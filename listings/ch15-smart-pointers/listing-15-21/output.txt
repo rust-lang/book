@@ -12,5 +12,5 @@ help: consider changing that to be a mutable reference
    |             ~~~~~~~~~
 
 For more information about this error, try `rustc --explain E0596`.
-error: could not compile `limit-tracker` due to previous error
+error: could not compile `limit-tracker` (lib test) due to previous error
 warning: build failed, waiting for other jobs to finish...

@@ -37,4 +37,4 @@ help: remove these parentheses
 
 For more information about this error, try `rustc --explain E0658`.
 warning: `functions` (bin "functions") generated 1 warning
-error: could not compile `functions` due to 3 previous errors; 1 warning emitted
+error: could not compile `functions` (bin "functions") due to 3 previous errors; 1 warning emitted

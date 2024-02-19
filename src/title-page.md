@@ -2,7 +2,7 @@
 
 *by Steve Klabnik and Carol Nichols, with contributions from the Rust Community*
 
-This version of the text assumes you’re using Rust 1.69.0 (released 2023-04-20)
+This version of the text assumes you’re using Rust 1.70.0 (released 2023-06-01)
 or later. See the [“Installation” section of Chapter 1][install]<!-- ignore -->
 to install or update Rust.
 

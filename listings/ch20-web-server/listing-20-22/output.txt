@@ -9,10 +9,10 @@ error[E0507]: cannot move out of `worker.thread` which is behind a mutable refer
      |             move occurs because `worker.thread` has type `JoinHandle<()>`, which does not implement the `Copy` trait
      |
 note: `JoinHandle::<T>::join` takes ownership of the receiver `self`, which moves `worker.thread`
-    --> /Users/carolnichols/.rustup/toolchains/1.69-aarch64-apple-darwin/lib/rustlib/src/rust/library/std/src/thread/mod.rs:1591:17
+    --> /Users/carolnichols/.rustup/toolchains/1.70-aarch64-apple-darwin/lib/rustlib/src/rust/library/std/src/thread/mod.rs:1557:17
      |
-1591 |     pub fn join(self) -> Result<T> {
+1557 |     pub fn join(self) -> Result<T> {
      |                 ^^^^
 
 For more information about this error, try `rustc --explain E0507`.
-error: could not compile `hello` due to previous error
+error: could not compile `hello` (lib) due to previous error

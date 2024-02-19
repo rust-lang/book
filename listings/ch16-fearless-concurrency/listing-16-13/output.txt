@@ -12,4 +12,4 @@ error[E0382]: use of moved value: `counter`
    |                           ------- use occurs due to use in closure
 
 For more information about this error, try `rustc --explain E0382`.
-error: could not compile `shared-state` due to previous error
+error: could not compile `shared-state` (bin "shared-state") due to previous error

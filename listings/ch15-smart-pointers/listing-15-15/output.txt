@@ -10,4 +10,4 @@ error[E0040]: explicit use of destructor method
    |     help: consider using `drop` function: `drop(c)`
 
 For more information about this error, try `rustc --explain E0040`.
-error: could not compile `drop-example` due to previous error
+error: could not compile `drop-example` (bin "drop-example") due to previous error

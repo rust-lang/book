@@ -20,4 +20,4 @@ error[E0277]: can't compare `{integer}` with `&{integer}`
   = note: this error originates in the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 For more information about this error, try `rustc --explain E0277`.
-error: could not compile `deref-example` due to previous error
+error: could not compile `deref-example` (bin "deref-example") due to previous error
