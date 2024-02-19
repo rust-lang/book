@@ -6,7 +6,7 @@ error[E0308]: mismatched types
 5 |     let n = example_closure(5);
   |             --------------- ^- help: try using a conversion method: `.to_string()`
   |             |               |
-  |             |               expected struct `String`, found integer
+  |             |               expected `String`, found integer
   |             arguments to this function are incorrect
   |
 note: closure parameter defined here

@@ -11,16 +11,16 @@ error[E0308]: mismatched types
    --> src/main.rs:22:21
     |
 22  |     match guess.cmp(&secret_number) {
-    |                 --- ^^^^^^^^^^^^^^ expected struct `String`, found integer
+    |                 --- ^^^^^^^^^^^^^^ expected `&String`, found `&{integer}`
     |                 |
     |                 arguments to this method are incorrect
     |
     = note: expected reference `&String`
                found reference `&{integer}`
-note: associated function defined here
-   --> /Users/carolnichols/.rustup/toolchains/1.68-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/cmp.rs:781:8
+note: method defined here
+   --> /Users/carolnichols/.rustup/toolchains/1.69-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/cmp.rs:783:8
     |
-781 |     fn cmp(&self, other: &Self) -> Ordering;
+783 |     fn cmp(&self, other: &Self) -> Ordering;
     |        ^^^
 
 For more information about this error, try `rustc --explain E0308`.
