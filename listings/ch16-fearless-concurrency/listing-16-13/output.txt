@@ -10,7 +10,7 @@ error[E0382]: borrow of moved value: `counter`
    |                                    ------- value moved into closure here, in previous iteration of loop
 ...
 21 |     println!("Result: {}", *counter.lock().unwrap());
-   |                             ^^^^^^^^^^^^^^ value borrowed here after move
+   |                             ^^^^^^^ value borrowed here after move
 
 For more information about this error, try `rustc --explain E0382`.
 error: could not compile `shared-state` (bin "shared-state") due to previous error
