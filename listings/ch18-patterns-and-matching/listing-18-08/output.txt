@@ -15,4 +15,4 @@ help: you might want to use `let else` to handle the variant that isn't matched
   |                                     ++++++++++++++++
 
 For more information about this error, try `rustc --explain E0005`.
-error: could not compile `patterns` (bin "patterns") due to previous error
+error: could not compile `patterns` (bin "patterns") due to 1 previous error
