@@ -1,20 +1,17 @@
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
 error[E0599]: no method named `join` found for enum `Option` in the current scope
-    --> src/lib.rs:52:27
-     |
-52   |             worker.thread.join().unwrap();
-     |                           ^^^^ method not found in `Option<JoinHandle<()>>`
-     |
+  --> src/lib.rs:52:27
+   |
+52 |             worker.thread.join().unwrap();
+   |                           ^^^^ method not found in `Option<JoinHandle<()>>`
+   |
 note: the method `join` exists on the type `JoinHandle<()>`
-    --> /Users/carolnichols/.rustup/toolchains/1.71-aarch64-apple-darwin/lib/rustlib/src/rust/library/std/src/thread/mod.rs:1560:5
-     |
-1560 |     pub fn join(self) -> Result<T> {
-     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  --> /rustc/d5c2e9c342b358556da91d61ed4133f6f50fc0c3/library/std/src/thread/mod.rs:1570:5
 help: consider using `Option::expect` to unwrap the `JoinHandle<()>` value, panicking if the value is an `Option::None`
-     |
-52   |             worker.thread.expect("REASON").join().unwrap();
-     |                          +++++++++++++++++
+   |
+52 |             worker.thread.expect("REASON").join().unwrap();
+   |                          +++++++++++++++++
 
 error[E0308]: mismatched types
   --> src/lib.rs:72:22
