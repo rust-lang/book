@@ -230,7 +230,7 @@ discuss what this line does.
 
 As mentioned earlier, `read_line` puts whatever the user enters into the string
 we pass to it, but it also returns a `Result` value. [`Result`][result]<!--
-ignore --> is an [*enumeration*][enums]<!-- ignore -->, often called an *enum*,
+ignore --> is an [*enumeration*][enumeration]<!-- ignore -->, often called an *enum*,
 which is a type that can be in one of multiple possible states. We call each
 possible state a *variant*.
 
@@ -925,6 +925,7 @@ discusses structs and method syntax, and Chapter 6 explains how enums work.
 [read_line]: ../std/io/struct.Stdin.html#method.read_line
 [result]: ../std/result/enum.Result.html
 [enums]: ch06-00-enums.html
+[enumeration]: ch06-01-defining-an-enum.html
 [expect]: ../std/result/enum.Result.html#method.expect
 [recover]: ch09-02-recoverable-errors-with-result.html
 [randcrate]: https://crates.io/crates/rand
