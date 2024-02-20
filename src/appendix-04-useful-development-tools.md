@@ -1,6 +1,6 @@
 ## Appendix D - Useful Development Tools
 
-In this appendix, we talk about some useful development tools that the Rust
+In this appendix, we talk about some useful development tools the Rust
 project provides. We’ll look at automatic formatting, quick ways to apply
 warning fixes, a linter, and integrating with IDEs.
 
@@ -32,8 +32,7 @@ on `rustfmt`, see [its documentation][rustfmt].
 ### Fix Your Code with `rustfix`
 
 The rustfix tool is included with Rust installations and can automatically fix
-compiler warnings that have a clear way to correct the problem that’s likely
-what you want. It’s likely you’ve seen compiler warnings before. For example,
+compiler warnings that have a clear way to correct the problem in a way you likely want. It’s likely you’ve seen compiler warnings before. For example,
 consider this code:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -66,7 +65,7 @@ warning: unused variable: `i`
 ```
 
 The warning suggests that we use `_i` as a name instead: the underscore
-indicates that we intend for this variable to be unused. We can automatically
+indicates that we intend this variable to be unused. We can automatically
 apply that suggestion using the `rustfix` tool by running the command `cargo
 fix`:
 
@@ -138,7 +137,7 @@ error: approximate value of `f{32, 64}::consts::PI` found
   |
   = note: `#[deny(clippy::approx_constant)]` on by default
   = help: consider using the constant directly
-  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#approx_constant
+  = help: for further information, visit https://rust-lang.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
 This error lets you know that Rust already has a more precise `PI` constant

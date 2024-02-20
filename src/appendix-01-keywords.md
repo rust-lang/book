@@ -2,7 +2,7 @@
 
 The following list contains keywords that are reserved for current or future
 use by the Rust language. As such, they cannot be used as identifiers (except
-as raw identifiers as we’ll discuss in the “[Raw
+as raw identifiers, as we’ll discuss in the “[Raw
 Identifiers][raw-identifiers]<!-- ignore -->” section). Identifiers are names
 of functions, variables, parameters, struct fields, modules, crates, constants,
 macros, static values, attributes, types, traits, or lifetimes.
@@ -81,7 +81,7 @@ Rust for potential future use.
 ### Raw Identifiers
 
 *Raw identifiers* are the syntax that lets you use keywords where they wouldn’t
-normally be allowed. You use a raw identifier by prefixing a keyword with `r#`.
+usually be allowed. You use a raw identifier by prefixing a keyword with `r#`.
 
 For example, `match` is a keyword. If you try to compile the following function
 that uses `match` as its name:
@@ -106,7 +106,7 @@ error: expected identifier, found keyword `match`
 
 The error shows that you can’t use the keyword `match` as the function
 identifier. To use `match` as a function name, you need to use the raw
-identifier syntax, like this:
+identifier syntax like this:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -121,11 +121,11 @@ fn main() {
 ```
 
 This code will compile without any errors. Note the `r#` prefix on the function
-name in its definition as well as where the function is called in `main`.
+name in its definition, as well as where the function is called in `main`.
 
 Raw identifiers allow you to use any word you choose as an identifier, even if
 that word happens to be a reserved keyword. This gives us more freedom to
-choose identifier names, as well as lets us integrate with programs written in
+choose identifier names and lets us integrate with programs written in
 a language where these words aren’t keywords. In addition, raw identifiers
 allow you to use libraries written in a different Rust edition than your crate
 uses. For example, `try` isn’t a keyword in the 2015 edition but is in the 2018

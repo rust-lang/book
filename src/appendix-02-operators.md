@@ -87,7 +87,7 @@ locations.
 | `"..."` | String literal |
 | `r"..."`, `r#"..."#`, `r##"..."##`, etc. | Raw string literal, escape characters not processed |
 | `b"..."` | Byte string literal; constructs an array of bytes instead of a string |
-| `br"..."`, `br#"..."#`, `br##"..."##`, etc. | Raw byte string literal, combination of raw and byte string literal |
+| `br"..."`, `br#"..."#`, `br##"..."##`, etc. | Raw byte string literal, a combination of raw and byte string literal |
 | `'...'` | Character literal |
 | `b'...'` | ASCII byte literal |
 | <code>&vert;...&vert; expr</code> | Closure |
@@ -119,7 +119,7 @@ parameters.
 | Symbol | Explanation |
 |--------|-------------|
 | `path<...>` | Specifies parameters to generic type in a type (e.g., `Vec<u8>`) |
-| `path::<...>`, `method::<...>` | Specifies parameters to generic type, function, or method in an expression; often referred to as turbofish (e.g., `"42".parse::<i32>()`) |
+| `path::<...>`, `method::<...>` | Specifies parameters to a generic type, function, or method in an expression; often referred to as turbofish (e.g., `"42".parse::<i32>()`) |
 | `fn ident<...> ...` | Define generic function |
 | `struct ident<...> ...` | Define generic structure |
 | `enum ident<...> ...` | Define generic enumeration |
