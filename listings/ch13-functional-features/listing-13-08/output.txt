@@ -3,7 +3,7 @@ $ cargo run
 error[E0507]: cannot move out of `value`, a captured variable in an `FnMut` closure
   --> src/main.rs:18:30
    |
-15 |     let value = String::from("by key called");
+15 |     let value = String::from("closure called");
    |         ----- captured outer variable
 16 |
 17 |     list.sort_by_key(|r| {

@@ -12,7 +12,7 @@ fn main() {
     ];
 
     let mut sort_operations = vec![];
-    let value = String::from("by key called");
+    let value = String::from("closure called");
 
     list.sort_by_key(|r| {
         sort_operations.push(value);
