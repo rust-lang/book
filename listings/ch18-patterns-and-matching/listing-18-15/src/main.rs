@@ -19,7 +19,7 @@ fn main() {
             println!("Text message: {text}");
         }
         Message::ChangeColor(r, g, b) => {
-            println!("Change the color to red {r}, green {g}, and blue {b}",)
+            println!("Change the color to red {r}, green {g}, and blue {b}")
         }
     }
 }

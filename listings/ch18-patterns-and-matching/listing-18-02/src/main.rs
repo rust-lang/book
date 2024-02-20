@@ -7,7 +7,7 @@ fn main() {
     stack.push(3);
 
     while let Some(top) = stack.pop() {
-        println!("{}", top);
+        println!("{top}");
     }
     // ANCHOR_END: here
 }

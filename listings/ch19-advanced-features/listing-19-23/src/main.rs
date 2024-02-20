@@ -10,5 +10,5 @@ impl fmt::Display for Wrapper {
 
 fn main() {
     let w = Wrapper(vec![String::from("hello"), String::from("world")]);
-    println!("w = {}", w);
+    println!("w = {w}");
 }

@@ -10,6 +10,6 @@ fn main() {
     add_to_count(3);
 
     unsafe {
-        println!("COUNTER: {}", COUNTER);
+        println!("COUNTER: {COUNTER}");
     }
 }

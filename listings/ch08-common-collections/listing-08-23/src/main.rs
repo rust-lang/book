@@ -7,6 +7,6 @@ fn main() {
     scores.insert(String::from("Blue"), 10);
     scores.insert(String::from("Blue"), 25);
 
-    println!("{:?}", scores);
+    println!("{scores:?}");
     // ANCHOR_END: here
 }
