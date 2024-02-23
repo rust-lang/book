@@ -177,7 +177,7 @@ identically whether we have a regular reference or a type that implements
 
 The reason the `deref` method returns a reference to a value, and that the
 plain dereference outside the parentheses in `*(y.deref())` is still necessary,
-is to do with the ownership system. If the `deref` method returned the value
+has to do with the ownership system. If the `deref` method returned the value
 directly instead of a reference to the value, the value would be moved out of
 `self`. We don’t want to take ownership of the inner value inside `MyBox<T>` in
 this case or in most cases where we use the dereference operator.
