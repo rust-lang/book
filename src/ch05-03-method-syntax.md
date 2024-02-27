@@ -165,7 +165,7 @@ of another `Rectangle` as a parameter. We can tell what the type of the
 parameter will be by looking at the code that calls the method:
 `rect1.can_hold(&rect2)` passes in `&rect2`, which is an immutable borrow to
 `rect2`, an instance of `Rectangle`. This makes sense because we only need to
-read `rect2` (rather than write, which would mean we’d need a mutable borrow),
+read `rect2` (rather than write, for which we would need a mutable borrow),
 and we want `main` to retain ownership of `rect2` so we can use it again after
 calling the `can_hold` method. The return value of `can_hold` will be a
 Boolean, and the implementation will check whether the width and height of
