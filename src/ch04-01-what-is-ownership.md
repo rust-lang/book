@@ -268,11 +268,7 @@ the memory that holds the contents of the string, a length, and a capacity.
 This group of data is stored on the stack. On the right is the memory on the
 heap that holds the contents.
 
-<img alt="Two tables: the first table contains the representation of s1 on the
-stack, consisting of its length (5), capacity (5), and a pointer to the first
-value in the second table. The second table contains the representation of the
-string data on the heap, byte by byte." src="img/trpl04-01.svg" class="center"
-style="width: 50%;" />
+{{#include img/trpl04-01.svg}}
 
 <span class="caption">Figure 4-1: Representation in memory of a `String`
 holding the value `"hello"` bound to `s1`</span>
@@ -288,9 +284,7 @@ pointer, the length, and the capacity that are on the stack. We do not copy the
 data on the heap that the pointer refers to. In other words, the data
 representation in memory looks like Figure 4-2.
 
-<img alt="Three tables: tables s1 and s2 representing those strings on the
-stack, respectively, and both pointing to the same string data on the heap."
-src="img/trpl04-02.svg" class="center" style="width: 50%;" />
+{{#include img/trpl04-02.svg}}
 
 <span class="caption">Figure 4-2: Representation in memory of the variable `s2`
 that has a copy of the pointer, length, and capacity of `s1`</span>
@@ -300,9 +294,7 @@ look like if Rust instead copied the heap data as well. If Rust did this, the
 operation `s2 = s1` could be very expensive in terms of runtime performance if
 the data on the heap were large.
 
-<img alt="Four tables: two tables representing the stack data for s1 and s2,
-and each points to its own copy of string data on the heap."
-src="img/trpl04-03.svg" class="center" style="width: 50%;" />
+{{#include img/trpl04-03.svg}}
 
 <span class="caption">Figure 4-3: Another possibility for what `s2 = s1` might
 do if Rust copied the heap data as well</span>
@@ -338,11 +330,7 @@ because Rust also invalidates the first variable, instead of being called a
 shallow copy, it’s known as a *move*. In this example, we would say that `s1`
 was *moved* into `s2`. So, what actually happens is shown in Figure 4-4.
 
-<img alt="Three tables: tables s1 and s2 representing those strings on the
-stack, respectively, and both pointing to the same string data on the heap.
-Table s1 is grayed out be-cause s1 is no longer valid; only s2 can be used to
-access the heap data." src="img/trpl04-04.svg" class="center" style="width:
-50%;" />
+{{#include img/trpl04-04.svg}}
 
 <span class="caption">Figure 4-4: Representation in memory after `s1` has been
 invalidated</span>

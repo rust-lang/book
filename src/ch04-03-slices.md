@@ -123,11 +123,7 @@ byte at index 6 of `s` with a length value of `5`.
 
 Figure 4-6 shows this in a diagram.
 
-<img alt="Three tables: a table representing the stack data of s, which points
-to the byte at index 0 in a table of the string data &quot;hello world&quot; on
-the heap. The third table rep-resents the stack data of the slice world, which
-has a length value of 5 and points to byte 6 of the heap data table."
-src="img/trpl04-06.svg" class="center" style="width: 50%;" />
+{{#include img/trpl04-06.svg}}
 
 <span class="caption">Figure 4-6: String slice referring to part of a
 `String`</span>
