@@ -194,7 +194,7 @@ and `sample.txt`:
 ```
 $ cargo run -- test sample.txt
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
      Running `target/debug/minigrep test sample.txt`
 Searching for test
 In file sample.txt
@@ -270,7 +270,7 @@ second argument:
 ```
 $ cargo run -- the poem.txt
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
      Running `target/debug/minigrep the poem.txt`
 Searching for the
 In file poem.txt
@@ -553,7 +553,7 @@ without any arguments; it will look like this:
 ```
 $ cargo run
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
      Running `target/debug/minigrep`
 thread 'main' panicked at 'index out of bounds: the len is 1 but
 the index is 1', src/main.rs:27:21
@@ -598,7 +598,7 @@ arguments again to see what the error looks like now:
 ```
 $ cargo run
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
      Running `target/debug/minigrep`
 thread 'main' panicked at 'not enough arguments',
 src/main.rs:26:13
@@ -1275,7 +1275,7 @@ Cool! Now let’s try a word that will match multiple lines, like *body*:
 
 ```
 $ cargo run -- body poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
      Running `target/debug/minigrep body poem.txt`
 I'm nobody! Who are you?
 Are you nobody, too?
@@ -1287,7 +1287,7 @@ word that isn’t anywhere in the poem, such as *monomorphization*:
 
 ```
 $ cargo run -- monomorphization poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
      Running `target/debug/minigrep monomorphization poem.txt`
 ```
 
@@ -1545,7 +1545,7 @@ the word *to* in all lowercase:
 ```
 $ cargo run -- to poem.txt
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
      Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
