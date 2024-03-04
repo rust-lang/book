@@ -96,8 +96,8 @@ There’s another advantage to using an enum rather than a struct: each variant
 can have different types and amounts of associated data. Version four IP
 addresses will always have four numeric components that will have values
 between 0 and 255. If we wanted to store `V4` addresses as four `u8` values but
-still express `V6` addresses as one `String` value, we wouldn’t be able to with
-a struct. Enums handle this case with ease:
+still express `V6` addresses as one `String` value, we wouldn’t be able to do that with
+a struct. However, enums handle this case with ease:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-03-variants-with-different-data/src/main.rs:here}}
