@@ -647,7 +647,7 @@ Worker 0 got a job; executing.
 Worker 2 got a job; executing.
 ```
 
-Success! We now have a thread pool that executes connections asynchronously.
+Success! We now have a thread pool that executes connections by multithreading (but not [`asynchronously`][async-book]).
 There are never more than four threads created, so our system won’t get
 overloaded if the server receives a lot of requests. If we make a request to
 */sleep*, the server will be able to serve other requests by having another
@@ -696,3 +696,4 @@ ch19-04-advanced-types.html#creating-type-synonyms-with-type-aliases
 ch13-01-closures.html#moving-captured-values-out-of-the-closure-and-the-fn-traits
 [builder]: ../std/thread/struct.Builder.html
 [builder-spawn]: ../std/thread/struct.Builder.html#method.spawn
+[async-book]: https://rust-lang.github.io//01_getting_started/01_chapter.html
