@@ -129,9 +129,9 @@ Then run `cargo test` again. The output now shows `exploration` instead of
 Now we’ll add another test, but this time we’ll make a test that fails! Tests
 fail when something in the test function panics. Each test is run in a new
 thread, and when the main thread sees that a test thread has died, the test is
-marked as failed. In Chapter 9, we talked about how the simplest way to panic
-is to call the `panic!` macro. Enter the new test as a function named
-`another`, so your *src/lib.rs* file looks like Listing 11-3.
+marked as failed. In Chapter 9, we learned the simplest way to panic is to call
+the `panic!` macro. Enter the new test as a function named `another`, so your
+*src/lib.rs* file looks like Listing 11-3.
 
 <span class="filename">Filename: src/lib.rs</span>
 
