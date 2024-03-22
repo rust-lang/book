@@ -490,7 +490,7 @@ series, you’d have to update the *Cargo.toml* file to look like this instead:
 
 ```toml
 [dependencies]
-rand = "0.9.0"
+rand = "0.9.0-alpha.1"
 ```
 
 The next time you run `cargo build`, Cargo will update the registry of crates
