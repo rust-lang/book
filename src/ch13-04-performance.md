@@ -65,7 +65,7 @@ multiply the values together, sum all the results, and shift the bits in the
 sum `qlp_shift` bits to the right.
 
 Calculations in applications like audio decoders often prioritize performance
-most highly. Here, we’re creating an iterator, using two adaptors, and then
+most highly. Here, we’re creating an iterator, using two adapters, and then
 consuming the value. What assembly code would this Rust code compile to? Well,
 as of this writing, it compiles down to the same assembly you’d write by hand.
 There’s no loop at all corresponding to the iteration over the values in

@@ -120,7 +120,7 @@ value we want to put in the `query` field of `Config`. If `next` returns a
 not enough arguments were given and we return early with an `Err` value. We do
 the same thing for the `file_path` value.
 
-### Making Code Clearer with Iterator Adaptors
+### Making Code Clearer with Iterator Adapters
 
 We can also take advantage of iterators in the `search` function in our I/O
 project, which is reproduced here in Listing 13-21 as it was in Listing 12-19:
@@ -134,7 +134,7 @@ project, which is reproduced here in Listing 13-21 as it was in Listing 12-19:
 <span class="caption">Listing 13-21: The implementation of the `search`
 function from Listing 12-19</span>
 
-We can write this code in a more concise way using iterator adaptor methods.
+We can write this code in a more concise way using iterator adapter methods.
 Doing so also lets us avoid having a mutable intermediate `results` vector. The
 functional programming style prefers to minimize the amount of mutable state to
 make code clearer. Removing the mutable state might enable a future enhancement
@@ -147,12 +147,12 @@ concurrent access to the `results` vector. Listing 13-22 shows this change:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-22/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 13-22: Using iterator adaptor methods in the
+<span class="caption">Listing 13-22: Using iterator adapter methods in the
 implementation of the `search` function</span>
 
 Recall that the purpose of the `search` function is to return all lines in
 `contents` that contain the `query`. Similar to the `filter` example in Listing
-13-16, this code uses the `filter` adaptor to keep only the lines that
+13-16, this code uses the `filter` adapter to keep only the lines that
 `line.contains(query)` returns `true` for. We then collect the matching lines
 into another vector with `collect`. Much simpler! Feel free to make the same
 change to use iterator methods in the `search_case_insensitive` function as
@@ -164,7 +164,7 @@ The next logical question is which style you should choose in your own code and
 why: the original implementation in Listing 13-21 or the version using
 iterators in Listing 13-22. Most Rust programmers prefer to use the iterator
 style. It’s a bit tougher to get the hang of at first, but once you get a feel
-for the various iterator adaptors and what they do, iterators can be easier to
+for the various iterator adapters and what they do, iterators can be easier to
 understand. Instead of fiddling with the various bits of looping and building
 new vectors, the code focuses on the high-level objective of the loop. This
 abstracts away some of the commonplace code so it’s easier to see the concepts
