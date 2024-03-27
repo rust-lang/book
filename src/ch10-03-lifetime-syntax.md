@@ -552,10 +552,10 @@ Here is an example where the third lifetime elision rule applies:
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:3rd}}
 ```
 
-There are two input lifetimes, so Rust applies the first lifetime elision rule
-and gives both `&self` and `announcement` their own lifetimes. Then, because
-one of the parameters is `&self`, the return type gets the lifetime of `&self`,
-and all lifetimes have been accounted for.
+There are two parameters and both are references. So Rust applies the first
+lifetime elision rule and gives both `&self` and `announcement` their own
+lifetimes. Then, because one of the parameters is `&self`, the return type
+gets the lifetime of `&self`, and all lifetimes have been accounted for.
 
 ### The Static Lifetime
 
