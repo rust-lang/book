@@ -297,7 +297,7 @@ evaluates to `true`, the code runs; otherwise, it exits the loop.
 
 #### Looping Through a Collection with `for`
 
-You can choose to use the `while` construct to loop over the elements of a
+You can also use the `while` construct to loop over the elements of a
 collection, such as an array. For example, the loop in Listing 3-4 prints each
 element in the array `a`.
 
