@@ -116,9 +116,9 @@ next stable release happens! Breakage in a beta release is relatively rare, but
 
 ### Maintenance time
 
-The Rust project only supports the most recent stable version, which means the 
-maintenance time of a stable version is six weeks. When a new stable version 
-released, the old version reaches its EOL(end-of-life). 
+The Rust project supports the most recent stable version. When a new stable
+version is released, the old version reaches its end of life (EOL). This means
+each version is supported for six weeks.
 
 ### Unstable Features
 
