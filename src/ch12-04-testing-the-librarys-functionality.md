@@ -28,7 +28,8 @@ lines that match the query. We’ll add this functionality in a function called
 ### Writing a Failing Test
 
 Because we don’t need them anymore, let’s remove the `println!` statements from
-*src/lib.rs* and *src/main.rs* that we used to check the program’s behavior.
+*src/lib.rs* and *src/main.rs* that we used to check the program’s behavior
+except the error message which will still be used as feedback to the user.
 Then, in *src/lib.rs*, add a `tests` module with a test function, as we did in
 [Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies the
 behavior we want the `search` function to have: it will take a query and the
