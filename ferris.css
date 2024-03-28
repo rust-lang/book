@@ -24,6 +24,16 @@ body.ayu .not_desired_behavior {
   z-index: 99;
   right: 5px;
   top: 30px;
+  opacity: 1;
+  transition: opacity 0.1s;
+}
+
+pre:hover .ferris-container {
+  opacity: 0.15;
+}
+
+pre:hover .ferris-container:hover {
+  opacity: 1;
 }
 
 .ferris {
