@@ -125,7 +125,8 @@ assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
 <span class="caption">Listing 3-1: A `main` function declaration containing one statement</span>
 
 Function definitions are also statements; the entire preceding example is a
-statement in itself.
+statement in itself. As we will see below, *calling* a function is an
+expression.
 
 Statements do not return values. Therefore, you can’t assign a `let` statement
 to another variable, as the following code tries to do; you’ll get an error:
