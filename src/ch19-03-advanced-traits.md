@@ -442,7 +442,7 @@ that holds an instance of `Vec<T>`; then we can implement `Display` on
 
 The implementation of `Display` uses `self.0` to access the inner `Vec<T>`,
 because `Wrapper` is a tuple struct and `Vec<T>` is the item at index 0 in the
-tuple. Then we can use the functionality of the `Display` type on `Wrapper`.
+tuple. Then we can use the functionality of the `Display` trait on `Wrapper`.
 
 The downside of using this technique is that `Wrapper` is a new type, so it
 doesn’t have the methods of the value it’s holding. We would have to implement
