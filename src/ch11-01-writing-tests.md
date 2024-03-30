@@ -309,7 +309,7 @@ Run the tests again:
 ```
 
 Our test caught the bug! The `it_adds_two` test failed, and the message tells
-us that the assertion that fails was `` assertion failed: `(left == right)` ``
+us that the assertion that fails was ``assertion `left == right` failed``
 and what the `left` and `right` values are. This message helps us start
 debugging: the `left` argument was `4` but the `right` argument, where we had
 `add_two(2)`, was `5`. You can imagine that this would be especially helpful

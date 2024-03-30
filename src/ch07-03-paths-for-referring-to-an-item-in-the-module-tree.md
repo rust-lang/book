@@ -184,8 +184,8 @@ interested in this topic, see [The Rust API Guidelines][api-guidelines].
 > well as a *src/lib.rs* library crate root, and both crates will have the
 > package name by default. Typically, packages with this pattern of containing
 > both a library and a binary crate will have just enough code in the binary
-> crate to start an executable that calls code with the library crate. This
-> lets other projects benefit from the most functionality that the package
+> crate to start an executable that calls code within the library crate. This
+> lets other projects benefit from most of the functionality that the package
 > provides, because the library crate’s code can be shared.
 >
 > The module tree should be defined in *src/lib.rs*. Then, any public items can
