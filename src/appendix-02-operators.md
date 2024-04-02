@@ -103,7 +103,7 @@ hierarchy to an item.
 |--------|-------------|
 | `ident::ident` | Namespace path |
 | `::path` | Path relative to the crate root (i.e., an explicitly absolute path) |
-| `self::path` | Path relative to the current module (i.e., an explicitly relative path).
+| `self::path` | Path relative to the current module (i.e., an explicitly relative path). |
 | `super::path` | Path relative to the parent of the current module |
 | `type::ident`, `<type as trait>::ident` | Associated constants, functions, and types |
 | `<type>::...` | Associated item for a type that cannot be directly named (e.g., `<&T>::...`, `<[T]>::...`, etc.) |

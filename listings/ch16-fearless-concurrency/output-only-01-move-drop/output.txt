@@ -15,4 +15,4 @@ error[E0382]: use of moved value: `v`
    |          ^ value used here after move
 
 For more information about this error, try `rustc --explain E0382`.
-error: could not compile `threads` due to previous error
+error: could not compile `threads` (bin "threads") due to 1 previous error

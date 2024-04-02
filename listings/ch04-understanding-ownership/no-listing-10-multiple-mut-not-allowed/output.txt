@@ -12,4 +12,4 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
   |                        -- first borrow later used here
 
 For more information about this error, try `rustc --explain E0499`.
-error: could not compile `ownership` due to previous error
+error: could not compile `ownership` (bin "ownership") due to 1 previous error

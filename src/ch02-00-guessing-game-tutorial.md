@@ -930,8 +930,8 @@ discusses structs and method syntax, and Chapter 6 explains how enums work.
 [randcrate]: https://crates.io/crates/rand
 [semver]: http://semver.org
 [cratesio]: https://crates.io/
-[doccargo]: http://doc.crates.io
-[doccratesio]: http://doc.crates.io/crates-io.html
+[doccargo]: https://doc.rust-lang.org/cargo/
+[doccratesio]: https://doc.rust-lang.org/cargo/reference/publishing.html
 [match]: ch06-02-match.html
 [shadowing]: ch03-01-variables-and-mutability.html#shadowing
 [parse]: ../std/primitive.str.html#method.parse
