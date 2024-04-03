@@ -120,7 +120,7 @@ otherwise use the same values from `user1` that we created in Listing 5-2.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-6: Creating a new `User` instance using one of
+<span class="caption">Listing 5-6: Creating a new `User` instance using all but one of
 the values from `user1`</span>
 
 Using struct update syntax, we can achieve the same effect with less code, as
