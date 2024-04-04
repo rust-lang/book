@@ -21,7 +21,7 @@ for each trait for details of how to manually implement them.
 These traits listed here are the only ones defined by the standard library that
 can be implemented on your types using `derive`. Other traits defined in the
 standard library don’t have sensible default behavior, so it’s up to you to
-implement them in a way that makes sense for what you’re trying to accomplish.
+implement them in the way that makes sense for what you’re trying to accomplish.
 
 An example of a trait that can’t be derived is `Display`, which handles
 formatting for end users. You should always consider the appropriate way to
@@ -71,14 +71,14 @@ number types: the implementation of floating point numbers states that two
 instances of the not-a-number (`NaN`) value are not equal to each other.
 
 An example of when `Eq` is required is for keys in a `HashMap<K, V>` so the
-`HashMap<K, V>` can tell whether two keys are identical.
+`HashMap<K, V>` can tell whether two keys are the same.
 
 ### `PartialOrd` and `Ord` for Ordering Comparisons
 
 The `PartialOrd` trait allows you to compare instances of a type for sorting
 purposes. A type that implements `PartialOrd` can be used with the `<`, `>`,
 `<=`, and `>=` operators. You can only apply the `PartialOrd` trait to types
-that implement `PartialEq`.
+that also implement `PartialEq`.
 
 Deriving `PartialOrd` implements the `partial_cmp` method, which returns an
 `Option<Ordering>` that will be `None` when the values given don’t produce an
@@ -115,7 +115,7 @@ data. See the [“Ways Variables and Data Interact:
 Clone”][ways-variables-and-data-interact-clone]<!-- ignore --> section in
 Chapter 4 for more information on `Clone`.
 
-Deriving `Clone` implements the `clone` method, which, when implemented for the
+Deriving `Clone` implements the `clone` method, which when implemented for the
 whole type, calls `clone` on each of the parts of the type. This means all the
 fields or values in the type must also implement `Clone` to derive `Clone`.
 

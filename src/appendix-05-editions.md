@@ -45,7 +45,7 @@ Rust 2018, your project will compile and be able to use that dependency. The
 opposite situation, where your project uses Rust 2018 and a dependency uses
 Rust 2015, works as well.
 
-To be clear: most features will be available in all editions. Developers using
+To be clear: most features will be available on all editions. Developers using
 any Rust edition will continue to see improvements as new stable releases are
 made. However, in some cases, mainly when new keywords are added, some new
 features might only be available in later editions. You will need to switch

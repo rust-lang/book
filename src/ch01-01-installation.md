@@ -11,7 +11,7 @@ The following steps install the latest stable version of the Rust compiler.
 Rust’s stability guarantees ensure that all the examples in the book that
 compile will continue to compile with newer Rust versions. The output might
 differ slightly between versions because Rust often improves error messages and
-warnings. In other words, any more recent stable version of Rust you install using
+warnings. In other words, any newer, stable version of Rust you install using
 these steps should work as expected with the content of this book.
 
 > ### Command Line Notation
@@ -39,7 +39,7 @@ for your password. If the install is successful, the following line will appear:
 Rust is installed now. Great!
 ```
 
-You will also need a *linker*, which is a program Rust uses to combine its
+You will also need a *linker*, which is a program that Rust uses to join its
 compiled outputs into one file. It is likely you already have one. If you get
 linker errors, you should install a C compiler, which will typically include a
 linker. A C compiler is also useful because some common Rust packages depend on
@@ -83,7 +83,7 @@ $ rustc --version
 ```
 
 You should see the version number, commit hash, and commit date for the latest
-stable version that has been released in the following format:
+stable version that has been released, in the following format:
 
 ```text
 rustc x.y.z (abcabcabc yyyy-mm-dd)
@@ -111,7 +111,7 @@ In Linux and macOS, use:
 $ echo $PATH
 ```
 
-If that’s all correct and Rust still isn’t working, there are several
+If that’s all correct and Rust still isn’t working, there are a number of
 places you can get help. Find out how to get in touch with other Rustaceans (a
 silly nickname we call ourselves) on [the community page][community].
 
