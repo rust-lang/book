@@ -52,7 +52,7 @@ producer for now, but we’ll add multiple producers when we get this example
 working.
 
 The `mpsc::channel` function returns a tuple, the first element of which is the
-sending end--the transmitter--and the second element is the receiving end--the
+sending end—the transmitter—and the second element is the receiving end—the
 receiver. The abbreviations `tx` and `rx` are traditionally used in many fields
 for *transmitter* and *receiver* respectively, so we name our variables as such
 to indicate each end. We’re using a `let` statement with a pattern that
