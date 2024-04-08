@@ -157,7 +157,8 @@ from a new scope with `pub use`</span>
 
 Before this change, external code would have to call the `add_to_waitlist`
 function by using the path
-`restaurant::front_of_house::hosting::add_to_waitlist()`. Now that this `pub
+`restaurant::front_of_house::hosting::add_to_waitlist()`, which also would have
+required the `front_of_house` module to be marked as `pub`. Now that this `pub
 use` has re-exported the `hosting` module from the root module, external code
 can now use the path `restaurant::hosting::add_to_waitlist()` instead.
 
