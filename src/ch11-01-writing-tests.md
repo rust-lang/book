@@ -62,7 +62,7 @@ cd ../../..
 <span class="caption">Listing 11-1: The test module and function generated
 automatically by `cargo new`</span>
 
-For now, let’s ignore the top two lines and focus on the function. Note the
+For now, let’s focus solely on the `it_works()` function. Note the
 `#[test]` annotation: this attribute indicates this is a test function, so the
 test runner knows to treat this function as a test. We might also have non-test
 functions in the `tests` module to help set up common scenarios or perform
