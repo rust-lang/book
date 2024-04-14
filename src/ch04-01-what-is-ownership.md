@@ -54,7 +54,7 @@ strings.
 > find you.
 >
 > Pushing to the stack is faster than allocating on the heap because the
-> allocator never has to search for a place to store new data; that location is
+> stack never has to search for a place to store new data; that location is
 > always at the top of the stack. Comparatively, allocating space on the heap
 > requires more work because the allocator must first find a big enough space
 > to hold the data and then perform bookkeeping to prepare for the next
