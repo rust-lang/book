@@ -562,7 +562,7 @@ style to use when writing Rust: everyone formats their code using the tool.
 
 Rust installations include `rustfmt` by default, so you should already have the
 programs `rustfmt` and `cargo-fmt` on your system. These two commands are
-analagous to `rustc` and `cargo` in that `rustfmt` allows finer-grained control
+analogous to `rustc` and `cargo` in that `rustfmt` allows finer-grained control
 and `cargo-fmt` understands conventions of a project that uses Cargo. To format
 any Cargo project, enter the following:
 
