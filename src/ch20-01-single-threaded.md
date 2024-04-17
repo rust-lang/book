@@ -448,7 +448,7 @@ uses the `status_line` and `filename` variables. This makes it easier to see
 the difference between the two cases, and it means we have only one place to
 update the code if we want to change how the file reading and response writing
 work. The behavior of the code in Listing 20-9 will be the same as that in
-Listing 20-8.
+Listing 20-7.
 
 Awesome! We now have a simple web server in approximately 40 lines of Rust code
 that responds to one request with a page of content and responds to all other
