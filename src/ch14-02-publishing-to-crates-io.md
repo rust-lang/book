@@ -277,7 +277,6 @@ API key. Then run the `cargo login` command and paste your API key when prompted
 
 ```console
 $ cargo login
-please paste the API Token found on https://crates.io/me below
 abcdefghijklmnopqrstuvwxyz012345
 ```
 
