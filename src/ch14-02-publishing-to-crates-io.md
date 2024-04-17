@@ -273,10 +273,11 @@ in via a GitHub account. (The GitHub account is currently a requirement, but
 the site might support other ways of creating an account in the future.) Once
 you’re logged in, visit your account settings at
 [https://crates.io/me/](https://crates.io/me/)<!-- ignore --> and retrieve your
-API key. Then run the `cargo login` command with your API key, like this:
+API key. Then run the `cargo login` command and paste your API key when prompted, like this:
 
 ```console
-$ cargo login abcdefghijklmnopqrstuvwxyz012345
+$ cargo login
+abcdefghijklmnopqrstuvwxyz012345
 ```
 
 This command will inform Cargo of your API token and store it locally in
