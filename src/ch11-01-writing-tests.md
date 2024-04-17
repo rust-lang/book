@@ -497,10 +497,10 @@ This time when we run the `should_panic` test, it will fail:
 ```
 
 The failure message indicates that this test did indeed panic as we expected,
-but the panic message did not include the expected string `'Guess value must be
-less than or equal to 100'`. The panic message that we did get in this case was
-`Guess value must be greater than or equal to 1, got 200.` Now we can start
-figuring out where our bug is!
+but the panic message did not include the expected string `less than or equal
+to 100`. The panic message that we did get in this case was `Guess value must
+be greater than or equal to 1, got 200.` Now we can start figuring out where
+our bug is!
 
 ### Using `Result<T, E>` in Tests
 
