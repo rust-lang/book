@@ -477,27 +477,8 @@ second arm doesn’t have a match guard and therefore matches any `Some` variant
 
 There is no way to express the `if x % 2 == 0` condition within a pattern, so
 the match guard gives us the ability to express this logic. The downside of
-this additional expressiveness is that the compiler is not smart enough about 
-arms exhaustiveness anymore when match guard expressions are involved.
-
-```rust,ignore,does_not_compile
-match Some(100) {
-    Some(_) if true => print!("Got Some"),
-    None => print!("Got None")
-}
-```
-This `match` expression involves compilation error.
-```console
-error[E0004]: non-exhaustive patterns: `Some(_)` not covered
-   --> src/main.rs:33:11
-    |
-33  |     match Some(100) {
-    |           ^^^^^^^^^ pattern `Some(_)` not covered
-    | 
-```
-Compilation fails even though `Some(_) if true` guarded pattern matches 
-any possible `Some`. Same as unguarded `Some(_)` does.
-
+this additional expressiveness is that the compiler doesn't try to check for
+exhaustiveness when match guard expressions are involved.
 
 In Listing 18-11, we mentioned that we could use match guards to solve our
 pattern-shadowing problem. Recall that we created a new variable inside the
