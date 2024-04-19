@@ -654,8 +654,8 @@ elsewhere that would cause Rust to infer a different numerical type. The reason
 for the error is that Rust cannot compare a string and a number type.
 
 Ultimately, we want to convert the `String` the program reads as input into a
-real number type so we can compare it numerically to the secret number. We do
-so by adding this line to the `main` function body:
+number type so we can compare it numerically to the secret number. We do so by
+adding this line to the `main` function body:
 
 <span class="filename">Filename: src/main.rs</span>
 
