@@ -23,13 +23,13 @@ example, the file could be missing, or we might not have permission to open it.
 Right now, regardless of the situation, we’d print the same error message for
 everything, which wouldn’t give the user any information!
 
-Fourth, we use `expect` repeatedly to handle different errors, and if the user
-runs our program without specifying enough arguments, they’ll get an `index out
-of bounds` error from Rust that doesn’t clearly explain the problem. It would
-be best if all the error-handling code were in one place so future maintainers
-had only one place to consult the code if the error-handling logic needed to
-change. Having all the error-handling code in one place will also ensure that
-we’re printing messages that will be meaningful to our end users.
+Fourth, we use `expect` to handle an error, and if the user runs our program
+without specifying enough arguments, they’ll get an `index out of bounds` error
+from Rust that doesn’t clearly explain the problem. It would be best if all the
+error-handling code were in one place so future maintainers had only one place
+to consult the code if the error-handling logic needed to change. Having all the
+error-handling code in one place will also ensure that we’re printing messages
+that will be meaningful to our end users.
 
 Let’s address these four problems by refactoring our project.
 
