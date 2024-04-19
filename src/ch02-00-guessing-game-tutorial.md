@@ -641,9 +641,9 @@ an `i32`, which is the type of `secret_number` unless you add type information
 elsewhere that would cause Rust to infer a different numerical type. The reason
 for the error is that Rust cannot compare a string and a number type.
 
-Ultimately, we want to convert the `String` the program reads as input into an
-actual number type so we can compare it numerically to the secret number. We do so
-by adding this line to the `main` function body:
+Ultimately, we want to convert the `String` the program reads as input into a
+number type so we can compare it numerically to the secret number. We do so by
+adding this line to the `main` function body:
 
 <span class="filename">Filename: src/main.rs</span>
 
