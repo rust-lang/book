@@ -32,13 +32,13 @@ interchangeable. Now we need to distinguish between the two a little more:
   all other operations to complete.
 
 On a machine with multiple CPU cores, we can actually do work in parallel. One
-core can be doing thing while another core does something completely unrelated,
-and those actually happen at the same time. On a machine with a single CPU core,
-the CPU can only do one operation at a time, but we can still have concurrency.
-Using tools like threads, processes, and async-await, the computer can pause one
-activity and switch to others before eventually cycling back to that first
-activity again. So all parallel operations are also concurrent, but not all
-concurrent operations happen in parallel!
+core can be doing one thing while another core does something completely
+unrelated, and those actually happen at the same time. On a machine with a
+single CPU core, the CPU can only do one operation at a time, but we can still
+have concurrency. Using tools like threads, processes, and async-await, the
+computer can pause one activity and switch to others before eventually cycling
+back to that first activity again. So all parallel operations are also
+concurrent, but not all concurrent operations happen in parallel!
 
 > Note: When working with async-await in Rust, we need to think in terms of
 > *concurrency*. Depending on the hardware, the operating system, and the async
@@ -56,8 +56,8 @@ tasks.
 
 (This analogy breaks down if you think about it too hard. The eggs keep cooking
 while the cook is chopping up the vegetables, after all. That is parallelism,
-not concurrency! The focus of the analogy is the *cook*, not the food, though,
-and as long as you keep that in mind, it mostly works.)
+not just concurrency! The focus of the analogy is the *cook*, not the food,
+though, and as long as you keep that in mind, it mostly works.)
 
 Consider again the examples of exporting a video file and waiting on the video
 file to finish uploading. The video export will use as much CPU and GPU power as
@@ -74,4 +74,4 @@ here -->
 A big difference between the cooking analogy and Rust’s async-await model for
 concurrency is that in the cooking example, the cook makes the decision about
 when to switch tasks. In Rust’s async-await model, the tasks are in control of
-that. To see how, let’s look at
+that. To see how, let’s look at how Rust actually uses async-await.
