@@ -18,7 +18,7 @@ fn main() {
         .map(|entry| match entry {
             Ok(entry) => entry,
             Err(err) => {
-                eprintln!("{:?}", err);
+                eprintln!("{err:?}");
                 std::process::exit(911)
             }
         })
