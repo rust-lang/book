@@ -60,10 +60,10 @@ the code in the curly brackets, giving it a way to continue validly. Listing
 <span class="caption">Listing 18-9: Using `if let` and a block with refutable
 patterns instead of `let`</span>
 
-We’ve given the code an out! This code is perfectly valid, although it means we
-cannot use an irrefutable pattern without receiving an error. If we give `if
-let` a pattern that will always match, such as `x`, as shown in Listing 18-10,
-the compiler will give a warning.
+We’ve given the code an out! This code is perfectly valid now. However,
+if we give `if let` an irrefutable pattern (a pattern that will always
+match), such as `x`, as shown in Listing 18-10, the compiler will give a
+warning.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-10/src/main.rs:here}}

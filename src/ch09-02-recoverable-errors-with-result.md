@@ -6,9 +6,9 @@ interpret and respond to. For example, if you try to open a file and that
 operation fails because the file doesn’t exist, you might want to create the
 file instead of terminating the process.
 
-Recall from [“Handling Potential Failure with the `Result`
-Type”][handle_failure]<!-- ignore --> in Chapter 2 that the `Result` enum is
-defined as having two variants, `Ok` and `Err`, as follows:
+Recall from [“Handling Potential Failure with `Result`”][handle_failure]<!--
+ignore --> in Chapter 2 that the `Result` enum is defined as having two
+variants, `Ok` and `Err`, as follows:
 
 ```rust
 enum Result<T, E> {
@@ -147,10 +147,10 @@ the missing file error.
 >     let greeting_file = File::open("hello.txt").unwrap_or_else(|error| {
 >         if error.kind() == ErrorKind::NotFound {
 >             File::create("hello.txt").unwrap_or_else(|error| {
->                 panic!("Problem creating the file: {:?}", error);
+>                 panic!("Problem creating the file: {error:?}");
 >             })
 >         } else {
->             panic!("Problem opening the file: {:?}", error);
+>             panic!("Problem opening the file: {error:?}");
 >         }
 >     });
 > }
@@ -188,9 +188,8 @@ copy and paste relevant text
 -->
 
 ```text
-thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Os {
-code: 2, kind: NotFound, message: "No such file or directory" }',
-src/main.rs:4:49
+thread 'main' panicked at src/main.rs:4:49:
+called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
 ```
 
 Similarly, the `expect` method lets us also choose the `panic!` error message.
@@ -216,9 +215,8 @@ copy and paste relevant text
 -->
 
 ```text
-thread 'main' panicked at 'hello.txt should be included in this project: Os {
-code: 2, kind: NotFound, message: "No such file or directory" }',
-src/main.rs:5:10
+thread 'main' panicked at src/main.rs:5:10:
+hello.txt should be included in this project: Os { code: 2, kind: NotFound, message: "No such file or directory" }
 ```
 
 In production-quality code, most Rustaceans choose `expect` rather than
@@ -532,6 +530,6 @@ Now that we’ve discussed the details of calling `panic!` or returning `Result`
 let’s return to the topic of how to decide which is appropriate to use in which
 cases.
 
-[handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type
+[handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-result
 [trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [termination]: ../std/process/trait.Termination.html

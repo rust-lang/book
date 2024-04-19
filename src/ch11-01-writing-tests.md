@@ -62,7 +62,7 @@ cd ../../..
 <span class="caption">Listing 11-1: The test module and function generated
 automatically by `cargo new`</span>
 
-For now, let’s ignore the top two lines and focus on the function. Note the
+For now, let’s focus solely on the `it_works()` function. Note the
 `#[test]` annotation: this attribute indicates this is a test function, so the
 test runner knows to treat this function as a test. We might also have non-test
 functions in the `tests` module to help set up common scenarios or perform
@@ -309,7 +309,7 @@ Run the tests again:
 ```
 
 Our test caught the bug! The `it_adds_two` test failed, and the message tells
-us that the assertion that fails was `` assertion failed: `(left == right)` ``
+us that the assertion that fails was ``assertion `left == right` failed``
 and what the `left` and `right` values are. This message helps us start
 debugging: the `left` argument was `4` but the `right` argument, where we had
 `add_two(2)`, was `5`. You can imagine that this would be especially helpful
@@ -497,10 +497,10 @@ This time when we run the `should_panic` test, it will fail:
 ```
 
 The failure message indicates that this test did indeed panic as we expected,
-but the panic message did not include the expected string `'Guess value must be
-less than or equal to 100'`. The panic message that we did get in this case was
-`Guess value must be greater than or equal to 1, got 200.` Now we can start
-figuring out where our bug is!
+but the panic message did not include the expected string `less than or equal
+to 100`. The panic message that we did get in this case was `Guess value must
+be greater than or equal to 1, got 200.` Now we can start figuring out where
+our bug is!
 
 ### Using `Result<T, E>` in Tests
 

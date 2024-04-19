@@ -3,7 +3,7 @@ fn main() {
 
     match numbers {
         (.., second, ..) => {
-            println!("Some numbers: {}", second)
+            println!("Some numbers: {second}")
         },
     }
 }

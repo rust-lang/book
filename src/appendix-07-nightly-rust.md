@@ -114,6 +114,12 @@ work as expected, you can report it to the team and get it fixed before the
 next stable release happens! Breakage in a beta release is relatively rare, but
 `rustc` is still a piece of software, and bugs do exist.
 
+### Maintenance time
+
+The Rust project supports the most recent stable version. When a new stable
+version is released, the old version reaches its end of life (EOL). This means
+each version is supported for six weeks.
+
 ### Unstable Features
 
 There’s one more catch with this release model: unstable features. Rust uses a

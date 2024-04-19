@@ -8,7 +8,7 @@ fn main() {
     scores.insert(String::from("Yellow"), 50);
 
     for (key, value) in &scores {
-        println!("{}: {}", key, value);
+        println!("{key}: {value}");
     }
     // ANCHOR_END: here
 }

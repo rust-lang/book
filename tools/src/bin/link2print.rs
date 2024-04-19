@@ -71,13 +71,13 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                             Some(key) => {
                                 match key.as_str() {
                                     // `[name][]`
-                                    "" => ref_map.get(&name.to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{}`", name)).to_string(),
+                                    "" => ref_map.get(&name.to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{name}`")).to_string(),
                                     // `[name][reference]`
                                     _ => ref_map.get(&key.as_str().to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{}`", key.as_str())).to_string(),
                                 }
                             }
                             // `[name]` as reference
-                            None => ref_map.get(&name.to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{}`", name)).to_string(),
+                            None => ref_map.get(&name.to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{name}`")).to_string(),
                         }
                     }
                 };

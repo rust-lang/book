@@ -82,8 +82,8 @@ parts, as shown in Listing 5-10.
 
 Here we’ve defined a struct and named it `Rectangle`. Inside the curly
 brackets, we defined the fields as `width` and `height`, both of which have
-type `u32`. Then in `main`, we created a particular instance of `Rectangle`
-that has a width of 30 and a height of 50.
+type `u32`. Then, in `main`, we created a particular instance of `Rectangle`
+that has a width of `30` and a height of `50`.
 
 Our `area` function is now defined with one parameter, which we’ve named
 `rectangle`, whose type is an immutable borrow of a struct `Rectangle`
@@ -126,7 +126,7 @@ When we compile this code, we get an error with this core message:
 The `println!` macro can do many kinds of formatting, and by default, the curly
 brackets tell `println!` to use formatting known as `Display`: output intended
 for direct end user consumption. The primitive types we’ve seen so far
-implement `Display` by default, because there’s only one way you’d want to show
+implement `Display` by default because there’s only one way you’d want to show
 a `1` or any other primitive type to a user. But with structs, the way
 `println!` should format the output is less clear because there are more
 display possibilities: Do you want commas or not? Do you want to print the
@@ -182,8 +182,8 @@ following output:
 Nice! It’s not the prettiest output, but it shows the values of all the fields
 for this instance, which would definitely help during debugging. When we have
 larger structs, it’s useful to have output that’s a bit easier to read; in
-those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string.
-In this example, using the `{:#?}` style will output:
+those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string. In
+this example, using the `{:#?}` style will output the following:
 
 ```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-02-pretty-debug/output.txt}}
@@ -191,15 +191,15 @@ In this example, using the `{:#?}` style will output:
 
 Another way to print out a value using the `Debug` format is to use the [`dbg!`
 macro][dbg]<!-- ignore -->, which takes ownership of an expression (as opposed
-to `println!` that takes a reference), prints the file and line number of where
-that `dbg!` macro call occurs in your code along with the resulting value of
-that expression, and returns ownership of the value.
+to `println!`, which takes a reference), prints the file and line number of
+where that `dbg!` macro call occurs in your code along with the resultant value
+of that expression, and returns ownership of the value.
 
 > Note: Calling the `dbg!` macro prints to the standard error console stream
-> (`stderr`), as opposed to `println!` which prints to the standard output
+> (`stderr`), as opposed to `println!`, which prints to the standard output
 > console stream (`stdout`). We’ll talk more about `stderr` and `stdout` in the
-> “[“Writing Error Messages to Standard Error Instead of Standard
-> Output” section in Chapter 12][err]<!-- ignore -->.
+> [“Writing Error Messages to Standard Error Instead of Standard Output”
+> section in Chapter 12][err]<!-- ignore -->.
 
 Here’s an example where we’re interested in the value that gets assigned to the
 `width` field, as well as the value of the whole struct in `rect1`:
@@ -218,8 +218,8 @@ Here’s what the output of this example looks like:
 {{#include ../listings/ch05-using-structs-to-structure-related-data/no-listing-05-dbg-macro/output.txt}}
 ```
 
-We can see the first bit of output came from *src/main.rs* line 10, where we’re
-debugging the expression `30 * scale`, and its resulting value is 60 (the
+We can see the first bit of output came from *src/main.rs* line 10 where we’re
+debugging the expression `30 * scale`, and its resultant value is `60` (the
 `Debug` formatting implemented for integers is to print only their value). The
 `dbg!` call on line 14 of *src/main.rs* outputs the value of `&rect1`, which is
 the `Rectangle` struct. This output uses the pretty `Debug` formatting of the
@@ -235,10 +235,10 @@ attributes other than `derive`; for more information, see [the “Attributes”
 section of the Rust Reference][attributes].
 
 Our `area` function is very specific: it only computes the area of rectangles.
-It would be helpful to tie this behavior more closely to our `Rectangle`
-struct, because it won’t work with any other type. Let’s look at how we can
-continue to refactor this code by turning the `area` function into an `area`
-*method* defined on our `Rectangle` type.
+It would be helpful to tie this behavior more closely to our `Rectangle` struct
+because it won’t work with any other type. Let’s look at how we can continue to
+refactor this code by turning the `area` function into an `area` *method*
+defined on our `Rectangle` type.
 
 [the-tuple-type]: ch03-02-data-types.html#the-tuple-type
 [app-c]: appendix-03-derivable-traits.md

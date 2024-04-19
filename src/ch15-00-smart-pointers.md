@@ -12,7 +12,7 @@ pointer but also have additional metadata and capabilities. The concept of
 smart pointers isn’t unique to Rust: smart pointers originated in C++ and exist
 in other languages as well. Rust has a variety of smart pointers defined in the
 standard library that provide functionality beyond that provided by references.
-To explore the general concept, we'll look at a couple of different examples of
+To explore the general concept, we’ll look at a couple of different examples of
 smart pointers, including a *reference counting* smart pointer type. This
 pointer enables you to allow data to have multiple owners by keeping track of
 the number of owners and, when no owners remain, cleaning up the data.
@@ -21,7 +21,7 @@ Rust, with its concept of ownership and borrowing, has an additional difference
 between references and smart pointers: while references only borrow data, in
 many cases, smart pointers *own* the data they point to.
 
-Though we didn't call them as such at the time, we’ve already encountered a few
+Though we didn’t call them as such at the time, we’ve already encountered a few
 smart pointers in this book, including `String` and `Vec<T>` in Chapter 8. Both
 these types count as smart pointers because they own some memory and allow you
 to manipulate it. They also have metadata and extra capabilities or guarantees.
@@ -32,7 +32,7 @@ Smart pointers are usually implemented using structs. Unlike an ordinary
 struct, smart pointers implement the `Deref` and `Drop` traits. The `Deref`
 trait allows an instance of the smart pointer struct to behave like a reference
 so you can write your code to work with either references or smart pointers.
-The `Drop` trait allows you to customize the code that's run when an instance
+The `Drop` trait allows you to customize the code that’s run when an instance
 of the smart pointer goes out of scope. In this chapter, we’ll discuss both
 traits and demonstrate why they’re important to smart pointers.
 

@@ -224,9 +224,9 @@ copy output below; the output updating script doesn't handle subdirectories in p
 ```console
 $ cargo build
     Updating crates.io index
-  Downloaded rand v0.8.3
+  Downloaded rand v0.8.5
    --snip--
-   Compiling rand v0.8.3
+   Compiling rand v0.8.5
    Compiling add_one v0.1.0 (file:///projects/add/add_one)
 warning: unused import: `rand`
  --> add_one/src/lib.rs:1:5
@@ -236,8 +236,7 @@ warning: unused import: `rand`
   |
   = note: `#[warn(unused_imports)]` on by default
 
-warning: 1 warning emitted
-
+warning: `add_one` (lib) generated 1 warning
    Compiling adder v0.1.0 (file:///projects/add/adder)
     Finished dev [unoptimized + debuginfo] target(s) in 10.18s
 ```
@@ -300,14 +299,14 @@ $ cargo test
    Compiling add_one v0.1.0 (file:///projects/add/add_one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
     Finished test [unoptimized + debuginfo] target(s) in 0.27s
-     Running target/debug/deps/add_one-f0253159197f7841
+     Running unittests src/lib.rs (target/debug/deps/add_one-f0253159197f7841)
 
 running 1 test
 test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-     Running target/debug/deps/adder-49979ff40686fa8e
+     Running unittests src/main.rs (target/debug/deps/adder-49979ff40686fa8e)
 
 running 0 tests
 
@@ -338,7 +337,7 @@ copy output below; the output updating script doesn't handle subdirectories in p
 ```console
 $ cargo test -p add_one
     Finished test [unoptimized + debuginfo] target(s) in 0.00s
-     Running target/debug/deps/add_one-b3235fea9a156f74
+     Running unittests src/lib.rs (target/debug/deps/add_one-b3235fea9a156f74)
 
 running 1 test
 test tests::it_works ... ok

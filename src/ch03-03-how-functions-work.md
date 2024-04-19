@@ -35,8 +35,8 @@ should see the following output:
 ```
 
 The lines execute in the order in which they appear in the `main` function.
-First, the “Hello, world!” message prints, and then `another_function` is
-called and its message is printed.
+First the “Hello, world!” message prints, and then `another_function` is called
+and its message is printed.
 
 ### Parameters
 
@@ -108,8 +108,9 @@ understand. Other languages don’t have the same distinctions, so let’s look 
 what statements and expressions are and how their differences affect the bodies
 of functions.
 
-*Statements* are instructions that perform some action and do not return a
-value. *Expressions* evaluate to a resulting value. Let’s look at some examples.
+* **Statements** are instructions that perform some action and do not return
+  a value.
+* **Expressions** evaluate to a resultant value. Let’s look at some examples.
 
 We’ve actually already used statements and expressions. Creating a variable and
 assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
@@ -172,10 +173,11 @@ This expression:
 
 is a block that, in this case, evaluates to `4`. That value gets bound to `y`
 as part of the `let` statement. Note that the `x + 1` line doesn’t have a
-semicolon at the end, unlike most of the lines you’ve seen so far. Expressions
-do not include ending semicolons. If you add a semicolon to the end of an
-expression, you turn it into a statement, and it will then not return a value.
-Keep this in mind as you explore function return values and expressions next.
+semicolon at the end, which is unlike most of the lines you’ve seen so far.
+Expressions do not include ending semicolons. If you add a semicolon to the end
+of an expression, you turn it into a statement, and it will then not return a
+value. Keep this in mind as you explore function return values and expressions
+next.
 
 ### Functions with Return Values
 
@@ -226,7 +228,7 @@ Let’s look at another example:
 
 Running this code will print `The value of x is: 6`. But if we place a
 semicolon at the end of the line containing `x + 1`, changing it from an
-expression to a statement, we’ll get an error.
+expression to a statement, we’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -240,7 +242,7 @@ Compiling this code produces an error, as follows:
 {{#include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/output.txt}}
 ```
 
-The main error message, “mismatched types,” reveals the core issue with this
+The main error message, `mismatched types`, reveals the core issue with this
 code. The definition of the function `plus_one` says that it will return an
 `i32`, but statements don’t evaluate to a value, which is expressed by `()`,
 the unit type. Therefore, nothing is returned, which contradicts the function

@@ -35,6 +35,7 @@ backtraces
 BACKTRACE
 Backtraces
 Baz's
+beefeb
 benchmarking
 bioinformatics
 bitand
@@ -537,6 +538,7 @@ uncommenting
 unevaluated
 Uninstalling
 uninstall
+unittests
 unix
 unpopulated
 unoptimized
@@ -545,6 +547,7 @@ unsafety
 unsized
 unsynchronized
 Unyank
+UpperCamelCase
 URIs
 UsefulType
 username

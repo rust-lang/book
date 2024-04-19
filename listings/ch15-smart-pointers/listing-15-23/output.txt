@@ -9,7 +9,8 @@ test tests::it_sends_an_over_75_percent_warning_message ... FAILED
 failures:
 
 ---- tests::it_sends_an_over_75_percent_warning_message stdout ----
-thread 'main' panicked at 'already borrowed: BorrowMutError', src/lib.rs:60:53
+thread 'tests::it_sends_an_over_75_percent_warning_message' panicked at src/lib.rs:60:53:
+already borrowed: BorrowMutError
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 
@@ -18,4 +19,4 @@ failures:
 
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-error: test failed, to rerun pass '--lib'
+error: test failed, to rerun pass `--lib`

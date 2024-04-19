@@ -95,7 +95,7 @@ fn main() {
 The `for` loop variable is now named `_i`, and the warning no longer appears.
 
 You can also use the `cargo fix` command to transition your code between
-different Rust editions. Editions are covered in Appendix E.
+different Rust editions. Editions are covered in [Appendix E][editions].
 
 ### More Lints with Clippy
 
@@ -130,14 +130,15 @@ fn main() {
 Running `cargo clippy` on this project results in this error:
 
 ```text
-error: approximate value of `f{32, 64}::consts::PI` found. Consider using it directly
+error: approximate value of `f{32, 64}::consts::PI` found
  --> src/main.rs:2:13
   |
 2 |     let x = 3.1415;
   |             ^^^^^^
   |
-  = note: #[deny(clippy::approx_constant)] on by default
-  = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/master/index.html#approx_constant
+  = note: `#[deny(clippy::approx_constant)]` on by default
+  = help: consider using the constant directly
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
 This error lets you know that Rust already has a more precise `PI` constant
@@ -171,9 +172,10 @@ communicate with each other. Different clients can use `rust-analyzer`, such as
 [lsp]: http://langserver.org/
 [vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer
 
-Visit the `rust-analyzer` project’s [home page][rust-analyzer] for installation
-instructions, then install the language server support in your particular IDE.
-Your IDE will gain abilities such as autocompletion, jump to definition, and
-inline errors.
+Visit the `rust-analyzer` project’s [home page][rust-analyzer]<!-- ignore -->
+for installation instructions, then install the language server support in your
+particular IDE. Your IDE will gain abilities such as autocompletion, jump to
+definition, and inline errors.
 
 [rust-analyzer]: https://rust-analyzer.github.io
+[editions]: appendix-05-editions.md

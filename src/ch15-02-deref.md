@@ -14,7 +14,7 @@ smart pointers to work in ways similar to references. Then we’ll look at
 Rust’s *deref coercion* feature and how it lets us work with either references
 or smart pointers.
 
-> Note: there’s one big difference between the `MyBox<T>` type we’re about to
+> Note: There’s one big difference between the `MyBox<T>` type we’re about to
 > build and the real `Box<T>`: our version will not store its data on the heap.
 > We are focusing this example on `Deref`, so where the data is actually stored
 > is less important than the pointer-like behavior.
@@ -73,11 +73,12 @@ Listing 15-6:
 `Box<i32>`</span>
 
 The main difference between Listing 15-7 and Listing 15-6 is that here we set
-`y` to be an instance of a box pointing to a copied value of `x` rather than a
-reference pointing to the value of `x`. In the last assertion, we can use the
-dereference operator to follow the box’s pointer in the same way that we did
-when `y` was a reference. Next, we’ll explore what is special about `Box<T>`
-that enables us to use the dereference operator by defining our own box type.
+`y` to be an instance of a `Box<T>` pointing to a copied value of `x` rather
+than a reference pointing to the value of `x`. In the last assertion, we can
+use the dereference operator to follow the pointer of the `Box<T>` in the same
+way that we did when `y` was a reference. Next, we’ll explore what is special
+about `Box<T>` that enables us to use the dereference operator by defining our
+own type.
 
 ### Defining Our Own Smart Pointer
 
