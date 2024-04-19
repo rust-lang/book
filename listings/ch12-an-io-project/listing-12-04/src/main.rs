@@ -10,9 +10,9 @@ fn main() {
     let query = &args[1];
     let file_path = &args[2];
 
-    println!("Searching for {}", query);
+    println!("Searching for {query}");
     // ANCHOR: here
-    println!("In file {}", file_path);
+    println!("In file {file_path}");
 
     let contents = fs::read_to_string(file_path)
         .expect("Should have been able to read the file");

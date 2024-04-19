@@ -8,5 +8,5 @@ fn main() {
         _ => println!("Default case, x = {x:?}"),
     }
 
-    println!("at the end: x = {:?}, y = {y}", x);
+    println!("at the end: x = {x:?}, y = {y}");
 }

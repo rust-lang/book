@@ -6,7 +6,7 @@ trait OutlinePrint: fmt::Display {
         let len = output.len();
         println!("{}", "*".repeat(len + 4));
         println!("*{}*", " ".repeat(len + 2));
-        println!("* {} *", output);
+        println!("* {output} *");
         println!("*{}*", " ".repeat(len + 2));
         println!("{}", "*".repeat(len + 4));
     }

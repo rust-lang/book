@@ -4,6 +4,6 @@ fn main() {
 
     s.push_str(", world!"); // push_str() appends a literal to a String
 
-    println!("{}", s); // This will print `hello, world!`
-                       // ANCHOR_END: here
+    println!("{s}"); // This will print `hello, world!`
+                     // ANCHOR_END: here
 }
