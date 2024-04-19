@@ -329,8 +329,8 @@ Using `FnOnce` in the trait bound expresses the constraint that
 `unwrap_or_else` is only going to call `f` at most one time. In the body of
 `unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be
 called. If the `Option` is `None`, `f` will be called once. Because all
-closures implement `FnOnce`, `unwrap_or_else` accepts the most different kinds
-of closures and is as flexible as it can be.
+closures implement `FnOnce`, `unwrap_or_else` accepts all three kinds of
+closures and is as flexible as it can be.
 
 > Note: Functions can implement all three of the `Fn` traits too. If what we
 > want to do doesn’t require capturing a value from the environment, we can use
