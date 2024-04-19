@@ -1,9 +1,8 @@
 ## The Slice Type
 
-*Slices* are a kind of reference, which lets you access a contiguous sub-sequence
-of elements in a sequential [collection](ch08-00-common-collections.md).
-Because slices are a kind of reference, they too can borrow access to memory, but
-not own it.
+*Slices* let you reference a contiguous sequence of elements in a
+[collection](ch08-00-common-collections.md) rather than the whole collection. A
+slice is a kind of reference, so it does not have ownership.
 
 Here’s a small programming problem: write a function that takes a string of
 words separated by spaces and returns the first word it finds in that string.
