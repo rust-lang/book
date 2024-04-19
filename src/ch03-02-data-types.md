@@ -352,7 +352,8 @@ cargo run
 -->
 
 ```console
-thread 'main' panicked at 'index out of bounds: the len is 5 but the index is 10', src/main.rs:19:19
+thread 'main' panicked at src/main.rs:19:19:
+index out of bounds: the len is 5 but the index is 10
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 

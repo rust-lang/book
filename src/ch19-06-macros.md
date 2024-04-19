@@ -508,6 +508,6 @@ and do one more project!
 [tlborm]: https://veykril.github.io/tlborm/
 [`syn`]: https://crates.io/crates/syn
 [`quote`]: https://crates.io/crates/quote
-[syn-docs]: https://docs.rs/syn/1.0/syn/struct.DeriveInput.html
+[syn-docs]: https://docs.rs/syn/2.0/syn/struct.DeriveInput.html
 [quote-docs]: https://docs.rs/quote
 [decl]: #declarative-macros-with-macro_rules-for-general-metaprogramming

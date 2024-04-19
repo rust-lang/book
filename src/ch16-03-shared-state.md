@@ -128,7 +128,7 @@ We hinted that this example wouldn’t compile. Now let’s find out why!
 
 The error message states that the `counter` value was moved in the previous
 iteration of the loop. Rust is telling us that we can’t move the ownership
-of lock `counter` into multiple threads. Let’s fix the compiler error with a
+of `counter` into multiple threads. Let’s fix the compiler error with a
 multiple-ownership method we discussed in Chapter 15.
 
 #### Multiple Ownership with Multiple Threads

@@ -266,7 +266,7 @@ a string slice for the type of the `s` parameter</span>
 
 If we have a string slice, we can pass that directly. If we have a `String`, we
 can pass a slice of the `String` or a reference to the `String`. This
-flexibility takes advantage of *deref coercions*, a feature we will cover in
+flexibility takes advantage of *deref coercions*, a feature we will cover in the
 [“Implicit Deref Coercions with Functions and
 Methods”][deref-coercions]<!--ignore--> section of Chapter 15.
 

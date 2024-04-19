@@ -198,4 +198,4 @@ code. Next, we’ll introduce you to the Cargo tool, which will help you write
 real-world Rust programs.
 
 [troubleshooting]: ch01-01-installation.html#troubleshooting
-[devtools]: appendix-04-useful-development-tools.md
+[devtools]: appendix-04-useful-development-tools.html

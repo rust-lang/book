@@ -250,6 +250,9 @@ and then check whether the `counter` is equal to `10`. When it is, we use the
 semicolon to end the statement that assigns the value to `result`. Finally, we
 print the value in `result`, which in this case is `20`.
 
+You can also `return` from inside a loop. While `break` only exits the current
+loop, `return` always exits the current function.
+
 #### Loop Labels to Disambiguate Between Multiple Loops
 
 If you have loops within loops, `break` and `continue` apply to the innermost
@@ -297,7 +300,7 @@ evaluates to `true`, the code runs; otherwise, it exits the loop.
 
 #### Looping Through a Collection with `for`
 
-You can choose to use the `while` construct to loop over the elements of a
+You can also use the `while` construct to loop over the elements of a
 collection, such as an array. For example, the loop in Listing 3-4 prints each
 element in the array `a`.
 
