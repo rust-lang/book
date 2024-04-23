@@ -2,6 +2,7 @@ fn main() {
     // ANCHOR: here
     let hello = String::from("السلام عليكم");
     let hello = String::from("Dobrý den");
+    let hello = String::from("Dzień dobry");
     let hello = String::from("Hello");
     let hello = String::from("שלום");
     let hello = String::from("नमस्ते");
