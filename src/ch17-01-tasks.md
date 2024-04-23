@@ -241,6 +241,7 @@ Hello, async!
 ```
 
 Now, that’s a lot of work to just print a string, but we have laid some key
-foundations for working with async and await in Rust.
+foundations for working with async-await in Rust! Now that you know the basics
+of how futures work, and the
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
