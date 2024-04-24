@@ -11,14 +11,19 @@
 
 use trpl::async_main;
 
+/// This test makes sure the re-exported version of the `tokio::main` macro,
+/// which is applied like `#[tokio::main] async fn some_fn() { … }`, continues
+/// to work. However, tests cannot use `async fn`, so to test it, we need to
+/// have a non-`async` test function, which then applies the macro to an `async`
+/// function in its body, and invokes *that*.
 #[test]
 fn re_exported_macro_works() {
     #[async_main]
-    async fn demo() -> &'static str {
+    async fn internal() -> &'static str {
         let val = async { "Hello" }.await;
         assert_eq!(val, "Hello", "Async is usable in async_main function");
         val
     }
 
-    assert_eq!(demo(), "Hello", "value returns correctly");
+    assert_eq!(internal(), "Hello", "value returns correctly");
 }
