@@ -1,5 +1,7 @@
 # The Rust Programming Language Book Crate
 
+![Build Status](https://github.com/chriskrycho/trpl-crate/workflows/CI/badge.svg)
+
 This repository is the home of the `trpl` crate used in _The Rust Programming
 Language_ book materials.
 
