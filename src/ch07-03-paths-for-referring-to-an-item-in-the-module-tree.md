@@ -20,10 +20,10 @@ This is the same as asking: what’s the path of the `add_to_waitlist` function?
 Listing 7-3 contains Listing 7-1 with some of the modules and functions
 removed.
 
-We’ll show two ways to call the `add_to_waitlist` function from a new function
-`eat_at_restaurant` defined in the crate root. These paths are correct, but
+We’ll show two ways to call the `add_to_waitlist` function from a new function,
+`eat_at_restaurant`, defined in the crate root. These paths are correct, but
 there’s another problem remaining that will prevent this example from compiling
-as-is. We’ll explain why in a bit.
+as is. We’ll explain why in a bit.
 
 The `eat_at_restaurant` function is part of our library crate’s public API, so
 we mark it with the `pub` keyword. In the [“Exposing Paths with the `pub`
@@ -55,19 +55,20 @@ filesystem equivalent would be using the path
 that the path is relative.
 
 Choosing whether to use a relative or absolute path is a decision you’ll make
-based on your project, and depends on whether you’re more likely to move item
-definition code separately from or together with the code that uses the item.
-For example, if we move the `front_of_house` module and the `eat_at_restaurant`
-function into a module named `customer_experience`, we’d need to update the
-absolute path to `add_to_waitlist`, but the relative path would still be valid.
-However, if we moved the `eat_at_restaurant` function separately into a module
-named `dining`, the absolute path to the `add_to_waitlist` call would stay the
-same, but the relative path would need to be updated. Our preference in general
-is to specify absolute paths because it’s more likely we’ll want to move code
-definitions and item calls independently of each other.
+based on your project, and it depends on whether you’re more likely to move
+item definition code separately from or together with the code that uses the
+item. For example, if we moved the `front_of_house` module and the
+`eat_at_restaurant` function into a module named `customer_experience`, we’d
+need to update the absolute path to `add_to_waitlist`, but the relative path
+would still be valid. However, if we moved the `eat_at_restaurant` function
+separately into a module named `dining`, the absolute path to the
+`add_to_waitlist` call would stay the same, but the relative path would need to
+be updated. Our preference in general is to specify absolute paths because it’s
+more likely we’ll want to move code definitions and item calls independently of
+each other.
 
 Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
-error we get is shown in Listing 7-4.
+errors we get are shown in Listing 7-4.
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-03/output.txt}}
@@ -113,8 +114,8 @@ access to the `add_to_waitlist` function in the child module, so we mark the
 <span class="caption">Listing 7-5: Declaring the `hosting` module as `pub` to
 use it from `eat_at_restaurant`</span>
 
-Unfortunately, the code in Listing 7-5 still results in an error, as shown in
-Listing 7-6.
+Unfortunately, the code in Listing 7-5 still results in compiler errors, as
+shown in Listing 7-6.
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-05/output.txt}}
@@ -180,13 +181,13 @@ interested in this topic, see [The Rust API Guidelines][api-guidelines].
 
 > #### Best Practices for Packages with a Binary and a Library
 >
-> We mentioned a package can contain both a *src/main.rs* binary crate root as
-> well as a *src/lib.rs* library crate root, and both crates will have the
-> package name by default. Typically, packages with this pattern of containing
-> both a library and a binary crate will have just enough code in the binary
-> crate to start an executable that calls code within the library crate. This
-> lets other projects benefit from most of the functionality that the package
-> provides, because the library crate’s code can be shared.
+> We mentioned that a package can contain both a *src/main.rs* binary crate
+> root as well as a *src/lib.rs* library crate root, and both crates will have
+> the package name by default. Typically, packages with this pattern of
+> containing both a library and a binary crate will have just enough code in the
+> binary crate to start an executable that calls code within the library crate.
+> This lets other projects benefit from most of the functionality that the
+> package provides because the library crate’s code can be shared.
 >
 > The module tree should be defined in *src/lib.rs*. Then, any public items can
 > be used in the binary crate by starting paths with the name of the package.
@@ -206,14 +207,14 @@ the current module or the crate root, by using `super` at the start of the
 path. This is like starting a filesystem path with the `..` syntax. Using
 `super` allows us to reference an item that we know is in the parent module,
 which can make rearranging the module tree easier when the module is closely
-related to the parent, but the parent might be moved elsewhere in the module
+related to the parent but the parent might be moved elsewhere in the module
 tree someday.
 
 Consider the code in Listing 7-8 that models the situation in which a chef
 fixes an incorrect order and personally brings it out to the customer. The
 function `fix_incorrect_order` defined in the `back_of_house` module calls the
 function `deliver_order` defined in the parent module by specifying the path to
-`deliver_order` starting with `super`:
+`deliver_order`, starting with `super`.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -236,7 +237,7 @@ code gets moved to a different module.
 ### Making Structs and Enums Public
 
 We can also use `pub` to designate structs and enums as public, but there are a
-few details extra to the usage of `pub` with structs and enums. If we use `pub`
+few extra details to the usage of `pub` with structs and enums. If we use `pub`
 before a struct definition, we make the struct public, but the struct’s fields
 will still be private. We can make each field public or not on a case-by-case
 basis. In Listing 7-9, we’ve defined a public `back_of_house::Breakfast` struct
@@ -258,7 +259,7 @@ private fields</span>
 Because the `toast` field in the `back_of_house::Breakfast` struct is public,
 in `eat_at_restaurant` we can write and read to the `toast` field using dot
 notation. Notice that we can’t use the `seasonal_fruit` field in
-`eat_at_restaurant` because `seasonal_fruit` is private. Try uncommenting the
+`eat_at_restaurant`, because `seasonal_fruit` is private. Try uncommenting the
 line modifying the `seasonal_fruit` field value to see what error you get!
 
 Also, note that because `back_of_house::Breakfast` has a private field, the

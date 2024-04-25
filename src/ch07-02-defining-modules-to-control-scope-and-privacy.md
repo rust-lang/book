@@ -1,27 +1,23 @@
 ## Defining Modules to Control Scope and Privacy
 
 In this section, we’ll talk about modules and other parts of the module system,
-namely *paths* that allow you to name items; the `use` keyword that brings a
+namely *paths*, which allow you to name items; the `use` keyword that brings a
 path into scope; and the `pub` keyword to make items public. We’ll also discuss
 the `as` keyword, external packages, and the glob operator.
 
-First, we’re going to start with a list of rules for easy reference when you’re
-organizing your code in the future. Then we’ll explain each of the rules in
-detail.
-
 ### Modules Cheat Sheet
 
-Here we provide a quick reference on how modules, paths, the `use` keyword, and
-the `pub` keyword work in the compiler, and how most developers organize their
-code. We’ll be going through examples of each of these rules throughout this
-chapter, but this is a great place to refer to as a reminder of how modules
-work.
+Before we get to the details of modules and paths, here we provide a quick
+reference on how modules, paths, the `use` keyword, and the `pub` keyword work
+in the compiler, and how most developers organize their code. We’ll be going
+through examples of each of these rules throughout this chapter, but this is a
+great place to refer to as a reminder of how modules work.
 
 - **Start from the crate root**: When compiling a crate, the compiler first
   looks in the crate root file (usually *src/lib.rs* for a library crate or
   *src/main.rs* for a binary crate) for code to compile.
 - **Declaring modules**: In the crate root file, you can declare new modules;
-say, you declare a “garden” module with `mod garden;`. The compiler will look
+say you declare a “garden” module with `mod garden;`. The compiler will look
 for the module’s code in these places:
   - Inline, within curly brackets that replace the semicolon following `mod
     garden`
@@ -40,7 +36,7 @@ for the module’s code in these places:
   as the privacy rules allow, using the path to the code. For example, an
   `Asparagus` type in the garden vegetables module would be found at
   `crate::garden::vegetables::Asparagus`.
-- **Private vs public**: Code within a module is private from its parent
+- **Private vs. public**: Code within a module is private from its parent
   modules by default. To make a module public, declare it with `pub mod`
   instead of `mod`. To make items within a public module public as well, use
   `pub` before their declarations.
@@ -50,8 +46,9 @@ for the module’s code in these places:
   crate::garden::vegetables::Asparagus;` and from then on you only need to
   write `Asparagus` to make use of that type in the scope.
 
-Here we create a binary crate named `backyard` that illustrates these rules. The
-crate’s directory, also named `backyard`, contains these files and directories:
+Here, we create a binary crate named `backyard` that illustrates these rules.
+The crate’s directory, also named `backyard`, contains these files and
+directories:
 
 ```text
 backyard
@@ -93,7 +90,7 @@ Now let’s get into the details of these rules and demonstrate them in action!
 ### Grouping Related Code in Modules
 
 *Modules* let us organize code within a crate for readability and easy reuse.
-Modules also allow us to control the *privacy* of items, because code within a
+Modules also allow us to control the *privacy* of items because code within a
 module is private by default. Private items are internal implementation details
 not available for outside use. We can choose to make modules and the items
 within them public, which exposes them to allow external code to use and depend
@@ -101,7 +98,7 @@ on them.
 
 As an example, let’s write a library crate that provides the functionality of a
 restaurant. We’ll define the signatures of functions but leave their bodies
-empty to concentrate on the organization of the code, rather than the
+empty to concentrate on the organization of the code rather than the
 implementation of a restaurant.
 
 In the restaurant industry, some parts of a restaurant are referred to as
@@ -113,8 +110,9 @@ administrative work.
 
 To structure our crate in this way, we can organize its functions into nested
 modules. Create a new library named `restaurant` by running `cargo new
-restaurant --lib`; then enter the code in Listing 7-1 into *src/lib.rs* to
-define some modules and function signatures. Here’s the front of house section:
+restaurant --lib`. Then enter the code in Listing 7-1 into *src/lib.rs* to
+define some modules and function signatures; this code is the front of house
+section.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -160,13 +158,13 @@ crate
 <span class="caption">Listing 7-2: The module tree for the code in Listing
 7-1</span>
 
-This tree shows how some of the modules nest inside one another; for example,
+This tree shows how some of the modules nest inside other modules; for example,
 `hosting` nests inside `front_of_house`. The tree also shows that some modules
-are *siblings* to each other, meaning they’re defined in the same module;
-`hosting` and `serving` are siblings defined within `front_of_house`. If module
-A is contained inside module B, we say that module A is the *child* of module B
-and that module B is the *parent* of module A. Notice that the entire module
-tree is rooted under the implicit module named `crate`.
+are *siblings*, meaning they’re defined in the same module; `hosting` and
+`serving` are siblings defined within `front_of_house`. If module A is
+contained inside module B, we say that module A is the *child* of module B and
+that module B is the *parent* of module A. Notice that the entire module tree
+is rooted under the implicit module named `crate`.
 
 The module tree might remind you of the filesystem’s directory tree on your
 computer; this is a very apt comparison! Just like directories in a filesystem,
