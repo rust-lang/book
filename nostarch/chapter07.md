@@ -410,7 +410,9 @@ error[E0603]: module `hosting` is private
  --> src/lib.rs:9:28
   |
 9 |     crate::front_of_house::hosting::add_to_waitlist();
-  |                            ^^^^^^^ private module
+  |                            ^^^^^^^  --------------- function `add_to_waitlist` is not publicly re-exported
+  |                            |
+  |                            private module
   |
 note: the module `hosting` is defined here
  --> src/lib.rs:2:5
@@ -422,7 +424,9 @@ error[E0603]: module `hosting` is private
   --> src/lib.rs:12:21
    |
 12 |     front_of_house::hosting::add_to_waitlist();
-   |                     ^^^^^^^ private module
+   |                     ^^^^^^^  --------------- function `add_to_waitlist` is not publicly re-exported
+   |                     |
+   |                     private module
    |
 note: the module `hosting` is defined here
   --> src/lib.rs:2:5
@@ -596,8 +600,8 @@ interested in this topic, see The Rust API Guidelines at *https://rust-lang.gith
 > root as well as a *src/lib.rs* library crate root, and both crates will have
 > the package name by default. Typically, packages with this pattern of
 > containing both a library and a binary crate will have just enough code in the
-> binary crate to start an executable that calls code with the library crate.
-> This lets other projects benefit from the most functionality that the
+> binary crate to start an executable that calls code within the library crate.
+> This lets other projects benefit from most of the functionality that the
 > package provides because the library crate’s code can be shared.
 >
 > The module tree should be defined in *src/lib.rs*. Then, any public items can
@@ -826,6 +830,11 @@ error[E0433]: failed to resolve: use of undeclared crate or module `hosting`
    |
 11 |         hosting::add_to_waitlist();
    |         ^^^^^^^ use of undeclared crate or module `hosting`
+   |
+help: consider importing this module through its public re-export
+   |
+10 +     use crate::hosting;
+   |
 
 warning: unused import: `crate::front_of_house::hosting`
  --> src/lib.rs:7:5
@@ -992,7 +1001,8 @@ from a new scope with `pub use`
 
 Before this change, external code would have to call the `add_to_waitlist`
 function by using the path
-`restaurant::front_of_house::hosting::add_to_waitlist()`. Now that this `pub
+`restaurant::front_of_house::hosting::add_to_waitlist()`, which also would have
+required the `front_of_house` module to be marked as `pub`. Now that this `pub
 use` has re-exported the `hosting` module from the root module, external code
 can use the path `restaurant::hosting::add_to_waitlist()` instead.
 
