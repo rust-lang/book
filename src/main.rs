@@ -3,7 +3,7 @@ use std::io;
 use clap::{self, Parser, Subcommand};
 use mdbook::preprocess::{CmdPreprocessor, Preprocessor};
 
-use mdbook_simple_note_preprocessor::SimpleNote;
+use mdbook_simple_note::SimpleNote;
 
 fn main() -> Result<(), String> {
     let cli = Cli::parse();

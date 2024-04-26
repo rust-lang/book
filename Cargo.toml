@@ -1,5 +1,5 @@
 [package]
-name = "mdbook-simple-note-preprocessor"
+name = "mdbook-simple-note"
 version = "1.0.0"
 edition = "2021"
 
