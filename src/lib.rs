@@ -82,6 +82,16 @@ pub fn rewrite(text: &str) -> String {
                 }
             }
 
+            (heading @ Start(Tag::Heading { .. }), StartingBlockquote(_blockquote_events)) => {
+                events.extend([
+                    Html(r#"<section class="note" aria-label="Note" aria-role="note">"#.into()),
+                    SoftBreak,
+                    SoftBreak,
+                    heading,
+                ]);
+                state = InNote;
+            }
+
             (Start(Tag::Paragraph), StartingBlockquote(ref mut events)) => {
                 events.push(Start(Tag::Paragraph));
             }
@@ -116,13 +126,6 @@ enum State<'e> {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    fn render_markdown(text: &str) -> String {
-        let parser = Parser::new(text);
-        let mut buf = String::new();
-        pulldown_cmark::html::push_html(&mut buf, parser);
-        buf
-    }
 
     #[test]
     fn no_note() {
@@ -162,5 +165,72 @@ mod tests {
             render_markdown(&processed),
             "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<p>This is some text.\nIt keeps going.</p>\n</section>\n<p>This is regular text.</p>\n<blockquote>\n<p>This is a blockquote.</p>\n</blockquote>\n"
         );
+    }
+
+    #[test]
+    fn with_h1() {
+        let text = "> # Header\n > And then some note content.";
+        let processed = rewrite(text);
+        assert_eq!(
+            render_markdown(&processed),
+            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h1>Header</h1>\n<p>And then some note content.</p>\n</section>"
+        );
+    }
+
+    #[test]
+    fn with_h2() {
+        let text = "> ## Header\n > And then some note content.";
+        let processed = rewrite(text);
+        assert_eq!(
+            render_markdown(&processed),
+            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h2>Header</h2>\n<p>And then some note content.</p>\n</section>"
+        );
+    }
+
+    #[test]
+    fn with_h3() {
+        let text = "> ### Header\n > And then some note content.";
+        let processed = rewrite(text);
+        assert_eq!(
+            render_markdown(&processed),
+            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h3>Header</h3>\n<p>And then some note content.</p>\n</section>"
+        );
+    }
+
+    #[test]
+    fn with_h4() {
+        let text = "> #### Header\n > And then some note content.";
+        let processed = rewrite(text);
+        assert_eq!(
+            render_markdown(&processed),
+            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h4>Header</h4>\n<p>And then some note content.</p>\n</section>"
+        );
+    }
+
+    #[test]
+    fn with_h5() {
+        let text = "> ##### Header\n > And then some note content.";
+        let processed = rewrite(text);
+        assert_eq!(
+            render_markdown(&processed),
+            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h5>Header</h5>\n<p>And then some note content.</p>\n</section>"
+        );
+    }
+
+    #[test]
+    fn with_h6() {
+        let text = "> ###### Header\n > And then some note content.";
+        let processed = rewrite(text);
+        assert_eq!(
+            render_markdown(&processed),
+            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h6>Header</h6>\n<p>And then some note content.</p>\n</section>"
+        );
+    }
+
+    fn render_markdown(text: &str) -> String {
+        let parser = Parser::new(text);
+        let mut buf = String::new();
+        pulldown_cmark::html::push_html(&mut buf, parser);
+        buf
     }
 }
