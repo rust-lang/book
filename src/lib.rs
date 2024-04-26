@@ -55,19 +55,23 @@ pub fn rewrite(text: &str) -> String {
     let mut state = Default;
 
     for event in parser {
-        match (event, &mut state) {
-            (Start(Tag::BlockQuote), Default) => {
+        match (&mut state, event) {
+            (Default, Start(Tag::BlockQuote)) => {
                 state = StartingBlockquote(vec![Start(Tag::BlockQuote)]);
             }
 
-            (Text(content), StartingBlockquote(blockquote_events)) => {
+            (StartingBlockquote(blockquote_events), Text(content)) => {
                 if content.starts_with("Note: ") {
-                    // This needs the “extra” `SoftBreak`s so that when the
-                    // final rendering pass happens, it does not end up treating
-                    // the internal content as inline: content inside HTML
-                    // blocks is only rendered as Markdown when it is separated
-                    // from the block HTML elements: otherwise it gets treated
-                    // as inline HTML and *not* rendered.
+                    // This needs the "extra" `SoftBreak`s so that when the final rendering pass
+                    // happens, it does not end up treating the internal content as inline *or*
+                    // treating the HTML tags as inline tags:
+                    //
+                    // - Content inside HTML blocks is only rendered as Markdown when it is
+                    //   separated from the block HTML elements: otherwise it gets treated as inline
+                    //   HTML and *not* rendered.
+                    // - Along the same lines, an HTML tag that happens to be directly adjacent to
+                    //   the end of a previous Markdown block will end up being rendered as part of
+                    //   that block.
                     events.extend([
                         Html(r#"<section class="note" aria-label="Note" aria-role="note">"#.into()),
                         SoftBreak,
@@ -82,7 +86,7 @@ pub fn rewrite(text: &str) -> String {
                 }
             }
 
-            (heading @ Start(Tag::Heading { .. }), StartingBlockquote(_blockquote_events)) => {
+            (StartingBlockquote(_blockquote_events), heading @ Start(Tag::Heading { .. })) => {
                 events.extend([
                     Html(r#"<section class="note" aria-label="Note" aria-role="note">"#.into()),
                     SoftBreak,
@@ -92,18 +96,18 @@ pub fn rewrite(text: &str) -> String {
                 state = InNote;
             }
 
-            (Start(Tag::Paragraph), StartingBlockquote(ref mut events)) => {
+            (StartingBlockquote(ref mut events), Start(Tag::Paragraph)) => {
                 events.push(Start(Tag::Paragraph));
             }
 
-            (End(TagEnd::BlockQuote), InNote) => {
+            (InNote, End(TagEnd::BlockQuote)) => {
                 // As with the start of the block HTML, the closing HTML must be
                 // separated from the Markdown text by two newlines.
                 events.extend([SoftBreak, SoftBreak, Html("</section>".into())]);
                 state = Default;
             }
 
-            (event, _) => {
+            (_, event) => {
                 events.push(event);
             }
         }
