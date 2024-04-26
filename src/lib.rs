@@ -73,6 +73,8 @@ pub fn rewrite(text: &str) -> String {
                     //   the end of a previous Markdown block will end up being rendered as part of
                     //   that block.
                     events.extend([
+                        SoftBreak,
+                        SoftBreak,
                         Html(r#"<section class="note" aria-label="Note" aria-role="note">"#.into()),
                         SoftBreak,
                         SoftBreak,
@@ -83,11 +85,14 @@ pub fn rewrite(text: &str) -> String {
                 } else {
                     events.append(blockquote_events);
                     events.push(Text(content));
+                    state = Default;
                 }
             }
 
             (StartingBlockquote(_blockquote_events), heading @ Start(Tag::Heading { .. })) => {
                 events.extend([
+                    SoftBreak,
+                    SoftBreak,
                     Html(r#"<section class="note" aria-label="Note" aria-role="note">"#.into()),
                     SoftBreak,
                     SoftBreak,
@@ -172,6 +177,26 @@ mod tests {
     }
 
     #[test]
+    fn blockquote_then_note() {
+        let text = "> This is quoted.\n\n> Note: This is noted.";
+        let processed = rewrite(text);
+        assert_eq!(
+            render_markdown(&processed),
+            "<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<p>Note: This is noted.</p>\n</section>"
+        );
+    }
+
+    #[test]
+    fn note_then_blockquote() {
+        let text = "> Note: This is noted.\n\n> This is quoted.";
+        let processed = rewrite(text);
+        assert_eq!(
+            render_markdown(&processed),
+            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<p>Note: This is noted.</p>\n</section>\n<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n"
+        );
+    }
+
+    #[test]
     fn with_h1_note() {
         let text = "> # Header\n > And then some note content.";
         let processed = rewrite(text);
@@ -228,6 +253,26 @@ mod tests {
         assert_eq!(
             render_markdown(&processed),
             "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h6>Header</h6>\n<p>And then some note content.</p>\n</section>"
+        );
+    }
+
+    #[test]
+    fn h1_then_blockquote() {
+        let text = "> # Header\n > And then some note content.\n\n> This is quoted.";
+        let processed = rewrite(text);
+        assert_eq!(
+            render_markdown(&processed),
+            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h1>Header</h1>\n<p>And then some note content.</p>\n</section>\n<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n"
+        );
+    }
+
+    #[test]
+    fn blockquote_then_h1_note() {
+        let text = "> This is quoted.\n\n> # Header\n > And then some note content.";
+        let processed = rewrite(text);
+        assert_eq!(
+            render_markdown(&processed),
+            "<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h1>Header</h1>\n<p>And then some note content.</p>\n</section>"
         );
     }
 
