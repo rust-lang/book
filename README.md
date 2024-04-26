@@ -16,7 +16,7 @@ Some text.
 —and rewrites the Markdown to this:
 
 ```html
-<section class="note" aria-label="Note" aria-role="note">
+<section class="note" aria-role="note">
 
 This is some material we want to provide more emphasis for, because it is
 important in some way!
@@ -25,7 +25,7 @@ important in some way!
 
 Some text.
 
-<section class="note" aria-label="Note" aria-role="note">
+<section class="note" aria-role="note">
 
 ## Some subject
 

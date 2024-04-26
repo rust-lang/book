@@ -21,7 +21,7 @@ use pulldown_cmark_to_cmark::cmark;
 /// Spits out Markdown like this:
 ///
 /// ```markdown
-/// <section class="note" aria-label="Note" aria-role="note">
+/// <section class="note" aria-role="note">
 ///
 /// This is a note.
 ///
@@ -75,7 +75,7 @@ pub fn rewrite(text: &str) -> String {
                     events.extend([
                         SoftBreak,
                         SoftBreak,
-                        Html(r#"<section class="note" aria-label="Note" aria-role="note">"#.into()),
+                        Html(r#"<section class="note" aria-role="note">"#.into()),
                         SoftBreak,
                         SoftBreak,
                         Start(Tag::Paragraph),
@@ -93,7 +93,7 @@ pub fn rewrite(text: &str) -> String {
                 events.extend([
                     SoftBreak,
                     SoftBreak,
-                    Html(r#"<section class="note" aria-label="Note" aria-role="note">"#.into()),
+                    Html(r#"<section class="note" aria-role="note">"#.into()),
                     SoftBreak,
                     SoftBreak,
                     heading,
@@ -152,7 +152,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<p>Note: This is some text.\nIt keeps going.</p>\n</section>"
+            "<section class=\"note\" aria-role=\"note\">\n<p>Note: This is some text.\nIt keeps going.</p>\n</section>"
         );
     }
 
@@ -172,7 +172,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<p>Note: This is some text.\nIt keeps going.</p>\n</section>\n<p>This is regular text.</p>\n<blockquote>\n<p>This is a blockquote.</p>\n</blockquote>\n"
+            "<section class=\"note\" aria-role=\"note\">\n<p>Note: This is some text.\nIt keeps going.</p>\n</section>\n<p>This is regular text.</p>\n<blockquote>\n<p>This is a blockquote.</p>\n</blockquote>\n"
         );
     }
 
@@ -182,7 +182,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<p>Note: This is noted.</p>\n</section>"
+            "<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n<section class=\"note\" aria-role=\"note\">\n<p>Note: This is noted.</p>\n</section>"
         );
     }
 
@@ -192,7 +192,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<p>Note: This is noted.</p>\n</section>\n<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n"
+            "<section class=\"note\" aria-role=\"note\">\n<p>Note: This is noted.</p>\n</section>\n<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n"
         );
     }
 
@@ -202,7 +202,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h1>Header</h1>\n<p>And then some note content.</p>\n</section>"
+            "<section class=\"note\" aria-role=\"note\">\n<h1>Header</h1>\n<p>And then some note content.</p>\n</section>"
         );
     }
 
@@ -212,7 +212,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h2>Header</h2>\n<p>And then some note content.</p>\n</section>"
+            "<section class=\"note\" aria-role=\"note\">\n<h2>Header</h2>\n<p>And then some note content.</p>\n</section>"
         );
     }
 
@@ -222,7 +222,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h3>Header</h3>\n<p>And then some note content.</p>\n</section>"
+            "<section class=\"note\" aria-role=\"note\">\n<h3>Header</h3>\n<p>And then some note content.</p>\n</section>"
         );
     }
 
@@ -232,7 +232,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h4>Header</h4>\n<p>And then some note content.</p>\n</section>"
+            "<section class=\"note\" aria-role=\"note\">\n<h4>Header</h4>\n<p>And then some note content.</p>\n</section>"
         );
     }
 
@@ -242,7 +242,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h5>Header</h5>\n<p>And then some note content.</p>\n</section>"
+            "<section class=\"note\" aria-role=\"note\">\n<h5>Header</h5>\n<p>And then some note content.</p>\n</section>"
         );
     }
 
@@ -252,7 +252,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h6>Header</h6>\n<p>And then some note content.</p>\n</section>"
+            "<section class=\"note\" aria-role=\"note\">\n<h6>Header</h6>\n<p>And then some note content.</p>\n</section>"
         );
     }
 
@@ -262,7 +262,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h1>Header</h1>\n<p>And then some note content.</p>\n</section>\n<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n"
+            "<section class=\"note\" aria-role=\"note\">\n<h1>Header</h1>\n<p>And then some note content.</p>\n</section>\n<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n"
         );
     }
 
@@ -272,7 +272,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<h1>Header</h1>\n<p>And then some note content.</p>\n</section>"
+            "<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n<section class=\"note\" aria-role=\"note\">\n<h1>Header</h1>\n<p>And then some note content.</p>\n</section>"
         );
     }
 
