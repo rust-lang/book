@@ -27,9 +27,9 @@ use pulldown_cmark_to_cmark::cmark;
 ///
 /// </section>
 /// ```
-pub struct SimpleNote;
+pub struct TrplNote;
 
-impl Preprocessor for SimpleNote {
+impl Preprocessor for TrplNote {
     fn name(&self) -> &str {
         "simple-note-preprocessor"
     }

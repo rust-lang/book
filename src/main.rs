@@ -3,11 +3,11 @@ use std::io;
 use clap::{self, Parser, Subcommand};
 use mdbook::preprocess::{CmdPreprocessor, Preprocessor};
 
-use mdbook_simple_note::SimpleNote;
+use mdbook_trpl_note::TrplNote;
 
 fn main() -> Result<(), String> {
     let cli = Cli::parse();
-    let simple_note = SimpleNote;
+    let simple_note = TrplNote;
     if let Some(Command::Supports { renderer }) = cli.command {
         return if simple_note.supports_renderer(&renderer) {
             Ok(())

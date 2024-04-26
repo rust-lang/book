@@ -941,7 +941,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "mdbook-simple-note"
+name = "mdbook-trpl-note"
 version = "1.0.0"
 dependencies = [
  "assert_cmd",

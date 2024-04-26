@@ -1,20 +1,36 @@
-# mdbook-simple-note-preprocessor
+# mdbook-trpl-note
 
-This is a *very* simple [preprocessor][pre] for [mdBook][mdbook] which takes Markdown like this—
+This is a *very* simple [preprocessor][pre] for [mdBook][mdbook], focused specifically on the content of _The Rust Programming Language_  book. This preprocessor takes Markdown like this—
 
 ```markdown
 > Note: This is some material we want to provide more emphasis for, because it
 > is important in some way!
+
+Some text.
+
+> ## Some subject
+>
+> Here is all the important things to know about that particular subject.
 ```
 
-—and produces output roughly like this:
+—and rewrites the Markdown to this:
 
 ```html
 <section class="note" aria-label="Note" aria-role="note">
-  <p>
-    This is some material we want to provide more emphasis for, because it is
-    important in some way!
-  </p>
+
+This is some material we want to provide more emphasis for, because it is
+important in some way!
+
+</section>
+
+Some text.
+
+<section class="note" aria-label="Note" aria-role="note">
+
+## Some subject
+
+Here is all the important things to know about that particular subject.
+
 </section>
 ```
 
