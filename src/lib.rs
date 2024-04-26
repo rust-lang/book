@@ -172,7 +172,7 @@ mod tests {
     }
 
     #[test]
-    fn with_h1() {
+    fn with_h1_note() {
         let text = "> # Header\n > And then some note content.";
         let processed = rewrite(text);
         assert_eq!(
@@ -182,7 +182,7 @@ mod tests {
     }
 
     #[test]
-    fn with_h2() {
+    fn with_h2_note() {
         let text = "> ## Header\n > And then some note content.";
         let processed = rewrite(text);
         assert_eq!(
@@ -192,7 +192,7 @@ mod tests {
     }
 
     #[test]
-    fn with_h3() {
+    fn with_h3_note() {
         let text = "> ### Header\n > And then some note content.";
         let processed = rewrite(text);
         assert_eq!(
@@ -202,7 +202,7 @@ mod tests {
     }
 
     #[test]
-    fn with_h4() {
+    fn with_h4_note() {
         let text = "> #### Header\n > And then some note content.";
         let processed = rewrite(text);
         assert_eq!(
@@ -212,7 +212,7 @@ mod tests {
     }
 
     #[test]
-    fn with_h5() {
+    fn with_h5_note() {
         let text = "> ##### Header\n > And then some note content.";
         let processed = rewrite(text);
         assert_eq!(
@@ -222,7 +222,7 @@ mod tests {
     }
 
     #[test]
-    fn with_h6() {
+    fn with_h6_note() {
         let text = "> ###### Header\n > And then some note content.";
         let processed = rewrite(text);
         assert_eq!(
