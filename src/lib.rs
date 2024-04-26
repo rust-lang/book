@@ -77,7 +77,7 @@ pub fn rewrite(text: &str) -> String {
                         SoftBreak,
                         SoftBreak,
                         Start(Tag::Paragraph),
-                        Text(content.replace("Note: ", "").into()),
+                        Text(content),
                     ]);
                     state = InNote;
                 } else {
@@ -147,7 +147,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<p>This is some text.\nIt keeps going.</p>\n</section>"
+            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<p>Note: This is some text.\nIt keeps going.</p>\n</section>"
         );
     }
 
@@ -167,7 +167,7 @@ mod tests {
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
-            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<p>This is some text.\nIt keeps going.</p>\n</section>\n<p>This is regular text.</p>\n<blockquote>\n<p>This is a blockquote.</p>\n</blockquote>\n"
+            "<section class=\"note\" aria-label=\"Note\" aria-role=\"note\">\n<p>Note: This is some text.\nIt keeps going.</p>\n</section>\n<p>This is regular text.</p>\n<blockquote>\n<p>This is a blockquote.</p>\n</blockquote>\n"
         );
     }
 
