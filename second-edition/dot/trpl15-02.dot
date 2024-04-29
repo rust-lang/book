@@ -1,0 +1,18 @@
+digraph {
+    rankdir=LR;
+    overlap=false;
+    dpi=300.0;
+    node [shape="plaintext"];
+
+    table0[label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+        <TR><TD COLSPAN="2" SIDES="B">Cons</TD></TR>
+        <TR><TD>i32</TD><TD>
+            <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+                <TR><TD SIDES="B">Box</TD></TR>
+                <TR><TD>usize</TD></TR>
+            </TABLE>
+        </TD></TR>
+    </TABLE>>];
+}
+
