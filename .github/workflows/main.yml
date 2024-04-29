@@ -43,6 +43,8 @@ jobs:
         mkdir bin
         curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
+    - name: Install mdbook-trpl-note
+      run: cargo install --path packages/mdbook-trpl-note
     - name: Install aspell
       run: sudo apt-get install aspell
     - name: Install shellcheck
