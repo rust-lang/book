@@ -1,8 +1,7 @@
-extern crate regex;
-
-use regex::{Captures, Regex};
 use std::io;
 use std::io::Read;
+
+use regex::{Captures, Regex};
 
 fn main() {
     write_md(remove_markup(read_md()));

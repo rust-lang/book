@@ -1,10 +1,11 @@
 // FIXME: we have some long lines that could be refactored, but it's not a big deal.
 // ignore-tidy-linelength
 
-use regex::{Captures, Regex};
 use std::collections::HashMap;
 use std::io;
 use std::io::Read;
+
+use regex::{Captures, Regex};
 
 fn main() {
     write_md(parse_links(parse_references(read_md())));
