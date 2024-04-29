@@ -8,7 +8,7 @@ One detail we didn’t discuss in the [“References and
 Borrowing”][references-and-borrowing]<!-- ignore --> section in Chapter 4 is
 that every reference in Rust has a *lifetime*, which is the scope for which
 that reference is valid. Most of the time, lifetimes are implicit and inferred,
-just like most of the time, types are inferred. We must only annotate types
+just like most of the time, types are inferred. We only have to annotate types
 when multiple types are possible. In a similar way, we must annotate lifetimes
 when the lifetimes of references could be related in a few different ways. Rust
 requires us to annotate the relationships using generic lifetime parameters to
