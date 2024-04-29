@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.5.4", features = ["derive"] }
-mdbook = "0.4.37"
+mdbook = { workspace = true }
 pulldown-cmark = { version = "0.10.3", features = ["simd"] }
 pulldown-cmark-to-cmark = "13.0.0"
 serde_json = "1.0.116"
