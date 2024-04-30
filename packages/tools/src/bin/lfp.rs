@@ -1,10 +1,11 @@
 // We have some long regex literals, so:
 // ignore-tidy-linelength
 
-use docopt::Docopt;
-use serde::Deserialize;
 use std::io::BufRead;
 use std::{fs, io, path};
+
+use docopt::Docopt;
+use serde::Deserialize;
 
 fn main() {
     let args: Args = Docopt::new(USAGE)

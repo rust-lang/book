@@ -1,5 +1,3 @@
-extern crate regex;
-
 use regex::{Captures, Regex};
 use std::collections::HashSet;
 use std::io;

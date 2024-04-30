@@ -1,6 +1,3 @@
-#[macro_use]
-extern crate lazy_static;
-
 use std::collections::BTreeMap;
 use std::env;
 use std::fs::{create_dir, read_dir, File};
@@ -9,6 +6,7 @@ use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::process::exit;
 
+use lazy_static::lazy_static;
 use regex::Regex;
 
 static PATTERNS: &[(&str, &str)] = &[
