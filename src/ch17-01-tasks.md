@@ -7,11 +7,12 @@ and they let us solve some of these issues. However, they also have some
 tradeoffs. On many operating systems, they use a fair bit of memory for each
 thread, and they come with some overhead for starting up and shutting down.
 Threads are also only an option when your operating system and hardware support
-multiple threads. While mainstream desktop and mobile operating systems have all
-had threading for many years, many embedded operating systems used on
-microcontrollers do not.
+them! While mainstream desktop and mobile operating systems have all had
+threading for many years, many embedded operating systems, like those used on
+some microcontrollers, do not.
 
-The async model provides a different, complementary set of tradeoffs. In
+The async model provides a different—and ultimately complementary—set of
+tradeoffs. In
 
 <!-- TODO: the following paragraph is not where it needs to be structurally. -->
 
@@ -65,7 +66,10 @@ bit surprising: we did not write a return type on the function. However, we
 *did* mark it as an `async fn`. In Rust, `async fn` is equivalent to writing a
 function which returns a *future* of the return type, using the `impl Trait`
 syntax we discussed back in the [“Traits as Parameters”][impl-trait] section in
-Chapter 10. So these two are roughly equivalent:
+Chapter 10, and an `async` block compiles to an anonymous struct which
+implements the `Future` trait.
+
+So these two are roughly equivalent:
 
 ```rust
 async fn hello_async()  {
@@ -73,28 +77,41 @@ async fn hello_async()  {
 }
 ```
 
-<!-- TODO: the return type here is confusing: where is the `Future`? -->
-
-<!-- no-compile -->
 ```rust
 fn hello_async() -> impl Future<Output = ()> {
-    println!("Hello, async!");
+    async {
+        println!("Hello, async!");
+    }
 }
 ```
 
-That explains why we got the `unused_must_use` warning. The other part of the
-warning was the note that we need to `.await` or poll the future. Rust's `await`
-keyword is a postfix keyword, meaning it goes *after* the expression you are
-awaiting. (As of now, `await` is the only postfix keyword in the language.)
-Let’s try that here:
+<!-- TODO: check whether the "unused Result" thing has been covered. -->
 
+That explains why we got the `unused_must_use` warning: writing `async fn` meant
+we were actually returning an anonymous `Future`. Just like with `Result`, Rust
+will let us know if we don’t use a `Future`. It is often a mistake to ignore an
+error in an operation your program performed. With a `Future`, it is even more
+significant. To see why, let’s look at the other part of the warning. It told us
+that “futures do nothing unless you `.await` or poll them”. That is, futures are
+*lazy*: they don’t do anything until you ask them to. The compiler is telling us
+that ignoring a `Future` makes it completely useless! We will see why that is
+later on. For now, let’s start by awaiting the future returned by `hello_async`
+to actually have it run.
+
+> Note: Rust’s `await` keyword goes *after* the expression you are awaiting—that
+> is, it is a *postfix keyword*. This is different from what you might be used
+> to if you have used async in languages like JavaScript or C#. Rust chose this
+> because it makes chains of async and non-async methods much nicer to work
+> with. As of now, `await` is the only postfix keyword in the language.
+
+<!-- does not compile -->
 ```rust
 fn main() {
     hello_async().await;
 }
 ```
 
-Now we actually have a compiler error!
+Oh no! We have gone from a compiler warning ton an actual error:
 
 ```text
 error[E0728]: `await` is only allowed inside `async` functions and blocks
@@ -106,12 +123,48 @@ error[E0728]: `await` is only allowed inside `async` functions and blocks
   |                   ^^^^^ only allowed inside `async` functions and blocks
 ```
 
-Okay, so we cannot actually use `.await` in `main`, because it is not an `async`
-function itself—and it cannot be. To understand why, we need to pause to see
-what a `Future` actually is and why it needs to be `.await`-ed or polled to do
-anything.
+This time, the compiler is informing us we cannot actually use `.await` in
+`main`, because `main` is not an `async` function. As of today, it cannot be
+without some extra help: it needs a *runtime* to execute the asynchronous code.
+For now, we can solve that by adding the runtime built into the `futures` crate,
+an official home for Rust experimentation for async code. Since we will be using
+a bunch of tools from that crate for the rest of the chapter, let’s go ahead and
+add it to the dependencies for our test project:
 
-### Understanding `Future`
+```
+cargo add futures@0.3
+```
+
+Now we can use the executor which comes with `futures` to run the code. The
+`futures::executor::block_on` function takes in a `Future` and runs it until it
+completes.
+
+```rust
+use futures::executor;
+
+fn main() {
+    executor::block_on(hello_async());
+}
+
+async fn hello_async() {
+    println!("Hello, async!");
+}
+```
+
+Now when we run this, we get the behavior we might have expected initially:
+
+```console
+$ cargo run
+   Compiling hello-async v0.1.0 (/Users/chris/dev/chriskrycho/async-trpl-fun/hello-async)
+    Finished dev [unoptimized + debuginfo] target(s) in 4.89s
+     Running `target/debug/hello-async`
+Hello, async!
+```
+
+Phew: we finally have some working async code! To understand why we needed this,
+let’s dig in a little more into what a `Future` actually is.
+
+### Futures and runtimes
 
 Since `async fn` compiles to a return type with `impl Future<Output = …>`, we
 know that `Future` is a trait, with an associated type `Output`. The other part
@@ -132,7 +185,7 @@ indicates that the future still has work to do, so the caller will need to check
 again later. The `Ready` variant indicates that the `Future` has finished its
 work and the `T` value is available.
 
-> Note: With most future, the caller should not call `poll()` again after the
+> Note: With most futures, the caller should not call `poll()` again after the
 > future has returned `Ready`. Many futures will panic if polled after becoming
 > ready! Futures which are safe to poll again will say so explicitly in their
 > documentation.
@@ -192,11 +245,11 @@ When we use the `async fn` form with `.await`, Rust compiles it to something
 smarter than the `loop` above, in conjunction with a *runtime* responsible for
 executing that loop.
 
-Some languages, including Go, Kotlin, Erlang, and Swift, ship runtimes with the
-language. In Rust, there are many different runtimes, because the things a
-runtime for a high-throughput web server with dozens of CPU cores and terabytes
-of RAM should do are very different from the things a runtime for a
-microcontroller with a single core and one gigabyte of RAM should do.
+> Note: Some languages, including Go, Kotlin, Erlang, and Swift, ship runtimes
+> with the language. In Rust, there are many different runtimes, because a
+> runtime might need to do very different things to support a high-throughput
+> web server with dozens of CPU cores and terabytes of RAM than it would for a
+> microcontroller with a single core and one gigabyte of RAM should do.
 
 <!-- TODO: more text here -->
 
@@ -215,41 +268,7 @@ digging into. In particular, see [Chapter 4: Pinning][pinning] in the official
 <!-- TODO: runtime and executor -->
 
 Going back to `main`, this explains why we cannot have an `async fn main`: what
-would execute the async code? We need to pick a runtime and executor. We can get
-started with that easily by using the simple one that comes bundled with the
-`futures` crate, an official home for Rust experimentation for async code. Since
-we will be using a bunch of tools from that crate for the rest of the chapter,
-let’s go ahead and add it to the dependencies for our test project:
-
-```
-cargo add futures@0.3
-```
-
-Now we can use the executor which comes with `futures` to run the code. The
-`futures::executor::block_on` function takes in a `Future` and runs it until it
-completes.
-
-```rust
-use futures::executor;
-
-fn main() {
-    executor::block_on(hello_async());
-}
-
-async fn hello_async() {
-    println!("Hello, async!");
-}
-```
-
-Now when we run this, we get the behavior we might have expected initially:
-
-```console
-$ cargo run
-   Compiling hello-async v0.1.0 (/Users/chris/dev/chriskrycho/async-trpl-fun/hello-async)
-    Finished dev [unoptimized + debuginfo] target(s) in 4.89s
-     Running `target/debug/hello-async`
-Hello, async!
-```
+would execute the async code? We need to pick a runtime and executor.
 
 Now, that’s a lot of work to just print a string, but we have laid some key
 foundations for working with async in Rust! Now that you know the basics of how
