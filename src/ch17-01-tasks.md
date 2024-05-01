@@ -67,15 +67,17 @@ function which returns a *future* of the return type, using the `impl Trait`
 syntax we discussed back in the [“Traits as Parameters”][impl-trait] section in
 Chapter 10. So these two are roughly equivalent:
 
-<!-- no-compile -->
 ```rust
-fn hello_async() -> impl Future<Output = ()> {
+async fn hello_async()  {
     println!("Hello, async!");
 }
 ```
 
+<!-- TODO: the return type here is confusing: where is the `Future`? -->
+
+<!-- no-compile -->
 ```rust
-async fn hello_async()  {
+fn hello_async() -> impl Future<Output = ()> {
     println!("Hello, async!");
 }
 ```
@@ -171,7 +173,7 @@ loop {
 
 If we wrote that code, though, we would block the computer from doing anything
 else, though—the opposite of what we were going for. It also wouldn’t compile
-for three other reasons, though:
+for three other reasons:
 
 1. The `poll` method actually requires an argument: a `Context` that carries
    along a way to say when to call it again, to avoid exactly the problem of
