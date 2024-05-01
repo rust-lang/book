@@ -123,9 +123,17 @@ enum Poll<T> {
 }
 ```
 
-(You might have noticed that this `Poll` type is a lot like an `Option`. Having
-a dedicated type lets Rust treat `Poll` differently from `Option`, though, which
-is important since they have very different meanings!)
+You might have noticed that this `Poll` type is a lot like an `Option`. Having a
+dedicated type lets Rust treat `Poll` differently from `Option`, though, which
+is important since they have very different meanings! The `Pending` variant
+indicates that the future still has work to do, so the caller will need to check
+again later. The `Ready` variant indicates that the `Future` has finished its
+work and the `T` value is available.
+
+> Note: With most future, the caller should not call `poll()` again after the
+> future has returned `Ready`. Many futures will panic if polled after becoming
+> ready! Futures which are safe to poll again will say so explicitly in their
+> documentation.
 
 Under the hood, when you call `.await`, Rust compiles that to code which calls
 `poll` instead, kind of like this:
