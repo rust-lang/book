@@ -1,20 +1,20 @@
 ## Async and Await
 
 In Chapter 16, we saw one of Rust’s approaches to concurrency: using threads.
-Since Rust 1.39, there has been another option for concurrency: the async-await
-model.
+Since Rust 1.39, there has been another option for concurrency: asynchronous
+programming, or *async*.
 
 In the rest of chapter, we will:
 
 * see how to use Rust’s `async` and `.await` syntax
-* explore how to use the async-await model to solve some of the same challenges
-  we looked at in Chapter 16
-* look at how multithreading and async-await provide complementary solutions,
-  which you can even use together in many cases
+* explore how to use the async model to solve some of the same challenges we
+  looked at in Chapter 16
+* look at how multithreading and async provide complementary solutions, which
+  you can even use together in many cases
 
-First, though, let’s explore what async-await gives us.
+First, though, let’s explore what async gives us.
 
-### Why async-await
+### Why Async?
 
 Many operations we ask the computer to do can take a while to finish. For
 example, if you used a video editor to create a video of a family celebration,
@@ -49,12 +49,12 @@ On a machine with multiple CPU cores, we can actually do work in parallel. One
 core can be doing one thing while another core does something completely
 unrelated, and those actually happen at the same time. On a machine with a
 single CPU core, the CPU can only do one operation at a time, but we can still
-have concurrency. Using tools like threads, processes, and async-await, the
-computer can pause one activity and switch to others before eventually cycling
-back to that first activity again. So all parallel operations are also
-concurrent, but not all concurrent operations happen in parallel!
+have concurrency. Using tools like threads, processes, and async, the computer
+can pause one activity and switch to others before eventually cycling back to
+that first activity again. So all parallel operations are also concurrent, but
+not all concurrent operations happen in parallel!
 
-> Note: When working with async-await in Rust, we need to think in terms of
+> Note: When working with async in Rust, we need to think in terms of
 > *concurrency*. Depending on the hardware, the operating system, and the async
 > runtime we are using, that concurrency may use some degree of parallelism
 > under the hood, or it may not. More about async runtimes in a later section!
@@ -81,9 +81,9 @@ In both of these cases, it might be useful for *your program* to participate in
 the same kind of concurrency the computer is providing for the rest of the
 system. One way to do this is the approach we saw last chapter: using threads,
 which are provided and managed by the operating system. Another way to get
-access to concurrency is using language-specific capabilities—like async-await.
+access to concurrency is using language-specific capabilities—like async.
 
-A big difference between the cooking analogy and Rust’s async-await model for
+A big difference between the cooking analogy and Rust’s async model for
 concurrency is that in the cooking example, the cook makes the decision about
-when to switch tasks. In Rust’s async-await model, the tasks are in control of
-that. To see how, let’s look at how Rust actually uses async-await.
+when to switch tasks. In Rust’s async model, the tasks are in control of that.
+To see how, let’s look at how Rust actually uses async.

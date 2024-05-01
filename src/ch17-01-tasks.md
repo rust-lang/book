@@ -1,4 +1,4 @@
-## Futures and the Async-Await Syntax
+## Futures and the Async Syntax
 
 ### Tasks
 
@@ -11,23 +11,23 @@ multiple threads. While mainstream desktop and mobile operating systems have all
 had threading for many years, many embedded operating systems used on
 microcontrollers do not.
 
-The async-await model provides a different, complementary set of tradeoffs. In
+The async model provides a different, complementary set of tradeoffs. In
 
 <!-- TODO: the following paragraph is not where it needs to be structurally. -->
 
-In the async-await model, concurrent operations do not require their own
-threads. Instead, they can run on *tasks*. A task is a bit like a thread, but
-instead of being managed by the operating system, it is managed by a runtime.
+In the async model, concurrent operations do not require their own threads.
+Instead, they can run on *tasks*. A task is a bit like a thread, but instead of
+being managed by the operating system, it is managed by a runtime.
 
 <!-- TODO: connective tissue as it were. -->
 
 ###
 
-Like many other languages with first-class support for the async-await
-programming model, Rust uses the `async` and `await` keywords—though with some
-important differences from other languages like C# or JavaScript. Blocks and
-functions can be marked `async`, and you can wait on the result of an `async`
-function or block to resolve using the `await` keyword.
+Like many other languages with first-class support for the async programming
+model, Rust uses the `async` and `await` keywords—though with some important
+differences from other languages like C# or JavaScript. Blocks and functions can
+be marked `async`, and you can wait on the result of an `async` function or
+block to resolve using the `await` keyword.
 
 Let’s write our first async function:
 
@@ -194,10 +194,10 @@ The other thing to notice here is that futures in Rust are *lazy*. They do not
 do anything until you explicitly ask them to—whether by calling `poll` or by
 using `.await` to do so. This is different from the behavior we saw when using
 `thread::spawn` in the previous chapter, and it is different from how many other
-languages approach async-await. This allows Rust to avoid running async code
-unless it is actually needed, and supports some of the memory safety features
-Rust brings to async-await. (The details are beyond the scope of this book, but
-are well worth digging into.)
+languages approach async. This allows Rust to avoid running async code unless it
+is actually needed, and supports some of the memory safety features Rust brings
+to async. (The details are beyond the scope of this book, but are well worth
+digging into.)
 
 ### Running Async Code
 
@@ -241,7 +241,7 @@ Hello, async!
 ```
 
 Now, that’s a lot of work to just print a string, but we have laid some key
-foundations for working with async-await in Rust! Now that you know the basics
-of how futures work, and the
+foundations for working with async in Rust! Now that you know the basics of how
+futures work, and the
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
