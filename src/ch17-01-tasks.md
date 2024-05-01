@@ -197,7 +197,8 @@ using `.await` to do so. This is different from the behavior we saw when using
 languages approach async. This allows Rust to avoid running async code unless it
 is actually needed, and supports some of the memory safety features Rust brings
 to async. (The details are beyond the scope of this book, but are well worth
-digging into.)
+digging into. In particular, see [Chapter 4: Pinning][pinning] in the official
+[_Asynchronous Programming in Rust_][async-book] book.)
 
 ### Running Async Code
 
@@ -245,3 +246,5 @@ foundations for working with async in Rust! Now that you know the basics of how
 futures work, and the
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
+[pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
+[async-book]: https://rust-lang.github.io/async-book/
