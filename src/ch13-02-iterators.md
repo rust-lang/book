@@ -219,10 +219,10 @@ that takes ownership of the vector. Then we call `filter` to adapt that
 iterator into a new iterator that only contains elements for which the closure
 returns `true`.
 
-The closure captures the `shoe_size` parameter from the environment and
-compares the value with each shoe’s size, keeping only shoes of the size
-specified. Finally, calling `collect` gathers the values returned by the
-adapted iterator into a vector that’s returned by the function.
+The closure captures an immutable reference to the `shoe_size` parameter from
+the environment and compares the value with each shoe’s size, keeping only
+shoes of the size specified. Finally, calling `collect` gathers the values
+returned by the adapted iterator into a vector that’s returned by the function.
 
 The test shows that when we call `shoes_in_size`, we get back only shoes
 that have the same size as the value we specified.

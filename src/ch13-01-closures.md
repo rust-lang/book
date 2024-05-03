@@ -384,14 +384,14 @@ compiler won’t let us use this closure with `sort_by_key`:
 This is a contrived, convoluted way (that doesn’t work) to try and count the
 number of times `sort_by_key` calls the closure when sorting `list`. This code
 attempts to do this counting by pushing `value`—a `String` from the closure’s
-environment—into the `sort_operations` vector. The closure captures `value`
-then moves `value` out of the closure by transferring ownership of `value` to
-the `sort_operations` vector. This closure can be called once; trying to call
-it a second time wouldn’t work because `value` would no longer be in the
-environment to be pushed into `sort_operations` again! Therefore, this closure
-only implements `FnOnce`. When we try to compile this code, we get this error
-that `value` can’t be moved out of the closure because the closure must
-implement `FnMut`:
+environment—into the `sort_operations` vector. The closure captures ownership
+of `value` then moves `value` out of the closure by transferring ownership of
+`value` to the `sort_operations` vector. This closure can be called once;
+trying to call it a second time wouldn’t work because `value` would no longer
+be in the environment to be pushed into `sort_operations` again! Therefore,
+this closure only implements `FnOnce`. When we try to compile this code, we get
+this error that `value` can’t be moved out of the closure because the closure
+must implement `FnMut`:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
