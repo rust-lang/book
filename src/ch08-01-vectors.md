@@ -65,7 +65,7 @@ we don’t need the `Vec<i32>` annotation.
 
 ### Reading Elements of Vectors
 
-There are two ways to reference a value stored in a vector: via indexing or
+There are two ways to reference a value stored in a vector: via indexing or by
 using the `get` method. In the following examples, we’ve annotated the types of
 the values that are returned from these functions for extra clarity.
 
@@ -76,8 +76,8 @@ syntax and the `get` method.
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-4: Using indexing syntax or the `get` method to
-access an item in a vector</span>
+<span class="caption">Listing 8-4: Using indexing syntax and using the `get`
+method to access an item in a vector</span>
 
 Note a few details here. We use the index value of `2` to get the third element
 because vectors are indexed by number, starting at zero. Using `&` and `[]`
@@ -85,11 +85,11 @@ gives us a reference to the element at the index value. When we use the `get`
 method with the index passed as an argument, we get an `Option<&T>` that we can
 use with `match`.
 
-The reason Rust provides these two ways to reference an element is so you can
-choose how the program behaves when you try to use an index value outside the
-range of existing elements. As an example, let’s see what happens when we have
-a vector of five elements and then we try to access an element at index 100
-with each technique, as shown in Listing 8-5.
+Rust provides these two ways to reference an element so you can choose how the
+program behaves when you try to use an index value outside the range of
+existing elements. As an example, let’s see what happens when we have a vector
+of five elements and then we try to access an element at index 100 with each
+technique, as shown in Listing 8-5.
 
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-05/src/main.rs:here}}
@@ -121,8 +121,7 @@ rule that states you can’t have mutable and immutable references in the same
 scope. That rule applies in Listing 8-6, where we hold an immutable reference
 to the first element in a vector and try to add an element to the end. This
 program won’t work if we also try to refer to that element later in the
-function:
-
+function.
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-06/src/main.rs:here}}
@@ -132,7 +131,6 @@ function:
 while holding a reference to an item</span>
 
 Compiling this code will result in this error:
-
 
 ```console
 {{#include ../listings/ch08-common-collections/listing-08-06/output.txt}}
@@ -151,7 +149,7 @@ ending up in that situation.
 > Note: For more on the implementation details of the `Vec<T>` type, see [“The
 > Rustonomicon”][nomicon].
 
-### Iterating over the Values in a Vector
+### Iterating Over the Values in a Vector
 
 To access each element in a vector in turn, we would iterate through all of the
 elements rather than use indices to access one at a time. Listing 8-7 shows how
@@ -183,7 +181,7 @@ Pointer to the Value with the Dereference Operator”][deref]<!-- ignore -->
 section of Chapter 15.
 
 Iterating over a vector, whether immutably or mutably, is safe because of the
-borrow checker's rules. If we attempted to insert or remove items in the `for`
+borrow checker’s rules. If we attempted to insert or remove items in the `for`
 loop bodies in Listing 8-7 and Listing 8-8, we would get a compiler error
 similar to the one we got with the code in Listing 8-6. The reference to the
 vector that the `for` loop holds prevents simultaneous modification of the
@@ -191,11 +189,11 @@ whole vector.
 
 ### Using an Enum to Store Multiple Types
 
-Vectors can only store values that are the same type. This can be inconvenient;
-there are definitely use cases for needing to store a list of items of
-different types. Fortunately, the variants of an enum are defined under the
-same enum type, so when we need one type to represent elements of different
-types, we can define and use an enum!
+Vectors can only store values that are of the same type. This can be
+inconvenient; there are definitely use cases for needing to store a list of
+items of different types. Fortunately, the variants of an enum are defined
+under the same enum type, so when we need one type to represent elements of
+different types, we can define and use an enum!
 
 For example, say we want to get values from a row in a spreadsheet in which
 some of the columns in the row contain integers, some floating-point numbers,
@@ -224,7 +222,7 @@ store in a vector, the enum technique won’t work. Instead, you can use a trait
 object, which we’ll cover in Chapter 17.
 
 Now that we’ve discussed some of the most common ways to use vectors, be sure
-to review [the API documentation][vec-api]<!-- ignore --> for all the many
+to review [the API documentation][vec-api]<!-- ignore --> for all of the many
 useful methods defined on `Vec<T>` by the standard library. For example, in
 addition to `push`, a `pop` method removes and returns the last element.
 
