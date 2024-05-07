@@ -489,6 +489,7 @@ Submodules
 submodule’s
 suboptimal
 subpath
+subslices
 substring
 subteams
 subtree
