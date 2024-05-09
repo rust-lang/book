@@ -36,7 +36,7 @@ are UTF-8 encoded.
 ### Creating a New String
 
 Many of the same operations available with `Vec<T>` are available with `String`
-as well, because `String` is actually implemented as a wrapper around a vector
+as well because `String` is actually implemented as a wrapper around a vector
 of bytes with some extra guarantees, restrictions, and capabilities. An example
 of a function that works the same way with `Vec<T>` and `String` is the `new`
 function to create an instance, shown in Listing 8-11.
@@ -47,9 +47,9 @@ function to create an instance, shown in Listing 8-11.
 
 <span class="caption">Listing 8-11: Creating a new, empty `String`</span>
 
-This line creates a new empty string called `s`, which we can then load data
-into. Often, we’ll have some initial data that we want to start the string
-with. For that, we use the `to_string` method, which is available on any type
+This line creates a new, empty string called `s`, into which we can then load
+data. Often, we’ll have some initial data with which we want to start the
+string. For that, we use the `to_string` method, which is available on any type
 that implements the `Display` trait, as string literals do. Listing 8-12 shows
 two examples.
 
@@ -63,7 +63,7 @@ two examples.
 This code creates a string containing `initial contents`.
 
 We can also use the function `String::from` to create a `String` from a string
-literal. The code in Listing 8-13 is equivalent to the code from Listing 8-12
+literal. The code in Listing 8-13 is equivalent to the code in Listing 8-12
 that uses `to_string`.
 
 ```rust
@@ -76,7 +76,7 @@ a `String` from a string literal</span>
 Because strings are used for so many things, we can use many different generic
 APIs for strings, providing us with a lot of options. Some of them can seem
 redundant, but they all have their place! In this case, `String::from` and
-`to_string` do the same thing, so which you choose is a matter of style and
+`to_string` do the same thing, so which one you choose is a matter of style and
 readability.
 
 Remember that strings are UTF-8 encoded, so we can include any properly encoded
@@ -125,7 +125,7 @@ If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
 
 The `push` method takes a single character as a parameter and adds it to the
-`String`. Listing 8-17 adds the letter “l” to a `String` using the `push`
+`String`. Listing 8-17 adds the letter *l* to a `String` using the `push`
 method.
 
 ```rust
@@ -159,11 +159,11 @@ this:
 fn add(self, s: &str) -> String {
 ```
 
-In the standard library, you'll see `add` defined using generics and associated
+In the standard library, you’ll see `add` defined using generics and associated
 types. Here, we’ve substituted in concrete types, which is what happens when we
 call this method with `String` values. We’ll discuss generics in Chapter 10.
-This signature gives us the clues we need to understand the tricky bits of the
-`+` operator.
+This signature gives us the clues we need in order to understand the tricky
+bits of the `+` operator.
 
 First, `s2` has an `&`, meaning that we’re adding a *reference* of the second
 string to the first string. This is because of the `s` parameter in the `add`
@@ -178,13 +178,13 @@ We’ll discuss deref coercion in more depth in Chapter 15. Because `add` does
 not take ownership of the `s` parameter, `s2` will still be a valid `String`
 after this operation.
 
-Second, we can see in the signature that `add` takes ownership of `self`,
+Second, we can see in the signature that `add` takes ownership of `self`
 because `self` does *not* have an `&`. This means `s1` in Listing 8-18 will be
-moved into the `add` call and will no longer be valid after that. So although
+moved into the `add` call and will no longer be valid after that. So, although
 `let s3 = s1 + &s2;` looks like it will copy both strings and create a new one,
 this statement actually takes ownership of `s1`, appends a copy of the contents
 of `s2`, and then returns ownership of the result. In other words, it looks
-like it’s making a lot of copies but isn’t; the implementation is more
+like it’s making a lot of copies, but it isn’t; the implementation is more
 efficient than copying.
 
 If we need to concatenate multiple strings, the behavior of the `+` operator
@@ -195,8 +195,8 @@ gets unwieldy:
 ```
 
 At this point, `s` will be `tic-tac-toe`. With all of the `+` and `"`
-characters, it’s difficult to see what’s going on. For more complicated string
-combining, we can instead use the `format!` macro:
+characters, it’s difficult to see what’s going on. For combining strings in
+more complicated ways, we can instead use the `format!` macro:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/no-listing-02-format/src/main.rs:here}}
@@ -241,20 +241,21 @@ encoded UTF-8 example strings from Listing 8-14. First, this one:
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:spanish}}
 ```
 
-In this case, `len` will be 4, which means the vector storing the string “Hola”
-is 4 bytes long. Each of these letters takes 1 byte when encoded in UTF-8. The
-following line, however, may surprise you. (Note that this string begins with
-the capital Cyrillic letter Ze, not the number 3.)
+In this case, `len` will be `4`, which means the vector storing the string
+`"Hola"` is 4 bytes long. Each of these letters takes one byte when encoded in
+UTF-8. The following line, however, may surprise you (note that this string
+begins with the capital Cyrillic letter *Ze*, not the number 3):
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:russian}}
 ```
 
-Asked how long the string is, you might say 12. In fact, Rust’s answer is 24:
-that’s the number of bytes it takes to encode “Здравствуйте” in UTF-8, because
-each Unicode scalar value in that string takes 2 bytes of storage. Therefore,
-an index into the string’s bytes will not always correlate to a valid Unicode
-scalar value. To demonstrate, consider this invalid Rust code:
+If you were asked how long the string is, you might say 12. In fact, Rust’s
+answer is 24: that’s the number of bytes it takes to encode “Здравствуйте” in
+UTF-8, because each Unicode scalar value in that string takes 2 bytes of
+storage. Therefore, an index into the string’s bytes will not always correlate
+to a valid Unicode scalar value. To demonstrate, consider this invalid Rust
+code:
 
 ```rust,ignore,does_not_compile
 let hello = "Здравствуйте";
@@ -331,8 +332,8 @@ let hello = "Здравствуйте";
 let s = &hello[0..4];
 ```
 
-Here, `s` will be a `&str` that contains the first 4 bytes of the string.
-Earlier, we mentioned that each of these characters was 2 bytes, which means
+Here, `s` will be a `&str` that contains the first four bytes of the string.
+Earlier, we mentioned that each of these characters was two bytes, which means
 `s` will be `Зд`.
 
 If we were to try to slice only part of a character’s bytes with something like
@@ -343,15 +344,15 @@ index were accessed in a vector:
 {{#include ../listings/ch08-common-collections/output-only-01-not-char-boundary/output.txt}}
 ```
 
-You should use ranges to create string slices with caution, because doing so
-can crash your program.
+You should use caution when creating string slices with ranges, because doing
+so can crash your program.
 
 ### Methods for Iterating Over Strings
 
 The best way to operate on pieces of strings is to be explicit about whether
 you want characters or bytes. For individual Unicode scalar values, use the
-`chars` method. Calling `chars` on “Зд” separates out and returns two values
-of type `char`, and you can iterate over the result to access each element:
+`chars` method. Calling `chars` on “Зд” separates out and returns two values of
+type `char`, and you can iterate over the result to access each element:
 
 ```rust
 for c in "Зд".chars() {
@@ -385,9 +386,9 @@ This code will print the four bytes that make up this string:
 ```
 
 But be sure to remember that valid Unicode scalar values may be made up of more
-than 1 byte.
+than one byte.
 
-Getting grapheme clusters from strings as with the Devanagari script is
+Getting grapheme clusters from strings, as with the Devanagari script, is
 complex, so this functionality is not provided by the standard library. Crates
 are available on [crates.io](https://crates.io/)<!-- ignore --> if this is the
 functionality you need.
@@ -398,7 +399,7 @@ To summarize, strings are complicated. Different programming languages make
 different choices about how to present this complexity to the programmer. Rust
 has chosen to make the correct handling of `String` data the default behavior
 for all Rust programs, which means programmers have to put more thought into
-handling UTF-8 data upfront. This trade-off exposes more of the complexity of
+handling UTF-8 data up front. This trade-off exposes more of the complexity of
 strings than is apparent in other programming languages, but it prevents you
 from having to handle errors involving non-ASCII characters later in your
 development life cycle.
