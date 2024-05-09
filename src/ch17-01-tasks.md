@@ -126,24 +126,29 @@ error[E0728]: `await` is only allowed inside `async` functions and blocks
 This time, the compiler is informing us we cannot actually use `.await` in
 `main`, because `main` is not an `async` function. As of today, it cannot be
 without some extra help: it needs a *runtime* to execute the asynchronous code.
-For now, we can solve that by adding the runtime built into the `futures` crate,
-an official home for Rust experimentation for async code. Since we will be using
-a bunch of tools from that crate for the rest of the chapter, let’s go ahead and
-add it to the dependencies for our test project:
 
-```
-cargo add futures@0.3
+To keep this chapter focused on learning async, rather than juggling parts of
+the ecosystem, we have created the `trpl` crate (`trpl` is short for “The Rust
+Programming Language”). It re-exports all the types, traits, and functions you
+will need, and in a couple cases wires up a few things for you which are less
+relevant to the subject of the book. There is no magic involved, though! If you
+want to understand what the crate does, we encourage you to check out [its
+source code][crate-source]. You will be able to see what crate each re-export
+comes from, and we have left extensive comments explaining what the handful of
+helper functions we supply are doing.
+
+For now, go ahead and add the dependency to your `hello-async` project:
+
+```console
+$ cargo add trpl
 ```
 
-Now we can use the executor which comes with `futures` to run the code. The
-`futures::executor::block_on` function takes in a `Future` and runs it until it
-completes.
+Now we can get our code working by using the `trpl::block_on` function, which
+takes in a `Future` and runs it until it completes.
 
 ```rust
-use futures::executor;
-
 fn main() {
-    executor::block_on(hello_async());
+    trpl::block_on(hello_async());
 }
 
 async fn hello_async() {
@@ -153,6 +158,7 @@ async fn hello_async() {
 
 Now when we run this, we get the behavior we might have expected initially:
 
+<!-- TODO: paths in the output here! -->
 ```console
 $ cargo run
    Compiling hello-async v0.1.0 (/Users/chris/dev/chriskrycho/async-trpl-fun/hello-async)
