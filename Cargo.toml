@@ -2,7 +2,10 @@
 members = ["packages/*"]
 default-members = ["packages/*"]
 resolver = "2"
-exclude = ["linkchecker"]        # part of the CI workflow
+exclude = [
+    "linkchecker", # linkchecker is part of the CI workflow
+    "listings",    # these are intentionally distinct from the workspace
+]
 
 [workspace.dependencies]
 walkdir = "2.3.1"
