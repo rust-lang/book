@@ -26,11 +26,12 @@ a code structure that is different from that in programs running in a single
 thread.
 
 Programming languages implement threads in a few different ways, and many
-operating systems provide an API the language can call for creating new
-threads. The Rust standard library uses a *1:1* model of thread implementation,
-whereby a program uses one operating system thread per one language thread.
-There are crates that implement other models of threading that make different
-tradeoffs to the 1:1 model.
+operating systems provide an API the language can call for creating new threads.
+The Rust standard library uses a *1:1* model of thread implementation, whereby a
+program uses one operating system thread per one language thread. There are
+crates that implement other models of threading that make different tradeoffs to
+the 1:1 model. (Rust’s async system, which we will see in the next chapter,
+provides another approach to concurrency as well.)
 
 ### Creating a New Thread with `spawn`
 

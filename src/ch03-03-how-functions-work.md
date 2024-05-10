@@ -53,13 +53,13 @@ In this version of `another_function` we add a parameter:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/src/main.rs}}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-parameters/src/main.rs}}
 ```
 
 Try running this program; you should get the following output:
 
 ```console
-{{#include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/output.txt}}
+{{#include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-parameters/output.txt}}
 ```
 
 The declaration of `another_function` has one parameter named `x`. The type of
@@ -79,7 +79,7 @@ commas, like this:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/src/main.rs}}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-19-functions-with-multiple-parameters/src/main.rs}}
 ```
 
 This example creates a function named `print_labeled_measurement` with two
@@ -92,7 +92,7 @@ project’s *src/main.rs* file with the preceding example and run it using `carg
 run`:
 
 ```console
-{{#include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/output.txt}}
+{{#include ../listings/ch03-common-programming-concepts/no-listing-19-functions-with-multiple-parameters/output.txt}}
 ```
 
 Because we called the function with `5` as the value for `value` and `'h'` as
@@ -133,13 +133,13 @@ to another variable, as the following code tries to do; you’ll get an error:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/src/main.rs}}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-20-statements-vs-expressions/src/main.rs}}
 ```
 
 When you run this program, the error you’ll get looks like this:
 
 ```console
-{{#include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/output.txt}}
+{{#include ../listings/ch03-common-programming-concepts/no-listing-20-statements-vs-expressions/output.txt}}
 ```
 
 The `let y = 6` statement does not return a value, so there isn’t anything for
@@ -159,7 +159,7 @@ curly brackets is an expression, for example:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-20-blocks-are-expressions/src/main.rs}}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-21-blocks-are-expressions/src/main.rs}}
 ```
 
 This expression:

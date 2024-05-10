@@ -238,7 +238,7 @@ that by using the unit value (the empty tuple type we mentioned in [“The Tuple
 Type”][tuples]<!-- ignore --> section) as the code that goes with the `_` arm:
 
 ```rust
-{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-17-underscore-unit/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-18-underscore-unit/src/main.rs:here}}
 ```
 
 Here, we’re telling Rust explicitly that we aren’t going to use any other value
