@@ -1,9 +1,10 @@
 ## Futures and the Async Syntax
 
 Like other languages with async, Rust uses the `async` and `await`
-keywords—though with some important differences, as we will see. Blocks and
-functions can be marked `async`, and you can wait on the result of an `async`
-function or block to resolve using the `await` keyword.
+keywords—though with some important differences from how other languages do
+things, as we will see. Blocks and functions can be marked `async`, and you can
+wait on the result of an `async` function or block to resolve using the `await`
+keyword.
 
 Let’s write our first async function, and call it:
 
