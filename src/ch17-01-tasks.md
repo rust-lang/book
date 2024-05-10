@@ -64,10 +64,10 @@ questions:
 
 ### Async functions
 
-In Rust, `async fn` is equivalent to writing a function which returns a
-future of the return type, using the `impl Trait` syntax we discussed back in
-the [“Traits as Parameters”][impl-trait] section in Chapter 10. An `async`
-block compiles to an anonymous struct which implements the `Future` trait.
+In Rust, `async fn` is equivalent to writing a function which returns a future
+of the return type, using the `impl Trait` syntax we discussed back in the
+[“Traits as Parameters”][impl-trait] section in Chapter 10. An `async` block
+compiles to an anonymous struct which implements the `Future` trait.
 
 That means these two are roughly equivalent:
 
@@ -102,18 +102,18 @@ async. This allows Rust to avoid running async code unless it is actually
 needed. We will see why that is later on. For now, let’s start by awaiting the
 future returned by `hello_async` to actually have it run.
 
-> Note: Rust’s `await` keyword goes *after* the expression you are awaiting—that
-> is, it is a *postfix keyword*. This is different from what you might be used
-> to if you have used async in languages like JavaScript or C#. Rust chose this
-> because it makes chains of async and non-async methods much nicer to work
-> with. As of now, `await` is the only postfix keyword in the language.
-
 <!-- does not compile -->
 ```rust
 fn main() {
     hello_async().await;
 }
 ```
+
+> Note: Rust’s `await` keyword goes *after* the expression you are awaiting—that
+> is, it is a *postfix keyword*. This is different from what you might be used
+> to if you have used async in languages like JavaScript or C#. Rust chose this
+> because it makes chains of async and non-async methods much nicer to work
+> with. As of now, `await` is the only postfix keyword in the language.
 
 Oh no! We have gone from a compiler warning to an actual error:
 
@@ -277,11 +277,11 @@ going for!
 
 <!-- TODO: listing number -->
 
-What is more, eventually we end up back in some non-async function. At that point, something needs to “translate” between the async
-and sync worlds. That “something” is a *runtime*, a crate which handles the
-top-level `poll()` call, scheduling and handing off between the different async
-operations which may be in flight, and often providing async versions of
-functionality like file I/O.
+What is more, eventually we end up back in some non-async function. At that
+point, something needs to “translate” between the async and sync worlds. That
+“something” is a *runtime*, a crate which handles the top-level `poll()` call,
+scheduling and handing off between the different async operations which may be
+in flight, and often providing async versions of functionality like file I/O.
 
 Now we can understand what is happening in Listing 17-XX. The `main` function is
 not `async`—and it really cannot be: if it were, something would need to call
@@ -293,7 +293,7 @@ function, which polls the `Future` returned by `hello_async` until it returns
 
 Now, that’s a lot of work to just print a string, but we have laid some key
 foundations for working with async in Rust! Now that you know the basics of how
-futures work, and the
+futures and runtimes work, we can see some of the things we can *do* with async.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
 [pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
