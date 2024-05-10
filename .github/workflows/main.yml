@@ -26,6 +26,21 @@ jobs:
         mdbook --version
     - name: Run tests
       run: mdbook test
+  package_tests:
+    name: Run package tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Update rustup
+      run: rustup self update
+    - name: Install Rust
+      run: |
+        rustup set profile minimal
+        rustup toolchain install 1.76 -c rust-docs
+        rustup default 1.76
+    - name: Run package tests
+      run: |
+        cargo test
   lint:
     name: Run lints
     runs-on: ubuntu-latest
