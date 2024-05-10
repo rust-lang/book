@@ -1,7 +1,5 @@
 ## Futures and the Async Syntax
 
-### Tasks
-
 As we saw in the previous chapter, threads provide one approach to concurrency,
 and they let us solve some of these issues. However, they also have some
 tradeoffs. On many operating systems, they use a fair bit of memory for each
@@ -22,15 +20,12 @@ being managed by the operating system, it is managed by a runtime.
 
 <!-- TODO: connective tissue as it were. -->
 
-###
+Like other languages with async, Rust uses the `async` and `await`
+keywords—though with some important differences, as we will see. Blocks and
+functions can be marked `async`, and you can wait on the result of an `async`
+function or block to resolve using the `await` keyword.
 
-Like many other languages with first-class support for the async programming
-model, Rust uses the `async` and `await` keywords—though with some important
-differences from other languages like C# or JavaScript. Blocks and functions can
-be marked `async`, and you can wait on the result of an `async` function or
-block to resolve using the `await` keyword.
-
-Let’s write our first async function:
+Let’s write our first async function, and call it:
 
 ```rust
 fn main() {
@@ -60,16 +55,21 @@ warning: `hello-async` (bin "hello-async") generated 1 warning
      Running `target/debug/hello-async`
 ```
 
-The warning tells us why nothing happened. Calling `hello_async()` itself was
-not enough: we need to `.await`or poll the “future” it returns. That might be a
-bit surprising: we did not write a return type on the function. However, we
-*did* mark it as an `async fn`. In Rust, `async fn` is equivalent to writing a
-function which returns a *future* of the return type, using the `impl Trait`
-syntax we discussed back in the [“Traits as Parameters”][impl-trait] section in
-Chapter 10, and an `async` block compiles to an anonymous struct which
-implements the `Future` trait.
+The warning tells us that just calling `hello_async()` was not enough: we also
+need to `.await` or poll the future it returns. This raises two important
+questions:
 
-So these two are roughly equivalent:
+- Given there is no return type on the function, how is it returning a future?
+- What is a future?
+
+### Async functions
+
+In Rust, `async fn` is equivalent to writing a function which returns a
+future of the return type, using the `impl Trait` syntax we discussed back in
+the [“Traits as Parameters”][impl-trait] section in Chapter 10. An `async`
+block compiles to an anonymous struct which implements the `Future` trait.
+
+That means these two are roughly equivalent:
 
 ```rust
 async fn hello_async()  {
@@ -137,7 +137,7 @@ source code][crate-source]. You will be able to see what crate each re-export
 comes from, and we have left extensive comments explaining what the handful of
 helper functions we supply are doing.
 
-For now, go ahead and add the dependency to your `hello-async` project:
+For now, go ahead and add the `trpl` crate to your `hello-async` project:
 
 ```console
 $ cargo add trpl
@@ -167,10 +167,11 @@ $ cargo run
 Hello, async!
 ```
 
-Phew: we finally have some working async code! To understand why we needed this,
-let’s dig in a little more into what a `Future` actually is.
+Phew: we finally have some working async code! Now we can answer that second
+question: what is a future anyway? That will also help us understand why we need
+a runtime to make this work.
 
-### Futures and runtimes
+### Futures
 
 Since `async fn` compiles to a return type with `impl Future<Output = …>`, we
 know that `Future` is a trait, with an associated type `Output`. The other part
@@ -184,7 +185,7 @@ enum Poll<T> {
 }
 ```
 
-You might have noticed that this `Poll` type is a lot like an `Option`. Having a
+You may notice that this `Poll` type is a lot like an `Option`. Having a
 dedicated type lets Rust treat `Poll` differently from `Option`, though, which
 is important since they have very different meanings! The `Pending` variant
 indicates that the future still has work to do, so the caller will need to check
