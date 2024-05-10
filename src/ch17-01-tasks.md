@@ -1,25 +1,5 @@
 ## Futures and the Async Syntax
 
-As we saw in the previous chapter, threads provide one approach to concurrency,
-and they let us solve some of these issues. However, they also have some
-tradeoffs. On many operating systems, they use a fair bit of memory for each
-thread, and they come with some overhead for starting up and shutting down.
-Threads are also only an option when your operating system and hardware support
-them! While mainstream desktop and mobile operating systems have all had
-threading for many years, many embedded operating systems, like those used on
-some microcontrollers, do not.
-
-The async model provides a different—and ultimately complementary—set of
-tradeoffs. In
-
-<!-- TODO: the following paragraph is not where it needs to be structurally. -->
-
-In the async model, concurrent operations do not require their own threads.
-Instead, they can run on *tasks*. A task is a bit like a thread, but instead of
-being managed by the operating system, it is managed by a runtime.
-
-<!-- TODO: connective tissue as it were. -->
-
 Like other languages with async, Rust uses the `async` and `await`
 keywords—though with some important differences, as we will see. Blocks and
 functions can be marked `async`, and you can wait on the result of an `async`
