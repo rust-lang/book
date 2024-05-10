@@ -264,38 +264,45 @@ loop {
 ```
 
 And in fact, when we use `.await`, Rust compiles it to something very similar to
-that `loop`. However, if Rust compiled it to *only* that code, every `.await`
-would block the computer from doing anything else—the opposite of what we were
-going for!
+that loop. If Rust compiled it to *exactly* that code, every `.await` would
+block the computer from doing anything else—the opposite of what we were going
+for! Instead, Rust internally makes sure that the loop can hand back control to
+the the context of the code where which is awaiting this little bit of code.
 
-> Note: It also wouldn’t compile, because it doesn’t actually satisfy the
-> contract for a `Future`. In particular, `hello_async_fut` is not *pinned* with
-> the `Pin` type and we did not pass along a `Context` argument. The details are
-> beyond the scope of this book, but are well worth digging into. In particular,
-> see [Chapter 4: Pinning][pinning] in the official [_Asynchronous Programming
-> in Rust_][async-book] book.
-
-<!-- TODO: listing number -->
-
-What is more, eventually we end up back in some non-async function. At that
-point, something needs to “translate” between the async and sync worlds. That
-“something” is a *runtime*, a crate which handles the top-level `poll()` call,
-scheduling and handing off between the different async operations which may be
-in flight, and often providing async versions of functionality like file I/O.
+When we follow that chain far enough, eventually we end up back in some
+non-async function. At that point, something needs to “translate” between the
+async and sync worlds. That “something” is a *runtime*, a crate which handles
+the top-level `poll()` call, scheduling and handing off between the different
+async operations which may be in flight, and often providing async versions of
+functionality like file I/O.
 
 Now we can understand what is happening in Listing 17-XX. The `main` function is
 not `async`—and it really cannot be: if it were, something would need to call
 `poll()` on whatever `main` returned! Instead, we use the `trpl::block_on`
 function, which polls the `Future` returned by `hello_async` until it returns
-`Ready`.
+`Ready`. Every async program in Rust has at least one place where it sets up an
+executor and executes code.
 
-### Running Async Code
+> Note: Under the hood, Rust uses *generators* so that it can hand off control
+> between different functions. These are an implementation detail, though, and
+> you never have to think about it when writing Rust.
+>
+> The loop as written also wouldn’t compile, because it doesn’t actually satisfy
+> the contract for a `Future`. In particular, `hello_async_fut` is not *pinned*
+> with the `Pin` type and we did not pass along a `Context` argument.
+>
+> More details here are beyond the scope of this book, but are well worth
+> digging into if you want to understand how things work “under the hood.” In
+> particular, see [Chapter 2: Under the Hood: Executing Futures and
+> Tasks][under-the-hood] and [Chapter 4: Pinning][pinning] in the official
+> [_Asynchronous Programming in Rust_][async-book] book.
 
 Now, that’s a lot of work to just print a string, but we have laid some key
 foundations for working with async in Rust! Now that you know the basics of how
 futures and runtimes work, we can see some of the things we can *do* with async.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
+[under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
 [pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
 [async-book]: https://rust-lang.github.io/async-book/
 [crate-source]: https://github.com/rust-lang/book/tree/main/packages/trpl
