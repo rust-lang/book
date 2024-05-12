@@ -141,7 +141,7 @@ If we continue reading the errors, we’ll find this helpful note:
 ```
 
 Let’s try it! The `println!` macro call will now look like `println!("rect1 is
-{:?}", rect1);`. Putting the specifier `:?` inside the curly brackets tells
+{rect1:?}");`. Putting the specifier `:?` inside the curly brackets tells
 `println!` we want to use an output format called `Debug`. The `Debug` trait
 enables us to print our struct in a way that is useful for developers so we can
 see its value while we’re debugging our code.
