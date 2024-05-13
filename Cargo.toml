@@ -1,0 +1,10 @@
+[package]
+name = "listing-preprocessor"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+pulldown-cmark = { version = "0.10.3", features = ["simd"] }
+xmlparser = "0.13.6"
