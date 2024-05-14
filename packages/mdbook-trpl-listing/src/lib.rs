@@ -260,17 +260,19 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
 struct Listing {
     number: String,
     caption: String,
-    file_name: String,
+    file_name: Option<String>,
 }
 
 impl Listing {
     fn opening_html(&self) -> String {
-        format!(
-            r#"<figure class="listing">
-<span class="file-name">Filename: {file_name}</span>
-"#,
-            file_name = self.file_name
-        )
+        let figure = String::from("<figure class=\"listing\">\n");
+
+        match self.file_name.as_ref() {
+            Some(file_name) => format!(
+                "{figure}<span class=\"file-name\">Filename: {file_name}</span>\n",
+            ),
+            None => figure,
+        }
     }
 
     fn closing_html(&self, trailing: &str) -> String {
@@ -283,7 +285,10 @@ impl Listing {
     }
 
     fn opening_text(&self) -> String {
-        format!("\nFilename: {file_name}\n", file_name = self.file_name)
+        self.file_name
+            .as_ref()
+            .map(|file_name| format!("\nFilename: {file_name}\n"))
+            .unwrap_or_default()
     }
 
     fn closing_text(&self, trailing: &str) -> String {
@@ -346,15 +351,10 @@ impl<'a> ListingBuilder<'a> {
             .ok_or_else(|| String::from("Missing caption"))?
             .to_owned();
 
-        let file_name = self
-            .file_name
-            .ok_or_else(|| String::from("Missing file-name"))?
-            .to_owned();
-
         Ok(Listing {
             number,
             caption,
-            file_name,
+            file_name: self.file_name.map(String::from),
         })
     }
 }
@@ -456,6 +456,41 @@ fn main() {
 </figure>
 
 Save the file and go back to your terminal window"#
+        );
+    }
+
+    #[test]
+    fn no_filename() {
+        let result = rewrite_listing(
+            r#"This is the opening.
+
+<Listing number="1-1" caption="This is the caption">
+
+```rust
+fn main() {}
+```
+
+</Listing>
+
+This is the closing."#,
+            Mode::Default,
+        );
+
+        assert!(result.is_ok());
+        assert_eq!(
+            result.unwrap(),
+            r#"This is the opening.
+
+<figure class="listing">
+
+````rust
+fn main() {}
+````
+
+<figcaption>Listing 1-1: This is the caption</figcaption>
+</figure>
+
+This is the closing."#
         );
     }
 
