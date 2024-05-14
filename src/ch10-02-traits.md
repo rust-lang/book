@@ -1,8 +1,8 @@
 ## Traits: Defining Shared Behavior
 
-A *trait* defines functionality a particular type has and can share with other
-types. We can use traits to define shared behavior in an abstract way. We can
-use *trait bounds* to specify that a generic type can be any type that has
+A *trait* defines the functionality a particular type has and can share with
+other types. We can use traits to define shared behavior in an abstract way. We
+can use *trait bounds* to specify that a generic type can be any type that has
 certain behavior.
 
 > Note: Traits are similar to a feature often called *interfaces* in other
@@ -17,15 +17,15 @@ define a set of behaviors necessary to accomplish some purpose.
 
 For example, let’s say we have multiple structs that hold various kinds and
 amounts of text: a `NewsArticle` struct that holds a news story filed in a
-particular location and a `Tweet` that can have at most 280 characters along
+particular location and a `Tweet` that can have, at most, 280 characters along
 with metadata that indicates whether it was a new tweet, a retweet, or a reply
 to another tweet.
 
 We want to make a media aggregator library crate named `aggregator` that can
 display summaries of data that might be stored in a `NewsArticle` or `Tweet`
-instance. To do this, we need a summary from each type, and we’ll request
-that summary by calling a `summarize` method on an instance. Listing 10-12
-shows the definition of a public `Summary` trait that expresses this behavior.
+instance. To do this, we need a summary from each type, and we’ll request that
+summary by calling a `summarize` method on an instance. Listing 10-12 shows the
+definition of a public `Summary` trait that expresses this behavior.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -37,7 +37,7 @@ shows the definition of a public `Summary` trait that expresses this behavior.
 behavior provided by a `summarize` method</span>
 
 Here, we declare a trait using the `trait` keyword and then the trait’s name,
-which is `Summary` in this case. We’ve also declared the trait as `pub` so that
+which is `Summary` in this case. We also declare the trait as `pub` so that
 crates depending on this crate can make use of this trait too, as we’ll see in
 a few examples. Inside the curly brackets, we declare the method signatures
 that describe the behaviors of the types that implement this trait, which in
@@ -50,7 +50,7 @@ that any type that has the `Summary` trait will have the method `summarize`
 defined with this signature exactly.
 
 A trait can have multiple methods in its body: the method signatures are listed
-one per line and each line ends in a semicolon.
+one per line, and each line ends in a semicolon.
 
 ### Implementing a Trait on a Type
 
@@ -59,7 +59,7 @@ we can implement it on the types in our media aggregator. Listing 10-13 shows
 an implementation of the `Summary` trait on the `NewsArticle` struct that uses
 the headline, the author, and the location to create the return value of
 `summarize`. For the `Tweet` struct, we define `summarize` as the username
-followed by the entire text of the tweet, assuming that tweet content is
+followed by the entire text of the tweet, assuming that the tweet content is
 already limited to 280 characters.
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -95,23 +95,23 @@ know, people`.
 
 Other crates that depend on the `aggregator` crate can also bring the `Summary`
 trait into scope to implement `Summary` on their own types. One restriction to
-note is that we can implement a trait on a type only if at least one of the
-trait or the type is local to our crate. For example, we can implement standard
+note is that we can implement a trait on a type only if either the trait or the
+type, or both, are local to our crate. For example, we can implement standard
 library traits like `Display` on a custom type like `Tweet` as part of our
-`aggregator` crate functionality, because the type `Tweet` is local to our
+`aggregator` crate functionality because the type `Tweet` is local to our
 `aggregator` crate. We can also implement `Summary` on `Vec<T>` in our
-`aggregator` crate, because the trait `Summary` is local to our `aggregator`
+`aggregator` crate because the trait `Summary` is local to our `aggregator`
 crate.
 
 But we can’t implement external traits on external types. For example, we can’t
-implement the `Display` trait on `Vec<T>` within our `aggregator` crate,
-because `Display` and `Vec<T>` are both defined in the standard library and
-aren’t local to our `aggregator` crate. This restriction is part of a property
-called *coherence*, and more specifically the *orphan rule*, so named because
-the parent type is not present. This rule ensures that other people’s code
-can’t break your code and vice versa. Without the rule, two crates could
-implement the same trait for the same type, and Rust wouldn’t know which
-implementation to use.
+implement the `Display` trait on `Vec<T>` within our `aggregator` crate because
+`Display` and `Vec<T>` are both defined in the standard library and aren’t
+local to our `aggregator` crate. This restriction is part of a property called
+*coherence*, and more specifically the *orphan rule*, so named because the
+parent type is not present. This rule ensures that other people’s code can’t
+break your code and vice versa. Without the rule, two crates could implement
+the same trait for the same type, and Rust wouldn’t know which implementation
+to use.
 
 ### Default Implementations
 
@@ -120,7 +120,7 @@ in a trait instead of requiring implementations for all methods on every type.
 Then, as we implement the trait on a particular type, we can keep or override
 each method’s default behavior.
 
-In Listing 10-14 we specify a default string for the `summarize` method of the
+In Listing 10-14, we specify a default string for the `summarize` method of the
 `Summary` trait instead of only defining the method signature, as we did in
 Listing 10-12.
 
@@ -175,7 +175,8 @@ After we define `summarize_author`, we can call `summarize` on instances of the
 `Tweet` struct, and the default implementation of `summarize` will call the
 definition of `summarize_author` that we’ve provided. Because we’ve implemented
 `summarize_author`, the `Summary` trait has given us the behavior of the
-`summarize` method without requiring us to write any more code.
+`summarize` method without requiring us to write any more code. Here’s what
+that looks like:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/main.rs:here}}
@@ -189,7 +190,7 @@ overriding implementation of that same method.
 ### Traits as Parameters
 
 Now that you know how to define and implement traits, we can explore how to use
-traits to define functions that accept many different types. We'll use the
+traits to define functions that accept many different types. We’ll use the
 `Summary` trait we implemented on the `NewsArticle` and `Tweet` types in
 Listing 10-13 to define a `notify` function that calls the `summarize` method
 on its `item` parameter, which is of some type that implements the `Summary`
@@ -274,7 +275,7 @@ bounds, so functions with multiple generic type parameters can contain lots of
 trait bound information between the function’s name and its parameter list,
 making the function signature hard to read. For this reason, Rust has alternate
 syntax for specifying trait bounds inside a `where` clause after the function
-signature. So instead of writing this:
+signature. So, instead of writing this:
 
 ```rust,ignore
 fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
@@ -290,7 +291,7 @@ This function’s signature is less cluttered: the function name, parameter list
 and return type are close together, similar to a function without lots of trait
 bounds.
 
-### Returning Types that Implement Traits
+### Returning Types That Implement Traits
 
 We can also use the `impl Trait` syntax in the return position to return a
 value of some type that implements a trait, as shown here:
@@ -349,7 +350,7 @@ generic type depending on trait bounds</span>
 
 We can also conditionally implement a trait for any type that implements
 another trait. Implementations of a trait on any type that satisfies the trait
-bounds are called *blanket implementations* and are extensively used in the
+bounds are called *blanket implementations* and are used extensively in the
 Rust standard library. For example, the standard library implements the
 `ToString` trait on any type that implements the `Display` trait. The `impl`
 block in the standard library looks similar to this code:
@@ -377,12 +378,12 @@ reduce duplication but also specify to the compiler that we want the generic
 type to have particular behavior. The compiler can then use the trait bound
 information to check that all the concrete types used with our code provide the
 correct behavior. In dynamically typed languages, we would get an error at
-runtime if we called a method on a type which didn’t define the method. But Rust
-moves these errors to compile time so we’re forced to fix the problems before
-our code is even able to run. Additionally, we don’t have to write code that
-checks for behavior at runtime because we’ve already checked at compile time.
-Doing so improves performance without having to give up the flexibility of
-generics.
+runtime if we called a method on a type which didn’t define the method. But
+Rust moves these errors to compile time so we’re forced to fix the problems
+before our code is even able to run. Additionally, we don’t have to write code
+that checks for behavior at runtime because we’ve already checked at compile
+time. Doing so improves performance without having to give up the flexibility
+of generics.
 
 [using-trait-objects-that-allow-for-values-of-different-types]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [methods]: ch05-03-method-syntax.html#defining-methods
