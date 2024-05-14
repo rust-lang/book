@@ -9,27 +9,35 @@
 //!
 //! [post]: https://matklad.github.io/2021/02/27/delete-cargo-integration-tests.html
 
-use trpl::{async_main, block_on};
+use trpl::{block_on, sleep, spawn_task};
 
-/// This test makes sure the re-exported version of the `tokio::main` macro,
-/// which is applied like `#[tokio::main] async fn some_fn() { … }`, continues
-/// to work. However, tests cannot use `async fn`, so to test it, we need to
-/// have a non-`async` test function, which then applies the macro to an `async`
-/// function in its body, and invokes *that*.
-#[test]
-fn re_exported_macro_works() {
-    #[async_main]
-    async fn internal() -> &'static str {
-        let val = async { "Hello" }.await;
-        assert_eq!(val, "Hello", "Async is usable in async_main function");
-        val
-    }
-
-    assert_eq!(internal(), "Hello", "value returns correctly");
-}
-
+/// This test is foundational for all the others, as they depend on `block_on`.
+///
+/// If we mess this up, *all* the tests below will fail -- so by the same token,
+/// if all the tests below are failing, this one probably is too; fix it and the
+/// others will likely start working again.
 #[test]
 fn re_exported_block_on_works() {
     let val = block_on(async { "Hello" });
     assert_eq!(val, "Hello");
+}
+
+#[test]
+fn re_exported_spawn_works() {
+    let result = block_on(async {
+        let handle_a = spawn_task(async { "Hello" });
+        let handle_b = spawn_task(async { "Goodbye" });
+        vec![handle_a.await.unwrap(), handle_b.await.unwrap()]
+    });
+
+    assert_eq!(result, vec!["Hello", "Goodbye"]);
+}
+
+#[test]
+fn re_exported_sleep_works() {
+    let val = block_on(async {
+        sleep(std::time::Duration::from_micros(1)).await;
+        "Done!"
+    });
+    assert_eq!(val, "Done!");
 }

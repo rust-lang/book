@@ -12,5 +12,23 @@
 //!    never be broken by upstream changes, e.g. if Tokio does a breaking 2.0
 //!    release at some point.
 
-pub use futures::executor::block_on;
-pub use tokio::main as async_main;
+use std::future::Future;
+
+pub use futures::future::join;
+pub use tokio::{runtime::Runtime, task::spawn as spawn_task, time::sleep};
+
+/// Run a single future to completion on a bespoke Tokio `Runtime`.
+///
+/// Every time you call this, a new instance of `tokio::runtime::Runtime` will
+/// be created (see the implementation for details: it is trivial). This is:
+///
+/// - Reasonable for teaching purposes, in that you do not generally need to set
+///   up more than one runtime anyway, and especially do not in basic code like
+///   we are showing!
+///
+/// - Not *that* far off from what Tokio itself does under the hood in its own
+///   `tokio::main` macro for supporting `async fn main`.
+pub fn block_on<F: Future>(future: F) -> F::Output {
+    let rt = Runtime::new().unwrap();
+    rt.block_on(future)
+}

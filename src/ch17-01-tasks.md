@@ -135,6 +135,21 @@ source code][crate-source]. You will be able to see what crate each re-export
 comes from, and we have left extensive comments explaining what the handful of
 helper functions we supply are doing.
 
+> ### The `futures` and `tokio` Crates
+>
+> Whenever you see code from the `trpl` crate throughout the rest of the
+> chapter, it will be re-exporting code from the `futures` and [`tokio`][tokio]
+> crates.
+>
+> - The `futures` crate is an official home for Rust experimentation for async
+>   code, and is actually where the `Future` type was originally designed.
+>
+> - Tokio is the most widely used async runtime in Rust today, especially (but
+>   not only!) for web applications. There are other great options out there,
+>   too, and they may be more suitable for your purposes. We are using Tokio
+>   because it is the most widely-used runtime—not as a judgment call on whether
+>   it is the *best* runtime!
+
 For now, go ahead and add the `trpl` crate to your `hello-async` project:
 
 ```console
@@ -299,5 +314,6 @@ futures and runtimes work, we can see some of the things we can *do* with async.
 [pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
 [async-book]: https://rust-lang.github.io/async-book/
 [crate-source]: https://github.com/rust-lang/book/tree/main/packages/trpl
+[tokio]: https://tokio.rs
 
 <!-- TODO: map source link version to version of Rust? -->
