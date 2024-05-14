@@ -156,14 +156,23 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
                     if tag.starts_with("<Listing") {
                         let listing_result = Tokenizer::from(tag.as_ref())
                             .flatten()
-                            .fold(ListingBuilder::new(), |builder, token| match token {
-                                Token::Attribute { local, value, .. } => match local.as_str() {
-                                    "number" => builder.with_number(value.as_str()),
-                                    "caption" => builder.with_caption(value.as_str()),
-                                    "file-name" => builder.with_file_name(value.as_str()),
-                                    _ => builder, // TODO: error on extra attrs?
-                                },
-                                _ => builder,
+                            .fold(ListingBuilder::new(), |builder, token| {
+                                match token {
+                                    Token::Attribute {
+                                        local, value, ..
+                                    } => {
+                                        match local.as_str() {
+                                            "number" => builder
+                                                .with_number(value.as_str()),
+                                            "caption" => builder
+                                                .with_caption(value.as_str()),
+                                            "file-name" => builder
+                                                .with_file_name(value.as_str()),
+                                            _ => builder, // TODO: error on extra attrs?
+                                        }
+                                    }
+                                    _ => builder,
+                                }
                             })
                             .build();
 
@@ -171,11 +180,13 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
                             Ok(listing) => {
                                 let opening_event = match mode {
                                     Mode::Default => {
-                                        let opening_html = listing.opening_html();
+                                        let opening_html =
+                                            listing.opening_html();
                                         Event::Html(opening_html.into())
                                     }
                                     Mode::Simple => {
-                                        let opening_text = listing.opening_text();
+                                        let opening_text =
+                                            listing.opening_text();
                                         Event::Text(opening_text.into())
                                     }
                                 };
@@ -185,16 +196,24 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
                             }
                             Err(reason) => state.events.push(Err(reason)),
                         }
-                    } else if tag.as_ref() == "</Listing>" {
+                    } else if tag.starts_with("</Listing>") {
+                        let trailing = if !tag.ends_with('>') {
+                            tag.replace("</Listing>", "")
+                        } else {
+                            String::from("")
+                        };
+
                         match state.current_listing {
                             Some(listing) => {
                                 let closing_event = match mode {
                                     Mode::Default => {
-                                        let closing_html = listing.closing_html();
+                                        let closing_html =
+                                            listing.closing_html(&trailing);
                                         Event::Html(closing_html.into())
                                     }
                                     Mode::Simple => {
-                                        let closing_text = listing.closing_text();
+                                        let closing_text =
+                                            listing.closing_text(&trailing);
                                         Event::Text(closing_text.into())
                                     }
                                 };
@@ -232,7 +251,8 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
     }
 
     let mut buf = String::with_capacity(src.len() * 2);
-    cmark(events.into_iter().map(|ok| ok.unwrap()), &mut buf).map_err(|e| format!("{e}"))?;
+    cmark(events.into_iter().map(|ok| ok.unwrap()), &mut buf)
+        .map_err(|e| format!("{e}"))?;
     Ok(buf)
 }
 
@@ -253,10 +273,10 @@ impl Listing {
         )
     }
 
-    fn closing_html(&self) -> String {
+    fn closing_html(&self, trailing: &str) -> String {
         format!(
             r#"<figcaption>Listing {number}: {caption}</figcaption>
-</figure>"#,
+</figure>{trailing}"#,
             number = self.number,
             caption = self.caption
         )
@@ -266,11 +286,11 @@ impl Listing {
         format!("\nFilename: {file_name}\n", file_name = self.file_name)
     }
 
-    fn closing_text(&self) -> String {
+    fn closing_text(&self, trailing: &str) -> String {
         format!(
-            "Listing {number}: {caption}",
+            "Listing {number}: {caption}{trailing}",
             number = self.number,
-            caption = self.caption
+            caption = self.caption,
         )
     }
 }
@@ -399,6 +419,46 @@ Listing 1-2: A write-up which <em>might</em> include inline Markdown like <code>
         );
     }
 
+    #[test]
+    fn actual_listing() {
+        let result = rewrite_listing(
+            r#"Now open the *main.rs* file you just created and enter the code in Listing 1-1.
+
+<Listing number="1-1" file-name="main.rs" caption="A program that prints `Hello, world!`">
+
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+```
+
+</Listing>
+
+Save the file and go back to your terminal window"#,
+            Mode::Default,
+        );
+
+        assert!(result.is_ok());
+        assert_eq!(
+            result.unwrap(),
+            r#"Now open the *main.rs* file you just created and enter the code in Listing 1-1.
+
+<figure class="listing">
+<span class="file-name">Filename: main.rs</span>
+
+````rust
+fn main() {
+    println!("Hello, world!");
+}
+````
+
+<figcaption>Listing 1-1: A program that prints <code>Hello, world!</code></figcaption>
+</figure>
+
+Save the file and go back to your terminal window"#
+        );
+    }
+
     /// Check that the config options are correctly handled.
     ///
     /// Note: none of these tests particularly exercise the *wiring*. They just
@@ -448,7 +508,9 @@ Listing 1-2: A write-up which <em>might</em> include inline Markdown like <code>
                 }
             ]"##;
             let input_json = input_json.as_bytes();
-            let (ctx, book) = mdbook::preprocess::CmdPreprocessor::parse_input(input_json).unwrap();
+            let (ctx, book) =
+                mdbook::preprocess::CmdPreprocessor::parse_input(input_json)
+                    .unwrap();
             let result = TrplListing.run(&ctx, book);
             assert!(result.is_err());
             let err = result.unwrap_err();
@@ -493,7 +555,9 @@ Listing 1-2: A write-up which <em>might</em> include inline Markdown like <code>
                 }
             ]"##;
             let input_json = input_json.as_bytes();
-            let (ctx, book) = mdbook::preprocess::CmdPreprocessor::parse_input(input_json).unwrap();
+            let (ctx, book) =
+                mdbook::preprocess::CmdPreprocessor::parse_input(input_json)
+                    .unwrap();
             let result = TrplListing.run(&ctx, book);
             assert!(result.is_ok());
         }
@@ -538,7 +602,9 @@ Listing 1-2: A write-up which <em>might</em> include inline Markdown like <code>
                 }
             ]"##;
             let input_json = input_json.as_bytes();
-            let (ctx, book) = mdbook::preprocess::CmdPreprocessor::parse_input(input_json).unwrap();
+            let (ctx, book) =
+                mdbook::preprocess::CmdPreprocessor::parse_input(input_json)
+                    .unwrap();
             let result = TrplListing.run(&ctx, book);
             assert!(result.is_ok());
         }
@@ -583,7 +649,9 @@ Listing 1-2: A write-up which <em>might</em> include inline Markdown like <code>
                 }
             ]"##;
             let input_json = input_json.as_bytes();
-            let (ctx, book) = mdbook::preprocess::CmdPreprocessor::parse_input(input_json).unwrap();
+            let (ctx, book) =
+                mdbook::preprocess::CmdPreprocessor::parse_input(input_json)
+                    .unwrap();
             let result = TrplListing.run(&ctx, book);
             assert!(result.is_ok());
         }
@@ -628,7 +696,9 @@ Listing 1-2: A write-up which <em>might</em> include inline Markdown like <code>
                 }
             ]"##;
             let input_json = input_json.as_bytes();
-            let (ctx, book) = mdbook::preprocess::CmdPreprocessor::parse_input(input_json).unwrap();
+            let (ctx, book) =
+                mdbook::preprocess::CmdPreprocessor::parse_input(input_json)
+                    .unwrap();
             let result = TrplListing.run(&ctx, book);
             assert!(result.is_err());
             let err = result.unwrap_err();
