@@ -12,4 +12,5 @@
 //!    never be broken by upstream changes, e.g. if Tokio does a breaking 2.0
 //!    release at some point.
 
+pub use futures::executor::block_on;
 pub use tokio::main as async_main;

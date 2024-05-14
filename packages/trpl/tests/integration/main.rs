@@ -9,7 +9,7 @@
 //!
 //! [post]: https://matklad.github.io/2021/02/27/delete-cargo-integration-tests.html
 
-use trpl::async_main;
+use trpl::{async_main, block_on};
 
 /// This test makes sure the re-exported version of the `tokio::main` macro,
 /// which is applied like `#[tokio::main] async fn some_fn() { … }`, continues
@@ -26,4 +26,10 @@ fn re_exported_macro_works() {
     }
 
     assert_eq!(internal(), "Hello", "value returns correctly");
+}
+
+#[test]
+fn re_exported_block_on_works() {
+    let val = block_on(async { "Hello" });
+    assert_eq!(val, "Hello");
 }
