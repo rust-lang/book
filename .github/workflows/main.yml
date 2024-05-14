@@ -60,6 +60,8 @@ jobs:
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
     - name: Install mdbook-trpl-note
       run: cargo install --path packages/mdbook-trpl-note
+    - name: Install mdbook-trpl-listing
+      run: cargo install --path packages/mdbook-trpl-listing
     - name: Install aspell
       run: sudo apt-get install aspell
     - name: Install shellcheck

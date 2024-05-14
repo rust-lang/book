@@ -12,3 +12,6 @@ git-repository-url = "https://github.com/rust-lang/book"
 
 # Do not sync this preprocessor; it is for the HTML renderer only.
 [preprocessor.trpl-note]
+
+[preprocessor.trpl-listing]
+output-mode = "default"
