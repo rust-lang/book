@@ -112,13 +112,10 @@ error[E0728]: `await` is only allowed inside `async` functions and blocks
   |                   ^^^^^ only allowed inside `async` functions and blocks
 ```
 
-<!-- TODO: eliminate duplicate definition of runtime here and below -->
-
 This time, the compiler is informing us we cannot use `.await` in `main`,
 because `main` is not an `async` function. That is because async code needs a
-*runtime*: a Rust crate which manages the details of executing the asynchronous
-code, including whether or not to use threads for it, scheduling different async
-operations, and so on.
+*runtime*: a Rust crate which manages the details of executing asynchronous
+code.
 
 Most languages which support async, including C#, JavaScript, Go, Kotlin,
 Erlang, and Swift, bundle a runtime with the language. At least for now, Rust
@@ -266,10 +263,10 @@ of code.
 
 When we follow that chain far enough, eventually we end up back in some
 non-async function. At that point, something needs to “translate” between the
-async and sync worlds. That “something” is a *runtime*, a crate which handles
-the top-level `poll()` call, scheduling and handing off between the different
-async operations which may be in flight, and often providing async versions of
-functionality like file I/O.
+async and sync worlds. That “something” is the runtime! Whatever runtime you use
+is what handles the top-level `poll()` call, scheduling and handing off between
+the different async operations which may be in flight, and often also providing
+async versions of functionality like file I/O.
 
 Now we can understand why the compiler was blocking us in Listing 17-2 (before
 we added the `trpl::block_on` function). The `main` function is not `async`—and
