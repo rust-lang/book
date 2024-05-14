@@ -49,7 +49,7 @@ convention is to use an underscore to separate them. For example, use
 
 Now open the *main.rs* file you just created and enter the code in Listing 1-1.
 
-<span class="filename">Filename: main.rs</span>
+<Listing number="1-1" file-name="main.rs" caption="A program that prints `Hello, world!`">
 
 ```rust
 fn main() {
@@ -57,7 +57,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 1-1: A program that prints `Hello, world!`</span>
+</Listing>
 
 Save the file and go back to your terminal window in the
 *~/projects/hello_world* directory. On Linux or macOS, enter the following

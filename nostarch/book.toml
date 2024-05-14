@@ -10,3 +10,6 @@ git-repository-url = "https://github.com/rust-lang/book"
 
 [build]
 build-dir = "../tmp"
+
+[preprocessor.trpl-listing]
+output-mode = "simple"
