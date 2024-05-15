@@ -28,7 +28,7 @@ these steps should work as expected with the content of this book.
 If you’re using Linux or macOS, open a terminal and enter the following command:
 
 ```console
-$ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
 The command downloads a script and starts the installation of the `rustup`
@@ -48,7 +48,7 @@ C code and will need a C compiler.
 On macOS, you can get a C compiler by running:
 
 ```console
-$ xcode-select --install
+xcode-select --install
 ```
 
 Linux users should generally install GCC or Clang, according to their
@@ -72,7 +72,7 @@ To check whether you have Rust installed correctly, open a shell and enter this
 line:
 
 ```console
-$ rustc --version
+rustc --version
 ```
 
 You should see the version number, commit hash, and commit date for the latest
@@ -89,19 +89,19 @@ follows.
 In Windows CMD, use:
 
 ```console
-> echo %PATH%
+echo %PATH%
 ```
 
 In PowerShell, use:
 
 ```powershell
-> echo $env:Path
+echo $env:Path
 ```
 
 In Linux and macOS, use:
 
 ```console
-$ echo $PATH
+echo $PATH
 ```
 
 If that’s all correct and Rust still isn’t working, there are a number of
@@ -114,14 +114,14 @@ Once Rust is installed via `rustup`, updating to a newly released version is
 easy. From your shell, run the following update script:
 
 ```console
-$ rustup update
+rustup update
 ```
 
 To uninstall Rust and `rustup`, run the following uninstall script from your
 shell:
 
 ```console
-$ rustup self uninstall
+rustup self uninstall
 ```
 
 ### Local Documentation
