@@ -9,7 +9,9 @@
 //!
 //! [post]: https://matklad.github.io/2021/02/27/delete-cargo-integration-tests.html
 
-use trpl::{block_on, sleep, spawn_task};
+use std::time::Duration;
+
+use trpl::{block_on, channel, sleep, spawn_task, Receiver, Sender};
 
 /// This test is foundational for all the others, as they depend on `block_on`.
 ///
@@ -36,8 +38,24 @@ fn re_exported_spawn_works() {
 #[test]
 fn re_exported_sleep_works() {
     let val = block_on(async {
-        sleep(std::time::Duration::from_micros(1)).await;
+        sleep(Duration::from_micros(1)).await;
         "Done!"
     });
     assert_eq!(val, "Done!");
+}
+
+#[test]
+fn re_exported_channel_apis_work() {
+    block_on(async {
+        let (tx, mut rx) = channel();
+
+        tx.send("Hello").unwrap();
+        trpl::sleep(Duration::from_millis(1)).await;
+        tx.send("Goodbye").unwrap();
+        drop(tx);
+
+        assert_eq!(rx.recv().await, Some("Hello"));
+        assert_eq!(rx.recv().await, Some("Goodbye"));
+        assert_eq!(rx.recv().await, None);
+    });
 }

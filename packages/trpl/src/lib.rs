@@ -15,7 +15,26 @@
 use std::future::Future;
 
 pub use futures::future::join;
-pub use tokio::{runtime::Runtime, task::spawn as spawn_task, time::sleep};
+pub use tokio::{
+    runtime::Runtime,
+    // We use the `unbounded` variants because they most closely match the APIs
+    // from `std::sync::mpsc::channel`. Tokio's API choices are interesting:
+    //
+    // | `tokio::sync::mpsc` | `std::sync::mpsc` |
+    // | ------------------- | ----------------- |
+    // | `channel`           | `sync_channel`    |
+    // | `unbounded_channel` | `channel`         |
+    //
+    // The book collapses these differences for pedagogical simplicity, so that
+    // readers are not asking why `unbounded` is now important and can focus on
+    // the more important differences between sync and async APIs.
+    sync::mpsc::{
+        unbounded_channel as channel, UnboundedReceiver as Receiver,
+        UnboundedSender as Sender,
+    },
+    task::spawn as spawn_task,
+    time::sleep,
+};
 
 /// Run a single future to completion on a bespoke Tokio `Runtime`.
 ///

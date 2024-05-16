@@ -5,7 +5,10 @@ we tackled with threads in chapter 16. Since we already talked about a lot of
 the key ideas there, in this section we will focus on what is different between
 threads and futures.
 
-In many cases, the APIs for working with concurrency using async are very similar to those for using threads. In other cases, they end up being shaped fairly differently. Even when the APIs look similar, they often have different behavior and they nearly always have different performance characteristics.
+In many cases, the APIs for working with concurrency using async are very
+similar to those for using threads. In other cases, they end up being shaped
+fairly differently. Even when the APIs look similar, they often have different
+behavior and they nearly always have different performance characteristics.
 
 ### Counting
 
@@ -165,7 +168,10 @@ time you write a future, a runtime is ultimately responsible for executing it.
 That means that an async block might outlive the function where you write it, the
 same way a closure does—even if you do not pass it to a closure explicitly.
 
-> Note: the `async` keyword does not yet work with closures directly, so you
+<!-- TODO: continue discussion of async move blocks -->
+
+> Note: the `async` keyword does not yet work with closures directly—that is,
+> there is no direct equivalent to `async fn` for anonymous functions—so you
 > cannot write code like these function calls:
 >
 > ```rust,ignore
@@ -187,5 +193,31 @@ same way a closure does—even if you do not pass it to a closure explicitly.
 
 ### Message Passing
 
+<!-- NOTE: mentions blocking again, need to define it somewhere before this. -->
+
 Sharing data between futures will look familiar. We can again use async versions
-of Rust’s types for
+of Rust’s types for message-passing. Instead of `std::sync:mpsc::channel`, we
+will use a `tprl::channel`, for example. The `Receiver::recv()` method in the
+`std` channel blocks until it receives a message. The `trpl::Receiver::recv()`
+method, by contrast, is an `async` function. Instead of blocking, it sleeps
+until a message is received or the send side of the channel closes.
+
+<!-- TODO: build up to this, rather than dumping the whole code all at once -->
+
+<Listing number="17-TODO" caption="Using an async mpsc channel" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-04/src/main.rs}}
+```
+
+</Listing>
+
+If we run this, though, it never stops! We can see that `rx` receives and prints all the messages, but
+
+<Listing number="17-TODO" caption="Fixing the async mpsc channel by using `move` to take ownership of the `Sender` (`tx`)" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-05/src/main.rs:move}}
+```
+
+</Listing>
