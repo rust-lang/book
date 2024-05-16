@@ -34,7 +34,11 @@ impl Preprocessor for TrplNote {
         "simple-note-preprocessor"
     }
 
-    fn run(&self, _ctx: &PreprocessorContext, mut book: Book) -> Result<mdbook::book::Book> {
+    fn run(
+        &self,
+        _ctx: &PreprocessorContext,
+        mut book: Book,
+    ) -> Result<mdbook::book::Book> {
         book.for_each_mut(|item| {
             if let BookItem::Chapter(ref mut chapter) = item {
                 chapter.content = rewrite(&chapter.content);
@@ -75,7 +79,9 @@ pub fn rewrite(text: &str) -> String {
                     events.extend([
                         SoftBreak,
                         SoftBreak,
-                        Html(r#"<section class="note" aria-role="note">"#.into()),
+                        Html(
+                            r#"<section class="note" aria-role="note">"#.into(),
+                        ),
                         SoftBreak,
                         SoftBreak,
                         Start(Tag::Paragraph),
@@ -89,7 +95,10 @@ pub fn rewrite(text: &str) -> String {
                 }
             }
 
-            (StartingBlockquote(_blockquote_events), heading @ Start(Tag::Heading { .. })) => {
+            (
+                StartingBlockquote(_blockquote_events),
+                heading @ Start(Tag::Heading { .. }),
+            ) => {
                 events.extend([
                     SoftBreak,
                     SoftBreak,
@@ -101,14 +110,18 @@ pub fn rewrite(text: &str) -> String {
                 state = InNote;
             }
 
-            (StartingBlockquote(ref mut events), Start(Tag::Paragraph)) => {
-                events.push(Start(Tag::Paragraph));
+            (StartingBlockquote(ref mut events), Start(tag)) => {
+                events.push(Start(tag));
             }
 
             (InNote, End(TagEnd::BlockQuote)) => {
                 // As with the start of the block HTML, the closing HTML must be
                 // separated from the Markdown text by two newlines.
-                events.extend([SoftBreak, SoftBreak, Html("</section>".into())]);
+                events.extend([
+                    SoftBreak,
+                    SoftBreak,
+                    Html("</section>".into()),
+                ]);
                 state = Default;
             }
 
@@ -258,7 +271,8 @@ mod tests {
 
     #[test]
     fn h1_then_blockquote() {
-        let text = "> # Header\n > And then some note content.\n\n> This is quoted.";
+        let text =
+            "> # Header\n > And then some note content.\n\n> This is quoted.";
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
@@ -268,11 +282,22 @@ mod tests {
 
     #[test]
     fn blockquote_then_h1_note() {
-        let text = "> This is quoted.\n\n> # Header\n > And then some note content.";
+        let text =
+            "> This is quoted.\n\n> # Header\n > And then some note content.";
         let processed = rewrite(text);
         assert_eq!(
             render_markdown(&processed),
             "<blockquote>\n<p>This is quoted.</p>\n</blockquote>\n<section class=\"note\" aria-role=\"note\">\n<h1>Header</h1>\n<p>And then some note content.</p>\n</section>"
+        );
+    }
+
+    #[test]
+    fn blockquote_with_strong() {
+        let text = "> **Bold text in a paragraph.**";
+        let processed = rewrite(text);
+        assert_eq!(
+            render_markdown(&processed),
+            "<blockquote>\n<p><strong>Bold text in a paragraph.</strong></p>\n</blockquote>\n"
         );
     }
 
