@@ -11,7 +11,7 @@
 
 use std::time::Duration;
 
-use trpl::{block_on, channel, sleep, spawn_task, Receiver, Sender};
+use trpl::{Receiver, Sender};
 
 /// This test is foundational for all the others, as they depend on `block_on`.
 ///
@@ -20,15 +20,15 @@ use trpl::{block_on, channel, sleep, spawn_task, Receiver, Sender};
 /// others will likely start working again.
 #[test]
 fn re_exported_block_on_works() {
-    let val = block_on(async { "Hello" });
+    let val = trpl::block_on(async { "Hello" });
     assert_eq!(val, "Hello");
 }
 
 #[test]
 fn re_exported_spawn_works() {
-    let result = block_on(async {
-        let handle_a = spawn_task(async { "Hello" });
-        let handle_b = spawn_task(async { "Goodbye" });
+    let result = trpl::block_on(async {
+        let handle_a = trpl::spawn_task(async { "Hello" });
+        let handle_b = trpl::spawn_task(async { "Goodbye" });
         vec![handle_a.await.unwrap(), handle_b.await.unwrap()]
     });
 
@@ -37,8 +37,8 @@ fn re_exported_spawn_works() {
 
 #[test]
 fn re_exported_sleep_works() {
-    let val = block_on(async {
-        sleep(Duration::from_micros(1)).await;
+    let val = trpl::block_on(async {
+        trpl::sleep(Duration::from_micros(1)).await;
         "Done!"
     });
     assert_eq!(val, "Done!");
@@ -46,8 +46,9 @@ fn re_exported_sleep_works() {
 
 #[test]
 fn re_exported_channel_apis_work() {
-    block_on(async {
-        let (tx, mut rx) = channel();
+    trpl::block_on(async {
+        // Explicitly naming the type to confirm the re-exports are aligned.
+        let (tx, mut rx): (Sender<&str>, Receiver<&str>) = trpl::channel();
 
         tx.send("Hello").unwrap();
         trpl::sleep(Duration::from_millis(1)).await;
@@ -58,4 +59,25 @@ fn re_exported_channel_apis_work() {
         assert_eq!(rx.recv().await, Some("Goodbye"));
         assert_eq!(rx.recv().await, None);
     });
+}
+
+#[test]
+fn re_exported_join_apis_work() {
+    let result = trpl::block_on(async {
+        let a = async { 1 };
+        let b = async { 2 };
+        trpl::join(a, b).await
+    });
+
+    assert_eq!(result, (1, 2));
+
+    let result = trpl::block_on(async {
+        let a = async { 1 };
+        let b = async { 2 };
+        let c = async { 3 };
+
+        trpl::join3(a, b, c).await
+    });
+
+    assert_eq!(result, (1, 2, 3));
 }

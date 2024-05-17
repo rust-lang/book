@@ -165,8 +165,8 @@ Chapter 16, we saw that we often need to use closures marked with `move` when
 working with threads. The `move` keyword also works with async blocks, which
 also sometimes need to take ownership of the data they reference. Remember, any
 time you write a future, a runtime is ultimately responsible for executing it.
-That means that an async block might outlive the function where you write it, the
-same way a closure does—even if you do not pass it to a closure explicitly.
+That means that an async block might outlive the function where you write it,
+the same way a closure does—even if you do not pass it to a closure explicitly.
 
 <!-- TODO: continue discussion of async move blocks -->
 
@@ -197,22 +197,100 @@ same way a closure does—even if you do not pass it to a closure explicitly.
 
 Sharing data between futures will look familiar. We can again use async versions
 of Rust’s types for message-passing. Instead of `std::sync:mpsc::channel`, we
-will use a `tprl::channel`, for example. The `Receiver::recv()` method in the
-`std` channel blocks until it receives a message. The `trpl::Receiver::recv()`
-method, by contrast, is an `async` function. Instead of blocking, it sleeps
-until a message is received or the send side of the channel closes.
+will use a `tprl::channel`, for example.
+
+The `Receiver::recv()` method in the `std` channel blocks until it receives a
+message. The `trpl::Receiver::recv()` method, by contrast, is an `async`
+function. Instead of blocking, it sleeps until a message is received or the send
+side of the channel closes. One other difference with this particular `recv()`
+implementation is that it returns an `Option` of the type sent over the channel
+instead of a `Result`.
 
 <!-- TODO: build up to this, rather than dumping the whole code all at once -->
 
 <Listing number="17-TODO" caption="Using an async mpsc channel" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-04/src/main.rs}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-04/src/main.rs:all}}
 ```
 
 </Listing>
 
-If we run this, though, it never stops! We can see that `rx` receives and prints all the messages, but
+If we run this, though, it never stops! You will need to shut it down using
+<span class="keystroke">ctrl-c</span>. We can see that `tx` sends all the
+messages,and `rx` receives and prints them, but we never see the “Done!”
+message, and the program never stops running. That’s because of the combination
+of the `while let` loop and the `trpl::join` call:
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-04/src/main.rs:loop}}
+```
+
+Let’s consider the way this loop works:
+
+* The `trpl::join` future only completes once *both* futures passed to it
+  have completed.
+* The `tx` future completes after sending the second message.
+* The `rx` future will not complete until the `while let` loop ends, though.
+* The `while let` loop will not end until `rx.recv().await` produces `None`.
+* The `rx.recv().await` will only return `None` once the other end of the
+  channel is closed.
+* The channel will only close if we call `rx.close()` or when the sender side,
+  `tx`, is dropped.
+* We do not call `rx.close()` anywhere, and `tx` will not be dropped until the
+  function exits.
+* The function cannot exit because it is blocked on `trpl::join` completing,
+  which takes us back to the top of the list!
+
+To solve this, then, we need to make sure the channel gets closed so that
+`trpl::join` will complete. We could manually close `rx` somewhere by calling
+`rx.close()`, but that does not make much sense in this case. The idea is that
+`rx` should keep listening until `tx` is done sending. Stopping after handling
+some arbitrary number of messages would make the program shut down, but it would
+mean we could miss messages if the sending side changed. Given that we cannot
+use `rx.close()`, we need to make sure that `tx` gets dropped *before* the end
+of the function.
+
+Right now, the async block only borrows `tx`. We can confirm this by adding
+another async block which uses `tx`, and using `trpl::join3` to wait for all
+three futures to complete:
+
+<Listing number="17-TODO" caption="Adding another async block which borrows `tx`, to see that we can borrow it repeatedly" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-04b/src/main.rs:updated}}
+```
+
+</Listing>
+
+Now both blocks borrow `tx`, so they are both able to use it to send messages,
+which `rx` can then receive. When we run that code, we see the extra output from
+the new `async` block, and the message it sends being received by the
+`rx.recv()`:
+
+```text
+Sending 'Hello'
+Sleeping!
+Sending 'Extra'
+Sleeping from tx_fut2
+received 'Hello'
+received 'Extra'
+Sending 'Goodbye'
+received 'Goodbye'
+```
+
+As before, we also see that the program does not shut down on its own and requires a <span class="keystroke">ctrl-c</span>. Now that we have seen how `async` blocks borrow the items they reference from their outer scope, we can go ahead and remove the extra block we just added, and switch back to using `trpl::join` instead of `trpl::join3`.
+
+We now know enough to solve the original issue here. We need to move `tx` into
+the async block. Once that block ends, `tx` will be dropped. We can do that by
+making the first async block an `async move` block:
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-05/src/main.rs:move}}
+```
+
+The result is Listing 17-TODO, and when we run *this* version of the code, it
+shuts down gracefully after the last message is sent.
 
 <Listing number="17-TODO" caption="Fixing the async mpsc channel by using `move` to take ownership of the `Sender` (`tx`)" file-name="src/main.rs">
 
@@ -221,3 +299,12 @@ If we run this, though, it never stops! We can see that `rx` receives and prints
 ```
 
 </Listing>
+
+<!--
+  TODO: maybe explore `tx.clone()`, picking up the thread from the 3-futures
+  version of the example? That would let us see how shared ownership can work,
+  and give a place to emphasize that we still need to make sure *one* of the
+  async blocks
+-->
+
+<!-- TODO: bridge into a discussion of `Pin` by showing `join_all`? -->

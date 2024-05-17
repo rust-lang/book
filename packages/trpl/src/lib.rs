@@ -14,7 +14,7 @@
 
 use std::future::Future;
 
-pub use futures::future::join;
+pub use futures::future::{join, join3};
 pub use tokio::{
     runtime::Runtime,
     // We use the `unbounded` variants because they most closely match the APIs
