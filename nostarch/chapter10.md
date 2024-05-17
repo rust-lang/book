@@ -1193,9 +1193,9 @@ when the lifetimes of references could be related in a few different ways. Rust
 requires us to annotate the relationships using generic lifetime parameters to
 ensure the actual references used at runtime will definitely be valid.
 
-Annotating lifetimes is not even a concept most other programming languages
-have, so this is going to feel unfamiliar. Although we won’t cover lifetimes in
-their entirety in this chapter, we’ll discuss common ways you might encounter
+Annotating lifetimes is not a concept most other programming languages have, so
+this is going to feel unfamiliar. Although we won’t cover lifetimes in their
+entirety in this chapter, we’ll discuss common ways you might encounter
 lifetime syntax so you can get comfortable with the concept.
 
 ### Preventing Dangling References with Lifetimes
@@ -1313,7 +1313,7 @@ Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
 means `r` can reference `x` because Rust knows that the reference in `r` will
 always be valid while `x` is valid.
 
-Now that you know where the lifetimes of references are and how Rust analyzes
+Now that you know what the lifetimes of references are and how Rust analyzes
 lifetimes to ensure references will always be valid, let’s explore generic
 lifetimes of parameters and return values in the context of functions.
 
