@@ -49,7 +49,7 @@ easier to reason through.
 
 But mutability can be very useful, and can make code more convenient to write.
 Although variables are immutable by default, you can make them mutable by
-adding `mut` in front of the variable name as you did in [Chapter
+adding `mut` before the variable name as you did in [Chapter
 2][storing-values-with-variables]<!-- ignore -->. Adding `mut` also conveys
 intent to future readers of the code by indicating that other parts of the code
 will be changing this variable’s value.
