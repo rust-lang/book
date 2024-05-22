@@ -1,6 +1,6 @@
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished test [unoptimized + debuginfo] target(s) in 0.57s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.57s
      Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 running 1 test

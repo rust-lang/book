@@ -39,14 +39,14 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
 
     # Save the previous compile time; we're going to keep it to minimize diff
     # churn
-    compile_time=$(sed -E -ne 's/.*Finished (dev|test) \[unoptimized \+ debuginfo] target\(s\) in ([0-9.]*).*/\2/p' "${full_output_path}")
+    compile_time=$(sed -E -ne "s/.*Finished \`(dev|test)\` profile \[unoptimized \+ debuginfo] target\(s\) in ([0-9.]*).*/\2/p" "${full_output_path}")
 
     # Save the hash from the first test binary; we're going to keep it to
     # minimize diff churn
     test_binary_hash=$(sed -E -ne 's@.*Running [^[:space:]]+( [^[:space:]\(\)]+)? \(target/debug/deps/[^-]*-([^\s]*)\)@\2@p' "${full_output_path}" | head -n 1)
 
     # Act like this is the first time this listing has been built
-    cargo clean
+    cargo clean > /dev/null 2>&1
 
     # Run the command in the existing output file
     cargo_command=$(sed -ne 's/$ \(.*\)/\1/p' "${full_output_path}")
@@ -65,7 +65,7 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
 
     # Restore the previous compile time, if there is one
     if [ -n  "${compile_time}" ]; then
-        sed -i '' -E -e "s/Finished (dev|test) \[unoptimized \+ debuginfo] target\(s\) in [0-9.]*/Finished \1 [unoptimized + debuginfo] target(s) in ${compile_time}/" "${full_output_path}"
+        sed -i '' -E -e "s/Finished \`(dev|test)\` profile \[unoptimized \+ debuginfo] target\(s\) in [0-9.]*/Finished \`\1\` profile [unoptimized + debuginfo] target(s) in ${compile_time}/" "${full_output_path}"
     fi
 
     # Restore the previous test binary hash, if there is one
@@ -77,7 +77,7 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
     fi
 
     # Clean again
-    cargo clean
+    cargo clean > /dev/null 2>&1
 
     cd - > /dev/null
 done

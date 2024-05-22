@@ -6,11 +6,11 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { workspace = true }
-mdbook = { workspace = true }
-pulldown-cmark = { workspace = true }
-pulldown-cmark-to-cmark = { workspace = true }
-serde_json = { workspace = true }
+clap = { version = "4", features = ["derive"] }
+mdbook = { version = "0.4", default-features = false }     # only need the library
+pulldown-cmark = { version = "0.10", features = ["simd"] }
+pulldown-cmark-to-cmark = "13"
+serde_json = "1"
 
 [dev-dependencies]
-assert_cmd = { workspace = true }
+assert_cmd = "2"
