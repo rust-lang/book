@@ -46,7 +46,7 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
     test_binary_hash=$(sed -E -ne 's@.*Running [^[:space:]]+( [^[:space:]\(\)]+)? \(target/debug/deps/[^-]*-([^\s]*)\)@\2@p' "${full_output_path}" | head -n 1)
 
     # Act like this is the first time this listing has been built
-    cargo clean
+    cargo clean > /dev/null 2>&1
 
     # Run the command in the existing output file
     cargo_command=$(sed -ne 's/$ \(.*\)/\1/p' "${full_output_path}")
@@ -77,7 +77,7 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
     fi
 
     # Clean again
-    cargo clean
+    cargo clean > /dev/null 2>&1
 
     cd - > /dev/null
 done
