@@ -48,7 +48,7 @@ Putting that all together, we end up with the code in Listing 17-TODO:
 
 </Listing>
 
-This does something very similar to what the thread-base implementation did, as
+This does something very similar to what the thread-based implementation did, as
 we can see from the output when we run it. (As with the threading example, you
 may see a different order in your own terminal output when you run this.)
 
@@ -170,30 +170,30 @@ working with threads. The `move` keyword also works with async blocks, which
 also sometimes need to take ownership of the data they reference. Remember, any
 time you write a future, a runtime is ultimately responsible for executing it.
 That means that an async block might outlive the function where you write it,
-the same way a closure does—even if you do not pass it to a closure explicitly.
+the same way a closure can.
 
 <!-- TODO: continue discussion of async move blocks -->
 
-> Note: the `async` keyword does not yet work with closures directly—that is,
-> there is no direct equivalent to `async fn` for anonymous functions—so you
-> cannot write code like these function calls:
->
-> ```rust,ignore
-> example_1(async || { ... });
-> example_2(async move || { ... });
-> ```
->
-> However, since async blocks themselves can be marked with `move`, this ends up
-> not being a problem. Remember that `async` blocks compile to anonymous
-> futures. That means you can write calls like this instead:
->
-> ```rust,ignore
-> example_1(|| async { ... });
-> example_2(|| async move { ... });
-> ```
->
-> These closures now return anonymous futures, meaning they work basically the
-> same way that an async function does.
+The `async` keyword does not yet work with closures directly. That is, there is
+no direct equivalent to `async fn` for anonymous functions. As a result, you
+cannot write code like these function calls:
+
+```rust,ignore
+example_1(async || { ... });
+example_2(async move || { ... });
+```
+
+However, since async blocks themselves can be marked with `move`, this ends up
+not being a problem. Remember that `async` blocks compile to anonymous futures.
+That means you can write calls like this instead:
+
+```rust,ignore
+example_1(|| async { ... });
+example_2(|| async move { ... });
+```
+
+These closures now return anonymous futures, meaning they work basically the
+same way that an async function does.
 
 ### Message Passing
 
