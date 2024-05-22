@@ -279,7 +279,7 @@ is what handles the top-level `poll()` call, scheduling and handing off between
 the different async operations which may be in flight, and often also providing
 async versions of functionality like file I/O.
 
-Now we can understand why the compiler was blocking us in Listing 17-2 (before
+Now we can understand why the compiler was stopping us in Listing 17-2 (before
 we added the `trpl::block_on` function). The `main` function is not `async`—and
 it really cannot be: if it were, something would need to call `poll()` on
 whatever `main` returned! Instead, we use the `trpl::block_on` function, which

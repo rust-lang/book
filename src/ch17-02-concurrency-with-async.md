@@ -29,8 +29,8 @@ To start, we will set up our `main` function with `trpl::block_on`:
 > forget to include it in your own code!
 
 Then we can write two loops within that block, each with a `trpl::sleep` call in
-them. Similar to the threading example, we put one in the body of a
-`trpl::spawn_task`, just like we did with `thread::spawn`, and the other in a
+them. Similar to the threading example, we put one loop in the body of a
+`trpl::spawn_task`, the same way we did with `thread::spawn`, and the other in a
 top-level `for` loop. Notice that we also need to add a `.await` after the
 `sleep` calls.
 
@@ -150,50 +150,19 @@ APIs sometimes exist to let you choose whether fairness is something you care
 about as a caller.
 
 Try some of these different variations on awaiting the futures and see what they
-do. For an extra challenge, see if you can figure out what the output will be
-*before* running the code!
+do:
 
 * Remove the async block from around either or both of the loops.
 * Await each async block immediately after defining it.
 * Wrap only the first loop in an async block, and await the resulting future
   after the body of second loop.
 
-### Tasks vs. Threads
+For an extra challenge, see if you can figure out what the output will be in
+each case *before* running the code!
+
+### Futures, Tasks, and Threads
 
 <!-- TODO: discuss tasks vs. threads more *here*? -->
-
-### Async Move Blocks
-
-In Chapter 13, we learned how to use the `move` keyword with closures, and in
-Chapter 16, we saw that we often need to use closures marked with `move` when
-working with threads. The `move` keyword also works with async blocks, which
-also sometimes need to take ownership of the data they reference. Remember, any
-time you write a future, a runtime is ultimately responsible for executing it.
-That means that an async block might outlive the function where you write it,
-the same way a closure can.
-
-<!-- TODO: continue discussion of async move blocks -->
-
-The `async` keyword does not yet work with closures directly. That is, there is
-no direct equivalent to `async fn` for anonymous functions. As a result, you
-cannot write code like these function calls:
-
-```rust,ignore
-example_1(async || { ... });
-example_2(async move || { ... });
-```
-
-However, since async blocks themselves can be marked with `move`, this ends up
-not being a problem. Remember that `async` blocks compile to anonymous futures.
-That means you can write calls like this instead:
-
-```rust,ignore
-example_1(|| async { ... });
-example_2(|| async move { ... });
-```
-
-These closures now return anonymous futures, meaning they work basically the
-same way that an async function does.
 
 ### Message Passing
 
@@ -283,11 +252,29 @@ Got: future
 Got: you
 ```
 
-As before, we also see that the program does not shut down on its own and requires a <span class="keystroke">ctrl-c</span>. Now that we have seen how `async` blocks borrow the items they reference from their outer scope, we can go ahead and remove the extra block we just added, and switch back to using `trpl::join` instead of `trpl::join3`.
+As before, we also see that the program does not shut down on its own and
+requires a <span class="keystroke">ctrl-c</span>. Now that we have seen how
+`async` blocks borrow the items they reference from their outer scope, we can go
+ahead and remove the extra block we just added, and switch back to using
+`trpl::join` instead of `trpl::join3`.
 
-We now know enough to solve the original issue here. We need to move `tx` into
-the async block. Once that block ends, `tx` will be dropped. We can do that by
-making the first async block an `async move` block:
+This little exploration makes the original issue much clearer: it is ultimately
+about *ownership*. We need to move `tx` into the async block so that once that
+block ends, `tx` will be dropped.
+
+In Chapter 13, we learned how to use the `move` keyword with closures, and in
+Chapter 16, we saw that we often need to use closures marked with `move` when
+working with threads. As we have discovered, the same dynamics apply to async
+blocks—so the `move` keyword also works with async blocks, allowing them to take
+ownership of the data they reference.
+
+<!-- TODO: scrap this or find it a home! -->
+Remember, any time you write a future, a runtime is ultimately responsible for
+executing it. That means that an async block might outlive the function where
+you write it, the same way a closure can.
+<!-- TODO: Through here -->
+
+We can do that by making the first async block an `async move` block.
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-TODO-05/src/main.rs:move}}
@@ -312,3 +299,26 @@ shuts down gracefully after the last message is sent.
 -->
 
 <!-- TODO: bridge into a discussion of `Pin` by showing `join_all`? -->
+
+<!-- TODO: find this a home or scrap it -->
+The `async` keyword does not yet work with closures directly. That is, there is
+no direct equivalent to `async fn` for anonymous functions. As a result, you
+cannot write code like these function calls:
+
+```rust,ignore
+example_1(async || { ... });
+example_2(async move || { ... });
+```
+
+However, since async blocks themselves can be marked with `move`, this ends up
+not being a problem. Remember that `async` blocks compile to anonymous futures.
+That means you can write calls like this instead:
+
+```rust,ignore
+example_1(|| async { ... });
+example_2(|| async move { ... });
+```
+
+These closures now return anonymous futures, meaning they work basically the
+same way that an async function does.
+<!-- TODO: through here -->
