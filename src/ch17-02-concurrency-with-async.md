@@ -179,6 +179,8 @@ side of the channel closes. One other difference with this particular `recv()`
 implementation is that it returns an `Option` of the type sent over the channel
 instead of a `Result`.
 
+We can start by introducing an async version of the `channel`
+
 <!-- TODO: build up to this, rather than dumping the whole code all at once -->
 
 <Listing number="17-TODO" caption="Using an async mpsc channel" file-name="src/main.rs">
@@ -290,6 +292,26 @@ shuts down gracefully after the last message is sent.
 ```
 
 </Listing>
+
+### Multiple Producers with Async
+
+This async channel is also a multiple-producer channel, so we can call `clone`
+on `tx` if we want to send messages from multiple futures. For example, we can
+make the code from Listing 17-TODO work by cloning the `tx` before moving it
+into the first async block, moving the original `tx` into the second async
+block, and switchign back to `join3`.
+
+<Listing number="17-TODO" caption="Using multiple producers with async blocks" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-04b2/src/main.rs:here}}
+```
+
+</Listing>
+
+
+Both of these blocks need to be `async move` blocks, or else we will end up back
+in the same infinite loop we started out in.
 
 <!--
   TODO: maybe explore `tx.clone()`, picking up the thread from the 3-futures
