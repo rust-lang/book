@@ -2,6 +2,7 @@ use std::time::Duration;
 
 fn main() {
     trpl::block_on(async {
+        // ANCHOR: handle
         let handle = trpl::spawn_task(async {
             for i in 1..10 {
                 println!("hi number {i} from the first task!");
@@ -15,5 +16,6 @@ fn main() {
         }
 
         handle.await;
+        // ANCHOR_END: handle
     });
 }

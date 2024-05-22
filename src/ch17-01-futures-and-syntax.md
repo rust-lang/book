@@ -236,9 +236,7 @@ work and the `T` value is available.
 Under the hood, when you call `.await`, Rust compiles that to code which calls
 `poll`, kind of like this:
 
-<!-- TODO: does not compile -->
-
-```rust
+```rust,ignore
 match hello_async().poll() {
     Ready(_) => {
         // We’re done!
@@ -253,9 +251,7 @@ As you can see from this sample, though, there is a question: what happens when
 the `Future` is still `Pending`? We need some way to try again. We would need to
 have something like this instead:
 
-<!-- TODO: does not compile -->
-
-```rust
+```rust,ignore
 let hello_async_fut = hello_async();
 loop {
     match hello_async_fut.poll() {

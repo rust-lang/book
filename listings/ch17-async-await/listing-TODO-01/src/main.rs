@@ -1,8 +1,8 @@
 // ANCHOR: all
 use std::time::Duration;
 
-// ANCHOR: block_on
 fn main() {
+    // ANCHOR: block_on
     trpl::block_on(async {
         // ANCHOR_END: block_on
         // ANCHOR: task
@@ -20,6 +20,6 @@ fn main() {
         // ANCHOR_END: task
         // ANCHOR: block_on
     });
+    // ANCHOR_END: block_on
 }
-// ANCHOR_END: block_on
 // ANCHOR_END: all

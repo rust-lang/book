@@ -2,6 +2,7 @@ use std::time::Duration;
 
 fn main() {
     trpl::block_on(async {
+        // ANCHOR: join
         let fut1 = async {
             for i in 1..10 {
                 println!("hi number {i} from the first task!");
@@ -17,5 +18,6 @@ fn main() {
         };
 
         trpl::join(fut1, fut2).await;
+        // ANCHOR_END: join
     });
 }
