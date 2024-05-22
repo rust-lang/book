@@ -12,5 +12,23 @@ help: consider introducing a named lifetime parameter
 9 | fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
   |           ++++     ++          ++          ++
 
+error: lifetime may not live long enough
+  --> src/main.rs:11:9
+   |
+9  | fn longest(x: &str, y: &str) -> &str {
+   |               - let's call the lifetime of this reference `'1`
+10 |     if x.len() > y.len() {
+11 |         x
+   |         ^ returning this value requires that `'1` must outlive `'static`
+
+error: lifetime may not live long enough
+  --> src/main.rs:13:9
+   |
+9  | fn longest(x: &str, y: &str) -> &str {
+   |                        - let's call the lifetime of this reference `'2`
+...
+13 |         y
+   |         ^ returning this value requires that `'2` must outlive `'static`
+
 For more information about this error, try `rustc --explain E0106`.
-error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
+error: could not compile `chapter10` (bin "chapter10") due to 3 previous errors

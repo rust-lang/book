@@ -14,4 +14,4 @@ help: use `let _ = ...` to ignore the resulting value
    |     +++++++
 
 warning: `guessing_game` (bin "guessing_game") generated 1 warning
-    Finished dev [unoptimized + debuginfo] target(s) in 0.59s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.59s
