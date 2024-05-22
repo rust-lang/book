@@ -2,11 +2,12 @@ use mdbook::{
     book::Book,
     errors::Result,
     preprocess::{Preprocessor, PreprocessorContext},
+    utils::new_cmark_parser,
     BookItem,
 };
 use pulldown_cmark::{
     Event::{self, *},
-    Parser, Tag, TagEnd,
+    Tag, TagEnd,
 };
 use pulldown_cmark_to_cmark::cmark;
 
@@ -53,7 +54,7 @@ impl Preprocessor for TrplNote {
 }
 
 pub fn rewrite(text: &str) -> String {
-    let parser = Parser::new(text);
+    let parser = new_cmark_parser(text, true);
 
     let mut events = Vec::new();
     let mut state = Default;
@@ -301,8 +302,43 @@ mod tests {
         );
     }
 
+    #[test]
+    fn normal_table() {
+        let text = "| Header 1 | Header 2 |\n| -------- | -------- |\n| Text 123 | More 456 |";
+        let processed = rewrite(text);
+
+        assert_eq!(
+            processed,
+            "|Header 1|Header 2|\n|--------|--------|\n|Text 123|More 456|",
+            "It strips some whitespace but otherwise leaves the table intact."
+        );
+    }
+
+    #[test]
+    fn table_in_note() {
+        let text = "> Note: table stuff.\n\n| Header 1 | Header 2 |\n| -------- | -------- |\n| Text 123 | More 456 |";
+        let processed = rewrite(text);
+
+        assert_eq!(
+            processed,
+            "\n\n<section class=\"note\" aria-role=\"note\">\n\nNote: table stuff.\n\n</section>\n\n|Header 1|Header 2|\n|--------|--------|\n|Text 123|More 456|",
+            "It adds the note markup but leaves the table untouched, to be rendered as Markdown."
+        );
+    }
+
+    #[test]
+    fn table_in_quote() {
+        let text = "> A table.\n\n| Header 1 | Header 2 |\n| -------- | -------- |\n| Text 123 | More 456 |";
+        let processed = rewrite(text);
+        assert_eq!(
+            render_markdown(&processed),
+            "<blockquote>\n<p>A table.</p>\n</blockquote>\n<table><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody>\n<tr><td>Text 123</td><td>More 456</td></tr>\n</tbody></table>\n",
+            "It renders blockquotes with nested tables as expected."
+        );
+    }
+
     fn render_markdown(text: &str) -> String {
-        let parser = Parser::new(text);
+        let parser = new_cmark_parser(text, true);
         let mut buf = String::new();
         pulldown_cmark::html::push_html(&mut buf, parser);
         buf
