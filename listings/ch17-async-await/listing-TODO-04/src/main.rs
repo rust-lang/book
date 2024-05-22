@@ -6,14 +6,17 @@ fn main() {
         let (tx, mut rx) = trpl::channel();
 
         let tx_fut = async {
-            println!("Sending 'Hello'");
-            tx.send("Hello").unwrap();
+            let vals = vec![
+                String::from("hi"),
+                String::from("from"),
+                String::from("the"),
+                String::from("future"),
+            ];
 
-            println!("Sleeping!");
-            trpl::sleep(Duration::from_millis(1)).await;
-
-            println!("Sending 'Goodbye'");
-            tx.send("Goodbye").unwrap();
+            for val in vals {
+                tx.send(val).unwrap();
+                trpl::sleep(Duration::from_secs(1)).await;
+            }
         };
 
         // ANCHOR: loop
@@ -26,7 +29,5 @@ fn main() {
         trpl::join(tx_fut, rx_fut).await;
         // ANCHOR_END: loop
     });
-
-    println!("Done!");
 }
 // ANCHOR_END: all

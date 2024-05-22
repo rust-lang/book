@@ -273,14 +273,14 @@ the new `async` block, and the message it sends being received by the
 `rx.recv()`:
 
 ```text
-Sending 'Hello'
-Sleeping!
-Sending 'Extra'
-Sleeping from tx_fut2
-received 'Hello'
-received 'Extra'
-Sending 'Goodbye'
-received 'Goodbye'
+Got: hi
+Got: more
+Got: from
+Got: messages
+Got: the
+Got: for
+Got: future
+Got: you
 ```
 
 As before, we also see that the program does not shut down on its own and requires a <span class="keystroke">ctrl-c</span>. Now that we have seen how `async` blocks borrow the items they reference from their outer scope, we can go ahead and remove the extra block we just added, and switch back to using `trpl::join` instead of `trpl::join3`.

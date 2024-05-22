@@ -7,12 +7,17 @@ fn main() {
         // ANCHOR: move
         let tx_fut = async move {
             // ANCHOR_END: move
-            println!("Sending 'Hello'");
-            tx.send("Hello").unwrap();
-            println!("Sleeping!");
-            trpl::sleep(Duration::from_millis(1)).await;
-            println!("Sending 'Goodbye'");
-            tx.send("Goodbye").unwrap();
+            let vals = vec![
+                String::from("hi"),
+                String::from("from"),
+                String::from("the"),
+                String::from("future"),
+            ];
+
+            for val in vals {
+                tx.send(val).unwrap();
+                trpl::sleep(Duration::from_secs(1)).await;
+            }
         };
 
         let rx_fut = async {
@@ -23,6 +28,4 @@ fn main() {
 
         trpl::join(tx_fut, rx_fut).await;
     });
-
-    println!("Done!");
 }

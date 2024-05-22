@@ -1,38 +1,45 @@
-use std::{boxed::Box, future::Future, pin::Pin, time::Duration};
+use std::time::Duration;
 
 fn main() {
     trpl::block_on(async {
         let (tx, mut rx) = trpl::channel();
 
         let tx_fut = async {
-            println!("Sending 'Hello'");
-            tx.send("Hello").unwrap();
+            let vals = vec![
+                String::from("hi"),
+                String::from("from"),
+                String::from("the"),
+                String::from("future"),
+            ];
 
-            println!("Sleeping!");
-            trpl::sleep(Duration::from_millis(1)).await;
-
-            println!("Sending 'Goodbye'");
-            tx.send("Goodbye").unwrap();
+            for val in vals {
+                tx.send(val).unwrap();
+                trpl::sleep(Duration::from_secs(1)).await;
+            }
         };
 
         let rx_fut = async {
-            while let Some(value) = rx.recv().await {
-                println!("received '{value}'");
+            while let Some(received) = rx.recv().await {
+                println!("Got: {received}");
             }
         };
 
         // ANCHOR: updated
         let tx_fut2 = async {
-            println!("Sending 'Extra'");
-            tx.send("Extra").unwrap();
+            let vals = vec![
+                String::from("more"),
+                String::from("messages"),
+                String::from("for"),
+                String::from("you"),
+            ];
 
-            println!("Sleeping from tx_fut2");
-            trpl::sleep(Duration::from_millis(1)).await;
+            for val in vals {
+                tx.send(val).unwrap();
+                trpl::sleep(Duration::from_secs(1)).await;
+            }
         };
 
         trpl::join3(tx_fut, tx_fut2, rx_fut).await;
         // ANCHOR_END: updated
     });
-
-    println!("Done!");
 }
