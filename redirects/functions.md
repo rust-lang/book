@@ -4,7 +4,7 @@
 
 > Function definitions in Rust start with `fn` and have a set of parentheses after the function name.
 > The curly brackets tell the compiler where the function body begins and ends.
-> We can call any function we’ve defined by entering its name followed by a set of parentheses. 
+> We can call any function we’ve defined by entering its name followed by a set of parentheses.
 
 ```rust
 fn main() {
