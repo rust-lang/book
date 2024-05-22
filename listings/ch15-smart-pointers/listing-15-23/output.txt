@@ -1,6 +1,6 @@
 $ cargo test
    Compiling limit-tracker v0.1.0 (file:///projects/limit-tracker)
-    Finished test [unoptimized + debuginfo] target(s) in 0.91s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.91s
      Running unittests src/lib.rs (target/debug/deps/limit_tracker-e599811fa246dbde)
 
 running 1 test

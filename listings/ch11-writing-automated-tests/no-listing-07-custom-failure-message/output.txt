@@ -1,6 +1,6 @@
 $ cargo test
    Compiling greeter v0.1.0 (file:///projects/greeter)
-    Finished test [unoptimized + debuginfo] target(s) in 0.93s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.93s
      Running unittests src/lib.rs (target/debug/deps/greeter-170b942eb5bf5e3a)
 
 running 1 test

@@ -1,6 +1,6 @@
 $ cargo test
    Compiling silly-function v0.1.0 (file:///projects/silly-function)
-    Finished test [unoptimized + debuginfo] target(s) in 0.58s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.58s
      Running unittests src/lib.rs (target/debug/deps/silly_function-160869f38cff9166)
 
 running 2 tests
