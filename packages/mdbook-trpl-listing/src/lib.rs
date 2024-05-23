@@ -2,9 +2,10 @@ use mdbook::{
     book::Book,
     errors::Result,
     preprocess::{Preprocessor, PreprocessorContext},
+    utils::new_cmark_parser,
     BookItem,
 };
-use pulldown_cmark::{html, Event, Parser};
+use pulldown_cmark::{html, Event};
 use pulldown_cmark_to_cmark::cmark;
 use xmlparser::{Token, Tokenizer};
 
@@ -138,7 +139,7 @@ impl TryFrom<&str> for Mode {
 }
 
 fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
-    let parser = Parser::new(src);
+    let parser = new_cmark_parser(src, true);
 
     struct State<'e> {
         current_listing: Option<Listing>,
@@ -339,7 +340,7 @@ impl<'a> ListingBuilder<'a> {
         let caption = self
             .caption
             .map(|caption_source| {
-                let events = Parser::new(caption_source);
+                let events = new_cmark_parser(caption_source, true);
                 let mut buf = String::with_capacity(caption_source.len() * 2);
                 html::push_html(&mut buf, events);
 
