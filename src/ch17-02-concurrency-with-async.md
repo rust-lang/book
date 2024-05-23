@@ -166,8 +166,6 @@ each case *before* running the code!
 
 ### Message Passing
 
-<!-- NOTE: mentions blocking again, need to define it somewhere before this. -->
-
 Sharing data between futures will look familiar. We can again use async versions
 of Rust’s types for message-passing. Instead of `std::sync:mpsc::channel`, we
 will use a `tprl::channel`, for example.

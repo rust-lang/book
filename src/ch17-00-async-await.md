@@ -23,6 +23,92 @@ upload that video to some service to share it with your family, that upload
 process might take a long time. It would be nice if we could do something else
 while we are waiting for those long-running processes to complete.
 
+
+
+Consider again the examples of exporting a video file and waiting on the video
+file to finish uploading. The video export will use as much CPU and GPU power as
+it can. If you only had one CPU core, and your operating system never paused
+that export until it completed, you could not do anything else on your computer
+while it was running. That would be a pretty frustrating experience, though, so
+instead your computer can (and does!) invisibly interrupt the export often
+enough to let you get other small amounts of work done along the way.
+
+The file upload is different. It does not take up very much CPU time. Instead,
+you are mostly waiting on data to transfer across the network. If you only have
+a single CPU core, you might write a bunch of data to a network socket and then
+wait for it to finish getting sent by the network controller. You could choose
+to wait for all the data to get “flushed” from the socket and actually sent over
+the network, but if there is a busy network connection, you might be waiting for
+a while… with your CPU doing not much! Thus, even if your program cannot do
+anything until it finishes writing data to a network socket, your computer
+probably still does other things while the network operation is happening.
+
+> Note: The video export is the kind of operation which is often described as
+> “CPU-bound”. It is limited by the speed of the computer’s CPU (and GPU), and
+> how much of that power it can use. The video upload is the kind of operation
+> which is often described as “IO-bound,” because it is limited by the speed of
+> the computer’s *input and output*. It can only go as fast as the data can be
+> sent across the network, which means that it can only go as fast as the data
+> can be written to the socket.
+
+In both of these examples, the concurrency happens at the level of the whole
+program. The operating system decides to interrupt the program to let other
+programs get work done. In many cases, since we understand our programs at a
+much more granular level than the operating system does, we can lots of
+opportunities for concurrency that the operating system cannot see. For example,
+if we are building a tool to manage file uploads, it is important that the user
+interface stay responsive while an upload is happening. In fact, we should even
+be able to start multiple uploads at the same time.
+
+However, many operating system APIs for interacting with network sockets are
+*blocking*. That is, the function calls block further progress in the program
+when they are called until they return. This is how *most* function calls work,
+if you think about it! However, we normally reserve the term “blocking” for
+function calls which interact with files, network sockets, or other resources on
+the computer, because those are the places where an individual program would
+benefit from the operation being *non*-blocking.
+
+When doing file uploads, we could work around the fact that the call to write to
+a network socket is blocking using threads. If we move the data over to a
+dedicated thread which handles the write operation, it will *not* block the rest
+of the program. But in many ways, it would be nicer if the call were not
+blocking in the first place.
+
+One way to accomplish that would be to use an API built around callbacks. For
+each blocking operation, we could pass in a function to call once the operation
+completes:
+
+```rust,ignore
+network_socket.non_blocking_send(data).and_then(|result| {
+    // ...
+});
+```
+
+This is the basic design of most event-based APIs. It is also the basic mechanic
+used when working directly with promises in JavaScript. Historically, it was
+also the way that Rust implemented async! This can make the control flow for the
+program much more complicated, though. In particular, you can end up with many
+nested callbacks, and debugging those can be very painful. Even with chains of
+function calls, this can get laborious:
+
+```rust,ignore
+network_socket
+  .non_blocking_send(data)
+  .and_then(|first_result| { /* another non_blocking operation */ })
+  .and_then(|next_result| { /* another non_blocking operation */ })
+  .and_then(|yet_another_result| { /* finish things up */ });
+```
+
+With other common types in Rust, we often use pattern-matching on operations
+like this. However, when we are using callbacks like these to avoid blocking, we
+cannot use pattern matching, because we do not yet have the data at the time we
+call `non_blocking_send`—and we will not have it until the callback gets
+called.
+
+<!-- TODO: finish describing how this motivates async -->
+
+### Parallelism and Concurrency
+
 In the previous chapter we treated parallelism and concurrency as
 interchangeable. Now we need to distinguish between the two a little more:
 
@@ -54,34 +140,10 @@ can pause one activity and switch to others before eventually cycling back to
 that first activity again. So all parallel operations are also concurrent, but
 not all concurrent operations happen in parallel!
 
-> Note: When working with async in Rust, we need to think in terms of
-> *concurrency*. Depending on the hardware, the operating system, and the async
-> runtime we are using, that concurrency may use some degree of parallelism
-> under the hood, or it may not. More about async runtimes in a later section!
-
-Consider again the examples of exporting a video file and waiting on the video
-file to finish uploading. The video export will use as much CPU and GPU power as
-it can. If you only had one CPU core, and your operating system never paused
-that export until it completed, you could not do anything else on your computer
-while it was running. That would be a pretty frustrating experience, though, so
-instead your computer can (and does!) invisibly interrupt the export often
-enough to let you get other small amounts of work done along the way.
-
-The file upload is different. It does not take up very much CPU time. Instead,
-you are mostly waiting on data to transfer across the network. If you only have
-a single CPU core, you might write a bunch of data to a network socket and then
-wait for it to finish getting sent by the network controller. You could choose
-to wait for all the data to get “flushed” from the socket and actually sent over
-the network, but if there is a busy network connection, you might be waiting for
-a while… with your CPU doing not much! Thus, even if you make a blocking call to
-write to a socket, your computer probably does other things while the network
-operation is happening.
-
-In both of these cases, it might be useful for *your program* to participate in
-the same kind of concurrency the computer is providing for the rest of the
-system. One way to do this is the approach we saw last chapter: using threads,
-which are provided and managed by the operating system. Another way to get
-access to concurrency is using language-specific capabilities—like async.
+When working with async in Rust, we are always dealing with concurrency.
+Depending on the hardware, the operating system, and the async runtime we are
+using, that concurrency may use some degree of parallelism under the hood, or it
+may not. (More about async runtimes later!)
 
 A big difference between the cooking analogy and Rust’s async model for
 concurrency is that in the cooking example, the cook makes the decision about
