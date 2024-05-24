@@ -4,7 +4,7 @@ In Chapter 16, we saw one of Rust’s approaches to concurrency: using threads.
 Since Rust 1.39, there has been another option for concurrency: asynchronous
 programming, or *async*.
 
-In the rest of chapter, we will:
+In the rest of this chapter, we will:
 
 * see how to use Rust’s `async` and `.await` syntax
 * explore how to use the async model to solve some of the same challenges we
@@ -23,15 +23,12 @@ upload that video to some service to share it with your family, that upload
 process might take a long time. It would be nice if we could do something else
 while we are waiting for those long-running processes to complete.
 
-
-
-Consider again the examples of exporting a video file and waiting on the video
-file to finish uploading. The video export will use as much CPU and GPU power as
-it can. If you only had one CPU core, and your operating system never paused
-that export until it completed, you could not do anything else on your computer
-while it was running. That would be a pretty frustrating experience, though, so
-instead your computer can (and does!) invisibly interrupt the export often
-enough to let you get other small amounts of work done along the way.
+The video export will use as much CPU and GPU power as it can. If you only had
+one CPU core, and your operating system never paused that export until it
+completed, you could not do anything else on your computer while it was running.
+That would be a pretty frustrating experience, though, so instead your computer
+can (and does!) invisibly interrupt the export often enough to let you get other
+small amounts of work done along the way.
 
 The file upload is different. It does not take up very much CPU time. Instead,
 you are mostly waiting on data to transfer across the network. If you only have
@@ -74,38 +71,81 @@ dedicated thread which handles the write operation, it will *not* block the rest
 of the program. But in many ways, it would be nicer if the call were not
 blocking in the first place.
 
+<!-- TODO: pick a single example API, rather than switching. -->
+
 One way to accomplish that would be to use an API built around callbacks. For
 each blocking operation, we could pass in a function to call once the operation
 completes:
 
 ```rust,ignore
-network_socket.non_blocking_send(data).and_then(|result| {
+network_socket.non_blocking_send(data, |result| {
     // ...
 });
 ```
 
-This is the basic design of most event-based APIs. It is also the basic mechanic
-used when working directly with promises in JavaScript. Historically, it was
-also the way that Rust implemented async! This can make the control flow for the
-program much more complicated, though. In particular, you can end up with many
-nested callbacks, and debugging those can be very painful. Even with chains of
-function calls, this can get laborious:
+Or we could register callbacks to run when events happen:
 
 ```rust,ignore
-network_socket
-  .non_blocking_send(data)
-  .and_then(|first_result| { /* another non_blocking operation */ })
-  .and_then(|next_result| { /* another non_blocking operation */ })
-  .and_then(|yet_another_result| { /* finish things up */ });
+network_socket.add_listener(Event::DoneSending, || {
+    // ...
+});
 ```
 
-With other common types in Rust, we often use pattern-matching on operations
-like this. However, when we are using callbacks like these to avoid blocking, we
-cannot use pattern matching, because we do not yet have the data at the time we
-call `non_blocking_send`—and we will not have it until the callback gets
-called.
+Or we could have our functions return a type with an `and_then` method on it,
+which in turn accepts a callback which can do more work of the same sort:
 
-<!-- TODO: finish describing how this motivates async -->
+```rust,ignore
+network_socket.non_blocking_send(data)
+    .and_then(|result| { /* another non_blocking operation */ })
+    .and_then(|next_result| { /* ... */ });
+```
+
+Historically, this last choice was the way that Rust did async! Each of these
+can make the control flow for the program more complicated, though. You can end
+up with many nested callbacks, or long chains of callbacks, and understanding
+the flow of data through the program can become more difficult as a result.
+
+With other common types in Rust, we often use pattern-matching in scenarios like
+this. When we are using callbacks we do not yet have the data at the time we
+call `non_blocking_send`—and we will not have it until the callback gets called.
+That means that there is no way to match on the data it will return: it is not
+here yet!
+
+There are also no particularly good ways to get data out of those callbacks. We
+might try something like this, imagining a `read_to_string_non_blocking` which
+has eaxctly the kind of `and_then` method described above. If we were to try to
+use that, with code something like this, it would not compile:
+
+```rust,ignore,does_not_compile
+let mut data = None;
+read_to_string_non_blocking(some_path).and_then(|result| {
+    data = Some(result);
+});
+println!("{data:?}");
+```
+
+The callback passed to `and_then` needs a mutable reference to `data`, but the
+`load` function tries to return `data` to the caller. Rust would helpfully tell
+us that we cannot borrow `data` immutably to print it because it is still
+borrowed mutably for the `and_then` callback. This is not just Rust being fussy,
+either: the result of this would normally always just print the `None` value and
+exit, but if the read *happened* to go fast enough, it is possible it could
+sometimes print some string data instead. That is *definitely* not what we
+want!
+
+We also cannot cancel `read_to_string_non_blocking`: once it has started, it
+will run till it finishes unless the whole program stops.
+
+What we really want to be able to write is something much simpler, like we would
+in blocking code, but in a way that
+
+```rust,ignore,does_not_compile
+let data = read_to_string_non_blocking(&path).await;
+printl!("{data}");
+```
+
+That is exactly what Rust’s async abstraction gives us. It is designed to help
+us solve all of these issues.
 
 ### Parallelism and Concurrency
 
