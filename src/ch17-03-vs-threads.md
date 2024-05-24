@@ -21,3 +21,48 @@ lives at the level of libraries.
   task primitive to run (and there are runtimes which do *not* use tasks!) so it
   might make more sense to find another common, appropriate term for it instead.
 -->
+
+### Parallelism and Concurrency
+
+First, though, we need to dig a little deeper into the differences between
+parallelism and concurrency. In the previous chapter we treated them as mostly
+interchangeable. Now we need to distinguish between the two a little more,
+because the differences will show up as we start working:
+
+* *Parallelism* is when operations can happen simultaneously.
+
+* *Concurrency* is when operations can make progress without having to wait for
+  all other operations to complete.
+
+One common analogy for thinking about the difference between concurrency and
+parallelism is cooking in a kitchen. Parallelism is like having two cooks: one
+working on cooking eggs, and the other working on preparing fruit bowls. Those
+can happen at the same time, without either affecting the other. Concurrency is
+like having a single cook who can start cooking some eggs, start dicing up some
+vegetables to use in the omelette, adding seasoning and whatever vegetables are
+ready to the eggs at certain points, and switching back and forth between those
+tasks.
+
+(This analogy breaks down if you think about it too hard. The eggs keep cooking
+while the cook is chopping up the vegetables, after all. That is parallelism,
+not just concurrency! The focus of the analogy is the *cook*, not the food,
+though, and as long as you keep that in mind, it mostly works.)
+
+On a machine with multiple CPU cores, we can actually do work in parallel. One
+core can be doing one thing while another core does something completely
+unrelated, and those actually happen at the same time. On a machine with a
+single CPU core, the CPU can only do one operation at a time, but we can still
+have concurrency. Using tools like threads, processes, and async, the computer
+can pause one activity and switch to others before eventually cycling back to
+that first activity again. So all parallel operations are also concurrent, but
+not all concurrent operations happen in parallel!
+
+When working with async in Rust, we are always dealing with concurrency.
+Depending on the hardware, the operating system, and the async runtime we are
+using, that concurrency may use some degree of parallelism under the hood, or it
+may not. (More about async runtimes later!)
+
+A big difference between the cooking analogy and Rust’s async model for
+concurrency is that in the cooking example, the cook makes the decision about
+when to switch tasks. In Rust’s async model, the tasks are in control of that.
+To see how, let’s look at how Rust actually uses async.
