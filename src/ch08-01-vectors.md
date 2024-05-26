@@ -75,12 +75,13 @@ the values that are returned from these functions for extra clarity.
 Listing 8-4 shows both methods of accessing a value in a vector, with indexing
 syntax and the `get` method.
 
+<Listing number="8-4" caption="Using indexing syntax and using the `get` method to access an item in a vector">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-4: Using indexing syntax and using the `get`
-method to access an item in a vector</span>
+</Listing>
 
 Note a few details here. We use the index value of `2` to get the third element
 because vectors are indexed by number, starting at zero. Using `&` and `[]`
