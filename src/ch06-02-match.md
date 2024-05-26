@@ -22,12 +22,13 @@ function that takes an unknown US coin and, in a similar way as the counting
 machine, determines which coin it is and returns its value in cents, as shown
 in Listing 6-3.
 
+<Listing number="6-3" caption="An enum and a `match` expression that has 32 the variants of the enum as its patterns">
+
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 6-3: An enum and a `match` expression that has
-the variants of the enum as its patterns</span>
+</Listing>
 
 Let’s break down the `match` in the `value_in_cents` function. First we list
 the `match` keyword followed by an expression, which in this case is the value
