@@ -116,12 +116,13 @@ access to the `add_to_waitlist` function in the child module, so we mark the
 Unfortunately, the code in Listing 7-5 still results in compiler errors, as
 shown in Listing 7-6.
 
+<Listing number="7-6" caption="Compiler errors from building the code in Listing 7-5">
+
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-05/output.txt}}
 ```
 
-<span class="caption">Listing 7-6: Compiler errors from building the code in
-Listing 7-5</span>
+</Listing>
 
 What happened? Adding the `pub` keyword in front of `mod hosting` makes the
 module public. With this change, if we can access `front_of_house`, we can
