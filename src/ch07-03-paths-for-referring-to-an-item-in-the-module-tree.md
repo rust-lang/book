@@ -268,14 +268,13 @@ have such a function, we couldn’t create an instance of `Breakfast` in
 In contrast, if we make an enum public, all of its variants are then public. We
 only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-10" file-name="src/lib.rs" caption="Designating an enum as public makes all its variants public">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-10/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-10: Designating an enum as public makes all its
-variants public</span>
+</Listing>
 
 Because we made the `Appetizer` enum public, we can use the `Soup` and `Salad`
 variants in `eat_at_restaurant`.
