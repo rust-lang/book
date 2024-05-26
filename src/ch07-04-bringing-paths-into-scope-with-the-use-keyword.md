@@ -58,14 +58,13 @@ crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in
 `eat_at_restaurant`, rather than specifying the `use` path all the way out to
 the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-13" file-name="src/lib.rs" caption="Bringing the `add_to_waitlist` function into scope with `use`, which is unidiomatic">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-13/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-13: Bringing the `add_to_waitlist` function
-into scope with `use`, which is unidiomatic</span>
+</Listing>
 
 Although both Listing 7-11 and Listing 7-13 accomplish the same task, Listing
 7-11 is the idiomatic way to bring a function into scope with `use`. Bringing
