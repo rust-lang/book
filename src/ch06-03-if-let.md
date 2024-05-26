@@ -6,12 +6,13 @@ program in Listing 6-6 that matches on an `Option<u8>` value in the
 `config_max` variable but only wants to execute code if the value is the `Some`
 variant.
 
+<Listing number="6-6" caption="A `match` that only cares about executing code when the value is `Some`">
+
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 6-6: A `match` that only cares about executing
-code when the value is `Some`</span>
+</Listing>
 
 If the value is `Some`, we print out the value in the `Some` variant by binding
 the value to the variable `max` in the pattern. We don’t want to do anything
