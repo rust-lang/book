@@ -11,12 +11,13 @@ lines of text in a file or the prices of items in a shopping cart.
 To create a new empty vector, we call the `Vec::new` function, as shown in
 Listing 8-1.
 
+<Listing number="8-1" caption="Creating a new, empty vector to hold values of type `i32`">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-1: Creating a new, empty vector to hold values
-of type `i32`</span>
+</Listing>
 
 Note that we added a type annotation here. Because we aren’t inserting any
 values into this vector, Rust doesn’t know what kind of elements we intend to
