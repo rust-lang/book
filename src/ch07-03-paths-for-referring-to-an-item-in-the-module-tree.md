@@ -214,14 +214,13 @@ function `fix_incorrect_order` defined in the `back_of_house` module calls the
 function `deliver_order` defined in the parent module by specifying the path to
 `deliver_order`, starting with `super`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-8" file-name="src/lib.rs" caption="Calling a function using a relative path starting with `super`">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-08/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-8: Calling a function using a relative path
-starting with `super`</span>
+</Listing>
 
 The `fix_incorrect_order` function is in the `back_of_house` module, so we can
 use `super` to go to the parent module of `back_of_house`, which in this case
