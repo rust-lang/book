@@ -95,12 +95,13 @@ existing elements. As an example, let’s see what happens when we have a vector
 of five elements and then we try to access an element at index 100 with each
 technique, as shown in Listing 8-5.
 
+<Listing number="8-5" caption="Attempting to access the element at index 100 in a vector containing five elements">
+
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-5: Attempting to access the element at index
-100 in a vector containing five elements</span>
+</Listing>
 
 When we run this code, the first `[]` method will cause the program to panic
 because it references a nonexistent element. This method is best used when you
