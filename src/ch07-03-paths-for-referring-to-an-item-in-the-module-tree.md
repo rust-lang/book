@@ -29,14 +29,13 @@ The `eat_at_restaurant` function is part of our library crate’s public API, so
 we mark it with the `pub` keyword. In the [“Exposing Paths with the `pub`
 Keyword”][pub]<!-- ignore --> section, we’ll go into more detail about `pub`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-3" file-name="src/lib.rs" caption="Calling the `add_to_waitlist` function using absolute and relative paths">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-03/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-3: Calling the `add_to_waitlist` function using
-absolute and relative paths</span>
+</Listing>
 
 The first time we call the `add_to_waitlist` function in `eat_at_restaurant`,
 we use an absolute path. The `add_to_waitlist` function is defined in the same
