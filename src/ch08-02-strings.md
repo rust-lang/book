@@ -41,11 +41,13 @@ of bytes with some extra guarantees, restrictions, and capabilities. An example
 of a function that works the same way with `Vec<T>` and `String` is the `new`
 function to create an instance, shown in Listing 8-11.
 
+<Listing number="8-11" caption="Creating a new, empty `String`">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-11: Creating a new, empty `String`</span>
+</Listing>
 
 This line creates a new, empty string called `s`, into which we can then load
 data. Often, we’ll have some initial data with which we want to start the
