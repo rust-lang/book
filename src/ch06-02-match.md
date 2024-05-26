@@ -121,12 +121,13 @@ operations.
 This function is very easy to write, thanks to `match`, and will look like
 Listing 6-5.
 
+<Listing number="6-5" caption="A function that uses a `match` expression on an `Option<i32>`">
+
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 6-5: A function that uses a `match` expression on
-an `Option<i32>`</span>
+</Listing>
 
 Let’s examine the first execution of `plus_one` in more detail. When we call
 `plus_one(five)`, the variable `x` in the body of `plus_one` will have the
