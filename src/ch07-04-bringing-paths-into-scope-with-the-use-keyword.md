@@ -115,14 +115,13 @@ into the same scope with `use`: after the path, we can specify `as` and a new
 local name, or *alias*, for the type. Listing 7-16 shows another way to write
 the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-16" file-name="src/lib.rs" caption="Renaming a type when it’s brought into scope with the `as` keyword">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-16/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 7-16: Renaming a type when it’s brought into
-scope with the `as` keyword</span>
+</Listing>
 
 In the second `use` statement, we chose the new name `IoResult` for the
 `std::io::Result` type, which won’t conflict with the `Result` from `std::fmt`
