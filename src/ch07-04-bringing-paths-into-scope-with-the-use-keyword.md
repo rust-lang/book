@@ -12,14 +12,13 @@ scope of the `eat_at_restaurant` function so we only have to specify
 `hosting::add_to_waitlist` to call the `add_to_waitlist` function in
 `eat_at_restaurant`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-11" file-name="src/lib.rs" caption="Bringing a module into scope with `use`">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-11/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-11: Bringing a module into scope with
-`use`</span>
+</Listing>
 
 Adding `use` and a path in a scope is similar to creating a symbolic link in
 the filesystem. By adding `use crate::front_of_house::hosting` in the crate
