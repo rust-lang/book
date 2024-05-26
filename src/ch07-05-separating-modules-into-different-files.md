@@ -16,14 +16,13 @@ the `mod front_of_house;` declaration, so that *src/lib.rs* contains the code
 shown in Listing 7-21. Note that this won’t compile until we create the
 *src/front_of_house.rs* file in Listing 7-22.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-21" file-name="src/lib.rs" caption="Declaring the `front_of_house` module whose body will be in *src/front_of_house.rs*">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-21: Declaring the `front_of_house` module whose
-body will be in *src/front_of_house.rs*</span>
+</Listing>
 
 Next, place the code that was in the curly brackets into a new file named
 *src/front_of_house.rs*, as shown in Listing 7-22. The compiler knows to look
