@@ -86,12 +86,13 @@ readability.
 Remember that strings are UTF-8 encoded, so we can include any properly encoded
 data in them, as shown in Listing 8-14.
 
+<Listing number="8-14" caption="Storing greetings in different languages in strings">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-14: Storing greetings in different languages in
-strings</span>
+</Listing>
 
 All of these are valid `String` values.
 
