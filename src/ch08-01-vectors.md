@@ -240,12 +240,13 @@ addition to `push`, a `pop` method removes and returns the last element.
 Like any other `struct`, a vector is freed when it goes out of scope, as
 annotated in Listing 8-10.
 
+<Listing number="8-10" caption="Showing where the vector and its elements are dropped">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-10: Showing where the vector and its elements
-are dropped</span>
+</Listing>
 
 When the vector gets dropped, all of its contents are also dropped, meaning the
 integers it holds will be cleaned up. The borrow checker ensures that any
