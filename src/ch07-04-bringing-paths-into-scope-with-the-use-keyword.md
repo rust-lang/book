@@ -31,14 +31,13 @@ Note that `use` only creates the shortcut for the particular scope in which the
 child module named `customer`, which is then a different scope than the `use`
 statement, so the function body won’t compile.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-12" file-name="src/lib.rs" caption="A `use` statement only applies in the scope it’s in">
 
 ```rust,noplayground,test_harness,does_not_compile,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-12: A `use` statement only applies in the scope
-it’s in</span>
+</Listing>
 
 The compiler error shows that the shortcut no longer applies within the
 `customer` module:
