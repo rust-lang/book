@@ -69,12 +69,13 @@ each other.
 Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
 errors we get are shown in Listing 7-4.
 
+<Listing number="7-4" caption="Compiler errors from building the code in Listing 7-3">
+
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-03/output.txt}}
 ```
 
-<span class="caption">Listing 7-4: Compiler errors from building the code in
-Listing 7-3</span>
+</Listing>
 
 The error messages say that module `hosting` is private. In other words, we
 have the correct paths for the `hosting` module and the `add_to_waitlist`
