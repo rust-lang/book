@@ -140,14 +140,13 @@ their scope.
 Listing 7-17 shows the code in Listing 7-11 with `use` in the root module
 changed to `pub use`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-17" file-name="src/lib.rs" caption="Making a name available for any code to use from a new scope with `pub use`">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-17/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-17: Making a name available for any code to use
-from a new scope with `pub use`</span>
+</Listing>
 
 Before this change, external code would have to call the `add_to_waitlist`
 function by using the path
