@@ -210,12 +210,13 @@ value types, and all the enum variants will be considered the same type: that
 of the enum. Then we can create a vector to hold that enum and so, ultimately,
 hold different types. We’ve demonstrated this in Listing 8-9.
 
+<Listing number="8-9" caption="Defining an `enum` to store values of different types in one vector">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-9: Defining an `enum` to store values of
-different types in one vector</span>
+</Listing>
 
 Rust needs to know what types will be in the vector at compile time so it knows
 exactly how much memory on the heap will be needed to store each element. We
