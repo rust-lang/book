@@ -65,11 +65,13 @@ the declaration of the `hosting` module:
 Then we create a *src/front_of_house* directory and a *hosting.rs* file to
 contain the definitions made in the `hosting` module:
 
-<span class="filename">Filename: src/front_of_house/hosting.rs</span>
+<Listing file-name="src/front_of_house/hosting.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house/hosting.rs}}
 ```
+
+</Listing>
 
 If we instead put *hosting.rs* in the *src* directory, the compiler would
 expect the *hosting.rs* code to be in a `hosting` module declared in the crate
