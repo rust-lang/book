@@ -54,11 +54,13 @@ named for its ancestors in the module tree, in this case *src/front_of_house*.
 To start moving `hosting`, we change *src/front_of_house.rs* to contain only
 the declaration of the `hosting` module:
 
-<span class="filename">Filename: src/front_of_house.rs</span>
+<Listing file-name="src/front_of_house.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house.rs}}
 ```
+
+</Listing>
 
 Then we create a *src/front_of_house* directory and a *hosting.rs* file to
 contain the definitions made in the `hosting` module:
