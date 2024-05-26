@@ -128,12 +128,13 @@ to the first element in a vector and try to add an element to the end. This
 program won’t work if we also try to refer to that element later in the
 function.
 
+<Listing number="8-6" caption="Attempting to add an element to a vector while holding a reference to an item">
+
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-6: Attempting to add an element to a vector
-while holding a reference to an item</span>
+</Listing>
 
 Compiling this code will result in this error:
 
