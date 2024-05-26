@@ -69,12 +69,13 @@ We can also use the function `String::from` to create a `String` from a string
 literal. The code in Listing 8-13 is equivalent to the code in Listing 8-12
 that uses `to_string`.
 
+<Listing number="8-13" caption="Using the `String::from` function to create a `String` from a string literal">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-13/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-13: Using the `String::from` function to create
-a `String` from a string literal</span>
+</Listing>
 
 Because strings are used for so many things, we can use many different generic
 APIs for strings, providing us with a lot of options. Some of them can seem
