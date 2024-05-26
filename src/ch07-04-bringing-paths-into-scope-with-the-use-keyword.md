@@ -179,11 +179,13 @@ added this line to *Cargo.toml*:
 * ch14-03-cargo-workspaces.md
 -->
 
-<span class="filename">Filename: Cargo.toml</span>
+<Listing file-name="Cargo.toml">
 
 ```toml
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
 ```
+
+</Listing>
 
 Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the
 `rand` package and any dependencies from [crates.io](https://crates.io/) and
