@@ -109,7 +109,6 @@ as shown in Listing 8-15.
 
 <Listing number="8-15" caption="Appending a string slice to a `String` using the `push_str` method">
 
-
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-15/src/main.rs:here}}
 ```
@@ -121,12 +120,13 @@ string slice because we don’t necessarily want to take ownership of the
 parameter. For example, in the code in Listing 8-16, we want to be able to use
 `s2` after appending its contents to `s1`.
 
+<Listing number="8-16" caption="Using a string slice after appending its contents to a `String`">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-16/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-16: Using a string slice after appending its
-contents to a `String`</span>
+</Listing>
 
 If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
