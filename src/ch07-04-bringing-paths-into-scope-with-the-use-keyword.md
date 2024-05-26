@@ -95,14 +95,13 @@ into scope with `use` statements, because Rust doesn’t allow that. Listing 7-1
 shows how to bring two `Result` types into scope that have the same name but
 different parent modules, and how to refer to them.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-15" file-name="src/lib.rs" caption="Bringing two types with the same name into the same scope requires using their parent modules.">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-15/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 7-15: Bringing two types with the same name into
-the same scope requires using their parent modules.</span>
+</Listing>
 
 As you can see, using the parent modules distinguishes the two `Result` types.
 If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
