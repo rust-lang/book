@@ -107,12 +107,14 @@ use the `+` operator or the `format!` macro to concatenate `String` values.
 We can grow a `String` by using the `push_str` method to append a string slice,
 as shown in Listing 8-15.
 
+<Listing number="8-15" caption="Appending a string slice to a `String` using the `push_str` method">
+
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-15/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-15: Appending a string slice to a `String`
-using the `push_str` method</span>
+</Listing>
 
 After these two lines, `s` will contain `foobar`. The `push_str` method takes a
 string slice because we don’t necessarily want to take ownership of the
