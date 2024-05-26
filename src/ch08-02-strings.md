@@ -55,12 +55,13 @@ string. For that, we use the `to_string` method, which is available on any type
 that implements the `Display` trait, as string literals do. Listing 8-12 shows
 two examples.
 
+<Listing number="8-12" caption="Using the `to_string` method to create a `String` from a string literal">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-12/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-12: Using the `to_string` method to create a
-`String` from a string literal</span>
+</Listing>
 
 This code creates a string containing `initial contents`.
 
