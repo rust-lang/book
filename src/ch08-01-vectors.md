@@ -36,12 +36,13 @@ new vector that holds the values you give it. Listing 8-2 creates a new
 because that’s the default integer type, as we discussed in the [“Data
 Types”][data-types]<!-- ignore --> section of Chapter 3.
 
+<Listing number="8-2" caption="Creating a new vector containing values">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-2: Creating a new vector containing
-values</span>
+</Listing>
 
 Because we’ve given initial `i32` values, Rust can infer that the type of `v`
 is `Vec<i32>`, and the type annotation isn’t necessary. Next, we’ll look at how
