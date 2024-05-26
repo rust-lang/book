@@ -142,6 +142,8 @@ known as the *module tree*.
 
 Listing 7-2 shows the module tree for the structure in Listing 7-1.
 
+<Listing number="7-2" caption="The module tree for the code in Listing 7-1">
+
 ```text
 crate
  └── front_of_house
@@ -154,8 +156,7 @@ crate
          └── take_payment
 ```
 
-<span class="caption">Listing 7-2: The module tree for the code in Listing
-7-1</span>
+</Listing>
 
 This tree shows how some of the modules nest inside other modules; for example,
 `hosting` nests inside `front_of_house`. The tree also shows that some modules
