@@ -226,11 +226,13 @@ each item on its own line can take up a lot of vertical space in our files. For
 example, these two `use` statements we had in the guessing game in Listing 2-4
 bring items from `std` into scope:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-01-use-std-unnested/src/main.rs:here}}
 ```
+
+</Listing>
 
 Instead, we can use nested paths to bring the same items into scope in one
 line. We do this by specifying the common part of the path, followed by two
