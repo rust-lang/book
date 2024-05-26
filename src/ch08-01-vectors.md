@@ -53,12 +53,13 @@ to modify a vector.
 To create a vector and then add elements to it, we can use the `push` method,
 as shown in Listing 8-3.
 
+<Listing number="8-3" caption="Using the `push` method to add values to a vector">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-3: Using the `push` method to add values to a
-vector</span>
+</Listing>
 
 As with any variable, if we want to be able to change its value, we need to
 make it mutable using the `mut` keyword, as discussed in Chapter 3. The numbers
