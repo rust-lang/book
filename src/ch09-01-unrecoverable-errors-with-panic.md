@@ -64,14 +64,13 @@ a `panic!` call comes from a library because of a bug in our code instead of
 from our code calling the macro directly. Listing 9-1 has some code that
 attempts to access an index in a vector beyond the range of valid indexes.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="9-1" file-name="src/main.rs" caption="Attempting to access an element beyond the end of a vector, which will cause a call to `panic!`">
 
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 9-1: Attempting to access an element beyond the
-end of a vector, which will cause a call to `panic!`</span>
+</Listing>
 
 Here, we’re attempting to access the 100th element of our vector (which is at
 index 99 because indexing starts at zero), but the vector has only three
