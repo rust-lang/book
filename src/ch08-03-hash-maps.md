@@ -180,12 +180,13 @@ the words as keys and increment the value to keep track of how many times we’v
 seen that word. If it’s the first time we’ve seen a word, we’ll first insert
 the value `0`.
 
+<Listing number="8-25" caption="Counting occurrences of words using a hash map that stores words and counts">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-25: Counting occurrences of words using a hash
-map that stores words and counts</span>
+</Listing>
 
 This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see
 the same key–value pairs printed in a different order: recall from the
