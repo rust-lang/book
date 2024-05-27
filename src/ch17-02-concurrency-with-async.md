@@ -21,7 +21,7 @@ to implement the same counting example as with threads.
 To start, we will set up our `main` function with `trpl::block_on`:
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-01/src/main.rs:block_on}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-01/src/main.rs:block_on}}
 ```
 
 > Note: From this point forward in the chapter, every example will include this
@@ -35,7 +35,7 @@ top-level `for` loop. Notice that we also need to add a `.await` after the
 `sleep` calls.
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-01/src/main.rs:task}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-01/src/main.rs:task}}
 ```
 
 Putting that all together, we end up with the code in Listing 17-TODO:
@@ -43,7 +43,7 @@ Putting that all together, we end up with the code in Listing 17-TODO:
 <Listing number="17-TODO" caption="Showing how we might implement two counters with `async` instead of threads" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-01/src/main.rs:all}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-01/src/main.rs:all}}
 ```
 
 </Listing>
@@ -74,7 +74,7 @@ thread was done running. Here, we can use `await` to do the same thing:
 <Listing number="17-TODO" caption="Using `.await` with a join handle to run a task to completion" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-02/src/main.rs:handle}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-02/src/main.rs:handle}}
 ```
 
 </Listing>
@@ -113,7 +113,7 @@ ask the runtime to run them both to completion using `trpl::join`:
 <Listing number="17-TODO" caption="Using `trpl::join` to await two anonymous futures" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-03/src/main.rs:join}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-03/src/main.rs:join}}
 ```
 
 </Listing>
@@ -180,7 +180,7 @@ We can start by introducing an async version of the `channel`
 <Listing number="17-TODO" caption="Using an async mpsc channel" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-04/src/main.rs:all}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:all}}
 ```
 
 </Listing>
@@ -192,7 +192,7 @@ message, and the program never stops running. That’s because of the combinatio
 of the `while let` loop and the `trpl::join` call:
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-04/src/main.rs:loop}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:loop}}
 ```
 
 Let’s consider the way this loop works:
@@ -227,7 +227,7 @@ three futures to complete:
 <Listing number="17-TODO" caption="Adding another async block which borrows `tx`, to see that we can borrow it repeatedly" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-04b/src/main.rs:updated}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-04b/src/main.rs:updated}}
 ```
 
 </Listing>
@@ -273,7 +273,7 @@ you write it, the same way a closure can.
 We can do that by making the first async block an `async move` block.
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-05/src/main.rs:move}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:move}}
 ```
 
 The result is Listing 17-TODO, and when we run *this* version of the code, it
@@ -282,7 +282,7 @@ shuts down gracefully after the last message is sent.
 <Listing number="17-TODO" caption="Fixing the async mpsc channel by using `move` to take ownership of the `Sender` (`tx`)" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-05/src/main.rs:move}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:move}}
 ```
 
 </Listing>
@@ -298,7 +298,7 @@ block, and switchign back to `join3`.
 <Listing number="17-TODO" caption="Using multiple producers with async blocks" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-TODO-04b2/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-04b2/src/main.rs:here}}
 ```
 
 </Listing>

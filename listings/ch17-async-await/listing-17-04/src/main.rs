@@ -3,7 +3,9 @@ use std::time::Duration;
 
 fn main() {
     trpl::block_on(async {
+        // ANCHOR: add-channel
         let (tx, mut rx) = trpl::channel();
+        // ANCHOR_END: add-channel
 
         let tx_fut = async {
             let vals = vec![
