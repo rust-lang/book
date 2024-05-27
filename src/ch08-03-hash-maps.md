@@ -48,12 +48,13 @@ must have the same type.
 We can get a value out of the hash map by providing its key to the `get`
 method, as shown in Listing 8-21.
 
+<Listing number="8-21" caption="Accessing the score for the Blue team stored in the hash map">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-21: Accessing the score for the Blue team
-stored in the hash map</span>
+</Listing>
 
 Here, `score` will have the value that’s associated with the Blue team, and the
 result will be `10`. The `get` method returns an `Option<&V>`; if there’s no
