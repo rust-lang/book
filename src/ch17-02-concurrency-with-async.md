@@ -38,16 +38,6 @@ top-level `for` loop. Notice that we also need to add a `.await` after the
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-01/src/main.rs:task}}
 ```
 
-Putting that all together, we end up with the code in Listing 17-TODO:
-
-<Listing number="17-TODO" caption="Showing how we might implement two counters with `async` instead of threads" file-name="src/main.rs">
-
-```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-01/src/main.rs:all}}
-```
-
-</Listing>
-
 This does something very similar to what the thread-based implementation did, as
 we can see from the output when we run it. (As with the threading example, you
 may see a different order in your own terminal output when you run this.)
@@ -377,8 +367,6 @@ shuts down gracefully after the last message is sent.
 
 </Listing>
 
-### Multiple Producers with Async
-
 This async channel is also a multiple-producer channel, so we can call `clone`
 on `tx` if we want to send messages from multiple futures. For example, we can
 make the code from Listing 17-TODO work by cloning the `tx` before moving it
@@ -396,14 +384,173 @@ block, and switching back to `join3`.
 Both of these blocks need to be `async move` blocks, or else we will end up back
 in the same infinite loop we started out in.
 
+### Working with More Futures
+
+When we switched from using two futures to three, we also had to switch from
+using `join` to using `join3`. It would be annoying to do this every time we
+changed our code.
+
+<!-- TODO: explain how to use `join!` -->
+
+However, both the function nor macro forms of `join` only work for cases where
+we know the number of futures ahead of time. If instead we have a dynamic number
+of futures, we need a function which works with a collection type which can grow
+and shrink dynamically at runtime, such as a vector. In real-world Rust, pushing
+futures into a collection and then waiting on some or all the futures in that
+collection to complete is a very common pattern.
+
+The `trpl::join_all` function accepts any type which implements the `Iterator`
+trait, which we learned about back in Chapter 13, so it seems like just the
+ticket. Let’s try putting our futures in a vector, so we can swap out our
+`join3` call and replace it with `join_all`.
+
+<Listing  number="17-TODO" caption="Storing anonymous futures in a vector and calling `join_all`">
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:here}}
+```
+
+</Listing>
+
+Unfortunately, this does not compile. Instead, we get this error:
+
+<!-- TODO: extract to output.txt -->
+
+```text
+error[E0308]: mismatched types
+  --> src/main.rs:43:37
+   |
+8  |           let tx1_fut = async move {
+   |  _______________________-
+9  | |             let vals = vec![
+10 | |                 String::from("hi"),
+11 | |                 String::from("from"),
+...  |
+19 | |             }
+20 | |         };
+   | |_________- the expected `async` block
+21 |
+22 |           let rx_fut = async {
+   |  ______________________-
+23 | |             while let Some(value) = rx.recv().await {
+24 | |                 println!("received '{value}'");
+25 | |             }
+26 | |         };
+   | |_________- the found `async` block
+...
+43 |           let futures = vec![tx1_fut, rx_fut, tx_fut];
+   |                                       ^^^^^^ expected `async` block, found a different `async` block
+   |
+   = note: expected `async` block `{async block@src/main.rs:8:23: 20:10}`
+              found `async` block `{async block@src/main.rs:22:22: 26:10}`
+```
+
+This error message is admittedly not the most helpful! It only tells us that it
+expected one async block and found another—but why is it looking for the async
+blocks that it names here, and why does it only reference them by where they
+appear in the code?
+
+One clue is the format of this message. Notice that it is exactly the same as if
+we had tried to create a `Vec` with a a number and a string in it:
+
+<!-- TODO: should this be a listing? -->
+
+```rust
+let a = 1;
+let b = "Hello";
+let vals = vec![a, b];
+```
+
+The output there would be:
+
+```text
+error[E0308]: mismatched types
+ --> src/main.rs:4:24
+  |
+4 |     let vals = vec![a, b];
+  |                        ^ expected integer, found `&str`
+```
+
+Saying “expected *something*, found *something else*” is Rust’s standard format
+for telling us about a type mismatch. As we saw with vectors in [Using an Enum
+to Store Multiple Types][collections] back in Chapter 8, we need the type of
+each item in a collection to be the same—and `tx1_fut`, `rx_fut`, and `tx_fut`
+do not have the same type.
+
+The underlying issue here is what we learned in the previous section: async
+blocks compile to anonymous futures. Under the hood, there is a data structure
+corresponding to each of these blocks, and it has its own unique type. This
+might be surprising. After all, none of them returns anything, so the `Future`
+type in each case is `Future<Output = ()>`. However, `Future` is a trait, not a
+concrete type. The actual types here are invisible from our point of view as the
+person writing the code.
+
+In Chapter 8, we discussed one way to include multiple types in a single vector:
+using an enum to represent each of the different types which can appear in the
+vector. We cannot do that here, though. For one thing, we do not even have a way
+to name the different types, because they are anonymous. For another, the reason
+we reached for a vector and `join_all` in the first place was to be able to work
+with a dynamic collection of futures where we do not know what they will all be
+until runtime.
+
+To make this work, we need to use *trait objects*, just as we did for returning
+different kinds of errors from the same function in [Returning Errors from the
+run function][dyn] back in Chapter 12. Again, we will cover trait objects in
+detail in Chapter 17. Here, it just lets us use
+
+Back in Chapter 13, we saw that we can use `Box` to provide enough indirection
+to tell Rust what *size* a type will be at runtime and avoid having types which
+are infinitely large. We can use `Box` in a similar way here to represent these
+different futures as the same type: a pointer to a *trait object*. We will talk
+more about trait objects later in the book. For now, it is enough to know that
+we can wrap a trait-based type like this in a `Box`, with the keyword `dyn` to
+tell the compiler that this is a
+
+<!-- TODO: `Box` -->
+
+<Listing number="17-TODO" caption="" file-name="src/main.rs">
+
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-11/src/main.rs:here}}
+
+</Listing>
+
+<!-- TODO: discussion of `Pin`? -->
+
+<Listing number="17-TODO" caption="" file-name="src/main.rs">
+
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-12/src/main.rs:here}}
+
+</Listing>
+
+This comes with a small amount of extra overhead from putting these futures on
+the heap with `Box`—and we are only doing that to get the types to line up. It
+would be nice if we could make this <!-- TODO: keep going -->
+
+This keeps everything on the stack, and that is a nice little performance win,
+but it is still a lot of explicit types, which is quite unusual for Rust! There
+is another problem, too. We got this far by ignoring the fact that we might have
+
+<!-- TODO: `pin!` simplifies a little -->
+
+<Listing number="17-TODO" caption="" file-name="src/main.rs">
+
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-12/src/main.rs:here}}
+
+</Listing>
+
 <!--
-  TODO: maybe explore `tx.clone()`, picking up the thread from the 3-futures
-  version of the example? That would let us see how shared ownership can work,
-  and give a place to emphasize that we still need to make sure *one* of the
-  async blocks
+  TODO: this is about as well as we can do, and requires `Output` be the same.
+
+  - fundamental tradeoff between `join_all` and `join!`
 -->
 
-<!-- TODO: bridge into a discussion of `Pin` by showing `join_all`? -->
+
+
+<!-- TODO: find this a home or scrap it -->
+> Note: This is how closures work, too, but we did not have to talk about it
+> back in Chapter 13, because the details did not bubble up to the surface the
+> way they do here!
+<!-- TODO: through here -->
 
 <!-- TODO: find this a home or scrap it -->
 The `async` keyword does not yet work with closures directly. That is, there is
@@ -433,3 +580,6 @@ Remember, any time you write a future, a runtime is ultimately responsible for
 executing it. That means that an async block might outlive the function where
 you write it, the same way a closure can.
 <!-- TODO: Through here -->
+
+[collections]: https://doc.rust-lang.org/stable/book/ch08-01-vectors.html#using-an-enum-to-store-multiple-types
+[dyn]: https://doc.rust-lang.org/stable/book/ch12-03-improving-error-handling-and-modularity.html

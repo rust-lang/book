@@ -9,8 +9,9 @@
 //!
 //! [post]: https://matklad.github.io/2021/02/27/delete-cargo-integration-tests.html
 
-use std::time::Duration;
+use std::{pin::Pin, time::Duration};
 
+use futures::Future;
 use trpl::{Receiver, Sender};
 
 /// This test is foundational for all the others, as they depend on `block_on`.
@@ -61,23 +62,71 @@ fn re_exported_channel_apis_work() {
     });
 }
 
-#[test]
-fn re_exported_join_apis_work() {
-    let result = trpl::block_on(async {
-        let a = async { 1 };
-        let b = async { 2 };
-        trpl::join(a, b).await
-    });
+mod re_exported_join_apis_work {
+    use super::*;
 
-    assert_eq!(result, (1, 2));
+    #[test]
+    fn join_fn() {
+        let result = trpl::block_on(async {
+            let a = async { 1 };
+            let b = async { 2 };
+            trpl::join(a, b).await
+        });
 
-    let result = trpl::block_on(async {
-        let a = async { 1 };
-        let b = async { 2 };
-        let c = async { 3 };
+        assert_eq!(result, (1, 2));
+    }
 
-        trpl::join3(a, b, c).await
-    });
+    #[test]
+    fn join3_fn() {
+        let result = trpl::block_on(async {
+            let a = async { 1 };
+            let b = async { 2 };
+            let c = async { 3 };
 
-    assert_eq!(result, (1, 2, 3));
+            trpl::join3(a, b, c).await
+        });
+
+        assert_eq!(result, (1, 2, 3));
+    }
+
+    #[test]
+    fn join_all_fn() {
+        let result = trpl::block_on(async {
+            let a = async { format!("{}", 1) };
+
+            let b = async { format!("Hello") };
+
+            let outer = String::from("World");
+            let c = async move { format!("{outer}") };
+
+            let futures: Vec<Pin<Box<dyn Future<Output = String>>>> =
+                vec![Box::pin(a), Box::pin(b), Box::pin(c)];
+
+            trpl::join_all(futures).await
+        });
+
+        assert_eq!(
+            result,
+            vec![
+                String::from("1"),
+                String::from("Hello"),
+                String::from("World")
+            ]
+        );
+    }
+
+    #[test]
+    fn join_macro() {
+        let result = trpl::block_on(async {
+            let a = async { 1 };
+            let b = async { "Hello" };
+
+            let outer = vec![String::from("World")];
+            let c = async move { outer };
+
+            trpl::join!(a, b, c)
+        });
+
+        assert_eq!(result, (1, "Hello", vec![String::from("World")]));
+    }
 }
