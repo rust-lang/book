@@ -123,12 +123,13 @@ Even though the code in Listing 8-23 calls `insert` twice, the hash map will
 only contain one key–value pair because we’re inserting the value for the Blue
 team’s key both times.
 
+<Listing number="8-23" caption="Replacing a value stored with a particular key">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-23/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-23: Replacing a value stored with a particular
-key</span>
+</Listing>
 
 This code will print `{"Blue": 25}`. The original value of `10` has been
 overwritten.
