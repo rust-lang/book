@@ -407,14 +407,13 @@ In Listing 9-10, let’s look at the error we’ll get if we use the `?` operato
 in a `main` function with a return type incompatible with the type of the value
 we use `?` on:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="9-10" file-name="src/main.rs" caption="Attempting to use the `?` in the `main` function that returns `()` won’t compile">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-10/src/main.rs}}
 ```
 
-<span class="caption">Listing 9-10: Attempting to use the `?` in the `main`
-function that returns `()` won’t compile</span>
+</Listing>
 
 This code opens a file, which might fail. The `?` operator follows the `Result`
 value returned by `File::open`, but this `main` function has the return type of
