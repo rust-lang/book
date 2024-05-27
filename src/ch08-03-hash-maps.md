@@ -24,12 +24,13 @@ One way to create an empty hash map is to use `new` and to add elements with
 names are *Blue* and *Yellow*. The Blue team starts with 10 points, and the
 Yellow team starts with 50.
 
+<Listing number="8-20" caption="Creating a new hash map and inserting some keys and values">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-20/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-20: Creating a new hash map and inserting some
-keys and values</span>
+</Listing>
 
 Note that we need to first `use` the `HashMap` from the collections portion of
 the standard library. Of our three common collections, this one is the least
