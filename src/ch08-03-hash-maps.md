@@ -151,12 +151,13 @@ we want to check whether the key for the Yellow team has a value associated
 with it. If it doesn’t, we want to insert the value `50`, and the same for the
 Blue team. Using the `entry` API, the code looks like Listing 8-24.
 
+<Listing number="8-24" caption="Using the `entry` method to only insert if the key does not already have a value">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-24: Using the `entry` method to only insert if
-the key does not already have a value</span>
+</Listing>
 
 The `or_insert` method on `Entry` is defined to return a mutable reference to
 the value for the corresponding `Entry` key if that key exists, and if not, it
