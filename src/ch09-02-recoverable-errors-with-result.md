@@ -29,13 +29,13 @@ return may differ.
 Let’s call a function that returns a `Result` value because the function could
 fail. In Listing 9-3 we try to open a file.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="9-3" file-name="src/main.rs" caption="Opening a file">
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-03/src/main.rs}}
 ```
 
-<span class="caption">Listing 9-3: Opening a file</span>
+</Listing>
 
 The return type of `File::open` is a `Result<T, E>`. The generic parameter `T`
 has been filled in by the implementation of `File::open` with the type of the
