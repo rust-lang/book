@@ -150,12 +150,13 @@ As a result, `s` will contain `lol`.
 Often, you’ll want to combine two existing strings. One way to do so is to use
 the `+` operator, as shown in Listing 8-18.
 
+<Listing number="8-18" caption="Using the `+` operator to combine two `String` values into a new `String` value">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-18/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-18: Using the `+` operator to combine two
-`String` values into a new `String` value</span>
+</Listing>
 
 The string `s3` will contain `Hello, world!`. The reason `s1` is no longer
 valid after the addition, and the reason we used a reference to `s2`, has to do
