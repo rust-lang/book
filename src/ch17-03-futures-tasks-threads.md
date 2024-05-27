@@ -1,4 +1,6 @@
-<!-- TODO: find the right home for this (maybe nowhere!) -->
+## Futures, Tasks, and Threads
+
+<!-- TODO: discuss tasks vs. threads more *here*? -->
 
 As we saw in the previous chapter, threads provide one approach to concurrency,
 and they let us solve some of these issues. However, they also have some

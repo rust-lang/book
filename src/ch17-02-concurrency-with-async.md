@@ -160,10 +160,6 @@ do:
 For an extra challenge, see if you can figure out what the output will be in
 each case *before* running the code!
 
-### Futures, Tasks, and Threads
-
-<!-- TODO: discuss tasks vs. threads more *here*? -->
-
 ### Message Passing
 
 Sharing data between futures will look familiar. We can again use async versions
