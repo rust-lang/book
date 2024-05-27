@@ -490,12 +490,14 @@ code from Listing 9-10 but we’ve changed the return type of `main` to be
 `Result<(), Box<dyn Error>>` and added a return value `Ok(())` to the end. This
 code will now compile:
 
+<Listing number="9-12" caption="Changing `main` to return `Result<(), E>` allows
+ the use of the `?` operator on `Result` values">
+
 ```rust,ignore
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-12/src/main.rs}}
 ```
 
-<span class="caption">Listing 9-12: Changing `main` to return `Result<(), E>`
-allows the use of the `?` operator on `Result` values</span>
+</Listing>
 
 The `Box<dyn Error>` type is a *trait object*, which we’ll talk about in the
 [“Using Trait Objects that Allow for Values of Different
