@@ -135,12 +135,13 @@ The `push` method takes a single character as a parameter and adds it to the
 `String`. Listing 8-17 adds the letter *l* to a `String` using the `push`
 method.
 
+<Listing number="8-17" caption="Adding one character to a `String` value using `push`">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-17/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-17: Adding one character to a `String` value
-using `push`</span>
+</Listing>
 
 As a result, `s` will contain `lol`.
 
