@@ -351,7 +351,7 @@ The `?` operator eliminates a lot of boilerplate and makes this function’s
 implementation simpler. We could even shorten this code further by chaining
 method calls immediately after the `?`, as shown in Listing 9-8.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="9-8" file-name="src/main.rs" caption="Chaining method calls after the `?` operator">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -361,8 +361,7 @@ don't want to include it for rustdoc testing purposes. -->
 {{#include ../listings/ch09-error-handling/listing-09-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 9-8: Chaining method calls after the `?`
-operator</span>
+</Listing>
 
 We’ve moved the creation of the new `String` in `username` to the beginning of
 the function; that part hasn’t changed. Instead of creating a variable
