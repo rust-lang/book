@@ -166,12 +166,13 @@ receives a value between 1 and 100.
 
 <span class="filename">Filename: src/lib.rs</span>
 
+<Listing number="9-13" caption="A `Guess` type that will only continue with values between 1 and 100">
+
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/lib.rs}}
 ```
 
-<span class="caption">Listing 9-13: A `Guess` type that will only continue with
-values between 1 and 100</span>
+</Listing>
 
 First we define a struct named `Guess` that has a field named `value` that
 holds an `i32`. This is where the number will be stored.
