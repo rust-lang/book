@@ -59,14 +59,13 @@ on the value `File::open` returns. Listing 9-4 shows one way to handle the
 `Result` using a basic tool, the `match` expression that we discussed in
 Chapter 6.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="9-4" file-name="src/main.rs" caption="Using a `match` expression to handle the `Result` variants that might be returned">
 
 ```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 9-4: Using a `match` expression to handle the
-`Result` variants that might be returned</span>
+</Listing>
 
 Note that, like the `Option` enum, the `Result` enum and its variants have been
 brought into scope by the prelude, so we don’t need to specify `Result::`
