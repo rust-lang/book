@@ -444,12 +444,13 @@ resulting value of the expression and the function continues. Listing 9-11 has
 an example of a function that finds the last character of the first line in the
 given text:
 
+<Listing number="9-11" caption="Using the `?` operator on an `Option<T>` value">
+
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 9-11: Using the `?` operator on an `Option<T>`
-value</span>
+</Listing>
 
 This function returns `Option<char>` because it’s possible that there is a
 character there, but it’s also possible that there isn’t. This code takes the
