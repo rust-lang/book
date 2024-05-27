@@ -26,7 +26,7 @@ fn remove_markup(input: String) -> String {
     let caption_start_regex =
         Regex::new(r#"\A<span class="caption">(.*)\z"#).unwrap();
     let caption_end_regex = Regex::new(r#"(.*)</span>\z"#).unwrap();
-    let regexen = vec![filename_regex, caption_start_regex, caption_end_regex];
+    let regexen = [filename_regex, caption_start_regex, caption_end_regex];
 
     let lines: Vec<_> = input
         .lines()

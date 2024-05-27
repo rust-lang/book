@@ -682,13 +682,12 @@ in the expression refers to the original `guess` variable that contained the
 input as a string. The `trim` method on a `String` instance will eliminate any
 whitespace at the beginning and end, which we must do to be able to compare the
 string to the `u32`, which can only contain numerical data. The user must press
-<span class="keystroke">enter</span> to satisfy `read_line` and input their
-guess, which adds a newline character to the string. For example, if the user
-types <span class="keystroke">5</span> and presses <span
-class="keystroke">enter</span>, `guess` looks like this: `5\n`. The `\n`
-represents “newline.” (On Windows, pressing <span
-class="keystroke">enter</span> results in a carriage return and a newline,
-`\r\n`.) The `trim` method eliminates `\n` or `\r\n`, resulting in just `5`.
+<kbd>enter</kbd> to satisfy `read_line` and input their guess, which adds a
+newline character to the string. For example, if the user types <kbd>5</kbd> and
+presses <kbd>enter</kbd>, `guess` looks like this: `5\n`. The `\n` represents
+“newline.” (On Windows, pressing <kbd>enter</kbd> results in a carriage return
+and a newline, `\r\n`.) The `trim` method eliminates `\n` or `\r\n`, resulting
+in just `5`.
 
 The [`parse` method on strings][parse]<!-- ignore --> converts a string to
 another type. Here, we use it to convert from a string to a number. We need to
@@ -762,11 +761,11 @@ and run the program again. The program will now ask for another guess forever,
 which actually introduces a new problem. It doesn’t seem like the user can quit!
 
 The user could always interrupt the program by using the keyboard shortcut
-<span class="keystroke">ctrl-c</span>. But there’s another way to escape this
-insatiable monster, as mentioned in the `parse` discussion in [“Comparing the
-Guess to the Secret Number”](#comparing-the-guess-to-the-secret-number)<!--
-ignore -->: if the user enters a non-number answer, the program will crash. We
-can take advantage of that to allow the user to quit, as shown here:
+<kbd>ctrl</kbd>-<kbd>c</kbd>. But there’s another way to escape this insatiable
+monster, as mentioned in the `parse` discussion in [“Comparing the Guess to the
+Secret Number”](#comparing-the-guess-to-the-secret-number)<!-- ignore -->: if
+the user enters a non-number answer, the program will crash. We can take
+advantage of that to allow the user to quit, as shown here:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-04-looping/
