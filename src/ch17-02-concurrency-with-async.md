@@ -416,8 +416,8 @@ example_2(async move || { ... });
 ```
 
 However, since async blocks themselves can be marked with `move`, this ends up
-not being a problem. Remember that `async` blocks compile to anonymous futures.
-That means you can write calls like this instead:
+not being a problem. Because `async` blocks compile to anonymous futures, you
+can write calls like this instead:
 
 ```rust,ignore
 example_1(|| async { ... });
