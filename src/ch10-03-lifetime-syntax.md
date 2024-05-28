@@ -8,15 +8,15 @@ One detail we didn’t discuss in the [“References and
 Borrowing”][references-and-borrowing]<!-- ignore --> section in Chapter 4 is
 that every reference in Rust has a *lifetime*, which is the scope for which
 that reference is valid. Most of the time, lifetimes are implicit and inferred,
-just like most of the time, types are inferred. We only have to annotate types
+just like most of the time, types are inferred. We must annotate types only
 when multiple types are possible. In a similar way, we must annotate lifetimes
 when the lifetimes of references could be related in a few different ways. Rust
 requires us to annotate the relationships using generic lifetime parameters to
 ensure the actual references used at runtime will definitely be valid.
 
-Annotating lifetimes is not a concept most other programming languages
-have, so this is going to feel unfamiliar. Although we won’t cover lifetimes in
-their entirety in this chapter, we’ll discuss common ways you might encounter
+Annotating lifetimes is not a concept most other programming languages have, so
+this is going to feel unfamiliar. Although we won’t cover lifetimes in their
+entirety in this chapter, we’ll discuss common ways you might encounter
 lifetime syntax so you can get comfortable with the concept.
 
 ### Preventing Dangling References with Lifetimes
@@ -33,31 +33,31 @@ scope.
 <span class="caption">Listing 10-16: An attempt to use a reference whose value
 has gone out of scope</span>
 
-> Note: The examples in Listings 10-16, 10-17, and 10-23 declare variables
-> without giving them an initial value, so the variable name exists in the
-> outer scope. At first glance, this might appear to be in conflict with Rust’s
-> having no null values. However, if we try to use a variable before giving it
-> a value, we’ll get a compile-time error, which shows that Rust indeed does
-> not allow null values.
+> Note: The examples in Listing 10-16, 10-17, and 10-23 declare variables
+> without giving them an initial value, so the variable name exists in the outer
+> scope. At first glance, this might appear to be in conflict with Rust’s having
+> no null values. However, if we try to use a variable before giving it a value,
+> we’ll get a compile-time error, which shows that Rust indeed does not allow
+> null values.
 
 The outer scope declares a variable named `r` with no initial value, and the
-inner scope declares a variable named `x` with the initial value of 5. Inside
+inner scope declares a variable named `x` with the initial value of `5`. Inside
 the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
 the inner scope ends, and we attempt to print the value in `r`. This code won’t
-compile because what the value `r` is referring to has gone out of scope before we
-try to use it. Here is the error message:
+compile because the value that `r` is referring to has gone out of scope before
+we try to use it. Here is the error message:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/output.txt}}
 ```
 
-The variable `x` doesn’t “live long enough.” The reason is that `x` will be out
-of scope when the inner scope ends on line 7. But `r` is still valid for the
-outer scope; because its scope is larger, we say that it “lives longer.” If
-Rust allowed this code to work, `r` would be referencing memory that was
-deallocated when `x` went out of scope, and anything we tried to do with `r`
-wouldn’t work correctly. So how does Rust determine that this code is invalid?
-It uses a borrow checker.
+The error message says that the variable `x` “does not live long enough.” The
+reason is that `x` will be out of scope when the inner scope ends on line 7.
+But `r` is still valid for the outer scope; because its scope is larger, we say
+that it “lives longer.” If Rust allowed this code to work, `r` would be
+referencing memory that was deallocated when `x` went out of scope, and
+anything we tried to do with `r` wouldn’t work correctly. So how does Rust
+determine that this code is invalid? It uses a borrow checker.
 
 ### The Borrow Checker
 
@@ -79,7 +79,7 @@ lifetimes and sees that `r` has a lifetime of `'a` but that it refers to memory
 with a lifetime of `'b`. The program is rejected because `'b` is shorter than
 `'a`: the subject of the reference doesn’t live as long as the reference.
 
-Listing 10-18 fixes the code so it doesn’t have a dangling reference and
+Listing 10-18 fixes the code so it doesn’t have a dangling reference and it
 compiles without any errors.
 
 ```rust
@@ -180,7 +180,7 @@ reference to an `i32` that also has the lifetime `'a`.
 &'a mut i32 // a mutable reference with an explicit lifetime
 ```
 
-One lifetime annotation by itself doesn’t have much meaning, because the
+One lifetime annotation by itself doesn’t have much meaning because the
 annotations are meant to tell Rust how generic lifetime parameters of multiple
 references relate to each other. Let’s examine how the lifetime annotations
 relate to each other in the context of the `longest` function.
@@ -260,7 +260,7 @@ references to `String` values that have different concrete lifetimes</span>
 
 In this example, `string1` is valid until the end of the outer scope, `string2`
 is valid until the end of the inner scope, and `result` references something
-that is valid until the end of the inner scope. Run this code, and you’ll see
+that is valid until the end of the inner scope. Run this code and you’ll see
 that the borrow checker approves; it will compile and print `The longest string
 is long string is long`.
 
@@ -293,7 +293,7 @@ this because we annotated the lifetimes of the function parameters and return
 values using the same lifetime parameter `'a`.
 
 As humans, we can look at this code and see that `string1` is longer than
-`string2` and therefore `result` will contain a reference to `string1`.
+`string2`, and therefore, `result` will contain a reference to `string1`.
 Because `string1` has not gone out of scope yet, a reference to `string1` will
 still be valid for the `println!` statement. However, the compiler can’t see
 that the reference is valid in this case. We’ve told Rust that the lifetime of
@@ -362,9 +362,9 @@ would create dangling pointers or otherwise violate memory safety.
 
 ### Lifetime Annotations in Struct Definitions
 
-So far, the structs we’ve defined all hold owned types. We can define structs to
-hold references, but in that case we would need to add a lifetime annotation on
-every reference in the struct’s definition. Listing 10-24 has a struct named
+So far, the structs we’ve defined all hold owned types. We can define structs
+to hold references, but in that case we would need to add a lifetime annotation
+on every reference in the struct’s definition. Listing 10-24 has a struct named
 `ImportantExcerpt` that holds a string slice.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -393,9 +393,9 @@ the `ImportantExcerpt` goes out of scope, so the reference in the
 ### Lifetime Elision
 
 You’ve learned that every reference has a lifetime and that you need to specify
-lifetime parameters for functions or structs that use references. However, in
-Chapter 4 we had a function in Listing 4-9, shown again in Listing 10-25, that
-compiled without lifetime annotations.
+lifetime parameters for functions or structs that use references. However, we
+had a function in Listing 4-9, shown again in Listing 10-25, that compiled
+without lifetime annotations.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -449,8 +449,8 @@ which it can’t figure out lifetimes, the compiler will stop with an error.
 These rules apply to `fn` definitions as well as `impl` blocks.
 
 The first rule is that the compiler assigns a lifetime parameter to each
-parameter that’s a reference. In other words, a function with one parameter gets
-one lifetime parameter: `fn foo<'a>(x: &'a i32)`; a function with two
+parameter that’s a reference. In other words, a function with one parameter
+gets one lifetime parameter: `fn foo<'a>(x: &'a i32)`; a function with two
 parameters gets two separate lifetime parameters: `fn foo<'a, 'b>(x: &'a i32,
 y: &'b i32)`; and so on.
 
@@ -526,7 +526,7 @@ use the lifetime parameters depends on whether they’re related to the struct
 fields or the method parameters and return values.
 
 Lifetime names for struct fields always need to be declared after the `impl`
-keyword and then used after the struct’s name, because those lifetimes are part
+keyword and then used after the struct’s name because those lifetimes are part
 of the struct’s type.
 
 In method signatures inside the `impl` block, references might be tied to the
@@ -535,7 +535,7 @@ addition, the lifetime elision rules often make it so that lifetime annotations
 aren’t necessary in method signatures. Let’s look at some examples using the
 struct named `ImportantExcerpt` that we defined in Listing 10-24.
 
-First, we’ll use a method named `level` whose only parameter is a reference to
+First we’ll use a method named `level` whose only parameter is a reference to
 `self` and whose return value is an `i32`, which is not a reference to anything:
 
 ```rust
@@ -567,9 +567,8 @@ string literals have the `'static` lifetime, which we can annotate as follows:
 let s: &'static str = "I have a static lifetime.";
 ```
 
-The text of this string is stored directly in the program’s binary, which
-is always available. Therefore, the lifetime of all string literals is
-`'static`.
+The text of this string is stored directly in the program’s binary, which is
+always available. Therefore, the lifetime of all string literals is `'static`.
 
 You might see suggestions to use the `'static` lifetime in error messages. But
 before specifying `'static` as the lifetime for a reference, think about
@@ -577,7 +576,7 @@ whether the reference you have actually lives the entire lifetime of your
 program or not, and whether you want it to. Most of the time, an error message
 suggesting the `'static` lifetime results from attempting to create a dangling
 reference or a mismatch of the available lifetimes. In such cases, the solution
-is fixing those problems, not specifying the `'static` lifetime.
+is to fix those problems, not to specify the `'static` lifetime.
 
 ## Generic Type Parameters, Trait Bounds, and Lifetimes Together
 
