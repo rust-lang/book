@@ -146,7 +146,8 @@ index out of bounds: the len is 3 but the index is 99
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-This error points at line 4 of our *main.rs* where we attempt to access `index`.
+This error points at line 4 of our *main.rs* where we attempt to access index
+`99` of the vector in `v`.
 
 The `note:` line tells us that we can set the `RUST_BACKTRACE` environment
 variable to get a backtrace of exactly what happened to cause the error. A
@@ -288,9 +289,7 @@ fn main() {
 
     let greeting_file = match greeting_file_result {
         Ok(file) => file,
-        Err(error) => {
-            panic!("Problem opening the file: {:?}", error);
-        }
+        Err(error) => panic!("Problem opening the file: {error:?}"),
     };
 }
 ```
@@ -349,20 +348,12 @@ fn main() {
     let greeting_file = match greeting_file_result {
         Ok(file) => file,
         Err(error) => match error.kind() {
-            ErrorKind::NotFound => {
-                match File::create("hello.txt") {
-                    Ok(fc) => fc,
-                    Err(e) => panic!(
-                        "Problem creating the file: {:?}",
-                        e
-                    ),
-                }
-            }
+            ErrorKind::NotFound => match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("Problem creating the file: {e:?}"),
+            },
             other_error => {
-                panic!(
-                    "Problem opening the file: {:?}",
-                    other_error
-                );
+                panic!("Problem opening the file: {other_error:?}");
             }
         },
     };
@@ -389,33 +380,40 @@ file can’t be created, a different error message is printed. The second arm of
 the outer `match` stays the same, so the program panics on any error besides
 the missing file error.
 
-#### Alternatives to Using match with Result<T, E>
-
-That’s a lot of `match`! The `match` expression is very useful but also very
-much a primitive. In Chapter 13, you’ll learn about closures, which are used
-with many of the methods defined on `Result<T, E>`. These methods can be more
-concise than using `match` when handling `Result<T, E>` values in your code.
-
-For example, here’s another way to write the same logic as shown in Listing
-9-5, this time using closures and the `unwrap_or_else` method:
-
-```
-// src/main.rs
-use std::fs::File;
-use std::io::ErrorKind;
-
-fn main() {
-    let greeting_file = File::open("hello.txt").unwrap_or_else(|error| {
-        if error.kind() == ErrorKind::NotFound {
-            File::create("hello.txt").unwrap_or_else(|error| {
-                panic!("Problem creating the file: {:?}", error);
-            })
-        } else {
-            panic!("Problem opening the file: {:?}", error);
-        }
-    });
-}
-```
+> #### Alternatives to Using `match` with `Result<T, E>`
+>
+> That’s a lot of `match`! The `match` expression is very useful but also very
+> much a primitive. In Chapter 13, you’ll learn about closures, which are used
+> with many of the methods defined on `Result<T, E>`. These methods can be more
+> concise than using `match` when handling `Result<T, E>` values in your code.
+>
+> For example, here’s another way to write the same logic as shown in Listing
+> 9-5, this time using closures and the `unwrap_or_else` method:
+>
+> <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
+>
+> ```rust,ignore
+> use std::fs::File;
+> use std::io::ErrorKind;
+>
+> fn main() {
+>     let greeting_file = File::open("hello.txt").unwrap_or_else(|error| {
+>         if error.kind() == ErrorKind::NotFound {
+>             File::create("hello.txt").unwrap_or_else(|error| {
+>                 panic!("Problem creating the file: {error:?}");
+>             })
+>         } else {
+>             panic!("Problem opening the file: {error:?}");
+>         }
+>     });
+> }
+> ```
+>
+> Although this code has the same behavior as Listing 9-5, it doesn’t contain
+> any `match` expressions and is cleaner to read. Come back to this example
+> after you’ve read Chapter 13, and look up the `unwrap_or_else` method in the
+> standard library documentation. Many more of these methods can clean up huge
+> nested `match` expressions when you’re dealing with errors.
 
 #### Shortcuts for Panic on Error: `unwrap` and `expect`
 
@@ -1054,12 +1052,9 @@ pub struct Guess {
 }
 
 impl Guess {
-  2 pub fn new(value: i32) -> Guess {
-      3 if value < 1 || value > 100 {
-          4 panic!(
-                "Guess value must be between 1 and 100, got {}.",
-                value
-            );
+    pub fn new(value: i32) -> Guess {
+        if value < 1 || value > 100 {
+            panic!("Guess value must be between 1 and 100, got {value}.");
         }
 
         Guess { value }
