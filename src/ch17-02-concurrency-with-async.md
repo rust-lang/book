@@ -496,29 +496,99 @@ until runtime.
 To make this work, we need to use *trait objects*, just as we did for returning
 different kinds of errors from the same function in [Returning Errors from the
 run function][dyn] back in Chapter 12. Again, we will cover trait objects in
-detail in Chapter 17. Here, it just lets us use
+detail in Chapter 17. Here, it lets us treat each of the anonymous futures
+produced by these types as interchangeable, since all of them by definition
+implement the `Future` trait.
 
-Back in Chapter 13, we saw that we can use `Box` to provide enough indirection
-to tell Rust what *size* a type will be at runtime and avoid having types which
-are infinitely large. We can use `Box` in a similar way here to represent these
-different futures as the same type: a pointer to a *trait object*. We will talk
-more about trait objects later in the book. For now, it is enough to know that
-we can wrap a trait-based type like this in a `Box`, with the keyword `dyn` to
-tell the compiler that this is a
-
-<!-- TODO: `Box` -->
+We can start by wrapping each of the futures in the `vec!` in a `Box::new()`.
+Unfortunately, the initial way we might try this, as shown in Listing 17-TODO,
+still does not compile.
 
 <Listing number="17-TODO" caption="" file-name="src/main.rs">
 
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-11/src/main.rs:here}}
+```
 
 </Listing>
 
-<!-- TODO: discussion of `Pin`? -->
+In fact, we have the same basic error we did before, but we get one for both the
+second and third `Box::new` calls, and we also get new errors referring to the
+`Unpin` trait.
+
+We can start by fixing the type error around the `Box::new` calls, by telling
+the compiler explicitly that we want to use these types as trait objects. The
+clearest way to do that here is by adding a type annotation to the declaration
+of `futures`, as we see in Listing 17-TODO. The type we have to write here is a
+little involved, so let’s walk through each part of it.
+
+- The innermost type is the future itself. We note explicitly that it the output
+  of the future is the unit type `()` by writing `Future<Output = ()>`.
+- Then we annotate the trait with `dyn` to mark it as dynamic.
+- The entire trait is wrapped in a `Box`.
+- Finally, we state explicitly that `futures` is a `Vec` containing these items.
 
 <Listing number="17-TODO" caption="" file-name="src/main.rs">
 
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-12/src/main.rs:here}}
+```
+
+</Listing>
+
+That already made a big difference. Now when we run the compiler, we only have
+the errors mentioning `Unpin`, each of which is a variation on this same output:
+
+<!-- TODO: compiler output listing for the listing -->
+
+```text
+error[E0277]: `{async block@src/main.rs:8:23: 20:10}` cannot be unpinned
+  --> src/main.rs:46:33
+   |
+46 |         trpl::join_all(futures).await;
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:8:23: 20:10}`, which is required by `Box<{async block@src/main.rs:8:23: 20:10}>: Future`
+   |
+   = note: consider using the `pin!` macro
+           consider using `Box::pin` if you need to access the pinned value outside of the current scope
+   = note: required for `Box<{async block@src/main.rs:8:23: 20:10}>` to implement `Future`
+note: required by a bound in `futures_util::future::join_all::JoinAll`
+  --> /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   |
+27 | pub struct JoinAll<F>
+   |            ------- required by a bound in this struct
+28 | where
+29 |     F: Future,
+   |        ^^^^^^ required by this bound in `JoinAll`
+```
+
+That is a *lot* to digest, so let’s pull it apart. The first part of the message
+tell us that the first async block (`src/main.rs:8:23: 20:10`) does not
+implement the `Unpin` trait, and suggests using `pin!` or `Box::pin` to resolve
+it. The rest of the message tells us *why* that is required: the `JoinAll`
+struct is generic over a `Future`, and `Future` itself requires the `Unpin`
+trait.
+
+`Unpin` is a marker trait, like `Send` and `Sync`, which we saw in Chapter 16.
+Recall that marker traits have no functionality of their own. They exist only to
+tell the compiler that it is safe to use the type which implements a given trait
+in certain context. Just like `Send` and `Sync`, `Unpin` is automatically
+implemented for all types where the compiler can prove it should be. You may
+also recall that there is an opposite for each of `Send` and `Sync`: `?Send` and
+`?Sync`, which tell the compiler that the types in question *might* be `Send` or
+`Sync` but are not guaranteed to. `Unpin`, as its name implies, is similarly the
+opposite of `Pin`, which we saw as part of the signature of the `Future::poll`
+method when we covered the API of `Future` in the [Futures][futures] section
+earlier in this chapter.
+
+### The Pin Trait and Pinning
+
+<!-- TODO: discussion of `Pin` -->
+
+<Listing number="17-TODO" caption="" file-name="src/main.rs">
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-13/src/main.rs:here}}
+```
 
 </Listing>
 
@@ -534,7 +604,9 @@ is another problem, too. We got this far by ignoring the fact that we might have
 
 <Listing number="17-TODO" caption="" file-name="src/main.rs">
 
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-12/src/main.rs:here}}
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-14/src/main.rs:here}}
+```
 
 </Listing>
 
@@ -583,3 +655,4 @@ you write it, the same way a closure can.
 
 [collections]: https://doc.rust-lang.org/stable/book/ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: https://doc.rust-lang.org/stable/book/ch12-03-improving-error-handling-and-modularity.html
+[futures]: /ch17-01-futures-and-syntax.html#futures
