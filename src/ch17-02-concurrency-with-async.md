@@ -561,12 +561,12 @@ note: required by a bound in `futures_util::future::join_all::JoinAll`
    |        ^^^^^^ required by this bound in `JoinAll`
 ```
 
-That is a *lot* to digest, so let’s pull it apart. The first part of the message
-tell us that the first async block (`src/main.rs:8:23: 20:10`) does not
-implement the `Unpin` trait, and suggests using `pin!` or `Box::pin` to resolve
-it. The rest of the message tells us *why* that is required: the `JoinAll`
-struct is generic over a `Future`, and `Future` itself requires the `Unpin`
-trait.
+That is a *lot* to digest, so let’s pull it apart. The first part of the
+message tell us that the first async block (`src/main.rs:8:23: 20:10`)
+does not implement the `Unpin` trait, and suggests using `pin!` or
+`Box::pin` to resolve it. The rest of the message tells us *why* that is
+required: the `JoinAll` struct, which is itself a `Future`, is also
+generic over a `Future`, and `Future` itself requires the `Unpin` trait.
 
 `Unpin` is a marker trait, like `Send` and `Sync`, which we saw in Chapter 16.
 Recall that marker traits have no functionality of their own. They exist only to
