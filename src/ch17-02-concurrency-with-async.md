@@ -561,12 +561,51 @@ note: required by a bound in `futures_util::future::join_all::JoinAll`
    |        ^^^^^^ required by this bound in `JoinAll`
 ```
 
-That is a *lot* to digest, so let’s pull it apart. The first part of the
-message tell us that the first async block (`src/main.rs:8:23: 20:10`)
-does not implement the `Unpin` trait, and suggests using `pin!` or
-`Box::pin` to resolve it. The rest of the message tells us *why* that is
-required: the `JoinAll` struct, which is itself a `Future`, is also
-generic over a `Future`, and `Future` itself requires the `Unpin` trait.
+That is a *lot* to digest, so let’s pull it apart. The first part of the message
+tell us that the first async block (`src/main.rs:8:23: 20:10`) does not
+implement the `Unpin` trait, and suggests using `pin!` or `Box::pin` to resolve
+it. The rest of the message tells us *why* that is required: the `JoinAll`
+struct, which is itself a `Future`, is also generic over a `Future`, and
+`Future` itself requires the `Unpin` trait. Understanding this error means we
+need to dive into a little more of how the `Future` type actually works, in
+particular the idea of *pinning*.
+
+### Pinning and the Pin and Unpin Traits
+
+When we introduced the `Future` trait in the previous chapter, we saw that the
+definition of its `poll` method has an unusual way of specifying the `self`
+parameter. To review, here is the full definition of `Future`:
+
+```rust
+pub trait Future {
+    type Output;
+
+    // Required method
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
+}
+```
+
+We have not seen a method definition like this before, where `self` has a type
+annotation rather than simply being named like `self`, `mut self`, `&self`, or
+`&mut self`. This syntax means that the method can only be called when the
+instance of the type which implements `Future` is behind a `Pin` pointer type.
+This syntax is not specific to `Pin`; it also works with `Box` and other smart
+pointer types, and we will see it again in Chapter 18.
+
+Here, the signature tells us that if we want to poll a future to check whether
+it is `Pending` or `Ready(Output)`, the type which implements `Future` has to be
+behind a `Pin` smart pointer type. Recalling that `.await` is implemented in
+terms of calls to `poll()`, this starts to explain the error message we saw
+above—but that was in terms of `Unpin`, not `Pin`. So what exactly are `Pin` and
+`Unpin`, how do they relate, and why does `Future` need `self` to be in a `Pin`
+type to call `poll`?
+
+<!-- TODO: keep going here: define `Pin`. -->
+
+Remember that any time you write a future, a runtime is ultimately responsible
+for executing it. That means that an async block might outlive the function
+where you write it, the same way a closure can. <!-- TODO: connect this to the
+need for pinning. -->
 
 `Unpin` is a marker trait, like `Send` and `Sync`, which we saw in Chapter 16.
 Recall that marker traits have no functionality of their own. They exist only to
@@ -580,9 +619,9 @@ opposite of `Pin`, which we saw as part of the signature of the `Future::poll`
 method when we covered the API of `Future` in the [Futures][futures] section
 earlier in this chapter.
 
-### The Pin Trait and Pinning
-
 <!-- TODO: discussion of `Pin` -->
+
+Now we know enough to understand the error message from above. The problem 
 
 <Listing number="17-TODO" caption="" file-name="src/main.rs">
 
@@ -596,10 +635,6 @@ This comes with a small amount of extra overhead from putting these futures on
 the heap with `Box`—and we are only doing that to get the types to line up. It
 would be nice if we could make this <!-- TODO: keep going -->
 
-This keeps everything on the stack, and that is a nice little performance win,
-but it is still a lot of explicit types, which is quite unusual for Rust! There
-is another problem, too. We got this far by ignoring the fact that we might have
-
 <!-- TODO: `pin!` simplifies a little -->
 
 <Listing number="17-TODO" caption="" file-name="src/main.rs">
@@ -609,6 +644,11 @@ is another problem, too. We got this far by ignoring the fact that we might have
 ```
 
 </Listing>
+
+This keeps everything on the stack, and that is a nice little performance win,
+but it is still a lot of explicit types, which is quite unusual for Rust! There
+is another problem, too. We got this far by ignoring the fact that we might have
+different `Output` types from the `Future`.
 
 <!--
   TODO: this is about as well as we can do, and requires `Output` be the same.
@@ -646,12 +686,6 @@ example_2(|| async move { ... });
 These closures now return anonymous futures, meaning they work basically the
 same way that an async function does.
 <!-- TODO: through here -->
-
-<!-- TODO: scrap this or find it a home! -->
-Remember, any time you write a future, a runtime is ultimately responsible for
-executing it. That means that an async block might outlive the function where
-you write it, the same way a closure can.
-<!-- TODO: Through here -->
 
 [collections]: https://doc.rust-lang.org/stable/book/ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: https://doc.rust-lang.org/stable/book/ch12-03-improving-error-handling-and-modularity.html
