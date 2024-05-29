@@ -68,3 +68,35 @@ A big difference between the cooking analogy and Rust’s async model for
 concurrency is that in the cooking example, the cook makes the decision about
 when to switch tasks. In Rust’s async model, the tasks are in control of that.
 To see how, let’s look at how Rust actually uses async.
+
+## Misc. other stuff
+
+<!-- TODO: find this a home or scrap it -->
+The `async` keyword does not yet work with closures directly. That is, there is
+no direct equivalent to `async fn` for anonymous functions. As a result, you
+cannot write code like these function calls:
+
+```rust,ignore
+example_1(async || { ... });
+example_2(async move || { ... });
+```
+
+However, since async blocks themselves can be marked with `move`, this ends up
+not being a problem. Because `async` blocks compile to anonymous futures, you
+can write calls like this instead:
+
+```rust,ignore
+example_1(|| async { ... });
+example_2(|| async move { ... });
+```
+
+These closures now return anonymous futures, meaning they work basically the
+same way that an async function does.
+<!-- TODO: through here -->
+
+<!-- TODO: find this a home or scrap it -->
+> Note: This is how closures work, too, but we did not have to talk about it
+> back in Chapter 13, because the details did not bubble up to the surface the
+> way they do here!
+<!-- TODO: through here -->
+

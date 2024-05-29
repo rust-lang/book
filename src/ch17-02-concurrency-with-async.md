@@ -610,14 +610,12 @@ need for pinning. -->
 `Unpin` is a marker trait, like `Send` and `Sync`, which we saw in Chapter 16.
 Recall that marker traits have no functionality of their own. They exist only to
 tell the compiler that it is safe to use the type which implements a given trait
-in certain context. Just like `Send` and `Sync`, `Unpin` is automatically
-implemented for all types where the compiler can prove it should be. You may
-also recall that there is an opposite for each of `Send` and `Sync`: `?Send` and
-`?Sync`, which tell the compiler that the types in question *might* be `Send` or
-`Sync` but are not guaranteed to. `Unpin`, as its name implies, is similarly the
-opposite of `Pin`, which we saw as part of the signature of the `Future::poll`
-method when we covered the API of `Future` in the [Futures][futures] section
-earlier in this chapter.
+in certain context. Just like `Send` and `Sync`, the compiler implements `Unpin`
+automatically for most types.
+
+`Unpin`’s job is to tell the compiler that a given type does *not* need to
+uphold any particular guarantees about whether the value in question can be
+moved. For example, if a future 
 
 <!-- TODO: discussion of `Pin` -->
 
@@ -697,44 +695,44 @@ dynamic `Future` type.
 This keeps everything on the stack, and that is a nice little performance win,
 but it is still a lot of explicit types, which is quite unusual for Rust! There
 is another problem, too. We got this far by ignoring the fact that we might have
-different `Output` types from the `Future`.
+different `Output` types. For example, in Listing 17-TODO, the anonymous future
+type for `a` implements `Future<Output = u32>` and the anonymous future type for
+`b` implements `Future<Output = &str>`.
+
+<Listing number="17-TODO" caption="" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-15/src/main.rs:here}}
+```
+
+</Listing>
+
+We can use `trpl::join!` to await them together, since it accepts two different
+future types, but we cannot use `trpl::join_all` with these futures, because we
+will never be able to make them have the same type. (This is the same as working
+with any other type in Rust, though: futures are not special, even though we
+have some nice syntax for working with them, and that is a good thing!) We have
+a basic tradeoff here: we can either deal with a dynamic number of futures with
+`join_all`, as long as they all have the same type, or we can deal with a
+static number of futures with `join!`, and so on, 
 
 <!--
-  TODO: this is about as well as we can do, and requires `Output` be the same.
-
-  - fundamental tradeoff between `join_all` and `join!`
+    TODO: validate that this is, you know, true. It matches my own experience,
+    but it is a fairly strong claim.
 -->
+In practice, you will usually work directly with `async` and `.await`, and only
+as a secondary tool reach for the functions like `join` or `join_all`, or their
+corresponding macro equivalents. These kinds of tools are really handy for
+building frameworks, or especially when you are building a runtime itself.
 
+### Select
 
+Thus far, we have only used the `join` family of functions and macros. When we
+“join” on some collection of futures, we require *all* of them to finish before
+we move on. Sometimes, though, we only need *some* future from a set to finish
+before we move on.
 
-<!-- TODO: find this a home or scrap it -->
-> Note: This is how closures work, too, but we did not have to talk about it
-> back in Chapter 13, because the details did not bubble up to the surface the
-> way they do here!
-<!-- TODO: through here -->
-
-<!-- TODO: find this a home or scrap it -->
-The `async` keyword does not yet work with closures directly. That is, there is
-no direct equivalent to `async fn` for anonymous functions. As a result, you
-cannot write code like these function calls:
-
-```rust,ignore
-example_1(async || { ... });
-example_2(async move || { ... });
-```
-
-However, since async blocks themselves can be marked with `move`, this ends up
-not being a problem. Because `async` blocks compile to anonymous futures, you
-can write calls like this instead:
-
-```rust,ignore
-example_1(|| async { ... });
-example_2(|| async move { ... });
-```
-
-These closures now return anonymous futures, meaning they work basically the
-same way that an async function does.
-<!-- TODO: through here -->
+<!-- TODO: timeout! retries! etc. -->
 
 [collections]: https://doc.rust-lang.org/stable/book/ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: https://doc.rust-lang.org/stable/book/ch12-03-improving-error-handling-and-modularity.html
