@@ -432,11 +432,11 @@ The patterns programmed into Rust’s analysis of references are called the
 a set of particular cases that the compiler will consider, and if your code
 fits these cases, you don’t need to write the lifetimes explicitly.
 
-The elision rules don’t provide full inference. If Rust deterministically
-applies the rules but there is still ambiguity as to what lifetimes the
-references have, the compiler won’t guess what the lifetime of the remaining
-references should be. Instead of guessing, the compiler will give you an error
-that you can resolve by adding the lifetime annotations.
+The elision rules don’t provide full inference. If there is still ambiguity as
+to what lifetimes the references have after Rust applies the rules, the
+compiler won’t guess what the lifetime of the remaining references should be.
+Instead of guessing, the compiler will give you an error that you can resolve
+by adding the lifetime annotations.
 
 Lifetimes on function or method parameters are called *input lifetimes*, and
 lifetimes on return values are called *output lifetimes*.
