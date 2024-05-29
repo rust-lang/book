@@ -46,8 +46,8 @@ fn main() {
         // ANCHOR: here
         let futures: Vec<Pin<Box<dyn Future<Output = ()>>>> =
             vec![Box::pin(tx1_fut), Box::pin(rx_fut), Box::pin(tx_fut)];
+        // ANCHOR_END: here
 
         trpl::join_all(futures).await;
-        // ANCHOR_END: here
     });
 }

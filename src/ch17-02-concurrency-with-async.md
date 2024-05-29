@@ -621,9 +621,31 @@ earlier in this chapter.
 
 <!-- TODO: discussion of `Pin` -->
 
-Now we know enough to understand the error message from above. The problem 
+<!-- 
+    The reason it gets weird to talk about is:
+    
+    - Nearly everything gets `Unpin` automatically because it is an auto trait.
+    - Things which do not have to `impl !Unpin for TheType`.
+    - But `!Unpin` actually means “must be pinned to be able to be used”.
+    - So the actual situation is that the `Future` produced by an `async` block
+      implements `!Unpin`, “not unpin”,
 
-<Listing number="17-TODO" caption="" file-name="src/main.rs">
+    My head hurts.
+ -->
+
+Now we know enough to understand the error message from above. The problem is
+that the futures produced by an async block are *not* pinned by default.
+Strictly: they implement `!Unpin` to opt out of being copyable by default the
+way most types are. We need to pin them explicitly.
+
+Now that we have an idea what that error message was telling us, we can finally
+get our `join_all` call to compile! First, we need to explicitly annotate
+`futures` as referring to a pinned `Box` of futures. Second, we actually need to
+pin the futures, which we can do using the handy `Box::pin` API, which exists
+for exactly this. Putting that together, we end up with the code in Listing
+17-TODO.
+
+<Listing number="17-TODO" caption="Using `Pin` and `Box::pin` to make the `Vec` type check" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-13/src/main.rs:here}}
@@ -631,13 +653,40 @@ Now we know enough to understand the error message from above. The problem
 
 </Listing>
 
-This comes with a small amount of extra overhead from putting these futures on
-the heap with `Box`—and we are only doing that to get the types to line up. It
-would be nice if we could make this <!-- TODO: keep going -->
+If we compile and run this, we finally get the output we hoped for:
 
-<!-- TODO: `pin!` simplifies a little -->
+<!-- TODO: listing for output.txt -->
 
-<Listing number="17-TODO" caption="" file-name="src/main.rs">
+```text
+received 'hi'
+received 'more'
+received 'from'
+received 'messages'
+received 'the'
+received 'for'
+received 'future'
+received 'you'
+```
+
+Phew!
+
+There is a bit more we can explore here. For one thing, using `Pin<Box<T>>`
+comes with a small amount of extra overhead from putting these futures on the
+heap with `Box`—and we are only doing that to get the types to line up. We don’t
+actually *need* the heap allocation, after all: these futures are local to this
+particular function. As noted above, `Pin` is itself a smart pointer, so we can
+get the benefit of having a single type in the `Vec`—the original reason we
+reached for `Box`—without doing a heap allocation. We can use `Pin` directly
+instead.
+
+The `std::pin::pin` macro exists to do just that for values. However, we must
+still be explicit about the type of the pinned reference; otherwise Rust will
+still not know to interpret these as dynamic trait objects, which is what we
+need them to be in the `Vec`. We therefore `pin!` each future when we define it,
+and define `futures` as a `Vec` containing pinned mutable references to the
+dynamic `Future` type.
+
+<Listing number="17-TODO" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-14/src/main.rs:here}}
