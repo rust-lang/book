@@ -12,7 +12,8 @@
 //!    never be broken by upstream changes, e.g. if Tokio does a breaking 2.0
 //!    release at some point.
 
-use std::future::Future;
+use std::{future::Future, time::Duration};
+use tokio::time::{self, Timeout};
 
 pub use futures::{
     future::{join, join3, join_all},
@@ -53,4 +54,20 @@ pub use tokio::{
 pub fn block_on<F: Future>(future: F) -> F::Output {
     let rt = Runtime::new().unwrap();
     rt.block_on(future)
+}
+
+/// Race a future against a specified timeout duration.
+///
+/// Under the hood, this uses `tokio::time::timeout`, but instead of returning
+/// Tokio's internal error type in the case of a failure, this simply returns
+/// the duration which had elapsed. (It actually provides strictly *more* info
+/// than Tokio's error does, though it does not `impl Error`.)
+pub async fn timeout<F>(
+    duration: Duration,
+    future: F,
+) -> Result<F::Output, Duration>
+where
+    F: Future,
+{
+    time::timeout(duration, future).await.map_err(|_| duration)
 }

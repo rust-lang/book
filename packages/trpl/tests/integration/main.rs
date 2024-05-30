@@ -130,3 +130,26 @@ mod re_exported_join_apis_work {
         assert_eq!(result, (1, "Hello", vec![String::from("World")]));
     }
 }
+
+#[test]
+fn re_exported_timeout_works() {
+    let val = trpl::block_on(async {
+        let winner = async {
+            trpl::sleep(Duration::from_millis(1)).await;
+            String::from("Hello")
+        };
+        trpl::timeout(Duration::from_millis(2), winner).await
+    });
+
+    assert_eq!(val, Ok(String::from("Hello")));
+
+    let val = trpl::block_on(async {
+        let loser = async {
+            trpl::sleep(Duration::from_millis(2)).await;
+            String::from("Hello")
+        };
+        trpl::timeout(Duration::from_millis(1), loser).await
+    });
+
+    assert!(val.is_err());
+}

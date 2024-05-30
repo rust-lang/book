@@ -744,6 +744,22 @@ before we move on.
 
 <!-- TODO: timeout! retries! etc. -->
 
+Many of these patterns are common enough to warrant abstracting over. For
+example, the `trpl::timeout` function takes a `Duration` for the maximum time to
+run, but also takes a future to run, and produces a new future you can await,
+whose `Output` type is a `Result`. Listing 17-TODO shows how we can use it. If
+the passed-in future finishes first, the output result will be `Ok`, with the
+result of that passed-in future. If the duration elapses before the passed-in
+future finishes, the result will be `Err` with the duration that elapsed.
+
+<Listing number="17-TODO" caption="Using a `timeout` in place of `select` to run a slow operation with a time limit" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-timeout/src/main.rs:here}}
+```
+
+</Listing>
+
 [collections]: https://doc.rust-lang.org/stable/book/ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: https://doc.rust-lang.org/stable/book/ch12-03-improving-error-handling-and-modularity.html
 [futures]: /ch17-01-futures-and-syntax.html#futures
