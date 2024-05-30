@@ -320,7 +320,7 @@ three futures to complete:
 Now both blocks borrow `tx`, so they are both able to use it to send messages,
 which `rx` can then receive. When we run that code, we see the extra output from
 the new `async` block, and the message it sends being received by the
-`rx.recv()`:
+`rx.recv()`.
 
 ```text
 Got: hi
@@ -334,21 +334,21 @@ Got: you
 ```
 
 As before, we also see that the program does not shut down on its own and
-requires a <span class="keystroke">ctrl-c</span>. Now that we have seen how
-`async` blocks borrow the items they reference from their outer scope, we can go
-ahead and remove the extra block we just added, and switch back to using
-`trpl::join` instead of `trpl::join3`.
-
-This little exploration makes the original issue much clearer: it is ultimately
-about *ownership*. We need to move `tx` into the async block so that once that
-block ends, `tx` will be dropped.
+requires a <span class="keystroke">ctrl-c</span>, though. This little
+exploration helps us understand why: it is ultimately about *ownership*. We need
+to move `tx` into the async block so that once that block ends, `tx` will be
+dropped.
 
 In Chapter 13, we learned how to use the `move` keyword with closures, and in
 Chapter 16, we saw that we often need to use closures marked with `move` when
 working with threads. As we have discovered, the same dynamics apply to async
 blocks—so the `move` keyword also works with async blocks, allowing them to take
-ownership of the data they reference. We can do that by change the first async
-block from an `async` block to an `async move` block, as in Listing 17-TODO:
+ownership of the data they reference.
+
+Since we have seen how `async` blocks borrow the items they reference from their
+outer scope, we can go ahead and remove the extra block we just added for now,
+and switch back from `join3` to `join`. Then we can change the first async block
+from an `async` block to an `async move` block, as in Listing 17-TODO:
 
 <Listing number="17-TODO" caption="Fixing the async mpsc channel by using `move` to take ownership of the `Sender` (`tx`)" file-name="src/main.rs">
 
