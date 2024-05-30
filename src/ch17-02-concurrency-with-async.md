@@ -388,16 +388,26 @@ in the same infinite loop we started out in.
 
 When we switched from using two futures to three, we also had to switch from
 using `join` to using `join3`. It would be annoying to do this every time we
-changed our code.
+changed our code. Happily, we have a macro form of `join` to which we can pass
+an arbitrary number of arguments. It also handles awaiting the futures itself.
+Thus, we could rewrite the code from Listing 17-TODO to use `join!` instead of `join3`, as in Listing 17-TODO:
 
-<!-- TODO: explain how to use `join!` -->
+<Listing number="17-TODO" caption="Using `join!` to wait for multiple futures" file-name="src/main.rs">
 
-However, both the function nor macro forms of `join` only work for cases where
-we know the number of futures ahead of time. If instead we have a dynamic number
-of futures, we need a function which works with a collection type which can grow
-and shrink dynamically at runtime, such as a vector. In real-world Rust, pushing
-futures into a collection and then waiting on some or all the futures in that
-collection to complete is a very common pattern.
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-09b/src/main.rs:here}}
+```
+
+</Listing>
+
+This is definitely a nice improvement over needing to swap between `join` and
+`join3` and `join4` and so on! However, both the function nor macro forms of
+`join` only work for cases where we know the number of futures ahead of time. If
+instead we have a dynamic number of futures, we need a function which works with
+a collection type which can grow and shrink dynamically at runtime, such as a
+vector. In real-world Rust, pushing futures into a collection and then waiting
+on some or all the futures in that collection to complete is a very common
+pattern.
 
 The `trpl::join_all` function accepts any type which implements the `Iterator`
 trait, which we learned about back in Chapter 13, so it seems like just the
