@@ -740,7 +740,15 @@ building frameworks, or especially when you are building a runtime itself.
 Thus far, we have only used the `join` family of functions and macros. When we
 “join” on some collection of futures, we require *all* of them to finish before
 we move on. Sometimes, though, we only need *some* future from a set to finish
-before we move on.
+before we move on—kind of like racing one future against another. This operation
+is usually called “select” after the name of a Unix system call used to check
+the status of IO operations after a time delay. Just like with `join`, there are
+both function and macro versions of `select`. For this example, we will use the
+function version.
+
+<!--
+    TODO: implement timeout ourselves using `sleep` and `select`?
+-->
 
 <!-- TODO: timeout! retries! etc. -->
 

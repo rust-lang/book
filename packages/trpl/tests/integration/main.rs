@@ -9,7 +9,10 @@
 //!
 //! [post]: https://matklad.github.io/2021/02/27/delete-cargo-integration-tests.html
 
-use std::{pin::Pin, time::Duration};
+use std::{
+    pin::{pin, Pin},
+    time::Duration,
+};
 
 use futures::Future;
 use trpl::{Receiver, Sender};
@@ -152,4 +155,32 @@ fn re_exported_timeout_works() {
     });
 
     assert!(val.is_err());
+}
+
+#[test]
+fn re_exported_select_macro() {
+    #[derive(Debug, PartialEq)]
+    enum Output {
+        Fast,
+        Slow,
+    }
+
+    let result: Result<Output, ()> = trpl::block_on(async {
+        // 1 second is 1,000 times slower than 1 millisecond, so this should
+        // reliably lose to the `fast` version.
+        let slow = pin!(async {
+            trpl::sleep(Duration::from_secs(1)).await;
+            Ok(Output::Slow)
+        });
+
+        let fast = pin!(async {
+            trpl::sleep(Duration::from_millis(1)).await;
+            Ok(Output::Fast)
+        });
+
+        trpl::select(slow, fast).await.factor_first().0
+    });
+
+    let val = result.unwrap();
+    assert_eq!(val, Output::Fast);
 }

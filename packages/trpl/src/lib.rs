@@ -13,10 +13,10 @@
 //!    release at some point.
 
 use std::{future::Future, time::Duration};
-use tokio::time::{self, Timeout};
+use tokio::time;
 
 pub use futures::{
-    future::{join, join3, join_all},
+    future::{join, join3, join_all, select},
     join,
 };
 pub use tokio::{
