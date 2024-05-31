@@ -4,9 +4,9 @@ Tests are Rust functions that verify that the non-test code is functioning in
 the expected manner. The bodies of test functions typically perform these three
 actions:
 
-1. Set up any needed data or state.
-2. Run the code you want to test.
-3. Assert the results are what you expect.
+* Set up any needed data or state.
+* Run the code you want to test.
+* Assert that the results are what you expect.
 
 Let’s look at the features Rust provides specifically for writing tests that
 take these actions, which include the `test` attribute, a few macros, and the
@@ -19,8 +19,8 @@ attribute. Attributes are metadata about pieces of Rust code; one example is
 the `derive` attribute we used with structs in Chapter 5. To change a function
 into a test function, add `#[test]` on the line before `fn`. When you run your
 tests with the `cargo test` command, Rust builds a test runner binary that runs
-the annotated functions and reports on whether each
-test function passes or fails.
+the annotated functions and reports on whether each test function passes or
+fails.
 
 Whenever we make a new library project with Cargo, a test module with a test
 function in it is automatically generated for us. This module gives you a
@@ -61,9 +61,9 @@ cd ../../..
 
 </Listing>
 
-For now, let’s focus solely on the `it_works()` function. Note the
-`#[test]` annotation: this attribute indicates this is a test function, so the
-test runner knows to treat this function as a test. We might also have non-test
+For now, let’s focus solely on the `it_works` function. Note the `#[test]`
+annotation: this attribute indicates this is a test function, so the test
+runner knows to treat this function as a test. We might also have non-test
 functions in the `tests` module to help set up common scenarios or perform
 common operations, so we always need to indicate which functions are tests.
 
@@ -95,7 +95,7 @@ Requested”][ignoring]<!-- ignore --> section later in this chapter. Because we
 haven’t done that here, the summary shows `0 ignored`. We can also pass an
 argument to the `cargo test` command to run only tests whose name matches a
 string; this is called *filtering* and we’ll cover that in the [“Running a
-Subset of Tests by Name”][subset]<!-- ignore --> section. We also haven’t
+Subset of Tests by Name”][subset]<!-- ignore --> section. Here we haven’t
 filtered the tests being run, so the end of the summary shows `0 filtered out`.
 
 The `0 measured` statistic is for benchmark tests that measure performance.
@@ -110,7 +110,7 @@ write documentation tests in the [“Documentation Comments as
 Tests”][doc-comments]<!-- ignore --> section of Chapter 14. For now, we’ll
 ignore the `Doc-tests` output.
 
-Let’s start to customize the test to our own needs. First change the name of
+Let’s start to customize the test to our own needs. First, change the name of
 the `it_works` function to a different name, such as `exploration`, like so:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -210,7 +210,7 @@ we covered in Chapter 7 in the [“Paths for Referring to an Item in the Module
 Tree”][paths-for-referring-to-an-item-in-the-module-tree]<!-- ignore -->
 section. Because the `tests` module is an inner module, we need to bring the
 code under test in the outer module into the scope of the inner module. We use
-a glob here so anything we define in the outer module is available to this
+a glob here, so anything we define in the outer module is available to this
 `tests` module.
 
 We’ve named our test `larger_can_hold_smaller`, and we’ve created the two
@@ -254,16 +254,16 @@ Running the tests now produces the following:
 {{#include ../listings/ch11-writing-automated-tests/no-listing-03-introducing-a-bug/output.txt}}
 ```
 
-Our tests caught the bug! Because `larger.width` is 8 and `smaller.width` is
-5, the comparison of the widths in `can_hold` now returns `false`: 8 is not
+Our tests caught the bug! Because `larger.width` is `8` and `smaller.width` is
+`5`, the comparison of the widths in `can_hold` now returns `false`: 8 is not
 less than 5.
 
 ### Testing Equality with the `assert_eq!` and `assert_ne!` Macros
 
 A common way to verify functionality is to test for equality between the result
 of the code under test and the value you expect the code to return. You could
-do this using the `assert!` macro and passing it an expression using the `==`
-operator. However, this is such a common test that the standard library
+do this by using the `assert!` macro and passing it an expression using the
+`==` operator. However, this is such a common test that the standard library
 provides a pair of macros—`assert_eq!` and `assert_ne!`—to perform this test
 more conveniently. These macros compare two arguments for equality or
 inequality, respectively. They’ll also print the two values if the assertion
@@ -471,7 +471,7 @@ This test will pass because the value we put in the `should_panic` attribute’s
 `expected` parameter is a substring of the message that the `Guess::new`
 function panics with. We could have specified the entire panic message that we
 expect, which in this case would be `Guess value must be less than or equal to
-100, got 200.` What you choose to specify depends on how much of the panic
+100, got 200`. What you choose to specify depends on how much of the panic
 message is unique or dynamic and how precise you want your test to be. In this
 case, a substring of the panic message is enough to ensure that the code in the
 test function executes the `else if value > 100` case.
