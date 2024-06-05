@@ -12,11 +12,11 @@
 //!    never be broken by upstream changes, e.g. if Tokio does a breaking 2.0
 //!    release at some point.
 
-use std::{future::Future, time::Duration};
+use std::{future::Future, pin::pin, time::Duration};
 use tokio::time;
 
 pub use futures::{
-    future::{join, join3, join_all, select},
+    future::{self, join, join3, join_all},
     join,
 };
 pub use tokio::{
@@ -70,4 +70,32 @@ where
     F: Future,
 {
     time::timeout(duration, future).await.map_err(|_| duration)
+}
+
+///Run two futures
+pub async fn race<A, B, F1, F2>(f1: F1, f2: F2) -> Either<A, B>
+where
+    F1: Future<Output = A>,
+    F2: Future<Output = B>,
+{
+    let f1 = pin!(f1);
+    let f2 = pin!(f2);
+    match future::select(f1, f2).await {
+        future::Either::Left((a, _f2)) => Either::Left(a),
+        future::Either::Right((b, _f1)) => Either::Right(b),
+    }
+}
+
+/// A type which represents a simple choice between two options.
+///
+/// You can think of this as being like [`Result`], but where `Result` gives
+/// specific meaning to the two types (success with `Ok`, failure with `Err`),
+/// `Either` does not.
+///
+/// Here, we use it with [`race`] because the point of `select` is to choose
+/// whichever type finishes first, but neither is more “correct” than the other.
+#[derive(Debug, PartialEq)]
+pub enum Either<A, B> {
+    Left(A),
+    Right(B),
 }

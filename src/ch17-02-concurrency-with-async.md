@@ -625,13 +625,13 @@ automatically for most types.
 
 `Unpin`’s job is to tell the compiler that a given type does *not* need to
 uphold any particular guarantees about whether the value in question can be
-moved. For example, if a future 
+moved. For example, if a future
 
 <!-- TODO: discussion of `Pin` -->
 
-<!-- 
+<!--
     The reason it gets weird to talk about is:
-    
+
     - Nearly everything gets `Unpin` automatically because it is an auto trait.
     - Things which do not have to `impl !Unpin for TheType`.
     - But `!Unpin` actually means “must be pinned to be able to be used”.
@@ -724,7 +724,7 @@ with any other type in Rust, though: futures are not special, even though we
 have some nice syntax for working with them, and that is a good thing!) We have
 a basic tradeoff here: we can either deal with a dynamic number of futures with
 `join_all`, as long as they all have the same type, or we can deal with a
-static number of futures with `join!`, and so on, 
+static number of futures with `join!`, and so on,
 
 <!--
     TODO: validate that this is, you know, true. It matches my own experience,
@@ -760,7 +760,7 @@ the passed-in future finishes first, the output result will be `Ok`, with the
 result of that passed-in future. If the duration elapses before the passed-in
 future finishes, the result will be `Err` with the duration that elapsed.
 
-<Listing number="17-TODO" caption="Using a `timeout` in place of `select` to run a slow operation with a time limit" file-name="src/main.rs">
+<Listing number="17-TODO" caption="Using `race` to run a slow operation with a time limit" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-timeout/src/main.rs:here}}

@@ -15,7 +15,7 @@ use std::{
 };
 
 use futures::Future;
-use trpl::{Receiver, Sender};
+use trpl::{Either, Receiver, Sender};
 
 /// This test is foundational for all the others, as they depend on `block_on`.
 ///
@@ -158,29 +158,26 @@ fn re_exported_timeout_works() {
 }
 
 #[test]
-fn re_exported_select_macro() {
+fn race() {
     #[derive(Debug, PartialEq)]
-    enum Output {
-        Fast,
-        Slow,
-    }
+    struct Slow;
 
-    let result: Result<Output, ()> = trpl::block_on(async {
-        // 1 second is 1,000 times slower than 1 millisecond, so this should
-        // reliably lose to the `fast` version.
-        let slow = pin!(async {
-            trpl::sleep(Duration::from_secs(1)).await;
-            Ok(Output::Slow)
-        });
+    #[derive(Debug, PartialEq)]
+    struct Fast;
 
-        let fast = pin!(async {
+    let val = trpl::block_on(async {
+        let slow = async {
+            trpl::sleep(Duration::from_millis(1_000)).await;
+            Slow
+        };
+
+        let fast = async {
             trpl::sleep(Duration::from_millis(1)).await;
-            Ok(Output::Fast)
-        });
+            Fast
+        };
 
-        trpl::select(slow, fast).await.factor_first().0
+        trpl::race(slow, fast).await
     });
 
-    let val = result.unwrap();
-    assert_eq!(val, Output::Fast);
+    assert_eq!(val, Either::Right(Fast));
 }
