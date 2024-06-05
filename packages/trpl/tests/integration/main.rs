@@ -179,5 +179,15 @@ fn race() {
         trpl::race(slow, fast).await
     });
 
-    assert_eq!(val, Either::Right(Fast));
+    assert!(matches!(val, Either::Right(Fast)));
+}
+
+#[test]
+fn yield_now() {
+    let result = trpl::block_on(async {
+        trpl::yield_now().await;
+        "done"
+    });
+
+    assert_eq!(result, "done");
 }

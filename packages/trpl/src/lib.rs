@@ -16,7 +16,7 @@ use std::{future::Future, pin::pin, time::Duration};
 use tokio::time;
 
 pub use futures::{
-    future::{self, join, join3, join_all},
+    future::{self, join, join3, join_all, Either},
     join,
 };
 pub use tokio::{
@@ -36,7 +36,7 @@ pub use tokio::{
         unbounded_channel as channel, UnboundedReceiver as Receiver,
         UnboundedSender as Sender,
     },
-    task::spawn as spawn_task,
+    task::{spawn as spawn_task, yield_now},
     time::sleep,
 };
 
@@ -81,21 +81,7 @@ where
     let f1 = pin!(f1);
     let f2 = pin!(f2);
     match future::select(f1, f2).await {
-        future::Either::Left((a, _f2)) => Either::Left(a),
-        future::Either::Right((b, _f1)) => Either::Right(b),
+        Either::Left((a, _f2)) => Either::Left(a),
+        Either::Right((b, _f1)) => Either::Right(b),
     }
-}
-
-/// A type which represents a simple choice between two options.
-///
-/// You can think of this as being like [`Result`], but where `Result` gives
-/// specific meaning to the two types (success with `Ok`, failure with `Err`),
-/// `Either` does not.
-///
-/// Here, we use it with [`race`] because the point of `select` is to choose
-/// whichever type finishes first, but neither is more “correct” than the other.
-#[derive(Debug, PartialEq)]
-pub enum Either<A, B> {
-    Left(A),
-    Right(B),
 }
