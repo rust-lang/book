@@ -768,15 +768,6 @@ future finishes, the result will be `Err` with the duration that elapsed.
 
 </Listing>
 
-Now, there are other things we might want to do here. For example, we could account for the different kinds of errors we might get for any given operation—some of them might be “fatal” and tell us to stop retrying immediately, while others might allow for retries.
-
-There are many other things we would want to add to a production-grade retry implementation, of course:
-
-- exponential backoff, so that
-- “jitter,” where each retry happens at *slightly* different intervals, so that if a bunch of requests from different clients fail, they do not all get retried at the same time
-
-These are beyond the scope of this example, but we encourage you to try implementing those! Just like the examples we have
-
 [collections]: https://doc.rust-lang.org/stable/book/ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: https://doc.rust-lang.org/stable/book/ch12-03-improving-error-handling-and-modularity.html
 [futures]: /ch17-01-futures-and-syntax.html#futures
