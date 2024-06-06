@@ -79,9 +79,7 @@ version with `yield_now` is *way* faster!
 
 <!-- TODO: make this its own listing? -->
 
-<!--
-    TODO: implement timeout ourselves using `sleep` and `select`?
--->
+### Building Our Own Async Abstractions
 
 Many of these patterns are common enough to warrant abstracting over. For
 example, the `trpl::timeout` function takes a `Duration` for the maximum time to
@@ -91,7 +89,7 @@ the passed-in future finishes first, the output result will be `Ok`, with the
 result of that passed-in future. If the duration elapses before the passed-in
 future finishes, the result will be `Err` with the duration that elapsed.
 
-<Listing number="17-TODO" caption="Using `race` to run a slow operation with a time limit" file-name="src/main.rs">
+<Listing number="17-TODO" caption="Using `timeout` to run a slow operation with a time limit" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-timeout-a/src/main.rs:here}}
@@ -100,7 +98,80 @@ future finishes, the result will be `Err` with the duration that elapsed.
 </Listing>
 
 Here we were using the `timeout` supplied by `trpl`, but we do not have to. We
-can implement it ourselves using the
+can implement it ourselves using `race` and `sleep`! To begin, let’s think about
+the API of `timeout`:
+
+- Its first parameter is a `std::time::Duration` which specifies the maximum
+  time to wait.
+- Its second parameter is the future to run.
+- It returns a `Result`. If the future completes successfully, the `Result` will
+  be `Ok` with the value produced by the future. If the timeout happens, the
+  `Result` will be `Err` with the duration that the timeout waited for.
+
+We can write the same signature ourselves, as in Listing 17-TODO.
+
+<Listing number="17-TODO" caption="Defining the signature of `timeout`" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-timeout-final/src/main.rs:declaration}}
+```
+
+</Listing>
+
+What about the body of the function? Here, we can `race` whatever future the
+caller passes with a `sleep` future.
+
+When we saw `race` earlier in Listing 17-TODO, we ignored its return type,
+because we were just interested in seeing the behavior of `fast` and `slow` when
+we ran the program. Here, though, its return value tells us whether the future
+or the sleep finished first. With `race`, both futures passed as arguments can
+legitimately “win,” so it does not make sense to use a `Result` to represent the
+return type. Instead, it returns a similar type called `Either`. Like `Result`,
+`Either` can be one of two types, but unlike `Result`, there is no notion of
+success or failure baked into the type. Instead, it uses `Left` and `Right` to
+indicate “one or the other”. Its implementation looks like this:
+
+```rust
+enum Either<A, B> {
+    Left(A),
+    Right(B)
+}
+```
+
+In the case of `race` specifically, it returns `Left` if the first argument
+finishes first, with that future’s output, and `Right` with the second future
+argument’s output if *that* one finishes first.
+
+```rust,ignore
+match race(future_a, future_b).await {
+    Either::Left(output_from_future_a) => /* ... */,
+    Either::Right(output_from_future_b) => /* ... */,
+}
+```
+
+That gives us enough to be able to implement `timeout` ourselves using `race`
+and `sleep`.
+
+<Listing number="17-TODO" caption="Defining `timeout` with `race` and `sleep`" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-timeout-final/src/main.rs:timeout}}
+```
+
+</Listing>
+
+Let’s walk through the details. Since we know from earlier that `race` is not
+fair, and will prefer the first argument to the second, we pass it the future
+first so it gets a chance to complete even if the caller passes in a very short
+value for `max_time`. Then we match on the result of awaiting the `race`. If the
+future passed in by the caller finished first, we will have
+`Either::Left(output)`, which we can return as a success with `Ok`. If the sleep
+finished first, we will have `Either::Right(())` instead, since `timeout`
+returns the unit type `()` if it succeeds. We can ignore that `()` by using `_`
+and return `Err` with the duration the user passed in instead. And that’s it!
+
+Back in `main`, we can call this new `timeout` function exactly like we called
+`trpl::timeout` before.
 
 [collections]: https://doc.rust-lang.org/stable/book/ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: https://doc.rust-lang.org/stable/book/ch12-03-improving-error-handling-and-modularity.html
