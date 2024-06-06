@@ -73,11 +73,24 @@ example, will always sleep for at least a millisecond, even if we pass it a
 `Duration` of one nanosecond. Again, modern computers are *fast*: they can do a
 lot in one millisecond!
 
-You can see this for yourself by comparing what happens if you change Listings
-17-TODO and 17-TODO to both do 100 or 1,000 iterations instead of just 5. The
-version with `yield_now` is *way* faster!
+You can see this for yourself by setting up a little benchmark, like the one in
+Listing 17-TODO. (This is not an especially rigorous way to do performance
+testing, but it suffices to show the difference here.) Here, we skip all the
+status printing, pass a one-nanosecond `Duration` to `sleep`, let each future
+run by itself so that they do not interfere with each other, and get rid of all
+the status printing that we did to see the back-and-forth between tasks in
+Listings 17-TODO and 17-TODO. Then we run for 1,000 iterations and see how long
+`sleep` takes vs. `yield_now`.
 
-<!-- TODO: make this its own listing? -->
+<Listing number="17-TODO" caption="Comparing the performance of `sleep` and `yield_now`" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-yield-c-performance/src/main.rs:here}}
+```
+
+</Listing>
+
+The version with `yield_now` is *way* faster!
 
 ### Building Our Own Async Abstractions
 
@@ -118,8 +131,8 @@ We can write the same signature ourselves, as in Listing 17-TODO.
 
 </Listing>
 
-What about the body of the function? Here, we can `race` whatever future the
-caller passes with a `sleep` future.
+Then, in the body of the function, we can `race` whatever future the caller
+passes with a `sleep` future.
 
 When we saw `race` earlier in Listing 17-TODO, we ignored its return type,
 because we were just interested in seeing the behavior of `fast` and `slow` when
