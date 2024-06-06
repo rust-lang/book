@@ -1,6 +1,10 @@
 name: CI
 on: [push, pull_request]
 
+env:
+  # Update the language picker in index.hbs to link new languages.
+  LANGUAGES:
+
 jobs:
   test:
     name: Run tests
@@ -17,7 +21,7 @@ jobs:
     - name: Install mdbook
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.37/mdbook-v0.4.37-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> "${GITHUB_PATH}"
     - name: Report versions
       run: |
@@ -64,8 +68,10 @@ jobs:
     - name: Install mdbook
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.37/mdbook-v0.4.37-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> "${GITHUB_PATH}"
+    - name: Install mdbook-i18n-helpers
+      run: cargo install mdbook-i18n-helpers --locked --version 0.3.3
     - name: Install mdbook-trpl-note
       run: cargo install --path packages/mdbook-trpl-note
     - name: Install mdbook-trpl-listing
@@ -97,3 +103,17 @@ jobs:
           https://raw.githubusercontent.com/rust-lang/rust/master/src/tools/linkchecker/linkcheck.sh
         # Cannot use --all here because of the generated redirect pages aren't available.
         sh linkcheck.sh book
+    - name: Build all translations
+      run: |
+        for po_lang in ${{ env.LANGUAGES }}; do
+          echo "::group::Building $po_lang translation"
+          MDBOOK_BOOK__LANGUAGE=$po_lang \
+          mdbook build -d book/$po_lang
+          echo "::endgroup::"
+        done
+    - name: Check all translations for broken links
+      run: |
+        for po_lang in ${{ env.LANGUAGES }}; do
+          MDBOOK_BOOK__LANGUAGE=$po_lang \
+          sh linkcheck.sh --all rust-by-example
+        done
