@@ -66,6 +66,21 @@ To run the tests:
 $ mdbook test
 ```
 
+The following warnings can be ignored safely if you don't build a translated version.
+
+```
+[WARN] (mdbook::preprocess::cmd): The command wasn't found, is the "gettext" preprocessor installed?
+[WARN] (mdbook::preprocess::cmd):   Command: mdbook-gettext
+```
+
+### Building translated version
+
+If there is a translated resource in `po/` directory, it can be specified through `MDBOOK_BOOK__LANGUAGE` like below:
+
+```bash
+MDBOOK_BOOK__LANGUAGE=ja mdbook build
+```
+
 ## Contributing
 
 We'd love your help! Please see [CONTRIBUTING.md][contrib] to learn about the
@@ -84,6 +99,12 @@ revisions, we will only be correcting errors. If your issue or pull request
 isn't strictly fixing an error, it might sit until the next time that we're
 working on a large revision: expect on the order of months or years. Thank you
 for your patience!
+
+## Translating
+
+Please see the [TRANSLATING.md] file for more details.
+
+[TRANSLATING.md]: https://github.com/rust-lang/book/blob/main/TRANSLATING.md
 
 ### Translations
 
