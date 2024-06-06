@@ -22,7 +22,7 @@ fn main() {
             }
             println!("'b' finished.");
         };
-        // ANCHOR_end: here
+        // ANCHOR_END: here
 
         trpl::race(a, b).await;
     });
