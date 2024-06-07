@@ -172,6 +172,10 @@ Listings 17-TODO and 17-TODO. Then we run for 1,000 iterations and see how long
 
 The version with `yield_now` is *way* faster!
 
+In real-world code, you will not usually be alternative regular function calls
+with await points on every single line, of course. The underlying dynamic is an
+important one to keep in mind, though!
+
 ### Building Our Own Async Abstractions
 
 Many of these patterns are common enough to warrant abstracting over. For
