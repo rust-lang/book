@@ -6,12 +6,11 @@ we move on. Sometimes, though, we only need *some* future from a set to finish
 before we move on—kind of like racing one future against another. This operation
 is often named `race` for exactly that reason.
 
-In Listing 17-TODO, we use `race` to run two futures, `slow` and `fast` against
-each other. First, we introduce the two futures. Each one prints a message when
-it starts running, pauses for some amount of time by calling and awaiting
-`sleep`, and then prints another message when it finishes. Then we pass both to
-`trpl::race` and wait for one of them to finish. (The outcome here won’t be too
-surprising: `fast` wins!)
+In Listing 17-TODO, we use `race` to run two futures, `slow` and `fast`, against
+each other. Each one prints a message when it starts running, pauses for some
+amount of time by calling and awaiting `sleep`, and then prints another message
+when it finishes. Then we pass both to `trpl::race` and wait for one of them to
+finish. (The outcome here won’t be too surprising: `fast` wins!)
 
 <Listing number="17-TODO" caption="Using `race` to get the result of whichever future finishes first" file-name="src/main.rs">
 
@@ -43,9 +42,9 @@ any other futures from making progress.
 > Note: You may sometimes hear this referred to as one future *starving* other
 > futures. The same thing applies to threads, too!
 
-That has another important consequence for using `race`, `join`, or other tools
-like them. *Some* future is going to run first, and everything up to the first
-await point in that future will run before any part of any other futures gets a
+That has another important consequence for using `race`, `join`, and other such
+helpers. *Some* future is going to run first, and everything up to the first
+await point in that future will run before any part of any other future gets a
 chance to run. For simple code, that may not be a big deal. However, if you are
 doing some kind of expensive setup or long-running work, or if you have a future
 which will keep doing some particular task indefinitely, you will need to think
@@ -54,8 +53,11 @@ about when and where to hand control back to the runtime.
 ### Yielding
 
 Let’s consider a long-running operation. Here, we will simulate it using `sleep`
-inside the function, but in the real world it could be a network call or
-really any operation which might take a while.
+inside the function, but in the real world it could be any of operations which
+might take a while, and which, critically, are *blocking*. Our `slow` helper
+function “slow” will just take a number of milliseconds to run, and sleep the
+thread for that long. This is intentionally not an async function, because the
+idea is to represent work that is *not* async.
 
 <!--
     This does mean that async can be a useful tool even for CPU-bound tasks,
@@ -63,15 +65,58 @@ really any operation which might take a while.
     tool for *structuring* the different parts of the program.
 -->
 
-Since we know that we hand off control at await points, we also know that we
-need a future to await. As a starting point, we could use the `sleep` function,
-as in Listing 17-TODO.
+<Listing number="17-TODO" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
-<!--
-    TODO: maybe tweak that example so that it actually shows the difference
-    between doing all of the work in a single chunk vs. breaking it into
-    separate chunks which can make progress.
--->
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-yield-0-blocked/src/main.rs:slow}}
+```
+
+</Listing>
+
+In Listing 17-TODO we have this kind of slow work in a pair of futures which
+only hand control back to the runtime *after* carrying out a bunch of slow
+operations, represented by calls to `slow`:
+
+<Listing number="17-TODO" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-yield-0-blocked/src/main.rs:slow-futures}}
+```
+
+</Listing>
+
+If you run this, you will see this output:
+
+<!-- TODO: listing for output -->
+
+```text
+'a' started.
+'a' ran for 300ms
+'a' ran for 100ms
+'a' ran for 200ms
+'a' ran for 900ms
+'b' started.
+'b' ran for 750ms
+'b' ran for 100ms
+'b' ran for 150ms
+'b' ran for 350ms
+'b' ran for 150ms
+'a' finished.
+```
+
+As with our earlier example, `race` still finishes when `a` finishes. There is
+no interleaving between the two futures, though. The `a` future does all of its
+work until the `trpl::sleep` call is awaited, then the `b` future does all of
+its work until its own `trpl::sleep` call is awaited, and then the `a` future
+completes. It would be better if both futures could make progress between their
+slow tasks. We need some way to hand control back to the runtime there—and we
+know that await points are the way to do that. However, that means we need
+something we can await!
+
+However, we can also see the handoff happening in this very example: if we
+removed the `trpl::sleep` at the end of the `a` future, it would complete
+without the `b` future running *at all*. Given that, maybe we could use the
+`sleep` function as a starting point, as in Listing 17-TODO.
 
 <Listing number="17-TODO" caption="Using `sleep` to let operations switch off making progress" file-name="src/main.rs">
 
@@ -80,6 +125,12 @@ as in Listing 17-TODO.
 ```
 
 </Listing>
+
+Now the two futures’ work is interleaved. The `a` future still runs for a bit
+before handing off control to `b`, because it has some expensive work to do up
+front, but after that they just swap back and forth every time one of them hits
+an await point. In this case, we have done that after ever call to `slow`, but
+we could break up the work however makes the most sense to us.
 
 However, we do not actually need to sleep to accomplish this. We just need to
 hand back control to the runtime. We can actually *yield* control back to the
