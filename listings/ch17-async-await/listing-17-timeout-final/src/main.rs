@@ -9,7 +9,9 @@ fn main() {
             "Finally finished"
         };
 
+        // ANCHOR: main
         match timeout(Duration::from_secs(2), slow).await {
+            // ANCHOR_END: main
             Ok(message) => println!("Succeeded with '{message}'"),
             Err(duration) => {
                 println!("Failed after {} seconds", duration.as_secs())

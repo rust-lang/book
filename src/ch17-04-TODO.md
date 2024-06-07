@@ -1,7 +1,5 @@
 ## TODO: Title This Section!
 
-### Race
-
 Thus far, we have only used the `join` family of functions and macros. When we
 “join” on some collection of futures, we require *all* of them to finish before
 we move on. Sometimes, though, we only need *some* future from a set to finish
@@ -24,19 +22,50 @@ surprising: `fast` wins!)
 </Listing>
 
 One other thing to notice: if you flip the order of the arguments to `race`, the
-order of the start messages changes, but the `fast` future always completes
-first. That is because the implementation of this particular `race` function is
-not *fair*. It always runs the futures passed as arguments in the order they are
-passed. That means everything up to the first `.await` in a given future will
-run before *any* of the other future gets a chance to run. Other implementations
-*are* fair, and will randomly choose which future to start first.
+order of the start messages changes, even though the `fast` future always
+completes first. That is because the implementation of this particular `race`
+function is not *fair*. It always runs the futures passed as arguments in the
+order they are passed. Other implementations *are* fair, and will randomly
+choose which future to start first.
 
-This dynamic is important to keep in mind! An async runtime can only switch
-which future it is executing at await points. That means if you load up a bunch
-of really expensive work in an async function, it will block any other futures
-from making progress. (You may sometimes hear this referred to as one future
-*starving* other futures. The same thing applies to threads, too!) We can work
-around this using the `sleep` function, as in Listing 17-TODO.
+Regardless of whether the implementation of race we are using is fair, though,
+*one* of the futures will run up to the first `.await` in its body before
+another task can start.
+
+To see why, recall from our discussion of [Futures][futures that Rust compiles
+async blocks in a way that hands control back to the async runtime at each await
+point. That has an important corollary: async runtimes can only switch which
+future they are executing at await points. Everything in between await points is
+just normal synchronous Rust code. That means if you do a bunch of really
+expensive work in an async function without an `.await`, that future will block
+any other futures from making progress.
+
+> Note: You may sometimes hear this referred to as one future *starving* other
+> futures. The same thing applies to threads, too!
+
+That has another important consequence for using `race`, `join`, or other tools
+like them. *Some* future is going to run first, and everything up to the first
+await point in that future will run before any part of any other futures gets a
+chance to run. For simple code, that may not be a big deal. However, if you are
+doing some kind of expensive setup or long-running work, or if you have a future
+which will keep doing some particular task indefinitely, you will need to think
+about when and where to hand control back to the runtime.
+
+### Yielding
+
+Let’s consider a long-running operation. Here, we will simulate it using `sleep`
+inside the function, but in the real world it could be a network call or
+really any operation which might take a while.
+
+<!--
+    This does mean that async can be a useful tool even for CPU-bound tasks,
+    depending on what else your program is doing, because it provides a useful
+    tool for *structuring* the different parts of the program.
+-->
+
+Since we know that we hand off control at await points, we also know that we
+need a future to await. As a starting point, we could use the `sleep` function,
+as in Listing 17-TODO.
 
 <!--
     TODO: maybe tweak that example so that it actually shows the difference
@@ -177,14 +206,26 @@ Let’s walk through the details. Since we know from earlier that `race` is not
 fair, and will prefer the first argument to the second, we pass it the future
 first so it gets a chance to complete even if the caller passes in a very short
 value for `max_time`. Then we match on the result of awaiting the `race`. If the
-future passed in by the caller finished first, we will have
-`Either::Left(output)`, which we can return as a success with `Ok`. If the sleep
-finished first, we will have `Either::Right(())` instead, since `timeout`
-returns the unit type `()` if it succeeds. We can ignore that `()` by using `_`
-and return `Err` with the duration the user passed in instead. And that’s it!
+future passed in by the caller finished first, we will have `Left(output)`,
+which we can return as a success with `Ok`. If the sleep finished first, we will
+have `Right(())` instead, since `timeout` returns the unit type `()` if it
+succeeds. We can ignore that `()` by using `_` and return `Err` with the
+duration the user passed in instead. And that’s it!
 
 Back in `main`, we can call this new `timeout` function exactly like we called
-`trpl::timeout` before.
+`trpl::timeout` before, but without the `trpl::` namespace:
+
+<Listing number="17-TODO" caption="Using the `timeout` function we defined ourselves" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-timeout-final/src/main.rs:main}}
+```
+
+</Listing>
+
+This pattern is quite common and useful. Futures compose with other futures, so
+you can build really powerful tools using smaller async building blocks. For
+example, you can  use this same approach to
 
 [collections]: https://doc.rust-lang.org/stable/book/ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: https://doc.rust-lang.org/stable/book/ch12-03-improving-error-handling-and-modularity.html
