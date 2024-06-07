@@ -26,8 +26,8 @@ pattern.
 
 The `trpl::join_all` function accepts any type which implements the `Iterator`
 trait, which we learned about back in Chapter 13, so it seems like just the
-ticket. Let’s try putting our futures in a vector, so we can swap out our
-`join3` call and replace it with `join_all`.
+ticket. Let’s try putting our futures in a vector, and replace `join3` with
+`join_all`.
 
 <Listing  number="17-TODO" caption="Storing anonymous futures in a vector and calling `join_all`">
 
@@ -227,6 +227,82 @@ type to call `poll`?
 
 <!-- TODO: keep going here: define `Pin`. -->
 
+<!--
+
+  - Pin pins the thing behind a pointer (just using the Rust type system! No
+    compiler magic required)
+  - The reason is what async compiles to. Refer to the discussion of state
+
+ -->
+
+In [Futures and Syntax: What Are Futures][what-are-futures], we described how
+a series of await points in a future get compiled into a state machine—and noted
+how the compiler helps make sure that state machine follows all of Rust’s normal
+rules around safety, including borrowing and ownership. Consider code like this:
+
+<!-- TODO: extract to listing -->
+
+```rust
+async {
+    let mut strings = vec![];
+
+    let a = trpl::read_to_string("test-data/hello.txt").await.unwrap();
+    strings.push(a.trim());
+
+    let b = trpl::read_to_string("test-data/world.txt").await.unwrap();
+    strings.push(b.trim());
+
+    let combined = strings.join(" ");
+    println!("{combined}");
+}
+```
+
+If we think about the state machine that would get compiled to, it might be
+something kind of like this:
+
+```rust,ignore
+enum AsyncStateMachine<'a> {
+    FirstAwait(&'a mut Vec<String>),
+    SecondAwait(&'a mut Vec<String>),
+}
+```
+
+This could actually be fine, on its own—Rust would keep track of those mutable
+references, and if we got something wrong, the borrow checker would tell us. It
+gets a bit tricky, though, if we want to move around the future that corresponds
+to that block. Remember, we could always do something like this:
+
+```rust,ignore
+let file_reads_future = async {
+    // snip...
+};
+
+let some_other_future = async {
+    // snip...
+};
+
+trpl::join(file_reads_future, some_other_future).await;
+```
+
+If we pass those futures into `join`, or return them from a function, or put
+them in a data structure to keep track of for some reason, we move the state
+machine as well, and that means the `Vec<String>` for the values we read in with
+`trpl::read_to_string` moves. But the state machine Rust generated for us has
+references to it. Since references point to the actual memory address of the
+`Vec`, Rust needs some way to either update them so they are still valid after
+the `Vec` moves, or it needs some way to keep `Vec` from getting moved around so
+that the references do not need to be updated. Updating all the references to an
+object every time it moves could be quite a lot of work for the compiler to add,
+especially since there can be a whole web of references that need updating. On
+the other hand, making sure the underlying item *does not move in memory* can be
+“free” at runtime in exchange for keeping some promises at compile time. That is
+where `Pin` and `Unpin` come in.
+
+<!-- TODO: continue with `Pin` discussion! -->
+
+> Note: This allows a whole class of complex types to be safe in Rust which are
+> otherwise difficult to implement.
+
 Remember that any time you write a future, a runtime is ultimately responsible
 for executing it. That means that an async block might outlive the function
 where you write it, the same way a closure can. <!-- TODO: connect this to the
@@ -349,3 +425,5 @@ In practice, you will usually work directly with `async` and `.await`, and only
 as a secondary tool reach for the functions like `join` or `join_all`, or their
 corresponding macro equivalents. These kinds of tools are really handy for
 building frameworks, or especially when you are building a runtime itself.
+
+[what-are-futures]: /ch17-01-futures-and-syntax.html#what-are-futures
