@@ -59,12 +59,6 @@ function “slow” will just take a number of milliseconds to run, and sleep t
 thread for that long. This is intentionally not an async function, because the
 idea is to represent work that is *not* async.
 
-<!--
-    This does mean that async can be a useful tool even for CPU-bound tasks,
-    depending on what else your program is doing, because it provides a useful
-    tool for *structuring* the different parts of the program.
--->
-
 <Listing number="17-TODO" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
 ```rust
@@ -171,6 +165,14 @@ Listings 17-TODO and 17-TODO. Then we run for 1,000 iterations and see how long
 </Listing>
 
 The version with `yield_now` is *way* faster!
+
+> Note: This also means that async can be a useful tool even for CPU-bound
+> tasks, depending on what else your program is doing, because it provides a
+> useful tool for structuring the relationships between different parts of the
+> program. This is a form of *cooperative multitasking*, where each future has
+> both the power to determine when it hands over control via await points and
+> therefore also the *responsibility* to avoid blocking for too long. This is
+> how some Rust-based embedded operating systems work!
 
 In real-world code, you will not usually be alternative regular function calls
 with await points on every single line, of course. The underlying dynamic is an
