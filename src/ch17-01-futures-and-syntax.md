@@ -190,7 +190,7 @@ Phew: we finally have some working async code! Now we can answer that second
 question: what is a future anyway? That will also help us understand why we need
 that `trpl::block_on` call to make this work.
 
-### Futures
+### What Are Futures?
 
 A *future* is a data structure which represents the state of some async
 operation. More precisely, a Rust `Future` is a trait; it allows many different
