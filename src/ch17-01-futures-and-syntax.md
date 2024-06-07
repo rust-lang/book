@@ -221,12 +221,14 @@ enum Poll<T> {
 }
 ```
 
-You may notice that this `Poll` type is a lot like an `Option`. Having a
-dedicated type lets Rust treat `Poll` differently from `Option`, though, which
-is important since they have very different meanings! The `Pending` variant
-indicates that the future still has work to do, so the caller will need to check
-again later. The `Ready` variant indicates that the `Future` has finished its
-work and the `T` value is available.
+You may notice that this `Poll` type is a lot like an `Option`: it has one
+variant which has a value (`Ready(T)` and `Some(T)`), and one which does not
+(`Pending` and `None`). Having a dedicated type lets Rust treat `Poll`
+differently from `Option`, though, which is important since they have very
+different meanings! The `Pending` variant indicates that the future still has
+work to do, so the caller will need to check again later. The `Ready` variant
+indicates that the `Future` has finished its work and the `T` value is
+available.
 
 > Note: With most futures, the caller should not call `poll()` again after the
 > future has returned `Ready`. Many futures will panic if polled after becoming
@@ -265,19 +267,47 @@ loop {
 }
 ```
 
-When we use `.await`, Rust actually does compile it to something very similar to
-that loop. If Rust compiled it to *exactly* that code, though, every `.await`
-would block the computer from doing anything else—the opposite of what we were
-going for! Instead, Rust internally makes sure that the loop can hand back
-control to the the context of the code where which is awaiting this little bit
-of code.
+When we use `.await`, Rust compiles it to something fairly similar to that loop.
+If Rust compiled it to *exactly* that code, though, every `.await` would block
+the computer from doing anything else—the opposite of what we were going for!
+Instead, Rust needs makes sure that the loop can hand off control to something
+which can pause work on this future and work on other futures and check this one
+again later. That “something” is an async runtime, and this scheduling and
+coordination work is one of the main jobs for a runtime.
+
+Every *await point*—that is, every place where the code explicitly calls
+`.await`—represents one of those places where control gets handed back to the
+runtime. To make that work, Rust needs to keep track of the state involved in
+the async block, so that the runtime can kick off some other work and then come
+back when it is ready to try advancing this one again. This is an invisible
+state machine, as if you wrote something like this:
+
+```rust
+enum MyAsyncStateMachine {
+    FirstAwaitPoint(/* the state used after the first await point */),
+    SecondAwaitPoint(/* the state used after the second await point */),
+    // etc. for each `.await` point...
+}
+```
+
+Writing that out by hand would be tedious and error-prone—especially when making
+changes to code later. Async Rust creates that state machine for us, and it
+really is an `enum` like this, just an anonymous one you don’t have to name. As
+a result, the normal rules around data structures all apply, including for
+borrowing and ownership. Happily, the compiler also handles checking that for
+us, and has good error messages. We will work through a few of those later in
+the chapter! This is enough information to let us keep following the chain back
+up to the root of our original problem with running async functions.
+
+<!-- Bullets summarizing how we got here and what happens at each phase. -->
 
 When we follow that chain far enough, eventually we end up back in some
 non-async function. At that point, something needs to “translate” between the
-async and sync worlds. That “something” is the runtime! Whatever runtime you use
+async and sync worlds. That “something” is also the runtime! Whatever runtime you use
 is what handles the top-level `poll()` call, scheduling and handing off between
-the different async operations which may be in flight, and often also providing
-async versions of functionality like file I/O.
+the different async operations which may be in flight as they hand back control
+at await points, and often also providing async versions of functionality like
+file I/O.
 
 Now we can understand why the compiler was stopping us in Listing 17-2 (before
 we added the `trpl::block_on` function). The `main` function is not `async`—and
