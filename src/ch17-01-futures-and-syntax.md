@@ -293,13 +293,16 @@ executes code.
 >
 > The loop as written also wouldn’t compile, because it doesn’t actually satisfy
 > the contract for a `Future`. In particular, `hello_async_fut` is not *pinned*
-> with the `Pin` type and we did not pass along a `Context` argument.
+> with the `Pin` type and we did not pass along a `Context` argument. We will
+> see a little more about `Pin` later in the chapter, but we will not dig into
+> `Context` because you will not normally need them for working with futures in
+> day-to-day Rust code.
 >
-> More details here are beyond the scope of this book, but are well worth
-> digging into if you want to understand how things work “under the hood.” In
-> particular, see [Chapter 2: Under the Hood: Executing Futures and
-> Tasks][under-the-hood] and [Chapter 4: Pinning][pinning] in the official
-> [_Asynchronous Programming in Rust_][async-book] book.
+> If you want to understand how things work “under the hood,” though, the
+> official [_Asynchronous Programming in Rust_][async-book] book covers them:
+>
+> - [Chapter 2: Under the Hood: Executing Futures and Tasks][under-the-hood]
+> - [Chapter 4: Pinning][pinning].
 
 Now, that’s a lot of work to just print a string, but we have laid some key
 foundations for working with async in Rust! Now that you know the basics of how
