@@ -339,16 +339,23 @@ exploration helps us understand why: it is ultimately about *ownership*. We need
 to move `tx` into the async block so that once that block ends, `tx` will be
 dropped.
 
-In Chapter 13, we learned how to use the `move` keyword with closures, and in
-Chapter 16, we saw that we often need to use closures marked with `move` when
-working with threads. As we have discovered, the same dynamics apply to async
-blocks—so the `move` keyword also works with async blocks, allowing them to take
-ownership of the data they reference.
-
 Since we have seen how `async` blocks borrow the items they reference from their
 outer scope, we can go ahead and remove the extra block we just added for now,
-and switch back from `join3` to `join`. Then we can change the first async block
-from an `async` block to an `async move` block, as in Listing 17-TODO:
+and switch back from `join3` to `join`.
+
+The last step here is to figure out how to get ownership of the data instead of
+just borrowing it. In Chapter 13, we learned how to use the `move` keyword with
+closures, and in Chapter 16, we saw that we often need to use closures marked
+with `move` when working with threads. As we have discovered, the same dynamics
+apply to async blocks! Hopefully this will make sense if you remember that any
+time you write a future, a runtime is ultimately responsible for executing it.
+That means that an async block might outlive the function where you write it,
+the same way a closure can. When a future takes ownership of the data it
+references this way, it needs to move that data into the future—so the `move`
+keyword works with async blocks just like it does with closures.
+
+Thus, we can change the first async block from an `async` block to an `async
+move` block, as in Listing 17-TODO:
 
 <Listing number="17-TODO" caption="Fixing the async mpsc channel by using `move` to take ownership of the `Sender` (`tx`)" file-name="src/main.rs">
 

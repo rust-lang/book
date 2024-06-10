@@ -305,53 +305,54 @@ where `Pin` and `Unpin` come in.
 > though. Here, we will stick to the parts you *do* need to understand to work
 > with them in everyday Rust!
 
-`Pin` is a smart pointer, which only works with *other pointer types*, including
-references, `Box`, `Rc`, and so on. (Technically, it works with any type which
-implements the `Deref` trait, which we covered in Chapter 15; you can think of
-this restriction as equivalent to only working with pointers, though, since
-implementing `Deref` means your type behaves like a pointer type.) Wrapping a
-pointer type in `Pin` enforces the exact guarantee we need: the value *behind*
-the pointer we wrap in `Pin` cannot move. It is “pinned” in its current spot by
-the `Pin` wrapper.
+`Pin` is a smart pointer, much like `Box`, `Rc`, and the others we saw in
+Chapter 15. Unlike those, however, `Pin` only works with *other pointer types*
+like reference (`&` and `&mut`) and smart pointers (`Box`, `Rc`, and so on). To
+be precise, `Pin` works with types which implement the `Deref` or `DerefMut`
+traits, which we covered in Chapter 15. You can think of this restriction as
+equivalent to only working with pointers, though, since implementing `Deref` or
+`DerefMut` means your type behaves like a pointer type. including references,
+other smart pointers, and so on.
 
-<!-- TODO: continue with `Pin` discussion! -->
+Wrapping a pointer type in `Pin` enforces the exact guarantee we need: the value
+*behind* the pointer we wrap in `Pin` cannot move. It is “pinned” in its current
+spot by the `Pin` wrapper. Thus, if you have `Pin<Box<SomeType>>`, you actually
+pin the `SomeType` value, *not* the `Box` pointer. In fact, the pinned box
+pointer can move around freely. Remember: we care about making sure the data
+ultimately being referenced stays in its place. If a pointer moves around, but
+the data it points to is in the same place, there is no problem.
 
-Remember that any time you write a future, a runtime is ultimately responsible
-for executing it. That means that an async block might outlive the function
-where you write it, the same way a closure can. <!-- TODO: connect this to the
-need for pinning, or switch to connecting it to *moving*. -->
+However, most types are perfectly safe to move around, even if they happen to be
+behind a `Pin` pointer. Remember: the problem `Pin` addresses is when data
+structures have internal references which need to maintained when the structure
+moves around, as happens with internal references in futures. Primitive values
+like numbers and booleans do not have any internal structure like that, so they
+are obviously safe. Neither do most types you normally work with in Rust. A
+`Vec`, for example, does not have any internal references it needs to keep up to
+date this way, so you can move it around without worrying. But what happens if
+you have a `Pin<u32>` or a `Pin<Vec<String>>`?
 
-`Unpin` is a marker trait, like `Send` and `Sync`, which we saw in Chapter 16.
-Recall that marker traits have no functionality of their own. They exist only to
-tell the compiler that it is safe to use the type which implements a given trait
-in certain context. Just like `Send` and `Sync`, the compiler implements `Unpin`
-automatically for most types.
+We need a way to tell the compiler that it is actually just fine to move items
+around in cases like these where there is nothing to worry about. For that, we
+have `Unpin`. `Unpin` is a marker trait, like `Send` and `Sync`, which we saw in
+Chapter 16. Recall that marker traits have no functionality of their own. They
+exist only to tell the compiler that it is safe to use the type which implements
+a given trait in a particular context. `Unpin` informs the compiler that a given
+type does *not* need to uphold any particular guarantees about whether the value
+in question can be moved.
 
-`Unpin`’s job is to tell the compiler that a given type does *not* need to
-uphold any particular guarantees about whether the value in question can be
-moved. For example, if a future
-
-<!-- TODO: discussion of `Pin` -->
-
-<!--
-    The reason it gets weird to talk about is:
-
-    - Nearly everything gets `Unpin` automatically because it is an auto trait.
-    - Things which do not have to `impl !Unpin for TheType`.
-    - But `!Unpin` actually means “must be pinned to be able to be used”.
-    - So the actual situation is that the `Future` produced by an `async` block
-      implements `!Unpin`, “not unpin”,
-
-    My head hurts.
- -->
+Just like `Send` and `Sync`, the compiler implements `Unpin` automatically for
+most types, and implementing it manually is unsafe. That is because you have to
+make sure that the type for which you are implementing `Unsafe` *never* moves
+data out from a reference that *needs* to be stable.
 
 > Note: This combination of `Pin` and `Unpin` allows a whole class of complex
 > types to be safe in Rust which are otherwise difficult to implement because
 > they are *self-referential*. That is, they are data structures where one part
 > of the structure refers to another internally. As we have seen, futures can
 > match that description, so self-referential types which require `Pin` show up
-> *most* commonly in async Rust today, but you might see it come up in other
-> contexts, too.
+> *most* commonly in async Rust today, but you might—very rarely!—see it in
+> other contexts, too.
 
 Now we know enough to understand the error message from above. The problem is
 that the futures produced by an async block are *not* pinned by default.
@@ -431,20 +432,20 @@ type for `a` implements `Future<Output = u32>` and the anonymous future type for
 
 We can use `trpl::join!` to await them together, since it accepts two different
 future types, but we cannot use `trpl::join_all` with these futures, because we
-will never be able to make them have the same type. (This is the same as working
-with any other type in Rust, though: futures are not special, even though we
-have some nice syntax for working with them, and that is a good thing!) We have
-a basic tradeoff here: we can either deal with a dynamic number of futures with
-`join_all`, as long as they all have the same type, or we can deal with a
-static number of futures with `join!`, and so on,
+will never be able to make them have the same type. We have a basic tradeoff
+here: we can either deal with a dynamic number of futures with `join_all`, as
+long as they all have the same type, or we can deal with a set number of futures
+with the `join` functions or the `join!` macro, even if they have different
+types. This is the same as working with any other type in Rust, though: futures
+are not special, even though we have some nice syntax for working with them, and
+that is a good thing!
 
-<!--
-    TODO: validate that this is, you know, true. It matches my own experience,
-    but it is a fairly strong claim.
--->
 In practice, you will usually work directly with `async` and `.await`, and only
 as a secondary tool reach for the functions like `join` or `join_all`, or their
-corresponding macro equivalents. These kinds of tools are really handy for
-building frameworks, or especially when you are building a runtime itself.
+corresponding macro equivalents. Likewise, you will only need to reach for `pin`
+now and again to use them *with* those APIs. These kinds of tools are mostly
+handy for building frameworks, or especially when you are building a runtime
+itself, rather than for day to day Rust code. When you see them, though, now you
+will know what to do!
 
 [what-are-futures]: /ch17-01-futures-and-syntax.html#what-are-futures
