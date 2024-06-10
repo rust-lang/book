@@ -242,7 +242,7 @@ finishes first, with that future’s output, and `Right` with the second future
 argument’s output if *that* one finishes first.
 
 ```rust,ignore
-match race(future_a, future_b).await {
+match trpl::race(future_a, future_b).await {
     Either::Left(output_from_future_a) => /* ... */,
     Either::Right(output_from_future_b) => /* ... */,
 }
@@ -282,7 +282,9 @@ Back in `main`, we can call this new `timeout` function exactly like we called
 
 This pattern is quite common and useful. Futures compose with other futures, so
 you can build really powerful tools using smaller async building blocks. For
-example, you can  use this same approach to
+example, you can use this same approach to combine timeouts with retries, and
+in turn use those with things like network calls—the exact example we started
+out with at the beginning of the chapter!
 
 [collections]: https://doc.rust-lang.org/stable/book/ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: https://doc.rust-lang.org/stable/book/ch12-03-improving-error-handling-and-modularity.html
