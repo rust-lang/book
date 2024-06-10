@@ -298,15 +298,28 @@ the other hand, making sure the underlying item *does not move in memory* can be
 “free” at runtime in exchange for keeping some promises at compile time. That is
 where `Pin` and `Unpin` come in.
 
-<!-- TODO: continue with `Pin` discussion! -->
+> Note: The specific mechanics for how `Pin` and `Unpin` work under the hood are
+> covered extensively in the API documentation for `std::pin`, so if you would
+> like to understand them more fundamentally, that is a great place to start.
+> Those details are not at all necessary for working with async Rust day to day,
+> though. Here, we will stick to the parts you *do* need to understand to work
+> with them in everyday Rust!
 
-> Note: This allows a whole class of complex types to be safe in Rust which are
-> otherwise difficult to implement.
+`Pin` is a smart pointer, which only works with *other pointer types*, including
+references, `Box`, `Rc`, and so on. (Technically, it works with any type which
+implements the `Deref` trait, which we covered in Chapter 15; you can think of
+this restriction as equivalent to only working with pointers, though, since
+implementing `Deref` means your type behaves like a pointer type.) Wrapping a
+pointer type in `Pin` enforces the exact guarantee we need: the value *behind*
+the pointer we wrap in `Pin` cannot move. It is “pinned” in its current spot by
+the `Pin` wrapper.
+
+<!-- TODO: continue with `Pin` discussion! -->
 
 Remember that any time you write a future, a runtime is ultimately responsible
 for executing it. That means that an async block might outlive the function
 where you write it, the same way a closure can. <!-- TODO: connect this to the
-need for pinning. -->
+need for pinning, or switch to connecting it to *moving*. -->
 
 `Unpin` is a marker trait, like `Send` and `Sync`, which we saw in Chapter 16.
 Recall that marker traits have no functionality of their own. They exist only to
@@ -331,6 +344,14 @@ moved. For example, if a future
 
     My head hurts.
  -->
+
+> Note: This combination of `Pin` and `Unpin` allows a whole class of complex
+> types to be safe in Rust which are otherwise difficult to implement because
+> they are *self-referential*. That is, they are data structures where one part
+> of the structure refers to another internally. As we have seen, futures can
+> match that description, so self-referential types which require `Pin` show up
+> *most* commonly in async Rust today, but you might see it come up in other
+> contexts, too.
 
 Now we know enough to understand the error message from above. The problem is
 that the futures produced by an async block are *not* pinned by default.
