@@ -1,4 +1,4 @@
-## TODO: Title This Section!
+## More Ways of Combining Futures
 
 Thus far, we have only used the `join` family of functions and macros. When we
 “join” on some collection of futures, we require *all* of them to finish before
