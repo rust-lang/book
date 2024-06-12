@@ -58,13 +58,13 @@ impossible to test private functions. Regardless of which testing ideology you
 adhere to, Rust’s privacy rules do allow you to test private functions.
 Consider the code in Listing 11-12 with the private function `internal_adder`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="11-12" file-name="src/lib.rs" caption="Testing a private function">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-12/src/lib.rs}}
 ```
 
-<span class="caption">Listing 11-12: Testing a private function</span>
+</Listing>
 
 Note that the `internal_adder` function is not marked as `pub`. Tests are just
 Rust code, and the `tests` module is just another module. As we discussed in
@@ -108,14 +108,13 @@ adder
 
 Enter the code in Listing 11-13 into the *tests/integration_test.rs* file:
 
-<span class="filename">Filename: tests/integration_test.rs</span>
+<Listing number="11-13" file-name="tests/integration_test.rs" caption="An integration test of a function in the `adder` crate">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-13/tests/integration_test.rs}}
 ```
 
-<span class="caption">Listing 11-13: An integration test of a function in the
-`adder` crate</span>
+</Listing>
 
 Each file in the `tests` directory is a separate crate, so we need to bring our
 library into each test crate’s scope. For that reason we add `use
