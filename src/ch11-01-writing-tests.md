@@ -225,13 +225,11 @@ supposed to return `true`, so our test should pass. Let’s find out!
 It does pass! Let’s add another test, this time asserting that a smaller
 rectangle cannot hold a larger rectangle:
 
-<Listing file-name="src/lib.rs">
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-02-adding-another-rectangle-test/src/lib.rs:here}}
 ```
-
-</Listing>
 
 Because the correct result of the `can_hold` function in this case is `false`,
 we need to negate that result before we pass it to the `assert!` macro. As a
