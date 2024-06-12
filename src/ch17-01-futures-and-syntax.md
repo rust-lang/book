@@ -273,7 +273,9 @@ us, and has good error messages. We will work through a few of those later in
 the chapter! This is enough information to let us keep following the chain back
 up to the root of our original problem with running async functions.
 
-<!-- Bullets summarizing how we got here and what happens at each phase. -->
+<!--
+  TODO: bullet points covering how we got here and what happens at each phase.
+-->
 
 When we follow that chain far enough, eventually we end up back in some
 non-async function. At that point, something needs to “translate” between the
