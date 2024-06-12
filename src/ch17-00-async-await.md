@@ -68,8 +68,8 @@ function calls which interact with files, network sockets, or other resources on
 the computer, because those are the places where an individual program would
 benefit from the operation being *non*-blocking.
 
-When doing file downloads, we could work around the fact that the call to write to
-a network socket is blocking using threads. If we move the data over to a
+When doing file downloads, we could use threads to work around the fact that the
+call to write to a network socket is blocking. If we move the data over to a
 dedicated thread which handles the write operation, it will *not* block the rest
 of the program. But in many ways, it would be nicer if the call were not
 blocking in the first place.
@@ -87,13 +87,14 @@ network_socket.read_non_blocking(|result| {
 Or we could register callbacks to run when events happen:
 
 ```rust,ignore
-network_socket.add_listener(Event::ReadFinished, |data| {
+network_socket.add_listener(Event::ReadFinished, |event| {
     // ...
 });
 ```
 
 Or we could have our functions return a type with `and_then` method, which in
-turn accepts a callback which can do more work of the same sort:
+turn accepts a callback which can do more work of the same sort (Historically,
+this was the way that Rust did async):
 
 ```rust,ignore
 network_socket.read_non_blocking().and_then(|result| {
@@ -101,21 +102,23 @@ network_socket.read_non_blocking().and_then(|result| {
 });
 ```
 
-Historically, this last choice was the way that Rust did async! Each of these
-can make the control flow for the program more complicated, though. You can end
-up with many nested callbacks, or long chains of callbacks, and understanding
-the flow of data through the program can become more difficult as a result.
+Each of these can make the control flow for the program more complicated,
+though. You can end up with event handler callbacks scattered across the code
+base, or groups of deeply nested callbacks, or long chains of `and_then` calls.
+Understanding the flow of data through the program can become more difficult as
+a result, and dealing with callbacks can also complicate ownership.
 
+There are also no particularly good ways to get data out of those callbacks.
 With other common types in Rust, we often use pattern-matching in scenarios like
 this. When we are using callbacks we do not yet have the data at the time we
 call `read_non_blocking`—and we will not have it until the callback gets called.
 That means that there is no way to match on the data it will return: it is not
 here yet!
 
-There are also no particularly good ways to get data out of those callbacks. We
-might try something like this, imagining a `read_non_blocking` which has exactly
-the kind of `and_then` method described above. If we were to try to use that,
-with code something like this, it would not compile:
+As an alternative, we might try something like this, imagining a
+`read_non_blocking` which has exactly the kind of `and_then` method described
+above. If we were to try to do that, though, with code kind of like this, it
+would not even compile:
 
 ```rust,ignore,does_not_compile
 let mut data = None;
@@ -134,8 +137,8 @@ exit, but if the read *happened* to go fast enough, it is possible it could
 sometimes print some string data instead. That is *definitely* not what we
 want!
 
-We also cannot cancel `read_non_blocking`: once it has started, it will run till
-it finishes unless the whole program stops.
+We also could not cancel `read_non_blocking`: once it has started, it will run
+till it finishes unless the whole program stops.
 
 What we really want to be able to write is something much more direct, like we
 would write in blocking code, but with the benefits of getting the data when it
