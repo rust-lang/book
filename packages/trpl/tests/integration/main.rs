@@ -9,10 +9,7 @@
 //!
 //! [post]: https://matklad.github.io/2021/02/27/delete-cargo-integration-tests.html
 
-use std::{
-    pin::{pin, Pin},
-    time::Duration,
-};
+use std::{pin::Pin, time::Duration};
 
 use futures::Future;
 use trpl::{Either, Receiver, Sender};
