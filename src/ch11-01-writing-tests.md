@@ -135,7 +135,7 @@ marked as failed. In Chapter 9, we talked about how the simplest way to panic
 is to call the `panic!` macro. Enter the new test as a function named
 `another`, so your *src/lib.rs* file looks like Listing 11-3.
 
-<Listing number="11-3" file-name="src/libs.rs" caption="Adding a second test that will fail because we call the `panic!` macro">
+<Listing number="11-3" file-name="src/lib.rs" caption="Adding a second test that will fail because we call the `panic!` macro">
 
 ```rust,panics,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-03/src/lib.rs:here}}
