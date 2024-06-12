@@ -317,7 +317,7 @@ assertion functions are called `expected` and `actual`, and the order in which
 we specify the arguments matters. However, in Rust, they’re called `left` and
 `right`, and the order in which we specify the value we expect and the value
 the code produces doesn’t matter. We could write the assertion in this test as
-`assert_eq!(add_two(2), 4)`, which would result in the same failure message
+`assert_eq!(4, add_two(2))`, which would result in the same failure message
 that displays `` assertion failed: `(left == right)` ``.
 
 The `assert_ne!` macro will pass if the two values we give it are not equal and
