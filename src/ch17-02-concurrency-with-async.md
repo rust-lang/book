@@ -21,7 +21,7 @@ to implement the same counting example as with threads.
 To start, we will set up our `main` function with `trpl::block_on`:
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-01/src/main.rs:block_on}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-S02-17-01/src/main.rs:block_on}}
 ```
 
 > Note: From this point forward in the chapter, every example will include this
@@ -35,7 +35,7 @@ top-level `for` loop. Notice that we also need to add a `.await` after the
 `sleep` calls.
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-01/src/main.rs:task}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-S02-17-01/src/main.rs:task}}
 ```
 
 This does something very similar to what the thread-based implementation did, as
@@ -64,7 +64,7 @@ thread was done running. Here, we can use `await` to do the same thing:
 <Listing number="17-TODO" caption="Using `.await` with a join handle to run a task to completion" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-02/src/main.rs:handle}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-S02-17-02/src/main.rs:handle}}
 ```
 
 </Listing>
@@ -103,7 +103,7 @@ ask the runtime to run them both to completion using `trpl::join`:
 <Listing number="17-TODO" caption="Using `trpl::join` to await two anonymous futures" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-03/src/main.rs:join}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-S02-17-03/src/main.rs:join}}
 ```
 
 </Listing>

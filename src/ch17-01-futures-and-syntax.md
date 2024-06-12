@@ -11,13 +11,7 @@ Let’s write our first async function, and call it:
 <Listing number="17-1" file-name="src/main.rs" caption="Defining a very simple async function">
 
 ```rust
-fn main() {
-    hello_async();
-}
-
-async fn hello_async() {
-    println!("Hello, async!");
-}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-01/src/main.rs:all}}
 ```
 
 </Listing>
@@ -25,19 +19,7 @@ async fn hello_async() {
 If we compile and run this… nothing happens, and we get a compiler warning:
 
 ```console
-$ cargo run
-warning: unused implementer of `Future` that must be used
- --> src/main.rs:2:5
-  |
-2 |     hello_async();
-  |     ^^^^^^^^^^^^^
-  |
-  = note: futures do nothing unless you `.await` or poll them
-  = note: `#[warn(unused_must_use)]` on by default
-
-warning: `hello-async` (bin "hello-async") generated 1 warning
-    Finished dev [unoptimized + debuginfo] target(s) in 1.50s
-     Running `target/debug/hello-async`
+{{#include ../listings/ch17-async-await/listing-17-01/output.txt}}
 ```
 
 The warning tells us that just calling `hello_async()` was not enough: we also
@@ -53,9 +35,7 @@ In Rust, `async fn` is equivalent to writing a function which returns a *future*
 of the return type. That is, when the compiler sees a function like this:
 
 ```rust
-async fn hello_async() {
-    println!("Hello, async!");
-}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-01/src/main.rs:async-fn}}
 ```
 
 It is basically equivalent to a function defined like this instead:
@@ -106,24 +86,16 @@ run.
 
 <!-- does not compile -->
 
-```rust,ignore, does_not_compile
-fn main() {
-    hello_async().await;
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-02/src/main.rs:main}}
 ```
 
 </Listing>
 
 Oh no! We have gone from a compiler warning to an actual error:
 
-```text
-error[E0728]: `await` is only allowed inside `async` functions and blocks
- --> src/main.rs:2:19
-  |
-1 | fn main() {
-  |    ---- this is not `async`
-2 |     hello_async().await;
-  |                   ^^^^^ only allowed inside `async` functions and blocks
+```console
+{{#include ../listings/ch17-async-await/listing-17-02/output.txt}}
 ```
 
 This time, the compiler is informing us we cannot use `.await` in `main`,
@@ -177,27 +149,15 @@ completes.
 <Listing number="17-3" caption="Using the `block_on` helper function to wait on a future in non-async code" file-name="src/main.rs">
 
 ```rust
-fn main() {
-    trpl::block_on(hello_async());
-}
-
-async fn hello_async() {
-    println!("Hello, async!");
-}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-03/src/main.rs:main}}
 ```
 
 </Listing>
 
 When we run this, we get the behavior we might have expected initially:
 
-<!-- TODO: paths in the output here! -->
-
 ```console
-$ cargo run
-   Compiling hello-async v0.1.0 (/Users/chris/dev/chriskrycho/async-trpl-fun/hello-async)
-    Finished dev [unoptimized + debuginfo] target(s) in 4.89s
-     Running `target/debug/hello-async`
-Hello, async!
+{{#include ../listings/ch17-async-await/listing-17-03/output.txt}}
 ```
 
 Phew: we finally have some working async code! Now we can answer that second
