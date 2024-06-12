@@ -329,8 +329,8 @@ Using `FnOnce` in the trait bound expresses the constraint that
 `unwrap_or_else` is only going to call `f` at most one time. In the body of
 `unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be
 called. If the `Option` is `None`, `f` will be called once. Because all
-closures implement `FnOnce`, `unwrap_or_else` accepts the most different kinds
-of closures and is as flexible as it can be.
+closures implement `FnOnce`, `unwrap_or_else` accepts all three kinds of
+closures and is as flexible as it can be.
 
 > Note: Functions can implement all three of the `Fn` traits too. If what we
 > want to do doesn’t require capturing a value from the environment, we can use
@@ -382,7 +382,7 @@ compiler won’t let us use this closure with `sort_by_key`:
 `sort_by_key`</span>
 
 This is a contrived, convoluted way (that doesn’t work) to try and count the
-number of times `sort_by_key` gets called when sorting `list`. This code
+number of times `sort_by_key` calls the closure when sorting `list`. This code
 attempts to do this counting by pushing `value`—a `String` from the closure’s
 environment—into the `sort_operations` vector. The closure captures `value`
 then moves `value` out of the closure by transferring ownership of `value` to
@@ -399,7 +399,7 @@ implement `FnMut`:
 
 The error points to the line in the closure body that moves `value` out of the
 environment. To fix this, we need to change the closure body so that it doesn’t
-move values out of the environment. To count the number of times `sort_by_key`
+move values out of the environment. To count the number of times the closure
 is called, keeping a counter in the environment and incrementing its value in
 the closure body is a more straightforward way to calculate that. The closure
 in Listing 13-9 works with `sort_by_key` because it is only capturing a mutable

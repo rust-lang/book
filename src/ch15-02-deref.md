@@ -14,7 +14,7 @@ smart pointers to work in ways similar to references. Then we’ll look at
 Rust’s *deref coercion* feature and how it lets us work with either references
 or smart pointers.
 
-> Note: there’s one big difference between the `MyBox<T>` type we’re about to
+> Note: There’s one big difference between the `MyBox<T>` type we’re about to
 > build and the real `Box<T>`: our version will not store its data on the heap.
 > We are focusing this example on `Deref`, so where the data is actually stored
 > is less important than the pointer-like behavior.

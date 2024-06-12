@@ -1,5 +1,3 @@
-extern crate regex;
-
 use regex::{Captures, Regex};
 use std::collections::HashSet;
 use std::io;
@@ -8,7 +6,7 @@ use std::io::Read;
 fn main() {
     let mut buffer = String::new();
     if let Err(e) = io::stdin().read_to_string(&mut buffer) {
-        panic!("{}", e);
+        panic!("{e}");
     }
 
     let mut refs = HashSet::new();
@@ -41,5 +39,5 @@ fn main() {
         caps.get(0).unwrap().as_str().to_string()
     });
 
-    print!("{}", out);
+    print!("{out}");
 }

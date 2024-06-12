@@ -267,10 +267,15 @@ error[E0432]: unresolved import `rand`
 To fix this, edit the *Cargo.toml* file for the `adder` package and indicate
 that `rand` is a dependency for it as well. Building the `adder` package will
 add `rand` to the list of dependencies for `adder` in *Cargo.lock*, but no
-additional copies of `rand` will be downloaded. Cargo has ensured that every
+additional copies of `rand` will be downloaded. Cargo will ensure that every
 crate in every package in the workspace using the `rand` package will be using
-the same version, saving us space and ensuring that the crates in the workspace
-will be compatible with each other.
+the same version as long as they specify compatible versions of `rand`, saving
+us space and ensuring that the crates in the workspace will be compatible with
+each other.
+
+If crates in the workspace specify incompatible versions of the same dependency,
+Cargo will resolve each of them, but will still try to resolve as few versions
+as possible.
 
 #### Adding a Test to a Workspace
 

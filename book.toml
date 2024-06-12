@@ -1,8 +1,17 @@
+# Sync any changes to this *other than where explicitly specified* with the copy
+# in `nostarch/book.toml`!
+
 [book]
 title = "The Rust Programming Language"
 authors = ["Steve Klabnik", "Carol Nichols", "Contributions from the Rust Community"]
 
 [output.html]
-additional-css = ["ferris.css", "theme/2018-edition.css"]
+additional-css = ["ferris.css", "theme/2018-edition.css", "theme/semantic-notes.css", "theme/listing.css"]
 additional-js = ["ferris.js"]
 git-repository-url = "https://github.com/rust-lang/book"
+
+# Do not sync this preprocessor; it is for the HTML renderer only.
+[preprocessor.trpl-note]
+
+[preprocessor.trpl-listing]
+output-mode = "default"

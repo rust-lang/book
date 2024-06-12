@@ -35,12 +35,13 @@ package also contains a library crate that the binary crate depends on. Other
 projects can depend on the Cargo library crate to use the same logic the Cargo
 command-line tool uses.
 
-A package can contain as many binary crates as you like, but at most only one
+A crate can come in one of two forms: a binary crate or a library crate. A
+package can contain as many binary crates as you like, but at most only one
 library crate. A package must contain at least one crate, whether that’s a
 library or binary crate.
 
-Let’s walk through what happens when we create a package. First, we enter the
-command `cargo new`:
+Let’s walk through what happens when we create a package. First we enter the
+command `cargo new my-project`:
 
 ```console
 $ cargo new my-project
@@ -52,15 +53,15 @@ $ ls my-project/src
 main.rs
 ```
 
-After we run `cargo new`, we use `ls` to see what Cargo creates. In the project
-directory, there’s a *Cargo.toml* file, giving us a package. There’s also a
-*src* directory that contains *main.rs*. Open *Cargo.toml* in your text editor,
-and note there’s no mention of *src/main.rs*. Cargo follows a convention that
-*src/main.rs* is the crate root of a binary crate with the same name as the
-package. Likewise, Cargo knows that if the package directory contains
-*src/lib.rs*, the package contains a library crate with the same name as the
-package, and *src/lib.rs* is its crate root. Cargo passes the crate root files
-to `rustc` to build the library or binary.
+After we run `cargo new my-project`, we use `ls` to see what Cargo creates. In
+the project directory, there’s a *Cargo.toml* file, giving us a package.
+There’s also a *src* directory that contains *main.rs*. Open *Cargo.toml* in
+your text editor, and note there’s no mention of *src/main.rs*. Cargo follows a
+convention that *src/main.rs* is the crate root of a binary crate with the same
+name as the package. Likewise, Cargo knows that if the package directory
+contains *src/lib.rs*, the package contains a library crate with the same name
+as the package, and *src/lib.rs* is its crate root. Cargo passes the crate root
+files to `rustc` to build the library or binary.
 
 Here, we have a package that only contains *src/main.rs*, meaning it only
 contains a binary crate named `my-project`. If a package contains *src/main.rs*

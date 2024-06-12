@@ -4,12 +4,20 @@ set -eu
 
 cargo build --release
 
+cd packages/mdbook-trpl-listing
+cargo install --locked --path .
+
+cd ../mdbook-trpl-note
+cargo install --locked --path .
+
+cd ../..
+
 mkdir -p tmp
 rm -rf tmp/*.md
 rm -rf tmp/markdown
 
 # Render the book as Markdown to include all the code listings
-MDBOOK_OUTPUT__MARKDOWN=1 mdbook build -d tmp
+MDBOOK_OUTPUT__MARKDOWN=1 mdbook build nostarch
 
 # Get all the Markdown files
 find tmp/markdown -name "${1:-\"\"}*.md" -print0 | \

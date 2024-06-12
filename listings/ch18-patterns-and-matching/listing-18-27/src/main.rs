@@ -5,8 +5,8 @@ fn main() {
     match x {
         Some(50) => println!("Got 50"),
         Some(n) if n == y => println!("Matched, n = {n}"),
-        _ => println!("Default case, x = {:?}", x),
+        _ => println!("Default case, x = {x:?}"),
     }
 
-    println!("at the end: x = {:?}, y = {y}", x);
+    println!("at the end: x = {x:?}, y = {y}");
 }

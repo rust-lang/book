@@ -6,11 +6,15 @@ error[E0746]: return type cannot have an unboxed trait object
 1 | fn returns_closure() -> dyn Fn(i32) -> i32 {
   |                         ^^^^^^^^^^^^^^^^^^ doesn't have a size known at compile-time
   |
-  = note: for information on `impl Trait`, see <https://doc.rust-lang.org/book/ch10-02-traits.html#returning-types-that-implement-traits>
-help: use `impl Fn(i32) -> i32` as the return type, as all return paths are of type `[closure@src/lib.rs:2:5: 2:8]`, which implements `Fn(i32) -> i32`
+help: return an `impl Trait` instead of a `dyn Trait`, if all returned values are the same type
   |
 1 | fn returns_closure() -> impl Fn(i32) -> i32 {
-  |                         ~~~~~~~~~~~~~~~~~~~
+  |                         ~~~~
+help: box the return type, and wrap all of the returned values in `Box::new`
+  |
+1 ~ fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
+2 ~     Box::new(|x| x + 1)
+  |
 
 For more information about this error, try `rustc --explain E0746`.
-error: could not compile `functions-example` due to previous error
+error: could not compile `functions-example` (lib) due to 1 previous error

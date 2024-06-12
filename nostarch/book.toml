@@ -1,0 +1,15 @@
+[book]
+title = "The Rust Programming Language"
+authors = ["Steve Klabnik", "Carol Nichols", "Contributions from the Rust Community"]
+src = "../src" # needs to be explicit (it is implicit in `/book.toml`).
+
+[output.html]
+additional-css = ["../ferris.css", "../theme/2018-edition.css", "../theme/semantic-notes.css"]
+additional-js = ["../ferris.js"]
+git-repository-url = "https://github.com/rust-lang/book"
+
+[build]
+build-dir = "../tmp"
+
+[preprocessor.trpl-listing]
+output-mode = "simple"

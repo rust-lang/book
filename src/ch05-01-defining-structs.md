@@ -120,7 +120,7 @@ otherwise use the same values from `user1` that we created in Listing 5-2.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-6: Creating a new `User` instance using one of
+<span class="caption">Listing 5-6: Creating a new `User` instance using all but one of
 the values from `user1`</span>
 
 Using struct update syntax, we can achieve the same effect with less code, as
@@ -278,7 +278,7 @@ implement them on any type, including unit-like structs.
 >   |
 >
 > For more information about this error, try `rustc --explain E0106`.
-> error: could not compile `structs` due to 2 previous errors
+> error: could not compile `structs` (bin "structs") due to 2 previous errors
 > ```
 >
 > In Chapter 10, we’ll discuss how to fix these errors so you can store

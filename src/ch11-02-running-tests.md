@@ -58,14 +58,13 @@ printed to standard output with the rest of the failure message.
 As an example, Listing 11-10 has a silly function that prints the value of its
 parameter and returns 10, as well as a test that passes and a test that fails.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="11-10" file-name="src/lib.rs" caption="Tests for a function that calls `println!`">
 
 ```rust,panics,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-10/src/lib.rs}}
 ```
 
-<span class="caption">Listing 11-10: Tests for a function that calls
-`println!`</span>
+</Listing>
 
 When we run these tests with `cargo test`, we’ll see the following output:
 
@@ -102,14 +101,13 @@ or names of the test(s) you want to run as an argument.
 To demonstrate how to run a subset of tests, we’ll first create three tests for
 our `add_two` function, as shown in Listing 11-11, and choose which ones to run.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="11-11" file-name="src/lib.rs" caption="Three tests with three different names">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-11/src/lib.rs}}
 ```
 
-<span class="caption">Listing 11-11: Three tests with three different
-names</span>
+</Listing>
 
 If we run the tests without passing any arguments, as we saw earlier, all the
 tests will run in parallel:
