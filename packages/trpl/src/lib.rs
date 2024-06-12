@@ -72,7 +72,16 @@ where
     time::timeout(duration, future).await.map_err(|_| duration)
 }
 
-///Run two futures
+/// Run two futures, taking whichever finishes first and canceling the other.
+///
+/// Notice that this is built on [`futures::future::select`], which has the
+/// same overall semantics but does *not* drop the slower future. The idea there
+/// is that you can work with the first result and then later *also* continue
+/// waiting for the second future.
+///
+/// We use the `race` semantics, where the slower future is simply dropped, for
+/// the sake of simplicity in the examples: no need to deal with the tuple and
+/// intentionally ignore the second future this way!
 pub async fn race<A, B, F1, F2>(f1: F1, f2: F2) -> Either<A, B>
 where
     F1: Future<Output = A>,
