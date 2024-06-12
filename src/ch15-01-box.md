@@ -35,13 +35,14 @@ syntax and how to interact with values stored within a `Box<T>`.
 
 Listing 15-1 shows how to use a box to store an `i32` value on the heap:
 
-<Listing number="15-1" file-name="src/main.rs" caption="Storing an `i32` value on the heap using a box">
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-01/src/main.rs}}
 ```
 
-</Listing>
+<span class="caption">Listing 15-1: Storing an `i32` value on the heap using a
+box</span>
 
 We define the variable `b` to have the value of a `Box` that points to the
 value `5`, which is allocated on the heap. This program will print `b = 5`; in
@@ -105,13 +106,14 @@ Listing 15-2 contains an enum definition for a cons list. Note that this code
 won’t compile yet because the `List` type doesn’t have a known size, which
 we’ll demonstrate.
 
-<Listing number="15-2" file-name="src/main.rs" caption="The first attempt at defining an enum to represent a cons list data structure of `i32` values">
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-02/src/main.rs:here}}
 ```
 
-</Listing>
+<span class="caption">Listing 15-2: The first attempt at defining an enum to
+represent a cons list data structure of `i32` values</span>
 
 > Note: We’re implementing a cons list that holds only `i32` values for the
 > purposes of this example. We could have implemented it using generics, as we
@@ -121,13 +123,14 @@ we’ll demonstrate.
 Using the `List` type to store the list `1, 2, 3` would look like the code in
 Listing 15-3:
 
-<Listing number="15-3" file-name="src/main.rs" caption="Using the `List` enum to store the list `1, 2, 3`">
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-03/src/main.rs:here}}
 ```
 
-</Listing>
+<span class="caption">Listing 15-3: Using the `List` enum to store the list `1,
+2, 3`</span>
 
 The first `Cons` value holds `1` and another `List` value. This `List` value is
 another `Cons` value that holds `2` and another `List` value. This `List` value
@@ -137,13 +140,12 @@ is one more `Cons` value that holds `3` and a `List` value, which is finally
 If we try to compile the code in Listing 15-3, we get the error shown in
 Listing 15-4:
 
-<Listing number="15-4" file-name="output.txt" caption="The error we get when attempting to define a recursive enum">
-
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-03/output.txt}}
 ```
 
-</Listing>
+<span class="caption">Listing 15-4: The error we get when attempting to define
+a recursive enum</span>
 
 The error shows this type “has infinite size.” The reason is that we’ve defined
 `List` with a variant that is recursive: it holds another value of itself
@@ -213,13 +215,14 @@ rather than inside one another.
 We can change the definition of the `List` enum in Listing 15-2 and the usage
 of the `List` in Listing 15-3 to the code in Listing 15-5, which will compile:
 
-<Listing number="15-5" file-name="src/main.rs" caption="Definition of `List` that uses `Box<T>` in order to have a known size">
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-05/src/main.rs}}
 ```
 
-</Listing>
+<span class="caption">Listing 15-5: Definition of `List` that uses `Box<T>` in
+order to have a known size</span>
 
 The `Cons` variant needs the size of an `i32` plus the space to store the
 box’s pointer data. The `Nil` variant stores no values, so it needs less space
