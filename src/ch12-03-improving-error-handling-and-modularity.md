@@ -346,8 +346,6 @@ defining the function in *src/main.rs*.
 
 <Listing number="12-11" file-name="src/main.rs" caption="Extracting a `run` function containing the rest of the program logic">
 
-<span class="filename">Filename: src/main.rs</span>
-
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-11/src/main.rs:here}}
 ```
