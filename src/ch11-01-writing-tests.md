@@ -113,13 +113,11 @@ ignore the `Doc-tests` output.
 Let’s start to customize the test to our own needs. First change the name of
 the `it_works` function to a different name, such as `exploration`, like so:
 
-<Listing file-name="src/lib.rs">
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/src/lib.rs}}
 ```
-
-</Listing>
 
 Then run `cargo test` again. The output now shows `exploration` instead of
 `it_works`:
@@ -361,13 +359,10 @@ the problem is with the code.
 For example, let’s say we have a function that greets people by name and we
 want to test that the name we pass into the function appears in the output:
 
-<Listing file-name="src/lib.rs">
-
+<span class="filename">Filename: src/lib.rs</span>
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-05-greeter/src/lib.rs}}
 ```
-
-</Listing>
 
 The requirements for this program haven’t been agreed upon yet, and we’re
 pretty sure the `Hello` text at the beginning of the greeting will change. We
