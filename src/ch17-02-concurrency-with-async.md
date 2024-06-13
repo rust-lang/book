@@ -181,37 +181,40 @@ implementation is that it returns an `Option` of the type sent over the channel
 instead of a `Result`.
 
 We can start by introducing an async version of the multiple-producer,
-single-consumer channel channel API we used with threads back in Chapter 16:
+single-consumer channel channel API we used with threads back in Chapter 16. The
+API is just a little different here in Listing 17-8: we have a mutable receiver
+`rx`. Otherwise, this looks pretty much the same as the thread-based approach.
 
-<Listing number="17-TODO" caption="Creating an async channel and assigning the two halves to `tx` and `rx`" file-name="src/main.rs">
+<Listing number="17-8" caption="Creating an async channel and assigning the two halves to `tx` and `rx`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-04-orig/src/main.rs:add-channel}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-08/src/main.rs:add-channel}}
 ```
 
 </Listing>
 
-Now we can send messages from the sender to the receiver. Unlike in Chapter 16,
-where we needed to spawn a separate thread to allow the message passing to
-happen asynchronously, here we opt into async behavior on the receiver side by
-using `.await` on the `rx.recv()` call.
+Now we can send messages from the sender to the receiver. Again, the API is just
+a little different from the threaded version in Chapter 16, where we needed to
+spawn a separate thread to allow the message passing to happen asynchronously.
+In the version in Listing 17-9, we opt into async behavior on the receiver side
+by using `.await` on the `rx.recv()` call.
 
-<Listing number="17-TODO" caption='Sending `"hi"` from `tx` and receiving it in `rx`' file-name="src/main.rs">
+<Listing number="17-9" caption='Sending `"hi"` from `tx` and receiving it in `rx`' file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-04-orig/src/main.rs:send-and-receive}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-09/src/main.rs:send-and-receive}}
 ```
 
 </Listing>
 
 The `send` call does not block, since the channel we are sending it into is
 unbounded. That was true with our threading example back in Chapter 16, too,
-though. The difference here is that the `rx.recv()` call here does not block the
-rest of the program, whereas the one in Chapter 16 *did* block the main thread.
-Instead, once the program hits the `.await` on the `rx.recv()` call, it hands
-control back to the runtime, which can go on scheduling other operations until a
-message arrives. It might be hard to see that from this code, though, since the
-message will arrive right away!
+though. However, there is a big difference with the `rx.recv()` calls. The one
+back in Chapter 16 blocked the thread it ran on—in that case, the main thread.
+This one does not block at all! Instead, once the program hits the `.await` on
+the `rx.recv()` call, it hands control back to the runtime, which can go on
+scheduling other operations until a message arrives. It might be hard to see
+that from this code, though, since the message will arrive right away!
 
 > Note: Since this is all wrapped in a `trpl::block_on`, this would effectively
 > block anything happening outside that. That is the whole point of `block_on`,
@@ -377,7 +380,7 @@ move` block, as in Listing 17-TODO:
 <Listing number="17-TODO" caption="Fixing the async mpsc channel by using `move` to take ownership of the `Sender` (`tx`)" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-08/src/main.rs:move}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-08-orig/src/main.rs:move}}
 ```
 
 The result is Listing 17-TODO, and when we run *this* version of the code, it
@@ -386,7 +389,7 @@ shuts down gracefully after the last message is sent.
 <Listing number="17-TODO" caption="A working example of sending and receiving messages between futures which correctly shuts down when complete" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-08/src/main.rs:all}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-08-orig/src/main.rs:all}}
 ```
 
 </Listing>
@@ -400,7 +403,7 @@ block, and switching back to `join3`.
 <Listing number="17-TODO" caption="Using multiple producers with async blocks" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-09/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-09-orig/src/main.rs:here}}
 ```
 
 </Listing>

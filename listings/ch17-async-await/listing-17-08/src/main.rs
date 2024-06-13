@@ -1,34 +1,13 @@
-// ANCHOR: all
-use std::time::Duration;
-
 fn main() {
     trpl::block_on(async {
+        // ANCHOR: add-channel
         let (tx, mut rx) = trpl::channel();
+        // ANCHOR_END: add-channel
 
-        // ANCHOR: move
-        let tx_fut = async move {
-            // ANCHOR_END: move
+        let val = String::from("hi");
+        tx.send(val).unwrap();
 
-            let vals = vec![
-                String::from("hi"),
-                String::from("from"),
-                String::from("the"),
-                String::from("future"),
-            ];
-
-            for val in vals {
-                tx.send(val).unwrap();
-                trpl::sleep(Duration::from_secs(1)).await;
-            }
-        };
-
-        let rx_fut = async {
-            while let Some(value) = rx.recv().await {
-                eprintln!("received '{value}'");
-            }
-        };
-
-        trpl::join(tx_fut, rx_fut).await;
+        let received = rx.recv().await.unwrap();
+        println!("Got: {received}");
     });
 }
-// ANCHOR_END: all
