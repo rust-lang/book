@@ -51,22 +51,14 @@ appear in the code?
 One clue is the format of this message. Notice that it is exactly the same as if
 we had tried to create a `Vec` with a a number and a string in it:
 
-<!-- TODO: should this be a listing? -->
-
-```rust
-let a = 1;
-let b = "Hello";
-let vals = vec![a, b];
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch17-async-await/no-listing-type-mismatch/src/main.rs:here}}
 ```
 
 The output there would be:
 
 ```text
-error[E0308]: mismatched types
- --> src/main.rs:4:24
-  |
-4 |     let vals = vec![a, b];
-  |                        ^ expected integer, found `&str`
+{{#include ../listings/ch17-async-await/no-listing-type-mismatch/output.txt}}
 ```
 
 Saying “expected *something*, found *something else*” is Rust’s standard format
