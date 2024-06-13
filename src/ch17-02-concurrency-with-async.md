@@ -380,35 +380,29 @@ references this way, it needs to move that data into the future—so the `move`
 keyword works with async blocks just like it does with closures.
 
 Thus, we can change the first async block from an `async` block to an `async
-move` block, as in Listing 17-TODO:
+move` block, like this:
 
-<Listing number="17-TODO" caption="Fixing the async mpsc channel by using `move` to take ownership of the `Sender` (`tx`)" file-name="src/main.rs">
-
-```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-08-orig/src/main.rs:move}}
-```
-
-The result is Listing 17-TODO, and when we run *this* version of the code, it
+The result is Listing 17-15, and when we run *this* version of the code, it
 shuts down gracefully after the last message is sent.
 
-<Listing number="17-TODO" caption="A working example of sending and receiving messages between futures which correctly shuts down when complete" file-name="src/main.rs">
+<Listing number="17-15" caption="A working example of sending and receiving messages between futures which correctly shuts down when complete" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-08-orig/src/main.rs:all}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-15/src/main.rs:with-move}}
 ```
 
 </Listing>
 
 This async channel is also a multiple-producer channel, so we can call `clone`
 on `tx` if we want to send messages from multiple futures. For example, we can
-make the code from Listing 17-TODO work by cloning the `tx` before moving it
+make the code from Listing 17-16 work by cloning the `tx` before moving it
 into the first async block, moving the original `tx` into the second async
 block, and switching back to `join3`.
 
-<Listing number="17-TODO" caption="Using multiple producers with async blocks" file-name="src/main.rs">
+<Listing number="17-16" caption="Using multiple producers with async blocks" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-09-orig/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-16/src/main.rs:here}}
 ```
 
 </Listing>

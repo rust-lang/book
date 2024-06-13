@@ -425,7 +425,7 @@ type for `a` implements `Future<Output = u32>` and the anonymous future type for
 <Listing number="17-TODO" caption="" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-15/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-15-orig/src/main.rs:here}}
 ```
 
 </Listing>
