@@ -125,6 +125,8 @@ ask the runtime to run them both to completion using `trpl::join`:
 
 When we run this, we see both futures run to completion:
 
+<!-- TODO: extract to output? -->
+
 ```text
 hi number 1 from the first task!
 hi number 1 from the second task!
