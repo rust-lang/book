@@ -2,32 +2,20 @@ use std::time::Duration;
 
 fn main() {
     trpl::block_on(async {
-        let (tx, mut rx) = trpl::channel();
-
-        // ANCHOR: futures
-        let tx_fut = async {
-            let vals = vec![
-                String::from("hi"),
-                String::from("from"),
-                String::from("the"),
-                String::from("future"),
-            ];
-
-            for val in vals {
-                tx.send(val).unwrap();
-                trpl::sleep(Duration::from_secs(1)).await;
+        // ANCHOR: handle
+        let handle = trpl::spawn_task(async {
+            for i in 1..10 {
+                println!("hi number {i} from the first task!");
+                trpl::sleep(Duration::from_millis(1)).await;
             }
-        };
+        });
 
-        let rx_fut = async {
-            // ANCHOR: loop
-            while let Some(value) = rx.recv().await {
-                println!("received '{value}'");
-            }
-            // ANCHOR_END: loop
-        };
+        for i in 1..5 {
+            println!("hi number {i} from the second task!");
+            trpl::sleep(Duration::from_millis(1)).await;
+        }
 
-        trpl::join(tx_fut, rx_fut).await;
-        // ANCHOR_END: futures
+        handle.await.unwrap();
+        // ANCHOR_END: handle
     });
 }

@@ -68,17 +68,23 @@ because the task spawned by `spawn_task` is shut down when the main function
 ends—just like threads are. Thus, if you want to run all the way to the
 completion of the task, you will need to use a join handle to wait for the first
 task to complete. With threads, we used the `join` method to “block” until the
-thread was done running. Here, we can use `await` to do the same thing:
+thread was done running. Here, we can use `await` to do the same thing, and
+since the handle’s output is actually a `Result`, we will also unwrap it.
 
-<Listing number="17-TODO" caption="Using `.await` with a join handle to run a task to completion" file-name="src/main.rs">
+<Listing number="17-6" caption="Using `.await` with a join handle to run a task to completion" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-S02-17-02/src/main.rs:handle}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-06/src/main.rs:handle}}
 ```
 
 </Listing>
 
-Now the output again looks like what we saw in the threading example.
+Now the output again looks like what we saw in the threading example. (Again,
+the exact output may look different for you.)
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 hi number 1 from the second task!
@@ -217,7 +223,7 @@ as shown in Listing 17-TODO:
 <Listing number="17-TODO" caption="Sending multiple messages over the async channel and sleeping with an `.await` between each message" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:many-messages}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-05-orig/src/main.rs:many-messages}}
 ```
 
 </Listing>
@@ -232,7 +238,7 @@ Listing 17-TODO, and the loop will end when `rx.recv().await` produces a `None`.
 <Listing number="17-TODO" caption="Using a `while let` loop with `.await` to receive messages asynchronously" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:loop}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-05-orig/src/main.rs:loop}}
 ```
 
 </Listing>
@@ -258,7 +264,7 @@ at the whole thing all together.
 <Listing number="17-TODO" caption="An async block with multiple `.await` points in it" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:all}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-05-orig/src/main.rs:all}}
 ```
 
 </Listing>
@@ -279,7 +285,7 @@ above. Listing 17-TODO shows how that looks.
 <Listing number="17-TODO" caption="Separating `send` and `recv` into their own `async` blocks and awaiting the futures for those blocks" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-06/src/main.rs:futures}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-06-orig/src/main.rs:futures}}
 ```
 
 </Listing>
