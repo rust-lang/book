@@ -178,21 +178,8 @@ a series of await points in a future get compiled into a state machine—and not
 how the compiler helps make sure that state machine follows all of Rust’s normal
 rules around safety, including borrowing and ownership. Consider code like this:
 
-<!-- TODO: extract to listing -->
-
 ```rust
-async {
-    let mut strings = vec![];
-
-    let a = trpl::read_to_string("test-data/hello.txt").await.unwrap();
-    strings.push(a.trim());
-
-    let b = trpl::read_to_string("test-data/world.txt").await.unwrap();
-    strings.push(b.trim());
-
-    let combined = strings.join(" ");
-    println!("{combined}");
-}
+{{#rustdoc_include ../listings/ch17-async-await/no-listing-borrow-mutable-vec/src/main.rs:here}}
 ```
 
 If we think about the state machine that would get compiled to, it might be
@@ -200,15 +187,22 @@ something kind of like this:
 
 ```rust,ignore
 enum AsyncStateMachine<'a> {
-    FirstAwait(&'a mut Vec<String>),
-    SecondAwait(&'a mut Vec<String>),
+    AfterFirstAwait(&'a mut Vec<String>),
+    AfterSecondAwait(&'a mut Vec<String>),
 }
 ```
 
-This could actually be fine, on its own—Rust would keep track of those mutable
-references, and if we got something wrong, the borrow checker would tell us. It
-gets a bit tricky, though, if we want to move around the future that corresponds
-to that block. Remember, we could always do something like this:
+That is, at each `.await` in the source code, Rust would look at what state is
+needed between that await point and the point another `.await` appears or the
+async block ends, and create a corresponding variant in the `AsyncStateMachine`.
+Each variant has the appropriate kind of reference to the data that will be
+referenced in that section. The real implementation is not *exactly* like this,
+but it is close enough to give the right mental model.
+
+And this could actually be fine, on its own—Rust would keep track of those
+mutable references, and if we got something wrong, the borrow checker would tell
+us. It gets a bit tricky, though, if we want to move around the future that
+corresponds to that block. Remember, we could always do something like this:
 
 ```rust,ignore
 let file_reads_future = async {

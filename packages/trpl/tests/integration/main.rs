@@ -188,3 +188,14 @@ fn yield_now() {
 
     assert_eq!(result, "done");
 }
+
+#[test]
+fn read_to_string() {
+    let result = trpl::block_on(async {
+        trpl::read_to_string("tests/integration/to-read.txt")
+            .await
+            .unwrap()
+    });
+
+    assert_eq!(result, String::from("This is some text!\n"));
+}

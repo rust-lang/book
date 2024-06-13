@@ -20,6 +20,7 @@ pub use futures::{
     join,
 };
 pub use tokio::{
+    fs::read_to_string,
     runtime::Runtime,
     // We use the `unbounded` variants because they most closely match the APIs
     // from `std::sync::mpsc::channel`. Tokio's API choices are interesting:
