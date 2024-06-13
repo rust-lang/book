@@ -198,16 +198,6 @@ above—but that was in terms of `Unpin`, not `Pin`. So what exactly are `Pin` a
 `Unpin`, how do they relate, and why does `Future` need `self` to be in a `Pin`
 type to call `poll`?
 
-<!-- TODO: keep going here: define `Pin`. -->
-
-<!--
-
-  - Pin pins the thing behind a pointer (just using the Rust type system! No
-    compiler magic required)
-  - The reason is what async compiles to. Refer to the discussion of state
-
- -->
-
 In [“Futures and Syntax: What Are Futures”][what-are-futures], we described how
 a series of await points in a future get compiled into a state machine—and noted
 how the compiler helps make sure that state machine follows all of Rust’s normal
