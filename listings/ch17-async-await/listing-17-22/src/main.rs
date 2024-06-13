@@ -26,9 +26,7 @@ fn main() {
             }
             // ANCHOR: here
         });
-        // ANCHOR_END: here
 
-        // ANCHOR: here
         let rx_fut = pin!(async {
             // snip...
             // ANCHOR_END: here
@@ -37,9 +35,7 @@ fn main() {
             }
             // ANCHOR: here
         });
-        // ANCHOR_END: here
 
-        // ANCHOR: here
         let tx_fut = pin!(async move {
             // snip...
             // ANCHOR_END: here

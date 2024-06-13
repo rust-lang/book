@@ -301,19 +301,21 @@ get our `join_all` call to compile! First, we need to explicitly annotate
 `futures` as referring to a pinned `Box` of futures. Second, we actually need to
 pin the futures, which we can do using the handy `Box::pin` API, which exists
 for exactly this. Putting that together, we end up with the code in Listing
-17-TODO.
+17-21.
 
-<Listing number="17-TODO" caption="Using `Pin` and `Box::pin` to make the `Vec` type check" file-name="src/main.rs">
+<Listing number="17-21" caption="Using `Pin` and `Box::pin` to make the `Vec` type check" file-name="src/main.rs">
 
-```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-13-orig/src/main.rs:here}}
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-21/src/main.rs:here}}
 ```
 
 </Listing>
 
 If we compile and run this, we finally get the output we hoped for:
 
-<!-- TODO: listing for output.txt -->
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 received 'hi'
@@ -342,40 +344,45 @@ still be explicit about the type of the pinned reference; otherwise Rust will
 still not know to interpret these as dynamic trait objects, which is what we
 need them to be in the `Vec`. We therefore `pin!` each future when we define it,
 and define `futures` as a `Vec` containing pinned mutable references to the
-dynamic `Future` type.
+dynamic `Future` type, as in Listing 17-22.
 
-<Listing number="17-TODO" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
+<Listing number="17-22" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-14-orig/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-22/src/main.rs:here}}
 ```
 
 </Listing>
 
-This keeps everything on the stack, and that is a nice little performance win,
-but it is still a lot of explicit types, which is quite unusual for Rust! There
-is another problem, too. We got this far by ignoring the fact that we might have
-different `Output` types. For example, in Listing 17-TODO, the anonymous future
-type for `a` implements `Future<Output = u32>` and the anonymous future type for
-`b` implements `Future<Output = &str>`.
+This keeps everything on the stack, which is a nice little performance win, but
+it is still a lot of explicit types, which is quite unusual for Rust!
 
-<Listing number="17-TODO" caption="" file-name="src/main.rs">
+There is another, more serious, issue as well. We got this far by ignoring the
+fact that we might have different `Output` types. For example, in Listing 17-23,
+the anonymous future type for `a` implements `Future<Output = u32>`, the
+anonymous future type for `b` implements `Future<Output = &str>`, and the
+anonymous future type for `c` implements `Future<Output = bool>`. We can use
+`trpl::join!` to await them together, since it accepts futures of different
+types.
+
+<Listing number="17-23" caption="Three futures with distinct types" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-15-orig/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:here}}
 ```
 
 </Listing>
 
-We can use `trpl::join!` to await them together, since it accepts two different
-future types, but we cannot use `trpl::join_all` with these futures, because we
-will never be able to make them have the same type. We have a basic tradeoff
-here: we can either deal with a dynamic number of futures with `join_all`, as
-long as they all have the same type, or we can deal with a set number of futures
-with the `join` functions or the `join!` macro, even if they have different
-types. This is the same as working with any other type in Rust, though: futures
-are not special, even though we have some nice syntax for working with them, and
-that is a good thing!
+We cannot use `trpl::join_all` with these futures, though, because
+we will never be able to make them have the same type. (Remember, that error is
+what got us started on this adventure with `Pin`!)
+
+We have a basic tradeoff here: we can either deal with a dynamic number of
+futures with `join_all`, as long as they all have the same type, or we can deal
+with a set number of futures with the `join` functions or the `join!` macro,
+even if they have different types. This is the same as working with any other
+type in Rust, though: futures are not special, even though we have some nice
+syntax for working with them, and that is a good thing!
 
 In practice, you will usually work directly with `async` and `.await`, and only
 as a secondary tool reach for the functions like `join` or `join_all`, or their
