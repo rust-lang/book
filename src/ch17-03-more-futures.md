@@ -91,13 +91,13 @@ produced by these types as interchangeable, since all of them by definition
 implement the `Future` trait.
 
 We can start by wrapping each of the futures in the `vec!` in a `Box::new()`.
-Unfortunately, the initial way we might try this, as shown in Listing 17-TODO,
+Unfortunately, the initial way we might try this, as shown in Listing 17-19,
 still does not compile.
 
-<Listing number="17-TODO" caption="" file-name="src/main.rs">
+<Listing number="17-19" caption="Trying to use `Box::new` to align the types of the futures in a `Vec`" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-11-orig/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-19/src/main.rs:here}}
 ```
 
 </Listing>
@@ -118,37 +118,20 @@ little involved, so let’s walk through each part of it.
 - The entire trait is wrapped in a `Box`.
 - Finally, we state explicitly that `futures` is a `Vec` containing these items.
 
-<Listing number="17-TODO" caption="" file-name="src/main.rs">
+<Listing number="17-20" caption="Fixing the rest of the type mismatch errors by using an explicit type declaration" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-12-orig/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-20/src/main.rs:here}}
 ```
 
 </Listing>
 
 That already made a big difference. Now when we run the compiler, we only have
-the errors mentioning `Unpin`, each of which is a variation on this same output:
+the errors mentioning `Unpin`. Although there are three of them, notice that
+each is very similar in its contets
 
-<!-- TODO: compiler output listing for the listing -->
-
-```text
-error[E0277]: `{async block@src/main.rs:8:23: 20:10}` cannot be unpinned
-  --> src/main.rs:46:33
-   |
-46 |         trpl::join_all(futures).await;
-   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:8:23: 20:10}`, which is required by `Box<{async block@src/main.rs:8:23: 20:10}>: Future`
-   |
-   = note: consider using the `pin!` macro
-           consider using `Box::pin` if you need to access the pinned value outside of the current scope
-   = note: required for `Box<{async block@src/main.rs:8:23: 20:10}>` to implement `Future`
-note: required by a bound in `futures_util::future::join_all::JoinAll`
-  --> /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
-   |
-27 | pub struct JoinAll<F>
-   |            ------- required by a bound in this struct
-28 | where
-29 |     F: Future,
-   |        ^^^^^^ required by this bound in `JoinAll`
+```console
+{{#include ../listings/ch17-async-await/listing-17-20/output.txt}}
 ```
 
 That is a *lot* to digest, so let’s pull it apart. The first part of the message
