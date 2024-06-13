@@ -369,7 +369,7 @@ for exactly this. Putting that together, we end up with the code in Listing
 <Listing number="17-TODO" caption="Using `Pin` and `Box::pin` to make the `Vec` type check" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-13/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-13-orig/src/main.rs:here}}
 ```
 
 </Listing>
@@ -410,7 +410,7 @@ dynamic `Future` type.
 <Listing number="17-TODO" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-14/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-14-orig/src/main.rs:here}}
 ```
 
 </Listing>

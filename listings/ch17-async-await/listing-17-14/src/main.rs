@@ -1,18 +1,10 @@
-use std::{
-    future::Future,
-    pin::{pin, Pin},
-    time::Duration,
-};
+use std::time::Duration;
 
 fn main() {
     trpl::block_on(async {
         let (tx, mut rx) = trpl::channel();
 
-        let tx1 = tx.clone();
-        // ANCHOR: here
-        let tx1_fut = pin!(async move {
-            // snip...
-            // ANCHOR_END: here
+        let tx_fut = async {
             let vals = vec![
                 String::from("hi"),
                 String::from("from"),
@@ -21,28 +13,19 @@ fn main() {
             ];
 
             for val in vals {
-                tx1.send(val).unwrap();
+                tx.send(val).unwrap();
                 trpl::sleep(Duration::from_secs(1)).await;
             }
-            // ANCHOR: here
-        });
-        // ANCHOR_END: here
+        };
 
-        // ANCHOR: here
-        let rx_fut = pin!(async {
-            // snip...
-            // ANCHOR_END: here
-            while let Some(value) = rx.recv().await {
-                println!("received '{value}'");
+        let rx_fut = async {
+            while let Some(received) = rx.recv().await {
+                println!("Got: {received}");
             }
-            // ANCHOR: here
-        });
-        // ANCHOR_END: here
+        };
 
-        // ANCHOR: here
-        let tx_fut = pin!(async move {
-            // snip...
-            // ANCHOR_END: here
+        // ANCHOR: updated
+        let tx_fut2 = async {
             let vals = vec![
                 String::from("more"),
                 String::from("messages"),
@@ -54,13 +37,9 @@ fn main() {
                 tx.send(val).unwrap();
                 trpl::sleep(Duration::from_secs(1)).await;
             }
-            // ANCHOR: here
-        });
+        };
 
-        let futures: Vec<Pin<&mut dyn Future<Output = ()>>> =
-            vec![tx1_fut, rx_fut, tx_fut];
-        // ANCHOR_END: here
-
-        trpl::join_all(futures).await;
+        trpl::join3(tx_fut, tx_fut2, rx_fut).await;
+        // ANCHOR_END: updated
     });
 }

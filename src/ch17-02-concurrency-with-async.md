@@ -289,12 +289,12 @@ receiving each message, rather than before receiving any message, we need to
 give put the `tx` and `rx` operations in their own async blocks, so the runtime
 can execute each of them separately. We also need to tell the runtime to
 actually run them using `trpl::join`, just like we did for the counting example
-above. Listing 17-TODO shows how that looks.
+above. Listing 17-13 shows how that looks.
 
-<Listing number="17-TODO" caption="Separating `send` and `recv` into their own `async` blocks and awaiting the futures for those blocks" file-name="src/main.rs">
+<Listing number="17-13" caption="Separating `send` and `recv` into their own `async` blocks and awaiting the futures for those blocks" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-06-orig/src/main.rs:futures}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-13/src/main.rs:futures}}
 ```
 
 </Listing>
@@ -333,10 +333,10 @@ Right now, the async block only borrows `tx`. We can confirm this by adding
 another async block which uses `tx`, and using `trpl::join3` to wait for all
 three futures to complete:
 
-<Listing number="17-TODO" caption="Adding another async block which borrows `tx`, to see that we can borrow it repeatedly" file-name="src/main.rs">
+<Listing number="17-14" caption="Adding another async block which borrows `tx`, to see that we can borrow it repeatedly" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-07-orig/src/main.rs:updated}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-14/src/main.rs:updated}}
 ```
 
 </Listing>
@@ -345,6 +345,8 @@ Now both blocks borrow `tx`, so they are both able to use it to send messages,
 which `rx` can then receive. When we run that code, we see the extra output from
 the new `async` block, and the message it sends being received by the
 `rx.recv()`.
+
+<!-- TODO: extract to output? -->
 
 ```text
 Got: hi
@@ -358,10 +360,9 @@ Got: you
 ```
 
 As before, we also see that the program does not shut down on its own and
-requires a <span class="keystroke">ctrl-c</span>, though. This little
-exploration helps us understand why: it is ultimately about *ownership*. We need
-to move `tx` into the async block so that once that block ends, `tx` will be
-dropped.
+requires a <span class="keystroke">ctrl-c</span>. This little exploration helps
+us understand why: it is ultimately about *ownership*. We need to move `tx` into
+the async block so that once that block ends, `tx` will be dropped.
 
 Since we have seen how `async` blocks borrow the items they reference from their
 outer scope, we can go ahead and remove the extra block we just added for now,
