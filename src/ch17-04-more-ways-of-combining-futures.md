@@ -31,9 +31,9 @@ Regardless of whether the implementation of race we are using is fair, though,
 *one* of the futures will run up to the first `.await` in its body before
 another task can start.
 
-To see why, recall from our discussion in [What Are Futures?][futures] that Rust
-compiles async blocks in a way that hands control back to the async runtime at
-each await point. That has an important corollary: async runtimes can only
+To see why, recall from our discussion in [“What Are Futures?”][futures] that
+Rust compiles async blocks in a way that hands control back to the async runtime
+at each await point. That has an important corollary: async runtimes can only
 switch which future they are executing at await points. Everything in between
 await points is just normal synchronous Rust code. That means if you do a bunch
 of really expensive work in an async function without an `.await`, that future
@@ -286,6 +286,4 @@ example, you can use this same approach to combine timeouts with retries, and
 in turn use those with things like network calls—the exact example we started
 out with at the beginning of the chapter!
 
-[collections]: https://doc.rust-lang.org/stable/book/ch08-01-vectors.html#using-an-enum-to-store-multiple-types
-[dyn]: https://doc.rust-lang.org/stable/book/ch12-03-improving-error-handling-and-modularity.html
-[futures]: /ch17-01-futures-and-syntax.html#what-are-futures
+[futures]: ch17-01-futures-and-syntax.html#what-are-futures

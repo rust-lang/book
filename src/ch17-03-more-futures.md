@@ -70,8 +70,8 @@ error[E0308]: mismatched types
 ```
 
 Saying “expected *something*, found *something else*” is Rust’s standard format
-for telling us about a type mismatch. As we saw with vectors in [Using an Enum
-to Store Multiple Types][collections] back in Chapter 8, we need the type of
+for telling us about a type mismatch. As we saw with vectors in [“Using an Enum
+to Store Multiple Types”][collections] back in Chapter 8, we need the type of
 each item in a collection to be the same—and `tx1_fut`, `rx_fut`, and `tx_fut`
 do not have the same type.
 
@@ -92,8 +92,8 @@ with a dynamic collection of futures where we do not know what they will all be
 until runtime.
 
 To make this work, we need to use *trait objects*, just as we did for returning
-different kinds of errors from the same function in [Returning Errors from the
-run function][dyn] back in Chapter 12. Again, we will cover trait objects in
+different kinds of errors from the same function in [“Returning Errors from the
+run function”][dyn] back in Chapter 12. Again, we will cover trait objects in
 detail in Chapter 17. Here, it lets us treat each of the anonymous futures
 produced by these types as interchangeable, since all of them by definition
 implement the `Future` trait.
@@ -208,7 +208,7 @@ type to call `poll`?
 
  -->
 
-In [Futures and Syntax: What Are Futures][what-are-futures], we described how
+In [“Futures and Syntax: What Are Futures”][what-are-futures], we described how
 a series of await points in a future get compiled into a state machine—and noted
 how the compiler helps make sure that state machine follows all of Rust’s normal
 rules around safety, including borrowing and ownership. Consider code like this:
@@ -421,4 +421,6 @@ handy for building frameworks, or especially when you are building a runtime
 itself, rather than for day to day Rust code. When you see them, though, now you
 will know what to do!
 
-[what-are-futures]: /ch17-01-futures-and-syntax.html#what-are-futures
+[collections]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
+[dyn]: ch12-03-improving-error-handling-and-modularity.html
+[what-are-futures]: ch17-01-futures-and-syntax.html#what-are-futures
