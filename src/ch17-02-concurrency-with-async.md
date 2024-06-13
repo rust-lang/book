@@ -268,12 +268,12 @@ much easier to follow, because having the order that `.await` keywords appear in
 the *code* is also the order they happen when running the *program*.
 
 With that in mind, we can see why this code behaves the way it does by looking
-at the whole thing all together.
+at the whole thing all together, in Listing 17-12.
 
-<Listing number="17-TODO" caption="An async block with multiple `.await` points in it" file-name="src/main.rs">
+<Listing number="17-12" caption="An async block with multiple `.await` points in it" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-05-orig/src/main.rs:all}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-12/src/main.rs:all}}
 ```
 
 </Listing>
