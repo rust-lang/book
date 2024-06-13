@@ -216,19 +216,24 @@ let some_other_future = async {
 trpl::join(file_reads_future, some_other_future).await;
 ```
 
+<!--
+    TODO: this paragraph is close to right, but it needs to be revised a bit to
+    make sure it is accurate about *what* is not moved.
+-->
+
 If we pass those futures into `join`, or return them from a function, or put
-them in a data structure to keep track of for some reason, we move the state
-machine as well, and that means the `Vec<String>` for the values we read in with
-`trpl::read_to_string` moves. But the state machine Rust generated for us has
-references to it. Since references point to the actual memory address of the
-`Vec`, Rust needs some way to either update them so they are still valid after
-the `Vec` moves, or it needs some way to keep `Vec` from getting moved around so
-that the references do not need to be updated. Updating all the references to an
-object every time it moves could be quite a lot of work for the compiler to add,
-especially since there can be a whole web of references that need updating. On
-the other hand, making sure the underlying item *does not move in memory* can be
-“free” at runtime in exchange for keeping some promises at compile time. That is
-where `Pin` and `Unpin` come in.
+them in a data structure to keep track of for some reason, that moves the state
+machine as well. That means the reference to `Vec<String>` for the values we
+read in with `trpl::read_to_string` moves along with it. Since references point
+to the actual memory address of the `Vec`, Rust needs some way to either update
+them so they are still valid after the `Vec` moves, or it needs some way to keep
+`Vec` from getting moved around so that the references do not need to be
+updated. Updating all the references to an object every time it moves could be
+quite a lot of work for the compiler to add, especially since there can be a
+whole web of references that need updating. On the other hand, making sure the
+underlying item *does not move in memory* can be “free” at runtime in exchange
+for keeping some promises at compile time. That is where `Pin` and `Unpin` come
+in.
 
 > Note: The specific mechanics for how `Pin` and `Unpin` work under the hood are
 > covered extensively in the API documentation for `std::pin`, so if you would
