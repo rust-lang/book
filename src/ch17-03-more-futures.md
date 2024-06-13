@@ -4,13 +4,13 @@ When we switched from using two futures to three in the previous section, we
 also had to switch from using `join` to using `join3`. It would be annoying to
 do this every time we changed our code. Happily, we have a macro form of `join`
 to which we can pass an arbitrary number of arguments. It also handles awaiting
-the futures itself. Thus, we could rewrite the code from Listing 17-TODO to use
-`join!` instead of `join3`, as in Listing 17-TODO:
+the futures itself. Thus, we could rewrite the code from Listing 17-16 to use
+`join!` instead of `join3`, as in Listing 17-17:
 
-<Listing number="17-TODO" caption="Using `join!` to wait for multiple futures" file-name="src/main.rs">
+<Listing number="17-17" caption="Using `join!` to wait for multiple futures" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-09b/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-17/src/main.rs:here}}
 ```
 
 </Listing>
