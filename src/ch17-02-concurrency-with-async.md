@@ -115,10 +115,10 @@ concurrency here. Remember that each async block compiles to an anonymous
 future. That means we can put each of these two loops in an async block and then
 ask the runtime to run them both to completion using `trpl::join`:
 
-<Listing number="17-TODO" caption="Using `trpl::join` to await two anonymous futures" file-name="src/main.rs">
+<Listing number="17-7" caption="Using `trpl::join` to await two anonymous futures" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-S02-17-03/src/main.rs:join}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-07/src/main.rs:join}}
 ```
 
 </Listing>
@@ -327,7 +327,7 @@ three futures to complete:
 <Listing number="17-TODO" caption="Adding another async block which borrows `tx`, to see that we can borrow it repeatedly" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-07/src/main.rs:updated}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-07-orig/src/main.rs:updated}}
 ```
 
 </Listing>
