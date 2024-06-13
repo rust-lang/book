@@ -68,7 +68,7 @@ extracted into a file. To do that:
 - If you only want to show part of the code in the file, use anchor comments
   (`// ANCHOR: some_tag` and `// ANCHOR_END: some_tag`) to mark the parts of
 	the file you want to show.
-- For Rust code, use the `{{#rustdoc_include [fileame:some_tag]}}` directive
+- For Rust code, use the `{{#rustdoc_include [filename:some_tag]}}` directive
   within the code blocks in the text. The `rustdoc_include` directive gives the
 	code that doesn't get displayed to `rustdoc` for `mdbook test` purposes.
 - For anything else, use the `{{#include [filename:some_tag]}}` directive.
