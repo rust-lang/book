@@ -29,45 +29,18 @@ trait, which we learned about back in Chapter 13, so it seems like just the
 ticket. Let’s try putting our futures in a vector, and replace `join3` with
 `join_all`.
 
-<Listing  number="17-TODO" caption="Storing anonymous futures in a vector and calling `join_all`">
+<Listing  number="17-18" caption="Storing anonymous futures in a vector and calling `join_all`">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-10-orig/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-18/src/main.rs:here}}
 ```
 
 </Listing>
 
 Unfortunately, this does not compile. Instead, we get this error:
 
-<!-- TODO: extract to output.txt -->
-
 ```text
-error[E0308]: mismatched types
-  --> src/main.rs:43:37
-   |
-8  |           let tx1_fut = async move {
-   |  _______________________-
-9  | |             let vals = vec![
-10 | |                 String::from("hi"),
-11 | |                 String::from("from"),
-...  |
-19 | |             }
-20 | |         };
-   | |_________- the expected `async` block
-21 |
-22 |           let rx_fut = async {
-   |  ______________________-
-23 | |             while let Some(value) = rx.recv().await {
-24 | |                 println!("received '{value}'");
-25 | |             }
-26 | |         };
-   | |_________- the found `async` block
-...
-43 |           let futures = vec![tx1_fut, rx_fut, tx_fut];
-   |                                       ^^^^^^ expected `async` block, found a different `async` block
-   |
-   = note: expected `async` block `{async block@src/main.rs:8:23: 20:10}`
-              found `async` block `{async block@src/main.rs:22:22: 26:10}`
+{{#include ../listings/ch17-async-await/listing-17-18/output.txt}}
 ```
 
 This error message is admittedly not the most helpful! It only tells us that it
