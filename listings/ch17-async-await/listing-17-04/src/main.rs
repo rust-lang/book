@@ -1,17 +1,7 @@
-// ANCHOR: all
 fn main() {
+    // ANCHOR: block_on
     trpl::block_on(async {
-        // ANCHOR: add-channel
-        let (tx, mut rx) = trpl::channel();
-        // ANCHOR_END: add-channel
-
-        // ANCHOR: send-and-receive
-        let val = String::from("hi");
-        tx.send(val).unwrap();
-
-        let received = rx.recv().await.unwrap();
-        println!("Got: {received}");
-        // ANCHOR_END: send-and-receive
+        // our implementation will go here
     });
+    // ANCHOR_END: block_on
 }
-// ANCHOR_END: all

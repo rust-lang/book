@@ -18,15 +18,16 @@ which looks very similar to the `thread::spawn` API, and a `sleep` function
 which is an async version of the `thread::sleep` API. We can use these together
 to implement the same counting example as with threads.
 
-To start, we will set up our `main` function with `trpl::block_on`:
+Listing 17-4 shows our starting point. We set up our `main` function with `trpl::block_on`, so that our top-level function can be async.
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-S02-17-01/src/main.rs:block_on}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:block_on}}
 ```
 
 > Note: From this point forward in the chapter, every example will include this
-> exact same code, so we will often skip it just like we do with `main`. Don’t
-> forget to include it in your own code!
+> exact same wrapping code with `trpl::block_on` in `main`, so we will often
+> skip it just like we do with `main`. Don’t forget to include it in your
+> code!
 
 Then we can write two loops within that block, each with a `trpl::sleep` call in
 them. Similar to the threading example, we put one loop in the body of a
@@ -169,7 +170,7 @@ single-consumer channel channel API we used with threads back in Chapter 16:
 <Listing number="17-TODO" caption="Creating an async channel and assigning the two halves to `tx` and `rx`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:add-channel}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-04-orig/src/main.rs:add-channel}}
 ```
 
 </Listing>
@@ -182,7 +183,7 @@ using `.await` on the `rx.recv()` call.
 <Listing number="17-TODO" caption='Sending `"hi"` from `tx` and receiving it in `rx`' file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:send-and-receive}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-04-orig/src/main.rs:send-and-receive}}
 ```
 
 </Listing>
