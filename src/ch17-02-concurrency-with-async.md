@@ -35,13 +35,21 @@ them. Similar to the threading example, we put one loop in the body of a
 top-level `for` loop. Notice that we also need to add a `.await` after the
 `sleep` calls.
 
+<Listing number="17-5" caption="Using `spawn_task` to count with two" file-name="src/main.rs">
+
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-S02-17-01/src/main.rs:task}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:task}}
 ```
+
+</Listing>
 
 This does something very similar to what the thread-based implementation did, as
 we can see from the output when we run it. (As with the threading example, you
 may see a different order in your own terminal output when you run this.)
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 hi number 1 from the second task!

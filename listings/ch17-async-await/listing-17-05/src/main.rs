@@ -1,31 +1,19 @@
-// ANCHOR: all
-// ANCHOR: many-messages
 use std::time::Duration;
-// ANCHOR_END: many-messages
 
 fn main() {
     trpl::block_on(async {
-        let (tx, mut rx) = trpl::channel();
+        // ANCHOR: task
+        trpl::spawn_task(async {
+            for i in 1..10 {
+                println!("hi number {i} from the first task!");
+                trpl::sleep(Duration::from_millis(1)).await;
+            }
+        });
 
-        // ANCHOR: many-messages
-        let vals = vec![
-            String::from("hi"),
-            String::from("from"),
-            String::from("the"),
-            String::from("future"),
-        ];
-
-        for val in vals {
-            tx.send(val).unwrap();
-            trpl::sleep(Duration::from_secs(1)).await;
+        for i in 1..5 {
+            println!("hi number {i} from the second task!");
+            trpl::sleep(Duration::from_millis(1)).await;
         }
-        // ANCHOR_END: many-messages
-
-        // ANCHOR: loop
-        while let Some(value) = rx.recv().await {
-            println!("received '{value}'");
-        }
-        // ANCHOR_END: loop
+        // ANCHOR_END: task
     });
 }
-// ANCHOR_END: all
