@@ -1,47 +1,26 @@
+// ANCHOR: many-messages
 use std::time::Duration;
+// ANCHOR_END: many-messages
 
 fn main() {
     trpl::block_on(async {
         let (tx, mut rx) = trpl::channel();
 
-        let tx1 = tx.clone();
-        let tx1_fut = async move {
-            let vals = vec![
-                String::from("hi"),
-                String::from("from"),
-                String::from("the"),
-                String::from("future"),
-            ];
+        // ANCHOR: many-messages
 
-            for val in vals {
-                tx1.send(val).unwrap();
-                trpl::sleep(Duration::from_secs(1)).await;
-            }
-        };
+        // snip...
 
-        let rx_fut = async {
-            while let Some(value) = rx.recv().await {
-                println!("received '{value}'");
-            }
-        };
+        let vals = vec![
+            String::from("hi"),
+            String::from("from"),
+            String::from("the"),
+            String::from("future"),
+        ];
 
-        let tx_fut = async move {
-            let vals = vec![
-                String::from("more"),
-                String::from("messages"),
-                String::from("for"),
-                String::from("you"),
-            ];
-
-            for val in vals {
-                tx.send(val).unwrap();
-                trpl::sleep(Duration::from_secs(1)).await;
-            }
-        };
-
-        // ANCHOR: here
-        let futures = vec![tx1_fut, rx_fut, tx_fut];
-        trpl::join_all(futures).await;
-        // ANCHOR_END: here
+        for val in vals {
+            tx.send(val).unwrap();
+            trpl::sleep(Duration::from_secs(1)).await;
+        }
+        // ANCHOR_END: many-messages
     });
 }

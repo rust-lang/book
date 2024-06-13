@@ -32,7 +32,7 @@ ticket. Let’s try putting our futures in a vector, and replace `join3` with
 <Listing  number="17-TODO" caption="Storing anonymous futures in a vector and calling `join_all`">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-10-orig/src/main.rs:here}}
 ```
 
 </Listing>
@@ -132,7 +132,7 @@ still does not compile.
 <Listing number="17-TODO" caption="" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-11/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-11-orig/src/main.rs:here}}
 ```
 
 </Listing>

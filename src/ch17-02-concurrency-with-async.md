@@ -223,36 +223,40 @@ that from this code, though, since the message will arrive right away!
 > `.await` does not block further operations—as we will see!
 
 Let’s go ahead and send a whole series of messages, and sleep in between them,
-as shown in Listing 17-TODO:
+as shown in Listing 17-10:
 
-<Listing number="17-TODO" caption="Sending multiple messages over the async channel and sleeping with an `.await` between each message" file-name="src/main.rs">
+<Listing number="17-10" caption="Sending multiple messages over the async channel and sleeping with an `.await` between each message" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-05-orig/src/main.rs:many-messages}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:many-messages}}
 ```
 
 </Listing>
 
-Then we can wait on each of those messages in a loop. Here, we need to use a
-`while let` loop rather than a `for` loop, because Rust does not yet have an
-async version of `Iterator`, which is what the `for` loop does. In TODO: SECTION
-TITLE, we will see more about two related traits the community has been working
-on, `AsyncIterator` and `Stream`. For now, we can stick with `while let`, as in
-Listing 17-TODO, and the loop will end when `rx.recv().await` produces a `None`.
+This handles sending the messages, but so far we don’t do anything with them,
+and the code just silently runs forever. Listing 17-11 shows how we can receive
+those messages by waiting for them in a loop.
 
-<Listing number="17-TODO" caption="Using a `while let` loop with `.await` to receive messages asynchronously" file-name="src/main.rs">
+Here, we need to use a `while let` loop rather than a `for` loop, because Rust
+does not yet have an async version of `Iterator`, which is what the `for` loop
+does. In TODO: SECTION TITLE, we will see more about two related traits the
+community has been working on, `AsyncIterator` and `Stream`. For now, we can
+stick with `while let`, as in Listing 17-11, and the loop will end when
+`rx.recv().await` produces a `None`.
+
+<Listing number="17-11" caption="Using a `while let` loop with `.await` to receive messages asynchronously" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-05-orig/src/main.rs:loop}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-11/src/main.rs:loop}}
 ```
 
 </Listing>
 
-This code does not do what we want. It does successfully send and receive the
-messages, but instead of seeing the messages received at one-second intervals,
-we see them arrive all at once, four seconds after we start the program. It
-also never stops! You will need to shut it down using
-<span class="keystroke">ctrl-c</span>.
+This code still does not do exactly what we want. It does successfully send and
+receive the messages, but instead of seeing the messages received at one-second
+intervals, we see them arrive all at once, four seconds after we start the
+program. It also never stops! You will need to shut it down using <span
+class="keystroke">ctrl-c</span>.
 
 Let’s start by understanding why the messages all come in at once after the full
 delay, rather than coming in with delays in between each one. This highlights an
