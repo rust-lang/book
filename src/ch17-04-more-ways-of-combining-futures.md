@@ -6,16 +6,16 @@ we move on. Sometimes, though, we only need *some* future from a set to finish
 before we move on—kind of like racing one future against another. This operation
 is often named `race` for exactly that reason.
 
-In Listing 17-TODO, we use `race` to run two futures, `slow` and `fast`, against
+In Listing 17-24, we use `race` to run two futures, `slow` and `fast`, against
 each other. Each one prints a message when it starts running, pauses for some
 amount of time by calling and awaiting `sleep`, and then prints another message
 when it finishes. Then we pass both to `trpl::race` and wait for one of them to
 finish. (The outcome here won’t be too surprising: `fast` wins!)
 
-<Listing number="17-TODO" caption="Using `race` to get the result of whichever future finishes first" file-name="src/main.rs">
+<Listing number="17-24" caption="Using `race` to get the result of whichever future finishes first" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-race/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-24/src/main.rs:here}}
 ```
 
 </Listing>
@@ -59,43 +59,30 @@ function “slow” will just take a number of milliseconds to run, and sleep t
 thread for that long. This is intentionally not an async function, because the
 idea is to represent work that is *not* async.
 
-<Listing number="17-TODO" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
+<Listing number="17-25" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-yield-0-blocked/src/main.rs:slow}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-25/src/main.rs:slow}}
 ```
 
 </Listing>
 
-In Listing 17-TODO we have this kind of slow work in a pair of futures which
-only hand control back to the runtime *after* carrying out a bunch of slow
-operations, represented by calls to `slow`:
+In Listing 17-26, we use `slow` to emulate doing this kind of CPU-bound work in
+a pair of futures. To begin, each future only hands control back to the runtime
+*after* carrying out a bunch of slow operations.
 
-<Listing number="17-TODO" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
+<Listing number="17-26" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-yield-0-blocked/src/main.rs:slow-futures}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-26/src/main.rs:slow-futures}}
 ```
 
 </Listing>
 
 If you run this, you will see this output:
 
-<!-- TODO: listing for output -->
-
-```text
-'a' started.
-'a' ran for 300ms
-'a' ran for 100ms
-'a' ran for 200ms
-'a' ran for 900ms
-'b' started.
-'b' ran for 750ms
-'b' ran for 100ms
-'b' ran for 150ms
-'b' ran for 350ms
-'b' ran for 150ms
-'a' finished.
+```console
+{{#include ../listings/ch17-async-await/listing-17-26/output.txt}}
 ```
 
 As with our earlier example, `race` still finishes when `a` finishes. There is
@@ -110,21 +97,42 @@ something we can await!
 However, we can also see the handoff happening in this very example: if we
 removed the `trpl::sleep` at the end of the `a` future, it would complete
 without the `b` future running *at all*. Given that, maybe we could use the
-`sleep` function as a starting point, as in Listing 17-TODO.
+`sleep` function as a starting point, as in Listing 17-27.
 
-<Listing number="17-TODO" caption="Using `sleep` to let operations switch off making progress" file-name="src/main.rs">
+<Listing number="17-27" caption="Using `sleep` to let operations switch off making progress" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-yield-a-sleep/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-27/src/main.rs:here}}
 ```
 
 </Listing>
 
-Now the two futures’ work is interleaved. The `a` future still runs for a bit
-before handing off control to `b`, because it has some expensive work to do up
-front, but after that they just swap back and forth every time one of them hits
-an await point. In this case, we have done that after ever call to `slow`, but
-we could break up the work however makes the most sense to us.
+Now the two futures’ work is interleaved, as we can see if we run it.
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+
+```text
+'a' started.
+'a' ran for 300ms
+'b' started.
+'b' ran for 750ms
+'a' ran for 100ms
+'b' ran for 100ms
+'a' ran for 200ms
+'b' ran for 150ms
+'a' ran for 900ms
+'b' ran for 350ms
+'a' finished.
+```
+
+
+The `a` future still runs for a bit before handing off control to `b`, because
+it has some expensive work to do up front, but after that they just swap back
+and forth every time one of them hits an await point. In this case, we have done
+that after every call to `slow`, but we could break up the work however makes
+the most sense to us.
 
 However, we do not actually need to sleep to accomplish this. We just need to
 hand back control to the runtime. We can actually *yield* control back to the
@@ -132,10 +140,10 @@ runtime, using a function named `yield_now`. It does just what it says: hands
 control back to the runtime, so that the runtime can check whether any other
 tasks are ready to make progress.
 
-<Listing number="17-TODO" caption="Using `yield_now` to let operations switch off making progress" file-name="src/main.rs">
+<Listing number="17-28" caption="Using `yield_now` to let operations switch off making progress" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-yield-b-yield/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-28/src/main.rs:here}}
 ```
 
 </Listing>
@@ -148,18 +156,18 @@ example, will always sleep for at least a millisecond, even if we pass it a
 lot in one millisecond!
 
 You can see this for yourself by setting up a little benchmark, like the one in
-Listing 17-TODO. (This is not an especially rigorous way to do performance
+Listing 17-29. (This is not an especially rigorous way to do performance
 testing, but it suffices to show the difference here.) Here, we skip all the
 status printing, pass a one-nanosecond `Duration` to `sleep`, let each future
 run by itself so that they do not interfere with each other, and get rid of all
 the status printing that we did to see the back-and-forth between tasks in
-Listings 17-TODO and 17-TODO. Then we run for 1,000 iterations and see how long
+Listings 17-27 and 17-28. Then we run for 1,000 iterations and see how long
 `sleep` takes vs. `yield_now`.
 
-<Listing number="17-TODO" caption="Comparing the performance of `sleep` and `yield_now`" file-name="src/main.rs">
+<Listing number="17-29" caption="Comparing the performance of `sleep` and `yield_now`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-yield-c-performance/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-29/src/main.rs:here}}
 ```
 
 </Listing>
