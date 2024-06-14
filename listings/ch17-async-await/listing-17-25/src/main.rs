@@ -1,14 +1,12 @@
-use std::{thread, time::Duration};
-
 fn main() {
     trpl::block_on(async {
-        // We will call `slow` here later
+        // ANCHOR: here
+        let a = async { 1u32 };
+        let b = async { "Hello!" };
+        let c = async { true };
+
+        let (a_result, b_result, c_result) = trpl::join!(a, b, c);
+        println!("{a_result}, {b_result}, {c_result}");
+        // ANCHOR_END: here
     });
 }
-
-// ANCHOR: slow
-fn slow(name: &str, ms: u64) {
-    thread::sleep(Duration::from_millis(ms));
-    println!("'{name}' ran for {ms}ms");
-}
-// ANCHOR_END: slow

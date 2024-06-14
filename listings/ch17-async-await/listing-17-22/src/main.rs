@@ -1,62 +1,18 @@
-use std::{
-    future::Future,
-    pin::{pin, Pin},
-    time::Duration,
-};
-
 fn main() {
-    trpl::block_on(async {
-        let (tx, mut rx) = trpl::channel();
-
-        let tx1 = tx.clone();
+    trpl::block_on({
         // ANCHOR: here
-        let tx1_fut = pin!(async move {
-            // snip...
-            // ANCHOR_END: here
-            let vals = vec![
-                String::from("hi"),
-                String::from("from"),
-                String::from("the"),
-                String::from("future"),
-            ];
+        async {
+            let mut strings = vec![];
 
-            for val in vals {
-                tx1.send(val).unwrap();
-                trpl::sleep(Duration::from_secs(1)).await;
-            }
-            // ANCHOR: here
-        });
+            let a = trpl::read_to_string("test-data/hello.txt").await.unwrap();
+            strings.push(a.trim());
 
-        let rx_fut = pin!(async {
-            // snip...
-            // ANCHOR_END: here
-            while let Some(value) = rx.recv().await {
-                println!("received '{value}'");
-            }
-            // ANCHOR: here
-        });
+            let b = trpl::read_to_string("test-data/world.txt").await.unwrap();
+            strings.push(b.trim());
 
-        let tx_fut = pin!(async move {
-            // snip...
-            // ANCHOR_END: here
-            let vals = vec![
-                String::from("more"),
-                String::from("messages"),
-                String::from("for"),
-                String::from("you"),
-            ];
-
-            for val in vals {
-                tx.send(val).unwrap();
-                trpl::sleep(Duration::from_secs(1)).await;
-            }
-            // ANCHOR: here
-        });
-
-        let futures: Vec<Pin<&mut dyn Future<Output = ()>>> =
-            vec![tx1_fut, rx_fut, tx_fut];
+            let combined = strings.join(" ");
+            println!("{combined}");
+        }
         // ANCHOR_END: here
-
-        trpl::join_all(futures).await;
     });
 }

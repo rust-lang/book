@@ -1,4 +1,4 @@
-use std::{future::Future, time::Duration};
+use std::time::Duration;
 
 fn main() {
     trpl::block_on(async {
@@ -40,10 +40,10 @@ fn main() {
         };
 
         // ANCHOR: here
-        let futures: Vec<Box<dyn Future<Output = ()>>> =
+        let futures =
             vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
-        // ANCHOR_END: here
 
         trpl::join_all(futures).await;
+        // ANCHOR_END: here
     });
 }

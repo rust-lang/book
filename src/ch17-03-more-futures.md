@@ -51,14 +51,18 @@ appear in the code?
 One clue is the format of this message. Notice that it is exactly the same as if
 we had tried to create a `Vec` with a a number and a string in it:
 
+<Listing number="17-19" caption="Trying to construct a `Vec` with a number and a string" file-name="src/main.rs">
+
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/no-listing-type-mismatch/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-19/src/main.rs:here}}
 ```
+
+</Listing>
 
 The output there would be:
 
 ```text
-{{#include ../listings/ch17-async-await/no-listing-type-mismatch/output.txt}}
+{{#include ../listings/ch17-async-await/listing-17-19/output.txt}}
 ```
 
 Saying “expected *something*, found *something else*” is Rust’s standard format
@@ -91,13 +95,13 @@ produced by these types as interchangeable, since all of them by definition
 implement the `Future` trait.
 
 We can start by wrapping each of the futures in the `vec!` in a `Box::new()`.
-Unfortunately, the initial way we might try this, as shown in Listing 17-19,
+Unfortunately, the initial way we might try this, as shown in Listing 17-20,
 still does not compile.
 
-<Listing number="17-19" caption="Trying to use `Box::new` to align the types of the futures in a `Vec`" file-name="src/main.rs">
+<Listing number="17-20" caption="Trying to use `Box::new` to align the types of the futures in a `Vec`" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-19/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-20/src/main.rs:here}}
 ```
 
 </Listing>
@@ -109,7 +113,7 @@ second and third `Box::new` calls, and we also get new errors referring to the
 We can start by fixing the type error around the `Box::new` calls, by telling
 the compiler explicitly that we want to use these types as trait objects. The
 clearest way to do that here is by adding a type annotation to the declaration
-of `futures`, as we see in Listing 17-TODO. The type we have to write here is a
+of `futures`, as we see in Listing 17-21. The type we have to write here is a
 little involved, so let’s walk through each part of it.
 
 - The innermost type is the future itself. We note explicitly that it the output
@@ -118,20 +122,20 @@ little involved, so let’s walk through each part of it.
 - The entire trait is wrapped in a `Box`.
 - Finally, we state explicitly that `futures` is a `Vec` containing these items.
 
-<Listing number="17-20" caption="Fixing the rest of the type mismatch errors by using an explicit type declaration" file-name="src/main.rs">
+<Listing number="17-21" caption="Fixing the rest of the type mismatch errors by using an explicit type declaration" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-20/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-21/src/main.rs:here}}
 ```
 
 </Listing>
 
 That already made a big difference. Now when we run the compiler, we only have
 the errors mentioning `Unpin`. Although there are three of them, notice that
-each is very similar in its contets
+each is very similar in its contents.
 
 ```console
-{{#include ../listings/ch17-async-await/listing-17-20/output.txt}}
+{{#include ../listings/ch17-async-await/listing-17-21/output.txt}}
 ```
 
 That is a *lot* to digest, so let’s pull it apart. The first part of the message
@@ -176,11 +180,17 @@ type to call `poll`?
 In [“Futures and Syntax: What Are Futures”][what-are-futures], we described how
 a series of await points in a future get compiled into a state machine—and noted
 how the compiler helps make sure that state machine follows all of Rust’s normal
-rules around safety, including borrowing and ownership. Consider code like this:
+rules around safety, including borrowing and ownership. Consider code which has
+a mutable `Vec` of strings, which asynchronously reads strings from files and
+pushes those strings into the `Vec`:
+
+<Listing number="17-22" caption="Borrowing mutable data across multiple `.await` points">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/no-listing-borrow-mutable-vec/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-22/src/main.rs:here}}
 ```
+
+</Listing>
 
 If we think about the state machine that would get compiled to, it might be
 something kind of like this:
@@ -301,12 +311,12 @@ get our `join_all` call to compile! First, we need to explicitly annotate
 `futures` as referring to a pinned `Box` of futures. Second, we actually need to
 pin the futures, which we can do using the handy `Box::pin` API, which exists
 for exactly this. Putting that together, we end up with the code in Listing
-17-21.
+17-23.
 
-<Listing number="17-21" caption="Using `Pin` and `Box::pin` to make the `Vec` type check" file-name="src/main.rs">
+<Listing number="17-23" caption="Using `Pin` and `Box::pin` to make the `Vec` type check" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-21/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:here}}
 ```
 
 </Listing>
@@ -344,12 +354,12 @@ still be explicit about the type of the pinned reference; otherwise Rust will
 still not know to interpret these as dynamic trait objects, which is what we
 need them to be in the `Vec`. We therefore `pin!` each future when we define it,
 and define `futures` as a `Vec` containing pinned mutable references to the
-dynamic `Future` type, as in Listing 17-22.
+dynamic `Future` type, as in Listing 17-24.
 
-<Listing number="17-22" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
+<Listing number="17-24" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-22/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-24/src/main.rs:here}}
 ```
 
 </Listing>
@@ -358,17 +368,17 @@ This keeps everything on the stack, which is a nice little performance win, but
 it is still a lot of explicit types, which is quite unusual for Rust!
 
 There is another, more serious, issue as well. We got this far by ignoring the
-fact that we might have different `Output` types. For example, in Listing 17-23,
+fact that we might have different `Output` types. For example, in Listing 17-25,
 the anonymous future type for `a` implements `Future<Output = u32>`, the
 anonymous future type for `b` implements `Future<Output = &str>`, and the
 anonymous future type for `c` implements `Future<Output = bool>`. We can use
 `trpl::join!` to await them together, since it accepts futures of different
 types.
 
-<Listing number="17-23" caption="Three futures with distinct types" file-name="src/main.rs">
+<Listing number="17-25" caption="Three futures with distinct types" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-25/src/main.rs:here}}
 ```
 
 </Listing>

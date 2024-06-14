@@ -1,12 +1,53 @@
+use std::{
+    future::Future,
+    pin::{pin, Pin},
+    time::Duration,
+};
+
 fn main() {
     trpl::block_on(async {
-        // ANCHOR: here
-        let a = async { 1u32 };
-        let b = async { "Hello!" };
-        let c = async { true };
+        let (tx, mut rx) = trpl::channel();
 
-        let (a_result, b_result, c_result) = trpl::join!(a, b, c);
-        println!("{a_result}, {b_result}, {c_result}");
+        let tx1 = tx.clone();
+        let tx1_fut = pin!(async move {
+            let vals = vec![
+                String::from("hi"),
+                String::from("from"),
+                String::from("the"),
+                String::from("future"),
+            ];
+
+            for val in vals {
+                tx1.send(val).unwrap();
+                trpl::sleep(Duration::from_secs(1)).await;
+            }
+        });
+
+        let rx_fut = pin!(async {
+            while let Some(value) = rx.recv().await {
+                println!("received '{value}'");
+            }
+        });
+
+        let tx_fut = pin!(async move {
+            let vals = vec![
+                String::from("more"),
+                String::from("messages"),
+                String::from("for"),
+                String::from("you"),
+            ];
+
+            for val in vals {
+                tx.send(val).unwrap();
+                trpl::sleep(Duration::from_secs(1)).await;
+            }
+        });
+
+        // ANCHOR: here
+        let futures: Vec<Pin<Box<dyn Future<Output = ()>>>> =
+            vec![Box::pin(tx1_fut), Box::pin(rx_fut), Box::pin(tx_fut)];
         // ANCHOR_END: here
+
+        trpl::join_all(futures).await;
     });
 }
