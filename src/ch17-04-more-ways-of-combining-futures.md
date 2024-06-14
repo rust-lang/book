@@ -191,15 +191,15 @@ important one to keep in mind, though!
 Many of these patterns are common enough to warrant abstracting over. For
 example, the `trpl::timeout` function takes a `Duration` for the maximum time to
 run, but also takes a future to run, and produces a new future you can await,
-whose `Output` type is a `Result`. Listing 17-TODO shows how we can use it. If
+whose `Output` type is a `Result`. Listing 17-32 shows how we can use it. If
 the passed-in future finishes first, the output result will be `Ok`, with the
 result of that passed-in future. If the duration elapses before the passed-in
 future finishes, the result will be `Err` with the duration that elapsed.
 
-<Listing number="17-TODO" caption="Using `timeout` to run a slow operation with a time limit" file-name="src/main.rs">
+<Listing number="17-32" caption="Using `timeout` to run a slow operation with a time limit" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-timeout-a/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-32/src/main.rs:here}}
 ```
 
 </Listing>
@@ -215,12 +215,12 @@ the API of `timeout`:
   be `Ok` with the value produced by the future. If the timeout happens, the
   `Result` will be `Err` with the duration that the timeout waited for.
 
-We can write the same signature ourselves, as in Listing 17-TODO.
+We can write the same signature ourselves, as in Listing 17-33.
 
-<Listing number="17-TODO" caption="Defining the signature of `timeout`" file-name="src/main.rs">
+<Listing number="17-33" caption="Defining the signature of `timeout`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-timeout-final/src/main.rs:declaration}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-33/src/main.rs:declaration}}
 ```
 
 </Listing>
@@ -228,7 +228,7 @@ We can write the same signature ourselves, as in Listing 17-TODO.
 Then, in the body of the function, we can `race` whatever future the caller
 passes with a `sleep` future.
 
-When we saw `race` earlier in Listing 17-TODO, we ignored its return type,
+When we saw `race` earlier in Listing 17-26, we ignored its return type,
 because we were just interested in seeing the behavior of `fast` and `slow` when
 we ran the program. Here, though, its return value tells us whether the future
 or the sleep finished first. With `race`, both futures passed as arguments can
@@ -259,10 +259,10 @@ match trpl::race(future_a, future_b).await {
 That gives us enough to be able to implement `timeout` ourselves using `race`
 and `sleep`.
 
-<Listing number="17-TODO" caption="Defining `timeout` with `race` and `sleep`" file-name="src/main.rs">
+<Listing number="17-34" caption="Defining `timeout` with `race` and `sleep`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-timeout-final/src/main.rs:timeout}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-34/src/main.rs:timeout}}
 ```
 
 </Listing>
@@ -280,10 +280,10 @@ duration the user passed in instead. And that’s it!
 Back in `main`, we can call this new `timeout` function exactly like we called
 `trpl::timeout` before, but without the `trpl::` namespace:
 
-<Listing number="17-TODO" caption="Using the `timeout` function we defined ourselves" file-name="src/main.rs">
+<Listing number="17-35" caption="Using the `timeout` function we defined ourselves" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-timeout-final/src/main.rs:main}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-35/src/main.rs:main}}
 ```
 
 </Listing>

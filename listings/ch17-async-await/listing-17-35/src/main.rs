@@ -20,17 +20,12 @@ fn main() {
     });
 }
 
-// ANCHOR: timeout
-
-// ANCHOR: declaration
 async fn timeout<F: Future>(
     max_time: Duration,
     future: F,
 ) -> Result<F::Output, Duration> {
-    // ANCHOR_END: declaration
     match trpl::race(future, trpl::sleep(max_time)).await {
         Either::Left(output) => Ok(output),
         Either::Right(_) => Err(max_time),
     }
 }
-// ANCHOR_END: timeout
