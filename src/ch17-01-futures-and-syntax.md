@@ -84,8 +84,6 @@ run.
 
 <Listing number="17-2" caption="Attempting to fix a compiler warning by awaiting a future" file-name="src/main.rs">
 
-<!-- does not compile -->
-
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-02/src/main.rs:main}}
 ```
@@ -124,8 +122,8 @@ helper functions we supply are doing.
 > ### The `futures` and `tokio` Crates
 >
 > Whenever you see code from the `trpl` crate throughout the rest of the
-> chapter, it will be re-exporting code from the `futures` and [`tokio`][tokio]
-> crates.
+> chapter, it will be re-exporting code from the [`futures`][futures-crate] and
+> [`tokio`][tokio] crates.
 >
 > - The `futures` crate is an official home for Rust experimentation for async
 >   code, and is actually where the `Future` type was originally designed.
@@ -178,6 +176,12 @@ pub trait Future {
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
 }
 ```
+
+Notice that this is a normal trait. While we often interact with futures via
+async blocks, you can also implement this yourself on your own data types when
+you need to. Many of the functions we will see throughout this chapter return
+types which have their own implementations of `Future`. Those implementations
+can compose together nicely
 
 `Future` has an associated type, `Output`, which says what the result of the
 future will be when it resolves. (This is analogous to the `Item` associated
@@ -270,20 +274,12 @@ really is an `enum` like this, just an anonymous one you don’t have to name. A
 a result, the normal rules around data structures all apply, including for
 borrowing and ownership. Happily, the compiler also handles checking that for
 us, and has good error messages. We will work through a few of those later in
-the chapter! This is enough information to let us keep following the chain back
-up to the root of our original problem with running async functions.
+the chapter!
 
-<!--
-  TODO: bullet points covering how we got here and what happens at each phase.
--->
-
-When we follow that chain far enough, eventually we end up back in some
-non-async function. At that point, something needs to “translate” between the
-async and sync worlds. That “something” is also the runtime! Whatever runtime
-you use is what handles the top-level `poll()` call, scheduling and handing off
-between the different async operations which may be in flight as they hand back
-control at await points, and often also providing async versions of
-functionality like file I/O.
+Once all of that compilation work is done, though, we need a runtime to actually
+poll the futures, coordinate between different futures as they hand off control
+at await points, and even provide async versions of common functionality like
+file or network I/O.
 
 Now we can understand why the compiler was stopping us in Listing 17-2 (before
 we added the `trpl::block_on` function). The `main` function is not `async`—and
@@ -319,7 +315,9 @@ futures and runtimes work, we can see some of the things we can *do* with async.
 [under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
 [pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
 [async-book]: https://rust-lang.github.io/async-book/
+<!-- TODO: map source link version to version of Rust? -->
 [crate-source]: https://github.com/rust-lang/book/tree/main/packages/trpl
+[futures-crate]: https://crates.io/crates/futures
 [tokio]: https://tokio.rs
 
-<!-- TODO: map source link version to version of Rust? -->
+
