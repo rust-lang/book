@@ -39,14 +39,13 @@ the iterator produces.
 The code in Listing 12-1 allows your `minigrep` program to read any command
 line arguments passed to it and then collect the values into a vector.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-1" file-name="src/main.rs" caption="Collecting the command line arguments into a vector and printing them">
 
 ```rust
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 12-1: Collecting the command line arguments into
-a vector and printing them</span>
+</Listing>
 
 First, we bring the `std::env` module into scope with a `use` statement so we
 can use its `args` function. Notice that the `std::env::args` function is
@@ -101,14 +100,13 @@ arguments. Now we need to save the values of the two arguments in variables so
 we can use the values throughout the rest of the program. We do that in Listing
 12-2.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-2" file-name="src/main.rs" caption="Creating variables to hold the query argument and file path argument">
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-02/src/main.rs}}
 ```
 
-<span class="caption">Listing 12-2: Creating variables to hold the query
-argument and file path argument</span>
+</Listing>
 
 As we saw when we printed the vector, the program’s name takes up the first
 value in the vector at `args[0]`, so we’re starting arguments at index `1`. The

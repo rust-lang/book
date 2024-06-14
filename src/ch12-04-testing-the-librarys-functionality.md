@@ -35,14 +35,13 @@ behavior we want the `search` function to have: it will take a query and the
 text to search, and it will return only the lines from the text that contain
 the query. Listing 12-15 shows this test, which won’t compile yet.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="12-15" file-name="src/lib.rs" caption="Creating a failing test for the `search` function we wish we had">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-15/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-15: Creating a failing test for the `search`
-function we wish we had</span>
+</Listing>
 
 This test searches for the string `"duct"`. The text we’re searching is three
 lines, only one of which contains `"duct"` (Note that the backslash after the
@@ -58,14 +57,13 @@ vector, as shown in Listing 12-16. Then the test should compile and fail
 because an empty vector doesn’t match a vector containing the line `"safe,
 fast, productive."`
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="12-16" file-name="src/lib.rs" caption="Defining just enough of the `search` function so our test will compile">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-16: Defining just enough of the `search`
-function so our test will compile</span>
+</Listing>
 
 Notice that we need to define an explicit lifetime `'a` in the signature of
 `search` and use that lifetime with the `contents` argument and the return
@@ -128,14 +126,13 @@ Rust has a helpful method to handle line-by-line iteration of strings,
 conveniently named `lines`, that works as shown in Listing 12-17. Note this
 won’t compile yet.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="12-17" file-name="src/lib.rs" caption="Iterating through each line in `contents`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-17/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-17: Iterating through each line in `contents`
-</span>
+</Listing>
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
 [Chapter 13][ch13-iterators]<!-- ignore -->, but recall that you saw this way
@@ -149,14 +146,13 @@ Fortunately, strings have a helpful method named `contains` that does this for
 us! Add a call to the `contains` method in the `search` function, as shown in
 Listing 12-18. Note this still won’t compile yet.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="12-18" file-name="src/lib.rs" caption="Adding functionality to see whether the line contains the string in `query`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-18/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-18: Adding functionality to see whether the
-line contains the string in `query`</span>
+</Listing>
 
 At the moment, we’re building up functionality. To get it to compile, we need
 to return a value from the body as we indicated we would in the function
@@ -169,14 +165,13 @@ to return. For that, we can make a mutable vector before the `for` loop and
 call the `push` method to store a `line` in the vector. After the `for` loop,
 we return the vector, as shown in Listing 12-19.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="12-19" file-name="src/lib.rs" caption="Storing the lines that match so we can return them">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-19: Storing the lines that match so we can
-return them</span>
+</Listing>
 
 Now the `search` function should return only the lines that contain `query`,
 and our test should pass. Let’s run the test:

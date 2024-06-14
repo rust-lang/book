@@ -7,26 +7,24 @@ has an Emily Dickinson poem that will work well! Create a file called
 *poem.txt* at the root level of your project, and enter the poem “I’m Nobody!
 Who are you?”
 
-<span class="filename">Filename: poem.txt</span>
+<Listing number="12-3" file-name="poem.txt" caption="A poem by Emily Dickinson makes a good test case">
 
 ```text
 {{#include ../listings/ch12-an-io-project/listing-12-03/poem.txt}}
 ```
 
-<span class="caption">Listing 12-3: A poem by Emily Dickinson makes a good test
-case</span>
+</Listing>
 
 With the text in place, edit *src/main.rs* and add code to read the file, as
 shown in Listing 12-4.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-4" file-name="src/main.rs" caption="Reading the contents of the file specified by the second argument">
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-4: Reading the contents of the file specified
-by the second argument</span>
+</Listing>
 
 First, we bring in a relevant part of the standard library with a `use`
 statement: we need `std::fs` to handle files.
