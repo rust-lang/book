@@ -109,17 +109,26 @@ The compiler error is as follows:
 ```
 
 The error references the `Sized` trait again! Rust doesn’t know how much space
-it will need to store the closure. We saw a solution to this problem earlier.
+it will need to store the closure. We saw some solutions to this problem earlier.
+
 We can use a trait object:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-19-returns-closure-trait-object/src/lib.rs}}
 ```
 
-This code will compile just fine. For more about trait objects, refer to the
+(For more about trait objects, refer to the
 section [“Using Trait Objects That Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
-ignore --> in Chapter 17.
+ignore --> in Chapter 17.)
+
+Or we can use the [`impl Trait` return type syntax][returning-types-that-implement-traits]<!-- ignore -->:
+
+```rust,noplayground
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-23-returns-closure-impl-trait/src/lib.rs}}
+```
+
+Either of these snippets will compile just fine.
 
 Next, let’s look at macros!
 
@@ -128,3 +137,5 @@ ch19-03-advanced-traits.html#advanced-traits
 [enum-values]: ch06-01-defining-an-enum.html#enum-values
 [using-trait-objects-that-allow-for-values-of-different-types]:
 ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[returning-types-that-implement-traits]:
+ch10-02-traits.html#returning-types-that-implement-traits
