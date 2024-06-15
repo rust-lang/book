@@ -1,5 +1,5 @@
 fn main() {
-    let hello = "Здравствуйте";
+    let hello = "Привіт";
 
     let s = &hello[0..1];
 }
