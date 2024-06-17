@@ -125,7 +125,9 @@ ask the runtime to run them both to completion using `trpl::join`:
 
 When we run this, we see both futures run to completion:
 
-<!-- TODO: extract to output? -->
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 hi number 1 from the first task!
@@ -346,7 +348,9 @@ which `rx` can then receive. When we run that code, we see the extra output from
 the new `async` block, and the message it sends being received by the
 `rx.recv()`.
 
-<!-- TODO: extract to output? -->
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 Got: hi
@@ -407,7 +411,12 @@ block, and switching back to `join3`.
 
 </Listing>
 
-Both of these blocks need to be `async move` blocks, or else we will end up back
-in the same infinite loop we started out in.
+*Both* of these blocks need to be `async move` blocks, or else we will end up
+back in the same infinite loop we started out in. With that done, though, we get
+all the messages we expected, with little delays between them. Notice that since
+each of the sending futures do a one-second delay after sending, the messages
+come in right after each other at one-second intervals. The delays are
+concurrent, not sequential, just as we would expect.
 
-<!-- TODO: transition sentence for section -->
+This is a good start, but it limits us to just a handful of futures: two with
+`join`, or three with `join3`. Let’s see how we might work with more futures.
