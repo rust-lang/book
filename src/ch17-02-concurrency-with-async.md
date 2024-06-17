@@ -175,12 +175,12 @@ Sharing data between futures will look familiar. We can again use async versions
 of Rust’s types for message-passing. Instead of `std::sync:mpsc::channel`, we
 will use a `tprl::channel`, for example.
 
-The `Receiver::recv()` method in the `std` channel blocks until it receives a
-message. The `trpl::Receiver::recv()` method, by contrast, is an `async`
-function. Instead of blocking, it sleeps until a message is received or the send
-side of the channel closes. One other difference with this particular `recv()`
-implementation is that it returns an `Option` of the type sent over the channel
-instead of a `Result`.
+The synchronous `Receiver::recv()` method in `std::mpsc::channel` blocks until
+it receives a message. The `trpl::Receiver::recv()` method, by contrast, is an
+`async` function. Instead of blocking, it waits until a message is received or
+the send side of the channel closes. One other difference with this particular
+`recv()` implementation is that it returns an `Option` of the type sent over the
+channel instead of a `Result`.
 
 We can start by introducing an async version of the multiple-producer,
 single-consumer channel channel API we used with threads back in Chapter 16. The
@@ -236,15 +236,22 @@ as shown in Listing 17-10:
 </Listing>
 
 This handles sending the messages, but so far we don’t do anything with them,
-and the code just silently runs forever. Listing 17-11 shows how we can receive
-those messages by waiting for them in a loop.
+and the code just silently runs forever. We need to actually *receive* the
+messages. In this case, we could do that manually, because we know how many
+messages are coming in. In the real world, though, we will generally be waiting
+on some *unknown* number of messages. In that case, we need to keep waiting
+until we determine that there are no more messages.
 
-Here, we need to use a `while let` loop rather than a `for` loop, because Rust
-does not yet have an async version of `Iterator`, which is what the `for` loop
-does. In TODO: SECTION TITLE, we will see more about two related traits the
-community has been working on, `AsyncIterator` and `Stream`. For now, we can
-stick with `while let`, as in Listing 17-11, and the loop will end when
-`rx.recv().await` produces a `None`.
+That sounds like a good job for a loop! In synchronous code, we might use a
+`for` loop to process a sequence of items, regardless of how many items are in
+the loop. However, Rust does not yet have a way to write a `for` loop over an
+*asynchronous* series of items. Instead, we need to use a new kind of loop we
+haven’t seen before, the `while let` conditional loop. A `while let` loop is the
+loop version of the `if let` construct we saw back in Chapter 6. It continues as
+long as the condition it relies on is true. Listing 17-11 shows how we can use
+this with `rx.recv` to print all the messages send by the `tx` transmitter.
+
+<!-- TODO: update text in ch. 19 to account for our having introduced this. -->
 
 <Listing number="17-11" caption="Using a `while let` loop with `.await` to receive messages asynchronously" file-name="src/main.rs">
 
@@ -254,10 +261,23 @@ stick with `while let`, as in Listing 17-11, and the loop will end when
 
 </Listing>
 
-This code still does not do exactly what we want. It does successfully send and
-receive the messages, but instead of seeing the messages received at one-second
-intervals, we see them arrive all at once, four seconds after we start the
-program. It also never stops! You will need to shut it down using <span
+The `rx.recv()` call produces a `Future`. The `Output` of the future is an
+`Option` of the message type. While waiting on messages, it will respond with
+`Poll::Pending`, so the runtime will pause it until it is time to check it
+again. Once a message arrives, it will respond with
+`Poll::Ready(Some(message))`. When the channel closes, it will instead respond
+with `Poll::Ready(None)`, which we can use to know that it is done. The `while
+let` pulls all of this together. If the result of calling `rx.recv().await` is
+`Some(message)`, we get access to the message and we can use it in the loop
+body, just like we could with `if let`. If the result is `None`, the loop ends.
+Every time the loop completes, it hits the await point again, so the runtime
+pauses it again until another message arrives.
+
+With the `while let` loop in place, the code now successfully sends and receives
+the messages. Unfortunately, there are still a couple problems. For one thing,
+the messages do not arrive at one-second intervals, we see them arrive all at
+once, four seconds after we start the program. For another, this program also
+never stops! You will need to shut it down using <span
 class="keystroke">ctrl-c</span>.
 
 Let’s start by understanding why the messages all come in at once after the full
@@ -420,3 +440,5 @@ concurrent, not sequential, just as we would expect.
 
 This is a good start, but it limits us to just a handful of futures: two with
 `join`, or three with `join3`. Let’s see how we might work with more futures.
+
+[streams]: /ch17-05-streams.md
