@@ -294,4 +294,6 @@ example, you can use this same approach to combine timeouts with retries, and
 in turn use those with things like network calls—the exact example we started
 out with at the beginning of the chapter!
 
+Up next, let’s look at how we can work with *sequences* of futures.
+
 [futures]: ch17-01-futures-and-syntax.html#what-are-futures
