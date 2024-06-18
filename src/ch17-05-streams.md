@@ -56,8 +56,8 @@ of those features put together:
   indicate that it is more like `Iterator`: there may be zero to many of these.
 
 * A method to get those items. We can call it `poll_next`, to make it clear that
-  it is polling like a future and producing a sequence of items one after another
-  like an iterator.
+  it is polling like a future and producing a sequence of items one after
+  another, just like an iterator.
 
 * A return type from `poll_next` which uses both `Poll` and `Option`. The outer
   type is `Poll`, since it has to be checked for readiness as a kind of future.
@@ -79,27 +79,50 @@ trait Stream {
 ```
 
 Something very similar to this will likely end up standardized as part of Rust’s
-standard library, just the way `Future` was.
+standard library, just the way `Future` was. In the meantime, it is part of the
+toolkit of most runtimes, so you can rely on it, and everything we cover below
+should generally apply!
 
 ### Working With Streams
 
-Now that we have seen the API, we can see that `rx.recv` is a good model for how
-we will use streams.
+We *could* work directly in terms of the `poll_next` API by hand-writing our own
+`Stream` state machines. However, just as we do not generally work with futures
+directly via their `poll` method, we generally also do not work directly with
+the `poll_next` method for streams. Instead, we usually use a `next` method,
+which is defined roughly like this:
 
-> Note: As mentioned in the [“Message Passing”][17-02-messages] section, there
-> is not yet an async version of `for` loops. There may well be in the future,
-> though, and if so it will be built on something a lot like `Stream`.
+```rust
+trait Stream {
+    async fn next(&mut self) -> Option<Self::Item>;
+}
+```
 
 <!--
+TODO: update this if/when tokio/etc. update their MSRV and switch to using AFIT,
+since the lack thereof is the reason they do not yet have this.
+-->
 
-- Motivation: you can do a lot with `while let` but it would be nice to be able
-  to use `for` loops, even `async for`. (But we don’t get those from the
-  ecosystem traits… so maybe only call them out in a `Note: …` context?)
+> Note: The actual definition we will use looks slightly different than this,
+> because it supports versions of Rust which did not yet support using async
+> functions in traits. As a result, it looks like this:
+>
+> ```rust
+> fn next(&mut self) -> Next<'_, Self> where Self: Unpin;
+> ```
+>
+> That `Next` type is just a simple `struct` which implements `Future`, so that
+> `.await` can work with this!
 
-- The basic API, with `poll_next()`, plus the “surface” syntax, `.next().await`.
+Working with this API will be kind of like working with iterators without the
+convenience of a `for` loop. In fact, it will look a lot like the way we used
+`rx.recv` back in the [“Message Passing”][17-02-messages] section, using `while
+let` loops.
 
-- How to use it, with a worked example from .
-
+<!--
+TODO: How to use it, with a worked example from… somewhere? Maybe use examples
+from the iterators chapter, combined with a sink/source? That would then push us
+to introduce *those* terms as well, but that is probably to the good, since they
+come up a lot here.
 -->
 
 [17-02-messages]: /ch17-02-concurrency-with-async.md#message-passing
