@@ -214,7 +214,8 @@ available.
 > documentation.
 
 Under the hood, when you call `.await`, Rust compiles that to code which calls
-`poll`, kind of like this:
+`poll`, kind of (although not exactly <!-- TODO: describe `IntoFuture`? -->)
+like this:
 
 ```rust,ignore
 match hello_async().poll() {
