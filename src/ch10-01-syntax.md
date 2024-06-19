@@ -16,14 +16,13 @@ Continuing with our `largest` function, Listing 10-4 shows two functions that
 both find the largest value in a slice. We'll then combine these into a single
 function that uses generics.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-4" file-name="src/main.rs" caption="Two functions that differ only in their names and the types in their signatures">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-4: Two functions that differ only in their
-names and the types in their signatures</span>
+</Listing>
 
 The `largest_i32` function is the one we extracted in Listing 10-3 that finds
 the largest `i32` in a slice. The `largest_char` function finds the largest
