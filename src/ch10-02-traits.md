@@ -61,14 +61,13 @@ the headline, the author, and the location to create the return value of
 followed by the entire text of the tweet, assuming that the tweet content is
 already limited to 280 characters.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="10-13" file-name="src/lib.rs" caption="Implementing the `Summary` trait on the `NewsArticle` and `Tweet` types">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-13/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 10-13: Implementing the `Summary` trait on the
-`NewsArticle` and `Tweet` types</span>
+</Listing>
 
 Implementing a trait on a type is similar to implementing regular methods. The
 difference is that after `impl`, we put the trait name we want to implement,
