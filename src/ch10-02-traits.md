@@ -335,14 +335,13 @@ is a type alias for the type of the `impl` block, which in this case is
 `cmp_display` method if its inner type `T` implements the `PartialOrd` trait
 that enables comparison *and* the `Display` trait that enables printing.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="10-15" file-name="src/lib.rs" caption="Conditionally implementing methods on a generic type depending on trait bounds">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-15/src/lib.rs}}
 ```
 
-<span class="caption">Listing 10-15: Conditionally implementing methods on a
-generic type depending on trait bounds</span>
+</Listing>
 
 We can also conditionally implement a trait for any type that implements
 another trait. Implementations of a trait on any type that satisfies the trait
