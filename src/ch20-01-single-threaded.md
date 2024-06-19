@@ -113,10 +113,10 @@ part of the `drop` implementation. Browsers sometimes deal with closed
 connections by retrying, because the problem might be temporary. The important
 factor is that we’ve successfully gotten a handle to a TCP connection!
 
-Remember to stop the program by pressing <span class="keystroke">ctrl-c</span>
-when you’re done running a particular version of the code. Then restart the
-program by invoking the `cargo run` command after you’ve made each set of code
-changes to make sure you’re running the newest code.
+Remember to stop the program by pressing <kbd>ctrl</kbd>-<kbd>c</kbd> when
+you’re done running a particular version of the code. Then restart the program
+by invoking the `cargo run` command after you’ve made each set of code changes
+to make sure you’re running the newest code.
 
 ### Reading the Request
 
@@ -448,7 +448,7 @@ uses the `status_line` and `filename` variables. This makes it easier to see
 the difference between the two cases, and it means we have only one place to
 update the code if we want to change how the file reading and response writing
 work. The behavior of the code in Listing 20-9 will be the same as that in
-Listing 20-8.
+Listing 20-7.
 
 Awesome! We now have a simple web server in approximately 40 lines of Rust code
 that responds to one request with a page of content and responds to all other

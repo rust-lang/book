@@ -58,19 +58,19 @@ impossible to test private functions. Regardless of which testing ideology you
 adhere to, Rust’s privacy rules do allow you to test private functions.
 Consider the code in Listing 11-12 with the private function `internal_adder`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="11-12" file-name="src/lib.rs" caption="Testing a private function">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-12/src/lib.rs}}
 ```
 
-<span class="caption">Listing 11-12: Testing a private function</span>
+</Listing>
 
 Note that the `internal_adder` function is not marked as `pub`. Tests are just
 Rust code, and the `tests` module is just another module. As we discussed in
 the [“Paths for Referring to an Item in the Module Tree”][paths]<!-- ignore -->
 section, items in child modules can use the items in their ancestor modules. In
-this test, we bring all of the `test` module’s parent’s items into scope with
+this test, we bring all of the `tests` module’s parent’s items into scope with
 `use super::*`, and then the test can call `internal_adder`. If you don’t think
 private functions should be tested, there’s nothing in Rust that will compel
 you to do so.
@@ -108,18 +108,18 @@ adder
 
 Enter the code in Listing 11-13 into the *tests/integration_test.rs* file:
 
-<span class="filename">Filename: tests/integration_test.rs</span>
+<Listing number="11-13" file-name="tests/integration_test.rs" caption="An integration test of a function in the `adder` crate">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-13/tests/integration_test.rs}}
 ```
 
-<span class="caption">Listing 11-13: An integration test of a function in the
-`adder` crate</span>
+</Listing>
 
 Each file in the `tests` directory is a separate crate, so we need to bring our
-library into each test crate’s scope. For that reason we add `use adder` at the
-top of the code, which we didn’t need in the unit tests.
+library into each test crate’s scope. For that reason we add `use
+adder::add_two` at the top of the code, which we didn’t need in the unit
+tests.
 
 We don’t need to annotate any code in *tests/integration_test.rs* with
 `#[cfg(test)]`. Cargo treats the `tests` directory specially and compiles files

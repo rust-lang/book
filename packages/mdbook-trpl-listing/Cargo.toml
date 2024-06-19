@@ -1,0 +1,19 @@
+[package]
+name = "mdbook-trpl-listing"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+mdbook = { version = "0.4", default-features = false }     # only need the library
+pulldown-cmark = { version = "0.10", features = ["simd"] }
+pulldown-cmark-to-cmark = "13"
+serde_json = "1"
+thiserror = "1.0.60"
+toml = "0.8.12"
+xmlparser = "0.13.6"
+
+[dev-dependencies]
+assert_cmd = "2"

@@ -193,7 +193,7 @@ after doing automatic regeneration, look at listings/ch15-smart-pointers/listing
 -->
 
 ```text
-help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List` representable
+help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
   |
 2 |     Cons(i32, Box<List>),
   |               ++++    +

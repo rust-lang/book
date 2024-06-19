@@ -6,6 +6,6 @@ fn main() {
         println!("found a string");
     }
 
-    println!("{:?}", s);
+    println!("{s:?}");
     // ANCHOR_END: here
 }

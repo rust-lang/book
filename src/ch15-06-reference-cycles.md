@@ -84,7 +84,7 @@ If you uncomment the last `println!` and run the program, Rust will try to
 print this cycle with `a` pointing to `b` pointing to `a` and so forth until it
 overflows the stack.
 
-Compared to a real-world program, the consequences creating a reference cycle
+Compared to a real-world program, the consequences of creating a reference cycle
 in this example aren’t very dire: right after we create the reference cycle,
 the program ends. However, if a more complex program allocated lots of memory
 in a cycle and held onto it for a long time, the program would use more memory

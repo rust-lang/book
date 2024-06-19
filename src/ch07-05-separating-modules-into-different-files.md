@@ -10,7 +10,7 @@ modules defined in the crate root file. In this case, the crate root file is
 *src/lib.rs*, but this procedure also works with binary crates whose crate root
 file is *src/main.rs*.
 
-First, we’ll extract the `front_of_house` module to its own file. Remove the
+First we’ll extract the `front_of_house` module to its own file. Remove the
 code inside the curly brackets for the `front_of_house` module, leaving only
 the `mod front_of_house;` declaration, so that *src/lib.rs* contains the code
 shown in Listing 7-21. Note that this won’t compile until we create the
@@ -51,10 +51,10 @@ programming languages.
 Next, we’ll extract the `hosting` module to its own file. The process is a bit
 different because `hosting` is a child module of `front_of_house`, not of the
 root module. We’ll place the file for `hosting` in a new directory that will be
-named for its ancestors in the module tree, in this case *src/front_of_house/*.
+named for its ancestors in the module tree, in this case *src/front_of_house*.
 
-To start moving `hosting`, we change *src/front_of_house.rs* to contain only the
-declaration of the `hosting` module:
+To start moving `hosting`, we change *src/front_of_house.rs* to contain only
+the declaration of the `hosting` module:
 
 <span class="filename">Filename: src/front_of_house.rs</span>
 
@@ -62,7 +62,7 @@ declaration of the `hosting` module:
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house.rs}}
 ```
 
-Then we create a *src/front_of_house* directory and a file *hosting.rs* to
+Then we create a *src/front_of_house* directory and a *hosting.rs* file to
 contain the definitions made in the `hosting` module:
 
 <span class="filename">Filename: src/front_of_house/hosting.rs</span>
@@ -74,7 +74,7 @@ contain the definitions made in the `hosting` module:
 If we instead put *hosting.rs* in the *src* directory, the compiler would
 expect the *hosting.rs* code to be in a `hosting` module declared in the crate
 root, and not declared as a child of the `front_of_house` module. The
-compiler’s rules for which files to check for which modules’ code means the
+compiler’s rules for which files to check for which modules’ code mean the
 directories and files more closely match the module tree.
 
 > ### Alternate File Paths
@@ -93,9 +93,9 @@ directories and files more closely match the module tree.
 > * *src/front_of_house/hosting.rs* (what we covered)
 > * *src/front_of_house/hosting/mod.rs* (older style, still supported path)
 >
-> If you use both styles for the same module, you’ll get a compiler error. Using
-> a mix of both styles for different modules in the same project is allowed, but
-> might be confusing for people navigating your project.
+> If you use both styles for the same module, you’ll get a compiler error.
+> Using a mix of both styles for different modules in the same project is
+> allowed, but might be confusing for people navigating your project.
 >
 > The main downside to the style that uses files named *mod.rs* is that your
 > project can end up with many files named *mod.rs*, which can get confusing
@@ -114,8 +114,8 @@ that module.
 
 ## Summary
 
-Rust lets you split a package into multiple crates and a crate into modules
-so you can refer to items defined in one module from another module. You can do
+Rust lets you split a package into multiple crates and a crate into modules so
+you can refer to items defined in one module from another module. You can do
 this by specifying absolute or relative paths. These paths can be brought into
 scope with a `use` statement so you can use a shorter path for multiple uses of
 the item in that scope. Module code is private by default, but you can make

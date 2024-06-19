@@ -11,11 +11,13 @@ Listing 13-10 creates an iterator over the items in the vector `v1` by calling
 the `iter` method defined on `Vec<T>`. This code by itself doesn’t do anything
 useful.
 
+<Listing number="13-10" file-name="src/main.rs" caption="Creating an iterator">
+
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-10: Creating an iterator</span>
+</Listing>
 
 The iterator is stored in the `v1_iter` variable. Once we’ve created an
 iterator, we can use it in a variety of ways. In Listing 3-5 in Chapter 3, we
@@ -28,11 +30,13 @@ the use of the iterator in the `for` loop. When the `for` loop is called using
 the iterator in `v1_iter`, each element in the iterator is used in one
 iteration of the loop, which prints out each value.
 
+<Listing number="13-11" file-name="src/main.rs" caption="Using an iterator in a `for` loop">
+
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-11: Using an iterator in a `for` loop</span>
+</Listing>
 
 In languages that don’t have iterators provided by their standard libraries,
 you would likely write this same functionality by starting a variable at index
@@ -76,14 +80,13 @@ We can call the `next` method on iterators directly; Listing 13-12 demonstrates
 what values are returned from repeated calls to `next` on the iterator created
 from the vector.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="13-12" file-name="src/lib.rs" caption="Calling the `next` method on an iterator">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-12/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 13-12: Calling the `next` method on an
-iterator</span>
+</Listing>
 
 Note that we needed to make `v1_iter` mutable: calling the `next` method on an
 iterator changes internal state that the iterator uses to keep track of where
@@ -115,14 +118,13 @@ consuming the iterator. As it iterates through, it adds each item to a running
 total and returns the total when iteration is complete. Listing 13-13 has a
 test illustrating a use of the `sum` method:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="13-13" file-name="src/lib.rs" caption="Calling the `sum` method to get the total of all items in the iterator">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-13/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 13-13: Calling the `sum` method to get the total
-of all items in the iterator</span>
+</Listing>
 
 We aren’t allowed to use `v1_iter` after the call to `sum` because `sum` takes
 ownership of the iterator we call it on.
@@ -139,14 +141,13 @@ The `map` method returns a new iterator that produces the modified items. The
 closure here creates a new iterator in which each item from the vector will be
 incremented by 1:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="13-14" file-name="src/main.rs" caption="Calling the iterator adaptor `map` to create a new iterator">
 
 ```rust,not_desired_behavior
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-14/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-14: Calling the iterator adaptor `map` to
-create a new iterator</span>
+</Listing>
 
 However, this code produces a warning:
 
@@ -167,15 +168,13 @@ In Listing 13-15, we collect the results of iterating over the iterator that’s
 returned from the call to `map` into a vector. This vector will end up
 containing each item from the original vector incremented by 1.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="13-15" file-name="src/main.rs" caption="Calling the `map` method to create a new iterator and then calling the `collect` method to consume the new iterator and create a vector">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-15/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-15: Calling the `map` method to create a new
-iterator and then calling the `collect` method to consume the new iterator and
-create a vector</span>
+</Listing>
 
 Because `map` takes a closure, we can specify any operation we want to perform
 on each item. This is a great example of how closures let you customize some
@@ -201,14 +200,13 @@ In Listing 13-16, we use `filter` with a closure that captures the `shoe_size`
 variable from its environment to iterate over a collection of `Shoe` struct
 instances. It will return only shoes that are the specified size.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="13-16" file-name="src/lib.rs" caption="Using the `filter` method with a closure that captures `shoe_size`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-16/src/lib.rs}}
 ```
 
-<span class="caption">Listing 13-16: Using the `filter` method with a closure
-that captures `shoe_size`</span>
+</Listing>
 
 The `shoes_in_size` function takes ownership of a vector of shoes and a shoe
 size as parameters. It returns a vector containing only shoes of the specified

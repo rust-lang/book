@@ -1,8 +1,8 @@
 ## The Slice Type
 
-*Slices* let you reference a contiguous sequence of elements in a collection
-rather than the whole collection. A slice is a kind of reference, so it does
-not have ownership.
+*Slices* let you reference a contiguous sequence of elements in a
+[collection](ch08-00-common-collections.md) rather than the whole collection. A
+slice is a kind of reference, so it does not have ownership.
 
 Here’s a small programming problem: write a function that takes a string of
 words separated by spaces and returns the first word it finds in that string.
@@ -266,7 +266,7 @@ a string slice for the type of the `s` parameter</span>
 
 If we have a string slice, we can pass that directly. If we have a `String`, we
 can pass a slice of the `String` or a reference to the `String`. This
-flexibility takes advantage of *deref coercions*, a feature we will cover in
+flexibility takes advantage of *deref coercions*, a feature we will cover in the
 [“Implicit Deref Coercions with Functions and
 Methods”][deref-coercions]<!--ignore--> section of Chapter 15.
 

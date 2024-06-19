@@ -30,7 +30,7 @@ also check privacy, like any other paths.
 Note that `use` only creates the shortcut for the particular scope in which the
 `use` occurs. Listing 7-12 moves the `eat_at_restaurant` function into a new
 child module named `customer`, which is then a different scope than the `use`
-statement, so the function body won’t compile:
+statement, so the function body won’t compile.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -57,7 +57,7 @@ the shortcut in the parent module with `super::hosting` within the child
 
 In Listing 7-11, you might have wondered why we specified `use
 crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in
-`eat_at_restaurant` rather than specifying the `use` path all the way out to
+`eat_at_restaurant`, rather than specifying the `use` path all the way out to
 the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -69,9 +69,9 @@ the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 <span class="caption">Listing 7-13: Bringing the `add_to_waitlist` function
 into scope with `use`, which is unidiomatic</span>
 
-Although both Listing 7-11 and 7-13 accomplish the same task, Listing 7-11 is
-the idiomatic way to bring a function into scope with `use`. Bringing the
-function’s parent module into scope with `use` means we have to specify the
+Although both Listing 7-11 and Listing 7-13 accomplish the same task, Listing
+7-11 is the idiomatic way to bring a function into scope with `use`. Bringing
+the function’s parent module into scope with `use` means we have to specify the
 parent module when calling the function. Specifying the parent module when
 calling the function makes it clear that the function isn’t locally defined
 while still minimizing repetition of the full path. The code in Listing 7-13 is
@@ -97,7 +97,7 @@ emerged, and folks have gotten used to reading and writing Rust code this way.
 The exception to this idiom is if we’re bringing two items with the same name
 into scope with `use` statements, because Rust doesn’t allow that. Listing 7-15
 shows how to bring two `Result` types into scope that have the same name but
-different parent modules and how to refer to them.
+different parent modules, and how to refer to them.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -110,7 +110,7 @@ the same scope requires using their parent modules.</span>
 
 As you can see, using the parent modules distinguishes the two `Result` types.
 If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
-have two `Result` types in the same scope and Rust wouldn’t know which one we
+have two `Result` types in the same scope, and Rust wouldn’t know which one we
 meant when we used `Result`.
 
 ### Providing New Names with the `as` Keyword
@@ -139,8 +139,8 @@ considered idiomatic, so the choice is up to you!
 When we bring a name into scope with the `use` keyword, the name available in
 the new scope is private. To enable the code that calls our code to refer to
 that name as if it had been defined in that code’s scope, we can combine `pub`
-and `use`. This technique is called *re-exporting* because we’re bringing
-an item into scope but also making that item available for others to bring into
+and `use`. This technique is called *re-exporting* because we’re bringing an
+item into scope but also making that item available for others to bring into
 their scope.
 
 Listing 7-17 shows the code in Listing 7-11 with `use` in the root module
@@ -157,9 +157,10 @@ from a new scope with `pub use`</span>
 
 Before this change, external code would have to call the `add_to_waitlist`
 function by using the path
-`restaurant::front_of_house::hosting::add_to_waitlist()`. Now that this `pub
+`restaurant::front_of_house::hosting::add_to_waitlist()`, which also would have
+required the `front_of_house` module to be marked as `pub`. Now that this `pub
 use` has re-exported the `hosting` module from the root module, external code
-can now use the path `restaurant::hosting::add_to_waitlist()` instead.
+can use the path `restaurant::hosting::add_to_waitlist()` instead.
 
 Re-exporting is useful when the internal structure of your code is different
 from how programmers calling your code would think about the domain. For
@@ -225,10 +226,10 @@ crate.
 
 ### Using Nested Paths to Clean Up Large `use` Lists
 
-If we’re using multiple items defined in the same crate or same module,
-listing each item on its own line can take up a lot of vertical space in our
-files. For example, these two `use` statements we had in the Guessing Game in
-Listing 2-4 bring items from `std` into scope:
+If we’re using multiple items defined in the same crate or same module, listing
+each item on its own line can take up a lot of vertical space in our files. For
+example, these two `use` statements we had in the guessing game in Listing 2-4
+bring items from `std` into scope:
 
 <span class="filename">Filename: src/main.rs</span>
 

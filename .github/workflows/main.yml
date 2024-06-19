@@ -12,8 +12,8 @@ jobs:
     - name: Install Rust
       run: |
         rustup set profile minimal
-        rustup toolchain install 1.65 -c rust-docs
-        rustup default 1.65
+        rustup toolchain install 1.78 -c rust-docs
+        rustup default 1.78
     - name: Install mdbook
       run: |
         mkdir bin
@@ -26,6 +26,29 @@ jobs:
         mdbook --version
     - name: Run tests
       run: mdbook test
+  package_tests:
+    name: Run package tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Update rustup
+      run: rustup self update
+    - name: Install Rust
+      run: |
+        rustup set profile minimal
+        rustup toolchain install 1.76 -c rust-docs
+        rustup default 1.76
+    - name: Run `tools` package tests
+      run: |
+        cargo test
+    - name: Run `mdbook-trpl-note` package tests
+      working-directory: packages/mdbook-trpl-note
+      run: |
+        cargo test
+    - name: Run `mdbook-trpl-listing` package tests
+      working-directory: packages/mdbook-trpl-listing
+      run: |
+        cargo test
   lint:
     name: Run lints
     runs-on: ubuntu-latest
@@ -43,6 +66,10 @@ jobs:
         mkdir bin
         curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
+    - name: Install mdbook-trpl-note
+      run: cargo install --path packages/mdbook-trpl-note
+    - name: Install mdbook-trpl-listing
+      run: cargo install --path packages/mdbook-trpl-listing
     - name: Install aspell
       run: sudo apt-get install aspell
     - name: Install shellcheck

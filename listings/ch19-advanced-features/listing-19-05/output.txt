@@ -14,4 +14,4 @@ error[E0499]: cannot borrow `*values` as mutable more than once at a time
   |     returning this value requires that `*values` is borrowed for `'1`
 
 For more information about this error, try `rustc --explain E0499`.
-error: could not compile `unsafe-example` due to previous error
+error: could not compile `unsafe-example` (bin "unsafe-example") due to 1 previous error

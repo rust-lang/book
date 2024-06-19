@@ -6,7 +6,7 @@ This repository contains the source of "The Rust Programming Language" book.
 
 [The book is available in dead-tree form from No Starch Press][nostarch].
 
-[nostarch]: https://nostarch.com/rust
+[nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
 
 You can also read the book for free online. Please see the book as shipped with
 the latest [stable], [beta], or [nightly] Rust releases. Be aware that issues
@@ -26,11 +26,11 @@ See the [releases] to download just the code of all the code listings that appea
 Building the book requires [mdBook], ideally the same version that
 rust-lang/rust uses in [this file][rust-mdbook]. To get it:
 
-[mdBook]: https://github.com/rust-lang-nursery/mdBook
+[mdBook]: https://github.com/rust-lang/mdBook
 [rust-mdbook]: https://github.com/rust-lang/rust/blob/master/src/tools/rustbook/Cargo.toml
 
 ```bash
-$ cargo install mdbook --version <version_num>
+$ cargo install mdbook --locked --version <version_num>
 ```
 
 ## Building
@@ -73,7 +73,7 @@ kinds of contributions we're looking for.
 
 [contrib]: https://github.com/rust-lang/book/blob/main/CONTRIBUTING.md
 
-Because the book is [printed](https://nostarch.com/rust), and because we want
+Because the book is [printed][nostarch], and because we want
 to keep the online version of the book close to the print version when
 possible, it may take longer than you're used to for us to address your issue
 or pull request.
@@ -93,13 +93,13 @@ a new language! We're waiting on [mdbook support] for multiple languages
 before we merge any in, but feel free to start!
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
-[mdbook support]: https://github.com/rust-lang-nursery/mdBook/issues/5
+[mdbook support]: https://github.com/rust-lang/mdBook/issues/5
 
 ## Spellchecking
 
 To scan source files for spelling errors, you can use the `spellcheck.sh`
 script available in the `ci` directory. It needs a dictionary of valid words,
 which is provided in `ci/dictionary.txt`. If the script produces a false
-positive (say, you used word `BTreeMap` which the script considers invalid),
+positive (say, you used the word `BTreeMap` which the script considers invalid),
 you need to add this word to `ci/dictionary.txt` (keep the sorted order for
 consistency).

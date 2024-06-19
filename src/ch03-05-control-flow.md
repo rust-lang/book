@@ -120,14 +120,13 @@ Rust branching construct called `match` for these cases.
 Because `if` is an expression, we can use it on the right side of a `let`
 statement to assign the outcome to a variable, as in Listing 3-2.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="3-2" file-name="src/main.rs" caption="Assigning the result of an `if` expression to a variable">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-02/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-2: Assigning the result of an `if` expression
-to a variable</span>
+</Listing>
 
 The `number` variable will be bound to a value based on the outcome of the `if`
 expression. Run this code to see what happens:
@@ -191,9 +190,9 @@ like this:
 ```
 
 When we run this program, we’ll see `again!` printed over and over continuously
-until we stop the program manually. Most terminals support the keyboard
-shortcut <span class="keystroke">ctrl-c</span> to interrupt a program that is
-stuck in a continual loop. Give it a try:
+until we stop the program manually. Most terminals support the keyboard shortcut
+<kbd>ctrl</kbd>-<kdb>c</kbd> to interrupt a program that is stuck in a continual
+loop. Give it a try:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-32-loop
@@ -213,10 +212,9 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <span
-class="keystroke">ctrl-c</span>. You may or may not see the word `again!`
-printed after the `^C`, depending on where the code was in the loop when it
-received the interrupt signal.
+The symbol `^C` represents where you pressed <kbd>ctrl</kbd>-<kbd>c</kbd>. You
+may or may not see the word `again!` printed after the `^C`, depending on where
+the code was in the loop when it received the interrupt signal.
 
 Fortunately, Rust also provides a way to break out of a loop using code. You
 can place the `break` keyword within the loop to tell the program when to stop
@@ -250,6 +248,9 @@ and then check whether the `counter` is equal to `10`. When it is, we use the
 semicolon to end the statement that assigns the value to `result`. Finally, we
 print the value in `result`, which in this case is `20`.
 
+You can also `return` from inside a loop. While `break` only exits the current
+loop, `return` always exits the current function.
+
 #### Loop Labels to Disambiguate Between Multiple Loops
 
 If you have loops within loops, `break` and `continue` apply to the innermost
@@ -282,14 +283,13 @@ that Rust has a built-in language construct for it, called a `while` loop. In
 Listing 3-3, we use `while` to loop the program three times, counting down each
 time, and then, after the loop, print a message and exit.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="3-3" file-name="src/main.rs" caption="Using a `while` loop to run code while a condition holds true">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-03/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-3: Using a `while` loop to run code while a
-condition holds true</span>
+</Listing>
 
 This construct eliminates a lot of nesting that would be necessary if you used
 `loop`, `if`, `else`, and `break`, and it’s clearer. While a condition
@@ -297,18 +297,17 @@ evaluates to `true`, the code runs; otherwise, it exits the loop.
 
 #### Looping Through a Collection with `for`
 
-You can choose to use the `while` construct to loop over the elements of a
+You can also use the `while` construct to loop over the elements of a
 collection, such as an array. For example, the loop in Listing 3-4 prints each
 element in the array `a`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="3-4" file-name="src/main.rs" caption="Looping through each element of a collection using a `while` loop">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-4: Looping through each element of a collection
-using a `while` loop</span>
+</Listing>
 
 Here, the code counts up through the elements in the array. It starts at index
 `0`, and then loops until it reaches the final index in the array (that is,
@@ -333,14 +332,13 @@ index is within the bounds of the array on every iteration through the loop.
 As a more concise alternative, you can use a `for` loop and execute some code
 for each item in a collection. A `for` loop looks like the code in Listing 3-5.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="3-5" file-name="src/main.rs" caption="Looping through each element of a collection using a `for` loop">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-5: Looping through each element of a collection
-using a `for` loop</span>
+</Listing>
 
 When we run this code, we’ll see the same output as in Listing 3-4. More
 importantly, we’ve now increased the safety of the code and eliminated the

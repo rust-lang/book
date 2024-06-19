@@ -4,7 +4,7 @@
 > Language][nsprust] available in print and ebook format from [No Starch
 > Press][nsp].
 
-[nsprust]: https://nostarch.com/rust
+[nsprust]: https://nostarch.com/rust-programming-language-2nd-edition
 [nsp]: https://nostarch.com/
 
 Welcome to *The Rust Programming Language*, an introductory book about Rust.
@@ -38,7 +38,7 @@ Rust also brings contemporary developer tools to the systems programming world:
   ecosystem.
 * The Rustfmt formatting tool ensures a consistent coding style across
   developers.
-* The Rust Language Server powers Integrated Development Environment (IDE)
+* The rust-analyzer powers Integrated Development Environment (IDE)
   integration for code completion and inline error messages.
 
 By using these and other tools in the Rust ecosystem, developers can be

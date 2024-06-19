@@ -1,0 +1,13 @@
+/*
+  This is copied directly from the styles for blockquotes, because notes were
+  historically rendered *as* blockquotes. This keeps the presentation of them
+  identical while updating the presentation.
+*/
+.note {
+    margin: 20px 0;
+    padding: 0 20px;
+    color: var(--fg);
+    background-color: var(--quote-bg);
+    border-block-start: 0.1em solid var(--quote-border);
+    border-block-end: 0.1em solid var(--quote-border);
+}
