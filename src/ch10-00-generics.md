@@ -42,14 +42,13 @@ duplicated code that can use generics.
 We begin with the short program in Listing 10-1 that finds the largest number
 in a list.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-1" filename="src/main.rs" caption="Finding the largest number in a list of numbers">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-1: Finding the largest number in a list of
-numbers</span>
+</Listing>
 
 We store a list of integers in the variable `number_list` and place a reference
 to the first number in the list in a variable named `largest`. We then iterate
