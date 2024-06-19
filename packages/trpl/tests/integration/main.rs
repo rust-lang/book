@@ -199,3 +199,23 @@ fn read_to_string() {
 
     assert_eq!(result, String::from("This is some text!\n"));
 }
+
+#[test]
+fn stream_iter() {
+    use trpl::StreamExt;
+
+    let result = trpl::block_on(async {
+        let ns = vec![1, 2, 3];
+        let mut stream = trpl::stream_from_iter(ns);
+        let mut result = vec![];
+        while let Some(n) = stream.next().await {
+            result.push(format!("{n}"));
+        }
+        result
+    });
+
+    assert_eq!(
+        result,
+        vec![String::from("1"), String::from("2"), String::from("3")]
+    )
+}

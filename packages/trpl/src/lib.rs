@@ -41,6 +41,8 @@ pub use tokio::{
     time::sleep,
 };
 
+pub use tokio_stream::{iter as stream_from_iter, Stream, StreamExt};
+
 /// Run a single future to completion on a bespoke Tokio `Runtime`.
 ///
 /// Every time you call this, a new instance of `tokio::runtime::Runtime` will
