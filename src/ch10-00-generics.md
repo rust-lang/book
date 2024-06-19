@@ -85,14 +85,13 @@ function named `largest`. Then we call the function to find the largest number
 in the two lists from Listing 10-2. We could also use the function on any other
 list of `i32` values we might have in the future.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-3" filename="src/main.rs" caption="Abstracted code to find the largest number in two lists">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-3: Abstracted code to find the largest number
-in two lists</span>
+</Listing>
 
 The `largest` function has a parameter called `list`, which represents any
 concrete slice of `i32` values we might pass into the function. As a result,
