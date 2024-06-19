@@ -88,14 +88,13 @@ We can also define structs to use a generic type parameter in one or more
 fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
 `x` and `y` coordinate values of any type.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-6" file-name="src/main.rs" caption="A `Point<T>` struct that holds `x` and `y` values of type `T`">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-6: A `Point<T>` struct that holds `x` and `y`
-values of type `T`</span>
+</Listing>
 
 The syntax for using generics in struct definitions is similar to that used in
 function definitions. First, we declare the name of the type parameter inside
