@@ -239,14 +239,13 @@ signature to make the example clearer. The method creates a new `Point`
 instance with the `x` value from the `self` `Point` (of type `X1`) and the `y`
 value from the passed-in `Point` (of type `Y2`).
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-11" file-name="src/main.rs" caption="A method that uses generic types different from its struct’s definition">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-11/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-11: A method that uses generic types different
-from its struct’s definition</span>
+</Listing>
 
 In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
 and an `f64` for `y` (with value `10.4`). The `p2` variable is a `Point` struct
