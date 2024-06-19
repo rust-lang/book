@@ -130,14 +130,13 @@ different types, we can use multiple generic type parameters. For example, in
 Listing 10-8, we change the definition of `Point` to be generic over types `T`
 and `U` where `x` is of type `T` and `y` is of type `U`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-8" file-name="src/main.rs" caption="A `Point<T, U>` generic over two types so that `x` and `y` can be values of different types">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-08/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-8: A `Point<T, U>` generic over two types so
-that `x` and `y` can be values of different types</span>
+</Listing>
 
 Now all the instances of `Point` shown are allowed! You can use as many generic
 type parameters in a definition as you want, but using more than a few makes
