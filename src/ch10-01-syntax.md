@@ -219,14 +219,13 @@ type. We could, for example, implement methods only on `Point<f32>` instances
 rather than on `Point<T>` instances with any generic type. In Listing 10-10 we
 use the concrete type `f32`, meaning we don’t declare any types after `impl`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-10" file-name="src/main.rs" caption="An `impl` block that only applies to a struct with a particular concrete type for the generic type parameter `T`">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-10: An `impl` block that only applies to a
-struct with a particular concrete type for the generic type parameter `T`</span>
+</Listing>
 
 This code means the type `Point<f32>` will have a `distance_from_origin`
 method; other instances of `Point<T>` where `T` is not of type `f32` will not
