@@ -57,14 +57,13 @@ data type in its signature. The listing also shows how we can call the function
 with either a slice of `i32` values or `char` values. Note that this code won’t
 compile yet, but we’ll fix it later in this chapter.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-5" file-name="src/main.rs" caption="The `largest` function using generic type parameters; this doesn’t compile yet">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-5: The `largest` function using generic type
-parameters; this doesn’t compile yet</span>
+</Listing>
 
 If we compile this code right now, we’ll get this error:
 
