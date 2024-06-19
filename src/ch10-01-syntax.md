@@ -193,15 +193,13 @@ We can implement methods on structs and enums (as we did in Chapter 5) and use
 generic types in their definitions too. Listing 10-9 shows the `Point<T>`
 struct we defined in Listing 10-6 with a method named `x` implemented on it.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-9" file-name="src/main.rs" caption="Implementing a method named `x` on the `Point<T>` struct that will return a reference to the `x` field of type `T`">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-09/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-9: Implementing a method named `x` on the
-`Point<T>` struct that will return a reference to the `x` field of type
-`T`</span>
+</Listing>
 
 Here, we’ve defined a method named `x` on `Point<T>` that returns a reference
 to the data in the field `x`.
