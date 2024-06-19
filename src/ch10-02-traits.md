@@ -27,14 +27,13 @@ instance. To do this, we need a summary from each type, and we’ll request
 that summary by calling a `summarize` method on an instance. Listing 10-12
 shows the definition of a public `Summary` trait that expresses this behavior.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="10-12" file-name="src/lib.rs" caption="A `Summary` trait that consists of the behavior provided by a `summarize` method">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-12/src/lib.rs}}
 ```
 
-<span class="caption">Listing 10-12: A `Summary` trait that consists of the
-behavior provided by a `summarize` method</span>
+</Listing>
 
 Here, we declare a trait using the `trait` keyword and then the trait’s name,
 which is `Summary` in this case. We’ve also declared the trait as `pub` so that
