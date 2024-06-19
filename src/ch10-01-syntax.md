@@ -108,14 +108,13 @@ the fields `x` and `y` are *both* that same type, whatever that type may be. If
 we create an instance of a `Point<T>` that has values of different types, as in
 Listing 10-7, our code won’t compile.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-7" file-name="src/main.rs" caption="The fields `x` and `y` must be the same type because both have the same generic data type `T`.">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-7: The fields `x` and `y` must be the same
-type because both have the same generic data type `T`.</span>
+</Listing>
 
 In this example, when we assign the integer value `5` to `x`, we let the
 compiler know that the generic type `T` will be an integer for this instance of
