@@ -63,14 +63,13 @@ We’ve now been tasked with finding the largest number in two different lists o
 numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
 the same logic at two different places in the program, as shown in Listing 10-2.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-2" filename="src/main.rs" caption="Code to find the largest number in *two* lists of numbers">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-02/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-2: Code to find the largest number in *two*
-lists of numbers</span>
+</Listing>
 
 Although this code works, duplicating code is tedious and error prone. We also
 have to remember to update the code in multiple places when we want to change
