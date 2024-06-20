@@ -118,11 +118,99 @@ convenience of a `for` loop. In fact, it will look a lot like the way we used
 `rx.recv` back in the [“Message Passing”][17-02-messages] section, using `while
 let` loops.
 
+Let’s start with a very simple example: using an iterator *as* a stream. Let’s
+start by creating a range of numbers, including every integer from 1 to 100,
+using the `..` range operator. Then we can double all of those values with the
+`map` method, as Listing 17-36 shows:
+
+<Listing number="17-36" caption="Creating an iterator ranging over the values from 1 to 100" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-36/src/main.rs:range}}
+```
+
+</Listing>
+
+We can convert this iterator to a stream using the `trpl::stream_from_iter`
+function.
+
+<Listing number="17-37" caption="Converting an iterator to a stream with `trpl::stream_from_iter`" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-37/src/main.rs:stream}}
+```
+
+</Listing>
+
+This gives us the stream. Now, to work with it, we want to use the `next` method
+with a `while let` loop as described above, as in Listing 17-38:
+
+<Listing number="17-38" caption="Trying to use the `next` method on the newly-created `stream`" file-name="src/main.rs">
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-38/src/main.rs:next}}
+```
+
+</Listing>
+
+Unfortunately, this does not yet work. When we try to run the code, it does not
+compile. Instead, as we can see in the output, it reports that there is no
+`next` method available.
+
+```console
+{{#include ../listings/ch17-async-await/listing-17-38/output.txt}}
+```
+
+As the output suggests, the problem is that we need the right trait in scope to
+be able to use it. In this case, that trait is `StreamExt`. (The `Ext` there is
+for “extension”: this is a common pattern in the Rust community for extending
+one trait with another.) `StreamExt` is automatically implemented for every type
+which implements `Stream`, but they are separated out so that the community can
+iterate on the foundational trait distinctly from the convenience APIs. All we
+need to do, then, is add a `use` statement for `trpl::StreamExt`, as in Listing
+17-39.
+
+<Listing number="17-39" caption="Successfully using an iterator as the basis for a stream" file-name="src/main.rs">
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-39/src/main.rs:all}}
+```
+
+</Listing>
+
+ With all those pieces put together, things work the way we want! There is a lot
+ of output, though, since we told it to print all of the 100 numbers in the
+ iterator. We can filter that down, to, say, multiples of three and five by using
+ the `filter` method, which conveniently also comes from `StreamExt`.
+
+ <Listing number="17-40" caption="Using" file-name="src/main.rs">
+
+ ```rust,ignore,does_not_compile
+ {{#rustdoc_include ../listings/ch17-async-await/listing-17-40/src/main.rs:filter}}
+ ```
+
+ </Listing>
+
+Of course, in the real world, the only time we would be directly converting an
+iterator to a stream like this is to help break up longer chunks of  work, like
+we discussed in the previous section. There are more interesting things we can
+do with streams, though!
+
+For one thing, lots of things are naturally represented as streams—items
+becoming available in a queue over time, for example, or working with more data
+than can fit in a computer’s memory by only pulling chunks of it from the file
+system at a time, or data arriving over the network over time. For another
+thing, since streams are futures, we can use them with any other kind of
+future, and we can combine them in interesting ways.
+
+This is the kind of thing we might actually do to help break up longer chunks of
+work, like we discussed in the previous section—though of course, presumably
+with more interesting iterators than this one!
+
 <!--
-TODO: How to use it, with a worked example from… somewhere? Maybe use examples
-from the iterators chapter, combined with a sink/source? That would then push us
-to introduce *those* terms as well, but that is probably to the good, since they
-come up a lot here.
+  - Maybe motivate with “doing some work” where that work is simple enough in
+    the example but demonstrates how it could be the kind of thing that is *not*
+    trivial and takes some time.
 -->
 
 [17-02-messages]: /ch17-02-concurrency-with-async.md#message-passing
