@@ -38,10 +38,14 @@ pub use tokio::{
         UnboundedSender as Sender,
     },
     task::{spawn as spawn_task, yield_now},
-    time::sleep,
+    time::{interval, sleep},
 };
 
-pub use tokio_stream::{iter as stream_from_iter, Stream, StreamExt};
+pub use tokio_stream::{
+    iter as stream_from_iter,
+    wrappers::{IntervalStream, UnboundedReceiverStream as ReceiverStream},
+    Stream, StreamExt,
+};
 
 /// Run a single future to completion on a bespoke Tokio `Runtime`.
 ///

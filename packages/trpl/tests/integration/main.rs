@@ -219,3 +219,36 @@ fn stream_iter() {
         vec![String::from("1"), String::from("2"), String::from("3")]
     )
 }
+
+#[test]
+fn receiver_stream() {
+    use trpl::ReceiverStream;
+    use trpl::StreamExt;
+
+    let result: Vec<u32> = trpl::block_on(async {
+        println!("startup");
+        let (tx, rx) = trpl::channel();
+        let rx_stream = ReceiverStream::new(rx);
+        println!("sending 123");
+        tx.send(123).unwrap();
+        drop(tx); // So the receiver channel closes!
+
+        rx_stream.collect().await
+    });
+
+    assert_eq!(result, vec![123]);
+}
+
+#[test]
+fn re_exported_interval_stream_works() {
+    use trpl::{IntervalStream, StreamExt};
+
+    trpl::block_on(async {
+        let mut interval_stream =
+            IntervalStream::new(trpl::interval(Duration::from_millis(1)))
+                .take(1);
+
+        assert!(interval_stream.next().await.is_some());
+        assert!(interval_stream.next().await.is_none());
+    });
+}
