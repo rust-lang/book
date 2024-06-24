@@ -160,6 +160,7 @@ Enums
 eprintln
 Erlang
 ErrorKind
+Español
 eval
 executables
 ExitCode
@@ -370,6 +371,7 @@ PendingReviewPost
 PlaceholderType
 polymorphism
 PoolCreationError
+por
 portia
 powershell
 PowerShell
@@ -432,6 +434,7 @@ rustdoc
 Rustonomicon
 rustfix
 rustfmt
+RustLangES
 rustup
 sampleproject
 screenshot
