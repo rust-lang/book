@@ -78,7 +78,7 @@ have to remember to update the code in multiple places when we want to change
 it.
 
 To eliminate this duplication, we’ll create an abstraction by defining a
-function that operates on any list of integers passed in a parameter. This
+function that operates on any list of integers passed in as a parameter. This
 solution makes our code clearer and lets us express the concept of finding the
 largest number in a list abstractly.
 
