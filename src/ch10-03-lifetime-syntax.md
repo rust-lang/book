@@ -388,7 +388,10 @@ that holds a reference to the first sentence of the `String` owned by the
 variable `novel`. The data in `novel` exists before the `ImportantExcerpt`
 instance is created. In addition, `novel` doesn’t go out of scope until after
 the `ImportantExcerpt` goes out of scope, so the reference in the
-`ImportantExcerpt` instance is valid.
+`ImportantExcerpt` instance is valid. This is because Rust ensures that 
+references do not outlive the data they reference, so when a reference and 
+the data it refers to are both going out of scope at the same time, Rust will 
+clean up the reference first, and then the data.
 
 ### Lifetime Elision
 
