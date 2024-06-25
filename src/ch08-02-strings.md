@@ -247,23 +247,23 @@ UTF-8. The following line, however, may surprise you (note that this string
 begins with the capital Cyrillic letter *Ze*, not the number 3):
 
 ```rust
-{{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:russian}}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:ukrainian}}
 ```
 
-If you were asked how long the string is, you might say 12. In fact, Rust’s
-answer is 24: that’s the number of bytes it takes to encode “Здравствуйте” in
+If you were asked how long the string is, you might say 6. In fact, Rust’s
+answer is 12: that’s the number of bytes it takes to encode “Привіт” in
 UTF-8, because each Unicode scalar value in that string takes 2 bytes of
 storage. Therefore, an index into the string’s bytes will not always correlate
 to a valid Unicode scalar value. To demonstrate, consider this invalid Rust
 code:
 
 ```rust,ignore,does_not_compile
-let hello = "Здравствуйте";
+let hello = "Привіт";
 let answer = &hello[0];
 ```
 
-You already know that `answer` will not be `З`, the first letter. When encoded
-in UTF-8, the first byte of `З` is `208` and the second is `151`, so it would
+You already know that `answer` will not be `П`, the first letter. When encoded
+in UTF-8, the first byte of `П` is `208` and the second is `159`, so it would
 seem that `answer` should in fact be `208`, but `208` is not a valid character
 on its own. Returning `208` is likely not what a user would want if they asked
 for the first letter of this string; however, that’s the only data that Rust
@@ -327,14 +327,14 @@ Rather than indexing using `[]` with a single number, you can use `[]` with a
 range to create a string slice containing particular bytes:
 
 ```rust
-let hello = "Здравствуйте";
+let hello = "Привіт";
 
 let s = &hello[0..4];
 ```
 
 Here, `s` will be a `&str` that contains the first four bytes of the string.
 Earlier, we mentioned that each of these characters was two bytes, which means
-`s` will be `Зд`.
+`s` will be `Пр`.
 
 If we were to try to slice only part of a character’s bytes with something like
 `&hello[0..1]`, Rust would panic at runtime in the same way as if an invalid
@@ -351,11 +351,11 @@ so can crash your program.
 
 The best way to operate on pieces of strings is to be explicit about whether
 you want characters or bytes. For individual Unicode scalar values, use the
-`chars` method. Calling `chars` on “Зд” separates out and returns two values of
+`chars` method. Calling `chars` on “Пр” separates out and returns two values of
 type `char`, and you can iterate over the result to access each element:
 
 ```rust
-for c in "Зд".chars() {
+for c in "Пр".chars() {
     println!("{c}");
 }
 ```
@@ -363,15 +363,15 @@ for c in "Зд".chars() {
 This code will print the following:
 
 ```text
-З
-д
+П
+р
 ```
 
 Alternatively, the `bytes` method returns each raw byte, which might be
 appropriate for your domain:
 
 ```rust
-for b in "Зд".bytes() {
+for b in "Пр".bytes() {
     println!("{b}");
 }
 ```
@@ -380,9 +380,9 @@ This code will print the four bytes that make up this string:
 
 ```text
 208
-151
-208
-180
+159
+209
+128
 ```
 
 But be sure to remember that valid Unicode scalar values may be made up of more
