@@ -1,4 +1,4 @@
-use std::{pin::pin, thread, time::Duration};
+use std::{pin::pin, time::Duration};
 
 use trpl::{ReceiverStream, Stream, StreamExt};
 
@@ -21,16 +21,15 @@ fn main() {
     })
 }
 
-// ANCHOR: thread
 fn get_messages() -> impl Stream<Item = String> {
     let (tx, rx) = trpl::channel();
 
-    thread::spawn(move || {
+    trpl::spawn_task(async move {
         let messages = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
 
         for (index, message) in messages.into_iter().enumerate() {
             let time_to_sleep = if index % 2 == 0 { 100 } else { 300 };
-            thread::sleep(Duration::from_millis(time_to_sleep));
+            trpl::sleep(Duration::from_millis(time_to_sleep)).await;
 
             if let Err(send_error) =
                 tx.send(format!("Message: '{message}' after {time_to_sleep}ms"))
@@ -44,13 +43,14 @@ fn get_messages() -> impl Stream<Item = String> {
     ReceiverStream::new(rx)
 }
 
+// ANCHOR: threads
 fn get_intervals() -> impl Stream<Item = u32> {
     let (tx, rx) = trpl::channel();
 
-    thread::spawn(move || {
+    trpl::spawn_task(async move {
         let mut count = 0;
         loop {
-            thread::sleep(Duration::from_millis(1));
+            trpl::sleep(Duration::from_millis(1)).await;
             count += 1;
             if let Err(send_error) = tx.send(count) {
                 eprintln!("Could not send interval {count}: {send_error}");
@@ -61,4 +61,4 @@ fn get_intervals() -> impl Stream<Item = u32> {
 
     ReceiverStream::new(rx)
 }
-// ANCHOR_END: thread
+// ANCHOR_END: threads
