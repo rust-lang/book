@@ -6,6 +6,7 @@ exclude = [
     "linkchecker", # linkchecker is part of the CI workflow
     "listings",    # these are intentionally distinct from the workspace
     "tmp",         # listings are built here when updating output via tools/update-rustc.sh
+    "packages/trpl",        # manages its own dependencies as a standalone crate
 
     # These are used as path dependencies in `rust-lang/rust` (since we are not
     # publishing them to crates.io), so they cannot be part of this workspace,
