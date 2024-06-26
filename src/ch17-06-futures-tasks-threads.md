@@ -45,66 +45,50 @@ functions spawned an async task on the runtime and the other spawned an
 operating system thread, they worked exactly the same way as far as processing
 the stream was concerned.
 
-This highlights that async tasks are kind of like lightweight, runtime-managed
-threads. However, there is a meaningful difference in the way this system
+However, there is a meaningful difference in the way this system
 behaves, although we might have a hard time measuring it in this very simple
 example. We could spawn hundreds of thousands or even millions of async tasks on
 any modern personal computer. If we tried to do that with threads, we would
 literally run out of memory!
 
-However, this does not mean that async tasks are always better than threads. In
-fact, they often work very well *together*. We have not mentioned it up until
-now, but under the hood the `Runtime` we have been using, including the
-`spawn_blocking` and `spawn_task` functions, are multithreaded by default! Many
-runtimes can transparently move tasks around between threads based on the
-current utilization of the threads, to hopefully improve the overall performance
-of the system.
+However, there is a reason these APIs are so similar. Threads act as a boundary
+for sets of synchronous operations; concurrency is possible *between* threads.
+Tasks act as a boundary for sets of *asynchronous* operations; concurrency is
+possible both *between* and *within* tasks. In that regard, tasks are kind of
+like lightweight, runtime-managed threads with added capabilities that come from
+being managed by a runtime instead of by the operating system.
 
-<!-- TODO: keep going from here: differentiate them? -->
+However, this does not mean that async tasks are always better than threads, any
+more than that threads are always better than tasks.
 
-### Parallelism and Concurrency
+On the one hand, concurrency with threads is in some ways a simpler programming
+model than concurrency with `async`. Threads are somewhat “fire and forget”, and
+they only allow interaction with the rest of the program via tools like channels
+or their final result via `join`. On the other hand, they have no native
+equivalent to a future, so they simply run to completion, without interruption
+except by the operating system itself. Threads also have no mechanisms for
+cancellation—a subject we have not covered in depth in this chapter, but which
+is implicit in the fact that whenever we ended a future, its state got cleaned
+up correctly.
 
-<!-- TODO: phrasing makes less sense given new home here at end of chapter -->
+These limitations make threads harder to compose than futures. It
+is much more difficult, for example, to build something like the `timeout` we
+built in [“Building Our Own Async Abstractions”][combining-futures], or the
+`throttle` method we used with streams in [“Working With Streams”][streams]. The fact
+that futures are richer data structures means they *can* be composed together
+more naturally, as we have seen.
 
-First, though, we need to dig a little deeper into the differences between
-parallelism and concurrency. In the previous chapter we treated them as mostly
-interchangeable. Now we need to distinguish between the two a little more,
-because the differences will show up as we start working:
+Tasks then give *additional* control over futures, allowing you to choose where
+and how to group them. And it turns out that threads and tasks often work very
+well together, because tasks can (at least in some runtimes) be moved around
+between threads. We have not mentioned it up until now, but under the hood the
+`Runtime` we have been using, including the `spawn_blocking` and `spawn_task`
+functions, are multithreaded by default! Many runtimes can transparently move
+tasks around between threads based on the current utilization of the threads, to
+hopefully improve the overall performance of the system. To build that actually
+requires threads *and* tasks, and therefore futures.
 
-* *Parallelism* is when operations can happen simultaneously.
+<!-- TODO: some kind of conclusion for the chapter -->
 
-* *Concurrency* is when operations can make progress without having to wait for
-  all other operations to complete.
-
-One common analogy for thinking about the difference between concurrency and
-parallelism is cooking in a kitchen. Parallelism is like having two cooks: one
-working on cooking eggs, and the other working on preparing fruit bowls. Those
-can happen at the same time, without either affecting the other. Concurrency is
-like having a single cook who can start cooking some eggs, start dicing up some
-vegetables to use in the omelette, adding seasoning and whatever vegetables are
-ready to the eggs at certain points, and switching back and forth between those
-tasks.
-
-(This analogy breaks down if you think about it too hard. The eggs keep cooking
-while the cook is chopping up the vegetables, after all. That is parallelism,
-not just concurrency! The focus of the analogy is the *cook*, not the food,
-though, and as long as you keep that in mind, it mostly works.)
-
-On a machine with multiple CPU cores, we can actually do work in parallel. One
-core can be doing one thing while another core does something completely
-unrelated, and those actually happen at the same time. On a machine with a
-single CPU core, the CPU can only do one operation at a time, but we can still
-have concurrency. Using tools like threads, processes, and async, the computer
-can pause one activity and switch to others before eventually cycling back to
-that first activity again. So all parallel operations are also concurrent, but
-not all concurrent operations happen in parallel!
-
-When working with async in Rust, we are always dealing with concurrency.
-Depending on the hardware, the operating system, and the async runtime we are
-using, that concurrency may use some degree of parallelism under the hood, or it
-may not. (More about async runtimes later!)
-
-A big difference between the cooking analogy and Rust’s async model for
-concurrency is that in the cooking example, the cook makes the decision about
-when to switch tasks. In Rust’s async model, the tasks are in control of that.
-To see how, let’s look at how Rust actually uses async.
+[combining-futures]: /ch17-04-more-ways-of-combining-futures.md#building-our-own-async-abstractions
+[streams]: /ch17-05-streams.md#working-with-streams
