@@ -363,14 +363,13 @@ to hold references, but in that case we would need to add a lifetime annotation
 on every reference in the struct’s definition. Listing 10-24 has a struct named
 `ImportantExcerpt` that holds a string slice.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-24" file-name="src/main.rs" caption="A struct that holds a reference, requiring a lifetime annotation">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-24: A struct that holds a reference, requiring
-a lifetime annotation</span>
+</Listing>
 
 This struct has the single field `part` that holds a string slice, which is a
 reference. As with generic data types, we declare the name of the generic
