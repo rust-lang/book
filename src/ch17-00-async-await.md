@@ -204,9 +204,4 @@ not all concurrent operations happen in parallel!
 When working with async in Rust, we are always dealing with concurrency.
 Depending on the hardware, the operating system, and the async runtime we are
 using, that concurrency may use some degree of parallelism under the hood, or it
-may not. (More about async runtimes later!)
-
-A big difference between the cooking analogy and Rust’s async model for
-concurrency is that in the cooking example, the cook makes the decision about
-when to switch tasks. In Rust’s async model, the tasks are in control of that.
-To see how, let’s look at how async programming in Rust actually works.
+may not. Let’s dive into how async programming in Rust actually works!
