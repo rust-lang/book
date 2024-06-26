@@ -84,12 +84,13 @@ with a lifetime of `'b`. The program is rejected because `'b` is shorter than
 Listing 10-18 fixes the code so it doesn’t have a dangling reference and
 compiles without any errors.
 
+<Listing number="10-18" caption="A valid reference because the data has a longer lifetime than the reference">
+
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-18/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-18: A valid reference because the data has a
-longer lifetime than the reference</span>
+</Listing>
 
 Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
 means `r` can reference `x` because Rust knows that the reference in `r` will
