@@ -125,15 +125,13 @@ ones we want.
 If we try to implement the `longest` function as shown in Listing 10-20, it
 won’t compile.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-20" file-name="src/main.rs" caption="An implementation of the `longest` function that returns the longer of two string slices but does not yet compile">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-20: An implementation of the `longest`
-function that returns the longer of two string slices but does not yet
-compile</span>
+</Listing>
 
 Instead, we get the following error that talks about lifetimes:
 
