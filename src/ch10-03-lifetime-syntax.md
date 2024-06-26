@@ -107,14 +107,13 @@ function will take two string slices and return a single string slice. After
 we’ve implemented the `longest` function, the code in Listing 10-19 should
 print `The longest string is abcd`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-19" file-name="src/main.rs" caption="A `main` function that calls the `longest` function to find the longer of two string slices">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-19/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-19: A `main` function that calls the `longest`
-function to find the longer of two string slices</span>
+</Listing>
 
 Note that we want the function to take string slices, which are references,
 rather than strings, because we don’t want the `longest` function to take
