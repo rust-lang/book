@@ -330,11 +330,13 @@ reference because the value will go out of scope at the end of the function.
 Consider this attempted implementation of the `longest` function that won’t
 compile:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/src/main.rs:here}}
 ```
+
+</Listing>
 
 Here, even though we’ve specified a lifetime parameter `'a` for the return
 type, this implementation will fail to compile because the return value
