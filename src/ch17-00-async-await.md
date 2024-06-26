@@ -166,19 +166,31 @@ because the differences will show up as we start working:
 * *Concurrency* is when operations can make progress without having to wait for
   all other operations to complete.
 
-One common analogy for thinking about the difference between concurrency and
-parallelism is cooking in a kitchen. Parallelism is like having two cooks: one
-working on cooking eggs, and the other working on preparing fruit bowls. Those
-can happen at the same time, without either affecting the other. Concurrency is
-like having a single cook who can start cooking some eggs, start dicing up some
-vegetables to use in the omelette, adding seasoning and whatever vegetables are
-ready to the eggs at certain points, and switching back and forth between those
-tasks.
+One way to think about the difference between parallelism and concurrency is to
+think about working on a software project as a team. When you agree to split up
+a group of tasks between a group of people, with each person working on one task
+and delivering them separately, this is *parallelism*. Each person on the team
+can be making progress at the exact same time.
 
-(This analogy breaks down if you think about it too hard. The eggs keep cooking
-while the cook is chopping up the vegetables, after all. That is parallelism,
-not just concurrency! The focus of the analogy is the *cook*, not the food,
-though, and as long as you keep that in mind, it mostly works.)
+On the other hand, when an individual works on several different tasks before
+any of them is complete, this is *concurrency*. Maybe you have two different
+projects checked out on your computer, and when you get bored or stuck on one
+project, you switch to the other. You are just one person, and you cannot make
+progress on both tasks at the exact same time.
+
+With both of these situations, you might have to coordinate between different
+tasks. Maybe you *thought* the task that one person was working on was totally
+independent from everyone else’s work, but it actually needs something finished
+by another person on the team. *Some* of the work could be done in parallel, but
+some of it was actually *serial*: it could only happen in a series, one thing
+after the other. Likewise, maybe with the two projects you were
+switching between yourself, you realize that one of them needs the result from
+the other, so now your concurrent work has also become *serial*.
+
+Parallelism and concurrency can intersect with each other, too. For example, if
+it turns out your coworker is waiting on one of your projects to finish, then
+you might need to focus on that project and not give any time to the other one
+until it is done, so your own work stops being concurrent.
 
 On a machine with multiple CPU cores, we can actually do work in parallel. One
 core can be doing one thing while another core does something completely
