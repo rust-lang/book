@@ -310,11 +310,13 @@ function is doing. For example, if we changed the implementation of the
 string slice, we wouldn’t need to specify a lifetime on the `y` parameter. The
 following code will compile:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-08-only-one-reference-with-lifetime/src/main.rs:here}}
 ```
+
+</Listing>
 
 We’ve specified a lifetime parameter `'a` for the parameter `x` and the return
 type, but not for the parameter `y`, because the lifetime of `y` does not have
