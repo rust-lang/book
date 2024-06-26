@@ -269,14 +269,13 @@ assignment of the value to the `result` variable inside the scope with
 inner scope, after the inner scope has ended. The code in Listing 10-23 will
 not compile.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-23" file-name="src/main.rs" caption="Attempting to use `result` after `string2` has gone out of scope">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-23: Attempting to use `result` after `string2`
-has gone out of scope</span>
+</Listing>
 
 When we try to compile this code, we get this error:
 
