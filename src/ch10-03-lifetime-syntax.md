@@ -396,15 +396,13 @@ lifetime parameters for functions or structs that use references. However, in
 Chapter 4 we had a function in Listing 4-9, shown again in Listing 10-25, that
 compiled without lifetime annotations.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="10-25" file-name="src/lib.rs" caption="A function we defined in Listing 4-9 that compiled without lifetime annotations, even though the parameter and return type are references">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-25/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-25: A function we defined in Listing 4-9 that
-compiled without lifetime annotations, even though the parameter and return
-type are references</span>
+</Listing>
 
 The reason this function compiles without lifetime annotations is historical:
 in early versions (pre-1.0) of Rust, this code wouldn’t have compiled because
