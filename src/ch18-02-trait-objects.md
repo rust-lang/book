@@ -63,19 +63,19 @@ a trait object. Trait objects aren’t as generally useful as objects in other
 languages: their specific purpose is to allow abstraction across common
 behavior.
 
-Listing 17-3 shows how to define a trait named `Draw` with one method named
+Listing 18-3 shows how to define a trait named `Draw` with one method named
 `draw`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch17-oop/listing-17-03/src/lib.rs}}
+{{#rustdoc_include ../listings/ch18-oop/listing-18-03/src/lib.rs}}
 ```
 
-<span class="caption">Listing 17-3: Definition of the `Draw` trait</span>
+<span class="caption">Listing 18-3: Definition of the `Draw` trait</span>
 
 This syntax should look familiar from our discussions on how to define traits
-in Chapter 10. Next comes some new syntax: Listing 17-4 defines a struct named
+in Chapter 10. Next comes some new syntax: Listing 18-4 defines a struct named
 `Screen` that holds a vector named `components`. This vector is of type
 `Box<dyn Draw>`, which is a trait object; it’s a stand-in for any type inside
 a `Box` that implements the `Draw` trait.
@@ -83,23 +83,23 @@ a `Box` that implements the `Draw` trait.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch17-oop/listing-17-04/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch18-oop/listing-18-04/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 17-4: Definition of the `Screen` struct with a
+<span class="caption">Listing 18-4: Definition of the `Screen` struct with a
 `components` field holding a vector of trait objects that implement the `Draw`
 trait</span>
 
 On the `Screen` struct, we’ll define a method named `run` that will call the
-`draw` method on each of its `components`, as shown in Listing 17-5:
+`draw` method on each of its `components`, as shown in Listing 18-5:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch17-oop/listing-17-05/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch18-oop/listing-18-05/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 17-5: A `run` method on `Screen` that calls the
+<span class="caption">Listing 18-5: A `run` method on `Screen` that calls the
 `draw` method on each component</span>
 
 This works differently from defining a struct that uses a generic type
@@ -107,15 +107,15 @@ parameter with trait bounds. A generic type parameter can only be substituted
 with one concrete type at a time, whereas trait objects allow for multiple
 concrete types to fill in for the trait object at runtime. For example, we
 could have defined the `Screen` struct using a generic type and a trait bound
-as in Listing 17-6:
+as in Listing 18-6:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch17-oop/listing-17-06/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch18-oop/listing-18-06/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 17-6: An alternate implementation of the `Screen`
+<span class="caption">Listing 18-6: An alternate implementation of the `Screen`
 struct and its `run` method using generics and trait bounds</span>
 
 This restricts us to a `Screen` instance that has a list of components all of
@@ -134,15 +134,15 @@ Now we’ll add some types that implement the `Draw` trait. We’ll provide the
 `Button` type. Again, actually implementing a GUI library is beyond the scope
 of this book, so the `draw` method won’t have any useful implementation in its
 body. To imagine what the implementation might look like, a `Button` struct
-might have fields for `width`, `height`, and `label`, as shown in Listing 17-7:
+might have fields for `width`, `height`, and `label`, as shown in Listing 18-7:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch17-oop/listing-17-07/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch18-oop/listing-18-07/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 17-7: A `Button` struct that implements the
+<span class="caption">Listing 18-7: A `Button` struct that implements the
 `Draw` trait</span>
 
 The `width`, `height`, and `label` fields on `Button` will differ from the
@@ -157,30 +157,30 @@ types like `TextField`.
 
 If someone using our library decides to implement a `SelectBox` struct that has
 `width`, `height`, and `options` fields, they implement the `Draw` trait on the
-`SelectBox` type as well, as shown in Listing 17-8:
+`SelectBox` type as well, as shown in Listing 18-8:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch17-oop/listing-17-08/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch18-oop/listing-18-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 17-8: Another crate using `gui` and implementing
+<span class="caption">Listing 18-8: Another crate using `gui` and implementing
 the `Draw` trait on a `SelectBox` struct</span>
 
 Our library’s user can now write their `main` function to create a `Screen`
 instance. To the `Screen` instance, they can add a `SelectBox` and a `Button`
 by putting each in a `Box<T>` to become a trait object. They can then call the
 `run` method on the `Screen` instance, which will call `draw` on each of the
-components. Listing 17-9 shows this implementation:
+components. Listing 18-9 shows this implementation:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch17-oop/listing-17-09/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch18-oop/listing-18-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 17-9: Using trait objects to store values of
+<span class="caption">Listing 18-9: Using trait objects to store values of
 different types that implement the same trait</span>
 
 When we wrote the library, we didn’t know that someone might add the
@@ -192,7 +192,7 @@ This concept—of being concerned only with the messages a value responds to
 rather than the value’s concrete type—is similar to the concept of *duck
 typing* in dynamically typed languages: if it walks like a duck and quacks
 like a duck, then it must be a duck! In the implementation of `run` on `Screen`
-in Listing 17-5, `run` doesn’t need to know what the concrete type of each
+in Listing 18-5, `run` doesn’t need to know what the concrete type of each
 component is. It doesn’t check whether a component is an instance of a `Button`
 or a `SelectBox`, it just calls the `draw` method on the component. By
 specifying `Box<dyn Draw>` as the type of the values in the `components`
@@ -205,22 +205,22 @@ value implements a particular method at runtime or worry about getting errors
 if a value doesn’t implement a method but we call it anyway. Rust won’t compile
 our code if the values don’t implement the traits that the trait objects need.
 
-For example, Listing 17-10 shows what happens if we try to create a `Screen`
+For example, Listing 18-10 shows what happens if we try to create a `Screen`
 with a `String` as a component:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-oop/listing-17-10/src/main.rs}}
+{{#rustdoc_include ../listings/ch18-oop/listing-18-10/src/main.rs}}
 ```
 
-<span class="caption">Listing 17-10: Attempting to use a type that doesn’t
+<span class="caption">Listing 18-10: Attempting to use a type that doesn’t
 implement the trait object’s trait</span>
 
 We’ll get this error because `String` doesn’t implement the `Draw` trait:
 
 ```console
-{{#include ../listings/ch17-oop/listing-17-10/output.txt}}
+{{#include ../listings/ch18-oop/listing-18-10/output.txt}}
 ```
 
 This error lets us know that either we’re passing something to `Screen` we
@@ -248,8 +248,8 @@ runtime, Rust uses the pointers inside the trait object to know which method to
 call. This lookup incurs a runtime cost that doesn’t occur with static
 dispatch. Dynamic dispatch also prevents the compiler from choosing to inline a
 method’s code, which in turn prevents some optimizations. However, we did get
-extra flexibility in the code that we wrote in Listing 17-5 and were able to
-support in Listing 17-9, so it’s a trade-off to consider.
+extra flexibility in the code that we wrote in Listing 18-5 and were able to
+support in Listing 18-9, so it’s a trade-off to consider.
 
 [performance-of-code-using-generics]:
 ch10-01-syntax.html#performance-of-code-using-generics

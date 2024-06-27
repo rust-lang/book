@@ -23,15 +23,15 @@ those cases, you’ll need to change either the pattern or the construct you’r
 using the pattern with, depending on the intended behavior of the code.
 
 Let’s look at an example of what happens when we try to use a refutable pattern
-where Rust requires an irrefutable pattern and vice versa. Listing 18-8 shows a
+where Rust requires an irrefutable pattern and vice versa. Listing 19-8 shows a
 `let` statement, but for the pattern we’ve specified `Some(x)`, a refutable
 pattern. As you might expect, this code will not compile.
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-08/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-8: Attempting to use a refutable pattern with
+<span class="caption">Listing 19-8: Attempting to use a refutable pattern with
 `let`</span>
 
 If `some_option_value` was a `None` value, it would fail to match the pattern
@@ -41,7 +41,7 @@ do with a `None` value. At compile time, Rust will complain that we’ve tried t
 use a refutable pattern where an irrefutable pattern is required:
 
 ```console
-{{#include ../listings/ch18-patterns-and-matching/listing-18-08/output.txt}}
+{{#include ../listings/ch19-patterns-and-matching/listing-19-08/output.txt}}
 ```
 
 Because we didn’t cover (and couldn’t cover!) every valid value with the
@@ -51,32 +51,32 @@ If we have a refutable pattern where an irrefutable pattern is needed, we can
 fix it by changing the code that uses the pattern: instead of using `let`, we
 can use `if let`. Then if the pattern doesn’t match, the code will just skip
 the code in the curly brackets, giving it a way to continue validly. Listing
-18-9 shows how to fix the code in Listing 18-8.
+18-9 shows how to fix the code in Listing 19-8.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-09/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-9: Using `if let` and a block with refutable
+<span class="caption">Listing 19-9: Using `if let` and a block with refutable
 patterns instead of `let`</span>
 
 We’ve given the code an out! This code is perfectly valid now. However,
 if we give `if let` an irrefutable pattern (a pattern that will always
-match), such as `x`, as shown in Listing 18-10, the compiler will give a
+match), such as `x`, as shown in Listing 19-10, the compiler will give a
 warning.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-10/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-10: Attempting to use an irrefutable pattern
+<span class="caption">Listing 19-10: Attempting to use an irrefutable pattern
 with `if let`</span>
 
 Rust complains that it doesn’t make sense to use `if let` with an irrefutable
 pattern:
 
 ```console
-{{#include ../listings/ch18-patterns-and-matching/listing-18-10/output.txt}}
+{{#include ../listings/ch19-patterns-and-matching/listing-19-10/output.txt}}
 ```
 
 For this reason, match arms must use refutable patterns, except for the last

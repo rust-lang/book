@@ -30,17 +30,17 @@ $ cargo new hello
 $ cd hello
 ```
 
-Now enter the code in Listing 20-1 in *src/main.rs* to start. This code will
+Now enter the code in Listing 21-1 in *src/main.rs* to start. This code will
 listen at the local address `127.0.0.1:7878` for incoming TCP streams. When it
 gets an incoming stream, it will print `Connection established!`.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,no_run
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-01/src/main.rs}}
+{{#rustdoc_include ../listings/ch21-web-server/listing-21-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 20-1: Listening for incoming streams and printing
+<span class="caption">Listing 21-1: Listening for incoming streams and printing
 a message when we receive a stream</span>
 
 Using `TcpListener`, we can listen for TCP connections at the address
@@ -125,15 +125,15 @@ separate the concerns of first getting a connection and then taking some action
 with the connection, we’ll start a new function for processing connections. In
 this new `handle_connection` function, we’ll read data from the TCP stream and
 print it so we can see the data being sent from the browser. Change the code to
-look like Listing 20-2.
+look like Listing 21-2.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,no_run
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-02/src/main.rs}}
+{{#rustdoc_include ../listings/ch21-web-server/listing-21-02/src/main.rs}}
 ```
 
-<span class="caption">Listing 20-2: Reading from the `TcpStream` and printing
+<span class="caption">Listing 21-2: Reading from the `TcpStream` and printing
 the data</span>
 
 We bring `std::io::prelude` and `std::io::BufReader` into scope to get access
@@ -271,15 +271,15 @@ The status code 200 is the standard success response. The text is a tiny
 successful HTTP response. Let’s write this to the stream as our response to a
 successful request! From the `handle_connection` function, remove the
 `println!` that was printing the request data and replace it with the code in
-Listing 20-3.
+Listing 21-3.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,no_run
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-03/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch21-web-server/listing-21-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 20-3: Writing a tiny successful HTTP response to
+<span class="caption">Listing 21-3: Writing a tiny successful HTTP response to
 the stream</span>
 
 The first new line defines the `response` variable that holds the success
@@ -299,30 +299,30 @@ request and sending a response!
 
 Let’s implement the functionality for returning more than a blank page. Create
 the new file *hello.html* in the root of your project directory, not in the
-*src* directory. You can input any HTML you want; Listing 20-4 shows one
+*src* directory. You can input any HTML you want; Listing 21-4 shows one
 possibility.
 
 <span class="filename">Filename: hello.html</span>
 
 ```html
-{{#include ../listings/ch20-web-server/listing-20-05/hello.html}}
+{{#include ../listings/ch21-web-server/listing-21-05/hello.html}}
 ```
 
-<span class="caption">Listing 20-4: A sample HTML file to return in a
+<span class="caption">Listing 21-4: A sample HTML file to return in a
 response</span>
 
 This is a minimal HTML5 document with a heading and some text. To return this
 from the server when a request is received, we’ll modify `handle_connection` as
-shown in Listing 20-5 to read the HTML file, add it to the response as a body,
+shown in Listing 21-5 to read the HTML file, add it to the response as a body,
 and send it.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,no_run
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-05/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch21-web-server/listing-21-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 20-5: Sending the contents of *hello.html* as the
+<span class="caption">Listing 21-5: Sending the contents of *hello.html* as the
 body of the response</span>
 
 We’ve added `fs` to the `use` statement to bring the standard library’s
@@ -352,17 +352,17 @@ Right now, our web server will return the HTML in the file no matter what the
 client requested. Let’s add functionality to check that the browser is
 requesting */* before returning the HTML file and return an error if the
 browser requests anything else. For this we need to modify `handle_connection`,
-as shown in Listing 20-6. This new code checks the content of the request
+as shown in Listing 21-6. This new code checks the content of the request
 received against what we know a request for */* looks like and adds `if` and
 `else` blocks to treat requests differently.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,no_run
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-06/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch21-web-server/listing-21-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 20-6: Handling requests to */* differently from
+<span class="caption">Listing 21-6: Handling requests to */* differently from
 other requests</span>
 
 We’re only going to be looking at the first line of the HTTP request, so rather
@@ -370,7 +370,7 @@ than reading the entire request into a vector, we’re calling `next` to get the
 first item from the iterator. The first `unwrap` takes care of the `Option` and
 stops the program if the iterator has no items. The second `unwrap` handles the
 `Result` and has the same effect as the `unwrap` that was in the `map` added in
-Listing 20-2.
+Listing 21-2.
 
 Next, we check the `request_line` to see if it equals the request line of a GET
 request to the */* path. If it does, the `if` block returns the contents of our
@@ -383,9 +383,9 @@ a moment to respond to all other requests.
 Run this code now and request *127.0.0.1:7878*; you should get the HTML in
 *hello.html*. If you make any other request, such as
 *127.0.0.1:7878/something-else*, you’ll get a connection error like those you
-saw when running the code in Listing 20-1 and Listing 20-2.
+saw when running the code in Listing 21-1 and Listing 21-2.
 
-Now let’s add the code in Listing 20-7 to the `else` block to return a response
+Now let’s add the code in Listing 21-7 to the `else` block to return a response
 with the status code 404, which signals that the content for the request was
 not found. We’ll also return some HTML for a page to render in the browser
 indicating the response to the end user.
@@ -393,25 +393,25 @@ indicating the response to the end user.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,no_run
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-07/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch21-web-server/listing-21-07/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 20-7: Responding with status code 404 and an
+<span class="caption">Listing 21-7: Responding with status code 404 and an
 error page if anything other than */* was requested</span>
 
 Here, our response has a status line with status code 404 and the reason phrase
 `NOT FOUND`. The body of the response will be the HTML in the file *404.html*.
 You’ll need to create a *404.html* file next to *hello.html* for the error
 page; again feel free to use any HTML you want or use the example HTML in
-Listing 20-8.
+Listing 21-8.
 
 <span class="filename">Filename: 404.html</span>
 
 ```html
-{{#include ../listings/ch20-web-server/listing-20-07/404.html}}
+{{#include ../listings/ch21-web-server/listing-21-07/404.html}}
 ```
 
-<span class="caption">Listing 20-8: Sample content for the page to send back
+<span class="caption">Listing 21-8: Sample content for the page to send back
 with any 404 response</span>
 
 With these changes, run your server again. Requesting *127.0.0.1:7878* should
@@ -426,16 +426,16 @@ differences are the status line and the filename. Let’s make the code more
 concise by pulling out those differences into separate `if` and `else` lines
 that will assign the values of the status line and the filename to variables;
 we can then use those variables unconditionally in the code to read the file
-and write the response. Listing 20-9 shows the resulting code after replacing
+and write the response. Listing 21-9 shows the resulting code after replacing
 the large `if` and `else` blocks.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,no_run
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-09/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch21-web-server/listing-21-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 20-9: Refactoring the `if` and `else` blocks to
+<span class="caption">Listing 21-9: Refactoring the `if` and `else` blocks to
 contain only the code that differs between the two cases</span>
 
 Now the `if` and `else` blocks only return the appropriate values for the
@@ -447,8 +447,8 @@ The previously duplicated code is now outside the `if` and `else` blocks and
 uses the `status_line` and `filename` variables. This makes it easier to see
 the difference between the two cases, and it means we have only one place to
 update the code if we want to change how the file reading and response writing
-work. The behavior of the code in Listing 20-9 will be the same as that in
-Listing 20-7.
+work. The behavior of the code in Listing 21-9 will be the same as that in
+Listing 21-7.
 
 Awesome! We now have a simple web server in approximately 40 lines of Rust code
 that responds to one request with a page of content and responds to all other

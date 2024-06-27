@@ -14,7 +14,7 @@ with function pointers will allow you to use functions as arguments to other
 functions.
 
 The syntax for specifying that a parameter is a function pointer is similar to
-that of closures, as shown in Listing 19-27, where we’ve defined a function
+that of closures, as shown in Listing 20-27, where we’ve defined a function
 `add_one` that adds one to its parameter. The function `do_twice` takes two
 parameters: a function pointer to any function that takes an `i32` parameter
 and returns an `i32`, and one `i32` value. The `do_twice` function calls the
@@ -25,10 +25,10 @@ results together. The `main` function calls `do_twice` with the arguments
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-27/src/main.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-27/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-27: Using the `fn` type to accept a function
+<span class="caption">Listing 20-27: Using the `fn` type to accept a function
 pointer as an argument</span>
 
 This code prints `The answer is: 12`. We specify that the parameter `f` in
@@ -56,14 +56,14 @@ trait in the standard library. To use the `map` function to turn a vector of
 numbers into a vector of strings, we could use a closure, like this:
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-15-map-closure/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-15-map-closure/src/main.rs:here}}
 ```
 
 Or we could name a function as the argument to `map` instead of the closure,
 like this:
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-16-map-function/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-16-map-function/src/main.rs:here}}
 ```
 
 Note that we must use the fully qualified syntax that we talked about earlier
@@ -79,7 +79,7 @@ implement the closure traits, which means we can specify the initializer
 functions as arguments for methods that take closures, like so:
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-17-map-initializer/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-18-map-initializer/src/main.rs:here}}
 ```
 
 Here we create `Status::Value` instances using each `u32` value in the range
@@ -99,13 +99,13 @@ pointer `fn` as a return type, for example.
 The following code tries to return a closure directly, but it won’t compile:
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-18-returns-closure/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-19-returns-closure/src/lib.rs}}
 ```
 
 The compiler error is as follows:
 
 ```console
-{{#include ../listings/ch19-advanced-features/no-listing-18-returns-closure/output.txt}}
+{{#include ../listings/ch20-advanced-features/no-listing-19-returns-closure/output.txt}}
 ```
 
 The error references the `Sized` trait again! Rust doesn’t know how much space
@@ -113,7 +113,7 @@ it will need to store the closure. We saw a solution to this problem earlier.
 We can use a trait object:
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-19-returns-closure-trait-object/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-20-returns-closure-trait-object/src/lib.rs}}
 ```
 
 This code will compile just fine. For more about trait objects, refer to the

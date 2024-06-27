@@ -52,13 +52,13 @@ way to write the equivalent of a `match` that only matches one case.
 Optionally, `if let` can have a corresponding `else` containing code to run if
 the pattern in the `if let` doesn’t match.
 
-Listing 18-1 shows that it’s also possible to mix and match `if let`, `else
+Listing 19-1 shows that it’s also possible to mix and match `if let`, `else
 if`, and `else if let` expressions. Doing so gives us more flexibility than a
 `match` expression in which we can express only one value to compare with the
 patterns. Also, Rust doesn't require that the conditions in a series of `if
 let`, `else if`, `else if let` arms relate to each other.
 
-The code in Listing 18-1 determines what color to make your background based on
+The code in Listing 19-1 determines what color to make your background based on
 a series of checks for several conditions. For this example, we’ve created
 variables with hardcoded values that a real program might receive from user
 input.
@@ -66,10 +66,10 @@ input.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-01/src/main.rs}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-1: Mixing `if let`, `else if`, `else if let`,
+<span class="caption">Listing 19-1: Mixing `if let`, `else if`, `else if let`,
 and `else`</span>
 
 If the user specifies a favorite color, that color is used as the background.
@@ -104,10 +104,10 @@ Similar in construction to `if let`, the `while let` conditional loop allows a
 values in the vector in the opposite order in which they were pushed.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-02/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-2: Using a `while let` loop to print values
+<span class="caption">Listing 19-2: Using a `while let` loop to print values
 for as long as `stack.pop()` returns `Some`</span>
 
 This example prints 3, 2, and then 1. The `pop` method takes the last element
@@ -119,21 +119,21 @@ use `while let` to pop every element off our stack.
 ### `for` Loops
 
 In a `for` loop, the value that directly follows the keyword `for` is a
-pattern. For example, in `for x in y` the `x` is the pattern. Listing 18-3
+pattern. For example, in `for x in y` the `x` is the pattern. Listing 19-3
 demonstrates how to use a pattern in a `for` loop to destructure, or break
 apart, a tuple as part of the `for` loop.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-03/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-3: Using a pattern in a `for` loop to
+<span class="caption">Listing 19-3: Using a pattern in a `for` loop to
 destructure a tuple</span>
 
-The code in Listing 18-3 will print the following:
+The code in Listing 19-3 will print the following:
 
 ```console
-{{#include ../listings/ch18-patterns-and-matching/listing-18-03/output.txt}}
+{{#include ../listings/ch19-patterns-and-matching/listing-19-03/output.txt}}
 ```
 
 We adapt an iterator using the `enumerate` method so it produces a value and
@@ -172,10 +172,10 @@ To see the pattern matching aspect of `let` more clearly, consider Listing
 18-4, which uses a pattern with `let` to destructure a tuple.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-04/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-4: Using a pattern to destructure a tuple and
+<span class="caption">Listing 19-4: Using a pattern to destructure a tuple and
 create three variables at once</span>
 
 Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
@@ -185,20 +185,20 @@ pattern as nesting three individual variable patterns inside it.
 
 If the number of elements in the pattern doesn’t match the number of elements
 in the tuple, the overall type won’t match and we’ll get a compiler error. For
-example, Listing 18-5 shows an attempt to destructure a tuple with three
+example, Listing 19-5 shows an attempt to destructure a tuple with three
 elements into two variables, which won’t work.
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-05/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-5: Incorrectly constructing a pattern whose
+<span class="caption">Listing 19-5: Incorrectly constructing a pattern whose
 variables don’t match the number of elements in the tuple</span>
 
 Attempting to compile this code results in this type error:
 
 ```console
-{{#include ../listings/ch18-patterns-and-matching/listing-18-05/output.txt}}
+{{#include ../listings/ch19-patterns-and-matching/listing-19-05/output.txt}}
 ```
 
 To fix the error, we could ignore one or more of the values in the tuple using
@@ -210,28 +210,28 @@ of elements in the tuple.
 
 ### Function Parameters
 
-Function parameters can also be patterns. The code in Listing 18-6, which
+Function parameters can also be patterns. The code in Listing 19-6, which
 declares a function named `foo` that takes one parameter named `x` of type
 `i32`, should by now look familiar.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-06/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-6: A function signature uses patterns in the
+<span class="caption">Listing 19-6: A function signature uses patterns in the
 parameters</span>
 
 The `x` part is a pattern! As we did with `let`, we could match a tuple in a
-function’s arguments to the pattern. Listing 18-7 splits the values in a tuple
+function’s arguments to the pattern. Listing 19-7 splits the values in a tuple
 as we pass it to a function.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-07/src/main.rs}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-07/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-7: A function with parameters that destructure
+<span class="caption">Listing 19-7: A function with parameters that destructure
 a tuple</span>
 
 This code prints `Current location: (3, 5)`. The values `&(3, 5)` match the

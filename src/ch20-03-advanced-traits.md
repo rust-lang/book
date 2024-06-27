@@ -26,10 +26,10 @@ iterating over. The definition of the `Iterator` trait is as shown in Listing
 19-12.
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-12/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-12/src/lib.rs}}
 ```
 
-<span class="caption">Listing 19-12: The definition of the `Iterator` trait
+<span class="caption">Listing 20-12: The definition of the `Iterator` trait
 that has an associated type `Item`</span>
 
 The type `Item` is a placeholder, and the `next` method’s definition shows that
@@ -46,20 +46,20 @@ the `Item` type is `u32`:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-22-iterator-on-counter/src/lib.rs:ch19}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-22-iterator-on-counter/src/lib.rs:ch19}}
 ```
 
 This syntax seems comparable to that of generics. So why not just define the
-`Iterator` trait with generics, as shown in Listing 19-13?
+`Iterator` trait with generics, as shown in Listing 20-13?
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-13/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-13/src/lib.rs}}
 ```
 
-<span class="caption">Listing 19-13: A hypothetical definition of the
+<span class="caption">Listing 20-13: A hypothetical definition of the
 `Iterator` trait using generics</span>
 
-The difference is that when using generics, as in Listing 19-13, we must
+The difference is that when using generics, as in Listing 20-13, we must
 annotate the types in each implementation; because we can also implement
 `Iterator<String> for Counter` or any other type, we could have multiple
 implementations of `Iterator` for `Counter`. In other words, when a trait has a
@@ -69,7 +69,7 @@ the concrete types of the generic type parameters each time. When we use the
 indicate which implementation of `Iterator` we want to use.
 
 With associated types, we don’t need to annotate types because we can’t
-implement a trait on a type multiple times. In Listing 19-12 with the
+implement a trait on a type multiple times. In Listing 20-12 with the
 definition that uses associated types, we can only choose what the type of
 `Item` will be once, because there can only be one `impl Iterator for Counter`.
 We don’t have to specify that we want an iterator of `u32` values everywhere
@@ -94,17 +94,17 @@ in particular situations.
 Rust doesn’t allow you to create your own operators or overload arbitrary
 operators. But you can overload the operations and corresponding traits listed
 in `std::ops` by implementing the traits associated with the operator. For
-example, in Listing 19-14 we overload the `+` operator to add two `Point`
+example, in Listing 20-14 we overload the `+` operator to add two `Point`
 instances together. We do this by implementing the `Add` trait on a `Point`
 struct:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-14/src/main.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-14/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-14: Implementing the `Add` trait to overload
+<span class="caption">Listing 20-14: Implementing the `Add` trait to overload
 the `+` operator for `Point` instances</span>
 
 The `add` method adds the `x` values of two `Point` instances and the `y`
@@ -142,15 +142,15 @@ units. This thin wrapping of an existing type in another struct is known as the
 Pattern to Implement External Traits on External Types”][newtype]<!-- ignore
 --> section. We want to add values in millimeters to values in meters and have
 the implementation of `Add` do the conversion correctly. We can implement `Add`
-for `Millimeters` with `Meters` as the `Rhs`, as shown in Listing 19-15.
+for `Millimeters` with `Meters` as the `Rhs`, as shown in Listing 20-15.
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-15/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-15/src/lib.rs}}
 ```
 
-<span class="caption">Listing 19-15: Implementing the `Add` trait on
+<span class="caption">Listing 20-15: Implementing the `Add` trait on
 `Millimeters` to add `Millimeters` to `Meters`</span>
 
 To add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to set the
@@ -181,7 +181,7 @@ on one type. It’s also possible to implement a method directly on the type wit
 the same name as methods from traits.
 
 When calling methods with the same name, you’ll need to tell Rust which one you
-want to use. Consider the code in Listing 19-16 where we’ve defined two traits,
+want to use. Consider the code in Listing 20-16 where we’ve defined two traits,
 `Pilot` and `Wizard`, that both have a method called `fly`. We then implement
 both traits on a type `Human` that already has a method named `fly` implemented
 on it. Each `fly` method does something different.
@@ -189,23 +189,23 @@ on it. Each `fly` method does something different.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-16/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-16/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-16: Two traits are defined to have a `fly`
+<span class="caption">Listing 20-16: Two traits are defined to have a `fly`
 method and are implemented on the `Human` type, and a `fly` method is
 implemented on `Human` directly</span>
 
 When we call `fly` on an instance of `Human`, the compiler defaults to calling
-the method that is directly implemented on the type, as shown in Listing 19-17.
+the method that is directly implemented on the type, as shown in Listing 20-17.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-17/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-17/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-17: Calling `fly` on an instance of
+<span class="caption">Listing 20-17: Calling `fly` on an instance of
 `Human`</span>
 
 Running this code will print `*waving arms furiously*`, showing that Rust
@@ -213,27 +213,27 @@ called the `fly` method implemented on `Human` directly.
 
 To call the `fly` methods from either the `Pilot` trait or the `Wizard` trait,
 we need to use more explicit syntax to specify which `fly` method we mean.
-Listing 19-18 demonstrates this syntax.
+Listing 20-18 demonstrates this syntax.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-18/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-18/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-18: Specifying which trait’s `fly` method we
+<span class="caption">Listing 20-18: Specifying which trait’s `fly` method we
 want to call</span>
 
 Specifying the trait name before the method name clarifies to Rust which
 implementation of `fly` we want to call. We could also write
 `Human::fly(&person)`, which is equivalent to the `person.fly()` that we used
-in Listing 19-18, but this is a bit longer to write if we don’t need to
+in Listing 20-18, but this is a bit longer to write if we don’t need to
 disambiguate.
 
 Running this code prints the following:
 
 ```console
-{{#include ../listings/ch19-advanced-features/listing-19-18/output.txt}}
+{{#include ../listings/ch20-advanced-features/listing-20-18/output.txt}}
 ```
 
 Because the `fly` method takes a `self` parameter, if we had two *types* that
@@ -243,7 +243,7 @@ trait to use based on the type of `self`.
 However, associated functions that are not methods don’t have a `self`
 parameter. When there are multiple types or traits that define non-method
 functions with the same function name, Rust doesn't always know which type you
-mean unless you use *fully qualified syntax*. For example, in Listing 19-19 we
+mean unless you use *fully qualified syntax*. For example, in Listing 20-19 we
 create a trait for an animal shelter that wants to name all baby dogs *Spot*.
 We make an `Animal` trait with an associated non-method function `baby_name`.
 The `Animal` trait is implemented for the struct `Dog`, on which we also
@@ -252,10 +252,10 @@ provide an associated non-method function `baby_name` directly.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-19/src/main.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-19/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-19: A trait with an associated function and a
+<span class="caption">Listing 20-19: A trait with an associated function and a
 type with an associated function of the same name that also implements the
 trait</span>
 
@@ -269,22 +269,22 @@ In `main`, we call the `Dog::baby_name` function, which calls the associated
 function defined on `Dog` directly. This code prints the following:
 
 ```console
-{{#include ../listings/ch19-advanced-features/listing-19-19/output.txt}}
+{{#include ../listings/ch20-advanced-features/listing-20-19/output.txt}}
 ```
 
 This output isn’t what we wanted. We want to call the `baby_name` function that
 is part of the `Animal` trait that we implemented on `Dog` so the code prints
 `A baby dog is called a puppy`. The technique of specifying the trait name that
-we used in Listing 19-18 doesn’t help here; if we change `main` to the code in
-Listing 19-20, we’ll get a compilation error.
+we used in Listing 20-18 doesn’t help here; if we change `main` to the code in
+Listing 20-20, we’ll get a compilation error.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-20/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-20/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-20: Attempting to call the `baby_name`
+<span class="caption">Listing 20-20: Attempting to call the `baby_name`
 function from the `Animal` trait, but Rust doesn’t know which implementation to
 use</span>
 
@@ -293,21 +293,21 @@ other types that implement the `Animal` trait, Rust can’t figure out which
 implementation of `Animal::baby_name` we want. We’ll get this compiler error:
 
 ```console
-{{#include ../listings/ch19-advanced-features/listing-19-20/output.txt}}
+{{#include ../listings/ch20-advanced-features/listing-20-20/output.txt}}
 ```
 
 To disambiguate and tell Rust that we want to use the implementation of
 `Animal` for `Dog` as opposed to the implementation of `Animal` for some other
-type, we need to use fully qualified syntax. Listing 19-21 demonstrates how to
+type, we need to use fully qualified syntax. Listing 20-21 demonstrates how to
 use fully qualified syntax.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-21/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-21/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-21: Using fully qualified syntax to specify
+<span class="caption">Listing 20-21: Using fully qualified syntax to specify
 that we want to call the `baby_name` function from the `Animal` trait as
 implemented on `Dog`</span>
 
@@ -317,7 +317,7 @@ implemented on `Dog` by saying that we want to treat the `Dog` type as an
 `Animal` for this function call. This code will now print what we want:
 
 ```console
-{{#include ../listings/ch19-advanced-features/listing-19-21/output.txt}}
+{{#include ../listings/ch20-advanced-features/listing-20-21/output.txt}}
 ```
 
 In general, fully qualified syntax is defined as follows:
@@ -362,16 +362,16 @@ In the implementation of the `outline_print` method, we want to use the
 `OutlinePrint` trait will work only for types that also implement `Display` and
 provide the functionality that `OutlinePrint` needs. We can do that in the
 trait definition by specifying `OutlinePrint: Display`. This technique is
-similar to adding a trait bound to the trait. Listing 19-22 shows an
+similar to adding a trait bound to the trait. Listing 20-22 shows an
 implementation of the `OutlinePrint` trait.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-22/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-22/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-22: Implementing the `OutlinePrint` trait that
+<span class="caption">Listing 20-22: Implementing the `OutlinePrint` trait that
 requires the functionality from `Display`</span>
 
 Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
@@ -387,13 +387,13 @@ doesn’t implement `Display`, such as the `Point` struct:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-02-impl-outlineprint-for-point/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-02-impl-outlineprint-for-point/src/main.rs:here}}
 ```
 
 We get an error saying that `Display` is required but not implemented:
 
 ```console
-{{#include ../listings/ch19-advanced-features/no-listing-02-impl-outlineprint-for-point/output.txt}}
+{{#include ../listings/ch20-advanced-features/no-listing-02-impl-outlineprint-for-point/output.txt}}
 ```
 
 To fix this, we implement `Display` on `Point` and satisfy the constraint that
@@ -402,7 +402,7 @@ To fix this, we implement `Display` on `Point` and satisfy the constraint that
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-03-impl-display-for-point/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-03-impl-display-for-point/src/main.rs:here}}
 ```
 
 Then implementing the `OutlinePrint` trait on `Point` will compile
@@ -429,15 +429,15 @@ As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the
 `Vec<T>` type are defined outside our crate. We can make a `Wrapper` struct
 that holds an instance of `Vec<T>`; then we can implement `Display` on
-`Wrapper` and use the `Vec<T>` value, as shown in Listing 19-23.
+`Wrapper` and use the `Vec<T>` value, as shown in Listing 20-23.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-23/src/main.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-23/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-23: Creating a `Wrapper` type around
+<span class="caption">Listing 20-23: Creating a `Wrapper` type around
 `Vec<String>` to implement `Display`</span>
 
 The implementation of `Display` uses `self.0` to access the inner `Vec<T>`,

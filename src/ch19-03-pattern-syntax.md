@@ -9,7 +9,7 @@ As you saw in Chapter 6, you can match patterns against literals directly. The
 following code gives some examples:
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-01-literals/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-01-literals/src/main.rs:here}}
 ```
 
 This code prints `one` because the value in `x` is 1. This syntax is useful
@@ -23,7 +23,7 @@ them many times in the book. However, there is a complication when you use
 named variables in `match` expressions. Because `match` starts a new scope,
 variables declared as part of a pattern inside the `match` expression will
 shadow those with the same name outside the `match` construct, as is the case
-with all variables. In Listing 18-11, we declare a variable named `x` with the
+with all variables. In Listing 19-11, we declare a variable named `x` with the
 value `Some(5)` and a variable `y` with the value `10`. We then create a
 `match` expression on the value `x`. Look at the patterns in the match arms and
 `println!` at the end, and try to figure out what the code will print before
@@ -32,10 +32,10 @@ running this code or reading further.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-11/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-11: A `match` expression with an arm that
+<span class="caption">Listing 19-11: A `match` expression with an arm that
 introduces a shadowed variable `y`</span>
 
 Let’s walk through what happens when the `match` expression runs. The pattern
@@ -75,7 +75,7 @@ meaning if the value of `x` matches either of the values in that arm, that
 arm’s code will run:
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-02-multiple-patterns/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-02-multiple-patterns/src/main.rs:here}}
 ```
 
 This code prints `one or two`.
@@ -87,7 +87,7 @@ following code, when a pattern matches any of the values within the given
 range, that arm will execute:
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-03-ranges/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-03-ranges/src/main.rs:here}}
 ```
 
 If `x` is 1, 2, 3, 4, or 5, the first arm will match. This syntax is more
@@ -103,7 +103,7 @@ numeric values, ranges are only allowed with numeric or `char` values.
 Here is an example using ranges of `char` values:
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-04-ranges-of-char/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-04-ranges-of-char/src/main.rs:here}}
 ```
 
 Rust can tell that `'c'` is within the first pattern’s range and prints `early
@@ -116,16 +116,16 @@ different parts of these values. Let’s walk through each value.
 
 #### Destructuring Structs
 
-Listing 18-12 shows a `Point` struct with two fields, `x` and `y`, that we can
+Listing 19-12 shows a `Point` struct with two fields, `x` and `y`, that we can
 break apart using a pattern with a `let` statement.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-12/src/main.rs}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-12/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-12: Destructuring a struct’s fields into
+<span class="caption">Listing 19-12: Destructuring a struct’s fields into
 separate variables</span>
 
 This code creates the variables `a` and `b` that match the values of the `x`
@@ -136,17 +136,17 @@ easier to remember which variables came from which fields. Because of this
 common usage, and because writing `let Point { x: x, y: y } = p;` contains a
 lot of duplication, Rust has a shorthand for patterns that match struct fields:
 you only need to list the name of the struct field, and the variables created
-from the pattern will have the same names. Listing 18-13 behaves in the same
-way as the code in Listing 18-12, but the variables created in the `let`
+from the pattern will have the same names. Listing 19-13 behaves in the same
+way as the code in Listing 19-12, but the variables created in the `let`
 pattern are `x` and `y` instead of `a` and `b`.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-13/src/main.rs}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-13/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-13: Destructuring struct fields using struct
+<span class="caption">Listing 19-13: Destructuring struct fields using struct
 field shorthand</span>
 
 This code creates the variables `x` and `y` that match the `x` and `y` fields
@@ -158,17 +158,17 @@ rather than creating variables for all the fields. Doing so allows us to test
 some of the fields for particular values while creating variables to
 destructure the other fields.
 
-In Listing 18-14, we have a `match` expression that separates `Point` values
+In Listing 19-14, we have a `match` expression that separates `Point` values
 into three cases: points that lie directly on the `x` axis (which is true when
 `y = 0`), on the `y` axis (`x = 0`), or neither.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-14/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-14/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-14: Destructuring and matching literal values
+<span class="caption">Listing 19-14: Destructuring and matching literal values
 in one pattern</span>
 
 The first arm will match any point that lies on the `x` axis by specifying that
@@ -192,16 +192,16 @@ and the `y` axis, this code would only print `On the x axis at 0`.
 We've destructured enums in this book (for example, Listing 6-5 in Chapter 6),
 but haven’t yet explicitly discussed that the pattern to destructure an enum
 corresponds to the way the data stored within the enum is defined. As an
-example, in Listing 18-15 we use the `Message` enum from Listing 6-2 and write
+example, in Listing 19-15 we use the `Message` enum from Listing 6-2 and write
 a `match` with patterns that will destructure each inner value.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-15/src/main.rs}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-15/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-15: Destructuring enum variants that hold
+<span class="caption">Listing 19-15: Destructuring enum variants that hold
 different kinds of values</span>
 
 This code will print `Change the color to red 0, green 160, and blue 255`. Try
@@ -215,7 +215,7 @@ For struct-like enum variants, such as `Message::Move`, we can use a pattern
 similar to the pattern we specify to match structs. After the variant name, we
 place curly brackets and then list the fields with variables so we break apart
 the pieces to use in the code for this arm. Here we use the shorthand form as
-we did in Listing 18-13.
+we did in Listing 19-13.
 
 For tuple-like enum variants, like `Message::Write` that holds a tuple with one
 element and `Message::ChangeColor` that holds a tuple with three elements, the
@@ -227,14 +227,14 @@ matching.
 
 So far, our examples have all been matching structs or enums one level deep,
 but matching can work on nested items too! For example, we can refactor the
-code in Listing 18-15 to support RGB and HSV colors in the `ChangeColor`
-message, as shown in Listing 18-16.
+code in Listing 19-15 to support RGB and HSV colors in the `ChangeColor`
+message, as shown in Listing 19-16.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-16/src/main.rs}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-16/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-16: Matching on nested enums</span>
+<span class="caption">Listing 19-16: Matching on nested enums</span>
 
 The pattern of the first arm in the `match` expression matches a
 `Message::ChangeColor` enum variant that contains a `Color::Rgb` variant; then
@@ -250,7 +250,7 @@ The following example shows a complicated destructure where we nest structs and
 tuples inside a tuple and destructure all the primitive values out:
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-05-destructuring-structs-and-tuples/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-05-destructuring-structs-and-tuples/src/main.rs:here}}
 ```
 
 This code lets us break complex types into their component parts so we can use
@@ -274,15 +274,15 @@ parts of a value. Let’s explore how and why to use each of these patterns.
 We’ve used the underscore as a wildcard pattern that will match any value but
 not bind to the value. This is especially useful as the last arm in a `match`
 expression, but we can also use it in any pattern, including function
-parameters, as shown in Listing 18-17.
+parameters, as shown in Listing 19-17.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-17/src/main.rs}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-17/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-17: Using `_` in a function signature</span>
+<span class="caption">Listing 19-17: Using `_` in a function signature</span>
 
 This code will completely ignore the value `3` passed as the first argument,
 and will print `This code only uses the y parameter: 4`.
@@ -299,16 +299,16 @@ would if you used a name instead.
 
 We can also use `_` inside another pattern to ignore just part of a value, for
 example, when we want to test for only part of a value but have no use for the
-other parts in the corresponding code we want to run. Listing 18-18 shows code
+other parts in the corresponding code we want to run. Listing 19-18 shows code
 responsible for managing a setting’s value. The business requirements are that
 the user should not be allowed to overwrite an existing customization of a
 setting but can unset the setting and give it a value if it is currently unset.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-18/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-18/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-18: Using an underscore within patterns that
+<span class="caption">Listing 19-18: Using an underscore within patterns that
 match `Some` variants when we don’t need to use the value inside the
 `Some`</span>
 
@@ -324,14 +324,14 @@ In all other cases (if either `setting_value` or `new_setting_value` are
 `new_setting_value` to become `setting_value`.
 
 We can also use underscores in multiple places within one pattern to ignore
-particular values. Listing 18-19 shows an example of ignoring the second and
+particular values. Listing 19-19 shows an example of ignoring the second and
 fourth values in a tuple of five items.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-19/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-19/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-19: Ignoring multiple parts of a tuple</span>
+<span class="caption">Listing 19-19: Ignoring multiple parts of a tuple</span>
 
 This code will print `Some numbers: 2, 8, 32`, and the values 4 and 16 will be
 ignored.
@@ -343,16 +343,16 @@ warning because an unused variable could be a bug. However, sometimes it’s
 useful to be able to create a variable you won’t use yet, such as when you’re
 prototyping or just starting a project. In this situation, you can tell Rust
 not to warn you about the unused variable by starting the name of the variable
-with an underscore. In Listing 18-20, we create two unused variables, but when
+with an underscore. In Listing 19-20, we create two unused variables, but when
 we compile this code, we should only get a warning about one of them.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-20/src/main.rs}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-20/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-20: Starting a variable name with an
+<span class="caption">Listing 19-20: Starting a variable name with an
 underscore to avoid getting unused variable warnings</span>
 
 Here we get a warning about not using the variable `y`, but we don’t get a
@@ -361,25 +361,25 @@ warning about not using `_x`.
 Note that there is a subtle difference between using only `_` and using a name
 that starts with an underscore. The syntax `_x` still binds the value to the
 variable, whereas `_` doesn’t bind at all. To show a case where this
-distinction matters, Listing 18-21 will provide us with an error.
+distinction matters, Listing 19-21 will provide us with an error.
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-21/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-21/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-21: An unused variable starting with an
+<span class="caption">Listing 19-21: An unused variable starting with an
 underscore still binds the value, which might take ownership of the value</span>
 
 We’ll receive an error because the `s` value will still be moved into `_s`,
 which prevents us from using `s` again. However, using the underscore by itself
-doesn’t ever bind to the value. Listing 18-22 will compile without any errors
+doesn’t ever bind to the value. Listing 19-22 will compile without any errors
 because `s` doesn’t get moved into `_`.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-22/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-22/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-22: Using an underscore does not bind the
+<span class="caption">Listing 19-22: Using an underscore does not bind the
 value</span>
 
 This code works just fine because we never bind `s` to anything; it isn’t moved.
@@ -389,16 +389,16 @@ This code works just fine because we never bind `s` to anything; it isn’t move
 With values that have many parts, we can use the `..` syntax to use specific
 parts and ignore the rest, avoiding the need to list underscores for each
 ignored value. The `..` pattern ignores any parts of a value that we haven’t
-explicitly matched in the rest of the pattern. In Listing 18-23, we have a
+explicitly matched in the rest of the pattern. In Listing 19-23, we have a
 `Point` struct that holds a coordinate in three-dimensional space. In the
 `match` expression, we want to operate only on the `x` coordinate and ignore
 the values in the `y` and `z` fields.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-23/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-23/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-23: Ignoring all fields of a `Point` except
+<span class="caption">Listing 19-23: Ignoring all fields of a `Point` except
 for `x` by using `..`</span>
 
 We list the `x` value and then just include the `..` pattern. This is quicker
@@ -406,16 +406,16 @@ than having to list `y: _` and `z: _`, particularly when we’re working with
 structs that have lots of fields in situations where only one or two fields are
 relevant.
 
-The syntax `..` will expand to as many values as it needs to be. Listing 18-24
+The syntax `..` will expand to as many values as it needs to be. Listing 19-24
 shows how to use `..` with a tuple.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-24/src/main.rs}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-24/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-24: Matching only the first and last values in
+<span class="caption">Listing 19-24: Matching only the first and last values in
 a tuple and ignoring all other values</span>
 
 In this code, the first and last value are matched with `first` and `last`. The
@@ -423,22 +423,22 @@ In this code, the first and last value are matched with `first` and `last`. The
 
 However, using `..` must be unambiguous. If it is unclear which values are
 intended for matching and which should be ignored, Rust will give us an error.
-Listing 18-25 shows an example of using `..` ambiguously, so it will not
+Listing 19-25 shows an example of using `..` ambiguously, so it will not
 compile.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-25/src/main.rs}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-25/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-25: An attempt to use `..` in an ambiguous
+<span class="caption">Listing 19-25: An attempt to use `..` in an ambiguous
 way</span>
 
 When we compile this example, we get this error:
 
 ```console
-{{#include ../listings/ch18-patterns-and-matching/listing-18-25/output.txt}}
+{{#include ../listings/ch19-patterns-and-matching/listing-19-25/output.txt}}
 ```
 
 It’s impossible for Rust to determine how many values in the tuple to ignore
@@ -455,15 +455,15 @@ A *match guard* is an additional `if` condition, specified after the pattern in
 a `match` arm, that must also match for that arm to be chosen. Match guards are
 useful for expressing more complex ideas than a pattern alone allows.
 
-The condition can use variables created in the pattern. Listing 18-26 shows a
+The condition can use variables created in the pattern. Listing 19-26 shows a
 `match` where the first arm has the pattern `Some(x)` and also has a match
 guard of `if x % 2 == 0` (which will be true if the number is even).
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-26/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-26/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-26: Adding a match guard to a pattern</span>
+<span class="caption">Listing 19-26: Adding a match guard to a pattern</span>
 
 This example will print `The number 4 is even`. When `num` is compared to the
 pattern in the first arm, it matches, because `Some(4)` matches `Some(x)`. Then
@@ -480,20 +480,20 @@ the match guard gives us the ability to express this logic. The downside of
 this additional expressiveness is that the compiler doesn't try to check for
 exhaustiveness when match guard expressions are involved.
 
-In Listing 18-11, we mentioned that we could use match guards to solve our
+In Listing 19-11, we mentioned that we could use match guards to solve our
 pattern-shadowing problem. Recall that we created a new variable inside the
 pattern in the `match` expression instead of using the variable outside the
 `match`. That new variable meant we couldn’t test against the value of the
-outer variable. Listing 18-27 shows how we can use a match guard to fix this
+outer variable. Listing 19-27 shows how we can use a match guard to fix this
 problem.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-27/src/main.rs}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-27/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-27: Using a match guard to test for equality
+<span class="caption">Listing 19-27: Using a match guard to test for equality
 with an outer variable</span>
 
 This code will now print `Default case, x = Some(5)`. The pattern in the second
@@ -516,10 +516,10 @@ applies to `4`, `5`, *and* `6`, even though it might look like `if y` only
 applies to `6`.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-28/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-28/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-28: Combining multiple patterns with a match
+<span class="caption">Listing 19-28: Combining multiple patterns with a match
 guard</span>
 
 The match condition states that the arm only matches if the value of `x` is
@@ -549,17 +549,17 @@ were applied only to the final value in the list of values specified using the
 ### `@` Bindings
 
 The *at* operator `@` lets us create a variable that holds a value at the same
-time as we’re testing that value for a pattern match. In Listing 18-29, we want
+time as we’re testing that value for a pattern match. In Listing 19-29, we want
 to test that a `Message::Hello` `id` field is within the range `3..=7`. We also
 want to bind the value to the variable `id_variable` so we can use it in the
 code associated with the arm. We could name this variable `id`, the same as the
 field, but for this example we’ll use a different name.
 
 ```rust
-{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-29/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-29/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-29: Using `@` to bind to a value in a pattern
+<span class="caption">Listing 19-29: Using `@` to bind to a value in a pattern
 while also testing it</span>
 
 This example will print `Found an id in range: 5`. By specifying `id_variable
