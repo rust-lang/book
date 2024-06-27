@@ -1,8 +1,16 @@
 ## Async and Await
 
-In Chapter 16, we saw one of Rust’s approaches to concurrency: using threads.
-Since Rust 1.39, there has been another option for concurrency: asynchronous
-programming, or *async*.
+The threading-based concurrency model is one of the oldest concurrency models in
+computing, and it was present and well-supported in Rust since 1.0. In the past
+few decades, though, many programming languages have been experimenting with
+other approaches to concurrency, especially asynchronous programming, or
+*async*.
+
+It took a few years to work out the right design for async in Rust. After a
+bunch of experimentation and design work in the library ecosystem, Rust added
+language-level support for async in Rust 1.39, in 2019, and there is a thriving
+ecosystem of crates supporting all sorts of interesting capabilities offered by
+those language primitives.
 
 In the rest of this chapter, we will:
 
