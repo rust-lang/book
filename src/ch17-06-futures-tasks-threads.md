@@ -88,7 +88,21 @@ tasks around between threads based on the current utilization of the threads, to
 hopefully improve the overall performance of the system. To build that actually
 requires threads *and* tasks, and therefore futures.
 
-<!-- TODO: some kind of conclusion for the chapter -->
+## Summary
+
+This isn’t the last you’ll see of concurrency in this book: the project in
+Chapter 21 will use the concepts in this chapter in a more realistic situation
+than the smaller examples discussed here—and compare more directly what it looks
+like to solve these kinds of problems with threading vs. with tasks and futures.
+
+Whether with threads or with futures and tasks, or combining them for greatest
+performance, Rust gives you the tools you need to write safe, fast, concurrent
+code—whether for a high-throughput web server or an embedded operating system.
+
+Next, we’ll talk about idiomatic ways to model problems and structure solutions
+as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idioms
+relate to those you might be familiar with from object-oriented programming.
+
 
 [combining-futures]: /ch17-04-more-ways-of-combining-futures.md#building-our-own-async-abstractions
 [streams]: /ch17-05-streams.md#working-with-streams
