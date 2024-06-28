@@ -11,7 +11,8 @@ lines of text in a file or the prices of items in a shopping cart.
 To create a new empty vector, we call the `Vec::new` function, as shown in
 Listing 8-1.
 
-<Listing number="8-1" caption="Creating a new, empty vector to hold values of type `i32`">
+<Listing number="8-1" caption="Creating a new, empty vector to hold values of
+type `i32`">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-01/src/main.rs:here}}
@@ -53,7 +54,8 @@ to modify a vector.
 To create a vector and then add elements to it, we can use the `push` method,
 as shown in Listing 8-3.
 
-<Listing number="8-3" caption="Using the `push` method to add values to a vector">
+<Listing number="8-3" caption="Using the `push` method to add values to a
+vector">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-03/src/main.rs:here}}
@@ -75,7 +77,8 @@ the values that are returned from these functions for extra clarity.
 Listing 8-4 shows both methods of accessing a value in a vector, with indexing
 syntax and the `get` method.
 
-<Listing number="8-4" caption="Using indexing syntax and using the `get` method to access an item in a vector">
+<Listing number="8-4" caption="Using indexing syntax and using the `get` method
+to access an item in a vector">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-04/src/main.rs:here}}
@@ -95,7 +98,8 @@ existing elements. As an example, let’s see what happens when we have a vector
 of five elements and then we try to access an element at index 100 with each
 technique, as shown in Listing 8-5.
 
-<Listing number="8-5" caption="Attempting to access the element at index 100 in a vector containing five elements">
+<Listing number="8-5" caption="Attempting to access the element at index 100 in
+a vector containing five elements">
 
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-05/src/main.rs:here}}
@@ -128,7 +132,8 @@ to the first element in a vector and try to add an element to the end. This
 program won’t work if we also try to refer to that element later in the
 function.
 
-<Listing number="8-6" caption="Attempting to add an element to a vector while holding a reference to an item">
+<Listing number="8-6" caption="Attempting to add an element to a vector while
+holding a reference to an item">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-06/src/main.rs:here}}
@@ -162,7 +167,8 @@ elements rather than use indices to access one at a time. Listing 8-7 shows how
 to use a `for` loop to get immutable references to each element in a vector of
 `i32` values and print them.
 
-<Listing number="8-7" caption="Printing each element in a vector by iterating over the elements using a `for` loop">
+<Listing number="8-7" caption="Printing each element in a vector by iterating
+over the elements using a `for` loop">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-07/src/main.rs:here}}
@@ -174,7 +180,8 @@ We can also iterate over mutable references to each element in a mutable vector
 in order to make changes to all the elements. The `for` loop in Listing 8-8
 will add `50` to each element.
 
-<Listing number="8-8" caption="Iterating over mutable references to elements in a vector">
+<Listing number="8-8" caption="Iterating over mutable references to elements in
+a vector">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-08/src/main.rs:here}}

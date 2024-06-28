@@ -167,7 +167,8 @@ file requires the `rand` crate. We do want to include it for reader
 experimentation purposes, but don't want to include it for rustdoc testing
 purposes. -->
 
-<Listing number="9-13" caption="A `Guess` type that will only continue with values between 1 and 100">
+<Listing number="9-13" caption="A `Guess` type that will only continue with
+values between 1 and 100">
 
 ```rust
 {{#include ../listings/ch09-error-handling/listing-09-13/src/main.rs:here}}

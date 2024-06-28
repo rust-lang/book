@@ -22,7 +22,8 @@ function that takes an unknown US coin and, in a similar way as the counting
 machine, determines which coin it is and returns its value in cents, as shown
 in Listing 6-3.
 
-<Listing number="6-3" caption="An enum and a `match` expression that has the variants of the enum as its patterns">
+<Listing number="6-3" caption="An enum and a `match` expression that has the
+variants of the enum as its patterns">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-03/src/main.rs:here}}
@@ -76,7 +77,8 @@ designs, so only quarters have this extra value. We can add this information to
 our `enum` by changing the `Quarter` variant to include a `UsState` value
 stored inside it, which we’ve done in Listing 6-4.
 
-<Listing number="6-4" caption="A `Coin` enum in which the `Quarter` variant also holds a `UsState` value">
+<Listing number="6-4" caption="A `Coin` enum in which the `Quarter` variant
+also holds a `UsState` value">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-04/src/main.rs:here}}
@@ -121,7 +123,8 @@ operations.
 This function is very easy to write, thanks to `match`, and will look like
 Listing 6-5.
 
-<Listing number="6-5" caption="A function that uses a `match` expression on an `Option<i32>`">
+<Listing number="6-5" caption="A function that uses a `match` expression on an
+`Option<i32>`">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:here}}
