@@ -1,0 +1,82 @@
+cargo run
+   Compiling proc-macro2 v1.0.82
+   Compiling unicode-ident v1.0.12
+   Compiling autocfg v1.3.0
+   Compiling futures-core v0.3.30
+   Compiling pin-project-lite v0.2.14
+   Compiling libc v0.2.154
+   Compiling futures-sink v0.3.30
+   Compiling memchr v2.7.2
+   Compiling futures-task v0.3.30
+   Compiling futures-io v0.3.30
+   Compiling futures-channel v0.3.30
+   Compiling pin-utils v0.1.0
+   Compiling slab v0.4.9
+   Compiling num_cpus v1.16.0
+   Compiling tokio v1.37.0
+   Compiling quote v1.0.36
+   Compiling syn v2.0.63
+   Compiling futures-macro v0.3.30
+   Compiling futures-util v0.3.30
+   Compiling futures-executor v0.3.30
+   Compiling futures v0.3.30
+   Compiling trpl v0.1.0 (/Users/chris/dev/rust-lang/book/packages/trpl)
+   Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-20)
+error[E0277]: `dyn std::future::Future<Output = ()>` cannot be unpinned
+   --> src/main.rs:47:24
+    |
+47  |         trpl::join_all(futures).await;
+    |         -------------- ^^^^^^^ the trait `Unpin` is not implemented for `dyn std::future::Future<Output = ()>`, which is required by `Box<dyn std::future::Future<Output = ()>>: std::future::Future`
+    |         |
+    |         required by a bound introduced by this call
+    |
+    = note: consider using the `pin!` macro
+            consider using `Box::pin` if you need to access the pinned value outside of the current scope
+    = note: required for `Box<dyn std::future::Future<Output = ()>>` to implement `std::future::Future`
+note: required by a bound in `join_all`
+   --> /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:105:14
+    |
+102 | pub fn join_all<I>(iter: I) -> JoinAll<I::Item>
+    |        -------- required by a bound in this function
+...
+105 |     I::Item: Future,
+    |              ^^^^^^ required by this bound in `join_all`
+
+error[E0277]: `dyn std::future::Future<Output = ()>` cannot be unpinned
+  --> src/main.rs:47:9
+   |
+47 |         trpl::join_all(futures).await;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ the trait `Unpin` is not implemented for `dyn std::future::Future<Output = ()>`, which is required by `Box<dyn std::future::Future<Output = ()>>: std::future::Future`
+   |
+   = note: consider using the `pin!` macro
+           consider using `Box::pin` if you need to access the pinned value outside of the current scope
+   = note: required for `Box<dyn std::future::Future<Output = ()>>` to implement `std::future::Future`
+note: required by a bound in `JoinAll`
+  --> /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   |
+27 | pub struct JoinAll<F>
+   |            ------- required by a bound in this struct
+28 | where
+29 |     F: Future,
+   |        ^^^^^^ required by this bound in `JoinAll`
+
+error[E0277]: `dyn std::future::Future<Output = ()>` cannot be unpinned
+  --> src/main.rs:47:33
+   |
+47 |         trpl::join_all(futures).await;
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `dyn std::future::Future<Output = ()>`, which is required by `Box<dyn std::future::Future<Output = ()>>: std::future::Future`
+   |
+   = note: consider using the `pin!` macro
+           consider using `Box::pin` if you need to access the pinned value outside of the current scope
+   = note: required for `Box<dyn std::future::Future<Output = ()>>` to implement `std::future::Future`
+note: required by a bound in `JoinAll`
+  --> /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   |
+27 | pub struct JoinAll<F>
+   |            ------- required by a bound in this struct
+28 | where
+29 |     F: Future,
+   |        ^^^^^^ required by this bound in `JoinAll`
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `async_await` (bin "async_await") due to 3 previous errors

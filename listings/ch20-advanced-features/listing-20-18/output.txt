@@ -1,0 +1,7 @@
+$ cargo run
+   Compiling traits-example v0.1.0 (file:///projects/traits-example)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.46s
+     Running `target/debug/traits-example`
+This is your captain speaking.
+Up!
+*waving arms furiously*
