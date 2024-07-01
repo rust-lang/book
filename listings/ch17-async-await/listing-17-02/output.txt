@@ -1,12 +1,12 @@
 $ cargo run
    Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-02)
 error[E0728]: `await` is only allowed inside `async` functions and blocks
- --> src/main.rs:3:19
+ --> src/main.rs:3:20
   |
 2 | fn main() {
   |    ---- this is not `async`
-3 |     hello_async().await;
-  |                   ^^^^^ only allowed inside `async` functions and blocks
+3 |     hello("async").await;
+  |                    ^^^^^ only allowed inside `async` functions and blocks
 
 For more information about this error, try `rustc --explain E0728`.
 error: could not compile `async_await` (bin "async_await") due to 1 previous error

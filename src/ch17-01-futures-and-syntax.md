@@ -1,10 +1,10 @@
 ## Futures and the Async Syntax
 
-Like other languages with async, Rust uses the `async` and `await`
-keywords—though with some important differences from how other languages do
-things, as we will see. Blocks and functions can be marked `async`, and you can
-wait on the result of an `async` function or block to resolve using the `await`
-keyword.
+Like other languages with async, Rust uses the `async` and `await` keywords for
+async programming. (If you are familiar with other languages’ approach to async,
+you may notice some significant differences, though.) In Rust, blocks and
+functions can be marked `async`, and you can wait on the result of an `async`
+function or block to resolve using the `await` keyword.
 
 Let’s write our first async function, and call it:
 
@@ -22,65 +22,75 @@ If we compile and run this… nothing happens, and we get a compiler warning:
 {{#include ../listings/ch17-async-await/listing-17-01/output.txt}}
 ```
 
-The warning tells us that just calling `hello_async()` was not enough: we also
-need to `.await` or poll the future it returns. This raises two important
-questions:
+The warning tells us that just calling `hello` was not enough: we also need to
+`.await` or poll the future it returns. This raises some important questions:
 
 - Given there is no return type on the function, how is it returning a future?
-- What is a future?
+- What exactly is a future?
+- Why do we need to `.await` or poll futures to make them do something?
+- How do `.await` and polling relate to each other?
+
+We will work through each of these in turn. We can answer the first question by
+learning what the syntax means, so let’s start there.
 
 ### Async functions
 
-In Rust, `async fn` is equivalent to writing a function which returns a *future*
-of the return type. That is, when the compiler sees a function like this:
+In Rust, writing `async fn` is equivalent to writing a function which returns a
+*future* of the return type. That is, when the compiler sees a function like
+`async fn hello` in Listing 17-1, it is basically equivalent to a function
+defined like this instead:
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-01/src/main.rs:async-fn}}
-```
-
-It is basically equivalent to a function defined like this instead:
-
-```rust
-fn hello_async() -> impl Future<Output = ()> {
+fn hello(name: &str) -> impl Future<Output = ()> {
     async {
-        println!("Hello, async!");
+        let greeting = format!("Hello, {name}!");
+        println!("{greeting}");
     }
 }
 ```
 
-Let’s break that down and see what each part means:
+Let’s walk through each part of the transformed version:
 
 * It uses the `impl Trait` syntax we discussed back in the [“Traits as
-  Parameters”][impl-trait] section in Chapter 10 to return a `Future` with an
-  associated type of `Output`. That tells us that `Future` is a trait, and the
-  `Output` associated type of `()` matches the original return type from the
-  async version of the function.
+  Parameters”][impl-trait] section in Chapter 10.
+* The returned trait is a `Future`, with an associated type of `Output`. Notice
+  that the `Output` type is `()`, which is the same as the the original return
+  type from the `async fn` version of `hello`.
+* The whole body of the function is wrapped in an `async` block. Remember that
+  blocks are expressions. This whole block is the expression returned from the
+  function.
+* The async block itself has the “unit” value `()`, since it ends with a
+  `println!` statement. That value matches the `Output` type in the return type.
 
-* It wraps the whole body of the `async fn` in an `async` block. Given that
-  blocks like this are expressions, and that this is expression is the one which
-  is returned from the function, we can infer that an `async` block like this
-  produces some anonymous data type which implements the `Future` trait.
+An `async` block corresponds to a data type which implements the `Future` trait,
+and the result of the async block will be the `Output` of the `Future`. Thus, an
+`async fn`’s return type is an anonymous data type the compiler creates for us,
+which implements `Future`. The associated `Output` type for the `Future` is the
+return type of the original `async fn`. Thus, calling `hello` in Listing 17-1
+returned a `Future<Output = ()>`.
 
-Combined, those explain that when we called `hello_async` in `main`, it returned
-a `Future`. Then Rust warned us that we did not do anything with the future.
-This is because futures are *lazy*: they don’t do anything until you ask them
-to. This should remind you of our discussion of iterators [back in Chapter
-13][iterators-lazy]. With iterators, you have to call `next` to get them to do
-anything—whether by using a `for` loop or by using iterator methods like `.iter()` and `.map()` which ultimately call `next()` under the hood.
+Then Rust warned us that we did not do anything with the future. This is because
+futures are *lazy*: they don’t do anything until you ask them to. This should
+remind you of our discussion of iterators [back in Chapter 13][iterators-lazy].
+Iterators do nothing unless you call their `.next()` method—whether directly, or
+using `for` loops or methods like `.map()` which use `.next()` under the hood.
 
-With futures, the same basic idea applies, although for different reasons, and
-with different syntax and methods. This is different from the behavior we saw
-when using `thread::spawn` in the previous chapter, and it is different from how
-many other languages approach async. This allows Rust to avoid running async
-code unless it is actually needed. We will see why that is later on. For now,
-let’s start by awaiting the future returned by `hello_async` to actually have it
-run.
+With futures, the same basic idea applies: they do nothing unless you explicitly
+ask them to. This laziness allows Rust to avoid running async code until it is
+actually needed.
 
-> Note: Rust’s `await` keyword goes after the expression you are awaiting, not
-> before it—that is, it is a _postfix keyword_. This is different from what you
-> might be used to if you have used async in languages like JavaScript or C#.
-> Rust chose this because it makes chains of async and non-async methods much
-> nicer to work with. As of now, `await` is Rust’s only postfix keyword.
+> Note: This is different from the behavior we saw when using `thread::spawn` in
+> the previous chapter, where the closure we passed to another thread started
+> running immediately. It is also different from how many other languages
+> approach async! But it is important for Rust. We will see why that is later.
+<!-- TODO: we need to pay off that promise later in the chapter! -->
+
+For now, let’s start by awaiting the future returned by `hello` to actually have
+it run. Rust’s `await` keyword goes after the expression you are awaiting, not
+before it. That is, it is a *postfix keyword*. (This is different from what you
+might be used to if you have used async in languages like JavaScript or C#. Rust
+chose this because it makes chains of methods much nicer to work with.) In
+Listing 17-2, we add `.await` to the `hello` call in `main`.
 
 <Listing number="17-2" caption="Attempting to fix a compiler warning by awaiting a future" file-name="src/main.rs">
 
@@ -97,52 +107,67 @@ Oh no! We have gone from a compiler warning to an actual error:
 ```
 
 This time, the compiler is informing us we cannot use `.await` in `main`,
-because `main` is not an `async` function. That is because async code needs a
-*runtime*: a Rust crate which manages the details of executing asynchronous
-code.
+because `main` is not an `async` function. Your first thought might be to make
+`main` an async function then, as in Listing 17-TODO-3.
 
-Most languages which support async, including C#, JavaScript, Go, Kotlin,
-Erlang, and Swift, bundle a runtime with the language. At least for now, Rust
-does not. Instead, there are many different async runtimes available, each of
-which makes different tradeoffs suitable to the use case they target. For
-example, a high-throughput web server with dozens of CPU cores and terabytes of
-RAM has very different different needs than a microcontroller with a single
-core, one gigabyte of RAM, and no ability to do heap allocations.
+<Listing number="17-TODO-3" caption="Attempting to make `main` an `async fn`" file-name="src/main.rs">
 
-To keep this chapter focused on learning async, rather than juggling parts of
-the ecosystem, we have created the `trpl` crate (`trpl` is short for “The Rust
-Programming Language”). It re-exports all the types, traits, and functions you
-will need, and in a couple cases wires up a few things for you which are less
-relevant to the subject of the book. There is no magic involved, though! If you
-want to understand what the crate does, we encourage you to check out [its
-source code][crate-source]. You will be able to see what crate each re-export
-comes from, and we have left extensive comments explaining what the handful of
-helper functions we supply are doing.
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-03-fix/src/main.rs:main}}
+```
 
-> ### The `futures` and `tokio` Crates
+</Listing>
+
+However, we get another compiler error here:
+
+```console
+{{#include ../listings/ch17-async-await/listing-17-03-fix/output.txt}}
+```
+
+The problem is that async code needs a *runtime*: a Rust crate which manages the
+details of executing asynchronous code.
+
+Most languages which support async bundle a runtime with the language. At least
+for now, Rust does not. Instead, there are many different async runtimes
+available, each of which makes different tradeoffs suitable to the use case they
+target. For example, a high-throughput web server with dozens of CPU cores and
+terabytes of RAM has very different different needs than a microcontroller with
+a single core, one gigabyte of RAM, and no ability to do heap allocations.
+
+> ### The `trpl` Crate
 >
-> Whenever you see code from the `trpl` crate throughout the rest of the
-> chapter, it will be re-exporting code from the [`futures`][futures-crate] and
-> [`tokio`][tokio] crates.
+> To keep this chapter focused on learning async, rather than juggling parts of
+> the ecosystem, we have created the `trpl` crate (`trpl` is short for “The Rust
+> Programming Language”). It re-exports all the types, traits, and functions you
+> will need, primarily from the [`futures`][futures-crate] and [`tokio`][tokio]
+> crates.
 >
 > - The `futures` crate is an official home for Rust experimentation for async
 >   code, and is actually where the `Future` type was originally designed.
 >
 > - Tokio is the most widely used async runtime in Rust today, especially (but
->   not only!) for web applications. There are other great options out there,
->   too, and they may be more suitable for your purposes. We are using Tokio
->   because it is the most widely-used runtime—not as a judgment call on whether
->   it is the *best* runtime!
+>   not only!) for web applications. There are other great runtimes out there,
+>   and they may be more suitable for your purposes. We use Tokio under the hood
+>   for `trpl` because it good and widely used.
+>
+> In some cases, `trpl` also renames or wraps the original APIs to let us stay
+> focused on the details relevant to chapter. If you want to understand what the
+> crate does, we encourage you to check out [its source code][crate-source]. You
+> will be able to see what crate each re-export comes from, and we have left
+> extensive comments explaining what the crate does.
 
-For now, go ahead and add the `trpl` crate to your `hello-async` project:
+Go ahead and add the `trpl` crate to your `hello-async` project:
 
 ```console
 $ cargo add trpl
 ```
 
-Then, in our `main` function, let’s wrap the call to `hello_async` with the
+Then, in our `main` function, let’s wrap the call to `hello` with the
 `trpl::block_on` function, which takes in a `Future` and runs it until it
-completes.
+completes. Since `hello` returns a `Future`, we could simply wrap it directly in
+`trpl::block_on`. However, for most of the examples in the chapter, we will be
+doing more than just one async function call, so instead we will pass an `async`
+block and explicitly await the result of calling `hello`.
 
 <Listing number="17-3" caption="Using the `block_on` helper function to wait on a future in non-async code" file-name="src/main.rs">
 
@@ -158,9 +183,8 @@ When we run this, we get the behavior we might have expected initially:
 {{#include ../listings/ch17-async-await/listing-17-03/output.txt}}
 ```
 
-Phew: we finally have some working async code! Now we can answer that second
-question: what is a future anyway? That will also help us understand why we need
-that `trpl::block_on` call to make this work.
+Phew: we finally have some working async code! Now we can turn our attention to
+how the `Future` trait works.
 
 ### What Are Futures?
 
@@ -218,7 +242,7 @@ Under the hood, when you call `.await`, Rust compiles that to code which calls
 like this:
 
 ```rust,ignore
-match hello_async().poll() {
+match hello("async").poll() {
     Ready(_) => {
         // We’re done!
     }
@@ -233,9 +257,9 @@ the `Future` is still `Pending`? We need some way to try again. We would need to
 have something like this instead:
 
 ```rust,ignore
-let hello_async_fut = hello_async();
+let hello_fut = hello("async");
 loop {
-    match hello_async_fut.poll() {
+    match hello_fut.poll() {
         Ready(_) => {
             break;
         }
@@ -286,7 +310,7 @@ Now we can understand why the compiler was stopping us in Listing 17-2 (before
 we added the `trpl::block_on` function). The `main` function is not `async`—and
 it really cannot be: if it were, something would need to call `poll()` on
 whatever `main` returned! Instead, we use the `trpl::block_on` function, which
-polls the `Future` returned by `hello_async` until it returns `Ready`. Every
+polls the `Future` returned by `hello` until it returns `Ready`. Every
 async program in Rust has at least one place where it sets up an executor and
 executes code.
 
@@ -295,7 +319,7 @@ executes code.
 > you never have to think about it when writing Rust.
 >
 > The loop as written also wouldn’t compile, because it doesn’t actually satisfy
-> the contract for a `Future`. In particular, `hello_async_fut` is not *pinned*
+> the contract for a `Future`. In particular, `hello_fut` is not *pinned*
 > with the `Pin` type and we did not pass along a `Context` argument. We will
 > see a little more about `Pin` later in the chapter, but we will not dig into
 > `Context` because you will not normally need them for working with futures in

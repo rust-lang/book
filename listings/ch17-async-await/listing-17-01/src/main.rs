@@ -1,11 +1,10 @@
 // ANCHOR: all
 fn main() {
-    hello_async();
+    hello("async");
 }
 
-// ANCHOR: async-fn
-async fn hello_async() {
-    println!("Hello, async!");
+async fn hello(name: &str) {
+    let greeting = format!("Hello, {name}!");
+    println!("{greeting}");
 }
-// ANCHOR_END: async-fn
 // ANCHOR_END: all

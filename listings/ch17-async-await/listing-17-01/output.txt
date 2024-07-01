@@ -1,14 +1,14 @@
 $ cargo run
    Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-01)
 warning: unused implementer of `Future` that must be used
- --> src/main.rs:2:5
+ --> src/main.rs:3:5
   |
-2 |     hello_async();
-  |     ^^^^^^^^^^^^^
+3 |     hello("async");
+  |     ^^^^^^^^^^^^^^
   |
   = note: futures do nothing unless you `.await` or poll them
   = note: `#[warn(unused_must_use)]` on by default
 
 warning: `async_await` (bin "async_await") generated 1 warning
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.11s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.21s
      Running `target/debug/async_await`

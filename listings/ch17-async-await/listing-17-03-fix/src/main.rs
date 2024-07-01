@@ -1,5 +1,5 @@
 // ANCHOR: main
-fn main() {
+async fn main() {
     hello("async").await;
 }
 // ANCHOR_END: main
