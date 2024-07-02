@@ -1,13 +1,25 @@
+use std::time::Duration;
+
 fn main() {
     trpl::block_on(async {
+        // ANCHOR: many-messages
         let (tx, mut rx) = trpl::channel();
 
-        // ANCHOR: send-and-receive
-        let val = String::from("hi");
-        tx.send(val).unwrap();
+        let vals = vec![
+            String::from("hi"),
+            String::from("from"),
+            String::from("the"),
+            String::from("future"),
+        ];
 
-        let received = rx.recv().await.unwrap();
-        println!("Got: {received}");
-        // ANCHOR_END: send-and-receive
+        for val in vals {
+            tx.send(val).unwrap();
+            trpl::sleep(Duration::from_millis(500)).await;
+        }
+
+        while let Some(value) = rx.recv().await {
+            println!("received '{value}'");
+        }
+        // ANCHOR_END: many-messages
     });
 }
