@@ -12,9 +12,11 @@
 //!    never be broken by upstream changes, e.g. if Tokio does a breaking 2.0
 //!    release at some point.
 
+// For direct use within the `trpl` crate, *not* re-exported.
 use std::{future::Future, pin::pin, time::Duration};
 use tokio::time;
 
+// Re-exports, to be used like `trpl::join`.
 pub use futures::{
     future::{self, join, join3, join_all, Either},
     join,
