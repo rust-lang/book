@@ -1,0 +1,798 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Closures: Anonymous Functions that Capture Their Environment - The Rust Programming Language</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">The Rust Programming Language</a></li><li class="chapter-item expanded affix "><a href="foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> Programming a Guessing Game</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> Common Programming Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> Variables and Mutability</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> Data Types</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> Functions</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> Control Flow</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> Understanding Ownership</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> What is Ownership?</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> References and Borrowing</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> The Slice Type</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> Using Structs to Structure Related Data</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> Defining and Instantiating Structs</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> An Example Program Using Structs</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> Method Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> Enums and Pattern Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> Defining an Enum</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> The match Control Flow Construct</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> Concise Control Flow with if let</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> Managing Growing Projects with Packages, Crates, and Modules</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> Packages and Crates</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> Defining Modules to Control Scope and Privacy</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> Paths for Referring to an Item in the Module Tree</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> Bringing Paths Into Scope with the use Keyword</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> Separating Modules into Different Files</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> Common Collections</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> Storing Lists of Values with Vectors</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> Storing UTF-8 Encoded Text with Strings</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> Storing Keys with Associated Values in Hash Maps</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> Error Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> Unrecoverable Errors with panic!</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> Recoverable Errors with Result</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> To panic! or Not to panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> Generic Data Types</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Traits: Defining Shared Behavior</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> Validating References with Lifetimes</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> Writing Automated Tests</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> How to Write Tests</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> Controlling How Tests Are Run</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> Test Organization</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> An I/O Project: Building a Command Line Program</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> Accepting Command Line Arguments</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> Reading a File</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> Refactoring to Improve Modularity and Error Handling</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> Developing the Library’s Functionality with Test Driven Development</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> Working with Environment Variables</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> Writing Error Messages to Standard Error Instead of Standard Output</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Functional Language Features: Iterators and Closures</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html" class="active"><strong aria-hidden="true">13.1.</strong> Closures: Anonymous Functions that Capture Their Environment</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> Processing a Series of Items with Iterators</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> Improving Our I/O Project</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> Comparing Performance: Loops vs. Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> More about Cargo and Crates.io</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> Customizing Builds with Release Profiles</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> Publishing a Crate to Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo Workspaces</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> Installing Binaries from Crates.io with cargo install</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Extending Cargo with Custom Commands</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> Using Box&lt;T&gt; to Point to Data on the Heap</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> Treating Smart Pointers Like Regular References with the Deref Trait</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> Running Code on Cleanup with the Drop Trait</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt;, the Reference Counted Smart Pointer</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; and the Interior Mutability Pattern</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> Reference Cycles Can Leak Memory</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> Fearless Concurrency</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> Using Threads to Run Code Simultaneously</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> Using Message Passing to Transfer Data Between Threads</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> Shared-State Concurrency</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> Extensible Concurrency with the Sync and Send Traits</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-async-await.html"><strong aria-hidden="true">17.</strong> Async and Await</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-futures-and-syntax.html"><strong aria-hidden="true">17.1.</strong> Futures and the Async Syntax</a></li><li class="chapter-item expanded "><a href="ch17-02-concurrency-with-async.html"><strong aria-hidden="true">17.2.</strong> Concurrency With Async</a></li><li class="chapter-item expanded "><a href="ch17-03-more-futures.html"><strong aria-hidden="true">17.3.</strong> Working With More Futures</a></li><li class="chapter-item expanded "><a href="ch17-04-more-ways-of-combining-futures.html"><strong aria-hidden="true">17.4.</strong> More Ways of Combining Futures</a></li><li class="chapter-item expanded "><a href="ch17-05-streams.html"><strong aria-hidden="true">17.5.</strong> Streams</a></li><li class="chapter-item expanded "><a href="ch17-06-futures-tasks-threads.html"><strong aria-hidden="true">17.6.</strong> Futures, Tasks, and Threads</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-oop.html"><strong aria-hidden="true">18.</strong> Object Oriented Programming Features of Rust</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-what-is-oo.html"><strong aria-hidden="true">18.1.</strong> Characteristics of Object-Oriented Languages</a></li><li class="chapter-item expanded "><a href="ch18-02-trait-objects.html"><strong aria-hidden="true">18.2.</strong> Using Trait Objects That Allow for Values of Different Types</a></li><li class="chapter-item expanded "><a href="ch18-03-oo-design-patterns.html"><strong aria-hidden="true">18.3.</strong> Implementing an Object-Oriented Design Pattern</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-patterns.html"><strong aria-hidden="true">19.</strong> Patterns and Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-all-the-places-for-patterns.html"><strong aria-hidden="true">19.1.</strong> All the Places Patterns Can Be Used</a></li><li class="chapter-item expanded "><a href="ch19-02-refutability.html"><strong aria-hidden="true">19.2.</strong> Refutability: Whether a Pattern Might Fail to Match</a></li><li class="chapter-item expanded "><a href="ch19-03-pattern-syntax.html"><strong aria-hidden="true">19.3.</strong> Pattern Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-advanced-features.html"><strong aria-hidden="true">20.</strong> Advanced Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-unsafe-rust.html"><strong aria-hidden="true">20.1.</strong> Unsafe Rust</a></li><li class="chapter-item expanded "><a href="ch20-03-advanced-traits.html"><strong aria-hidden="true">20.2.</strong> Advanced Traits</a></li><li class="chapter-item expanded "><a href="ch20-04-advanced-types.html"><strong aria-hidden="true">20.3.</strong> Advanced Types</a></li><li class="chapter-item expanded "><a href="ch20-05-advanced-functions-and-closures.html"><strong aria-hidden="true">20.4.</strong> Advanced Functions and Closures</a></li><li class="chapter-item expanded "><a href="ch20-06-macros.html"><strong aria-hidden="true">20.5.</strong> Macros</a></li></ol></li><li class="chapter-item expanded "><a href="ch21-00-final-project-a-web-server.html"><strong aria-hidden="true">21.</strong> Final Project: Building a Multithreaded Web Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch21-01-single-threaded.html"><strong aria-hidden="true">21.1.</strong> Building a Single-Threaded Web Server</a></li><li class="chapter-item expanded "><a href="ch21-02-multithreaded.html"><strong aria-hidden="true">21.2.</strong> Turning Our Single-Threaded Server into a Multithreaded Server</a></li><li class="chapter-item expanded "><a href="ch21-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">21.3.</strong> Graceful Shutdown and Cleanup</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">22.</strong> Appendix</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">22.1.</strong> A - Keywords</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">22.2.</strong> B - Operators and Symbols</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">22.3.</strong> C - Derivable Traits</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">22.4.</strong> D - Useful Development Tools</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">22.5.</strong> E - Editions</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">22.6.</strong> F - Translations of the Book</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">22.7.</strong> G - How Rust is Made and “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Old heading. Do not remove or links may break. -->
+<p><a id="closures-anonymous-functions-that-can-capture-their-environment"></a></p>
+<h2 id="closures-anonymous-functions-that-capture-their-environment"><a class="header" href="#closures-anonymous-functions-that-capture-their-environment">Closures: Anonymous Functions that Capture Their Environment</a></h2>
+<p>Rust’s closures are anonymous functions you can save in a variable or pass as
+arguments to other functions. You can create the closure in one place and then
+call the closure elsewhere to evaluate it in a different context. Unlike
+functions, closures can capture values from the scope in which they’re defined.
+We’ll demonstrate how these closure features allow for code reuse and behavior
+customization.</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="creating-an-abstraction-of-behavior-with-closures"></a>
+<a id="refactoring-using-functions"></a>
+<a id="refactoring-with-closures-to-store-code"></a></p>
+<h3 id="capturing-the-environment-with-closures"><a class="header" href="#capturing-the-environment-with-closures">Capturing the Environment with Closures</a></h3>
+<p>We’ll first examine how we can use closures to capture values from the
+environment they’re defined in for later use. Here’s the scenario: Every so
+often, our t-shirt company gives away an exclusive, limited-edition shirt to
+someone on our mailing list as a promotion. People on the mailing list can
+optionally add their favorite color to their profile. If the person chosen for
+a free shirt has their favorite color set, they get that color shirt. If the
+person hasn’t specified a favorite color, they get whatever color the company
+currently has the most of.</p>
+<p>There are many ways to implement this. For this example, we’re going to use an
+enum called <code>ShirtColor</code> that has the variants <code>Red</code> and <code>Blue</code> (limiting the
+number of colors available for simplicity). We represent the company’s
+inventory with an <code>Inventory</code> struct that has a field named <code>shirts</code> that
+contains a <code>Vec&lt;ShirtColor&gt;</code> representing the shirt colors currently in stock.
+The method <code>giveaway</code> defined on <code>Inventory</code> gets the optional shirt
+color preference of the free shirt winner, and returns the shirt color the
+person will get. This setup is shown in Listing 13-1:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust noplayground">#[derive(Debug, PartialEq, Copy, Clone)]
+enum ShirtColor {
+    Red,
+    Blue,
+}
+
+struct Inventory {
+    shirts: Vec&lt;ShirtColor&gt;,
+}
+
+impl Inventory {
+    fn giveaway(&amp;self, user_preference: Option&lt;ShirtColor&gt;) -&gt; ShirtColor {
+        user_preference.unwrap_or_else(|| self.most_stocked())
+    }
+
+    fn most_stocked(&amp;self) -&gt; ShirtColor {
+        let mut num_red = 0;
+        let mut num_blue = 0;
+
+        for color in &amp;self.shirts {
+            match color {
+                ShirtColor::Red =&gt; num_red += 1,
+                ShirtColor::Blue =&gt; num_blue += 1,
+            }
+        }
+        if num_red &gt; num_blue {
+            ShirtColor::Red
+        } else {
+            ShirtColor::Blue
+        }
+    }
+}
+
+fn main() {
+    let store = Inventory {
+        shirts: vec![ShirtColor::Blue, ShirtColor::Red, ShirtColor::Blue],
+    };
+
+    let user_pref1 = Some(ShirtColor::Red);
+    let giveaway1 = store.giveaway(user_pref1);
+    println!(
+        "The user with preference {:?} gets {:?}",
+        user_pref1, giveaway1
+    );
+
+    let user_pref2 = None;
+    let giveaway2 = store.giveaway(user_pref2);
+    println!(
+        "The user with preference {:?} gets {:?}",
+        user_pref2, giveaway2
+    );
+}</code></pre>
+<figcaption>Listing 13-1: Shirt company giveaway situation</figcaption>
+</figure>
+<p>The <code>store</code> defined in <code>main</code> has two blue shirts and one red shirt remaining
+to distribute for this limited-edition promotion. We call the <code>giveaway</code> method
+for a user with a preference for a red shirt and a user without any preference.</p>
+<p>Again, this code could be implemented in many ways, and here, to focus on
+closures, we’ve stuck to concepts you’ve already learned except for the body of
+the <code>giveaway</code> method that uses a closure. In the <code>giveaway</code> method, we get the
+user preference as a parameter of type <code>Option&lt;ShirtColor&gt;</code> and call the
+<code>unwrap_or_else</code> method on <code>user_preference</code>. The <a href="../std/option/enum.Option.html#method.unwrap_or_else"><code>unwrap_or_else</code> method on
+<code>Option&lt;T&gt;</code></a><!-- ignore --> is defined by the standard library.
+It takes one argument: a closure without any arguments that returns a value <code>T</code>
+(the same type stored in the <code>Some</code> variant of the <code>Option&lt;T&gt;</code>, in this case
+<code>ShirtColor</code>). If the <code>Option&lt;T&gt;</code> is the <code>Some</code> variant, <code>unwrap_or_else</code>
+returns the value from within the <code>Some</code>. If the <code>Option&lt;T&gt;</code> is the <code>None</code>
+variant, <code>unwrap_or_else</code> calls the closure and returns the value returned by
+the closure.</p>
+<p>We specify the closure expression <code>|| self.most_stocked()</code> as the argument to
+<code>unwrap_or_else</code>. This is a closure that takes no parameters itself (if the
+closure had parameters, they would appear between the two vertical bars). The
+body of the closure calls <code>self.most_stocked()</code>. We’re defining the closure
+here, and the implementation of <code>unwrap_or_else</code> will evaluate the closure
+later if the result is needed.</p>
+<p>Running this code prints:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling shirt-company v0.1.0 (file:///projects/shirt-company)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.27s
+     Running `target/debug/shirt-company`
+The user with preference Some(Red) gets Red
+The user with preference None gets Blue
+</code></pre>
+<p>One interesting aspect here is that we’ve passed a closure that calls
+<code>self.most_stocked()</code> on the current <code>Inventory</code> instance. The standard library
+didn’t need to know anything about the <code>Inventory</code> or <code>ShirtColor</code> types we
+defined, or the logic we want to use in this scenario. The closure captures an
+immutable reference to the <code>self</code> <code>Inventory</code> instance and passes it with the
+code we specify to the <code>unwrap_or_else</code> method. Functions, on the other hand,
+are not able to capture their environment in this way.</p>
+<h3 id="closure-type-inference-and-annotation"><a class="header" href="#closure-type-inference-and-annotation">Closure Type Inference and Annotation</a></h3>
+<p>There are more differences between functions and closures. Closures don’t
+usually require you to annotate the types of the parameters or the return value
+like <code>fn</code> functions do. Type annotations are required on functions because the
+types are part of an explicit interface exposed to your users. Defining this
+interface rigidly is important for ensuring that everyone agrees on what types
+of values a function uses and returns. Closures, on the other hand, aren’t used
+in an exposed interface like this: they’re stored in variables and used without
+naming them and exposing them to users of our library.</p>
+<p>Closures are typically short and relevant only within a narrow context rather
+than in any arbitrary scenario. Within these limited contexts, the compiler can
+infer the types of the parameters and the return type, similar to how it’s able
+to infer the types of most variables (there are rare cases where the compiler
+needs closure type annotations too).</p>
+<p>As with variables, we can add type annotations if we want to increase
+explicitness and clarity at the cost of being more verbose than is strictly
+necessary. Annotating the types for a closure would look like the definition
+shown in Listing 13-2. In this example, we’re defining a closure and storing it
+in a variable rather than defining the closure in the spot we pass it as an
+argument as we did in Listing 13-1.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::thread;
+</span><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn generate_workout(intensity: u32, random_number: u32) {
+</span>    let expensive_closure = |num: u32| -&gt; u32 {
+        println!("calculating slowly...");
+        thread::sleep(Duration::from_secs(2));
+        num
+    };
+<span class="boring">
+</span><span class="boring">    if intensity &lt; 25 {
+</span><span class="boring">        println!("Today, do {} pushups!", expensive_closure(intensity));
+</span><span class="boring">        println!("Next, do {} situps!", expensive_closure(intensity));
+</span><span class="boring">    } else {
+</span><span class="boring">        if random_number == 3 {
+</span><span class="boring">            println!("Take a break today! Remember to stay hydrated!");
+</span><span class="boring">        } else {
+</span><span class="boring">            println!(
+</span><span class="boring">                "Today, run for {} minutes!",
+</span><span class="boring">                expensive_closure(intensity)
+</span><span class="boring">            );
+</span><span class="boring">        }
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let simulated_user_specified_value = 10;
+</span><span class="boring">    let simulated_random_number = 7;
+</span><span class="boring">
+</span><span class="boring">    generate_workout(simulated_user_specified_value, simulated_random_number);
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>Listing 13-2: Adding optional type annotations of the parameter and return value types in the closure</figcaption>
+</figure>
+<p>With type annotations added, the syntax of closures looks more similar to the
+syntax of functions. Here we define a function that adds 1 to its parameter and
+a closure that has the same behavior, for comparison. We’ve added some spaces
+to line up the relevant parts. This illustrates how closure syntax is similar
+to function syntax except for the use of pipes and the amount of syntax that is
+optional:</p>
+<pre><code class="language-rust ignore">fn  add_one_v1   (x: u32) -&gt; u32 { x + 1 }
+let add_one_v2 = |x: u32| -&gt; u32 { x + 1 };
+let add_one_v3 = |x|             { x + 1 };
+let add_one_v4 = |x|               x + 1  ;</code></pre>
+<p>The first line shows a function definition, and the second line shows a fully
+annotated closure definition. In the third line, we remove the type annotations
+from the closure definition. In the fourth line, we remove the brackets, which
+are optional because the closure body has only one expression. These are all
+valid definitions that will produce the same behavior when they’re called. The
+<code>add_one_v3</code> and <code>add_one_v4</code> lines require the closures to be evaluated to be
+able to compile because the types will be inferred from their usage. This is
+similar to <code>let v = Vec::new();</code> needing either type annotations or values of
+some type to be inserted into the <code>Vec</code> for Rust to be able to infer the type.</p>
+<p>For closure definitions, the compiler will infer one concrete type for each of
+their parameters and for their return value. For instance, Listing 13-3 shows
+the definition of a short closure that just returns the value it receives as a
+parameter. This closure isn’t very useful except for the purposes of this
+example. Note that we haven’t added any type annotations to the definition.
+Because there are no type annotations, we can call the closure with any type,
+which we’ve done here with <code>String</code> the first time. If we then try to call
+<code>example_closure</code> with an integer, we’ll get an error.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span>    let example_closure = |x| x;
+
+    let s = example_closure(String::from("hello"));
+    let n = example_closure(5);
+<span class="boring">}</span></code></pre>
+<figcaption>Listing 13-3: Attempting to call a closure whose types are inferred with two different types</figcaption>
+</figure>
+<p>The compiler gives us this error:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling closure-example v0.1.0 (file:///projects/closure-example)
+error[E0308]: mismatched types
+ --&gt; src/main.rs:5:29
+  |
+5 |     let n = example_closure(5);
+  |             --------------- ^- help: try using a conversion method: `.to_string()`
+  |             |               |
+  |             |               expected `String`, found integer
+  |             arguments to this function are incorrect
+  |
+note: expected because the closure was earlier called with an argument of type `String`
+ --&gt; src/main.rs:4:29
+  |
+4 |     let s = example_closure(String::from("hello"));
+  |             --------------- ^^^^^^^^^^^^^^^^^^^^^ expected because this argument is of type `String`
+  |             |
+  |             in this closure call
+note: closure parameter defined here
+ --&gt; src/main.rs:2:28
+  |
+2 |     let example_closure = |x| x;
+  |                            ^
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `closure-example` (bin "closure-example") due to 1 previous error
+</code></pre>
+<p>The first time we call <code>example_closure</code> with the <code>String</code> value, the compiler
+infers the type of <code>x</code> and the return type of the closure to be <code>String</code>. Those
+types are then locked into the closure in <code>example_closure</code>, and we get a type
+error when we next try to use a different type with the same closure.</p>
+<h3 id="capturing-references-or-moving-ownership"><a class="header" href="#capturing-references-or-moving-ownership">Capturing References or Moving Ownership</a></h3>
+<p>Closures can capture values from their environment in three ways, which
+directly map to the three ways a function can take a parameter: borrowing
+immutably, borrowing mutably, and taking ownership. The closure will decide
+which of these to use based on what the body of the function does with the
+captured values.</p>
+<p>In Listing 13-4, we define a closure that captures an immutable reference to
+the vector named <code>list</code> because it only needs an immutable reference to print
+the value:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let list = vec![1, 2, 3];
+    println!("Before defining closure: {list:?}");
+
+    let only_borrows = || println!("From closure: {list:?}");
+
+    println!("Before calling closure: {list:?}");
+    only_borrows();
+    println!("After calling closure: {list:?}");
+}</code></pre></pre>
+<figcaption>Listing 13-4: Defining and calling a closure that captures an immutable reference</figcaption>
+</figure>
+<p>This example also illustrates that a variable can bind to a closure definition,
+and we can later call the closure by using the variable name and parentheses as
+if the variable name were a function name.</p>
+<p>Because we can have multiple immutable references to <code>list</code> at the same time,
+<code>list</code> is still accessible from the code before the closure definition, after
+the closure definition but before the closure is called, and after the closure
+is called. This code compiles, runs, and prints:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling closure-example v0.1.0 (file:///projects/closure-example)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.43s
+     Running `target/debug/closure-example`
+Before defining closure: [1, 2, 3]
+Before calling closure: [1, 2, 3]
+From closure: [1, 2, 3]
+After calling closure: [1, 2, 3]
+</code></pre>
+<p>Next, in Listing 13-5, we change the closure body so that it adds an element to
+the <code>list</code> vector. The closure now captures a mutable reference:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let mut list = vec![1, 2, 3];
+    println!("Before defining closure: {list:?}");
+
+    let mut borrows_mutably = || list.push(7);
+
+    borrows_mutably();
+    println!("After calling closure: {list:?}");
+}</code></pre></pre>
+<figcaption>Listing 13-5: Defining and calling a closure that captures a mutable reference</figcaption>
+</figure>
+<p>This code compiles, runs, and prints:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling closure-example v0.1.0 (file:///projects/closure-example)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.43s
+     Running `target/debug/closure-example`
+Before defining closure: [1, 2, 3]
+After calling closure: [1, 2, 3, 7]
+</code></pre>
+<p>Note that there’s no longer a <code>println!</code> between the definition and the call of
+the <code>borrows_mutably</code> closure: when <code>borrows_mutably</code> is defined, it captures a
+mutable reference to <code>list</code>. We don’t use the closure again after the closure
+is called, so the mutable borrow ends. Between the closure definition and the
+closure call, an immutable borrow to print isn’t allowed because no other
+borrows are allowed when there’s a mutable borrow. Try adding a <code>println!</code>
+there to see what error message you get!</p>
+<p>If you want to force the closure to take ownership of the values it uses in the
+environment even though the body of the closure doesn’t strictly need
+ownership, you can use the <code>move</code> keyword before the parameter list.</p>
+<p>This technique is mostly useful when passing a closure to a new thread to move
+the data so that it’s owned by the new thread. We’ll discuss threads and why
+you would want to use them in detail in Chapter 16 when we talk about
+concurrency, but for now, let’s briefly explore spawning a new thread using a
+closure that needs the <code>move</code> keyword. Listing 13-6 shows Listing 13-4 modified
+to print the vector in a new thread rather than in the main thread:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><pre class="playground"><code class="language-rust">use std::thread;
+
+fn main() {
+    let list = vec![1, 2, 3];
+    println!("Before defining closure: {list:?}");
+
+    thread::spawn(move || println!("From thread: {list:?}"))
+        .join()
+        .unwrap();
+}</code></pre></pre>
+<figcaption>Listing 13-6: Using <code>move</code> to force the closure for the thread to take ownership of <code>list</code></figcaption>
+</figure>
+<p>We spawn a new thread, giving the thread a closure to run as an argument. The
+closure body prints out the list. In Listing 13-4, the closure only captured
+<code>list</code> using an immutable reference because that’s the least amount of access
+to <code>list</code> needed to print it. In this example, even though the closure body
+still only needs an immutable reference, we need to specify that <code>list</code> should
+be moved into the closure by putting the <code>move</code> keyword at the beginning of the
+closure definition. The new thread might finish before the rest of the main
+thread finishes, or the main thread might finish first. If the main thread
+maintained ownership of <code>list</code> but ended before the new thread did and dropped
+<code>list</code>, the immutable reference in the thread would be invalid. Therefore, the
+compiler requires that <code>list</code> be moved into the closure given to the new thread
+so the reference will be valid. Try removing the <code>move</code> keyword or using <code>list</code>
+in the main thread after the closure is defined to see what compiler errors you
+get!</p>
+<!-- Old headings. Do not remove or links may break. -->
+<p><a id="storing-closures-using-generic-parameters-and-the-fn-traits"></a>
+<a id="limitations-of-the-cacher-implementation"></a>
+<a id="moving-captured-values-out-of-the-closure-and-the-fn-traits"></a></p>
+<h3 id="moving-captured-values-out-of-closures-and-the-fn-traits"><a class="header" href="#moving-captured-values-out-of-closures-and-the-fn-traits">Moving Captured Values Out of Closures and the <code>Fn</code> Traits</a></h3>
+<p>Once a closure has captured a reference or captured ownership of a value from
+the environment where the closure is defined (thus affecting what, if anything,
+is moved <em>into</em> the closure), the code in the body of the closure defines what
+happens to the references or values when the closure is evaluated later (thus
+affecting what, if anything, is moved <em>out of</em> the closure). A closure body can
+do any of the following: move a captured value out of the closure, mutate the
+captured value, neither move nor mutate the value, or capture nothing from the
+environment to begin with.</p>
+<p>The way a closure captures and handles values from the environment affects
+which traits the closure implements, and traits are how functions and structs
+can specify what kinds of closures they can use. Closures will automatically
+implement one, two, or all three of these <code>Fn</code> traits, in an additive fashion,
+depending on how the closure’s body handles the values:</p>
+<ol>
+<li><code>FnOnce</code> applies to closures that can be called once. All closures implement
+at least this trait, because all closures can be called. A closure that
+moves captured values out of its body will only implement <code>FnOnce</code> and none
+of the other <code>Fn</code> traits, because it can only be called once.</li>
+<li><code>FnMut</code> applies to closures that don’t move captured values out of their
+body, but that might mutate the captured values. These closures can be
+called more than once.</li>
+<li><code>Fn</code> applies to closures that don’t move captured values out of their body
+and that don’t mutate captured values, as well as closures that capture
+nothing from their environment. These closures can be called more than once
+without mutating their environment, which is important in cases such as
+calling a closure multiple times concurrently.</li>
+</ol>
+<p>Let’s look at the definition of the <code>unwrap_or_else</code> method on <code>Option&lt;T&gt;</code> that
+we used in Listing 13-1:</p>
+<pre><code class="language-rust ignore">impl&lt;T&gt; Option&lt;T&gt; {
+    pub fn unwrap_or_else&lt;F&gt;(self, f: F) -&gt; T
+    where
+        F: FnOnce() -&gt; T
+    {
+        match self {
+            Some(x) =&gt; x,
+            None =&gt; f(),
+        }
+    }
+}</code></pre>
+<p>Recall that <code>T</code> is the generic type representing the type of the value in the
+<code>Some</code> variant of an <code>Option</code>. That type <code>T</code> is also the return type of the
+<code>unwrap_or_else</code> function: code that calls <code>unwrap_or_else</code> on an
+<code>Option&lt;String&gt;</code>, for example, will get a <code>String</code>.</p>
+<p>Next, notice that the <code>unwrap_or_else</code> function has the additional generic type
+parameter <code>F</code>. The <code>F</code> type is the type of the parameter named <code>f</code>, which is
+the closure we provide when calling <code>unwrap_or_else</code>.</p>
+<p>The trait bound specified on the generic type <code>F</code> is <code>FnOnce() -&gt; T</code>, which
+means <code>F</code> must be able to be called once, take no arguments, and return a <code>T</code>.
+Using <code>FnOnce</code> in the trait bound expresses the constraint that
+<code>unwrap_or_else</code> is only going to call <code>f</code> at most one time. In the body of
+<code>unwrap_or_else</code>, we can see that if the <code>Option</code> is <code>Some</code>, <code>f</code> won’t be
+called. If the <code>Option</code> is <code>None</code>, <code>f</code> will be called once. Because all
+closures implement <code>FnOnce</code>, <code>unwrap_or_else</code> accepts all three kinds of
+closures and is as flexible as it can be.</p>
+<section class="note" aria-role="note">
+<p>Note: Functions can implement all three of the <code>Fn</code> traits too. If what we
+want to do doesn’t require capturing a value from the environment, we can use
+the name of a function rather than a closure where we need something that
+implements one of the <code>Fn</code> traits. For example, on an <code>Option&lt;Vec&lt;T&gt;&gt;</code> value,
+we could call <code>unwrap_or_else(Vec::new)</code> to get a new, empty vector if the
+value is <code>None</code>.</p>
+</section>
+<p>Now let’s look at the standard library method <code>sort_by_key</code> defined on slices,
+to see how that differs from <code>unwrap_or_else</code> and why <code>sort_by_key</code> uses
+<code>FnMut</code> instead of <code>FnOnce</code> for the trait bound. The closure gets one argument
+in the form of a reference to the current item in the slice being considered,
+and returns a value of type <code>K</code> that can be ordered. This function is useful
+when you want to sort a slice by a particular attribute of each item. In
+Listing 13-7, we have a list of <code>Rectangle</code> instances and we use <code>sort_by_key</code>
+to order them by their <code>width</code> attribute from low to high:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let mut list = [
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
+    ];
+
+    list.sort_by_key(|r| r.width);
+    println!("{list:#?}");
+}</code></pre></pre>
+<figcaption>Listing 13-7: Using <code>sort_by_key</code> to order rectangles by width</figcaption>
+</figure>
+<p>This code prints:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling rectangles v0.1.0 (file:///projects/rectangles)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.41s
+     Running `target/debug/rectangles`
+[
+    Rectangle {
+        width: 3,
+        height: 5,
+    },
+    Rectangle {
+        width: 7,
+        height: 12,
+    },
+    Rectangle {
+        width: 10,
+        height: 1,
+    },
+]
+</code></pre>
+<p>The reason <code>sort_by_key</code> is defined to take an <code>FnMut</code> closure is that it calls
+the closure multiple times: once for each item in the slice. The closure <code>|r| r.width</code> doesn’t capture, mutate, or move out anything from its environment, so
+it meets the trait bound requirements.</p>
+<p>In contrast, Listing 13-8 shows an example of a closure that implements just
+the <code>FnOnce</code> trait, because it moves a value out of the environment. The
+compiler won’t let us use this closure with <code>sort_by_key</code>:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile">#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let mut list = [
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
+    ];
+
+    let mut sort_operations = vec![];
+    let value = String::from("closure called");
+
+    list.sort_by_key(|r| {
+        sort_operations.push(value);
+        r.width
+    });
+    println!("{list:#?}");
+}</code></pre>
+<figcaption>Listing 13-8: Attempting to use an <code>FnOnce</code> closure with <code>sort_by_key</code></figcaption>
+</figure>
+<p>This is a contrived, convoluted way (that doesn’t work) to try and count the
+number of times <code>sort_by_key</code> calls the closure when sorting <code>list</code>. This code
+attempts to do this counting by pushing <code>value</code>—a <code>String</code> from the closure’s
+environment—into the <code>sort_operations</code> vector. The closure captures <code>value</code>
+then moves <code>value</code> out of the closure by transferring ownership of <code>value</code> to
+the <code>sort_operations</code> vector. This closure can be called once; trying to call
+it a second time wouldn’t work because <code>value</code> would no longer be in the
+environment to be pushed into <code>sort_operations</code> again! Therefore, this closure
+only implements <code>FnOnce</code>. When we try to compile this code, we get this error
+that <code>value</code> can’t be moved out of the closure because the closure must
+implement <code>FnMut</code>:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling rectangles v0.1.0 (file:///projects/rectangles)
+error[E0507]: cannot move out of `value`, a captured variable in an `FnMut` closure
+  --&gt; src/main.rs:18:30
+   |
+15 |     let value = String::from("closure called");
+   |         ----- captured outer variable
+16 |
+17 |     list.sort_by_key(|r| {
+   |                      --- captured by this `FnMut` closure
+18 |         sort_operations.push(value);
+   |                              ^^^^^ move occurs because `value` has type `String`, which does not implement the `Copy` trait
+
+For more information about this error, try `rustc --explain E0507`.
+error: could not compile `rectangles` (bin "rectangles") due to 1 previous error
+</code></pre>
+<p>The error points to the line in the closure body that moves <code>value</code> out of the
+environment. To fix this, we need to change the closure body so that it doesn’t
+move values out of the environment. To count the number of times the closure
+is called, keeping a counter in the environment and incrementing its value in
+the closure body is a more straightforward way to calculate that. The closure
+in Listing 13-9 works with <code>sort_by_key</code> because it is only capturing a mutable
+reference to the <code>num_sort_operations</code> counter and can therefore be called more
+than once:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let mut list = [
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
+    ];
+
+    let mut num_sort_operations = 0;
+    list.sort_by_key(|r| {
+        num_sort_operations += 1;
+        r.width
+    });
+    println!("{list:#?}, sorted in {num_sort_operations} operations");
+}</code></pre></pre>
+<figcaption>Listing 13-9: Using an <code>FnMut</code> closure with <code>sort_by_key</code> is allowed</figcaption>
+</figure>
+<p>The <code>Fn</code> traits are important when defining or using functions or types that
+make use of closures. In the next section, we’ll discuss iterators. Many
+iterator methods take closure arguments, so keep these closure details in mind
+as we continue!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch13-00-functional-features.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch13-02-iterators.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch13-00-functional-features.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch13-02-iterators.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

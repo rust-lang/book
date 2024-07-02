@@ -1,0 +1,1007 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Working With More Futures - The Rust Programming Language</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">The Rust Programming Language</a></li><li class="chapter-item expanded affix "><a href="foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> Programming a Guessing Game</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> Common Programming Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> Variables and Mutability</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> Data Types</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> Functions</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> Control Flow</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> Understanding Ownership</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> What is Ownership?</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> References and Borrowing</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> The Slice Type</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> Using Structs to Structure Related Data</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> Defining and Instantiating Structs</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> An Example Program Using Structs</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> Method Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> Enums and Pattern Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> Defining an Enum</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> The match Control Flow Construct</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> Concise Control Flow with if let</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> Managing Growing Projects with Packages, Crates, and Modules</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> Packages and Crates</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> Defining Modules to Control Scope and Privacy</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> Paths for Referring to an Item in the Module Tree</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> Bringing Paths Into Scope with the use Keyword</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> Separating Modules into Different Files</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> Common Collections</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> Storing Lists of Values with Vectors</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> Storing UTF-8 Encoded Text with Strings</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> Storing Keys with Associated Values in Hash Maps</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> Error Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> Unrecoverable Errors with panic!</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> Recoverable Errors with Result</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> To panic! or Not to panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> Generic Data Types</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Traits: Defining Shared Behavior</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> Validating References with Lifetimes</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> Writing Automated Tests</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> How to Write Tests</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> Controlling How Tests Are Run</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> Test Organization</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> An I/O Project: Building a Command Line Program</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> Accepting Command Line Arguments</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> Reading a File</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> Refactoring to Improve Modularity and Error Handling</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> Developing the Library’s Functionality with Test Driven Development</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> Working with Environment Variables</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> Writing Error Messages to Standard Error Instead of Standard Output</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Functional Language Features: Iterators and Closures</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> Closures: Anonymous Functions that Capture Their Environment</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> Processing a Series of Items with Iterators</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> Improving Our I/O Project</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> Comparing Performance: Loops vs. Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> More about Cargo and Crates.io</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> Customizing Builds with Release Profiles</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> Publishing a Crate to Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo Workspaces</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> Installing Binaries from Crates.io with cargo install</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Extending Cargo with Custom Commands</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> Using Box&lt;T&gt; to Point to Data on the Heap</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> Treating Smart Pointers Like Regular References with the Deref Trait</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> Running Code on Cleanup with the Drop Trait</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt;, the Reference Counted Smart Pointer</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; and the Interior Mutability Pattern</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> Reference Cycles Can Leak Memory</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> Fearless Concurrency</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> Using Threads to Run Code Simultaneously</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> Using Message Passing to Transfer Data Between Threads</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> Shared-State Concurrency</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> Extensible Concurrency with the Sync and Send Traits</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-async-await.html"><strong aria-hidden="true">17.</strong> Async and Await</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-futures-and-syntax.html"><strong aria-hidden="true">17.1.</strong> Futures and the Async Syntax</a></li><li class="chapter-item expanded "><a href="ch17-02-concurrency-with-async.html"><strong aria-hidden="true">17.2.</strong> Concurrency With Async</a></li><li class="chapter-item expanded "><a href="ch17-03-more-futures.html" class="active"><strong aria-hidden="true">17.3.</strong> Working With More Futures</a></li><li class="chapter-item expanded "><a href="ch17-04-more-ways-of-combining-futures.html"><strong aria-hidden="true">17.4.</strong> More Ways of Combining Futures</a></li><li class="chapter-item expanded "><a href="ch17-05-streams.html"><strong aria-hidden="true">17.5.</strong> Streams</a></li><li class="chapter-item expanded "><a href="ch17-06-futures-tasks-threads.html"><strong aria-hidden="true">17.6.</strong> Futures, Tasks, and Threads</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-oop.html"><strong aria-hidden="true">18.</strong> Object Oriented Programming Features of Rust</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-what-is-oo.html"><strong aria-hidden="true">18.1.</strong> Characteristics of Object-Oriented Languages</a></li><li class="chapter-item expanded "><a href="ch18-02-trait-objects.html"><strong aria-hidden="true">18.2.</strong> Using Trait Objects That Allow for Values of Different Types</a></li><li class="chapter-item expanded "><a href="ch18-03-oo-design-patterns.html"><strong aria-hidden="true">18.3.</strong> Implementing an Object-Oriented Design Pattern</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-patterns.html"><strong aria-hidden="true">19.</strong> Patterns and Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-all-the-places-for-patterns.html"><strong aria-hidden="true">19.1.</strong> All the Places Patterns Can Be Used</a></li><li class="chapter-item expanded "><a href="ch19-02-refutability.html"><strong aria-hidden="true">19.2.</strong> Refutability: Whether a Pattern Might Fail to Match</a></li><li class="chapter-item expanded "><a href="ch19-03-pattern-syntax.html"><strong aria-hidden="true">19.3.</strong> Pattern Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-advanced-features.html"><strong aria-hidden="true">20.</strong> Advanced Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-unsafe-rust.html"><strong aria-hidden="true">20.1.</strong> Unsafe Rust</a></li><li class="chapter-item expanded "><a href="ch20-03-advanced-traits.html"><strong aria-hidden="true">20.2.</strong> Advanced Traits</a></li><li class="chapter-item expanded "><a href="ch20-04-advanced-types.html"><strong aria-hidden="true">20.3.</strong> Advanced Types</a></li><li class="chapter-item expanded "><a href="ch20-05-advanced-functions-and-closures.html"><strong aria-hidden="true">20.4.</strong> Advanced Functions and Closures</a></li><li class="chapter-item expanded "><a href="ch20-06-macros.html"><strong aria-hidden="true">20.5.</strong> Macros</a></li></ol></li><li class="chapter-item expanded "><a href="ch21-00-final-project-a-web-server.html"><strong aria-hidden="true">21.</strong> Final Project: Building a Multithreaded Web Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch21-01-single-threaded.html"><strong aria-hidden="true">21.1.</strong> Building a Single-Threaded Web Server</a></li><li class="chapter-item expanded "><a href="ch21-02-multithreaded.html"><strong aria-hidden="true">21.2.</strong> Turning Our Single-Threaded Server into a Multithreaded Server</a></li><li class="chapter-item expanded "><a href="ch21-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">21.3.</strong> Graceful Shutdown and Cleanup</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">22.</strong> Appendix</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">22.1.</strong> A - Keywords</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">22.2.</strong> B - Operators and Symbols</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">22.3.</strong> C - Derivable Traits</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">22.4.</strong> D - Useful Development Tools</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">22.5.</strong> E - Editions</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">22.6.</strong> F - Translations of the Book</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">22.7.</strong> G - How Rust is Made and “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="working-with-more-futures"><a class="header" href="#working-with-more-futures">Working With More Futures</a></h2>
+<p>When we switched from using two futures to three in the previous section, we
+also had to switch from using <code>join</code> to using <code>join3</code>. It would be annoying to
+do this every time we changed our code. Happily, we have a macro form of <code>join</code>
+to which we can pass an arbitrary number of arguments. It also handles awaiting
+the futures itself. Thus, we could rewrite the code from Listing 17-16 to use
+<code>join!</code> instead of <code>join3</code>, as in Listing 17-17:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::block_on(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span><span class="boring">        let tx1_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let rx_fut = async {
+</span><span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let tx_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span>        trpl::join!(tx1_fut, tx_fut, rx_fut);
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>Listing 17-17: Using <code>join!</code> to wait for multiple futures</figcaption>
+</figure>
+<p>This is definitely a nice improvement over needing to swap between <code>join</code> and
+<code>join3</code> and <code>join4</code> and so on! However, both the function nor macro forms of
+<code>join</code> only work for cases where we know the number of futures ahead of time. If
+instead we have a dynamic number of futures, we need a function which works with
+a collection type which can grow and shrink dynamically at runtime, such as a
+vector. In real-world Rust, pushing futures into a collection and then waiting
+on some or all the futures in that collection to complete is a very common
+pattern.</p>
+<p>The <code>trpl::join_all</code> function accepts any type which implements the <code>Iterator</code>
+trait, which we learned about back in Chapter 13, so it seems like just the
+ticket. Let’s try putting our futures in a vector, and replace <code>join3</code> with
+<code>join_all</code>.</p>
+<figure class="listing">
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::block_on(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span><span class="boring">        let tx1_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let rx_fut = async {
+</span><span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let tx_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span>        let futures = vec![tx1_fut, rx_fut, tx_fut];
+        trpl::join_all(futures).await;
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre>
+<figcaption>Listing 17-18: Storing anonymous futures in a vector and calling <code>join_all</code></figcaption>
+</figure>
+<p>Unfortunately, this does not compile. Instead, we get this error:</p>
+<pre><code class="language-text">$ cargo run
+   Compiling proc-macro2 v1.0.82
+   Compiling unicode-ident v1.0.12
+   Compiling autocfg v1.3.0
+   Compiling futures-core v0.3.30
+   Compiling libc v0.2.154
+   Compiling futures-sink v0.3.30
+   Compiling pin-project-lite v0.2.14
+   Compiling pin-utils v0.1.0
+   Compiling futures-io v0.3.30
+   Compiling futures-task v0.3.30
+   Compiling memchr v2.7.2
+   Compiling futures-channel v0.3.30
+   Compiling slab v0.4.9
+   Compiling num_cpus v1.16.0
+   Compiling quote v1.0.36
+   Compiling tokio v1.37.0
+   Compiling syn v2.0.63
+   Compiling futures-macro v0.3.30
+   Compiling futures-util v0.3.30
+   Compiling futures-executor v0.3.30
+   Compiling futures v0.3.30
+   Compiling trpl v0.1.0 (/Users/chris/dev/rust-lang/book/packages/trpl)
+   Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-18)
+error[E0308]: mismatched types
+  --&gt; src/main.rs:43:37
+   |
+8  |           let tx1_fut = async move {
+   |  _______________________-
+9  | |             let vals = vec![
+10 | |                 String::from("hi"),
+11 | |                 String::from("from"),
+...  |
+19 | |             }
+20 | |         };
+   | |_________- the expected `async` block
+21 |
+22 |           let rx_fut = async {
+   |  ______________________-
+23 | |             while let Some(value) = rx.recv().await {
+24 | |                 println!("received '{value}'");
+25 | |             }
+26 | |         };
+   | |_________- the found `async` block
+...
+43 |           let futures = vec![tx1_fut, rx_fut, tx_fut];
+   |                                       ^^^^^^ expected `async` block, found a different `async` block
+   |
+   = note: expected `async` block `{async block@src/main.rs:8:23: 20:10}`
+              found `async` block `{async block@src/main.rs:22:22: 26:10}`
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `async_await` (bin "async_await") due to 1 previous error
+</code></pre>
+<p>This error message is admittedly not the most helpful! It only tells us that it
+expected one async block and found another—but why is it looking for the async
+blocks that it names here, and why does it only reference them by where they
+appear in the code?</p>
+<p>One clue is the format of this message. Notice that it is exactly the same as if
+we had tried to create a <code>Vec</code> with a a number and a string in it:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span>    let a = 1;
+    let b = "Hello";
+    let vals = vec![a, b];
+<span class="boring">}</span></code></pre>
+<figcaption>Listing 17-19: Trying to construct a <code>Vec</code> with a number and a string</figcaption>
+</figure>
+<p>The output there would be:</p>
+<pre><code class="language-text">$ cargo build
+   Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/no-listing-type-mismatch)
+error[E0308]: mismatched types
+ --&gt; src/main.rs:5:24
+  |
+5 |     let vals = vec![a, b];
+  |                        ^ expected integer, found `&amp;str`
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `async_await` (bin "async_await") due to 1 previous error
+</code></pre>
+<p>Saying “expected <em>something</em>, found <em>something else</em>” is Rust’s standard format
+for telling us about a type mismatch. As we saw with vectors in <a href="ch08-01-vectors.html#using-an-enum-to-store-multiple-types">“Using an Enum
+to Store Multiple Types”</a> back in Chapter 8, we need the type of
+each item in a collection to be the same—and <code>tx1_fut</code>, <code>rx_fut</code>, and <code>tx_fut</code>
+do not have the same type.</p>
+<p>The underlying issue here is what we learned in the previous section: async
+blocks compile to anonymous futures. Under the hood, there is a data structure
+corresponding to each of these blocks, and it has its own unique type. This
+might be surprising. After all, none of them returns anything, so the <code>Future</code>
+type in each case is <code>Future&lt;Output = ()&gt;</code>. However, <code>Future</code> is a trait, not a
+concrete type. The actual types here are invisible from our point of view as the
+person writing the code.</p>
+<p>In Chapter 8, we discussed one way to include multiple types in a single vector:
+using an enum to represent each of the different types which can appear in the
+vector. We cannot do that here, though. For one thing, we do not even have a way
+to name the different types, because they are anonymous. For another, the reason
+we reached for a vector and <code>join_all</code> in the first place was to be able to work
+with a dynamic collection of futures where we do not know what they will all be
+until runtime.</p>
+<p>To make this work, we need to use <em>trait objects</em>, just as we did for returning
+different kinds of errors from the same function in <a href="ch12-03-improving-error-handling-and-modularity.html">“Returning Errors from the
+run function”</a> back in Chapter 12. Again, we will cover trait objects in
+detail in Chapter 17. Here, it lets us treat each of the anonymous futures
+produced by these types as interchangeable, since all of them by definition
+implement the <code>Future</code> trait.</p>
+<p>We can start by wrapping each of the futures in the <code>vec!</code> in a <code>Box::new()</code>.
+Unfortunately, the initial way we might try this, as shown in Listing 17-20,
+still does not compile.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::time::Duration;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::block_on(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span><span class="boring">        let tx1_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let rx_fut = async {
+</span><span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let tx_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span>        let futures =
+            vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
+
+        trpl::join_all(futures).await;
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre>
+<figcaption>Listing 17-20: Trying to use <code>Box::new</code> to align the types of the futures in a <code>Vec</code></figcaption>
+</figure>
+<p>In fact, we have the same basic error we did before, but we get one for both the
+second and third <code>Box::new</code> calls, and we also get new errors referring to the
+<code>Unpin</code> trait.</p>
+<p>We can start by fixing the type error around the <code>Box::new</code> calls, by telling
+the compiler explicitly that we want to use these types as trait objects. The
+clearest way to do that here is by adding a type annotation to the declaration
+of <code>futures</code>, as we see in Listing 17-21. The type we have to write here is a
+little involved, so let’s walk through each part of it.</p>
+<ul>
+<li>The innermost type is the future itself. We note explicitly that it the output
+of the future is the unit type <code>()</code> by writing <code>Future&lt;Output = ()&gt;</code>.</li>
+<li>Then we annotate the trait with <code>dyn</code> to mark it as dynamic.</li>
+<li>The entire trait is wrapped in a <code>Box</code>.</li>
+<li>Finally, we state explicitly that <code>futures</code> is a <code>Vec</code> containing these items.</li>
+</ul>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::{future::Future, time::Duration};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::block_on(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span><span class="boring">        let tx1_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let rx_fut = async {
+</span><span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span><span class="boring">        let tx_fut = async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        };
+</span><span class="boring">
+</span>        let futures: Vec&lt;Box&lt;dyn Future&lt;Output = ()&gt;&gt;&gt; =
+            vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
+<span class="boring">
+</span><span class="boring">        trpl::join_all(futures).await;
+</span><span class="boring">    });
+</span><span class="boring">}</span></code></pre>
+<figcaption>Listing 17-21: Fixing the rest of the type mismatch errors by using an explicit type declaration</figcaption>
+</figure>
+<p>That already made a big difference. Now when we run the compiler, we only have
+the errors mentioning <code>Unpin</code>. Although there are three of them, notice that
+each is very similar in its contents.</p>
+<pre><code class="language-console">cargo run
+   Compiling proc-macro2 v1.0.82
+   Compiling unicode-ident v1.0.12
+   Compiling autocfg v1.3.0
+   Compiling futures-core v0.3.30
+   Compiling pin-project-lite v0.2.14
+   Compiling libc v0.2.154
+   Compiling futures-sink v0.3.30
+   Compiling memchr v2.7.2
+   Compiling futures-task v0.3.30
+   Compiling futures-io v0.3.30
+   Compiling futures-channel v0.3.30
+   Compiling pin-utils v0.1.0
+   Compiling slab v0.4.9
+   Compiling num_cpus v1.16.0
+   Compiling tokio v1.37.0
+   Compiling quote v1.0.36
+   Compiling syn v2.0.63
+   Compiling futures-macro v0.3.30
+   Compiling futures-util v0.3.30
+   Compiling futures-executor v0.3.30
+   Compiling futures v0.3.30
+   Compiling trpl v0.1.0 (/Users/chris/dev/rust-lang/book/packages/trpl)
+   Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-20)
+error[E0277]: `dyn std::future::Future&lt;Output = ()&gt;` cannot be unpinned
+   --&gt; src/main.rs:47:24
+    |
+47  |         trpl::join_all(futures).await;
+    |         -------------- ^^^^^^^ the trait `Unpin` is not implemented for `dyn std::future::Future&lt;Output = ()&gt;`, which is required by `Box&lt;dyn std::future::Future&lt;Output = ()&gt;&gt;: std::future::Future`
+    |         |
+    |         required by a bound introduced by this call
+    |
+    = note: consider using the `pin!` macro
+            consider using `Box::pin` if you need to access the pinned value outside of the current scope
+    = note: required for `Box&lt;dyn std::future::Future&lt;Output = ()&gt;&gt;` to implement `std::future::Future`
+note: required by a bound in `join_all`
+   --&gt; /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:105:14
+    |
+102 | pub fn join_all&lt;I&gt;(iter: I) -&gt; JoinAll&lt;I::Item&gt;
+    |        -------- required by a bound in this function
+...
+105 |     I::Item: Future,
+    |              ^^^^^^ required by this bound in `join_all`
+
+error[E0277]: `dyn std::future::Future&lt;Output = ()&gt;` cannot be unpinned
+  --&gt; src/main.rs:47:9
+   |
+47 |         trpl::join_all(futures).await;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ the trait `Unpin` is not implemented for `dyn std::future::Future&lt;Output = ()&gt;`, which is required by `Box&lt;dyn std::future::Future&lt;Output = ()&gt;&gt;: std::future::Future`
+   |
+   = note: consider using the `pin!` macro
+           consider using `Box::pin` if you need to access the pinned value outside of the current scope
+   = note: required for `Box&lt;dyn std::future::Future&lt;Output = ()&gt;&gt;` to implement `std::future::Future`
+note: required by a bound in `JoinAll`
+  --&gt; /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   |
+27 | pub struct JoinAll&lt;F&gt;
+   |            ------- required by a bound in this struct
+28 | where
+29 |     F: Future,
+   |        ^^^^^^ required by this bound in `JoinAll`
+
+error[E0277]: `dyn std::future::Future&lt;Output = ()&gt;` cannot be unpinned
+  --&gt; src/main.rs:47:33
+   |
+47 |         trpl::join_all(futures).await;
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `dyn std::future::Future&lt;Output = ()&gt;`, which is required by `Box&lt;dyn std::future::Future&lt;Output = ()&gt;&gt;: std::future::Future`
+   |
+   = note: consider using the `pin!` macro
+           consider using `Box::pin` if you need to access the pinned value outside of the current scope
+   = note: required for `Box&lt;dyn std::future::Future&lt;Output = ()&gt;&gt;` to implement `std::future::Future`
+note: required by a bound in `JoinAll`
+  --&gt; /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   |
+27 | pub struct JoinAll&lt;F&gt;
+   |            ------- required by a bound in this struct
+28 | where
+29 |     F: Future,
+   |        ^^^^^^ required by this bound in `JoinAll`
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `async_await` (bin "async_await") due to 3 previous errors
+</code></pre>
+<p>That is a <em>lot</em> to digest, so let’s pull it apart. The first part of the message
+tell us that the first async block (<code>src/main.rs:8:23: 20:10</code>) does not
+implement the <code>Unpin</code> trait, and suggests using <code>pin!</code> or <code>Box::pin</code> to resolve
+it. The rest of the message tells us <em>why</em> that is required: the <code>JoinAll</code>
+struct, which is itself a <code>Future</code>, is also generic over a <code>Future</code>, and
+<code>Future</code> itself requires the <code>Unpin</code> trait. Understanding this error means we
+need to dive into a little more of how the <code>Future</code> type actually works, in
+particular the idea of <em>pinning</em>.</p>
+<h3 id="pinning-and-the-pin-and-unpin-traits"><a class="header" href="#pinning-and-the-pin-and-unpin-traits">Pinning and the Pin and Unpin Traits</a></h3>
+<p>When we introduced the <code>Future</code> trait in the previous chapter, we saw that the
+definition of its <code>poll</code> method has an unusual way of specifying the <code>self</code>
+parameter. To review, here is the full definition of <code>Future</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait Future {
+    type Output;
+
+    // Required method
+    fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt;;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>We have not seen a method definition like this before, where <code>self</code> has a type
+annotation rather than simply being named like <code>self</code>, <code>mut self</code>, <code>&amp;self</code>, or
+<code>&amp;mut self</code>. This syntax means that the method can only be called when the
+instance of the type which implements <code>Future</code> is behind a <code>Pin</code> pointer type.
+This syntax is not specific to <code>Pin</code>; it also works with <code>Box</code> and other smart
+pointer types, and we will see it again in Chapter 18.</p>
+<p>Here, the signature tells us that if we want to poll a future to check whether
+it is <code>Pending</code> or <code>Ready(Output)</code>, the type which implements <code>Future</code> has to be
+behind a <code>Pin</code> smart pointer type. Recalling that <code>.await</code> is implemented in
+terms of calls to <code>poll()</code>, this starts to explain the error message we saw
+above—but that was in terms of <code>Unpin</code>, not <code>Pin</code>. So what exactly are <code>Pin</code> and
+<code>Unpin</code>, how do they relate, and why does <code>Future</code> need <code>self</code> to be in a <code>Pin</code>
+type to call <code>poll</code>?</p>
+<p>In <a href="ch17-01-futures-and-syntax.html#what-are-futures">“Futures and Syntax: What Are Futures”</a>, we described how
+a series of await points in a future get compiled into a state machine—and noted
+how the compiler helps make sure that state machine follows all of Rust’s normal
+rules around safety, including borrowing and ownership. Consider code which has
+a mutable <code>Vec</code> of strings, which asynchronously reads strings from files and
+pushes those strings into the <code>Vec</code>:</p>
+<figure class="listing">
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span><span class="boring">    trpl::block_on({
+</span>        async {
+            let mut strings = vec![];
+
+            let a = trpl::read_to_string("test-data/hello.txt").await.unwrap();
+            strings.push(a.trim());
+
+            let b = trpl::read_to_string("test-data/world.txt").await.unwrap();
+            strings.push(b.trim());
+
+            let combined = strings.join(" ");
+            println!("{combined}");
+        }
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>Listing 17-22: Borrowing mutable data across multiple <code>.await</code> points</figcaption>
+</figure>
+<p>If we think about the state machine that would get compiled to, it might be
+something kind of like this:</p>
+<pre><code class="language-rust ignore">enum AsyncStateMachine&lt;'a&gt; {
+    AfterFirstAwait(&amp;'a mut Vec&lt;String&gt;),
+    AfterSecondAwait(&amp;'a mut Vec&lt;String&gt;),
+}</code></pre>
+<p>That is, at each <code>.await</code> in the source code, Rust would look at what state is
+needed between that await point and the point another <code>.await</code> appears or the
+async block ends, and create a corresponding variant in the <code>AsyncStateMachine</code>.
+Each variant has the appropriate kind of reference to the data that will be
+referenced in that section. The real implementation is not <em>exactly</em> like this,
+but it is close enough to give the right mental model.</p>
+<p>And this could actually be fine, on its own—Rust would keep track of those
+mutable references, and if we got something wrong, the borrow checker would tell
+us. It gets a bit tricky, though, if we want to move around the future that
+corresponds to that block. Remember, we could always do something like this:</p>
+<pre><code class="language-rust ignore">let file_reads_future = async {
+    // snip...
+};
+
+let some_other_future = async {
+    // snip...
+};
+
+trpl::join(file_reads_future, some_other_future).await;</code></pre>
+<!--
+    TODO: this paragraph is close to right, but it needs to be revised a bit to
+    make sure it is accurate about *what* is not moved.
+-->
+<p>If we pass those futures into <code>join</code>, or return them from a function, or put
+them in a data structure to keep track of for some reason, that moves the state
+machine as well. That means the reference to <code>Vec&lt;String&gt;</code> for the values we
+read in with <code>trpl::read_to_string</code> moves along with it. Since references point
+to the actual memory address of the <code>Vec</code>, Rust needs some way to either update
+them so they are still valid after the <code>Vec</code> moves, or it needs some way to keep
+<code>Vec</code> from getting moved around so that the references do not need to be
+updated. Updating all the references to an object every time it moves could be
+quite a lot of work for the compiler to add, especially since there can be a
+whole web of references that need updating. On the other hand, making sure the
+underlying item <em>does not move in memory</em> can be “free” at runtime in exchange
+for keeping some promises at compile time. That is where <code>Pin</code> and <code>Unpin</code> come
+in.</p>
+<section class="note" aria-role="note">
+<p>Note: The specific mechanics for how <code>Pin</code> and <code>Unpin</code> work under the hood are
+covered extensively in the API documentation for <code>std::pin</code>, so if you would
+like to understand them more fundamentally, that is a great place to start.
+Those details are not at all necessary for working with async Rust day to day,
+though. Here, we will stick to the parts you <em>do</em> need to understand to work
+with them in everyday Rust!</p>
+</section>
+<p><code>Pin</code> is a smart pointer, much like <code>Box</code>, <code>Rc</code>, and the others we saw in
+Chapter 15. Unlike those, however, <code>Pin</code> only works with <em>other pointer types</em>
+like reference (<code>&amp;</code> and <code>&amp;mut</code>) and smart pointers (<code>Box</code>, <code>Rc</code>, and so on). To
+be precise, <code>Pin</code> works with types which implement the <code>Deref</code> or <code>DerefMut</code>
+traits, which we covered in Chapter 15. You can think of this restriction as
+equivalent to only working with pointers, though, since implementing <code>Deref</code> or
+<code>DerefMut</code> means your type behaves like a pointer type. including references,
+other smart pointers, and so on.</p>
+<p>Wrapping a pointer type in <code>Pin</code> enforces the exact guarantee we need: the value
+<em>behind</em> the pointer we wrap in <code>Pin</code> cannot move. It is “pinned” in its current
+spot by the <code>Pin</code> wrapper. Thus, if you have <code>Pin&lt;Box&lt;SomeType&gt;&gt;</code>, you actually
+pin the <code>SomeType</code> value, <em>not</em> the <code>Box</code> pointer. In fact, the pinned box
+pointer can move around freely. Remember: we care about making sure the data
+ultimately being referenced stays in its place. If a pointer moves around, but
+the data it points to is in the same place, there is no problem.</p>
+<p>However, most types are perfectly safe to move around, even if they happen to be
+behind a <code>Pin</code> pointer. Remember: the problem <code>Pin</code> addresses is when data
+structures have internal references which need to maintained when the structure
+moves around, as happens with internal references in futures. Primitive values
+like numbers and booleans do not have any internal structure like that, so they
+are obviously safe. Neither do most types you normally work with in Rust. A
+<code>Vec</code>, for example, does not have any internal references it needs to keep up to
+date this way, so you can move it around without worrying. But what happens if
+you have a <code>Pin&lt;u32&gt;</code> or a <code>Pin&lt;Vec&lt;String&gt;&gt;</code>?</p>
+<p>We need a way to tell the compiler that it is actually just fine to move items
+around in cases like these where there is nothing to worry about. For that, we
+have <code>Unpin</code>. <code>Unpin</code> is a marker trait, like <code>Send</code> and <code>Sync</code>, which we saw in
+Chapter 16. Recall that marker traits have no functionality of their own. They
+exist only to tell the compiler that it is safe to use the type which implements
+a given trait in a particular context. <code>Unpin</code> informs the compiler that a given
+type does <em>not</em> need to uphold any particular guarantees about whether the value
+in question can be moved.</p>
+<p>Just like <code>Send</code> and <code>Sync</code>, the compiler implements <code>Unpin</code> automatically for
+most types, and implementing it manually is unsafe. That is because you have to
+make sure that the type for which you are implementing <code>Unsafe</code> <em>never</em> moves
+data out from a reference that <em>needs</em> to be stable.</p>
+<section class="note" aria-role="note">
+<p>Note: This combination of <code>Pin</code> and <code>Unpin</code> allows a whole class of complex
+types to be safe in Rust which are otherwise difficult to implement because
+they are <em>self-referential</em>. That is, they are data structures where one part
+of the structure refers to another internally. As we have seen, futures can
+match that description, so self-referential types which require <code>Pin</code> show up
+<em>most</em> commonly in async Rust today, but you might—very rarely!—see it in
+other contexts, too.</p>
+</section>
+<p>Now we know enough to understand the error message from above. The problem is
+that the futures produced by an async block are <em>not</em> pinned by default.
+Strictly: they implement <code>!Unpin</code> to opt out of being copyable by default the
+way most types are. We need to pin them explicitly.</p>
+<p>Now that we have an idea what that error message was telling us, we can finally
+get our <code>join_all</code> call to compile! First, we need to explicitly annotate
+<code>futures</code> as referring to a pinned <code>Box</code> of futures. Second, we actually need to
+pin the futures, which we can do using the handy <code>Box::pin</code> API, which exists
+for exactly this. Putting that together, we end up with the code in Listing
+17-23.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{
+</span><span class="boring">    future::Future,
+</span><span class="boring">    pin::{pin, Pin},
+</span><span class="boring">    time::Duration,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::block_on(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span><span class="boring">        let tx1_fut = pin!(async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        });
+</span><span class="boring">
+</span><span class="boring">        let rx_fut = pin!(async {
+</span><span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span><span class="boring">        });
+</span><span class="boring">
+</span><span class="boring">        let tx_fut = pin!(async move {
+</span><span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span><span class="boring">        });
+</span><span class="boring">
+</span>        let futures: Vec&lt;Pin&lt;Box&lt;dyn Future&lt;Output = ()&gt;&gt;&gt;&gt; =
+            vec![Box::pin(tx1_fut), Box::pin(rx_fut), Box::pin(tx_fut)];
+<span class="boring">
+</span><span class="boring">        trpl::join_all(futures).await;
+</span><span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>Listing 17-23: Using <code>Pin</code> and <code>Box::pin</code> to make the <code>Vec</code> type check</figcaption>
+</figure>
+<p>If we compile and run this, we finally get the output we hoped for:</p>
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+<pre><code class="language-text">received 'hi'
+received 'more'
+received 'from'
+received 'messages'
+received 'the'
+received 'for'
+received 'future'
+received 'you'
+</code></pre>
+<p>Phew!</p>
+<p>There is a bit more we can explore here. For one thing, using <code>Pin&lt;Box&lt;T&gt;&gt;</code>
+comes with a small amount of extra overhead from putting these futures on the
+heap with <code>Box</code>—and we are only doing that to get the types to line up. We don’t
+actually <em>need</em> the heap allocation, after all: these futures are local to this
+particular function. As noted above, <code>Pin</code> is itself a smart pointer, so we can
+get the benefit of having a single type in the <code>Vec</code>—the original reason we
+reached for <code>Box</code>—without doing a heap allocation. We can use <code>Pin</code> directly
+instead.</p>
+<p>The <code>std::pin::pin</code> macro exists to do just that for values. However, we must
+still be explicit about the type of the pinned reference; otherwise Rust will
+still not know to interpret these as dynamic trait objects, which is what we
+need them to be in the <code>Vec</code>. We therefore <code>pin!</code> each future when we define it,
+and define <code>futures</code> as a <code>Vec</code> containing pinned mutable references to the
+dynamic <code>Future</code> type, as in Listing 17-24.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{
+</span><span class="boring">    future::Future,
+</span><span class="boring">    pin::{pin, Pin},
+</span><span class="boring">    time::Duration,
+</span><span class="boring">};
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    trpl::block_on(async {
+</span><span class="boring">        let (tx, mut rx) = trpl::channel();
+</span><span class="boring">
+</span><span class="boring">        let tx1 = tx.clone();
+</span>        let tx1_fut = pin!(async move {
+            // snip...
+<span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("hi"),
+</span><span class="boring">                String::from("from"),
+</span><span class="boring">                String::from("the"),
+</span><span class="boring">                String::from("future"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx1.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span>        });
+
+        let rx_fut = pin!(async {
+            // snip...
+<span class="boring">            while let Some(value) = rx.recv().await {
+</span><span class="boring">                println!("received '{value}'");
+</span><span class="boring">            }
+</span>        });
+
+        let tx_fut = pin!(async move {
+            // snip...
+<span class="boring">            let vals = vec![
+</span><span class="boring">                String::from("more"),
+</span><span class="boring">                String::from("messages"),
+</span><span class="boring">                String::from("for"),
+</span><span class="boring">                String::from("you"),
+</span><span class="boring">            ];
+</span><span class="boring">
+</span><span class="boring">            for val in vals {
+</span><span class="boring">                tx.send(val).unwrap();
+</span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
+</span><span class="boring">            }
+</span>        });
+
+        let futures: Vec&lt;Pin&lt;&amp;mut dyn Future&lt;Output = ()&gt;&gt;&gt; =
+            vec![tx1_fut, rx_fut, tx_fut];
+<span class="boring">
+</span><span class="boring">        trpl::join_all(futures).await;
+</span><span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>Listing 17-24: Using <code>Pin</code> directly with the <code>pin!</code> macro to avoid unnecessary heap allocations</figcaption>
+</figure>
+<p>This keeps everything on the stack, which is a nice little performance win, but
+it is still a lot of explicit types, which is quite unusual for Rust!</p>
+<p>There is another, more serious, issue as well. We got this far by ignoring the
+fact that we might have different <code>Output</code> types. For example, in Listing 17-25,
+the anonymous future type for <code>a</code> implements <code>Future&lt;Output = u32&gt;</code>, the
+anonymous future type for <code>b</code> implements <code>Future&lt;Output = &amp;str&gt;</code>, and the
+anonymous future type for <code>c</code> implements <code>Future&lt;Output = bool&gt;</code>. We can use
+<code>trpl::join!</code> to await them together, since it accepts futures of different
+types.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span><span class="boring">    trpl::block_on(async {
+</span>        let a = async { 1u32 };
+        let b = async { "Hello!" };
+        let c = async { true };
+
+        let (a_result, b_result, c_result) = trpl::join!(a, b, c);
+        println!("{a_result}, {b_result}, {c_result}");
+<span class="boring">    });
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>Listing 17-25: Three futures with distinct types</figcaption>
+</figure>
+<p>We cannot use <code>trpl::join_all</code> with these futures, though, because
+we will never be able to make them have the same type. (Remember, that error is
+what got us started on this adventure with <code>Pin</code>!)</p>
+<p>We have a basic tradeoff here: we can either deal with a dynamic number of
+futures with <code>join_all</code>, as long as they all have the same type, or we can deal
+with a set number of futures with the <code>join</code> functions or the <code>join!</code> macro,
+even if they have different types. This is the same as working with any other
+type in Rust, though: futures are not special, even though we have some nice
+syntax for working with them, and that is a good thing!</p>
+<p>In practice, you will usually work directly with <code>async</code> and <code>.await</code>, and only
+as a secondary tool reach for the functions like <code>join</code> or <code>join_all</code>, or their
+corresponding macro equivalents. Likewise, you will only need to reach for <code>pin</code>
+now and again to use them <em>with</em> those APIs. These kinds of tools are mostly
+handy for building frameworks, or especially when you are building a runtime
+itself, rather than for day to day Rust code. When you see them, though, now you
+will know what to do!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch17-02-concurrency-with-async.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch17-04-more-ways-of-combining-futures.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch17-02-concurrency-with-async.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch17-04-more-ways-of-combining-futures.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

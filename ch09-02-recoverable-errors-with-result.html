@@ -1,0 +1,767 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Recoverable Errors with Result - The Rust Programming Language</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">The Rust Programming Language</a></li><li class="chapter-item expanded affix "><a href="foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> Programming a Guessing Game</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> Common Programming Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> Variables and Mutability</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> Data Types</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> Functions</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> Control Flow</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> Understanding Ownership</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> What is Ownership?</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> References and Borrowing</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> The Slice Type</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> Using Structs to Structure Related Data</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> Defining and Instantiating Structs</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> An Example Program Using Structs</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> Method Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> Enums and Pattern Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> Defining an Enum</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> The match Control Flow Construct</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> Concise Control Flow with if let</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> Managing Growing Projects with Packages, Crates, and Modules</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> Packages and Crates</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> Defining Modules to Control Scope and Privacy</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> Paths for Referring to an Item in the Module Tree</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> Bringing Paths Into Scope with the use Keyword</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> Separating Modules into Different Files</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> Common Collections</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> Storing Lists of Values with Vectors</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> Storing UTF-8 Encoded Text with Strings</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> Storing Keys with Associated Values in Hash Maps</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> Error Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> Unrecoverable Errors with panic!</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html" class="active"><strong aria-hidden="true">9.2.</strong> Recoverable Errors with Result</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> To panic! or Not to panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> Generic Data Types</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Traits: Defining Shared Behavior</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> Validating References with Lifetimes</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> Writing Automated Tests</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> How to Write Tests</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> Controlling How Tests Are Run</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> Test Organization</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> An I/O Project: Building a Command Line Program</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> Accepting Command Line Arguments</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> Reading a File</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> Refactoring to Improve Modularity and Error Handling</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> Developing the Library’s Functionality with Test Driven Development</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> Working with Environment Variables</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> Writing Error Messages to Standard Error Instead of Standard Output</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Functional Language Features: Iterators and Closures</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> Closures: Anonymous Functions that Capture Their Environment</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> Processing a Series of Items with Iterators</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> Improving Our I/O Project</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> Comparing Performance: Loops vs. Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> More about Cargo and Crates.io</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> Customizing Builds with Release Profiles</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> Publishing a Crate to Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo Workspaces</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> Installing Binaries from Crates.io with cargo install</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Extending Cargo with Custom Commands</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> Using Box&lt;T&gt; to Point to Data on the Heap</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> Treating Smart Pointers Like Regular References with the Deref Trait</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> Running Code on Cleanup with the Drop Trait</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt;, the Reference Counted Smart Pointer</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; and the Interior Mutability Pattern</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> Reference Cycles Can Leak Memory</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> Fearless Concurrency</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> Using Threads to Run Code Simultaneously</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> Using Message Passing to Transfer Data Between Threads</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> Shared-State Concurrency</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> Extensible Concurrency with the Sync and Send Traits</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-async-await.html"><strong aria-hidden="true">17.</strong> Async and Await</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-futures-and-syntax.html"><strong aria-hidden="true">17.1.</strong> Futures and the Async Syntax</a></li><li class="chapter-item expanded "><a href="ch17-02-concurrency-with-async.html"><strong aria-hidden="true">17.2.</strong> Concurrency With Async</a></li><li class="chapter-item expanded "><a href="ch17-03-more-futures.html"><strong aria-hidden="true">17.3.</strong> Working With More Futures</a></li><li class="chapter-item expanded "><a href="ch17-04-more-ways-of-combining-futures.html"><strong aria-hidden="true">17.4.</strong> More Ways of Combining Futures</a></li><li class="chapter-item expanded "><a href="ch17-05-streams.html"><strong aria-hidden="true">17.5.</strong> Streams</a></li><li class="chapter-item expanded "><a href="ch17-06-futures-tasks-threads.html"><strong aria-hidden="true">17.6.</strong> Futures, Tasks, and Threads</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-oop.html"><strong aria-hidden="true">18.</strong> Object Oriented Programming Features of Rust</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-what-is-oo.html"><strong aria-hidden="true">18.1.</strong> Characteristics of Object-Oriented Languages</a></li><li class="chapter-item expanded "><a href="ch18-02-trait-objects.html"><strong aria-hidden="true">18.2.</strong> Using Trait Objects That Allow for Values of Different Types</a></li><li class="chapter-item expanded "><a href="ch18-03-oo-design-patterns.html"><strong aria-hidden="true">18.3.</strong> Implementing an Object-Oriented Design Pattern</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-patterns.html"><strong aria-hidden="true">19.</strong> Patterns and Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-all-the-places-for-patterns.html"><strong aria-hidden="true">19.1.</strong> All the Places Patterns Can Be Used</a></li><li class="chapter-item expanded "><a href="ch19-02-refutability.html"><strong aria-hidden="true">19.2.</strong> Refutability: Whether a Pattern Might Fail to Match</a></li><li class="chapter-item expanded "><a href="ch19-03-pattern-syntax.html"><strong aria-hidden="true">19.3.</strong> Pattern Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-advanced-features.html"><strong aria-hidden="true">20.</strong> Advanced Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-unsafe-rust.html"><strong aria-hidden="true">20.1.</strong> Unsafe Rust</a></li><li class="chapter-item expanded "><a href="ch20-03-advanced-traits.html"><strong aria-hidden="true">20.2.</strong> Advanced Traits</a></li><li class="chapter-item expanded "><a href="ch20-04-advanced-types.html"><strong aria-hidden="true">20.3.</strong> Advanced Types</a></li><li class="chapter-item expanded "><a href="ch20-05-advanced-functions-and-closures.html"><strong aria-hidden="true">20.4.</strong> Advanced Functions and Closures</a></li><li class="chapter-item expanded "><a href="ch20-06-macros.html"><strong aria-hidden="true">20.5.</strong> Macros</a></li></ol></li><li class="chapter-item expanded "><a href="ch21-00-final-project-a-web-server.html"><strong aria-hidden="true">21.</strong> Final Project: Building a Multithreaded Web Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch21-01-single-threaded.html"><strong aria-hidden="true">21.1.</strong> Building a Single-Threaded Web Server</a></li><li class="chapter-item expanded "><a href="ch21-02-multithreaded.html"><strong aria-hidden="true">21.2.</strong> Turning Our Single-Threaded Server into a Multithreaded Server</a></li><li class="chapter-item expanded "><a href="ch21-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">21.3.</strong> Graceful Shutdown and Cleanup</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">22.</strong> Appendix</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">22.1.</strong> A - Keywords</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">22.2.</strong> B - Operators and Symbols</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">22.3.</strong> C - Derivable Traits</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">22.4.</strong> D - Useful Development Tools</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">22.5.</strong> E - Editions</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">22.6.</strong> F - Translations of the Book</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">22.7.</strong> G - How Rust is Made and “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="recoverable-errors-with-result"><a class="header" href="#recoverable-errors-with-result">Recoverable Errors with <code>Result</code></a></h2>
+<p>Most errors aren’t serious enough to require the program to stop entirely.
+Sometimes when a function fails it’s for a reason that you can easily interpret
+and respond to. For example, if you try to open a file and that operation fails
+because the file doesn’t exist, you might want to create the file instead of
+terminating the process.</p>
+<p>Recall from <a href="ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-result">“Handling Potential Failure with <code>Result</code>”</a><!--
+ignore --> in Chapter 2 that the <code>Result</code> enum is defined as having two
+variants, <code>Ok</code> and <code>Err</code>, as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Result&lt;T, E&gt; {
+    Ok(T),
+    Err(E),
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The <code>T</code> and <code>E</code> are generic type parameters: we’ll discuss generics in more
+detail in Chapter 10. What you need to know right now is that <code>T</code> represents
+the type of the value that will be returned in a success case within the <code>Ok</code>
+variant, and <code>E</code> represents the type of the error that will be returned in a
+failure case within the <code>Err</code> variant. Because <code>Result</code> has these generic type
+parameters, we can use the <code>Result</code> type and the functions defined on it in
+many different situations where the success value and error value we want to
+return may differ.</p>
+<p>Let’s call a function that returns a <code>Result</code> value because the function could
+fail. In Listing 9-3 we try to open a file.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust">use std::fs::File;
+
+fn main() {
+    let greeting_file_result = File::open("hello.txt");
+}</code></pre></pre>
+<p><span class="caption">Listing 9-3: Opening a file</span></p>
+<p>The return type of <code>File::open</code> is a <code>Result&lt;T, E&gt;</code>. The generic parameter <code>T</code>
+has been filled in by the implementation of <code>File::open</code> with the type of the
+success value, <code>std::fs::File</code>, which is a file handle. The type of <code>E</code> used in
+the error value is <code>std::io::Error</code>. This return type means the call to
+<code>File::open</code> might succeed and return a file handle that we can read from or
+write to. The function call also might fail: for example, the file might not
+exist, or we might not have permission to access the file. The <code>File::open</code>
+function needs to have a way to tell us whether it succeeded or failed and at
+the same time give us either the file handle or error information. This
+information is exactly what the <code>Result</code> enum conveys.</p>
+<p>In the case where <code>File::open</code> succeeds, the value in the variable
+<code>greeting_file_result</code> will be an instance of <code>Ok</code> that contains a file handle.
+In the case where it fails, the value in <code>greeting_file_result</code> will be an
+instance of <code>Err</code> that contains more information about the kind of error that
+occurred.</p>
+<p>We need to add to the code in Listing 9-3 to take different actions depending
+on the value <code>File::open</code> returns. Listing 9-4 shows one way to handle the
+<code>Result</code> using a basic tool, the <code>match</code> expression that we discussed in
+Chapter 6.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust should_panic">use std::fs::File;
+
+fn main() {
+    let greeting_file_result = File::open("hello.txt");
+
+    let greeting_file = match greeting_file_result {
+        Ok(file) =&gt; file,
+        Err(error) =&gt; panic!("Problem opening the file: {error:?}"),
+    };
+}</code></pre></pre>
+<p><span class="caption">Listing 9-4: Using a <code>match</code> expression to handle the
+<code>Result</code> variants that might be returned</span></p>
+<p>Note that, like the <code>Option</code> enum, the <code>Result</code> enum and its variants have been
+brought into scope by the prelude, so we don’t need to specify <code>Result::</code>
+before the <code>Ok</code> and <code>Err</code> variants in the <code>match</code> arms.</p>
+<p>When the result is <code>Ok</code>, this code will return the inner <code>file</code> value out of
+the <code>Ok</code> variant, and we then assign that file handle value to the variable
+<code>greeting_file</code>. After the <code>match</code>, we can use the file handle for reading or
+writing.</p>
+<p>The other arm of the <code>match</code> handles the case where we get an <code>Err</code> value from
+<code>File::open</code>. In this example, we’ve chosen to call the <code>panic!</code> macro. If
+there’s no file named <em>hello.txt</em> in our current directory and we run this
+code, we’ll see the following output from the <code>panic!</code> macro:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling error-handling v0.1.0 (file:///projects/error-handling)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.73s
+     Running `target/debug/error-handling`
+thread 'main' panicked at src/main.rs:8:23:
+Problem opening the file: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+</code></pre>
+<p>As usual, this output tells us exactly what has gone wrong.</p>
+<h3 id="matching-on-different-errors"><a class="header" href="#matching-on-different-errors">Matching on Different Errors</a></h3>
+<p>The code in Listing 9-4 will <code>panic!</code> no matter why <code>File::open</code> failed.
+However, we want to take different actions for different failure reasons. If
+<code>File::open</code> failed because the file doesn’t exist, we want to create the file
+and return the handle to the new file. If <code>File::open</code> failed for any other
+reason—for example, because we didn’t have permission to open the file—we still
+want the code to <code>panic!</code> in the same way it did in Listing 9-4. For this, we
+add an inner <code>match</code> expression, shown in Listing 9-5.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<!-- ignore this test because otherwise it creates hello.txt which causes other
+tests to fail lol -->
+<pre><code class="language-rust ignore">use std::fs::File;
+use std::io::ErrorKind;
+
+fn main() {
+    let greeting_file_result = File::open("hello.txt");
+
+    let greeting_file = match greeting_file_result {
+        Ok(file) =&gt; file,
+        Err(error) =&gt; match error.kind() {
+            ErrorKind::NotFound =&gt; match File::create("hello.txt") {
+                Ok(fc) =&gt; fc,
+                Err(e) =&gt; panic!("Problem creating the file: {e:?}"),
+            },
+            other_error =&gt; {
+                panic!("Problem opening the file: {other_error:?}");
+            }
+        },
+    };
+}</code></pre>
+<p><span class="caption">Listing 9-5: Handling different kinds of errors in
+different ways</span></p>
+<p>The type of the value that <code>File::open</code> returns inside the <code>Err</code> variant is
+<code>io::Error</code>, which is a struct provided by the standard library. This struct
+has a method <code>kind</code> that we can call to get an <code>io::ErrorKind</code> value. The enum
+<code>io::ErrorKind</code> is provided by the standard library and has variants
+representing the different kinds of errors that might result from an <code>io</code>
+operation. The variant we want to use is <code>ErrorKind::NotFound</code>, which indicates
+the file we’re trying to open doesn’t exist yet. So we match on
+<code>greeting_file_result</code>, but we also have an inner match on <code>error.kind()</code>.</p>
+<p>The condition we want to check in the inner match is whether the value returned
+by <code>error.kind()</code> is the <code>NotFound</code> variant of the <code>ErrorKind</code> enum. If it is,
+we try to create the file with <code>File::create</code>. However, because <code>File::create</code>
+could also fail, we need a second arm in the inner <code>match</code> expression. When the
+file can’t be created, a different error message is printed. The second arm of
+the outer <code>match</code> stays the same, so the program panics on any error besides
+the missing file error.</p>
+<section class="note" aria-role="note">
+<h4 id="alternatives-to-using-match-with-resultt-e"><a class="header" href="#alternatives-to-using-match-with-resultt-e">Alternatives to Using <code>match</code> with <code>Result&lt;T, E&gt;</code></a></h4>
+<p>That’s a lot of <code>match</code>! The <code>match</code> expression is very useful but also very
+much a primitive. In Chapter 13, you’ll learn about closures, which are used
+with many of the methods defined on <code>Result&lt;T, E&gt;</code>. These methods can be more
+concise than using <code>match</code> when handling <code>Result&lt;T, E&gt;</code> values in your code.</p>
+<p>For example, here’s another way to write the same logic as shown in Listing
+9-5, this time using closures and the <code>unwrap_or_else</code> method:</p>
+<!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
+<pre><code class="language-rust ignore">use std::fs::File;
+use std::io::ErrorKind;
+
+fn main() {
+    let greeting_file = File::open("hello.txt").unwrap_or_else(|error| {
+        if error.kind() == ErrorKind::NotFound {
+            File::create("hello.txt").unwrap_or_else(|error| {
+                panic!("Problem creating the file: {error:?}");
+            })
+        } else {
+            panic!("Problem opening the file: {error:?}");
+        }
+    });
+}</code></pre>
+<p>Although this code has the same behavior as Listing 9-5, it doesn’t contain
+any <code>match</code> expressions and is cleaner to read. Come back to this example
+after you’ve read Chapter 13, and look up the <code>unwrap_or_else</code> method in the
+standard library documentation. Many more of these methods can clean up huge
+nested <code>match</code> expressions when you’re dealing with errors.</p>
+</section>
+<h4 id="shortcuts-for-panic-on-error-unwrap-and-expect"><a class="header" href="#shortcuts-for-panic-on-error-unwrap-and-expect">Shortcuts for Panic on Error: <code>unwrap</code> and <code>expect</code></a></h4>
+<p>Using <code>match</code> works well enough, but it can be a bit verbose and doesn’t always
+communicate intent well. The <code>Result&lt;T, E&gt;</code> type has many helper methods
+defined on it to do various, more specific tasks. The <code>unwrap</code> method is a
+shortcut method implemented just like the <code>match</code> expression we wrote in
+Listing 9-4. If the <code>Result</code> value is the <code>Ok</code> variant, <code>unwrap</code> will return
+the value inside the <code>Ok</code>. If the <code>Result</code> is the <code>Err</code> variant, <code>unwrap</code> will
+call the <code>panic!</code> macro for us. Here is an example of <code>unwrap</code> in action:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust should_panic">use std::fs::File;
+
+fn main() {
+    let greeting_file = File::open("hello.txt").unwrap();
+}</code></pre></pre>
+<p>If we run this code without a <em>hello.txt</em> file, we’ll see an error message from
+the <code>panic!</code> call that the <code>unwrap</code> method makes:</p>
+<!-- manual-regeneration
+cd listings/ch09-error-handling/no-listing-04-unwrap
+cargo run
+copy and paste relevant text
+-->
+<pre><code class="language-text">thread 'main' panicked at src/main.rs:4:49:
+called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+</code></pre>
+<p>Similarly, the <code>expect</code> method lets us also choose the <code>panic!</code> error message.
+Using <code>expect</code> instead of <code>unwrap</code> and providing good error messages can convey
+your intent and make tracking down the source of a panic easier. The syntax of
+<code>expect</code> looks like this:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust should_panic">use std::fs::File;
+
+fn main() {
+    let greeting_file = File::open("hello.txt")
+        .expect("hello.txt should be included in this project");
+}</code></pre></pre>
+<p>We use <code>expect</code> in the same way as <code>unwrap</code>: to return the file handle or call
+the <code>panic!</code> macro. The error message used by <code>expect</code> in its call to <code>panic!</code>
+will be the parameter that we pass to <code>expect</code>, rather than the default
+<code>panic!</code> message that <code>unwrap</code> uses. Here’s what it looks like:</p>
+<!-- manual-regeneration
+cd listings/ch09-error-handling/no-listing-05-expect
+cargo run
+copy and paste relevant text
+-->
+<pre><code class="language-text">thread 'main' panicked at src/main.rs:5:10:
+hello.txt should be included in this project: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+</code></pre>
+<p>In production-quality code, most Rustaceans choose <code>expect</code> rather than
+<code>unwrap</code> and give more context about why the operation is expected to always
+succeed. That way, if your assumptions are ever proven wrong, you have more
+information to use in debugging.</p>
+<h3 id="propagating-errors"><a class="header" href="#propagating-errors">Propagating Errors</a></h3>
+<p>When a function’s implementation calls something that might fail, instead of
+handling the error within the function itself you can return the error to the
+calling code so that it can decide what to do. This is known as <em>propagating</em>
+the error and gives more control to the calling code, where there might be more
+information or logic that dictates how the error should be handled than what
+you have available in the context of your code.</p>
+<p>For example, Listing 9-6 shows a function that reads a username from a file. If
+the file doesn’t exist or can’t be read, this function will return those errors
+to the code that called the function.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<!-- Deliberately not using rustdoc_include here; the `main` function in the
+file panics. We do want to include it for reader experimentation purposes, but
+don't want to include it for rustdoc testing purposes. -->
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::fs::File;
+use std::io::{self, Read};
+
+fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
+    let username_file_result = File::open("hello.txt");
+
+    let mut username_file = match username_file_result {
+        Ok(file) =&gt; file,
+        Err(e) =&gt; return Err(e),
+    };
+
+    let mut username = String::new();
+
+    match username_file.read_to_string(&amp;mut username) {
+        Ok(_) =&gt; Ok(username),
+        Err(e) =&gt; Err(e),
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 9-6: A function that returns errors to the
+calling code using <code>match</code></span></p>
+<p>This function can be written in a much shorter way, but we’re going to start by
+doing a lot of it manually in order to explore error handling; at the end,
+we’ll show the shorter way. Let’s look at the return type of the function
+first: <code>Result&lt;String, io::Error&gt;</code>. This means the function is returning a
+value of the type <code>Result&lt;T, E&gt;</code>, where the generic parameter <code>T</code> has been
+filled in with the concrete type <code>String</code> and the generic type <code>E</code> has been
+filled in with the concrete type <code>io::Error</code>.</p>
+<p>If this function succeeds without any problems, the code that calls this
+function will receive an <code>Ok</code> value that holds a <code>String</code>—the <code>username</code> that
+this function read from the file. If this function encounters any problems, the
+calling code will receive an <code>Err</code> value that holds an instance of <code>io::Error</code>
+that contains more information about what the problems were. We chose
+<code>io::Error</code> as the return type of this function because that happens to be the
+type of the error value returned from both of the operations we’re calling in
+this function’s body that might fail: the <code>File::open</code> function and the
+<code>read_to_string</code> method.</p>
+<p>The body of the function starts by calling the <code>File::open</code> function. Then we
+handle the <code>Result</code> value with a <code>match</code> similar to the <code>match</code> in Listing 9-4.
+If <code>File::open</code> succeeds, the file handle in the pattern variable <code>file</code>
+becomes the value in the mutable variable <code>username_file</code> and the function
+continues. In the <code>Err</code> case, instead of calling <code>panic!</code>, we use the <code>return</code>
+keyword to return early out of the function entirely and pass the error value
+from <code>File::open</code>, now in the pattern variable <code>e</code>, back to the calling code as
+this function’s error value.</p>
+<p>So, if we have a file handle in <code>username_file</code>, the function then creates a
+new <code>String</code> in variable <code>username</code> and calls the <code>read_to_string</code> method on
+the file handle in <code>username_file</code> to read the contents of the file into
+<code>username</code>. The <code>read_to_string</code> method also returns a <code>Result</code> because it
+might fail, even though <code>File::open</code> succeeded. So we need another <code>match</code> to
+handle that <code>Result</code>: if <code>read_to_string</code> succeeds, then our function has
+succeeded, and we return the username from the file that’s now in <code>username</code>
+wrapped in an <code>Ok</code>. If <code>read_to_string</code> fails, we return the error value in the
+same way that we returned the error value in the <code>match</code> that handled the
+return value of <code>File::open</code>. However, we don’t need to explicitly say
+<code>return</code>, because this is the last expression in the function.</p>
+<p>The code that calls this code will then handle getting either an <code>Ok</code> value
+that contains a username or an <code>Err</code> value that contains an <code>io::Error</code>. It’s
+up to the calling code to decide what to do with those values. If the calling
+code gets an <code>Err</code> value, it could call <code>panic!</code> and crash the program, use a
+default username, or look up the username from somewhere other than a file, for
+example. We don’t have enough information on what the calling code is actually
+trying to do, so we propagate all the success or error information upward for
+it to handle appropriately.</p>
+<p>This pattern of propagating errors is so common in Rust that Rust provides the
+question mark operator <code>?</code> to make this easier.</p>
+<h4 id="a-shortcut-for-propagating-errors-the--operator"><a class="header" href="#a-shortcut-for-propagating-errors-the--operator">A Shortcut for Propagating Errors: the <code>?</code> Operator</a></h4>
+<p>Listing 9-7 shows an implementation of <code>read_username_from_file</code> that has the
+same functionality as in Listing 9-6, but this implementation uses the <code>?</code>
+operator.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<!-- Deliberately not using rustdoc_include here; the `main` function in the
+file panics. We do want to include it for reader experimentation purposes, but
+don't want to include it for rustdoc testing purposes. -->
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::fs::File;
+use std::io::{self, Read};
+
+fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
+    let mut username_file = File::open("hello.txt")?;
+    let mut username = String::new();
+    username_file.read_to_string(&amp;mut username)?;
+    Ok(username)
+}
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 9-7: A function that returns errors to the
+calling code using the <code>?</code> operator</span></p>
+<p>The <code>?</code> placed after a <code>Result</code> value is defined to work in almost the same way
+as the <code>match</code> expressions we defined to handle the <code>Result</code> values in Listing
+9-6. If the value of the <code>Result</code> is an <code>Ok</code>, the value inside the <code>Ok</code> will
+get returned from this expression, and the program will continue. If the value
+is an <code>Err</code>, the <code>Err</code> will be returned from the whole function as if we had
+used the <code>return</code> keyword so the error value gets propagated to the calling
+code.</p>
+<p>There is a difference between what the <code>match</code> expression from Listing 9-6 does
+and what the <code>?</code> operator does: error values that have the <code>?</code> operator called
+on them go through the <code>from</code> function, defined in the <code>From</code> trait in the
+standard library, which is used to convert values from one type into another.
+When the <code>?</code> operator calls the <code>from</code> function, the error type received is
+converted into the error type defined in the return type of the current
+function. This is useful when a function returns one error type to represent
+all the ways a function might fail, even if parts might fail for many different
+reasons.</p>
+<p>For example, we could change the <code>read_username_from_file</code> function in Listing
+9-7 to return a custom error type named <code>OurError</code> that we define. If we also
+define <code>impl From&lt;io::Error&gt; for OurError</code> to construct an instance of
+<code>OurError</code> from an <code>io::Error</code>, then the <code>?</code> operator calls in the body of
+<code>read_username_from_file</code> will call <code>from</code> and convert the error types without
+needing to add any more code to the function.</p>
+<p>In the context of Listing 9-7, the <code>?</code> at the end of the <code>File::open</code> call will
+return the value inside an <code>Ok</code> to the variable <code>username_file</code>. If an error
+occurs, the <code>?</code> operator will return early out of the whole function and give
+any <code>Err</code> value to the calling code. The same thing applies to the <code>?</code> at the
+end of the <code>read_to_string</code> call.</p>
+<p>The <code>?</code> operator eliminates a lot of boilerplate and makes this function’s
+implementation simpler. We could even shorten this code further by chaining
+method calls immediately after the <code>?</code>, as shown in Listing 9-8.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<!-- Deliberately not using rustdoc_include here; the `main` function in the
+file panics. We do want to include it for reader experimentation purposes, but
+don't want to include it for rustdoc testing purposes. -->
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::fs::File;
+use std::io::{self, Read};
+
+fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
+    let mut username = String::new();
+
+    File::open("hello.txt")?.read_to_string(&amp;mut username)?;
+
+    Ok(username)
+}
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 9-8: Chaining method calls after the <code>?</code>
+operator</span></p>
+<p>We’ve moved the creation of the new <code>String</code> in <code>username</code> to the beginning of
+the function; that part hasn’t changed. Instead of creating a variable
+<code>username_file</code>, we’ve chained the call to <code>read_to_string</code> directly onto the
+result of <code>File::open("hello.txt")?</code>. We still have a <code>?</code> at the end of the
+<code>read_to_string</code> call, and we still return an <code>Ok</code> value containing <code>username</code>
+when both <code>File::open</code> and <code>read_to_string</code> succeed rather than returning
+errors. The functionality is again the same as in Listing 9-6 and Listing 9-7;
+this is just a different, more ergonomic way to write it.</p>
+<p>Listing 9-9 shows a way to make this even shorter using <code>fs::read_to_string</code>.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<!-- Deliberately not using rustdoc_include here; the `main` function in the
+file panics. We do want to include it for reader experimentation purposes, but
+don't want to include it for rustdoc testing purposes. -->
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::fs;
+use std::io;
+
+fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
+    fs::read_to_string("hello.txt")
+}
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 9-9: Using <code>fs::read_to_string</code> instead of
+opening and then reading the file</span></p>
+<p>Reading a file into a string is a fairly common operation, so the standard
+library provides the convenient <code>fs::read_to_string</code> function that opens the
+file, creates a new <code>String</code>, reads the contents of the file, puts the contents
+into that <code>String</code>, and returns it. Of course, using <code>fs::read_to_string</code>
+doesn’t give us the opportunity to explain all the error handling, so we did it
+the longer way first.</p>
+<h4 id="where-the--operator-can-be-used"><a class="header" href="#where-the--operator-can-be-used">Where The <code>?</code> Operator Can Be Used</a></h4>
+<p>The <code>?</code> operator can only be used in functions whose return type is compatible
+with the value the <code>?</code> is used on. This is because the <code>?</code> operator is defined
+to perform an early return of a value out of the function, in the same manner
+as the <code>match</code> expression we defined in Listing 9-6. In Listing 9-6, the
+<code>match</code> was using a <code>Result</code> value, and the early return arm returned an
+<code>Err(e)</code> value. The return type of the function has to be a <code>Result</code> so that
+it’s compatible with this <code>return</code>.</p>
+<p>In Listing 9-10, let’s look at the error we’ll get if we use the <code>?</code> operator
+in a <code>main</code> function with a return type that is incompatible with the type of
+the value we use <code>?</code> on.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">use std::fs::File;
+
+fn main() {
+    let greeting_file = File::open("hello.txt")?;
+}</code></pre>
+<p><span class="caption">Listing 9-10: Attempting to use the <code>?</code> in the <code>main</code>
+function that returns <code>()</code> won’t compile.</span></p>
+<p>This code opens a file, which might fail. The <code>?</code> operator follows the <code>Result</code>
+value returned by <code>File::open</code>, but this <code>main</code> function has the return type of
+<code>()</code>, not <code>Result</code>. When we compile this code, we get the following error
+message:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling error-handling v0.1.0 (file:///projects/error-handling)
+error[E0277]: the `?` operator can only be used in a function that returns `Result` or `Option` (or another type that implements `FromResidual`)
+ --&gt; src/main.rs:4:48
+  |
+3 | fn main() {
+  | --------- this function should return `Result` or `Option` to accept `?`
+4 |     let greeting_file = File::open("hello.txt")?;
+  |                                                ^ cannot use the `?` operator in a function that returns `()`
+  |
+  = help: the trait `FromResidual&lt;Result&lt;Infallible, std::io::Error&gt;&gt;` is not implemented for `()`
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `error-handling` (bin "error-handling") due to 1 previous error
+</code></pre>
+<p>This error points out that we’re only allowed to use the <code>?</code> operator in a
+function that returns <code>Result</code>, <code>Option</code>, or another type that implements
+<code>FromResidual</code>.</p>
+<p>To fix the error, you have two choices. One choice is to change the return type
+of your function to be compatible with the value you’re using the <code>?</code> operator
+on as long as you have no restrictions preventing that. The other choice is to
+use a <code>match</code> or one of the <code>Result&lt;T, E&gt;</code> methods to handle the <code>Result&lt;T, E&gt;</code>
+in whatever way is appropriate.</p>
+<p>The error message also mentioned that <code>?</code> can be used with <code>Option&lt;T&gt;</code> values
+as well. As with using <code>?</code> on <code>Result</code>, you can only use <code>?</code> on <code>Option</code> in a
+function that returns an <code>Option</code>. The behavior of the <code>?</code> operator when called
+on an <code>Option&lt;T&gt;</code> is similar to its behavior when called on a <code>Result&lt;T, E&gt;</code>:
+if the value is <code>None</code>, the <code>None</code> will be returned early from the function at
+that point. If the value is <code>Some</code>, the value inside the <code>Some</code> is the
+resultant value of the expression, and the function continues. Listing 9-11 has
+an example of a function that finds the last character of the first line in the
+given text.</p>
+<pre><pre class="playground"><code class="language-rust">fn last_char_of_first_line(text: &amp;str) -&gt; Option&lt;char&gt; {
+    text.lines().next()?.chars().last()
+}
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    assert_eq!(
+</span><span class="boring">        last_char_of_first_line("Hello, world\nHow are you today?"),
+</span><span class="boring">        Some('d')
+</span><span class="boring">    );
+</span><span class="boring">
+</span><span class="boring">    assert_eq!(last_char_of_first_line(""), None);
+</span><span class="boring">    assert_eq!(last_char_of_first_line("\nhi"), None);
+</span><span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 9-11: Using the <code>?</code> operator on an <code>Option&lt;T&gt;</code>
+value</span></p>
+<p>This function returns <code>Option&lt;char&gt;</code> because it’s possible that there is a
+character there, but it’s also possible that there isn’t. This code takes the
+<code>text</code> string slice argument and calls the <code>lines</code> method on it, which returns
+an iterator over the lines in the string. Because this function wants to
+examine the first line, it calls <code>next</code> on the iterator to get the first value
+from the iterator. If <code>text</code> is the empty string, this call to <code>next</code> will
+return <code>None</code>, in which case we use <code>?</code> to stop and return <code>None</code> from
+<code>last_char_of_first_line</code>. If <code>text</code> is not the empty string, <code>next</code> will
+return a <code>Some</code> value containing a string slice of the first line in <code>text</code>.</p>
+<p>The <code>?</code> extracts the string slice, and we can call <code>chars</code> on that string slice
+to get an iterator of its characters. We’re interested in the last character in
+this first line, so we call <code>last</code> to return the last item in the iterator.
+This is an <code>Option</code> because it’s possible that the first line is the empty
+string; for example, if <code>text</code> starts with a blank line but has characters on
+other lines, as in <code>"\nhi"</code>. However, if there is a last character on the first
+line, it will be returned in the <code>Some</code> variant. The <code>?</code> operator in the middle
+gives us a concise way to express this logic, allowing us to implement the
+function in one line. If we couldn’t use the <code>?</code> operator on <code>Option</code>, we’d
+have to implement this logic using more method calls or a <code>match</code> expression.</p>
+<p>Note that you can use the <code>?</code> operator on a <code>Result</code> in a function that returns
+<code>Result</code>, and you can use the <code>?</code> operator on an <code>Option</code> in a function that
+returns <code>Option</code>, but you can’t mix and match. The <code>?</code> operator won’t
+automatically convert a <code>Result</code> to an <code>Option</code> or vice versa; in those cases,
+you can use methods like the <code>ok</code> method on <code>Result</code> or the <code>ok_or</code> method on
+<code>Option</code> to do the conversion explicitly.</p>
+<p>So far, all the <code>main</code> functions we’ve used return <code>()</code>. The <code>main</code> function is
+special because it’s the entry point and exit point of an executable program,
+and there are restrictions on what its return type can be for the program to
+behave as expected.</p>
+<p>Luckily, <code>main</code> can also return a <code>Result&lt;(), E&gt;</code>. Listing 9-12 has the code
+from Listing 9-10, but we’ve changed the return type of <code>main</code> to be
+<code>Result&lt;(), Box&lt;dyn Error&gt;&gt;</code> and added a return value <code>Ok(())</code> to the end. This
+code will now compile.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore">use std::error::Error;
+use std::fs::File;
+
+fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
+    let greeting_file = File::open("hello.txt")?;
+
+    Ok(())
+}</code></pre>
+<p><span class="caption">Listing 9-12: Changing <code>main</code> to return <code>Result&lt;(), E&gt;</code>
+allows the use of the <code>?</code> operator on <code>Result</code> values.</span></p>
+<p>The <code>Box&lt;dyn Error&gt;</code> type is a <em>trait object</em>, which we’ll talk about in the
+<a href="ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects that Allow for Values of Different
+Types”</a><!-- ignore --> section in Chapter 17. For now, you can
+read <code>Box&lt;dyn Error&gt;</code> to mean “any kind of error.” Using <code>?</code> on a <code>Result</code>
+value in a <code>main</code> function with the error type <code>Box&lt;dyn Error&gt;</code> is allowed
+because it allows any <code>Err</code> value to be returned early. Even though the body of
+this <code>main</code> function will only ever return errors of type <code>std::io::Error</code>, by
+specifying <code>Box&lt;dyn Error&gt;</code>, this signature will continue to be correct even if
+more code that returns other errors is added to the body of <code>main</code>.</p>
+<p>When a <code>main</code> function returns a <code>Result&lt;(), E&gt;</code>, the executable will exit with
+a value of <code>0</code> if <code>main</code> returns <code>Ok(())</code> and will exit with a nonzero value if
+<code>main</code> returns an <code>Err</code> value. Executables written in C return integers when
+they exit: programs that exit successfully return the integer <code>0</code>, and programs
+that error return some integer other than <code>0</code>. Rust also returns integers from
+executables to be compatible with this convention.</p>
+<p>The <code>main</code> function may return any types that implement <a href="../std/process/trait.Termination.html">the
+<code>std::process::Termination</code> trait</a><!-- ignore -->, which contains
+a function <code>report</code> that returns an <code>ExitCode</code>. Consult the standard library
+documentation for more information on implementing the <code>Termination</code> trait for
+your own types.</p>
+<p>Now that we’ve discussed the details of calling <code>panic!</code> or returning <code>Result</code>,
+let’s return to the topic of how to decide which is appropriate to use in which
+cases.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch09-01-unrecoverable-errors-with-panic.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch09-03-to-panic-or-not-to-panic.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch09-01-unrecoverable-errors-with-panic.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch09-03-to-panic-or-not-to-panic.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

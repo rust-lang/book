@@ -1,0 +1,576 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Futures and the Async Syntax - The Rust Programming Language</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">The Rust Programming Language</a></li><li class="chapter-item expanded affix "><a href="foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> Programming a Guessing Game</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> Common Programming Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> Variables and Mutability</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> Data Types</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> Functions</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> Control Flow</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> Understanding Ownership</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> What is Ownership?</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> References and Borrowing</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> The Slice Type</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> Using Structs to Structure Related Data</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> Defining and Instantiating Structs</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> An Example Program Using Structs</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> Method Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> Enums and Pattern Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> Defining an Enum</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> The match Control Flow Construct</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> Concise Control Flow with if let</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> Managing Growing Projects with Packages, Crates, and Modules</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> Packages and Crates</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> Defining Modules to Control Scope and Privacy</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> Paths for Referring to an Item in the Module Tree</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> Bringing Paths Into Scope with the use Keyword</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> Separating Modules into Different Files</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> Common Collections</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> Storing Lists of Values with Vectors</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> Storing UTF-8 Encoded Text with Strings</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> Storing Keys with Associated Values in Hash Maps</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> Error Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> Unrecoverable Errors with panic!</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> Recoverable Errors with Result</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> To panic! or Not to panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> Generic Data Types</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Traits: Defining Shared Behavior</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> Validating References with Lifetimes</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> Writing Automated Tests</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> How to Write Tests</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> Controlling How Tests Are Run</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> Test Organization</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> An I/O Project: Building a Command Line Program</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> Accepting Command Line Arguments</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> Reading a File</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> Refactoring to Improve Modularity and Error Handling</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> Developing the Library’s Functionality with Test Driven Development</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> Working with Environment Variables</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> Writing Error Messages to Standard Error Instead of Standard Output</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Functional Language Features: Iterators and Closures</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> Closures: Anonymous Functions that Capture Their Environment</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> Processing a Series of Items with Iterators</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> Improving Our I/O Project</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> Comparing Performance: Loops vs. Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> More about Cargo and Crates.io</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> Customizing Builds with Release Profiles</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> Publishing a Crate to Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo Workspaces</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> Installing Binaries from Crates.io with cargo install</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Extending Cargo with Custom Commands</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> Using Box&lt;T&gt; to Point to Data on the Heap</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> Treating Smart Pointers Like Regular References with the Deref Trait</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> Running Code on Cleanup with the Drop Trait</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt;, the Reference Counted Smart Pointer</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; and the Interior Mutability Pattern</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> Reference Cycles Can Leak Memory</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> Fearless Concurrency</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> Using Threads to Run Code Simultaneously</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> Using Message Passing to Transfer Data Between Threads</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> Shared-State Concurrency</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> Extensible Concurrency with the Sync and Send Traits</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-async-await.html"><strong aria-hidden="true">17.</strong> Async and Await</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-futures-and-syntax.html" class="active"><strong aria-hidden="true">17.1.</strong> Futures and the Async Syntax</a></li><li class="chapter-item expanded "><a href="ch17-02-concurrency-with-async.html"><strong aria-hidden="true">17.2.</strong> Concurrency With Async</a></li><li class="chapter-item expanded "><a href="ch17-03-more-futures.html"><strong aria-hidden="true">17.3.</strong> Working With More Futures</a></li><li class="chapter-item expanded "><a href="ch17-04-more-ways-of-combining-futures.html"><strong aria-hidden="true">17.4.</strong> More Ways of Combining Futures</a></li><li class="chapter-item expanded "><a href="ch17-05-streams.html"><strong aria-hidden="true">17.5.</strong> Streams</a></li><li class="chapter-item expanded "><a href="ch17-06-futures-tasks-threads.html"><strong aria-hidden="true">17.6.</strong> Futures, Tasks, and Threads</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-oop.html"><strong aria-hidden="true">18.</strong> Object Oriented Programming Features of Rust</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-what-is-oo.html"><strong aria-hidden="true">18.1.</strong> Characteristics of Object-Oriented Languages</a></li><li class="chapter-item expanded "><a href="ch18-02-trait-objects.html"><strong aria-hidden="true">18.2.</strong> Using Trait Objects That Allow for Values of Different Types</a></li><li class="chapter-item expanded "><a href="ch18-03-oo-design-patterns.html"><strong aria-hidden="true">18.3.</strong> Implementing an Object-Oriented Design Pattern</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-patterns.html"><strong aria-hidden="true">19.</strong> Patterns and Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-all-the-places-for-patterns.html"><strong aria-hidden="true">19.1.</strong> All the Places Patterns Can Be Used</a></li><li class="chapter-item expanded "><a href="ch19-02-refutability.html"><strong aria-hidden="true">19.2.</strong> Refutability: Whether a Pattern Might Fail to Match</a></li><li class="chapter-item expanded "><a href="ch19-03-pattern-syntax.html"><strong aria-hidden="true">19.3.</strong> Pattern Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-advanced-features.html"><strong aria-hidden="true">20.</strong> Advanced Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-unsafe-rust.html"><strong aria-hidden="true">20.1.</strong> Unsafe Rust</a></li><li class="chapter-item expanded "><a href="ch20-03-advanced-traits.html"><strong aria-hidden="true">20.2.</strong> Advanced Traits</a></li><li class="chapter-item expanded "><a href="ch20-04-advanced-types.html"><strong aria-hidden="true">20.3.</strong> Advanced Types</a></li><li class="chapter-item expanded "><a href="ch20-05-advanced-functions-and-closures.html"><strong aria-hidden="true">20.4.</strong> Advanced Functions and Closures</a></li><li class="chapter-item expanded "><a href="ch20-06-macros.html"><strong aria-hidden="true">20.5.</strong> Macros</a></li></ol></li><li class="chapter-item expanded "><a href="ch21-00-final-project-a-web-server.html"><strong aria-hidden="true">21.</strong> Final Project: Building a Multithreaded Web Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch21-01-single-threaded.html"><strong aria-hidden="true">21.1.</strong> Building a Single-Threaded Web Server</a></li><li class="chapter-item expanded "><a href="ch21-02-multithreaded.html"><strong aria-hidden="true">21.2.</strong> Turning Our Single-Threaded Server into a Multithreaded Server</a></li><li class="chapter-item expanded "><a href="ch21-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">21.3.</strong> Graceful Shutdown and Cleanup</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">22.</strong> Appendix</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">22.1.</strong> A - Keywords</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">22.2.</strong> B - Operators and Symbols</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">22.3.</strong> C - Derivable Traits</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">22.4.</strong> D - Useful Development Tools</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">22.5.</strong> E - Editions</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">22.6.</strong> F - Translations of the Book</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">22.7.</strong> G - How Rust is Made and “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="futures-and-the-async-syntax"><a class="header" href="#futures-and-the-async-syntax">Futures and the Async Syntax</a></h2>
+<p>Like other languages with async, Rust uses the <code>async</code> and <code>await</code>
+keywords—though with some important differences from how other languages do
+things, as we will see. Blocks and functions can be marked <code>async</code>, and you can
+wait on the result of an <code>async</code> function or block to resolve using the <code>await</code>
+keyword.</p>
+<p>Let’s write our first async function, and call it:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    hello_async();
+}
+
+async fn hello_async() {
+    println!("Hello, async!");
+}</code></pre></pre>
+<figcaption>Listing 17-1: Defining a very simple async function</figcaption>
+</figure>
+<p>If we compile and run this… nothing happens, and we get a compiler warning:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-01)
+warning: unused implementer of `Future` that must be used
+ --&gt; src/main.rs:2:5
+  |
+2 |     hello_async();
+  |     ^^^^^^^^^^^^^
+  |
+  = note: futures do nothing unless you `.await` or poll them
+  = note: `#[warn(unused_must_use)]` on by default
+
+warning: `async_await` (bin "async_await") generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.11s
+     Running `target/debug/async_await`
+</code></pre>
+<p>The warning tells us that just calling <code>hello_async()</code> was not enough: we also
+need to <code>.await</code> or poll the future it returns. This raises two important
+questions:</p>
+<ul>
+<li>Given there is no return type on the function, how is it returning a future?</li>
+<li>What is a future?</li>
+</ul>
+<h3 id="async-functions"><a class="header" href="#async-functions">Async functions</a></h3>
+<p>In Rust, <code>async fn</code> is equivalent to writing a function which returns a <em>future</em>
+of the return type. That is, when the compiler sees a function like this:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+</span><span class="boring">    hello_async();
+</span><span class="boring">}
+</span><span class="boring">
+</span>async fn hello_async() {
+    println!("Hello, async!");
+}</code></pre></pre>
+<p>It is basically equivalent to a function defined like this instead:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn hello_async() -&gt; impl Future&lt;Output = ()&gt; {
+    async {
+        println!("Hello, async!");
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Let’s break that down and see what each part means:</p>
+<ul>
+<li>
+<p>It uses the <code>impl Trait</code> syntax we discussed back in the <a href="ch10-02-traits.html#traits-as-parameters">“Traits as
+Parameters”</a> section in Chapter 10 to return a <code>Future</code> with an
+associated type of <code>Output</code>. That tells us that <code>Future</code> is a trait, and the
+<code>Output</code> associated type of <code>()</code> matches the original return type from the
+async version of the function.</p>
+</li>
+<li>
+<p>It wraps the whole body of the <code>async fn</code> in an <code>async</code> block. Given that
+blocks like this are expressions, and that this is expression is the one which
+is returned from the function, we can infer that an <code>async</code> block like this
+produces some anonymous data type which implements the <code>Future</code> trait.</p>
+</li>
+</ul>
+<p>Combined, those explain that when we called <code>hello_async</code> in <code>main</code>, it returned
+a <code>Future</code>. Then Rust warned us that we did not do anything with the future.
+This is because futures are <em>lazy</em>: they don’t do anything until you ask them
+to. This should remind you of our discussion of iterators <a href="ch13-02-iterators.html">back in Chapter
+13</a>. With iterators, you have to call <code>next</code> to get them to do
+anything—whether by using a <code>for</code> loop or by using iterator methods like <code>.iter()</code> and <code>.map()</code> which ultimately call <code>next()</code> under the hood.</p>
+<p>With futures, the same basic idea applies, although for different reasons, and
+with different syntax and methods. This is different from the behavior we saw
+when using <code>thread::spawn</code> in the previous chapter, and it is different from how
+many other languages approach async. This allows Rust to avoid running async
+code unless it is actually needed. We will see why that is later on. For now,
+let’s start by awaiting the future returned by <code>hello_async</code> to actually have it
+run.</p>
+<section class="note" aria-role="note">
+<p>Note: Rust’s <code>await</code> keyword goes after the expression you are awaiting, not
+before it—that is, it is a <em>postfix keyword</em>. This is different from what you
+might be used to if you have used async in languages like JavaScript or C#.
+Rust chose this because it makes chains of async and non-async methods much
+nicer to work with. As of now, <code>await</code> is Rust’s only postfix keyword.</p>
+</section>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore does_not_compile">fn main() {
+    hello_async().await;
+}
+<span class="boring">
+</span><span class="boring">async fn hello_async() {
+</span><span class="boring">    println!("Hello, async!");
+</span><span class="boring">}</span></code></pre>
+<figcaption>Listing 17-2: Attempting to fix a compiler warning by awaiting a future</figcaption>
+</figure>
+<p>Oh no! We have gone from a compiler warning to an actual error:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-02)
+error[E0728]: `await` is only allowed inside `async` functions and blocks
+ --&gt; src/main.rs:3:19
+  |
+2 | fn main() {
+  |    ---- this is not `async`
+3 |     hello_async().await;
+  |                   ^^^^^ only allowed inside `async` functions and blocks
+
+For more information about this error, try `rustc --explain E0728`.
+error: could not compile `async_await` (bin "async_await") due to 1 previous error
+</code></pre>
+<p>This time, the compiler is informing us we cannot use <code>.await</code> in <code>main</code>,
+because <code>main</code> is not an <code>async</code> function. That is because async code needs a
+<em>runtime</em>: a Rust crate which manages the details of executing asynchronous
+code.</p>
+<p>Most languages which support async, including C#, JavaScript, Go, Kotlin,
+Erlang, and Swift, bundle a runtime with the language. At least for now, Rust
+does not. Instead, there are many different async runtimes available, each of
+which makes different tradeoffs suitable to the use case they target. For
+example, a high-throughput web server with dozens of CPU cores and terabytes of
+RAM has very different different needs than a microcontroller with a single
+core, one gigabyte of RAM, and no ability to do heap allocations.</p>
+<p>To keep this chapter focused on learning async, rather than juggling parts of
+the ecosystem, we have created the <code>trpl</code> crate (<code>trpl</code> is short for “The Rust
+Programming Language”). It re-exports all the types, traits, and functions you
+will need, and in a couple cases wires up a few things for you which are less
+relevant to the subject of the book. There is no magic involved, though! If you
+want to understand what the crate does, we encourage you to check out <a href="https://github.com/rust-lang/book/tree/main/packages/trpl">its
+source code</a>. You will be able to see what crate each re-export
+comes from, and we have left extensive comments explaining what the handful of
+helper functions we supply are doing.</p>
+<section class="note" aria-role="note">
+<h3 id="the-futures-and-tokio-crates"><a class="header" href="#the-futures-and-tokio-crates">The <code>futures</code> and <code>tokio</code> Crates</a></h3>
+<p>Whenever you see code from the <code>trpl</code> crate throughout the rest of the
+chapter, it will be re-exporting code from the <a href="https://crates.io/crates/futures"><code>futures</code></a> and
+<a href="https://tokio.rs"><code>tokio</code></a> crates.</p>
+<ul>
+<li>
+<p>The <code>futures</code> crate is an official home for Rust experimentation for async
+code, and is actually where the <code>Future</code> type was originally designed.</p>
+</li>
+<li>
+<p>Tokio is the most widely used async runtime in Rust today, especially (but
+not only!) for web applications. There are other great options out there,
+too, and they may be more suitable for your purposes. We are using Tokio
+because it is the most widely-used runtime—not as a judgment call on whether
+it is the <em>best</em> runtime!</p>
+</li>
+</ul>
+</section>
+<p>For now, go ahead and add the <code>trpl</code> crate to your <code>hello-async</code> project:</p>
+<pre><code class="language-console">$ cargo add trpl
+</code></pre>
+<p>Then, in our <code>main</code> function, let’s wrap the call to <code>hello_async</code> with the
+<code>trpl::block_on</code> function, which takes in a <code>Future</code> and runs it until it
+completes.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    trpl::block_on(hello_async());
+}
+<span class="boring">
+</span><span class="boring">async fn hello_async() {
+</span><span class="boring">    println!("Hello, async!");
+</span><span class="boring">}</span></code></pre></pre>
+<figcaption>Listing 17-3: Using the <code>block_on</code> helper function to wait on a future in non-async code</figcaption>
+</figure>
+<p>When we run this, we get the behavior we might have expected initially:</p>
+<pre><code class="language-console">cargo run
+   Compiling proc-macro2 v1.0.85
+   Compiling unicode-ident v1.0.12
+   Compiling autocfg v1.3.0
+   Compiling futures-sink v0.3.30
+   Compiling pin-project-lite v0.2.14
+   Compiling libc v0.2.155
+   Compiling futures-core v0.3.30
+   Compiling memchr v2.7.2
+   Compiling pin-utils v0.1.0
+   Compiling futures-io v0.3.30
+   Compiling futures-task v0.3.30
+   Compiling futures-channel v0.3.30
+   Compiling slab v0.4.9
+   Compiling num_cpus v1.16.0
+   Compiling tokio v1.38.0
+   Compiling quote v1.0.36
+   Compiling syn v2.0.66
+   Compiling futures-macro v0.3.30
+   Compiling futures-util v0.3.30
+   Compiling futures-executor v0.3.30
+   Compiling futures v0.3.30
+   Compiling trpl v0.1.0 (/Users/chris/dev/rust-lang/book/packages/trpl)
+   Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-03)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.91s
+     Running `target/debug/async_await`
+Hello, async!
+</code></pre>
+<p>Phew: we finally have some working async code! Now we can answer that second
+question: what is a future anyway? That will also help us understand why we need
+that <code>trpl::block_on</code> call to make this work.</p>
+<h3 id="what-are-futures"><a class="header" href="#what-are-futures">What Are Futures?</a></h3>
+<p>A <em>future</em> is a data structure which represents the state of some async
+operation. More precisely, a Rust <code>Future</code> is a trait; it allows many different
+data structures to represent different async operations in different ways, but
+with a common interface. Here is the definition of the trait:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait Future {
+    type Output;
+
+    fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt;;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Notice that this is a normal trait. While we often interact with futures via
+async blocks, you can also implement this yourself on your own data types when
+you need to. Many of the functions we will see throughout this chapter return
+types which have their own implementations of <code>Future</code>. Those implementations
+can compose together nicely</p>
+<p><code>Future</code> has an associated type, <code>Output</code>, which says what the result of the
+future will be when it resolves. (This is analogous to the <code>Item</code> associated
+type for the <code>Iterator</code> trait, which we saw back in Chapter 13.) Beyond that,
+<code>Future</code> has only one method: <code>poll</code>, which takes a special <code>Pin</code> reference for
+its <code>self</code> parameter and a mutable reference to some <code>Context</code> type, and returns
+a <code>Poll&lt;Self::Output&gt;</code>. We will talk a little more about <code>Pin</code> and <code>Context</code>
+later in the chapter. For now, let’s focus on what the method returns, the
+<code>Poll</code> type:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Poll&lt;T&gt; {
+    Ready(T),
+    Pending
+}
+<span class="boring">}</span></code></pre></pre>
+<p>You may notice that this <code>Poll</code> type is a lot like an <code>Option</code>: it has one
+variant which has a value (<code>Ready(T)</code> and <code>Some(T)</code>), and one which does not
+(<code>Pending</code> and <code>None</code>). Having a dedicated type lets Rust treat <code>Poll</code>
+differently from <code>Option</code>, though, which is important since they have very
+different meanings! The <code>Pending</code> variant indicates that the future still has
+work to do, so the caller will need to check again later. The <code>Ready</code> variant
+indicates that the <code>Future</code> has finished its work and the <code>T</code> value is
+available.</p>
+<section class="note" aria-role="note">
+<p>Note: With most futures, the caller should not call <code>poll()</code> again after the
+future has returned <code>Ready</code>. Many futures will panic if polled after becoming
+ready! Futures which are safe to poll again will say so explicitly in their
+documentation.</p>
+</section>
+<p>Under the hood, when you call <code>.await</code>, Rust compiles that to code which calls
+<code>poll</code>, kind of (although not exactly <!-- TODO: describe `IntoFuture`? -->)
+like this:</p>
+<pre><code class="language-rust ignore">match hello_async().poll() {
+    Ready(_) =&gt; {
+        // We’re done!
+    }
+    Pending =&gt; {
+        // But what goes here?
+    }
+}</code></pre>
+<p>As you can see from this sample, though, there is a question: what happens when
+the <code>Future</code> is still <code>Pending</code>? We need some way to try again. We would need to
+have something like this instead:</p>
+<pre><code class="language-rust ignore">let hello_async_fut = hello_async();
+loop {
+    match hello_async_fut.poll() {
+        Ready(_) =&gt; {
+            break;
+        }
+        Pending =&gt; {
+            // continue
+        }
+    }
+}</code></pre>
+<p>When we use <code>.await</code>, Rust compiles it to something fairly similar to that loop.
+If Rust compiled it to <em>exactly</em> that code, though, every <code>.await</code> would block
+the computer from doing anything else—the opposite of what we were going for!
+Instead, Rust needs makes sure that the loop can hand off control to something
+which can pause work on this future and work on other futures and check this one
+again later. That “something” is an async runtime, and this scheduling and
+coordination work is one of the main jobs for a runtime.</p>
+<p>Every <em>await point</em>—that is, every place where the code explicitly calls
+<code>.await</code>—represents one of those places where control gets handed back to the
+runtime. To make that work, Rust needs to keep track of the state involved in
+the async block, so that the runtime can kick off some other work and then come
+back when it is ready to try advancing this one again. This is an invisible
+state machine, as if you wrote something like this:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum MyAsyncStateMachine {
+    FirstAwaitPoint(/* the state used after the first await point */),
+    SecondAwaitPoint(/* the state used after the second await point */),
+    // etc. for each `.await` point...
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Writing that out by hand would be tedious and error-prone—especially when making
+changes to code later. Async Rust creates that state machine for us, and it
+really is an <code>enum</code> like this, just an anonymous one you don’t have to name. As
+a result, the normal rules around data structures all apply, including for
+borrowing and ownership. Happily, the compiler also handles checking that for
+us, and has good error messages. We will work through a few of those later in
+the chapter!</p>
+<p>Once all of that compilation work is done, though, we need a runtime to actually
+poll the futures, coordinate between different futures as they hand off control
+at await points, and even provide async versions of common functionality like
+file or network I/O.</p>
+<p>Now we can understand why the compiler was stopping us in Listing 17-2 (before
+we added the <code>trpl::block_on</code> function). The <code>main</code> function is not <code>async</code>—and
+it really cannot be: if it were, something would need to call <code>poll()</code> on
+whatever <code>main</code> returned! Instead, we use the <code>trpl::block_on</code> function, which
+polls the <code>Future</code> returned by <code>hello_async</code> until it returns <code>Ready</code>. Every
+async program in Rust has at least one place where it sets up an executor and
+executes code.</p>
+<section class="note" aria-role="note">
+<p>Note: Under the hood, Rust uses <em>generators</em> so that it can hand off control
+between different functions. These are an implementation detail, though, and
+you never have to think about it when writing Rust.</p>
+<p>The loop as written also wouldn’t compile, because it doesn’t actually satisfy
+the contract for a <code>Future</code>. In particular, <code>hello_async_fut</code> is not <em>pinned</em>
+with the <code>Pin</code> type and we did not pass along a <code>Context</code> argument. We will
+see a little more about <code>Pin</code> later in the chapter, but we will not dig into
+<code>Context</code> because you will not normally need them for working with futures in
+day-to-day Rust code.</p>
+<p>If you want to understand how things work “under the hood,” though, the
+official <a href="https://rust-lang.github.io/async-book/"><em>Asynchronous Programming in Rust</em></a> book covers them:</p>
+<ul>
+<li><a href="https://rust-lang.github.io/async-book/02_execution/01_chapter.html">Chapter 2: Under the Hood: Executing Futures and Tasks</a></li>
+<li><a href="https://rust-lang.github.io/async-book/04_pinning/01_chapter.html">Chapter 4: Pinning</a>.</li>
+</ul>
+</section>
+<p>Now, that’s a lot of work to just print a string, but we have laid some key
+foundations for working with async in Rust! Now that you know the basics of how
+futures and runtimes work, we can see some of the things we can <em>do</em> with async.</p>
+<!-- TODO: map source link version to version of Rust? -->
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch17-00-async-await.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch17-02-concurrency-with-async.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch17-00-async-await.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch17-02-concurrency-with-async.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
