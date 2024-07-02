@@ -188,10 +188,10 @@ how the `Future` trait works.
 
 ### What Are Futures?
 
-A *future* is a data structure which represents the state of some async
-operation. More precisely, a Rust `Future` is a trait; it allows many different
-data structures to represent different async operations in different ways, but
-with a common interface. Here is the definition of the trait:
+A *future* is a data structure which manages the state of some async operation.
+Rust provides the `Future` trait as a building block so different async
+operations can be implemented with different data, but with a common interface.
+Here is the definition of the trait:
 
 ```rust
 pub trait Future {
@@ -201,20 +201,18 @@ pub trait Future {
 }
 ```
 
-Notice that this is a normal trait. While we often interact with futures via
-async blocks, you can also implement this yourself on your own data types when
-you need to. Many of the functions we will see throughout this chapter return
-types which have their own implementations of `Future`. Those implementations
-can compose together nicely
+While we often interact with the futures created via async blocks, you can also
+implement `Future` on your own data types. Indeed, many of the functions we will
+see throughout this chapter return types with their own implementations of
+`Future`.
 
-`Future` has an associated type, `Output`, which says what the result of the
-future will be when it resolves. (This is analogous to the `Item` associated
-type for the `Iterator` trait, which we saw back in Chapter 13.) Beyond that,
-`Future` has only one method: `poll`, which takes a special `Pin` reference for
-its `self` parameter and a mutable reference to some `Context` type, and returns
-a `Poll<Self::Output>`. We will talk a little more about `Pin` and `Context`
-later in the chapter. For now, let’s focus on what the method returns, the
-`Poll` type:
+As we learned earlier, `Future`’s associated type `Output` says what the future
+will resolves to. (This is analogous to the `Item` associated type for the
+`Iterator` trait.) Beyond that, `Future` also has the `poll` method, which takes
+a special `Pin` reference for its `self` parameter and a mutable reference to a
+`Context` type, and returns a `Poll<Self::Output>`. We will talk a little more
+about `Pin` and `Context` later in the chapter. For now, let’s focus on what the
+method returns, the `Poll` type:
 
 ```rust
 enum Poll<T> {
@@ -223,19 +221,17 @@ enum Poll<T> {
 }
 ```
 
-You may notice that this `Poll` type is a lot like an `Option`: it has one
-variant which has a value (`Ready(T)` and `Some(T)`), and one which does not
-(`Pending` and `None`). Having a dedicated type lets Rust treat `Poll`
-differently from `Option`, though, which is important since they have very
-different meanings! The `Pending` variant indicates that the future still has
+This `Poll` type is a lot like an `Option`: it has one variant which has a value
+(`Ready(T)`), and one which does not (`Pending`). It means something quite
+different, though! The `Pending` variant indicates that the future still has
 work to do, so the caller will need to check again later. The `Ready` variant
 indicates that the `Future` has finished its work and the `T` value is
 available.
 
 > Note: With most futures, the caller should not call `poll()` again after the
-> future has returned `Ready`. Many futures will panic if polled after becoming
-> ready! Futures which are safe to poll again will say so explicitly in their
-> documentation.
+> future has returned `Ready`. Many futures will panic if polled again after
+> becoming ready! Futures which are safe to poll again will say so explicitly in
+> their documentation.
 
 Under the hood, when you call `.await`, Rust compiles that to code which calls
 `poll`, kind of (although not exactly <!-- TODO: describe `IntoFuture`? -->)
@@ -252,9 +248,9 @@ match hello("async").poll() {
 }
 ```
 
-As you can see from this sample, though, there is a question: what happens when
-the `Future` is still `Pending`? We need some way to try again. We would need to
-have something like this instead:
+What should we do when the `Future` is still `Pending`? We need some way to try
+again… and again, and again, until the future is finally ready. In other words,
+a loop:
 
 ```rust,ignore
 let hello_fut = hello("async");
@@ -270,16 +266,15 @@ loop {
 }
 ```
 
-When we use `.await`, Rust compiles it to something fairly similar to that loop.
-If Rust compiled it to *exactly* that code, though, every `.await` would block
-the computer from doing anything else—the opposite of what we were going for!
-Instead, Rust needs makes sure that the loop can hand off control to something
-which can pause work on this future and work on other futures and check this one
-again later. That “something” is an async runtime, and this scheduling and
-coordination work is one of the main jobs for a runtime.
+If Rust compiled it to exactly that code, though, every `.await` would be
+blocking—exactly the opposite of what we were going for! Instead, Rust needs
+makes sure that the loop can hand off control to something which can pause work
+on this future and work on other futures and check this one again later. That
+“something” is an async runtime, and this scheduling and coordination work is
+one of the main jobs for a runtime.
 
-Every *await point*—that is, every place where the code explicitly calls
-`.await`—represents one of those places where control gets handed back to the
+Every *await point*—that is, every place where the code explicitly applies the
+`.await` keyword—represents a place where control gets handed back to the
 runtime. To make that work, Rust needs to keep track of the state involved in
 the async block, so that the runtime can kick off some other work and then come
 back when it is ready to try advancing this one again. This is an invisible
@@ -293,37 +288,26 @@ enum MyAsyncStateMachine {
 }
 ```
 
-Writing that out by hand would be tedious and error-prone—especially when making
-changes to code later. Async Rust creates that state machine for us, and it
-really is an `enum` like this, just an anonymous one you don’t have to name. As
-a result, the normal rules around data structures all apply, including for
-borrowing and ownership. Happily, the compiler also handles checking that for
-us, and has good error messages. We will work through a few of those later in
-the chapter!
+Writing that out by hand would be tedious and error-prone, especially when
+making changes to code later. Instead, async Rust creates and manages the state
+machine data structures for us. (If you’re wondering: yep, the normal borrowing
+and ownership rules around data structures all apply. Happily, the compiler also
+handles checking those for us, and has good error messages. We will work through
+a few of those later in the chapter!)
 
-Once all of that compilation work is done, though, we need a runtime to actually
-poll the futures, coordinate between different futures as they hand off control
-at await points, and even provide async versions of common functionality like
-file or network I/O.
+Now we can understand why the compiler stopped us from making `main` itself an
+async function in Listing 17-3. If `main` were an async function, something else
+would need to call `poll()` on whatever `main` returned, but main is the
+starting point for the program! Instead, we use the `trpl::block_on` function,
+which sets up a runtime and polls the `Future` returned by `hello` until it
+returns `Ready`.
 
-Now we can understand why the compiler was stopping us in Listing 17-2 (before
-we added the `trpl::block_on` function). The `main` function is not `async`—and
-it really cannot be: if it were, something would need to call `poll()` on
-whatever `main` returned! Instead, we use the `trpl::block_on` function, which
-polls the `Future` returned by `hello` until it returns `Ready`. Every
-async program in Rust has at least one place where it sets up an executor and
-executes code.
+Every async program in Rust has at least one place where it sets up a runtime and
+executes the futures. Those runtimes also often supply async versions of common
+functionality like file or network I/O.
 
-> Note: Under the hood, Rust uses *generators* so that it can hand off control
-> between different functions. These are an implementation detail, though, and
-> you never have to think about it when writing Rust.
->
-> The loop as written also wouldn’t compile, because it doesn’t actually satisfy
-> the contract for a `Future`. In particular, `hello_fut` is not *pinned*
-> with the `Pin` type and we did not pass along a `Context` argument. We will
-> see a little more about `Pin` later in the chapter, but we will not dig into
-> `Context` because you will not normally need them for working with futures in
-> day-to-day Rust code.
+> Note: We have skipped over some interesting implementation details in this
+> discussion, because you should not have to think about them when writing Rust.
 >
 > If you want to understand how things work “under the hood,” though, the
 > official [_Asynchronous Programming in Rust_][async-book] book covers them:
@@ -331,9 +315,8 @@ executes code.
 > - [Chapter 2: Under the Hood: Executing Futures and Tasks][under-the-hood]
 > - [Chapter 4: Pinning][pinning].
 
-Now, that’s a lot of work to just print a string, but we have laid some key
-foundations for working with async in Rust! Now that you know the basics of how
-futures and runtimes work, we can see some of the things we can *do* with async.
+Now that you know the basics of how futures and runtimes work, we can see some
+of the things we can *do* with async.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
 [iterators-lazy]: ch13-02-iterators.html
