@@ -1,27 +1,10 @@
-cargo run
-   Compiling proc-macro2 v1.0.85
-   Compiling unicode-ident v1.0.12
-   Compiling autocfg v1.3.0
-   Compiling futures-sink v0.3.30
-   Compiling pin-project-lite v0.2.14
-   Compiling libc v0.2.155
-   Compiling futures-core v0.3.30
-   Compiling memchr v2.7.2
-   Compiling pin-utils v0.1.0
-   Compiling futures-io v0.3.30
-   Compiling futures-task v0.3.30
-   Compiling futures-channel v0.3.30
-   Compiling slab v0.4.9
-   Compiling num_cpus v1.16.0
-   Compiling tokio v1.38.0
-   Compiling quote v1.0.36
-   Compiling syn v2.0.66
-   Compiling futures-macro v0.3.30
-   Compiling futures-util v0.3.30
-   Compiling futures-executor v0.3.30
-   Compiling futures v0.3.30
-   Compiling trpl v0.1.0 (/Users/chris/dev/rust-lang/book/packages/trpl)
-   Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-03)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.91s
-     Running `target/debug/async_await`
-Hello, async!
+$ cargo run
+   Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-03-fix)
+error[E0752]: `main` function is not allowed to be `async`
+ --> src/main.rs:2:1
+  |
+2 | async fn main() {
+  | ^^^^^^^^^^^^^^^ `main` function is not allowed to be `async`
+
+For more information about this error, try `rustc --explain E0752`.
+error: could not compile `async_await` (bin "async_await") due to 1 previous error

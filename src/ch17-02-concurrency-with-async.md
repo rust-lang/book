@@ -16,36 +16,30 @@ The first task we tackled in Chapter 16 was counting up on two separate threads.
 Let’s do the same using async. The `trpl` crate supplies a `spawn_task` function
 which looks very similar to the `thread::spawn` API, and a `sleep` function
 which is an async version of the `thread::sleep` API. We can use these together
-to implement the same counting example as with threads.
+to implement the same counting example as with threads, in Listing 17-5.
 
-Listing 17-4 shows our starting point. We set up our `main` function with `trpl::block_on`, so that our top-level function can be async.
+<Listing number="17-5" caption="Using `spawn_task` to count with two" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:block_on}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs}}
 ```
+
+</Listing>
+
+As our starting point, we set up our `main` function with `trpl::block_on`, so that our top-level function can be async.
 
 > Note: From this point forward in the chapter, every example will include this
 > exact same wrapping code with `trpl::block_on` in `main`, so we will often
 > skip it just like we do with `main`. Don’t forget to include it in your
 > code!
 
-Then we can write two loops within that block, each with a `trpl::sleep` call in
-them. Similar to the threading example, we put one loop in the body of a
-`trpl::spawn_task`, the same way we did with `thread::spawn`, and the other in a
-top-level `for` loop. Notice that we also need to add a `.await` after the
-`sleep` calls.
+Then we write two loops within that block, each with a `trpl::sleep` call in it.
+We put one loop in the body of a `trpl::spawn_task` and the other in a top-level
+`for` loop. We also add an `.await` after the `sleep` calls.
 
-<Listing number="17-5" caption="Using `spawn_task` to count with two" file-name="src/main.rs">
-
-```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:task}}
-```
-
-</Listing>
-
-This does something very similar to what the thread-based implementation did, as
-we can see from the output when we run it. (As with the threading example, you
-may see a different order in your own terminal output when you run this.)
+This does something similar to the thread-based implementation—including the
+fact that you may see the messages appear in a different order in your own
+terminal when you run it.
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -63,13 +57,10 @@ hi number 4 from the second task!
 hi number 5 from the first task!
 ```
 
-This stops as soon as the for loop in the body of the main async block finishes,
-because the task spawned by `spawn_task` is shut down when the main function
-ends—just like threads are. Thus, if you want to run all the way to the
-completion of the task, you will need to use a join handle to wait for the first
-task to complete. With threads, we used the `join` method to “block” until the
-thread was done running. Here, we can use `await` to do the same thing, and
-since the handle’s output is actually a `Result`, we will also unwrap it.
+This version stops as soon as the for loop in the body of the main async block
+finishes, because the task spawned by `spawn_task` is shut down when the main
+function ends. If you want to run all the way to the completion of the task, you
+will need to use a join handle to wait for the first task to complete.
 
 <Listing number="17-6" caption="Using `.await` with a join handle to run a task to completion" file-name="src/main.rs">
 
@@ -79,8 +70,11 @@ since the handle’s output is actually a `Result`, we will also unwrap it.
 
 </Listing>
 
-Now the output again looks like what we saw in the threading example. (Again,
-the exact output may look different for you.)
+With threads, we used the `join` method to “block” until the thread was done
+running. In Listing 17-6, we can use `await` to do the same thing, because the
+task handle itself is a future. Its `Output` type is a `Result`, so we also
+unwrap it after awaiting it. This updated version runs till *both* loops
+finish.
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -102,18 +96,19 @@ hi number 8 from the first task!
 hi number 9 from the first task!
 ```
 
-So far, it looks like async and threads basically give us the same basic
-behavior. However, there are a few important differences already. One was using
-`.await` instead of calling `join` on the join handle. Another is that we needed
-to await both `sleep` calls. Most importantly, though, we did not need to spawn
-another operating system thread to do this. We were able to get concurrency for
-just the cost of a task, which has much faster startup time and uses much less
-memory than an OS thread.
+So far, it looks like async and threads give us the same basic outcomes, just
+with different syntax: using `.await` instead of calling `join` on the join
+handle, and awaiting the `sleep` calls.
 
-What is more, we actually do not need the `spawn_task` call at all to get
-concurrency here. Remember that each async block compiles to an anonymous
-future. That means we can put each of these two loops in an async block and then
-ask the runtime to run them both to completion using `trpl::join`:
+The bigger difference is that we did not need to spawn another operating system
+thread to do this. In fact, we do not even a task here. Given that async blocks
+compile to anonymous futures, we can put each loop in an async block and have
+the runtime run them both to completion using `trpl::join`.
+
+<!--
+We were able to get concurrency for just the cost of a task.
+Tasks have much faster startup time and use much less memory than an OS thread.
+-->
 
 <Listing number="17-7" caption="Using `trpl::join` to await two anonymous futures" file-name="src/main.rs">
 
@@ -147,16 +142,15 @@ hi number 9 from the first task!
 
 Here, you will see the exact same order every time, which is very different from
 what we saw with threads. That is because the `trpl::join` function is *fair*,
-meaning it checks both futures equally, rather than letting one race ahead. With
-threads, the operating system decides which thread to check, and that is
-ultimately out of our control. With an async runtime, the runtime itself decides
-which future to check, so it has the final say. In practice, the details get
-complicated because an async runtime might use operating system threads under
-the hood as part of how it manages concurrency, but a runtime can still choose
-to guarantee fairness even so. However, runtimes do not have to guarantee
-fairness for any given operation, and even within a given runtime, different
-APIs sometimes exist to let you choose whether fairness is something you care
-about as a caller.
+meaning it checks each future equally often, alternating between them, and never
+lets one race ahead if the other is ready. With threads, the operating system
+decides which thread to check and how long to let it run. With async Rust, the
+runtime decides which future to check. (In practice, the details get complicated
+because an async runtime might use operating system threads under the hood as
+part of how it manages concurrency, so guaranteeing fairness can be more work
+for a runtime—but it is still possible!) Runtimes do not have to guarantee
+fairness for any given operation, and runtimes often offer different APIs to let
+you choose whether you want fairness or not.
 
 Try some of these different variations on awaiting the futures and see what they
 do:

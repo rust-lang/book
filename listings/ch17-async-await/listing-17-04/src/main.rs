@@ -1,7 +1,12 @@
+// ANCHOR: main
 fn main() {
-    // ANCHOR: block_on
     trpl::block_on(async {
-        // our implementation will go here
+        hello("async").await;
     });
-    // ANCHOR_END: block_on
+}
+// ANCHOR_END: main
+
+async fn hello(name: &str) {
+    let greeting = format!("Hello, {name}!");
+    println!("{greeting}");
 }

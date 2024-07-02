@@ -1,8 +1,6 @@
 // ANCHOR: main
-fn main() {
-    trpl::block_on(async {
-        hello("async").await;
-    });
+async fn main() {
+    hello("async").await;
 }
 // ANCHOR_END: main
 

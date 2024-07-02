@@ -108,12 +108,12 @@ Oh no! We have gone from a compiler warning to an actual error:
 
 This time, the compiler is informing us we cannot use `.await` in `main`,
 because `main` is not an `async` function. Your first thought might be to make
-`main` an async function then, as in Listing 17-TODO-3.
+`main` an async function then, as in Listing 17-3.
 
-<Listing number="17-TODO-3" caption="Attempting to make `main` an `async fn`" file-name="src/main.rs">
+<Listing number="17-3" caption="Attempting to make `main` an `async fn`" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-03-fix/src/main.rs:main}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-03/src/main.rs:main}}
 ```
 
 </Listing>
@@ -121,7 +121,7 @@ because `main` is not an `async` function. Your first thought might be to make
 However, we get another compiler error here:
 
 ```console
-{{#include ../listings/ch17-async-await/listing-17-03-fix/output.txt}}
+{{#include ../listings/ch17-async-await/listing-17-03/output.txt}}
 ```
 
 The problem is that async code needs a *runtime*: a Rust crate which manages the
@@ -169,10 +169,10 @@ completes. Since `hello` returns a `Future`, we could simply wrap it directly in
 doing more than just one async function call, so instead we will pass an `async`
 block and explicitly await the result of calling `hello`.
 
-<Listing number="17-3" caption="Using the `block_on` helper function to wait on a future in non-async code" file-name="src/main.rs">
+<Listing number="17-4" caption="Using the `block_on` helper function to wait on a future in non-async code" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-03/src/main.rs:main}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:main}}
 ```
 
 </Listing>
@@ -180,7 +180,7 @@ block and explicitly await the result of calling `hello`.
 When we run this, we get the behavior we might have expected initially:
 
 ```console
-{{#include ../listings/ch17-async-await/listing-17-03/output.txt}}
+{{#include ../listings/ch17-async-await/listing-17-04/output.txt}}
 ```
 
 Phew: we finally have some working async code! Now we can turn our attention to
