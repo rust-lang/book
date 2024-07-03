@@ -234,9 +234,10 @@ the idea of *pinning*.
 
 ### Pinning and the Pin and Unpin Traits
 
-When we introduced the `Future` trait in the previous chapter, we saw that the
-definition of its `poll` method has an unusual way of specifying the `self`
-parameter. To review, here is the full definition of `Future`:
+<!-- TODO: get a *very* careful technical review of this section! -->
+
+Let’s look again at the definition of `Future`, focusing now on its `poll`
+method’s `self` type:
 
 ```rust
 pub trait Future {
@@ -247,95 +248,15 @@ pub trait Future {
 }
 ```
 
-We have not seen a method definition like this before, where `self` has a type
-annotation rather than simply being named like `self`, `mut self`, `&self`, or
-`&mut self`. This syntax means that the method can only be called when the
-instance of the type which implements `Future` is behind a `Pin` pointer type.
-This syntax is not specific to `Pin`; it also works with `Box` and other smart
-pointer types, and we will see it again in Chapter 18.
-
-Here, the signature tells us that if we want to poll a future to check whether
-it is `Pending` or `Ready(Output)`, the type which implements `Future` has to be
-behind a `Pin` smart pointer type. Recalling that `.await` is implemented in
-terms of calls to `poll()`, this starts to explain the error message we saw
-above—but that was in terms of `Unpin`, not `Pin`. So what exactly are `Pin` and
-`Unpin`, how do they relate, and why does `Future` need `self` to be in a `Pin`
-type to call `poll`?
-
-In [“Futures and Syntax: What Are Futures”][what-are-futures], we described how
-a series of await points in a future get compiled into a state machine—and noted
-how the compiler helps make sure that state machine follows all of Rust’s normal
-rules around safety, including borrowing and ownership. Consider code which has
-a mutable `Vec` of strings, which asynchronously reads strings from files and
-pushes those strings into the `Vec`:
-
-<Listing number="17-22" caption="Borrowing mutable data across multiple `.await` points">
-
-```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-22/src/main.rs:here}}
-```
-
-</Listing>
-
-If we think about the state machine that would get compiled to, it might be
-something kind of like this:
-
-```rust,ignore
-enum AsyncStateMachine<'a> {
-    AfterFirstAwait(&'a mut Vec<String>),
-    AfterSecondAwait(&'a mut Vec<String>),
-}
-```
-
-That is, at each `.await` in the source code, Rust would look at what state is
-needed between that await point and the point another `.await` appears or the
-async block ends, and create a corresponding variant in the `AsyncStateMachine`.
-Each variant has the appropriate kind of reference to the data that will be
-referenced in that section. The real implementation is not *exactly* like this,
-but it is close enough to give the right mental model.
-
-And this could actually be fine, on its own—Rust would keep track of those
-mutable references, and if we got something wrong, the borrow checker would tell
-us. It gets a bit tricky, though, if we want to move around the future that
-corresponds to that block. Remember, we could always do something like this:
-
-```rust,ignore
-let file_reads_future = async {
-    // snip...
-};
-
-let some_other_future = async {
-    // snip...
-};
-
-trpl::join(file_reads_future, some_other_future).await;
-```
-
-<!--
-    TODO: this paragraph is close to right, but it needs to be revised a bit to
-    make sure it is accurate about *what* is not moved.
--->
-
-If we pass those futures into `join`, or return them from a function, or put
-them in a data structure to keep track of for some reason, that moves the state
-machine as well. That means the reference to `Vec<String>` for the values we
-read in with `trpl::read_to_string` moves along with it. Since references point
-to the actual memory address of the `Vec`, Rust needs some way to either update
-them so they are still valid after the `Vec` moves, or it needs some way to keep
-`Vec` from getting moved around so that the references do not need to be
-updated. Updating all the references to an object every time it moves could be
-quite a lot of work for the compiler to add, especially since there can be a
-whole web of references that need updating. On the other hand, making sure the
-underlying item *does not move in memory* can be “free” at runtime in exchange
-for keeping some promises at compile time. That is where `Pin` and `Unpin` come
-in.
-
-> Note: The specific mechanics for how `Pin` and `Unpin` work under the hood are
-> covered extensively in the API documentation for `std::pin`, so if you would
-> like to understand them more fundamentally, that is a great place to start.
-> Those details are not at all necessary for working with async Rust day to day,
-> though. Here, we will stick to the parts you *do* need to understand to work
-> with them in everyday Rust!
+This is the first time we have seen a method where `self` has a type annotation
+like this. When we specify the type of `self` like this, we are telling Rust
+what type `self` must be to call this method. These kinds of type annotations
+for `self` are similar to those for other function parameters, but with the
+restriction that the type annotation has to be the type on which the method is
+implemented, or a reference or smart pointer to that type. We will see more on
+this syntax in Chapter 18. For now, it is enough to know that if we want to poll
+a future (to check whether it is `Pending` or `Ready(Output)`), we need a
+mutable reference to the type, which is wrapped in a `Pin`.
 
 `Pin` is a smart pointer, much like `Box`, `Rc`, and the others we saw in
 Chapter 15. Unlike those, however, `Pin` only works with *other pointer types*
@@ -343,65 +264,103 @@ like reference (`&` and `&mut`) and smart pointers (`Box`, `Rc`, and so on). To
 be precise, `Pin` works with types which implement the `Deref` or `DerefMut`
 traits, which we covered in Chapter 15. You can think of this restriction as
 equivalent to only working with pointers, though, since implementing `Deref` or
-`DerefMut` means your type behaves like a pointer type. including references,
-other smart pointers, and so on.
+`DerefMut` means your type behaves like a pointer type.
 
-Wrapping a pointer type in `Pin` enforces the exact guarantee we need: the value
-*behind* the pointer we wrap in `Pin` cannot move. It is “pinned” in its current
-spot by the `Pin` wrapper. Thus, if you have `Pin<Box<SomeType>>`, you actually
-pin the `SomeType` value, *not* the `Box` pointer. In fact, the pinned box
-pointer can move around freely. Remember: we care about making sure the data
-ultimately being referenced stays in its place. If a pointer moves around, but
-the data it points to is in the same place, there is no problem.
+Recalling that `.await` is implemented in terms of calls to `poll()`, this
+starts to explain the error message we saw above—but that was in terms of
+`Unpin`, not `Pin`. So what exactly are `Pin` and `Unpin`, how do they relate,
+and why does `Future` need `self` to be in a `Pin` type to call `poll`?
+
+In [“What Are Futures”][what-are-futures], we described how a series of await
+points in a future get compiled into a state machine—and noted how the compiler
+helps make sure that state machine follows all of Rust’s normal rules around
+safety, including borrowing and ownership. To make that work, Rust looks at what
+data is needed between each await point and the next await point or the end of
+the async block. It then creates a corresponding variant in the state machine it
+creates. Each variant gets the access it needs to the data that will be used in
+that section of the source code, whether by taking ownership of that data or by
+getting a mutable or immutable reference to it.
+
+So far so good: if we get anything wrong about the ownership or references in a
+given async block, the borrow checker will tell us. When we want to move around
+the future that corresponds to that block—like moving it into a `Vec` to pass to
+`join_all`—things get trickier.
+
+When we move a future—whether by pushing into a data structure to use as an
+iterator with `join_all`, or returning them from a function—that actually means
+moving the state machine Rust creates for us. And unlike most other types in
+Rust, the futures Rust creates for async blocks can end up with references to
+themselves in the fields of any given variant. Any object which has a reference
+to itself is unsafe to move, though, because references always point to the
+actual memory address of the thing they refer to. If you move the data structure
+itself, you *have* to update any references to it, or they will be left pointing
+to the old location.
+
+In principle, you could make the Rust compiler try to update every reference to
+an object every time it gets moved. That would  potentially be a lot of
+performance overhead, especially given there can be a whole web of references
+that need updating. On the other hand, if we could make sure the data structure
+in question *does not move in memory*, we do not have to update any references.
+And this is exactly what Rust’s borrow checker already guarantees: you cannot
+move an item which has any active references to it using safe code.
+
+`Pin` builds on that to give us the exact guarantee we need. When we *pin* a
+value by wrapping a pointer to it in `Pin`, it can no longer move. Thus, if you
+have `Pin<Box<SomeType>>`, you actually pin the `SomeType` value, *not* the
+`Box` pointer. In fact, the pinned box pointer can move around freely. Remember:
+we care about making sure the data ultimately being referenced stays in its
+place. If a pointer moves around, but the data it points to is in the same
+place, there is no problem.
 
 However, most types are perfectly safe to move around, even if they happen to be
-behind a `Pin` pointer. Remember: the problem `Pin` addresses is when data
-structures have internal references which need to maintained when the structure
-moves around, as happens with internal references in futures. Primitive values
-like numbers and booleans do not have any internal structure like that, so they
-are obviously safe. Neither do most types you normally work with in Rust. A
-`Vec`, for example, does not have any internal references it needs to keep up to
-date this way, so you can move it around without worrying. But what happens if
-you have a `Pin<u32>` or a `Pin<Vec<String>>`?
+behind a `Pin` pointer. We only need to think about pinning when items have
+internal references. Primitive values like numbers and booleans do not have any
+internal structure like that, so they are obviously safe. Neither do most types
+you normally work with in Rust. A `Vec`, for example, does not have any internal
+references it needs to keep up to date this way, so you can move it around
+without worrying. If you have a `Pin<Vec<String>>`, you would have to do
+everything via Pin’s safe but restrictive APIs, even though a `Vec<String>` is
+always safe to move if there are no other references to it. We need a way to
+tell the compiler that it is actually just fine to move items around in cases
+like these. For that, we have `Unpin`.
 
-We need a way to tell the compiler that it is actually just fine to move items
-around in cases like these where there is nothing to worry about. For that, we
-have `Unpin`. `Unpin` is a marker trait, like `Send` and `Sync`, which we saw in
-Chapter 16. Recall that marker traits have no functionality of their own. They
-exist only to tell the compiler that it is safe to use the type which implements
-a given trait in a particular context. `Unpin` informs the compiler that a given
-type does *not* need to uphold any particular guarantees about whether the value
-in question can be moved.
+`Unpin` is a marker trait, like `Send` and `Sync`, which we saw in Chapter 16.
+Recall that marker traits have no functionality of their own. They exist only to
+tell the compiler that it is safe to use the type which implements a given trait
+in a particular context. `Unpin` informs the compiler that a given type does
+*not* need to uphold any particular guarantees about whether the value in
+question can be moved.
 
 Just like `Send` and `Sync`, the compiler implements `Unpin` automatically for
-most types, and implementing it manually is unsafe. That is because you have to
-make sure that the type for which you are implementing `Unsafe` *never* moves
-data out from a reference that *needs* to be stable.
+all types where it can prove it is safe. Implementing `Unpin` manually is unsafe
+because it requires *you* to uphold all the guarantees which make `Pin` and
+`Unpin` safe yourself for a type with internal references. In practice, this is
+a very rare thing to implement yourself!
 
 > Note: This combination of `Pin` and `Unpin` allows a whole class of complex
 > types to be safe in Rust which are otherwise difficult to implement because
-> they are *self-referential*. That is, they are data structures where one part
-> of the structure refers to another internally. As we have seen, futures can
-> match that description, so self-referential types which require `Pin` show up
-> *most* commonly in async Rust today, but you might—very rarely!—see it in
-> other contexts, too.
+> they are self-referential. Types which require `Pin` show up *most* commonly
+> in async Rust today, but you might—very rarely!—see it in other contexts, too.
+>
+> The specific mechanics for how `Pin` and `Unpin` work under the hood are
+> covered extensively in the API documentation for `std::pin`, so if you would
+> like to understand them more deeply, that is a great place to start.
 
-Now we know enough to understand the error message from above. The problem is
-that the futures produced by an async block are *not* pinned by default.
-Strictly: they implement `!Unpin` to opt out of being copyable by default the
-way most types are. We need to pin them explicitly.
+Now we know enough to fix the last errors with `join_all`. We tried to move the
+futures produced by an async blocks into a `Vec<Box<dyn Future<Output = ()>>>`,
+but as we have seen, those futures may have internal references, so they do not
+implement `Unpin`. They need to be pinned, and then we can pass the `Pin` type
+into the `Vec`, confident that the underlying data in the futures will *not* be
+moved.
 
-Now that we have an idea what that error message was telling us, we can finally
-get our `join_all` call to compile! First, we need to explicitly annotate
-`futures` as referring to a pinned `Box` of futures. Second, we actually need to
-pin the futures, which we can do using the handy `Box::pin` API, which exists
-for exactly this. Putting that together, we end up with the code in Listing
-17-23.
+Listing 17-17 shows how we put this all into practice. First, we update the type
+annotation for `futures`, with a `Pin` wrapping each `Box`. Second, we use
+`Box::pin` to pin the futures themselves.
 
-<Listing number="17-23" caption="Using `Pin` and `Box::pin` to make the `Vec` type check" file-name="src/main.rs">
+<Listing number="17-17" caption="Using `Pin` and `Box::pin` to make the `Vec` type check" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-17/src/main.rs:here}}
 ```
 
 </Listing>
@@ -432,60 +391,55 @@ actually *need* the heap allocation, after all: these futures are local to this
 particular function. As noted above, `Pin` is itself a smart pointer, so we can
 get the benefit of having a single type in the `Vec`—the original reason we
 reached for `Box`—without doing a heap allocation. We can use `Pin` directly
-instead.
+with each future, using the `std::pin::pin` macro.
 
-The `std::pin::pin` macro exists to do just that for values. However, we must
-still be explicit about the type of the pinned reference; otherwise Rust will
-still not know to interpret these as dynamic trait objects, which is what we
-need them to be in the `Vec`. We therefore `pin!` each future when we define it,
-and define `futures` as a `Vec` containing pinned mutable references to the
-dynamic `Future` type, as in Listing 17-24.
+However, we must still be explicit about the type of the pinned reference;
+otherwise Rust will still not know to interpret these as dynamic trait objects,
+which is what we need them to be in the `Vec`. We therefore `pin!` each future
+when we define it, and define `futures` as a `Vec` containing pinned mutable
+references to the dynamic `Future` type, as in Listing 17-18.
 
-<Listing number="17-24" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
+<Listing number="17-18" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-24/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-18/src/main.rs:here}}
 ```
 
 </Listing>
-
-This keeps everything on the stack, which is a nice little performance win, but
-it is still a lot of explicit types, which is quite unusual for Rust!
 
 There is another, more serious, issue as well. We got this far by ignoring the
-fact that we might have different `Output` types. For example, in Listing 17-25,
-the anonymous future type for `a` implements `Future<Output = u32>`, the
-anonymous future type for `b` implements `Future<Output = &str>`, and the
-anonymous future type for `c` implements `Future<Output = bool>`. We can use
-`trpl::join!` to await them together, since it accepts futures of different
-types.
+fact that we might have different `Output` types. For example, in Listing 17-19,
+the anonymous future for `a` implements `Future<Output = u32>`, the anonymous
+future for `b` implements `Future<Output = &str>`, and the anonymous future for
+`c` implements `Future<Output = bool>`.
 
-<Listing number="17-25" caption="Three futures with distinct types" file-name="src/main.rs">
+<Listing number="17-19" caption="Three futures with distinct types" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-25/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-19/src/main.rs:here}}
 ```
 
 </Listing>
 
-We cannot use `trpl::join_all` with these futures, though, because
-we will never be able to make them have the same type. (Remember, that error is
-what got us started on this adventure with `Pin`!)
+We can use `trpl::join!` to await them, because it allows you to pass in
+multiple future types and produces a tuple of those htypes. We *cannot* use
+`trpl::join_all`, because it requires the futures passed in all to have the same
+type. (Remember, that error is what got us started on this adventure with
+`Pin`!)
 
-We have a basic tradeoff here: we can either deal with a dynamic number of
+This is a fundamental tradeoff: we can either deal with a dynamic number of
 futures with `join_all`, as long as they all have the same type, or we can deal
 with a set number of futures with the `join` functions or the `join!` macro,
 even if they have different types. This is the same as working with any other
-type in Rust, though: futures are not special, even though we have some nice
-syntax for working with them, and that is a good thing!
+types in Rust, though. Futures are not special, even though we have some nice
+syntax for working with them, and that is a good thing.
 
-In practice, you will usually work directly with `async` and `.await`, and only
-as a secondary tool reach for the functions like `join` or `join_all`, or their
-corresponding macro equivalents. Likewise, you will only need to reach for `pin`
-now and again to use them *with* those APIs. These kinds of tools are mostly
-handy for building frameworks, or especially when you are building a runtime
-itself, rather than for day to day Rust code. When you see them, though, now you
-will know what to do!
+In practice, you will usually work directly with `async` and `.await`, and
+secondarily with functions and macros like `join` or `join_all`. You will only
+need to reach for `pin` now and again to use them with those APIs. `Pin` and
+`Unpin` are mostly important for building lower-level libraries, or when you are
+building a runtime itself, rather than for day to day Rust code. When you see
+them, though, now you will know what to do!
 
 [collections]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: ch12-03-improving-error-handling-and-modularity.html

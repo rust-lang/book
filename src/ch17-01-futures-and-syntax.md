@@ -282,18 +282,24 @@ state machine, as if you wrote something like this:
 
 ```rust
 enum MyAsyncStateMachine {
-    FirstAwaitPoint(/* the state used after the first await point */),
-    SecondAwaitPoint(/* the state used after the second await point */),
+    FirstAwaitPoint {
+        // the state used up to the first await point...
+    },
+    SecondAwaitPoint {
+        // the state used up to the second await point...
+    },
     // etc. for each `.await` point...
 }
 ```
 
 Writing that out by hand would be tedious and error-prone, especially when
-making changes to code later. Instead, async Rust creates and manages the state
-machine data structures for us. (If you’re wondering: yep, the normal borrowing
-and ownership rules around data structures all apply. Happily, the compiler also
-handles checking those for us, and has good error messages. We will work through
-a few of those later in the chapter!)
+making changes to code later. Instead, the Rust compiler creates and manages the
+state machine data structures for async code automatically.
+
+If you’re wondering: yep, the normal borrowing and ownership rules around data
+structures all apply. Happily, the compiler also handles checking those for us,
+and has good error messages. We will work through a few of those later in the
+chapter!
 
 Now we can understand why the compiler stopped us from making `main` itself an
 async function in Listing 17-3. If `main` were an async function, something else
