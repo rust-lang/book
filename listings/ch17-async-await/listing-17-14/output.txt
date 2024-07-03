@@ -1,14 +1,15 @@
 $ cargo run
+    Updating crates.io index
    Compiling proc-macro2 v1.0.82
    Compiling unicode-ident v1.0.12
    Compiling autocfg v1.3.0
-   Compiling futures-core v0.3.30
-   Compiling libc v0.2.154
-   Compiling futures-sink v0.3.30
    Compiling pin-project-lite v0.2.14
-   Compiling pin-utils v0.1.0
-   Compiling futures-io v0.3.30
+   Compiling libc v0.2.154
+   Compiling futures-core v0.3.30
+   Compiling futures-sink v0.3.30
    Compiling futures-task v0.3.30
+   Compiling futures-io v0.3.30
+   Compiling pin-utils v0.1.0
    Compiling memchr v2.7.2
    Compiling futures-channel v0.3.30
    Compiling slab v0.4.9
@@ -16,12 +17,13 @@ $ cargo run
    Compiling quote v1.0.36
    Compiling tokio v1.37.0
    Compiling syn v2.0.63
+   Compiling tokio-stream v0.1.15
    Compiling futures-macro v0.3.30
    Compiling futures-util v0.3.30
    Compiling futures-executor v0.3.30
    Compiling futures v0.3.30
    Compiling trpl v0.1.0 (/Users/chris/dev/rust-lang/book/packages/trpl)
-   Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-18)
+   Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-14)
 error[E0308]: mismatched types
   --> src/main.rs:43:37
    |
@@ -48,6 +50,5 @@ error[E0308]: mismatched types
    |
    = note: expected `async` block `{async block@src/main.rs:8:23: 20:10}`
               found `async` block `{async block@src/main.rs:22:22: 26:10}`
-
-For more information about this error, try `rustc --explain E0308`.
-error: could not compile `async_await` (bin "async_await") due to 1 previous error
+   = note: no two async blocks, even if identical, have the same type
+   = help: consider pinning your async block and and casting it to a trait object
