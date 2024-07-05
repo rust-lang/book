@@ -11,10 +11,6 @@ error[E0382]: borrow of moved value: `val`
    |                          ^^^^^ value borrowed here after move
    |
    = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
-help: consider cloning the value if the performance cost is acceptable
-   |
-9  |         tx.send(val.clone()).unwrap();
-   |                    ++++++++
 
 For more information about this error, try `rustc --explain E0382`.
 error: could not compile `message-passing` (bin "message-passing") due to 1 previous error

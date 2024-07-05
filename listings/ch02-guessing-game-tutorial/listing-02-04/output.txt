@@ -18,7 +18,7 @@ error[E0308]: mismatched types
    = note: expected reference `&String`
               found reference `&{integer}`
 note: method defined here
-  --> /rustc/9b00956e56009bab2aa15d7bff10916599e3d6d6/library/core/src/cmp.rs:836:8
+  --> /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/core/src/cmp.rs:840:8
 
 For more information about this error, try `rustc --explain E0308`.
 error: could not compile `guessing_game` (bin "guessing_game") due to 1 previous error
