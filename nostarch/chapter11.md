@@ -100,25 +100,29 @@ cd ../../..
 -->
 
 ```
+pub fn add(left: usize, right: usize) -> usize {
+    left + right
+}
+
 #[cfg(test)]
 mod tests {
-  1 #[test]
+    use super::*;
+
+    #[test]
     fn it_works() {
-        let result = 2 + 2;
-      2 assert_eq!(result, 4);
+        let result = add(2, 2);
+        assert_eq!(result, 4);
     }
 }
 ```
 
-Listing 11-1: The test module and function generated automatically by `cargo
-new`
+Listing 11-1: The code generated automatically by <code>cargo new</code>
 
-For now, let’s ignore the top two lines and focus on the function. Note the
-`#[test]` annotation [1]: this attribute indicates this is a test function, so
-the test runner knows to treat this function as a test. We might also have
-non-test functions in the `tests` module to help set up common scenarios or
-perform common operations, so we always need to indicate which functions are
-tests.
+For now, let’s focus solely on the `it_works` function. Note the `#[test]`
+annotation: this attribute indicates this is a test function, so the test
+runner knows to treat this function as a test. We might also have non-test
+functions in the `tests` module to help set up common scenarios or perform
+common operations, so we always need to indicate which functions are tests.
 
 The example function body uses the `assert_eq!` macro to assert that `result`,
 which contains the result of adding 2 and 2, equals 4. This assertion serves as
@@ -132,9 +136,8 @@ The `cargo test` command runs all tests in our project, as shown in Listing
 ```
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished test [unoptimized + debuginfo] target(s) in 0.57s
-     Running unittests src/lib.rs (target/debug/deps/adder-
-92948b65e88960b4)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.57s
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 running 1 test
 test tests::it_works ... ok
@@ -151,24 +154,23 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 Listing 11-2: The output from running the automatically generated test
 
-Cargo compiled and ran the test. We see the line `running 1 test` [1]. The next
-line shows the name of the generated test function, called `it_works`, and that
-the result of running that test is `ok` [2]. The overall summary `test result:
-ok.` [3] means that all the tests passed, and the portion that reads `1 passed;
-0 failed` totals the number of tests that passed or failed.
+Cargo compiled and ran the test. We see the line `running 1 test`. The next
+line shows the name of the generated test function, called `tests::it_works`,
+and that the result of running that test is `ok`. The overall summary `test result: ok.` means that all the tests passed, and the portion that reads `1 passed; 0 failed` totals the number of tests that passed or failed.
 
 It’s possible to mark a test as ignored so it doesn’t run in a particular
-instance; we’ll cover that in “Ignoring Some Tests Unless Specifically
-Requested” on page XX. Because we haven’t done that here, the summary shows `0
-ignored`. We can also pass an argument to the `cargo test` command to run only
-tests whose name matches a string; this is called *filtering* and we’ll cover
-it in “Running a Subset of Tests by Name” on page XX. Here we haven’t filtered
-the tests being run, so the end of the summary shows `0 filtered out`.
+instance; we’ll cover that in the “Ignoring Some Tests Unless Specifically
+Requested” section later in this chapter. Because we
+haven’t done that here, the summary shows `0 ignored`.
 
 The `0 measured` statistic is for benchmark tests that measure performance.
 Benchmark tests are, as of this writing, only available in nightly Rust. See
 the documentation about benchmark tests at *../unstable-book/library-features/test.html* to learn more.
 
+We can pass an argument to the `cargo test` command to run only tests whose
+name matches a string; this is called *filtering* and we’ll cover that in the
+“Running a Subset of Tests by Name” section. Here we
+haven’t filtered the tests being run, so the end of the summary shows `0 filtered out`.
 
 The next part of the test output starting at `Doc-tests adder` is for the
 results of any documentation tests. We don’t have any documentation tests yet,
@@ -184,11 +186,17 @@ the `it_works` function to a different name, such as `exploration`, like so:
 Filename: src/lib.rs
 
 ```
+pub fn add(left: usize, right: usize) -> usize {
+    left + right
+}
+
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn exploration() {
-        let result = 2 + 2;
+        let result = add(2, 2);
         assert_eq!(result, 4);
     }
 }
@@ -227,11 +235,18 @@ is to call the `panic!` macro. Enter the new test as a function named
 Filename: src/lib.rs
 
 ```
+pub fn add(left: usize, right: usize) -> usize {
+    left + right
+}
+
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn exploration() {
-        assert_eq!(2 + 2, 4);
+        let result = add(2, 2);
+        assert_eq!(result, 4);
     }
 
     #[test]
@@ -260,9 +275,9 @@ test tests::exploration ... ok
 failures:
 
 ---- tests::another stdout ----
-thread 'main' panicked at 'Make this test fail', src/lib.rs:10:9
-note: run with `RUST_BACKTRACE=1` environment variable to display
-a backtrace
+thread 'tests::another' panicked at src/lib.rs:17:9:
+Make this test fail
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 
 failures:
@@ -270,7 +285,7 @@ failures:
 
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-error: test failed, to rerun pass '--lib'
+error: test failed, to rerun pass `--lib`
 ```
 
 Listing 11-4: Test results when one test passes and one test fails
@@ -284,8 +299,8 @@ Instead of `ok`, the line `test tests::another` shows `FAILED`. Two new
 sections appear between the individual results and the summary: the first
 displays the detailed reason for each test failure. In this case, we get the
 details that `another` failed because it `panicked at 'Make this test fail'` on
-line 10 in the *src/lib.rs* file. The next section [3] lists just the names of
-all the failing tests, which is useful when there are lots of tests and lots of
+line 17 in the *src/lib.rs* file. The next section lists just the names of all
+the failing tests, which is useful when there are lots of tests and lots of
 detailed failing test output. We can use the name of a failing test to run just
 that test to more easily debug it; we’ll talk more about ways to run tests in
 the “Controlling How Tests Are Run” section.
@@ -360,12 +375,13 @@ mod tests {
 
 Listing 11-6: A test for <code>can_hold</code> that checks whether a larger rectangle can indeed hold a smaller rectangle
 
-Note that we’ve added a new line inside the `tests` module: `use super::*;`
-[1]. The `tests` module is a regular module that follows the usual visibility
-rules we covered in “Paths for Referring to an Item in the Module Tree” on page
-XX. Because the `tests` module is an inner module, we need to bring the code
-under test in the outer module into the scope of the inner module. We use a
-glob here, so anything we define in the outer module is available to this
+Note the `use super::*;` line inside the `tests` module. The `tests` module is
+a regular module that follows the usual visibility rules we covered in Chapter
+7 in the “Paths for Referring to an Item in the Module
+Tree”
+section. Because the `tests` module is an inner module, we need to bring the
+code under test in the outer module into the scope of the inner module. We use
+a glob here, so anything we define in the outer module is available to this
 `tests` module.
 
 We’ve named our test `larger_can_hold_smaller`, and we’ve created the two
@@ -476,10 +492,9 @@ test tests::smaller_cannot_hold_larger ... ok
 failures:
 
 ---- tests::larger_can_hold_smaller stdout ----
-thread 'main' panicked at 'assertion failed:
-larger.can_hold(&smaller)', src/lib.rs:28:9
-note: run with `RUST_BACKTRACE=1` environment variable to display
-a backtrace
+thread 'tests::larger_can_hold_smaller' panicked at src/lib.rs:28:9:
+assertion failed: larger.can_hold(&smaller)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 
 failures:
@@ -514,7 +529,7 @@ parameter, then we test this function using the `assert_eq!` macro.
 Filename: src/lib.rs
 
 ```
-pub fn add_two(a: i32) -> i32 {
+pub fn add_two(a: usize) -> usize {
     a + 2
 }
 
@@ -524,7 +539,8 @@ mod tests {
 
     #[test]
     fn it_adds_two() {
-        assert_eq!(4, add_two(2));
+        let result = add_two(2);
+        assert_eq!(result, 4);
     }
 }
 ```
@@ -552,15 +568,16 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 ```
 
-We pass `4` as the argument to `assert_eq!`, which is equal to the result of
-calling `add_two(2)`. The line for this test is `test tests::it_adds_two ...
-ok`, and the `ok` text indicates that our test passed!
+We create a variable named `result` that holds the result of calling
+`add_two(2)`. Then we pass `result` and `4` as the arguments to `assert_eq!`.
+The output line for this test is `test tests::it_adds_two ... ok`, and the `ok`
+text indicates that our test passed!
 
 Let’s introduce a bug into our code to see what `assert_eq!` looks like when it
 fails. Change the implementation of the `add_two` function to instead add `3`:
 
 ```
-pub fn add_two(a: i32) -> i32 {
+pub fn add_two(a: usize) -> usize {
     a + 3
 }
 ```
@@ -579,33 +596,35 @@ test tests::it_adds_two ... FAILED
 failures:
 
 ---- tests::it_adds_two stdout ----
-1 thread 'main' panicked at 'assertion failed: `(left == right)`
-2   left: `4`,
-3  right: `5`', src/lib.rs:11:9
-note: run with `RUST_BACKTRACE=1` environment variable to display
-a backtrace
+thread 'tests::it_adds_two' panicked at src/lib.rs:12:9:
+assertion `left == right` failed
+  left: 5
+ right: 4
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
 
 failures:
     tests::it_adds_two
 
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0
-filtered out; finished in 0.00s
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
 ```
 
 Our test caught the bug! The `it_adds_two` test failed, and the message tells
-us that the assertion that failed was `assertion failed: `(left == right)`` [1]
-and what the `left` [2] and `right` [3] values are. This message helps us start
-debugging: the `left` argument was `4` but the `right` argument, where we had
-`add_two(2)`, was `5`. You can imagine that this would be especially helpful
-when we have a lot of tests going on.
+us ``assertion `left == right` failed`` and what the `left` and `right` values
+are. This message helps us start debugging: the `left` argument, where we had
+the result of calling `add_two(2)`, was `5` but the `right` argument was `4`.
+You can imagine that this would be especially helpful when we have a lot of
+tests going on.
 
 Note that in some languages and test frameworks, the parameters to equality
 assertion functions are called `expected` and `actual`, and the order in which
 we specify the arguments matters. However, in Rust, they’re called `left` and
 `right`, and the order in which we specify the value we expect and the value
 the code produces doesn’t matter. We could write the assertion in this test as
-`assert_eq!(add_two(2), 4)`, which would result in the same failure message
-that displays `assertion failed: `(left == right)``.
+`assert_eq!(4, result)`, which would produce the same failure message
+that displays `` assertion failed: `(left == right)` ``.
 
 The `assert_ne!` macro will pass if the two values we give it are not equal and
 fail if they’re equal. This macro is most useful for cases when we’re not sure
@@ -693,10 +712,9 @@ test tests::greeting_contains_name ... FAILED
 failures:
 
 ---- tests::greeting_contains_name stdout ----
-thread 'main' panicked at 'assertion failed:
-result.contains(\"Carol\")', src/lib.rs:12:9
-note: run with `RUST_BACKTRACE=1` environment variable to display
-a backtrace
+thread 'tests::greeting_contains_name' panicked at src/lib.rs:12:9:
+assertion failed: result.contains("Carol")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 
 failures:
@@ -738,10 +756,17 @@ test tests::greeting_contains_name ... FAILED
 failures:
 
 ---- tests::greeting_contains_name stdout ----
-thread 'main' panicked at 'Greeting did not contain name, value
-was `Hello!`', src/lib.rs:12:9
-note: run with `RUST_BACKTRACE=1` environment variable to display
-a backtrace
+thread 'tests::greeting_contains_name' panicked at src/lib.rs:12:9:
+Greeting did not contain name, value was `Hello!`
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    tests::greeting_contains_name
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
 ```
 
 We can see the value we actually got in the test output, which would help us
@@ -774,10 +799,7 @@ pub struct Guess {
 impl Guess {
     pub fn new(value: i32) -> Guess {
         if value < 1 || value > 100 {
-            panic!(
-                "Guess value must be between 1 and 100, got {}.",
-                value
-            );
+            panic!("Guess value must be between 1 and 100, got {value}.");
         }
 
         Guess { value }
@@ -829,10 +851,7 @@ that the `new` function will panic if the value is greater than 100:
 impl Guess {
     pub fn new(value: i32) -> Guess {
         if value < 1 {
-            panic!(
-                "Guess value must be between 1 and 100, got {}.",
-                value
-            );
+            panic!("Guess value must be between 1 and 100, got {value}.");
         }
 
         Guess { value }
@@ -887,13 +906,11 @@ impl Guess {
     pub fn new(value: i32) -> Guess {
         if value < 1 {
             panic!(
-                "Guess value must be greater than or equal to 1, got {}.",
-                value
+                "Guess value must be greater than or equal to 1, got {value}."
             );
         } else if value > 100 {
             panic!(
-                "Guess value must be less than or equal to 100, got {}.",
-                value
+                "Guess value must be less than or equal to 100, got {value}."
             );
         }
 
@@ -928,20 +945,15 @@ fails, let’s again introduce a bug into our code by swapping the bodies of the
 `if value < 1` and the `else if value > 100` blocks:
 
 ```
-// src/lib.rs
---snip--
-if value < 1 {
-    panic!(
-        "Guess value must be less than or equal to 100, got {}.",
-        value
-    );
-} else if value > 100 {
-    panic!(
-        "Guess value must be greater than or equal to 1, got {}.",
-        value
-    );
-}
---snip--
+        if value < 1 {
+            panic!(
+                "Guess value must be less than or equal to 100, got {value}."
+            );
+        } else if value > 100 {
+            panic!(
+                "Guess value must be greater than or equal to 1, got {value}."
+            );
+        }
 ```
 
 This time when we run the `should_panic` test, it will fail:
@@ -958,8 +970,8 @@ test tests::greater_than_100 - should panic ... FAILED
 failures:
 
 ---- tests::greater_than_100 stdout ----
-thread 'main' panicked at 'Guess value must be greater than or equal to 1, got
-200.', src/lib.rs:13:13
+thread 'tests::greater_than_100' panicked at src/lib.rs:12:13:
+Guess value must be greater than or equal to 1, got 200.
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 note: panic did not contain expected string
       panic message: `"Guess value must be greater than or equal to 1, got 200."`,
@@ -974,10 +986,8 @@ error: test failed, to rerun pass `--lib`
 ```
 
 The failure message indicates that this test did indeed panic as we expected,
-but the panic message did not include the expected string `'Guess value must be
-less than or equal to 100'`. The panic message that we did get in this case was
-`Guess value must be greater than or equal to 1, got 200`. Now we can start
-figuring out where our bug is!
+but the panic message did not include the expected string `less than or equal to 100`. The panic message that we did get in this case was `Guess value must be greater than or equal to 1, got 200.` Now we can start figuring out where
+our bug is!
 
 ### Using `Result<T, E>` in Tests
 
@@ -985,17 +995,16 @@ Our tests so far all panic when they fail. We can also write tests that use
 `Result<T, E>`! Here’s the test from Listing 11-1, rewritten to use `Result<T, E>` and return an `Err` instead of panicking:
 
 ```
-#[cfg(test)]
-mod tests {
     #[test]
     fn it_works() -> Result<(), String> {
-        if 2 + 2 == 4 {
+        let result = add(2, 2);
+
+        if result == 4 {
             Ok(())
         } else {
             Err(String::from("two plus two does not equal four"))
         }
     }
-}
 ```
 
 The `it_works` function now has the `Result<(), String>` return type. In the
@@ -1090,13 +1099,13 @@ mod tests {
     #[test]
     fn this_test_will_pass() {
         let value = prints_and_returns_10(4);
-        assert_eq!(10, value);
+        assert_eq!(value, 10);
     }
 
     #[test]
     fn this_test_will_fail() {
         let value = prints_and_returns_10(8);
-        assert_eq!(5, value);
+        assert_eq!(value, 5);
     }
 }
 ```
@@ -1118,12 +1127,13 @@ test tests::this_test_will_pass ... ok
 failures:
 
 ---- tests::this_test_will_fail stdout ----
-1 I got the value 8
-thread 'main' panicked at 'assertion failed: `(left == right)`
-  left: `5`,
- right: `10`', src/lib.rs:19:9
-note: run with `RUST_BACKTRACE=1` environment variable to display
-a backtrace
+I got the value 8
+thread 'tests::this_test_will_fail' panicked at src/lib.rs:19:9:
+assertion `left == right` failed
+  left: 10
+ right: 5
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
 
 failures:
     tests::this_test_will_fail
@@ -1171,11 +1181,12 @@ failures:
 
 ---- tests::this_test_will_fail stdout ----
 I got the value 8
-thread 'main' panicked at 'assertion failed: `(left == right)`
-  left: `5`,
- right: `10`', src/lib.rs:19:9
-note: run with `RUST_BACKTRACE=1` environment variable to display
-a backtrace
+thread 'tests::this_test_will_fail' panicked at src/lib.rs:19:9:
+assertion `left == right` failed
+  left: 5
+ right: 10
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
 
 failures:
     tests::this_test_will_fail
@@ -1199,7 +1210,7 @@ our `add_two` function, as shown in Listing 11-11, and choose which ones to run.
 Filename: src/lib.rs
 
 ```
-pub fn add_two(a: i32) -> i32 {
+pub fn add_two(a: usize) -> usize {
     a + 2
 }
 
@@ -1209,17 +1220,20 @@ mod tests {
 
     #[test]
     fn add_two_and_two() {
-        assert_eq!(4, add_two(2));
+        let result = add_two(2);
+        assert_eq!(result, 4);
     }
 
     #[test]
     fn add_three_and_two() {
-        assert_eq!(5, add_two(3));
+        let result = add_two(3);
+        assert_eq!(result, 5);
     }
 
     #[test]
     fn one_hundred() {
-        assert_eq!(102, add_two(100));
+        let result = add_two(100);
+        assert_eq!(result, 102);
     }
 }
 ```
@@ -1257,9 +1271,8 @@ We can pass the name of any test function to `cargo test` to run only that test:
 ```
 $ cargo test one_hundred
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished test [unoptimized + debuginfo] target(s) in 0.69s
-     Running unittests src/lib.rs (target/debug/deps/adder-
-92948b65e88960b4)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.69s
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 running 1 test
 test tests::one_hundred ... ok
@@ -1284,9 +1297,8 @@ run those two by running `cargo test add`:
 ```
 $ cargo test add
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished test [unoptimized + debuginfo] target(s) in 0.61s
-     Running unittests src/lib.rs (target/debug/deps/adder-
-92948b65e88960b4)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.61s
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 running 2 tests
 test tests::add_three_and_two ... ok
@@ -1312,16 +1324,21 @@ here:
 Filename: src/lib.rs
 
 ```
-#[test]
-fn it_works() {
-    let result = 2 + 2;
-    assert_eq!(result, 4);
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-#[ignore]
-fn expensive_test() {
-    // code that takes an hour to run
+    #[test]
+    fn it_works() {
+        let result = add(2, 2);
+        assert_eq!(result, 4);
+    }
+
+    #[test]
+    #[ignore]
+    fn expensive_test() {
+        // code that takes an hour to run
+    }
 }
 ```
 
@@ -1331,9 +1348,8 @@ Now when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
 ```
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished test [unoptimized + debuginfo] target(s) in 0.60s
-     Running unittests src/lib.rs (target/debug/deps/adder-
-92948b65e88960b4)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.60s
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 running 2 tests
 test tests::expensive_test ... ignored
@@ -1354,9 +1370,9 @@ the ignored tests, we can use `cargo test -- --ignored`:
 
 ```
 $ cargo test -- --ignored
-    Finished test [unoptimized + debuginfo] target(s) in 0.61s
-     Running unittests src/lib.rs (target/debug/deps/adder-
-92948b65e88960b4)
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.61s
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 running 1 test
 test expensive_test ... ok
@@ -1416,24 +1432,29 @@ this chapter, Cargo generated this code for us:
 Filename: src/lib.rs
 
 ```
+pub fn add(left: usize, right: usize) -> usize {
+    left + right
+}
+
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn it_works() {
-        let result = 2 + 2;
+        let result = add(2, 2);
         assert_eq!(result, 4);
     }
 }
 ```
 
-This code is the automatically generated `tests` module. The attribute `cfg`
-stands for *configuration* and tells Rust that the following item should only
-be included given a certain configuration option. In this case, the
-configuration option is `test`, which is provided by Rust for compiling and
-running tests. By using the `cfg` attribute, Cargo compiles our test code only
-if we actively run the tests with `cargo test`. This includes any helper
-functions that might be within this module, in addition to the functions
-annotated with `#[test]`.
+On the automatically generated `tests` module, the attribute `cfg` stands for
+*configuration* and tells Rust that the following item should only be included
+given a certain configuration option. In this case, the configuration option is
+`test`, which is provided by Rust for compiling and running tests. By using the
+`cfg` attribute, Cargo compiles our test code only if we actively run the tests
+with `cargo test`. This includes any helper functions that might be within this
+module, in addition to the functions annotated with `#[test]`.
 
 #### Testing Private Functions
 
@@ -1447,12 +1468,12 @@ Consider the code in Listing 11-12 with the private function `internal_adder`.
 Filename: src/lib.rs
 
 ```
-pub fn add_two(a: i32) -> i32 {
+pub fn add_two(a: usize) -> usize {
     internal_adder(a, 2)
 }
 
-fn internal_adder(a: i32, b: i32) -> i32 {
-    a + b
+fn internal_adder(left: usize, right: usize) -> usize {
+    left + right
 }
 
 #[cfg(test)]
@@ -1461,7 +1482,8 @@ mod tests {
 
     #[test]
     fn internal() {
-        assert_eq!(4, internal_adder(2, 2));
+        let result = internal_adder(2, 2);
+        assert_eq!(result, 4);
     }
 }
 ```
@@ -1470,11 +1492,12 @@ Listing 11-12: Testing a private function
 
 Note that the `internal_adder` function is not marked as `pub`. Tests are just
 Rust code, and the `tests` module is just another module. As we discussed in
-“Paths for Referring to an Item in the Module Tree” on page XX, items in child
-modules can use the items in their ancestor modules. In this test, we bring all
-of the `test` module’s parent’s items into scope with `use super::*`, and then
-the test can call `internal_adder`. If you don’t think private functions should
-be tested, there’s nothing in Rust that will compel you to do so.
+the “Paths for Referring to an Item in the Module Tree”
+section, items in child modules can use the items in their ancestor modules. In
+this test, we bring all of the `tests` module’s parent’s items into scope with
+`use super::*`, and then the test can call `internal_adder`. If you don’t think
+private functions should be tested, there’s nothing in Rust that will compel
+you to do so.
 
 ### Integration Tests
 
@@ -1513,19 +1536,19 @@ Enter the code in Listing 11-13 into the *tests/integration_test.rs* file.
 Filename: tests/integration_test.rs
 
 ```
-use adder;
+use adder::add_two;
 
 #[test]
 fn it_adds_two() {
-    assert_eq!(4, adder::add_two(2));
+    let result = add_two(2);
+    assert_eq!(result, 4);
 }
 ```
 
 Listing 11-13: An integration test of a function in the <code>adder</code> crate
 
 Each file in the *tests* directory is a separate crate, so we need to bring our
-library into each test crate’s scope. For that reason we add `use adder;` at
-the top of the code, which we didn’t need in the unit tests.
+library into each test crate’s scope. For that reason we add `use adder::add_two;` at the top of the code, which we didn’t need in the unit tests.
 
 We don’t need to annotate any code in *tests/integration_test.rs* with
 `#[cfg(test)]`. Cargo treats the *tests* directory specially and compiles files
@@ -1534,9 +1557,8 @@ in this directory only when we run `cargo test`. Run `cargo test` now:
 ```
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished test [unoptimized + debuginfo] target(s) in 1.31s
-     Running unittests src/lib.rs (target/debug/deps/adder-
-1082c4b063a8fbe6)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.31s
+     Running unittests src/lib.rs (target/debug/deps/adder-1082c4b063a8fbe6)
 
 running 1 test
 test tests::internal ... ok
@@ -1582,9 +1604,9 @@ followed by the name of the file:
 
 ```
 $ cargo test --test integration_test
-    Finished test [unoptimized + debuginfo] target(s) in 0.64s
-     Running tests/integration_test.rs
-(target/debug/deps/integration_test-82e7799c1bc62298)
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.64s
+     Running tests/integration_test.rs (target/debug/deps/integration_test-82e7799c1bc62298)
 
 running 1 test
 test it_adds_two ... ok
@@ -1691,14 +1713,16 @@ function from the `it_adds_two` test in *tests/integration_test.rs*:
 Filename: tests/integration_test.rs
 
 ```
-use adder;
+use adder::add_two;
 
 mod common;
 
 #[test]
 fn it_adds_two() {
     common::setup();
-    assert_eq!(4, adder::add_two(2));
+
+    let result = add_two(2);
+    assert_eq!(result, 4);
 }
 ```
 
