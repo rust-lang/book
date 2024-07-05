@@ -1,4 +1,4 @@
-## Working With More Futures
+## Working With More Than Two Futures
 
 When we switched from using two futures to three in the previous section, we
 also had to switch from using `join` to using `join3`. It would be annoying to
