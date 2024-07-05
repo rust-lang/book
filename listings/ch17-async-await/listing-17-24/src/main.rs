@@ -2,35 +2,31 @@ use std::{thread, time::Duration};
 
 fn main() {
     trpl::block_on(async {
-        // ANCHOR: here
+        // ANCHOR: yields
         let a = async {
             println!("'a' started.");
-            slow("a", 300);
+            slow("a", 30);
             trpl::yield_now().await;
-            slow("a", 100);
+            slow("a", 10);
             trpl::yield_now().await;
-            slow("a", 200);
-            trpl::yield_now().await;
-            slow("a", 900);
+            slow("a", 20);
             trpl::yield_now().await;
             println!("'a' finished.");
         };
 
         let b = async {
             println!("'b' started.");
-            slow("b", 750);
+            slow("b", 75);
             trpl::yield_now().await;
-            slow("b", 100);
+            slow("b", 10);
             trpl::yield_now().await;
-            slow("b", 150);
+            slow("b", 15);
             trpl::yield_now().await;
-            slow("b", 350);
-            trpl::yield_now().await;
-            slow("b", 150);
+            slow("b", 35);
             trpl::yield_now().await;
             println!("'b' finished.");
         };
-        // ANCHOR_end: here
+        // ANCHOR_END: yields
 
         trpl::race(a, b).await;
     });

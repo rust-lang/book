@@ -7,28 +7,24 @@ fn main() {
 
         let a = async {
             println!("'a' started.");
-            slow("a", 300);
+            slow("a", 30);
             trpl::sleep(one_ms).await;
-            slow("a", 100);
+            slow("a", 10);
             trpl::sleep(one_ms).await;
-            slow("a", 200);
-            trpl::sleep(one_ms).await;
-            slow("a", 900);
+            slow("a", 20);
             trpl::sleep(one_ms).await;
             println!("'a' finished.");
         };
 
         let b = async {
             println!("'b' started.");
-            slow("b", 750);
+            slow("b", 75);
             trpl::sleep(one_ms).await;
-            slow("b", 100);
+            slow("b", 10);
             trpl::sleep(one_ms).await;
-            slow("b", 150);
+            slow("b", 15);
             trpl::sleep(one_ms).await;
-            slow("b", 350);
-            trpl::sleep(one_ms).await;
-            slow("b", 150);
+            slow("b", 35);
             trpl::sleep(one_ms).await;
             println!("'b' finished.");
         };

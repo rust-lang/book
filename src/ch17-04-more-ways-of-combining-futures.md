@@ -1,113 +1,77 @@
 ## More Ways of Combining Futures
 
-Thus far, we have only used the `join` family of functions and macros. When we
-“join” on some collection of futures, we require *all* of them to finish before
-we move on. Sometimes, though, we only need *some* future from a set to finish
-before we move on—kind of like racing one future against another. This operation
-is often named `race` for exactly that reason.
+When we “join” futures with the `join` family of functions and macros, we
+require *all* of them to finish before we move on. Sometimes, though, we only
+need *some* future from a set to finish before we move on—kind of like racing
+one future against another. This operation is often named `race` for exactly
+that reason.
 
-In Listing 17-26, we use `race` to run two futures, `slow` and `fast`, against
+In Listing 17-20, we use `race` to run two futures, `slow` and `fast`, against
 each other. Each one prints a message when it starts running, pauses for some
 amount of time by calling and awaiting `sleep`, and then prints another message
 when it finishes. Then we pass both to `trpl::race` and wait for one of them to
 finish. (The outcome here won’t be too surprising: `fast` wins!)
 
-<Listing number="17-26" caption="Using `race` to get the result of whichever future finishes first" file-name="src/main.rs">
+<Listing number="17-20" caption="Using `race` to get the result of whichever future finishes first" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-26/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-20/src/main.rs:here}}
 ```
 
 </Listing>
 
-One other thing to notice: if you flip the order of the arguments to `race`, the
-order of the start messages changes, even though the `fast` future always
-completes first. That is because the implementation of this particular `race`
-function is not *fair*. It always runs the futures passed as arguments in the
-order they are passed. Other implementations *are* fair, and will randomly
-choose which future to start first.
+Notice that if you flip the order of the arguments to `race`, the order of the
+“started” messages changes, even though the `fast` future always completes
+first. That is because the implementation of this particular `race` function is
+not fair. It always runs the futures passed as arguments in the order they are
+passed. Other implementations *are* fair, and will randomly choose which future
+to poll first. Regardless of whether the implementation of race we are using is
+fair, though, *one* of the futures will run up to the first `.await` in its body
+before another task can start.
 
-Regardless of whether the implementation of race we are using is fair, though,
-*one* of the futures will run up to the first `.await` in its body before
-another task can start.
+Recall from [“What Are Futures?”][futures] that at each await point, Rust pauses
+the async block and hands control back to a runtime. The inverse is also true:
+Rust *only* pauses async blocks and hands control back to a runtime at an await
+point. Everything between await points is synchronous.
 
-To see why, recall from our discussion in [“What Are Futures?”][futures] that
-Rust compiles async blocks in a way that hands control back to the async runtime
-at each await point. That has an important corollary: async runtimes can only
-switch which future they are executing at await points. Everything in between
-await points is just normal synchronous Rust code. That means if you do a bunch
-of really expensive work in an async function without an `.await`, that future
-will block any other futures from making progress.
+That means if you do a bunch of work in an async block without an await point,
+that future will block any other futures from making progress. (You may
+sometimes hear this referred to as one future *starving* other futures. And this
+applies to threads, too!) In many cases, that may not be a big deal. However, if
+you are doing some kind of expensive setup or long-running work, or if you have
+a future which will keep doing some particular task indefinitely, you will need
+to think about when and where to hand control back to the runtime.
 
-> Note: You may sometimes hear this referred to as one future *starving* other
-> futures. The same thing applies to threads, too!
-
-That has another important consequence for using `race`, `join`, and other such
-helpers. *Some* future is going to run first, and everything up to the first
-await point in that future will run before any part of any other future gets a
-chance to run. For simple code, that may not be a big deal. However, if you are
-doing some kind of expensive setup or long-running work, or if you have a future
-which will keep doing some particular task indefinitely, you will need to think
-about when and where to hand control back to the runtime.
+But *how* would you hand control back to the runtime in those cases?
 
 ### Yielding
 
-Let’s consider a long-running operation. Here, we will simulate it using `sleep`
-inside the function, but in the real world it could be any of operations which
-might take a while, and which, critically, are *blocking*. Our `slow` helper
-function “slow” will just take a number of milliseconds to run, and sleep the
-thread for that long. This is intentionally not an async function, because the
-idea is to represent work that is *not* async.
+Let’s simulate a long-running operation. Listing 17-21 introduces a `slow`
+function which uses `std::thread::sleep` to block the current thread for some
+number of milliseconds. We can use `slow` to stand in for real-world operations
+which are both long-running and blocking.
 
-<Listing number="17-27" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
+<Listing number="17-21" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-27/src/main.rs:slow}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-21/src/main.rs:slow}}
 ```
 
 </Listing>
 
-In Listing 17-28, we use `slow` to emulate doing this kind of CPU-bound work in
+In Listing 17-22, we use `slow` to emulate doing this kind of CPU-bound work in
 a pair of futures. To begin, each future only hands control back to the runtime
 *after* carrying out a bunch of slow operations.
 
-<Listing number="17-28" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
+<Listing number="17-22" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-28/src/main.rs:slow-futures}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-22/src/main.rs:slow-futures}}
 ```
 
 </Listing>
 
 If you run this, you will see this output:
-
-```console
-{{#include ../listings/ch17-async-await/listing-17-28/output.txt}}
-```
-
-As with our earlier example, `race` still finishes when `a` finishes. There is
-no interleaving between the two futures, though. The `a` future does all of its
-work until the `trpl::sleep` call is awaited, then the `b` future does all of
-its work until its own `trpl::sleep` call is awaited, and then the `a` future
-completes. It would be better if both futures could make progress between their
-slow tasks. We need some way to hand control back to the runtime there—and we
-know that await points are the way to do that. However, that means we need
-something we can await!
-
-However, we can also see the handoff happening in this very example: if we
-removed the `trpl::sleep` at the end of the `a` future, it would complete
-without the `b` future running *at all*. Given that, maybe we could use the
-`sleep` function as a starting point, as in Listing 17-29.
-
-<Listing number="17-29" caption="Using `sleep` to let operations switch off making progress" file-name="src/main.rs">
-
-```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-29/src/main.rs:here}}
-```
-
-</Listing>
-
-Now the two futures’ work is interleaved, as we can see if we run it.
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -115,35 +79,72 @@ changes in the compiler -->
 
 ```text
 'a' started.
-'a' ran for 300ms
+'a' ran for 30ms
+'a' ran for 10ms
+'a' ran for 20ms
 'b' started.
-'b' ran for 750ms
-'a' ran for 100ms
-'b' ran for 100ms
-'a' ran for 200ms
-'b' ran for 150ms
-'a' ran for 900ms
+'b' ran for 75ms
+'b' ran for 10ms
+'b' ran for 15ms
 'b' ran for 350ms
 'a' finished.
 ```
 
+As with our earlier example, `race` still finishes as soon as `a` is done. There
+is no interleaving between the two futures, though. The `a` future does all of
+its work until the `trpl::sleep` call is awaited, then the `b` future does all
+of its work until its own `trpl::sleep` call is awaited, and then the `a` future
+completes. To allow both futures to make progress between their slow tasks, we
+need await points so we can hand control back to the runtime. That means we need
+something we can await!
 
-The `a` future still runs for a bit before handing off control to `b`, because
-it has some expensive work to do up front, but after that they just swap back
-and forth every time one of them hits an await point. In this case, we have done
-that after every call to `slow`, but we could break up the work however makes
-the most sense to us.
+We can already see this kind of handoff happening in Listing 17-22: if we
+removed the `trpl::sleep` at the end of the `a` future, it would complete
+without the `b` future running *at all*. Maybe we could use the `sleep` function
+as a starting point?
 
-However, we do not actually need to sleep to accomplish this. We just need to
-hand back control to the runtime. We can actually *yield* control back to the
-runtime, using a function named `yield_now`. It does just what it says: hands
-control back to the runtime, so that the runtime can check whether any other
-tasks are ready to make progress.
-
-<Listing number="17-30" caption="Using `yield_now` to let operations switch off making progress" file-name="src/main.rs">
+<Listing number="17-23" caption="Using `sleep` to let operations switch off making progress" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-30/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:here}}
+```
+
+</Listing>
+
+In Listing 17-23, we add `trpl::sleep` calls with await points between each call
+to `slow`. Now the two futures’ work is interleaved:
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+
+```text
+'a' started.
+'a' ran for 30ms
+'b' started.
+'b' ran for 75ms
+'a' ran for 10ms
+'b' ran for 10ms
+'a' ran for 20ms
+'b' ran for 15ms
+'a' finished.
+```
+
+The `a` future still runs for a bit before handing off control to `b`, because
+it calls `slow` before ever calling `trpl::sleep`, but after that the futures
+swap back and forth eaach time one of them hits an await point. In this case, we
+have done that after every call to `slow`, but we could break up the work
+however makes the most sense to us.
+
+We do not really want to *sleep* here, though: we want to make progress as fast
+as we can. We just need to hand back control to the runtime. We can do that
+directly, using the `yield_now` function. In Listing 17-24, we replace all those
+`sleep` calls with `yield_now`.
+
+<Listing number="17-24" caption="Using `yield_now` to let operations switch off making progress" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-24/src/main.rs:yields}}
 ```
 
 </Listing>
@@ -156,34 +157,34 @@ example, will always sleep for at least a millisecond, even if we pass it a
 lot in one millisecond!
 
 You can see this for yourself by setting up a little benchmark, like the one in
-Listing 17-31. (This is not an especially rigorous way to do performance
+Listing 17-25. (This is not an especially rigorous way to do performance
 testing, but it suffices to show the difference here.) Here, we skip all the
 status printing, pass a one-nanosecond `Duration` to `sleep`, let each future
 run by itself so that they do not interfere with each other, and get rid of all
 the status printing that we did to see the back-and-forth between tasks in
-Listings 17-29 and 17-30. Then we run for 1,000 iterations and see how long
+Listings 17-23 and 17-24. Then we run for 1,000 iterations and see how long
 `sleep` takes vs. `yield_now`.
 
-<Listing number="17-31" caption="Comparing the performance of `sleep` and `yield_now`" file-name="src/main.rs">
+<Listing number="17-25" caption="Comparing the performance of `sleep` and `yield_now`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-31/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-25/src/main.rs:here}}
 ```
 
 </Listing>
 
 The version with `yield_now` is *way* faster!
 
-> Note: This also means that async can be a useful tool even for CPU-bound
-> tasks, depending on what else your program is doing, because it provides a
-> useful tool for structuring the relationships between different parts of the
-> program. This is a form of *cooperative multitasking*, where each future has
-> both the power to determine when it hands over control via await points and
-> therefore also the *responsibility* to avoid blocking for too long. This is
-> how some Rust-based embedded operating systems work!
+> Note: This means that async can be a useful tool even for CPU-bound tasks,
+> depending on what else your program is doing, because it provides a useful
+> tool for structuring the relationships between different parts of the program.
+> This is a form of *cooperative multitasking*, where each future has both the
+> power to determine when it hands over control via await points and therefore
+> also the *responsibility* to avoid blocking for too long. This is how some
+> Rust-based embedded operating systems work!
 
-In real-world code, you will not usually be alternative regular function calls
-with await points on every single line, of course. The underlying dynamic is an
+In real-world code, you will not usually be alternating function calls with
+await points on every single line, of course. The underlying dynamic is an
 important one to keep in mind, though!
 
 ### Building Our Own Async Abstractions
@@ -228,7 +229,7 @@ We can write the same signature ourselves, as in Listing 17-33.
 Then, in the body of the function, we can `race` whatever future the caller
 passes with a `sleep` future.
 
-When we saw `race` earlier in Listing 17-26, we ignored its return type,
+When we saw `race` earlier in Listing 17-20, we ignored its return type,
 because we were just interested in seeing the behavior of `fast` and `slow` when
 we ran the program. Here, though, its return value tells us whether the future
 or the sleep finished first. With `race`, both futures passed as arguments can
