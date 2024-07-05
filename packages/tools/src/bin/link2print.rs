@@ -60,8 +60,12 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                    name.starts_with("profile") ||
                    name.starts_with("test") ||
                    name.starts_with("no_mangle") ||
+                   name.starts_with("cfg") ||
+                   name.starts_with("unoptimized") ||
+                   name.starts_with("ignore") ||
+                   name.starts_with("should_panic") ||
                    error_code.is_match(name) {
-                    return name.to_string()
+                    return format!("[{name}]")
                 }
 
                 let val = match caps.name("val") {
