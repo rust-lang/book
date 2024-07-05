@@ -50,8 +50,9 @@ cd listings/ch11-writing-automated-tests
 rm -rf listing-11-01
 cargo new listing-11-01 --lib --name adder
 cd listing-11-01
-cargo test
-git co output.txt
+echo "$ cargo test" > output.txt
+RUSTFLAGS="-A unused_variables -A dead_code" RUST_TEST_THREADS=1 cargo test >> output.txt 2>&1
+git diff output.txt # commit any relevant changes; discard irrelevant ones
 cd ../../..
 -->
 
