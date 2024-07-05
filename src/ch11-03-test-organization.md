@@ -41,14 +41,13 @@ this chapter, Cargo generated this code for us:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-01/src/lib.rs}}
 ```
 
-This code is the automatically generated `tests` module. The attribute `cfg`
-stands for *configuration* and tells Rust that the following item should only
-be included given a certain configuration option. In this case, the
-configuration option is `test`, which is provided by Rust for compiling and
-running tests. By using the `cfg` attribute, Cargo compiles our test code only
-if we actively run the tests with `cargo test`. This includes any helper
-functions that might be within this module, in addition to the functions
-annotated with `#[test]`.
+On the automatically generated `tests` module, the attribute `cfg` stands for
+*configuration* and tells Rust that the following item should only be included
+given a certain configuration option. In this case, the configuration option is
+`test`, which is provided by Rust for compiling and running tests. By using the
+`cfg` attribute, Cargo compiles our test code only if we actively run the tests
+with `cargo test`. This includes any helper functions that might be within this
+module, in addition to the functions annotated with `#[test]`.
 
 #### Testing Private Functions
 
