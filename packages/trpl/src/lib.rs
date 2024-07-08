@@ -13,8 +13,7 @@
 //!    release at some point.
 
 // For direct use within the `trpl` crate, *not* re-exported.
-use std::{future::Future, pin::pin, time::Duration};
-use tokio::time;
+use std::{future::Future, pin::pin};
 
 // Re-exports, to be used like `trpl::join`.
 pub use futures::{
@@ -65,22 +64,6 @@ pub fn block_on<F: Future>(future: F) -> F::Output {
     rt.block_on(future)
 }
 
-/// Race a future against a specified timeout duration.
-///
-/// Under the hood, this uses `tokio::time::timeout`, but instead of returning
-/// Tokio's internal error type in the case of a failure, this simply returns
-/// the duration which had elapsed. (It actually provides strictly *more* info
-/// than Tokio's error does, though it does not `impl Error`.)
-pub async fn timeout<F>(
-    duration: Duration,
-    future: F,
-) -> Result<F::Output, Duration>
-where
-    F: Future,
-{
-    time::timeout(duration, future).await.map_err(|_| duration)
-}
-
 /// Run two futures, taking whichever finishes first and canceling the other.
 ///
 /// Notice that this is built on [`futures::future::select`], which has the
@@ -91,6 +74,13 @@ where
 /// We use the `race` semantics, where the slower future is simply dropped, for
 /// the sake of simplicity in the examples: no need to deal with the tuple and
 /// intentionally ignore the second future this way!
+///
+/// Note that this only works as “simply” as it does because:
+///
+/// - It takes ownership of the futures.
+/// - It internally *pins* the futures.
+/// - It throws away (rather than returning) the unused future (which is why it
+///   can get away with pinning them).
 pub async fn race<A, B, F1, F2>(f1: F1, f2: F2) -> Either<A, B>
 where
     F1: Future<Output = A>,

@@ -9,9 +9,7 @@ fn main() {
             "Finally finished"
         };
 
-        // ANCHOR: main
         match timeout(Duration::from_secs(2), slow).await {
-            // ANCHOR_END: main
             Ok(message) => println!("Succeeded with '{message}'"),
             Err(duration) => {
                 println!("Failed after {} seconds", duration.as_secs())
@@ -24,8 +22,10 @@ async fn timeout<F: Future>(
     max_time: Duration,
     future: F,
 ) -> Result<F::Output, Duration> {
+    // ANCHOR: implementation
     match trpl::race(future, trpl::sleep(max_time)).await {
         Either::Left(output) => Ok(output),
         Either::Right(_) => Err(max_time),
     }
+    // ANCHOR_END: implementation
 }

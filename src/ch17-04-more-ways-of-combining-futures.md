@@ -73,9 +73,11 @@ a pair of futures. To begin, each future only hands control back to the runtime
 
 If you run this, you will see this output:
 
-<!-- Not extracting output because changes to this output aren't significant;
-the changes are likely to be due to the threads running differently rather than
-changes in the compiler -->
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-22/
+cargo run
+copy just the output
+-->
 
 ```text
 'a' started.
@@ -114,9 +116,11 @@ as a starting point?
 In Listing 17-23, we add `trpl::sleep` calls with await points between each call
 to `slow`. Now the two futures’ work is interleaved:
 
-<!-- Not extracting output because changes to this output aren't significant;
-the changes are likely to be due to the threads running differently rather than
-changes in the compiler -->
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-23/
+cargo run
+copy just the output
+-->
 
 ```text
 'a' started.
@@ -175,13 +179,13 @@ Listings 17-23 and 17-24. Then we run for 1,000 iterations and see how long
 
 The version with `yield_now` is *way* faster!
 
-> Note: This means that async can be a useful tool even for CPU-bound tasks,
-> depending on what else your program is doing, because it provides a useful
-> tool for structuring the relationships between different parts of the program.
-> This is a form of *cooperative multitasking*, where each future has both the
-> power to determine when it hands over control via await points and therefore
-> also the *responsibility* to avoid blocking for too long. This is how some
-> Rust-based embedded operating systems work!
+This means that async can be useful even for CPU-bound tasks, depending on what
+else your program is doing, because it provides a useful tool for structuring
+the relationships between different parts of the program. This is a form of
+*cooperative multitasking*, where each future has both the power to determine
+when it hands over control via await points. Each future therefore also has the
+*responsibility* to avoid blocking for too long. In some Rust-based embedded
+operating systems, this is the *only* kind of multitasking!
 
 In real-world code, you will not usually be alternating function calls with
 await points on every single line, of course. The underlying dynamic is an
@@ -189,55 +193,57 @@ important one to keep in mind, though!
 
 ### Building Our Own Async Abstractions
 
-Many of these patterns are common enough to warrant abstracting over. For
-example, the `trpl::timeout` function takes a `Duration` for the maximum time to
-run, but also takes a future to run, and produces a new future you can await,
-whose `Output` type is a `Result`. Listing 17-32 shows how we can use it. If
-the passed-in future finishes first, the output result will be `Ok`, with the
-result of that passed-in future. If the duration elapses before the passed-in
-future finishes, the result will be `Err` with the duration that elapsed.
+We can also compose futures together to create new patterns. For example, we can
+build a `timeout` function with async building blocks we already have. When we
+are done, the result will be another building block we could use to build up yet
+further async abstractions.
 
-<Listing number="17-32" caption="Using `timeout` to run a slow operation with a time limit" file-name="src/main.rs">
+Listing 17-26 shows how we would expect this `timeout` to work with a slow
+future.
 
-```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-32/src/main.rs:here}}
+<Listing number="17-26" caption="Using our imagined `timeout` to run a slow operation with a time limit" file-name="src/main.rs">
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-26/src/main.rs:here}}
 ```
 
 </Listing>
 
-Here we were using the `timeout` supplied by `trpl`, but we do not have to. We
-can implement it ourselves using `race` and `sleep`! To begin, let’s think about
-the API of `timeout`:
+Let’s implement this! To begin, let’s think about the API for `timeout`:
 
-- Its first parameter is a `std::time::Duration` which specifies the maximum
-  time to wait.
-- Its second parameter is the future to run.
-- It returns a `Result`. If the future completes successfully, the `Result` will
-  be `Ok` with the value produced by the future. If the timeout happens, the
-  `Result` will be `Err` with the duration that the timeout waited for.
+- It needs to be an async function itself so we can await it.
+- Its first parameter should be a future to run. We can make it generic to allow
+  it to work with any future.
+- Its second parameter will be the maximum time to wait. If we use a `Duration`,
+  that will make it easy to pass along to `trpl::sleep`.
+- It should return a `Result`. If the future completes successfully, the
+  `Result` will be `Ok` with the value produced by the future. If the timeout
+  elapses first, the `Result` will be `Err` with the duration that the timeout
+  waited for.
 
-We can write the same signature ourselves, as in Listing 17-33.
+Listing 17-27 shows this declaration.
 
-<Listing number="17-33" caption="Defining the signature of `timeout`" file-name="src/main.rs">
+<Listing number="17-27" caption="Defining the signature of `timeout`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-33/src/main.rs:declaration}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-27/src/main.rs:declaration}}
 ```
 
 </Listing>
 
-Then, in the body of the function, we can `race` whatever future the caller
-passes with a `sleep` future.
+The types line up now, so let’s think about the *behavior* we need. We want to
+race the future passed in against the duration. We can use `trpl::sleep` to make
+a timer future from the duration, and use `trpl::race` to run the future and the
+timer against each other.
 
-When we saw `race` earlier in Listing 17-20, we ignored its return type,
-because we were just interested in seeing the behavior of `fast` and `slow` when
-we ran the program. Here, though, its return value tells us whether the future
-or the sleep finished first. With `race`, both futures passed as arguments can
+When we saw `race` earlier in Listing 17-20, we ignored its return type, because
+we were just interested in seeing the behavior of `fast` and `slow` when we ran
+the program. Here, though, its return value tells us whether the future or the
+sleep finished first. With `race`, both futures passed as arguments can
 legitimately “win,” so it does not make sense to use a `Result` to represent the
-return type. Instead, it returns a similar type called `Either`. Like `Result`,
-`Either` can be one of two types, but unlike `Result`, there is no notion of
-success or failure baked into the type. Instead, it uses `Left` and `Right` to
-indicate “one or the other”. Its implementation looks like this:
+return type. Instead, it returns a similar type called `Either`. Unlike
+`Result`, there is no notion of success or failure baked into `Either`. Instead,
+it uses `Left` and `Right` to indicate “one or the other”:
 
 ```rust
 enum Either<A, B> {
@@ -246,54 +252,39 @@ enum Either<A, B> {
 }
 ```
 
-In the case of `race` specifically, it returns `Left` if the first argument
-finishes first, with that future’s output, and `Right` with the second future
-argument’s output if *that* one finishes first.
+The `race` function returns `Left` if the first argument finishes first, with
+that future’s output, and `Right` with the second future argument’s output if
+*that* one finishes first. We also know that `race` is not fair, and polls
+arguments in the order they are passed. For `timeout`, we pass the future to
+`race` first so it gets a chance to complete even if `max_time` is a very short
+duration. If `future` finishes first, `race` will return `Left` with the output
+from `future`. If `timer` finishes first, `race` will return `Right` with the
+timer’s output of `()`.
 
-```rust,ignore
-match trpl::race(future_a, future_b).await {
-    Either::Left(output_from_future_a) => /* ... */,
-    Either::Right(output_from_future_b) => /* ... */,
-}
-```
+In Listing 17-28, we match on the result of awaiting `trpl::race`. If the
+future succeeded and we get a `Left(output)`, we return `Ok(output)`. If the
+sleep timer elapsed instead and we get a `Right(())`, we ignore the `()` with
+`_` and return `Err(duration)` instead.
 
-That gives us enough to be able to implement `timeout` ourselves using `race`
-and `sleep`.
-
-<Listing number="17-34" caption="Defining `timeout` with `race` and `sleep`" file-name="src/main.rs">
+<Listing number="17-28" caption="Defining `timeout` with `race` and `sleep`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-34/src/main.rs:timeout}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-28/src/main.rs:implementation}}
 ```
 
 </Listing>
 
-Let’s walk through the details. Since we know from earlier that `race` is not
-fair, and will prefer the first argument to the second, we pass it the future
-first so it gets a chance to complete even if the caller passes in a very short
-value for `max_time`. Then we match on the result of awaiting the `race`. If the
-future passed in by the caller finished first, we will have `Left(output)`,
-which we can return as a success with `Ok`. If the sleep finished first, we will
-have `Right(())` instead, since `timeout` returns the unit type `()` if it
-succeeds. We can ignore that `()` by using `_` and return `Err` with the
-duration the user passed in instead. And that’s it!
+With that, we have a working `timeout`, built out of two other async helpers. If
+we run our code, it will print the failure mode after the timeout:
 
-Back in `main`, we can call this new `timeout` function exactly like we called
-`trpl::timeout` before, but without the `trpl::` namespace:
-
-<Listing number="17-35" caption="Using the `timeout` function we defined ourselves" file-name="src/main.rs">
-
-```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-35/src/main.rs:main}}
+```text
+Failed after 2 seconds
 ```
 
-</Listing>
-
-This pattern is quite common and useful. Futures compose with other futures, so
-you can build really powerful tools using smaller async building blocks. For
-example, you can use this same approach to combine timeouts with retries, and
-in turn use those with things like network calls—the exact example we started
-out with at the beginning of the chapter!
+Because futures compose with other futures, you can build really powerful tools
+using smaller async building blocks. For example, you can use this same approach
+to combine timeouts with retries, and in turn use those with things like network
+calls—one of the examples from the beginning of the chapter!
 
 Over the last two sections, we have seen how to work with multiple futures at
 the same time. Up next, let’s look at how we can work with multiple futures in a

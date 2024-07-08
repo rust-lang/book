@@ -94,10 +94,10 @@ mod re_exported_join_apis_work {
         let result = trpl::block_on(async {
             let a = async { format!("{}", 1) };
 
-            let b = async { format!("Hello") };
+            let b = async { "Hello".to_string() };
 
             let outer = String::from("World");
-            let c = async move { format!("{outer}") };
+            let c = async move { outer.to_string() };
 
             let futures: Vec<Pin<Box<dyn Future<Output = String>>>> =
                 vec![Box::pin(a), Box::pin(b), Box::pin(c)];
@@ -129,29 +129,6 @@ mod re_exported_join_apis_work {
 
         assert_eq!(result, (1, "Hello", vec![String::from("World")]));
     }
-}
-
-#[test]
-fn re_exported_timeout_works() {
-    let val = trpl::block_on(async {
-        let winner = async {
-            trpl::sleep(Duration::from_millis(1)).await;
-            String::from("Hello")
-        };
-        trpl::timeout(Duration::from_millis(2), winner).await
-    });
-
-    assert_eq!(val, Ok(String::from("Hello")));
-
-    let val = trpl::block_on(async {
-        let loser = async {
-            trpl::sleep(Duration::from_millis(2)).await;
-            String::from("Hello")
-        };
-        trpl::timeout(Duration::from_millis(1), loser).await
-    });
-
-    assert!(val.is_err());
 }
 
 #[test]
