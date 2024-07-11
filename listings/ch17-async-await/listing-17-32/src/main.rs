@@ -7,11 +7,16 @@ fn main() {
         while let Some(message) = messages.next().await {
             println!("{message}");
         }
-    })
+    });
 }
 
 fn get_messages() -> impl Stream<Item = String> {
     let (tx, rx) = trpl::channel();
+
+    let messages = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+    for message in messages {
+        tx.send(format!("Message: '{message}'")).unwrap();
+    }
 
     ReceiverStream::new(rx)
 }

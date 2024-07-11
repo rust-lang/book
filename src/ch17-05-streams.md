@@ -210,49 +210,34 @@ streams in interesting ways.
 
 ### Composing Streams
 
-For one thing, lots of things are naturally represented as streams—items
-becoming available in a queue over time, for example, or working with more data
-than can fit in a computer’s memory by only pulling chunks of it from the file
-system at a time, or data arriving over the network over time. For another
-thing, since streams are futures, we can use them with any other kind of
-future, and we can combine them in interesting ways.
+Lots of things are naturally represented as streams: items becoming available in
+a queue over time, or working with more data than can fit in a computer’s memory
+by only pulling chunks of it from the file system at a time, or data arriving
+over the network over time. And because streams are futures, we can use them
+with any other kind of future, and we can combine them in interesting ways. For
+example, we can debounce events to avoid triggering too many network calls, set
+timeouts on sequences of long-running operations, or throttle user interface
+events to avoid doing needless work.
 
-In the real world, we can use this to do things like debounce events to avoid
-triggering too many network calls, set timeouts on sequences of long-running
-operations, or throttle user interface events to avoid doing needless work.
-Let’s start by building a little stream of messages. This is similar to what we
-might see from a WebSocket or some other real-time communication protocol. To
-begin, we will create a function, `get_messages()`, which returns `impl
-Stream<Item = String>`, and use a `while let` loop to print all the messages
-from the stream.
+Let’s start by building a little stream of messages, similar to what we might
+see from a WebSocket or other real-time communication protocols. In Listing
+17-32, we  create a function `get_messages()` which returns `impl Stream<Item =
+String>`. For its implementation, we create an async channel, loop over the
+first ten letters of the English alphabet, and send them across the channel.
 
-<Listing number="17-41" caption="Using the `rx` receiver as a `ReceiverStream`" file-name="src/main.rs">
+We also use a new type: `ReceiverStream`. This converts the `rx` receiver from
+the `trpl::channel` into a stream. Back in `main`, we use a `while let` loop to
+print all the messages from the stream.
+
+<Listing number="17-32" caption="Using the `rx` receiver as a `ReceiverStream`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-41/src/main.rs}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-32/src/main.rs}}
 ```
 
 </Listing>
 
-In Listing 17-41, we also use a new type: `ReceiverStream`. This converts the
-`rx` receiver from the `trpl::channel` into a stream. This is pretty easy, since
-the API for a receiver like this already has the same basic shape as a `Stream`.
-
-So far this will compile just fine, but we are not sending any messages, so
-nothing will happen when we run the program. We can change that by looping over
-the first ten letters of the English alphabet, and sending those across the
-channel.
-
-<Listing number="17-42" caption="Sending messages through the channel to print" file-name="src/main.rs">
-
-```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-42/src/main.rs:send}}
-```
-
-</Listing>
-
-When we run the code in Listing 17-42, we get exactly the results we would
-expect:
+When we run this code, we get exactly the results we would expect:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -271,68 +256,55 @@ Message: 'i'
 Message: 'j'
 ```
 
-Thus far, we have not seen anything we could not do with the regular `recv` API.
-Since this is a stream, though, we can do things like add a timeout which
-applies to every item in the stream, as in Listing 17-43.
+We could do this with the regular `Receiver` API, or even the regular `Iterator`
+API, though. Let’s add something that requires streams, like adding a timeout
+which applies to every item in the stream, and a delay on the items we emit.
 
-<Listing number="17-43" caption="Using the `StreamExt::timeout` method to set a time limit on the items in a stream" file-name="src/main.rs">
+<Listing number="17-33" caption="Using the `StreamExt::timeout` method to set a time limit on the items in a stream" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-43/src/main.rs:timeout}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-33/src/main.rs:timeout}}
 ```
 
 </Listing>
 
-First, we add a timeout to the stream itself, using the the `timeout` method,
-which is available on the stream because we already have `StreamExt` in scope.
-Second, we update the the `while let` loop because the stream now returns a
-`Result`, where the `Ok` variant indicates a message arrived in time and the
-`Err` variant indicates that the timeout elapsed before any message arrived. We
-can use a `match` to either print the message when we receive it successfully,
-or to notify about a problem if the timeout happened.
-
-Unfortunately, this does not compile. It is our old friend `Unpin` again! Both
-the `next()` method and the `await` tell us that that type `PhantomPin` cannot
-be unpinned. (This `PhantomPin` is just a special type that the runtime is using
-to keep track of what needs to be pinned in a way that *only* shows up at
-compile time, but has no cost when actually running the program.) The solution
-is exactly the same as what we saw earlier in the chapter: to pin the `messages`
-with the `pin` macro. Once we add that, as in Listing 17-44, the program
-compiles again.
-
-<Listing number="17-44" caption="Pinning `messages` with the `pin!` macro to " file-name="src/main.rs">
-
-```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-44/src/main.rs:pin}}
-```
-
-</Listing>
+The first thing we do in Listing 17-33 is add a timeout to the stream with the
+`timeout` method, which comes from the `StreamExt` trait. Then we update the
+body of the `while let` loop, because the stream now returns a `Result`. The
+`Ok` variant indicates a message arrived in time; the `Err` variant indicates
+that the timeout elapsed before any message arrived. We `match` on that result
+and either print the message when we receive it successfully, or print a notice
+about the timeout. Finally, notice that we pinned the messages after applying
+the timeout to them, because the timeout helper produces a future which needs
+to be pinned to be polled.
 
 However, since there are no delays between messages, this timeout does not
-change the behavior of the program yet. To see the timeout actually have an
-effect, we will add a delay to the messages we send. We will use the `enumerate`
-iterator method to get the index of the items we are sending, and apply a 100
-millisecond delay to even-index items and a 300 millisecond delay to odd-index
-items, to simulate the different delays we might see from a stream of messages
-in the real world.
+change the behavior of the program. Let’s add a variable delay to the messages
+we send. In `get_messages`, we use the `enumerate` iterator method with the
+`messages` array so that we can get the index of each item we are sending along
+with the item itself. Then we apply a 100 millisecond delay to even-index items
+and a 300 millisecond delay to odd-index items, to simulate the different delays
+we might see from a stream of messages in the real world. Because our timeout is
+for 200 milliseconds, this should affect half of the messages.
 
-<Listing number="17-45" caption="Sending messages through `tx` with an async delay without making `get_messages` an async function" file-name="src/main.rs">
+<Listing number="17-34" caption="Sending messages through `tx` with an async delay without making `get_messages` an async function" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-45/src/main.rs:messages}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-34/src/main.rs:messages}}
 ```
 
 </Listing>
 
-To do that without blocking the `get_messages` function, we need to use async.
-However, we cannot just turn `get_messages` itself into an async function,
-because then we would return a `Future<Output = Stream<Item = String>>` instead
-of just a `Stream<Item = String>>`. In practical terms, we would end up sending
-all the messages and sleeping repeatedly before finally returning the receiver
-stream. The caller would end up getting all the messages immediately, *without*
-the sleep in between them, because the caller would not even be able to *start*
-processing the stream until all of the await points in `get_messages` had been
-hit. <!-- TODO: does this need a listing? -->
+To sleep between messages in the `get_messages` function without blocking, we
+need to use async. However, we cannot make `get_messages` itself into an async
+function, because then we would return a `Future<Output = Stream<Item =
+String>>` instead of just a `Stream<Item = String>>`. The caller would have to
+await `get_messages` itself to get access to the stream. But remember:
+everything in a given future happens linearly; concurrency happens *between*
+futures. Awaiting `get_messages` would require it to send all the messages, and
+sleeping between sending them, before returning the receiver stream. As a
+result, The timeout would end up useless, because there would be no delays in
+the stream itself: the delays all happen before the stream is even available.
 
 Instead, we leave `get_messages` as a regular function which returns a stream,
 and spawn a task to handle the async `sleep` calls.
@@ -345,17 +317,14 @@ and spawn a task to handle the async `sleep` calls.
 > spawn tasks without reference to a runtime. You should make sure you know what
 > tradeoff your runtime has chosen and write your code accordingly!
 
-Now our code has a much more interesting result! Between the messages, we see an
-error reported: `Problem: Elapsed(())`. Notice that it does not prevent the
-messages from arriving in the end—we still get all of the original messages.
-This is because our channel is unbounded: it can hold as many messages as we can
-fit in memory. If the message does not arrive before the timeout, our stream
-handler will account for that, but when it polls the stream again, the message
-may now have arrived.
+Now our code has a much more interesting result! Between every other pair of
+messages, we see an error reported: `Problem: Elapsed(())`.
 
-<!-- Not extracting output because changes to this output aren't significant;
-the changes are likely to be due to the threads running differently rather than
-changes in the compiler -->
+<!-- manual-regeneration
+cd listings/listing-17-34
+cargo run
+copy only the program output, *not* the compiler output
+-->
 
 ```text
 Message: 'a'
@@ -374,6 +343,12 @@ Message: 'i'
 Problem: Elapsed(())
 Message: 'j'
 ```
+
+The timeout does not prevent the messages from arriving in the end—we still get
+all of the original messages. This is because our channel is unbounded: it can
+hold as many messages as we can fit in memory. If the message does not arrive
+before the timeout, our stream handler will account for that, but when it polls
+the stream again, the message may now have arrived.
 
 You can get different behavior if needed by using other kinds of channels, or
 other kinds of streams more generally. Let’s see one of those in practice in our

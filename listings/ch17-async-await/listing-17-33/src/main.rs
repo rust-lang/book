@@ -1,14 +1,11 @@
 // ANCHOR: timeout
-use std::time::Duration;
-// --snip--
-// ANCHOR_END: timeout
+use std::{pin::pin, time::Duration};
 use trpl::{ReceiverStream, Stream, StreamExt};
 
 fn main() {
     trpl::block_on(async {
-        // ANCHOR: timeout
-
-        let mut messages = get_messages().timeout(Duration::from_millis(200));
+        let mut messages =
+            pin!(get_messages().timeout(Duration::from_millis(200)));
 
         while let Some(result) = messages.next().await {
             match result {
@@ -16,9 +13,9 @@ fn main() {
                 Err(reason) => eprintln!("Problem: {reason:?}"),
             }
         }
-        // ANCHOR_END: timeout
     })
 }
+// ANCHOR_END: timeout
 
 fn get_messages() -> impl Stream<Item = String> {
     let (tx, rx) = trpl::channel();

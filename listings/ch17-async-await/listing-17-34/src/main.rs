@@ -1,16 +1,11 @@
-// ANCHOR: pin
 use std::{pin::pin, time::Duration};
-// --snip--
 
-// ANCHOR_END: pin
 use trpl::{ReceiverStream, Stream, StreamExt};
 
 fn main() {
     trpl::block_on(async {
-        // ANCHOR: pin
         let mut messages =
             pin!(get_messages().timeout(Duration::from_millis(200)));
-        // ANCHOR_END: pin
 
         while let Some(result) = messages.next().await {
             match result {
@@ -21,13 +16,20 @@ fn main() {
     })
 }
 
+// ANCHOR: messages
 fn get_messages() -> impl Stream<Item = String> {
     let (tx, rx) = trpl::channel();
 
-    let messages = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
-    for message in messages {
-        tx.send(format!("Message: '{message}'")).unwrap();
-    }
+    trpl::spawn_task(async move {
+        let messages = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+        for (index, message) in messages.into_iter().enumerate() {
+            let time_to_sleep = if index % 2 == 0 { 100 } else { 300 };
+            trpl::sleep(Duration::from_millis(time_to_sleep)).await;
+
+            tx.send(format!("Message: '{message}'")).unwrap();
+        }
+    });
 
     ReceiverStream::new(rx)
 }
+// ANCHOR_END: messages
