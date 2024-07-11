@@ -4,17 +4,17 @@ use trpl::{ReceiverStream, Stream, StreamExt};
 
 fn main() {
     trpl::block_on(async {
-        let messages = get_messages().timeout(Duration::from_millis(200));
         // ANCHOR: throttle
+        let messages = get_messages().timeout(Duration::from_millis(200));
         let intervals = get_intervals()
             .map(|count| format!("Interval #{count}"))
             .throttle(Duration::from_millis(100))
             .timeout(Duration::from_secs(10));
-
-        let mut merged = pin!(messages.merge(intervals).take(20));
+        let merged = messages.merge(intervals).take(20);
+        let mut stream = pin!(merged);
         // ANCHOR_END: throttle
 
-        while let Some(result) = merged.next().await {
+        while let Some(result) = stream.next().await {
             match result {
                 Ok(message) => println!("{message}"),
                 Err(reason) => eprintln!("Problem: {reason:?}"),
