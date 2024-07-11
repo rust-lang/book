@@ -429,6 +429,7 @@ Rustaceans
 rUsT
 rustc
 rustdoc
+RUSTFLAGS
 Rustonomicon
 rustfix
 rustfmt

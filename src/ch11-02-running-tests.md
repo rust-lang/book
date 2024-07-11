@@ -1,14 +1,14 @@
 ## Controlling How Tests Are Run
 
-Just as `cargo run` compiles your code and then runs the resulting binary,
-`cargo test` compiles your code in test mode and runs the resulting test
+Just as `cargo run` compiles your code and then runs the resultant binary,
+`cargo test` compiles your code in test mode and runs the resultant test
 binary. The default behavior of the binary produced by `cargo test` is to run
 all the tests in parallel and capture output generated during test runs,
 preventing the output from being displayed and making it easier to read the
 output related to the test results. You can, however, specify command line
 options to change this default behavior.
 
-Some command line options go to `cargo test`, and some go to the resulting test
+Some command line options go to `cargo test`, and some go to the resultant test
 binary. To separate these two types of arguments, you list the arguments that
 go to `cargo test` followed by the separator `--` and then the ones that go to
 the test binary. Running `cargo test --help` displays the options you can use
@@ -72,13 +72,13 @@ When we run these tests with `cargo test`, we’ll see the following output:
 {{#include ../listings/ch11-writing-automated-tests/listing-11-10/output.txt}}
 ```
 
-Note that nowhere in this output do we see `I got the value 4`, which is what
-is printed when the test that passes runs. That output has been captured. The
+Note that nowhere in this output do we see `I got the value 4`, which is
+printed when the test that passes runs. That output has been captured. The
 output from the test that failed, `I got the value 8`, appears in the section
 of the test summary output, which also shows the cause of the test failure.
 
-If we want to see printed values for passing tests as well, we can tell Rust
-to also show the output of successful tests with `--show-output`.
+If we want to see printed values for passing tests as well, we can tell Rust to
+also show the output of successful tests with `--show-output`:
 
 ```console
 $ cargo test -- --show-output
@@ -157,11 +157,11 @@ here:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-11-ignore-a-test/src/lib.rs}}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-11-ignore-a-test/src/lib.rs:here}}
 ```
 
-After `#[test]` we add the `#[ignore]` line to the test we want to exclude. Now
-when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
+After `#[test]`, we add the `#[ignore]` line to the test we want to exclude.
+Now when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-11-ignore-a-test/output.txt}}
@@ -175,7 +175,7 @@ the ignored tests, we can use `cargo test -- --ignored`:
 ```
 
 By controlling which tests run, you can make sure your `cargo test` results
-will be fast. When you’re at a point where it makes sense to check the results
-of the `ignored` tests and you have time to wait for the results, you can run
-`cargo test -- --ignored` instead. If you want to run all tests whether they’re
-ignored or not, you can run `cargo test -- --include-ignored`.
+will be returned quickly. When you’re at a point where it makes sense to check
+the results of the `ignored` tests and you have time to wait for the results,
+you can run `cargo test -- --ignored` instead. If you want to run all tests
+whether they’re ignored or not, you can run `cargo test -- --include-ignored`.
