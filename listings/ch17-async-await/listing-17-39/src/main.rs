@@ -9,16 +9,16 @@ fn main() {
             .map(|count| format!("Interval #{count}"))
             .throttle(Duration::from_millis(500))
             .timeout(Duration::from_secs(10));
+        let merged = messages.merge(intervals).take(20);
+        let mut stream = pin!(merged);
 
-        let mut merged = pin!(messages.merge(intervals).take(20));
-
-        while let Some(result) = merged.next().await {
+        while let Some(result) = stream.next().await {
             match result {
                 Ok(item) => println!("{item}"),
                 Err(reason) => eprintln!("Problem: {reason:?}"),
             }
         }
-    })
+    });
 }
 
 // ANCHOR: errors
@@ -32,8 +32,7 @@ fn get_messages() -> impl Stream<Item = String> {
             let time_to_sleep = if index % 2 == 0 { 100 } else { 300 };
             trpl::sleep(Duration::from_millis(time_to_sleep)).await;
 
-            let result = tx.send(format!("Message: '{message}'"));
-            if let Err(send_error) = result {
+            if let Err(send_error) = tx.send(format!("Message: '{message}'")) {
                 eprintln!("Cannot send message '{message}': {send_error}");
                 break;
             }
@@ -52,8 +51,7 @@ fn get_intervals() -> impl Stream<Item = u32> {
             trpl::sleep(Duration::from_millis(1)).await;
             count += 1;
 
-            let result = tx.send(count);
-            if let Err(send_error) = result {
+            if let Err(send_error) = tx.send(count) {
                 eprintln!("Could not send interval {count}: {send_error}");
                 break;
             };

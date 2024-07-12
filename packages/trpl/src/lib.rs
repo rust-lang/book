@@ -15,9 +15,11 @@
 // For direct use within the `trpl` crate, *not* re-exported.
 use std::{future::Future, pin::pin};
 
+use futures::future;
+
 // Re-exports, to be used like `trpl::join`.
 pub use futures::{
-    future::{self, join, join3, join_all, Either},
+    future::{join, join3, join_all, Either},
     join,
 };
 pub use tokio::{
@@ -38,7 +40,7 @@ pub use tokio::{
         unbounded_channel as channel, UnboundedReceiver as Receiver,
         UnboundedSender as Sender,
     },
-    task::{spawn as spawn_task, yield_now},
+    task::{spawn as spawn_task, yield_now, JoinHandle},
     time::{interval, sleep},
 };
 
