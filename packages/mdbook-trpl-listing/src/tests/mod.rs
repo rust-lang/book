@@ -131,5 +131,32 @@ This is the closing."#
     );
 }
 
+#[test]
+fn without_number() {
+    let result = rewrite_listing(
+        r#"<Listing file-name="src/main.rs">
+
+```rust
+fn main() {}
+```
+
+</Listing>"#,
+        Mode::Default,
+    );
+
+    assert!(result.is_ok());
+    assert_eq!(
+        result.unwrap(),
+        r#"<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
+
+````rust
+fn main() {}
+````
+
+</figure>"#
+    );
+}
+
 #[cfg(test)]
 mod config;

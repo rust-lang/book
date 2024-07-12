@@ -155,7 +155,7 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
             match ev {
                 Event::Html(tag) => {
                     if tag.starts_with("<Listing") {
-                        let listing_result = Tokenizer::from(tag.as_ref())
+                        let listing = Tokenizer::from(tag.as_ref())
                             .flatten()
                             .fold(ListingBuilder::new(), |builder, token| {
                                 match token {
@@ -177,26 +177,19 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
                             })
                             .build();
 
-                        match listing_result {
-                            Ok(listing) => {
-                                let opening_event = match mode {
-                                    Mode::Default => {
-                                        let opening_html =
-                                            listing.opening_html();
-                                        Event::Html(opening_html.into())
-                                    }
-                                    Mode::Simple => {
-                                        let opening_text =
-                                            listing.opening_text();
-                                        Event::Text(opening_text.into())
-                                    }
-                                };
-
-                                state.current_listing = Some(listing);
-                                state.events.push(Ok(opening_event));
+                        let opening_event = match mode {
+                            Mode::Default => {
+                                let opening_html = listing.opening_html();
+                                Event::Html(opening_html.into())
                             }
-                            Err(reason) => state.events.push(Err(reason)),
-                        }
+                            Mode::Simple => {
+                                let opening_text = listing.opening_text();
+                                Event::Text(opening_text.into())
+                            }
+                        };
+
+                        state.current_listing = Some(listing);
+                        state.events.push(Ok(opening_event));
                     } else if tag.starts_with("</Listing>") {
                         let trailing = if !tag.ends_with('>') {
                             tag.replace("</Listing>", "")
@@ -259,8 +252,8 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
 
 #[derive(Debug)]
 struct Listing {
-    number: String,
-    caption: String,
+    number: Option<String>,
+    caption: Option<String>,
     file_name: Option<String>,
 }
 
@@ -277,12 +270,21 @@ impl Listing {
     }
 
     fn closing_html(&self, trailing: &str) -> String {
-        format!(
-            r#"<figcaption>Listing {number}: {caption}</figcaption>
-</figure>{trailing}"#,
-            number = self.number,
-            caption = self.caption
-        )
+        match (&self.number, &self.caption) {
+            (Some(number), Some(caption)) => format!(
+                r#"<figcaption>Listing {number}: {caption}</figcaption>
+</figure>{trailing}"#
+            ),
+            (None, Some(caption)) => format!(
+                r#"<figcaption>{caption}</figcaption>
+</figure>{trailing}"#
+            ),
+            (Some(number), None) => format!(
+                r#"<figcaption>Listing {number}</figcaption>
+</figure>{trailing}"#
+            ),
+            (None, None) => format!("</figure>{trailing}"),
+        }
     }
 
     fn opening_text(&self) -> String {
@@ -293,11 +295,14 @@ impl Listing {
     }
 
     fn closing_text(&self, trailing: &str) -> String {
-        format!(
-            "Listing {number}: {caption}{trailing}",
-            number = self.number,
-            caption = self.caption,
-        )
+        match (&self.number, &self.caption) {
+            (Some(number), Some(caption)) => {
+                format!("Listing {number}: {caption}{trailing}")
+            }
+            (None, Some(caption)) => format!("{caption}{trailing}"),
+            (Some(number), None) => format!("Listing {number}{trailing}"),
+            (None, None) => trailing.into(),
+        }
     }
 }
 
@@ -331,32 +336,23 @@ impl<'a> ListingBuilder<'a> {
         self
     }
 
-    fn build(self) -> Result<Listing, String> {
-        let number = self
-            .number
-            .ok_or_else(|| String::from("Missing number"))?
-            .to_owned();
+    fn build(self) -> Listing {
+        let caption = self.caption.map(|caption_source| {
+            let events = new_cmark_parser(caption_source, true);
+            let mut buf = String::with_capacity(caption_source.len() * 2);
+            html::push_html(&mut buf, events);
 
-        let caption = self
-            .caption
-            .map(|caption_source| {
-                let events = new_cmark_parser(caption_source, true);
-                let mut buf = String::with_capacity(caption_source.len() * 2);
-                html::push_html(&mut buf, events);
+            // This is not particularly principled, but since the only
+            // place it is used is here, for caption source handling, it
+            // is “fine”.
+            buf.replace("<p>", "").replace("</p>", "").replace('\n', "")
+        });
 
-                // This is not particularly principled, but since the only
-                // place it is used is here, for caption source handling, it
-                // is “fine”.
-                buf.replace("<p>", "").replace("</p>", "").replace('\n', "")
-            })
-            .ok_or_else(|| String::from("Missing caption"))?
-            .to_owned();
-
-        Ok(Listing {
-            number,
+        Listing {
+            number: self.number.map(String::from),
             caption,
             file_name: self.file_name.map(String::from),
-        })
+        }
     }
 }
 
