@@ -57,6 +57,36 @@ Listing 1-2: A write-up which <em>might</em> include inline Markdown like <code>
 }
 
 #[test]
+fn listing_with_embedded_angle_brackets() {
+    let result = rewrite_listing(
+        r#"<Listing number="34-5" caption="This has a `Box<T>` in it.">
+
+```rust
+fn get_a_box_of<T>(t: T) -> Box<T> {
+    Box::new(T)
+}
+```
+
+</Listing>"#,
+        Mode::Default,
+    );
+
+    assert_eq!(
+        &result.unwrap(),
+        r#"<figure class="listing">
+
+````rust
+fn get_a_box_of<T>(t: T) -> Box<T> {
+    Box::new(T)
+}
+````
+
+<figcaption>Listing 34-5: This has a <code>Box&lt;T&gt;</code> in it.</figcaption>
+</figure>"#
+    );
+}
+
+#[test]
 fn actual_listing() {
     let result = rewrite_listing(
         r#"Now open the *main.rs* file you just created and enter the code in Listing 1-1.

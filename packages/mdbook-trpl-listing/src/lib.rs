@@ -1,3 +1,4 @@
+use html_parser::Dom;
 use mdbook::{
     book::Book,
     errors::Result,
@@ -7,7 +8,6 @@ use mdbook::{
 };
 use pulldown_cmark::{html, Event};
 use pulldown_cmark_to_cmark::cmark;
-use xmlparser::{Token, Tokenizer};
 
 /// A preprocessor for rendering listings more elegantly.
 ///
@@ -139,97 +139,29 @@ impl TryFrom<&str> for Mode {
 }
 
 fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
-    let parser = new_cmark_parser(src, true);
-
-    struct State<'e> {
-        current_listing: Option<Listing>,
-        events: Vec<Result<Event<'e>, String>>,
-    }
-
-    let final_state = parser.fold(
-        State {
-            current_listing: None,
+    let final_state = new_cmark_parser(src, true).try_fold(
+        ListingState {
+            current: None,
             events: vec![],
         },
         |mut state, ev| {
             match ev {
                 Event::Html(tag) => {
                     if tag.starts_with("<Listing") {
-                        let listing = Tokenizer::from(tag.as_ref())
-                            .flatten()
-                            .fold(ListingBuilder::new(), |builder, token| {
-                                match token {
-                                    Token::Attribute {
-                                        local, value, ..
-                                    } => {
-                                        match local.as_str() {
-                                            "number" => builder
-                                                .with_number(value.as_str()),
-                                            "caption" => builder
-                                                .with_caption(value.as_str()),
-                                            "file-name" => builder
-                                                .with_file_name(value.as_str()),
-                                            _ => builder, // TODO: error on extra attrs?
-                                        }
-                                    }
-                                    _ => builder,
-                                }
-                            })
-                            .build();
-
-                        let opening_event = match mode {
-                            Mode::Default => {
-                                let opening_html = listing.opening_html();
-                                Event::Html(opening_html.into())
-                            }
-                            Mode::Simple => {
-                                let opening_text = listing.opening_text();
-                                Event::Text(opening_text.into())
-                            }
-                        };
-
-                        state.current_listing = Some(listing);
-                        state.events.push(Ok(opening_event));
+                        state.open_listing(tag, mode)?;
                     } else if tag.starts_with("</Listing>") {
-                        let trailing = if !tag.ends_with('>') {
-                            tag.replace("</Listing>", "")
-                        } else {
-                            String::from("")
-                        };
-
-                        match state.current_listing {
-                            Some(listing) => {
-                                let closing_event = match mode {
-                                    Mode::Default => {
-                                        let closing_html =
-                                            listing.closing_html(&trailing);
-                                        Event::Html(closing_html.into())
-                                    }
-                                    Mode::Simple => {
-                                        let closing_text =
-                                            listing.closing_text(&trailing);
-                                        Event::Text(closing_text.into())
-                                    }
-                                };
-
-                                state.current_listing = None;
-                                state.events.push(Ok(closing_event));
-                            }
-                            None => state.events.push(Err(String::from(
-                                "Closing `</Listing>` without opening tag.",
-                            ))),
-                        }
+                        state.close_listing(tag, mode);
                     } else {
                         state.events.push(Ok(Event::Html(tag)));
                     }
                 }
                 ev => state.events.push(Ok(ev)),
             };
-            state
+            Ok::<ListingState, String>(state)
         },
-    );
+    )?;
 
-    if final_state.current_listing.is_some() {
+    if final_state.current.is_some() {
         return Err("Unclosed listing".into());
     }
 
@@ -248,6 +180,103 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
     cmark(events.into_iter().map(|ok| ok.unwrap()), &mut buf)
         .map_err(|e| format!("{e}"))?;
     Ok(buf)
+}
+
+struct ListingState<'e> {
+    current: Option<Listing>,
+    events: Vec<Result<Event<'e>, String>>,
+}
+
+impl<'e> ListingState<'e> {
+    fn open_listing(
+        &mut self,
+        tag: pulldown_cmark::CowStr,
+        mode: Mode,
+    ) -> Result<(), String> {
+        // We do not *keep* the version constructed here, just temporarily
+        // construct it so the HTML parser, which expects properly closed tags
+        // to parse it as a *tag* rather than a *weird text node*, which accept
+        // it and provide a useful view of it.
+        let to_parse = tag.to_owned().to_string() + "</Listing>";
+        let listing = Dom::parse(&to_parse)
+            .map_err(|e| e.to_string())?
+            .children
+            .into_iter()
+            .filter_map(|node| match node {
+                html_parser::Node::Element(element) => Some(element.attributes),
+                html_parser::Node::Text(_) | html_parser::Node::Comment(_) => {
+                    None
+                }
+            })
+            .flatten()
+            .try_fold(ListingBuilder::new(), |builder, (key, maybe_value)| {
+                match (key.as_str(), maybe_value) {
+                    ("number", Some(value)) => Ok(builder.with_number(value)),
+                    ("number", None) => {
+                        Err(String::from("number attribute without value"))
+                    }
+                    ("caption", Some(value)) => Ok(builder.with_caption(value)),
+                    ("caption", None) => {
+                        Err(String::from("caption attribute without value"))
+                    }
+                    ("file-name", Some(value)) => {
+                        Ok(builder.with_file_name(value))
+                    }
+                    ("file-name", None) => {
+                        Err(String::from("file-name attribute without value"))
+                    }
+
+                    _ => Ok(builder), // TODO: error on extra attrs?
+                }
+            })?
+            .build();
+
+        let opening_event = match mode {
+            Mode::Default => {
+                let opening_html = listing.opening_html();
+                Event::Html(opening_html.into())
+            }
+            Mode::Simple => {
+                let opening_text = listing.opening_text();
+                Event::Text(opening_text.into())
+            }
+        };
+
+        self.current = Some(listing);
+        self.events.push(Ok(opening_event));
+        Ok(())
+    }
+
+    fn close_listing(&mut self, tag: pulldown_cmark::CowStr, mode: Mode) {
+        let trailing = if !tag.ends_with('>') {
+            tag.replace("</Listing>", "")
+        } else {
+            String::from("")
+        };
+
+        match &self.current {
+            Some(listing) => {
+                let closing_event = match mode {
+                    Mode::Default => {
+                        let closing_html = listing.closing_html(&trailing);
+                        Event::Html(closing_html.into())
+                    }
+                    Mode::Simple => {
+                        let closing_text = listing.closing_text(&trailing);
+                        Event::Text(closing_text.into())
+                    }
+                };
+
+                self.current = None;
+                self.events.push(Ok(closing_event));
+            }
+            None => {
+                self.events.push(Err(String::from(
+                    "Closing `</Listing>` without opening tag.",
+                )));
+            }
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -306,14 +335,14 @@ impl Listing {
     }
 }
 
-struct ListingBuilder<'a> {
-    number: Option<&'a str>,
-    caption: Option<&'a str>,
-    file_name: Option<&'a str>,
+struct ListingBuilder {
+    number: Option<String>,
+    caption: Option<String>,
+    file_name: Option<String>,
 }
 
-impl<'a> ListingBuilder<'a> {
-    fn new() -> ListingBuilder<'a> {
+impl ListingBuilder {
+    fn new() -> ListingBuilder {
         ListingBuilder {
             number: None,
             caption: None,
@@ -321,24 +350,24 @@ impl<'a> ListingBuilder<'a> {
         }
     }
 
-    fn with_number(mut self, value: &'a str) -> Self {
+    fn with_number(mut self, value: String) -> Self {
         self.number = Some(value);
         self
     }
 
-    fn with_caption(mut self, value: &'a str) -> Self {
+    fn with_caption(mut self, value: String) -> Self {
         self.caption = Some(value);
         self
     }
 
-    fn with_file_name(mut self, value: &'a str) -> Self {
+    fn with_file_name(mut self, value: String) -> Self {
         self.file_name = Some(value);
         self
     }
 
     fn build(self) -> Listing {
         let caption = self.caption.map(|caption_source| {
-            let events = new_cmark_parser(caption_source, true);
+            let events = new_cmark_parser(&caption_source, true);
             let mut buf = String::with_capacity(caption_source.len() * 2);
             html::push_html(&mut buf, events);
 
