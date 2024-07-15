@@ -25,7 +25,7 @@ To check all the futures in some collection, we will need to iterate over and
 join on *all* of them. The `trpl::join_all` function accepts any type which
 implements the `Iterator` trait, which we learned about back in Chapter 13, so
 it seems like just the ticket. Let’s try putting our futures in a vector, and
-replace `join3` with `join_all`.
+replace `join!` with `join_all`.
 
 <Listing  number="17-14" caption="Storing anonymous futures in a vector and calling `join_all`">
 
@@ -39,7 +39,6 @@ Unfortunately, this does not compile. Instead, we get this error:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-14/
-cargo clean
 cargo build
 copy just the compiler error, and *add* the following text (correctly aligned),
 to match the nicer version we will have starting in 1.81
