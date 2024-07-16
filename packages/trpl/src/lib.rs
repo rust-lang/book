@@ -1,4 +1,6 @@
-//! A support crate for _The Rust Programming Language_.
+//! A support crate for [_The Rust Programming Language_][trpl].
+//!
+//! [trpl]: https://doc.rust-lang.org/book
 //!
 //! This crate mostly just re-exports items from *other* crates. It exists for
 //! two main reasons:

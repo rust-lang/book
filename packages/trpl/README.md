@@ -19,5 +19,4 @@ main reasons:
 
 ## Requirements
 
-<!-- TODO: pick an appropriate starting version! -->
-This crate currently requires at least Rust 1.77.
+This crate currently requires at least Rust 1.79.
