@@ -72,10 +72,10 @@ time. Many operating system APIs for interacting with network sockets are
 program when they are called until they return.
 
 > Note: This is how *most* function calls work, if you think about it! However,
-we normally reserve the term “blocking” for function calls which interact with
-files, network sockets, or other resources on the computer, because those are
-the places where an individual program would benefit from the operation being
-*non*-blocking.
+> we normally reserve the term “blocking” for function calls which interact with
+> files, network sockets, or other resources on the computer, because those are
+> the places where an individual program would benefit from the operation being
+> *non*-blocking.
 
 We could use threads to avoid blocking while downloading files, by using a
 dedicated thread. But it would be nicer if the call were not blocking in the
