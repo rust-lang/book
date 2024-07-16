@@ -421,7 +421,7 @@ future for `b` implements `Future<Output = &str>`, and the anonymous future for
 </Listing>
 
 We can use `trpl::join!` to await them, because it allows you to pass in
-multiple future types and produces a tuple of those htypes. We *cannot* use
+multiple future types and produces a tuple of those types. We *cannot* use
 `trpl::join_all`, because it requires the futures passed in all to have the same
 type. (Remember, that error is what got us started on this adventure with
 `Pin`!)
