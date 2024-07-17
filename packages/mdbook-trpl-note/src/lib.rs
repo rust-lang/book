@@ -49,7 +49,7 @@ impl Preprocessor for TrplNote {
     }
 
     fn supports_renderer(&self, renderer: &str) -> bool {
-        renderer == "html" || renderer == "markdown"
+        renderer == "html" || renderer == "markdown" || renderer == "test"
     }
 }
 
