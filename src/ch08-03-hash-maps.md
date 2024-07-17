@@ -24,7 +24,8 @@ One way to create an empty hash map is to use `new` and to add elements with
 names are *Blue* and *Yellow*. The Blue team starts with 10 points, and the
 Yellow team starts with 50.
 
-<Listing number="8-20" caption="Creating a new hash map and inserting some keys and values">
+<Listing number="8-20" caption="Creating a new hash map and inserting some keys
+and values">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-20/src/main.rs:here}}
@@ -48,7 +49,8 @@ must have the same type.
 We can get a value out of the hash map by providing its key to the `get`
 method, as shown in Listing 8-21.
 
-<Listing number="8-21" caption="Accessing the score for the Blue team stored in the hash map">
+<Listing number="8-21" caption="Accessing the score for the Blue team stored in
+the hash map">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
@@ -83,7 +85,8 @@ For types that implement the `Copy` trait, like `i32`, the values are copied
 into the hash map. For owned values like `String`, the values will be moved and
 the hash map will be the owner of those values, as demonstrated in Listing 8-22.
 
-<Listing number="8-22" caption="Showing that keys and values are owned by the hash map once they’re inserted">
+<Listing number="8-22" caption="Showing that keys and values are owned by the
+hash map once they’re inserted">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-22/src/main.rs:here}}
@@ -123,7 +126,8 @@ Even though the code in Listing 8-23 calls `insert` twice, the hash map will
 only contain one key–value pair because we’re inserting the value for the Blue
 team’s key both times.
 
-<Listing number="8-23" caption="Replacing a value stored with a particular key">
+<Listing number="8-23" caption="Replacing a value stored with a particular
+key">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-23/src/main.rs:here}}
@@ -151,7 +155,8 @@ we want to check whether the key for the Yellow team has a value associated
 with it. If it doesn’t, we want to insert the value `50`, and the same for the
 Blue team. Using the `entry` API, the code looks like Listing 8-24.
 
-<Listing number="8-24" caption="Using the `entry` method to only insert if the key does not already have a value">
+<Listing number="8-24" caption="Using the `entry` method to only insert if the
+key does not already have a value">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
@@ -180,7 +185,8 @@ the words as keys and increment the value to keep track of how many times we’v
 seen that word. If it’s the first time we’ve seen a word, we’ll first insert
 the value `0`.
 
-<Listing number="8-25" caption="Counting occurrences of words using a hash map that stores words and counts">
+<Listing number="8-25" caption="Counting occurrences of words using a hash map
+that stores words and counts">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
