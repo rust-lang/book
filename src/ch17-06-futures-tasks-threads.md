@@ -29,7 +29,7 @@ could do the exact same thing with a thread! In Listing 17-39, we used
 the `thread::spawn` and `thread::sleep` APIs from the standard library in the
 `get_intervals` function.
 
-<Listing number="17-40" caption="TODO" file-name="src/main.rs">
+<Listing number="17-40" caption="Using the `std::thread` APIs instead of the async `trpl` APIs for the `get_intervals` function" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-40/src/main.rs:threads}}
