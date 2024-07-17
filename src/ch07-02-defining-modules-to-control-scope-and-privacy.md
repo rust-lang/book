@@ -63,11 +63,13 @@ backyard
 
 The crate root file in this case is *src/main.rs*, and it contains:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/main.rs}}
 ```
+
+</Listing>
 
 The `pub mod garden;` line tells the compiler to include the code it finds in
 *src/garden.rs*, which is:
