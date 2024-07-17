@@ -1,3 +1,5 @@
+extern crate trpl; // required for mdbook test
+
 use std::{pin::pin, time::Duration};
 
 use trpl::{ReceiverStream, Stream, StreamExt};
