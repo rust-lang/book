@@ -305,7 +305,7 @@ definition with the specific ones.
 The monomorphized version of the code looks similar to the following (the
 compiler uses different names than what we’re using here for illustration):
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust
 enum Option_i32 {
@@ -323,6 +323,8 @@ fn main() {
     let float = Option_f64::Some(5.0);
 }
 ```
+
+</Listing>
 
 The generic `Option<T>` is replaced with the specific definitions created by
 the compiler. Because Rust compiles generic code into code that specifies the
