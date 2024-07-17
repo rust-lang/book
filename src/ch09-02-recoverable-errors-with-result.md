@@ -197,11 +197,13 @@ Using `expect` instead of `unwrap` and providing good error messages can convey
 your intent and make tracking down the source of a panic easier. The syntax of
 `expect` looks like this:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-05-expect/src/main.rs}}
 ```
+
+</Listing>
 
 We use `expect` in the same way as `unwrap`: to return the file handle or call
 the `panic!` macro. The error message used by `expect` in its call to `panic!`
