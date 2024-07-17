@@ -41,8 +41,10 @@ In Rust, writing `async fn` is equivalent to writing a function which returns a
 defined like this instead:
 
 ```rust
-fn hello(name: &str) -> impl Future<Output = ()> {
-    async {
+use std::future::Future;
+
+fn hello<'a>(name: &'a str) -> impl Future<Output = ()> + 'a {
+    async move {
         let greeting = format!("Hello, {name}!");
         println!("{greeting}");
     }
@@ -56,9 +58,10 @@ Let’s walk through each part of the transformed version:
 * The returned trait is a `Future`, with an associated type of `Output`. Notice
   that the `Output` type is `()`, which is the same as the the original return
   type from the `async fn` version of `hello`.
-* The whole body of the function is wrapped in an `async` block. Remember that
-  blocks are expressions. This whole block is the expression returned from the
-  function.
+* The whole body of the function is wrapped in an `async move` block. Remember
+  that blocks are expressions. This whole block is the expression returned from
+  the function. It is an `async move` block
+* It names the fact that
 * The async block itself has the “unit” value `()`, since it ends with a
   `println!` statement. That value matches the `Output` type in the return type.
 
@@ -194,6 +197,9 @@ operations can be implemented with different data, but with a common interface.
 Here is the definition of the trait:
 
 ```rust
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
 pub trait Future {
     type Output;
 
