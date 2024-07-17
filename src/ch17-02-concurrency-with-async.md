@@ -21,7 +21,7 @@ to implement the same counting example as with threads, in Listing 17-5.
 <Listing number="17-5" caption="Using `spawn_task` to count with two" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:all}}
 ```
 
 </Listing>
@@ -202,9 +202,11 @@ It is hard to see the effect of async in Listing 17-8, though, since the message
 will arrive right away! Let’s go ahead and send a whole series of messages, and
 sleep in between them, as shown in Listing 17-9:
 
+<!-- We cannot test this one because it never stops! -->
+
 <Listing number="17-9" caption="Sending and receiving multiple messages over the async channel and sleeping with an `.await` between each message" file-name="src/main.rs">
 
-```rust
+```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-09/src/main.rs:many-messages}}
 ```
 
@@ -260,9 +262,11 @@ each message, we need to put the `tx` and `rx` operations in their own async
 blocks. Then the runtime can execute each of them separately using `trpl::join`,
 just like in the counting example.
 
+<!-- We cannot test this one because it never stops! -->
+
 <Listing number="17-10" caption="Separating `send` and `recv` into their own `async` blocks and awaiting the futures for those blocks" file-name="src/main.rs">
 
-```rust
+```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:futures}}
 ```
 
