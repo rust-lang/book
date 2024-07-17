@@ -31,11 +31,13 @@ panic occurs to make it easier to track down the source of the panic.
 
 Let’s try calling `panic!` in a simple program:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-01-panic/src/main.rs}}
 ```
+
+</Listing>
 
 When you run the program, you’ll see something like this:
 
