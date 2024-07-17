@@ -239,6 +239,9 @@ Let’s look again at the definition of `Future`, focusing now on its `poll`
 method’s `self` type:
 
 ```rust
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
 pub trait Future {
     type Output;
 
