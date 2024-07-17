@@ -74,11 +74,13 @@ The crate root file in this case is *src/main.rs*, and it contains:
 The `pub mod garden;` line tells the compiler to include the code it finds in
 *src/garden.rs*, which is:
 
-<span class="filename">Filename: src/garden.rs</span>
+<Listing file-name="src/garden.rs">
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden.rs}}
 ```
+
+</Listing>
 
 Here, `pub mod vegetables;` means the code in *src/garden/vegetables.rs* is
 included too. That code is:
