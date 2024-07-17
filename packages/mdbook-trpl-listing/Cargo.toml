@@ -7,13 +7,13 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4", features = ["derive"] }
+html_parser = "0.7.0"
 mdbook = { version = "0.4", default-features = false }     # only need the library
 pulldown-cmark = { version = "0.10", features = ["simd"] }
 pulldown-cmark-to-cmark = "13"
 serde_json = "1"
 thiserror = "1.0.60"
 toml = "0.8.12"
-xmlparser = "0.13.6"
 
 [dev-dependencies]
 assert_cmd = "2"
