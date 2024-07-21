@@ -284,7 +284,7 @@ from `leaf.parent` has no bearing on whether or not `Node` is dropped, so we
 don’t get any memory leaks!
 
 If we try to access the parent of `leaf` after the end of the scope, we’ll get
-`None` again. At the end of the program, the `Rc<Node>` in `leaf` has a strong
+`None`. At the end of the program, the `Rc<Node>` in `leaf` has a strong
 count of 1 and a weak count of 0, because the variable `leaf` is now the only
 reference to the `Rc<Node>` again.
 
