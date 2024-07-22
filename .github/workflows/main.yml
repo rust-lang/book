@@ -18,7 +18,7 @@ jobs:
       run: |
         mkdir bin
         curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
-        echo "$(pwd)/bin" >> ${GITHUB_PATH}
+        echo "$(pwd)/bin" >> "${GITHUB_PATH}"
     - name: Report versions
       run: |
         rustup --version
@@ -65,7 +65,7 @@ jobs:
       run: |
         mkdir bin
         curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
-        echo "$(pwd)/bin" >> ${GITHUB_PATH}
+        echo "$(pwd)/bin" >> "${GITHUB_PATH}"
     - name: Install mdbook-trpl-note
       run: cargo install --path packages/mdbook-trpl-note
     - name: Install mdbook-trpl-listing
@@ -82,7 +82,7 @@ jobs:
         aspell --version
         shellcheck --version
     - name: Shellcheck
-      run: find . -name '*.sh' | xargs shellcheck
+      run: find . -name '*.sh' -print0 | xargs -0 shellcheck
     - name: Spellcheck
       run: bash ci/spellcheck.sh list
     - name: Lint for local file paths
