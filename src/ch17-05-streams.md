@@ -508,4 +508,4 @@ That is a good note to turn to our final section and wrap up this walk through
 async in Rust, by discussing how futures (including streams), tasks, and threads
 relate to each other, and how you can use them together.
 
-[17-02-messages]: /ch17-02-concurrency-with-async.md#message-passing
+[17-02-messages]: ch17-02-concurrency-with-async.md#message-passing

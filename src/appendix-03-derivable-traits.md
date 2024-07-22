@@ -184,4 +184,4 @@ ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struc
 ch04-01-what-is-ownership.html#stack-only-data-copy
 [ways-variables-and-data-interact-clone]:
 ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone
-[macros]: ch19-06-macros.html#macros
+[macros]: ch20-06-macros.html#macros

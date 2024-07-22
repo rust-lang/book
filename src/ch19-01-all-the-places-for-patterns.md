@@ -247,4 +247,4 @@ be irrefutable; in other circumstances, they can be refutable. We’ll discuss
 these two concepts next.
 
 [ignoring-values-in-a-pattern]:
-ch18-03-pattern-syntax.html#ignoring-values-in-a-pattern
+ch19-03-pattern-syntax.html#ignoring-values-in-a-pattern

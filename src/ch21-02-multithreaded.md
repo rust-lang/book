@@ -690,7 +690,7 @@ the associated block. In Listing 20-21, the lock remains held for the duration
 of the call to `job()`, meaning other workers cannot receive jobs.
 
 [creating-type-synonyms-with-type-aliases]:
-ch19-04-advanced-types.html#creating-type-synonyms-with-type-aliases
+ch20-04-advanced-types.html#creating-type-synonyms-with-type-aliases
 [integer-types]: ch03-02-data-types.html#integer-types
 [fn-traits]:
 ch13-01-closures.html#moving-captured-values-out-of-the-closure-and-the-fn-traits

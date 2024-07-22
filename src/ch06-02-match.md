@@ -246,9 +246,10 @@ that doesn’t match a pattern in an earlier arm, and we don’t want to run any
 code in this case.
 
 There’s more about patterns and matching that we’ll cover in [Chapter
-18][ch18-00-patterns]<!-- ignore -->. For now, we’re going to move on to the
+19][ch19-00-patterns]<!-- ignore -->. For now, we’re going to move on to the
 `if let` syntax, which can be useful in situations where the `match` expression
 is a bit wordy.
 
 [tuples]: ch03-02-data-types.html#the-tuple-type
-[ch18-00-patterns]: ch18-00-patterns.html
+
+[ch19-00-patterns]: ch19-00-patterns.html

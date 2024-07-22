@@ -74,7 +74,7 @@ up correctly.
 These limitations make threads harder to compose than futures. It is much more
 difficult, for example, to build something like the `timeout` we built in
 [“Building Our Own Async Abstractions”][combining-futures], or the `throttle`
-method we used with streams in [“Working With Streams”][streams]. The fact that
+method we used with streams in [“Composing Streams”][streams]. The fact that
 futures are richer data structures means they *can* be composed together more
 naturally, as we have seen.
 
@@ -116,5 +116,5 @@ as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idio
 relate to those you might be familiar with from object-oriented programming.
 
 
-[combining-futures]: /ch17-04-more-ways-of-combining-futures.md#building-our-own-async-abstractions
-[streams]: /ch17-05-streams.md#working-with-streams
+[combining-futures]: ch17-04-more-ways-of-combining-futures.md#building-our-own-async-abstractions
+[streams]: ch17-05-streams.md#composing-streams
