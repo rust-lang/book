@@ -136,7 +136,7 @@ copy just the output
 
 The `a` future still runs for a bit before handing off control to `b`, because
 it calls `slow` before ever calling `trpl::sleep`, but after that the futures
-swap back and forth eaach time one of them hits an await point. In this case, we
+swap back and forth each time one of them hits an await point. In this case, we
 have done that after every call to `slow`, but we could break up the work
 however makes the most sense to us.
 

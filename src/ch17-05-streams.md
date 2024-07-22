@@ -159,8 +159,8 @@ we can do just that.
 ```
 
 <!--
-TODO: update this if/when tokio/etc. update their MSRV and switch to using AFIT,
-since the lack thereof is the reason they do not yet have this.
+TODO: update this if/when tokio/etc. update their MSRV and switch to using async functions
+in traits, since the lack thereof is the reason they do not yet have this.
 -->
 
 > Note: The actual definition we will use looks slightly different than this,
