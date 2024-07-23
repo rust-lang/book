@@ -38,25 +38,25 @@ That would be a pretty frustrating experience, though. Instead, your computer
 can (and does!) invisibly interrupt the export often enough to let you get other
 work done along the way.
 
-The file download is different. It does not take up very much CPU time. You are
-mostly waiting on data to transfer across the network. You can start reading
-from a network socket, but it might take a while for all the data to arrive and
-be fed into the socket by the network controller. Even once the data has all
-arrived, videos can be quite large, so it might take some time to load all the
-data from the socket. Maybe it only takes a second or two—but that is a very
-long time for a modern processor, which can do billions of operations every
-second. It would be nice to be able to put the CPU to use for other work while
-waiting for the network call to finish—so, again, your computer will once again
-invisibly interrupt your program so other things can happen while the network
-operation is still ongoing.
+The file download is different. It does not take up very much CPU time. The CPU
+needs to wait on data to arrive from the network. While you can start reading
+the data once some of it arrives, it might take a while for the rest to arrive.
+Even once the data has all arrived, videos can be quite large, so it might take
+some time to load all the data from the socket. Maybe it only takes a second or
+two—but that is a very long time for a modern processor, which can do billions
+of operations every second. It would be nice to be able to put the CPU to use
+for other work while waiting for the network call to finish—so, again, your
+computer will once again invisibly interrupt your program so other things can
+happen while the network operation is still ongoing.
 
 > Note: The video export is the kind of operation which is often described as
-> “CPU-bound”. It is limited by the speed of the computer’s *CPU and GPU*, and
-> how much of that speed it can use. The video download is the kind of operation
-> which is often described as “IO-bound,” because it is limited by the speed of
-> the computer’s *input and output*. It can only go as fast as the data can be
-> sent across the network, which means that it can only go as fast as the data
-> can be written to the socket by the network controller.
+> “CPU-bound” or “compute-bound”. It is limited by the speed of the computer’s
+> ability to process data within the *CPU* or *GPU*, and how much of that speed
+> it can use. The video download is the kind of operation which is often
+> described as “IO-bound,” because it is limited by the speed of the computer’s
+> *input and output*. It can only go as fast as the data can be sent across the
+> network, which means that it can only go as fast as the data can be written to
+> the socket by the network controller.
 
 In both of these examples, the concurrency only happens at the level of a whole
 program. The operating system interrupts one program to let other
@@ -68,8 +68,8 @@ For example, if we are building a tool to manage file downloads, we should be
 able to write our program in such a way that starting one download does not lock
 up the UI, and users should be able to start multiple downloads at the same
 time. Many operating system APIs for interacting with network sockets are
-*blocking*, though. That is, the function calls block further progress in the
-program when they are called until they return.
+*blocking*, though. That is, these APIs block the program’s progress until the
+data that they are processing is completely ready.
 
 > Note: This is how *most* function calls work, if you think about it! However,
 > we normally reserve the term “blocking” for function calls which interact with
@@ -77,8 +77,8 @@ program when they are called until they return.
 > the places where an individual program would benefit from the operation being
 > *non*-blocking.
 
-We could use threads to avoid blocking while downloading files, by using a
-dedicated thread. But it would be nicer if the call were not blocking in the
+We could avoid blocking our main thread, by spawning a dedicated thread to
+download each file. But it would be nicer if the call were not blocking in the
 first place.
 
 One way to accomplish that would be to use an API built around callbacks. For
