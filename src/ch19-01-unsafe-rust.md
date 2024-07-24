@@ -389,14 +389,14 @@ static variable named `COUNTER`.
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-10/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-10: Reading from or writing to a mutable
-static variable is unsafe</span>
+<span class="caption">Listing 19-10: Accessing or modifying a mutable static 
+variable is unsafe</span>
 
 As with regular variables, we specify mutability using the `mut` keyword. Any
-code that reads or writes from `COUNTER` must be within an `unsafe` block. This
-code compiles and prints `COUNTER: 3` as we would expect because it’s single
-threaded. Having multiple threads access `COUNTER` would likely result in data
-races.
+code that accessing or modifying `COUNTER` must be within an `unsafe` block.
+This code compiles and prints `COUNTER: 3` as we would expect because it’s 
+single threaded. Having multiple threads access `COUNTER` would likely result 
+in data races.
 
 With mutable data that is globally accessible, it’s difficult to ensure there
 are no data races, which is why Rust considers mutable static variables to be
