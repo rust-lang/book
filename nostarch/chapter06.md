@@ -162,7 +162,7 @@ let loopback = IpAddr::V6(String::from("::1"));
 
 We’ve shown several different ways to define data structures to store version
 four and version six IP addresses. However, as it turns out, wanting to store
-IP addresses and encode which kind they are is so common that the standard
+IP addresses and encode which kind they are so common that the standard
 library has a definition we can use! Let’s look at how the standard library
 defines `IpAddr`: it has the exact enum and variants that we’ve defined and
 used, but it embeds the address data inside the variants in the form of two
