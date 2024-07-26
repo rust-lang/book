@@ -81,9 +81,25 @@ to the other. You are just one person, and you cannot make progress on both
 tasks at the exact same time—but you can multi-task, making progress on multiple
 tasks by switching between them.
 
+<figure>
+
+<img alt="Concurrent work flow" src="img/trpl17-01.svg" class="center" />
+
+<figcaption>Figure 17-1: A concurrent workflow, switching between Task A and Task B</figcaption>
+
+</figure>
+
 When you agree to split up a group of tasks between the people on the team, with
 each person taking one task and working on it alone, this is *parallelism*. Each
 person on the team can make progress at the exact same time.
+
+<figure>
+
+<img alt="Concurrent work flow" src="img/trpl17-02.svg" class="center" />
+
+<figcaption>Figure 17-2: A parallel workflow, where work happens on Task A and Task B independently</figcaption>
+
+</figure>
 
 With both of these situations, you might have to coordinate between different
 tasks. Maybe you *thought* the task that one person was working on was totally

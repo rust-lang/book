@@ -1,46 +1,20 @@
 digraph {
    dpi = 300.0;
    
-   Concurrent [label = "Concurrent";shape = "plaintext";];
-   rankdir = "TB";
+   rankdir = "LR";
    splines = false;
    cluster = true;
    
    node [shape = diamond;];
    
-   subgraph cluster_task_a {
-      label = "Task A";
-      
-      // makes ordering between subgraphs work
+   subgraph cluster_ColleagueA {
       newrank = true;
-      
-      A1;
-      A2;
-      A3;
-      A4;
-      
-      // for vertical alignment purposes only
-      A0 [style = invis;];
-      
-      edge [style = invis;];
+      label = "Task 1";
+      A1 -> A2 -> A3 -> A4;
    }
    
-   subgraph cluster_task_b {
-      label = "Task B";
-      cluster = true;
-      
-      // for vertical alignment purposes only
-      newrank = true;
-      
-      B0 [style = invis;];
-      
-      B1;
-      B2;
-      B3;
+   subgraph cluster_ColleagueB {
+      label = "Task 2";
+      B1 -> B2 -> B3;
    }
-   
-   A1 -> B1 -> A2 -> B2 -> A3 -> A4 -> B3;
-   
-   // Makes the heights line up between the boxes.
-   A4 -> A0 [style = invis;];
 }
