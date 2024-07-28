@@ -1,42 +1,21 @@
-[package]
-name = "rust-book"
-version = "0.0.1"
-description = "The Rust Book"
-edition = "2018"
+[workspace]
+members = ["packages/tools"]
+default-members = ["packages/tools"]
+resolver = "2"
+exclude = [
+    "linkchecker", # linkchecker is part of the CI workflow
+    "listings",    # these are intentionally distinct from the workspace
+    "tmp",         # listings are built here when updating output via tools/update-rustc.sh
 
-[[bin]]
-name = "concat_chapters"
-path = "tools/src/bin/concat_chapters.rs"
+    # These are used as path dependencies in `rust-lang/rust` (since we are not
+    # publishing them to crates.io), so they cannot be part of this workspace,
+    # because path dependencies do not get built as a crate within the hosting
+    # workspace.
+    "packages/mdbook-trpl-listing",
+    "packages/mdbook-trpl-note",
+]
 
-[[bin]]
-name = "convert_quotes"
-path = "tools/src/bin/convert_quotes.rs"
-
-[[bin]]
-name = "lfp"
-path = "tools/src/bin/lfp.rs"
-
-[[bin]]
-name = "link2print"
-path = "tools/src/bin/link2print.rs"
-
-[[bin]]
-name = "release_listings"
-path = "tools/src/bin/release_listings.rs"
-
-[[bin]]
-name = "remove_hidden_lines"
-path = "tools/src/bin/remove_hidden_lines.rs"
-
-[[bin]]
-name = "remove_links"
-path = "tools/src/bin/remove_links.rs"
-
-[[bin]]
-name = "remove_markup"
-path = "tools/src/bin/remove_markup.rs"
-
-[dependencies]
+[workspace.dependencies]
 walkdir = "2.3.1"
 docopt = "1.1.0"
 serde = "1.0"

@@ -142,14 +142,13 @@ Next, let’s use the `add_one` function (from the `add_one` crate) in the
 top to bring the new `add_one` library crate into scope. Then change the `main`
 function to call the `add_one` function, as in Listing 14-7.
 
-<span class="filename">Filename: adder/src/main.rs</span>
+<Listing number="14-7" file-name="adder/src/main.rs" caption="Using the `add_one` library crate from the `adder` crate">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
 ```
 
-<span class="caption">Listing 14-7: Using the `add_one` library crate from the
- `adder` crate</span>
+</Listing>
 
 Let’s build the workspace by running `cargo build` in the top-level *add*
 directory!
@@ -267,10 +266,15 @@ error[E0432]: unresolved import `rand`
 To fix this, edit the *Cargo.toml* file for the `adder` package and indicate
 that `rand` is a dependency for it as well. Building the `adder` package will
 add `rand` to the list of dependencies for `adder` in *Cargo.lock*, but no
-additional copies of `rand` will be downloaded. Cargo has ensured that every
+additional copies of `rand` will be downloaded. Cargo will ensure that every
 crate in every package in the workspace using the `rand` package will be using
-the same version, saving us space and ensuring that the crates in the workspace
-will be compatible with each other.
+the same version as long as they specify compatible versions of `rand`, saving
+us space and ensuring that the crates in the workspace will be compatible with
+each other.
+
+If crates in the workspace specify incompatible versions of the same dependency,
+Cargo will resolve each of them, but will still try to resolve as few versions
+as possible.
 
 #### Adding a Test to a Workspace
 

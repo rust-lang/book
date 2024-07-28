@@ -3,12 +3,17 @@ $ cargo test
 error[E0596]: cannot borrow `self.sent_messages` as mutable, as it is behind a `&` reference
   --> src/lib.rs:58:13
    |
-2  |     fn send(&self, msg: &str);
-   |             ----- help: consider changing that to be a mutable reference: `&mut self`
-...
 58 |             self.sent_messages.push(String::from(message));
-   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `self` is a `&` reference, so the data it refers to cannot be borrowed as mutable
+   |             ^^^^^^^^^^^^^^^^^^ `self` is a `&` reference, so the data it refers to cannot be borrowed as mutable
+   |
+help: consider changing this to be a mutable reference in the `impl` method and the `trait` definition
+   |
+2  ~     fn send(&mut self, msg: &str);
+3  | }
+ ...
+56 |     impl Messenger for MockMessenger {
+57 ~         fn send(&mut self, message: &str) {
+   |
 
 For more information about this error, try `rustc --explain E0596`.
-error: could not compile `limit-tracker` due to previous error
-warning: build failed, waiting for other jobs to finish...
+error: could not compile `limit-tracker` (lib test) due to 1 previous error

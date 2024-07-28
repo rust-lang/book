@@ -16,14 +16,13 @@ the new `search_case_insensitive` function and rename our old test from
 `one_result` to `case_sensitive` to clarify the differences between the two
 tests, as shown in Listing 12-20.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="12-20" file-name="src/lib.rs" caption="Adding a new failing test for the case-insensitive function we’re about to add">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-20/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-20: Adding a new failing test for the
-case-insensitive function we’re about to add</span>
+</Listing>
 
 Note that we’ve edited the old test’s `contents` too. We’ve added a new line
 with the text `"Duct tape."` using a capital D that shouldn’t match the query
@@ -48,14 +47,13 @@ the same as the `search` function. The only difference is that we’ll lowercase
 the `query` and each `line` so whatever the case of the input arguments,
 they’ll be the same case when we check whether the line contains the query.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="12-21" file-name="src/lib.rs" caption="Defining the `search_case_insensitive` function to lowercase the query and the line before comparing them">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-21/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-21: Defining the `search_case_insensitive`
-function to lowercase the query and the line before comparing them</span>
+</Listing>
 
 First, we lowercase the `query` string and store it in a shadowed variable with
 the same name. Calling `to_lowercase` on the query is necessary so no
@@ -101,30 +99,28 @@ function to check the `ignore_case` field’s value and use that to decide
 whether to call the `search` function or the `search_case_insensitive`
 function, as shown in Listing 12-22. This still won’t compile yet.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="12-22" file-name="src/lib.rs" caption="Calling either `search` or `search_case_insensitive` based on the value in `config.ignore_case`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/lib.rs:there}}
 ```
 
-<span class="caption">Listing 12-22: Calling either `search` or
-`search_case_insensitive` based on the value in `config.ignore_case`</span>
+</Listing>
 
 Finally, we need to check for the environment variable. The functions for
 working with environment variables are in the `env` module in the standard
 library, so we bring that module into scope at the top of *src/lib.rs*. Then
-we’ll use the `var` function from the `env` module to check to see if any value
+we’ll use the `var` function from the `env` module to check if any value
 has been set for an environment variable named `IGNORE_CASE`, as shown in
 Listing 12-23.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="12-23" file-name="src/lib.rs" caption="Checking for any value in an environment variable named `IGNORE_CASE`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-23/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-23: Checking for any value in an environment
-variable named `IGNORE_CASE`</span>
+</Listing>
 
 Here, we create a new variable `ignore_case`. To set its value, we call the
 `env::var` function and pass it the name of the `IGNORE_CASE` environment

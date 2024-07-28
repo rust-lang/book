@@ -2,13 +2,13 @@
 
 *by Steve Klabnik and Carol Nichols, with contributions from the Rust Community*
 
-This version of the text assumes you’re using Rust 1.67.1 (released 2023-02-09)
+This version of the text assumes you’re using Rust 1.79.0 (released 2024-06-13)
 or later. See the [“Installation” section of Chapter 1][install]<!-- ignore -->
 to install or update Rust.
 
 The HTML format is available online at
 [https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/)
-and offline with installations of Rust made with `rustup`; run `rustup docs
+and offline with installations of Rust made with `rustup`; run `rustup doc
 --book` to open.
 
 Several community [translations] are also available.

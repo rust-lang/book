@@ -7,7 +7,7 @@ error[E0599]: no method named `join` found for enum `Option` in the current scop
    |                           ^^^^ method not found in `Option<JoinHandle<()>>`
    |
 note: the method `join` exists on the type `JoinHandle<()>`
-  --> /rustc/d5a82bbd26e1ad8b7401f6a718a9c57c96905483/library/std/src/thread/mod.rs:1581:5
+  --> /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/thread/mod.rs:1718:5
 help: consider using `Option::expect` to unwrap the `JoinHandle<()>` value, panicking if the value is an `Option::None`
    |
 52 |             worker.thread.expect("REASON").join().unwrap();
@@ -17,7 +17,7 @@ error[E0308]: mismatched types
   --> src/lib.rs:72:22
    |
 72 |         Worker { id, thread }
-   |                      ^^^^^^ expected enum `Option`, found struct `JoinHandle`
+   |                      ^^^^^^ expected `Option<JoinHandle<()>>`, found `JoinHandle<_>`
    |
    = note: expected enum `Option<JoinHandle<()>>`
             found struct `JoinHandle<_>`
@@ -28,4 +28,4 @@ help: try wrapping the expression in `Some`
 
 Some errors have detailed explanations: E0308, E0599.
 For more information about an error, try `rustc --explain E0308`.
-error: could not compile `hello` due to 2 previous errors
+error: could not compile `hello` (lib) due to 2 previous errors

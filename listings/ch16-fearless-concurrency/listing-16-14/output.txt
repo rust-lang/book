@@ -6,7 +6,7 @@ error[E0277]: `Rc<Mutex<i32>>` cannot be sent between threads safely
 11 |           let handle = thread::spawn(move || {
    |                        ------------- ^------
    |                        |             |
-   |  ______________________|_____________within this `[closure@src/main.rs:11:36: 11:43]`
+   |  ______________________|_____________within this `{closure@src/main.rs:11:36: 11:43}`
    | |                      |
    | |                      required by a bound introduced by this call
 12 | |             let mut num = counter.lock().unwrap();
@@ -15,16 +15,14 @@ error[E0277]: `Rc<Mutex<i32>>` cannot be sent between threads safely
 15 | |         });
    | |_________^ `Rc<Mutex<i32>>` cannot be sent between threads safely
    |
-   = help: within `[closure@src/main.rs:11:36: 11:43]`, the trait `Send` is not implemented for `Rc<Mutex<i32>>`
+   = help: within `{closure@src/main.rs:11:36: 11:43}`, the trait `Send` is not implemented for `Rc<Mutex<i32>>`, which is required by `{closure@src/main.rs:11:36: 11:43}: Send`
 note: required because it's used within this closure
   --> src/main.rs:11:36
    |
 11 |         let handle = thread::spawn(move || {
    |                                    ^^^^^^^
 note: required by a bound in `spawn`
-  --> /rustc/d5a82bbd26e1ad8b7401f6a718a9c57c96905483/library/std/src/thread/mod.rs:704:8
-   |
-   = note: required by this bound in `spawn`
+  --> /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/thread/mod.rs:691:1
 
 For more information about this error, try `rustc --explain E0277`.
-error: could not compile `shared-state` due to previous error
+error: could not compile `shared-state` (bin "shared-state") due to 1 previous error

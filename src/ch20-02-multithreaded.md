@@ -653,7 +653,7 @@ overloaded if the server receives a lot of requests. If we make a request to
 */sleep*, the server will be able to serve other requests by having another
 thread run them.
 
-> Note: if you open */sleep* in multiple browser windows simultaneously, they
+> Note: If you open */sleep* in multiple browser windows simultaneously, they
 > might load one at a time in 5 second intervals. Some web browsers execute
 > multiple instances of the same request sequentially for caching reasons. This
 > limitation is not caused by our web server.

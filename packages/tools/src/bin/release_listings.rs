@@ -1,13 +1,12 @@
-#[macro_use]
-extern crate lazy_static;
-
-use regex::Regex;
 use std::error::Error;
 use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::{BufReader, BufWriter};
 use std::path::{Path, PathBuf};
+
+use lazy_static::lazy_static;
+use regex::Regex;
 
 fn main() -> Result<(), Box<dyn Error>> {
     // Get all listings from the `listings` directory
@@ -149,7 +148,7 @@ fn copy_cleaned_rust_file(
         if !ANCHOR_OR_SNIP_COMMENTS.is_match(&line)
             && (item_name != "lib.rs" || !EMPTY_MAIN.is_match(&line))
         {
-            writeln!(&mut to_buf, "{}", line)?;
+            writeln!(&mut to_buf, "{line}")?;
         }
     }
 

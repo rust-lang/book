@@ -73,14 +73,13 @@ that input, and check that the input is in the expected form. To start, we’ll
 allow the player to input a guess. Enter the code in Listing 2-1 into
 *src/main.rs*.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="2-1" file-name="src/main.rs" caption="Code that gets a guess from the user and prints it">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
 ```
 
-<span class="caption">Listing 2-1: Code that gets a guess from the user and
-prints it</span>
+</Listing> 
 
 This code contains a lot of information, so let’s go over it line by line. To
 obtain user input and then print the result as output, we need to bring the
@@ -376,6 +375,8 @@ rm Cargo.lock
 cargo clean
 cargo build -->
 
+<Listing number="2-2" caption="The output from running `cargo build` after adding the rand crate as a dependency">
+
 ```console
 $ cargo build
     Updating crates.io index
@@ -397,8 +398,7 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
 
-<span class="caption">Listing 2-2: The output from running `cargo build` after
-adding the rand crate as a dependency</span>
+</Listing>
 
 You may see different version numbers (but they will all be compatible with the
 code, thanks to SemVer!) and different lines (depending on the operating
@@ -466,8 +466,8 @@ checked into source control with the rest of the code in your project.
 When you *do* want to update a crate, Cargo provides the command `update`,
 which will ignore the *Cargo.lock* file and figure out all the latest versions
 that fit your specifications in *Cargo.toml*. Cargo will then write those
-versions to the *Cargo.lock* file. Otherwise, by default, Cargo will only look
-for versions greater than 0.8.5 and less than 0.9.0. If the `rand` crate has
+versions to the *Cargo.lock* file. In this case, Cargo will only look for
+versions greater than 0.8.5 and less than 0.9.0. If the `rand` crate has
 released the two new versions 0.8.6 and 0.9.0, you would see the following if
 you ran `cargo update`:
 
@@ -508,14 +508,13 @@ from a number of packages.
 Let’s start using `rand` to generate a number to guess. The next step is to
 update *src/main.rs*, as shown in Listing 2-3.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="2-3" file-name="src/main.rs" caption="Adding code to generate a random number">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:all}}
 ```
 
-<span class="caption">Listing 2-3: Adding code to generate a random
-number</span>
+</Listing>
 
 First we add the line `use rand::Rng;`. The `Rng` trait defines methods that
 random number generators implement, and this trait must be in scope for us to
@@ -585,14 +584,13 @@ Now that we have user input and a random number, we can compare them. That step
 is shown in Listing 2-4. Note that this code won’t compile just yet, as we will
 explain.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="2-4" file-name="src/main.rs" caption="Handling the possible return values of comparing two numbers">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 2-4: Handling the possible return values of
-comparing two numbers</span>
+</Listing>
 
 First we add another `use` statement, bringing a type called
 `std::cmp::Ordering` into scope from the standard library. The `Ordering` type
@@ -654,8 +652,8 @@ elsewhere that would cause Rust to infer a different numerical type. The reason
 for the error is that Rust cannot compare a string and a number type.
 
 Ultimately, we want to convert the `String` the program reads as input into a
-real number type so we can compare it numerically to the secret number. We do
-so by adding this line to the `main` function body:
+number type so we can compare it numerically to the secret number. We do so by
+adding this line to the `main` function body:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -682,13 +680,12 @@ in the expression refers to the original `guess` variable that contained the
 input as a string. The `trim` method on a `String` instance will eliminate any
 whitespace at the beginning and end, which we must do to be able to compare the
 string to the `u32`, which can only contain numerical data. The user must press
-<span class="keystroke">enter</span> to satisfy `read_line` and input their
-guess, which adds a newline character to the string. For example, if the user
-types <span class="keystroke">5</span> and presses <span
-class="keystroke">enter</span>, `guess` looks like this: `5\n`. The `\n`
-represents “newline.” (On Windows, pressing <span
-class="keystroke">enter</span> results in a carriage return and a newline,
-`\r\n`.) The `trim` method eliminates `\n` or `\r\n`, resulting in just `5`.
+<kbd>enter</kbd> to satisfy `read_line` and input their guess, which adds a
+newline character to the string. For example, if the user types <kbd>5</kbd> and
+presses <kbd>enter</kbd>, `guess` looks like this: `5\n`. The `\n` represents
+“newline.” (On Windows, pressing <kbd>enter</kbd> results in a carriage return
+and a newline, `\r\n`.) The `trim` method eliminates `\n` or `\r\n`, resulting
+in just `5`.
 
 The [`parse` method on strings][parse]<!-- ignore --> converts a string to
 another type. Here, we use it to convert from a string to a number. We need to
@@ -762,11 +759,11 @@ and run the program again. The program will now ask for another guess forever,
 which actually introduces a new problem. It doesn’t seem like the user can quit!
 
 The user could always interrupt the program by using the keyboard shortcut
-<span class="keystroke">ctrl-c</span>. But there’s another way to escape this
-insatiable monster, as mentioned in the `parse` discussion in [“Comparing the
-Guess to the Secret Number”](#comparing-the-guess-to-the-secret-number)<!--
-ignore -->: if the user enters a non-number answer, the program will crash. We
-can take advantage of that to allow the user to quit, as shown here:
+<kbd>ctrl</kbd>-<kbd>c</kbd>. But there’s another way to escape this insatiable
+monster, as mentioned in the `parse` discussion in [“Comparing the Guess to the
+Secret Number”](#comparing-the-guess-to-the-secret-number)<!-- ignore -->: if
+the user enters a non-number answer, the program will crash. We can take
+advantage of that to allow the user to quit, as shown here:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-04-looping/
@@ -827,14 +824,13 @@ the user inputs a non-number, let’s make the game ignore a non-number so the
 user can continue guessing. We can do that by altering the line where `guess`
 is converted from a `String` to a `u32`, as shown in Listing 2-5.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="2-5" file-name="src/main.rs" caption="Ignoring a non-number guess and asking for another guess instead of crashing the program">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 2-5: Ignoring a non-number guess and asking for
-another guess instead of crashing the program</span>
+</Listing>
 
 We switch from an `expect` call to a `match` expression to move from crashing
 on an error to handling the error. Remember that `parse` returns a `Result`
@@ -897,13 +893,13 @@ that the program is still printing the secret number. That worked well for
 testing, but it ruins the game. Let’s delete the `println!` that outputs the
 secret number. Listing 2-6 shows the final code.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="2-6" file-name="src/main.rs" caption="Complete guessing game code">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 2-6: Complete guessing game code</span>
+</Listing>
 
 At this point, you’ve successfully built the guessing game. Congratulations!
 
@@ -930,8 +926,8 @@ discusses structs and method syntax, and Chapter 6 explains how enums work.
 [randcrate]: https://crates.io/crates/rand
 [semver]: http://semver.org
 [cratesio]: https://crates.io/
-[doccargo]: http://doc.crates.io
-[doccratesio]: http://doc.crates.io/crates-io.html
+[doccargo]: https://doc.rust-lang.org/cargo/
+[doccratesio]: https://doc.rust-lang.org/cargo/reference/publishing.html
 [match]: ch06-02-match.html
 [shadowing]: ch03-01-variables-and-mutability.html#shadowing
 [parse]: ../std/primitive.str.html#method.parse

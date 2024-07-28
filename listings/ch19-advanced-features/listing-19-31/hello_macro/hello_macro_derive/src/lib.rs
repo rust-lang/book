@@ -1,6 +1,5 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn;
 
 #[proc_macro_derive(HelloMacro)]
 pub fn hello_macro_derive(input: TokenStream) -> TokenStream {

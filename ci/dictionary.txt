@@ -35,6 +35,7 @@ backtraces
 BACKTRACE
 Backtraces
 Baz's
+beefeb
 benchmarking
 bioinformatics
 bitand
@@ -430,6 +431,7 @@ Rustaceans
 rUsT
 rustc
 rustdoc
+RUSTFLAGS
 Rustonomicon
 rustfix
 rustfmt
@@ -491,6 +493,7 @@ Submodules
 submodule’s
 suboptimal
 subpath
+subslices
 substring
 subteams
 subtree

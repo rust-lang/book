@@ -23,14 +23,14 @@ in each file to contain the test functions and to annotate the module with
 
 #### The Tests Module and `#[cfg(test)]`
 
-The `#[cfg(test)]` annotation on the tests module tells Rust to compile and run
-the test code only when you run `cargo test`, not when you run `cargo build`.
-This saves compile time when you only want to build the library and saves space
-in the resulting compiled artifact because the tests are not included. You’ll
-see that because integration tests go in a different directory, they don’t need
-the `#[cfg(test)]` annotation. However, because unit tests go in the same files
-as the code, you’ll use `#[cfg(test)]` to specify that they shouldn’t be
-included in the compiled result.
+The `#[cfg(test)]` annotation on the `tests` module tells Rust to compile and
+run the test code only when you run `cargo test`, not when you run `cargo
+build`. This saves compile time when you only want to build the library and
+saves space in the resultant compiled artifact because the tests are not
+included. You’ll see that because integration tests go in a different
+directory, they don’t need the `#[cfg(test)]` annotation. However, because unit
+tests go in the same files as the code, you’ll use `#[cfg(test)]` to specify
+that they shouldn’t be included in the compiled result.
 
 Recall that when we generated the new `adder` project in the first section of
 this chapter, Cargo generated this code for us:
@@ -41,14 +41,13 @@ this chapter, Cargo generated this code for us:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-01/src/lib.rs}}
 ```
 
-This code is the automatically generated test module. The attribute `cfg`
-stands for *configuration* and tells Rust that the following item should only
-be included given a certain configuration option. In this case, the
-configuration option is `test`, which is provided by Rust for compiling and
-running tests. By using the `cfg` attribute, Cargo compiles our test code only
-if we actively run the tests with `cargo test`. This includes any helper
-functions that might be within this module, in addition to the functions
-annotated with `#[test]`.
+On the automatically generated `tests` module, the attribute `cfg` stands for
+*configuration* and tells Rust that the following item should only be included
+given a certain configuration option. In this case, the configuration option is
+`test`, which is provided by Rust for compiling and running tests. By using the
+`cfg` attribute, Cargo compiles our test code only if we actively run the tests
+with `cargo test`. This includes any helper functions that might be within this
+module, in addition to the functions annotated with `#[test]`.
 
 #### Testing Private Functions
 
@@ -58,19 +57,19 @@ impossible to test private functions. Regardless of which testing ideology you
 adhere to, Rust’s privacy rules do allow you to test private functions.
 Consider the code in Listing 11-12 with the private function `internal_adder`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="11-12" file-name="src/lib.rs" caption="Testing a private function">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-12/src/lib.rs}}
 ```
 
-<span class="caption">Listing 11-12: Testing a private function</span>
+</Listing>
 
 Note that the `internal_adder` function is not marked as `pub`. Tests are just
 Rust code, and the `tests` module is just another module. As we discussed in
 the [“Paths for Referring to an Item in the Module Tree”][paths]<!-- ignore -->
 section, items in child modules can use the items in their ancestor modules. In
-this test, we bring all of the `test` module’s parent’s items into scope with
+this test, we bring all of the `tests` module’s parent’s items into scope with
 `use super::*`, and then the test can call `internal_adder`. If you don’t think
 private functions should be tested, there’s nothing in Rust that will compel
 you to do so.
@@ -106,23 +105,22 @@ adder
     └── integration_test.rs
 ```
 
-Enter the code in Listing 11-13 into the *tests/integration_test.rs* file:
+Enter the code in Listing 11-13 into the *tests/integration_test.rs* file.
 
-<span class="filename">Filename: tests/integration_test.rs</span>
+<Listing number="11-13" file-name="tests/integration_test.rs" caption="An integration test of a function in the `adder` crate">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-13/tests/integration_test.rs}}
 ```
 
-<span class="caption">Listing 11-13: An integration test of a function in the
-`adder` crate</span>
+</Listing>
 
-Each file in the `tests` directory is a separate crate, so we need to bring our
-library into each test crate’s scope. For that reason we add `use adder` at the
-top of the code, which we didn’t need in the unit tests.
+Each file in the *tests* directory is a separate crate, so we need to bring our
+library into each test crate’s scope. For that reason we add `use
+adder::add_two;` at the top of the code, which we didn’t need in the unit tests.
 
 We don’t need to annotate any code in *tests/integration_test.rs* with
-`#[cfg(test)]`. Cargo treats the `tests` directory specially and compiles files
+`#[cfg(test)]`. Cargo treats the *tests* directory specially and compiles files
 in this directory only when we run `cargo test`. Run `cargo test` now:
 
 ```console
@@ -193,11 +191,9 @@ did we call the `setup` function from anywhere:
 
 Having `common` appear in the test results with `running 0 tests` displayed for
 it is not what we wanted. We just wanted to share some code with the other
-integration test files.
-
-To avoid having `common` appear in the test output, instead of creating
-*tests/common.rs*, we’ll create *tests/common/mod.rs*. The project directory
-now looks like this:
+integration test files. To avoid having `common` appear in the test output,
+instead of creating *tests/common.rs*, we’ll create *tests/common/mod.rs*. The
+project directory now looks like this:
 
 ```text
 ├── Cargo.lock
@@ -230,7 +226,7 @@ function from the `it_adds_two` test in *tests/integration_test.rs*:
 ```
 
 Note that the `mod common;` declaration is the same as the module declaration
-we demonstrated in Listing 7-21. Then in the test function, we can call the
+we demonstrated in Listing 7-21. Then, in the test function, we can call the
 `common::setup()` function.
 
 #### Integration Tests for Binary Crates
@@ -244,10 +240,9 @@ crates can use; binary crates are meant to be run on their own.
 This is one of the reasons Rust projects that provide a binary have a
 straightforward *src/main.rs* file that calls logic that lives in the
 *src/lib.rs* file. Using that structure, integration tests *can* test the
-library crate with `use` to make the important functionality available.
-If the important functionality works, the small amount of code in the
-*src/main.rs* file will work as well, and that small amount of code doesn’t
-need to be tested.
+library crate with `use` to make the important functionality available. If the
+important functionality works, the small amount of code in the *src/main.rs*
+file will work as well, and that small amount of code doesn’t need to be tested.
 
 ## Summary
 

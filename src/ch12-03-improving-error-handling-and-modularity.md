@@ -23,13 +23,13 @@ example, the file could be missing, or we might not have permission to open it.
 Right now, regardless of the situation, we’d print the same error message for
 everything, which wouldn’t give the user any information!
 
-Fourth, we use `expect` repeatedly to handle different errors, and if the user
-runs our program without specifying enough arguments, they’ll get an `index out
-of bounds` error from Rust that doesn’t clearly explain the problem. It would
-be best if all the error-handling code were in one place so future maintainers
-had only one place to consult the code if the error-handling logic needed to
-change. Having all the error-handling code in one place will also ensure that
-we’re printing messages that will be meaningful to our end users.
+Fourth, we use `expect` to handle an error, and if the user runs our program
+without specifying enough arguments, they’ll get an `index out of bounds` error
+from Rust that doesn’t clearly explain the problem. It would be best if all the
+error-handling code were in one place so future maintainers had only one place
+to consult the code if the error-handling logic needed to change. Having all the
+error-handling code in one place will also ensure that we’re printing messages
+that will be meaningful to our end users.
 
 Let’s address these four problems by refactoring our project.
 
@@ -70,14 +70,13 @@ We’ll extract the functionality for parsing arguments into a function that
 *src/lib.rs*. Listing 12-5 shows the new start of `main` that calls a new
 function `parse_config`, which we’ll define in *src/main.rs* for the moment.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-5" file-name="src/main.rs" caption="Extracting a `parse_config` function from `main`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-5: Extracting a `parse_config` function from
-`main`</span>
+</Listing>
 
 We’re still collecting the command line arguments into a vector, but instead of
 assigning the argument value at index 1 to the variable `query` and the
@@ -112,14 +111,13 @@ other and what their purpose is.
 
 Listing 12-6 shows the improvements to the `parse_config` function.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-6" file-name="src/main.rs" caption="Refactoring `parse_config` to return an instance of a `Config` struct">
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-6: Refactoring `parse_config` to return an
-instance of a `Config` struct</span>
+</Listing>
 
 We’ve added a struct named `Config` defined to have fields named `query` and
 `file_path`. The signature of `parse_config` now indicates that it returns a
@@ -179,14 +177,13 @@ changing `parse_config` into a `new` function associated with `Config`, we’ll
 be able to create instances of `Config` by calling `Config::new`. Listing 12-7
 shows the changes we need to make.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-7" file-name="src/main.rs" caption="Changing `parse_config` into `Config::new`">
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-07/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-7: Changing `parse_config` into
-`Config::new`</span>
+</Listing>
 
 We’ve updated `main` where we were calling `parse_config` to instead call
 `Config::new`. We’ve changed the name of `parse_config` to `new` and moved it
@@ -214,14 +211,13 @@ In Listing 12-8, we add a check in the `new` function that will verify that the
 slice is long enough before accessing index 1 and 2. If the slice isn’t long
 enough, the program panics and displays a better error message.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-8" file-name="src/main.rs" caption="Adding a check for the number of arguments">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-8: Adding a check for the number of
-arguments</span>
+</Listing>
 
 This code is similar to [the `Guess::new` function we wrote in Listing
 9-13][ch9-custom-types]<!-- ignore -->, where we called `panic!` when the
@@ -265,14 +261,13 @@ function we’re now calling `Config::build` and the body of the function needed
 to return a `Result`. Note that this won’t compile until we update `main` as
 well, which we’ll do in the next listing.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-9" file-name="src/main.rs" caption="Returning a `Result` from `Config::build`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-9: Returning a `Result` from
-`Config::build`</span>
+</Listing>
 
 Our `build` function returns a `Result` with a `Config` instance in the success
 case and a `&'static str` in the error case. Our error values will always be
@@ -299,14 +294,13 @@ tool with a nonzero error code away from `panic!` and instead implement it by
 hand. A nonzero exit status is a convention to signal to the process that
 called our program that the program exited with an error state.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-10" file-name="src/main.rs" caption="Exiting with an error code if building a `Config` fails">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-10: Exiting with an error code if building a
-`Config` fails</span>
+</Listing>
 
 In this listing, we’ve used a method we haven’t covered in detail yet:
 `unwrap_or_else`, which is defined on `Result<T, E>` by the standard library.
@@ -350,14 +344,13 @@ Listing 12-11 shows the extracted `run` function. For now, we’re just making
 the small, incremental improvement of extracting the function. We’re still
 defining the function in *src/main.rs*.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-11" file-name="src/main.rs" caption="Extracting a `run` function containing the rest of the program logic">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-11: Extracting a `run` function containing the
-rest of the program logic</span>
+</Listing>
 
 The `run` function now contains all the remaining logic from `main`, starting
 from reading the file. The `run` function takes the `Config` instance as an
@@ -373,14 +366,13 @@ us further consolidate the logic around handling errors into `main` in a
 user-friendly way. Listing 12-12 shows the changes we need to make to the
 signature and body of `run`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-12" file-name="src/main.rs" caption="Changing the `run` function to return `Result`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-12/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-12: Changing the `run` function to return
-`Result`</span>
+</Listing>
 
 We’ve made three significant changes here. First, we changed the return type of
 the `run` function to `Result<(), Box<dyn Error>>`. This function previously
@@ -458,14 +450,13 @@ The contents of *src/lib.rs* should have the signatures shown in Listing 12-13
 (we’ve omitted the bodies of the functions for brevity). Note that this won’t
 compile until we modify *src/main.rs* in Listing 12-14.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="12-13" file-name="src/lib.rs" caption="Moving `Config` and `run` into *src/lib.rs*">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-13: Moving `Config` and `run` into
-*src/lib.rs*</span>
+</Listing>
 
 We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its
 `build` method, and on the `run` function. We now have a library crate that has
@@ -474,14 +465,13 @@ a public API we can test!
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the
 binary crate in *src/main.rs*, as shown in Listing 12-14.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-14" file-name="src/main.rs" caption="Using the `minigrep` library crate in *src/main.rs*">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-14: Using the `minigrep` library crate in
-*src/main.rs*</span>
+</Listing>
 
 We add a `use minigrep::Config` line to bring the `Config` type from the
 library crate into the binary crate’s scope, and we prefix the `run` function

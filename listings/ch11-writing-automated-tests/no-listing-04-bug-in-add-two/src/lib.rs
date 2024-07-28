@@ -1,5 +1,5 @@
 // ANCHOR: here
-pub fn add_two(a: i32) -> i32 {
+pub fn add_two(a: usize) -> usize {
     a + 3
 }
 // ANCHOR_END: here
@@ -10,6 +10,7 @@ mod tests {
 
     #[test]
     fn it_adds_two() {
-        assert_eq!(4, add_two(2));
+        let result = add_two(2);
+        assert_eq!(result, 4);
     }
 }

@@ -13,4 +13,4 @@ error[E0384]: cannot assign twice to immutable variable `x`
   |     ^^^^^ cannot assign twice to immutable variable
 
 For more information about this error, try `rustc --explain E0384`.
-error: could not compile `variables` due to previous error
+error: could not compile `variables` (bin "variables") due to 1 previous error

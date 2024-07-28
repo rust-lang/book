@@ -1,8 +1,7 @@
-extern crate regex;
-
-use regex::{Captures, Regex};
 use std::io;
 use std::io::Read;
+
+use regex::{Captures, Regex};
 
 fn main() {
     write_md(remove_markup(read_md()));
@@ -12,12 +11,12 @@ fn read_md() -> String {
     let mut buffer = String::new();
     match io::stdin().read_to_string(&mut buffer) {
         Ok(_) => buffer,
-        Err(error) => panic!("{}", error),
+        Err(error) => panic!("{error}"),
     }
 }
 
 fn write_md(output: String) {
-    print!("{}", output);
+    print!("{output}");
 }
 
 fn remove_markup(input: String) -> String {
@@ -27,7 +26,7 @@ fn remove_markup(input: String) -> String {
     let caption_start_regex =
         Regex::new(r#"\A<span class="caption">(.*)\z"#).unwrap();
     let caption_end_regex = Regex::new(r#"(.*)</span>\z"#).unwrap();
-    let regexen = vec![filename_regex, caption_start_regex, caption_end_regex];
+    let regexen = [filename_regex, caption_start_regex, caption_end_regex];
 
     let lines: Vec<_> = input
         .lines()

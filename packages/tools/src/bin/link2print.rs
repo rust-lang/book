@@ -1,10 +1,11 @@
 // FIXME: we have some long lines that could be refactored, but it's not a big deal.
 // ignore-tidy-linelength
 
-use regex::{Captures, Regex};
 use std::collections::HashMap;
 use std::io;
 use std::io::Read;
+
+use regex::{Captures, Regex};
 
 fn main() {
     write_md(parse_links(parse_references(read_md())));
@@ -14,12 +15,12 @@ fn read_md() -> String {
     let mut buffer = String::new();
     match io::stdin().read_to_string(&mut buffer) {
         Ok(_) => buffer,
-        Err(error) => panic!("{}", error),
+        Err(error) => panic!("{error}"),
     }
 }
 
 fn write_md(output: String) {
-    print!("{}", output);
+    print!("{output}");
 }
 
 fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
@@ -59,8 +60,12 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                    name.starts_with("profile") ||
                    name.starts_with("test") ||
                    name.starts_with("no_mangle") ||
+                   name.starts_with("cfg") ||
+                   name.starts_with("unoptimized") ||
+                   name.starts_with("ignore") ||
+                   name.starts_with("should_panic") ||
                    error_code.is_match(name) {
-                    return name.to_string()
+                    return format!("[{name}]")
                 }
 
                 let val = match caps.name("val") {
@@ -71,17 +76,17 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                             Some(key) => {
                                 match key.as_str() {
                                     // `[name][]`
-                                    "" => ref_map.get(&name.to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{}`", name)).to_string(),
+                                    "" => ref_map.get(&name.to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{name}`")).to_string(),
                                     // `[name][reference]`
                                     _ => ref_map.get(&key.as_str().to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{}`", key.as_str())).to_string(),
                                 }
                             }
                             // `[name]` as reference
-                            None => ref_map.get(&name.to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{}`", name)).to_string(),
+                            None => ref_map.get(&name.to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{name}`")).to_string(),
                         }
                     }
                 };
-                format!("{} at *{}*", name, val)
+                format!("{name} at *{val}*")
             }
         }
     });

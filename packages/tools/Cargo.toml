@@ -1,0 +1,46 @@
+[package]
+name = "rust-book-tools"
+version = "0.0.1"
+description = "The Rust Book"
+edition = "2021"
+
+[[bin]]
+name = "concat_chapters"
+path = "src/bin/concat_chapters.rs"
+
+[[bin]]
+name = "convert_quotes"
+path = "src/bin/convert_quotes.rs"
+
+[[bin]]
+name = "lfp"
+path = "src/bin/lfp.rs"
+
+[[bin]]
+name = "link2print"
+path = "src/bin/link2print.rs"
+
+[[bin]]
+name = "release_listings"
+path = "src/bin/release_listings.rs"
+
+[[bin]]
+name = "remove_hidden_lines"
+path = "src/bin/remove_hidden_lines.rs"
+
+[[bin]]
+name = "remove_links"
+path = "src/bin/remove_links.rs"
+
+[[bin]]
+name = "remove_markup"
+path = "src/bin/remove_markup.rs"
+
+[dependencies]
+walkdir = { workspace = true }
+docopt = { workspace = true }
+serde = { workspace = true }
+regex = { workspace = true }
+lazy_static = { workspace = true }
+flate2 = { workspace = true }
+tar = { workspace = true }

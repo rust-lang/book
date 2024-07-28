@@ -116,16 +116,17 @@ We’ve actually already used statements and expressions. Creating a variable an
 assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
 `let y = 6;` is a statement.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="3-1" file-name="src/main.rs" caption="A `main` function declaration containing one statement">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-1: A `main` function declaration containing one statement</span>
+</Listing>
 
 Function definitions are also statements; the entire preceding example is a
-statement in itself.
+statement in itself. (As we will see below, *calling* a function is not a
+statement.)
 
 Statements do not return values. Therefore, you can’t assign a `let` statement
 to another variable, as the following code tries to do; you’ll get an error:

@@ -54,14 +54,13 @@ the `eprintln!` macro that prints to the standard error stream, so let’s chang
 the two places we were calling `println!` to print errors to use `eprintln!`
 instead.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="12-24" file-name="src/main.rs" caption="Writing error messages to standard error instead of standard output using `eprintln!`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-24/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-24: Writing error messages to standard error
-instead of standard output using `eprintln!`</span>
+</Listing>
 
 Let’s now run the program again in the same way, without any arguments and
 redirecting standard output with `>`:

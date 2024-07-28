@@ -9,12 +9,12 @@ fn read_md() -> String {
     let mut buffer = String::new();
     match io::stdin().read_to_string(&mut buffer) {
         Ok(_) => buffer,
-        Err(error) => panic!("{}", error),
+        Err(error) => panic!("{error}"),
     }
 }
 
 fn write_md(output: String) {
-    print!("{}", output);
+    print!("{output}");
 }
 
 fn remove_hidden_lines(input: &str) -> String {

@@ -7,4 +7,4 @@ error[E0599]: no function or associated item named `new` found for struct `Threa
    |                            ^^^ function or associated item not found in `ThreadPool`
 
 For more information about this error, try `rustc --explain E0599`.
-error: could not compile `hello` due to previous error
+error: could not compile `hello` (bin "hello") due to 1 previous error
