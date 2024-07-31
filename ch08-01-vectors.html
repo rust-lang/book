@@ -189,7 +189,7 @@ lines of text in a file or the prices of items in a shopping cart.</p>
 <h3 id="creating-a-new-vector"><a class="header" href="#creating-a-new-vector">Creating a New Vector</a></h3>
 <p>To create a new empty vector, we call the <code>Vec::new</code> function, as shown in
 Listing 8-1.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v: Vec&lt;i32&gt; = Vec::new();
 <span class="boring">}</span></code></pre></pre>
 <p><span class="caption">Listing 8-1: Creating a new, empty vector to hold values
@@ -209,7 +209,7 @@ new vector that holds the values you give it. Listing 8-2 creates a new
 <code>Vec&lt;i32&gt;</code> that holds the values <code>1</code>, <code>2</code>, and <code>3</code>. The integer type is <code>i32</code>
 because that’s the default integer type, as we discussed in the <a href="ch03-02-data-types.html#data-types">“Data
 Types”</a><!-- ignore --> section of Chapter 3.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v = vec![1, 2, 3];
 <span class="boring">}</span></code></pre></pre>
 <p><span class="caption">Listing 8-2: Creating a new vector containing
@@ -220,7 +220,7 @@ to modify a vector.</p>
 <h3 id="updating-a-vector"><a class="header" href="#updating-a-vector">Updating a Vector</a></h3>
 <p>To create a vector and then add elements to it, we can use the <code>push</code> method,
 as shown in Listing 8-3.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut v = Vec::new();
 
     v.push(5);
@@ -240,7 +240,7 @@ using the <code>get</code> method. In the following examples, we’ve annotated 
 the values that are returned from these functions for extra clarity.</p>
 <p>Listing 8-4 shows both methods of accessing a value in a vector, with indexing
 syntax and the <code>get</code> method.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v = vec![1, 2, 3, 4, 5];
 
     let third: &amp;i32 = &amp;v[2];
@@ -264,7 +264,7 @@ program behaves when you try to use an index value outside the range of
 existing elements. As an example, let’s see what happens when we have a vector
 of five elements and then we try to access an element at index 100 with each
 technique, as shown in Listing 8-5.</p>
-<pre><pre class="playground"><code class="language-rust should_panic panics"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust should_panic panics edition2021"><span class="boring">fn main() {
 </span>    let v = vec![1, 2, 3, 4, 5];
 
     let does_not_exist = &amp;v[100];
@@ -341,7 +341,7 @@ Rustonomicon”</a>.</p>
 elements rather than use indices to access one at a time. Listing 8-7 shows how
 to use a <code>for</code> loop to get immutable references to each element in a vector of
 <code>i32</code> values and print them.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v = vec![100, 32, 57];
     for i in &amp;v {
         println!("{i}");
@@ -352,7 +352,7 @@ iterating over the elements using a <code>for</code> loop</span></p>
 <p>We can also iterate over mutable references to each element in a mutable vector
 in order to make changes to all the elements. The <code>for</code> loop in Listing 8-8
 will add <code>50</code> to each element.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut v = vec![100, 32, 57];
     for i in &amp;mut v {
         *i += 50;
@@ -383,7 +383,7 @@ and some strings. We can define an enum whose variants will hold the different
 value types, and all the enum variants will be considered the same type: that
 of the enum. Then we can create a vector to hold that enum and so, ultimately,
 hold different types. We’ve demonstrated this in Listing 8-9.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    enum SpreadsheetCell {
         Int(i32),
         Float(f64),
@@ -415,7 +415,7 @@ addition to <code>push</code>, a <code>pop</code> method removes and returns the
 <h3 id="dropping-a-vector-drops-its-elements"><a class="header" href="#dropping-a-vector-drops-its-elements">Dropping a Vector Drops Its Elements</a></h3>
 <p>Like any other <code>struct</code>, a vector is freed when it goes out of scope, as
 annotated in Listing 8-10.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    {
         let v = vec![1, 2, 3, 4];
 

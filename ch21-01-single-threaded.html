@@ -208,7 +208,7 @@ $ cd hello
 listen at the local address <code>127.0.0.1:7878</code> for incoming TCP streams. When it
 gets an incoming stream, it will print <code>Connection established!</code>.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust no_run">use std::net::TcpListener;
+<pre><pre class="playground"><code class="language-rust no_run edition2021">use std::net::TcpListener;
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
@@ -293,7 +293,7 @@ this new <code>handle_connection</code> function, we’ll read data from the TCP
 print it so we can see the data being sent from the browser. Change the code to
 look like Listing 20-2.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust no_run">use std::{
+<pre><pre class="playground"><code class="language-rust no_run edition2021">use std::{
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
 };
@@ -427,7 +427,7 @@ successful request! From the <code>handle_connection</code> function, remove the
 <code>println!</code> that was printing the request data and replace it with the code in
 Listing 20-3.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">use std::{
+<pre><pre class="playground"><code class="language-rust no_run edition2021"><span class="boring">use std::{
 </span><span class="boring">    io::{prelude::*, BufReader},
 </span><span class="boring">    net::{TcpListener, TcpStream},
 </span><span class="boring">};
@@ -492,7 +492,7 @@ from the server when a request is received, we’ll modify <code>handle_connecti
 shown in Listing 20-5 to read the HTML file, add it to the response as a body,
 and send it.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust no_run">use std::{
+<pre><pre class="playground"><code class="language-rust no_run edition2021">use std::{
     fs,
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
@@ -554,7 +554,7 @@ as shown in Listing 20-6. This new code checks the content of the request
 received against what we know a request for <em>/</em> looks like and adds <code>if</code> and
 <code>else</code> blocks to treat requests differently.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">use std::{
+<pre><pre class="playground"><code class="language-rust no_run edition2021"><span class="boring">use std::{
 </span><span class="boring">    fs,
 </span><span class="boring">    io::{prelude::*, BufReader},
 </span><span class="boring">    net::{TcpListener, TcpStream},
@@ -612,7 +612,7 @@ with the status code 404, which signals that the content for the request was
 not found. We’ll also return some HTML for a page to render in the browser
 indicating the response to the end user.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">use std::{
+<pre><pre class="playground"><code class="language-rust no_run edition2021"><span class="boring">use std::{
 </span><span class="boring">    fs,
 </span><span class="boring">    io::{prelude::*, BufReader},
 </span><span class="boring">    net::{TcpListener, TcpStream},
@@ -690,7 +690,7 @@ we can then use those variables unconditionally in the code to read the file
 and write the response. Listing 20-9 shows the resulting code after replacing
 the large <code>if</code> and <code>else</code> blocks.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">use std::{
+<pre><pre class="playground"><code class="language-rust no_run edition2021"><span class="boring">use std::{
 </span><span class="boring">    fs,
 </span><span class="boring">    io::{prelude::*, BufReader},
 </span><span class="boring">    net::{TcpListener, TcpStream},

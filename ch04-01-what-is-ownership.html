@@ -272,7 +272,7 @@ boilerplate code.</p>
 <p>As a first example of ownership, we’ll look at the <em>scope</em> of some variables. A
 scope is the range within a program for which an item is valid. Take the
 following variable:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let s = "hello";
 <span class="boring">}</span></code></pre></pre>
@@ -280,7 +280,7 @@ following variable:</p>
 hardcoded into the text of our program. The variable is valid from the point at
 which it’s declared until the end of the current <em>scope</em>. Listing 4-1 shows a
 program with comments annotating where the variable <code>s</code> would be valid.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    {                      // s is not valid here, it’s not yet declared
         let s = "hello";   // s is valid from this point forward
 
@@ -319,7 +319,7 @@ these situations, Rust has a second string type, <code>String</code>. This type 
 data allocated on the heap and as such is able to store an amount of text that
 is unknown to us at compile time. You can create a <code>String</code> from a string
 literal using the <code>from</code> function, like so:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let s = String::from("hello");
 <span class="boring">}</span></code></pre></pre>
@@ -330,7 +330,7 @@ Syntax”</a><!-- ignore --> section of Chapter 5, and when we talk
 about namespacing with modules in <a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html">“Paths for Referring to an Item in the
 Module Tree”</a><!-- ignore --> in Chapter 7.</p>
 <p>This kind of string <em>can</em> be mutated:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s = String::from("hello");
 
     s.push_str(", world!"); // push_str() appends a literal to a String
@@ -369,7 +369,7 @@ exactly one <code>free</code>.</p>
 <p>Rust takes a different path: the memory is automatically returned once the
 variable that owns it goes out of scope. Here’s a version of our scope example
 from Listing 4-1 using a <code>String</code> instead of a string literal:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    {
         let s = String::from("hello"); // s is valid from this point forward
 
@@ -398,7 +398,7 @@ we’ve allocated on the heap. Let’s explore some of those situations now.</p>
 <h4 id="variables-and-data-interacting-with-move"><a class="header" href="#variables-and-data-interacting-with-move">Variables and Data Interacting with Move</a></h4>
 <p>Multiple variables can interact with the same data in different ways in Rust.
 Let’s look at an example using an integer in Listing 4-2.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let x = 5;
     let y = x;
 <span class="boring">}</span></code></pre></pre>
@@ -410,7 +410,7 @@ and <code>y</code>, and both equal <code>5</code>. This is indeed what is happen
 are simple values with a known, fixed size, and these two <code>5</code> values are pushed
 onto the stack.</p>
 <p>Now let’s look at the <code>String</code> version:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s1 = String::from("hello");
     let s2 = s1;
 <span class="boring">}</span></code></pre></pre>
@@ -519,7 +519,7 @@ stack data, we can use a common method called <code>clone</code>. We’ll discus
 syntax in Chapter 5, but because methods are a common feature in many
 programming languages, you’ve probably seen them before.</p>
 <p>Here’s an example of the <code>clone</code> method in action:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s1 = String::from("hello");
     let s2 = s1.clone();
 
@@ -533,7 +533,7 @@ different is going on.</p>
 <h4 id="stack-only-data-copy"><a class="header" href="#stack-only-data-copy">Stack-Only Data: Copy</a></h4>
 <p>There’s another wrinkle we haven’t talked about yet. This code using
 integers—part of which was shown in Listing 4-2—works and is valid:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let x = 5;
     let y = x;
 
@@ -577,7 +577,7 @@ assigning a value to a variable. Passing a variable to a function will move or
 copy, just as assignment does. Listing 4-3 has an example with some annotations
 showing where variables go into and out of scope.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s = String::from("hello");  // s comes into scope
 
     takes_ownership(s);             // s's value moves into the function...
@@ -611,7 +611,7 @@ the ownership rules prevent you from doing so.</p>
 function that returns some value, with similar annotations as those in Listing
 4-3.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s1 = gives_ownership();         // gives_ownership moves its return
                                         // value into s1
 
@@ -653,7 +653,7 @@ be passed back if we want to use it again, in addition to any data resulting
 from the body of the function that we might want to return as well.</p>
 <p>Rust does let us return multiple values using a tuple, as shown in Listing 4-5.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s1 = String::from("hello");
 
     let (s2, len) = calculate_length(s1);

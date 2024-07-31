@@ -186,7 +186,7 @@ when you might want to use each one.</p>
 <h3 id="matching-literals"><a class="header" href="#matching-literals">Matching Literals</a></h3>
 <p>As you saw in Chapter 6, you can match patterns against literals directly. The
 following code gives some examples:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let x = 1;
 
     match x {
@@ -211,7 +211,7 @@ value <code>Some(5)</code> and a variable <code>y</code> with the value <code>10
 <code>println!</code> at the end, and try to figure out what the code will print before
 running this code or reading further.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let x = Some(5);
     let y = 10;
 
@@ -253,7 +253,7 @@ which is the pattern <em>or</em> operator. For example, in the following code we
 the value of <code>x</code> against the match arms, the first of which has an <em>or</em> option,
 meaning if the value of <code>x</code> matches either of the values in that arm, that
 arm’s code will run:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let x = 1;
 
     match x {
@@ -267,7 +267,7 @@ arm’s code will run:</p>
 <p>The <code>..=</code> syntax allows us to match to an inclusive range of values. In the
 following code, when a pattern matches any of the values within the given
 range, that arm will execute:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let x = 5;
 
     match x {
@@ -284,7 +284,7 @@ number between 1 and 1,000!</p>
 only types for which Rust can tell if a range is empty or not are <code>char</code> and
 numeric values, ranges are only allowed with numeric or <code>char</code> values.</p>
 <p>Here is an example using ranges of <code>char</code> values:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let x = 'c';
 
     match x {
@@ -301,7 +301,7 @@ different parts of these values. Let’s walk through each value.</p>
 <p>Listing 18-12 shows a <code>Point</code> struct with two fields, <code>x</code> and <code>y</code>, that we can
 break apart using a pattern with a <code>let</code> statement.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct Point {
+<pre><pre class="playground"><code class="language-rust edition2021">struct Point {
     x: i32,
     y: i32,
 }
@@ -327,7 +327,7 @@ from the pattern will have the same names. Listing 18-13 behaves in the same
 way as the code in Listing 18-12, but the variables created in the <code>let</code>
 pattern are <code>x</code> and <code>y</code> instead of <code>a</code> and <code>b</code>.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct Point {
+<pre><pre class="playground"><code class="language-rust edition2021">struct Point {
     x: i32,
     y: i32,
 }
@@ -352,7 +352,7 @@ destructure the other fields.</p>
 into three cases: points that lie directly on the <code>x</code> axis (which is true when
 <code>y = 0</code>), on the <code>y</code> axis (<code>x = 0</code>), or neither.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">struct Point {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct Point {
 </span><span class="boring">    x: i32,
 </span><span class="boring">    y: i32,
 </span><span class="boring">}
@@ -389,7 +389,7 @@ corresponds to the way the data stored within the enum is defined. As an
 example, in Listing 18-15 we use the <code>Message</code> enum from Listing 6-2 and write
 a <code>match</code> with patterns that will destructure each inner value.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">enum Message {
+<pre><pre class="playground"><code class="language-rust edition2021">enum Message {
     Quit,
     Move { x: i32, y: i32 },
     Write(String),
@@ -436,7 +436,7 @@ matching.</p>
 but matching can work on nested items too! For example, we can refactor the
 code in Listing 18-15 to support RGB and HSV colors in the <code>ChangeColor</code>
 message, as shown in Listing 18-16.</p>
-<pre><pre class="playground"><code class="language-rust">enum Color {
+<pre><pre class="playground"><code class="language-rust edition2021">enum Color {
     Rgb(i32, i32, i32),
     Hsv(i32, i32, i32),
 }
@@ -472,7 +472,7 @@ matches <code>Color::Hsv</code> instead. We can specify these complex conditions
 <p>We can mix, match, and nest destructuring patterns in even more complex ways.
 The following example shows a complicated destructure where we nest structs and
 tuples inside a tuple and destructure all the primitive values out:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    struct Point {
 </span><span class="boring">        x: i32,
 </span><span class="boring">        y: i32,
@@ -498,7 +498,7 @@ not bind to the value. This is especially useful as the last arm in a <code>matc
 expression, but we can also use it in any pattern, including function
 parameters, as shown in Listing 18-17.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn foo(_: i32, y: i32) {
+<pre><pre class="playground"><code class="language-rust edition2021">fn foo(_: i32, y: i32) {
     println!("This code only uses the y parameter: {y}");
 }
 
@@ -522,7 +522,7 @@ other parts in the corresponding code we want to run. Listing 18-18 shows code
 responsible for managing a setting’s value. The business requirements are that
 the user should not be allowed to overwrite an existing customization of a
 setting but can unset the setting and give it a value if it is currently unset.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut setting_value = Some(5);
     let new_setting_value = Some(10);
 
@@ -552,7 +552,7 @@ changed.</p>
 <p>We can also use underscores in multiple places within one pattern to ignore
 particular values. Listing 18-19 shows an example of ignoring the second and
 fourth values in a tuple of five items.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let numbers = (2, 4, 8, 16, 32);
 
     match numbers {
@@ -573,7 +573,7 @@ not to warn you about the unused variable by starting the name of the variable
 with an underscore. In Listing 18-20, we create two unused variables, but when
 we compile this code, we should only get a warning about one of them.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let _x = 5;
     let y = 10;
 }</code></pre></pre>
@@ -600,7 +600,7 @@ underscore still binds the value, which might take ownership of the value</span>
 which prevents us from using <code>s</code> again. However, using the underscore by itself
 doesn’t ever bind to the value. Listing 18-22 will compile without any errors
 because <code>s</code> doesn’t get moved into <code>_</code>.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s = Some(String::from("Hello!"));
 
     if let Some(_) = s {
@@ -620,7 +620,7 @@ explicitly matched in the rest of the pattern. In Listing 18-23, we have a
 <code>Point</code> struct that holds a coordinate in three-dimensional space. In the
 <code>match</code> expression, we want to operate only on the <code>x</code> coordinate and ignore
 the values in the <code>y</code> and <code>z</code> fields.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    struct Point {
         x: i32,
         y: i32,
@@ -642,7 +642,7 @@ relevant.</p>
 <p>The syntax <code>..</code> will expand to as many values as it needs to be. Listing 18-24
 shows how to use <code>..</code> with a tuple.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let numbers = (2, 4, 8, 16, 32);
 
     match numbers {
@@ -698,7 +698,7 @@ useful for expressing more complex ideas than a pattern alone allows.</p>
 <p>The condition can use variables created in the pattern. Listing 18-26 shows a
 <code>match</code> where the first arm has the pattern <code>Some(x)</code> and also has a match
 guard of <code>if x % 2 == 0</code> (which will be true if the number is even).</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let num = Some(4);
 
     match num {
@@ -727,7 +727,7 @@ pattern in the <code>match</code> expression instead of using the variable outsi
 outer variable. Listing 18-27 shows how we can use a match guard to fix this
 problem.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = Some(5);
     let y = 10;
 
@@ -757,7 +757,7 @@ patterns; the match guard condition will apply to all the patterns. Listing
 guard. The important part of this example is that the <code>if y</code> match guard
 applies to <code>4</code>, <code>5</code>, <em>and</em> <code>6</code>, even though it might look like <code>if y</code> only
 applies to <code>6</code>.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let x = 4;
     let y = false;
 
@@ -792,7 +792,7 @@ to test that a <code>Message::Hello</code> <code>id</code> field is within the r
 want to bind the value to the variable <code>id_variable</code> so we can use it in the
 code associated with the arm. We could name this variable <code>id</code>, the same as the
 field, but for this example we’ll use a different name.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    enum Message {
         Hello { id: i32 },
     }

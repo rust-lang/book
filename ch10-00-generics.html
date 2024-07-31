@@ -216,7 +216,7 @@ duplicated code that can use generics.</p>
 <p>We’ll begin with the short program in Listing 10-1 that finds the largest
 number in a list.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let number_list = vec![34, 50, 25, 100, 65];
 
     let mut largest = &amp;number_list[0];
@@ -244,7 +244,7 @@ refer to the largest number, which in this case is 100.</p>
 numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
 the same logic at two different places in the program, as shown in Listing 10-2.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let number_list = vec![34, 50, 25, 100, 65];
 
     let mut largest = &amp;number_list[0];
@@ -283,7 +283,7 @@ function named <code>largest</code>. Then we call the function to find the large
 in the two lists from Listing 10-2. We could also use the function on any other
 list of <code>i32</code> values we might have in the future.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn largest(list: &amp;[i32]) -&gt; &amp;i32 {
+<pre><pre class="playground"><code class="language-rust edition2021">fn largest(list: &amp;[i32]) -&gt; &amp;i32 {
     let mut largest = &amp;list[0];
 
     for item in list {

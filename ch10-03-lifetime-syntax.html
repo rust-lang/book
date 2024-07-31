@@ -277,7 +277,7 @@ with a lifetime of <code>'b</code>. The program is rejected because <code>'b</co
 <code>'a</code>: the subject of the reference doesn’t live as long as the reference.</p>
 <p>Listing 10-18 fixes the code so it doesn’t have a dangling reference and it
 compiles without any errors.</p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = 5;            // ----------+-- 'b
                           //           |
     let r = &amp;x;           // --+-- 'a  |
@@ -399,7 +399,7 @@ relationship between lifetimes of the parameters and the return value. We’ll
 name the lifetime <code>'a</code> and then add it to each reference, as shown in Listing
 10-21.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    let string1 = String::from("abcd");
 </span><span class="boring">    let string2 = "xyz";
 </span><span class="boring">
@@ -454,7 +454,7 @@ lifetimes of <code>x</code> and <code>y</code>.</p>
 passing in references that have different concrete lifetimes. Listing 10-22 is
 a straightforward example.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let string1 = String::from("long string is long");
 
     {
@@ -545,7 +545,7 @@ function is doing. For example, if we changed the implementation of the
 string slice, we wouldn’t need to specify a lifetime on the <code>y</code> parameter. The
 following code will compile:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    let string1 = String::from("abcd");
 </span><span class="boring">    let string2 = "efghijklmnopqrstuvwxyz";
 </span><span class="boring">
@@ -614,7 +614,7 @@ to hold references, but in that case we would need to add a lifetime annotation
 on every reference in the struct’s definition. Listing 10-24 has a struct named
 <code>ImportantExcerpt</code> that holds a string slice.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct ImportantExcerpt&lt;'a&gt; {
+<pre><pre class="playground"><code class="language-rust edition2021">struct ImportantExcerpt&lt;'a&gt; {
     part: &amp;'a str,
 }
 
@@ -645,7 +645,7 @@ lifetime parameters for functions or structs that use references. However, we
 had a function in Listing 4-9, shown again in Listing 10-25, that compiled
 without lifetime annotations.</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn first_word(s: &amp;str) -&gt; &amp;str {
+<pre><pre class="playground"><code class="language-rust edition2021">fn first_word(s: &amp;str) -&gt; &amp;str {
     let bytes = s.as_bytes();
 
     for (i, &amp;item) in bytes.iter().enumerate() {
@@ -763,7 +763,7 @@ aren’t necessary in method signatures. Let’s look at some examples using the
 struct named <code>ImportantExcerpt</code> that we defined in Listing 10-24.</p>
 <p>First we’ll use a method named <code>level</code> whose only parameter is a reference to
 <code>self</code> and whose return value is an <code>i32</code>, which is not a reference to anything:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">struct ImportantExcerpt&lt;'a&gt; {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct ImportantExcerpt&lt;'a&gt; {
 </span><span class="boring">    part: &amp;'a str,
 </span><span class="boring">}
 </span><span class="boring">
@@ -791,7 +791,7 @@ struct named <code>ImportantExcerpt</code> that we defined in Listing 10-24.</p>
 are required, but we’re not required to annotate the lifetime of the reference
 to <code>self</code> because of the first elision rule.</p>
 <p>Here is an example where the third lifetime elision rule applies:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">struct ImportantExcerpt&lt;'a&gt; {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct ImportantExcerpt&lt;'a&gt; {
 </span><span class="boring">    part: &amp;'a str,
 </span><span class="boring">}
 </span><span class="boring">
@@ -823,7 +823,7 @@ and all lifetimes have been accounted for.</p>
 <p>One special lifetime we need to discuss is <code>'static</code>, which denotes that the
 affected reference <em>can</em> live for the entire duration of the program. All
 string literals have the <code>'static</code> lifetime, which we can annotate as follows:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let s: &amp;'static str = "I have a static lifetime.";
 <span class="boring">}</span></code></pre></pre>
@@ -839,7 +839,7 @@ is to fix those problems, not to specify the <code>'static</code> lifetime.</p>
 <h2 id="generic-type-parameters-trait-bounds-and-lifetimes-together"><a class="header" href="#generic-type-parameters-trait-bounds-and-lifetimes-together">Generic Type Parameters, Trait Bounds, and Lifetimes Together</a></h2>
 <p>Let’s briefly look at the syntax of specifying generic type parameters, trait
 bounds, and lifetimes all in one function!</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    let string1 = String::from("abcd");
 </span><span class="boring">    let string2 = "xyz";
 </span><span class="boring">

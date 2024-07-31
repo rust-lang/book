@@ -208,7 +208,9 @@ the <code>thread::spawn</code> and <code>thread::sleep</code> APIs from the stan
 <code>get_intervals</code> function.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{pin::pin, thread, time::Duration};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{pin::pin, thread, time::Duration};
 </span><span class="boring">
 </span><span class="boring">use trpl::{ReceiverStream, Stream, StreamExt};
 </span><span class="boring">
@@ -254,9 +256,11 @@ the <code>thread::spawn</code> and <code>thread::sleep</code> APIs from the stan
 </span>fn get_intervals() -&gt; impl Stream&lt;Item = u32&gt; {
     let (tx, rx) = trpl::channel();
 
+    // This is *not* `trpl::spawn` but `std::thread::spawn`!
     thread::spawn(move || {
         let mut count = 0;
         loop {
+            // Likewise, this is *not* `trpl::sleep` but `std::thread::sleep`!
             thread::sleep(Duration::from_millis(1));
             count += 1;
 
@@ -269,7 +273,7 @@ the <code>thread::spawn</code> and <code>thread::sleep</code> APIs from the stan
 
     ReceiverStream::new(rx)
 }</code></pre></pre>
-<figcaption>Listing 17-40: TODO</figcaption>
+<figcaption>Listing 17-40: Using the <code>std::thread</code> APIs instead of the async <code>trpl</code> APIs for the <code>get_intervals</code> function</figcaption>
 </figure>
 <p>If you run this, the output is identical. And notice how little changes here
 from the perspective of the calling code! What is more, even though one of our
@@ -302,8 +306,8 @@ is implicit in the fact that whenever we ended a future, its state got cleaned
 up correctly.</p>
 <p>These limitations make threads harder to compose than futures. It is much more
 difficult, for example, to build something like the <code>timeout</code> we built in
-<a href="/ch17-04-more-ways-of-combining-futures.html#building-our-own-async-abstractions">“Building Our Own Async Abstractions”</a>, or the <code>throttle</code>
-method we used with streams in <a href="/ch17-05-streams.html#working-with-streams">“Working With Streams”</a>. The fact that
+<a href="ch17-04-more-ways-of-combining-futures.html#building-our-own-async-abstractions">“Building Our Own Async Abstractions”</a>, or the <code>throttle</code>
+method we used with streams in <a href="ch17-05-streams.html#composing-streams">“Composing Streams”</a>. The fact that
 futures are richer data structures means they <em>can</em> be composed together more
 naturally, as we have seen.</p>
 <p>Tasks then give <em>additional</em> control over futures, allowing you to choose where

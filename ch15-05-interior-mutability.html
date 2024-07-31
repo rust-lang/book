@@ -719,7 +719,7 @@ change the values in the lists. Listing 15-24 shows that by using a
 <code>RefCell&lt;T&gt;</code> in the <code>Cons</code> definition, we can modify the value stored in all
 the lists:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
 enum List {
     Cons(Rc&lt;RefCell&lt;i32&gt;&gt;, Rc&lt;List&gt;),
     Nil,

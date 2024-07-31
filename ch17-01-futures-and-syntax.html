@@ -189,7 +189,7 @@ function or block to resolve using the <code>await</code> keyword.</p>
 <p>Let’s write our first async function, and call it:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     hello("async");
 }
 
@@ -230,10 +230,12 @@ learning what the syntax means, so let’s start there.</p>
 <em>future</em> of the return type. That is, when the compiler sees a function like
 <code>async fn hello</code> in Listing 17-1, it is basically equivalent to a function
 defined like this instead:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn hello(name: &amp;str) -&gt; impl Future&lt;Output = ()&gt; {
-    async {
+</span>use std::future::Future;
+
+fn hello&lt;'a&gt;(name: &amp;'a str) -&gt; impl Future&lt;Output = ()&gt; + 'a {
+    async move {
         let greeting = format!("Hello, {name}!");
         println!("{greeting}");
     }
@@ -246,9 +248,13 @@ Parameters”</a> section in Chapter 10.</li>
 <li>The returned trait is a <code>Future</code>, with an associated type of <code>Output</code>. Notice
 that the <code>Output</code> type is <code>()</code>, which is the same as the the original return
 type from the <code>async fn</code> version of <code>hello</code>.</li>
-<li>The whole body of the function is wrapped in an <code>async</code> block. Remember that
-blocks are expressions. This whole block is the expression returned from the
-function.</li>
+<li>All of the code called in the body of the original function is wrapped in an
+<code>async move</code> block. Remember that blocks are expressions. This whole block is
+the expression returned from the function.</li>
+<li>The new function body is an <code>async move</code> block because of how it uses the
+<code>name</code> argument.</li>
+<li>The new version of the function makes the lifetime of the <code>name</code> parameter
+explicit so that it can reference it in the output type.</li>
 <li>The async block itself has the “unit” value <code>()</code>, since it ends with a
 <code>println!</code> statement. That value matches the <code>Output</code> type in the return type.</li>
 </ul>
@@ -259,10 +265,11 @@ which implements <code>Future</code>. The associated <code>Output</code> type fo
 return type of the original <code>async fn</code>. Thus, calling <code>hello</code> in Listing 17-1
 returned a <code>Future&lt;Output = ()&gt;</code>.</p>
 <p>Then Rust warned us that we did not do anything with the future. This is because
-futures are <em>lazy</em>: they don’t do anything until you ask them to. This should
-remind you of our discussion of iterators <a href="ch13-02-iterators.html">back in Chapter 13</a>.
-Iterators do nothing unless you call their <code>.next()</code> method—whether directly, or
-using <code>for</code> loops or methods like <code>.map()</code> which use <code>.next()</code> under the hood.</p>
+futures are <em>lazy</em>: they don’t do anything until you ask them to with <code>await</code>.
+This should remind you of our discussion of iterators <a href="ch13-02-iterators.html">back in Chapter
+13</a>. Iterators do nothing unless you call their <code>.next()</code>
+method—whether directly, or using <code>for</code> loops or methods like <code>.map()</code> which use
+<code>.next()</code> under the hood.</p>
 <p>With futures, the same basic idea applies: they do nothing unless you explicitly
 ask them to. This laziness allows Rust to avoid running async code until it is
 actually needed.</p>
@@ -334,12 +341,12 @@ error: could not compile `async_await` (bin "async_await") due to 1 previous err
 </code></pre>
 <p>The problem is that async code needs a <em>runtime</em>: a Rust crate which manages the
 details of executing asynchronous code.</p>
-<p>Most languages which support async bundle a runtime with the language. At least
-for now, Rust does not. Instead, there are many different async runtimes
-available, each of which makes different tradeoffs suitable to the use case they
-target. For example, a high-throughput web server with dozens of CPU cores and
-terabytes of RAM has very different different needs than a microcontroller with
-a single core, one gigabyte of RAM, and no ability to do heap allocations.</p>
+<p>Most languages which support async bundle a runtime with the language. Rust does
+not. Instead, there are many different async runtimes available, each of which
+makes different tradeoffs suitable to the use case they target. For example, a
+high-throughput web server with many CPU cores and a large amount of RAM has
+very different different needs than a microcontroller with a single core, a
+small amount of RAM, and no ability to do heap allocations.</p>
 <section class="note" aria-role="note">
 <h3 id="the-trpl-crate"><a class="header" href="#the-trpl-crate">The <code>trpl</code> Crate</a></h3>
 <p>To keep this chapter focused on learning async, rather than juggling parts of
@@ -356,7 +363,7 @@ code, and is actually where the <code>Future</code> type was originally designed
 <p>Tokio is the most widely used async runtime in Rust today, especially (but
 not only!) for web applications. There are other great runtimes out there,
 and they may be more suitable for your purposes. We use Tokio under the hood
-for <code>trpl</code> because it good and widely used.</p>
+for <code>trpl</code> because it is good and widely used.</p>
 </li>
 </ul>
 <p>In some cases, <code>trpl</code> also renames or wraps the original APIs to let us stay
@@ -376,7 +383,9 @@ doing more than just one async function call, so instead we will pass an <code>a
 block and explicitly await the result of calling <code>hello</code>.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span>fn main() {
     trpl::block_on(async {
         hello("async").await;
     });
@@ -424,9 +433,12 @@ how the <code>Future</code> trait works.</p>
 Rust provides the <code>Future</code> trait as a building block so different async
 operations can be implemented with different data, but with a common interface.
 Here is the definition of the trait:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>pub trait Future {
+</span>use std::pin::Pin;
+use std::task::{Context, Poll};
+
+pub trait Future {
     type Output;
 
     fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt;;
@@ -443,7 +455,7 @@ a special <code>Pin</code> reference for its <code>self</code> parameter and a m
 <code>Context</code> type, and returns a <code>Poll&lt;Self::Output&gt;</code>. We will talk a little more
 about <code>Pin</code> and <code>Context</code> later in the chapter. For now, let’s focus on what the
 method returns, the <code>Poll</code> type:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum Poll&lt;T&gt; {
     Ready(T),
@@ -499,7 +511,7 @@ runtime. To make that work, Rust needs to keep track of the state involved in
 the async block, so that the runtime can kick off some other work and then come
 back when it is ready to try advancing this one again. This is an invisible
 state machine, as if you wrote something like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum MyAsyncStateMachine {
     FirstAwaitPoint {

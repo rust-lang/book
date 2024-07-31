@@ -185,7 +185,7 @@
 name, they can have parameters and a return value, and they contain some code
 that’s run when the method is called from somewhere else. Unlike functions,
 methods are defined within the context of a struct (or an enum or a trait
-object, which we cover in <a href="ch06-00-enums.html">Chapter 6</a><!-- ignore --> and <a href="ch17-02-trait-objects.html">Chapter
+object, which we cover in <a href="ch06-00-enums.html">Chapter 6</a><!-- ignore --> and <a href="ch18-02-trait-objects.html">Chapter
 17</a><!-- ignore -->, respectively), and their first parameter is
 always <code>self</code>, which represents the instance of the struct the method is being
 called on.</p>
@@ -194,7 +194,7 @@ called on.</p>
 and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct, as shown
 in Listing 5-13.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
 struct Rectangle {
     width: u32,
     height: u32,
@@ -256,7 +256,7 @@ library we provide.</p>
 fields. For example, we can define a method on <code>Rectangle</code> that is also named
 <code>width</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">struct Rectangle {
 </span><span class="boring">    width: u32,
 </span><span class="boring">    height: u32,
@@ -306,7 +306,7 @@ one of the few places in Rust that has this behavior.</p>
 automatically adds in <code>&amp;</code>, <code>&amp;mut</code>, or <code>*</code> so <code>object</code> matches the signature of
 the method. In other words, the following are the same:</p>
 <!-- CAN'T EXTRACT SEE BUG https://github.com/rust-lang/mdBook/issues/1127 -->
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">#[derive(Debug,Copy,Clone)]
 </span><span class="boring">struct Point {
@@ -381,7 +381,7 @@ Boolean, and the implementation will check whether the width and height of
 respectively. Let’s add the new <code>can_hold</code> method to the <code>impl</code> block from
 Listing 5-13, shown in Listing 5-15.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">struct Rectangle {
 </span><span class="boring">    width: u32,
 </span><span class="boring">    height: u32,
@@ -435,7 +435,7 @@ one dimension parameter and use that as both width and height, thus making it
 easier to create a square <code>Rectangle</code> rather than having to specify the same
 value twice:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">struct Rectangle {
 </span><span class="boring">    width: u32,
 </span><span class="boring">    height: u32,
@@ -465,7 +465,7 @@ namespaces created by modules. We’ll discuss modules in <a href="ch07-02-defin
 <p>Each struct is allowed to have multiple <code>impl</code> blocks. For example, Listing
 5-15 is equivalent to the code shown in Listing 5-16, which has each method in
 its own <code>impl</code> block.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">struct Rectangle {
 </span><span class="boring">    width: u32,
 </span><span class="boring">    height: u32,

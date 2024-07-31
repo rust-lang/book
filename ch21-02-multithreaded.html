@@ -194,7 +194,7 @@ our current server implementation. Listing 20-10 implements handling a request
 to <em>/sleep</em> with a simulated slow response that will cause the server to sleep
 for 5 seconds before responding.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust no_run">use std::{
+<pre><pre class="playground"><code class="language-rust no_run edition2021">use std::{
     fs,
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
@@ -308,7 +308,7 @@ thread pool as an improvement, and contrasting the two solutions will be
 easier. Listing 20-11 shows the changes to make to <code>main</code> to spawn a new thread
 to handle each stream within the <code>for</code> loop.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">use std::{
+<pre><pre class="playground"><code class="language-rust no_run edition2021"><span class="boring">use std::{
 </span><span class="boring">    fs,
 </span><span class="boring">    io::{prelude::*, BufReader},
 </span><span class="boring">    net::{TcpListener, TcpStream},
@@ -1084,7 +1084,7 @@ share ownership of the receiver.</p>
 <h4 id="implementing-the-execute-method"><a class="header" href="#implementing-the-execute-method">Implementing the <code>execute</code> Method</a></h4>
 <p>Let’s finally implement the <code>execute</code> method on <code>ThreadPool</code>. We’ll also change
 <code>Job</code> from a struct to a type alias for a trait object that holds the type of
-closure that <code>execute</code> receives. As discussed in the <a href="ch19-04-advanced-types.html#creating-type-synonyms-with-type-aliases">“Creating Type Synonyms
+closure that <code>execute</code> receives. As discussed in the <a href="ch20-04-advanced-types.html#creating-type-synonyms-with-type-aliases">“Creating Type Synonyms
 with Type Aliases”</a><!-- ignore -->
 section of Chapter 19, type aliases allow us to make long types shorter for
 ease of use. Look at Listing 20-19.</p>

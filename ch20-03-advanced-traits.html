@@ -281,7 +281,7 @@ example, in Listing 19-14 we overload the <code>+</code> operator to add two <co
 instances together. We do this by implementing the <code>Add</code> trait on a <code>Point</code>
 struct:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::ops::Add;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::ops::Add;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 struct Point {
@@ -314,7 +314,7 @@ associated type named <code>Output</code> that determines the type returned from
 method.</p>
 <p>The default generic type in this code is within the <code>Add</code> trait. Here is its
 definition:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>trait Add&lt;Rhs=Self&gt; {
     type Output;
@@ -335,7 +335,7 @@ the <code>Add</code> trait where we want to customize the <code>Rhs</code> type 
 default.</p>
 <p>We have two structs, <code>Millimeters</code> and <code>Meters</code>, holding values in different
 units. This thin wrapping of an existing type in another struct is known as the
-<em>newtype pattern</em>, which we describe in more detail in the <a href="ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types">“Using the Newtype
+<em>newtype pattern</em>, which we describe in more detail in the <a href="ch20-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types">“Using the Newtype
 Pattern to Implement External Traits on External Types”</a><!-- ignore
 --> section. We want to add values in millimeters to values in meters and have
 the implementation of <code>Add</code> do the conversion correctly. We can implement <code>Add</code>
@@ -383,7 +383,7 @@ want to use. Consider the code in Listing 19-16 where we’ve defined two traits
 both traits on a type <code>Human</code> that already has a method named <code>fly</code> implemented
 on it. Each <code>fly</code> method does something different.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">trait Pilot {
+<pre><pre class="playground"><code class="language-rust edition2021">trait Pilot {
     fn fly(&amp;self);
 }
 
@@ -418,7 +418,7 @@ implemented on <code>Human</code> directly</span></p>
 <p>When we call <code>fly</code> on an instance of <code>Human</code>, the compiler defaults to calling
 the method that is directly implemented on the type, as shown in Listing 19-17.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">trait Pilot {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">trait Pilot {
 </span><span class="boring">    fn fly(&amp;self);
 </span><span class="boring">}
 </span><span class="boring">
@@ -458,7 +458,7 @@ called the <code>fly</code> method implemented on <code>Human</code> directly.</
 we need to use more explicit syntax to specify which <code>fly</code> method we mean.
 Listing 19-18 demonstrates this syntax.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">trait Pilot {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">trait Pilot {
 </span><span class="boring">    fn fly(&amp;self);
 </span><span class="boring">}
 </span><span class="boring">
@@ -520,7 +520,7 @@ We make an <code>Animal</code> trait with an associated non-method function <cod
 The <code>Animal</code> trait is implemented for the struct <code>Dog</code>, on which we also
 provide an associated non-method function <code>baby_name</code> directly.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">trait Animal {
+<pre><pre class="playground"><code class="language-rust edition2021">trait Animal {
     fn baby_name() -&gt; String;
 }
 
@@ -614,7 +614,7 @@ error: could not compile `traits-example` (bin "traits-example") due to 1 previo
 type, we need to use fully qualified syntax. Listing 19-21 demonstrates how to
 use fully qualified syntax.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">trait Animal {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">trait Animal {
 </span><span class="boring">    fn baby_name() -&gt; String;
 </span><span class="boring">}
 </span><span class="boring">
@@ -683,7 +683,7 @@ trait definition by specifying <code>OutlinePrint: Display</code>. This techniqu
 similar to adding a trait bound to the trait. Listing 19-22 shows an
 implementation of the <code>OutlinePrint</code> trait.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::fmt;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::fmt;
 
 trait OutlinePrint: fmt::Display {
     fn outline_print(&amp;self) {
@@ -773,7 +773,7 @@ error: could not compile `traits-example` (bin "traits-example") due to 2 previo
 <p>To fix this, we implement <code>Display</code> on <code>Point</code> and satisfy the constraint that
 <code>OutlinePrint</code> requires, like so:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">trait OutlinePrint: fmt::Display {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">trait OutlinePrint: fmt::Display {
 </span><span class="boring">    fn outline_print(&amp;self) {
 </span><span class="boring">        let output = self.to_string();
 </span><span class="boring">        let len = output.len();
@@ -827,7 +827,7 @@ orphan rule prevents us from doing directly because the <code>Display</code> tra
 that holds an instance of <code>Vec&lt;T&gt;</code>; then we can implement <code>Display</code> on
 <code>Wrapper</code> and use the <code>Vec&lt;T&gt;</code> value, as shown in Listing 19-23.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::fmt;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::fmt;
 
 struct Wrapper(Vec&lt;String&gt;);
 

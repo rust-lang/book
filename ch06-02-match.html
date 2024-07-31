@@ -186,7 +186,7 @@
 <p>Rust has an extremely powerful control flow construct called <code>match</code> that
 allows you to compare a value against a series of patterns and then execute
 code based on which pattern matches. Patterns can be made up of literal values,
-variable names, wildcards, and many other things; <a href="ch18-00-patterns.html">Chapter
+variable names, wildcards, and many other things; <a href="ch19-00-patterns.html">Chapter
 18</a><!-- ignore --> covers all the different kinds of patterns
 and what they do. The power of <code>match</code> comes from the expressiveness of the
 patterns and the fact that the compiler confirms that all possible cases are
@@ -200,7 +200,7 @@ the value falls into the associated code block to be used during execution.</p>
 function that takes an unknown US coin and, in a similar way as the counting
 machine, determines which coin it is and returns its value in cents, as shown
 in Listing 6-3.</p>
-<pre><pre class="playground"><code class="language-rust">enum Coin {
+<pre><pre class="playground"><code class="language-rust edition2021">enum Coin {
     Penny,
     Nickel,
     Dime,
@@ -243,7 +243,7 @@ lines of code in a match arm, you must use curly brackets, and the comma
 following the arm is then optional. For example, the following code prints
 “Lucky penny!” every time the method is called with a <code>Coin::Penny</code>, but still
 returns the last value of the block, <code>1</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">enum Coin {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">enum Coin {
 </span><span class="boring">    Penny,
 </span><span class="boring">    Nickel,
 </span><span class="boring">    Dime,
@@ -273,7 +273,7 @@ designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
 our <code>enum</code> by changing the <code>Quarter</code> variant to include a <code>UsState</code> value
 stored inside it, which we’ve done in Listing 6-4.</p>
-<pre><pre class="playground"><code class="language-rust">#[derive(Debug)] // so we can inspect the state in a minute
+<pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)] // so we can inspect the state in a minute
 enum UsState {
     Alabama,
     Alaska,
@@ -298,7 +298,7 @@ they can add it to their collection.</p>
 pattern that matches values of the variant <code>Coin::Quarter</code>. When a
 <code>Coin::Quarter</code> matches, the <code>state</code> variable will bind to the value of that
 quarter’s state. Then we can use <code>state</code> in the code for that arm, like so:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">enum UsState {
 </span><span class="boring">    Alabama,
 </span><span class="boring">    Alaska,
@@ -345,7 +345,7 @@ the function should return the <code>None</code> value and not attempt to perfor
 operations.</p>
 <p>This function is very easy to write, thanks to <code>match</code>, and will look like
 Listing 6-5.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
         match x {
             None =&gt; None,
@@ -471,7 +471,7 @@ a <code>match</code> that implements that logic, with the result of the dice rol
 hardcoded rather than a random value, and all other logic represented by
 functions without bodies because actually implementing them is out of scope for
 this example:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let dice_roll = 9;
     match dice_roll {
         3 =&gt; add_fancy_hat(),
@@ -500,7 +500,7 @@ use the value, so Rust won’t warn us about an unused variable.</p>
 <p>Let’s change the rules of the game: now, if you roll anything other than a 3 or
 a 7, you must roll again. We no longer need to use the catch-all value, so we
 can change our code to use <code>_</code> instead of the variable named <code>other</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let dice_roll = 9;
     match dice_roll {
         3 =&gt; add_fancy_hat(),
@@ -518,7 +518,7 @@ ignoring all other values in the last arm; we haven’t forgotten anything.</p>
 happens on your turn if you roll anything other than a 3 or a 7. We can express
 that by using the unit value (the empty tuple type we mentioned in <a href="ch03-02-data-types.html#the-tuple-type">“The Tuple
 Type”</a><!-- ignore --> section) as the code that goes with the <code>_</code> arm:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let dice_roll = 9;
     match dice_roll {
         3 =&gt; add_fancy_hat(),
@@ -532,8 +532,8 @@ Type”</a><!-- ignore --> section) as the code that goes with the <code>_</code
 <p>Here, we’re telling Rust explicitly that we aren’t going to use any other value
 that doesn’t match a pattern in an earlier arm, and we don’t want to run any
 code in this case.</p>
-<p>There’s more about patterns and matching that we’ll cover in <a href="ch18-00-patterns.html">Chapter
-18</a><!-- ignore -->. For now, we’re going to move on to the
+<p>There’s more about patterns and matching that we’ll cover in <a href="ch19-00-patterns.html">Chapter
+19</a><!-- ignore -->. For now, we’re going to move on to the
 <code>if let</code> syntax, which can be useful in situations where the <code>match</code> expression
 is a bit wordy.</p>
 

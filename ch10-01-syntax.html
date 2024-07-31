@@ -194,7 +194,7 @@ more functionality to callers of our function while preventing code duplication.
 both find the largest value in a slice. We’ll then combine these into a single
 function that uses generics.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn largest_i32(list: &amp;[i32]) -&gt; &amp;i32 {
+<pre><pre class="playground"><code class="language-rust edition2021">fn largest_i32(list: &amp;[i32]) -&gt; &amp;i32 {
     let mut largest = &amp;list[0];
 
     for item in list {
@@ -318,7 +318,7 @@ implements <code>PartialOrd</code> on both <code>i32</code> and <code>char</code
 fields using the <code>&lt;&gt;</code> syntax. Listing 10-6 defines a <code>Point&lt;T&gt;</code> struct to hold
 <code>x</code> and <code>y</code> coordinate values of any type.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct Point&lt;T&gt; {
+<pre><pre class="playground"><code class="language-rust edition2021">struct Point&lt;T&gt; {
     x: T,
     y: T,
 }
@@ -370,7 +370,7 @@ different types, we can use multiple generic type parameters. For example, in
 Listing 10-8, we change the definition of <code>Point</code> to be generic over types <code>T</code>
 and <code>U</code> where <code>x</code> is of type <code>T</code> and <code>y</code> is of type <code>U</code>.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct Point&lt;T, U&gt; {
+<pre><pre class="playground"><code class="language-rust edition2021">struct Point&lt;T, U&gt; {
     x: T,
     y: U,
 }
@@ -391,7 +391,7 @@ pieces.</p>
 <p>As we did with structs, we can define enums to hold generic data types in their
 variants. Let’s take another look at the <code>Option&lt;T&gt;</code> enum that the standard
 library provides, which we used in Chapter 6:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum Option&lt;T&gt; {
     Some(T),
@@ -406,7 +406,7 @@ optional value, and because <code>Option&lt;T&gt;</code> is generic, we can use 
 no matter what the type of the optional value is.</p>
 <p>Enums can use multiple generic types as well. The definition of the <code>Result</code>
 enum that we used in Chapter 9 is one example:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum Result&lt;T, E&gt; {
     Ok(T),
@@ -429,7 +429,7 @@ avoid duplication by using generic types instead.</p>
 generic types in their definitions too. Listing 10-9 shows the <code>Point&lt;T&gt;</code>
 struct we defined in Listing 10-6 with a method named <code>x</code> implemented on it.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct Point&lt;T&gt; {
+<pre><pre class="playground"><code class="language-rust edition2021">struct Point&lt;T&gt; {
     x: T,
     y: T,
 }
@@ -464,7 +464,7 @@ type. We could, for example, implement methods only on <code>Point&lt;f32&gt;</c
 rather than on <code>Point&lt;T&gt;</code> instances with any generic type. In Listing 10-10 we
 use the concrete type <code>f32</code>, meaning we don’t declare any types after <code>impl</code>.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">struct Point&lt;T&gt; {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct Point&lt;T&gt; {
 </span><span class="boring">    x: T,
 </span><span class="boring">    y: T,
 </span><span class="boring">}
@@ -500,7 +500,7 @@ signature to make the example clearer. The method creates a new <code>Point</cod
 instance with the <code>x</code> value from the <code>self</code> <code>Point</code> (of type <code>X1</code>) and the <code>y</code>
 value from the passed-in <code>Point</code> (of type <code>Y2</code>).</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct Point&lt;X1, Y1&gt; {
+<pre><pre class="playground"><code class="language-rust edition2021">struct Point&lt;X1, Y1&gt; {
     x: X1,
     y: Y1,
 }
@@ -550,7 +550,7 @@ places where generic code is called and generates code for the concrete types
 the generic code is called with.</p>
 <p>Let’s look at how this works by using the standard library’s generic
 <code>Option&lt;T&gt;</code> enum:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let integer = Some(5);
 let float = Some(5.0);
@@ -564,7 +564,7 @@ definition with the specific ones.</p>
 <p>The monomorphized version of the code looks similar to the following (the
 compiler uses different names than what we’re using here for illustration):</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">enum Option_i32 {
+<pre><pre class="playground"><code class="language-rust edition2021">enum Option_i32 {
     Some(i32),
     None,
 }

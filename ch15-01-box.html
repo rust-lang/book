@@ -203,7 +203,7 @@ time because the data is copied around on the stack. To improve performance in
 this situation, we can store the large amount of data on the heap in a box.
 Then, only the small amount of pointer data is copied around on the stack,
 while the data it references stays in one place on the heap. The third case is
-known as a <em>trait object</em>, and Chapter 17 devotes an entire section, <a href="ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using
+known as a <em>trait object</em>, and Chapter 17 devotes an entire section, <a href="ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using
 Trait Objects That Allow for Values of Different Types,”</a><!--
 ignore --> just to that topic. So what you learn here you’ll apply again in
 Chapter 17!</p>
@@ -212,7 +212,7 @@ Chapter 17!</p>
 syntax and how to interact with values stored within a <code>Box&lt;T&gt;</code>.</p>
 <p>Listing 15-1 shows how to use a box to store an <code>i32</code> value on the heap:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let b = Box::new(5);
     println!("b = {b}");
 }</code></pre></pre>
@@ -341,7 +341,7 @@ Rust decides how much space it needs to store a value of a non-recursive type.</
 <h4 id="computing-the-size-of-a-non-recursive-type"><a class="header" href="#computing-the-size-of-a-non-recursive-type">Computing the Size of a Non-Recursive Type</a></h4>
 <p>Recall the <code>Message</code> enum we defined in Listing 6-2 when we discussed enum
 definitions in Chapter 6:</p>
-<pre><pre class="playground"><code class="language-rust">enum Message {
+<pre><pre class="playground"><code class="language-rust edition2021">enum Message {
     Quit,
     Move { x: i32, y: i32 },
     Write(String),
@@ -391,7 +391,7 @@ rather than inside one another.</p>
 <p>We can change the definition of the <code>List</code> enum in Listing 15-2 and the usage
 of the <code>List</code> in Listing 15-3 to the code in Listing 15-5, which will compile:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">enum List {
+<pre><pre class="playground"><code class="language-rust edition2021">enum List {
     Cons(i32, Box&lt;List&gt;),
     Nil,
 }

@@ -225,7 +225,7 @@ system and ownership rules, you can’t get locking and unlocking wrong.</p>
 <p>As an example of how to use a mutex, let’s start by using a mutex in a
 single-threaded context, as shown in Listing 16-12:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::sync::Mutex;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::sync::Mutex;
 
 fn main() {
     let m = Mutex::new(5);
@@ -431,7 +431,7 @@ guarantees atomics provide.</p>
 our program by changing the <code>use</code> line, the call to <code>new</code>, and the call to
 <code>clone</code>. The code in Listing 16-15 will finally compile and run:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::sync::{Arc, Mutex};
+<pre><pre class="playground"><code class="language-rust edition2021">use std::sync::{Arc, Mutex};
 use std::thread;
 
 fn main() {

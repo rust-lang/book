@@ -183,7 +183,7 @@
                         <h2 id="streams"><a class="header" href="#streams">Streams</a></h2>
 <p>So far in this chapter, we have mostly stuck with individual futures. The one
 big exception was the async channel we used. Recall how we used the receiver for
-our async channel in the <a href="/ch17-02-concurrency-with-async.html#message-passing">“Message Passing”</a> earlier in the
+our async channel in the <a href="ch17-02-concurrency-with-async.html#message-passing">“Message Passing”</a> earlier in the
 chapter, which waits on a sequence of items produced over time—a <em>stream</em>.</p>
 <p>A sequence of items is something we have seen before, when we looked at the
 <code>Iterator</code> trait in Chapter 13, but there are two differences between iterators
@@ -199,7 +199,9 @@ iterator. Like an iterator, we can work with a stream by calling its <code>next<
 method, and then awaiting the output, as in Listing 17-29.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust does_not_compile"><span class="boring">fn main() {
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
 </span>        let values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let iter = values.iter().map(|n| n * 2);
@@ -209,7 +211,7 @@ method, and then awaiting the output, as in Listing 17-29.</p>
             println!("The value was: {value}");
         }
 <span class="boring">    });
-</span><span class="boring">}</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre>
 <figcaption>Listing 17-29: Creating a stream from an iterator and printing its values</figcaption>
 </figure>
 <p>We start with an array of numbers, which we convert to an iterator and then call
@@ -259,7 +261,9 @@ All we need to do here is add a <code>use</code> statement for <code>trpl::Strea
 Listing 17-30.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><code class="language-rust ignore does_not_compile">use trpl::StreamExt;
+<pre><code class="language-rust ignore does_not_compile">extern crate trpl; // required for mdbook test
+
+use trpl::StreamExt;
 
 fn main() {
     trpl::block_on(async {
@@ -280,7 +284,9 @@ filter out everything but multiples of three and five by using  the <code>filter
 method, which conveniently also comes from <code>StreamExt</code>, as in Listing 17-31.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">use trpl::StreamExt;
+<pre><pre class="playground"><code class="language-rust edition2021">extern crate trpl; // required for mdbook test
+
+use trpl::StreamExt;
 
 fn main() {
     trpl::block_on(async {
@@ -308,37 +314,17 @@ the standard library yet as of the time of writing,<!-- TODO: verify before
 press time! --> but there <em>is</em> a very common definition used throughout the
 ecosystem. Let’s review the definitions of the <code>Iterator</code> and <code>Future</code> traits,
 so we can build up to how a <code>Stream</code> trait that merges them together might look.</p>
-<p>The <code>Iterator</code> trait defines an associated type <code>Item</code> and a function <code>next</code>,
-which produces <code>Some(Item)</code> until the underlying iterator is empty, and then
-produces <code>None</code>.</p>
-<!-- TODO: support for no-listing listings in Listing? -->
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>trait Iterator {
-    type Item;
-
-    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;;
-}
-<span class="boring">}</span></code></pre></pre>
-<p>The <code>Future</code> trait defines an associated item <code>Output</code> and a function <code>poll</code>,
-which produces <code>Poll::Pending</code> while waiting and then <code>Poll::Ready(Output)</code> once
-the future is ready.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>trait Future {
-    type Output;
-
-    fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt;;
-}
-<span class="boring">}</span></code></pre></pre>
 <p>From <code>Iterator</code>, we have the idea of a sequence: its <code>next</code> method provides an
 <code>Option&lt;Self::Item&gt;</code>. From <code>Future</code>, we have the idea of readiness over time:
 its <code>poll</code> method provides a <code>Poll&lt;Self::Output&gt;</code>. To represent a sequence of
 items which become ready over time, we define a <code>Stream</code> trait which has all of
 those features put together:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>trait Stream {
+</span>use std::pin::Pin;
+use std::task::{Context, Poll};
+
+trait Stream {
     type Item;
 
     fn poll_next(
@@ -365,26 +351,37 @@ but instead <code>next</code> and <code>StreamExt</code>. We <em>could</em> work
 as we <em>could</em> work with futures directly via their <code>poll</code> method. Using <code>await</code>
 is much nicer, though, so the <code>StreamExt</code> trait supplies the <code>next</code> method so
 we can do just that.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>trait StreamExt {
-    async fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;;
+</span><span class="boring">use std::pin::Pin;
+</span><span class="boring">use std::task::{Context, Poll};
+</span><span class="boring">
+</span><span class="boring">trait Stream {
+</span><span class="boring">    type Item;
+</span><span class="boring">    fn poll_next(
+</span><span class="boring">        self: Pin&lt;&amp;mut Self&gt;,
+</span><span class="boring">        cx: &amp;mut Context&lt;'_&gt;,
+</span><span class="boring">    ) -&gt; Poll&lt;Option&lt;Self::Item&gt;&gt;;
+</span><span class="boring">}
+</span><span class="boring">
+</span>trait StreamExt: Stream {
+    async fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;
+    where
+        Self: Unpin;
 }
 <span class="boring">}</span></code></pre></pre>
 <!--
-TODO: update this if/when tokio/etc. update their MSRV and switch to using AFIT,
-since the lack thereof is the reason they do not yet have this.
+TODO: update this if/when tokio/etc. update their MSRV and switch to using async functions
+in traits, since the lack thereof is the reason they do not yet have this.
 -->
 <section class="note" aria-role="note">
 <p>Note: The actual definition we will use looks slightly different than this,
 because it supports versions of Rust which did not yet support using async
 functions in traits. As a result, it looks like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>fn next(&amp;mut self) -&gt; Next&lt;'_, Self&gt; where Self: Unpin;
-<span class="boring">}</span></code></pre></pre>
-<p>That <code>Next</code> type is just a simple <code>struct</code> which implements <code>Future</code>, so that
-<code>.await</code> can work with this!</p>
+<pre><code class="language-rust ignore">fn next(&amp;mut self) -&gt; Next&lt;'_, Self&gt; where Self: Unpin;</code></pre>
+<p>That <code>Next</code> type is just a simple <code>struct</code> which implements <code>Future</code> and gives
+a way to name the lifetime of the reference to <code>self</code> with <code>Next&lt;'_, Self&gt;</code>,
+so that <code>.await</code> can work with this!</p>
 </section>
 <p>The <code>StreamExt</code> trait is also the home of all the interesting methods available
 to use with streams. <code>StreamExt</code> is automatically implemented for every type
@@ -411,7 +408,9 @@ the <code>trpl::channel</code> into a stream. Back in <code>main</code>, we use 
 print all the messages from the stream.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">use trpl::{ReceiverStream, Stream, StreamExt};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span>use trpl::{ReceiverStream, Stream, StreamExt};
 
 fn main() {
     trpl::block_on(async {
@@ -455,7 +454,9 @@ API, though. Let’s add something that requires streams, like adding a timeout
 which applies to every item in the stream, and a delay on the items we emit.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">use std::{pin::pin, time::Duration};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span>use std::{pin::pin, time::Duration};
 use trpl::{ReceiverStream, Stream, StreamExt};
 
 fn main() {
@@ -503,7 +504,9 @@ we might see from a stream of messages in the real world. Because our timeout is
 for 200 milliseconds, this should affect half of the messages.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{pin::pin, time::Duration};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{pin::pin, time::Duration};
 </span><span class="boring">
 </span><span class="boring">use trpl::{ReceiverStream, Stream, StreamExt};
 </span><span class="boring">
@@ -606,7 +609,9 @@ it over the channel. Since this is all wrapped in the task created by
 the infinite loop.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{pin::pin, time::Duration};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{pin::pin, time::Duration};
 </span><span class="boring">
 </span><span class="boring">use trpl::{ReceiverStream, Stream, StreamExt};
 </span><span class="boring">
@@ -665,7 +670,9 @@ Finally, we loop over that combined stream instead of over <code>messages</code>
 17-36).</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{pin::pin, time::Duration};
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{pin::pin, time::Duration};
 </span><span class="boring">
 </span><span class="boring">use trpl::{ReceiverStream, Stream, StreamExt};
 </span><span class="boring">
@@ -713,8 +720,8 @@ Finally, we loop over that combined stream instead of over <code>messages</code>
 </span><span class="boring">    });
 </span><span class="boring">
 </span><span class="boring">    ReceiverStream::new(rx)
-</span><span class="boring">}</span></code></pre></pre>
-<figcaption>Listing 17-36: TODO</figcaption>
+</span><span class="boring">}</span></code></pre>
+<figcaption>Listing 17-36: Attempting to merge streams of messages and intervals</figcaption>
 </figure>
 <p>At this point, neither <code>messages</code> nor <code>intervals</code> needs to be pinned or mutable,
 because both will be combined into the single <code>merged</code> stream. However, this
@@ -731,9 +738,12 @@ longer than the other durations we are using. Here, we create a 10-second time
 out with <code>Duration::from_secs(10)</code>. Finally, we need to make <code>merged</code> both
 mutable, so that the <code>while let</code> loop’s <code>next</code> calls can iterate through the
 stream, and pinned, so that it is safe to do so.</p>
+<!-- We cannot directly test this one, because it never stops. -->
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{pin::pin, time::Duration};
+<pre><code class="language-rust ignore"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{pin::pin, time::Duration};
 </span><span class="boring">
 </span><span class="boring">use trpl::{ReceiverStream, Stream, StreamExt};
 </span><span class="boring">
@@ -784,7 +794,7 @@ stream, and pinned, so that it is safe to do so.</p>
 </span><span class="boring">    });
 </span><span class="boring">
 </span><span class="boring">    ReceiverStream::new(rx)
-</span><span class="boring">}</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre>
 <figcaption>Listing 17-37: Aligning the types of the the <code>intervals</code> stream with the type of the <code>messages</code> stream</figcaption>
 </figure>
 <p>That gets us <em>almost</em> to where we need to be. Everything type checks. If you run
@@ -816,7 +826,9 @@ method. We apply it to the <em>merged</em> stream, because we want to limit the 
 output, not just one stream or the other.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{pin::pin, time::Duration};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{pin::pin, time::Duration};
 </span><span class="boring">
 </span><span class="boring">use trpl::{ReceiverStream, Stream, StreamExt};
 </span><span class="boring">
@@ -917,7 +929,9 @@ a simple error strategy: print the issue and then <code>break</code> from the lo
 usual, the correct way to handle a message send error will vary—just make sure
 you have a strategy.</p>
 <figure class="listing">
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{pin::pin, time::Duration};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{pin::pin, time::Duration};
 </span><span class="boring">
 </span><span class="boring">use trpl::{ReceiverStream, Stream, StreamExt};
 </span><span class="boring">

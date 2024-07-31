@@ -211,7 +211,7 @@ value can never fail and thus covers every remaining case.</p>
 <p>The particular pattern <code>_</code> will match anything, but it never binds to a
 variable, so it’s often used in the last match arm. The <code>_</code> pattern can be
 useful when you want to ignore any value not specified, for example. We’ll
-cover the <code>_</code> pattern in more detail in the <a href="ch18-03-pattern-syntax.html#ignoring-values-in-a-pattern">“Ignoring Values in a
+cover the <code>_</code> pattern in more detail in the <a href="ch19-03-pattern-syntax.html#ignoring-values-in-a-pattern">“Ignoring Values in a
 Pattern”</a><!-- ignore --> section later in this
 chapter.</p>
 <h3 id="conditional-if-let-expressions"><a class="header" href="#conditional-if-let-expressions">Conditional <code>if let</code> Expressions</a></h3>
@@ -227,7 +227,7 @@ a series of checks for several conditions. For this example, we’ve created
 variables with hardcoded values that a real program might receive from user
 input.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let favorite_color: Option&lt;&amp;str&gt; = None;
     let is_tuesday = false;
     let age: Result&lt;u8, _&gt; = "34".parse();
@@ -272,7 +272,7 @@ not alert us to the possible logic bug.</p>
 <code>while</code> loop to run for as long as a pattern continues to match. In Listing
 18-2 we code a <code>while let</code> loop that uses a vector as a stack and prints the
 values in the vector in the opposite order in which they were pushed.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut stack = Vec::new();
 
     stack.push(1);
@@ -295,7 +295,7 @@ use <code>while let</code> to pop every element off our stack.</p>
 pattern. For example, in <code>for x in y</code> the <code>x</code> is the pattern. Listing 18-3
 demonstrates how to use a pattern in a <code>for</code> loop to destructure, or break
 apart, a tuple as part of the <code>for</code> loop.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v = vec!['a', 'b', 'c'];
 
     for (index, value) in v.iter().enumerate() {
@@ -323,7 +323,7 @@ output.</p>
 <code>match</code> and <code>if let</code>, but in fact, we’ve used patterns in other places as well,
 including in <code>let</code> statements. For example, consider this straightforward
 variable assignment with <code>let</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let x = 5;
 <span class="boring">}</span></code></pre></pre>
@@ -340,7 +340,7 @@ the variable <code>x</code>.” Because the name <code>x</code> is the whole pat
 effectively means “bind everything to the variable <code>x</code>, whatever the value is.”</p>
 <p>To see the pattern matching aspect of <code>let</code> more clearly, consider Listing
 18-4, which uses a pattern with <code>let</code> to destructure a tuple.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let (x, y, z) = (1, 2, 3);
 <span class="boring">}</span></code></pre></pre>
 <p><span class="caption">Listing 18-4: Using a pattern to destructure a tuple and
@@ -376,7 +376,7 @@ For more information about this error, try `rustc --explain E0308`.
 error: could not compile `patterns` (bin "patterns") due to 1 previous error
 </code></pre>
 <p>To fix the error, we could ignore one or more of the values in the tuple using
-<code>_</code> or <code>..</code>, as you’ll see in the <a href="ch18-03-pattern-syntax.html#ignoring-values-in-a-pattern">“Ignoring Values in a
+<code>_</code> or <code>..</code>, as you’ll see in the <a href="ch19-03-pattern-syntax.html#ignoring-values-in-a-pattern">“Ignoring Values in a
 Pattern”</a><!-- ignore --> section. If the problem
 is that we have too many variables in the pattern, the solution is to make the
 types match by removing variables so the number of variables equals the number
@@ -385,7 +385,7 @@ of elements in the tuple.</p>
 <p>Function parameters can also be patterns. The code in Listing 18-6, which
 declares a function named <code>foo</code> that takes one parameter named <code>x</code> of type
 <code>i32</code>, should by now look familiar.</p>
-<pre><pre class="playground"><code class="language-rust">fn foo(x: i32) {
+<pre><pre class="playground"><code class="language-rust edition2021">fn foo(x: i32) {
     // code goes here
 }
 <span class="boring">
@@ -396,7 +396,7 @@ parameters</span></p>
 function’s arguments to the pattern. Listing 18-7 splits the values in a tuple
 as we pass it to a function.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn print_coordinates(&amp;(x, y): &amp;(i32, i32)) {
+<pre><pre class="playground"><code class="language-rust edition2021">fn print_coordinates(&amp;(x, y): &amp;(i32, i32)) {
     println!("Current location: ({x}, {y})");
 }
 

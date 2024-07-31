@@ -197,7 +197,9 @@ which is an async version of the <code>thread::sleep</code> API. We can use thes
 to implement the same counting example as with threads, in Listing 17-5.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">use std::time::Duration;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span>use std::time::Duration;
 
 fn main() {
     trpl::block_on(async {
@@ -250,7 +252,9 @@ function ends. If you want to run all the way to the completion of the task, you
 will need to use a join handle to wait for the first task to complete.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::time::Duration;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -306,7 +310,9 @@ Tasks have much faster startup time and use much less memory than an OS thread.
 -->
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::time::Duration;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -373,7 +379,9 @@ each case <em>before</em> running the code!</p>
 again, but this with async versions of the types and functions.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
 </span>        let (tx, mut rx) = trpl::channel();
 
@@ -408,9 +416,12 @@ transition between sync and async code. However, <em>within</em> this block, the
 <p>It is hard to see the effect of async in Listing 17-8, though, since the message
 will arrive right away! Let’s go ahead and send a whole series of messages, and
 sleep in between them, as shown in Listing 17-9:</p>
+<!-- We cannot test this one because it never stops! -->
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::time::Duration;
+<pre><code class="language-rust ignore"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -432,7 +443,7 @@ sleep in between them, as shown in Listing 17-9:</p>
             println!("received '{value}'");
         }
 <span class="boring">    });
-</span><span class="boring">}</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre>
 <figcaption>Listing 17-9: Sending and receiving multiple messages over the async channel and sleeping with an <code>.await</code> between each message</figcaption>
 </figure>
 <p>In addition to sending the messages, we need to receive them. In this case, we
@@ -475,9 +486,12 @@ linearly. All the <code>tx.send</code> calls happen, interspersed with all of th
 each message, we need to put the <code>tx</code> and <code>rx</code> operations in their own async
 blocks. Then the runtime can execute each of them separately using <code>trpl::join</code>,
 just like in the counting example.</p>
+<!-- We cannot test this one because it never stops! -->
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::time::Duration;
+<pre><code class="language-rust ignore"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -505,7 +519,7 @@ just like in the counting example.</p>
 
         trpl::join(tx_fut, rx_fut).await;
 <span class="boring">    });
-</span><span class="boring">}</span></code></pre></pre>
+</span><span class="boring">}</span></code></pre>
 <figcaption>Listing 17-10: Separating <code>send</code> and <code>recv</code> into their own <code>async</code> blocks and awaiting the futures for those blocks</figcaption>
 </figure>
 <p>With the updated code in Listing 17-10, the messages get printed at
@@ -543,7 +557,9 @@ block. When we run <em>this</em> version of the code, it shuts down gracefully a
 the last message is sent.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::time::Duration;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -587,7 +603,9 @@ end up back in the same infinite loop we started out in. Finally, we switch from
 <code>trpl::join</code> to <code>trpl::join3</code> to handle the additional future.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::time::Duration;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {

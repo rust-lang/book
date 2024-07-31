@@ -268,7 +268,7 @@ we call <code>Rc::clone</code>, the reference count to the data within the <code
 increase, and the data won’t be cleaned up unless there are zero references to
 it.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">enum List {
+<pre><pre class="playground"><code class="language-rust edition2021">enum List {
     Cons(i32, Rc&lt;List&gt;),
     Nil,
 }
@@ -304,7 +304,7 @@ counts changing as we create and drop references to the <code>Rc&lt;List&gt;</co
 <p>In Listing 15-19, we’ll change <code>main</code> so it has an inner scope around list <code>c</code>;
 then we can see how the reference count changes when <code>c</code> goes out of scope.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">enum List {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">enum List {
 </span><span class="boring">    Cons(i32, Rc&lt;List&gt;),
 </span><span class="boring">    Nil,
 </span><span class="boring">}

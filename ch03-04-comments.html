@@ -186,14 +186,14 @@ extra explanation is warranted. In these cases, programmers leave <em>comments</
 their source code that the compiler will ignore but people reading the source
 code may find useful.</p>
 <p>Here’s a simple comment:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// hello, world
 <span class="boring">}</span></code></pre></pre>
 <p>In Rust, the idiomatic comment style starts a comment with two slashes, and the
 comment continues until the end of the line. For comments that extend beyond a
 single line, you’ll need to include <code>//</code> on each line, like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// So we’re doing something complicated here, long enough that we need
 // multiple lines of comments to do it! Whew! Hopefully, this comment will
@@ -201,13 +201,13 @@ single line, you’ll need to include <code>//</code> on each line, like this:</
 <span class="boring">}</span></code></pre></pre>
 <p>Comments can also be placed at the end of lines containing code:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let lucky_number = 7; // I’m feeling lucky today
 }</code></pre></pre>
 <p>But you’ll more often see them used in this format, with the comment on a
 separate line above the code it’s annotating:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     // I’m feeling lucky today
     let lucky_number = 7;
 }</code></pre></pre>

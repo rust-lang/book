@@ -191,7 +191,7 @@ when many types are possible, such as when we converted a <code>String</code> to
 type using <code>parse</code> in the <a href="ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number">“Comparing the Guess to the Secret
 Number”</a><!-- ignore --> section in
 Chapter 2, we must add a type annotation, like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let guess: u32 = "42".parse().expect("Not a number!");
 <span class="boring">}</span></code></pre></pre>
@@ -311,7 +311,7 @@ because on modern CPUs, it’s roughly the same speed as <code>f32</code> but is
 more precision. All floating-point types are signed.</p>
 <p>Here’s an example that shows floating-point numbers in action:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = 2.0; // f64
 
     let y: f32 = 3.0; // f32
@@ -324,7 +324,7 @@ types: addition, subtraction, multiplication, division, and remainder. Integer
 division truncates toward zero to the nearest integer. The following code shows
 how you’d use each numeric operation in a <code>let</code> statement:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     // addition
     let sum = 5 + 10;
 
@@ -350,7 +350,7 @@ provides.</p>
 values: <code>true</code> and <code>false</code>. Booleans are one byte in size. The Boolean type in
 Rust is specified using <code>bool</code>. For example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let t = true;
 
     let f: bool = false; // with explicit type annotation
@@ -362,7 +362,7 @@ Flow”</a><!-- ignore --> section.</p>
 <p>Rust’s <code>char</code> type is the language’s most primitive alphabetic type. Here are
 some examples of declaring <code>char</code> values:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let c = 'z';
     let z: char = 'ℤ'; // with explicit type annotation
     let heart_eyed_cat = '😻';
@@ -389,14 +389,14 @@ parentheses. Each position in the tuple has a type, and the types of the
 different values in the tuple don’t have to be the same. We’ve added optional
 type annotations in this example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
 }</code></pre></pre>
 <p>The variable <code>tup</code> binds to the entire tuple because a tuple is considered a
 single compound element. To get the individual values out of a tuple, we can
 use pattern matching to destructure a tuple value, like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let tup = (500, 6.4, 1);
 
     let (x, y, z) = tup;
@@ -411,7 +411,7 @@ the single tuple into three parts. Finally, the program prints the value of
 <p>We can also access a tuple element directly by using a period (<code>.</code>) followed by
 the index of the value we want to access. For example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x: (i32, f64, u8) = (500, 6.4, 1);
 
     let five_hundred = x.0;
@@ -434,7 +434,7 @@ some other languages, arrays in Rust have a fixed length.</p>
 <p>We write the values in an array as a comma-separated list inside square
 brackets:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let a = [1, 2, 3, 4, 5];
 }</code></pre></pre>
 <p>Arrays are useful when you want your data allocated on the stack rather than
@@ -449,14 +449,14 @@ to use an array or a vector, chances are you should use a vector. <a href="ch08-
 need to change. For example, if you were using the names of the month in a
 program, you would probably use an array rather than a vector because you know
 it will always contain 12 elements:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 <span class="boring">}</span></code></pre></pre>
 <p>You write an array’s type using square brackets with the type of each element,
 a semicolon, and then the number of elements in the array, like so:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let a: [i32; 5] = [1, 2, 3, 4, 5];
 <span class="boring">}</span></code></pre></pre>
@@ -465,7 +465,7 @@ indicates the array contains five elements.</p>
 <p>You can also initialize an array to contain the same value for each element by
 specifying the initial value, followed by a semicolon, and then the length of
 the array in square brackets, as shown here:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let a = [3; 5];
 <span class="boring">}</span></code></pre></pre>
@@ -477,7 +477,7 @@ more concise way.</p>
 allocated on the stack. You can access elements of an array using indexing,
 like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let a = [1, 2, 3, 4, 5];
 
     let first = a[0];

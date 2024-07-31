@@ -207,7 +207,7 @@ as an arrow to a value stored somewhere else. In Listing 15-6, we create a
 reference to an <code>i32</code> value and then use the dereference operator to follow the
 reference to the value:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = 5;
     let y = &amp;x;
 
@@ -247,7 +247,7 @@ reference; the dereference operator used on the <code>Box&lt;T&gt;</code> in Lis
 functions in the same way as the dereference operator used on the reference in
 Listing 15-6:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = 5;
     let y = Box::new(x);
 
@@ -272,7 +272,7 @@ dereference operator.</p>
 Listing 15-8 defines a <code>MyBox&lt;T&gt;</code> type in the same way. We’ll also define a
 <code>new</code> function to match the <code>new</code> function defined on <code>Box&lt;T&gt;</code>.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct MyBox&lt;T&gt;(T);
+<pre><pre class="playground"><code class="language-rust edition2021">struct MyBox&lt;T&gt;(T);
 
 impl&lt;T&gt; MyBox&lt;T&gt; {
     fn new(x: T) -&gt; MyBox&lt;T&gt; {
@@ -331,7 +331,7 @@ by the standard library, requires us to implement one method named <code>deref</
 borrows <code>self</code> and returns a reference to the inner data. Listing 15-10
 contains an implementation of <code>Deref</code> to add to the definition of <code>MyBox</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::ops::Deref;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::ops::Deref;
 
 impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
     type Target = T;
@@ -409,7 +409,7 @@ Listing 15-8 as well as the implementation of <code>Deref</code> that we added i
 15-10. Listing 15-11 shows the definition of a function that has a string slice
 parameter:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn hello(name: &amp;str) {
+<pre><pre class="playground"><code class="language-rust edition2021">fn hello(name: &amp;str) {
     println!("Hello, {name}!");
 }
 <span class="boring">
@@ -420,7 +420,7 @@ parameter:</p>
 <code>hello("Rust");</code> for example. Deref coercion makes it possible to call <code>hello</code>
 with a reference to a value of type <code>MyBox&lt;String&gt;</code>, as shown in Listing 15-12:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::ops::Deref;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::ops::Deref;
 </span><span class="boring">
 </span><span class="boring">impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
 </span><span class="boring">    type Target = T;
@@ -459,7 +459,7 @@ matches the <code>hello</code> function’s definition.</p>
 Listing 15-13 instead of the code in Listing 15-12 to call <code>hello</code> with a value
 of type <code>&amp;MyBox&lt;String&gt;</code>.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::ops::Deref;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::ops::Deref;
 </span><span class="boring">
 </span><span class="boring">impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
 </span><span class="boring">    type Target = T;

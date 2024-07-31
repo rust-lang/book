@@ -242,7 +242,7 @@ intent to future readers of the code by indicating that other parts of the code
 will be changing this variable’s value.</p>
 <p>For example, let’s change <em>src/main.rs</em> to the following:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let mut x = 5;
     println!("The value of x is: {x}");
     x = 6;
@@ -274,7 +274,7 @@ them useful for values that many parts of code need to know about.</p>
 <p>The last difference is that constants may be set only to a constant expression,
 not the result of a value that could only be computed at runtime.</p>
 <p>Here’s an example of a constant declaration:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 <span class="boring">}</span></code></pre></pre>
@@ -308,7 +308,7 @@ variable name to itself until either it itself is shadowed or the scope ends.
 We can shadow a variable by using the same variable’s name and repeating the
 use of the <code>let</code> keyword as follows:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = 5;
 
     let x = x + 1;
@@ -344,7 +344,7 @@ effectively creating a new variable when we use the <code>let</code> keyword aga
 change the type of the value but reuse the same name. For example, say our
 program asks a user to show how many spaces they want between some text by
 inputting space characters, and then we want to store that input as a number:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let spaces = "   ";
     let spaces = spaces.len();
 <span class="boring">}</span></code></pre></pre>

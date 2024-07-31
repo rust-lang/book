@@ -196,7 +196,7 @@ ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about <em>part</em> of a string. However, we could return the index of the
 end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn first_word(s: &amp;String) -&gt; usize {
+<pre><pre class="playground"><code class="language-rust edition2021">fn first_word(s: &amp;String) -&gt; usize {
     let bytes = s.as_bytes();
 
     for (i, &amp;item) in bytes.iter().enumerate() {
@@ -276,7 +276,7 @@ because it’s a separate value from the <code>String</code>, there’s no guara
 will still be valid in the future. Consider the program in Listing 4-8 that
 uses the <code>first_word</code> function from Listing 4-7.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn first_word(s: &amp;String) -&gt; usize {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn first_word(s: &amp;String) -&gt; usize {
 </span><span class="boring">    let bytes = s.as_bytes();
 </span><span class="boring">
 </span><span class="boring">    for (i, &amp;item) in bytes.iter().enumerate() {
@@ -316,7 +316,7 @@ to be kept in sync.</p>
 <p>Luckily, Rust has a solution to this problem: string slices.</p>
 <h3 id="string-slices"><a class="header" href="#string-slices">String Slices</a></h3>
 <p>A <em>string slice</em> is a reference to part of a <code>String</code>, and it looks like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s = String::from("hello world");
 
     let hello = &amp;s[0..5];
@@ -340,7 +340,7 @@ src="img/trpl04-06.svg" class="center" style="width: 50%;" /></p>
 <code>String</code></span></p>
 <p>With Rust’s <code>..</code> range syntax, if you want to start at index 0, you can drop
 the value before the two periods. In other words, these are equal:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let s = String::from("hello");
 
@@ -349,7 +349,7 @@ let slice = &amp;s[..2];
 <span class="boring">}</span></code></pre></pre>
 <p>By the same token, if your slice includes the last byte of the <code>String</code>, you
 can drop the trailing number. That means these are equal:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let s = String::from("hello");
 
@@ -360,7 +360,7 @@ let slice = &amp;s[3..];
 <span class="boring">}</span></code></pre></pre>
 <p>You can also drop both values to take a slice of the entire string. So these
 are equal:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let s = String::from("hello");
 
@@ -380,7 +380,7 @@ Text with Strings”</a><!-- ignore --> section of Chapter 8.</p>
 <p>With all this information in mind, let’s rewrite <code>first_word</code> to return a
 slice. The type that signifies “string slice” is written as <code>&amp;str</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn first_word(s: &amp;String) -&gt; &amp;str {
+<pre><pre class="playground"><code class="language-rust edition2021">fn first_word(s: &amp;String) -&gt; &amp;str {
     let bytes = s.as_bytes();
 
     for (i, &amp;item) in bytes.iter().enumerate() {
@@ -464,7 +464,7 @@ but it has also eliminated an entire class of errors at compile time!</p>
 <h4 id="string-literals-as-slices"><a class="header" href="#string-literals-as-slices">String Literals as Slices</a></h4>
 <p>Recall that we talked about string literals being stored inside the binary. Now
 that we know about slices, we can properly understand string literals:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let s = "Hello, world!";
 <span class="boring">}</span></code></pre></pre>
@@ -520,7 +520,7 @@ Methods”</a><!--ignore--> section of Chapter 15.</p>
 <p>Defining a function to take a string slice instead of a reference to a <code>String</code>
 makes our API more general and useful without losing any functionality:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn first_word(s: &amp;str) -&gt; &amp;str {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn first_word(s: &amp;str) -&gt; &amp;str {
 </span><span class="boring">    let bytes = s.as_bytes();
 </span><span class="boring">
 </span><span class="boring">    for (i, &amp;item) in bytes.iter().enumerate() {
@@ -555,13 +555,13 @@ makes our API more general and useful without losing any functionality:</p>
 <h3 id="other-slices"><a class="header" href="#other-slices">Other Slices</a></h3>
 <p>String slices, as you might imagine, are specific to strings. But there’s a
 more general slice type too. Consider this array:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let a = [1, 2, 3, 4, 5];
 <span class="boring">}</span></code></pre></pre>
 <p>Just as we might want to refer to part of a string, we might want to refer to
 part of an array. We’d do so like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let a = [1, 2, 3, 4, 5];
 

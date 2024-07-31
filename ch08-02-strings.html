@@ -215,7 +215,7 @@ as well because <code>String</code> is actually implemented as a wrapper around 
 of bytes with some extra guarantees, restrictions, and capabilities. An example
 of a function that works the same way with <code>Vec&lt;T&gt;</code> and <code>String</code> is the <code>new</code>
 function to create an instance, shown in Listing 8-11.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s = String::new();
 <span class="boring">}</span></code></pre></pre>
 <p><span class="caption">Listing 8-11: Creating a new, empty <code>String</code></span></p>
@@ -224,7 +224,7 @@ data. Often, we’ll have some initial data with which we want to start the
 string. For that, we use the <code>to_string</code> method, which is available on any type
 that implements the <code>Display</code> trait, as string literals do. Listing 8-12 shows
 two examples.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let data = "initial contents";
 
     let s = data.to_string();
@@ -238,7 +238,7 @@ two examples.</p>
 <p>We can also use the function <code>String::from</code> to create a <code>String</code> from a string
 literal. The code in Listing 8-13 is equivalent to the code in Listing 8-12
 that uses <code>to_string</code>.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s = String::from("initial contents");
 <span class="boring">}</span></code></pre></pre>
 <p><span class="caption">Listing 8-13: Using the <code>String::from</code> function to create
@@ -250,7 +250,7 @@ redundant, but they all have their place! In this case, <code>String::from</code
 readability.</p>
 <p>Remember that strings are UTF-8 encoded, so we can include any properly encoded
 data in them, as shown in Listing 8-14.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let hello = String::from("السلام عليكم");
     let hello = String::from("Dobrý den");
     let hello = String::from("Hello");
@@ -273,7 +273,7 @@ use the <code>+</code> operator or the <code>format!</code> macro to concatenate
 <h4 id="appending-to-a-string-with-push_str-and-push"><a class="header" href="#appending-to-a-string-with-push_str-and-push">Appending to a String with <code>push_str</code> and <code>push</code></a></h4>
 <p>We can grow a <code>String</code> by using the <code>push_str</code> method to append a string slice,
 as shown in Listing 8-15.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s = String::from("foo");
     s.push_str("bar");
 <span class="boring">}</span></code></pre></pre>
@@ -283,7 +283,7 @@ using the <code>push_str</code> method</span></p>
 string slice because we don’t necessarily want to take ownership of the
 parameter. For example, in the code in Listing 8-16, we want to be able to use
 <code>s2</code> after appending its contents to <code>s1</code>.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s1 = String::from("foo");
     let s2 = "bar";
     s1.push_str(s2);
@@ -296,7 +296,7 @@ its value on the last line. However, this code works as we’d expect!</p>
 <p>The <code>push</code> method takes a single character as a parameter and adds it to the
 <code>String</code>. Listing 8-17 adds the letter <em>l</em> to a <code>String</code> using the <code>push</code>
 method.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s = String::from("lo");
     s.push('l');
 <span class="boring">}</span></code></pre></pre>
@@ -306,7 +306,7 @@ using <code>push</code></span></p>
 <h4 id="concatenation-with-the--operator-or-the-format-macro"><a class="header" href="#concatenation-with-the--operator-or-the-format-macro">Concatenation with the <code>+</code> Operator or the <code>format!</code> Macro</a></h4>
 <p>Often, you’ll want to combine two existing strings. One way to do so is to use
 the <code>+</code> operator, as shown in Listing 8-18.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s1 = String::from("Hello, ");
     let s2 = String::from("world!");
     let s3 = s1 + &amp;s2; // note s1 has been moved here and can no longer be used
@@ -345,7 +345,7 @@ like it’s making a lot of copies, but it isn’t; the implementation is more
 efficient than copying.</p>
 <p>If we need to concatenate multiple strings, the behavior of the <code>+</code> operator
 gets unwieldy:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s1 = String::from("tic");
     let s2 = String::from("tac");
     let s3 = String::from("toe");
@@ -355,7 +355,7 @@ gets unwieldy:</p>
 <p>At this point, <code>s</code> will be <code>tic-tac-toe</code>. With all of the <code>+</code> and <code>"</code>
 characters, it’s difficult to see what’s going on. For combining strings in
 more complicated ways, we can instead use the <code>format!</code> macro:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s1 = String::from("tic");
     let s2 = String::from("tac");
     let s3 = String::from("toe");
@@ -403,7 +403,7 @@ memory.</p>
 <h4 id="internal-representation"><a class="header" href="#internal-representation">Internal Representation</a></h4>
 <p>A <code>String</code> is a wrapper over a <code>Vec&lt;u8&gt;</code>. Let’s look at some of our properly
 encoded UTF-8 example strings from Listing 8-14. First, this one:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    let hello = String::from("السلام عليكم");
 </span><span class="boring">    let hello = String::from("Dobrý den");
 </span><span class="boring">    let hello = String::from("Hello");
@@ -420,7 +420,7 @@ encoded UTF-8 example strings from Listing 8-14. First, this one:</p>
 <code>"Hola"</code> is 4 bytes long. Each of these letters takes one byte when encoded in
 UTF-8. The following line, however, may surprise you (note that this string
 begins with the capital Cyrillic letter <em>Ze</em>, not the number 3):</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    let hello = String::from("السلام عليكم");
 </span><span class="boring">    let hello = String::from("Dobrý den");
 </span><span class="boring">    let hello = String::from("Hello");
@@ -487,7 +487,7 @@ character, a grapheme cluster, or a string slice. If you really need to use
 indices to create string slices, therefore, Rust asks you to be more specific.</p>
 <p>Rather than indexing using <code>[]</code> with a single number, you can use <code>[]</code> with a
 range to create a string slice containing particular bytes:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let hello = "Здравствуйте";
 
@@ -514,7 +514,7 @@ so can crash your program.</p>
 you want characters or bytes. For individual Unicode scalar values, use the
 <code>chars</code> method. Calling <code>chars</code> on “Зд” separates out and returns two values of
 type <code>char</code>, and you can iterate over the result to access each element:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>for c in "Зд".chars() {
     println!("{c}");
@@ -526,7 +526,7 @@ type <code>char</code>, and you can iterate over the result to access each eleme
 </code></pre>
 <p>Alternatively, the <code>bytes</code> method returns each raw byte, which might be
 appropriate for your domain:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>for b in "Зд".bytes() {
     println!("{b}");

@@ -205,7 +205,7 @@ let’s implement <code>drop</code> with <code>println!</code> statements for no
 functionality is that it will print <code>Dropping CustomSmartPointer!</code> when the
 instance goes out of scope, to show when Rust runs the <code>drop</code> function.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct CustomSmartPointer {
+<pre><pre class="playground"><code class="language-rust edition2021">struct CustomSmartPointer {
     data: String,
 }
 
@@ -320,7 +320,7 @@ trait. We call it by passing as an argument the value we want to force drop.
 The function is in the prelude, so we can modify <code>main</code> in Listing 15-15 to
 call the <code>drop</code> function, as shown in Listing 15-16:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">struct CustomSmartPointer {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct CustomSmartPointer {
 </span><span class="boring">    data: String,
 </span><span class="boring">}
 </span><span class="boring">

@@ -192,7 +192,7 @@ particular type for the life of that reference.</p>
 <p>Here is how you would define and use a <code>calculate_length</code> function that has a
 reference to an object as a parameter instead of taking ownership of the value:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s1 = String::from("hello");
 
     let len = calculate_length(&amp;s1);
@@ -219,7 +219,7 @@ dereference operator in Chapter 8 and discuss details of dereferencing in
 Chapter 15.</p>
 </section>
 <p>Let’s take a closer look at the function call here:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s1 = String::from("hello");
 
     let len = calculate_length(&amp;s1);
@@ -235,7 +235,7 @@ but does not own it. Because it does not own it, the value it points to will
 not be dropped when the reference stops being used.</p>
 <p>Likewise, the signature of the function uses <code>&amp;</code> to indicate that the type of
 the parameter <code>s</code> is a reference. Let’s add some explanatory annotations:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    let s1 = String::from("hello");
 </span><span class="boring">
 </span><span class="boring">    let len = calculate_length(&amp;s1);
@@ -292,7 +292,7 @@ allowed to modify something we have a reference to.</p>
 <p>We can fix the code from Listing 4-6 to allow us to modify a borrowed value
 with just a few small tweaks that use, instead, a <em>mutable reference</em>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let mut s = String::from("hello");
 
     change(&amp;mut s);
@@ -354,7 +354,7 @@ when you’re trying to track them down at runtime; Rust prevents this problem b
 refusing to compile code with data races!</p>
 <p>As always, we can use curly brackets to create a new scope, allowing for
 multiple mutable references, just not <em>simultaneous</em> ones:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s = String::from("hello");
 
     {
@@ -497,7 +497,7 @@ for it to be borrowed from
 this reference would be pointing to an invalid <code>String</code>. That’s no good! Rust
 won’t let us do this.</p>
 <p>The solution here is to return the <code>String</code> directly:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    let string = no_dangle();
 </span><span class="boring">}
 </span><span class="boring">

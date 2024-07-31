@@ -189,7 +189,7 @@ declare new functions.</p>
 names, in which all letters are lowercase and underscores separate words.
 Here’s a program that contains an example function definition:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     println!("Hello, world!");
 
     another_function();
@@ -230,7 +230,7 @@ in a function’s definition or the concrete values passed in when you call a
 function.</p>
 <p>In this version of <code>another_function</code> we add a parameter:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     another_function(5);
 }
 
@@ -256,7 +256,7 @@ more helpful error messages if it knows what types the function expects.</p>
 <p>When defining multiple parameters, separate the parameter declarations with
 commas, like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     print_labeled_measurement(5, 'h');
 }
 
@@ -295,13 +295,14 @@ assigning a value to it with the <code>let</code> keyword is a statement. In Lis
 <code>let y = 6;</code> is a statement.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let y = 6;
 }</code></pre></pre>
 <figcaption>Listing 3-1: A <code>main</code> function declaration containing one statement</figcaption>
 </figure>
 <p>Function definitions are also statements; the entire preceding example is a
-statement in itself.</p>
+statement in itself. (As we will see below, <em>calling</em> a function is not a
+statement.)</p>
 <p>Statements do not return values. Therefore, you can’t assign a <code>let</code> statement
 to another variable, as the following code tries to do; you’ll get an error:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -348,7 +349,7 @@ expression that evaluates to the value <code>6</code>. Calling a function is an
 expression. Calling a macro is an expression. A new scope block created with
 curly brackets is an expression, for example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let y = {
         let x = 3;
         x + 1
@@ -377,7 +378,7 @@ function by using the <code>return</code> keyword and specifying a value, but mo
 functions return the last expression implicitly. Here’s an example of a
 function that returns a value:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn five() -&gt; i32 {
+<pre><pre class="playground"><code class="language-rust edition2021">fn five() -&gt; i32 {
     5
 }
 
@@ -401,7 +402,7 @@ is <code>i32</code>. Let’s examine this in more detail. There are two importan
 first, the line <code>let x = five();</code> shows that we’re using the return value of a
 function to initialize a variable. Because the function <code>five</code> returns a <code>5</code>,
 that line is the same as the following:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let x = 5;
 <span class="boring">}</span></code></pre></pre>
@@ -410,7 +411,7 @@ return value, but the body of the function is a lonely <code>5</code> with no se
 because it’s an expression whose value we want to return.</p>
 <p>Let’s look at another example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = plus_one(5);
 
     println!("The value of x is: {x}");

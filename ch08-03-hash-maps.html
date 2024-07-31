@@ -200,7 +200,7 @@ As always, check the standard library documentation for more information.</p>
 <code>insert</code>. In Listing 8-20, we’re keeping track of the scores of two teams whose
 names are <em>Blue</em> and <em>Yellow</em>. The Blue team starts with 10 points, and the
 Yellow team starts with 50.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
     let mut scores = HashMap::new();
@@ -222,7 +222,7 @@ must have the same type.</p>
 <h3 id="accessing-values-in-a-hash-map"><a class="header" href="#accessing-values-in-a-hash-map">Accessing Values in a Hash Map</a></h3>
 <p>We can get a value out of the hash map by providing its key to the <code>get</code>
 method, as shown in Listing 8-21.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
     let mut scores = HashMap::new();
@@ -243,7 +243,7 @@ handles the <code>Option</code> by calling <code>copied</code> to get an <code>O
 have an entry for the key.</p>
 <p>We can iterate over each key–value pair in a hash map in a similar manner as we
 do with vectors, using a <code>for</code> loop:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
     let mut scores = HashMap::new();
@@ -263,7 +263,7 @@ Blue: 10
 <p>For types that implement the <code>Copy</code> trait, like <code>i32</code>, the values are copied
 into the hash map. For owned values like <code>String</code>, the values will be moved and
 the hash map will be the owner of those values, as demonstrated in Listing 8-22.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
     let field_name = String::from("Favorite color");
@@ -301,7 +301,7 @@ with a different value, the value associated with that key will be replaced.
 Even though the code in Listing 8-23 calls <code>insert</code> twice, the hash map will
 only contain one key–value pair because we’re inserting the value for the Blue
 team’s key both times.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
     let mut scores = HashMap::new();
@@ -328,7 +328,7 @@ called <code>Entry</code> that represents a value that might or might not exist.
 we want to check whether the key for the Yellow team has a value associated
 with it. If it doesn’t, we want to insert the value <code>50</code>, and the same for the
 Blue team. Using the <code>entry</code> API, the code looks like Listing 8-24.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
     let mut scores = HashMap::new();
@@ -358,7 +358,7 @@ counts how many times each word appears in some text. We use a hash map with
 the words as keys and increment the value to keep track of how many times we’ve
 seen that word. If it’s the first time we’ve seen a word, we’ll first insert
 the value <code>0</code>.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
     let text = "hello world wonderful world";

@@ -194,7 +194,7 @@ will never be dropped.</p>
 starting with the definition of the <code>List</code> enum and a <code>tail</code> method in Listing
 15-25:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use crate::List::{Cons, Nil};
+<pre><pre class="playground"><code class="language-rust edition2021">use crate::List::{Cons, Nil};
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -228,7 +228,7 @@ the list in <code>a</code>. Then it modifies the list in <code>a</code> to point
 reference cycle. There are <code>println!</code> statements along the way to show what the
 reference counts are at various points in this process.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use crate::List::{Cons, Nil};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use crate::List::{Cons, Nil};
 </span><span class="boring">use std::cell::RefCell;
 </span><span class="boring">use std::rc::Rc;
 </span><span class="boring">
@@ -365,7 +365,7 @@ their parent items.</p>
 We’ll create a struct named <code>Node</code> that holds its own <code>i32</code> value as well as
 references to its children <code>Node</code> values:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::cell::RefCell;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::cell::RefCell;
 use std::rc::Rc;
 
 #[derive(Debug)]
@@ -394,7 +394,7 @@ modify which nodes are children of another node, so we have a <code>RefCell&lt;T
 <code>leaf</code> with the value 3 and no children, and another instance named <code>branch</code>
 with the value 5 and <code>leaf</code> as one of its children, as shown in Listing 15-27:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::cell::RefCell;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::cell::RefCell;
 </span><span class="boring">use std::rc::Rc;
 </span><span class="boring">
 </span><span class="boring">#[derive(Debug)]
@@ -437,7 +437,7 @@ parent should still exist. This is a case for weak references!</p>
 specifically a <code>RefCell&lt;Weak&lt;Node&gt;&gt;</code>. Now our <code>Node</code> struct definition looks
 like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::cell::RefCell;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::cell::RefCell;
 use std::rc::{Rc, Weak};
 
 #[derive(Debug)]
@@ -470,7 +470,7 @@ struct Node {
 In Listing 15-28, we update <code>main</code> to use this new definition so the <code>leaf</code>
 node will have a way to refer to its parent, <code>branch</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::cell::RefCell;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::cell::RefCell;
 </span><span class="boring">use std::rc::{Rc, Weak};
 </span><span class="boring">
 </span><span class="boring">#[derive(Debug)]
@@ -535,7 +535,7 @@ instances change by creating a new inner scope and moving the creation of
 created and then dropped when it goes out of scope. The modifications are shown
 in Listing 15-29:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::cell::RefCell;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::cell::RefCell;
 </span><span class="boring">use std::rc::{Rc, Weak};
 </span><span class="boring">
 </span><span class="boring">#[derive(Debug)]

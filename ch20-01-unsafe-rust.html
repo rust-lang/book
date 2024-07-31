@@ -259,7 +259,7 @@ guaranteed safety in exchange for greater performance or the ability to
 interface with another language or hardware where Rust’s guarantees don’t apply.</p>
 <p>Listing 19-1 shows how to create an immutable and a mutable raw pointer from
 references.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut num = 5;
 
     let r1 = &amp;num as *const i32;
@@ -281,7 +281,7 @@ data at that address or there might not, the compiler might optimize the code
 so there is no memory access, or the program might error with a segmentation
 fault. Usually, there is no good reason to write code like this, but it is
 possible.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let address = 0x012345usize;
     let r = address as *const i32;
 <span class="boring">}</span></code></pre></pre>
@@ -290,7 +290,7 @@ memory address</span></p>
 <p>Recall that we can create raw pointers in safe code, but we can’t <em>dereference</em>
 raw pointers and read the data being pointed to. In Listing 19-3, we use the
 dereference operator <code>*</code> on a raw pointer that requires an <code>unsafe</code> block.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut num = 5;
 
     let r1 = &amp;num as *const i32;
@@ -331,7 +331,7 @@ guarantee we’ve met these requirements. By calling an unsafe function within a
 take responsibility for upholding the function’s contracts.</p>
 <p>Here is an unsafe function named <code>dangerous</code> that doesn’t do anything in its
 body:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    unsafe fn dangerous() {}
 
     unsafe {
@@ -367,7 +367,7 @@ from the standard library, which requires some unsafe code. We’ll explore how
 we might implement it. This safe method is defined on mutable slices: it takes
 one slice and makes it two by splitting the slice at the index given as an
 argument. Listing 19-4 shows how to use <code>split_at_mut</code>.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut v = vec![1, 2, 3, 4, 5, 6];
 
     let r = &amp;mut v[..];
@@ -433,7 +433,7 @@ slices aren’t overlapping, but Rust isn’t smart enough to know this. When we
 know code is okay, but Rust doesn’t, it’s time to reach for unsafe code.</p>
 <p>Listing 19-6 shows how to use an <code>unsafe</code> block, a raw pointer, and some calls
 to unsafe functions to make the implementation of <code>split_at_mut</code> work.</p>
-<pre><pre class="playground"><code class="language-rust">use std::slice;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::slice;
 
 fn split_at_mut(values: &amp;mut [i32], mid: usize) -&gt; (&amp;mut [i32], &amp;mut [i32]) {
     let len = values.len();
@@ -485,7 +485,7 @@ data this function has access to.</p>
 <p>In contrast, the use of <code>slice::from_raw_parts_mut</code> in Listing 19-7 would
 likely crash when the slice is used. This code takes an arbitrary memory
 location and creates a slice 10,000 items long.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::slice;
 
     let address = 0x01234usize;
@@ -510,7 +510,7 @@ always unsafe to call from Rust code. The reason is that other languages don’t
 enforce Rust’s rules and guarantees, and Rust can’t check them, so
 responsibility falls on the programmer to ensure safety.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">extern "C" {
+<pre><pre class="playground"><code class="language-rust edition2021">extern "C" {
     fn abs(input: i32) -&gt; i32;
 }
 
@@ -540,7 +540,7 @@ mangles names slightly differently, so for a Rust function to be nameable by
 other languages, we must disable the Rust compiler’s name mangling.</p>
 <p>In the following example, we make the <code>call_from_c</code> function accessible from
 C code, after it’s compiled to a shared library and linked from C:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[no_mangle]
 pub extern "C" fn call_from_c() {
@@ -557,7 +557,7 @@ accessing the same mutable global variable, it can cause a data race.</p>
 example declaration and use of a static variable with a string slice as a
 value.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">static HELLO_WORLD: &amp;str = "Hello, world!";
+<pre><pre class="playground"><code class="language-rust edition2021">static HELLO_WORLD: &amp;str = "Hello, world!";
 
 fn main() {
     println!("name is: {HELLO_WORLD}");
@@ -580,7 +580,7 @@ variables can be mutable. Accessing and modifying mutable static variables is
 <em>unsafe</em>. Listing 19-10 shows how to declare, access, and modify a mutable
 static variable named <code>COUNTER</code>.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">static mut COUNTER: u32 = 0;
+<pre><pre class="playground"><code class="language-rust edition2021">static mut COUNTER: u32 = 0;
 
 fn add_to_count(inc: u32) {
     unsafe {
@@ -613,7 +613,7 @@ least one of its methods has some invariant that the compiler can’t verify. We
 declare that a trait is <code>unsafe</code> by adding the <code>unsafe</code> keyword before <code>trait</code>
 and marking the implementation of the trait as <code>unsafe</code> too, as shown in
 Listing 19-11.</p>
-<pre><pre class="playground"><code class="language-rust">unsafe trait Foo {
+<pre><pre class="playground"><code class="language-rust edition2021">unsafe trait Foo {
     // methods go here
 }
 

@@ -200,7 +200,7 @@ function <code>f</code> twice, passing it the <code>arg</code> value, then adds 
 results together. The <code>main</code> function calls <code>do_twice</code> with the arguments
 <code>add_one</code> and <code>5</code>.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn add_one(x: i32) -&gt; i32 {
+<pre><pre class="playground"><code class="language-rust edition2021">fn add_one(x: i32) -&gt; i32 {
     x + 1
 }
 
@@ -234,20 +234,20 @@ functions can accept functions as arguments, but C doesn’t have closures.</p>
 function, let’s look at a use of the <code>map</code> method provided by the <code>Iterator</code>
 trait in the standard library. To use the <code>map</code> function to turn a vector of
 numbers into a vector of strings, we could use a closure, like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let list_of_numbers = vec![1, 2, 3];
     let list_of_strings: Vec&lt;String&gt; =
         list_of_numbers.iter().map(|i| i.to_string()).collect();
 <span class="boring">}</span></code></pre></pre>
 <p>Or we could name a function as the argument to <code>map</code> instead of the closure,
 like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let list_of_numbers = vec![1, 2, 3];
     let list_of_strings: Vec&lt;String&gt; =
         list_of_numbers.iter().map(ToString::to_string).collect();
 <span class="boring">}</span></code></pre></pre>
 <p>Note that we must use the fully qualified syntax that we talked about earlier
-in the <a href="ch19-03-advanced-traits.html#advanced-traits">“Advanced Traits”</a><!-- ignore --> section because
+in the <a href="ch20-03-advanced-traits.html#advanced-traits">“Advanced Traits”</a><!-- ignore --> section because
 there are multiple functions available named <code>to_string</code>. Here, we’re using the
 <code>to_string</code> function defined in the <code>ToString</code> trait, which the standard
 library has implemented for any type that implements <code>Display</code>.</p>
@@ -256,7 +256,7 @@ library has implemented for any type that implements <code>Display</code>.</p>
 function. We can use these initializer functions as function pointers that
 implement the closure traits, which means we can specify the initializer
 functions as arguments for methods that take closures, like so:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    enum Status {
         Value(u32),
         Stop,
@@ -308,9 +308,9 @@ We can use a trait object:</p>
     Box::new(|x| x + 1)
 }</code></pre>
 <p>This code will compile just fine. For more about trait objects, refer to the
-section <a href="ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects That Allow for Values of Different
+section <a href="ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects That Allow for Values of Different
 Types”</a><!--
-ignore --> in Chapter 17.</p>
+ignore --> in Chapter 18.</p>
 <p>Next, let’s look at macros!</p>
 
                     </main>

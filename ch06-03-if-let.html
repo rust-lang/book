@@ -186,7 +186,7 @@ handle values that match one pattern while ignoring the rest. Consider the
 program in Listing 6-6 that matches on an <code>Option&lt;u8&gt;</code> value in the
 <code>config_max</code> variable but only wants to execute code if the value is the <code>Some</code>
 variant.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let config_max = Some(3u8);
     match config_max {
         Some(max) =&gt; println!("The maximum is configured to be {max}"),
@@ -201,7 +201,7 @@ with the <code>None</code> value. To satisfy the <code>match</code> expression, 
 add.</p>
 <p>Instead, we could write this in a shorter way using <code>if let</code>. The following
 code behaves the same as the <code>match</code> in Listing 6-6:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let config_max = Some(3u8);
     if let Some(max) = config_max {
         println!("The maximum is configured to be {max}");
@@ -228,7 +228,7 @@ runs code when the value matches one pattern and then ignores all other values.<
 <code>UsState</code> value. If we wanted to count all non-quarter coins we see while also
 announcing the state of the quarters, we could do that with a <code>match</code>
 expression, like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">enum UsState {
 </span><span class="boring">    Alabama,
 </span><span class="boring">    Alaska,
@@ -251,7 +251,7 @@ expression, like this:</p>
     }
 <span class="boring">}</span></code></pre></pre>
 <p>Or we could use an <code>if let</code> and <code>else</code> expression, like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">enum UsState {
 </span><span class="boring">    Alabama,
 </span><span class="boring">    Alaska,

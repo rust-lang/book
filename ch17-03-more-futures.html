@@ -189,7 +189,9 @@ the futures itself. Thus, we could rewrite the code from Listing 17-12 to use
 <code>join!</code> instead of <code>join3</code>, as in Listing 17-13:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::time::Duration;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -246,7 +248,9 @@ implements the <code>Iterator</code> trait, which we learned about back in Chapt
 it seems like just the ticket. Let’s try putting our futures in a vector, and
 replace <code>join!</code> with <code>join_all</code>.</p>
 <figure class="listing">
-<pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::time::Duration;
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -373,7 +377,9 @@ they will all be until runtime.</p>
 shown in Listing 17-15.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::time::Duration;
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -430,7 +436,9 @@ back to the <code>Unpin</code> errors in a moment. First, let’s fix the type e
 object (Listing 17-16).</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::{future::Future, time::Duration};
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{future::Future, time::Duration};
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -490,7 +498,7 @@ of the future is the unit type <code>()</code> by writing <code>Future&lt;Output
 <p>That already made a big difference. Now when we run the compiler, we only have
 the errors mentioning <code>Unpin</code>. Although there are three of them, notice that
 each is very similar in its contents.</p>
-<!-- manual-regeneraton
+<!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-16
 cargo build
 copy *only* the errors
@@ -567,9 +575,12 @@ the idea of <em>pinning</em>.</p>
 <!-- TODO: get a *very* careful technical review of this section! -->
 <p>Let’s look again at the definition of <code>Future</code>, focusing now on its <code>poll</code>
 method’s <code>self</code> type:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>pub trait Future {
+</span>use std::pin::Pin;
+use std::task::{Context, Poll};
+
+pub trait Future {
     type Output;
 
     // Required method
@@ -674,7 +685,9 @@ annotation for <code>futures</code>, with a <code>Pin</code> wrapping each <code
 <code>Box::pin</code> to pin the futures themselves.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{
 </span><span class="boring">    future::Future,
 </span><span class="boring">    pin::{pin, Pin},
 </span><span class="boring">    time::Duration,
@@ -756,14 +769,20 @@ when we define it, and define <code>futures</code> as a <code>Vec</code> contain
 references to the dynamic <code>Future</code> type, as in Listing 17-18.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::time::Duration;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{
+</span><span class="boring">    future::Future,
+</span><span class="boring">    pin::{pin, Pin},
+</span><span class="boring">    time::Duration,
+</span><span class="boring">};
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
 </span><span class="boring">        let (tx, mut rx) = trpl::channel();
 </span><span class="boring">
 </span><span class="boring">        let tx1 = tx.clone();
-</span><span class="boring">        let tx1_fut = async move {
+</span><span class="boring">        let tx1_fut = pin!(async move {
 </span><span class="boring">            let vals = vec![
 </span><span class="boring">                String::from("hi"),
 </span><span class="boring">                String::from("from"),
@@ -775,15 +794,15 @@ references to the dynamic <code>Future</code> type, as in Listing 17-18.</p>
 </span><span class="boring">                tx1.send(val).unwrap();
 </span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
 </span><span class="boring">            }
-</span><span class="boring">        };
+</span><span class="boring">        });
 </span><span class="boring">
-</span><span class="boring">        let rx_fut = async {
+</span><span class="boring">        let rx_fut = pin!(async {
 </span><span class="boring">            while let Some(value) = rx.recv().await {
 </span><span class="boring">                println!("received '{value}'");
 </span><span class="boring">            }
-</span><span class="boring">        };
+</span><span class="boring">        });
 </span><span class="boring">
-</span><span class="boring">        let tx_fut = async move {
+</span><span class="boring">        let tx_fut = pin!(async move {
 </span><span class="boring">            let vals = vec![
 </span><span class="boring">                String::from("more"),
 </span><span class="boring">                String::from("messages"),
@@ -795,11 +814,13 @@ references to the dynamic <code>Future</code> type, as in Listing 17-18.</p>
 </span><span class="boring">                tx.send(val).unwrap();
 </span><span class="boring">                trpl::sleep(Duration::from_secs(1)).await;
 </span><span class="boring">            }
-</span><span class="boring">        };
+</span><span class="boring">        });
 </span><span class="boring">
-</span>        let futures = vec![tx1_fut, rx_fut, tx_fut];
-        trpl::join_all(futures).await;
-<span class="boring">    });
+</span>        let futures: Vec&lt;Pin&lt;&amp;mut dyn Future&lt;Output = ()&gt;&gt;&gt; =
+            vec![tx1_fut, rx_fut, tx_fut];
+<span class="boring">
+</span><span class="boring">        trpl::join_all(futures).await;
+</span><span class="boring">    });
 </span><span class="boring">}</span></code></pre></pre>
 <figcaption>Listing 17-18: Using <code>Pin</code> directly with the <code>pin!</code> macro to avoid unnecessary heap allocations</figcaption>
 </figure>
@@ -810,7 +831,9 @@ future for <code>b</code> implements <code>Future&lt;Output = &amp;str&gt;</code
 <code>c</code> implements <code>Future&lt;Output = bool&gt;</code>.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
 </span>        let a = async { 1u32 };
         let b = async { "Hello!" };
@@ -823,7 +846,7 @@ future for <code>b</code> implements <code>Future&lt;Output = &amp;str&gt;</code
 <figcaption>Listing 17-19: Three futures with distinct types</figcaption>
 </figure>
 <p>We can use <code>trpl::join!</code> to await them, because it allows you to pass in
-multiple future types and produces a tuple of those htypes. We <em>cannot</em> use
+multiple future types and produces a tuple of those types. We <em>cannot</em> use
 <code>trpl::join_all</code>, because it requires the futures passed in all to have the same
 type. (Remember, that error is what got us started on this adventure with
 <code>Pin</code>!)</p>

@@ -324,7 +324,7 @@ in a variable rather than defining the closure in the spot we pass it as an
 argument as we did in Listing 13-1.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::thread;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::thread;
 </span><span class="boring">use std::time::Duration;
 </span><span class="boring">
 </span><span class="boring">fn generate_workout(intensity: u32, random_number: u32) {
@@ -437,7 +437,7 @@ the vector named <code>list</code> because it only needs an immutable reference 
 the value:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let list = vec![1, 2, 3];
     println!("Before defining closure: {list:?}");
 
@@ -471,7 +471,7 @@ After calling closure: [1, 2, 3]
 the <code>list</code> vector. The closure now captures a mutable reference:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let mut list = vec![1, 2, 3];
     println!("Before defining closure: {list:?}");
 
@@ -510,7 +510,7 @@ closure that needs the <code>move</code> keyword. Listing 13-6 shows Listing 13-
 to print the vector in a new thread rather than in the main thread:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">use std::thread;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::thread;
 
 fn main() {
     let list = vec![1, 2, 3];
@@ -614,7 +614,7 @@ Listing 13-7, we have a list of <code>Rectangle</code> instances and we use <cod
 to order them by their <code>width</code> attribute from low to high:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
 struct Rectangle {
     width: u32,
     height: u32,
@@ -726,7 +726,7 @@ reference to the <code>num_sort_operations</code> counter and can therefore be c
 than once:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
 struct Rectangle {
     width: u32,
     height: u32,

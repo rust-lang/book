@@ -291,7 +291,7 @@ it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way
 to bring the standard library’s <code>HashMap</code> struct into the scope of a binary
 crate.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::collections::HashMap;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::collections::HashMap;
 
 fn main() {
     let mut map = HashMap::new();
@@ -436,7 +436,7 @@ package. Because the standard library is shipped with the Rust language, we
 don’t need to change <em>Cargo.toml</em> to include <code>std</code>. But we do need to refer to
 it with <code>use</code> to bring items from there into our package’s scope. For example,
 with <code>HashMap</code> we would use this line:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use std::collections::HashMap;
 <span class="boring">}</span></code></pre></pre>
@@ -537,7 +537,7 @@ one <code>use</code> statement</span></p>
 <h3 id="the-glob-operator"><a class="header" href="#the-glob-operator">The Glob Operator</a></h3>
 <p>If we want to bring <em>all</em> public items defined in a path into scope, we can
 specify that path followed by the <code>*</code> glob operator:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use std::collections::*;
 <span class="boring">}</span></code></pre></pre>

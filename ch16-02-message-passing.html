@@ -238,7 +238,7 @@ string so the spawned thread is communicating with the main thread, as shown in
 Listing 16-7. This is like putting a rubber duck in the river upstream or
 sending a chat message from one thread to another.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::sync::mpsc;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::sync::mpsc;
 use std::thread;
 
 fn main() {
@@ -264,7 +264,7 @@ Chapter 9 to review strategies for proper error handling.</p>
 is like retrieving the rubber duck from the water at the end of the river or
 receiving a chat message.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::sync::mpsc;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::sync::mpsc;
 use std::thread;
 
 fn main() {

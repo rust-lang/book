@@ -193,7 +193,9 @@ when it finishes. Then we pass both to <code>trpl::race</code> and wait for one 
 finish. (The outcome here won’t be too surprising: <code>fast</code> wins!)</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::time::Duration;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -241,7 +243,9 @@ number of milliseconds. We can use <code>slow</code> to stand in for real-world 
 which are both long-running and blocking.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{thread, time::Duration};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{thread, time::Duration};
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -260,7 +264,9 @@ a pair of futures. To begin, each future only hands control back to the runtime
 <em>after</em> carrying out a bunch of slow operations.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{thread, time::Duration};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{thread, time::Duration};
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -323,7 +329,9 @@ without the <code>b</code> future running <em>at all</em>. Maybe we could use th
 as a starting point?</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{thread, time::Duration};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{thread, time::Duration};
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -382,7 +390,7 @@ copy just the output
 </code></pre>
 <p>The <code>a</code> future still runs for a bit before handing off control to <code>b</code>, because
 it calls <code>slow</code> before ever calling <code>trpl::sleep</code>, but after that the futures
-swap back and forth eaach time one of them hits an await point. In this case, we
+swap back and forth each time one of them hits an await point. In this case, we
 have done that after every call to <code>slow</code>, but we could break up the work
 however makes the most sense to us.</p>
 <p>We do not really want to <em>sleep</em> here, though: we want to make progress as fast
@@ -391,7 +399,9 @@ directly, using the <code>yield_now</code> function. In Listing 17-24, we replac
 <code>sleep</code> calls with <code>yield_now</code>.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{thread, time::Duration};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{thread, time::Duration};
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -445,7 +455,9 @@ Listings 17-23 and 17-24. Then we run for 1,000 iterations and see how long
 <code>sleep</code> takes vs. <code>yield_now</code>.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::time::{Duration, Instant};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::{Duration, Instant};
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -499,7 +511,9 @@ further async abstractions.</p>
 future.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><code class="language-rust ignore"><span class="boring">use std::time::Duration;
+<pre><code class="language-rust ignore"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::time::Duration;
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -531,9 +545,12 @@ elapses first, the <code>Result</code> will be <code>Err</code> with the duratio
 waited for.</li>
 </ul>
 <p>Listing 17-27 shows this declaration.</p>
+<!-- This is not tested because it intentionally does not compile. -->
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{future::Future, time::Duration};
+<pre><code class="language-rust ignore"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{future::Future, time::Duration};
 </span><span class="boring">
 </span><span class="boring">fn main() {
 </span><span class="boring">    trpl::block_on(async {
@@ -556,7 +573,7 @@ waited for.</li>
     max_time: Duration,
 ) -&gt; Result&lt;F::Output, Duration&gt; {
     // Here is where our implementation will go!
-}</code></pre></pre>
+}</code></pre>
 <figcaption>Listing 17-27: Defining the signature of <code>timeout</code></figcaption>
 </figure>
 <p>The types line up now, so let’s think about the <em>behavior</em> we need. We want to
@@ -571,7 +588,7 @@ legitimately “win,” so it does not make sense to use a <code>Result</code> t
 return type. Instead, it returns a similar type called <code>Either</code>. Unlike
 <code>Result</code>, there is no notion of success or failure baked into <code>Either</code>. Instead,
 it uses <code>Left</code> and <code>Right</code> to indicate “one or the other”:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum Either&lt;A, B&gt; {
     Left(A),
@@ -592,7 +609,9 @@ sleep timer elapsed instead and we get a <code>Right(())</code>, we ignore the <
 <code>_</code> and return <code>Err(duration)</code> instead.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">use std::{future::Future, time::Duration};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span><span class="boring">use std::{future::Future, time::Duration};
 </span><span class="boring">
 </span><span class="boring">use trpl::Either;
 </span><span class="boring">

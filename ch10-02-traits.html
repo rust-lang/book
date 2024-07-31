@@ -657,7 +657,7 @@ return type specified as <code>impl Summary</code> wouldn’t work:</p>
 }</code></pre>
 <p>Returning either a <code>NewsArticle</code> or a <code>Tweet</code> isn’t allowed due to restrictions
 around how the <code>impl Trait</code> syntax is implemented in the compiler. We’ll cover
-how to write a function with this behavior in the <a href="ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects That
+how to write a function with this behavior in the <a href="ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects That
 Allow for Values of Different
 Types”</a><!--
 ignore --> section of Chapter 17.</p>
@@ -709,7 +709,7 @@ block in the standard library looks similar to this code:</p>
 <code>to_string</code> method defined by the <code>ToString</code> trait on any type that implements
 the <code>Display</code> trait. For example, we can turn integers into their corresponding
 <code>String</code> values like this because integers implement <code>Display</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let s = 3.to_string();
 <span class="boring">}</span></code></pre></pre>

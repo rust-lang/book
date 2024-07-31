@@ -240,7 +240,7 @@ fix it by changing the code that uses the pattern: instead of using <code>let</c
 can use <code>if let</code>. Then if the pattern doesn’t match, the code will just skip
 the code in the curly brackets, giving it a way to continue validly. Listing
 18-9 shows how to fix the code in Listing 18-8.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    let some_option_value: Option&lt;i32&gt; = None;
 </span>    if let Some(x) = some_option_value {
         println!("{x}");
@@ -252,7 +252,7 @@ patterns instead of <code>let</code></span></p>
 if we give <code>if let</code> an irrefutable pattern (a pattern that will always
 match), such as <code>x</code>, as shown in Listing 18-10, the compiler will give a
 warning.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    if let x = 5 {
         println!("{x}");
     };

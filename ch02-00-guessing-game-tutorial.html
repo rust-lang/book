@@ -223,7 +223,7 @@ edition = "2021"
 <p>As you saw in Chapter 1, <code>cargo new</code> generates a “Hello, world!” program for
 you. Check out the <em>src/main.rs</em> file:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     println!("Hello, world!");
 }</code></pre></pre>
 <p>Now let’s compile this “Hello, world!” program and run it in the same step
@@ -513,7 +513,7 @@ expression, place empty curly brackets in the format string, then follow the
 format string with a comma-separated list of expressions to print in each empty
 curly bracket placeholder in the same order. Printing a variable and the result
 of an expression in one call to <code>println!</code> would look like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let x = 5;
 let y = 10;

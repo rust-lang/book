@@ -188,7 +188,7 @@ similar to newtypes but with slightly different semantics. We’ll also discuss
 the <code>!</code> type and dynamically sized types.</p>
 <h3 id="using-the-newtype-pattern-for-type-safety-and-abstraction"><a class="header" href="#using-the-newtype-pattern-for-type-safety-and-abstraction">Using the Newtype Pattern for Type Safety and Abstraction</a></h3>
 <section class="note" aria-role="note">
-<p>Note: This section assumes you’ve read the earlier section <a href="ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types">“Using the
+<p>Note: This section assumes you’ve read the earlier section <a href="ch20-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types">“Using the
 Newtype Pattern to Implement External Traits on External
 Types.”</a><!-- ignore --></p>
 </section>
@@ -209,7 +209,7 @@ associated with their name. Code using <code>People</code> would only interact w
 public API we provide, such as a method to add a name string to the <code>People</code>
 collection; that code wouldn’t need to know that we assign an <code>i32</code> ID to names
 internally. The newtype pattern is a lightweight way to achieve encapsulation
-to hide implementation details, which we discussed in the <a href="ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details">“Encapsulation that
+to hide implementation details, which we discussed in the <a href="ch18-01-what-is-oo.html#encapsulation-that-hides-implementation-details">“Encapsulation that
 Hides Implementation
 Details”</a><!-- ignore -->
 section of Chapter 17.</p>
@@ -217,7 +217,7 @@ section of Chapter 17.</p>
 <p>Rust provides the ability to declare a <em>type alias</em> to give an existing type
 another name. For this we use the <code>type</code> keyword. For example, we can create
 the alias <code>Kilometers</code> to <code>i32</code> like so:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    type Kilometers = i32;
 <span class="boring">
 </span><span class="boring">    let x: i32 = 5;
@@ -229,7 +229,7 @@ the alias <code>Kilometers</code> to <code>i32</code> like so:</p>
 and <code>Meters</code> types we created in Listing 19-15, <code>Kilometers</code> is not a separate,
 new type. Values that have the type <code>Kilometers</code> will be treated the same as
 values of type <code>i32</code>:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    type Kilometers = i32;
 
     let x: i32 = 5;
@@ -249,7 +249,7 @@ might have a lengthy type like this:</p>
 <p>Writing this lengthy type in function signatures and as type annotations all
 over the code can be tiresome and error prone. Imagine having a project full of
 code like that in Listing 19-24.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let f: Box&lt;dyn Fn() + Send + 'static&gt; = Box::new(|| println!("hi"));
 
     fn takes_long_type(f: Box&lt;dyn Fn() + Send + 'static&gt;) {
@@ -265,7 +265,7 @@ code like that in Listing 19-24.</p>
 <p>A type alias makes this code more manageable by reducing the repetition. In
 Listing 19-25, we’ve introduced an alias named <code>Thunk</code> for the verbose type and
 can replace all uses of the type with the shorter alias <code>Thunk</code>.</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    type Thunk = Box&lt;dyn Fn() + Send + 'static&gt;;
 
     let f: Thunk = Box::new(|| println!("hi"));
@@ -487,7 +487,7 @@ types behind a pointer of some kind.</p>
 <p>We can combine <code>str</code> with all kinds of pointers: for example, <code>Box&lt;str&gt;</code> or
 <code>Rc&lt;str&gt;</code>. In fact, you’ve seen this before but with a different dynamically
 sized type: traits. Every trait is a dynamically sized type we can refer to by
-using the name of the trait. In Chapter 17 in the <a href="ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects That
+using the name of the trait. In Chapter 17 in the <a href="ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects That
 Allow for Values of Different
 Types”</a><!--
 ignore --> section, we mentioned that to use traits as trait objects, we must

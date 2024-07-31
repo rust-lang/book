@@ -193,7 +193,7 @@ grouped together. Then, inside curly brackets, we define the names and types of
 the pieces of data, which we call <em>fields</em>. For example, Listing 5-1 shows a
 struct that stores information about a user account.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct User {
+<pre><pre class="playground"><code class="language-rust edition2021">struct User {
     active: bool,
     username: String,
     email: String,
@@ -212,7 +212,7 @@ struct definition is like a general template for the type, and instances fill
 in that template with particular data to create values of the type. For
 example, we can declare a particular user as shown in Listing 5-2.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">struct User {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct User {
 </span><span class="boring">    active: bool,
 </span><span class="boring">    username: String,
 </span><span class="boring">    email: String,
@@ -235,7 +235,7 @@ mutable, we can change a value by using the dot notation and assigning into a
 particular field. Listing 5-3 shows how to change the value in the <code>email</code>
 field of a mutable <code>User</code> instance.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">struct User {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct User {
 </span><span class="boring">    active: bool,
 </span><span class="boring">    username: String,
 </span><span class="boring">    email: String,
@@ -262,7 +262,7 @@ implicitly return that new instance.</p>
 the given email and username. The <code>active</code> field gets the value of <code>true</code>, and
 the <code>sign_in_count</code> gets a value of <code>1</code>.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">struct User {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct User {
 </span><span class="boring">    active: bool,
 </span><span class="boring">    username: String,
 </span><span class="boring">    email: String,
@@ -298,7 +298,7 @@ Listing 5-4, we can use the <em>field init shorthand</em> syntax to rewrite
 <code>build_user</code> so it behaves exactly the same but doesn’t have the repetition of
 <code>username</code> and <code>email</code>, as shown in Listing 5-5.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">struct User {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct User {
 </span><span class="boring">    active: bool,
 </span><span class="boring">    username: String,
 </span><span class="boring">    email: String,
@@ -336,7 +336,7 @@ the values from another instance, but changes some. You can do this using
 regularly, without the update syntax. We set a new value for <code>email</code> but
 otherwise use the same values from <code>user1</code> that we created in Listing 5-2.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">struct User {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct User {
 </span><span class="boring">    active: bool,
 </span><span class="boring">    username: String,
 </span><span class="boring">    email: String,
@@ -366,7 +366,7 @@ the values from <code>user1</code></span></p>
 shown in Listing 5-7. The syntax <code>..</code> specifies that the remaining fields not
 explicitly set should have the same value as the fields in the given instance.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">struct User {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct User {
 </span><span class="boring">    active: bool,
 </span><span class="boring">    username: String,
 </span><span class="boring">    email: String,
@@ -419,7 +419,7 @@ field as in a regular struct would be verbose or redundant.</p>
 followed by the types in the tuple. For example, here we define and use two
 tuple structs named <code>Color</code> and <code>Point</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct Color(i32, i32, i32);
+<pre><pre class="playground"><code class="language-rust edition2021">struct Color(i32, i32, i32);
 struct Point(i32, i32, i32);
 
 fn main() {
@@ -443,7 +443,7 @@ have any data that you want to store in the type itself. We’ll discuss traits
 in Chapter 10. Here’s an example of declaring and instantiating a unit struct
 named <code>AlwaysEqual</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct AlwaysEqual;
+<pre><pre class="playground"><code class="language-rust edition2021">struct AlwaysEqual;
 
 fn main() {
     let subject = AlwaysEqual;

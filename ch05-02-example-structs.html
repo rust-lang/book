@@ -189,7 +189,7 @@ the width and height of a rectangle specified in pixels and calculate the area
 of the rectangle. Listing 5-8 shows a short program with one way of doing
 exactly that in our project’s <em>src/main.rs</em>.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let width1 = 30;
     let height1 = 50;
 
@@ -237,7 +237,7 @@ of Chapter 3: by using tuples.</p>
 <h3 id="refactoring-with-tuples"><a class="header" href="#refactoring-with-tuples">Refactoring with Tuples</a></h3>
 <p>Listing 5-9 shows another version of our program that uses tuples.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let rect1 = (30, 50);
 
     println!(
@@ -266,7 +266,7 @@ our data in our code, it’s now easier to introduce errors.</p>
 we’re using into a struct with a name for the whole as well as names for the
 parts, as shown in Listing 5-10.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">struct Rectangle {
+<pre><pre class="playground"><code class="language-rust edition2021">struct Rectangle {
     width: u32,
     height: u32,
 }
@@ -359,7 +359,7 @@ have to explicitly opt in to make that functionality available for our struct.
 To do that, we add the outer attribute <code>#[derive(Debug)]</code> just before the
 struct definition, as shown in Listing 5-12.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
 struct Rectangle {
     width: u32,
     height: u32,
@@ -411,7 +411,7 @@ section in Chapter 12</a><!-- ignore -->.</p>
 </section>
 <p>Here’s an example where we’re interested in the value that gets assigned to the
 <code>width</code> field, as well as the value of the whole struct in <code>rect1</code>:</p>
-<pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
 struct Rectangle {
     width: u32,
     height: u32,

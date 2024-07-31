@@ -204,7 +204,7 @@ compiler warnings that have a clear way to correct the problem that’s likely
 what you want. It’s likely you’ve seen compiler warnings before. For example,
 consider this code:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn do_something() {}
+<pre><pre class="playground"><code class="language-rust edition2021">fn do_something() {}
 
 fn main() {
     for i in 0..100 {
@@ -236,7 +236,7 @@ apply that suggestion using the <code>rustfix</code> tool by running the command
 <p>When we look at <em>src/main.rs</em> again, we’ll see that <code>cargo fix</code> has changed the
 code:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn do_something() {}
+<pre><pre class="playground"><code class="language-rust edition2021">fn do_something() {}
 
 fn main() {
     for _i in 0..100 {
@@ -258,7 +258,7 @@ common mistakes and improve your Rust code.</p>
 <p>For example, say you write a program that uses an approximation of a
 mathematical constant, such as pi, as this program does:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = 3.1415;
     let r = 8.0;
     println!("the area of the circle is {}", x * r * r);
@@ -279,7 +279,7 @@ defined, and that your program would be more correct if you used the constant
 instead. You would then change your code to use the <code>PI</code> constant. The
 following code doesn’t result in any errors or warnings from Clippy:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = std::f64::consts::PI;
     let r = 8.0;
     println!("the area of the circle is {}", x * r * r);

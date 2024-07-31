@@ -217,7 +217,7 @@ closure (we talked about closures in Chapter 13) containing the code we want to
 run in the new thread. The example in Listing 16-1 prints some text from a main
 thread and other text from a new thread:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::thread;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::thread;
 use std::time::Duration;
 
 fn main() {
@@ -274,7 +274,7 @@ call the <code>join</code> method on it, will wait for its thread to finish. Lis
 shows how to use the <code>JoinHandle</code> of the thread we created in Listing 16-1 and
 call <code>join</code> to make sure the spawned thread finishes before <code>main</code> exits:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::thread;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::thread;
 use std::time::Duration;
 
 fn main() {
@@ -321,7 +321,7 @@ call to <code>handle.join()</code> and does not end until the spawned thread is 
 <p>But let’s see what happens when we instead move <code>handle.join()</code> before the
 <code>for</code> loop in <code>main</code>, like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::thread;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::thread;
 use std::time::Duration;
 
 fn main() {
@@ -460,7 +460,7 @@ ownership of the values it’s using rather than allowing Rust to infer that it
 should borrow the values. The modification to Listing 16-3 shown in Listing
 16-5 will compile and run as we intend:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">use std::thread;
+<pre><pre class="playground"><code class="language-rust edition2021">use std::thread;
 
 fn main() {
     let v = vec![1, 2, 3];

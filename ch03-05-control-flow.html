@@ -192,7 +192,7 @@ of code. If the condition is not met, do not run this block of code.”</p>
 <p>Create a new project called <em>branches</em> in your <em>projects</em> directory to explore
 the <code>if</code> expression. In the <em>src/main.rs</em> file, input the following:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let number = 3;
 
     if number &lt; 5 {
@@ -270,7 +270,7 @@ convert non-Boolean types to a Boolean. You must be explicit and always provide
 only when a number is not equal to <code>0</code>, for example, we can change the <code>if</code>
 expression to the following:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let number = 3;
 
     if number != 0 {
@@ -282,7 +282,7 @@ expression to the following:</p>
 <p>You can use multiple conditions by combining <code>if</code> and <code>else</code> in an <code>else if</code>
 expression. For example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let number = 6;
 
     if number % 4 == 0 {
@@ -317,7 +317,7 @@ Rust branching construct called <code>match</code> for these cases.</p>
 statement to assign the outcome to a variable, as in Listing 3-2.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let condition = true;
     let number = if condition { 5 } else { 6 };
 
@@ -427,7 +427,7 @@ the result of that operation out of the loop to the rest of your code. To do
 this, you can add the value you want returned after the <code>break</code> expression you
 use to stop the loop; that value will be returned out of the loop so you can
 use it, as shown here:</p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let mut counter = 0;
 
     let result = loop {
@@ -455,7 +455,7 @@ loop at that point. You can optionally specify a <em>loop label</em> on a loop t
 you can then use with <code>break</code> or <code>continue</code> to specify that those keywords
 apply to the labeled loop instead of the innermost loop. Loop labels must begin
 with a single quote. Here’s an example with two nested loops:</p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let mut count = 0;
     'counting_up: loop {
         println!("count = {count}");
@@ -504,7 +504,7 @@ Listing 3-3, we use <code>while</code> to loop the program three times, counting
 time, and then, after the loop, print a message and exit.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let mut number = 3;
 
     while number != 0 {
@@ -526,7 +526,7 @@ collection, such as an array. For example, the loop in Listing 3-4 prints each
 element in the array <code>a</code>.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let a = [10, 20, 30, 40, 50];
     let mut index = 0;
 
@@ -565,7 +565,7 @@ index is within the bounds of the array on every iteration through the loop.</p>
 for each item in a collection. A <code>for</code> loop looks like the code in Listing 3-5.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let a = [10, 20, 30, 40, 50];
 
     for element in a {
@@ -591,7 +591,7 @@ number.</p>
 <p>Here’s what the countdown would look like using a <code>for</code> loop and another method
 we’ve not yet talked about, <code>rev</code>, to reverse the range:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     for number in (1..4).rev() {
         println!("{number}!");
     }

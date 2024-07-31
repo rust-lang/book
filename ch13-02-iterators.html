@@ -192,7 +192,7 @@ the <code>iter</code> method defined on <code>Vec&lt;T&gt;</code>. This code by 
 useful.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v1 = vec![1, 2, 3];
 
     let v1_iter = v1.iter();
@@ -210,7 +210,7 @@ the iterator in <code>v1_iter</code>, each element in the iterator is used in on
 iteration of the loop, which prints out each value.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v1 = vec![1, 2, 3];
 
     let v1_iter = v1.iter();
@@ -233,7 +233,7 @@ index into, like vectors. Let’s examine how iterators do that.</p>
 <h3 id="the-iterator-trait-and-the-next-method"><a class="header" href="#the-iterator-trait-and-the-next-method">The <code>Iterator</code> Trait and the <code>next</code> Method</a></h3>
 <p>All iterators implement a trait named <code>Iterator</code> that is defined in the
 standard library. The definition of the trait looks like this:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub trait Iterator {
     type Item;
@@ -329,7 +329,7 @@ closure here creates a new iterator in which each item from the vector will be
 incremented by 1:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust not_desired_behavior"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust not_desired_behavior edition2021"><span class="boring">fn main() {
 </span>    let v1: Vec&lt;i32&gt; = vec![1, 2, 3];
 
     v1.iter().map(|x| x + 1);
@@ -368,7 +368,7 @@ returned from the call to <code>map</code> into a vector. This vector will end u
 containing each item from the original vector incremented by 1.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v1: Vec&lt;i32&gt; = vec![1, 2, 3];
 
     let v2: Vec&lt;_&gt; = v1.iter().map(|x| x + 1).collect();

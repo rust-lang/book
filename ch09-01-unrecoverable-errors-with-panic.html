@@ -208,7 +208,7 @@ panic = 'abort'
 </section>
 <p>Let’s try calling <code>panic!</code> in a simple program:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust should_panic panics">fn main() {
+<pre><pre class="playground"><code class="language-rust should_panic panics edition2021">fn main() {
     panic!("crash and burn");
 }</code></pre></pre>
 <p>When you run the program, you’ll see something like this:</p>
@@ -238,7 +238,7 @@ a <code>panic!</code> call comes from a library because of a bug in our code ins
 from our code calling the macro directly. Listing 9-1 has some code that
 attempts to access an index in a vector beyond the range of valid indexes.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playground"><code class="language-rust should_panic panics">fn main() {
+<pre><pre class="playground"><code class="language-rust should_panic panics edition2021">fn main() {
     let v = vec![1, 2, 3];
 
     v[99];
