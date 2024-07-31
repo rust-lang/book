@@ -6,7 +6,7 @@ Rust has an extremely powerful control flow construct called `match` that
 allows you to compare a value against a series of patterns and then execute
 code based on which pattern matches. Patterns can be made up of literal values,
 variable names, wildcards, and many other things; [Chapter
-18][ch18-00-patterns]<!-- ignore --> covers all the different kinds of patterns
+18][ch19-00-patterns]<!-- ignore --> covers all the different kinds of patterns
 and what they do. The power of `match` comes from the expressiveness of the
 patterns and the fact that the compiler confirms that all possible cases are
 handled.
@@ -238,7 +238,7 @@ that by using the unit value (the empty tuple type we mentioned in [“The Tuple
 Type”][tuples]<!-- ignore --> section) as the code that goes with the `_` arm:
 
 ```rust
-{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-17-underscore-unit/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-18-underscore-unit/src/main.rs:here}}
 ```
 
 Here, we’re telling Rust explicitly that we aren’t going to use any other value
@@ -246,9 +246,10 @@ that doesn’t match a pattern in an earlier arm, and we don’t want to run any
 code in this case.
 
 There’s more about patterns and matching that we’ll cover in [Chapter
-18][ch18-00-patterns]<!-- ignore -->. For now, we’re going to move on to the
+19][ch19-00-patterns]<!-- ignore -->. For now, we’re going to move on to the
 `if let` syntax, which can be useful in situations where the `match` expression
 is a bit wordy.
 
 [tuples]: ch03-02-data-types.html#the-tuple-type
-[ch18-00-patterns]: ch18-00-patterns.html
+
+[ch19-00-patterns]: ch19-00-patterns.html

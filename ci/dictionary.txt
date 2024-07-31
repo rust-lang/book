@@ -55,6 +55,7 @@ bool
 boolean
 Boolean
 Booleans
+booleans
 Bors
 BorrowMutError
 BoxMeUp
@@ -109,6 +110,7 @@ deallocate
 deallocated
 deallocating
 deallocation
+debounce
 debuginfo
 decl
 decrementing
@@ -145,6 +147,7 @@ DisplayBacktrace
 DivAssign
 DraftPost
 DSTs
+durations
 ebook
 ebooks
 Edsger
@@ -179,6 +182,7 @@ filesystem's
 filesystems
 filmmaking
 Firefox
+FirstAwaitPoint
 FnMut
 FnOnce
 formatter
@@ -197,6 +201,7 @@ grapheme
 Grapheme
 growable
 gzip
+handoff
 hardcode
 hardcoded
 hardcoding
@@ -241,6 +246,7 @@ inline
 instantiation
 internet
 interoperate
+IntoFuture
 IntoIterator
 InvalidDigit
 invariants
@@ -256,6 +262,7 @@ isize
 iter
 iterator's
 JavaScript
+JoinAll
 JoinHandle
 Kay's
 kinded
@@ -294,6 +301,8 @@ Metadata
 metaprogramming
 mibbit
 Mibbit
+microcontroller
+microcontrollers
 millis
 minigrep
 mixup
@@ -307,10 +316,12 @@ monomorphized
 MoveMessage
 Mozilla
 mpsc
+MSRV
 msvc
 MulAssign
 multibyte
 multithreaded
+multithreading
 mutex
 mutex's
 Mutex
@@ -318,6 +329,7 @@ mutexes
 Mutexes
 MutexGuard
 mutext
+MyAsyncStateMachine
 MyBox
 myprogram
 namespace
@@ -359,6 +371,7 @@ OutlinePrint
 overloadable
 overread
 PanicPayload
+parallelizable
 param
 parameterize
 ParseIntError
@@ -371,6 +384,7 @@ PlaceholderType
 polymorphism
 PoolCreationError
 portia
+postfix
 powershell
 PowerShell
 powi
@@ -396,6 +410,8 @@ RangeTo
 RangeFull
 README
 READMEs
+ReadFinished
+ReceiverStream
 rect
 recurse
 recv
@@ -438,6 +454,7 @@ sampleproject
 screenshot
 searchstring
 SecondaryColor
+SecondAwaitPoint
 SelectBox
 semver
 SemVer
@@ -455,6 +472,7 @@ SliceIndex
 Smalltalk
 snuck
 someproject
+SomeType
 someusername
 SPDX
 spdx
@@ -470,6 +488,7 @@ stdlib
 stdout
 steveklabnik's
 stringify
+StreamExt
 Stroustrup
 Stroustrup's
 struct
@@ -514,6 +533,8 @@ tlborm
 tlsv
 TODO
 TokenStream
+Tokio
+tokio
 toml
 TOML
 toolchain
@@ -538,6 +559,7 @@ uncomment
 Uncomment
 uncommenting
 unevaluated
+unhandled
 Uninstalling
 uninstall
 unittests
@@ -556,6 +578,7 @@ username
 USERPROFILE
 usize
 UsState
+util
 utils
 vals
 variable's

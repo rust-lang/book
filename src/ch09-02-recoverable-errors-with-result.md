@@ -533,5 +533,5 @@ let’s return to the topic of how to decide which is appropriate to use in whic
 cases.
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-result
-[trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[trait-objects]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [termination]: ../std/process/trait.Termination.html

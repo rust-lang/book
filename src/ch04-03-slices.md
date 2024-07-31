@@ -108,7 +108,7 @@ Luckily, Rust has a solution to this problem: string slices.
 A *string slice* is a reference to part of a `String`, and it looks like this:
 
 ```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-18-slice/src/main.rs:here}}
 ```
 
 Rather than a reference to the entire `String`, `hello` is a reference to a
@@ -179,7 +179,7 @@ slice. The type that signifies “string slice” is written as `&str`:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-18-first-word-slice/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-19-first-word-slice/src/main.rs:here}}
 ```
 
 We get the index for the end of the word the same way we did in Listing 4-7, by
@@ -210,13 +210,13 @@ compile-time error:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-20-slice-error/src/main.rs:here}}
 ```
 
 Here’s the compiler error:
 
 ```console
-{{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}
+{{#include ../listings/ch04-understanding-ownership/no-listing-20-slice-error/output.txt}}
 ```
 
 Recall from the borrowing rules that if we have an immutable reference to
