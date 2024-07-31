@@ -191,7 +191,7 @@ like this:
 
 When we run this program, we’ll see `again!` printed over and over continuously
 until we stop the program manually. Most terminals support the keyboard shortcut
-<kbd>ctrl</kbd>-<kdb>c</kbd> to interrupt a program that is stuck in a continual
+<kbd>ctrl</kbd>-<kbd>c</kbd> to interrupt a program that is stuck in a continual
 loop. Give it a try:
 
 <!-- manual-regeneration
