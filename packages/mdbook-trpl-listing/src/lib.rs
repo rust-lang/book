@@ -157,7 +157,7 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
                 }
                 ev => state.events.push(Ok(ev)),
             };
-            Ok::<ListingState, String>(state)
+            Ok::<ListingState<'_>, String>(state)
         },
     )?;
 
@@ -190,7 +190,7 @@ struct ListingState<'e> {
 impl<'e> ListingState<'e> {
     fn open_listing(
         &mut self,
-        tag: pulldown_cmark::CowStr,
+        tag: pulldown_cmark::CowStr<'_>,
         mode: Mode,
     ) -> Result<(), String> {
         // We do not *keep* the version constructed here, just temporarily
@@ -247,7 +247,7 @@ impl<'e> ListingState<'e> {
         Ok(())
     }
 
-    fn close_listing(&mut self, tag: pulldown_cmark::CowStr, mode: Mode) {
+    fn close_listing(&mut self, tag: pulldown_cmark::CowStr<'_>, mode: Mode) {
         let trailing = if !tag.ends_with('>') {
             tag.replace("</Listing>", "")
         } else {
