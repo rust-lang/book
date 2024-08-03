@@ -128,6 +128,10 @@ Only the test with the name `one_hundred` ran; the other two tests didn’t matc
 that name. The test output lets us know we had more tests that didn’t run by
 displaying `2 filtered out` at the end.
 
+If a test name is a substring of another test, we can use `-- --exact` argument,
+referring to test function with full path, for example
+`cargo test tests::one_hundred -- --exact`.
+
 We can’t specify the names of multiple tests in this way; only the first value
 given to `cargo test` will be used. But there is a way to run multiple tests.
 
