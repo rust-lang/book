@@ -154,7 +154,7 @@ That already made a big difference. Now when we run the compiler, we only have
 the errors mentioning `Unpin`. Although there are three of them, notice that
 each is very similar in its contents.
 
-<!-- manual-regeneraton
+<!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-16
 cargo build
 copy *only* the errors
@@ -239,6 +239,9 @@ Let’s look again at the definition of `Future`, focusing now on its `poll`
 method’s `self` type:
 
 ```rust
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
 pub trait Future {
     type Output;
 

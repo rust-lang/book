@@ -253,4 +253,4 @@ support in Listing 17-9, so it’s a trade-off to consider.
 
 [performance-of-code-using-generics]:
 ch10-01-syntax.html#performance-of-code-using-generics
-[dynamically-sized]: ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait
+[dynamically-sized]: ch20-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait

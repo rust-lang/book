@@ -41,8 +41,10 @@ In Rust, writing `async fn` is equivalent to writing a function which returns a
 defined like this instead:
 
 ```rust
-fn hello(name: &str) -> impl Future<Output = ()> {
-    async {
+use std::future::Future;
+
+fn hello<'a>(name: &'a str) -> impl Future<Output = ()> + 'a {
+    async move {
         let greeting = format!("Hello, {name}!");
         println!("{greeting}");
     }
@@ -56,9 +58,13 @@ Let’s walk through each part of the transformed version:
 * The returned trait is a `Future`, with an associated type of `Output`. Notice
   that the `Output` type is `()`, which is the same as the the original return
   type from the `async fn` version of `hello`.
-* The whole body of the function is wrapped in an `async` block. Remember that
-  blocks are expressions. This whole block is the expression returned from the
-  function.
+* All of the code called in the body of the original function is wrapped in an
+  `async move` block. Remember that blocks are expressions. This whole block is
+  the expression returned from the function.
+* The new function body is an `async move` block because of how it uses the
+  `name` argument.
+* The new version of the function makes the lifetime of the `name` parameter
+  explicit so that it can reference it in the output type.
 * The async block itself has the “unit” value `()`, since it ends with a
   `println!` statement. That value matches the `Output` type in the return type.
 
@@ -70,10 +76,11 @@ return type of the original `async fn`. Thus, calling `hello` in Listing 17-1
 returned a `Future<Output = ()>`.
 
 Then Rust warned us that we did not do anything with the future. This is because
-futures are *lazy*: they don’t do anything until you ask them to. This should
-remind you of our discussion of iterators [back in Chapter 13][iterators-lazy].
-Iterators do nothing unless you call their `.next()` method—whether directly, or
-using `for` loops or methods like `.map()` which use `.next()` under the hood.
+futures are *lazy*: they don’t do anything until you ask them to with `await`.
+This should remind you of our discussion of iterators [back in Chapter
+13][iterators-lazy]. Iterators do nothing unless you call their `.next()`
+method—whether directly, or using `for` loops or methods like `.map()` which use
+`.next()` under the hood.
 
 With futures, the same basic idea applies: they do nothing unless you explicitly
 ask them to. This laziness allows Rust to avoid running async code until it is
@@ -127,12 +134,12 @@ However, we get another compiler error here:
 The problem is that async code needs a *runtime*: a Rust crate which manages the
 details of executing asynchronous code.
 
-Most languages which support async bundle a runtime with the language. At least
-for now, Rust does not. Instead, there are many different async runtimes
-available, each of which makes different tradeoffs suitable to the use case they
-target. For example, a high-throughput web server with dozens of CPU cores and
-terabytes of RAM has very different different needs than a microcontroller with
-a single core, one gigabyte of RAM, and no ability to do heap allocations.
+Most languages which support async bundle a runtime with the language. Rust does
+not. Instead, there are many different async runtimes available, each of which
+makes different tradeoffs suitable to the use case they target. For example, a
+high-throughput web server with many CPU cores and a large amount of RAM has
+very different different needs than a microcontroller with a single core, a
+small amount of RAM, and no ability to do heap allocations.
 
 > ### The `trpl` Crate
 >
@@ -148,7 +155,7 @@ a single core, one gigabyte of RAM, and no ability to do heap allocations.
 > - Tokio is the most widely used async runtime in Rust today, especially (but
 >   not only!) for web applications. There are other great runtimes out there,
 >   and they may be more suitable for your purposes. We use Tokio under the hood
->   for `trpl` because it good and widely used.
+>   for `trpl` because it is good and widely used.
 >
 > In some cases, `trpl` also renames or wraps the original APIs to let us stay
 > focused on the details relevant to chapter. If you want to understand what the
@@ -194,6 +201,9 @@ operations can be implemented with different data, but with a common interface.
 Here is the definition of the trait:
 
 ```rust
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
 pub trait Future {
     type Output;
 

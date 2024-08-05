@@ -37,7 +37,7 @@ to turn it into a collection, such as a vector, that contains all the elements
 the iterator produces.
 
 The code in Listing 12-1 allows your `minigrep` program to read any command
-line arguments passed to it and then collect the values into a vector.
+line arguments passed to it, and then collect the values into a vector.
 
 <Listing number="12-1" file-name="src/main.rs" caption="Collecting the command line arguments into a vector and printing them">
 
@@ -47,7 +47,7 @@ line arguments passed to it and then collect the values into a vector.
 
 </Listing>
 
-First, we bring the `std::env` module into scope with a `use` statement so we
+First we bring the `std::env` module into scope with a `use` statement so we
 can use its `args` function. Notice that the `std::env::args` function is
 nested in two levels of modules. As we discussed in [Chapter
 7][ch7-idiomatic-use]<!-- ignore -->, in cases where the desired function is
@@ -63,14 +63,14 @@ mistaken for a function that’s defined in the current module.
 > Unicode. If your program needs to accept arguments containing invalid
 > Unicode, use `std::env::args_os` instead. That function returns an iterator
 > that produces `OsString` values instead of `String` values. We’ve chosen to
-> use `std::env::args` here for simplicity, because `OsString` values differ
-> per platform and are more complex to work with than `String` values.
+> use `std::env::args` here for simplicity because `OsString` values differ per
+> platform and are more complex to work with than `String` values.
 
 On the first line of `main`, we call `env::args`, and we immediately use
 `collect` to turn the iterator into a vector containing all the values produced
 by the iterator. We can use the `collect` function to create many kinds of
 collections, so we explicitly annotate the type of `args` to specify that we
-want a vector of strings. Although we very rarely need to annotate types in
+want a vector of strings. Although you very rarely need to annotate types in
 Rust, `collect` is one function you do often need to annotate because Rust
 isn’t able to infer the kind of collection you want.
 
@@ -89,8 +89,8 @@ Notice that the first value in the vector is `"target/debug/minigrep"`, which
 is the name of our binary. This matches the behavior of the arguments list in
 C, letting programs use the name by which they were invoked in their execution.
 It’s often convenient to have access to the program name in case you want to
-print it in messages or change behavior of the program based on what command
-line alias was used to invoke the program. But for the purposes of this
+print it in messages or change the behavior of the program based on what
+command line alias was used to invoke the program. But for the purposes of this
 chapter, we’ll ignore it and save only the two arguments we need.
 
 ### Saving the Argument Values in Variables
@@ -109,7 +109,7 @@ we can use the values throughout the rest of the program. We do that in Listing
 </Listing>
 
 As we saw when we printed the vector, the program’s name takes up the first
-value in the vector at `args[0]`, so we’re starting arguments at index `1`. The
+value in the vector at `args[0]`, so we’re starting arguments at index 1. The
 first argument `minigrep` takes is the string we’re searching for, so we put a
 reference to the first argument in the variable `query`. The second argument
 will be the file path, so we put a reference to the second argument in the

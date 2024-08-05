@@ -1,3 +1,6 @@
+extern crate trpl; // required for mdbook test
+
+// ANCHOR: all
 use std::time::Duration;
 
 fn main() {
@@ -15,3 +18,4 @@ fn main() {
         }
     });
 }
+// ANCHOR_END: all

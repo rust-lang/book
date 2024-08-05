@@ -288,10 +288,10 @@ pointer. In this case, we’ve chosen a reference.
 Next, we’ll talk about functions and closures!
 
 [encapsulation-that-hides-implementation-details]:
-ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details
+ch18-01-what-is-oo.html#encapsulation-that-hides-implementation-details
 [string-slices]: ch04-03-slices.html#string-slices
 [the-match-control-flow-operator]:
 ch06-02-match.html#the-match-control-flow-operator
 [using-trait-objects-that-allow-for-values-of-different-types]:
-ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
-[using-the-newtype-pattern]: ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
+ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[using-the-newtype-pattern]: ch20-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types

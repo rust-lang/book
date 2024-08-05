@@ -252,4 +252,4 @@ even more important to the functionality provided by the other smart pointer
 types we’ll discuss in the rest of this chapter. Let’s explore these two traits
 in more detail.
 
-[trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[trait-objects]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

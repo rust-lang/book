@@ -21,7 +21,7 @@ method, and then awaiting the output, as in Listing 17-29.
 
 <Listing number="17-29" caption="Creating a stream from an iterator and printing its values" file-name="src/main.rs">
 
-```rust,does_not_compile
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-29/src/main.rs:stream}}
 ```
 
@@ -112,32 +112,6 @@ press time! --> but there *is* a very common definition used throughout the
 ecosystem. Let’s review the definitions of the `Iterator` and `Future` traits,
 so we can build up to how a `Stream` trait that merges them together might look.
 
-The `Iterator` trait defines an associated type `Item` and a function `next`,
-which produces `Some(Item)` until the underlying iterator is empty, and then
-produces `None`.
-
-<!-- TODO: support for no-listing listings in Listing? -->
-
-```rust
-trait Iterator {
-    type Item;
-
-    fn next(&mut self) -> Option<Self::Item>;
-}
-```
-
-The `Future` trait defines an associated item `Output` and a function `poll`,
-which produces `Poll::Pending` while waiting and then `Poll::Ready(Output)` once
-the future is ready.
-
-```rust
-trait Future {
-    type Output;
-
-    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
-}
-```
-
 From `Iterator`, we have the idea of a sequence: its `next` method provides an
 `Option<Self::Item>`. From `Future`, we have the idea of readiness over time:
 its `poll` method provides a `Poll<Self::Output>`. To represent a sequence of
@@ -145,6 +119,9 @@ items which become ready over time, we define a `Stream` trait which has all of
 those features put together:
 
 ```rust
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
 trait Stream {
     type Item;
 
@@ -178,26 +155,25 @@ is much nicer, though, so the `StreamExt` trait supplies the `next` method so
 we can do just that.
 
 ```rust
-trait StreamExt {
-    async fn next(&mut self) -> Option<Self::Item>;
-}
+{{#rustdoc_include ../listings/ch17-async-await/no-listing-stream-ext/src/lib.rs:here}}
 ```
 
 <!--
-TODO: update this if/when tokio/etc. update their MSRV and switch to using AFIT,
-since the lack thereof is the reason they do not yet have this.
+TODO: update this if/when tokio/etc. update their MSRV and switch to using async functions
+in traits, since the lack thereof is the reason they do not yet have this.
 -->
 
 > Note: The actual definition we will use looks slightly different than this,
 > because it supports versions of Rust which did not yet support using async
 > functions in traits. As a result, it looks like this:
 >
-> ```rust
+> ```rust,ignore
 > fn next(&mut self) -> Next<'_, Self> where Self: Unpin;
 > ```
 >
-> That `Next` type is just a simple `struct` which implements `Future`, so that
-> `.await` can work with this!
+> That `Next` type is just a simple `struct` which implements `Future` and gives
+> a way to name the lifetime of the reference to `self` with `Next<'_, Self>`,
+> so that `.await` can work with this!
 
 The `StreamExt` trait is also the home of all the interesting methods available
 to use with streams. `StreamExt` is automatically implemented for every type
@@ -232,7 +208,7 @@ print all the messages from the stream.
 <Listing number="17-32" caption="Using the `rx` receiver as a `ReceiverStream`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-32/src/main.rs}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-32/src/main.rs:all}}
 ```
 
 </Listing>
@@ -389,9 +365,9 @@ Then we merge the `messages` and `intervals` streams with the `merge` method.
 Finally, we loop over that combined stream instead of over `messages` (Listing
 17-36).
 
-<Listing number="17-36" caption="TODO" file-name="src/main.rs">
+<Listing number="17-36" caption="Attempting to merge streams of messages and intervals" file-name="src/main.rs">
 
-```rust
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-36/src/main.rs:main}}
 ```
 
@@ -417,9 +393,11 @@ out with `Duration::from_secs(10)`. Finally, we need to make `merged` both
 mutable, so that the `while let` loop’s `next` calls can iterate through the
 stream, and pinned, so that it is safe to do so.
 
+<!-- We cannot directly test this one, because it never stops. -->
+
 <Listing number="17-37" caption="Aligning the types of the the `intervals` stream with the type of the `messages` stream" file-name="src/main.rs">
 
-```rust
+```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-37/src/main.rs:main}}
 ```
 
@@ -530,4 +508,4 @@ That is a good note to turn to our final section and wrap up this walk through
 async in Rust, by discussing how futures (including streams), tasks, and threads
 relate to each other, and how you can use them together.
 
-[17-02-messages]: /ch17-02-concurrency-with-async.md#message-passing
+[17-02-messages]: ch17-02-concurrency-with-async.md#message-passing

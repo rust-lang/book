@@ -119,12 +119,12 @@ We can use a trait object:
 This code will compile just fine. For more about trait objects, refer to the
 section [“Using Trait Objects That Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
-ignore --> in Chapter 17.
+ignore --> in Chapter 18.
 
 Next, let’s look at macros!
 
 [advanced-traits]:
-ch19-03-advanced-traits.html#advanced-traits
+ch20-03-advanced-traits.html#advanced-traits
 [enum-values]: ch06-01-defining-an-enum.html#enum-values
 [using-trait-objects-that-allow-for-values-of-different-types]:
-ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

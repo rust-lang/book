@@ -1,3 +1,5 @@
+extern crate trpl; // required for mdbook test
+
 use std::{
     future::Future,
     pin::{pin, Pin},

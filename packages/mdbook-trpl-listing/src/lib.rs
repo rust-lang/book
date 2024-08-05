@@ -1,3 +1,4 @@
+use html_parser::Dom;
 use mdbook::{
     book::Book,
     errors::Result,
@@ -7,7 +8,6 @@ use mdbook::{
 };
 use pulldown_cmark::{html, Event};
 use pulldown_cmark_to_cmark::cmark;
-use xmlparser::{Token, Tokenizer};
 
 /// A preprocessor for rendering listings more elegantly.
 ///
@@ -98,7 +98,7 @@ impl Preprocessor for TrplListing {
     }
 
     fn supports_renderer(&self, renderer: &str) -> bool {
-        renderer == "html" || renderer == "markdown"
+        renderer == "html" || renderer == "markdown" || renderer == "test"
     }
 }
 
@@ -139,104 +139,29 @@ impl TryFrom<&str> for Mode {
 }
 
 fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
-    let parser = new_cmark_parser(src, true);
-
-    struct State<'e> {
-        current_listing: Option<Listing>,
-        events: Vec<Result<Event<'e>, String>>,
-    }
-
-    let final_state = parser.fold(
-        State {
-            current_listing: None,
+    let final_state = new_cmark_parser(src, true).try_fold(
+        ListingState {
+            current: None,
             events: vec![],
         },
         |mut state, ev| {
             match ev {
                 Event::Html(tag) => {
                     if tag.starts_with("<Listing") {
-                        let listing_result = Tokenizer::from(tag.as_ref())
-                            .flatten()
-                            .fold(ListingBuilder::new(), |builder, token| {
-                                match token {
-                                    Token::Attribute {
-                                        local, value, ..
-                                    } => {
-                                        match local.as_str() {
-                                            "number" => builder
-                                                .with_number(value.as_str()),
-                                            "caption" => builder
-                                                .with_caption(value.as_str()),
-                                            "file-name" => builder
-                                                .with_file_name(value.as_str()),
-                                            _ => builder, // TODO: error on extra attrs?
-                                        }
-                                    }
-                                    _ => builder,
-                                }
-                            })
-                            .build();
-
-                        match listing_result {
-                            Ok(listing) => {
-                                let opening_event = match mode {
-                                    Mode::Default => {
-                                        let opening_html =
-                                            listing.opening_html();
-                                        Event::Html(opening_html.into())
-                                    }
-                                    Mode::Simple => {
-                                        let opening_text =
-                                            listing.opening_text();
-                                        Event::Text(opening_text.into())
-                                    }
-                                };
-
-                                state.current_listing = Some(listing);
-                                state.events.push(Ok(opening_event));
-                            }
-                            Err(reason) => state.events.push(Err(reason)),
-                        }
+                        state.open_listing(tag, mode)?;
                     } else if tag.starts_with("</Listing>") {
-                        let trailing = if !tag.ends_with('>') {
-                            tag.replace("</Listing>", "")
-                        } else {
-                            String::from("")
-                        };
-
-                        match state.current_listing {
-                            Some(listing) => {
-                                let closing_event = match mode {
-                                    Mode::Default => {
-                                        let closing_html =
-                                            listing.closing_html(&trailing);
-                                        Event::Html(closing_html.into())
-                                    }
-                                    Mode::Simple => {
-                                        let closing_text =
-                                            listing.closing_text(&trailing);
-                                        Event::Text(closing_text.into())
-                                    }
-                                };
-
-                                state.current_listing = None;
-                                state.events.push(Ok(closing_event));
-                            }
-                            None => state.events.push(Err(String::from(
-                                "Closing `</Listing>` without opening tag.",
-                            ))),
-                        }
+                        state.close_listing(tag, mode);
                     } else {
                         state.events.push(Ok(Event::Html(tag)));
                     }
                 }
                 ev => state.events.push(Ok(ev)),
             };
-            state
+            Ok::<ListingState<'_>, String>(state)
         },
-    );
+    )?;
 
-    if final_state.current_listing.is_some() {
+    if final_state.current.is_some() {
         return Err("Unclosed listing".into());
     }
 
@@ -257,10 +182,107 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
     Ok(buf)
 }
 
+struct ListingState<'e> {
+    current: Option<Listing>,
+    events: Vec<Result<Event<'e>, String>>,
+}
+
+impl<'e> ListingState<'e> {
+    fn open_listing(
+        &mut self,
+        tag: pulldown_cmark::CowStr<'_>,
+        mode: Mode,
+    ) -> Result<(), String> {
+        // We do not *keep* the version constructed here, just temporarily
+        // construct it so the HTML parser, which expects properly closed tags
+        // to parse it as a *tag* rather than a *weird text node*, which accept
+        // it and provide a useful view of it.
+        let to_parse = tag.to_owned().to_string() + "</Listing>";
+        let listing = Dom::parse(&to_parse)
+            .map_err(|e| e.to_string())?
+            .children
+            .into_iter()
+            .filter_map(|node| match node {
+                html_parser::Node::Element(element) => Some(element.attributes),
+                html_parser::Node::Text(_) | html_parser::Node::Comment(_) => {
+                    None
+                }
+            })
+            .flatten()
+            .try_fold(ListingBuilder::new(), |builder, (key, maybe_value)| {
+                match (key.as_str(), maybe_value) {
+                    ("number", Some(value)) => Ok(builder.with_number(value)),
+                    ("number", None) => {
+                        Err(String::from("number attribute without value"))
+                    }
+                    ("caption", Some(value)) => Ok(builder.with_caption(value)),
+                    ("caption", None) => {
+                        Err(String::from("caption attribute without value"))
+                    }
+                    ("file-name", Some(value)) => {
+                        Ok(builder.with_file_name(value))
+                    }
+                    ("file-name", None) => {
+                        Err(String::from("file-name attribute without value"))
+                    }
+
+                    _ => Ok(builder), // TODO: error on extra attrs?
+                }
+            })?
+            .build();
+
+        let opening_event = match mode {
+            Mode::Default => {
+                let opening_html = listing.opening_html();
+                Event::Html(opening_html.into())
+            }
+            Mode::Simple => {
+                let opening_text = listing.opening_text();
+                Event::Text(opening_text.into())
+            }
+        };
+
+        self.current = Some(listing);
+        self.events.push(Ok(opening_event));
+        Ok(())
+    }
+
+    fn close_listing(&mut self, tag: pulldown_cmark::CowStr<'_>, mode: Mode) {
+        let trailing = if !tag.ends_with('>') {
+            tag.replace("</Listing>", "")
+        } else {
+            String::from("")
+        };
+
+        match &self.current {
+            Some(listing) => {
+                let closing_event = match mode {
+                    Mode::Default => {
+                        let closing_html = listing.closing_html(&trailing);
+                        Event::Html(closing_html.into())
+                    }
+                    Mode::Simple => {
+                        let closing_text = listing.closing_text(&trailing);
+                        Event::Text(closing_text.into())
+                    }
+                };
+
+                self.current = None;
+                self.events.push(Ok(closing_event));
+            }
+            None => {
+                self.events.push(Err(String::from(
+                    "Closing `</Listing>` without opening tag.",
+                )));
+            }
+        }
+    }
+}
+
 #[derive(Debug)]
 struct Listing {
-    number: String,
-    caption: String,
+    number: Option<String>,
+    caption: Option<String>,
     file_name: Option<String>,
 }
 
@@ -277,12 +299,21 @@ impl Listing {
     }
 
     fn closing_html(&self, trailing: &str) -> String {
-        format!(
-            r#"<figcaption>Listing {number}: {caption}</figcaption>
-</figure>{trailing}"#,
-            number = self.number,
-            caption = self.caption
-        )
+        match (&self.number, &self.caption) {
+            (Some(number), Some(caption)) => format!(
+                r#"<figcaption>Listing {number}: {caption}</figcaption>
+</figure>{trailing}"#
+            ),
+            (None, Some(caption)) => format!(
+                r#"<figcaption>{caption}</figcaption>
+</figure>{trailing}"#
+            ),
+            (Some(number), None) => format!(
+                r#"<figcaption>Listing {number}</figcaption>
+</figure>{trailing}"#
+            ),
+            (None, None) => format!("</figure>{trailing}"),
+        }
     }
 
     fn opening_text(&self) -> String {
@@ -293,22 +324,25 @@ impl Listing {
     }
 
     fn closing_text(&self, trailing: &str) -> String {
-        format!(
-            "Listing {number}: {caption}{trailing}",
-            number = self.number,
-            caption = self.caption,
-        )
+        match (&self.number, &self.caption) {
+            (Some(number), Some(caption)) => {
+                format!("Listing {number}: {caption}{trailing}")
+            }
+            (None, Some(caption)) => format!("{caption}{trailing}"),
+            (Some(number), None) => format!("Listing {number}{trailing}"),
+            (None, None) => trailing.into(),
+        }
     }
 }
 
-struct ListingBuilder<'a> {
-    number: Option<&'a str>,
-    caption: Option<&'a str>,
-    file_name: Option<&'a str>,
+struct ListingBuilder {
+    number: Option<String>,
+    caption: Option<String>,
+    file_name: Option<String>,
 }
 
-impl<'a> ListingBuilder<'a> {
-    fn new() -> ListingBuilder<'a> {
+impl ListingBuilder {
+    fn new() -> ListingBuilder {
         ListingBuilder {
             number: None,
             caption: None,
@@ -316,432 +350,40 @@ impl<'a> ListingBuilder<'a> {
         }
     }
 
-    fn with_number(mut self, value: &'a str) -> Self {
+    fn with_number(mut self, value: String) -> Self {
         self.number = Some(value);
         self
     }
 
-    fn with_caption(mut self, value: &'a str) -> Self {
+    fn with_caption(mut self, value: String) -> Self {
         self.caption = Some(value);
         self
     }
 
-    fn with_file_name(mut self, value: &'a str) -> Self {
+    fn with_file_name(mut self, value: String) -> Self {
         self.file_name = Some(value);
         self
     }
 
-    fn build(self) -> Result<Listing, String> {
-        let number = self
-            .number
-            .ok_or_else(|| String::from("Missing number"))?
-            .to_owned();
+    fn build(self) -> Listing {
+        let caption = self.caption.map(|caption_source| {
+            let events = new_cmark_parser(&caption_source, true);
+            let mut buf = String::with_capacity(caption_source.len() * 2);
+            html::push_html(&mut buf, events);
 
-        let caption = self
-            .caption
-            .map(|caption_source| {
-                let events = new_cmark_parser(caption_source, true);
-                let mut buf = String::with_capacity(caption_source.len() * 2);
-                html::push_html(&mut buf, events);
+            // This is not particularly principled, but since the only
+            // place it is used is here, for caption source handling, it
+            // is “fine”.
+            buf.replace("<p>", "").replace("</p>", "").replace('\n', "")
+        });
 
-                // This is not particularly principled, but since the only
-                // place it is used is here, for caption source handling, it
-                // is “fine”.
-                buf.replace("<p>", "").replace("</p>", "").replace('\n', "")
-            })
-            .ok_or_else(|| String::from("Missing caption"))?
-            .to_owned();
-
-        Ok(Listing {
-            number,
+        Listing {
+            number: self.number.map(String::from),
             caption,
             file_name: self.file_name.map(String::from),
-        })
+        }
     }
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-
-    /// Note: This inserts an additional backtick around the re-emitted code.
-    /// It is not clear *why*, but that seems to be an artifact of the rendering
-    /// done by the `pulldown_cmark_to_cmark` crate.
-    #[test]
-    fn default_mode_works() {
-        let result = rewrite_listing(
-            r#"<Listing number="1-2" caption="A write-up which *might* include inline Markdown like `code` etc." file-name="src/main.rs">
-
-```rust
-fn main() {}
-```
-
-</Listing>"#,
-            Mode::Default,
-        );
-
-        assert_eq!(
-            &result.unwrap(),
-            r#"<figure class="listing">
-<span class="file-name">Filename: src/main.rs</span>
-
-````rust
-fn main() {}
-````
-
-<figcaption>Listing 1-2: A write-up which <em>might</em> include inline Markdown like <code>code</code> etc.</figcaption>
-</figure>"#
-        );
-    }
-
-    #[test]
-    fn simple_mode_works() {
-        let result = rewrite_listing(
-            r#"<Listing number="1-2" caption="A write-up which *might* include inline Markdown like `code` etc." file-name="src/main.rs">
-
-```rust
-fn main() {}
-```
-
-</Listing>"#,
-            Mode::Simple,
-        );
-
-        assert_eq!(
-            &result.unwrap(),
-            r#"
-Filename: src/main.rs
-
-````rust
-fn main() {}
-````
-
-Listing 1-2: A write-up which <em>might</em> include inline Markdown like <code>code</code> etc."#
-        );
-    }
-
-    #[test]
-    fn actual_listing() {
-        let result = rewrite_listing(
-            r#"Now open the *main.rs* file you just created and enter the code in Listing 1-1.
-
-<Listing number="1-1" file-name="main.rs" caption="A program that prints `Hello, world!`">
-
-```rust
-fn main() {
-    println!("Hello, world!");
-}
-```
-
-</Listing>
-
-Save the file and go back to your terminal window"#,
-            Mode::Default,
-        );
-
-        assert!(result.is_ok());
-        assert_eq!(
-            result.unwrap(),
-            r#"Now open the *main.rs* file you just created and enter the code in Listing 1-1.
-
-<figure class="listing">
-<span class="file-name">Filename: main.rs</span>
-
-````rust
-fn main() {
-    println!("Hello, world!");
-}
-````
-
-<figcaption>Listing 1-1: A program that prints <code>Hello, world!</code></figcaption>
-</figure>
-
-Save the file and go back to your terminal window"#
-        );
-    }
-
-    #[test]
-    fn no_filename() {
-        let result = rewrite_listing(
-            r#"This is the opening.
-
-<Listing number="1-1" caption="This is the caption">
-
-```rust
-fn main() {}
-```
-
-</Listing>
-
-This is the closing."#,
-            Mode::Default,
-        );
-
-        assert!(result.is_ok());
-        assert_eq!(
-            result.unwrap(),
-            r#"This is the opening.
-
-<figure class="listing">
-
-````rust
-fn main() {}
-````
-
-<figcaption>Listing 1-1: This is the caption</figcaption>
-</figure>
-
-This is the closing."#
-        );
-    }
-
-    /// Check that the config options are correctly handled.
-    ///
-    /// Note: none of these tests particularly exercise the *wiring*. They just
-    /// assume that the config itself is done correctly. This is a small enough
-    /// chunk of code that it easy to verify by hand at present. If it becomes
-    /// more complex in the future, it would be good to revisit and integrate
-    /// the same kinds of tests as the unit tests above here.
-    #[cfg(test)]
-    mod config {
-        use super::*;
-
-        // TODO: what *should* the behavior here be? I *think* it should error,
-        // in that there is a problem if it is invoked without that info.
-        #[test]
-        fn no_config() {
-            let input_json = r##"[
-                {
-                    "root": "/path/to/book",
-                    "config": {
-                        "book": {
-                            "authors": ["AUTHOR"],
-                            "language": "en",
-                            "multilingual": false,
-                            "src": "src",
-                            "title": "TITLE"
-                        },
-                        "preprocessor": {}
-                    },
-                    "renderer": "html",
-                    "mdbook_version": "0.4.21"
-                },
-                {
-                    "sections": [
-                        {
-                            "Chapter": {
-                                "name": "Chapter 1",
-                                "content": "# Chapter 1\n",
-                                "number": [1],
-                                "sub_items": [],
-                                "path": "chapter_1.md",
-                                "source_path": "chapter_1.md",
-                                "parent_names": []
-                            }
-                        }
-                    ],
-                    "__non_exhaustive": null
-                }
-            ]"##;
-            let input_json = input_json.as_bytes();
-            let (ctx, book) =
-                mdbook::preprocess::CmdPreprocessor::parse_input(input_json)
-                    .unwrap();
-            let result = TrplListing.run(&ctx, book);
-            assert!(result.is_err());
-            let err = result.unwrap_err();
-            assert_eq!(format!("{err}"), "No config for trpl-listing");
-        }
-
-        #[test]
-        fn empty_config() {
-            let input_json = r##"[
-                {
-                    "root": "/path/to/book",
-                    "config": {
-                        "book": {
-                            "authors": ["AUTHOR"],
-                            "language": "en",
-                            "multilingual": false,
-                            "src": "src",
-                            "title": "TITLE"
-                        },
-                        "preprocessor": {
-                            "trpl-listing": {}
-                        }
-                    },
-                    "renderer": "html",
-                    "mdbook_version": "0.4.21"
-                },
-                {
-                    "sections": [
-                        {
-                            "Chapter": {
-                                "name": "Chapter 1",
-                                "content": "# Chapter 1\n",
-                                "number": [1],
-                                "sub_items": [],
-                                "path": "chapter_1.md",
-                                "source_path": "chapter_1.md",
-                                "parent_names": []
-                            }
-                        }
-                    ],
-                    "__non_exhaustive": null
-                }
-            ]"##;
-            let input_json = input_json.as_bytes();
-            let (ctx, book) =
-                mdbook::preprocess::CmdPreprocessor::parse_input(input_json)
-                    .unwrap();
-            let result = TrplListing.run(&ctx, book);
-            assert!(result.is_ok());
-        }
-
-        #[test]
-        fn specify_default() {
-            let input_json = r##"[
-                {
-                    "root": "/path/to/book",
-                    "config": {
-                        "book": {
-                            "authors": ["AUTHOR"],
-                            "language": "en",
-                            "multilingual": false,
-                            "src": "src",
-                            "title": "TITLE"
-                        },
-                        "preprocessor": {
-                            "trpl-listing": {
-                                "output-mode": "default"
-                            }
-                        }
-                    },
-                    "renderer": "html",
-                    "mdbook_version": "0.4.21"
-                },
-                {
-                    "sections": [
-                        {
-                            "Chapter": {
-                                "name": "Chapter 1",
-                                "content": "# Chapter 1\n",
-                                "number": [1],
-                                "sub_items": [],
-                                "path": "chapter_1.md",
-                                "source_path": "chapter_1.md",
-                                "parent_names": []
-                            }
-                        }
-                    ],
-                    "__non_exhaustive": null
-                }
-            ]"##;
-            let input_json = input_json.as_bytes();
-            let (ctx, book) =
-                mdbook::preprocess::CmdPreprocessor::parse_input(input_json)
-                    .unwrap();
-            let result = TrplListing.run(&ctx, book);
-            assert!(result.is_ok());
-        }
-
-        #[test]
-        fn specify_simple() {
-            let input_json = r##"[
-                {
-                    "root": "/path/to/book",
-                    "config": {
-                        "book": {
-                            "authors": ["AUTHOR"],
-                            "language": "en",
-                            "multilingual": false,
-                            "src": "src",
-                            "title": "TITLE"
-                        },
-                        "preprocessor": {
-                            "trpl-listing": {
-                                "output-mode": "simple"
-                            }
-                        }
-                    },
-                    "renderer": "html",
-                    "mdbook_version": "0.4.21"
-                },
-                {
-                    "sections": [
-                        {
-                            "Chapter": {
-                                "name": "Chapter 1",
-                                "content": "# Chapter 1\n",
-                                "number": [1],
-                                "sub_items": [],
-                                "path": "chapter_1.md",
-                                "source_path": "chapter_1.md",
-                                "parent_names": []
-                            }
-                        }
-                    ],
-                    "__non_exhaustive": null
-                }
-            ]"##;
-            let input_json = input_json.as_bytes();
-            let (ctx, book) =
-                mdbook::preprocess::CmdPreprocessor::parse_input(input_json)
-                    .unwrap();
-            let result = TrplListing.run(&ctx, book);
-            assert!(result.is_ok());
-        }
-
-        #[test]
-        fn specify_invalid() {
-            let input_json = r##"[
-                {
-                    "root": "/path/to/book",
-                    "config": {
-                        "book": {
-                            "authors": ["AUTHOR"],
-                            "language": "en",
-                            "multilingual": false,
-                            "src": "src",
-                            "title": "TITLE"
-                        },
-                        "preprocessor": {
-                            "trpl-listing": {
-                                "output-mode": "nonsense"
-                            }
-                        }
-                    },
-                    "renderer": "html",
-                    "mdbook_version": "0.4.21"
-                },
-                {
-                    "sections": [
-                        {
-                            "Chapter": {
-                                "name": "Chapter 1",
-                                "content": "# Chapter 1\n",
-                                "number": [1],
-                                "sub_items": [],
-                                "path": "chapter_1.md",
-                                "source_path": "chapter_1.md",
-                                "parent_names": []
-                            }
-                        }
-                    ],
-                    "__non_exhaustive": null
-                }
-            ]"##;
-            let input_json = input_json.as_bytes();
-            let (ctx, book) =
-                mdbook::preprocess::CmdPreprocessor::parse_input(input_json)
-                    .unwrap();
-            let result = TrplListing.run(&ctx, book);
-            assert!(result.is_err());
-            let err = result.unwrap_err();
-            assert_eq!(
-                format!("{err}"),
-                "Bad config value '\"nonsense\"' for key 'output-mode'"
-            );
-        }
-    }
-}
+mod tests;

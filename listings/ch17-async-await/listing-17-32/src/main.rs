@@ -1,3 +1,6 @@
+extern crate trpl; // required for mdbook test
+
+// ANCHOR: all
 use trpl::{ReceiverStream, Stream, StreamExt};
 
 fn main() {
@@ -20,3 +23,4 @@ fn get_messages() -> impl Stream<Item = String> {
 
     ReceiverStream::new(rx)
 }
+// ANCHOR_END: all

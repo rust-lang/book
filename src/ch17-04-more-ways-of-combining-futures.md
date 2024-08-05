@@ -136,7 +136,7 @@ copy just the output
 
 The `a` future still runs for a bit before handing off control to `b`, because
 it calls `slow` before ever calling `trpl::sleep`, but after that the futures
-swap back and forth eaach time one of them hits an await point. In this case, we
+swap back and forth each time one of them hits an await point. In this case, we
 have done that after every call to `slow`, but we could break up the work
 however makes the most sense to us.
 
@@ -223,9 +223,11 @@ Let’s implement this! To begin, let’s think about the API for `timeout`:
 
 Listing 17-27 shows this declaration.
 
+<!-- This is not tested because it intentionally does not compile. -->
+
 <Listing number="17-27" caption="Defining the signature of `timeout`" file-name="src/main.rs">
 
-```rust
+```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-27/src/main.rs:declaration}}
 ```
 

@@ -1,3 +1,5 @@
+extern crate trpl; // required for mdbook test
+
 use std::time::Duration;
 
 fn main() {
