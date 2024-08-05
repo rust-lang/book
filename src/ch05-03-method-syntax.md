@@ -250,6 +250,6 @@ But structs aren’t the only way you can create custom types: let’s turn to
 Rust’s enum feature to add another tool to your toolbox.
 
 [enums]: ch06-00-enums.html
-[trait-objects]: ch17-02-trait-objects.md
+[trait-objects]: ch18-02-trait-objects.md
 [public]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword
 [modules]: ch07-02-defining-modules-to-control-scope-and-privacy.html

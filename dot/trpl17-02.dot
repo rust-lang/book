@@ -1,0 +1,20 @@
+digraph {
+   dpi = 300.0;
+   
+   rankdir = "LR";
+   splines = false;
+   cluster = true;
+   
+   node [shape = diamond;];
+   
+   subgraph cluster_ColleagueA {
+      newrank = true;
+      label = "Task 1";
+      A1 -> A2 -> A3 -> A4;
+   }
+   
+   subgraph cluster_ColleagueB {
+      label = "Task 2";
+      B1 -> B2 -> B3;
+   }
+}

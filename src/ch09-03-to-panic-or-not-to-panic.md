@@ -219,4 +219,4 @@ Now that you’ve seen useful ways that the standard library uses generics with
 the `Option` and `Result` enums, we’ll talk about how generics work and how you
 can use them in your code.
 
-[encoding]: ch17-03-oo-design-patterns.html#encoding-states-and-behavior-as-types
+[encoding]: ch18-03-oo-design-patterns.html#encoding-states-and-behavior-as-types

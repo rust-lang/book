@@ -491,5 +491,5 @@ write some tests!
 [ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation
 [ch9-error-guidelines]: ch09-03-to-panic-or-not-to-panic.html#guidelines-for-error-handling
 [ch9-result]: ch09-02-recoverable-errors-with-result.html
-[ch17]: ch17-00-oop.html
+[ch17]: ch18-00-oop.html
 [ch9-question-mark]: ch09-02-recoverable-errors-with-result.html#a-shortcut-for-propagating-errors-the--operator
