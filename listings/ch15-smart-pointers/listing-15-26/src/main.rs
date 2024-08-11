@@ -34,7 +34,7 @@ fn main() {
         *link.borrow_mut() = Rc::clone(&b);
     }
 
-    println!("b rc count after changing a = {}", Rc::strong_count(&b));
+    println!("b rc count after changing b = {}", Rc::strong_count(&b));
     println!("a rc count after changing a = {}", Rc::strong_count(&a));
 
     // Uncomment the next line to see that we have a cycle;
