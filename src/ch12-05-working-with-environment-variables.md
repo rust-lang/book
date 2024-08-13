@@ -149,8 +149,8 @@ the word *to* in all lowercase:
 {{#include ../listings/ch12-an-io-project/listing-12-23/output.txt}}
 ```
 
-Looks like that still works! Now, let’s run the program with `IGNORE_CASE`
-set to `1` but with the same query `to`.
+Looks like that still works! Now let’s run the program with `IGNORE_CASE` set
+to `1` but with the same query *to*:
 
 ```console
 $ IGNORE_CASE=1 cargo run -- to poem.txt
