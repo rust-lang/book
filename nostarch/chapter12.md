@@ -1022,7 +1022,7 @@ principles, we’ll add just enough code to get the test to compile and run by
 adding a definition of the `search` function that always returns an empty
 vector, as shown in Listing 12-16. Then the test should compile and fail
 because an empty vector doesn’t match a vector containing the line `"safe,
-fast, productive."`.
+fast, productive."`
 
 Filename: src/lib.rs
 
