@@ -270,7 +270,7 @@ well, which we’ll do in the next listing.
 </Listing>
 
 Our `build` function returns a `Result` with a `Config` instance in the success
-case and a `&'static str` in the error case. Our error values will always be
+case and a string literal in the error case. Our error values will always be
 string literals that have the `'static` lifetime.
 
 We’ve made two changes in the body of the function: instead of calling `panic!`
