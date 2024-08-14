@@ -137,7 +137,7 @@ $ cargo run
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.61s
      Running `target/debug/minigrep`
-[src/main.rs:5] args = [
+[src/main.rs:5:5] args = [
     "target/debug/minigrep",
 ]
 ```
@@ -147,7 +147,7 @@ $ cargo run -- needle haystack
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.57s
      Running `target/debug/minigrep needle haystack`
-[src/main.rs:5] args = [
+[src/main.rs:5:5] args = [
     "target/debug/minigrep",
     "needle",
     "haystack",
@@ -181,8 +181,8 @@ fn main() {
     let query = &args[1];
     let file_path = &args[2];
 
-    println!("Searching for {}", query);
-    println!("In file {}", file_path);
+    println!("Searching for {query}");
+    println!("In file {file_path}");
 }
 ```
 
@@ -202,7 +202,7 @@ and `sample.txt`:
 ```
 $ cargo run -- test sample.txt
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep test sample.txt`
 Searching for test
 In file sample.txt
@@ -252,7 +252,7 @@ use std::fs;
 
 fn main() {
     // --snip--
-    println!("In file {}", file_path);
+    println!("In file {file_path}");
 
     let contents = fs::read_to_string(file_path)
         .expect("Should have been able to read the file");
@@ -267,7 +267,8 @@ First we bring in a relevant part of the standard library with a `use`
 statement: we need `std::fs` to handle files.
 
 In `main`, the new statement `fs::read_to_string` takes the `file_path`, opens
-that file, and returns an `std::io::Result<String>` of the file’s contents [2].
+that file, and returns a value of type `std::io::Result<String>` that contains
+the file’s contents.
 
 After that, we again add a temporary `println!` statement that prints the value
 of `contents` after the file is read, so we can check that the program is
@@ -280,7 +281,7 @@ second argument:
 ```
 $ cargo run -- the poem.txt
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep the poem.txt`
 Searching for the
 In file poem.txt
@@ -331,13 +332,13 @@ example, the file could be missing, or we might not have permission to open it.
 Right now, regardless of the situation, we’d print the same error message for
 everything, which wouldn’t give the user any information!
 
-Fourth, we use `expect` repeatedly to handle different errors, and if the user
-runs our program without specifying enough arguments, they’ll get an `index out
-of bounds` error from Rust that doesn’t clearly explain the problem. It would
-be best if all the error-handling code were in one place so future maintainers
-had only one place to consult the code if the error-handling logic needed to
-change. Having all the error-handling code in one place will also ensure that
-we’re printing messages that will be meaningful to our end users.
+Fourth, we use `expect` to handle an error, and if the user runs our program
+without specifying enough arguments, they’ll get an `index out of bounds` error
+from Rust that doesn’t clearly explain the problem. It would be best if all the
+error-handling code were in one place so future maintainers had only one place
+to consult the code if the error-handling logic needed to change. Having all the
+error-handling code in one place will also ensure that we’re printing messages
+that will be meaningful to our end users.
 
 Let’s address these four problems by refactoring our project.
 
@@ -566,12 +567,11 @@ without any arguments; it will look like this:
 ```
 $ cargo run
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep`
-thread 'main' panicked at 'index out of bounds: the len is 1 but
-the index is 1', src/main.rs:27:21
-note: run with `RUST_BACKTRACE=1` environment variable to display
-a backtrace
+thread 'main' panicked at src/main.rs:27:21:
+index out of bounds: the len is 1 but the index is 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
 The line `index out of bounds: the len is 1 but the index is 1` is an error
@@ -612,12 +612,11 @@ arguments again to see what the error looks like now:
 ```
 $ cargo run
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep`
-thread 'main' panicked at 'not enough arguments',
-src/main.rs:26:13
-note: run with `RUST_BACKTRACE=1` environment variable to display
-a backtrace
+thread 'main' panicked at src/main.rs:26:13:
+not enough arguments
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
 This output is better: we now have a reasonable error message. However, we also
@@ -668,7 +667,7 @@ impl Config {
 Listing 12-9: Returning a <code>Result</code> from <code>Config::build</code>
 
 Our `build` function returns a `Result` with a `Config` instance in the success
-case and an `&'static str` in the error case. Our error values will always be
+case and a string literal in the error case. Our error values will always be
 string literals that have the `'static` lifetime.
 
 We’ve made two changes in the body of the function: instead of calling `panic!`
@@ -737,7 +736,7 @@ extra output. Let’s try it:
 ```
 $ cargo run
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.48s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.48s
      Running `target/debug/minigrep`
 Problem parsing arguments: not enough arguments
 ```
@@ -851,11 +850,16 @@ warning: unused `Result` that must be used
   --> src/main.rs:19:5
    |
 19 |     run(config);
-   |     ^^^^^^^^^^^^
+   |     ^^^^^^^^^^^
    |
+   = note: this `Result` may be an `Err` variant, which should be handled
    = note: `#[warn(unused_must_use)]` on by default
-   = note: this `Result` may be an `Err` variant, which should be
-handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+19 |     let _ = run(config);
+   |     +++++++
+
+warning: `minigrep` (bin "minigrep") generated 1 warning
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.71s
      Running `target/debug/minigrep the poem.txt`
 Searching for the
@@ -1129,7 +1133,7 @@ Now let’s run the test:
 ```
 $ cargo test
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished test [unoptimized + debuginfo] target(s) in 0.97s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.97s
      Running unittests src/lib.rs (target/debug/deps/minigrep-9cd200e5fac0fc94)
 
 running 1 test
@@ -1138,9 +1142,10 @@ test tests::one_result ... FAILED
 failures:
 
 ---- tests::one_result stdout ----
-thread 'tests::one_result' panicked at 'assertion failed: `(left == right)`
-  left: `["safe, fast, productive."]`,
- right: `[]`', src/lib.rs:47:9
+thread 'tests::one_result' panicked at src/lib.rs:44:9:
+assertion `left == right` failed
+  left: ["safe, fast, productive."]
+ right: []
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 
@@ -1149,7 +1154,7 @@ failures:
 
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-error: test failed, to rerun pass '--lib'
+error: test failed, to rerun pass `--lib`
 ```
 
 Great, the test fails, exactly as we expected. Let’s get the test to pass!
@@ -1309,7 +1314,7 @@ should return exactly one line from the Emily Dickinson poem: *frog*.
 ```
 $ cargo run -- frog poem.txt
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.38s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.38s
      Running `target/debug/minigrep frog poem.txt`
 How public, like a frog
 ```
@@ -1318,7 +1323,8 @@ Cool! Now let’s try a word that will match multiple lines, like *body*:
 
 ```
 $ cargo run -- body poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep body poem.txt`
 I'm nobody! Who are you?
 Are you nobody, too?
@@ -1330,7 +1336,8 @@ word that isn’t anywhere in the poem, such as *monomorphization*:
 
 ```
 $ cargo run -- monomorphization poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep monomorphization poem.txt`
 ```
 
@@ -1600,14 +1607,14 @@ the word *to* in all lowercase:
 ```
 $ cargo run -- to poem.txt
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 ```
 
 Looks like that still works! Now let’s run the program with `IGNORE_CASE` set
-to `1` but with the same query `to`:
+to `1` but with the same query *to*:
 
 ```
 $ IGNORE_CASE=1 cargo run -- to poem.txt
