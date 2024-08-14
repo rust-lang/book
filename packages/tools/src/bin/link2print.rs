@@ -46,27 +46,11 @@ fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
 fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
     // FIXME: check which punctuation is allowed by spec.
     let re = Regex::new(r###"(?:(?P<pre>(?:```(?:[^`]|`[^`])*`?\n```\n)|(?:[^\[]`[^`\n]+[\n]?[^`\n]*`))|(?:\[(?P<name>[^]]+)\](?:(?:\([[:blank:]]*(?P<val>[^")]*[^ ])(?:[[:blank:]]*"[^"]*")?\))|(?:\[(?P<key>[^]]*)\]))?))"###).expect("could not create regex");
-    let error_code =
-        Regex::new(r###"^E\d{4}$"###).expect("could not create regex");
     let output = re.replace_all(&buffer, |caps: &Captures<'_>| {
         match caps.name("pre") {
             Some(pre_section) => pre_section.as_str().to_string(),
             None => {
                 let name = caps.name("name").expect("could not get name").as_str();
-                // Really we should ignore text inside code blocks,
-                // this is a hack to not try to treat `#[derive()]`,
-                // `[profile]`, `[test]`, or `[E\d\d\d\d]` like a link.
-                if name.starts_with("derive(") ||
-                   name.starts_with("profile") ||
-                   name.starts_with("test") ||
-                   name.starts_with("no_mangle") ||
-                   name.starts_with("cfg") ||
-                   name.starts_with("unoptimized") ||
-                   name.starts_with("ignore") ||
-                   name.starts_with("should_panic") ||
-                   error_code.is_match(name) {
-                    return format!("[{name}]")
-                }
 
                 let val = match caps.name("val") {
                     // `[name](link)`
@@ -81,8 +65,10 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                                     _ => ref_map.get(&key.as_str().to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{}`", key.as_str())).to_string(),
                                 }
                             }
-                            // `[name]` as reference
-                            None => ref_map.get(&name.to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{name}`")).to_string(),
+                            // `[name]` is within code and should not be treated as a link
+                            None => {
+                                return format!("[{name}]");
+                            }
                         }
                     }
                 };
@@ -236,11 +222,11 @@ more text"
     }
 
     #[test]
-    fn parses_link_without_reference_as_reference() {
+    fn does_not_parse_link_without_reference_as_reference() {
         let source = r"[link] is alone
 [link]: The contents"
             .to_string();
-        let target = r"link at *The contents* is alone".to_string();
+        let target = r"[link] is alone".to_string();
         assert_eq!(parse(source), target);
     }
 
@@ -294,7 +280,7 @@ version = "0.1.0"
 
 [dependencies]
 ```
-Another [link]
+Another [link][]
 more text
 [link]: http://gohere
 "###
