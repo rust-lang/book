@@ -542,8 +542,8 @@ With these changes, the code compiles! We’re getting there!
 
 #### Implementing the `execute` Method
 
-Let’s finally implement the `execute` method on `ThreadPool`. We’ll also change
-`Job` from a struct to a type alias for a trait object that holds the type of
+Let’s finally implement the `execute` method on `ThreadPool`. We’ll also remove the
+`Job` struct and instead implement it as a type alias for a trait object that holds the type of
 closure that `execute` receives. As discussed in the [“Creating Type Synonyms
 with Type Aliases”][creating-type-synonyms-with-type-aliases]<!-- ignore -->
 section of Chapter 19, type aliases allow us to make long types shorter for
