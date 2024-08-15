@@ -106,6 +106,13 @@ reason might be that the browser is making a request for the page as well as a
 request for other resources, like the *favicon.ico* icon that appears in the
 browser tab.
 
+Another reason might be that the browser is opening multiple connections to the
+server in anticipation of future requests. By opening connections early, the
+browser begins connection setup tasks ahead of time. Once the connection is
+established, the next request to the server can be sent without delay. Disable
+this optimization in Chrome by using Incognito mode, or else it could make the
+server panic in later sections.
+
 It could also be that the browser is trying to connect to the server multiple
 times because the server isn’t responding with any data. When `stream` goes out
 of scope and is dropped at the end of the loop, the connection is closed as
