@@ -174,7 +174,7 @@ occurs before the mutable reference is introduced:
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
 ```
 
-The scopes of the immutable references `r1` and `r2` end after the `println!`
+The scopes of the immutable references `r1` and `r2` end after the first `println!`
 where they are last used, which is before the mutable reference `r3` is
 created. These scopes don’t overlap, so this code is allowed: the compiler can
 tell that the reference is no longer being used at a point before the end of
