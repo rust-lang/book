@@ -174,13 +174,13 @@ $ cargo add trpl
 ```
 
 Then, in our `main` function, let’s wrap the call to `hello` with the
-`trpl::block_on` function, which takes in a `Future` and runs it until it
-completes. Since `hello` returns a `Future`, we could simply wrap it directly in
-`trpl::block_on`. However, for most of the examples in the chapter, we will be
+`trpl::run` function, which takes in a `Future` and runs it until it completes.
+Since `hello` returns a `Future`, we could simply wrap it directly in
+`trpl::run`. However, for most of the examples in the chapter, we will be
 doing more than just one async function call, so instead we will pass an `async`
 block and explicitly await the result of calling `hello`.
 
-<Listing number="17-4" caption="Using the `block_on` helper function to wait on a future in non-async code" file-name="src/main.rs">
+<Listing number="17-4" caption="Using the `run` helper function to wait on a future in non-async code" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:main}}
@@ -254,9 +254,9 @@ chapter!
 Now we can understand why the compiler stopped us from making `main` itself an
 async function in Listing 17-3. If `main` were an async function, something else
 would need to call `poll()` on whatever `main` returned, but main is the
-starting point for the program! Instead, we use the `trpl::block_on` function,
-which sets up a runtime and polls the `Future` returned by `hello` until it
-returns `Ready`.
+starting point for the program! Instead, we use the `trpl::run` function, which
+sets up a runtime and polls the `Future` returned by `hello` until it returns
+`Ready`.
 
 > Note: We have skipped over some interesting implementation details in this
 > discussion, because you should not have to think about them when writing Rust.

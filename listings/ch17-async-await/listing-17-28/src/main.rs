@@ -5,7 +5,7 @@ use std::{future::Future, time::Duration};
 use trpl::Either;
 
 fn main() {
-    trpl::block_on(async {
+    trpl::run(async {
         let slow = async {
             trpl::sleep(Duration::from_secs(5)).await;
             "Finally finished"

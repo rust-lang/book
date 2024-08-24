@@ -3,7 +3,7 @@ extern crate trpl; // required for mdbook test
 use trpl::StreamExt;
 
 fn main() {
-    trpl::block_on(async {
+    trpl::run(async {
         let values = 1..101;
         let iter = values.map(|n| n * 2);
         let stream = trpl::stream_from_iter(iter);

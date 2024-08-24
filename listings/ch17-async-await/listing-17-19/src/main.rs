@@ -1,7 +1,7 @@
 extern crate trpl; // required for mdbook test
 
 fn main() {
-    trpl::block_on(async {
+    trpl::run(async {
         // ANCHOR: here
         let a = async { 1u32 };
         let b = async { "Hello!" };

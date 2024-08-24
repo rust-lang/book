@@ -3,7 +3,7 @@ extern crate trpl; // required for mdbook test
 use std::time::Duration;
 
 fn main() {
-    trpl::block_on(async {
+    trpl::run(async {
         // ANCHOR: here
         let (tx, mut rx) = trpl::channel();
 

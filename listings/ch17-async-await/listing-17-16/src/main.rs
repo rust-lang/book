@@ -3,7 +3,7 @@ extern crate trpl; // required for mdbook test
 use std::{future::Future, time::Duration};
 
 fn main() {
-    trpl::block_on(async {
+    trpl::run(async {
         let (tx, mut rx) = trpl::channel();
 
         let tx1 = tx.clone();

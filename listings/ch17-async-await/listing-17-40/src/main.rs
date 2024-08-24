@@ -5,7 +5,7 @@ use std::{pin::pin, thread, time::Duration};
 use trpl::{ReceiverStream, Stream, StreamExt};
 
 fn main() {
-    trpl::block_on(async {
+    trpl::run(async {
         let messages = get_messages().timeout(Duration::from_millis(200));
         let intervals = get_intervals()
             .map(|count| format!("Interval #{count}"))

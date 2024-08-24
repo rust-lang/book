@@ -3,7 +3,7 @@ extern crate trpl; // required for mdbook test
 use std::{thread, time::Duration};
 
 fn main() {
-    trpl::block_on(async {
+    trpl::run(async {
         // ANCHOR: here
         let one_ms = Duration::from_millis(1);
 

@@ -26,13 +26,12 @@ to implement the same counting example as with threads, in Listing 17-5.
 
 </Listing>
 
-As our starting point, we set up our `main` function with `trpl::block_on`, so
+As our starting point, we set up our `main` function with `trpl::run`, so
 that our top-level function can be async.
 
 > Note: From this point forward in the chapter, every example will include this
-> exact same wrapping code with `trpl::block_on` in `main`, so we will often
-> skip it just like we do with `main`. Don’t forget to include it in your
-> code!
+> exact same wrapping code with `trpl::run` in `main`, so we will often skip it
+> just like we do with `main`. Don’t forget to include it in your code!
 
 Then we write two loops within that block, each with a `trpl::sleep` call in it,
 which waits for half a second (500 milliseconds) before sending the next
@@ -192,9 +191,9 @@ received or the send side of the channel closes. By contrast, we do not await
 the `send` call, because it does not block. It does not need to, because the
 channel we are sending it into is unbounded.
 
-> Note: Since this is all wrapped in a `trpl::block_on`, this would effectively
-> block anything happening outside that. That is the whole point of `block_on`,
-> in fact: to allow you to *choose* where to block on some set of async code to
+> Note: Since this is all wrapped in a `trpl::run`, this would effectively block
+> anything happening outside that. That is the whole point of `block_on`, in
+> fact: to allow you to *choose* where to block on some set of async code to
 > transition between sync and async code. However, *within* this block, the
 > `.await` does not block further operations—as we will see!
 

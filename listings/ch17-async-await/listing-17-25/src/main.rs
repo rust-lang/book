@@ -3,7 +3,7 @@ extern crate trpl; // required for mdbook test
 use std::time::{Duration, Instant};
 
 fn main() {
-    trpl::block_on(async {
+    trpl::run(async {
         // ANCHOR: here
         let one_ns = Duration::from_nanos(1);
         let start = Instant::now();

@@ -63,7 +63,7 @@ pub use tokio_stream::{
 ///
 /// - Not *that* far off from what Tokio itself does under the hood in its own
 ///   `tokio::main` macro for supporting `async fn main`.
-pub fn block_on<F: Future>(future: F) -> F::Output {
+pub fn run<F: Future>(future: F) -> F::Output {
     let rt = Runtime::new().unwrap();
     rt.block_on(future)
 }

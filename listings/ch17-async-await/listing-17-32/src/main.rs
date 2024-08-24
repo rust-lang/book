@@ -4,7 +4,7 @@ extern crate trpl; // required for mdbook test
 use trpl::{ReceiverStream, Stream, StreamExt};
 
 fn main() {
-    trpl::block_on(async {
+    trpl::run(async {
         let mut messages = get_messages();
 
         while let Some(message) = messages.next().await {
