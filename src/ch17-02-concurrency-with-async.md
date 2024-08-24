@@ -228,12 +228,12 @@ long as the condition it relies on is true.
 
 <!-- TODO: update text in ch. 19 to account for our having introduced this. -->
 
-The `rx.recv()` call produces a `Future`, which we await. While waiting on
-messages to arrive, the future will produce `Poll::Pending`, so the runtime will
-pause it until it is time to check it again. Once a message arrives, `rx.recv()`
-will respond with `Poll::Ready(Some(message))`. When the channel closes,
-`rx.recv()` will respond with `Poll::Ready(None)` to indicate that there are no
-more values, and we should stop polling—that is, stop awaiting.
+The `rx.recv()` call produces a `Future`, which we await. The runtime will pause
+the `Future` until it is ready. Once a message arrives, the future will resolve
+to `Some(message)`, as many times as a message arrives. When the channel closes,
+regardless of whether *any*  messages have arrived, the future will instead
+resolve to `None` to indicate that there are no more values, and we should stop
+polling—that is, stop awaiting.
 
 The `while let` loop pulls all of this together. If the result of calling
 `rx.recv().await` is `Some(message)`, we get access to the message and we can

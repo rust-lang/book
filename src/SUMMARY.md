@@ -108,6 +108,7 @@
     - [More Ways of Combining Futures](ch17-04-more-ways-of-combining-futures.md)
     - [Streams](ch17-05-streams.md)
     - [Futures, Tasks, and Threads](ch17-06-futures-tasks-threads.md)
+    - [Restructuring](ch17-07-wip.md)
 
 - [Object Oriented Programming Features of Rust](ch18-00-oop.md)
     - [Characteristics of Object-Oriented Languages](ch18-01-what-is-oo.md)

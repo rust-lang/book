@@ -141,6 +141,10 @@ high-throughput web server with many CPU cores and a large amount of RAM has
 very different different needs than a microcontroller with a single core, a
 small amount of RAM, and no ability to do heap allocations.
 
+Every async program in Rust has at least one place where it sets up a runtime
+and executes the futures. Those runtimes also often supply async versions of
+common functionality like file or network I/O.
+
 > ### The `trpl` Crate
 >
 > To keep this chapter focused on learning async, rather than juggling parts of
@@ -190,101 +194,32 @@ When we run this, we get the behavior we might have expected initially:
 {{#include ../listings/ch17-async-await/listing-17-04/output.txt}}
 ```
 
-Phew: we finally have some working async code! Now we can turn our attention to
-how the `Future` trait works.
-
-### What Are Futures?
+Phew: we finally have some working async code! Let’s briefly turn our attention
+to how the `Future` trait works.
 
 A *future* is a data structure which manages the state of some async operation.
-Rust provides the `Future` trait as a building block so different async
-operations can be implemented with different data, but with a common interface.
-Here is the definition of the trait:
+It is called a “future” because it represents work which may not be ready now,
+but will become ready at some point in the future. (This same concept shows up
+in many languages, sometimes under other names like “task” or “promise”.) Rust
+provides a `Future` trait as a building block so different async operations can
+be implemented with different data structures, but with a common interface.
 
-```rust
-use std::pin::Pin;
-use std::task::{Context, Poll};
+Most of the time when writing async Rust, we don’t work directly with the
+`Future` trait. Instead, we use the `async` and `await` keywords we saw above.
+Rust does the work of compiling them into the appropriate calls to the `Future`
+trait, much like it does with `for` loops and the `Iterator` trait.
 
-pub trait Future {
-    type Output;
+We most often interact with the futures created via async blocks, but you can
+also implement `Future` on your own data types. Indeed, many of the functions we
+will see throughout this chapter return types with their own implementations of
+`Future`. We will return to the definition of the trait at the end of the
+chapter and dig into more of how it works, but this is enough detail to keep us
+moving forward.
 
-    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
-}
-```
-
-While we often interact with the futures created via async blocks, you can also
-implement `Future` on your own data types. Indeed, many of the functions we will
-see throughout this chapter return types with their own implementations of
-`Future`.
-
-As we learned earlier, `Future`’s associated type `Output` says what the future
-will resolves to. (This is analogous to the `Item` associated type for the
-`Iterator` trait.) Beyond that, `Future` also has the `poll` method, which takes
-a special `Pin` reference for its `self` parameter and a mutable reference to a
-`Context` type, and returns a `Poll<Self::Output>`. We will talk a little more
-about `Pin` and `Context` later in the chapter. For now, let’s focus on what the
-method returns, the `Poll` type:
-
-```rust
-enum Poll<T> {
-    Ready(T),
-    Pending
-}
-```
-
-This `Poll` type is a lot like an `Option`: it has one variant which has a value
-(`Ready(T)`), and one which does not (`Pending`). It means something quite
-different, though! The `Pending` variant indicates that the future still has
-work to do, so the caller will need to check again later. The `Ready` variant
-indicates that the `Future` has finished its work and the `T` value is
-available.
-
-> Note: With most futures, the caller should not call `poll()` again after the
-> future has returned `Ready`. Many futures will panic if polled again after
-> becoming ready! Futures which are safe to poll again will say so explicitly in
-> their documentation.
-
-Under the hood, when you call `.await`, Rust compiles that to code which calls
-`poll`, kind of (although not exactly <!-- TODO: describe `IntoFuture`? -->)
-like this:
-
-```rust,ignore
-match hello("async").poll() {
-    Ready(_) => {
-        // We’re done!
-    }
-    Pending => {
-        // But what goes here?
-    }
-}
-```
-
-What should we do when the `Future` is still `Pending`? We need some way to try
-again… and again, and again, until the future is finally ready. In other words,
-a loop:
-
-```rust,ignore
-let hello_fut = hello("async");
-loop {
-    match hello_fut.poll() {
-        Ready(_) => {
-            break;
-        }
-        Pending => {
-            // continue
-        }
-    }
-}
-```
-
-If Rust compiled it to exactly that code, though, every `.await` would be
-blocking—exactly the opposite of what we were going for! Instead, Rust needs
-makes sure that the loop can hand off control to something which can pause work
-on this future and work on other futures and check this one again later. That
-“something” is an async runtime, and this scheduling and coordination work is
-one of the main jobs for a runtime.
+<!-- TODO: need to introduce/transition with this next paragraph. -->
 
 Every *await point*—that is, every place where the code explicitly applies the
-`.await` keyword—represents a place where control gets handed back to the
+`await` keyword—represents a place where control gets handed back to the
 runtime. To make that work, Rust needs to keep track of the state involved in
 the async block, so that the runtime can kick off some other work and then come
 back when it is ready to try advancing this one again. This is an invisible
@@ -311,16 +246,17 @@ structures all apply. Happily, the compiler also handles checking those for us,
 and has good error messages. We will work through a few of those later in the
 chapter!
 
+<!--
+  TODO: this part needs to be rewritten to account for moving the content out to
+  a later part of the book.
+-->
+
 Now we can understand why the compiler stopped us from making `main` itself an
 async function in Listing 17-3. If `main` were an async function, something else
 would need to call `poll()` on whatever `main` returned, but main is the
 starting point for the program! Instead, we use the `trpl::block_on` function,
 which sets up a runtime and polls the `Future` returned by `hello` until it
 returns `Ready`.
-
-Every async program in Rust has at least one place where it sets up a runtime and
-executes the futures. Those runtimes also often supply async versions of common
-functionality like file or network I/O.
 
 > Note: We have skipped over some interesting implementation details in this
 > discussion, because you should not have to think about them when writing Rust.
@@ -343,5 +279,3 @@ of the things we can *do* with async.
 [crate-source]: https://github.com/rust-lang/book/tree/main/packages/trpl
 [futures-crate]: https://crates.io/crates/futures
 [tokio]: https://tokio.rs
-
-
