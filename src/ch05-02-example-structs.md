@@ -124,7 +124,7 @@ When we compile this code, we get an error with this core message:
 ```
 
 The `println!` macro can do many kinds of formatting, and by default, the curly
-brackets tell `println!` to use formatting known as `Display`: output intended
+brackets tell `println!` to use formatting known as `Display` output intended
 for direct end user consumption. The primitive types we’ve seen so far
 implement `Display` by default because there’s only one way you’d want to show
 a `1` or any other primitive type to a user. But with structs, the way
