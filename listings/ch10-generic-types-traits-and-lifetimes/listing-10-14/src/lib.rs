@@ -4,7 +4,6 @@ pub trait Summary {
         String::from("(Read more...)")
     }
 }
-// ANCHOR_END: here
 
 pub struct NewsArticle {
     pub headline: String,
@@ -27,3 +26,4 @@ impl Summary for Tweet {
         format!("{}: {}", self.username, self.content)
     }
 }
+// ANCHOR_END: here
