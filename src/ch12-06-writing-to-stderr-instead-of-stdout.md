@@ -73,6 +73,12 @@ Problem parsing arguments: not enough arguments
 Now we see the error onscreen and *output.txt* contains nothing, which is the
 behavior we expect of command line programs.
 
+We can use `2>` to redirect the standard error to a file:
+
+```console
+$ cargo run 2> output.txt
+```
+
 Let’s run the program again with arguments that don’t cause an error but still
 redirect standard output to a file, like so:
 
