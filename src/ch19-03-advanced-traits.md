@@ -62,7 +62,7 @@ This syntax seems comparable to that of generics. So why not just define the
 
 The difference is that when the trait is defined using generics, as in Listing 19-13,
 we must annotate the types in each implementation. This means multiple implementations
-for `Iterator` can exist for a single type, with different `T`s. For example, we can
+for `Iterator` could exist for a single type, with different `T`s. For example, we could
 have `impl Iterator<u32> for Counter` for `u32`, as well as
 `impl Iterator<String> for Counter` for `String`. When we use the `next` method on
 `Counter`, we would have to provide type annotations to indicate which implementation
