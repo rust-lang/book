@@ -8,8 +8,9 @@ about Rust, we can get into the nitty-gritty.
 ### Specifying Placeholder Types in Trait Definitions with Associated Types
 
 *Associated types* connect a type placeholder with a trait such that the trait
-method definitions can use these placeholder types in their signatures. The
-implementor of a trait will specify the concrete type to be used instead of the
+method definitions can use these placeholder types in their signatures. 
+This is a little bit similar to generics, the differences to be explained later.
+The implementor of a trait will specify the concrete type to be used instead of the
 placeholder type for the particular implementation. That way, we can define a
 trait that uses some types without needing to know exactly what those types are
 until the trait is implemented.
@@ -59,14 +60,15 @@ This syntax seems comparable to that of generics. So why not just define the
 <span class="caption">Listing 19-13: A hypothetical definition of the
 `Iterator` trait using generics</span>
 
-The difference is that when using generics, as in Listing 19-13, we must
-annotate the types in each implementation; because we can also implement
-`Iterator<String> for Counter` or any other type, we could have multiple
-implementations of `Iterator` for `Counter`. In other words, when a trait has a
-generic parameter, it can be implemented for a type multiple times, changing
-the concrete types of the generic type parameters each time. When we use the
-`next` method on `Counter`, we would have to provide type annotations to
-indicate which implementation of `Iterator` we want to use.
+The difference is that when the trait is defined using generics, as in Listing 19-13,
+we must annotate the types in each implementation. This means multiple implementations
+for `Iterator` can exist for a single type, with different `T`s. For example, we can
+have `impl Iterator<u32> for Counter` for `u32`, as well as
+`impl Iterator<String> for Counter` for `String`. When we use the `next` method on
+`Counter`, we would have to provide type annotations to indicate which implementation
+of `Iterator` we want to use. This is undesired for the `Iterator` trait, because the
+iterator for a certain type should return a value of a single type, rather than
+multiple types.
 
 With associated types, we don’t need to annotate types because we can’t
 implement a trait on a type multiple times. In Listing 19-12 with the
