@@ -122,7 +122,7 @@ Listing 12-23.
 
 </Listing>
 
-Here, we create a new variable, `ignore_case`. To set its value, we call the
+Here, we create a new variable, `ignore_case`. To fetch its value, we call the
 `env::var` function and pass it the name of the `IGNORE_CASE` environment
 variable. The `env::var` function returns a `Result` that will be the
 successful `Ok` variant that contains the value of the environment variable if
