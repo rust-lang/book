@@ -40,18 +40,7 @@ Unfortunately, this does not compile. Instead, we get this error:
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-14/
 cargo build
-copy just the compiler error, and *add* the following text (correctly aligned),
-to match the nicer version we will have starting in 1.81
-
-```
-   = note: no two async blocks, even if identical, have the same type
-   = help: consider pinning your async block and and casting it to a trait object
-```
-
-Once 1.81 lands, we can remove the last part of that, since it will include the
-message correctly automatically; but we  still need to do the rest of the manual
-regeneration, unfortunately.
-
+copy just the compiler error
 -->
 
 

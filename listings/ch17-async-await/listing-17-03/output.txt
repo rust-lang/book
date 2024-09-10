@@ -1,9 +1,9 @@
 $ cargo run
-   Compiling async_await v0.1.0 (/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-03-fix)
+   Compiling async_await v0.1.0 (file:///projects/async_await)
 error[E0752]: `main` function is not allowed to be `async`
- --> src/main.rs:2:1
+ --> src/main.rs:1:1
   |
-2 | async fn main() {
+1 | async fn main() {
   | ^^^^^^^^^^^^^^^ `main` function is not allowed to be `async`
 
 For more information about this error, try `rustc --explain E0752`.
