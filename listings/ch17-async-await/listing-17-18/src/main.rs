@@ -11,7 +11,10 @@ fn main() {
         let (tx, mut rx) = trpl::channel();
 
         let tx1 = tx.clone();
+        // ANCHOR: here
         let tx1_fut = pin!(async move {
+            // snip...
+            // ANCHOR_END: here
             let vals = vec![
                 String::from("hi"),
                 String::from("from"),
@@ -23,15 +26,23 @@ fn main() {
                 tx1.send(val).unwrap();
                 trpl::sleep(Duration::from_secs(1)).await;
             }
+            // ANCHOR: here
         });
 
+        // ANCHOR_END: here
+        // ANCHOR: here
         let rx_fut = pin!(async {
+            // snip...
+            // ANCHOR_END: here
             while let Some(value) = rx.recv().await {
                 println!("received '{value}'");
             }
+            // ANCHOR: here
         });
 
         let tx_fut = pin!(async move {
+            // snip...
+            // ANCHOR_END: here
             let vals = vec![
                 String::from("more"),
                 String::from("messages"),
@@ -43,9 +54,9 @@ fn main() {
                 tx.send(val).unwrap();
                 trpl::sleep(Duration::from_secs(1)).await;
             }
+            // ANCHOR: here
         });
 
-        // ANCHOR: here
         let futures: Vec<Pin<&mut dyn Future<Output = ()>>> =
             vec![tx1_fut, rx_fut, tx_fut];
         // ANCHOR_END: here
