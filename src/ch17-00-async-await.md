@@ -16,8 +16,8 @@ let you get other work done along the way.
 
 The file download is different. It does not take up very much CPU time. Instead,
 the CPU needs to wait on data to arrive from the network. While you can start
-reading the data once some of it arrives, it might take a while for the rest to
-arrive. Even once the data has all arrived, a video can be quite large, so it
+reading the data once some of it is present, it might take a while for the rest
+to show up. Even once the data is all present, a video can be quite large, so it
 might take some time to load it all. Maybe it only takes a second or two—but
 that is a very long time for a modern processor, which can do billions of
 operations every second. It would be nice to be able to put the CPU to use for
@@ -54,9 +54,10 @@ data that they are processing is completely ready.
 > *non*-blocking.
 
 We could avoid blocking our main thread by spawning a dedicated thread to
-download each file. But it would be nicer if the call were not blocking in the
-first place. It would also be nice if we could write in the same direct style
-we use in blocking code. Something like this:
+download each file. However, we would eventually find that the overhead of those
+threads was a problem. It would also be nicer if the call were not blocking in
+the first place. Last but not least, it would be better if we could write in the
+same direct style we use in blocking code. Something like this:
 
 ```rust,ignore,does_not_compile
 let data = fetch_data_from(url).await;

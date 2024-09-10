@@ -7,8 +7,9 @@ threads and futures.
 
 In many cases, the APIs for working with concurrency using async are very
 similar to those for using threads. In other cases, they end up being shaped
-fairly differently. Even when the APIs look similar, they often have different
-behavior and they nearly always have different performance characteristics.
+quite differently. Even when the APIs *look* similar between threads and async,
+they often have different behavior—and they nearly always have different
+performance characteristics.
 
 ### Counting
 
@@ -61,7 +62,11 @@ hi number 5 from the first task!
 This version stops as soon as the for loop in the body of the main async block
 finishes, because the task spawned by `spawn_task` is shut down when the main
 function ends. If you want to run all the way to the completion of the task, you
-will need to use a join handle to wait for the first task to complete.
+will need to use a join handle to wait for the first task to complete. With
+threads, we used the `join` method to “block” until the thread was done running.
+In Listing 17-6, we can use `await` to do the same thing, because the task
+handle itself is a future. Its `Output` type is a `Result`, so we also unwrap it
+after awaiting it.
 
 <Listing number="17-6" caption="Using `.await` with a join handle to run a task to completion" file-name="src/main.rs">
 
@@ -71,11 +76,7 @@ will need to use a join handle to wait for the first task to complete.
 
 </Listing>
 
-With threads, we used the `join` method to “block” until the thread was done
-running. In Listing 17-6, we can use `await` to do the same thing, because the
-task handle itself is a future. Its `Output` type is a `Result`, so we also
-unwrap it after awaiting it. This updated version runs till *both* loops
-finish.
+This updated version runs till *both* loops finish.
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -166,7 +167,7 @@ each case *before* running the code!
 
 ### Message Passing
 
-Sharing data between futures will also be familiar: we will use message passing,
+Sharing data between futures will also be familiar: we will use message passing
 again, but this with async versions of the types and functions.
 
 <Listing number="17-8" caption="Creating an async channel and assigning the two halves to `tx` and `rx`" file-name="src/main.rs">
@@ -179,23 +180,26 @@ again, but this with async versions of the types and functions.
 
 We start by using `trpl::channel`, an async version of the multiple-producer,
 single-consumer channel API we used with threads back in Chapter 16. The async
-version of the API is only a little different: we have a mutable receiver `rx`.
-With the channel in place, we can send messages from the sender to the receiver.
-Again, the API is just a little different from the threaded version. Instead of
-spawning a separate thread, we await the `rx.recv()` call.
+version of the API is only a little different from the thread-based version: it
+uses a mutable rather than an immutable receiver `rx`, and its `recv` method
+produces a future we need to await rather than producing the value directly. Now
+we can send messages from the sender to the receiver. Notice that we do not have
+to spawn a separate thread or even a task; we merely need to await the
+`rx.recv()` call.
 
 The synchronous `Receiver::recv()` method in `std::mpsc::channel` blocks until
 it receives a message. The `trpl::Receiver::recv()` method does not, because it
-is async. Instead of blocking, it will return `Poll::Pending` until a message is
-received or the send side of the channel closes. By contrast, we do not await
-the `send` call, because it does not block. It does not need to, because the
-channel we are sending it into is unbounded.
+is async. Instead of blocking, it hands control back to the runtime until either
+a message is received or the send side of the channel closes. By contrast, we do
+not await the `send` call, because it does not block. It does not need to,
+because the channel we are sending it into is unbounded.
 
-> Note: Since this is all wrapped in a `trpl::run`, this would effectively block
-> anything happening outside that. That is the whole point of `block_on`, in
-> fact: to allow you to *choose* where to block on some set of async code to
-> transition between sync and async code. However, *within* this block, the
-> `.await` does not block further operations—as we will see!
+> Note: Because all of this async code runs in an async block in a `trpl::run`
+> call, everything within it can avoid blocking. However, the code *outside* it
+> will block on the `run` function returning. That is the whole point of the
+> `trpl::run` function: it lets you *choose* where to block on some set of async
+> code, and thus where to transition between sync and async code. In most async
+> runtimes, `run` is actually named `block_on` for exactly this reason.
 
 It is hard to see the effect of async in Listing 17-8, though, since the message
 will arrive right away! Let’s go ahead and send a whole series of messages, and
@@ -217,13 +221,13 @@ know how many messages are coming in. In the real world, though, we will
 generally be waiting on some *unknown* number of messages. In that case, we need
 to keep waiting until we determine that there are no more messages.
 
-That sounds like a good job for a loop! In synchronous code, we might use a
-`for` loop to process a sequence of items, regardless of how many items are in
-the loop. However, Rust does not yet have a way to write a `for` loop over an
-*asynchronous* series of items. Instead, we need to use a new kind of loop we
-haven’t seen before, the `while let` conditional loop. A `while let` loop is the
-loop version of the `if let` construct we saw back in Chapter 6. It continues as
-long as the condition it relies on is true.
+In synchronous code, we might use a `for` loop to process a sequence of items
+like this, regardless of how many items are in the loop. However, Rust does not
+yet have a way to write a `for` loop over an *asynchronous* series of items.
+Instead, we need to use a new kind of loop we haven’t seen before, the `while
+let` conditional loop. A `while let` loop is the loop version of the `if let`
+construct we saw back in Chapter 6. The loop while continue executing as long as
+the pattern matches.
 
 <!-- TODO: update text in ch. 19 to account for our having introduced this. -->
 
@@ -304,9 +308,9 @@ in Chapter 16, we saw that we often need to use move data into closures when
 working with threads. The same basic dynamics apply to async blocks, so the
 `move` keyword works with async blocks just like it does with closures.
 
-In Listing 17-11, we change the async block for sending messages an `async move`
-block. When we run *this* version of the code, it shuts down gracefully after
-the last message is sent.
+In Listing 17-11, we change the async block for sending messages from a plain
+`async` block to an `async move` block. When we run *this* version of the code,
+it shuts down gracefully after the last message is sent and received.
 
 <Listing number="17-11" caption="A working example of sending and receiving messages between futures which correctly shuts down when complete" file-name="src/main.rs">
 

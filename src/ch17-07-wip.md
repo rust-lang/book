@@ -89,6 +89,14 @@ one of the main jobs for a runtime.
 
 ---
 
+> Note: If you want to understand how things work “under the hood,” the official
+> [_Asynchronous Programming in Rust_][async-book] book covers them:
+>
+> - [Chapter 2: Under the Hood: Executing Futures and Tasks][under-the-hood]
+> - [Chapter 4: Pinning][pinning].
+
+---
+
 Recall our description of how `rx.recv()` waits in the [Counting][counting]
 section. The `recv()` call returns a `Future`, and awaiting it polls it. In our
 initial discussion, we noted that a runtime will pause the future until it is

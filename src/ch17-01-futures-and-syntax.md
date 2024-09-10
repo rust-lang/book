@@ -195,7 +195,7 @@ When we run this, we get the behavior we might have expected initially:
 ```
 
 Phew: we finally have some working async code! Let’s briefly turn our attention
-to how the `Future` trait works.
+to how futures actually work.
 
 A *future* is a data structure which manages the state of some async operation.
 It is called a “future” because it represents work which may not be ready now,
@@ -204,13 +204,11 @@ in many languages, sometimes under other names like “task” or “promise”.
 provides a `Future` trait as a building block so different async operations can
 be implemented with different data structures, but with a common interface.
 
-Most of the time when writing async Rust, we don’t work directly with the
-`Future` trait. Instead, we use the `async` and `await` keywords we saw above.
-Rust does the work of compiling them into the appropriate calls to the `Future`
-trait, much like it does with `for` loops and the `Iterator` trait.
-
-We most often interact with the futures created via async blocks, but you can
-also implement `Future` on your own data types. Indeed, many of the functions we
+Most of the time when writing async Rust, we use the `async` and `await`
+keywords we saw above. Rust compiles them into equivalent code using the
+`Future` trait, much like it compiles `for` loops into equivalent code using the
+`Iterator` trait. Because Rust provides the `Future` trait, though, you can also
+implement it for your own data types when you need to. Many of the functions we
 will see throughout this chapter return types with their own implementations of
 `Future`. We will return to the definition of the trait at the end of the
 chapter and dig into more of how it works, but this is enough detail to keep us
@@ -258,17 +256,11 @@ starting point for the program! Instead, we use the `trpl::run` function, which
 sets up a runtime and polls the `Future` returned by `hello` until it returns
 `Ready`.
 
-> Note: We have skipped over some interesting implementation details in this
-> discussion, because you should not have to think about them when writing Rust.
->
-> If you want to understand how things work “under the hood,” though, the
-> official [_Asynchronous Programming in Rust_][async-book] book covers them:
->
-> - [Chapter 2: Under the Hood: Executing Futures and Tasks][under-the-hood]
-> - [Chapter 4: Pinning][pinning].
+> Note: We skipped over most of the details of how the `Future` trait works so
+> far. We will come back to some of those later in the chapter!
 
-Now that you know the basics of how futures and runtimes work, we can see some
-of the things we can *do* with async.
+Now that you know the basics of working with futures, we can dig into more of
+the things we can *do* with async.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
 [iterators-lazy]: ch13-02-iterators.html
