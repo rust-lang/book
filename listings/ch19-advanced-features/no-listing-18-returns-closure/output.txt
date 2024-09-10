@@ -6,11 +6,11 @@ error[E0746]: return type cannot have an unboxed trait object
 1 | fn returns_closure() -> dyn Fn(i32) -> i32 {
   |                         ^^^^^^^^^^^^^^^^^^ doesn't have a size known at compile-time
   |
-help: return an `impl Trait` instead of a `dyn Trait`, if all returned values are the same type
+help: consider returning an `impl Trait` instead of a `dyn Trait`
   |
 1 | fn returns_closure() -> impl Fn(i32) -> i32 {
   |                         ~~~~
-help: box the return type, and wrap all of the returned values in `Box::new`
+help: alternatively, box the return type, and wrap all of the returned values in `Box::new`
   |
 1 ~ fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
 2 ~     Box::new(|x| x + 1)
