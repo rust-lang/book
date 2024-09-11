@@ -33,7 +33,7 @@ The warning tells us that just calling `hello` was not enough: we also need to
 We will work through each of these in turn. We can answer the first question by
 learning what the syntax means, so let’s start there.
 
-### Async functions
+### Async Functions
 
 In Rust, writing `async fn` is equivalent to writing a function which returns a
 *future* of the return type. That is, when the compiler sees a function like
@@ -264,9 +264,6 @@ the things we can *do* with async.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
 [iterators-lazy]: ch13-02-iterators.html
-[under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
-[pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
-[async-book]: https://rust-lang.github.io/async-book/
 <!-- TODO: map source link version to version of Rust? -->
 [crate-source]: https://github.com/rust-lang/book/tree/main/packages/trpl
 [futures-crate]: https://crates.io/crates/futures

@@ -14,5 +14,7 @@ trait StreamExt: Stream {
     async fn next(&mut self) -> Option<Self::Item>
     where
         Self: Unpin;
+
+    // other methods...
 }
 // ANCHOR_END: here

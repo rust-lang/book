@@ -1,15 +1,19 @@
 ## Digging Into the Traits for Async
 
-> ## Restructuring
->
-> This is just a placeholder for material that needs to be restructured so that
-> the earlier sections of the book can avoid getting sidetracked into details of
-> things like `Pin` or even just the full gnarliness of the `Future` trait at
-> points where it would be better for the text to keep moving.
+Throughout the chapter, we have used the `Future`, `Pin`, `Unpin`, `Stream`, and
+`StreamExt` traits in various ways. So far, though, we have avoided digging too
+far into the details of how they work or how they fit together. Much of the time
+when writing Rust day to day, this is fine. Sometimes, though, you will hit
+situations where understanding a few more of these details matters. In this
+section, we will dig down *enough* further to help with those situations—while
+still leaving the *really* deep dive for other documentation!
 
----
 
-Here is the definition of the trait:
+### Future
+
+Back in [Async Functions][async-functions], we noted that `Future` is a trait.
+Let’s start by taking a closer look at how it works. Here is how Rust defines
+a `Future`:
 
 ```rust
 use std::pin::Pin;
@@ -22,13 +26,16 @@ pub trait Future {
 }
 ```
 
-As we learned earlier, `Future`’s associated type `Output` says what the future
-will resolves to. (This is analogous to the `Item` associated type for the
-`Iterator` trait.) Beyond that, `Future` also has the `poll` method, which takes
-a special `Pin` reference for its `self` parameter and a mutable reference to a
-`Context` type, and returns a `Poll<Self::Output>`. We will talk a little more
-about `Pin` and `Context` later in the chapter. For now, let’s focus on what the
-method returns, the `Poll` type:
+That trait definition includes a bunch of new types and also some syntax we have
+not seen before, so let’s walk through the definition piece by piece.
+
+First, `Future`’s associated type `Output` says what the future resolves to.
+This is analogous to the `Item` associated type for the `Iterator` trait.
+Second, `Future` also has the `poll` method, which takes a special `Pin`
+reference for its `self` parameter and a mutable reference to a `Context` type,
+and returns a `Poll<Self::Output>`. We will talk a little more about `Pin` and
+`Context` later in the section. For now, let’s focus on what the method returns,
+the `Poll` type:
 
 ```rust
 enum Poll<T> {
@@ -89,49 +96,68 @@ on this future and work on other futures and check this one again later. That
 “something” is an async runtime, and this scheduling and coordination work is
 one of the main jobs for a runtime.
 
----
-
-> Note: If you want to understand how things work “under the hood,” the official
-> [_Asynchronous Programming in Rust_][async-book] book covers them:
->
-> - [Chapter 2: Under the Hood: Executing Futures and Tasks][under-the-hood]
-> - [Chapter 4: Pinning][pinning].
-
----
-
-Recall our description of how `rx.recv()` waits in the [Counting][counting]
-section. The `recv()` call returns a `Future`, and awaiting it polls it. In our
-initial discussion, we noted that a runtime will pause the future until it is
-ready with either `Some(message)` or `None` when the channel closes. With a
-deeper understanding of `Future` in place, and specifically its `poll` method,
-we can see how that works. The runtime knows the future is not ready when it
+Recall our description (in the [Counting][counting] section) of waiting on
+`rx.recv()` . The `recv()` call returns a `Future`, and awaiting it polls it. In
+our initial discussion, we noted that a runtime will pause the future until it
+is ready with either `Some(message)` or `None` when the channel closes. With our
+deeper understanding of `Future` in place, and specifically `Future::poll`, we
+can see how that works. The runtime knows the future is not ready when it
 returns `Poll::Pending`. Conversely, the runtime knows the future is ready and
 advances it when `poll` returns `Poll::Ready(Some(message))` or
 `Poll::Ready(None)`.
 
-[counting]: /ch17-02-concurrency-with-async.md
-
----
-
-<!--
-    From my own notes when rereading the chapter:
-
-    > Incoherent sentence and a *lot* of material in it which we do not unpack in this paragraph.
- -->
-
-The rest of the message tells us *why* that is required: the `JoinAll`
-struct returned by `trpl::join_all` is generic over a type `F` which must
-implement the `Future` trait, directly awaiting a Future requires that the
-future implement the `Unpin` trait. Understanding this error means we need to
-dive into a little more of how the `Future` type actually works, in particular
-the idea of *pinning*.
+The exact details of how a runtime does that are more than we will cover in even
+this deep dive section. The key here is to see the basic mechanic of futures: a
+runtime *polls* each future it is responsible for, putting it back to sleep when
+it is not yet ready.
 
 ### Pinning and the Pin and Unpin Traits
 
 <!-- TODO: get a *very* careful technical review of this section! -->
 
-Let’s look again at the definition of `Future`, focusing now on its `poll`
-method’s `self` type:
+When we introduced the idea of pinning, while working on Listing 17-16, we ran
+into a very gnarly error message. Here is the relevant part of it again:
+
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-16
+cargo build
+copy *only* the final `error` block from the errors
+-->
+
+```text
+error[E0277]: `{async block@src/main.rs:8:23: 20:10}` cannot be unpinned
+  --> src/main.rs:46:33
+   |
+46 |         trpl::join_all(futures).await;
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:8:23: 20:10}`, which is required by `Box<{async block@src/main.rs:8:23: 20:10}>: std::future::Future`
+   |
+   = note: consider using the `pin!` macro
+           consider using `Box::pin` if you need to access the pinned value outside of the current scope
+   = note: required for `Box<{async block@src/main.rs:8:23: 20:10}>` to implement `std::future::Future`
+note: required by a bound in `JoinAll`
+  --> /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   |
+27 | pub struct JoinAll<F>
+   |            ------- required by a bound in this struct
+28 | where
+29 |     F: Future,
+   |        ^^^^^^ required by this bound in `JoinAll`
+
+Some errors have detailed explanations: E0277, E0308.
+For more information about an error, try `rustc --explain E0277`.
+```
+
+When we read this error message carefully, it not only tells us that we need to
+pin the values but also us why pinning is required. The `trpl::join_all`
+function returns a struct called `JoinAll`. That struct in turn is generic over
+a type `F`, which is constrained to implement the `Future` trait. Finally,
+directly awaiting a Future requires that the future in question implement the
+`Unpin` trait. That’s a lot! But we can understand it, if we dive a little
+further into how the `Future` type actually works, in particular around
+*pinning*.
+
+Let’s look again at the definition of `Future`, focusing specifically on the
+`poll` method’s `self` type:
 
 ```rust
 use std::pin::Pin;
@@ -155,13 +181,13 @@ this syntax in Chapter 18. For now, it is enough to know that if we want to poll
 a future (to check whether it is `Pending` or `Ready(Output)`), we need a
 mutable reference to the type, which is wrapped in a `Pin`.
 
-`Pin` is a smart pointer, much like `Box`, `Rc`, and the others we saw in
-Chapter 15. Unlike those, however, `Pin` only works with *other pointer types*
-like reference (`&` and `&mut`) and smart pointers (`Box`, `Rc`, and so on). To
-be precise, `Pin` works with types which implement the `Deref` or `DerefMut`
-traits, which we covered in Chapter 15. You can think of this restriction as
-equivalent to only working with pointers, though, since implementing `Deref` or
-`DerefMut` means your type behaves like a pointer type.
+`Pin` is a wrapper type, much like the `Box`, `Rc`, and other smart pointer
+types we saw in Chapter 15. Unlike those, however, `Pin` only works with *other
+pointer types* like reference (`&` and `&mut`) and smart pointers (`Box`, `Rc`,
+and so on). To be precise, `Pin` works with types which implement the `Deref` or
+`DerefMut` traits, which we covered in Chapter 15. You can think of this
+restriction as equivalent to only working with pointers, though, since
+implementing `Deref` or `DerefMut` means your type behaves like a pointer type.
 
 Recalling that `.await` is implemented in terms of calls to `poll()`, this
 starts to explain the error message we saw above—but that was in terms of
@@ -234,6 +260,13 @@ because it requires *you* to uphold all the guarantees which make `Pin` and
 `Unpin` safe yourself for a type with internal references. In practice, this is
 a very rare thing to implement yourself!
 
+Now we know enough to understand the errors reported for that `join_all` call.
+We originally tried to move the futures produced by an async blocks into a
+`Vec<Box<dyn Future<Output = ()>>>`, but as we have seen, those futures may have
+internal references, so they do not implement `Unpin`. They need to be pinned,
+and then we can pass the `Pin` type into the `Vec`, confident that the
+underlying data in the futures will *not* be moved.
+
 > Note: This combination of `Pin` and `Unpin` allows a whole class of complex
 > types to be safe in Rust which are otherwise difficult to implement because
 > they are self-referential. Types which require `Pin` show up *most* commonly
@@ -242,29 +275,32 @@ a very rare thing to implement yourself!
 > The specific mechanics for how `Pin` and `Unpin` work under the hood are
 > covered extensively in the API documentation for `std::pin`, so if you would
 > like to understand them more deeply, that is a great place to start.
+>
+> If you want to understand how things work “under the hood” in even more
+> detail, the official [_Asynchronous Programming in Rust_][async-book] book has
+> you covered:
+>
+> - [Chapter 2: Under the Hood: Executing Futures and Tasks][under-the-hood]
+> - [Chapter 4: Pinning][pinning].
 
-Now we know enough to fix the last errors with `join_all`. We tried to move the
-futures produced by an async blocks into a `Vec<Box<dyn Future<Output = ()>>>`,
-but as we have seen, those futures may have internal references, so they do not
-implement `Unpin`. They need to be pinned, and then we can pass the `Pin` type
-into the `Vec`, confident that the underlying data in the futures will *not* be
-moved.
+Now that we have a deeper grasp on the `Future`, `Pin`, and `Unpin` traits, we
+can turn our attention to the `Stream` trait.
 
----
+### The Stream Trait
 
-### The Stream API
-
-Unlike `Iterator` and `Future`, there is no definition of a `Stream` trait in
-the standard library yet as of the time of writing,<!-- TODO: verify before
+As described in the section introducing streams, streams are like asynchronous
+iterators. Unlike `Iterator` and `Future`, there is no definition of a `Stream`
+trait in the standard library as of the time of writing,<!-- TODO: verify before
 press time! --> but there *is* a very common definition used throughout the
-ecosystem. Let’s review the definitions of the `Iterator` and `Future` traits,
-so we can build up to how a `Stream` trait that merges them together might look.
+ecosystem.
 
-From `Iterator`, we have the idea of a sequence: its `next` method provides an
+Let’s review the definitions of the `Iterator` and `Future` traits, so we can
+build up to how a `Stream` trait that merges them together might look. From
+`Iterator`, we have the idea of a sequence: its `next` method provides an
 `Option<Self::Item>`. From `Future`, we have the idea of readiness over time:
 its `poll` method provides a `Poll<Self::Output>`. To represent a sequence of
-items which become ready over time, we define a `Stream` trait which has all of
-those features put together:
+items which become ready over time, we define a `Stream` trait which puts those
+features together:
 
 ```rust
 use std::pin::Pin;
@@ -282,11 +318,12 @@ trait Stream {
 
 The `Stream` trait defines an associated type `Item` for the type of the items
 produced by the stream. This is like `Iterator`: there may be zero to many of
-these, and unlike `Future`, where there was a single `Output`.
+these, and unlike `Future`, where there is always a single `Output` (even if it
+the unit type `()`).
 
 `Stream` also defines a method to get those items. We call it `poll_next`, to
 make it clear that it polls like `Future::poll` and produces a sequence of items
-like `Iterator::next`. Its return type uses both `Poll` and `Option`. The outer
+like `Iterator::next`. Its return type combines `Poll`with `Option`. The outer
 type is `Poll`, since it has to be checked for readiness, just like a future.
 The inner type is `Option`, since it needs to signal whether there are more
 messages, just like an iterator.
@@ -295,12 +332,12 @@ Something very similar to this will likely end up standardized as part of Rust�
 standard library. In the meantime, it is part of the toolkit of most runtimes,
 so you can rely on it, and everything we cover below should generally apply!
 
-In the example we saw above, though, we did not use `poll_next` *or* `Stream`,
-but instead `next` and `StreamExt`. We *could* work directly in terms of the
-`poll_next` API by hand-writing our own `Stream` state machines, of course, just
-as we *could* work with futures directly via their `poll` method. Using `await`
-is much nicer, though, so the `StreamExt` trait supplies the `next` method so
-we can do just that.
+In the example we saw in the section on streaming, though, we did not use
+`poll_next` *or* `Stream`, but instead used `next` and `StreamExt`. We *could*
+work directly in terms of the `poll_next` API by hand-writing our own `Stream`
+state machines, of course, just as we *could* work with futures directly via
+their `poll` method. Using `await` is much nicer, though, so the `StreamExt`
+trait supplies the `next` method so we can do just that.
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/no-listing-stream-ext/src/lib.rs:here}}
@@ -327,3 +364,19 @@ The `StreamExt` trait is also the home of all the interesting methods available
 to use with streams. `StreamExt` is automatically implemented for every type
 which implements `Stream`, but they are separated out so that the community can
 iterate on the foundational trait distinctly from the convenience APIs.
+
+In the version of `StreamExt` used in the `trpl` crate, the trait not only
+defines the `next` method, it also supplies an implementation of `next`, which
+correctly handles the details of calling `Stream::poll_next`. This means that
+even when you need to write your own streaming data type, you *only* have to
+implement `Stream`, and then anyone who uses your data type can use `StreamExt`
+and its methods with it automatically.
+
+[counting]: /ch17-02-concurrency-with-async.md
+[async-book]: https://rust-lang.github.io/async-book/
+[under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
+[pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
+
+That’s all we’re going to cover for the lower-level details on these traits. To
+wrap up, let’s consider how futures (including streams), tasks, and threads all
+fit together!
