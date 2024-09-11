@@ -247,3 +247,81 @@ but as we have seen, those futures may have internal references, so they do not
 implement `Unpin`. They need to be pinned, and then we can pass the `Pin` type
 into the `Vec`, confident that the underlying data in the futures will *not* be
 moved.
+
+---
+
+### The Stream API
+
+Unlike `Iterator` and `Future`, there is no definition of a `Stream` trait in
+the standard library yet as of the time of writing,<!-- TODO: verify before
+press time! --> but there *is* a very common definition used throughout the
+ecosystem. Let’s review the definitions of the `Iterator` and `Future` traits,
+so we can build up to how a `Stream` trait that merges them together might look.
+
+From `Iterator`, we have the idea of a sequence: its `next` method provides an
+`Option<Self::Item>`. From `Future`, we have the idea of readiness over time:
+its `poll` method provides a `Poll<Self::Output>`. To represent a sequence of
+items which become ready over time, we define a `Stream` trait which has all of
+those features put together:
+
+```rust
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
+trait Stream {
+    type Item;
+
+    fn poll_next(
+        self: Pin<&mut Self>,
+        cx: &mut Context<'_>
+    ) -> Poll<Option<Self::Item>>;
+}
+```
+
+The `Stream` trait defines an associated type `Item` for the type of the items
+produced by the stream. This is like `Iterator`: there may be zero to many of
+these, and unlike `Future`, where there was a single `Output`.
+
+`Stream` also defines a method to get those items. We call it `poll_next`, to
+make it clear that it polls like `Future::poll` and produces a sequence of items
+like `Iterator::next`. Its return type uses both `Poll` and `Option`. The outer
+type is `Poll`, since it has to be checked for readiness, just like a future.
+The inner type is `Option`, since it needs to signal whether there are more
+messages, just like an iterator.
+
+Something very similar to this will likely end up standardized as part of Rust’s
+standard library. In the meantime, it is part of the toolkit of most runtimes,
+so you can rely on it, and everything we cover below should generally apply!
+
+In the example we saw above, though, we did not use `poll_next` *or* `Stream`,
+but instead `next` and `StreamExt`. We *could* work directly in terms of the
+`poll_next` API by hand-writing our own `Stream` state machines, of course, just
+as we *could* work with futures directly via their `poll` method. Using `await`
+is much nicer, though, so the `StreamExt` trait supplies the `next` method so
+we can do just that.
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/no-listing-stream-ext/src/lib.rs:here}}
+```
+
+<!--
+TODO: update this if/when tokio/etc. update their MSRV and switch to using async functions
+in traits, since the lack thereof is the reason they do not yet have this.
+-->
+
+> Note: The actual definition we will use looks slightly different than this,
+> because it supports versions of Rust which did not yet support using async
+> functions in traits. As a result, it looks like this:
+>
+> ```rust,ignore
+> fn next(&mut self) -> Next<'_, Self> where Self: Unpin;
+> ```
+>
+> That `Next` type is just a simple `struct` which implements `Future` and gives
+> a way to name the lifetime of the reference to `self` with `Next<'_, Self>`,
+> so that `.await` can work with this!
+
+The `StreamExt` trait is also the home of all the interesting methods available
+to use with streams. `StreamExt` is automatically implemented for every type
+which implements `Stream`, but they are separated out so that the community can
+iterate on the foundational trait distinctly from the convenience APIs.
