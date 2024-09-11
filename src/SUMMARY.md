@@ -105,10 +105,9 @@
     - [Futures and the Async Syntax](ch17-01-futures-and-syntax.md)
     - [Concurrency With Async](ch17-02-concurrency-with-async.md)
     - [Working With More Than Two Futures](ch17-03-more-futures.md)
-    - [More Ways of Combining Futures](ch17-04-more-ways-of-combining-futures.md)
-    - [Streams](ch17-05-streams.md)
+    - [Streams](ch17-04-streams.md)
+    - [Digging Into the Traits for Async](ch17-05-traits-for-async.md)
     - [Futures, Tasks, and Threads](ch17-06-futures-tasks-threads.md)
-    - [Restructuring](ch17-07-wip.md)
 
 - [Object Oriented Programming Features of Rust](ch18-00-oop.md)
     - [Characteristics of Object-Oriented Languages](ch18-01-what-is-oo.md)
