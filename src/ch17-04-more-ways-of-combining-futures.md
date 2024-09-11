@@ -47,9 +47,10 @@ But *how* would you hand control back to the runtime in those cases?
 ### Yielding
 
 Let’s simulate a long-running operation. Listing 17-21 introduces a `slow`
-function which uses `std::thread::sleep` to block the current thread for some
-number of milliseconds. We can use `slow` to stand in for real-world operations
-which are both long-running and blocking.
+function. It uses `std::thread::sleep` instead of `trpl::sleep` so that calling
+`slow` will block the current thread for some number of milliseconds. We can use
+`slow` to stand in for real-world operations which are both long-running and
+blocking.
 
 <Listing number="17-21" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
@@ -163,11 +164,10 @@ lot in one millisecond!
 You can see this for yourself by setting up a little benchmark, like the one in
 Listing 17-25. (This is not an especially rigorous way to do performance
 testing, but it suffices to show the difference here.) Here, we skip all the
-status printing, pass a one-nanosecond `Duration` to `sleep`, let each future
-run by itself so that they do not interfere with each other, and get rid of all
-the status printing that we did to see the back-and-forth between tasks in
-Listings 17-23 and 17-24. Then we run for 1,000 iterations and see how long
-`sleep` takes vs. `yield_now`.
+status printing, pass a one-nanosecond `Duration` to `trple::sleep`,  and let
+each future run by itself, with no switching between the futures. Then we run
+for 1,000 iterations and see how long the future using `trpl::sleep` takes
+compared to the future using `trpl::yield_now`.
 
 <Listing number="17-25" caption="Comparing the performance of `sleep` and `yield_now`" file-name="src/main.rs">
 
@@ -233,19 +233,21 @@ Listing 17-27 shows this declaration.
 
 </Listing>
 
-The types line up now, so let’s think about the *behavior* we need. We want to
-race the future passed in against the duration. We can use `trpl::sleep` to make
-a timer future from the duration, and use `trpl::race` to run the future and the
-timer against each other.
+That satisfies our goals for the types. Now let’s think about the *behavior* we
+need: we want to race the future passed in against the duration. We can use
+`trpl::sleep` to make a timer future from the duration, and use `trpl::race` to
+run that timer with the future the caller passes in.
 
-When we saw `race` earlier in Listing 17-20, we ignored its return type, because
-we were just interested in seeing the behavior of `fast` and `slow` when we ran
-the program. Here, though, its return value tells us whether the future or the
-sleep finished first. With `race`, both futures passed as arguments can
-legitimately “win,” so it does not make sense to use a `Result` to represent the
-return type. Instead, it returns a similar type called `Either`. Unlike
-`Result`, there is no notion of success or failure baked into `Either`. Instead,
-it uses `Left` and `Right` to indicate “one or the other”:
+The `trpl::race` function returns a value to indicate which of the futures
+passed to it finishes first. (When we saw `race` earlier in Listing 17-20, we
+ignored its return value, because we were only interested in seeing the behavior
+of `fast` and `slow` when we ran the program.) Because either future passed as
+an argument to `race` can legitimately “win,” it does not make sense to use a
+`Result` to represent the return type. Instead, `race` returns a type we have
+not seen before, `Either`. The `Either` type is somewhat like a `Result`, in
+that it has two cases. Unlike `Result`, though, there is no notion of success or
+failure baked into `Either`. Instead, it uses `Left` and `Right` to indicate
+“one or the other”.
 
 ```rust
 enum Either<A, B> {
@@ -256,17 +258,19 @@ enum Either<A, B> {
 
 The `race` function returns `Left` if the first argument finishes first, with
 that future’s output, and `Right` with the second future argument’s output if
-*that* one finishes first. We also know that `race` is not fair, and polls
-arguments in the order they are passed. For `timeout`, we pass the future to
-`race` first so it gets a chance to complete even if `max_time` is a very short
-duration. If `future` finishes first, `race` will return `Left` with the output
-from `future`. If `timer` finishes first, `race` will return `Right` with the
-timer’s output of `()`.
+*that* one finishes first.
+
+We also know that `race` is not fair, and polls arguments in the order they are
+passed. Thus, we pass the caller-supplied future to `race` first so it gets a
+chance to complete even if `max_time` is a very short duration. If `future`
+finishes first, `race` will return `Left` with the output from `future`. If
+`timer` finishes first, `race` will return `Right` with the timer’s output of
+`()`.
 
 In Listing 17-28, we match on the result of awaiting `trpl::race`. If the
 future succeeded and we get a `Left(output)`, we return `Ok(output)`. If the
 sleep timer elapsed instead and we get a `Right(())`, we ignore the `()` with
-`_` and return `Err(duration)` instead.
+`_` and return `Err(max_time)` instead.
 
 <Listing number="17-28" caption="Defining `timeout` with `race` and `sleep`" file-name="src/main.rs">
 
