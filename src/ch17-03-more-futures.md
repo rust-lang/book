@@ -1,11 +1,12 @@
-## Working With More Than Two Futures
+## Working With Any Number of Futures
 
 When we switched from using two futures to three in the previous section, we
 also had to switch from using `join` to using `join3`. It would be annoying to
-do this every time we changed our code. Happily, we have a macro form of `join`
-to which we can pass an arbitrary number of arguments. It also handles awaiting
-the futures itself. Thus, we could rewrite the code from Listing 17-12 to use
-`join!` instead of `join3`, as in Listing 17-13:
+have to call a different function every time we changed the number of futures we
+wanted to join. Happily, we have a macro form of `join` to which we can pass an
+arbitrary number of arguments. It also handles awaiting the futures itself.
+Thus, we could rewrite the code from Listing 17-12 to use `join!` instead of
+`join3`, as in Listing 17-13:
 
 <Listing number="17-13" caption="Using `join!` to wait for multiple futures" file-name="src/main.rs">
 
@@ -96,8 +97,8 @@ implement the `Future` trait.
 > able to work with a dynamic collection of futures where we do not know what
 > they will all be until runtime.
 
-We start by wrapping each of the futures in the `vec!` in a `Box::new()`, as
-shown in Listing 17-15.
+We start by wrapping each of the futures in the `vec!` in a `Box::new`, as shown
+in Listing 17-15.
 
 <Listing number="17-15" caption="Trying to use `Box::new` to align the types of the futures in a `Vec`" file-name="src/main.rs">
 
@@ -241,7 +242,7 @@ There is a bit more we can explore here. For one thing, using `Pin<Box<T>>`
 comes with a small amount of extra overhead from putting these futures on the
 heap with `Box`—and we are only doing that to get the types to line up. We don’t
 actually *need* the heap allocation, after all: these futures are local to this
-particular function. As noted above, `Pin` is itself a smart pointer, so we can
+particular function. As noted above, `Pin` is itself a wrapper type, so we can
 get the benefit of having a single type in the `Vec`—the original reason we
 reached for `Box`—without doing a heap allocation. We can use `Pin` directly
 with each future, using the `std::pin::pin` macro.
@@ -260,11 +261,10 @@ references to the dynamic `Future` type, as in Listing 17-18.
 
 </Listing>
 
-There is one last issue to fix. We got this far by ignoring the fact that we
-might have different `Output` types. For example, in Listing 17-19, the
-anonymous future for `a` implements `Future<Output = u32>`, the anonymous future
-for `b` implements `Future<Output = &str>`, and the anonymous future for `c`
-implements `Future<Output = bool>`.
+We got this far by ignoring the fact that we might have different `Output`
+types. For example, in Listing 17-19, the anonymous future for `a` implements
+`Future<Output = u32>`, the anonymous future for `b` implements `Future<Output =
+&str>`, and the anonymous future for `c` implements `Future<Output = bool>`.
 
 <Listing number="17-19" caption="Three futures with distinct types" file-name="src/main.rs">
 
@@ -277,8 +277,7 @@ implements `Future<Output = bool>`.
 We can use `trpl::join!` to await them, because it allows you to pass in
 multiple future types and produces a tuple of those types. We *cannot* use
 `trpl::join_all`, because it requires the futures passed in all to have the same
-type. (Remember, that error is what got us started on this adventure with
-`Pin`!)
+type. Remember, that error is what got us started on this adventure with `Pin`!
 
 This is a fundamental tradeoff: we can either deal with a dynamic number of
 futures with `join_all`, as long as they all have the same type, or we can deal
@@ -286,13 +285,6 @@ with a set number of futures with the `join` functions or the `join!` macro,
 even if they have different types. This is the same as working with any other
 types in Rust, though. Futures are not special, even though we have some nice
 syntax for working with them, and that is a good thing.
-
-In practice, you will usually work directly with `async` and `.await`, and
-secondarily with functions and macros like `join` or `join_all`. You will only
-need to reach for `pin` now and again to use them with those APIs. `Pin` and
-`Unpin` are mostly important for building lower-level libraries, or when you are
-building a runtime itself, rather than for day to day Rust code. When you see
-them, though, now you will know what to do!
 
 ### Racing futures
 
@@ -302,11 +294,16 @@ need *some* future from a set to finish before we move on—kind of like racing
 one future against another. This operation is often named `race` for exactly
 that reason.
 
-In Listing 17-20, we use `race` to run two futures, `slow` and `fast`, against
-each other. Each one prints a message when it starts running, pauses for some
-amount of time by calling and awaiting `sleep`, and then prints another message
-when it finishes. Then we pass both to `trpl::race` and wait for one of them to
-finish. (The outcome here won’t be too surprising: `fast` wins!)
+> Note: Under the hood, `race` is built on a more general function, `select`,
+> which you will encounter more often in real-world Rust code. A `select`
+> function can do a lot of things that `trpl::race` function cannot, but it also
+> has some additional complexity that we can skip over for now.
+
+In Listing 17-20, we use `trpl::race` to run two futures, `slow` and `fast`,
+against each other. Each one prints a message when it starts running, pauses for
+some amount of time by calling and awaiting `sleep`, and then prints another
+message when it finishes. Then we pass both to `trpl::race` and wait for one of
+them to finish. (The outcome here won’t be too surprising: `fast` wins!)
 
 <Listing number="17-20" caption="Using `race` to get the result of whichever future finishes first" file-name="src/main.rs">
 
@@ -507,12 +504,12 @@ future.
 
 Let’s implement this! To begin, let’s think about the API for `timeout`:
 
-- It needs to be an async function itself so we can await it.
-- Its first parameter should be a future to run. We can make it generic to allow
+* It needs to be an async function itself so we can await it.
+* Its first parameter should be a future to run. We can make it generic to allow
   it to work with any future.
-- Its second parameter will be the maximum time to wait. If we use a `Duration`,
+* Its second parameter will be the maximum time to wait. If we use a `Duration`,
   that will make it easy to pass along to `trpl::sleep`.
-- It should return a `Result`. If the future completes successfully, the
+* It should return a `Result`. If the future completes successfully, the
   `Result` will be `Ok` with the value produced by the future. If the timeout
   elapses first, the `Result` will be `Err` with the duration that the timeout
   waited for.
@@ -588,9 +585,25 @@ using smaller async building blocks. For example, you can use this same approach
 to combine timeouts with retries, and in turn use those with things like network
 calls—one of the examples from the beginning of the chapter!
 
-Over the last two sections, we have seen how to work with multiple futures at
-the same time. Up next, let’s look at how we can work with multiple futures in a
-sequence over time, with *streams*.
+In practice, you will usually work directly with `async` and `.await`, and
+secondarily with functions and macros like `join`, `join_all`, `race`, and so
+on. You will only need to reach for `pin` now and again to use them with those
+APIs.
+
+We have now seen a number of ways to work with multiple futures at the same
+time. Up next, we will look at how we can work with multiple futures in a
+sequence over time, with *streams*. Here are a couple more things you might want
+to consider first, though:
+
+* We used a `Vec` with `join_all` to wait for all of the futures in some group
+  to finish. How could you use a `Vec` to process a group of futures in
+  sequence, instead? What are the tradeoffs of doing that?
+
+* Take a look at the `futures::stream::FuturesUnordered` type from the `futures`
+  crate. How would using it be different from using a `Vec`? (Don’t worry about
+  the fact that it is from the `stream` part of the crate; it works just fine
+  with any collection of futures.)
+
 
 [collections]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: ch12-03-improving-error-handling-and-modularity.html

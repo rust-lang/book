@@ -129,7 +129,7 @@ avoid doing needless work.
 
 Let’s start by building a little stream of messages, similar to what we might
 see from a WebSocket or other real-time communication protocols. In Listing
-17-32, we  create a function `get_messages()` which returns `impl Stream<Item =
+17-32, we  create a function `get_messages` which returns `impl Stream<Item =
 String>`. For its implementation, we create an async channel, loop over the
 first ten letters of the English alphabet, and send them across the channel.
 
@@ -310,7 +310,7 @@ Finally, we loop over that combined stream instead of over `messages` (Listing
 
 At this point, neither `messages` nor `intervals` needs to be pinned or mutable,
 because both will be combined into the single `merged` stream. However, this
-call to `merge` does not type check! (Neither does the `next` call in the `while
+call to `merge` does not compile! (Neither does the `next` call in the `while
 let` loop, but we will come back to that after fixing this.) The two streams
 have different types. The `messages` stream has the type `Timeout<impl
 Stream<Item = String>>`, where `Timeout` is the type which implements `Stream`

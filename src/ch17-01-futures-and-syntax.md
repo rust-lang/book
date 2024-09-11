@@ -78,9 +78,9 @@ returned a `Future<Output = ()>`.
 Then Rust warned us that we did not do anything with the future. This is because
 futures are *lazy*: they don’t do anything until you ask them to with `await`.
 This should remind you of our discussion of iterators [back in Chapter
-13][iterators-lazy]. Iterators do nothing unless you call their `.next()`
-method—whether directly, or using `for` loops or methods like `.map()` which use
-`.next()` under the hood.
+13][iterators-lazy]. Iterators do nothing unless you call their `next`
+method—whether directly, or using `for` loops or methods like `map` which use
+`next` under the hood.
 
 With futures, the same basic idea applies: they do nothing unless you explicitly
 ask them to. This laziness allows Rust to avoid running async code until it is
@@ -237,27 +237,27 @@ enum MyAsyncStateMachine {
 
 Writing that out by hand would be tedious and error-prone, especially when
 making changes to code later. Instead, the Rust compiler creates and manages the
-state machine data structures for async code automatically.
+state machine data structures for async code automatically. If you’re wondering:
+yep, the normal borrowing and ownership rules around data structures all apply.
+Happily, the compiler also handles checking those for us, and has good error
+messages. We will work through a few of those later in the chapter!
 
-If you’re wondering: yep, the normal borrowing and ownership rules around data
-structures all apply. Happily, the compiler also handles checking those for us,
-and has good error messages. We will work through a few of those later in the
-chapter!
-
-<!--
-  TODO: this part needs to be rewritten to account for moving the content out to
-  a later part of the book.
--->
+Ultimately, something has to execute that state machine. That something is a
+runtime. This is why you  may sometimes come across references to *executors*
+when looking into runtimes: an executor is the part of a runtime responsible for
+executing the async code.
 
 Now we can understand why the compiler stopped us from making `main` itself an
 async function in Listing 17-3. If `main` were an async function, something else
-would need to call `poll()` on whatever `main` returned, but main is the
-starting point for the program! Instead, we use the `trpl::run` function, which
-sets up a runtime and polls the `Future` returned by `hello` until it returns
-`Ready`.
+would need to manage the state machine for whatever future `main` returned, but
+main is the starting point for the program! Instead, we use the `trpl::run`
+function, which sets up a runtime and polls the `Future` returned by `hello`
+until it returns `Ready`.
 
-> Note: We skipped over most of the details of how the `Future` trait works so
-> far. We will come back to some of those later in the chapter!
+> Note: some runtimes provide macros to make it so you *can* write an async main
+> function. Those macros rewrite `async fn main() { ... }` to be a normal `fn
+> main` which does the same thing we did by hand in Listing 17-TODO: call a
+> function which runs a future to completion the way `trpl::run` does.
 
 Now that you know the basics of working with futures, we can dig into more of
 the things we can *do* with async.

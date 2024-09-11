@@ -103,14 +103,19 @@ with different syntax: using `.await` instead of calling `join` on the join
 handle, and awaiting the `sleep` calls.
 
 The bigger difference is that we did not need to spawn another operating system
-thread to do this. In fact, we do not even a task here. Given that async blocks
-compile to anonymous futures, we can put each loop in an async block and have
-the runtime run them both to completion using `trpl::join`.
+thread to do this. In fact, we do not even need to spawn a task here. Because
+async blocks compile to anonymous futures, we can put each loop in an async
+block and have the runtime run them both to completion using the `trpl::join`
+function.
 
-<!--
-We were able to get concurrency for just the cost of a task.
-Tasks have much faster startup time and use much less memory than an OS thread.
--->
+In Chapter 16, we showed how to use the `join` method on the `JoinHandle` type
+returned when you call `std::thread::spawn`. The `trpl::join` function is
+similar, but for futures. When you give it two futures, it produces a single new
+future whose output is a tuple with the output of each of the futures you passed
+in once *both* complete. Thus, in Listing 17-7, we use `trpl::join` to wait for
+both `fut1` and `fut2` to finish. We do *not* await `fut1` and `fut2`, but
+instead the new future produced by `trpl::join`. We ignore the output, because
+it is just a tuple with two unit values in it.
 
 <Listing number="17-7" caption="Using `trpl::join` to await two anonymous futures" file-name="src/main.rs">
 
@@ -147,7 +152,7 @@ what we saw with threads. That is because the `trpl::join` function is *fair*,
 meaning it checks each future equally often, alternating between them, and never
 lets one race ahead if the other is ready. With threads, the operating system
 decides which thread to check and how long to let it run. With async Rust, the
-runtime decides which future to check. (In practice, the details get complicated
+runtime decides which taks to check. (In practice, the details get complicated
 because an async runtime might use operating system threads under the hood as
 part of how it manages concurrency, so guaranteeing fairness can be more work
 for a runtime—but it is still possible!) Runtimes do not have to guarantee
@@ -184,11 +189,11 @@ version of the API is only a little different from the thread-based version: it
 uses a mutable rather than an immutable receiver `rx`, and its `recv` method
 produces a future we need to await rather than producing the value directly. Now
 we can send messages from the sender to the receiver. Notice that we do not have
-to spawn a separate thread or even a task; we merely need to await the
-`rx.recv()` call.
+to spawn a separate thread or even a task; we merely need to await the `rx.recv`
+call.
 
-The synchronous `Receiver::recv()` method in `std::mpsc::channel` blocks until
-it receives a message. The `trpl::Receiver::recv()` method does not, because it
+The synchronous `Receiver::recv` method in `std::mpsc::channel` blocks until
+it receives a message. The `trpl::Receiver::recv` method does not, because it
 is async. Instead of blocking, it hands control back to the runtime until either
 a message is received or the send side of the channel closes. By contrast, we do
 not await the `send` call, because it does not block. It does not need to,
@@ -221,17 +226,17 @@ know how many messages are coming in. In the real world, though, we will
 generally be waiting on some *unknown* number of messages. In that case, we need
 to keep waiting until we determine that there are no more messages.
 
-In synchronous code, we might use a `for` loop to process a sequence of items
-like this, regardless of how many items are in the loop. However, Rust does not
-yet have a way to write a `for` loop over an *asynchronous* series of items.
-Instead, we need to use a new kind of loop we haven’t seen before, the `while
-let` conditional loop. A `while let` loop is the loop version of the `if let`
-construct we saw back in Chapter 6. The loop while continue executing as long as
-the pattern matches.
+In Listing 16-10, we used a `for` loop to process all the items received from a
+synchronous channel. However, Rust does not yet have a way to write a `for` loop
+over an *asynchronous* series of items. Instead, we need to use a new kind of
+loop we haven’t seen before, the `while let` conditional loop. A `while let`
+loop is the loop version of the `if let` construct we saw back in Chapter 6. The
+loop will continue executing as long as the pattern it specifies continues to
+match the value.
 
 <!-- TODO: update text in ch. 19 to account for our having introduced this. -->
 
-The `rx.recv()` call produces a `Future`, which we await. The runtime will pause
+The `rx.recv` call produces a `Future`, which we await. The runtime will pause
 the `Future` until it is ready. Once a message arrives, the future will resolve
 to `Some(message)`, as many times as a message arrives. When the channel closes,
 regardless of whether *any*  messages have arrived, the future will instead
@@ -247,8 +252,9 @@ again, so the runtime pauses it again until another message arrives.
 The code now successfully sends and receives all of the messages. Unfortunately,
 there are still a couple problems. For one thing, the messages do not arrive at
 half-second intervals. They arrive all at once, two seconds (2,000 milliseconds)
-after we start the program. For another, this program also never stops! You will
-need to shut it down using <span class="keystroke">ctrl-c</span>.
+after we start the program. For another, this program also never exits! Instead,
+it waits forever for new messages. You will need to shut it down using <span
+class="keystroke">ctrl-c</span>.
 
 Let’s start by understanding why the messages all come in at once after the full
 delay, rather than coming in with delays in between each one. Within a given
@@ -263,7 +269,10 @@ let` loop get to go through any of the `.await` points on the `recv` calls.
 To get the behavior we want, where the sleep delay happens between receiving
 each message, we need to put the `tx` and `rx` operations in their own async
 blocks. Then the runtime can execute each of them separately using `trpl::join`,
-just like in the counting example.
+just like in the counting example. Once again, we await the result of calling
+`trpl::join`, not the individual futures. If we awaited the individual futures
+in sequence, we would just end up back in a sequential flow—exactly what we are
+trying *not* to do.
 
 <!-- We cannot test this one because it never stops! -->
 
@@ -278,28 +287,28 @@ just like in the counting example.
 With the updated code in Listing 17-10, the messages get printed at
 500-millisecond intervals, rather than all in a rush after two seconds.
 
-The program still never stops, because of the way `while let` loop interacts
-with `trpl::join`:
+The program still never exits, though, because of the way `while let` loop
+interacts with `trpl::join`:
 
 * The future returned from `trpl::join` only completes once *both* futures
   passed to it have completed.
 * The `tx` future completes once it finishes sleeping after sending the last
   message in `vals`.
 * The `rx` future will not complete until the `while let` loop ends.
-* The `while let` loop will not end until `rx.recv().await` produces `None`.
-* The `rx.recv().await` will only return `None` once the other end of the
-  channel is closed.
-* The channel will only close if we call `rx.close()` or when the sender side,
+* The `while let` loop will not end until awaiting `rx.recv` produces `None`.
+* Awaiting `rx.recv` will only return `None` once the other end of the channel
+  is closed.
+* The channel will only close if we call `rx.close` or when the sender side,
   `tx`, is dropped.
-* We do not call `rx.close()` anywhere, and `tx` will not be dropped until the
-  async block ends.
-* The block cannot end because it is blocked on `trpl::join` completing,
-  which takes us back to the top of this list!
+* We do not call `rx.close` anywhere, and `tx` will not be dropped until the
+  outermost async block passed to `trpl::run` ends.
+* The block cannot end because it is blocked on `trpl::join` completing, which
+  takes us back to the top of this list!
 
-We could manually close `rx` by calling `rx.close()` somewhere, but that does
-not make much sense. Stopping after handling some arbitrary number of messages
-would make the program shut down, but we could miss messages. We need some other
-way to make sure that `tx` gets dropped *before* the end of the function.
+We could manually close `rx` by calling `rx.close` somewhere, but that does not
+make much sense. Stopping after handling some arbitrary number of messages would
+make the program shut down, but we could miss messages. We need some other way
+to make sure that `tx` gets dropped *before* the end of the function.
 
 Right now, the async block where we send the messages only borrows `tx`, but if
 we could move `tx` into that async block, it would be dropped once that block
@@ -324,9 +333,10 @@ This async channel is also a multiple-producer channel, so we can call `clone`
 on `tx` if we want to send messages from multiple futures. In Listing 17-12, we
 clone `tx`, creating `tx1` outside the first async block. We move `tx1` into
 that block just as we did before with `tx`. Then, later, we move the original
-`tx` into a *new* async block, where we send more messages on a slightly
-slower delay. (We happen to put this new async block after the async block
-for receiving messages, but it could go before it just as well.)
+`tx` into a *new* async block, where we send more messages on a slightly slower
+delay. We happen to put this new async block after the async block for receiving
+messages, but it could go before it just as well. They key is the order of the
+futures are awaited in, not the order they are created in.
 
 Both of the async blocks for sending messages need to be `async move` blocks, so
 that both `tx` and `tx1` get dropped when those blocks finish. Otherwise we will

@@ -51,10 +51,10 @@ work to do, so the caller will need to check again later. The `Ready` variant
 indicates that the `Future` has finished its work and the `T` value is
 available.
 
-> Note: With most futures, the caller should not call `poll()` again after the
+> Note: With most futures, the caller should not call `poll` again after the
 > future has returned `Ready`. Many futures will panic if polled again after
 > becoming ready! Futures which are safe to poll again will say so explicitly in
-> their documentation.
+> their documentation. This is similar to how `Iterator::next` behaves!
 
 Under the hood, when you call `.await`, Rust compiles that to code which calls
 `poll`, kind of (although not exactly <!-- TODO: describe `IntoFuture`? -->)
@@ -97,9 +97,9 @@ on this future and work on other futures and check this one again later. That
 one of the main jobs for a runtime.
 
 Recall our description (in the [Counting][counting] section) of waiting on
-`rx.recv()` . The `recv()` call returns a `Future`, and awaiting it polls it. In
-our initial discussion, we noted that a runtime will pause the future until it
-is ready with either `Some(message)` or `None` when the channel closes. With our
+`rx.recv`. The `recv` call returns a `Future`, and awaiting it polls it. In our
+initial discussion, we noted that a runtime will pause the future until it is
+ready with either `Some(message)` or `None` when the channel closes. With our
 deeper understanding of `Future` in place, and specifically `Future::poll`, we
 can see how that works. The runtime knows the future is not ready when it
 returns `Poll::Pending`. Conversely, the runtime knows the future is ready and
@@ -176,20 +176,25 @@ like this. When we specify the type of `self` like this, we are telling Rust
 what type `self` must be to call this method. These kinds of type annotations
 for `self` are similar to those for other function parameters, but with the
 restriction that the type annotation has to be the type on which the method is
-implemented, or a reference or smart pointer to that type. We will see more on
-this syntax in Chapter 18. For now, it is enough to know that if we want to poll
-a future (to check whether it is `Pending` or `Ready(Output)`), we need a
-mutable reference to the type, which is wrapped in a `Pin`.
+implemented, or a reference or smart pointer to that type, or a `Pin` wrapping a
+reference to that type. We will see more on this syntax in Chapter 18. For now,
+it is enough to know that if we want to poll a future (to check whether it is
+`Pending` or `Ready(Output)`), we need a mutable reference to the type, which is
+wrapped in a `Pin`.
 
-`Pin` is a wrapper type, much like the `Box`, `Rc`, and other smart pointer
-types we saw in Chapter 15. Unlike those, however, `Pin` only works with *other
-pointer types* like reference (`&` and `&mut`) and smart pointers (`Box`, `Rc`,
-and so on). To be precise, `Pin` works with types which implement the `Deref` or
-`DerefMut` traits, which we covered in Chapter 15. You can think of this
-restriction as equivalent to only working with pointers, though, since
-implementing `Deref` or `DerefMut` means your type behaves like a pointer type.
+`Pin` is a wrapper type. In some ways, it is like the `Box`, `Rc`, and other
+smart pointer types we saw in Chapter 15, which also wrap other types. Unlike
+those, however, `Pin` only works with *other pointer types* like reference (`&`
+and `&mut`) and smart pointers (`Box`, `Rc`, and so on). To be precise, `Pin`
+works with types which implement the `Deref` or `DerefMut` traits, which we
+covered in Chapter 15. You can think of this restriction as equivalent to only
+working with pointers, though, since implementing `Deref` or `DerefMut` means
+your type behaves like a pointer type. `Pin` is also not a pointer itself, and
+it does not have any behavior of its own like the ref counting of `Rc` or `Arc`.
+It is purely a tool the compiler can use to uphold the relevant guarantees, by
+wrapping pointers in the type.
 
-Recalling that `.await` is implemented in terms of calls to `poll()`, this
+Recalling that `.await` is implemented in terms of calls to `poll`, this
 starts to explain the error message we saw above—but that was in terms of
 `Unpin`, not `Pin`. So what exactly are `Pin` and `Unpin`, how do they relate,
 and why does `Future` need `self` to be in a `Pin` type to call `poll`?
@@ -267,6 +272,10 @@ internal references, so they do not implement `Unpin`. They need to be pinned,
 and then we can pass the `Pin` type into the `Vec`, confident that the
 underlying data in the futures will *not* be moved.
 
+`Pin` and `Unpin` are mostly important for building lower-level libraries, or
+when you are building a runtime itself, rather than for day to day Rust code.
+When you see them, though, now you will know what to do!
+
 > Note: This combination of `Pin` and `Unpin` allows a whole class of complex
 > types to be safe in Rust which are otherwise difficult to implement because
 > they are self-referential. Types which require `Pin` show up *most* commonly
@@ -283,16 +292,14 @@ underlying data in the futures will *not* be moved.
 > - [Chapter 2: Under the Hood: Executing Futures and Tasks][under-the-hood]
 > - [Chapter 4: Pinning][pinning].
 
-Now that we have a deeper grasp on the `Future`, `Pin`, and `Unpin` traits, we
-can turn our attention to the `Stream` trait.
-
 ### The Stream Trait
 
-As described in the section introducing streams, streams are like asynchronous
-iterators. Unlike `Iterator` and `Future`, there is no definition of a `Stream`
-trait in the standard library as of the time of writing,<!-- TODO: verify before
-press time! --> but there *is* a very common definition used throughout the
-ecosystem.
+Now that we have a deeper grasp on the `Future`, `Pin`, and `Unpin` traits, we
+can turn our attention to the `Stream` trait. As described in the section
+introducing streams, streams are like asynchronous iterators. Unlike `Iterator`
+and `Future`, there is no definition of a `Stream` trait in the standard library
+as of the time of writing,<!-- TODO: verify before press time! --> but there
+*is* a very common definition used throughout the ecosystem.
 
 Let’s review the definitions of the `Iterator` and `Future` traits, so we can
 build up to how a `Stream` trait that merges them together might look. From
