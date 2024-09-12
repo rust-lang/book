@@ -125,10 +125,10 @@ object (Listing 17-16).
 
 The type we had to write here is a little involved, so let’s walk through it:
 
-* The innermost type is the future itself. We note explicitly that it the output
-  of the future is the unit type `()` by writing `Future<Output = ()>`.
+* The innermost type is the future itself. We note explicitly that the output of
+  the future is the unit type `()` by writing `Future<Output = ()>`.
 * Then we annotate the trait with `dyn` to mark it as dynamic.
-* The entire trait is wrapped in a `Box`.
+* The entire trait reference is wrapped in a `Box`.
 * Finally, we state explicitly that `futures` is a `Vec` containing these items.
 
 That already made a big difference. Now when we run the compiler, we only have
@@ -330,11 +330,15 @@ await points is synchronous.
 
 That means if you do a bunch of work in an async block without an await point,
 that future will block any other futures from making progress. You may sometimes
-hear this referred to as one future *starving* other futures. In many cases,
+hear this referred to as one future *starving* other futures. In some cases,
 that may not be a big deal. However, if you are doing some kind of expensive
 setup or long-running work, or if you have a future which will keep doing some
 particular task indefinitely, you will need to think about when and where to
 hand control back to the runtime.
+
+By the same token, if you have long-running blocking operations, async can be a
+useful tool for providing ways for different parts of the program to relate to
+each other.
 
 But *how* would you hand control back to the runtime in those cases?
 
@@ -473,17 +477,21 @@ compared to the future using `trpl::yield_now`.
 
 The version with `yield_now` is *way* faster!
 
-This means that async can be useful even for CPU-bound tasks, depending on what
-else your program is doing, because it provides a useful tool for structuring
-the relationships between different parts of the program. This is a form of
-*cooperative multitasking*, where each future has both the power to determine
-when it hands over control via await points. Each future therefore also has the
-*responsibility* to avoid blocking for too long. In some Rust-based embedded
-operating systems, this is the *only* kind of multitasking!
+This means that async can be useful even for compute-bound tasks, depending on
+what else your program is doing, because it provides a useful tool for
+structuring the relationships between different parts of the program. This is a
+form of *cooperative multitasking*, where each future has both the power to
+determine when it hands over control via await points. Each future therefore
+also has the responsibility to avoid blocking for too long. In some Rust-based
+embedded operating systems, this is the *only* kind of multitasking!
 
 In real-world code, you will not usually be alternating function calls with
-await points on every single line, of course. The underlying dynamic is an
-important one to keep in mind, though!
+await points on every single line, of course. While yielding control like this
+is relatively inexpensive, it is not free! In many cases, trying to break up a
+compute-bound task might make it significantly slower, so sometimes it is better
+for *overall* performance to let an operation block briefly. You should always
+measure to see what your code’s actual performance bottlenecks are. The
+underlying dynamic is an important one to keep in mind if you *are* seeing a lot of work happening in serial that you expected to happen concurrently, though!
 
 ### Building Our Own Async Abstractions
 
@@ -535,13 +543,12 @@ run that timer with the future the caller passes in.
 The `trpl::race` function returns a value to indicate which of the futures
 passed to it finishes first. (When we saw `race` earlier in Listing 17-20, we
 ignored its return value, because we were only interested in seeing the behavior
-of `fast` and `slow` when we ran the program.) Because either future passed as
-an argument to `race` can legitimately “win,” it does not make sense to use a
-`Result` to represent the return type. Instead, `race` returns a type we have
-not seen before, `Either`. The `Either` type is somewhat like a `Result`, in
-that it has two cases. Unlike `Result`, though, there is no notion of success or
-failure baked into `Either`. Instead, it uses `Left` and `Right` to indicate
-“one or the other”.
+of `fast` and `slow` when we ran the program.) Either future can legitimately
+“win,” so it does not make sense to return a `Result`. Instead, `race` returns a
+type we have not seen before, `trpl::Either`. The `Either` type is somewhat like
+a `Result`, in that it has two cases. Unlike `Result`, though, there is no
+notion of success or failure baked into `Either`. Instead, it uses `Left` and
+`Right` to indicate “one or the other”.
 
 ```rust
 enum Either<A, B> {
@@ -552,19 +559,20 @@ enum Either<A, B> {
 
 The `race` function returns `Left` if the first argument finishes first, with
 that future’s output, and `Right` with the second future argument’s output if
-*that* one finishes first.
+*that* one finishes first. This matches the order the arguments appear when
+calling the function: the first argument is to the left of the second argument.
 
 We also know that `race` is not fair, and polls arguments in the order they are
-passed. Thus, we pass the caller-supplied future to `race` first so it gets a
-chance to complete even if `max_time` is a very short duration. If `future`
+passed. Thus, we pass `future_to_try` to `race` first so it gets a chance to
+complete even if `max_time` is a very short duration. If `future_to_try`
 finishes first, `race` will return `Left` with the output from `future`. If
 `timer` finishes first, `race` will return `Right` with the timer’s output of
 `()`.
 
 In Listing 17-28, we match on the result of awaiting `trpl::race`. If the
-future succeeded and we get a `Left(output)`, we return `Ok(output)`. If the
-sleep timer elapsed instead and we get a `Right(())`, we ignore the `()` with
-`_` and return `Err(max_time)` instead.
+`future_to_try` succeeded and we get a `Left(output)`, we return `Ok(output)`.
+If the sleep timer elapsed instead and we get a `Right(())`, we ignore the `()`
+with `_` and return `Err(max_time)` instead.
 
 <Listing number="17-28" caption="Defining `timeout` with `race` and `sleep`" file-name="src/main.rs">
 

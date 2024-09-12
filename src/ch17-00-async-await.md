@@ -11,8 +11,8 @@ The video export will use as much CPU and GPU power as it can. If you only had
 one CPU core, and your operating system never paused that export until it
 completed, you could not do anything else on your computer while it was running.
 That would be a pretty frustrating experience, though. Instead, your computer’s
-operating sysem can (and does!) invisibly interrupt the export often enough to
-let you get other work done along the way.
+operating sysem can—and does!—invisibly interrupt the export often enough to let
+you get other work done along the way.
 
 The file download is different. It does not take up very much CPU time. Instead,
 the CPU needs to wait on data to arrive from the network. While you can start

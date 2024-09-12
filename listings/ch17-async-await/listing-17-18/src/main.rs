@@ -13,7 +13,7 @@ fn main() {
         let tx1 = tx.clone();
         // ANCHOR: here
         let tx1_fut = pin!(async move {
-            // snip...
+            // --snip--
             // ANCHOR_END: here
             let vals = vec![
                 String::from("hi"),
@@ -32,7 +32,7 @@ fn main() {
         // ANCHOR_END: here
         // ANCHOR: here
         let rx_fut = pin!(async {
-            // snip...
+            // --snip--
             // ANCHOR_END: here
             while let Some(value) = rx.recv().await {
                 println!("received '{value}'");
@@ -41,7 +41,7 @@ fn main() {
         });
 
         let tx_fut = pin!(async move {
-            // snip...
+            // --snip--
             // ANCHOR_END: here
             let vals = vec![
                 String::from("more"),

@@ -123,7 +123,7 @@ a queue, or working with more data than can fit in a computer’s memory by only
 pulling chunks of it from the file system at a time, or data arriving over the
 network over time. Because streams are futures, we can use them with any other
 kind of future, too, and we can combine them in interesting ways. For example,
-we can debounce events to avoid triggering too many network calls, set timeouts
+we can batch up events to avoid triggering too many network calls, set timeouts
 on sequences of long-running operations, or throttle user interface events to
 avoid doing needless work.
 

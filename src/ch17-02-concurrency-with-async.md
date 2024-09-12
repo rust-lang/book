@@ -173,7 +173,11 @@ each case *before* running the code!
 ### Message Passing
 
 Sharing data between futures will also be familiar: we will use message passing
-again, but this with async versions of the types and functions.
+again, but this with async versions of the types and functions. We will take a
+slightly different path than we did in Chapter 16, to illustrate some of the key
+differences between thread-based and futures-based concurrency. In Listing 17-8,
+we will begin with just a single async block—*not* spawning a separate task like
+we spawned a separate thread.
 
 <Listing number="17-8" caption="Creating an async channel and assigning the two halves to `tx` and `rx`" file-name="src/main.rs">
 
@@ -183,7 +187,7 @@ again, but this with async versions of the types and functions.
 
 </Listing>
 
-We start by using `trpl::channel`, an async version of the multiple-producer,
+Here, we use `trpl::channel`, an async version of the multiple-producer,
 single-consumer channel API we used with threads back in Chapter 16. The async
 version of the API is only a little different from the thread-based version: it
 uses a mutable rather than an immutable receiver `rx`, and its `recv` method
@@ -206,9 +210,13 @@ because the channel we are sending it into is unbounded.
 > code, and thus where to transition between sync and async code. In most async
 > runtimes, `run` is actually named `block_on` for exactly this reason.
 
-It is hard to see the effect of async in Listing 17-8, though, since the message
-will arrive right away! Let’s go ahead and send a whole series of messages, and
-sleep in between them, as shown in Listing 17-9:
+Notice two things about this example: First, the message will arrive right away!
+Second, although we use a future here, there is no concurrency yet. Everything
+in the listing happens in sequence, just as it would if there were no futures
+involved.
+
+Let’s address the first part by sending a series of messages, and sleep in
+between them, as shown in Listing 17-9:
 
 <!-- We cannot test this one because it never stops! -->
 
@@ -262,9 +270,10 @@ async block, the order that `.await` keywords appear in the code is also the
 order they happen when running the program.
 
 There is only one async block in Listing 17-9, so everything in it runs
-linearly. All the `tx.send` calls happen, interspersed with all of the
-`trpl::sleep` calls and their associated await points. Only then does the `while
-let` loop get to go through any of the `.await` points on the `recv` calls.
+linearly. There is still no concurrency. All the `tx.send` calls happen,
+interspersed with all of the `trpl::sleep` calls and their associated await
+points. Only then does the `while let` loop get to go through any of the
+`.await` points on the `recv` calls.
 
 To get the behavior we want, where the sleep delay happens between receiving
 each message, we need to put the `tx` and `rx` operations in their own async
