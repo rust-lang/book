@@ -24,7 +24,7 @@ fn handle_connection(mut stream: TcpStream) {
     // --snip--
 
     // ANCHOR_END: here
-    let buf_reader = BufReader::new(&mut stream);
+    let buf_reader = BufReader::new(&stream);
     let request_line = buf_reader.lines().next().unwrap().unwrap();
 
     // ANCHOR: here

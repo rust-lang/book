@@ -15,7 +15,7 @@ fn main() {
 
 // ANCHOR: here
 fn handle_connection(mut stream: TcpStream) {
-    let buf_reader = BufReader::new(&mut stream);
+    let buf_reader = BufReader::new(&stream);
     let http_request: Vec<_> = buf_reader
         .lines()
         .map(|result| result.unwrap())
