@@ -322,18 +322,19 @@ to poll first. Regardless of whether the implementation of race we are using is
 fair, though, *one* of the futures will run up to the first `.await` in its body
 before another task can start.
 
-Recall from [“What Are Futures?”][futures] that at each await point, Rust pauses
-the async block and hands control back to a runtime. The inverse is also true:
-Rust *only* pauses async blocks and hands control back to a runtime at an await
-point. Everything between await points is synchronous.
+Recall from [“What Are Futures?”][futures] that at each await point, Rust gives
+a runtime a chance to pause the task and switch to another one if the future
+being awaited is not ready. The inverse is also true: Rust *only* pauses async
+blocks and hands control back to a runtime at an await point. Everything between
+await points is synchronous.
 
 That means if you do a bunch of work in an async block without an await point,
-that future will block any other futures from making progress. (You may
-sometimes hear this referred to as one future *starving* other futures. And this
-applies to threads, too!) In many cases, that may not be a big deal. However, if
-you are doing some kind of expensive setup or long-running work, or if you have
-a future which will keep doing some particular task indefinitely, you will need
-to think about when and where to hand control back to the runtime.
+that future will block any other futures from making progress. You may sometimes
+hear this referred to as one future *starving* other futures. In many cases,
+that may not be a big deal. However, if you are doing some kind of expensive
+setup or long-running work, or if you have a future which will keep doing some
+particular task indefinitely, you will need to think about when and where to
+hand control back to the runtime.
 
 But *how* would you hand control back to the runtime in those cases?
 
