@@ -462,7 +462,7 @@ lot in one millisecond!
 You can see this for yourself by setting up a little benchmark, like the one in
 Listing 17-25. (This is not an especially rigorous way to do performance
 testing, but it suffices to show the difference here.) Here, we skip all the
-status printing, pass a one-nanosecond `Duration` to `trple::sleep`,  and let
+status printing, pass a one-nanosecond `Duration` to `trpl::sleep`,  and let
 each future run by itself, with no switching between the futures. Then we run
 for 1,000 iterations and see how long the future using `trpl::sleep` takes
 compared to the future using `trpl::yield_now`.
