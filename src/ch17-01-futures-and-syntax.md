@@ -1,10 +1,30 @@
 ## Futures and the Async Syntax
 
-Like other languages with async, Rust uses the `async` and `await` keywords for
-async programming. (If you are familiar with other languages’ approach to async,
-you may notice some significant differences, though.) In Rust, blocks and
-functions can be marked `async`, and you can wait on the result of an `async`
-function or block to resolve using the `await` keyword.
+They key elements of asynchronous programming in Rust are *futures* and Rust’s
+`async` and `await` keywords.
+
+A future is a value that may not ready yet. Every future holds its own
+information about the progress that has been made and what "ready" means. In
+Rust, we say that types which implement the `Future` trait are futures. The
+`async` keyword can be applied to blocks and functions to specify that they can
+be interrupted and resumed. Within an async block or async function, you can use
+the `await` keyword to wait for a future to become ready, called *awaiting a
+future*. Each place you await a future within an async block or function is a
+place that async block or function may get paused and resumed.
+
+> Note: Many other languages use the `async` and `await` keywords for async
+> programming. If you are familiar with other languages’ approach to async, you
+> may notice some significant differences in how Rust does things, including how
+> it handles the syntax. That is for good reason, as we will see!
+
+That may all feel a bit abstract. Let’s write our first async program: a little
+web scraper. This will have a fair bit of new syntax, but don’t worry. We will
+explain it all as we go.
+
+<!--
+  TODO: replace the example code here and the associated discussion with the web
+  scraper example we came up with.
+-->
 
 Let’s write our first async function, and call it:
 
@@ -37,8 +57,8 @@ learning what the syntax means, so let’s start there.
 
 In Rust, writing `async fn` is equivalent to writing a function which returns a
 *future* of the return type. That is, when the compiler sees a function like
-`async fn hello` in Listing 17-1, it is basically equivalent to a function
-defined like this instead:
+`async fn hello` in Listing 17-1, it is equivalent to a function defined like
+this instead:
 
 ```rust
 use std::future::Future;
@@ -131,8 +151,11 @@ However, we get another compiler error here:
 {{#include ../listings/ch17-async-await/listing-17-03/output.txt}}
 ```
 
-The problem is that async code needs a *runtime*: a Rust crate which manages the
-details of executing asynchronous code.
+Rust won't allow us too mark `main` as `async`. The underlying problem is that
+async code needs a *runtime*: a Rust crate which manages the details of
+executing asynchronous code. A program's `main` function can initialize a
+runtime, but it is not a runtime itself. (We will see more about why this is a
+bit later.)
 
 Most languages which support async bundle a runtime with the language. Rust does
 not. Instead, there are many different async runtimes available, each of which
