@@ -17,12 +17,12 @@ The first task we tackled in Chapter 16 was counting up on two separate threads.
 Let’s do the same using async. The `trpl` crate supplies a `spawn_task` function
 which looks very similar to the `thread::spawn` API, and a `sleep` function
 which is an async version of the `thread::sleep` API. We can use these together
-to implement the same counting example as with threads, in Listing 17-5.
+to implement the same counting example as with threads, in Listing 17-6.
 
-<Listing number="17-5" caption="Using `spawn_task` to count with two" file-name="src/main.rs">
+<Listing number="17-6" caption="Using `spawn_task` to count with two" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:all}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-06/src/main.rs:all}}
 ```
 
 </Listing>
@@ -64,14 +64,14 @@ finishes, because the task spawned by `spawn_task` is shut down when the main
 function ends. If you want to run all the way to the completion of the task, you
 will need to use a join handle to wait for the first task to complete. With
 threads, we used the `join` method to “block” until the thread was done running.
-In Listing 17-6, we can use `await` to do the same thing, because the task
+In Listing 17-7, we can use `await` to do the same thing, because the task
 handle itself is a future. Its `Output` type is a `Result`, so we also unwrap it
 after awaiting it.
 
-<Listing number="17-6" caption="Using `.await` with a join handle to run a task to completion" file-name="src/main.rs">
+<Listing number="17-7" caption="Using `.await` with a join handle to run a task to completion" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-06/src/main.rs:handle}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-07/src/main.rs:handle}}
 ```
 
 </Listing>
@@ -112,15 +112,15 @@ In Chapter 16, we showed how to use the `join` method on the `JoinHandle` type
 returned when you call `std::thread::spawn`. The `trpl::join` function is
 similar, but for futures. When you give it two futures, it produces a single new
 future whose output is a tuple with the output of each of the futures you passed
-in once *both* complete. Thus, in Listing 17-7, we use `trpl::join` to wait for
+in once *both* complete. Thus, in Listing 17-8, we use `trpl::join` to wait for
 both `fut1` and `fut2` to finish. We do *not* await `fut1` and `fut2`, but
 instead the new future produced by `trpl::join`. We ignore the output, because
 it is just a tuple with two unit values in it.
 
-<Listing number="17-7" caption="Using `trpl::join` to await two anonymous futures" file-name="src/main.rs">
+<Listing number="17-8" caption="Using `trpl::join` to await two anonymous futures" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-07/src/main.rs:join}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-08/src/main.rs:join}}
 ```
 
 </Listing>
@@ -175,14 +175,14 @@ each case *before* running the code!
 Sharing data between futures will also be familiar: we will use message passing
 again, but this with async versions of the types and functions. We will take a
 slightly different path than we did in Chapter 16, to illustrate some of the key
-differences between thread-based and futures-based concurrency. In Listing 17-8,
+differences between thread-based and futures-based concurrency. In Listing 17-9,
 we will begin with just a single async block—*not* spawning a separate task like
 we spawned a separate thread.
 
-<Listing number="17-8" caption="Creating an async channel and assigning the two halves to `tx` and `rx`" file-name="src/main.rs">
+<Listing number="17-9" caption="Creating an async channel and assigning the two halves to `tx` and `rx`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-08/src/main.rs:channel}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-09/src/main.rs:channel}}
 ```
 
 </Listing>
@@ -216,14 +216,14 @@ in the listing happens in sequence, just as it would if there were no futures
 involved.
 
 Let’s address the first part by sending a series of messages, and sleep in
-between them, as shown in Listing 17-9:
+between them, as shown in Listing 17-10:
 
 <!-- We cannot test this one because it never stops! -->
 
-<Listing number="17-9" caption="Sending and receiving multiple messages over the async channel and sleeping with an `.await` between each message" file-name="src/main.rs">
+<Listing number="17-10" caption="Sending and receiving multiple messages over the async channel and sleeping with an `.await` between each message" file-name="src/main.rs">
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-09/src/main.rs:many-messages}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-11/src/main.rs:many-messages}}
 ```
 
 </Listing>
@@ -269,7 +269,7 @@ delay, rather than coming in with delays in between each one. Within a given
 async block, the order that `.await` keywords appear in the code is also the
 order they happen when running the program.
 
-There is only one async block in Listing 17-9, so everything in it runs
+There is only one async block in Listing 17-10, so everything in it runs
 linearly. There is still no concurrency. All the `tx.send` calls happen,
 interspersed with all of the `trpl::sleep` calls and their associated await
 points. Only then does the `while let` loop get to go through any of the
@@ -285,15 +285,15 @@ trying *not* to do.
 
 <!-- We cannot test this one because it never stops! -->
 
-<Listing number="17-10" caption="Separating `send` and `recv` into their own `async` blocks and awaiting the futures for those blocks" file-name="src/main.rs">
+<Listing number="17-11" caption="Separating `send` and `recv` into their own `async` blocks and awaiting the futures for those blocks" file-name="src/main.rs">
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:futures}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-12/src/main.rs:futures}}
 ```
 
 </Listing>
 
-With the updated code in Listing 17-10, the messages get printed at
+With the updated code in Listing 17-11, the messages get printed at
 500-millisecond intervals, rather than all in a rush after two seconds.
 
 The program still never exits, though, because of the way `while let` loop
@@ -326,20 +326,20 @@ in Chapter 16, we saw that we often need to use move data into closures when
 working with threads. The same basic dynamics apply to async blocks, so the
 `move` keyword works with async blocks just like it does with closures.
 
-In Listing 17-11, we change the async block for sending messages from a plain
+In Listing 17-12, we change the async block for sending messages from a plain
 `async` block to an `async move` block. When we run *this* version of the code,
 it shuts down gracefully after the last message is sent and received.
 
-<Listing number="17-11" caption="A working example of sending and receiving messages between futures which correctly shuts down when complete" file-name="src/main.rs">
+<Listing number="17-12" caption="A working example of sending and receiving messages between futures which correctly shuts down when complete" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-11/src/main.rs:with-move}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-13/src/main.rs:with-move}}
 ```
 
 </Listing>
 
 This async channel is also a multiple-producer channel, so we can call `clone`
-on `tx` if we want to send messages from multiple futures. In Listing 17-12, we
+on `tx` if we want to send messages from multiple futures. In Listing 17-13, we
 clone `tx`, creating `tx1` outside the first async block. We move `tx1` into
 that block just as we did before with `tx`. Then, later, we move the original
 `tx` into a *new* async block, where we send more messages on a slightly slower
@@ -352,10 +352,10 @@ that both `tx` and `tx1` get dropped when those blocks finish. Otherwise we will
 end up back in the same infinite loop we started out in. Finally, we switch from
 `trpl::join` to `trpl::join3` to handle the additional future.
 
-<Listing number="17-12" caption="Using multiple producers with async blocks" file-name="src/main.rs">
+<Listing number="17-13" caption="Using multiple producers with async blocks" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-12/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-14/src/main.rs:here}}
 ```
 
 </Listing>

@@ -12,6 +12,8 @@ authors = ["Chris Krycho <hello@chriskrycho.com>"]
 
 [dependencies]
 futures = "0.3"
+reqwest = "0.12"
+scraper = "0.20"
 tokio = { version = "1", default-features = false, features = [
     "fs",
     "rt-multi-thread",

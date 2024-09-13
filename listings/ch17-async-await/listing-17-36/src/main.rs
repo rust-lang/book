@@ -6,13 +6,10 @@ use trpl::{ReceiverStream, Stream, StreamExt};
 
 fn main() {
     trpl::run(async {
-        // ANCHOR: main
-        let messages = get_messages().timeout(Duration::from_millis(200));
-        let intervals = get_intervals();
-        let merged = messages.merge(intervals);
-        // ANCHOR_END: main
+        let mut messages =
+            pin!(get_messages().timeout(Duration::from_millis(200)));
 
-        while let Some(result) = merged.next().await {
+        while let Some(result) = messages.next().await {
             match result {
                 Ok(message) => println!("{message}"),
                 Err(reason) => eprintln!("Problem: {reason:?}"),
@@ -37,6 +34,7 @@ fn get_messages() -> impl Stream<Item = String> {
     ReceiverStream::new(rx)
 }
 
+// ANCHOR: intervals
 fn get_intervals() -> impl Stream<Item = u32> {
     let (tx, rx) = trpl::channel();
 
@@ -51,3 +49,4 @@ fn get_intervals() -> impl Stream<Item = u32> {
 
     ReceiverStream::new(rx)
 }
+// ANCHOR_END: intervals

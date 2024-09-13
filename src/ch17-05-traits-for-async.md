@@ -115,11 +115,11 @@ it is not yet ready.
 
 <!-- TODO: get a *very* careful technical review of this section! -->
 
-When we introduced the idea of pinning, while working on Listing 17-16, we ran
+When we introduced the idea of pinning, while working on Listing 17-17, we ran
 into a very gnarly error message. Here is the relevant part of it again:
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-16
+cd listings/ch17-async-await/listing-17-18
 cargo build
 copy *only* the final `error` block from the errors
 -->

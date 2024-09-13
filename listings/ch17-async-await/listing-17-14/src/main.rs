@@ -42,9 +42,7 @@ fn main() {
         };
 
         // ANCHOR: here
-        let futures = vec![tx1_fut, rx_fut, tx_fut];
-
-        trpl::join_all(futures).await;
+        trpl::join!(tx1_fut, tx_fut, rx_fut);
         // ANCHOR_END: here
     });
 }

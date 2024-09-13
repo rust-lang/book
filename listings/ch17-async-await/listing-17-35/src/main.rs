@@ -18,6 +18,7 @@ fn main() {
     })
 }
 
+// ANCHOR: messages
 fn get_messages() -> impl Stream<Item = String> {
     let (tx, rx) = trpl::channel();
 
@@ -33,20 +34,4 @@ fn get_messages() -> impl Stream<Item = String> {
 
     ReceiverStream::new(rx)
 }
-
-// ANCHOR: intervals
-fn get_intervals() -> impl Stream<Item = u32> {
-    let (tx, rx) = trpl::channel();
-
-    trpl::spawn_task(async move {
-        let mut count = 0;
-        loop {
-            trpl::sleep(Duration::from_millis(1)).await;
-            count += 1;
-            tx.send(count).unwrap();
-        }
-    });
-
-    ReceiverStream::new(rx)
-}
-// ANCHOR_END: intervals
+// ANCHOR_END: messages

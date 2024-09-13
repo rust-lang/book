@@ -24,15 +24,15 @@ is managed by library-level code: the runtime.
 
 In the previous section, we saw that we could build a `Stream` by using an async
 channel and spawning an async task which we could call from synchronous code. We
-could do the exact same thing with a thread! In Listing 17-39, we used
-`trpl::spawn_task` and `trpl::sleep`. In Listing 17-40, we replace those with
+could do the exact same thing with a thread! In Listing 17-40, we used
+`trpl::spawn_task` and `trpl::sleep`. In Listing 17-41, we replace those with
 the `thread::spawn` and `thread::sleep` APIs from the standard library in the
 `get_intervals` function.
 
-<Listing number="17-40" caption="Using the `std::thread` APIs instead of the async `trpl` APIs for the `get_intervals` function" file-name="src/main.rs">
+<Listing number="17-41" caption="Using the `std::thread` APIs instead of the async `trpl` APIs for the `get_intervals` function" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-40/src/main.rs:threads}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-41/src/main.rs:threads}}
 ```
 
 </Listing>

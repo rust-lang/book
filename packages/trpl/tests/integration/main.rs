@@ -229,3 +229,14 @@ fn re_exported_interval_stream_works() {
         assert!(interval_stream.next().await.is_none());
     });
 }
+
+#[test]
+fn re_exported_html() {
+    use trpl::Html;
+
+    let doc = Html::parse(
+        "<html><head><title></title></head><body><p>Hello!</p></body></html>",
+    );
+    let p = doc.select_first("p").map(|el| el.inner_html());
+    assert_eq!(p, Some(String::from("Hello!")));
+}

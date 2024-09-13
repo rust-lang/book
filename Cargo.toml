@@ -1,5 +1,5 @@
 [workspace]
-members = ["packages/tools"]
+members = [ "listings/ch17-async-await/listing-scraper-01","packages/tools"]
 default-members = ["packages/tools"]
 resolver = "2"
 exclude = [
