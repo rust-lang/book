@@ -235,7 +235,7 @@ blocks</span>
 
 There’s no reason to separate these methods into multiple `impl` blocks here,
 but this is valid syntax. We’ll see a case in which multiple `impl` blocks are
-useful in Chapter 10, where we discuss generic types and traits.
+useful in [Chapter 10][traits], where we discuss generic types and traits.
 
 ## Summary
 
@@ -253,3 +253,4 @@ Rust’s enum feature to add another tool to your toolbox.
 [trait-objects]: ch17-02-trait-objects.md
 [public]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword
 [modules]: ch07-02-defining-modules-to-control-scope-and-privacy.html
+[traits]: ch10-02-traits.html#using-trait-bounds-to-conditionally-implement-methods
