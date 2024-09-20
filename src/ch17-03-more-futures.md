@@ -11,7 +11,7 @@ Thus, we could rewrite the code from Listing 17-13 to use `join!` instead of
 <Listing number="17-14" caption="Using `join!` to wait for multiple futures" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-15/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-14/src/main.rs:here}}
 ```
 
 </Listing>
@@ -31,7 +31,7 @@ replace `join!` with `join_all`.
 <Listing  number="17-15" caption="Storing anonymous futures in a vector and calling `join_all`">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-16/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-15/src/main.rs:here}}
 ```
 
 </Listing>
@@ -103,7 +103,7 @@ in Listing 17-16.
 <Listing number="17-16" caption="Trying to use `Box::new` to align the types of the futures in a `Vec`" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-17/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-16/src/main.rs:here}}
 ```
 
 </Listing>
@@ -118,7 +118,7 @@ object (Listing 17-17).
 <Listing number="17-17" caption="Fixing the rest of the type mismatch errors by using an explicit type declaration" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-18/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-17/src/main.rs:here}}
 ```
 
 </Listing>
@@ -136,7 +136,7 @@ the errors mentioning `Unpin`. Although there are three of them, notice that
 each is very similar in its contents.
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-18
+cd listings/ch17-async-await/listing-17-17
 cargo build
 copy *only* the errors
 -->
@@ -214,7 +214,7 @@ the futures themselves.
 <Listing number="17-18" caption="Using `Pin` and `Box::pin` to make the `Vec` type check" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-19/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-18/src/main.rs:here}}
 ```
 
 </Listing>
@@ -256,7 +256,7 @@ references to the dynamic `Future` type, as in Listing 17-19.
 <Listing number="17-19" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-20/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-19/src/main.rs:here}}
 ```
 
 </Listing>
@@ -269,7 +269,7 @@ types. For example, in Listing 17-20, the anonymous future for `a` implements
 <Listing number="17-20" caption="Three futures with distinct types" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-21/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-20/src/main.rs:here}}
 ```
 
 </Listing>
@@ -311,7 +311,7 @@ because all of the interesting behavior happens in the body of the async blocks.
 <Listing number="17-21" caption="Using `race` to get the result of whichever future finishes first" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-22/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-21/src/main.rs:here}}
 ```
 
 </Listing>
@@ -356,7 +356,7 @@ blocking.
 <Listing number="17-22" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:slow}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-22/src/main.rs:slow}}
 ```
 
 </Listing>
@@ -368,7 +368,7 @@ a pair of futures. To begin, each future only hands control back to the runtime
 <Listing number="17-23" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-24/src/main.rs:slow-futures}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:slow-futures}}
 ```
 
 </Listing>
@@ -410,7 +410,7 @@ as a starting point?
 <Listing number="17-24" caption="Using `sleep` to let operations switch off making progress" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-25/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-24/src/main.rs:here}}
 ```
 
 </Listing>
@@ -419,7 +419,7 @@ In Listing 17-24, we add `trpl::sleep` calls with await points between each call
 to `slow`. Now the two futures’ work is interleaved:
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-25/
+cd listings/ch17-async-await/listing-17-24
 cargo run
 copy just the output
 -->
@@ -450,7 +450,7 @@ directly, using the `yield_now` function. In Listing 17-25, we replace all those
 <Listing number="17-25" caption="Using `yield_now` to let operations switch off making progress" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-26/src/main.rs:yields}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-25/src/main.rs:yields}}
 ```
 
 </Listing>
@@ -473,7 +473,7 @@ compared to the future using `trpl::yield_now`.
 <Listing number="17-26" caption="Comparing the performance of `sleep` and `yield_now`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-27/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-26/src/main.rs:here}}
 ```
 
 </Listing>
@@ -509,7 +509,7 @@ future.
 <Listing number="17-27" caption="Using our imagined `timeout` to run a slow operation with a time limit" file-name="src/main.rs">
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-28/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-27/src/main.rs:here}}
 ```
 
 </Listing>
@@ -533,7 +533,7 @@ Listing 17-28 shows this declaration.
 <Listing number="17-28" caption="Defining the signature of `timeout`" file-name="src/main.rs">
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-29/src/main.rs:declaration}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-28/src/main.rs:declaration}}
 ```
 
 </Listing>
@@ -558,7 +558,7 @@ with `_` and return `Err(max_time)` instead.
 <Listing number="17-29" caption="Defining `timeout` with `race` and `sleep`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-30/src/main.rs:implementation}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-29/src/main.rs:implementation}}
 ```
 
 </Listing>

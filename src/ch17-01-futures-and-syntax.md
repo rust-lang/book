@@ -74,7 +74,7 @@ finishes that whole process first.
 <Listing number="17-1" file-name="src/main.rs" caption="Defining an async function to get the title element from an HTML page">
 
 ```rust
-{{#include ../listings/ch17-async-await/listing-17-01/src/main.rs:all}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-01/src/main.rs:all}}
 ```
 
 </Listing>
@@ -129,7 +129,7 @@ function calls together with `await` between them, as shown in Listing 17-2:
 <Listing number="17-2" file-name="src/main.rs" caption="Chaining with the `await` keyword">
 
 ```rust
-{{#include ../listings/ch17-async-await/listing-17-02/src/main.rs:chaining}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-02/src/main.rs:chaining}}
 ```
 
 </Listing>
@@ -150,7 +150,9 @@ page_title` in Listing 17-1, it is equivalent to a non-async function defined
 like this:
 
 ```rust
+# extern crate trpl; // required for mdbook test
 use std::future::Future;
+use trpl::Html;
 
 fn page_title(url: &str) -> impl Future<Output = Option<String>> + '_ {
     async move {
@@ -172,7 +174,7 @@ Let’s walk through each part of the transformed version:
 * All of the code called in the body of the original function is wrapped in an
   `async move` block. Remember that blocks are expressions. This whole block is
   the expression returned from the function.
-* This async block produces a value with the type `Option<String>`, as described 
+* This async block produces a value with the type `Option<String>`, as described
   above. That value matches the `Output` type in the return type. This is just
   like other blocks you have seen.
 * The new function body is an `async move` block because of how it uses the
@@ -195,8 +197,8 @@ account for whether the page had a `<title>`.
 
 <Listing number="17-3" file-name="src/main.rs" caption="Calling the `page_title` function from `main` with a user-supplied argument">
 
-```rust
-{{#include ../listings/ch17-async-await/listing-17-03/src/main.rs:main}}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-03/src/main.rs:main}}
 ```
 
 </Listing>
@@ -249,7 +251,9 @@ await the result of calling `page_title`, as in Listing 17-4.
 
 <Listing number="17-4" caption="Awaiting an async block with `trpl::run`" file-name="src/main.rs">
 
-```rust
+<!-- should_panic,noplayground because mdbook does not pass args -->
+
+```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:run}}
 ```
 
@@ -275,6 +279,7 @@ it is ready to try advancing this one again. This is an invisible state machine,
 as if you wrote something like this:
 
 ```rust
+# extern crate trpl; // required for mdbook test
 enum PageTitleFuture<'a> {
     GetAwaitPoint {
         url: &'a str,
@@ -315,7 +320,9 @@ and racing it.
 
 <Listing number="17-5" caption="" file-name="src/main.rs">
 
-```rust
+<!-- should_panic,noplayground because mdbook does not pass args -->
+
+```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-05/src/main.rs:all}}
 ```
 

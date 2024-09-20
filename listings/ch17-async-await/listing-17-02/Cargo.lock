@@ -31,6 +31,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "async_await"
+version = "0.1.0"
+dependencies = [
+ "trpl",
+]
+
+[[package]]
 name = "atomic-waker"
 version = "1.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -578,13 +585,6 @@ name = "linux-raw-sys"
 version = "0.4.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "78b3ae25bc7c8c38cec158d1f2757ee79e9b3740fbc7ccf0e59e4b08d793fa89"
-
-[[package]]
-name = "listing-scraper-01"
-version = "0.1.0"
-dependencies = [
- "trpl",
-]
 
 [[package]]
 name = "lock_api"

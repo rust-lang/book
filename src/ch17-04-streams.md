@@ -25,7 +25,7 @@ method, and then awaiting the output, as in Listing 17-30.
 <Listing number="17-30" caption="Creating a stream from an iterator and printing its values" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-31/src/main.rs:stream}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-30/src/main.rs:stream}}
 ```
 
 </Listing>
@@ -40,7 +40,7 @@ can see in the output, it reports that there is no `next` method available.
 
 <!-- TODO: fix up the path here? -->
 <!-- manual-regeneration
-cd listings/chapter-17-async-await/listing-17-31
+cd listings/chapter-17-async-await/listing-17-30
 cargo build
 copy only the error output
 -->
@@ -52,7 +52,7 @@ error[E0599]: no method named `next` found for struct `Iter` in the current scop
 8 |         while let Some(value) = stream.next().await {
   |                                        ^^^^
   |
-  = note: the full type name has been written to '/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-31/target/debug/deps/async_await-bbd5bb8f6851cb5f.long-type-18426562901668632191.txt'
+  = note: the full type name has been written to '/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-30/target/debug/deps/async_await-bbd5bb8f6851cb5f.long-type-18426562901668632191.txt'
   = note: consider using `--verbose` to print the full type name to the console
   = help: items from traits can only be used if the trait is in scope
 help: the following traits which provide `next` are implemented but not in scope; perhaps you want to import one of them
@@ -94,7 +94,7 @@ Listing 17-31.
 <Listing number="17-31" caption="Successfully using an iterator as the basis for a stream" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-32/src/main.rs}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-31/src/main.rs}}
 ```
 
 </Listing>
@@ -107,7 +107,7 @@ method to filter out everything but multiples of three and five.
 <Listing number="17-32" caption="Filtering a `Stream` with the `StreamExt::filter` method" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-33/src/main.rs}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-32/src/main.rs}}
 ```
 
 </Listing>
@@ -140,7 +140,7 @@ a `while let` loop to print all the messages from the stream.
 <Listing number="17-33" caption="Using the `rx` receiver as a `ReceiverStream`" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-34/src/main.rs:all}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-33/src/main.rs:all}}
 ```
 
 </Listing>
@@ -181,7 +181,7 @@ be polled.
 <Listing number="17-34" caption="Using the `StreamExt::timeout` method to set a time limit on the items in a stream" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-35/src/main.rs:timeout}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-34/src/main.rs:timeout}}
 ```
 
 </Listing>
@@ -198,7 +198,7 @@ for 200 milliseconds, this should affect half of the messages.
 <Listing number="17-35" caption="Sending messages through `tx` with an async delay without making `get_messages` an async function" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-36/src/main.rs:messages}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-35/src/main.rs:messages}}
 ```
 
 </Listing>
@@ -230,7 +230,7 @@ Now our code has a much more interesting result! Between every other pair of
 messages, we see an error reported: `Problem: Elapsed(())`.
 
 <!-- manual-regeneration
-cd listings/listing-17-36
+cd listings/listing-17-35
 cargo run
 copy only the program output, *not* the compiler output
 -->
@@ -285,7 +285,7 @@ the infinite loop.
 <Listing number="17-36" caption="Creating a stream with a counter that will be emitted once every millisecond" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-37/src/main.rs:intervals}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-36/src/main.rs:intervals}}
 ```
 
 </Listing>
@@ -303,7 +303,7 @@ Finally, we loop over that combined stream instead of over `messages` (Listing
 <Listing number="17-37" caption="Attempting to merge streams of messages and intervals" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-38/src/main.rs:main}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-37/src/main.rs:main}}
 ```
 
 </Listing>
@@ -333,7 +333,7 @@ stream, and pin it so that it is safe to do so.
 <Listing number="17-38" caption="Aligning the types of the the `intervals` stream with the type of the `messages` stream" file-name="src/main.rs">
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-39/src/main.rs:main}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-38/src/main.rs:main}}
 ```
 
 </Listing>
@@ -375,7 +375,7 @@ output, not just one stream or the other.
 <Listing number="17-39" caption="Using `throttle` and `take` to manage the merged streams" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-40/src/main.rs:throttle}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-39/src/main.rs:throttle}}
 ```
 
 </Listing>
@@ -393,7 +393,7 @@ never produce those interval messages in the first place! This is the inherent
 performance characteristics.
 
 <!-- manual-regeneration
-cd listings/listing-17-40
+cd listings/listing-17-39
 cargo run
 copy and paste only the program output
 -->
@@ -434,7 +434,7 @@ you have a strategy.
 <Listing number="17-40" caption="Handling errors and shutting down the loops">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-41/src/main.rs:errors}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-40/src/main.rs:errors}}
 ```
 
 </Listing>

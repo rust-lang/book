@@ -73,7 +73,8 @@ $ start chrome.exe .\book\index.html            # Windows (Cmd)
 To run the tests:
 
 ```bash
-$ mdbook test
+$ cd packages/trpl
+$ mdbook test --library-path packages/trpl/target/debug/deps
 ```
 
 ## Contributing

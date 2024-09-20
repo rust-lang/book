@@ -103,27 +103,10 @@ common example of this kind of mix in real-world Rust code.
 
 <!-- TODO: extract into a listing file! -->
 
-<Listing number="17-TODO" caption="Sending messages with blocking code in a thread and awaiting the messages in an async block" file-name="src/main.rs">
+<Listing number="17-42" caption="Sending messages with blocking code in a thread and awaiting the messages in an async block" file-name="src/main.rs">
 
 ```rust
-use std::thread;
-
-fn main() {
-    let (tx, mut rx) = trpl::channel();
-
-    thread::spawn(move || {
-        for i in 1..11 {
-            tx.send(i).unwrap();
-            thread::sleep(Duration::from_secs(1));
-        }
-    });
-
-    trpl::run(async {
-        while let Some(message) = rx.recv().await {
-            println!("{message}");
-        }
-    });
-}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-42/src/main.rs}}
 ```
 
 </Listing>

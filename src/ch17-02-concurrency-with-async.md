@@ -223,7 +223,7 @@ between them, as shown in Listing 17-10:
 <Listing number="17-10" caption="Sending and receiving multiple messages over the async channel and sleeping with an `.await` between each message" file-name="src/main.rs">
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-11/src/main.rs:many-messages}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:many-messages}}
 ```
 
 </Listing>
@@ -288,7 +288,7 @@ trying *not* to do.
 <Listing number="17-11" caption="Separating `send` and `recv` into their own `async` blocks and awaiting the futures for those blocks" file-name="src/main.rs">
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-12/src/main.rs:futures}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-11/src/main.rs:futures}}
 ```
 
 </Listing>
@@ -333,7 +333,7 @@ it shuts down gracefully after the last message is sent and received.
 <Listing number="17-12" caption="A working example of sending and receiving messages between futures which correctly shuts down when complete" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-13/src/main.rs:with-move}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-12/src/main.rs:with-move}}
 ```
 
 </Listing>
@@ -355,7 +355,7 @@ end up back in the same infinite loop we started out in. Finally, we switch from
 <Listing number="17-13" caption="Using multiple producers with async blocks" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-14/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-13/src/main.rs:here}}
 ```
 
 </Listing>
