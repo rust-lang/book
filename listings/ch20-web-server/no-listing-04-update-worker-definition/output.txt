@@ -7,7 +7,7 @@ error[E0599]: no method named `join` found for enum `Option` in the current scop
    |                           ^^^^ method not found in `Option<JoinHandle<()>>`
    |
 note: the method `join` exists on the type `JoinHandle<()>`
-  --> /rustc/129f3b9964af4d4a709d1383930ade12dfe7c081/library/std/src/thread/mod.rs:1718:5
+  --> /rustc/eeb90cda1969383f56a2637cbd3037bdf598841c/library/std/src/thread/mod.rs:1778:5
 help: consider using `Option::expect` to unwrap the `JoinHandle<()>` value, panicking if the value is an `Option::None`
    |
 52 |             worker.thread.expect("REASON").join().unwrap();

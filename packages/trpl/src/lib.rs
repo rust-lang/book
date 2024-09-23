@@ -63,7 +63,7 @@ pub use tokio_stream::{
 ///
 /// - Not *that* far off from what Tokio itself does under the hood in its own
 ///   `tokio::main` macro for supporting `async fn main`.
-pub fn block_on<F: Future>(future: F) -> F::Output {
+pub fn run<F: Future>(future: F) -> F::Output {
     let rt = Runtime::new().unwrap();
     rt.block_on(future)
 }
@@ -95,5 +95,56 @@ where
     match future::select(f1, f2).await {
         Either::Left((a, _f2)) => Either::Left(a),
         Either::Right((b, _f1)) => Either::Right(b),
+    }
+}
+
+/// Fetch data from a URL. For more convenient use in _The Rust Programming
+/// Language_, panics instead of returning a [`Result`] if the request fails.
+pub async fn get(url: &str) -> Response {
+    Response(reqwest::get(url).await.unwrap())
+}
+
+/// A thin wrapper around [`reqwest::Response`] to make the demos in _The Rust
+/// Programming Language_ substantially nicer to use.
+pub struct Response(reqwest::Response);
+
+impl Response {
+    /// Get the full response text.
+    ///
+    /// If the response cannot be deserialized, this panics instead of returning
+    /// a [`Result`] (for convenience in the demo).
+    pub async fn text(self) -> String {
+        self.0.text().await.unwrap()
+    }
+}
+
+/// A thin wrapper around [`scraper::Html`] to make the demos in _The Rust
+/// Programming Language_ substantially nicer to use.
+pub struct Html {
+    inner: scraper::Html,
+}
+
+impl Html {
+    /// Parse an HTML document from a string.
+    ///
+    /// This is just a thin wrapper around `scraper::Html::parse_document` to
+    /// keep the exported API surface simpler.
+    pub fn parse(source: &str) -> Html {
+        Html {
+            inner: scraper::Html::parse_document(source),
+        }
+    }
+
+    /// Get the first item in the document matching a string selector. Returns
+    /// Some()
+    ///
+    /// If the selector is not a valid CSS selector, panics rather than
+    /// returning a [`Result`] for convenience.
+    pub fn select_first<'a>(
+        &'a self,
+        selector: &'a str,
+    ) -> Option<scraper::ElementRef<'a>> {
+        let selector = scraper::Selector::parse(selector).unwrap();
+        self.inner.select(&selector).nth(0)
     }
 }

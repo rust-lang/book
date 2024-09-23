@@ -1,10 +1,17 @@
-// ANCHOR: all
+extern crate trpl; // required for mdbook test
+
 fn main() {
-    hello("async");
+    // TODO: we'll add this next!
 }
 
-async fn hello(name: &str) {
-    let greeting = format!("Hello, {name}!");
-    println!("{greeting}");
+// ANCHOR: all
+use trpl::Html;
+
+async fn page_title(url: &str) -> Option<String> {
+    let response = trpl::get(url).await;
+    let response_text = response.text().await;
+    Html::parse(&response_text)
+        .select_first("title")
+        .map(|title_element| title_element.inner_html())
 }
 // ANCHOR_END: all

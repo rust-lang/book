@@ -1,15 +1,37 @@
 extern crate trpl; // required for mdbook test
 
-fn main() {
-    trpl::block_on(async {
-        // ANCHOR: stream
-        let values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        let iter = values.iter().map(|n| n * 2);
-        let mut stream = trpl::stream_from_iter(iter);
+use std::{future::Future, time::Duration};
 
-        while let Some(value) = stream.next().await {
-            println!("The value was: {value}");
+// ANCHOR: implementation
+use trpl::Either;
+
+// --snip--
+// ANCHOR: implementation
+
+fn main() {
+    trpl::run(async {
+        let slow = async {
+            trpl::sleep(Duration::from_secs(5)).await;
+            "Finally finished"
+        };
+
+        match timeout(slow, Duration::from_secs(2)).await {
+            Ok(message) => println!("Succeeded with '{message}'"),
+            Err(duration) => {
+                println!("Failed after {} seconds", duration.as_secs())
+            }
         }
-        // ANCHOR_END: stream
     });
+}
+
+async fn timeout<F: Future>(
+    future_to_try: F,
+    max_time: Duration,
+) -> Result<F::Output, Duration> {
+    // ANCHOR: implementation
+    match trpl::race(future_to_try, trpl::sleep(max_time)).await {
+        Either::Left(output) => Ok(output),
+        Either::Right(_) => Err(max_time),
+    }
+    // ANCHOR_END: implementation
 }

@@ -7,7 +7,7 @@ use std::{
 };
 
 fn main() {
-    trpl::block_on(async {
+    trpl::run(async {
         let (tx, mut rx) = trpl::channel();
 
         let tx1 = tx.clone();
@@ -46,8 +46,8 @@ fn main() {
         });
 
         // ANCHOR: here
-        let futures: Vec<Pin<&mut dyn Future<Output = ()>>> =
-            vec![tx1_fut, rx_fut, tx_fut];
+        let futures: Vec<Pin<Box<dyn Future<Output = ()>>>> =
+            vec![Box::pin(tx1_fut), Box::pin(rx_fut), Box::pin(tx_fut)];
         // ANCHOR_END: here
 
         trpl::join_all(futures).await;

@@ -5,16 +5,15 @@ use std::{pin::pin, time::Duration};
 use trpl::{ReceiverStream, Stream, StreamExt};
 
 fn main() {
-    trpl::block_on(async {
-        // ANCHOR: throttle
+    trpl::run(async {
+        // ANCHOR: main
         let messages = get_messages().timeout(Duration::from_millis(200));
         let intervals = get_intervals()
-            .map(|count| format!("Interval #{count}"))
-            .throttle(Duration::from_millis(100))
+            .map(|count| format!("Interval: {count}"))
             .timeout(Duration::from_secs(10));
-        let merged = messages.merge(intervals).take(20);
+        let merged = messages.merge(intervals);
         let mut stream = pin!(merged);
-        // ANCHOR_END: throttle
+        // ANCHOR_END: main
 
         while let Some(result) = stream.next().await {
             match result {

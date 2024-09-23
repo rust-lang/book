@@ -143,8 +143,8 @@ connection, we now call the new `handle_connection` function and pass the
 `stream` to it.
 
 In the `handle_connection` function, we create a new `BufReader` instance that
-wraps a mutable reference to the `stream`. `BufReader` adds buffering by
-managing calls to the `std::io::Read` trait methods for us.
+wraps a reference to the `stream`. `BufReader` adds buffering by managing calls
+to the `std::io::Read` trait methods for us.
 
 We create a variable named `http_request` to collect the lines of the request
 the browser sends to our server. We indicate that we want to collect these

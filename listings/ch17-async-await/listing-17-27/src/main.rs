@@ -1,12 +1,13 @@
 extern crate trpl; // required for mdbook test
 
-use std::{future::Future, time::Duration};
+use std::time::Duration;
 
 fn main() {
-    trpl::block_on(async {
+    trpl::run(async {
+        // ANCHOR: here
         let slow = async {
-            trpl::sleep(Duration::from_secs(5)).await;
-            "Finally finished"
+            trpl::sleep(Duration::from_millis(100)).await;
+            "I finished!"
         };
 
         match timeout(slow, Duration::from_millis(10)).await {
@@ -15,14 +16,6 @@ fn main() {
                 println!("Failed after {} seconds", duration.as_secs())
             }
         }
+        // ANCHOR_END: here
     });
 }
-
-// ANCHOR: declaration
-async fn timeout<F: Future>(
-    future: F,
-    max_time: Duration,
-) -> Result<F::Output, Duration> {
-    // Here is where our implementation will go!
-}
-// ANCHOR_END: declaration

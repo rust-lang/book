@@ -1,11 +1,11 @@
 extern crate trpl; // required for mdbook test
 
-use std::{pin::pin, thread, time::Duration};
+use std::{pin::pin, time::Duration};
 
 use trpl::{ReceiverStream, Stream, StreamExt};
 
 fn main() {
-    trpl::block_on(async {
+    trpl::run(async {
         let messages = get_messages().timeout(Duration::from_millis(200));
         let intervals = get_intervals()
             .map(|count| format!("Interval #{count}"))
@@ -23,6 +23,7 @@ fn main() {
     });
 }
 
+// ANCHOR: errors
 fn get_messages() -> impl Stream<Item = String> {
     let (tx, rx) = trpl::channel();
 
@@ -43,16 +44,13 @@ fn get_messages() -> impl Stream<Item = String> {
     ReceiverStream::new(rx)
 }
 
-// ANCHOR: threads
 fn get_intervals() -> impl Stream<Item = u32> {
     let (tx, rx) = trpl::channel();
 
-    // This is *not* `trpl::spawn` but `std::thread::spawn`!
-    thread::spawn(move || {
+    trpl::spawn_task(async move {
         let mut count = 0;
         loop {
-            // Likewise, this is *not* `trpl::sleep` but `std::thread::sleep`!
-            thread::sleep(Duration::from_millis(1));
+            trpl::sleep(Duration::from_millis(1)).await;
             count += 1;
 
             if let Err(send_error) = tx.send(count) {
@@ -64,4 +62,4 @@ fn get_intervals() -> impl Stream<Item = u32> {
 
     ReceiverStream::new(rx)
 }
-// ANCHOR_END: threads
+// ANCHOR_END: errors

@@ -10,19 +10,19 @@ processes to complete.
 The video export will use as much CPU and GPU power as it can. If you only had
 one CPU core, and your operating system never paused that export until it
 completed, you could not do anything else on your computer while it was running.
-That would be a pretty frustrating experience, though. Instead, your computer
-can (and does!) invisibly interrupt the export often enough to let you get other
-work done along the way.
+That would be a pretty frustrating experience, though. Instead, your computer’s
+operating system can—and does!—invisibly interrupt the export often enough to
+let you get other work done along the way.
 
-The file download is different. It does not take up very much CPU time. The CPU
-needs to wait on data to arrive from the network. While you can start reading
-the data once some of it arrives, it might take a while for the rest to arrive.
-Even once the data has all arrived, videos can be quite large, so it might take
-some time to load all the data from the network. Maybe it only takes a second or
-two—but that is a very long time for a modern processor, which can do billions
-of operations every second. It would be nice to be able to put the CPU to use
-for other work while waiting for the network call to finish—so, again, your
-computer will once again invisibly interrupt your program so other things can
+The file download is different. It does not take up very much CPU time. Instead,
+the CPU needs to wait on data to arrive from the network. While you can start
+reading the data once some of it is present, it might take a while for the rest
+to show up. Even once the data is all present, a video can be quite large, so it
+might take some time to load it all. Maybe it only takes a second or two—but
+that is a very long time for a modern processor, which can do billions of
+operations every second. It would be nice to be able to put the CPU to use for
+other work while waiting for the network call to finish—so, again, your
+operating system will invisibly interrupt your program so other things can
 happen while the network operation is still ongoing.
 
 > Note: The video export is the kind of operation which is often described as
@@ -33,8 +33,9 @@ happen while the network operation is still ongoing.
 > *input and output*. It can only go as fast as the data can be sent across the
 > network.
 
-In both of these examples, the concurrency only happens at the level of a whole
-program. The operating system interrupts one program to let other
+In both of these examples, the operating system’s invisible interrupts provide a
+form of concurrency. That concurrency only happens at the level of a whole
+program, though: the operating system interrupts one program to let other
 programs get work done. In many cases, since we understand our programs at a
 much more granular level than the operating system does, we can spot lots of
 opportunities for concurrency that the operating system cannot see.
@@ -53,9 +54,10 @@ data that they are processing is completely ready.
 > *non*-blocking.
 
 We could avoid blocking our main thread by spawning a dedicated thread to
-download each file. But it would be nicer if the call were not blocking in the
-first place. It would also be nice if we could write in the same direct style
-we use in blocking code. Something like this:
+download each file. However, we would eventually find that the overhead of those
+threads was a problem. It would also be nicer if the call were not blocking in
+the first place. Last but not least, it would be better if we could write in the
+same direct style we use in blocking code. Something like this:
 
 ```rust,ignore,does_not_compile
 let data = fetch_data_from(url).await;
@@ -72,12 +74,14 @@ In the previous chapter we treated parallelism and concurrency as mostly
 interchangeable. Now we need to distinguish between them more precisely, because
 the differences will show up as we start working.
 
-Think about working on a software project as a team.
+Consider the different ways a team could split up work on a software project. We
+could assign a single individual multiple tasks, or we could assign one task per
+team member, or we could do a mix of both approaches.
 
 When an individual works on several different tasks before any of them is
 complete, this is *concurrency*. Maybe you have two different projects checked
 out on your computer, and when you get bored or stuck on one project, you switch
-to the other. You are just one person, and you cannot make progress on both
+to the other. You are just one person, so you cannot make progress on both tasks
 tasks at the exact same time—but you can multi-task, making progress on multiple
 tasks by switching between them.
 
@@ -106,15 +110,14 @@ tasks. Maybe you *thought* the task that one person was working on was totally
 independent from everyone else’s work, but it actually needs something finished
 by another person on the team. Some of the work could be done in parallel, but
 some of it was actually *serial*: it could only happen in a series, one thing
-after the other. Likewise, you might realize that one of the tasks you were
-working on needs the result from another of your tasks. Now your concurrent work
-has also become serial.
+after the other. Likewise, you might realize that one of your own tasks depends
+on another of your tasks. Now your concurrent work has also become serial.
 
-Parallelism and concurrency can intersect with each other, too. For example, if
-it turns out your coworker is waiting on one of your projects to finish, you
-might need to focus on that project and not give any time to your other task
-until it is done. In that case, you and your coworker are no longer able to work
-in parallel *and* you are no longer able to work concurrently.
+Parallelism and concurrency can intersect with each other, too. If you learn
+that a colleague is stuck until you finish one of your tasks, you will probably
+focus all your efforts on that task to “unblock” your colleague. You and your
+coworker are no longer able to work in parallel, and you are also no longer able
+to work concurrently on your own tasks.
 
 The same basic dynamics come into play with software and hardware. On a machine
 with a single CPU core, the CPU can only do one operation at a time, but it can
@@ -127,8 +130,8 @@ time.
 
 When working with async in Rust, we are always dealing with concurrency.
 Depending on the hardware, the operating system, and the async runtime we are
-using—more on async runtimes shortly!—that concurrency may or may not also use
-parallelism under the hood.
+using—more on async runtimes shortly!—that concurrency may also use parallelism
+under the hood.
 
 Now, let’s dive into how async programming in Rust actually works! In the rest
 of this chapter, we will:

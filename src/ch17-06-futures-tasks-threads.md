@@ -12,8 +12,8 @@ However, they are not without their tradeoffs. On many operating systems, they
 use a fair bit of memory for each thread, and they come with some overhead for
 starting up and shutting down. Threads are also only an option when your
 operating system and hardware support them! Unlike mainstream desktop and mobile
-operating systems, many embedded operating systems, like those used on some
-microcontrollers, do not have OS-level threads at all.
+computers, some embedded systems do not have an OS at all, so they also do not
+have threads!
 
 The async model provides a different—and ultimately complementary—set of
 tradeoffs. In the async model, concurrent operations do not require their own
@@ -24,15 +24,15 @@ is managed by library-level code: the runtime.
 
 In the previous section, we saw that we could build a `Stream` by using an async
 channel and spawning an async task which we could call from synchronous code. We
-could do the exact same thing with a thread! In Listing 17-39, we used
-`trpl::spawn_task` and `trpl::sleep`. In Listing 17-40, we replace those with
+could do the exact same thing with a thread! In Listing 17-40, we used
+`trpl::spawn_task` and `trpl::sleep`. In Listing 17-41, we replace those with
 the `thread::spawn` and `thread::sleep` APIs from the standard library in the
 `get_intervals` function.
 
-<Listing number="17-40" caption="Using the `std::thread` APIs instead of the async `trpl` APIs for the `get_intervals` function" file-name="src/main.rs">
+<Listing number="17-41" caption="Using the `std::thread` APIs instead of the async `trpl` APIs for the `get_intervals` function" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-40/src/main.rs:threads}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-41/src/main.rs:threads}}
 ```
 
 </Listing>
@@ -55,21 +55,20 @@ possible both *between* and *within* tasks. In that regard, tasks are kind of
 like lightweight, runtime-managed threads with added capabilities that come from
 being managed by a runtime instead of by the operating system. Futures are an
 even more granular unit of concurrency, where each future may represent a tree
-of other futures. <!-- TODO: here, somehow? What *is* the right mental model?
--->
+of other futures. That is, the runtime—specifically, its executor—manages tasks,
+and tasks manage futures.
 
 However, this does not mean that async tasks are always better than threads, any
 more than that threads are always better than tasks.
 
 On the one hand, concurrency with threads is in some ways a simpler programming
-model than concurrency with `async`. Threads are somewhat “fire and forget”, and
-they only allow interaction with the rest of the program via tools like channels
-or their final result via `join`. On the other hand, they have no native
-equivalent to a future, so they simply run to completion, without interruption
-except by the operating system itself. Threads also have no mechanisms for
-cancellation—a subject we have not covered in depth in this chapter, but which
-is implicit in the fact that whenever we ended a future, its state got cleaned
-up correctly.
+model than concurrency with `async`. Threads are somewhat “fire and forget,”
+they have no native equivalent to a future, so they simply run to completion,
+without interruption except by the operating system itself. That is, they have
+no *intra-task concurrency* like futures can. Threads in Rust also have no
+mechanisms for cancellation—a subject we have not covered in depth in this
+chapter, but which is implicit in the fact that whenever we ended a future, its
+state got cleaned up correctly.
 
 These limitations make threads harder to compose than futures. It is much more
 difficult, for example, to build something like the `timeout` we built in
@@ -83,10 +82,11 @@ and how to group them. And it turns out that threads and tasks often work very
 well together, because tasks can (at least in some runtimes) be moved around
 between threads. We have not mentioned it up until now, but under the hood the
 `Runtime` we have been using, including the `spawn_blocking` and `spawn_task`
-functions, are multithreaded by default! Many runtimes can transparently move
-tasks around between threads based on the current utilization of the threads, to
-hopefully improve the overall performance of the system. To build that actually
-requires threads *and* tasks, and therefore futures.
+functions, is multithreaded by default! Many runtimes use an approach called
+*work stealing* to transparently move tasks around between threads based on the
+current utilization of the threads, with the aim of improving the overall
+performance of the system. To build that actually requires threads *and* tasks,
+and therefore futures.
 
 As a default way of thinking about which to use when:
 
@@ -98,7 +98,30 @@ As a default way of thinking about which to use when:
 
 And if you need some mix of parallelism and concurrency, you do not have to
 choose between threads and async. You can use them together freely, letting each
-one serve the part it is best at.
+one serve the part it is best at. For example, Listing 17-TODO shows a fairly
+common example of this kind of mix in real-world Rust code.
+
+<!-- TODO: extract into a listing file! -->
+
+<Listing number="17-42" caption="Sending messages with blocking code in a thread and awaiting the messages in an async block" file-name="src/main.rs">
+
+```rust
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-42/src/main.rs}}
+```
+
+</Listing>
+
+We begin by creating an async channel. Then we spawn a thread which takes
+ownership of the sender side of the channel. Within the thread, we send the
+numbers 1 through 10, and sleep for a second in between each. Finally, we run a
+future created with an async block passed to `trpl::run` just like we have
+throughout the chapter. In that future, we await those messages, just like in
+the other message-passing examples we have seen.
+
+To return to the examples we opened the chapter with: you could imagine running
+a set of video encoding tasks using a dedicated thread, since video encoding is
+compute bound, but notifying the UI that those operations are done with an async
+channel. Examples of this kind of mix abound!
 
 ## Summary
 
@@ -116,5 +139,5 @@ as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idio
 relate to those you might be familiar with from object-oriented programming.
 
 
-[combining-futures]: ch17-04-more-ways-of-combining-futures.md#building-our-own-async-abstractions
-[streams]: ch17-05-streams.md#composing-streams
+[combining-futures]: ch17-03-more-futures.html#building-our-own-async-abstractions
+[streams]: ch17-04-streams.html#composing-streams

@@ -1,27 +1,15 @@
 extern crate trpl; // required for mdbook test
 
-use std::time::Duration;
-
 fn main() {
-    trpl::block_on(async {
-        // ANCHOR: many-messages
+    trpl::run(async {
+        // ANCHOR: channel
         let (tx, mut rx) = trpl::channel();
 
-        let vals = vec![
-            String::from("hi"),
-            String::from("from"),
-            String::from("the"),
-            String::from("future"),
-        ];
+        let val = String::from("hi");
+        tx.send(val).unwrap();
 
-        for val in vals {
-            tx.send(val).unwrap();
-            trpl::sleep(Duration::from_millis(500)).await;
-        }
-
-        while let Some(value) = rx.recv().await {
-            println!("received '{value}'");
-        }
-        // ANCHOR_END: many-messages
+        let received = rx.recv().await.unwrap();
+        println!("Got: {received}");
+        // ANCHOR_END: channel
     });
 }
