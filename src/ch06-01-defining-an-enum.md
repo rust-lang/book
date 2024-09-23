@@ -56,7 +56,7 @@ And we can call this function with either variant:
 Using enums has even more advantages. Thinking more about our IP address type,
 at the moment we don’t have a way to store the actual IP address *data*; we
 only know what *kind* it is. Given that you just learned about structs in
-Chapter 5, you might be tempted to tackle this problem with structs as shown in
+[Chapter 5][structs], you might be tempted to tackle this problem with structs as shown in
 Listing 6-1.
 
 ```rust
@@ -135,7 +135,7 @@ what you might come up with.
 Note that even though the standard library contains a definition for `IpAddr`,
 we can still create and use our own definition without conflict because we
 haven’t brought the standard library’s definition into our scope. We’ll talk
-more about bringing types into scope in Chapter 7.
+more about bringing types into scope in [Chapter 7][scope].
 
 Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants.
@@ -242,7 +242,7 @@ prefix. The `Option<T>` enum is still just a regular enum, and `Some(T)` and
 `None` are still variants of type `Option<T>`.
 
 The `<T>` syntax is a feature of Rust we haven’t talked about yet. It’s a
-generic type parameter, and we’ll cover generics in more detail in Chapter 10.
+generic type parameter, and we’ll cover generics in more detail in [Chapter 10][generics].
 For now, all you need to know is that `<T>` means that the `Some` variant of
 the `Option` enum can hold one piece of data of any type, and that each
 concrete type that gets used in place of `T` makes the overall `Option<T>` type
@@ -322,3 +322,7 @@ matching value.
 [IpAddr]: ../std/net/enum.IpAddr.html
 [option]: ../std/option/enum.Option.html
 [docs]: ../std/option/enum.Option.html
+[structs]: ch05-01-defining-structs.html
+[scope]: ch07-04-bringing-paths-into-scope-with-the-use-keyword.html
+[generics]: ch10-00-generics.html
+
