@@ -325,11 +325,11 @@ to poll first. Regardless of whether the implementation of race we are using is
 fair, though, *one* of the futures will run up to the first `.await` in its body
 before another task can start.
 
-Recall from [“What Are Futures?”][futures] that at each await point, Rust gives
-a runtime a chance to pause the task and switch to another one if the future
-being awaited is not ready. The inverse is also true: Rust *only* pauses async
-blocks and hands control back to a runtime at an await point. Everything between
-await points is synchronous.
+Recall from [Our First Async Program][async-program] that at each await point,
+Rust gives a runtime a chance to pause the task and switch to another one if the
+future being awaited is not ready. The inverse is also true: Rust *only* pauses
+async blocks and hands control back to a runtime at an await point. Everything
+between await points is synchronous.
 
 That means if you do a bunch of work in an async block without an await point,
 that future will block any other futures from making progress. You may sometimes
@@ -597,5 +597,4 @@ to consider first, though:
 
 [collections]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: ch12-03-improving-error-handling-and-modularity.html
-[futures]: ch17-01-futures-and-syntax.html#what-are-futures
 [async-program]: ch17-01-futures-and-syntax.html#our-first-async-program

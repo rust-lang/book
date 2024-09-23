@@ -152,7 +152,7 @@ what we saw with threads. That is because the `trpl::join` function is *fair*,
 meaning it checks each future equally often, alternating between them, and never
 lets one race ahead if the other is ready. With threads, the operating system
 decides which thread to check and how long to let it run. With async Rust, the
-runtime decides which taks to check. (In practice, the details get complicated
+runtime decides which task to check. (In practice, the details get complicated
 because an async runtime might use operating system threads under the hood as
 part of how it manages concurrency, so guaranteeing fairness can be more work
 for a runtime—but it is still possible!) Runtimes do not have to guarantee
@@ -382,4 +382,4 @@ received 'you'
 This is a good start, but it limits us to just a handful of futures: two with
 `join`, or three with `join3`. Let’s see how we might work with more futures.
 
-[streams]: /ch17-05-streams.md
+[streams]: ch17-05-streams.html

@@ -139,5 +139,5 @@ as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idio
 relate to those you might be familiar with from object-oriented programming.
 
 
-[combining-futures]: ch17-04-more-ways-of-combining-futures.md#building-our-own-async-abstractions
-[streams]: ch17-05-streams.md#composing-streams
+[combining-futures]: ch17-03-more-futures.html#building-our-own-async-abstractions
+[streams]: ch17-04-streams.html#composing-streams

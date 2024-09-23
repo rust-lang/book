@@ -11,9 +11,9 @@ still leaving the *really* deep dive for other documentation!
 
 ### Future
 
-Back in [Async Functions][async-functions], we noted that `Future` is a trait.
-Let’s start by taking a closer look at how it works. Here is how Rust defines
-a `Future`:
+Back in [Futures and the Async Syntax][futures-syntax], we noted that `Future`
+is a trait. Let’s start by taking a closer look at how it works. Here is how
+Rust defines a `Future`:
 
 ```rust
 use std::pin::Pin;
@@ -199,7 +199,7 @@ starts to explain the error message we saw above—but that was in terms of
 `Unpin`, not `Pin`. So what exactly are `Pin` and `Unpin`, how do they relate,
 and why does `Future` need `self` to be in a `Pin` type to call `poll`?
 
-In [“What Are Futures”][what-are-futures], we described how a series of await
+In [Our First Async Program][first-async], we described how a series of await
 points in a future get compiled into a state machine—and noted how the compiler
 helps make sure that state machine follows all of Rust’s normal rules around
 safety, including borrowing and ownership. To make that work, Rust looks at what
@@ -379,10 +379,12 @@ even when you need to write your own streaming data type, you *only* have to
 implement `Stream`, and then anyone who uses your data type can use `StreamExt`
 and its methods with it automatically.
 
-[counting]: /ch17-02-concurrency-with-async.md
+[futures-syntax]: ch17-01-futures-and-syntax.html
+[counting]: ch17-02-concurrency-with-async.html
 [async-book]: https://rust-lang.github.io/async-book/
 [under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
 [pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
+[first-async]: ch17-01-futures-and-syntax.html#our-first-async-program
 
 That’s all we’re going to cover for the lower-level details on these traits. To
 wrap up, let’s consider how futures (including streams), tasks, and threads all
