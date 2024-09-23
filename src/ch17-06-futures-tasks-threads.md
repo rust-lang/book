@@ -1,4 +1,4 @@
-# Futures, Tasks, and Threads
+## Futures, Tasks, and Threads
 
 As we saw in the previous chapter, threads provide one approach to concurrency.
 We have seen another approach to concurrency in this chapter, using async with
@@ -100,8 +100,6 @@ And if you need some mix of parallelism and concurrency, you do not have to
 choose between threads and async. You can use them together freely, letting each
 one serve the part it is best at. For example, Listing 17-TODO shows a fairly
 common example of this kind of mix in real-world Rust code.
-
-<!-- TODO: extract into a listing file! -->
 
 <Listing number="17-42" caption="Sending messages with blocking code in a thread and awaiting the messages in an async block" file-name="src/main.rs">
 

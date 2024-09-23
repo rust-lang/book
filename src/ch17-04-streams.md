@@ -88,13 +88,13 @@ method and also many other utility methods like those from `Iterator`. We will
 return to the `Stream` and `StreamExt` traits in a bit more detail at the end of
 the chapter. For now, this is enough to let us keep moving.
 
-All we need to do here is add a `use` statement for `trpl::StreamExt`, as in
-Listing 17-31.
+All we need to do is add a `use` statement for `trpl::StreamExt`, as in Listing
+17-31.
 
 <Listing number="17-31" caption="Successfully using an iterator as the basis for a stream" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-31/src/main.rs}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-31/src/main.rs:all}}
 ```
 
 </Listing>
@@ -107,7 +107,7 @@ method to filter out everything but multiples of three and five.
 <Listing number="17-32" caption="Filtering a `Stream` with the `StreamExt::filter` method" file-name="src/main.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-32/src/main.rs}}
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-32/src/main.rs:all}}
 ```
 
 </Listing>
@@ -439,8 +439,8 @@ you have a strategy.
 
 </Listing>
 
-That is a good note to turn to our final section and wrap up this walk through
-async in Rust, by discussing how futures (including streams), tasks, and threads
-relate to each other, and how you can use them together.
+Now that we have seen a bunch of async in practice, let’s take a step back and
+dig into a few of the details of how `Future`, `Stream`, and the other key
+traits which Rust uses to make async work.
 
 [17-02-messages]: ch17-02-concurrency-with-async.html#message-passing

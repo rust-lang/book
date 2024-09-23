@@ -56,14 +56,16 @@ available.
 > becoming ready! Futures which are safe to poll again will say so explicitly in
 > their documentation. This is similar to how `Iterator::next` behaves!
 
-Under the hood, when you call `.await`, Rust compiles that to code which calls
-`poll`, kind of (although not exactly <!-- TODO: describe `IntoFuture`? -->)
-like this:
+Under the hood, when you see code which uses `await`, Rust compiles that to code
+which calls `poll`. If you look back at Listing 17-4, where we printed out the
+page title for a single URL once it resolved, Rust compiles it into something
+kind of (although not exactly) like this:
 
 ```rust,ignore
-match hello("async").poll() {
-    Ready(_) => {
-        // We’re done!
+match page_title(url).poll() {
+    Ready(page_title) => match page_title {
+        Some(title) => println!("The title for {url} was {title}"),
+        None => println!("{url} had no title"),
     }
     Pending => {
         // But what goes here?
@@ -76,11 +78,12 @@ again… and again, and again, until the future is finally ready. In other words
 a loop:
 
 ```rust,ignore
-let hello_fut = hello("async");
+let mut page_title_fut = page_title(url);
 loop {
-    match hello_fut.poll() {
-        Ready(_) => {
-            break;
+    match page_title_fut.poll() {
+        Ready(value) => match page_title {
+            Some(title) => println!("The title for {url} was {title}"),
+            None => println!("{url} had no title"),
         }
         Pending => {
             // continue
@@ -89,7 +92,7 @@ loop {
 }
 ```
 
-If Rust compiled it to exactly that code, though, every `.await` would be
+If Rust compiled it to exactly that code, though, every `await` would be
 blocking—exactly the opposite of what we were going for! Instead, Rust needs
 makes sure that the loop can hand off control to something which can pause work
 on this future and work on other futures and check this one again later. That
@@ -119,7 +122,7 @@ When we introduced the idea of pinning, while working on Listing 17-17, we ran
 into a very gnarly error message. Here is the relevant part of it again:
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-18
+cd listings/ch17-async-await/listing-17-17
 cargo build
 copy *only* the final `error` block from the errors
 -->
@@ -156,8 +159,7 @@ directly awaiting a Future requires that the future in question implement the
 further into how the `Future` type actually works, in particular around
 *pinning*.
 
-Let’s look again at the definition of `Future`, focusing specifically on the
-`poll` method’s `self` type:
+Let’s look again at the definition of `Future`:
 
 ```rust
 use std::pin::Pin;
@@ -171,33 +173,38 @@ pub trait Future {
 }
 ```
 
-This is the first time we have seen a method where `self` has a type annotation
-like this. When we specify the type of `self` like this, we are telling Rust
-what type `self` must be to call this method. These kinds of type annotations
-for `self` are similar to those for other function parameters, but with the
-restriction that the type annotation has to be the type on which the method is
-implemented, or a reference or smart pointer to that type, or a `Pin` wrapping a
-reference to that type. We will see more on this syntax in Chapter 18. For now,
-it is enough to know that if we want to poll a future (to check whether it is
-`Pending` or `Ready(Output)`), we need a mutable reference to the type, which is
-wrapped in a `Pin`.
+The `cx` parameter and its `Context` type is interesting, but is beyond the
+scope of this chapter: you generally only need to worry about it when writing a
+custom `Future` implementation.
+
+Instead, we will focus on the type for `self`. This is the first time we have
+seen a method where `self` has a type annotation. A type annotation for `self`
+is similar to type annotations for other function parameters, with two key
+differences. First, when we specify the type of `self` like this, we are telling
+Rust what type `self` must be to call this method. Second, a type annotation on
+`self` cannot be just any type. It is only allowed to be the type on which the
+method is implemented, or a reference or smart pointer to that type, or a `Pin`
+wrapping a reference to that type. We will see more on this syntax in Chapter
+18. For now, it is enough to know that if we want to poll a future (to check
+whether it is `Pending` or `Ready(Output)`), we need a mutable reference to the
+type, which is wrapped in a `Pin`.
 
 `Pin` is a wrapper type. In some ways, it is like the `Box`, `Rc`, and other
 smart pointer types we saw in Chapter 15, which also wrap other types. Unlike
-those, however, `Pin` only works with *other pointer types* like reference (`&`
-and `&mut`) and smart pointers (`Box`, `Rc`, and so on). To be precise, `Pin`
-works with types which implement the `Deref` or `DerefMut` traits, which we
-covered in Chapter 15. You can think of this restriction as equivalent to only
-working with pointers, though, since implementing `Deref` or `DerefMut` means
-your type behaves like a pointer type. `Pin` is also not a pointer itself, and
-it does not have any behavior of its own like the ref counting of `Rc` or `Arc`.
-It is purely a tool the compiler can use to uphold the relevant guarantees, by
+those, however, `Pin` only works with *pointer types* like references (`&` and
+`&mut`) and smart pointers (`Box`, `Rc`, and so on). To be precise, `Pin` works
+with types which implement the `Deref` or `DerefMut` traits, which we covered in
+Chapter 15. You can think of this restriction as equivalent to only working with
+pointers, though, since implementing `Deref` or `DerefMut` means your type
+behaves like a pointer type. `Pin` is also not a pointer itself, and it does not
+have any behavior of its own like the ref counting of `Rc` or `Arc`. It is
+purely a tool the compiler can use to uphold the relevant guarantees, by
 wrapping pointers in the type.
 
-Recalling that `.await` is implemented in terms of calls to `poll`, this
-starts to explain the error message we saw above—but that was in terms of
-`Unpin`, not `Pin`. So what exactly are `Pin` and `Unpin`, how do they relate,
-and why does `Future` need `self` to be in a `Pin` type to call `poll`?
+Recalling that `await` is implemented in terms of calls to `poll`, this starts
+to explain the error message we saw above—but that was in terms of `Unpin`, not
+`Pin`. So what exactly are `Pin` and `Unpin`, how do they relate, and why does
+`Future` need `self` to be in a `Pin` type to call `poll`?
 
 In [Our First Async Program][first-async], we described how a series of await
 points in a future get compiled into a state machine—and noted how the compiler
@@ -212,33 +219,58 @@ getting a mutable or immutable reference to it.
 So far so good: if we get anything wrong about the ownership or references in a
 given async block, the borrow checker will tell us. When we want to move around
 the future that corresponds to that block—like moving it into a `Vec` to pass to
-`join_all`—things get trickier.
+`join_all`, the way we did back in—things get trickier.
 
 When we move a future—whether by pushing into a data structure to use as an
 iterator with `join_all`, or returning them from a function—that actually means
 moving the state machine Rust creates for us. And unlike most other types in
 Rust, the futures Rust creates for async blocks can end up with references to
-themselves in the fields of any given variant. Any object which has a reference
-to itself is unsafe to move, though, because references always point to the
-actual memory address of the thing they refer to. If you move the data structure
-itself, you *have* to update any references to it, or they will be left pointing
-to the old location.
+themselves in the fields of any given variant, as in Figure 17-3 (a simplified
+illustration to help you get a feel for the idea, rather than digging into what
+are often fairly complicated details).
 
-In principle, you could make the Rust compiler try to update every reference to
-an object every time it gets moved. That would potentially be a lot of
-performance overhead, especially given there can be a whole web of references
-that need updating. On the other hand, if we could make sure the data structure
-in question *does not move in memory*, we do not have to update any references.
-And this is exactly what Rust’s borrow checker already guarantees: you cannot
-move an item which has any active references to it using safe code.
+<figure>
+
+<img alt="Concurrent work flow" src="img/trpl17-03.svg" class="center" />
+
+<figcaption>Figure 17-3: A self-referential data type.</figcaption>
+
+</figure>
+
+By default, though, any object which has a reference to itself is unsafe to
+move, because references always point to the actual memory address of the thing
+they refer to. If you move the data structure itself, those internal references
+will be left pointing to the old location. However, that memory location is now
+invalid. For one thing, its value will not be updated when you make changes to
+the data structure. For another—and more importantly!—the computer is now free
+to reuse that memory for other things! You could end up reading completely
+unrelated data later.
+
+<figure>
+
+<img alt="Concurrent work flow" src="img/trpl17-04.svg" class="center" />
+
+<figcaption>Figure 17-4: The unsafe result of moving a self-referential data type.</figcaption>
+
+</figure>
+
+In principle, the Rust compiler could try to update every reference to an object
+every time it gets moved. That would potentially be a lot of performance
+overhead, especially given there can be a whole web of references that need
+updating. On the other hand, if we could make sure the data structure in
+question *does not move in memory*, we do not have to update any references.
+This is exactly what Rust’s borrow checker requires: you cannot move an item
+which has any active references to it using safe code.
 
 `Pin` builds on that to give us the exact guarantee we need. When we *pin* a
-value by wrapping a pointer to it in `Pin`, it can no longer move. Thus, if you
-have `Pin<Box<SomeType>>`, you actually pin the `SomeType` value, *not* the
-`Box` pointer. In fact, the pinned box pointer can move around freely. Remember:
-we care about making sure the data ultimately being referenced stays in its
-place. If a pointer moves around, but the data it points to is in the same
-place, there is no problem.
+value by wrapping a pointer to that value in `Pin`, it can no longer move. Thus,
+if you have `Pin<Box<SomeType>>`, you actually pin the `SomeType` value, *not*
+the `Box` pointer. In fact, the `Box` pointer can still move around freely.
+Remember: we care about making sure the data ultimately being referenced stays
+in its place. If a pointer moves around, but the data it points to is in the
+same place, there is no problem.
+
+<!-- TODO: diagram of `Pin` -->
 
 However, most types are perfectly safe to move around, even if they happen to be
 behind a `Pin` pointer. We only need to think about pinning when items have
@@ -247,10 +279,10 @@ internal structure like that, so they are obviously safe. Neither do most types
 you normally work with in Rust. A `Vec`, for example, does not have any internal
 references it needs to keep up to date this way, so you can move it around
 without worrying. If you have a `Pin<Vec<String>>`, you would have to do
-everything via Pin’s safe but restrictive APIs, even though a `Vec<String>` is
-always safe to move if there are no other references to it. We need a way to
-tell the compiler that it is actually just fine to move items around in cases
-like these. For that, we have `Unpin`.
+everything via the safe but restrictive APIs provided by `Pin`, even though a
+`Vec<String>` is always safe to move if there are no other references to it. We
+need a way to tell the compiler that it is actually just fine to move items
+around in cases like these. For that, we have `Unpin`.
 
 `Unpin` is a marker trait, like `Send` and `Sync`, which we saw in Chapter 16.
 Recall that marker traits have no functionality of their own. They exist only to
@@ -258,6 +290,8 @@ tell the compiler that it is safe to use the type which implements a given trait
 in a particular context. `Unpin` informs the compiler that a given type does
 *not* need to uphold any particular guarantees about whether the value in
 question can be moved.
+
+<!-- TODO: a diagram for `Unpin`? I have no idea what or how, though. Hmm. -->
 
 Just like `Send` and `Sync`, the compiler implements `Unpin` automatically for
 all types where it can prove it is safe. Implementing `Unpin` manually is unsafe
@@ -281,9 +315,10 @@ When you see them, though, now you will know what to do!
 > they are self-referential. Types which require `Pin` show up *most* commonly
 > in async Rust today, but you might—very rarely!—see it in other contexts, too.
 >
-> The specific mechanics for how `Pin` and `Unpin` work under the hood are
-> covered extensively in the API documentation for `std::pin`, so if you would
-> like to understand them more deeply, that is a great place to start.
+> The specifics of how `Pin` and `Unpin` work, and the rules they are required
+> to uphold, are covered extensively in the API documentation for `std::pin`, so
+> if you would like to understand them more deeply, that is a great place to
+> start.
 >
 > If you want to understand how things work “under the hood” in even more
 > detail, the official [_Asynchronous Programming in Rust_][async-book] book has
@@ -355,9 +390,9 @@ TODO: update this if/when tokio/etc. update their MSRV and switch to using async
 in traits, since the lack thereof is the reason they do not yet have this.
 -->
 
-> Note: The actual definition we will use looks slightly different than this,
-> because it supports versions of Rust which did not yet support using async
-> functions in traits. As a result, it looks like this:
+> Note: The actual definition we used earlier in the chapter looks slightly
+> different than this, because it supports versions of Rust which did not yet
+> support using async functions in traits. As a result, it looks like this:
 >
 > ```rust,ignore
 > fn next(&mut self) -> Next<'_, Self> where Self: Unpin;
@@ -365,7 +400,7 @@ in traits, since the lack thereof is the reason they do not yet have this.
 >
 > That `Next` type is just a simple `struct` which implements `Future` and gives
 > a way to name the lifetime of the reference to `self` with `Next<'_, Self>`,
-> so that `.await` can work with this!
+> so that `await` can work with this!
 
 The `StreamExt` trait is also the home of all the interesting methods available
 to use with streams. `StreamExt` is automatically implemented for every type

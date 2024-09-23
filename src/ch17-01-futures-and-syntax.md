@@ -279,15 +279,7 @@ it is ready to try advancing this one again. This is an invisible state machine,
 as if you wrote something like this:
 
 ```rust
-# extern crate trpl; // required for mdbook test
-enum PageTitleFuture<'a> {
-    GetAwaitPoint {
-        url: &'a str,
-    },
-    TextAwaitPoint {
-        response: trpl::Response,
-    },
-}
+{{#rustdoc_include ../listings/ch17-async-await/no-listing-state-machine/src/lib.rs:enum}}
 ```
 
 Writing that out by hand would be tedious and error-prone, especially when
@@ -331,8 +323,14 @@ and racing it.
 In Listing 17-5, we begin by calling `page_title` with both of the user-supplied
 URLs. We save the futures produced by calling `page_title` as `title_fut_1` and
 `title_fut_2`. Remember, these don’t do anything yet, because futures are lazy,
-and we have not yet awaited them. Then we pass the futures  `trpl::race`, which
-returns a value to indicate which of the futures passed to it finishes first.
+and we have not yet awaited them. Then we pass the futures to `trpl::race`,
+which returns a value to indicate which of the futures passed to it finishes
+first.
+
+> Note: Under the hood, `race` is built on a more general function, `select`,
+> which you will encounter more often in real-world Rust code. A `select`
+> function can do a lot of things that `trpl::race` function cannot, but it also
+> has some additional complexity that we can skip over for now.
 
 Either future can legitimately “win,” so it does not make sense to return a
 `Result`. Instead, `race` returns a type we have not seen before,

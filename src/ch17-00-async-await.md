@@ -136,7 +136,7 @@ under the hood.
 Now, let’s dive into how async programming in Rust actually works! In the rest
 of this chapter, we will:
 
-* see how to use Rust’s `async` and `.await` syntax
+* see how to use Rust’s `async` and `await` syntax
 * explore how to use the async model to solve some of the same challenges we
   looked at in Chapter 16
 * look at how multithreading and async provide complementary solutions, which

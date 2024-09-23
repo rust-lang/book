@@ -37,7 +37,7 @@ that our top-level function can be async.
 Then we write two loops within that block, each with a `trpl::sleep` call in it,
 which waits for half a second (500 milliseconds) before sending the next
 message. We put one loop in the body of a `trpl::spawn_task` and the other in a
-top-level `for` loop. We also add an `.await` after the `sleep` calls.
+top-level `for` loop. We also add an `await` after the `sleep` calls.
 
 This does something similar to the thread-based implementation—including the
 fact that you may see the messages appear in a different order in your own
@@ -68,7 +68,7 @@ In Listing 17-7, we can use `await` to do the same thing, because the task
 handle itself is a future. Its `Output` type is a `Result`, so we also unwrap it
 after awaiting it.
 
-<Listing number="17-7" caption="Using `.await` with a join handle to run a task to completion" file-name="src/main.rs">
+<Listing number="17-7" caption="Using `await` with a join handle to run a task to completion" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-07/src/main.rs:handle}}
@@ -99,7 +99,7 @@ hi number 9 from the first task!
 ```
 
 So far, it looks like async and threads give us the same basic outcomes, just
-with different syntax: using `.await` instead of calling `join` on the join
+with different syntax: using `await` instead of calling `join` on the join
 handle, and awaiting the `sleep` calls.
 
 The bigger difference is that we did not need to spawn another operating system
@@ -220,7 +220,7 @@ between them, as shown in Listing 17-10:
 
 <!-- We cannot test this one because it never stops! -->
 
-<Listing number="17-10" caption="Sending and receiving multiple messages over the async channel and sleeping with an `.await` between each message" file-name="src/main.rs">
+<Listing number="17-10" caption="Sending and receiving multiple messages over the async channel and sleeping with an `await` between each message" file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:many-messages}}
@@ -266,14 +266,14 @@ class="keystroke">ctrl-c</span>.
 
 Let’s start by understanding why the messages all come in at once after the full
 delay, rather than coming in with delays in between each one. Within a given
-async block, the order that `.await` keywords appear in the code is also the
+async block, the order that `await` keywords appear in the code is also the
 order they happen when running the program.
 
 There is only one async block in Listing 17-10, so everything in it runs
 linearly. There is still no concurrency. All the `tx.send` calls happen,
 interspersed with all of the `trpl::sleep` calls and their associated await
-points. Only then does the `while let` loop get to go through any of the
-`.await` points on the `recv` calls.
+points. Only then does the `while let` loop get to go through any of the `await`
+points on the `recv` calls.
 
 To get the behavior we want, where the sleep delay happens between receiving
 each message, we need to put the `tx` and `rx` operations in their own async

@@ -291,22 +291,16 @@ syntax for working with them, and that is a good thing.
 When we “join” futures with the `join` family of functions and macros, we
 require *all* of them to finish before we move on. Sometimes, though, we only
 need *some* future from a set to finish before we move on—kind of like racing
-one future against another. This operation is often named `race` for exactly
-that reason.
+one future against another.
 
-> Note: Under the hood, `race` is built on a more general function, `select`,
-> which you will encounter more often in real-world Rust code. A `select`
-> function can do a lot of things that `trpl::race` function cannot, but it also
-> has some additional complexity that we can skip over for now.
-
-In Listing 17-21, we use `trpl::race` to run two futures, `slow` and `fast`,
-against each other. Each one prints a message when it starts running, pauses for
-some amount of time by calling and awaiting `sleep`, and then prints another
-message when it finishes. Then we pass both to `trpl::race` and wait for one of
-them to finish. (The outcome here won’t be too surprising: `fast` wins!) Note
-that unlike the first time we used `race` back in [Our First Async
-Program][async-program], we just ignore the `Either` instance it returns here,
-because all of the interesting behavior happens in the body of the async blocks.
+In Listing 17-21, we once again use `trpl::race` to run two futures, `slow` and
+`fast`, against each other. Each one prints a message when it starts running,
+pauses for some amount of time by calling and awaiting `sleep`, and then prints
+another message when it finishes. Then we pass both to `trpl::race` and wait for
+one of them to finish. (The outcome here won’t be too surprising: `fast` wins!)
+Unlike when we used `race` back in [Our First Async Program][async-program], we
+just ignore the `Either` instance it returns here, because all of the
+interesting behavior happens in the body of the async blocks.
 
 <Listing number="17-21" caption="Using `race` to get the result of whichever future finishes first" file-name="src/main.rs">
 
@@ -322,7 +316,7 @@ first. That is because the implementation of this particular `race` function is
 not fair. It always runs the futures passed as arguments in the order they are
 passed. Other implementations *are* fair, and will randomly choose which future
 to poll first. Regardless of whether the implementation of race we are using is
-fair, though, *one* of the futures will run up to the first `.await` in its body
+fair, though, *one* of the futures will run up to the first `await` in its body
 before another task can start.
 
 Recall from [Our First Async Program][async-program] that at each await point,
@@ -575,7 +569,7 @@ using smaller async building blocks. For example, you can use this same approach
 to combine timeouts with retries, and in turn use those with things like network
 calls—one of the examples from the beginning of the chapter!
 
-In practice, you will usually work directly with `async` and `.await`, and
+In practice, you will usually work directly with `async` and `await`, and
 secondarily with functions and macros like `join`, `join_all`, `race`, and so
 on. You will only need to reach for `pin` now and again to use them with those
 APIs.

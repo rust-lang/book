@@ -28,9 +28,6 @@ digraph {
    subgraph cluster_task_b {
       label = "Task B";
       
-      // for horizontal alignment purposes only
-      // newrank = true;
-      
       B0 [style = invis;];
       
       B1;
