@@ -1,5 +1,7 @@
 /* CSS for UI elements (a.k.a. chrome) */
 
+@import 'variables.css';
+
 html {
     scrollbar-color: var(--scrollbar) var(--bg);
 }
