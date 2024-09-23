@@ -253,4 +253,4 @@ Rust’s enum feature to add another tool to your toolbox.
 [trait-objects]: ch17-02-trait-objects.md
 [public]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword
 [modules]: ch07-02-defining-modules-to-control-scope-and-privacy.html
-[traits]: ch10-02-traits.html#using-trait-bounds-to-conditionally-implement-methods
+[traits]: ch10-02-traits.md#using-trait-bounds-to-conditionally-implement-methods
