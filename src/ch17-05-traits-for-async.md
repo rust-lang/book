@@ -265,12 +265,33 @@ which has any active references to it using safe code.
 `Pin` builds on that to give us the exact guarantee we need. When we *pin* a
 value by wrapping a pointer to that value in `Pin`, it can no longer move. Thus,
 if you have `Pin<Box<SomeType>>`, you actually pin the `SomeType` value, *not*
-the `Box` pointer. In fact, the `Box` pointer can still move around freely.
-Remember: we care about making sure the data ultimately being referenced stays
-in its place. If a pointer moves around, but the data it points to is in the
-same place, there is no problem.
+the `Box` pointer. Figure 17-5 illustrates this:
 
-<!-- TODO: diagram of `Pin` -->
+<figure>
+
+<img alt="Concurrent work flow" src="img/trpl17-05.svg" class="center" />
+
+<figcaption>Figure 17-5: Pinning a `Box` which points to a self-referential future type.</figcaption>
+
+</figure>
+
+In fact, the `Box` pointer can still move around freely. Remember: we care about
+making sure the data ultimately being referenced stays in its place. If a
+pointer moves around, but the data it points to is in the same place, as in
+Figure 17-6, there is no potential problem. (How you would do this with a `Pin`
+wrapping a `Box` is more than we will get into in this particular discussion,
+but it would make for a good exercise! If you look at the docs for the types as
+well as the `std::pin` module, you might be able to work out how you would do
+that.) The key is that the self-referential type itself cannot move, because it
+is still pinned.
+
+<figure>
+
+<img alt="Concurrent work flow" src="img/trpl17-06.svg" class="center" />
+
+<figcaption>Figure 17-6: Moving a `Box` which points to a self-referential future type.</figcaption>
+
+</figure>
 
 However, most types are perfectly safe to move around, even if they happen to be
 behind a `Pin` pointer. We only need to think about pinning when items have
@@ -291,20 +312,43 @@ in a particular context. `Unpin` informs the compiler that a given type does
 *not* need to uphold any particular guarantees about whether the value in
 question can be moved.
 
-<!-- TODO: a diagram for `Unpin`? I have no idea what or how, though. Hmm. -->
-
 Just like `Send` and `Sync`, the compiler implements `Unpin` automatically for
 all types where it can prove it is safe. Implementing `Unpin` manually is unsafe
 because it requires *you* to uphold all the guarantees which make `Pin` and
 `Unpin` safe yourself for a type with internal references. In practice, this is
 a very rare thing to implement yourself!
 
-Now we know enough to understand the errors reported for that `join_all` call.
-We originally tried to move the futures produced by an async blocks into a
-`Vec<Box<dyn Future<Output = ()>>>`, but as we have seen, those futures may have
-internal references, so they do not implement `Unpin`. They need to be pinned,
-and then we can pass the `Pin` type into the `Vec`, confident that the
-underlying data in the futures will *not* be moved.
+To make that concrete, think about a `String`: it has a length and the Unicode
+characters which make it up. We can wrap a `String` in `Pin`, as seen in Figure
+17-7. However
+
+<figure>
+
+<img alt="Concurrent work flow" src="img/trpl17-07.svg" class="center" />
+
+<figcaption>Figure 17-7: Pinning a String, with a dotted line indicating that the String implements the `Unpin` trait, so it is not pinned.</figcaption>
+
+</figure>
+
+This means that we can do things like replace one string with another at the
+exact same location in memory as in Figure 17-8. This does not violate the `Pin`
+contract because `String`—like most other types in Rust—implements `Unpin`,
+because it has no internal references that make it unsafe to move around!
+
+<figure>
+
+<img alt="Concurrent work flow" src="img/trpl17-08.svg" class="center" />
+
+<figcaption>Figure 17-8: Replacing the String with an entirely different String in memory.</figcaption>
+
+</figure>
+
+Now we know enough to understand the errors reported for that `join_all` call
+from back in Listing 17-17. We originally tried to move the futures produced by
+an async blocks into a `Vec<Box<dyn Future<Output = ()>>>`, but as we have seen,
+those futures may have internal references, so they do not implement `Unpin`.
+They need to be pinned, and then we can pass the `Pin` type into the `Vec`,
+confident that the underlying data in the futures will *not* be moved.
 
 `Pin` and `Unpin` are mostly important for building lower-level libraries, or
 when you are building a runtime itself, rather than for day to day Rust code.
