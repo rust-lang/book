@@ -322,7 +322,7 @@ matching value.
 [IpAddr]: ../std/net/enum.IpAddr.html
 [option]: ../std/option/enum.Option.html
 [docs]: ../std/option/enum.Option.html
-[structs]: ch05-01-defining-structs.html
-[scope]: ch07-04-bringing-paths-into-scope-with-the-use-keyword.html
-[generics]: ch10-00-generics.html
+[structs]: ch05-01-defining-structs.md
+[scope]: ch07-04-bringing-paths-into-scope-with-the-use-keyword.md
+[generics]: ch10-00-generics.md
 
