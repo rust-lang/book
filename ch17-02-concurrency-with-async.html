@@ -229,7 +229,7 @@ just like we do with <code>main</code>. Don’t forget to include it in your cod
 <p>Then we write two loops within that block, each with a <code>trpl::sleep</code> call in it,
 which waits for half a second (500 milliseconds) before sending the next
 message. We put one loop in the body of a <code>trpl::spawn_task</code> and the other in a
-top-level <code>for</code> loop. We also add an <code>.await</code> after the <code>sleep</code> calls.</p>
+top-level <code>for</code> loop. We also add an <code>await</code> after the <code>sleep</code> calls.</p>
 <p>This does something similar to the thread-based implementation—including the
 fact that you may see the messages appear in a different order in your own
 terminal when you run it.</p>
@@ -277,7 +277,7 @@ after awaiting it.</p>
         handle.await.unwrap();
 <span class="boring">    });
 </span><span class="boring">}</span></code></pre></pre>
-<figcaption>Listing 17-7: Using <code>.await</code> with a join handle to run a task to completion</figcaption>
+<figcaption>Listing 17-7: Using <code>await</code> with a join handle to run a task to completion</figcaption>
 </figure>
 <p>This updated version runs till <em>both</em> loops finish.</p>
 <!-- Not extracting output because changes to this output aren't significant;
@@ -298,7 +298,7 @@ hi number 8 from the first task!
 hi number 9 from the first task!
 </code></pre>
 <p>So far, it looks like async and threads give us the same basic outcomes, just
-with different syntax: using <code>.await</code> instead of calling <code>join</code> on the join
+with different syntax: using <code>await</code> instead of calling <code>join</code> on the join
 handle, and awaiting the <code>sleep</code> calls.</p>
 <p>The bigger difference is that we did not need to spawn another operating system
 thread to do this. In fact, we do not even need to spawn a task here. Because
@@ -459,7 +459,7 @@ between them, as shown in Listing 17-10:</p>
         }
 <span class="boring">    });
 </span><span class="boring">}</span></code></pre>
-<figcaption>Listing 17-10: Sending and receiving multiple messages over the async channel and sleeping with an <code>.await</code> between each message</figcaption>
+<figcaption>Listing 17-10: Sending and receiving multiple messages over the async channel and sleeping with an <code>await</code> between each message</figcaption>
 </figure>
 <p>In addition to sending the messages, we need to receive them. In this case, we
 could do that manually, by just doing <code>rx.recv().await</code> four times, because we
@@ -493,13 +493,13 @@ it waits forever for new messages. You will need to shut it down using <span
 class="keystroke">ctrl-c</span>.</p>
 <p>Let’s start by understanding why the messages all come in at once after the full
 delay, rather than coming in with delays in between each one. Within a given
-async block, the order that <code>.await</code> keywords appear in the code is also the
+async block, the order that <code>await</code> keywords appear in the code is also the
 order they happen when running the program.</p>
 <p>There is only one async block in Listing 17-10, so everything in it runs
 linearly. There is still no concurrency. All the <code>tx.send</code> calls happen,
 interspersed with all of the <code>trpl::sleep</code> calls and their associated await
-points. Only then does the <code>while let</code> loop get to go through any of the
-<code>.await</code> points on the <code>recv</code> calls.</p>
+points. Only then does the <code>while let</code> loop get to go through any of the <code>await</code>
+points on the <code>recv</code> calls.</p>
 <p>To get the behavior we want, where the sleep delay happens between receiving
 each message, we need to put the <code>tx</code> and <code>rx</code> operations in their own async
 blocks. Then the runtime can execute each of them separately using <code>trpl::join</code>,

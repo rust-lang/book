@@ -487,13 +487,11 @@ as if you wrote something like this:</p>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
 </span>enum PageTitleFuture&lt;'a&gt; {
-    GetAwaitPoint {
-        url: &amp;'a str,
-    },
-    TextAwaitPoint {
-        response: trpl::Response,
-    },
+    Initial { url: &amp;'a str },
+    GetAwaitPoint { url: &amp;'a str },
+    TextAwaitPoint { response: trpl::Response },
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Writing that out by hand would be tedious and error-prone, especially when
@@ -560,8 +558,15 @@ async fn page_title(url: &amp;str) -&gt; (&amp;str, Option&lt;String&gt;) {
 <p>In Listing 17-5, we begin by calling <code>page_title</code> with both of the user-supplied
 URLs. We save the futures produced by calling <code>page_title</code> as <code>title_fut_1</code> and
 <code>title_fut_2</code>. Remember, these don’t do anything yet, because futures are lazy,
-and we have not yet awaited them. Then we pass the futures  <code>trpl::race</code>, which
-returns a value to indicate which of the futures passed to it finishes first.</p>
+and we have not yet awaited them. Then we pass the futures to <code>trpl::race</code>,
+which returns a value to indicate which of the futures passed to it finishes
+first.</p>
+<section class="note" aria-role="note">
+<p>Note: Under the hood, <code>race</code> is built on a more general function, <code>select</code>,
+which you will encounter more often in real-world Rust code. A <code>select</code>
+function can do a lot of things that <code>trpl::race</code> function cannot, but it also
+has some additional complexity that we can skip over for now.</p>
+</section>
 <p>Either future can legitimately “win,” so it does not make sense to return a
 <code>Result</code>. Instead, <code>race</code> returns a type we have not seen before,
 <code>trpl::Either</code>. The <code>Either</code> type is somewhat like a <code>Result</code>, in that it has

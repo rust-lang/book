@@ -728,22 +728,15 @@ syntax for working with them, and that is a good thing.</p>
 <p>When we “join” futures with the <code>join</code> family of functions and macros, we
 require <em>all</em> of them to finish before we move on. Sometimes, though, we only
 need <em>some</em> future from a set to finish before we move on—kind of like racing
-one future against another. This operation is often named <code>race</code> for exactly
-that reason.</p>
-<section class="note" aria-role="note">
-<p>Note: Under the hood, <code>race</code> is built on a more general function, <code>select</code>,
-which you will encounter more often in real-world Rust code. A <code>select</code>
-function can do a lot of things that <code>trpl::race</code> function cannot, but it also
-has some additional complexity that we can skip over for now.</p>
-</section>
-<p>In Listing 17-21, we use <code>trpl::race</code> to run two futures, <code>slow</code> and <code>fast</code>,
-against each other. Each one prints a message when it starts running, pauses for
-some amount of time by calling and awaiting <code>sleep</code>, and then prints another
-message when it finishes. Then we pass both to <code>trpl::race</code> and wait for one of
-them to finish. (The outcome here won’t be too surprising: <code>fast</code> wins!) Note
-that unlike the first time we used <code>race</code> back in <a href="ch17-01-futures-and-syntax.html#our-first-async-program">Our First Async
-Program</a>, we just ignore the <code>Either</code> instance it returns here,
-because all of the interesting behavior happens in the body of the async blocks.</p>
+one future against another.</p>
+<p>In Listing 17-21, we once again use <code>trpl::race</code> to run two futures, <code>slow</code> and
+<code>fast</code>, against each other. Each one prints a message when it starts running,
+pauses for some amount of time by calling and awaiting <code>sleep</code>, and then prints
+another message when it finishes. Then we pass both to <code>trpl::race</code> and wait for
+one of them to finish. (The outcome here won’t be too surprising: <code>fast</code> wins!)
+Unlike when we used <code>race</code> back in <a href="ch17-01-futures-and-syntax.html#our-first-async-program">Our First Async Program</a>, we
+just ignore the <code>Either</code> instance it returns here, because all of the
+interesting behavior happens in the body of the async blocks.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
@@ -775,7 +768,7 @@ first. That is because the implementation of this particular <code>race</code> f
 not fair. It always runs the futures passed as arguments in the order they are
 passed. Other implementations <em>are</em> fair, and will randomly choose which future
 to poll first. Regardless of whether the implementation of race we are using is
-fair, though, <em>one</em> of the futures will run up to the first <code>.await</code> in its body
+fair, though, <em>one</em> of the futures will run up to the first <code>await</code> in its body
 before another task can start.</p>
 <p>Recall from <a href="ch17-01-futures-and-syntax.html#our-first-async-program">Our First Async Program</a> that at each await point,
 Rust gives a runtime a chance to pause the task and switch to another one if the
@@ -1196,7 +1189,7 @@ we run our code, it will print the failure mode after the timeout:</p>
 using smaller async building blocks. For example, you can use this same approach
 to combine timeouts with retries, and in turn use those with things like network
 calls—one of the examples from the beginning of the chapter!</p>
-<p>In practice, you will usually work directly with <code>async</code> and <code>.await</code>, and
+<p>In practice, you will usually work directly with <code>async</code> and <code>await</code>, and
 secondarily with functions and macros like <code>join</code>, <code>join_all</code>, <code>race</code>, and so
 on. You will only need to reach for <code>pin</code> now and again to use them with those
 APIs.</p>

@@ -268,13 +268,13 @@ supplies a higher-level set of APIs on top of <code>Stream</code>, including the
 method and also many other utility methods like those from <code>Iterator</code>. We will
 return to the <code>Stream</code> and <code>StreamExt</code> traits in a bit more detail at the end of
 the chapter. For now, this is enough to let us keep moving.</p>
-<p>All we need to do here is add a <code>use</code> statement for <code>trpl::StreamExt</code>, as in
-Listing 17-31.</p>
+<p>All we need to do is add a <code>use</code> statement for <code>trpl::StreamExt</code>, as in Listing
+17-31.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><code class="language-rust ignore does_not_compile">extern crate trpl; // required for mdbook test
-
-use trpl::StreamExt;
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span>use trpl::StreamExt;
 
 fn main() {
     trpl::run(async {
@@ -295,9 +295,9 @@ just like with iterators. For example, in Listing 17-32, we use the <code>filter
 method to filter out everything but multiples of three and five.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust edition2021">extern crate trpl; // required for mdbook test
-
-use trpl::StreamExt;
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
+</span><span class="boring">
+</span>use trpl::StreamExt;
 
 fn main() {
     trpl::run(async {
@@ -925,9 +925,9 @@ fn get_intervals() -&gt; impl Stream&lt;Item = u32&gt; {
 }</code></pre></pre>
 <figcaption>Listing 17-40: Handling errors and shutting down the loops</figcaption>
 </figure>
-<p>That is a good note to turn to our final section and wrap up this walk through
-async in Rust, by discussing how futures (including streams), tasks, and threads
-relate to each other, and how you can use them together.</p>
+<p>Now that we have seen a bunch of async in practice, let’s take a step back and
+dig into a few of the details of how <code>Future</code>, <code>Stream</code>, and the other key
+traits which Rust uses to make async work.</p>
 
                     </main>
 
