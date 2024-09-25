@@ -1,6 +1,6 @@
 [package]
 name = "trpl"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "A support crate for The Rust Programming Language book"
