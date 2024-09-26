@@ -67,13 +67,13 @@ to give it back. You don’t own it.
 So, what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-6. Spoiler alert: it doesn’t work!
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="4-6" file-name="src/main.rs" caption="Attempting to modify a borrowed value">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 4-6: Attempting to modify a borrowed value</span>
+</Listing>
 
 Here’s the error:
 
