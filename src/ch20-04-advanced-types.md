@@ -15,7 +15,7 @@ the `!` type and dynamically sized types.
 The newtype pattern is also useful for tasks beyond those we’ve discussed so
 far, including statically enforcing that values are never confused and
 indicating the units of a value. You saw an example of using newtypes to
-indicate units in Listing 19-15: recall that the `Millimeters` and `Meters`
+indicate units in Listing 20-15: recall that the `Millimeters` and `Meters`
 structs wrapped `u32` values in a newtype. If we wrote a function with a
 parameter of type `Millimeters`, we couldn’t compile a program that
 accidentally tried to call that function with a value of type `Meters` or a
@@ -43,16 +43,16 @@ another name. For this we use the `type` keyword. For example, we can create
 the alias `Kilometers` to `i32` like so:
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-04-kilometers-alias/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-04-kilometers-alias/src/main.rs:here}}
 ```
 
 Now, the alias `Kilometers` is a *synonym* for `i32`; unlike the `Millimeters`
-and `Meters` types we created in Listing 19-15, `Kilometers` is not a separate,
+and `Meters` types we created in Listing 20-15, `Kilometers` is not a separate,
 new type. Values that have the type `Kilometers` will be treated the same as
 values of type `i32`:
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-04-kilometers-alias/src/main.rs:there}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-04-kilometers-alias/src/main.rs:there}}
 ```
 
 Because `Kilometers` and `i32` are the same type, we can add values of both
@@ -71,23 +71,23 @@ Box<dyn Fn() + Send + 'static>
 
 Writing this lengthy type in function signatures and as type annotations all
 over the code can be tiresome and error prone. Imagine having a project full of
-code like that in Listing 19-24.
+code like that in Listing 20-24.
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-24/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-24/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-24: Using a long type in many places</span>
+<span class="caption">Listing 20-24: Using a long type in many places</span>
 
 A type alias makes this code more manageable by reducing the repetition. In
-Listing 19-25, we’ve introduced an alias named `Thunk` for the verbose type and
+Listing 20-25, we’ve introduced an alias named `Thunk` for the verbose type and
 can replace all uses of the type with the shorter alias `Thunk`.
 
 ```rust
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-25/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-25/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-25: Introducing a type alias `Thunk` to reduce
+<span class="caption">Listing 20-25: Introducing a type alias `Thunk` to reduce
 repetition</span>
 
 This code is much easier to read and write! Choosing a meaningful name for a
@@ -104,14 +104,14 @@ possible I/O errors. Many of the functions in `std::io` will be returning
 the `Write` trait:
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-05-write-trait/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-05-write-trait/src/lib.rs}}
 ```
 
 The `Result<..., Error>` is repeated a lot. As such, `std::io` has this type
 alias declaration:
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-06-result-alias/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-06-result-alias/src/lib.rs:here}}
 ```
 
 Because this declaration is in the `std::io` module, we can use the fully
@@ -120,7 +120,7 @@ filled in as `std::io::Error`. The `Write` trait function signatures end up
 looking like this:
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-06-result-alias/src/lib.rs:there}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-06-result-alias/src/lib.rs:there}}
 ```
 
 The type alias helps in two ways: it makes code easier to write *and* it gives
@@ -136,7 +136,7 @@ because it stands in the place of the return type when a function will never
 return. Here is an example:
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-07-never-type/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-07-never-type/src/lib.rs:here}}
 ```
 
 This code is read as “the function `bar` returns never.” Functions that return
@@ -145,13 +145,13 @@ so `bar` can never possibly return.
 
 But what use is a type you can never create values for? Recall the code from
 Listing 2-5, part of the number guessing game; we’ve reproduced a bit of it
-here in Listing 19-26.
+here in Listing 20-26.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:ch19}}
 ```
 
-<span class="caption">Listing 19-26: A `match` with an arm that ends in
+<span class="caption">Listing 20-26: A `match` with an arm that ends in
 `continue`</span>
 
 At the time, we skipped over some details in this code. In Chapter 6 in [“The
@@ -160,13 +160,13 @@ section, we discussed that `match` arms must all return the same type. So, for
 example, the following code doesn’t work:
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-08-match-arms-different-types/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-08-match-arms-different-types/src/main.rs:here}}
 ```
 
 The type of `guess` in this code would have to be an integer *and* a string,
 and Rust requires that `guess` have only one type. So what does `continue`
 return? How were we allowed to return a `u32` from one arm and have another arm
-that ends with `continue` in Listing 19-26?
+that ends with `continue` in Listing 20-26?
 
 As you might have guessed, `continue` has a `!` value. That is, when Rust
 computes the type of `guess`, it looks at both match arms, the former with a
@@ -184,10 +184,10 @@ function that we call on `Option<T>` values to produce a value or panic with
 this definition:
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-09-unwrap-definition/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-09-unwrap-definition/src/lib.rs:here}}
 ```
 
-In this code, the same thing happens as in the `match` in Listing 19-26: Rust
+In this code, the same thing happens as in the `match` in Listing 20-26: Rust
 sees that `val` has the type `T` and `panic!` has the type `!`, so the result
 of the overall `match` expression is `T`. This code works because `panic!`
 doesn’t produce a value; it ends the program. In the `None` case, we won’t be
@@ -196,7 +196,7 @@ returning a value from `unwrap`, so this code is valid.
 One final expression that has the type `!` is a `loop`:
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-10-loop-returns-never/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-10-loop-returns-never/src/main.rs:here}}
 ```
 
 Here, the loop never ends, so `!` is the value of the expression. However, this
@@ -218,7 +218,7 @@ we can’t create a variable of type `str`, nor can we take an argument of type
 `str`. Consider the following code, which does not work:
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-11-cant-create-str/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-11-cant-create-str/src/main.rs:here}}
 ```
 
 Rust needs to know how much memory to allocate for any value of a particular
@@ -259,13 +259,13 @@ implicitly adds a bound on `Sized` to every generic function. That is, a
 generic function definition like this:
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-12-generic-fn-definition/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-12-generic-fn-definition/src/lib.rs}}
 ```
 
 is actually treated as though we had written this:
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-13-generic-implicit-sized-bound/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-13-generic-implicit-sized-bound/src/lib.rs}}
 ```
 
 By default, generic functions will work only on types that have a known size at
@@ -273,7 +273,7 @@ compile time. However, you can use the following special syntax to relax this
 restriction:
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-14-generic-maybe-sized/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-14-generic-maybe-sized/src/lib.rs}}
 ```
 
 A trait bound on `?Sized` means “`T` may or may not be `Sized`” and this
