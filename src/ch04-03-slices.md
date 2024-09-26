@@ -174,11 +174,13 @@ let slice = &s[..];
 With all this information in mind, let’s rewrite `first_word` to return a
 slice. The type that signifies “string slice” is written as `&str`:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-18-first-word-slice/src/main.rs:here}}
 ```
+
+</Listing>
 
 We get the index for the end of the word the same way we did in Listing 4-7, by
 looking for the first occurrence of a space. When we find a space, we return a
@@ -205,11 +207,13 @@ string. Slices make this bug impossible and let us know we have a problem with
 our code much sooner. Using the slice version of `first_word` will throw a
 compile-time error:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/src/main.rs:here}}
 ```
+
+</Listing>
 
 Here’s the compiler error:
 
@@ -272,11 +276,13 @@ Methods”][deref-coercions]<!--ignore--> section of Chapter 15.
 Defining a function to take a string slice instead of a reference to a `String`
 makes our API more general and useful without losing any functionality:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:usage}}
 ```
+
+</Listing>
 
 ### Other Slices
 
