@@ -78,7 +78,7 @@ more of the following:
   rather than checking for the problem at every step.
 * There’s not a good way to encode this information in the types you use. We’ll
   work through an example of what we mean in the [“Encoding States and Behavior
-  as Types”][encoding]<!-- ignore --> section of Chapter 17.
+  as Types”][encoding]<!-- ignore --> section of Chapter 18.
 
 If someone calls your code and passes in values that don’t make sense, it’s
 best to return an error if you can so the user of the library can decide what

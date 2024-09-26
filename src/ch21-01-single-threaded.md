@@ -441,7 +441,7 @@ contain only the code that differs between the two cases</span>
 Now the `if` and `else` blocks only return the appropriate values for the
 status line and filename in a tuple; we then use destructuring to assign these
 two values to `status_line` and `filename` using a pattern in the `let`
-statement, as discussed in Chapter 18.
+statement, as discussed in Chapter 19.
 
 The previously duplicated code is now outside the `if` and `else` blocks and
 uses the `status_line` and `filename` variables. This makes it easier to see

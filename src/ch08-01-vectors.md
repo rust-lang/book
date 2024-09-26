@@ -219,7 +219,7 @@ at compile time that every possible case is handled, as discussed in Chapter 6.
 
 If you don’t know the exhaustive set of types a program will get at runtime to
 store in a vector, the enum technique won’t work. Instead, you can use a trait
-object, which we’ll cover in Chapter 17.
+object, which we’ll cover in Chapter 18.
 
 Now that we’ve discussed some of the most common ways to use vectors, be sure
 to review [the API documentation][vec-api]<!-- ignore --> for all of the many

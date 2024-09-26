@@ -45,7 +45,7 @@ implementing our specified trait and a table used to look up trait methods on
 that type at runtime. We create a trait object by specifying some sort of
 pointer, such as a `&` reference or a `Box<T>` smart pointer, then the `dyn`
 keyword, and then specifying the relevant trait. (We’ll talk about the reason
-trait objects must use a pointer in Chapter 19 in the section [“Dynamically
+trait objects must use a pointer in Chapter 20 in the section [“Dynamically
 Sized Types and the `Sized` Trait.”][dynamically-sized]<!-- ignore -->) We can
 use trait objects in place of a generic or concrete type. Wherever we use a
 trait object, Rust’s type system will ensure at compile time that any value

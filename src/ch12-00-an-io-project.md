@@ -36,7 +36,7 @@ Our `grep` project will combine a number of concepts you’ve learned so far:
 * Writing tests ([Chapter 11][ch11]<!-- ignore -->)
 
 We’ll also briefly introduce closures, iterators, and trait objects, which
-[Chapter 13][ch13]<!-- ignore --> and [Chapter 17][ch17]<!-- ignore --> will
+[Chapter 13][ch13]<!-- ignore --> and [Chapter 18][ch18]<!-- ignore --> will
 cover in detail.
 
 [ch7]: ch07-00-managing-growing-projects-with-packages-crates-and-modules.html
@@ -45,4 +45,4 @@ cover in detail.
 [ch10]: ch10-00-generics.html
 [ch11]: ch11-00-testing.html
 [ch13]: ch13-00-functional-features.html
-[ch17]: ch18-00-oop.html
+[ch18]: ch18-00-oop.html

@@ -119,7 +119,7 @@ We can use a trait object:
 This code will compile just fine. For more about trait objects, refer to the
 section [“Using Trait Objects That Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
-ignore --> in Chapter 18.
+ignore --> in Chapter 19.
 
 Next, let’s look at macros!
 

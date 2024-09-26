@@ -90,7 +90,7 @@ The following changes will do so:
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-06-fix-threadpool-drop/src/lib.rs:here}}
 ```
 
-As discussed in Chapter 17, the `take` method on `Option` takes the `Some`
+As discussed in Chapter 18, the `take` method on `Option` takes the `Some`
 variant out and leaves `None` in its place. We’re using `if let` to destructure
 the `Some` and get the thread; then we call `join` on the thread. If a worker’s
 thread is already `None`, we know that worker has already had its thread

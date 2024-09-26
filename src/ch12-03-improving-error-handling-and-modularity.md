@@ -381,7 +381,7 @@ returned the unit type, `()`, and we keep that as the value returned in the
 
 For the error type, we used the *trait object* `Box<dyn Error>` (and we’ve
 brought `std::error::Error` into scope with a `use` statement at the top).
-We’ll cover trait objects in [Chapter 17][ch17]<!-- ignore -->. For now, just
+We’ll cover trait objects in [Chapter 18][ch18]<!-- ignore -->. For now, just
 know that `Box<dyn Error>` means the function will return a type that
 implements the `Error` trait, but we don’t have to specify what particular type
 the return value will be. This gives us flexibility to return error values that
@@ -490,5 +490,5 @@ write some tests!
 [ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation
 [ch9-error-guidelines]: ch09-03-to-panic-or-not-to-panic.html#guidelines-for-error-handling
 [ch9-result]: ch09-02-recoverable-errors-with-result.html
-[ch17]: ch18-00-oop.html
+[ch18]: ch18-00-oop.html
 [ch9-question-mark]: ch09-02-recoverable-errors-with-result.html#a-shortcut-for-propagating-errors-the--operator

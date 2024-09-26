@@ -28,7 +28,7 @@ compiled.
 
 Any type composed entirely of `Send` types is automatically marked as `Send` as
 well. Almost all primitive types are `Send`, aside from raw pointers, which
-we’ll discuss in Chapter 19.
+we’ll discuss in Chapter 20.
 
 ### Allowing Access from Multiple Threads with `Sync`
 
@@ -54,7 +54,7 @@ marker traits, they don’t even have any methods to implement. They’re just
 useful for enforcing invariants related to concurrency.
 
 Manually implementing these traits involves implementing unsafe Rust code.
-We’ll talk about using unsafe Rust code in Chapter 19; for now, the important
+We’ll talk about using unsafe Rust code in Chapter 20; for now, the important
 information is that building new concurrent types not made up of `Send` and
 `Sync` parts requires careful thought to uphold the safety guarantees. [“The
 Rustonomicon”][nomicon] has more information about these guarantees and how to
@@ -63,7 +63,7 @@ uphold them.
 ## Summary
 
 This isn’t the last you’ll see of concurrency in this book: the whole next
-chapter focuses on async programming, and the project in Chapter 20 will use the
+chapter focuses on async programming, and the project in Chapter 21 will use the
 concepts in this chapter in a more realistic situation than the smaller examples
 discussed here.
 

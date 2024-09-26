@@ -148,7 +148,7 @@ contains an implementation of `Deref` to add to the definition of `MyBox`:
 The `type Target = T;` syntax defines an associated type for the `Deref`
 trait to use. Associated types are a slightly different way of declaring a
 generic parameter, but you don’t need to worry about them for now; we’ll cover
-them in more detail in Chapter 19.
+them in more detail in Chapter 20.
 
 We fill in the body of the `deref` method with `&self.0` so `deref` returns a
 reference to the value we want to access with the `*` operator; recall from the

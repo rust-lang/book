@@ -105,7 +105,7 @@ other pattern will result in an error. More complex macros will have more than
 one arm.
 
 Valid pattern syntax in macro definitions is different than the pattern syntax
-covered in Chapter 18 because macro patterns are matched against Rust code
+covered in Chapter 19 because macro patterns are matched against Rust code
 structure rather than values. Let’s walk through what the pattern pieces in
 Listing 20-28 mean; for the full macro pattern syntax, see the [Rust
 Reference][ref].

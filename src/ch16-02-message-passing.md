@@ -57,7 +57,7 @@ receiver. The abbreviations `tx` and `rx` are traditionally used in many fields
 for *transmitter* and *receiver* respectively, so we name our variables as such
 to indicate each end. We’re using a `let` statement with a pattern that
 destructures the tuples; we’ll discuss the use of patterns in `let` statements
-and destructuring in Chapter 18. For now, know that using a `let` statement
+and destructuring in Chapter 19. For now, know that using a `let` statement
 this way is a convenient approach to extract the pieces of the tuple returned
 by `mpsc::channel`.
 

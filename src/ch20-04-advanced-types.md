@@ -34,7 +34,7 @@ internally. The newtype pattern is a lightweight way to achieve encapsulation
 to hide implementation details, which we discussed in the [“Encapsulation that
 Hides Implementation
 Details”][encapsulation-that-hides-implementation-details]<!-- ignore -->
-section of Chapter 17.
+section of Chapter 18.
 
 ### Creating Type Synonyms with Type Aliases
 
@@ -245,7 +245,7 @@ types behind a pointer of some kind.
 We can combine `str` with all kinds of pointers: for example, `Box<str>` or
 `Rc<str>`. In fact, you’ve seen this before but with a different dynamically
 sized type: traits. Every trait is a dynamically sized type we can refer to by
-using the name of the trait. In Chapter 17 in the [“Using Trait Objects That
+using the name of the trait. In Chapter 18 in the [“Using Trait Objects That
 Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
 ignore --> section, we mentioned that to use traits as trait objects, we must
