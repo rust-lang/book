@@ -104,9 +104,13 @@ As a first example of ownership, we’ll look at the *scope* of some variables. 
 scope is the range within a program for which an item is valid. Take the
 following variable:
 
+<Listing>
+
 ```rust
 let s = "hello";
 ```
+
+</Listing>
 
 The variable `s` refers to a string literal, where the value of the string is
 hardcoded into the text of our program. The variable is valid from the point at
@@ -156,9 +160,13 @@ data allocated on the heap and as such is able to store an amount of text that
 is unknown to us at compile time. You can create a `String` from a string
 literal using the `from` function, like so:
 
+<Listing>
+
 ```rust
 let s = String::from("hello");
 ```
+
+</Listing>
 
 The double colon `::` operator allows us to namespace this particular `from`
 function under the `String` type rather than using some sort of name like
@@ -169,9 +177,13 @@ Module Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
 
 This kind of string *can* be mutated:
 
+<Listing>
+
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-01-can-mutate-string/src/main.rs:here}}
 ```
+
+</Listing>
 
 So, what’s the difference here? Why can `String` be mutated but literals
 cannot? The difference is in how these two types deal with memory.
@@ -211,9 +223,13 @@ Rust takes a different path: the memory is automatically returned once the
 variable that owns it goes out of scope. Here’s a version of our scope example
 from Listing 4-1 using a `String` instead of a string literal:
 
+<Listing>
+
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-02-string-scope/src/main.rs:here}}
 ```
+
+</Listing>
 
 There is a natural point at which we can return the memory our `String` needs
 to the allocator: when `s` goes out of scope. When a variable goes out of
@@ -256,9 +272,13 @@ onto the stack.
 
 Now let’s look at the `String` version:
 
+<Listing>
+
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-03-string-move/src/main.rs:here}}
 ```
+
+</Listing>
 
 This looks very similar, so we might assume that the way it works would be the
 same: that is, the second line would make a copy of the value in `s1` and bind
@@ -322,16 +342,24 @@ no longer valid. Therefore, Rust doesn’t need to free anything when `s1` goes
 out of scope. Check out what happens when you try to use `s1` after `s2` is
 created; it won’t work:
 
+<Listing>
+
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/src/main.rs:here}}
 ```
 
+</Listing>
+
 You’ll get an error like this because Rust prevents you from using the
 invalidated reference:
+
+<Listing>
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/output.txt}}
 ```
+
+</Listing>
 
 If you’ve heard the terms *shallow copy* and *deep copy* while working with
 other languages, the concept of copying the pointer, length, and capacity
@@ -368,9 +396,13 @@ programming languages, you’ve probably seen them before.
 
 Here’s an example of the `clone` method in action:
 
+<Listing>
+
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-05-clone/src/main.rs:here}}
 ```
+
+</Listing>
 
 This works just fine and explicitly produces the behavior shown in Figure 4-3,
 where the heap data *does* get copied.
@@ -384,9 +416,13 @@ different is going on.
 There’s another wrinkle we haven’t talked about yet. This code using
 integers—part of which was shown in Listing 4-2—works and is valid:
 
+<Listing>
+
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
 ```
+
+</Listing>
 
 But this code seems to contradict what we just learned: we don’t have a call to
 `clone`, but `x` is still valid and wasn’t moved into `y`.

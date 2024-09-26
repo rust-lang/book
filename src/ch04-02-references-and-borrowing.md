@@ -40,9 +40,13 @@ s1`</span>
 
 Let’s take a closer look at the function call here:
 
+<Listing>
+
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:here}}
 ```
+
+</Listing>
 
 The `&s1` syntax lets us create a reference that *refers* to the value of `s1`
 but does not own it. Because it does not own it, the value it points to will
@@ -51,9 +55,13 @@ not be dropped when the reference stops being used.
 Likewise, the signature of the function uses `&` to indicate that the type of
 the parameter `s` is a reference. Let’s add some explanatory annotations:
 
+<Listing>
+
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-08-reference-with-annotations/src/main.rs:here}}
 ```
+
+</Listing>
 
 The scope in which the variable `s` is valid is the same as any function
 parameter’s scope, but the value pointed to by the reference is not dropped
@@ -79,9 +87,13 @@ Listing 4-6. Spoiler alert: it doesn’t work!
 
 Here’s the error:
 
+<Listing>
+
 ```console
 {{#include ../listings/ch04-understanding-ownership/listing-04-06/output.txt}}
 ```
+
+</Listing>
 
 Just as variables are immutable by default, so are references. We’re not
 allowed to modify something we have a reference to.
@@ -118,9 +130,13 @@ attempts to create two mutable references to `s` will fail:
 
 Here’s the error:
 
+<Listing>
+
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/output.txt}}
 ```
+
+</Listing>
 
 This error says that this code is invalid because we cannot borrow `s` as
 mutable more than once at a time. The first mutable borrow is in `r1` and must
@@ -146,22 +162,34 @@ refusing to compile code with data races!
 As always, we can use curly brackets to create a new scope, allowing for
 multiple mutable references, just not *simultaneous* ones:
 
+<Listing>
+
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-11-muts-in-separate-scopes/src/main.rs:here}}
 ```
 
+</Listing>
+
 Rust enforces a similar rule for combining mutable and immutable references.
 This code results in an error:
+
+<Listing>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/src/main.rs:here}}
 ```
 
+</Listing>
+
 Here’s the error:
+
+<Listing>
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/output.txt}}
 ```
+
+</Listing>
 
 Whew! We *also* cannot have a mutable reference while we have an immutable one
 to the same value.
@@ -176,9 +204,13 @@ through the last time that reference is used. For instance, this code will
 compile because the last usage of the immutable references, the `println!`,
 occurs before the mutable reference is introduced:
 
+<Listing>
+
 ```rust,edition2021
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
 ```
+
+</Listing>
 
 The scopes of the immutable references `r1` and `r2` end after the `println!`
 where they are last used, which is before the mutable reference `r3` is
@@ -214,18 +246,26 @@ compile-time error:
 
 Here’s the error:
 
+<Listing>
+
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/output.txt}}
 ```
+
+</Listing>
 
 This error message refers to a feature we haven’t covered yet: lifetimes. We’ll
 discuss lifetimes in detail in Chapter 10. But, if you disregard the parts
 about lifetimes, the message does contain the key to why this code is a problem:
 
+<Listing>
+
 ```text
 this function's return type contains a borrowed value, but there is no value
 for it to be borrowed from
 ```
+
+</Listing>
 
 Let’s take a closer look at exactly what’s happening at each stage of our
 `dangle` code:
@@ -245,9 +285,13 @@ won’t let us do this.
 
 The solution here is to return the `String` directly:
 
+<Listing>
+
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-16-no-dangle/src/main.rs:here}}
 ```
+
+</Listing>
 
 This works without any problems. Ownership is moved out, and nothing is
 deallocated.
