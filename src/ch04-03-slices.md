@@ -12,13 +12,9 @@ one word, so the entire string should be returned.
 Let’s work through how we’d write the signature of this function without using
 slices, to understand the problem that slices will solve:
 
-<Listing>
-
 ```rust,ignore
 fn first_word(s: &String) -> ?
 ```
-
-</Listing>
 
 The `first_word` function has a `&String` as a parameter. We don’t want
 ownership, so this is fine. But what should we return? We don’t really have a
@@ -37,23 +33,15 @@ Because we need to go through the `String` element by element and check whether
 a value is a space, we’ll convert our `String` to an array of bytes using the
 `as_bytes` method.
 
-<Listing>
-
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
 ```
 
-</Listing>
-
 Next, we create an iterator over the array of bytes using the `iter` method:
-
-<Listing>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
-
-</Listing>
 
 We’ll discuss iterators in more detail in [Chapter 13][ch13]<!-- ignore -->.
 For now, know that `iter` is a method that returns each element in a collection
@@ -73,13 +61,9 @@ Inside the `for` loop, we search for the byte that represents the space by
 using the byte literal syntax. If we find a space, we return the position.
 Otherwise, we return the length of the string by using `s.len()`.
 
-<Listing>
-
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:inside_for}}
 ```
-
-</Listing>
 
 We now have a way to find out the index of the end of the first word in the
 string, but there’s a problem. We’re returning a `usize` on its own, but it’s
@@ -106,13 +90,9 @@ Having to worry about the index in `word` getting out of sync with the data in
 `s` is tedious and error prone! Managing these indices is even more brittle if
 we write a `second_word` function. Its signature would have to look like this:
 
-<Listing>
-
 ```rust,ignore
 fn second_word(s: &String) -> (usize, usize) {
 ```
-
-</Listing>
 
 Now we’re tracking a starting *and* an ending index, and we have even more
 values that were calculated from data in a particular state but aren’t tied to
@@ -125,13 +105,9 @@ Luckily, Rust has a solution to this problem: string slices.
 
 A *string slice* is a reference to part of a `String`, and it looks like this:
 
-<Listing>
-
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
 ```
-
-</Listing>
 
 Rather than a reference to the entire `String`, `hello` is a reference to a
 portion of the `String`, specified in the extra `[0..5]` bit. We create slices
@@ -157,8 +133,6 @@ src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 With Rust’s `..` range syntax, if you want to start at index 0, you can drop
 the value before the two periods. In other words, these are equal:
 
-<Listing>
-
 ```rust
 let s = String::from("hello");
 
@@ -166,12 +140,8 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-</Listing>
-
 By the same token, if your slice includes the last byte of the `String`, you
 can drop the trailing number. That means these are equal:
-
-<Listing>
 
 ```rust
 let s = String::from("hello");
@@ -182,12 +152,8 @@ let slice = &s[3..len];
 let slice = &s[3..];
 ```
 
-</Listing>
-
 You can also drop both values to take a slice of the entire string. So these
 are equal:
-
-<Listing>
 
 ```rust
 let s = String::from("hello");
@@ -197,8 +163,6 @@ let len = s.len();
 let slice = &s[0..len];
 let slice = &s[..];
 ```
-
-</Listing>
 
 > Note: String slice range indices must occur at valid UTF-8 character
 > boundaries. If you attempt to create a string slice in the middle of a
@@ -229,13 +193,9 @@ the slice and the number of elements in the slice.
 
 Returning a slice would also work for a `second_word` function:
 
-<Listing>
-
 ```rust,ignore
 fn second_word(s: &String) -> &str {
 ```
-
-</Listing>
 
 We now have a straightforward API that’s much harder to mess up because the
 compiler will ensure the references into the `String` remain valid. Remember
@@ -257,13 +217,9 @@ compile-time error:
 
 Here’s the compiler error:
 
-<Listing>
-
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}
 ```
-
-</Listing>
 
 Recall from the borrowing rules that if we have an immutable reference to
 something, we cannot also take a mutable reference. Because `clear` needs to
@@ -282,13 +238,9 @@ but it has also eliminated an entire class of errors at compile time!
 Recall that we talked about string literals being stored inside the binary. Now
 that we know about slices, we can properly understand string literals:
 
-<Listing>
-
 ```rust
 let s = "Hello, world!";
 ```
-
-</Listing>
 
 The type of `s` here is `&str`: it’s a slice pointing to that specific point of
 the binary. This is also why string literals are immutable; `&str` is an
@@ -299,13 +251,9 @@ immutable reference.
 Knowing that you can take slices of literals and `String` values leads us to
 one more improvement on `first_word`, and that’s its signature:
 
-<Listing>
-
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
-
-</Listing>
 
 A more experienced Rustacean would write the signature shown in Listing 4-9
 instead because it allows us to use the same function on both `&String` values
@@ -341,18 +289,12 @@ makes our API more general and useful without losing any functionality:
 String slices, as you might imagine, are specific to strings. But there’s a
 more general slice type too. Consider this array:
 
-<Listing>
-
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
-</Listing>
-
 Just as we might want to refer to part of a string, we might want to refer to
 part of an array. We’d do so like this:
-
-<Listing>
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -361,8 +303,6 @@ let slice = &a[1..3];
 
 assert_eq!(slice, &[2, 3]);
 ```
-
-</Listing>
 
 This slice has the type `&[i32]`. It works the same way as string slices do, by
 storing a reference to the first element and a length. You’ll use this kind of
