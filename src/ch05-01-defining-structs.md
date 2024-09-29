@@ -184,6 +184,14 @@ values. Otherwise, tuple struct instances are similar to tuples in that you can
 destructure them into their individual pieces, and you can use a `.` followed
 by the index to access an individual value.
 
+When destructuring tuple structs, you must mention the type of the instance
+being destructured. For example, the line below would not compile when used in
+the previous listing:
+
+```rust
+    let (r, g, b) = black;
+```
+
 ### Unit-Like Structs Without Any Fields
 
 You can also define structs that don’t have any fields! These are called
