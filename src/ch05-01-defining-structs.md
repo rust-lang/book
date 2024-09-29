@@ -147,14 +147,18 @@ the struct’s definition.
 
 Note that the struct update syntax uses `=` like an assignment; this is because
 it moves the data, just as we saw in the [“Variables and Data Interacting with
-Move”][move]<!-- ignore --> section. In this example, we can no longer use
-`user1` as a whole after creating `user2` because the `String` in the
-`username` field of `user1` was moved into `user2`. If we had given `user2` new
-`String` values for both `email` and `username`, and thus only used the
-`active` and `sign_in_count` values from `user1`, then `user1` would still be
-valid after creating `user2`. Both `active` and `sign_in_count` are types that
-implement the `Copy` trait, so the behavior we discussed in the [“Stack-Only
-Data: Copy”][copy]<!-- ignore --> section would apply.
+Move”][move]<!-- ignore --> section. However, the fields are moved
+individually, and the original struct is not invalidated if it contains
+reference the data that wasn't moved.
+
+In Listing 5-7, we can no longer use `user1.username` because it was moved into
+`user2.username`. However, we can continue to use `user1.email` normally. If we
+had given `user2` new `String` values for both `email` and `username`, and thus
+only used the `active` and `sign_in_count` values from `user1`, then
+`user1.username` would still be valid after creating `user2`. Both `active` and
+`sign_in_count` are types that implement the `Copy` trait, so the behavior we
+discussed in the [“Stack-Only Data: Copy”][copy]<!-- ignore --> section would
+apply.
 
 ### Using Tuple Structs Without Named Fields to Create Different Types
 
