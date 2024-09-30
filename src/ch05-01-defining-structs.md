@@ -191,7 +191,7 @@ You can also define structs that don’t have any fields! These are called
 we mentioned in [“The Tuple Type”][tuples]<!-- ignore --> section. Unit-like
 structs can be useful when you need to implement a trait on some type but don’t
 have any data that you want to store in the type itself. We’ll discuss traits
-in Chapter 10. Here’s an example of declaring and instantiating a unit struct
+in [Chapter 10][traits]. Here’s an example of declaring and instantiating a unit struct
 named `AlwaysEqual`:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -207,7 +207,7 @@ name we defined, without any curly brackets or parentheses. Imagine that later
 we’ll implement behavior for this type such that every instance of
 `AlwaysEqual` is always equal to every instance of any other type, perhaps to
 have a known result for testing purposes. We wouldn’t need any data to
-implement that behavior! You’ll see in Chapter 10 how to define traits and
+implement that behavior! You’ll see in [Chapter 10][traits] how to define traits and
 implement them on any type, including unit-like structs.
 
 > ### Ownership of Struct Data
@@ -219,7 +219,7 @@ implement them on any type, including unit-like structs.
 >
 > It’s also possible for structs to store references to data owned by something
 > else, but to do so requires the use of *lifetimes*, a Rust feature that we’ll
-> discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
+> discuss in [Chapter 10][lifetimes]. Lifetimes ensure that the data referenced by a struct
 > is valid for as long as the struct is. Let’s say you try to store a reference
 > in a struct without specifying lifetimes, like the following; this won’t work:
 >
@@ -281,7 +281,7 @@ implement them on any type, including unit-like structs.
 > error: could not compile `structs` (bin "structs") due to 2 previous errors
 > ```
 >
-> In Chapter 10, we’ll discuss how to fix these errors so you can store
+> In [Chapter 10][lifetimes], we’ll discuss how to fix these errors so you can store
 > references in structs, but for now, we’ll fix errors like these using owned
 > types like `String` instead of references like `&str`.
 
@@ -295,3 +295,5 @@ add `> ` before every line -->
 [tuples]: ch03-02-data-types.html#the-tuple-type
 [move]: ch04-01-what-is-ownership.html#variables-and-data-interacting-with-move
 [copy]: ch04-01-what-is-ownership.html#stack-only-data-copy
+[traits]: ch10-02-traits.html
+[lifetimes]: ch10-03-lifetime-syntax.html
