@@ -12,11 +12,13 @@ particular type for the life of that reference.
 Here is how you would define and use a `calculate_length` function that has a
 reference to an object as a parameter instead of taking ownership of the value:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:all}}
 ```
+
+</Listing>
 
 First, notice that all the tuple code in the variable declaration and the
 function return value is gone. Second, note that we pass `&s1` into
@@ -67,13 +69,13 @@ to give it back. You don’t own it.
 So, what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-6. Spoiler alert: it doesn’t work!
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="4-6" file-name="src/main.rs" caption="Attempting to modify a borrowed value">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 4-6: Attempting to modify a borrowed value</span>
+</Listing>
 
 Here’s the error:
 
@@ -89,11 +91,13 @@ allowed to modify something we have a reference to.
 We can fix the code from Listing 4-6 to allow us to modify a borrowed value
 with just a few small tweaks that use, instead, a *mutable reference*:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-09-fixes-listing-04-06/src/main.rs}}
 ```
+
+</Listing>
 
 First we change `s` to be `mut`. Then we create a mutable reference with `&mut
 s` where we call the `change` function, and update the function signature to
@@ -104,11 +108,13 @@ Mutable references have one big restriction: if you have a mutable reference to
 a value, you can have no other references to that value. This code that
 attempts to create two mutable references to `s` will fail:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/src/main.rs:here}}
 ```
+
+</Listing>
 
 Here’s the error:
 
@@ -198,11 +204,13 @@ reference to the data does.
 Let’s try to create a dangling reference to see how Rust prevents them with a
 compile-time error:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/src/main.rs}}
 ```
+
+</Listing>
 
 Here’s the error:
 
@@ -222,11 +230,13 @@ for it to be borrowed from
 Let’s take a closer look at exactly what’s happening at each stage of our
 `dangle` code:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-15-dangling-reference-annotated/src/main.rs:here}}
 ```
+
+</Listing>
 
 Because `s` is created inside `dangle`, when the code of `dangle` is finished,
 `s` will be deallocated. But we tried to return a reference to it. That means
