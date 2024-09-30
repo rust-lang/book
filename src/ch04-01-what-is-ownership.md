@@ -356,6 +356,26 @@ In addition, there’s a design choice that’s implied by this: Rust will never
 automatically create “deep” copies of your data. Therefore, any *automatic*
 copying can be assumed to be inexpensive in terms of runtime performance.
 
+#### Scope and Shadowing
+
+The inverse of this is true for the relationship between scoping, ownership, and
+memory being freed via the `drop` function as well. Back in our discussion of
+[Shadowing][shadowing], we noted that when you define a new variable with the
+same name as an existing variable, it shadows the old variable. This is another
+way that a variable can go out of scope.
+
+Consider this code, for example:
+
+```rust
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04b-shadowing/src/main.rs:here}}
+```
+
+We initially declare a variable `s` and bind it to a `String` with the value
+`"hello"`. Then we immediately declare a new value `s`, which is a `String` with
+the value `"ahoy"`. The second declaration shadows the first one, so it
+immediately goes out of scope and its memory is freed. When we print the value
+at the end, it will be `"ahoy, world!"`.
+
 <!-- Old heading. Do not remove or links may break. -->
 <a id="ways-variables-and-data-interact-clone"></a>
 
