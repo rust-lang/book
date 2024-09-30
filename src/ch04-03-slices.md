@@ -119,15 +119,15 @@ corresponds to `ending_index` minus `starting_index`. So, in the case of `let
 world = &s[6..11];`, `world` would be a slice that contains a pointer to the
 byte at index 6 of `s` with a length value of `5`.
 
-Figure 4-6 shows this in a diagram.
+Figure 4-7 shows this in a diagram.
 
 <img alt="Three tables: a table representing the stack data of s, which points
 to the byte at index 0 in a table of the string data &quot;hello world&quot; on
 the heap. The third table rep-resents the stack data of the slice world, which
 has a length value of 5 and points to byte 6 of the heap data table."
-src="img/trpl04-06.svg" class="center" style="width: 50%;" />
+src="img/trpl04-07.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-6: String slice referring to part of a
+<span class="caption">Figure 4-7: String slice referring to part of a
 `String`</span>
 
 With Rust’s `..` range syntax, if you want to start at index 0, you can drop

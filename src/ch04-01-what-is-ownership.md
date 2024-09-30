@@ -356,6 +356,37 @@ In addition, there’s a design choice that’s implied by this: Rust will never
 automatically create “deep” copies of your data. Therefore, any *automatic*
 copying can be assumed to be inexpensive in terms of runtime performance.
 
+#### Scope and Assignment
+
+The inverse of this is true for the relationship between scoping, ownership, and
+memory being freed via the `drop` function as well. When you assign a completely
+new value to an existing variable, Rust will call `drop` and free the original
+value’s memory immediately. Consider this code, for example:
+
+```rust
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04b-replacement-drop/src/main.rs:here}}
+```
+
+We initially declare a variable `s` and bind it to a `String` with the value
+`"hello"`. Then we immediately create a new `String` with the value `"ahoy"` and
+assign it to `s`. At this point, nothing is referring to the original value on
+the heap at all.
+
+<img alt="One table s representing the string value on the stack, pointing to
+the second piece of string data (ahoy) on the heap, with the original string
+data (hello) grayed out because it cannot be accessed anymore."
+src="img/trpl04-05.svg"
+class="center"
+style="width: 50%;"
+/>
+
+<span class="caption">Figure 4-5: Representation in memory after the initial
+value has been replaced in its entirety.</span>
+
+The original string thus immediately goes out of scope. Rust will run the `drop`
+function on it and its memory will be freed right away. When we print the value
+at the end, it will be `"ahoy, world!"`.
+
 <!-- Old heading. Do not remove or links may break. -->
 <a id="ways-variables-and-data-interact-clone"></a>
 
