@@ -10,5 +10,7 @@ a better way to group data.
 We’ll demonstrate how to define and instantiate structs. We’ll discuss how to
 define associated functions, especially the kind of associated functions called
 *methods*, to specify behavior associated with a struct type. Structs and enums
-(discussed in Chapter 6) are the building blocks for creating new types in your
+(discussed in [Chapter 6][enums]) are the building blocks for creating new types in your
 program’s domain to take full advantage of Rust’s compile-time type checking.
+
+[enums]: ch06-00-enums.html
