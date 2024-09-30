@@ -87,7 +87,7 @@ that has a width of `30` and a height of `50`.
 
 Our `area` function is now defined with one parameter, which we’ve named
 `rectangle`, whose type is an immutable borrow of a struct `Rectangle`
-instance. As mentioned in Chapter 4, we want to borrow the struct rather than
+instance. As mentioned in [Chapter 4][references], we want to borrow the struct rather than
 take ownership of it. This way, `main` retains its ownership and can continue
 using `rect1`, which is the reason we use the `&` in the function signature and
 where we call the function.
@@ -230,7 +230,7 @@ In addition to the `Debug` trait, Rust has provided a number of traits for us
 to use with the `derive` attribute that can add useful behavior to our custom
 types. Those traits and their behaviors are listed in [Appendix C][app-c]<!--
 ignore -->. We’ll cover how to implement these traits with custom behavior as
-well as how to create your own traits in Chapter 10. There are also many
+well as how to create your own traits in [Chapter 10][traits]. There are also many
 attributes other than `derive`; for more information, see [the “Attributes”
 section of the Rust Reference][attributes].
 
@@ -246,3 +246,5 @@ defined on our `Rectangle` type.
 [dbg]: ../std/macro.dbg.html
 [err]: ch12-06-writing-to-stderr-instead-of-stdout.html
 [attributes]: ../reference/attributes.html
+[references]: ch04-02-references-and-borrowing.html
+[traits]: ch10-02-traits.html
