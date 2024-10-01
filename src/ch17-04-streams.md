@@ -34,7 +34,7 @@ method and then awaiting the output, as in Listing 17-30.
 We start with an array of numbers, which we convert to an iterator and then call
 `map` on to double all the values. Then we convert the iterator into a stream
 using the `trpl::stream_from_iter` function. Then we loop over the items in the
-stream as they arrive with the `while let` loop
+stream as they arrive with the `while let` loop.
 
 Unfortunately, when we try to run the code, it does not compile. Instead, as we
 can see in the output, it reports that there is no `next` method available.
