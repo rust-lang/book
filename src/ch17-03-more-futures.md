@@ -112,8 +112,7 @@ Unfortunately, this still does not compile. In fact, we have the same basic
 error we did before, but we get one for both the second and third `Box::new`
 calls, and we also get new errors referring to the `Unpin` trait. We will come
 back to the `Unpin` errors in a moment. First, let’s fix the type errors on the
-`Box::new` calls, by explicitly annotating the type of the futures as a trait
-object:
+`Box::new` calls, by explicitly annotating the type of the `futures` variable:
 
 <Listing number="17-17" caption="Fixing the rest of the type mismatch errors by using an explicit type declaration" file-name="src/main.rs">
 
