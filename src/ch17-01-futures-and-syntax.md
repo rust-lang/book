@@ -55,9 +55,9 @@ crates.
   for `trpl` because it is good and widely used.
 
 In some cases, `trpl` also renames or wraps the original APIs to let us stay
-focused on the details relevant to chapter. If you want to understand what the
-crate does, we encourage you to check out [its source code][crate-source]. You
-will be able to see what crate each re-export comes from, and we have left
+focused on the details relevant to this chapter. If you want to understand what
+the crate does, we encourage you to check out [its source code][crate-source].
+You will be able to see what crate each re-export comes from, and we have left
 extensive comments explaining what the crate does.
 
 Go ahead and add the `trpl` crate to your `hello-async` project:
