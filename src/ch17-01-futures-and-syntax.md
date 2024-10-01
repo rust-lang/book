@@ -210,8 +210,8 @@ account for whether the page had a `<title>`.
 </Listing>
 
 Unfortunately, this does not compile. The only place we can use the `await`
-keyword is in async functions or blocks, so Rust will not let us mark `main` as
-`async`.
+keyword is in async functions or blocks, and Rust will not let us mark the
+special `main` function as `async`.
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-03
