@@ -281,7 +281,8 @@ keyword—represents a place where control gets handed back to the runtime. To
 make that work, Rust needs to keep track of the state involved in the async
 block, so that the runtime can kick off some other work and then come back when
 it is ready to try advancing this one again. This is an invisible state machine,
-as if you wrote something like this:
+as if you wrote an enum like this to save the current state at each `await`
+point:
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/no-listing-state-machine/src/lib.rs:enum}}
