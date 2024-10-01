@@ -385,17 +385,17 @@ output, not just one stream or the other.
 
 </Listing>
 
-Now when we run the program, it stop after pulling twenty items from the stream,
-and the intervals do not overwhelm the messages. We also do not get `Interval:
-100` or `Interval: 200` or so on, but instead simply get `Interval: 1`,
-`Interval: 2`, and so on—even though we have a source stream which *can* produce
-an event every millisecond. That is because the `throttle` call produces a new
-stream, wrapping the original stream, so that the original stream only gets
-polled at the throttle rate, not its own “native” rate.  We do not have a bunch
-of unhandled interval messages we are simply choosing to ignore. Instead, we
-never produce those interval messages in the first place! This is the inherent
-“laziness” of Rust’s futures at work again, allowing us to choose our
-performance characteristics.
+Now when we run the program, it stops after pulling twenty items from the
+stream, and the intervals do not overwhelm the messages. We also do not get
+`Interval: 100` or `Interval: 200` or so on, but instead get `Interval: 1`,
+`Interval: 2`, and so on—even though we have a source stream which *can*
+produce an event every millisecond. That is because the `throttle` call
+produces a new stream, wrapping the original stream, so that the original
+stream only gets polled at the throttle rate, not its own “native” rate. We do
+not have a bunch of unhandled interval messages we are simply choosing to
+ignore. Instead, we never produce those interval messages in the first place!
+This is the inherent “laziness” of Rust’s futures at work again, allowing us to
+choose our performance characteristics.
 
 <!-- manual-regeneration
 cd listings/listing-17-39
