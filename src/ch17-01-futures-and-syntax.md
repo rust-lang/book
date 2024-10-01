@@ -184,7 +184,7 @@ Let’s walk through each part of the transformed version:
   above. That value matches the `Output` type in the return type. This is just
   like other blocks you have seen.
 * The new function body is an `async move` block because of how it uses the
-  `name` argument. (We will talk about `async` vs. `async move` much more later
+  `url` parameter. (We will talk about `async` vs. `async move` much more later
   in the chapter.)
 * The new version of the function has a kind of lifetime we have not seen before
   in the output type: `'_`. Because the function returns a `Future` which refers
