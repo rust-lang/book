@@ -1,33 +1,16 @@
 digraph {
    rankdir = LR;
    overlap = false;
-   newrank = true;
    dpi = 300.0;
-   splines = false;
-   clusterrank = "local";
    node [shape = "plaintext";];
    
-   subgraph cluster_stack {
-      peripheries = 0;
-      rank = "same";
-      
-      // Just to have the right height!
-      a [label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="gray">
-         <TR><TD>a</TD></TR>
-         <TR><TD>0</TD></TR>
-         <TR><TD>1</TD></TR>
-         <TR><TD>2</TD></TR>
-         <TR><TD>3</TD></TR>
-         </TABLE>>;style = invis;];
-      
-      s [label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-         <TR><TD COLSPAN="2" SIDES="B">s</TD></TR>
-         <TR><TD>name</TD><TD>value</TD></TR>
-         <TR><TD>ptr</TD><TD PORT="pointer"></TD></TR>
-         <TR><TD>len</TD><TD>4</TD></TR>
-         <TR><TD>capacity</TD><TD>4</TD></TR>
-         </TABLE>>;];
-   }
+   s [label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD COLSPAN="2" SIDES="B">s</TD></TR>
+      <TR><TD>name</TD><TD>value</TD></TR>
+      <TR><TD>ptr</TD><TD PORT="pointer"></TD></TR>
+      <TR><TD>len</TD><TD>4</TD></TR>
+      <TR><TD>capacity</TD><TD>4</TD></TR>
+      </TABLE>>;];
    
    subgraph cluster_heap {
       peripheries = 0;
