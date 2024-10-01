@@ -117,9 +117,9 @@ throughout the chapter. In that future, we await those messages, just like in
 the other message-passing examples we have seen.
 
 To return to the examples we opened the chapter with: you could imagine running
-a set of video encoding tasks using a dedicated thread, since video encoding is
-compute bound, but notifying the UI that those operations are done with an async
-channel. Examples of this kind of mix abound!
+a set of video encoding tasks using a dedicated thread, because video encoding
+is compute bound, but notifying the UI that those operations are done with an
+async channel. Examples of this kind of mix abound!
 
 ## Summary
 

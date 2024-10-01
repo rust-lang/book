@@ -195,7 +195,7 @@ those, however, `Pin` only works with *pointer types* like references (`&` and
 `&mut`) and smart pointers (`Box`, `Rc`, and so on). To be precise, `Pin` works
 with types which implement the `Deref` or `DerefMut` traits, which we covered in
 Chapter 15. You can think of this restriction as equivalent to only working with
-pointers, though, since implementing `Deref` or `DerefMut` means your type
+pointers, though, because implementing `Deref` or `DerefMut` means your type
 behaves like a pointer type. `Pin` is also not a pointer itself, and it does not
 have any behavior of its own like the ref counting of `Rc` or `Arc`. It is
 purely a tool the compiler can use to uphold the relevant guarantees, by
@@ -410,8 +410,8 @@ the unit type `()`).
 `Stream` also defines a method to get those items. We call it `poll_next`, to
 make it clear that it polls like `Future::poll` and produces a sequence of items
 like `Iterator::next`. Its return type combines `Poll`with `Option`. The outer
-type is `Poll`, since it has to be checked for readiness, just like a future.
-The inner type is `Option`, since it needs to signal whether there are more
+type is `Poll`, because it has to be checked for readiness, just like a future.
+The inner type is `Option`, because it needs to signal whether there are more
 messages, just like an iterator.
 
 Something very similar to this will likely end up standardized as part of Rust’s

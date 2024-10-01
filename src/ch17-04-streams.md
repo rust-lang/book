@@ -186,7 +186,7 @@ be polled.
 
 </Listing>
 
-However, since there are no delays between messages, this timeout does not
+However, because there are no delays between messages, this timeout does not
 change the behavior of the program. Let’s add a variable delay to the messages
 we send. In `get_messages`, we use the `enumerate` iterator method with the
 `messages` array so that we can get the index of each item we are sending along
@@ -278,7 +278,7 @@ In Listing 17-36, we start by defining a `count` in the task. (We could define
 it outside the task, too, but it is clearer to limit the scope of any given
 variable.) Then we create a an infinite loop. Each iteration of the loop
 asynchronously sleeps for one millisecond, increments the count, and then sends
-it over the channel. Since this is all wrapped in the task created by
+it over the channel. Because this is all wrapped in the task created by
 `spawn_task`, all of it will get cleaned up along with the runtime, including
 the infinite loop.
 
@@ -318,15 +318,15 @@ for a `timeout` call. Meanwhile, the `intervals` stream has the type `impl
 Stream<Item = u32>`. To merge these two streams, we need to transform one of
 them to match the other.
 
-In Listing 17-38, we rework with the `intervals` stream, since `messages` is
+In Listing 17-38, we rework with the `intervals` stream, because `messages` is
 already in the basic format we want and has to handle timeout errors. First, we
 can use the `map` helper method to transform the `intervals` into a string.
-Second, we need to match the `Timeout` from `messages`. Since we do not actually
-*want* a timeout for `intervals`, though, we can just create a timeout which is
-longer than the other durations we are using. Here, we create a 10-second
-timeout with `Duration::from_secs(10)`. Finally, we need to make `stream`
-mutable, so that the `while let` loop’s `next` calls can iterate through the
-stream, and pin it so that it is safe to do so.
+Second, we need to match the `Timeout` from `messages`. Because we do not
+actually *want* a timeout for `intervals`, though, we can just create a timeout
+which is longer than the other durations we are using. Here, we create a
+10-second timeout with `Duration::from_secs(10)`. Finally, we need to make
+`stream` mutable, so that the `while let` loop’s `next` calls can iterate
+through the stream, and pin it so that it is safe to do so.
 
 <!-- We cannot directly test this one, because it never stops. -->
 
@@ -365,8 +365,8 @@ Listing 17-39 shows one way to solve these last two problems. First, we use the
 `throttle` method on the `intervals` stream, so that it does not overwhelm the
 `messages` stream. Throttling is a way of limiting the rate at which a function
 will be called—or, in this case, how often the stream will be polled. Once every
-hundred milliseconds should do, since that is in the same ballpark as how often
-our messages arrive.
+hundred milliseconds should do, because that is in the same ballpark as how
+often our messages arrive.
 
 To limit the number of items we will accept from a stream, we can use the `take`
 method. We apply it to the *merged* stream, because we want to limit the final

@@ -117,7 +117,7 @@ Once we have `response_text`, we can then parse it into an instance of the
 type we can use to work with the HTML as a richer data structure. In particular,
 we can use the `select_first` method to find the first instance of a given CSS
 selector. By passing the string `"title"`, we will get the first `<title>`
-element in the document, if there is one. Since there may not be any matching
+element in the document, if there is one. Because there may not be any matching
 element, `select_first` returns an `Option<ElementRef>`. Finally, we use the
 `Option::map` method, which lets us work with the item in the `Option` if it is
 present, and do nothing if it is not. (We could also use a `match` expression
@@ -194,11 +194,11 @@ Let’s walk through each part of the transformed version:
   reference which could be involved, but we *do* have to be explicit that the
   resulting `Future` is bound by that lifetime.
 
-Now we can call `page_title` in `main`. To start, we will just get the title for
-a single page. In Listing 17-3, we follow the same pattern we used for getting
-command line arguments back in Chapter 12. Then we pass the first URL
-`page_title`, and await the result. Since the value produced by the future is an
-`Option<String>`, we use a `match` expression to print different messages to
+Now we can call `page_title` in `main`. To start, we will just get the title
+for a single page. In Listing 17-3, we follow the same pattern we used for
+getting command line arguments back in Chapter 12. Then we pass the first URL
+`page_title`, and await the result. Because the value produced by the future is
+an `Option<String>`, we use a `match` expression to print different messages to
 account for whether the page had a `<title>`.
 
 <Listing number="17-3" file-name="src/main.rs" caption="Calling the `page_title` function from `main` with a user-supplied argument">

@@ -36,7 +36,7 @@ happen while the network operation is still ongoing.
 In both of these examples, the operating system’s invisible interrupts provide a
 form of concurrency. That concurrency only happens at the level of a whole
 program, though: the operating system interrupts one program to let other
-programs get work done. In many cases, since we understand our programs at a
+programs get work done. In many cases, because we understand our programs at a
 much more granular level than the operating system does, we can spot lots of
 opportunities for concurrency that the operating system cannot see.
 

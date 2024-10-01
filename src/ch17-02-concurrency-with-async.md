@@ -1,7 +1,7 @@
 ## Concurrency With Async
 
 In this section, we will apply async to some of the same concurrency challenges
-we tackled with threads in chapter 16. Since we already talked about a lot of
+we tackled with threads in chapter 16. Because we already talked about a lot of
 the key ideas there, in this section we will focus on what is different between
 threads and futures.
 
