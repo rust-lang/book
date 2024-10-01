@@ -404,26 +404,26 @@ copy and paste only the program output
 -->
 
 ```text
-Interval #1
+Interval: 1
 Message: 'a'
-Interval #2
-Interval #3
+Interval: 2
+Interval: 3
 Problem: Elapsed(())
-Interval #4
+Interval: 4
 Message: 'b'
-Interval #5
+Interval: 5
 Message: 'c'
-Interval #6
-Interval #7
+Interval: 6
+Interval: 7
 Problem: Elapsed(())
-Interval #8
+Interval: 8
 Message: 'd'
-Interval #9
+Interval: 9
 Message: 'e'
-Interval #10
-Interval #11
+Interval: 10
+Interval: 11
 Problem: Elapsed(())
-Interval #12
+Interval: 12
 ```
 
 There is one last thing we need to handle: errors! With both of these
