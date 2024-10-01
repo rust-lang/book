@@ -358,7 +358,7 @@ that future’s output, and `Right` with the second future argument’s output i
 *that* one finishes first. This matches the order the arguments appear when
 calling the function: the first argument is to the left of the second argument.
 
-We also update `page_title_for` to return the same URL passed in. That way, if
+We also update `page_title` to return the same URL passed in. That way, if
 the page which returns first does not have a `<title>` we can resolve, we can
 still print a meaningful message. With that information available, we wrap up by
 updating our `println!` output to indicate both which URL finished first and
