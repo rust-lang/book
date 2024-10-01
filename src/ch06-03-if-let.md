@@ -31,8 +31,10 @@ sign. It works the same way as a `match`, where the expression is given to the
 `match` and the pattern is its first arm. In this case, the pattern is
 `Some(max)`, and the `max` binds to the value inside the `Some`. We can then
 use `max` in the body of the `if let` block in the same way we used `max` in
-the corresponding `match` arm. The code in the `if let` block isn’t run if the
-value doesn’t match the pattern.
+the corresponding `match` arm. Much like `match`, the binding is only valid for
+the duration of the scope defined by the `if let`, and cannot be used later.
+The code in the `if let` block isn’t run if the value doesn’t match the
+pattern.
 
 Using `if let` means less typing, less indentation, and less boilerplate code.
 However, you lose the exhaustive checking that `match` enforces. Choosing

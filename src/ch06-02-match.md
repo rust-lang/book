@@ -101,7 +101,9 @@ would be `Coin::Quarter(UsState::Alaska)`. When we compare that value with each
 of the match arms, none of them match until we reach `Coin::Quarter(state)`. At
 that point, the binding for `state` will be the value `UsState::Alaska`. We can
 then use that binding in the `println!` expression, thus getting the inner
-state value out of the `Coin` enum variant for `Quarter`.
+state value out of the `Coin` enum variant for `Quarter`. The binding is only
+valid for the scope defined by the right side of the arm, and cannot be
+used once that scope is over.
 
 ### Matching with `Option<T>`
 
