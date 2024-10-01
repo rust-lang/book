@@ -81,7 +81,7 @@ reasonably expect that to be `Stream`, but the trait we need *here* is actually
 the Rust community for extending one trait with another.
 
 You might be wondering why `StreamExt` instead of `Stream`, and for that matter
-whether there is a `Stream` type at all. Briefly, the answer is that throughout
+whether there is a `Stream` trait at all. Briefly, the answer is that throughout
 the Rust ecosystem, the `Stream` trait defines a low-level interface which
 effectively combines the `Iterator` and `Future` traits. The `StreamExt` trait
 supplies a higher-level set of APIs on top of `Stream`, including the `next`
