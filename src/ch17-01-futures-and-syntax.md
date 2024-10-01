@@ -16,7 +16,8 @@ The `async` keyword can be applied to blocks and functions to specify that they
 can be interrupted and resumed. Within an async block or async function, you can
 use the `await` keyword to wait for a future to become ready, called *awaiting a
 future*. Each place you await a future within an async block or function is a
-place that async block or function may get paused and resumed.
+place that async block or function may get paused and resumed. The process of
+checking with a future to see if its value is available yet is called *polling*.
 
 Some other languages also use `async` and `await` keywords for async
 programming. If you are familiar with those languages, you may notice some
