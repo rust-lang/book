@@ -85,9 +85,10 @@ whether there is a `Stream` trait at all. Briefly, the answer is that throughout
 the Rust ecosystem, the `Stream` trait defines a low-level interface which
 effectively combines the `Iterator` and `Future` traits. The `StreamExt` trait
 supplies a higher-level set of APIs on top of `Stream`, including the `next`
-method and also many other utility methods like those from `Iterator`. We will
-return to the `Stream` and `StreamExt` traits in a bit more detail at the end of
-the chapter. For now, this is enough to let us keep moving.
+method as well as other utility methods similar to those provided by the
+`Iterator` trait. We will return to the `Stream` and `StreamExt` traits in a
+bit more detail at the end of the chapter. For now, this is enough to let us
+keep moving.
 
 All we need to do is add a `use` statement for `trpl::StreamExt`, as in Listing
 17-31.
