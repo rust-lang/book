@@ -319,12 +319,13 @@ make much sense. Stopping after handling some arbitrary number of messages would
 make the program shut down, but we could miss messages. We need some other way
 to make sure that `tx` gets dropped *before* the end of the function.
 
-Right now, the async block where we send the messages only borrows `tx`, but if
-we could move `tx` into that async block, it would be dropped once that block
-ends. In Chapter 13, we learned how to use the `move` keyword with closures, and
-in Chapter 16, we saw that we often need to use move data into closures when
-working with threads. The same basic dynamics apply to async blocks, so the
-`move` keyword works with async blocks just like it does with closures.
+Right now, the async block where we send the messages only borrows `tx` because
+sending a message doesn't require ownership, but if we could move `tx` into
+that async block, it would be dropped once that block ends. In Chapter 13, we
+learned how to use the `move` keyword with closures, and in Chapter 16, we saw
+that we often need to move data into closures when working with threads. The
+same basic dynamics apply to async blocks, so the `move` keyword works with
+async blocks just like it does with closures.
 
 In Listing 17-12, we change the async block for sending messages from a plain
 `async` block to an `async move` block. When we run *this* version of the code,
