@@ -273,10 +273,8 @@ When we run this, we get the behavior we might have expected initially:
 ```
 
 Phew: we finally have some working async code! This now compiles, and we can run
-it. Pick a couple URLs and run the command line tool. You may discover that some
-sites are reliably faster than others, while in other cases which site “wins”
-varies from run to run. Let’s briefly turn our attention back to how futures
-work.
+it. Before we add code to race two sites against each other, let’s briefly turn
+our attention back to how futures work.
 
 Each *await point*—that is, every place where the code uses the `await`
 keyword—represents a place where control gets handed back to the runtime. To
