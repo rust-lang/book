@@ -314,8 +314,8 @@ returned by the `async` block until it returns `Ready`.
 > function which runs a future to completion the way `trpl::run` does.
 
 Let’s put these pieces together and see how we can write concurrent code, by
-calling `page_title_for` with two different URLs passed in from the command line
-and racing it.
+calling `page_title` with two different URLs passed in from the command line
+and racing them.
 
 <Listing number="17-5" caption="" file-name="src/main.rs">
 
