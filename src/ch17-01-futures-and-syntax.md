@@ -364,10 +364,11 @@ still print a meaningful message. With that information available, we wrap up by
 updating our `println!` output to indicate both which URL finished first and
 what the `<title>` was for the web page at that URL, if any.
 
-You have built a small working web scraper now, which we could extend in a bunch
-of different directions. More importantly, you have learned the basics of
-working with futures, so we can now dig into even more of the things we can *do*
-with async.
+You have built a small working web scraper now! Pick a couple URLs and run the
+command line tool. You may discover that some sites are reliably faster than
+others, while in other cases which site “wins” varies from run to run. More
+importantly, you have learned the basics of working with futures, so we can now
+dig into even more of the things we can *do* with async.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
 [iterators-lazy]: ch13-02-iterators.html
