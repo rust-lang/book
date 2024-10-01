@@ -304,9 +304,9 @@ executing the async code.)
 Now we can understand why the compiler stopped us from making `main` itself an
 async function back in Listing 17-3. If `main` were an async function, something
 else would need to manage the state machine for whatever future `main` returned,
-but main is the starting point for the program! Instead, we use the `trpl::run`
-function, which sets up a runtime and runs the future returned by `page_title`
-until it returns `Ready`.
+but `main` is the starting point for the program! Instead, we call the
+`trpl::run` function in `main`, which sets up a runtime and runs the future
+returned by the `async` block until it returns `Ready`.
 
 > Note: some runtimes provide macros to make it so you *can* write an async main
 > function. Those macros rewrite `async fn main() { ... }` to be a normal `fn
