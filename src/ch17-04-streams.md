@@ -101,10 +101,10 @@ as in Listing 17-31.
 
 </Listing>
 
-With all those pieces put together, things work the way we want! What is more,
-now that we have `StreamExt` in scope, we can use all of its utility methods,
-just like with iterators. For example, in Listing 17-32, we use the `filter`
-method to filter out everything but multiples of three and five.
+With all those pieces put together, this code works the way we want! What's
+more, now that we have `StreamExt` in scope, we can use all of its utility
+methods, just like with iterators. For example, in Listing 17-32, we use the
+`filter` method to filter out everything but multiples of three and five.
 
 <Listing number="17-32" caption="Filtering a `Stream` with the `StreamExt::filter` method" file-name="src/main.rs">
 
@@ -120,7 +120,7 @@ do which are unique to streams.
 
 ### Composing Streams
 
-Lots of things are naturally represented as streams: items becoming available in
+Many concepts are naturally represented as streams: items becoming available in
 a queue, or working with more data than can fit in a computer’s memory by only
 pulling chunks of it from the file system at a time, or data arriving over the
 network over time. Because streams are futures, we can use them with any other
