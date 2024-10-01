@@ -299,9 +299,11 @@ indefinitely. With async, this does not block anything else, as long as there is
 at least one await point in each iteration through the loop.
 
 Back in our main function’s async block, we start by calling `get_intervals`.
-Then we merge the `messages` and `intervals` streams with the `merge` method.
-Finally, we loop over that combined stream instead of over `messages` (Listing
-17-37).
+Then we merge the `messages` and `intervals` streams with the `merge` method,
+which combines multiple streams into one stream that produces items from any of
+the source streams as soon as the items are available, without imposing any
+particular ordering. Finally, we loop over that combined stream instead of over
+`messages` (Listing 17-37).
 
 <Listing number="17-37" caption="Attempting to merge streams of messages and intervals" file-name="src/main.rs">
 
