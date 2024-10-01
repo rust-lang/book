@@ -323,7 +323,7 @@ for a `timeout` call. Meanwhile, the `intervals` stream has the type `impl
 Stream<Item = u32>`. To merge these two streams, we need to transform one of
 them to match the other.
 
-In Listing 17-38, we rework with the `intervals` stream, because `messages` is
+In Listing 17-38, we rework the `intervals` stream, because `messages` is
 already in the basic format we want and has to handle timeout errors. First, we
 can use the `map` helper method to transform the `intervals` into a string.
 Second, we need to match the `Timeout` from `messages`. Because we do not
