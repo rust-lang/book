@@ -349,7 +349,7 @@ other”.
 ```rust
 enum Either<A, B> {
     Left(A),
-    Right(B)
+    Right(B),
 }
 ```
 
