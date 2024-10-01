@@ -327,7 +327,7 @@ and racing them.
 
 </Listing>
 
-In Listing 17-5, we begin by calling `page_title` with both of the user-supplied
+In Listing 17-5, we begin by calling `page_title` for each of the user-supplied
 URLs. We save the futures produced by calling `page_title` as `title_fut_1` and
 `title_fut_2`. Remember, these don’t do anything yet, because futures are lazy,
 and we have not yet awaited them. Then we pass the futures to `trpl::race`,
