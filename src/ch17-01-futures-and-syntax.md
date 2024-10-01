@@ -288,12 +288,13 @@ point:
 {{#rustdoc_include ../listings/ch17-async-await/no-listing-state-machine/src/lib.rs:enum}}
 ```
 
-Writing that out by hand would be tedious and error-prone, especially when
-making changes to code later. Instead, the Rust compiler creates and manages the
-state machine data structures for async code automatically. If you’re wondering:
-yep, the normal borrowing and ownership rules around data structures all apply.
-Happily, the compiler also handles checking those for us, and has good error
-messages. We will work through a few of those later in the chapter!
+Writing the code to transition between each state by hand would be tedious and
+error-prone, especially when adding more functionality and more states to the
+code later. Instead, the Rust compiler creates and manages the state machine
+data structures for async code automatically. If you’re wondering: yep, the
+normal borrowing and ownership rules around data structures all apply. Happily,
+the compiler also handles checking those for us, and has good error messages.
+We will work through a few of those later in the chapter!
 
 Ultimately, something has to execute that state machine. That something is a
 runtime. (This is why you may sometimes come across references to *executors*
