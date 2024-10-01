@@ -227,11 +227,12 @@ error[E0752]: `main` function is not allowed to be `async`
   | ^^^^^^^^^^^^^^^ `main` function is not allowed to be `async`
 ```
 
-The reason is that async code needs a *runtime*: a Rust crate which manages the
-details of executing asynchronous code. A program's `main` function can
-initialize a runtime, but it is not a runtime itself. (We will see more about
-why this is a bit later.) Every async program in Rust has at least one place
-where it sets up a runtime and executes the futures.
+The reason `main` can't be marked `async` is that async code needs a *runtime*:
+a Rust crate which manages the details of executing asynchronous code. A
+program's `main` function can *initialize* a runtime, but it is not a runtime
+*itself*. (We will see more about why this is a bit later.) Every Rust program
+that executes async code has at least one place where it sets up a runtime and
+executes the futures.
 
 Most languages which support async bundle a runtime with the language. Rust does
 not. Instead, there are many different async runtimes available, each of which
