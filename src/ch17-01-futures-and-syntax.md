@@ -74,6 +74,9 @@ program. We will build a little command line tool which fetches two web pages,
 pulls the `<title>` element from each, and prints out the title of whichever
 finishes that whole process first.
 
+Let's start by writing a function that takes one page URL as a parameter, makes
+a request to it, and returns the text of the title element:
+
 <Listing number="17-1" file-name="src/main.rs" caption="Defining an async function to get the title element from an HTML page">
 
 ```rust
