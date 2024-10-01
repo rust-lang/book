@@ -129,11 +129,12 @@ we can batch up events to avoid triggering too many network calls, set timeouts
 on sequences of long-running operations, or throttle user interface events to
 avoid doing needless work.
 
-Let’s start by building a little stream of messages, similar to what we might
-see from a WebSocket or other real-time communication protocols. In Listing
-17-33, we  create a function `get_messages` which returns `impl Stream<Item =
-String>`. For its implementation, we create an async channel, loop over the
-first ten letters of the English alphabet, and send them across the channel.
+Let’s start by building a little stream of messages, as a stand-in for a stream
+of data we might see from a WebSocket or another real-time communication
+protocol. In Listing 17-33, we create a function `get_messages` which returns
+`impl Stream<Item = String>`. For its implementation, we create an async
+channel, loop over the first ten letters of the English alphabet, and send them
+across the channel.
 
 We also use a new type: `ReceiverStream`, which converts the `rx` receiver from
 the `trpl::channel` into a `Stream` with a `next` method. Back in `main`, we use
