@@ -90,8 +90,8 @@ method as well as other utility methods similar to those provided by the
 bit more detail at the end of the chapter. For now, this is enough to let us
 keep moving.
 
-All we need to do is add a `use` statement for `trpl::StreamExt`, as in Listing
-17-31.
+The fix to the compiler error is to add a `use` statement for `trpl::StreamExt`,
+as in Listing 17-31.
 
 <Listing number="17-31" caption="Successfully using an iterator as the basis for a stream" file-name="src/main.rs">
 
