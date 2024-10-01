@@ -214,11 +214,15 @@ The `Self` keywords in the return type and in the body of the function are
 aliases for the type that appears after the `impl` keyword, which in this case
 is `Rectangle`.
 
-To call this associated function, we use the `::` syntax with the struct name;
-`let sq = Rectangle::square(3);` is an example. This function is namespaced by
-the struct: the `::` syntax is used for both associated functions and
-namespaces created by modules. We’ll discuss modules in [Chapter
-7][modules]<!-- ignore -->.
+To call this associated function, we use the `::` syntax with the struct name. For example:
+
+```rust,ignore
+let sq = Rectangle::square(3);
+```
+
+This function is namespaced by the struct: the `::` syntax is used for both
+associated functions and namespaces created by modules. We’ll discuss modules
+in [Chapter 7][modules]<!-- ignore -->.
 
 ### Multiple `impl` Blocks
 
