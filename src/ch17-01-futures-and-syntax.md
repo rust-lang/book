@@ -60,9 +60,12 @@ the crate does, we encourage you to check out [its source code][crate-source].
 You will be able to see what crate each re-export comes from, and we have left
 extensive comments explaining what the crate does.
 
-Go ahead and add the `trpl` crate to your `hello-async` project:
+Create a new binary project named `hello-async` and add the `trpl` crate as a
+dependency:
 
 ```console
+$ cargo new hello-async
+$ cd hello-async
 $ cargo add trpl
 ```
 
