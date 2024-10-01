@@ -188,7 +188,7 @@ When destructuring tuple structs, you must mention the type of the instance
 being destructured. For example, the line below would not compile when used in
 the previous listing:
 
-```rust
+```rust,ignore
     let (r, g, b) = black;
 ```
 
