@@ -49,7 +49,10 @@ We can have as many arms as we need: in Listing 6-3, our `match` has four arms.
 
 The code associated with each arm is an expression, and the resultant value of
 the expression in the matching arm is the value that gets returned for the
-entire `match` expression.
+entire `match` expression. In the [“Control Flow”][arms-same-type]<!-- ignore
+--> section of Chapter 3, we mentioned that all arms of an `if` expression must
+evaluate to the same type, and here the same rule applies: all arms of a
+`match` expression must also evaluate to the same type.
 
 We don’t typically use curly brackets if the match arm code is short, as it is
 in Listing 6-3 where each arm just returns a value. If you want to run multiple
@@ -250,5 +253,6 @@ There’s more about patterns and matching that we’ll cover in [Chapter
 `if let` syntax, which can be useful in situations where the `match` expression
 is a bit wordy.
 
+[arms-same-type]: ch03-05-control-flow.html#using-if-in-a-let-statement
 [tuples]: ch03-02-data-types.html#the-tuple-type
 [ch18-00-patterns]: ch18-00-patterns.html
