@@ -17,11 +17,11 @@ very similar.
 
 That similarity is not a coincidence. A stream is like an asynchronous form of
 iteration. Whereas the `trpl::Receiver` specifically waits to receive messages,
-though, a general-purpose stream API needs to be much more general: it will just
-provide the next item like `Iterator` does, but asynchronously. In fact, this is
-roughly how it works in Rust, so we can actually create a stream from any
+though, the general-purpose stream API is much more general: it provides the
+next item like `Iterator` does, but asynchronously. The similarity between
+iterators and streams in Rust means we can actually create a stream from any
 iterator. As with an iterator, we can work with a stream by calling its `next`
-method, and then awaiting the output, as in Listing 17-30.
+method and then awaiting the output, as in Listing 17-30.
 
 <Listing number="17-30" caption="Creating a stream from an iterator and printing its values" file-name="src/main.rs">
 
