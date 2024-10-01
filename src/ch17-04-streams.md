@@ -11,8 +11,9 @@ A sequence of items is something we have seen before, when we looked at the
 and the async channel receiver. The first difference is the element of time:
 iterators are synchronous, while the channel receiver is asynchronous. The
 second difference is the API. When working directly with an `Iterator`, we call
-its synchronous `next` method. With a `trpl::Receiver`, we call an asynchronous
-`recv` method instead, but these APIs otherwise feel very similar.
+its synchronous `next` method. With the `trpl::Receiver` stream in particular,
+we called an  asynchronous `recv` method instead, but these APIs otherwise feel
+very similar.
 
 That similarity is not a coincidence. A stream is like an asynchronous form of
 iteration. Whereas the `trpl::Receiver` specifically waits to receive messages,
