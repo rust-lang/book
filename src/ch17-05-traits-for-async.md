@@ -40,7 +40,7 @@ the `Poll` type:
 ```rust
 enum Poll<T> {
     Ready(T),
-    Pending
+    Pending,
 }
 ```
 
