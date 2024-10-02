@@ -20,31 +20,31 @@ place that async block or function may get paused and resumed. The process of
 checking with a future to see if its value is available yet is called *polling*.
 
 Some other languages also use `async` and `await` keywords for async
-programming. If you are familiar with those languages, you may notice some
+programming. If you’re familiar with those languages, you may notice some
 significant differences in how Rust does things, including how it handles the
-syntax. That is for good reason, as we will see!
+syntax. That’s for good reason, as we’ll see!
 
 Most of the time when writing async Rust, we use the `async` and `await`
 keywords. Rust compiles them into equivalent code using the `Future` trait, much
 like it compiles `for` loops into equivalent code using the `Iterator` trait.
 Because Rust provides the `Future` trait, though, you can also implement it for
-your own data types when you need to. Many of the functions we will see
+your own data types when you need to. Many of the functions we’ll see
 throughout this chapter return types with their own implementations of `Future`.
-We will return to the definition of the trait at the end of the chapter and dig
+We’ll return to the definition of the trait at the end of the chapter and dig
 into more of how it works, but this is enough detail to keep us moving forward.
 
 That may all feel a bit abstract. Let’s write our first async program: a little
-web scraper. We will pass in two URLs from the command line, fetch both of them
+web scraper. We’ll pass in two URLs from the command line, fetch both of them
 concurrently, and return the result of whichever one finishes first. This
-example will have a fair bit of new syntax, but don’t worry. We will explain
+example will have a fair bit of new syntax, but don’t worry. We’ll explain
 everything you need to know as we go.
 
 ### Our First Async Program
 
 To keep this chapter focused on learning async, rather than juggling parts of
 the ecosystem, we have created the `trpl` crate (`trpl` is short for “The Rust
-Programming Language”). It re-exports all the types, traits, and functions you
-will need, primarily from the [`futures`][futures-crate] and [`tokio`][tokio]
+Programming Language”). It re-exports all the types, traits, and functions
+you’ll need, primarily from the [`futures`][futures-crate] and [`tokio`][tokio]
 crates.
 
 - The `futures` crate is an official home for Rust experimentation for async
@@ -53,12 +53,12 @@ crates.
 - Tokio is the most widely used async runtime in Rust today, especially (but
   not only!) for web applications. There are other great runtimes out there,
   and they may be more suitable for your purposes. We use Tokio under the hood
-  for `trpl` because it is good and widely used.
+  for `trpl` because it’s well-tested and widely used.
 
 In some cases, `trpl` also renames or wraps the original APIs to let us stay
 focused on the details relevant to this chapter. If you want to understand what
 the crate does, we encourage you to check out [its source code][crate-source].
-You will be able to see what crate each re-export comes from, and we have left
+You’ll be able to see what crate each re-export comes from, and we’ve left
 extensive comments explaining what the crate does.
 
 Create a new binary project named `hello-async` and add the `trpl` crate as a
@@ -71,11 +71,11 @@ $ cargo add trpl
 ```
 
 Now we can use the various pieces provided by `trpl` to write our first async
-program. We will build a little command line tool which fetches two web pages,
+program. We’ll build a little command line tool which fetches two web pages,
 pulls the `<title>` element from each, and prints out the title of whichever
 finishes that whole process first.
 
-Let's start by writing a function that takes one page URL as a parameter, makes
+Let’s start by writing a function that takes one page URL as a parameter, makes
 a request to it, and returns the text of the title element:
 
 <Listing number="17-1" file-name="src/main.rs" caption="Defining an async function to get the title element from an HTML page">
@@ -100,34 +100,34 @@ is also async.
 
 We have to explicitly await both of these futures, because futures in Rust are
 *lazy*: they don’t do anything until you ask them to with `await`. (In fact,
-Rust will show a compiler warning if you do not use a future.) This should
+Rust will show a compiler warning if you don’t use a future.) This should
 remind you of our discussion of iterators [back in Chapter 13][iterators-lazy].
 Iterators do nothing unless you call their `next` method—whether directly, or
 using `for` loops or methods like `map` which use `next` under the hood. With
 futures, the same basic idea applies: they do nothing unless you explicitly ask
-them to. This laziness allows Rust to avoid running async code until it is
+them to. This laziness allows Rust to avoid running async code until it’s
 actually needed.
 
 > Note: This is different from the behavior we saw when using `thread::spawn` in
 > the previous chapter, where the closure we passed to another thread started
-> running immediately. It is also different from how many other languages
-> approach async! But it is important for Rust. We will see why that is later.
+> running immediately. It’s also different from how many other languages
+> approach async! But it’s important for Rust. We’ll see why that is later.
 
 Once we have `response_text`, we can then parse it into an instance of the
 `Html` type using `Html::parse`. Instead of a raw string, we now have a data
 type we can use to work with the HTML as a richer data structure. In particular,
 we can use the `select_first` method to find the first instance of a given CSS
-selector. By passing the string `"title"`, we will get the first `<title>`
+selector. By passing the string `"title"`, we’ll get the first `<title>`
 element in the document, if there is one. Because there may not be any matching
 element, `select_first` returns an `Option<ElementRef>`. Finally, we use the
-`Option::map` method, which lets us work with the item in the `Option` if it is
-present, and do nothing if it is not. (We could also use a `match` expression
+`Option::map` method, which lets us work with the item in the `Option` if it’s
+present, and do nothing if it isn’t. (We could also use a `match` expression
 here, but `map` is more idiomatic.) In the body of the function we supply to
 `map`, we call `inner_html` on the `title_element` to get its content, which is
 a `String`. When all is said and done, we have an `Option<String>`.
 
-Notice that Rust’s `await` keyword goes after the expression you are awaiting,
-not before it. That is, it is a *postfix keyword*. This may be different from
+Notice that Rust’s `await` keyword goes after the expression you’re awaiting,
+not before it. That is, it’s a *postfix keyword*. This may be different from
 what you might be used to if you have used async in other languages. Rust chose
 this because it makes chains of methods much nicer to work with. As a result, we
 can change the body of `page_url_for` to chain the `trpl::get` and `text`
@@ -142,7 +142,7 @@ function calls together with `await` between them, as shown in Listing 17-2:
 </Listing>
 
 With that, we have successfully written our first async function! Before we add
-some code in `main` to call it, let’s talk a little more about what we have
+some code in `main` to call it, let’s talk a little more about what we’ve
 written and what it means.
 
 When Rust sees a block marked with the `async` keyword, it compiles it into a
@@ -185,17 +185,17 @@ Let’s walk through each part of the transformed version:
   above. That value matches the `Output` type in the return type. This is just
   like other blocks you have seen.
 * The new function body is an `async move` block because of how it uses the
-  `url` parameter. (We will talk about `async` vs. `async move` much more later
+  `url` parameter. (We’ll talk about `async` vs. `async move` much more later
   in the chapter.)
-* The new version of the function has a kind of lifetime we have not seen before
+* The new version of the function has a kind of lifetime we haven’t seen before
   in the output type: `'_`. Because the function returns a `Future` which refers
   to a reference—in this case, the reference from the `url` parameter—we need to
-  tell Rust that we mean for that reference to be included. We do not have to
+  tell Rust that we mean for that reference to be included. We don’t have to
   name the lifetime here, because Rust is smart enough to know there is only one
   reference which could be involved, but we *do* have to be explicit that the
   resulting `Future` is bound by that lifetime.
 
-Now we can call `page_title` in `main`. To start, we will just get the title
+Now we can call `page_title` in `main`. To start, we’ll just get the title
 for a single page. In Listing 17-3, we follow the same pattern we used for
 getting command line arguments back in Chapter 12. Then we pass the first URL
 `page_title`, and await the result. Because the value produced by the future is
@@ -210,8 +210,8 @@ account for whether the page had a `<title>`.
 
 </Listing>
 
-Unfortunately, this does not compile. The only place we can use the `await`
-keyword is in async functions or blocks, and Rust will not let us mark the
+Unfortunately, this doesn’t compile. The only place we can use the `await`
+keyword is in async functions or blocks, and Rust won’t let us mark the
 special `main` function as `async`.
 
 <!-- manual-regeneration
@@ -228,10 +228,10 @@ error[E0752]: `main` function is not allowed to be `async`
   | ^^^^^^^^^^^^^^^ `main` function is not allowed to be `async`
 ```
 
-The reason `main` can't be marked `async` is that async code needs a *runtime*:
+The reason `main` can’t be marked `async` is that async code needs a *runtime*:
 a Rust crate which manages the details of executing asynchronous code. A
-program's `main` function can *initialize* a runtime, but it is not a runtime
-*itself*. (We will see more about why this is a bit later.) Every Rust program
+program’s `main` function can *initialize* a runtime, but it’s not a runtime
+*itself*. (We’ll see more about why this is a bit later.) Every Rust program
 that executes async code has at least one place where it sets up a runtime and
 executes the futures.
 
@@ -244,7 +244,7 @@ small amount of RAM, and no ability to do heap allocations. The crates which
 provide those runtimes also often supply async versions of common functionality
 like file or network I/O.
 
-Here, and throughout the rest of this chapter, we will use the `run` function
+Here, and throughout the rest of this chapter, we’ll use the `run` function
 from the `trpl` crate, which takes a future as an argument and runs it to
 completion. Behind the scenes, calling `run` sets up a runtime to use to run the
 future passed in. Once the future completes, `run` returns whatever value the
@@ -253,8 +253,8 @@ future produced.
 We could pass the future returned by `page_title` directly to `run`. Once it
 completed, we would be able to match on the resulting `Option<String>`, the way
 we tried to do in Listing 17-3. However, for most of the examples in the chapter
-(and most async code in the real world!), we will be doing more than just one
-async function call, so instead we will pass an `async` block and explicitly
+(and most async code in the real world!), we’ll be doing more than just one
+async function call, so instead we’ll pass an `async` block and explicitly
 await the result of calling `page_title`, as in Listing 17-4.
 
 <Listing number="17-4" caption="Awaiting an async block with `trpl::run`" file-name="src/main.rs">
@@ -281,7 +281,7 @@ Each *await point*—that is, every place where the code uses the `await`
 keyword—represents a place where control gets handed back to the runtime. To
 make that work, Rust needs to keep track of the state involved in the async
 block, so that the runtime can kick off some other work and then come back when
-it is ready to try advancing this one again. This is an invisible state machine,
+it’s ready to try advancing this one again. This is an invisible state machine,
 as if you wrote an enum like this to save the current state at each `await`
 point:
 
@@ -295,7 +295,7 @@ code later. Instead, the Rust compiler creates and manages the state machine
 data structures for async code automatically. If you’re wondering: yep, the
 normal borrowing and ownership rules around data structures all apply. Happily,
 the compiler also handles checking those for us, and has good error messages.
-We will work through a few of those later in the chapter!
+We’ll work through a few of those later in the chapter!
 
 Ultimately, something has to execute that state machine. That something is a
 runtime. (This is why you may sometimes come across references to *executors*
@@ -331,17 +331,17 @@ and racing them.
 In Listing 17-5, we begin by calling `page_title` for each of the user-supplied
 URLs. We save the futures produced by calling `page_title` as `title_fut_1` and
 `title_fut_2`. Remember, these don’t do anything yet, because futures are lazy,
-and we have not yet awaited them. Then we pass the futures to `trpl::race`,
+and we haven’t yet awaited them. Then we pass the futures to `trpl::race`,
 which returns a value to indicate which of the futures passed to it finishes
 first.
 
 > Note: Under the hood, `race` is built on a more general function, `select`,
 > which you will encounter more often in real-world Rust code. A `select`
-> function can do a lot of things that `trpl::race` function cannot, but it also
+> function can do a lot of things that `trpl::race` function can’t, but it also
 > has some additional complexity that we can skip over for now.
 
-Either future can legitimately “win,” so it does not make sense to return a
-`Result`. Instead, `race` returns a type we have not seen before,
+Either future can legitimately “win,” so it doesn’t make sense to return a
+`Result`. Instead, `race` returns a type we haven’t seen before,
 `trpl::Either`. The `Either` type is somewhat like a `Result`, in that it has
 two cases. Unlike `Result`, though, there is no notion of success or failure
 baked into `Either`. Instead, it uses `Left` and `Right` to indicate “one or the
@@ -368,7 +368,7 @@ what the `<title>` was for the web page at that URL, if any.
 You have built a small working web scraper now! Pick a couple URLs and run the
 command line tool. You may discover that some sites are reliably faster than
 others, while in other cases which site “wins” varies from run to run. More
-importantly, you have learned the basics of working with futures, so we can now
+importantly, you’ve learned the basics of working with futures, so we can now
 dig into even more of the things we can *do* with async.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
