@@ -103,19 +103,20 @@ Notice that we don’t include the `unsafe` keyword in this code. We can create
 raw pointers in safe code; we just can’t dereference raw pointers outside an
 unsafe block, as you’ll see in a bit.
 
-We’ve created raw pointers by using `as` to cast an immutable and a mutable
-reference into their corresponding raw pointer types. Because we created them
-directly from references guaranteed to be valid, we know these particular raw
-pointers are valid, but we can’t make that assumption about just any raw
-pointer.
+We’ve created raw pointers by using the raw borrow operators: `&raw const num`
+creates a `*const i32` immutable raw pointer, and `&raw mut num` creates a `&mut
+i32` mutable raw pointer. Because we created them directly from references
+guaranteed to be valid, we know these particular raw pointers are valid, but we
+can’t make that assumption about just any raw pointer.
 
 To demonstrate this, next we’ll create a raw pointer whose validity we can’t be
-so certain of. Listing 20-2 shows how to create a raw pointer to an arbitrary
+so certain of, using `as` to cast a value instead of using the raw reference
+operators. Listing 20-2 shows how to create a raw pointer to an arbitrary
 location in memory. Trying to use arbitrary memory is undefined: there might be
-data at that address or there might not, the compiler might optimize the code
-so there is no memory access, or the program might error with a segmentation
-fault. Usually, there is no good reason to write code like this, but it is
-possible.
+data at that address or there might not, the compiler might optimize the code so
+there is no memory access, or the program might error with a segmentation fault.
+Usually, there is no good reason to write code like this, especially in cases
+where you can use a raw borrow operator instead, but it is possible.
 
 <Listing number="20-2" caption="Creating a raw pointer to an arbitrary memory address">
 
