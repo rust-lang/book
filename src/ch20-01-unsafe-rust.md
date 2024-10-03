@@ -136,7 +136,7 @@ dereference operator `*` on a raw pointer that requires an `unsafe` block.
 Creating a pointer does no harm; it’s only when we try to access the value that
 it points at that we might end up dealing with an invalid value.
 
-Note also that in Listing 20-1 and 19-3, we created `*const i32` and `*mut i32`
+Note also that in Listing 20-1 and 20-3, we created `*const i32` and `*mut i32`
 raw pointers that both pointed to the same memory location, where `num` is
 stored. If we instead tried to create an immutable and a mutable reference to
 `num`, the code would not have compiled because Rust’s ownership rules don’t
