@@ -351,7 +351,8 @@ confident that the underlying data in the futures will *not* be moved.
 
 `Pin` and `Unpin` are mostly important for building lower-level libraries, or
 when you’re building a runtime itself, rather than for day to day Rust code.
-When you see them, though, now you’ll know what to do!
+When you see these traits in error messages, though, now you’ll have a better
+idea of how to fix the code!
 
 > Note: This combination of `Pin` and `Unpin` allows a whole class of complex
 > types to be safe in Rust which are otherwise difficult to implement because
