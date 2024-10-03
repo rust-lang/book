@@ -402,7 +402,15 @@ As with regular variables, we specify mutability using the `mut` keyword. Any
 code that reads or writes from `COUNTER` must be within an `unsafe` block. This
 code compiles and prints `COUNTER: 3` as we would expect because it’s single
 threaded. Having multiple threads access `COUNTER` would likely result in data
-races.
+races, so it is undefined behavior. Therefore, we need to mark the entire
+function as `unsafe`, and document the safety limitation, so anyone calling the
+function knows what they are and are not allowed to do safely.
+
+Whenever we write an unsafe function, it is idiomatic to write a comment
+starting with `SAFETY` and explaining what the caller needs to do to call the
+function safely. Likewise, whenever we perform an unsafe operation, it is
+idiomatic to write a comment starting with `SAFETY` to explain how the safety
+rules are upheld.
 
 With mutable data that is globally accessible, it’s difficult to ensure there
 are no data races, which is why Rust considers mutable static variables to be
