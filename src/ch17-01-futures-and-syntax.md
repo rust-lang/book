@@ -5,12 +5,12 @@ The key elements of asynchronous programming in Rust are *futures* and Rust’s
 
 A *future* is a value which may not be ready now, but will become ready at some
 point in the future. (This same concept shows up in many languages, sometimes
-under other names like “task” or “promise”.) Rust provides a `Future` trait as a
-building block so different async operations can be implemented with different
-data structures, but with a common interface. In Rust, we say that types which
-implement the `Future` trait are futures. Each type which implements `Future`
-holds its own information about the progress that has been made and what "ready"
-means.
+under other names such as “task” or “promise”.) Rust provides a `Future` trait
+as a building block so different async operations can be implemented with
+different data structures, but with a common interface. In Rust, we say that
+types which implement the `Future` trait are futures. Each type which
+implements `Future` holds its own information about the progress that has been
+made and what "ready" means.
 
 The `async` keyword can be applied to blocks and functions to specify that they
 can be interrupted and resumed. Within an async block or async function, you can
@@ -26,7 +26,7 @@ syntax. That’s for good reason, as we’ll see!
 
 Most of the time when writing async Rust, we use the `async` and `await`
 keywords. Rust compiles them into equivalent code using the `Future` trait, much
-like it compiles `for` loops into equivalent code using the `Iterator` trait.
+as it compiles `for` loops into equivalent code using the `Iterator` trait.
 Because Rust provides the `Future` trait, though, you can also implement it for
 your own data types when you need to. Many of the functions we’ll see
 throughout this chapter return types with their own implementations of `Future`.
@@ -103,7 +103,7 @@ We have to explicitly await both of these futures, because futures in Rust are
 Rust will show a compiler warning if you don’t use a future.) This should
 remind you of our discussion of iterators [back in Chapter 13][iterators-lazy].
 Iterators do nothing unless you call their `next` method—whether directly, or
-using `for` loops or methods like `map` which use `next` under the hood. With
+using `for` loops or methods such as `map` which use `next` under the hood. With
 futures, the same basic idea applies: they do nothing unless you explicitly ask
 them to. This laziness allows Rust to avoid running async code until it’s
 actually needed.
@@ -152,9 +152,9 @@ whose body is an async block. Thus, an async function’s return type is the typ
 of the anonymous data type the compiler creates for that async block.
 
 Thus, writing `async fn` is equivalent to writing a function which returns a
-*future* of the return type. When the compiler sees a function like `async fn
-page_title` in Listing 17-1, it is equivalent to a non-async function defined
-like this:
+*future* of the return type. When the compiler sees a function definition such
+as the `async fn page_title` in Listing 17-1, it’s equivalent to a non-async
+function defined like this:
 
 ```rust
 # extern crate trpl; // required for mdbook test
@@ -242,7 +242,7 @@ high-throughput web server with many CPU cores and a large amount of RAM has
 very different different needs than a microcontroller with a single core, a
 small amount of RAM, and no ability to do heap allocations. The crates which
 provide those runtimes also often supply async versions of common functionality
-like file or network I/O.
+such as file or network I/O.
 
 Here, and throughout the rest of this chapter, we’ll use the `run` function
 from the `trpl` crate, which takes a future as an argument and runs it to
@@ -282,7 +282,7 @@ keyword—represents a place where control gets handed back to the runtime. To
 make that work, Rust needs to keep track of the state involved in the async
 block, so that the runtime can kick off some other work and then come back when
 it’s ready to try advancing this one again. This is an invisible state machine,
-as if you wrote an enum like this to save the current state at each `await`
+as if you wrote an enum in this way to save the current state at each `await`
 point:
 
 ```rust
@@ -342,10 +342,10 @@ first.
 
 Either future can legitimately “win,” so it doesn’t make sense to return a
 `Result`. Instead, `race` returns a type we haven’t seen before,
-`trpl::Either`. The `Either` type is somewhat like a `Result`, in that it has
-two cases. Unlike `Result`, though, there is no notion of success or failure
-baked into `Either`. Instead, it uses `Left` and `Right` to indicate “one or the
-other”.
+`trpl::Either`. The `Either` type is somewhat similar to a `Result`, in that it
+has two cases. Unlike `Result`, though, there is no notion of success or
+failure baked into `Either`. Instead, it uses `Left` and `Right` to indicate
+“one or the other”.
 
 ```rust
 enum Either<A, B> {

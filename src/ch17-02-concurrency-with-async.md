@@ -32,7 +32,7 @@ that our top-level function can be async.
 
 > Note: From this point forward in the chapter, every example will include this
 > exact same wrapping code with `trpl::run` in `main`, so we’ll often skip it
-> just like we do with `main`. Don’t forget to include it in your code!
+> just as we do with `main`. Don’t forget to include it in your code!
 
 Then we write two loops within that block, each with a `trpl::sleep` call in it,
 which waits for half a second (500 milliseconds) before sending the next
@@ -176,7 +176,7 @@ Sharing data between futures will also be familiar: we’ll use message passing
 again, but this with async versions of the types and functions. We’ll take a
 slightly different path than we did in Chapter 16, to illustrate some of the key
 differences between thread-based and futures-based concurrency. In Listing 17-9,
-we’ll begin with just a single async block—*not* spawning a separate task like
+we’ll begin with just a single async block—*not* spawning a separate task as
 we spawned a separate thread.
 
 <Listing number="17-9" caption="Creating an async channel and assigning the two halves to `tx` and `rx`" file-name="src/main.rs">
@@ -253,7 +253,7 @@ polling—that is, stop awaiting.
 
 The `while let` loop pulls all of this together. If the result of calling
 `rx.recv().await` is `Some(message)`, we get access to the message and we can
-use it in the loop body, just like we could with `if let`. If the result is
+use it in the loop body, just as we could with `if let`. If the result is
 `None`, the loop ends. Every time the loop completes, it hits the await point
 again, so the runtime pauses it again until another message arrives.
 
@@ -278,7 +278,7 @@ points on the `recv` calls.
 To get the behavior we want, where the sleep delay happens between receiving
 each message, we need to put the `tx` and `rx` operations in their own async
 blocks. Then the runtime can execute each of them separately using `trpl::join`,
-just like in the counting example. Once again, we await the result of calling
+just as in the counting example. Once again, we await the result of calling
 `trpl::join`, not the individual futures. If we awaited the individual futures
 in sequence, we would just end up back in a sequential flow—exactly what we’re
 trying *not* to do.
@@ -325,7 +325,7 @@ that async block, it would be dropped once that block ends. In Chapter 13, we
 learned how to use the `move` keyword with closures, and in Chapter 16, we saw
 that we often need to move data into closures when working with threads. The
 same basic dynamics apply to async blocks, so the `move` keyword works with
-async blocks just like it does with closures.
+async blocks just as it does with closures.
 
 In Listing 17-12, we change the async block for sending messages from a plain
 `async` block to an `async move` block. When we run *this* version of the code,

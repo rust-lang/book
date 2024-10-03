@@ -15,13 +15,13 @@ its synchronous `next` method. With the `trpl::Receiver` stream in particular,
 we called an  asynchronous `recv` method instead, but these APIs otherwise feel
 very similar.
 
-That similarity isn’t a coincidence. A stream is like an asynchronous form of
-iteration. Whereas the `trpl::Receiver` specifically waits to receive messages,
-though, the general-purpose stream API is much more general: it provides the
-next item like `Iterator` does, but asynchronously. The similarity between
-iterators and streams in Rust means we can actually create a stream from any
-iterator. As with an iterator, we can work with a stream by calling its `next`
-method and then awaiting the output, as in Listing 17-30.
+That similarity isn’t a coincidence. A stream is similar to an asynchronous
+form of iteration. Whereas the `trpl::Receiver` specifically waits to receive
+messages, though, the general-purpose stream API is much more general: it
+provides the next item the way `Iterator` does, but asynchronously. The
+similarity between iterators and streams in Rust means we can actually create a
+stream from any iterator. As with an iterator, we can work with a stream by
+calling its `next` method and then awaiting the output, as in Listing 17-30.
 
 <Listing number="17-30" caption="Creating a stream from an iterator and printing its values" file-name="src/main.rs">
 
@@ -103,7 +103,7 @@ as in Listing 17-31.
 
 With all those pieces put together, this code works the way we want! What’s
 more, now that we have `StreamExt` in scope, we can use all of its utility
-methods, just like with iterators. For example, in Listing 17-32, we use the
+methods, just as with iterators. For example, in Listing 17-32, we use the
 `filter` method to filter out everything but multiples of three and five.
 
 <Listing number="17-32" caption="Filtering a `Stream` with the `StreamExt::filter` method" file-name="src/main.rs">
@@ -168,7 +168,7 @@ Message: 'j'
 ```
 
 We could do this with the regular `Receiver` API, or even the regular `Iterator`
-API, though. Let’s add something that requires streams, like adding a timeout
+API, though. Let’s add something that requires streams: adding a timeout
 which applies to every item in the stream, and a delay on the items we emit.
 
 In Listing 17-34, we start by adding a timeout to the stream with the `timeout`
@@ -221,7 +221,7 @@ available.
 Instead, we leave `get_messages` as a regular function which returns a stream,
 and spawn a task to handle the async `sleep` calls.
 
-> Note: calling `spawn_task` like this works because we already set up our
+> Note: calling `spawn_task` in this way works because we already set up our
 > runtime. Calling this particular implementation of `spawn_task` *without*
 > first setting up a runtime will cause a panic. Other implementations choose
 > different tradeoffs: they might spawn a new runtime and so avoid the panic but

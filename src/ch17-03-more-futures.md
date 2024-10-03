@@ -289,8 +289,8 @@ syntax for working with them, and that is a good thing.
 
 When we “join” futures with the `join` family of functions and macros, we
 require *all* of them to finish before we move on. Sometimes, though, we only
-need *some* future from a set to finish before we move on—kind of like racing
-one future against another.
+need *some* future from a set to finish before we move on—kind of similar to
+racing one future against another.
 
 In Listing 17-21, we once again use `trpl::race` to run two futures, `slow` and
 `fast`, against each other. Each one prints a message when it starts running,
@@ -449,14 +449,14 @@ directly, using the `yield_now` function. In Listing 17-25, we replace all those
 </Listing>
 
 This is both clearer about the actual intent and can be significantly faster
-than using `sleep`, because timers like the one used by `sleep` often have
+than using `sleep`, because timers such as the one used by `sleep` often have
 limits to how granular they can be. The version of `sleep` we are using, for
 example, will always sleep for at least a millisecond, even if we pass it a
 `Duration` of one nanosecond. Again, modern computers are *fast*: they can do a
 lot in one millisecond!
 
-You can see this for yourself by setting up a little benchmark, like the one in
-Listing 17-26. (This isn’t an especially rigorous way to do performance
+You can see this for yourself by setting up a little benchmark, such as the one
+in Listing 17-26. (This isn’t an especially rigorous way to do performance
 testing, but it suffices to show the difference here.) Here, we skip all the
 status printing, pass a one-nanosecond `Duration` to `trpl::sleep`, and let
 each future run by itself, with no switching between the futures. Then we run
@@ -481,9 +481,9 @@ determine when it hands over control via await points. Each future therefore
 also has the responsibility to avoid blocking for too long. In some Rust-based
 embedded operating systems, this is the *only* kind of multitasking!
 
-In real-world code, you won’t usually be alternating function calls with
-await points on every single line, of course. While yielding control like this
-is relatively inexpensive, it’s not free! In many cases, trying to break up a
+In real-world code, you won’t usually be alternating function calls with await
+points on every single line, of course. While yielding control in this way is
+relatively inexpensive, it’s not free! In many cases, trying to break up a
 compute-bound task might make it significantly slower, so sometimes it’s better
 for *overall* performance to let an operation block briefly. You should always
 measure to see what your code’s actual performance bottlenecks are. The
@@ -566,13 +566,13 @@ Failed after 2 seconds
 ```
 
 Because futures compose with other futures, you can build really powerful tools
-using smaller async building blocks. For example, you can use this same approach
-to combine timeouts with retries, and in turn use those with things like network
-calls—one of the examples from the beginning of the chapter!
+using smaller async building blocks. For example, you can use this same
+approach to combine timeouts with retries, and in turn use those with things
+such as network calls—one of the examples from the beginning of the chapter!
 
 In practice, you will usually work directly with `async` and `await`, and
-secondarily with functions and macros like `join`, `join_all`, `race`, and so
-on. You’ll only need to reach for `pin` now and again to use them with those
+secondarily with functions and macros such as `join`, `join_all`, `race`, and
+so on. You’ll only need to reach for `pin` now and again to use them with those
 APIs.
 
 We’ve now seen a number of ways to work with multiple futures at the same

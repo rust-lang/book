@@ -43,7 +43,7 @@ enum Poll<T> {
 }
 ```
 
-This `Poll` type is a lot like an `Option`: it has one variant which has a value
+This `Poll` type is similar to an `Option`: it has one variant which has a value
 (`Ready(T)`), and one which does not (`Pending`). It means something quite
 different, though! The `Pending` variant indicates that the future still has
 work to do, so the caller will need to check again later. The `Ready` variant
@@ -176,17 +176,17 @@ The `cx` parameter and its `Context` type is interesting, but is beyond the
 scope of this chapter: you generally only need to worry about it when writing a
 custom `Future` implementation.
 
-Instead, we’ll focus on the type for `self`. This is the first time we’ve
-seen a method where `self` has a type annotation. A type annotation for `self`
-is similar to type annotations for other function parameters, with two key
-differences. First, when we specify the type of `self` like this, we’re telling
-Rust what type `self` must be to call this method. Second, a type annotation on
-`self` can’t be just any type. It’s only allowed to be the type on which the
-method is implemented, a reference or smart pointer to that type, or a `Pin`
-wrapping a reference to that type. We’ll see more on this syntax in Chapter
-18. For now, it’s enough to know that if we want to poll a future (to check
-whether it is `Pending` or `Ready(Output)`), we need a mutable reference to the
-type, which is wrapped in a `Pin`.
+Instead, we’ll focus on the type for `self`. This is the first time we’ve seen
+a method where `self` has a type annotation. A type annotation for `self` is
+similar to type annotations for other function parameters, with two key
+differences. First, when we specify the type of `self` in this way, we’re
+telling Rust what type `self` must be to call this method. Second, a type
+annotation on `self` can’t be just any type. It’s only allowed to be the type
+on which the method is implemented, a reference or smart pointer to that type,
+or a `Pin` wrapping a reference to that type. We’ll see more on this syntax in
+Chapter 18. For now, it’s enough to know that if we want to poll a future (to
+check whether it is `Pending` or `Ready(Output)`), we need a mutable reference
+to the type, which is wrapped in a `Pin`.
 
 `Pin` is a wrapper type. In some ways, it’s similar to the `Box`, `Rc`, and
 other smart pointer types we saw in Chapter 15, which also wrap other types.
@@ -195,10 +195,10 @@ Unlike those, however, `Pin` only works with *pointer types* such as references
 `Pin` works with types which implement the `Deref` or `DerefMut` traits, which
 we covered in Chapter 15. You can think of this restriction as equivalent to
 only working with pointers, though, because implementing `Deref` or `DerefMut`
-means your type behaves like a pointer type. `Pin` is also not a pointer itself,
-and it doesn’t have any behavior of its own like the ref counting of `Rc` or
-`Arc`. It’s purely a tool the compiler can use to uphold the relevant
-guarantees, by wrapping pointers in the type.
+means your type behaves similarly to a pointer type. `Pin` is also not a
+pointer itself, and it doesn’t have any behavior of its own as the ref counting
+of `Rc` or `Arc` does. It’s purely a tool the compiler can use to uphold the
+relevant guarantees, by wrapping pointers in the type.
 
 Recalling that `await` is implemented in terms of calls to `poll`, this starts
 to explain the error message we saw above—but that was in terms of `Unpin`, not
@@ -292,30 +292,30 @@ is still pinned.
 
 </figure>
 
-However, most types are perfectly safe to move around, even if they happen to be
-behind a `Pin` pointer. We only need to think about pinning when items have
-internal references. Primitive values like numbers and booleans do not have any
-internal structure like that, so they’re obviously safe. Neither do most types
-you normally work with in Rust. A `Vec`, for example, doesn’t have any internal
+However, most types are perfectly safe to move around, even if they happen to
+be behind a `Pin` pointer. We only need to think about pinning when items have
+internal references. Primitive values such as numbers and booleans don’t have
+any internal references, so they’re obviously safe. Neither do most types you
+normally work with in Rust. A `Vec`, for example, doesn’t have any internal
 references it needs to keep up to date this way, so you can move it around
-without worrying. If you have a `Pin<Vec<String>>`, you’d have to do
-everything via the safe but restrictive APIs provided by `Pin`, even though a
+without worrying. If you have a `Pin<Vec<String>>`, you’d have to do everything
+via the safe but restrictive APIs provided by `Pin`, even though a
 `Vec<String>` is always safe to move if there are no other references to it. We
 need a way to tell the compiler that it’s actually just fine to move items
-around in cases like these. For that, we have `Unpin`.
+around in cases such as these. For that, we have `Unpin`.
 
-`Unpin` is a marker trait, like `Send` and `Sync`, which we saw in Chapter 16.
+`Unpin` is a marker trait, as `Send` and `Sync` are, which we saw in Chapter 16.
 Recall that marker traits have no functionality of their own. They exist only to
 tell the compiler that it’s safe to use the type which implements a given trait
 in a particular context. `Unpin` informs the compiler that a given type does
 *not* need to uphold any particular guarantees about whether the value in
 question can be moved.
 
-Just like `Send` and `Sync`, the compiler implements `Unpin` automatically for
-all types where it can prove it is safe. Implementing `Unpin` manually is unsafe
-because it requires *you* to uphold all the guarantees which make `Pin` and
-`Unpin` safe yourself for a type with internal references. In practice, this is
-a very rare thing to implement yourself!
+Just as with `Send` and `Sync`, the compiler implements `Unpin` automatically
+for all types where it can prove it is safe. Implementing `Unpin` manually is
+unsafe because it requires *you* to uphold all the guarantees which make `Pin`
+and `Unpin` safe yourself for a type with internal references. In practice,
+this is a very rare thing to implement yourself!
 
 To make that concrete, think about a `String`: it has a length and the Unicode
 characters which make it up. We can wrap a `String` in `Pin`, as seen in Figure
@@ -329,7 +329,7 @@ characters which make it up. We can wrap a `String` in `Pin`, as seen in Figure
 
 </figure>
 
-This means that we can do things like replace one string with another at the
+This means that we can do things such as replace one string with another at the
 exact same location in memory as in Figure 17-8. This doesn’t violate the `Pin`
 contract because `String`—like most other types in Rust—implements `Unpin`,
 because it has no internal references that make it unsafe to move around!
@@ -374,11 +374,11 @@ idea of how to fix the code!
 
 Now that we have a deeper grasp on the `Future`, `Pin`, and `Unpin` traits, we
 can turn our attention to the `Stream` trait. As described in the section
-introducing streams, streams are like asynchronous iterators. Unlike `Iterator`
-and `Future`, there is no definition of a `Stream` trait in the standard library
-as of the time of writing,<!-- TODO: verify before press time! --> but there
-*is* a very common definition from the `futures` crate used throughout the
-ecosystem.
+introducing streams, streams are similar to asynchronous iterators. Unlike
+`Iterator` and `Future`, there is no definition of a `Stream` trait in the
+standard library as of the time of writing,<!-- TODO: verify before press time!
+--> but there *is* a very common definition from the `futures` crate used
+throughout the ecosystem.
 
 Let’s review the definitions of the `Iterator` and `Future` traits, so we can
 build up to how a `Stream` trait that merges them together might look. From
@@ -403,16 +403,17 @@ trait Stream {
 ```
 
 The `Stream` trait defines an associated type `Item` for the type of the items
-produced by the stream. This is like `Iterator`: there may be zero to many of
-these, and unlike `Future`, where there is always a single `Output` (even if
-it’s the unit type `()`).
+produced by the stream. This is similar to `Iterator`: there may be zero to
+many of these, and unlike `Future`, where there is always a single `Output`
+(even if it’s the unit type `()`).
 
 `Stream` also defines a method to get those items. We call it `poll_next`, to
-make it clear that it polls like `Future::poll` and produces a sequence of items
-like `Iterator::next`. Its return type combines `Poll` with `Option`. The outer
-type is `Poll`, because it has to be checked for readiness, just like a future.
-The inner type is `Option`, because it needs to signal whether there are more
-messages, just like an iterator.
+make it clear that it polls in the same way `Future::poll` does and produces a
+sequence of items in the same way `Iterator::next` does. Its return type
+combines `Poll` with `Option`. The outer type is `Poll`, because it has to be
+checked for readiness, just as a future does. The inner type is `Option`,
+because it needs to signal whether there are more messages, just as an iterator
+does.
 
 Something very similar to this will likely end up standardized as part of Rust’s
 standard library. In the meantime, it’s part of the toolkit of most runtimes,

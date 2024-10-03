@@ -19,7 +19,7 @@ The async model provides a different—and ultimately complementary—set of
 tradeoffs. In the async model, concurrent operations don’t require their own
 threads. Instead, they can run on tasks, as when we used `trpl::spawn_task` to
 kick off work from a synchronous function throughout the streams section. A
-*task* is a lot like a thread—but instead of being managed by the operating
+*task* is similar to a thread—but instead of being managed by the operating
 system, it’s managed by library-level code: the runtime.
 
 In the previous section, we saw that we could build a `Stream` by using an async
@@ -51,8 +51,8 @@ literally run out of memory!
 However, there’s a reason these APIs are so similar. Threads act as a boundary
 for sets of synchronous operations; concurrency is possible *between* threads.
 Tasks act as a boundary for sets of *asynchronous* operations; concurrency is
-possible both *between* and *within* tasks. In that regard, tasks are kind of
-like lightweight, runtime-managed threads with added capabilities that come from
+possible both *between* and *within* tasks. In that regard, tasks are similar to
+lightweight, runtime-managed threads with added capabilities that come from
 being managed by a runtime instead of by the operating system. Futures are an
 even more granular unit of concurrency, where each future may represent a tree
 of other futures. That is, the runtime—specifically, its executor—manages tasks,
@@ -65,13 +65,13 @@ On the one hand, concurrency with threads is in some ways a simpler programming
 model than concurrency with `async`. Threads are somewhat “fire and forget,”
 they have no native equivalent to a future, so they simply run to completion,
 without interruption except by the operating system itself. That is, they have
-no *intra-task concurrency* like futures can. Threads in Rust also have no
+no *intra-task concurrency* as futures can. Threads in Rust also have no
 mechanisms for cancellation—a subject we haven’t covered in depth in this
 chapter, but which is implicit in the fact that whenever we ended a future, its
 state got cleaned up correctly.
 
 These limitations make threads harder to compose than futures. It’s much more
-difficult, for example, to build something like the `timeout` we built in
+difficult, for example, to build something similar to the `timeout` we built in
 [“Building Our Own Async Abstractions”][combining-futures], or the `throttle`
 method we used with streams in [“Composing Streams”][streams]. The fact that
 futures are richer data structures means they *can* be composed together more
@@ -90,9 +90,9 @@ requires threads *and* tasks, and therefore futures.
 
 As a default way of thinking about which to use when:
 
-- If the task is *very parallelizable*, like processing a bunch of data where
+- If the task is *very parallelizable*, such as processing a bunch of data where
   each part can be processed separately, threads are a better choice.
-- If the task is *very concurrent*, like handling messages from a bunch of
+- If the task is *very concurrent*, such as handling messages from a bunch of
   different sources which may come in a different intervals or different rates,
   async is a better choice.
 
@@ -112,8 +112,8 @@ common example of this kind of mix in real-world Rust code.
 We begin by creating an async channel. Then we spawn a thread which takes
 ownership of the sender side of the channel. Within the thread, we send the
 numbers 1 through 10, and sleep for a second in between each. Finally, we run a
-future created with an async block passed to `trpl::run` just like we have
-throughout the chapter. In that future, we await those messages, just like in
+future created with an async block passed to `trpl::run` just as we have
+throughout the chapter. In that future, we await those messages, just as in
 the other message-passing examples we have seen.
 
 To return to the examples we opened the chapter with: you could imagine running

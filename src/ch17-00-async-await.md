@@ -57,7 +57,7 @@ We could avoid blocking our main thread by spawning a dedicated thread to
 download each file. However, we would eventually find that the overhead of those
 threads was a problem. It would also be nicer if the call were not blocking in
 the first place. Last but not least, it would be better if we could write in the
-same direct style we use in blocking code. Something like this:
+same direct style we use in blocking code. Something similar to this:
 
 ```rust,ignore,does_not_compile
 let data = fetch_data_from(url).await;
@@ -121,7 +121,7 @@ to work concurrently on your own tasks.
 
 The same basic dynamics come into play with software and hardware. On a machine
 with a single CPU core, the CPU can only do one operation at a time, but it can
-still work concurrently. Using tools like threads, processes, and async, the
+still work concurrently. Using tools such as threads, processes, and async, the
 computer can pause one activity and switch to others before eventually cycling
 back to that first activity again. On a machine with multiple CPU cores, it can
 also do work in parallel. One core can be doing one thing while another core
