@@ -24,13 +24,13 @@ First, notice that all the tuple code in the variable declaration and the
 function return value is gone. Second, note that we pass `&s1` into
 `calculate_length` and, in its definition, we take `&String` rather than
 `String`. These ampersands represent *references*, and they allow you to refer
-to some value without taking ownership of it. Figure 4-5 depicts this concept.
+to some value without taking ownership of it. Figure 4-6 depicts this concept.
 
 <img alt="Three tables: the table for s contains only a pointer to the table
 for s1. The table for s1 contains the stack data for s1 and points to the
-string data on the heap." src="img/trpl04-05.svg" class="center" />
+string data on the heap." src="img/trpl04-06.svg" class="center" />
 
-<span class="caption">Figure 4-5: A diagram of `&String s` pointing at `String
+<span class="caption">Figure 4-6: A diagram of `&String s` pointing at `String
 s1`</span>
 
 > Note: The opposite of referencing by using `&` is *dereferencing*, which is
