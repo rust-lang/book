@@ -111,7 +111,7 @@ trait. Some of these methods call the `next` method in their definition, which
 is why you’re required to implement the `next` method when implementing the
 `Iterator` trait.
 
-Methods that call `next` are called *consuming adaptors*, because calling them
+Methods that call `next` are called *consuming adapters*, because calling them
 uses up the iterator. One example is the `sum` method, which takes ownership of
 the iterator and iterates through the items by repeatedly calling `next`, thus
 consuming the iterator. As it iterates through, it adds each item to a running
@@ -131,17 +131,17 @@ ownership of the iterator we call it on.
 
 ### Methods that Produce Other Iterators
 
-*Iterator adaptors* are methods defined on the `Iterator` trait that don’t
+*Iterator adapters* are methods defined on the `Iterator` trait that don’t
 consume the iterator. Instead, they produce different iterators by changing
 some aspect of the original iterator.
 
-Listing 13-14 shows an example of calling the iterator adaptor method `map`,
+Listing 13-14 shows an example of calling the iterator adapter method `map`,
 which takes a closure to call on each item as the items are iterated through.
 The `map` method returns a new iterator that produces the modified items. The
 closure here creates a new iterator in which each item from the vector will be
 incremented by 1:
 
-<Listing number="13-14" file-name="src/main.rs" caption="Calling the iterator adaptor `map` to create a new iterator">
+<Listing number="13-14" file-name="src/main.rs" caption="Calling the iterator adapter `map` to create a new iterator">
 
 ```rust,not_desired_behavior
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-14/src/main.rs:here}}
@@ -156,7 +156,7 @@ However, this code produces a warning:
 ```
 
 The code in Listing 13-14 doesn’t do anything; the closure we’ve specified
-never gets called. The warning reminds us why: iterator adaptors are lazy, and
+never gets called. The warning reminds us why: iterator adapters are lazy, and
 we need to consume the iterator here.
 
 To fix this warning and consume the iterator, we’ll use the `collect` method,
@@ -181,9 +181,9 @@ on each item. This is a great example of how closures let you customize some
 behavior while reusing the iteration behavior that the `Iterator` trait
 provides.
 
-You can chain multiple calls to iterator adaptors to perform complex actions in
+You can chain multiple calls to iterator adapters to perform complex actions in
 a readable way. But because all iterators are lazy, you have to call one of the
-consuming adaptor methods to get results from calls to iterator adaptors.
+consuming adapter methods to get results from calls to iterator adapters.
 
 ### Using Closures that Capture Their Environment
 
