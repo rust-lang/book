@@ -146,10 +146,10 @@ some code in `main` to call it, let’s talk a little more about what we’ve
 written and what it means.
 
 When Rust sees a block marked with the `async` keyword, it compiles it into a
-unique, anonymous data type which implements the `Future` trait. When Rust
-sees a function marked with `async`, it compiles it into a non-async function
-whose body is an async block. Thus, an async function’s return type is the type
-of the anonymous data type the compiler creates for that async block.
+unique, anonymous data type which implements the `Future` trait. When Rust sees
+a function marked with `async`, it compiles it into a non-async function whose
+body is an async block. An async function’s return type is the type of the
+anonymous data type the compiler creates for that async block.
 
 Thus, writing `async fn` is equivalent to writing a function which returns a
 *future* of the return type. When the compiler sees a function definition such
