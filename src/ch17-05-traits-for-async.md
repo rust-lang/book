@@ -376,9 +376,8 @@ Now that we have a deeper grasp on the `Future`, `Pin`, and `Unpin` traits, we
 can turn our attention to the `Stream` trait. As described in the section
 introducing streams, streams are similar to asynchronous iterators. Unlike
 `Iterator` and `Future`, there is no definition of a `Stream` trait in the
-standard library as of the time of writing,<!-- TODO: verify before press time!
---> but there *is* a very common definition from the `futures` crate used
-throughout the ecosystem.
+standard library as of the time of writing, but there *is* a very common
+definition from the `futures` crate used throughout the ecosystem.
 
 Let’s review the definitions of the `Iterator` and `Future` traits, so we can
 build up to how a `Stream` trait that merges them together might look. From
