@@ -2,10 +2,10 @@ extern crate trpl; // required for mdbook test
 
 use trpl::Html;
 
+// ANCHOR: run
 fn main() {
     let args: Vec<String> = std::env::args().collect();
 
-    // ANCHOR: run
     trpl::run(async {
         let url = &args[1];
         match page_title(url).await {
@@ -13,8 +13,8 @@ fn main() {
             None => println!("{url} had no title"),
         }
     })
-    // ANCHOR_END: run
 }
+// ANCHOR_END: run
 
 async fn page_title(url: &str) -> Option<String> {
     let response_text = trpl::get(url).await.text().await;

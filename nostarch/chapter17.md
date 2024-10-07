@@ -417,6 +417,9 @@ await the result of calling `page_title`, as in Listing 17-4.
 Filename: src/main.rs
 
 ```
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+
     trpl::run(async {
         let url = &args[1];
         match page_title(url).await {
@@ -424,6 +427,7 @@ Filename: src/main.rs
             None => println!("{url} had no title"),
         }
     })
+}
 ```
 
 Listing 17-4: Awaiting an async block with `trpl::run`
