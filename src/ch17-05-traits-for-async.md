@@ -224,15 +224,15 @@ When we move a future—whether by pushing into a data structure to use as an
 iterator with `join_all`, or returning them from a function—that actually means
 moving the state machine Rust creates for us. And unlike most other types in
 Rust, the futures Rust creates for async blocks can end up with references to
-themselves in the fields of any given variant, as in Figure 17-3 (a simplified
+themselves in the fields of any given variant, as in Figure 17-4 (a simplified
 illustration to help you get a feel for the idea, rather than digging into what
 are often fairly complicated details).
 
 <figure>
 
-<img alt="Concurrent work flow" src="img/trpl17-03.svg" class="center" />
+<img alt="Concurrent work flow" src="img/trpl17-04.svg" class="center" />
 
-<figcaption>Figure 17-3: A self-referential data type.</figcaption>
+<figcaption>Figure 17-4: A self-referential data type.</figcaption>
 
 </figure>
 
@@ -247,9 +247,9 @@ unrelated data later.
 
 <figure>
 
-<img alt="Concurrent work flow" src="img/trpl17-04.svg" class="center" />
+<img alt="Concurrent work flow" src="img/trpl17-05.svg" class="center" />
 
-<figcaption>Figure 17-4: The unsafe result of moving a self-referential data type.</figcaption>
+<figcaption>Figure 17-5: The unsafe result of moving a self-referential data type.</figcaption>
 
 </figure>
 
@@ -264,20 +264,20 @@ which has any active references to it using safe code.
 `Pin` builds on that to give us the exact guarantee we need. When we *pin* a
 value by wrapping a pointer to that value in `Pin`, it can no longer move. Thus,
 if you have `Pin<Box<SomeType>>`, you actually pin the `SomeType` value, *not*
-the `Box` pointer. Figure 17-5 illustrates this:
+the `Box` pointer. Figure 17-6 illustrates this:
 
 <figure>
 
-<img alt="Concurrent work flow" src="img/trpl17-05.svg" class="center" />
+<img alt="Concurrent work flow" src="img/trpl17-06.svg" class="center" />
 
-<figcaption>Figure 17-5: Pinning a `Box` which points to a self-referential future type.</figcaption>
+<figcaption>Figure 17-6: Pinning a `Box` which points to a self-referential future type.</figcaption>
 
 </figure>
 
 In fact, the `Box` pointer can still move around freely. Remember: we care about
 making sure the data ultimately being referenced stays in its place. If a
 pointer moves around, but the data it points to is in the same place, as in
-Figure 17-6, there’s no potential problem. (How you would do this with a `Pin`
+Figure 17-7, there’s no potential problem. (How you would do this with a `Pin`
 wrapping a `Box` is more than we’ll get into in this particular discussion,
 but it would make for a good exercise! If you look at the docs for the types as
 well as the `std::pin` module, you might be able to work out how you would do
@@ -286,9 +286,9 @@ is still pinned.
 
 <figure>
 
-<img alt="Concurrent work flow" src="img/trpl17-06.svg" class="center" />
+<img alt="Concurrent work flow" src="img/trpl17-07.svg" class="center" />
 
-<figcaption>Figure 17-6: Moving a `Box` which points to a self-referential future type.</figcaption>
+<figcaption>Figure 17-7: Moving a `Box` which points to a self-referential future type.</figcaption>
 
 </figure>
 
@@ -323,22 +323,22 @@ characters which make it up. We can wrap a `String` in `Pin`, as seen in Figure
 
 <figure>
 
-<img alt="Concurrent work flow" src="img/trpl17-07.svg" class="center" />
+<img alt="Concurrent work flow" src="img/trpl17-08.svg" class="center" />
 
-<figcaption>Figure 17-7: Pinning a String, with a dotted line indicating that the String implements the `Unpin` trait, so it is not pinned.</figcaption>
+<figcaption>Figure 17-8: Pinning a String, with a dotted line indicating that the String implements the `Unpin` trait, so it is not pinned.</figcaption>
 
 </figure>
 
 This means that we can do things such as replace one string with another at the
-exact same location in memory as in Figure 17-8. This doesn’t violate the `Pin`
+exact same location in memory as in Figure 17-9. This doesn’t violate the `Pin`
 contract because `String`—like most other types in Rust—implements `Unpin`,
 because it has no internal references that make it unsafe to move around!
 
 <figure>
 
-<img alt="Concurrent work flow" src="img/trpl17-08.svg" class="center" />
+<img alt="Concurrent work flow" src="img/trpl17-09.svg" class="center" />
 
-<figcaption>Figure 17-8: Replacing the String with an entirely different String in memory.</figcaption>
+<figcaption>Figure 17-9: Replacing the String with an entirely different String in memory.</figcaption>
 
 </figure>
 

@@ -89,7 +89,7 @@ tasks by switching between them.
 
 <img alt="Concurrent work flow" src="img/trpl17-01.svg" />
 
-Figure 17-1: A concurrent workflow, switching between Task A and Task B
+Figure 17-1: A concurrent workflow, switching between Task A and Task B.
 
 When you agree to split up a group of tasks between the people on the team, with
 each person taking one task and working on it alone, this is *parallelism*. Each
@@ -98,15 +98,21 @@ person on the team can make progress at the exact same time.
 <img alt="Concurrent work flow" src="img/trpl17-02.svg" />
 
 Figure 17-2: A parallel workflow, where work happens on Task A and Task B
-independently
+independently.
 
 With both of these situations, you might have to coordinate between different
 tasks. Maybe you *thought* the task that one person was working on was totally
 independent from everyone else’s work, but it actually needs something finished
 by another person on the team. Some of the work could be done in parallel, but
 some of it was actually *serial*: it could only happen in a series, one thing
-after the other. Likewise, you might realize that one of your own tasks depends
-on another of your tasks. Now your concurrent work has also become serial.
+after the other, as in Figure 17-3.
+
+<img alt="Concurrent work flow" src="img/trpl17-03.svg" class="center" />
+
+Figure 17-3: A partially parallel workflow, where work happens on Task A and Task B independently until task A3 is blocked on the results of task B3.
+
+Likewise, you might realize that one of your own tasks depends on another of
+your tasks. Now your concurrent work has also become serial.
 
 Parallelism and concurrency can intersect with each other, too. If you learn
 that a colleague is stuck until you finish one of your tasks, you’ll probably
@@ -2601,13 +2607,13 @@ When we move a future—whether by pushing into a data structure to use as an
 iterator with `join_all`, or returning them from a function—that actually means
 moving the state machine Rust creates for us. And unlike most other types in
 Rust, the futures Rust creates for async blocks can end up with references to
-themselves in the fields of any given variant, as in Figure 17-3 (a simplified
+themselves in the fields of any given variant, as in Figure 17-4 (a simplified
 illustration to help you get a feel for the idea, rather than digging into what
 are often fairly complicated details).
 
-<img alt="Concurrent work flow" src="img/trpl17-03.svg" />
+<img alt="Concurrent work flow" src="img/trpl17-04.svg" />
 
-Figure 17-3: A self-referential data type.
+Figure 17-4: A self-referential data type.
 
 By default, though, any object which has a reference to itself is unsafe to
 move, because references always point to the actual memory address of the thing
@@ -2618,9 +2624,9 @@ the data structure. For another—and more importantly!—the computer is now fr
 to reuse that memory for other things! You could end up reading completely
 unrelated data later.
 
-<img alt="Concurrent work flow" src="img/trpl17-04.svg" />
+<img alt="Concurrent work flow" src="img/trpl17-05.svg" />
 
-Figure 17-4: The unsafe result of moving a self-referential data type.
+Figure 17-5: The unsafe result of moving a self-referential data type.
 
 In principle, the Rust compiler could try to update every reference to an object
 every time it gets moved. That would potentially be a lot of performance
@@ -2633,25 +2639,25 @@ which has any active references to it using safe code.
 `Pin` builds on that to give us the exact guarantee we need. When we *pin* a
 value by wrapping a pointer to that value in `Pin`, it can no longer move. Thus,
 if you have `Pin<Box<SomeType>>`, you actually pin the `SomeType` value, *not*
-the `Box` pointer. Figure 17-5 illustrates this:
+the `Box` pointer. Figure 17-6 illustrates this:
 
-<img alt="Concurrent work flow" src="img/trpl17-05.svg" />
+<img alt="Concurrent work flow" src="img/trpl17-06.svg" />
 
-Figure 17-5: Pinning a `Box` which points to a self-referential future type.
+Figure 17-6: Pinning a `Box` which points to a self-referential future type.
 
 In fact, the `Box` pointer can still move around freely. Remember: we care about
 making sure the data ultimately being referenced stays in its place. If a
 pointer moves around, but the data it points to is in the same place, as in
-Figure 17-6, there’s no potential problem. (How you would do this with a `Pin`
+Figure 17-7, there’s no potential problem. (How you would do this with a `Pin`
 wrapping a `Box` is more than we’ll get into in this particular discussion,
 but it would make for a good exercise! If you look at the docs for the types as
 well as the `std::pin` module, you might be able to work out how you would do
 that.) The key is that the self-referential type itself cannot move, because it
 is still pinned.
 
-<img alt="Concurrent work flow" src="img/trpl17-06.svg" />
+<img alt="Concurrent work flow" src="img/trpl17-07.svg" />
 
-Figure 17-6: Moving a `Box` which points to a self-referential future type.
+Figure 17-7: Moving a `Box` which points to a self-referential future type.
 
 However, most types are perfectly safe to move around, even if they happen to
 be behind a `Pin` pointer. We only need to think about pinning when items have
@@ -2683,19 +2689,19 @@ To make that concrete, think about a `String`: it has a length and the Unicode
 characters which make it up. We can wrap a `String` in `Pin`, as seen in Figure
 17-7. However
 
-<img alt="Concurrent work flow" src="img/trpl17-07.svg" />
+<img alt="Concurrent work flow" src="img/trpl17-08.svg" />
 
-Figure 17-7: Pinning a String, with a dotted line indicating that the String
+Figure 17-8: Pinning a String, with a dotted line indicating that the String
 implements the `Unpin` trait, so it is not pinned.
 
 This means that we can do things such as replace one string with another at the
-exact same location in memory as in Figure 17-8. This doesn’t violate the `Pin`
+exact same location in memory as in Figure 17-9. This doesn’t violate the `Pin`
 contract because `String`—like most other types in Rust—implements `Unpin`,
 because it has no internal references that make it unsafe to move around!
 
-<img alt="Concurrent work flow" src="img/trpl17-08.svg" />
+<img alt="Concurrent work flow" src="img/trpl17-09.svg" />
 
-Figure 17-8: Replacing the String with an entirely different String in memory.
+Figure 17-9: Replacing the String with an entirely different String in memory.
 
 Now we know enough to understand the errors reported for that `join_all` call
 from back in Listing 17-17. We originally tried to move the futures produced by

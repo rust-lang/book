@@ -89,7 +89,7 @@ tasks by switching between them.
 
 <img alt="Concurrent work flow" src="img/trpl17-01.svg" class="center" />
 
-<figcaption>Figure 17-1: A concurrent workflow, switching between Task A and Task B</figcaption>
+<figcaption>Figure 17-1: A concurrent workflow, switching between Task A and Task B.</figcaption>
 
 </figure>
 
@@ -101,7 +101,7 @@ person on the team can make progress at the exact same time.
 
 <img alt="Concurrent work flow" src="img/trpl17-02.svg" class="center" />
 
-<figcaption>Figure 17-2: A parallel workflow, where work happens on Task A and Task B independently</figcaption>
+<figcaption>Figure 17-2: A parallel workflow, where work happens on Task A and Task B independently.</figcaption>
 
 </figure>
 
@@ -110,8 +110,18 @@ tasks. Maybe you *thought* the task that one person was working on was totally
 independent from everyone else’s work, but it actually needs something finished
 by another person on the team. Some of the work could be done in parallel, but
 some of it was actually *serial*: it could only happen in a series, one thing
-after the other. Likewise, you might realize that one of your own tasks depends
-on another of your tasks. Now your concurrent work has also become serial.
+after the other, as in Figure 17-3.
+
+<figure>
+
+<img alt="Concurrent work flow" src="img/trpl17-03.svg" class="center" />
+
+<figcaption>Figure 17-3: A partially parallel workflow, where work happens on Task A and Task B independently until task A3 is blocked on the results of task B3.</figcaption>
+
+</figure>
+
+Likewise, you might realize that one of your own tasks depends on another of
+your tasks. Now your concurrent work has also become serial.
 
 Parallelism and concurrency can intersect with each other, too. If you learn
 that a colleague is stuck until you finish one of your tasks, you’ll probably

@@ -1,39 +1,64 @@
 digraph {
    rankdir = LR;
-   overlap = false;
-   dpi = 300.0;
-   splines = false;
-   cluster = true;
    newrank = true;
-   outputorder = in;
-   compound = true;
-   labelloc = "c";
+   dpi = 300.0;
    
    node [shape = "plaintext";];
    
-   pinned_box [label = <<table border="0" cellborder="1" cellspacing="0">
-      <tr><td sides="B">Pin</td></tr>
-      <tr><td port="source"> </td></tr>
-      </table>>;];
    
-   
-   subgraph cluster_deref {
-      style = dashed;
-      label = "String";
+   subgraph cluster_not_fut {
+      peripheries = 0;
       
-      pin [shape = "point";];
+      pin [label = <<table border="0" cellborder="1" cellspacing="0">
+         <tr><td sides="B">Pin</td></tr>
+         <tr><td port="source"> </td></tr>
+         </table>>;];
+      
+      subgraph cluster_boxes {
+         peripheries = 0;
+         rank = same;
+         
+         subgraph cluster_box_1 {
+            subgraph cluster_box_2_internal {
+               label = "b1";
+               shape = box;
+               style = solid;
+               style = filled;
+               peripheries = 1;
+               box1 [shape = "point";style = "invis";];
+            }
+         }
+         
+         subgraph cluster_box_2 {
+            subgraph cluster_box_2_internal {
+               label = "b2";
+               shape = box;
+               style = solid;
+               peripheries = 1;
+               box2 [shape = "point";];
+            }
+         }
+      }
+   }
+   subgraph cluster_target {
+      style = bold;
+      label = "pinned";
       
       fut [label = <<table border="0" cellborder="1" cellspacing="0">
-         <tr><td port="target">5usize</td>
-         <td>h</td>
-         <td>e</td>
-         <td>l</td>
-         <td>l</td>
-         <td>o</td></tr>
+         <tr><td sides="B">fut</td></tr>
+         <tr><td port="target">0</td></tr>
+         <tr><td port="source"> </td></tr>
+         <tr><td style="dashed">...</td></tr>
+         <tr><td port="internal">1</td></tr>
          </table>>;];
    }
    
+   
+   box1 -> box2 [rankdir = TB; style = invis;];
+   
    edge [tailclip = false;];
-   pinned_box -> pin [tailport = "source:c"; arrowhead = "none";];
-   pin -> fut [headport = "target";];
+   pin -> box1 [style = "invis";];
+   pin -> box2 [tailport = "source:c"; arrowhead = "none";];
+   box2 -> fut [headport = "target";];
+   fut -> fut [tailport = "source:c"; headport = "internal";];
 }
