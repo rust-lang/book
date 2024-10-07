@@ -177,7 +177,9 @@ example, a function that takes a parameter of type `Color` cannot take a
 `Point` as an argument, even though both types are made up of three `i32`
 values. Otherwise, tuple struct instances are similar to tuples in that you can
 destructure them into their individual pieces, and you can use a `.` followed
-by the index to access an individual value.
+by the index to access an individual value. Unlike tuples, tuple structs
+require you to name the type of the struct when you destructure them. For
+example, we would write `let Point(x, y, z) = point`.
 
 ### Unit-Like Structs Without Any Fields
 
