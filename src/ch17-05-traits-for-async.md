@@ -195,9 +195,9 @@ Unlike those, however, `Pin` only works with *pointer types* such as references
 `Pin` works with types which implement the `Deref` or `DerefMut` traits, which
 we covered in Chapter 15. You can think of this restriction as equivalent to
 only working with pointers, though, because implementing `Deref` or `DerefMut`
-means your type behaves similarly to a pointer type. `Pin` is also not a
-pointer itself, and it doesn’t have any behavior of its own as the ref counting
-of `Rc` or `Arc` does. It’s purely a tool the compiler can use to uphold the
+means your type behaves similarly to a pointer type. `Pin` is also not a pointer
+itself, and it doesn’t have any behavior of its own the way `Rc` and `Arc` do
+with ref counting. It’s purely a tool the compiler can use to uphold the
 relevant guarantees, by wrapping pointers in the type.
 
 Recalling that `await` is implemented in terms of calls to `poll`, this starts

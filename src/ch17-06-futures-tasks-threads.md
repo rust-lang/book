@@ -65,7 +65,7 @@ On the one hand, concurrency with threads is in some ways a simpler programming
 model than concurrency with `async`. Threads are somewhat “fire and forget,”
 they have no native equivalent to a future, so they simply run to completion,
 without interruption except by the operating system itself. That is, they have
-no *intra-task concurrency* as futures can. Threads in Rust also have no
+no *intra-task concurrency* the way futures can. Threads in Rust also have no
 mechanisms for cancellation—a subject we haven’t covered in depth in this
 chapter, but which is implicit in the fact that whenever we ended a future, its
 state got cleaned up correctly.

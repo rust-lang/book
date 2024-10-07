@@ -2569,13 +2569,12 @@ Unlike those, however, `Pin` only works with *pointer types* such as references
 (`&` and `&mut`) and smart pointers (`Box`, `Rc`, and so on). To be precise,
 `Pin` works with types which implement the `Deref` or `DerefMut` traits, which
 we covered in the “Treating Smart Pointers Like Regular References with the
-Deref Trait” section of Chapter 15 on page XX. You can think of this
-restriction as equivalent to only working with pointers, though, because
-implementing `Deref` or `DerefMut` means your type behaves similarly to a
-pointer type. `Pin` is also not a pointer itself, and it doesn’t have any
-behavior of its own as the ref counting of `Rc` or `Arc` does. It’s purely a
-tool the compiler can use to uphold the relevant guarantees, by wrapping
-pointers in the type.
+Deref Trait” section of Chapter 15 on page XX. You can think of this restriction
+as equivalent to only working with pointers, though, because implementing
+`Deref` or `DerefMut` means your type behaves similarly to a pointer type. `Pin`
+is also not a pointer itself, and it doesn’t have any behavior of its own the
+way `Rc` and `Arc` do with ref counting. It’s purely a tool the compiler can use
+to uphold the relevant guarantees, by wrapping pointers in the type.
 
 Recalling that `await` is implemented in terms of calls to `poll`, this starts
 to explain the error message we saw above—but that was in terms of `Unpin`, not
@@ -2908,7 +2907,7 @@ On the one hand, concurrency with threads is in some ways a simpler programming
 model than concurrency with `async`. Threads are somewhat “fire and forget,”
 they have no native equivalent to a future, so they simply run to completion,
 without interruption except by the operating system itself. That is, they have
-no *intra-task concurrency* as futures can. Threads in Rust also have no
+no *intra-task concurrency* the way futures can. Threads in Rust also have no
 mechanisms for cancellation—a subject we haven’t covered in depth in this
 chapter, but which is implicit in the fact that whenever we ended a future, its
 state got cleaned up correctly.
