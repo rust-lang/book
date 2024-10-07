@@ -113,12 +113,13 @@ hardcoded into the text of our program. The variable is valid from the point at
 which it’s declared until the end of the current *scope*. Listing 4-1 shows a
 program with comments annotating where the variable `s` would be valid.
 
+<Listing number="4-1" caption="A variable and the scope in which it is valid">
+
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 4-1: A variable and the scope in which it is
-valid</span>
+</Listing>
 
 In other words, there are two important points in time here:
 
@@ -239,12 +240,13 @@ we’ve allocated on the heap. Let’s explore some of those situations now.
 Multiple variables can interact with the same data in different ways in Rust.
 Let’s look at an example using an integer in Listing 4-2.
 
+<Listing number="4-2" caption="Assigning the integer value of variable `x` to `y`">
+
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 4-2: Assigning the integer value of variable `x`
-to `y`</span>
+</Listing>
 
 We can probably guess what this is doing: “bind the value `5` to `x`; then make
 a copy of the value in `x` and bind it to `y`.” We now have two variables, `x`
@@ -354,6 +356,37 @@ In addition, there’s a design choice that’s implied by this: Rust will never
 automatically create “deep” copies of your data. Therefore, any *automatic*
 copying can be assumed to be inexpensive in terms of runtime performance.
 
+#### Scope and Assignment
+
+The inverse of this is true for the relationship between scoping, ownership, and
+memory being freed via the `drop` function as well. When you assign a completely
+new value to an existing variable, Rust will call `drop` and free the original
+value’s memory immediately. Consider this code, for example:
+
+```rust
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04b-replacement-drop/src/main.rs:here}}
+```
+
+We initially declare a variable `s` and bind it to a `String` with the value
+`"hello"`. Then we immediately create a new `String` with the value `"ahoy"` and
+assign it to `s`. At this point, nothing is referring to the original value on
+the heap at all.
+
+<img alt="One table s representing the string value on the stack, pointing to
+the second piece of string data (ahoy) on the heap, with the original string
+data (hello) grayed out because it cannot be accessed anymore."
+src="img/trpl04-05.svg"
+class="center"
+style="width: 50%;"
+/>
+
+<span class="caption">Figure 4-5: Representation in memory after the initial
+value has been replaced in its entirety.</span>
+
+The original string thus immediately goes out of scope. Rust will run the `drop`
+function on it and its memory will be freed right away. When we print the value
+at the end, it will be `"ahoy, world!"`.
+
 <!-- Old heading. Do not remove or links may break. -->
 <a id="ways-variables-and-data-interact-clone"></a>
 
@@ -429,14 +462,13 @@ assigning a value to a variable. Passing a variable to a function will move or
 copy, just as assignment does. Listing 4-3 has an example with some annotations
 showing where variables go into and out of scope.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="4-3" file-name="src/main.rs" caption="Functions with ownership and scope annotated">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-03/src/main.rs}}
 ```
 
-<span class="caption">Listing 4-3: Functions with ownership and scope
-annotated</span>
+</Listing>
 
 If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
 compile-time error. These static checks protect us from mistakes. Try adding
@@ -449,14 +481,13 @@ Returning values can also transfer ownership. Listing 4-4 shows an example of a
 function that returns some value, with similar annotations as those in Listing
 4-3.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="4-4" file-name="src/main.rs" caption="Transferring ownership of return values">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 4-4: Transferring ownership of return
-values</span>
+</Listing>
 
 The ownership of a variable follows the same pattern every time: assigning a
 value to another variable moves it. When a variable that includes data on the
@@ -471,13 +502,13 @@ from the body of the function that we might want to return as well.
 
 Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="4-5" file-name="src/main.rs" caption="Returning ownership of parameters">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 4-5: Returning ownership of parameters</span>
+</Listing>
 
 But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for using a value without

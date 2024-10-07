@@ -15,14 +15,13 @@ Let’s change the `area` function that has a `Rectangle` instance as a paramete
 and instead make an `area` method defined on the `Rectangle` struct, as shown
 in Listing 5-13.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-13" file-name="src/main.rs" caption="Defining an `area` method on the `Rectangle` struct">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-13/src/main.rs}}
 ```
 
-<span class="caption">Listing 5-13: Defining an `area` method on the
-`Rectangle` struct</span>
+</Listing>
 
 To define the function within the context of `Rectangle`, we start an `impl`
 (implementation) block for `Rectangle`. Everything within this `impl` block
@@ -65,11 +64,13 @@ Note that we can choose to give a method the same name as one of the struct’s
 fields. For example, we can define a method on `Rectangle` that is also named
 `width`:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-06-method-field-interaction/src/main.rs:here}}
 ```
+
+</Listing>
 
 Here, we’re choosing to make the `width` method return `true` if the value in
 the instance’s `width` field is greater than `0` and `false` if the value is
@@ -141,14 +142,13 @@ within `self` (the first `Rectangle`); otherwise, it should return `false`.
 That is, once we’ve defined the `can_hold` method, we want to be able to write
 the program shown in Listing 5-14.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-14" file-name="src/main.rs" caption="Using the as-yet-unwritten `can_hold` method">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-14/src/main.rs}}
 ```
 
-<span class="caption">Listing 5-14: Using the as-yet-unwritten `can_hold`
-method</span>
+</Listing>
 
 The expected output would look like the following because both dimensions of
 `rect2` are smaller than the dimensions of `rect1`, but `rect3` is wider than
@@ -173,14 +173,13 @@ Boolean, and the implementation will check whether the width and height of
 respectively. Let’s add the new `can_hold` method to the `impl` block from
 Listing 5-13, shown in Listing 5-15.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-15" file-name="src/main.rs" caption="Implementing the `can_hold` method on `Rectangle` that takes another `Rectangle` instance as a parameter">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-15/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-15: Implementing the `can_hold` method on
-`Rectangle` that takes another `Rectangle` instance as a parameter</span>
+</Listing>
 
 When we run this code with the `main` function in Listing 5-14, we’ll get our
 desired output. Methods can take multiple parameters that we add to the
@@ -226,12 +225,13 @@ Each struct is allowed to have multiple `impl` blocks. For example, Listing
 5-15 is equivalent to the code shown in Listing 5-16, which has each method in
 its own `impl` block.
 
+<Listing number="5-16" caption="Rewriting Listing 5-15 using multiple `impl` blocks">
+
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-16/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-16: Rewriting Listing 5-15 using multiple `impl`
-blocks</span>
+</Listing>
 
 There’s no reason to separate these methods into multiple `impl` blocks here,
 but this is valid syntax. We’ll see a case in which multiple `impl` blocks are

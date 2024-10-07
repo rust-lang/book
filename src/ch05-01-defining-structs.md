@@ -13,13 +13,13 @@ grouped together. Then, inside curly brackets, we define the names and types of
 the pieces of data, which we call *fields*. For example, Listing 5-1 shows a
 struct that stores information about a user account.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-1" file-name="src/main.rs" caption="A `User` struct definition">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-1: A `User` struct definition</span>
+</Listing>
 
 To use a struct after we’ve defined it, we create an *instance* of that struct
 by specifying concrete values for each of the fields. We create an instance by
@@ -31,14 +31,13 @@ struct definition is like a general template for the type, and instances fill
 in that template with particular data to create values of the type. For
 example, we can declare a particular user as shown in Listing 5-2.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-2" file-name="src/main.rs" caption="Creating an instance of the `User` struct">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-2: Creating an instance of the `User`
-struct</span>
+</Listing>
 
 To get a specific value from a struct, we use dot notation. For example, to
 access this user’s email address, we use `user1.email`. If the instance is
@@ -46,14 +45,13 @@ mutable, we can change a value by using the dot notation and assigning into a
 particular field. Listing 5-3 shows how to change the value in the `email`
 field of a mutable `User` instance.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-3" file-name="src/main.rs" caption="Changing the value in the `email` field of a `User` instance">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-3: Changing the value in the `email` field of a
-`User` instance</span>
+</Listing>
 
 Note that the entire instance must be mutable; Rust doesn’t allow us to mark
 only certain fields as mutable. As with any expression, we can construct a new
@@ -64,14 +62,13 @@ Listing 5-4 shows a `build_user` function that returns a `User` instance with
 the given email and username. The `active` field gets the value of `true`, and
 the `sign_in_count` gets a value of `1`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-4" file-name="src/main.rs" caption="A `build_user` function that takes an email and username and returns a `User` instance">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-4: A `build_user` function that takes an email
-and username and returns a `User` instance</span>
+</Listing>
 
 It makes sense to name the function parameters with the same name as the struct
 fields, but having to repeat the `email` and `username` field names and
@@ -88,15 +85,13 @@ Listing 5-4, we can use the *field init shorthand* syntax to rewrite
 `build_user` so it behaves exactly the same but doesn’t have the repetition of
 `username` and `email`, as shown in Listing 5-5.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-5" file-name="src/main.rs" caption="A `build_user` function that uses field init shorthand because the `username` and `email` parameters have the same name as struct fields">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-5: A `build_user` function that uses field init
-shorthand because the `username` and `email` parameters have the same name as
-struct fields</span>
+</Listing>
 
 Here, we’re creating a new instance of the `User` struct, which has a field
 named `email`. We want to set the `email` field’s value to the value in the
@@ -114,28 +109,25 @@ First, in Listing 5-6 we show how to create a new `User` instance in `user2`
 regularly, without the update syntax. We set a new value for `email` but
 otherwise use the same values from `user1` that we created in Listing 5-2.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-6" file-name="src/main.rs" caption="Creating a new `User` instance using all but one of the values from `user1`">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-6: Creating a new `User` instance using all but one of
-the values from `user1`</span>
+</Listing>
 
 Using struct update syntax, we can achieve the same effect with less code, as
 shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
 explicitly set should have the same value as the fields in the given instance.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-7" file-name="src/main.rs" caption="Using struct update syntax to set a new `email` value for a `User` instance but to use the rest of the values from `user1`">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-07/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-7: Using struct update syntax to set a new
-`email` value for a `User` instance but to use the rest of the values from
-`user1`</span>
+</Listing>
 
 The code in Listing 5-7 also creates an instance in `user2` that has a
 different value for `email` but has the same values for the `username`,
@@ -154,7 +146,8 @@ Move”][move]<!-- ignore --> section. In this example, we can no longer use
 `active` and `sign_in_count` values from `user1`, then `user1` would still be
 valid after creating `user2`. Both `active` and `sign_in_count` are types that
 implement the `Copy` trait, so the behavior we discussed in the [“Stack-Only
-Data: Copy”][copy]<!-- ignore --> section would apply.
+Data: Copy”][copy]<!-- ignore --> section would apply. We can still use
+`user1.email` in this example, since its value was _not_ moved out.
 
 ### Using Tuple Structs Without Named Fields to Create Different Types
 
@@ -169,11 +162,13 @@ To define a tuple struct, start with the `struct` keyword and the struct name
 followed by the types in the tuple. For example, here we define and use two
 tuple structs named `Color` and `Point`:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-01-tuple-structs/src/main.rs}}
 ```
+
+</Listing>
 
 Note that the `black` and `origin` values are different types because they’re
 instances of different tuple structs. Each struct you define is its own type,
@@ -194,11 +189,13 @@ have any data that you want to store in the type itself. We’ll discuss traits
 in Chapter 10. Here’s an example of declaring and instantiating a unit struct
 named `AlwaysEqual`:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-04-unit-like-structs/src/main.rs}}
 ```
+
+</Listing>
 
 To define `AlwaysEqual`, we use the `struct` keyword, the name we want, and
 then a semicolon. No need for curly brackets or parentheses! Then we can get an
@@ -223,7 +220,7 @@ implement them on any type, including unit-like structs.
 > is valid for as long as the struct is. Let’s say you try to store a reference
 > in a struct without specifying lifetimes, like the following; this won’t work:
 >
-> <span class="filename">Filename: src/main.rs</span>
+> <Listing file-name="src/main.rs">
 >
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
 >
@@ -244,6 +241,8 @@ implement them on any type, including unit-like structs.
 >     };
 > }
 > ```
+>
+> </Listing>
 >
 > The compiler will complain that it needs lifetime specifiers:
 >
