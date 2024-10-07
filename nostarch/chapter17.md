@@ -567,7 +567,7 @@ You have built a small working web scraper now! Pick a couple URLs and run the
 command line tool. You may discover that some sites are reliably faster than
 others, while in other cases which site “wins” varies from run to run. More
 importantly, you’ve learned the basics of working with futures, so we can now
-dig into even more of the things we can *do* with async.
+dig into even more of the things we can do with async.
 
 ## Concurrency With Async
 
