@@ -79,7 +79,7 @@ allow the player to input a guess. Enter the code in Listing 2-1 into
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
 ```
 
-</Listing> 
+</Listing>
 
 This code contains a lot of information, so let’s go over it line by line. To
 obtain user input and then print the result as output, we need to bring the
@@ -612,7 +612,7 @@ fits that arm’s pattern. Rust takes the value given to `match` and looks
 through each arm’s pattern in turn. Patterns and the `match` construct are
 powerful Rust features: they let you express a variety of situations your code
 might encounter and they make sure you handle them all. These features will be
-covered in detail in Chapter 6 and Chapter 18, respectively.
+covered in detail in Chapter 6 and Chapter 19, respectively.
 
 Let’s walk through an example with the `match` expression we use here. Say that
 the user has guessed 50 and the randomly generated secret number this time is

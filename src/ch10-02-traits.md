@@ -325,7 +325,7 @@ around how the `impl Trait` syntax is implemented in the compiler. We’ll cover
 how to write a function with this behavior in the [“Using Trait Objects That
 Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
-ignore --> section of Chapter 17.
+ignore --> section of Chapter 18.
 
 ### Using Trait Bounds to Conditionally Implement Methods
 

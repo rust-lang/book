@@ -23,10 +23,10 @@ time because the data is copied around on the stack. To improve performance in
 this situation, we can store the large amount of data on the heap in a box.
 Then, only the small amount of pointer data is copied around on the stack,
 while the data it references stays in one place on the heap. The third case is
-known as a *trait object*, and Chapter 17 devotes an entire section, [“Using
+known as a *trait object*, and Chapter 18 devotes an entire section, [“Using
 Trait Objects That Allow for Values of Different Types,”][trait-objects]<!--
 ignore --> just to that topic. So what you learn here you’ll apply again in
-Chapter 17!
+Chapter 18!
 
 ### Using a `Box<T>` to Store Data on the Heap
 
@@ -242,7 +242,7 @@ other special capabilities, like those we’ll see with the other smart pointer
 types. They also don’t have the performance overhead that these special
 capabilities incur, so they can be useful in cases like the cons list where the
 indirection is the only feature we need. We’ll look at more use cases for boxes
-in Chapter 17, too.
+in Chapter 18, too.
 
 The `Box<T>` type is a smart pointer because it implements the `Deref` trait,
 which allows `Box<T>` values to be treated like references. When a `Box<T>`
