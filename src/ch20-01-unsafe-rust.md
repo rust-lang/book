@@ -175,7 +175,7 @@ We must call the `dangerous` function within a separate `unsafe` block. If we
 try to call `dangerous` without the `unsafe` block, we’ll get an error:
 
 ```console
-{{#include ../listings/ch19-advanced-features/output-only-01-missing-unsafe/output.txt}}
+{{#include ../listings/ch20-advanced-features/output-only-01-missing-unsafe/output.txt}}
 ```
 
 With the `unsafe` block, we’re asserting to Rust that we’ve read the function’s
