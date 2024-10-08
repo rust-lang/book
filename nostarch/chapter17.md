@@ -1899,21 +1899,20 @@ help: there is a method `try_next` with a similar name
 For more information about this error, try `rustc --explain E0599`.
 ```
 
-As the output suggests, the problem is that we need the right trait in scope to
-be able to use the `next` method. Given our discussion so far, you might
-reasonably expect that to be `Stream`, but the trait we need *here* is actually
-`StreamExt`. The `Ext` there is for “extension”: this is a common pattern in
-the Rust community for extending one trait with another.
+As the output suggests, the reason for the compiler error is that we need the
+right trait in scope to be able to use the `next` method. Given our discussion
+so far, you might reasonably expect that to be `Stream`, but the trait we need
+here is actually `StreamExt`. The `Ext` there is for “extension”: this is a
+common pattern in the Rust community for extending one trait with another.
 
-You might be wondering why `StreamExt` instead of `Stream`, and for that matter
-whether there is a `Stream` trait at all. Briefly, the answer is that throughout
-the Rust ecosystem, the `Stream` trait defines a low-level interface which
-effectively combines the `Iterator` and `Future` traits. The `StreamExt` trait
-supplies a higher-level set of APIs on top of `Stream`, including the `next`
-method as well as other utility methods similar to those provided by the
-`Iterator` trait. We’ll return to the `Stream` and `StreamExt` traits in a
-bit more detail at the end of the chapter. For now, this is enough to let us
-keep moving.
+Why do we need `StreamExt` instead of `Stream`, and what does the `Stream` trait
+itself do? Briefly, the answer is that throughout the Rust ecosystem, the
+`Stream` trait defines a low-level interface which effectively combines the
+`Iterator` and `Future` traits. The `StreamExt` trait supplies a higher-level
+set of APIs on top of `Stream`, including the `next` method as well as other
+utility methods similar to those provided by the `Iterator` trait. We’ll return
+to the `Stream` and `StreamExt` traits in a bit more detail at the end of the
+chapter. For now, this is enough to let us keep moving.
 
 The fix to the compiler error is to add a `use` statement for `trpl::StreamExt`,
 as in Listing 17-31.
@@ -2109,13 +2108,13 @@ Listing 17-35: Sending messages through `tx` with an async delay without making
 To sleep between messages in the `get_messages` function without blocking, we
 need to use async. However, we can’t make `get_messages` itself into an async
 function, because then we’d return a `Future<Output = Stream<Item = String>>`
-instead of just a `Stream<Item = String>>`. The caller would have to await
-`get_messages` itself to get access to the stream. But remember: everything in
-a given future happens linearly; concurrency happens *between* futures.
-Awaiting `get_messages` would require it to send all the messages, including
-sleeping between sending each message, before returning the receiver stream. As
-a result, the timeout would end up useless. There would be no delays in the
-stream itself: the delays would all happen before the stream was even available.
+instead of a `Stream<Item = String>>`. The caller would have to await
+`get_messages` itself to get access to the stream. But remember: everything in a
+given future happens linearly; concurrency happens *between* futures. Awaiting
+`get_messages` would require it to send all the messages, including sleeping
+between sending each message, before returning the receiver stream. As a result,
+the timeout would end up useless. There would be no delays in the stream itself:
+the delays would all happen before the stream was even available.
 
 Instead, we leave `get_messages` as a regular function which returns a stream,
 and spawn a task to handle the async `sleep` calls.
@@ -2557,9 +2556,10 @@ pub trait Future {
 }
 ```
 
-The `cx` parameter and its `Context` type is interesting, but is beyond the
-scope of this chapter: you generally only need to worry about it when writing a
-custom `Future` implementation.
+The `cx` parameter and its `Context` type is the key to how a runtime actually
+knows when to check any given future, while still being lazy. The details of how
+that works are beyond the scope of this chapter, though: you generally only need
+to worry about it when writing a custom `Future` implementation.
 
 Instead, we’ll focus on the type for `self`. This is the first time we’ve seen
 a method where `self` has a type annotation. A type annotation for `self` is
