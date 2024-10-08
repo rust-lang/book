@@ -618,7 +618,7 @@ value we want to put in the <code>query</code> field of <code>Config</code>. If 
 <code>Some</code>, we use a <code>match</code> to extract the value. If it returns <code>None</code>, it means
 not enough arguments were given and we return early with an <code>Err</code> value. We do
 the same thing for the <code>file_path</code> value.</p>
-<h3 id="making-code-clearer-with-iterator-adaptors"><a class="header" href="#making-code-clearer-with-iterator-adaptors">Making Code Clearer with Iterator Adaptors</a></h3>
+<h3 id="making-code-clearer-with-iterator-adapters"><a class="header" href="#making-code-clearer-with-iterator-adapters">Making Code Clearer with Iterator Adapters</a></h3>
 <p>We can also take advantage of iterators in the <code>search</code> function in our I/O
 project, which is reproduced here in Listing 13-21 as it was in Listing 12-19:</p>
 <figure class="listing">
@@ -679,7 +679,7 @@ project, which is reproduced here in Listing 13-21 as it was in Listing 12-19:</
 </span><span class="boring">}</span></code></pre>
 <figcaption>Listing 13-21: The implementation of the <code>search</code> function from Listing 12-19</figcaption>
 </figure>
-<p>We can write this code in a more concise way using iterator adaptor methods.
+<p>We can write this code in a more concise way using iterator adapter methods.
 Doing so also lets us avoid having a mutable intermediate <code>results</code> vector. The
 functional programming style prefers to minimize the amount of mutable state to
 make code clearer. Removing the mutable state might enable a future enhancement
@@ -793,11 +793,11 @@ concurrent access to the <code>results</code> vector. Listing 13-22 shows this c
 </span><span class="boring">        );
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<figcaption>Listing 13-22: Using iterator adaptor methods in the implementation of the <code>search</code> function</figcaption>
+<figcaption>Listing 13-22: Using iterator adapter methods in the implementation of the <code>search</code> function</figcaption>
 </figure>
 <p>Recall that the purpose of the <code>search</code> function is to return all lines in
 <code>contents</code> that contain the <code>query</code>. Similar to the <code>filter</code> example in Listing
-13-16, this code uses the <code>filter</code> adaptor to keep only the lines that
+13-16, this code uses the <code>filter</code> adapter to keep only the lines that
 <code>line.contains(query)</code> returns <code>true</code> for. We then collect the matching lines
 into another vector with <code>collect</code>. Much simpler! Feel free to make the same
 change to use iterator methods in the <code>search_case_insensitive</code> function as
@@ -807,7 +807,7 @@ well.</p>
 why: the original implementation in Listing 13-21 or the version using
 iterators in Listing 13-22. Most Rust programmers prefer to use the iterator
 style. It’s a bit tougher to get the hang of at first, but once you get a feel
-for the various iterator adaptors and what they do, iterators can be easier to
+for the various iterator adapters and what they do, iterators can be easier to
 understand. Instead of fiddling with the various bits of looping and building
 new vectors, the code focuses on the high-level objective of the loop. This
 abstracts away some of the commonplace code so it’s easier to see the concepts

@@ -280,6 +280,7 @@ following variable:</p>
 hardcoded into the text of our program. The variable is valid from the point at
 which it’s declared until the end of the current <em>scope</em>. Listing 4-1 shows a
 program with comments annotating where the variable <code>s</code> would be valid.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    {                      // s is not valid here, it’s not yet declared
         let s = "hello";   // s is valid from this point forward
@@ -287,8 +288,8 @@ program with comments annotating where the variable <code>s</code> would be vali
         // do stuff with s
     }                      // this scope is now over, and s is no longer valid
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 4-1: A variable and the scope in which it is
-valid</span></p>
+<figcaption>Listing 4-1: A variable and the scope in which it is valid</figcaption>
+</figure>
 <p>In other words, there are two important points in time here:</p>
 <ul>
 <li>When <code>s</code> comes <em>into</em> scope, it is valid.</li>
@@ -398,12 +399,13 @@ we’ve allocated on the heap. Let’s explore some of those situations now.</p>
 <h4 id="variables-and-data-interacting-with-move"><a class="header" href="#variables-and-data-interacting-with-move">Variables and Data Interacting with Move</a></h4>
 <p>Multiple variables can interact with the same data in different ways in Rust.
 Let’s look at an example using an integer in Listing 4-2.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let x = 5;
     let y = x;
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 4-2: Assigning the integer value of variable <code>x</code>
-to <code>y</code></span></p>
+<figcaption>Listing 4-2: Assigning the integer value of variable <code>x</code> to <code>y</code></figcaption>
+</figure>
 <p>We can probably guess what this is doing: “bind the value <code>5</code> to <code>x</code>; then make
 a copy of the value in <code>x</code> and bind it to <code>y</code>.” We now have two variables, <code>x</code>
 and <code>y</code>, and both equal <code>5</code>. This is indeed what is happening, because integers
@@ -511,6 +513,33 @@ alone will free the memory, and we’re done.</p>
 <p>In addition, there’s a design choice that’s implied by this: Rust will never
 automatically create “deep” copies of your data. Therefore, any <em>automatic</em>
 copying can be assumed to be inexpensive in terms of runtime performance.</p>
+<h4 id="scope-and-assignment"><a class="header" href="#scope-and-assignment">Scope and Assignment</a></h4>
+<p>The inverse of this is true for the relationship between scoping, ownership, and
+memory being freed via the <code>drop</code> function as well. When you assign a completely
+new value to an existing variable, Rust will call <code>drop</code> and free the original
+value’s memory immediately. Consider this code, for example:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let mut s = String::from("hello");
+    s = String::from("ahoy");
+
+    println!("{s}, world!");
+<span class="boring">}</span></code></pre></pre>
+<p>We initially declare a variable <code>s</code> and bind it to a <code>String</code> with the value
+<code>"hello"</code>. Then we immediately create a new <code>String</code> with the value <code>"ahoy"</code> and
+assign it to <code>s</code>. At this point, nothing is referring to the original value on
+the heap at all.</p>
+<p><img alt="One table s representing the string value on the stack, pointing to
+the second piece of string data (ahoy) on the heap, with the original string
+data (hello) grayed out because it cannot be accessed anymore."
+src="img/trpl04-05.svg"
+class="center"
+style="width: 50%;"
+/></p>
+<p><span class="caption">Figure 4-5: Representation in memory after the initial
+value has been replaced in its entirety.</span></p>
+<p>The original string thus immediately goes out of scope. Rust will run the <code>drop</code>
+function on it and its memory will be freed right away. When we print the value
+at the end, it will be <code>"ahoy, world!"</code>.</p>
 <!-- Old heading. Do not remove or links may break. -->
 <p><a id="ways-variables-and-data-interact-clone"></a></p>
 <h4 id="variables-and-data-interacting-with-clone"><a class="header" href="#variables-and-data-interacting-with-clone">Variables and Data Interacting with Clone</a></h4>
@@ -576,7 +605,8 @@ implement <code>Copy</code>:</p>
 assigning a value to a variable. Passing a variable to a function will move or
 copy, just as assignment does. Listing 4-3 has an example with some annotations
 showing where variables go into and out of scope.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s = String::from("hello");  // s comes into scope
 
@@ -600,8 +630,8 @@ fn takes_ownership(some_string: String) { // some_string comes into scope
 fn makes_copy(some_integer: i32) { // some_integer comes into scope
     println!("{some_integer}");
 } // Here, some_integer goes out of scope. Nothing special happens.</code></pre></pre>
-<p><span class="caption">Listing 4-3: Functions with ownership and scope
-annotated</span></p>
+<figcaption>Listing 4-3: Functions with ownership and scope annotated</figcaption>
+</figure>
 <p>If we tried to use <code>s</code> after the call to <code>takes_ownership</code>, Rust would throw a
 compile-time error. These static checks protect us from mistakes. Try adding
 code to <code>main</code> that uses <code>s</code> and <code>x</code> to see where you can use them and where
@@ -610,7 +640,8 @@ the ownership rules prevent you from doing so.</p>
 <p>Returning values can also transfer ownership. Listing 4-4 shows an example of a
 function that returns some value, with similar annotations as those in Listing
 4-3.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s1 = gives_ownership();         // gives_ownership moves its return
                                         // value into s1
@@ -640,8 +671,8 @@ fn takes_and_gives_back(a_string: String) -&gt; String { // a_string comes into
 
     a_string  // a_string is returned and moves out to the calling function
 }</code></pre></pre>
-<p><span class="caption">Listing 4-4: Transferring ownership of return
-values</span></p>
+<figcaption>Listing 4-4: Transferring ownership of return values</figcaption>
+</figure>
 <p>The ownership of a variable follows the same pattern every time: assigning a
 value to another variable moves it. When a variable that includes data on the
 heap goes out of scope, the value will be cleaned up by <code>drop</code> unless ownership
@@ -652,7 +683,8 @@ not take ownership? It’s quite annoying that anything we pass in also needs to
 be passed back if we want to use it again, in addition to any data resulting
 from the body of the function that we might want to return as well.</p>
 <p>Rust does let us return multiple values using a tuple, as shown in Listing 4-5.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s1 = String::from("hello");
 
@@ -666,7 +698,8 @@ fn calculate_length(s: String) -&gt; (String, usize) {
 
     (s, length)
 }</code></pre></pre>
-<p><span class="caption">Listing 4-5: Returning ownership of parameters</span></p>
+<figcaption>Listing 4-5: Returning ownership of parameters</figcaption>
+</figure>
 <p>But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for using a value without
 transferring ownership, called <em>references</em>.</p>

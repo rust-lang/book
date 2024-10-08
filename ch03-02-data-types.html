@@ -437,14 +437,14 @@ brackets:</p>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let a = [1, 2, 3, 4, 5];
 }</code></pre></pre>
-<p>Arrays are useful when you want your data allocated on the stack rather than
-the heap (we will discuss the stack and the heap more in <a href="ch04-01-what-is-ownership.html#the-stack-and-the-heap">Chapter
-4</a><!-- ignore -->) or when you want to ensure you always have a
-fixed number of elements. An array isn’t as flexible as the vector type,
-though. A <em>vector</em> is a similar collection type provided by the standard
-library that <em>is</em> allowed to grow or shrink in size. If you’re unsure whether
-to use an array or a vector, chances are you should use a vector. <a href="ch08-01-vectors.html">Chapter
-8</a><!-- ignore --> discusses vectors in more detail.</p>
+<p>Arrays are useful when you want your data allocated on the stack, the same as
+the other types we have seen so far, rather than the heap (we will discuss the
+stack and the heap more in <a href="ch04-01-what-is-ownership.html#the-stack-and-the-heap">Chapter 4</a><!-- ignore -->) or when
+you want to ensure you always have a fixed number of elements. An array isn’t as
+flexible as the vector type, though. A <em>vector</em> is a similar collection type
+provided by the standard library that <em>is</em> allowed to grow or shrink in size. If
+you’re unsure whether to use an array or a vector, chances are you should use a
+vector. <a href="ch08-01-vectors.html">Chapter 8</a><!-- ignore --> discusses vectors in more detail.</p>
 <p>However, arrays are more useful when you know the number of elements will not
 need to change. For example, if you were using the names of the month in a
 program, you would probably use an array rather than a vector because you know

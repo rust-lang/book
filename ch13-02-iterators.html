@@ -293,7 +293,7 @@ methods by looking in the standard library API documentation for the <code>Itera
 trait. Some of these methods call the <code>next</code> method in their definition, which
 is why you’re required to implement the <code>next</code> method when implementing the
 <code>Iterator</code> trait.</p>
-<p>Methods that call <code>next</code> are called <em>consuming adaptors</em>, because calling them
+<p>Methods that call <code>next</code> are called <em>consuming adapters</em>, because calling them
 uses up the iterator. One example is the <code>sum</code> method, which takes ownership of
 the iterator and iterates through the items by repeatedly calling <code>next</code>, thus
 consuming the iterator. As it iterates through, it adds each item to a running
@@ -319,10 +319,10 @@ test illustrating a use of the <code>sum</code> method:</p>
 <p>We aren’t allowed to use <code>v1_iter</code> after the call to <code>sum</code> because <code>sum</code> takes
 ownership of the iterator we call it on.</p>
 <h3 id="methods-that-produce-other-iterators"><a class="header" href="#methods-that-produce-other-iterators">Methods that Produce Other Iterators</a></h3>
-<p><em>Iterator adaptors</em> are methods defined on the <code>Iterator</code> trait that don’t
+<p><em>Iterator adapters</em> are methods defined on the <code>Iterator</code> trait that don’t
 consume the iterator. Instead, they produce different iterators by changing
 some aspect of the original iterator.</p>
-<p>Listing 13-14 shows an example of calling the iterator adaptor method <code>map</code>,
+<p>Listing 13-14 shows an example of calling the iterator adapter method <code>map</code>,
 which takes a closure to call on each item as the items are iterated through.
 The <code>map</code> method returns a new iterator that produces the modified items. The
 closure here creates a new iterator in which each item from the vector will be
@@ -334,7 +334,7 @@ incremented by 1:</p>
 
     v1.iter().map(|x| x + 1);
 <span class="boring">}</span></code></pre></pre>
-<figcaption>Listing 13-14: Calling the iterator adaptor <code>map</code> to create a new iterator</figcaption>
+<figcaption>Listing 13-14: Calling the iterator adapter <code>map</code> to create a new iterator</figcaption>
 </figure>
 <p>However, this code produces a warning:</p>
 <pre><code class="language-console">$ cargo run
@@ -357,7 +357,7 @@ warning: `iterators` (bin "iterators") generated 1 warning
      Running `target/debug/iterators`
 </code></pre>
 <p>The code in Listing 13-14 doesn’t do anything; the closure we’ve specified
-never gets called. The warning reminds us why: iterator adaptors are lazy, and
+never gets called. The warning reminds us why: iterator adapters are lazy, and
 we need to consume the iterator here.</p>
 <p>To fix this warning and consume the iterator, we’ll use the <code>collect</code> method,
 which we used in Chapter 12 with <code>env::args</code> in Listing 12-1. This method
@@ -381,9 +381,9 @@ containing each item from the original vector incremented by 1.</p>
 on each item. This is a great example of how closures let you customize some
 behavior while reusing the iteration behavior that the <code>Iterator</code> trait
 provides.</p>
-<p>You can chain multiple calls to iterator adaptors to perform complex actions in
+<p>You can chain multiple calls to iterator adapters to perform complex actions in
 a readable way. But because all iterators are lazy, you have to call one of the
-consuming adaptor methods to get results from calls to iterator adaptors.</p>
+consuming adapter methods to get results from calls to iterator adapters.</p>
 <h3 id="using-closures-that-capture-their-environment"><a class="header" href="#using-closures-that-capture-their-environment">Using Closures that Capture Their Environment</a></h3>
 <p>Many iterator adapters take closures as arguments, and commonly the closures
 we’ll specify as arguments to iterator adapters will be closures that capture

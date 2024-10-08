@@ -186,20 +186,21 @@ exception was the async channel we used. Recall how we used the receiver for our
 async channel in the <a href="ch17-02-concurrency-with-async.html#message-passing">“Message Passing”</a> earlier in the chapter.
 The async <code>recv</code> method produces a sequence of items over time. This is an
 instance of a much more general pattern, often called a <em>stream</em>.</p>
-<p>A sequence of items is something we have seen before, when we looked at the
+<p>A sequence of items is something we’ve seen before, when we looked at the
 <code>Iterator</code> trait in Chapter 13, but there are two differences between iterators
 and the async channel receiver. The first difference is the element of time:
 iterators are synchronous, while the channel receiver is asynchronous. The
 second difference is the API. When working directly with an <code>Iterator</code>, we call
-its synchronous <code>next</code> method. With a <code>trpl::Receiver</code>, we call an asynchronous
-<code>recv</code> method instead, but these APIs otherwise feel very similar.</p>
-<p>That similarity is not a coincidence. A stream is like an asynchronous form of
-iteration. Whereas the <code>trpl::Receiver</code> specifically waits to receive messages,
-though, a general-purpose stream API needs to be much more general: it will just
-provide the next item like <code>Iterator</code> does, but asynchronously. In fact, this is
-roughly how it works in Rust, so we can actually create a stream from any
-iterator. As with an iterator, we can work with a stream by calling its <code>next</code>
-method, and then awaiting the output, as in Listing 17-30.</p>
+its synchronous <code>next</code> method. With the <code>trpl::Receiver</code> stream in particular,
+we called an  asynchronous <code>recv</code> method instead, but these APIs otherwise feel
+very similar.</p>
+<p>That similarity isn’t a coincidence. A stream is similar to an asynchronous
+form of iteration. Whereas the <code>trpl::Receiver</code> specifically waits to receive
+messages, though, the general-purpose stream API is much more general: it
+provides the next item the way <code>Iterator</code> does, but asynchronously. The
+similarity between iterators and streams in Rust means we can actually create a
+stream from any iterator. As with an iterator, we can work with a stream by
+calling its <code>next</code> method and then awaiting the output, as in Listing 17-30.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
@@ -220,8 +221,8 @@ method, and then awaiting the output, as in Listing 17-30.</p>
 <p>We start with an array of numbers, which we convert to an iterator and then call
 <code>map</code> on to double all the values. Then we convert the iterator into a stream
 using the <code>trpl::stream_from_iter</code> function. Then we loop over the items in the
-stream as they arrive with the <code>while let</code> loop</p>
-<p>Unfortunately, when we try to run the code, it does not compile. Instead, as we
+stream as they arrive with the <code>while let</code> loop.</p>
+<p>Unfortunately, when we try to run the code, it doesn’t compile. Instead, as we
 can see in the output, it reports that there is no <code>next</code> method available.</p>
 <!-- TODO: fix up the path here? -->
 <!-- manual-regeneration
@@ -255,24 +256,24 @@ help: there is a method `try_next` with a similar name
 
 For more information about this error, try `rustc --explain E0599`.
 </code></pre>
-<p>As the output suggests, the problem is that we need the right trait in scope to
-be able to use the <code>next</code> method. Given our discussion so far, you might
-reasonably expect that to be <code>Stream</code>, but the trait we need <em>here</em> is actually
-<code>StreamExt</code>. The <code>Ext</code> there is for “extension”: this is a common pattern in
-the Rust community for extending one trait with another.</p>
-<p>You might be wondering why <code>StreamExt</code> instead of <code>Stream</code>, and for that matter
-whether there is a <code>Stream</code> type at all. Briefly, the answer is that throughout
-the Rust ecosystem, the <code>Stream</code> trait defines a low-level interface which
-effectively combines the <code>Iterator</code> and <code>Future</code> traits. The <code>StreamExt</code> trait
-supplies a higher-level set of APIs on top of <code>Stream</code>, including the <code>next</code>
-method and also many other utility methods like those from <code>Iterator</code>. We will
-return to the <code>Stream</code> and <code>StreamExt</code> traits in a bit more detail at the end of
-the chapter. For now, this is enough to let us keep moving.</p>
-<p>All we need to do is add a <code>use</code> statement for <code>trpl::StreamExt</code>, as in Listing
-17-31.</p>
+<p>As the output suggests, the reason for the compiler error is that we need the
+right trait in scope to be able to use the <code>next</code> method. Given our discussion
+so far, you might reasonably expect that to be <code>Stream</code>, but the trait we need
+here is actually <code>StreamExt</code>. The <code>Ext</code> there is for “extension”: this is a
+common pattern in the Rust community for extending one trait with another.</p>
+<p>Why do we need <code>StreamExt</code> instead of <code>Stream</code>, and what does the <code>Stream</code> trait
+itself do? Briefly, the answer is that throughout the Rust ecosystem, the
+<code>Stream</code> trait defines a low-level interface which effectively combines the
+<code>Iterator</code> and <code>Future</code> traits. The <code>StreamExt</code> trait supplies a higher-level
+set of APIs on top of <code>Stream</code>, including the <code>next</code> method as well as other
+utility methods similar to those provided by the <code>Iterator</code> trait. We’ll return
+to the <code>Stream</code> and <code>StreamExt</code> traits in a bit more detail at the end of the
+chapter. For now, this is enough to let us keep moving.</p>
+<p>The fix to the compiler error is to add a <code>use</code> statement for <code>trpl::StreamExt</code>,
+as in Listing 17-31.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
 </span><span class="boring">
 </span>use trpl::StreamExt;
 
@@ -286,13 +287,13 @@ fn main() {
             println!("The value was: {value}");
         }
     });
-}</code></pre>
+}</code></pre></pre>
 <figcaption>Listing 17-31: Successfully using an iterator as the basis for a stream</figcaption>
 </figure>
-<p>With all those pieces put together, things work the way we want! What is more,
-now that we have <code>StreamExt</code> in scope, we can use all of its utility methods,
-just like with iterators. For example, in Listing 17-32, we use the <code>filter</code>
-method to filter out everything but multiples of three and five.</p>
+<p>With all those pieces put together, this code works the way we want! What’s
+more, now that we have <code>StreamExt</code> in scope, we can use all of its utility
+methods, just as with iterators. For example, in Listing 17-32, we use the
+<code>filter</code> method to filter out everything but multiples of three and five.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
@@ -315,11 +316,11 @@ fn main() {
 }</code></pre></pre>
 <figcaption>Listing 17-32: Filtering a <code>Stream</code> with the <code>StreamExt::filter</code> method</figcaption>
 </figure>
-<p>Of course, this is not very interesting. We could do that with normal iterators
+<p>Of course, this isn’t very interesting. We could do that with normal iterators
 and without any async at all. So let’s look at some of the other things we can
 do which are unique to streams.</p>
 <h3 id="composing-streams"><a class="header" href="#composing-streams">Composing Streams</a></h3>
-<p>Lots of things are naturally represented as streams: items becoming available in
+<p>Many concepts are naturally represented as streams: items becoming available in
 a queue, or working with more data than can fit in a computer’s memory by only
 pulling chunks of it from the file system at a time, or data arriving over the
 network over time. Because streams are futures, we can use them with any other
@@ -327,10 +328,12 @@ kind of future, too, and we can combine them in interesting ways. For example,
 we can batch up events to avoid triggering too many network calls, set timeouts
 on sequences of long-running operations, or throttle user interface events to
 avoid doing needless work.</p>
-<p>Let’s start by building a little stream of messages, similar to what we might
-see from a WebSocket or other real-time communication protocols. In Listing
-17-33, we  create a function <code>get_messages</code> which returns <code>impl Stream&lt;Item = String&gt;</code>. For its implementation, we create an async channel, loop over the
-first ten letters of the English alphabet, and send them across the channel.</p>
+<p>Let’s start by building a little stream of messages, as a stand-in for a stream
+of data we might see from a WebSocket or another real-time communication
+protocol. In Listing 17-33, we create a function <code>get_messages</code> which returns
+<code>impl Stream&lt;Item = String&gt;</code>. For its implementation, we create an async
+channel, loop over the first ten letters of the English alphabet, and send them
+across the channel.</p>
 <p>We also use a new type: <code>ReceiverStream</code>, which converts the <code>rx</code> receiver from
 the <code>trpl::channel</code> into a <code>Stream</code> with a <code>next</code> method. Back in <code>main</code>, we use
 a <code>while let</code> loop to print all the messages from the stream.</p>
@@ -378,7 +381,7 @@ Message: 'i'
 Message: 'j'
 </code></pre>
 <p>We could do this with the regular <code>Receiver</code> API, or even the regular <code>Iterator</code>
-API, though. Let’s add something that requires streams, like adding a timeout
+API, though. Let’s add something that requires streams: adding a timeout
 which applies to every item in the stream, and a delay on the items we emit.</p>
 <p>In Listing 17-34, we start by adding a timeout to the stream with the <code>timeout</code>
 method, which comes from the <code>StreamExt</code> trait. Then we update the body of the
@@ -422,7 +425,7 @@ fn main() {
 </span><span class="boring">}</span></code></pre></pre>
 <figcaption>Listing 17-34: Using the <code>StreamExt::timeout</code> method to set a time limit on the items in a stream</figcaption>
 </figure>
-<p>However, since there are no delays between messages, this timeout does not
+<p>However, because there are no delays between messages, this timeout does not
 change the behavior of the program. Let’s add a variable delay to the messages
 we send. In <code>get_messages</code>, we use the <code>enumerate</code> iterator method with the
 <code>messages</code> array so that we can get the index of each item we are sending along
@@ -470,19 +473,19 @@ for 200 milliseconds, this should affect half of the messages.</p>
 <figcaption>Listing 17-35: Sending messages through <code>tx</code> with an async delay without making <code>get_messages</code> an async function</figcaption>
 </figure>
 <p>To sleep between messages in the <code>get_messages</code> function without blocking, we
-need to use async. However, we cannot make <code>get_messages</code> itself into an async
-function, because then we would return a <code>Future&lt;Output = Stream&lt;Item = String&gt;&gt;</code> instead of just a <code>Stream&lt;Item = String&gt;&gt;</code>. The caller would have to
-await <code>get_messages</code> itself to get access to the stream. But remember:
-everything in a given future happens linearly; concurrency happens <em>between</em>
-futures. Awaiting <code>get_messages</code> would require it to send all the messages,
-including sleeping between sending each message, before returning the receiver
-stream. As a result, the timeout would end up useless. There would be no delays
-in the stream itself: the delays would all happen before the stream was even
-available.</p>
+need to use async. However, we can’t make <code>get_messages</code> itself into an async
+function, because then we’d return a <code>Future&lt;Output = Stream&lt;Item = String&gt;&gt;</code>
+instead of a <code>Stream&lt;Item = String&gt;&gt;</code>. The caller would have to await
+<code>get_messages</code> itself to get access to the stream. But remember: everything in a
+given future happens linearly; concurrency happens <em>between</em> futures. Awaiting
+<code>get_messages</code> would require it to send all the messages, including sleeping
+between sending each message, before returning the receiver stream. As a result,
+the timeout would end up useless. There would be no delays in the stream itself:
+the delays would all happen before the stream was even available.</p>
 <p>Instead, we leave <code>get_messages</code> as a regular function which returns a stream,
 and spawn a task to handle the async <code>sleep</code> calls.</p>
 <section class="note" aria-role="note">
-<p>Note: calling <code>spawn_task</code> like this works because we already set up our
+<p>Note: calling <code>spawn_task</code> in this way works because we already set up our
 runtime. Calling this particular implementation of <code>spawn_task</code> <em>without</em>
 first setting up a runtime will cause a panic. Other implementations choose
 different tradeoffs: they might spawn a new runtime and so avoid the panic but
@@ -513,9 +516,9 @@ Message: 'i'
 Problem: Elapsed(())
 Message: 'j'
 </code></pre>
-<p>The timeout does not prevent the messages from arriving in the end—we still get
+<p>The timeout doesn’t prevent the messages from arriving in the end—we still get
 all of the original messages. This is because our channel is unbounded: it can
-hold as many messages as we can fit in memory. If the message does not arrive
+hold as many messages as we can fit in memory. If the message doesn’t arrive
 before the timeout, our stream handler will account for that, but when it polls
 the stream again, the message may now have arrived.</p>
 <p>You can get different behavior if needed by using other kinds of channels, or
@@ -526,15 +529,15 @@ this stream of messages.</p>
 <p>First, let’s create another stream, which will emit an item every millisecond if
 we let it run directly. For simplicity, we can use the <code>sleep</code> function to send
 a message on a delay, and combine it with the same approach of creating a stream
-from a channel we used in <code>get_messages</code>. The difference is that this time, we
-are going to send back the count of intervals which has elapsed, so the return
+from a channel we used in <code>get_messages</code>. The difference is that this time,
+we’re going to send back the count of intervals which has elapsed, so the return
 type will be <code>impl Stream&lt;Item = u32&gt;</code>, and we can call the function
 <code>get_intervals</code>.</p>
 <p>In Listing 17-36, we start by defining a <code>count</code> in the task. (We could define
 it outside the task, too, but it is clearer to limit the scope of any given
-variable.) Then we create a an infinite loop. Each iteration of the loop
+variable.) Then we create an infinite loop. Each iteration of the loop
 asynchronously sleeps for one millisecond, increments the count, and then sends
-it over the channel. Since this is all wrapped in the task created by
+it over the channel. Because this is all wrapped in the task created by
 <code>spawn_task</code>, all of it will get cleaned up along with the runtime, including
 the infinite loop.</p>
 <figure class="listing">
@@ -593,12 +596,14 @@ the infinite loop.</p>
 </figure>
 <p>This kind of infinite loop, which only ends when the whole runtime gets torn
 down, is fairly common in async Rust: many programs need to keep running
-indefinitely. With async, this does not block anything else, as long as there is
+indefinitely. With async, this doesn’t block anything else, as long as there is
 at least one await point in each iteration through the loop.</p>
 <p>Back in our main function’s async block, we start by calling <code>get_intervals</code>.
-Then we merge the <code>messages</code> and <code>intervals</code> streams with the <code>merge</code> method.
-Finally, we loop over that combined stream instead of over <code>messages</code> (Listing
-17-37).</p>
+Then we merge the <code>messages</code> and <code>intervals</code> streams with the <code>merge</code> method,
+which combines multiple streams into one stream that produces items from any of
+the source streams as soon as the items are available, without imposing any
+particular ordering. Finally, we loop over that combined stream instead of over
+<code>messages</code> (Listing 17-37).</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
@@ -656,19 +661,19 @@ Finally, we loop over that combined stream instead of over <code>messages</code>
 </figure>
 <p>At this point, neither <code>messages</code> nor <code>intervals</code> needs to be pinned or mutable,
 because both will be combined into the single <code>merged</code> stream. However, this
-call to <code>merge</code> does not compile! (Neither does the <code>next</code> call in the <code>while let</code> loop, but we will come back to that after fixing this.) The two streams
+call to <code>merge</code> does not compile! (Neither does the <code>next</code> call in the <code>while let</code> loop, but we’ll come back to that after fixing this.) The two streams
 have different types. The <code>messages</code> stream has the type <code>Timeout&lt;impl Stream&lt;Item = String&gt;&gt;</code>, where <code>Timeout</code> is the type which implements <code>Stream</code>
 for a <code>timeout</code> call. Meanwhile, the <code>intervals</code> stream has the type <code>impl Stream&lt;Item = u32&gt;</code>. To merge these two streams, we need to transform one of
 them to match the other.</p>
-<p>In Listing 17-38, we rework with the <code>intervals</code> stream, since <code>messages</code> is
+<p>In Listing 17-38, we rework the <code>intervals</code> stream, because <code>messages</code> is
 already in the basic format we want and has to handle timeout errors. First, we
 can use the <code>map</code> helper method to transform the <code>intervals</code> into a string.
-Second, we need to match the <code>Timeout</code> from <code>messages</code>. Since we do not actually
-<em>want</em> a timeout for <code>intervals</code>, though, we can just create a timeout which is
-longer than the other durations we are using. Here, we create a 10-second
-timeout with <code>Duration::from_secs(10)</code>. Finally, we need to make <code>stream</code>
-mutable, so that the <code>while let</code> loop’s <code>next</code> calls can iterate through the
-stream, and pin it so that it is safe to do so.</p>
+Second, we need to match the <code>Timeout</code> from <code>messages</code>. Because we don’t
+actually <em>want</em> a timeout for <code>intervals</code>, though, we can just create a timeout
+which is longer than the other durations we are using. Here, we create a
+10-second timeout with <code>Duration::from_secs(10)</code>. Finally, we need to make
+<code>stream</code> mutable, so that the <code>while let</code> loop’s <code>next</code> calls can iterate
+through the stream, and pin it so that it’s safe to do so.</p>
 <!-- We cannot directly test this one, because it never stops. -->
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
@@ -729,8 +734,8 @@ stream, and pin it so that it is safe to do so.</p>
 <figcaption>Listing 17-38: Aligning the types of the the <code>intervals</code> stream with the type of the <code>messages</code> stream</figcaption>
 </figure>
 <p>That gets us <em>almost</em> to where we need to be. Everything type checks. If you run
-this, though, there will be two problems. First, it will never stop! You will
-need to stop it with <span class="keystroke">ctrl-c</span>. Second,  the
+this, though, there will be two problems. First, it will never stop! You’ll
+need to stop it with <span class="keystroke">ctrl-c</span>. Second, the
 messages from the English alphabet will be buried in the midst of all the
 interval counter messages:</p>
 <!-- Not extracting output because changes to this output aren't significant;
@@ -747,11 +752,11 @@ Interval: 43
 --snip--
 </code></pre>
 <p>Listing 17-39 shows one way to solve these last two problems. First, we use the
-<code>throttle</code> method on the <code>intervals</code> stream, so that it does not overwhelm the
+<code>throttle</code> method on the <code>intervals</code> stream, so that it doesn’t overwhelm the
 <code>messages</code> stream. Throttling is a way of limiting the rate at which a function
 will be called—or, in this case, how often the stream will be polled. Once every
-hundred milliseconds should do, since that is in the same ballpark as how often
-our messages arrive.</p>
+hundred milliseconds should do, because that is in the same ballpark as how
+often our messages arrive.</p>
 <p>To limit the number of items we will accept from a stream, we can use the <code>take</code>
 method. We apply it to the <em>merged</em> stream, because we want to limit the final
 output, not just one stream or the other.</p>
@@ -767,7 +772,7 @@ output, not just one stream or the other.</p>
 </span><span class="boring">    trpl::run(async {
 </span>        let messages = get_messages().timeout(Duration::from_millis(200));
         let intervals = get_intervals()
-            .map(|count| format!("Interval #{count}"))
+            .map(|count| format!("Interval: {count}"))
             .throttle(Duration::from_millis(100))
             .timeout(Duration::from_secs(10));
         let merged = messages.merge(intervals).take(20);
@@ -814,48 +819,49 @@ output, not just one stream or the other.</p>
 </span><span class="boring">}</span></code></pre></pre>
 <figcaption>Listing 17-39: Using <code>throttle</code> and <code>take</code> to manage the merged streams</figcaption>
 </figure>
-<p>Now when we run the program, it stop after pulling twenty items from the stream,
-and the intervals do not overwhelm the messages. We also do not get <code>Interval: 100</code> or <code>Interval: 200</code> or so on, but instead simply get <code>Interval: 1</code>,
-<code>Interval: 2</code>, and so on—even though we have a source stream which <em>can</em> produce
-an event every millisecond. That is because the <code>throttle</code> call produces a new
-stream, wrapping the original stream, so that the original stream only gets
-polled at the throttle rate, not its own “native” rate.  We do not have a bunch
-of unhandled interval messages we are simply choosing to ignore. Instead, we
-never produce those interval messages in the first place! This is the inherent
-“laziness” of Rust’s futures at work again, allowing us to choose our
-performance characteristics.</p>
+<p>Now when we run the program, it stops after pulling twenty items from the
+stream, and the intervals don’t overwhelm the messages. We also don’t get
+<code>Interval: 100</code> or <code>Interval: 200</code> or so on, but instead get <code>Interval: 1</code>,
+<code>Interval: 2</code>, and so on—even though we have a source stream which <em>can</em>
+produce an event every millisecond. That’s because the <code>throttle</code> call
+produces a new stream, wrapping the original stream, so that the original
+stream only gets polled at the throttle rate, not its own “native” rate. We
+don’t have a bunch of unhandled interval messages we’re choosing to
+ignore. Instead, we never produce those interval messages in the first place!
+This is the inherent “laziness” of Rust’s futures at work again, allowing us to
+choose our performance characteristics.</p>
 <!-- manual-regeneration
 cd listings/listing-17-39
 cargo run
 copy and paste only the program output
 -->
-<pre><code class="language-text">Interval #1
+<pre><code class="language-text">Interval: 1
 Message: 'a'
-Interval #2
-Interval #3
+Interval: 2
+Interval: 3
 Problem: Elapsed(())
-Interval #4
+Interval: 4
 Message: 'b'
-Interval #5
+Interval: 5
 Message: 'c'
-Interval #6
-Interval #7
+Interval: 6
+Interval: 7
 Problem: Elapsed(())
-Interval #8
+Interval: 8
 Message: 'd'
-Interval #9
+Interval: 9
 Message: 'e'
-Interval #10
-Interval #11
+Interval: 10
+Interval: 11
 Problem: Elapsed(())
-Interval #12
+Interval: 12
 </code></pre>
-<p>There is one last thing we need to handle: errors! With both of these
+<p>There’s one last thing we need to handle: errors! With both of these
 channel-based streams, the <code>send</code> calls could fail when the other side of the
-channel closes—and that is just a matter of how the runtime executes the futures
-which make up the stream. Up till now we have ignored this by calling <code>unwrap</code>,
+channel closes—and that’s just a matter of how the runtime executes the futures
+which make up the stream. Up until now we have ignored this by calling <code>unwrap</code>,
 but in a well-behaved app, we should explicitly handle the error, at minimum by
-ending the loop so we do not try to send any more messages!  Listing 17-40 shows
+ending the loop so we don’t try to send any more messages!  Listing 17-40 shows
 a simple error strategy: print the issue and then <code>break</code> from the loops. As
 usual, the correct way to handle a message send error will vary—just make sure
 you have a strategy.</p>
@@ -925,7 +931,7 @@ fn get_intervals() -&gt; impl Stream&lt;Item = u32&gt; {
 }</code></pre></pre>
 <figcaption>Listing 17-40: Handling errors and shutting down the loops</figcaption>
 </figure>
-<p>Now that we have seen a bunch of async in practice, let’s take a step back and
+<p>Now that we’ve seen a bunch of async in practice, let’s take a step back and
 dig into a few of the details of how <code>Future</code>, <code>Stream</code>, and the other key
 traits which Rust uses to make async work.</p>
 

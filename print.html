@@ -2373,14 +2373,14 @@ brackets:</p>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let a = [1, 2, 3, 4, 5];
 }</code></pre></pre>
-<p>Arrays are useful when you want your data allocated on the stack rather than
-the heap (we will discuss the stack and the heap more in <a href="ch04-01-what-is-ownership.html#the-stack-and-the-heap">Chapter
-4</a><!-- ignore -->) or when you want to ensure you always have a
-fixed number of elements. An array isn’t as flexible as the vector type,
-though. A <em>vector</em> is a similar collection type provided by the standard
-library that <em>is</em> allowed to grow or shrink in size. If you’re unsure whether
-to use an array or a vector, chances are you should use a vector. <a href="ch08-01-vectors.html">Chapter
-8</a><!-- ignore --> discusses vectors in more detail.</p>
+<p>Arrays are useful when you want your data allocated on the stack, the same as
+the other types we have seen so far, rather than the heap (we will discuss the
+stack and the heap more in <a href="ch04-01-what-is-ownership.html#the-stack-and-the-heap">Chapter 4</a><!-- ignore -->) or when
+you want to ensure you always have a fixed number of elements. An array isn’t as
+flexible as the vector type, though. A <em>vector</em> is a similar collection type
+provided by the standard library that <em>is</em> allowed to grow or shrink in size. If
+you’re unsure whether to use an array or a vector, chances are you should use a
+vector. <a href="ch08-01-vectors.html">Chapter 8</a><!-- ignore --> discusses vectors in more detail.</p>
 <p>However, arrays are more useful when you know the number of elements will not
 need to change. For example, if you were using the names of the month in a
 program, you would probably use an array rather than a vector because you know
@@ -3323,6 +3323,7 @@ following variable:</p>
 hardcoded into the text of our program. The variable is valid from the point at
 which it’s declared until the end of the current <em>scope</em>. Listing 4-1 shows a
 program with comments annotating where the variable <code>s</code> would be valid.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    {                      // s is not valid here, it’s not yet declared
         let s = "hello";   // s is valid from this point forward
@@ -3330,8 +3331,8 @@ program with comments annotating where the variable <code>s</code> would be vali
         // do stuff with s
     }                      // this scope is now over, and s is no longer valid
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 4-1: A variable and the scope in which it is
-valid</span></p>
+<figcaption>Listing 4-1: A variable and the scope in which it is valid</figcaption>
+</figure>
 <p>In other words, there are two important points in time here:</p>
 <ul>
 <li>When <code>s</code> comes <em>into</em> scope, it is valid.</li>
@@ -3441,12 +3442,13 @@ we’ve allocated on the heap. Let’s explore some of those situations now.</p>
 <h4 id="variables-and-data-interacting-with-move"><a class="header" href="#variables-and-data-interacting-with-move">Variables and Data Interacting with Move</a></h4>
 <p>Multiple variables can interact with the same data in different ways in Rust.
 Let’s look at an example using an integer in Listing 4-2.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let x = 5;
     let y = x;
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 4-2: Assigning the integer value of variable <code>x</code>
-to <code>y</code></span></p>
+<figcaption>Listing 4-2: Assigning the integer value of variable <code>x</code> to <code>y</code></figcaption>
+</figure>
 <p>We can probably guess what this is doing: “bind the value <code>5</code> to <code>x</code>; then make
 a copy of the value in <code>x</code> and bind it to <code>y</code>.” We now have two variables, <code>x</code>
 and <code>y</code>, and both equal <code>5</code>. This is indeed what is happening, because integers
@@ -3554,6 +3556,33 @@ alone will free the memory, and we’re done.</p>
 <p>In addition, there’s a design choice that’s implied by this: Rust will never
 automatically create “deep” copies of your data. Therefore, any <em>automatic</em>
 copying can be assumed to be inexpensive in terms of runtime performance.</p>
+<h4 id="scope-and-assignment"><a class="header" href="#scope-and-assignment">Scope and Assignment</a></h4>
+<p>The inverse of this is true for the relationship between scoping, ownership, and
+memory being freed via the <code>drop</code> function as well. When you assign a completely
+new value to an existing variable, Rust will call <code>drop</code> and free the original
+value’s memory immediately. Consider this code, for example:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let mut s = String::from("hello");
+    s = String::from("ahoy");
+
+    println!("{s}, world!");
+<span class="boring">}</span></code></pre></pre>
+<p>We initially declare a variable <code>s</code> and bind it to a <code>String</code> with the value
+<code>"hello"</code>. Then we immediately create a new <code>String</code> with the value <code>"ahoy"</code> and
+assign it to <code>s</code>. At this point, nothing is referring to the original value on
+the heap at all.</p>
+<p><img alt="One table s representing the string value on the stack, pointing to
+the second piece of string data (ahoy) on the heap, with the original string
+data (hello) grayed out because it cannot be accessed anymore."
+src="img/trpl04-05.svg"
+class="center"
+style="width: 50%;"
+/></p>
+<p><span class="caption">Figure 4-5: Representation in memory after the initial
+value has been replaced in its entirety.</span></p>
+<p>The original string thus immediately goes out of scope. Rust will run the <code>drop</code>
+function on it and its memory will be freed right away. When we print the value
+at the end, it will be <code>"ahoy, world!"</code>.</p>
 <!-- Old heading. Do not remove or links may break. -->
 <p><a id="ways-variables-and-data-interact-clone"></a></p>
 <h4 id="variables-and-data-interacting-with-clone"><a class="header" href="#variables-and-data-interacting-with-clone">Variables and Data Interacting with Clone</a></h4>
@@ -3619,7 +3648,8 @@ implement <code>Copy</code>:</p>
 assigning a value to a variable. Passing a variable to a function will move or
 copy, just as assignment does. Listing 4-3 has an example with some annotations
 showing where variables go into and out of scope.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s = String::from("hello");  // s comes into scope
 
@@ -3643,8 +3673,8 @@ fn takes_ownership(some_string: String) { // some_string comes into scope
 fn makes_copy(some_integer: i32) { // some_integer comes into scope
     println!("{some_integer}");
 } // Here, some_integer goes out of scope. Nothing special happens.</code></pre></pre>
-<p><span class="caption">Listing 4-3: Functions with ownership and scope
-annotated</span></p>
+<figcaption>Listing 4-3: Functions with ownership and scope annotated</figcaption>
+</figure>
 <p>If we tried to use <code>s</code> after the call to <code>takes_ownership</code>, Rust would throw a
 compile-time error. These static checks protect us from mistakes. Try adding
 code to <code>main</code> that uses <code>s</code> and <code>x</code> to see where you can use them and where
@@ -3653,7 +3683,8 @@ the ownership rules prevent you from doing so.</p>
 <p>Returning values can also transfer ownership. Listing 4-4 shows an example of a
 function that returns some value, with similar annotations as those in Listing
 4-3.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s1 = gives_ownership();         // gives_ownership moves its return
                                         // value into s1
@@ -3683,8 +3714,8 @@ fn takes_and_gives_back(a_string: String) -&gt; String { // a_string comes into
 
     a_string  // a_string is returned and moves out to the calling function
 }</code></pre></pre>
-<p><span class="caption">Listing 4-4: Transferring ownership of return
-values</span></p>
+<figcaption>Listing 4-4: Transferring ownership of return values</figcaption>
+</figure>
 <p>The ownership of a variable follows the same pattern every time: assigning a
 value to another variable moves it. When a variable that includes data on the
 heap goes out of scope, the value will be cleaned up by <code>drop</code> unless ownership
@@ -3695,7 +3726,8 @@ not take ownership? It’s quite annoying that anything we pass in also needs to
 be passed back if we want to use it again, in addition to any data resulting
 from the body of the function that we might want to return as well.</p>
 <p>Rust does let us return multiple values using a tuple, as shown in Listing 4-5.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s1 = String::from("hello");
 
@@ -3709,7 +3741,8 @@ fn calculate_length(s: String) -&gt; (String, usize) {
 
     (s, length)
 }</code></pre></pre>
-<p><span class="caption">Listing 4-5: Returning ownership of parameters</span></p>
+<figcaption>Listing 4-5: Returning ownership of parameters</figcaption>
+</figure>
 <p>But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for using a value without
 transferring ownership, called <em>references</em>.</p>
@@ -3724,7 +3757,8 @@ Unlike a pointer, a reference is guaranteed to point to a valid value of a
 particular type for the life of that reference.</p>
 <p>Here is how you would define and use a <code>calculate_length</code> function that has a
 reference to an object as a parameter instead of taking ownership of the value:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s1 = String::from("hello");
 
@@ -3736,15 +3770,16 @@ reference to an object as a parameter instead of taking ownership of the value:<
 fn calculate_length(s: &amp;String) -&gt; usize {
     s.len()
 }</code></pre></pre>
+</figure>
 <p>First, notice that all the tuple code in the variable declaration and the
 function return value is gone. Second, note that we pass <code>&amp;s1</code> into
 <code>calculate_length</code> and, in its definition, we take <code>&amp;String</code> rather than
 <code>String</code>. These ampersands represent <em>references</em>, and they allow you to refer
-to some value without taking ownership of it. Figure 4-5 depicts this concept.</p>
+to some value without taking ownership of it. Figure 4-6 depicts this concept.</p>
 <p><img alt="Three tables: the table for s contains only a pointer to the table
 for s1. The table for s1 contains the stack data for s1 and points to the
-string data on the heap." src="img/trpl04-05.svg" class="center" /></p>
-<p><span class="caption">Figure 4-5: A diagram of <code>&amp;String s</code> pointing at <code>String s1</code></span></p>
+string data on the heap." src="img/trpl04-06.svg" class="center" /></p>
+<p><span class="caption">Figure 4-6: A diagram of <code>&amp;String s</code> pointing at <code>String s1</code></span></p>
 <section class="note" aria-role="note">
 <p>Note: The opposite of referencing by using <code>&amp;</code> is <em>dereferencing</em>, which is
 accomplished with the dereference operator, <code>*</code>. We’ll see some uses of the
@@ -3791,7 +3826,8 @@ person owns something, you can borrow it from them. When you’re done, you have
 to give it back. You don’t own it.</p>
 <p>So, what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-6. Spoiler alert: it doesn’t work!</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">fn main() {
     let s = String::from("hello");
 
@@ -3801,7 +3837,8 @@ Listing 4-6. Spoiler alert: it doesn’t work!</p>
 fn change(some_string: &amp;String) {
     some_string.push_str(", world");
 }</code></pre>
-<p><span class="caption">Listing 4-6: Attempting to modify a borrowed value</span></p>
+<figcaption>Listing 4-6: Attempting to modify a borrowed value</figcaption>
+</figure>
 <p>Here’s the error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling ownership v0.1.0 (file:///projects/ownership)
@@ -3824,7 +3861,8 @@ allowed to modify something we have a reference to.</p>
 <h3 id="mutable-references"><a class="header" href="#mutable-references">Mutable References</a></h3>
 <p>We can fix the code from Listing 4-6 to allow us to modify a borrowed value
 with just a few small tweaks that use, instead, a <em>mutable reference</em>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let mut s = String::from("hello");
 
@@ -3834,13 +3872,15 @@ with just a few small tweaks that use, instead, a <em>mutable reference</em>:</p
 fn change(some_string: &amp;mut String) {
     some_string.push_str(", world");
 }</code></pre></pre>
+</figure>
 <p>First we change <code>s</code> to be <code>mut</code>. Then we create a mutable reference with <code>&amp;mut s</code> where we call the <code>change</code> function, and update the function signature to
 accept a mutable reference with <code>some_string: &amp;mut String</code>. This makes it very
 clear that the <code>change</code> function will mutate the value it borrows.</p>
 <p>Mutable references have one big restriction: if you have a mutable reference to
 a value, you can have no other references to that value. This code that
 attempts to create two mutable references to <code>s</code> will fail:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
 </span>    let mut s = String::from("hello");
 
@@ -3849,6 +3889,7 @@ attempts to create two mutable references to <code>s</code> will fail:</p>
 
     println!("{}, {}", r1, r2);
 <span class="boring">}</span></code></pre>
+</figure>
 <p>Here’s the error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling ownership v0.1.0 (file:///projects/ownership)
@@ -3965,7 +4006,8 @@ compiler will ensure that the data will not go out of scope before the
 reference to the data does.</p>
 <p>Let’s try to create a dangling reference to see how Rust prevents them with a
 compile-time error:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">fn main() {
     let reference_to_nothing = dangle();
 }
@@ -3975,6 +4017,7 @@ fn dangle() -&gt; &amp;String {
 
     &amp;s
 }</code></pre>
+</figure>
 <p>Here’s the error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling ownership v0.1.0 (file:///projects/ownership)
@@ -4013,7 +4056,8 @@ for it to be borrowed from
 </code></pre>
 <p>Let’s take a closer look at exactly what’s happening at each stage of our
 <code>dangle</code> code:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
 </span><span class="boring">    let reference_to_nothing = dangle();
 </span><span class="boring">}
@@ -4025,6 +4069,7 @@ for it to be borrowed from
     &amp;s // we return a reference to the String, s
 } // Here, s goes out of scope, and is dropped. Its memory goes away.
   // Danger!</code></pre>
+</figure>
 <p>Because <code>s</code> is created inside <code>dangle</code>, when the code of <code>dangle</code> is finished,
 <code>s</code> will be deallocated. But we tried to return a reference to it. That means
 this reference would be pointing to an invalid <code>String</code>. That’s no good! Rust
@@ -4064,7 +4109,8 @@ slices, to understand the problem that slices will solve:</p>
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about <em>part</em> of a string. However, we could return the index of the
 end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn first_word(s: &amp;String) -&gt; usize {
     let bytes = s.as_bytes();
 
@@ -4078,8 +4124,8 @@ end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 4-7: The <code>first_word</code> function that returns a
-byte index value into the <code>String</code> parameter</span></p>
+<figcaption>Listing 4-7: The <code>first_word</code> function that returns a byte index value into the <code>String</code> parameter</figcaption>
+</figure>
 <p>Because we need to go through the <code>String</code> element by element and check whether
 a value is a space, we’ll convert our <code>String</code> to an array of bytes using the
 <code>as_bytes</code> method.</p>
@@ -4144,7 +4190,8 @@ only a meaningful number in the context of the <code>&amp;String</code>. In othe
 because it’s a separate value from the <code>String</code>, there’s no guarantee that it
 will still be valid in the future. Consider the program in Listing 4-8 that
 uses the <code>first_word</code> function from Listing 4-7.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn first_word(s: &amp;String) -&gt; usize {
 </span><span class="boring">    let bytes = s.as_bytes();
 </span><span class="boring">
@@ -4167,8 +4214,8 @@ uses the <code>first_word</code> function from Listing 4-7.</p>
     // word still has the value 5 here, but there's no more string that
     // we could meaningfully use the value 5 with. word is now totally invalid!
 }</code></pre></pre>
-<p><span class="caption">Listing 4-8: Storing the result from calling the
-<code>first_word</code> function and then changing the <code>String</code> contents</span></p>
+<figcaption>Listing 4-8: Storing the result from calling the <code>first_word</code> function and then changing the <code>String</code> contents</figcaption>
+</figure>
 <p>This program compiles without any errors and would also do so if we used <code>word</code>
 after calling <code>s.clear()</code>. Because <code>word</code> isn’t connected to the state of <code>s</code>
 at all, <code>word</code> still contains the value <code>5</code>. We could use that value <code>5</code> with
@@ -4199,13 +4246,13 @@ one more than the last position in the slice. Internally, the slice data
 structure stores the starting position and the length of the slice, which
 corresponds to <code>ending_index</code> minus <code>starting_index</code>. So, in the case of <code>let world = &amp;s[6..11];</code>, <code>world</code> would be a slice that contains a pointer to the
 byte at index 6 of <code>s</code> with a length value of <code>5</code>.</p>
-<p>Figure 4-6 shows this in a diagram.</p>
+<p>Figure 4-7 shows this in a diagram.</p>
 <p><img alt="Three tables: a table representing the stack data of s, which points
 to the byte at index 0 in a table of the string data &quot;hello world&quot; on
 the heap. The third table rep-resents the stack data of the slice world, which
 has a length value of 5 and points to byte 6 of the heap data table."
-src="img/trpl04-06.svg" class="center" style="width: 50%;" /></p>
-<p><span class="caption">Figure 4-6: String slice referring to part of a
+src="img/trpl04-07.svg" class="center" style="width: 50%;" /></p>
+<p><span class="caption">Figure 4-7: String slice referring to part of a
 <code>String</code></span></p>
 <p>With Rust’s <code>..</code> range syntax, if you want to start at index 0, you can drop
 the value before the two periods. In other words, these are equal:</p>
@@ -4248,7 +4295,8 @@ Text with Strings”</a><!-- ignore --> section of Chapter 8.</p>
 </section>
 <p>With all this information in mind, let’s rewrite <code>first_word</code> to return a
 slice. The type that signifies “string slice” is written as <code>&amp;str</code>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn first_word(s: &amp;String) -&gt; &amp;str {
     let bytes = s.as_bytes();
 
@@ -4262,6 +4310,7 @@ slice. The type that signifies “string slice” is written as <code>&amp;str</
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
+</figure>
 <p>We get the index for the end of the word the same way we did in Listing 4-7, by
 looking for the first occurrence of a space. When we find a space, we return a
 string slice using the start of the string and the index of the space as the
@@ -4280,7 +4329,8 @@ show up later if we kept trying to use the first word index with an emptied
 string. Slices make this bug impossible and let us know we have a problem with
 our code much sooner. Using the slice version of <code>first_word</code> will throw a
 compile-time error:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn first_word(s: &amp;String) -&gt; &amp;str {
 </span><span class="boring">    let bytes = s.as_bytes();
 </span><span class="boring">
@@ -4302,6 +4352,7 @@ compile-time error:</p>
 
     println!("the first word is: {word}");
 }</code></pre>
+</figure>
 <p>Here’s the compiler error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling ownership v0.1.0 (file:///projects/ownership)
@@ -4347,6 +4398,7 @@ one more improvement on <code>first_word</code>, and that’s its signature:</p>
 <p>A more experienced Rustacean would write the signature shown in Listing 4-9
 instead because it allows us to use the same function on both <code>&amp;String</code> values
 and <code>&amp;str</code> values.</p>
+<figure class="listing">
 <pre><code class="language-rust ignore">fn first_word(s: &amp;str) -&gt; &amp;str {
 <span class="boring">    let bytes = s.as_bytes();
 </span><span class="boring">
@@ -4379,8 +4431,8 @@ and <code>&amp;str</code> values.</p>
 </span><span class="boring">    // this works too, without the slice syntax!
 </span><span class="boring">    let word = first_word(my_string_literal);
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 4-9: Improving the <code>first_word</code> function by using
-a string slice for the type of the <code>s</code> parameter</span></p>
+<figcaption>Listing 4-9: Improving the <code>first_word</code> function by using a string slice for the type of the <code>s</code> parameter</figcaption>
+</figure>
 <p>If we have a string slice, we can pass that directly. If we have a <code>String</code>, we
 can pass a slice of the <code>String</code> or a reference to the <code>String</code>. This
 flexibility takes advantage of <em>deref coercions</em>, a feature we will cover in the
@@ -4388,7 +4440,8 @@ flexibility takes advantage of <em>deref coercions</em>, a feature we will cover
 Methods”</a><!--ignore--> section of Chapter 15.</p>
 <p>Defining a function to take a string slice instead of a reference to a <code>String</code>
 makes our API more general and useful without losing any functionality:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn first_word(s: &amp;str) -&gt; &amp;str {
 </span><span class="boring">    let bytes = s.as_bytes();
 </span><span class="boring">
@@ -4421,6 +4474,7 @@ makes our API more general and useful without losing any functionality:</p>
     // this works too, without the slice syntax!
     let word = first_word(my_string_literal);
 }</code></pre></pre>
+</figure>
 <h3 id="other-slices"><a class="header" href="#other-slices">Other Slices</a></h3>
 <p>String slices, as you might imagine, are specific to strings. But there’s a
 more general slice type too. Consider this array:</p>
@@ -4475,7 +4529,8 @@ struct’s name should describe the significance of the pieces of data being
 grouped together. Then, inside curly brackets, we define the names and types of
 the pieces of data, which we call <em>fields</em>. For example, Listing 5-1 shows a
 struct that stores information about a user account.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct User {
     active: bool,
     username: String,
@@ -4484,7 +4539,8 @@ struct that stores information about a user account.</p>
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 5-1: A <code>User</code> struct definition</span></p>
+<figcaption>Listing 5-1: A <code>User</code> struct definition</figcaption>
+</figure>
 <p>To use a struct after we’ve defined it, we create an <em>instance</em> of that struct
 by specifying concrete values for each of the fields. We create an instance by
 stating the name of the struct and then add curly brackets containing <em>key:
@@ -4494,7 +4550,8 @@ the same order in which we declared them in the struct. In other words, the
 struct definition is like a general template for the type, and instances fill
 in that template with particular data to create values of the type. For
 example, we can declare a particular user as shown in Listing 5-2.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct User {
 </span><span class="boring">    active: bool,
 </span><span class="boring">    username: String,
@@ -4510,14 +4567,15 @@ example, we can declare a particular user as shown in Listing 5-2.</p>
         sign_in_count: 1,
     };
 }</code></pre></pre>
-<p><span class="caption">Listing 5-2: Creating an instance of the <code>User</code>
-struct</span></p>
+<figcaption>Listing 5-2: Creating an instance of the <code>User</code> struct</figcaption>
+</figure>
 <p>To get a specific value from a struct, we use dot notation. For example, to
 access this user’s email address, we use <code>user1.email</code>. If the instance is
 mutable, we can change a value by using the dot notation and assigning into a
 particular field. Listing 5-3 shows how to change the value in the <code>email</code>
 field of a mutable <code>User</code> instance.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct User {
 </span><span class="boring">    active: bool,
 </span><span class="boring">    username: String,
@@ -4535,8 +4593,8 @@ field of a mutable <code>User</code> instance.</p>
 
     user1.email = String::from("anotheremail@example.com");
 }</code></pre></pre>
-<p><span class="caption">Listing 5-3: Changing the value in the <code>email</code> field of a
-<code>User</code> instance</span></p>
+<figcaption>Listing 5-3: Changing the value in the <code>email</code> field of a <code>User</code> instance</figcaption>
+</figure>
 <p>Note that the entire instance must be mutable; Rust doesn’t allow us to mark
 only certain fields as mutable. As with any expression, we can construct a new
 instance of the struct as the last expression in the function body to
@@ -4544,7 +4602,8 @@ implicitly return that new instance.</p>
 <p>Listing 5-4 shows a <code>build_user</code> function that returns a <code>User</code> instance with
 the given email and username. The <code>active</code> field gets the value of <code>true</code>, and
 the <code>sign_in_count</code> gets a value of <code>1</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct User {
 </span><span class="boring">    active: bool,
 </span><span class="boring">    username: String,
@@ -4567,8 +4626,8 @@ the <code>sign_in_count</code> gets a value of <code>1</code>.</p>
 </span><span class="boring">        String::from("someusername123"),
 </span><span class="boring">    );
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 5-4: A <code>build_user</code> function that takes an email
-and username and returns a <code>User</code> instance</span></p>
+<figcaption>Listing 5-4: A <code>build_user</code> function that takes an email and username and returns a <code>User</code> instance</figcaption>
+</figure>
 <p>It makes sense to name the function parameters with the same name as the struct
 fields, but having to repeat the <code>email</code> and <code>username</code> field names and
 variables is a bit tedious. If the struct had more fields, repeating each name
@@ -4580,7 +4639,8 @@ would get even more annoying. Luckily, there’s a convenient shorthand!</p>
 Listing 5-4, we can use the <em>field init shorthand</em> syntax to rewrite
 <code>build_user</code> so it behaves exactly the same but doesn’t have the repetition of
 <code>username</code> and <code>email</code>, as shown in Listing 5-5.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct User {
 </span><span class="boring">    active: bool,
 </span><span class="boring">    username: String,
@@ -4603,9 +4663,8 @@ Listing 5-4, we can use the <em>field init shorthand</em> syntax to rewrite
 </span><span class="boring">        String::from("someusername123"),
 </span><span class="boring">    );
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 5-5: A <code>build_user</code> function that uses field init
-shorthand because the <code>username</code> and <code>email</code> parameters have the same name as
-struct fields</span></p>
+<figcaption>Listing 5-5: A <code>build_user</code> function that uses field init shorthand because the <code>username</code> and <code>email</code> parameters have the same name as struct fields</figcaption>
+</figure>
 <p>Here, we’re creating a new instance of the <code>User</code> struct, which has a field
 named <code>email</code>. We want to set the <code>email</code> field’s value to the value in the
 <code>email</code> parameter of the <code>build_user</code> function. Because the <code>email</code> field and
@@ -4618,7 +4677,8 @@ the values from another instance, but changes some. You can do this using
 <p>First, in Listing 5-6 we show how to create a new <code>User</code> instance in <code>user2</code>
 regularly, without the update syntax. We set a new value for <code>email</code> but
 otherwise use the same values from <code>user1</code> that we created in Listing 5-2.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct User {
 </span><span class="boring">    active: bool,
 </span><span class="boring">    username: String,
@@ -4643,12 +4703,13 @@ otherwise use the same values from <code>user1</code> that we created in Listing
         sign_in_count: user1.sign_in_count,
     };
 }</code></pre></pre>
-<p><span class="caption">Listing 5-6: Creating a new <code>User</code> instance using all but one of
-the values from <code>user1</code></span></p>
+<figcaption>Listing 5-6: Creating a new <code>User</code> instance using all but one of the values from <code>user1</code></figcaption>
+</figure>
 <p>Using struct update syntax, we can achieve the same effect with less code, as
 shown in Listing 5-7. The syntax <code>..</code> specifies that the remaining fields not
 explicitly set should have the same value as the fields in the given instance.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct User {
 </span><span class="boring">    active: bool,
 </span><span class="boring">    username: String,
@@ -4671,9 +4732,8 @@ explicitly set should have the same value as the fields in the given instance.</
         ..user1
     };
 }</code></pre></pre>
-<p><span class="caption">Listing 5-7: Using struct update syntax to set a new
-<code>email</code> value for a <code>User</code> instance but to use the rest of the values from
-<code>user1</code></span></p>
+<figcaption>Listing 5-7: Using struct update syntax to set a new <code>email</code> value for a <code>User</code> instance but to use the rest of the values from <code>user1</code></figcaption>
+</figure>
 <p>The code in Listing 5-7 also creates an instance in <code>user2</code> that has a
 different value for <code>email</code> but has the same values for the <code>username</code>,
 <code>active</code>, and <code>sign_in_count</code> fields from <code>user1</code>. The <code>..user1</code> must come last
@@ -4690,7 +4750,8 @@ Move”</a><!-- ignore --> section. In this example, we can no longer use
 <code>active</code> and <code>sign_in_count</code> values from <code>user1</code>, then <code>user1</code> would still be
 valid after creating <code>user2</code>. Both <code>active</code> and <code>sign_in_count</code> are types that
 implement the <code>Copy</code> trait, so the behavior we discussed in the <a href="ch04-01-what-is-ownership.html#stack-only-data-copy">“Stack-Only
-Data: Copy”</a><!-- ignore --> section would apply.</p>
+Data: Copy”</a><!-- ignore --> section would apply. We can still use
+<code>user1.email</code> in this example, since its value was <em>not</em> moved out.</p>
 <h3 id="using-tuple-structs-without-named-fields-to-create-different-types"><a class="header" href="#using-tuple-structs-without-named-fields-to-create-different-types">Using Tuple Structs Without Named Fields to Create Different Types</a></h3>
 <p>Rust also supports structs that look similar to tuples, called <em>tuple structs</em>.
 Tuple structs have the added meaning the struct name provides but don’t have
@@ -4701,7 +4762,8 @@ field as in a regular struct would be verbose or redundant.</p>
 <p>To define a tuple struct, start with the <code>struct</code> keyword and the struct name
 followed by the types in the tuple. For example, here we define and use two
 tuple structs named <code>Color</code> and <code>Point</code>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct Color(i32, i32, i32);
 struct Point(i32, i32, i32);
 
@@ -4709,6 +4771,7 @@ fn main() {
     let black = Color(0, 0, 0);
     let origin = Point(0, 0, 0);
 }</code></pre></pre>
+</figure>
 <p>Note that the <code>black</code> and <code>origin</code> values are different types because they’re
 instances of different tuple structs. Each struct you define is its own type,
 even though the fields within the struct might have the same types. For
@@ -4725,12 +4788,14 @@ structs can be useful when you need to implement a trait on some type but don’
 have any data that you want to store in the type itself. We’ll discuss traits
 in Chapter 10. Here’s an example of declaring and instantiating a unit struct
 named <code>AlwaysEqual</code>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct AlwaysEqual;
 
 fn main() {
     let subject = AlwaysEqual;
 }</code></pre></pre>
+</figure>
 <p>To define <code>AlwaysEqual</code>, we use the <code>struct</code> keyword, the name we want, and
 then a semicolon. No need for curly brackets or parentheses! Then we can get an
 instance of <code>AlwaysEqual</code> in the <code>subject</code> variable in a similar way: using the
@@ -4751,7 +4816,8 @@ else, but to do so requires the use of <em>lifetimes</em>, a Rust feature that w
 discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
 is valid for as long as the struct is. Let’s say you try to store a reference
 in a struct without specifying lifetimes, like the following; this won’t work:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
 <pre><code class="language-rust ignore does_not_compile">struct User {
     active: bool,
@@ -4768,6 +4834,7 @@ fn main() {
         sign_in_count: 1,
     };
 }</code></pre>
+</figure>
 <p>The compiler will complain that it needs lifetime specifiers:</p>
 <pre><code class="language-console">$ cargo run
    Compiling structs v0.1.0 (file:///projects/structs)
@@ -4819,7 +4886,8 @@ then refactor the program until we’re using structs instead.</p>
 the width and height of a rectangle specified in pixels and calculate the area
 of the rectangle. Listing 5-8 shows a short program with one way of doing
 exactly that in our project’s <em>src/main.rs</em>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let width1 = 30;
     let height1 = 50;
@@ -4833,8 +4901,8 @@ exactly that in our project’s <em>src/main.rs</em>.</p>
 fn area(width: u32, height: u32) -&gt; u32 {
     width * height
 }</code></pre></pre>
-<p><span class="caption">Listing 5-8: Calculating the area of a rectangle
-specified by separate width and height variables</span></p>
+<figcaption>Listing 5-8: Calculating the area of a rectangle specified by separate width and height variables</figcaption>
+</figure>
 <p>Now, run this program using <code>cargo run</code>:</p>
 <pre><code class="language-console">$ cargo run
    Compiling rectangles v0.1.0 (file:///projects/rectangles)
@@ -4867,7 +4935,8 @@ we might do that in <a href="ch03-02-data-types.html#the-tuple-type">“The Tupl
 of Chapter 3: by using tuples.</p>
 <h3 id="refactoring-with-tuples"><a class="header" href="#refactoring-with-tuples">Refactoring with Tuples</a></h3>
 <p>Listing 5-9 shows another version of our program that uses tuples.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let rect1 = (30, 50);
 
@@ -4880,8 +4949,8 @@ of Chapter 3: by using tuples.</p>
 fn area(dimensions: (u32, u32)) -&gt; u32 {
     dimensions.0 * dimensions.1
 }</code></pre></pre>
-<p><span class="caption">Listing 5-9: Specifying the width and height of the
-rectangle with a tuple</span></p>
+<figcaption>Listing 5-9: Specifying the width and height of the rectangle with a tuple</figcaption>
+</figure>
 <p>In one way, this program is better. Tuples let us add a bit of structure, and
 we’re now passing just one argument. But in another way, this version is less
 clear: tuples don’t name their elements, so we have to index into the parts of
@@ -4896,7 +4965,8 @@ our data in our code, it’s now easier to introduce errors.</p>
 <p>We use structs to add meaning by labeling the data. We can transform the tuple
 we’re using into a struct with a name for the whole as well as names for the
 parts, as shown in Listing 5-10.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct Rectangle {
     width: u32,
     height: u32,
@@ -4917,7 +4987,8 @@ fn main() {
 fn area(rectangle: &amp;Rectangle) -&gt; u32 {
     rectangle.width * rectangle.height
 }</code></pre></pre>
-<p><span class="caption">Listing 5-10: Defining a <code>Rectangle</code> struct</span></p>
+<figcaption>Listing 5-10: Defining a <code>Rectangle</code> struct</figcaption>
+</figure>
 <p>Here we’ve defined a struct and named it <code>Rectangle</code>. Inside the curly
 brackets, we defined the fields as <code>width</code> and <code>height</code>, both of which have
 type <code>u32</code>. Then, in <code>main</code>, we created a particular instance of <code>Rectangle</code>
@@ -4941,7 +5012,8 @@ win for clarity.</p>
 debugging our program and see the values for all its fields. Listing 5-11 tries
 using the <a href="../std/macro.println.html"><code>println!</code> macro</a><!-- ignore --> as we have used in
 previous chapters. This won’t work, however.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">struct Rectangle {
     width: u32,
     height: u32,
@@ -4955,8 +5027,8 @@ fn main() {
 
     println!("rect1 is {}", rect1);
 }</code></pre>
-<p><span class="caption">Listing 5-11: Attempting to print a <code>Rectangle</code>
-instance</span></p>
+<figcaption>Listing 5-11: Attempting to print a <code>Rectangle</code> instance</figcaption>
+</figure>
 <p>When we compile this code, we get an error with this core message:</p>
 <pre><code class="language-text">error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
 </code></pre>
@@ -4989,7 +5061,8 @@ see its value while we’re debugging our code.</p>
 have to explicitly opt in to make that functionality available for our struct.
 To do that, we add the outer attribute <code>#[derive(Debug)]</code> just before the
 struct definition, as shown in Listing 5-12.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
 struct Rectangle {
     width: u32,
@@ -5004,8 +5077,8 @@ fn main() {
 
     println!("rect1 is {rect1:?}");
 }</code></pre></pre>
-<p><span class="caption">Listing 5-12: Adding the attribute to derive the <code>Debug</code>
-trait and printing the <code>Rectangle</code> instance using debug formatting</span></p>
+<figcaption>Listing 5-12: Adding the attribute to derive the <code>Debug</code> trait and printing the <code>Rectangle</code> instance using debug formatting</figcaption>
+</figure>
 <p>Now when we run the program, we won’t get any errors, and we’ll see the
 following output:</p>
 <pre><code class="language-console">$ cargo run
@@ -5104,7 +5177,8 @@ called on.</p>
 <p>Let’s change the <code>area</code> function that has a <code>Rectangle</code> instance as a parameter
 and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct, as shown
 in Listing 5-13.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
 struct Rectangle {
     width: u32,
@@ -5128,8 +5202,8 @@ fn main() {
         rect1.area()
     );
 }</code></pre></pre>
-<p><span class="caption">Listing 5-13: Defining an <code>area</code> method on the
-<code>Rectangle</code> struct</span></p>
+<figcaption>Listing 5-13: Defining an <code>area</code> method on the <code>Rectangle</code> struct</figcaption>
+</figure>
 <p>To define the function within the context of <code>Rectangle</code>, we start an <code>impl</code>
 (implementation) block for <code>Rectangle</code>. Everything within this <code>impl</code> block
 will be associated with the <code>Rectangle</code> type. Then we move the <code>area</code> function
@@ -5166,7 +5240,8 @@ library we provide.</p>
 <p>Note that we can choose to give a method the same name as one of the struct’s
 fields. For example, we can define a method on <code>Rectangle</code> that is also named
 <code>width</code>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">struct Rectangle {
 </span><span class="boring">    width: u32,
@@ -5189,6 +5264,7 @@ fn main() {
         println!("The rectangle has a nonzero width; it is {}", rect1.width);
     }
 }</code></pre></pre>
+</figure>
 <p>Here, we’re choosing to make the <code>width</code> method return <code>true</code> if the value in
 the instance’s <code>width</code> field is greater than <code>0</code> and <code>false</code> if the value is
 <code>0</code>: we can use a field within a method of the same name for any purpose. In
@@ -5252,7 +5328,8 @@ of <code>Rectangle</code> and return <code>true</code> if the second <code>Recta
 within <code>self</code> (the first <code>Rectangle</code>); otherwise, it should return <code>false</code>.
 That is, once we’ve defined the <code>can_hold</code> method, we want to be able to write
 the program shown in Listing 5-14.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore">fn main() {
     let rect1 = Rectangle {
         width: 30,
@@ -5270,8 +5347,8 @@ the program shown in Listing 5-14.</p>
     println!("Can rect1 hold rect2? {}", rect1.can_hold(&amp;rect2));
     println!("Can rect1 hold rect3? {}", rect1.can_hold(&amp;rect3));
 }</code></pre>
-<p><span class="caption">Listing 5-14: Using the as-yet-unwritten <code>can_hold</code>
-method</span></p>
+<figcaption>Listing 5-14: Using the as-yet-unwritten <code>can_hold</code> method</figcaption>
+</figure>
 <p>The expected output would look like the following because both dimensions of
 <code>rect2</code> are smaller than the dimensions of <code>rect1</code>, but <code>rect3</code> is wider than
 <code>rect1</code>:</p>
@@ -5291,7 +5368,8 @@ Boolean, and the implementation will check whether the width and height of
 <code>self</code> are greater than the width and height of the other <code>Rectangle</code>,
 respectively. Let’s add the new <code>can_hold</code> method to the <code>impl</code> block from
 Listing 5-13, shown in Listing 5-15.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">struct Rectangle {
 </span><span class="boring">    width: u32,
@@ -5325,8 +5403,8 @@ Listing 5-13, shown in Listing 5-15.</p>
 </span><span class="boring">    println!("Can rect1 hold rect2? {}", rect1.can_hold(&amp;rect2));
 </span><span class="boring">    println!("Can rect1 hold rect3? {}", rect1.can_hold(&amp;rect3));
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 5-15: Implementing the <code>can_hold</code> method on
-<code>Rectangle</code> that takes another <code>Rectangle</code> instance as a parameter</span></p>
+<figcaption>Listing 5-15: Implementing the <code>can_hold</code> method on <code>Rectangle</code> that takes another <code>Rectangle</code> instance as a parameter</figcaption>
+</figure>
 <p>When we run this code with the <code>main</code> function in Listing 5-14, we’ll get our
 desired output. Methods can take multiple parameters that we add to the
 signature after the <code>self</code> parameter, and those parameters work just like
@@ -5376,6 +5454,7 @@ namespaces created by modules. We’ll discuss modules in <a href="ch07-02-defin
 <p>Each struct is allowed to have multiple <code>impl</code> blocks. For example, Listing
 5-15 is equivalent to the code shown in Listing 5-16, which has each method in
 its own <code>impl</code> block.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">struct Rectangle {
 </span><span class="boring">    width: u32,
@@ -5411,8 +5490,8 @@ impl Rectangle {
 </span><span class="boring">    println!("Can rect1 hold rect2? {}", rect1.can_hold(&amp;rect2));
 </span><span class="boring">    println!("Can rect1 hold rect3? {}", rect1.can_hold(&amp;rect3));
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 5-16: Rewriting Listing 5-15 using multiple <code>impl</code>
-blocks</span></p>
+<figcaption>Listing 5-16: Rewriting Listing 5-15 using multiple <code>impl</code> blocks</figcaption>
+</figure>
 <p>There’s no reason to separate these methods into multiple <code>impl</code> blocks here,
 but this is valid syntax. We’ll see a case in which multiple <code>impl</code> blocks are
 useful in Chapter 10, where we discuss generic types and traits.</p>
@@ -12165,8 +12244,8 @@ failures:
 I got the value 8
 thread 'tests::this_test_will_fail' panicked at src/lib.rs:19:9:
 assertion `left == right` failed
-  left: 5
- right: 10
+  left: 10
+ right: 5
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 
@@ -15657,7 +15736,7 @@ methods by looking in the standard library API documentation for the <code>Itera
 trait. Some of these methods call the <code>next</code> method in their definition, which
 is why you’re required to implement the <code>next</code> method when implementing the
 <code>Iterator</code> trait.</p>
-<p>Methods that call <code>next</code> are called <em>consuming adaptors</em>, because calling them
+<p>Methods that call <code>next</code> are called <em>consuming adapters</em>, because calling them
 uses up the iterator. One example is the <code>sum</code> method, which takes ownership of
 the iterator and iterates through the items by repeatedly calling <code>next</code>, thus
 consuming the iterator. As it iterates through, it adds each item to a running
@@ -15683,10 +15762,10 @@ test illustrating a use of the <code>sum</code> method:</p>
 <p>We aren’t allowed to use <code>v1_iter</code> after the call to <code>sum</code> because <code>sum</code> takes
 ownership of the iterator we call it on.</p>
 <h3 id="methods-that-produce-other-iterators"><a class="header" href="#methods-that-produce-other-iterators">Methods that Produce Other Iterators</a></h3>
-<p><em>Iterator adaptors</em> are methods defined on the <code>Iterator</code> trait that don’t
+<p><em>Iterator adapters</em> are methods defined on the <code>Iterator</code> trait that don’t
 consume the iterator. Instead, they produce different iterators by changing
 some aspect of the original iterator.</p>
-<p>Listing 13-14 shows an example of calling the iterator adaptor method <code>map</code>,
+<p>Listing 13-14 shows an example of calling the iterator adapter method <code>map</code>,
 which takes a closure to call on each item as the items are iterated through.
 The <code>map</code> method returns a new iterator that produces the modified items. The
 closure here creates a new iterator in which each item from the vector will be
@@ -15698,7 +15777,7 @@ incremented by 1:</p>
 
     v1.iter().map(|x| x + 1);
 <span class="boring">}</span></code></pre></pre>
-<figcaption>Listing 13-14: Calling the iterator adaptor <code>map</code> to create a new iterator</figcaption>
+<figcaption>Listing 13-14: Calling the iterator adapter <code>map</code> to create a new iterator</figcaption>
 </figure>
 <p>However, this code produces a warning:</p>
 <pre><code class="language-console">$ cargo run
@@ -15721,7 +15800,7 @@ warning: `iterators` (bin "iterators") generated 1 warning
      Running `target/debug/iterators`
 </code></pre>
 <p>The code in Listing 13-14 doesn’t do anything; the closure we’ve specified
-never gets called. The warning reminds us why: iterator adaptors are lazy, and
+never gets called. The warning reminds us why: iterator adapters are lazy, and
 we need to consume the iterator here.</p>
 <p>To fix this warning and consume the iterator, we’ll use the <code>collect</code> method,
 which we used in Chapter 12 with <code>env::args</code> in Listing 12-1. This method
@@ -15745,9 +15824,9 @@ containing each item from the original vector incremented by 1.</p>
 on each item. This is a great example of how closures let you customize some
 behavior while reusing the iteration behavior that the <code>Iterator</code> trait
 provides.</p>
-<p>You can chain multiple calls to iterator adaptors to perform complex actions in
+<p>You can chain multiple calls to iterator adapters to perform complex actions in
 a readable way. But because all iterators are lazy, you have to call one of the
-consuming adaptor methods to get results from calls to iterator adaptors.</p>
+consuming adapter methods to get results from calls to iterator adapters.</p>
 <h3 id="using-closures-that-capture-their-environment"><a class="header" href="#using-closures-that-capture-their-environment">Using Closures that Capture Their Environment</a></h3>
 <p>Many iterator adapters take closures as arguments, and commonly the closures
 we’ll specify as arguments to iterator adapters will be closures that capture
@@ -16262,7 +16341,7 @@ value we want to put in the <code>query</code> field of <code>Config</code>. If 
 <code>Some</code>, we use a <code>match</code> to extract the value. If it returns <code>None</code>, it means
 not enough arguments were given and we return early with an <code>Err</code> value. We do
 the same thing for the <code>file_path</code> value.</p>
-<h3 id="making-code-clearer-with-iterator-adaptors"><a class="header" href="#making-code-clearer-with-iterator-adaptors">Making Code Clearer with Iterator Adaptors</a></h3>
+<h3 id="making-code-clearer-with-iterator-adapters"><a class="header" href="#making-code-clearer-with-iterator-adapters">Making Code Clearer with Iterator Adapters</a></h3>
 <p>We can also take advantage of iterators in the <code>search</code> function in our I/O
 project, which is reproduced here in Listing 13-21 as it was in Listing 12-19:</p>
 <figure class="listing">
@@ -16323,7 +16402,7 @@ project, which is reproduced here in Listing 13-21 as it was in Listing 12-19:</
 </span><span class="boring">}</span></code></pre>
 <figcaption>Listing 13-21: The implementation of the <code>search</code> function from Listing 12-19</figcaption>
 </figure>
-<p>We can write this code in a more concise way using iterator adaptor methods.
+<p>We can write this code in a more concise way using iterator adapter methods.
 Doing so also lets us avoid having a mutable intermediate <code>results</code> vector. The
 functional programming style prefers to minimize the amount of mutable state to
 make code clearer. Removing the mutable state might enable a future enhancement
@@ -16437,11 +16516,11 @@ concurrent access to the <code>results</code> vector. Listing 13-22 shows this c
 </span><span class="boring">        );
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<figcaption>Listing 13-22: Using iterator adaptor methods in the implementation of the <code>search</code> function</figcaption>
+<figcaption>Listing 13-22: Using iterator adapter methods in the implementation of the <code>search</code> function</figcaption>
 </figure>
 <p>Recall that the purpose of the <code>search</code> function is to return all lines in
 <code>contents</code> that contain the <code>query</code>. Similar to the <code>filter</code> example in Listing
-13-16, this code uses the <code>filter</code> adaptor to keep only the lines that
+13-16, this code uses the <code>filter</code> adapter to keep only the lines that
 <code>line.contains(query)</code> returns <code>true</code> for. We then collect the matching lines
 into another vector with <code>collect</code>. Much simpler! Feel free to make the same
 change to use iterator methods in the <code>search_case_insensitive</code> function as
@@ -16451,7 +16530,7 @@ well.</p>
 why: the original implementation in Listing 13-21 or the version using
 iterators in Listing 13-22. Most Rust programmers prefer to use the iterator
 style. It’s a bit tougher to get the hang of at first, but once you get a feel
-for the various iterator adaptors and what they do, iterators can be easier to
+for the various iterator adapters and what they do, iterators can be easier to
 understand. Instead of fiddling with the various bits of looping and building
 new vectors, the code focuses on the high-level objective of the loop. This
 abstracts away some of the commonplace code so it’s easier to see the concepts
@@ -16516,7 +16595,7 @@ values with the previous 12 values in <code>buffer</code>. Then, for each pair, 
 multiply the values together, sum all the results, and shift the bits in the
 sum <code>qlp_shift</code> bits to the right.</p>
 <p>Calculations in applications like audio decoders often prioritize performance
-most highly. Here, we’re creating an iterator, using two adaptors, and then
+most highly. Here, we’re creating an iterator, using two adapters, and then
 consuming the value. What assembly code would this Rust code compile to? Well,
 as of this writing, it compiles down to the same assembly you’d write by hand.
 There’s no loop at all corresponding to the iteration over the values in
@@ -20544,7 +20623,7 @@ if we could do something else while we are waiting for those long-running
 processes to complete.</p>
 <p>The video export will use as much CPU and GPU power as it can. If you only had
 one CPU core, and your operating system never paused that export until it
-completed, you could not do anything else on your computer while it was running.
+completed, you couldn’t do anything else on your computer while it was running.
 That would be a pretty frustrating experience, though. Instead, your computer’s
 operating system can—and does!—invisibly interrupt the export often enough to
 let you get other work done along the way.</p>
@@ -20553,27 +20632,27 @@ the CPU needs to wait on data to arrive from the network. While you can start
 reading the data once some of it is present, it might take a while for the rest
 to show up. Even once the data is all present, a video can be quite large, so it
 might take some time to load it all. Maybe it only takes a second or two—but
-that is a very long time for a modern processor, which can do billions of
+that’s a very long time for a modern processor, which can do billions of
 operations every second. It would be nice to be able to put the CPU to use for
 other work while waiting for the network call to finish—so, again, your
 operating system will invisibly interrupt your program so other things can
 happen while the network operation is still ongoing.</p>
 <section class="note" aria-role="note">
 <p>Note: The video export is the kind of operation which is often described as
-“CPU-bound” or “compute-bound”. It is limited by the speed of the computer’s
+“CPU-bound” or “compute-bound”. It’s limited by the speed of the computer’s
 ability to process data within the <em>CPU</em> or <em>GPU</em>, and how much of that speed
 it can use. The video download is the kind of operation which is often
-described as “IO-bound,” because it is limited by the speed of the computer’s
+described as “IO-bound,” because it’s limited by the speed of the computer’s
 <em>input and output</em>. It can only go as fast as the data can be sent across the
 network.</p>
 </section>
 <p>In both of these examples, the operating system’s invisible interrupts provide a
 form of concurrency. That concurrency only happens at the level of a whole
 program, though: the operating system interrupts one program to let other
-programs get work done. In many cases, since we understand our programs at a
+programs get work done. In many cases, because we understand our programs at a
 much more granular level than the operating system does, we can spot lots of
 opportunities for concurrency that the operating system cannot see.</p>
-<p>For example, if we are building a tool to manage file downloads, we should be
+<p>For example, if we’re building a tool to manage file downloads, we should be
 able to write our program in such a way that starting one download does not lock
 up the UI, and users should be able to start multiple downloads at the same
 time. Many operating system APIs for interacting with the network are
@@ -20590,14 +20669,14 @@ places where an individual program would benefit from the operation being
 download each file. However, we would eventually find that the overhead of those
 threads was a problem. It would also be nicer if the call were not blocking in
 the first place. Last but not least, it would be better if we could write in the
-same direct style we use in blocking code. Something like this:</p>
+same direct style we use in blocking code. Something similar to this:</p>
 <pre><code class="language-rust ignore does_not_compile">let data = fetch_data_from(url).await;
 println!("{data}");</code></pre>
 <p>That is exactly what Rust’s async abstraction gives us. Before we see how this
 works in practice, though, we need to take a short detour into the differences
 between parallelism and concurrency.</p>
 <h3 id="parallelism-and-concurrency"><a class="header" href="#parallelism-and-concurrency">Parallelism and Concurrency</a></h3>
-<p>In the previous chapter we treated parallelism and concurrency as mostly
+<p>In the previous chapter, we treated parallelism and concurrency as mostly
 interchangeable. Now we need to distinguish between them more precisely, because
 the differences will show up as we start working.</p>
 <p>Consider the different ways a team could split up work on a software project. We
@@ -20606,41 +20685,46 @@ team member, or we could do a mix of both approaches.</p>
 <p>When an individual works on several different tasks before any of them is
 complete, this is <em>concurrency</em>. Maybe you have two different projects checked
 out on your computer, and when you get bored or stuck on one project, you switch
-to the other. You are just one person, so you cannot make progress on both tasks
-tasks at the exact same time—but you can multi-task, making progress on multiple
+to the other. You’re just one person, so you can’t make progress on both tasks
+at the exact same time—but you can multi-task, making progress on multiple
 tasks by switching between them.</p>
 <figure>
 <img alt="Concurrent work flow" src="img/trpl17-01.svg" class="center" />
-<figcaption>Figure 17-1: A concurrent workflow, switching between Task A and Task B</figcaption>
+<figcaption>Figure 17-1: A concurrent workflow, switching between Task A and Task B.</figcaption>
 </figure>
 <p>When you agree to split up a group of tasks between the people on the team, with
 each person taking one task and working on it alone, this is <em>parallelism</em>. Each
 person on the team can make progress at the exact same time.</p>
 <figure>
 <img alt="Concurrent work flow" src="img/trpl17-02.svg" class="center" />
-<figcaption>Figure 17-2: A parallel workflow, where work happens on Task A and Task B independently</figcaption>
+<figcaption>Figure 17-2: A parallel workflow, where work happens on Task A and Task B independently.</figcaption>
 </figure>
 <p>With both of these situations, you might have to coordinate between different
 tasks. Maybe you <em>thought</em> the task that one person was working on was totally
 independent from everyone else’s work, but it actually needs something finished
 by another person on the team. Some of the work could be done in parallel, but
 some of it was actually <em>serial</em>: it could only happen in a series, one thing
-after the other. Likewise, you might realize that one of your own tasks depends
-on another of your tasks. Now your concurrent work has also become serial.</p>
+after the other, as in Figure 17-3.</p>
+<figure>
+<img alt="Concurrent work flow" src="img/trpl17-03.svg" class="center" />
+<figcaption>Figure 17-3: A partially parallel workflow, where work happens on Task A and Task B independently until task A3 is blocked on the results of task B3.</figcaption>
+</figure>
+<p>Likewise, you might realize that one of your own tasks depends on another of
+your tasks. Now your concurrent work has also become serial.</p>
 <p>Parallelism and concurrency can intersect with each other, too. If you learn
-that a colleague is stuck until you finish one of your tasks, you will probably
+that a colleague is stuck until you finish one of your tasks, you’ll probably
 focus all your efforts on that task to “unblock” your colleague. You and your
-coworker are no longer able to work in parallel, and you are also no longer able
+coworker are no longer able to work in parallel, and you’re also no longer able
 to work concurrently on your own tasks.</p>
 <p>The same basic dynamics come into play with software and hardware. On a machine
 with a single CPU core, the CPU can only do one operation at a time, but it can
-still work concurrently. Using tools like threads, processes, and async, the
+still work concurrently. Using tools such as threads, processes, and async, the
 computer can pause one activity and switch to others before eventually cycling
 back to that first activity again. On a machine with multiple CPU cores, it can
 also do work in parallel. One core can be doing one thing while another core
 does something completely unrelated, and those actually happen at the same
 time.</p>
-<p>When working with async in Rust, we are always dealing with concurrency.
+<p>When working with async in Rust, we’re always dealing with concurrency.
 Depending on the hardware, the operating system, and the async runtime we are
 using—more on async runtimes shortly!—that concurrency may also use parallelism
 under the hood.</p>
@@ -20658,39 +20742,40 @@ you can even use together in many cases</li>
 <code>async</code> and <code>await</code> keywords.</p>
 <p>A <em>future</em> is a value which may not be ready now, but will become ready at some
 point in the future. (This same concept shows up in many languages, sometimes
-under other names like “task” or “promise”.) Rust provides a <code>Future</code> trait as a
-building block so different async operations can be implemented with different
-data structures, but with a common interface. In Rust, we say that types which
-implement the <code>Future</code> trait are futures. Each type which implements <code>Future</code>
-holds its own information about the progress that has been made and what “ready”
-means.</p>
+under other names such as “task” or “promise”.) Rust provides a <code>Future</code> trait
+as a building block so different async operations can be implemented with
+different data structures, but with a common interface. In Rust, we say that
+types which implement the <code>Future</code> trait are futures. Each type which
+implements <code>Future</code> holds its own information about the progress that has been
+made and what “ready” means.</p>
 <p>The <code>async</code> keyword can be applied to blocks and functions to specify that they
 can be interrupted and resumed. Within an async block or async function, you can
 use the <code>await</code> keyword to wait for a future to become ready, called <em>awaiting a
 future</em>. Each place you await a future within an async block or function is a
-place that async block or function may get paused and resumed.</p>
+place that async block or function may get paused and resumed. The process of
+checking with a future to see if its value is available yet is called <em>polling</em>.</p>
 <p>Some other languages also use <code>async</code> and <code>await</code> keywords for async
-programming. If you are familiar with those languages, you may notice some
+programming. If you’re familiar with those languages, you may notice some
 significant differences in how Rust does things, including how it handles the
-syntax. That is for good reason, as we will see!</p>
+syntax. That’s for good reason, as we’ll see!</p>
 <p>Most of the time when writing async Rust, we use the <code>async</code> and <code>await</code>
 keywords. Rust compiles them into equivalent code using the <code>Future</code> trait, much
-like it compiles <code>for</code> loops into equivalent code using the <code>Iterator</code> trait.
+as it compiles <code>for</code> loops into equivalent code using the <code>Iterator</code> trait.
 Because Rust provides the <code>Future</code> trait, though, you can also implement it for
-your own data types when you need to. Many of the functions we will see
+your own data types when you need to. Many of the functions we’ll see
 throughout this chapter return types with their own implementations of <code>Future</code>.
-We will return to the definition of the trait at the end of the chapter and dig
+We’ll return to the definition of the trait at the end of the chapter and dig
 into more of how it works, but this is enough detail to keep us moving forward.</p>
 <p>That may all feel a bit abstract. Let’s write our first async program: a little
-web scraper. We will pass in two URLs from the command line, fetch both of them
+web scraper. We’ll pass in two URLs from the command line, fetch both of them
 concurrently, and return the result of whichever one finishes first. This
-example will have a fair bit of new syntax, but don’t worry. We will explain
+example will have a fair bit of new syntax, but don’t worry. We’ll explain
 everything you need to know as we go.</p>
 <h3 id="our-first-async-program"><a class="header" href="#our-first-async-program">Our First Async Program</a></h3>
 <p>To keep this chapter focused on learning async, rather than juggling parts of
 the ecosystem, we have created the <code>trpl</code> crate (<code>trpl</code> is short for “The Rust
-Programming Language”). It re-exports all the types, traits, and functions you
-will need, primarily from the <a href="https://crates.io/crates/futures"><code>futures</code></a> and <a href="https://tokio.rs"><code>tokio</code></a>
+Programming Language”). It re-exports all the types, traits, and functions
+you’ll need, primarily from the <a href="https://crates.io/crates/futures"><code>futures</code></a> and <a href="https://tokio.rs"><code>tokio</code></a>
 crates.</p>
 <ul>
 <li>
@@ -20701,21 +20786,26 @@ code, and is actually where the <code>Future</code> type was originally designed
 <p>Tokio is the most widely used async runtime in Rust today, especially (but
 not only!) for web applications. There are other great runtimes out there,
 and they may be more suitable for your purposes. We use Tokio under the hood
-for <code>trpl</code> because it is good and widely used.</p>
+for <code>trpl</code> because it’s well-tested and widely used.</p>
 </li>
 </ul>
 <p>In some cases, <code>trpl</code> also renames or wraps the original APIs to let us stay
-focused on the details relevant to chapter. If you want to understand what the
-crate does, we encourage you to check out <a href="https://github.com/rust-lang/book/tree/main/packages/trpl">its source code</a>. You
-will be able to see what crate each re-export comes from, and we have left
+focused on the details relevant to this chapter. If you want to understand what
+the crate does, we encourage you to check out <a href="https://github.com/rust-lang/book/tree/main/packages/trpl">its source code</a>.
+You’ll be able to see what crate each re-export comes from, and we’ve left
 extensive comments explaining what the crate does.</p>
-<p>Go ahead and add the <code>trpl</code> crate to your <code>hello-async</code> project:</p>
-<pre><code class="language-console">$ cargo add trpl
+<p>Create a new binary project named <code>hello-async</code> and add the <code>trpl</code> crate as a
+dependency:</p>
+<pre><code class="language-console">$ cargo new hello-async
+$ cd hello-async
+$ cargo add trpl
 </code></pre>
 <p>Now we can use the various pieces provided by <code>trpl</code> to write our first async
-program. We will build a little command line tool which fetches two web pages,
+program. We’ll build a little command line tool which fetches two web pages,
 pulls the <code>&lt;title&gt;</code> element from each, and prints out the title of whichever
 finishes that whole process first.</p>
+<p>Let’s start by writing a function that takes one page URL as a parameter, makes
+a request to it, and returns the text of the title element:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
@@ -20748,33 +20838,33 @@ have to wait for the <em>entirety</em> of the response to arrive, so the <code>t
 is also async.</p>
 <p>We have to explicitly await both of these futures, because futures in Rust are
 <em>lazy</em>: they don’t do anything until you ask them to with <code>await</code>. (In fact,
-Rust will show a compiler warning if you do not use a future.) This should
+Rust will show a compiler warning if you don’t use a future.) This should
 remind you of our discussion of iterators <a href="ch13-02-iterators.html">back in Chapter 13</a>.
 Iterators do nothing unless you call their <code>next</code> method—whether directly, or
-using <code>for</code> loops or methods like <code>map</code> which use <code>next</code> under the hood. With
+using <code>for</code> loops or methods such as <code>map</code> which use <code>next</code> under the hood. With
 futures, the same basic idea applies: they do nothing unless you explicitly ask
-them to. This laziness allows Rust to avoid running async code until it is
+them to. This laziness allows Rust to avoid running async code until it’s
 actually needed.</p>
 <section class="note" aria-role="note">
 <p>Note: This is different from the behavior we saw when using <code>thread::spawn</code> in
 the previous chapter, where the closure we passed to another thread started
-running immediately. It is also different from how many other languages
-approach async! But it is important for Rust. We will see why that is later.</p>
+running immediately. It’s also different from how many other languages
+approach async! But it’s important for Rust. We’ll see why that is later.</p>
 </section>
 <p>Once we have <code>response_text</code>, we can then parse it into an instance of the
 <code>Html</code> type using <code>Html::parse</code>. Instead of a raw string, we now have a data
 type we can use to work with the HTML as a richer data structure. In particular,
 we can use the <code>select_first</code> method to find the first instance of a given CSS
-selector. By passing the string <code>"title"</code>, we will get the first <code>&lt;title&gt;</code>
-element in the document, if there is one. Since there may not be any matching
+selector. By passing the string <code>"title"</code>, we’ll get the first <code>&lt;title&gt;</code>
+element in the document, if there is one. Because there may not be any matching
 element, <code>select_first</code> returns an <code>Option&lt;ElementRef&gt;</code>. Finally, we use the
-<code>Option::map</code> method, which lets us work with the item in the <code>Option</code> if it is
-present, and do nothing if it is not. (We could also use a <code>match</code> expression
+<code>Option::map</code> method, which lets us work with the item in the <code>Option</code> if it’s
+present, and do nothing if it isn’t. (We could also use a <code>match</code> expression
 here, but <code>map</code> is more idiomatic.) In the body of the function we supply to
 <code>map</code>, we call <code>inner_html</code> on the <code>title_element</code> to get its content, which is
 a <code>String</code>. When all is said and done, we have an <code>Option&lt;String&gt;</code>.</p>
-<p>Notice that Rust’s <code>await</code> keyword goes after the expression you are awaiting,
-not before it. That is, it is a <em>postfix keyword</em>. This may be different from
+<p>Notice that Rust’s <code>await</code> keyword goes after the expression you’re awaiting,
+not before it. That is, it’s a <em>postfix keyword</em>. This may be different from
 what you might be used to if you have used async in other languages. Rust chose
 this because it makes chains of methods much nicer to work with. As a result, we
 can change the body of <code>page_url_for</code> to chain the <code>trpl::get</code> and <code>text</code>
@@ -20798,16 +20888,17 @@ function calls together with <code>await</code> between them, as shown in Listin
 <figcaption>Listing 17-2: Chaining with the <code>await</code> keyword</figcaption>
 </figure>
 <p>With that, we have successfully written our first async function! Before we add
-some code in <code>main</code> to call it, let’s talk a little more about what we have
+some code in <code>main</code> to call it, let’s talk a little more about what we’ve
 written and what it means.</p>
 <p>When Rust sees a block marked with the <code>async</code> keyword, it compiles it into a
-unique, anonymous data type which implements the <code>Future</code> trait. When Rust
-sees a function marked with <code>async</code>, it compiles it into a non-async function
-whose body is an async block. Thus, an async function’s return type is the type
-of the anonymous data type the compiler creates for that async block.</p>
+unique, anonymous data type which implements the <code>Future</code> trait. When Rust sees
+a function marked with <code>async</code>, it compiles it into a non-async function whose
+body is an async block. An async function’s return type is the type of the
+anonymous data type the compiler creates for that async block.</p>
 <p>Thus, writing <code>async fn</code> is equivalent to writing a function which returns a
-<em>future</em> of the return type. When the compiler sees a function like <code>async fn page_title</code> in Listing 17-1, it is equivalent to a non-async function defined
-like this:</p>
+<em>future</em> of the return type. When the compiler sees a function definition such
+as the <code>async fn page_title</code> in Listing 17-1, it’s equivalent to a non-async
+function defined like this:</p>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate trpl; // required for mdbook test
@@ -20837,21 +20928,21 @@ the expression returned from the function.</li>
 above. That value matches the <code>Output</code> type in the return type. This is just
 like other blocks you have seen.</li>
 <li>The new function body is an <code>async move</code> block because of how it uses the
-<code>name</code> argument. (We will talk about <code>async</code> vs. <code>async move</code> much more later
+<code>url</code> parameter. (We’ll talk about <code>async</code> vs. <code>async move</code> much more later
 in the chapter.)</li>
-<li>The new version of the function has a kind of lifetime we have not seen before
+<li>The new version of the function has a kind of lifetime we haven’t seen before
 in the output type: <code>'_</code>. Because the function returns a <code>Future</code> which refers
 to a reference—in this case, the reference from the <code>url</code> parameter—we need to
-tell Rust that we mean for that reference to be included. We do not have to
+tell Rust that we mean for that reference to be included. We don’t have to
 name the lifetime here, because Rust is smart enough to know there is only one
 reference which could be involved, but we <em>do</em> have to be explicit that the
 resulting <code>Future</code> is bound by that lifetime.</li>
 </ul>
-<p>Now we can call <code>page_title</code> in <code>main</code>. To start, we will just get the title for
-a single page. In Listing 17-3, we follow the same pattern we used for getting
-command line arguments back in Chapter 12. Then we pass the first URL
-<code>page_title</code>, and await the result. Since the value produced by the future is an
-<code>Option&lt;String&gt;</code>, we use a <code>match</code> expression to print different messages to
+<p>Now we can call <code>page_title</code> in <code>main</code>. To start, we’ll just get the title
+for a single page. In Listing 17-3, we follow the same pattern we used for
+getting command line arguments back in Chapter 12. Then we pass the first URL
+<code>page_title</code>, and await the result. Because the value produced by the future is
+an <code>Option&lt;String&gt;</code>, we use a <code>match</code> expression to print different messages to
 account for whether the page had a <code>&lt;title&gt;</code>.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
@@ -20876,9 +20967,9 @@ account for whether the page had a <code>&lt;title&gt;</code>.</p>
 </span><span class="boring">}</span></code></pre>
 <figcaption>Listing 17-3: Calling the <code>page_title</code> function from <code>main</code> with a user-supplied argument</figcaption>
 </figure>
-<p>Unfortunately, this does not compile. The only place we can use the <code>await</code>
-keyword is in async functions or blocks, so Rust will not let us mark <code>main</code> as
-<code>async</code>.</p>
+<p>Unfortunately, this doesn’t compile. The only place we can use the <code>await</code>
+keyword is in async functions or blocks, and Rust won’t let us mark the
+special <code>main</code> function as <code>async</code>.</p>
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-03
 cargo build
@@ -20890,11 +20981,12 @@ copy just the compiler error
 6 | async fn main() {
   | ^^^^^^^^^^^^^^^ `main` function is not allowed to be `async`
 </code></pre>
-<p>The reason is that async code needs a <em>runtime</em>: a Rust crate which manages the
-details of executing asynchronous code. A program’s <code>main</code> function can
-initialize a runtime, but it is not a runtime itself. (We will see more about
-why this is a bit later.) Every async program in Rust has at least one place
-where it sets up a runtime and executes the futures.</p>
+<p>The reason <code>main</code> can’t be marked <code>async</code> is that async code needs a <em>runtime</em>:
+a Rust crate which manages the details of executing asynchronous code. A
+program’s <code>main</code> function can <em>initialize</em> a runtime, but it’s not a runtime
+<em>itself</em>. (We’ll see more about why this is a bit later.) Every Rust program
+that executes async code has at least one place where it sets up a runtime and
+executes the futures.</p>
 <p>Most languages which support async bundle a runtime with the language. Rust does
 not. Instead, there are many different async runtimes available, each of which
 makes different tradeoffs suitable to the use case they target. For example, a
@@ -20902,8 +20994,8 @@ high-throughput web server with many CPU cores and a large amount of RAM has
 very different different needs than a microcontroller with a single core, a
 small amount of RAM, and no ability to do heap allocations. The crates which
 provide those runtimes also often supply async versions of common functionality
-like file or network I/O.</p>
-<p>Here, and throughout the rest of this chapter, we will use the <code>run</code> function
+such as file or network I/O.</p>
+<p>Here, and throughout the rest of this chapter, we’ll use the <code>run</code> function
 from the <code>trpl</code> crate, which takes a future as an argument and runs it to
 completion. Behind the scenes, calling <code>run</code> sets up a runtime to use to run the
 future passed in. Once the future completes, <code>run</code> returns whatever value the
@@ -20911,8 +21003,8 @@ future produced.</p>
 <p>We could pass the future returned by <code>page_title</code> directly to <code>run</code>. Once it
 completed, we would be able to match on the resulting <code>Option&lt;String&gt;</code>, the way
 we tried to do in Listing 17-3. However, for most of the examples in the chapter
-(and most async code in the real world!), we will be doing more than just one
-async function call, so instead we will pass an <code>async</code> block and explicitly
+(and most async code in the real world!), we’ll be doing more than just one
+async function call, so instead we’ll pass an <code>async</code> block and explicitly
 await the result of calling <code>page_title</code>, as in Listing 17-4.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
@@ -20921,18 +21013,18 @@ await the result of calling <code>page_title</code>, as in Listing 17-4.</p>
 </span><span class="boring">
 </span><span class="boring">use trpl::Html;
 </span><span class="boring">
-</span><span class="boring">fn main() {
-</span><span class="boring">    let args: Vec&lt;String&gt; = std::env::args().collect();
-</span><span class="boring">
-</span>    trpl::run(async {
+</span>fn main() {
+    let args: Vec&lt;String&gt; = std::env::args().collect();
+
+    trpl::run(async {
         let url = &amp;args[1];
         match page_title(url).await {
             Some(title) =&gt; println!("The title for {url} was {title}"),
             None =&gt; println!("{url} had no title"),
         }
     })
-<span class="boring">}
-</span><span class="boring">
+}
+<span class="boring">
 </span><span class="boring">async fn page_title(url: &amp;str) -&gt; Option&lt;String&gt; {
 </span><span class="boring">    let response_text = trpl::get(url).await.text().await;
 </span><span class="boring">    Html::parse(&amp;response_text)
@@ -20947,16 +21039,15 @@ The title for http://www.rust-lang.org was
             Rust Programming Language
 </code></pre>
 <p>Phew: we finally have some working async code! This now compiles, and we can run
-it. Pick a couple URLs and run the command line tool. You may discover that some
-sites are reliably faster than others, while in other cases which site “wins”
-varies from run to run. Let’s briefly turn our attention back to how futures
-work.</p>
+it. Before we add code to race two sites against each other, let’s briefly turn
+our attention back to how futures work.</p>
 <p>Each <em>await point</em>—that is, every place where the code uses the <code>await</code>
 keyword—represents a place where control gets handed back to the runtime. To
 make that work, Rust needs to keep track of the state involved in the async
 block, so that the runtime can kick off some other work and then come back when
-it is ready to try advancing this one again. This is an invisible state machine,
-as if you wrote something like this:</p>
+it’s ready to try advancing this one again. This is an invisible state machine,
+as if you wrote an enum in this way to save the current state at each <code>await</code>
+point:</p>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span><span class="boring">extern crate trpl; // required for mdbook test
@@ -20967,12 +21058,13 @@ as if you wrote something like this:</p>
     TextAwaitPoint { response: trpl::Response },
 }
 <span class="boring">}</span></code></pre></pre>
-<p>Writing that out by hand would be tedious and error-prone, especially when
-making changes to code later. Instead, the Rust compiler creates and manages the
-state machine data structures for async code automatically. If you’re wondering:
-yep, the normal borrowing and ownership rules around data structures all apply.
-Happily, the compiler also handles checking those for us, and has good error
-messages. We will work through a few of those later in the chapter!</p>
+<p>Writing the code to transition between each state by hand would be tedious and
+error-prone, especially when adding more functionality and more states to the
+code later. Instead, the Rust compiler creates and manages the state machine
+data structures for async code automatically. If you’re wondering: yep, the
+normal borrowing and ownership rules around data structures all apply. Happily,
+the compiler also handles checking those for us, and has good error messages.
+We’ll work through a few of those later in the chapter!</p>
 <p>Ultimately, something has to execute that state machine. That something is a
 runtime. (This is why you may sometimes come across references to <em>executors</em>
 when looking into runtimes: an executor is the part of a runtime responsible for
@@ -20980,17 +21072,17 @@ executing the async code.)</p>
 <p>Now we can understand why the compiler stopped us from making <code>main</code> itself an
 async function back in Listing 17-3. If <code>main</code> were an async function, something
 else would need to manage the state machine for whatever future <code>main</code> returned,
-but main is the starting point for the program! Instead, we use the <code>trpl::run</code>
-function, which sets up a runtime and runs the future returned by <code>page_title</code>
-until it returns <code>Ready</code>.</p>
+but <code>main</code> is the starting point for the program! Instead, we call the
+<code>trpl::run</code> function in <code>main</code>, which sets up a runtime and runs the future
+returned by the <code>async</code> block until it returns <code>Ready</code>.</p>
 <section class="note" aria-role="note">
 <p>Note: some runtimes provide macros to make it so you <em>can</em> write an async main
 function. Those macros rewrite <code>async fn main() { ... }</code> to be a normal <code>fn main</code> which does the same thing we did by hand in Listing 17-5: call a
 function which runs a future to completion the way <code>trpl::run</code> does.</p>
 </section>
 <p>Let’s put these pieces together and see how we can write concurrent code, by
-calling <code>page_title_for</code> with two different URLs passed in from the command line
-and racing it.</p>
+calling <code>page_title</code> with two different URLs passed in from the command line
+and racing them.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
 <!-- should_panic,noplayground because mdbook does not pass args -->
@@ -21028,49 +21120,50 @@ async fn page_title(url: &amp;str) -&gt; (&amp;str, Option&lt;String&gt;) {
 }</code></pre>
 <figcaption>Listing 17-5: </figcaption>
 </figure>
-<p>In Listing 17-5, we begin by calling <code>page_title</code> with both of the user-supplied
+<p>In Listing 17-5, we begin by calling <code>page_title</code> for each of the user-supplied
 URLs. We save the futures produced by calling <code>page_title</code> as <code>title_fut_1</code> and
 <code>title_fut_2</code>. Remember, these don’t do anything yet, because futures are lazy,
-and we have not yet awaited them. Then we pass the futures to <code>trpl::race</code>,
+and we haven’t yet awaited them. Then we pass the futures to <code>trpl::race</code>,
 which returns a value to indicate which of the futures passed to it finishes
 first.</p>
 <section class="note" aria-role="note">
 <p>Note: Under the hood, <code>race</code> is built on a more general function, <code>select</code>,
 which you will encounter more often in real-world Rust code. A <code>select</code>
-function can do a lot of things that <code>trpl::race</code> function cannot, but it also
+function can do a lot of things that <code>trpl::race</code> function can’t, but it also
 has some additional complexity that we can skip over for now.</p>
 </section>
-<p>Either future can legitimately “win,” so it does not make sense to return a
-<code>Result</code>. Instead, <code>race</code> returns a type we have not seen before,
-<code>trpl::Either</code>. The <code>Either</code> type is somewhat like a <code>Result</code>, in that it has
-two cases. Unlike <code>Result</code>, though, there is no notion of success or failure
-baked into <code>Either</code>. Instead, it uses <code>Left</code> and <code>Right</code> to indicate “one or the
-other”.</p>
+<p>Either future can legitimately “win,” so it doesn’t make sense to return a
+<code>Result</code>. Instead, <code>race</code> returns a type we haven’t seen before,
+<code>trpl::Either</code>. The <code>Either</code> type is somewhat similar to a <code>Result</code>, in that it
+has two cases. Unlike <code>Result</code>, though, there is no notion of success or
+failure baked into <code>Either</code>. Instead, it uses <code>Left</code> and <code>Right</code> to indicate
+“one or the other”.</p>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum Either&lt;A, B&gt; {
     Left(A),
-    Right(B)
+    Right(B),
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The <code>race</code> function returns <code>Left</code> if the first argument finishes first, with
 that future’s output, and <code>Right</code> with the second future argument’s output if
 <em>that</em> one finishes first. This matches the order the arguments appear when
 calling the function: the first argument is to the left of the second argument.</p>
-<p>We also update <code>page_title_for</code> to return the same URL passed in. That way, if
+<p>We also update <code>page_title</code> to return the same URL passed in. That way, if
 the page which returns first does not have a <code>&lt;title&gt;</code> we can resolve, we can
 still print a meaningful message. With that information available, we wrap up by
 updating our <code>println!</code> output to indicate both which URL finished first and
 what the <code>&lt;title&gt;</code> was for the web page at that URL, if any.</p>
-<p>You have built a small working web scraper now, which we could extend in a bunch
-of different directions. More importantly, you have learned the basics of
-working with futures, so we can now dig into even more of the things we can <em>do</em>
-with async.</p>
+<p>You have built a small working web scraper now! Pick a couple URLs and run the
+command line tool. You may discover that some sites are reliably faster than
+others, while in other cases which site “wins” varies from run to run. More
+importantly, you’ve learned the basics of working with futures, so we can now
+dig into even more of the things we can do with async.</p>
 <!-- TODO: map source link version to version of Rust? -->
 <div style="break-before: page; page-break-before: always;"></div><h2 id="concurrency-with-async"><a class="header" href="#concurrency-with-async">Concurrency With Async</a></h2>
-<p>In this section, we will apply async to some of the same concurrency challenges
-we tackled with threads in chapter 16. Since we already talked about a lot of
-the key ideas there, in this section we will focus on what is different between
+<p>In this section, we’ll apply async to some of the same concurrency challenges
+we tackled with threads in chapter 16. Because we already talked about a lot of
+the key ideas there, in this section we’ll focus on what’s different between
 threads and futures.</p>
 <p>In many cases, the APIs for working with concurrency using async are very
 similar to those for using threads. In other cases, they end up being shaped
@@ -21110,8 +21203,8 @@ fn main() {
 that our top-level function can be async.</p>
 <section class="note" aria-role="note">
 <p>Note: From this point forward in the chapter, every example will include this
-exact same wrapping code with <code>trpl::run</code> in <code>main</code>, so we will often skip it
-just like we do with <code>main</code>. Don’t forget to include it in your code!</p>
+exact same wrapping code with <code>trpl::run</code> in <code>main</code>, so we’ll often skip it
+just as we do with <code>main</code>. Don’t forget to include it in your code!</p>
 </section>
 <p>Then we write two loops within that block, each with a <code>trpl::sleep</code> call in it,
 which waits for half a second (500 milliseconds) before sending the next
@@ -21187,8 +21280,8 @@ hi number 9 from the first task!
 <p>So far, it looks like async and threads give us the same basic outcomes, just
 with different syntax: using <code>await</code> instead of calling <code>join</code> on the join
 handle, and awaiting the <code>sleep</code> calls.</p>
-<p>The bigger difference is that we did not need to spawn another operating system
-thread to do this. In fact, we do not even need to spawn a task here. Because
+<p>The bigger difference is that we didn’t need to spawn another operating system
+thread to do this. In fact, we don’t even need to spawn a task here. Because
 async blocks compile to anonymous futures, we can put each loop in an async
 block and have the runtime run them both to completion using the <code>trpl::join</code>
 function.</p>
@@ -21199,7 +21292,7 @@ future whose output is a tuple with the output of each of the futures you passed
 in once <em>both</em> complete. Thus, in Listing 17-8, we use <code>trpl::join</code> to wait for
 both <code>fut1</code> and <code>fut2</code> to finish. We do <em>not</em> await <code>fut1</code> and <code>fut2</code>, but
 instead the new future produced by <code>trpl::join</code>. We ignore the output, because
-it is just a tuple with two unit values in it.</p>
+it’s just a tuple with two unit values in it.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
@@ -21245,7 +21338,7 @@ hi number 7 from the first task!
 hi number 8 from the first task!
 hi number 9 from the first task!
 </code></pre>
-<p>Here, you will see the exact same order every time, which is very different from
+<p>Here, you’ll see the exact same order every time, which is very different from
 what we saw with threads. That is because the <code>trpl::join</code> function is <em>fair</em>,
 meaning it checks each future equally often, alternating between them, and never
 lets one race ahead if the other is ready. With threads, the operating system
@@ -21253,7 +21346,7 @@ decides which thread to check and how long to let it run. With async Rust, the
 runtime decides which task to check. (In practice, the details get complicated
 because an async runtime might use operating system threads under the hood as
 part of how it manages concurrency, so guaranteeing fairness can be more work
-for a runtime—but it is still possible!) Runtimes do not have to guarantee
+for a runtime—but it’s still possible!) Runtimes don’t have to guarantee
 fairness for any given operation, and runtimes often offer different APIs to let
 you choose whether you want fairness or not.</p>
 <p>Try some of these different variations on awaiting the futures and see what they
@@ -21267,11 +21360,11 @@ after the body of second loop.</li>
 <p>For an extra challenge, see if you can figure out what the output will be in
 each case <em>before</em> running the code!</p>
 <h3 id="message-passing"><a class="header" href="#message-passing">Message Passing</a></h3>
-<p>Sharing data between futures will also be familiar: we will use message passing
-again, but this with async versions of the types and functions. We will take a
+<p>Sharing data between futures will also be familiar: we’ll use message passing
+again, but this with async versions of the types and functions. We’ll take a
 slightly different path than we did in Chapter 16, to illustrate some of the key
 differences between thread-based and futures-based concurrency. In Listing 17-9,
-we will begin with just a single async block—<em>not</em> spawning a separate task like
+we’ll begin with just a single async block—<em>not</em> spawning a separate task as
 we spawned a separate thread.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
@@ -21295,15 +21388,15 @@ single-consumer channel API we used with threads back in Chapter 16. The async
 version of the API is only a little different from the thread-based version: it
 uses a mutable rather than an immutable receiver <code>rx</code>, and its <code>recv</code> method
 produces a future we need to await rather than producing the value directly. Now
-we can send messages from the sender to the receiver. Notice that we do not have
+we can send messages from the sender to the receiver. Notice that we don’t have
 to spawn a separate thread or even a task; we merely need to await the <code>rx.recv</code>
 call.</p>
 <p>The synchronous <code>Receiver::recv</code> method in <code>std::mpsc::channel</code> blocks until
 it receives a message. The <code>trpl::Receiver::recv</code> method does not, because it
 is async. Instead of blocking, it hands control back to the runtime until either
-a message is received or the send side of the channel closes. By contrast, we do
-not await the <code>send</code> call, because it does not block. It does not need to,
-because the channel we are sending it into is unbounded.</p>
+a message is received or the send side of the channel closes. By contrast, we
+don’t await the <code>send</code> call, because it doesn’t block. It doesn’t need to,
+because the channel we’re sending it into is unbounded.</p>
 <section class="note" aria-role="note">
 <p>Note: Because all of this async code runs in an async block in a <code>trpl::run</code>
 call, everything within it can avoid blocking. However, the code <em>outside</em> it
@@ -21313,7 +21406,7 @@ code, and thus where to transition between sync and async code. In most async
 runtimes, <code>run</code> is actually named <code>block_on</code> for exactly this reason.</p>
 </section>
 <p>Notice two things about this example: First, the message will arrive right away!
-Second, although we use a future here, there is no concurrency yet. Everything
+Second, although we use a future here, there’s no concurrency yet. Everything
 in the listing happens in sequence, just as it would if there were no futures
 involved.</p>
 <p>Let’s address the first part by sending a series of messages, and sleep in
@@ -21350,11 +21443,11 @@ between them, as shown in Listing 17-10:</p>
 </figure>
 <p>In addition to sending the messages, we need to receive them. In this case, we
 could do that manually, by just doing <code>rx.recv().await</code> four times, because we
-know how many messages are coming in. In the real world, though, we will
+know how many messages are coming in. In the real world, though, we’ll
 generally be waiting on some <em>unknown</em> number of messages. In that case, we need
 to keep waiting until we determine that there are no more messages.</p>
 <p>In Listing 16-10, we used a <code>for</code> loop to process all the items received from a
-synchronous channel. However, Rust does not yet have a way to write a <code>for</code> loop
+synchronous channel. However, Rust doesn’t yet have a way to write a <code>for</code> loop
 over an <em>asynchronous</em> series of items. Instead, we need to use a new kind of
 loop we haven’t seen before, the <code>while let</code> conditional loop. A <code>while let</code>
 loop is the loop version of the <code>if let</code> construct we saw back in Chapter 6. The
@@ -21369,7 +21462,7 @@ resolve to <code>None</code> to indicate that there are no more values, and we s
 polling—that is, stop awaiting.</p>
 <p>The <code>while let</code> loop pulls all of this together. If the result of calling
 <code>rx.recv().await</code> is <code>Some(message)</code>, we get access to the message and we can
-use it in the loop body, just like we could with <code>if let</code>. If the result is
+use it in the loop body, just as we could with <code>if let</code>. If the result is
 <code>None</code>, the loop ends. Every time the loop completes, it hits the await point
 again, so the runtime pauses it again until another message arrives.</p>
 <p>The code now successfully sends and receives all of the messages. Unfortunately,
@@ -21382,17 +21475,17 @@ class="keystroke">ctrl-c</span>.</p>
 delay, rather than coming in with delays in between each one. Within a given
 async block, the order that <code>await</code> keywords appear in the code is also the
 order they happen when running the program.</p>
-<p>There is only one async block in Listing 17-10, so everything in it runs
-linearly. There is still no concurrency. All the <code>tx.send</code> calls happen,
+<p>There’s only one async block in Listing 17-10, so everything in it runs
+linearly. There’s still no concurrency. All the <code>tx.send</code> calls happen,
 interspersed with all of the <code>trpl::sleep</code> calls and their associated await
 points. Only then does the <code>while let</code> loop get to go through any of the <code>await</code>
 points on the <code>recv</code> calls.</p>
 <p>To get the behavior we want, where the sleep delay happens between receiving
 each message, we need to put the <code>tx</code> and <code>rx</code> operations in their own async
 blocks. Then the runtime can execute each of them separately using <code>trpl::join</code>,
-just like in the counting example. Once again, we await the result of calling
+just as in the counting example. Once again, we await the result of calling
 <code>trpl::join</code>, not the individual futures. If we awaited the individual futures
-in sequence, we would just end up back in a sequential flow—exactly what we are
+in sequence, we would just end up back in a sequential flow—exactly what we’re
 trying <em>not</em> to do.</p>
 <!-- We cannot test this one because it never stops! -->
 <figure class="listing">
@@ -21439,27 +21532,28 @@ interacts with <code>trpl::join</code>:</p>
 passed to it have completed.</li>
 <li>The <code>tx</code> future completes once it finishes sleeping after sending the last
 message in <code>vals</code>.</li>
-<li>The <code>rx</code> future will not complete until the <code>while let</code> loop ends.</li>
-<li>The <code>while let</code> loop will not end until awaiting <code>rx.recv</code> produces <code>None</code>.</li>
+<li>The <code>rx</code> future won’t complete until the <code>while let</code> loop ends.</li>
+<li>The <code>while let</code> loop won’t end until awaiting <code>rx.recv</code> produces <code>None</code>.</li>
 <li>Awaiting <code>rx.recv</code> will only return <code>None</code> once the other end of the channel
 is closed.</li>
 <li>The channel will only close if we call <code>rx.close</code> or when the sender side,
 <code>tx</code>, is dropped.</li>
-<li>We do not call <code>rx.close</code> anywhere, and <code>tx</code> will not be dropped until the
+<li>We don’t call <code>rx.close</code> anywhere, and <code>tx</code> won’t be dropped until the
 outermost async block passed to <code>trpl::run</code> ends.</li>
-<li>The block cannot end because it is blocked on <code>trpl::join</code> completing, which
+<li>The block can’t end because it is blocked on <code>trpl::join</code> completing, which
 takes us back to the top of this list!</li>
 </ul>
-<p>We could manually close <code>rx</code> by calling <code>rx.close</code> somewhere, but that does not
+<p>We could manually close <code>rx</code> by calling <code>rx.close</code> somewhere, but that doesn’t
 make much sense. Stopping after handling some arbitrary number of messages would
 make the program shut down, but we could miss messages. We need some other way
 to make sure that <code>tx</code> gets dropped <em>before</em> the end of the function.</p>
-<p>Right now, the async block where we send the messages only borrows <code>tx</code>, but if
-we could move <code>tx</code> into that async block, it would be dropped once that block
-ends. In Chapter 13, we learned how to use the <code>move</code> keyword with closures, and
-in Chapter 16, we saw that we often need to use move data into closures when
-working with threads. The same basic dynamics apply to async blocks, so the
-<code>move</code> keyword works with async blocks just like it does with closures.</p>
+<p>Right now, the async block where we send the messages only borrows <code>tx</code> because
+sending a message doesn’t require ownership, but if we could move <code>tx</code> into
+that async block, it would be dropped once that block ends. In Chapter 13, we
+learned how to use the <code>move</code> keyword with closures, and in Chapter 16, we saw
+that we often need to move data into closures when working with threads. The
+same basic dynamics apply to async blocks, so the <code>move</code> keyword works with
+async blocks just as it does with closures.</p>
 <p>In Listing 17-12, we change the async block for sending messages from a plain
 <code>async</code> block to an <code>async move</code> block. When we run <em>this</em> version of the code,
 it shuts down gracefully after the last message is sent and received.</p>
@@ -21504,10 +21598,10 @@ clone <code>tx</code>, creating <code>tx1</code> outside the first async block. 
 that block just as we did before with <code>tx</code>. Then, later, we move the original
 <code>tx</code> into a <em>new</em> async block, where we send more messages on a slightly slower
 delay. We happen to put this new async block after the async block for receiving
-messages, but it could go before it just as well. They key is the order of the
+messages, but it could go before it just as well. The key is the order of the
 futures are awaited in, not the order they are created in.</p>
 <p>Both of the async blocks for sending messages need to be <code>async move</code> blocks, so
-that both <code>tx</code> and <code>tx1</code> get dropped when those blocks finish. Otherwise we will
+that both <code>tx</code> and <code>tx1</code> get dropped when those blocks finish. Otherwise we’ll
 end up back in the same infinite loop we started out in. Finally, we switch from
 <code>trpl::join</code> to <code>trpl::join3</code> to handle the additional future.</p>
 <figure class="listing">
@@ -21640,7 +21734,7 @@ Thus, we could rewrite the code from Listing 17-13 to use <code>join!</code> ins
 know the number of futures ahead of time. In real-world Rust, though, pushing
 futures into a collection and then waiting on some or all the futures in that
 collection to complete is a common pattern.</p>
-<p>To check all the futures in some collection, we will need to iterate over and
+<p>To check all the futures in some collection, we’ll need to iterate over and
 join on <em>all</em> of them. The <code>trpl::join_all</code> function accepts any type which
 implements the <code>Iterator</code> trait, which we learned about back in Chapter 13, so
 it seems like just the ticket. Let’s try putting our futures in a vector, and
@@ -21696,7 +21790,7 @@ replace <code>join!</code> with <code>join_all</code>.</p>
 </span><span class="boring">}</span></code></pre>
 <figcaption>Listing 17-15: Storing anonymous futures in a vector and calling <code>join_all</code></figcaption>
 </figure>
-<p>Unfortunately, this does not compile. Instead, we get this error:</p>
+<p>Unfortunately, this doesn’t compile. Instead, we get this error:</p>
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-16/
 cargo build
@@ -21731,24 +21825,24 @@ copy just the compiler error
    = note: no two async blocks, even if identical, have the same type
    = help: consider pinning your async block and and casting it to a trait object
 </code></pre>
-<p>This might be surprising. After all, none of them returns anything, so each
+<p>This might be surprising. After all, none of them return anything, so each
 block produces a <code>Future&lt;Output = ()&gt;</code>. However, <code>Future</code> is a trait, not a
 concrete type. The concrete types are the individual data structures generated
-by the compiler for async blocks. You cannot put two different hand-written
+by the compiler for async blocks. You can’t put two different hand-written
 structs in a <code>Vec</code>, and the same thing applies to the different structs
 generated by the compiler.</p>
 <p>To make this work, we need to use <em>trait objects</em>, just as we did in <a href="ch12-03-improving-error-handling-and-modularity.html">“Returning
-Errors from the run function”</a> in Chapter 12. (We will cover trait objects
+Errors from the run function”</a> in Chapter 12. (We’ll cover trait objects
 in detail in Chapter 18.) Using trait objects lets us treat each of the
-anonymous futures produced by these types as the same type, since all of them
+anonymous futures produced by these types as the same type, because all of them
 implement the <code>Future</code> trait.</p>
 <section class="note" aria-role="note">
 <p>Note: In Chapter 8, we discussed another way to include multiple types in a
 <code>Vec</code>: using an enum to represent each of the different types which can
-appear in the vector. We cannot do that here, though. For one thing, we have
+appear in the vector. We can’t do that here, though. For one thing, we have
 no way to name the different types, because they are anonymous. For another,
 the reason we reached for a vector and <code>join_all</code> in the first place was to be
-able to work with a dynamic collection of futures where we do not know what
+able to work with a dynamic collection of futures where we don’t know what
 they will all be until runtime.</p>
 </section>
 <p>We start by wrapping each of the futures in the <code>vec!</code> in a <code>Box::new</code>, as shown
@@ -21806,12 +21900,11 @@ in Listing 17-16.</p>
 </span><span class="boring">}</span></code></pre>
 <figcaption>Listing 17-16: Trying to use <code>Box::new</code> to align the types of the futures in a <code>Vec</code></figcaption>
 </figure>
-<p>Unfortunately, this still does not compile. In fact, we have the same basic
+<p>Unfortunately, this still doesn’t compile. In fact, we have the same basic
 error we did before, but we get one for both the second and third <code>Box::new</code>
 calls, and we also get new errors referring to the <code>Unpin</code> trait. We will come
 back to the <code>Unpin</code> errors in a moment. First, let’s fix the type errors on the
-<code>Box::new</code> calls, by explicitly providing the type of <code>futures</code> as a trait
-object (Listing 17-17).</p>
+<code>Box::new</code> calls, by explicitly annotating the type of the <code>futures</code> variable:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
@@ -21943,7 +22036,7 @@ For more information about an error, try `rustc --explain E0277`.
 <p>That is a <em>lot</em> to digest, so let’s pull it apart. The first part of the message
 tell us that the first async block (<code>src/main.rs:8:23: 20:10</code>) does not
 implement the <code>Unpin</code> trait, and suggests using <code>pin!</code> or <code>Box::pin</code> to resolve
-it. Later in the chapter, we will dig into a few more details about <code>Pin</code> and
+it. Later in the chapter, we’ll dig into a few more details about <code>Pin</code> and
 <code>Unpin</code>. For the moment, though, we can just follow the compiler’s advice to get
 unstuck! In Listing 17-18, we start by updating the type annotation for
 <code>futures</code>, with a <code>Pin</code> wrapping each <code>Box</code>. Second, we use <code>Box::pin</code> to pin
@@ -22019,9 +22112,9 @@ received 'future'
 received 'you'
 </code></pre>
 <p>Phew!</p>
-<p>There is a bit more we can explore here. For one thing, using <code>Pin&lt;Box&lt;T&gt;&gt;</code>
+<p>There’s a bit more we can explore here. For one thing, using <code>Pin&lt;Box&lt;T&gt;&gt;</code>
 comes with a small amount of extra overhead from putting these futures on the
-heap with <code>Box</code>—and we are only doing that to get the types to line up. We don’t
+heap with <code>Box</code>—and we’re only doing that to get the types to line up. We don’t
 actually <em>need</em> the heap allocation, after all: these futures are local to this
 particular function. As noted above, <code>Pin</code> is itself a wrapper type, so we can
 get the benefit of having a single type in the <code>Vec</code>—the original reason we
@@ -22124,8 +22217,8 @@ syntax for working with them, and that is a good thing.</p>
 <h3 id="racing-futures"><a class="header" href="#racing-futures">Racing futures</a></h3>
 <p>When we “join” futures with the <code>join</code> family of functions and macros, we
 require <em>all</em> of them to finish before we move on. Sometimes, though, we only
-need <em>some</em> future from a set to finish before we move on—kind of like racing
-one future against another.</p>
+need <em>some</em> future from a set to finish before we move on—kind of similar to
+racing one future against another.</p>
 <p>In Listing 17-21, we once again use <code>trpl::race</code> to run two futures, <code>slow</code> and
 <code>fast</code>, against each other. Each one prints a message when it starts running,
 pauses for some amount of time by calling and awaiting <code>sleep</code>, and then prints
@@ -22161,15 +22254,15 @@ interesting behavior happens in the body of the async blocks.</p>
 </figure>
 <p>Notice that if you flip the order of the arguments to <code>race</code>, the order of the
 “started” messages changes, even though the <code>fast</code> future always completes
-first. That is because the implementation of this particular <code>race</code> function is
-not fair. It always runs the futures passed as arguments in the order they are
+first. That’s because the implementation of this particular <code>race</code> function is
+not fair. It always runs the futures passed as arguments in the order they’re
 passed. Other implementations <em>are</em> fair, and will randomly choose which future
-to poll first. Regardless of whether the implementation of race we are using is
+to poll first. Regardless of whether the implementation of race we’re using is
 fair, though, <em>one</em> of the futures will run up to the first <code>await</code> in its body
 before another task can start.</p>
 <p>Recall from <a href="ch17-01-futures-and-syntax.html#our-first-async-program">Our First Async Program</a> that at each await point,
 Rust gives a runtime a chance to pause the task and switch to another one if the
-future being awaited is not ready. The inverse is also true: Rust <em>only</em> pauses
+future being awaited isn’t ready. The inverse is also true: Rust <em>only</em> pauses
 async blocks and hands control back to a runtime at an await point. Everything
 between await points is synchronous.</p>
 <p>That means if you do a bunch of work in an async block without an await point,
@@ -22177,7 +22270,7 @@ that future will block any other futures from making progress. You may sometimes
 hear this referred to as one future <em>starving</em> other futures. In some cases,
 that may not be a big deal. However, if you are doing some kind of expensive
 setup or long-running work, or if you have a future which will keep doing some
-particular task indefinitely, you will need to think about when and where to
+particular task indefinitely, you’ll need to think about when and where to
 hand control back to the runtime.</p>
 <p>By the same token, if you have long-running blocking operations, async can be a
 useful tool for providing ways for different parts of the program to relate to
@@ -22264,13 +22357,13 @@ copy just the output
 'b' ran for 350ms
 'a' finished.
 </code></pre>
-<p>As with our earlier example, <code>race</code> still finishes as soon as <code>a</code> is done. There
-is no interleaving between the two futures, though. The <code>a</code> future does all of
-its work until the <code>trpl::sleep</code> call is awaited, then the <code>b</code> future does all
-of its work until its own <code>trpl::sleep</code> call is awaited, and then the <code>a</code> future
-completes. To allow both futures to make progress between their slow tasks, we
-need await points so we can hand control back to the runtime. That means we need
-something we can await!</p>
+<p>As with our earlier example, <code>race</code> still finishes as soon as <code>a</code> is done.
+There’s no interleaving between the two futures, though. The <code>a</code> future does all
+of its work until the <code>trpl::sleep</code> call is awaited, then the <code>b</code> future does
+all of its work until its own <code>trpl::sleep</code> call is awaited, and then the <code>a</code>
+future completes. To allow both futures to make progress between their slow
+tasks, we need await points so we can hand control back to the runtime. That
+means we need something we can await!</p>
 <p>We can already see this kind of handoff happening in Listing 17-23: if we
 removed the <code>trpl::sleep</code> at the end of the <code>a</code> future, it would complete
 without the <code>b</code> future running <em>at all</em>. Maybe we could use the <code>sleep</code> function
@@ -22341,7 +22434,7 @@ it calls <code>slow</code> before ever calling <code>trpl::sleep</code>, but aft
 swap back and forth each time one of them hits an await point. In this case, we
 have done that after every call to <code>slow</code>, but we could break up the work
 however makes the most sense to us.</p>
-<p>We do not really want to <em>sleep</em> here, though: we want to make progress as fast
+<p>We don’t really want to <em>sleep</em> here, though: we want to make progress as fast
 as we can. We just need to hand back control to the runtime. We can do that
 directly, using the <code>yield_now</code> function. In Listing 17-25, we replace all those
 <code>sleep</code> calls with <code>yield_now</code>.</p>
@@ -22388,15 +22481,15 @@ directly, using the <code>yield_now</code> function. In Listing 17-25, we replac
 <figcaption>Listing 17-25: Using <code>yield_now</code> to let operations switch off making progress</figcaption>
 </figure>
 <p>This is both clearer about the actual intent and can be significantly faster
-than using <code>sleep</code>, because timers like the one used by <code>sleep</code> often have
+than using <code>sleep</code>, because timers such as the one used by <code>sleep</code> often have
 limits to how granular they can be. The version of <code>sleep</code> we are using, for
 example, will always sleep for at least a millisecond, even if we pass it a
 <code>Duration</code> of one nanosecond. Again, modern computers are <em>fast</em>: they can do a
 lot in one millisecond!</p>
-<p>You can see this for yourself by setting up a little benchmark, like the one in
-Listing 17-26. (This is not an especially rigorous way to do performance
+<p>You can see this for yourself by setting up a little benchmark, such as the one
+in Listing 17-26. (This isn’t an especially rigorous way to do performance
 testing, but it suffices to show the difference here.) Here, we skip all the
-status printing, pass a one-nanosecond <code>Duration</code> to <code>trpl::sleep</code>,  and let
+status printing, pass a one-nanosecond <code>Duration</code> to <code>trpl::sleep</code>, and let
 each future run by itself, with no switching between the futures. Then we run
 for 1,000 iterations and see how long the future using <code>trpl::sleep</code> takes
 compared to the future using <code>trpl::yield_now</code>.</p>
@@ -22446,18 +22539,20 @@ form of <em>cooperative multitasking</em>, where each future has both the power 
 determine when it hands over control via await points. Each future therefore
 also has the responsibility to avoid blocking for too long. In some Rust-based
 embedded operating systems, this is the <em>only</em> kind of multitasking!</p>
-<p>In real-world code, you will not usually be alternating function calls with
-await points on every single line, of course. While yielding control like this
-is relatively inexpensive, it is not free! In many cases, trying to break up a
-compute-bound task might make it significantly slower, so sometimes it is better
+<p>In real-world code, you won’t usually be alternating function calls with await
+points on every single line, of course. While yielding control in this way is
+relatively inexpensive, it’s not free! In many cases, trying to break up a
+compute-bound task might make it significantly slower, so sometimes it’s better
 for <em>overall</em> performance to let an operation block briefly. You should always
 measure to see what your code’s actual performance bottlenecks are. The
-underlying dynamic is an important one to keep in mind if you <em>are</em> seeing a lot of work happening in serial that you expected to happen concurrently, though!</p>
+underlying dynamic is an important one to keep in mind if you <em>are</em> seeing a
+lot of work happening in serial that you expected to happen concurrently,
+though!</p>
 <h3 id="building-our-own-async-abstractions"><a class="header" href="#building-our-own-async-abstractions">Building Our Own Async Abstractions</a></h3>
 <p>We can also compose futures together to create new patterns. For example, we can
-build a <code>timeout</code> function with async building blocks we already have. When we
-are done, the result will be another building block we could use to build up yet
-further async abstractions.</p>
+build a <code>timeout</code> function with async building blocks we already have. When
+we’re done, the result will be another building block we could use to build up
+yet further async abstractions.</p>
 <p>Listing 17-27 shows how we would expect this <code>timeout</code> to work with a slow
 future.</p>
 <figure class="listing">
@@ -22583,15 +22678,15 @@ we run our code, it will print the failure mode after the timeout:</p>
 <pre><code class="language-text">Failed after 2 seconds
 </code></pre>
 <p>Because futures compose with other futures, you can build really powerful tools
-using smaller async building blocks. For example, you can use this same approach
-to combine timeouts with retries, and in turn use those with things like network
-calls—one of the examples from the beginning of the chapter!</p>
+using smaller async building blocks. For example, you can use this same
+approach to combine timeouts with retries, and in turn use those with things
+such as network calls—one of the examples from the beginning of the chapter!</p>
 <p>In practice, you will usually work directly with <code>async</code> and <code>await</code>, and
-secondarily with functions and macros like <code>join</code>, <code>join_all</code>, <code>race</code>, and so
-on. You will only need to reach for <code>pin</code> now and again to use them with those
+secondarily with functions and macros such as <code>join</code>, <code>join_all</code>, <code>race</code>, and
+so on. You’ll only need to reach for <code>pin</code> now and again to use them with those
 APIs.</p>
-<p>We have now seen a number of ways to work with multiple futures at the same
-time. Up next, we will look at how we can work with multiple futures in a
+<p>We’ve now seen a number of ways to work with multiple futures at the same
+time. Up next, we’ll look at how we can work with multiple futures in a
 sequence over time, with <em>streams</em>. Here are a couple more things you might want
 to consider first, though:</p>
 <ul>
@@ -22613,20 +22708,21 @@ exception was the async channel we used. Recall how we used the receiver for our
 async channel in the <a href="ch17-02-concurrency-with-async.html#message-passing">“Message Passing”</a> earlier in the chapter.
 The async <code>recv</code> method produces a sequence of items over time. This is an
 instance of a much more general pattern, often called a <em>stream</em>.</p>
-<p>A sequence of items is something we have seen before, when we looked at the
+<p>A sequence of items is something we’ve seen before, when we looked at the
 <code>Iterator</code> trait in Chapter 13, but there are two differences between iterators
 and the async channel receiver. The first difference is the element of time:
 iterators are synchronous, while the channel receiver is asynchronous. The
 second difference is the API. When working directly with an <code>Iterator</code>, we call
-its synchronous <code>next</code> method. With a <code>trpl::Receiver</code>, we call an asynchronous
-<code>recv</code> method instead, but these APIs otherwise feel very similar.</p>
-<p>That similarity is not a coincidence. A stream is like an asynchronous form of
-iteration. Whereas the <code>trpl::Receiver</code> specifically waits to receive messages,
-though, a general-purpose stream API needs to be much more general: it will just
-provide the next item like <code>Iterator</code> does, but asynchronously. In fact, this is
-roughly how it works in Rust, so we can actually create a stream from any
-iterator. As with an iterator, we can work with a stream by calling its <code>next</code>
-method, and then awaiting the output, as in Listing 17-30.</p>
+its synchronous <code>next</code> method. With the <code>trpl::Receiver</code> stream in particular,
+we called an  asynchronous <code>recv</code> method instead, but these APIs otherwise feel
+very similar.</p>
+<p>That similarity isn’t a coincidence. A stream is similar to an asynchronous
+form of iteration. Whereas the <code>trpl::Receiver</code> specifically waits to receive
+messages, though, the general-purpose stream API is much more general: it
+provides the next item the way <code>Iterator</code> does, but asynchronously. The
+similarity between iterators and streams in Rust means we can actually create a
+stream from any iterator. As with an iterator, we can work with a stream by
+calling its <code>next</code> method and then awaiting the output, as in Listing 17-30.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
@@ -22647,8 +22743,8 @@ method, and then awaiting the output, as in Listing 17-30.</p>
 <p>We start with an array of numbers, which we convert to an iterator and then call
 <code>map</code> on to double all the values. Then we convert the iterator into a stream
 using the <code>trpl::stream_from_iter</code> function. Then we loop over the items in the
-stream as they arrive with the <code>while let</code> loop</p>
-<p>Unfortunately, when we try to run the code, it does not compile. Instead, as we
+stream as they arrive with the <code>while let</code> loop.</p>
+<p>Unfortunately, when we try to run the code, it doesn’t compile. Instead, as we
 can see in the output, it reports that there is no <code>next</code> method available.</p>
 <!-- TODO: fix up the path here? -->
 <!-- manual-regeneration
@@ -22682,24 +22778,24 @@ help: there is a method `try_next` with a similar name
 
 For more information about this error, try `rustc --explain E0599`.
 </code></pre>
-<p>As the output suggests, the problem is that we need the right trait in scope to
-be able to use the <code>next</code> method. Given our discussion so far, you might
-reasonably expect that to be <code>Stream</code>, but the trait we need <em>here</em> is actually
-<code>StreamExt</code>. The <code>Ext</code> there is for “extension”: this is a common pattern in
-the Rust community for extending one trait with another.</p>
-<p>You might be wondering why <code>StreamExt</code> instead of <code>Stream</code>, and for that matter
-whether there is a <code>Stream</code> type at all. Briefly, the answer is that throughout
-the Rust ecosystem, the <code>Stream</code> trait defines a low-level interface which
-effectively combines the <code>Iterator</code> and <code>Future</code> traits. The <code>StreamExt</code> trait
-supplies a higher-level set of APIs on top of <code>Stream</code>, including the <code>next</code>
-method and also many other utility methods like those from <code>Iterator</code>. We will
-return to the <code>Stream</code> and <code>StreamExt</code> traits in a bit more detail at the end of
-the chapter. For now, this is enough to let us keep moving.</p>
-<p>All we need to do is add a <code>use</code> statement for <code>trpl::StreamExt</code>, as in Listing
-17-31.</p>
+<p>As the output suggests, the reason for the compiler error is that we need the
+right trait in scope to be able to use the <code>next</code> method. Given our discussion
+so far, you might reasonably expect that to be <code>Stream</code>, but the trait we need
+here is actually <code>StreamExt</code>. The <code>Ext</code> there is for “extension”: this is a
+common pattern in the Rust community for extending one trait with another.</p>
+<p>Why do we need <code>StreamExt</code> instead of <code>Stream</code>, and what does the <code>Stream</code> trait
+itself do? Briefly, the answer is that throughout the Rust ecosystem, the
+<code>Stream</code> trait defines a low-level interface which effectively combines the
+<code>Iterator</code> and <code>Future</code> traits. The <code>StreamExt</code> trait supplies a higher-level
+set of APIs on top of <code>Stream</code>, including the <code>next</code> method as well as other
+utility methods similar to those provided by the <code>Iterator</code> trait. We’ll return
+to the <code>Stream</code> and <code>StreamExt</code> traits in a bit more detail at the end of the
+chapter. For now, this is enough to let us keep moving.</p>
+<p>The fix to the compiler error is to add a <code>use</code> statement for <code>trpl::StreamExt</code>,
+as in Listing 17-31.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
 </span><span class="boring">
 </span>use trpl::StreamExt;
 
@@ -22713,13 +22809,13 @@ fn main() {
             println!("The value was: {value}");
         }
     });
-}</code></pre>
+}</code></pre></pre>
 <figcaption>Listing 17-31: Successfully using an iterator as the basis for a stream</figcaption>
 </figure>
-<p>With all those pieces put together, things work the way we want! What is more,
-now that we have <code>StreamExt</code> in scope, we can use all of its utility methods,
-just like with iterators. For example, in Listing 17-32, we use the <code>filter</code>
-method to filter out everything but multiples of three and five.</p>
+<p>With all those pieces put together, this code works the way we want! What’s
+more, now that we have <code>StreamExt</code> in scope, we can use all of its utility
+methods, just as with iterators. For example, in Listing 17-32, we use the
+<code>filter</code> method to filter out everything but multiples of three and five.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // required for mdbook test
@@ -22742,11 +22838,11 @@ fn main() {
 }</code></pre></pre>
 <figcaption>Listing 17-32: Filtering a <code>Stream</code> with the <code>StreamExt::filter</code> method</figcaption>
 </figure>
-<p>Of course, this is not very interesting. We could do that with normal iterators
+<p>Of course, this isn’t very interesting. We could do that with normal iterators
 and without any async at all. So let’s look at some of the other things we can
 do which are unique to streams.</p>
 <h3 id="composing-streams"><a class="header" href="#composing-streams">Composing Streams</a></h3>
-<p>Lots of things are naturally represented as streams: items becoming available in
+<p>Many concepts are naturally represented as streams: items becoming available in
 a queue, or working with more data than can fit in a computer’s memory by only
 pulling chunks of it from the file system at a time, or data arriving over the
 network over time. Because streams are futures, we can use them with any other
@@ -22754,10 +22850,12 @@ kind of future, too, and we can combine them in interesting ways. For example,
 we can batch up events to avoid triggering too many network calls, set timeouts
 on sequences of long-running operations, or throttle user interface events to
 avoid doing needless work.</p>
-<p>Let’s start by building a little stream of messages, similar to what we might
-see from a WebSocket or other real-time communication protocols. In Listing
-17-33, we  create a function <code>get_messages</code> which returns <code>impl Stream&lt;Item = String&gt;</code>. For its implementation, we create an async channel, loop over the
-first ten letters of the English alphabet, and send them across the channel.</p>
+<p>Let’s start by building a little stream of messages, as a stand-in for a stream
+of data we might see from a WebSocket or another real-time communication
+protocol. In Listing 17-33, we create a function <code>get_messages</code> which returns
+<code>impl Stream&lt;Item = String&gt;</code>. For its implementation, we create an async
+channel, loop over the first ten letters of the English alphabet, and send them
+across the channel.</p>
 <p>We also use a new type: <code>ReceiverStream</code>, which converts the <code>rx</code> receiver from
 the <code>trpl::channel</code> into a <code>Stream</code> with a <code>next</code> method. Back in <code>main</code>, we use
 a <code>while let</code> loop to print all the messages from the stream.</p>
@@ -22805,7 +22903,7 @@ Message: 'i'
 Message: 'j'
 </code></pre>
 <p>We could do this with the regular <code>Receiver</code> API, or even the regular <code>Iterator</code>
-API, though. Let’s add something that requires streams, like adding a timeout
+API, though. Let’s add something that requires streams: adding a timeout
 which applies to every item in the stream, and a delay on the items we emit.</p>
 <p>In Listing 17-34, we start by adding a timeout to the stream with the <code>timeout</code>
 method, which comes from the <code>StreamExt</code> trait. Then we update the body of the
@@ -22849,7 +22947,7 @@ fn main() {
 </span><span class="boring">}</span></code></pre></pre>
 <figcaption>Listing 17-34: Using the <code>StreamExt::timeout</code> method to set a time limit on the items in a stream</figcaption>
 </figure>
-<p>However, since there are no delays between messages, this timeout does not
+<p>However, because there are no delays between messages, this timeout does not
 change the behavior of the program. Let’s add a variable delay to the messages
 we send. In <code>get_messages</code>, we use the <code>enumerate</code> iterator method with the
 <code>messages</code> array so that we can get the index of each item we are sending along
@@ -22897,19 +22995,19 @@ for 200 milliseconds, this should affect half of the messages.</p>
 <figcaption>Listing 17-35: Sending messages through <code>tx</code> with an async delay without making <code>get_messages</code> an async function</figcaption>
 </figure>
 <p>To sleep between messages in the <code>get_messages</code> function without blocking, we
-need to use async. However, we cannot make <code>get_messages</code> itself into an async
-function, because then we would return a <code>Future&lt;Output = Stream&lt;Item = String&gt;&gt;</code> instead of just a <code>Stream&lt;Item = String&gt;&gt;</code>. The caller would have to
-await <code>get_messages</code> itself to get access to the stream. But remember:
-everything in a given future happens linearly; concurrency happens <em>between</em>
-futures. Awaiting <code>get_messages</code> would require it to send all the messages,
-including sleeping between sending each message, before returning the receiver
-stream. As a result, the timeout would end up useless. There would be no delays
-in the stream itself: the delays would all happen before the stream was even
-available.</p>
+need to use async. However, we can’t make <code>get_messages</code> itself into an async
+function, because then we’d return a <code>Future&lt;Output = Stream&lt;Item = String&gt;&gt;</code>
+instead of a <code>Stream&lt;Item = String&gt;&gt;</code>. The caller would have to await
+<code>get_messages</code> itself to get access to the stream. But remember: everything in a
+given future happens linearly; concurrency happens <em>between</em> futures. Awaiting
+<code>get_messages</code> would require it to send all the messages, including sleeping
+between sending each message, before returning the receiver stream. As a result,
+the timeout would end up useless. There would be no delays in the stream itself:
+the delays would all happen before the stream was even available.</p>
 <p>Instead, we leave <code>get_messages</code> as a regular function which returns a stream,
 and spawn a task to handle the async <code>sleep</code> calls.</p>
 <section class="note" aria-role="note">
-<p>Note: calling <code>spawn_task</code> like this works because we already set up our
+<p>Note: calling <code>spawn_task</code> in this way works because we already set up our
 runtime. Calling this particular implementation of <code>spawn_task</code> <em>without</em>
 first setting up a runtime will cause a panic. Other implementations choose
 different tradeoffs: they might spawn a new runtime and so avoid the panic but
@@ -22940,9 +23038,9 @@ Message: 'i'
 Problem: Elapsed(())
 Message: 'j'
 </code></pre>
-<p>The timeout does not prevent the messages from arriving in the end—we still get
+<p>The timeout doesn’t prevent the messages from arriving in the end—we still get
 all of the original messages. This is because our channel is unbounded: it can
-hold as many messages as we can fit in memory. If the message does not arrive
+hold as many messages as we can fit in memory. If the message doesn’t arrive
 before the timeout, our stream handler will account for that, but when it polls
 the stream again, the message may now have arrived.</p>
 <p>You can get different behavior if needed by using other kinds of channels, or
@@ -22953,15 +23051,15 @@ this stream of messages.</p>
 <p>First, let’s create another stream, which will emit an item every millisecond if
 we let it run directly. For simplicity, we can use the <code>sleep</code> function to send
 a message on a delay, and combine it with the same approach of creating a stream
-from a channel we used in <code>get_messages</code>. The difference is that this time, we
-are going to send back the count of intervals which has elapsed, so the return
+from a channel we used in <code>get_messages</code>. The difference is that this time,
+we’re going to send back the count of intervals which has elapsed, so the return
 type will be <code>impl Stream&lt;Item = u32&gt;</code>, and we can call the function
 <code>get_intervals</code>.</p>
 <p>In Listing 17-36, we start by defining a <code>count</code> in the task. (We could define
 it outside the task, too, but it is clearer to limit the scope of any given
-variable.) Then we create a an infinite loop. Each iteration of the loop
+variable.) Then we create an infinite loop. Each iteration of the loop
 asynchronously sleeps for one millisecond, increments the count, and then sends
-it over the channel. Since this is all wrapped in the task created by
+it over the channel. Because this is all wrapped in the task created by
 <code>spawn_task</code>, all of it will get cleaned up along with the runtime, including
 the infinite loop.</p>
 <figure class="listing">
@@ -23020,12 +23118,14 @@ the infinite loop.</p>
 </figure>
 <p>This kind of infinite loop, which only ends when the whole runtime gets torn
 down, is fairly common in async Rust: many programs need to keep running
-indefinitely. With async, this does not block anything else, as long as there is
+indefinitely. With async, this doesn’t block anything else, as long as there is
 at least one await point in each iteration through the loop.</p>
 <p>Back in our main function’s async block, we start by calling <code>get_intervals</code>.
-Then we merge the <code>messages</code> and <code>intervals</code> streams with the <code>merge</code> method.
-Finally, we loop over that combined stream instead of over <code>messages</code> (Listing
-17-37).</p>
+Then we merge the <code>messages</code> and <code>intervals</code> streams with the <code>merge</code> method,
+which combines multiple streams into one stream that produces items from any of
+the source streams as soon as the items are available, without imposing any
+particular ordering. Finally, we loop over that combined stream instead of over
+<code>messages</code> (Listing 17-37).</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">extern crate trpl; // required for mdbook test
@@ -23083,19 +23183,19 @@ Finally, we loop over that combined stream instead of over <code>messages</code>
 </figure>
 <p>At this point, neither <code>messages</code> nor <code>intervals</code> needs to be pinned or mutable,
 because both will be combined into the single <code>merged</code> stream. However, this
-call to <code>merge</code> does not compile! (Neither does the <code>next</code> call in the <code>while let</code> loop, but we will come back to that after fixing this.) The two streams
+call to <code>merge</code> does not compile! (Neither does the <code>next</code> call in the <code>while let</code> loop, but we’ll come back to that after fixing this.) The two streams
 have different types. The <code>messages</code> stream has the type <code>Timeout&lt;impl Stream&lt;Item = String&gt;&gt;</code>, where <code>Timeout</code> is the type which implements <code>Stream</code>
 for a <code>timeout</code> call. Meanwhile, the <code>intervals</code> stream has the type <code>impl Stream&lt;Item = u32&gt;</code>. To merge these two streams, we need to transform one of
 them to match the other.</p>
-<p>In Listing 17-38, we rework with the <code>intervals</code> stream, since <code>messages</code> is
+<p>In Listing 17-38, we rework the <code>intervals</code> stream, because <code>messages</code> is
 already in the basic format we want and has to handle timeout errors. First, we
 can use the <code>map</code> helper method to transform the <code>intervals</code> into a string.
-Second, we need to match the <code>Timeout</code> from <code>messages</code>. Since we do not actually
-<em>want</em> a timeout for <code>intervals</code>, though, we can just create a timeout which is
-longer than the other durations we are using. Here, we create a 10-second
-timeout with <code>Duration::from_secs(10)</code>. Finally, we need to make <code>stream</code>
-mutable, so that the <code>while let</code> loop’s <code>next</code> calls can iterate through the
-stream, and pin it so that it is safe to do so.</p>
+Second, we need to match the <code>Timeout</code> from <code>messages</code>. Because we don’t
+actually <em>want</em> a timeout for <code>intervals</code>, though, we can just create a timeout
+which is longer than the other durations we are using. Here, we create a
+10-second timeout with <code>Duration::from_secs(10)</code>. Finally, we need to make
+<code>stream</code> mutable, so that the <code>while let</code> loop’s <code>next</code> calls can iterate
+through the stream, and pin it so that it’s safe to do so.</p>
 <!-- We cannot directly test this one, because it never stops. -->
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
@@ -23156,8 +23256,8 @@ stream, and pin it so that it is safe to do so.</p>
 <figcaption>Listing 17-38: Aligning the types of the the <code>intervals</code> stream with the type of the <code>messages</code> stream</figcaption>
 </figure>
 <p>That gets us <em>almost</em> to where we need to be. Everything type checks. If you run
-this, though, there will be two problems. First, it will never stop! You will
-need to stop it with <span class="keystroke">ctrl-c</span>. Second,  the
+this, though, there will be two problems. First, it will never stop! You’ll
+need to stop it with <span class="keystroke">ctrl-c</span>. Second, the
 messages from the English alphabet will be buried in the midst of all the
 interval counter messages:</p>
 <!-- Not extracting output because changes to this output aren't significant;
@@ -23174,11 +23274,11 @@ Interval: 43
 --snip--
 </code></pre>
 <p>Listing 17-39 shows one way to solve these last two problems. First, we use the
-<code>throttle</code> method on the <code>intervals</code> stream, so that it does not overwhelm the
+<code>throttle</code> method on the <code>intervals</code> stream, so that it doesn’t overwhelm the
 <code>messages</code> stream. Throttling is a way of limiting the rate at which a function
 will be called—or, in this case, how often the stream will be polled. Once every
-hundred milliseconds should do, since that is in the same ballpark as how often
-our messages arrive.</p>
+hundred milliseconds should do, because that is in the same ballpark as how
+often our messages arrive.</p>
 <p>To limit the number of items we will accept from a stream, we can use the <code>take</code>
 method. We apply it to the <em>merged</em> stream, because we want to limit the final
 output, not just one stream or the other.</p>
@@ -23194,7 +23294,7 @@ output, not just one stream or the other.</p>
 </span><span class="boring">    trpl::run(async {
 </span>        let messages = get_messages().timeout(Duration::from_millis(200));
         let intervals = get_intervals()
-            .map(|count| format!("Interval #{count}"))
+            .map(|count| format!("Interval: {count}"))
             .throttle(Duration::from_millis(100))
             .timeout(Duration::from_secs(10));
         let merged = messages.merge(intervals).take(20);
@@ -23241,48 +23341,49 @@ output, not just one stream or the other.</p>
 </span><span class="boring">}</span></code></pre></pre>
 <figcaption>Listing 17-39: Using <code>throttle</code> and <code>take</code> to manage the merged streams</figcaption>
 </figure>
-<p>Now when we run the program, it stop after pulling twenty items from the stream,
-and the intervals do not overwhelm the messages. We also do not get <code>Interval: 100</code> or <code>Interval: 200</code> or so on, but instead simply get <code>Interval: 1</code>,
-<code>Interval: 2</code>, and so on—even though we have a source stream which <em>can</em> produce
-an event every millisecond. That is because the <code>throttle</code> call produces a new
-stream, wrapping the original stream, so that the original stream only gets
-polled at the throttle rate, not its own “native” rate.  We do not have a bunch
-of unhandled interval messages we are simply choosing to ignore. Instead, we
-never produce those interval messages in the first place! This is the inherent
-“laziness” of Rust’s futures at work again, allowing us to choose our
-performance characteristics.</p>
+<p>Now when we run the program, it stops after pulling twenty items from the
+stream, and the intervals don’t overwhelm the messages. We also don’t get
+<code>Interval: 100</code> or <code>Interval: 200</code> or so on, but instead get <code>Interval: 1</code>,
+<code>Interval: 2</code>, and so on—even though we have a source stream which <em>can</em>
+produce an event every millisecond. That’s because the <code>throttle</code> call
+produces a new stream, wrapping the original stream, so that the original
+stream only gets polled at the throttle rate, not its own “native” rate. We
+don’t have a bunch of unhandled interval messages we’re choosing to
+ignore. Instead, we never produce those interval messages in the first place!
+This is the inherent “laziness” of Rust’s futures at work again, allowing us to
+choose our performance characteristics.</p>
 <!-- manual-regeneration
 cd listings/listing-17-39
 cargo run
 copy and paste only the program output
 -->
-<pre><code class="language-text">Interval #1
+<pre><code class="language-text">Interval: 1
 Message: 'a'
-Interval #2
-Interval #3
+Interval: 2
+Interval: 3
 Problem: Elapsed(())
-Interval #4
+Interval: 4
 Message: 'b'
-Interval #5
+Interval: 5
 Message: 'c'
-Interval #6
-Interval #7
+Interval: 6
+Interval: 7
 Problem: Elapsed(())
-Interval #8
+Interval: 8
 Message: 'd'
-Interval #9
+Interval: 9
 Message: 'e'
-Interval #10
-Interval #11
+Interval: 10
+Interval: 11
 Problem: Elapsed(())
-Interval #12
+Interval: 12
 </code></pre>
-<p>There is one last thing we need to handle: errors! With both of these
+<p>There’s one last thing we need to handle: errors! With both of these
 channel-based streams, the <code>send</code> calls could fail when the other side of the
-channel closes—and that is just a matter of how the runtime executes the futures
-which make up the stream. Up till now we have ignored this by calling <code>unwrap</code>,
+channel closes—and that’s just a matter of how the runtime executes the futures
+which make up the stream. Up until now we have ignored this by calling <code>unwrap</code>,
 but in a well-behaved app, we should explicitly handle the error, at minimum by
-ending the loop so we do not try to send any more messages!  Listing 17-40 shows
+ending the loop so we don’t try to send any more messages!  Listing 17-40 shows
 a simple error strategy: print the issue and then <code>break</code> from the loops. As
 usual, the correct way to handle a message send error will vary—just make sure
 you have a strategy.</p>
@@ -23352,16 +23453,16 @@ fn get_intervals() -&gt; impl Stream&lt;Item = u32&gt; {
 }</code></pre></pre>
 <figcaption>Listing 17-40: Handling errors and shutting down the loops</figcaption>
 </figure>
-<p>Now that we have seen a bunch of async in practice, let’s take a step back and
+<p>Now that we’ve seen a bunch of async in practice, let’s take a step back and
 dig into a few of the details of how <code>Future</code>, <code>Stream</code>, and the other key
 traits which Rust uses to make async work.</p>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="digging-into-the-traits-for-async"><a class="header" href="#digging-into-the-traits-for-async">Digging Into the Traits for Async</a></h2>
-<p>Throughout the chapter, we have used the <code>Future</code>, <code>Pin</code>, <code>Unpin</code>, <code>Stream</code>, and
-<code>StreamExt</code> traits in various ways. So far, though, we have avoided digging too
+<p>Throughout the chapter, we’ve used the <code>Future</code>, <code>Pin</code>, <code>Unpin</code>, <code>Stream</code>, and
+<code>StreamExt</code> traits in various ways. So far, though, we’ve avoided digging too
 far into the details of how they work or how they fit together. Much of the time
-when writing Rust day to day, this is fine. Sometimes, though, you will hit
+when writing Rust day to day, this is fine. Sometimes, though, you’ll hit
 situations where understanding a few more of these details matters. In this
-section, we will dig down <em>enough</em> further to help with those situations—while
+section, we’ll dig down <em>enough</em> further to help with those situations—while
 still leaving the <em>really</em> deep dive for other documentation!</p>
 <h3 id="future"><a class="header" href="#future">Future</a></h3>
 <p>Back in <a href="ch17-01-futures-and-syntax.html">Futures and the Async Syntax</a>, we noted that <code>Future</code>
@@ -23378,23 +23479,23 @@ pub trait Future {
     fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt;;
 }
 <span class="boring">}</span></code></pre></pre>
-<p>That trait definition includes a bunch of new types and also some syntax we have
-not seen before, so let’s walk through the definition piece by piece.</p>
+<p>That trait definition includes a bunch of new types and also some syntax we
+haven’t seen before, so let’s walk through the definition piece by piece.</p>
 <p>First, <code>Future</code>’s associated type <code>Output</code> says what the future resolves to.
 This is analogous to the <code>Item</code> associated type for the <code>Iterator</code> trait.
 Second, <code>Future</code> also has the <code>poll</code> method, which takes a special <code>Pin</code>
 reference for its <code>self</code> parameter and a mutable reference to a <code>Context</code> type,
-and returns a <code>Poll&lt;Self::Output&gt;</code>. We will talk a little more about <code>Pin</code> and
+and returns a <code>Poll&lt;Self::Output&gt;</code>. We’ll talk a little more about <code>Pin</code> and
 <code>Context</code> later in the section. For now, let’s focus on what the method returns,
 the <code>Poll</code> type:</p>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum Poll&lt;T&gt; {
     Ready(T),
-    Pending
+    Pending,
 }
 <span class="boring">}</span></code></pre></pre>
-<p>This <code>Poll</code> type is a lot like an <code>Option</code>: it has one variant which has a value
+<p>This <code>Poll</code> type is similar to an <code>Option</code>: it has one variant which has a value
 (<code>Ready(T)</code>), and one which does not (<code>Pending</code>). It means something quite
 different, though! The <code>Pending</code> variant indicates that the future still has
 work to do, so the caller will need to check again later. The <code>Ready</code> variant
@@ -23442,10 +23543,10 @@ on this future and work on other futures and check this one again later. That
 one of the main jobs for a runtime.</p>
 <p>Recall our description (in the <a href="ch17-02-concurrency-with-async.html">Counting</a> section) of waiting on
 <code>rx.recv</code>. The <code>recv</code> call returns a <code>Future</code>, and awaiting it polls it. In our
-initial discussion, we noted that a runtime will pause the future until it is
+initial discussion, we noted that a runtime will pause the future until it’s
 ready with either <code>Some(message)</code> or <code>None</code> when the channel closes. With our
 deeper understanding of <code>Future</code> in place, and specifically <code>Future::poll</code>, we
-can see how that works. The runtime knows the future is not ready when it
+can see how that works. The runtime knows the future isn’t ready when it
 returns <code>Poll::Pending</code>. Conversely, the runtime knows the future is ready and
 advances it when <code>poll</code> returns <code>Poll::Ready(Some(message))</code> or
 <code>Poll::Ready(None)</code>.</p>
@@ -23484,9 +23585,9 @@ Some errors have detailed explanations: E0277, E0308.
 For more information about an error, try `rustc --explain E0277`.
 </code></pre>
 <p>When we read this error message carefully, it not only tells us that we need to
-pin the values but also us why pinning is required. The <code>trpl::join_all</code>
-function returns a struct called <code>JoinAll</code>. That struct in turn is generic over
-a type <code>F</code>, which is constrained to implement the <code>Future</code> trait. Finally,
+pin the values, but also tells us why pinning is required. The <code>trpl::join_all</code>
+function returns a struct called <code>JoinAll</code>. That struct, in turn, is generic
+over a type <code>F</code>, which is constrained to implement the <code>Future</code> trait. Finally,
 directly awaiting a Future requires that the future in question implement the
 <code>Unpin</code> trait. That’s a lot! But we can understand it, if we dive a little
 further into how the <code>Future</code> type actually works, in particular around
@@ -23504,31 +23605,32 @@ pub trait Future {
     fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt;;
 }
 <span class="boring">}</span></code></pre></pre>
-<p>The <code>cx</code> parameter and its <code>Context</code> type is interesting, but is beyond the
-scope of this chapter: you generally only need to worry about it when writing a
-custom <code>Future</code> implementation.</p>
-<p>Instead, we will focus on the type for <code>self</code>. This is the first time we have
-seen a method where <code>self</code> has a type annotation. A type annotation for <code>self</code>
-is similar to type annotations for other function parameters, with two key
-differences. First, when we specify the type of <code>self</code> like this, we are telling
-Rust what type <code>self</code> must be to call this method. Second, a type annotation on
-<code>self</code> cannot be just any type. It is only allowed to be the type on which the
-method is implemented, or a reference or smart pointer to that type, or a <code>Pin</code>
-wrapping a reference to that type. We will see more on this syntax in Chapter
-18. For now, it is enough to know that if we want to poll a future (to check
-whether it is <code>Pending</code> or <code>Ready(Output)</code>), we need a mutable reference to the
-type, which is wrapped in a <code>Pin</code>.</p>
-<p><code>Pin</code> is a wrapper type. In some ways, it is like the <code>Box</code>, <code>Rc</code>, and other
-smart pointer types we saw in Chapter 15, which also wrap other types. Unlike
-those, however, <code>Pin</code> only works with <em>pointer types</em> like references (<code>&amp;</code> and
-<code>&amp;mut</code>) and smart pointers (<code>Box</code>, <code>Rc</code>, and so on). To be precise, <code>Pin</code> works
-with types which implement the <code>Deref</code> or <code>DerefMut</code> traits, which we covered in
-Chapter 15. You can think of this restriction as equivalent to only working with
-pointers, though, since implementing <code>Deref</code> or <code>DerefMut</code> means your type
-behaves like a pointer type. <code>Pin</code> is also not a pointer itself, and it does not
-have any behavior of its own like the ref counting of <code>Rc</code> or <code>Arc</code>. It is
-purely a tool the compiler can use to uphold the relevant guarantees, by
-wrapping pointers in the type.</p>
+<p>The <code>cx</code> parameter and its <code>Context</code> type is the key to how a runtime actually
+knows when to check any given future, while still being lazy. The details of how
+that works are beyond the scope of this chapter, though: you generally only need
+to worry about it when writing a custom <code>Future</code> implementation.</p>
+<p>Instead, we’ll focus on the type for <code>self</code>. This is the first time we’ve seen
+a method where <code>self</code> has a type annotation. A type annotation for <code>self</code> is
+similar to type annotations for other function parameters, with two key
+differences. First, when we specify the type of <code>self</code> in this way, we’re
+telling Rust what type <code>self</code> must be to call this method. Second, a type
+annotation on <code>self</code> can’t be just any type. It’s only allowed to be the type
+on which the method is implemented, a reference or smart pointer to that type,
+or a <code>Pin</code> wrapping a reference to that type. We’ll see more on this syntax in
+Chapter 18. For now, it’s enough to know that if we want to poll a future (to
+check whether it is <code>Pending</code> or <code>Ready(Output)</code>), we need a mutable reference
+to the type, which is wrapped in a <code>Pin</code>.</p>
+<p><code>Pin</code> is a wrapper type. In some ways, it’s similar to the <code>Box</code>, <code>Rc</code>, and
+other smart pointer types we saw in Chapter 15, which also wrap other types.
+Unlike those, however, <code>Pin</code> only works with <em>pointer types</em> such as references
+(<code>&amp;</code> and <code>&amp;mut</code>) and smart pointers (<code>Box</code>, <code>Rc</code>, and so on). To be precise,
+<code>Pin</code> works with types which implement the <code>Deref</code> or <code>DerefMut</code> traits, which
+we covered in Chapter 15. You can think of this restriction as equivalent to
+only working with pointers, though, because implementing <code>Deref</code> or <code>DerefMut</code>
+means your type behaves similarly to a pointer type. <code>Pin</code> is also not a pointer
+itself, and it doesn’t have any behavior of its own the way <code>Rc</code> and <code>Arc</code> do
+with ref counting. It’s purely a tool the compiler can use to uphold the
+relevant guarantees, by wrapping pointers in the type.</p>
 <p>Recalling that <code>await</code> is implemented in terms of calls to <code>poll</code>, this starts
 to explain the error message we saw above—but that was in terms of <code>Unpin</code>, not
 <code>Pin</code>. So what exactly are <code>Pin</code> and <code>Unpin</code>, how do they relate, and why does
@@ -23550,12 +23652,12 @@ the future that corresponds to that block—like moving it into a <code>Vec</cod
 iterator with <code>join_all</code>, or returning them from a function—that actually means
 moving the state machine Rust creates for us. And unlike most other types in
 Rust, the futures Rust creates for async blocks can end up with references to
-themselves in the fields of any given variant, as in Figure 17-3 (a simplified
+themselves in the fields of any given variant, as in Figure 17-4 (a simplified
 illustration to help you get a feel for the idea, rather than digging into what
 are often fairly complicated details).</p>
 <figure>
-<img alt="Concurrent work flow" src="img/trpl17-03.svg" class="center" />
-<figcaption>Figure 17-3: A self-referential data type.</figcaption>
+<img alt="Concurrent work flow" src="img/trpl17-04.svg" class="center" />
+<figcaption>Figure 17-4: A self-referential data type.</figcaption>
 </figure>
 <p>By default, though, any object which has a reference to itself is unsafe to
 move, because references always point to the actual memory address of the thing
@@ -23566,107 +23668,107 @@ the data structure. For another—and more importantly!—the computer is now fr
 to reuse that memory for other things! You could end up reading completely
 unrelated data later.</p>
 <figure>
-<img alt="Concurrent work flow" src="img/trpl17-04.svg" class="center" />
-<figcaption>Figure 17-4: The unsafe result of moving a self-referential data type.</figcaption>
+<img alt="Concurrent work flow" src="img/trpl17-05.svg" class="center" />
+<figcaption>Figure 17-5: The unsafe result of moving a self-referential data type.</figcaption>
 </figure>
 <p>In principle, the Rust compiler could try to update every reference to an object
 every time it gets moved. That would potentially be a lot of performance
 overhead, especially given there can be a whole web of references that need
 updating. On the other hand, if we could make sure the data structure in
-question <em>does not move in memory</em>, we do not have to update any references.
-This is exactly what Rust’s borrow checker requires: you cannot move an item
+question <em>doesn’t move in memory</em>, we don’t have to update any references.
+This is exactly what Rust’s borrow checker requires: you can’t move an item
 which has any active references to it using safe code.</p>
 <p><code>Pin</code> builds on that to give us the exact guarantee we need. When we <em>pin</em> a
 value by wrapping a pointer to that value in <code>Pin</code>, it can no longer move. Thus,
 if you have <code>Pin&lt;Box&lt;SomeType&gt;&gt;</code>, you actually pin the <code>SomeType</code> value, <em>not</em>
-the <code>Box</code> pointer. Figure 17-5 illustrates this:</p>
+the <code>Box</code> pointer. Figure 17-6 illustrates this:</p>
 <figure>
-<img alt="Concurrent work flow" src="img/trpl17-05.svg" class="center" />
-<figcaption>Figure 17-5: Pinning a `Box` which points to a self-referential future type.</figcaption>
+<img alt="Concurrent work flow" src="img/trpl17-06.svg" class="center" />
+<figcaption>Figure 17-6: Pinning a `Box` which points to a self-referential future type.</figcaption>
 </figure>
 <p>In fact, the <code>Box</code> pointer can still move around freely. Remember: we care about
 making sure the data ultimately being referenced stays in its place. If a
 pointer moves around, but the data it points to is in the same place, as in
-Figure 17-6, there is no potential problem. (How you would do this with a <code>Pin</code>
-wrapping a <code>Box</code> is more than we will get into in this particular discussion,
+Figure 17-7, there’s no potential problem. (How you would do this with a <code>Pin</code>
+wrapping a <code>Box</code> is more than we’ll get into in this particular discussion,
 but it would make for a good exercise! If you look at the docs for the types as
 well as the <code>std::pin</code> module, you might be able to work out how you would do
 that.) The key is that the self-referential type itself cannot move, because it
 is still pinned.</p>
 <figure>
-<img alt="Concurrent work flow" src="img/trpl17-06.svg" class="center" />
-<figcaption>Figure 17-6: Moving a `Box` which points to a self-referential future type.</figcaption>
+<img alt="Concurrent work flow" src="img/trpl17-07.svg" class="center" />
+<figcaption>Figure 17-7: Moving a `Box` which points to a self-referential future type.</figcaption>
 </figure>
-<p>However, most types are perfectly safe to move around, even if they happen to be
-behind a <code>Pin</code> pointer. We only need to think about pinning when items have
-internal references. Primitive values like numbers and booleans do not have any
-internal structure like that, so they are obviously safe. Neither do most types
-you normally work with in Rust. A <code>Vec</code>, for example, does not have any internal
+<p>However, most types are perfectly safe to move around, even if they happen to
+be behind a <code>Pin</code> pointer. We only need to think about pinning when items have
+internal references. Primitive values such as numbers and booleans don’t have
+any internal references, so they’re obviously safe. Neither do most types you
+normally work with in Rust. A <code>Vec</code>, for example, doesn’t have any internal
 references it needs to keep up to date this way, so you can move it around
-without worrying. If you have a <code>Pin&lt;Vec&lt;String&gt;&gt;</code>, you would have to do
-everything via the safe but restrictive APIs provided by <code>Pin</code>, even though a
+without worrying. If you have a <code>Pin&lt;Vec&lt;String&gt;&gt;</code>, you’d have to do everything
+via the safe but restrictive APIs provided by <code>Pin</code>, even though a
 <code>Vec&lt;String&gt;</code> is always safe to move if there are no other references to it. We
-need a way to tell the compiler that it is actually just fine to move items
-around in cases like these. For that, we have <code>Unpin</code>.</p>
-<p><code>Unpin</code> is a marker trait, like <code>Send</code> and <code>Sync</code>, which we saw in Chapter 16.
-Recall that marker traits have no functionality of their own. They exist only to
-tell the compiler that it is safe to use the type which implements a given trait
-in a particular context. <code>Unpin</code> informs the compiler that a given type does
-<em>not</em> need to uphold any particular guarantees about whether the value in
-question can be moved.</p>
-<p>Just like <code>Send</code> and <code>Sync</code>, the compiler implements <code>Unpin</code> automatically for
-all types where it can prove it is safe. Implementing <code>Unpin</code> manually is unsafe
-because it requires <em>you</em> to uphold all the guarantees which make <code>Pin</code> and
-<code>Unpin</code> safe yourself for a type with internal references. In practice, this is
-a very rare thing to implement yourself!</p>
+need a way to tell the compiler that it’s actually just fine to move items
+around in cases such as these. For that, we have <code>Unpin</code>.</p>
+<p><code>Unpin</code> is a marker trait, similar to the <code>Send</code> and <code>Sync</code> traits we saw in
+Chapter 16. Recall that marker traits have no functionality of their own. They
+exist only to tell the compiler that it’s safe to use the type which implements
+a given trait in a particular context. <code>Unpin</code> informs the compiler that a given
+type does <em>not</em> need to uphold any particular guarantees about whether the value
+in question can be moved.</p>
+<p>Just as with <code>Send</code> and <code>Sync</code>, the compiler implements <code>Unpin</code> automatically
+for all types where it can prove it is safe. Implementing <code>Unpin</code> manually is
+unsafe because it requires <em>you</em> to uphold all the guarantees which make <code>Pin</code>
+and <code>Unpin</code> safe yourself for a type with internal references. In practice,
+this is a very rare thing to implement yourself!</p>
 <p>To make that concrete, think about a <code>String</code>: it has a length and the Unicode
 characters which make it up. We can wrap a <code>String</code> in <code>Pin</code>, as seen in Figure
 17-7. However</p>
 <figure>
-<img alt="Concurrent work flow" src="img/trpl17-07.svg" class="center" />
-<figcaption>Figure 17-7: Pinning a String, with a dotted line indicating that the String implements the `Unpin` trait, so it is not pinned.</figcaption>
+<img alt="Concurrent work flow" src="img/trpl17-08.svg" class="center" />
+<figcaption>Figure 17-8: Pinning a String, with a dotted line indicating that the String implements the `Unpin` trait, so it is not pinned.</figcaption>
 </figure>
-<p>This means that we can do things like replace one string with another at the
-exact same location in memory as in Figure 17-8. This does not violate the <code>Pin</code>
+<p>This means that we can do things such as replace one string with another at the
+exact same location in memory as in Figure 17-9. This doesn’t violate the <code>Pin</code>
 contract because <code>String</code>—like most other types in Rust—implements <code>Unpin</code>,
 because it has no internal references that make it unsafe to move around!</p>
 <figure>
-<img alt="Concurrent work flow" src="img/trpl17-08.svg" class="center" />
-<figcaption>Figure 17-8: Replacing the String with an entirely different String in memory.</figcaption>
+<img alt="Concurrent work flow" src="img/trpl17-09.svg" class="center" />
+<figcaption>Figure 17-9: Replacing the String with an entirely different String in memory.</figcaption>
 </figure>
 <p>Now we know enough to understand the errors reported for that <code>join_all</code> call
 from back in Listing 17-17. We originally tried to move the futures produced by
-an async blocks into a <code>Vec&lt;Box&lt;dyn Future&lt;Output = ()&gt;&gt;&gt;</code>, but as we have seen,
-those futures may have internal references, so they do not implement <code>Unpin</code>.
+async blocks into a <code>Vec&lt;Box&lt;dyn Future&lt;Output = ()&gt;&gt;&gt;</code>, but as we’ve seen,
+those futures may have internal references, so they don’t implement <code>Unpin</code>.
 They need to be pinned, and then we can pass the <code>Pin</code> type into the <code>Vec</code>,
 confident that the underlying data in the futures will <em>not</em> be moved.</p>
 <p><code>Pin</code> and <code>Unpin</code> are mostly important for building lower-level libraries, or
-when you are building a runtime itself, rather than for day to day Rust code.
-When you see them, though, now you will know what to do!</p>
+when you’re building a runtime itself, rather than for day to day Rust code.
+When you see these traits in error messages, though, now you’ll have a better
+idea of how to fix the code!</p>
 <section class="note" aria-role="note">
 <p>Note: This combination of <code>Pin</code> and <code>Unpin</code> allows a whole class of complex
 types to be safe in Rust which are otherwise difficult to implement because
-they are self-referential. Types which require <code>Pin</code> show up <em>most</em> commonly
+they’re self-referential. Types which require <code>Pin</code> show up <em>most</em> commonly
 in async Rust today, but you might—very rarely!—see it in other contexts, too.</p>
-<p>The specifics of how <code>Pin</code> and <code>Unpin</code> work, and the rules they are required
+<p>The specifics of how <code>Pin</code> and <code>Unpin</code> work, and the rules they’re required
 to uphold, are covered extensively in the API documentation for <code>std::pin</code>, so
-if you would like to understand them more deeply, that is a great place to
-start.</p>
+if you’d like to understand them more deeply, that’s a great place to start.</p>
 <p>If you want to understand how things work “under the hood” in even more
 detail, the official <a href="https://rust-lang.github.io/async-book/"><em>Asynchronous Programming in Rust</em></a> book has
 you covered:</p>
 <ul>
 <li><a href="https://rust-lang.github.io/async-book/02_execution/01_chapter.html">Chapter 2: Under the Hood: Executing Futures and Tasks</a></li>
-<li><a href="https://rust-lang.github.io/async-book/04_pinning/01_chapter.html">Chapter 4: Pinning</a>.</li>
+<li><a href="https://rust-lang.github.io/async-book/04_pinning/01_chapter.html">Chapter 4: Pinning</a></li>
 </ul>
 </section>
 <h3 id="the-stream-trait"><a class="header" href="#the-stream-trait">The Stream Trait</a></h3>
 <p>Now that we have a deeper grasp on the <code>Future</code>, <code>Pin</code>, and <code>Unpin</code> traits, we
 can turn our attention to the <code>Stream</code> trait. As described in the section
-introducing streams, streams are like asynchronous iterators. Unlike <code>Iterator</code>
-and <code>Future</code>, there is no definition of a <code>Stream</code> trait in the standard library
-as of the time of writing,<!-- TODO: verify before press time! --> but there
-<em>is</em> a very common definition used throughout the ecosystem.</p>
+introducing streams, streams are similar to asynchronous iterators. Unlike
+<code>Iterator</code> and <code>Future</code>, there is no definition of a <code>Stream</code> trait in the
+standard library as of the time of writing, but there <em>is</em> a very common
+definition from the <code>futures</code> crate used throughout the ecosystem.</p>
 <p>Let’s review the definitions of the <code>Iterator</code> and <code>Future</code> traits, so we can
 build up to how a <code>Stream</code> trait that merges them together might look. From
 <code>Iterator</code>, we have the idea of a sequence: its <code>next</code> method provides an
@@ -23689,19 +23791,20 @@ trait Stream {
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The <code>Stream</code> trait defines an associated type <code>Item</code> for the type of the items
-produced by the stream. This is like <code>Iterator</code>: there may be zero to many of
-these, and unlike <code>Future</code>, where there is always a single <code>Output</code> (even if it
-the unit type <code>()</code>).</p>
+produced by the stream. This is similar to <code>Iterator</code>: there may be zero to
+many of these, and unlike <code>Future</code>, where there is always a single <code>Output</code>
+(even if it’s the unit type <code>()</code>).</p>
 <p><code>Stream</code> also defines a method to get those items. We call it <code>poll_next</code>, to
-make it clear that it polls like <code>Future::poll</code> and produces a sequence of items
-like <code>Iterator::next</code>. Its return type combines <code>Poll</code>with <code>Option</code>. The outer
-type is <code>Poll</code>, since it has to be checked for readiness, just like a future.
-The inner type is <code>Option</code>, since it needs to signal whether there are more
-messages, just like an iterator.</p>
+make it clear that it polls in the same way <code>Future::poll</code> does and produces a
+sequence of items in the same way <code>Iterator::next</code> does. Its return type
+combines <code>Poll</code> with <code>Option</code>. The outer type is <code>Poll</code>, because it has to be
+checked for readiness, just as a future does. The inner type is <code>Option</code>,
+because it needs to signal whether there are more messages, just as an iterator
+does.</p>
 <p>Something very similar to this will likely end up standardized as part of Rust’s
-standard library. In the meantime, it is part of the toolkit of most runtimes,
+standard library. In the meantime, it’s part of the toolkit of most runtimes,
 so you can rely on it, and everything we cover below should generally apply!</p>
-<p>In the example we saw in the section on streaming, though, we did not use
+<p>In the example we saw in the section on streaming, though, we didn’t use
 <code>poll_next</code> <em>or</em> <code>Stream</code>, but instead used <code>next</code> and <code>StreamExt</code>. We <em>could</em>
 work directly in terms of the <code>poll_next</code> API by hand-writing our own <code>Stream</code>
 state machines, of course, just as we <em>could</em> work with futures directly via
@@ -23737,14 +23840,15 @@ in traits, since the lack thereof is the reason they do not yet have this.
 different than this, because it supports versions of Rust which did not yet
 support using async functions in traits. As a result, it looks like this:</p>
 <pre><code class="language-rust ignore">fn next(&amp;mut self) -&gt; Next&lt;'_, Self&gt; where Self: Unpin;</code></pre>
-<p>That <code>Next</code> type is just a simple <code>struct</code> which implements <code>Future</code> and gives
-a way to name the lifetime of the reference to <code>self</code> with <code>Next&lt;'_, Self&gt;</code>,
-so that <code>await</code> can work with this!</p>
+<p>That <code>Next</code> type is a <code>struct</code> which implements <code>Future</code> and gives a way to
+name the lifetime of the reference to <code>self</code> with <code>Next&lt;'_, Self&gt;</code>, so that
+<code>await</code> can work with this method!</p>
 </section>
 <p>The <code>StreamExt</code> trait is also the home of all the interesting methods available
 to use with streams. <code>StreamExt</code> is automatically implemented for every type
-which implements <code>Stream</code>, but they are separated out so that the community can
-iterate on the foundational trait distinctly from the convenience APIs.</p>
+which implements <code>Stream</code>, but these traits are defined separately so that the
+community can iterate on the foundational trait distinctly from the convenience
+APIs.</p>
 <p>In the version of <code>StreamExt</code> used in the <code>trpl</code> crate, the trait not only
 defines the <code>next</code> method, it also supplies an implementation of <code>next</code>, which
 correctly handles the details of calling <code>Stream::poll_next</code>. This means that
@@ -23756,24 +23860,24 @@ wrap up, let’s consider how futures (including streams), tasks, and threads al
 fit together!</p>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="futures-tasks-and-threads"><a class="header" href="#futures-tasks-and-threads">Futures, Tasks, and Threads</a></h2>
 <p>As we saw in the previous chapter, threads provide one approach to concurrency.
-We have seen another approach to concurrency in this chapter, using async with
+We’ve seen another approach to concurrency in this chapter, using async with
 futures and streams. You might be wondering why you would choose one or the
-other. The answer is: it depends! And in many cases, it is not threads <em>or</em>
-async but rather threads <em>and</em> async.</p>
+other. The answer is: it depends! And in many cases, the choice isn’t threads
+<em>or</em> async but rather threads <em>and</em> async.</p>
 <p>Many operating systems have supplied threading-based concurrency models for
 decades now, and many programming languages have support for them as a result.
 However, they are not without their tradeoffs. On many operating systems, they
 use a fair bit of memory for each thread, and they come with some overhead for
 starting up and shutting down. Threads are also only an option when your
 operating system and hardware support them! Unlike mainstream desktop and mobile
-computers, some embedded systems do not have an OS at all, so they also do not
+computers, some embedded systems don’t have an OS at all, so they also don’t
 have threads!</p>
 <p>The async model provides a different—and ultimately complementary—set of
-tradeoffs. In the async model, concurrent operations do not require their own
+tradeoffs. In the async model, concurrent operations don’t require their own
 threads. Instead, they can run on tasks, as when we used <code>trpl::spawn_task</code> to
 kick off work from a synchronous function throughout the streams section. A task
-is a lot like a thread—but instead of being managed by the operating system, it
-is managed by library-level code: the runtime.</p>
+is similar to a thread, but instead of being managed by the operating system,
+it’s managed by library-level code: the runtime.</p>
 <p>In the previous section, we saw that we could build a <code>Stream</code> by using an async
 channel and spawning an async task which we could call from synchronous code. We
 could do the exact same thing with a thread! In Listing 17-40, we used
@@ -23850,67 +23954,66 @@ the <code>thread::spawn</code> and <code>thread::sleep</code> APIs from the stan
 <figcaption>Listing 17-41: Using the <code>std::thread</code> APIs instead of the async <code>trpl</code> APIs for the <code>get_intervals</code> function</figcaption>
 </figure>
 <p>If you run this, the output is identical. And notice how little changes here
-from the perspective of the calling code! What is more, even though one of our
+from the perspective of the calling code! What’s more, even though one of our
 functions spawned an async task on the runtime and the other spawned an
 OS thread, the resulting streams were unaffected by the differences.</p>
-<p>However, there is a significant difference between these two approaches behave,
-although we might have a hard time measuring it in this very simple example. We
-could spawn hundreds of thousands or even millions of async tasks on any modern
-personal computer. If we tried to do that with threads, we would literally run
-out of memory!</p>
-<p>However, there is a reason these APIs are so similar. Threads act as a boundary
+<p>Despite the similarities, these two approaches behave very differently, although
+we might have a hard time measuring it in this very simple example. We could
+spawn millions of async tasks on any modern personal computer. If we tried to do
+that with threads, we would literally run out of memory!</p>
+<p>However, there’s a reason these APIs are so similar. Threads act as a boundary
 for sets of synchronous operations; concurrency is possible <em>between</em> threads.
 Tasks act as a boundary for sets of <em>asynchronous</em> operations; concurrency is
-possible both <em>between</em> and <em>within</em> tasks. In that regard, tasks are kind of
-like lightweight, runtime-managed threads with added capabilities that come from
-being managed by a runtime instead of by the operating system. Futures are an
-even more granular unit of concurrency, where each future may represent a tree
-of other futures. That is, the runtime—specifically, its executor—manages tasks,
-and tasks manage futures.</p>
-<p>However, this does not mean that async tasks are always better than threads, any
-more than that threads are always better than tasks.</p>
-<p>On the one hand, concurrency with threads is in some ways a simpler programming
-model than concurrency with <code>async</code>. Threads are somewhat “fire and forget,”
-they have no native equivalent to a future, so they simply run to completion,
-without interruption except by the operating system itself. That is, they have
-no <em>intra-task concurrency</em> like futures can. Threads in Rust also have no
-mechanisms for cancellation—a subject we have not covered in depth in this
-chapter, but which is implicit in the fact that whenever we ended a future, its
-state got cleaned up correctly.</p>
-<p>These limitations make threads harder to compose than futures. It is much more
-difficult, for example, to build something like the <code>timeout</code> we built in
-<a href="ch17-03-more-futures.html#building-our-own-async-abstractions">“Building Our Own Async Abstractions”</a>, or the <code>throttle</code>
-method we used with streams in <a href="ch17-04-streams.html#composing-streams">“Composing Streams”</a>. The fact that
-futures are richer data structures means they <em>can</em> be composed together more
-naturally, as we have seen.</p>
+possible both <em>between</em> and <em>within</em> tasks, because a task can switch between
+futures in its body. Finally, futures are Rust’s most granular unit of
+concurrency, and each future may represent a tree of other futures. The
+runtime—specifically, its executor—manages tasks, and tasks manage futures. In
+that regard, tasks are similar to lightweight, runtime-managed threads with
+added capabilities that come from being managed by a runtime instead of by the
+operating system.</p>
+<p>This doesn’t mean that async tasks are always better than threads, any more than
+that threads are always better than tasks.</p>
+<p>Concurrency with threads is in some ways a simpler programming model than
+concurrency with <code>async</code>. That can be a strength or a weakness. Threads are
+somewhat “fire and forget,” they have no native equivalent to a future, so they
+simply run to completion, without interruption except by the operating system
+itself. That is, they have no built-in support for <em>intra-task concurrency</em> the
+way futures do. Threads in Rust also have no mechanisms for cancellation—a
+subject we haven’t covered in depth in this chapter, but which is implicit in
+the fact that whenever we ended a future, its state got cleaned up correctly.</p>
+<p>These limitations also make threads harder to compose than futures. It’s much
+more difficult, for example, to use threads to build helpers such as the
+<code>timeout</code> we built in <a href="ch17-03-more-futures.html#building-our-own-async-abstractions">“Building Our Own Async Abstractions”</a>
+or the <code>throttle</code> method we used with streams in <a href="ch17-04-streams.html#composing-streams">“Composing Streams”</a>.
+The fact that futures are richer data structures means they can be composed
+together more naturally, as we have seen.</p>
 <p>Tasks then give <em>additional</em> control over futures, allowing you to choose where
-and how to group them. And it turns out that threads and tasks often work very
-well together, because tasks can (at least in some runtimes) be moved around
-between threads. We have not mentioned it up until now, but under the hood the
-<code>Runtime</code> we have been using, including the <code>spawn_blocking</code> and <code>spawn_task</code>
-functions, is multithreaded by default! Many runtimes use an approach called
-<em>work stealing</em> to transparently move tasks around between threads based on the
-current utilization of the threads, with the aim of improving the overall
-performance of the system. To build that actually requires threads <em>and</em> tasks,
-and therefore futures.</p>
+and how to group the futures. And it turns out that threads and tasks often
+work very well together, because tasks can (at least in some runtimes) be moved
+around between threads. We haven’t mentioned it up until now, but under the
+hood the <code>Runtime</code> we have been using, including the <code>spawn_blocking</code> and
+<code>spawn_task</code> functions, is multithreaded by default! Many runtimes use an
+approach called <em>work stealing</em> to transparently move tasks around between
+threads based on the current utilization of the threads, with the aim of
+improving the overall performance of the system. To build that actually requires
+threads <em>and</em> tasks, and therefore futures.</p>
 <p>As a default way of thinking about which to use when:</p>
 <ul>
-<li>If the task is <em>very parallelizable</em>, like processing a bunch of data where
+<li>If the task is <em>very parallelizable</em>, such as processing a bunch of data where
 each part can be processed separately, threads are a better choice.</li>
-<li>If the task is <em>very concurrent</em>, like handling messages from a bunch of
+<li>If the task is <em>very concurrent</em>, such as handling messages from a bunch of
 different sources which may come in a different intervals or different rates,
 async is a better choice.</li>
 </ul>
-<p>And if you need some mix of parallelism and concurrency, you do not have to
+<p>And if you need some mix of parallelism and concurrency, you don’t have to
 choose between threads and async. You can use them together freely, letting each
-one serve the part it is best at. For example, Listing 17-TODO shows a fairly
+one serve the part it is best at. For example, Listing 17-42 shows a fairly
 common example of this kind of mix in real-world Rust code.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
-<pre><pre class="playground"><code class="language-rust edition2021">extern crate trpl; // for mdbook test
-
-// ANCHOR: all
-use std::{thread, time::Duration};
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">extern crate trpl; // for mdbook test
+</span><span class="boring">
+</span>use std::{thread, time::Duration};
 
 fn main() {
     let (tx, mut rx) = trpl::channel();
@@ -23927,20 +24030,19 @@ fn main() {
             println!("{message}");
         }
     });
-}
-// ANCHOR_END: all</code></pre></pre>
+}</code></pre></pre>
 <figcaption>Listing 17-42: Sending messages with blocking code in a thread and awaiting the messages in an async block</figcaption>
 </figure>
 <p>We begin by creating an async channel. Then we spawn a thread which takes
 ownership of the sender side of the channel. Within the thread, we send the
 numbers 1 through 10, and sleep for a second in between each. Finally, we run a
-future created with an async block passed to <code>trpl::run</code> just like we have
-throughout the chapter. In that future, we await those messages, just like in
+future created with an async block passed to <code>trpl::run</code> just as we have
+throughout the chapter. In that future, we await those messages, just as in
 the other message-passing examples we have seen.</p>
 <p>To return to the examples we opened the chapter with: you could imagine running
-a set of video encoding tasks using a dedicated thread, since video encoding is
-compute bound, but notifying the UI that those operations are done with an async
-channel. Examples of this kind of mix abound!</p>
+a set of video encoding tasks using a dedicated thread, because video encoding
+is compute bound, but notifying the UI that those operations are done with an
+async channel. Examples of this kind of mix abound!</p>
 <h2 id="summary-16"><a class="header" href="#summary-16">Summary</a></h2>
 <p>This isn’t the last you’ll see of concurrency in this book: the project in
 Chapter 21 will use the concepts in this chapter in a more realistic situation
@@ -31674,9 +31776,8 @@ how to automatically upgrade your code to a new edition via <code>cargo fix</cod
 <li><a href="https://github.com/nunojesus/rust-book-pt-pt">Português</a> (PT)</li>
 <li><a href="https://github.com/KaiserY/trpl-zh-cn">简体中文</a></li>
 <li><a href="https://github.com/rust-tw/book-tw">正體中文</a></li>
-<li><a href="https://github.com/pavloslav/rust-book-uk-ua">Українська</a></li>
+<li><a href="https://rust-lang-ua.github.io/rustbook_ukrainian">Українська</a></li>
 <li><a href="https://github.com/thecodix/book">Español</a>, <a href="https://github.com/ManRR/rust-book-es">alternate</a></li>
-<li><a href="https://github.com/EmanueleGurini/book_it">Italiano</a></li>
 <li><a href="https://github.com/rust-lang-ru/book">Русский</a></li>
 <li><a href="https://github.com/rinthel/rust-lang-book-ko">한국어</a></li>
 <li><a href="https://github.com/rust-lang-ja/book-ja">日本語</a></li>

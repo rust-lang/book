@@ -193,7 +193,8 @@ called on.</p>
 <p>Let’s change the <code>area</code> function that has a <code>Rectangle</code> instance as a parameter
 and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct, as shown
 in Listing 5-13.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
 struct Rectangle {
     width: u32,
@@ -217,8 +218,8 @@ fn main() {
         rect1.area()
     );
 }</code></pre></pre>
-<p><span class="caption">Listing 5-13: Defining an <code>area</code> method on the
-<code>Rectangle</code> struct</span></p>
+<figcaption>Listing 5-13: Defining an <code>area</code> method on the <code>Rectangle</code> struct</figcaption>
+</figure>
 <p>To define the function within the context of <code>Rectangle</code>, we start an <code>impl</code>
 (implementation) block for <code>Rectangle</code>. Everything within this <code>impl</code> block
 will be associated with the <code>Rectangle</code> type. Then we move the <code>area</code> function
@@ -255,7 +256,8 @@ library we provide.</p>
 <p>Note that we can choose to give a method the same name as one of the struct’s
 fields. For example, we can define a method on <code>Rectangle</code> that is also named
 <code>width</code>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">struct Rectangle {
 </span><span class="boring">    width: u32,
@@ -278,6 +280,7 @@ fn main() {
         println!("The rectangle has a nonzero width; it is {}", rect1.width);
     }
 }</code></pre></pre>
+</figure>
 <p>Here, we’re choosing to make the <code>width</code> method return <code>true</code> if the value in
 the instance’s <code>width</code> field is greater than <code>0</code> and <code>false</code> if the value is
 <code>0</code>: we can use a field within a method of the same name for any purpose. In
@@ -341,7 +344,8 @@ of <code>Rectangle</code> and return <code>true</code> if the second <code>Recta
 within <code>self</code> (the first <code>Rectangle</code>); otherwise, it should return <code>false</code>.
 That is, once we’ve defined the <code>can_hold</code> method, we want to be able to write
 the program shown in Listing 5-14.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore">fn main() {
     let rect1 = Rectangle {
         width: 30,
@@ -359,8 +363,8 @@ the program shown in Listing 5-14.</p>
     println!("Can rect1 hold rect2? {}", rect1.can_hold(&amp;rect2));
     println!("Can rect1 hold rect3? {}", rect1.can_hold(&amp;rect3));
 }</code></pre>
-<p><span class="caption">Listing 5-14: Using the as-yet-unwritten <code>can_hold</code>
-method</span></p>
+<figcaption>Listing 5-14: Using the as-yet-unwritten <code>can_hold</code> method</figcaption>
+</figure>
 <p>The expected output would look like the following because both dimensions of
 <code>rect2</code> are smaller than the dimensions of <code>rect1</code>, but <code>rect3</code> is wider than
 <code>rect1</code>:</p>
@@ -380,7 +384,8 @@ Boolean, and the implementation will check whether the width and height of
 <code>self</code> are greater than the width and height of the other <code>Rectangle</code>,
 respectively. Let’s add the new <code>can_hold</code> method to the <code>impl</code> block from
 Listing 5-13, shown in Listing 5-15.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">struct Rectangle {
 </span><span class="boring">    width: u32,
@@ -414,8 +419,8 @@ Listing 5-13, shown in Listing 5-15.</p>
 </span><span class="boring">    println!("Can rect1 hold rect2? {}", rect1.can_hold(&amp;rect2));
 </span><span class="boring">    println!("Can rect1 hold rect3? {}", rect1.can_hold(&amp;rect3));
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 5-15: Implementing the <code>can_hold</code> method on
-<code>Rectangle</code> that takes another <code>Rectangle</code> instance as a parameter</span></p>
+<figcaption>Listing 5-15: Implementing the <code>can_hold</code> method on <code>Rectangle</code> that takes another <code>Rectangle</code> instance as a parameter</figcaption>
+</figure>
 <p>When we run this code with the <code>main</code> function in Listing 5-14, we’ll get our
 desired output. Methods can take multiple parameters that we add to the
 signature after the <code>self</code> parameter, and those parameters work just like
@@ -465,6 +470,7 @@ namespaces created by modules. We’ll discuss modules in <a href="ch07-02-defin
 <p>Each struct is allowed to have multiple <code>impl</code> blocks. For example, Listing
 5-15 is equivalent to the code shown in Listing 5-16, which has each method in
 its own <code>impl</code> block.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#[derive(Debug)]
 </span><span class="boring">struct Rectangle {
 </span><span class="boring">    width: u32,
@@ -500,8 +506,8 @@ impl Rectangle {
 </span><span class="boring">    println!("Can rect1 hold rect2? {}", rect1.can_hold(&amp;rect2));
 </span><span class="boring">    println!("Can rect1 hold rect3? {}", rect1.can_hold(&amp;rect3));
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 5-16: Rewriting Listing 5-15 using multiple <code>impl</code>
-blocks</span></p>
+<figcaption>Listing 5-16: Rewriting Listing 5-15 using multiple <code>impl</code> blocks</figcaption>
+</figure>
 <p>There’s no reason to separate these methods into multiple <code>impl</code> blocks here,
 but this is valid syntax. We’ll see a case in which multiple <code>impl</code> blocks are
 useful in Chapter 10, where we discuss generic types and traits.</p>

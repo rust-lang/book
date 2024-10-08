@@ -191,7 +191,8 @@ Unlike a pointer, a reference is guaranteed to point to a valid value of a
 particular type for the life of that reference.</p>
 <p>Here is how you would define and use a <code>calculate_length</code> function that has a
 reference to an object as a parameter instead of taking ownership of the value:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s1 = String::from("hello");
 
@@ -203,15 +204,16 @@ reference to an object as a parameter instead of taking ownership of the value:<
 fn calculate_length(s: &amp;String) -&gt; usize {
     s.len()
 }</code></pre></pre>
+</figure>
 <p>First, notice that all the tuple code in the variable declaration and the
 function return value is gone. Second, note that we pass <code>&amp;s1</code> into
 <code>calculate_length</code> and, in its definition, we take <code>&amp;String</code> rather than
 <code>String</code>. These ampersands represent <em>references</em>, and they allow you to refer
-to some value without taking ownership of it. Figure 4-5 depicts this concept.</p>
+to some value without taking ownership of it. Figure 4-6 depicts this concept.</p>
 <p><img alt="Three tables: the table for s contains only a pointer to the table
 for s1. The table for s1 contains the stack data for s1 and points to the
-string data on the heap." src="img/trpl04-05.svg" class="center" /></p>
-<p><span class="caption">Figure 4-5: A diagram of <code>&amp;String s</code> pointing at <code>String s1</code></span></p>
+string data on the heap." src="img/trpl04-06.svg" class="center" /></p>
+<p><span class="caption">Figure 4-6: A diagram of <code>&amp;String s</code> pointing at <code>String s1</code></span></p>
 <section class="note" aria-role="note">
 <p>Note: The opposite of referencing by using <code>&amp;</code> is <em>dereferencing</em>, which is
 accomplished with the dereference operator, <code>*</code>. We’ll see some uses of the
@@ -258,7 +260,8 @@ person owns something, you can borrow it from them. When you’re done, you have
 to give it back. You don’t own it.</p>
 <p>So, what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-6. Spoiler alert: it doesn’t work!</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">fn main() {
     let s = String::from("hello");
 
@@ -268,7 +271,8 @@ Listing 4-6. Spoiler alert: it doesn’t work!</p>
 fn change(some_string: &amp;String) {
     some_string.push_str(", world");
 }</code></pre>
-<p><span class="caption">Listing 4-6: Attempting to modify a borrowed value</span></p>
+<figcaption>Listing 4-6: Attempting to modify a borrowed value</figcaption>
+</figure>
 <p>Here’s the error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling ownership v0.1.0 (file:///projects/ownership)
@@ -291,7 +295,8 @@ allowed to modify something we have a reference to.</p>
 <h3 id="mutable-references"><a class="header" href="#mutable-references">Mutable References</a></h3>
 <p>We can fix the code from Listing 4-6 to allow us to modify a borrowed value
 with just a few small tweaks that use, instead, a <em>mutable reference</em>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let mut s = String::from("hello");
 
@@ -301,13 +306,15 @@ with just a few small tweaks that use, instead, a <em>mutable reference</em>:</p
 fn change(some_string: &amp;mut String) {
     some_string.push_str(", world");
 }</code></pre></pre>
+</figure>
 <p>First we change <code>s</code> to be <code>mut</code>. Then we create a mutable reference with <code>&amp;mut s</code> where we call the <code>change</code> function, and update the function signature to
 accept a mutable reference with <code>some_string: &amp;mut String</code>. This makes it very
 clear that the <code>change</code> function will mutate the value it borrows.</p>
 <p>Mutable references have one big restriction: if you have a mutable reference to
 a value, you can have no other references to that value. This code that
 attempts to create two mutable references to <code>s</code> will fail:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
 </span>    let mut s = String::from("hello");
 
@@ -316,6 +323,7 @@ attempts to create two mutable references to <code>s</code> will fail:</p>
 
     println!("{}, {}", r1, r2);
 <span class="boring">}</span></code></pre>
+</figure>
 <p>Here’s the error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling ownership v0.1.0 (file:///projects/ownership)
@@ -432,7 +440,8 @@ compiler will ensure that the data will not go out of scope before the
 reference to the data does.</p>
 <p>Let’s try to create a dangling reference to see how Rust prevents them with a
 compile-time error:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">fn main() {
     let reference_to_nothing = dangle();
 }
@@ -442,6 +451,7 @@ fn dangle() -&gt; &amp;String {
 
     &amp;s
 }</code></pre>
+</figure>
 <p>Here’s the error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling ownership v0.1.0 (file:///projects/ownership)
@@ -480,7 +490,8 @@ for it to be borrowed from
 </code></pre>
 <p>Let’s take a closer look at exactly what’s happening at each stage of our
 <code>dangle</code> code:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
 </span><span class="boring">    let reference_to_nothing = dangle();
 </span><span class="boring">}
@@ -492,6 +503,7 @@ for it to be borrowed from
     &amp;s // we return a reference to the String, s
 } // Here, s goes out of scope, and is dropped. Its memory goes away.
   // Danger!</code></pre>
+</figure>
 <p>Because <code>s</code> is created inside <code>dangle</code>, when the code of <code>dangle</code> is finished,
 <code>s</code> will be deallocated. But we tried to return a reference to it. That means
 this reference would be pointing to an invalid <code>String</code>. That’s no good! Rust

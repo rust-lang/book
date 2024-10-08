@@ -195,7 +195,8 @@ slices, to understand the problem that slices will solve:</p>
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about <em>part</em> of a string. However, we could return the index of the
 end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn first_word(s: &amp;String) -&gt; usize {
     let bytes = s.as_bytes();
 
@@ -209,8 +210,8 @@ end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 4-7: The <code>first_word</code> function that returns a
-byte index value into the <code>String</code> parameter</span></p>
+<figcaption>Listing 4-7: The <code>first_word</code> function that returns a byte index value into the <code>String</code> parameter</figcaption>
+</figure>
 <p>Because we need to go through the <code>String</code> element by element and check whether
 a value is a space, we’ll convert our <code>String</code> to an array of bytes using the
 <code>as_bytes</code> method.</p>
@@ -275,7 +276,8 @@ only a meaningful number in the context of the <code>&amp;String</code>. In othe
 because it’s a separate value from the <code>String</code>, there’s no guarantee that it
 will still be valid in the future. Consider the program in Listing 4-8 that
 uses the <code>first_word</code> function from Listing 4-7.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn first_word(s: &amp;String) -&gt; usize {
 </span><span class="boring">    let bytes = s.as_bytes();
 </span><span class="boring">
@@ -298,8 +300,8 @@ uses the <code>first_word</code> function from Listing 4-7.</p>
     // word still has the value 5 here, but there's no more string that
     // we could meaningfully use the value 5 with. word is now totally invalid!
 }</code></pre></pre>
-<p><span class="caption">Listing 4-8: Storing the result from calling the
-<code>first_word</code> function and then changing the <code>String</code> contents</span></p>
+<figcaption>Listing 4-8: Storing the result from calling the <code>first_word</code> function and then changing the <code>String</code> contents</figcaption>
+</figure>
 <p>This program compiles without any errors and would also do so if we used <code>word</code>
 after calling <code>s.clear()</code>. Because <code>word</code> isn’t connected to the state of <code>s</code>
 at all, <code>word</code> still contains the value <code>5</code>. We could use that value <code>5</code> with
@@ -330,13 +332,13 @@ one more than the last position in the slice. Internally, the slice data
 structure stores the starting position and the length of the slice, which
 corresponds to <code>ending_index</code> minus <code>starting_index</code>. So, in the case of <code>let world = &amp;s[6..11];</code>, <code>world</code> would be a slice that contains a pointer to the
 byte at index 6 of <code>s</code> with a length value of <code>5</code>.</p>
-<p>Figure 4-6 shows this in a diagram.</p>
+<p>Figure 4-7 shows this in a diagram.</p>
 <p><img alt="Three tables: a table representing the stack data of s, which points
 to the byte at index 0 in a table of the string data &quot;hello world&quot; on
 the heap. The third table rep-resents the stack data of the slice world, which
 has a length value of 5 and points to byte 6 of the heap data table."
-src="img/trpl04-06.svg" class="center" style="width: 50%;" /></p>
-<p><span class="caption">Figure 4-6: String slice referring to part of a
+src="img/trpl04-07.svg" class="center" style="width: 50%;" /></p>
+<p><span class="caption">Figure 4-7: String slice referring to part of a
 <code>String</code></span></p>
 <p>With Rust’s <code>..</code> range syntax, if you want to start at index 0, you can drop
 the value before the two periods. In other words, these are equal:</p>
@@ -379,7 +381,8 @@ Text with Strings”</a><!-- ignore --> section of Chapter 8.</p>
 </section>
 <p>With all this information in mind, let’s rewrite <code>first_word</code> to return a
 slice. The type that signifies “string slice” is written as <code>&amp;str</code>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn first_word(s: &amp;String) -&gt; &amp;str {
     let bytes = s.as_bytes();
 
@@ -393,6 +396,7 @@ slice. The type that signifies “string slice” is written as <code>&amp;str</
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
+</figure>
 <p>We get the index for the end of the word the same way we did in Listing 4-7, by
 looking for the first occurrence of a space. When we find a space, we return a
 string slice using the start of the string and the index of the space as the
@@ -411,7 +415,8 @@ show up later if we kept trying to use the first word index with an emptied
 string. Slices make this bug impossible and let us know we have a problem with
 our code much sooner. Using the slice version of <code>first_word</code> will throw a
 compile-time error:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn first_word(s: &amp;String) -&gt; &amp;str {
 </span><span class="boring">    let bytes = s.as_bytes();
 </span><span class="boring">
@@ -433,6 +438,7 @@ compile-time error:</p>
 
     println!("the first word is: {word}");
 }</code></pre>
+</figure>
 <p>Here’s the compiler error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling ownership v0.1.0 (file:///projects/ownership)
@@ -478,6 +484,7 @@ one more improvement on <code>first_word</code>, and that’s its signature:</p>
 <p>A more experienced Rustacean would write the signature shown in Listing 4-9
 instead because it allows us to use the same function on both <code>&amp;String</code> values
 and <code>&amp;str</code> values.</p>
+<figure class="listing">
 <pre><code class="language-rust ignore">fn first_word(s: &amp;str) -&gt; &amp;str {
 <span class="boring">    let bytes = s.as_bytes();
 </span><span class="boring">
@@ -510,8 +517,8 @@ and <code>&amp;str</code> values.</p>
 </span><span class="boring">    // this works too, without the slice syntax!
 </span><span class="boring">    let word = first_word(my_string_literal);
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 4-9: Improving the <code>first_word</code> function by using
-a string slice for the type of the <code>s</code> parameter</span></p>
+<figcaption>Listing 4-9: Improving the <code>first_word</code> function by using a string slice for the type of the <code>s</code> parameter</figcaption>
+</figure>
 <p>If we have a string slice, we can pass that directly. If we have a <code>String</code>, we
 can pass a slice of the <code>String</code> or a reference to the <code>String</code>. This
 flexibility takes advantage of <em>deref coercions</em>, a feature we will cover in the
@@ -519,7 +526,8 @@ flexibility takes advantage of <em>deref coercions</em>, a feature we will cover
 Methods”</a><!--ignore--> section of Chapter 15.</p>
 <p>Defining a function to take a string slice instead of a reference to a <code>String</code>
 makes our API more general and useful without losing any functionality:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn first_word(s: &amp;str) -&gt; &amp;str {
 </span><span class="boring">    let bytes = s.as_bytes();
 </span><span class="boring">
@@ -552,6 +560,7 @@ makes our API more general and useful without losing any functionality:</p>
     // this works too, without the slice syntax!
     let word = first_word(my_string_literal);
 }</code></pre></pre>
+</figure>
 <h3 id="other-slices"><a class="header" href="#other-slices">Other Slices</a></h3>
 <p>String slices, as you might imagine, are specific to strings. But there’s a
 more general slice type too. Consider this array:</p>

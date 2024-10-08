@@ -188,7 +188,8 @@ then refactor the program until we’re using structs instead.</p>
 the width and height of a rectangle specified in pixels and calculate the area
 of the rectangle. Listing 5-8 shows a short program with one way of doing
 exactly that in our project’s <em>src/main.rs</em>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let width1 = 30;
     let height1 = 50;
@@ -202,8 +203,8 @@ exactly that in our project’s <em>src/main.rs</em>.</p>
 fn area(width: u32, height: u32) -&gt; u32 {
     width * height
 }</code></pre></pre>
-<p><span class="caption">Listing 5-8: Calculating the area of a rectangle
-specified by separate width and height variables</span></p>
+<figcaption>Listing 5-8: Calculating the area of a rectangle specified by separate width and height variables</figcaption>
+</figure>
 <p>Now, run this program using <code>cargo run</code>:</p>
 <pre><code class="language-console">$ cargo run
    Compiling rectangles v0.1.0 (file:///projects/rectangles)
@@ -236,7 +237,8 @@ we might do that in <a href="ch03-02-data-types.html#the-tuple-type">“The Tupl
 of Chapter 3: by using tuples.</p>
 <h3 id="refactoring-with-tuples"><a class="header" href="#refactoring-with-tuples">Refactoring with Tuples</a></h3>
 <p>Listing 5-9 shows another version of our program that uses tuples.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let rect1 = (30, 50);
 
@@ -249,8 +251,8 @@ of Chapter 3: by using tuples.</p>
 fn area(dimensions: (u32, u32)) -&gt; u32 {
     dimensions.0 * dimensions.1
 }</code></pre></pre>
-<p><span class="caption">Listing 5-9: Specifying the width and height of the
-rectangle with a tuple</span></p>
+<figcaption>Listing 5-9: Specifying the width and height of the rectangle with a tuple</figcaption>
+</figure>
 <p>In one way, this program is better. Tuples let us add a bit of structure, and
 we’re now passing just one argument. But in another way, this version is less
 clear: tuples don’t name their elements, so we have to index into the parts of
@@ -265,7 +267,8 @@ our data in our code, it’s now easier to introduce errors.</p>
 <p>We use structs to add meaning by labeling the data. We can transform the tuple
 we’re using into a struct with a name for the whole as well as names for the
 parts, as shown in Listing 5-10.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct Rectangle {
     width: u32,
     height: u32,
@@ -286,7 +289,8 @@ fn main() {
 fn area(rectangle: &amp;Rectangle) -&gt; u32 {
     rectangle.width * rectangle.height
 }</code></pre></pre>
-<p><span class="caption">Listing 5-10: Defining a <code>Rectangle</code> struct</span></p>
+<figcaption>Listing 5-10: Defining a <code>Rectangle</code> struct</figcaption>
+</figure>
 <p>Here we’ve defined a struct and named it <code>Rectangle</code>. Inside the curly
 brackets, we defined the fields as <code>width</code> and <code>height</code>, both of which have
 type <code>u32</code>. Then, in <code>main</code>, we created a particular instance of <code>Rectangle</code>
@@ -310,7 +314,8 @@ win for clarity.</p>
 debugging our program and see the values for all its fields. Listing 5-11 tries
 using the <a href="../std/macro.println.html"><code>println!</code> macro</a><!-- ignore --> as we have used in
 previous chapters. This won’t work, however.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">struct Rectangle {
     width: u32,
     height: u32,
@@ -324,8 +329,8 @@ fn main() {
 
     println!("rect1 is {}", rect1);
 }</code></pre>
-<p><span class="caption">Listing 5-11: Attempting to print a <code>Rectangle</code>
-instance</span></p>
+<figcaption>Listing 5-11: Attempting to print a <code>Rectangle</code> instance</figcaption>
+</figure>
 <p>When we compile this code, we get an error with this core message:</p>
 <pre><code class="language-text">error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
 </code></pre>
@@ -358,7 +363,8 @@ see its value while we’re debugging our code.</p>
 have to explicitly opt in to make that functionality available for our struct.
 To do that, we add the outer attribute <code>#[derive(Debug)]</code> just before the
 struct definition, as shown in Listing 5-12.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
 struct Rectangle {
     width: u32,
@@ -373,8 +379,8 @@ fn main() {
 
     println!("rect1 is {rect1:?}");
 }</code></pre></pre>
-<p><span class="caption">Listing 5-12: Adding the attribute to derive the <code>Debug</code>
-trait and printing the <code>Rectangle</code> instance using debug formatting</span></p>
+<figcaption>Listing 5-12: Adding the attribute to derive the <code>Debug</code> trait and printing the <code>Rectangle</code> instance using debug formatting</figcaption>
+</figure>
 <p>Now when we run the program, we won’t get any errors, and we’ll see the
 following output:</p>
 <pre><code class="language-console">$ cargo run
