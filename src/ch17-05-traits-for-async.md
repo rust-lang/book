@@ -172,9 +172,10 @@ pub trait Future {
 }
 ```
 
-The `cx` parameter and its `Context` type is interesting, but is beyond the
-scope of this chapter: you generally only need to worry about it when writing a
-custom `Future` implementation.
+The `cx` parameter and its `Context` type is the key to how a runtime actually
+knows when to check any given future, while still being lazy. The details of how
+that works are beyond the scope of this chapter, though: you generally only need
+to worry about it when writing a custom `Future` implementation.
 
 Instead, we’ll focus on the type for `self`. This is the first time we’ve seen
 a method where `self` has a type annotation. A type annotation for `self` is
@@ -304,12 +305,12 @@ via the safe but restrictive APIs provided by `Pin`, even though a
 need a way to tell the compiler that it’s actually just fine to move items
 around in cases such as these. For that, we have `Unpin`.
 
-`Unpin` is a marker trait, as `Send` and `Sync` are, which we saw in Chapter 16.
-Recall that marker traits have no functionality of their own. They exist only to
-tell the compiler that it’s safe to use the type which implements a given trait
-in a particular context. `Unpin` informs the compiler that a given type does
-*not* need to uphold any particular guarantees about whether the value in
-question can be moved.
+`Unpin` is a marker trait, similar to the `Send` and `Sync` traits we saw in
+Chapter 16. Recall that marker traits have no functionality of their own. They
+exist only to tell the compiler that it’s safe to use the type which implements
+a given trait in a particular context. `Unpin` informs the compiler that a given
+type does *not* need to uphold any particular guarantees about whether the value
+in question can be moved.
 
 Just as with `Send` and `Sync`, the compiler implements `Unpin` automatically
 for all types where it can prove it is safe. Implementing `Unpin` manually is

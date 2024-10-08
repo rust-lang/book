@@ -2675,7 +2675,7 @@ via the safe but restrictive APIs provided by `Pin`, even though a
 need a way to tell the compiler that it’s actually just fine to move items
 around in cases such as these. For that, we have `Unpin`.
 
-`Unpin` is a marker trait, as `Send` and `Sync` are, which we saw in the
+`Unpin` is a marker trait, similar to the `Send` and `Sync` traits we saw in the
 “Extensible Concurrency with the `Sync` and `Send` Traits” section of Chapter
 16 on page XX. Recall that marker traits have no functionality of their own.
 They exist only to tell the compiler that it’s safe to use the type which
