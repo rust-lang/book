@@ -73,22 +73,25 @@ Writing this lengthy type in function signatures and as type annotations all
 over the code can be tiresome and error prone. Imagine having a project full of
 code like that in Listing 20-24.
 
+<Listing number="20-24" caption="Using a long type in many places">
+
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-24/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 20-24: Using a long type in many places</span>
+</Listing>
 
 A type alias makes this code more manageable by reducing the repetition. In
 Listing 20-25, we’ve introduced an alias named `Thunk` for the verbose type and
 can replace all uses of the type with the shorter alias `Thunk`.
 
+<Listing number="20-25" caption="Introducing a type alias `Thunk` to reduce repetition">
+
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-25/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 20-25: Introducing a type alias `Thunk` to reduce
-repetition</span>
+</Listing>
 
 This code is much easier to read and write! Choosing a meaningful name for a
 type alias can help communicate your intent as well (*thunk* is a word for code
@@ -147,12 +150,13 @@ But what use is a type you can never create values for? Recall the code from
 Listing 2-5, part of the number guessing game; we’ve reproduced a bit of it
 here in Listing 20-26.
 
+<Listing number="20-26" caption="A `match` with an arm that ends in `continue`">
+
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:ch19}}
 ```
 
-<span class="caption">Listing 20-26: A `match` with an arm that ends in
-`continue`</span>
+</Listing>
 
 At the time, we skipped over some details in this code. In Chapter 6 in [“The
 `match` Control Flow Operator”][the-match-control-flow-operator]<!-- ignore -->
