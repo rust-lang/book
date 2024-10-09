@@ -40,14 +40,13 @@ Listing 18-11 shows this workflow in code form: this is an example usage of the
 API we’ll implement in a library crate named `blog`. This won’t compile yet
 because we haven’t implemented the `blog` crate.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="18-11" file-name="src/main.rs" caption="Code that demonstrates the desired behavior we want our `blog` crate to have">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-11/src/main.rs:all}}
 ```
 
-<span class="caption">Listing 18-11: Code that demonstrates the desired
-behavior we want our `blog` crate to have</span>
+</Listing>
 
 We want to allow the user to create a new draft blog post with `Post::new`. We
 want to allow text to be added to the blog post. If we try to get the post’s
@@ -84,15 +83,13 @@ Then `Post` will hold a trait object of `Box<dyn State>` inside an `Option<T>`
 in a private field named `state` to hold the state object. You’ll see why the
 `Option<T>` is necessary in a bit.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-12" file-name="src/lib.rs" caption="Definition of a `Post` struct and a `new` function that creates a new `Post` instance, a `State` trait, and a `Draft` struct">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-12/src/lib.rs}}
 ```
 
-<span class="caption">Listing 18-12: Definition of a `Post` struct and a `new`
-function that creates a new `Post` instance, a `State` trait, and a `Draft`
-struct</span>
+</Listing>
 
 The `State` trait defines the behavior shared by different post states. The
 state objects are `Draft`, `PendingReview`, and `Published`, and they will all
@@ -117,14 +114,13 @@ the `content` field’s data is read. The `add_text` method is pretty
 straightforward, so let’s add the implementation in Listing 18-13 to the `impl
 Post` block:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-13" fie-name="src/lib.rs" caption="Implementing the `add_text` method to add text to a post’s `content`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-13/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 18-13: Implementing the `add_text` method to add
-text to a post’s `content`</span>
+</Listing>
 
 The `add_text` method takes a mutable reference to `self`, because we’re
 changing the `Post` instance that we’re calling `add_text` on. We then call
@@ -145,14 +141,13 @@ once we implement the ability to change a post’s state so it can be published.
 So far, posts can only be in the draft state, so the post content should always
 be empty. Listing 18-14 shows this placeholder implementation:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-14" file-name="src/lib.rs" caption="Adding a placeholder implementation for the `content` method on `Post` that always returns an empty string slice">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-14/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 18-14: Adding a placeholder implementation for
-the `content` method on `Post` that always returns an empty string slice</span>
+</Listing>
 
 With this added `content` method, everything in Listing 18-11 up to line 7
 works as intended.
@@ -162,14 +157,13 @@ works as intended.
 Next, we need to add functionality to request a review of a post, which should
 change its state from `Draft` to `PendingReview`. Listing 18-15 shows this code:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-15" file-name="src/lib.rs" caption="Implementing `request_review` methods on `Post` and the `State` trait">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-15/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 18-15: Implementing `request_review` methods on
-`Post` and the `State` trait</span>
+</Listing>
 
 We give `Post` a public method named `request_review` that will take a mutable
 reference to `self`. Then we call an internal `request_review` method on the
@@ -222,14 +216,13 @@ The `approve` method will be similar to the `request_review` method: it will
 set `state` to the value that the current state says it should have when that
 state is approved, as shown in Listing 18-16:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-16" file-name="src/lib.rs" caption="Implementing the `approve` method on `Post` and the `State` trait">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-16/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 18-16: Implementing the `approve` method on
-`Post` and the `State` trait</span>
+</Listing>
 
 We add the `approve` method to the `State` trait and add a new struct that
 implements `State`, the `Published` state.
@@ -247,14 +240,13 @@ returned from `content` to depend on the current state of the `Post`, so we’re
 going to have the `Post` delegate to a `content` method defined on its `state`,
 as shown in Listing 18-17:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-17" file-name="src/lib.rs" caption="Updating the `content` method on `Post` to delegate to a `content` method on `State`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-17/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 18-17: Updating the `content` method on `Post` to
-delegate to a `content` method on `State`</span>
+</Listing>
 
 Because the goal is to keep all these rules inside the structs that implement
 `State`, we call a `content` method on the value in `state` and pass the post
@@ -282,14 +274,13 @@ we need to add `content` to the `State` trait definition, and that is where
 we’ll put the logic for what content to return depending on which state we
 have, as shown in Listing 18-18:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-18" file-name="src/lib.rs" caption="Adding the `content` method to the `State` trait">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-18/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 18-18: Adding the `content` method to the `State`
-trait</span>
+</Listing>
 
 We add a default implementation for the `content` method that returns an empty
 string slice. That means we don’t need to implement `content` on the `Draft`
@@ -383,11 +374,13 @@ draft posts where only published posts are allowed by issuing a compiler error.
 
 Let’s consider the first part of `main` in Listing 18-11:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-11/src/main.rs:here}}
 ```
+
+</Listing>
 
 We still enable the creation of new posts in the draft state using `Post::new`
 and the ability to add text to the post’s content. But instead of having a
@@ -399,14 +392,13 @@ display draft post content in production, because that code won’t even compile
 Listing 18-19 shows the definition of a `Post` struct and a `DraftPost` struct,
 as well as methods on each:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-19" file-name="src/lib.rs" caption="A `Post` with a `content` method and `DraftPost` without a `content` method">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-19/src/lib.rs}}
 ```
 
-<span class="caption">Listing 18-19: A `Post` with a `content` method and a
-`DraftPost` without a `content` method</span>
+</Listing>
 
 Both the `Post` and `DraftPost` structs have a private `content` field that
 stores the blog post text. The structs no longer have the `state` field because
@@ -435,15 +427,13 @@ these constraints by adding another struct, `PendingReviewPost`, defining the
 defining an `approve` method on `PendingReviewPost` to return a `Post`, as
 shown in Listing 18-20:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-20" file-name="src/lib.rs" caption="A `PendingReviewPost` that gets created by calling `request_review` on `DraftPost` and an `approve` method that turns a `PendingReviewPost` into a published `Post`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-20/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 18-20: A `PendingReviewPost` that gets created by
-calling `request_review` on `DraftPost` and an `approve` method that turns a
-`PendingReviewPost` into a published `Post`</span>
+</Listing>
 
 The `request_review` and `approve` methods take ownership of `self`, thus
 consuming the `DraftPost` and `PendingReviewPost` instances and transforming
@@ -465,14 +455,13 @@ pending review posts’ contents be empty strings, nor do we need them: we can�
 compile code that tries to use the content of posts in those states any longer.
 The updated code in `main` is shown in Listing 18-21:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="18-21" file-name="src/main.rs" caption="Modifications to `main` to use the new implementation of the blog post workflow">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-21/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-21: Modifications to `main` to use the new
-implementation of the blog post workflow</span>
+</Listing>
 
 The changes we needed to make to `main` to reassign `post` mean that this
 implementation doesn’t quite follow the object-oriented state pattern anymore:

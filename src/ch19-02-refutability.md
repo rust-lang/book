@@ -27,12 +27,13 @@ where Rust requires an irrefutable pattern and vice versa. Listing 19-8 shows a
 `let` statement, but for the pattern we’ve specified `Some(x)`, a refutable
 pattern. As you might expect, this code will not compile.
 
+<Listing number="19-8" caption="Attempting to use a refutable pattern with `let`">
+
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-8: Attempting to use a refutable pattern with
-`let`</span>
+</Listing>
 
 If `some_option_value` was a `None` value, it would fail to match the pattern
 `Some(x)`, meaning the pattern is refutable. However, the `let` statement can
@@ -53,24 +54,26 @@ can use `if let`. Then if the pattern doesn’t match, the code will just skip
 the code in the curly brackets, giving it a way to continue validly. Listing
 19-9 shows how to fix the code in Listing 19-8.
 
+<Listing number="19-9" caption="Using `if let` and a block with refutable patterns instead of `let`">
+
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-9: Using `if let` and a block with refutable
-patterns instead of `let`</span>
+</Listing>
 
 We’ve given the code an out! This code is perfectly valid now. However,
 if we give `if let` an irrefutable pattern (a pattern that will always
 match), such as `x`, as shown in Listing 19-10, the compiler will give a
 warning.
 
+<Listing number="19-10" caption="Attempting to use an irrefutable pattern with `if let`">
+
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-10: Attempting to use an irrefutable pattern
-with `if let`</span>
+</Listing>
 
 Rust complains that it doesn’t make sense to use `if let` with an irrefutable
 pattern:

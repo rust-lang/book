@@ -22,14 +22,13 @@ function `f` twice, passing it the `arg` value, then adds the two function call
 results together. The `main` function calls `do_twice` with the arguments
 `add_one` and `5`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="20-27" file-name="src/main.rs" caption="Using the `fn` type to accept a function pointer as an argument">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-27/src/main.rs}}
 ```
 
-<span class="caption">Listing 20-27: Using the `fn` type to accept a function
-pointer as an argument</span>
+</Listing>
 
 This code prints `The answer is: 12`. We specify that the parameter `f` in
 `do_twice` is an `fn` that takes one parameter of type `i32` and returns an

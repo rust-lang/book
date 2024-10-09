@@ -66,13 +66,13 @@ behavior.
 Listing 18-3 shows how to define a trait named `Draw` with one method named
 `draw`:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-3" file-name="src/lib.rs" caption="Definition of the `Draw` trait">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-03/src/lib.rs}}
 ```
 
-<span class="caption">Listing 18-3: Definition of the `Draw` trait</span>
+</Listing>
 
 This syntax should look familiar from our discussions on how to define traits
 in Chapter 10. Next comes some new syntax: Listing 18-4 defines a struct named
@@ -80,27 +80,24 @@ in Chapter 10. Next comes some new syntax: Listing 18-4 defines a struct named
 `Box<dyn Draw>`, which is a trait object; it’s a stand-in for any type inside
 a `Box` that implements the `Draw` trait.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-4" file-name="src/lib.rs" caption="Definition of the `Screen` struct with a `components` field holding a vector of trait objects that implement the `Draw` trait">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-04/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 18-4: Definition of the `Screen` struct with a
-`components` field holding a vector of trait objects that implement the `Draw`
-trait</span>
+</Listing>
 
 On the `Screen` struct, we’ll define a method named `run` that will call the
 `draw` method on each of its `components`, as shown in Listing 18-5:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-5" file-name="src/lib.rs" caption="A `run` method on `Screen` that calls the `draw` method on each component">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-05/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 18-5: A `run` method on `Screen` that calls the
-`draw` method on each component</span>
+</Listing>
 
 This works differently from defining a struct that uses a generic type
 parameter with trait bounds. A generic type parameter can only be substituted
@@ -109,14 +106,13 @@ concrete types to fill in for the trait object at runtime. For example, we
 could have defined the `Screen` struct using a generic type and a trait bound
 as in Listing 18-6:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-6" file-name="src/lib.rs" caption="An alternate implementation of the `Screen` struct and its `run` method using generics and trait bounds">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-06/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 18-6: An alternate implementation of the `Screen`
-struct and its `run` method using generics and trait bounds</span>
+</Listing>
 
 This restricts us to a `Screen` instance that has a list of components all of
 type `Button` or all of type `TextField`. If you’ll only ever have homogeneous
@@ -136,14 +132,13 @@ of this book, so the `draw` method won’t have any useful implementation in its
 body. To imagine what the implementation might look like, a `Button` struct
 might have fields for `width`, `height`, and `label`, as shown in Listing 18-7:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-7" file-name="src/lib.rs" caption="A `Button` struct that implements the `Draw` trait">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-07/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 18-7: A `Button` struct that implements the
-`Draw` trait</span>
+</Listing>
 
 The `width`, `height`, and `label` fields on `Button` will differ from the
 fields on other components; for example, a `TextField` type might have those
@@ -159,14 +154,13 @@ If someone using our library decides to implement a `SelectBox` struct that has
 `width`, `height`, and `options` fields, they implement the `Draw` trait on the
 `SelectBox` type as well, as shown in Listing 18-8:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="18-8" file-name="src/main.rs" caption="Another crate using `gui` and implementing the `Draw` trait on a `SelectBox` struct">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-8: Another crate using `gui` and implementing
-the `Draw` trait on a `SelectBox` struct</span>
+</Listing>
 
 Our library’s user can now write their `main` function to create a `Screen`
 instance. To the `Screen` instance, they can add a `SelectBox` and a `Button`
@@ -174,14 +168,13 @@ by putting each in a `Box<T>` to become a trait object. They can then call the
 `run` method on the `Screen` instance, which will call `draw` on each of the
 components. Listing 18-9 shows this implementation:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="18-9" file-name="src/main.rs" caption="Using trait objects to store values of different types that implement the same trait">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-9: Using trait objects to store values of
-different types that implement the same trait</span>
+</Listing>
 
 When we wrote the library, we didn’t know that someone might add the
 `SelectBox` type, but our `Screen` implementation was able to operate on the
@@ -208,14 +201,13 @@ our code if the values don’t implement the traits that the trait objects need.
 For example, Listing 18-10 shows what happens if we try to create a `Screen`
 with a `String` as a component:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="18-10" file-name="src/main.rs" caption="Attempting to use a type that doesn’t implement the trait object’s trait">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-10/src/main.rs}}
 ```
 
-<span class="caption">Listing 18-10: Attempting to use a type that doesn’t
-implement the trait object’s trait</span>
+</Listing>
 
 We’ll get this error because `String` doesn’t implement the `Draw` trait:
 
