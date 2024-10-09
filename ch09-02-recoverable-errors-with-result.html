@@ -699,7 +699,7 @@ fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
 allows the use of the <code>?</code> operator on <code>Result</code> values.</span></p>
 <p>The <code>Box&lt;dyn Error&gt;</code> type is a <em>trait object</em>, which we’ll talk about in the
 <a href="ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects that Allow for Values of Different
-Types”</a><!-- ignore --> section in Chapter 17. For now, you can
+Types”</a><!-- ignore --> section in Chapter 18. For now, you can
 read <code>Box&lt;dyn Error&gt;</code> to mean “any kind of error.” Using <code>?</code> on a <code>Result</code>
 value in a <code>main</code> function with the error type <code>Box&lt;dyn Error&gt;</code> is allowed
 because it allows any <code>Err</code> value to be returned early. Even though the body of

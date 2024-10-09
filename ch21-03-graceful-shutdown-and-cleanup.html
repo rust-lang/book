@@ -181,7 +181,7 @@
                 <div id="content" class="content">
                     <main>
                         <h2 id="graceful-shutdown-and-cleanup"><a class="header" href="#graceful-shutdown-and-cleanup">Graceful Shutdown and Cleanup</a></h2>
-<p>The code in Listing 20-20 is responding to requests asynchronously through the
+<p>The code in Listing 21-20 is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about the <code>workers</code>,
 <code>id</code>, and <code>thread</code> fields that we’re not using in a direct way that reminds us
 we’re not cleaning up anything. When we use the less elegant
@@ -197,9 +197,10 @@ thread pool.</p>
 <h3 id="implementing-the-drop-trait-on-threadpool"><a class="header" href="#implementing-the-drop-trait-on-threadpool">Implementing the <code>Drop</code> Trait on <code>ThreadPool</code></a></h3>
 <p>Let’s start with implementing <code>Drop</code> on our thread pool. When the pool is
 dropped, our threads should all join to make sure they finish their work.
-Listing 20-22 shows a first attempt at a <code>Drop</code> implementation; this code won’t
+Listing 21-22 shows a first attempt at a <code>Drop</code> implementation; this code won’t
 quite work yet.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::{
 </span><span class="boring">    sync::{mpsc, Arc, Mutex},
 </span><span class="boring">    thread,
@@ -274,8 +275,8 @@ quite work yet.</p>
 </span><span class="boring">        Worker { id, thread }
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 20-22: Joining each thread when the thread pool
-goes out of scope</span></p>
+<figcaption>Listing 21-22: Joining each thread when the thread pool goes out of scope</figcaption>
+</figure>
 <p>First, we loop through each of the thread pool <code>workers</code>. We use <code>&amp;mut</code> for
 this because <code>self</code> is a mutable reference, and we also need to be able to
 mutate <code>worker</code>. For each worker, we print a message saying that this
@@ -310,7 +311,8 @@ will have a <code>Some</code> variant in <code>thread</code>, and when we want t
 <code>Worker</code>, we’ll replace <code>Some</code> with <code>None</code> so the <code>Worker</code> doesn’t have a
 thread to run.</p>
 <p>So we know we want to update the definition of <code>Worker</code> like this:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::{
 </span><span class="boring">    sync::{mpsc, Arc, Mutex},
 </span><span class="boring">    thread,
@@ -385,6 +387,7 @@ thread to run.</p>
 </span><span class="boring">        Worker { id, thread }
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
+</figure>
 <p>Now let’s lean on the compiler to find the other places that need to change.
 Checking this code, we get two errors:</p>
 <pre><code class="language-console">$ cargo check
@@ -422,7 +425,8 @@ error: could not compile `hello` (lib) due to 2 previous errors
 <p>Let’s address the second error, which points to the code at the end of
 <code>Worker::new</code>; we need to wrap the <code>thread</code> value in <code>Some</code> when we create a
 new <code>Worker</code>. Make the following changes to fix this error:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::{
 </span><span class="boring">    sync::{mpsc, Arc, Mutex},
 </span><span class="boring">    thread,
@@ -502,10 +506,12 @@ new <code>Worker</code>. Make the following changes to fix this error:</p>
         }
     }
 }</code></pre>
+</figure>
 <p>The first error is in our <code>Drop</code> implementation. We mentioned earlier that we
 intended to call <code>take</code> on the <code>Option</code> value to move <code>thread</code> out of <code>worker</code>.
 The following changes will do so:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore not_desired_behavior"><span class="boring">use std::{
 </span><span class="boring">    sync::{mpsc, Arc, Mutex},
 </span><span class="boring">    thread,
@@ -585,7 +591,8 @@ The following changes will do so:</p>
 </span><span class="boring">        }
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p>As discussed in Chapter 17, the <code>take</code> method on <code>Option</code> takes the <code>Some</code>
+</figure>
+<p>As discussed in Chapter 18, the <code>take</code> method on <code>Option</code> takes the <code>Some</code>
 variant out and leaves <code>None</code> in its place. We’re using <code>if let</code> to destructure
 the <code>Some</code> and get the thread; then we call <code>join</code> on the thread. If a worker’s
 thread is already <code>None</code>, we know that worker has already had its thread
@@ -601,11 +608,12 @@ block forever waiting for the first thread to finish.</p>
 <p>To fix this problem, we’ll need a change in the <code>ThreadPool</code> <code>drop</code>
 implementation and then a change in the <code>Worker</code> loop.</p>
 <p>First, we’ll change the <code>ThreadPool</code> <code>drop</code> implementation to explicitly drop
-the <code>sender</code> before waiting for the threads to finish. Listing 20-23 shows the
+the <code>sender</code> before waiting for the threads to finish. Listing 21-23 shows the
 changes to <code>ThreadPool</code> to explicitly drop <code>sender</code>. We use the same <code>Option</code>
 and <code>take</code> technique as we did with the thread to be able to move <code>sender</code> out
 of <code>ThreadPool</code>:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground not_desired_behavior"><span class="boring">use std::{
 </span><span class="boring">    sync::{mpsc, Arc, Mutex},
 </span><span class="boring">    thread,
@@ -693,14 +701,15 @@ impl Drop for ThreadPool {
 </span><span class="boring">        }
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 20-23: Explicitly drop <code>sender</code> before joining
-the worker threads</span></p>
+<figcaption>Listing 21-23: Explicitly drop <code>sender</code> before joining the worker threads</figcaption>
+</figure>
 <p>Dropping <code>sender</code> closes the channel, which indicates no more messages will be
 sent. When that happens, all the calls to <code>recv</code> that the workers do in the
-infinite loop will return an error. In Listing 20-24, we change the <code>Worker</code>
+infinite loop will return an error. In Listing 21-24, we change the <code>Worker</code>
 loop to gracefully exit the loop in that case, which means the threads will
 finish when the <code>ThreadPool</code> <code>drop</code> implementation calls <code>join</code> on them.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">use std::{
 </span><span class="boring">    sync::{mpsc, Arc, Mutex},
 </span><span class="boring">    thread,
@@ -793,11 +802,12 @@ finish when the <code>ThreadPool</code> <code>drop</code> implementation calls <
         }
     }
 }</code></pre>
-<p><span class="caption">Listing 20-24: Explicitly break out of the loop when
-<code>recv</code> returns an error</span></p>
+<figcaption>Listing 21-24: Explicitly break out of the loop when <code>recv</code> returns an error</figcaption>
+</figure>
 <p>To see this code in action, let’s modify <code>main</code> to accept only two requests
-before gracefully shutting down the server, as shown in Listing 20-25.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+before gracefully shutting down the server, as shown in Listing 21-25.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore"><span class="boring">use hello::ThreadPool;
 </span><span class="boring">use std::{
 </span><span class="boring">    fs,
@@ -843,8 +853,8 @@ before gracefully shutting down the server, as shown in Listing 20-25.</p>
 </span><span class="boring">
 </span><span class="boring">    stream.write_all(response.as_bytes()).unwrap();
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 20-25: Shut down the server after serving two
-requests by exiting the loop</span></p>
+<figcaption>Listing 21-25: Shut down the server after serving two requests by exiting the loop</figcaption>
+</figure>
 <p>You wouldn’t want a real-world web server to shut down after serving only two
 requests. This code just demonstrates that the graceful shutdown and cleanup is
 in working order.</p>
@@ -854,7 +864,7 @@ end of <code>main</code>, and the <code>drop</code> implementation will run.</p>
 <p>Start the server with <code>cargo run</code>, and make three requests. The third request
 should error, and in your terminal you should see output similar to this:</p>
 <!-- manual-regeneration
-cd listings/ch20-web-server/listing-20-25
+cd listings/ch21-web-server/listing-21-25
 cargo run
 curl http://127.0.0.1:7878
 curl http://127.0.0.1:7878
@@ -897,7 +907,8 @@ all exited their loops and stopped.</p>
 a thread pool to respond asynchronously. We’re able to perform a graceful
 shutdown of the server, which cleans up all the threads in the pool.</p>
 <p>Here’s the full code for reference:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore">use hello::ThreadPool;
 use std::{
     fs,
@@ -943,7 +954,9 @@ fn handle_connection(mut stream: TcpStream) {
 
     stream.write_all(response.as_bytes()).unwrap();
 }</code></pre>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+</figure>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::{
     sync::{mpsc, Arc, Mutex},
     thread,
@@ -1036,6 +1049,7 @@ impl Worker {
         }
     }
 }</code></pre>
+</figure>
 <p>We could do more here! If you want to continue enhancing this project, here are
 some ideas:</p>
 <ul>

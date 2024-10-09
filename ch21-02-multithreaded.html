@@ -190,10 +190,11 @@ finished, even if the new requests can be processed quickly. We’ll need to fix
 this, but first, we’ll look at the problem in action.</p>
 <h3 id="simulating-a-slow-request-in-the-current-server-implementation"><a class="header" href="#simulating-a-slow-request-in-the-current-server-implementation">Simulating a Slow Request in the Current Server Implementation</a></h3>
 <p>We’ll look at how a slow-processing request can affect other requests made to
-our current server implementation. Listing 20-10 implements handling a request
+our current server implementation. Listing 21-10 implements handling a request
 to <em>/sleep</em> with a simulated slow response that will cause the server to sleep
 for 5 seconds before responding.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust no_run edition2021">use std::{
     fs,
     io::{prelude::*, BufReader},
@@ -238,16 +239,16 @@ fn handle_connection(mut stream: TcpStream) {
 </span><span class="boring">
 </span><span class="boring">    stream.write_all(response.as_bytes()).unwrap();
 </span>}</code></pre></pre>
-<p><span class="caption">Listing 20-10: Simulating a slow request by sleeping for
-5 seconds</span></p>
+<figcaption>Listing 21-10: Simulating a slow request by sleeping for 5 seconds</figcaption>
+</figure>
 <p>We switched from <code>if</code> to <code>match</code> now that we have three cases. We need to
 explicitly match on a slice of <code>request_line</code> to pattern match against the
 string literal values; <code>match</code> doesn’t do automatic referencing and
 dereferencing like the equality method does.</p>
-<p>The first arm is the same as the <code>if</code> block from Listing 20-9. The second arm
+<p>The first arm is the same as the <code>if</code> block from Listing 21-9. The second arm
 matches a request to <em>/sleep</em>. When that request is received, the server will
 sleep for 5 seconds before rendering the successful HTML page. The third arm is
-the same as the <code>else</code> block from Listing 20-9.</p>
+the same as the <code>else</code> block from Listing 21-9.</p>
 <p>You can see how primitive our server is: real libraries would handle the
 recognition of multiple requests in a much less verbose way!</p>
 <p>Start the server using <code>cargo run</code>. Then open two browser windows: one for
@@ -305,9 +306,10 @@ every connection. As mentioned earlier, this isn’t our final plan due to the
 problems with potentially spawning an unlimited number of threads, but it is a
 starting point to get a working multithreaded server first. Then we’ll add the
 thread pool as an improvement, and contrasting the two solutions will be
-easier. Listing 20-11 shows the changes to make to <code>main</code> to spawn a new thread
+easier. Listing 21-11 shows the changes to make to <code>main</code> to spawn a new thread
 to handle each stream within the <code>for</code> loop.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust no_run edition2021"><span class="boring">use std::{
 </span><span class="boring">    fs,
 </span><span class="boring">    io::{prelude::*, BufReader},
@@ -349,8 +351,8 @@ to handle each stream within the <code>for</code> loop.</p>
 </span><span class="boring">
 </span><span class="boring">    stream.write_all(response.as_bytes()).unwrap();
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 20-11: Spawning a new thread for each
-stream</span></p>
+<figcaption>Listing 21-11: Spawning a new thread for each stream</figcaption>
+</figure>
 <p>As you learned in Chapter 16, <code>thread::spawn</code> will create a new thread and then
 run the code in the closure in the new thread. If you run this code and load
 <em>/sleep</em> in your browser, then <em>/</em> in two more browser tabs, you’ll indeed see
@@ -362,9 +364,10 @@ new threads without any limit.</p>
 <h4 id="creating-a-finite-number-of-threads"><a class="header" href="#creating-a-finite-number-of-threads">Creating a Finite Number of Threads</a></h4>
 <p>We want our thread pool to work in a similar, familiar way so switching from
 threads to a thread pool doesn’t require large changes to the code that uses
-our API. Listing 20-12 shows the hypothetical interface for a <code>ThreadPool</code>
+our API. Listing 21-12 shows the hypothetical interface for a <code>ThreadPool</code>
 struct we want to use instead of <code>thread::spawn</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::{
 </span><span class="boring">    fs,
 </span><span class="boring">    io::{prelude::*, BufReader},
@@ -407,7 +410,8 @@ struct we want to use instead of <code>thread::spawn</code>.</p>
 </span><span class="boring">
 </span><span class="boring">    stream.write_all(response.as_bytes()).unwrap();
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 20-12: Our ideal <code>ThreadPool</code> interface</span></p>
+<figcaption>Listing 21-12: Our ideal <code>ThreadPool</code> interface</figcaption>
+</figure>
 <p>We use <code>ThreadPool::new</code> to create a new thread pool with a configurable number
 of threads, in this case four. Then, in the <code>for</code> loop, <code>pool.execute</code> has a
 similar interface as <code>thread::spawn</code> in that it takes a closure the pool should
@@ -417,7 +421,7 @@ compile, but we’ll try so the compiler can guide us in how to fix it.</p>
 <!-- Old headings. Do not remove or links may break. -->
 <p><a id="building-the-threadpool-struct-using-compiler-driven-development"></a></p>
 <h4 id="building-threadpool-using-compiler-driven-development"><a class="header" href="#building-threadpool-using-compiler-driven-development">Building <code>ThreadPool</code> Using Compiler Driven Development</a></h4>
-<p>Make the changes in Listing 20-12 to <em>src/main.rs</em>, and then let’s use the
+<p>Make the changes in Listing 21-12 to <em>src/main.rs</em>, and then let’s use the
 compiler errors from <code>cargo check</code> to drive our development. Here is the first
 error we get:</p>
 <pre><code class="language-console">$ cargo check
@@ -440,11 +444,14 @@ library for any work we want to do using a thread pool, not just for serving
 web requests.</p>
 <p>Create a <em>src/lib.rs</em> that contains the following, which is the simplest
 definition of a <code>ThreadPool</code> struct that we can have for now:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub struct ThreadPool;</code></pre>
+</figure>
 <p>Then edit <em>main.rs</em> file to bring <code>ThreadPool</code> into scope from the library
 crate by adding the following code to the top of <em>src/main.rs</em>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore">use hello::ThreadPool;
 <span class="boring">use std::{
 </span><span class="boring">    fs,
@@ -488,6 +495,7 @@ crate by adding the following code to the top of <em>src/main.rs</em>:</p>
 </span><span class="boring">
 </span><span class="boring">    stream.write_all(response.as_bytes()).unwrap();
 </span><span class="boring">}</span></code></pre>
+</figure>
 <p>This code still won’t work, but let’s check it again to get the next error that
 we need to address:</p>
 <pre><code class="language-console">$ cargo check
@@ -506,7 +514,8 @@ error: could not compile `hello` (bin "hello") due to 1 previous error
 that can accept <code>4</code> as an argument and should return a <code>ThreadPool</code> instance.
 Let’s implement the simplest <code>new</code> function that will have those
 characteristics:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub struct ThreadPool;
 
 impl ThreadPool {
@@ -514,6 +523,7 @@ impl ThreadPool {
         ThreadPool
     }
 }</code></pre>
+</figure>
 <p>We chose <code>usize</code> as the type of the <code>size</code> parameter, because we know that a
 negative number of threads doesn’t make any sense. We also know we’ll use this
 4 as the number of elements in a collection of threads, which is what the
@@ -562,7 +572,8 @@ request’s closure one time, which matches the <code>Once</code> in <code>FnOnc
 closure from one thread to another and <code>'static</code> because we don’t know how long
 the thread will take to execute. Let’s create an <code>execute</code> method on
 <code>ThreadPool</code> that will take a generic parameter of type <code>F</code> with these bounds:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub struct ThreadPool;
 </span><span class="boring">
 </span>impl ThreadPool {
@@ -577,6 +588,7 @@ the thread will take to execute. Let’s create an <code>execute</code> method o
     {
     }
 }</code></pre>
+</figure>
 <p>We still use the <code>()</code> after <code>FnOnce</code> because this <code>FnOnce</code> represents a closure
 that takes no parameters and returns the unit type <code>()</code>. Just like function
 definitions, the return type can be omitted from the signature, but even if we
@@ -607,8 +619,9 @@ parameter, because a pool with a negative number of threads makes no sense.
 However, a pool with zero threads also makes no sense, yet zero is a perfectly
 valid <code>usize</code>. We’ll add code to check that <code>size</code> is greater than zero before
 we return a <code>ThreadPool</code> instance and have the program panic if it receives a
-zero by using the <code>assert!</code> macro, as shown in Listing 20-13.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+zero by using the <code>assert!</code> macro, as shown in Listing 21-13.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub struct ThreadPool;
 </span><span class="boring">
 </span>impl ThreadPool {
@@ -632,8 +645,8 @@ zero by using the <code>assert!</code> macro, as shown in Listing 20-13.</p>
 </span><span class="boring">    {
 </span><span class="boring">    }
 </span>}</code></pre>
-<p><span class="caption">Listing 20-13: Implementing <code>ThreadPool::new</code> to panic if
-<code>size</code> is zero</span></p>
+<figcaption>Listing 21-13: Implementing <code>ThreadPool::new</code> to panic if <code>size</code> is zero</figcaption>
+</figure>
 <p>We’ve also added some documentation for our <code>ThreadPool</code> with doc comments.
 Note that we followed good documentation practices by adding a section that
 calls out the situations in which our function can panic, as discussed in
@@ -660,12 +673,13 @@ look at the <code>thread::spawn</code> signature:</p>
 closure returns. Let’s try using <code>JoinHandle</code> too and see what happens. In our
 case, the closures we’re passing to the thread pool will handle the connection
 and not return anything, so <code>T</code> will be the unit type <code>()</code>.</p>
-<p>The code in Listing 20-14 will compile but doesn’t create any threads yet.
+<p>The code in Listing 21-14 will compile but doesn’t create any threads yet.
 We’ve changed the definition of <code>ThreadPool</code> to hold a vector of
 <code>thread::JoinHandle&lt;()&gt;</code> instances, initialized the vector with a capacity of
 <code>size</code>, set up a <code>for</code> loop that will run some code to create the threads, and
 returned a <code>ThreadPool</code> instance containing them.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore not_desired_behavior">use std::thread;
 
 pub struct ThreadPool {
@@ -700,8 +714,8 @@ impl ThreadPool {
 </span><span class="boring">    {
 </span><span class="boring">    }
 </span>}</code></pre>
-<p><span class="caption">Listing 20-14: Creating a vector for <code>ThreadPool</code> to hold
-the threads</span></p>
+<figcaption>Listing 21-14: Creating a vector for <code>ThreadPool</code> to hold the threads</figcaption>
+</figure>
 <p>We’ve brought <code>std::thread</code> into scope in the library crate, because we’re
 using <code>thread::JoinHandle</code> as the type of the items in the vector in
 <code>ThreadPool</code>.</p>
@@ -713,7 +727,7 @@ this allocation up front is slightly more efficient than using <code>Vec::new</c
 which resizes itself as elements are inserted.</p>
 <p>When you run <code>cargo check</code> again, it should succeed.</p>
 <h4 id="a-worker-struct-responsible-for-sending-code-from-the-threadpool-to-a-thread"><a class="header" href="#a-worker-struct-responsible-for-sending-code-from-the-threadpool-to-a-thread">A <code>Worker</code> Struct Responsible for Sending Code from the <code>ThreadPool</code> to a Thread</a></h4>
-<p>We left a comment in the <code>for</code> loop in Listing 20-14 regarding the creation of
+<p>We left a comment in the <code>for</code> loop in Listing 21-14 regarding the creation of
 threads. Here, we’ll look at how we actually create threads. The standard
 library provides <code>thread::spawn</code> as a way to create threads, and
 <code>thread::spawn</code> expects to get some code the thread should run as soon as the
@@ -747,9 +761,10 @@ closure.</li>
 a new <code>Worker</code> with that <code>id</code>, and store the worker in the vector.</li>
 </ol>
 <p>If you’re up for a challenge, try implementing these changes on your own before
-looking at the code in Listing 20-15.</p>
-<p>Ready? Here is Listing 20-15 with one way to make the preceding modifications.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+looking at the code in Listing 21-15.</p>
+<p>Ready? Here is Listing 21-15 with one way to make the preceding modifications.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::thread;
 
 pub struct ThreadPool {
@@ -797,8 +812,8 @@ impl Worker {
         Worker { id, thread }
     }
 }</code></pre>
-<p><span class="caption">Listing 20-15: Modifying <code>ThreadPool</code> to hold <code>Worker</code>
-instances instead of holding threads directly</span></p>
+<figcaption>Listing 21-15: Modifying <code>ThreadPool</code> to hold <code>Worker</code> instances instead of holding threads directly</figcaption>
+</figure>
 <p>We’ve changed the name of the field on <code>ThreadPool</code> from <code>threads</code> to <code>workers</code>
 because it’s now holding <code>Worker</code> instances instead of <code>JoinHandle&lt;()&gt;</code>
 instances. We use the counter in the <code>for</code> loop as an argument to
@@ -842,10 +857,11 @@ sender.</li>
 closures of any jobs it receives.</li>
 </ol>
 <p>Let’s start by creating a channel in <code>ThreadPool::new</code> and holding the sender
-in the <code>ThreadPool</code> instance, as shown in Listing 20-16. The <code>Job</code> struct
+in the <code>ThreadPool</code> instance, as shown in Listing 21-16. The <code>Job</code> struct
 doesn’t hold anything for now but will be the type of item we’re sending down
 the channel.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::{sync::mpsc, thread};
 
 pub struct ThreadPool {
@@ -898,15 +914,16 @@ impl ThreadPool {
 </span><span class="boring">        Worker { id, thread }
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 20-16: Modifying <code>ThreadPool</code> to store the
-sender of a channel that transmits <code>Job</code> instances</span></p>
+<figcaption>Listing 21-16: Modifying <code>ThreadPool</code> to store the sender of a channel that transmits <code>Job</code> instances</figcaption>
+</figure>
 <p>In <code>ThreadPool::new</code>, we create our new channel and have the pool hold the
 sender. This will successfully compile.</p>
 <p>Let’s try passing a receiver of the channel into each worker as the thread pool
 creates the channel. We know we want to use the receiver in the thread that the
 workers spawn, so we’ll reference the <code>receiver</code> parameter in the closure. The
-code in Listing 20-17 won’t quite compile yet.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+code in Listing 21-17 won’t quite compile yet.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::{sync::mpsc, thread};
 </span><span class="boring">
 </span><span class="boring">pub struct ThreadPool {
@@ -964,7 +981,8 @@ code in Listing 20-17 won’t quite compile yet.</p>
         Worker { id, thread }
     }
 }</code></pre>
-<p><span class="caption">Listing 20-17: Passing the receiver to the workers</span></p>
+<figcaption>Listing 21-17: Passing the receiver to the workers</figcaption>
+</figure>
 <p>We’ve made some small and straightforward changes: we pass the receiver into
 <code>Worker::new</code>, and then we use it inside the closure.</p>
 <p>When we try to check this code, we get this error:</p>
@@ -1009,8 +1027,9 @@ otherwise, we might get race conditions (as covered in Chapter 16).</p>
 ownership across multiple threads and allow the threads to mutate the value, we
 need to use <code>Arc&lt;Mutex&lt;T&gt;&gt;</code>. The <code>Arc</code> type will let multiple workers own the
 receiver, and <code>Mutex</code> will ensure that only one worker gets a job from the
-receiver at a time. Listing 20-18 shows the changes we need to make.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+receiver at a time. Listing 21-18 shows the changes we need to make.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::{
     sync::{mpsc, Arc, Mutex},
     thread,
@@ -1075,8 +1094,8 @@ receiver at a time. Listing 20-18 shows the changes we need to make.</p>
 </span><span class="boring">        Worker { id, thread }
 </span>    }
 }</code></pre>
-<p><span class="caption">Listing 20-18: Sharing the receiver among the workers
-using <code>Arc</code> and <code>Mutex</code></span></p>
+<figcaption>Listing 21-18: Sharing the receiver among the workers using <code>Arc</code> and <code>Mutex</code></figcaption>
+</figure>
 <p>In <code>ThreadPool::new</code>, we put the receiver in an <code>Arc</code> and a <code>Mutex</code>. For each
 new worker, we clone the <code>Arc</code> to bump the reference count so the workers can
 share ownership of the receiver.</p>
@@ -1086,9 +1105,10 @@ share ownership of the receiver.</p>
 <code>Job</code> from a struct to a type alias for a trait object that holds the type of
 closure that <code>execute</code> receives. As discussed in the <a href="ch20-04-advanced-types.html#creating-type-synonyms-with-type-aliases">“Creating Type Synonyms
 with Type Aliases”</a><!-- ignore -->
-section of Chapter 19, type aliases allow us to make long types shorter for
-ease of use. Look at Listing 20-19.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+section of Chapter 20, type aliases allow us to make long types shorter for
+ease of use. Look at Listing 21-19.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">use std::{
 </span><span class="boring">    sync::{mpsc, Arc, Mutex},
 </span><span class="boring">    thread,
@@ -1154,8 +1174,8 @@ impl ThreadPool {
 </span><span class="boring">        Worker { id, thread }
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 20-19: Creating a <code>Job</code> type alias for a <code>Box</code>
-that holds each closure and then sending the job down the channel</span></p>
+<figcaption>Listing 21-19: Creating a <code>Job</code> type alias for a <code>Box</code> that holds each closure and then sending the job down the channel</figcaption>
+</figure>
 <p>After creating a new <code>Job</code> instance using the closure we get in <code>execute</code>, we
 send that job down the sending end of the channel. We’re calling <code>unwrap</code> on
 <code>send</code> for the case that sending fails. This might happen if, for example, we
@@ -1168,8 +1188,9 @@ compiler doesn’t know that.</p>
 <code>thread::spawn</code> still only <em>references</em> the receiving end of the channel.
 Instead, we need the closure to loop forever, asking the receiving end of the
 channel for a job and running the job when it gets one. Let’s make the change
-shown in Listing 20-20 to <code>Worker::new</code>.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+shown in Listing 21-20 to <code>Worker::new</code>.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">use std::{
 </span><span class="boring">    sync::{mpsc, Arc, Mutex},
 </span><span class="boring">    thread,
@@ -1236,8 +1257,8 @@ impl Worker {
         Worker { id, thread }
     }
 }</code></pre>
-<p><span class="caption">Listing 20-20: Receiving and executing the jobs in the
-worker’s thread</span></p>
+<figcaption>Listing 21-20: Receiving and executing the jobs in the worker’s thread</figcaption>
+</figure>
 <p>Here, we first call <code>lock</code> on the <code>receiver</code> to acquire the mutex, and then we
 call <code>unwrap</code> to panic on any errors. Acquiring a lock might fail if the mutex
 is in a <em>poisoned</em> state, which can happen if some other thread panicked while
@@ -1255,7 +1276,7 @@ wait until a job becomes available. The <code>Mutex&lt;T&gt;</code> ensures that
 <p>Our thread pool is now in a working state! Give it a <code>cargo run</code> and make some
 requests:</p>
 <!-- manual-regeneration
-cd listings/ch20-web-server/listing-20-20
+cd listings/ch21-web-server/listing-21-20
 cargo run
 make some requests to 127.0.0.1:7878
 Can't automate because the output depends on making requests
@@ -1307,9 +1328,10 @@ might load one at a time in 5 second intervals. Some web browsers execute
 multiple instances of the same request sequentially for caching reasons. This
 limitation is not caused by our web server.</p>
 </section>
-<p>After learning about the <code>while let</code> loop in Chapter 18, you might be wondering
-why we didn’t write the worker thread code as shown in Listing 20-21.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<p>After learning about the <code>while let</code> loop in Chapters 17 and 18, you might be
+wondering why we didn’t write the worker thread code as shown in Listing 21-21.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore not_desired_behavior"><span class="boring">use std::{
 </span><span class="boring">    sync::{mpsc, Arc, Mutex},
 </span><span class="boring">    thread,
@@ -1375,8 +1397,8 @@ impl Worker {
         Worker { id, thread }
     }
 }</code></pre>
-<p><span class="caption">Listing 20-21: An alternative implementation of
-<code>Worker::new</code> using <code>while let</code></span></p>
+<figcaption>Listing 21-21: An alternative implementation of <code>Worker::new</code> using <code>while let</code></figcaption>
+</figure>
 <p>This code compiles and runs but doesn’t result in the desired threading
 behavior: a slow request will still cause other requests to wait to be
 processed. The reason is somewhat subtle: the <code>Mutex</code> struct has no public
@@ -1387,10 +1409,10 @@ that a resource guarded by a <code>Mutex</code> cannot be accessed unless we hol
 lock. However, this implementation can also result in the lock being held
 longer than intended if we aren’t mindful of the lifetime of the
 <code>MutexGuard&lt;T&gt;</code>.</p>
-<p>The code in Listing 20-20 that uses <code>let job = receiver.lock().unwrap().recv().unwrap();</code> works because with <code>let</code>, any
+<p>The code in Listing 21-20 that uses <code>let job = receiver.lock().unwrap().recv().unwrap();</code> works because with <code>let</code>, any
 temporary values used in the expression on the right hand side of the equals
 sign are immediately dropped when the <code>let</code> statement ends. However, <code>while let</code> (and <code>if let</code> and <code>match</code>) does not drop temporary values until the end of
-the associated block. In Listing 20-21, the lock remains held for the duration
+the associated block. In Listing 21-21, the lock remains held for the duration
 of the call to <code>job()</code>, meaning other workers cannot receive jobs.</p>
 
                     </main>

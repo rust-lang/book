@@ -221,7 +221,7 @@ implementing our specified trait and a table used to look up trait methods on
 that type at runtime. We create a trait object by specifying some sort of
 pointer, such as a <code>&amp;</code> reference or a <code>Box&lt;T&gt;</code> smart pointer, then the <code>dyn</code>
 keyword, and then specifying the relevant trait. (We’ll talk about the reason
-trait objects must use a pointer in Chapter 19 in the section <a href="ch20-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait">“Dynamically
+trait objects must use a pointer in Chapter 20 in the section <a href="ch20-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait">“Dynamically
 Sized Types and the <code>Sized</code> Trait.”</a><!-- ignore -->) We can
 use trait objects in place of a generic or concrete type. Wherever we use a
 trait object, Rust’s type system will ensure at compile time that any value
@@ -237,19 +237,22 @@ But trait objects differ from traditional objects in that we can’t add data to
 a trait object. Trait objects aren’t as generally useful as objects in other
 languages: their specific purpose is to allow abstraction across common
 behavior.</p>
-<p>Listing 17-3 shows how to define a trait named <code>Draw</code> with one method named
+<p>Listing 18-3 shows how to define a trait named <code>Draw</code> with one method named
 <code>draw</code>:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub trait Draw {
     fn draw(&amp;self);
 }</code></pre>
-<p><span class="caption">Listing 17-3: Definition of the <code>Draw</code> trait</span></p>
+<figcaption>Listing 18-3: Definition of the <code>Draw</code> trait</figcaption>
+</figure>
 <p>This syntax should look familiar from our discussions on how to define traits
-in Chapter 10. Next comes some new syntax: Listing 17-4 defines a struct named
+in Chapter 10. Next comes some new syntax: Listing 18-4 defines a struct named
 <code>Screen</code> that holds a vector named <code>components</code>. This vector is of type
 <code>Box&lt;dyn Draw&gt;</code>, which is a trait object; it’s a stand-in for any type inside
 a <code>Box</code> that implements the <code>Draw</code> trait.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
 </span><span class="boring">    fn draw(&amp;self);
 </span><span class="boring">}
@@ -257,12 +260,12 @@ a <code>Box</code> that implements the <code>Draw</code> trait.</p>
 </span>pub struct Screen {
     pub components: Vec&lt;Box&lt;dyn Draw&gt;&gt;,
 }</code></pre>
-<p><span class="caption">Listing 17-4: Definition of the <code>Screen</code> struct with a
-<code>components</code> field holding a vector of trait objects that implement the <code>Draw</code>
-trait</span></p>
+<figcaption>Listing 18-4: Definition of the <code>Screen</code> struct with a <code>components</code> field holding a vector of trait objects that implement the <code>Draw</code> trait</figcaption>
+</figure>
 <p>On the <code>Screen</code> struct, we’ll define a method named <code>run</code> that will call the
-<code>draw</code> method on each of its <code>components</code>, as shown in Listing 17-5:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<code>draw</code> method on each of its <code>components</code>, as shown in Listing 18-5:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
 </span><span class="boring">    fn draw(&amp;self);
 </span><span class="boring">}
@@ -278,15 +281,16 @@ trait</span></p>
         }
     }
 }</code></pre>
-<p><span class="caption">Listing 17-5: A <code>run</code> method on <code>Screen</code> that calls the
-<code>draw</code> method on each component</span></p>
+<figcaption>Listing 18-5: A <code>run</code> method on <code>Screen</code> that calls the <code>draw</code> method on each component</figcaption>
+</figure>
 <p>This works differently from defining a struct that uses a generic type
 parameter with trait bounds. A generic type parameter can only be substituted
 with one concrete type at a time, whereas trait objects allow for multiple
 concrete types to fill in for the trait object at runtime. For example, we
 could have defined the <code>Screen</code> struct using a generic type and a trait bound
-as in Listing 17-6:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+as in Listing 18-6:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
 </span><span class="boring">    fn draw(&amp;self);
 </span><span class="boring">}
@@ -305,8 +309,8 @@ where
         }
     }
 }</code></pre>
-<p><span class="caption">Listing 17-6: An alternate implementation of the <code>Screen</code>
-struct and its <code>run</code> method using generics and trait bounds</span></p>
+<figcaption>Listing 18-6: An alternate implementation of the <code>Screen</code> struct and its <code>run</code> method using generics and trait bounds</figcaption>
+</figure>
 <p>This restricts us to a <code>Screen</code> instance that has a list of components all of
 type <code>Button</code> or all of type <code>TextField</code>. If you’ll only ever have homogeneous
 collections, using generics and trait bounds is preferable because the
@@ -320,8 +324,9 @@ runtime performance implications.</p>
 <code>Button</code> type. Again, actually implementing a GUI library is beyond the scope
 of this book, so the <code>draw</code> method won’t have any useful implementation in its
 body. To imagine what the implementation might look like, a <code>Button</code> struct
-might have fields for <code>width</code>, <code>height</code>, and <code>label</code>, as shown in Listing 17-7:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+might have fields for <code>width</code>, <code>height</code>, and <code>label</code>, as shown in Listing 18-7:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
 </span><span class="boring">    fn draw(&amp;self);
 </span><span class="boring">}
@@ -349,8 +354,8 @@ impl Draw for Button {
         // code to actually draw a button
     }
 }</code></pre>
-<p><span class="caption">Listing 17-7: A <code>Button</code> struct that implements the
-<code>Draw</code> trait</span></p>
+<figcaption>Listing 18-7: A <code>Button</code> struct that implements the <code>Draw</code> trait</figcaption>
+</figure>
 <p>The <code>width</code>, <code>height</code>, and <code>label</code> fields on <code>Button</code> will differ from the
 fields on other components; for example, a <code>TextField</code> type might have those
 same fields plus a <code>placeholder</code> field. Each of the types we want to draw on
@@ -362,8 +367,9 @@ happens when a user clicks the button. These kinds of methods won’t apply to
 types like <code>TextField</code>.</p>
 <p>If someone using our library decides to implement a <code>SelectBox</code> struct that has
 <code>width</code>, <code>height</code>, and <code>options</code> fields, they implement the <code>Draw</code> trait on the
-<code>SelectBox</code> type as well, as shown in Listing 17-8:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<code>SelectBox</code> type as well, as shown in Listing 18-8:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore">use gui::Draw;
 
 struct SelectBox {
@@ -379,14 +385,15 @@ impl Draw for SelectBox {
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre>
-<p><span class="caption">Listing 17-8: Another crate using <code>gui</code> and implementing
-the <code>Draw</code> trait on a <code>SelectBox</code> struct</span></p>
+<figcaption>Listing 18-8: Another crate using <code>gui</code> and implementing the <code>Draw</code> trait on a <code>SelectBox</code> struct</figcaption>
+</figure>
 <p>Our library’s user can now write their <code>main</code> function to create a <code>Screen</code>
 instance. To the <code>Screen</code> instance, they can add a <code>SelectBox</code> and a <code>Button</code>
 by putting each in a <code>Box&lt;T&gt;</code> to become a trait object. They can then call the
 <code>run</code> method on the <code>Screen</code> instance, which will call <code>draw</code> on each of the
-components. Listing 17-9 shows this implementation:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+components. Listing 18-9 shows this implementation:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore"><span class="boring">use gui::Draw;
 </span><span class="boring">
 </span><span class="boring">struct SelectBox {
@@ -425,8 +432,8 @@ fn main() {
 
     screen.run();
 }</code></pre>
-<p><span class="caption">Listing 17-9: Using trait objects to store values of
-different types that implement the same trait</span></p>
+<figcaption>Listing 18-9: Using trait objects to store values of different types that implement the same trait</figcaption>
+</figure>
 <p>When we wrote the library, we didn’t know that someone might add the
 <code>SelectBox</code> type, but our <code>Screen</code> implementation was able to operate on the
 new type and draw it because <code>SelectBox</code> implements the <code>Draw</code> trait, which
@@ -435,7 +442,7 @@ means it implements the <code>draw</code> method.</p>
 rather than the value’s concrete type—is similar to the concept of <em>duck
 typing</em> in dynamically typed languages: if it walks like a duck and quacks
 like a duck, then it must be a duck! In the implementation of <code>run</code> on <code>Screen</code>
-in Listing 17-5, <code>run</code> doesn’t need to know what the concrete type of each
+in Listing 18-5, <code>run</code> doesn’t need to know what the concrete type of each
 component is. It doesn’t check whether a component is an instance of a <code>Button</code>
 or a <code>SelectBox</code>, it just calls the <code>draw</code> method on the component. By
 specifying <code>Box&lt;dyn Draw&gt;</code> as the type of the values in the <code>components</code>
@@ -446,9 +453,10 @@ similar to code using duck typing is that we never have to check whether a
 value implements a particular method at runtime or worry about getting errors
 if a value doesn’t implement a method but we call it anyway. Rust won’t compile
 our code if the values don’t implement the traits that the trait objects need.</p>
-<p>For example, Listing 17-10 shows what happens if we try to create a <code>Screen</code>
+<p>For example, Listing 18-10 shows what happens if we try to create a <code>Screen</code>
 with a <code>String</code> as a component:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">use gui::Screen;
 
 fn main() {
@@ -458,8 +466,8 @@ fn main() {
 
     screen.run();
 }</code></pre>
-<p><span class="caption">Listing 17-10: Attempting to use a type that doesn’t
-implement the trait object’s trait</span></p>
+<figcaption>Listing 18-10: Attempting to use a type that doesn’t implement the trait object’s trait</figcaption>
+</figure>
 <p>We’ll get this error because <code>String</code> doesn’t implement the <code>Draw</code> trait:</p>
 <pre><code class="language-console">$ cargo run
    Compiling gui v0.1.0 (file:///projects/gui)
@@ -497,8 +505,8 @@ runtime, Rust uses the pointers inside the trait object to know which method to
 call. This lookup incurs a runtime cost that doesn’t occur with static
 dispatch. Dynamic dispatch also prevents the compiler from choosing to inline a
 method’s code, which in turn prevents some optimizations. However, we did get
-extra flexibility in the code that we wrote in Listing 17-5 and were able to
-support in Listing 17-9, so it’s a trade-off to consider.</p>
+extra flexibility in the code that we wrote in Listing 18-5 and were able to
+support in Listing 18-9, so it’s a trade-off to consider.</p>
 
                     </main>
 

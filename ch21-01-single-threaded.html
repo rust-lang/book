@@ -204,10 +204,11 @@ this. Let’s make a new project in the usual fashion:</p>
      Created binary (application) `hello` project
 $ cd hello
 </code></pre>
-<p>Now enter the code in Listing 20-1 in <em>src/main.rs</em> to start. This code will
+<p>Now enter the code in Listing 21-1 in <em>src/main.rs</em> to start. This code will
 listen at the local address <code>127.0.0.1:7878</code> for incoming TCP streams. When it
 gets an incoming stream, it will print <code>Connection established!</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust no_run edition2021">use std::net::TcpListener;
 
 fn main() {
@@ -219,8 +220,8 @@ fn main() {
         println!("Connection established!");
     }
 }</code></pre></pre>
-<p><span class="caption">Listing 20-1: Listening for incoming streams and printing
-a message when we receive a stream</span></p>
+<figcaption>Listing 21-1: Listening for incoming streams and printing a message when we receive a stream</figcaption>
+</figure>
 <p>Using <code>TcpListener</code>, we can listen for TCP connections at the address
 <code>127.0.0.1:7878</code>. In the address, the section before the colon is an IP address
 representing your computer (this is the same on every computer and doesn’t
@@ -291,8 +292,9 @@ separate the concerns of first getting a connection and then taking some action
 with the connection, we’ll start a new function for processing connections. In
 this new <code>handle_connection</code> function, we’ll read data from the TCP stream and
 print it so we can see the data being sent from the browser. Change the code to
-look like Listing 20-2.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+look like Listing 21-2.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust no_run edition2021">use std::{
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
@@ -318,8 +320,8 @@ fn handle_connection(mut stream: TcpStream) {
 
     println!("Request: {http_request:#?}");
 }</code></pre></pre>
-<p><span class="caption">Listing 20-2: Reading from the <code>TcpStream</code> and printing
-the data</span></p>
+<figcaption>Listing 21-2: Reading from the <code>TcpStream</code> and printing the data</figcaption>
+</figure>
 <p>We bring <code>std::io::prelude</code> and <code>std::io::BufReader</code> into scope to get access
 to traits and types that let us read from and write to the stream. In the <code>for</code>
 loop in the <code>main</code> function, instead of printing a message that says we made a
@@ -425,8 +427,9 @@ response.</p>
 successful HTTP response. Let’s write this to the stream as our response to a
 successful request! From the <code>handle_connection</code> function, remove the
 <code>println!</code> that was printing the request data and replace it with the code in
-Listing 20-3.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+Listing 21-3.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust no_run edition2021"><span class="boring">use std::{
 </span><span class="boring">    io::{prelude::*, BufReader},
 </span><span class="boring">    net::{TcpListener, TcpStream},
@@ -454,8 +457,8 @@ Listing 20-3.</p>
 
     stream.write_all(response.as_bytes()).unwrap();
 }</code></pre></pre>
-<p><span class="caption">Listing 20-3: Writing a tiny successful HTTP response to
-the stream</span></p>
+<figcaption>Listing 21-3: Writing a tiny successful HTTP response to the stream</figcaption>
+</figure>
 <p>The first new line defines the <code>response</code> variable that holds the success
 message’s data. Then we call <code>as_bytes</code> on our <code>response</code> to convert the string
 data to bytes. The <code>write_all</code> method on <code>stream</code> takes a <code>&amp;[u8]</code> and sends
@@ -470,9 +473,10 @@ request and sending a response!</p>
 <h3 id="returning-real-html"><a class="header" href="#returning-real-html">Returning Real HTML</a></h3>
 <p>Let’s implement the functionality for returning more than a blank page. Create
 the new file <em>hello.html</em> in the root of your project directory, not in the
-<em>src</em> directory. You can input any HTML you want; Listing 20-4 shows one
+<em>src</em> directory. You can input any HTML you want; Listing 21-4 shows one
 possibility.</p>
-<p><span class="filename">Filename: hello.html</span></p>
+<figure class="listing">
+<span class="file-name">Filename: hello.html</span>
 <pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
   &lt;head&gt;
@@ -485,13 +489,14 @@ possibility.</p>
   &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<p><span class="caption">Listing 20-4: A sample HTML file to return in a
-response</span></p>
+<figcaption>Listing 21-4: A sample HTML file to return in a response</figcaption>
+</figure>
 <p>This is a minimal HTML5 document with a heading and some text. To return this
 from the server when a request is received, we’ll modify <code>handle_connection</code> as
-shown in Listing 20-5 to read the HTML file, add it to the response as a body,
+shown in Listing 21-5 to read the HTML file, add it to the response as a body,
 and send it.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust no_run edition2021">use std::{
     fs,
     io::{prelude::*, BufReader},
@@ -526,8 +531,8 @@ and send it.</p>
 
     stream.write_all(response.as_bytes()).unwrap();
 }</code></pre></pre>
-<p><span class="caption">Listing 20-5: Sending the contents of <em>hello.html</em> as the
-body of the response</span></p>
+<figcaption>Listing 21-5: Sending the contents of <em>hello.html</em> as the body of the response</figcaption>
+</figure>
 <p>We’ve added <code>fs</code> to the <code>use</code> statement to bring the standard library’s
 filesystem module into scope. The code for reading the contents of a file to a
 string should look familiar; we used it in Chapter 12 when we read the contents
@@ -550,10 +555,11 @@ request to <em>/</em>.</p>
 client requested. Let’s add functionality to check that the browser is
 requesting <em>/</em> before returning the HTML file and return an error if the
 browser requests anything else. For this we need to modify <code>handle_connection</code>,
-as shown in Listing 20-6. This new code checks the content of the request
+as shown in Listing 21-6. This new code checks the content of the request
 received against what we know a request for <em>/</em> looks like and adds <code>if</code> and
 <code>else</code> blocks to treat requests differently.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust no_run edition2021"><span class="boring">use std::{
 </span><span class="boring">    fs,
 </span><span class="boring">    io::{prelude::*, BufReader},
@@ -589,14 +595,14 @@ fn handle_connection(mut stream: TcpStream) {
         // some other request
     }
 }</code></pre></pre>
-<p><span class="caption">Listing 20-6: Handling requests to <em>/</em> differently from
-other requests</span></p>
+<figcaption>Listing 21-6: Handling requests to <em>/</em> differently from other requests</figcaption>
+</figure>
 <p>We’re only going to be looking at the first line of the HTTP request, so rather
 than reading the entire request into a vector, we’re calling <code>next</code> to get the
 first item from the iterator. The first <code>unwrap</code> takes care of the <code>Option</code> and
 stops the program if the iterator has no items. The second <code>unwrap</code> handles the
 <code>Result</code> and has the same effect as the <code>unwrap</code> that was in the <code>map</code> added in
-Listing 20-2.</p>
+Listing 21-2.</p>
 <p>Next, we check the <code>request_line</code> to see if it equals the request line of a GET
 request to the <em>/</em> path. If it does, the <code>if</code> block returns the contents of our
 HTML file.</p>
@@ -606,12 +612,13 @@ a moment to respond to all other requests.</p>
 <p>Run this code now and request <em>127.0.0.1:7878</em>; you should get the HTML in
 <em>hello.html</em>. If you make any other request, such as
 <em>127.0.0.1:7878/something-else</em>, you’ll get a connection error like those you
-saw when running the code in Listing 20-1 and Listing 20-2.</p>
-<p>Now let’s add the code in Listing 20-7 to the <code>else</code> block to return a response
+saw when running the code in Listing 21-1 and Listing 21-2.</p>
+<p>Now let’s add the code in Listing 21-7 to the <code>else</code> block to return a response
 with the status code 404, which signals that the content for the request was
 not found. We’ll also return some HTML for a page to render in the browser
 indicating the response to the end user.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust no_run edition2021"><span class="boring">use std::{
 </span><span class="boring">    fs,
 </span><span class="boring">    io::{prelude::*, BufReader},
@@ -655,14 +662,15 @@ indicating the response to the end user.</p>
         stream.write_all(response.as_bytes()).unwrap();
     }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 20-7: Responding with status code 404 and an
-error page if anything other than <em>/</em> was requested</span></p>
+<figcaption>Listing 21-7: Responding with status code 404 and an error page if anything other than <em>/</em> was requested</figcaption>
+</figure>
 <p>Here, our response has a status line with status code 404 and the reason phrase
 <code>NOT FOUND</code>. The body of the response will be the HTML in the file <em>404.html</em>.
 You’ll need to create a <em>404.html</em> file next to <em>hello.html</em> for the error
 page; again feel free to use any HTML you want or use the example HTML in
-Listing 20-8.</p>
-<p><span class="filename">Filename: 404.html</span></p>
+Listing 21-8.</p>
+<figure class="listing">
+<span class="file-name">Filename: 404.html</span>
 <pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
   &lt;head&gt;
@@ -675,8 +683,8 @@ Listing 20-8.</p>
   &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<p><span class="caption">Listing 20-8: Sample content for the page to send back
-with any 404 response</span></p>
+<figcaption>Listing 21-8: Sample content for the page to send back with any 404 response</figcaption>
+</figure>
 <p>With these changes, run your server again. Requesting <em>127.0.0.1:7878</em> should
 return the contents of <em>hello.html</em>, and any other request, like
 <em>127.0.0.1:7878/foo</em>, should return the error HTML from <em>404.html</em>.</p>
@@ -687,9 +695,10 @@ differences are the status line and the filename. Let’s make the code more
 concise by pulling out those differences into separate <code>if</code> and <code>else</code> lines
 that will assign the values of the status line and the filename to variables;
 we can then use those variables unconditionally in the code to read the file
-and write the response. Listing 20-9 shows the resulting code after replacing
+and write the response. Listing 21-9 shows the resulting code after replacing
 the large <code>if</code> and <code>else</code> blocks.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust no_run edition2021"><span class="boring">use std::{
 </span><span class="boring">    fs,
 </span><span class="boring">    io::{prelude::*, BufReader},
@@ -726,18 +735,18 @@ fn handle_connection(mut stream: TcpStream) {
 
     stream.write_all(response.as_bytes()).unwrap();
 }</code></pre></pre>
-<p><span class="caption">Listing 20-9: Refactoring the <code>if</code> and <code>else</code> blocks to
-contain only the code that differs between the two cases</span></p>
+<figcaption>Listing 21-9: Refactoring the <code>if</code> and <code>else</code> blocks to contain only the code that differs between the two cases</figcaption>
+</figure>
 <p>Now the <code>if</code> and <code>else</code> blocks only return the appropriate values for the
 status line and filename in a tuple; we then use destructuring to assign these
 two values to <code>status_line</code> and <code>filename</code> using a pattern in the <code>let</code>
-statement, as discussed in Chapter 18.</p>
+statement, as discussed in Chapter 19.</p>
 <p>The previously duplicated code is now outside the <code>if</code> and <code>else</code> blocks and
 uses the <code>status_line</code> and <code>filename</code> variables. This makes it easier to see
 the difference between the two cases, and it means we have only one place to
 update the code if we want to change how the file reading and response writing
-work. The behavior of the code in Listing 20-9 will be the same as that in
-Listing 20-7.</p>
+work. The behavior of the code in Listing 21-9 will be the same as that in
+Listing 21-7.</p>
 <p>Awesome! We now have a simple web server in approximately 40 lines of Rust code
 that responds to one request with a page of content and responds to all other
 requests with a 404 response.</p>

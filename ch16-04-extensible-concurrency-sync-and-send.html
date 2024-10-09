@@ -203,7 +203,7 @@ this in Listing 16-14, we got the error <code>the trait Send is not implemented 
 compiled.</p>
 <p>Any type composed entirely of <code>Send</code> types is automatically marked as <code>Send</code> as
 well. Almost all primitive types are <code>Send</code>, aside from raw pointers, which
-we’ll discuss in Chapter 19.</p>
+we’ll discuss in Chapter 20.</p>
 <h3 id="allowing-access-from-multiple-threads-with-sync"><a class="header" href="#allowing-access-from-multiple-threads-with-sync">Allowing Access from Multiple Threads with <code>Sync</code></a></h3>
 <p>The <code>Sync</code> marker trait indicates that it is safe for the type implementing
 <code>Sync</code> to be referenced from multiple threads. In other words, any type <code>T</code> is
@@ -223,14 +223,14 @@ also <code>Send</code> and <code>Sync</code>, we don’t have to implement those
 marker traits, they don’t even have any methods to implement. They’re just
 useful for enforcing invariants related to concurrency.</p>
 <p>Manually implementing these traits involves implementing unsafe Rust code.
-We’ll talk about using unsafe Rust code in Chapter 19; for now, the important
+We’ll talk about using unsafe Rust code in Chapter 20; for now, the important
 information is that building new concurrent types not made up of <code>Send</code> and
 <code>Sync</code> parts requires careful thought to uphold the safety guarantees. <a href="../nomicon/index.html">“The
 Rustonomicon”</a> has more information about these guarantees and how to
 uphold them.</p>
 <h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
 <p>This isn’t the last you’ll see of concurrency in this book: the whole next
-chapter focuses on async programming, and the project in Chapter 20 will use the
+chapter focuses on async programming, and the project in Chapter 21 will use the
 concepts in this chapter in a more realistic situation than the smaller examples
 discussed here.</p>
 <p>As mentioned earlier, because very little of how Rust handles concurrency is

@@ -212,10 +212,11 @@ accidentally be published.</li>
 <p>Any other changes attempted on a post should have no effect. For example, if we
 try to approve a draft blog post before we’ve requested a review, the post
 should remain an unpublished draft.</p>
-<p>Listing 17-11 shows this workflow in code form: this is an example usage of the
+<p>Listing 18-11 shows this workflow in code form: this is an example usage of the
 API we’ll implement in a library crate named <code>blog</code>. This won’t compile yet
 because we haven’t implemented the <code>blog</code> crate.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">use blog::Post;
 
 fn main() {
@@ -230,8 +231,8 @@ fn main() {
     post.approve();
     assert_eq!("I ate a salad for lunch today", post.content());
 }</code></pre>
-<p><span class="caption">Listing 17-11: Code that demonstrates the desired
-behavior we want our <code>blog</code> crate to have</span></p>
+<figcaption>Listing 18-11: Code that demonstrates the desired behavior we want our <code>blog</code> crate to have</figcaption>
+</figure>
 <p>We want to allow the user to create a new draft blog post with <code>Post::new</code>. We
 want to allow text to be added to the blog post. If we try to get the post’s
 content immediately, before approval, we shouldn’t get any text because the
@@ -255,13 +256,14 @@ make a mistake with the states, like publishing a post before it’s reviewed.</
 <p>Let’s get started on the implementation of the library! We know we need a
 public <code>Post</code> struct that holds some content, so we’ll start with the
 definition of the struct and an associated public <code>new</code> function to create an
-instance of <code>Post</code>, as shown in Listing 17-12. We’ll also make a private
+instance of <code>Post</code>, as shown in Listing 18-12. We’ll also make a private
 <code>State</code> trait that will define the behavior that all state objects for a <code>Post</code>
 must have.</p>
 <p>Then <code>Post</code> will hold a trait object of <code>Box&lt;dyn State&gt;</code> inside an <code>Option&lt;T&gt;</code>
 in a private field named <code>state</code> to hold the state object. You’ll see why the
 <code>Option&lt;T&gt;</code> is necessary in a bit.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub struct Post {
     state: Option&lt;Box&lt;dyn State&gt;&gt;,
     content: String,
@@ -281,9 +283,8 @@ trait State {}
 struct Draft {}
 
 impl State for Draft {}</code></pre>
-<p><span class="caption">Listing 17-12: Definition of a <code>Post</code> struct and a <code>new</code>
-function that creates a new <code>Post</code> instance, a <code>State</code> trait, and a <code>Draft</code>
-struct</span></p>
+<figcaption>Listing 18-12: Definition of a <code>Post</code> struct and a <code>new</code> function that creates a new <code>Post</code> instance, a <code>State</code> trait, and a <code>Draft</code> struct</figcaption>
+</figure>
 <p>The <code>State</code> trait defines the behavior shared by different post states. The
 state objects are <code>Draft</code>, <code>PendingReview</code>, and <code>Published</code>, and they will all
 implement the <code>State</code> trait. For now, the trait doesn’t have any methods, and
@@ -296,13 +297,13 @@ a draft. Because the <code>state</code> field of <code>Post</code> is private, t
 create a <code>Post</code> in any other state! In the <code>Post::new</code> function, we set the
 <code>content</code> field to a new, empty <code>String</code>.</p>
 <h3 id="storing-the-text-of-the-post-content"><a class="header" href="#storing-the-text-of-the-post-content">Storing the Text of the Post Content</a></h3>
-<p>We saw in Listing 17-11 that we want to be able to call a method named
+<p>We saw in Listing 18-11 that we want to be able to call a method named
 <code>add_text</code> and pass it a <code>&amp;str</code> that is then added as the text content of the
 blog post. We implement this as a method, rather than exposing the <code>content</code>
 field as <code>pub</code>, so that later we can implement a method that will control how
 the <code>content</code> field’s data is read. The <code>add_text</code> method is pretty
-straightforward, so let’s add the implementation in Listing 17-13 to the <code>impl Post</code> block:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+straightforward, so let’s add the implementation in Listing 18-13 to the <code>impl Post</code> block:</p>
+<figure class="listing">
 <pre><code class="language-rust noplayground"><span class="boring">pub struct Post {
 </span><span class="boring">    state: Option&lt;Box&lt;dyn State&gt;&gt;,
 </span><span class="boring">    content: String,
@@ -327,8 +328,8 @@ straightforward, so let’s add the implementation in Listing 17-13 to the <code
 </span><span class="boring">struct Draft {}
 </span><span class="boring">
 </span><span class="boring">impl State for Draft {}</span></code></pre>
-<p><span class="caption">Listing 17-13: Implementing the <code>add_text</code> method to add
-text to a post’s <code>content</code></span></p>
+<figcaption>Listing 18-13: Implementing the <code>add_text</code> method to add text to a post’s <code>content</code></figcaption>
+</figure>
 <p>The <code>add_text</code> method takes a mutable reference to <code>self</code>, because we’re
 changing the <code>Post</code> instance that we’re calling <code>add_text</code> on. We then call
 <code>push_str</code> on the <code>String</code> in <code>content</code> and pass the <code>text</code> argument to add to
@@ -339,13 +340,14 @@ support.</p>
 <h3 id="ensuring-the-content-of-a-draft-post-is-empty"><a class="header" href="#ensuring-the-content-of-a-draft-post-is-empty">Ensuring the Content of a Draft Post Is Empty</a></h3>
 <p>Even after we’ve called <code>add_text</code> and added some content to our post, we still
 want the <code>content</code> method to return an empty string slice because the post is
-still in the draft state, as shown on line 7 of Listing 17-11. For now, let’s
+still in the draft state, as shown on line 7 of Listing 18-11. For now, let’s
 implement the <code>content</code> method with the simplest thing that will fulfill this
 requirement: always returning an empty string slice. We’ll change this later
 once we implement the ability to change a post’s state so it can be published.
 So far, posts can only be in the draft state, so the post content should always
-be empty. Listing 17-14 shows this placeholder implementation:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+be empty. Listing 18-14 shows this placeholder implementation:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub struct Post {
 </span><span class="boring">    state: Option&lt;Box&lt;dyn State&gt;&gt;,
 </span><span class="boring">    content: String,
@@ -374,14 +376,15 @@ be empty. Listing 17-14 shows this placeholder implementation:</p>
 </span><span class="boring">struct Draft {}
 </span><span class="boring">
 </span><span class="boring">impl State for Draft {}</span></code></pre>
-<p><span class="caption">Listing 17-14: Adding a placeholder implementation for
-the <code>content</code> method on <code>Post</code> that always returns an empty string slice</span></p>
-<p>With this added <code>content</code> method, everything in Listing 17-11 up to line 7
+<figcaption>Listing 18-14: Adding a placeholder implementation for the <code>content</code> method on <code>Post</code> that always returns an empty string slice</figcaption>
+</figure>
+<p>With this added <code>content</code> method, everything in Listing 18-11 up to line 7
 works as intended.</p>
 <h3 id="requesting-a-review-of-the-post-changes-its-state"><a class="header" href="#requesting-a-review-of-the-post-changes-its-state">Requesting a Review of the Post Changes Its State</a></h3>
 <p>Next, we need to add functionality to request a review of a post, which should
-change its state from <code>Draft</code> to <code>PendingReview</code>. Listing 17-15 shows this code:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+change its state from <code>Draft</code> to <code>PendingReview</code>. Listing 18-15 shows this code:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub struct Post {
 </span><span class="boring">    state: Option&lt;Box&lt;dyn State&gt;&gt;,
 </span><span class="boring">    content: String,
@@ -430,8 +433,8 @@ impl State for PendingReview {
         self
     }
 }</code></pre>
-<p><span class="caption">Listing 17-15: Implementing <code>request_review</code> methods on
-<code>Post</code> and the <code>State</code> trait</span></p>
+<figcaption>Listing 18-15: Implementing <code>request_review</code> methods on <code>Post</code> and the <code>State</code> trait</figcaption>
+</figure>
 <p>We give <code>Post</code> a public method named <code>request_review</code> that will take a mutable
 reference to <code>self</code>. Then we call an internal <code>request_review</code> method on the
 current state of <code>Post</code>, and this second <code>request_review</code> method consumes the
@@ -466,14 +469,15 @@ state is responsible for its own rules.</p>
 <p>We’ll leave the <code>content</code> method on <code>Post</code> as is, returning an empty string
 slice. We can now have a <code>Post</code> in the <code>PendingReview</code> state as well as in the
 <code>Draft</code> state, but we want the same behavior in the <code>PendingReview</code> state.
-Listing 17-11 now works up to line 10!</p>
+Listing 18-11 now works up to line 10!</p>
 <!-- Old headings. Do not remove or links may break. -->
 <p><a id="adding-the-approve-method-that-changes-the-behavior-of-content"></a></p>
 <h3 id="adding-approve-to-change-the-behavior-of-content"><a class="header" href="#adding-approve-to-change-the-behavior-of-content">Adding <code>approve</code> to Change the Behavior of <code>content</code></a></h3>
 <p>The <code>approve</code> method will be similar to the <code>request_review</code> method: it will
 set <code>state</code> to the value that the current state says it should have when that
-state is approved, as shown in Listing 17-16:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+state is approved, as shown in Listing 18-16:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub struct Post {
 </span><span class="boring">    state: Option&lt;Box&lt;dyn State&gt;&gt;,
 </span><span class="boring">    content: String,
@@ -551,8 +555,8 @@ impl State for Published {
         self
     }
 }</code></pre>
-<p><span class="caption">Listing 17-16: Implementing the <code>approve</code> method on
-<code>Post</code> and the <code>State</code> trait</span></p>
+<figcaption>Listing 18-16: Implementing the <code>approve</code> method on <code>Post</code> and the <code>State</code> trait</figcaption>
+</figure>
 <p>We add the <code>approve</code> method to the <code>State</code> trait and add a new struct that
 implements <code>State</code>, the <code>Published</code> state.</p>
 <p>Similar to the way <code>request_review</code> on <code>PendingReview</code> works, if we call the
@@ -565,8 +569,9 @@ state in those cases.</p>
 <p>Now we need to update the <code>content</code> method on <code>Post</code>. We want the value
 returned from <code>content</code> to depend on the current state of the <code>Post</code>, so we’re
 going to have the <code>Post</code> delegate to a <code>content</code> method defined on its <code>state</code>,
-as shown in Listing 17-17:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+as shown in Listing 18-17:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">pub struct Post {
 </span><span class="boring">    state: Option&lt;Box&lt;dyn State&gt;&gt;,
 </span><span class="boring">    content: String,
@@ -643,8 +648,8 @@ as shown in Listing 17-17:</p>
 </span><span class="boring">        self
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 17-17: Updating the <code>content</code> method on <code>Post</code> to
-delegate to a <code>content</code> method on <code>State</code></span></p>
+<figcaption>Listing 18-17: Updating the <code>content</code> method on <code>Post</code> to delegate to a <code>content</code> method on <code>State</code></figcaption>
+</figure>
 <p>Because the goal is to keep all these rules inside the structs that implement
 <code>State</code>, we call a <code>content</code> method on the value in <code>state</code> and pass the post
 instance (that is, <code>self</code>) as an argument. Then we return the value that’s
@@ -665,8 +670,9 @@ will take effect on the <code>&amp;</code> and the <code>Box</code> so the <code
 ultimately be called on the type that implements the <code>State</code> trait. That means
 we need to add <code>content</code> to the <code>State</code> trait definition, and that is where
 we’ll put the logic for what content to return depending on which state we
-have, as shown in Listing 17-18:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+have, as shown in Listing 18-18:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub struct Post {
 </span><span class="boring">    state: Option&lt;Box&lt;dyn State&gt;&gt;,
 </span><span class="boring">    content: String,
@@ -753,8 +759,8 @@ impl State for Published {
         &amp;post.content
     }
 }</code></pre>
-<p><span class="caption">Listing 17-18: Adding the <code>content</code> method to the <code>State</code>
-trait</span></p>
+<figcaption>Listing 18-18: Adding the <code>content</code> method to the <code>State</code> trait</figcaption>
+</figure>
 <p>We add a default implementation for the <code>content</code> method that returns an empty
 string slice. That means we don’t need to implement <code>content</code> on the <code>Draft</code>
 and <code>PendingReview</code> structs. The <code>Published</code> struct will override the <code>content</code>
@@ -763,7 +769,7 @@ method and return the value in <code>post.content</code>.</p>
 Chapter 10. We’re taking a reference to a <code>post</code> as an argument and returning a
 reference to part of that <code>post</code>, so the lifetime of the returned reference is
 related to the lifetime of the <code>post</code> argument.</p>
-<p>And we’re done—all of Listing 17-11 now works! We’ve implemented the state
+<p>And we’re done—all of Listing 18-11 now works! We’ve implemented the state
 pattern with the rules of the blog post workflow. The logic related to the
 rules lives in the state objects rather than being scattered throughout <code>Post</code>.</p>
 <section class="note" aria-role="note">
@@ -821,7 +827,7 @@ and <code>approve</code> methods on <code>Post</code>. Both methods delegate to 
 the same method on the value in the <code>state</code> field of <code>Option</code> and set the new
 value of the <code>state</code> field to the result. If we had a lot of methods on <code>Post</code>
 that followed this pattern, we might consider defining a macro to eliminate the
-repetition (see the <a href="ch20-06-macros.html#macros">“Macros”</a><!-- ignore --> section in Chapter 19).</p>
+repetition (see the <a href="ch20-06-macros.html#macros">“Macros”</a><!-- ignore --> section in Chapter 20).</p>
 <p>By implementing the state pattern exactly as it’s defined for object-oriented
 languages, we’re not taking as full advantage of Rust’s strengths as we could.
 Let’s look at some changes we can make to the <code>blog</code> crate that can make
@@ -832,8 +838,9 @@ trade-offs. Rather than encapsulating the states and transitions completely so
 outside code has no knowledge of them, we’ll encode the states into different
 types. Consequently, Rust’s type checking system will prevent attempts to use
 draft posts where only published posts are allowed by issuing a compiler error.</p>
-<p>Let’s consider the first part of <code>main</code> in Listing 17-11:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<p>Let’s consider the first part of <code>main</code> in Listing 18-11:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore"><span class="boring">use blog::Post;
 </span><span class="boring">
 </span>fn main() {
@@ -848,6 +855,7 @@ draft posts where only published posts are allowed by issuing a compiler error.<
 </span><span class="boring">    post.approve();
 </span><span class="boring">    assert_eq!("I ate a salad for lunch today", post.content());
 </span>}</code></pre>
+</figure>
 <p>We still enable the creation of new posts in the draft state using <code>Post::new</code>
 and the ability to add text to the post’s content. But instead of having a
 <code>content</code> method on a draft post that returns an empty string, we’ll make it so
@@ -855,9 +863,10 @@ draft posts don’t have the <code>content</code> method at all. That way, if we
 a draft post’s content, we’ll get a compiler error telling us the method
 doesn’t exist. As a result, it will be impossible for us to accidentally
 display draft post content in production, because that code won’t even compile.
-Listing 17-19 shows the definition of a <code>Post</code> struct and a <code>DraftPost</code> struct,
+Listing 18-19 shows the definition of a <code>Post</code> struct and a <code>DraftPost</code> struct,
 as well as methods on each:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub struct Post {
     content: String,
 }
@@ -883,8 +892,8 @@ impl DraftPost {
         self.content.push_str(text);
     }
 }</code></pre>
-<p><span class="caption">Listing 17-19: A <code>Post</code> with a <code>content</code> method and a
-<code>DraftPost</code> without a <code>content</code> method</span></p>
+<figcaption>Listing 18-19: A <code>Post</code> with a <code>content</code> method and <code>DraftPost</code> without a <code>content</code> method</figcaption>
+</figure>
 <p>Both the <code>Post</code> and <code>DraftPost</code> structs have a private <code>content</code> field that
 stores the blog post text. The structs no longer have the <code>state</code> field because
 we’re moving the encoding of the state to the types of the structs. The <code>Post</code>
@@ -906,8 +915,9 @@ pending review state should still not display any content. Let’s implement
 these constraints by adding another struct, <code>PendingReviewPost</code>, defining the
 <code>request_review</code> method on <code>DraftPost</code> to return a <code>PendingReviewPost</code>, and
 defining an <code>approve</code> method on <code>PendingReviewPost</code> to return a <code>Post</code>, as
-shown in Listing 17-20:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+shown in Listing 18-20:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub struct Post {
 </span><span class="boring">    content: String,
 </span><span class="boring">}
@@ -952,9 +962,8 @@ impl PendingReviewPost {
         }
     }
 }</code></pre>
-<p><span class="caption">Listing 17-20: A <code>PendingReviewPost</code> that gets created by
-calling <code>request_review</code> on <code>DraftPost</code> and an <code>approve</code> method that turns a
-<code>PendingReviewPost</code> into a published <code>Post</code></span></p>
+<figcaption>Listing 18-20: A <code>PendingReviewPost</code> that gets created by calling <code>request_review</code> on <code>DraftPost</code> and an <code>approve</code> method that turns a <code>PendingReviewPost</code> into a published <code>Post</code></figcaption>
+</figure>
 <p>The <code>request_review</code> and <code>approve</code> methods take ownership of <code>self</code>, thus
 consuming the <code>DraftPost</code> and <code>PendingReviewPost</code> instances and transforming
 them into a <code>PendingReviewPost</code> and a published <code>Post</code>, respectively. This way,
@@ -972,8 +981,9 @@ called on, so we need to add more <code>let post =</code> shadowing assignments 
 the returned instances. We also can’t have the assertions about the draft and
 pending review posts’ contents be empty strings, nor do we need them: we can’t
 compile code that tries to use the content of posts in those states any longer.
-The updated code in <code>main</code> is shown in Listing 17-21:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+The updated code in <code>main</code> is shown in Listing 18-21:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore">use blog::Post;
 
 fn main() {
@@ -987,8 +997,8 @@ fn main() {
 
     assert_eq!("I ate a salad for lunch today", post.content());
 }</code></pre>
-<p><span class="caption">Listing 17-21: Modifications to <code>main</code> to use the new
-implementation of the blog post workflow</span></p>
+<figcaption>Listing 18-21: Modifications to <code>main</code> to use the new implementation of the blog post workflow</figcaption>
+</figure>
 <p>The changes we needed to make to <code>main</code> to reassign <code>post</code> mean that this
 implementation doesn’t quite follow the object-oriented state pattern anymore:
 the transformations between the states are no longer encapsulated entirely
@@ -997,7 +1007,7 @@ now impossible because of the type system and the type checking that happens at
 compile time! This ensures that certain bugs, such as display of the content of
 an unpublished post, will be discovered before they make it to production.</p>
 <p>Try the tasks suggested at the start of this section on the <code>blog</code> crate as it
-is after Listing 17-21 to see what you think about the design of this version
+is after Listing 18-21 to see what you think about the design of this version
 of the code. Note that some of the tasks might be completed already in this
 design.</p>
 <p>We’ve seen that even though Rust is capable of implementing object-oriented

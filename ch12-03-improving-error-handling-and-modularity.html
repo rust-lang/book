@@ -779,7 +779,7 @@ returned the unit type, <code>()</code>, and we keep that as the value returned 
 <code>Ok</code> case.</p>
 <p>For the error type, we used the <em>trait object</em> <code>Box&lt;dyn Error&gt;</code> (and we’ve
 brought <code>std::error::Error</code> into scope with a <code>use</code> statement at the top).
-We’ll cover trait objects in <a href="ch18-00-oop.html">Chapter 17</a><!-- ignore -->. For now, just
+We’ll cover trait objects in <a href="ch18-00-oop.html">Chapter 18</a><!-- ignore -->. For now, just
 know that <code>Box&lt;dyn Error&gt;</code> means the function will return a type that
 implements the <code>Error</code> trait, but we don’t have to specify what particular type
 the return value will be. This gives us flexibility to return error values that

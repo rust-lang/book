@@ -200,14 +200,15 @@ the other features discussed in this chapter.</p>
 standard library provides. The associated type is named <code>Item</code> and stands in
 for the type of the values the type implementing the <code>Iterator</code> trait is
 iterating over. The definition of the <code>Iterator</code> trait is as shown in Listing
-19-12.</p>
+20-12.</p>
+<figure class="listing">
 <pre><code class="language-rust noplayground">pub trait Iterator {
     type Item;
 
     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;;
 }</code></pre>
-<p><span class="caption">Listing 19-12: The definition of the <code>Iterator</code> trait
-that has an associated type <code>Item</code></span></p>
+<figcaption>Listing 20-12: The definition of the <code>Iterator</code> trait that has an associated type <code>Item</code></figcaption>
+</figure>
 <p>The type <code>Item</code> is a placeholder, and the <code>next</code> method’s definition shows that
 it will return values of type <code>Option&lt;Self::Item&gt;</code>. Implementors of the
 <code>Iterator</code> trait will specify the concrete type for <code>Item</code>, and the <code>next</code>
@@ -217,7 +218,8 @@ latter allow us to define a function without specifying what types it can
 handle. To examine the difference between the two concepts, we’ll look at an
 implementation of the <code>Iterator</code> trait on a type named <code>Counter</code> that specifies
 the <code>Item</code> type is <code>u32</code>:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore"><span class="boring">struct Counter {
 </span><span class="boring">    count: u32,
 </span><span class="boring">}
@@ -241,14 +243,16 @@ the <code>Item</code> type is <code>u32</code>:</p>
 </span><span class="boring">        }
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
+</figure>
 <p>This syntax seems comparable to that of generics. So why not just define the
-<code>Iterator</code> trait with generics, as shown in Listing 19-13?</p>
+<code>Iterator</code> trait with generics, as shown in Listing 20-13?</p>
+<figure class="listing">
 <pre><code class="language-rust noplayground">pub trait Iterator&lt;T&gt; {
     fn next(&amp;mut self) -&gt; Option&lt;T&gt;;
 }</code></pre>
-<p><span class="caption">Listing 19-13: A hypothetical definition of the
-<code>Iterator</code> trait using generics</span></p>
-<p>The difference is that when using generics, as in Listing 19-13, we must
+<figcaption>Listing A hypothetical definition of the `Iterator` trait using generics</figcaption>
+</figure>
+<p>The difference is that when using generics, as in Listing 20-13, we must
 annotate the types in each implementation; because we can also implement
 <code>Iterator&lt;String&gt; for Counter</code> or any other type, we could have multiple
 implementations of <code>Iterator</code> for <code>Counter</code>. In other words, when a trait has a
@@ -257,7 +261,7 @@ the concrete types of the generic type parameters each time. When we use the
 <code>next</code> method on <code>Counter</code>, we would have to provide type annotations to
 indicate which implementation of <code>Iterator</code> we want to use.</p>
 <p>With associated types, we don’t need to annotate types because we can’t
-implement a trait on a type multiple times. In Listing 19-12 with the
+implement a trait on a type multiple times. In Listing 20-12 with the
 definition that uses associated types, we can only choose what the type of
 <code>Item</code> will be once, because there can only be one <code>impl Iterator for Counter</code>.
 We don’t have to specify that we want an iterator of <code>u32</code> values everywhere
@@ -277,10 +281,11 @@ in particular situations.</p>
 <p>Rust doesn’t allow you to create your own operators or overload arbitrary
 operators. But you can overload the operations and corresponding traits listed
 in <code>std::ops</code> by implementing the traits associated with the operator. For
-example, in Listing 19-14 we overload the <code>+</code> operator to add two <code>Point</code>
+example, in Listing 20-14 we overload the <code>+</code> operator to add two <code>Point</code>
 instances together. We do this by implementing the <code>Add</code> trait on a <code>Point</code>
 struct:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::ops::Add;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -306,8 +311,8 @@ fn main() {
         Point { x: 3, y: 3 }
     );
 }</code></pre></pre>
-<p><span class="caption">Listing 19-14: Implementing the <code>Add</code> trait to overload
-the <code>+</code> operator for <code>Point</code> instances</span></p>
+<figcaption>Listing 20-14: Implementing the <code>Add</code> trait to overload the <code>+</code> operator for <code>Point</code> instances</figcaption>
+</figure>
 <p>The <code>add</code> method adds the <code>x</code> values of two <code>Point</code> instances and the <code>y</code>
 values of two <code>Point</code> instances to create a new <code>Point</code>. The <code>Add</code> trait has an
 associated type named <code>Output</code> that determines the type returned from the <code>add</code>
@@ -339,8 +344,9 @@ units. This thin wrapping of an existing type in another struct is known as the
 Pattern to Implement External Traits on External Types”</a><!-- ignore
 --> section. We want to add values in millimeters to values in meters and have
 the implementation of <code>Add</code> do the conversion correctly. We can implement <code>Add</code>
-for <code>Millimeters</code> with <code>Meters</code> as the <code>Rhs</code>, as shown in Listing 19-15.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+for <code>Millimeters</code> with <code>Meters</code> as the <code>Rhs</code>, as shown in Listing 20-15.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::ops::Add;
 
 struct Millimeters(u32);
@@ -353,8 +359,8 @@ impl Add&lt;Meters&gt; for Millimeters {
         Millimeters(self.0 + (other.0 * 1000))
     }
 }</code></pre>
-<p><span class="caption">Listing 19-15: Implementing the <code>Add</code> trait on
-<code>Millimeters</code> to add <code>Millimeters</code> to <code>Meters</code></span></p>
+<figcaption>Listing 20-15: Implementing the <code>Add</code> trait on <code>Millimeters</code> to add <code>Millimeters</code> to <code>Meters</code></figcaption>
+</figure>
 <p>To add <code>Millimeters</code> and <code>Meters</code>, we specify <code>impl Add&lt;Meters&gt;</code> to set the
 value of the <code>Rhs</code> type parameter instead of using the default of <code>Self</code>.</p>
 <p>You’ll use default type parameters in two main ways:</p>
@@ -378,11 +384,12 @@ another trait’s method, nor does Rust prevent you from implementing both trait
 on one type. It’s also possible to implement a method directly on the type with
 the same name as methods from traits.</p>
 <p>When calling methods with the same name, you’ll need to tell Rust which one you
-want to use. Consider the code in Listing 19-16 where we’ve defined two traits,
+want to use. Consider the code in Listing 20-16 where we’ve defined two traits,
 <code>Pilot</code> and <code>Wizard</code>, that both have a method called <code>fly</code>. We then implement
 both traits on a type <code>Human</code> that already has a method named <code>fly</code> implemented
 on it. Each <code>fly</code> method does something different.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">trait Pilot {
     fn fly(&amp;self);
 }
@@ -412,12 +419,12 @@ impl Human {
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 19-16: Two traits are defined to have a <code>fly</code>
-method and are implemented on the <code>Human</code> type, and a <code>fly</code> method is
-implemented on <code>Human</code> directly</span></p>
+<figcaption>Listing 20-16: Two traits are defined to have a <code>method and are implemented on the</code>Human<code>type, and a</code>fly<code>method is implemented on</code>Human` directly</figcaption>
+</figure>
 <p>When we call <code>fly</code> on an instance of <code>Human</code>, the compiler defaults to calling
-the method that is directly implemented on the type, as shown in Listing 19-17.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+the method that is directly implemented on the type, as shown in Listing 20-17.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">trait Pilot {
 </span><span class="boring">    fn fly(&amp;self);
 </span><span class="boring">}
@@ -450,14 +457,15 @@ the method that is directly implemented on the type, as shown in Listing 19-17.<
     let person = Human;
     person.fly();
 }</code></pre></pre>
-<p><span class="caption">Listing 19-17: Calling <code>fly</code> on an instance of
-<code>Human</code></span></p>
+<figcaption>Listing 20-17: Calling <code>fly</code> on an instance of <code>Human</code></figcaption>
+</figure>
 <p>Running this code will print <code>*waving arms furiously*</code>, showing that Rust
 called the <code>fly</code> method implemented on <code>Human</code> directly.</p>
 <p>To call the <code>fly</code> methods from either the <code>Pilot</code> trait or the <code>Wizard</code> trait,
 we need to use more explicit syntax to specify which <code>fly</code> method we mean.
-Listing 19-18 demonstrates this syntax.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+Listing 20-18 demonstrates this syntax.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">trait Pilot {
 </span><span class="boring">    fn fly(&amp;self);
 </span><span class="boring">}
@@ -492,12 +500,12 @@ Listing 19-18 demonstrates this syntax.</p>
     Wizard::fly(&amp;person);
     person.fly();
 }</code></pre></pre>
-<p><span class="caption">Listing 19-18: Specifying which trait’s <code>fly</code> method we
-want to call</span></p>
+<figcaption>Listing 20-18: Specifying which trait’s <code>fly</code> method we want to call</figcaption>
+</figure>
 <p>Specifying the trait name before the method name clarifies to Rust which
 implementation of <code>fly</code> we want to call. We could also write
 <code>Human::fly(&amp;person)</code>, which is equivalent to the <code>person.fly()</code> that we used
-in Listing 19-18, but this is a bit longer to write if we don’t need to
+in Listing 20-18, but this is a bit longer to write if we don’t need to
 disambiguate.</p>
 <p>Running this code prints the following:</p>
 <pre><code class="language-console">$ cargo run
@@ -514,12 +522,13 @@ trait to use based on the type of <code>self</code>.</p>
 <p>However, associated functions that are not methods don’t have a <code>self</code>
 parameter. When there are multiple types or traits that define non-method
 functions with the same function name, Rust doesn’t always know which type you
-mean unless you use <em>fully qualified syntax</em>. For example, in Listing 19-19 we
+mean unless you use <em>fully qualified syntax</em>. For example, in Listing 20-19 we
 create a trait for an animal shelter that wants to name all baby dogs <em>Spot</em>.
 We make an <code>Animal</code> trait with an associated non-method function <code>baby_name</code>.
 The <code>Animal</code> trait is implemented for the struct <code>Dog</code>, on which we also
 provide an associated non-method function <code>baby_name</code> directly.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">trait Animal {
     fn baby_name() -&gt; String;
 }
@@ -541,9 +550,8 @@ impl Animal for Dog {
 fn main() {
     println!("A baby dog is called a {}", Dog::baby_name());
 }</code></pre></pre>
-<p><span class="caption">Listing 19-19: A trait with an associated function and a
-type with an associated function of the same name that also implements the
-trait</span></p>
+<figcaption>Listing 20-19: A trait with an associated function and a type with an associated function of the same name that also implements the trait</figcaption>
+</figure>
 <p>We implement the code for naming all puppies Spot in the <code>baby_name</code> associated
 function that is defined on <code>Dog</code>. The <code>Dog</code> type also implements the trait
 <code>Animal</code>, which describes characteristics that all animals have. Baby dogs are
@@ -560,9 +568,10 @@ A baby dog is called a Spot
 <p>This output isn’t what we wanted. We want to call the <code>baby_name</code> function that
 is part of the <code>Animal</code> trait that we implemented on <code>Dog</code> so the code prints
 <code>A baby dog is called a puppy</code>. The technique of specifying the trait name that
-we used in Listing 19-18 doesn’t help here; if we change <code>main</code> to the code in
-Listing 19-20, we’ll get a compilation error.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+we used in Listing 20-18 doesn’t help here; if we change <code>main</code> to the code in
+Listing 20-20, we’ll get a compilation error.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">trait Animal {
 </span><span class="boring">    fn baby_name() -&gt; String;
 </span><span class="boring">}
@@ -584,9 +593,8 @@ Listing 19-20, we’ll get a compilation error.</p>
 </span>fn main() {
     println!("A baby dog is called a {}", Animal::baby_name());
 }</code></pre>
-<p><span class="caption">Listing 19-20: Attempting to call the <code>baby_name</code>
-function from the <code>Animal</code> trait, but Rust doesn’t know which implementation to
-use</span></p>
+<figcaption>Listing 20-20: Attempting to call the <code>baby_name</code> function from the <code>Animal</code> trait, but Rust doesn’t know which implementation to use</figcaption>
+</figure>
 <p>Because <code>Animal::baby_name</code> doesn’t have a <code>self</code> parameter, and there could be
 other types that implement the <code>Animal</code> trait, Rust can’t figure out which
 implementation of <code>Animal::baby_name</code> we want. We’ll get this compiler error:</p>
@@ -611,9 +619,10 @@ error: could not compile `traits-example` (bin "traits-example") due to 1 previo
 </code></pre>
 <p>To disambiguate and tell Rust that we want to use the implementation of
 <code>Animal</code> for <code>Dog</code> as opposed to the implementation of <code>Animal</code> for some other
-type, we need to use fully qualified syntax. Listing 19-21 demonstrates how to
+type, we need to use fully qualified syntax. Listing 20-21 demonstrates how to
 use fully qualified syntax.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">trait Animal {
 </span><span class="boring">    fn baby_name() -&gt; String;
 </span><span class="boring">}
@@ -635,9 +644,8 @@ use fully qualified syntax.</p>
 </span>fn main() {
     println!("A baby dog is called a {}", &lt;Dog as Animal&gt;::baby_name());
 }</code></pre></pre>
-<p><span class="caption">Listing 19-21: Using fully qualified syntax to specify
-that we want to call the <code>baby_name</code> function from the <code>Animal</code> trait as
-implemented on <code>Dog</code></span></p>
+<figcaption>Listing 20-21: Using fully qualified syntax to specify that we want to call the <code>baby_name</code> function from the <code>Animal</code> trait as implemented on <code>Dog</code></figcaption>
+</figure>
 <p>We’re providing Rust with a type annotation within the angle brackets, which
 indicates we want to call the <code>baby_name</code> method from the <code>Animal</code> trait as
 implemented on <code>Dog</code> by saying that we want to treat the <code>Dog</code> type as an
@@ -680,9 +688,10 @@ should print the following:</p>
 <code>OutlinePrint</code> trait will work only for types that also implement <code>Display</code> and
 provide the functionality that <code>OutlinePrint</code> needs. We can do that in the
 trait definition by specifying <code>OutlinePrint: Display</code>. This technique is
-similar to adding a trait bound to the trait. Listing 19-22 shows an
+similar to adding a trait bound to the trait. Listing 20-22 shows an
 implementation of the <code>OutlinePrint</code> trait.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::fmt;
 
 trait OutlinePrint: fmt::Display {
@@ -698,8 +707,8 @@ trait OutlinePrint: fmt::Display {
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 19-22: Implementing the <code>OutlinePrint</code> trait that
-requires the functionality from <code>Display</code></span></p>
+<figcaption>Listing 20-22: Implementing the <code>OutlinePrint</code> trait that requires the functionality from <code>Display</code></figcaption>
+</figure>
 <p>Because we’ve specified that <code>OutlinePrint</code> requires the <code>Display</code> trait, we
 can use the <code>to_string</code> function that is automatically implemented for any type
 that implements <code>Display</code>. If we tried to use <code>to_string</code> without adding a
@@ -708,7 +717,8 @@ error saying that no method named <code>to_string</code> was found for the type 
 the current scope.</p>
 <p>Let’s see what happens when we try to implement <code>OutlinePrint</code> on a type that
 doesn’t implement <code>Display</code>, such as the <code>Point</code> struct:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">use std::fmt;
 </span><span class="boring">
 </span><span class="boring">trait OutlinePrint: fmt::Display {
@@ -734,6 +744,7 @@ impl OutlinePrint for Point {}
 </span><span class="boring">    let p = Point { x: 1, y: 3 };
 </span><span class="boring">    p.outline_print();
 </span><span class="boring">}</span></code></pre>
+</figure>
 <p>We get an error saying that <code>Display</code> is required but not implemented:</p>
 <pre><code class="language-console">$ cargo run
    Compiling traits-example v0.1.0 (file:///projects/traits-example)
@@ -772,7 +783,8 @@ error: could not compile `traits-example` (bin "traits-example") due to 2 previo
 </code></pre>
 <p>To fix this, we implement <code>Display</code> on <code>Point</code> and satisfy the constraint that
 <code>OutlinePrint</code> requires, like so:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">trait OutlinePrint: fmt::Display {
 </span><span class="boring">    fn outline_print(&amp;self) {
 </span><span class="boring">        let output = self.to_string();
@@ -804,6 +816,7 @@ impl fmt::Display for Point {
 </span><span class="boring">    let p = Point { x: 1, y: 3 };
 </span><span class="boring">    p.outline_print();
 </span><span class="boring">}</span></code></pre></pre>
+</figure>
 <p>Then implementing the <code>OutlinePrint</code> trait on <code>Point</code> will compile
 successfully, and we can call <code>outline_print</code> on a <code>Point</code> instance to display
 it within an outline of asterisks.</p>
@@ -825,8 +838,9 @@ type is elided at compile time.</p>
 orphan rule prevents us from doing directly because the <code>Display</code> trait and the
 <code>Vec&lt;T&gt;</code> type are defined outside our crate. We can make a <code>Wrapper</code> struct
 that holds an instance of <code>Vec&lt;T&gt;</code>; then we can implement <code>Display</code> on
-<code>Wrapper</code> and use the <code>Vec&lt;T&gt;</code> value, as shown in Listing 19-23.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<code>Wrapper</code> and use the <code>Vec&lt;T&gt;</code> value, as shown in Listing 20-23.</p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::fmt;
 
 struct Wrapper(Vec&lt;String&gt;);
@@ -841,8 +855,8 @@ fn main() {
     let w = Wrapper(vec![String::from("hello"), String::from("world")]);
     println!("w = {w}");
 }</code></pre></pre>
-<p><span class="caption">Listing 19-23: Creating a <code>Wrapper</code> type around
-<code>Vec&lt;String&gt;</code> to implement <code>Display</code></span></p>
+<figcaption>Listing 20-23: Creating a <code>Wrapper</code> type around <code>Vec&lt;String&gt;</code> to implement <code>Display</code></figcaption>
+</figure>
 <p>The implementation of <code>Display</code> uses <code>self.0</code> to access the inner <code>Vec&lt;T&gt;</code>,
 because <code>Wrapper</code> is a tuple struct and <code>Vec&lt;T&gt;</code> is the item at index 0 in the
 tuple. Then we can use the functionality of the <code>Display</code> trait on <code>Wrapper</code>.</p>

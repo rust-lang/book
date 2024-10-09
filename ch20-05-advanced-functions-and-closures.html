@@ -192,14 +192,15 @@ closure trait. The <code>fn</code> type is called a <em>function pointer</em>. P
 with function pointers will allow you to use functions as arguments to other
 functions.</p>
 <p>The syntax for specifying that a parameter is a function pointer is similar to
-that of closures, as shown in Listing 19-27, where we’ve defined a function
+that of closures, as shown in Listing 20-27, where we’ve defined a function
 <code>add_one</code> that adds one to its parameter. The function <code>do_twice</code> takes two
 parameters: a function pointer to any function that takes an <code>i32</code> parameter
 and returns an <code>i32</code>, and one <code>i32</code> value. The <code>do_twice</code> function calls the
 function <code>f</code> twice, passing it the <code>arg</code> value, then adds the two function call
 results together. The <code>main</code> function calls <code>do_twice</code> with the arguments
 <code>add_one</code> and <code>5</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn add_one(x: i32) -&gt; i32 {
     x + 1
 }
@@ -213,8 +214,8 @@ fn main() {
 
     println!("The answer is: {answer}");
 }</code></pre></pre>
-<p><span class="caption">Listing 19-27: Using the <code>fn</code> type to accept a function
-pointer as an argument</span></p>
+<figcaption>Listing 20-27: Using the <code>fn</code> type to accept a function pointer as an argument</figcaption>
+</figure>
 <p>This code prints <code>The answer is: 12</code>. We specify that the parameter <code>f</code> in
 <code>do_twice</code> is an <code>fn</code> that takes one parameter of type <code>i32</code> and returns an
 <code>i32</code>. We can then call <code>f</code> in the body of <code>do_twice</code>. In <code>main</code>, we can pass
@@ -310,7 +311,7 @@ We can use a trait object:</p>
 <p>This code will compile just fine. For more about trait objects, refer to the
 section <a href="ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects That Allow for Values of Different
 Types”</a><!--
-ignore --> in Chapter 18.</p>
+ignore --> in Chapter 19.</p>
 <p>Next, let’s look at macros!</p>
 
                     </main>

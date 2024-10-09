@@ -360,7 +360,7 @@ impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
 <p>The <code>type Target = T;</code> syntax defines an associated type for the <code>Deref</code>
 trait to use. Associated types are a slightly different way of declaring a
 generic parameter, but you don’t need to worry about them for now; we’ll cover
-them in more detail in Chapter 19.</p>
+them in more detail in Chapter 20.</p>
 <p>We fill in the body of the <code>deref</code> method with <code>&amp;self.0</code> so <code>deref</code> returns a
 reference to the value we want to access with the <code>*</code> operator; recall from the
 <a href="ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types">“Using Tuple Structs without Named Fields to Create Different

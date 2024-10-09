@@ -195,7 +195,7 @@ Types.”</a><!-- ignore --></p>
 <p>The newtype pattern is also useful for tasks beyond those we’ve discussed so
 far, including statically enforcing that values are never confused and
 indicating the units of a value. You saw an example of using newtypes to
-indicate units in Listing 19-15: recall that the <code>Millimeters</code> and <code>Meters</code>
+indicate units in Listing 20-15: recall that the <code>Millimeters</code> and <code>Meters</code>
 structs wrapped <code>u32</code> values in a newtype. If we wrote a function with a
 parameter of type <code>Millimeters</code>, we couldn’t compile a program that
 accidentally tried to call that function with a value of type <code>Meters</code> or a
@@ -212,7 +212,7 @@ internally. The newtype pattern is a lightweight way to achieve encapsulation
 to hide implementation details, which we discussed in the <a href="ch18-01-what-is-oo.html#encapsulation-that-hides-implementation-details">“Encapsulation that
 Hides Implementation
 Details”</a><!-- ignore -->
-section of Chapter 17.</p>
+section of Chapter 18.</p>
 <h3 id="creating-type-synonyms-with-type-aliases"><a class="header" href="#creating-type-synonyms-with-type-aliases">Creating Type Synonyms with Type Aliases</a></h3>
 <p>Rust provides the ability to declare a <em>type alias</em> to give an existing type
 another name. For this we use the <code>type</code> keyword. For example, we can create
@@ -226,7 +226,7 @@ the alias <code>Kilometers</code> to <code>i32</code> like so:</p>
 </span><span class="boring">    println!("x + y = {}", x + y);
 </span><span class="boring">}</span></code></pre></pre>
 <p>Now, the alias <code>Kilometers</code> is a <em>synonym</em> for <code>i32</code>; unlike the <code>Millimeters</code>
-and <code>Meters</code> types we created in Listing 19-15, <code>Kilometers</code> is not a separate,
+and <code>Meters</code> types we created in Listing 20-15, <code>Kilometers</code> is not a separate,
 new type. Values that have the type <code>Kilometers</code> will be treated the same as
 values of type <code>i32</code>:</p>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
@@ -248,7 +248,8 @@ might have a lengthy type like this:</p>
 <pre><code class="language-rust ignore">Box&lt;dyn Fn() + Send + 'static&gt;</code></pre>
 <p>Writing this lengthy type in function signatures and as type annotations all
 over the code can be tiresome and error prone. Imagine having a project full of
-code like that in Listing 19-24.</p>
+code like that in Listing 20-24.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let f: Box&lt;dyn Fn() + Send + 'static&gt; = Box::new(|| println!("hi"));
 
@@ -261,10 +262,12 @@ code like that in Listing 19-24.</p>
 <span class="boring">        Box::new(|| ())
 </span>    }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 19-24: Using a long type in many places</span></p>
+<figcaption>Listing 20-24: Using a long type in many places</figcaption>
+</figure>
 <p>A type alias makes this code more manageable by reducing the repetition. In
-Listing 19-25, we’ve introduced an alias named <code>Thunk</code> for the verbose type and
+Listing 20-25, we’ve introduced an alias named <code>Thunk</code> for the verbose type and
 can replace all uses of the type with the shorter alias <code>Thunk</code>.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    type Thunk = Box&lt;dyn Fn() + Send + 'static&gt;;
 
@@ -279,8 +282,8 @@ can replace all uses of the type with the shorter alias <code>Thunk</code>.</p>
 <span class="boring">        Box::new(|| ())
 </span>    }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 19-25: Introducing a type alias <code>Thunk</code> to reduce
-repetition</span></p>
+<figcaption>Listing 20-25: Introducing a type alias <code>Thunk</code> to reduce repetition</figcaption>
+</figure>
 <p>This code is much easier to read and write! Choosing a meaningful name for a
 type alias can help communicate your intent as well (<em>thunk</em> is a word for code
 to be evaluated at a later time, so it’s an appropriate name for a closure that
@@ -348,7 +351,8 @@ never are called <em>diverging functions</em>. We can’t create values of the t
 so <code>bar</code> can never possibly return.</p>
 <p>But what use is a type you can never create values for? Recall the code from
 Listing 2-5, part of the number guessing game; we’ve reproduced a bit of it
-here in Listing 19-26.</p>
+here in Listing 20-26.</p>
+<figure class="listing">
 <pre><code class="language-rust ignore"><span class="boring">use rand::Rng;
 </span><span class="boring">use std::cmp::Ordering;
 </span><span class="boring">use std::io;
@@ -390,8 +394,8 @@ here in Listing 19-26.</p>
 </span><span class="boring">        }
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 19-26: A <code>match</code> with an arm that ends in
-<code>continue</code></span></p>
+<figcaption>Listing 20-26: A <code>match</code> with an arm that ends in <code>continue</code></figcaption>
+</figure>
 <p>At the time, we skipped over some details in this code. In Chapter 6 in <a href="ch06-02-match.html#the-match-control-flow-operator">“The
 <code>match</code> Control Flow Operator”</a><!-- ignore -->
 section, we discussed that <code>match</code> arms must all return the same type. So, for
@@ -406,7 +410,7 @@ example, the following code doesn’t work:</p>
 <p>The type of <code>guess</code> in this code would have to be an integer <em>and</em> a string,
 and Rust requires that <code>guess</code> have only one type. So what does <code>continue</code>
 return? How were we allowed to return a <code>u32</code> from one arm and have another arm
-that ends with <code>continue</code> in Listing 19-26?</p>
+that ends with <code>continue</code> in Listing 20-26?</p>
 <p>As you might have guessed, <code>continue</code> has a <code>!</code> value. That is, when Rust
 computes the type of <code>guess</code>, it looks at both match arms, the former with a
 value of <code>u32</code> and the latter with a <code>!</code> value. Because <code>!</code> can never have a
@@ -434,7 +438,7 @@ this definition:</p>
         }
     }
 }</code></pre>
-<p>In this code, the same thing happens as in the <code>match</code> in Listing 19-26: Rust
+<p>In this code, the same thing happens as in the <code>match</code> in Listing 20-26: Rust
 sees that <code>val</code> has the type <code>T</code> and <code>panic!</code> has the type <code>!</code>, so the result
 of the overall <code>match</code> expression is <code>T</code>. This code works because <code>panic!</code>
 doesn’t produce a value; it ends the program. In the <code>None</code> case, we won’t be
@@ -487,7 +491,7 @@ types behind a pointer of some kind.</p>
 <p>We can combine <code>str</code> with all kinds of pointers: for example, <code>Box&lt;str&gt;</code> or
 <code>Rc&lt;str&gt;</code>. In fact, you’ve seen this before but with a different dynamically
 sized type: traits. Every trait is a dynamically sized type we can refer to by
-using the name of the trait. In Chapter 17 in the <a href="ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects That
+using the name of the trait. In Chapter 18 in the <a href="ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects That
 Allow for Values of Different
 Types”</a><!--
 ignore --> section, we mentioned that to use traits as trait objects, we must

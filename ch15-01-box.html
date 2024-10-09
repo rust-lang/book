@@ -203,10 +203,10 @@ time because the data is copied around on the stack. To improve performance in
 this situation, we can store the large amount of data on the heap in a box.
 Then, only the small amount of pointer data is copied around on the stack,
 while the data it references stays in one place on the heap. The third case is
-known as a <em>trait object</em>, and Chapter 17 devotes an entire section, <a href="ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using
+known as a <em>trait object</em>, and Chapter 18 devotes an entire section, <a href="ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using
 Trait Objects That Allow for Values of Different Types,”</a><!--
 ignore --> just to that topic. So what you learn here you’ll apply again in
-Chapter 17!</p>
+Chapter 18!</p>
 <h3 id="using-a-boxt-to-store-data-on-the-heap"><a class="header" href="#using-a-boxt-to-store-data-on-the-heap">Using a <code>Box&lt;T&gt;</code> to Store Data on the Heap</a></h3>
 <p>Before we discuss the heap storage use case for <code>Box&lt;T&gt;</code>, we’ll cover the
 syntax and how to interact with values stored within a <code>Box&lt;T&gt;</code>.</p>
@@ -418,7 +418,7 @@ other special capabilities, like those we’ll see with the other smart pointer
 types. They also don’t have the performance overhead that these special
 capabilities incur, so they can be useful in cases like the cons list where the
 indirection is the only feature we need. We’ll look at more use cases for boxes
-in Chapter 17, too.</p>
+in Chapter 18, too.</p>
 <p>The <code>Box&lt;T&gt;</code> type is a smart pointer because it implements the <code>Deref</code> trait,
 which allows <code>Box&lt;T&gt;</code> values to be treated like references. When a <code>Box&lt;T&gt;</code>
 value goes out of scope, the heap data that the box is pointing to is cleaned

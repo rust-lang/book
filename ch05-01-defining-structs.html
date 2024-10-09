@@ -442,7 +442,9 @@ example, a function that takes a parameter of type <code>Color</code> cannot tak
 <code>Point</code> as an argument, even though both types are made up of three <code>i32</code>
 values. Otherwise, tuple struct instances are similar to tuples in that you can
 destructure them into their individual pieces, and you can use a <code>.</code> followed
-by the index to access an individual value.</p>
+by the index to access an individual value. Unlike tuples, tuple structs
+require you to name the type of the struct when you destructure them. For
+example, we would write <code>let Point(x, y, z) = point</code>.</p>
 <h3 id="unit-like-structs-without-any-fields"><a class="header" href="#unit-like-structs-without-any-fields">Unit-Like Structs Without Any Fields</a></h3>
 <p>You can also define structs that don’t have any fields! These are called
 <em>unit-like structs</em> because they behave similarly to <code>()</code>, the unit type that

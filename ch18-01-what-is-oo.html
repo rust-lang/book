@@ -217,21 +217,23 @@ can define a struct <code>AveragedCollection</code> that has a field containing 
 of <code>i32</code> values. The struct can also have a field that contains the average of
 the values in the vector, meaning the average doesn’t have to be computed
 on demand whenever anyone needs it. In other words, <code>AveragedCollection</code> will
-cache the calculated average for us. Listing 17-1 has the definition of the
+cache the calculated average for us. Listing 18-1 has the definition of the
 <code>AveragedCollection</code> struct:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub struct AveragedCollection {
     list: Vec&lt;i32&gt;,
     average: f64,
 }</code></pre>
-<p><span class="caption">Listing 17-1: An <code>AveragedCollection</code> struct that
-maintains a list of integers and the average of the items in the
-collection</span></p>
+<figcaption>Listing 18-1: Listing 18-1: An <code>AveragedCollection</code> struct that maintains a list of integers and the average of the items in the collection</figcaption>
+</figure>
 <p>The struct is marked <code>pub</code> so that other code can use it, but the fields within
 the struct remain private. This is important in this case because we want to
 ensure that whenever a value is added or removed from the list, the average is
 also updated. We do this by implementing <code>add</code>, <code>remove</code>, and <code>average</code> methods
-on the struct, as shown in Listing 17-2:</p>
+on the struct, as shown in Listing 18-2:</p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust noplayground"><span class="boring">pub struct AveragedCollection {
 </span><span class="boring">    list: Vec&lt;i32&gt;,
@@ -264,8 +266,8 @@ on the struct, as shown in Listing 17-2:</p>
         self.average = total as f64 / self.list.len() as f64;
     }
 }</code></pre>
-<p><span class="caption">Listing 17-2: Implementations of the public methods
-<code>add</code>, <code>remove</code>, and <code>average</code> on <code>AveragedCollection</code></span></p>
+<figcaption>Listing 18-2: Listing 18-2: Implementations of the public methods <code>add</code>, <code>remove</code>, and <code>average</code> on <code>AveragedCollection</code></figcaption>
+</figure>
 <p>The public methods <code>add</code>, <code>remove</code>, and <code>average</code> are the only ways to access
 or modify data in an instance of <code>AveragedCollection</code>. When an item is added
 to <code>list</code> using the <code>add</code> method or removed using the <code>remove</code> method, the
