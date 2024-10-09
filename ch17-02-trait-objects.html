@@ -1,0 +1,554 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Using Trait Objects That Allow for Values of Different Types - The Rust Programming Language</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">The Rust Programming Language</a></li><li class="chapter-item expanded affix "><a href="foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> Programming a Guessing Game</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> Common Programming Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> Variables and Mutability</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> Data Types</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> Functions</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> Control Flow</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> Understanding Ownership</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> What is Ownership?</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> References and Borrowing</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> The Slice Type</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> Using Structs to Structure Related Data</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> Defining and Instantiating Structs</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> An Example Program Using Structs</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> Method Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> Enums and Pattern Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> Defining an Enum</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> The match Control Flow Construct</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> Concise Control Flow with if let</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> Managing Growing Projects with Packages, Crates, and Modules</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> Packages and Crates</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> Defining Modules to Control Scope and Privacy</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> Paths for Referring to an Item in the Module Tree</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> Bringing Paths Into Scope with the use Keyword</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> Separating Modules into Different Files</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> Common Collections</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> Storing Lists of Values with Vectors</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> Storing UTF-8 Encoded Text with Strings</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> Storing Keys with Associated Values in Hash Maps</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> Error Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> Unrecoverable Errors with panic!</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> Recoverable Errors with Result</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> To panic! or Not to panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> Generic Data Types</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Traits: Defining Shared Behavior</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> Validating References with Lifetimes</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> Writing Automated Tests</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> How to Write Tests</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> Controlling How Tests Are Run</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> Test Organization</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> An I/O Project: Building a Command Line Program</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> Accepting Command Line Arguments</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> Reading a File</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> Refactoring to Improve Modularity and Error Handling</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> Developing the Library’s Functionality with Test Driven Development</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> Working with Environment Variables</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> Writing Error Messages to Standard Error Instead of Standard Output</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Functional Language Features: Iterators and Closures</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> Closures: Anonymous Functions that Capture Their Environment</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> Processing a Series of Items with Iterators</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> Improving Our I/O Project</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> Comparing Performance: Loops vs. Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> More about Cargo and Crates.io</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> Customizing Builds with Release Profiles</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> Publishing a Crate to Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo Workspaces</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> Installing Binaries from Crates.io with cargo install</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Extending Cargo with Custom Commands</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> Using Box&lt;T&gt; to Point to Data on the Heap</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> Treating Smart Pointers Like Regular References with the Deref Trait</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> Running Code on Cleanup with the Drop Trait</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt;, the Reference Counted Smart Pointer</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; and the Interior Mutability Pattern</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> Reference Cycles Can Leak Memory</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> Fearless Concurrency</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> Using Threads to Run Code Simultaneously</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> Using Message Passing to Transfer Data Between Threads</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> Shared-State Concurrency</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> Extensible Concurrency with the Sync and Send Traits</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-oop.html"><strong aria-hidden="true">17.</strong> Object Oriented Programming Features of Rust</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-what-is-oo.html"><strong aria-hidden="true">17.1.</strong> Characteristics of Object-Oriented Languages</a></li><li class="chapter-item expanded "><a href="ch17-02-trait-objects.html" class="active"><strong aria-hidden="true">17.2.</strong> Using Trait Objects That Allow for Values of Different Types</a></li><li class="chapter-item expanded "><a href="ch17-03-oo-design-patterns.html"><strong aria-hidden="true">17.3.</strong> Implementing an Object-Oriented Design Pattern</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-patterns.html"><strong aria-hidden="true">18.</strong> Patterns and Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-all-the-places-for-patterns.html"><strong aria-hidden="true">18.1.</strong> All the Places Patterns Can Be Used</a></li><li class="chapter-item expanded "><a href="ch18-02-refutability.html"><strong aria-hidden="true">18.2.</strong> Refutability: Whether a Pattern Might Fail to Match</a></li><li class="chapter-item expanded "><a href="ch18-03-pattern-syntax.html"><strong aria-hidden="true">18.3.</strong> Pattern Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-advanced-features.html"><strong aria-hidden="true">19.</strong> Advanced Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-unsafe-rust.html"><strong aria-hidden="true">19.1.</strong> Unsafe Rust</a></li><li class="chapter-item expanded "><a href="ch19-03-advanced-traits.html"><strong aria-hidden="true">19.2.</strong> Advanced Traits</a></li><li class="chapter-item expanded "><a href="ch19-04-advanced-types.html"><strong aria-hidden="true">19.3.</strong> Advanced Types</a></li><li class="chapter-item expanded "><a href="ch19-05-advanced-functions-and-closures.html"><strong aria-hidden="true">19.4.</strong> Advanced Functions and Closures</a></li><li class="chapter-item expanded "><a href="ch19-06-macros.html"><strong aria-hidden="true">19.5.</strong> Macros</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-final-project-a-web-server.html"><strong aria-hidden="true">20.</strong> Final Project: Building a Multithreaded Web Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-single-threaded.html"><strong aria-hidden="true">20.1.</strong> Building a Single-Threaded Web Server</a></li><li class="chapter-item expanded "><a href="ch20-02-multithreaded.html"><strong aria-hidden="true">20.2.</strong> Turning Our Single-Threaded Server into a Multithreaded Server</a></li><li class="chapter-item expanded "><a href="ch20-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">20.3.</strong> Graceful Shutdown and Cleanup</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">21.</strong> Appendix</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">21.1.</strong> A - Keywords</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">21.2.</strong> B - Operators and Symbols</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">21.3.</strong> C - Derivable Traits</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">21.4.</strong> D - Useful Development Tools</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">21.5.</strong> E - Editions</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">21.6.</strong> F - Translations of the Book</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">21.7.</strong> G - How Rust is Made and “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="using-trait-objects-that-allow-for-values-of-different-types"><a class="header" href="#using-trait-objects-that-allow-for-values-of-different-types">Using Trait Objects That Allow for Values of Different Types</a></h2>
+<p>In Chapter 8, we mentioned that one limitation of vectors is that they can
+store elements of only one type. We created a workaround in Listing 8-9 where
+we defined a <code>SpreadsheetCell</code> enum that had variants to hold integers, floats,
+and text. This meant we could store different types of data in each cell and
+still have a vector that represented a row of cells. This is a perfectly good
+solution when our interchangeable items are a fixed set of types that we know
+when our code is compiled.</p>
+<p>However, sometimes we want our library user to be able to extend the set of
+types that are valid in a particular situation. To show how we might achieve
+this, we’ll create an example graphical user interface (GUI) tool that iterates
+through a list of items, calling a <code>draw</code> method on each one to draw it to the
+screen—a common technique for GUI tools. We’ll create a library crate called
+<code>gui</code> that contains the structure of a GUI library. This crate might include
+some types for people to use, such as <code>Button</code> or <code>TextField</code>. In addition,
+<code>gui</code> users will want to create their own types that can be drawn: for
+instance, one programmer might add an <code>Image</code> and another might add a
+<code>SelectBox</code>.</p>
+<p>We won’t implement a fully fledged GUI library for this example but will show
+how the pieces would fit together. At the time of writing the library, we can’t
+know and define all the types other programmers might want to create. But we do
+know that <code>gui</code> needs to keep track of many values of different types, and it
+needs to call a <code>draw</code> method on each of these differently typed values. It
+doesn’t need to know exactly what will happen when we call the <code>draw</code> method,
+just that the value will have that method available for us to call.</p>
+<p>To do this in a language with inheritance, we might define a class named
+<code>Component</code> that has a method named <code>draw</code> on it. The other classes, such as
+<code>Button</code>, <code>Image</code>, and <code>SelectBox</code>, would inherit from <code>Component</code> and thus
+inherit the <code>draw</code> method. They could each override the <code>draw</code> method to define
+their custom behavior, but the framework could treat all of the types as if
+they were <code>Component</code> instances and call <code>draw</code> on them. But because Rust
+doesn’t have inheritance, we need another way to structure the <code>gui</code> library to
+allow users to extend it with new types.</p>
+<h3 id="defining-a-trait-for-common-behavior"><a class="header" href="#defining-a-trait-for-common-behavior">Defining a Trait for Common Behavior</a></h3>
+<p>To implement the behavior we want <code>gui</code> to have, we’ll define a trait named
+<code>Draw</code> that will have one method named <code>draw</code>. Then we can define a vector that
+takes a <em>trait object</em>. A trait object points to both an instance of a type
+implementing our specified trait and a table used to look up trait methods on
+that type at runtime. We create a trait object by specifying some sort of
+pointer, such as a <code>&amp;</code> reference or a <code>Box&lt;T&gt;</code> smart pointer, then the <code>dyn</code>
+keyword, and then specifying the relevant trait. (We’ll talk about the reason
+trait objects must use a pointer in Chapter 19 in the section <a href="ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait">“Dynamically
+Sized Types and the <code>Sized</code> Trait.”</a><!-- ignore -->) We can
+use trait objects in place of a generic or concrete type. Wherever we use a
+trait object, Rust’s type system will ensure at compile time that any value
+used in that context will implement the trait object’s trait. Consequently, we
+don’t need to know all the possible types at compile time.</p>
+<p>We’ve mentioned that, in Rust, we refrain from calling structs and enums
+“objects” to distinguish them from other languages’ objects. In a struct or
+enum, the data in the struct fields and the behavior in <code>impl</code> blocks are
+separated, whereas in other languages, the data and behavior combined into one
+concept is often labeled an object. However, trait objects <em>are</em> more like
+objects in other languages in the sense that they combine data and behavior.
+But trait objects differ from traditional objects in that we can’t add data to
+a trait object. Trait objects aren’t as generally useful as objects in other
+languages: their specific purpose is to allow abstraction across common
+behavior.</p>
+<p>Listing 17-3 shows how to define a trait named <code>Draw</code> with one method named
+<code>draw</code>:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust noplayground">pub trait Draw {
+    fn draw(&amp;self);
+}</code></pre>
+<p><span class="caption">Listing 17-3: Definition of the <code>Draw</code> trait</span></p>
+<p>This syntax should look familiar from our discussions on how to define traits
+in Chapter 10. Next comes some new syntax: Listing 17-4 defines a struct named
+<code>Screen</code> that holds a vector named <code>components</code>. This vector is of type
+<code>Box&lt;dyn Draw&gt;</code>, which is a trait object; it’s a stand-in for any type inside
+a <code>Box</code> that implements the <code>Draw</code> trait.</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
+</span><span class="boring">    fn draw(&amp;self);
+</span><span class="boring">}
+</span><span class="boring">
+</span>pub struct Screen {
+    pub components: Vec&lt;Box&lt;dyn Draw&gt;&gt;,
+}</code></pre>
+<p><span class="caption">Listing 17-4: Definition of the <code>Screen</code> struct with a
+<code>components</code> field holding a vector of trait objects that implement the <code>Draw</code>
+trait</span></p>
+<p>On the <code>Screen</code> struct, we’ll define a method named <code>run</code> that will call the
+<code>draw</code> method on each of its <code>components</code>, as shown in Listing 17-5:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
+</span><span class="boring">    fn draw(&amp;self);
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">pub struct Screen {
+</span><span class="boring">    pub components: Vec&lt;Box&lt;dyn Draw&gt;&gt;,
+</span><span class="boring">}
+</span><span class="boring">
+</span>impl Screen {
+    pub fn run(&amp;self) {
+        for component in self.components.iter() {
+            component.draw();
+        }
+    }
+}</code></pre>
+<p><span class="caption">Listing 17-5: A <code>run</code> method on <code>Screen</code> that calls the
+<code>draw</code> method on each component</span></p>
+<p>This works differently from defining a struct that uses a generic type
+parameter with trait bounds. A generic type parameter can only be substituted
+with one concrete type at a time, whereas trait objects allow for multiple
+concrete types to fill in for the trait object at runtime. For example, we
+could have defined the <code>Screen</code> struct using a generic type and a trait bound
+as in Listing 17-6:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
+</span><span class="boring">    fn draw(&amp;self);
+</span><span class="boring">}
+</span><span class="boring">
+</span>pub struct Screen&lt;T: Draw&gt; {
+    pub components: Vec&lt;T&gt;,
+}
+
+impl&lt;T&gt; Screen&lt;T&gt;
+where
+    T: Draw,
+{
+    pub fn run(&amp;self) {
+        for component in self.components.iter() {
+            component.draw();
+        }
+    }
+}</code></pre>
+<p><span class="caption">Listing 17-6: An alternate implementation of the <code>Screen</code>
+struct and its <code>run</code> method using generics and trait bounds</span></p>
+<p>This restricts us to a <code>Screen</code> instance that has a list of components all of
+type <code>Button</code> or all of type <code>TextField</code>. If you’ll only ever have homogeneous
+collections, using generics and trait bounds is preferable because the
+definitions will be monomorphized at compile time to use the concrete types.</p>
+<p>On the other hand, with the method using trait objects, one <code>Screen</code> instance
+can hold a <code>Vec&lt;T&gt;</code> that contains a <code>Box&lt;Button&gt;</code> as well as a
+<code>Box&lt;TextField&gt;</code>. Let’s look at how this works, and then we’ll talk about the
+runtime performance implications.</p>
+<h3 id="implementing-the-trait"><a class="header" href="#implementing-the-trait">Implementing the Trait</a></h3>
+<p>Now we’ll add some types that implement the <code>Draw</code> trait. We’ll provide the
+<code>Button</code> type. Again, actually implementing a GUI library is beyond the scope
+of this book, so the <code>draw</code> method won’t have any useful implementation in its
+body. To imagine what the implementation might look like, a <code>Button</code> struct
+might have fields for <code>width</code>, <code>height</code>, and <code>label</code>, as shown in Listing 17-7:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust noplayground"><span class="boring">pub trait Draw {
+</span><span class="boring">    fn draw(&amp;self);
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">pub struct Screen {
+</span><span class="boring">    pub components: Vec&lt;Box&lt;dyn Draw&gt;&gt;,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Screen {
+</span><span class="boring">    pub fn run(&amp;self) {
+</span><span class="boring">        for component in self.components.iter() {
+</span><span class="boring">            component.draw();
+</span><span class="boring">        }
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span>pub struct Button {
+    pub width: u32,
+    pub height: u32,
+    pub label: String,
+}
+
+impl Draw for Button {
+    fn draw(&amp;self) {
+        // code to actually draw a button
+    }
+}</code></pre>
+<p><span class="caption">Listing 17-7: A <code>Button</code> struct that implements the
+<code>Draw</code> trait</span></p>
+<p>The <code>width</code>, <code>height</code>, and <code>label</code> fields on <code>Button</code> will differ from the
+fields on other components; for example, a <code>TextField</code> type might have those
+same fields plus a <code>placeholder</code> field. Each of the types we want to draw on
+the screen will implement the <code>Draw</code> trait but will use different code in the
+<code>draw</code> method to define how to draw that particular type, as <code>Button</code> has here
+(without the actual GUI code, as mentioned). The <code>Button</code> type, for instance,
+might have an additional <code>impl</code> block containing methods related to what
+happens when a user clicks the button. These kinds of methods won’t apply to
+types like <code>TextField</code>.</p>
+<p>If someone using our library decides to implement a <code>SelectBox</code> struct that has
+<code>width</code>, <code>height</code>, and <code>options</code> fields, they implement the <code>Draw</code> trait on the
+<code>SelectBox</code> type as well, as shown in Listing 17-8:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore">use gui::Draw;
+
+struct SelectBox {
+    width: u32,
+    height: u32,
+    options: Vec&lt;String&gt;,
+}
+
+impl Draw for SelectBox {
+    fn draw(&amp;self) {
+        // code to actually draw a select box
+    }
+}
+<span class="boring">
+</span><span class="boring">fn main() {}</span></code></pre>
+<p><span class="caption">Listing 17-8: Another crate using <code>gui</code> and implementing
+the <code>Draw</code> trait on a <code>SelectBox</code> struct</span></p>
+<p>Our library’s user can now write their <code>main</code> function to create a <code>Screen</code>
+instance. To the <code>Screen</code> instance, they can add a <code>SelectBox</code> and a <code>Button</code>
+by putting each in a <code>Box&lt;T&gt;</code> to become a trait object. They can then call the
+<code>run</code> method on the <code>Screen</code> instance, which will call <code>draw</code> on each of the
+components. Listing 17-9 shows this implementation:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore"><span class="boring">use gui::Draw;
+</span><span class="boring">
+</span><span class="boring">struct SelectBox {
+</span><span class="boring">    width: u32,
+</span><span class="boring">    height: u32,
+</span><span class="boring">    options: Vec&lt;String&gt;,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">impl Draw for SelectBox {
+</span><span class="boring">    fn draw(&amp;self) {
+</span><span class="boring">        // code to actually draw a select box
+</span><span class="boring">    }
+</span><span class="boring">}
+</span><span class="boring">
+</span>use gui::{Button, Screen};
+
+fn main() {
+    let screen = Screen {
+        components: vec![
+            Box::new(SelectBox {
+                width: 75,
+                height: 10,
+                options: vec![
+                    String::from("Yes"),
+                    String::from("Maybe"),
+                    String::from("No"),
+                ],
+            }),
+            Box::new(Button {
+                width: 50,
+                height: 10,
+                label: String::from("OK"),
+            }),
+        ],
+    };
+
+    screen.run();
+}</code></pre>
+<p><span class="caption">Listing 17-9: Using trait objects to store values of
+different types that implement the same trait</span></p>
+<p>When we wrote the library, we didn’t know that someone might add the
+<code>SelectBox</code> type, but our <code>Screen</code> implementation was able to operate on the
+new type and draw it because <code>SelectBox</code> implements the <code>Draw</code> trait, which
+means it implements the <code>draw</code> method.</p>
+<p>This concept—of being concerned only with the messages a value responds to
+rather than the value’s concrete type—is similar to the concept of <em>duck
+typing</em> in dynamically typed languages: if it walks like a duck and quacks
+like a duck, then it must be a duck! In the implementation of <code>run</code> on <code>Screen</code>
+in Listing 17-5, <code>run</code> doesn’t need to know what the concrete type of each
+component is. It doesn’t check whether a component is an instance of a <code>Button</code>
+or a <code>SelectBox</code>, it just calls the <code>draw</code> method on the component. By
+specifying <code>Box&lt;dyn Draw&gt;</code> as the type of the values in the <code>components</code>
+vector, we’ve defined <code>Screen</code> to need values that we can call the <code>draw</code>
+method on.</p>
+<p>The advantage of using trait objects and Rust’s type system to write code
+similar to code using duck typing is that we never have to check whether a
+value implements a particular method at runtime or worry about getting errors
+if a value doesn’t implement a method but we call it anyway. Rust won’t compile
+our code if the values don’t implement the traits that the trait objects need.</p>
+<p>For example, Listing 17-10 shows what happens if we try to create a <code>Screen</code>
+with a <code>String</code> as a component:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore does_not_compile">use gui::Screen;
+
+fn main() {
+    let screen = Screen {
+        components: vec![Box::new(String::from("Hi"))],
+    };
+
+    screen.run();
+}</code></pre>
+<p><span class="caption">Listing 17-10: Attempting to use a type that doesn’t
+implement the trait object’s trait</span></p>
+<p>We’ll get this error because <code>String</code> doesn’t implement the <code>Draw</code> trait:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling gui v0.1.0 (file:///projects/gui)
+error[E0277]: the trait bound `String: Draw` is not satisfied
+ --&gt; src/main.rs:5:26
+  |
+5 |         components: vec![Box::new(String::from("Hi"))],
+  |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Draw` is not implemented for `String`
+  |
+  = help: the trait `Draw` is implemented for `Button`
+  = note: required for the cast from `Box&lt;String&gt;` to `Box&lt;dyn Draw&gt;`
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `gui` (bin "gui") due to 1 previous error
+</code></pre>
+<p>This error lets us know that either we’re passing something to <code>Screen</code> we
+didn’t mean to pass and so should pass a different type or we should implement
+<code>Draw</code> on <code>String</code> so that <code>Screen</code> is able to call <code>draw</code> on it.</p>
+<h3 id="trait-objects-perform-dynamic-dispatch"><a class="header" href="#trait-objects-perform-dynamic-dispatch">Trait Objects Perform Dynamic Dispatch</a></h3>
+<p>Recall in the <a href="ch10-01-syntax.html#performance-of-code-using-generics">“Performance of Code Using
+Generics”</a><!-- ignore --> section in
+Chapter 10 our discussion on the monomorphization process performed by the
+compiler when we use trait bounds on generics: the compiler generates
+nongeneric implementations of functions and methods for each concrete type that
+we use in place of a generic type parameter. The code that results from
+monomorphization is doing <em>static dispatch</em>, which is when the compiler knows
+what method you’re calling at compile time. This is opposed to <em>dynamic
+dispatch</em>, which is when the compiler can’t tell at compile time which method
+you’re calling. In dynamic dispatch cases, the compiler emits code that at
+runtime will figure out which method to call.</p>
+<p>When we use trait objects, Rust must use dynamic dispatch. The compiler doesn’t
+know all the types that might be used with the code that’s using trait objects,
+so it doesn’t know which method implemented on which type to call. Instead, at
+runtime, Rust uses the pointers inside the trait object to know which method to
+call. This lookup incurs a runtime cost that doesn’t occur with static
+dispatch. Dynamic dispatch also prevents the compiler from choosing to inline a
+method’s code, which in turn prevents some optimizations. However, we did get
+extra flexibility in the code that we wrote in Listing 17-5 and were able to
+support in Listing 17-9, so it’s a trade-off to consider.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch17-01-what-is-oo.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch17-03-oo-design-patterns.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch17-01-what-is-oo.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch17-03-oo-design-patterns.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

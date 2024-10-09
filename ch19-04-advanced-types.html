@@ -1,0 +1,573 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Advanced Types - The Rust Programming Language</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">The Rust Programming Language</a></li><li class="chapter-item expanded affix "><a href="foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> Programming a Guessing Game</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> Common Programming Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> Variables and Mutability</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> Data Types</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> Functions</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> Control Flow</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> Understanding Ownership</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> What is Ownership?</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> References and Borrowing</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> The Slice Type</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> Using Structs to Structure Related Data</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> Defining and Instantiating Structs</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> An Example Program Using Structs</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> Method Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> Enums and Pattern Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> Defining an Enum</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> The match Control Flow Construct</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> Concise Control Flow with if let</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> Managing Growing Projects with Packages, Crates, and Modules</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> Packages and Crates</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> Defining Modules to Control Scope and Privacy</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> Paths for Referring to an Item in the Module Tree</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> Bringing Paths Into Scope with the use Keyword</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> Separating Modules into Different Files</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> Common Collections</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> Storing Lists of Values with Vectors</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> Storing UTF-8 Encoded Text with Strings</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> Storing Keys with Associated Values in Hash Maps</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> Error Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> Unrecoverable Errors with panic!</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> Recoverable Errors with Result</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> To panic! or Not to panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> Generic Data Types</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Traits: Defining Shared Behavior</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> Validating References with Lifetimes</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> Writing Automated Tests</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> How to Write Tests</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> Controlling How Tests Are Run</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> Test Organization</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> An I/O Project: Building a Command Line Program</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> Accepting Command Line Arguments</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> Reading a File</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> Refactoring to Improve Modularity and Error Handling</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> Developing the Library’s Functionality with Test Driven Development</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> Working with Environment Variables</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> Writing Error Messages to Standard Error Instead of Standard Output</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Functional Language Features: Iterators and Closures</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> Closures: Anonymous Functions that Capture Their Environment</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> Processing a Series of Items with Iterators</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> Improving Our I/O Project</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> Comparing Performance: Loops vs. Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> More about Cargo and Crates.io</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> Customizing Builds with Release Profiles</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> Publishing a Crate to Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo Workspaces</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> Installing Binaries from Crates.io with cargo install</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Extending Cargo with Custom Commands</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> Using Box&lt;T&gt; to Point to Data on the Heap</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> Treating Smart Pointers Like Regular References with the Deref Trait</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> Running Code on Cleanup with the Drop Trait</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt;, the Reference Counted Smart Pointer</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; and the Interior Mutability Pattern</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> Reference Cycles Can Leak Memory</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> Fearless Concurrency</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> Using Threads to Run Code Simultaneously</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> Using Message Passing to Transfer Data Between Threads</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> Shared-State Concurrency</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> Extensible Concurrency with the Sync and Send Traits</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-oop.html"><strong aria-hidden="true">17.</strong> Object Oriented Programming Features of Rust</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-what-is-oo.html"><strong aria-hidden="true">17.1.</strong> Characteristics of Object-Oriented Languages</a></li><li class="chapter-item expanded "><a href="ch17-02-trait-objects.html"><strong aria-hidden="true">17.2.</strong> Using Trait Objects That Allow for Values of Different Types</a></li><li class="chapter-item expanded "><a href="ch17-03-oo-design-patterns.html"><strong aria-hidden="true">17.3.</strong> Implementing an Object-Oriented Design Pattern</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-patterns.html"><strong aria-hidden="true">18.</strong> Patterns and Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-all-the-places-for-patterns.html"><strong aria-hidden="true">18.1.</strong> All the Places Patterns Can Be Used</a></li><li class="chapter-item expanded "><a href="ch18-02-refutability.html"><strong aria-hidden="true">18.2.</strong> Refutability: Whether a Pattern Might Fail to Match</a></li><li class="chapter-item expanded "><a href="ch18-03-pattern-syntax.html"><strong aria-hidden="true">18.3.</strong> Pattern Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-advanced-features.html"><strong aria-hidden="true">19.</strong> Advanced Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-unsafe-rust.html"><strong aria-hidden="true">19.1.</strong> Unsafe Rust</a></li><li class="chapter-item expanded "><a href="ch19-03-advanced-traits.html"><strong aria-hidden="true">19.2.</strong> Advanced Traits</a></li><li class="chapter-item expanded "><a href="ch19-04-advanced-types.html" class="active"><strong aria-hidden="true">19.3.</strong> Advanced Types</a></li><li class="chapter-item expanded "><a href="ch19-05-advanced-functions-and-closures.html"><strong aria-hidden="true">19.4.</strong> Advanced Functions and Closures</a></li><li class="chapter-item expanded "><a href="ch19-06-macros.html"><strong aria-hidden="true">19.5.</strong> Macros</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-final-project-a-web-server.html"><strong aria-hidden="true">20.</strong> Final Project: Building a Multithreaded Web Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-single-threaded.html"><strong aria-hidden="true">20.1.</strong> Building a Single-Threaded Web Server</a></li><li class="chapter-item expanded "><a href="ch20-02-multithreaded.html"><strong aria-hidden="true">20.2.</strong> Turning Our Single-Threaded Server into a Multithreaded Server</a></li><li class="chapter-item expanded "><a href="ch20-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">20.3.</strong> Graceful Shutdown and Cleanup</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">21.</strong> Appendix</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">21.1.</strong> A - Keywords</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">21.2.</strong> B - Operators and Symbols</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">21.3.</strong> C - Derivable Traits</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">21.4.</strong> D - Useful Development Tools</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">21.5.</strong> E - Editions</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">21.6.</strong> F - Translations of the Book</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">21.7.</strong> G - How Rust is Made and “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="advanced-types"><a class="header" href="#advanced-types">Advanced Types</a></h2>
+<p>The Rust type system has some features that we’ve so far mentioned but haven’t
+yet discussed. We’ll start by discussing newtypes in general as we examine why
+newtypes are useful as types. Then we’ll move on to type aliases, a feature
+similar to newtypes but with slightly different semantics. We’ll also discuss
+the <code>!</code> type and dynamically sized types.</p>
+<h3 id="using-the-newtype-pattern-for-type-safety-and-abstraction"><a class="header" href="#using-the-newtype-pattern-for-type-safety-and-abstraction">Using the Newtype Pattern for Type Safety and Abstraction</a></h3>
+<section class="note" aria-role="note">
+<p>Note: This section assumes you’ve read the earlier section <a href="ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types">“Using the
+Newtype Pattern to Implement External Traits on External
+Types.”</a><!-- ignore --></p>
+</section>
+<p>The newtype pattern is also useful for tasks beyond those we’ve discussed so
+far, including statically enforcing that values are never confused and
+indicating the units of a value. You saw an example of using newtypes to
+indicate units in Listing 19-15: recall that the <code>Millimeters</code> and <code>Meters</code>
+structs wrapped <code>u32</code> values in a newtype. If we wrote a function with a
+parameter of type <code>Millimeters</code>, we couldn’t compile a program that
+accidentally tried to call that function with a value of type <code>Meters</code> or a
+plain <code>u32</code>.</p>
+<p>We can also use the newtype pattern to abstract away some implementation
+details of a type: the new type can expose a public API that is different from
+the API of the private inner type.</p>
+<p>Newtypes can also hide internal implementation. For example, we could provide a
+<code>People</code> type to wrap a <code>HashMap&lt;i32, String&gt;</code> that stores a person’s ID
+associated with their name. Code using <code>People</code> would only interact with the
+public API we provide, such as a method to add a name string to the <code>People</code>
+collection; that code wouldn’t need to know that we assign an <code>i32</code> ID to names
+internally. The newtype pattern is a lightweight way to achieve encapsulation
+to hide implementation details, which we discussed in the <a href="ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details">“Encapsulation that
+Hides Implementation
+Details”</a><!-- ignore -->
+section of Chapter 17.</p>
+<h3 id="creating-type-synonyms-with-type-aliases"><a class="header" href="#creating-type-synonyms-with-type-aliases">Creating Type Synonyms with Type Aliases</a></h3>
+<p>Rust provides the ability to declare a <em>type alias</em> to give an existing type
+another name. For this we use the <code>type</code> keyword. For example, we can create
+the alias <code>Kilometers</code> to <code>i32</code> like so:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    type Kilometers = i32;
+<span class="boring">
+</span><span class="boring">    let x: i32 = 5;
+</span><span class="boring">    let y: Kilometers = 5;
+</span><span class="boring">
+</span><span class="boring">    println!("x + y = {}", x + y);
+</span><span class="boring">}</span></code></pre></pre>
+<p>Now, the alias <code>Kilometers</code> is a <em>synonym</em> for <code>i32</code>; unlike the <code>Millimeters</code>
+and <code>Meters</code> types we created in Listing 19-15, <code>Kilometers</code> is not a separate,
+new type. Values that have the type <code>Kilometers</code> will be treated the same as
+values of type <code>i32</code>:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    type Kilometers = i32;
+
+    let x: i32 = 5;
+    let y: Kilometers = 5;
+
+    println!("x + y = {}", x + y);
+<span class="boring">}</span></code></pre></pre>
+<p>Because <code>Kilometers</code> and <code>i32</code> are the same type, we can add values of both
+types and we can pass <code>Kilometers</code> values to functions that take <code>i32</code>
+parameters. However, using this method, we don’t get the type checking benefits
+that we get from the newtype pattern discussed earlier. In other words, if we
+mix up <code>Kilometers</code> and <code>i32</code> values somewhere, the compiler will not give us
+an error.</p>
+<p>The main use case for type synonyms is to reduce repetition. For example, we
+might have a lengthy type like this:</p>
+<pre><code class="language-rust ignore">Box&lt;dyn Fn() + Send + 'static&gt;</code></pre>
+<p>Writing this lengthy type in function signatures and as type annotations all
+over the code can be tiresome and error prone. Imagine having a project full of
+code like that in Listing 19-24.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let f: Box&lt;dyn Fn() + Send + 'static&gt; = Box::new(|| println!("hi"));
+
+    fn takes_long_type(f: Box&lt;dyn Fn() + Send + 'static&gt;) {
+        // --snip--
+    }
+
+    fn returns_long_type() -&gt; Box&lt;dyn Fn() + Send + 'static&gt; {
+        // --snip--
+<span class="boring">        Box::new(|| ())
+</span>    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 19-24: Using a long type in many places</span></p>
+<p>A type alias makes this code more manageable by reducing the repetition. In
+Listing 19-25, we’ve introduced an alias named <code>Thunk</code> for the verbose type and
+can replace all uses of the type with the shorter alias <code>Thunk</code>.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    type Thunk = Box&lt;dyn Fn() + Send + 'static&gt;;
+
+    let f: Thunk = Box::new(|| println!("hi"));
+
+    fn takes_long_type(f: Thunk) {
+        // --snip--
+    }
+
+    fn returns_long_type() -&gt; Thunk {
+        // --snip--
+<span class="boring">        Box::new(|| ())
+</span>    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 19-25: Introducing a type alias <code>Thunk</code> to reduce
+repetition</span></p>
+<p>This code is much easier to read and write! Choosing a meaningful name for a
+type alias can help communicate your intent as well (<em>thunk</em> is a word for code
+to be evaluated at a later time, so it’s an appropriate name for a closure that
+gets stored).</p>
+<p>Type aliases are also commonly used with the <code>Result&lt;T, E&gt;</code> type for reducing
+repetition. Consider the <code>std::io</code> module in the standard library. I/O
+operations often return a <code>Result&lt;T, E&gt;</code> to handle situations when operations
+fail to work. This library has a <code>std::io::Error</code> struct that represents all
+possible I/O errors. Many of the functions in <code>std::io</code> will be returning
+<code>Result&lt;T, E&gt;</code> where the <code>E</code> is <code>std::io::Error</code>, such as these functions in
+the <code>Write</code> trait:</p>
+<pre><code class="language-rust noplayground">use std::fmt;
+use std::io::Error;
+
+pub trait Write {
+    fn write(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;usize, Error&gt;;
+    fn flush(&amp;mut self) -&gt; Result&lt;(), Error&gt;;
+
+    fn write_all(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;(), Error&gt;;
+    fn write_fmt(&amp;mut self, fmt: fmt::Arguments) -&gt; Result&lt;(), Error&gt;;
+}</code></pre>
+<p>The <code>Result&lt;..., Error&gt;</code> is repeated a lot. As such, <code>std::io</code> has this type
+alias declaration:</p>
+<pre><code class="language-rust noplayground"><span class="boring">use std::fmt;
+</span><span class="boring">
+</span>type Result&lt;T&gt; = std::result::Result&lt;T, std::io::Error&gt;;
+<span class="boring">
+</span><span class="boring">pub trait Write {
+</span><span class="boring">    fn write(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;usize&gt;;
+</span><span class="boring">    fn flush(&amp;mut self) -&gt; Result&lt;()&gt;;
+</span><span class="boring">
+</span><span class="boring">    fn write_all(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;()&gt;;
+</span><span class="boring">    fn write_fmt(&amp;mut self, fmt: fmt::Arguments) -&gt; Result&lt;()&gt;;
+</span><span class="boring">}</span></code></pre>
+<p>Because this declaration is in the <code>std::io</code> module, we can use the fully
+qualified alias <code>std::io::Result&lt;T&gt;</code>; that is, a <code>Result&lt;T, E&gt;</code> with the <code>E</code>
+filled in as <code>std::io::Error</code>. The <code>Write</code> trait function signatures end up
+looking like this:</p>
+<pre><code class="language-rust noplayground"><span class="boring">use std::fmt;
+</span><span class="boring">
+</span><span class="boring">type Result&lt;T&gt; = std::result::Result&lt;T, std::io::Error&gt;;
+</span><span class="boring">
+</span>pub trait Write {
+    fn write(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;usize&gt;;
+    fn flush(&amp;mut self) -&gt; Result&lt;()&gt;;
+
+    fn write_all(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;()&gt;;
+    fn write_fmt(&amp;mut self, fmt: fmt::Arguments) -&gt; Result&lt;()&gt;;
+}</code></pre>
+<p>The type alias helps in two ways: it makes code easier to write <em>and</em> it gives
+us a consistent interface across all of <code>std::io</code>. Because it’s an alias, it’s
+just another <code>Result&lt;T, E&gt;</code>, which means we can use any methods that work on
+<code>Result&lt;T, E&gt;</code> with it, as well as special syntax like the <code>?</code> operator.</p>
+<h3 id="the-never-type-that-never-returns"><a class="header" href="#the-never-type-that-never-returns">The Never Type that Never Returns</a></h3>
+<p>Rust has a special type named <code>!</code> that’s known in type theory lingo as the
+<em>empty type</em> because it has no values. We prefer to call it the <em>never type</em>
+because it stands in the place of the return type when a function will never
+return. Here is an example:</p>
+<pre><code class="language-rust noplayground">fn bar() -&gt; ! {
+    // --snip--
+<span class="boring">    panic!();
+</span>}</code></pre>
+<p>This code is read as “the function <code>bar</code> returns never.” Functions that return
+never are called <em>diverging functions</em>. We can’t create values of the type <code>!</code>
+so <code>bar</code> can never possibly return.</p>
+<p>But what use is a type you can never create values for? Recall the code from
+Listing 2-5, part of the number guessing game; we’ve reproduced a bit of it
+here in Listing 19-26.</p>
+<pre><code class="language-rust ignore"><span class="boring">use rand::Rng;
+</span><span class="boring">use std::cmp::Ordering;
+</span><span class="boring">use std::io;
+</span><span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    println!("Guess the number!");
+</span><span class="boring">
+</span><span class="boring">    let secret_number = rand::thread_rng().gen_range(1..=100);
+</span><span class="boring">
+</span><span class="boring">    println!("The secret number is: {secret_number}");
+</span><span class="boring">
+</span><span class="boring">    loop {
+</span><span class="boring">        println!("Please input your guess.");
+</span><span class="boring">
+</span><span class="boring">        let mut guess = String::new();
+</span><span class="boring">
+</span><span class="boring">        // --snip--
+</span><span class="boring">
+</span><span class="boring">        io::stdin()
+</span><span class="boring">            .read_line(&amp;mut guess)
+</span><span class="boring">            .expect("Failed to read line");
+</span><span class="boring">
+</span>        let guess: u32 = match guess.trim().parse() {
+            Ok(num) =&gt; num,
+            Err(_) =&gt; continue,
+        };
+<span class="boring">
+</span><span class="boring">        println!("You guessed: {guess}");
+</span><span class="boring">
+</span><span class="boring">        // --snip--
+</span><span class="boring">
+</span><span class="boring">        match guess.cmp(&amp;secret_number) {
+</span><span class="boring">            Ordering::Less =&gt; println!("Too small!"),
+</span><span class="boring">            Ordering::Greater =&gt; println!("Too big!"),
+</span><span class="boring">            Ordering::Equal =&gt; {
+</span><span class="boring">                println!("You win!");
+</span><span class="boring">                break;
+</span><span class="boring">            }
+</span><span class="boring">        }
+</span><span class="boring">    }
+</span><span class="boring">}</span></code></pre>
+<p><span class="caption">Listing 19-26: A <code>match</code> with an arm that ends in
+<code>continue</code></span></p>
+<p>At the time, we skipped over some details in this code. In Chapter 6 in <a href="ch06-02-match.html#the-match-control-flow-operator">“The
+<code>match</code> Control Flow Operator”</a><!-- ignore -->
+section, we discussed that <code>match</code> arms must all return the same type. So, for
+example, the following code doesn’t work:</p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span><span class="boring">    let guess = "3";
+</span>    let guess = match guess.trim().parse() {
+        Ok(_) =&gt; 5,
+        Err(_) =&gt; "hello",
+    };
+<span class="boring">}</span></code></pre>
+<p>The type of <code>guess</code> in this code would have to be an integer <em>and</em> a string,
+and Rust requires that <code>guess</code> have only one type. So what does <code>continue</code>
+return? How were we allowed to return a <code>u32</code> from one arm and have another arm
+that ends with <code>continue</code> in Listing 19-26?</p>
+<p>As you might have guessed, <code>continue</code> has a <code>!</code> value. That is, when Rust
+computes the type of <code>guess</code>, it looks at both match arms, the former with a
+value of <code>u32</code> and the latter with a <code>!</code> value. Because <code>!</code> can never have a
+value, Rust decides that the type of <code>guess</code> is <code>u32</code>.</p>
+<p>The formal way of describing this behavior is that expressions of type <code>!</code> can
+be coerced into any other type. We’re allowed to end this <code>match</code> arm with
+<code>continue</code> because <code>continue</code> doesn’t return a value; instead, it moves control
+back to the top of the loop, so in the <code>Err</code> case, we never assign a value to
+<code>guess</code>.</p>
+<p>The never type is useful with the <code>panic!</code> macro as well. Recall the <code>unwrap</code>
+function that we call on <code>Option&lt;T&gt;</code> values to produce a value or panic with
+this definition:</p>
+<pre><code class="language-rust ignore"><span class="boring">enum Option&lt;T&gt; {
+</span><span class="boring">    Some(T),
+</span><span class="boring">    None,
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">use crate::Option::*;
+</span><span class="boring">
+</span>impl&lt;T&gt; Option&lt;T&gt; {
+    pub fn unwrap(self) -&gt; T {
+        match self {
+            Some(val) =&gt; val,
+            None =&gt; panic!("called `Option::unwrap()` on a `None` value"),
+        }
+    }
+}</code></pre>
+<p>In this code, the same thing happens as in the <code>match</code> in Listing 19-26: Rust
+sees that <code>val</code> has the type <code>T</code> and <code>panic!</code> has the type <code>!</code>, so the result
+of the overall <code>match</code> expression is <code>T</code>. This code works because <code>panic!</code>
+doesn’t produce a value; it ends the program. In the <code>None</code> case, we won’t be
+returning a value from <code>unwrap</code>, so this code is valid.</p>
+<p>One final expression that has the type <code>!</code> is a <code>loop</code>:</p>
+<pre><code class="language-rust ignore"><span class="boring">fn main() {
+</span>    print!("forever ");
+
+    loop {
+        print!("and ever ");
+    }
+<span class="boring">}</span></code></pre>
+<p>Here, the loop never ends, so <code>!</code> is the value of the expression. However, this
+wouldn’t be true if we included a <code>break</code>, because the loop would terminate
+when it got to the <code>break</code>.</p>
+<h3 id="dynamically-sized-types-and-the-sized-trait"><a class="header" href="#dynamically-sized-types-and-the-sized-trait">Dynamically Sized Types and the <code>Sized</code> Trait</a></h3>
+<p>Rust needs to know certain details about its types, such as how much space to
+allocate for a value of a particular type. This leaves one corner of its type
+system a little confusing at first: the concept of <em>dynamically sized types</em>.
+Sometimes referred to as <em>DSTs</em> or <em>unsized types</em>, these types let us write
+code using values whose size we can know only at runtime.</p>
+<p>Let’s dig into the details of a dynamically sized type called <code>str</code>, which
+we’ve been using throughout the book. That’s right, not <code>&amp;str</code>, but <code>str</code> on
+its own, is a DST. We can’t know how long the string is until runtime, meaning
+we can’t create a variable of type <code>str</code>, nor can we take an argument of type
+<code>str</code>. Consider the following code, which does not work:</p>
+<pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
+</span>    let s1: str = "Hello there!";
+    let s2: str = "How's it going?";
+<span class="boring">}</span></code></pre>
+<p>Rust needs to know how much memory to allocate for any value of a particular
+type, and all values of a type must use the same amount of memory. If Rust
+allowed us to write this code, these two <code>str</code> values would need to take up the
+same amount of space. But they have different lengths: <code>s1</code> needs 12 bytes of
+storage and <code>s2</code> needs 15. This is why it’s not possible to create a variable
+holding a dynamically sized type.</p>
+<p>So what do we do? In this case, you already know the answer: we make the types
+of <code>s1</code> and <code>s2</code> a <code>&amp;str</code> rather than a <code>str</code>. Recall from the <a href="ch04-03-slices.html#string-slices">“String
+Slices”</a><!-- ignore --> section of Chapter 4 that the slice data
+structure just stores the starting position and the length of the slice. So
+although a <code>&amp;T</code> is a single value that stores the memory address of where the
+<code>T</code> is located, a <code>&amp;str</code> is <em>two</em> values: the address of the <code>str</code> and its
+length. As such, we can know the size of a <code>&amp;str</code> value at compile time: it’s
+twice the length of a <code>usize</code>. That is, we always know the size of a <code>&amp;str</code>, no
+matter how long the string it refers to is. In general, this is the way in
+which dynamically sized types are used in Rust: they have an extra bit of
+metadata that stores the size of the dynamic information. The golden rule of
+dynamically sized types is that we must always put values of dynamically sized
+types behind a pointer of some kind.</p>
+<p>We can combine <code>str</code> with all kinds of pointers: for example, <code>Box&lt;str&gt;</code> or
+<code>Rc&lt;str&gt;</code>. In fact, you’ve seen this before but with a different dynamically
+sized type: traits. Every trait is a dynamically sized type we can refer to by
+using the name of the trait. In Chapter 17 in the <a href="ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects That
+Allow for Values of Different
+Types”</a><!--
+ignore --> section, we mentioned that to use traits as trait objects, we must
+put them behind a pointer, such as <code>&amp;dyn Trait</code> or <code>Box&lt;dyn Trait&gt;</code> (<code>Rc&lt;dyn Trait&gt;</code> would work too).</p>
+<p>To work with DSTs, Rust provides the <code>Sized</code> trait to determine whether or not
+a type’s size is known at compile time. This trait is automatically implemented
+for everything whose size is known at compile time. In addition, Rust
+implicitly adds a bound on <code>Sized</code> to every generic function. That is, a
+generic function definition like this:</p>
+<pre><code class="language-rust ignore">fn generic&lt;T&gt;(t: T) {
+    // --snip--
+}</code></pre>
+<p>is actually treated as though we had written this:</p>
+<pre><code class="language-rust ignore">fn generic&lt;T: Sized&gt;(t: T) {
+    // --snip--
+}</code></pre>
+<p>By default, generic functions will work only on types that have a known size at
+compile time. However, you can use the following special syntax to relax this
+restriction:</p>
+<pre><code class="language-rust ignore">fn generic&lt;T: ?Sized&gt;(t: &amp;T) {
+    // --snip--
+}</code></pre>
+<p>A trait bound on <code>?Sized</code> means “<code>T</code> may or may not be <code>Sized</code>” and this
+notation overrides the default that generic types must have a known size at
+compile time. The <code>?Trait</code> syntax with this meaning is only available for
+<code>Sized</code>, not any other traits.</p>
+<p>Also note that we switched the type of the <code>t</code> parameter from <code>T</code> to <code>&amp;T</code>.
+Because the type might not be <code>Sized</code>, we need to use it behind some kind of
+pointer. In this case, we’ve chosen a reference.</p>
+<p>Next, we’ll talk about functions and closures!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch19-03-advanced-traits.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch19-05-advanced-functions-and-closures.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch19-03-advanced-traits.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch19-05-advanced-functions-and-closures.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>

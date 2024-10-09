@@ -1,0 +1,704 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Unsafe Rust - The Rust Programming Language</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="ferris.css">
+        <link rel="stylesheet" href="theme/2018-edition.css">
+        <link rel="stylesheet" href="theme/semantic-notes.css">
+        <link rel="stylesheet" href="theme/listing.css">
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">The Rust Programming Language</a></li><li class="chapter-item expanded affix "><a href="foreword.html">Foreword</a></li><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="ch01-02-hello-world.html"><strong aria-hidden="true">1.2.</strong> Hello, World!</a></li><li class="chapter-item expanded "><a href="ch01-03-hello-cargo.html"><strong aria-hidden="true">1.3.</strong> Hello, Cargo!</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-guessing-game-tutorial.html"><strong aria-hidden="true">2.</strong> Programming a Guessing Game</a></li><li class="chapter-item expanded "><a href="ch03-00-common-programming-concepts.html"><strong aria-hidden="true">3.</strong> Common Programming Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-variables-and-mutability.html"><strong aria-hidden="true">3.1.</strong> Variables and Mutability</a></li><li class="chapter-item expanded "><a href="ch03-02-data-types.html"><strong aria-hidden="true">3.2.</strong> Data Types</a></li><li class="chapter-item expanded "><a href="ch03-03-how-functions-work.html"><strong aria-hidden="true">3.3.</strong> Functions</a></li><li class="chapter-item expanded "><a href="ch03-04-comments.html"><strong aria-hidden="true">3.4.</strong> Comments</a></li><li class="chapter-item expanded "><a href="ch03-05-control-flow.html"><strong aria-hidden="true">3.5.</strong> Control Flow</a></li></ol></li><li class="chapter-item expanded "><a href="ch04-00-understanding-ownership.html"><strong aria-hidden="true">4.</strong> Understanding Ownership</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-what-is-ownership.html"><strong aria-hidden="true">4.1.</strong> What is Ownership?</a></li><li class="chapter-item expanded "><a href="ch04-02-references-and-borrowing.html"><strong aria-hidden="true">4.2.</strong> References and Borrowing</a></li><li class="chapter-item expanded "><a href="ch04-03-slices.html"><strong aria-hidden="true">4.3.</strong> The Slice Type</a></li></ol></li><li class="chapter-item expanded "><a href="ch05-00-structs.html"><strong aria-hidden="true">5.</strong> Using Structs to Structure Related Data</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch05-01-defining-structs.html"><strong aria-hidden="true">5.1.</strong> Defining and Instantiating Structs</a></li><li class="chapter-item expanded "><a href="ch05-02-example-structs.html"><strong aria-hidden="true">5.2.</strong> An Example Program Using Structs</a></li><li class="chapter-item expanded "><a href="ch05-03-method-syntax.html"><strong aria-hidden="true">5.3.</strong> Method Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch06-00-enums.html"><strong aria-hidden="true">6.</strong> Enums and Pattern Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch06-01-defining-an-enum.html"><strong aria-hidden="true">6.1.</strong> Defining an Enum</a></li><li class="chapter-item expanded "><a href="ch06-02-match.html"><strong aria-hidden="true">6.2.</strong> The match Control Flow Construct</a></li><li class="chapter-item expanded "><a href="ch06-03-if-let.html"><strong aria-hidden="true">6.3.</strong> Concise Control Flow with if let</a></li></ol></li><li class="chapter-item expanded "><a href="ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"><strong aria-hidden="true">7.</strong> Managing Growing Projects with Packages, Crates, and Modules</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch07-01-packages-and-crates.html"><strong aria-hidden="true">7.1.</strong> Packages and Crates</a></li><li class="chapter-item expanded "><a href="ch07-02-defining-modules-to-control-scope-and-privacy.html"><strong aria-hidden="true">7.2.</strong> Defining Modules to Control Scope and Privacy</a></li><li class="chapter-item expanded "><a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html"><strong aria-hidden="true">7.3.</strong> Paths for Referring to an Item in the Module Tree</a></li><li class="chapter-item expanded "><a href="ch07-04-bringing-paths-into-scope-with-the-use-keyword.html"><strong aria-hidden="true">7.4.</strong> Bringing Paths Into Scope with the use Keyword</a></li><li class="chapter-item expanded "><a href="ch07-05-separating-modules-into-different-files.html"><strong aria-hidden="true">7.5.</strong> Separating Modules into Different Files</a></li></ol></li><li class="chapter-item expanded "><a href="ch08-00-common-collections.html"><strong aria-hidden="true">8.</strong> Common Collections</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch08-01-vectors.html"><strong aria-hidden="true">8.1.</strong> Storing Lists of Values with Vectors</a></li><li class="chapter-item expanded "><a href="ch08-02-strings.html"><strong aria-hidden="true">8.2.</strong> Storing UTF-8 Encoded Text with Strings</a></li><li class="chapter-item expanded "><a href="ch08-03-hash-maps.html"><strong aria-hidden="true">8.3.</strong> Storing Keys with Associated Values in Hash Maps</a></li></ol></li><li class="chapter-item expanded "><a href="ch09-00-error-handling.html"><strong aria-hidden="true">9.</strong> Error Handling</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong aria-hidden="true">9.1.</strong> Unrecoverable Errors with panic!</a></li><li class="chapter-item expanded "><a href="ch09-02-recoverable-errors-with-result.html"><strong aria-hidden="true">9.2.</strong> Recoverable Errors with Result</a></li><li class="chapter-item expanded "><a href="ch09-03-to-panic-or-not-to-panic.html"><strong aria-hidden="true">9.3.</strong> To panic! or Not to panic!</a></li></ol></li><li class="chapter-item expanded "><a href="ch10-00-generics.html"><strong aria-hidden="true">10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch10-01-syntax.html"><strong aria-hidden="true">10.1.</strong> Generic Data Types</a></li><li class="chapter-item expanded "><a href="ch10-02-traits.html"><strong aria-hidden="true">10.2.</strong> Traits: Defining Shared Behavior</a></li><li class="chapter-item expanded "><a href="ch10-03-lifetime-syntax.html"><strong aria-hidden="true">10.3.</strong> Validating References with Lifetimes</a></li></ol></li><li class="chapter-item expanded "><a href="ch11-00-testing.html"><strong aria-hidden="true">11.</strong> Writing Automated Tests</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch11-01-writing-tests.html"><strong aria-hidden="true">11.1.</strong> How to Write Tests</a></li><li class="chapter-item expanded "><a href="ch11-02-running-tests.html"><strong aria-hidden="true">11.2.</strong> Controlling How Tests Are Run</a></li><li class="chapter-item expanded "><a href="ch11-03-test-organization.html"><strong aria-hidden="true">11.3.</strong> Test Organization</a></li></ol></li><li class="chapter-item expanded "><a href="ch12-00-an-io-project.html"><strong aria-hidden="true">12.</strong> An I/O Project: Building a Command Line Program</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch12-01-accepting-command-line-arguments.html"><strong aria-hidden="true">12.1.</strong> Accepting Command Line Arguments</a></li><li class="chapter-item expanded "><a href="ch12-02-reading-a-file.html"><strong aria-hidden="true">12.2.</strong> Reading a File</a></li><li class="chapter-item expanded "><a href="ch12-03-improving-error-handling-and-modularity.html"><strong aria-hidden="true">12.3.</strong> Refactoring to Improve Modularity and Error Handling</a></li><li class="chapter-item expanded "><a href="ch12-04-testing-the-librarys-functionality.html"><strong aria-hidden="true">12.4.</strong> Developing the Library’s Functionality with Test Driven Development</a></li><li class="chapter-item expanded "><a href="ch12-05-working-with-environment-variables.html"><strong aria-hidden="true">12.5.</strong> Working with Environment Variables</a></li><li class="chapter-item expanded "><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong aria-hidden="true">12.6.</strong> Writing Error Messages to Standard Error Instead of Standard Output</a></li></ol></li><li class="chapter-item expanded "><a href="ch13-00-functional-features.html"><strong aria-hidden="true">13.</strong> Functional Language Features: Iterators and Closures</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch13-01-closures.html"><strong aria-hidden="true">13.1.</strong> Closures: Anonymous Functions that Capture Their Environment</a></li><li class="chapter-item expanded "><a href="ch13-02-iterators.html"><strong aria-hidden="true">13.2.</strong> Processing a Series of Items with Iterators</a></li><li class="chapter-item expanded "><a href="ch13-03-improving-our-io-project.html"><strong aria-hidden="true">13.3.</strong> Improving Our I/O Project</a></li><li class="chapter-item expanded "><a href="ch13-04-performance.html"><strong aria-hidden="true">13.4.</strong> Comparing Performance: Loops vs. Iterators</a></li></ol></li><li class="chapter-item expanded "><a href="ch14-00-more-about-cargo.html"><strong aria-hidden="true">14.</strong> More about Cargo and Crates.io</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch14-01-release-profiles.html"><strong aria-hidden="true">14.1.</strong> Customizing Builds with Release Profiles</a></li><li class="chapter-item expanded "><a href="ch14-02-publishing-to-crates-io.html"><strong aria-hidden="true">14.2.</strong> Publishing a Crate to Crates.io</a></li><li class="chapter-item expanded "><a href="ch14-03-cargo-workspaces.html"><strong aria-hidden="true">14.3.</strong> Cargo Workspaces</a></li><li class="chapter-item expanded "><a href="ch14-04-installing-binaries.html"><strong aria-hidden="true">14.4.</strong> Installing Binaries from Crates.io with cargo install</a></li><li class="chapter-item expanded "><a href="ch14-05-extending-cargo.html"><strong aria-hidden="true">14.5.</strong> Extending Cargo with Custom Commands</a></li></ol></li><li class="chapter-item expanded "><a href="ch15-00-smart-pointers.html"><strong aria-hidden="true">15.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch15-01-box.html"><strong aria-hidden="true">15.1.</strong> Using Box&lt;T&gt; to Point to Data on the Heap</a></li><li class="chapter-item expanded "><a href="ch15-02-deref.html"><strong aria-hidden="true">15.2.</strong> Treating Smart Pointers Like Regular References with the Deref Trait</a></li><li class="chapter-item expanded "><a href="ch15-03-drop.html"><strong aria-hidden="true">15.3.</strong> Running Code on Cleanup with the Drop Trait</a></li><li class="chapter-item expanded "><a href="ch15-04-rc.html"><strong aria-hidden="true">15.4.</strong> Rc&lt;T&gt;, the Reference Counted Smart Pointer</a></li><li class="chapter-item expanded "><a href="ch15-05-interior-mutability.html"><strong aria-hidden="true">15.5.</strong> RefCell&lt;T&gt; and the Interior Mutability Pattern</a></li><li class="chapter-item expanded "><a href="ch15-06-reference-cycles.html"><strong aria-hidden="true">15.6.</strong> Reference Cycles Can Leak Memory</a></li></ol></li><li class="chapter-item expanded "><a href="ch16-00-concurrency.html"><strong aria-hidden="true">16.</strong> Fearless Concurrency</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch16-01-threads.html"><strong aria-hidden="true">16.1.</strong> Using Threads to Run Code Simultaneously</a></li><li class="chapter-item expanded "><a href="ch16-02-message-passing.html"><strong aria-hidden="true">16.2.</strong> Using Message Passing to Transfer Data Between Threads</a></li><li class="chapter-item expanded "><a href="ch16-03-shared-state.html"><strong aria-hidden="true">16.3.</strong> Shared-State Concurrency</a></li><li class="chapter-item expanded "><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong aria-hidden="true">16.4.</strong> Extensible Concurrency with the Sync and Send Traits</a></li></ol></li><li class="chapter-item expanded "><a href="ch17-00-oop.html"><strong aria-hidden="true">17.</strong> Object Oriented Programming Features of Rust</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch17-01-what-is-oo.html"><strong aria-hidden="true">17.1.</strong> Characteristics of Object-Oriented Languages</a></li><li class="chapter-item expanded "><a href="ch17-02-trait-objects.html"><strong aria-hidden="true">17.2.</strong> Using Trait Objects That Allow for Values of Different Types</a></li><li class="chapter-item expanded "><a href="ch17-03-oo-design-patterns.html"><strong aria-hidden="true">17.3.</strong> Implementing an Object-Oriented Design Pattern</a></li></ol></li><li class="chapter-item expanded "><a href="ch18-00-patterns.html"><strong aria-hidden="true">18.</strong> Patterns and Matching</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch18-01-all-the-places-for-patterns.html"><strong aria-hidden="true">18.1.</strong> All the Places Patterns Can Be Used</a></li><li class="chapter-item expanded "><a href="ch18-02-refutability.html"><strong aria-hidden="true">18.2.</strong> Refutability: Whether a Pattern Might Fail to Match</a></li><li class="chapter-item expanded "><a href="ch18-03-pattern-syntax.html"><strong aria-hidden="true">18.3.</strong> Pattern Syntax</a></li></ol></li><li class="chapter-item expanded "><a href="ch19-00-advanced-features.html"><strong aria-hidden="true">19.</strong> Advanced Features</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch19-01-unsafe-rust.html" class="active"><strong aria-hidden="true">19.1.</strong> Unsafe Rust</a></li><li class="chapter-item expanded "><a href="ch19-03-advanced-traits.html"><strong aria-hidden="true">19.2.</strong> Advanced Traits</a></li><li class="chapter-item expanded "><a href="ch19-04-advanced-types.html"><strong aria-hidden="true">19.3.</strong> Advanced Types</a></li><li class="chapter-item expanded "><a href="ch19-05-advanced-functions-and-closures.html"><strong aria-hidden="true">19.4.</strong> Advanced Functions and Closures</a></li><li class="chapter-item expanded "><a href="ch19-06-macros.html"><strong aria-hidden="true">19.5.</strong> Macros</a></li></ol></li><li class="chapter-item expanded "><a href="ch20-00-final-project-a-web-server.html"><strong aria-hidden="true">20.</strong> Final Project: Building a Multithreaded Web Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch20-01-single-threaded.html"><strong aria-hidden="true">20.1.</strong> Building a Single-Threaded Web Server</a></li><li class="chapter-item expanded "><a href="ch20-02-multithreaded.html"><strong aria-hidden="true">20.2.</strong> Turning Our Single-Threaded Server into a Multithreaded Server</a></li><li class="chapter-item expanded "><a href="ch20-03-graceful-shutdown-and-cleanup.html"><strong aria-hidden="true">20.3.</strong> Graceful Shutdown and Cleanup</a></li></ol></li><li class="chapter-item expanded "><a href="appendix-00.html"><strong aria-hidden="true">21.</strong> Appendix</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix-01-keywords.html"><strong aria-hidden="true">21.1.</strong> A - Keywords</a></li><li class="chapter-item expanded "><a href="appendix-02-operators.html"><strong aria-hidden="true">21.2.</strong> B - Operators and Symbols</a></li><li class="chapter-item expanded "><a href="appendix-03-derivable-traits.html"><strong aria-hidden="true">21.3.</strong> C - Derivable Traits</a></li><li class="chapter-item expanded "><a href="appendix-04-useful-development-tools.html"><strong aria-hidden="true">21.4.</strong> D - Useful Development Tools</a></li><li class="chapter-item expanded "><a href="appendix-05-editions.html"><strong aria-hidden="true">21.5.</strong> E - Editions</a></li><li class="chapter-item expanded "><a href="appendix-06-translation.html"><strong aria-hidden="true">21.6.</strong> F - Translations of the Book</a></li><li class="chapter-item expanded "><a href="appendix-07-nightly-rust.html"><strong aria-hidden="true">21.7.</strong> G - How Rust is Made and “Nightly Rust”</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/rust-lang/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="unsafe-rust"><a class="header" href="#unsafe-rust">Unsafe Rust</a></h2>
+<p>All the code we’ve discussed so far has had Rust’s memory safety guarantees
+enforced at compile time. However, Rust has a second language hidden inside it
+that doesn’t enforce these memory safety guarantees: it’s called <em>unsafe Rust</em>
+and works just like regular Rust, but gives us extra superpowers.</p>
+<p>Unsafe Rust exists because, by nature, static analysis is conservative. When
+the compiler tries to determine whether or not code upholds the guarantees,
+it’s better for it to reject some valid programs than to accept some invalid
+programs. Although the code <em>might</em> be okay, if the Rust compiler doesn’t have
+enough information to be confident, it will reject the code. In these cases,
+you can use unsafe code to tell the compiler, “Trust me, I know what I’m
+doing.” Be warned, however, that you use unsafe Rust at your own risk: if you
+use unsafe code incorrectly, problems can occur due to memory unsafety, such as
+null pointer dereferencing.</p>
+<p>Another reason Rust has an unsafe alter ego is that the underlying computer
+hardware is inherently unsafe. If Rust didn’t let you do unsafe operations, you
+couldn’t do certain tasks. Rust needs to allow you to do low-level systems
+programming, such as directly interacting with the operating system or even
+writing your own operating system. Working with low-level systems programming
+is one of the goals of the language. Let’s explore what we can do with unsafe
+Rust and how to do it.</p>
+<h3 id="unsafe-superpowers"><a class="header" href="#unsafe-superpowers">Unsafe Superpowers</a></h3>
+<p>To switch to unsafe Rust, use the <code>unsafe</code> keyword and then start a new block
+that holds the unsafe code. You can take five actions in unsafe Rust that you
+can’t in safe Rust, which we call <em>unsafe superpowers</em>. Those superpowers
+include the ability to:</p>
+<ul>
+<li>Dereference a raw pointer</li>
+<li>Call an unsafe function or method</li>
+<li>Access or modify a mutable static variable</li>
+<li>Implement an unsafe trait</li>
+<li>Access fields of a <code>union</code></li>
+</ul>
+<p>It’s important to understand that <code>unsafe</code> doesn’t turn off the borrow checker
+or disable any other of Rust’s safety checks: if you use a reference in unsafe
+code, it will still be checked. The <code>unsafe</code> keyword only gives you access to
+these five features that are then not checked by the compiler for memory
+safety. You’ll still get some degree of safety inside of an unsafe block.</p>
+<p>In addition, <code>unsafe</code> does not mean the code inside the block is necessarily
+dangerous or that it will definitely have memory safety problems: the intent is
+that as the programmer, you’ll ensure the code inside an <code>unsafe</code> block will
+access memory in a valid way.</p>
+<p>People are fallible, and mistakes will happen, but by requiring these five
+unsafe operations to be inside blocks annotated with <code>unsafe</code> you’ll know that
+any errors related to memory safety must be within an <code>unsafe</code> block. Keep
+<code>unsafe</code> blocks small; you’ll be thankful later when you investigate memory
+bugs.</p>
+<p>To isolate unsafe code as much as possible, it’s best to enclose unsafe code
+within a safe abstraction and provide a safe API, which we’ll discuss later in
+the chapter when we examine unsafe functions and methods. Parts of the standard
+library are implemented as safe abstractions over unsafe code that has been
+audited. Wrapping unsafe code in a safe abstraction prevents uses of <code>unsafe</code>
+from leaking out into all the places that you or your users might want to use
+the functionality implemented with <code>unsafe</code> code, because using a safe
+abstraction is safe.</p>
+<p>Let’s look at each of the five unsafe superpowers in turn. We’ll also look at
+some abstractions that provide a safe interface to unsafe code.</p>
+<h3 id="dereferencing-a-raw-pointer"><a class="header" href="#dereferencing-a-raw-pointer">Dereferencing a Raw Pointer</a></h3>
+<p>In Chapter 4, in the <a href="ch04-02-references-and-borrowing.html#dangling-references">“Dangling References”</a><!-- ignore
+--> section, we mentioned that the compiler ensures references are always
+valid. Unsafe Rust has two new types called <em>raw pointers</em> that are similar to
+references. As with references, raw pointers can be immutable or mutable and
+are written as <code>*const T</code> and <code>*mut T</code>, respectively. The asterisk isn’t the
+dereference operator; it’s part of the type name. In the context of raw
+pointers, <em>immutable</em> means that the pointer can’t be directly assigned to
+after being dereferenced.</p>
+<p>Different from references and smart pointers, raw pointers:</p>
+<ul>
+<li>Are allowed to ignore the borrowing rules by having both immutable and
+mutable pointers or multiple mutable pointers to the same location</li>
+<li>Aren’t guaranteed to point to valid memory</li>
+<li>Are allowed to be null</li>
+<li>Don’t implement any automatic cleanup</li>
+</ul>
+<p>By opting out of having Rust enforce these guarantees, you can give up
+guaranteed safety in exchange for greater performance or the ability to
+interface with another language or hardware where Rust’s guarantees don’t apply.</p>
+<p>Listing 19-1 shows how to create an immutable and a mutable raw pointer from
+references.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let mut num = 5;
+
+    let r1 = &amp;num as *const i32;
+    let r2 = &amp;mut num as *mut i32;
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 19-1: Creating raw pointers from references</span></p>
+<p>Notice that we don’t include the <code>unsafe</code> keyword in this code. We can create
+raw pointers in safe code; we just can’t dereference raw pointers outside an
+unsafe block, as you’ll see in a bit.</p>
+<p>We’ve created raw pointers by using <code>as</code> to cast an immutable and a mutable
+reference into their corresponding raw pointer types. Because we created them
+directly from references guaranteed to be valid, we know these particular raw
+pointers are valid, but we can’t make that assumption about just any raw
+pointer.</p>
+<p>To demonstrate this, next we’ll create a raw pointer whose validity we can’t be
+so certain of. Listing 19-2 shows how to create a raw pointer to an arbitrary
+location in memory. Trying to use arbitrary memory is undefined: there might be
+data at that address or there might not, the compiler might optimize the code
+so there is no memory access, or the program might error with a segmentation
+fault. Usually, there is no good reason to write code like this, but it is
+possible.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let address = 0x012345usize;
+    let r = address as *const i32;
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 19-2: Creating a raw pointer to an arbitrary
+memory address</span></p>
+<p>Recall that we can create raw pointers in safe code, but we can’t <em>dereference</em>
+raw pointers and read the data being pointed to. In Listing 19-3, we use the
+dereference operator <code>*</code> on a raw pointer that requires an <code>unsafe</code> block.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let mut num = 5;
+
+    let r1 = &amp;num as *const i32;
+    let r2 = &amp;mut num as *mut i32;
+
+    unsafe {
+        println!("r1 is: {}", *r1);
+        println!("r2 is: {}", *r2);
+    }
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 19-3: Dereferencing raw pointers within an
+<code>unsafe</code> block</span></p>
+<p>Creating a pointer does no harm; it’s only when we try to access the value that
+it points at that we might end up dealing with an invalid value.</p>
+<p>Note also that in Listing 19-1 and 19-3, we created <code>*const i32</code> and <code>*mut i32</code>
+raw pointers that both pointed to the same memory location, where <code>num</code> is
+stored. If we instead tried to create an immutable and a mutable reference to
+<code>num</code>, the code would not have compiled because Rust’s ownership rules don’t
+allow a mutable reference at the same time as any immutable references. With
+raw pointers, we can create a mutable pointer and an immutable pointer to the
+same location and change data through the mutable pointer, potentially creating
+a data race. Be careful!</p>
+<p>With all of these dangers, why would you ever use raw pointers? One major use
+case is when interfacing with C code, as you’ll see in the next section,
+<a href="#calling-an-unsafe-function-or-method">“Calling an Unsafe Function or
+Method.”</a><!-- ignore --> Another case is
+when building up safe abstractions that the borrow checker doesn’t understand.
+We’ll introduce unsafe functions and then look at an example of a safe
+abstraction that uses unsafe code.</p>
+<h3 id="calling-an-unsafe-function-or-method"><a class="header" href="#calling-an-unsafe-function-or-method">Calling an Unsafe Function or Method</a></h3>
+<p>The second type of operation you can perform in an unsafe block is calling
+unsafe functions. Unsafe functions and methods look exactly like regular
+functions and methods, but they have an extra <code>unsafe</code> before the rest of the
+definition. The <code>unsafe</code> keyword in this context indicates the function has
+requirements we need to uphold when we call this function, because Rust can’t
+guarantee we’ve met these requirements. By calling an unsafe function within an
+<code>unsafe</code> block, we’re saying that we’ve read this function’s documentation and
+take responsibility for upholding the function’s contracts.</p>
+<p>Here is an unsafe function named <code>dangerous</code> that doesn’t do anything in its
+body:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    unsafe fn dangerous() {}
+
+    unsafe {
+        dangerous();
+    }
+<span class="boring">}</span></code></pre></pre>
+<p>We must call the <code>dangerous</code> function within a separate <code>unsafe</code> block. If we
+try to call <code>dangerous</code> without the <code>unsafe</code> block, we’ll get an error:</p>
+<pre><code class="language-console">$ cargo run
+   Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
+error[E0133]: call to unsafe function `dangerous` is unsafe and requires unsafe function or block
+ --&gt; src/main.rs:4:5
+  |
+4 |     dangerous();
+  |     ^^^^^^^^^^^ call to unsafe function
+  |
+  = note: consult the function's documentation for information on how to avoid undefined behavior
+
+For more information about this error, try `rustc --explain E0133`.
+error: could not compile `unsafe-example` (bin "unsafe-example") due to 1 previous error
+</code></pre>
+<p>With the <code>unsafe</code> block, we’re asserting to Rust that we’ve read the function’s
+documentation, we understand how to use it properly, and we’ve verified that
+we’re fulfilling the contract of the function.</p>
+<p>Bodies of unsafe functions are effectively <code>unsafe</code> blocks, so to perform other
+unsafe operations within an unsafe function, we don’t need to add another
+<code>unsafe</code> block.</p>
+<h4 id="creating-a-safe-abstraction-over-unsafe-code"><a class="header" href="#creating-a-safe-abstraction-over-unsafe-code">Creating a Safe Abstraction over Unsafe Code</a></h4>
+<p>Just because a function contains unsafe code doesn’t mean we need to mark the
+entire function as unsafe. In fact, wrapping unsafe code in a safe function is
+a common abstraction. As an example, let’s study the <code>split_at_mut</code> function
+from the standard library, which requires some unsafe code. We’ll explore how
+we might implement it. This safe method is defined on mutable slices: it takes
+one slice and makes it two by splitting the slice at the index given as an
+argument. Listing 19-4 shows how to use <code>split_at_mut</code>.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    let mut v = vec![1, 2, 3, 4, 5, 6];
+
+    let r = &amp;mut v[..];
+
+    let (a, b) = r.split_at_mut(3);
+
+    assert_eq!(a, &amp;mut [1, 2, 3]);
+    assert_eq!(b, &amp;mut [4, 5, 6]);
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 19-4: Using the safe <code>split_at_mut</code>
+function</span></p>
+<p>We can’t implement this function using only safe Rust. An attempt might look
+something like Listing 19-5, which won’t compile. For simplicity, we’ll
+implement <code>split_at_mut</code> as a function rather than a method and only for slices
+of <code>i32</code> values rather than for a generic type <code>T</code>.</p>
+<pre><code class="language-rust ignore does_not_compile">fn split_at_mut(values: &amp;mut [i32], mid: usize) -&gt; (&amp;mut [i32], &amp;mut [i32]) {
+    let len = values.len();
+
+    assert!(mid &lt;= len);
+
+    (&amp;mut values[..mid], &amp;mut values[mid..])
+}
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let mut vector = vec![1, 2, 3, 4, 5, 6];
+</span><span class="boring">    let (left, right) = split_at_mut(&amp;mut vector, 3);
+</span><span class="boring">}</span></code></pre>
+<p><span class="caption">Listing 19-5: An attempted implementation of
+<code>split_at_mut</code> using only safe Rust</span></p>
+<p>This function first gets the total length of the slice. Then it asserts that
+the index given as a parameter is within the slice by checking whether it’s
+less than or equal to the length. The assertion means that if we pass an index
+that is greater than the length to split the slice at, the function will panic
+before it attempts to use that index.</p>
+<p>Then we return two mutable slices in a tuple: one from the start of the
+original slice to the <code>mid</code> index and another from <code>mid</code> to the end of the
+slice.</p>
+<p>When we try to compile the code in Listing 19-5, we’ll get an error.</p>
+<pre><code class="language-console">$ cargo run
+   Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
+error[E0499]: cannot borrow `*values` as mutable more than once at a time
+ --&gt; src/main.rs:6:31
+  |
+1 | fn split_at_mut(values: &amp;mut [i32], mid: usize) -&gt; (&amp;mut [i32], &amp;mut [i32]) {
+  |                         - let's call the lifetime of this reference `'1`
+...
+6 |     (&amp;mut values[..mid], &amp;mut values[mid..])
+  |     --------------------------^^^^^^--------
+  |     |     |                   |
+  |     |     |                   second mutable borrow occurs here
+  |     |     first mutable borrow occurs here
+  |     returning this value requires that `*values` is borrowed for `'1`
+  |
+  = help: use `.split_at_mut(position)` to obtain two mutable non-overlapping sub-slices
+
+For more information about this error, try `rustc --explain E0499`.
+error: could not compile `unsafe-example` (bin "unsafe-example") due to 1 previous error
+</code></pre>
+<p>Rust’s borrow checker can’t understand that we’re borrowing different parts of
+the slice; it only knows that we’re borrowing from the same slice twice.
+Borrowing different parts of a slice is fundamentally okay because the two
+slices aren’t overlapping, but Rust isn’t smart enough to know this. When we
+know code is okay, but Rust doesn’t, it’s time to reach for unsafe code.</p>
+<p>Listing 19-6 shows how to use an <code>unsafe</code> block, a raw pointer, and some calls
+to unsafe functions to make the implementation of <code>split_at_mut</code> work.</p>
+<pre><pre class="playground"><code class="language-rust edition2021">use std::slice;
+
+fn split_at_mut(values: &amp;mut [i32], mid: usize) -&gt; (&amp;mut [i32], &amp;mut [i32]) {
+    let len = values.len();
+    let ptr = values.as_mut_ptr();
+
+    assert!(mid &lt;= len);
+
+    unsafe {
+        (
+            slice::from_raw_parts_mut(ptr, mid),
+            slice::from_raw_parts_mut(ptr.add(mid), len - mid),
+        )
+    }
+}
+<span class="boring">
+</span><span class="boring">fn main() {
+</span><span class="boring">    let mut vector = vec![1, 2, 3, 4, 5, 6];
+</span><span class="boring">    let (left, right) = split_at_mut(&amp;mut vector, 3);
+</span><span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 19-6: Using unsafe code in the implementation of
+the <code>split_at_mut</code> function</span></p>
+<p>Recall from <a href="ch04-03-slices.html#the-slice-type">“The Slice Type”</a><!-- ignore --> section in
+Chapter 4 that slices are a pointer to some data and the length of the slice.
+We use the <code>len</code> method to get the length of a slice and the <code>as_mut_ptr</code>
+method to access the raw pointer of a slice. In this case, because we have a
+mutable slice to <code>i32</code> values, <code>as_mut_ptr</code> returns a raw pointer with the type
+<code>*mut i32</code>, which we’ve stored in the variable <code>ptr</code>.</p>
+<p>We keep the assertion that the <code>mid</code> index is within the slice. Then we get to
+the unsafe code: the <code>slice::from_raw_parts_mut</code> function takes a raw pointer
+and a length, and it creates a slice. We use this function to create a slice
+that starts from <code>ptr</code> and is <code>mid</code> items long. Then we call the <code>add</code>
+method on <code>ptr</code> with <code>mid</code> as an argument to get a raw pointer that starts at
+<code>mid</code>, and we create a slice using that pointer and the remaining number of
+items after <code>mid</code> as the length.</p>
+<p>The function <code>slice::from_raw_parts_mut</code> is unsafe because it takes a raw
+pointer and must trust that this pointer is valid. The <code>add</code> method on raw
+pointers is also unsafe, because it must trust that the offset location is also
+a valid pointer. Therefore, we had to put an <code>unsafe</code> block around our calls to
+<code>slice::from_raw_parts_mut</code> and <code>add</code> so we could call them. By looking at
+the code and by adding the assertion that <code>mid</code> must be less than or equal to
+<code>len</code>, we can tell that all the raw pointers used within the <code>unsafe</code> block
+will be valid pointers to data within the slice. This is an acceptable and
+appropriate use of <code>unsafe</code>.</p>
+<p>Note that we don’t need to mark the resulting <code>split_at_mut</code> function as
+<code>unsafe</code>, and we can call this function from safe Rust. We’ve created a safe
+abstraction to the unsafe code with an implementation of the function that uses
+<code>unsafe</code> code in a safe way, because it creates only valid pointers from the
+data this function has access to.</p>
+<p>In contrast, the use of <code>slice::from_raw_parts_mut</code> in Listing 19-7 would
+likely crash when the slice is used. This code takes an arbitrary memory
+location and creates a slice 10,000 items long.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
+</span>    use std::slice;
+
+    let address = 0x01234usize;
+    let r = address as *mut i32;
+
+    let values: &amp;[i32] = unsafe { slice::from_raw_parts_mut(r, 10000) };
+<span class="boring">}</span></code></pre></pre>
+<p><span class="caption">Listing 19-7: Creating a slice from an arbitrary memory
+location</span></p>
+<p>We don’t own the memory at this arbitrary location, and there is no guarantee
+that the slice this code creates contains valid <code>i32</code> values. Attempting to use
+<code>values</code> as though it’s a valid slice results in undefined behavior.</p>
+<h4 id="using-extern-functions-to-call-external-code"><a class="header" href="#using-extern-functions-to-call-external-code">Using <code>extern</code> Functions to Call External Code</a></h4>
+<p>Sometimes, your Rust code might need to interact with code written in another
+language. For this, Rust has the keyword <code>extern</code> that facilitates the creation
+and use of a <em>Foreign Function Interface (FFI)</em>. An FFI is a way for a
+programming language to define functions and enable a different (foreign)
+programming language to call those functions.</p>
+<p>Listing 19-8 demonstrates how to set up an integration with the <code>abs</code> function
+from the C standard library. Functions declared within <code>extern</code> blocks are
+always unsafe to call from Rust code. The reason is that other languages don’t
+enforce Rust’s rules and guarantees, and Rust can’t check them, so
+responsibility falls on the programmer to ensure safety.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">extern "C" {
+    fn abs(input: i32) -&gt; i32;
+}
+
+fn main() {
+    unsafe {
+        println!("Absolute value of -3 according to C: {}", abs(-3));
+    }
+}</code></pre></pre>
+<p><span class="caption">Listing 19-8: Declaring and calling an <code>extern</code> function
+defined in another language</span></p>
+<p>Within the <code>extern "C"</code> block, we list the names and signatures of external
+functions from another language we want to call. The <code>"C"</code> part defines which
+<em>application binary interface (ABI)</em> the external function uses: the ABI
+defines how to call the function at the assembly level. The <code>"C"</code> ABI is the
+most common and follows the C programming language’s ABI.</p>
+<section class="note" aria-role="note">
+<h4 id="calling-rust-functions-from-other-languages"><a class="header" href="#calling-rust-functions-from-other-languages">Calling Rust Functions from Other Languages</a></h4>
+<p>We can also use <code>extern</code> to create an interface that allows other languages
+to call Rust functions. Instead of creating a whole <code>extern</code> block, we add
+the <code>extern</code> keyword and specify the ABI to use just before the <code>fn</code> keyword
+for the relevant function. We also need to add a <code>#[no_mangle]</code> annotation to
+tell the Rust compiler not to mangle the name of this function. <em>Mangling</em> is
+when a compiler changes the name we’ve given a function to a different name
+that contains more information for other parts of the compilation process to
+consume but is less human readable. Every programming language compiler
+mangles names slightly differently, so for a Rust function to be nameable by
+other languages, we must disable the Rust compiler’s name mangling.</p>
+<p>In the following example, we make the <code>call_from_c</code> function accessible from
+C code, after it’s compiled to a shared library and linked from C:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[no_mangle]
+pub extern "C" fn call_from_c() {
+    println!("Just called a Rust function from C!");
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This usage of <code>extern</code> does not require <code>unsafe</code>.</p>
+</section>
+<h3 id="accessing-or-modifying-a-mutable-static-variable"><a class="header" href="#accessing-or-modifying-a-mutable-static-variable">Accessing or Modifying a Mutable Static Variable</a></h3>
+<p>In this book, we’ve not yet talked about <em>global variables</em>, which Rust does
+support but can be problematic with Rust’s ownership rules. If two threads are
+accessing the same mutable global variable, it can cause a data race.</p>
+<p>In Rust, global variables are called <em>static</em> variables. Listing 19-9 shows an
+example declaration and use of a static variable with a string slice as a
+value.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">static HELLO_WORLD: &amp;str = "Hello, world!";
+
+fn main() {
+    println!("name is: {HELLO_WORLD}");
+}</code></pre></pre>
+<p><span class="caption">Listing 19-9: Defining and using an immutable static
+variable</span></p>
+<p>Static variables are similar to constants, which we discussed in the
+<a href="ch03-01-variables-and-mutability.html#constants">“Differences Between Variables and
+Constants”</a><!-- ignore --> section
+in Chapter 3. The names of static variables are in <code>SCREAMING_SNAKE_CASE</code> by
+convention. Static variables can only store references with the <code>'static</code>
+lifetime, which means the Rust compiler can figure out the lifetime and we
+aren’t required to annotate it explicitly. Accessing an immutable static
+variable is safe.</p>
+<p>A subtle difference between constants and immutable static variables is that
+values in a static variable have a fixed address in memory. Using the value
+will always access the same data. Constants, on the other hand, are allowed to
+duplicate their data whenever they’re used. Another difference is that static
+variables can be mutable. Accessing and modifying mutable static variables is
+<em>unsafe</em>. Listing 19-10 shows how to declare, access, and modify a mutable
+static variable named <code>COUNTER</code>.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playground"><code class="language-rust edition2021">static mut COUNTER: u32 = 0;
+
+fn add_to_count(inc: u32) {
+    unsafe {
+        COUNTER += inc;
+    }
+}
+
+fn main() {
+    add_to_count(3);
+
+    unsafe {
+        println!("COUNTER: {COUNTER}");
+    }
+}</code></pre></pre>
+<p><span class="caption">Listing 19-10: Reading from or writing to a mutable
+static variable is unsafe</span></p>
+<p>As with regular variables, we specify mutability using the <code>mut</code> keyword. Any
+code that reads or writes from <code>COUNTER</code> must be within an <code>unsafe</code> block. This
+code compiles and prints <code>COUNTER: 3</code> as we would expect because it’s single
+threaded. Having multiple threads access <code>COUNTER</code> would likely result in data
+races.</p>
+<p>With mutable data that is globally accessible, it’s difficult to ensure there
+are no data races, which is why Rust considers mutable static variables to be
+unsafe. Where possible, it’s preferable to use the concurrency techniques and
+thread-safe smart pointers we discussed in Chapter 16 so the compiler checks
+that data accessed from different threads is done safely.</p>
+<h3 id="implementing-an-unsafe-trait"><a class="header" href="#implementing-an-unsafe-trait">Implementing an Unsafe Trait</a></h3>
+<p>We can use <code>unsafe</code> to implement an unsafe trait. A trait is unsafe when at
+least one of its methods has some invariant that the compiler can’t verify. We
+declare that a trait is <code>unsafe</code> by adding the <code>unsafe</code> keyword before <code>trait</code>
+and marking the implementation of the trait as <code>unsafe</code> too, as shown in
+Listing 19-11.</p>
+<pre><pre class="playground"><code class="language-rust edition2021">unsafe trait Foo {
+    // methods go here
+}
+
+unsafe impl Foo for i32 {
+    // method implementations go here
+}
+
+fn main() {}</code></pre></pre>
+<p><span class="caption">Listing 19-11: Defining and implementing an unsafe
+trait</span></p>
+<p>By using <code>unsafe impl</code>, we’re promising that we’ll uphold the invariants that
+the compiler can’t verify.</p>
+<p>As an example, recall the <code>Sync</code> and <code>Send</code> marker traits we discussed in the
+<a href="ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits">“Extensible Concurrency with the <code>Sync</code> and <code>Send</code>
+Traits”</a><!-- ignore -->
+section in Chapter 16: the compiler implements these traits automatically if
+our types are composed entirely of <code>Send</code> and <code>Sync</code> types. If we implement a
+type that contains a type that is not <code>Send</code> or <code>Sync</code>, such as raw pointers,
+and we want to mark that type as <code>Send</code> or <code>Sync</code>, we must use <code>unsafe</code>. Rust
+can’t verify that our type upholds the guarantees that it can be safely sent
+across threads or accessed from multiple threads; therefore, we need to do
+those checks manually and indicate as such with <code>unsafe</code>.</p>
+<h3 id="accessing-fields-of-a-union"><a class="header" href="#accessing-fields-of-a-union">Accessing Fields of a Union</a></h3>
+<p>The final action that works only with <code>unsafe</code> is accessing fields of a
+<em>union</em>. A <code>union</code> is similar to a <code>struct</code>, but only one declared field is
+used in a particular instance at one time. Unions are primarily used to
+interface with unions in C code. Accessing union fields is unsafe because Rust
+can’t guarantee the type of the data currently being stored in the union
+instance. You can learn more about unions in <a href="../reference/items/unions.html">the Rust Reference</a>.</p>
+<h3 id="when-to-use-unsafe-code"><a class="header" href="#when-to-use-unsafe-code">When to Use Unsafe Code</a></h3>
+<p>Using <code>unsafe</code> to take one of the five actions (superpowers) just discussed
+isn’t wrong or even frowned upon. But it is trickier to get <code>unsafe</code> code
+correct because the compiler can’t help uphold memory safety. When you have a
+reason to use <code>unsafe</code> code, you can do so, and having the explicit <code>unsafe</code>
+annotation makes it easier to track down the source of problems when they occur.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch19-00-advanced-features.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch19-03-advanced-traits.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch19-00-advanced-features.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch19-03-advanced-traits.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="ferris.js"></script>
+
+
+    </div>
+    </body>
+</html>
