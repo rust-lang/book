@@ -1,0 +1,3 @@
+$ cargo run "http://www.rust-lang.org"
+The title for http://www.rust-lang.org was
+            Rust Programming Language

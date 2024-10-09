@@ -66,7 +66,7 @@ authors commonly use in their documentation:
   returned can be helpful to callers so they can write code to handle the
   different kinds of errors in different ways.
 * **Safety**: If the function is `unsafe` to call (we discuss unsafety in
-  Chapter 19), there should be a section explaining why the function is unsafe
+  Chapter 20), there should be a section explaining why the function is unsafe
   and covering the invariants that the function expects callers to uphold.
 
 Most documentation comments don’t need all of these sections, but this is a

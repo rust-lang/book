@@ -507,7 +507,7 @@ allows the use of the `?` operator on `Result` values.</span>
 
 The `Box<dyn Error>` type is a *trait object*, which we’ll talk about in the
 [“Using Trait Objects that Allow for Values of Different
-Types”][trait-objects]<!-- ignore --> section in Chapter 17. For now, you can
+Types”][trait-objects]<!-- ignore --> section in Chapter 18. For now, you can
 read `Box<dyn Error>` to mean “any kind of error.” Using `?` on a `Result`
 value in a `main` function with the error type `Box<dyn Error>` is allowed
 because it allows any `Err` value to be returned early. Even though the body of
@@ -533,5 +533,5 @@ let’s return to the topic of how to decide which is appropriate to use in whic
 cases.
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-result
-[trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[trait-objects]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [termination]: ../std/process/trait.Termination.html

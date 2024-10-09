@@ -34,7 +34,7 @@ The list of derivable traits provided in this appendix is not comprehensive:
 libraries can implement `derive` for their own traits, making the list of
 traits you can use `derive` with truly open-ended. Implementing `derive`
 involves using a procedural macro, which is covered in the
-[“Macros”][macros]<!-- ignore --> section of Chapter 19.
+[“Macros”][macros]<!-- ignore --> section of Chapter 20.
 
 ### `Debug` for Programmer Output
 
@@ -184,4 +184,4 @@ ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struc
 ch04-01-what-is-ownership.html#stack-only-data-copy
 [ways-variables-and-data-interact-clone]:
 ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone
-[macros]: ch19-06-macros.html#macros
+[macros]: ch20-06-macros.html#macros

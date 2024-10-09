@@ -1,0 +1,14 @@
+$ cargo run
+error: failed to get `trpl` as a dependency of package `async_await v0.1.0 (/Users/chris/dev/rust-lang/book/tmp/listings/ch17-async-await/listing-17-18)`
+
+Caused by:
+  failed to load source for dependency `trpl`
+
+Caused by:
+  Unable to update /Users/chris/dev/rust-lang/book/tmp/packages/trpl
+
+Caused by:
+  failed to read `/Users/chris/dev/rust-lang/book/tmp/packages/trpl/Cargo.toml`
+
+Caused by:
+  No such file or directory (os error 2)

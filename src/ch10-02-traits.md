@@ -325,7 +325,7 @@ around how the `impl Trait` syntax is implemented in the compiler. We’ll cover
 how to write a function with this behavior in the [“Using Trait Objects That
 Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
-ignore --> section of Chapter 17.
+ignore --> section of Chapter 18.
 
 ### Using Trait Bounds to Conditionally Implement Methods
 
@@ -385,5 +385,5 @@ that checks for behavior at runtime because we’ve already checked at compile
 time. Doing so improves performance without having to give up the flexibility
 of generics.
 
-[using-trait-objects-that-allow-for-values-of-different-types]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [methods]: ch05-03-method-syntax.html#defining-methods
