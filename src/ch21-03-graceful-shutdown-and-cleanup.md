@@ -22,14 +22,13 @@ dropped, our threads should all join to make sure they finish their work.
 Listing 21-22 shows a first attempt at a `Drop` implementation; this code won’t
 quite work yet.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="21-22" file-name="src/lib.rs" caption="Joining each thread when the thread pool goes out of scope">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-22/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 21-22: Joining each thread when the thread pool
-goes out of scope</span>
+</Listing>
 
 First, we loop through each of the thread pool `workers`. We use `&mut` for
 this because `self` is a mutable reference, and we also need to be able to
@@ -57,11 +56,13 @@ thread to run.
 
 So we know we want to update the definition of `Worker` like this:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing file-name="src/lib.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-04-update-worker-definition/src/lib.rs:here}}
 ```
+
+</Listing>
 
 Now let’s lean on the compiler to find the other places that need to change.
 Checking this code, we get two errors:
@@ -74,21 +75,25 @@ Let’s address the second error, which points to the code at the end of
 `Worker::new`; we need to wrap the `thread` value in `Some` when we create a
 new `Worker`. Make the following changes to fix this error:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing file-name="src/lib.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-05-fix-worker-new/src/lib.rs:here}}
 ```
 
+</Listing>
+
 The first error is in our `Drop` implementation. We mentioned earlier that we
 intended to call `take` on the `Option` value to move `thread` out of `worker`.
 The following changes will do so:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing file-name="src/lib.rs">
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-06-fix-threadpool-drop/src/lib.rs:here}}
 ```
+
+</Listing>
 
 As discussed in Chapter 18, the `take` method on `Option` takes the `Some`
 variant out and leaves `None` in its place. We’re using `if let` to destructure
@@ -115,14 +120,13 @@ changes to `ThreadPool` to explicitly drop `sender`. We use the same `Option`
 and `take` technique as we did with the thread to be able to move `sender` out
 of `ThreadPool`:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="21-23" file-name="src/lib.rs" caption="Explicitly drop `sender` before joining the worker threads">
 
 ```rust,noplayground,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-23/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 21-23: Explicitly drop `sender` before joining
-the worker threads</span>
+</Listing>
 
 Dropping `sender` closes the channel, which indicates no more messages will be
 sent. When that happens, all the calls to `recv` that the workers do in the
@@ -130,26 +134,24 @@ infinite loop will return an error. In Listing 21-24, we change the `Worker`
 loop to gracefully exit the loop in that case, which means the threads will
 finish when the `ThreadPool` `drop` implementation calls `join` on them.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="21-24" file-name="src/lib.rs" caption="Explicitly break out of the loop when `recv` returns an error">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-24/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 21-24: Explicitly break out of the loop when
-`recv` returns an error</span>
+</Listing>
 
 To see this code in action, let’s modify `main` to accept only two requests
 before gracefully shutting down the server, as shown in Listing 21-25.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="21-25" file-name="src/main.rs" caption="Shut down the server after serving two requests by exiting the loop">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-25/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 21-25: Shut down the server after serving two
-requests by exiting the loop</span>
+</Listing>
 
 You wouldn’t want a real-world web server to shut down after serving only two
 requests. This code just demonstrates that the graceful shutdown and cleanup is
@@ -213,17 +215,21 @@ shutdown of the server, which cleans up all the threads in the pool.
 
 Here’s the full code for reference:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-07-final-code/src/main.rs}}
 ```
 
-<span class="filename">Filename: src/lib.rs</span>
+</Listing>
+
+<Listing file-name="src/lib.rs">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-07-final-code/src/lib.rs}}
 ```
+
+</Listing>
 
 We could do more here! If you want to continue enhancing this project, here are
 some ideas:

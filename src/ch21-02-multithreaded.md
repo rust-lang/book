@@ -15,14 +15,13 @@ our current server implementation. Listing 21-10 implements handling a request
 to */sleep* with a simulated slow response that will cause the server to sleep
 for 5 seconds before responding.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="21-10" file-name="src/main.rs" caption="Simulating a slow request by sleeping for 5 seconds">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 21-10: Simulating a slow request by sleeping for
-5 seconds</span>
+</Listing>
 
 We switched from `if` to `match` now that we have three cases. We need to
 explicitly match on a slice of `request_line` to pattern match against the
@@ -106,14 +105,13 @@ thread pool as an improvement, and contrasting the two solutions will be
 easier. Listing 21-11 shows the changes to make to `main` to spawn a new thread
 to handle each stream within the `for` loop.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="21-11" file-name="src/main.rs" caption="Spawning a new thread for each stream">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 21-11: Spawning a new thread for each
-stream</span>
+</Listing>
 
 As you learned in Chapter 16, `thread::spawn` will create a new thread and then
 run the code in the closure in the new thread. If you run this code and load
@@ -132,13 +130,13 @@ threads to a thread pool doesn’t require large changes to the code that uses
 our API. Listing 21-12 shows the hypothetical interface for a `ThreadPool`
 struct we want to use instead of `thread::spawn`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="21-12" file-name="src/main.rs" caption="Our ideal `ThreadPool` interface">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-12/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 21-12: Our ideal `ThreadPool` interface</span>
+</Listing>
 
 We use `ThreadPool::new` to create a new thread pool with a configurable number
 of threads, in this case four. Then, in the `for` loop, `pool.execute` has a
@@ -171,20 +169,24 @@ web requests.
 Create a *src/lib.rs* that contains the following, which is the simplest
 definition of a `ThreadPool` struct that we can have for now:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing file-name="src/lib.rs">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-01-define-threadpool-struct/src/lib.rs}}
 ```
 
+</Listing>
+
 Then edit *main.rs* file to bring `ThreadPool` into scope from the library
 crate by adding the following code to the top of *src/main.rs*:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-01-define-threadpool-struct/src/main.rs:here}}
 ```
+
+</Listing>
 
 This code still won’t work, but let’s check it again to get the next error that
 we need to address:
@@ -199,11 +201,13 @@ that can accept `4` as an argument and should return a `ThreadPool` instance.
 Let’s implement the simplest `new` function that will have those
 characteristics:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing file-name="src/lib.rs">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-02-impl-threadpool-new/src/lib.rs}}
 ```
+
+</Listing>
 
 We chose `usize` as the type of the `size` parameter, because we know that a
 negative number of threads doesn’t make any sense. We also know we’ll use this
@@ -255,11 +259,13 @@ closure from one thread to another and `'static` because we don’t know how lon
 the thread will take to execute. Let’s create an `execute` method on
 `ThreadPool` that will take a generic parameter of type `F` with these bounds:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing file-name="src/lib.rs">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-03-define-execute/src/lib.rs:here}}
 ```
+
+</Listing>
 
 We still use the `()` after `FnOnce` because this `FnOnce` represents a closure
 that takes no parameters and returns the unit type `()`. Just like function
@@ -296,14 +302,13 @@ valid `usize`. We’ll add code to check that `size` is greater than zero before
 we return a `ThreadPool` instance and have the program panic if it receives a
 zero by using the `assert!` macro, as shown in Listing 21-13.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="21-13" file-name="src/lib.rs" caption="Implementing `ThreadPool::new` to panic if `size` is zero">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-13/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 21-13: Implementing `ThreadPool::new` to panic if
-`size` is zero</span>
+</Listing>
 
 We’ve also added some documentation for our `ThreadPool` with doc comments.
 Note that we followed good documentation practices by adding a section that
@@ -348,14 +353,13 @@ We’ve changed the definition of `ThreadPool` to hold a vector of
 `size`, set up a `for` loop that will run some code to create the threads, and
 returned a `ThreadPool` instance containing them.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="21-14" file-name="src/lib.rs" caption="Creating a vector for `ThreadPool` to hold the threads">
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-14/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 21-14: Creating a vector for `ThreadPool` to hold
-the threads</span>
+</Listing>
 
 We’ve brought `std::thread` into scope in the library crate, because we’re
 using `thread::JoinHandle` as the type of the items in the vector in
@@ -413,14 +417,13 @@ looking at the code in Listing 21-15.
 
 Ready? Here is Listing 21-15 with one way to make the preceding modifications.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="21-15" file-name="src/lib.rs" caption="Modifying `ThreadPool` to hold `Worker` instances instead of holding threads directly">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-15/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 21-15: Modifying `ThreadPool` to hold `Worker`
-instances instead of holding threads directly</span>
+</Listing>
 
 We’ve changed the name of the field on `ThreadPool` from `threads` to `workers`
 because it’s now holding `Worker` instances instead of `JoinHandle<()>`
@@ -474,14 +477,13 @@ in the `ThreadPool` instance, as shown in Listing 21-16. The `Job` struct
 doesn’t hold anything for now but will be the type of item we’re sending down
 the channel.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="21-16" file-name="src/lib.rs" caption="Modifying `ThreadPool` to store the sender of a channel that transmits `Job` instances">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-16/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 21-16: Modifying `ThreadPool` to store the
-sender of a channel that transmits `Job` instances</span>
+</Listing>
 
 In `ThreadPool::new`, we create our new channel and have the pool hold the
 sender. This will successfully compile.
@@ -491,13 +493,13 @@ creates the channel. We know we want to use the receiver in the thread that the
 workers spawn, so we’ll reference the `receiver` parameter in the closure. The
 code in Listing 21-17 won’t quite compile yet.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="21-17" file-name="src/lib.rs" caption="Passing the receiver to the workers">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-17/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 21-17: Passing the receiver to the workers</span>
+</Listing>
 
 We’ve made some small and straightforward changes: we pass the receiver into
 `Worker::new`, and then we use it inside the closure.
@@ -525,14 +527,13 @@ need to use `Arc<Mutex<T>>`. The `Arc` type will let multiple workers own the
 receiver, and `Mutex` will ensure that only one worker gets a job from the
 receiver at a time. Listing 21-18 shows the changes we need to make.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="21-18" file-name="src/lib.rs" caption="Sharing the receiver among the workers using `Arc` and `Mutex`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-18/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 21-18: Sharing the receiver among the workers
-using `Arc` and `Mutex`</span>
+</Listing>
 
 In `ThreadPool::new`, we put the receiver in an `Arc` and a `Mutex`. For each
 new worker, we clone the `Arc` to bump the reference count so the workers can
@@ -549,14 +550,13 @@ with Type Aliases”][creating-type-synonyms-with-type-aliases]<!-- ignore -->
 section of Chapter 20, type aliases allow us to make long types shorter for
 ease of use. Look at Listing 21-19.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="21-19" file-name="src/lib.rs" caption="Creating a `Job` type alias for a `Box` that holds each closure and then sending the job down the channel">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-19/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 21-19: Creating a `Job` type alias for a `Box`
-that holds each closure and then sending the job down the channel</span>
+</Listing>
 
 After creating a new `Job` instance using the closure we get in `execute`, we
 send that job down the sending end of the channel. We’re calling `unwrap` on
@@ -573,14 +573,13 @@ Instead, we need the closure to loop forever, asking the receiving end of the
 channel for a job and running the job when it gets one. Let’s make the change
 shown in Listing 21-20 to `Worker::new`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="21-20" file-name="src/lib.rs" caption="Receiving and executing the jobs in the worker’s thread">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-20/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 21-20: Receiving and executing the jobs in the
-worker’s thread</span>
+</Listing>
 
 Here, we first call `lock` on the `receiver` to acquire the mutex, and then we
 call `unwrap` to panic on any errors. Acquiring a lock might fail if the mutex
@@ -661,14 +660,13 @@ thread run them.
 After learning about the `while let` loop in Chapters 17 and 18, you might be
 wondering why we didn’t write the worker thread code as shown in Listing 21-21.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="21-21" file-name="src/lib.rs" caption="An alternative implementation of `Worker::new` using `while let`">
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-21/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 21-21: An alternative implementation of
-`Worker::new` using `while let`</span>
+</Listing>
 
 This code compiles and runs but doesn’t result in the desired threading
 behavior: a slow request will still cause other requests to wait to be
