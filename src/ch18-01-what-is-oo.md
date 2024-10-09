@@ -44,15 +44,13 @@ on demand whenever anyone needs it. In other words, `AveragedCollection` will
 cache the calculated average for us. Listing 18-1 has the definition of the
 `AveragedCollection` struct:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="18-1" file-name="src/lib.rs" caption="Listing 18-1: An `AveragedCollection` struct that maintains a list of integers and the average of the items in the collection">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-01/src/lib.rs}}
 ```
 
-<span class="caption">Listing 18-1: An `AveragedCollection` struct that
-maintains a list of integers and the average of the items in the
-collection</span>
+</Listing>
 
 The struct is marked `pub` so that other code can use it, but the fields within
 the struct remain private. This is important in this case because we want to
@@ -60,14 +58,15 @@ ensure that whenever a value is added or removed from the list, the average is
 also updated. We do this by implementing `add`, `remove`, and `average` methods
 on the struct, as shown in Listing 18-2:
 
+<Listing number="18-2" file-name="src/lib.rs" caption="Listing 18-2: Implementations of the public methods `add`, `remove`, and `average` on `AveragedCollection`">
+
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-02/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 18-2: Implementations of the public methods
-`add`, `remove`, and `average` on `AveragedCollection`</span>
+</Listing>
 
 The public methods `add`, `remove`, and `average` are the only ways to access
 or modify data in an instance of `AveragedCollection`. When an item is added
