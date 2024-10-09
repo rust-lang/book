@@ -63,14 +63,13 @@ a series of checks for several conditions. For this example, we’ve created
 variables with hardcoded values that a real program might receive from user
 input.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="19-1" file-name="src/main.rs" caption="Mixing `if let`, `else if`, `else if let`, and `else`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-1: Mixing `if let`, `else if`, `else if let`,
-and `else`</span>
+</Listing>
 
 If the user specifies a favorite color, that color is used as the background.
 If no favorite color is specified and today is Tuesday, the background color is
@@ -103,12 +102,13 @@ Similar in construction to `if let`, the `while let` conditional loop allows a
 19-2 we code a `while let` loop that uses a vector as a stack and prints the
 values in the vector in the opposite order in which they were pushed.
 
+<Listing number="19-2" caption="Using a `while let` loop to print values for as long as `stack.pop()` returns `Some`">
+
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-2: Using a `while let` loop to print values
-for as long as `stack.pop()` returns `Some`</span>
+</Listing>
 
 This example prints 3, 2, and then 1. The `pop` method takes the last element
 out of the vector and returns `Some(value)`. If the vector is empty, `pop`
@@ -123,12 +123,13 @@ pattern. For example, in `for x in y` the `x` is the pattern. Listing 19-3
 demonstrates how to use a pattern in a `for` loop to destructure, or break
 apart, a tuple as part of the `for` loop.
 
+<Listing number="19-3" caption="Using a pattern in a `for` loop to destructure a tuple">
+
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-3: Using a pattern in a `for` loop to
-destructure a tuple</span>
+</Listing>
 
 The code in Listing 19-3 will print the following:
 
@@ -171,12 +172,13 @@ effectively means “bind everything to the variable `x`, whatever the value is.
 To see the pattern matching aspect of `let` more clearly, consider Listing
 19-4, which uses a pattern with `let` to destructure a tuple.
 
+<Listing number="19-4" caption="Using a pattern to destructure a tuple and create three variables at once">
+
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-4: Using a pattern to destructure a tuple and
-create three variables at once</span>
+</Listing>
 
 Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
 to the pattern `(x, y, z)` and sees that the value matches the pattern, so Rust
@@ -188,12 +190,13 @@ in the tuple, the overall type won’t match and we’ll get a compiler error. F
 example, Listing 19-5 shows an attempt to destructure a tuple with three
 elements into two variables, which won’t work.
 
+<Listing number="19-5" caption="Incorrectly constructing a pattern whose variables don’t match the number of elements in the tuple">
+
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-5: Incorrectly constructing a pattern whose
-variables don’t match the number of elements in the tuple</span>
+</Listing>
 
 Attempting to compile this code results in this type error:
 
@@ -214,25 +217,25 @@ Function parameters can also be patterns. The code in Listing 19-6, which
 declares a function named `foo` that takes one parameter named `x` of type
 `i32`, should by now look familiar.
 
+<Listing number="19-6" caption="A function signature uses patterns in the parameters">
+
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-6: A function signature uses patterns in the
-parameters</span>
+</Listing>
 
 The `x` part is a pattern! As we did with `let`, we could match a tuple in a
 function’s arguments to the pattern. Listing 19-7 splits the values in a tuple
 as we pass it to a function.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="19-7" file-name="src/main.rs" caption="A function with parameters that destructure a tuple">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-07/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-7: A function with parameters that destructure
-a tuple</span>
+</Listing>
 
 This code prints `Current location: (3, 5)`. The values `&(3, 5)` match the
 pattern `&(x, y)`, so `x` is the value `3` and `y` is the value `5`.
