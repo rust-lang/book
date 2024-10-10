@@ -23,6 +23,11 @@ occasional maintenance tasks.
 To update the `edition = "[year]"` metadata in all the listings' `Cargo.toml`s,
 run the `./tools/update-editions.sh` script and commit the changes.
 
+## Update the `edition` in mdBook config
+
+Open `book.toml` and `nostarch/book.toml` and set the `edition` value in the
+`[rust]` table to the new edition.
+
 ## Release a new version of the listings
 
 We now make `.tar` files of complete projects containing every listing
