@@ -239,10 +239,10 @@ Most languages which support async bundle a runtime with the language. Rust does
 not. Instead, there are many different async runtimes available, each of which
 makes different tradeoffs suitable to the use case they target. For example, a
 high-throughput web server with many CPU cores and a large amount of RAM has
-very different different needs than a microcontroller with a single core, a
-small amount of RAM, and no ability to do heap allocations. The crates which
-provide those runtimes also often supply async versions of common functionality
-such as file or network I/O.
+very different needs than a microcontroller with a single core, a small amount
+of RAM, and no ability to do heap allocations. The crates which provide those
+runtimes also often supply async versions of common functionality such as file
+or network I/O.
 
 Here, and throughout the rest of this chapter, we’ll use the `run` function
 from the `trpl` crate, which takes a future as an argument and runs it to
