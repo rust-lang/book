@@ -269,6 +269,7 @@ JoinHandle
 Kay's
 kinded
 Klabnik
+Krycho
 lang
 LastWriteTime
 latin
