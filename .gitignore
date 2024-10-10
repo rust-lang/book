@@ -4,5 +4,6 @@ book/
 .DS_Store
 target
 tmp
+po/messages.pot
 
 .nova
