@@ -52,14 +52,13 @@ system and ownership rules, you can’t get locking and unlocking wrong.
 As an example of how to use a mutex, let’s start by using a mutex in a
 single-threaded context, as shown in Listing 16-12:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-12" file-name="src/main.rs" caption="Exploring the API of `Mutex<T>` in a single-threaded context for simplicity">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-12/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-12: Exploring the API of `Mutex<T>` in a
-single-threaded context for simplicity</span>
+</Listing>
 
 As with many types, we create a `Mutex<T>` using the associated function `new`.
 To access the data inside the mutex, we use the `lock` method to acquire the
@@ -98,14 +97,13 @@ the counter goes from 0 to 10. The next example in Listing 16-13 will have
 a compiler error, and we’ll use that error to learn more about using
 `Mutex<T>` and how Rust helps us use it correctly.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-13" file-name="src/main.rs" caption="Ten threads each increment a counter guarded by a `Mutex<T>`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-13/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-13: Ten threads each increment a counter
-guarded by a `Mutex<T>`</span>
+</Listing>
 
 We create a `counter` variable to hold an `i32` inside a `Mutex<T>`, as we did
 in Listing 16-12. Next, we create 10 threads by iterating over a range of
@@ -138,14 +136,13 @@ In Chapter 15, we gave a value multiple owners by using the smart pointer
 what happens. We’ll wrap the `Mutex<T>` in `Rc<T>` in Listing 16-14 and clone
 the `Rc<T>` before moving ownership to the thread.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-14" file-name="src/main.rs" caption="Attempting to use `Rc<T>` to allow multiple threads to own the `Mutex<T>`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-14/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-14: Attempting to use `Rc<T>` to allow
-multiple threads to own the `Mutex<T>`</span>
+</Listing>
 
 Once again, we compile and get... different errors! The compiler is teaching us
 a lot.
@@ -191,14 +188,13 @@ Let’s return to our example: `Arc<T>` and `Rc<T>` have the same API, so we fix
 our program by changing the `use` line, the call to `new`, and the call to
 `clone`. The code in Listing 16-15 will finally compile and run:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-15" file-name="src/main.rs" caption="Using an `Arc<T>` to wrap the `Mutex<T>` to be able to share ownership across multiple threads">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-15/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-15: Using an `Arc<T>` to wrap the `Mutex<T>`
-to be able to share ownership across multiple threads</span>
+</Listing>
 
 This code will print the following:
 
