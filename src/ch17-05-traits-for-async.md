@@ -117,7 +117,7 @@ it is not yet ready.
 
 <!-- TODO: get a *very* careful technical review of this section! -->
 
-When we introduced the idea of pinning, while working on Listing 17-17, we ran
+When we introduced the idea of pinning while working on Listing 17-17, we ran
 into a very gnarly error message. Here is the relevant part of it again:
 
 <!-- manual-regeneration
@@ -151,12 +151,11 @@ For more information about an error, try `rustc --explain E0277`.
 
 When we read this error message carefully, it not only tells us that we need to
 pin the values, but also tells us why pinning is required. The `trpl::join_all`
-function returns a struct called `JoinAll`. That struct, in turn, is generic
-over a type `F`, which is constrained to implement the `Future` trait. Finally,
-directly awaiting a Future requires that the future in question implement the
-`Unpin` trait. That’s a lot! But we can understand it, if we dive a little
-further into how the `Future` type actually works, in particular around
-*pinning*.
+function returns a struct called `JoinAll`. That struct is generic over a type
+`F`, which is constrained to implement the `Future` trait. Finally, directly
+awaiting a Future requires that the future in question implement the `Unpin`
+trait. That’s a lot! But we can understand it, if we dive a little further into
+how the `Future` type actually works, in particular around *pinning*.
 
 Let’s look again at the definition of `Future`:
 

@@ -1669,10 +1669,10 @@ The version with `yield_now` is *way* faster!
 This means that async can be useful even for compute-bound tasks, depending on
 what else your program is doing, because it provides a useful tool for
 structuring the relationships between different parts of the program. This is a
-form of *cooperative multitasking*, where each future has both the power to
-determine when it hands over control via await points. Each future therefore
-also has the responsibility to avoid blocking for too long. In some Rust-based
-embedded operating systems, this is the *only* kind of multitasking!
+form of *cooperative multitasking*, where each future has the power to determine
+when it hands over control via await points. Each future therefore also has the
+responsibility to avoid blocking for too long. In some Rust-based embedded
+operating systems, this is the *only* kind of multitasking!
 
 In real-world code, you won’t usually be alternating function calls with await
 points on every single line, of course. While yielding control in this way is
@@ -2046,7 +2046,7 @@ indicates a message arrived in time; the `Err` variant indicates that the
 timeout elapsed before any message arrived. We `match` on that result and either
 print the message when we receive it successfully, or print a notice about the
 timeout. Finally, notice that we pin the messages after applying the timeout to
-them, because the timeout helper produces a future which needs to be pinned to
+them, because the timeout helper produces a stream which needs to be pinned to
 be polled.
 
 Filename: src/main.rs
@@ -2507,7 +2507,7 @@ it is not yet ready.
 
 ### Pinning and the Pin and Unpin Traits
 
-When we introduced the idea of pinning, while working on Listing 17-17, we ran
+When we introduced the idea of pinning while working on Listing 17-17, we ran
 into a very gnarly error message. Here is the relevant part of it again:
 
 ```
@@ -2535,12 +2535,11 @@ For more information about an error, try `rustc --explain E0277`.
 
 When we read this error message carefully, it not only tells us that we need to
 pin the values, but also tells us why pinning is required. The `trpl::join_all`
-function returns a struct called `JoinAll`. That struct, in turn, is generic
-over a type `F`, which is constrained to implement the `Future` trait. Finally,
-directly awaiting a Future requires that the future in question implement the
-`Unpin` trait. That’s a lot! But we can understand it, if we dive a little
-further into how the `Future` type actually works, in particular around
-*pinning*.
+function returns a struct called `JoinAll`. That struct is generic over a type
+`F`, which is constrained to implement the `Future` trait. Finally, directly
+awaiting a Future requires that the future in question implement the `Unpin`
+trait. That’s a lot! But we can understand it, if we dive a little further into
+how the `Future` type actually works, in particular around *pinning*.
 
 Let’s look again at the definition of `Future`:
 
@@ -2943,9 +2942,9 @@ threads *and* tasks, and therefore futures.
 
 As a default way of thinking about which to use when:
 
-* If the task is *very parallelizable*, such as processing a bunch of data where
+* If the work is *very parallelizable*, such as processing a bunch of data where
   each part can be processed separately, threads are a better choice.
-* If the task is *very concurrent*, such as handling messages from a bunch of
+* If the work is *very concurrent*, such as handling messages from a bunch of
   different sources which may come in a different intervals or different rates,
   async is a better choice.
 

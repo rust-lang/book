@@ -177,7 +177,7 @@ indicates a message arrived in time; the `Err` variant indicates that the
 timeout elapsed before any message arrived. We `match` on that result and either
 print the message when we receive it successfully, or print a notice about the
 timeout. Finally, notice that we pin the messages after applying the timeout to
-them, because the timeout helper produces a future which needs to be pinned to
+them, because the timeout helper produces a stream which needs to be pinned to
 be polled.
 
 <Listing number="17-34" caption="Using the `StreamExt::timeout` method to set a time limit on the items in a stream" file-name="src/main.rs">
