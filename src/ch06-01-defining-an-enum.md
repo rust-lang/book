@@ -59,12 +59,13 @@ only know what *kind* it is. Given that you just learned about structs in
 Chapter 5, you might be tempted to tackle this problem with structs as shown in
 Listing 6-1.
 
+<Listing number="6-1" caption="Storing the data and `IpAddrKind` variant of an IP address using a `struct`">
+
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 6-1: Storing the data and `IpAddrKind` variant of
-an IP address using a `struct`</span>
+</Listing>
 
 Here, we’ve defined a struct `IpAddr` that has two fields: a `kind` field that
 is of type `IpAddrKind` (the enum we defined previously) and an `address` field
@@ -140,12 +141,13 @@ more about bringing types into scope in Chapter 7.
 Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants.
 
+<Listing number="6-2" caption="A `Message` enum whose variants each store different amounts and types of values">
+
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 6-2: A `Message` enum whose variants each store
-different amounts and types of values</span>
+</Listing>
 
 This enum has four variants with different types:
 
