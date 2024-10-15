@@ -41,11 +41,13 @@ of bytes with some extra guarantees, restrictions, and capabilities. An example
 of a function that works the same way with `Vec<T>` and `String` is the `new`
 function to create an instance, shown in Listing 8-11.
 
+<Listing number="8-11" caption="Creating a new, empty `String`">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-11: Creating a new, empty `String`</span>
+</Listing>
 
 This line creates a new, empty string called `s`, into which we can then load
 data. Often, we’ll have some initial data with which we want to start the
@@ -53,12 +55,13 @@ string. For that, we use the `to_string` method, which is available on any type
 that implements the `Display` trait, as string literals do. Listing 8-12 shows
 two examples.
 
+<Listing number="8-12" caption="Using the `to_string` method to create a `String` from a string literal">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-12/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-12: Using the `to_string` method to create a
-`String` from a string literal</span>
+</Listing>
 
 This code creates a string containing `initial contents`.
 
@@ -66,12 +69,13 @@ We can also use the function `String::from` to create a `String` from a string
 literal. The code in Listing 8-13 is equivalent to the code in Listing 8-12
 that uses `to_string`.
 
+<Listing number="8-13" caption="Using the `String::from` function to create a `String` from a string literal">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-13/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-13: Using the `String::from` function to create
-a `String` from a string literal</span>
+</Listing>
 
 Because strings are used for so many things, we can use many different generic
 APIs for strings, providing us with a lot of options. Some of them can seem
@@ -82,12 +86,13 @@ readability.
 Remember that strings are UTF-8 encoded, so we can include any properly encoded
 data in them, as shown in Listing 8-14.
 
+<Listing number="8-14" caption="Storing greetings in different languages in strings">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-14: Storing greetings in different languages in
-strings</span>
+</Listing>
 
 All of these are valid `String` values.
 
@@ -102,24 +107,26 @@ use the `+` operator or the `format!` macro to concatenate `String` values.
 We can grow a `String` by using the `push_str` method to append a string slice,
 as shown in Listing 8-15.
 
+<Listing number="8-15" caption="Appending a string slice to a `String` using the `push_str` method">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-15/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-15: Appending a string slice to a `String`
-using the `push_str` method</span>
+</Listing>
 
 After these two lines, `s` will contain `foobar`. The `push_str` method takes a
 string slice because we don’t necessarily want to take ownership of the
 parameter. For example, in the code in Listing 8-16, we want to be able to use
 `s2` after appending its contents to `s1`.
 
+<Listing number="8-16" caption="Using a string slice after appending its contents to a `String`">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-16/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-16: Using a string slice after appending its
-contents to a `String`</span>
+</Listing>
 
 If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
@@ -128,12 +135,13 @@ The `push` method takes a single character as a parameter and adds it to the
 `String`. Listing 8-17 adds the letter *l* to a `String` using the `push`
 method.
 
+<Listing number="8-17" caption="Adding one character to a `String` value using `push`">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-17/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-17: Adding one character to a `String` value
-using `push`</span>
+</Listing>
 
 As a result, `s` will contain `lol`.
 
@@ -142,12 +150,13 @@ As a result, `s` will contain `lol`.
 Often, you’ll want to combine two existing strings. One way to do so is to use
 the `+` operator, as shown in Listing 8-18.
 
+<Listing number="8-18" caption="Using the `+` operator to combine two `String` values into a new `String` value">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-18/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-18: Using the `+` operator to combine two
-`String` values into a new `String` value</span>
+</Listing>
 
 The string `s3` will contain `Hello, world!`. The reason `s1` is no longer
 valid after the addition, and the reason we used a reference to `s2`, has to do
@@ -215,12 +224,13 @@ string by referencing them by index is a valid and common operation. However,
 if you try to access parts of a `String` using indexing syntax in Rust, you’ll
 get an error. Consider the invalid code in Listing 8-19.
 
+<Listing number="8-19" caption="Attempting to use indexing syntax with a String">
+
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-19/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-19: Attempting to use indexing syntax with a
-String</span>
+</Listing>
 
 This code will result in the following error:
 
