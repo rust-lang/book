@@ -166,8 +166,7 @@ confidently use the values they receive. Listing 9-13 shows one way to define a
 `Guess` type that will only create an instance of `Guess` if the `new` function
 receives a value between 1 and 100.
 
-<Listing number="9-13" file-name="src/lib.rs" caption="A `Guess` type that will
-only continue with values between 1 and 100">
+<Listing number="9-13" caption="A `Guess` type that will only continue with values between 1 and 100">
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/lib.rs}}

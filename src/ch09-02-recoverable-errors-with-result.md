@@ -59,8 +59,7 @@ on the value `File::open` returns. Listing 9-4 shows one way to handle the
 `Result` using a basic tool, the `match` expression that we discussed in
 Chapter 6.
 
-<Listing number="9-4" file-name="src/main.rs" caption="Using a `match`
-expression to handle the `Result` variants that might be returned">
+<Listing number="9-4" file-name="src/main.rs" caption="Using a `match` expression to handle the `Result` variants that might be returned">
 
 ```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-04/src/main.rs}}
@@ -98,8 +97,7 @@ reason—for example, because we didn’t have permission to open the file—we 
 want the code to `panic!` in the same way it did in Listing 9-4. For this, we
 add an inner `match` expression, shown in Listing 9-5.
 
-<Listing number="9-5" file-name="src/main.rs" caption="Handling different kinds
-of errors in different ways">
+<Listing number="9-5" file-name="src/main.rs" caption="Handling different kinds of errors in different ways">
 
 <!-- ignore this test because otherwise it creates hello.txt which causes other
 tests to fail lol -->
@@ -241,8 +239,7 @@ For example, Listing 9-6 shows a function that reads a username from a file. If
 the file doesn’t exist or can’t be read, this function will return those errors
 to the code that called the function.
 
-<Listing number="9-6" file-name="src/main.rs" caption="A function that returns
-errors to the calling code using `match`">
+<Listing number="9-6" file-name="src/main.rs" caption="A function that returns errors to the calling code using `match`">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -311,8 +308,7 @@ Listing 9-7 shows an implementation of `read_username_from_file` that has the
 same functionality as in Listing 9-6, but this implementation uses the `?`
 operator.
 
-<Listing number="9-7" file-name="src/main.rs" caption="A function that returns
-errors to the calling code using the `?` operator">
+<Listing number="9-7" file-name="src/main.rs" caption="A function that returns errors to the calling code using the `?` operator">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -359,8 +355,7 @@ The `?` operator eliminates a lot of boilerplate and makes this function’s
 implementation simpler. We could even shorten this code further by chaining
 method calls immediately after the `?`, as shown in Listing 9-8.
 
-<Listing number="9-8" file-name="src/main.rs" caption="Chaining method calls
-after the `?` operator">
+<Listing number="9-8" file-name="src/main.rs" caption="Chaining method calls after the `?` operator">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -383,8 +378,7 @@ this is just a different, more ergonomic way to write it.
 
 Listing 9-9 shows a way to make this even shorter using `fs::read_to_string`.
 
-<Listing number="9-9" file-name="src/main.rs" caption="Using
-`fs::read_to_string` instead of opening and then reading the file">
+<Listing number="9-9" file-name="src/main.rs" caption="Using `fs::read_to_string` instead of opening and then reading the file">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -417,8 +411,7 @@ In Listing 9-10, let’s look at the error we’ll get if we use the `?` operato
 in a `main` function with a return type that is incompatible with the type of
 the value we use `?` on.
 
-<Listing number="9-10" file-name="src/main.rs" caption="Attempting to use the
-`?` in the `main` function that returns `()` won’t compile.">
+<Listing number="9-10" file-name="src/main.rs" caption="Attempting to use the `?` in the `main` function that returns `()` won’t compile.">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-10/src/main.rs}}
@@ -455,8 +448,7 @@ resultant value of the expression, and the function continues. Listing 9-11 has
 an example of a function that finds the last character of the first line in the
 given text.
 
-<Listing number="9-11" caption="Using the `?` operator on an `Option<T>`
-value">
+<Listing number="9-11" caption="Using the `?` operator on an `Option<T>` value">
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-11/src/main.rs:here}}
@@ -502,8 +494,7 @@ from Listing 9-10, but we’ve changed the return type of `main` to be
 `Result<(), Box<dyn Error>>` and added a return value `Ok(())` to the end. This
 code will now compile.
 
-<Listing number="9-12" caption="Changing `main` to return `Result<(), E>`
-allows the use of the `?` operator on `Result` values.">
+<Listing number="9-12" file-name="src/main.rs" caption="Changing `main` to return `Result<(), E>` allows the use of the `?` operator on `Result` values.">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-12/src/main.rs}}
