@@ -16,28 +16,26 @@ the `mod front_of_house;` declaration, so that *src/lib.rs* contains the code
 shown in Listing 7-21. Note that this won’t compile until we create the
 *src/front_of_house.rs* file in Listing 7-22.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-21" file-name="src/lib.rs" caption="Declaring the `front_of_house` module whose body will be in *src/front_of_house.rs*">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-21: Declaring the `front_of_house` module whose
-body will be in *src/front_of_house.rs*</span>
+</Listing>
 
 Next, place the code that was in the curly brackets into a new file named
 *src/front_of_house.rs*, as shown in Listing 7-22. The compiler knows to look
 in this file because it came across the module declaration in the crate root
 with the name `front_of_house`.
 
-<span class="filename">Filename: src/front_of_house.rs</span>
+<Listing number="7-22" file-name="src/front_of_house.rs" caption="Definitions inside the `front_of_house` module in *src/front_of_house.rs*">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
 ```
 
-<span class="caption">Listing 7-22: Definitions inside the `front_of_house`
-module in *src/front_of_house.rs*</span>
+</Listing>
 
 Note that you only need to load a file using a `mod` declaration *once* in your
 module tree. Once the compiler knows the file is part of the project (and knows
@@ -56,20 +54,24 @@ named for its ancestors in the module tree, in this case *src/front_of_house*.
 To start moving `hosting`, we change *src/front_of_house.rs* to contain only
 the declaration of the `hosting` module:
 
-<span class="filename">Filename: src/front_of_house.rs</span>
+<Listing file-name="src/front_of_house.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house.rs}}
 ```
 
+</Listing>
+
 Then we create a *src/front_of_house* directory and a *hosting.rs* file to
 contain the definitions made in the `hosting` module:
 
-<span class="filename">Filename: src/front_of_house/hosting.rs</span>
+<Listing file-name="src/front_of_house/hosting.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house/hosting.rs}}
 ```
+
+</Listing>
 
 If we instead put *hosting.rs* in the *src* directory, the compiler would
 expect the *hosting.rs* code to be in a `hosting` module declared in the crate

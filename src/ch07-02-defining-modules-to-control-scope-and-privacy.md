@@ -63,20 +63,24 @@ backyard
 
 The crate root file in this case is *src/main.rs*, and it contains:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/main.rs}}
 ```
 
+</Listing>
+
 The `pub mod garden;` line tells the compiler to include the code it finds in
 *src/garden.rs*, which is:
 
-<span class="filename">Filename: src/garden.rs</span>
+<Listing file-name="src/garden.rs">
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden.rs}}
 ```
+
+</Listing>
 
 Here, `pub mod vegetables;` means the code in *src/garden/vegetables.rs* is
 included too. That code is:
@@ -114,14 +118,13 @@ restaurant --lib`. Then enter the code in Listing 7-1 into *src/lib.rs* to
 define some modules and function signatures; this code is the front of house
 section.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-1" file-name="src/lib.rs" caption="A `front_of_house` module containing other modules that then contain functions">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-01/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-1: A `front_of_house` module containing other
-modules that then contain functions</span>
+</Listing>
 
 We define a module with the `mod` keyword followed by the name of the module
 (in this case, `front_of_house`). The body of the module then goes inside curly
@@ -143,6 +146,8 @@ known as the *module tree*.
 
 Listing 7-2 shows the module tree for the structure in Listing 7-1.
 
+<Listing number="7-2" caption="The module tree for the code in Listing 7-1">
+
 ```text
 crate
  └── front_of_house
@@ -155,8 +160,7 @@ crate
          └── take_payment
 ```
 
-<span class="caption">Listing 7-2: The module tree for the code in Listing
-7-1</span>
+</Listing>
 
 This tree shows how some of the modules nest inside other modules; for example,
 `hosting` nests inside `front_of_house`. The tree also shows that some modules
