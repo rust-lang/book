@@ -195,7 +195,7 @@ impl<'e> ListingState<'e> {
     ) -> Result<(), String> {
         // We do not *keep* the version constructed here, just temporarily
         // construct it so the HTML parser, which expects properly closed tags
-        // to parse it as a *tag* rather than a *weird text node*, which accept
+        // to parse it as a *tag* rather than a *weird text node*, will accept
         // it and provide a useful view of it.
         let to_parse = tag.to_owned().to_string() + "</Listing>";
         let listing = Dom::parse(&to_parse)
@@ -212,21 +212,22 @@ impl<'e> ListingState<'e> {
             .try_fold(ListingBuilder::new(), |builder, (key, maybe_value)| {
                 match (key.as_str(), maybe_value) {
                     ("number", Some(value)) => Ok(builder.with_number(value)),
-                    ("number", None) => {
-                        Err(String::from("number attribute without value"))
-                    }
+
                     ("caption", Some(value)) => Ok(builder.with_caption(value)),
-                    ("caption", None) => {
-                        Err(String::from("caption attribute without value"))
-                    }
+
                     ("file-name", Some(value)) => {
                         Ok(builder.with_file_name(value))
                     }
-                    ("file-name", None) => {
-                        Err(String::from("file-name attribute without value"))
+
+                    (attr @ "file-name", None)
+                    | (attr @ "caption", None)
+                    | (attr @ "number", None) => {
+                        Err(format!("Missing value for attribute: '{attr}'"))
                     }
 
-                    _ => Ok(builder), // TODO: error on extra attrs?
+                    (attr, _) => {
+                        Err(format!("Unsupported attribute name: '{attr}'"))
+                    }
                 }
             })?
             .build();
