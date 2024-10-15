@@ -90,9 +90,9 @@ threads *and* tasks, and therefore futures.
 
 As a default way of thinking about which to use when:
 
-- If the task is *very parallelizable*, such as processing a bunch of data where
+- If the work is *very parallelizable*, such as processing a bunch of data where
   each part can be processed separately, threads are a better choice.
-- If the task is *very concurrent*, such as handling messages from a bunch of
+- If the work is *very concurrent*, such as handling messages from a bunch of
   different sources which may come in a different intervals or different rates,
   async is a better choice.
 

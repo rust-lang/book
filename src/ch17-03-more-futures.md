@@ -476,10 +476,10 @@ The version with `yield_now` is *way* faster!
 This means that async can be useful even for compute-bound tasks, depending on
 what else your program is doing, because it provides a useful tool for
 structuring the relationships between different parts of the program. This is a
-form of *cooperative multitasking*, where each future has both the power to
-determine when it hands over control via await points. Each future therefore
-also has the responsibility to avoid blocking for too long. In some Rust-based
-embedded operating systems, this is the *only* kind of multitasking!
+form of *cooperative multitasking*, where each future has the power to determine
+when it hands over control via await points. Each future therefore also has the
+responsibility to avoid blocking for too long. In some Rust-based embedded
+operating systems, this is the *only* kind of multitasking!
 
 In real-world code, you won’t usually be alternating function calls with await
 points on every single line, of course. While yielding control in this way is
