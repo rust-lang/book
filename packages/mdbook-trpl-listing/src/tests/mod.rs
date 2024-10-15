@@ -188,5 +188,108 @@ fn main() {}
     );
 }
 
+#[test]
+fn with_unsupported_attr_name() {
+    let result = rewrite_listing(
+        "<Listing invalid-attr>
+
+```rust
+fn main() {}
+```
+
+</Listing>",
+        Mode::Default,
+    );
+
+    assert_eq!(
+        result,
+        Err(String::from("Unsupported attribute name: 'invalid-attr'"))
+    )
+}
+
+#[test]
+fn with_unsupported_attr_name_with_arg() {
+    let result = rewrite_listing(
+        r#"<Listing invalid-attr="123">
+
+```rust
+fn main() {}
+```
+
+</Listing>"#,
+        Mode::Default,
+    );
+
+    assert_eq!(
+        result,
+        Err(String::from("Unsupported attribute name: 'invalid-attr'"))
+    )
+}
+
+#[cfg(test)]
+mod missing_value {
+    use super::*;
+
+    #[test]
+    fn for_number() {
+        let result = rewrite_listing(
+            r#"<Listing number>
+
+```rust
+fn main() {}
+```
+
+</Listing>"#,
+            Mode::Default,
+        );
+
+        assert_eq!(
+            result,
+            Err(String::from("Missing value for attribute: 'number'"))
+        )
+    }
+
+    #[test]
+    fn for_caption() {
+        let result = rewrite_listing(
+            r#"<Listing caption>
+
+```rust
+fn main() {}
+```
+
+</Listing>"#,
+            Mode::Default,
+        );
+
+        assert_eq!(
+            result,
+            Err(String::from("Missing value for attribute: 'caption'"))
+        )
+    }
+
+    #[test]
+    fn for_file_name() {
+        let result = rewrite_listing(
+            r#"<Listing file-name>
+
+```rust
+fn main() {}
+```
+
+</Listing>"#,
+            Mode::Default,
+        );
+
+        assert_eq!(
+            result,
+            Err(String::from("Missing value for attribute: 'file-name'"))
+        )
+    }
+}
+
+#[test]
+fn missing_value() {}
+
 #[cfg(test)]
 mod config;
