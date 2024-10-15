@@ -29,8 +29,7 @@ The `eat_at_restaurant` function is part of our library crate’s public API, so
 we mark it with the `pub` keyword. In the [“Exposing Paths with the `pub`
 Keyword”][pub]<!-- ignore --> section, we’ll go into more detail about `pub`.
 
-<Listing number="7-3" file-name="src/lib.rs" caption="Calling the
-`add_to_waitlist` function using absolute and relative paths">
+<Listing number="7-3" file-name="src/lib.rs" caption="Calling the `add_to_waitlist` function using absolute and relative paths">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-03/src/lib.rs}}
@@ -70,8 +69,7 @@ each other.
 Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
 errors we get are shown in Listing 7-4.
 
-<Listing number="7-4" caption="Compiler errors from building the code in
-Listing 7-3">
+<Listing number="7-4" caption="Compiler errors from building the code in Listing 7-3">
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-03/output.txt}}
@@ -107,8 +105,7 @@ private. We want the `eat_at_restaurant` function in the parent module to have
 access to the `add_to_waitlist` function in the child module, so we mark the
 `hosting` module with the `pub` keyword, as shown in Listing 7-5.
 
-<Listing number="7-5" file-name="src/lib.rs" caption="Declaring the `hosting`
-module as `pub` to use it from `eat_at_restaurant`">
+<Listing number="7-5" file-name="src/lib.rs" caption="Declaring the `hosting` module as `pub` to use it from `eat_at_restaurant`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-05/src/lib.rs}}
@@ -119,8 +116,7 @@ module as `pub` to use it from `eat_at_restaurant`">
 Unfortunately, the code in Listing 7-5 still results in compiler errors, as
 shown in Listing 7-6.
 
-<Listing number="7-6" caption="Compiler errors from building the code in
-Listing 7-5">
+<Listing number="7-6" caption="Compiler errors from building the code in Listing 7-5">
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-05/output.txt}}
@@ -144,9 +140,7 @@ modules.
 Let’s also make the `add_to_waitlist` function public by adding the `pub`
 keyword before its definition, as in Listing 7-7.
 
-<Listing number="7-7" file-name="src/lib.rs" caption="Adding the `pub` keyword
-to `mod hosting` and `fn add_to_waitlist` lets us call the function from
-`eat_at_restaurant`">
+<Listing number="7-7" file-name="src/lib.rs" caption="Adding the `pub` keyword to `mod hosting` and `fn add_to_waitlist` lets us call the function from `eat_at_restaurant`">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-07/src/lib.rs}}
@@ -220,8 +214,7 @@ function `fix_incorrect_order` defined in the `back_of_house` module calls the
 function `deliver_order` defined in the parent module by specifying the path to
 `deliver_order`, starting with `super`.
 
-<Listing number="7-8" file-name="src/lib.rs" caption="Calling a function using
-a relative path starting with `super`">
+<Listing number="7-8" file-name="src/lib.rs" caption="Calling a function using a relative path starting with `super`">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-08/src/lib.rs}}
@@ -251,8 +244,7 @@ comes with a meal, but the chef decides which fruit accompanies the meal based
 on what’s in season and in stock. The available fruit changes quickly, so
 customers can’t choose the fruit or even see which fruit they’ll get.
 
-<Listing number="7-9" file-name="src/lib.rs" caption="A struct with some public
-fields and some private fields">
+<Listing number="7-9" file-name="src/lib.rs" caption="A struct with some public fields and some private fields">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-09/src/lib.rs}}
@@ -276,8 +268,7 @@ have such a function, we couldn’t create an instance of `Breakfast` in
 In contrast, if we make an enum public, all of its variants are then public. We
 only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
 
-<Listing number="7-10" file-name="src/lib.rs" caption="Designating an enum as
-public makes all its variants public">
+<Listing number="7-10" file-name="src/lib.rs" caption="Designating an enum as public makes all its variants public">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-10/src/lib.rs}}

@@ -118,8 +118,7 @@ restaurant --lib`. Then enter the code in Listing 7-1 into *src/lib.rs* to
 define some modules and function signatures; this code is the front of house
 section.
 
-<Listing number="7-1" file-name="src/lib.rs" caption="A `front_of_house` module
-containing other modules that then contain functions">
+<Listing number="7-1" file-name="src/lib.rs" caption="A `front_of_house` module containing other modules that then contain functions">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-01/src/lib.rs}}
