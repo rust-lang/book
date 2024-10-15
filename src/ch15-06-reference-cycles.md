@@ -15,14 +15,13 @@ Let’s look at how a reference cycle might happen and how to prevent it,
 starting with the definition of the `List` enum and a `tail` method in Listing
 15-25:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-25" file-name="src/main.rs" caption="A cons list definition that holds a `RefCell<T>` so we can modify what a `Cons` variant is referring to">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-25/src/main.rs}}
 ```
 
-<span class="caption">Listing 15-25: A cons list definition that holds a
-`RefCell<T>` so we can modify what a `Cons` variant is referring to</span>
+</Listing>
 
 We’re using another variation of the `List` definition from Listing 15-5. The
 second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
@@ -37,14 +36,13 @@ the list in `a`. Then it modifies the list in `a` to point to `b`, creating a
 reference cycle. There are `println!` statements along the way to show what the
 reference counts are at various points in this process.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-26" file-name="src/main.rs" caption="Creating a reference cycle of two `List` values pointing to each other">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-26/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-26: Creating a reference cycle of two `List`
-values pointing to each other</span>
+</Listing>
 
 We create an `Rc<List>` instance holding a `List` value in the variable `a`
 with an initial list of `5, Nil`. We then create an `Rc<List>` instance holding
@@ -163,14 +161,13 @@ Next, we’ll use our struct definition and create one `Node` instance named
 `leaf` with the value 3 and no children, and another instance named `branch`
 with the value 5 and `leaf` as one of its children, as shown in Listing 15-27:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-27" file-name="src/main.rs" caption="Creating a `leaf` node with no children and a `branch` node with `leaf` as one of its children">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-27/src/main.rs:there}}
 ```
 
-<span class="caption">Listing 15-27: Creating a `leaf` node with no children
-and a `branch` node with `leaf` as one of its children</span>
+</Listing>
 
 We clone the `Rc<Node>` in `leaf` and store that in `branch`, meaning the
 `Node` in `leaf` now has two owners: `leaf` and `branch`. We can get from
@@ -207,14 +204,13 @@ A node will be able to refer to its parent node but doesn’t own its parent.
 In Listing 15-28, we update `main` to use this new definition so the `leaf`
 node will have a way to refer to its parent, `branch`:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-28" file-name="src/main.rs" caption="A `leaf` node with a weak reference to its parent node `branch`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-28/src/main.rs:there}}
 ```
 
-<span class="caption">Listing 15-28: A `leaf` node with a weak reference to its
-parent node `branch`</span>
+</Listing>
 
 Creating the `leaf` node looks similar to Listing 15-27 with the exception of
 the `parent` field: `leaf` starts out without a parent, so we create a new,
@@ -260,14 +256,13 @@ instances change by creating a new inner scope and moving the creation of
 created and then dropped when it goes out of scope. The modifications are shown
 in Listing 15-29:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-29" file-name="src/main.rs" caption="Creating `branch` in an inner scope and examining strong and weak reference counts">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-29/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-29: Creating `branch` in an inner scope and
-examining strong and weak reference counts</span>
+</Listing>
 
 After `leaf` is created, its `Rc<Node>` has a strong count of 1 and a weak
 count of 0. In the inner scope, we create `branch` and associate it with
