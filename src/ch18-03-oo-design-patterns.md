@@ -114,7 +114,7 @@ the `content` field’s data is read. The `add_text` method is pretty
 straightforward, so let’s add the implementation in Listing 18-13 to the `impl
 Post` block:
 
-<Listing number="18-13" fie-name="src/lib.rs" caption="Implementing the `add_text` method to add text to a post’s `content`">
+<Listing number="18-13" file-name="src/lib.rs" caption="Implementing the `add_text` method to add text to a post’s `content`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-13/src/lib.rs:here}}
