@@ -140,11 +140,13 @@ One way to do this would be to parse the guess as an `i32` instead of only a
 `u32` to allow potentially negative numbers, and then add a check for the
 number being in range, like so:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-09-guess-out-of-range/src/main.rs:here}}
 ```
+
+</Listing>
 
 The `if` expression checks whether our value is out of range, tells the user
 about the problem, and calls `continue` to start the next iteration of the loop
@@ -164,14 +166,13 @@ confidently use the values they receive. Listing 9-13 shows one way to define a
 `Guess` type that will only create an instance of `Guess` if the `new` function
 receives a value between 1 and 100.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="9-13" caption="A `Guess` type that will only continue with values between 1 and 100">
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/lib.rs}}
 ```
 
-<span class="caption">Listing 9-13: A `Guess` type that will only continue with
-values between 1 and 100</span>
+</Listing>
 
 First we define a struct named `Guess` that has a field named `value` that
 holds an `i32`. This is where the number will be stored.
