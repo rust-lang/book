@@ -88,10 +88,9 @@ By opting out of having Rust enforce these guarantees, you can give up
 guaranteed safety in exchange for greater performance or the ability to
 interface with another language or hardware where Rust’s guarantees don’t apply.
 
-Listing 20-1 shows how to create an immutable and a mutable raw pointer from
-references.
+Listing 20-1 shows how to create an immutable and a mutable raw pointer.
 
-<Listing number="20-1" caption="Creating raw pointers from references">
+<Listing number="20-1" caption="Creating raw pointers with the raw borrow operators">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-01/src/main.rs:here}}
@@ -105,9 +104,9 @@ unsafe block, as you’ll see in a bit.
 
 We’ve created raw pointers by using the raw borrow operators: `&raw const num`
 creates a `*const i32` immutable raw pointer, and `&raw mut num` creates a `&mut
-i32` mutable raw pointer. Because we created them directly from references
-guaranteed to be valid, we know these particular raw pointers are valid, but we
-can’t make that assumption about just any raw pointer.
+i32` mutable raw pointer. Because we created them directly from a local
+variable, we know these particular raw pointers are valid, but we can’t make
+that assumption about just any raw pointer.
 
 To demonstrate this, next we’ll create a raw pointer whose validity we can’t be
 so certain of, using `as` to cast a value instead of using the raw reference
