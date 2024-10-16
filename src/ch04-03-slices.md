@@ -17,7 +17,7 @@ fn first_word(s: &String) -> ?
 ```
 
 The `first_word` function has a `&String` as a parameter. We don’t want
-ownership, so this is fine. But what should we return? We don’t really have a
+ownership because we want to keep using the `String` after calling the `first_word` function, so this is fine. But what should we return? We don’t really have a
 way to talk about *part* of a string. However, we could return the index of the
 end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
