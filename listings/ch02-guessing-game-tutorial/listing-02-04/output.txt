@@ -18,9 +18,9 @@ error[E0308]: mismatched types
     = note: expected reference `&String`
                found reference `&{integer}`
 note: method defined here
-   --> /rustc/eeb90cda1969383f56a2637cbd3037bdf598841c/library/core/src/cmp.rs:839:8
+   --> file:///home/.rustup/toolchains/1.82/lib/rustlib/src/rust/library/core/src/cmp.rs:838:8
     |
-839 |     fn cmp(&self, other: &Self) -> Ordering;
+838 |     fn cmp(&self, other: &Self) -> Ordering;
     |        ^^^
 
 For more information about this error, try `rustc --explain E0308`.

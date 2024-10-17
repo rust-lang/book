@@ -22,12 +22,12 @@ note: required because it's used within this closure
 11  |         let handle = thread::spawn(move || {
     |                                    ^^^^^^^
 note: required by a bound in `spawn`
-   --> /rustc/eeb90cda1969383f56a2637cbd3037bdf598841c/library/std/src/thread/mod.rs:691:8
+   --> file:///home/.rustup/toolchains/1.82/lib/rustlib/src/rust/library/std/src/thread/mod.rs:675:8
     |
-688 | pub fn spawn<F, T>(f: F) -> JoinHandle<T>
+672 | pub fn spawn<F, T>(f: F) -> JoinHandle<T>
     |        ----- required by a bound in this function
 ...
-691 |     F: Send + 'static,
+675 |     F: Send + 'static,
     |        ^^^^ required by this bound in `spawn`
 
 For more information about this error, try `rustc --explain E0277`.
