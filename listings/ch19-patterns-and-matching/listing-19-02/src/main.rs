@@ -1,13 +1,14 @@
 fn main() {
     // ANCHOR: here
-    let mut stack = Vec::new();
+    let (tx, rx) = std::sync::mpsc::channel();
+    std::thread::spawn(move || {
+        for val in [1, 2, 3] {
+            tx.send(val).unwrap();
+        }
+    });
 
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
-
-    while let Some(top) = stack.pop() {
-        println!("{top}");
+    while let Ok(value) = rx.recv() {
+        println!("{value}");
     }
     // ANCHOR_END: here
 }

@@ -242,8 +242,6 @@ loop is the loop version of the `if let` construct we saw back in Chapter 6. The
 loop will continue executing as long as the pattern it specifies continues to
 match the value.
 
-<!-- TODO: update text in ch. 19 to account for our having introduced this. -->
-
 The `rx.recv` call produces a `Future`, which we await. The runtime will pause
 the `Future` until it is ready. Once a message arrives, the future will resolve
 to `Some(message)`, as many times as a message arrives. When the channel closes,

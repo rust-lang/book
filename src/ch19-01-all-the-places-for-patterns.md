@@ -98,11 +98,13 @@ not alert us to the possible logic bug.
 ### `while let` Conditional Loops
 
 Similar in construction to `if let`, the `while let` conditional loop allows a
-`while` loop to run for as long as a pattern continues to match. In Listing
-19-2 we code a `while let` loop that uses a vector as a stack and prints the
-values in the vector in the opposite order in which they were pushed.
+`while` loop to run for as long as a pattern continues to match. We first saw a
+`while let` loop in Chapter 17, where we used it to keep looping as long as a
+stream produced new values. Similarly, in Listing 19-2 we show a `while let`
+loop that waits on messages sent between threads, but in this case checking a
+`Result` instead of an `Option`.
 
-<Listing number="19-2" caption="Using a `while let` loop to print values for as long as `stack.pop()` returns `Some`">
+<Listing number="19-2" caption="Using a `while let` loop to print values for as long as `rx.recv()` returns `Ok`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-02/src/main.rs:here}}
@@ -110,11 +112,11 @@ values in the vector in the opposite order in which they were pushed.
 
 </Listing>
 
-This example prints 3, 2, and then 1. The `pop` method takes the last element
-out of the vector and returns `Some(value)`. If the vector is empty, `pop`
-returns `None`. The `while` loop continues running the code in its block as
-long as `pop` returns `Some`. When `pop` returns `None`, the loop stops. We can
-use `while let` to pop every element off our stack.
+This example prints 1, 2, and 3. When we saw `recv` back in Chapter 16, we
+unwrapped the error directly, or interacted with it as an iterator using a `for`
+loop. As Listing 19-2 shows, though, we can also use `while let`, because the
+`recv` method returns `Ok` as long as the sender is producing messages, and then
+produces an `Err` once the sender side disconnects.
 
 ### `for` Loops
 
