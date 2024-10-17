@@ -15,7 +15,7 @@ the `!` type and dynamically sized types.
 The newtype pattern is also useful for tasks beyond those we’ve discussed so
 far, including statically enforcing that values are never confused and
 indicating the units of a value. You saw an example of using newtypes to
-indicate units in Listing 20-15: recall that the `Millimeters` and `Meters`
+indicate units in Listing 20-16: recall that the `Millimeters` and `Meters`
 structs wrapped `u32` values in a newtype. If we wrote a function with a
 parameter of type `Millimeters`, we couldn’t compile a program that
 accidentally tried to call that function with a value of type `Meters` or a
@@ -47,7 +47,7 @@ the alias `Kilometers` to `i32` like so:
 ```
 
 Now, the alias `Kilometers` is a *synonym* for `i32`; unlike the `Millimeters`
-and `Meters` types we created in Listing 20-15, `Kilometers` is not a separate,
+and `Meters` types we created in Listing 20-16, `Kilometers` is not a separate,
 new type. Values that have the type `Kilometers` will be treated the same as
 values of type `i32`:
 
@@ -71,24 +71,24 @@ Box<dyn Fn() + Send + 'static>
 
 Writing this lengthy type in function signatures and as type annotations all
 over the code can be tiresome and error prone. Imagine having a project full of
-code like that in Listing 20-24.
+code like that in Listing 20-25.
 
-<Listing number="20-24" caption="Using a long type in many places">
+<Listing number="20-25" caption="Using a long type in many places">
 
 ```rust
-{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-24/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-25/src/main.rs:here}}
 ```
 
 </Listing>
 
 A type alias makes this code more manageable by reducing the repetition. In
-Listing 20-25, we’ve introduced an alias named `Thunk` for the verbose type and
+Listing 20-26, we’ve introduced an alias named `Thunk` for the verbose type and
 can replace all uses of the type with the shorter alias `Thunk`.
 
-<Listing number="20-25" caption="Introducing a type alias `Thunk` to reduce repetition">
+<Listing number="20-26" caption="Introducing a type alias `Thunk` to reduce repetition">
 
 ```rust
-{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-25/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-26/src/main.rs:here}}
 ```
 
 </Listing>
@@ -148,9 +148,9 @@ so `bar` can never possibly return.
 
 But what use is a type you can never create values for? Recall the code from
 Listing 2-5, part of the number guessing game; we’ve reproduced a bit of it
-here in Listing 20-26.
+here in Listing 20-27.
 
-<Listing number="20-26" caption="A `match` with an arm that ends in `continue`">
+<Listing number="20-27" caption="A `match` with an arm that ends in `continue`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:ch19}}
@@ -170,7 +170,7 @@ example, the following code doesn’t work:
 The type of `guess` in this code would have to be an integer *and* a string,
 and Rust requires that `guess` have only one type. So what does `continue`
 return? How were we allowed to return a `u32` from one arm and have another arm
-that ends with `continue` in Listing 20-26?
+that ends with `continue` in Listing 20-27?
 
 As you might have guessed, `continue` has a `!` value. That is, when Rust
 computes the type of `guess`, it looks at both match arms, the former with a
@@ -191,7 +191,7 @@ this definition:
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-09-unwrap-definition/src/lib.rs:here}}
 ```
 
-In this code, the same thing happens as in the `match` in Listing 20-26: Rust
+In this code, the same thing happens as in the `match` in Listing 20-27: Rust
 sees that `val` has the type `T` and `panic!` has the type `!`, so the result
 of the overall `match` expression is `T`. This code works because `panic!`
 doesn’t produce a value; it ends the program. In the `None` case, we won’t be

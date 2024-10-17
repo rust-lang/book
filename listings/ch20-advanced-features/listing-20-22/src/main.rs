@@ -1,17 +1,23 @@
-// ANCHOR: here
-use std::fmt;
+trait Animal {
+    fn baby_name() -> String;
+}
 
-trait OutlinePrint: fmt::Display {
-    fn outline_print(&self) {
-        let output = self.to_string();
-        let len = output.len();
-        println!("{}", "*".repeat(len + 4));
-        println!("*{}*", " ".repeat(len + 2));
-        println!("* {output} *");
-        println!("*{}*", " ".repeat(len + 2));
-        println!("{}", "*".repeat(len + 4));
+struct Dog;
+
+impl Dog {
+    fn baby_name() -> String {
+        String::from("Spot")
     }
 }
-// ANCHOR_END: here
 
-fn main() {}
+impl Animal for Dog {
+    fn baby_name() -> String {
+        String::from("puppy")
+    }
+}
+
+// ANCHOR: here
+fn main() {
+    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
+}
+// ANCHOR_END: here
