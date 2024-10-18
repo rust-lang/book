@@ -88,10 +88,9 @@ By opting out of having Rust enforce these guarantees, you can give up
 guaranteed safety in exchange for greater performance or the ability to
 interface with another language or hardware where Rust’s guarantees don’t apply.
 
-Listing 20-1 shows how to create an immutable and a mutable raw pointer from
-references.
+Listing 20-1 shows how to create an immutable and a mutable raw pointer.
 
-<Listing number="20-1" caption="Creating raw pointers from references">
+<Listing number="20-1" caption="Creating raw pointers with the raw borrow operators">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-01/src/main.rs:here}}
@@ -103,19 +102,20 @@ Notice that we don’t include the `unsafe` keyword in this code. We can create
 raw pointers in safe code; we just can’t dereference raw pointers outside an
 unsafe block, as you’ll see in a bit.
 
-We’ve created raw pointers by using `as` to cast an immutable and a mutable
-reference into their corresponding raw pointer types. Because we created them
-directly from references guaranteed to be valid, we know these particular raw
-pointers are valid, but we can’t make that assumption about just any raw
-pointer.
+We’ve created raw pointers by using the raw borrow operators: `&raw const num`
+creates a `*const i32` immutable raw pointer, and `&raw mut num` creates a `&mut
+i32` mutable raw pointer. Because we created them directly from a local
+variable, we know these particular raw pointers are valid, but we can’t make
+that assumption about just any raw pointer.
 
 To demonstrate this, next we’ll create a raw pointer whose validity we can’t be
-so certain of. Listing 20-2 shows how to create a raw pointer to an arbitrary
+so certain of, using `as` to cast a value instead of using the raw reference
+operators. Listing 20-2 shows how to create a raw pointer to an arbitrary
 location in memory. Trying to use arbitrary memory is undefined: there might be
-data at that address or there might not, the compiler might optimize the code
-so there is no memory access, or the program might error with a segmentation
-fault. Usually, there is no good reason to write code like this, but it is
-possible.
+data at that address or there might not, the compiler might optimize the code so
+there is no memory access, or the program might error with a segmentation fault.
+Usually, there is no good reason to write code like this, especially in cases
+where you can use a raw borrow operator instead, but it is possible.
 
 <Listing number="20-2" caption="Creating a raw pointer to an arbitrary memory address">
 
@@ -401,7 +401,15 @@ As with regular variables, we specify mutability using the `mut` keyword. Any
 code that reads or writes from `COUNTER` must be within an `unsafe` block. This
 code compiles and prints `COUNTER: 3` as we would expect because it’s single
 threaded. Having multiple threads access `COUNTER` would likely result in data
-races.
+races, so it is undefined behavior. Therefore, we need to mark the entire
+function as `unsafe`, and document the safety limitation, so anyone calling the
+function knows what they are and are not allowed to do safely.
+
+Whenever we write an unsafe function, it is idiomatic to write a comment
+starting with `SAFETY` and explaining what the caller needs to do to call the
+function safely. Likewise, whenever we perform an unsafe operation, it is
+idiomatic to write a comment starting with `SAFETY` to explain how the safety
+rules are upheld.
 
 With mutable data that is globally accessible, it’s difficult to ensure there
 are no data races, which is why Rust considers mutable static variables to be
@@ -448,6 +456,47 @@ interface with unions in C code. Accessing union fields is unsafe because Rust
 can’t guarantee the type of the data currently being stored in the union
 instance. You can learn more about unions in [the Rust Reference][reference].
 
+### Using Miri to check unsafe code
+
+When writing unsafe code, you might want to check that what you have written
+actually is safe and correct. One of the best ways to do that is to use
+[Miri][miri], an official Rust tool for detecting undefined behavior. Whereas
+the borrow checker is a *static* tool which works at compile time, Miri is a
+*dynamic* tool which works at runtime. It checks your code by running your
+program, or its test suite, and detecting when you violate the rules its
+understands about how Rust should work.
+
+Using Miri requires a nightly build of Rust (which we talk about more in
+[Appendix G: How Rust is Made and “Nightly Rust”][nightly]). You can install
+both a nightly version of Rust and the Miri tool by typing `rustup +nightly
+component add miri`. This does not change what version of Rust your project
+uses; it only adds the tool to your system so you can use it when you want to.
+You can run Miri on a project by typing `cargo +nightly miri run` or `cargo
++nightly miri test`.
+
+For an example of how helpful this can be, consider what happens when we run it
+against Listing 20-10:
+
+```console
+{{#include ../listings/ch20-advanced-features/listing-20-10/output.txt}}
+```
+
+It helpfully and correctly notices that we have shared references to mutable
+data, and warns about it. In this case, it does not tell us how to fix the
+problem, but it means that we know there is a possible issue and can think about
+how to make sure it is safe. In other cases, it can actually tell us that some
+code is *sure* to be wrong and make recommendations about how to fix it.
+
+Miri doesn’t catch *everything* you might get wrong when writing unsafe code.
+For one thing, since it is a dynamic check, it only catches problems with code
+that actually gets run. That means you will need to use it in conjunction with
+good testing techniques to increase your confidence about the unsafe code you
+have written. For another thing, it does not cover every possible way your code
+can be unsound. If Miri *does* catch a problem, you know there’s a bug, but just
+because Miri *doesn’t* catch a bug doesn’t mean there isn’t a problem. Miri can
+catch a lot, though. Try running it on the other examples of unsafe code in this
+chapter and see what it says!
+
 ### When to Use Unsafe Code
 
 Using `unsafe` to take one of the five actions (superpowers) just discussed
@@ -455,6 +504,8 @@ isn’t wrong or even frowned upon. But it is trickier to get `unsafe` code
 correct because the compiler can’t help uphold memory safety. When you have a
 reason to use `unsafe` code, you can do so, and having the explicit `unsafe`
 annotation makes it easier to track down the source of problems when they occur.
+Whenever you write unsafe code, you can use Miri to help you be more confident
+that the code you have written upholds Rust’s rules.
 
 [dangling-references]:
 ch04-02-references-and-borrowing.html#dangling-references
@@ -464,3 +515,5 @@ ch03-01-variables-and-mutability.html#constants
 ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits
 [the-slice-type]: ch04-03-slices.html#the-slice-type
 [reference]: ../reference/items/unions.html
+[miri]: https://github.com/rust-lang/miri
+[nightly]: appendix-07-nightly-rust.html
