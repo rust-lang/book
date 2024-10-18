@@ -116,14 +116,14 @@ some sort of collection.
 > have. Relying on integer overflow’s wrapping behavior is considered an error.
 >
 > To explicitly handle the possibility of overflow, you can use these families
-> of methods provided by the standard library for primitive numeric types:
+> of functions provided by the standard library for primitive numeric types:
 >
-> * Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`.
-> * Return the `None` value if there is overflow with the `checked_*` methods.
+> * Wrap in all modes with the `wrapping_*` functions, such as `wrapping_add`.
+> * Return the `None` value if there is overflow with the `checked_*` functions.
 > * Return the value and a boolean indicating whether there was overflow with
->   the `overflowing_*` methods.
+>   the `overflowing_*` functions.
 > * Saturate at the value’s minimum or maximum values with the `saturating_*`
->   methods.
+>   functions.
 
 #### Floating-Point Types
 
