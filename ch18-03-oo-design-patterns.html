@@ -304,6 +304,7 @@ field as <code>pub</code>, so that later we can implement a method that will con
 the <code>content</code> field’s data is read. The <code>add_text</code> method is pretty
 straightforward, so let’s add the implementation in Listing 18-13 to the <code>impl Post</code> block:</p>
 <figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub struct Post {
 </span><span class="boring">    state: Option&lt;Box&lt;dyn State&gt;&gt;,
 </span><span class="boring">    content: String,

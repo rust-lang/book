@@ -200,6 +200,7 @@ the value falls into the associated code block to be used during execution.</p>
 function that takes an unknown US coin and, in a similar way as the counting
 machine, determines which coin it is and returns its value in cents, as shown
 in Listing 6-3.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021">enum Coin {
     Penny,
     Nickel,
@@ -217,8 +218,8 @@ fn value_in_cents(coin: Coin) -&gt; u8 {
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 6-3: An enum and a <code>match</code> expression that has
-the variants of the enum as its patterns</span></p>
+<figcaption>Listing 6-3: An enum and a <code>match</code> expression that has the variants of the enum as its patterns</figcaption>
+</figure>
 <p>Let’s break down the <code>match</code> in the <code>value_in_cents</code> function. First we list
 the <code>match</code> keyword followed by an expression, which in this case is the value
 <code>coin</code>. This seems very similar to a conditional expression used with <code>if</code>, but
@@ -273,6 +274,7 @@ designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
 our <code>enum</code> by changing the <code>Quarter</code> variant to include a <code>UsState</code> value
 stored inside it, which we’ve done in Listing 6-4.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)] // so we can inspect the state in a minute
 enum UsState {
     Alabama,
@@ -288,8 +290,8 @@ enum Coin {
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 6-4: A <code>Coin</code> enum in which the <code>Quarter</code> variant
-also holds a <code>UsState</code> value</span></p>
+<figcaption>Listing 6-4: A <code>Coin</code> enum in which the <code>Quarter</code> variant also holds a <code>UsState</code> value</figcaption>
+</figure>
 <p>Let’s imagine that a friend is trying to collect all 50 state quarters. While
 we sort our loose change by coin type, we’ll also call out the name of the
 state associated with each quarter so that if it’s one our friend doesn’t have,
@@ -345,6 +347,7 @@ the function should return the <code>None</code> value and not attempt to perfor
 operations.</p>
 <p>This function is very easy to write, thanks to <code>match</code>, and will look like
 Listing 6-5.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
         match x {
@@ -357,8 +360,8 @@ Listing 6-5.</p>
     let six = plus_one(five);
     let none = plus_one(None);
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 6-5: A function that uses a <code>match</code> expression on
-an <code>Option&lt;i32&gt;</code></span></p>
+<figcaption>Listing 6-5: A function that uses a <code>match</code> expression on an <code>Option&lt;i32&gt;</code></figcaption>
+</figure>
 <p>Let’s examine the first execution of <code>plus_one</code> in more detail. When we call
 <code>plus_one(five)</code>, the variable <code>x</code> in the body of <code>plus_one</code> will have the
 value <code>Some(5)</code>. We then compare that against each match arm:</p>

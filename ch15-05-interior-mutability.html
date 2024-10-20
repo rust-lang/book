@@ -302,7 +302,8 @@ messages: the application could put a message in the application, send an
 email, send a text message, or something else. The library doesn’t need to know
 that detail. All it needs is something that implements a trait we’ll provide
 called <code>Messenger</code>. Listing 15-20 shows the library code:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub trait Messenger {
     fn send(&amp;self, msg: &amp;str);
 }
@@ -341,8 +342,8 @@ where
         }
     }
 }</code></pre>
-<p><span class="caption">Listing 15-20: A library to keep track of how close a
-value is to a maximum value and warn when the value is at certain levels</span></p>
+<figcaption>Listing 15-20: A library to keep track of how close a value is to a maximum value and warn when the value is at certain levels</figcaption>
+</figure>
 <p>One important part of this code is that the <code>Messenger</code> trait has one method
 called <code>send</code> that takes an immutable reference to <code>self</code> and the text of the
 message. This trait is the interface our mock object needs to implement so that
@@ -359,7 +360,8 @@ create a new instance of the mock object, create a <code>LimitTracker</code> tha
 mock object, call the <code>set_value</code> method on <code>LimitTracker</code>, and then check that
 the mock object has the messages we expect. Listing 15-21 shows an attempt to
 implement a mock object to do just that, but the borrow checker won’t allow it:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">pub trait Messenger {
 </span><span class="boring">    fn send(&amp;self, msg: &amp;str);
 </span><span class="boring">}
@@ -431,8 +433,8 @@ mod tests {
         assert_eq!(mock_messenger.sent_messages.len(), 1);
     }
 }</code></pre>
-<p><span class="caption">Listing 15-21: An attempt to implement a <code>MockMessenger</code>
-that isn’t allowed by the borrow checker</span></p>
+<figcaption>Listing 15-21: An attempt to implement a <code>MockMessenger</code> that isn’t allowed by the borrow checker</figcaption>
+</figure>
 <p>This test code defines a <code>MockMessenger</code> struct that has a <code>sent_messages</code>
 field with a <code>Vec</code> of <code>String</code> values to keep track of the messages it’s told
 to send. We also define an associated function <code>new</code> to make it convenient to
@@ -479,7 +481,8 @@ definition (feel free to try and see what error message you get).</p>
 <code>sent_messages</code> within a <code>RefCell&lt;T&gt;</code>, and then the <code>send</code> method will be
 able to modify <code>sent_messages</code> to store the messages we’ve seen. Listing 15-22
 shows what that looks like:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub trait Messenger {
 </span><span class="boring">    fn send(&amp;self, msg: &amp;str);
 </span><span class="boring">}
@@ -553,8 +556,8 @@ mod tests {
         assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
     }
 }</code></pre>
-<p><span class="caption">Listing 15-22: Using <code>RefCell&lt;T&gt;</code> to mutate an inner
-value while the outer value is considered immutable</span></p>
+<figcaption>Listing 15-22: Using <code>RefCell&lt;T&gt;</code> to mutate an inner value while the outer value is considered immutable</figcaption>
+</figure>
 <p>The <code>sent_messages</code> field is now of type <code>RefCell&lt;Vec&lt;String&gt;&gt;</code> instead of
 <code>Vec&lt;String&gt;</code>. In the <code>new</code> function, we create a new <code>RefCell&lt;Vec&lt;String&gt;&gt;</code>
 instance around the empty vector.</p>
@@ -587,7 +590,8 @@ runtime. Listing 15-23 shows a modification of the implementation of <code>send<
 Listing 15-22. We’re deliberately trying to create two mutable borrows active
 for the same scope to illustrate that <code>RefCell&lt;T&gt;</code> prevents us from doing this
 at runtime.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore panics"><span class="boring">pub trait Messenger {
 </span><span class="boring">    fn send(&amp;self, msg: &amp;str);
 </span><span class="boring">}
@@ -664,8 +668,8 @@ at runtime.</p>
 </span><span class="boring">        assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 15-23: Creating two mutable references in the
-same scope to see that <code>RefCell&lt;T&gt;</code> will panic</span></p>
+<figcaption>Listing 15-23: Creating two mutable references in the same scope to see that <code>RefCell&lt;T&gt;</code> will panic</figcaption>
+</figure>
 <p>We create a variable <code>one_borrow</code> for the <code>RefMut&lt;T&gt;</code> smart pointer returned
 from <code>borrow_mut</code>. Then we create another mutable borrow in the same way in the
 variable <code>two_borrow</code>. This makes two mutable references in the same scope,
@@ -718,7 +722,8 @@ list once we’ve created them. Let’s add in <code>RefCell&lt;T&gt;</code> to 
 change the values in the lists. Listing 15-24 shows that by using a
 <code>RefCell&lt;T&gt;</code> in the <code>Cons</code> definition, we can modify the value stored in all
 the lists:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
 enum List {
     Cons(Rc&lt;RefCell&lt;i32&gt;&gt;, Rc&lt;List&gt;),
@@ -743,8 +748,8 @@ fn main() {
     println!("b after = {b:?}");
     println!("c after = {c:?}");
 }</code></pre></pre>
-<p><span class="caption">Listing 15-24: Using <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> to create a
-<code>List</code> that we can mutate</span></p>
+<figcaption>Listing 15-24: Using <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> to create a <code>List</code> that we can mutate</figcaption>
+</figure>
 <p>We create a value that is an instance of <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> and store it in a
 variable named <code>value</code> so we can access it directly later. Then we create a
 <code>List</code> in <code>a</code> with a <code>Cons</code> variant that holds <code>value</code>. We need to clone

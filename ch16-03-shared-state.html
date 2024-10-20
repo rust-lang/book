@@ -224,7 +224,8 @@ system and ownership rules, you can’t get locking and unlocking wrong.</p>
 <h4 id="the-api-of-mutext"><a class="header" href="#the-api-of-mutext">The API of <code>Mutex&lt;T&gt;</code></a></h4>
 <p>As an example of how to use a mutex, let’s start by using a mutex in a
 single-threaded context, as shown in Listing 16-12:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::sync::Mutex;
 
 fn main() {
@@ -237,8 +238,8 @@ fn main() {
 
     println!("m = {m:?}");
 }</code></pre></pre>
-<p><span class="caption">Listing 16-12: Exploring the API of <code>Mutex&lt;T&gt;</code> in a
-single-threaded context for simplicity</span></p>
+<figcaption>Listing 16-12: Exploring the API of <code>Mutex&lt;T&gt;</code> in a single-threaded context for simplicity</figcaption>
+</figure>
 <p>As with many types, we create a <code>Mutex&lt;T&gt;</code> using the associated function <code>new</code>.
 To access the data inside the mutex, we use the <code>lock</code> method to acquire the
 lock. This call will block the current thread so it can’t do any work until
@@ -269,7 +270,8 @@ We’ll spin up 10 threads and have them each increment a counter value by 1, so
 the counter goes from 0 to 10. The next example in Listing 16-13 will have
 a compiler error, and we’ll use that error to learn more about using
 <code>Mutex&lt;T&gt;</code> and how Rust helps us use it correctly.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">use std::sync::Mutex;
 use std::thread;
 
@@ -292,8 +294,8 @@ fn main() {
 
     println!("Result: {}", *counter.lock().unwrap());
 }</code></pre>
-<p><span class="caption">Listing 16-13: Ten threads each increment a counter
-guarded by a <code>Mutex&lt;T&gt;</code></span></p>
+<figcaption>Listing 16-13: Ten threads each increment a counter guarded by a <code>Mutex&lt;T&gt;</code></figcaption>
+</figure>
 <p>We create a <code>counter</code> variable to hold an <code>i32</code> inside a <code>Mutex&lt;T&gt;</code>, as we did
 in Listing 16-12. Next, we create 10 threads by iterating over a range of
 numbers. We use <code>thread::spawn</code> and give all the threads the same closure: one
@@ -342,7 +344,8 @@ multiple-ownership method we discussed in Chapter 15.</p>
 <code>Rc&lt;T&gt;</code> to create a reference counted value. Let’s do the same here and see
 what happens. We’ll wrap the <code>Mutex&lt;T&gt;</code> in <code>Rc&lt;T&gt;</code> in Listing 16-14 and clone
 the <code>Rc&lt;T&gt;</code> before moving ownership to the thread.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">use std::rc::Rc;
 use std::sync::Mutex;
 use std::thread;
@@ -367,8 +370,8 @@ fn main() {
 
     println!("Result: {}", *counter.lock().unwrap());
 }</code></pre>
-<p><span class="caption">Listing 16-14: Attempting to use <code>Rc&lt;T&gt;</code> to allow
-multiple threads to own the <code>Mutex&lt;T&gt;</code></span></p>
+<figcaption>Listing 16-14: Attempting to use <code>Rc&lt;T&gt;</code> to allow multiple threads to own the <code>Mutex&lt;T&gt;</code></figcaption>
+</figure>
 <p>Once again, we compile and get… different errors! The compiler is teaching us
 a lot.</p>
 <pre><code class="language-console">$ cargo run
@@ -430,7 +433,8 @@ guarantees atomics provide.</p>
 <p>Let’s return to our example: <code>Arc&lt;T&gt;</code> and <code>Rc&lt;T&gt;</code> have the same API, so we fix
 our program by changing the <code>use</code> line, the call to <code>new</code>, and the call to
 <code>clone</code>. The code in Listing 16-15 will finally compile and run:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::sync::{Arc, Mutex};
 use std::thread;
 
@@ -454,8 +458,8 @@ fn main() {
 
     println!("Result: {}", *counter.lock().unwrap());
 }</code></pre></pre>
-<p><span class="caption">Listing 16-15: Using an <code>Arc&lt;T&gt;</code> to wrap the <code>Mutex&lt;T&gt;</code>
-to be able to share ownership across multiple threads</span></p>
+<figcaption>Listing 16-15: Using an <code>Arc&lt;T&gt;</code> to wrap the <code>Mutex&lt;T&gt;</code> to be able to share ownership across multiple threads</figcaption>
+</figure>
 <p>This code will print the following:</p>
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than

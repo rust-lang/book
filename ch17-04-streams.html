@@ -390,7 +390,7 @@ indicates a message arrived in time; the <code>Err</code> variant indicates that
 timeout elapsed before any message arrived. We <code>match</code> on that result and either
 print the message when we receive it successfully, or print a notice about the
 timeout. Finally, notice that we pin the messages after applying the timeout to
-them, because the timeout helper produces a future which needs to be pinned to
+them, because the timeout helper produces a stream which needs to be pinned to
 be polled.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>

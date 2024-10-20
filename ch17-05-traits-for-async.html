@@ -279,8 +279,7 @@ this deep dive section. The key here is to see the basic mechanic of futures: a
 runtime <em>polls</em> each future it is responsible for, putting it back to sleep when
 it is not yet ready.</p>
 <h3 id="pinning-and-the-pin-and-unpin-traits"><a class="header" href="#pinning-and-the-pin-and-unpin-traits">Pinning and the Pin and Unpin Traits</a></h3>
-<!-- TODO: get a *very* careful technical review of this section! -->
-<p>When we introduced the idea of pinning, while working on Listing 17-17, we ran
+<p>When we introduced the idea of pinning while working on Listing 17-17, we ran
 into a very gnarly error message. Here is the relevant part of it again:</p>
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-17
@@ -310,12 +309,18 @@ For more information about an error, try `rustc --explain E0277`.
 </code></pre>
 <p>When we read this error message carefully, it not only tells us that we need to
 pin the values, but also tells us why pinning is required. The <code>trpl::join_all</code>
-function returns a struct called <code>JoinAll</code>. That struct, in turn, is generic
-over a type <code>F</code>, which is constrained to implement the <code>Future</code> trait. Finally,
-directly awaiting a Future requires that the future in question implement the
-<code>Unpin</code> trait. That’s a lot! But we can understand it, if we dive a little
-further into how the <code>Future</code> type actually works, in particular around
-<em>pinning</em>.</p>
+function returns a struct called <code>JoinAll</code>. That struct is generic over a type
+<code>F</code>, which is constrained to implement the <code>Future</code> trait. Directly awaiting a
+future with <code>await</code> pins the future implicitly. That’s why we don’t need to use
+<code>pin!</code> everywhere we want to await futures.</p>
+<p>However, we’re not directly awaiting a future here. Instead, we construct a new
+future, <code>JoinAll</code>, by passing a collection of futures to the <code>join_all</code>
+function. The signature for <code>join_all</code> produces requires that the type of the
+items in the collection all implement the <code>Future</code> trait, and <code>Box&lt;T&gt;</code> only
+implements <code>Future</code> if the <code>T</code> that it wraps is a future which implements the
+<code>Unpin</code> trait.</p>
+<p>That’s a lot! But we can understand it, if we dive a little further into how the
+<code>Future</code> type actually works, in particular around <em>pinning</em>.</p>
 <p>Let’s look again at the definition of <code>Future</code>:</p>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -441,21 +446,28 @@ a given trait in a particular context. <code>Unpin</code> informs the compiler t
 type does <em>not</em> need to uphold any particular guarantees about whether the value
 in question can be moved.</p>
 <p>Just as with <code>Send</code> and <code>Sync</code>, the compiler implements <code>Unpin</code> automatically
-for all types where it can prove it is safe. Implementing <code>Unpin</code> manually is
-unsafe because it requires <em>you</em> to uphold all the guarantees which make <code>Pin</code>
-and <code>Unpin</code> safe yourself for a type with internal references. In practice,
-this is a very rare thing to implement yourself!</p>
+for all types where it can prove it is safe. The special case, again similar to
+<code>Send</code> and <code>Sync</code>, is the case where <code>Unpin</code> is <em>not</em> implemented for a type.
+The notation for this is <code>impl !Unpin for SomeType</code>, where <code>SomeType</code> is the
+name of a type which <em>does</em> need to uphold those guarantees to be safe whenever
+a pointer to that type it is used in a <code>Pin</code>.</p>
+<p>In other words, there are two things to keep in mind about the relationship
+between <code>Pin</code> and <code>Unpin</code>. First, <code>Unpin</code> is the “normal” case, and <code>!Unpin</code> is
+the special case. Second, whether a type implements <code>Unpin</code> or <code>!Unpin</code> <em>only</em>
+matters when using a pinned pointer to that type like <code>Pin&lt;&amp;mut SomeType&gt;</code>.</p>
 <p>To make that concrete, think about a <code>String</code>: it has a length and the Unicode
 characters which make it up. We can wrap a <code>String</code> in <code>Pin</code>, as seen in Figure
-17-7. However</p>
+17-8. However, <code>String</code> automatically implements <code>Unpin</code>, the same as most other
+types in Rust.</p>
 <figure>
 <img alt="Concurrent work flow" src="img/trpl17-08.svg" class="center" />
 <figcaption>Figure 17-8: Pinning a String, with a dotted line indicating that the String implements the `Unpin` trait, so it is not pinned.</figcaption>
 </figure>
-<p>This means that we can do things such as replace one string with another at the
-exact same location in memory as in Figure 17-9. This doesn’t violate the <code>Pin</code>
-contract because <code>String</code>—like most other types in Rust—implements <code>Unpin</code>,
-because it has no internal references that make it unsafe to move around!</p>
+<p>As a result, we can do things which would be illegal if <code>String</code> implemented
+<code>!Unpin</code> instead, such as replace one string with another at the exact same
+location in memory as in Figure 17-9. This doesn’t violate the <code>Pin</code> contract,
+because <code>String</code> has no internal references that make it unsafe to move around!
+That is precisely why it implements <code>Unpin</code> rather than <code>!Unpin</code>.</p>
 <figure>
 <img alt="Concurrent work flow" src="img/trpl17-09.svg" class="center" />
 <figcaption>Figure 17-9: Replacing the String with an entirely different String in memory.</figcaption>

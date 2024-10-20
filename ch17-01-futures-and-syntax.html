@@ -434,10 +434,10 @@ executes the futures.</p>
 not. Instead, there are many different async runtimes available, each of which
 makes different tradeoffs suitable to the use case they target. For example, a
 high-throughput web server with many CPU cores and a large amount of RAM has
-very different different needs than a microcontroller with a single core, a
-small amount of RAM, and no ability to do heap allocations. The crates which
-provide those runtimes also often supply async versions of common functionality
-such as file or network I/O.</p>
+very different needs than a microcontroller with a single core, a small amount
+of RAM, and no ability to do heap allocations. The crates which provide those
+runtimes also often supply async versions of common functionality such as file
+or network I/O.</p>
 <p>Here, and throughout the rest of this chapter, we’ll use the <code>run</code> function
 from the <code>trpl</code> crate, which takes a future as an argument and runs it to
 completion. Behind the scenes, calling <code>run</code> sets up a runtime to use to run the

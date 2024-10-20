@@ -206,7 +206,8 @@ is less important than the pointer-like behavior.</p>
 as an arrow to a value stored somewhere else. In Listing 15-6, we create a
 reference to an <code>i32</code> value and then use the dereference operator to follow the
 reference to the value:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = 5;
     let y = &amp;x;
@@ -214,8 +215,8 @@ reference to the value:</p>
     assert_eq!(5, x);
     assert_eq!(5, *y);
 }</code></pre></pre>
-<p><span class="caption">Listing 15-6: Using the dereference operator to follow a
-reference to an <code>i32</code> value</span></p>
+<figcaption>Listing 15-6: Using the dereference operator to follow a reference to an <code>i32</code> value</figcaption>
+</figure>
 <p>The variable <code>x</code> holds an <code>i32</code> value <code>5</code>. We set <code>y</code> equal to a reference to
 <code>x</code>. We can assert that <code>x</code> is equal to <code>5</code>. However, if we want to make an
 assertion about the value in <code>y</code>, we have to use <code>*y</code> to follow the reference
@@ -246,7 +247,8 @@ to the value it’s pointing to.</p>
 reference; the dereference operator used on the <code>Box&lt;T&gt;</code> in Listing 15-7
 functions in the same way as the dereference operator used on the reference in
 Listing 15-6:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = 5;
     let y = Box::new(x);
@@ -254,8 +256,8 @@ Listing 15-6:</p>
     assert_eq!(5, x);
     assert_eq!(5, *y);
 }</code></pre></pre>
-<p><span class="caption">Listing 15-7: Using the dereference operator on a
-<code>Box&lt;i32&gt;</code></span></p>
+<figcaption>Listing 15-7: Using the dereference operator on a <code>Box&lt;i32&gt;</code></figcaption>
+</figure>
 <p>The main difference between Listing 15-7 and Listing 15-6 is that here we set
 <code>y</code> to be an instance of a <code>Box&lt;T&gt;</code> pointing to a copied value of <code>x</code> rather
 than a reference pointing to the value of <code>x</code>. In the last assertion, we can
@@ -271,7 +273,8 @@ dereference operator.</p>
 <p>The <code>Box&lt;T&gt;</code> type is ultimately defined as a tuple struct with one element, so
 Listing 15-8 defines a <code>MyBox&lt;T&gt;</code> type in the same way. We’ll also define a
 <code>new</code> function to match the <code>new</code> function defined on <code>Box&lt;T&gt;</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct MyBox&lt;T&gt;(T);
 
 impl&lt;T&gt; MyBox&lt;T&gt; {
@@ -281,7 +284,8 @@ impl&lt;T&gt; MyBox&lt;T&gt; {
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 15-8: Defining a <code>MyBox&lt;T&gt;</code> type</span></p>
+<figcaption>Listing 15-8: Defining a <code>MyBox&lt;T&gt;</code> type</figcaption>
+</figure>
 <p>We define a struct named <code>MyBox</code> and declare a generic parameter <code>T</code>, because
 we want our type to hold values of any type. The <code>MyBox</code> type is a tuple struct
 with one element of type <code>T</code>. The <code>MyBox::new</code> function takes one parameter of
@@ -290,7 +294,8 @@ type <code>T</code> and returns a <code>MyBox</code> instance that holds the val
 changing it to use the <code>MyBox&lt;T&gt;</code> type we’ve defined instead of <code>Box&lt;T&gt;</code>. The
 code in Listing 15-9 won’t compile because Rust doesn’t know how to dereference
 <code>MyBox</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">struct MyBox&lt;T&gt;(T);
 </span><span class="boring">
 </span><span class="boring">impl&lt;T&gt; MyBox&lt;T&gt; {
@@ -306,8 +311,8 @@ code in Listing 15-9 won’t compile because Rust doesn’t know how to derefere
     assert_eq!(5, x);
     assert_eq!(5, *y);
 }</code></pre>
-<p><span class="caption">Listing 15-9: Attempting to use <code>MyBox&lt;T&gt;</code> in the same
-way we used references and <code>Box&lt;T&gt;</code></span></p>
+<figcaption>Listing 15-9: Attempting to use <code>MyBox&lt;T&gt;</code> in the same way we used references and <code>Box&lt;T&gt;</code></figcaption>
+</figure>
 <p>Here’s the resulting compilation error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling deref-example v0.1.0 (file:///projects/deref-example)
@@ -330,7 +335,8 @@ implementations for the trait’s required methods. The <code>Deref</code> trait
 by the standard library, requires us to implement one method named <code>deref</code> that
 borrows <code>self</code> and returns a reference to the inner data. Listing 15-10
 contains an implementation of <code>Deref</code> to add to the definition of <code>MyBox</code>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::ops::Deref;
 
 impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
@@ -356,7 +362,8 @@ impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
 </span><span class="boring">    assert_eq!(5, x);
 </span><span class="boring">    assert_eq!(5, *y);
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 15-10: Implementing <code>Deref</code> on <code>MyBox&lt;T&gt;</code></span></p>
+<figcaption>Listing 15-10: Implementing <code>Deref</code> on <code>MyBox&lt;T&gt;</code></figcaption>
+</figure>
 <p>The <code>type Target = T;</code> syntax defines an associated type for the <code>Deref</code>
 trait to use. Associated types are a slightly different way of declaring a
 generic parameter, but you don’t need to worry about them for now; we’ll cover
@@ -408,18 +415,20 @@ can work for either references or smart pointers.</p>
 Listing 15-8 as well as the implementation of <code>Deref</code> that we added in Listing
 15-10. Listing 15-11 shows the definition of a function that has a string slice
 parameter:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn hello(name: &amp;str) {
     println!("Hello, {name}!");
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 15-11: A <code>hello</code> function that has the parameter
-<code>name</code> of type <code>&amp;str</code></span></p>
+<figcaption>Listing 15-11: A <code>hello</code> function that has the parameter <code>name</code> of type <code>&amp;str</code></figcaption>
+</figure>
 <p>We can call the <code>hello</code> function with a string slice as an argument, such as
 <code>hello("Rust");</code> for example. Deref coercion makes it possible to call <code>hello</code>
 with a reference to a value of type <code>MyBox&lt;String&gt;</code>, as shown in Listing 15-12:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::ops::Deref;
 </span><span class="boring">
 </span><span class="boring">impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
@@ -446,8 +455,8 @@ with a reference to a value of type <code>MyBox&lt;String&gt;</code>, as shown i
     let m = MyBox::new(String::from("Rust"));
     hello(&amp;m);
 }</code></pre></pre>
-<p><span class="caption">Listing 15-12: Calling <code>hello</code> with a reference to a
-<code>MyBox&lt;String&gt;</code> value, which works because of deref coercion</span></p>
+<figcaption>Listing 15-12: Calling <code>hello</code> with a reference to a <code>MyBox&lt;String&gt;</code> value, which works because of deref coercion</figcaption>
+</figure>
 <p>Here we’re calling the <code>hello</code> function with the argument <code>&amp;m</code>, which is a
 reference to a <code>MyBox&lt;String&gt;</code> value. Because we implemented the <code>Deref</code> trait
 on <code>MyBox&lt;T&gt;</code> in Listing 15-10, Rust can turn <code>&amp;MyBox&lt;String&gt;</code> into <code>&amp;String</code>
@@ -458,7 +467,8 @@ matches the <code>hello</code> function’s definition.</p>
 <p>If Rust didn’t implement deref coercion, we would have to write the code in
 Listing 15-13 instead of the code in Listing 15-12 to call <code>hello</code> with a value
 of type <code>&amp;MyBox&lt;String&gt;</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::ops::Deref;
 </span><span class="boring">
 </span><span class="boring">impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
@@ -485,8 +495,8 @@ of type <code>&amp;MyBox&lt;String&gt;</code>.</p>
     let m = MyBox::new(String::from("Rust"));
     hello(&amp;(*m)[..]);
 }</code></pre></pre>
-<p><span class="caption">Listing 15-13: The code we would have to write if Rust
-didn’t have deref coercion</span></p>
+<figcaption>Listing 15-13: The code we would have to write if Rust didn’t have deref coercion</figcaption>
+</figure>
 <p>The <code>(*m)</code> dereferences the <code>MyBox&lt;String&gt;</code> into a <code>String</code>. Then the <code>&amp;</code> and
 <code>[..]</code> take a string slice of the <code>String</code> that is equal to the whole string to
 match the signature of <code>hello</code>. This code without deref coercions is harder to

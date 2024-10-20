@@ -237,7 +237,8 @@ by <code>mpsc::channel</code>.</p>
 string so the spawned thread is communicating with the main thread, as shown in
 Listing 16-7. This is like putting a rubber duck in the river upstream or
 sending a chat message from one thread to another.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::sync::mpsc;
 use std::thread;
 
@@ -249,8 +250,8 @@ fn main() {
         tx.send(val).unwrap();
     });
 }</code></pre></pre>
-<p><span class="caption">Listing 16-7: Moving <code>tx</code> to a spawned thread and sending
-“hi”</span></p>
+<figcaption>Listing 16-7: Moving <code>tx</code> to a spawned thread and sending “hi”</figcaption>
+</figure>
 <p>Again, we’re using <code>thread::spawn</code> to create a new thread and then using <code>move</code>
 to move <code>tx</code> into the closure so the spawned thread owns <code>tx</code>. The spawned
 thread needs to own the transmitter to be able to send messages through the
@@ -263,7 +264,8 @@ Chapter 9 to review strategies for proper error handling.</p>
 <p>In Listing 16-8, we’ll get the value from the receiver in the main thread. This
 is like retrieving the rubber duck from the water at the end of the river or
 receiving a chat message.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::sync::mpsc;
 use std::thread;
 
@@ -278,8 +280,8 @@ fn main() {
     let received = rx.recv().unwrap();
     println!("Got: {received}");
 }</code></pre></pre>
-<p><span class="caption">Listing 16-8: Receiving the value “hi” in the main thread
-and printing it</span></p>
+<figcaption>Listing 16-8: Receiving the value “hi” in the main thread and printing it</figcaption>
+</figure>
 <p>The receiver has two useful methods: <code>recv</code> and <code>try_recv</code>. We’re using <code>recv</code>,
 short for <em>receive</em>, which will block the main thread’s execution and wait
 until a value is sent down the channel. Once a value is sent, <code>recv</code> will
@@ -311,7 +313,8 @@ an experiment to show how channels and ownership work together to prevent
 problems: we’ll try to use a <code>val</code> value in the spawned thread <em>after</em> we’ve
 sent it down the channel. Try compiling the code in Listing 16-9 to see why
 this code isn’t allowed:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">use std::sync::mpsc;
 use std::thread;
 
@@ -327,8 +330,8 @@ fn main() {
     let received = rx.recv().unwrap();
     println!("Got: {received}");
 }</code></pre>
-<p><span class="caption">Listing 16-9: Attempting to use <code>val</code> after we’ve sent it
-down the channel</span></p>
+<figcaption>Listing 16-9: Attempting to use <code>val</code> after we’ve sent it down the channel</figcaption>
+</figure>
 <p>Here, we try to print <code>val</code> after we’ve sent it down the channel via <code>tx.send</code>.
 Allowing this would be a bad idea: once the value has been sent to another
 thread, that thread could modify or drop it before we try to use the value
@@ -362,7 +365,8 @@ two separate threads were talking to each other over the channel. In Listing
 16-10 we’ve made some modifications that will prove the code in Listing 16-8 is
 running concurrently: the spawned thread will now send multiple messages and
 pause for a second between each message.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust noplayground">use std::sync::mpsc;
 use std::thread;
 use std::time::Duration;
@@ -388,8 +392,8 @@ fn main() {
         println!("Got: {received}");
     }
 }</code></pre>
-<p><span class="caption">Listing 16-10: Sending multiple messages and pausing
-between each</span></p>
+<figcaption>Listing 16-10: Sending multiple messages and pausing between each</figcaption>
+</figure>
 <p>This time, the spawned thread has a vector of strings that we want to send to
 the main thread. We iterate over them, sending each individually, and pause
 between each by calling the <code>thread::sleep</code> function with a <code>Duration</code> value of
@@ -415,7 +419,8 @@ the spawned thread.</p>
 single consumer</em>. Let’s put <code>mpsc</code> to use and expand the code in Listing 16-10
 to create multiple threads that all send values to the same receiver. We can do
 so by cloning the transmitter, as shown in Listing 16-11:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">use std::sync::mpsc;
 </span><span class="boring">use std::thread;
 </span><span class="boring">use std::time::Duration;
@@ -460,8 +465,8 @@ so by cloning the transmitter, as shown in Listing 16-11:</p>
 
     // --snip--
 <span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 16-11: Sending multiple messages from multiple
-producers</span></p>
+<figcaption>Listing 16-11: Sending multiple messages from multiple producers</figcaption>
+</figure>
 <p>This time, before we create the first spawned thread, we call <code>clone</code> on the
 transmitter. This will give us a new transmitter we can pass to the first
 spawned thread. We pass the original transmitter to a second spawned thread.

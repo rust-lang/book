@@ -270,6 +270,7 @@ at the moment we don’t have a way to store the actual IP address <em>data</em>
 only know what <em>kind</em> it is. Given that you just learned about structs in
 Chapter 5, you might be tempted to tackle this problem with structs as shown in
 Listing 6-1.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    enum IpAddrKind {
         V4,
@@ -291,8 +292,8 @@ Listing 6-1.</p>
         address: String::from("::1"),
     };
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 6-1: Storing the data and <code>IpAddrKind</code> variant of
-an IP address using a <code>struct</code></span></p>
+<figcaption>Listing 6-1: Storing the data and <code>IpAddrKind</code> variant of an IP address using a <code>struct</code></figcaption>
+</figure>
 <p>Here, we’ve defined a struct <code>IpAddr</code> that has two fields: a <code>kind</code> field that
 is of type <code>IpAddrKind</code> (the enum we defined previously) and an <code>address</code> field
 of type <code>String</code>. We have two instances of this struct. The first is <code>home</code>,
@@ -371,6 +372,7 @@ haven’t brought the standard library’s definition into our scope. We’ll ta
 more about bringing types into scope in Chapter 7.</p>
 <p>Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021">enum Message {
     Quit,
     Move { x: i32, y: i32 },
@@ -379,8 +381,8 @@ variety of types embedded in its variants.</p>
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 6-2: A <code>Message</code> enum whose variants each store
-different amounts and types of values</span></p>
+<figcaption>Listing 6-2: A <code>Message</code> enum whose variants each store different amounts and types of values</figcaption>
+</figure>
 <p>This enum has four variants with different types:</p>
 <ul>
 <li><code>Quit</code> has no data associated with it at all.</li>

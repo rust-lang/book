@@ -270,28 +270,31 @@ last <code>else</code> block and therefore missed handling some cases, the compi
 not alert us to the possible logic bug.</p>
 <h3 id="while-let-conditional-loops"><a class="header" href="#while-let-conditional-loops"><code>while let</code> Conditional Loops</a></h3>
 <p>Similar in construction to <code>if let</code>, the <code>while let</code> conditional loop allows a
-<code>while</code> loop to run for as long as a pattern continues to match. In Listing
-19-2 we code a <code>while let</code> loop that uses a vector as a stack and prints the
-values in the vector in the opposite order in which they were pushed.</p>
+<code>while</code> loop to run for as long as a pattern continues to match. We first saw a
+<code>while let</code> loop in Chapter 17, where we used it to keep looping as long as a
+stream produced new values. Similarly, in Listing 19-2 we show a <code>while let</code>
+loop that waits on messages sent between threads, but in this case checking a
+<code>Result</code> instead of an <code>Option</code>.</p>
 <figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
-</span>    let mut stack = Vec::new();
+</span>    let (tx, rx) = std::sync::mpsc::channel();
+    std::thread::spawn(move || {
+        for val in [1, 2, 3] {
+            tx.send(val).unwrap();
+        }
+    });
 
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
-
-    while let Some(top) = stack.pop() {
-        println!("{top}");
+    while let Ok(value) = rx.recv() {
+        println!("{value}");
     }
 <span class="boring">}</span></code></pre></pre>
-<figcaption>Listing 19-2: Using a <code>while let</code> loop to print values for as long as <code>stack.pop()</code> returns <code>Some</code></figcaption>
+<figcaption>Listing 19-2: Using a <code>while let</code> loop to print values for as long as <code>rx.recv()</code> returns <code>Ok</code></figcaption>
 </figure>
-<p>This example prints 3, 2, and then 1. The <code>pop</code> method takes the last element
-out of the vector and returns <code>Some(value)</code>. If the vector is empty, <code>pop</code>
-returns <code>None</code>. The <code>while</code> loop continues running the code in its block as
-long as <code>pop</code> returns <code>Some</code>. When <code>pop</code> returns <code>None</code>, the loop stops. We can
-use <code>while let</code> to pop every element off our stack.</p>
+<p>This example prints 1, 2, and 3. When we saw <code>recv</code> back in Chapter 16, we
+unwrapped the error directly, or interacted with it as an iterator using a <code>for</code>
+loop. As Listing 19-2 shows, though, we can also use <code>while let</code>, because the
+<code>recv</code> method returns <code>Ok</code> as long as the sender is producing messages, and then
+produces an <code>Err</code> once the sender side disconnects.</p>
 <h3 id="for-loops"><a class="header" href="#for-loops"><code>for</code> Loops</a></h3>
 <p>In a <code>for</code> loop, the value that directly follows the keyword <code>for</code> is a
 pattern. For example, in <code>for x in y</code> the <code>x</code> is the pattern. Listing 19-3

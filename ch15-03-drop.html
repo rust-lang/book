@@ -204,7 +204,8 @@ let’s implement <code>drop</code> with <code>println!</code> statements for no
 <p>Listing 15-14 shows a <code>CustomSmartPointer</code> struct whose only custom
 functionality is that it will print <code>Dropping CustomSmartPointer!</code> when the
 instance goes out of scope, to show when Rust runs the <code>drop</code> function.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct CustomSmartPointer {
     data: String,
 }
@@ -224,8 +225,8 @@ fn main() {
     };
     println!("CustomSmartPointers created.");
 }</code></pre></pre>
-<p><span class="caption">Listing 15-14: A <code>CustomSmartPointer</code> struct that
-implements the <code>Drop</code> trait where we would put our cleanup code</span></p>
+<figcaption>Listing 15-14: A <code>CustomSmartPointer</code> struct that implements the <code>Drop</code> trait where we would put our cleanup code</figcaption>
+</figure>
 <p>The <code>Drop</code> trait is included in the prelude, so we don’t need to bring it into
 scope. We implement the <code>Drop</code> trait on <code>CustomSmartPointer</code> and provide an
 implementation for the <code>drop</code> method that calls <code>println!</code>. The body of the
@@ -265,7 +266,8 @@ if you want to force a value to be dropped before the end of its scope.</p>
 <p>If we try to call the <code>Drop</code> trait’s <code>drop</code> method manually by modifying the
 <code>main</code> function from Listing 15-14, as shown in Listing 15-15, we’ll get a
 compiler error:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">struct CustomSmartPointer {
 </span><span class="boring">    data: String,
 </span><span class="boring">}
@@ -284,8 +286,8 @@ compiler error:</p>
     c.drop();
     println!("CustomSmartPointer dropped before the end of main.");
 }</code></pre>
-<p><span class="caption">Listing 15-15: Attempting to call the <code>drop</code> method from
-the <code>Drop</code> trait manually to clean up early</span></p>
+<figcaption>Listing 15-15: Attempting to call the <code>drop</code> method from the <code>Drop</code> trait manually to clean up early</figcaption>
+</figure>
 <p>When we try to compile this code, we’ll get this error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling drop-example v0.1.0 (file:///projects/drop-example)
@@ -319,7 +321,8 @@ a value to be cleaned up early, we use the <code>std::mem::drop</code> function.
 trait. We call it by passing as an argument the value we want to force drop.
 The function is in the prelude, so we can modify <code>main</code> in Listing 15-15 to
 call the <code>drop</code> function, as shown in Listing 15-16:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct CustomSmartPointer {
 </span><span class="boring">    data: String,
 </span><span class="boring">}
@@ -338,8 +341,8 @@ call the <code>drop</code> function, as shown in Listing 15-16:</p>
     drop(c);
     println!("CustomSmartPointer dropped before the end of main.");
 }</code></pre></pre>
-<p><span class="caption">Listing 15-16: Calling <code>std::mem::drop</code> to explicitly
-drop a value before it goes out of scope</span></p>
+<figcaption>Listing 15-16: Calling <code>std::mem::drop</code> to explicitly drop a value before it goes out of scope</figcaption>
+</figure>
 <p>Running this code will print the following:</p>
 <pre><code class="language-console">$ cargo run
    Compiling drop-example v0.1.0 (file:///projects/drop-example)

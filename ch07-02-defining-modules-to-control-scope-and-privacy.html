@@ -242,7 +242,8 @@ directories:</p>
     └── main.rs
 </code></pre>
 <p>The crate root file in this case is <em>src/main.rs</em>, and it contains:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust noplayground ignore">use crate::garden::vegetables::Asparagus;
 
 pub mod garden;
@@ -251,10 +252,13 @@ fn main() {
     let plant = Asparagus {};
     println!("I'm growing {plant:?}!");
 }</code></pre>
+</figure>
 <p>The <code>pub mod garden;</code> line tells the compiler to include the code it finds in
 <em>src/garden.rs</em>, which is:</p>
-<p><span class="filename">Filename: src/garden.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/garden.rs</span>
 <pre><code class="language-rust noplayground ignore">pub mod vegetables;</code></pre>
+</figure>
 <p>Here, <code>pub mod vegetables;</code> means the code in <em>src/garden/vegetables.rs</em> is
 included too. That code is:</p>
 <pre><code class="language-rust noplayground ignore">#[derive(Debug)]
@@ -281,7 +285,8 @@ administrative work.</p>
 modules. Create a new library named <code>restaurant</code> by running <code>cargo new restaurant --lib</code>. Then enter the code in Listing 7-1 into <em>src/lib.rs</em> to
 define some modules and function signatures; this code is the front of house
 section.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">mod front_of_house {
     mod hosting {
         fn add_to_waitlist() {}
@@ -297,8 +302,8 @@ section.</p>
         fn take_payment() {}
     }
 }</code></pre>
-<p><span class="caption">Listing 7-1: A <code>front_of_house</code> module containing other
-modules that then contain functions</span></p>
+<figcaption>Listing 7-1: A <code>front_of_house</code> module containing other modules that then contain functions</figcaption>
+</figure>
 <p>We define a module with the <code>mod</code> keyword followed by the name of the module
 (in this case, <code>front_of_house</code>). The body of the module then goes inside curly
 brackets. Inside modules, we can place other modules, as in this case with the
@@ -315,6 +320,7 @@ roots. The reason for their name is that the contents of either of these two
 files form a module named <code>crate</code> at the root of the crate’s module structure,
 known as the <em>module tree</em>.</p>
 <p>Listing 7-2 shows the module tree for the structure in Listing 7-1.</p>
+<figure class="listing">
 <pre><code class="language-text">crate
  └── front_of_house
      ├── hosting
@@ -325,8 +331,8 @@ known as the <em>module tree</em>.</p>
          ├── serve_order
          └── take_payment
 </code></pre>
-<p><span class="caption">Listing 7-2: The module tree for the code in Listing
-7-1</span></p>
+<figcaption>Listing 7-2: The module tree for the code in Listing 7-1</figcaption>
+</figure>
 <p>This tree shows how some of the modules nest inside other modules; for example,
 <code>hosting</code> nests inside <code>front_of_house</code>. The tree also shows that some modules
 are <em>siblings</em>, meaning they’re defined in the same module; <code>hosting</code> and

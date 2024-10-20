@@ -225,7 +225,7 @@ cache the calculated average for us. Listing 18-1 has the definition of the
     list: Vec&lt;i32&gt;,
     average: f64,
 }</code></pre>
-<figcaption>Listing 18-1: Listing 18-1: An <code>AveragedCollection</code> struct that maintains a list of integers and the average of the items in the collection</figcaption>
+<figcaption>Listing 18-1: An <code>AveragedCollection</code> struct that maintains a list of integers and the average of the items in the collection</figcaption>
 </figure>
 <p>The struct is marked <code>pub</code> so that other code can use it, but the fields within
 the struct remain private. This is important in this case because we want to
@@ -234,7 +234,6 @@ also updated. We do this by implementing <code>add</code>, <code>remove</code>, 
 on the struct, as shown in Listing 18-2:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/lib.rs</span>
-<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust noplayground"><span class="boring">pub struct AveragedCollection {
 </span><span class="boring">    list: Vec&lt;i32&gt;,
 </span><span class="boring">    average: f64,
@@ -266,7 +265,7 @@ on the struct, as shown in Listing 18-2:</p>
         self.average = total as f64 / self.list.len() as f64;
     }
 }</code></pre>
-<figcaption>Listing 18-2: Listing 18-2: Implementations of the public methods <code>add</code>, <code>remove</code>, and <code>average</code> on <code>AveragedCollection</code></figcaption>
+<figcaption>Listing 18-2: Implementations of the public methods <code>add</code>, <code>remove</code>, and <code>average</code> on <code>AveragedCollection</code></figcaption>
 </figure>
 <p>The public methods <code>add</code>, <code>remove</code>, and <code>average</code> are the only ways to access
 or modify data in an instance of <code>AveragedCollection</code>. When an item is added

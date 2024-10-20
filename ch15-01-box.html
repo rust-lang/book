@@ -211,13 +211,14 @@ Chapter 18!</p>
 <p>Before we discuss the heap storage use case for <code>Box&lt;T&gt;</code>, we’ll cover the
 syntax and how to interact with values stored within a <code>Box&lt;T&gt;</code>.</p>
 <p>Listing 15-1 shows how to use a box to store an <code>i32</code> value on the heap:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let b = Box::new(5);
     println!("b = {b}");
 }</code></pre></pre>
-<p><span class="caption">Listing 15-1: Storing an <code>i32</code> value on the heap using a
-box</span></p>
+<figcaption>Listing 15-1: Storing an <code>i32</code> value on the heap using a box</figcaption>
+</figure>
 <p>We define the variable <code>b</code> to have the value of a <code>Box</code> that points to the
 value <code>5</code>, which is allocated on the heap. This program will print <code>b = 5</code>; in
 this case, we can access the data in the box similar to how we would if this
@@ -267,15 +268,16 @@ let us define a recursive data type without much distraction.</p>
 <p>Listing 15-2 contains an enum definition for a cons list. Note that this code
 won’t compile yet because the <code>List</code> type doesn’t have a known size, which
 we’ll demonstrate.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">enum List {
     Cons(i32, List),
     Nil,
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre>
-<p><span class="caption">Listing 15-2: The first attempt at defining an enum to
-represent a cons list data structure of <code>i32</code> values</span></p>
+<figcaption>Listing 15-2: The first attempt at defining an enum to represent a cons list data structure of <code>i32</code> values</figcaption>
+</figure>
 <section class="note" aria-role="note">
 <p>Note: We’re implementing a cons list that holds only <code>i32</code> values for the
 purposes of this example. We could have implemented it using generics, as we
@@ -284,7 +286,8 @@ any type.</p>
 </section>
 <p>Using the <code>List</code> type to store the list <code>1, 2, 3</code> would look like the code in
 Listing 15-3:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">enum List {
 </span><span class="boring">    Cons(i32, List),
 </span><span class="boring">    Nil,
@@ -295,13 +298,16 @@ Listing 15-3:</p>
 fn main() {
     let list = Cons(1, Cons(2, Cons(3, Nil)));
 }</code></pre>
-<p><span class="caption">Listing 15-3: Using the <code>List</code> enum to store the list <code>1, 2, 3</code></span></p>
+<figcaption>Listing 15-3: Using the <code>List</code> enum to store the list <code>1, 2, 3</code></figcaption>
+</figure>
 <p>The first <code>Cons</code> value holds <code>1</code> and another <code>List</code> value. This <code>List</code> value is
 another <code>Cons</code> value that holds <code>2</code> and another <code>List</code> value. This <code>List</code> value
 is one more <code>Cons</code> value that holds <code>3</code> and a <code>List</code> value, which is finally
 <code>Nil</code>, the non-recursive variant that signals the end of the list.</p>
 <p>If we try to compile the code in Listing 15-3, we get the error shown in
 Listing 15-4:</p>
+<figure class="listing">
+<span class="file-name">Filename: output.txt</span>
 <pre><code class="language-console">$ cargo run
    Compiling cons-list v0.1.0 (file:///projects/cons-list)
 error[E0072]: recursive type `List` has infinite size
@@ -331,8 +337,8 @@ Some errors have detailed explanations: E0072, E0391.
 For more information about an error, try `rustc --explain E0072`.
 error: could not compile `cons-list` (bin "cons-list") due to 2 previous errors
 </code></pre>
-<p><span class="caption">Listing 15-4: The error we get when attempting to define
-a recursive enum</span></p>
+<figcaption>Listing 15-4: The error we get when attempting to define a recursive enum</figcaption>
+</figure>
 <p>The error shows this type “has infinite size.” The reason is that we’ve defined
 <code>List</code> with a variant that is recursive: it holds another value of itself
 directly. As a result, Rust can’t figure out how much space it needs to store a
@@ -390,7 +396,8 @@ this implementation is now more like placing the items next to one another
 rather than inside one another.</p>
 <p>We can change the definition of the <code>List</code> enum in Listing 15-2 and the usage
 of the <code>List</code> in Listing 15-3 to the code in Listing 15-5, which will compile:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">enum List {
     Cons(i32, Box&lt;List&gt;),
     Nil,
@@ -401,8 +408,8 @@ use crate::List::{Cons, Nil};
 fn main() {
     let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
 }</code></pre></pre>
-<p><span class="caption">Listing 15-5: Definition of <code>List</code> that uses <code>Box&lt;T&gt;</code> in
-order to have a known size</span></p>
+<figcaption>Listing 15-5: Definition of <code>List</code> that uses <code>Box&lt;T&gt;</code> in order to have a known size</figcaption>
+</figure>
 <p>The <code>Cons</code> variant needs the size of an <code>i32</code> plus the space to store the
 box’s pointer data. The <code>Nil</code> variant stores no values, so it needs less space
 than the <code>Cons</code> variant. We now know that any <code>List</code> value will take up the

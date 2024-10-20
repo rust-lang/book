@@ -189,11 +189,12 @@ lines of text in a file or the prices of items in a shopping cart.</p>
 <h3 id="creating-a-new-vector"><a class="header" href="#creating-a-new-vector">Creating a New Vector</a></h3>
 <p>To create a new empty vector, we call the <code>Vec::new</code> function, as shown in
 Listing 8-1.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v: Vec&lt;i32&gt; = Vec::new();
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-1: Creating a new, empty vector to hold values
-of type <code>i32</code></span></p>
+<figcaption>Listing 8-1: Creating a new, empty vector to hold values of type <code>i32</code></figcaption>
+</figure>
 <p>Note that we added a type annotation here. Because we aren’t inserting any
 values into this vector, Rust doesn’t know what kind of elements we intend to
 store. This is an important point. Vectors are implemented using generics;
@@ -209,17 +210,19 @@ new vector that holds the values you give it. Listing 8-2 creates a new
 <code>Vec&lt;i32&gt;</code> that holds the values <code>1</code>, <code>2</code>, and <code>3</code>. The integer type is <code>i32</code>
 because that’s the default integer type, as we discussed in the <a href="ch03-02-data-types.html#data-types">“Data
 Types”</a><!-- ignore --> section of Chapter 3.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v = vec![1, 2, 3];
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-2: Creating a new vector containing
-values</span></p>
+<figcaption>Listing 8-2: Creating a new vector containing values</figcaption>
+</figure>
 <p>Because we’ve given initial <code>i32</code> values, Rust can infer that the type of <code>v</code>
 is <code>Vec&lt;i32&gt;</code>, and the type annotation isn’t necessary. Next, we’ll look at how
 to modify a vector.</p>
 <h3 id="updating-a-vector"><a class="header" href="#updating-a-vector">Updating a Vector</a></h3>
 <p>To create a vector and then add elements to it, we can use the <code>push</code> method,
 as shown in Listing 8-3.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut v = Vec::new();
 
@@ -228,8 +231,8 @@ as shown in Listing 8-3.</p>
     v.push(7);
     v.push(8);
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-3: Using the <code>push</code> method to add values to a
-vector</span></p>
+<figcaption>Listing 8-3: Using the <code>push</code> method to add values to a vector</figcaption>
+</figure>
 <p>As with any variable, if we want to be able to change its value, we need to
 make it mutable using the <code>mut</code> keyword, as discussed in Chapter 3. The numbers
 we place inside are all of type <code>i32</code>, and Rust infers this from the data, so
@@ -240,6 +243,7 @@ using the <code>get</code> method. In the following examples, we’ve annotated 
 the values that are returned from these functions for extra clarity.</p>
 <p>Listing 8-4 shows both methods of accessing a value in a vector, with indexing
 syntax and the <code>get</code> method.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v = vec![1, 2, 3, 4, 5];
 
@@ -252,8 +256,8 @@ syntax and the <code>get</code> method.</p>
         None =&gt; println!("There is no third element."),
     }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-4: Using indexing syntax and using the <code>get</code>
-method to access an item in a vector</span></p>
+<figcaption>Listing 8-4: Using indexing syntax and using the <code>get</code> method to access an item in a vector</figcaption>
+</figure>
 <p>Note a few details here. We use the index value of <code>2</code> to get the third element
 because vectors are indexed by number, starting at zero. Using <code>&amp;</code> and <code>[]</code>
 gives us a reference to the element at the index value. When we use the <code>get</code>
@@ -264,14 +268,15 @@ program behaves when you try to use an index value outside the range of
 existing elements. As an example, let’s see what happens when we have a vector
 of five elements and then we try to access an element at index 100 with each
 technique, as shown in Listing 8-5.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust should_panic panics edition2021"><span class="boring">fn main() {
 </span>    let v = vec![1, 2, 3, 4, 5];
 
     let does_not_exist = &amp;v[100];
     let does_not_exist = v.get(100);
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-5: Attempting to access the element at index
-100 in a vector containing five elements</span></p>
+<figcaption>Listing 8-5: Attempting to access the element at index 100 in a vector containing five elements</figcaption>
+</figure>
 <p>When we run this code, the first <code>[]</code> method will cause the program to panic
 because it references a nonexistent element. This method is best used when you
 want your program to crash if there’s an attempt to access an element past the
@@ -294,6 +299,7 @@ scope. That rule applies in Listing 8-6, where we hold an immutable reference
 to the first element in a vector and try to add an element to the end. This
 program won’t work if we also try to refer to that element later in the
 function.</p>
+<figure class="listing">
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
 </span>    let mut v = vec![1, 2, 3, 4, 5];
 
@@ -303,8 +309,8 @@ function.</p>
 
     println!("The first element is: {first}");
 <span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 8-6: Attempting to add an element to a vector
-while holding a reference to an item</span></p>
+<figcaption>Listing 8-6: Attempting to add an element to a vector while holding a reference to an item</figcaption>
+</figure>
 <p>Compiling this code will result in this error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling collections v0.1.0 (file:///projects/collections)
@@ -341,25 +347,27 @@ Rustonomicon”</a>.</p>
 elements rather than use indices to access one at a time. Listing 8-7 shows how
 to use a <code>for</code> loop to get immutable references to each element in a vector of
 <code>i32</code> values and print them.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v = vec![100, 32, 57];
     for i in &amp;v {
         println!("{i}");
     }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-7: Printing each element in a vector by
-iterating over the elements using a <code>for</code> loop</span></p>
+<figcaption>Listing 8-7: Printing each element in a vector by iterating over the elements using a <code>for</code> loop</figcaption>
+</figure>
 <p>We can also iterate over mutable references to each element in a mutable vector
 in order to make changes to all the elements. The <code>for</code> loop in Listing 8-8
 will add <code>50</code> to each element.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut v = vec![100, 32, 57];
     for i in &amp;mut v {
         *i += 50;
     }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-8: Iterating over mutable references to
-elements in a vector</span></p>
+<figcaption>Listing 8-8: Iterating over mutable references to elements in a vector</figcaption>
+</figure>
 <p>To change the value that the mutable reference refers to, we have to use the
 <code>*</code> dereference operator to get to the value in <code>i</code> before we can use the <code>+=</code>
 operator. We’ll talk more about the dereference operator in the <a href="ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator">“Following the
@@ -383,6 +391,7 @@ and some strings. We can define an enum whose variants will hold the different
 value types, and all the enum variants will be considered the same type: that
 of the enum. Then we can create a vector to hold that enum and so, ultimately,
 hold different types. We’ve demonstrated this in Listing 8-9.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    enum SpreadsheetCell {
         Int(i32),
@@ -396,8 +405,8 @@ hold different types. We’ve demonstrated this in Listing 8-9.</p>
         SpreadsheetCell::Float(10.12),
     ];
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-9: Defining an <code>enum</code> to store values of
-different types in one vector</span></p>
+<figcaption>Listing 8-9: Defining an <code>enum</code> to store values of different types in one vector</figcaption>
+</figure>
 <p>Rust needs to know what types will be in the vector at compile time so it knows
 exactly how much memory on the heap will be needed to store each element. We
 must also be explicit about what types are allowed in this vector. If Rust
@@ -415,6 +424,7 @@ addition to <code>push</code>, a <code>pop</code> method removes and returns the
 <h3 id="dropping-a-vector-drops-its-elements"><a class="header" href="#dropping-a-vector-drops-its-elements">Dropping a Vector Drops Its Elements</a></h3>
 <p>Like any other <code>struct</code>, a vector is freed when it goes out of scope, as
 annotated in Listing 8-10.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    {
         let v = vec![1, 2, 3, 4];
@@ -422,8 +432,8 @@ annotated in Listing 8-10.</p>
         // do stuff with v
     } // &lt;- v goes out of scope and is freed here
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-10: Showing where the vector and its elements
-are dropped</span></p>
+<figcaption>Listing 8-10: Showing where the vector and its elements are dropped</figcaption>
+</figure>
 <p>When the vector gets dropped, all of its contents are also dropped, meaning the
 integers it holds will be cleaned up. The borrow checker ensures that any
 references to contents of a vector are only used while the vector itself is

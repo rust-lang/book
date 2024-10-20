@@ -182,7 +182,8 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="the-rust-programming-language"><a class="header" href="#the-rust-programming-language">The Rust Programming Language</a></h1>
-<p><em>by Steve Klabnik and Carol Nichols, with contributions from the Rust Community</em></p>
+<p><em>by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the
+Rust Community</em></p>
 <p>This version of the text assumes you’re using Rust 1.81.0 (released 2024-09-04)
 or later. See the <a href="ch01-01-installation.html">“Installation” section of Chapter 1</a><!-- ignore -->
 to install or update Rust.</p>
@@ -5608,6 +5609,7 @@ at the moment we don’t have a way to store the actual IP address <em>data</em>
 only know what <em>kind</em> it is. Given that you just learned about structs in
 Chapter 5, you might be tempted to tackle this problem with structs as shown in
 Listing 6-1.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    enum IpAddrKind {
         V4,
@@ -5629,8 +5631,8 @@ Listing 6-1.</p>
         address: String::from("::1"),
     };
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 6-1: Storing the data and <code>IpAddrKind</code> variant of
-an IP address using a <code>struct</code></span></p>
+<figcaption>Listing 6-1: Storing the data and <code>IpAddrKind</code> variant of an IP address using a <code>struct</code></figcaption>
+</figure>
 <p>Here, we’ve defined a struct <code>IpAddr</code> that has two fields: a <code>kind</code> field that
 is of type <code>IpAddrKind</code> (the enum we defined previously) and an <code>address</code> field
 of type <code>String</code>. We have two instances of this struct. The first is <code>home</code>,
@@ -5709,6 +5711,7 @@ haven’t brought the standard library’s definition into our scope. We’ll ta
 more about bringing types into scope in Chapter 7.</p>
 <p>Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021">enum Message {
     Quit,
     Move { x: i32, y: i32 },
@@ -5717,8 +5720,8 @@ variety of types embedded in its variants.</p>
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 6-2: A <code>Message</code> enum whose variants each store
-different amounts and types of values</span></p>
+<figcaption>Listing 6-2: A <code>Message</code> enum whose variants each store different amounts and types of values</figcaption>
+</figure>
 <p>This enum has four variants with different types:</p>
 <ul>
 <li><code>Quit</code> has no data associated with it at all.</li>
@@ -5924,6 +5927,7 @@ the value falls into the associated code block to be used during execution.</p>
 function that takes an unknown US coin and, in a similar way as the counting
 machine, determines which coin it is and returns its value in cents, as shown
 in Listing 6-3.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021">enum Coin {
     Penny,
     Nickel,
@@ -5941,8 +5945,8 @@ fn value_in_cents(coin: Coin) -&gt; u8 {
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 6-3: An enum and a <code>match</code> expression that has
-the variants of the enum as its patterns</span></p>
+<figcaption>Listing 6-3: An enum and a <code>match</code> expression that has the variants of the enum as its patterns</figcaption>
+</figure>
 <p>Let’s break down the <code>match</code> in the <code>value_in_cents</code> function. First we list
 the <code>match</code> keyword followed by an expression, which in this case is the value
 <code>coin</code>. This seems very similar to a conditional expression used with <code>if</code>, but
@@ -5997,6 +6001,7 @@ designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
 our <code>enum</code> by changing the <code>Quarter</code> variant to include a <code>UsState</code> value
 stored inside it, which we’ve done in Listing 6-4.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)] // so we can inspect the state in a minute
 enum UsState {
     Alabama,
@@ -6012,8 +6017,8 @@ enum Coin {
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 6-4: A <code>Coin</code> enum in which the <code>Quarter</code> variant
-also holds a <code>UsState</code> value</span></p>
+<figcaption>Listing 6-4: A <code>Coin</code> enum in which the <code>Quarter</code> variant also holds a <code>UsState</code> value</figcaption>
+</figure>
 <p>Let’s imagine that a friend is trying to collect all 50 state quarters. While
 we sort our loose change by coin type, we’ll also call out the name of the
 state associated with each quarter so that if it’s one our friend doesn’t have,
@@ -6069,6 +6074,7 @@ the function should return the <code>None</code> value and not attempt to perfor
 operations.</p>
 <p>This function is very easy to write, thanks to <code>match</code>, and will look like
 Listing 6-5.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
         match x {
@@ -6081,8 +6087,8 @@ Listing 6-5.</p>
     let six = plus_one(five);
     let none = plus_one(None);
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 6-5: A function that uses a <code>match</code> expression on
-an <code>Option&lt;i32&gt;</code></span></p>
+<figcaption>Listing 6-5: A function that uses a <code>match</code> expression on an <code>Option&lt;i32&gt;</code></figcaption>
+</figure>
 <p>Let’s examine the first execution of <code>plus_one</code> in more detail. When we call
 <code>plus_one(five)</code>, the variable <code>x</code> in the body of <code>plus_one</code> will have the
 value <code>Some(5)</code>. We then compare that against each match arm:</p>
@@ -6266,6 +6272,7 @@ handle values that match one pattern while ignoring the rest. Consider the
 program in Listing 6-6 that matches on an <code>Option&lt;u8&gt;</code> value in the
 <code>config_max</code> variable but only wants to execute code if the value is the <code>Some</code>
 variant.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let config_max = Some(3u8);
     match config_max {
@@ -6273,8 +6280,8 @@ variant.</p>
         _ =&gt; (),
     }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 6-6: A <code>match</code> that only cares about executing
-code when the value is <code>Some</code></span></p>
+<figcaption>Listing 6-6: A <code>match</code> that only cares about executing code when the value is <code>Some</code></figcaption>
+</figure>
 <p>If the value is <code>Some</code>, we print out the value in the <code>Some</code> variant by binding
 the value to the variable <code>max</code> in the pattern. We don’t want to do anything
 with the <code>None</code> value. To satisfy the <code>match</code> expression, we have to add <code>_ =&gt; ()</code> after processing just one variant, which is annoying boilerplate code to
@@ -6528,7 +6535,8 @@ directories:</p>
     └── main.rs
 </code></pre>
 <p>The crate root file in this case is <em>src/main.rs</em>, and it contains:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust noplayground ignore">use crate::garden::vegetables::Asparagus;
 
 pub mod garden;
@@ -6537,10 +6545,13 @@ fn main() {
     let plant = Asparagus {};
     println!("I'm growing {plant:?}!");
 }</code></pre>
+</figure>
 <p>The <code>pub mod garden;</code> line tells the compiler to include the code it finds in
 <em>src/garden.rs</em>, which is:</p>
-<p><span class="filename">Filename: src/garden.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/garden.rs</span>
 <pre><code class="language-rust noplayground ignore">pub mod vegetables;</code></pre>
+</figure>
 <p>Here, <code>pub mod vegetables;</code> means the code in <em>src/garden/vegetables.rs</em> is
 included too. That code is:</p>
 <pre><code class="language-rust noplayground ignore">#[derive(Debug)]
@@ -6567,7 +6578,8 @@ administrative work.</p>
 modules. Create a new library named <code>restaurant</code> by running <code>cargo new restaurant --lib</code>. Then enter the code in Listing 7-1 into <em>src/lib.rs</em> to
 define some modules and function signatures; this code is the front of house
 section.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">mod front_of_house {
     mod hosting {
         fn add_to_waitlist() {}
@@ -6583,8 +6595,8 @@ section.</p>
         fn take_payment() {}
     }
 }</code></pre>
-<p><span class="caption">Listing 7-1: A <code>front_of_house</code> module containing other
-modules that then contain functions</span></p>
+<figcaption>Listing 7-1: A <code>front_of_house</code> module containing other modules that then contain functions</figcaption>
+</figure>
 <p>We define a module with the <code>mod</code> keyword followed by the name of the module
 (in this case, <code>front_of_house</code>). The body of the module then goes inside curly
 brackets. Inside modules, we can place other modules, as in this case with the
@@ -6601,6 +6613,7 @@ roots. The reason for their name is that the contents of either of these two
 files form a module named <code>crate</code> at the root of the crate’s module structure,
 known as the <em>module tree</em>.</p>
 <p>Listing 7-2 shows the module tree for the structure in Listing 7-1.</p>
+<figure class="listing">
 <pre><code class="language-text">crate
  └── front_of_house
      ├── hosting
@@ -6611,8 +6624,8 @@ known as the <em>module tree</em>.</p>
          ├── serve_order
          └── take_payment
 </code></pre>
-<p><span class="caption">Listing 7-2: The module tree for the code in Listing
-7-1</span></p>
+<figcaption>Listing 7-2: The module tree for the code in Listing 7-1</figcaption>
+</figure>
 <p>This tree shows how some of the modules nest inside other modules; for example,
 <code>hosting</code> nests inside <code>front_of_house</code>. The tree also shows that some modules
 are <em>siblings</em>, meaning they’re defined in the same module; <code>hosting</code> and
@@ -6649,7 +6662,8 @@ as is. We’ll explain why in a bit.</p>
 <p>The <code>eat_at_restaurant</code> function is part of our library crate’s public API, so
 we mark it with the <code>pub</code> keyword. In the <a href="ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword">“Exposing Paths with the <code>pub</code>
 Keyword”</a><!-- ignore --> section, we’ll go into more detail about <code>pub</code>.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore does_not_compile">mod front_of_house {
     mod hosting {
         fn add_to_waitlist() {}
@@ -6663,8 +6677,8 @@ pub fn eat_at_restaurant() {
     // Relative path
     front_of_house::hosting::add_to_waitlist();
 }</code></pre>
-<p><span class="caption">Listing 7-3: Calling the <code>add_to_waitlist</code> function using
-absolute and relative paths</span></p>
+<figcaption>Listing 7-3: Calling the <code>add_to_waitlist</code> function using absolute and relative paths</figcaption>
+</figure>
 <p>The first time we call the <code>add_to_waitlist</code> function in <code>eat_at_restaurant</code>,
 we use an absolute path. The <code>add_to_waitlist</code> function is defined in the same
 crate as <code>eat_at_restaurant</code>, which means we can use the <code>crate</code> keyword to
@@ -6693,6 +6707,7 @@ more likely we’ll want to move code definitions and item calls independently o
 each other.</p>
 <p>Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
 errors we get are shown in Listing 7-4.</p>
+<figure class="listing">
 <pre><code class="language-console">$ cargo build
    Compiling restaurant v0.1.0 (file:///projects/restaurant)
 error[E0603]: module `hosting` is private
@@ -6726,8 +6741,8 @@ note: the module `hosting` is defined here
 For more information about this error, try `rustc --explain E0603`.
 error: could not compile `restaurant` (lib) due to 2 previous errors
 </code></pre>
-<p><span class="caption">Listing 7-4: Compiler errors from building the code in
-Listing 7-3</span></p>
+<figcaption>Listing 7-4: Compiler errors from building the code in Listing 7-3</figcaption>
+</figure>
 <p>The error messages say that module <code>hosting</code> is private. In other words, we
 have the correct paths for the <code>hosting</code> module and the <code>add_to_waitlist</code>
 function, but Rust won’t let us use them because it doesn’t have access to the
@@ -6751,7 +6766,8 @@ modules by using the <code>pub</code> keyword to make an item public.</p>
 private. We want the <code>eat_at_restaurant</code> function in the parent module to have
 access to the <code>add_to_waitlist</code> function in the child module, so we mark the
 <code>hosting</code> module with the <code>pub</code> keyword, as shown in Listing 7-5.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore does_not_compile">mod front_of_house {
     pub mod hosting {
         fn add_to_waitlist() {}
@@ -6765,10 +6781,11 @@ pub fn eat_at_restaurant() {
     // Relative path
     front_of_house::hosting::add_to_waitlist();
 }</code></pre>
-<p><span class="caption">Listing 7-5: Declaring the <code>hosting</code> module as <code>pub</code> to
-use it from <code>eat_at_restaurant</code></span></p>
+<figcaption>Listing 7-5: Declaring the <code>hosting</code> module as <code>pub</code> to use it from <code>eat_at_restaurant</code></figcaption>
+</figure>
 <p>Unfortunately, the code in Listing 7-5 still results in compiler errors, as
 shown in Listing 7-6.</p>
+<figure class="listing">
 <pre><code class="language-console">$ cargo build
    Compiling restaurant v0.1.0 (file:///projects/restaurant)
 error[E0603]: function `add_to_waitlist` is private
@@ -6798,8 +6815,8 @@ note: the function `add_to_waitlist` is defined here
 For more information about this error, try `rustc --explain E0603`.
 error: could not compile `restaurant` (lib) due to 2 previous errors
 </code></pre>
-<p><span class="caption">Listing 7-6: Compiler errors from building the code in
-Listing 7-5</span></p>
+<figcaption>Listing 7-6: Compiler errors from building the code in Listing 7-5</figcaption>
+</figure>
 <p>What happened? Adding the <code>pub</code> keyword in front of <code>mod hosting</code> makes the
 module public. With this change, if we can access <code>front_of_house</code>, we can
 access <code>hosting</code>. But the <em>contents</em> of <code>hosting</code> are still private; making the
@@ -6813,7 +6830,8 @@ The privacy rules apply to structs, enums, functions, and methods as well as
 modules.</p>
 <p>Let’s also make the <code>add_to_waitlist</code> function public by adding the <code>pub</code>
 keyword before its definition, as in Listing 7-7.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground test_harness">mod front_of_house {
     pub mod hosting {
         pub fn add_to_waitlist() {}
@@ -6827,9 +6845,8 @@ pub fn eat_at_restaurant() {
     // Relative path
     front_of_house::hosting::add_to_waitlist();
 }</code></pre>
-<p><span class="caption">Listing 7-7: Adding the <code>pub</code> keyword to <code>mod hosting</code>
-and <code>fn add_to_waitlist</code> lets us call the function from
-<code>eat_at_restaurant</code></span></p>
+<figcaption>Listing 7-7: Adding the <code>pub</code> keyword to <code>mod hosting</code> and <code>fn add_to_waitlist</code> lets us call the function from <code>eat_at_restaurant</code></figcaption>
+</figure>
 <p>Now the code will compile! To see why adding the <code>pub</code> keyword lets us use
 these paths in <code>eat_at_restaurant</code> with respect to the privacy rules, let’s look
 at the absolute and the relative paths.</p>
@@ -6887,7 +6904,8 @@ fixes an incorrect order and personally brings it out to the customer. The
 function <code>fix_incorrect_order</code> defined in the <code>back_of_house</code> module calls the
 function <code>deliver_order</code> defined in the parent module by specifying the path to
 <code>deliver_order</code>, starting with <code>super</code>.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground test_harness">fn deliver_order() {}
 
 mod back_of_house {
@@ -6898,8 +6916,8 @@ mod back_of_house {
 
     fn cook_order() {}
 }</code></pre>
-<p><span class="caption">Listing 7-8: Calling a function using a relative path
-starting with <code>super</code></span></p>
+<figcaption>Listing 7-8: Calling a function using a relative path starting with <code>super</code></figcaption>
+</figure>
 <p>The <code>fix_incorrect_order</code> function is in the <code>back_of_house</code> module, so we can
 use <code>super</code> to go to the parent module of <code>back_of_house</code>, which in this case
 is <code>crate</code>, the root. From there, we look for <code>deliver_order</code> and find it.
@@ -6919,7 +6937,8 @@ the case in a restaurant where the customer can pick the type of bread that
 comes with a meal, but the chef decides which fruit accompanies the meal based
 on what’s in season and in stock. The available fruit changes quickly, so
 customers can’t choose the fruit or even see which fruit they’ll get.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">mod back_of_house {
     pub struct Breakfast {
         pub toast: String,
@@ -6947,8 +6966,8 @@ pub fn eat_at_restaurant() {
     // to see or modify the seasonal fruit that comes with the meal
     // meal.seasonal_fruit = String::from("blueberries");
 }</code></pre>
-<p><span class="caption">Listing 7-9: A struct with some public fields and some
-private fields</span></p>
+<figcaption>Listing 7-9: A struct with some public fields and some private fields</figcaption>
+</figure>
 <p>Because the <code>toast</code> field in the <code>back_of_house::Breakfast</code> struct is public,
 in <code>eat_at_restaurant</code> we can write and read to the <code>toast</code> field using dot
 notation. Notice that we can’t use the <code>seasonal_fruit</code> field in
@@ -6962,7 +6981,8 @@ have such a function, we couldn’t create an instance of <code>Breakfast</code>
 <code>seasonal_fruit</code> field in <code>eat_at_restaurant</code>.</p>
 <p>In contrast, if we make an enum public, all of its variants are then public. We
 only need the <code>pub</code> before the <code>enum</code> keyword, as shown in Listing 7-10.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">mod back_of_house {
     pub enum Appetizer {
         Soup,
@@ -6974,8 +6994,8 @@ pub fn eat_at_restaurant() {
     let order1 = back_of_house::Appetizer::Soup;
     let order2 = back_of_house::Appetizer::Salad;
 }</code></pre>
-<p><span class="caption">Listing 7-10: Designating an enum as public makes all its
-variants public</span></p>
+<figcaption>Listing 7-10: Designating an enum as public makes all its variants public</figcaption>
+</figure>
 <p>Because we made the <code>Appetizer</code> enum public, we can use the <code>Soup</code> and <code>Salad</code>
 variants in <code>eat_at_restaurant</code>.</p>
 <p>Enums aren’t very useful unless their variants are public; it would be annoying
@@ -6997,7 +7017,8 @@ keyword once, and then use the shorter name everywhere else in the scope.</p>
 scope of the <code>eat_at_restaurant</code> function so we only have to specify
 <code>hosting::add_to_waitlist</code> to call the <code>add_to_waitlist</code> function in
 <code>eat_at_restaurant</code>.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground test_harness">mod front_of_house {
     pub mod hosting {
         pub fn add_to_waitlist() {}
@@ -7009,8 +7030,8 @@ use crate::front_of_house::hosting;
 pub fn eat_at_restaurant() {
     hosting::add_to_waitlist();
 }</code></pre>
-<p><span class="caption">Listing 7-11: Bringing a module into scope with
-<code>use</code></span></p>
+<figcaption>Listing 7-11: Bringing a module into scope with <code>use</code></figcaption>
+</figure>
 <p>Adding <code>use</code> and a path in a scope is similar to creating a symbolic link in
 the filesystem. By adding <code>use crate::front_of_house::hosting</code> in the crate
 root, <code>hosting</code> is now a valid name in that scope, just as though the <code>hosting</code>
@@ -7020,7 +7041,8 @@ also check privacy, like any other paths.</p>
 <code>use</code> occurs. Listing 7-12 moves the <code>eat_at_restaurant</code> function into a new
 child module named <code>customer</code>, which is then a different scope than the <code>use</code>
 statement, so the function body won’t compile.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground test_harness does_not_compile ignore">mod front_of_house {
     pub mod hosting {
         pub fn add_to_waitlist() {}
@@ -7034,8 +7056,8 @@ mod customer {
         hosting::add_to_waitlist();
     }
 }</code></pre>
-<p><span class="caption">Listing 7-12: A <code>use</code> statement only applies in the scope
-it’s in</span></p>
+<figcaption>Listing 7-12: A <code>use</code> statement only applies in the scope it’s in</figcaption>
+</figure>
 <p>The compiler error shows that the shortcut no longer applies within the
 <code>customer</code> module:</p>
 <pre><code class="language-console">$ cargo build
@@ -7071,7 +7093,8 @@ the shortcut in the parent module with <code>super::hosting</code> within the ch
 <p>In Listing 7-11, you might have wondered why we specified <code>use crate::front_of_house::hosting</code> and then called <code>hosting::add_to_waitlist</code> in
 <code>eat_at_restaurant</code>, rather than specifying the <code>use</code> path all the way out to
 the <code>add_to_waitlist</code> function to achieve the same result, as in Listing 7-13.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground test_harness">mod front_of_house {
     pub mod hosting {
         pub fn add_to_waitlist() {}
@@ -7083,8 +7106,8 @@ use crate::front_of_house::hosting::add_to_waitlist;
 pub fn eat_at_restaurant() {
     add_to_waitlist();
 }</code></pre>
-<p><span class="caption">Listing 7-13: Bringing the <code>add_to_waitlist</code> function
-into scope with <code>use</code>, which is unidiomatic</span></p>
+<figcaption>Listing 7-13: Bringing the <code>add_to_waitlist</code> function into scope with <code>use</code>, which is unidiomatic</figcaption>
+</figure>
 <p>Although both Listing 7-11 and Listing 7-13 accomplish the same task, Listing
 7-11 is the idiomatic way to bring a function into scope with <code>use</code>. Bringing
 the function’s parent module into scope with <code>use</code> means we have to specify the
@@ -7096,22 +7119,24 @@ unclear as to where <code>add_to_waitlist</code> is defined.</p>
 it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way
 to bring the standard library’s <code>HashMap</code> struct into the scope of a binary
 crate.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::collections::HashMap;
 
 fn main() {
     let mut map = HashMap::new();
     map.insert(1, 2);
 }</code></pre></pre>
-<p><span class="caption">Listing 7-14: Bringing <code>HashMap</code> into scope in an
-idiomatic way</span></p>
+<figcaption>Listing 7-14: Bringing <code>HashMap</code> into scope in an idiomatic way</figcaption>
+</figure>
 <p>There’s no strong reason behind this idiom: it’s just the convention that has
 emerged, and folks have gotten used to reading and writing Rust code this way.</p>
 <p>The exception to this idiom is if we’re bringing two items with the same name
 into scope with <code>use</code> statements, because Rust doesn’t allow that. Listing 7-15
 shows how to bring two <code>Result</code> types into scope that have the same name but
 different parent modules, and how to refer to them.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::fmt;
 use std::io;
 
@@ -7124,8 +7149,8 @@ fn function2() -&gt; io::Result&lt;()&gt; {
     // --snip--
 <span class="boring">    Ok(())
 </span>}</code></pre>
-<p><span class="caption">Listing 7-15: Bringing two types with the same name into
-the same scope requires using their parent modules.</span></p>
+<figcaption>Listing 7-15: Bringing two types with the same name into the same scope requires using their parent modules.</figcaption>
+</figure>
 <p>As you can see, using the parent modules distinguishes the two <code>Result</code> types.
 If instead we specified <code>use std::fmt::Result</code> and <code>use std::io::Result</code>, we’d
 have two <code>Result</code> types in the same scope, and Rust wouldn’t know which one we
@@ -7135,7 +7160,8 @@ meant when we used <code>Result</code>.</p>
 into the same scope with <code>use</code>: after the path, we can specify <code>as</code> and a new
 local name, or <em>alias</em>, for the type. Listing 7-16 shows another way to write
 the code in Listing 7-15 by renaming one of the two <code>Result</code> types using <code>as</code>.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::fmt::Result;
 use std::io::Result as IoResult;
 
@@ -7148,8 +7174,8 @@ fn function2() -&gt; IoResult&lt;()&gt; {
     // --snip--
 <span class="boring">    Ok(())
 </span>}</code></pre>
-<p><span class="caption">Listing 7-16: Renaming a type when it’s brought into
-scope with the <code>as</code> keyword</span></p>
+<figcaption>Listing 7-16: Renaming a type when it’s brought into scope with the <code>as</code> keyword</figcaption>
+</figure>
 <p>In the second <code>use</code> statement, we chose the new name <code>IoResult</code> for the
 <code>std::io::Result</code> type, which won’t conflict with the <code>Result</code> from <code>std::fmt</code>
 that we’ve also brought into scope. Listing 7-15 and Listing 7-16 are
@@ -7163,7 +7189,8 @@ item into scope but also making that item available for others to bring into
 their scope.</p>
 <p>Listing 7-17 shows the code in Listing 7-11 with <code>use</code> in the root module
 changed to <code>pub use</code>.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground test_harness">mod front_of_house {
     pub mod hosting {
         pub fn add_to_waitlist() {}
@@ -7175,8 +7202,8 @@ pub use crate::front_of_house::hosting;
 pub fn eat_at_restaurant() {
     hosting::add_to_waitlist();
 }</code></pre>
-<p><span class="caption">Listing 7-17: Making a name available for any code to use
-from a new scope with <code>pub use</code></span></p>
+<figcaption>Listing 7-17: Making a name available for any code to use from a new scope with <code>pub use</code></figcaption>
+</figure>
 <p>Before this change, external code would have to call the <code>add_to_waitlist</code>
 function by using the path
 <code>restaurant::front_of_house::hosting::add_to_waitlist()</code>, which also would have
@@ -7202,9 +7229,11 @@ added this line to <em>Cargo.toml</em>:</p>
 * ch02-00-guessing-game-tutorial.md
 * ch14-03-cargo-workspaces.md
 -->
-<p><span class="filename">Filename: Cargo.toml</span></p>
+<figure class="listing">
+<span class="file-name">Filename: Cargo.toml</span>
 <pre><code class="language-toml">rand = "0.8.5"
 </code></pre>
+</figure>
 <p>Adding <code>rand</code> as a dependency in <em>Cargo.toml</em> tells Cargo to download the
 <code>rand</code> package and any dependencies from <a href="https://crates.io/">crates.io</a> and
 make <code>rand</code> available to our project.</p>
@@ -7253,7 +7282,8 @@ crate.</p>
 each item on its own line can take up a lot of vertical space in our files. For
 example, these two <code>use</code> statements we had in the guessing game in Listing 2-4
 bring items from <code>std</code> into scope:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore"><span class="boring">use rand::Rng;
 </span>// --snip--
 use std::cmp::Ordering;
@@ -7283,11 +7313,13 @@ use std::io;
 </span><span class="boring">        Ordering::Equal =&gt; println!("You win!"),
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
+</figure>
 <p>Instead, we can use nested paths to bring the same items into scope in one
 line. We do this by specifying the common part of the path, followed by two
 colons, and then curly brackets around a list of the parts of the paths that
 differ, as shown in Listing 7-18.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore"><span class="boring">use rand::Rng;
 </span>// --snip--
 use std::{cmp::Ordering, io};
@@ -7318,8 +7350,8 @@ use std::{cmp::Ordering, io};
 </span><span class="boring">        Ordering::Equal =&gt; println!("You win!"),
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 7-18: Specifying a nested path to bring multiple
-items with the same prefix into scope</span></p>
+<figcaption>Listing 7-18: Specifying a nested path to bring multiple items with the same prefix into scope</figcaption>
+</figure>
 <p>In bigger programs, bringing many items into scope from the same crate or
 module using nested paths can reduce the number of separate <code>use</code> statements
 needed by a lot!</p>
@@ -7327,18 +7359,20 @@ needed by a lot!</p>
 two <code>use</code> statements that share a subpath. For example, Listing 7-19 shows two
 <code>use</code> statements: one that brings <code>std::io</code> into scope and one that brings
 <code>std::io::Write</code> into scope.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::io;
 use std::io::Write;</code></pre>
-<p><span class="caption">Listing 7-19: Two <code>use</code> statements where one is a subpath
-of the other</span></p>
+<figcaption>Listing 7-19: Two <code>use</code> statements where one is a subpath of the other</figcaption>
+</figure>
 <p>The common part of these two paths is <code>std::io</code>, and that’s the complete first
 path. To merge these two paths into one <code>use</code> statement, we can use <code>self</code> in
 the nested path, as shown in Listing 7-20.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::io::{self, Write};</code></pre>
-<p><span class="caption">Listing 7-20: Combining the paths in Listing 7-19 into
-one <code>use</code> statement</span></p>
+<figcaption>Listing 7-20: Combining the paths in Listing 7-19 into one <code>use</code> statement</figcaption>
+</figure>
 <p>This line brings <code>std::io</code> and <code>std::io::Write</code> into scope.</p>
 <h3 id="the-glob-operator"><a class="header" href="#the-glob-operator">The Glob Operator</a></h3>
 <p>If we want to bring <em>all</em> public items defined in a path into scope, we can
@@ -7371,7 +7405,8 @@ code inside the curly brackets for the <code>front_of_house</code> module, leavi
 the <code>mod front_of_house;</code> declaration, so that <em>src/lib.rs</em> contains the code
 shown in Listing 7-21. Note that this won’t compile until we create the
 <em>src/front_of_house.rs</em> file in Listing 7-22.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore does_not_compile">mod front_of_house;
 
 pub use crate::front_of_house::hosting;
@@ -7379,18 +7414,19 @@ pub use crate::front_of_house::hosting;
 pub fn eat_at_restaurant() {
     hosting::add_to_waitlist();
 }</code></pre>
-<p><span class="caption">Listing 7-21: Declaring the <code>front_of_house</code> module whose
-body will be in <em>src/front_of_house.rs</em></span></p>
+<figcaption>Listing 7-21: Declaring the <code>front_of_house</code> module whose body will be in <em>src/front_of_house.rs</em></figcaption>
+</figure>
 <p>Next, place the code that was in the curly brackets into a new file named
 <em>src/front_of_house.rs</em>, as shown in Listing 7-22. The compiler knows to look
 in this file because it came across the module declaration in the crate root
 with the name <code>front_of_house</code>.</p>
-<p><span class="filename">Filename: src/front_of_house.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/front_of_house.rs</span>
 <pre><code class="language-rust ignore">pub mod hosting {
     pub fn add_to_waitlist() {}
 }</code></pre>
-<p><span class="caption">Listing 7-22: Definitions inside the <code>front_of_house</code>
-module in <em>src/front_of_house.rs</em></span></p>
+<figcaption>Listing 7-22: Definitions inside the <code>front_of_house</code> module in <em>src/front_of_house.rs</em></figcaption>
+</figure>
 <p>Note that you only need to load a file using a <code>mod</code> declaration <em>once</em> in your
 module tree. Once the compiler knows the file is part of the project (and knows
 where in the module tree the code resides because of where you’ve put the <code>mod</code>
@@ -7405,12 +7441,16 @@ root module. We’ll place the file for <code>hosting</code> in a new directory 
 named for its ancestors in the module tree, in this case <em>src/front_of_house</em>.</p>
 <p>To start moving <code>hosting</code>, we change <em>src/front_of_house.rs</em> to contain only
 the declaration of the <code>hosting</code> module:</p>
-<p><span class="filename">Filename: src/front_of_house.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/front_of_house.rs</span>
 <pre><code class="language-rust ignore">pub mod hosting;</code></pre>
+</figure>
 <p>Then we create a <em>src/front_of_house</em> directory and a <em>hosting.rs</em> file to
 contain the definitions made in the <code>hosting</code> module:</p>
-<p><span class="filename">Filename: src/front_of_house/hosting.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/front_of_house/hosting.rs</span>
 <pre><code class="language-rust ignore">pub fn add_to_waitlist() {}</code></pre>
+</figure>
 <p>If we instead put <em>hosting.rs</em> in the <em>src</em> directory, the compiler would
 expect the <em>hosting.rs</em> code to be in a <code>hosting</code> module declared in the crate
 root, and not declared as a child of the <code>front_of_house</code> module. The
@@ -7487,11 +7527,12 @@ lines of text in a file or the prices of items in a shopping cart.</p>
 <h3 id="creating-a-new-vector"><a class="header" href="#creating-a-new-vector">Creating a New Vector</a></h3>
 <p>To create a new empty vector, we call the <code>Vec::new</code> function, as shown in
 Listing 8-1.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v: Vec&lt;i32&gt; = Vec::new();
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-1: Creating a new, empty vector to hold values
-of type <code>i32</code></span></p>
+<figcaption>Listing 8-1: Creating a new, empty vector to hold values of type <code>i32</code></figcaption>
+</figure>
 <p>Note that we added a type annotation here. Because we aren’t inserting any
 values into this vector, Rust doesn’t know what kind of elements we intend to
 store. This is an important point. Vectors are implemented using generics;
@@ -7507,17 +7548,19 @@ new vector that holds the values you give it. Listing 8-2 creates a new
 <code>Vec&lt;i32&gt;</code> that holds the values <code>1</code>, <code>2</code>, and <code>3</code>. The integer type is <code>i32</code>
 because that’s the default integer type, as we discussed in the <a href="ch03-02-data-types.html#data-types">“Data
 Types”</a><!-- ignore --> section of Chapter 3.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v = vec![1, 2, 3];
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-2: Creating a new vector containing
-values</span></p>
+<figcaption>Listing 8-2: Creating a new vector containing values</figcaption>
+</figure>
 <p>Because we’ve given initial <code>i32</code> values, Rust can infer that the type of <code>v</code>
 is <code>Vec&lt;i32&gt;</code>, and the type annotation isn’t necessary. Next, we’ll look at how
 to modify a vector.</p>
 <h3 id="updating-a-vector"><a class="header" href="#updating-a-vector">Updating a Vector</a></h3>
 <p>To create a vector and then add elements to it, we can use the <code>push</code> method,
 as shown in Listing 8-3.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut v = Vec::new();
 
@@ -7526,8 +7569,8 @@ as shown in Listing 8-3.</p>
     v.push(7);
     v.push(8);
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-3: Using the <code>push</code> method to add values to a
-vector</span></p>
+<figcaption>Listing 8-3: Using the <code>push</code> method to add values to a vector</figcaption>
+</figure>
 <p>As with any variable, if we want to be able to change its value, we need to
 make it mutable using the <code>mut</code> keyword, as discussed in Chapter 3. The numbers
 we place inside are all of type <code>i32</code>, and Rust infers this from the data, so
@@ -7538,6 +7581,7 @@ using the <code>get</code> method. In the following examples, we’ve annotated 
 the values that are returned from these functions for extra clarity.</p>
 <p>Listing 8-4 shows both methods of accessing a value in a vector, with indexing
 syntax and the <code>get</code> method.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v = vec![1, 2, 3, 4, 5];
 
@@ -7550,8 +7594,8 @@ syntax and the <code>get</code> method.</p>
         None =&gt; println!("There is no third element."),
     }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-4: Using indexing syntax and using the <code>get</code>
-method to access an item in a vector</span></p>
+<figcaption>Listing 8-4: Using indexing syntax and using the <code>get</code> method to access an item in a vector</figcaption>
+</figure>
 <p>Note a few details here. We use the index value of <code>2</code> to get the third element
 because vectors are indexed by number, starting at zero. Using <code>&amp;</code> and <code>[]</code>
 gives us a reference to the element at the index value. When we use the <code>get</code>
@@ -7562,14 +7606,15 @@ program behaves when you try to use an index value outside the range of
 existing elements. As an example, let’s see what happens when we have a vector
 of five elements and then we try to access an element at index 100 with each
 technique, as shown in Listing 8-5.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust should_panic panics edition2021"><span class="boring">fn main() {
 </span>    let v = vec![1, 2, 3, 4, 5];
 
     let does_not_exist = &amp;v[100];
     let does_not_exist = v.get(100);
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-5: Attempting to access the element at index
-100 in a vector containing five elements</span></p>
+<figcaption>Listing 8-5: Attempting to access the element at index 100 in a vector containing five elements</figcaption>
+</figure>
 <p>When we run this code, the first <code>[]</code> method will cause the program to panic
 because it references a nonexistent element. This method is best used when you
 want your program to crash if there’s an attempt to access an element past the
@@ -7592,6 +7637,7 @@ scope. That rule applies in Listing 8-6, where we hold an immutable reference
 to the first element in a vector and try to add an element to the end. This
 program won’t work if we also try to refer to that element later in the
 function.</p>
+<figure class="listing">
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
 </span>    let mut v = vec![1, 2, 3, 4, 5];
 
@@ -7601,8 +7647,8 @@ function.</p>
 
     println!("The first element is: {first}");
 <span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 8-6: Attempting to add an element to a vector
-while holding a reference to an item</span></p>
+<figcaption>Listing 8-6: Attempting to add an element to a vector while holding a reference to an item</figcaption>
+</figure>
 <p>Compiling this code will result in this error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling collections v0.1.0 (file:///projects/collections)
@@ -7639,25 +7685,27 @@ Rustonomicon”</a>.</p>
 elements rather than use indices to access one at a time. Listing 8-7 shows how
 to use a <code>for</code> loop to get immutable references to each element in a vector of
 <code>i32</code> values and print them.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let v = vec![100, 32, 57];
     for i in &amp;v {
         println!("{i}");
     }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-7: Printing each element in a vector by
-iterating over the elements using a <code>for</code> loop</span></p>
+<figcaption>Listing 8-7: Printing each element in a vector by iterating over the elements using a <code>for</code> loop</figcaption>
+</figure>
 <p>We can also iterate over mutable references to each element in a mutable vector
 in order to make changes to all the elements. The <code>for</code> loop in Listing 8-8
 will add <code>50</code> to each element.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut v = vec![100, 32, 57];
     for i in &amp;mut v {
         *i += 50;
     }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-8: Iterating over mutable references to
-elements in a vector</span></p>
+<figcaption>Listing 8-8: Iterating over mutable references to elements in a vector</figcaption>
+</figure>
 <p>To change the value that the mutable reference refers to, we have to use the
 <code>*</code> dereference operator to get to the value in <code>i</code> before we can use the <code>+=</code>
 operator. We’ll talk more about the dereference operator in the <a href="ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator">“Following the
@@ -7681,6 +7729,7 @@ and some strings. We can define an enum whose variants will hold the different
 value types, and all the enum variants will be considered the same type: that
 of the enum. Then we can create a vector to hold that enum and so, ultimately,
 hold different types. We’ve demonstrated this in Listing 8-9.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    enum SpreadsheetCell {
         Int(i32),
@@ -7694,8 +7743,8 @@ hold different types. We’ve demonstrated this in Listing 8-9.</p>
         SpreadsheetCell::Float(10.12),
     ];
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-9: Defining an <code>enum</code> to store values of
-different types in one vector</span></p>
+<figcaption>Listing 8-9: Defining an <code>enum</code> to store values of different types in one vector</figcaption>
+</figure>
 <p>Rust needs to know what types will be in the vector at compile time so it knows
 exactly how much memory on the heap will be needed to store each element. We
 must also be explicit about what types are allowed in this vector. If Rust
@@ -7713,6 +7762,7 @@ addition to <code>push</code>, a <code>pop</code> method removes and returns the
 <h3 id="dropping-a-vector-drops-its-elements"><a class="header" href="#dropping-a-vector-drops-its-elements">Dropping a Vector Drops Its Elements</a></h3>
 <p>Like any other <code>struct</code>, a vector is freed when it goes out of scope, as
 annotated in Listing 8-10.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    {
         let v = vec![1, 2, 3, 4];
@@ -7720,8 +7770,8 @@ annotated in Listing 8-10.</p>
         // do stuff with v
     } // &lt;- v goes out of scope and is freed here
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-10: Showing where the vector and its elements
-are dropped</span></p>
+<figcaption>Listing 8-10: Showing where the vector and its elements are dropped</figcaption>
+</figure>
 <p>When the vector gets dropped, all of its contents are also dropped, meaning the
 integers it holds will be cleaned up. The borrow checker ensures that any
 references to contents of a vector are only used while the vector itself is
@@ -7762,15 +7812,18 @@ as well because <code>String</code> is actually implemented as a wrapper around 
 of bytes with some extra guarantees, restrictions, and capabilities. An example
 of a function that works the same way with <code>Vec&lt;T&gt;</code> and <code>String</code> is the <code>new</code>
 function to create an instance, shown in Listing 8-11.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s = String::new();
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-11: Creating a new, empty <code>String</code></span></p>
+<figcaption>Listing 8-11: Creating a new, empty <code>String</code></figcaption>
+</figure>
 <p>This line creates a new, empty string called <code>s</code>, into which we can then load
 data. Often, we’ll have some initial data with which we want to start the
 string. For that, we use the <code>to_string</code> method, which is available on any type
 that implements the <code>Display</code> trait, as string literals do. Listing 8-12 shows
 two examples.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let data = "initial contents";
 
@@ -7779,17 +7832,18 @@ two examples.</p>
     // the method also works on a literal directly:
     let s = "initial contents".to_string();
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-12: Using the <code>to_string</code> method to create a
-<code>String</code> from a string literal</span></p>
+<figcaption>Listing 8-12: Using the <code>to_string</code> method to create a <code>String</code> from a string literal</figcaption>
+</figure>
 <p>This code creates a string containing <code>initial contents</code>.</p>
 <p>We can also use the function <code>String::from</code> to create a <code>String</code> from a string
 literal. The code in Listing 8-13 is equivalent to the code in Listing 8-12
 that uses <code>to_string</code>.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s = String::from("initial contents");
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-13: Using the <code>String::from</code> function to create
-a <code>String</code> from a string literal</span></p>
+<figcaption>Listing 8-13: Using the <code>String::from</code> function to create a <code>String</code> from a string literal</figcaption>
+</figure>
 <p>Because strings are used for so many things, we can use many different generic
 APIs for strings, providing us with a lot of options. Some of them can seem
 redundant, but they all have their place! In this case, <code>String::from</code> and
@@ -7797,6 +7851,7 @@ redundant, but they all have their place! In this case, <code>String::from</code
 readability.</p>
 <p>Remember that strings are UTF-8 encoded, so we can include any properly encoded
 data in them, as shown in Listing 8-14.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let hello = String::from("السلام عليكم");
     let hello = String::from("Dobrý den");
@@ -7810,8 +7865,8 @@ data in them, as shown in Listing 8-14.</p>
     let hello = String::from("Здравствуйте");
     let hello = String::from("Hola");
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-14: Storing greetings in different languages in
-strings</span></p>
+<figcaption>Listing 8-14: Storing greetings in different languages in strings</figcaption>
+</figure>
 <p>All of these are valid <code>String</code> values.</p>
 <h3 id="updating-a-string"><a class="header" href="#updating-a-string">Updating a String</a></h3>
 <p>A <code>String</code> can grow in size and its contents can change, just like the contents
@@ -7820,46 +7875,50 @@ use the <code>+</code> operator or the <code>format!</code> macro to concatenate
 <h4 id="appending-to-a-string-with-push_str-and-push"><a class="header" href="#appending-to-a-string-with-push_str-and-push">Appending to a String with <code>push_str</code> and <code>push</code></a></h4>
 <p>We can grow a <code>String</code> by using the <code>push_str</code> method to append a string slice,
 as shown in Listing 8-15.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s = String::from("foo");
     s.push_str("bar");
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-15: Appending a string slice to a <code>String</code>
-using the <code>push_str</code> method</span></p>
+<figcaption>Listing 8-15: Appending a string slice to a <code>String</code> using the <code>push_str</code> method</figcaption>
+</figure>
 <p>After these two lines, <code>s</code> will contain <code>foobar</code>. The <code>push_str</code> method takes a
 string slice because we don’t necessarily want to take ownership of the
 parameter. For example, in the code in Listing 8-16, we want to be able to use
 <code>s2</code> after appending its contents to <code>s1</code>.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s1 = String::from("foo");
     let s2 = "bar";
     s1.push_str(s2);
     println!("s2 is {s2}");
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-16: Using a string slice after appending its
-contents to a <code>String</code></span></p>
+<figcaption>Listing 8-16: Using a string slice after appending its contents to a <code>String</code></figcaption>
+</figure>
 <p>If the <code>push_str</code> method took ownership of <code>s2</code>, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!</p>
 <p>The <code>push</code> method takes a single character as a parameter and adds it to the
 <code>String</code>. Listing 8-17 adds the letter <em>l</em> to a <code>String</code> using the <code>push</code>
 method.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s = String::from("lo");
     s.push('l');
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-17: Adding one character to a <code>String</code> value
-using <code>push</code></span></p>
+<figcaption>Listing 8-17: Adding one character to a <code>String</code> value using <code>push</code></figcaption>
+</figure>
 <p>As a result, <code>s</code> will contain <code>lol</code>.</p>
 <h4 id="concatenation-with-the--operator-or-the-format-macro"><a class="header" href="#concatenation-with-the--operator-or-the-format-macro">Concatenation with the <code>+</code> Operator or the <code>format!</code> Macro</a></h4>
 <p>Often, you’ll want to combine two existing strings. One way to do so is to use
 the <code>+</code> operator, as shown in Listing 8-18.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s1 = String::from("Hello, ");
     let s2 = String::from("world!");
     let s3 = s1 + &amp;s2; // note s1 has been moved here and can no longer be used
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-18: Using the <code>+</code> operator to combine two
-<code>String</code> values into a new <code>String</code> value</span></p>
+<figcaption>Listing 8-18: Using the <code>+</code> operator to combine two <code>String</code> values into a new <code>String</code> value</figcaption>
+</figure>
 <p>The string <code>s3</code> will contain <code>Hello, world!</code>. The reason <code>s1</code> is no longer
 valid after the addition, and the reason we used a reference to <code>s2</code>, has to do
 with the signature of the method that’s called when we use the <code>+</code> operator.
@@ -7919,12 +7978,13 @@ so that this call doesn’t take ownership of any of its parameters.</p>
 string by referencing them by index is a valid and common operation. However,
 if you try to access parts of a <code>String</code> using indexing syntax in Rust, you’ll
 get an error. Consider the invalid code in Listing 8-19.</p>
+<figure class="listing">
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
 </span>    let s1 = String::from("hello");
     let h = s1[0];
 <span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 8-19: Attempting to use indexing syntax with a
-String</span></p>
+<figcaption>Listing 8-19: Attempting to use indexing syntax with a String</figcaption>
+</figure>
 <p>This code will result in the following error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling collections v0.1.0 (file:///projects/collections)
@@ -8126,6 +8186,7 @@ As always, check the standard library documentation for more information.</p>
 <code>insert</code>. In Listing 8-20, we’re keeping track of the scores of two teams whose
 names are <em>Blue</em> and <em>Yellow</em>. The Blue team starts with 10 points, and the
 Yellow team starts with 50.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
@@ -8134,8 +8195,8 @@ Yellow team starts with 50.</p>
     scores.insert(String::from("Blue"), 10);
     scores.insert(String::from("Yellow"), 50);
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-20: Creating a new hash map and inserting some
-keys and values</span></p>
+<figcaption>Listing 8-20: Creating a new hash map and inserting some keys and values</figcaption>
+</figure>
 <p>Note that we need to first <code>use</code> the <code>HashMap</code> from the collections portion of
 the standard library. Of our three common collections, this one is the least
 often used, so it’s not included in the features brought into scope
@@ -8148,6 +8209,7 @@ must have the same type.</p>
 <h3 id="accessing-values-in-a-hash-map"><a class="header" href="#accessing-values-in-a-hash-map">Accessing Values in a Hash Map</a></h3>
 <p>We can get a value out of the hash map by providing its key to the <code>get</code>
 method, as shown in Listing 8-21.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
@@ -8159,8 +8221,8 @@ method, as shown in Listing 8-21.</p>
     let team_name = String::from("Blue");
     let score = scores.get(&amp;team_name).copied().unwrap_or(0);
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-21: Accessing the score for the Blue team
-stored in the hash map</span></p>
+<figcaption>Listing 8-21: Accessing the score for the Blue team stored in the hash map</figcaption>
+</figure>
 <p>Here, <code>score</code> will have the value that’s associated with the Blue team, and the
 result will be <code>10</code>. The <code>get</code> method returns an <code>Option&lt;&amp;V&gt;</code>; if there’s no
 value for that key in the hash map, <code>get</code> will return <code>None</code>. This program
@@ -8189,6 +8251,7 @@ Blue: 10
 <p>For types that implement the <code>Copy</code> trait, like <code>i32</code>, the values are copied
 into the hash map. For owned values like <code>String</code>, the values will be moved and
 the hash map will be the owner of those values, as demonstrated in Listing 8-22.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
@@ -8200,8 +8263,8 @@ the hash map will be the owner of those values, as demonstrated in Listing 8-22.
     // field_name and field_value are invalid at this point, try using them and
     // see what compiler error you get!
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-22: Showing that keys and values are owned by
-the hash map once they’re inserted</span></p>
+<figcaption>Listing 8-22: Showing that keys and values are owned by the hash map once they’re inserted</figcaption>
+</figure>
 <p>We aren’t able to use the variables <code>field_name</code> and <code>field_value</code> after
 they’ve been moved into the hash map with the call to <code>insert</code>.</p>
 <p>If we insert references to values into the hash map, the values won’t be moved
@@ -8227,6 +8290,7 @@ with a different value, the value associated with that key will be replaced.
 Even though the code in Listing 8-23 calls <code>insert</code> twice, the hash map will
 only contain one key–value pair because we’re inserting the value for the Blue
 team’s key both times.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
@@ -8237,8 +8301,8 @@ team’s key both times.</p>
 
     println!("{scores:?}");
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-23: Replacing a value stored with a particular
-key</span></p>
+<figcaption>Listing 8-23: Replacing a value stored with a particular key</figcaption>
+</figure>
 <p>This code will print <code>{"Blue": 25}</code>. The original value of <code>10</code> has been
 overwritten.</p>
 <!-- Old headings. Do not remove or links may break. -->
@@ -8254,6 +8318,7 @@ called <code>Entry</code> that represents a value that might or might not exist.
 we want to check whether the key for the Yellow team has a value associated
 with it. If it doesn’t, we want to insert the value <code>50</code>, and the same for the
 Blue team. Using the <code>entry</code> API, the code looks like Listing 8-24.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
@@ -8265,8 +8330,8 @@ Blue team. Using the <code>entry</code> API, the code looks like Listing 8-24.</
 
     println!("{scores:?}");
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-24: Using the <code>entry</code> method to only insert if
-the key does not already have a value</span></p>
+<figcaption>Listing 8-24: Using the <code>entry</code> method to only insert if the key does not already have a value</figcaption>
+</figure>
 <p>The <code>or_insert</code> method on <code>Entry</code> is defined to return a mutable reference to
 the value for the corresponding <code>Entry</code> key if that key exists, and if not, it
 inserts the parameter as the new value for this key and returns a mutable
@@ -8284,6 +8349,7 @@ counts how many times each word appears in some text. We use a hash map with
 the words as keys and increment the value to keep track of how many times we’ve
 seen that word. If it’s the first time we’ve seen a word, we’ll first insert
 the value <code>0</code>.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    use std::collections::HashMap;
 
@@ -8298,8 +8364,8 @@ the value <code>0</code>.</p>
 
     println!("{map:?}");
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-25: Counting occurrences of words using a hash
-map that stores words and counts</span></p>
+<figcaption>Listing 8-25: Counting occurrences of words using a hash map that stores words and counts</figcaption>
+</figure>
 <p>This code will print <code>{"world": 2, "hello": 1, "wonderful": 1}</code>. You might see
 the same key–value pairs printed in a different order: recall from the
 <a href="ch08-03-hash-maps.html#accessing-values-in-a-hash-map">“Accessing Values in a Hash Map”</a><!-- ignore --> section that
@@ -8397,10 +8463,12 @@ panic = 'abort'
 </code></pre>
 </section>
 <p>Let’s try calling <code>panic!</code> in a simple program:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust should_panic panics edition2021">fn main() {
     panic!("crash and burn");
 }</code></pre></pre>
+</figure>
 <p>When you run the program, you’ll see something like this:</p>
 <pre><code class="language-console">$ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
@@ -8427,14 +8495,15 @@ a <code>panic!</code> backtrace, let’s look at another example and see what it
 a <code>panic!</code> call comes from a library because of a bug in our code instead of
 from our code calling the macro directly. Listing 9-1 has some code that
 attempts to access an index in a vector beyond the range of valid indexes.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust should_panic panics edition2021">fn main() {
     let v = vec![1, 2, 3];
 
     v[99];
 }</code></pre></pre>
-<p><span class="caption">Listing 9-1: Attempting to access an element beyond the
-end of a vector, which will cause a call to <code>panic!</code></span></p>
+<figcaption>Listing 9-1: Attempting to access an element beyond the end of a vector, which will cause a call to <code>panic!</code></figcaption>
+</figure>
 <p>Here, we’re attempting to access the 100th element of our vector (which is at
 index 99 because indexing starts at zero), but the vector has only three
 elements. In this situation, Rust will panic. Using <code>[]</code> is supposed to return
@@ -8477,6 +8546,7 @@ RUST_BACKTRACE=1 cargo run
 copy the backtrace output below
 check the backtrace number mentioned in the text below the listing
 -->
+<figure class="listing">
 <pre><code class="language-console">$ RUST_BACKTRACE=1 cargo run
 thread 'main' panicked at src/main.rs:4:6:
 index out of bounds: the len is 3 but the index is 99
@@ -8499,8 +8569,8 @@ stack backtrace:
              at /rustc/07dca489ac2d933c78d3c5158e3f43beefeb02ce/library/core/src/ops/function.rs:250:5
 note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
 </code></pre>
-<p><span class="caption">Listing 9-2: The backtrace generated by a call to
-<code>panic!</code> displayed when the environment variable <code>RUST_BACKTRACE</code> is set</span></p>
+<figcaption>Listing 9-2: The backtrace generated by a call to <code>panic!</code> displayed when the environment variable <code>RUST_BACKTRACE</code> is set</figcaption>
+</figure>
 <p>That’s a lot of output! The exact output you see might be different depending
 on your operating system and Rust version. In order to get backtraces with this
 information, debug symbols must be enabled. Debug symbols are enabled by
@@ -8544,13 +8614,15 @@ many different situations where the success value and error value we want to
 return may differ.</p>
 <p>Let’s call a function that returns a <code>Result</code> value because the function could
 fail. In Listing 9-3 we try to open a file.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::fs::File;
 
 fn main() {
     let greeting_file_result = File::open("hello.txt");
 }</code></pre></pre>
-<p><span class="caption">Listing 9-3: Opening a file</span></p>
+<figcaption>Listing 9-3: Opening a file</figcaption>
+</figure>
 <p>The return type of <code>File::open</code> is a <code>Result&lt;T, E&gt;</code>. The generic parameter <code>T</code>
 has been filled in by the implementation of <code>File::open</code> with the type of the
 success value, <code>std::fs::File</code>, which is a file handle. The type of <code>E</code> used in
@@ -8570,7 +8642,8 @@ occurred.</p>
 on the value <code>File::open</code> returns. Listing 9-4 shows one way to handle the
 <code>Result</code> using a basic tool, the <code>match</code> expression that we discussed in
 Chapter 6.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust should_panic edition2021">use std::fs::File;
 
 fn main() {
@@ -8581,8 +8654,8 @@ fn main() {
         Err(error) =&gt; panic!("Problem opening the file: {error:?}"),
     };
 }</code></pre></pre>
-<p><span class="caption">Listing 9-4: Using a <code>match</code> expression to handle the
-<code>Result</code> variants that might be returned</span></p>
+<figcaption>Listing 9-4: Using a <code>match</code> expression to handle the <code>Result</code> variants that might be returned</figcaption>
+</figure>
 <p>Note that, like the <code>Option</code> enum, the <code>Result</code> enum and its variants have been
 brought into scope by the prelude, so we don’t need to specify <code>Result::</code>
 before the <code>Ok</code> and <code>Err</code> variants in the <code>match</code> arms.</p>
@@ -8611,7 +8684,8 @@ and return the handle to the new file. If <code>File::open</code> failed for any
 reason—for example, because we didn’t have permission to open the file—we still
 want the code to <code>panic!</code> in the same way it did in Listing 9-4. For this, we
 add an inner <code>match</code> expression, shown in Listing 9-5.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <!-- ignore this test because otherwise it creates hello.txt which causes other
 tests to fail lol -->
 <pre><code class="language-rust ignore">use std::fs::File;
@@ -8633,8 +8707,8 @@ fn main() {
         },
     };
 }</code></pre>
-<p><span class="caption">Listing 9-5: Handling different kinds of errors in
-different ways</span></p>
+<figcaption>Listing 9-5: Handling different kinds of errors in different ways</figcaption>
+</figure>
 <p>The type of the value that <code>File::open</code> returns inside the <code>Err</code> variant is
 <code>io::Error</code>, which is a struct provided by the standard library. This struct
 has a method <code>kind</code> that we can call to get an <code>io::ErrorKind</code> value. The enum
@@ -8687,12 +8761,14 @@ shortcut method implemented just like the <code>match</code> expression we wrote
 Listing 9-4. If the <code>Result</code> value is the <code>Ok</code> variant, <code>unwrap</code> will return
 the value inside the <code>Ok</code>. If the <code>Result</code> is the <code>Err</code> variant, <code>unwrap</code> will
 call the <code>panic!</code> macro for us. Here is an example of <code>unwrap</code> in action:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust should_panic edition2021">use std::fs::File;
 
 fn main() {
     let greeting_file = File::open("hello.txt").unwrap();
 }</code></pre></pre>
+</figure>
 <p>If we run this code without a <em>hello.txt</em> file, we’ll see an error message from
 the <code>panic!</code> call that the <code>unwrap</code> method makes:</p>
 <!-- manual-regeneration
@@ -8707,13 +8783,15 @@ called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, messa
 Using <code>expect</code> instead of <code>unwrap</code> and providing good error messages can convey
 your intent and make tracking down the source of a panic easier. The syntax of
 <code>expect</code> looks like this:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust should_panic edition2021">use std::fs::File;
 
 fn main() {
     let greeting_file = File::open("hello.txt")
         .expect("hello.txt should be included in this project");
 }</code></pre></pre>
+</figure>
 <p>We use <code>expect</code> in the same way as <code>unwrap</code>: to return the file handle or call
 the <code>panic!</code> macro. The error message used by <code>expect</code> in its call to <code>panic!</code>
 will be the parameter that we pass to <code>expect</code>, rather than the default
@@ -8740,7 +8818,8 @@ you have available in the context of your code.</p>
 <p>For example, Listing 9-6 shows a function that reads a username from a file. If
 the file doesn’t exist or can’t be read, this function will return those errors
 to the code that called the function.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
 don't want to include it for rustdoc testing purposes. -->
@@ -8765,8 +8844,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     }
 }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 9-6: A function that returns errors to the
-calling code using <code>match</code></span></p>
+<figcaption>Listing 9-6: A function that returns errors to the calling code using <code>match</code></figcaption>
+</figure>
 <p>This function can be written in a much shorter way, but we’re going to start by
 doing a lot of it manually in order to explore error handling; at the end,
 we’ll show the shorter way. Let’s look at the return type of the function
@@ -8816,7 +8895,8 @@ question mark operator <code>?</code> to make this easier.</p>
 <p>Listing 9-7 shows an implementation of <code>read_username_from_file</code> that has the
 same functionality as in Listing 9-6, but this implementation uses the <code>?</code>
 operator.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
 don't want to include it for rustdoc testing purposes. -->
@@ -8832,8 +8912,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     Ok(username)
 }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 9-7: A function that returns errors to the
-calling code using the <code>?</code> operator</span></p>
+<figcaption>Listing 9-7: A function that returns errors to the calling code using the <code>?</code> operator</figcaption>
+</figure>
 <p>The <code>?</code> placed after a <code>Result</code> value is defined to work in almost the same way
 as the <code>match</code> expressions we defined to handle the <code>Result</code> values in Listing
 9-6. If the value of the <code>Result</code> is an <code>Ok</code>, the value inside the <code>Ok</code> will
@@ -8864,7 +8944,8 @@ end of the <code>read_to_string</code> call.</p>
 <p>The <code>?</code> operator eliminates a lot of boilerplate and makes this function’s
 implementation simpler. We could even shorten this code further by chaining
 method calls immediately after the <code>?</code>, as shown in Listing 9-8.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
 don't want to include it for rustdoc testing purposes. -->
@@ -8881,8 +8962,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     Ok(username)
 }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 9-8: Chaining method calls after the <code>?</code>
-operator</span></p>
+<figcaption>Listing 9-8: Chaining method calls after the <code>?</code> operator</figcaption>
+</figure>
 <p>We’ve moved the creation of the new <code>String</code> in <code>username</code> to the beginning of
 the function; that part hasn’t changed. Instead of creating a variable
 <code>username_file</code>, we’ve chained the call to <code>read_to_string</code> directly onto the
@@ -8892,7 +8973,8 @@ when both <code>File::open</code> and <code>read_to_string</code> succeed rather
 errors. The functionality is again the same as in Listing 9-6 and Listing 9-7;
 this is just a different, more ergonomic way to write it.</p>
 <p>Listing 9-9 shows a way to make this even shorter using <code>fs::read_to_string</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
 don't want to include it for rustdoc testing purposes. -->
@@ -8905,8 +8987,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     fs::read_to_string("hello.txt")
 }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 9-9: Using <code>fs::read_to_string</code> instead of
-opening and then reading the file</span></p>
+<figcaption>Listing 9-9: Using <code>fs::read_to_string</code> instead of opening and then reading the file</figcaption>
+</figure>
 <p>Reading a file into a string is a fairly common operation, so the standard
 library provides the convenient <code>fs::read_to_string</code> function that opens the
 file, creates a new <code>String</code>, reads the contents of the file, puts the contents
@@ -8924,14 +9006,15 @@ it’s compatible with this <code>return</code>.</p>
 <p>In Listing 9-10, let’s look at the error we’ll get if we use the <code>?</code> operator
 in a <code>main</code> function with a return type that is incompatible with the type of
 the value we use <code>?</code> on.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">use std::fs::File;
 
 fn main() {
     let greeting_file = File::open("hello.txt")?;
 }</code></pre>
-<p><span class="caption">Listing 9-10: Attempting to use the <code>?</code> in the <code>main</code>
-function that returns <code>()</code> won’t compile.</span></p>
+<figcaption>Listing 9-10: Attempting to use the <code>?</code> in the <code>main</code> function that returns <code>()</code> won’t compile.</figcaption>
+</figure>
 <p>This code opens a file, which might fail. The <code>?</code> operator follows the <code>Result</code>
 value returned by <code>File::open</code>, but this <code>main</code> function has the return type of
 <code>()</code>, not <code>Result</code>. When we compile this code, we get the following error
@@ -8976,6 +9059,7 @@ that point. If the value is <code>Some</code>, the value inside the <code>Some</
 resultant value of the expression, and the function continues. Listing 9-11 has
 an example of a function that finds the last character of the first line in the
 given text.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021">fn last_char_of_first_line(text: &amp;str) -&gt; Option&lt;char&gt; {
     text.lines().next()?.chars().last()
 }
@@ -8989,8 +9073,8 @@ given text.</p>
 </span><span class="boring">    assert_eq!(last_char_of_first_line(""), None);
 </span><span class="boring">    assert_eq!(last_char_of_first_line("\nhi"), None);
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 9-11: Using the <code>?</code> operator on an <code>Option&lt;T&gt;</code>
-value</span></p>
+<figcaption>Listing 9-11: Using the <code>?</code> operator on an <code>Option&lt;T&gt;</code> value</figcaption>
+</figure>
 <p>This function returns <code>Option&lt;char&gt;</code> because it’s possible that there is a
 character there, but it’s also possible that there isn’t. This code takes the
 <code>text</code> string slice argument and calls the <code>lines</code> method on it, which returns
@@ -9024,7 +9108,8 @@ behave as expected.</p>
 from Listing 9-10, but we’ve changed the return type of <code>main</code> to be
 <code>Result&lt;(), Box&lt;dyn Error&gt;&gt;</code> and added a return value <code>Ok(())</code> to the end. This
 code will now compile.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore">use std::error::Error;
 use std::fs::File;
 
@@ -9033,8 +9118,8 @@ fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
 
     Ok(())
 }</code></pre>
-<p><span class="caption">Listing 9-12: Changing <code>main</code> to return <code>Result&lt;(), E&gt;</code>
-allows the use of the <code>?</code> operator on <code>Result</code> values.</span></p>
+<figcaption>Listing 9-12: Changing <code>main</code> to return <code>Result&lt;(), E&gt;</code> allows the use of the <code>?</code> operator on <code>Result</code> values.</figcaption>
+</figure>
 <p>The <code>Box&lt;dyn Error&gt;</code> type is a <em>trait object</em>, which we’ll talk about in the
 <a href="ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects that Allow for Values of Different
 Types”</a><!-- ignore --> section in Chapter 18. For now, you can
@@ -9185,7 +9270,8 @@ user types, for example, letters instead.</p>
 <p>One way to do this would be to parse the guess as an <code>i32</code> instead of only a
 <code>u32</code> to allow potentially negative numbers, and then add a check for the
 number being in range, like so:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore"><span class="boring">use rand::Rng;
 </span><span class="boring">use std::cmp::Ordering;
 </span><span class="boring">use std::io;
@@ -9227,6 +9313,7 @@ number being in range, like so:</p>
 </span><span class="boring">        }
 </span>    }
 <span class="boring">}</span></code></pre>
+</figure>
 <p>The <code>if</code> expression checks whether our value is out of range, tells the user
 about the problem, and calls <code>continue</code> to start the next iteration of the loop
 and ask for another guess. After the <code>if</code> expression, we can proceed with the
@@ -9242,7 +9329,7 @@ way, it’s safe for functions to use the new type in their signatures and
 confidently use the values they receive. Listing 9-13 shows one way to define a
 <code>Guess</code> type that will only create an instance of <code>Guess</code> if the <code>new</code> function
 receives a value between 1 and 100.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub struct Guess {
@@ -9263,8 +9350,8 @@ impl Guess {
     }
 }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 9-13: A <code>Guess</code> type that will only continue with
-values between 1 and 100</span></p>
+<figcaption>Listing 9-13: A <code>Guess</code> type that will only continue with values between 1 and 100</figcaption>
+</figure>
 <p>First we define a struct named <code>Guess</code> that has a field named <code>value</code> that
 holds an <code>i32</code>. This is where the number will be stored.</p>
 <p>Then we implement an associated function named <code>new</code> on <code>Guess</code> that creates
@@ -9339,7 +9426,8 @@ duplicated code you can extract into a function, you’ll start to recognize
 duplicated code that can use generics.</p>
 <p>We’ll begin with the short program in Listing 10-1 that finds the largest
 number in a list.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let number_list = vec![34, 50, 25, 100, 65];
 
@@ -9354,8 +9442,8 @@ number in a list.</p>
     println!("The largest number is {largest}");
 <span class="boring">    assert_eq!(*largest, 100);
 </span>}</code></pre></pre>
-<p><span class="caption">Listing 10-1: Finding the largest number in a list of
-numbers</span></p>
+<figcaption>Listing 10-1: Finding the largest number in a list of numbers</figcaption>
+</figure>
 <p>We store a list of integers in the variable <code>number_list</code> and place a reference
 to the first number in the list in a variable named <code>largest</code>. We then iterate
 through all the numbers in the list, and if the current number is greater than
@@ -9367,7 +9455,8 @@ refer to the largest number, which in this case is 100.</p>
 <p>We’ve now been tasked with finding the largest number in two different lists of
 numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
 the same logic at two different places in the program, as shown in Listing 10-2.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let number_list = vec![34, 50, 25, 100, 65];
 
@@ -9393,8 +9482,8 @@ the same logic at two different places in the program, as shown in Listing 10-2.
 
     println!("The largest number is {largest}");
 }</code></pre></pre>
-<p><span class="caption">Listing 10-2: Code to find the largest number in <em>two</em>
-lists of numbers</span></p>
+<figcaption>Listing 10-2: Code to find the largest number in <em>two</em> lists of numbers</figcaption>
+</figure>
 <p>Although this code works, duplicating code is tedious and error prone. We also
 have to remember to update the code in multiple places when we want to change
 it.</p>
@@ -9406,7 +9495,8 @@ largest number in a list abstractly.</p>
 function named <code>largest</code>. Then we call the function to find the largest number
 in the two lists from Listing 10-2. We could also use the function on any other
 list of <code>i32</code> values we might have in the future.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn largest(list: &amp;[i32]) -&gt; &amp;i32 {
     let mut largest = &amp;list[0];
 
@@ -9432,8 +9522,8 @@ fn main() {
     println!("The largest number is {result}");
 <span class="boring">    assert_eq!(*result, 6000);
 </span>}</code></pre></pre>
-<p><span class="caption">Listing 10-3: Abstracted code to find the largest number
-in two lists</span></p>
+<figcaption>Listing 10-3: Abstracted code to find the largest number in two lists</figcaption>
+</figure>
 <p>The <code>largest</code> function has a parameter called <code>list</code>, which represents any
 concrete slice of <code>i32</code> values we might pass into the function. As a result,
 when we call the function, the code runs on the specific values that we pass
@@ -9465,7 +9555,8 @@ more functionality to callers of our function while preventing code duplication.
 <p>Continuing with our <code>largest</code> function, Listing 10-4 shows two functions that
 both find the largest value in a slice. We’ll then combine these into a single
 function that uses generics.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn largest_i32(list: &amp;[i32]) -&gt; &amp;i32 {
     let mut largest = &amp;list[0];
 
@@ -9503,8 +9594,8 @@ fn main() {
     println!("The largest char is {result}");
 <span class="boring">    assert_eq!(*result, 'y');
 </span>}</code></pre></pre>
-<p><span class="caption">Listing 10-4: Two functions that differ only in their
-names and in the types in their signatures</span></p>
+<figcaption>Listing 10-4: Two functions that differ only in their names and in the types in their signatures</figcaption>
+</figure>
 <p>The <code>largest_i32</code> function is the one we extracted in Listing 10-3 that finds
 the largest <code>i32</code> in a slice. The <code>largest_char</code> function finds the largest
 <code>char</code> in a slice. The function bodies have the same code, so let’s eliminate
@@ -9530,7 +9621,8 @@ same type <code>T</code>.</p>
 data type in its signature. The listing also shows how we can call the function
 with either a slice of <code>i32</code> values or <code>char</code> values. Note that this code won’t
 compile yet, but we’ll fix it later in this chapter.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">fn largest&lt;T&gt;(list: &amp;[T]) -&gt; &amp;T {
     let mut largest = &amp;list[0];
 
@@ -9554,8 +9646,8 @@ fn main() {
     let result = largest(&amp;char_list);
     println!("The largest char is {result}");
 }</code></pre>
-<p><span class="caption">Listing 10-5: The <code>largest</code> function using generic type
-parameters; this doesn’t compile yet</span></p>
+<figcaption>Listing 10-5: The <code>largest</code> function using generic type parameters; this doesn’t compile yet</figcaption>
+</figure>
 <p>If we compile this code right now, we’ll get this error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling chapter10 v0.1.0 (file:///projects/chapter10)
@@ -9589,7 +9681,8 @@ implements <code>PartialOrd</code> on both <code>i32</code> and <code>char</code
 <p>We can also define structs to use a generic type parameter in one or more
 fields using the <code>&lt;&gt;</code> syntax. Listing 10-6 defines a <code>Point&lt;T&gt;</code> struct to hold
 <code>x</code> and <code>y</code> coordinate values of any type.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -9599,8 +9692,8 @@ fn main() {
     let integer = Point { x: 5, y: 10 };
     let float = Point { x: 1.0, y: 4.0 };
 }</code></pre></pre>
-<p><span class="caption">Listing 10-6: A <code>Point&lt;T&gt;</code> struct that holds <code>x</code> and <code>y</code>
-values of type <code>T</code></span></p>
+<figcaption>Listing 10-6: A <code>Point&lt;T&gt;</code> struct that holds <code>x</code> and <code>y</code> values of type <code>T</code></figcaption>
+</figure>
 <p>The syntax for using generics in struct definitions is similar to that used in
 function definitions. First we declare the name of the type parameter inside
 angle brackets just after the name of the struct. Then we use the generic
@@ -9611,7 +9704,8 @@ definition says that the <code>Point&lt;T&gt;</code> struct is generic over some
 the fields <code>x</code> and <code>y</code> are <em>both</em> that same type, whatever that type may be. If
 we create an instance of a <code>Point&lt;T&gt;</code> that has values of different types, as in
 Listing 10-7, our code won’t compile.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -9620,8 +9714,8 @@ Listing 10-7, our code won’t compile.</p>
 fn main() {
     let wont_work = Point { x: 5, y: 4.0 };
 }</code></pre>
-<p><span class="caption">Listing 10-7: The fields <code>x</code> and <code>y</code> must be the same
-type because both have the same generic data type <code>T</code>.</span></p>
+<figcaption>Listing 10-7: The fields <code>x</code> and <code>y</code> must be the same type because both have the same generic data type <code>T</code>.</figcaption>
+</figure>
 <p>In this example, when we assign the integer value <code>5</code> to <code>x</code>, we let the
 compiler know that the generic type <code>T</code> will be an integer for this instance of
 <code>Point&lt;T&gt;</code>. Then when we specify <code>4.0</code> for <code>y</code>, which we’ve defined to have the
@@ -9641,7 +9735,8 @@ error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
 different types, we can use multiple generic type parameters. For example, in
 Listing 10-8, we change the definition of <code>Point</code> to be generic over types <code>T</code>
 and <code>U</code> where <code>x</code> is of type <code>T</code> and <code>y</code> is of type <code>U</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct Point&lt;T, U&gt; {
     x: T,
     y: U,
@@ -9652,8 +9747,8 @@ fn main() {
     let both_float = Point { x: 1.0, y: 4.0 };
     let integer_and_float = Point { x: 5, y: 4.0 };
 }</code></pre></pre>
-<p><span class="caption">Listing 10-8: A <code>Point&lt;T, U&gt;</code> generic over two types so
-that <code>x</code> and <code>y</code> can be values of different types</span></p>
+<figcaption>Listing 10-8: A <code>Point&lt;T, U&gt;</code> generic over two types so that <code>x</code> and <code>y</code> can be values of different types</figcaption>
+</figure>
 <p>Now all the instances of <code>Point</code> shown are allowed! You can use as many generic
 type parameters in a definition as you want, but using more than a few makes
 your code hard to read. If you’re finding you need lots of generic types in
@@ -9700,7 +9795,8 @@ avoid duplication by using generic types instead.</p>
 <p>We can implement methods on structs and enums (as we did in Chapter 5) and use
 generic types in their definitions too. Listing 10-9 shows the <code>Point&lt;T&gt;</code>
 struct we defined in Listing 10-6 with a method named <code>x</code> implemented on it.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -9717,9 +9813,8 @@ fn main() {
 
     println!("p.x = {}", p.x());
 }</code></pre></pre>
-<p><span class="caption">Listing 10-9: Implementing a method named <code>x</code> on the
-<code>Point&lt;T&gt;</code> struct that will return a reference to the <code>x</code> field of type
-<code>T</code></span></p>
+<figcaption>Listing 10-9: Implementing a method named <code>x</code> on the <code>Point&lt;T&gt;</code> struct that will return a reference to the <code>x</code> field of type <code>T</code></figcaption>
+</figure>
 <p>Here, we’ve defined a method named <code>x</code> on <code>Point&lt;T&gt;</code> that returns a reference
 to the data in the field <code>x</code>.</p>
 <p>Note that we have to declare <code>T</code> just after <code>impl</code> so we can use <code>T</code> to specify
@@ -9735,7 +9830,8 @@ up substituting for the generic type.</p>
 type. We could, for example, implement methods only on <code>Point&lt;f32&gt;</code> instances
 rather than on <code>Point&lt;T&gt;</code> instances with any generic type. In Listing 10-10 we
 use the concrete type <code>f32</code>, meaning we don’t declare any types after <code>impl</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct Point&lt;T&gt; {
 </span><span class="boring">    x: T,
 </span><span class="boring">    y: T,
@@ -9758,8 +9854,8 @@ use the concrete type <code>f32</code>, meaning we don’t declare any types aft
 </span><span class="boring">
 </span><span class="boring">    println!("p.x = {}", p.x());
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 10-10: An <code>impl</code> block that only applies to a
-struct with a particular concrete type for the generic type parameter <code>T</code></span></p>
+<figcaption>Listing 10-10: An <code>impl</code> block that only applies to a struct with a particular concrete type for the generic type parameter <code>T</code></figcaption>
+</figure>
 <p>This code means the type <code>Point&lt;f32&gt;</code> will have a <code>distance_from_origin</code>
 method; other instances of <code>Point&lt;T&gt;</code> where <code>T</code> is not of type <code>f32</code> will not
 have this method defined. The method measures how far our point is from the
@@ -9771,7 +9867,8 @@ types <code>X1</code> and <code>Y1</code> for the <code>Point</code> struct and 
 signature to make the example clearer. The method creates a new <code>Point</code>
 instance with the <code>x</code> value from the <code>self</code> <code>Point</code> (of type <code>X1</code>) and the <code>y</code>
 value from the passed-in <code>Point</code> (of type <code>Y2</code>).</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct Point&lt;X1, Y1&gt; {
     x: X1,
     y: Y1,
@@ -9794,8 +9891,8 @@ fn main() {
 
     println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
 }</code></pre></pre>
-<p><span class="caption">Listing 10-11: A method that uses generic types different
-from its struct’s definition</span></p>
+<figcaption>Listing 10-11: A method that uses generic types different from its struct’s definition</figcaption>
+</figure>
 <p>In <code>main</code>, we’ve defined a <code>Point</code> that has an <code>i32</code> for <code>x</code> (with value <code>5</code>)
 and an <code>f64</code> for <code>y</code> (with value <code>10.4</code>). The <code>p2</code> variable is a <code>Point</code> struct
 that has a string slice for <code>x</code> (with value <code>"Hello"</code>) and a <code>char</code> for <code>y</code>
@@ -9835,7 +9932,8 @@ definitions specialized to <code>i32</code> and <code>f64</code>, thereby replac
 definition with the specific ones.</p>
 <p>The monomorphized version of the code looks similar to the following (the
 compiler uses different names than what we’re using here for illustration):</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">enum Option_i32 {
     Some(i32),
     None,
@@ -9850,6 +9948,7 @@ fn main() {
     let integer = Option_i32::Some(5);
     let float = Option_f64::Some(5.0);
 }</code></pre></pre>
+</figure>
 <p>The generic <code>Option&lt;T&gt;</code> is replaced with the specific definitions created by
 the compiler. Because Rust compiles generic code into code that specifies the
 type in each instance, we pay no runtime cost for using generics. When the code
@@ -9880,12 +9979,13 @@ display summaries of data that might be stored in a <code>NewsArticle</code> or 
 instance. To do this, we need a summary from each type, and we’ll request that
 summary by calling a <code>summarize</code> method on an instance. Listing 10-12 shows the
 definition of a public <code>Summary</code> trait that expresses this behavior.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub trait Summary {
     fn summarize(&amp;self) -&gt; String;
 }</code></pre>
-<p><span class="caption">Listing 10-12: A <code>Summary</code> trait that consists of the
-behavior provided by a <code>summarize</code> method</span></p>
+<figcaption>Listing 10-12: A <code>Summary</code> trait that consists of the behavior provided by a <code>summarize</code> method</figcaption>
+</figure>
 <p>Here, we declare a trait using the <code>trait</code> keyword and then the trait’s name,
 which is <code>Summary</code> in this case. We also declare the trait as <code>pub</code> so that
 crates depending on this crate can make use of this trait too, as we’ll see in
@@ -9907,7 +10007,8 @@ the headline, the author, and the location to create the return value of
 <code>summarize</code>. For the <code>Tweet</code> struct, we define <code>summarize</code> as the username
 followed by the entire text of the tweet, assuming that the tweet content is
 already limited to 280 characters.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub trait Summary {
 </span><span class="boring">    fn summarize(&amp;self) -&gt; String;
 </span><span class="boring">}
@@ -9937,8 +10038,8 @@ impl Summary for Tweet {
         format!("{}: {}", self.username, self.content)
     }
 }</code></pre>
-<p><span class="caption">Listing 10-13: Implementing the <code>Summary</code> trait on the
-<code>NewsArticle</code> and <code>Tweet</code> types</span></p>
+<figcaption>Listing 10-13: Implementing the <code>Summary</code> trait on the <code>NewsArticle</code> and <code>Tweet</code> types</figcaption>
+</figure>
 <p>Implementing a trait on a type is similar to implementing regular methods. The
 difference is that after <code>impl</code>, we put the trait name we want to implement,
 then use the <code>for</code> keyword, and then specify the name of the type we want to
@@ -9993,7 +10094,8 @@ each method’s default behavior.</p>
 <p>In Listing 10-14, we specify a default string for the <code>summarize</code> method of the
 <code>Summary</code> trait instead of only defining the method signature, as we did in
 Listing 10-12.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub trait Summary {
     fn summarize(&amp;self) -&gt; String {
         String::from("(Read more...)")
@@ -10021,8 +10123,8 @@ Listing 10-12.</p>
 </span><span class="boring">        format!("{}: {}", self.username, self.content)
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 10-14: Defining a <code>Summary</code> trait with a default
-implementation of the <code>summarize</code> method</span></p>
+<figcaption>Listing 10-14: Defining a <code>Summary</code> trait with a default implementation of the <code>summarize</code> method</figcaption>
+</figure>
 <p>To use a default implementation to summarize instances of <code>NewsArticle</code>, we
 specify an empty <code>impl</code> block with <code>impl Summary for NewsArticle {}</code>.</p>
 <p>Even though we’re no longer defining the <code>summarize</code> method on <code>NewsArticle</code>
@@ -10347,7 +10449,8 @@ is a type alias for the type of the <code>impl</code> block, which in this case 
 <code>Pair&lt;T&gt;</code>). But in the next <code>impl</code> block, <code>Pair&lt;T&gt;</code> only implements the
 <code>cmp_display</code> method if its inner type <code>T</code> implements the <code>PartialOrd</code> trait
 that enables comparison <em>and</em> the <code>Display</code> trait that enables printing.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::fmt::Display;
 
 struct Pair&lt;T&gt; {
@@ -10370,8 +10473,8 @@ impl&lt;T: Display + PartialOrd&gt; Pair&lt;T&gt; {
         }
     }
 }</code></pre>
-<p><span class="caption">Listing 10-15: Conditionally implementing methods on a
-generic type depending on trait bounds</span></p>
+<figcaption>Listing 10-15: Conditionally implementing methods on a generic type depending on trait bounds</figcaption>
+</figure>
 <p>We can also conditionally implement a trait for any type that implements
 another trait. Implementations of a trait on any type that satisfies the trait
 bounds are called <em>blanket implementations</em> and are used extensively in the
@@ -10424,6 +10527,7 @@ lifetime syntax so you can get comfortable with the concept.</p>
 program to reference data other than the data it’s intended to reference.
 Consider the program in Listing 10-16, which has an outer scope and an inner
 scope.</p>
+<figure class="listing">
 <pre><code class="language-rust ignore does_not_compile">fn main() {
     let r;
 
@@ -10434,8 +10538,8 @@ scope.</p>
 
     println!("r: {r}");
 }</code></pre>
-<p><span class="caption">Listing 10-16: An attempt to use a reference whose value
-has gone out of scope</span></p>
+<figcaption>Listing 10-16: An attempt to use a reference whose value has gone out of scope</figcaption>
+</figure>
 <section class="note" aria-role="note">
 <p>Note: The examples in Listing 10-16, 10-17, and 10-23 declare variables
 without giving them an initial value, so the variable name exists in the outer
@@ -10479,6 +10583,7 @@ determine that this code is invalid? It uses a borrow checker.</p>
 <p>The Rust compiler has a <em>borrow checker</em> that compares scopes to determine
 whether all borrows are valid. Listing 10-17 shows the same code as Listing
 10-16 but with annotations showing the lifetimes of the variables.</p>
+<figure class="listing">
 <pre><code class="language-rust ignore does_not_compile">fn main() {
     let r;                // ---------+-- 'a
                           //          |
@@ -10489,8 +10594,8 @@ whether all borrows are valid. Listing 10-17 shows the same code as Listing
                           //          |
     println!("r: {r}");   //          |
 }                         // ---------+</code></pre>
-<p><span class="caption">Listing 10-17: Annotations of the lifetimes of <code>r</code> and
-<code>x</code>, named <code>'a</code> and <code>'b</code>, respectively</span></p>
+<figcaption>Listing 10-17: Annotations of the lifetimes of <code>r</code> and <code>x</code>, named <code>'a</code> and <code>'b</code>, respectively</figcaption>
+</figure>
 <p>Here, we’ve annotated the lifetime of <code>r</code> with <code>'a</code> and the lifetime of <code>x</code>
 with <code>'b</code>. As you can see, the inner <code>'b</code> block is much smaller than the outer
 <code>'a</code> lifetime block. At compile time, Rust compares the size of the two
@@ -10499,6 +10604,7 @@ with a lifetime of <code>'b</code>. The program is rejected because <code>'b</co
 <code>'a</code>: the subject of the reference doesn’t live as long as the reference.</p>
 <p>Listing 10-18 fixes the code so it doesn’t have a dangling reference and it
 compiles without any errors.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = 5;            // ----------+-- 'b
                           //           |
@@ -10507,8 +10613,8 @@ compiles without any errors.</p>
     println!("r: {r}");   //   |       |
                           // --+       |
 }                         // ----------+</code></pre></pre>
-<p><span class="caption">Listing 10-18: A valid reference because the data has a
-longer lifetime than the reference</span></p>
+<figcaption>Listing 10-18: A valid reference because the data has a longer lifetime than the reference</figcaption>
+</figure>
 <p>Here, <code>x</code> has the lifetime <code>'b</code>, which in this case is larger than <code>'a</code>. This
 means <code>r</code> can reference <code>x</code> because Rust knows that the reference in <code>r</code> will
 always be valid while <code>x</code> is valid.</p>
@@ -10520,7 +10626,8 @@ lifetimes of parameters and return values in the context of functions.</p>
 function will take two string slices and return a single string slice. After
 we’ve implemented the <code>longest</code> function, the code in Listing 10-19 should
 print <code>The longest string is abcd</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore">fn main() {
     let string1 = String::from("abcd");
     let string2 = "xyz";
@@ -10528,8 +10635,8 @@ print <code>The longest string is abcd</code>.</p>
     let result = longest(string1.as_str(), string2);
     println!("The longest string is {result}");
 }</code></pre>
-<p><span class="caption">Listing 10-19: A <code>main</code> function that calls the <code>longest</code>
-function to find the longer of two string slices</span></p>
+<figcaption>Listing 10-19: A <code>main</code> function that calls the <code>longest</code> function to find the longer of two string slices</figcaption>
+</figure>
 <p>Note that we want the function to take string slices, which are references,
 rather than strings, because we don’t want the <code>longest</code> function to take
 ownership of its parameters. Refer to the <a href="ch04-03-slices.html#string-slices-as-parameters">“String Slices as
@@ -10538,7 +10645,8 @@ for more discussion about why the parameters we use in Listing 10-19 are the
 ones we want.</p>
 <p>If we try to implement the <code>longest</code> function as shown in Listing 10-20, it
 won’t compile.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
 </span><span class="boring">    let string1 = String::from("abcd");
 </span><span class="boring">    let string2 = "xyz";
@@ -10554,9 +10662,8 @@ won’t compile.</p>
         y
     }
 }</code></pre>
-<p><span class="caption">Listing 10-20: An implementation of the <code>longest</code>
-function that returns the longer of two string slices but does not yet
-compile</span></p>
+<figcaption>Listing 10-20: An implementation of the <code>longest</code> function that returns the longer of two string slices but does not yet compile</figcaption>
+</figure>
 <p>Instead, we get the following error that talks about lifetimes:</p>
 <pre><code class="language-console">$ cargo run
    Compiling chapter10 v0.1.0 (file:///projects/chapter10)
@@ -10620,7 +10727,8 @@ reference will be valid as long as both the parameters are valid. This is the
 relationship between lifetimes of the parameters and the return value. We’ll
 name the lifetime <code>'a</code> and then add it to each reference, as shown in Listing
 10-21.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    let string1 = String::from("abcd");
 </span><span class="boring">    let string2 = "xyz";
@@ -10636,9 +10744,8 @@ name the lifetime <code>'a</code> and then add it to each reference, as shown in
         y
     }
 }</code></pre></pre>
-<p><span class="caption">Listing 10-21: The <code>longest</code> function definition
-specifying that all the references in the signature must have the same lifetime
-<code>'a</code></span></p>
+<figcaption>Listing 10-21: The <code>longest</code> function definition specifying that all the references in the signature must have the same lifetime <code>'a</code></figcaption>
+</figure>
 <p>This code should compile and produce the result we want when we use it with the
 <code>main</code> function in Listing 10-19.</p>
 <p>The function signature now tells Rust that for some lifetime <code>'a</code>, the function
@@ -10675,7 +10782,8 @@ lifetimes of <code>x</code> and <code>y</code>.</p>
 <p>Let’s look at how the lifetime annotations restrict the <code>longest</code> function by
 passing in references that have different concrete lifetimes. Listing 10-22 is
 a straightforward example.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let string1 = String::from("long string is long");
 
@@ -10693,8 +10801,8 @@ a straightforward example.</p>
 </span><span class="boring">        y
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 10-22: Using the <code>longest</code> function with
-references to <code>String</code> values that have different concrete lifetimes</span></p>
+<figcaption>Listing 10-22: Using the <code>longest</code> function with references to <code>String</code> values that have different concrete lifetimes</figcaption>
+</figure>
 <p>In this example, <code>string1</code> is valid until the end of the outer scope, <code>string2</code>
 is valid until the end of the inner scope, and <code>result</code> references something
 that is valid until the end of the inner scope. Run this code and you’ll see
@@ -10706,7 +10814,8 @@ assignment of the value to the <code>result</code> variable inside the scope wit
 <code>string2</code>. Then we’ll move the <code>println!</code> that uses <code>result</code> to outside the
 inner scope, after the inner scope has ended. The code in Listing 10-23 will
 not compile.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">fn main() {
     let string1 = String::from("long string is long");
     let result;
@@ -10724,8 +10833,8 @@ not compile.</p>
 </span><span class="boring">        y
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 10-23: Attempting to use <code>result</code> after <code>string2</code>
-has gone out of scope</span></p>
+<figcaption>Listing 10-23: Attempting to use <code>result</code> after <code>string2</code> has gone out of scope</figcaption>
+</figure>
 <p>When we try to compile this code, we get this error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling chapter10 v0.1.0 (file:///projects/chapter10)
@@ -10766,7 +10875,8 @@ function is doing. For example, if we changed the implementation of the
 <code>longest</code> function to always return the first parameter rather than the longest
 string slice, we wouldn’t need to specify a lifetime on the <code>y</code> parameter. The
 following code will compile:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    let string1 = String::from("abcd");
 </span><span class="boring">    let string2 = "efghijklmnopqrstuvwxyz";
@@ -10778,6 +10888,7 @@ following code will compile:</p>
 </span>fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;str) -&gt; &amp;'a str {
     x
 }</code></pre></pre>
+</figure>
 <p>We’ve specified a lifetime parameter <code>'a</code> for the parameter <code>x</code> and the return
 type, but not for the parameter <code>y</code>, because the lifetime of <code>y</code> does not have
 any relationship with the lifetime of <code>x</code> or the return value.</p>
@@ -10788,7 +10899,8 @@ to a value created within this function. However, this would be a dangling
 reference because the value will go out of scope at the end of the function.
 Consider this attempted implementation of the <code>longest</code> function that won’t
 compile:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
 </span><span class="boring">    let string1 = String::from("abcd");
 </span><span class="boring">    let string2 = "xyz";
@@ -10801,6 +10913,7 @@ compile:</p>
     let result = String::from("really long string");
     result.as_str()
 }</code></pre>
+</figure>
 <p>Here, even though we’ve specified a lifetime parameter <code>'a</code> for the return
 type, this implementation will fail to compile because the return value
 lifetime is not related to the lifetime of the parameters at all. Here is the
@@ -10835,7 +10948,8 @@ would create dangling pointers or otherwise violate memory safety.</p>
 to hold references, but in that case we would need to add a lifetime annotation
 on every reference in the struct’s definition. Listing 10-24 has a struct named
 <code>ImportantExcerpt</code> that holds a string slice.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct ImportantExcerpt&lt;'a&gt; {
     part: &amp;'a str,
 }
@@ -10847,8 +10961,8 @@ fn main() {
         part: first_sentence,
     };
 }</code></pre></pre>
-<p><span class="caption">Listing 10-24: A struct that holds a reference, requiring
-a lifetime annotation</span></p>
+<figcaption>Listing 10-24: A struct that holds a reference, requiring a lifetime annotation</figcaption>
+</figure>
 <p>This struct has the single field <code>part</code> that holds a string slice, which is a
 reference. As with generic data types, we declare the name of the generic
 lifetime parameter inside angle brackets after the name of the struct so we can
@@ -10866,7 +10980,8 @@ the <code>ImportantExcerpt</code> goes out of scope, so the reference in the
 lifetime parameters for functions or structs that use references. However, we
 had a function in Listing 4-9, shown again in Listing 10-25, that compiled
 without lifetime annotations.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn first_word(s: &amp;str) -&gt; &amp;str {
     let bytes = s.as_bytes();
 
@@ -10894,9 +11009,8 @@ without lifetime annotations.</p>
 </span><span class="boring">    // this works too, without the slice syntax!
 </span><span class="boring">    let word = first_word(my_string_literal);
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 10-25: A function we defined in Listing 4-9 that
-compiled without lifetime annotations, even though the parameter and return
-type are references</span></p>
+<figcaption>Listing 10-25: A function we defined in Listing 4-9 that compiled without lifetime annotations, even though the parameter and return type are references</figcaption>
+</figure>
 <p>The reason this function compiles without lifetime annotations is historical:
 in early versions (pre-1.0) of Rust, this code wouldn’t have compiled because
 every reference needed an explicit lifetime. At that time, the function
@@ -17593,13 +17707,14 @@ Chapter 18!</p>
 <p>Before we discuss the heap storage use case for <code>Box&lt;T&gt;</code>, we’ll cover the
 syntax and how to interact with values stored within a <code>Box&lt;T&gt;</code>.</p>
 <p>Listing 15-1 shows how to use a box to store an <code>i32</code> value on the heap:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let b = Box::new(5);
     println!("b = {b}");
 }</code></pre></pre>
-<p><span class="caption">Listing 15-1: Storing an <code>i32</code> value on the heap using a
-box</span></p>
+<figcaption>Listing 15-1: Storing an <code>i32</code> value on the heap using a box</figcaption>
+</figure>
 <p>We define the variable <code>b</code> to have the value of a <code>Box</code> that points to the
 value <code>5</code>, which is allocated on the heap. This program will print <code>b = 5</code>; in
 this case, we can access the data in the box similar to how we would if this
@@ -17649,15 +17764,16 @@ let us define a recursive data type without much distraction.</p>
 <p>Listing 15-2 contains an enum definition for a cons list. Note that this code
 won’t compile yet because the <code>List</code> type doesn’t have a known size, which
 we’ll demonstrate.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">enum List {
     Cons(i32, List),
     Nil,
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre>
-<p><span class="caption">Listing 15-2: The first attempt at defining an enum to
-represent a cons list data structure of <code>i32</code> values</span></p>
+<figcaption>Listing 15-2: The first attempt at defining an enum to represent a cons list data structure of <code>i32</code> values</figcaption>
+</figure>
 <section class="note" aria-role="note">
 <p>Note: We’re implementing a cons list that holds only <code>i32</code> values for the
 purposes of this example. We could have implemented it using generics, as we
@@ -17666,7 +17782,8 @@ any type.</p>
 </section>
 <p>Using the <code>List</code> type to store the list <code>1, 2, 3</code> would look like the code in
 Listing 15-3:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">enum List {
 </span><span class="boring">    Cons(i32, List),
 </span><span class="boring">    Nil,
@@ -17677,13 +17794,16 @@ Listing 15-3:</p>
 fn main() {
     let list = Cons(1, Cons(2, Cons(3, Nil)));
 }</code></pre>
-<p><span class="caption">Listing 15-3: Using the <code>List</code> enum to store the list <code>1, 2, 3</code></span></p>
+<figcaption>Listing 15-3: Using the <code>List</code> enum to store the list <code>1, 2, 3</code></figcaption>
+</figure>
 <p>The first <code>Cons</code> value holds <code>1</code> and another <code>List</code> value. This <code>List</code> value is
 another <code>Cons</code> value that holds <code>2</code> and another <code>List</code> value. This <code>List</code> value
 is one more <code>Cons</code> value that holds <code>3</code> and a <code>List</code> value, which is finally
 <code>Nil</code>, the non-recursive variant that signals the end of the list.</p>
 <p>If we try to compile the code in Listing 15-3, we get the error shown in
 Listing 15-4:</p>
+<figure class="listing">
+<span class="file-name">Filename: output.txt</span>
 <pre><code class="language-console">$ cargo run
    Compiling cons-list v0.1.0 (file:///projects/cons-list)
 error[E0072]: recursive type `List` has infinite size
@@ -17713,8 +17833,8 @@ Some errors have detailed explanations: E0072, E0391.
 For more information about an error, try `rustc --explain E0072`.
 error: could not compile `cons-list` (bin "cons-list") due to 2 previous errors
 </code></pre>
-<p><span class="caption">Listing 15-4: The error we get when attempting to define
-a recursive enum</span></p>
+<figcaption>Listing 15-4: The error we get when attempting to define a recursive enum</figcaption>
+</figure>
 <p>The error shows this type “has infinite size.” The reason is that we’ve defined
 <code>List</code> with a variant that is recursive: it holds another value of itself
 directly. As a result, Rust can’t figure out how much space it needs to store a
@@ -17772,7 +17892,8 @@ this implementation is now more like placing the items next to one another
 rather than inside one another.</p>
 <p>We can change the definition of the <code>List</code> enum in Listing 15-2 and the usage
 of the <code>List</code> in Listing 15-3 to the code in Listing 15-5, which will compile:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">enum List {
     Cons(i32, Box&lt;List&gt;),
     Nil,
@@ -17783,8 +17904,8 @@ use crate::List::{Cons, Nil};
 fn main() {
     let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
 }</code></pre></pre>
-<p><span class="caption">Listing 15-5: Definition of <code>List</code> that uses <code>Box&lt;T&gt;</code> in
-order to have a known size</span></p>
+<figcaption>Listing 15-5: Definition of <code>List</code> that uses <code>Box&lt;T&gt;</code> in order to have a known size</figcaption>
+</figure>
 <p>The <code>Cons</code> variant needs the size of an <code>i32</code> plus the space to store the
 box’s pointer data. The <code>Nil</code> variant stores no values, so it needs less space
 than the <code>Cons</code> variant. We now know that any <code>List</code> value will take up the
@@ -17834,7 +17955,8 @@ is less important than the pointer-like behavior.</p>
 as an arrow to a value stored somewhere else. In Listing 15-6, we create a
 reference to an <code>i32</code> value and then use the dereference operator to follow the
 reference to the value:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = 5;
     let y = &amp;x;
@@ -17842,8 +17964,8 @@ reference to the value:</p>
     assert_eq!(5, x);
     assert_eq!(5, *y);
 }</code></pre></pre>
-<p><span class="caption">Listing 15-6: Using the dereference operator to follow a
-reference to an <code>i32</code> value</span></p>
+<figcaption>Listing 15-6: Using the dereference operator to follow a reference to an <code>i32</code> value</figcaption>
+</figure>
 <p>The variable <code>x</code> holds an <code>i32</code> value <code>5</code>. We set <code>y</code> equal to a reference to
 <code>x</code>. We can assert that <code>x</code> is equal to <code>5</code>. However, if we want to make an
 assertion about the value in <code>y</code>, we have to use <code>*y</code> to follow the reference
@@ -17874,7 +17996,8 @@ to the value it’s pointing to.</p>
 reference; the dereference operator used on the <code>Box&lt;T&gt;</code> in Listing 15-7
 functions in the same way as the dereference operator used on the reference in
 Listing 15-6:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = 5;
     let y = Box::new(x);
@@ -17882,8 +18005,8 @@ Listing 15-6:</p>
     assert_eq!(5, x);
     assert_eq!(5, *y);
 }</code></pre></pre>
-<p><span class="caption">Listing 15-7: Using the dereference operator on a
-<code>Box&lt;i32&gt;</code></span></p>
+<figcaption>Listing 15-7: Using the dereference operator on a <code>Box&lt;i32&gt;</code></figcaption>
+</figure>
 <p>The main difference between Listing 15-7 and Listing 15-6 is that here we set
 <code>y</code> to be an instance of a <code>Box&lt;T&gt;</code> pointing to a copied value of <code>x</code> rather
 than a reference pointing to the value of <code>x</code>. In the last assertion, we can
@@ -17899,7 +18022,8 @@ dereference operator.</p>
 <p>The <code>Box&lt;T&gt;</code> type is ultimately defined as a tuple struct with one element, so
 Listing 15-8 defines a <code>MyBox&lt;T&gt;</code> type in the same way. We’ll also define a
 <code>new</code> function to match the <code>new</code> function defined on <code>Box&lt;T&gt;</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct MyBox&lt;T&gt;(T);
 
 impl&lt;T&gt; MyBox&lt;T&gt; {
@@ -17909,7 +18033,8 @@ impl&lt;T&gt; MyBox&lt;T&gt; {
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 15-8: Defining a <code>MyBox&lt;T&gt;</code> type</span></p>
+<figcaption>Listing 15-8: Defining a <code>MyBox&lt;T&gt;</code> type</figcaption>
+</figure>
 <p>We define a struct named <code>MyBox</code> and declare a generic parameter <code>T</code>, because
 we want our type to hold values of any type. The <code>MyBox</code> type is a tuple struct
 with one element of type <code>T</code>. The <code>MyBox::new</code> function takes one parameter of
@@ -17918,7 +18043,8 @@ type <code>T</code> and returns a <code>MyBox</code> instance that holds the val
 changing it to use the <code>MyBox&lt;T&gt;</code> type we’ve defined instead of <code>Box&lt;T&gt;</code>. The
 code in Listing 15-9 won’t compile because Rust doesn’t know how to dereference
 <code>MyBox</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">struct MyBox&lt;T&gt;(T);
 </span><span class="boring">
 </span><span class="boring">impl&lt;T&gt; MyBox&lt;T&gt; {
@@ -17934,8 +18060,8 @@ code in Listing 15-9 won’t compile because Rust doesn’t know how to derefere
     assert_eq!(5, x);
     assert_eq!(5, *y);
 }</code></pre>
-<p><span class="caption">Listing 15-9: Attempting to use <code>MyBox&lt;T&gt;</code> in the same
-way we used references and <code>Box&lt;T&gt;</code></span></p>
+<figcaption>Listing 15-9: Attempting to use <code>MyBox&lt;T&gt;</code> in the same way we used references and <code>Box&lt;T&gt;</code></figcaption>
+</figure>
 <p>Here’s the resulting compilation error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling deref-example v0.1.0 (file:///projects/deref-example)
@@ -17958,7 +18084,8 @@ implementations for the trait’s required methods. The <code>Deref</code> trait
 by the standard library, requires us to implement one method named <code>deref</code> that
 borrows <code>self</code> and returns a reference to the inner data. Listing 15-10
 contains an implementation of <code>Deref</code> to add to the definition of <code>MyBox</code>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::ops::Deref;
 
 impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
@@ -17984,7 +18111,8 @@ impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
 </span><span class="boring">    assert_eq!(5, x);
 </span><span class="boring">    assert_eq!(5, *y);
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 15-10: Implementing <code>Deref</code> on <code>MyBox&lt;T&gt;</code></span></p>
+<figcaption>Listing 15-10: Implementing <code>Deref</code> on <code>MyBox&lt;T&gt;</code></figcaption>
+</figure>
 <p>The <code>type Target = T;</code> syntax defines an associated type for the <code>Deref</code>
 trait to use. Associated types are a slightly different way of declaring a
 generic parameter, but you don’t need to worry about them for now; we’ll cover
@@ -18036,18 +18164,20 @@ can work for either references or smart pointers.</p>
 Listing 15-8 as well as the implementation of <code>Deref</code> that we added in Listing
 15-10. Listing 15-11 shows the definition of a function that has a string slice
 parameter:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn hello(name: &amp;str) {
     println!("Hello, {name}!");
 }
 <span class="boring">
 </span><span class="boring">fn main() {}</span></code></pre></pre>
-<p><span class="caption">Listing 15-11: A <code>hello</code> function that has the parameter
-<code>name</code> of type <code>&amp;str</code></span></p>
+<figcaption>Listing 15-11: A <code>hello</code> function that has the parameter <code>name</code> of type <code>&amp;str</code></figcaption>
+</figure>
 <p>We can call the <code>hello</code> function with a string slice as an argument, such as
 <code>hello("Rust");</code> for example. Deref coercion makes it possible to call <code>hello</code>
 with a reference to a value of type <code>MyBox&lt;String&gt;</code>, as shown in Listing 15-12:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::ops::Deref;
 </span><span class="boring">
 </span><span class="boring">impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
@@ -18074,8 +18204,8 @@ with a reference to a value of type <code>MyBox&lt;String&gt;</code>, as shown i
     let m = MyBox::new(String::from("Rust"));
     hello(&amp;m);
 }</code></pre></pre>
-<p><span class="caption">Listing 15-12: Calling <code>hello</code> with a reference to a
-<code>MyBox&lt;String&gt;</code> value, which works because of deref coercion</span></p>
+<figcaption>Listing 15-12: Calling <code>hello</code> with a reference to a <code>MyBox&lt;String&gt;</code> value, which works because of deref coercion</figcaption>
+</figure>
 <p>Here we’re calling the <code>hello</code> function with the argument <code>&amp;m</code>, which is a
 reference to a <code>MyBox&lt;String&gt;</code> value. Because we implemented the <code>Deref</code> trait
 on <code>MyBox&lt;T&gt;</code> in Listing 15-10, Rust can turn <code>&amp;MyBox&lt;String&gt;</code> into <code>&amp;String</code>
@@ -18086,7 +18216,8 @@ matches the <code>hello</code> function’s definition.</p>
 <p>If Rust didn’t implement deref coercion, we would have to write the code in
 Listing 15-13 instead of the code in Listing 15-12 to call <code>hello</code> with a value
 of type <code>&amp;MyBox&lt;String&gt;</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::ops::Deref;
 </span><span class="boring">
 </span><span class="boring">impl&lt;T&gt; Deref for MyBox&lt;T&gt; {
@@ -18113,8 +18244,8 @@ of type <code>&amp;MyBox&lt;String&gt;</code>.</p>
     let m = MyBox::new(String::from("Rust"));
     hello(&amp;(*m)[..]);
 }</code></pre></pre>
-<p><span class="caption">Listing 15-13: The code we would have to write if Rust
-didn’t have deref coercion</span></p>
+<figcaption>Listing 15-13: The code we would have to write if Rust didn’t have deref coercion</figcaption>
+</figure>
 <p>The <code>(*m)</code> dereferences the <code>MyBox&lt;String&gt;</code> into a <code>String</code>. Then the <code>&amp;</code> and
 <code>[..]</code> take a string slice of the <code>String</code> that is equal to the whole string to
 match the signature of <code>hello</code>. This code without deref coercions is harder to
@@ -18175,7 +18306,8 @@ let’s implement <code>drop</code> with <code>println!</code> statements for no
 <p>Listing 15-14 shows a <code>CustomSmartPointer</code> struct whose only custom
 functionality is that it will print <code>Dropping CustomSmartPointer!</code> when the
 instance goes out of scope, to show when Rust runs the <code>drop</code> function.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct CustomSmartPointer {
     data: String,
 }
@@ -18195,8 +18327,8 @@ fn main() {
     };
     println!("CustomSmartPointers created.");
 }</code></pre></pre>
-<p><span class="caption">Listing 15-14: A <code>CustomSmartPointer</code> struct that
-implements the <code>Drop</code> trait where we would put our cleanup code</span></p>
+<figcaption>Listing 15-14: A <code>CustomSmartPointer</code> struct that implements the <code>Drop</code> trait where we would put our cleanup code</figcaption>
+</figure>
 <p>The <code>Drop</code> trait is included in the prelude, so we don’t need to bring it into
 scope. We implement the <code>Drop</code> trait on <code>CustomSmartPointer</code> and provide an
 implementation for the <code>drop</code> method that calls <code>println!</code>. The body of the
@@ -18236,7 +18368,8 @@ if you want to force a value to be dropped before the end of its scope.</p>
 <p>If we try to call the <code>Drop</code> trait’s <code>drop</code> method manually by modifying the
 <code>main</code> function from Listing 15-14, as shown in Listing 15-15, we’ll get a
 compiler error:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">struct CustomSmartPointer {
 </span><span class="boring">    data: String,
 </span><span class="boring">}
@@ -18255,8 +18388,8 @@ compiler error:</p>
     c.drop();
     println!("CustomSmartPointer dropped before the end of main.");
 }</code></pre>
-<p><span class="caption">Listing 15-15: Attempting to call the <code>drop</code> method from
-the <code>Drop</code> trait manually to clean up early</span></p>
+<figcaption>Listing 15-15: Attempting to call the <code>drop</code> method from the <code>Drop</code> trait manually to clean up early</figcaption>
+</figure>
 <p>When we try to compile this code, we’ll get this error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling drop-example v0.1.0 (file:///projects/drop-example)
@@ -18290,7 +18423,8 @@ a value to be cleaned up early, we use the <code>std::mem::drop</code> function.
 trait. We call it by passing as an argument the value we want to force drop.
 The function is in the prelude, so we can modify <code>main</code> in Listing 15-15 to
 call the <code>drop</code> function, as shown in Listing 15-16:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">struct CustomSmartPointer {
 </span><span class="boring">    data: String,
 </span><span class="boring">}
@@ -18309,8 +18443,8 @@ call the <code>drop</code> function, as shown in Listing 15-16:</p>
     drop(c);
     println!("CustomSmartPointer dropped before the end of main.");
 }</code></pre></pre>
-<p><span class="caption">Listing 15-16: Calling <code>std::mem::drop</code> to explicitly
-drop a value before it goes out of scope</span></p>
+<figcaption>Listing 15-16: Calling <code>std::mem::drop</code> to explicitly drop a value before it goes out of scope</figcaption>
+</figure>
 <p>Running this code will print the following:</p>
 <pre><code class="language-console">$ cargo run
    Compiling drop-example v0.1.0 (file:///projects/drop-example)
@@ -18372,7 +18506,8 @@ lists will then continue on to the first <code>a</code> list containing 5 and 10
 words, both lists will share the first list containing 5 and 10.</p>
 <p>Trying to implement this scenario using our definition of <code>List</code> with <code>Box&lt;T&gt;</code>
 won’t work, as shown in Listing 15-17:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">enum List {
     Cons(i32, Box&lt;List&gt;),
     Nil,
@@ -18385,8 +18520,8 @@ fn main() {
     let b = Cons(3, Box::new(a));
     let c = Cons(4, Box::new(a));
 }</code></pre>
-<p><span class="caption">Listing 15-17: Demonstrating we’re not allowed to have
-two lists using <code>Box&lt;T&gt;</code> that try to share ownership of a third list</span></p>
+<figcaption>Listing 15-17: Demonstrating we’re not allowed to have two lists using <code>Box&lt;T&gt;</code> that try to share ownership of a third list</figcaption>
+</figure>
 <p>When we compile this code, we get this error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling cons-list v0.1.0 (file:///projects/cons-list)
@@ -18421,7 +18556,8 @@ creating <code>c</code>, increasing the number of references from two to three. 
 we call <code>Rc::clone</code>, the reference count to the data within the <code>Rc&lt;List&gt;</code> will
 increase, and the data won’t be cleaned up unless there are zero references to
 it.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">enum List {
     Cons(i32, Rc&lt;List&gt;),
     Nil,
@@ -18435,8 +18571,8 @@ fn main() {
     let b = Cons(3, Rc::clone(&amp;a));
     let c = Cons(4, Rc::clone(&amp;a));
 }</code></pre></pre>
-<p><span class="caption">Listing 15-18: A definition of <code>List</code> that uses
-<code>Rc&lt;T&gt;</code></span></p>
+<figcaption>Listing 15-18: A definition of <code>List</code> that uses <code>Rc&lt;T&gt;</code></figcaption>
+</figure>
 <p>We need to add a <code>use</code> statement to bring <code>Rc&lt;T&gt;</code> into scope because it’s not
 in the prelude. In <code>main</code>, we create the list holding 5 and 10 and store it in
 a new <code>Rc&lt;List&gt;</code> in <code>a</code>. Then when we create <code>b</code> and <code>c</code>, we call the
@@ -18457,7 +18593,8 @@ code, we only need to consider the deep-copy clones and can disregard calls to
 counts changing as we create and drop references to the <code>Rc&lt;List&gt;</code> in <code>a</code>.</p>
 <p>In Listing 15-19, we’ll change <code>main</code> so it has an inner scope around list <code>c</code>;
 then we can see how the reference count changes when <code>c</code> goes out of scope.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">enum List {
 </span><span class="boring">    Cons(i32, Rc&lt;List&gt;),
 </span><span class="boring">    Nil,
@@ -18477,7 +18614,8 @@ then we can see how the reference count changes when <code>c</code> goes out of 
     }
     println!("count after c goes out of scope = {}", Rc::strong_count(&amp;a));
 }</code></pre></pre>
-<p><span class="caption">Listing 15-19: Printing the reference count</span></p>
+<figcaption>Listing 15-19: Printing the reference count</figcaption>
+</figure>
 <p>At each point in the program where the reference count changes, we print the
 reference count, which we get by calling the <code>Rc::strong_count</code> function. This
 function is named <code>strong_count</code> rather than <code>count</code> because the <code>Rc&lt;T&gt;</code> type
@@ -18635,7 +18773,8 @@ messages: the application could put a message in the application, send an
 email, send a text message, or something else. The library doesn’t need to know
 that detail. All it needs is something that implements a trait we’ll provide
 called <code>Messenger</code>. Listing 15-20 shows the library code:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub trait Messenger {
     fn send(&amp;self, msg: &amp;str);
 }
@@ -18674,8 +18813,8 @@ where
         }
     }
 }</code></pre>
-<p><span class="caption">Listing 15-20: A library to keep track of how close a
-value is to a maximum value and warn when the value is at certain levels</span></p>
+<figcaption>Listing 15-20: A library to keep track of how close a value is to a maximum value and warn when the value is at certain levels</figcaption>
+</figure>
 <p>One important part of this code is that the <code>Messenger</code> trait has one method
 called <code>send</code> that takes an immutable reference to <code>self</code> and the text of the
 message. This trait is the interface our mock object needs to implement so that
@@ -18692,7 +18831,8 @@ create a new instance of the mock object, create a <code>LimitTracker</code> tha
 mock object, call the <code>set_value</code> method on <code>LimitTracker</code>, and then check that
 the mock object has the messages we expect. Listing 15-21 shows an attempt to
 implement a mock object to do just that, but the borrow checker won’t allow it:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">pub trait Messenger {
 </span><span class="boring">    fn send(&amp;self, msg: &amp;str);
 </span><span class="boring">}
@@ -18764,8 +18904,8 @@ mod tests {
         assert_eq!(mock_messenger.sent_messages.len(), 1);
     }
 }</code></pre>
-<p><span class="caption">Listing 15-21: An attempt to implement a <code>MockMessenger</code>
-that isn’t allowed by the borrow checker</span></p>
+<figcaption>Listing 15-21: An attempt to implement a <code>MockMessenger</code> that isn’t allowed by the borrow checker</figcaption>
+</figure>
 <p>This test code defines a <code>MockMessenger</code> struct that has a <code>sent_messages</code>
 field with a <code>Vec</code> of <code>String</code> values to keep track of the messages it’s told
 to send. We also define an associated function <code>new</code> to make it convenient to
@@ -18812,7 +18952,8 @@ definition (feel free to try and see what error message you get).</p>
 <code>sent_messages</code> within a <code>RefCell&lt;T&gt;</code>, and then the <code>send</code> method will be
 able to modify <code>sent_messages</code> to store the messages we’ve seen. Listing 15-22
 shows what that looks like:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub trait Messenger {
 </span><span class="boring">    fn send(&amp;self, msg: &amp;str);
 </span><span class="boring">}
@@ -18886,8 +19027,8 @@ mod tests {
         assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
     }
 }</code></pre>
-<p><span class="caption">Listing 15-22: Using <code>RefCell&lt;T&gt;</code> to mutate an inner
-value while the outer value is considered immutable</span></p>
+<figcaption>Listing 15-22: Using <code>RefCell&lt;T&gt;</code> to mutate an inner value while the outer value is considered immutable</figcaption>
+</figure>
 <p>The <code>sent_messages</code> field is now of type <code>RefCell&lt;Vec&lt;String&gt;&gt;</code> instead of
 <code>Vec&lt;String&gt;</code>. In the <code>new</code> function, we create a new <code>RefCell&lt;Vec&lt;String&gt;&gt;</code>
 instance around the empty vector.</p>
@@ -18920,7 +19061,8 @@ runtime. Listing 15-23 shows a modification of the implementation of <code>send<
 Listing 15-22. We’re deliberately trying to create two mutable borrows active
 for the same scope to illustrate that <code>RefCell&lt;T&gt;</code> prevents us from doing this
 at runtime.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore panics"><span class="boring">pub trait Messenger {
 </span><span class="boring">    fn send(&amp;self, msg: &amp;str);
 </span><span class="boring">}
@@ -18997,8 +19139,8 @@ at runtime.</p>
 </span><span class="boring">        assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 15-23: Creating two mutable references in the
-same scope to see that <code>RefCell&lt;T&gt;</code> will panic</span></p>
+<figcaption>Listing 15-23: Creating two mutable references in the same scope to see that <code>RefCell&lt;T&gt;</code> will panic</figcaption>
+</figure>
 <p>We create a variable <code>one_borrow</code> for the <code>RefMut&lt;T&gt;</code> smart pointer returned
 from <code>borrow_mut</code>. Then we create another mutable borrow in the same way in the
 variable <code>two_borrow</code>. This makes two mutable references in the same scope,
@@ -19051,7 +19193,8 @@ list once we’ve created them. Let’s add in <code>RefCell&lt;T&gt;</code> to 
 change the values in the lists. Listing 15-24 shows that by using a
 <code>RefCell&lt;T&gt;</code> in the <code>Cons</code> definition, we can modify the value stored in all
 the lists:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">#[derive(Debug)]
 enum List {
     Cons(Rc&lt;RefCell&lt;i32&gt;&gt;, Rc&lt;List&gt;),
@@ -19076,8 +19219,8 @@ fn main() {
     println!("b after = {b:?}");
     println!("c after = {c:?}");
 }</code></pre></pre>
-<p><span class="caption">Listing 15-24: Using <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> to create a
-<code>List</code> that we can mutate</span></p>
+<figcaption>Listing 15-24: Using <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> to create a <code>List</code> that we can mutate</figcaption>
+</figure>
 <p>We create a value that is an instance of <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> and store it in a
 variable named <code>value</code> so we can access it directly later. Then we create a
 <code>List</code> in <code>a</code> with a <code>Cons</code> variant that holds <code>value</code>. We need to clone
@@ -19124,7 +19267,8 @@ will never be dropped.</p>
 <p>Let’s look at how a reference cycle might happen and how to prevent it,
 starting with the definition of the <code>List</code> enum and a <code>tail</code> method in Listing
 15-25:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use crate::List::{Cons, Nil};
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -19145,8 +19289,8 @@ impl List {
 }
 
 fn main() {}</code></pre></pre>
-<p><span class="caption">Listing 15-25: A cons list definition that holds a
-<code>RefCell&lt;T&gt;</code> so we can modify what a <code>Cons</code> variant is referring to</span></p>
+<figcaption>Listing 15-25: A cons list definition that holds a <code>RefCell&lt;T&gt;</code> so we can modify what a <code>Cons</code> variant is referring to</figcaption>
+</figure>
 <p>We’re using another variation of the <code>List</code> definition from Listing 15-5. The
 second element in the <code>Cons</code> variant is now <code>RefCell&lt;Rc&lt;List&gt;&gt;</code>, meaning that
 instead of having the ability to modify the <code>i32</code> value as we did in Listing
@@ -19158,7 +19302,8 @@ Listing 15-25. This code creates a list in <code>a</code> and a list in <code>b<
 the list in <code>a</code>. Then it modifies the list in <code>a</code> to point to <code>b</code>, creating a
 reference cycle. There are <code>println!</code> statements along the way to show what the
 reference counts are at various points in this process.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use crate::List::{Cons, Nil};
 </span><span class="boring">use std::cell::RefCell;
 </span><span class="boring">use std::rc::Rc;
@@ -19201,8 +19346,8 @@ reference counts are at various points in this process.</p>
     // it will overflow the stack
     // println!("a next item = {:?}", a.tail());
 }</code></pre></pre>
-<p><span class="caption">Listing 15-26: Creating a reference cycle of two <code>List</code>
-values pointing to each other</span></p>
+<figcaption>Listing 15-26: Creating a reference cycle of two <code>List</code> values pointing to each other</figcaption>
+</figure>
 <p>We create an <code>Rc&lt;List&gt;</code> instance holding a <code>List</code> value in the variable <code>a</code>
 with an initial list of <code>5, Nil</code>. We then create an <code>Rc&lt;List&gt;</code> instance holding
 another <code>List</code> value in the variable <code>b</code> that contains the value 10 and points
@@ -19324,7 +19469,8 @@ modify which nodes are children of another node, so we have a <code>RefCell&lt;T
 <p>Next, we’ll use our struct definition and create one <code>Node</code> instance named
 <code>leaf</code> with the value 3 and no children, and another instance named <code>branch</code>
 with the value 5 and <code>leaf</code> as one of its children, as shown in Listing 15-27:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::cell::RefCell;
 </span><span class="boring">use std::rc::Rc;
 </span><span class="boring">
@@ -19345,8 +19491,8 @@ with the value 5 and <code>leaf</code> as one of its children, as shown in Listi
         children: RefCell::new(vec![Rc::clone(&amp;leaf)]),
     });
 }</code></pre></pre>
-<p><span class="caption">Listing 15-27: Creating a <code>leaf</code> node with no children
-and a <code>branch</code> node with <code>leaf</code> as one of its children</span></p>
+<figcaption>Listing 15-27: Creating a <code>leaf</code> node with no children and a <code>branch</code> node with <code>leaf</code> as one of its children</figcaption>
+</figure>
 <p>We clone the <code>Rc&lt;Node&gt;</code> in <code>leaf</code> and store that in <code>branch</code>, meaning the
 <code>Node</code> in <code>leaf</code> now has two owners: <code>leaf</code> and <code>branch</code>. We can get from
 <code>branch</code> to <code>leaf</code> through <code>branch.children</code>, but there’s no way to get from
@@ -19400,7 +19546,8 @@ struct Node {
 <p>A node will be able to refer to its parent node but doesn’t own its parent.
 In Listing 15-28, we update <code>main</code> to use this new definition so the <code>leaf</code>
 node will have a way to refer to its parent, <code>branch</code>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::cell::RefCell;
 </span><span class="boring">use std::rc::{Rc, Weak};
 </span><span class="boring">
@@ -19430,8 +19577,8 @@ node will have a way to refer to its parent, <code>branch</code>:</p>
 
     println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
 }</code></pre></pre>
-<p><span class="caption">Listing 15-28: A <code>leaf</code> node with a weak reference to its
-parent node <code>branch</code></span></p>
+<figcaption>Listing 15-28: A <code>leaf</code> node with a weak reference to its parent node <code>branch</code></figcaption>
+</figure>
 <p>Creating the <code>leaf</code> node looks similar to Listing 15-27 with the exception of
 the <code>parent</code> field: <code>leaf</code> starts out without a parent, so we create a new,
 empty <code>Weak&lt;Node&gt;</code> reference instance.</p>
@@ -19465,7 +19612,8 @@ instances change by creating a new inner scope and moving the creation of
 <code>branch</code> into that scope. By doing so, we can see what happens when <code>branch</code> is
 created and then dropped when it goes out of scope. The modifications are shown
 in Listing 15-29:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">use std::cell::RefCell;
 </span><span class="boring">use std::rc::{Rc, Weak};
 </span><span class="boring">
@@ -19518,8 +19666,8 @@ in Listing 15-29:</p>
         Rc::weak_count(&amp;leaf),
     );
 }</code></pre></pre>
-<p><span class="caption">Listing 15-29: Creating <code>branch</code> in an inner scope and
-examining strong and weak reference counts</span></p>
+<figcaption>Listing 15-29: Creating <code>branch</code> in an inner scope and examining strong and weak reference counts</figcaption>
+</figure>
 <p>After <code>leaf</code> is created, its <code>Rc&lt;Node&gt;</code> has a strong count of 1 and a weak
 count of 0. In the inner scope, we create <code>branch</code> and associate it with
 <code>leaf</code>, at which point when we print the counts, the <code>Rc&lt;Node&gt;</code> in <code>branch</code>
@@ -19642,7 +19790,8 @@ provides another approach to concurrency as well.)</p>
 closure (we talked about closures in Chapter 13) containing the code we want to
 run in the new thread. The example in Listing 16-1 prints some text from a main
 thread and other text from a new thread:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::thread;
 use std::time::Duration;
 
@@ -19659,8 +19808,8 @@ fn main() {
         thread::sleep(Duration::from_millis(1));
     }
 }</code></pre></pre>
-<p><span class="caption">Listing 16-1: Creating a new thread to print one thing
-while the main thread prints something else</span></p>
+<figcaption>Listing 16-1: Creating a new thread to print one thing while the main thread prints something else</figcaption>
+</figure>
 <p>Note that when the main thread of a Rust program completes, all spawned threads
 are shut down, whether or not they have finished running. The output from this
 program might be a little different every time, but it will look similar to the
@@ -19699,7 +19848,8 @@ by saving the return value of <code>thread::spawn</code> in a variable. The retu
 call the <code>join</code> method on it, will wait for its thread to finish. Listing 16-2
 shows how to use the <code>JoinHandle</code> of the thread we created in Listing 16-1 and
 call <code>join</code> to make sure the spawned thread finishes before <code>main</code> exits:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::thread;
 use std::time::Duration;
 
@@ -19718,8 +19868,8 @@ fn main() {
 
     handle.join().unwrap();
 }</code></pre></pre>
-<p><span class="caption">Listing 16-2: Saving a <code>JoinHandle</code> from <code>thread::spawn</code>
-to guarantee the thread is run to completion</span></p>
+<figcaption>Listing 16-2: Saving a <code>JoinHandle</code> from <code>thread::spawn</code> to guarantee the thread is run to completion</figcaption>
+</figure>
 <p>Calling <code>join</code> on the handle blocks the thread currently running until the
 thread represented by the handle terminates. <em>Blocking</em> a thread means that
 thread is prevented from performing work or exiting. Because we’ve put the call
@@ -19746,7 +19896,8 @@ hi number 9 from the spawned thread!
 call to <code>handle.join()</code> and does not end until the spawned thread is finished.</p>
 <p>But let’s see what happens when we instead move <code>handle.join()</code> before the
 <code>for</code> loop in <code>main</code>, like this:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::thread;
 use std::time::Duration;
 
@@ -19765,6 +19916,7 @@ fn main() {
         thread::sleep(Duration::from_millis(1));
     }
 }</code></pre></pre>
+</figure>
 <p>The main thread will wait for the spawned thread to finish and then run its
 <code>for</code> loop, so the output won’t be interleaved anymore, as shown here:</p>
 <!-- Not extracting output because changes to this output aren't significant;
@@ -19799,7 +19951,8 @@ thread’s code. To use data from the main thread in the spawned thread, the
 spawned thread’s closure must capture the values it needs. Listing 16-3 shows
 an attempt to create a vector in the main thread and use it in the spawned
 thread. However, this won’t yet work, as you’ll see in a moment.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">use std::thread;
 
 fn main() {
@@ -19811,8 +19964,8 @@ fn main() {
 
     handle.join().unwrap();
 }</code></pre>
-<p><span class="caption">Listing 16-3: Attempting to use a vector created by the
-main thread in another thread</span></p>
+<figcaption>Listing 16-3: Attempting to use a vector created by the main thread in another thread</figcaption>
+</figure>
 <p>The closure uses <code>v</code>, so it will capture <code>v</code> and make it part of the closure’s
 environment. Because <code>thread::spawn</code> runs this closure in a new thread, we
 should be able to access <code>v</code> inside that new thread. But when we compile this
@@ -19849,7 +20002,8 @@ tell how long the spawned thread will run, so it doesn’t know if the reference
 to <code>v</code> will always be valid.</p>
 <p>Listing 16-4 provides a scenario that’s more likely to have a reference to <code>v</code>
 that won’t be valid:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">use std::thread;
 
 fn main() {
@@ -19863,8 +20017,8 @@ fn main() {
 
     handle.join().unwrap();
 }</code></pre>
-<p><span class="caption">Listing 16-4: A thread with a closure that attempts to
-capture a reference to <code>v</code> from a main thread that drops <code>v</code></span></p>
+<figcaption>Listing 16-4: A thread with a closure that attempts to capture a reference to <code>v</code> from a main thread that drops <code>v</code></figcaption>
+</figure>
 <p>If Rust allowed us to run this code, there’s a possibility the spawned thread
 would be immediately put in the background without running at all. The spawned
 thread has a reference to <code>v</code> inside, but the main thread immediately drops
@@ -19885,7 +20039,8 @@ after automatic regeneration, look at listings/ch16-fearless-concurrency/listing
 ownership of the values it’s using rather than allowing Rust to infer that it
 should borrow the values. The modification to Listing 16-3 shown in Listing
 16-5 will compile and run as we intend:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::thread;
 
 fn main() {
@@ -19897,8 +20052,8 @@ fn main() {
 
     handle.join().unwrap();
 }</code></pre></pre>
-<p><span class="caption">Listing 16-5: Using the <code>move</code> keyword to force a closure
-to take ownership of the values it uses</span></p>
+<figcaption>Listing 16-5: Using the <code>move</code> keyword to force a closure to take ownership of the values it uses</figcaption>
+</figure>
 <p>We might be tempted to try the same thing to fix the code in Listing 16-4 where
 the main thread called <code>drop</code> by using a <code>move</code> closure. However, this fix will
 not work because what Listing 16-4 is trying to do is disallowed for a
@@ -19992,7 +20147,8 @@ by <code>mpsc::channel</code>.</p>
 string so the spawned thread is communicating with the main thread, as shown in
 Listing 16-7. This is like putting a rubber duck in the river upstream or
 sending a chat message from one thread to another.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::sync::mpsc;
 use std::thread;
 
@@ -20004,8 +20160,8 @@ fn main() {
         tx.send(val).unwrap();
     });
 }</code></pre></pre>
-<p><span class="caption">Listing 16-7: Moving <code>tx</code> to a spawned thread and sending
-“hi”</span></p>
+<figcaption>Listing 16-7: Moving <code>tx</code> to a spawned thread and sending “hi”</figcaption>
+</figure>
 <p>Again, we’re using <code>thread::spawn</code> to create a new thread and then using <code>move</code>
 to move <code>tx</code> into the closure so the spawned thread owns <code>tx</code>. The spawned
 thread needs to own the transmitter to be able to send messages through the
@@ -20018,7 +20174,8 @@ Chapter 9 to review strategies for proper error handling.</p>
 <p>In Listing 16-8, we’ll get the value from the receiver in the main thread. This
 is like retrieving the rubber duck from the water at the end of the river or
 receiving a chat message.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::sync::mpsc;
 use std::thread;
 
@@ -20033,8 +20190,8 @@ fn main() {
     let received = rx.recv().unwrap();
     println!("Got: {received}");
 }</code></pre></pre>
-<p><span class="caption">Listing 16-8: Receiving the value “hi” in the main thread
-and printing it</span></p>
+<figcaption>Listing 16-8: Receiving the value “hi” in the main thread and printing it</figcaption>
+</figure>
 <p>The receiver has two useful methods: <code>recv</code> and <code>try_recv</code>. We’re using <code>recv</code>,
 short for <em>receive</em>, which will block the main thread’s execution and wait
 until a value is sent down the channel. Once a value is sent, <code>recv</code> will
@@ -20066,7 +20223,8 @@ an experiment to show how channels and ownership work together to prevent
 problems: we’ll try to use a <code>val</code> value in the spawned thread <em>after</em> we’ve
 sent it down the channel. Try compiling the code in Listing 16-9 to see why
 this code isn’t allowed:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">use std::sync::mpsc;
 use std::thread;
 
@@ -20082,8 +20240,8 @@ fn main() {
     let received = rx.recv().unwrap();
     println!("Got: {received}");
 }</code></pre>
-<p><span class="caption">Listing 16-9: Attempting to use <code>val</code> after we’ve sent it
-down the channel</span></p>
+<figcaption>Listing 16-9: Attempting to use <code>val</code> after we’ve sent it down the channel</figcaption>
+</figure>
 <p>Here, we try to print <code>val</code> after we’ve sent it down the channel via <code>tx.send</code>.
 Allowing this would be a bad idea: once the value has been sent to another
 thread, that thread could modify or drop it before we try to use the value
@@ -20117,7 +20275,8 @@ two separate threads were talking to each other over the channel. In Listing
 16-10 we’ve made some modifications that will prove the code in Listing 16-8 is
 running concurrently: the spawned thread will now send multiple messages and
 pause for a second between each message.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust noplayground">use std::sync::mpsc;
 use std::thread;
 use std::time::Duration;
@@ -20143,8 +20302,8 @@ fn main() {
         println!("Got: {received}");
     }
 }</code></pre>
-<p><span class="caption">Listing 16-10: Sending multiple messages and pausing
-between each</span></p>
+<figcaption>Listing 16-10: Sending multiple messages and pausing between each</figcaption>
+</figure>
 <p>This time, the spawned thread has a vector of strings that we want to send to
 the main thread. We iterate over them, sending each individually, and pause
 between each by calling the <code>thread::sleep</code> function with a <code>Duration</code> value of
@@ -20170,7 +20329,8 @@ the spawned thread.</p>
 single consumer</em>. Let’s put <code>mpsc</code> to use and expand the code in Listing 16-10
 to create multiple threads that all send values to the same receiver. We can do
 so by cloning the transmitter, as shown in Listing 16-11:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">use std::sync::mpsc;
 </span><span class="boring">use std::thread;
 </span><span class="boring">use std::time::Duration;
@@ -20215,8 +20375,8 @@ so by cloning the transmitter, as shown in Listing 16-11:</p>
 
     // --snip--
 <span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 16-11: Sending multiple messages from multiple
-producers</span></p>
+<figcaption>Listing 16-11: Sending multiple messages from multiple producers</figcaption>
+</figure>
 <p>This time, before we create the first spawned thread, we call <code>clone</code> on the
 transmitter. This will give us a new transmitter we can pass to the first
 spawned thread. We pass the original transmitter to a second spawned thread.
@@ -20284,7 +20444,8 @@ system and ownership rules, you can’t get locking and unlocking wrong.</p>
 <h4 id="the-api-of-mutext"><a class="header" href="#the-api-of-mutext">The API of <code>Mutex&lt;T&gt;</code></a></h4>
 <p>As an example of how to use a mutex, let’s start by using a mutex in a
 single-threaded context, as shown in Listing 16-12:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::sync::Mutex;
 
 fn main() {
@@ -20297,8 +20458,8 @@ fn main() {
 
     println!("m = {m:?}");
 }</code></pre></pre>
-<p><span class="caption">Listing 16-12: Exploring the API of <code>Mutex&lt;T&gt;</code> in a
-single-threaded context for simplicity</span></p>
+<figcaption>Listing 16-12: Exploring the API of <code>Mutex&lt;T&gt;</code> in a single-threaded context for simplicity</figcaption>
+</figure>
 <p>As with many types, we create a <code>Mutex&lt;T&gt;</code> using the associated function <code>new</code>.
 To access the data inside the mutex, we use the <code>lock</code> method to acquire the
 lock. This call will block the current thread so it can’t do any work until
@@ -20329,7 +20490,8 @@ We’ll spin up 10 threads and have them each increment a counter value by 1, so
 the counter goes from 0 to 10. The next example in Listing 16-13 will have
 a compiler error, and we’ll use that error to learn more about using
 <code>Mutex&lt;T&gt;</code> and how Rust helps us use it correctly.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">use std::sync::Mutex;
 use std::thread;
 
@@ -20352,8 +20514,8 @@ fn main() {
 
     println!("Result: {}", *counter.lock().unwrap());
 }</code></pre>
-<p><span class="caption">Listing 16-13: Ten threads each increment a counter
-guarded by a <code>Mutex&lt;T&gt;</code></span></p>
+<figcaption>Listing 16-13: Ten threads each increment a counter guarded by a <code>Mutex&lt;T&gt;</code></figcaption>
+</figure>
 <p>We create a <code>counter</code> variable to hold an <code>i32</code> inside a <code>Mutex&lt;T&gt;</code>, as we did
 in Listing 16-12. Next, we create 10 threads by iterating over a range of
 numbers. We use <code>thread::spawn</code> and give all the threads the same closure: one
@@ -20402,7 +20564,8 @@ multiple-ownership method we discussed in Chapter 15.</p>
 <code>Rc&lt;T&gt;</code> to create a reference counted value. Let’s do the same here and see
 what happens. We’ll wrap the <code>Mutex&lt;T&gt;</code> in <code>Rc&lt;T&gt;</code> in Listing 16-14 and clone
 the <code>Rc&lt;T&gt;</code> before moving ownership to the thread.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">use std::rc::Rc;
 use std::sync::Mutex;
 use std::thread;
@@ -20427,8 +20590,8 @@ fn main() {
 
     println!("Result: {}", *counter.lock().unwrap());
 }</code></pre>
-<p><span class="caption">Listing 16-14: Attempting to use <code>Rc&lt;T&gt;</code> to allow
-multiple threads to own the <code>Mutex&lt;T&gt;</code></span></p>
+<figcaption>Listing 16-14: Attempting to use <code>Rc&lt;T&gt;</code> to allow multiple threads to own the <code>Mutex&lt;T&gt;</code></figcaption>
+</figure>
 <p>Once again, we compile and get… different errors! The compiler is teaching us
 a lot.</p>
 <pre><code class="language-console">$ cargo run
@@ -20490,7 +20653,8 @@ guarantees atomics provide.</p>
 <p>Let’s return to our example: <code>Arc&lt;T&gt;</code> and <code>Rc&lt;T&gt;</code> have the same API, so we fix
 our program by changing the <code>use</code> line, the call to <code>new</code>, and the call to
 <code>clone</code>. The code in Listing 16-15 will finally compile and run:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::sync::{Arc, Mutex};
 use std::thread;
 
@@ -20514,8 +20678,8 @@ fn main() {
 
     println!("Result: {}", *counter.lock().unwrap());
 }</code></pre></pre>
-<p><span class="caption">Listing 16-15: Using an <code>Arc&lt;T&gt;</code> to wrap the <code>Mutex&lt;T&gt;</code>
-to be able to share ownership across multiple threads</span></p>
+<figcaption>Listing 16-15: Using an <code>Arc&lt;T&gt;</code> to wrap the <code>Mutex&lt;T&gt;</code> to be able to share ownership across multiple threads</figcaption>
+</figure>
 <p>This code will print the following:</p>
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -20995,10 +21159,10 @@ executes the futures.</p>
 not. Instead, there are many different async runtimes available, each of which
 makes different tradeoffs suitable to the use case they target. For example, a
 high-throughput web server with many CPU cores and a large amount of RAM has
-very different different needs than a microcontroller with a single core, a
-small amount of RAM, and no ability to do heap allocations. The crates which
-provide those runtimes also often supply async versions of common functionality
-such as file or network I/O.</p>
+very different needs than a microcontroller with a single core, a small amount
+of RAM, and no ability to do heap allocations. The crates which provide those
+runtimes also often supply async versions of common functionality such as file
+or network I/O.</p>
 <p>Here, and throughout the rest of this chapter, we’ll use the <code>run</code> function
 from the <code>trpl</code> crate, which takes a future as an argument and runs it to
 completion. Behind the scenes, calling <code>run</code> sets up a runtime to use to run the
@@ -21457,7 +21621,6 @@ loop we haven’t seen before, the <code>while let</code> conditional loop. A <c
 loop is the loop version of the <code>if let</code> construct we saw back in Chapter 6. The
 loop will continue executing as long as the pattern it specifies continues to
 match the value.</p>
-<!-- TODO: update text in ch. 19 to account for our having introduced this. -->
 <p>The <code>rx.recv</code> call produces a <code>Future</code>, which we await. The runtime will pause
 the <code>Future</code> until it is ready. Once a message arrives, the future will resolve
 to <code>Some(message)</code>, as many times as a message arrives. When the channel closes,
@@ -22539,10 +22702,10 @@ compared to the future using <code>trpl::yield_now</code>.</p>
 <p>This means that async can be useful even for compute-bound tasks, depending on
 what else your program is doing, because it provides a useful tool for
 structuring the relationships between different parts of the program. This is a
-form of <em>cooperative multitasking</em>, where each future has both the power to
-determine when it hands over control via await points. Each future therefore
-also has the responsibility to avoid blocking for too long. In some Rust-based
-embedded operating systems, this is the <em>only</em> kind of multitasking!</p>
+form of <em>cooperative multitasking</em>, where each future has the power to determine
+when it hands over control via await points. Each future therefore also has the
+responsibility to avoid blocking for too long. In some Rust-based embedded
+operating systems, this is the <em>only</em> kind of multitasking!</p>
 <p>In real-world code, you won’t usually be alternating function calls with await
 points on every single line, of course. While yielding control in this way is
 relatively inexpensive, it’s not free! In many cases, trying to break up a
@@ -22916,7 +23079,7 @@ indicates a message arrived in time; the <code>Err</code> variant indicates that
 timeout elapsed before any message arrived. We <code>match</code> on that result and either
 print the message when we receive it successfully, or print a notice about the
 timeout. Finally, notice that we pin the messages after applying the timeout to
-them, because the timeout helper produces a future which needs to be pinned to
+them, because the timeout helper produces a stream which needs to be pinned to
 be polled.</p>
 <figure class="listing">
 <span class="file-name">Filename: src/main.rs</span>
@@ -23559,8 +23722,7 @@ this deep dive section. The key here is to see the basic mechanic of futures: a
 runtime <em>polls</em> each future it is responsible for, putting it back to sleep when
 it is not yet ready.</p>
 <h3 id="pinning-and-the-pin-and-unpin-traits"><a class="header" href="#pinning-and-the-pin-and-unpin-traits">Pinning and the Pin and Unpin Traits</a></h3>
-<!-- TODO: get a *very* careful technical review of this section! -->
-<p>When we introduced the idea of pinning, while working on Listing 17-17, we ran
+<p>When we introduced the idea of pinning while working on Listing 17-17, we ran
 into a very gnarly error message. Here is the relevant part of it again:</p>
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-17
@@ -23590,12 +23752,18 @@ For more information about an error, try `rustc --explain E0277`.
 </code></pre>
 <p>When we read this error message carefully, it not only tells us that we need to
 pin the values, but also tells us why pinning is required. The <code>trpl::join_all</code>
-function returns a struct called <code>JoinAll</code>. That struct, in turn, is generic
-over a type <code>F</code>, which is constrained to implement the <code>Future</code> trait. Finally,
-directly awaiting a Future requires that the future in question implement the
-<code>Unpin</code> trait. That’s a lot! But we can understand it, if we dive a little
-further into how the <code>Future</code> type actually works, in particular around
-<em>pinning</em>.</p>
+function returns a struct called <code>JoinAll</code>. That struct is generic over a type
+<code>F</code>, which is constrained to implement the <code>Future</code> trait. Directly awaiting a
+future with <code>await</code> pins the future implicitly. That’s why we don’t need to use
+<code>pin!</code> everywhere we want to await futures.</p>
+<p>However, we’re not directly awaiting a future here. Instead, we construct a new
+future, <code>JoinAll</code>, by passing a collection of futures to the <code>join_all</code>
+function. The signature for <code>join_all</code> produces requires that the type of the
+items in the collection all implement the <code>Future</code> trait, and <code>Box&lt;T&gt;</code> only
+implements <code>Future</code> if the <code>T</code> that it wraps is a future which implements the
+<code>Unpin</code> trait.</p>
+<p>That’s a lot! But we can understand it, if we dive a little further into how the
+<code>Future</code> type actually works, in particular around <em>pinning</em>.</p>
 <p>Let’s look again at the definition of <code>Future</code>:</p>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -23721,21 +23889,28 @@ a given trait in a particular context. <code>Unpin</code> informs the compiler t
 type does <em>not</em> need to uphold any particular guarantees about whether the value
 in question can be moved.</p>
 <p>Just as with <code>Send</code> and <code>Sync</code>, the compiler implements <code>Unpin</code> automatically
-for all types where it can prove it is safe. Implementing <code>Unpin</code> manually is
-unsafe because it requires <em>you</em> to uphold all the guarantees which make <code>Pin</code>
-and <code>Unpin</code> safe yourself for a type with internal references. In practice,
-this is a very rare thing to implement yourself!</p>
+for all types where it can prove it is safe. The special case, again similar to
+<code>Send</code> and <code>Sync</code>, is the case where <code>Unpin</code> is <em>not</em> implemented for a type.
+The notation for this is <code>impl !Unpin for SomeType</code>, where <code>SomeType</code> is the
+name of a type which <em>does</em> need to uphold those guarantees to be safe whenever
+a pointer to that type it is used in a <code>Pin</code>.</p>
+<p>In other words, there are two things to keep in mind about the relationship
+between <code>Pin</code> and <code>Unpin</code>. First, <code>Unpin</code> is the “normal” case, and <code>!Unpin</code> is
+the special case. Second, whether a type implements <code>Unpin</code> or <code>!Unpin</code> <em>only</em>
+matters when using a pinned pointer to that type like <code>Pin&lt;&amp;mut SomeType&gt;</code>.</p>
 <p>To make that concrete, think about a <code>String</code>: it has a length and the Unicode
 characters which make it up. We can wrap a <code>String</code> in <code>Pin</code>, as seen in Figure
-17-7. However</p>
+17-8. However, <code>String</code> automatically implements <code>Unpin</code>, the same as most other
+types in Rust.</p>
 <figure>
 <img alt="Concurrent work flow" src="img/trpl17-08.svg" class="center" />
 <figcaption>Figure 17-8: Pinning a String, with a dotted line indicating that the String implements the `Unpin` trait, so it is not pinned.</figcaption>
 </figure>
-<p>This means that we can do things such as replace one string with another at the
-exact same location in memory as in Figure 17-9. This doesn’t violate the <code>Pin</code>
-contract because <code>String</code>—like most other types in Rust—implements <code>Unpin</code>,
-because it has no internal references that make it unsafe to move around!</p>
+<p>As a result, we can do things which would be illegal if <code>String</code> implemented
+<code>!Unpin</code> instead, such as replace one string with another at the exact same
+location in memory as in Figure 17-9. This doesn’t violate the <code>Pin</code> contract,
+because <code>String</code> has no internal references that make it unsafe to move around!
+That is precisely why it implements <code>Unpin</code> rather than <code>!Unpin</code>.</p>
 <figure>
 <img alt="Concurrent work flow" src="img/trpl17-09.svg" class="center" />
 <figcaption>Figure 17-9: Replacing the String with an entirely different String in memory.</figcaption>
@@ -24003,9 +24178,9 @@ improving the overall performance of the system. To build that actually requires
 threads <em>and</em> tasks, and therefore futures.</p>
 <p>As a default way of thinking about which to use when:</p>
 <ul>
-<li>If the task is <em>very parallelizable</em>, such as processing a bunch of data where
+<li>If the work is <em>very parallelizable</em>, such as processing a bunch of data where
 each part can be processed separately, threads are a better choice.</li>
-<li>If the task is <em>very concurrent</em>, such as handling messages from a bunch of
+<li>If the work is <em>very concurrent</em>, such as handling messages from a bunch of
 different sources which may come in a different intervals or different rates,
 async is a better choice.</li>
 </ul>
@@ -24115,7 +24290,7 @@ cache the calculated average for us. Listing 18-1 has the definition of the
     list: Vec&lt;i32&gt;,
     average: f64,
 }</code></pre>
-<figcaption>Listing 18-1: Listing 18-1: An <code>AveragedCollection</code> struct that maintains a list of integers and the average of the items in the collection</figcaption>
+<figcaption>Listing 18-1: An <code>AveragedCollection</code> struct that maintains a list of integers and the average of the items in the collection</figcaption>
 </figure>
 <p>The struct is marked <code>pub</code> so that other code can use it, but the fields within
 the struct remain private. This is important in this case because we want to
@@ -24124,7 +24299,6 @@ also updated. We do this by implementing <code>add</code>, <code>remove</code>, 
 on the struct, as shown in Listing 18-2:</p>
 <figure class="listing">
 <span class="file-name">Filename: src/lib.rs</span>
-<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust noplayground"><span class="boring">pub struct AveragedCollection {
 </span><span class="boring">    list: Vec&lt;i32&gt;,
 </span><span class="boring">    average: f64,
@@ -24156,7 +24330,7 @@ on the struct, as shown in Listing 18-2:</p>
         self.average = total as f64 / self.list.len() as f64;
     }
 }</code></pre>
-<figcaption>Listing 18-2: Listing 18-2: Implementations of the public methods <code>add</code>, <code>remove</code>, and <code>average</code> on <code>AveragedCollection</code></figcaption>
+<figcaption>Listing 18-2: Implementations of the public methods <code>add</code>, <code>remove</code>, and <code>average</code> on <code>AveragedCollection</code></figcaption>
 </figure>
 <p>The public methods <code>add</code>, <code>remove</code>, and <code>average</code> are the only ways to access
 or modify data in an instance of <code>AveragedCollection</code>. When an item is added
@@ -24678,6 +24852,7 @@ field as <code>pub</code>, so that later we can implement a method that will con
 the <code>content</code> field’s data is read. The <code>add_text</code> method is pretty
 straightforward, so let’s add the implementation in Listing 18-13 to the <code>impl Post</code> block:</p>
 <figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub struct Post {
 </span><span class="boring">    state: Option&lt;Box&lt;dyn State&gt;&gt;,
 </span><span class="boring">    content: String,
@@ -25521,28 +25696,31 @@ last <code>else</code> block and therefore missed handling some cases, the compi
 not alert us to the possible logic bug.</p>
 <h3 id="while-let-conditional-loops"><a class="header" href="#while-let-conditional-loops"><code>while let</code> Conditional Loops</a></h3>
 <p>Similar in construction to <code>if let</code>, the <code>while let</code> conditional loop allows a
-<code>while</code> loop to run for as long as a pattern continues to match. In Listing
-19-2 we code a <code>while let</code> loop that uses a vector as a stack and prints the
-values in the vector in the opposite order in which they were pushed.</p>
+<code>while</code> loop to run for as long as a pattern continues to match. We first saw a
+<code>while let</code> loop in Chapter 17, where we used it to keep looping as long as a
+stream produced new values. Similarly, in Listing 19-2 we show a <code>while let</code>
+loop that waits on messages sent between threads, but in this case checking a
+<code>Result</code> instead of an <code>Option</code>.</p>
 <figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
-</span>    let mut stack = Vec::new();
+</span>    let (tx, rx) = std::sync::mpsc::channel();
+    std::thread::spawn(move || {
+        for val in [1, 2, 3] {
+            tx.send(val).unwrap();
+        }
+    });
 
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
-
-    while let Some(top) = stack.pop() {
-        println!("{top}");
+    while let Ok(value) = rx.recv() {
+        println!("{value}");
     }
 <span class="boring">}</span></code></pre></pre>
-<figcaption>Listing 19-2: Using a <code>while let</code> loop to print values for as long as <code>stack.pop()</code> returns <code>Some</code></figcaption>
+<figcaption>Listing 19-2: Using a <code>while let</code> loop to print values for as long as <code>rx.recv()</code> returns <code>Ok</code></figcaption>
 </figure>
-<p>This example prints 3, 2, and then 1. The <code>pop</code> method takes the last element
-out of the vector and returns <code>Some(value)</code>. If the vector is empty, <code>pop</code>
-returns <code>None</code>. The <code>while</code> loop continues running the code in its block as
-long as <code>pop</code> returns <code>Some</code>. When <code>pop</code> returns <code>None</code>, the loop stops. We can
-use <code>while let</code> to pop every element off our stack.</p>
+<p>This example prints 1, 2, and 3. When we saw <code>recv</code> back in Chapter 16, we
+unwrapped the error directly, or interacted with it as an iterator using a <code>for</code>
+loop. As Listing 19-2 shows, though, we can also use <code>while let</code>, because the
+<code>recv</code> method returns <code>Ok</code> as long as the sender is producing messages, and then
+produces an <code>Err</code> once the sender side disconnects.</p>
 <h3 id="for-loops"><a class="header" href="#for-loops"><code>for</code> Loops</a></h3>
 <p>In a <code>for</code> loop, the value that directly follows the keyword <code>for</code> is a
 pattern. For example, in <code>for x in y</code> the <code>x</code> is the pattern. Listing 19-3
@@ -31517,7 +31695,7 @@ hierarchy to an item.</p>
 <p><span class="caption">Table B-3: Path-Related Syntax</span></p>
 <div class="table-wrapper"><table><thead><tr><th>Symbol</th><th>Explanation</th></tr></thead><tbody>
 <tr><td><code>ident::ident</code></td><td>Namespace path</td></tr>
-<tr><td><code>::path</code></td><td>Path relative to the crate root (i.e., an explicitly absolute path)</td></tr>
+<tr><td><code>::path</code></td><td>Path relative to the extern prelude, where all other crates are rooted (i.e., an explicitly absolute path including crate name)</td></tr>
 <tr><td><code>self::path</code></td><td>Path relative to the current module (i.e., an explicitly relative path).</td></tr>
 <tr><td><code>super::path</code></td><td>Path relative to the parent of the current module</td></tr>
 <tr><td><code>type::ident</code>, <code>&lt;type as trait&gt;::ident</code></td><td>Associated constants, functions, and types</td></tr>

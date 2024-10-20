@@ -191,7 +191,8 @@ keyword once, and then use the shorter name everywhere else in the scope.</p>
 scope of the <code>eat_at_restaurant</code> function so we only have to specify
 <code>hosting::add_to_waitlist</code> to call the <code>add_to_waitlist</code> function in
 <code>eat_at_restaurant</code>.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground test_harness">mod front_of_house {
     pub mod hosting {
         pub fn add_to_waitlist() {}
@@ -203,8 +204,8 @@ use crate::front_of_house::hosting;
 pub fn eat_at_restaurant() {
     hosting::add_to_waitlist();
 }</code></pre>
-<p><span class="caption">Listing 7-11: Bringing a module into scope with
-<code>use</code></span></p>
+<figcaption>Listing 7-11: Bringing a module into scope with <code>use</code></figcaption>
+</figure>
 <p>Adding <code>use</code> and a path in a scope is similar to creating a symbolic link in
 the filesystem. By adding <code>use crate::front_of_house::hosting</code> in the crate
 root, <code>hosting</code> is now a valid name in that scope, just as though the <code>hosting</code>
@@ -214,7 +215,8 @@ also check privacy, like any other paths.</p>
 <code>use</code> occurs. Listing 7-12 moves the <code>eat_at_restaurant</code> function into a new
 child module named <code>customer</code>, which is then a different scope than the <code>use</code>
 statement, so the function body won’t compile.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground test_harness does_not_compile ignore">mod front_of_house {
     pub mod hosting {
         pub fn add_to_waitlist() {}
@@ -228,8 +230,8 @@ mod customer {
         hosting::add_to_waitlist();
     }
 }</code></pre>
-<p><span class="caption">Listing 7-12: A <code>use</code> statement only applies in the scope
-it’s in</span></p>
+<figcaption>Listing 7-12: A <code>use</code> statement only applies in the scope it’s in</figcaption>
+</figure>
 <p>The compiler error shows that the shortcut no longer applies within the
 <code>customer</code> module:</p>
 <pre><code class="language-console">$ cargo build
@@ -265,7 +267,8 @@ the shortcut in the parent module with <code>super::hosting</code> within the ch
 <p>In Listing 7-11, you might have wondered why we specified <code>use crate::front_of_house::hosting</code> and then called <code>hosting::add_to_waitlist</code> in
 <code>eat_at_restaurant</code>, rather than specifying the <code>use</code> path all the way out to
 the <code>add_to_waitlist</code> function to achieve the same result, as in Listing 7-13.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground test_harness">mod front_of_house {
     pub mod hosting {
         pub fn add_to_waitlist() {}
@@ -277,8 +280,8 @@ use crate::front_of_house::hosting::add_to_waitlist;
 pub fn eat_at_restaurant() {
     add_to_waitlist();
 }</code></pre>
-<p><span class="caption">Listing 7-13: Bringing the <code>add_to_waitlist</code> function
-into scope with <code>use</code>, which is unidiomatic</span></p>
+<figcaption>Listing 7-13: Bringing the <code>add_to_waitlist</code> function into scope with <code>use</code>, which is unidiomatic</figcaption>
+</figure>
 <p>Although both Listing 7-11 and Listing 7-13 accomplish the same task, Listing
 7-11 is the idiomatic way to bring a function into scope with <code>use</code>. Bringing
 the function’s parent module into scope with <code>use</code> means we have to specify the
@@ -290,22 +293,24 @@ unclear as to where <code>add_to_waitlist</code> is defined.</p>
 it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way
 to bring the standard library’s <code>HashMap</code> struct into the scope of a binary
 crate.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::collections::HashMap;
 
 fn main() {
     let mut map = HashMap::new();
     map.insert(1, 2);
 }</code></pre></pre>
-<p><span class="caption">Listing 7-14: Bringing <code>HashMap</code> into scope in an
-idiomatic way</span></p>
+<figcaption>Listing 7-14: Bringing <code>HashMap</code> into scope in an idiomatic way</figcaption>
+</figure>
 <p>There’s no strong reason behind this idiom: it’s just the convention that has
 emerged, and folks have gotten used to reading and writing Rust code this way.</p>
 <p>The exception to this idiom is if we’re bringing two items with the same name
 into scope with <code>use</code> statements, because Rust doesn’t allow that. Listing 7-15
 shows how to bring two <code>Result</code> types into scope that have the same name but
 different parent modules, and how to refer to them.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::fmt;
 use std::io;
 
@@ -318,8 +323,8 @@ fn function2() -&gt; io::Result&lt;()&gt; {
     // --snip--
 <span class="boring">    Ok(())
 </span>}</code></pre>
-<p><span class="caption">Listing 7-15: Bringing two types with the same name into
-the same scope requires using their parent modules.</span></p>
+<figcaption>Listing 7-15: Bringing two types with the same name into the same scope requires using their parent modules.</figcaption>
+</figure>
 <p>As you can see, using the parent modules distinguishes the two <code>Result</code> types.
 If instead we specified <code>use std::fmt::Result</code> and <code>use std::io::Result</code>, we’d
 have two <code>Result</code> types in the same scope, and Rust wouldn’t know which one we
@@ -329,7 +334,8 @@ meant when we used <code>Result</code>.</p>
 into the same scope with <code>use</code>: after the path, we can specify <code>as</code> and a new
 local name, or <em>alias</em>, for the type. Listing 7-16 shows another way to write
 the code in Listing 7-15 by renaming one of the two <code>Result</code> types using <code>as</code>.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::fmt::Result;
 use std::io::Result as IoResult;
 
@@ -342,8 +348,8 @@ fn function2() -&gt; IoResult&lt;()&gt; {
     // --snip--
 <span class="boring">    Ok(())
 </span>}</code></pre>
-<p><span class="caption">Listing 7-16: Renaming a type when it’s brought into
-scope with the <code>as</code> keyword</span></p>
+<figcaption>Listing 7-16: Renaming a type when it’s brought into scope with the <code>as</code> keyword</figcaption>
+</figure>
 <p>In the second <code>use</code> statement, we chose the new name <code>IoResult</code> for the
 <code>std::io::Result</code> type, which won’t conflict with the <code>Result</code> from <code>std::fmt</code>
 that we’ve also brought into scope. Listing 7-15 and Listing 7-16 are
@@ -357,7 +363,8 @@ item into scope but also making that item available for others to bring into
 their scope.</p>
 <p>Listing 7-17 shows the code in Listing 7-11 with <code>use</code> in the root module
 changed to <code>pub use</code>.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground test_harness">mod front_of_house {
     pub mod hosting {
         pub fn add_to_waitlist() {}
@@ -369,8 +376,8 @@ pub use crate::front_of_house::hosting;
 pub fn eat_at_restaurant() {
     hosting::add_to_waitlist();
 }</code></pre>
-<p><span class="caption">Listing 7-17: Making a name available for any code to use
-from a new scope with <code>pub use</code></span></p>
+<figcaption>Listing 7-17: Making a name available for any code to use from a new scope with <code>pub use</code></figcaption>
+</figure>
 <p>Before this change, external code would have to call the <code>add_to_waitlist</code>
 function by using the path
 <code>restaurant::front_of_house::hosting::add_to_waitlist()</code>, which also would have
@@ -396,9 +403,11 @@ added this line to <em>Cargo.toml</em>:</p>
 * ch02-00-guessing-game-tutorial.md
 * ch14-03-cargo-workspaces.md
 -->
-<p><span class="filename">Filename: Cargo.toml</span></p>
+<figure class="listing">
+<span class="file-name">Filename: Cargo.toml</span>
 <pre><code class="language-toml">rand = "0.8.5"
 </code></pre>
+</figure>
 <p>Adding <code>rand</code> as a dependency in <em>Cargo.toml</em> tells Cargo to download the
 <code>rand</code> package and any dependencies from <a href="https://crates.io/">crates.io</a> and
 make <code>rand</code> available to our project.</p>
@@ -447,7 +456,8 @@ crate.</p>
 each item on its own line can take up a lot of vertical space in our files. For
 example, these two <code>use</code> statements we had in the guessing game in Listing 2-4
 bring items from <code>std</code> into scope:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore"><span class="boring">use rand::Rng;
 </span>// --snip--
 use std::cmp::Ordering;
@@ -477,11 +487,13 @@ use std::io;
 </span><span class="boring">        Ordering::Equal =&gt; println!("You win!"),
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
+</figure>
 <p>Instead, we can use nested paths to bring the same items into scope in one
 line. We do this by specifying the common part of the path, followed by two
 colons, and then curly brackets around a list of the parts of the paths that
 differ, as shown in Listing 7-18.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore"><span class="boring">use rand::Rng;
 </span>// --snip--
 use std::{cmp::Ordering, io};
@@ -512,8 +524,8 @@ use std::{cmp::Ordering, io};
 </span><span class="boring">        Ordering::Equal =&gt; println!("You win!"),
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 7-18: Specifying a nested path to bring multiple
-items with the same prefix into scope</span></p>
+<figcaption>Listing 7-18: Specifying a nested path to bring multiple items with the same prefix into scope</figcaption>
+</figure>
 <p>In bigger programs, bringing many items into scope from the same crate or
 module using nested paths can reduce the number of separate <code>use</code> statements
 needed by a lot!</p>
@@ -521,18 +533,20 @@ needed by a lot!</p>
 two <code>use</code> statements that share a subpath. For example, Listing 7-19 shows two
 <code>use</code> statements: one that brings <code>std::io</code> into scope and one that brings
 <code>std::io::Write</code> into scope.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::io;
 use std::io::Write;</code></pre>
-<p><span class="caption">Listing 7-19: Two <code>use</code> statements where one is a subpath
-of the other</span></p>
+<figcaption>Listing 7-19: Two <code>use</code> statements where one is a subpath of the other</figcaption>
+</figure>
 <p>The common part of these two paths is <code>std::io</code>, and that’s the complete first
 path. To merge these two paths into one <code>use</code> statement, we can use <code>self</code> in
 the nested path, as shown in Listing 7-20.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::io::{self, Write};</code></pre>
-<p><span class="caption">Listing 7-20: Combining the paths in Listing 7-19 into
-one <code>use</code> statement</span></p>
+<figcaption>Listing 7-20: Combining the paths in Listing 7-19 into one <code>use</code> statement</figcaption>
+</figure>
 <p>This line brings <code>std::io</code> and <code>std::io::Write</code> into scope.</p>
 <h3 id="the-glob-operator"><a class="header" href="#the-glob-operator">The Glob Operator</a></h3>
 <p>If we want to bring <em>all</em> public items defined in a path into scope, we can

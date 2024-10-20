@@ -194,7 +194,8 @@ code inside the curly brackets for the <code>front_of_house</code> module, leavi
 the <code>mod front_of_house;</code> declaration, so that <em>src/lib.rs</em> contains the code
 shown in Listing 7-21. Note that this won’t compile until we create the
 <em>src/front_of_house.rs</em> file in Listing 7-22.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust ignore does_not_compile">mod front_of_house;
 
 pub use crate::front_of_house::hosting;
@@ -202,18 +203,19 @@ pub use crate::front_of_house::hosting;
 pub fn eat_at_restaurant() {
     hosting::add_to_waitlist();
 }</code></pre>
-<p><span class="caption">Listing 7-21: Declaring the <code>front_of_house</code> module whose
-body will be in <em>src/front_of_house.rs</em></span></p>
+<figcaption>Listing 7-21: Declaring the <code>front_of_house</code> module whose body will be in <em>src/front_of_house.rs</em></figcaption>
+</figure>
 <p>Next, place the code that was in the curly brackets into a new file named
 <em>src/front_of_house.rs</em>, as shown in Listing 7-22. The compiler knows to look
 in this file because it came across the module declaration in the crate root
 with the name <code>front_of_house</code>.</p>
-<p><span class="filename">Filename: src/front_of_house.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/front_of_house.rs</span>
 <pre><code class="language-rust ignore">pub mod hosting {
     pub fn add_to_waitlist() {}
 }</code></pre>
-<p><span class="caption">Listing 7-22: Definitions inside the <code>front_of_house</code>
-module in <em>src/front_of_house.rs</em></span></p>
+<figcaption>Listing 7-22: Definitions inside the <code>front_of_house</code> module in <em>src/front_of_house.rs</em></figcaption>
+</figure>
 <p>Note that you only need to load a file using a <code>mod</code> declaration <em>once</em> in your
 module tree. Once the compiler knows the file is part of the project (and knows
 where in the module tree the code resides because of where you’ve put the <code>mod</code>
@@ -228,12 +230,16 @@ root module. We’ll place the file for <code>hosting</code> in a new directory 
 named for its ancestors in the module tree, in this case <em>src/front_of_house</em>.</p>
 <p>To start moving <code>hosting</code>, we change <em>src/front_of_house.rs</em> to contain only
 the declaration of the <code>hosting</code> module:</p>
-<p><span class="filename">Filename: src/front_of_house.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/front_of_house.rs</span>
 <pre><code class="language-rust ignore">pub mod hosting;</code></pre>
+</figure>
 <p>Then we create a <em>src/front_of_house</em> directory and a <em>hosting.rs</em> file to
 contain the definitions made in the <code>hosting</code> module:</p>
-<p><span class="filename">Filename: src/front_of_house/hosting.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/front_of_house/hosting.rs</span>
 <pre><code class="language-rust ignore">pub fn add_to_waitlist() {}</code></pre>
+</figure>
 <p>If we instead put <em>hosting.rs</em> in the <em>src</em> directory, the compiler would
 expect the <em>hosting.rs</em> code to be in a <code>hosting</code> module declared in the crate
 root, and not declared as a child of the <code>front_of_house</code> module. The

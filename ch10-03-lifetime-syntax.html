@@ -202,6 +202,7 @@ lifetime syntax so you can get comfortable with the concept.</p>
 program to reference data other than the data it’s intended to reference.
 Consider the program in Listing 10-16, which has an outer scope and an inner
 scope.</p>
+<figure class="listing">
 <pre><code class="language-rust ignore does_not_compile">fn main() {
     let r;
 
@@ -212,8 +213,8 @@ scope.</p>
 
     println!("r: {r}");
 }</code></pre>
-<p><span class="caption">Listing 10-16: An attempt to use a reference whose value
-has gone out of scope</span></p>
+<figcaption>Listing 10-16: An attempt to use a reference whose value has gone out of scope</figcaption>
+</figure>
 <section class="note" aria-role="note">
 <p>Note: The examples in Listing 10-16, 10-17, and 10-23 declare variables
 without giving them an initial value, so the variable name exists in the outer
@@ -257,6 +258,7 @@ determine that this code is invalid? It uses a borrow checker.</p>
 <p>The Rust compiler has a <em>borrow checker</em> that compares scopes to determine
 whether all borrows are valid. Listing 10-17 shows the same code as Listing
 10-16 but with annotations showing the lifetimes of the variables.</p>
+<figure class="listing">
 <pre><code class="language-rust ignore does_not_compile">fn main() {
     let r;                // ---------+-- 'a
                           //          |
@@ -267,8 +269,8 @@ whether all borrows are valid. Listing 10-17 shows the same code as Listing
                           //          |
     println!("r: {r}");   //          |
 }                         // ---------+</code></pre>
-<p><span class="caption">Listing 10-17: Annotations of the lifetimes of <code>r</code> and
-<code>x</code>, named <code>'a</code> and <code>'b</code>, respectively</span></p>
+<figcaption>Listing 10-17: Annotations of the lifetimes of <code>r</code> and <code>x</code>, named <code>'a</code> and <code>'b</code>, respectively</figcaption>
+</figure>
 <p>Here, we’ve annotated the lifetime of <code>r</code> with <code>'a</code> and the lifetime of <code>x</code>
 with <code>'b</code>. As you can see, the inner <code>'b</code> block is much smaller than the outer
 <code>'a</code> lifetime block. At compile time, Rust compares the size of the two
@@ -277,6 +279,7 @@ with a lifetime of <code>'b</code>. The program is rejected because <code>'b</co
 <code>'a</code>: the subject of the reference doesn’t live as long as the reference.</p>
 <p>Listing 10-18 fixes the code so it doesn’t have a dangling reference and it
 compiles without any errors.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let x = 5;            // ----------+-- 'b
                           //           |
@@ -285,8 +288,8 @@ compiles without any errors.</p>
     println!("r: {r}");   //   |       |
                           // --+       |
 }                         // ----------+</code></pre></pre>
-<p><span class="caption">Listing 10-18: A valid reference because the data has a
-longer lifetime than the reference</span></p>
+<figcaption>Listing 10-18: A valid reference because the data has a longer lifetime than the reference</figcaption>
+</figure>
 <p>Here, <code>x</code> has the lifetime <code>'b</code>, which in this case is larger than <code>'a</code>. This
 means <code>r</code> can reference <code>x</code> because Rust knows that the reference in <code>r</code> will
 always be valid while <code>x</code> is valid.</p>
@@ -298,7 +301,8 @@ lifetimes of parameters and return values in the context of functions.</p>
 function will take two string slices and return a single string slice. After
 we’ve implemented the <code>longest</code> function, the code in Listing 10-19 should
 print <code>The longest string is abcd</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore">fn main() {
     let string1 = String::from("abcd");
     let string2 = "xyz";
@@ -306,8 +310,8 @@ print <code>The longest string is abcd</code>.</p>
     let result = longest(string1.as_str(), string2);
     println!("The longest string is {result}");
 }</code></pre>
-<p><span class="caption">Listing 10-19: A <code>main</code> function that calls the <code>longest</code>
-function to find the longer of two string slices</span></p>
+<figcaption>Listing 10-19: A <code>main</code> function that calls the <code>longest</code> function to find the longer of two string slices</figcaption>
+</figure>
 <p>Note that we want the function to take string slices, which are references,
 rather than strings, because we don’t want the <code>longest</code> function to take
 ownership of its parameters. Refer to the <a href="ch04-03-slices.html#string-slices-as-parameters">“String Slices as
@@ -316,7 +320,8 @@ for more discussion about why the parameters we use in Listing 10-19 are the
 ones we want.</p>
 <p>If we try to implement the <code>longest</code> function as shown in Listing 10-20, it
 won’t compile.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
 </span><span class="boring">    let string1 = String::from("abcd");
 </span><span class="boring">    let string2 = "xyz";
@@ -332,9 +337,8 @@ won’t compile.</p>
         y
     }
 }</code></pre>
-<p><span class="caption">Listing 10-20: An implementation of the <code>longest</code>
-function that returns the longer of two string slices but does not yet
-compile</span></p>
+<figcaption>Listing 10-20: An implementation of the <code>longest</code> function that returns the longer of two string slices but does not yet compile</figcaption>
+</figure>
 <p>Instead, we get the following error that talks about lifetimes:</p>
 <pre><code class="language-console">$ cargo run
    Compiling chapter10 v0.1.0 (file:///projects/chapter10)
@@ -398,7 +402,8 @@ reference will be valid as long as both the parameters are valid. This is the
 relationship between lifetimes of the parameters and the return value. We’ll
 name the lifetime <code>'a</code> and then add it to each reference, as shown in Listing
 10-21.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    let string1 = String::from("abcd");
 </span><span class="boring">    let string2 = "xyz";
@@ -414,9 +419,8 @@ name the lifetime <code>'a</code> and then add it to each reference, as shown in
         y
     }
 }</code></pre></pre>
-<p><span class="caption">Listing 10-21: The <code>longest</code> function definition
-specifying that all the references in the signature must have the same lifetime
-<code>'a</code></span></p>
+<figcaption>Listing 10-21: The <code>longest</code> function definition specifying that all the references in the signature must have the same lifetime <code>'a</code></figcaption>
+</figure>
 <p>This code should compile and produce the result we want when we use it with the
 <code>main</code> function in Listing 10-19.</p>
 <p>The function signature now tells Rust that for some lifetime <code>'a</code>, the function
@@ -453,7 +457,8 @@ lifetimes of <code>x</code> and <code>y</code>.</p>
 <p>Let’s look at how the lifetime annotations restrict the <code>longest</code> function by
 passing in references that have different concrete lifetimes. Listing 10-22 is
 a straightforward example.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let string1 = String::from("long string is long");
 
@@ -471,8 +476,8 @@ a straightforward example.</p>
 </span><span class="boring">        y
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 10-22: Using the <code>longest</code> function with
-references to <code>String</code> values that have different concrete lifetimes</span></p>
+<figcaption>Listing 10-22: Using the <code>longest</code> function with references to <code>String</code> values that have different concrete lifetimes</figcaption>
+</figure>
 <p>In this example, <code>string1</code> is valid until the end of the outer scope, <code>string2</code>
 is valid until the end of the inner scope, and <code>result</code> references something
 that is valid until the end of the inner scope. Run this code and you’ll see
@@ -484,7 +489,8 @@ assignment of the value to the <code>result</code> variable inside the scope wit
 <code>string2</code>. Then we’ll move the <code>println!</code> that uses <code>result</code> to outside the
 inner scope, after the inner scope has ended. The code in Listing 10-23 will
 not compile.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">fn main() {
     let string1 = String::from("long string is long");
     let result;
@@ -502,8 +508,8 @@ not compile.</p>
 </span><span class="boring">        y
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 10-23: Attempting to use <code>result</code> after <code>string2</code>
-has gone out of scope</span></p>
+<figcaption>Listing 10-23: Attempting to use <code>result</code> after <code>string2</code> has gone out of scope</figcaption>
+</figure>
 <p>When we try to compile this code, we get this error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling chapter10 v0.1.0 (file:///projects/chapter10)
@@ -544,7 +550,8 @@ function is doing. For example, if we changed the implementation of the
 <code>longest</code> function to always return the first parameter rather than the longest
 string slice, we wouldn’t need to specify a lifetime on the <code>y</code> parameter. The
 following code will compile:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span><span class="boring">    let string1 = String::from("abcd");
 </span><span class="boring">    let string2 = "efghijklmnopqrstuvwxyz";
@@ -556,6 +563,7 @@ following code will compile:</p>
 </span>fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;str) -&gt; &amp;'a str {
     x
 }</code></pre></pre>
+</figure>
 <p>We’ve specified a lifetime parameter <code>'a</code> for the parameter <code>x</code> and the return
 type, but not for the parameter <code>y</code>, because the lifetime of <code>y</code> does not have
 any relationship with the lifetime of <code>x</code> or the return value.</p>
@@ -566,7 +574,8 @@ to a value created within this function. However, this would be a dangling
 reference because the value will go out of scope at the end of the function.
 Consider this attempted implementation of the <code>longest</code> function that won’t
 compile:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
 </span><span class="boring">    let string1 = String::from("abcd");
 </span><span class="boring">    let string2 = "xyz";
@@ -579,6 +588,7 @@ compile:</p>
     let result = String::from("really long string");
     result.as_str()
 }</code></pre>
+</figure>
 <p>Here, even though we’ve specified a lifetime parameter <code>'a</code> for the return
 type, this implementation will fail to compile because the return value
 lifetime is not related to the lifetime of the parameters at all. Here is the
@@ -613,7 +623,8 @@ would create dangling pointers or otherwise violate memory safety.</p>
 to hold references, but in that case we would need to add a lifetime annotation
 on every reference in the struct’s definition. Listing 10-24 has a struct named
 <code>ImportantExcerpt</code> that holds a string slice.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">struct ImportantExcerpt&lt;'a&gt; {
     part: &amp;'a str,
 }
@@ -625,8 +636,8 @@ fn main() {
         part: first_sentence,
     };
 }</code></pre></pre>
-<p><span class="caption">Listing 10-24: A struct that holds a reference, requiring
-a lifetime annotation</span></p>
+<figcaption>Listing 10-24: A struct that holds a reference, requiring a lifetime annotation</figcaption>
+</figure>
 <p>This struct has the single field <code>part</code> that holds a string slice, which is a
 reference. As with generic data types, we declare the name of the generic
 lifetime parameter inside angle brackets after the name of the struct so we can
@@ -644,7 +655,8 @@ the <code>ImportantExcerpt</code> goes out of scope, so the reference in the
 lifetime parameters for functions or structs that use references. However, we
 had a function in Listing 4-9, shown again in Listing 10-25, that compiled
 without lifetime annotations.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">fn first_word(s: &amp;str) -&gt; &amp;str {
     let bytes = s.as_bytes();
 
@@ -672,9 +684,8 @@ without lifetime annotations.</p>
 </span><span class="boring">    // this works too, without the slice syntax!
 </span><span class="boring">    let word = first_word(my_string_literal);
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 10-25: A function we defined in Listing 4-9 that
-compiled without lifetime annotations, even though the parameter and return
-type are references</span></p>
+<figcaption>Listing 10-25: A function we defined in Listing 4-9 that compiled without lifetime annotations, even though the parameter and return type are references</figcaption>
+</figure>
 <p>The reason this function compiles without lifetime annotations is historical:
 in early versions (pre-1.0) of Rust, this code wouldn’t have compiled because
 every reference needed an explicit lifetime. At that time, the function

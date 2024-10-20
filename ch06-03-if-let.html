@@ -186,6 +186,7 @@ handle values that match one pattern while ignoring the rest. Consider the
 program in Listing 6-6 that matches on an <code>Option&lt;u8&gt;</code> value in the
 <code>config_max</code> variable but only wants to execute code if the value is the <code>Some</code>
 variant.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let config_max = Some(3u8);
     match config_max {
@@ -193,8 +194,8 @@ variant.</p>
         _ =&gt; (),
     }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 6-6: A <code>match</code> that only cares about executing
-code when the value is <code>Some</code></span></p>
+<figcaption>Listing 6-6: A <code>match</code> that only cares about executing code when the value is <code>Some</code></figcaption>
+</figure>
 <p>If the value is <code>Some</code>, we print out the value in the <code>Some</code> variant by binding
 the value to the variable <code>max</code> in the pattern. We don’t want to do anything
 with the <code>None</code> value. To satisfy the <code>match</code> expression, we have to add <code>_ =&gt; ()</code> after processing just one variant, which is annoying boilerplate code to

@@ -215,15 +215,18 @@ as well because <code>String</code> is actually implemented as a wrapper around 
 of bytes with some extra guarantees, restrictions, and capabilities. An example
 of a function that works the same way with <code>Vec&lt;T&gt;</code> and <code>String</code> is the <code>new</code>
 function to create an instance, shown in Listing 8-11.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s = String::new();
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-11: Creating a new, empty <code>String</code></span></p>
+<figcaption>Listing 8-11: Creating a new, empty <code>String</code></figcaption>
+</figure>
 <p>This line creates a new, empty string called <code>s</code>, into which we can then load
 data. Often, we’ll have some initial data with which we want to start the
 string. For that, we use the <code>to_string</code> method, which is available on any type
 that implements the <code>Display</code> trait, as string literals do. Listing 8-12 shows
 two examples.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let data = "initial contents";
 
@@ -232,17 +235,18 @@ two examples.</p>
     // the method also works on a literal directly:
     let s = "initial contents".to_string();
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-12: Using the <code>to_string</code> method to create a
-<code>String</code> from a string literal</span></p>
+<figcaption>Listing 8-12: Using the <code>to_string</code> method to create a <code>String</code> from a string literal</figcaption>
+</figure>
 <p>This code creates a string containing <code>initial contents</code>.</p>
 <p>We can also use the function <code>String::from</code> to create a <code>String</code> from a string
 literal. The code in Listing 8-13 is equivalent to the code in Listing 8-12
 that uses <code>to_string</code>.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s = String::from("initial contents");
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-13: Using the <code>String::from</code> function to create
-a <code>String</code> from a string literal</span></p>
+<figcaption>Listing 8-13: Using the <code>String::from</code> function to create a <code>String</code> from a string literal</figcaption>
+</figure>
 <p>Because strings are used for so many things, we can use many different generic
 APIs for strings, providing us with a lot of options. Some of them can seem
 redundant, but they all have their place! In this case, <code>String::from</code> and
@@ -250,6 +254,7 @@ redundant, but they all have their place! In this case, <code>String::from</code
 readability.</p>
 <p>Remember that strings are UTF-8 encoded, so we can include any properly encoded
 data in them, as shown in Listing 8-14.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let hello = String::from("السلام عليكم");
     let hello = String::from("Dobrý den");
@@ -263,8 +268,8 @@ data in them, as shown in Listing 8-14.</p>
     let hello = String::from("Здравствуйте");
     let hello = String::from("Hola");
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-14: Storing greetings in different languages in
-strings</span></p>
+<figcaption>Listing 8-14: Storing greetings in different languages in strings</figcaption>
+</figure>
 <p>All of these are valid <code>String</code> values.</p>
 <h3 id="updating-a-string"><a class="header" href="#updating-a-string">Updating a String</a></h3>
 <p>A <code>String</code> can grow in size and its contents can change, just like the contents
@@ -273,46 +278,50 @@ use the <code>+</code> operator or the <code>format!</code> macro to concatenate
 <h4 id="appending-to-a-string-with-push_str-and-push"><a class="header" href="#appending-to-a-string-with-push_str-and-push">Appending to a String with <code>push_str</code> and <code>push</code></a></h4>
 <p>We can grow a <code>String</code> by using the <code>push_str</code> method to append a string slice,
 as shown in Listing 8-15.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s = String::from("foo");
     s.push_str("bar");
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-15: Appending a string slice to a <code>String</code>
-using the <code>push_str</code> method</span></p>
+<figcaption>Listing 8-15: Appending a string slice to a <code>String</code> using the <code>push_str</code> method</figcaption>
+</figure>
 <p>After these two lines, <code>s</code> will contain <code>foobar</code>. The <code>push_str</code> method takes a
 string slice because we don’t necessarily want to take ownership of the
 parameter. For example, in the code in Listing 8-16, we want to be able to use
 <code>s2</code> after appending its contents to <code>s1</code>.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s1 = String::from("foo");
     let s2 = "bar";
     s1.push_str(s2);
     println!("s2 is {s2}");
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-16: Using a string slice after appending its
-contents to a <code>String</code></span></p>
+<figcaption>Listing 8-16: Using a string slice after appending its contents to a <code>String</code></figcaption>
+</figure>
 <p>If the <code>push_str</code> method took ownership of <code>s2</code>, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!</p>
 <p>The <code>push</code> method takes a single character as a parameter and adds it to the
 <code>String</code>. Listing 8-17 adds the letter <em>l</em> to a <code>String</code> using the <code>push</code>
 method.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let mut s = String::from("lo");
     s.push('l');
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-17: Adding one character to a <code>String</code> value
-using <code>push</code></span></p>
+<figcaption>Listing 8-17: Adding one character to a <code>String</code> value using <code>push</code></figcaption>
+</figure>
 <p>As a result, <code>s</code> will contain <code>lol</code>.</p>
 <h4 id="concatenation-with-the--operator-or-the-format-macro"><a class="header" href="#concatenation-with-the--operator-or-the-format-macro">Concatenation with the <code>+</code> Operator or the <code>format!</code> Macro</a></h4>
 <p>Often, you’ll want to combine two existing strings. One way to do so is to use
 the <code>+</code> operator, as shown in Listing 8-18.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">fn main() {
 </span>    let s1 = String::from("Hello, ");
     let s2 = String::from("world!");
     let s3 = s1 + &amp;s2; // note s1 has been moved here and can no longer be used
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 8-18: Using the <code>+</code> operator to combine two
-<code>String</code> values into a new <code>String</code> value</span></p>
+<figcaption>Listing 8-18: Using the <code>+</code> operator to combine two <code>String</code> values into a new <code>String</code> value</figcaption>
+</figure>
 <p>The string <code>s3</code> will contain <code>Hello, world!</code>. The reason <code>s1</code> is no longer
 valid after the addition, and the reason we used a reference to <code>s2</code>, has to do
 with the signature of the method that’s called when we use the <code>+</code> operator.
@@ -372,12 +381,13 @@ so that this call doesn’t take ownership of any of its parameters.</p>
 string by referencing them by index is a valid and common operation. However,
 if you try to access parts of a <code>String</code> using indexing syntax in Rust, you’ll
 get an error. Consider the invalid code in Listing 8-19.</p>
+<figure class="listing">
 <pre><code class="language-rust ignore does_not_compile"><span class="boring">fn main() {
 </span>    let s1 = String::from("hello");
     let h = s1[0];
 <span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 8-19: Attempting to use indexing syntax with a
-String</span></p>
+<figcaption>Listing 8-19: Attempting to use indexing syntax with a String</figcaption>
+</figure>
 <p>This code will result in the following error:</p>
 <pre><code class="language-console">$ cargo run
    Compiling collections v0.1.0 (file:///projects/collections)

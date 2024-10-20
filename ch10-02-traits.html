@@ -204,12 +204,13 @@ display summaries of data that might be stored in a <code>NewsArticle</code> or 
 instance. To do this, we need a summary from each type, and we’ll request that
 summary by calling a <code>summarize</code> method on an instance. Listing 10-12 shows the
 definition of a public <code>Summary</code> trait that expresses this behavior.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub trait Summary {
     fn summarize(&amp;self) -&gt; String;
 }</code></pre>
-<p><span class="caption">Listing 10-12: A <code>Summary</code> trait that consists of the
-behavior provided by a <code>summarize</code> method</span></p>
+<figcaption>Listing 10-12: A <code>Summary</code> trait that consists of the behavior provided by a <code>summarize</code> method</figcaption>
+</figure>
 <p>Here, we declare a trait using the <code>trait</code> keyword and then the trait’s name,
 which is <code>Summary</code> in this case. We also declare the trait as <code>pub</code> so that
 crates depending on this crate can make use of this trait too, as we’ll see in
@@ -231,7 +232,8 @@ the headline, the author, and the location to create the return value of
 <code>summarize</code>. For the <code>Tweet</code> struct, we define <code>summarize</code> as the username
 followed by the entire text of the tweet, assuming that the tweet content is
 already limited to 280 characters.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground"><span class="boring">pub trait Summary {
 </span><span class="boring">    fn summarize(&amp;self) -&gt; String;
 </span><span class="boring">}
@@ -261,8 +263,8 @@ impl Summary for Tweet {
         format!("{}: {}", self.username, self.content)
     }
 }</code></pre>
-<p><span class="caption">Listing 10-13: Implementing the <code>Summary</code> trait on the
-<code>NewsArticle</code> and <code>Tweet</code> types</span></p>
+<figcaption>Listing 10-13: Implementing the <code>Summary</code> trait on the <code>NewsArticle</code> and <code>Tweet</code> types</figcaption>
+</figure>
 <p>Implementing a trait on a type is similar to implementing regular methods. The
 difference is that after <code>impl</code>, we put the trait name we want to implement,
 then use the <code>for</code> keyword, and then specify the name of the type we want to
@@ -317,7 +319,8 @@ each method’s default behavior.</p>
 <p>In Listing 10-14, we specify a default string for the <code>summarize</code> method of the
 <code>Summary</code> trait instead of only defining the method signature, as we did in
 Listing 10-12.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">pub trait Summary {
     fn summarize(&amp;self) -&gt; String {
         String::from("(Read more...)")
@@ -345,8 +348,8 @@ Listing 10-12.</p>
 </span><span class="boring">        format!("{}: {}", self.username, self.content)
 </span><span class="boring">    }
 </span><span class="boring">}</span></code></pre>
-<p><span class="caption">Listing 10-14: Defining a <code>Summary</code> trait with a default
-implementation of the <code>summarize</code> method</span></p>
+<figcaption>Listing 10-14: Defining a <code>Summary</code> trait with a default implementation of the <code>summarize</code> method</figcaption>
+</figure>
 <p>To use a default implementation to summarize instances of <code>NewsArticle</code>, we
 specify an empty <code>impl</code> block with <code>impl Summary for NewsArticle {}</code>.</p>
 <p>Even though we’re no longer defining the <code>summarize</code> method on <code>NewsArticle</code>
@@ -671,7 +674,8 @@ is a type alias for the type of the <code>impl</code> block, which in this case 
 <code>Pair&lt;T&gt;</code>). But in the next <code>impl</code> block, <code>Pair&lt;T&gt;</code> only implements the
 <code>cmp_display</code> method if its inner type <code>T</code> implements the <code>PartialOrd</code> trait
 that enables comparison <em>and</em> the <code>Display</code> trait that enables printing.</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/lib.rs</span>
 <pre><code class="language-rust noplayground">use std::fmt::Display;
 
 struct Pair&lt;T&gt; {
@@ -694,8 +698,8 @@ impl&lt;T: Display + PartialOrd&gt; Pair&lt;T&gt; {
         }
     }
 }</code></pre>
-<p><span class="caption">Listing 10-15: Conditionally implementing methods on a
-generic type depending on trait bounds</span></p>
+<figcaption>Listing 10-15: Conditionally implementing methods on a generic type depending on trait bounds</figcaption>
+</figure>
 <p>We can also conditionally implement a trait for any type that implements
 another trait. Implementations of a trait on any type that satisfies the trait
 bounds are called <em>blanket implementations</em> and are used extensively in the

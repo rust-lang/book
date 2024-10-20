@@ -272,7 +272,7 @@ hierarchy to an item.</p>
 <p><span class="caption">Table B-3: Path-Related Syntax</span></p>
 <div class="table-wrapper"><table><thead><tr><th>Symbol</th><th>Explanation</th></tr></thead><tbody>
 <tr><td><code>ident::ident</code></td><td>Namespace path</td></tr>
-<tr><td><code>::path</code></td><td>Path relative to the crate root (i.e., an explicitly absolute path)</td></tr>
+<tr><td><code>::path</code></td><td>Path relative to the extern prelude, where all other crates are rooted (i.e., an explicitly absolute path including crate name)</td></tr>
 <tr><td><code>self::path</code></td><td>Path relative to the current module (i.e., an explicitly relative path).</td></tr>
 <tr><td><code>super::path</code></td><td>Path relative to the parent of the current module</td></tr>
 <tr><td><code>type::ident</code>, <code>&lt;type as trait&gt;::ident</code></td><td>Associated constants, functions, and types</td></tr>

@@ -206,13 +206,15 @@ many different situations where the success value and error value we want to
 return may differ.</p>
 <p>Let’s call a function that returns a <code>Result</code> value because the function could
 fail. In Listing 9-3 we try to open a file.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust edition2021">use std::fs::File;
 
 fn main() {
     let greeting_file_result = File::open("hello.txt");
 }</code></pre></pre>
-<p><span class="caption">Listing 9-3: Opening a file</span></p>
+<figcaption>Listing 9-3: Opening a file</figcaption>
+</figure>
 <p>The return type of <code>File::open</code> is a <code>Result&lt;T, E&gt;</code>. The generic parameter <code>T</code>
 has been filled in by the implementation of <code>File::open</code> with the type of the
 success value, <code>std::fs::File</code>, which is a file handle. The type of <code>E</code> used in
@@ -232,7 +234,8 @@ occurred.</p>
 on the value <code>File::open</code> returns. Listing 9-4 shows one way to handle the
 <code>Result</code> using a basic tool, the <code>match</code> expression that we discussed in
 Chapter 6.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust should_panic edition2021">use std::fs::File;
 
 fn main() {
@@ -243,8 +246,8 @@ fn main() {
         Err(error) =&gt; panic!("Problem opening the file: {error:?}"),
     };
 }</code></pre></pre>
-<p><span class="caption">Listing 9-4: Using a <code>match</code> expression to handle the
-<code>Result</code> variants that might be returned</span></p>
+<figcaption>Listing 9-4: Using a <code>match</code> expression to handle the <code>Result</code> variants that might be returned</figcaption>
+</figure>
 <p>Note that, like the <code>Option</code> enum, the <code>Result</code> enum and its variants have been
 brought into scope by the prelude, so we don’t need to specify <code>Result::</code>
 before the <code>Ok</code> and <code>Err</code> variants in the <code>match</code> arms.</p>
@@ -273,7 +276,8 @@ and return the handle to the new file. If <code>File::open</code> failed for any
 reason—for example, because we didn’t have permission to open the file—we still
 want the code to <code>panic!</code> in the same way it did in Listing 9-4. For this, we
 add an inner <code>match</code> expression, shown in Listing 9-5.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <!-- ignore this test because otherwise it creates hello.txt which causes other
 tests to fail lol -->
 <pre><code class="language-rust ignore">use std::fs::File;
@@ -295,8 +299,8 @@ fn main() {
         },
     };
 }</code></pre>
-<p><span class="caption">Listing 9-5: Handling different kinds of errors in
-different ways</span></p>
+<figcaption>Listing 9-5: Handling different kinds of errors in different ways</figcaption>
+</figure>
 <p>The type of the value that <code>File::open</code> returns inside the <code>Err</code> variant is
 <code>io::Error</code>, which is a struct provided by the standard library. This struct
 has a method <code>kind</code> that we can call to get an <code>io::ErrorKind</code> value. The enum
@@ -349,12 +353,14 @@ shortcut method implemented just like the <code>match</code> expression we wrote
 Listing 9-4. If the <code>Result</code> value is the <code>Ok</code> variant, <code>unwrap</code> will return
 the value inside the <code>Ok</code>. If the <code>Result</code> is the <code>Err</code> variant, <code>unwrap</code> will
 call the <code>panic!</code> macro for us. Here is an example of <code>unwrap</code> in action:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust should_panic edition2021">use std::fs::File;
 
 fn main() {
     let greeting_file = File::open("hello.txt").unwrap();
 }</code></pre></pre>
+</figure>
 <p>If we run this code without a <em>hello.txt</em> file, we’ll see an error message from
 the <code>panic!</code> call that the <code>unwrap</code> method makes:</p>
 <!-- manual-regeneration
@@ -369,13 +375,15 @@ called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, messa
 Using <code>expect</code> instead of <code>unwrap</code> and providing good error messages can convey
 your intent and make tracking down the source of a panic easier. The syntax of
 <code>expect</code> looks like this:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><pre class="playground"><code class="language-rust should_panic edition2021">use std::fs::File;
 
 fn main() {
     let greeting_file = File::open("hello.txt")
         .expect("hello.txt should be included in this project");
 }</code></pre></pre>
+</figure>
 <p>We use <code>expect</code> in the same way as <code>unwrap</code>: to return the file handle or call
 the <code>panic!</code> macro. The error message used by <code>expect</code> in its call to <code>panic!</code>
 will be the parameter that we pass to <code>expect</code>, rather than the default
@@ -402,7 +410,8 @@ you have available in the context of your code.</p>
 <p>For example, Listing 9-6 shows a function that reads a username from a file. If
 the file doesn’t exist or can’t be read, this function will return those errors
 to the code that called the function.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
 don't want to include it for rustdoc testing purposes. -->
@@ -427,8 +436,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     }
 }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 9-6: A function that returns errors to the
-calling code using <code>match</code></span></p>
+<figcaption>Listing 9-6: A function that returns errors to the calling code using <code>match</code></figcaption>
+</figure>
 <p>This function can be written in a much shorter way, but we’re going to start by
 doing a lot of it manually in order to explore error handling; at the end,
 we’ll show the shorter way. Let’s look at the return type of the function
@@ -478,7 +487,8 @@ question mark operator <code>?</code> to make this easier.</p>
 <p>Listing 9-7 shows an implementation of <code>read_username_from_file</code> that has the
 same functionality as in Listing 9-6, but this implementation uses the <code>?</code>
 operator.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
 don't want to include it for rustdoc testing purposes. -->
@@ -494,8 +504,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     Ok(username)
 }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 9-7: A function that returns errors to the
-calling code using the <code>?</code> operator</span></p>
+<figcaption>Listing 9-7: A function that returns errors to the calling code using the <code>?</code> operator</figcaption>
+</figure>
 <p>The <code>?</code> placed after a <code>Result</code> value is defined to work in almost the same way
 as the <code>match</code> expressions we defined to handle the <code>Result</code> values in Listing
 9-6. If the value of the <code>Result</code> is an <code>Ok</code>, the value inside the <code>Ok</code> will
@@ -526,7 +536,8 @@ end of the <code>read_to_string</code> call.</p>
 <p>The <code>?</code> operator eliminates a lot of boilerplate and makes this function’s
 implementation simpler. We could even shorten this code further by chaining
 method calls immediately after the <code>?</code>, as shown in Listing 9-8.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
 don't want to include it for rustdoc testing purposes. -->
@@ -543,8 +554,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     Ok(username)
 }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 9-8: Chaining method calls after the <code>?</code>
-operator</span></p>
+<figcaption>Listing 9-8: Chaining method calls after the <code>?</code> operator</figcaption>
+</figure>
 <p>We’ve moved the creation of the new <code>String</code> in <code>username</code> to the beginning of
 the function; that part hasn’t changed. Instead of creating a variable
 <code>username_file</code>, we’ve chained the call to <code>read_to_string</code> directly onto the
@@ -554,7 +565,8 @@ when both <code>File::open</code> and <code>read_to_string</code> succeed rather
 errors. The functionality is again the same as in Listing 9-6 and Listing 9-7;
 this is just a different, more ergonomic way to write it.</p>
 <p>Listing 9-9 shows a way to make this even shorter using <code>fs::read_to_string</code>.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
 don't want to include it for rustdoc testing purposes. -->
@@ -567,8 +579,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     fs::read_to_string("hello.txt")
 }
 <span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 9-9: Using <code>fs::read_to_string</code> instead of
-opening and then reading the file</span></p>
+<figcaption>Listing 9-9: Using <code>fs::read_to_string</code> instead of opening and then reading the file</figcaption>
+</figure>
 <p>Reading a file into a string is a fairly common operation, so the standard
 library provides the convenient <code>fs::read_to_string</code> function that opens the
 file, creates a new <code>String</code>, reads the contents of the file, puts the contents
@@ -586,14 +598,15 @@ it’s compatible with this <code>return</code>.</p>
 <p>In Listing 9-10, let’s look at the error we’ll get if we use the <code>?</code> operator
 in a <code>main</code> function with a return type that is incompatible with the type of
 the value we use <code>?</code> on.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore does_not_compile">use std::fs::File;
 
 fn main() {
     let greeting_file = File::open("hello.txt")?;
 }</code></pre>
-<p><span class="caption">Listing 9-10: Attempting to use the <code>?</code> in the <code>main</code>
-function that returns <code>()</code> won’t compile.</span></p>
+<figcaption>Listing 9-10: Attempting to use the <code>?</code> in the <code>main</code> function that returns <code>()</code> won’t compile.</figcaption>
+</figure>
 <p>This code opens a file, which might fail. The <code>?</code> operator follows the <code>Result</code>
 value returned by <code>File::open</code>, but this <code>main</code> function has the return type of
 <code>()</code>, not <code>Result</code>. When we compile this code, we get the following error
@@ -638,6 +651,7 @@ that point. If the value is <code>Some</code>, the value inside the <code>Some</
 resultant value of the expression, and the function continues. Listing 9-11 has
 an example of a function that finds the last character of the first line in the
 given text.</p>
+<figure class="listing">
 <pre><pre class="playground"><code class="language-rust edition2021">fn last_char_of_first_line(text: &amp;str) -&gt; Option&lt;char&gt; {
     text.lines().next()?.chars().last()
 }
@@ -651,8 +665,8 @@ given text.</p>
 </span><span class="boring">    assert_eq!(last_char_of_first_line(""), None);
 </span><span class="boring">    assert_eq!(last_char_of_first_line("\nhi"), None);
 </span><span class="boring">}</span></code></pre></pre>
-<p><span class="caption">Listing 9-11: Using the <code>?</code> operator on an <code>Option&lt;T&gt;</code>
-value</span></p>
+<figcaption>Listing 9-11: Using the <code>?</code> operator on an <code>Option&lt;T&gt;</code> value</figcaption>
+</figure>
 <p>This function returns <code>Option&lt;char&gt;</code> because it’s possible that there is a
 character there, but it’s also possible that there isn’t. This code takes the
 <code>text</code> string slice argument and calls the <code>lines</code> method on it, which returns
@@ -686,7 +700,8 @@ behave as expected.</p>
 from Listing 9-10, but we’ve changed the return type of <code>main</code> to be
 <code>Result&lt;(), Box&lt;dyn Error&gt;&gt;</code> and added a return value <code>Ok(())</code> to the end. This
 code will now compile.</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure class="listing">
+<span class="file-name">Filename: src/main.rs</span>
 <pre><code class="language-rust ignore">use std::error::Error;
 use std::fs::File;
 
@@ -695,8 +710,8 @@ fn main() -&gt; Result&lt;(), Box&lt;dyn Error&gt;&gt; {
 
     Ok(())
 }</code></pre>
-<p><span class="caption">Listing 9-12: Changing <code>main</code> to return <code>Result&lt;(), E&gt;</code>
-allows the use of the <code>?</code> operator on <code>Result</code> values.</span></p>
+<figcaption>Listing 9-12: Changing <code>main</code> to return <code>Result&lt;(), E&gt;</code> allows the use of the <code>?</code> operator on <code>Result</code> values.</figcaption>
+</figure>
 <p>The <code>Box&lt;dyn Error&gt;</code> type is a <em>trait object</em>, which we’ll talk about in the
 <a href="ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">“Using Trait Objects that Allow for Values of Different
 Types”</a><!-- ignore --> section in Chapter 18. For now, you can
