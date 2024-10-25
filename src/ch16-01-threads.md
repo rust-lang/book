@@ -2,21 +2,21 @@
 
 In most current operating systems, an executed program’s code is run in a
 *process*, and the operating system will manage multiple processes at once.
-Within a program, you can also have independent parts that run simultaneously.
+Within a program, you can also have independent parts that may run simultaneously.
 The features that run these independent parts are called *threads*. For
 example, a web server could have multiple threads so that it could respond to
 more than one request at the same time.
 
 Splitting the computation in your program into multiple threads to run multiple
-tasks at the same time can improve performance, but it also adds complexity.
-Because threads can run simultaneously, there’s no inherent guarantee about the
-order in which parts of your code on different threads will run. This can lead
-to problems, such as:
+tasks at the same time may improve performance, but it also adds complexity.
+Because threads may run simultaneously, without an explicit synchronization mechanism,
+there’s no inherent guarantee about the order in which parts of your code on different
+threads will run. This can lead to problems, such as:
 
 * Race conditions, where threads are accessing data or resources in an
   inconsistent order
 * Deadlocks, where two threads are waiting for each other, preventing both
-  threads from continuing
+  threads from progressing
 * Bugs that happen only in certain situations and are hard to reproduce and fix
   reliably
 
@@ -89,9 +89,10 @@ the order in which threads run, we also can’t guarantee that the spawned threa
 will get to run at all!
 
 We can fix the problem of the spawned thread not running or ending prematurely
-by saving the return value of `thread::spawn` in a variable. The return type of
+by joining the JoinHandle associated with the created thread. To do this, we 
+save the return value of `thread::spawn` in a variable. The return type of
 `thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned value that, when we
-call the `join` method on it, will wait for its thread to finish. Listing 16-2
+call the `join` method on it, will wait for its associated thread to finish. Listing 16-2
 shows how to use the `JoinHandle` of the thread we created in Listing 16-1 and
 call `join` to make sure the spawned thread finishes before `main` exits:
 
@@ -264,7 +265,7 @@ thread. We would get this compiler error instead:
 {{#include ../listings/ch16-fearless-concurrency/output-only-01-move-drop/output.txt}}
 ```
 
-Rust’s ownership rules have saved us again! We got an error from the code in
+Rust’s ownership rules have saved us again! We got an error at compile-time from the code in
 Listing 16-3 because Rust was being conservative and only borrowing `v` for the
 thread, which meant the main thread could theoretically invalidate the spawned
 thread’s reference. By telling Rust to move ownership of `v` to the spawned
