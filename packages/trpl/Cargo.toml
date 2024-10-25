@@ -21,3 +21,8 @@ tokio = { version = "1", default-features = false, features = [
     "time",
 ] }
 tokio-stream = "0.1"
+
+# This package is built as a standalone package to publish to crates.io, and is
+# also built as a path dependency for distribution with Rust, so it must not be
+# built as part of the `rust-lang/book` or `rust-lang/rust` workspaces.
+[workspace]

@@ -17,3 +17,8 @@ toml = "0.8.12"
 
 [dev-dependencies]
 assert_cmd = "2"
+
+# This package is used as a path dependency in `rust-lang/rust`, not published
+# to crates.io, so it cannot be part of the `rust-lang/book` workspace, because
+# path dependencies do not get built as a crate within the hosting workspace.
+[workspace]
