@@ -43,7 +43,8 @@ But if you enter */sleep* and then load */*, you’ll see that */* waits until
 `sleep` has slept for its full 5 seconds before loading.
 
 There are multiple techniques we could use to avoid requests backing up behind
-a slow request; the one we’ll implement is a thread pool.
+a slow request, including using async as we did Chapter 17; the one we’ll
+implement is a thread pool.
 
 ### Improving Throughput with a Thread Pool
 
@@ -119,6 +120,10 @@ run the code in the closure in the new thread. If you run this code and load
 that the requests to */* don’t have to wait for */sleep* to finish. However, as
 we mentioned, this will eventually overwhelm the system because you’d be making
 new threads without any limit.
+
+You may also recall from Chapter 17 that this is exactly the kind of situation
+where async and await really shine! Keep that in mind as we build the thread
+pool and think about how things would look different or the same with async.
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="creating-a-similar-interface-for-a-finite-number-of-threads"></a>
@@ -290,6 +295,9 @@ yet!
 > were building a real, complete project, this would be a good time to start
 > writing unit tests to check that the code compiles *and* has the behavior we
 > want.
+
+Consider: what would be different here if we were going to execute a *future*
+instead of a closure?
 
 #### Validating the Number of Threads in `new`
 
@@ -656,6 +664,11 @@ thread run them.
 > might load one at a time in 5 second intervals. Some web browsers execute
 > multiple instances of the same request sequentially for caching reasons. This
 > limitation is not caused by our web server.
+
+This is a good time to pause and consider how the code in Listings 21-18, 21-19,
+and 21-20 would be different if we were using futures instead of a closure for
+the work to be done. What types would change? How would the method signatures be
+different, if at all? What parts of the code would stay the same?
 
 After learning about the `while let` loop in Chapters 17 and 18, you might be
 wondering why we didn’t write the worker thread code as shown in Listing 21-21.

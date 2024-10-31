@@ -15,6 +15,10 @@ accepting new requests and shut down. To see this code in action, we’ll modify
 our server to accept only two requests before gracefully shutting down its
 thread pool.
 
+One thing to notice as we go: none of this affects the parts of the code that
+handle executing the closures, so everything here would be just the same if we
+were using a thread pool for an async runtime.
+
 ### Implementing the `Drop` Trait on `ThreadPool`
 
 Let’s start with implementing `Drop` on our thread pool. When the pool is
