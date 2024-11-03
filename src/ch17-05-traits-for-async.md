@@ -475,6 +475,10 @@ even when you need to write your own streaming data type, you *only* have to
 implement `Stream`, and then anyone who uses your data type can use `StreamExt`
 and its methods with it automatically.
 
+That’s all we’re going to cover for the lower-level details on these traits. To
+wrap up, let’s consider how futures (including streams), tasks, and threads all
+fit together!
+
 [futures-syntax]: ch17-01-futures-and-syntax.html
 [counting]: ch17-02-concurrency-with-async.html
 [async-book]: https://rust-lang.github.io/async-book/
@@ -482,7 +486,3 @@ and its methods with it automatically.
 [pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
 [first-async]: ch17-01-futures-and-syntax.html#our-first-async-program
 [any-number-futures]: ch17-03-more-futures.html#working-with-any-number-of-futures
-
-That’s all we’re going to cover for the lower-level details on these traits. To
-wrap up, let’s consider how futures (including streams), tasks, and threads all
-fit together!
