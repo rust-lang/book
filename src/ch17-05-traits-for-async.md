@@ -323,7 +323,7 @@ for all types where it can prove it is safe. The special case, again similar to
 `Send` and `Sync`, is the case where `Unpin` is *not* implemented for a type.
 The notation for this is `impl !Unpin for SomeType`, where `SomeType` is the
 name of a type which *does* need to uphold those guarantees to be safe whenever
-a pointer to that type it is used in a `Pin`.
+a pointer to that type is used in a `Pin`.
 
 In other words, there are two things to keep in mind about the relationship
 between `Pin` and `Unpin`. First, `Unpin` is the “normal” case, and `!Unpin` is
