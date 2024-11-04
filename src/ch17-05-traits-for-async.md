@@ -224,8 +224,9 @@ getting a mutable or immutable reference to it.
 
 So far so good: if we get anything wrong about the ownership or references in a
 given async block, the borrow checker will tell us. When we want to move around
-the future that corresponds to that block—like moving it into a `Vec` to pass to
-`join_all`, the way we did back in—things get trickier.
+the future that corresponds to that block—like moving it into a `Vec` to pass
+to `join_all`, the way we did back in the [“Working With Any Number of
+Futures”][any-number-futures]<!-- ignore --> section—things get trickier.
 
 When we move a future—whether by pushing into a data structure to use as an
 iterator with `join_all`, or returning them from a function—that actually means
@@ -323,7 +324,7 @@ for all types where it can prove it is safe. The special case, again similar to
 `Send` and `Sync`, is the case where `Unpin` is *not* implemented for a type.
 The notation for this is `impl !Unpin for SomeType`, where `SomeType` is the
 name of a type which *does* need to uphold those guarantees to be safe whenever
-a pointer to that type it is used in a `Pin`.
+a pointer to that type is used in a `Pin`.
 
 In other words, there are two things to keep in mind about the relationship
 between `Pin` and `Unpin`. First, `Unpin` is the “normal” case, and `!Unpin` is
@@ -474,13 +475,14 @@ even when you need to write your own streaming data type, you *only* have to
 implement `Stream`, and then anyone who uses your data type can use `StreamExt`
 and its methods with it automatically.
 
+That’s all we’re going to cover for the lower-level details on these traits. To
+wrap up, let’s consider how futures (including streams), tasks, and threads all
+fit together!
+
 [futures-syntax]: ch17-01-futures-and-syntax.html
 [counting]: ch17-02-concurrency-with-async.html
 [async-book]: https://rust-lang.github.io/async-book/
 [under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
 [pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
 [first-async]: ch17-01-futures-and-syntax.html#our-first-async-program
-
-That’s all we’re going to cover for the lower-level details on these traits. To
-wrap up, let’s consider how futures (including streams), tasks, and threads all
-fit together!
+[any-number-futures]: ch17-03-more-futures.html#working-with-any-number-of-futures
