@@ -88,15 +88,15 @@ a request to it, and returns the text of the title element:
 
 In Listing 17-1, we define a function named `page_title`, and we mark it with
 the `async` keyword. Then we use the `trpl::get` function to fetch whatever URL
-is passed in, and, and we await the response by using the `await` keyword. Then
-we get the text of the response by calling its `text` method and once again
-awaiting it with the `await` keyword. Both of these steps are asynchronous. For
-`get`, we need to wait for the server to send back the first part of its
-response, which will include HTTP headers, cookies, and so on. That part of the
-response can be delivered separately from the body of the request. Especially if
-the body is very large, it can take some time for it all to arrive. Thus, we
-have to wait for the *entirety* of the response to arrive, so the `text` method
-is also async.
+is passed in, and we await the response by using the `await` keyword. Then we
+get the text of the response by calling its `text` method, and once again await
+it with the `await` keyword. Both of these steps are asynchronous. For `get`,
+we need to wait for the server to send back the first part of its response,
+which will include HTTP headers, cookies, and so on. That part of the response
+can be delivered separately from the body of the request. Especially if the
+body is very large, it can take some time for it all to arrive. Thus, we have
+to wait for the *entirety* of the response to arrive, so the `text` method is
+also async.
 
 We have to explicitly await both of these futures, because futures in Rust are
 *lazy*: they don’t do anything until you ask them to with `await`. (In fact,
