@@ -74,7 +74,7 @@ fields. For example, we can define a method on `Rectangle` that is also named
 
 Here, we’re choosing to make the `width` method return `true` if the value in
 the instance’s `width` field is greater than `0` and `false` if the value is
-`0`: we can use a field within a method of the same name for any purpose. In
+less than or equal to `0`: we can use a field within a method of the same name for any purpose. In
 `main`, when we follow `rect1.width` with parentheses, Rust knows we mean the
 method `width`. When we don’t use parentheses, Rust knows we mean the field
 `width`.
