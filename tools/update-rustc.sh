@@ -2,6 +2,16 @@
 
 set -eu
 
+# Build book `trpl` crate dependency in the location where the listings will go
+# looking for it so they can compile correctly.
+echo 'Building book dependencies in tmp/packages...'
+mkdir -p tmp/packages
+cp -r packages/trpl tmp/packages/trpl
+cd tmp/packages/trpl
+cargo clean > /dev/null
+cargo build > /dev/null
+cd - > /dev/null
+
 # Build the book before making any changes for comparison of the output.
 echo 'Building book into tmp/book-before before updating...'
 mdbook build -d tmp/book-before
