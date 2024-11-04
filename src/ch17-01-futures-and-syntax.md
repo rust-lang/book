@@ -98,7 +98,7 @@ body is very large, it can take some time for it all to arrive. Thus, we have
 to wait for the *entirety* of the response to arrive, so the `text` method is
 also async.
 
-We have to explicitly await both of these futures because futures in Rust are
+We have to explicitly await both of these futures, because futures in Rust are
 *lazy*: they don’t do anything until you ask them to with `await`. (In fact,
 Rust will show a compiler warning if you don’t use a future.) This should
 remind you of our discussion of iterators [back in Chapter 13][iterators-lazy].
