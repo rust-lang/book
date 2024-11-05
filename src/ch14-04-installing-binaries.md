@@ -36,7 +36,7 @@ $ cargo install ripgrep
   Installing ripgrep v13.0.0
 --snip--
    Compiling ripgrep v13.0.0
-    Finished release [optimized + debuginfo] target(s) in 3m 10s
+    Finished `release` profile [optimized + debuginfo] target(s) in 10.64s
   Installing ~/.cargo/bin/rg
    Installed package `ripgrep v13.0.0` (executable `rg`)
 ```

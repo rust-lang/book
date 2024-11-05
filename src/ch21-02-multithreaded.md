@@ -619,28 +619,28 @@ Can't automate because the output depends on making requests
 ```console
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
-warning: field is never read: `workers`
+warning: field `workers` is never read
  --> src/lib.rs:7:5
   |
+6 | pub struct ThreadPool {
+  |            ---------- field in this struct
 7 |     workers: Vec<Worker>,
-  |     ^^^^^^^^^^^^^^^^^^^^
+  |     ^^^^^^^
   |
   = note: `#[warn(dead_code)]` on by default
 
-warning: field is never read: `id`
+warning: fields `id` and `thread` are never read
   --> src/lib.rs:48:5
    |
+47 | struct Worker {
+   |        ------ fields in this struct
 48 |     id: usize,
-   |     ^^^^^^^^^
-
-warning: field is never read: `thread`
-  --> src/lib.rs:49:5
-   |
+   |     ^^
 49 |     thread: thread::JoinHandle<()>,
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |     ^^^^^^
 
-warning: `hello` (lib) generated 3 warnings
-    Finished dev [unoptimized + debuginfo] target(s) in 1.40s
+warning: `hello` (lib) generated 2 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.91s
      Running `target/debug/hello`
 Worker 0 got a job; executing.
 Worker 2 got a job; executing.

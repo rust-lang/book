@@ -271,16 +271,17 @@ When we run this, we get the behavior we might have expected initially:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-04
-cargo clean
 cargo build # skip all the build noise
 cargo run https://www.rust-lang.org
 # copy the output here
 -->
 
 ```console
-$ cargo run https://www.rust-lang.org
+$ cargo run -- https://www.rust-lang.org
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running `target/debug/async_await 'https://www.rust-lang.org'`
 The title for https://www.rust-lang.org was
-Rust Programming Language
+            Rust Programming Language
 ```
 
 Phew: we finally have some working async code! This now compiles, and we can run
