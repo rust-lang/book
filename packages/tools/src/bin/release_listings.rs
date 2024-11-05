@@ -64,7 +64,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             if !listing_path.is_dir() {
                 eprintln!(
                     "'{}' is not a directory, skipping",
-                    chapter_path.display()
+                    listing_path.display(),
                 );
                 continue;
             }
