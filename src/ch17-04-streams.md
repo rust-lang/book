@@ -39,39 +39,36 @@ stream as they arrive with the `while let` loop.
 Unfortunately, when we try to run the code, it doesn’t compile. Instead, as we
 can see in the output, it reports that there is no `next` method available.
 
-<!-- TODO: fix up the path here? -->
 <!-- manual-regeneration
-cd listings/chapter-17-async-await/listing-17-30
+cd listings/ch17-async-await/listing-17-30
 cargo build
 copy only the error output
 -->
 
 ```console
 error[E0599]: no method named `next` found for struct `Iter` in the current scope
- --> src/main.rs:8:40
-  |
-8 |         while let Some(value) = stream.next().await {
-  |                                        ^^^^
-  |
-  = note: the full type name has been written to '/Users/chris/dev/rust-lang/book/listings/ch17-async-await/listing-17-30/target/debug/deps/async_await-bbd5bb8f6851cb5f.long-type-18426562901668632191.txt'
-  = note: consider using `--verbose` to print the full type name to the console
-  = help: items from traits can only be used if the trait is in scope
+  --> src/main.rs:10:40
+   |
+10 |         while let Some(value) = stream.next().await {
+   |                                        ^^^^
+   |
+   = note: the full type name has been written to 'file:///projects/async_await/target/debug/deps/async_await-9de943556a6001b8.long-type-1281356139287206597.txt'
+   = note: consider using `--verbose` to print the full type name to the console
+   = help: items from traits can only be used if the trait is in scope
 help: the following traits which provide `next` are implemented but not in scope; perhaps you want to import one of them
-  |
-1 + use futures_util::stream::stream::StreamExt;
-  |
-1 + use std::iter::Iterator;
-  |
-1 + use std::str::pattern::Searcher;
-  |
-1 + use trpl::StreamExt;
-  |
+   |
+1  + use crate::trpl::StreamExt;
+   |
+1  + use futures_util::stream::stream::StreamExt;
+   |
+1  + use std::iter::Iterator;
+   |
+1  + use std::str::pattern::Searcher;
+   |
 help: there is a method `try_next` with a similar name
-  |
-8 |         while let Some(value) = stream.try_next().await {
-  |                                        ~~~~~~~~
-
-For more information about this error, try `rustc --explain E0599`.
+   |
+10 |         while let Some(value) = stream.try_next().await {
+   |                                        ~~~~~~~~
 ```
 
 As the output suggests, the reason for the compiler error is that we need the
@@ -231,7 +228,7 @@ Now our code has a much more interesting result! Between every other pair of
 messages, we see an error reported: `Problem: Elapsed(())`.
 
 <!-- manual-regeneration
-cd listings/listing-17-35
+cd listings/ch17-async-await/listing-17-35
 cargo run
 copy only the program output, *not* the compiler output
 -->
@@ -395,7 +392,7 @@ This is the inherent “laziness” of Rust’s futures at work again, allowing 
 choose our performance characteristics.
 
 <!-- manual-regeneration
-cd listings/listing-17-39
+cd listings/ch17-async-await/listing-17-39
 cargo run
 copy and paste only the program output
 -->

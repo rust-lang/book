@@ -106,6 +106,8 @@ fn is_line_of_interest(line: &str) -> bool {
     line.split_whitespace().any(|sub_string| {
         sub_string.contains("file://")
             && !sub_string.contains("file:///projects/")
+            && !sub_string.contains("file:///home/.cargo")
+            && !sub_string.contains("file:///home/.rustup")
     })
 }
 
