@@ -311,6 +311,8 @@ microcontroller
 microcontrollers
 millis
 minigrep
+Miri
+miri
 mixup
 mkdir
 MockMessenger
