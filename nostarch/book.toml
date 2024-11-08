@@ -14,5 +14,10 @@ build-dir = "../tmp"
 [preprocessor.trpl-listing]
 output-mode = "simple"
 
+# Only used in this version, *not* in the root `book.toml`, because its job is
+# to remove `<figure>` and `<figcaption>` markup from the version we send them.
+[preprocessor.trpl-figure]
+output-mode = "simple"
+
 [rust]
 edition = "2021"
