@@ -3,25 +3,26 @@ use std::io;
 use clap::{self, Parser, Subcommand};
 use mdbook::preprocess::{CmdPreprocessor, Preprocessor};
 
-use mdbook_trpl_listing::TrplListing;
+use mdbook_trpl::Note;
 
 fn main() -> Result<(), String> {
     let cli = Cli::parse();
+    let simple_note = Note;
     if let Some(Command::Supports { renderer }) = cli.command {
-        return if TrplListing.supports_renderer(&renderer) {
+        return if simple_note.supports_renderer(&renderer) {
             Ok(())
         } else {
             Err(format!("Renderer '{renderer}' is unsupported"))
         };
     }
 
-    let (ctx, book) = CmdPreprocessor::parse_input(io::stdin()).map_err(|e| format!("{e}"))?;
-    let processed = TrplListing.run(&ctx, book).map_err(|e| format!("{e}"))?;
+    let (ctx, book) = CmdPreprocessor::parse_input(io::stdin())
+        .map_err(|e| format!("blah: {e}"))?;
+    let processed = simple_note.run(&ctx, book).map_err(|e| format!("{e}"))?;
     serde_json::to_writer(io::stdout(), &processed).map_err(|e| format!("{e}"))
 }
 
-/// A simple preprocessor for semantic markup for code listings in _The Rust
-/// Programming Language_.
+/// A simple preprocessor for semantic notes in _The Rust Programming Language_.
 #[derive(Parser, Debug)]
 struct Cli {
     #[command(subcommand)]

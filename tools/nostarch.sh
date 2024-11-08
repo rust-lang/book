@@ -4,13 +4,7 @@ set -eu
 
 cargo build --release
 
-cd packages/mdbook-trpl-listing
-cargo install --locked --path .
-
-cd ../mdbook-trpl-note
-cargo install --locked --path .
-
-cd ../..
+cargo install --locked --path ./packages/mdbook_trpl
 
 mkdir -p tmp
 rm -rf tmp/*.md

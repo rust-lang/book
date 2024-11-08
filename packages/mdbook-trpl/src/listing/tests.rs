@@ -33,26 +33,33 @@ fn main() {}
 #[test]
 fn simple_mode_works() {
     let result = rewrite_listing(
-        r#"<Listing number="1-2" caption="A write-up which *might* include inline Markdown like `code` etc." file-name="src/main.rs">
+        r#"Leading text.
+
+<Listing number="1-2" caption="A write-up which *might* include inline Markdown like `code` etc." file-name="src/main.rs">
 
 ```rust
 fn main() {}
 ```
 
-</Listing>"#,
+</Listing>
+
+Trailing text."#,
         Mode::Simple,
     );
 
     assert_eq!(
         &result.unwrap(),
-        r#"
+        r#"Leading text.
+
 Filename: src/main.rs
 
-````rust
+```rust
 fn main() {}
-````
+```
 
-Listing 1-2: A write-up which <em>might</em> include inline Markdown like <code>code</code> etc."#
+Listing 1-2: A write-up which *might* include inline Markdown like `code` etc.
+
+Trailing text."#
     );
 }
 
@@ -287,9 +294,3 @@ fn main() {}
         )
     }
 }
-
-#[test]
-fn missing_value() {}
-
-#[cfg(test)]
-mod config;
