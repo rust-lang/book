@@ -92,9 +92,9 @@ loop {
 ```
 
 If Rust compiled it to exactly that code, though, every `await` would be
-blocking—exactly the opposite of what we were going for! Instead, Rust needs
-makes sure that the loop can hand off control to something which can pause work
-on this future and work on other futures and check this one again later. That
+blocking—exactly the opposite of what we were going for! Instead, Rust makes
+sure that the loop can hand off control to something which can pause work on
+this future and work on other futures and check this one again later. That
 “something” is an async runtime, and this scheduling and coordination work is
 one of the main jobs for a runtime.
 
@@ -153,10 +153,10 @@ future with `await` pins the future implicitly. That’s why we don’t need to 
 
 However, we’re not directly awaiting a future here. Instead, we construct a new
 future, `JoinAll`, by passing a collection of futures to the `join_all`
-function. The signature for `join_all` produces requires that the type of the
-items in the collection all implement the `Future` trait, and `Box<T>` only
-implements `Future` if the `T` that it wraps is a future which implements the
-`Unpin` trait.
+function. The signature for `join_all` requires that the type of the items in
+the collection all implement the `Future` trait, and `Box<T>` only implements
+`Future` if the `T` that it wraps is a future which implements the `Unpin`
+trait.
 
 That’s a lot! But we can understand it, if we dive a little further into how the
 `Future` type actually works, in particular around *pinning*.
@@ -190,7 +190,7 @@ on which the method is implemented, a reference or smart pointer to that type,
 or a `Pin` wrapping a reference to that type. We’ll see more on this syntax in
 Chapter 18. For now, it’s enough to know that if we want to poll a future (to
 check whether it is `Pending` or `Ready(Output)`), we need a mutable reference
-to the type, which is wrapped in a `Pin`.
+to the type which is wrapped in a `Pin`.
 
 `Pin` is a wrapper type. In some ways, it’s similar to the `Box`, `Rc`, and
 other smart pointer types we saw in Chapter 15, which also wrap other types.
