@@ -190,7 +190,7 @@ on which the method is implemented, a reference or smart pointer to that type,
 or a `Pin` wrapping a reference to that type. We’ll see more on this syntax in
 Chapter 18. For now, it’s enough to know that if we want to poll a future (to
 check whether it is `Pending` or `Ready(Output)`), we need a mutable reference
-to the type which is wrapped in a `Pin`.
+to the type, which is wrapped in a `Pin`.
 
 `Pin` is a wrapper type. In some ways, it’s similar to the `Box`, `Rc`, and
 other smart pointer types we saw in Chapter 15, which also wrap other types.
