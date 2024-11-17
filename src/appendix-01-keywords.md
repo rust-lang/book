@@ -1,92 +1,138 @@
-## Appendix A: Keywords
+## დანართი ა: საკვანძო სიტყვები
 
-The following list contains keywords that are reserved for current or future
-use by the Rust language. As such, they cannot be used as identifiers (except
-as raw identifiers as we’ll discuss in the “[Raw
-Identifiers][raw-identifiers]<!-- ignore -->” section). Identifiers are names
-of functions, variables, parameters, struct fields, modules, crates, constants,
-macros, static values, attributes, types, traits, or lifetimes.
+მოცემული ჩამონათვალი შეიცავს საკვანძო სიტყვებს, რომლებსაც ხშირად გამოვიყენებთ Rust თან მუშაობის, ამ სიტყვებს ვერ გამოვიყენებთ როგორც საიდენტიფიკაციო ნიშნებად (გარდა გამონაკლისი შემთხვევებისა, მალევე განვიხილავთ “[Raw Identifiers][raw-identifiers]" სექციაში). საიდენტიფიკაციო ნიშნების მაგალითებია: ფუნქციების, პარამეტრების, მოდულების, კონსტანტების, მაკროების, ატრიბუტების, ტიპების და ასე შემდეგ სახელები, გთხოვთ იხილოთ ინგლისური ჩამონათვალი უკეთესად მიხვედრისათვის:
+
+Identifiers are names of functions, variables, parameters, struct fields, modules, crates, constants, macros, static values, attributes, types, traits, or lifetimes.
 
 [raw-identifiers]: #raw-identifiers
 
-### Keywords Currently in Use
+### ამჟამინდელი საკვანძო სიტყვები
 
-The following is a list of keywords currently in use, with their functionality
-described.
+ქვევით ჩამოთვლილია საკვანძო სიტყვები, თავისივე ფუნქციური დახასიათებით, რომლებიც ამჟამად გამოიყენება:
 
-* `as` - perform primitive casting, disambiguate the specific trait containing
-  an item, or rename items in `use` statements
-* `async` -  return a `Future` instead of blocking the current thread
-* `await` - suspend execution until the result of a `Future` is ready
-* `break` - exit a loop immediately
-* `const` - define constant items or constant raw pointers
-* `continue` - continue to the next loop iteration
-* `crate` - in a module path, refers to the crate root
-* `dyn` - dynamic dispatch to a trait object
-* `else` - fallback for `if` and `if let` control flow constructs
-* `enum` - define an enumeration
-* `extern` - link an external function or variable
-* `false` - Boolean false literal
-* `fn` - define a function or the function pointer type
-* `for` - loop over items from an iterator, implement a trait, or specify a
-  higher-ranked lifetime
-* `if` - branch based on the result of a conditional expression
-* `impl` - implement inherent or trait functionality
-* `in` - part of `for` loop syntax
-* `let` - bind a variable
-* `loop` - loop unconditionally
-* `match` - match a value to patterns
-* `mod` - define a module
-* `move` - make a closure take ownership of all its captures
-* `mut` - denote mutability in references, raw pointers, or pattern bindings
-* `pub` - denote public visibility in struct fields, `impl` blocks, or modules
-* `ref` - bind by reference
-* `return` - return from function
-* `Self` - a type alias for the type we are defining or implementing
-* `self` - method subject or current module
-* `static` - global variable or lifetime lasting the entire program execution
-* `struct` - define a structure
-* `super` - parent module of the current module
-* `trait` - define a trait
-* `true` - Boolean true literal
-* `type` - define a type alias or associated type
-* `union` - define a [union][union]<!-- ignore -->; is only a keyword when used
-  in a union declaration
-* `unsafe` - denote unsafe code, functions, traits, or implementations
-* `use` - bring symbols into scope
-* `where` - denote clauses that constrain a type
-* `while` - loop conditionally based on the result of an expression
+- `as` - ოპერატორი საშუალებას გაძლევთ განახორციელოთ პრიმიტიული ტიპის კასტინგი (primitive casting), განსაზღვროთ კონკრეტული ტრეტი (trait), რომელიც შეიცავს რომელიმე ელემენტს, ან გამოიყენოთ use statement ში სახელების გადარქმევისათვის.
 
-[union]: ../reference/items/unions.html
+- `async` - აბრუნებს Future ობიექტს, რომელიც აღარ ბლოკავს მიმდინარე ნაკადს
 
-### Keywords Reserved for Future Use
+- `await` - აჩერებს კოდის შესრულებას, სანამ `Future`-ის შედეგი მზად არ იქნება
 
-The following keywords do not yet have any functionality but are reserved by
-Rust for potential future use.
+- `break` - წყვეტს ციკლს დაუყოვნებლივ
 
-* `abstract`
-* `become`
-* `box`
-* `do`
-* `final`
-* `macro`
-* `override`
-* `priv`
-* `try`
-* `typeof`
-* `unsized`
-* `virtual`
-* `yield`
+- `const` - დეფინიცია გამოიყენება იმ ელემენტებისთვის ან ნედლი პოინტერებისთვის, რომელთა მნიშვნელობა კოდის გაშვებისას არ უნდა შეიცვალოს.
+
+- `continue` - გადადის ციკლის შემდეგ იტერაციაზე
+
+- `crate` - მოდულების გზის (module path) კონტექსტში, მიუთითებს მიმდინარე კრეიტის (crate) ძირეულ დონეზე (root level)
+
+მაგალითად:
+
+```text
+// თუ გვაქვს ასეთი სტრუქტურა:
+
+crate
+ ├── src
+ │   ├── main.rs
+ │   └── utils
+ │       └── helper.rs
+
+// helper.rs-ში შეგვიძლია მივწვდეთ
+// root მოდულში არსებულ ელემენტებს შემდეგნაირად:
+
+use crate::some_root_function;
+```
+
+- `dyn` - დინამიური დისპატჩი trait ობიექტზე
+
+- `if` - განშტოება, რომელიც დაფუძნებულია პირობითი გამოხატულების შედეგზე.
+
+- `else` - გამოიყენება `if` და `if let` კონსტრუქციებში ალტერნატიული შემთხვევის დასამუშავებლად
+
+- `enum` - განსაზღვრავს ჩამონათვალს (ენუმერაციას). ენუმერაცია არის ტიპი, რომელიც შეიძლება იყოს ერთ-ერთი წინასწარ განსაზღვრული ვარიანტებიდან. თითოეული ვარიანტი შეიძლება შეიცავდეს სხვადასხვა ტიპის მონაცემებს.
+
+- `extern` - გამოიყენება გარე ფუნქციის ან ცვლადის დასაკავშირებლად
+
+- `fn` - საკვანძო სიტყვა, რომელიც გამოიყენება ფუნქციის განსაზღვრისთვის ან ფუნქციის მაჩვენებლის (პოინტერის) ტიპის მითითებისთვის. უფრო მარტივად რომ ვთქვათ, იგი მიუთითებს ახალი ფუნქციის შექმნას ან ფუნქციაზე მიმთითებელ ცვლადს.
+
+- `for` - გამოიყენება სამი მიზნით:
+
+1. იტერატორიდან ელემენტებზე ციკლის შესასრულებლად
+2. ტრეიტის იმპლემენტაციის აღსანიშნავად
+3. უფრო მაღალი რანგის სასიცოცხლო ხანგრძლივობის (higher-ranked lifetime) მისათითებლად
+
+- `impl` - გამოიყენება საკუთარი (inherent) ან ტრეიტის ფუნქციონალის იმპლემენტაციისთვის. სხვა სიტყვებით, იგი საშუალებას გვაძლევს განვსაზღვროთ ტიპის (მაგ. სტრუქტურის) მეთოდები და ასოცირებული ფუნქციები, ან განვახორციელოთ ტრეიტის მიერ განსაზღვრული ქცევა კონკრეტული ტიპისთვის.
+
+- `in` - საკვანძო სიტყვა Rust-ში, რომელიც წარმოადგენს `for` ციკლის სინტაქსის ნაწილს. ის გამოიყენება იტერატორსა და ციკლის სხეულს შორის საზღვრის გასავლებად, რაც განსაზღვრავს თუ რომელ კოლექციაზე ან დიაპაზონზე უნდა მოხდეს იტერაცია.
+
+- `let` - საკვანძო სიტყვა, რომელიც გამოიყენება ცვლადის გამოსაცხადებლად და მისთვის მნიშვნელობის მისანიჭებლად.
+
+- `loop` - ციკლი, რომელიც არ სრულდება, პირობის არ ქონის გამო.
+
+- `match` - აკავშირებს პატერნებს მნიშვნელობასთან
+
+- `mod` - მოდულის დასადეკლარილებლად
+
+- `move` - აიძულოს კლოჟურა (closure) მთლიანად დაეუფლოს (ანუ აიღოს მფლობელობა) იმ ცვლადებზე, რომლებსაც ის იყენებს.
+
+- `mut` - გამოიყენება იმის მითითებისთვის, რომ მონაცემები შეიძლება შეიცვალოს.
+
+- `pub` - გამოიყენება სტრუქტურების ველების, impl ბლოკების ან მოდულებისთვის, რათა მიუთითოს, რომ ისინი პროგრამის სხვა ნაწილებიდან ხელმისაწვდომია.
+
+- `ref` - გამოიყენება ცვლადის მისამართით მიბმისთვის, რაც საშუალებას გვაძლევს შევცვალოთ ორიგინალური ცვლადის მნიშვნელობა ფუნქციის შიგნით.
+
+- `return` - ფუნქციიდან მნიშვნელობის დაბრუნება
+
+- `Self` - ტიპის ალიასი, რომელიც განსაზღვრავს ან იმპლემენტაციას უკეთებს ამჟამინდელ ტიპს.
+
+- `self` - "მეთოდის მფლობელი" ან "მიმდინარე მოდული"
+
+- `static` - ვარიანტი გლობალური ცვლადია, რომლის სიცოცხლის ციკლიც მთელი პროგრამის შესრულების განმავლობაში გრძელდება.
+
+- `struct` - გამოიყენება მონაცემების უფრო რთული და მნიშვნელოვანი სტრუქტურების შესაქმნელად.
+
+- `super` - მშობელი მოდული
+
+- `trait` - trait - ის დასადეკლარილებლად
+
+- `true` - Boolean
+- `false` - Boolean
+
+- `type` - გამოავლენს ტიპის ალიასი ან დაკავშირებულ ტიპს.
+
+- `union` - გამოიყენება სინტაქსის კონკრეტულ კონსტრუქციაში, რომელიც ახალი გაერთიანების ტიპს ადგენს
+
+- `unsafe` - არაუსაფრთხო კოდის, ფუნქციის ან იმპლემენტაციის გააქტიურება
+
+- `use` - ბიბლიოთეკებიდან ფუნქციებისა და სტრუქტურების შემოტანა
+
+- `where` - განსაზღვრავს დამატებით პირობებს, რომლებიც ტიპის მნიშვნელობებმა უნდა დააკმაყოფილონ
+
+- `while` - ციკლი განმეორდება მანამ, სანამ განსაზღვრული პირობა სიმართლეს შეესაბამება
+
+### სამომავნო საკვანძო სიტყვები
+
+შემდეგი საკვანძო სიტყვები ჯერ არ აქვთ რაიმე ფუნქციონალი, მაგრამ დაცულია Rust-ის მიერ სამომავლო გამოყენებისთვის.
+
+- `abstract`
+- `become`
+- `box`
+- `do`
+- `final`
+- `macro`
+- `override`
+- `priv`
+- `try`
+- `typeof`
+- `unsized`
+- `virtual`
+- `yield`
 
 ### Raw Identifiers
 
-*Raw identifiers* are the syntax that lets you use keywords where they wouldn’t
-normally be allowed. You use a raw identifier by prefixing a keyword with `r#`.
+_Raw identifiers_ - სინტაქცის ტიპები, რომლებიც საშვალებას გაძლევენ ზემოთ ჩამოთვლილი საკვანძო სიტყვები გამოიყენოთ, იქ სადაც ნორმალურ შემთხვევაში დასაშვები არ უნდა იყოს. ეს ყველაფერი საკვანძო სიტყვაზე თავსართის `r#` დამატებით ხდება
 
-For example, `match` is a keyword. If you try to compile the following function
-that uses `match` as its name:
+მაგალითად `match` - საკვანძო სიტყვა. როდესაც შეეცდები მომდევნო ფუნქციის დაკომპაილებას, რომლის სახელიც `match` ად არის დადეკლარირებული:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ფაილის სახელი: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 fn match(needle: &str, haystack: &str) -> bool {
@@ -94,7 +140,7 @@ fn match(needle: &str, haystack: &str) -> bool {
 }
 ```
 
-you’ll get this error:
+მიიღებ ამგვარ ცდომილებას::
 
 ```text
 error: expected identifier, found keyword `match`
@@ -104,11 +150,9 @@ error: expected identifier, found keyword `match`
   |    ^^^^^ expected identifier, found keyword
 ```
 
-The error shows that you can’t use the keyword `match` as the function
-identifier. To use `match` as a function name, you need to use the raw
-identifier syntax, like this:
+ეს ცდომილება იმის მაგალითია რომ შენ არ შეგიძლია საკვანძო სიტყვა - `match` - გამოიყენო ფუნქციის სახელად. Raw identifier ის სინტაქსი კი ამის საშვალებას მოგცემს, ამგვარად:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ფაილის სახელი: src/main.rs</span>
 
 ```rust
 fn r#match(needle: &str, haystack: &str) -> bool {
@@ -120,18 +164,11 @@ fn main() {
 }
 ```
 
-This code will compile without any errors. Note the `r#` prefix on the function
-name in its definition as well as where the function is called in `main`.
+ეს კოდი ყოველგვარი ცდომილებების გარეშე დაკომპაილდება. დაიმახსოვრე რომ თავსართი - `r#` - მხოლოდ ფუნქციის შექმნისას კიარა არამედ გამოძახებისასაც აუცილებელია.
 
-Raw identifiers allow you to use any word you choose as an identifier, even if
-that word happens to be a reserved keyword. This gives us more freedom to
-choose identifier names, as well as lets us integrate with programs written in
-a language where these words aren’t keywords. In addition, raw identifiers
-allow you to use libraries written in a different Rust edition than your crate
-uses. For example, `try` isn’t a keyword in the 2015 edition but is in the 2018
-edition. If you depend on a library that’s written using the 2015 edition and
-has a `try` function, you’ll need to use the raw identifier syntax, `r#try` in
-this case, to call that function from your 2018 edition code. See [Appendix
-E][appendix-e]<!-- ignore --> for more information on editions.
+Raw identifiers ნებას გრთავს გამოიყენო ნებისმიერი სიტყვა რომელსაც შენ აირჩევ, არ აქვს მნიშვნელობა ეს სიტყვა წინასწარ განსაზღვრულ საკვანძო სიტყვებშიც რომ შედიოდეს. ამგვარი მიდგომა უფრო მეტ თავისუფლებას გვაძლევს სახელების არჩევისას, ასევე
 
-[appendix-e]: appendix-05-editions.html
+ასევე საშუალებას გვაძლევს ინტეგრაცია გავუწიოთ პროგრამებს, რომლებიც დაწერილია ისეთ ენაზე, სადაც ეს სიტყვები საკვანძო სიტყვებად არ ითვლება. გარდა ამისა, raw identifiers
+raw identifiers საშუალებას გაძლევთ გამოიყენოთ ბიბლიოთეკები, რომლებიც დაწერილია სხვა Rust-ის ვერსიაში, ვიდრე თქვენი crate იყენებს. მაგალითად, `try` არ არის საკვანძო სიტყვა 2015 წლის ვერსიაში, მაგრამ არის 2018 წლის გამოცემაში. თუ თქვენ დამოკიდებული ხართ ბიბლიოთეკაზე, რომელიც დაწერილია 2015 წლის გამოცემით და აქვს `try` ფუნქცია, თქვენ უნდა გამოიყენოთ raw identifier სინტაქსი, ამ შემთხვევაში `r#try`, რათა გამოიძახოთ ეს ფუნქცია თქვენი 2018 წლის გამოცემის კოდიდან. იხილეთ [დანართი-ე][appendix-e] დამატებითი ინფორმაციისათვის.
+
+[appendix-e]: appendix-05-editions.md
