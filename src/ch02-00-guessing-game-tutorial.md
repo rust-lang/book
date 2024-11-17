@@ -305,7 +305,7 @@ input 6 -->
 ```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 6.44s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.44s
      Running `target/debug/guessing_game`
 Guess the number!
 Please input your guess.
@@ -380,22 +380,28 @@ cargo build -->
 ```console
 $ cargo build
     Updating crates.io index
-  Downloaded rand v0.8.5
-  Downloaded libc v0.2.127
-  Downloaded getrandom v0.2.7
-  Downloaded cfg-if v1.0.0
-  Downloaded ppv-lite86 v0.2.16
-  Downloaded rand_chacha v0.3.1
-  Downloaded rand_core v0.6.3
-   Compiling libc v0.2.127
-   Compiling getrandom v0.2.7
+     Locking 16 packages to latest compatible versions
+      Adding wasi v0.11.0+wasi-snapshot-preview1 (latest: v0.13.3+wasi-0.2.2)
+      Adding zerocopy v0.7.35 (latest: v0.8.9)
+      Adding zerocopy-derive v0.7.35 (latest: v0.8.9)
+  Downloaded syn v2.0.87
+  Downloaded 1 crate (278.1 KB) in 0.16s
+   Compiling proc-macro2 v1.0.89
+   Compiling unicode-ident v1.0.13
+   Compiling libc v0.2.161
    Compiling cfg-if v1.0.0
-   Compiling ppv-lite86 v0.2.16
-   Compiling rand_core v0.6.3
+   Compiling byteorder v1.5.0
+   Compiling getrandom v0.2.15
+   Compiling rand_core v0.6.4
+   Compiling quote v1.0.37
+   Compiling syn v2.0.87
+   Compiling zerocopy-derive v0.7.35
+   Compiling zerocopy v0.7.35
+   Compiling ppv-lite86 v0.2.20
    Compiling rand_chacha v0.3.1
    Compiling rand v0.8.5
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.69s
 ```
 
 </Listing>
@@ -433,7 +439,7 @@ cargo build -->
 ```console
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.13s
 ```
 
 These lines show that Cargo only updates the build with your tiny change to the
@@ -557,7 +563,7 @@ cargo run
 ```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 7
@@ -566,7 +572,7 @@ Please input your guess.
 You guessed: 4
 
 $ cargo run
-    Finished dev [unoptimized + debuginfo] target(s) in 0.02s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 83
@@ -717,6 +723,7 @@ Let’s run the program now:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/
+touch src/main.rs
 cargo run
   76
 -->
@@ -724,7 +731,7 @@ cargo run
 ```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.43s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.26s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 58
@@ -767,6 +774,7 @@ advantage of that to allow the user to quit, as shown here:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-04-looping/
+touch src/main.rs
 cargo run
 (too small guess)
 (too big guess)
@@ -777,7 +785,7 @@ quit
 ```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 1.50s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.23s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 59
@@ -868,7 +876,7 @@ foo
 ```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 4.45s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.13s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 61

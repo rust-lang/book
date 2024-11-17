@@ -115,36 +115,33 @@ it is not yet ready.
 
 ### Pinning and the Pin and Unpin Traits
 
-When we introduced the idea of pinning while working on Listing 17-17, we ran
+When we introduced the idea of pinning while working on Listing 17-16, we ran
 into a very gnarly error message. Here is the relevant part of it again:
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-17
+cd listings/ch17-async-await/listing-17-16
 cargo build
 copy *only* the final `error` block from the errors
 -->
 
 ```text
-error[E0277]: `{async block@src/main.rs:8:23: 20:10}` cannot be unpinned
-  --> src/main.rs:46:33
+error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
+  --> src/main.rs:48:33
    |
-46 |         trpl::join_all(futures).await;
-   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:8:23: 20:10}`, which is required by `Box<{async block@src/main.rs:8:23: 20:10}>: std::future::Future`
+48 |         trpl::join_all(futures).await;
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`, which is required by `Box<{async block@src/main.rs:10:23: 10:33}>: Future`
    |
    = note: consider using the `pin!` macro
            consider using `Box::pin` if you need to access the pinned value outside of the current scope
-   = note: required for `Box<{async block@src/main.rs:8:23: 20:10}>` to implement `std::future::Future`
-note: required by a bound in `JoinAll`
-  --> /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
+note: required by a bound in `futures_util::future::join_all::JoinAll`
+  --> file:///home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
    |
 27 | pub struct JoinAll<F>
    |            ------- required by a bound in this struct
 28 | where
 29 |     F: Future,
    |        ^^^^^^ required by this bound in `JoinAll`
-
-Some errors have detailed explanations: E0277, E0308.
-For more information about an error, try `rustc --explain E0277`.
 ```
 
 When we read this error message carefully, it not only tells us that we need to

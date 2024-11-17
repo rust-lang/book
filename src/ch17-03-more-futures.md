@@ -39,7 +39,7 @@ replace `join!` with `join_all`.
 Unfortunately, this doesn’t compile. Instead, we get this error:
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-16/
+cd listings/ch17-async-await/listing-17-15/
 cargo build
 copy just the compiler error
 -->
@@ -47,33 +47,21 @@ copy just the compiler error
 
 ```text
 error[E0308]: mismatched types
-  --> src/main.rs:43:37
+  --> src/main.rs:45:37
    |
-8  |           let tx1_fut = async move {
-   |  _______________________-
-9  | |             let vals = vec![
-10 | |                 String::from("hi"),
-11 | |                 String::from("from"),
-...  |
-19 | |             }
-20 | |         };
-   | |_________- the expected `async` block
-21 |
-22 |           let rx_fut = async {
-   |  ______________________-
-23 | |             while let Some(value) = rx.recv().await {
-24 | |                 println!("received '{value}'");
-25 | |             }
-26 | |         };
-   | |_________- the found `async` block
+10 |         let tx1_fut = async move {
+   |                       ---------- the expected `async` block
 ...
-43 |           let futures = vec![tx1_fut, rx_fut, tx_fut];
-   |                                       ^^^^^^ expected `async` block, found a different `async` block
+24 |         let rx_fut = async {
+   |                      ----- the found `async` block
+...
+45 |         let futures = vec![tx1_fut, rx_fut, tx_fut];
+   |                                     ^^^^^^ expected `async` block, found a different `async` block
    |
-   = note: expected `async` block `{async block@src/main.rs:8:23: 20:10}`
-              found `async` block `{async block@src/main.rs:22:22: 26:10}`
+   = note: expected `async` block `{async block@src/main.rs:10:23: 10:33}`
+              found `async` block `{async block@src/main.rs:24:22: 24:27}`
    = note: no two async blocks, even if identical, have the same type
-   = help: consider pinning your async block and and casting it to a trait object
+   = help: consider pinning your async block and casting it to a trait object
 ```
 
 This might be surprising. After all, none of them return anything, so each
@@ -135,25 +123,74 @@ the errors mentioning `Unpin`. Although there are three of them, notice that
 each is very similar in its contents.
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-17
+cd listings/ch17-async-await/listing-17-16
 cargo build
-copy *only* the errors
+# copy *only* the errors
+# fix the paths
 -->
 
 ```text
-error[E0277]: `{async block@src/main.rs:8:23: 20:10}` cannot be unpinned
-   --> src/main.rs:46:24
+error[E0308]: mismatched types
+   --> src/main.rs:46:46
     |
-46  |         trpl::join_all(futures).await;
-    |         -------------- ^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:8:23: 20:10}`, which is required by `Box<{async block@src/main.rs:8:23: 20:10}>: std::future::Future`
+10  |         let tx1_fut = async move {
+    |                       ---------- the expected `async` block
+...
+24  |         let rx_fut = async {
+    |                      ----- the found `async` block
+...
+46  |             vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
+    |                                     -------- ^^^^^^ expected `async` block, found a different `async` block
+    |                                     |
+    |                                     arguments to this function are incorrect
+    |
+    = note: expected `async` block `{async block@src/main.rs:10:23: 10:33}`
+               found `async` block `{async block@src/main.rs:24:22: 24:27}`
+    = note: no two async blocks, even if identical, have the same type
+    = help: consider pinning your async block and casting it to a trait object
+note: associated function defined here
+   --> file:///home/.rustup/toolchains/1.82/lib/rustlib/src/rust/library/alloc/src/boxed.rs:255:12
+    |
+255 |     pub fn new(x: T) -> Self {
+    |            ^^^
+
+error[E0308]: mismatched types
+   --> src/main.rs:46:64
+    |
+10  |         let tx1_fut = async move {
+    |                       ---------- the expected `async` block
+...
+30  |         let tx_fut = async move {
+    |                      ---------- the found `async` block
+...
+46  |             vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
+    |                                                       -------- ^^^^^^ expected `async` block, found a different `async` block
+    |                                                       |
+    |                                                       arguments to this function are incorrect
+    |
+    = note: expected `async` block `{async block@src/main.rs:10:23: 10:33}`
+               found `async` block `{async block@src/main.rs:30:22: 30:32}`
+    = note: no two async blocks, even if identical, have the same type
+    = help: consider pinning your async block and casting it to a trait object
+note: associated function defined here
+   --> file:///home/.rustup/toolchains/1.82/lib/rustlib/src/rust/library/alloc/src/boxed.rs:255:12
+    |
+255 |     pub fn new(x: T) -> Self {
+    |            ^^^
+
+error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
+   --> src/main.rs:48:24
+    |
+48  |         trpl::join_all(futures).await;
+    |         -------------- ^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`, which is required by `Box<{async block@src/main.rs:10:23: 10:33}>: Future`
     |         |
     |         required by a bound introduced by this call
     |
     = note: consider using the `pin!` macro
             consider using `Box::pin` if you need to access the pinned value outside of the current scope
-    = note: required for `Box<{async block@src/main.rs:8:23: 20:10}>` to implement `std::future::Future`
+    = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
 note: required by a bound in `join_all`
-   --> /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:105:14
+   --> file:///home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:105:14
     |
 102 | pub fn join_all<I>(iter: I) -> JoinAll<I::Item>
     |        -------- required by a bound in this function
@@ -161,17 +198,17 @@ note: required by a bound in `join_all`
 105 |     I::Item: Future,
     |              ^^^^^^ required by this bound in `join_all`
 
-error[E0277]: `{async block@src/main.rs:8:23: 20:10}` cannot be unpinned
-  --> src/main.rs:46:9
+error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
+  --> src/main.rs:48:9
    |
-46 |         trpl::join_all(futures).await;
-   |         ^^^^^^^^^^^^^^^^^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:8:23: 20:10}`, which is required by `Box<{async block@src/main.rs:8:23: 20:10}>: std::future::Future`
+48 |         trpl::join_all(futures).await;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`, which is required by `Box<{async block@src/main.rs:10:23: 10:33}>: Future`
    |
    = note: consider using the `pin!` macro
            consider using `Box::pin` if you need to access the pinned value outside of the current scope
-   = note: required for `Box<{async block@src/main.rs:8:23: 20:10}>` to implement `std::future::Future`
-note: required by a bound in `JoinAll`
-  --> /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
+note: required by a bound in `futures_util::future::join_all::JoinAll`
+  --> file:///home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
    |
 27 | pub struct JoinAll<F>
    |            ------- required by a bound in this struct
@@ -179,26 +216,23 @@ note: required by a bound in `JoinAll`
 29 |     F: Future,
    |        ^^^^^^ required by this bound in `JoinAll`
 
-error[E0277]: `{async block@src/main.rs:8:23: 20:10}` cannot be unpinned
-  --> src/main.rs:46:33
+error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
+  --> src/main.rs:48:33
    |
-46 |         trpl::join_all(futures).await;
-   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:8:23: 20:10}`, which is required by `Box<{async block@src/main.rs:8:23: 20:10}>: std::future::Future`
+48 |         trpl::join_all(futures).await;
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`, which is required by `Box<{async block@src/main.rs:10:23: 10:33}>: Future`
    |
    = note: consider using the `pin!` macro
            consider using `Box::pin` if you need to access the pinned value outside of the current scope
-   = note: required for `Box<{async block@src/main.rs:8:23: 20:10}>` to implement `std::future::Future`
-note: required by a bound in `JoinAll`
-  --> /Users/chris/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+   = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
+note: required by a bound in `futures_util::future::join_all::JoinAll`
+  --> file:///home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
    |
 27 | pub struct JoinAll<F>
    |            ------- required by a bound in this struct
 28 | where
 29 |     F: Future,
    |        ^^^^^^ required by this bound in `JoinAll`
-
-Some errors have detailed explanations: E0277, E0308.
-For more information about an error, try `rustc --explain E0277`.
 ```
 
 That is a *lot* to digest, so let’s pull it apart. The first part of the message
@@ -369,7 +403,7 @@ a pair of futures. To begin, each future only hands control back to the runtime
 If you run this, you will see this output:
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-24/
+cd listings/ch17-async-await/listing-17-23/
 cargo run
 copy just the output
 -->

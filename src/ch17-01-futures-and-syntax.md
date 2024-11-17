@@ -259,7 +259,7 @@ await the result of calling `page_title`, as in Listing 17-4.
 
 <Listing number="17-4" caption="Awaiting an async block with `trpl::run`" file-name="src/main.rs">
 
-<!-- should_panic,noplayground because mdbook does not pass args -->
+<!-- should_panic,noplayground because mdbook test does not pass args -->
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-04/src/main.rs:run}}
@@ -269,8 +269,19 @@ await the result of calling `page_title`, as in Listing 17-4.
 
 When we run this, we get the behavior we might have expected initially:
 
+<!-- manual-regeneration
+cd listings/ch17-async-await/listing-17-04
+cargo build # skip all the build noise
+cargo run https://www.rust-lang.org
+# copy the output here
+-->
+
 ```console
-{{#include ../listings/ch17-async-await/listing-17-04/output.txt}}
+$ cargo run -- https://www.rust-lang.org
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running `target/debug/async_await 'https://www.rust-lang.org'`
+The title for https://www.rust-lang.org was
+            Rust Programming Language
 ```
 
 Phew: we finally have some working async code! This now compiles, and we can run

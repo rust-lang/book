@@ -61,6 +61,7 @@ BTreeSet
 BufRead
 BufReader
 BuildHasher
+byteorder
 Cacher
 cacher
 Cagain
@@ -104,6 +105,7 @@ CustomSmartPointer
 CustomSmartPointers
 data's
 DataStruct
+dbea
 deallocate
 deallocated
 deallocating
@@ -309,6 +311,8 @@ microcontroller
 microcontrollers
 millis
 minigrep
+Miri
+miri
 mixup
 mkdir
 MockMessenger
@@ -566,6 +570,7 @@ Uncomment
 uncommenting
 unevaluated
 unhandled
+unicode
 Uninstalling
 uninstall
 unittests
@@ -598,6 +603,7 @@ Vlissides
 vscode
 vtable
 waitlist
+wasi
 wasn
 weakt
 WeatherForecast
@@ -616,4 +622,5 @@ WriteMessage
 xcode
 xpression
 yyyy
+zerocopy
 ZipImpl
