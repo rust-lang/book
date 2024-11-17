@@ -1,4 +1,3 @@
-# Appendix
+# დანართი
 
-The following sections contain reference material you may find useful in your
-Rust journey.
+მომდევნო სექციები შეიცავს მასალას, რომელიც შეიძლება გამოგადგეთ თქვენი Rust მოგზაურობისას.
