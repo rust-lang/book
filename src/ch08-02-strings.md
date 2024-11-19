@@ -132,7 +132,7 @@ If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
 
 The `push` method takes a single character as a parameter and adds it to the
-`String`. Listing 8-17 adds the letter *l* to a `String` using the `push`
+`String`. Listing 8-17 adds the letter `l` to a `String` using the `push`
 method.
 
 <Listing number="8-17" caption="Adding one character to a `String` value using `push`">
