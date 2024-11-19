@@ -30,7 +30,7 @@ rust-lang/rust uses in [this file][rust-mdbook]. To get it:
 [rust-mdbook]: https://github.com/rust-lang/rust/blob/master/src/tools/rustbook/Cargo.toml
 
 ```bash
-$ cargo install mdbook --locked --version <version_num>
+cargo install mdbook --locked --version <version_num>
 ```
 
 The book also uses two mdbook plugins which are part of this repository. If you
@@ -39,8 +39,8 @@ look right, but you *will* still be able to build the book. To use the plugins,
 you should run:
 
 ```bash
-$ cargo install --locked --path packages/mdbook-trpl-listing
-$ cargo install --locked --path packages/mdbook-trpl-note
+cargo install --locked --path packages/mdbook-trpl-listing
+cargo install --locked --path packages/mdbook-trpl-note
 ```
 
 ## Building
@@ -48,7 +48,7 @@ $ cargo install --locked --path packages/mdbook-trpl-note
 To build the book, type:
 
 ```bash
-$ mdbook build
+mdbook build
 ```
 
 The output will be in the `book` subdirectory. To check it out, open it in
@@ -56,25 +56,25 @@ your web browser.
 
 _Firefox:_
 ```bash
-$ firefox book/index.html                       # Linux
-$ open -a "Firefox" book/index.html             # OS X
-$ Start-Process "firefox.exe" .\book\index.html # Windows (PowerShell)
-$ start firefox.exe .\book\index.html           # Windows (Cmd)
+firefox book/index.html                       # Linux
+open -a "Firefox" book/index.html             # OS X
+Start-Process "firefox.exe" .\book\index.html # Windows (PowerShell)
+start firefox.exe .\book\index.html           # Windows (Cmd)
 ```
 
 _Chrome:_
 ```bash
-$ google-chrome book/index.html                 # Linux
-$ open -a "Google Chrome" book/index.html       # OS X
-$ Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
-$ start chrome.exe .\book\index.html            # Windows (Cmd)
+google-chrome book/index.html                 # Linux
+open -a "Google Chrome" book/index.html       # OS X
+Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
+start chrome.exe .\book\index.html            # Windows (Cmd)
 ```
 
 To run the tests:
 
 ```bash
-$ cd packages/trpl
-$ mdbook test --library-path packages/trpl/target/debug/deps
+cd packages/trpl
+mdbook test --library-path packages/trpl/target/debug/deps
 ```
 
 ## Contributing
