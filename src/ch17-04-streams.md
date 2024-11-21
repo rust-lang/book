@@ -2,7 +2,7 @@
 
 So far in this chapter, we have mostly stuck to individual futures. The one big
 exception was the async channel we used. Recall how we used the receiver for our
-async channel in the [“Message Passing”][17-02-messages] earlier in the chapter.
+async channel in the [“Message Passing”][17-02-messages]<!-- ignore --> earlier in the chapter.
 The async `recv` method produces a sequence of items over time. This is an
 instance of a much more general pattern, often called a _stream_.
 

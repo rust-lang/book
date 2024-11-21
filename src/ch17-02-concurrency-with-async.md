@@ -380,5 +380,3 @@ received 'you'
 
 This is a good start, but it limits us to just a handful of futures: two with
 `join`, or three with `join3`. Let’s see how we might work with more futures.
-
-[streams]: ch17-05-streams.html
