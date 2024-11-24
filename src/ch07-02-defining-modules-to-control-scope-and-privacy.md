@@ -71,7 +71,7 @@ The crate root file in this case is *src/main.rs*, and it contains:
 
 </Listing>
 
-The `pub mod garden;` line tells the compiler to include the code it finds in
+The `mod garden;` line tells the compiler to include the code it finds in
 *src/garden.rs*, which is:
 
 <Listing file-name="src/garden.rs">
