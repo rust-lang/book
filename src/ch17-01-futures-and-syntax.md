@@ -162,7 +162,7 @@ defined like this:
 use std::future::Future;
 use trpl::Html;
 
-fn page_title(url: &str) -> impl Future<Output = Option<String>> + '_ {
+fn page_title(url: &str) -> impl Future<Output = Option<String>> {
     async move {
         let text = trpl::get(url).await.text().await;
         Html::parse(&text)
@@ -188,13 +188,6 @@ Let’s walk through each part of the transformed version:
 - The new function body is an `async move` block because of how it uses the
   `url` parameter. (We’ll talk much more about `async` versus `async move` later
   in the chapter.)
-- The new version of the function has a kind of lifetime we haven’t seen before
-  in the output type: `'_`. Because the function returns a future that refers to
-  a reference—in this case, the reference from the `url` parameter—we need to
-  tell Rust that we want that reference to be included. We don’t have to name
-  the lifetime here, because Rust is smart enough to know there’s only one
-  reference that could be involved, but we _do_ have to be explicit that the
-  resulting future is bound by that lifetime.
 
 Now we can call `page_title` in `main`.
 
