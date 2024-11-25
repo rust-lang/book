@@ -153,7 +153,7 @@ anonymous data type the compiler creates for that async block.
 
 Thus, writing `async fn` is equivalent to writing a function which returns a
 *future* of the return type. When the compiler sees a function definition such
-as the `async fn page_title` in Listing 17-1, it’s equivalent to a non-async
+as the `async fn page_title` in Listing 17-2, it’s equivalent to a non-async
 function defined like this:
 
 ```rust
@@ -161,7 +161,7 @@ function defined like this:
 use std::future::Future;
 use trpl::Html;
 
-fn page_title(url: &str) -> impl Future<Output = Option<String>> + '_ {
+fn page_title(url: &str) -> impl Future<Output = Option<String>> {
     async move {
         let text = trpl::get(url).await.text().await;
         Html::parse(&text)
@@ -185,15 +185,8 @@ Let’s walk through each part of the transformed version:
   above. That value matches the `Output` type in the return type. This is just
   like other blocks you have seen.
 * The new function body is an `async move` block because of how it uses the
-  `url` parameter. (We’ll talk about `async` vs. `async move` much more later
-  in the chapter.)
-* The new version of the function has a kind of lifetime we haven’t seen before
-  in the output type: `'_`. Because the function returns a `Future` which refers
-  to a reference—in this case, the reference from the `url` parameter—we need to
-  tell Rust that we mean for that reference to be included. We don’t have to
-  name the lifetime here, because Rust is smart enough to know there is only one
-  reference which could be involved, but we *do* have to be explicit that the
-  resulting `Future` is bound by that lifetime.
+  `url` parameter. (We’ll talk more about `async` vs. `async move` later in the
+  chapter.)
 
 Now we can call `page_title` in `main`. To start, we’ll just get the title
 for a single page. In Listing 17-3, we follow the same pattern we used for
