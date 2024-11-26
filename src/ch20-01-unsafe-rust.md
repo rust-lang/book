@@ -311,9 +311,10 @@ programming language to call those functions.
 
 Listing 20-8 demonstrates how to set up an integration with the `abs` function
 from the C standard library. Functions declared within `extern` blocks are
-always unsafe to call from Rust code. The reason is that other languages don’t
-enforce Rust’s rules and guarantees, and Rust can’t check them, so
-responsibility falls on the programmer to ensure safety.
+usually unsafe to call from Rust code, so they must also be marked `unsafe`. The
+reason is that other languages don’t enforce Rust’s rules and guarantees, and
+Rust can’t check them, so responsibility falls on the programmer to ensure
+safety.
 
 <Listing number="20-8" file-name="src/main.rs" caption="Declaring and calling an `extern` function defined in another language">
 
@@ -323,30 +324,51 @@ responsibility falls on the programmer to ensure safety.
 
 </Listing>
 
-Within the `extern "C"` block, we list the names and signatures of external
-functions from another language we want to call. The `"C"` part defines which
-*application binary interface (ABI)* the external function uses: the ABI
+Within the `unsafe extern "C"` block, we list the names and signatures of
+external functions from another language we want to call. The `"C"` part defines
+which *application binary interface (ABI)* the external function uses: the ABI
 defines how to call the function at the assembly level. The `"C"` ABI is the
 most common and follows the C programming language’s ABI.
 
+This particular function does not have any memory safety considerations, though.
+In fact, we know that any call to `abs` will always be safe for any `i32`, so we
+can use the `safe` keyword to say that this specific function is safe to call
+even though it is in an `unsafe extern` block. Once we make that change, calling
+it no longer requires an `unsafe` block, as shown in Listing 20-9.
+
+<Listing number="20-9" file-name="src/main.rs" caption="Explicitly marking a function as `safe` within an `unsafe extern` block and calling it safely">
+
+```rust
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-09/src/main.rs}}
+```
+
+</Listing>
+
+Marking a function as `safe` does not inherently make it safe! Instead, it is
+like a promise you are making to Rust that it *is* safe. It is still your
+responsibility to make sure that promise is kept!
+
 > #### Calling Rust Functions from Other Languages
 >
-> We can also use `extern` to create an interface that allows other languages
-> to call Rust functions. Instead of creating a whole `extern` block, we add
-> the `extern` keyword and specify the ABI to use just before the `fn` keyword
-> for the relevant function. We also need to add a `#[no_mangle]` annotation to
-> tell the Rust compiler not to mangle the name of this function. *Mangling* is
-> when a compiler changes the name we’ve given a function to a different name
+> We can also use `extern` to create an interface that allows other languages to
+> call Rust functions. Instead of creating a whole `extern` block, we add the
+> `extern` keyword and specify the ABI to use just before the `fn` keyword for
+> the relevant function. We also need to add a `#[unsafe(no_mangle)]` annotation
+> to tell the Rust compiler not to mangle the name of this function. *Mangling*
+> is when a compiler changes the name we’ve given a function to a different name
 > that contains more information for other parts of the compilation process to
 > consume but is less human readable. Every programming language compiler
 > mangles names slightly differently, so for a Rust function to be nameable by
-> other languages, we must disable the Rust compiler’s name mangling.
+> other languages, we must disable the Rust compiler’s name mangling. This is
+> unsafe because there might be name collisions across libraries without the
+> built-in mangling, so it is our responsibility to make sure the name we have
+> exported is safe to export without mangling.
 >
 > In the following example, we make the `call_from_c` function accessible from
 > C code, after it’s compiled to a shared library and linked from C:
 >
 > ```rust
-> #[no_mangle]
+> #[unsafe(no_mangle)]
 > pub extern "C" fn call_from_c() {
 >     println!("Just called a Rust function from C!");
 > }
@@ -360,14 +382,14 @@ In this book, we’ve not yet talked about *global variables*, which Rust does
 support but can be problematic with Rust’s ownership rules. If two threads are
 accessing the same mutable global variable, it can cause a data race.
 
-In Rust, global variables are called *static* variables. Listing 20-9 shows an
+In Rust, global variables are called *static* variables. Listing 20-10 shows an
 example declaration and use of a static variable with a string slice as a
 value.
 
-<Listing number="20-9" file-name="src/main.rs" caption="Defining and using an immutable static variable">
+<Listing number="20-10" file-name="src/main.rs" caption="Defining and using an immutable static variable">
 
 ```rust
-{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-09/src/main.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-10/src/main.rs}}
 ```
 
 </Listing>
@@ -386,13 +408,13 @@ values in a static variable have a fixed address in memory. Using the value
 will always access the same data. Constants, on the other hand, are allowed to
 duplicate their data whenever they’re used. Another difference is that static
 variables can be mutable. Accessing and modifying mutable static variables is
-*unsafe*. Listing 20-10 shows how to declare, access, and modify a mutable
+*unsafe*. Listing 20-11 shows how to declare, access, and modify a mutable
 static variable named `COUNTER`.
 
-<Listing number="20-10" file-name="src/main.rs" caption="Reading from or writing to a mutable static variable is unsafe">
+<Listing number="20-11" file-name="src/main.rs" caption="Reading from or writing to a mutable static variable is unsafe">
 
 ```rust
-{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-10/src/main.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-11/src/main.rs}}
 ```
 
 </Listing>
@@ -423,12 +445,12 @@ We can use `unsafe` to implement an unsafe trait. A trait is unsafe when at
 least one of its methods has some invariant that the compiler can’t verify. We
 declare that a trait is `unsafe` by adding the `unsafe` keyword before `trait`
 and marking the implementation of the trait as `unsafe` too, as shown in
-Listing 20-11.
+Listing 20-12.
 
-<Listing number="20-11" caption="Defining and implementing an unsafe trait">
+<Listing number="20-12" caption="Defining and implementing an unsafe trait">
 
 ```rust
-{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-11/src/main.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-12/src/main.rs}}
 ```
 
 </Listing>
@@ -475,10 +497,10 @@ You can run Miri on a project by typing `cargo +nightly miri run` or `cargo
 +nightly miri test`.
 
 For an example of how helpful this can be, consider what happens when we run it
-against Listing 20-10:
+against Listing 20-11:
 
 ```console
-{{#include ../listings/ch20-advanced-features/listing-20-10/output.txt}}
+{{#include ../listings/ch20-advanced-features/listing-20-11/output.txt}}
 ```
 
 It helpfully and correctly notices that we have shared references to mutable

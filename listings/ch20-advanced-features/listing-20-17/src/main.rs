@@ -1,3 +1,4 @@
+// ANCHOR: here
 trait Pilot {
     fn fly(&self);
 }
@@ -25,10 +26,6 @@ impl Human {
         println!("*waving arms furiously*");
     }
 }
-
-// ANCHOR: here
-fn main() {
-    let person = Human;
-    person.fly();
-}
 // ANCHOR_END: here
+
+fn main() {}

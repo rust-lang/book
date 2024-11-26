@@ -18,6 +18,6 @@ impl Animal for Dog {
 
 // ANCHOR: here
 fn main() {
-    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
+    println!("A baby dog is called a {}", Animal::baby_name());
 }
 // ANCHOR_END: here
