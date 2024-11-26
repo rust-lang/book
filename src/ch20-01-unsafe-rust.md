@@ -103,7 +103,7 @@ raw pointers in safe code; we just can’t dereference raw pointers outside an
 unsafe block, as you’ll see in a bit.
 
 We’ve created raw pointers by using the raw borrow operators: `&raw const num`
-creates a `*const i32` immutable raw pointer, and `&raw mut num` creates a `&mut
+creates a `*const i32` immutable raw pointer, and `&raw mut num` creates a `*mut
 i32` mutable raw pointer. Because we created them directly from a local
 variable, we know these particular raw pointers are valid, but we can’t make
 that assumption about just any raw pointer.
@@ -485,7 +485,7 @@ actually is safe and correct. One of the best ways to do that is to use
 [Miri][miri], an official Rust tool for detecting undefined behavior. Whereas
 the borrow checker is a *static* tool which works at compile time, Miri is a
 *dynamic* tool which works at runtime. It checks your code by running your
-program, or its test suite, and detecting when you violate the rules its
+program, or its test suite, and detecting when you violate the rules it
 understands about how Rust should work.
 
 Using Miri requires a nightly build of Rust (which we talk about more in
