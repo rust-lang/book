@@ -7,13 +7,12 @@ The async `recv` method produces a sequence of items over time. This is an
 instance of a much more general pattern, often called a *stream*.
 
 A sequence of items is something we’ve seen before, when we looked at the
-`Iterator` trait in Chapter 13, but there are two differences between iterators
-and the async channel receiver. The first difference is the element of time:
-iterators are synchronous, while the channel receiver is asynchronous. The
-second difference is the API. When working directly with an `Iterator`, we call
-its synchronous `next` method. With the `trpl::Receiver` stream in particular,
-we called an  asynchronous `recv` method instead, but these APIs otherwise feel
-very similar.
+`Iterator` trait in Chapter 13. There are two differences between iterators and
+the async channel receiver, though. The first is the element of time: iterators
+are synchronous, while the channel receiver is asynchronous. The second is the
+API. When working directly with an `Iterator`, we call its synchronous `next`
+method. With the `trpl::Receiver` stream in particular, we called an
+asynchronous `recv` method instead. These APIs otherwise feel very similar.
 
 That similarity isn’t a coincidence. A stream is similar to an asynchronous
 form of iteration. Whereas the `trpl::Receiver` specifically waits to receive
