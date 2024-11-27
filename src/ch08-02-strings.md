@@ -278,8 +278,8 @@ seem that `answer` should in fact be `208`, but `208` is not a valid character
 on its own. Returning `208` is likely not what a user would want if they asked
 for the first letter of this string; however, that’s the only data that Rust
 has at byte index 0. Users generally don’t want the byte value returned, even
-if the string contains only Latin letters: if `&"hello"[0]` were valid code
-that returned the byte value, it would return `104`, not `h`.
+if the string contains only Latin letters: if `&"hi"[0]` were valid code that
+returned the byte value, it would return `104`, not `h`.
 
 The answer, then, is that to avoid returning an unexpected value and causing
 bugs that might not be discovered immediately, Rust doesn’t compile this code
