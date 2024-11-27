@@ -6,7 +6,7 @@ fn main() {
 
     let x = 5;                      // x comes into scope
 
-    makes_copy(x);                  // since i32 implements the Copy trait,
+    makes_copy(x);                  // because i32 implements the Copy trait,
                                     // x does NOT move into the function,
     println!("{}", x);              // so it's okay to use x afterward
 
