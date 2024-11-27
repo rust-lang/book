@@ -13,7 +13,12 @@ binary. To separate these two types of arguments, you list the arguments that
 go to `cargo test` followed by the separator `--` and then the ones that go to
 the test binary. Running `cargo test --help` displays the options you can use
 with `cargo test`, and running `cargo test -- --help` displays the options you
-can use after the separator.
+can use after the separator. Those options are also documented in [the “Tests”
+section][tests] of the [the rustc book][rustc].
+
+[tests]: https://doc.rust-lang.org/rustc/tests/index.html
+[rustc]: https://doc.rust-lang.org/rustc/index.html
+
 
 ### Running Tests in Parallel or Consecutively
 
@@ -127,10 +132,6 @@ We can pass the name of any test function to `cargo test` to run only that test:
 Only the test with the name `one_hundred` ran; the other two tests didn’t match
 that name. The test output lets us know we had more tests that didn’t run by
 displaying `2 filtered out` at the end.
-
-If a test name is a substring of another test, we can use `-- --exact` argument,
-referring to test function with full path, for example
-`cargo test tests::one_hundred -- --exact`.
 
 We can’t specify the names of multiple tests in this way; only the first value
 given to `cargo test` will be used. But there is a way to run multiple tests.
