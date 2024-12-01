@@ -231,7 +231,7 @@ As mentioned earlier, `read_line` puts whatever the user enters into the string
 we pass to it, but it also returns a `Result` value. [`Result`][result]<!--
 ignore --> is an [*enumeration*][enums]<!-- ignore -->, often called an *enum*,
 which is a type that can be in one of multiple possible states. We call each
-possible state a *variant*.
+possible state a *variant*. An enum represents a value which can be one of several variants. Each variant can optionally carry data.
 
 [Chapter 6][enums]<!-- ignore --> will cover enums in more detail. The purpose
 of these `Result` types is to encode error-handling information.
