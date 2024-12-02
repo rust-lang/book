@@ -1,9 +1,5 @@
 name: CI
-
-on:
-  push:
-    branches:
-      - arabic-release # Replace with your primary branch if different
+on: [push, pull_request]
 
 jobs:
   test:
