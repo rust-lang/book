@@ -684,8 +684,8 @@ often used when you want to convert a value from one type to another type.
 We bind this new variable to the expression `guess.trim().parse()`. The `guess`
 in the expression refers to the original `guess` variable that contained the
 input as a string. The `trim` method on a `String` instance will eliminate any
-whitespace at the beginning and end, which we must do to be able to compare the
-string to the `u32`, which can only contain numerical data. The user must press
+whitespace at the beginning and end, which we must do before we can convert the
+string to a `u32`, which can only contain numerical data. The user must press
 <kbd>enter</kbd> to satisfy `read_line` and input their guess, which adds a
 newline character to the string. For example, if the user types <kbd>5</kbd> and
 presses <kbd>enter</kbd>, `guess` looks like this: `5\n`. The `\n` represents
