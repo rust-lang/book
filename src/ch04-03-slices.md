@@ -1,6 +1,6 @@
 ## The Slice Type
 
-*Slices* let you reference a contiguous sequence of elements in a
+_Slices_ let you reference a contiguous sequence of elements in a
 [collection](ch08-00-common-collections.md) rather than the whole collection. A
 slice is a kind of reference, so it does not have ownership.
 
@@ -18,7 +18,7 @@ fn first_word(s: &String) -> ?
 
 The `first_word` function has a `&String` as a parameter. We don’t want
 ownership, so this is fine. But what should we return? We don’t really have a
-way to talk about *part* of a string. However, we could return the index of the
+way to talk about _part_ of a string. However, we could return the index of the
 end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
 <Listing number="4-7" file-name="src/main.rs" caption="The `first_word` function that returns a byte index value into the `String` parameter">
@@ -94,7 +94,7 @@ we write a `second_word` function. Its signature would have to look like this:
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking a starting *and* an ending index, and we have even more
+Now we’re tracking a starting _and_ an ending index, and we have even more
 values that were calculated from data in a particular state but aren’t tied to
 that state at all. We have three unrelated variables floating around that need
 to be kept in sync.
@@ -103,7 +103,7 @@ Luckily, Rust has a solution to this problem: string slices.
 
 ### String Slices
 
-A *string slice* is a reference to part of a `String`, and it looks like this:
+A _string slice_ is a reference to part of a `String`, and it looks like this:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
@@ -231,6 +231,7 @@ same time, and compilation fails. Not only has Rust made our API easier to use,
 but it has also eliminated an entire class of errors at compile time!
 
 <!-- Old heading. Do not remove or links may break. -->
+
 <a id="string-literals-are-slices"></a>
 
 #### String Literals as Slices
@@ -269,7 +270,7 @@ and `&str` values.
 
 If we have a string slice, we can pass that directly. If we have a `String`, we
 can pass a slice of the `String` or a reference to the `String`. This
-flexibility takes advantage of *deref coercions*, a feature we will cover in the
+flexibility takes advantage of _deref coercions_, a feature we will cover in the
 [“Implicit Deref Coercions with Functions and
 Methods”][deref-coercions]<!--ignore--> section of Chapter 15.
 

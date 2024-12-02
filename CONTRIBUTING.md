@@ -45,8 +45,7 @@ or pull request.
 
 [nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
 
-So far, we've been doing a larger revision to coincide with [Rust
-Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
+So far, we've been doing a larger revision to coincide with [Rust Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
 revisions, we will only be correcting errors. If your issue or pull request
 isn't strictly fixing an error, it might sit until the next time that we're
 working on a large revision: expect on the order of months or years. Thank you

@@ -4,7 +4,7 @@ As we saw in the previous chapter, threads provide one approach to concurrency.
 We’ve seen another approach to concurrency in this chapter, using async with
 futures and streams. You might be wondering why you would choose one or the
 other. The answer is: it depends! And in many cases, the choice isn’t threads
-*or* async but rather threads *and* async.
+_or_ async but rather threads _and_ async.
 
 Many operating systems have supplied threading-based concurrency models for
 decades now, and many programming languages have support for them as a result.
@@ -48,9 +48,9 @@ spawn millions of async tasks on any modern personal computer. If we tried to do
 that with threads, we would literally run out of memory!
 
 However, there’s a reason these APIs are so similar. Threads act as a boundary
-for sets of synchronous operations; concurrency is possible *between* threads.
-Tasks act as a boundary for sets of *asynchronous* operations; concurrency is
-possible both *between* and *within* tasks, because a task can switch between
+for sets of synchronous operations; concurrency is possible _between_ threads.
+Tasks act as a boundary for sets of _asynchronous_ operations; concurrency is
+possible both _between_ and _within_ tasks, because a task can switch between
 futures in its body. Finally, futures are Rust’s most granular unit of
 concurrency, and each future may represent a tree of other futures. The
 runtime—specifically, its executor—manages tasks, and tasks manage futures. In
@@ -65,7 +65,7 @@ Concurrency with threads is in some ways a simpler programming model than
 concurrency with `async`. That can be a strength or a weakness. Threads are
 somewhat “fire and forget,” they have no native equivalent to a future, so they
 simply run to completion, without interruption except by the operating system
-itself. That is, they have no built-in support for *intra-task concurrency* the
+itself. That is, they have no built-in support for _intra-task concurrency_ the
 way futures do. Threads in Rust also have no mechanisms for cancellation—a
 subject we haven’t covered in depth in this chapter, but which is implicit in
 the fact that whenever we ended a future, its state got cleaned up correctly.
@@ -77,22 +77,22 @@ or the `throttle` method we used with streams in [“Composing Streams”][strea
 The fact that futures are richer data structures means they can be composed
 together more naturally, as we have seen.
 
-Tasks then give *additional* control over futures, allowing you to choose where
+Tasks then give _additional_ control over futures, allowing you to choose where
 and how to group the futures. And it turns out that threads and tasks often
 work very well together, because tasks can (at least in some runtimes) be moved
 around between threads. We haven’t mentioned it up until now, but under the
 hood the `Runtime` we have been using, including the `spawn_blocking` and
 `spawn_task` functions, is multithreaded by default! Many runtimes use an
-approach called *work stealing* to transparently move tasks around between
+approach called _work stealing_ to transparently move tasks around between
 threads based on the current utilization of the threads, with the aim of
 improving the overall performance of the system. To build that actually requires
-threads *and* tasks, and therefore futures.
+threads _and_ tasks, and therefore futures.
 
 As a default way of thinking about which to use when:
 
-- If the work is *very parallelizable*, such as processing a bunch of data where
+- If the work is _very parallelizable_, such as processing a bunch of data where
   each part can be processed separately, threads are a better choice.
-- If the work is *very concurrent*, such as handling messages from a bunch of
+- If the work is _very concurrent_, such as handling messages from a bunch of
   different sources which may come in a different intervals or different rates,
   async is a better choice.
 
@@ -135,7 +135,6 @@ code—whether for a high-throughput web server or an embedded operating system.
 Next, we’ll talk about idiomatic ways to model problems and structure solutions
 as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idioms
 relate to those you might be familiar with from object-oriented programming.
-
 
 [combining-futures]: ch17-03-more-futures.html#building-our-own-async-abstractions
 [streams]: ch17-04-streams.html#composing-streams

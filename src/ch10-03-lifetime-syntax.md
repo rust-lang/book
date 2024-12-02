@@ -6,7 +6,7 @@ references are valid as long as we need them to be.
 
 One detail we didn’t discuss in the [“References and
 Borrowing”][references-and-borrowing]<!-- ignore --> section in Chapter 4 is
-that every reference in Rust has a *lifetime*, which is the scope for which
+that every reference in Rust has a _lifetime_, which is the scope for which
 that reference is valid. Most of the time, lifetimes are implicit and inferred,
 just like most of the time, types are inferred. We must annotate types only
 when multiple types are possible. In a similar way, we must annotate lifetimes
@@ -21,7 +21,7 @@ lifetime syntax so you can get comfortable with the concept.
 
 ### Preventing Dangling References with Lifetimes
 
-The main aim of lifetimes is to prevent *dangling references*, which cause a
+The main aim of lifetimes is to prevent _dangling references_, which cause a
 program to reference data other than the data it’s intended to reference.
 Consider the program in Listing 10-16, which has an outer scope and an inner
 scope.
@@ -62,7 +62,7 @@ determine that this code is invalid? It uses a borrow checker.
 
 ### The Borrow Checker
 
-The Rust compiler has a *borrow checker* that compares scopes to determine
+The Rust compiler has a _borrow checker_ that compares scopes to determine
 whether all borrows are valid. Listing 10-17 shows the same code as Listing
 10-16 but with annotations showing the lifetimes of the variables.
 
@@ -188,8 +188,8 @@ relate to each other in the context of the `longest` function.
 ### Lifetime Annotations in Function Signatures
 
 To use lifetime annotations in function signatures, we need to declare the
-generic *lifetime* parameters inside angle brackets between the function name
-and the parameter list, just as we did with generic *type* parameters.
+generic _lifetime_ parameters inside angle brackets between the function name
+and the parameter list, just as we did with generic _type_ parameters.
 
 We want the signature to express the following constraint: the returned
 reference will be valid as long as both the parameters are valid. This is the
@@ -324,7 +324,7 @@ any relationship with the lifetime of `x` or the return value.
 
 When returning a reference from a function, the lifetime parameter for the
 return type needs to match the lifetime parameter for one of the parameters. If
-the reference returned does *not* refer to one of the parameters, it must refer
+the reference returned does _not_ refer to one of the parameters, it must refer
 to a value created within this function. However, this would be a dangling
 reference because the value will go out of scope at the end of the function.
 Consider this attempted implementation of the `longest` function that won’t
@@ -425,7 +425,7 @@ deterministic patterns will emerge and be added to the compiler. In the future,
 even fewer lifetime annotations might be required.
 
 The patterns programmed into Rust’s analysis of references are called the
-*lifetime elision rules*. These aren’t rules for programmers to follow; they’re
+_lifetime elision rules_. These aren’t rules for programmers to follow; they’re
 a set of particular cases that the compiler will consider, and if your code
 fits these cases, you don’t need to write the lifetimes explicitly.
 
@@ -435,8 +435,8 @@ compiler won’t guess what the lifetime of the remaining references should be.
 Instead of guessing, the compiler will give you an error that you can resolve
 by adding the lifetime annotations.
 
-Lifetimes on function or method parameters are called *input lifetimes*, and
-lifetimes on return values are called *output lifetimes*.
+Lifetimes on function or method parameters are called _input lifetimes_, and
+lifetimes on return values are called _output lifetimes_.
 
 The compiler uses three rules to figure out the lifetimes of the references
 when there aren’t explicit annotations. The first rule applies to input
@@ -557,7 +557,7 @@ and all lifetimes have been accounted for.
 ### The Static Lifetime
 
 One special lifetime we need to discuss is `'static`, which denotes that the
-affected reference *can* live for the entire duration of the program. All
+affected reference _can_ live for the entire duration of the program. All
 string literals have the `'static` lifetime, which we can annotate as follows:
 
 ```rust
@@ -611,8 +611,6 @@ that you will only need in very advanced scenarios; for those, you should read
 the [Rust Reference][reference]. But next, you’ll learn how to write tests in
 Rust so you can make sure your code is working the way it should.
 
-[references-and-borrowing]:
-ch04-02-references-and-borrowing.html#references-and-borrowing
-[string-slices-as-parameters]:
-ch04-03-slices.html#string-slices-as-parameters
+[references-and-borrowing]: ch04-02-references-and-borrowing.html#references-and-borrowing
+[string-slices-as-parameters]: ch04-03-slices.html#string-slices-as-parameters
 [reference]: ../reference/index.html

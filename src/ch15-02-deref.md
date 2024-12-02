@@ -1,7 +1,7 @@
 ## Treating Smart Pointers Like Regular References with the `Deref` Trait
 
 Implementing the `Deref` trait allows you to customize the behavior of the
-*dereference operator* `*` (not to be confused with the multiplication or glob
+_dereference operator_ `*` (not to be confused with the multiplication or glob
 operator). By implementing `Deref` in such a way that a smart pointer can be
 treated like a regular reference, you can write code that operates on
 references and use that code with smart pointers too.
@@ -11,7 +11,7 @@ Then we’ll try to define a custom type that behaves like `Box<T>`, and see why
 the dereference operator doesn’t work like a reference on our newly defined
 type. We’ll explore how implementing the `Deref` trait makes it possible for
 smart pointers to work in ways similar to references. Then we’ll look at
-Rust’s *deref coercion* feature and how it lets us work with either references
+Rust’s _deref coercion_ feature and how it lets us work with either references
 or smart pointers.
 
 > Note: There’s one big difference between the `MyBox<T>` type we’re about to
@@ -20,6 +20,7 @@ or smart pointers.
 > is less important than the pointer-like behavior.
 
 <!-- Old link, do not remove -->
+
 <a id="following-the-pointer-to-the-value-with-the-dereference-operator"></a>
 
 ### Following the Pointer to the Value
@@ -40,7 +41,7 @@ reference to the value:
 The variable `x` holds an `i32` value `5`. We set `y` equal to a reference to
 `x`. We can assert that `x` is equal to `5`. However, if we want to make an
 assertion about the value in `y`, we have to use `*y` to follow the reference
-to the value it’s pointing to (hence *dereference*) so the compiler can compare
+to the value it’s pointing to (hence _dereference_) so the compiler can compare
 the actual value. Once we dereference `y`, we have access to the integer value
 `y` is pointing to that we can compare with `5`.
 
@@ -187,7 +188,7 @@ Listing 15-9.
 
 ### Implicit Deref Coercions with Functions and Methods
 
-*Deref coercion* converts a reference to a type that implements the `Deref`
+_Deref coercion_ converts a reference to a type that implements the `Deref`
 trait into a reference to another type. For example, deref coercion can convert
 `&String` to `&str` because `String` implements the `Deref` trait such that it
 returns `&str`. Deref coercion is a convenience Rust performs on arguments to
@@ -268,9 +269,9 @@ operator on mutable references.
 Rust does deref coercion when it finds types and trait implementations in three
 cases:
 
-* From `&T` to `&U` when `T: Deref<Target=U>`
-* From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
-* From `&mut T` to `&U` when `T: Deref<Target=U>`
+- From `&T` to `&U` when `T: Deref<Target=U>`
+- From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
+- From `&mut T` to `&U` when `T: Deref<Target=U>`
 
 The first two cases are the same as each other except that the second
 implements mutability. The first case states that if you have a `&T`, and `T`
@@ -278,7 +279,7 @@ implements `Deref` to some type `U`, you can get a `&U` transparently. The
 second case states that the same deref coercion happens for mutable references.
 
 The third case is trickier: Rust will also coerce a mutable reference to an
-immutable one. But the reverse is *not* possible: immutable references will
+immutable one. But the reverse is _not_ possible: immutable references will
 never coerce to mutable references. Because of the borrowing rules, if you have
 a mutable reference, that mutable reference must be the only reference to that
 data (otherwise, the program wouldn’t compile). Converting one mutable

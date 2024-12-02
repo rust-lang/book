@@ -41,7 +41,7 @@ operations that borrow, we can move the `String` values from the iterator into
 
 #### Using the Returned Iterator Directly
 
-Open your I/O project’s *src/main.rs* file, which should look like this:
+Open your I/O project’s _src/main.rs_ file, which should look like this:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -67,7 +67,7 @@ we’re passing ownership of the iterator returned from `env::args` to
 `Config::build` directly.
 
 Next, we need to update the definition of `Config::build`. In your I/O
-project’s *src/lib.rs* file, let’s change the signature of `Config::build` to
+project’s _src/lib.rs_ file, let’s change the signature of `Config::build` to
 look like Listing 13-19. This still won’t compile because we need to update the
 function body.
 

@@ -7,7 +7,7 @@ about Rust, we can get into the nitty-gritty.
 
 ### Specifying Placeholder Types in Trait Definitions with Associated Types
 
-*Associated types* connect a type placeholder with a trait such that the trait
+_Associated types_ connect a type placeholder with a trait such that the trait
 method definitions can use these placeholder types in their signatures. The
 implementor of a trait will specify the concrete type to be used instead of the
 placeholder type for the particular implementation. That way, we can define a
@@ -91,8 +91,8 @@ the generic type. This eliminates the need for implementors of the trait to
 specify a concrete type if the default type works. You specify a default type
 when declaring a generic type with the `<PlaceholderType=ConcreteType>` syntax.
 
-A great example of a situation where this technique is useful is with *operator
-overloading*, in which you customize the behavior of an operator (such as `+`)
+A great example of a situation where this technique is useful is with _operator
+overloading_, in which you customize the behavior of an operator (such as `+`)
 in particular situations.
 
 Rust doesn’t allow you to create your own operators or overload arbitrary
@@ -127,8 +127,8 @@ trait Add<Rhs=Self> {
 ```
 
 This code should look generally familiar: a trait with one method and an
-associated type. The new part is `Rhs=Self`: this syntax is called *default
-type parameters*. The `Rhs` generic type parameter (short for “right hand
+associated type. The new part is `Rhs=Self`: this syntax is called _default
+type parameters_. The `Rhs` generic type parameter (short for “right hand
 side”) defines the type of the `rhs` parameter in the `add` method. If we don’t
 specify a concrete type for `Rhs` when we implement the `Add` trait, the type
 of `Rhs` will default to `Self`, which will be the type we’re implementing
@@ -141,7 +141,7 @@ default.
 
 We have two structs, `Millimeters` and `Meters`, holding values in different
 units. This thin wrapping of an existing type in another struct is known as the
-*newtype pattern*, which we describe in more detail in the [“Using the Newtype
+_newtype pattern_, which we describe in more detail in the [“Using the Newtype
 Pattern to Implement External Traits on External Types”][newtype]<!-- ignore
 --> section. We want to add values in millimeters to values in meters and have
 the implementation of `Add` do the conversion correctly. We can implement `Add`
@@ -160,8 +160,8 @@ value of the `Rhs` type parameter instead of using the default of `Self`.
 
 You’ll use default type parameters in two main ways:
 
-* To extend a type without breaking existing code
-* To allow customization in specific cases most users won’t need
+- To extend a type without breaking existing code
+- To allow customization in specific cases most users won’t need
 
 The standard library’s `Add` trait is an example of the second purpose:
 usually, you’ll add two like types, but the `Add` trait provides the ability to
@@ -234,15 +234,15 @@ Running this code prints the following:
 {{#include ../listings/ch20-advanced-features/listing-20-19/output.txt}}
 ```
 
-Because the `fly` method takes a `self` parameter, if we had two *types* that
-both implement one *trait*, Rust could figure out which implementation of a
+Because the `fly` method takes a `self` parameter, if we had two _types_ that
+both implement one _trait_, Rust could figure out which implementation of a
 trait to use based on the type of `self`.
 
 However, associated functions that are not methods don’t have a `self`
 parameter. When there are multiple types or traits that define non-method
 functions with the same function name, Rust doesn't always know which type you
-mean unless you use *fully qualified syntax*. For example, in Listing 20-20 we
-create a trait for an animal shelter that wants to name all baby dogs *Spot*.
+mean unless you use _fully qualified syntax_. For example, in Listing 20-20 we
+create a trait for an animal shelter that wants to name all baby dogs _Spot_.
 We make an `Animal` trait with an associated non-method function `baby_name`.
 The `Animal` trait is implemented for the struct `Dog`, on which we also
 provide an associated non-method function `baby_name` directly.
@@ -332,7 +332,7 @@ Sometimes, you might write a trait definition that depends on another trait:
 for a type to implement the first trait, you want to require that type to also
 implement the second trait. You would do this so that your trait definition can
 make use of the associated items of the second trait. The trait your trait
-definition is relying on is called a *supertrait* of your trait.
+definition is relying on is called a _supertrait_ of your trait.
 
 For example, let’s say we want to make an `OutlinePrint` trait with an
 `outline_print` method that will print a given value formatted so that it's
@@ -410,13 +410,13 @@ In Chapter 10 in the [“Implementing a Trait on a
 Type”][implementing-a-trait-on-a-type]<!-- ignore --> section, we mentioned the
 orphan rule that states we’re only allowed to implement a trait on a type if
 either the trait or the type are local to our crate. It’s possible to get
-around this restriction using the *newtype pattern*, which involves creating a
+around this restriction using the _newtype pattern_, which involves creating a
 new type in a tuple struct. (We covered tuple structs in the [“Using Tuple
 Structs without Named Fields to Create Different Types”][tuple-structs]<!--
 ignore --> section of Chapter 5.) The tuple struct will have one field and be a
 thin wrapper around the type we want to implement a trait for. Then the wrapper
 type is local to our crate, and we can implement the trait on the wrapper.
-*Newtype* is a term that originates from the Haskell programming language.
+_Newtype_ is a term that originates from the Haskell programming language.
 There is no runtime performance penalty for using this pattern, and the wrapper
 type is elided at compile time.
 
@@ -454,9 +454,7 @@ This newtype pattern is also useful even when traits are not involved. Let’s
 switch focus and look at some advanced ways to interact with Rust’s type system.
 
 [newtype]: ch20-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
-[implementing-a-trait-on-a-type]:
-ch10-02-traits.html#implementing-a-trait-on-a-type
-[traits-defining-shared-behavior]:
-ch10-02-traits.html#traits-defining-shared-behavior
+[implementing-a-trait-on-a-type]: ch10-02-traits.html#implementing-a-trait-on-a-type
+[traits-defining-shared-behavior]: ch10-02-traits.html#traits-defining-shared-behavior
 [smart-pointer-deref]: ch15-02-deref.html#treating-smart-pointers-like-regular-references-with-the-deref-trait
 [tuple-structs]: ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types

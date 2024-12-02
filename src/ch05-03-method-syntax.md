@@ -1,6 +1,6 @@
 ## Method Syntax
 
-*Methods* are similar to functions: we declare them with the `fn` keyword and a
+_Methods_ are similar to functions: we declare them with the `fn` keyword and a
 name, they can have parameters and a return value, and they contain some code
 that’s run when the method is called from somewhere else. Unlike functions,
 methods are defined within the context of a struct (or an enum or a trait
@@ -29,7 +29,7 @@ will be associated with the `Rectangle` type. Then we move the `area` function
 within the `impl` curly brackets and change the first (and in this case, only)
 parameter to be `self` in the signature and everywhere within the body. In
 `main`, where we called the `area` function and passed `rect1` as an argument,
-we can instead use *method syntax* to call the `area` method on our `Rectangle`
+we can instead use _method syntax_ to call the `area` method on our `Rectangle`
 instance. The method syntax goes after an instance: we add a dot followed by
 the method name, parentheses, and any arguments.
 
@@ -81,7 +81,7 @@ method `width`. When we don’t use parentheses, Rust knows we mean the field
 
 Often, but not always, when we give a method the same name as a field we want
 it to only return the value in the field and do nothing else. Methods like this
-are called *getters*, and Rust does not implement them automatically for struct
+are called _getters_, and Rust does not implement them automatically for struct
 fields as some other languages do. Getters are useful because you can make the
 field private but the method public, and thus enable read-only access to that
 field as part of the type’s public API. We will discuss what public and private
@@ -97,7 +97,7 @@ are and how to designate a field or method as public or private in [Chapter
 > `object->something()` is similar to `(*object).something()`.
 >
 > Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
-> feature called *automatic referencing and dereferencing*. Calling methods is
+> feature called _automatic referencing and dereferencing_. Calling methods is
 > one of the few places in Rust that has this behavior.
 >
 > Here’s how it works: when you call a method with `object.something()`, Rust
@@ -105,6 +105,7 @@ are and how to designate a field or method as public or private in [Chapter
 > the method. In other words, the following are the same:
 >
 > <!-- CAN'T EXTRACT SEE BUG https://github.com/rust-lang/mdBook/issues/1127 -->
+>
 > ```rust
 > # #[derive(Debug,Copy,Clone)]
 > # struct Point {
@@ -188,7 +189,7 @@ parameters in functions.
 
 ### Associated Functions
 
-All functions defined within an `impl` block are called *associated functions*
+All functions defined within an `impl` block are called _associated functions_
 because they’re associated with the type named after the `impl`. We can define
 associated functions that don’t have `self` as their first parameter (and thus
 are not methods) because they don’t need an instance of the type to work with.

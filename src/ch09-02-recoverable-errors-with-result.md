@@ -78,7 +78,7 @@ writing.
 
 The other arm of the `match` handles the case where we get an `Err` value from
 `File::open`. In this example, we’ve chosen to call the `panic!` macro. If
-there’s no file named *hello.txt* in our current directory and we run this
+there’s no file named _hello.txt_ in our current directory and we run this
 code, we’ll see the following output from the `panic!` macro:
 
 ```console
@@ -178,7 +178,7 @@ call the `panic!` macro for us. Here is an example of `unwrap` in action:
 
 </Listing>
 
-If we run this code without a *hello.txt* file, we’ll see an error message from
+If we run this code without a _hello.txt_ file, we’ll see an error message from
 the `panic!` call that the `unwrap` method makes:
 
 <!-- manual-regeneration
@@ -230,7 +230,7 @@ information to use in debugging.
 
 When a function’s implementation calls something that might fail, instead of
 handling the error within the function itself you can return the error to the
-calling code so that it can decide what to do. This is known as *propagating*
+calling code so that it can decide what to do. This is known as _propagating_
 the error and gives more control to the calling code, where there might be more
 information or logic that dictates how the error should be handled than what
 you have available in the context of your code.
@@ -502,7 +502,7 @@ code will now compile.
 
 </Listing>
 
-The `Box<dyn Error>` type is a *trait object*, which we’ll talk about in the
+The `Box<dyn Error>` type is a _trait object_, which we’ll talk about in the
 [“Using Trait Objects that Allow for Values of Different
 Types”][trait-objects]<!-- ignore --> section in Chapter 18. For now, you can
 read `Box<dyn Error>` to mean “any kind of error.” Using `?` on a `Result`
