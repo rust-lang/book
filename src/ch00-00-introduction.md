@@ -103,7 +103,7 @@ the topic in a later chapter.
 You’ll find two kinds of chapters in this book: concept chapters and project
 chapters. In concept chapters, you’ll learn about an aspect of Rust. In project
 chapters, we’ll build small programs together, applying what you’ve learned so
-far. Chapters 2, 12, and 20 are project chapters; the rest are concept chapters.
+far. Chapters 2, 12, and 21 are project chapters; the rest are concept chapters.
 
 Chapter 1 explains how to install Rust, how to write a “Hello, world!” program,
 and how to use Cargo, Rust’s package manager and build tool. Chapter 2 is a
