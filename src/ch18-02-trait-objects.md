@@ -243,6 +243,5 @@ method’s code, which in turn prevents some optimizations. However, we did get
 extra flexibility in the code that we wrote in Listing 18-5 and were able to
 support in Listing 18-9, so it’s a trade-off to consider.
 
-[performance-of-code-using-generics]:
-ch10-01-syntax.html#performance-of-code-using-generics
+[performance-of-code-using-generics]: ch10-01-syntax.html#performance-of-code-using-generics
 [dynamically-sized]: ch20-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait
