@@ -3,7 +3,7 @@ name: Deploy mdBook to GitHub Pages
 on:
   push:
     branches:
-      - main # Trigger on pushes to the main branch
+      - main # Replace with your primary branch if different
 
 jobs:
   build-and-deploy:
