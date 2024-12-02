@@ -29,7 +29,7 @@ value `Some(5)` and a variable `y` with the value `10`. We then create a
 `println!` at the end, and try to figure out what the code will print before
 running this code or reading further.
 
-<Listing number="19-11" file-name="src/main.rs" caption="A `match` expression with an arm that introduces a shadowed variable `y`">
+<Listing number="19-11" file-name="src/main.rs" caption="A `match` expression with an arm that introduces a new variable which shadows an existing variable `y`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-11/src/main.rs:here}}
@@ -60,10 +60,10 @@ When the `match` expression is done, its scope ends, and so does the scope of
 the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
 
 To create a `match` expression that compares the values of the outer `x` and
-`y`, rather than introducing a shadowed variable, we would need to use a match
-guard conditional instead. We’ll talk about match guards later in the [“Extra
-Conditionals with Match Guards”](#extra-conditionals-with-match-guards)<!--
-ignore --> section.
+`y`, rather than introducing a new variable which shadows the existing `y`
+variable, we would need to use a match guard conditional instead. We’ll talk
+about match guards later in the [“Extra Conditionals with Match
+Guards”](#extra-conditionals-with-match-guards)<!-- ignore --> section.
 
 ### Multiple Patterns
 
@@ -503,8 +503,8 @@ pattern as `Some(y)`, which would have shadowed the outer `y`, we specify
 `Some(n)`. This creates a new variable `n` that doesn’t shadow anything because
 there is no `n` variable outside the `match`.
 
-The match guard `if n == y` is not a pattern and therefore doesn’t introduce
-new variables. This `y` *is* the outer `y` rather than a new shadowed `y`, and
+The match guard `if n == y` is not a pattern and therefore doesn’t introduce new
+variables. This `y` *is* the outer `y` rather than a new `y` shadowing it, and
 we can look for a value that has the same value as the outer `y` by comparing
 `n` to `y`.
 

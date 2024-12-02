@@ -82,13 +82,13 @@ This conditional structure lets us support complex requirements. With the
 hardcoded values we have here, this example will print `Using purple as the
 background color`.
 
-You can see that `if let` can also introduce shadowed variables in the same way
-that `match` arms can: the line `if let Ok(age) = age` introduces a new
-shadowed `age` variable that contains the value inside the `Ok` variant. This
-means we need to place the `if age > 30` condition within that block: we can’t
-combine these two conditions into `if let Ok(age) = age && age > 30`. The
-shadowed `age` we want to compare to 30 isn’t valid until the new scope starts
-with the curly bracket.
+You can see that `if let` can also introduce new variables which shadow existing
+variables in the same way that `match` arms can: the line `if let Ok(age) = age`
+introduces a new shadowed `age` variable that contains the value inside the `Ok`
+variant. This means we need to place the `if age > 30` condition within that
+block: we can’t combine these two conditions into `if let Ok(age) = age && age >
+30`. The shadowed `age` we want to compare to 30 isn’t valid until the new scope
+starts with the curly bracket.
 
 The downside of using `if let` expressions is that the compiler doesn’t check
 for exhaustiveness, whereas with `match` expressions it does. If we omitted the
