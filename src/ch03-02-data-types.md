@@ -118,7 +118,8 @@ some sort of collection.
 > To explicitly handle the possibility of overflow, you can use these families
 > of methods provided by the standard library for primitive numeric types:
 >
-> * Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`.
+> * Wrap in all compilation modes with the `wrapping_*` methods, such as
+>   `wrapping_add`.
 > * Return the `None` value if there is overflow with the `checked_*` methods.
 > * Return the value and a boolean indicating whether there was overflow with
 >   the `overflowing_*` methods.
