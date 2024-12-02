@@ -66,7 +66,7 @@ authors commonly use in their documentation:
   returned can be helpful to callers so they can write code to handle the
   different kinds of errors in different ways.
 * **Safety**: If the function is `unsafe` to call (we discuss unsafety in
-  Chapter 19), there should be a section explaining why the function is unsafe
+  Chapter 20), there should be a section explaining why the function is unsafe
   and covering the invariants that the function expects callers to uphold.
 
 Most documentation comments don’t need all of these sections, but this is a
@@ -320,7 +320,7 @@ See https://doc.rust-lang.org/cargo/reference/manifest.html#package-metadata for
 error: failed to publish to registry at https://crates.io
 
 Caused by:
-  the remote server responded with an error: missing or empty metadata fields: description, license. Please see https://doc.rust-lang.org/cargo/reference/manifest.html for how to upload metadata
+  the remote server responded with an error (status 400 Bad Request): missing or empty metadata fields: description, license. Please see https://doc.rust-lang.org/cargo/reference/manifest.html for more information on configuring these field
 ```
 
 This errors because you’re missing some crucial information: a description and
@@ -401,7 +401,7 @@ $ cargo publish
    Verifying guessing_game v0.1.0 (file:///projects/guessing_game)
    Compiling guessing_game v0.1.0
 (file:///projects/guessing_game/target/package/guessing_game-0.1.0)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.19s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s
    Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 

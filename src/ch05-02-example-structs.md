@@ -9,14 +9,13 @@ the width and height of a rectangle specified in pixels and calculate the area
 of the rectangle. Listing 5-8 shows a short program with one way of doing
 exactly that in our project’s *src/main.rs*.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-8" file-name="src/main.rs" caption="Calculating the area of a rectangle specified by separate width and height variables">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-08/src/main.rs:all}}
 ```
 
-<span class="caption">Listing 5-8: Calculating the area of a rectangle
-specified by separate width and height variables</span>
+</Listing>
 
 Now, run this program using `cargo run`:
 
@@ -45,14 +44,13 @@ of Chapter 3: by using tuples.
 
 Listing 5-9 shows another version of our program that uses tuples.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-9" file-name="src/main.rs" caption="Specifying the width and height of the rectangle with a tuple">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-09/src/main.rs}}
 ```
 
-<span class="caption">Listing 5-9: Specifying the width and height of the
-rectangle with a tuple</span>
+</Listing>
 
 In one way, this program is better. Tuples let us add a bit of structure, and
 we’re now passing just one argument. But in another way, this version is less
@@ -72,13 +70,13 @@ We use structs to add meaning by labeling the data. We can transform the tuple
 we’re using into a struct with a name for the whole as well as names for the
 parts, as shown in Listing 5-10.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-10" file-name="src/main.rs" caption="Defining a `Rectangle` struct">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-10/src/main.rs}}
 ```
 
-<span class="caption">Listing 5-10: Defining a `Rectangle` struct</span>
+</Listing>
 
 Here we’ve defined a struct and named it `Rectangle`. Inside the curly
 brackets, we defined the fields as `width` and `height`, both of which have
@@ -108,14 +106,13 @@ debugging our program and see the values for all its fields. Listing 5-11 tries
 using the [`println!` macro][println]<!-- ignore --> as we have used in
 previous chapters. This won’t work, however.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-11" file-name="src/main.rs" caption="Attempting to print a `Rectangle` instance">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/src/main.rs}}
 ```
 
-<span class="caption">Listing 5-11: Attempting to print a `Rectangle`
-instance</span>
+</Listing>
 
 When we compile this code, we get an error with this core message:
 
@@ -163,14 +160,13 @@ have to explicitly opt in to make that functionality available for our struct.
 To do that, we add the outer attribute `#[derive(Debug)]` just before the
 struct definition, as shown in Listing 5-12.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="5-12" file-name="src/main.rs" caption="Adding the attribute to derive the `Debug` trait and printing the `Rectangle` instance using debug formatting">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-12/src/main.rs}}
 ```
 
-<span class="caption">Listing 5-12: Adding the attribute to derive the `Debug`
-trait and printing the `Rectangle` instance using debug formatting</span>
+</Listing>
 
 Now when we run the program, we won’t get any errors, and we’ll see the
 following output:

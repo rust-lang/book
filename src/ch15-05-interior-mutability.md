@@ -6,7 +6,7 @@ action is disallowed by the borrowing rules. To mutate data, the pattern uses
 `unsafe` code inside a data structure to bend Rust’s usual rules that govern
 mutation and borrowing. Unsafe code indicates to the compiler that we’re
 checking the rules manually instead of relying on the compiler to check them
-for us; we will discuss unsafe code more in Chapter 19.
+for us; we will discuss unsafe code more in Chapter 20.
 
 We can use types that use the interior mutability pattern only when we can
 ensure that the borrowing rules will be followed at runtime, even though the
@@ -129,14 +129,13 @@ email, send a text message, or something else. The library doesn’t need to kno
 that detail. All it needs is something that implements a trait we’ll provide
 called `Messenger`. Listing 15-20 shows the library code:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="15-20" file-name="src/lib.rs" caption="A library to keep track of how close a value is to a maximum value and warn when the value is at certain levels">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-20/src/lib.rs}}
 ```
 
-<span class="caption">Listing 15-20: A library to keep track of how close a
-value is to a maximum value and warn when the value is at certain levels</span>
+</Listing>
 
 One important part of this code is that the `Messenger` trait has one method
 called `send` that takes an immutable reference to `self` and the text of the
@@ -156,14 +155,13 @@ mock object, call the `set_value` method on `LimitTracker`, and then check that
 the mock object has the messages we expect. Listing 15-21 shows an attempt to
 implement a mock object to do just that, but the borrow checker won’t allow it:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="15-21" file-name="src/lib.rs" caption="An attempt to implement a `MockMessenger` that isn’t allowed by the borrow checker">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-21/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 15-21: An attempt to implement a `MockMessenger`
-that isn’t allowed by the borrow checker</span>
+</Listing>
 
 This test code defines a `MockMessenger` struct that has a `sent_messages`
 field with a `Vec` of `String` values to keep track of the messages it’s told
@@ -200,14 +198,13 @@ This is a situation in which interior mutability can help! We’ll store the
 able to modify `sent_messages` to store the messages we’ve seen. Listing 15-22
 shows what that looks like:
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="15-22" file-name="src/lib.rs" caption="Using `RefCell<T>` to mutate an inner value while the outer value is considered immutable">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-22/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 15-22: Using `RefCell<T>` to mutate an inner
-value while the outer value is considered immutable</span>
+</Listing>
 
 The `sent_messages` field is now of type `RefCell<Vec<String>>` instead of
 `Vec<String>`. In the `new` function, we create a new `RefCell<Vec<String>>`
@@ -249,14 +246,13 @@ Listing 15-22. We’re deliberately trying to create two mutable borrows active
 for the same scope to illustrate that `RefCell<T>` prevents us from doing this
 at runtime.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="15-23" file-name="src/lib.rs" caption="Creating two mutable references in the same scope to see that `RefCell<T>` will panic">
 
 ```rust,ignore,panics
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-23/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 15-23: Creating two mutable references in the
-same scope to see that `RefCell<T>` will panic</span>
+</Listing>
 
 We create a variable `one_borrow` for the `RefMut<T>` smart pointer returned
 from `borrow_mut`. Then we create another mutable borrow in the same way in the
@@ -298,14 +294,13 @@ change the values in the lists. Listing 15-24 shows that by using a
 `RefCell<T>` in the `Cons` definition, we can modify the value stored in all
 the lists:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-24" file-name="src/main.rs" caption="Using `Rc<RefCell<i32>>` to create a `List` that we can mutate">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-24/src/main.rs}}
 ```
 
-<span class="caption">Listing 15-24: Using `Rc<RefCell<i32>>` to create a
-`List` that we can mutate</span>
+</Listing>
 
 We create a value that is an instance of `Rc<RefCell<i32>>` and store it in a
 variable named `value` so we can access it directly later. Then we create a

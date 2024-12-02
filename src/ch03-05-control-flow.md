@@ -191,7 +191,7 @@ like this:
 
 When we run this program, we’ll see `again!` printed over and over continuously
 until we stop the program manually. Most terminals support the keyboard shortcut
-<kbd>ctrl</kbd>-<kdb>c</kbd> to interrupt a program that is stuck in a continual
+<kbd>ctrl</kbd>-<kbd>c</kbd> to interrupt a program that is stuck in a continual
 loop. Give it a try:
 
 <!-- manual-regeneration
@@ -203,7 +203,7 @@ CTRL-C
 ```console
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.29s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.08s
      Running `target/debug/loops`
 again!
 again!

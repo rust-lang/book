@@ -12,14 +12,13 @@ scope of the `eat_at_restaurant` function so we only have to specify
 `hosting::add_to_waitlist` to call the `add_to_waitlist` function in
 `eat_at_restaurant`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-11" file-name="src/lib.rs" caption="Bringing a module into scope with `use`">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-11/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-11: Bringing a module into scope with
-`use`</span>
+</Listing>
 
 Adding `use` and a path in a scope is similar to creating a symbolic link in
 the filesystem. By adding `use crate::front_of_house::hosting` in the crate
@@ -32,14 +31,13 @@ Note that `use` only creates the shortcut for the particular scope in which the
 child module named `customer`, which is then a different scope than the `use`
 statement, so the function body won’t compile.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-12" file-name="src/lib.rs" caption="A `use` statement only applies in the scope it’s in">
 
 ```rust,noplayground,test_harness,does_not_compile,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-12: A `use` statement only applies in the scope
-it’s in</span>
+</Listing>
 
 The compiler error shows that the shortcut no longer applies within the
 `customer` module:
@@ -60,14 +58,13 @@ crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in
 `eat_at_restaurant`, rather than specifying the `use` path all the way out to
 the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-13" file-name="src/lib.rs" caption="Bringing the `add_to_waitlist` function into scope with `use`, which is unidiomatic">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-13/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-13: Bringing the `add_to_waitlist` function
-into scope with `use`, which is unidiomatic</span>
+</Listing>
 
 Although both Listing 7-11 and Listing 7-13 accomplish the same task, Listing
 7-11 is the idiomatic way to bring a function into scope with `use`. Bringing
@@ -82,14 +79,13 @@ it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way
 to bring the standard library’s `HashMap` struct into the scope of a binary
 crate.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="7-14" file-name="src/main.rs" caption="Bringing `HashMap` into scope in an idiomatic way">
 
 ```rust
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-14/src/main.rs}}
 ```
 
-<span class="caption">Listing 7-14: Bringing `HashMap` into scope in an
-idiomatic way</span>
+</Listing>
 
 There’s no strong reason behind this idiom: it’s just the convention that has
 emerged, and folks have gotten used to reading and writing Rust code this way.
@@ -99,14 +95,13 @@ into scope with `use` statements, because Rust doesn’t allow that. Listing 7-1
 shows how to bring two `Result` types into scope that have the same name but
 different parent modules, and how to refer to them.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-15" file-name="src/lib.rs" caption="Bringing two types with the same name into the same scope requires using their parent modules.">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-15/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 7-15: Bringing two types with the same name into
-the same scope requires using their parent modules.</span>
+</Listing>
 
 As you can see, using the parent modules distinguishes the two `Result` types.
 If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
@@ -120,14 +115,13 @@ into the same scope with `use`: after the path, we can specify `as` and a new
 local name, or *alias*, for the type. Listing 7-16 shows another way to write
 the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-16" file-name="src/lib.rs" caption="Renaming a type when it’s brought into scope with the `as` keyword">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-16/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 7-16: Renaming a type when it’s brought into
-scope with the `as` keyword</span>
+</Listing>
 
 In the second `use` statement, we chose the new name `IoResult` for the
 `std::io::Result` type, which won’t conflict with the `Result` from `std::fmt`
@@ -146,14 +140,13 @@ their scope.
 Listing 7-17 shows the code in Listing 7-11 with `use` in the root module
 changed to `pub use`.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-17" file-name="src/lib.rs" caption="Making a name available for any code to use from a new scope with `pub use`">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-17/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-17: Making a name available for any code to use
-from a new scope with `pub use`</span>
+</Listing>
 
 Before this change, external code would have to call the `add_to_waitlist`
 function by using the path
@@ -186,11 +179,13 @@ added this line to *Cargo.toml*:
 * ch14-03-cargo-workspaces.md
 -->
 
-<span class="filename">Filename: Cargo.toml</span>
+<Listing file-name="Cargo.toml">
 
 ```toml
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
 ```
+
+</Listing>
 
 Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the
 `rand` package and any dependencies from [crates.io](https://crates.io/) and
@@ -231,25 +226,26 @@ each item on its own line can take up a lot of vertical space in our files. For
 example, these two `use` statements we had in the guessing game in Listing 2-4
 bring items from `std` into scope:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-01-use-std-unnested/src/main.rs:here}}
 ```
+
+</Listing>
 
 Instead, we can use nested paths to bring the same items into scope in one
 line. We do this by specifying the common part of the path, followed by two
 colons, and then curly brackets around a list of the parts of the paths that
 differ, as shown in Listing 7-18.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="7-18" file-name="src/main.rs" caption="Specifying a nested path to bring multiple items with the same prefix into scope">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 7-18: Specifying a nested path to bring multiple
-items with the same prefix into scope</span>
+</Listing>
 
 In bigger programs, bringing many items into scope from the same crate or
 module using nested paths can reduce the number of separate `use` statements
@@ -260,27 +256,25 @@ two `use` statements that share a subpath. For example, Listing 7-19 shows two
 `use` statements: one that brings `std::io` into scope and one that brings
 `std::io::Write` into scope.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-19" file-name="src/lib.rs" caption="Two `use` statements where one is a subpath of the other">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-19/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-19: Two `use` statements where one is a subpath
-of the other</span>
+</Listing>
 
 The common part of these two paths is `std::io`, and that’s the complete first
 path. To merge these two paths into one `use` statement, we can use `self` in
 the nested path, as shown in Listing 7-20.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="7-20" file-name="src/lib.rs" caption="Combining the paths in Listing 7-19 into one `use` statement">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-20/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-20: Combining the paths in Listing 7-19 into
-one `use` statement</span>
+</Listing>
 
 This line brings `std::io` and `std::io::Write` into scope.
 

@@ -11,12 +11,13 @@ lines of text in a file or the prices of items in a shopping cart.
 To create a new empty vector, we call the `Vec::new` function, as shown in
 Listing 8-1.
 
+<Listing number="8-1" caption="Creating a new, empty vector to hold values of type `i32`">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-1: Creating a new, empty vector to hold values
-of type `i32`</span>
+</Listing>
 
 Note that we added a type annotation here. Because we aren’t inserting any
 values into this vector, Rust doesn’t know what kind of elements we intend to
@@ -35,12 +36,13 @@ new vector that holds the values you give it. Listing 8-2 creates a new
 because that’s the default integer type, as we discussed in the [“Data
 Types”][data-types]<!-- ignore --> section of Chapter 3.
 
+<Listing number="8-2" caption="Creating a new vector containing values">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-2: Creating a new vector containing
-values</span>
+</Listing>
 
 Because we’ve given initial `i32` values, Rust can infer that the type of `v`
 is `Vec<i32>`, and the type annotation isn’t necessary. Next, we’ll look at how
@@ -51,12 +53,13 @@ to modify a vector.
 To create a vector and then add elements to it, we can use the `push` method,
 as shown in Listing 8-3.
 
+<Listing number="8-3" caption="Using the `push` method to add values to a vector">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-3: Using the `push` method to add values to a
-vector</span>
+</Listing>
 
 As with any variable, if we want to be able to change its value, we need to
 make it mutable using the `mut` keyword, as discussed in Chapter 3. The numbers
@@ -72,12 +75,13 @@ the values that are returned from these functions for extra clarity.
 Listing 8-4 shows both methods of accessing a value in a vector, with indexing
 syntax and the `get` method.
 
+<Listing number="8-4" caption="Using indexing syntax and using the `get` method to access an item in a vector">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-4: Using indexing syntax and using the `get`
-method to access an item in a vector</span>
+</Listing>
 
 Note a few details here. We use the index value of `2` to get the third element
 because vectors are indexed by number, starting at zero. Using `&` and `[]`
@@ -91,12 +95,13 @@ existing elements. As an example, let’s see what happens when we have a vector
 of five elements and then we try to access an element at index 100 with each
 technique, as shown in Listing 8-5.
 
+<Listing number="8-5" caption="Attempting to access the element at index 100 in a vector containing five elements">
+
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-5: Attempting to access the element at index
-100 in a vector containing five elements</span>
+</Listing>
 
 When we run this code, the first `[]` method will cause the program to panic
 because it references a nonexistent element. This method is best used when you
@@ -123,12 +128,13 @@ to the first element in a vector and try to add an element to the end. This
 program won’t work if we also try to refer to that element later in the
 function.
 
+<Listing number="8-6" caption="Attempting to add an element to a vector while holding a reference to an item">
+
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-6: Attempting to add an element to a vector
-while holding a reference to an item</span>
+</Listing>
 
 Compiling this code will result in this error:
 
@@ -156,23 +162,25 @@ elements rather than use indices to access one at a time. Listing 8-7 shows how
 to use a `for` loop to get immutable references to each element in a vector of
 `i32` values and print them.
 
+<Listing number="8-7" caption="Printing each element in a vector by iterating over the elements using a `for` loop">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-07/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-7: Printing each element in a vector by
-iterating over the elements using a `for` loop</span>
+</Listing>
 
 We can also iterate over mutable references to each element in a mutable vector
 in order to make changes to all the elements. The `for` loop in Listing 8-8
 will add `50` to each element.
 
+<Listing number="8-8" caption="Iterating over mutable references to elements in a vector">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-8: Iterating over mutable references to
-elements in a vector</span>
+</Listing>
 
 To change the value that the mutable reference refers to, we have to use the
 `*` dereference operator to get to the value in `i` before we can use the `+=`
@@ -202,12 +210,13 @@ value types, and all the enum variants will be considered the same type: that
 of the enum. Then we can create a vector to hold that enum and so, ultimately,
 hold different types. We’ve demonstrated this in Listing 8-9.
 
+<Listing number="8-9" caption="Defining an `enum` to store values of different types in one vector">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-9: Defining an `enum` to store values of
-different types in one vector</span>
+</Listing>
 
 Rust needs to know what types will be in the vector at compile time so it knows
 exactly how much memory on the heap will be needed to store each element. We
@@ -219,7 +228,7 @@ at compile time that every possible case is handled, as discussed in Chapter 6.
 
 If you don’t know the exhaustive set of types a program will get at runtime to
 store in a vector, the enum technique won’t work. Instead, you can use a trait
-object, which we’ll cover in Chapter 17.
+object, which we’ll cover in Chapter 18.
 
 Now that we’ve discussed some of the most common ways to use vectors, be sure
 to review [the API documentation][vec-api]<!-- ignore --> for all of the many
@@ -231,12 +240,13 @@ addition to `push`, a `pop` method removes and returns the last element.
 Like any other `struct`, a vector is freed when it goes out of scope, as
 annotated in Listing 8-10.
 
+<Listing number="8-10" caption="Showing where the vector and its elements are dropped">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-10: Showing where the vector and its elements
-are dropped</span>
+</Listing>
 
 When the vector gets dropped, all of its contents are also dropped, meaning the
 integers it holds will be cleaned up. The borrow checker ensures that any

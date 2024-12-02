@@ -78,7 +78,7 @@ more of the following:
   rather than checking for the problem at every step.
 * There’s not a good way to encode this information in the types you use. We’ll
   work through an example of what we mean in the [“Encoding States and Behavior
-  as Types”][encoding]<!-- ignore --> section of Chapter 17.
+  as Types”][encoding]<!-- ignore --> section of Chapter 18.
 
 If someone calls your code and passes in values that don’t make sense, it’s
 best to return an error if you can so the user of the library can decide what
@@ -140,11 +140,13 @@ One way to do this would be to parse the guess as an `i32` instead of only a
 `u32` to allow potentially negative numbers, and then add a check for the
 number being in range, like so:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-09-guess-out-of-range/src/main.rs:here}}
 ```
+
+</Listing>
 
 The `if` expression checks whether our value is out of range, tells the user
 about the problem, and calls `continue` to start the next iteration of the loop
@@ -164,14 +166,13 @@ confidently use the values they receive. Listing 9-13 shows one way to define a
 `Guess` type that will only create an instance of `Guess` if the `new` function
 receives a value between 1 and 100.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="9-13" caption="A `Guess` type that will only continue with values between 1 and 100">
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/lib.rs}}
 ```
 
-<span class="caption">Listing 9-13: A `Guess` type that will only continue with
-values between 1 and 100</span>
+</Listing>
 
 First we define a struct named `Guess` that has a field named `value` that
 holds an `i32`. This is where the number will be stored.
@@ -219,4 +220,4 @@ Now that you’ve seen useful ways that the standard library uses generics with
 the `Option` and `Result` enums, we’ll talk about how generics work and how you
 can use them in your code.
 
-[encoding]: ch17-03-oo-design-patterns.html#encoding-states-and-behavior-as-types
+[encoding]: ch18-03-oo-design-patterns.html#encoding-states-and-behavior-as-types

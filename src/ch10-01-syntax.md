@@ -16,14 +16,13 @@ Continuing with our `largest` function, Listing 10-4 shows two functions that
 both find the largest value in a slice. We’ll then combine these into a single
 function that uses generics.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-4" file-name="src/main.rs" caption="Two functions that differ only in their names and in the types in their signatures">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-4: Two functions that differ only in their
-names and in the types in their signatures</span>
+</Listing>
 
 The `largest_i32` function is the one we extracted in Listing 10-3 that finds
 the largest `i32` in a slice. The `largest_char` function finds the largest
@@ -58,14 +57,13 @@ data type in its signature. The listing also shows how we can call the function
 with either a slice of `i32` values or `char` values. Note that this code won’t
 compile yet, but we’ll fix it later in this chapter.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-5" file-name="src/main.rs" caption="The `largest` function using generic type parameters; this doesn’t compile yet">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-5: The `largest` function using generic type
-parameters; this doesn’t compile yet</span>
+</Listing>
 
 If we compile this code right now, we’ll get this error:
 
@@ -90,14 +88,13 @@ We can also define structs to use a generic type parameter in one or more
 fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
 `x` and `y` coordinate values of any type.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-6" file-name="src/main.rs" caption="A `Point<T>` struct that holds `x` and `y` values of type `T`">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-6: A `Point<T>` struct that holds `x` and `y`
-values of type `T`</span>
+</Listing>
 
 The syntax for using generics in struct definitions is similar to that used in
 function definitions. First we declare the name of the type parameter inside
@@ -111,14 +108,13 @@ the fields `x` and `y` are *both* that same type, whatever that type may be. If
 we create an instance of a `Point<T>` that has values of different types, as in
 Listing 10-7, our code won’t compile.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-7" file-name="src/main.rs" caption="The fields `x` and `y` must be the same type because both have the same generic data type `T`.">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-7: The fields `x` and `y` must be the same
-type because both have the same generic data type `T`.</span>
+</Listing>
 
 In this example, when we assign the integer value `5` to `x`, we let the
 compiler know that the generic type `T` will be an integer for this instance of
@@ -134,14 +130,13 @@ different types, we can use multiple generic type parameters. For example, in
 Listing 10-8, we change the definition of `Point` to be generic over types `T`
 and `U` where `x` is of type `T` and `y` is of type `U`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-8" file-name="src/main.rs" caption="A `Point<T, U>` generic over two types so that `x` and `y` can be values of different types">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-08/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-8: A `Point<T, U>` generic over two types so
-that `x` and `y` can be values of different types</span>
+</Listing>
 
 Now all the instances of `Point` shown are allowed! You can use as many generic
 type parameters in a definition as you want, but using more than a few makes
@@ -198,15 +193,13 @@ We can implement methods on structs and enums (as we did in Chapter 5) and use
 generic types in their definitions too. Listing 10-9 shows the `Point<T>`
 struct we defined in Listing 10-6 with a method named `x` implemented on it.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-9" file-name="src/main.rs" caption="Implementing a method named `x` on the `Point<T>` struct that will return a reference to the `x` field of type `T`">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-09/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-9: Implementing a method named `x` on the
-`Point<T>` struct that will return a reference to the `x` field of type
-`T`</span>
+</Listing>
 
 Here, we’ve defined a method named `x` on `Point<T>` that returns a reference
 to the data in the field `x`.
@@ -226,14 +219,13 @@ type. We could, for example, implement methods only on `Point<f32>` instances
 rather than on `Point<T>` instances with any generic type. In Listing 10-10 we
 use the concrete type `f32`, meaning we don’t declare any types after `impl`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-10" file-name="src/main.rs" caption="An `impl` block that only applies to a struct with a particular concrete type for the generic type parameter `T`">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-10: An `impl` block that only applies to a
-struct with a particular concrete type for the generic type parameter `T`</span>
+</Listing>
 
 This code means the type `Point<f32>` will have a `distance_from_origin`
 method; other instances of `Point<T>` where `T` is not of type `f32` will not
@@ -248,14 +240,13 @@ signature to make the example clearer. The method creates a new `Point`
 instance with the `x` value from the `self` `Point` (of type `X1`) and the `y`
 value from the passed-in `Point` (of type `Y2`).
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-11" file-name="src/main.rs" caption="A method that uses generic types different from its struct’s definition">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-11/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-11: A method that uses generic types different
-from its struct’s definition</span>
+</Listing>
 
 In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
 and an `f64` for `y` (with value `10.4`). The `p2` variable is a `Point` struct
@@ -304,7 +295,7 @@ definition with the specific ones.
 The monomorphized version of the code looks similar to the following (the
 compiler uses different names than what we’re using here for illustration):
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust
 enum Option_i32 {
@@ -322,6 +313,8 @@ fn main() {
     let float = Option_f64::Some(5.0);
 }
 ```
+
+</Listing>
 
 The generic `Option<T>` is replaced with the specific definitions created by
 the compiler. Because Rust compiles generic code into code that specifies the

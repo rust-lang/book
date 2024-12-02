@@ -57,7 +57,7 @@ receiver. The abbreviations `tx` and `rx` are traditionally used in many fields
 for *transmitter* and *receiver* respectively, so we name our variables as such
 to indicate each end. We’re using a `let` statement with a pattern that
 destructures the tuples; we’ll discuss the use of patterns in `let` statements
-and destructuring in Chapter 18. For now, know that using a `let` statement
+and destructuring in Chapter 19. For now, know that using a `let` statement
 this way is a convenient approach to extract the pieces of the tuple returned
 by `mpsc::channel`.
 
@@ -66,14 +66,13 @@ string so the spawned thread is communicating with the main thread, as shown in
 Listing 16-7. This is like putting a rubber duck in the river upstream or
 sending a chat message from one thread to another.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-7" file-name="src/main.rs" caption="Moving `tx` to a spawned thread and sending “hi”">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-07/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-7: Moving `tx` to a spawned thread and sending
-“hi”</span>
+</Listing>
 
 Again, we’re using `thread::spawn` to create a new thread and then using `move`
 to move `tx` into the closure so the spawned thread owns `tx`. The spawned
@@ -89,14 +88,13 @@ In Listing 16-8, we’ll get the value from the receiver in the main thread. Thi
 is like retrieving the rubber duck from the water at the end of the river or
 receiving a chat message.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-8" file-name="src/main.rs" caption="Receiving the value “hi” in the main thread and printing it">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-08/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-8: Receiving the value “hi” in the main thread
-and printing it</span>
+</Listing>
 
 The receiver has two useful methods: `recv` and `try_recv`. We’re using `recv`,
 short for *receive*, which will block the main thread’s execution and wait
@@ -139,14 +137,13 @@ problems: we’ll try to use a `val` value in the spawned thread *after* we’ve
 sent it down the channel. Try compiling the code in Listing 16-9 to see why
 this code isn’t allowed:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-9" file-name="src/main.rs" caption="Attempting to use `val` after we’ve sent it down the channel">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-09/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-9: Attempting to use `val` after we’ve sent it
-down the channel</span>
+</Listing>
 
 Here, we try to print `val` after we’ve sent it down the channel via `tx.send`.
 Allowing this would be a bad idea: once the value has been sent to another
@@ -172,14 +169,13 @@ two separate threads were talking to each other over the channel. In Listing
 running concurrently: the spawned thread will now send multiple messages and
 pause for a second between each message.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-10" file-name="src/main.rs" caption="Sending multiple messages and pausing between each">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-10/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-10: Sending multiple messages and pausing
-between each</span>
+</Listing>
 
 This time, the spawned thread has a vector of strings that we want to send to
 the main thread. We iterate over them, sending each individually, and pause
@@ -215,14 +211,13 @@ single consumer*. Let’s put `mpsc` to use and expand the code in Listing 16-10
 to create multiple threads that all send values to the same receiver. We can do
 so by cloning the transmitter, as shown in Listing 16-11:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-11" file-name="src/main.rs" caption="Sending multiple messages from multiple producers">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 16-11: Sending multiple messages from multiple
-producers</span>
+</Listing>
 
 This time, before we create the first spawned thread, we call `clone` on the
 transmitter. This will give us a new transmitter we can pass to the first

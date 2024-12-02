@@ -23,10 +23,10 @@ time because the data is copied around on the stack. To improve performance in
 this situation, we can store the large amount of data on the heap in a box.
 Then, only the small amount of pointer data is copied around on the stack,
 while the data it references stays in one place on the heap. The third case is
-known as a *trait object*, and Chapter 17 devotes an entire section, [“Using
+known as a *trait object*, and Chapter 18 devotes an entire section, [“Using
 Trait Objects That Allow for Values of Different Types,”][trait-objects]<!--
 ignore --> just to that topic. So what you learn here you’ll apply again in
-Chapter 17!
+Chapter 18!
 
 ### Using a `Box<T>` to Store Data on the Heap
 
@@ -35,14 +35,13 @@ syntax and how to interact with values stored within a `Box<T>`.
 
 Listing 15-1 shows how to use a box to store an `i32` value on the heap:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-1" file-name="src/main.rs" caption="Storing an `i32` value on the heap using a box">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 15-1: Storing an `i32` value on the heap using a
-box</span>
+</Listing>
 
 We define the variable `b` to have the value of a `Box` that points to the
 value `5`, which is allocated on the heap. This program will print `b = 5`; in
@@ -106,14 +105,13 @@ Listing 15-2 contains an enum definition for a cons list. Note that this code
 won’t compile yet because the `List` type doesn’t have a known size, which
 we’ll demonstrate.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-2" file-name="src/main.rs" caption="The first attempt at defining an enum to represent a cons list data structure of `i32` values">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-2: The first attempt at defining an enum to
-represent a cons list data structure of `i32` values</span>
+</Listing>
 
 > Note: We’re implementing a cons list that holds only `i32` values for the
 > purposes of this example. We could have implemented it using generics, as we
@@ -123,14 +121,13 @@ represent a cons list data structure of `i32` values</span>
 Using the `List` type to store the list `1, 2, 3` would look like the code in
 Listing 15-3:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-3" file-name="src/main.rs" caption="Using the `List` enum to store the list `1, 2, 3`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-3: Using the `List` enum to store the list `1,
-2, 3`</span>
+</Listing>
 
 The first `Cons` value holds `1` and another `List` value. This `List` value is
 another `Cons` value that holds `2` and another `List` value. This `List` value
@@ -140,12 +137,13 @@ is one more `Cons` value that holds `3` and a `List` value, which is finally
 If we try to compile the code in Listing 15-3, we get the error shown in
 Listing 15-4:
 
+<Listing number="15-4" file-name="output.txt" caption="The error we get when attempting to define a recursive enum">
+
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-03/output.txt}}
 ```
 
-<span class="caption">Listing 15-4: The error we get when attempting to define
-a recursive enum</span>
+</Listing>
 
 The error shows this type “has infinite size.” The reason is that we’ve defined
 `List` with a variant that is recursive: it holds another value of itself
@@ -215,14 +213,13 @@ rather than inside one another.
 We can change the definition of the `List` enum in Listing 15-2 and the usage
 of the `List` in Listing 15-3 to the code in Listing 15-5, which will compile:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-5" file-name="src/main.rs" caption="Definition of `List` that uses `Box<T>` in order to have a known size">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 15-5: Definition of `List` that uses `Box<T>` in
-order to have a known size</span>
+</Listing>
 
 The `Cons` variant needs the size of an `i32` plus the space to store the
 box’s pointer data. The `Nil` variant stores no values, so it needs less space
@@ -242,7 +239,7 @@ other special capabilities, like those we’ll see with the other smart pointer
 types. They also don’t have the performance overhead that these special
 capabilities incur, so they can be useful in cases like the cons list where the
 indirection is the only feature we need. We’ll look at more use cases for boxes
-in Chapter 17, too.
+in Chapter 18, too.
 
 The `Box<T>` type is a smart pointer because it implements the `Deref` trait,
 which allows `Box<T>` values to be treated like references. When a `Box<T>`
@@ -252,4 +249,4 @@ even more important to the functionality provided by the other smart pointer
 types we’ll discuss in the rest of this chapter. Let’s explore these two traits
 in more detail.
 
-[trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[trait-objects]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

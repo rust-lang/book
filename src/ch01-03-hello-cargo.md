@@ -113,7 +113,8 @@ everything is in its place.
 If you started a project that doesn’t use Cargo, as we did with the “Hello,
 world!” project, you can convert it to a project that does use Cargo. Move the
 project code into the *src* directory and create an appropriate *Cargo.toml*
-file.
+file. One easy way to get that *Cargo.toml* file is to run `cargo init`, which
+will create it for you automatically.
 
 ### Building and Running a Cargo Project
 

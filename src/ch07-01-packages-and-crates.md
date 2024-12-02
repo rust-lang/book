@@ -20,7 +20,7 @@ executable. Instead, they define functionality intended to be shared with
 multiple projects. For example, the `rand` crate we used in [Chapter
 2][rand]<!-- ignore --> provides functionality that generates random numbers.
 Most of the time when Rustaceans say “crate”, they mean library crate, and they
-use “crate” interchangeably with the general programming concept of a “library".
+use “crate” interchangeably with the general programming concept of a “library”.
 
 The *crate root* is a source file that the Rust compiler starts from and makes
 up the root module of your crate (we’ll explain modules in depth in the
@@ -33,12 +33,9 @@ build those crates. Cargo is actually a package that contains the binary crate
 for the command-line tool you’ve been using to build your code. The Cargo
 package also contains a library crate that the binary crate depends on. Other
 projects can depend on the Cargo library crate to use the same logic the Cargo
-command-line tool uses.
-
-A crate can come in one of two forms: a binary crate or a library crate. A
-package can contain as many binary crates as you like, but at most only one
-library crate. A package must contain at least one crate, whether that’s a
-library or binary crate.
+command-line tool uses. A package can contain as many binary crates as you
+like, but at most only one library crate. A package must contain at least one
+crate, whether that’s a library or binary crate.
 
 Let’s walk through what happens when we create a package. First we enter the
 command `cargo new my-project`:

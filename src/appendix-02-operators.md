@@ -102,7 +102,7 @@ hierarchy to an item.
 | Symbol | Explanation |
 |--------|-------------|
 | `ident::ident` | Namespace path |
-| `::path` | Path relative to the crate root (i.e., an explicitly absolute path) |
+| `::path` | Path relative to the extern prelude, where all other crates are rooted (i.e., an explicitly absolute path including crate name) |
 | `self::path` | Path relative to the current module (i.e., an explicitly relative path). |
 | `super::path` | Path relative to the parent of the current module |
 | `type::ident`, `<type as trait>::ident` | Associated constants, functions, and types |

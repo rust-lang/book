@@ -134,7 +134,16 @@ Any time a type or function is provided by the standard library and you’re not
 sure what it does or how to use it, use the application programming interface
 (API) documentation to find out!
 
+### Text Editors and Integrated Development Environments
+
+This book makes no assumptions about what tools you use to author Rust code.
+Just about any text editor will get the job done! However, many text editors and
+integrated development environments (IDEs) have built-in support for Rust. You
+can always find a fairly current list of many editors and IDEs on [the tools
+page][tools] on the Rust website.
+
 [otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 [install]: https://www.rust-lang.org/tools/install
 [msvc]: https://rust-lang.github.io/rustup/installation/windows-msvc.html
 [community]: https://www.rust-lang.org/community
+[tools]: https://www.rust-lang.org/tools

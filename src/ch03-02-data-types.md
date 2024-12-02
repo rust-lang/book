@@ -141,8 +141,7 @@ Here’s an example that shows floating-point numbers in action:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-06-floating-point/src/main.rs}}
 ```
 
-Floating-point numbers are represented according to the IEEE-754 standard. The
-`f32` type is a single-precision float, and `f64` has double precision.
+Floating-point numbers are represented according to the IEEE-754 standard.
 
 #### Numeric Operations
 
@@ -271,14 +270,14 @@ brackets:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-13-arrays/src/main.rs}}
 ```
 
-Arrays are useful when you want your data allocated on the stack rather than
-the heap (we will discuss the stack and the heap more in [Chapter
-4][stack-and-heap]<!-- ignore -->) or when you want to ensure you always have a
-fixed number of elements. An array isn’t as flexible as the vector type,
-though. A *vector* is a similar collection type provided by the standard
-library that *is* allowed to grow or shrink in size. If you’re unsure whether
-to use an array or a vector, chances are you should use a vector. [Chapter
-8][vectors]<!-- ignore --> discusses vectors in more detail.
+Arrays are useful when you want your data allocated on the stack, the same as
+the other types we have seen so far, rather than the heap (we will discuss the
+stack and the heap more in [Chapter 4][stack-and-heap]<!-- ignore -->) or when
+you want to ensure you always have a fixed number of elements. An array isn’t as
+flexible as the vector type, though. A *vector* is a similar collection type
+provided by the standard library that *is* allowed to grow or shrink in size. If
+you’re unsure whether to use an array or a vector, chances are you should use a
+vector. [Chapter 8][vectors]<!-- ignore --> discusses vectors in more detail.
 
 However, arrays are more useful when you know the number of elements will not
 need to change. For example, if you were using the names of the month in a

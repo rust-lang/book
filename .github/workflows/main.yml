@@ -12,8 +12,8 @@ jobs:
     - name: Install Rust
       run: |
         rustup set profile minimal
-        rustup toolchain install 1.79 -c rust-docs
-        rustup default 1.79
+        rustup toolchain install 1.82 -c rust-docs
+        rustup default 1.82
     - name: Install mdbook
       run: |
         mkdir bin
@@ -24,8 +24,19 @@ jobs:
         rustup --version
         rustc -Vv
         mdbook --version
+
+    # mdBook does not currently have particularly good support for “external”
+    # crates. To make the test suite work correctly with `trpl`, we must first
+    # build `trpl` itself (`mdbook` will not do it), and then explicitly pass
+    # its `deps` path as a library search path for `mdbook test`. That will make
+    # sure all the crates can be resolved when running the tests.
+    - name: Build `trpl` crate
+      run: |
+        cd packages/trpl
+        cargo build
     - name: Run tests
-      run: mdbook test
+      run:
+        mdbook test --library-path packages/trpl/target/debug/deps
   package_tests:
     name: Run package tests
     runs-on: ubuntu-latest
@@ -36,8 +47,8 @@ jobs:
     - name: Install Rust
       run: |
         rustup set profile minimal
-        rustup toolchain install 1.79 -c rust-docs
-        rustup default 1.79
+        rustup toolchain install 1.82 -c rust-docs
+        rustup default 1.82
     - name: Run `tools` package tests
       run: |
         cargo test

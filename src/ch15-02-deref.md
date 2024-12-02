@@ -29,14 +29,13 @@ as an arrow to a value stored somewhere else. In Listing 15-6, we create a
 reference to an `i32` value and then use the dereference operator to follow the
 reference to the value:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-6" file-name="src/main.rs" caption="Using the dereference operator to follow a reference to an `i32` value">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 15-6: Using the dereference operator to follow a
-reference to an `i32` value</span>
+</Listing>
 
 The variable `x` holds an `i32` value `5`. We set `y` equal to a reference to
 `x`. We can assert that `x` is equal to `5`. However, if we want to make an
@@ -63,14 +62,13 @@ reference; the dereference operator used on the `Box<T>` in Listing 15-7
 functions in the same way as the dereference operator used on the reference in
 Listing 15-6:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-7" file-name="src/main.rs" caption="Using the dereference operator on a `Box<i32>`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-07/src/main.rs}}
 ```
 
-<span class="caption">Listing 15-7: Using the dereference operator on a
-`Box<i32>`</span>
+</Listing>
 
 The main difference between Listing 15-7 and Listing 15-6 is that here we set
 `y` to be an instance of a `Box<T>` pointing to a copied value of `x` rather
@@ -91,13 +89,13 @@ The `Box<T>` type is ultimately defined as a tuple struct with one element, so
 Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
 `new` function to match the `new` function defined on `Box<T>`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-8" file-name="src/main.rs" caption="Defining a `MyBox<T>` type">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-8: Defining a `MyBox<T>` type</span>
+</Listing>
 
 We define a struct named `MyBox` and declare a generic parameter `T`, because
 we want our type to hold values of any type. The `MyBox` type is a tuple struct
@@ -109,14 +107,13 @@ changing it to use the `MyBox<T>` type we’ve defined instead of `Box<T>`. The
 code in Listing 15-9 won’t compile because Rust doesn’t know how to dereference
 `MyBox`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-9" file-name="src/main.rs" caption="Attempting to use `MyBox<T>` in the same way we used references and `Box<T>`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-9: Attempting to use `MyBox<T>` in the same
-way we used references and `Box<T>`</span>
+</Listing>
 
 Here’s the resulting compilation error:
 
@@ -137,18 +134,18 @@ by the standard library, requires us to implement one method named `deref` that
 borrows `self` and returns a reference to the inner data. Listing 15-10
 contains an implementation of `Deref` to add to the definition of `MyBox`:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-10" file-name="src/main.rs" caption="Implementing `Deref` on `MyBox<T>`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-10: Implementing `Deref` on `MyBox<T>`</span>
+</Listing>
 
 The `type Target = T;` syntax defines an associated type for the `Deref`
 trait to use. Associated types are a slightly different way of declaring a
 generic parameter, but you don’t need to worry about them for now; we’ll cover
-them in more detail in Chapter 19.
+them in more detail in Chapter 20.
 
 We fill in the body of the `deref` method with `&self.0` so `deref` returns a
 reference to the value we want to access with the `*` operator; recall from the
@@ -210,27 +207,25 @@ Listing 15-8 as well as the implementation of `Deref` that we added in Listing
 15-10. Listing 15-11 shows the definition of a function that has a string slice
 parameter:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-11" file-name="src/main.rs" caption="A `hello` function that has the parameter `name` of type `&str`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-11: A `hello` function that has the parameter
-`name` of type `&str`</span>
+</Listing>
 
 We can call the `hello` function with a string slice as an argument, such as
 `hello("Rust");` for example. Deref coercion makes it possible to call `hello`
 with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-12" file-name="src/main.rs" caption="Calling `hello` with a reference to a `MyBox<String>` value, which works because of deref coercion">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-12/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-12: Calling `hello` with a reference to a
-`MyBox<String>` value, which works because of deref coercion</span>
+</Listing>
 
 Here we’re calling the `hello` function with the argument `&m`, which is a
 reference to a `MyBox<String>` value. Because we implemented the `Deref` trait
@@ -244,14 +239,13 @@ If Rust didn’t implement deref coercion, we would have to write the code in
 Listing 15-13 instead of the code in Listing 15-12 to call `hello` with a value
 of type `&MyBox<String>`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-13" file-name="src/main.rs" caption="The code we would have to write if Rust didn’t have deref coercion">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-13/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-13: The code we would have to write if Rust
-didn’t have deref coercion</span>
+</Listing>
 
 The `(*m)` dereferences the `MyBox<String>` into a `String`. Then the `&` and
 `[..]` take a string slice of the `String` that is equal to the whole string to

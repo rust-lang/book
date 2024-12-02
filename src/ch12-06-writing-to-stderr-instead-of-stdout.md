@@ -7,12 +7,12 @@ error messages. This distinction enables users to choose to direct the
 successful output of a program to a file but still print error messages to the
 screen.
 
-The `println!` macro is only capable of printing to standard output, so we
-have to use something else to print to standard error.
+The `println!` macro is only capable of printing to standard output, so we have
+to use something else to print to standard error.
 
 ### Checking Where Errors Are Written
 
-First, let’s observe how the content printed by `minigrep` is currently being
+First let’s observe how the content printed by `minigrep` is currently being
 written to standard output, including any error messages we want to write to
 standard error instead. We’ll do that by redirecting the standard output stream
 to a file while intentionally causing an error. We won’t redirect the standard
@@ -21,7 +21,7 @@ the screen.
 
 Command line programs are expected to send error messages to the standard error
 stream so we can still see error messages on the screen even if we redirect the
-standard output stream to a file. Our program is not currently well-behaved:
+standard output stream to a file. Our program is not currently well behaved:
 we’re about to see that it saves the error message output to a file instead!
 
 To demonstrate this behavior, we’ll run the program with `>` and the file path,
@@ -105,3 +105,4 @@ well tested.
 
 Next, we’ll explore some Rust features that were influenced by functional
 languages: closures and iterators.
+
