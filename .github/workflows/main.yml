@@ -3,7 +3,7 @@ name: Deploy mdBook to GitHub Pages
 on:
   push:
     branches:
-      - main # Replace with your primary branch if different
+      - arabic-release # Replace with your primary branch if different
 
 jobs:
   build-and-deploy:
