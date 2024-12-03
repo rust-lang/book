@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{config.book.title}}</title>
+    {{#each config.book.stylesheets}}
+    <link rel="stylesheet" href="{{this}}">
+    {{/each}}
+</head>
+<body>
+    {{> book}}
+</body>
+</html>
+
