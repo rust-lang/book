@@ -34,11 +34,11 @@ The issue with this code is evident in the signature of `area`:
 ```
 
 The `area` function is supposed to calculate the area of one rectangle, but the
-function we wrote has two parameters, and it’s not clear anywhere in our
-program that the parameters are related. It would be more readable and more
-manageable to group width and height together. We’ve already discussed one way
-we might do that in [“The Tuple Type”][the-tuple-type]<!-- ignore --> section
-of Chapter 3: by using tuples.
+function we wrote has two parameters, and it’s not clear anywhere in our program
+that the parameters are related. It would be more readable and more manageable
+to group width and height together. We’ve already discussed one way we might do
+that in [“The Tuple Type”][the-tuple-type]<!-- ignore --> section of Chapter 3:
+by using tuples.
 
 ### Refactoring with Tuples
 
@@ -59,10 +59,10 @@ the tuple, making our calculation less obvious.
 
 Mixing up the width and height wouldn’t matter for the area calculation, but if
 we want to draw the rectangle on the screen, it would matter! We would have to
-keep in mind that `width` is the tuple index `0` and `height` is the tuple
-index `1`. This would be even harder for someone else to figure out and keep in
-mind if they were to use our code. Because we haven’t conveyed the meaning of
-our data in our code, it’s now easier to introduce errors.
+keep in mind that `width` is the tuple index `0` and `height` is the tuple index
+`1`. This would be even harder for someone else to figure out and keep in mind
+if they were to use our code. Because we haven’t conveyed the meaning of our
+data in our code, it’s now easier to introduce errors.
 
 ### Refactoring with Structs: Adding More Meaning
 
@@ -78,33 +78,33 @@ parts, as shown in Listing 5-10.
 
 </Listing>
 
-Here we’ve defined a struct and named it `Rectangle`. Inside the curly
-brackets, we defined the fields as `width` and `height`, both of which have
-type `u32`. Then, in `main`, we created a particular instance of `Rectangle`
-that has a width of `30` and a height of `50`.
+Here we’ve defined a struct and named it `Rectangle`. Inside the curly brackets,
+we defined the fields as `width` and `height`, both of which have type `u32`.
+Then, in `main`, we created a particular instance of `Rectangle` that has a
+width of `30` and a height of `50`.
 
 Our `area` function is now defined with one parameter, which we’ve named
-`rectangle`, whose type is an immutable borrow of a struct `Rectangle`
-instance. As mentioned in Chapter 4, we want to borrow the struct rather than
-take ownership of it. This way, `main` retains its ownership and can continue
-using `rect1`, which is the reason we use the `&` in the function signature and
-where we call the function.
+`rectangle`, whose type is an immutable borrow of a struct `Rectangle` instance.
+As mentioned in Chapter 4, we want to borrow the struct rather than take
+ownership of it. This way, `main` retains its ownership and can continue using
+`rect1`, which is the reason we use the `&` in the function signature and where
+we call the function.
 
 The `area` function accesses the `width` and `height` fields of the `Rectangle`
-instance (note that accessing fields of a borrowed struct instance does not
-move the field values, which is why you often see borrows of structs). Our
-function signature for `area` now says exactly what we mean: calculate the area
-of `Rectangle`, using its `width` and `height` fields. This conveys that the
-width and height are related to each other, and it gives descriptive names to
-the values rather than using the tuple index values of `0` and `1`. This is a
-win for clarity.
+instance (note that accessing fields of a borrowed struct instance does not move
+the field values, which is why you often see borrows of structs). Our function
+signature for `area` now says exactly what we mean: calculate the area of
+`Rectangle`, using its `width` and `height` fields. This conveys that the width
+and height are related to each other, and it gives descriptive names to the
+values rather than using the tuple index values of `0` and `1`. This is a win
+for clarity.
 
 ### Adding Useful Functionality with Derived Traits
 
 It’d be useful to be able to print an instance of `Rectangle` while we’re
 debugging our program and see the values for all its fields. Listing 5-11 tries
-using the [`println!` macro][println]<!-- ignore --> as we have used in
-previous chapters. This won’t work, however.
+using the [`println!` macro][println]<!-- ignore --> as we have used in previous
+chapters. This won’t work, however.
 
 <Listing number="5-11" file-name="src/main.rs" caption="Attempting to print a `Rectangle` instance">
 
@@ -122,14 +122,14 @@ When we compile this code, we get an error with this core message:
 
 The `println!` macro can do many kinds of formatting, and by default, the curly
 brackets tell `println!` to use formatting known as `Display`: output intended
-for direct end user consumption. The primitive types we’ve seen so far
-implement `Display` by default because there’s only one way you’d want to show
-a `1` or any other primitive type to a user. But with structs, the way
-`println!` should format the output is less clear because there are more
-display possibilities: Do you want commas or not? Do you want to print the
-curly brackets? Should all the fields be shown? Due to this ambiguity, Rust
-doesn’t try to guess what we want, and structs don’t have a provided
-implementation of `Display` to use with `println!` and the `{}` placeholder.
+for direct end user consumption. The primitive types we’ve seen so far implement
+`Display` by default because there’s only one way you’d want to show a `1` or
+any other primitive type to a user. But with structs, the way `println!` should
+format the output is less clear because there are more display possibilities: Do
+you want commas or not? Do you want to print the curly brackets? Should all the
+fields be shown? Due to this ambiguity, Rust doesn’t try to guess what we want,
+and structs don’t have a provided implementation of `Display` to use with
+`println!` and the `{}` placeholder.
 
 If we continue reading the errors, we’ll find this helpful note:
 
@@ -137,11 +137,12 @@ If we continue reading the errors, we’ll find this helpful note:
 {{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/output.txt:9:10}}
 ```
 
-Let’s try it! The `println!` macro call will now look like `println!("rect1 is
-{rect1:?}");`. Putting the specifier `:?` inside the curly brackets tells
-`println!` we want to use an output format called `Debug`. The `Debug` trait
-enables us to print our struct in a way that is useful for developers so we can
-see its value while we’re debugging our code.
+Let’s try it! The `println!` macro call will now look like
+`println!("rect1 is
+{rect1:?}");`. Putting the specifier `:?` inside the curly
+brackets tells `println!` we want to use an output format called `Debug`. The
+`Debug` trait enables us to print our struct in a way that is useful for
+developers so we can see its value while we’re debugging our code.
 
 Compile the code with this change. Drat! We still get an error:
 
@@ -157,8 +158,8 @@ But again, the compiler gives us a helpful note:
 
 Rust _does_ include functionality to print out debugging information, but we
 have to explicitly opt in to make that functionality available for our struct.
-To do that, we add the outer attribute `#[derive(Debug)]` just before the
-struct definition, as shown in Listing 5-12.
+To do that, we add the outer attribute `#[derive(Debug)]` just before the struct
+definition, as shown in Listing 5-12.
 
 <Listing number="5-12" file-name="src/main.rs" caption="Adding the attribute to derive the `Debug` trait and printing the `Rectangle` instance using debug formatting">
 
@@ -177,19 +178,19 @@ following output:
 
 Nice! It’s not the prettiest output, but it shows the values of all the fields
 for this instance, which would definitely help during debugging. When we have
-larger structs, it’s useful to have output that’s a bit easier to read; in
-those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string. In
-this example, using the `{:#?}` style will output the following:
+larger structs, it’s useful to have output that’s a bit easier to read; in those
+cases, we can use `{:#?}` instead of `{:?}` in the `println!` string. In this
+example, using the `{:#?}` style will output the following:
 
 ```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-02-pretty-debug/output.txt}}
 ```
 
-Another way to print out a value using the `Debug` format is to use the [`dbg!`
-macro][dbg]<!-- ignore -->, which takes ownership of an expression (as opposed
-to `println!`, which takes a reference), prints the file and line number of
-where that `dbg!` macro call occurs in your code along with the resultant value
-of that expression, and returns ownership of the value.
+Another way to print out a value using the `Debug` format is to use the
+[`dbg!` macro][dbg]<!-- ignore -->, which takes ownership of an expression (as
+opposed to `println!`, which takes a reference), prints the file and line number
+of where that `dbg!` macro call occurs in your code along with the resultant
+value of that expression, and returns ownership of the value.
 
 > Note: Calling the `dbg!` macro prints to the standard error console stream
 > (`stderr`), as opposed to `println!`, which prints to the standard output
@@ -204,11 +205,11 @@ Here’s an example where we’re interested in the value that gets assigned to 
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-05-dbg-macro/src/main.rs}}
 ```
 
-We can put `dbg!` around the expression `30 * scale` and, because `dbg!`
-returns ownership of the expression’s value, the `width` field will get the
-same value as if we didn’t have the `dbg!` call there. We don’t want `dbg!` to
-take ownership of `rect1`, so we use a reference to `rect1` in the next call.
-Here’s what the output of this example looks like:
+We can put `dbg!` around the expression `30 * scale` and, because `dbg!` returns
+ownership of the expression’s value, the `width` field will get the same value
+as if we didn’t have the `dbg!` call there. We don’t want `dbg!` to take
+ownership of `rect1`, so we use a reference to `rect1` in the next call. Here’s
+what the output of this example looks like:
 
 ```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/no-listing-05-dbg-macro/output.txt}}
@@ -222,13 +223,13 @@ the `Rectangle` struct. This output uses the pretty `Debug` formatting of the
 `Rectangle` type. The `dbg!` macro can be really helpful when you’re trying to
 figure out what your code is doing!
 
-In addition to the `Debug` trait, Rust has provided a number of traits for us
-to use with the `derive` attribute that can add useful behavior to our custom
+In addition to the `Debug` trait, Rust has provided a number of traits for us to
+use with the `derive` attribute that can add useful behavior to our custom
 types. Those traits and their behaviors are listed in [Appendix C][app-c]<!--
 ignore -->. We’ll cover how to implement these traits with custom behavior as
 well as how to create your own traits in Chapter 10. There are also many
-attributes other than `derive`; for more information, see [the “Attributes”
-section of the Rust Reference][attributes].
+attributes other than `derive`; for more information, see
+[the “Attributes” section of the Rust Reference][attributes].
 
 Our `area` function is very specific: it only computes the area of rectangles.
 It would be helpful to tie this behavior more closely to our `Rectangle` struct

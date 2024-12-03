@@ -17,20 +17,21 @@ library are doing what you expect them to, separately and together.
 The purpose of unit tests is to test each unit of code in isolation from the
 rest of the code to quickly pinpoint where code is and isn’t working as
 expected. You’ll put unit tests in the _src_ directory in each file with the
-code that they’re testing. The convention is to create a module named `tests`
-in each file to contain the test functions and to annotate the module with
+code that they’re testing. The convention is to create a module named `tests` in
+each file to contain the test functions and to annotate the module with
 `cfg(test)`.
 
 #### The Tests Module and `#[cfg(test)]`
 
 The `#[cfg(test)]` annotation on the `tests` module tells Rust to compile and
 run the test code only when you run `cargo test`, not when you run `cargo
-build`. This saves compile time when you only want to build the library and
-saves space in the resultant compiled artifact because the tests are not
-included. You’ll see that because integration tests go in a different
-directory, they don’t need the `#[cfg(test)]` annotation. However, because unit
-tests go in the same files as the code, you’ll use `#[cfg(test)]` to specify
-that they shouldn’t be included in the compiled result.
+build`.
+This saves compile time when you only want to build the library and saves space
+in the resultant compiled artifact because the tests are not included. You’ll
+see that because integration tests go in a different directory, they don’t need
+the `#[cfg(test)]` annotation. However, because unit tests go in the same files
+as the code, you’ll use `#[cfg(test)]` to specify that they shouldn’t be
+included in the compiled result.
 
 Recall that when we generated the new `adder` project in the first section of
 this chapter, Cargo generated this code for us:
@@ -54,8 +55,8 @@ module, in addition to the functions annotated with `#[test]`.
 There’s debate within the testing community about whether or not private
 functions should be tested directly, and other languages make it difficult or
 impossible to test private functions. Regardless of which testing ideology you
-adhere to, Rust’s privacy rules do allow you to test private functions.
-Consider the code in Listing 11-12 with the private function `internal_adder`.
+adhere to, Rust’s privacy rules do allow you to test private functions. Consider
+the code in Listing 11-12 with the private function `internal_adder`.
 
 <Listing number="11-12" file-name="src/lib.rs" caption="Testing a private function">
 
@@ -66,13 +67,13 @@ Consider the code in Listing 11-12 with the private function `internal_adder`.
 </Listing>
 
 Note that the `internal_adder` function is not marked as `pub`. Tests are just
-Rust code, and the `tests` module is just another module. As we discussed in
-the [“Paths for Referring to an Item in the Module Tree”][paths]<!-- ignore -->
+Rust code, and the `tests` module is just another module. As we discussed in the
+[“Paths for Referring to an Item in the Module Tree”][paths]<!-- ignore -->
 section, items in child modules can use the items in their ancestor modules. In
 this test, we bring all of the `tests` module’s parent’s items into scope with
 `use super::*`, and then the test can call `internal_adder`. If you don’t think
-private functions should be tested, there’s nothing in Rust that will compel
-you to do so.
+private functions should be tested, there’s nothing in Rust that will compel you
+to do so.
 
 ### Integration Tests
 
@@ -86,9 +87,9 @@ tests, you first need a _tests_ directory.
 
 #### The _tests_ Directory
 
-We create a _tests_ directory at the top level of our project directory, next
-to _src_. Cargo knows to look for integration test files in this directory. We
-can then make as many test files as we want, and Cargo will compile each of the
+We create a _tests_ directory at the top level of our project directory, next to
+_src_. Cargo knows to look for integration test files in this directory. We can
+then make as many test files as we want, and Cargo will compile each of the
 files as an individual crate.
 
 Let’s create an integration test. With the code in Listing 11-12 still in the
@@ -116,8 +117,10 @@ Enter the code in Listing 11-13 into the _tests/integration_test.rs_ file.
 </Listing>
 
 Each file in the _tests_ directory is a separate crate, so we need to bring our
-library into each test crate’s scope. For that reason we add `use
-adder::add_two;` at the top of the code, which we didn’t need in the unit tests.
+library into each test crate’s scope. For that reason we add
+`use
+adder::add_two;` at the top of the code, which we didn’t need in the unit
+tests.
 
 We don’t need to annotate any code in _tests/integration_test.rs_ with
 `#[cfg(test)]`. Cargo treats the _tests_ directory specially and compiles files
@@ -137,9 +140,10 @@ The first section for the unit tests is the same as we’ve been seeing: one lin
 for each unit test (one named `internal` that we added in Listing 11-12) and
 then a summary line for the unit tests.
 
-The integration tests section starts with the line `Running
-tests/integration_test.rs`. Next, there is a line for each test function in
-that integration test and a summary line for the results of the integration
+The integration tests section starts with the line
+`Running
+tests/integration_test.rs`. Next, there is a line for each test function
+in that integration test and a summary line for the results of the integration
 test just before the `Doc-tests adder` section starts.
 
 Each integration test file has its own section, so if we add more files in the
@@ -163,13 +167,14 @@ _tests_ directory to help organize them; for example, you can group the test
 functions by the functionality they’re testing. As mentioned earlier, each file
 in the _tests_ directory is compiled as its own separate crate, which is useful
 for creating separate scopes to more closely imitate the way end users will be
-using your crate. However, this means files in the _tests_ directory don’t
-share the same behavior as files in _src_ do, as you learned in Chapter 7
-regarding how to separate code into modules and files.
+using your crate. However, this means files in the _tests_ directory don’t share
+the same behavior as files in _src_ do, as you learned in Chapter 7 regarding
+how to separate code into modules and files.
 
 The different behavior of _tests_ directory files is most noticeable when you
-have a set of helper functions to use in multiple integration test files and
-you try to follow the steps in the [“Separating Modules into Different
+have a set of helper functions to use in multiple integration test files and you
+try to follow the steps in the
+[“Separating Modules into Different
 Files”][separating-modules-into-files]<!-- ignore --> section of Chapter 7 to
 extract them into a common module. For example, if we create _tests/common.rs_
 and place a function named `setup` in it, we can add some code to `setup` that
@@ -206,10 +211,10 @@ project directory now looks like this:
     └── integration_test.rs
 ```
 
-This is the older naming convention that Rust also understands that we
-mentioned in the [“Alternate File Paths”][alt-paths]<!-- ignore --> section of
-Chapter 7. Naming the file this way tells Rust not to treat the `common` module
-as an integration test file. When we move the `setup` function code into
+This is the older naming convention that Rust also understands that we mentioned
+in the [“Alternate File Paths”][alt-paths]<!-- ignore --> section of Chapter 7.
+Naming the file this way tells Rust not to treat the `common` module as an
+integration test file. When we move the `setup` function code into
 _tests/common/mod.rs_ and delete the _tests/common.rs_ file, the section in the
 test output will no longer appear. Files in subdirectories of the _tests_
 directory don’t get compiled as separate crates or have sections in the test
@@ -225,8 +230,8 @@ function from the `it_adds_two` test in _tests/integration_test.rs_:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-13-fix-shared-test-code-problem/tests/integration_test.rs}}
 ```
 
-Note that the `mod common;` declaration is the same as the module declaration
-we demonstrated in Listing 7-21. Then, in the test function, we can call the
+Note that the `mod common;` declaration is the same as the module declaration we
+demonstrated in Listing 7-21. Then, in the test function, we can call the
 `common::setup()` function.
 
 #### Integration Tests for Binary Crates
@@ -255,8 +260,8 @@ in the same way external code will use it. Even though Rust’s type system and
 ownership rules help prevent some kinds of bugs, tests are still important to
 reduce logic bugs having to do with how your code is expected to behave.
 
-Let’s combine the knowledge you learned in this chapter and in previous
-chapters to work on a project!
+Let’s combine the knowledge you learned in this chapter and in previous chapters
+to work on a project!
 
 [paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
 [separating-modules-into-files]: ch07-05-separating-modules-into-different-files.html

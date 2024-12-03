@@ -3,8 +3,8 @@
 Having to write out the paths to call functions can feel inconvenient and
 repetitive. In Listing 7-7, whether we chose the absolute or relative path to
 the `add_to_waitlist` function, every time we wanted to call `add_to_waitlist`
-we had to specify `front_of_house` and `hosting` too. Fortunately, there’s a
-way to simplify this process: we can create a shortcut to a path with the `use`
+we had to specify `front_of_house` and `hosting` too. Fortunately, there’s a way
+to simplify this process: we can create a shortcut to a path with the `use`
 keyword once, and then use the shorter name everywhere else in the scope.
 
 In Listing 7-11, we bring the `crate::front_of_house::hosting` module into the
@@ -20,11 +20,11 @@ scope of the `eat_at_restaurant` function so we only have to specify
 
 </Listing>
 
-Adding `use` and a path in a scope is similar to creating a symbolic link in
-the filesystem. By adding `use crate::front_of_house::hosting` in the crate
-root, `hosting` is now a valid name in that scope, just as though the `hosting`
-module had been defined in the crate root. Paths brought into scope with `use`
-also check privacy, like any other paths.
+Adding `use` and a path in a scope is similar to creating a symbolic link in the
+filesystem. By adding `use crate::front_of_house::hosting` in the crate root,
+`hosting` is now a valid name in that scope, just as though the `hosting` module
+had been defined in the crate root. Paths brought into scope with `use` also
+check privacy, like any other paths.
 
 Note that `use` only creates the shortcut for the particular scope in which the
 `use` occurs. Listing 7-12 moves the `eat_at_restaurant` function into a new
@@ -53,9 +53,10 @@ the shortcut in the parent module with `super::hosting` within the child
 
 ### Creating Idiomatic `use` Paths
 
-In Listing 7-11, you might have wondered why we specified `use
-crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in
-`eat_at_restaurant`, rather than specifying the `use` path all the way out to
+In Listing 7-11, you might have wondered why we specified
+`use
+crate::front_of_house::hosting` and then called `hosting::add_to_waitlist`
+in `eat_at_restaurant`, rather than specifying the `use` path all the way out to
 the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 
 <Listing number="7-13" file-name="src/lib.rs" caption="Bringing the `add_to_waitlist` function into scope with `use`, which is unidiomatic">
@@ -75,9 +76,8 @@ while still minimizing repetition of the full path. The code in Listing 7-13 is
 unclear as to where `add_to_waitlist` is defined.
 
 On the other hand, when bringing in structs, enums, and other items with `use`,
-it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way
-to bring the standard library’s `HashMap` struct into the scope of a binary
-crate.
+it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way to
+bring the standard library’s `HashMap` struct into the scope of a binary crate.
 
 <Listing number="7-14" file-name="src/main.rs" caption="Bringing `HashMap` into scope in an idiomatic way">
 
@@ -125,8 +125,8 @@ the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 
 In the second `use` statement, we chose the new name `IoResult` for the
 `std::io::Result` type, which won’t conflict with the `Result` from `std::fmt`
-that we’ve also brought into scope. Listing 7-15 and Listing 7-16 are
-considered idiomatic, so the choice is up to you!
+that we’ve also brought into scope. Listing 7-15 and Listing 7-16 are considered
+idiomatic, so the choice is up to you!
 
 ### Re-exporting Names with `pub use`
 
@@ -151,9 +151,10 @@ changed to `pub use`.
 Before this change, external code would have to call the `add_to_waitlist`
 function by using the path
 `restaurant::front_of_house::hosting::add_to_waitlist()`, which also would have
-required the `front_of_house` module to be marked as `pub`. Now that this `pub
-use` has re-exported the `hosting` module from the root module, external code
-can use the path `restaurant::hosting::add_to_waitlist()` instead.
+required the `front_of_house` module to be marked as `pub`. Now that this
+`pub
+use` has re-exported the `hosting` module from the root module, external
+code can use the path `restaurant::hosting::add_to_waitlist()` instead.
 
 Re-exporting is useful when the internal structure of your code is different
 from how programmers calling your code would think about the domain. For
@@ -163,7 +164,8 @@ probably won’t think about the parts of the restaurant in those terms. With
 `pub use`, we can write our code with one structure but expose a different
 structure. Doing so makes our library well organized for programmers working on
 the library and programmers calling the library. We’ll look at another example
-of `pub use` and how it affects your crate’s documentation in the [“Exporting a
+of `pub use` and how it affects your crate’s documentation in the
+[“Exporting a
 Convenient Public API with `pub use`”][ch14-pub-use]<!-- ignore --> section of
 Chapter 14.
 
@@ -187,15 +189,15 @@ added this line to _Cargo.toml_:
 
 </Listing>
 
-Adding `rand` as a dependency in _Cargo.toml_ tells Cargo to download the
-`rand` package and any dependencies from [crates.io](https://crates.io/) and
-make `rand` available to our project.
+Adding `rand` as a dependency in _Cargo.toml_ tells Cargo to download the `rand`
+package and any dependencies from [crates.io](https://crates.io/) and make
+`rand` available to our project.
 
 Then, to bring `rand` definitions into the scope of our package, we added a
-`use` line starting with the name of the crate, `rand`, and listed the items
-we wanted to bring into scope. Recall that in the [“Generating a Random
-Number”][rand]<!-- ignore --> section in Chapter 2, we brought the `Rng` trait
-into scope and called the `rand::thread_rng` function:
+`use` line starting with the name of the crate, `rand`, and listed the items we
+wanted to bring into scope. Recall that in the
+[“Generating a Random Number”][rand]<!-- ignore --> section in Chapter 2, we
+brought the `Rng` trait into scope and called the `rand::thread_rng` function:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
@@ -234,10 +236,10 @@ bring items from `std` into scope:
 
 </Listing>
 
-Instead, we can use nested paths to bring the same items into scope in one
-line. We do this by specifying the common part of the path, followed by two
-colons, and then curly brackets around a list of the parts of the paths that
-differ, as shown in Listing 7-18.
+Instead, we can use nested paths to bring the same items into scope in one line.
+We do this by specifying the common part of the path, followed by two colons,
+and then curly brackets around a list of the parts of the paths that differ, as
+shown in Listing 7-18.
 
 <Listing number="7-18" file-name="src/main.rs" caption="Specifying a nested path to bring multiple items with the same prefix into scope">
 
@@ -247,9 +249,9 @@ differ, as shown in Listing 7-18.
 
 </Listing>
 
-In bigger programs, bringing many items into scope from the same crate or
-module using nested paths can reduce the number of separate `use` statements
-needed by a lot!
+In bigger programs, bringing many items into scope from the same crate or module
+using nested paths can reduce the number of separate `use` statements needed by
+a lot!
 
 We can use a nested path at any level in a path, which is useful when combining
 two `use` statements that share a subpath. For example, Listing 7-19 shows two
@@ -289,13 +291,14 @@ use std::collections::*;
 
 This `use` statement brings all public items defined in `std::collections` into
 the current scope. Be careful when using the glob operator! Glob can make it
-harder to tell what names are in scope and where a name used in your program
-was defined.
+harder to tell what names are in scope and where a name used in your program was
+defined.
 
-The glob operator is often used when testing to bring everything under test
-into the `tests` module; we’ll talk about that in the [“How to Write
-Tests”][writing-tests]<!-- ignore --> section in Chapter 11. The glob operator
-is also sometimes used as part of the prelude pattern: see [the standard library documentation](../std/prelude/index.html#other-preludes)<!-- ignore -->
+The glob operator is often used when testing to bring everything under test into
+the `tests` module; we’ll talk about that in the
+[“How to Write Tests”][writing-tests]<!-- ignore --> section in Chapter 11. The
+glob operator is also sometimes used as part of the prelude pattern: see
+[the standard library documentation](../std/prelude/index.html#other-preludes)<!-- ignore -->
 for more information on that pattern.
 
 [ch14-pub-use]: ch14-02-publishing-to-crates-io.html#exporting-a-convenient-public-api-with-pub-use

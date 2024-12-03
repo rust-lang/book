@@ -6,12 +6,12 @@ value is one of a possible set of values. For example, we may want to say that
 `Rectangle` is one of a set of possible shapes that also includes `Circle` and
 `Triangle`. To do this, Rust allows us to encode these possibilities as an enum.
 
-Let’s look at a situation we might want to express in code and see why enums
-are useful and more appropriate than structs in this case. Say we need to work
-with IP addresses. Currently, two major standards are used for IP addresses:
-version four and version six. Because these are the only possibilities for an
-IP address that our program will come across, we can _enumerate_ all possible
-variants, which is where enumeration gets its name.
+Let’s look at a situation we might want to express in code and see why enums are
+useful and more appropriate than structs in this case. Say we need to work with
+IP addresses. Currently, two major standards are used for IP addresses: version
+four and version six. Because these are the only possibilities for an IP address
+that our program will come across, we can _enumerate_ all possible variants,
+which is where enumeration gets its name.
 
 Any IP address can be either a version four or a version six address, but not
 both at the same time. That property of IP addresses makes the enum data
@@ -40,8 +40,8 @@ We can create instances of each of the two variants of `IpAddrKind` like this:
 
 Note that the variants of the enum are namespaced under its identifier, and we
 use a double colon to separate the two. This is useful because now both values
-`IpAddrKind::V4` and `IpAddrKind::V6` are of the same type: `IpAddrKind`. We
-can then, for instance, define a function that takes any `IpAddrKind`:
+`IpAddrKind::V4` and `IpAddrKind::V6` are of the same type: `IpAddrKind`. We can
+then, for instance, define a function that takes any `IpAddrKind`:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-01-defining-enums/src/main.rs:fn}}
@@ -54,10 +54,10 @@ And we can call this function with either variant:
 ```
 
 Using enums has even more advantages. Thinking more about our IP address type,
-at the moment we don’t have a way to store the actual IP address _data_; we
-only know what _kind_ it is. Given that you just learned about structs in
-Chapter 5, you might be tempted to tackle this problem with structs as shown in
-Listing 6-1.
+at the moment we don’t have a way to store the actual IP address _data_; we only
+know what _kind_ it is. Given that you just learned about structs in Chapter 5,
+you might be tempted to tackle this problem with structs as shown in Listing
+6-1.
 
 <Listing number="6-1" caption="Storing the data and `IpAddrKind` variant of an IP address using a `struct`">
 
@@ -69,12 +69,12 @@ Listing 6-1.
 
 Here, we’ve defined a struct `IpAddr` that has two fields: a `kind` field that
 is of type `IpAddrKind` (the enum we defined previously) and an `address` field
-of type `String`. We have two instances of this struct. The first is `home`,
-and it has the value `IpAddrKind::V4` as its `kind` with associated address
-data of `127.0.0.1`. The second instance is `loopback`. It has the other
-variant of `IpAddrKind` as its `kind` value, `V6`, and has address `::1`
-associated with it. We’ve used a struct to bundle the `kind` and `address`
-values together, so now the variant is associated with the value.
+of type `String`. We have two instances of this struct. The first is `home`, and
+it has the value `IpAddrKind::V4` as its `kind` with associated address data of
+`127.0.0.1`. The second instance is `loopback`. It has the other variant of
+`IpAddrKind` as its `kind` value, `V6`, and has address `::1` associated with
+it. We’ve used a struct to bundle the `kind` and `address` values together, so
+now the variant is associated with the value.
 
 However, representing the same concept using just an enum is more concise:
 rather than an enum inside a struct, we can put data directly into each enum
@@ -95,23 +95,23 @@ enum.
 
 There’s another advantage to using an enum rather than a struct: each variant
 can have different types and amounts of associated data. Version four IP
-addresses will always have four numeric components that will have values
-between 0 and 255. If we wanted to store `V4` addresses as four `u8` values but
-still express `V6` addresses as one `String` value, we wouldn’t be able to with
-a struct. Enums handle this case with ease:
+addresses will always have four numeric components that will have values between
+0 and 255. If we wanted to store `V4` addresses as four `u8` values but still
+express `V6` addresses as one `String` value, we wouldn’t be able to with a
+struct. Enums handle this case with ease:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-03-variants-with-different-data/src/main.rs:here}}
 ```
 
 We’ve shown several different ways to define data structures to store version
-four and version six IP addresses. However, as it turns out, wanting to store
-IP addresses and encode which kind they are is so common that [the standard
-library has a definition we can use!][IpAddr]<!-- ignore --> Let’s look at how
-the standard library defines `IpAddr`: it has the exact enum and variants that
-we’ve defined and used, but it embeds the address data inside the variants in
-the form of two different structs, which are defined differently for each
-variant:
+four and version six IP addresses. However, as it turns out, wanting to store IP
+addresses and encode which kind they are is so common that
+[the standard library has a definition we can use!][IpAddr]<!-- ignore --> Let’s
+look at how the standard library defines `IpAddr`: it has the exact enum and
+variants that we’ve defined and used, but it embeds the address data inside the
+variants in the form of two different structs, which are defined differently for
+each variant:
 
 ```rust
 struct Ipv4Addr {
@@ -130,8 +130,8 @@ enum IpAddr {
 
 This code illustrates that you can put any kind of data inside an enum variant:
 strings, numeric types, or structs, for example. You can even include another
-enum! Also, standard library types are often not much more complicated than
-what you might come up with.
+enum! Also, standard library types are often not much more complicated than what
+you might come up with.
 
 Note that even though the standard library contains a definition for `IpAddr`,
 we can still create and use our own definition without conflict because we
@@ -151,10 +151,10 @@ variety of types embedded in its variants.
 
 This enum has four variants with different types:
 
-- `Quit` has no data associated with it at all.
-- `Move` has named fields, like a struct does.
-- `Write` includes a single `String`.
-- `ChangeColor` includes three `i32` values.
+* `Quit` has no data associated with it at all.
+* `Move` has named fields, like a struct does.
+* `Write` includes a single `String`.
+* `ChangeColor` includes three `i32` values.
 
 Defining an enum with variants such as the ones in Listing 6-2 is similar to
 defining different kinds of struct definitions, except the enum doesn’t use the
@@ -188,22 +188,21 @@ useful: `Option`.
 
 ### The `Option` Enum and Its Advantages Over Null Values
 
-This section explores a case study of `Option`, which is another enum defined
-by the standard library. The `Option` type encodes the very common scenario in
+This section explores a case study of `Option`, which is another enum defined by
+the standard library. The `Option` type encodes the very common scenario in
 which a value could be something or it could be nothing.
 
-For example, if you request the first item in a non-empty list, you would get
-a value. If you request the first item in an empty list, you would get nothing.
-Expressing this concept in terms of the type system means the compiler can
-check whether you’ve handled all the cases you should be handling; this
-functionality can prevent bugs that are extremely common in other programming
-languages.
+For example, if you request the first item in a non-empty list, you would get a
+value. If you request the first item in an empty list, you would get nothing.
+Expressing this concept in terms of the type system means the compiler can check
+whether you’ve handled all the cases you should be handling; this functionality
+can prevent bugs that are extremely common in other programming languages.
 
 Programming language design is often thought of in terms of which features you
 include, but the features you exclude are important too. Rust doesn’t have the
 null feature that many other languages have. _Null_ is a value that means there
-is no value there. In languages with null, variables can always be in one of
-two states: null or not-null.
+is no value there. In languages with null, variables can always be in one of two
+states: null or not-null.
 
 In his 2009 presentation “Null References: The Billion Dollar Mistake,” Tony
 Hoare, the inventor of null, has this to say:
@@ -225,8 +224,8 @@ However, the concept that null is trying to express is still a useful one: a
 null is a value that is currently invalid or absent for some reason.
 
 The problem isn’t really with the concept but with the particular
-implementation. As such, Rust does not have nulls, but it does have an enum
-that can encode the concept of a value being present or absent. This enum is
+implementation. As such, Rust does not have nulls, but it does have an enum that
+can encode the concept of a value being present or absent. This enum is
 `Option<T>`, and it is [defined by the standard library][option]<!-- ignore -->
 as follows:
 
@@ -245,11 +244,11 @@ prefix. The `Option<T>` enum is still just a regular enum, and `Some(T)` and
 
 The `<T>` syntax is a feature of Rust we haven’t talked about yet. It’s a
 generic type parameter, and we’ll cover generics in more detail in Chapter 10.
-For now, all you need to know is that `<T>` means that the `Some` variant of
-the `Option` enum can hold one piece of data of any type, and that each
-concrete type that gets used in place of `T` makes the overall `Option<T>` type
-a different type. Here are some examples of using `Option` values to hold
-number types and string types:
+For now, all you need to know is that `<T>` means that the `Some` variant of the
+`Option` enum can hold one piece of data of any type, and that each concrete
+type that gets used in place of `T` makes the overall `Option<T>` type a
+different type. Here are some examples of using `Option` values to hold number
+types and string types:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-06-option-examples/src/main.rs:here}}
@@ -259,8 +258,8 @@ The type of `some_number` is `Option<i32>`. The type of `some_char` is
 `Option<char>`, which is a different type. Rust can infer these types because
 we’ve specified a value inside the `Some` variant. For `absent_number`, Rust
 requires us to annotate the overall `Option` type: the compiler can’t infer the
-type that the corresponding `Some` variant will hold by looking only at a
-`None` value. Here, we tell Rust that we mean for `absent_number` to be of type
+type that the corresponding `Some` variant will hold by looking only at a `None`
+value. Here, we tell Rust that we mean for `absent_number` to be of type
 `Option<i32>`.
 
 When we have a `Some` value, we know that a value is present and the value is
@@ -283,30 +282,29 @@ If we run this code, we get an error message like this one:
 {{#include ../listings/ch06-enums-and-pattern-matching/no-listing-07-cant-use-option-directly/output.txt}}
 ```
 
-Intense! In effect, this error message means that Rust doesn’t understand how
-to add an `i8` and an `Option<i8>`, because they’re different types. When we
-have a value of a type like `i8` in Rust, the compiler will ensure that we
-always have a valid value. We can proceed confidently without having to check
-for null before using that value. Only when we have an `Option<i8>` (or
-whatever type of value we’re working with) do we have to worry about possibly
-not having a value, and the compiler will make sure we handle that case before
-using the value.
+Intense! In effect, this error message means that Rust doesn’t understand how to
+add an `i8` and an `Option<i8>`, because they’re different types. When we have a
+value of a type like `i8` in Rust, the compiler will ensure that we always have
+a valid value. We can proceed confidently without having to check for null
+before using that value. Only when we have an `Option<i8>` (or whatever type of
+value we’re working with) do we have to worry about possibly not having a value,
+and the compiler will make sure we handle that case before using the value.
 
 In other words, you have to convert an `Option<T>` to a `T` before you can
 perform `T` operations with it. Generally, this helps catch one of the most
 common issues with null: assuming that something isn’t null when it actually is.
 
 Eliminating the risk of incorrectly assuming a not-null value helps you to be
-more confident in your code. In order to have a value that can possibly be
-null, you must explicitly opt in by making the type of that value `Option<T>`.
-Then, when you use that value, you are required to explicitly handle the case
-when the value is null. Everywhere that a value has a type that isn’t an
-`Option<T>`, you _can_ safely assume that the value isn’t null. This was a
-deliberate design decision for Rust to limit null’s pervasiveness and increase
-the safety of Rust code.
+more confident in your code. In order to have a value that can possibly be null,
+you must explicitly opt in by making the type of that value `Option<T>`. Then,
+when you use that value, you are required to explicitly handle the case when the
+value is null. Everywhere that a value has a type that isn’t an `Option<T>`, you
+_can_ safely assume that the value isn’t null. This was a deliberate design
+decision for Rust to limit null’s pervasiveness and increase the safety of Rust
+code.
 
-So how do you get the `T` value out of a `Some` variant when you have a value
-of type `Option<T>` so that you can use that value? The `Option<T>` enum has a
+So how do you get the `T` value out of a `Some` variant when you have a value of
+type `Option<T>` so that you can use that value? The `Option<T>` enum has a
 large number of methods that are useful in a variety of situations; you can
 check them out in [its documentation][docs]<!-- ignore -->. Becoming familiar
 with the methods on `Option<T>` will be extremely useful in your journey with

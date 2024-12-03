@@ -39,8 +39,8 @@ the `thread::spawn` and `thread::sleep` APIs from the standard library in the
 
 If you run this, the output is identical. And notice how little changes here
 from the perspective of the calling code! What’s more, even though one of our
-functions spawned an async task on the runtime and the other spawned an
-OS thread, the resulting streams were unaffected by the differences.
+functions spawned an async task on the runtime and the other spawned an OS
+thread, the resulting streams were unaffected by the differences.
 
 Despite the similarities, these two approaches behave very differently, although
 we might have a hard time measuring it in this very simple example. We could
@@ -78,10 +78,10 @@ The fact that futures are richer data structures means they can be composed
 together more naturally, as we have seen.
 
 Tasks then give _additional_ control over futures, allowing you to choose where
-and how to group the futures. And it turns out that threads and tasks often
-work very well together, because tasks can (at least in some runtimes) be moved
-around between threads. We haven’t mentioned it up until now, but under the
-hood the `Runtime` we have been using, including the `spawn_blocking` and
+and how to group the futures. And it turns out that threads and tasks often work
+very well together, because tasks can (at least in some runtimes) be moved
+around between threads. We haven’t mentioned it up until now, but under the hood
+the `Runtime` we have been using, including the `spawn_blocking` and
 `spawn_task` functions, is multithreaded by default! Many runtimes use an
 approach called _work stealing_ to transparently move tasks around between
 threads based on the current utilization of the threads, with the aim of
@@ -90,9 +90,9 @@ threads _and_ tasks, and therefore futures.
 
 As a default way of thinking about which to use when:
 
-- If the work is _very parallelizable_, such as processing a bunch of data where
+* If the work is _very parallelizable_, such as processing a bunch of data where
   each part can be processed separately, threads are a better choice.
-- If the work is _very concurrent_, such as handling messages from a bunch of
+* If the work is _very concurrent_, such as handling messages from a bunch of
   different sources which may come in a different intervals or different rates,
   async is a better choice.
 
@@ -113,8 +113,8 @@ We begin by creating an async channel. Then we spawn a thread which takes
 ownership of the sender side of the channel. Within the thread, we send the
 numbers 1 through 10, and sleep for a second in between each. Finally, we run a
 future created with an async block passed to `trpl::run` just as we have
-throughout the chapter. In that future, we await those messages, just as in
-the other message-passing examples we have seen.
+throughout the chapter. In that future, we await those messages, just as in the
+other message-passing examples we have seen.
 
 To return to the examples we opened the chapter with: you could imagine running
 a set of video encoding tasks using a dedicated thread, because video encoding

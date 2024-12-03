@@ -6,8 +6,8 @@ point of many programs. You’ve also seen the `fn` keyword, which allows you to
 declare new functions.
 
 Rust code uses _snake case_ as the conventional style for function and variable
-names, in which all letters are lowercase and underscores separate words.
-Here’s a program that contains an example function definition:
+names, in which all letters are lowercase and underscores separate words. Here’s
+a program that contains an example function definition:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -16,19 +16,19 @@ Here’s a program that contains an example function definition:
 ```
 
 We define a function in Rust by entering `fn` followed by a function name and a
-set of parentheses. The curly brackets tell the compiler where the function
-body begins and ends.
+set of parentheses. The curly brackets tell the compiler where the function body
+begins and ends.
 
-We can call any function we’ve defined by entering its name followed by a set
-of parentheses. Because `another_function` is defined in the program, it can be
+We can call any function we’ve defined by entering its name followed by a set of
+parentheses. Because `another_function` is defined in the program, it can be
 called from inside the `main` function. Note that we defined `another_function`
 _after_ the `main` function in the source code; we could have defined it before
 as well. Rust doesn’t care where you define your functions, only that they’re
 defined somewhere in a scope that can be seen by the caller.
 
-Let’s start a new binary project named _functions_ to explore functions
-further. Place the `another_function` example in _src/main.rs_ and run it. You
-should see the following output:
+Let’s start a new binary project named _functions_ to explore functions further.
+Place the `another_function` example in _src/main.rs_ and run it. You should see
+the following output:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-16-functions/output.txt}}
@@ -44,8 +44,8 @@ We can define functions to have _parameters_, which are special variables that
 are part of a function’s signature. When a function has parameters, you can
 provide it with concrete values for those parameters. Technically, the concrete
 values are called _arguments_, but in casual conversation, people tend to use
-the words _parameter_ and _argument_ interchangeably for either the variables
-in a function’s definition or the concrete values passed in when you call a
+the words _parameter_ and _argument_ interchangeably for either the variables in
+a function’s definition or the concrete values passed in when you call a
 function.
 
 In this version of `another_function` we add a parameter:
@@ -64,11 +64,11 @@ Try running this program; you should get the following output:
 
 The declaration of `another_function` has one parameter named `x`. The type of
 `x` is specified as `i32`. When we pass `5` in to `another_function`, the
-`println!` macro puts `5` where the pair of curly brackets containing `x` was
-in the format string.
+`println!` macro puts `5` where the pair of curly brackets containing `x` was in
+the format string.
 
-In function signatures, you _must_ declare the type of each parameter. This is
-a deliberate decision in Rust’s design: requiring type annotations in function
+In function signatures, you _must_ declare the type of each parameter. This is a
+deliberate decision in Rust’s design: requiring type annotations in function
 definitions means the compiler almost never needs you to use them elsewhere in
 the code to figure out what type you mean. The compiler is also able to give
 more helpful error messages if it knows what types the function expects.
@@ -88,7 +88,8 @@ named `unit_label` and is type `char`. The function then prints text containing
 both the `value` and the `unit_label`.
 
 Let’s try running this code. Replace the program currently in your _functions_
-project’s _src/main.rs_ file with the preceding example and run it using `cargo
+project’s _src/main.rs_ file with the preceding example and run it using
+`cargo
 run`:
 
 ```console
@@ -102,15 +103,15 @@ the value for `unit_label`, the program output contains those values.
 
 Function bodies are made up of a series of statements optionally ending in an
 expression. So far, the functions we’ve covered haven’t included an ending
-expression, but you have seen an expression as part of a statement. Because
-Rust is an expression-based language, this is an important distinction to
-understand. Other languages don’t have the same distinctions, so let’s look at
-what statements and expressions are and how their differences affect the bodies
-of functions.
+expression, but you have seen an expression as part of a statement. Because Rust
+is an expression-based language, this is an important distinction to understand.
+Other languages don’t have the same distinctions, so let’s look at what
+statements and expressions are and how their differences affect the bodies of
+functions.
 
-- **Statements** are instructions that perform some action and do not return
-  a value.
-- **Expressions** evaluate to a resultant value. Let’s look at some examples.
+* **Statements** are instructions that perform some action and do not return a
+  value.
+* **Expressions** evaluate to a resultant value. Let’s look at some examples.
 
 We’ve actually already used statements and expressions. Creating a variable and
 assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
@@ -153,9 +154,9 @@ Expressions evaluate to a value and make up most of the rest of the code that
 you’ll write in Rust. Consider a math operation, such as `5 + 6`, which is an
 expression that evaluates to the value `11`. Expressions can be part of
 statements: in Listing 3-1, the `6` in the statement `let y = 6;` is an
-expression that evaluates to the value `6`. Calling a function is an
-expression. Calling a macro is an expression. A new scope block created with
-curly brackets is an expression, for example:
+expression that evaluates to the value `6`. Calling a function is an expression.
+Calling a macro is an expression. A new scope block created with curly brackets
+is an expression, for example:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -172,13 +173,12 @@ This expression:
 }
 ```
 
-is a block that, in this case, evaluates to `4`. That value gets bound to `y`
-as part of the `let` statement. Note that the `x + 1` line doesn’t have a
-semicolon at the end, which is unlike most of the lines you’ve seen so far.
-Expressions do not include ending semicolons. If you add a semicolon to the end
-of an expression, you turn it into a statement, and it will then not return a
-value. Keep this in mind as you explore function return values and expressions
-next.
+is a block that, in this case, evaluates to `4`. That value gets bound to `y` as
+part of the `let` statement. Note that the `x + 1` line doesn’t have a semicolon
+at the end, which is unlike most of the lines you’ve seen so far. Expressions do
+not include ending semicolons. If you add a semicolon to the end of an
+expression, you turn it into a statement, and it will then not return a value.
+Keep this in mind as you explore function return values and expressions next.
 
 ### Functions with Return Values
 
@@ -187,8 +187,8 @@ values, but we must declare their type after an arrow (`->`). In Rust, the
 return value of the function is synonymous with the value of the final
 expression in the block of the body of a function. You can return early from a
 function by using the `return` keyword and specifying a value, but most
-functions return the last expression implicitly. Here’s an example of a
-function that returns a value:
+functions return the last expression implicitly. Here’s an example of a function
+that returns a value:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -215,9 +215,9 @@ that line is the same as the following:
 let x = 5;
 ```
 
-Second, the `five` function has no parameters and defines the type of the
-return value, but the body of the function is a lonely `5` with no semicolon
-because it’s an expression whose value we want to return.
+Second, the `five` function has no parameters and defines the type of the return
+value, but the body of the function is a lonely `5` with no semicolon because
+it’s an expression whose value we want to return.
 
 Let’s look at another example:
 
@@ -227,9 +227,9 @@ Let’s look at another example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-22-function-parameter-and-return/src/main.rs}}
 ```
 
-Running this code will print `The value of x is: 6`. But if we place a
-semicolon at the end of the line containing `x + 1`, changing it from an
-expression to a statement, we’ll get an error:
+Running this code will print `The value of x is: 6`. But if we place a semicolon
+at the end of the line containing `x + 1`, changing it from an expression to a
+statement, we’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -245,8 +245,8 @@ Compiling this code produces an error, as follows:
 
 The main error message, `mismatched types`, reveals the core issue with this
 code. The definition of the function `plus_one` says that it will return an
-`i32`, but statements don’t evaluate to a value, which is expressed by `()`,
-the unit type. Therefore, nothing is returned, which contradicts the function
+`i32`, but statements don’t evaluate to a value, which is expressed by `()`, the
+unit type. Therefore, nothing is returned, which contradicts the function
 definition and results in an error. In this output, Rust provides a message to
 possibly help rectify this issue: it suggests removing the semicolon, which
 would fix the error.

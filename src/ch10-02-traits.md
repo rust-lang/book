@@ -12,8 +12,8 @@ certain behavior.
 
 A type’s behavior consists of the methods we can call on that type. Different
 types share the same behavior if we can call the same methods on all of those
-types. Trait definitions are a way to group method signatures together to
-define a set of behaviors necessary to accomplish some purpose.
+types. Trait definitions are a way to group method signatures together to define
+a set of behaviors necessary to accomplish some purpose.
 
 For example, let’s say we have multiple structs that hold various kinds and
 amounts of text: a `NewsArticle` struct that holds a news story filed in a
@@ -37,16 +37,16 @@ definition of a public `Summary` trait that expresses this behavior.
 
 Here, we declare a trait using the `trait` keyword and then the trait’s name,
 which is `Summary` in this case. We also declare the trait as `pub` so that
-crates depending on this crate can make use of this trait too, as we’ll see in
-a few examples. Inside the curly brackets, we declare the method signatures
-that describe the behaviors of the types that implement this trait, which in
-this case is `fn summarize(&self) -> String`.
+crates depending on this crate can make use of this trait too, as we’ll see in a
+few examples. Inside the curly brackets, we declare the method signatures that
+describe the behaviors of the types that implement this trait, which in this
+case is `fn summarize(&self) -> String`.
 
 After the method signature, instead of providing an implementation within curly
-brackets, we use a semicolon. Each type implementing this trait must provide
-its own custom behavior for the body of the method. The compiler will enforce
-that any type that has the `Summary` trait will have the method `summarize`
-defined with this signature exactly.
+brackets, we use a semicolon. Each type implementing this trait must provide its
+own custom behavior for the body of the method. The compiler will enforce that
+any type that has the `Summary` trait will have the method `summarize` defined
+with this signature exactly.
 
 A trait can have multiple methods in its body: the method signatures are listed
 one per line, and each line ends in a semicolon.
@@ -54,9 +54,9 @@ one per line, and each line ends in a semicolon.
 ### Implementing a Trait on a Type
 
 Now that we’ve defined the desired signatures of the `Summary` trait’s methods,
-we can implement it on the types in our media aggregator. Listing 10-13 shows
-an implementation of the `Summary` trait on the `NewsArticle` struct that uses
-the headline, the author, and the location to create the return value of
+we can implement it on the types in our media aggregator. Listing 10-13 shows an
+implementation of the `Summary` trait on the `NewsArticle` struct that uses the
+headline, the author, and the location to create the return value of
 `summarize`. For the `Tweet` struct, we define `summarize` as the username
 followed by the entire text of the tweet, assuming that the tweet content is
 already limited to 280 characters.
@@ -88,7 +88,8 @@ library crate:
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs}}
 ```
 
-This code prints `1 new tweet: horse_ebooks: of course, as you probably already
+This code prints
+`1 new tweet: horse_ebooks: of course, as you probably already
 know, people`.
 
 Other crates that depend on the `aggregator` crate can also bring the `Summary`
@@ -103,18 +104,18 @@ crate.
 
 But we can’t implement external traits on external types. For example, we can’t
 implement the `Display` trait on `Vec<T>` within our `aggregator` crate because
-`Display` and `Vec<T>` are both defined in the standard library and aren’t
-local to our `aggregator` crate. This restriction is part of a property called
+`Display` and `Vec<T>` are both defined in the standard library and aren’t local
+to our `aggregator` crate. This restriction is part of a property called
 _coherence_, and more specifically the _orphan rule_, so named because the
 parent type is not present. This rule ensures that other people’s code can’t
-break your code and vice versa. Without the rule, two crates could implement
-the same trait for the same type, and Rust wouldn’t know which implementation
-to use.
+break your code and vice versa. Without the rule, two crates could implement the
+same trait for the same type, and Rust wouldn’t know which implementation to
+use.
 
 ### Default Implementations
 
-Sometimes it’s useful to have default behavior for some or all of the methods
-in a trait instead of requiring implementations for all methods on every type.
+Sometimes it’s useful to have default behavior for some or all of the methods in
+a trait instead of requiring implementations for all methods on every type.
 Then, as we implement the trait on a particular type, we can keep or override
 each method’s default behavior.
 
@@ -135,8 +136,8 @@ specify an empty `impl` block with `impl Summary for NewsArticle {}`.
 
 Even though we’re no longer defining the `summarize` method on `NewsArticle`
 directly, we’ve provided a default implementation and specified that
-`NewsArticle` implements the `Summary` trait. As a result, we can still call
-the `summarize` method on an instance of `NewsArticle`, like this:
+`NewsArticle` implements the `Summary` trait. As a result, we can still call the
+`summarize` method on an instance of `NewsArticle`, like this:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-02-calling-default-impl/src/main.rs:here}}
@@ -146,13 +147,13 @@ This code prints `New article available! (Read more...)`.
 
 Creating a default implementation doesn’t require us to change anything about
 the implementation of `Summary` on `Tweet` in Listing 10-13. The reason is that
-the syntax for overriding a default implementation is the same as the syntax
-for implementing a trait method that doesn’t have a default implementation.
+the syntax for overriding a default implementation is the same as the syntax for
+implementing a trait method that doesn’t have a default implementation.
 
 Default implementations can call other methods in the same trait, even if those
 other methods don’t have a default implementation. In this way, a trait can
-provide a lot of useful functionality and only require implementors to specify
-a small part of it. For example, we could define the `Summary` trait to have a
+provide a lot of useful functionality and only require implementors to specify a
+small part of it. For example, we could define the `Summary` trait to have a
 `summarize_author` method whose implementation is required, and then define a
 `summarize` method that has a default implementation that calls the
 `summarize_author` method:
@@ -161,8 +162,8 @@ a small part of it. For example, we could define the `Summary` trait to have a
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:here}}
 ```
 
-To use this version of `Summary`, we only need to define `summarize_author`
-when we implement the trait on a type:
+To use this version of `Summary`, we only need to define `summarize_author` when
+we implement the trait on a type:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:impl}}
@@ -172,8 +173,8 @@ After we define `summarize_author`, we can call `summarize` on instances of the
 `Tweet` struct, and the default implementation of `summarize` will call the
 definition of `summarize_author` that we’ve provided. Because we’ve implemented
 `summarize_author`, the `Summary` trait has given us the behavior of the
-`summarize` method without requiring us to write any more code. Here’s what
-that looks like:
+`summarize` method without requiring us to write any more code. Here’s what that
+looks like:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/main.rs:here}}
@@ -188,10 +189,10 @@ overriding implementation of that same method.
 
 Now that you know how to define and implement traits, we can explore how to use
 traits to define functions that accept many different types. We’ll use the
-`Summary` trait we implemented on the `NewsArticle` and `Tweet` types in
-Listing 10-13 to define a `notify` function that calls the `summarize` method
-on its `item` parameter, which is of some type that implements the `Summary`
-trait. To do this, we use the `impl Trait` syntax, like this:
+`Summary` trait we implemented on the `NewsArticle` and `Tweet` types in Listing
+10-13 to define a `notify` function that calls the `summarize` method on its
+`item` parameter, which is of some type that implements the `Summary` trait. To
+do this, we use the `impl Trait` syntax, like this:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-04-traits-as-parameters/src/lib.rs:here}}
@@ -199,11 +200,11 @@ trait. To do this, we use the `impl Trait` syntax, like this:
 
 Instead of a concrete type for the `item` parameter, we specify the `impl`
 keyword and the trait name. This parameter accepts any type that implements the
-specified trait. In the body of `notify`, we can call any methods on `item`
-that come from the `Summary` trait, such as `summarize`. We can call `notify`
-and pass in any instance of `NewsArticle` or `Tweet`. Code that calls the
-function with any other type, such as a `String` or an `i32`, won’t compile
-because those types don’t implement `Summary`.
+specified trait. In the body of `notify`, we can call any methods on `item` that
+come from the `Summary` trait, such as `summarize`. We can call `notify` and
+pass in any instance of `NewsArticle` or `Tweet`. Code that calls the function
+with any other type, such as a `String` or an `i32`, won’t compile because those
+types don’t implement `Summary`.
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -242,16 +243,16 @@ trait bound, like this:
 pub fn notify<T: Summary>(item1: &T, item2: &T) {
 ```
 
-The generic type `T` specified as the type of the `item1` and `item2`
-parameters constrains the function such that the concrete type of the value
-passed as an argument for `item1` and `item2` must be the same.
+The generic type `T` specified as the type of the `item1` and `item2` parameters
+constrains the function such that the concrete type of the value passed as an
+argument for `item1` and `item2` must be the same.
 
 #### Specifying Multiple Trait Bounds with the `+` Syntax
 
 We can also specify more than one trait bound. Say we wanted `notify` to use
 display formatting as well as `summarize` on `item`: we specify in the `notify`
-definition that `item` must implement both `Display` and `Summary`. We can do
-so using the `+` syntax:
+definition that `item` must implement both `Display` and `Summary`. We can do so
+using the `+` syntax:
 
 ```rust,ignore
 pub fn notify(item: &(impl Summary + Display)) {
@@ -291,8 +292,8 @@ bounds.
 
 ### Returning Types That Implement Traits
 
-We can also use the `impl Trait` syntax in the return position to return a
-value of some type that implements a trait, as shown here:
+We can also use the `impl Trait` syntax in the return position to return a value
+of some type that implements a trait, as shown here:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-05-returning-impl-trait/src/lib.rs:here}}
@@ -320,8 +321,8 @@ return type specified as `impl Summary` wouldn’t work:
 
 Returning either a `NewsArticle` or a `Tweet` isn’t allowed due to restrictions
 around how the `impl Trait` syntax is implemented in the compiler. We’ll cover
-how to write a function with this behavior in the [“Using Trait Objects That
-Allow for Values of Different
+how to write a function with this behavior in the
+[“Using Trait Objects That Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
 ignore --> section of Chapter 18.
 
@@ -331,11 +332,11 @@ By using a trait bound with an `impl` block that uses generic type parameters,
 we can implement methods conditionally for types that implement the specified
 traits. For example, the type `Pair<T>` in Listing 10-15 always implements the
 `new` function to return a new instance of `Pair<T>` (recall from the
-[“Defining Methods”][methods]<!-- ignore --> section of Chapter 5 that `Self`
-is a type alias for the type of the `impl` block, which in this case is
-`Pair<T>`). But in the next `impl` block, `Pair<T>` only implements the
-`cmp_display` method if its inner type `T` implements the `PartialOrd` trait
-that enables comparison _and_ the `Display` trait that enables printing.
+[“Defining Methods”][methods]<!-- ignore --> section of Chapter 5 that `Self` is
+a type alias for the type of the `impl` block, which in this case is `Pair<T>`).
+But in the next `impl` block, `Pair<T>` only implements the `cmp_display` method
+if its inner type `T` implements the `PartialOrd` trait that enables comparison
+_and_ the `Display` trait that enables printing.
 
 <Listing number="10-15" file-name="src/lib.rs" caption="Conditionally implementing methods on a generic type depending on trait bounds">
 
@@ -345,12 +346,12 @@ that enables comparison _and_ the `Display` trait that enables printing.
 
 </Listing>
 
-We can also conditionally implement a trait for any type that implements
-another trait. Implementations of a trait on any type that satisfies the trait
-bounds are called _blanket implementations_ and are used extensively in the
-Rust standard library. For example, the standard library implements the
-`ToString` trait on any type that implements the `Display` trait. The `impl`
-block in the standard library looks similar to this code:
+We can also conditionally implement a trait for any type that implements another
+trait. Implementations of a trait on any type that satisfies the trait bounds
+are called _blanket implementations_ and are used extensively in the Rust
+standard library. For example, the standard library implements the `ToString`
+trait on any type that implements the `Display` trait. The `impl` block in the
+standard library looks similar to this code:
 
 ```rust,ignore
 impl<T: Display> ToString for T {
@@ -375,12 +376,12 @@ reduce duplication but also specify to the compiler that we want the generic
 type to have particular behavior. The compiler can then use the trait bound
 information to check that all the concrete types used with our code provide the
 correct behavior. In dynamically typed languages, we would get an error at
-runtime if we called a method on a type which didn’t define the method. But
-Rust moves these errors to compile time so we’re forced to fix the problems
-before our code is even able to run. Additionally, we don’t have to write code
-that checks for behavior at runtime because we’ve already checked at compile
-time. Doing so improves performance without having to give up the flexibility
-of generics.
+runtime if we called a method on a type which didn’t define the method. But Rust
+moves these errors to compile time so we’re forced to fix the problems before
+our code is even able to run. Additionally, we don’t have to write code that
+checks for behavior at runtime because we’ve already checked at compile time.
+Doing so improves performance without having to give up the flexibility of
+generics.
 
 [using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [methods]: ch05-03-method-syntax.html#defining-methods

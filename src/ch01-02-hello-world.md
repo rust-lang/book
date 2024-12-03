@@ -1,22 +1,22 @@
 ## Hello, World!
 
-Now that you’ve installed Rust, it’s time to write your first Rust program.
-It’s traditional when learning a new language to write a little program that
-prints the text `Hello, world!` to the screen, so we’ll do the same here!
+Now that you’ve installed Rust, it’s time to write your first Rust program. It’s
+traditional when learning a new language to write a little program that prints
+the text `Hello, world!` to the screen, so we’ll do the same here!
 
-> Note: This book assumes basic familiarity with the command line. Rust makes
-> no specific demands about your editing or tooling or where your code lives, so
-> if you prefer to use an integrated development environment (IDE) instead of
-> the command line, feel free to use your favorite IDE. Many IDEs now have some
+> Note: This book assumes basic familiarity with the command line. Rust makes no
+> specific demands about your editing or tooling or where your code lives, so if
+> you prefer to use an integrated development environment (IDE) instead of the
+> command line, feel free to use your favorite IDE. Many IDEs now have some
 > degree of Rust support; check the IDE’s documentation for details. The Rust
 > team has been focusing on enabling great IDE support via `rust-analyzer`. See
 > [Appendix D][devtools]<!-- ignore --> for more details.
 
 ### Creating a Project Directory
 
-You’ll start by making a directory to store your Rust code. It doesn’t matter
-to Rust where your code lives, but for the exercises and projects in this book,
-we suggest making a _projects_ directory in your home directory and keeping all
+You’ll start by making a directory to store your Rust code. It doesn’t matter to
+Rust where your code lives, but for the exercises and projects in this book, we
+suggest making a _projects_ directory in your home directory and keeping all
 your projects there.
 
 Open a terminal and enter the following commands to make a _projects_ directory
@@ -107,10 +107,9 @@ line as the function declaration, adding one space in between.
 
 > Note: If you want to stick to a standard style across Rust projects, you can
 > use an automatic formatter tool called `rustfmt` to format your code in a
-> particular style (more on `rustfmt` in
-> [Appendix D][devtools]<!-- ignore -->). The Rust team has included this tool
-> with the standard Rust distribution, as `rustc` is, so it should already be
-> installed on your computer!
+> particular style (more on `rustfmt` in [Appendix D][devtools]<!-- ignore -->).
+> The Rust team has included this tool with the standard Rust distribution, as
+> `rustc` is, so it should already be installed on your computer!
 
 The body of the `main` function holds the following code:
 
@@ -125,9 +124,9 @@ First, Rust style is to indent with four spaces, not a tab.
 
 Second, `println!` calls a Rust macro. If it had called a function instead, it
 would be entered as `println` (without the `!`). We’ll discuss Rust macros in
-more detail in Chapter 20. For now, you just need to know that using a `!`
-means that you’re calling a macro instead of a normal function and that macros
-don’t always follow the same rules as functions.
+more detail in Chapter 20. For now, you just need to know that using a `!` means
+that you’re calling a macro instead of a normal function and that macros don’t
+always follow the same rules as functions.
 
 Third, you see the `"Hello, world!"` string. We pass this string as an argument
 to `println!`, and the string is printed to the screen.
@@ -160,8 +159,8 @@ $ ls
 main  main.rs
 ```
 
-On Linux and macOS, you’ll see two files. With PowerShell on Windows, you’ll
-see the same three files that you would see using CMD. With CMD on Windows, you
+On Linux and macOS, you’ll see two files. With PowerShell on Windows, you’ll see
+the same three files that you would see using CMD. With CMD on Windows, you
 would enter the following:
 
 ```cmd
@@ -173,24 +172,25 @@ main.rs
 
 This shows the source code file with the _.rs_ extension, the executable file
 (_main.exe_ on Windows, but _main_ on all other platforms), and, when using
-Windows, a file containing debugging information with the _.pdb_ extension.
-From here, you run the _main_ or _main.exe_ file, like this:
+Windows, a file containing debugging information with the _.pdb_ extension. From
+here, you run the _main_ or _main.exe_ file, like this:
 
 ```console
 $ ./main # or .\main.exe on Windows
 ```
 
-If your _main.rs_ is your “Hello, world!” program, this line prints `Hello,
+If your _main.rs_ is your “Hello, world!” program, this line prints
+`Hello,
 world!` to your terminal.
 
 If you’re more familiar with a dynamic language, such as Ruby, Python, or
-JavaScript, you might not be used to compiling and running a program as
-separate steps. Rust is an _ahead-of-time compiled_ language, meaning you can
-compile a program and give the executable to someone else, and they can run it
-even without having Rust installed. If you give someone a _.rb_, _.py_, or
-_.js_ file, they need to have a Ruby, Python, or JavaScript implementation
-installed (respectively). But in those languages, you only need one command to
-compile and run your program. Everything is a trade-off in language design.
+JavaScript, you might not be used to compiling and running a program as separate
+steps. Rust is an _ahead-of-time compiled_ language, meaning you can compile a
+program and give the executable to someone else, and they can run it even
+without having Rust installed. If you give someone a _.rb_, _.py_, or _.js_
+file, they need to have a Ruby, Python, or JavaScript implementation installed
+(respectively). But in those languages, you only need one command to compile and
+run your program. Everything is a trade-off in language design.
 
 Just compiling with `rustc` is fine for simple programs, but as your project
 grows, you’ll want to manage all the options and make it easy to share your

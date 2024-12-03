@@ -16,8 +16,8 @@ functions.
 The syntax for specifying that a parameter is a function pointer is similar to
 that of closures, as shown in Listing 20-28, where we’ve defined a function
 `add_one` that adds one to its parameter. The function `do_twice` takes two
-parameters: a function pointer to any function that takes an `i32` parameter
-and returns an `i32`, and one `i32` value. The `do_twice` function calls the
+parameters: a function pointer to any function that takes an `i32` parameter and
+returns an `i32`, and one `i32` value. The `do_twice` function calls the
 function `f` twice, passing it the `arg` value, then adds the two function call
 results together. The `main` function calls `do_twice` with the arguments
 `add_one` and `5`.
@@ -42,8 +42,8 @@ of the `Fn` traits as a trait bound.
 Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
 `FnOnce`), meaning you can always pass a function pointer as an argument for a
 function that expects a closure. It’s best to write functions using a generic
-type and one of the closure traits so your functions can accept either
-functions or closures.
+type and one of the closure traits so your functions can accept either functions
+or closures.
 
 That said, one example of where you would want to only accept `fn` and not
 closures is when interfacing with external code that doesn’t have closures: C
@@ -65,14 +65,14 @@ like this:
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-16-map-function/src/main.rs:here}}
 ```
 
-Note that we must use the fully qualified syntax that we talked about earlier
-in the [“Advanced Traits”][advanced-traits]<!-- ignore --> section because
-there are multiple functions available named `to_string`. Here, we’re using the
-`to_string` function defined in the `ToString` trait, which the standard
-library has implemented for any type that implements `Display`.
+Note that we must use the fully qualified syntax that we talked about earlier in
+the [“Advanced Traits”][advanced-traits]<!-- ignore --> section because there
+are multiple functions available named `to_string`. Here, we’re using the
+`to_string` function defined in the `ToString` trait, which the standard library
+has implemented for any type that implements `Display`.
 
-Recall from the [“Enum values”][enum-values]<!-- ignore --> section of Chapter
-6 that the name of each enum variant that we define also becomes an initializer
+Recall from the [“Enum values”][enum-values]<!-- ignore --> section of Chapter 6
+that the name of each enum variant that we define also becomes an initializer
 function. We can use these initializer functions as function pointers that
 implement the closure traits, which means we can specify the initializer
 functions as arguments for methods that take closures, like so:
@@ -92,8 +92,8 @@ Closures are represented by traits, which means you can’t return closures
 directly. In most cases where you might want to return a trait, you can instead
 use the concrete type that implements the trait as the return value of the
 function. However, you can’t do that with closures because they don’t have a
-concrete type that is returnable; you’re not allowed to use the function
-pointer `fn` as a return type, for example.
+concrete type that is returnable; you’re not allowed to use the function pointer
+`fn` as a return type, for example.
 
 The following code tries to return a closure directly, but it won’t compile:
 
@@ -108,15 +108,16 @@ The compiler error is as follows:
 ```
 
 The error references the `Sized` trait again! Rust doesn’t know how much space
-it will need to store the closure. We saw a solution to this problem earlier.
-We can use a trait object:
+it will need to store the closure. We saw a solution to this problem earlier. We
+can use a trait object:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-19-returns-closure-trait-object/src/lib.rs}}
 ```
 
 This code will compile just fine. For more about trait objects, refer to the
-section [“Using Trait Objects That Allow for Values of Different
+section
+[“Using Trait Objects That Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
 ignore --> in Chapter 19.
 

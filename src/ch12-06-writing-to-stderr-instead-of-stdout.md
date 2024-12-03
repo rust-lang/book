@@ -42,8 +42,8 @@ Problem parsing arguments: not enough arguments
 ```
 
 Yup, our error message is being printed to standard output. It’s much more
-useful for error messages like this to be printed to standard error so only
-data from a successful run ends up in the file. We’ll change that.
+useful for error messages like this to be printed to standard error so only data
+from a successful run ends up in the file. We’ll change that.
 
 ### Printing Errors to Standard Error
 
@@ -90,8 +90,8 @@ Are you nobody, too?
 How dreary to be somebody!
 ```
 
-This demonstrates that we’re now using standard output for successful output
-and standard error for error output as appropriate.
+This demonstrates that we’re now using standard output for successful output and
+standard error for error output as appropriate.
 
 ## Summary
 

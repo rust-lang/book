@@ -7,8 +7,8 @@ warning fixes, a linter, and integrating with IDEs.
 ### Automatic Formatting with `rustfmt`
 
 The `rustfmt` tool reformats your code according to the community code style.
-Many collaborative projects use `rustfmt` to prevent arguments about which
-style to use when writing Rust: everyone formats their code using the tool.
+Many collaborative projects use `rustfmt` to prevent arguments about which style
+to use when writing Rust: everyone formats their code using the tool.
 
 To install `rustfmt`, enter the following:
 
@@ -67,7 +67,8 @@ warning: unused variable: `i`
 
 The warning suggests that we use `_i` as a name instead: the underscore
 indicates that we intend for this variable to be unused. We can automatically
-apply that suggestion using the `rustfix` tool by running the command `cargo
+apply that suggestion using the `rustfix` tool by running the command
+`cargo
 fix`:
 
 ```console
@@ -143,8 +144,8 @@ error: approximate value of `f{32, 64}::consts::PI` found
 
 This error lets you know that Rust already has a more precise `PI` constant
 defined, and that your program would be more correct if you used the constant
-instead. You would then change your code to use the `PI` constant. The
-following code doesn’t result in any errors or warnings from Clippy:
+instead. You would then change your code to use the `PI` constant. The following
+code doesn’t result in any errors or warnings from Clippy:
 
 <span class="filename">Filename: src/main.rs</span>
 

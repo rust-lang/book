@@ -141,8 +141,8 @@ parameters with trait bounds.
 | `T: ?Sized`                   | Allow generic type parameter to be a dynamically sized type                                                                                |
 | `'a + trait`, `trait + trait` | Compound type constraint                                                                                                                   |
 
-Table B-6 shows symbols that appear in the context of calling or defining
-macros and specifying attributes on an item.
+Table B-6 shows symbols that appear in the context of calling or defining macros
+and specifying attributes on an item.
 
 <span class="caption">Table B-6: Macros and Attributes</span>
 

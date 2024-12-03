@@ -2,11 +2,11 @@
 
 There is no consensus in the programming community about what features a
 language must have to be considered object-oriented. Rust is influenced by many
-programming paradigms, including OOP; for example, we explored the features
-that came from functional programming in Chapter 13. Arguably, OOP languages
-share certain common characteristics, namely objects, encapsulation, and
-inheritance. Let’s look at what each of those characteristics means and whether
-Rust supports it.
+programming paradigms, including OOP; for example, we explored the features that
+came from functional programming in Chapter 13. Arguably, OOP languages share
+certain common characteristics, namely objects, encapsulation, and inheritance.
+Let’s look at what each of those characteristics means and whether Rust supports
+it.
 
 ### Objects Contain Data and Behavior
 
@@ -19,10 +19,10 @@ catalog of object-oriented design patterns. It defines OOP this way:
 > data and the procedures that operate on that data. The procedures are
 > typically called _methods_ or _operations_.
 
-Using this definition, Rust is object-oriented: structs and enums have data,
-and `impl` blocks provide methods on structs and enums. Even though structs and
-enums with methods aren’t _called_ objects, they provide the same
-functionality, according to the Gang of Four’s definition of objects.
+Using this definition, Rust is object-oriented: structs and enums have data, and
+`impl` blocks provide methods on structs and enums. Even though structs and
+enums with methods aren’t _called_ objects, they provide the same functionality,
+according to the Gang of Four’s definition of objects.
 
 ### Encapsulation that Hides Implementation Details
 
@@ -36,12 +36,12 @@ change the code that uses the object.
 
 We discussed how to control encapsulation in Chapter 7: we can use the `pub`
 keyword to decide which modules, types, functions, and methods in our code
-should be public, and by default everything else is private. For example, we
-can define a struct `AveragedCollection` that has a field containing a vector
-of `i32` values. The struct can also have a field that contains the average of
-the values in the vector, meaning the average doesn’t have to be computed
-on demand whenever anyone needs it. In other words, `AveragedCollection` will
-cache the calculated average for us. Listing 18-1 has the definition of the
+should be public, and by default everything else is private. For example, we can
+define a struct `AveragedCollection` that has a field containing a vector of
+`i32` values. The struct can also have a field that contains the average of the
+values in the vector, meaning the average doesn’t have to be computed on demand
+whenever anyone needs it. In other words, `AveragedCollection` will cache the
+calculated average for us. Listing 18-1 has the definition of the
 `AveragedCollection` struct:
 
 <Listing number="18-1" file-name="src/lib.rs" caption="An `AveragedCollection` struct that maintains a list of integers and the average of the items in the collection">
@@ -66,17 +66,17 @@ on the struct, as shown in Listing 18-2:
 
 </Listing>
 
-The public methods `add`, `remove`, and `average` are the only ways to access
-or modify data in an instance of `AveragedCollection`. When an item is added
-to `list` using the `add` method or removed using the `remove` method, the
+The public methods `add`, `remove`, and `average` are the only ways to access or
+modify data in an instance of `AveragedCollection`. When an item is added to
+`list` using the `add` method or removed using the `remove` method, the
 implementations of each call the private `update_average` method that handles
 updating the `average` field as well.
 
-We leave the `list` and `average` fields private so there is no way for
-external code to add or remove items to or from the `list` field directly;
-otherwise, the `average` field might become out of sync when the `list`
-changes. The `average` method returns the value in the `average` field,
-allowing external code to read the `average` but not modify it.
+We leave the `list` and `average` fields private so there is no way for external
+code to add or remove items to or from the `list` field directly; otherwise, the
+`average` field might become out of sync when the `list` changes. The `average`
+method returns the value in the `average` field, allowing external code to read
+the `average` but not modify it.
 
 Because we’ve encapsulated the implementation details of the struct
 `AveragedCollection`, we can easily change aspects, such as the data structure,
@@ -94,55 +94,55 @@ not for different parts of code enables encapsulation of implementation details.
 
 ### Inheritance as a Type System and as Code Sharing
 
-_Inheritance_ is a mechanism whereby an object can inherit elements from
-another object’s definition, thus gaining the parent object’s data and behavior
-without you having to define them again.
+_Inheritance_ is a mechanism whereby an object can inherit elements from another
+object’s definition, thus gaining the parent object’s data and behavior without
+you having to define them again.
 
-If a language must have inheritance to be an object-oriented language, then
-Rust is not one. There is no way to define a struct that inherits the parent
-struct’s fields and method implementations without using a macro.
+If a language must have inheritance to be an object-oriented language, then Rust
+is not one. There is no way to define a struct that inherits the parent struct’s
+fields and method implementations without using a macro.
 
 However, if you’re used to having inheritance in your programming toolbox, you
 can use other solutions in Rust, depending on your reason for reaching for
 inheritance in the first place.
 
-You would choose inheritance for two main reasons. One is for reuse of code:
-you can implement particular behavior for one type, and inheritance enables you
-to reuse that implementation for a different type. You can do this in a limited
-way in Rust code using default trait method implementations, which you saw in
+You would choose inheritance for two main reasons. One is for reuse of code: you
+can implement particular behavior for one type, and inheritance enables you to
+reuse that implementation for a different type. You can do this in a limited way
+in Rust code using default trait method implementations, which you saw in
 Listing 10-14 when we added a default implementation of the `summarize` method
-on the `Summary` trait. Any type implementing the `Summary` trait would have
-the `summarize` method available on it without any further code. This is
-similar to a parent class having an implementation of a method and an
-inheriting child class also having the implementation of the method. We can
-also override the default implementation of the `summarize` method when we
-implement the `Summary` trait, which is similar to a child class overriding the
-implementation of a method inherited from a parent class.
+on the `Summary` trait. Any type implementing the `Summary` trait would have the
+`summarize` method available on it without any further code. This is similar to
+a parent class having an implementation of a method and an inheriting child
+class also having the implementation of the method. We can also override the
+default implementation of the `summarize` method when we implement the `Summary`
+trait, which is similar to a child class overriding the implementation of a
+method inherited from a parent class.
 
 The other reason to use inheritance relates to the type system: to enable a
-child type to be used in the same places as the parent type. This is also
-called _polymorphism_, which means that you can substitute multiple objects for
-each other at runtime if they share certain characteristics.
+child type to be used in the same places as the parent type. This is also called
+_polymorphism_, which means that you can substitute multiple objects for each
+other at runtime if they share certain characteristics.
 
 > ### Polymorphism
 >
-> To many people, polymorphism is synonymous with inheritance. But it’s
-> actually a more general concept that refers to code that can work with data
-> of multiple types. For inheritance, those types are generally subclasses.
+> To many people, polymorphism is synonymous with inheritance. But it’s actually
+> a more general concept that refers to code that can work with data of multiple
+> types. For inheritance, those types are generally subclasses.
 >
-> Rust instead uses generics to abstract over different possible types and
-> trait bounds to impose constraints on what those types must provide. This is
+> Rust instead uses generics to abstract over different possible types and trait
+> bounds to impose constraints on what those types must provide. This is
 > sometimes called _bounded parametric polymorphism_.
 
-Inheritance has recently fallen out of favor as a programming design solution
-in many programming languages because it’s often at risk of sharing more code
-than necessary. Subclasses shouldn’t always share all characteristics of their
-parent class but will do so with inheritance. This can make a program’s design
-less flexible. It also introduces the possibility of calling methods on
-subclasses that don’t make sense or that cause errors because the methods don’t
-apply to the subclass. In addition, some languages will only allow single
-inheritance (meaning a subclass can only inherit from one class), further
-restricting the flexibility of a program’s design.
+Inheritance has recently fallen out of favor as a programming design solution in
+many programming languages because it’s often at risk of sharing more code than
+necessary. Subclasses shouldn’t always share all characteristics of their parent
+class but will do so with inheritance. This can make a program’s design less
+flexible. It also introduces the possibility of calling methods on subclasses
+that don’t make sense or that cause errors because the methods don’t apply to
+the subclass. In addition, some languages will only allow single inheritance
+(meaning a subclass can only inherit from one class), further restricting the
+flexibility of a program’s design.
 
 For these reasons, Rust takes the different approach of using trait objects
 instead of inheritance. Let’s look at how trait objects enable polymorphism in

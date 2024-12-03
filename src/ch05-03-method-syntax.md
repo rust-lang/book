@@ -4,16 +4,16 @@ _Methods_ are similar to functions: we declare them with the `fn` keyword and a
 name, they can have parameters and a return value, and they contain some code
 that’s run when the method is called from somewhere else. Unlike functions,
 methods are defined within the context of a struct (or an enum or a trait
-object, which we cover in [Chapter 6][enums]<!-- ignore --> and [Chapter
-17][trait-objects]<!-- ignore -->, respectively), and their first parameter is
-always `self`, which represents the instance of the struct the method is being
-called on.
+object, which we cover in [Chapter 6][enums]<!-- ignore --> and
+[Chapter 17][trait-objects]<!-- ignore -->, respectively), and their first
+parameter is always `self`, which represents the instance of the struct the
+method is being called on.
 
 ### Defining Methods
 
 Let’s change the `area` function that has a `Rectangle` instance as a parameter
-and instead make an `area` method defined on the `Rectangle` struct, as shown
-in Listing 5-13.
+and instead make an `area` method defined on the `Rectangle` struct, as shown in
+Listing 5-13.
 
 <Listing number="5-13" file-name="src/main.rs" caption="Defining an `area` method on the `Rectangle` struct">
 
@@ -24,14 +24,14 @@ in Listing 5-13.
 </Listing>
 
 To define the function within the context of `Rectangle`, we start an `impl`
-(implementation) block for `Rectangle`. Everything within this `impl` block
-will be associated with the `Rectangle` type. Then we move the `area` function
-within the `impl` curly brackets and change the first (and in this case, only)
+(implementation) block for `Rectangle`. Everything within this `impl` block will
+be associated with the `Rectangle` type. Then we move the `area` function within
+the `impl` curly brackets and change the first (and in this case, only)
 parameter to be `self` in the signature and everywhere within the body. In
 `main`, where we called the `area` function and passed `rect1` as an argument,
 we can instead use _method syntax_ to call the `area` method on our `Rectangle`
-instance. The method syntax goes after an instance: we add a dot followed by
-the method name, parentheses, and any arguments.
+instance. The method syntax goes after an instance: we add a dot followed by the
+method name, parentheses, and any arguments.
 
 In the signature for `area`, we use `&self` instead of `rectangle: &Rectangle`.
 The `&self` is actually short for `self: &Self`. Within an `impl` block, the
@@ -49,16 +49,16 @@ version: we don’t want to take ownership, and we just want to read the data in
 the struct, not write to it. If we wanted to change the instance that we’ve
 called the method on as part of what the method does, we’d use `&mut self` as
 the first parameter. Having a method that takes ownership of the instance by
-using just `self` as the first parameter is rare; this technique is usually
-used when the method transforms `self` into something else and you want to
-prevent the caller from using the original instance after the transformation.
+using just `self` as the first parameter is rare; this technique is usually used
+when the method transforms `self` into something else and you want to prevent
+the caller from using the original instance after the transformation.
 
-The main reason for using methods instead of functions, in addition to
-providing method syntax and not having to repeat the type of `self` in every
-method’s signature, is for organization. We’ve put all the things we can do
-with an instance of a type in one `impl` block rather than making future users
-of our code search for capabilities of `Rectangle` in various places in the
-library we provide.
+The main reason for using methods instead of functions, in addition to providing
+method syntax and not having to repeat the type of `self` in every method’s
+signature, is for organization. We’ve put all the things we can do with an
+instance of a type in one `impl` block rather than making future users of our
+code search for capabilities of `Rectangle` in various places in the library we
+provide.
 
 Note that we can choose to give a method the same name as one of the struct’s
 fields. For example, we can define a method on `Rectangle` that is also named
@@ -79,22 +79,22 @@ the instance’s `width` field is greater than `0` and `false` if the value is
 method `width`. When we don’t use parentheses, Rust knows we mean the field
 `width`.
 
-Often, but not always, when we give a method the same name as a field we want
-it to only return the value in the field and do nothing else. Methods like this
-are called _getters_, and Rust does not implement them automatically for struct
+Often, but not always, when we give a method the same name as a field we want it
+to only return the value in the field and do nothing else. Methods like this are
+called _getters_, and Rust does not implement them automatically for struct
 fields as some other languages do. Getters are useful because you can make the
 field private but the method public, and thus enable read-only access to that
 field as part of the type’s public API. We will discuss what public and private
-are and how to designate a field or method as public or private in [Chapter
-7][public]<!-- ignore -->.
+are and how to designate a field or method as public or private in
+[Chapter 7][public]<!-- ignore -->.
 
 > ### Where’s the `->` Operator?
 >
 > In C and C++, two different operators are used for calling methods: you use
 > `.` if you’re calling a method on the object directly and `->` if you’re
 > calling the method on a pointer to the object and need to dereference the
-> pointer first. In other words, if `object` is a pointer,
-> `object->something()` is similar to `(*object).something()`.
+> pointer first. In other words, if `object` is a pointer, `object->something()`
+> is similar to `(*object).something()`.
 >
 > Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
 > feature called _automatic referencing and dereferencing_. Calling methods is
@@ -137,11 +137,11 @@ are and how to designate a field or method as public or private in [Chapter
 ### Methods with More Parameters
 
 Let’s practice using methods by implementing a second method on the `Rectangle`
-struct. This time we want an instance of `Rectangle` to take another instance
-of `Rectangle` and return `true` if the second `Rectangle` can fit completely
-within `self` (the first `Rectangle`); otherwise, it should return `false`.
-That is, once we’ve defined the `can_hold` method, we want to be able to write
-the program shown in Listing 5-14.
+struct. This time we want an instance of `Rectangle` to take another instance of
+`Rectangle` and return `true` if the second `Rectangle` can fit completely
+within `self` (the first `Rectangle`); otherwise, it should return `false`. That
+is, once we’ve defined the `can_hold` method, we want to be able to write the
+program shown in Listing 5-14.
 
 <Listing number="5-14" file-name="src/main.rs" caption="Using the as-yet-unwritten `can_hold` method">
 
@@ -168,11 +168,11 @@ parameter will be by looking at the code that calls the method:
 `rect2`, an instance of `Rectangle`. This makes sense because we only need to
 read `rect2` (rather than write, which would mean we’d need a mutable borrow),
 and we want `main` to retain ownership of `rect2` so we can use it again after
-calling the `can_hold` method. The return value of `can_hold` will be a
-Boolean, and the implementation will check whether the width and height of
-`self` are greater than the width and height of the other `Rectangle`,
-respectively. Let’s add the new `can_hold` method to the `impl` block from
-Listing 5-13, shown in Listing 5-15.
+calling the `can_hold` method. The return value of `can_hold` will be a Boolean,
+and the implementation will check whether the width and height of `self` are
+greater than the width and height of the other `Rectangle`, respectively. Let’s
+add the new `can_hold` method to the `impl` block from Listing 5-13, shown in
+Listing 5-15.
 
 <Listing number="5-15" file-name="src/main.rs" caption="Implementing the `can_hold` method on `Rectangle` that takes another `Rectangle` instance as a parameter">
 
@@ -216,15 +216,15 @@ is `Rectangle`.
 
 To call this associated function, we use the `::` syntax with the struct name;
 `let sq = Rectangle::square(3);` is an example. This function is namespaced by
-the struct: the `::` syntax is used for both associated functions and
-namespaces created by modules. We’ll discuss modules in [Chapter
-7][modules]<!-- ignore -->.
+the struct: the `::` syntax is used for both associated functions and namespaces
+created by modules. We’ll discuss modules in
+[Chapter 7][modules]<!-- ignore -->.
 
 ### Multiple `impl` Blocks
 
-Each struct is allowed to have multiple `impl` blocks. For example, Listing
-5-15 is equivalent to the code shown in Listing 5-16, which has each method in
-its own `impl` block.
+Each struct is allowed to have multiple `impl` blocks. For example, Listing 5-15
+is equivalent to the code shown in Listing 5-16, which has each method in its
+own `impl` block.
 
 <Listing number="5-16" caption="Rewriting Listing 5-15 using multiple `impl` blocks">
 

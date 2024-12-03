@@ -2,12 +2,12 @@
 
 We’ll start by getting a single-threaded web server working. Before we begin,
 let’s look at a quick overview of the protocols involved in building web
-servers. The details of these protocols are beyond the scope of this book, but
-a brief overview will give you the information you need.
+servers. The details of these protocols are beyond the scope of this book, but a
+brief overview will give you the information you need.
 
-The two main protocols involved in web servers are _Hypertext Transfer
-Protocol_ _(HTTP)_ and _Transmission Control Protocol_ _(TCP)_. Both protocols
-are _request-response_ protocols, meaning a _client_ initiates requests and a
+The two main protocols involved in web servers are _Hypertext Transfer Protocol_
+_(HTTP)_ and _Transmission Control Protocol_ _(TCP)_. Both protocols are
+_request-response_ protocols, meaning a _client_ initiates requests and a
 _server_ listens to the requests and provides a response to the client. The
 contents of those requests and responses are defined by the protocols.
 
@@ -51,19 +51,19 @@ our server is unlikely to conflict with any other web server you might have
 running on your machine, and 7878 is _rust_ typed on a telephone.
 
 The `bind` function in this scenario works like the `new` function in that it
-will return a new `TcpListener` instance. The function is called `bind`
-because, in networking, connecting to a port to listen to is known as “binding
-to a port.”
+will return a new `TcpListener` instance. The function is called `bind` because,
+in networking, connecting to a port to listen to is known as “binding to a
+port.”
 
-The `bind` function returns a `Result<T, E>`, which indicates that it’s
-possible for binding to fail. For example, connecting to port 80 requires
-administrator privileges (nonadministrators can listen only on ports higher
-than 1023), so if we tried to connect to port 80 without being an
-administrator, binding wouldn’t work. Binding also wouldn’t work, for example,
-if we ran two instances of our program and so had two programs listening to the
-same port. Because we’re writing a basic server just for learning purposes, we
-won’t worry about handling these kinds of errors; instead, we use `unwrap` to
-stop the program if errors happen.
+The `bind` function returns a `Result<T, E>`, which indicates that it’s possible
+for binding to fail. For example, connecting to port 80 requires administrator
+privileges (nonadministrators can listen only on ports higher than 1023), so if
+we tried to connect to port 80 without being an administrator, binding wouldn’t
+work. Binding also wouldn’t work, for example, if we ran two instances of our
+program and so had two programs listening to the same port. Because we’re
+writing a basic server just for learning purposes, we won’t worry about handling
+these kinds of errors; instead, we use `unwrap` to stop the program if errors
+happen.
 
 The `incoming` method on `TcpListener` returns an iterator that gives us a
 sequence of streams (more specifically, streams of type `TcpStream`). A single
@@ -80,18 +80,17 @@ our program if the stream has any errors; if there aren’t any errors, the
 program prints a message. We’ll add more functionality for the success case in
 the next listing. The reason we might receive errors from the `incoming` method
 when a client connects to the server is that we’re not actually iterating over
-connections. Instead, we’re iterating over _connection attempts_. The
-connection might not be successful for a number of reasons, many of them
-operating system specific. For example, many operating systems have a limit to
-the number of simultaneous open connections they can support; new connection
-attempts beyond that number will produce an error until some of the open
-connections are closed.
+connections. Instead, we’re iterating over _connection attempts_. The connection
+might not be successful for a number of reasons, many of them operating system
+specific. For example, many operating systems have a limit to the number of
+simultaneous open connections they can support; new connection attempts beyond
+that number will produce an error until some of the open connections are closed.
 
 Let’s try running this code! Invoke `cargo run` in the terminal and then load
-_127.0.0.1:7878_ in a web browser. The browser should show an error message
-like “Connection reset,” because the server isn’t currently sending back any
-data. But when you look at your terminal, you should see several messages that
-were printed when the browser connected to the server!
+_127.0.0.1:7878_ in a web browser. The browser should show an error message like
+“Connection reset,” because the server isn’t currently sending back any data.
+But when you look at your terminal, you should see several messages that were
+printed when the browser connected to the server!
 
 ```text
      Running `target/debug/hello`
@@ -107,10 +106,10 @@ browser tab.
 
 It could also be that the browser is trying to connect to the server multiple
 times because the server isn’t responding with any data. When `stream` goes out
-of scope and is dropped at the end of the loop, the connection is closed as
-part of the `drop` implementation. Browsers sometimes deal with closed
-connections by retrying, because the problem might be temporary. The important
-factor is that we’ve successfully gotten a handle to a TCP connection!
+of scope and is dropped at the end of the loop, the connection is closed as part
+of the `drop` implementation. Browsers sometimes deal with closed connections by
+retrying, because the problem might be temporary. The important factor is that
+we’ve successfully gotten a handle to a TCP connection!
 
 Remember to stop the program by pressing <kbd>ctrl</kbd>-<kbd>c</kbd> when
 you’re done running a particular version of the code. Then restart the program
@@ -134,38 +133,39 @@ look like Listing 21-2.
 
 </Listing>
 
-We bring `std::io::prelude` and `std::io::BufReader` into scope to get access
-to traits and types that let us read from and write to the stream. In the `for`
+We bring `std::io::prelude` and `std::io::BufReader` into scope to get access to
+traits and types that let us read from and write to the stream. In the `for`
 loop in the `main` function, instead of printing a message that says we made a
 connection, we now call the new `handle_connection` function and pass the
 `stream` to it.
 
 In the `handle_connection` function, we create a new `BufReader` instance that
-wraps a reference to the `stream`. The `BufReader` adds buffering by managing calls
-to the `std::io::Read` trait methods for us.
+wraps a reference to the `stream`. The `BufReader` adds buffering by managing
+calls to the `std::io::Read` trait methods for us.
 
 We create a variable named `http_request` to collect the lines of the request
-the browser sends to our server. We indicate that we want to collect these
-lines in a vector by adding the `Vec<_>` type annotation.
+the browser sends to our server. We indicate that we want to collect these lines
+in a vector by adding the `Vec<_>` type annotation.
 
 `BufReader` implements the `std::io::BufRead` trait, which provides the `lines`
-method. The `lines` method returns an iterator of `Result<String,
-std::io::Error>` by splitting the stream of data whenever it sees a newline
-byte. To get each `String`, we map and `unwrap` each `Result`. The `Result`
-might be an error if the data isn’t valid UTF-8 or if there was a problem
-reading from the stream. Again, a production program should handle these errors
-more gracefully, but we’re choosing to stop the program in the error case for
-simplicity.
+method. The `lines` method returns an iterator of
+`Result<String,
+std::io::Error>` by splitting the stream of data whenever it sees
+a newline byte. To get each `String`, we map and `unwrap` each `Result`. The
+`Result` might be an error if the data isn’t valid UTF-8 or if there was a
+problem reading from the stream. Again, a production program should handle these
+errors more gracefully, but we’re choosing to stop the program in the error case
+for simplicity.
 
-The browser signals the end of an HTTP request by sending two newline
-characters in a row, so to get one request from the stream, we take lines until
-we get a line that is the empty string. Once we’ve collected the lines into the
-vector, we’re printing them out using pretty debug formatting so we can take a
-look at the instructions the web browser is sending to our server.
+The browser signals the end of an HTTP request by sending two newline characters
+in a row, so to get one request from the stream, we take lines until we get a
+line that is the empty string. Once we’ve collected the lines into the vector,
+we’re printing them out using pretty debug formatting so we can take a look at
+the instructions the web browser is sending to our server.
 
 Let’s try this code! Start the program and make a request in a web browser
-again. Note that we’ll still get an error page in the browser, but our
-program’s output in the terminal will now look similar to this:
+again. Note that we’ll still get an error page in the browser, but our program’s
+output in the terminal will now look similar to this:
 
 ```console
 $ cargo run
@@ -191,11 +191,11 @@ Request: [
 ```
 
 Depending on your browser, you might get slightly different output. Now that
-we’re printing the request data, we can see why we get multiple connections
-from one browser request by looking at the path after `GET` in the first line
-of the request. If the repeated connections are all requesting _/_, we know the
-browser is trying to fetch _/_ repeatedly because it’s not getting a response
-from our program.
+we’re printing the request data, we can see why we get multiple connections from
+one browser request by looking at the path after `GET` in the first line of the
+request. If the repeated connections are all requesting _/_, we know the browser
+is trying to fetch _/_ repeatedly because it’s not getting a response from our
+program.
 
 Let’s break down this request data to understand what the browser is asking of
 our program.
@@ -224,27 +224,27 @@ uses the term URI, so we can just mentally substitute URL for URI here.
 
 The last part is the HTTP version the client uses, and then the request line
 ends in a _CRLF sequence_. (CRLF stands for _carriage return_ and _line feed_,
-which are terms from the typewriter days!) The CRLF sequence can also be
-written as `\r\n`, where `\r` is a carriage return and `\n` is a line feed. The
-CRLF sequence separates the request line from the rest of the request data.
-Note that when the CRLF is printed, we see a new line start rather than `\r\n`.
+which are terms from the typewriter days!) The CRLF sequence can also be written
+as `\r\n`, where `\r` is a carriage return and `\n` is a line feed. The CRLF
+sequence separates the request line from the rest of the request data. Note that
+when the CRLF is printed, we see a new line start rather than `\r\n`.
 
-Looking at the request line data we received from running our program so far,
-we see that `GET` is the method, _/_ is the request URI, and `HTTP/1.1` is the
+Looking at the request line data we received from running our program so far, we
+see that `GET` is the method, _/_ is the request URI, and `HTTP/1.1` is the
 version.
 
 After the request line, the remaining lines starting from `Host:` onward are
 headers. `GET` requests have no body.
 
-Try making a request from a different browser or asking for a different
-address, such as _127.0.0.1:7878/test_, to see how the request data changes.
+Try making a request from a different browser or asking for a different address,
+such as _127.0.0.1:7878/test_, to see how the request data changes.
 
 Now that we know what the browser is asking for, let’s send back some data!
 
 ### Writing a Response
 
-We’re going to implement sending data in response to a client request.
-Responses have the following format:
+We’re going to implement sending data in response to a client request. Responses
+have the following format:
 
 ```text
 HTTP-Version Status-Code Reason-Phrase CRLF
@@ -253,8 +253,8 @@ message-body
 ```
 
 The first line is a _status line_ that contains the HTTP version used in the
-response, a numeric status code that summarizes the result of the request, and
-a reason phrase that provides a text description of the status code. After the
+response, a numeric status code that summarizes the result of the request, and a
+reason phrase that provides a text description of the status code. After the
 CRLF sequence are any headers, another CRLF sequence, and the body of the
 response.
 
@@ -267,9 +267,8 @@ HTTP/1.1 200 OK\r\n\r\n
 
 The status code 200 is the standard success response. The text is a tiny
 successful HTTP response. Let’s write this to the stream as our response to a
-successful request! From the `handle_connection` function, remove the
-`println!` that was printing the request data and replace it with the code in
-Listing 21-3.
+successful request! From the `handle_connection` function, remove the `println!`
+that was printing the request data and replace it with the code in Listing 21-3.
 
 <Listing number="21-3" file-name="src/main.rs" caption="Writing a tiny successful HTTP response to the stream">
 
@@ -336,20 +335,19 @@ should see your HTML rendered!
 Currently, we’re ignoring the request data in `http_request` and just sending
 back the contents of the HTML file unconditionally. That means if you try
 requesting _127.0.0.1:7878/something-else_ in your browser, you’ll still get
-back this same HTML response. At the moment, our server is very limited and
-does not do what most web servers do. We want to customize our responses
-depending on the request and only send back the HTML file for a well-formed
-request to _/_.
+back this same HTML response. At the moment, our server is very limited and does
+not do what most web servers do. We want to customize our responses depending on
+the request and only send back the HTML file for a well-formed request to _/_.
 
 ### Validating the Request and Selectively Responding
 
 Right now, our web server will return the HTML in the file no matter what the
 client requested. Let’s add functionality to check that the browser is
-requesting _/_ before returning the HTML file and return an error if the
-browser requests anything else. For this we need to modify `handle_connection`,
-as shown in Listing 21-6. This new code checks the content of the request
-received against what we know a request for _/_ looks like and adds `if` and
-`else` blocks to treat requests differently.
+requesting _/_ before returning the HTML file and return an error if the browser
+requests anything else. For this we need to modify `handle_connection`, as shown
+in Listing 21-6. This new code checks the content of the request received
+against what we know a request for _/_ looks like and adds `if` and `else`
+blocks to treat requests differently.
 
 <Listing number="21-6" file-name="src/main.rs" caption="Handling requests to */* differently from other requests">
 
@@ -370,9 +368,9 @@ Next, we check the `request_line` to see if it equals the request line of a GET
 request to the _/_ path. If it does, the `if` block returns the contents of our
 HTML file.
 
-If the `request_line` does _not_ equal the GET request to the _/_ path, it
-means we’ve received some other request. We’ll add code to the `else` block in
-a moment to respond to all other requests.
+If the `request_line` does _not_ equal the GET request to the _/_ path, it means
+we’ve received some other request. We’ll add code to the `else` block in a
+moment to respond to all other requests.
 
 Run this code now and request _127.0.0.1:7878_; you should get the HTML in
 _hello.html_. If you make any other request, such as
@@ -380,8 +378,8 @@ _127.0.0.1:7878/something-else_, you’ll get a connection error like those you
 saw when running the code in Listing 21-1 and Listing 21-2.
 
 Now let’s add the code in Listing 21-7 to the `else` block to return a response
-with the status code 404, which signals that the content for the request was
-not found. We’ll also return some HTML for a page to render in the browser
+with the status code 404, which signals that the content for the request was not
+found. We’ll also return some HTML for a page to render in the browser
 indicating the response to the end user.
 
 <Listing number="21-7" file-name="src/main.rs" caption="Responding with status code 404 and an error page if anything other than */* was requested">
@@ -394,9 +392,9 @@ indicating the response to the end user.
 
 Here, our response has a status line with status code 404 and the reason phrase
 `NOT FOUND`. The body of the response will be the HTML in the file _404.html_.
-You’ll need to create a _404.html_ file next to _hello.html_ for the error
-page; again feel free to use any HTML you want or use the example HTML in
-Listing 21-8.
+You’ll need to create a _404.html_ file next to _hello.html_ for the error page;
+again feel free to use any HTML you want or use the example HTML in Listing
+21-8.
 
 <Listing number="21-8" file-name="404.html" caption="Sample content for the page to send back with any 404 response">
 
@@ -416,10 +414,10 @@ At the moment the `if` and `else` blocks have a lot of repetition: they’re bot
 reading files and writing the contents of the files to the stream. The only
 differences are the status line and the filename. Let’s make the code more
 concise by pulling out those differences into separate `if` and `else` lines
-that will assign the values of the status line and the filename to variables;
-we can then use those variables unconditionally in the code to read the file
-and write the response. Listing 21-9 shows the resulting code after replacing
-the large `if` and `else` blocks.
+that will assign the values of the status line and the filename to variables; we
+can then use those variables unconditionally in the code to read the file and
+write the response. Listing 21-9 shows the resulting code after replacing the
+large `if` and `else` blocks.
 
 <Listing number="21-9" file-name="src/main.rs" caption="Refactoring the `if` and `else` blocks to contain only the code that differs between the two cases">
 
@@ -429,17 +427,17 @@ the large `if` and `else` blocks.
 
 </Listing>
 
-Now the `if` and `else` blocks only return the appropriate values for the
-status line and filename in a tuple; we then use destructuring to assign these
-two values to `status_line` and `filename` using a pattern in the `let`
-statement, as discussed in Chapter 19.
+Now the `if` and `else` blocks only return the appropriate values for the status
+line and filename in a tuple; we then use destructuring to assign these two
+values to `status_line` and `filename` using a pattern in the `let` statement,
+as discussed in Chapter 19.
 
 The previously duplicated code is now outside the `if` and `else` blocks and
-uses the `status_line` and `filename` variables. This makes it easier to see
-the difference between the two cases, and it means we have only one place to
-update the code if we want to change how the file reading and response writing
-work. The behavior of the code in Listing 21-9 will be the same as that in
-Listing 21-7.
+uses the `status_line` and `filename` variables. This makes it easier to see the
+difference between the two cases, and it means we have only one place to update
+the code if we want to change how the file reading and response writing work.
+The behavior of the code in Listing 21-9 will be the same as that in Listing
+21-7.
 
 Awesome! We now have a simple web server in approximately 40 lines of Rust code
 that responds to one request with a page of content and responds to all other

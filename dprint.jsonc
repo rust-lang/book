@@ -4,6 +4,8 @@
   "json": {
   },
   "markdown": {
+    "textWrap": "always",
+    "unorderedListKind": "asterisks",
   },
   "malva": {
   },

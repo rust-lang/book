@@ -82,8 +82,8 @@ When an individual works on several different tasks before any of them is
 complete, this is _concurrency_. Maybe you have two different projects checked
 out on your computer, and when you get bored or stuck on one project, you switch
 to the other. You’re just one person, so you can’t make progress on both tasks
-at the exact same time—but you can multi-task, making progress on multiple
-tasks by switching between them.
+at the exact same time—but you can multi-task, making progress on multiple tasks
+by switching between them.
 
 <figure>
 
@@ -135,8 +135,7 @@ still work concurrently. Using tools such as threads, processes, and async, the
 computer can pause one activity and switch to others before eventually cycling
 back to that first activity again. On a machine with multiple CPU cores, it can
 also do work in parallel. One core can be doing one thing while another core
-does something completely unrelated, and those actually happen at the same
-time.
+does something completely unrelated, and those actually happen at the same time.
 
 When working with async in Rust, we’re always dealing with concurrency.
 Depending on the hardware, the operating system, and the async runtime we are
@@ -146,8 +145,8 @@ under the hood.
 Now, let’s dive into how async programming in Rust actually works! In the rest
 of this chapter, we will:
 
-- see how to use Rust’s `async` and `await` syntax
-- explore how to use the async model to solve some of the same challenges we
+* see how to use Rust’s `async` and `await` syntax
+* explore how to use the async model to solve some of the same challenges we
   looked at in Chapter 16
-- look at how multithreading and async provide complementary solutions, which
+* look at how multithreading and async provide complementary solutions, which
   you can even use together in many cases

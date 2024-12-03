@@ -10,8 +10,8 @@ concise. Let’s look at how iterators can improve our implementation of the
 In Listing 12-6, we added code that took a slice of `String` values and created
 an instance of the `Config` struct by indexing into the slice and cloning the
 values, allowing the `Config` struct to own those values. In Listing 13-17,
-we’ve reproduced the implementation of the `Config::build` function as it was
-in Listing 12-23:
+we’ve reproduced the implementation of the `Config::build` function as it was in
+Listing 12-23:
 
 <Listing number="13-17" file-name="src/lib.rs" caption="Reproduction of the `Config::build` function from Listing 12-23">
 
@@ -21,8 +21,8 @@ in Listing 12-23:
 
 </Listing>
 
-At the time, we said not to worry about the inefficient `clone` calls because
-we would remove them in the future. Well, that time is now!
+At the time, we said not to worry about the inefficient `clone` calls because we
+would remove them in the future. Well, that time is now!
 
 We needed `clone` here because we have a slice with `String` elements in the
 parameter `args`, but the `build` function doesn’t own `args`. To return
@@ -49,9 +49,9 @@ Open your I/O project’s _src/main.rs_ file, which should look like this:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-24-reproduced/src/main.rs:ch13}}
 ```
 
-We’ll first change the start of the `main` function that we had in Listing
-12-24 to the code in Listing 13-18, which this time uses an iterator. This
-won’t compile until we update `Config::build` as well.
+We’ll first change the start of the `main` function that we had in Listing 12-24
+to the code in Listing 13-18, which this time uses an iterator. This won’t
+compile until we update `Config::build` as well.
 
 <Listing number="13-18" file-name="src/main.rs" caption="Passing the return value of `env::args` to `Config::build`">
 
@@ -66,10 +66,10 @@ iterator values into a vector and then passing a slice to `Config::build`, now
 we’re passing ownership of the iterator returned from `env::args` to
 `Config::build` directly.
 
-Next, we need to update the definition of `Config::build`. In your I/O
-project’s _src/lib.rs_ file, let’s change the signature of `Config::build` to
-look like Listing 13-19. This still won’t compile because we need to update the
-function body.
+Next, we need to update the definition of `Config::build`. In your I/O project’s
+_src/lib.rs_ file, let’s change the signature of `Config::build` to look like
+Listing 13-19. This still won’t compile because we need to update the function
+body.
 
 <Listing number="13-19" file-name="src/lib.rs" caption="Updating the signature of `Config::build` to expect an iterator">
 
@@ -155,18 +155,17 @@ well.
 ### Choosing Between Loops or Iterators
 
 The next logical question is which style you should choose in your own code and
-why: the original implementation in Listing 13-21 or the version using
-iterators in Listing 13-22. Most Rust programmers prefer to use the iterator
-style. It’s a bit tougher to get the hang of at first, but once you get a feel
-for the various iterator adapters and what they do, iterators can be easier to
-understand. Instead of fiddling with the various bits of looping and building
-new vectors, the code focuses on the high-level objective of the loop. This
-abstracts away some of the commonplace code so it’s easier to see the concepts
-that are unique to this code, such as the filtering condition each element in
-the iterator must pass.
+why: the original implementation in Listing 13-21 or the version using iterators
+in Listing 13-22. Most Rust programmers prefer to use the iterator style. It’s a
+bit tougher to get the hang of at first, but once you get a feel for the various
+iterator adapters and what they do, iterators can be easier to understand.
+Instead of fiddling with the various bits of looping and building new vectors,
+the code focuses on the high-level objective of the loop. This abstracts away
+some of the commonplace code so it’s easier to see the concepts that are unique
+to this code, such as the filtering condition each element in the iterator must
+pass.
 
-But are the two implementations truly equivalent? The intuitive assumption
-might be that the more low-level loop will be faster. Let’s talk about
-performance.
+But are the two implementations truly equivalent? The intuitive assumption might
+be that the more low-level loop will be faster. Let’s talk about performance.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters

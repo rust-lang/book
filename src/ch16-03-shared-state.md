@@ -2,8 +2,8 @@
 
 Message passing is a fine way of handling concurrency, but it’s not the only
 one. Another method would be for multiple threads to access the same shared
-data. Consider this part of the slogan from the Go language documentation
-again: “do not communicate by sharing memory.”
+data. Consider this part of the slogan from the Go language documentation again:
+“do not communicate by sharing memory.”
 
 What would communicating by sharing memory look like? In addition, why would
 message-passing enthusiasts caution not to use memory sharing?
@@ -21,18 +21,18 @@ for shared memory.
 ### Using Mutexes to Allow Access to Data from One Thread at a Time
 
 _Mutex_ is an abbreviation for _mutual exclusion_, as in, a mutex allows only
-one thread to access some data at any given time. To access the data in a
-mutex, a thread must first signal that it wants access by asking to acquire the
-mutex’s _lock_. The lock is a data structure that is part of the mutex that
-keeps track of who currently has exclusive access to the data. Therefore, the
-mutex is described as _guarding_ the data it holds via the locking system.
+one thread to access some data at any given time. To access the data in a mutex,
+a thread must first signal that it wants access by asking to acquire the mutex’s
+_lock_. The lock is a data structure that is part of the mutex that keeps track
+of who currently has exclusive access to the data. Therefore, the mutex is
+described as _guarding_ the data it holds via the locking system.
 
 Mutexes have a reputation for being difficult to use because you have to
 remember two rules:
 
-- You must attempt to acquire the lock before using the data.
-- When you’re done with the data that the mutex guards, you must unlock the
-  data so other threads can acquire the lock.
+* You must attempt to acquire the lock before using the data.
+* When you’re done with the data that the mutex guards, you must unlock the data
+  so other threads can acquire the lock.
 
 For a real-world metaphor for a mutex, imagine a panel discussion at a
 conference with only one microphone. Before a panelist can speak, they have to
@@ -62,8 +62,8 @@ single-threaded context, as shown in Listing 16-12:
 
 As with many types, we create a `Mutex<T>` using the associated function `new`.
 To access the data inside the mutex, we use the `lock` method to acquire the
-lock. This call will block the current thread so it can’t do any work until
-it’s our turn to have the lock.
+lock. This call will block the current thread so it can’t do any work until it’s
+our turn to have the lock.
 
 The call to `lock` would fail if another thread holding the lock panicked. In
 that case, no one would ever be able to get the lock, so we’ve chosen to
@@ -91,11 +91,11 @@ to change the inner `i32` to 6.
 
 #### Sharing a `Mutex<T>` Between Multiple Threads
 
-Now, let’s try to share a value between multiple threads using `Mutex<T>`.
-We’ll spin up 10 threads and have them each increment a counter value by 1, so
-the counter goes from 0 to 10. The next example in Listing 16-13 will have
-a compiler error, and we’ll use that error to learn more about using
-`Mutex<T>` and how Rust helps us use it correctly.
+Now, let’s try to share a value between multiple threads using `Mutex<T>`. We’ll
+spin up 10 threads and have them each increment a counter value by 1, so the
+counter goes from 0 to 10. The next example in Listing 16-13 will have a
+compiler error, and we’ll use that error to learn more about using `Mutex<T>`
+and how Rust helps us use it correctly.
 
 <Listing number="16-13" file-name="src/main.rs" caption="Ten threads each increment a counter guarded by a `Mutex<T>`">
 
@@ -114,8 +114,8 @@ thread finishes running its closure, `num` will go out of scope and release the
 lock so another thread can acquire it.
 
 In the main thread, we collect all the join handles. Then, as we did in Listing
-16-2, we call `join` on each handle to make sure all the threads finish. At
-that point, the main thread will acquire the lock and print the result of this
+16-2, we call `join` on each handle to make sure all the threads finish. At that
+point, the main thread will acquire the lock and print the result of this
 program.
 
 We hinted that this example wouldn’t compile. Now let’s find out why!
@@ -125,16 +125,16 @@ We hinted that this example wouldn’t compile. Now let’s find out why!
 ```
 
 The error message states that the `counter` value was moved in the previous
-iteration of the loop. Rust is telling us that we can’t move the ownership
-of `counter` into multiple threads. Let’s fix the compiler error with a
+iteration of the loop. Rust is telling us that we can’t move the ownership of
+`counter` into multiple threads. Let’s fix the compiler error with a
 multiple-ownership method we discussed in Chapter 15.
 
 #### Multiple Ownership with Multiple Threads
 
 In Chapter 15, we gave a value multiple owners by using the smart pointer
-`Rc<T>` to create a reference counted value. Let’s do the same here and see
-what happens. We’ll wrap the `Mutex<T>` in `Rc<T>` in Listing 16-14 and clone
-the `Rc<T>` before moving ownership to the thread.
+`Rc<T>` to create a reference counted value. Let’s do the same here and see what
+happens. We’ll wrap the `Mutex<T>` in `Rc<T>` in Listing 16-14 and clone the
+`Rc<T>` before moving ownership to the thread.
 
 <Listing number="16-14" file-name="src/main.rs" caption="Attempting to use `Rc<T>` to allow multiple threads to own the `Mutex<T>`">
 
@@ -153,29 +153,30 @@ a lot.
 
 Wow, that error message is very wordy! Here’s the important part to focus on:
 `` `Rc<Mutex<i32>>` cannot be sent between threads safely ``. The compiler is
-also telling us the reason why: `` the trait `Send` is not implemented for
-`Rc<Mutex<i32>>` ``. We’ll talk about `Send` in the next section: it’s one of
-the traits that ensures the types we use with threads are meant for use in
-concurrent situations.
+also telling us the reason why:
+`` the trait `Send` is not implemented for
+`Rc<Mutex<i32>>` ``. We’ll talk about
+`Send` in the next section: it’s one of the traits that ensures the types we use
+with threads are meant for use in concurrent situations.
 
-Unfortunately, `Rc<T>` is not safe to share across threads. When `Rc<T>`
-manages the reference count, it adds to the count for each call to `clone` and
-subtracts from the count when each clone is dropped. But it doesn’t use any
-concurrency primitives to make sure that changes to the count can’t be
-interrupted by another thread. This could lead to wrong counts—subtle bugs that
-could in turn lead to memory leaks or a value being dropped before we’re done
-with it. What we need is a type exactly like `Rc<T>` but one that makes changes
-to the reference count in a thread-safe way.
+Unfortunately, `Rc<T>` is not safe to share across threads. When `Rc<T>` manages
+the reference count, it adds to the count for each call to `clone` and subtracts
+from the count when each clone is dropped. But it doesn’t use any concurrency
+primitives to make sure that changes to the count can’t be interrupted by
+another thread. This could lead to wrong counts—subtle bugs that could in turn
+lead to memory leaks or a value being dropped before we’re done with it. What we
+need is a type exactly like `Rc<T>` but one that makes changes to the reference
+count in a thread-safe way.
 
 #### Atomic Reference Counting with `Arc<T>`
 
-Fortunately, `Arc<T>` _is_ a type like `Rc<T>` that is safe to use in
-concurrent situations. The _a_ stands for _atomic_, meaning it’s an _atomically
-reference counted_ type. Atomics are an additional kind of concurrency
-primitive that we won’t cover in detail here: see the standard library
-documentation for [`std::sync::atomic`][atomic]<!-- ignore --> for more
-details. At this point, you just need to know that atomics work like primitive
-types but are safe to share across threads.
+Fortunately, `Arc<T>` _is_ a type like `Rc<T>` that is safe to use in concurrent
+situations. The _a_ stands for _atomic_, meaning it’s an _atomically reference
+counted_ type. Atomics are an additional kind of concurrency primitive that we
+won’t cover in detail here: see the standard library documentation for
+[`std::sync::atomic`][atomic]<!-- ignore --> for more details. At this point,
+you just need to know that atomics work like primitive types but are safe to
+share across threads.
 
 You might then wonder why all primitive types aren’t atomic and why standard
 library types aren’t implemented to use `Arc<T>` by default. The reason is that
@@ -214,10 +215,11 @@ parts, split those parts across threads, and then use a `Mutex<T>` to have each
 thread update the final result with its part.
 
 Note that if you are doing simple numerical operations, there are types simpler
-than `Mutex<T>` types provided by the [`std::sync::atomic` module of the
-standard library][atomic]<!-- ignore -->. These types provide safe, concurrent,
-atomic access to primitive types. We chose to use `Mutex<T>` with a primitive
-type for this example so we could concentrate on how `Mutex<T>` works.
+than `Mutex<T>` types provided by the
+[`std::sync::atomic` module of the standard library][atomic]<!-- ignore -->.
+These types provide safe, concurrent, atomic access to primitive types. We chose
+to use `Mutex<T>` with a primitive type for this example so we could concentrate
+on how `Mutex<T>` works.
 
 ### Similarities Between `RefCell<T>`/`Rc<T>` and `Mutex<T>`/`Arc<T>`
 
@@ -235,9 +237,9 @@ creating _deadlocks_. These occur when an operation needs to lock two resources
 and two threads have each acquired one of the locks, causing them to wait for
 each other forever. If you’re interested in deadlocks, try creating a Rust
 program that has a deadlock; then research deadlock mitigation strategies for
-mutexes in any language and have a go at implementing them in Rust. The
-standard library API documentation for `Mutex<T>` and `MutexGuard` offers
-useful information.
+mutexes in any language and have a go at implementing them in Rust. The standard
+library API documentation for `Mutex<T>` and `MutexGuard` offers useful
+information.
 
 We’ll round out this chapter by talking about the `Send` and `Sync` traits and
 how we can use them with custom types.
