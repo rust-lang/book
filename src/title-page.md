@@ -1,27 +1,21 @@
-# The Rust Programming Language
+# لغة البرمجة Rust
 
-*by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the
-Rust Community*
+*بقلم ستيف كلابنيك، كارول نيكولز، وكريس كريتشو، مع مساهمات من مجتمع Rust*
 
-This version of the text assumes you’re using Rust 1.82.0 (released 2024-10-17)
-or later. See the [“Installation” section of Chapter 1][install]<!-- ignore -->
-to install or update Rust.
+تفترض هذه النسخة من النص أنك تستخدم إصدار Rust 1.82.0 (الصادر في 17 أكتوبر 2024) أو إصدارًا أحدث. راجع [قسم "التثبيت" في الفصل الأول][install] لتثبيت أو تحديث Rust.
 
-The HTML format is available online at
-[https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/)
-and offline with installations of Rust made with `rustup`; run `rustup doc
---book` to open.
+يتوفر هذا النص بتنسيق HTML عبر الإنترنت على  
+[https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/)  
+وأيضًا دون اتصال بالإنترنت مع عمليات تثبيت Rust التي تتم باستخدام `rustup`؛ قم بتشغيل الأمر `rustup doc --book` لفتح النص.
 
-Several community [translations] are also available.
+تتوفر أيضًا العديد من [الترجمات][translations] التي أنشأها المجتمع.
 
-This text is available in [paperback and ebook format from No Starch
-Press][nsprust].
+يتوفر هذا النص أيضًا في [نسخة مطبوعة وإلكترونية من No Starch Press][nsprust].
 
-[install]: ch01-01-installation.html
-[editions]: appendix-05-editions.html
-[nsprust]: https://nostarch.com/rust-programming-language-2nd-edition
-[translations]: appendix-06-translation.html
+[install]: ch01-01-installation.html  
+[editions]: appendix-05-editions.html  
+[nsprust]: https://nostarch.com/rust-programming-language-2nd-edition  
+[translations]: appendix-06-translation.html  
 
-> **🚨 Want a more interactive learning experience? Try out a different version
-> of the Rust Book, featuring: quizzes, highlighting, visualizations, and
-> more**: <https://rust-book.cs.brown.edu>
+> **🚨 هل ترغب في تجربة تعليمية أكثر تفاعلية؟ جرّب إصدارًا مختلفًا من كتاب Rust، يحتوي على: اختبارات، أدوات تمييز، تصورات، والمزيد**: <https://rust-book.cs.brown.edu>
+
