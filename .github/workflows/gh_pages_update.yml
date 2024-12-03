@@ -34,4 +34,4 @@ jobs:
         with:
           deploy_dir: book
           github_token: "${{ secrets.GITHUB_TOKEN }}"
-        if: github.ref == 'refs/heads/arabic-released'
+        if: github.ref == 'refs/heads/arabic-release'
