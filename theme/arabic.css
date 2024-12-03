@@ -47,19 +47,3 @@
 		calc(var(--sidebar-resize-indicator-width) - var(--sidebar-width))
 	);
 }
-
-.next {
-	float: left !important;
-	transform: rotate(180deg);
-	left: 0;
-}
-
-.previous {
-	float: right !important;
-	transform: rotate(180deg);
-}
-
-
-#sidebar-toggle-anchor:not(:checked) ~ .previous {
-  right: 0;
-}
