@@ -1,9 +1,9 @@
 ## Using Threads to Run Code Simultaneously
 
 In most current operating systems, an executed program’s code is run in a
-*process*, and the operating system will manage multiple processes at once.
+_process_, and the operating system will manage multiple processes at once.
 Within a program, you can also have independent parts that run simultaneously.
-The features that run these independent parts are called *threads*. For
+The features that run these independent parts are called _threads_. For
 example, a web server could have multiple threads so that it could respond to
 more than one request at the same time.
 
@@ -13,11 +13,11 @@ Because threads can run simultaneously, there’s no inherent guarantee about th
 order in which parts of your code on different threads will run. This can lead
 to problems, such as:
 
-* Race conditions, where threads are accessing data or resources in an
+- Race conditions, where threads are accessing data or resources in an
   inconsistent order
-* Deadlocks, where two threads are waiting for each other, preventing both
+- Deadlocks, where two threads are waiting for each other, preventing both
   threads from continuing
-* Bugs that happen only in certain situations and are hard to reproduce and fix
+- Bugs that happen only in certain situations and are hard to reproduce and fix
   reliably
 
 Rust attempts to mitigate the negative effects of using threads, but
@@ -27,7 +27,7 @@ thread.
 
 Programming languages implement threads in a few different ways, and many
 operating systems provide an API the language can call for creating new threads.
-The Rust standard library uses a *1:1* model of thread implementation, whereby a
+The Rust standard library uses a _1:1_ model of thread implementation, whereby a
 program uses one operating system thread per one language thread. There are
 crates that implement other models of threading that make different tradeoffs to
 the 1:1 model. (Rust’s async system, which we will see in the next chapter,
@@ -104,7 +104,7 @@ call `join` to make sure the spawned thread finishes before `main` exits:
 </Listing>
 
 Calling `join` on the handle blocks the thread currently running until the
-thread represented by the handle terminates. *Blocking* a thread means that
+thread represented by the handle terminates. _Blocking_ a thread means that
 thread is prevented from performing work or exiting. Because we’ve put the call
 to `join` after the main thread’s `for` loop, running Listing 16-2 should
 produce output similar to this:
@@ -202,7 +202,7 @@ example, we get the following error:
 {{#include ../listings/ch16-fearless-concurrency/listing-16-03/output.txt}}
 ```
 
-Rust *infers* how to capture `v`, and because `println!` only needs a reference
+Rust _infers_ how to capture `v`, and because `println!` only needs a reference
 to `v`, the closure tries to borrow `v`. However, there’s a problem: Rust can’t
 tell how long the spawned thread will run, so it doesn’t know if the reference
 to `v` will always be valid.
@@ -246,7 +246,6 @@ should borrow the values. The modification to Listing 16-3 shown in Listing
 
 <Listing number="16-5" file-name="src/main.rs" caption="Using the `move` keyword to force a closure to take ownership of the values it uses">
 
-
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-05/src/main.rs}}
 ```
@@ -275,6 +274,6 @@ Rust’s conservative default of borrowing; it doesn’t let us violate the
 ownership rules.
 
 With a basic understanding of threads and the thread API, let’s look at what we
-can *do* with threads.
+can _do_ with threads.
 
 [capture]: ch13-01-closures.html#capturing-references-or-moving-ownership

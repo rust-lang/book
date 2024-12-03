@@ -15,7 +15,7 @@ correct, the game will print a congratulatory message and exit.
 
 ## Setting Up a New Project
 
-To set up a new project, go to the *projects* directory that you created in
+To set up a new project, go to the _projects_ directory that you created in
 Chapter 1 and make a new project using Cargo, like so:
 
 ```console
@@ -27,7 +27,7 @@ The first command, `cargo new`, takes the name of the project (`guessing_game`)
 as the first argument. The second command changes to the new project’s
 directory.
 
-Look at the generated *Cargo.toml* file:
+Look at the generated _Cargo.toml_ file:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial
@@ -45,7 +45,7 @@ cd ../../..
 ```
 
 As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
-you. Check out the *src/main.rs* file:
+you. Check out the _src/main.rs_ file:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -64,14 +64,14 @@ The `run` command comes in handy when you need to rapidly iterate on a project,
 as we’ll do in this game, quickly testing each iteration before moving on to
 the next one.
 
-Reopen the *src/main.rs* file. You’ll be writing all the code in this file.
+Reopen the _src/main.rs_ file. You’ll be writing all the code in this file.
 
 ## Processing a Guess
 
 The first part of the guessing game program will ask for user input, process
 that input, and check that the input is in the expected form. To start, we’ll
 allow the player to input a guess. Enter the code in Listing 2-1 into
-*src/main.rs*.
+_src/main.rs_.
 
 <Listing number="2-1" file-name="src/main.rs" caption="Code that gets a guess from the user and prints it">
 
@@ -91,7 +91,7 @@ library, known as `std`:
 ```
 
 By default, Rust has a set of items defined in the standard library that it
-brings into the scope of every program. This set is called the *prelude*, and
+brings into the scope of every program. This set is called the _prelude_, and
 you can see everything in it [in the standard library documentation][prelude].
 
 If a type you want to use isn’t in the prelude, you have to bring that type
@@ -121,7 +121,7 @@ from the user.
 
 ### Storing Values with Variables
 
-Next, we’ll create a *variable* to store the user input, like this:
+Next, we’ll create a _variable_ to store the user input, like this:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:string}}
@@ -159,7 +159,7 @@ the value that `guess` is bound to, which is the result of calling
 library that is a growable, UTF-8 encoded bit of text.
 
 The `::` syntax in the `::new` line indicates that `new` is an associated
-function of the `String` type. An *associated function* is a function that’s
+function of the `String` type. An _associated function_ is a function that’s
 implemented on a type, in this case `String`. This `new` function creates a
 new, empty string. You’ll find a `new` function on many types because it’s a
 common name for a function that makes a new value of some kind.
@@ -193,7 +193,7 @@ whatever the user types into standard input and append that into a string
 argument. The string argument needs to be mutable so the method can change the
 string’s content.
 
-The `&` indicates that this argument is a *reference*, which gives you a way to
+The `&` indicates that this argument is a _reference_, which gives you a way to
 let multiple parts of your code access one piece of data without needing to
 copy that data into memory multiple times. References are a complex feature,
 and one of Rust’s major advantages is how safe and easy it is to use
@@ -204,6 +204,7 @@ immutable by default. Hence, you need to write `&mut guess` rather than
 thoroughly.)
 
 <!-- Old heading. Do not remove or links may break. -->
+
 <a id="handling-potential-failure-with-the-result-type"></a>
 
 ### Handling Potential Failure with `Result`
@@ -229,9 +230,9 @@ discuss what this line does.
 
 As mentioned earlier, `read_line` puts whatever the user enters into the string
 we pass to it, but it also returns a `Result` value. [`Result`][result]<!--
-ignore --> is an [*enumeration*][enums]<!-- ignore -->, often called an *enum*,
+ignore --> is an [_enumeration_][enums]<!-- ignore -->, often called an _enum_,
 which is a type that can be in one of multiple possible states. We call each
-possible state a *variant*.
+possible state a _variant_.
 
 [Chapter 6][enums]<!-- ignore --> will cover enums in more detail. The purpose
 of these `Result` types is to encode error-handling information.
@@ -328,12 +329,12 @@ said functionality.
 ### Using a Crate to Get More Functionality
 
 Remember that a crate is a collection of Rust source code files. The project
-we’ve been building is a *binary crate*, which is an executable. The `rand`
-crate is a *library crate*, which contains code that is intended to be used in
+we’ve been building is a _binary crate_, which is an executable. The `rand`
+crate is a _library crate_, which contains code that is intended to be used in
 other programs and can’t be executed on its own.
 
 Cargo’s coordination of external crates is where Cargo really shines. Before we
-can write code that uses `rand`, we need to modify the *Cargo.toml* file to
+can write code that uses `rand`, we need to modify the _Cargo.toml_ file to
 include the `rand` crate as a dependency. Open that file now and add the
 following line to the bottom, beneath the `[dependencies]` section header that
 Cargo created for you. Be sure to specify `rand` exactly as we have here, with
@@ -351,12 +352,12 @@ this version number, or the code examples in this tutorial may not work:
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:8:}}
 ```
 
-In the *Cargo.toml* file, everything that follows a header is part of that
+In the _Cargo.toml_ file, everything that follows a header is part of that
 section that continues until another section starts. In `[dependencies]` you
 tell Cargo which external crates your project depends on and which versions of
 those crates you require. In this case, we specify the `rand` crate with the
 semantic version specifier `0.8.5`. Cargo understands [Semantic
-Versioning][semver]<!-- ignore --> (sometimes called *SemVer*), which is a
+Versioning][semver]<!-- ignore --> (sometimes called _SemVer_), which is a
 standard for writing version numbers. The specifier `0.8.5` is actually
 shorthand for `^0.8.5`, which means any version that is at least 0.8.5 but
 below 0.9.0.
@@ -411,7 +412,7 @@ code, thanks to SemVer!) and different lines (depending on the operating
 system), and the lines may be in a different order.
 
 When we include an external dependency, Cargo fetches the latest versions of
-everything that dependency needs from the *registry*, which is a copy of data
+everything that dependency needs from the _registry_, which is a copy of data
 from [Crates.io][cratesio]. Crates.io is where people in the Rust ecosystem
 post their open source Rust projects for others to use.
 
@@ -424,11 +425,11 @@ them and then compiles the project with the dependencies available.
 If you immediately run `cargo build` again without making any changes, you
 won’t get any output aside from the `Finished` line. Cargo knows it has already
 downloaded and compiled the dependencies, and you haven’t changed anything
-about them in your *Cargo.toml* file. Cargo also knows that you haven’t changed
+about them in your _Cargo.toml_ file. Cargo also knows that you haven’t changed
 anything about your code, so it doesn’t recompile that either. With nothing to
 do, it simply exits.
 
-If you open the *src/main.rs* file, make a trivial change, and then save it and
+If you open the _src/main.rs_ file, make a trivial change, and then save it and
 build again, you’ll only see two lines of output:
 
 <!-- manual-regeneration
@@ -443,36 +444,36 @@ $ cargo build
 ```
 
 These lines show that Cargo only updates the build with your tiny change to the
-*src/main.rs* file. Your dependencies haven’t changed, so Cargo knows it can
+_src/main.rs_ file. Your dependencies haven’t changed, so Cargo knows it can
 reuse what it has already downloaded and compiled for those.
 
-#### Ensuring Reproducible Builds with the *Cargo.lock* File
+#### Ensuring Reproducible Builds with the _Cargo.lock_ File
 
 Cargo has a mechanism that ensures you can rebuild the same artifact every time
 you or anyone else builds your code: Cargo will use only the versions of the
 dependencies you specified until you indicate otherwise. For example, say that
 next week version 0.8.6 of the `rand` crate comes out, and that version
 contains an important bug fix, but it also contains a regression that will
-break your code. To handle this, Rust creates the *Cargo.lock* file the first
-time you run `cargo build`, so we now have this in the *guessing_game*
+break your code. To handle this, Rust creates the _Cargo.lock_ file the first
+time you run `cargo build`, so we now have this in the _guessing_game_
 directory.
 
 When you build a project for the first time, Cargo figures out all the versions
 of the dependencies that fit the criteria and then writes them to the
-*Cargo.lock* file. When you build your project in the future, Cargo will see
-that the *Cargo.lock* file exists and will use the versions specified there
+_Cargo.lock_ file. When you build your project in the future, Cargo will see
+that the _Cargo.lock_ file exists and will use the versions specified there
 rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
-remain at 0.8.5 until you explicitly upgrade, thanks to the *Cargo.lock* file.
-Because the *Cargo.lock* file is important for reproducible builds, it’s often
+remain at 0.8.5 until you explicitly upgrade, thanks to the _Cargo.lock_ file.
+Because the _Cargo.lock_ file is important for reproducible builds, it’s often
 checked into source control with the rest of the code in your project.
 
 #### Updating a Crate to Get a New Version
 
-When you *do* want to update a crate, Cargo provides the command `update`,
-which will ignore the *Cargo.lock* file and figure out all the latest versions
-that fit your specifications in *Cargo.toml*. Cargo will then write those
-versions to the *Cargo.lock* file. In this case, Cargo will only look for
+When you _do_ want to update a crate, Cargo provides the command `update`,
+which will ignore the _Cargo.lock_ file and figure out all the latest versions
+that fit your specifications in _Cargo.toml_. Cargo will then write those
+versions to the _Cargo.lock_ file. In this case, Cargo will only look for
 versions greater than 0.8.5 and less than 0.9.0. If the `rand` crate has
 released the two new versions 0.8.6 and 0.9.0, you would see the following if
 you ran `cargo update`:
@@ -490,9 +491,9 @@ $ cargo update
 ```
 
 Cargo ignores the 0.9.0 release. At this point, you would also notice a change
-in your *Cargo.lock* file noting that the version of the `rand` crate you are
-now using is 0.8.6. To use `rand` version 0.9.0 or any version in the 0.9.*x*
-series, you’d have to update the *Cargo.toml* file to look like this instead:
+in your _Cargo.lock_ file noting that the version of the `rand` crate you are
+now using is 0.8.6. To use `rand` version 0.9.0 or any version in the 0.9._x_
+series, you’d have to update the _Cargo.toml_ file to look like this instead:
 
 ```toml
 [dependencies]
@@ -512,7 +513,7 @@ from a number of packages.
 ### Generating a Random Number
 
 Let’s start using `rand` to generate a number to guess. The next step is to
-update *src/main.rs*, as shown in Listing 2-3.
+update _src/main.rs_, as shown in Listing 2-3.
 
 <Listing number="2-3" file-name="src/main.rs" caption="Adding code to generate a random number">
 
@@ -612,7 +613,7 @@ comparing `guess` to `secret_number`. Then it returns a variant of the
 which variant of `Ordering` was returned from the call to `cmp` with the values
 in `guess` and `secret_number`.
 
-A `match` expression is made up of *arms*. An arm consists of a *pattern* to
+A `match` expression is made up of _arms_. An arm consists of a _pattern_ to
 match against, and the code that should be run if the value given to `match`
 fits that arm’s pattern. Rust takes the value given to `match` and looks
 through each arm’s pattern in turn. Patterns and the `match` construct are
@@ -630,7 +631,7 @@ the `Ordering::Greater` value and starts checking each arm’s pattern. It looks
 at the first arm’s pattern, `Ordering::Less`, and sees that the value
 `Ordering::Greater` does not match `Ordering::Less`, so it ignores the code in
 that arm and moves to the next arm. The next arm’s pattern is
-`Ordering::Greater`, which *does* match `Ordering::Greater`! The associated
+`Ordering::Greater`, which _does_ match `Ordering::Greater`! The associated
 code in that arm will execute and print `Too big!` to the screen. The `match`
 expression ends after the first successful match, so it won’t look at the last
 arm in this scenario.
@@ -646,7 +647,7 @@ anchor or snip comments
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-04/output.txt}}
 ```
 
-The core of the error states that there are *mismatched types*. Rust has a
+The core of the error states that there are _mismatched types_. Rust has a
 strong, static type system. However, it also has type inference. When we wrote
 `let mut guess = String::new()`, Rust was able to infer that `guess` should be
 a `String` and didn’t make us write the type. The `secret_number`, on the other
@@ -675,7 +676,7 @@ let guess: u32 = guess.trim().parse().expect("Please type a number!");
 
 We create a variable named `guess`. But wait, doesn’t the program already have
 a variable named `guess`? It does, but helpfully Rust allows us to shadow the
-previous value of `guess` with a new one. *Shadowing* lets us reuse the `guess`
+previous value of `guess` with a new one. _Shadowing_ lets us reuse the `guess`
 variable name rather than forcing us to create two unique variables, such as
 `guess_str` and `guess`, for example. We’ll cover this in more detail in
 [Chapter 3][shadowing]<!-- ignore -->, but for now, know that this feature is
@@ -852,7 +853,7 @@ match the first arm’s pattern, and the `match` expression will just return the
 `num` value that `parse` produced and put inside the `Ok` value. That number
 will end up right where we want it in the new `guess` variable we’re creating.
 
-If `parse` is *not* able to turn the string into a number, it will return an
+If `parse` is _not_ able to turn the string into a number, it will return an
 `Err` value that contains more information about the error. The `Err` value
 does not match the `Ok(num)` pattern in the first `match` arm, but it does
 match the `Err(_)` pattern in the second arm. The underscore, `_`, is a

@@ -4,10 +4,10 @@ To understand when we might want to use structs, let’s write a program that
 calculates the area of a rectangle. We’ll start by using single variables, and
 then refactor the program until we’re using structs instead.
 
-Let’s make a new binary project with Cargo called *rectangles* that will take
+Let’s make a new binary project with Cargo called _rectangles_ that will take
 the width and height of a rectangle specified in pixels and calculate the area
 of the rectangle. Listing 5-8 shows a short program with one way of doing
-exactly that in our project’s *src/main.rs*.
+exactly that in our project’s _src/main.rs_.
 
 <Listing number="5-8" file-name="src/main.rs" caption="Calculating the area of a rectangle specified by separate width and height variables">
 
@@ -155,7 +155,7 @@ But again, the compiler gives us a helpful note:
 {{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:9:10}}
 ```
 
-Rust *does* include functionality to print out debugging information, but we
+Rust _does_ include functionality to print out debugging information, but we
 have to explicitly opt in to make that functionality available for our struct.
 To do that, we add the outer attribute `#[derive(Debug)]` just before the
 struct definition, as shown in Listing 5-12.
@@ -214,10 +214,10 @@ Here’s what the output of this example looks like:
 {{#include ../listings/ch05-using-structs-to-structure-related-data/no-listing-05-dbg-macro/output.txt}}
 ```
 
-We can see the first bit of output came from *src/main.rs* line 10 where we’re
+We can see the first bit of output came from _src/main.rs_ line 10 where we’re
 debugging the expression `30 * scale`, and its resultant value is `60` (the
 `Debug` formatting implemented for integers is to print only their value). The
-`dbg!` call on line 14 of *src/main.rs* outputs the value of `&rect1`, which is
+`dbg!` call on line 14 of _src/main.rs_ outputs the value of `&rect1`, which is
 the `Rectangle` struct. This output uses the pretty `Debug` formatting of the
 `Rectangle` type. The `dbg!` macro can be really helpful when you’re trying to
 figure out what your code is doing!
@@ -233,7 +233,7 @@ section of the Rust Reference][attributes].
 Our `area` function is very specific: it only computes the area of rectangles.
 It would be helpful to tie this behavior more closely to our `Rectangle` struct
 because it won’t work with any other type. Let’s look at how we can continue to
-refactor this code by turning the `area` function into an `area` *method*
+refactor this code by turning the `area` function into an `area` _method_
 defined on our `Rectangle` type.
 
 [the-tuple-type]: ch03-02-data-types.html#the-tuple-type

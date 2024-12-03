@@ -12,7 +12,7 @@ this, but first, we’ll look at the problem in action.
 
 We’ll look at how a slow-processing request can affect other requests made to
 our current server implementation. Listing 21-10 implements handling a request
-to */sleep* with a simulated slow response that will cause the server to sleep
+to _/sleep_ with a simulated slow response that will cause the server to sleep
 for 5 seconds before responding.
 
 <Listing number="21-10" file-name="src/main.rs" caption="Simulating a slow request by sleeping for 5 seconds">
@@ -29,7 +29,7 @@ string literal values; `match` doesn’t do automatic referencing and
 dereferencing like the equality method does.
 
 The first arm is the same as the `if` block from Listing 21-9. The second arm
-matches a request to */sleep*. When that request is received, the server will
+matches a request to _/sleep_. When that request is received, the server will
 sleep for 5 seconds before rendering the successful HTML page. The third arm is
 the same as the `else` block from Listing 21-9.
 
@@ -37,9 +37,9 @@ You can see how primitive our server is: real libraries would handle the
 recognition of multiple requests in a much less verbose way!
 
 Start the server using `cargo run`. Then open two browser windows: one for
-*http://127.0.0.1:7878/* and the other for *http://127.0.0.1:7878/sleep*. If
-you enter the */* URI a few times, as before, you’ll see it respond quickly.
-But if you enter */sleep* and then load */*, you’ll see that */* waits until
+_http://127.0.0.1:7878/_ and the other for _http://127.0.0.1:7878/sleep_. If
+you enter the _/_ URI a few times, as before, you’ll see it respond quickly.
+But if you enter _/sleep_ and then load _/_, you’ll see that _/_ waits until
 `sleep` has slept for its full 5 seconds before loading.
 
 There are multiple techniques we could use to avoid requests backing up behind
@@ -48,7 +48,7 @@ implement is a thread pool.
 
 ### Improving Throughput with a Thread Pool
 
-A *thread pool* is a group of spawned threads that are waiting and ready to
+A _thread pool_ is a group of spawned threads that are waiting and ready to
 handle a task. When the program receives a new task, it assigns one of the
 threads in the pool to the task, and that thread will process the task. The
 remaining threads in the pool are available to handle any other tasks that come
@@ -74,8 +74,8 @@ back up in the queue, but we’ve increased the number of long-running requests
 we can handle before reaching that point.
 
 This technique is just one of many ways to improve the throughput of a web
-server. Other options you might explore are the *fork/join model*, the
-*single-threaded async I/O model*, or the *multi-threaded async I/O model*. If
+server. Other options you might explore are the _fork/join model_, the
+_single-threaded async I/O model_, or the _multi-threaded async I/O model_. If
 you’re interested in this topic, you can read more about other solutions and
 try to implement them; with a low-level language like Rust, all of these
 options are possible.
@@ -94,6 +94,7 @@ what we should change next to get the code to work. Before we do that, however,
 we’ll explore the technique we’re not going to use as a starting point.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="code-structure-if-we-could-spawn-a-thread-for-each-request"></a>
 
 #### Spawning a Thread for Each Request
@@ -116,8 +117,8 @@ to handle each stream within the `for` loop.
 
 As you learned in Chapter 16, `thread::spawn` will create a new thread and then
 run the code in the closure in the new thread. If you run this code and load
-*/sleep* in your browser, then */* in two more browser tabs, you’ll indeed see
-that the requests to */* don’t have to wait for */sleep* to finish. However, as
+_/sleep_ in your browser, then _/_ in two more browser tabs, you’ll indeed see
+that the requests to _/_ don’t have to wait for _/sleep_ to finish. However, as
 we mentioned, this will eventually overwhelm the system because you’d be making
 new threads without any limit.
 
@@ -126,6 +127,7 @@ where async and await really shine! Keep that in mind as we build the thread
 pool and think about how things would look different or the same with async.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="creating-a-similar-interface-for-a-finite-number-of-threads"></a>
 
 #### Creating a Finite Number of Threads
@@ -151,11 +153,12 @@ closure and gives it to a thread in the pool to run. This code won’t yet
 compile, but we’ll try so the compiler can guide us in how to fix it.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="building-the-threadpool-struct-using-compiler-driven-development"></a>
 
 #### Building `ThreadPool` Using Compiler Driven Development
 
-Make the changes in Listing 21-12 to *src/main.rs*, and then let’s use the
+Make the changes in Listing 21-12 to _src/main.rs_, and then let’s use the
 compiler errors from `cargo check` to drive our development. Here is the first
 error we get:
 
@@ -171,7 +174,7 @@ we change to a library crate, we could also use the separate thread pool
 library for any work we want to do using a thread pool, not just for serving
 web requests.
 
-Create a *src/lib.rs* that contains the following, which is the simplest
+Create a _src/lib.rs_ that contains the following, which is the simplest
 definition of a `ThreadPool` struct that we can have for now:
 
 <Listing file-name="src/lib.rs">
@@ -182,8 +185,8 @@ definition of a `ThreadPool` struct that we can have for now:
 
 </Listing>
 
-Then edit *main.rs* file to bring `ThreadPool` into scope from the library
-crate by adding the following code to the top of *src/main.rs*:
+Then edit _main.rs_ file to bring `ThreadPool` into scope from the library
+crate by adding the following code to the top of _src/main.rs_:
 
 <Listing file-name="src/main.rs">
 
@@ -293,10 +296,10 @@ yet!
 > Haskell and Rust, is “if the code compiles, it works.” But this saying is not
 > universally true. Our project compiles, but it does absolutely nothing! If we
 > were building a real, complete project, this would be a good time to start
-> writing unit tests to check that the code compiles *and* has the behavior we
+> writing unit tests to check that the code compiles _and_ has the behavior we
 > want.
 
-Consider: what would be different here if we were going to execute a *future*
+Consider: what would be different here if we were going to execute a _future_
 instead of a closure?
 
 #### Validating the Number of Threads in `new`
@@ -389,13 +392,13 @@ threads. Here, we’ll look at how we actually create threads. The standard
 library provides `thread::spawn` as a way to create threads, and
 `thread::spawn` expects to get some code the thread should run as soon as the
 thread is created. However, in our case, we want to create the threads and have
-them *wait* for code that we’ll send later. The standard library’s
+them _wait_ for code that we’ll send later. The standard library’s
 implementation of threads doesn’t include any way to do that; we have to
 implement it manually.
 
 We’ll implement this behavior by introducing a new data structure between the
 `ThreadPool` and the threads that will manage this new behavior. We’ll call
-this data structure *Worker*, which is a common term in pooling
+this data structure _Worker_, which is a common term in pooling
 implementations. The Worker picks up code that needs to be run and runs the
 code in the Worker’s thread. Think of people working in the kitchen at a
 restaurant: the workers wait until orders come in from customers, and then
@@ -438,7 +441,7 @@ because it’s now holding `Worker` instances instead of `JoinHandle<()>`
 instances. We use the counter in the `for` loop as an argument to
 `Worker::new`, and we store each new `Worker` in the vector named `workers`.
 
-External code (like our server in *src/main.rs*) doesn’t need to know the
+External code (like our server in _src/main.rs_) doesn’t need to know the
 implementation details regarding using a `Worker` struct within `ThreadPool`,
 so we make the `Worker` struct and its `new` function private. The
 `Worker::new` function uses the `id` we give it and stores a `JoinHandle<()>`
@@ -453,7 +456,7 @@ instance that is created by spawning a new thread using an empty closure.
 > [`spawn`][builder-spawn]<!-- ignore --> method that returns `Result` instead.
 
 This code will compile and will store the number of `Worker` instances we
-specified as an argument to `ThreadPool::new`. But we’re *still* not processing
+specified as an argument to `ThreadPool::new`. But we’re _still_ not processing
 the closure that we get in `execute`. Let’s look at how to do that next.
 
 #### Sending Requests to Threads via Channels
@@ -520,7 +523,7 @@ When we try to check this code, we get this error:
 
 The code is trying to pass `receiver` to multiple `Worker` instances. This
 won’t work, as you’ll recall from Chapter 16: the channel implementation that
-Rust provides is multiple *producer*, single *consumer*. This means we can’t
+Rust provides is multiple _producer_, single _consumer_. This means we can’t
 just clone the consuming end of the channel to fix this code. We also don’t
 want to send a message multiple times to multiple consumers; we want one list
 of messages with multiple workers such that each message gets processed once.
@@ -576,7 +579,7 @@ reason we use `unwrap` is that we know the failure case won’t happen, but the
 compiler doesn’t know that.
 
 But we’re not quite done yet! In the worker, our closure being passed to
-`thread::spawn` still only *references* the receiving end of the channel.
+`thread::spawn` still only _references_ the receiving end of the channel.
 Instead, we need the closure to loop forever, asking the receiving end of the
 channel for a job and running the job when it gets one. Let’s make the change
 shown in Listing 21-20 to `Worker::new`.
@@ -591,7 +594,7 @@ shown in Listing 21-20 to `Worker::new`.
 
 Here, we first call `lock` on the `receiver` to acquire the mutex, and then we
 call `unwrap` to panic on any errors. Acquiring a lock might fail if the mutex
-is in a *poisoned* state, which can happen if some other thread panicked while
+is in a _poisoned_ state, which can happen if some other thread panicked while
 holding the lock rather than releasing the lock. In this situation, calling
 `unwrap` to have this thread panic is the correct action to take. Feel free to
 change this `unwrap` to an `expect` with an error message that is meaningful to
@@ -657,10 +660,10 @@ Worker 2 got a job; executing.
 Success! We now have a thread pool that executes connections asynchronously.
 There are never more than four threads created, so our system won’t get
 overloaded if the server receives a lot of requests. If we make a request to
-*/sleep*, the server will be able to serve other requests by having another
+_/sleep_, the server will be able to serve other requests by having another
 thread run them.
 
-> Note: If you open */sleep* in multiple browser windows simultaneously, they
+> Note: If you open _/sleep_ in multiple browser windows simultaneously, they
 > might load one at a time in 5 second intervals. Some web browsers execute
 > multiple instances of the same request sequentially for caching reasons. This
 > limitation is not caused by our web server.
@@ -700,10 +703,8 @@ let` (and `if let` and `match`) does not drop temporary values until the end of
 the associated block. In Listing 21-21, the lock remains held for the duration
 of the call to `job()`, meaning other workers cannot receive jobs.
 
-[creating-type-synonyms-with-type-aliases]:
-ch20-04-advanced-types.html#creating-type-synonyms-with-type-aliases
+[creating-type-synonyms-with-type-aliases]: ch20-04-advanced-types.html#creating-type-synonyms-with-type-aliases
 [integer-types]: ch03-02-data-types.html#integer-types
-[fn-traits]:
-ch13-01-closures.html#moving-captured-values-out-of-the-closure-and-the-fn-traits
+[fn-traits]: ch13-01-closures.html#moving-captured-values-out-of-the-closure-and-the-fn-traits
 [builder]: ../std/thread/struct.Builder.html
 [builder-spawn]: ../std/thread/struct.Builder.html#method.spawn

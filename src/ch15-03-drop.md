@@ -93,14 +93,14 @@ When we try to compile this code, we’ll get this error:
 ```
 
 This error message states that we’re not allowed to explicitly call `drop`. The
-error message uses the term *destructor*, which is the general programming term
-for a function that cleans up an instance. A *destructor* is analogous to a
-*constructor*, which creates an instance. The `drop` function in Rust is one
+error message uses the term _destructor_, which is the general programming term
+for a function that cleans up an instance. A _destructor_ is analogous to a
+_constructor_, which creates an instance. The `drop` function in Rust is one
 particular destructor.
 
 Rust doesn’t let us call `drop` explicitly because Rust would still
 automatically call `drop` on the value at the end of `main`. This would cause a
-*double free* error because Rust would be trying to clean up the same value
+_double free_ error because Rust would be trying to clean up the same value
 twice.
 
 We can’t disable the automatic insertion of `drop` when a value goes out of
@@ -126,7 +126,7 @@ Running this code will print the following:
 {{#include ../listings/ch15-smart-pointers/listing-15-16/output.txt}}
 ```
 
-The text ```Dropping CustomSmartPointer with data `some data`!``` is printed
+The text ``Dropping CustomSmartPointer with data `some data`!`` is printed
 between the `CustomSmartPointer created.` and `CustomSmartPointer dropped
 before the end of main.` text, showing that the `drop` method code is called to
 drop `c` at that point.

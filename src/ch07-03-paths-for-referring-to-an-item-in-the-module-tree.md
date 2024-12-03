@@ -6,10 +6,10 @@ know its path.
 
 A path can take two forms:
 
-* An *absolute path* is the full path starting from a crate root; for code
+- An _absolute path_ is the full path starting from a crate root; for code
   from an external crate, the absolute path begins with the crate name, and for
   code from the current crate, it starts with the literal `crate`.
-* A *relative path* starts from the current module and uses `self`, `super`, or
+- A _relative path_ starts from the current module and uses `self`, `super`, or
   an identifier in the current module.
 
 Both absolute and relative paths are followed by one or more identifiers
@@ -126,7 +126,7 @@ shown in Listing 7-6.
 
 What happened? Adding the `pub` keyword in front of `mod hosting` makes the
 module public. With this change, if we can access `front_of_house`, we can
-access `hosting`. But the *contents* of `hosting` are still private; making the
+access `hosting`. But the _contents_ of `hosting` are still private; making the
 module public doesn’t make its contents public. The `pub` keyword on a module
 only lets code in its ancestor modules refer to it, not access its inner code.
 Because modules are containers, there’s not much we can do by only making the
@@ -179,15 +179,15 @@ interested in this topic, see [The Rust API Guidelines][api-guidelines].
 
 > #### Best Practices for Packages with a Binary and a Library
 >
-> We mentioned that a package can contain both a *src/main.rs* binary crate
-> root as well as a *src/lib.rs* library crate root, and both crates will have
+> We mentioned that a package can contain both a _src/main.rs_ binary crate
+> root as well as a _src/lib.rs_ library crate root, and both crates will have
 > the package name by default. Typically, packages with this pattern of
 > containing both a library and a binary crate will have just enough code in the
 > binary crate to start an executable that calls code within the library crate.
 > This lets other projects benefit from most of the functionality that the
 > package provides because the library crate’s code can be shared.
 >
-> The module tree should be defined in *src/lib.rs*. Then, any public items can
+> The module tree should be defined in _src/lib.rs_. Then, any public items can
 > be used in the binary crate by starting paths with the name of the package.
 > The binary crate becomes a user of the library crate just like a completely
 > external crate would use the library crate: it can only use the public API.

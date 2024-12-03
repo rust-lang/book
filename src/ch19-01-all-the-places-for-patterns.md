@@ -32,7 +32,7 @@ match x {
 The patterns in this `match` expression are the `None` and `Some(i)` on the
 left of each arrow.
 
-One requirement for `match` expressions is that they need to be *exhaustive* in
+One requirement for `match` expressions is that they need to be _exhaustive_ in
 the sense that all possibilities for the value in the `match` expression must
 be accounted for. One way to ensure you’ve covered every possibility is to have
 a catchall pattern for the last arm: for example, a variable name matching any
@@ -251,5 +251,4 @@ work the same in every place we can use them. In some places, the patterns must
 be irrefutable; in other circumstances, they can be refutable. We’ll discuss
 these two concepts next.
 
-[ignoring-values-in-a-pattern]:
-ch19-03-pattern-syntax.html#ignoring-values-in-a-pattern
+[ignoring-values-in-a-pattern]: ch19-03-pattern-syntax.html#ignoring-values-in-a-pattern

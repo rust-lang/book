@@ -4,7 +4,7 @@ Now we’ll add functionality to read the file specified in the `file_path`
 argument. First we need a sample file to test it with: we’ll use a file with a
 small amount of text over multiple lines with some repeated words. Listing 12-3
 has an Emily Dickinson poem that will work well! Create a file called
-*poem.txt* at the root level of your project, and enter the poem “I’m Nobody!
+_poem.txt_ at the root level of your project, and enter the poem “I’m Nobody!
 Who are you?”
 
 <Listing number="12-3" file-name="poem.txt" caption="A poem by Emily Dickinson makes a good test case.">
@@ -15,7 +15,7 @@ Who are you?”
 
 </Listing>
 
-With the text in place, edit *src/main.rs* and add code to read the file, as
+With the text in place, edit _src/main.rs_ and add code to read the file, as
 shown in Listing 12-4.
 
 <Listing number="12-4" file-name="src/main.rs" caption="Reading the contents of the file specified by the second argument">
@@ -38,7 +38,7 @@ of `contents` after the file is read, so we can check that the program is
 working so far.
 
 Let’s run this code with any string as the first command line argument (because
-we haven’t implemented the searching part yet) and the *poem.txt* file as the
+we haven’t implemented the searching part yet) and the _poem.txt_ file as the
 second argument:
 
 ```console

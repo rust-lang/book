@@ -1,14 +1,14 @@
 ## Macros
 
 We’ve used macros like `println!` throughout this book, but we haven’t fully
-explored what a macro is and how it works. The term *macro* refers to a family
-of features in Rust: *declarative* macros with `macro_rules!` and three kinds
-of *procedural* macros:
+explored what a macro is and how it works. The term _macro_ refers to a family
+of features in Rust: _declarative_ macros with `macro_rules!` and three kinds
+of _procedural_ macros:
 
-* Custom `#[derive]` macros that specify code added with the `derive` attribute
+- Custom `#[derive]` macros that specify code added with the `derive` attribute
   used on structs and enums
-* Attribute-like macros that define custom attributes usable on any item
-* Function-like macros that look like function calls but operate on the tokens
+- Attribute-like macros that define custom attributes usable on any item
+- Function-like macros that look like function calls but operate on the tokens
   specified as their argument
 
 We’ll talk about each of these in turn, but first, let’s look at why we even
@@ -17,10 +17,10 @@ need macros when we already have functions.
 ### The Difference Between Macros and Functions
 
 Fundamentally, macros are a way of writing code that writes other code, which
-is known as *metaprogramming*. In Appendix C, we discuss the `derive`
+is known as _metaprogramming_. In Appendix C, we discuss the `derive`
 attribute, which generates an implementation of various traits for you. We’ve
 also used the `println!` and `vec!` macros throughout the book. All of these
-macros *expand* to produce more code than the code you’ve written manually.
+macros _expand_ to produce more code than the code you’ve written manually.
 
 Metaprogramming is useful for reducing the amount of code you have to write and
 maintain, which is also one of the roles of functions. However, macros have
@@ -41,12 +41,12 @@ generally more difficult to read, understand, and maintain than function
 definitions.
 
 Another important difference between macros and functions is that you must
-define macros or bring them into scope *before* you call them in a file, as
+define macros or bring them into scope _before_ you call them in a file, as
 opposed to functions you can define anywhere and call anywhere.
 
 ### Declarative Macros with `macro_rules!` for General Metaprogramming
 
-The most widely used form of macros in Rust is the *declarative macro*. These
+The most widely used form of macros in Rust is the _declarative macro_. These
 are also sometimes referred to as “macros by example,” “`macro_rules!` macros,”
 or just plain “macros.” At their core, declarative macros allow you to write
 something similar to a Rust `match` expression. As discussed in Chapter 6,
@@ -92,7 +92,7 @@ available whenever the crate in which the macro is defined is brought into
 scope. Without this annotation, the macro can’t be brought into scope.
 
 We then start the macro definition with `macro_rules!` and the name of the
-macro we’re defining *without* the exclamation mark. The name, in this case
+macro we’re defining _without_ the exclamation mark. The name, in this case
 `vec`, is followed by curly brackets denoting the body of the macro definition.
 
 The structure in the `vec!` body is similar to the structure of a `match`
@@ -150,7 +150,7 @@ Daniel Keep and continued by Lukas Wirth.
 
 ### Procedural Macros for Generating Code from Attributes
 
-The second form of macros is the *procedural macro*, which acts more like a
+The second form of macros is the _procedural macro_, which acts more like a
 function (and is a type of procedure). Procedural macros accept some code as an
 input, operate on that code, and produce some code as an output rather than
 matching against patterns and replacing the code with other code as declarative
@@ -266,7 +266,7 @@ possible for programmers to use `hello_macro` even if they don’t want the
 We need to declare the `hello_macro_derive` crate as a procedural macro crate.
 We’ll also need functionality from the `syn` and `quote` crates, as you’ll see
 in a moment, so we need to add them as dependencies. Add the following to the
-*Cargo.toml* file for `hello_macro_derive`:
+_Cargo.toml_ file for `hello_macro_derive`:
 
 <Listing file-name="hello_macro_derive/Cargo.toml">
 
@@ -277,7 +277,7 @@ in a moment, so we need to add them as dependencies. Add the following to the
 </Listing>
 
 To start defining the procedural macro, place the code in Listing 20-32 into
-your *src/lib.rs* file for the `hello_macro_derive` crate. Note that this code
+your _src/lib.rs_ file for the `hello_macro_derive` crate. Note that this code
 won’t compile until we add a definition for the `impl_hello_macro` function.
 
 <Listing number="20-32" file-name="hello_macro_derive/src/lib.rs" caption="Code that most procedural macro crates will require in order to process Rust code">
@@ -299,7 +299,7 @@ depending on your procedural macro’s purpose.
 
 We’ve introduced three new crates: `proc_macro`, [`syn`], and [`quote`]. The
 `proc_macro` crate comes with Rust, so we didn’t need to add that to the
-dependencies in *Cargo.toml*. The `proc_macro` crate is the compiler’s API that
+dependencies in _Cargo.toml_. The `proc_macro` crate is the compiler’s API that
 allows us to read and manipulate Rust code from our code.
 
 The `syn` crate parses Rust code from a string into a data structure that we
@@ -413,9 +413,9 @@ saves an allocation by converting `#name` to a string literal at compile time.
 At this point, `cargo build` should complete successfully in both `hello_macro`
 and `hello_macro_derive`. Let’s hook up these crates to the code in Listing
 20-31 to see the procedural macro in action! Create a new binary project in
-your *projects* directory using `cargo new pancakes`. We need to add
+your _projects_ directory using `cargo new pancakes`. We need to add
 `hello_macro` and `hello_macro_derive` as dependencies in the `pancakes`
-crate’s *Cargo.toml*. If you’re publishing your versions of `hello_macro` and
+crate’s _Cargo.toml_. If you’re publishing your versions of `hello_macro` and
 `hello_macro_derive` to [crates.io](https://crates.io/), they would be regular
 dependencies; if not, you can specify them as `path` dependencies as follows:
 
@@ -423,7 +423,7 @@ dependencies; if not, you can specify them as `path` dependencies as follows:
 {{#include ../listings/ch20-advanced-features/no-listing-21-pancakes/pancakes/Cargo.toml:7:9}}
 ```
 
-Put the code in Listing 20-31 into *src/main.rs*, and run `cargo run`: it
+Put the code in Listing 20-31 into _src/main.rs_, and run `cargo run`: it
 should print `Hello, Macro! My name is Pancakes!` The implementation of the
 `HelloMacro` trait from the procedural macro was included without the
 `pancakes` crate needing to implement it; the `#[derive(HelloMacro)]` added the

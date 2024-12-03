@@ -68,8 +68,8 @@ Guards”](#extra-conditionals-with-match-guards)<!-- ignore --> section.
 ### Multiple Patterns
 
 In `match` expressions, you can match multiple patterns using the `|` syntax,
-which is the pattern *or* operator. For example, in the following code we match
-the value of `x` against the match arms, the first of which has an *or* option,
+which is the pattern _or_ operator. For example, in the following code we match
+the value of `x` against the match arms, the first of which has an _or_ option,
 meaning if the value of `x` matches either of the values in that arm, that
 arm’s code will run:
 
@@ -450,7 +450,7 @@ compiler error because using `..` in two places like this is ambiguous.
 
 ### Extra Conditionals with Match Guards
 
-A *match guard* is an additional `if` condition, specified after the pattern in
+A _match guard_ is an additional `if` condition, specified after the pattern in
 a `match` arm, that must also match for that arm to be chosen. Match guards are
 useful for expressing more complex ideas than a pattern alone allows.
 
@@ -504,15 +504,15 @@ pattern as `Some(y)`, which would have shadowed the outer `y`, we specify
 there is no `n` variable outside the `match`.
 
 The match guard `if n == y` is not a pattern and therefore doesn’t introduce new
-variables. This `y` *is* the outer `y` rather than a new `y` shadowing it, and
+variables. This `y` _is_ the outer `y` rather than a new `y` shadowing it, and
 we can look for a value that has the same value as the outer `y` by comparing
 `n` to `y`.
 
-You can also use the *or* operator `|` in a match guard to specify multiple
+You can also use the _or_ operator `|` in a match guard to specify multiple
 patterns; the match guard condition will apply to all the patterns. Listing
 19-28 shows the precedence when combining a pattern that uses `|` with a match
 guard. The important part of this example is that the `if y` match guard
-applies to `4`, `5`, *and* `6`, even though it might look like `if y` only
+applies to `4`, `5`, _and_ `6`, even though it might look like `if y` only
 applies to `6`.
 
 <Listing number="19-28" caption="Combining multiple patterns with a match guard">
@@ -524,7 +524,7 @@ applies to `6`.
 </Listing>
 
 The match condition states that the arm only matches if the value of `x` is
-equal to `4`, `5`, or `6` *and* if `y` is `true`. When this code runs, the
+equal to `4`, `5`, or `6` _and_ if `y` is `true`. When this code runs, the
 pattern of the first arm matches because `x` is `4`, but the match guard `if y`
 is false, so the first arm is not chosen. The code moves on to the second arm,
 which does match, and this program prints `no`. The reason is that the `if`
@@ -549,7 +549,7 @@ were applied only to the final value in the list of values specified using the
 
 ### `@` Bindings
 
-The *at* operator `@` lets us create a variable that holds a value at the same
+The _at_ operator `@` lets us create a variable that holds a value at the same
 time as we’re testing that value for a pattern match. In Listing 19-29, we want
 to test that a `Message::Hello` `id` field is within the range `3..=7`. We also
 want to bind the value to the variable `id_variable` so we can use it in the

@@ -4,7 +4,7 @@ So far in this chapter, we have mostly stuck to individual futures. The one big
 exception was the async channel we used. Recall how we used the receiver for our
 async channel in the [“Message Passing”][17-02-messages] earlier in the chapter.
 The async `recv` method produces a sequence of items over time. This is an
-instance of a much more general pattern, often called a *stream*.
+instance of a much more general pattern, often called a _stream_.
 
 A sequence of items is something we’ve seen before, when we looked at the
 `Iterator` trait in Chapter 13. There are two differences between iterators and
@@ -206,7 +206,7 @@ need to use async. However, we can’t make `get_messages` itself into an async
 function, because then we’d return a `Future<Output = Stream<Item = String>>`
 instead of a `Stream<Item = String>>`. The caller would have to await
 `get_messages` itself to get access to the stream. But remember: everything in a
-given future happens linearly; concurrency happens *between* futures. Awaiting
+given future happens linearly; concurrency happens _between_ futures. Awaiting
 `get_messages` would require it to send all the messages, including sleeping
 between sending each message, before returning the receiver stream. As a result,
 the timeout would end up useless. There would be no delays in the stream itself:
@@ -216,7 +216,7 @@ Instead, we leave `get_messages` as a regular function which returns a stream,
 and spawn a task to handle the async `sleep` calls.
 
 > Note: calling `spawn_task` in this way works because we already set up our
-> runtime. Calling this particular implementation of `spawn_task` *without*
+> runtime. Calling this particular implementation of `spawn_task` _without_
 > first setting up a runtime will cause a panic. Other implementations choose
 > different tradeoffs: they might spawn a new runtime and so avoid the panic but
 > end up with a bit of extra overhead, or simply not provide a standalone way to
@@ -321,7 +321,7 @@ In Listing 17-38, we rework the `intervals` stream, because `messages` is
 already in the basic format we want and has to handle timeout errors. First, we
 can use the `map` helper method to transform the `intervals` into a string.
 Second, we need to match the `Timeout` from `messages`. Because we don’t
-actually *want* a timeout for `intervals`, though, we can just create a timeout
+actually _want_ a timeout for `intervals`, though, we can just create a timeout
 which is longer than the other durations we are using. Here, we create a
 10-second timeout with `Duration::from_secs(10)`. Finally, we need to make
 `stream` mutable, so that the `while let` loop’s `next` calls can iterate
@@ -337,7 +337,7 @@ through the stream, and pin it so that it’s safe to do so.
 
 </Listing>
 
-That gets us *almost* to where we need to be. Everything type checks. If you run
+That gets us _almost_ to where we need to be. Everything type checks. If you run
 this, though, there will be two problems. First, it will never stop! You’ll
 need to stop it with <span class="keystroke">ctrl-c</span>. Second, the
 messages from the English alphabet will be buried in the midst of all the
@@ -367,7 +367,7 @@ hundred milliseconds should do, because that is in the same ballpark as how
 often our messages arrive.
 
 To limit the number of items we will accept from a stream, we can use the `take`
-method. We apply it to the *merged* stream, because we want to limit the final
+method. We apply it to the _merged_ stream, because we want to limit the final
 output, not just one stream or the other.
 
 <Listing number="17-39" caption="Using `throttle` and `take` to manage the merged streams" file-name="src/main.rs">
@@ -381,7 +381,7 @@ output, not just one stream or the other.
 Now when we run the program, it stops after pulling twenty items from the
 stream, and the intervals don’t overwhelm the messages. We also don’t get
 `Interval: 100` or `Interval: 200` or so on, but instead get `Interval: 1`,
-`Interval: 2`, and so on—even though we have a source stream which *can*
+`Interval: 2`, and so on—even though we have a source stream which _can_
 produce an event every millisecond. That’s because the `throttle` call
 produces a new stream, wrapping the original stream, so that the original
 stream only gets polled at the throttle rate, not its own “native” rate. We
@@ -424,7 +424,7 @@ channel-based streams, the `send` calls could fail when the other side of the
 channel closes—and that’s just a matter of how the runtime executes the futures
 which make up the stream. Up until now we have ignored this by calling `unwrap`,
 but in a well-behaved app, we should explicitly handle the error, at minimum by
-ending the loop so we don’t try to send any more messages!  Listing 17-40 shows
+ending the loop so we don’t try to send any more messages! Listing 17-40 shows
 a simple error strategy: print the issue and then `break` from the loops. As
 usual, the correct way to handle a message send error will vary—just make sure
 you have a strategy.

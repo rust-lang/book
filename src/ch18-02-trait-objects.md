@@ -40,7 +40,7 @@ allow users to extend it with new types.
 
 To implement the behavior we want `gui` to have, we’ll define a trait named
 `Draw` that will have one method named `draw`. Then we can define a vector that
-takes a *trait object*. A trait object points to both an instance of a type
+takes a _trait object_. A trait object points to both an instance of a type
 implementing our specified trait and a table used to look up trait methods on
 that type at runtime. We create a trait object by specifying some sort of
 pointer, such as a `&` reference or a `Box<T>` smart pointer, then the `dyn`
@@ -56,7 +56,7 @@ We’ve mentioned that, in Rust, we refrain from calling structs and enums
 “objects” to distinguish them from other languages’ objects. In a struct or
 enum, the data in the struct fields and the behavior in `impl` blocks are
 separated, whereas in other languages, the data and behavior combined into one
-concept is often labeled an object. However, trait objects *are* more like
+concept is often labeled an object. However, trait objects _are_ more like
 objects in other languages in the sense that they combine data and behavior.
 But trait objects differ from traditional objects in that we can’t add data to
 a trait object. Trait objects aren’t as generally useful as objects in other
@@ -182,8 +182,8 @@ new type and draw it because `SelectBox` implements the `Draw` trait, which
 means it implements the `draw` method.
 
 This concept—of being concerned only with the messages a value responds to
-rather than the value’s concrete type—is similar to the concept of *duck
-typing* in dynamically typed languages: if it walks like a duck and quacks
+rather than the value’s concrete type—is similar to the concept of _duck
+typing_ in dynamically typed languages: if it walks like a duck and quacks
 like a duck, then it must be a duck! In the implementation of `run` on `Screen`
 in Listing 18-5, `run` doesn’t need to know what the concrete type of each
 component is. It doesn’t check whether a component is an instance of a `Button`
@@ -227,9 +227,9 @@ Chapter 10 our discussion on the monomorphization process performed by the
 compiler when we use trait bounds on generics: the compiler generates
 nongeneric implementations of functions and methods for each concrete type that
 we use in place of a generic type parameter. The code that results from
-monomorphization is doing *static dispatch*, which is when the compiler knows
-what method you’re calling at compile time. This is opposed to *dynamic
-dispatch*, which is when the compiler can’t tell at compile time which method
+monomorphization is doing _static dispatch_, which is when the compiler knows
+what method you’re calling at compile time. This is opposed to _dynamic
+dispatch_, which is when the compiler can’t tell at compile time which method
 you’re calling. In dynamic dispatch cases, the compiler emits code that at
 runtime will figure out which method to call.
 
@@ -243,6 +243,5 @@ method’s code, which in turn prevents some optimizations. However, we did get
 extra flexibility in the code that we wrote in Listing 18-5 and were able to
 support in Listing 18-9, so it’s a trade-off to consider.
 
-[performance-of-code-using-generics]:
-ch10-01-syntax.html#performance-of-code-using-generics
+[performance-of-code-using-generics]: ch10-01-syntax.html#performance-of-code-using-generics
 [dynamically-sized]: ch20-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait

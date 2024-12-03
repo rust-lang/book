@@ -9,10 +9,10 @@ Let’s explore how and why Rust encourages you to favor immutability and why
 sometimes you might want to opt out.
 
 When a variable is immutable, once a value is bound to a name, you can’t change
-that value. To illustrate this, generate a new project called *variables* in
-your *projects* directory by using `cargo new variables`.
+that value. To illustrate this, generate a new project called _variables_ in
+your _projects_ directory by using `cargo new variables`.
 
-Then, in your new *variables* directory, open *src/main.rs* and replace its
+Then, in your new _variables_ directory, open _src/main.rs_ and replace its
 code with the following code, which won’t compile just yet:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -30,11 +30,10 @@ regarding an immutability error, as shown in this output:
 
 This example shows how the compiler helps you find errors in your programs.
 Compiler errors can be frustrating, but really they only mean your program
-isn’t safely doing what you want it to do yet; they do *not* mean that you’re
+isn’t safely doing what you want it to do yet; they do _not_ mean that you’re
 not a good programmer! Experienced Rustaceans still get compiler errors.
 
-You received the error message `` cannot assign twice to immutable variable `x`
-`` because you tried to assign a second value to the immutable `x` variable.
+You received the error message `` cannot assign twice to immutable variable `x` `` because you tried to assign a second value to the immutable `x` variable.
 
 It’s important that we get compile-time errors when we attempt to change a
 value that’s designated as immutable because this very situation can lead to
@@ -42,7 +41,7 @@ bugs. If one part of our code operates on the assumption that a value will
 never change and another part of our code changes that value, it’s possible
 that the first part of the code won’t do what it was designed to do. The cause
 of this kind of bug can be difficult to track down after the fact, especially
-when the second piece of code changes the value only *sometimes*. The Rust
+when the second piece of code changes the value only _sometimes_. The Rust
 compiler guarantees that when you state that a value won’t change, it really
 won’t change, so you don’t have to keep track of it yourself. Your code is thus
 easier to reason through.
@@ -54,7 +53,7 @@ adding `mut` in front of the variable name as you did in [Chapter
 intent to future readers of the code by indicating that other parts of the code
 will be changing this variable’s value.
 
-For example, let’s change *src/main.rs* to the following:
+For example, let’s change _src/main.rs_ to the following:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -74,13 +73,13 @@ depends on what you think is clearest in that particular situation.
 
 ### Constants
 
-Like immutable variables, *constants* are values that are bound to a name and
+Like immutable variables, _constants_ are values that are bound to a name and
 are not allowed to change, but there are a few differences between constants
 and variables.
 
 First, you aren’t allowed to use `mut` with constants. Constants aren’t just
 immutable by default—they’re always immutable. You declare constants using the
-`const` keyword instead of the `let` keyword, and the type of the value *must*
+`const` keyword instead of the `let` keyword, and the type of the value _must_
 be annotated. We’ll cover types and type annotations in the next section,
 [“Data Types”][data-types]<!-- ignore -->, so don’t worry about the details
 right now. Just know that you must always annotate the type.
@@ -124,7 +123,7 @@ hardcoded value needed to be updated in the future.
 As you saw in the guessing game tutorial in [Chapter
 2][comparing-the-guess-to-the-secret-number]<!-- ignore -->, you can declare a
 new variable with the same name as a previous variable. Rustaceans say that the
-first variable is *shadowed* by the second, which means that the second
+first variable is _shadowed_ by the second, which means that the second
 variable is what the compiler will see when you use the name of the variable.
 In effect, the second variable overshadows the first, taking any uses of the
 variable name to itself until either it itself is shadowed or the scope ends.
@@ -184,8 +183,7 @@ The error says we’re not allowed to mutate a variable’s type:
 Now that we’ve explored how variables work, let’s look at more data types they
 can have.
 
-[comparing-the-guess-to-the-secret-number]:
-ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+[comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [data-types]: ch03-02-data-types.html#data-types
 [storing-values-with-variables]: ch02-00-guessing-game-tutorial.html#storing-values-with-variables
 [const-eval]: ../reference/const_eval.html

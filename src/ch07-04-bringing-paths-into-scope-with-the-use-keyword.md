@@ -112,7 +112,7 @@ meant when we used `Result`.
 
 There’s another solution to the problem of bringing two types of the same name
 into the same scope with `use`: after the path, we can specify `as` and a new
-local name, or *alias*, for the type. Listing 7-16 shows another way to write
+local name, or _alias_, for the type. Listing 7-16 shows another way to write
 the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 
 <Listing number="7-16" file-name="src/lib.rs" caption="Renaming a type when it’s brought into scope with the `as` keyword">
@@ -133,7 +133,7 @@ considered idiomatic, so the choice is up to you!
 When we bring a name into scope with the `use` keyword, the name available in
 the new scope is private. To enable the code that calls our code to refer to
 that name as if it had been defined in that code’s scope, we can combine `pub`
-and `use`. This technique is called *re-exporting* because we’re bringing an
+and `use`. This technique is called _re-exporting_ because we’re bringing an
 item into scope but also making that item available for others to bring into
 their scope.
 
@@ -171,7 +171,7 @@ Chapter 14.
 
 In Chapter 2, we programmed a guessing game project that used an external
 package called `rand` to get random numbers. To use `rand` in our project, we
-added this line to *Cargo.toml*:
+added this line to _Cargo.toml_:
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -187,7 +187,7 @@ added this line to *Cargo.toml*:
 
 </Listing>
 
-Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the
+Adding `rand` as a dependency in _Cargo.toml_ tells Cargo to download the
 `rand` package and any dependencies from [crates.io](https://crates.io/) and
 make `rand` available to our project.
 
@@ -203,12 +203,12 @@ into scope and called the `rand::thread_rng` function:
 
 Members of the Rust community have made many packages available at
 [crates.io](https://crates.io/), and pulling any of them into your package
-involves these same steps: listing them in your package’s *Cargo.toml* file and
+involves these same steps: listing them in your package’s _Cargo.toml_ file and
 using `use` to bring items from their crates into scope.
 
 Note that the standard `std` library is also a crate that’s external to our
 package. Because the standard library is shipped with the Rust language, we
-don’t need to change *Cargo.toml* to include `std`. But we do need to refer to
+don’t need to change _Cargo.toml_ to include `std`. But we do need to refer to
 it with `use` to bring items from there into our package’s scope. For example,
 with `HashMap` we would use this line:
 
@@ -280,7 +280,7 @@ This line brings `std::io` and `std::io::Write` into scope.
 
 ### The Glob Operator
 
-If we want to bring *all* public items defined in a path into scope, we can
+If we want to bring _all_ public items defined in a path into scope, we can
 specify that path followed by the `*` glob operator:
 
 ```rust
@@ -295,8 +295,7 @@ was defined.
 The glob operator is often used when testing to bring everything under test
 into the `tests` module; we’ll talk about that in the [“How to Write
 Tests”][writing-tests]<!-- ignore --> section in Chapter 11. The glob operator
-is also sometimes used as part of the prelude pattern: see [the standard
-library documentation](../std/prelude/index.html#other-preludes)<!-- ignore -->
+is also sometimes used as part of the prelude pattern: see [the standard library documentation](../std/prelude/index.html#other-preludes)<!-- ignore -->
 for more information on that pattern.
 
 [ch14-pub-use]: ch14-02-publishing-to-crates-io.html#exporting-a-convenient-public-api-with-pub-use

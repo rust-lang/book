@@ -1,7 +1,7 @@
 ## Reference Cycles Can Leak Memory
 
 Rust’s memory safety guarantees make it difficult, but not impossible, to
-accidentally create memory that is never cleaned up (known as a *memory leak*).
+accidentally create memory that is never cleaned up (known as a _memory leak_).
 Preventing memory leaks entirely is not one of Rust’s guarantees, meaning
 memory leaks are memory safe in Rust. We can see that Rust allows memory leaks
 by using `Rc<T>` and `RefCell<T>`: it’s possible to create references where
@@ -111,7 +111,7 @@ reference cycles.
 
 So far, we’ve demonstrated that calling `Rc::clone` increases the
 `strong_count` of an `Rc<T>` instance, and an `Rc<T>` instance is only cleaned
-up if its `strong_count` is 0. You can also create a *weak reference* to the
+up if its `strong_count` is 0. You can also create a _weak reference_ to the
 value within an `Rc<T>` instance by calling `Rc::downgrade` and passing a
 reference to the `Rc<T>`. Strong references are how you can share ownership of
 an `Rc<T>` instance. Weak references don’t express an ownership relationship,
@@ -136,7 +136,7 @@ Rust will ensure that the `Some` case and the `None` case are handled, and
 there won’t be an invalid pointer.
 
 As an example, rather than using a list whose items know only about the next
-item, we’ll create a tree whose items know about their children items *and*
+item, we’ll create a tree whose items know about their children items _and_
 their parent items.
 
 #### Creating a Tree Data Structure: a `Node` with Child Nodes

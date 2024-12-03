@@ -38,7 +38,7 @@ section of Chapter 18.
 
 ### Creating Type Synonyms with Type Aliases
 
-Rust provides the ability to declare a *type alias* to give an existing type
+Rust provides the ability to declare a _type alias_ to give an existing type
 another name. For this we use the `type` keyword. For example, we can create
 the alias `Kilometers` to `i32` like so:
 
@@ -46,7 +46,7 @@ the alias `Kilometers` to `i32` like so:
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-04-kilometers-alias/src/main.rs:here}}
 ```
 
-Now, the alias `Kilometers` is a *synonym* for `i32`; unlike the `Millimeters`
+Now, the alias `Kilometers` is a _synonym_ for `i32`; unlike the `Millimeters`
 and `Meters` types we created in Listing 20-16, `Kilometers` is not a separate,
 new type. Values that have the type `Kilometers` will be treated the same as
 values of type `i32`:
@@ -94,7 +94,7 @@ can replace all uses of the type with the shorter alias `Thunk`.
 </Listing>
 
 This code is much easier to read and write! Choosing a meaningful name for a
-type alias can help communicate your intent as well (*thunk* is a word for code
+type alias can help communicate your intent as well (_thunk_ is a word for code
 to be evaluated at a later time, so it’s an appropriate name for a closure that
 gets stored).
 
@@ -126,7 +126,7 @@ looking like this:
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-06-result-alias/src/lib.rs:there}}
 ```
 
-The type alias helps in two ways: it makes code easier to write *and* it gives
+The type alias helps in two ways: it makes code easier to write _and_ it gives
 us a consistent interface across all of `std::io`. Because it’s an alias, it’s
 just another `Result<T, E>`, which means we can use any methods that work on
 `Result<T, E>` with it, as well as special syntax like the `?` operator.
@@ -134,7 +134,7 @@ just another `Result<T, E>`, which means we can use any methods that work on
 ### The Never Type that Never Returns
 
 Rust has a special type named `!` that’s known in type theory lingo as the
-*empty type* because it has no values. We prefer to call it the *never type*
+_empty type_ because it has no values. We prefer to call it the _never type_
 because it stands in the place of the return type when a function will never
 return. Here is an example:
 
@@ -143,7 +143,7 @@ return. Here is an example:
 ```
 
 This code is read as “the function `bar` returns never.” Functions that return
-never are called *diverging functions*. We can’t create values of the type `!`
+never are called _diverging functions_. We can’t create values of the type `!`
 so `bar` can never possibly return.
 
 But what use is a type you can never create values for? Recall the code from
@@ -167,7 +167,7 @@ example, the following code doesn’t work:
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-08-match-arms-different-types/src/main.rs:here}}
 ```
 
-The type of `guess` in this code would have to be an integer *and* a string,
+The type of `guess` in this code would have to be an integer _and_ a string,
 and Rust requires that `guess` have only one type. So what does `continue`
 return? How were we allowed to return a `u32` from one arm and have another arm
 that ends with `continue` in Listing 20-27?
@@ -211,8 +211,8 @@ when it got to the `break`.
 
 Rust needs to know certain details about its types, such as how much space to
 allocate for a value of a particular type. This leaves one corner of its type
-system a little confusing at first: the concept of *dynamically sized types*.
-Sometimes referred to as *DSTs* or *unsized types*, these types let us write
+system a little confusing at first: the concept of _dynamically sized types_.
+Sometimes referred to as _DSTs_ or _unsized types_, these types let us write
 code using values whose size we can know only at runtime.
 
 Let’s dig into the details of a dynamically sized type called `str`, which
@@ -237,7 +237,7 @@ of `s1` and `s2` a `&str` rather than a `str`. Recall from the [“String
 Slices”][string-slices]<!-- ignore --> section of Chapter 4 that the slice data
 structure just stores the starting position and the length of the slice. So
 although a `&T` is a single value that stores the memory address of where the
-`T` is located, a `&str` is *two* values: the address of the `str` and its
+`T` is located, a `&str` is _two_ values: the address of the `str` and its
 length. As such, we can know the size of a `&str` value at compile time: it’s
 twice the length of a `usize`. That is, we always know the size of a `&str`, no
 matter how long the string it refers to is. In general, this is the way in
@@ -291,11 +291,8 @@ pointer. In this case, we’ve chosen a reference.
 
 Next, we’ll talk about functions and closures!
 
-[encapsulation-that-hides-implementation-details]:
-ch18-01-what-is-oo.html#encapsulation-that-hides-implementation-details
+[encapsulation-that-hides-implementation-details]: ch18-01-what-is-oo.html#encapsulation-that-hides-implementation-details
 [string-slices]: ch04-03-slices.html#string-slices
-[the-match-control-flow-operator]:
-ch06-02-match.html#the-match-control-flow-operator
-[using-trait-objects-that-allow-for-values-of-different-types]:
-ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[the-match-control-flow-operator]: ch06-02-match.html#the-match-control-flow-operator
+[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [using-the-newtype-pattern]: ch20-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types

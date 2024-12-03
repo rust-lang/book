@@ -9,7 +9,7 @@ We’ve talked about how to pass closures to functions; you can also pass regula
 functions to functions! This technique is useful when you want to pass a
 function you’ve already defined rather than defining a new closure. Functions
 coerce to the type `fn` (with a lowercase f), not to be confused with the `Fn`
-closure trait. The `fn` type is called a *function pointer*. Passing functions
+closure trait. The `fn` type is called a _function pointer_. Passing functions
 with function pointers will allow you to use functions as arguments to other
 functions.
 
@@ -122,8 +122,6 @@ ignore --> in Chapter 19.
 
 Next, let’s look at macros!
 
-[advanced-traits]:
-ch20-03-advanced-traits.html#advanced-traits
+[advanced-traits]: ch20-03-advanced-traits.html#advanced-traits
 [enum-values]: ch06-01-defining-an-enum.html#enum-values
-[using-trait-objects-that-allow-for-values-of-different-types]:
-ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
