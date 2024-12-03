@@ -239,9 +239,12 @@ so it doesn’t know which method implemented on which type to call. Instead, at
 runtime, Rust uses the pointers inside the trait object to know which method to
 call. This lookup incurs a runtime cost that doesn’t occur with static
 dispatch. Dynamic dispatch also prevents the compiler from choosing to inline a
-method’s code, which in turn prevents some optimizations. However, we did get
-extra flexibility in the code that we wrote in Listing 18-5 and were able to
-support in Listing 18-9, so it’s a trade-off to consider.
+method’s code, which in turn prevents some optimizations, and Rust has some
+rules about where you can and cannot use dynamic dispatch, called [_dyn
+compatibility_][dyn-compatibility]. However, we did get extra flexibility in the code
+that we wrote in Listing 18-5 and were able to support in Listing 18-9, so it’s
+a trade-off to consider.
 
 [performance-of-code-using-generics]: ch10-01-syntax.html#performance-of-code-using-generics
 [dynamically-sized]: ch20-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait
+[dyn-compatibility]: https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility
