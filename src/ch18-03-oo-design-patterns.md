@@ -349,9 +349,9 @@ another design pattern.
 Another downside is that we’ve duplicated some logic. To eliminate some of the
 duplication, we might try to make default implementations for the
 `request_review` and `approve` methods on the `State` trait that return `self`;
-however, this would violate object safety, because the trait doesn’t know what
+however, this would not be dyn compatible, because the trait doesn’t know what
 the concrete `self` will be exactly. We want to be able to use `State` as a
-trait object, so we need its methods to be object safe.
+trait object, so we need its methods to be dyn compatible.
 
 Other duplication includes the similar implementations of the `request_review`
 and `approve` methods on `Post`. Both methods delegate to the implementation of
