@@ -1,41 +1,15 @@
-# Foreword
+# مقدمة
 
-It wasn’t always so clear, but the Rust programming language is fundamentally
-about *empowerment*: no matter what kind of code you are writing now, Rust
-empowers you to reach farther, to program with confidence in a wider variety of
-domains than you did before.
+لم يكن الأمر دائمًا واضحًا، ولكن لغة البرمجة Rust تدور جوهريًا حول التمكين: بغض النظر عن نوع الكود الذي تكتبه حاليًا، تُمكّنك Rust من التوسع أكثر، والبرمجة بثقة في مجالات أوسع مما كنت تفعل سابقًا.
 
-Take, for example, “systems-level” work that deals with low-level details of
-memory management, data representation, and concurrency. Traditionally, this
-realm of programming is seen as arcane, accessible only to a select few who
-have devoted the necessary years learning to avoid its infamous pitfalls. And
-even those who practice it do so with caution, lest their code be open to
-exploits, crashes, or corruption.
+خذ على سبيل المثال العمل "على مستوى الأنظمة" الذي يتعامل مع التفاصيل الدقيقة لإدارة الذاكرة، وتمثيل البيانات، والتزامن. تقليديًا، يُعتبر هذا المجال من البرمجة غامضًا، ومتاحًا فقط لقلة مختارة ممن قضوا سنوات طويلة يتعلمون تجنب أخطائه الشهيرة. وحتى أولئك الذين يعملون فيه يفعلون ذلك بحذر شديد، خشية أن يكون كودهم عرضة للثغرات أو الأعطال أو الفساد.
 
-Rust breaks down these barriers by eliminating the old pitfalls and providing a
-friendly, polished set of tools to help you along the way. Programmers who need
-to “dip down” into lower-level control can do so with Rust, without taking on
-the customary risk of crashes or security holes, and without having to learn
-the fine points of a fickle toolchain. Better yet, the language is designed to
-guide you naturally towards reliable code that is efficient in terms of speed
-and memory usage.
+تُزيل Rust هذه الحواجز من خلال القضاء على الأخطاء التقليدية وتوفير مجموعة أدوات صديقة ومصقولة لمساعدتك على طول الطريق. يمكن للمبرمجين الذين يحتاجون إلى "الغوص العميق" في مستوى التحكم المنخفض القيام بذلك باستخدام Rust، دون المخاطرة المعتادة بحدوث أعطال أو ثغرات أمنية، ودون الحاجة إلى تعلم التفاصيل الدقيقة لأدوات معقدة وغير مستقرة. والأفضل من ذلك، تم تصميم اللغة لتوجهك بشكل طبيعي نحو كتابة كود موثوق وفعال من حيث السرعة واستخدام الذاكرة.
 
-Programmers who are already working with low-level code can use Rust to raise
-their ambitions. For example, introducing parallelism in Rust is a relatively
-low-risk operation: the compiler will catch the classical mistakes for you. And
-you can tackle more aggressive optimizations in your code with the confidence
-that you won’t accidentally introduce crashes or vulnerabilities.
+يمكن للمبرمجين الذين يعملون بالفعل مع الكود منخفض المستوى استخدام Rust لرفع سقف طموحاتهم. على سبيل المثال، إدخال التوازي في Rust هو عملية منخفضة المخاطر نسبيًا: سيكتشف المُترجم الأخطاء التقليدية نيابةً عنك. ويمكنك معالجة تحسينات أكثر جرأة في كودك بثقة أنك لن تُدخل عن غير قصد أعطالًا أو ثغرات أمنية.
 
-But Rust isn’t limited to low-level systems programming. It’s expressive and
-ergonomic enough to make CLI apps, web servers, and many other kinds of code
-quite pleasant to write — you’ll find simple examples of both later in the
-book. Working with Rust allows you to build skills that transfer from one
-domain to another; you can learn Rust by writing a web app, then apply those
-same skills to target your Raspberry Pi.
+لكن Rust ليست مقتصرة على برمجة الأنظمة منخفضة المستوى. فهي معبرة وسهلة الاستخدام بما يكفي لجعل كتابة تطبيقات CLI وخوادم الويب والعديد من أنواع المشاريع البرمجية الأخرى ممتعة للغاية — ستجد أمثلة بسيطة لكليهما لاحقًا في هذا الكتاب. العمل مع Rust يسمح لك ببناء مهارات قابلة للنقل بين المجالات المختلفة؛ يمكنك تعلم Rust بكتابة تطبيق ويب، ثم تطبيق نفس المهارات لاستهداف جهاز Raspberry Pi الخاص بك.
 
-This book fully embraces the potential of Rust to empower its users. It’s a
-friendly and approachable text intended to help you level up not just your
-knowledge of Rust, but also your reach and confidence as a programmer in
-general. So dive in, get ready to learn—and welcome to the Rust community!
+يتبنى هذا الكتاب بالكامل إمكانيات Rust لتمكين مستخدميها. إنه نص ودي وسهل الوصول يهدف إلى مساعدتك على تحسين ليس فقط معرفتك بـ Rust، ولكن أيضًا قدراتك وثقتك كمبرمج بشكل عام. لذا اغمر نفسك، واستعد للتعلم — ومرحبًا بك في مجتمع Rust!
 
-— Nicholas Matsakis and Aaron Turon
+— نيكولاس ماتساكيس وآرون تورون
