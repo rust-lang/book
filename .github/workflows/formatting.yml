@@ -1,0 +1,28 @@
+# Allows us to trigger auto-formatting by adding a comment with the body
+# `!format` to a pull request. It will run the formatter and create a commit if
+# there are any changes.
+
+on: issue_comment
+jobs:
+  auto-format:
+    name: formatting
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == "!format" }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install dprint
+        run: |
+          cargo install --locked dprint@0.47.6
+
+      - name: format the code
+        run: |
+          dprint fmt
+
+      - name: commit any changes
+        uses: stefanzweifel/git-auto-commit-action@5.0.1
+        with:
+          commit_author: "Format Prose Bot <format-prose-bot@rust-lang.org>"
+          commit_message: "🤖 dprint fmt"
+          commit_user_email: "format-prose-bot@rust-lang.org"
+          commit_user_name: "Format Prose Bot"
