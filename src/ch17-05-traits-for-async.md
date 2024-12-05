@@ -10,9 +10,9 @@ still leaving the _really_ deep dive for other documentation!
 
 ### Future
 
-Back in [Futures and the Async Syntax][futures-syntax], we noted that `Future`
-is a trait. Let’s start by taking a closer look at how it works. Here is how
-Rust defines a `Future`:
+Back in [“Futures and the Async Syntax”][futures-syntax]<!-- ignore -->, we
+noted that `Future` is a trait. Let’s start by taking a closer look at how it
+works. Here is how Rust defines a `Future`:
 
 ```rust
 use std::pin::Pin;
