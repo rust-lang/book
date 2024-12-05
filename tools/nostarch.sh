@@ -4,7 +4,7 @@ set -eu
 
 cargo build --release
 
-cargo install --locked --path ./packages/mdbook_trpl --offline
+cargo install --locked --path ./packages/mdbook-trpl --offline
 
 mkdir -p tmp
 rm -rf tmp/*.md
