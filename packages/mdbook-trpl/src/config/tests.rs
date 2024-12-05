@@ -6,96 +6,118 @@
 //! more complex in the future, it would be good to revisit and integrate
 //! the same kinds of tests as the unit tests above here.
 
-use super::*;
+use mdbook::{
+    book::Book,
+    errors::Result,
+    preprocess::{Preprocessor, PreprocessorContext},
+    BookItem,
+};
 
-// TODO: what *should* the behavior here be? I *think* it should error,
-// in that there is a problem if it is invoked without that info.
+use crate::config::Mode;
+
+/// Dummy preprocessor for testing purposes to exercise config.
+struct TestPreprocessor;
+
+impl Preprocessor for TestPreprocessor {
+    fn name(&self) -> &str {
+        "test-preprocessor"
+    }
+
+    fn run(&self, ctx: &PreprocessorContext, mut book: Book) -> Result<Book> {
+        let mode = Mode::from_context(ctx, self.name())?;
+        book.push_item(BookItem::PartTitle(format!("{mode:?}")));
+        Ok(book)
+    }
+}
+
 #[test]
 fn no_config() {
     let input_json = r##"[
-                {
-                    "root": "/path/to/book",
-                    "config": {
-                        "book": {
-                            "authors": ["AUTHOR"],
-                            "language": "en",
-                            "multilingual": false,
-                            "src": "src",
-                            "title": "TITLE"
-                        },
-                        "preprocessor": {}
-                    },
-                    "renderer": "html",
-                    "mdbook_version": "0.4.21"
+        {
+            "root": "/path/to/book",
+            "config": {
+                "book": {
+                    "authors": ["AUTHOR"],
+                    "language": "en",
+                    "multilingual": false,
+                    "src": "src",
+                    "title": "TITLE"
                 },
+                "preprocessor": {}
+            },
+            "renderer": "html",
+            "mdbook_version": "0.4.21"
+        },
+        {
+            "sections": [
                 {
-                    "sections": [
-                        {
-                            "Chapter": {
-                                "name": "Chapter 1",
-                                "content": "# Chapter 1\n",
-                                "number": [1],
-                                "sub_items": [],
-                                "path": "chapter_1.md",
-                                "source_path": "chapter_1.md",
-                                "parent_names": []
-                            }
-                        }
-                    ],
-                    "__non_exhaustive": null
+                    "Chapter": {
+                        "name": "Chapter 1",
+                        "content": "# Chapter 1\n",
+                        "number": [1],
+                        "sub_items": [],
+                        "path": "chapter_1.md",
+                        "source_path": "chapter_1.md",
+                        "parent_names": []
+                    }
                 }
-            ]"##;
+            ],
+            "__non_exhaustive": null
+        }
+    ]"##;
     let input_json = input_json.as_bytes();
     let (ctx, book) =
         mdbook::preprocess::CmdPreprocessor::parse_input(input_json).unwrap();
-    let result = TrplListing.run(&ctx, book);
+    let result = TestPreprocessor.run(&ctx, book);
     assert!(result.is_err());
     let err = result.unwrap_err();
-    assert_eq!(format!("{err}"), "No config for trpl-listing");
+    assert_eq!(format!("{err}"), "No config for 'test-preprocessor'");
 }
 
 #[test]
 fn empty_config() {
     let input_json = r##"[
-                {
-                    "root": "/path/to/book",
-                    "config": {
-                        "book": {
-                            "authors": ["AUTHOR"],
-                            "language": "en",
-                            "multilingual": false,
-                            "src": "src",
-                            "title": "TITLE"
-                        },
-                        "preprocessor": {
-                            "trpl-listing": {}
-                        }
-                    },
-                    "renderer": "html",
-                    "mdbook_version": "0.4.21"
+        {
+            "root": "/path/to/book",
+            "config": {
+                "book": {
+                    "authors": ["AUTHOR"],
+                    "language": "en",
+                    "multilingual": false,
+                    "src": "src",
+                    "title": "TITLE"
                 },
-                {
-                    "sections": [
-                        {
-                            "Chapter": {
-                                "name": "Chapter 1",
-                                "content": "# Chapter 1\n",
-                                "number": [1],
-                                "sub_items": [],
-                                "path": "chapter_1.md",
-                                "source_path": "chapter_1.md",
-                                "parent_names": []
-                            }
-                        }
-                    ],
-                    "__non_exhaustive": null
+                "preprocessor": {
+                    "test-preprocessor": {}
                 }
-            ]"##;
+            },
+            "renderer": "html",
+            "mdbook_version": "0.4.21"
+        },
+        {
+            "sections": [
+                {
+                    "Chapter": {
+                        "name": "Chapter 1",
+                        "content": "# Chapter 1\n",
+                        "number": [1],
+                        "sub_items": [],
+                        "path": "chapter_1.md",
+                        "source_path": "chapter_1.md",
+                        "parent_names": []
+                    }
+                }
+            ],
+            "__non_exhaustive": null
+        }
+    ]"##;
     let input_json = input_json.as_bytes();
     let (ctx, book) =
         mdbook::preprocess::CmdPreprocessor::parse_input(input_json).unwrap();
-    let result = TrplListing.run(&ctx, book);
-    assert!(result.is_ok());
+    let book = TestPreprocessor.run(&ctx, book).unwrap();
+    assert!(book.iter().any(
+        |item| matches!(item, BookItem::PartTitle(title) if title == &format!("{:?}", Mode::Default))
+    ))
 }
 
 #[test]
@@ -112,7 +134,7 @@ fn specify_default() {
                             "title": "TITLE"
                         },
                         "preprocessor": {
-                            "trpl-listing": {
+                            "test-preprocessor": {
                                 "output-mode": "default"
                             }
                         }
@@ -140,8 +162,10 @@ fn specify_default() {
     let input_json = input_json.as_bytes();
     let (ctx, book) =
         mdbook::preprocess::CmdPreprocessor::parse_input(input_json).unwrap();
-    let result = TrplListing.run(&ctx, book);
-    assert!(result.is_ok());
+    let book = TestPreprocessor.run(&ctx, book).unwrap();
+    assert!(book.iter().any(
+        |item| matches!(item, BookItem::PartTitle(title) if title == &format!("{:?}", Mode::Default))
+    ));
 }
 
 #[test]
@@ -158,7 +182,7 @@ fn specify_simple() {
                             "title": "TITLE"
                         },
                         "preprocessor": {
-                            "trpl-listing": {
+                            "test-preprocessor": {
                                 "output-mode": "simple"
                             }
                         }
@@ -186,8 +210,10 @@ fn specify_simple() {
     let input_json = input_json.as_bytes();
     let (ctx, book) =
         mdbook::preprocess::CmdPreprocessor::parse_input(input_json).unwrap();
-    let result = TrplListing.run(&ctx, book);
-    assert!(result.is_ok());
+    let book = TestPreprocessor.run(&ctx, book).unwrap();
+    assert!(book.iter().any(
+        |item| matches!(item, BookItem::PartTitle(title) if title == &format!("{:?}", Mode::Simple))
+    ))
 }
 
 #[test]
@@ -204,7 +230,7 @@ fn specify_invalid() {
                             "title": "TITLE"
                         },
                         "preprocessor": {
-                            "trpl-listing": {
+                            "test-preprocessor": {
                                 "output-mode": "nonsense"
                             }
                         }
@@ -232,11 +258,9 @@ fn specify_invalid() {
     let input_json = input_json.as_bytes();
     let (ctx, book) =
         mdbook::preprocess::CmdPreprocessor::parse_input(input_json).unwrap();
-    let result = TrplListing.run(&ctx, book);
-    assert!(result.is_err());
-    let err = result.unwrap_err();
+    let result = TestPreprocessor.run(&ctx, book).unwrap_err();
     assert_eq!(
-        format!("{err}"),
+        format!("{result}"),
         "Bad config value '\"nonsense\"' for key 'output-mode'"
     );
 }

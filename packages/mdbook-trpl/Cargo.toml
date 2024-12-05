@@ -1,16 +1,27 @@
 [package]
-name = "mdbook-trpl-listing"
+name = "mdbook-trpl"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "mdbook-trpl-note"
+path = "src/bin/note.rs"
+
+[[bin]]
+name = "mdbook-trpl-listing"
+path = "src/bin/listing.rs"
+
+[[bin]]
+name = "mdbook-trpl-figure"
+path = "src/bin/figure.rs"
 
 [dependencies]
+anyhow = "1"
 clap = { version = "4", features = ["derive"] }
 html_parser = "0.7.0"
 mdbook = { version = "0.4", default-features = false }     # only need the library
-pulldown-cmark = { version = "0.10", features = ["simd"] }
-pulldown-cmark-to-cmark = "13"
+pulldown-cmark = { version = "0.12", features = ["simd"] }
+pulldown-cmark-to-cmark = "19"
 serde_json = "1"
 thiserror = "1.0.60"
 toml = "0.8.12"
