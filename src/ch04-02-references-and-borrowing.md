@@ -45,8 +45,8 @@ Let’s take a closer look at the function call here:
 ```
 
 The `&s1` syntax lets us create a reference that _refers_ to the value of `s1`
-but does not own it. Because it does not own it, the value it points to will
-not be dropped when the reference stops being used.
+but does not own it. Because the reference does not own it, the value it points
+to will not be dropped when the reference stops being used.
 
 Likewise, the signature of the function uses `&` to indicate that the type of
 the parameter `s` is a reference. Let’s add some explanatory annotations:
