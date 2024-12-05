@@ -3,8 +3,8 @@
 Now that we’ve extracted the logic into _src/lib.rs_ and left the argument
 collecting and error handling in _src/main.rs_, it’s much easier to write tests
 for the core functionality of our code. We can call functions directly with
-various arguments and check return values without having to call our binary
-from the command line.
+various arguments and check return values without having to call our binary from
+the command line.
 
 In this section, we’ll add the searching logic to the `minigrep` program using
 the test-driven development (TDD) process with the following steps:
@@ -31,9 +31,9 @@ Because we don’t need them anymore, let’s remove the `println!` statements f
 _src/lib.rs_ and _src/main.rs_ that we used to check the program’s behavior.
 Then, in _src/lib.rs_, we’ll add a `tests` module with a test function, as we
 did in [Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies
-the behavior we want the `search` function to have: it will take a query and
-the text to search, and it will return only the lines from the text that
-contain the query. Listing 12-15 shows this test, which won’t compile yet.
+the behavior we want the `search` function to have: it will take a query and the
+text to search, and it will return only the lines from the text that contain the
+query. Listing 12-15 shows this test, which won’t compile yet.
 
 <Listing number="12-15" file-name="src/lib.rs" caption="Creating a failing test for the `search` function we wish we had">
 
@@ -53,8 +53,9 @@ We aren’t yet able to run this test and watch it fail because the test doesn�
 even compile: the `search` function doesn’t exist yet! In accordance with TDD
 principles, we’ll add just enough code to get the test to compile and run by
 adding a definition of the `search` function that always returns an empty
-vector, as shown in Listing 12-16. Then the test should compile and fail
-because an empty vector doesn’t match a vector containing the line `"safe,
+vector, as shown in Listing 12-16. Then the test should compile and fail because
+an empty vector doesn’t match a vector containing the line
+`"safe,
 fast, productive."`
 
 <Listing number="12-16" file-name="src/lib.rs" caption="Defining just enough of the `search` function so our test will compile">
@@ -95,9 +96,10 @@ syntax.
 
 Other programming languages don’t require you to connect arguments to return
 values in the signature, but this practice will get easier over time. You might
-want to compare this example with the examples in the [“Validating References
-with Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> section
-in Chapter 10.
+want to compare this example with the examples in the
+[“Validating References
+with Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> section in
+Chapter 10.
 
 Now let’s run the test:
 
@@ -123,8 +125,8 @@ Let’s work through each step, starting with iterating through lines.
 #### Iterating Through Lines with the `lines` Method
 
 Rust has a helpful method to handle line-by-line iteration of strings,
-conveniently named `lines`, that works as shown in Listing 12-17. Note that
-this won’t compile yet.
+conveniently named `lines`, that works as shown in Listing 12-17. Note that this
+won’t compile yet.
 
 <Listing number="12-17" file-name="src/lib.rs" caption="Iterating through each line in `contents`">
 
@@ -135,8 +137,8 @@ this won’t compile yet.
 </Listing>
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
-[Chapter 13][ch13-iterators]<!-- ignore -->, but recall that you saw this way
-of using an iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a
+[Chapter 13][ch13-iterators]<!-- ignore -->, but recall that you saw this way of
+using an iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a
 `for` loop with an iterator to run some code on each item in a collection.
 
 #### Searching Each Line for the Query
@@ -161,9 +163,9 @@ signature.
 #### Storing Matching Lines
 
 To finish this function, we need a way to store the matching lines that we want
-to return. For that, we can make a mutable vector before the `for` loop and
-call the `push` method to store a `line` in the vector. After the `for` loop,
-we return the vector, as shown in Listing 12-19.
+to return. For that, we can make a mutable vector before the `for` loop and call
+the `push` method to store a `line` in the vector. After the `for` loop, we
+return the vector, as shown in Listing 12-19.
 
 <Listing number="12-19" file-name="src/lib.rs" caption="Storing the lines that match so we can return them">
 
@@ -173,8 +175,8 @@ we return the vector, as shown in Listing 12-19.
 
 </Listing>
 
-Now the `search` function should return only the lines that contain `query`,
-and our test should pass. Let’s run the test:
+Now the `search` function should return only the lines that contain `query`, and
+our test should pass. Let’s run the test:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-19/output.txt}}
@@ -185,9 +187,9 @@ Our test passed, so we know it works!
 At this point, we could consider opportunities for refactoring the
 implementation of the search function while keeping the tests passing to
 maintain the same functionality. The code in the search function isn’t too bad,
-but it doesn’t take advantage of some useful features of iterators. We’ll
-return to this example in [Chapter 13][ch13-iterators]<!-- ignore -->, where
-we’ll explore iterators in detail, and look at how to improve it.
+but it doesn’t take advantage of some useful features of iterators. We’ll return
+to this example in [Chapter 13][ch13-iterators]<!-- ignore -->, where we’ll
+explore iterators in detail, and look at how to improve it.
 
 #### Using the `search` Function in the `run` Function
 

@@ -2,9 +2,9 @@
 
 So far in this chapter, we have mostly stuck to individual futures. The one big
 exception was the async channel we used. Recall how we used the receiver for our
-async channel in the [“Message Passing”][17-02-messages]<!-- ignore --> earlier in the chapter.
-The async `recv` method produces a sequence of items over time. This is an
-instance of a much more general pattern, often called a _stream_.
+async channel in the [“Message Passing”][17-02-messages]<!-- ignore --> earlier
+in the chapter. The async `recv` method produces a sequence of items over time.
+This is an instance of a much more general pattern, often called a _stream_.
 
 A sequence of items is something we’ve seen before, when we looked at the
 `Iterator` trait in Chapter 13. There are two differences between iterators and
@@ -14,8 +14,8 @@ API. When working directly with an `Iterator`, we call its synchronous `next`
 method. With the `trpl::Receiver` stream in particular, we called an
 asynchronous `recv` method instead. These APIs otherwise feel very similar.
 
-That similarity isn’t a coincidence. A stream is similar to an asynchronous
-form of iteration. Whereas the `trpl::Receiver` specifically waits to receive
+That similarity isn’t a coincidence. A stream is similar to an asynchronous form
+of iteration. Whereas the `trpl::Receiver` specifically waits to receive
 messages, though, the general-purpose stream API is much more general: it
 provides the next item the way `Iterator` does, but asynchronously. The
 similarity between iterators and streams in Rust means we can actually create a
@@ -163,8 +163,8 @@ Message: 'j'
 ```
 
 We could do this with the regular `Receiver` API, or even the regular `Iterator`
-API, though. Let’s add something that requires streams: adding a timeout
-which applies to every item in the stream, and a delay on the items we emit.
+API, though. Let’s add something that requires streams: adding a timeout which
+applies to every item in the stream, and a delay on the items we emit.
 
 In Listing 17-34, we start by adding a timeout to the stream with the `timeout`
 method, which comes from the `StreamExt` trait. Then we update the body of the
@@ -309,13 +309,16 @@ particular ordering. Finally, we loop over that combined stream instead of over
 
 At this point, neither `messages` nor `intervals` needs to be pinned or mutable,
 because both will be combined into the single `merged` stream. However, this
-call to `merge` does not compile! (Neither does the `next` call in the `while
+call to `merge` does not compile! (Neither does the `next` call in the
+`while
 let` loop, but we’ll come back to that after fixing this.) The two streams
-have different types. The `messages` stream has the type `Timeout<impl
-Stream<Item = String>>`, where `Timeout` is the type which implements `Stream`
-for a `timeout` call. Meanwhile, the `intervals` stream has the type `impl
-Stream<Item = u32>`. To merge these two streams, we need to transform one of
-them to match the other.
+have different types. The `messages` stream has the type
+`Timeout<impl
+Stream<Item = String>>`, where `Timeout` is the type which
+implements `Stream` for a `timeout` call. Meanwhile, the `intervals` stream has
+the type `impl
+Stream<Item = u32>`. To merge these two streams, we need to
+transform one of them to match the other.
 
 In Listing 17-38, we rework the `intervals` stream, because `messages` is
 already in the basic format we want and has to handle timeout errors. First, we
@@ -338,10 +341,10 @@ through the stream, and pin it so that it’s safe to do so.
 </Listing>
 
 That gets us _almost_ to where we need to be. Everything type checks. If you run
-this, though, there will be two problems. First, it will never stop! You’ll
-need to stop it with <span class="keystroke">ctrl-c</span>. Second, the
-messages from the English alphabet will be buried in the midst of all the
-interval counter messages:
+this, though, there will be two problems. First, it will never stop! You’ll need
+to stop it with <span class="keystroke">ctrl-c</span>. Second, the messages from
+the English alphabet will be buried in the midst of all the interval counter
+messages:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the tasks running differently rather than
@@ -381,14 +384,14 @@ output, not just one stream or the other.
 Now when we run the program, it stops after pulling twenty items from the
 stream, and the intervals don’t overwhelm the messages. We also don’t get
 `Interval: 100` or `Interval: 200` or so on, but instead get `Interval: 1`,
-`Interval: 2`, and so on—even though we have a source stream which _can_
-produce an event every millisecond. That’s because the `throttle` call
-produces a new stream, wrapping the original stream, so that the original
-stream only gets polled at the throttle rate, not its own “native” rate. We
-don’t have a bunch of unhandled interval messages we’re choosing to
-ignore. Instead, we never produce those interval messages in the first place!
-This is the inherent “laziness” of Rust’s futures at work again, allowing us to
-choose our performance characteristics.
+`Interval: 2`, and so on—even though we have a source stream which _can_ produce
+an event every millisecond. That’s because the `throttle` call produces a new
+stream, wrapping the original stream, so that the original stream only gets
+polled at the throttle rate, not its own “native” rate. We don’t have a bunch of
+unhandled interval messages we’re choosing to ignore. Instead, we never produce
+those interval messages in the first place! This is the inherent “laziness” of
+Rust’s futures at work again, allowing us to choose our performance
+characteristics.
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-39
@@ -424,8 +427,8 @@ channel-based streams, the `send` calls could fail when the other side of the
 channel closes—and that’s just a matter of how the runtime executes the futures
 which make up the stream. Up until now we have ignored this by calling `unwrap`,
 but in a well-behaved app, we should explicitly handle the error, at minimum by
-ending the loop so we don’t try to send any more messages! Listing 17-40 shows
-a simple error strategy: print the issue and then `break` from the loops. As
+ending the loop so we don’t try to send any more messages! Listing 17-40 shows a
+simple error strategy: print the issue and then `break` from the loops. As
 usual, the correct way to handle a message send error will vary—just make sure
 you have a strategy.
 
@@ -437,8 +440,8 @@ you have a strategy.
 
 </Listing>
 
-Now that we’ve seen a bunch of async in practice, let’s take a step back and
-dig into a few of the details of how `Future`, `Stream`, and the other key
-traits which Rust uses to make async work.
+Now that we’ve seen a bunch of async in practice, let’s take a step back and dig
+into a few of the details of how `Future`, `Stream`, and the other key traits
+which Rust uses to make async work.
 
 [17-02-messages]: ch17-02-concurrency-with-async.html#message-passing

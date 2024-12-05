@@ -13,36 +13,38 @@ in the compiler, and how most developers organize their code. We’ll be going
 through examples of each of these rules throughout this chapter, but this is a
 great place to refer to as a reminder of how modules work.
 
-- **Start from the crate root**: When compiling a crate, the compiler first
+* **Start from the crate root**: When compiling a crate, the compiler first
   looks in the crate root file (usually _src/lib.rs_ for a library crate or
   _src/main.rs_ for a binary crate) for code to compile.
-- **Declaring modules**: In the crate root file, you can declare new modules;
+* **Declaring modules**: In the crate root file, you can declare new modules;
   say you declare a “garden” module with `mod garden;`. The compiler will look
   for the module’s code in these places:
-  - Inline, within curly brackets that replace the semicolon following `mod
+  * Inline, within curly brackets that replace the semicolon following
+    `mod
     garden`
-  - In the file _src/garden.rs_
-  - In the file _src/garden/mod.rs_
-- **Declaring submodules**: In any file other than the crate root, you can
+  * In the file _src/garden.rs_
+  * In the file _src/garden/mod.rs_
+* **Declaring submodules**: In any file other than the crate root, you can
   declare submodules. For example, you might declare `mod vegetables;` in
   _src/garden.rs_. The compiler will look for the submodule’s code within the
   directory named for the parent module in these places:
-  - Inline, directly following `mod vegetables`, within curly brackets instead
+  * Inline, directly following `mod vegetables`, within curly brackets instead
     of the semicolon
-  - In the file _src/garden/vegetables.rs_
-  - In the file _src/garden/vegetables/mod.rs_
-- **Paths to code in modules**: Once a module is part of your crate, you can
-  refer to code in that module from anywhere else in that same crate, as long
-  as the privacy rules allow, using the path to the code. For example, an
+  * In the file _src/garden/vegetables.rs_
+  * In the file _src/garden/vegetables/mod.rs_
+* **Paths to code in modules**: Once a module is part of your crate, you can
+  refer to code in that module from anywhere else in that same crate, as long as
+  the privacy rules allow, using the path to the code. For example, an
   `Asparagus` type in the garden vegetables module would be found at
   `crate::garden::vegetables::Asparagus`.
-- **Private vs. public**: Code within a module is private from its parent
-  modules by default. To make a module public, declare it with `pub mod`
-  instead of `mod`. To make items within a public module public as well, use
-  `pub` before their declarations.
-- **The `use` keyword**: Within a scope, the `use` keyword creates shortcuts to
+* **Private vs. public**: Code within a module is private from its parent
+  modules by default. To make a module public, declare it with `pub mod` instead
+  of `mod`. To make items within a public module public as well, use `pub`
+  before their declarations.
+* **The `use` keyword**: Within a scope, the `use` keyword creates shortcuts to
   items to reduce repetition of long paths. In any scope that can refer to
-  `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use
+  `crate::garden::vegetables::Asparagus`, you can create a shortcut with
+  `use
   crate::garden::vegetables::Asparagus;` and from then on you only need to
   write `Asparagus` to make use of that type in the scope.
 
@@ -105,18 +107,18 @@ restaurant. We’ll define the signatures of functions but leave their bodies
 empty to concentrate on the organization of the code rather than the
 implementation of a restaurant.
 
-In the restaurant industry, some parts of a restaurant are referred to as
-_front of house_ and others as _back of house_. Front of house is where
-customers are; this encompasses where the hosts seat customers, servers take
-orders and payment, and bartenders make drinks. Back of house is where the
-chefs and cooks work in the kitchen, dishwashers clean up, and managers do
-administrative work.
+In the restaurant industry, some parts of a restaurant are referred to as _front
+of house_ and others as _back of house_. Front of house is where customers are;
+this encompasses where the hosts seat customers, servers take orders and
+payment, and bartenders make drinks. Back of house is where the chefs and cooks
+work in the kitchen, dishwashers clean up, and managers do administrative work.
 
 To structure our crate in this way, we can organize its functions into nested
-modules. Create a new library named `restaurant` by running `cargo new
-restaurant --lib`. Then enter the code in Listing 7-1 into _src/lib.rs_ to
-define some modules and function signatures; this code is the front of house
-section.
+modules. Create a new library named `restaurant` by running
+`cargo new
+restaurant --lib`. Then enter the code in Listing 7-1 into
+_src/lib.rs_ to define some modules and function signatures; this code is the
+front of house section.
 
 <Listing number="7-1" file-name="src/lib.rs" caption="A `front_of_house` module containing other modules that then contain functions">
 
@@ -126,18 +128,18 @@ section.
 
 </Listing>
 
-We define a module with the `mod` keyword followed by the name of the module
-(in this case, `front_of_house`). The body of the module then goes inside curly
+We define a module with the `mod` keyword followed by the name of the module (in
+this case, `front_of_house`). The body of the module then goes inside curly
 brackets. Inside modules, we can place other modules, as in this case with the
 modules `hosting` and `serving`. Modules can also hold definitions for other
 items, such as structs, enums, constants, traits, and—as in Listing
 7-1—functions.
 
-By using modules, we can group related definitions together and name why
-they’re related. Programmers using this code can navigate the code based on the
-groups rather than having to read through all the definitions, making it easier
-to find the definitions relevant to them. Programmers adding new functionality
-to this code would know where to place the code to keep the program organized.
+By using modules, we can group related definitions together and name why they’re
+related. Programmers using this code can navigate the code based on the groups
+rather than having to read through all the definitions, making it easier to find
+the definitions relevant to them. Programmers adding new functionality to this
+code would know where to place the code to keep the program organized.
 
 Earlier, we mentioned that _src/main.rs_ and _src/lib.rs_ are called crate
 roots. The reason for their name is that the contents of either of these two
@@ -165,10 +167,10 @@ crate
 This tree shows how some of the modules nest inside other modules; for example,
 `hosting` nests inside `front_of_house`. The tree also shows that some modules
 are _siblings_, meaning they’re defined in the same module; `hosting` and
-`serving` are siblings defined within `front_of_house`. If module A is
-contained inside module B, we say that module A is the _child_ of module B and
-that module B is the _parent_ of module A. Notice that the entire module tree
-is rooted under the implicit module named `crate`.
+`serving` are siblings defined within `front_of_house`. If module A is contained
+inside module B, we say that module A is the _child_ of module B and that module
+B is the _parent_ of module A. Notice that the entire module tree is rooted
+under the implicit module named `crate`.
 
 The module tree might remind you of the filesystem’s directory tree on your
 computer; this is a very apt comparison! Just like directories in a filesystem,

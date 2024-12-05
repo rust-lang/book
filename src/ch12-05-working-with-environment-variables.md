@@ -11,10 +11,10 @@ and have all their searches be case insensitive in that terminal session.
 
 We first add a new `search_case_insensitive` function that will be called when
 the environment variable has a value. We’ll continue to follow the TDD process,
-so the first step is again to write a failing test. We’ll add a new test for
-the new `search_case_insensitive` function and rename our old test from
-`one_result` to `case_sensitive` to clarify the differences between the two
-tests, as shown in Listing 12-20.
+so the first step is again to write a failing test. We’ll add a new test for the
+new `search_case_insensitive` function and rename our old test from `one_result`
+to `case_sensitive` to clarify the differences between the two tests, as shown
+in Listing 12-20.
 
 <Listing number="12-20" file-name="src/lib.rs" caption="Adding a new failing test for the case-insensitive function we’re about to add">
 
@@ -33,12 +33,12 @@ and should continue to pass as we work on the case-insensitive search.
 
 The new test for the case-_insensitive_ search uses `"rUsT"` as its query. In
 the `search_case_insensitive` function we’re about to add, the query `"rUsT"`
-should match the line containing `"Rust:"` with a capital _R_ and match the
-line `"Trust me."` even though both have different casing from the query. This
-is our failing test, and it will fail to compile because we haven’t yet defined
-the `search_case_insensitive` function. Feel free to add a skeleton
-implementation that always returns an empty vector, similar to the way we did
-for the `search` function in Listing 12-16 to see the test compile and fail.
+should match the line containing `"Rust:"` with a capital _R_ and match the line
+`"Trust me."` even though both have different casing from the query. This is our
+failing test, and it will fail to compile because we haven’t yet defined the
+`search_case_insensitive` function. Feel free to add a skeleton implementation
+that always returns an empty vector, similar to the way we did for the `search`
+function in Listing 12-16 to see the test compile and fail.
 
 ### Implementing the `search_case_insensitive` Function
 
@@ -73,8 +73,8 @@ need to add an ampersand because the signature of `contains` is defined to take
 a string slice.
 
 Next, we add a call to `to_lowercase` on each `line` to lowercase all
-characters. Now that we’ve converted `line` and `query` to lowercase, we’ll
-find matches no matter what the case of the query is.
+characters. Now that we’ve converted `line` and `query` to lowercase, we’ll find
+matches no matter what the case of the query is.
 
 Let’s see if this implementation passes the tests:
 
@@ -84,8 +84,8 @@ Let’s see if this implementation passes the tests:
 
 Great! They passed. Now, let’s call the new `search_case_insensitive` function
 from the `run` function. First we’ll add a configuration option to the `Config`
-struct to switch between case-sensitive and case-insensitive search. Adding
-this field will cause compiler errors because we aren’t initializing this field
+struct to switch between case-sensitive and case-insensitive search. Adding this
+field will cause compiler errors because we aren’t initializing this field
 anywhere yet:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -95,9 +95,9 @@ anywhere yet:
 ```
 
 We added the `ignore_case` field that holds a Boolean. Next, we need the `run`
-function to check the `ignore_case` field’s value and use that to decide
-whether to call the `search` function or the `search_case_insensitive`
-function, as shown in Listing 12-22. This still won’t compile yet.
+function to check the `ignore_case` field’s value and use that to decide whether
+to call the `search` function or the `search_case_insensitive` function, as
+shown in Listing 12-22. This still won’t compile yet.
 
 <Listing number="12-22" file-name="src/lib.rs" caption="Calling either `search` or `search_case_insensitive` based on the value in `config.ignore_case`">
 
@@ -124,18 +124,18 @@ Listing 12-23.
 
 Here, we create a new variable, `ignore_case`. To set its value, we call the
 `env::var` function and pass it the name of the `IGNORE_CASE` environment
-variable. The `env::var` function returns a `Result` that will be the
-successful `Ok` variant that contains the value of the environment variable if
-the environment variable is set to any value. It will return the `Err` variant
-if the environment variable is not set.
+variable. The `env::var` function returns a `Result` that will be the successful
+`Ok` variant that contains the value of the environment variable if the
+environment variable is set to any value. It will return the `Err` variant if
+the environment variable is not set.
 
 We’re using the `is_ok` method on the `Result` to check whether the environment
-variable is set, which means the program should do a case-insensitive search.
-If the `IGNORE_CASE` environment variable isn’t set to anything, `is_ok` will
+variable is set, which means the program should do a case-insensitive search. If
+the `IGNORE_CASE` environment variable isn’t set to anything, `is_ok` will
 return `false` and the program will perform a case-sensitive search. We don’t
 care about the _value_ of the environment variable, just whether it’s set or
-unset, so we’re checking `is_ok` rather than using `unwrap`, `expect`, or any
-of the other methods we’ve seen on `Result`.
+unset, so we’re checking `is_ok` rather than using `unwrap`, `expect`, or any of
+the other methods we’ve seen on `Result`.
 
 We pass the value in the `ignore_case` variable to the `Config` instance so the
 `run` function can read that value and decide whether to call
@@ -149,8 +149,8 @@ the word _to_ in all lowercase:
 {{#include ../listings/ch12-an-io-project/listing-12-23/output.txt}}
 ```
 
-Looks like that still works! Now let’s run the program with `IGNORE_CASE` set
-to `1` but with the same query _to_:
+Looks like that still works! Now let’s run the program with `IGNORE_CASE` set to
+`1` but with the same query _to_:
 
 ```console
 $ IGNORE_CASE=1 cargo run -- to poem.txt
@@ -163,8 +163,8 @@ run the program as separate commands:
 PS> $Env:IGNORE_CASE=1; cargo run -- to poem.txt
 ```
 
-This will make `IGNORE_CASE` persist for the remainder of your shell session.
-It can be unset with the `Remove-Item` cmdlet:
+This will make `IGNORE_CASE` persist for the remainder of your shell session. It
+can be unset with the `Remove-Item` cmdlet:
 
 ```console
 PS> Remove-Item Env:IGNORE_CASE

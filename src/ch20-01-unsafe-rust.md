@@ -5,23 +5,23 @@ enforced at compile time. However, Rust has a second language hidden inside it
 that doesn’t enforce these memory safety guarantees: it’s called _unsafe Rust_
 and works just like regular Rust, but gives us extra superpowers.
 
-Unsafe Rust exists because, by nature, static analysis is conservative. When
-the compiler tries to determine whether or not code upholds the guarantees,
-it’s better for it to reject some valid programs than to accept some invalid
+Unsafe Rust exists because, by nature, static analysis is conservative. When the
+compiler tries to determine whether or not code upholds the guarantees, it’s
+better for it to reject some valid programs than to accept some invalid
 programs. Although the code _might_ be okay, if the Rust compiler doesn’t have
-enough information to be confident, it will reject the code. In these cases,
-you can use unsafe code to tell the compiler, “Trust me, I know what I’m
-doing.” Be warned, however, that you use unsafe Rust at your own risk: if you
-use unsafe code incorrectly, problems can occur due to memory unsafety, such as
-null pointer dereferencing.
+enough information to be confident, it will reject the code. In these cases, you
+can use unsafe code to tell the compiler, “Trust me, I know what I’m doing.” Be
+warned, however, that you use unsafe Rust at your own risk: if you use unsafe
+code incorrectly, problems can occur due to memory unsafety, such as null
+pointer dereferencing.
 
 Another reason Rust has an unsafe alter ego is that the underlying computer
 hardware is inherently unsafe. If Rust didn’t let you do unsafe operations, you
 couldn’t do certain tasks. Rust needs to allow you to do low-level systems
 programming, such as directly interacting with the operating system or even
-writing your own operating system. Working with low-level systems programming
-is one of the goals of the language. Let’s explore what we can do with unsafe
-Rust and how to do it.
+writing your own operating system. Working with low-level systems programming is
+one of the goals of the language. Let’s explore what we can do with unsafe Rust
+and how to do it.
 
 ### Unsafe Superpowers
 
@@ -30,17 +30,17 @@ that holds the unsafe code. You can take five actions in unsafe Rust that you
 can’t in safe Rust, which we call _unsafe superpowers_. Those superpowers
 include the ability to:
 
-- Dereference a raw pointer
-- Call an unsafe function or method
-- Access or modify a mutable static variable
-- Implement an unsafe trait
-- Access fields of a `union`
+* Dereference a raw pointer
+* Call an unsafe function or method
+* Access or modify a mutable static variable
+* Implement an unsafe trait
+* Access fields of a `union`
 
 It’s important to understand that `unsafe` doesn’t turn off the borrow checker
 or disable any other of Rust’s safety checks: if you use a reference in unsafe
 code, it will still be checked. The `unsafe` keyword only gives you access to
-these five features that are then not checked by the compiler for memory
-safety. You’ll still get some degree of safety inside of an unsafe block.
+these five features that are then not checked by the compiler for memory safety.
+You’ll still get some degree of safety inside of an unsafe block.
 
 In addition, `unsafe` does not mean the code inside the block is necessarily
 dangerous or that it will definitely have memory safety problems: the intent is
@@ -68,21 +68,21 @@ some abstractions that provide a safe interface to unsafe code.
 ### Dereferencing a Raw Pointer
 
 In Chapter 4, in the [“Dangling References”][dangling-references]<!-- ignore
---> section, we mentioned that the compiler ensures references are always
-valid. Unsafe Rust has two new types called _raw pointers_ that are similar to
-references. As with references, raw pointers can be immutable or mutable and
-are written as `*const T` and `*mut T`, respectively. The asterisk isn’t the
+--> section, we mentioned that the compiler ensures references are always valid.
+Unsafe Rust has two new types called _raw pointers_ that are similar to
+references. As with references, raw pointers can be immutable or mutable and are
+written as `*const T` and `*mut T`, respectively. The asterisk isn’t the
 dereference operator; it’s part of the type name. In the context of raw
-pointers, _immutable_ means that the pointer can’t be directly assigned to
-after being dereferenced.
+pointers, _immutable_ means that the pointer can’t be directly assigned to after
+being dereferenced.
 
 Different from references and smart pointers, raw pointers:
 
-- Are allowed to ignore the borrowing rules by having both immutable and
-  mutable pointers or multiple mutable pointers to the same location
-- Aren’t guaranteed to point to valid memory
-- Are allowed to be null
-- Don’t implement any automatic cleanup
+* Are allowed to ignore the borrowing rules by having both immutable and mutable
+  pointers or multiple mutable pointers to the same location
+* Aren’t guaranteed to point to valid memory
+* Are allowed to be null
+* Don’t implement any automatic cleanup
 
 By opting out of having Rust enforce these guarantees, you can give up
 guaranteed safety in exchange for greater performance or the ability to
@@ -103,7 +103,8 @@ raw pointers in safe code; we just can’t dereference raw pointers outside an
 unsafe block, as you’ll see in a bit.
 
 We’ve created raw pointers by using the raw borrow operators: `&raw const num`
-creates a `*const i32` immutable raw pointer, and `&raw mut num` creates a `*mut
+creates a `*const i32` immutable raw pointer, and `&raw mut num` creates a
+`*mut
 i32` mutable raw pointer. Because we created them directly from a local
 variable, we know these particular raw pointers are valid, but we can’t make
 that assumption about just any raw pointer.
@@ -144,10 +145,10 @@ Note also that in Listing 20-1 and 20-3, we created `*const i32` and `*mut i32`
 raw pointers that both pointed to the same memory location, where `num` is
 stored. If we instead tried to create an immutable and a mutable reference to
 `num`, the code would not have compiled because Rust’s ownership rules don’t
-allow a mutable reference at the same time as any immutable references. With
-raw pointers, we can create a mutable pointer and an immutable pointer to the
-same location and change data through the mutable pointer, potentially creating
-a data race. Be careful!
+allow a mutable reference at the same time as any immutable references. With raw
+pointers, we can create a mutable pointer and an immutable pointer to the same
+location and change data through the mutable pointer, potentially creating a
+data race. Be careful!
 
 With all of these dangers, why would you ever use raw pointers? One major use
 case is when interfacing with C code, as you’ll see in the next section,
@@ -193,12 +194,12 @@ unsafe operations within an unsafe function, we don’t need to add another
 #### Creating a Safe Abstraction over Unsafe Code
 
 Just because a function contains unsafe code doesn’t mean we need to mark the
-entire function as unsafe. In fact, wrapping unsafe code in a safe function is
-a common abstraction. As an example, let’s study the `split_at_mut` function
-from the standard library, which requires some unsafe code. We’ll explore how
-we might implement it. This safe method is defined on mutable slices: it takes
-one slice and makes it two by splitting the slice at the index given as an
-argument. Listing 20-4 shows how to use `split_at_mut`.
+entire function as unsafe. In fact, wrapping unsafe code in a safe function is a
+common abstraction. As an example, let’s study the `split_at_mut` function from
+the standard library, which requires some unsafe code. We’ll explore how we
+might implement it. This safe method is defined on mutable slices: it takes one
+slice and makes it two by splitting the slice at the index given as an argument.
+Listing 20-4 shows how to use `split_at_mut`.
 
 <Listing number="20-4" caption="Using the safe `split_at_mut` function">
 
@@ -221,15 +222,14 @@ of `i32` values rather than for a generic type `T`.
 
 </Listing>
 
-This function first gets the total length of the slice. Then it asserts that
-the index given as a parameter is within the slice by checking whether it’s
-less than or equal to the length. The assertion means that if we pass an index
-that is greater than the length to split the slice at, the function will panic
-before it attempts to use that index.
+This function first gets the total length of the slice. Then it asserts that the
+index given as a parameter is within the slice by checking whether it’s less
+than or equal to the length. The assertion means that if we pass an index that
+is greater than the length to split the slice at, the function will panic before
+it attempts to use that index.
 
-Then we return two mutable slices in a tuple: one from the start of the
-original slice to the `mid` index and another from `mid` to the end of the
-slice.
+Then we return two mutable slices in a tuple: one from the start of the original
+slice to the `mid` index and another from `mid` to the end of the slice.
 
 When we try to compile the code in Listing 20-5, we’ll get an error.
 
@@ -254,30 +254,30 @@ to unsafe functions to make the implementation of `split_at_mut` work.
 
 </Listing>
 
-Recall from [“The Slice Type”][the-slice-type]<!-- ignore --> section in
-Chapter 4 that slices are a pointer to some data and the length of the slice.
-We use the `len` method to get the length of a slice and the `as_mut_ptr`
-method to access the raw pointer of a slice. In this case, because we have a
-mutable slice to `i32` values, `as_mut_ptr` returns a raw pointer with the type
-`*mut i32`, which we’ve stored in the variable `ptr`.
+Recall from [“The Slice Type”][the-slice-type]<!-- ignore --> section in Chapter
+4 that slices are a pointer to some data and the length of the slice. We use the
+`len` method to get the length of a slice and the `as_mut_ptr` method to access
+the raw pointer of a slice. In this case, because we have a mutable slice to
+`i32` values, `as_mut_ptr` returns a raw pointer with the type `*mut i32`, which
+we’ve stored in the variable `ptr`.
 
 We keep the assertion that the `mid` index is within the slice. Then we get to
 the unsafe code: the `slice::from_raw_parts_mut` function takes a raw pointer
 and a length, and it creates a slice. We use this function to create a slice
-that starts from `ptr` and is `mid` items long. Then we call the `add`
-method on `ptr` with `mid` as an argument to get a raw pointer that starts at
-`mid`, and we create a slice using that pointer and the remaining number of
-items after `mid` as the length.
+that starts from `ptr` and is `mid` items long. Then we call the `add` method on
+`ptr` with `mid` as an argument to get a raw pointer that starts at `mid`, and
+we create a slice using that pointer and the remaining number of items after
+`mid` as the length.
 
 The function `slice::from_raw_parts_mut` is unsafe because it takes a raw
 pointer and must trust that this pointer is valid. The `add` method on raw
 pointers is also unsafe, because it must trust that the offset location is also
 a valid pointer. Therefore, we had to put an `unsafe` block around our calls to
-`slice::from_raw_parts_mut` and `add` so we could call them. By looking at
-the code and by adding the assertion that `mid` must be less than or equal to
-`len`, we can tell that all the raw pointers used within the `unsafe` block
-will be valid pointers to data within the slice. This is an acceptable and
-appropriate use of `unsafe`.
+`slice::from_raw_parts_mut` and `add` so we could call them. By looking at the
+code and by adding the assertion that `mid` must be less than or equal to `len`,
+we can tell that all the raw pointers used within the `unsafe` block will be
+valid pointers to data within the slice. This is an acceptable and appropriate
+use of `unsafe`.
 
 Note that we don’t need to mark the resulting `split_at_mut` function as
 `unsafe`, and we can call this function from safe Rust. We’ve created a safe
@@ -285,9 +285,9 @@ abstraction to the unsafe code with an implementation of the function that uses
 `unsafe` code in a safe way, because it creates only valid pointers from the
 data this function has access to.
 
-In contrast, the use of `slice::from_raw_parts_mut` in Listing 20-7 would
-likely crash when the slice is used. This code takes an arbitrary memory
-location and creates a slice 10,000 items long.
+In contrast, the use of `slice::from_raw_parts_mut` in Listing 20-7 would likely
+crash when the slice is used. This code takes an arbitrary memory location and
+creates a slice 10,000 items long.
 
 <Listing number="20-7" caption="Creating a slice from an arbitrary memory location">
 
@@ -364,8 +364,8 @@ responsibility to make sure that promise is kept!
 > built-in mangling, so it is our responsibility to make sure the name we have
 > exported is safe to export without mangling.
 >
-> In the following example, we make the `call_from_c` function accessible from
-> C code, after it’s compiled to a shared library and linked from C:
+> In the following example, we make the `call_from_c` function accessible from C
+> code, after it’s compiled to a shared library and linked from C:
 >
 > ```rust
 > #[unsafe(no_mangle)]
@@ -383,8 +383,7 @@ support but can be problematic with Rust’s ownership rules. If two threads are
 accessing the same mutable global variable, it can cause a data race.
 
 In Rust, global variables are called _static_ variables. Listing 20-10 shows an
-example declaration and use of a static variable with a string slice as a
-value.
+example declaration and use of a static variable with a string slice as a value.
 
 <Listing number="20-10" file-name="src/main.rs" caption="Defining and using an immutable static variable">
 
@@ -404,8 +403,8 @@ aren’t required to annotate it explicitly. Accessing an immutable static
 variable is safe.
 
 A subtle difference between constants and immutable static variables is that
-values in a static variable have a fixed address in memory. Using the value
-will always access the same data. Constants, on the other hand, are allowed to
+values in a static variable have a fixed address in memory. Using the value will
+always access the same data. Constants, on the other hand, are allowed to
 duplicate their data whenever they’re used. Another difference is that static
 variables can be mutable. Accessing and modifying mutable static variables is
 _unsafe_. Listing 20-11 shows how to declare, access, and modify a mutable
@@ -444,8 +443,8 @@ that data accessed from different threads is done safely.
 We can use `unsafe` to implement an unsafe trait. A trait is unsafe when at
 least one of its methods has some invariant that the compiler can’t verify. We
 declare that a trait is `unsafe` by adding the `unsafe` keyword before `trait`
-and marking the implementation of the trait as `unsafe` too, as shown in
-Listing 20-12.
+and marking the implementation of the trait as `unsafe` too, as shown in Listing
+20-12.
 
 <Listing number="20-12" caption="Defining and implementing an unsafe trait">
 
@@ -461,22 +460,22 @@ the compiler can’t verify.
 As an example, recall the `Sync` and `Send` marker traits we discussed in the
 [“Extensible Concurrency with the `Sync` and `Send`
 Traits”][extensible-concurrency-with-the-sync-and-send-traits]<!-- ignore -->
-section in Chapter 16: the compiler implements these traits automatically if
-our types are composed entirely of `Send` and `Sync` types. If we implement a
-type that contains a type that is not `Send` or `Sync`, such as raw pointers,
-and we want to mark that type as `Send` or `Sync`, we must use `unsafe`. Rust
-can’t verify that our type upholds the guarantees that it can be safely sent
-across threads or accessed from multiple threads; therefore, we need to do
-those checks manually and indicate as such with `unsafe`.
+section in Chapter 16: the compiler implements these traits automatically if our
+types are composed entirely of `Send` and `Sync` types. If we implement a type
+that contains a type that is not `Send` or `Sync`, such as raw pointers, and we
+want to mark that type as `Send` or `Sync`, we must use `unsafe`. Rust can’t
+verify that our type upholds the guarantees that it can be safely sent across
+threads or accessed from multiple threads; therefore, we need to do those checks
+manually and indicate as such with `unsafe`.
 
 ### Accessing Fields of a Union
 
-The final action that works only with `unsafe` is accessing fields of a
-_union_. A `union` is similar to a `struct`, but only one declared field is
-used in a particular instance at one time. Unions are primarily used to
-interface with unions in C code. Accessing union fields is unsafe because Rust
-can’t guarantee the type of the data currently being stored in the union
-instance. You can learn more about unions in [the Rust Reference][reference].
+The final action that works only with `unsafe` is accessing fields of a _union_.
+A `union` is similar to a `struct`, but only one declared field is used in a
+particular instance at one time. Unions are primarily used to interface with
+unions in C code. Accessing union fields is unsafe because Rust can’t guarantee
+the type of the data currently being stored in the union instance. You can learn
+more about unions in [the Rust Reference][reference].
 
 ### Using Miri to check unsafe code
 
@@ -490,10 +489,12 @@ understands about how Rust should work.
 
 Using Miri requires a nightly build of Rust (which we talk about more in
 [Appendix G: How Rust is Made and “Nightly Rust”][nightly]). You can install
-both a nightly version of Rust and the Miri tool by typing `rustup +nightly
-component add miri`. This does not change what version of Rust your project
-uses; it only adds the tool to your system so you can use it when you want to.
-You can run Miri on a project by typing `cargo +nightly miri run` or `cargo
+both a nightly version of Rust and the Miri tool by typing
+`rustup +nightly
+component add miri`. This does not change what version of Rust
+your project uses; it only adds the tool to your system so you can use it when
+you want to. You can run Miri on a project by typing `cargo +nightly miri run`
+or `cargo
 +nightly miri test`.
 
 For an example of how helpful this can be, consider what happens when we run it

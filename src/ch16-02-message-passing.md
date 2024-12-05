@@ -2,7 +2,8 @@
 
 One increasingly popular approach to ensuring safe concurrency is _message
 passing_, where threads or actors communicate by sending each other messages
-containing data. Here’s the idea in a slogan from [the Go language documentation](https://golang.org/doc/effective_go.html#concurrency):
+containing data. Here’s the idea in a slogan from
+[the Go language documentation](https://golang.org/doc/effective_go.html#concurrency):
 “Do not communicate by sharing memory; instead, share memory by communicating.”
 
 To accomplish message-sending concurrency, Rust's standard library provides an
@@ -10,27 +11,27 @@ implementation of _channels_. A channel is a general programming concept by
 which data is sent from one thread to another.
 
 You can imagine a channel in programming as being like a directional channel of
-water, such as a stream or a river. If you put something like a rubber duck
-into a river, it will travel downstream to the end of the waterway.
+water, such as a stream or a river. If you put something like a rubber duck into
+a river, it will travel downstream to the end of the waterway.
 
 A channel has two halves: a transmitter and a receiver. The transmitter half is
 the upstream location where you put rubber ducks into the river, and the
-receiver half is where the rubber duck ends up downstream. One part of your
-code calls methods on the transmitter with the data you want to send, and
-another part checks the receiving end for arriving messages. A channel is said
-to be _closed_ if either the transmitter or receiver half is dropped.
+receiver half is where the rubber duck ends up downstream. One part of your code
+calls methods on the transmitter with the data you want to send, and another
+part checks the receiving end for arriving messages. A channel is said to be
+_closed_ if either the transmitter or receiver half is dropped.
 
-Here, we’ll work up to a program that has one thread to generate values and
-send them down a channel, and another thread that will receive the values and
-print them out. We’ll be sending simple values between threads using a channel
-to illustrate the feature. Once you’re familiar with the technique, you could
-use channels for any threads that need to communicate between each other, such
-as a chat system or a system where many threads perform parts of a calculation
-and send the parts to one thread that aggregates the results.
+Here, we’ll work up to a program that has one thread to generate values and send
+them down a channel, and another thread that will receive the values and print
+them out. We’ll be sending simple values between threads using a channel to
+illustrate the feature. Once you’re familiar with the technique, you could use
+channels for any threads that need to communicate between each other, such as a
+chat system or a system where many threads perform parts of a calculation and
+send the parts to one thread that aggregates the results.
 
-First, in Listing 16-6, we’ll create a channel but not do anything with it.
-Note that this won’t compile yet because Rust can’t tell what type of values we
-want to send over the channel.
+First, in Listing 16-6, we’ll create a channel but not do anything with it. Note
+that this won’t compile yet because Rust can’t tell what type of values we want
+to send over the channel.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -56,9 +57,9 @@ receiver. The abbreviations `tx` and `rx` are traditionally used in many fields
 for _transmitter_ and _receiver_ respectively, so we name our variables as such
 to indicate each end. We’re using a `let` statement with a pattern that
 destructures the tuples; we’ll discuss the use of patterns in `let` statements
-and destructuring in Chapter 19. For now, know that using a `let` statement
-this way is a convenient approach to extract the pieces of the tuple returned
-by `mpsc::channel`.
+and destructuring in Chapter 19. For now, know that using a `let` statement this
+way is a convenient approach to extract the pieces of the tuple returned by
+`mpsc::channel`.
 
 Let’s move the transmitting end into a spawned thread and have it send one
 string so the spawned thread is communicating with the main thread, as shown in
@@ -96,18 +97,17 @@ receiving a chat message.
 </Listing>
 
 The receiver has two useful methods: `recv` and `try_recv`. We’re using `recv`,
-short for _receive_, which will block the main thread’s execution and wait
-until a value is sent down the channel. Once a value is sent, `recv` will
-return it in a `Result<T, E>`. When the transmitter closes, `recv` will return
-an error to signal that no more values will be coming.
+short for _receive_, which will block the main thread’s execution and wait until
+a value is sent down the channel. Once a value is sent, `recv` will return it in
+a `Result<T, E>`. When the transmitter closes, `recv` will return an error to
+signal that no more values will be coming.
 
 The `try_recv` method doesn’t block, but will instead return a `Result<T, E>`
 immediately: an `Ok` value holding a message if one is available and an `Err`
-value if there aren’t any messages this time. Using `try_recv` is useful if
-this thread has other work to do while waiting for messages: we could write a
-loop that calls `try_recv` every so often, handles a message if one is
-available, and otherwise does other work for a little while until checking
-again.
+value if there aren’t any messages this time. Using `try_recv` is useful if this
+thread has other work to do while waiting for messages: we could write a loop
+that calls `try_recv` every so often, handles a message if one is available, and
+otherwise does other work for a little while until checking again.
 
 We’ve used `recv` in this example for simplicity; we don’t have any other work
 for the main thread to do other than wait for messages, so blocking the main
@@ -130,11 +130,11 @@ Perfect!
 
 The ownership rules play a vital role in message sending because they help you
 write safe, concurrent code. Preventing errors in concurrent programming is the
-advantage of thinking about ownership throughout your Rust programs. Let’s do
-an experiment to show how channels and ownership work together to prevent
-problems: we’ll try to use a `val` value in the spawned thread _after_ we’ve
-sent it down the channel. Try compiling the code in Listing 16-9 to see why
-this code isn’t allowed:
+advantage of thinking about ownership throughout your Rust programs. Let’s do an
+experiment to show how channels and ownership work together to prevent problems:
+we’ll try to use a `val` value in the spawned thread _after_ we’ve sent it down
+the channel. Try compiling the code in Listing 16-9 to see why this code isn’t
+allowed:
 
 <Listing number="16-9" file-name="src/main.rs" caption="Attempting to use `val` after we’ve sent it down the channel">
 
@@ -185,8 +185,8 @@ In the main thread, we’re not calling the `recv` function explicitly anymore:
 instead, we’re treating `rx` as an iterator. For each value received, we’re
 printing it. When the channel is closed, iteration will end.
 
-When running the code in Listing 16-10, you should see the following output
-with a 1-second pause in between each line:
+When running the code in Listing 16-10, you should see the following output with
+a 1-second pause in between each line:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -205,10 +205,10 @@ the spawned thread.
 
 ### Creating Multiple Producers by Cloning the Transmitter
 
-Earlier we mentioned that `mpsc` was an acronym for _multiple producer,
-single consumer_. Let’s put `mpsc` to use and expand the code in Listing 16-10
-to create multiple threads that all send values to the same receiver. We can do
-so by cloning the transmitter, as shown in Listing 16-11:
+Earlier we mentioned that `mpsc` was an acronym for _multiple producer, single
+consumer_. Let’s put `mpsc` to use and expand the code in Listing 16-10 to
+create multiple threads that all send values to the same receiver. We can do so
+by cloning the transmitter, as shown in Listing 16-11:
 
 <Listing number="16-11" file-name="src/main.rs" caption="Sending multiple messages from multiple producers">
 

@@ -17,11 +17,11 @@ six-week release process.
 
 Editions serve different purposes for different people:
 
-- For active Rust users, a new edition brings together incremental changes into
+* For active Rust users, a new edition brings together incremental changes into
   an easy-to-understand package.
-- For non-users, a new edition signals that some major advancements have
-  landed, which might make Rust worth another look.
-- For those developing Rust, a new edition provides a rallying point for the
+* For non-users, a new edition signals that some major advancements have landed,
+  which might make Rust worth another look.
+* For those developing Rust, a new edition provides a rallying point for the
   project as a whole.
 
 At the time of this writing, three Rust editions are available: Rust 2015, Rust
@@ -33,17 +33,17 @@ value for backward compatibility reasons.
 
 Each project can opt in to an edition other than the default 2015 edition.
 Editions can contain incompatible changes, such as including a new keyword that
-conflicts with identifiers in code. However, unless you opt in to those
-changes, your code will continue to compile even as you upgrade the Rust
-compiler version you use.
+conflicts with identifiers in code. However, unless you opt in to those changes,
+your code will continue to compile even as you upgrade the Rust compiler version
+you use.
 
 All Rust compiler versions support any edition that existed prior to that
-compiler’s release, and they can link crates of any supported editions
-together. Edition changes only affect the way the compiler initially parses
-code. Therefore, if you’re using Rust 2015 and one of your dependencies uses
-Rust 2018, your project will compile and be able to use that dependency. The
-opposite situation, where your project uses Rust 2018 and a dependency uses
-Rust 2015, works as well.
+compiler’s release, and they can link crates of any supported editions together.
+Edition changes only affect the way the compiler initially parses code.
+Therefore, if you’re using Rust 2015 and one of your dependencies uses Rust
+2018, your project will compile and be able to use that dependency. The opposite
+situation, where your project uses Rust 2018 and a dependency uses Rust 2015,
+works as well.
 
 To be clear: most features will be available on all editions. Developers using
 any Rust edition will continue to see improvements as new stable releases are
@@ -51,6 +51,8 @@ made. However, in some cases, mainly when new keywords are added, some new
 features might only be available in later editions. You will need to switch
 editions if you want to take advantage of such features.
 
-For more details, the [_Edition Guide_](https://doc.rust-lang.org/stable/edition-guide/) is a complete book
-about editions that enumerates the differences between editions and explains
-how to automatically upgrade your code to a new edition via `cargo fix`.
+For more details, the
+[_Edition Guide_](https://doc.rust-lang.org/stable/edition-guide/) is a complete
+book about editions that enumerates the differences between editions and
+explains how to automatically upgrade your code to a new edition via
+`cargo fix`.

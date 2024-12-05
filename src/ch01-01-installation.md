@@ -31,9 +31,9 @@ If you’re using Linux or macOS, open a terminal and enter the following comman
 $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
-The command downloads a script and starts the installation of the `rustup`
-tool, which installs the latest stable version of Rust. You might be prompted
-for your password. If the install is successful, the following line will appear:
+The command downloads a script and starts the installation of the `rustup` tool,
+which installs the latest stable version of Rust. You might be prompted for your
+password. If the install is successful, the following line will appear:
 
 ```text
 Rust is installed now. Great!
@@ -104,9 +104,9 @@ In Linux and macOS, use:
 $ echo $PATH
 ```
 
-If that’s all correct and Rust still isn’t working, there are a number of
-places you can get help. Find out how to get in touch with other Rustaceans (a
-silly nickname we call ourselves) on [the community page][community].
+If that’s all correct and Rust still isn’t working, there are a number of places
+you can get help. Find out how to get in touch with other Rustaceans (a silly
+nickname we call ourselves) on [the community page][community].
 
 ### Updating and Uninstalling
 
@@ -126,9 +126,9 @@ $ rustup self uninstall
 
 ### Local Documentation
 
-The installation of Rust also includes a local copy of the documentation so
-that you can read it offline. Run `rustup doc` to open the local documentation
-in your browser.
+The installation of Rust also includes a local copy of the documentation so that
+you can read it offline. Run `rustup doc` to open the local documentation in
+your browser.
 
 Any time a type or function is provided by the standard library and you’re not
 sure what it does or how to use it, use the application programming interface
@@ -139,8 +139,8 @@ sure what it does or how to use it, use the application programming interface
 This book makes no assumptions about what tools you use to author Rust code.
 Just about any text editor will get the job done! However, many text editors and
 integrated development environments (IDEs) have built-in support for Rust. You
-can always find a fairly current list of many editors and IDEs on [the tools
-page][tools] on the Rust website.
+can always find a fairly current list of many editors and IDEs on
+[the tools page][tools] on the Rust website.
 
 [otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 [install]: https://www.rust-lang.org/tools/install

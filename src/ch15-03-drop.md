@@ -2,8 +2,8 @@
 
 The second trait important to the smart pointer pattern is `Drop`, which lets
 you customize what happens when a value is about to go out of scope. You can
-provide an implementation for the `Drop` trait on any type, and that code can
-be used to release resources like files or network connections.
+provide an implementation for the `Drop` trait on any type, and that code can be
+used to release resources like files or network connections.
 
 We’re introducing `Drop` in the context of smart pointers because the
 functionality of the `Drop` trait is almost always used when implementing a
@@ -12,17 +12,17 @@ space on the heap that the box points to.
 
 In some languages, for some types, the programmer must call code to free memory
 or resources every time they finish using an instance of those types. Examples
-include file handles, sockets, or locks. If they forget, the system might
-become overloaded and crash. In Rust, you can specify that a particular bit of
-code be run whenever a value goes out of scope, and the compiler will insert
-this code automatically. As a result, you don’t need to be careful about
-placing cleanup code everywhere in a program that an instance of a particular
-type is finished with—you still won’t leak resources!
+include file handles, sockets, or locks. If they forget, the system might become
+overloaded and crash. In Rust, you can specify that a particular bit of code be
+run whenever a value goes out of scope, and the compiler will insert this code
+automatically. As a result, you don’t need to be careful about placing cleanup
+code everywhere in a program that an instance of a particular type is finished
+with—you still won’t leak resources!
 
 You specify the code to run when a value goes out of scope by implementing the
-`Drop` trait. The `Drop` trait requires you to implement one method named
-`drop` that takes a mutable reference to `self`. To see when Rust calls `drop`,
-let’s implement `drop` with `println!` statements for now.
+`Drop` trait. The `Drop` trait requires you to implement one method named `drop`
+that takes a mutable reference to `self`. To see when Rust calls `drop`, let’s
+implement `drop` with `println!` statements for now.
 
 Listing 15-14 shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print `Dropping CustomSmartPointer!` when the
@@ -45,9 +45,9 @@ demonstrate visually when Rust will call `drop`.
 
 In `main`, we create two instances of `CustomSmartPointer` and then print
 `CustomSmartPointers created`. At the end of `main`, our instances of
-`CustomSmartPointer` will go out of scope, and Rust will call the code we put
-in the `drop` method, printing our final message. Note that we didn’t need to
-call the `drop` method explicitly.
+`CustomSmartPointer` will go out of scope, and Rust will call the code we put in
+the `drop` method, printing our final message. Note that we didn’t need to call
+the `drop` method explicitly.
 
 When we run this program, we’ll see the following output:
 
@@ -57,10 +57,9 @@ When we run this program, we’ll see the following output:
 
 Rust automatically called `drop` for us when our instances went out of scope,
 calling the code we specified. Variables are dropped in the reverse order of
-their creation, so `d` was dropped before `c`. This example’s purpose is to
-give you a visual guide to how the `drop` method works; usually you would
-specify the cleanup code that your type needs to run rather than a print
-message.
+their creation, so `d` was dropped before `c`. This example’s purpose is to give
+you a visual guide to how the `drop` method works; usually you would specify the
+cleanup code that your type needs to run rather than a print message.
 
 ### Dropping a Value Early with `std::mem::drop`
 
@@ -70,9 +69,9 @@ functionality. Disabling `drop` isn’t usually necessary; the whole point of th
 you might want to clean up a value early. One example is when using smart
 pointers that manage locks: you might want to force the `drop` method that
 releases the lock so that other code in the same scope can acquire the lock.
-Rust doesn’t let you call the `Drop` trait’s `drop` method manually; instead
-you have to call the `std::mem::drop` function provided by the standard library
-if you want to force a value to be dropped before the end of its scope.
+Rust doesn’t let you call the `Drop` trait’s `drop` method manually; instead you
+have to call the `std::mem::drop` function provided by the standard library if
+you want to force a value to be dropped before the end of its scope.
 
 If we try to call the `Drop` trait’s `drop` method manually by modifying the
 `main` function from Listing 15-14, as shown in Listing 15-15, we’ll get a
@@ -104,13 +103,13 @@ _double free_ error because Rust would be trying to clean up the same value
 twice.
 
 We can’t disable the automatic insertion of `drop` when a value goes out of
-scope, and we can’t call the `drop` method explicitly. So, if we need to force
-a value to be cleaned up early, we use the `std::mem::drop` function.
+scope, and we can’t call the `drop` method explicitly. So, if we need to force a
+value to be cleaned up early, we use the `std::mem::drop` function.
 
 The `std::mem::drop` function is different from the `drop` method in the `Drop`
-trait. We call it by passing as an argument the value we want to force drop.
-The function is in the prelude, so we can modify `main` in Listing 15-15 to
-call the `drop` function, as shown in Listing 15-16:
+trait. We call it by passing as an argument the value we want to force drop. The
+function is in the prelude, so we can modify `main` in Listing 15-15 to call the
+`drop` function, as shown in Listing 15-16:
 
 <Listing number="15-16" file-name="src/main.rs" caption="Calling `std::mem::drop` to explicitly drop a value before it goes out of scope">
 
@@ -127,19 +126,20 @@ Running this code will print the following:
 ```
 
 The text ``Dropping CustomSmartPointer with data `some data`!`` is printed
-between the `CustomSmartPointer created.` and `CustomSmartPointer dropped
-before the end of main.` text, showing that the `drop` method code is called to
-drop `c` at that point.
+between the `CustomSmartPointer created.` and
+`CustomSmartPointer dropped
+before the end of main.` text, showing that the
+`drop` method code is called to drop `c` at that point.
 
-You can use code specified in a `Drop` trait implementation in many ways to
-make cleanup convenient and safe: for instance, you could use it to create your
-own memory allocator! With the `Drop` trait and Rust’s ownership system, you
-don’t have to remember to clean up because Rust does it automatically.
+You can use code specified in a `Drop` trait implementation in many ways to make
+cleanup convenient and safe: for instance, you could use it to create your own
+memory allocator! With the `Drop` trait and Rust’s ownership system, you don’t
+have to remember to clean up because Rust does it automatically.
 
-You also don’t have to worry about problems resulting from accidentally
-cleaning up values still in use: the ownership system that makes sure
-references are always valid also ensures that `drop` gets called only once when
-the value is no longer being used.
+You also don’t have to worry about problems resulting from accidentally cleaning
+up values still in use: the ownership system that makes sure references are
+always valid also ensures that `drop` gets called only once when the value is no
+longer being used.
 
 Now that we’ve examined `Box<T>` and some of the characteristics of smart
 pointers, let’s look at a few other smart pointers defined in the standard

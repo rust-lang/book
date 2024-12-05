@@ -103,10 +103,9 @@ Recall our description (in the [Counting][counting] section) of waiting on
 initial discussion, we noted that a runtime will pause the future until it’s
 ready with either `Some(message)` or `None` when the channel closes. With our
 deeper understanding of `Future` in place, and specifically `Future::poll`, we
-can see how that works. The runtime knows the future isn’t ready when it
-returns `Poll::Pending`. Conversely, the runtime knows the future is ready and
-advances it when `poll` returns `Poll::Ready(Some(message))` or
-`Poll::Ready(None)`.
+can see how that works. The runtime knows the future isn’t ready when it returns
+`Poll::Pending`. Conversely, the runtime knows the future is ready and advances
+it when `poll` returns `Poll::Ready(Some(message))` or `Poll::Ready(None)`.
 
 The exact details of how a runtime does that are more than we will cover in even
 this deep dive section. The key here is to see the basic mechanic of futures: a
@@ -180,14 +179,14 @@ knows when to check any given future, while still being lazy. The details of how
 that works are beyond the scope of this chapter, though: you generally only need
 to worry about it when writing a custom `Future` implementation.
 
-Instead, we’ll focus on the type for `self`. This is the first time we’ve seen
-a method where `self` has a type annotation. A type annotation for `self` is
+Instead, we’ll focus on the type for `self`. This is the first time we’ve seen a
+method where `self` has a type annotation. A type annotation for `self` is
 similar to type annotations for other function parameters, with two key
 differences. First, when we specify the type of `self` in this way, we’re
 telling Rust what type `self` must be to call this method. Second, a type
-annotation on `self` can’t be just any type. It’s only allowed to be the type
-on which the method is implemented, a reference or smart pointer to that type,
-or a `Pin` wrapping a reference to that type. We’ll see more on this syntax in
+annotation on `self` can’t be just any type. It’s only allowed to be the type on
+which the method is implemented, a reference or smart pointer to that type, or a
+`Pin` wrapping a reference to that type. We’ll see more on this syntax in
 Chapter 18. For now, it’s enough to know that if we want to poll a future (to
 check whether it is `Pending` or `Ready(Output)`), we need a mutable reference
 to the type, which is wrapped in a `Pin`.
@@ -221,9 +220,10 @@ getting a mutable or immutable reference to it.
 
 So far so good: if we get anything wrong about the ownership or references in a
 given async block, the borrow checker will tell us. When we want to move around
-the future that corresponds to that block—like moving it into a `Vec` to pass
-to `join_all`, the way we did back in the [“Working With Any Number of
-Futures”][any-number-futures]<!-- ignore --> section—things get trickier.
+the future that corresponds to that block—like moving it into a `Vec` to pass to
+`join_all`, the way we did back in the
+[“Working With Any Number of Futures”][any-number-futures]<!-- ignore -->
+section—things get trickier.
 
 When we move a future—whether by pushing into a data structure to use as an
 iterator with `join_all`, or returning them from a function—that actually means
@@ -262,9 +262,9 @@ In principle, the Rust compiler could try to update every reference to an object
 every time it gets moved. That would potentially be a lot of performance
 overhead, especially given there can be a whole web of references that need
 updating. On the other hand, if we could make sure the data structure in
-question _doesn’t move in memory_, we don’t have to update any references.
-This is exactly what Rust’s borrow checker requires: you can’t move an item
-which has any active references to it using safe code.
+question _doesn’t move in memory_, we don’t have to update any references. This
+is exactly what Rust’s borrow checker requires: you can’t move an item which has
+any active references to it using safe code.
 
 `Pin` builds on that to give us the exact guarantee we need. When we _pin_ a
 value by wrapping a pointer to that value in `Pin`, it can no longer move. Thus,
@@ -283,11 +283,11 @@ In fact, the `Box` pointer can still move around freely. Remember: we care about
 making sure the data ultimately being referenced stays in its place. If a
 pointer moves around, but the data it points to is in the same place, as in
 Figure 17-7, there’s no potential problem. (How you would do this with a `Pin`
-wrapping a `Box` is more than we’ll get into in this particular discussion,
-but it would make for a good exercise! If you look at the docs for the types as
-well as the `std::pin` module, you might be able to work out how you would do
-that.) The key is that the self-referential type itself cannot move, because it
-is still pinned.
+wrapping a `Box` is more than we’ll get into in this particular discussion, but
+it would make for a good exercise! If you look at the docs for the types as well
+as the `std::pin` module, you might be able to work out how you would do that.)
+The key is that the self-referential type itself cannot move, because it is
+still pinned.
 
 <figure>
 
@@ -297,17 +297,17 @@ is still pinned.
 
 </figure>
 
-However, most types are perfectly safe to move around, even if they happen to
-be behind a `Pin` pointer. We only need to think about pinning when items have
+However, most types are perfectly safe to move around, even if they happen to be
+behind a `Pin` pointer. We only need to think about pinning when items have
 internal references. Primitive values such as numbers and booleans don’t have
 any internal references, so they’re obviously safe. Neither do most types you
 normally work with in Rust. A `Vec`, for example, doesn’t have any internal
 references it needs to keep up to date this way, so you can move it around
 without worrying. If you have a `Pin<Vec<String>>`, you’d have to do everything
-via the safe but restrictive APIs provided by `Pin`, even though a
-`Vec<String>` is always safe to move if there are no other references to it. We
-need a way to tell the compiler that it’s actually just fine to move items
-around in cases such as these. For that, we have `Unpin`.
+via the safe but restrictive APIs provided by `Pin`, even though a `Vec<String>`
+is always safe to move if there are no other references to it. We need a way to
+tell the compiler that it’s actually just fine to move items around in cases
+such as these. For that, we have `Unpin`.
 
 `Unpin` is a marker trait, similar to the `Send` and `Sync` traits we saw in
 Chapter 16. Recall that marker traits have no functionality of their own. They
@@ -369,19 +369,19 @@ idea of how to fix the code!
 
 > Note: This combination of `Pin` and `Unpin` allows a whole class of complex
 > types to be safe in Rust which are otherwise difficult to implement because
-> they’re self-referential. Types which require `Pin` show up _most_ commonly
-> in async Rust today, but you might—very rarely!—see it in other contexts, too.
+> they’re self-referential. Types which require `Pin` show up _most_ commonly in
+> async Rust today, but you might—very rarely!—see it in other contexts, too.
 >
-> The specifics of how `Pin` and `Unpin` work, and the rules they’re required
-> to uphold, are covered extensively in the API documentation for `std::pin`, so
-> if you’d like to understand them more deeply, that’s a great place to start.
+> The specifics of how `Pin` and `Unpin` work, and the rules they’re required to
+> uphold, are covered extensively in the API documentation for `std::pin`, so if
+> you’d like to understand them more deeply, that’s a great place to start.
 >
 > If you want to understand how things work “under the hood” in even more
 > detail, the official [_Asynchronous Programming in Rust_][async-book] book has
 > you covered:
 >
-> - [Chapter 2: Under the Hood: Executing Futures and Tasks][under-the-hood]
-> - [Chapter 4: Pinning][pinning]
+> * [Chapter 2: Under the Hood: Executing Futures and Tasks][under-the-hood]
+> * [Chapter 4: Pinning][pinning]
 
 ### The Stream Trait
 
@@ -415,9 +415,9 @@ trait Stream {
 ```
 
 The `Stream` trait defines an associated type `Item` for the type of the items
-produced by the stream. This is similar to `Iterator`: there may be zero to
-many of these, and unlike `Future`, where there is always a single `Output`
-(even if it’s the unit type `()`).
+produced by the stream. This is similar to `Iterator`: there may be zero to many
+of these, and unlike `Future`, where there is always a single `Output` (even if
+it’s the unit type `()`).
 
 `Stream` also defines a method to get those items. We call it `poll_next`, to
 make it clear that it polls in the same way `Future::poll` does and produces a
@@ -428,8 +428,8 @@ because it needs to signal whether there are more messages, just as an iterator
 does.
 
 Something very similar to this will likely end up standardized as part of Rust’s
-standard library. In the meantime, it’s part of the toolkit of most runtimes,
-so you can rely on it, and everything we cover below should generally apply!
+standard library. In the meantime, it’s part of the toolkit of most runtimes, so
+you can rely on it, and everything we cover below should generally apply!
 
 In the example we saw in the section on streaming, though, we didn’t use
 `poll_next` _or_ `Stream`, but instead used `next` and `StreamExt`. We _could_

@@ -8,7 +8,8 @@ Keep in mind that Rust is a _statically typed_ language, which means that it
 must know the types of all variables at compile time. The compiler can usually
 infer what type we want to use based on the value and how we use it. In cases
 when many types are possible, such as when we converted a `String` to a numeric
-type using `parse` in the [“Comparing the Guess to the Secret
+type using `parse` in the
+[“Comparing the Guess to the Secret
 Number”][comparing-the-guess-to-the-secret-number]<!-- ignore --> section in
 Chapter 2, we must add a type annotation, like this:
 
@@ -52,32 +53,32 @@ the type of an integer value.
 | 128-bit | `i128`  | `u128`   |
 | arch    | `isize` | `usize`  |
 
-Each variant can be either signed or unsigned and has an explicit size.
-_Signed_ and _unsigned_ refer to whether it’s possible for the number to be
-negative—in other words, whether the number needs to have a sign with it
-(signed) or whether it will only ever be positive and can therefore be
-represented without a sign (unsigned). It’s like writing numbers on paper: when
-the sign matters, a number is shown with a plus sign or a minus sign; however,
-when it’s safe to assume the number is positive, it’s shown with no sign.
-Signed numbers are stored using [two’s complement][twos-complement]<!-- ignore
+Each variant can be either signed or unsigned and has an explicit size. _Signed_
+and _unsigned_ refer to whether it’s possible for the number to be negative—in
+other words, whether the number needs to have a sign with it (signed) or whether
+it will only ever be positive and can therefore be represented without a sign
+(unsigned). It’s like writing numbers on paper: when the sign matters, a number
+is shown with a plus sign or a minus sign; however, when it’s safe to assume the
+number is positive, it’s shown with no sign. Signed numbers are stored using
+[two’s complement][twos-complement]<!-- ignore
 --> representation.
 
 Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
 1</sup> - 1 inclusive, where _n_ is the number of bits that variant uses. So an
 `i8` can store numbers from -(2<sup>7</sup>) to 2<sup>7</sup> - 1, which equals
--128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1,
-so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
+-128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1, so
+a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
 
 Additionally, the `isize` and `usize` types depend on the architecture of the
-computer your program is running on, which is denoted in the table as “arch”:
-64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit
+computer your program is running on, which is denoted in the table as “arch”: 64
+bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit
 architecture.
 
-You can write integer literals in any of the forms shown in Table 3-2. Note
-that number literals that can be multiple numeric types allow a type suffix,
-such as `57u8`, to designate the type. Number literals can also use `_` as a
-visual separator to make the number easier to read, such as `1_000`, which will
-have the same value as if you had specified `1000`.
+You can write integer literals in any of the forms shown in Table 3-2. Note that
+number literals that can be multiple numeric types allow a type suffix, such as
+`57u8`, to designate the type. Number literals can also use `_` as a visual
+separator to make the number easier to read, such as `1_000`, which will have
+the same value as if you had specified `1000`.
 
 <span class="caption">Table 3-2: Integer Literals in Rust</span>
 
@@ -90,9 +91,9 @@ have the same value as if you had specified `1000`.
 | Byte (`u8` only) | `b'A'`        |
 
 So how do you know which type of integer to use? If you’re unsure, Rust’s
-defaults are generally good places to start: integer types default to `i32`.
-The primary situation in which you’d use `isize` or `usize` is when indexing
-some sort of collection.
+defaults are generally good places to start: integer types default to `i32`. The
+primary situation in which you’d use `isize` or `usize` is when indexing some
+sort of collection.
 
 > ##### Integer Overflow
 >
@@ -102,7 +103,8 @@ some sort of collection.
 > When you’re compiling in debug mode, Rust includes checks for integer overflow
 > that cause your program to _panic_ at runtime if this behavior occurs. Rust
 > uses the term _panicking_ when a program exits with an error; we’ll discuss
-> panics in more depth in the [“Unrecoverable Errors with
+> panics in more depth in the
+> [“Unrecoverable Errors with
 > `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> section in Chapter
 > 9.
 >
@@ -118,11 +120,11 @@ some sort of collection.
 > To explicitly handle the possibility of overflow, you can use these families
 > of methods provided by the standard library for primitive numeric types:
 >
-> - Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`.
-> - Return the `None` value if there is overflow with the `checked_*` methods.
-> - Return the value and a boolean indicating whether there was overflow with
+> * Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`.
+> * Return the `None` value if there is overflow with the `checked_*` methods.
+> * Return the value and a boolean indicating whether there was overflow with
 >   the `overflowing_*` methods.
-> - Saturate at the value’s minimum or maximum values with the `saturating_*`
+> * Saturate at the value’s minimum or maximum values with the `saturating_*`
 >   methods.
 
 #### Floating-Point Types
@@ -157,9 +159,9 @@ how you’d use each numeric operation in a `let` statement:
 ```
 
 Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable. [Appendix
-B][appendix_b]<!-- ignore --> contains a list of all operators that Rust
-provides.
+to a single value, which is then bound to a variable.
+[Appendix B][appendix_b]<!-- ignore --> contains a list of all operators that
+Rust provides.
 
 #### The Boolean Type
 
@@ -174,8 +176,8 @@ Rust is specified using `bool`. For example:
 ```
 
 The main way to use Boolean values is through conditionals, such as an `if`
-expression. We’ll cover how `if` expressions work in Rust in the [“Control
-Flow”][control-flow]<!-- ignore --> section.
+expression. We’ll cover how `if` expressions work in Rust in the
+[“Control Flow”][control-flow]<!-- ignore --> section.
 
 #### The Character Type
 
@@ -192,17 +194,18 @@ Note that we specify `char` literals with single quotes, as opposed to string
 literals, which use double quotes. Rust’s `char` type is four bytes in size and
 represents a Unicode Scalar Value, which means it can represent a lot more than
 just ASCII. Accented letters; Chinese, Japanese, and Korean characters; emoji;
-and zero-width spaces are all valid `char` values in Rust. Unicode Scalar
-Values range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF` inclusive.
-However, a “character” isn’t really a concept in Unicode, so your human
-intuition for what a “character” is may not match up with what a `char` is in
-Rust. We’ll discuss this topic in detail in [“Storing UTF-8 Encoded Text with
-Strings”][strings]<!-- ignore --> in Chapter 8.
+and zero-width spaces are all valid `char` values in Rust. Unicode Scalar Values
+range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF` inclusive. However, a
+“character” isn’t really a concept in Unicode, so your human intuition for what
+a “character” is may not match up with what a `char` is in Rust. We’ll discuss
+this topic in detail in
+[“Storing UTF-8 Encoded Text with Strings”][strings]<!-- ignore --> in
+Chapter 8.
 
 ### Compound Types
 
-_Compound types_ can group multiple values into one type. Rust has two
-primitive compound types: tuples and arrays.
+_Compound types_ can group multiple values into one type. Rust has two primitive
+compound types: tuples and arrays.
 
 #### The Tuple Type
 
@@ -222,8 +225,8 @@ type annotations in this example:
 ```
 
 The variable `tup` binds to the entire tuple because a tuple is considered a
-single compound element. To get the individual values out of a tuple, we can
-use pattern matching to destructure a tuple value, like this:
+single compound element. To get the individual values out of a tuple, we can use
+pattern matching to destructure a tuple value, like this:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -234,8 +237,8 @@ use pattern matching to destructure a tuple value, like this:
 This program first creates a tuple and binds it to the variable `tup`. It then
 uses a pattern with `let` to take `tup` and turn it into three separate
 variables, `x`, `y`, and `z`. This is called _destructuring_ because it breaks
-the single tuple into three parts. Finally, the program prints the value of
-`y`, which is `6.4`.
+the single tuple into three parts. Finally, the program prints the value of `y`,
+which is `6.4`.
 
 We can also access a tuple element directly by using a period (`.`) followed by
 the index of the value we want to access. For example:
@@ -257,9 +260,9 @@ return any other value.
 
 #### The Array Type
 
-Another way to have a collection of multiple values is with an _array_. Unlike
-a tuple, every element of an array must have the same type. Unlike arrays in
-some other languages, arrays in Rust have a fixed length.
+Another way to have a collection of multiple values is with an _array_. Unlike a
+tuple, every element of an array must have the same type. Unlike arrays in some
+other languages, arrays in Rust have a fixed length.
 
 We write the values in an array as a comma-separated list inside square
 brackets:
@@ -289,8 +292,8 @@ let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-You write an array’s type using square brackets with the type of each element,
-a semicolon, and then the number of elements in the array, like so:
+You write an array’s type using square brackets with the type of each element, a
+semicolon, and then the number of elements in the array, like so:
 
 ```rust
 let a: [i32; 5] = [1, 2, 3, 4, 5];
@@ -314,8 +317,8 @@ more concise way.
 ##### Accessing Array Elements
 
 An array is a single chunk of memory of a known, fixed size that can be
-allocated on the stack. You can access elements of an array using indexing,
-like this:
+allocated on the stack. You can access elements of an array using indexing, like
+this:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -356,14 +359,14 @@ index out of bounds: the len is 5 but the index is 10
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-The program resulted in a _runtime_ error at the point of using an invalid
-value in the indexing operation. The program exited with an error message and
-didn’t execute the final `println!` statement. When you attempt to access an
-element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than or equal to the length,
-Rust will panic. This check has to happen at runtime, especially in this case,
-because the compiler can’t possibly know what value a user will enter when they
-run the code later.
+The program resulted in a _runtime_ error at the point of using an invalid value
+in the indexing operation. The program exited with an error message and didn’t
+execute the final `println!` statement. When you attempt to access an element
+using indexing, Rust will check that the index you’ve specified is less than the
+array length. If the index is greater than or equal to the length, Rust will
+panic. This check has to happen at runtime, especially in this case, because the
+compiler can’t possibly know what value a user will enter when they run the code
+later.
 
 This is an example of Rust’s memory safety principles in action. In many
 low-level languages, this kind of check is not done, and when you provide an
