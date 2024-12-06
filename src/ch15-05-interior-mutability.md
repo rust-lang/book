@@ -189,9 +189,10 @@ However, there’s one problem with this test, as shown here:
 
 We can’t modify the `MockMessenger` to keep track of the messages, because the
 `send` method takes an immutable reference to `self`. We also can’t take the
-suggestion from the error text to use `&mut self` instead, because then the
-signature of `send` wouldn’t match the signature in the `Messenger` trait
-definition (feel free to try and see what error message you get).
+suggestion from the error text to use `&mut self` in both the `impl` method and
+the `trait` definition. We do not want to change the `Messenger` trait solely
+for the sake of testing. Instead, we need to find a way to make our test code
+work correctly with our existing design.
 
 This is a situation in which interior mutability can help! We’ll store the
 `sent_messages` within a `RefCell<T>`, and then the `send` method will be
