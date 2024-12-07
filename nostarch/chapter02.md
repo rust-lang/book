@@ -386,9 +386,8 @@ The specifier `0.8.5` is actually shorthand for `^0.8.5`, which means any
 version that is at least 0.8.5 but below 0.9.0.
 
 Cargo considers these versions to have public APIs compatible with version
-0.8.5, and this specification ensures you’ll get the latest patch release that
-will still compile with the code in this chapter. Any version 0.9.0 or greater
-is not guaranteed to have the same API as what the following examples use.
+0.8.5. Any version 0.9.0 or greater is not guaranteed to have the same API 
+as what the following examples use.
 
 Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2.
