@@ -12,6 +12,16 @@ only use the part of Cargo that handles building your code. As you write more
 complex Rust programs, you’ll add dependencies, and if you start a project
 using Cargo, adding dependencies will be much easier to do.
 
+The Cargo package manager allows for seamless distribution of projects allowing 
+for easy portability. In larger project, Cargo allows for environments to be 
+quickly transferred over to other team members or depatrments. It allows for 
+projects to be set up correctly without needing to manually install all of 
+the pre-requisites.
+
+Using Cargo allows for faster and more streamlined transfer of projects, 
+portability, and consistency. It allows for the Rust ecosystem to flourish 
+and it gives developers an streamlined experience to share projects.
+
 Because the vast majority of Rust projects use Cargo, the rest of this book
 assumes that you’re using Cargo too. Cargo comes installed with Rust if you
 used the official installers discussed in the
