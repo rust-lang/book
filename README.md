@@ -39,7 +39,7 @@ look right, but you _will_ still be able to build the book. To use the plugins,
 you should run:
 
 ```bash
-$ cargo install --locked --path packages/mdbook_trpl
+$ cargo install --locked --path packages/mdbook-trpl
 ```
 
 ## Building
