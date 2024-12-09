@@ -62,6 +62,9 @@ cd ../../..
 
 </Listing>
 
+The file starts with an example `add` function, so that we have something
+to test.
+
 For now, let’s focus solely on the `it_works` function. Note the `#[test]`
 annotation: this attribute indicates this is a test function, so the test
 runner knows to treat this function as a test. We might also have non-test
@@ -69,9 +72,9 @@ functions in the `tests` module to help set up common scenarios or perform
 common operations, so we always need to indicate which functions are tests.
 
 The example function body uses the `assert_eq!` macro to assert that `result`,
-which contains the result of adding 2 and 2, equals 4. This assertion serves as
-an example of the format for a typical test. Let’s run it to see that this test
-passes.
+which contains the result of calling `add` with 2 and 2, equals 4. This
+assertion serves as an example of the format for a typical test. Let’s run it
+to see that this test passes.
 
 The `cargo test` command runs all tests in our project, as shown in Listing
 11-2.
