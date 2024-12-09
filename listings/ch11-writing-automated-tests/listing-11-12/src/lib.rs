@@ -1,9 +1,9 @@
-pub fn add_two(a: i32) -> i32 {
+pub fn add_two(a: usize) -> usize {
     internal_adder(a, 2)
 }
 
-fn internal_adder(a: i32, b: i32) -> i32 {
-    a + b
+fn internal_adder(left: usize, right: usize) -> usize {
+    left + right
 }
 
 #[cfg(test)]
@@ -12,6 +12,7 @@ mod tests {
 
     #[test]
     fn internal() {
-        assert_eq!(4, internal_adder(2, 2));
+        let result = internal_adder(2, 2);
+        assert_eq!(result, 4);
     }
 }

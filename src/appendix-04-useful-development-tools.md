@@ -77,7 +77,7 @@ $ cargo fix
     Finished dev [unoptimized + debuginfo] target(s) in 0.59s
 ```
 
-When we look at *src/main.rs* again, we’ll see that `cargo fix` has changed the
+When we look at _src/main.rs_ again, we’ll see that `cargo fix` has changed the
 code:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -95,7 +95,7 @@ fn main() {
 The `for` loop variable is now named `_i`, and the warning no longer appears.
 
 You can also use the `cargo fix` command to transition your code between
-different Rust editions. Editions are covered in Appendix E.
+different Rust editions. Editions are covered in [Appendix E][editions].
 
 ### More Lints with Clippy
 
@@ -178,3 +178,4 @@ particular IDE. Your IDE will gain abilities such as autocompletion, jump to
 definition, and inline errors.
 
 [rust-analyzer]: https://rust-analyzer.github.io
+[editions]: appendix-05-editions.md

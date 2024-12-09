@@ -6,12 +6,13 @@ program in Listing 6-6 that matches on an `Option<u8>` value in the
 `config_max` variable but only wants to execute code if the value is the `Some`
 variant.
 
+<Listing number="6-6" caption="A `match` that only cares about executing code when the value is `Some`">
+
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 6-6: A `match` that only cares about executing
-code when the value is `Some`</span>
+</Listing>
 
 If the value is `Some`, we print out the value in the `Some` variant by binding
 the value to the variable `max` in the pattern. We don’t want to do anything
@@ -31,8 +32,8 @@ sign. It works the same way as a `match`, where the expression is given to the
 `match` and the pattern is its first arm. In this case, the pattern is
 `Some(max)`, and the `max` binds to the value inside the `Some`. We can then
 use `max` in the body of the `if let` block in the same way we used `max` in
-the corresponding `match` arm. The code in the `if let` block isn’t run if the
-value doesn’t match the pattern.
+the corresponding `match` arm. The code in the `if let` block only runs if the
+value matches the pattern.
 
 Using `if let` means less typing, less indentation, and less boilerplate code.
 However, you lose the exhaustive checking that `match` enforces. Choosing
@@ -80,4 +81,3 @@ function expects.
 In order to provide a well-organized API to your users that is straightforward
 to use and only exposes exactly what your users will need, let’s now turn to
 Rust’s modules.
-

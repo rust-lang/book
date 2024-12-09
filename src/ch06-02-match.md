@@ -1,12 +1,14 @@
 <!-- Old heading. Do not remove or links may break. -->
+
 <a id="the-match-control-flow-operator"></a>
+
 ## The `match` Control Flow Construct
 
 Rust has an extremely powerful control flow construct called `match` that
 allows you to compare a value against a series of patterns and then execute
 code based on which pattern matches. Patterns can be made up of literal values,
 variable names, wildcards, and many other things; [Chapter
-18][ch18-00-patterns]<!-- ignore --> covers all the different kinds of patterns
+18][ch19-00-patterns]<!-- ignore --> covers all the different kinds of patterns
 and what they do. The power of `match` comes from the expressiveness of the
 patterns and the fact that the compiler confirms that all possible cases are
 handled.
@@ -22,12 +24,13 @@ function that takes an unknown US coin and, in a similar way as the counting
 machine, determines which coin it is and returns its value in cents, as shown
 in Listing 6-3.
 
+<Listing number="6-3" caption="An enum and a `match` expression that has the variants of the enum as its patterns">
+
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 6-3: An enum and a `match` expression that has
-the variants of the enum as its patterns</span>
+</Listing>
 
 Let’s break down the `match` in the `value_in_cents` function. First we list
 the `match` keyword followed by an expression, which in this case is the value
@@ -75,12 +78,13 @@ designs, so only quarters have this extra value. We can add this information to
 our `enum` by changing the `Quarter` variant to include a `UsState` value
 stored inside it, which we’ve done in Listing 6-4.
 
+<Listing number="6-4" caption="A `Coin` enum in which the `Quarter` variant also holds a `UsState` value">
+
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 6-4: A `Coin` enum in which the `Quarter` variant
-also holds a `UsState` value</span>
+</Listing>
 
 Let’s imagine that a friend is trying to collect all 50 state quarters. While
 we sort our loose change by coin type, we’ll also call out the name of the
@@ -119,12 +123,13 @@ operations.
 This function is very easy to write, thanks to `match`, and will look like
 Listing 6-5.
 
+<Listing number="6-5" caption="A function that uses a `match` expression on an `Option<i32>`">
+
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 6-5: A function that uses a `match` expression on
-an `Option<i32>`</span>
+</Listing>
 
 Let’s examine the first execution of `plus_one` in more detail. When we call
 `plus_one(five)`, the variable `x` in the body of `plus_one` will have the
@@ -182,7 +187,7 @@ error:
 ```
 
 Rust knows that we didn’t cover every possible case, and even knows which
-pattern we forgot! Matches in Rust are *exhaustive*: we must exhaust every last
+pattern we forgot! Matches in Rust are _exhaustive_: we must exhaust every last
 possibility in order for the code to be valid. Especially in the case of
 `Option<T>`, when Rust prevents us from forgetting to explicitly handle the
 `None` case, it protects us from assuming that we have a value when we might
@@ -217,7 +222,7 @@ patterns are evaluated in order. If we put the catch-all arm earlier, the other
 arms would never run, so Rust will warn us if we add arms after a catch-all!
 
 Rust also has a pattern we can use when we want a catch-all but don’t want to
-*use* the value in the catch-all pattern: `_` is a special pattern that matches
+_use_ the value in the catch-all pattern: `_` is a special pattern that matches
 any value and does not bind to that value. This tells Rust we aren’t going to
 use the value, so Rust won’t warn us about an unused variable.
 
@@ -246,9 +251,9 @@ that doesn’t match a pattern in an earlier arm, and we don’t want to run any
 code in this case.
 
 There’s more about patterns and matching that we’ll cover in [Chapter
-18][ch18-00-patterns]<!-- ignore -->. For now, we’re going to move on to the
+19][ch19-00-patterns]<!-- ignore -->. For now, we’re going to move on to the
 `if let` syntax, which can be useful in situations where the `match` expression
 is a bit wordy.
 
 [tuples]: ch03-02-data-types.html#the-tuple-type
-[ch18-00-patterns]: ch18-00-patterns.html
+[ch19-00-patterns]: ch19-00-patterns.html

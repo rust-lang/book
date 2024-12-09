@@ -1,4 +1,4 @@
-pub fn add(left: usize, right: usize) -> usize {
+pub fn add(left: u64, right: u64) -> u64 {
     left + right
 }
 
@@ -6,12 +6,16 @@ pub fn add(left: usize, right: usize) -> usize {
 mod tests {
     use super::*;
 
+    // ANCHOR: here
     #[test]
     fn it_works() -> Result<(), String> {
-        if add(2, 2) == 4 {
+        let result = add(2, 2);
+
+        if result == 4 {
             Ok(())
         } else {
             Err(String::from("two plus two does not equal four"))
         }
     }
+    // ANCHOR_END: here
 }

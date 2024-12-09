@@ -16,5 +16,5 @@ fn main() {
         num_sort_operations += 1;
         r.width
     });
-    println!("{:#?}, sorted in {num_sort_operations} operations", list);
+    println!("{list:#?}, sorted in {num_sort_operations} operations");
 }

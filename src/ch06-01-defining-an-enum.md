@@ -10,7 +10,7 @@ Let’s look at a situation we might want to express in code and see why enums
 are useful and more appropriate than structs in this case. Say we need to work
 with IP addresses. Currently, two major standards are used for IP addresses:
 version four and version six. Because these are the only possibilities for an
-IP address that our program will come across, we can *enumerate* all possible
+IP address that our program will come across, we can _enumerate_ all possible
 variants, which is where enumeration gets its name.
 
 Any IP address can be either a version four or a version six address, but not
@@ -54,17 +54,18 @@ And we can call this function with either variant:
 ```
 
 Using enums has even more advantages. Thinking more about our IP address type,
-at the moment we don’t have a way to store the actual IP address *data*; we
-only know what *kind* it is. Given that you just learned about structs in
+at the moment we don’t have a way to store the actual IP address _data_; we
+only know what _kind_ it is. Given that you just learned about structs in
 Chapter 5, you might be tempted to tackle this problem with structs as shown in
 Listing 6-1.
+
+<Listing number="6-1" caption="Storing the data and `IpAddrKind` variant of an IP address using a `struct`">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 6-1: Storing the data and `IpAddrKind` variant of
-an IP address using a `struct`</span>
+</Listing>
 
 Here, we’ve defined a struct `IpAddr` that has two fields: a `kind` field that
 is of type `IpAddrKind` (the enum we defined previously) and an `address` field
@@ -140,19 +141,20 @@ more about bringing types into scope in Chapter 7.
 Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants.
 
+<Listing number="6-2" caption="A `Message` enum whose variants each store different amounts and types of values">
+
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 6-2: A `Message` enum whose variants each store
-different amounts and types of values</span>
+</Listing>
 
 This enum has four variants with different types:
 
-* `Quit` has no data associated with it at all.
-* `Move` has named fields, like a struct does.
-* `Write` includes a single `String`.
-* `ChangeColor` includes three `i32` values.
+- `Quit` has no data associated with it at all.
+- `Move` has named fields, like a struct does.
+- `Write` includes a single `String`.
+- `ChangeColor` includes three `i32` values.
 
 Defining an enum with variants such as the ones in Listing 6-2 is similar to
 defining different kinds of struct definitions, except the enum doesn’t use the
@@ -199,7 +201,7 @@ languages.
 
 Programming language design is often thought of in terms of which features you
 include, but the features you exclude are important too. Rust doesn’t have the
-null feature that many other languages have. *Null* is a value that means there
+null feature that many other languages have. _Null_ is a value that means there
 is no value there. In languages with null, variables can always be in one of
 two states: null or not-null.
 
@@ -299,7 +301,7 @@ more confident in your code. In order to have a value that can possibly be
 null, you must explicitly opt in by making the type of that value `Option<T>`.
 Then, when you use that value, you are required to explicitly handle the case
 when the value is null. Everywhere that a value has a type that isn’t an
-`Option<T>`, you *can* safely assume that the value isn’t null. This was a
+`Option<T>`, you _can_ safely assume that the value isn’t null. This was a
 deliberate design decision for Rust to limit null’s pervasiveness and increase
 the safety of Rust code.
 
