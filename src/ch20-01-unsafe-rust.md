@@ -186,9 +186,14 @@ With the `unsafe` block, we’re asserting to Rust that we’ve read the functio
 documentation, we understand how to use it properly, and we’ve verified that
 we’re fulfilling the contract of the function.
 
-Bodies of unsafe functions are effectively `unsafe` blocks, so to perform other
-unsafe operations within an unsafe function, we don’t need to add another
-`unsafe` block.
+> Note: In earlier versions of Rust, the body of an unsafe function was treated
+> as an `unsafe` block, so you could perform any unsafe operation within the
+> body of an `unsafe` function. In later versions of Rust, the compiler will
+> warn you that you need to use an `unsafe` block to perform unsafe operations
+> in the body of an unsafe function. This is because Rust now distinguishes
+> between `unsafe fn`, which defines what you need to do to call the function
+> safely, and an `unsafe` block, where you actually uphold that “contract” the
+> function establishes.
 
 #### Creating a Safe Abstraction over Unsafe Code
 
