@@ -44,22 +44,22 @@ impl ThreadPool {
     }
 }
 
+// ANCHOR: here
 impl Drop for ThreadPool {
     fn drop(&mut self) {
-        for worker in &mut self.workers {
+        for worker in self.workers.drain(..) {
             println!("Shutting down worker {}", worker.id);
 
             worker.thread.join().unwrap();
         }
     }
 }
+// ANCHOR_END: here
 
-// ANCHOR: here
 struct Worker {
     id: usize,
-    thread: Option<thread::JoinHandle<()>>,
+    thread: thread::JoinHandle<()>,
 }
-// ANCHOR_END: here
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
