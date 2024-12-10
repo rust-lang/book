@@ -95,33 +95,33 @@ function. However, you can’t do that with closures because they don’t have a
 concrete type that is returnable; you’re not allowed to use the function
 pointer `fn` as a return type, for example.
 
-The following code tries to return a closure directly, but it won’t compile:
+Instead, you will normally use the `impl Trait` syntax we learned about in
+Chapter 10. You can return any function type, using `Fn`, `FnOnce` and `FnMut`.
+For example, this code will work just fine:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-18-returns-closure/src/lib.rs}}
 ```
 
-The compiler error is as follows:
-
-```console
-{{#include ../listings/ch20-advanced-features/no-listing-18-returns-closure/output.txt}}
-```
-
-The error references the `Sized` trait again! Rust doesn’t know how much space
-it will need to store the closure. We saw a solution to this problem earlier.
-We can use a trait object:
+However, as we noted in the [“Closure Type Inference and
+Annotation”][closure-types]<!-- ignore --> section in Chapter 13, each closure
+is also its own distinct type. If you need to work with multiple functions that
+have the same signature but different implementations, you will need to use a
+trait object for them:
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-19-returns-closure-trait-object/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-19-returns-closure-trait-object/src/main.rs}}
 ```
 
-This code will compile just fine. For more about trait objects, refer to the
-section [“Using Trait Objects That Allow for Values of Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
-ignore --> in Chapter 19.
+This code will compile just fine—but it wouldn’t if we had tried to stick with
+`impl Fn(i32) -> i32`. For more about trait objects, refer to the section
+[“Using Trait Objects That Allow for Values of Different
+Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
+--> in Chapter 19.
 
 Next, let’s look at macros!
 
 [advanced-traits]: ch20-03-advanced-traits.html#advanced-traits
 [enum-values]: ch06-01-defining-an-enum.html#enum-values
+[closure-types]: ch13-01-closures.html#closure-type-inference-and-annotation
 [using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
