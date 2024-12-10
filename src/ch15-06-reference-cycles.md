@@ -231,7 +231,7 @@ We still have `leaf` as one of the children of `branch`. Once we have the
 reference to its parent. We use the `borrow_mut` method on the
 `RefCell<Weak<Node>>` in the `parent` field of `leaf`, and then we use the
 `Rc::downgrade` function to create a `Weak<Node>` reference to `branch` from
-the `Rc<Node>` in `branch.`
+the `Rc<Node>` in `branch`.
 
 When we print the parent of `leaf` again, this time we’ll get a `Some` variant
 holding `branch`: now `leaf` can access its parent! When we print `leaf`, we
