@@ -1,0 +1,33 @@
+{
+  "typescript": {
+  },
+  "json": {
+  },
+  "markdown": {
+  },
+  "malva": {
+  },
+  "excludes": [
+    "**/node_modules",
+    "**/*-lock.json",
+    "**/target",
+    // We don’t to apply auto-formatting to this *yet*, at a minimum. It may be
+    // helpful as a way of replacing some of the manual formatting we do in both
+    // the nostarch script and the script for pulling data back over from docx,
+    // though, so we may *start* doing so in the future.
+    "nostarch",
+    // These should never change at this point
+    "2018-edition",
+    "first-edition",
+    "second-edition",
+    "redirects",
+    // has empty list items which look like headings to a formatter
+    ".github/ISSUE_TEMPLATE/bug_report.md",
+  ],
+  "plugins": [
+    "https://plugins.dprint.dev/typescript-0.93.3.wasm",
+    "https://plugins.dprint.dev/json-0.19.4.wasm",
+    "https://plugins.dprint.dev/markdown-0.17.8.wasm",
+    "https://plugins.dprint.dev/g-plane/malva-v0.11.0.wasm",
+  ],
+}

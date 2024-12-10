@@ -8,9 +8,9 @@ struct User {
 // ANCHOR: here
 fn main() {
     let user1 = User {
-        email: String::from("someone@example.com"),
-        username: String::from("someusername123"),
         active: true,
+        username: String::from("someusername123"),
+        email: String::from("someone@example.com"),
         sign_in_count: 1,
     };
 }

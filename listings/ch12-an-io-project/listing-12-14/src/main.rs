@@ -22,7 +22,6 @@ fn main() {
         // --snip--
         // ANCHOR_END: here
         println!("Application error: {e}");
-
         process::exit(1);
         // ANCHOR: here
     }

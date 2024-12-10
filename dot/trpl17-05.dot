@@ -1,0 +1,32 @@
+digraph {
+   rankdir = RL;
+   overlap = false;
+   dpi = 300.0;
+   splines = false;
+   cluster = true;
+   
+   node [shape = "plaintext";];
+   
+   // Group the two together, which results in the desired alignment.
+   subgraph {
+      // But don't show the frame!
+      style = "invis";
+      
+      fut1 [label = <<table border="0" cellborder="1" cellspacing="0" bgcolor="gray">
+         <tr><td sides="B">fut1</td></tr>
+         <tr><td>?</td></tr>
+         <tr><td port="target">?</td></tr>
+         <tr><td>?</td></tr>
+         </table>>;];
+      
+      fut2 [label = <<table border="0" cellborder="1" cellspacing="0">
+         <tr><td sides="B">fut2</td></tr>
+         <tr><td>0</td></tr>
+         <tr><td>1</td></tr>
+         <tr><td port="source"> </td></tr>
+         </table>>;];
+      
+      edge [tailclip = "false"; dir = forward];
+      fut2:source:c -> fut1:target:e;
+   }
+}

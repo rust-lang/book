@@ -1,4 +1,5 @@
 <!-- Old heading. Do not remove or links may break. -->
+
 <a id="closures-anonymous-functions-that-can-capture-their-environment"></a>
 
 ## Closures: Anonymous Functions that Capture Their Environment
@@ -11,6 +12,7 @@ We’ll demonstrate how these closure features allow for code reuse and behavior
 customization.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="creating-an-abstraction-of-behavior-with-closures"></a>
 <a id="refactoring-using-functions"></a>
 <a id="refactoring-with-closures-to-store-code"></a>
@@ -31,17 +33,17 @@ enum called `ShirtColor` that has the variants `Red` and `Blue` (limiting the
 number of colors available for simplicity). We represent the company’s
 inventory with an `Inventory` struct that has a field named `shirts` that
 contains a `Vec<ShirtColor>` representing the shirt colors currently in stock.
-The method `shirt_giveaway` defined on `Inventory` gets the optional shirt
+The method `giveaway` defined on `Inventory` gets the optional shirt
 color preference of the free shirt winner, and returns the shirt color the
 person will get. This setup is shown in Listing 13-1:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="13-1" file-name="src/main.rs" caption="Shirt company giveaway situation">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-1: Shirt company giveaway situation</span>
+</Listing>
 
 The `store` defined in `main` has two blue shirts and one red shirt remaining
 to distribute for this limited-edition promotion. We call the `giveaway` method
@@ -105,14 +107,13 @@ shown in Listing 13-2. In this example, we’re defining a closure and storing i
 in a variable rather than defining the closure in the spot we pass it as an
 argument as we did in Listing 13-1.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="13-2" file-name="src/main.rs" caption="Adding optional type annotations of the parameter and return value types in the closure">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-2: Adding optional type annotations of the
-parameter and return value types in the closure</span>
+</Listing>
 
 With type annotations added, the syntax of closures looks more similar to the
 syntax of functions. Here we define a function that adds 1 to its parameter and
@@ -132,8 +133,8 @@ The first line shows a function definition, and the second line shows a fully
 annotated closure definition. In the third line, we remove the type annotations
 from the closure definition. In the fourth line, we remove the brackets, which
 are optional because the closure body has only one expression. These are all
-valid definitions that will produce the same behavior when they’re called.
-Evaluating the closures is required for `add_one_v3` and `add_one_v4` to be
+valid definitions that will produce the same behavior when they’re called. The
+`add_one_v3` and `add_one_v4` lines require the closures to be evaluated to be
 able to compile because the types will be inferred from their usage. This is
 similar to `let v = Vec::new();` needing either type annotations or values of
 some type to be inserted into the `Vec` for Rust to be able to infer the type.
@@ -147,14 +148,13 @@ Because there are no type annotations, we can call the closure with any type,
 which we’ve done here with `String` the first time. If we then try to call
 `example_closure` with an integer, we’ll get an error.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="13-3" file-name="src/main.rs" caption="Attempting to call a closure whose types are inferred with two different types">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-3: Attempting to call a closure whose types
-are inferred with two different types</span>
+</Listing>
 
 The compiler gives us this error:
 
@@ -179,14 +179,13 @@ In Listing 13-4, we define a closure that captures an immutable reference to
 the vector named `list` because it only needs an immutable reference to print
 the value:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="13-4" file-name="src/main.rs" caption="Defining and calling a closure that captures an immutable reference">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-4: Defining and calling a closure that
-captures an immutable reference</span>
+</Listing>
 
 This example also illustrates that a variable can bind to a closure definition,
 and we can later call the closure by using the variable name and parentheses as
@@ -204,14 +203,13 @@ is called. This code compiles, runs, and prints:
 Next, in Listing 13-5, we change the closure body so that it adds an element to
 the `list` vector. The closure now captures a mutable reference:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="13-5" file-name="src/main.rs" caption="Defining and calling a closure that captures a mutable reference">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-5: Defining and calling a closure that
-captures a mutable reference</span>
+</Listing>
 
 This code compiles, runs, and prints:
 
@@ -229,36 +227,65 @@ there to see what error message you get!
 
 If you want to force the closure to take ownership of the values it uses in the
 environment even though the body of the closure doesn’t strictly need
-ownership, you can use the `move` keyword before the parameter list. This
-technique is mostly useful when passing a closure to a new thread to move the
-data so that it’s owned by the new thread. We’ll have more examples of `move`
-closures in Chapter 16 when we talk about concurrency.
+ownership, you can use the `move` keyword before the parameter list.
+
+This technique is mostly useful when passing a closure to a new thread to move
+the data so that it’s owned by the new thread. We’ll discuss threads and why
+you would want to use them in detail in Chapter 16 when we talk about
+concurrency, but for now, let’s briefly explore spawning a new thread using a
+closure that needs the `move` keyword. Listing 13-6 shows Listing 13-4 modified
+to print the vector in a new thread rather than in the main thread:
+
+<Listing number="13-6" file-name="src/main.rs" caption="Using `move` to force the closure for the thread to take ownership of `list`">
+
+```rust
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-06/src/main.rs}}
+```
+
+</Listing>
+
+We spawn a new thread, giving the thread a closure to run as an argument. The
+closure body prints out the list. In Listing 13-4, the closure only captured
+`list` using an immutable reference because that's the least amount of access
+to `list` needed to print it. In this example, even though the closure body
+still only needs an immutable reference, we need to specify that `list` should
+be moved into the closure by putting the `move` keyword at the beginning of the
+closure definition. The new thread might finish before the rest of the main
+thread finishes, or the main thread might finish first. If the main thread
+maintained ownership of `list` but ended before the new thread did and dropped
+`list`, the immutable reference in the thread would be invalid. Therefore, the
+compiler requires that `list` be moved into the closure given to the new thread
+so the reference will be valid. Try removing the `move` keyword or using `list`
+in the main thread after the closure is defined to see what compiler errors you
+get!
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="storing-closures-using-generic-parameters-and-the-fn-traits"></a>
 <a id="limitations-of-the-cacher-implementation"></a>
 <a id="moving-captured-values-out-of-the-closure-and-the-fn-traits"></a>
 
 ### Moving Captured Values Out of Closures and the `Fn` Traits
 
-Once a closure has captured a reference or captured ownership of a value where
-the closure is defined (thus affecting what, if anything, is moved *into* the
-closure), the code in the body of the closure defines what happens to the
-references or values when the closure is evaluated later (thus affecting what,
-if anything, is moved *out of* the closure). A closure body can do any of the
-following: move a captured value out of the closure, mutate the captured value,
-neither move nor mutate the value, or capture nothing from the environment to
-begin with.
+Once a closure has captured a reference or captured ownership of a value from
+the environment where the closure is defined (thus affecting what, if anything,
+is moved _into_ the closure), the code in the body of the closure defines what
+happens to the references or values when the closure is evaluated later (thus
+affecting what, if anything, is moved _out of_ the closure). A closure body can
+do any of the following: move a captured value out of the closure, mutate the
+captured value, neither move nor mutate the value, or capture nothing from the
+environment to begin with.
 
 The way a closure captures and handles values from the environment affects
 which traits the closure implements, and traits are how functions and structs
 can specify what kinds of closures they can use. Closures will automatically
-implement one, two, or all three of these `Fn` traits, in an additive fashion:
+implement one, two, or all three of these `Fn` traits, in an additive fashion,
+depending on how the closure’s body handles the values:
 
-1. `FnOnce` applies to closures that can be called at least once. All closures
-   implement at least this trait, because all closures can be called. A closure
-   that moves captured values out of its body will only implement `FnOnce`
-   and none of the other `Fn` traits, because it can only be called once.
+1. `FnOnce` applies to closures that can be called once. All closures implement
+   at least this trait, because all closures can be called. A closure that
+   moves captured values out of its body will only implement `FnOnce` and none
+   of the other `Fn` traits, because it can only be called once.
 2. `FnMut` applies to closures that don’t move captured values out of their
    body, but that might mutate the captured values. These closures can be
    called more than once.
@@ -269,7 +296,7 @@ implement one, two, or all three of these `Fn` traits, in an additive fashion:
    calling a closure multiple times concurrently.
 
 Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
-we used in Listing 13-6:
+we used in Listing 13-1:
 
 ```rust,ignore
 impl<T> Option<T> {
@@ -295,13 +322,13 @@ parameter `F`. The `F` type is the type of the parameter named `f`, which is
 the closure we provide when calling `unwrap_or_else`.
 
 The trait bound specified on the generic type `F` is `FnOnce() -> T`, which
-means `F` must be able to be called at least once, take no arguments, and
-return a `T`. Using `FnOnce` in the trait bound expresses the constraint that
+means `F` must be able to be called once, take no arguments, and return a `T`.
+Using `FnOnce` in the trait bound expresses the constraint that
 `unwrap_or_else` is only going to call `f` at most one time. In the body of
 `unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be
 called. If the `Option` is `None`, `f` will be called once. Because all
-closures implement `FnOnce`, `unwrap_or_else` accepts the most different kinds
-of closures and is as flexible as it can be.
+closures implement `FnOnce`, `unwrap_or_else` accepts all three kinds of
+closures and is as flexible as it can be.
 
 > Note: Functions can implement all three of the `Fn` traits too. If what we
 > want to do doesn’t require capturing a value from the environment, we can use
@@ -312,22 +339,20 @@ of closures and is as flexible as it can be.
 
 Now let’s look at the standard library method `sort_by_key` defined on slices,
 to see how that differs from `unwrap_or_else` and why `sort_by_key` uses
-`FnMut` instead of `FnOnce` for the trait bound.
+`FnMut` instead of `FnOnce` for the trait bound. The closure gets one argument
+in the form of a reference to the current item in the slice being considered,
+and returns a value of type `K` that can be ordered. This function is useful
+when you want to sort a slice by a particular attribute of each item. In
+Listing 13-7, we have a list of `Rectangle` instances and we use `sort_by_key`
+to order them by their `width` attribute from low to high:
 
-The closure gets one argument, a reference to the current item in the slice
-being considered, and returns a value of type `K` that can be ordered. This
-function is useful when you want to sort a slice by a particular attribute of
-each item. In Listing 13-x, we have a list of `Rectangle` instances and we use
-`sort_by_key` to order them by their `width` attribute from low to high:
-
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="13-7" file-name="src/main.rs" caption="Using `sort_by_key` to order rectangles by width">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-7: Using `sort_by_key` to order rectangles by
-width</span>
+</Listing>
 
 This code prints:
 
@@ -344,17 +369,16 @@ In contrast, Listing 13-8 shows an example of a closure that implements just
 the `FnOnce` trait, because it moves a value out of the environment. The
 compiler won’t let us use this closure with `sort_by_key`:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="13-8" file-name="src/main.rs" caption="Attempting to use an `FnOnce` closure with `sort_by_key`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-8: Attempting to use an `FnOnce` closure with
-`sort_by_key`</span>
+</Listing>
 
 This is a contrived, convoluted way (that doesn’t work) to try and count the
-number of times `sort_by_key` gets called when sorting `list`. This code
+number of times `sort_by_key` calls the closure when sorting `list`. This code
 attempts to do this counting by pushing `value`—a `String` from the closure’s
 environment—into the `sort_operations` vector. The closure captures `value`
 then moves `value` out of the closure by transferring ownership of `value` to
@@ -371,21 +395,20 @@ implement `FnMut`:
 
 The error points to the line in the closure body that moves `value` out of the
 environment. To fix this, we need to change the closure body so that it doesn’t
-move values out of the environment. To count the number of times `sort_by_key`
+move values out of the environment. To count the number of times the closure
 is called, keeping a counter in the environment and incrementing its value in
 the closure body is a more straightforward way to calculate that. The closure
-in Listing 13-x works with `sort_by_key` because it is only capturing a mutable
+in Listing 13-9 works with `sort_by_key` because it is only capturing a mutable
 reference to the `num_sort_operations` counter and can therefore be called more
 than once:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="13-9" file-name="src/main.rs" caption="Using an `FnMut` closure with `sort_by_key` is allowed">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-09/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-9: Using an `FnMut` closure with `sort_by_key`
-is allowed</span>
+</Listing>
 
 The `Fn` traits are important when defining or using functions or types that
 make use of closures. In the next section, we’ll discuss iterators. Many

@@ -1,7 +1,7 @@
 ## Comments
 
 All programmers strive to make their code easy to understand, but sometimes
-extra explanation is warranted. In these cases, programmers leave *comments* in
+extra explanation is warranted. In these cases, programmers leave _comments_ in
 their source code that the compiler will ignore but people reading the source
 code may find useful.
 
@@ -39,4 +39,7 @@ separate line above the code it’s annotating:
 ```
 
 Rust also has another kind of comment, documentation comments, which we’ll
-discuss in the “Publishing a Crate to Crates.io” section of Chapter 14.
+discuss in the [“Publishing a Crate to Crates.io”][publishing]<!-- ignore -->
+section of Chapter 14.
+
+[publishing]: ch14-02-publishing-to-crates-io.html
