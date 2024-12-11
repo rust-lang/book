@@ -19,11 +19,11 @@ some general guidelines on how to decide whether to panic in library code.
 
 ### Examples, Prototype Code, and Tests
 
-When you’re writing an example to illustrate some concept, also including robust
-error-handling code can make the example less clear. In
-examples, it’s understood that a call to a method like `unwrap` that could
-panic is meant as a placeholder for the way you’d want your application to
-handle errors, which can differ based on what the rest of your code is doing.
+When you’re writing an example to illustrate some concept, also including
+robust error-handling code can make the example less clear. In examples, it’s
+understood that a call to a method like `unwrap` that could panic is meant as a
+placeholder for the way you’d want your application to handle errors, which can
+differ based on what the rest of your code is doing.
 
 Similarly, the `unwrap` and `expect` methods are very handy when prototyping,
 before you’re ready to decide how to handle errors. They leave clear markers in
@@ -57,28 +57,28 @@ of the `parse` method: we still get a `Result` value, and the compiler will
 still make us handle the `Result` as if the `Err` variant is a possibility
 because the compiler isn’t smart enough to see that this string is always a
 valid IP address. If the IP address string came from a user rather than being
-hardcoded into the program and therefore *did* have a possibility of failure,
+hardcoded into the program and therefore _did_ have a possibility of failure,
 we’d definitely want to handle the `Result` in a more robust way instead.
 Mentioning the assumption that this IP address is hardcoded will prompt us to
-change `expect` to better error handling code if in the future, we need to get
+change `expect` to better error-handling code if, in the future, we need to get
 the IP address from some other source instead.
 
 ### Guidelines for Error Handling
 
-It’s advisable to have your code panic when it’s possible that your code
-could end up in a bad state. In this context, a *bad state* is when some
-assumption, guarantee, contract, or invariant has been broken, such as when
-invalid values, contradictory values, or missing values are passed to your
-code—plus one or more of the following:
+It’s advisable to have your code panic when it’s possible that your code could
+end up in a bad state. In this context, a _bad state_ is when some assumption,
+guarantee, contract, or invariant has been broken, such as when invalid values,
+contradictory values, or missing values are passed to your code—plus one or
+more of the following:
 
-* The bad state is something that is unexpected, as opposed to something that
+- The bad state is something that is unexpected, as opposed to something that
   will likely happen occasionally, like a user entering data in the wrong
   format.
-* Your code after this point needs to rely on not being in this bad state,
+- Your code after this point needs to rely on not being in this bad state,
   rather than checking for the problem at every step.
-* There’s not a good way to encode this information in the types you use. We’ll
+- There’s not a good way to encode this information in the types you use. We’ll
   work through an example of what we mean in the [“Encoding States and Behavior
-  as Types”][encoding]<!-- ignore --> section of Chapter 17.
+  as Types”][encoding]<!-- ignore --> section of Chapter 18.
 
 If someone calls your code and passes in values that don’t make sense, it’s
 best to return an error if you can so the user of the library can decide what
@@ -102,11 +102,11 @@ attempting to operate on invalid data can expose your code to vulnerabilities.
 This is the main reason the standard library will call `panic!` if you attempt
 an out-of-bounds memory access: trying to access memory that doesn’t belong to
 the current data structure is a common security problem. Functions often have
-*contracts*: their behavior is only guaranteed if the inputs meet particular
+_contracts_: their behavior is only guaranteed if the inputs meet particular
 requirements. Panicking when the contract is violated makes sense because a
-contract violation always indicates a caller-side bug and it’s not a kind of
+contract violation always indicates a caller-side bug, and it’s not a kind of
 error you want the calling code to have to explicitly handle. In fact, there’s
-no reasonable way for calling code to recover; the calling *programmers* need
+no reasonable way for calling code to recover; the calling _programmers_ need
 to fix the code. Contracts for a function, especially when a violation will
 cause a panic, should be explained in the API documentation for the function.
 
@@ -116,7 +116,7 @@ checking done by the compiler) to do many of the checks for you. If your
 function has a particular type as a parameter, you can proceed with your code’s
 logic knowing that the compiler has already ensured you have a valid value. For
 example, if you have a type rather than an `Option`, your program expects to
-have *something* rather than *nothing*. Your code then doesn’t have to handle
+have _something_ rather than _nothing_. Your code then doesn’t have to handle
 two cases for the `Some` and `None` variants: it will only have one case for
 definitely having a value. Code trying to pass nothing to your function won’t
 even compile, so your function doesn’t have to check for that case at runtime.
@@ -133,16 +133,20 @@ numbers before checking it against our secret number; we only validated that
 the guess was positive. In this case, the consequences were not very dire: our
 output of “Too high” or “Too low” would still be correct. But it would be a
 useful enhancement to guide the user toward valid guesses and have different
-behavior when a user guesses a number that’s out of range versus when a user
-types, for example, letters instead.
+behavior when the user guesses a number that’s out of range versus when the
+user types, for example, letters instead.
 
 One way to do this would be to parse the guess as an `i32` instead of only a
 `u32` to allow potentially negative numbers, and then add a check for the
 number being in range, like so:
 
+<Listing file-name="src/main.rs">
+
 ```rust,ignore
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-09-guess-out-of-range/src/main.rs:here}}
 ```
+
+</Listing>
 
 The `if` expression checks whether our value is out of range, tells the user
 about the problem, and calls `continue` to start the next iteration of the loop
@@ -150,7 +154,7 @@ and ask for another guess. After the `if` expression, we can proceed with the
 comparisons between `guess` and the secret number knowing that `guess` is
 between 1 and 100.
 
-However, this is not an ideal solution: if it was absolutely critical that the
+However, this is not an ideal solution: if it were absolutely critical that the
 program only operated on values between 1 and 100, and it had many functions
 with this requirement, having a check like this in every function would be
 tedious (and might impact performance).
@@ -162,19 +166,15 @@ confidently use the values they receive. Listing 9-13 shows one way to define a
 `Guess` type that will only create an instance of `Guess` if the `new` function
 receives a value between 1 and 100.
 
-<!-- Deliberately not using rustdoc_include here; the `main` function in the
-file requires the `rand` crate. We do want to include it for reader
-experimentation purposes, but don't want to include it for rustdoc testing
-purposes. -->
+<Listing number="9-13" caption="A `Guess` type that will only continue with values between 1 and 100">
 
 ```rust
-{{#include ../listings/ch09-error-handling/listing-09-13/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/lib.rs}}
 ```
 
-<span class="caption">Listing 9-13: A `Guess` type that will only continue with
-values between 1 and 100</span>
+</Listing>
 
-First, we define a struct named `Guess` that has a field named `value` that
+First we define a struct named `Guess` that has a field named `value` that
 holds an `i32`. This is where the number will be stored.
 
 Then we implement an associated function named `new` on `Guess` that creates
@@ -193,11 +193,11 @@ to the `value` parameter and return the `Guess`.
 
 Next, we implement a method named `value` that borrows `self`, doesn’t have any
 other parameters, and returns an `i32`. This kind of method is sometimes called
-a *getter*, because its purpose is to get some data from its fields and return
+a _getter_ because its purpose is to get some data from its fields and return
 it. This public method is necessary because the `value` field of the `Guess`
 struct is private. It’s important that the `value` field be private so code
 using the `Guess` struct is not allowed to set `value` directly: code outside
-the module *must* use the `Guess::new` function to create an instance of
+the module _must_ use the `Guess::new` function to create an instance of
 `Guess`, thereby ensuring there’s no way for a `Guess` to have a `value` that
 hasn’t been checked by the conditions in the `Guess::new` function.
 
@@ -207,7 +207,7 @@ then declare in its signature that it takes or returns a `Guess` rather than an
 
 ## Summary
 
-Rust’s error handling features are designed to help you write more robust code.
+Rust’s error-handling features are designed to help you write more robust code.
 The `panic!` macro signals that your program is in a state it can’t handle and
 lets you tell the process to stop instead of trying to proceed with invalid or
 incorrect values. The `Result` enum uses Rust’s type system to indicate that
@@ -220,4 +220,4 @@ Now that you’ve seen useful ways that the standard library uses generics with
 the `Option` and `Result` enums, we’ll talk about how generics work and how you
 can use them in your code.
 
-[encoding]: ch17-03-oo-design-patterns.html#encoding-states-and-behavior-as-types
+[encoding]: ch18-03-oo-design-patterns.html#encoding-states-and-behavior-as-types

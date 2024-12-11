@@ -1,6 +1,6 @@
 $ cargo run
    Compiling cons-list v0.1.0 (file:///projects/cons-list)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.45s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.45s
      Running `target/debug/cons-list`
 count after creating a = 1
 count after creating b = 2

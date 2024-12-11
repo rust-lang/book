@@ -8,11 +8,11 @@ type you’ve annotated with the `derive` syntax.
 In this appendix, we provide a reference of all the traits in the standard
 library that you can use with `derive`. Each section covers:
 
-* What operators and methods deriving this trait will enable
-* What the implementation of the trait provided by `derive` does
-* What implementing the trait signifies about the type
-* The conditions in which you’re allowed or not allowed to implement the trait
-* Examples of operations that require the trait
+- What operators and methods deriving this trait will enable
+- What the implementation of the trait provided by `derive` does
+- What implementing the trait signifies about the type
+- The conditions in which you’re allowed or not allowed to implement the trait
+- Examples of operations that require the trait
 
 If you want different behavior from that provided by the `derive` attribute,
 consult the [standard library documentation](../std/index.html)<!-- ignore -->
@@ -34,7 +34,7 @@ The list of derivable traits provided in this appendix is not comprehensive:
 libraries can implement `derive` for their own traits, making the list of
 traits you can use `derive` with truly open-ended. Implementing `derive`
 involves using a procedural macro, which is covered in the
-[“Macros”][macros]<!-- ignore --> section of Chapter 19.
+[“Macros”][macros]<!-- ignore --> section of Chapter 20.
 
 ### `Debug` for Programmer Output
 
@@ -45,7 +45,7 @@ The `Debug` trait allows you to print instances of a type for debugging
 purposes, so you and other programmers using your type can inspect an instance
 at a particular point in a program’s execution.
 
-The `Debug` trait is required, for example, in use of the `assert_eq!` macro.
+The `Debug` trait is required, for example, in using the `assert_eq!` macro.
 This macro prints the values of instances given as arguments if the equality
 assertion fails so programmers can see why the two instances weren’t equal.
 
@@ -55,7 +55,7 @@ The `PartialEq` trait allows you to compare instances of a type to check for
 equality and enables use of the `==` and `!=` operators.
 
 Deriving `PartialEq` implements the `eq` method. When `PartialEq` is derived on
-structs, two instances are equal only if *all* fields are equal, and the
+structs, two instances are equal only if _all_ fields are equal, and the
 instances are not equal if any fields are not equal. When derived on enums,
 each variant is equal to itself and not equal to the other variants.
 
@@ -178,10 +178,7 @@ The `Default` trait is required when you use the method `unwrap_or_default` on
 `unwrap_or_default` will return the result of `Default::default` for the type
 `T` stored in the `Option<T>`.
 
-[creating-instances-from-other-instances-with-struct-update-syntax]:
-ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
-[stack-only-data-copy]:
-ch04-01-what-is-ownership.html#stack-only-data-copy
-[ways-variables-and-data-interact-clone]:
-ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone
-[macros]: ch19-06-macros.html#macros
+[creating-instances-from-other-instances-with-struct-update-syntax]: ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
+[stack-only-data-copy]: ch04-01-what-is-ownership.html#stack-only-data-copy
+[ways-variables-and-data-interact-clone]: ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone
+[macros]: ch20-06-macros.html#macros
