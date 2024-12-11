@@ -47,63 +47,41 @@ Here is the error we get when we compile this code:
 {{#include ../listings/ch21-web-server/listing-21-22/output.txt}}
 ```
 
-The error tells us we can’t call `join` because we only have a mutable borrow
-of each `worker` and `join` takes ownership of its argument. To solve this
-issue, we need to move the thread out of the `Worker` instance that owns
-`thread` so `join` can consume the thread. We did this in Listing 17-15: if
-`Worker` holds an `Option<thread::JoinHandle<()>>` instead, we can call the
-`take` method on the `Option` to move the value out of the `Some` variant and
-leave a `None` variant in its place. In other words, a `Worker` that is running
-will have a `Some` variant in `thread`, and when we want to clean up a
-`Worker`, we’ll replace `Some` with `None` so the `Worker` doesn’t have a
-thread to run.
+The error tells us we can’t call `join` because we only have a mutable borrow of
+each `worker` and `join` takes ownership of its argument. To solve this issue,
+we need to move the thread out of the `Worker` instance that owns `thread` so
+`join` can consume the thread. One way to do this is by taking the same approach
+we did in Listing 18-15. If `Worker` held an `Option<thread::JoinHandle<()>>`,
+we could call the `take` method on the `Option` to move the value out of the
+`Some` variant and leave a `None` variant in its place. In other words, a
+`Worker` that is running would have a `Some` variant in `thread`, and when we
+wanted to clean up a `Worker`, we would replace `Some` with `None` so the
+`Worker` doesn’t have a thread to run.
 
-So we know we want to update the definition of `Worker` like this:
+However, the _only_ time this would come up would be when dropping the `Worker`.
+In exchange, we would have to deal with an `Option<thread::JoinHandle<()>>`
+everywhere we access `worker.thread`. Idiomatic Rust uses `Option` quite a bit,
+but when you find yourself wrapping something in `Option` as a workaround even
+though you know the item will always be present, it is a good idea to look for
+alternative approaches. They can make your code cleaner and less error-prone.
 
-<Listing file-name="src/lib.rs">
+In this case, there is a better alternative: the `Vec::drain` method. It accepts
+a range parameter to specify which items to remove from the `Vec`, and returns
+an iterator of those items. Passing the `..` range syntax will remove *every*
+value from the `Vec`.
 
-```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch21-web-server/no-listing-04-update-worker-definition/src/lib.rs:here}}
-```
-
-</Listing>
-
-Now let’s lean on the compiler to find the other places that need to change.
-Checking this code, we get two errors:
-
-```console
-{{#include ../listings/ch21-web-server/no-listing-04-update-worker-definition/output.txt}}
-```
-
-Let’s address the second error, which points to the code at the end of
-`Worker::new`; we need to wrap the `thread` value in `Some` when we create a
-new `Worker`. Make the following changes to fix this error:
+So we need to update the `ThreadPool` `drop` implementation like this:
 
 <Listing file-name="src/lib.rs">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch21-web-server/no-listing-05-fix-worker-new/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch21-web-server/no-listing-04-update-drop-definition/src/lib.rs:here}}
 ```
 
 </Listing>
 
-The first error is in our `Drop` implementation. We mentioned earlier that we
-intended to call `take` on the `Option` value to move `thread` out of `worker`.
-The following changes will do so:
-
-<Listing file-name="src/lib.rs">
-
-```rust,ignore,not_desired_behavior
-{{#rustdoc_include ../listings/ch21-web-server/no-listing-06-fix-threadpool-drop/src/lib.rs:here}}
-```
-
-</Listing>
-
-As discussed in Chapter 18, the `take` method on `Option` takes the `Some`
-variant out and leaves `None` in its place. We’re using `if let` to destructure
-the `Some` and get the thread; then we call `join` on the thread. If a worker’s
-thread is already `None`, we know that worker has already had its thread
-cleaned up, so nothing happens in that case.
+This resolves the compiler error and does not require any other changes to our
+code.
 
 ### Signaling to the Threads to Stop Listening for Jobs
 
@@ -120,9 +98,9 @@ implementation and then a change in the `Worker` loop.
 
 First, we’ll change the `ThreadPool` `drop` implementation to explicitly drop
 the `sender` before waiting for the threads to finish. Listing 21-23 shows the
-changes to `ThreadPool` to explicitly drop `sender`. We use the same `Option`
-and `take` technique as we did with the thread to be able to move `sender` out
-of `ThreadPool`:
+changes to `ThreadPool` to explicitly drop `sender`. Unlike with the `workers`,
+here we *do* need to use an `Option` to be able to move `sender` out of
+`ThreadPool` with `Option::take`.
 
 <Listing number="21-23" file-name="src/lib.rs" caption="Explicitly drop `sender` before joining the worker threads">
 
