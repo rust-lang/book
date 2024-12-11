@@ -1,6 +1,6 @@
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.58s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.58s
      Running `target/debug/loops`
 count = 0
 remaining = 10

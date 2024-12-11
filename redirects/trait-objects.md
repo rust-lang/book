@@ -65,4 +65,4 @@ Here are the relevant sections in the new and old books:
 
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/trait-objects.html
-[2]: ch17-02-trait-objects.html
+[2]: ch18-02-trait-objects.html

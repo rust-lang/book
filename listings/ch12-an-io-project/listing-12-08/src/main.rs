@@ -7,17 +7,17 @@ fn main() {
     let config = Config::new(&args);
 
     println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
+    println!("In file {}", config.file_path);
 
-    let contents = fs::read_to_string(config.filename)
-        .expect("Something went wrong reading the file");
+    let contents = fs::read_to_string(config.file_path)
+        .expect("Should have been able to read the file");
 
-    println!("With text:\n{}", contents);
+    println!("With text:\n{contents}");
 }
 
 struct Config {
     query: String,
-    filename: String,
+    file_path: String,
 }
 
 impl Config {
@@ -31,8 +31,8 @@ impl Config {
         // ANCHOR_END: here
 
         let query = args[1].clone();
-        let filename = args[2].clone();
+        let file_path = args[2].clone();
 
-        Config { query, filename }
+        Config { query, file_path }
     }
 }

@@ -7,30 +7,30 @@ fn main() {
     let config = Config::new(&args);
 
     println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
+    println!("In file {}", config.file_path);
 
-    let contents = fs::read_to_string(config.filename)
-        .expect("Something went wrong reading the file");
+    let contents = fs::read_to_string(config.file_path)
+        .expect("Should have been able to read the file");
 
-    println!("With text:\n{}", contents);
+    println!("With text:\n{contents}");
 }
 
 struct Config {
     query: String,
-    filename: String,
+    file_path: String,
 }
 
 // ANCHOR: here
 impl Config {
-    fn new(args: &[String]) -> Result<Config, &'static str> {
+    fn build(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
             return Err("not enough arguments");
         }
 
         let query = args[1].clone();
-        let filename = args[2].clone();
+        let file_path = args[2].clone();
 
-        Ok(Config { query, filename })
+        Ok(Config { query, file_path })
     }
 }
 // ANCHOR_END: here

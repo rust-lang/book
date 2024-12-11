@@ -6,26 +6,17 @@ struct Rectangle {
 
 fn main() {
     let mut list = [
-        Rectangle {
-            width: 10,
-            height: 1,
-        },
-        Rectangle {
-            width: 3,
-            height: 5,
-        },
-        Rectangle {
-            width: 7,
-            height: 12,
-        },
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
     ];
 
     let mut sort_operations = vec![];
-    let value = String::from("by key called");
+    let value = String::from("closure called");
 
     list.sort_by_key(|r| {
         sort_operations.push(value);
         r.width
     });
-    println!("{:#?}", list);
+    println!("{list:#?}");
 }

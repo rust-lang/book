@@ -1,11 +1,11 @@
 ## Traits: Defining Shared Behavior
 
-A *trait* defines functionality a particular type has and can share with other
-types. We can use traits to define shared behavior in an abstract way. We can
-use *trait bounds* to specify that a generic type can be any type that has
+A _trait_ defines the functionality a particular type has and can share with
+other types. We can use traits to define shared behavior in an abstract way. We
+can use _trait bounds_ to specify that a generic type can be any type that has
 certain behavior.
 
-> Note: Traits are similar to a feature often called *interfaces* in other
+> Note: Traits are similar to a feature often called _interfaces_ in other
 > languages, although with some differences.
 
 ### Defining a Trait
@@ -17,27 +17,26 @@ define a set of behaviors necessary to accomplish some purpose.
 
 For example, let’s say we have multiple structs that hold various kinds and
 amounts of text: a `NewsArticle` struct that holds a news story filed in a
-particular location and a `Tweet` that can have at most 280 characters along
+particular location and a `Tweet` that can have, at most, 280 characters along
 with metadata that indicates whether it was a new tweet, a retweet, or a reply
 to another tweet.
 
 We want to make a media aggregator library crate named `aggregator` that can
 display summaries of data that might be stored in a `NewsArticle` or `Tweet`
-instance. To do this, we need a summary from each type, and we’ll request
-that summary by calling a `summarize` method on an instance. Listing 10-12
-shows the definition of a public `Summary` trait that expresses this behavior.
+instance. To do this, we need a summary from each type, and we’ll request that
+summary by calling a `summarize` method on an instance. Listing 10-12 shows the
+definition of a public `Summary` trait that expresses this behavior.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="10-12" file-name="src/lib.rs" caption="A `Summary` trait that consists of the behavior provided by a `summarize` method">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-12/src/lib.rs}}
 ```
 
-<span class="caption">Listing 10-12: A `Summary` trait that consists of the
-behavior provided by a `summarize` method</span>
+</Listing>
 
 Here, we declare a trait using the `trait` keyword and then the trait’s name,
-which is `Summary` in this case. We’ve also declared the trait as `pub` so that
+which is `Summary` in this case. We also declare the trait as `pub` so that
 crates depending on this crate can make use of this trait too, as we’ll see in
 a few examples. Inside the curly brackets, we declare the method signatures
 that describe the behaviors of the types that implement this trait, which in
@@ -50,7 +49,7 @@ that any type that has the `Summary` trait will have the method `summarize`
 defined with this signature exactly.
 
 A trait can have multiple methods in its body: the method signatures are listed
-one per line and each line ends in a semicolon.
+one per line, and each line ends in a semicolon.
 
 ### Implementing a Trait on a Type
 
@@ -59,17 +58,16 @@ we can implement it on the types in our media aggregator. Listing 10-13 shows
 an implementation of the `Summary` trait on the `NewsArticle` struct that uses
 the headline, the author, and the location to create the return value of
 `summarize`. For the `Tweet` struct, we define `summarize` as the username
-followed by the entire text of the tweet, assuming that tweet content is
+followed by the entire text of the tweet, assuming that the tweet content is
 already limited to 280 characters.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="10-13" file-name="src/lib.rs" caption="Implementing the `Summary` trait on the `NewsArticle` and `Tweet` types">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-13/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 10-13: Implementing the `Summary` trait on the
-`NewsArticle` and `Tweet` types</span>
+</Listing>
 
 Implementing a trait on a type is similar to implementing regular methods. The
 difference is that after `impl`, we put the trait name we want to implement,
@@ -95,23 +93,23 @@ know, people`.
 
 Other crates that depend on the `aggregator` crate can also bring the `Summary`
 trait into scope to implement `Summary` on their own types. One restriction to
-note is that we can implement a trait on a type only if at least one of the
-trait or the type is local to our crate. For example, we can implement standard
+note is that we can implement a trait on a type only if either the trait or the
+type, or both, are local to our crate. For example, we can implement standard
 library traits like `Display` on a custom type like `Tweet` as part of our
-`aggregator` crate functionality, because the type `Tweet` is local to our
+`aggregator` crate functionality because the type `Tweet` is local to our
 `aggregator` crate. We can also implement `Summary` on `Vec<T>` in our
-`aggregator` crate, because the trait `Summary` is local to our `aggregator`
+`aggregator` crate because the trait `Summary` is local to our `aggregator`
 crate.
 
 But we can’t implement external traits on external types. For example, we can’t
-implement the `Display` trait on `Vec<T>` within our `aggregator` crate,
-because `Display` and `Vec<T>` are both defined in the standard library and
-aren’t local to our `aggregator` crate. This restriction is part of a property
-called *coherence*, and more specifically the *orphan rule*, so named because
-the parent type is not present. This rule ensures that other people’s code
-can’t break your code and vice versa. Without the rule, two crates could
-implement the same trait for the same type, and Rust wouldn’t know which
-implementation to use.
+implement the `Display` trait on `Vec<T>` within our `aggregator` crate because
+`Display` and `Vec<T>` are both defined in the standard library and aren’t
+local to our `aggregator` crate. This restriction is part of a property called
+_coherence_, and more specifically the _orphan rule_, so named because the
+parent type is not present. This rule ensures that other people’s code can’t
+break your code and vice versa. Without the rule, two crates could implement
+the same trait for the same type, and Rust wouldn’t know which implementation
+to use.
 
 ### Default Implementations
 
@@ -120,18 +118,17 @@ in a trait instead of requiring implementations for all methods on every type.
 Then, as we implement the trait on a particular type, we can keep or override
 each method’s default behavior.
 
-In Listing 10-14 we specify a default string for the `summarize` method of the
+In Listing 10-14, we specify a default string for the `summarize` method of the
 `Summary` trait instead of only defining the method signature, as we did in
 Listing 10-12.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="10-14" file-name="src/lib.rs" caption="Defining a `Summary` trait with a default implementation of the `summarize` method">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-14/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 10-14: Defining a `Summary` trait with a default
-implementation of the `summarize` method</span>
+</Listing>
 
 To use a default implementation to summarize instances of `NewsArticle`, we
 specify an empty `impl` block with `impl Summary for NewsArticle {}`.
@@ -175,7 +172,8 @@ After we define `summarize_author`, we can call `summarize` on instances of the
 `Tweet` struct, and the default implementation of `summarize` will call the
 definition of `summarize_author` that we’ve provided. Because we’ve implemented
 `summarize_author`, the `Summary` trait has given us the behavior of the
-`summarize` method without requiring us to write any more code.
+`summarize` method without requiring us to write any more code. Here’s what
+that looks like:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/main.rs:here}}
@@ -189,7 +187,7 @@ overriding implementation of that same method.
 ### Traits as Parameters
 
 Now that you know how to define and implement traits, we can explore how to use
-traits to define functions that accept many different types. We'll use the
+traits to define functions that accept many different types. We’ll use the
 `Summary` trait we implemented on the `NewsArticle` and `Tweet` types in
 Listing 10-13 to define a `notify` function that calls the `summarize` method
 on its `item` parameter, which is of some type that implements the `Summary`
@@ -207,10 +205,14 @@ and pass in any instance of `NewsArticle` or `Tweet`. Code that calls the
 function with any other type, such as a `String` or an `i32`, won’t compile
 because those types don’t implement `Summary`.
 
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="fixing-the-largest-function-with-trait-bounds"></a>
+
 #### Trait Bound Syntax
 
 The `impl Trait` syntax works for straightforward cases but is actually syntax
-sugar for a longer form known as a *trait bound*; it looks like this:
+sugar for a longer form known as a _trait bound_; it looks like this:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: &T) {
@@ -271,7 +273,7 @@ bounds, so functions with multiple generic type parameters can contain lots of
 trait bound information between the function’s name and its parameter list,
 making the function signature hard to read. For this reason, Rust has alternate
 syntax for specifying trait bounds inside a `where` clause after the function
-signature. So instead of writing this:
+signature. So, instead of writing this:
 
 ```rust,ignore
 fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
@@ -280,17 +282,14 @@ fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
 we can use a `where` clause, like this:
 
 ```rust,ignore
-fn some_function<T, U>(t: &T, u: &U) -> i32
-    where T: Display + Clone,
-          U: Clone + Debug
-{
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-where-clause/src/lib.rs:here}}
 ```
 
 This function’s signature is less cluttered: the function name, parameter list,
 and return type are close together, similar to a function without lots of trait
 bounds.
 
-### Returning Types that Implement Traits
+### Returning Types That Implement Traits
 
 We can also use the `impl Trait` syntax in the return position to return a
 value of some type that implements a trait, as shown here:
@@ -324,104 +323,31 @@ around how the `impl Trait` syntax is implemented in the compiler. We’ll cover
 how to write a function with this behavior in the [“Using Trait Objects That
 Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
-ignore --> section of Chapter 17.
-
-### Fixing the `largest` Function with Trait Bounds
-
-Now that you know how to specify the behavior you want using the generic type
-parameter’s bounds, let’s return to Listing 10-5 to fix the definition of the
-`largest` function that uses a generic type parameter! Last time we tried to
-run that code, we received this error:
-
-```console
-{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
-```
-
-In the body of `largest` we wanted to compare two values of type `T` using the
-greater than (`>`) operator. Because that operator is defined as a default
-method on the standard library trait `std::cmp::PartialOrd`, we need to specify
-`PartialOrd` in the trait bounds for `T` so the `largest` function can work on
-slices of any type that we can compare. We don’t need to bring `PartialOrd`
-into scope because it’s in the prelude. Change the signature of `largest` to
-look like this:
-
-```rust,ignore
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-fixing-listing-10-05/src/main.rs:here}}
-```
-
-This time when we compile the code, we get a different set of errors:
-
-```console
-{{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-fixing-listing-10-05/output.txt}}
-```
-
-The key line in this error is `cannot move out of type [T], a non-copy slice`.
-With our non-generic versions of the `largest` function, we were only trying to
-find the largest `i32` or `char`. As discussed in the [“Stack-Only Data:
-Copy”][stack-only-data-copy]<!-- ignore --> section in Chapter 4, types like
-`i32` and `char` that have a known size can be stored on the stack, so they
-implement the `Copy` trait. But when we made the `largest` function generic, it
-became possible for the `list` parameter to have types in it that don’t
-implement the `Copy` trait. Consequently, we wouldn’t be able to move the value
-out of `list[0]` and into the `largest` variable, resulting in this error.
-
-To call this code with only those types that implement the `Copy` trait, we can
-add `Copy` to the trait bounds of `T`! Listing 10-15 shows the complete code of
-a generic `largest` function that will compile as long as the types of the
-values in the slice that we pass into the function implement the `PartialOrd`
-*and* `Copy` traits, like `i32` and `char` do.
-
-<span class="filename">Filename: src/main.rs</span>
-
-```rust
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-15/src/main.rs}}
-```
-
-<span class="caption">Listing 10-15: A working definition of the `largest`
-function that works on any generic type that implements the `PartialOrd` and
-`Copy` traits</span>
-
-If we don’t want to restrict the `largest` function to the types that implement
-the `Copy` trait, we could specify that `T` has the trait bound `Clone` instead
-of `Copy`. Then we could clone each value in the slice when we want the
-`largest` function to have ownership. Using the `clone` function means we’re
-potentially making more heap allocations in the case of types that own heap
-data like `String`, and heap allocations can be slow if we’re working with
-large amounts of data.
-
-We could also implement `largest` by having the function return a reference to
-a `T` value in the slice. If we change the return type to `&T` instead of `T`,
-thereby changing the body of the function to return a reference, we wouldn’t
-need the `Clone` or `Copy` trait bounds and we could avoid heap allocations.
-Try implementing these alternate solutions on your own! If you get stuck with
-errors having to do with lifetimes, keep reading: the “Validating References
-with Lifetimes” section coming up will explain, but lifetimes aren’t required
-to solve these challenges.
+ignore --> section of Chapter 18.
 
 ### Using Trait Bounds to Conditionally Implement Methods
 
 By using a trait bound with an `impl` block that uses generic type parameters,
 we can implement methods conditionally for types that implement the specified
-traits. For example, the type `Pair<T>` in Listing 10-16 always implements the
+traits. For example, the type `Pair<T>` in Listing 10-15 always implements the
 `new` function to return a new instance of `Pair<T>` (recall from the
 [“Defining Methods”][methods]<!-- ignore --> section of Chapter 5 that `Self`
 is a type alias for the type of the `impl` block, which in this case is
 `Pair<T>`). But in the next `impl` block, `Pair<T>` only implements the
 `cmp_display` method if its inner type `T` implements the `PartialOrd` trait
-that enables comparison *and* the `Display` trait that enables printing.
+that enables comparison _and_ the `Display` trait that enables printing.
 
-<span class="filename">Filename: src/lib.rs</span>
+<Listing number="10-15" file-name="src/lib.rs" caption="Conditionally implementing methods on a generic type depending on trait bounds">
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/src/lib.rs}}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-15/src/lib.rs}}
 ```
 
-<span class="caption">Listing 10-16: Conditionally implement methods on a
-generic type depending on trait bounds</span>
+</Listing>
 
 We can also conditionally implement a trait for any type that implements
 another trait. Implementations of a trait on any type that satisfies the trait
-bounds are called *blanket implementations* and are extensively used in the
+bounds are called _blanket implementations_ and are used extensively in the
 Rust standard library. For example, the standard library implements the
 `ToString` trait on any type that implements the `Display` trait. The `impl`
 block in the standard library looks similar to this code:
@@ -449,13 +375,12 @@ reduce duplication but also specify to the compiler that we want the generic
 type to have particular behavior. The compiler can then use the trait bound
 information to check that all the concrete types used with our code provide the
 correct behavior. In dynamically typed languages, we would get an error at
-runtime if we called a method on a type which didn’t define the method. But Rust
-moves these errors to compile time so we’re forced to fix the problems before
-our code is even able to run. Additionally, we don’t have to write code that
-checks for behavior at runtime because we’ve already checked at compile time.
-Doing so improves performance without having to give up the flexibility of
-generics.
+runtime if we called a method on a type which didn’t define the method. But
+Rust moves these errors to compile time so we’re forced to fix the problems
+before our code is even able to run. Additionally, we don’t have to write code
+that checks for behavior at runtime because we’ve already checked at compile
+time. Doing so improves performance without having to give up the flexibility
+of generics.
 
-[stack-only-data-copy]: ch04-01-what-is-ownership.html#stack-only-data-copy
-[using-trait-objects-that-allow-for-values-of-different-types]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [methods]: ch05-03-method-syntax.html#defining-methods

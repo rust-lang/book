@@ -1,4 +1,4 @@
-use chapter10::{self, NewsArticle, Summary};
+use aggregator::{self, NewsArticle, Summary};
 
 fn main() {
     // ANCHOR: here
