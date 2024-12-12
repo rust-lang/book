@@ -1,5 +1,5 @@
 [package]
-name = "iterators"
+name = "shoe_size"
 version = "0.1.0"
 edition = "2021"
 

@@ -6,7 +6,7 @@ warning fixes, a linter, and integrating with IDEs.
 
 ### Automatic Formatting with `rustfmt`
 
-The `rustfmt` tool reformats your code according to the community code style.
+The `rustfmt` tool reformats your code according to the community code style.
 Many collaborative projects use `rustfmt` to prevent arguments about which
 style to use when writing Rust: everyone formats their code using the tool.
 
@@ -32,8 +32,9 @@ on `rustfmt`, see [its documentation][rustfmt].
 ### Fix Your Code with `rustfix`
 
 The rustfix tool is included with Rust installations and can automatically fix
-some compiler warnings. If you’ve written code in Rust, you’ve probably seen
-compiler warnings. For example, consider this code:
+compiler warnings that have a clear way to correct the problem that’s likely
+what you want. It’s likely you’ve seen compiler warnings before. For example,
+consider this code:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -56,7 +57,7 @@ $ cargo build
 warning: unused variable: `i`
  --> src/main.rs:4:9
   |
-4 |     for i in 1..100 {
+4 |     for i in 0..100 {
   |         ^ help: consider using `_i` instead
   |
   = note: #[warn(unused_variables)] on by default
@@ -76,7 +77,7 @@ $ cargo fix
     Finished dev [unoptimized + debuginfo] target(s) in 0.59s
 ```
 
-When we look at *src/main.rs* again, we’ll see that `cargo fix` has changed the
+When we look at _src/main.rs_ again, we’ll see that `cargo fix` has changed the
 code:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -94,7 +95,7 @@ fn main() {
 The `for` loop variable is now named `_i`, and the warning no longer appears.
 
 You can also use the `cargo fix` command to transition your code between
-different Rust editions. Editions are covered in Appendix E.
+different Rust editions. Editions are covered in [Appendix E][editions].
 
 ### More Lints with Clippy
 
@@ -129,20 +130,21 @@ fn main() {
 Running `cargo clippy` on this project results in this error:
 
 ```text
-error: approximate value of `f{32, 64}::consts::PI` found. Consider using it directly
+error: approximate value of `f{32, 64}::consts::PI` found
  --> src/main.rs:2:13
   |
 2 |     let x = 3.1415;
   |             ^^^^^^
   |
-  = note: #[deny(clippy::approx_constant)] on by default
-  = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/master/index.html#approx_constant
+  = note: `#[deny(clippy::approx_constant)]` on by default
+  = help: consider using the constant directly
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
-This error lets you know that Rust has this constant defined more precisely and
-that your program would be more correct if you used the constant instead. You
-would then change your code to use the `PI` constant. The following code
-doesn’t result in any errors or warnings from Clippy:
+This error lets you know that Rust already has a more precise `PI` constant
+defined, and that your program would be more correct if you used the constant
+instead. You would then change your code to use the `PI` constant. The
+following code doesn’t result in any errors or warnings from Clippy:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -161,22 +163,19 @@ For more information on Clippy, see [its documentation][clippy].
 ### IDE Integration Using `rust-analyzer`
 
 To help IDE integration, the Rust community recommends using
-[`rust-analyzer`][rust-analyzer]. This tool is a set of compiler-centric
-utilities that speaks the [Language Server Protocol][lsp], which is a
-specification for IDEs and programming languages to communicate with each
-other. Different clients can use `rust-analyzer`, such as [the Rust analyzer
-plug-in for Visual Studio Code][vscode].
+[`rust-analyzer`][rust-analyzer]<!-- ignore -->. This tool is a set of
+compiler-centric utilities that speaks the [Language Server Protocol][lsp]<!--
+ignore -->, which is a specification for IDEs and programming languages to
+communicate with each other. Different clients can use `rust-analyzer`, such as
+[the Rust analyzer plug-in for Visual Studio Code][vscode].
 
 [lsp]: http://langserver.org/
-[vscode]: https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer
+[vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer
 
-Visit the `rust-analyzer` project’s [home page][rust-analyzer] for installation
-instructions, then install the language server support in your particular IDE.
-Your IDE will gain abilities such as autocompletion, jump to definition, and
-inline errors.
-
-For more information on `rust-analyzer`, see [its
-documentation][rust-analyzer-manual].
+Visit the `rust-analyzer` project’s [home page][rust-analyzer]<!-- ignore -->
+for installation instructions, then install the language server support in your
+particular IDE. Your IDE will gain abilities such as autocompletion, jump to
+definition, and inline errors.
 
 [rust-analyzer]: https://rust-analyzer.github.io
-[rust-analyzer-manual]: https://rust-analyzer.github.io/manual.html
+[editions]: appendix-05-editions.md

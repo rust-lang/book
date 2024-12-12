@@ -17,7 +17,7 @@ impl<T> MyBox<T> {
 }
 
 fn hello(name: &str) {
-    println!("Hello, {}!", name);
+    println!("Hello, {name}!");
 }
 
 // ANCHOR: here

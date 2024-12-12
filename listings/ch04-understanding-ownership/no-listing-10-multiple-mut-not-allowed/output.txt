@@ -7,9 +7,9 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
   |              ------ first mutable borrow occurs here
 5 |     let r2 = &mut s;
   |              ^^^^^^ second mutable borrow occurs here
-6 | 
+6 |
 7 |     println!("{}, {}", r1, r2);
   |                        -- first borrow later used here
 
 For more information about this error, try `rustc --explain E0499`.
-error: could not compile `ownership` due to previous error
+error: could not compile `ownership` (bin "ownership") due to 1 previous error

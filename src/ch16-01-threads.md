@@ -1,21 +1,23 @@
 ## Using Threads to Run Code Simultaneously
 
 In most current operating systems, an executed program’s code is run in a
-*process*, and the operating system manages multiple processes at once. Within
-your program, you can also have independent parts that run simultaneously. The
-features that run these independent parts are called *threads*.
+_process_, and the operating system will manage multiple processes at once.
+Within a program, you can also have independent parts that run simultaneously.
+The features that run these independent parts are called _threads_. For
+example, a web server could have multiple threads so that it could respond to
+more than one request at the same time.
 
-Splitting the computation in your program into multiple threads can improve
-performance because the program does multiple tasks at the same time, but it
-also adds complexity. Because threads can run simultaneously, there’s no
-inherent guarantee about the order in which parts of your code on different
-threads will run. This can lead to problems, such as:
+Splitting the computation in your program into multiple threads to run multiple
+tasks at the same time can improve performance, but it also adds complexity.
+Because threads can run simultaneously, there’s no inherent guarantee about the
+order in which parts of your code on different threads will run. This can lead
+to problems, such as:
 
-* Race conditions, where threads are accessing data or resources in an
+- Race conditions, where threads are accessing data or resources in an
   inconsistent order
-* Deadlocks, where two threads are waiting for each other to finish using a
-  resource the other thread has, preventing both threads from continuing
-* Bugs that happen only in certain situations and are hard to reproduce and fix
+- Deadlocks, where two threads are waiting for each other, preventing both
+  threads from continuing
+- Bugs that happen only in certain situations and are hard to reproduce and fix
   reliably
 
 Rust attempts to mitigate the negative effects of using threads, but
@@ -23,12 +25,13 @@ programming in a multithreaded context still takes careful thought and requires
 a code structure that is different from that in programs running in a single
 thread.
 
-Programming languages implement threads in a few different ways. Many operating
-systems provide an API for creating new threads. This model where a language
-calls the operating system APIs to create threads is sometimes called *1:1*,
-meaning one operating system thread per one language thread. The Rust standard
-library only provides an implementation of 1:1 threading; there are crates that
-implement other models of threading that make different tradeoffs.
+Programming languages implement threads in a few different ways, and many
+operating systems provide an API the language can call for creating new threads.
+The Rust standard library uses a _1:1_ model of thread implementation, whereby a
+program uses one operating system thread per one language thread. There are
+crates that implement other models of threading that make different tradeoffs to
+the 1:1 model. (Rust’s async system, which we will see in the next chapter,
+provides another approach to concurrency as well.)
 
 ### Creating a New Thread with `spawn`
 
@@ -37,17 +40,16 @@ closure (we talked about closures in Chapter 13) containing the code we want to
 run in the new thread. The example in Listing 16-1 prints some text from a main
 thread and other text from a new thread:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-1" file-name="src/main.rs" caption="Creating a new thread to print one thing while the main thread prints something else">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-1: Creating a new thread to print one thing
-while the main thread prints something else</span>
+</Listing>
 
-Note that with this function, the new thread will be stopped when the main
-thread ends, whether or not it has finished running. The output from this
+Note that when the main thread of a Rust program completes, all spawned threads
+are shut down, whether or not they have finished running. The output from this
 program might be a little different every time, but it will look similar to the
 following:
 
@@ -82,29 +84,27 @@ for the operating system to switch between the threads.
 ### Waiting for All Threads to Finish Using `join` Handles
 
 The code in Listing 16-1 not only stops the spawned thread prematurely most of
-the time due to the main thread ending, but also can’t guarantee that the
-spawned thread will get to run at all. The reason is that there is no guarantee
-on the order in which threads run!
+the time due to the main thread ending, but because there is no guarantee on
+the order in which threads run, we also can’t guarantee that the spawned thread
+will get to run at all!
 
-We can fix the problem of the spawned thread not getting to run, or not getting
-to run completely, by saving the return value of `thread::spawn` in a variable.
-The return type of `thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned
-value that, when we call the `join` method on it, will wait for its thread to
-finish. Listing 16-2 shows how to use the `JoinHandle` of the thread we created
-in Listing 16-1 and call `join` to make sure the spawned thread finishes before
-`main` exits:
+We can fix the problem of the spawned thread not running or ending prematurely
+by saving the return value of `thread::spawn` in a variable. The return type of
+`thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned value that, when we
+call the `join` method on it, will wait for its thread to finish. Listing 16-2
+shows how to use the `JoinHandle` of the thread we created in Listing 16-1 and
+call `join` to make sure the spawned thread finishes before `main` exits:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-2" file-name="src/main.rs" caption="Saving a `JoinHandle` from `thread::spawn` to guarantee the thread is run to completion">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-02/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-2: Saving a `JoinHandle` from `thread::spawn`
-to guarantee the thread is run to completion</span>
+</Listing>
 
 Calling `join` on the handle blocks the thread currently running until the
-thread represented by the handle terminates. *Blocking* a thread means that
+thread represented by the handle terminates. _Blocking_ a thread means that
 thread is prevented from performing work or exiting. Because we’ve put the call
 to `join` after the main thread’s `for` loop, running Listing 16-2 should
 produce output similar to this:
@@ -135,11 +135,13 @@ call to `handle.join()` and does not end until the spawned thread is finished.
 But let’s see what happens when we instead move `handle.join()` before the
 `for` loop in `main`, like this:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/no-listing-01-join-too-early/src/main.rs}}
 ```
+
+</Listing>
 
 The main thread will wait for the spawned thread to finish and then run its
 `for` loop, so the output won’t be interleaved anymore, as shown here:
@@ -169,12 +171,12 @@ threads run at the same time.
 
 ### Using `move` Closures with Threads
 
-The `move` keyword is often used with closures passed to `thread::spawn`
+We'll often use the `move` keyword with closures passed to `thread::spawn`
 because the closure will then take ownership of the values it uses from the
 environment, thus transferring ownership of those values from one thread to
-another. In the [“Capturing the Environment with Closures”][capture]<!-- ignore
+another. In the [“Capturing References or Moving Ownership”][capture]<!-- ignore
 --> section of Chapter 13, we discussed `move` in the context of closures. Now,
-we’ll concentrate more on the interaction between `move` and `thread::spawn`
+we’ll concentrate more on the interaction between `move` and `thread::spawn`.
 
 Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
 arguments: we’re not using any data from the main thread in the spawned
@@ -183,14 +185,13 @@ spawned thread’s closure must capture the values it needs. Listing 16-3 shows
 an attempt to create a vector in the main thread and use it in the spawned
 thread. However, this won’t yet work, as you’ll see in a moment.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-3" file-name="src/main.rs" caption="Attempting to use a vector created by the main thread in another thread">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-03/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-3: Attempting to use a vector created by the
-main thread in another thread</span>
+</Listing>
 
 The closure uses `v`, so it will capture `v` and make it part of the closure’s
 environment. Because `thread::spawn` runs this closure in a new thread, we
@@ -201,7 +202,7 @@ example, we get the following error:
 {{#include ../listings/ch16-fearless-concurrency/listing-16-03/output.txt}}
 ```
 
-Rust *infers* how to capture `v`, and because `println!` only needs a reference
+Rust _infers_ how to capture `v`, and because `println!` only needs a reference
 to `v`, the closure tries to borrow `v`. However, there’s a problem: Rust can’t
 tell how long the spawned thread will run, so it doesn’t know if the reference
 to `v` will always be valid.
@@ -209,16 +210,15 @@ to `v` will always be valid.
 Listing 16-4 provides a scenario that’s more likely to have a reference to `v`
 that won’t be valid:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-4" file-name="src/main.rs" caption="A thread with a closure that attempts to capture a reference to `v` from a main thread that drops `v`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-4: A thread with a closure that attempts to
-capture a reference to `v` from a main thread that drops `v`</span>
+</Listing>
 
-If we were allowed to run this code, there’s a possibility the spawned thread
+If Rust allowed us to run this code, there’s a possibility the spawned thread
 would be immediately put in the background without running at all. The spawned
 thread has a reference to `v` inside, but the main thread immediately drops
 `v`, using the `drop` function we discussed in Chapter 15. Then, when the
@@ -244,21 +244,20 @@ ownership of the values it’s using rather than allowing Rust to infer that it
 should borrow the values. The modification to Listing 16-3 shown in Listing
 16-5 will compile and run as we intend:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-5" file-name="src/main.rs" caption="Using the `move` keyword to force a closure to take ownership of the values it uses">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-5: Using the `move` keyword to force a closure
-to take ownership of the values it uses</span>
+</Listing>
 
-What would happen to the code in Listing 16-4 where the main thread called
-`drop` if we use a `move` closure? Would `move` fix that case? Unfortunately,
-no; we would get a different error because what Listing 16-4 is trying to do
-isn’t allowed for a different reason. If we added `move` to the closure, we
-would move `v` into the closure’s environment, and we could no longer call
-`drop` on it in the main thread. We would get this compiler error instead:
+We might be tempted to try the same thing to fix the code in Listing 16-4 where
+the main thread called `drop` by using a `move` closure. However, this fix will
+not work because what Listing 16-4 is trying to do is disallowed for a
+different reason. If we added `move` to the closure, we would move `v` into the
+closure’s environment, and we could no longer call `drop` on it in the main
+thread. We would get this compiler error instead:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/output-only-01-move-drop/output.txt}}
@@ -275,6 +274,6 @@ Rust’s conservative default of borrowing; it doesn’t let us violate the
 ownership rules.
 
 With a basic understanding of threads and the thread API, let’s look at what we
-can *do* with threads.
+can _do_ with threads.
 
-[capture]: ch13-01-closures.html#capturing-the-environment-with-closures
+[capture]: ch13-01-closures.html#capturing-references-or-moving-ownership

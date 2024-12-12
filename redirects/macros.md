@@ -25,6 +25,6 @@ Here are the relevant sections in the new and old books:
 
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/macros.html
-[2]: ch19-06-macros.html
+[2]: ch20-06-macros.html
 [3]: https://rustbyexample.com/macros.html
 [4]: ../reference/macros-by-example.html
