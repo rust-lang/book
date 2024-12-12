@@ -8,6 +8,10 @@ warning: unused `Result` that must be used
    |
    = note: this `Result` may be an `Err` variant, which should be handled
    = note: `#[warn(unused_must_use)]` on by default
+help: use `let _ = ...` to ignore the resulting value
+   |
+10 |     let _ = io::stdin().read_line(&mut guess);
+   |     +++++++
 
 warning: `guessing_game` (bin "guessing_game") generated 1 warning
-    Finished dev [unoptimized + debuginfo] target(s) in 0.59s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.59s

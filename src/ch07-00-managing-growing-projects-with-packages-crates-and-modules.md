@@ -11,7 +11,7 @@ and then multiple files. A package can contain multiple binary crates and
 optionally one library crate. As a package grows, you can extract parts into
 separate crates that become external dependencies. This chapter covers all
 these techniques. For very large projects comprising a set of interrelated
-packages that evolve together, Cargo provides *workspaces*, which we’ll cover
+packages that evolve together, Cargo provides _workspaces_, which we’ll cover
 in the [“Cargo Workspaces”][workspaces]<!-- ignore --> section in Chapter 14.
 
 We’ll also discuss encapsulating implementation details, which lets you reuse
@@ -33,13 +33,13 @@ same name in the same scope; tools are available to resolve name conflicts.
 Rust has a number of features that allow you to manage your code’s
 organization, including which details are exposed, which details are private,
 and what names are in each scope in your programs. These features, sometimes
-collectively referred to as the *module system*, include:
+collectively referred to as the _module system_, include:
 
-* **Packages:** A Cargo feature that lets you build, test, and share crates
-* **Crates:** A tree of modules that produces a library or executable
-* **Modules** and **use:** Let you control the organization, scope, and
+- **Packages:** A Cargo feature that lets you build, test, and share crates
+- **Crates:** A tree of modules that produces a library or executable
+- **Modules** and **use:** Let you control the organization, scope, and
   privacy of paths
-* **Paths:** A way of naming an item, such as a struct, function, or module
+- **Paths:** A way of naming an item, such as a struct, function, or module
 
 In this chapter, we’ll cover all these features, discuss how they interact, and
 explain how to use them to manage scope. By the end, you should have a solid

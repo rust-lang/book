@@ -16,11 +16,11 @@ prints the text `Hello, world!` to the screen, so we’ll do the same here!
 
 You’ll start by making a directory to store your Rust code. It doesn’t matter
 to Rust where your code lives, but for the exercises and projects in this book,
-we suggest making a *projects* directory in your home directory and keeping all
+we suggest making a _projects_ directory in your home directory and keeping all
 your projects there.
 
-Open a terminal and enter the following commands to make a *projects* directory
-and a directory for the “Hello, world!” project within the *projects* directory.
+Open a terminal and enter the following commands to make a _projects_ directory
+and a directory for the “Hello, world!” project within the _projects_ directory.
 
 For Linux, macOS, and PowerShell on Windows, enter this:
 
@@ -42,14 +42,14 @@ For Windows CMD, enter this:
 
 ### Writing and Running a Rust Program
 
-Next, make a new source file and call it *main.rs*. Rust files always end with
-the *.rs* extension. If you’re using more than one word in your filename, the
+Next, make a new source file and call it _main.rs_. Rust files always end with
+the _.rs_ extension. If you’re using more than one word in your filename, the
 convention is to use an underscore to separate them. For example, use
-*hello_world.rs* rather than *helloworld.rs*.
+_hello_world.rs_ rather than _helloworld.rs_.
 
-Now open the *main.rs* file you just created and enter the code in Listing 1-1.
+Now open the _main.rs_ file you just created and enter the code in Listing 1-1.
 
-<span class="filename">Filename: main.rs</span>
+<Listing number="1-1" file-name="main.rs" caption="A program that prints `Hello, world!`">
 
 ```rust
 fn main() {
@@ -57,10 +57,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 1-1: A program that prints `Hello, world!`</span>
+</Listing>
 
 Save the file and go back to your terminal window in the
-*~/projects/hello_world* directory. On Linux or macOS, enter the following
+_~/projects/hello_world_ directory. On Linux or macOS, enter the following
 commands to compile and run the file:
 
 ```console
@@ -115,24 +115,22 @@ line as the function declaration, adding one space in between.
 The body of the `main` function holds the following code:
 
 ```rust
-    println!("Hello, world!");
+println!("Hello, world!");
 ```
 
 This line does all the work in this little program: it prints text to the
 screen. There are four important details to notice here.
 
-First, Rust style is to indent with four spaces, not a tab.
-
-Second, `println!` calls a Rust macro. If it had called a function instead, it
+First, `println!` calls a Rust macro. If it had called a function instead, it
 would be entered as `println` (without the `!`). We’ll discuss Rust macros in
-more detail in Chapter 19. For now, you just need to know that using a `!`
+more detail in Chapter 20. For now, you just need to know that using a `!`
 means that you’re calling a macro instead of a normal function and that macros
 don’t always follow the same rules as functions.
 
-Third, you see the `"Hello, world!"` string. We pass this string as an argument
+Second, you see the `"Hello, world!"` string. We pass this string as an argument
 to `println!`, and the string is printed to the screen.
 
-Fourth, we end the line with a semicolon (`;`), which indicates that this
+Third, we end the line with a semicolon (`;`), which indicates that this
 expression is over and the next one is ready to begin. Most lines of Rust code
 end with a semicolon.
 
@@ -171,24 +169,24 @@ main.pdb
 main.rs
 ```
 
-This shows the source code file with the *.rs* extension, the executable file
-(*main.exe* on Windows, but *main* on all other platforms), and, when using
-Windows, a file containing debugging information with the *.pdb* extension.
-From here, you run the *main* or *main.exe* file, like this:
+This shows the source code file with the _.rs_ extension, the executable file
+(_main.exe_ on Windows, but _main_ on all other platforms), and, when using
+Windows, a file containing debugging information with the _.pdb_ extension.
+From here, you run the _main_ or _main.exe_ file, like this:
 
 ```console
 $ ./main # or .\main.exe on Windows
 ```
 
-If your *main.rs* is your “Hello, world!” program, this line prints `Hello,
+If your _main.rs_ is your “Hello, world!” program, this line prints `Hello,
 world!` to your terminal.
 
 If you’re more familiar with a dynamic language, such as Ruby, Python, or
 JavaScript, you might not be used to compiling and running a program as
-separate steps. Rust is an *ahead-of-time compiled* language, meaning you can
+separate steps. Rust is an _ahead-of-time compiled_ language, meaning you can
 compile a program and give the executable to someone else, and they can run it
-even without having Rust installed. If you give someone a *.rb*, *.py*, or
-*.js* file, they need to have a Ruby, Python, or JavaScript implementation
+even without having Rust installed. If you give someone a _.rb_, _.py_, or
+_.js_ file, they need to have a Ruby, Python, or JavaScript implementation
 installed (respectively). But in those languages, you only need one command to
 compile and run your program. Everything is a trade-off in language design.
 
