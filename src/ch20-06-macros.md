@@ -118,8 +118,9 @@ for use in the replacement code. Within `$()` is `$x:expr`, which matches any
 Rust expression and gives the expression the name `$x`.
 
 The comma following `$()` indicates that a literal comma separator character
-could optionally appear after the code that matches the code in `$()`. The `*`
-specifies that the pattern matches zero or more of whatever precedes the `*`.
+must appear between each instance of the code that matches the code within
+`$()`. The `*` specifies that the pattern matches zero or more of whatever
+precedes the `*`.
 
 When we call this macro with `vec![1, 2, 3];`, the `$x` pattern matches three
 times with the three expressions `1`, `2`, and `3`.
