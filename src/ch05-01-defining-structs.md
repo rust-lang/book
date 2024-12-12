@@ -10,7 +10,7 @@ on the order of the data to specify or access the values of an instance.
 To define a struct, we enter the keyword `struct` and name the entire struct. A
 struct’s name should describe the significance of the pieces of data being
 grouped together. Then, inside curly brackets, we define the names and types of
-the pieces of data, which we call *fields*. For example, Listing 5-1 shows a
+the pieces of data, which we call _fields_. For example, Listing 5-1 shows a
 struct that stores information about a user account.
 
 <Listing number="5-1" file-name="src/main.rs" caption="A `User` struct definition">
@@ -21,10 +21,10 @@ struct that stores information about a user account.
 
 </Listing>
 
-To use a struct after we’ve defined it, we create an *instance* of that struct
+To use a struct after we’ve defined it, we create an _instance_ of that struct
 by specifying concrete values for each of the fields. We create an instance by
-stating the name of the struct and then add curly brackets containing *key:
-value* pairs, where the keys are the names of the fields and the values are the
+stating the name of the struct and then add curly brackets containing _key:
+value_ pairs, where the keys are the names of the fields and the values are the
 data we want to store in those fields. We don’t have to specify the fields in
 the same order in which we declared them in the struct. In other words, the
 struct definition is like a general template for the type, and instances fill
@@ -76,12 +76,13 @@ variables is a bit tedious. If the struct had more fields, repeating each name
 would get even more annoying. Luckily, there’s a convenient shorthand!
 
 <!-- Old heading. Do not remove or links may break. -->
+
 <a id="using-the-field-init-shorthand-when-variables-and-fields-have-the-same-name"></a>
 
 ### Using the Field Init Shorthand
 
 Because the parameter names and the struct field names are exactly the same in
-Listing 5-4, we can use the *field init shorthand* syntax to rewrite
+Listing 5-4, we can use the _field init shorthand_ syntax to rewrite
 `build_user` so it behaves exactly the same but doesn’t have the repetition of
 `username` and `email`, as shown in Listing 5-5.
 
@@ -103,7 +104,7 @@ than `email: email`.
 
 It’s often useful to create a new instance of a struct that includes most of
 the values from another instance, but changes some. You can do this using
-*struct update syntax*.
+_struct update syntax_.
 
 First, in Listing 5-6 we show how to create a new `User` instance in `user2`
 regularly, without the update syntax. We set a new value for `email` but
@@ -151,7 +152,7 @@ Data: Copy”][copy]<!-- ignore --> section would apply. We can still use
 
 ### Using Tuple Structs Without Named Fields to Create Different Types
 
-Rust also supports structs that look similar to tuples, called *tuple structs*.
+Rust also supports structs that look similar to tuples, called _tuple structs_.
 Tuple structs have the added meaning the struct name provides but don’t have
 names associated with their fields; rather, they just have the types of the
 fields. Tuple structs are useful when you want to give the whole tuple a name
@@ -184,7 +185,7 @@ example, we would write `let Point(x, y, z) = point`.
 ### Unit-Like Structs Without Any Fields
 
 You can also define structs that don’t have any fields! These are called
-*unit-like structs* because they behave similarly to `()`, the unit type that
+_unit-like structs_ because they behave similarly to `()`, the unit type that
 we mentioned in [“The Tuple Type”][tuples]<!-- ignore --> section. Unit-like
 structs can be useful when you need to implement a trait on some type but don’t
 have any data that you want to store in the type itself. We’ll discuss traits
@@ -217,7 +218,7 @@ implement them on any type, including unit-like structs.
 > that data to be valid for as long as the entire struct is valid.
 >
 > It’s also possible for structs to store references to data owned by something
-> else, but to do so requires the use of *lifetimes*, a Rust feature that we’ll
+> else, but to do so requires the use of _lifetimes_, a Rust feature that we’ll
 > discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
 > is valid for as long as the struct is. Let’s say you try to store a reference
 > in a struct without specifying lifetimes, like the following; this won’t work:

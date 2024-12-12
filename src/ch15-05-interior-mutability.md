@@ -1,6 +1,6 @@
 ## `RefCell<T>` and the Interior Mutability Pattern
 
-*Interior mutability* is a design pattern in Rust that allows you to mutate
+_Interior mutability_ is a design pattern in Rust that allows you to mutate
 data even when there are immutable references to that data; normally, this
 action is disallowed by the borrowing rules. To mutate data, the pattern uses
 `unsafe` code inside a data structure to bend Rust’s usual rules that govern
@@ -22,12 +22,12 @@ Unlike `Rc<T>`, the `RefCell<T>` type represents single ownership over the data
 it holds. So, what makes `RefCell<T>` different from a type like `Box<T>`?
 Recall the borrowing rules you learned in Chapter 4:
 
-* At any given time, you can have *either* (but not both) one mutable reference
+- At any given time, you can have _either_ (but not both) one mutable reference
   or any number of immutable references.
-* References must always be valid.
+- References must always be valid.
 
 With references and `Box<T>`, the borrowing rules’ invariants are enforced at
-compile time. With `RefCell<T>`, these invariants are enforced *at runtime*.
+compile time. With `RefCell<T>`, these invariants are enforced _at runtime_.
 With references, if you break these rules, you’ll get a compiler error. With
 `RefCell<T>`, if you break these rules, your program will panic and exit.
 
@@ -60,16 +60,16 @@ multithreaded program in Chapter 16.
 
 Here is a recap of the reasons to choose `Box<T>`, `Rc<T>`, or `RefCell<T>`:
 
-* `Rc<T>` enables multiple owners of the same data; `Box<T>` and `RefCell<T>`
+- `Rc<T>` enables multiple owners of the same data; `Box<T>` and `RefCell<T>`
   have single owners.
-* `Box<T>` allows immutable or mutable borrows checked at compile time; `Rc<T>`
+- `Box<T>` allows immutable or mutable borrows checked at compile time; `Rc<T>`
   allows only immutable borrows checked at compile time; `RefCell<T>` allows
   immutable or mutable borrows checked at runtime.
-* Because `RefCell<T>` allows mutable borrows checked at runtime, you can
+- Because `RefCell<T>` allows mutable borrows checked at runtime, you can
   mutate the value inside the `RefCell<T>` even when the `RefCell<T>` is
   immutable.
 
-Mutating the value inside an immutable value is the *interior mutability*
+Mutating the value inside an immutable value is the _interior mutability_
 pattern. Let’s look at a situation in which interior mutability is useful and
 examine how it’s possible.
 
@@ -104,10 +104,10 @@ an immutable value and see why that is useful.
 
 Sometimes during testing a programmer will use a type in place of another type,
 in order to observe particular behavior and assert it’s implemented correctly.
-This placeholder type is called a *test double*. Think of it in the sense of a
+This placeholder type is called a _test double_. Think of it in the sense of a
 “stunt double” in filmmaking, where a person steps in and substitutes for an
 actor to do a particular tricky scene. Test doubles stand in for other types
-when we’re running tests. *Mock objects* are specific types of test doubles
+when we’re running tests. _Mock objects_ are specific types of test doubles
 that record what happens during a test so you can assert that the correct
 actions took place.
 
@@ -189,9 +189,10 @@ However, there’s one problem with this test, as shown here:
 
 We can’t modify the `MockMessenger` to keep track of the messages, because the
 `send` method takes an immutable reference to `self`. We also can’t take the
-suggestion from the error text to use `&mut self` instead, because then the
-signature of `send` wouldn’t match the signature in the `Messenger` trait
-definition (feel free to try and see what error message you get).
+suggestion from the error text to use `&mut self` in both the `impl` method and
+the `trait` definition. We do not want to change the `Messenger` trait solely
+for the sake of testing. Instead, we need to find a way to make our test code
+work correctly with our existing design.
 
 This is a situation in which interior mutability can help! We’ll store the
 `sent_messages` within a `RefCell<T>`, and then the `send` method will be
@@ -284,7 +285,7 @@ provide.
 A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
 `Rc<T>` lets you have multiple owners of some data, but it only gives immutable
 access to that data. If you have an `Rc<T>` that holds a `RefCell<T>`, you can
-get a value that can have multiple owners *and* that you can mutate!
+get a value that can have multiple owners _and_ that you can mutate!
 
 For example, recall the cons list example in Listing 15-18 where we used
 `Rc<T>` to allow multiple lists to share ownership of another list. Because

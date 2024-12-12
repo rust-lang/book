@@ -33,7 +33,7 @@ To parameterize the types in a new single function, we need to name the type
 parameter, just as we do for the value parameters to a function. You can use
 any identifier as a type parameter name. But we’ll use `T` because, by
 convention, type parameter names in Rust are short, often just one letter, and
-Rust’s type-naming convention is UpperCamelCase. Short for *type*, `T` is the
+Rust’s type-naming convention is UpperCamelCase. Short for _type_, `T` is the
 default choice of most Rust programmers.
 
 When we use a parameter in the body of the function, we have to declare the
@@ -71,7 +71,7 @@ If we compile this code right now, we’ll get this error:
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
-The help text mentions `std::cmp::PartialOrd`, which is a *trait*, and we’re
+The help text mentions `std::cmp::PartialOrd`, which is a _trait_, and we’re
 going to talk about traits in the next section. For now, know that this error
 states that the body of `largest` won’t work for all possible types that `T`
 could be. Because we want to compare values of type `T` in the body, we can
@@ -104,7 +104,7 @@ types.
 
 Note that because we’ve used only one generic type to define `Point<T>`, this
 definition says that the `Point<T>` struct is generic over some type `T`, and
-the fields `x` and `y` are *both* that same type, whatever that type may be. If
+the fields `x` and `y` are _both_ that same type, whatever that type may be. If
 we create an instance of a `Point<T>` that has values of different types, as in
 Listing 10-7, our code won’t compile.
 
@@ -270,7 +270,7 @@ parameters. The good news is that using generic types won’t make your program
 run any slower than it would with concrete types.
 
 Rust accomplishes this by performing monomorphization of the code using
-generics at compile time. *Monomorphization* is the process of turning generic
+generics at compile time. _Monomorphization_ is the process of turning generic
 code into specific code by filling in the concrete types that are used when
 compiled. In this process, the compiler does the opposite of the steps we used
 to create the generic function in Listing 10-5: the compiler looks at all the

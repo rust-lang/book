@@ -1,6 +1,6 @@
 ## Customizing Builds with Release Profiles
 
-In Rust, *release profiles* are predefined and customizable profiles with
+In Rust, _release profiles_ are predefined and customizable profiles with
 different configurations that allow a programmer to have more control over
 various options for compiling code. Each profile is configured independently of
 the others.
@@ -21,15 +21,15 @@ and ensure output below is accurate
 
 ```console
 $ cargo build
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s
 $ cargo build --release
-    Finished release [optimized] target(s) in 0.0s
+    Finished `release` profile [optimized] target(s) in 0.32s
 ```
 
 The `dev` and `release` are these different profiles used by the compiler.
 
 Cargo has default settings for each of the profiles that apply when you haven't
-explicitly added any `[profile.*]` sections in the project’s *Cargo.toml* file.
+explicitly added any `[profile.*]` sections in the project’s _Cargo.toml_ file.
 By adding `[profile.*]` sections for any profile you want to customize, you
 override any subset of the default settings. For example, here are the default
 values for the `opt-level` setting for the `dev` and `release` profiles:
@@ -55,8 +55,8 @@ so release mode trades longer compile time for code that runs faster. That is
 why the default `opt-level` for the `release` profile is `3`.
 
 You can override a default setting by adding a different value for it in
-*Cargo.toml*. For example, if we want to use optimization level 1 in the
-development profile, we can add these two lines to our project’s *Cargo.toml*
+_Cargo.toml_. For example, if we want to use optimization level 1 in the
+development profile, we can add these two lines to our project’s _Cargo.toml_
 file:
 
 <span class="filename">Filename: Cargo.toml</span>

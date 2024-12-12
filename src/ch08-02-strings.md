@@ -18,9 +18,9 @@ complicated by the differences between how people and computers interpret
 
 ### What Is a String?
 
-We’ll first define what we mean by the term *string*. Rust has only one string
+We’ll first define what we mean by the term _string_. Rust has only one string
 type in the core language, which is the string slice `str` that is usually seen
-in its borrowed form `&str`. In Chapter 4, we talked about *string slices*,
+in its borrowed form `&str`. In Chapter 4, we talked about _string slices_,
 which are references to some UTF-8 encoded string data stored elsewhere. String
 literals, for example, are stored in the program’s binary and are therefore
 string slices.
@@ -132,7 +132,7 @@ If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
 
 The `push` method takes a single character as a parameter and adds it to the
-`String`. Listing 8-17 adds the letter *l* to a `String` using the `push`
+`String`. Listing 8-17 adds the letter _l_ to a `String` using the `push`
 method.
 
 <Listing number="8-17" caption="Adding one character to a `String` value using `push`">
@@ -174,21 +174,21 @@ call this method with `String` values. We’ll discuss generics in Chapter 10.
 This signature gives us the clues we need in order to understand the tricky
 bits of the `+` operator.
 
-First, `s2` has an `&`, meaning that we’re adding a *reference* of the second
+First, `s2` has an `&`, meaning that we’re adding a _reference_ of the second
 string to the first string. This is because of the `s` parameter in the `add`
 function: we can only add a `&str` to a `String`; we can’t add two `String`
 values together. But wait—the type of `&s2` is `&String`, not `&str`, as
 specified in the second parameter to `add`. So why does Listing 8-18 compile?
 
 The reason we’re able to use `&s2` in the call to `add` is that the compiler
-can *coerce* the `&String` argument into a `&str`. When we call the `add`
-method, Rust uses a *deref coercion*, which here turns `&s2` into `&s2[..]`.
+can _coerce_ the `&String` argument into a `&str`. When we call the `add`
+method, Rust uses a _deref coercion_, which here turns `&s2` into `&s2[..]`.
 We’ll discuss deref coercion in more depth in Chapter 15. Because `add` does
 not take ownership of the `s` parameter, `s2` will still be a valid `String`
 after this operation.
 
 Second, we can see in the signature that `add` takes ownership of `self`
-because `self` does *not* have an `&`. This means `s1` in Listing 8-18 will be
+because `self` does _not_ have an `&`. This means `s1` in Listing 8-18 will be
 moved into the `add` call and will no longer be valid after that. So, although
 `let s3 = s1 + &s2;` looks like it will copy both strings and create a new one,
 this statement actually takes ownership of `s1`, appends a copy of the contents
@@ -254,7 +254,7 @@ encoded UTF-8 example strings from Listing 8-14. First, this one:
 In this case, `len` will be `4`, which means the vector storing the string
 `"Hola"` is 4 bytes long. Each of these letters takes one byte when encoded in
 UTF-8. The following line, however, may surprise you (note that this string
-begins with the capital Cyrillic letter *Ze*, not the number 3):
+begins with the capital Cyrillic letter _Ze_, not the number 3):
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:russian}}
@@ -278,8 +278,8 @@ seem that `answer` should in fact be `208`, but `208` is not a valid character
 on its own. Returning `208` is likely not what a user would want if they asked
 for the first letter of this string; however, that’s the only data that Rust
 has at byte index 0. Users generally don’t want the byte value returned, even
-if the string contains only Latin letters: if `&"hello"[0]` were valid code
-that returned the byte value, it would return `104`, not `h`.
+if the string contains only Latin letters: if `&"hi"[0]` were valid code that
+returned the byte value, it would return `104`, not `h`.
 
 The answer, then, is that to avoid returning an unexpected value and causing
 bugs that might not be discovered immediately, Rust doesn’t compile this code
@@ -289,7 +289,7 @@ at all and prevents misunderstandings early in the development process.
 
 Another point about UTF-8 is that there are actually three relevant ways to
 look at strings from Rust’s perspective: as bytes, scalar values, and grapheme
-clusters (the closest thing to what we would call *letters*).
+clusters (the closest thing to what we would call _letters_).
 
 If we look at the Hindi word “नमस्ते” written in the Devanagari script, it is
 stored as a vector of `u8` values that looks like this:

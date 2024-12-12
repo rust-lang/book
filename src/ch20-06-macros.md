@@ -1,14 +1,14 @@
 ## Macros
 
 We’ve used macros like `println!` throughout this book, but we haven’t fully
-explored what a macro is and how it works. The term *macro* refers to a family
-of features in Rust: *declarative* macros with `macro_rules!` and three kinds
-of *procedural* macros:
+explored what a macro is and how it works. The term _macro_ refers to a family
+of features in Rust: _declarative_ macros with `macro_rules!` and three kinds
+of _procedural_ macros:
 
-* Custom `#[derive]` macros that specify code added with the `derive` attribute
+- Custom `#[derive]` macros that specify code added with the `derive` attribute
   used on structs and enums
-* Attribute-like macros that define custom attributes usable on any item
-* Function-like macros that look like function calls but operate on the tokens
+- Attribute-like macros that define custom attributes usable on any item
+- Function-like macros that look like function calls but operate on the tokens
   specified as their argument
 
 We’ll talk about each of these in turn, but first, let’s look at why we even
@@ -17,10 +17,10 @@ need macros when we already have functions.
 ### The Difference Between Macros and Functions
 
 Fundamentally, macros are a way of writing code that writes other code, which
-is known as *metaprogramming*. In Appendix C, we discuss the `derive`
+is known as _metaprogramming_. In Appendix C, we discuss the `derive`
 attribute, which generates an implementation of various traits for you. We’ve
 also used the `println!` and `vec!` macros throughout the book. All of these
-macros *expand* to produce more code than the code you’ve written manually.
+macros _expand_ to produce more code than the code you’ve written manually.
 
 Metaprogramming is useful for reducing the amount of code you have to write and
 maintain, which is also one of the roles of functions. However, macros have
@@ -41,12 +41,12 @@ generally more difficult to read, understand, and maintain than function
 definitions.
 
 Another important difference between macros and functions is that you must
-define macros or bring them into scope *before* you call them in a file, as
+define macros or bring them into scope _before_ you call them in a file, as
 opposed to functions you can define anywhere and call anywhere.
 
 ### Declarative Macros with `macro_rules!` for General Metaprogramming
 
-The most widely used form of macros in Rust is the *declarative macro*. These
+The most widely used form of macros in Rust is the _declarative macro_. These
 are also sometimes referred to as “macros by example,” “`macro_rules!` macros,”
 or just plain “macros.” At their core, declarative macros allow you to write
 something similar to a Rust `match` expression. As discussed in Chapter 6,
@@ -73,12 +73,12 @@ We could also use the `vec!` macro to make a vector of two integers or a vector
 of five string slices. We wouldn’t be able to use a function to do the same
 because we wouldn’t know the number or type of values up front.
 
-Listing 20-28 shows a slightly simplified definition of the `vec!` macro.
+Listing 20-29 shows a slightly simplified definition of the `vec!` macro.
 
-<Listing number="20-28" file-name="src/lib.rs" caption="A simplified version of the `vec!` macro definition">
+<Listing number="20-29" file-name="src/lib.rs" caption="A simplified version of the `vec!` macro definition">
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-28/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-29/src/lib.rs}}
 ```
 
 </Listing>
@@ -92,7 +92,7 @@ available whenever the crate in which the macro is defined is brought into
 scope. Without this annotation, the macro can’t be brought into scope.
 
 We then start the macro definition with `macro_rules!` and the name of the
-macro we’re defining *without* the exclamation mark. The name, in this case
+macro we’re defining _without_ the exclamation mark. The name, in this case
 `vec`, is followed by curly brackets denoting the body of the macro definition.
 
 The structure in the `vec!` body is similar to the structure of a `match`
@@ -106,7 +106,7 @@ one arm.
 Valid pattern syntax in macro definitions is different than the pattern syntax
 covered in Chapter 19 because macro patterns are matched against Rust code
 structure rather than values. Let’s walk through what the pattern pieces in
-Listing 20-28 mean; for the full macro pattern syntax, see the [Rust
+Listing 20-29 mean; for the full macro pattern syntax, see the [Rust
 Reference][ref].
 
 First, we use a set of parentheses to encompass the whole pattern. We use a
@@ -150,7 +150,7 @@ Daniel Keep and continued by Lukas Wirth.
 
 ### Procedural Macros for Generating Code from Attributes
 
-The second form of macros is the *procedural macro*, which acts more like a
+The second form of macros is the _procedural macro_, which acts more like a
 function (and is a type of procedure). Procedural macros accept some code as an
 input, operate on that code, and produce some code as an output rather than
 matching against patterns and replacing the code with other code as declarative
@@ -159,11 +159,11 @@ attribute-like, and function-like, and all work in a similar fashion.
 
 When creating procedural macros, the definitions must reside in their own crate
 with a special crate type. This is for complex technical reasons that we hope
-to eliminate in the future. In Listing 20-29, we show how to define a
+to eliminate in the future. In Listing 20-30, we show how to define a
 procedural macro, where `some_attribute` is a placeholder for using a specific
 macro variety.
 
-<Listing number="20-29" file-name="src/lib.rs" caption="An example of defining a procedural macro">
+<Listing number="20-30" file-name="src/lib.rs" caption="An example of defining a procedural macro">
 
 ```rust,ignore
 use proc_macro;
@@ -198,12 +198,12 @@ we’ll provide a procedural macro so users can annotate their type with
 function. The default implementation will print `Hello, Macro! My name is
 TypeName!` where `TypeName` is the name of the type on which this trait has
 been defined. In other words, we’ll write a crate that enables another
-programmer to write code like Listing 20-30 using our crate.
+programmer to write code like Listing 20-31 using our crate.
 
-<Listing number="20-30" file-name="src/main.rs" caption="The code a user of our crate will be able to write when using our procedural macro">
+<Listing number="20-31" file-name="src/main.rs" caption="The code a user of our crate will be able to write when using our procedural macro">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-30/src/main.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-31/src/main.rs}}
 ```
 
 </Listing>
@@ -266,24 +266,24 @@ possible for programmers to use `hello_macro` even if they don’t want the
 We need to declare the `hello_macro_derive` crate as a procedural macro crate.
 We’ll also need functionality from the `syn` and `quote` crates, as you’ll see
 in a moment, so we need to add them as dependencies. Add the following to the
-*Cargo.toml* file for `hello_macro_derive`:
+_Cargo.toml_ file for `hello_macro_derive`:
 
 <Listing file-name="hello_macro_derive/Cargo.toml">
 
 ```toml
-{{#include ../listings/ch20-advanced-features/listing-20-31/hello_macro/hello_macro_derive/Cargo.toml:6:12}}
+{{#include ../listings/ch20-advanced-features/listing-20-32/hello_macro/hello_macro_derive/Cargo.toml:6:12}}
 ```
 
 </Listing>
 
-To start defining the procedural macro, place the code in Listing 20-31 into
-your *src/lib.rs* file for the `hello_macro_derive` crate. Note that this code
+To start defining the procedural macro, place the code in Listing 20-32 into
+your _src/lib.rs_ file for the `hello_macro_derive` crate. Note that this code
 won’t compile until we add a definition for the `impl_hello_macro` function.
 
-<Listing number="20-31" file-name="hello_macro_derive/src/lib.rs" caption="Code that most procedural macro crates will require in order to process Rust code">
+<Listing number="20-32" file-name="hello_macro_derive/src/lib.rs" caption="Code that most procedural macro crates will require in order to process Rust code">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-31/hello_macro/hello_macro_derive/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-32/hello_macro/hello_macro_derive/src/lib.rs}}
 ```
 
 </Listing>
@@ -299,7 +299,7 @@ depending on your procedural macro’s purpose.
 
 We’ve introduced three new crates: `proc_macro`, [`syn`], and [`quote`]. The
 `proc_macro` crate comes with Rust, so we didn’t need to add that to the
-dependencies in *Cargo.toml*. The `proc_macro` crate is the compiler’s API that
+dependencies in _Cargo.toml_. The `proc_macro` crate is the compiler’s API that
 allows us to read and manipulate Rust code from our code.
 
 The `syn` crate parses Rust code from a string into a data structure that we
@@ -318,10 +318,10 @@ The `hello_macro_derive` function first converts the `input` from a
 `TokenStream` to a data structure that we can then interpret and perform
 operations on. This is where `syn` comes into play. The `parse` function in
 `syn` takes a `TokenStream` and returns a `DeriveInput` struct representing the
-parsed Rust code. Listing 20-32 shows the relevant parts of the `DeriveInput`
+parsed Rust code. Listing 20-33 shows the relevant parts of the `DeriveInput`
 struct we get from parsing the `struct Pancakes;` string:
 
-<Listing number="20-32" caption="The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-30">
+<Listing number="20-33" caption="The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-31">
 
 ```rust,ignore
 DeriveInput {
@@ -367,23 +367,23 @@ about what went wrong by using `panic!` or `expect`.
 
 Now that we have the code to turn the annotated Rust code from a `TokenStream`
 into a `DeriveInput` instance, let’s generate the code that implements the
-`HelloMacro` trait on the annotated type, as shown in Listing 20-33.
+`HelloMacro` trait on the annotated type, as shown in Listing 20-34.
 
-<Listing number="20-33" file-name="hello_macro_derive/src/lib.rs" caption="Implementing the `HelloMacro` trait using the parsed Rust code">
+<Listing number="20-34" file-name="hello_macro_derive/src/lib.rs" caption="Implementing the `HelloMacro` trait using the parsed Rust code">
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-33/hello_macro/hello_macro_derive/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-34/hello_macro/hello_macro_derive/src/lib.rs:here}}
 ```
 
 </Listing>
 
 We get an `Ident` struct instance containing the name (identifier) of the
-annotated type using `ast.ident`. The struct in Listing 20-32 shows that when
-we run the `impl_hello_macro` function on the code in Listing 20-30, the
+annotated type using `ast.ident`. The struct in Listing 20-33 shows that when
+we run the `impl_hello_macro` function on the code in Listing 20-31, the
 `ident` we get will have the `ident` field with a value of `"Pancakes"`. Thus,
-the `name` variable in Listing 20-33 will contain an `Ident` struct instance
+the `name` variable in Listing 20-34 will contain an `Ident` struct instance
 that, when printed, will be the string `"Pancakes"`, the name of the struct in
-Listing 20-30.
+Listing 20-31.
 
 The `quote!` macro lets us define the Rust code that we want to return. The
 compiler expects something different to the direct result of the `quote!`
@@ -412,10 +412,10 @@ saves an allocation by converting `#name` to a string literal at compile time.
 
 At this point, `cargo build` should complete successfully in both `hello_macro`
 and `hello_macro_derive`. Let’s hook up these crates to the code in Listing
-20-30 to see the procedural macro in action! Create a new binary project in
-your *projects* directory using `cargo new pancakes`. We need to add
+20-31 to see the procedural macro in action! Create a new binary project in
+your _projects_ directory using `cargo new pancakes`. We need to add
 `hello_macro` and `hello_macro_derive` as dependencies in the `pancakes`
-crate’s *Cargo.toml*. If you’re publishing your versions of `hello_macro` and
+crate’s _Cargo.toml_. If you’re publishing your versions of `hello_macro` and
 `hello_macro_derive` to [crates.io](https://crates.io/), they would be regular
 dependencies; if not, you can specify them as `path` dependencies as follows:
 
@@ -423,7 +423,7 @@ dependencies; if not, you can specify them as `path` dependencies as follows:
 {{#include ../listings/ch20-advanced-features/no-listing-21-pancakes/pancakes/Cargo.toml:7:9}}
 ```
 
-Put the code in Listing 20-30 into *src/main.rs*, and run `cargo run`: it
+Put the code in Listing 20-31 into _src/main.rs_, and run `cargo run`: it
 should print `Hello, Macro! My name is Pancakes!` The implementation of the
 `HelloMacro` trait from the procedural macro was included without the
 `pancakes` crate needing to implement it; the `#[derive(HelloMacro)]` added the

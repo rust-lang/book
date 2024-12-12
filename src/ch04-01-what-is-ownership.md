@@ -1,6 +1,6 @@
 ## What Is Ownership?
 
-*Ownership* is a set of rules that govern how a Rust program manages memory.
+_Ownership_ is a set of rules that govern how a Rust program manages memory.
 All programs have to manage the way they use a computer’s memory while running.
 Some languages have garbage collection that regularly looks for no-longer-used
 memory as the program runs; in other languages, the programmer must explicitly
@@ -31,20 +31,20 @@ strings.
 > Both the stack and the heap are parts of memory available to your code to use
 > at runtime, but they are structured in different ways. The stack stores
 > values in the order it gets them and removes the values in the opposite
-> order. This is referred to as *last in, first out*. Think of a stack of
+> order. This is referred to as _last in, first out_. Think of a stack of
 > plates: when you add more plates, you put them on top of the pile, and when
 > you need a plate, you take one off the top. Adding or removing plates from
-> the middle or bottom wouldn’t work as well! Adding data is called *pushing
-> onto the stack*, and removing data is called *popping off the stack*. All
+> the middle or bottom wouldn’t work as well! Adding data is called _pushing
+> onto the stack_, and removing data is called _popping off the stack_. All
 > data stored on the stack must have a known, fixed size. Data with an unknown
 > size at compile time or a size that might change must be stored on the heap
 > instead.
 >
 > The heap is less organized: when you put data on the heap, you request a
 > certain amount of space. The memory allocator finds an empty spot in the heap
-> that is big enough, marks it as being in use, and returns a *pointer*, which
-> is the address of that location. This process is called *allocating on the
-> heap* and is sometimes abbreviated as just *allocating* (pushing values onto
+> that is big enough, marks it as being in use, and returns a _pointer_, which
+> is the address of that location. This process is called _allocating on the
+> heap_ and is sometimes abbreviated as just _allocating_ (pushing values onto
 > the stack is not considered allocating). Because the pointer to the heap is a
 > known, fixed size, you can store the pointer on the stack, but when you want
 > the actual data, you must follow the pointer. Think of being seated at a
@@ -88,9 +88,9 @@ strings.
 First, let’s take a look at the ownership rules. Keep these rules in mind as we
 work through the examples that illustrate them:
 
-* Each value in Rust has an *owner*.
-* There can only be one owner at a time.
-* When the owner goes out of scope, the value will be dropped.
+- Each value in Rust has an _owner_.
+- There can only be one owner at a time.
+- When the owner goes out of scope, the value will be dropped.
 
 ### Variable Scope
 
@@ -100,7 +100,7 @@ examples inside a `main` function manually. As a result, our examples will be a
 bit more concise, letting us focus on the actual details rather than
 boilerplate code.
 
-As a first example of ownership, we’ll look at the *scope* of some variables. A
+As a first example of ownership, we’ll look at the _scope_ of some variables. A
 scope is the range within a program for which an item is valid. Take the
 following variable:
 
@@ -110,7 +110,7 @@ let s = "hello";
 
 The variable `s` refers to a string literal, where the value of the string is
 hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current *scope*. Listing 4-1 shows a
+which it’s declared until the end of the current _scope_. Listing 4-1 shows a
 program with comments annotating where the variable `s` would be valid.
 
 <Listing number="4-1" caption="A variable and the scope in which it is valid">
@@ -123,8 +123,8 @@ program with comments annotating where the variable `s` would be valid.
 
 In other words, there are two important points in time here:
 
-* When `s` comes *into* scope, it is valid.
-* It remains valid until it goes *out of* scope.
+- When `s` comes _into_ scope, it is valid.
+- It remains valid until it goes _out of_ scope.
 
 At this point, the relationship between scopes and when variables are valid is
 similar to that in other programming languages. Now we’ll build on top of this
@@ -167,7 +167,7 @@ Syntax”][method-syntax]<!-- ignore --> section of Chapter 5, and when we talk
 about namespacing with modules in [“Paths for Referring to an Item in the
 Module Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
 
-This kind of string *can* be mutated:
+This kind of string _can_ be mutated:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-01-can-mutate-string/src/main.rs:here}}
@@ -189,16 +189,16 @@ With the `String` type, in order to support a mutable, growable piece of text,
 we need to allocate an amount of memory on the heap, unknown at compile time,
 to hold the contents. This means:
 
-* The memory must be requested from the memory allocator at runtime.
-* We need a way of returning this memory to the allocator when we’re done with
+- The memory must be requested from the memory allocator at runtime.
+- We need a way of returning this memory to the allocator when we’re done with
   our `String`.
 
 That first part is done by us: when we call `String::from`, its implementation
 requests the memory it needs. This is pretty much universal in programming
 languages.
 
-However, the second part is different. In languages with a *garbage collector
-(GC)*, the GC keeps track of and cleans up memory that isn’t being used
+However, the second part is different. In languages with a _garbage collector
+(GC)_, the GC keeps track of and cleans up memory that isn’t being used
 anymore, and we don’t need to think about it. In most languages without a GC,
 it’s our responsibility to identify when memory is no longer being used and to
 call code to explicitly free it, just as we did to request it. Doing this
@@ -223,7 +223,7 @@ the code to return the memory. Rust calls `drop` automatically at the closing
 curly bracket.
 
 > Note: In C++, this pattern of deallocating resources at the end of an item’s
-> lifetime is sometimes called *Resource Acquisition Is Initialization (RAII)*.
+> lifetime is sometimes called _Resource Acquisition Is Initialization (RAII)_.
 > The `drop` function in Rust will be familiar to you if you’ve used RAII
 > patterns.
 
@@ -233,6 +233,7 @@ complicated situations when we want to have multiple variables use the data
 we’ve allocated on the heap. Let’s explore some of those situations now.
 
 <!-- Old heading. Do not remove or links may break. -->
+
 <a id="ways-variables-and-data-interact-move"></a>
 
 #### Variables and Data Interacting with Move
@@ -297,7 +298,7 @@ src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 <span class="caption">Figure 4-2: Representation in memory of the variable `s2`
 that has a copy of the pointer, length, and capacity of `s1`</span>
 
-The representation does *not* look like Figure 4-3, which is what memory would
+The representation does _not_ look like Figure 4-3, which is what memory would
 look like if Rust instead copied the heap data as well. If Rust did this, the
 operation `s2 = s1` could be very expensive in terms of runtime performance if
 the data on the heap were large.
@@ -313,7 +314,7 @@ Earlier, we said that when a variable goes out of scope, Rust automatically
 calls the `drop` function and cleans up the heap memory for that variable. But
 Figure 4-2 shows both data pointers pointing to the same location. This is a
 problem: when `s2` and `s1` go out of scope, they will both try to free the
-same memory. This is known as a *double free* error and is one of the memory
+same memory. This is known as a _double free_ error and is one of the memory
 safety bugs we mentioned previously. Freeing memory twice can lead to memory
 corruption, which can potentially lead to security vulnerabilities.
 
@@ -333,12 +334,12 @@ invalidated reference:
 {{#include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/output.txt}}
 ```
 
-If you’ve heard the terms *shallow copy* and *deep copy* while working with
+If you’ve heard the terms _shallow copy_ and _deep copy_ while working with
 other languages, the concept of copying the pointer, length, and capacity
 without copying the data probably sounds like making a shallow copy. But
 because Rust also invalidates the first variable, instead of being called a
-shallow copy, it’s known as a *move*. In this example, we would say that `s1`
-was *moved* into `s2`. So, what actually happens is shown in Figure 4-4.
+shallow copy, it’s known as a _move_. In this example, we would say that `s1`
+was _moved_ into `s2`. So, what actually happens is shown in Figure 4-4.
 
 <img alt="Three tables: tables s1 and s2 representing those strings on the
 stack, respectively, and both pointing to the same string data on the heap.
@@ -353,7 +354,7 @@ That solves our problem! With only `s2` valid, when it goes out of scope it
 alone will free the memory, and we’re done.
 
 In addition, there’s a design choice that’s implied by this: Rust will never
-automatically create “deep” copies of your data. Therefore, any *automatic*
+automatically create “deep” copies of your data. Therefore, any _automatic_
 copying can be assumed to be inexpensive in terms of runtime performance.
 
 #### Scope and Assignment
@@ -388,11 +389,12 @@ function on it and its memory will be freed right away. When we print the value
 at the end, it will be `"ahoy, world!"`.
 
 <!-- Old heading. Do not remove or links may break. -->
+
 <a id="ways-variables-and-data-interact-clone"></a>
 
 #### Variables and Data Interacting with Clone
 
-If we *do* want to deeply copy the heap data of the `String`, not just the
+If we _do_ want to deeply copy the heap data of the `String`, not just the
 stack data, we can use a common method called `clone`. We’ll discuss method
 syntax in Chapter 5, but because methods are a common feature in many
 programming languages, you’ve probably seen them before.
@@ -404,7 +406,7 @@ Here’s an example of the `clone` method in action:
 ```
 
 This works just fine and explicitly produces the behavior shown in Figure 4-3,
-where the heap data *does* get copied.
+where the heap data _does_ get copied.
 
 When you see a call to `clone`, you know that some arbitrary code is being
 executed and that code may be expensive. It’s a visual indicator that something
@@ -448,11 +450,11 @@ values can implement `Copy`, and nothing that requires allocation or is some
 form of resource can implement `Copy`. Here are some of the types that
 implement `Copy`:
 
-* All the integer types, such as `u32`.
-* The Boolean type, `bool`, with values `true` and `false`.
-* All the floating-point types, such as `f64`.
-* The character type, `char`.
-* Tuples, if they only contain types that also implement `Copy`. For example,
+- All the integer types, such as `u32`.
+- The Boolean type, `bool`, with values `true` and `false`.
+- All the floating-point types, such as `f64`.
+- The character type, `char`.
+- Tuples, if they only contain types that also implement `Copy`. For example,
   `(i32, i32)` implements `Copy`, but `(i32, String)` does not.
 
 ### Ownership and Functions
@@ -512,7 +514,7 @@ Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
 
 But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for using a value without
-transferring ownership, called *references*.
+transferring ownership, called _references_.
 
 [data-types]: ch03-02-data-types.html#data-types
 [ch8]: ch08-02-strings.html

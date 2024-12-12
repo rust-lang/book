@@ -32,8 +32,8 @@ sign. It works the same way as a `match`, where the expression is given to the
 `match` and the pattern is its first arm. In this case, the pattern is
 `Some(max)`, and the `max` binds to the value inside the `Some`. We can then
 use `max` in the body of the `if let` block in the same way we used `max` in
-the corresponding `match` arm. The code in the `if let` block isn’t run if the
-value doesn’t match the pattern.
+the corresponding `match` arm. The code in the `if let` block only runs if the
+value matches the pattern.
 
 Using `if let` means less typing, less indentation, and less boilerplate code.
 However, you lose the exhaustive checking that `match` enforces. Choosing
@@ -81,4 +81,3 @@ function expects.
 In order to provide a well-organized API to your users that is straightforward
 to use and only exposes exactly what your users will need, let’s now turn to
 Rust’s modules.
-

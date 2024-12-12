@@ -1,8 +1,8 @@
 ## Implementing an Object-Oriented Design Pattern
 
-The *state pattern* is an object-oriented design pattern. The crux of the
+The _state pattern_ is an object-oriented design pattern. The crux of the
 pattern is that we define a set of states a value can have internally. The
-states are represented by a set of *state objects*, and the value’s behavior
+states are represented by a set of _state objects_, and the value’s behavior
 changes based on its state. We’re going to work through an example of a blog
 post struct that has a field to hold its state, which will be a state object
 from the set "draft", "review", or "published".
@@ -208,6 +208,7 @@ slice. We can now have a `Post` in the `PendingReview` state as well as in the
 Listing 18-11 now works up to line 10!
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="adding-the-approve-method-that-changes-the-behavior-of-content"></a>
 
 ### Adding `approve` to Change the Behavior of `content`
@@ -330,10 +331,10 @@ The implementation using the state pattern is easy to extend to add more
 functionality. To see the simplicity of maintaining code that uses the state
 pattern, try a few of these suggestions:
 
-* Add a `reject` method that changes the post’s state from `PendingReview` back
+- Add a `reject` method that changes the post’s state from `PendingReview` back
   to `Draft`.
-* Require two calls to `approve` before the state can be changed to `Published`.
-* Allow users to add text content only when a post is in the `Draft` state.
+- Require two calls to `approve` before the state can be changed to `Published`.
+- Allow users to add text content only when a post is in the `Draft` state.
   Hint: have the state object responsible for what might change about the
   content but not responsible for modifying the `Post`.
 
@@ -348,9 +349,9 @@ another design pattern.
 Another downside is that we’ve duplicated some logic. To eliminate some of the
 duplication, we might try to make default implementations for the
 `request_review` and `approve` methods on the `State` trait that return `self`;
-however, this would violate object safety, because the trait doesn’t know what
+however, this would not be dyn compatible, because the trait doesn’t know what
 the concrete `self` will be exactly. We want to be able to use `State` as a
-trait object, so we need its methods to be object safe.
+trait object, so we need its methods to be dyn compatible.
 
 Other duplication includes the similar implementations of the `request_review`
 and `approve` methods on `Post`. Both methods delegate to the implementation of

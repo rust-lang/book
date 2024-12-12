@@ -57,7 +57,7 @@ of the `parse` method: we still get a `Result` value, and the compiler will
 still make us handle the `Result` as if the `Err` variant is a possibility
 because the compiler isn’t smart enough to see that this string is always a
 valid IP address. If the IP address string came from a user rather than being
-hardcoded into the program and therefore *did* have a possibility of failure,
+hardcoded into the program and therefore _did_ have a possibility of failure,
 we’d definitely want to handle the `Result` in a more robust way instead.
 Mentioning the assumption that this IP address is hardcoded will prompt us to
 change `expect` to better error-handling code if, in the future, we need to get
@@ -66,17 +66,17 @@ the IP address from some other source instead.
 ### Guidelines for Error Handling
 
 It’s advisable to have your code panic when it’s possible that your code could
-end up in a bad state. In this context, a *bad state* is when some assumption,
+end up in a bad state. In this context, a _bad state_ is when some assumption,
 guarantee, contract, or invariant has been broken, such as when invalid values,
 contradictory values, or missing values are passed to your code—plus one or
 more of the following:
 
-* The bad state is something that is unexpected, as opposed to something that
+- The bad state is something that is unexpected, as opposed to something that
   will likely happen occasionally, like a user entering data in the wrong
   format.
-* Your code after this point needs to rely on not being in this bad state,
+- Your code after this point needs to rely on not being in this bad state,
   rather than checking for the problem at every step.
-* There’s not a good way to encode this information in the types you use. We’ll
+- There’s not a good way to encode this information in the types you use. We’ll
   work through an example of what we mean in the [“Encoding States and Behavior
   as Types”][encoding]<!-- ignore --> section of Chapter 18.
 
@@ -102,11 +102,11 @@ attempting to operate on invalid data can expose your code to vulnerabilities.
 This is the main reason the standard library will call `panic!` if you attempt
 an out-of-bounds memory access: trying to access memory that doesn’t belong to
 the current data structure is a common security problem. Functions often have
-*contracts*: their behavior is only guaranteed if the inputs meet particular
+_contracts_: their behavior is only guaranteed if the inputs meet particular
 requirements. Panicking when the contract is violated makes sense because a
 contract violation always indicates a caller-side bug, and it’s not a kind of
 error you want the calling code to have to explicitly handle. In fact, there’s
-no reasonable way for calling code to recover; the calling *programmers* need
+no reasonable way for calling code to recover; the calling _programmers_ need
 to fix the code. Contracts for a function, especially when a violation will
 cause a panic, should be explained in the API documentation for the function.
 
@@ -116,7 +116,7 @@ checking done by the compiler) to do many of the checks for you. If your
 function has a particular type as a parameter, you can proceed with your code’s
 logic knowing that the compiler has already ensured you have a valid value. For
 example, if you have a type rather than an `Option`, your program expects to
-have *something* rather than *nothing*. Your code then doesn’t have to handle
+have _something_ rather than _nothing_. Your code then doesn’t have to handle
 two cases for the `Some` and `None` variants: it will only have one case for
 definitely having a value. Code trying to pass nothing to your function won’t
 even compile, so your function doesn’t have to check for that case at runtime.
@@ -193,11 +193,11 @@ to the `value` parameter and return the `Guess`.
 
 Next, we implement a method named `value` that borrows `self`, doesn’t have any
 other parameters, and returns an `i32`. This kind of method is sometimes called
-a *getter* because its purpose is to get some data from its fields and return
+a _getter_ because its purpose is to get some data from its fields and return
 it. This public method is necessary because the `value` field of the `Guess`
 struct is private. It’s important that the `value` field be private so code
 using the `Guess` struct is not allowed to set `value` directly: code outside
-the module *must* use the `Guess::new` function to create an instance of
+the module _must_ use the `Guess::new` function to create an instance of
 `Guess`, thereby ensuring there’s no way for a `Guess` to have a `value` that
 hasn’t been checked by the conditions in the `Guess::new` function.
 

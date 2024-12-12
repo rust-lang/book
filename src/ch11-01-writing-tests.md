@@ -4,9 +4,9 @@ Tests are Rust functions that verify that the non-test code is functioning in
 the expected manner. The bodies of test functions typically perform these three
 actions:
 
-* Set up any needed data or state.
-* Run the code you want to test.
-* Assert that the results are what you expect.
+- Set up any needed data or state.
+- Run the code you want to test.
+- Assert that the results are what you expect.
 
 Let’s look at the features Rust provides specifically for writing tests that
 take these actions, which include the `test` attribute, a few macros, and the
@@ -40,7 +40,7 @@ $ cargo new adder --lib
 $ cd adder
 ```
 
-The contents of the *src/lib.rs* file in your `adder` library should look like
+The contents of the _src/lib.rs_ file in your `adder` library should look like
 Listing 11-1.
 
 <Listing number="11-1" file-name="src/lib.rs" caption="The code generated automatically by `cargo new`">
@@ -62,6 +62,9 @@ cd ../../..
 
 </Listing>
 
+The file starts with an example `add` function, so that we have something
+to test.
+
 For now, let’s focus solely on the `it_works` function. Note the `#[test]`
 annotation: this attribute indicates this is a test function, so the test
 runner knows to treat this function as a test. We might also have non-test
@@ -69,9 +72,9 @@ functions in the `tests` module to help set up common scenarios or perform
 common operations, so we always need to indicate which functions are tests.
 
 The example function body uses the `assert_eq!` macro to assert that `result`,
-which contains the result of adding 2 and 2, equals 4. This assertion serves as
-an example of the format for a typical test. Let’s run it to see that this test
-passes.
+which contains the result of calling `add` with 2 and 2, equals 4. This
+assertion serves as an example of the format for a typical test. Let’s run it
+to see that this test passes.
 
 The `cargo test` command runs all tests in our project, as shown in Listing
 11-2.
@@ -100,7 +103,7 @@ Benchmark tests are, as of this writing, only available in nightly Rust. See
 [the documentation about benchmark tests][bench] to learn more.
 
 We can pass an argument to the `cargo test` command to run only tests whose
-name matches a string; this is called *filtering* and we’ll cover that in the
+name matches a string; this is called _filtering_ and we’ll cover that in the
 [“Running a Subset of Tests by Name”][subset]<!-- ignore --> section. Here we
 haven’t filtered the tests being run, so the end of the summary shows `0
 filtered out`.
@@ -134,7 +137,7 @@ fail when something in the test function panics. Each test is run in a new
 thread, and when the main thread sees that a test thread has died, the test is
 marked as failed. In Chapter 9, we talked about how the simplest way to panic
 is to call the `panic!` macro. Enter the new test as a function named
-`another`, so your *src/lib.rs* file looks like Listing 11-3.
+`another`, so your _src/lib.rs_ file looks like Listing 11-3.
 
 <Listing number="11-3" file-name="src/lib.rs" caption="Adding a second test that will fail because we call the `panic!` macro">
 
@@ -164,7 +167,7 @@ Instead of `ok`, the line `test tests::another` shows `FAILED`. Two new
 sections appear between the individual results and the summary: the first
 displays the detailed reason for each test failure. In this case, we get the
 details that `another` failed because it `panicked at 'Make this test fail'` on
-line 17 in the *src/lib.rs* file. The next section lists just the names of all
+line 17 in the _src/lib.rs_ file. The next section lists just the names of all
 the failing tests, which is useful when there are lots of tests and lots of
 detailed failing test output. We can use the name of a failing test to run just
 that test to more easily debug it; we’ll talk more about ways to run tests in
@@ -188,7 +191,7 @@ macro helps us check that our code is functioning in the way we intend.
 
 In Chapter 5, Listing 5-15, we used a `Rectangle` struct and a `can_hold`
 method, which are repeated here in Listing 11-5. Let’s put this code in the
-*src/lib.rs* file, then write some tests for it using the `assert!` macro.
+_src/lib.rs_ file, then write some tests for it using the `assert!` macro.
 
 <Listing number="11-5" file-name="src/lib.rs" caption="The `Rectangle` struct and its `can_hold` method from Chapter 5">
 
@@ -275,7 +278,7 @@ do this by using the `assert!` macro and passing it an expression using the
 provides a pair of macros—`assert_eq!` and `assert_ne!`—to perform this test
 more conveniently. These macros compare two arguments for equality or
 inequality, respectively. They’ll also print the two values if the assertion
-fails, which makes it easier to see *why* the test failed; conversely, the
+fails, which makes it easier to see _why_ the test failed; conversely, the
 `assert!` macro only indicates that it got a `false` value for the `==`
 expression, without printing the values that led to the `false` value.
 
@@ -331,7 +334,7 @@ that displays `` assertion failed: `(left == right)` ``.
 
 The `assert_ne!` macro will pass if the two values we give it are not equal and
 fail if they’re equal. This macro is most useful for cases when we’re not sure
-what a value *will* be, but we know what the value definitely *shouldn’t* be.
+what a value _will_ be, but we know what the value definitely _shouldn’t_ be.
 For example, if we’re testing a function that is guaranteed to change its input
 in some way, but the way in which the input is changed depends on the day of
 the week that we run our tests, the best thing to assert might be that the
@@ -367,6 +370,7 @@ For example, let’s say we have a function that greets people by name and we
 want to test that the name we pass into the function appears in the output:
 
 <span class="filename">Filename: src/lib.rs</span>
+
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-05-greeter/src/lib.rs}}
 ```
@@ -525,7 +529,7 @@ mark operator in the body of tests, which can be a convenient way to write
 tests that should fail if any operation within them returns an `Err` variant.
 
 You can’t use the `#[should_panic]` annotation on tests that use `Result<T,
-E>`. To assert that an operation returns an `Err` variant, *don’t* use the
+E>`. To assert that an operation returns an `Err` variant, _don’t_ use the
 question mark operator on the `Result<T, E>` value. Instead, use
 `assert!(value.is_err())`.
 
@@ -533,13 +537,11 @@ Now that you know several ways to write tests, let’s look at what is happening
 when we run our tests and explore the different options we can use with `cargo
 test`.
 
-[concatenation-with-the--operator-or-the-format-macro]:
-ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
+[concatenation-with-the--operator-or-the-format-macro]: ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
 [bench]: ../unstable-book/library-features/test.html
 [ignoring]: ch11-02-running-tests.html#ignoring-some-tests-unless-specifically-requested
 [subset]: ch11-02-running-tests.html#running-a-subset-of-tests-by-name
-[controlling-how-tests-are-run]:
-ch11-02-running-tests.html#controlling-how-tests-are-run
+[controlling-how-tests-are-run]: ch11-02-running-tests.html#controlling-how-tests-are-run
 [derivable-traits]: appendix-03-derivable-traits.html
 [doc-comments]: ch14-02-publishing-to-crates-io.html#documentation-comments-as-tests
 [paths-for-referring-to-an-item-in-the-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html

@@ -1,11 +1,11 @@
 ## Storing Keys with Associated Values in Hash Maps
 
-The last of our common collections is the *hash map*. The type `HashMap<K, V>`
-stores a mapping of keys of type `K` to values of type `V` using a *hashing
-function*, which determines how it places these keys and values into memory.
+The last of our common collections is the _hash map_. The type `HashMap<K, V>`
+stores a mapping of keys of type `K` to values of type `V` using a _hashing
+function_, which determines how it places these keys and values into memory.
 Many programming languages support this kind of data structure, but they often
-use a different name, such as *hash*, *map*, *object*, *hash table*,
-*dictionary*, or *associative array*, just to name a few.
+use a different name, such as _hash_, _map_, _object_, _hash table_,
+_dictionary_, or _associative array_, just to name a few.
 
 Hash maps are useful when you want to look up data not by using an index, as
 you can with vectors, but by using a key that can be of any type. For example,
@@ -21,7 +21,7 @@ As always, check the standard library documentation for more information.
 
 One way to create an empty hash map is to use `new` and to add elements with
 `insert`. In Listing 8-20, we’re keeping track of the scores of two teams whose
-names are *Blue* and *Yellow*. The Blue team starts with 10 points, and the
+names are _Blue_ and _Yellow_. The Blue team starts with 10 points, and the
 Yellow team starts with 50.
 
 <Listing number="8-20" caption="Creating a new hash map and inserting some keys and values">
@@ -112,7 +112,7 @@ When you want to change the data in a hash map, you have to decide how to
 handle the case when a key already has a value assigned. You could replace the
 old value with the new value, completely disregarding the old value. You could
 keep the old value and ignore the new value, only adding the new value if the
-key *doesn’t* already have a value. Or you could combine the old value and the
+key _doesn’t_ already have a value. Or you could combine the old value and the
 new value. Let’s look at how to do each of these!
 
 #### Overwriting a Value
@@ -135,6 +135,7 @@ This code will print `{"Blue": 25}`. The original value of `10` has been
 overwritten.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="only-inserting-a-value-if-the-key-has-no-value"></a>
 
 #### Adding a Key and Value Only If a Key Isn’t Present
@@ -203,13 +204,13 @@ changes are safe and allowed by the borrowing rules.
 
 ### Hashing Functions
 
-By default, `HashMap` uses a hashing function called *SipHash* that can provide
+By default, `HashMap` uses a hashing function called _SipHash_ that can provide
 resistance to denial-of-service (DoS) attacks involving hash
 tables[^siphash]<!-- ignore -->. This is not the fastest hashing algorithm
 available, but the trade-off for better security that comes with the drop in
 performance is worth it. If you profile your code and find that the default
 hash function is too slow for your purposes, you can switch to another function
-by specifying a different hasher. A *hasher* is a type that implements the
+by specifying a different hasher. A _hasher_ is a type that implements the
 `BuildHasher` trait. We’ll talk about traits and how to implement them in
 [Chapter 10][traits]<!-- ignore -->. You don’t necessarily have to implement
 your own hasher from scratch; [crates.io](https://crates.io/)<!-- ignore -->
@@ -228,9 +229,9 @@ some exercises you should now be equipped to solve:
    the value in the middle position) and mode (the value that occurs most
    often; a hash map will be helpful here) of the list.
 1. Convert strings to pig latin. The first consonant of each word is moved to
-   the end of the word and *ay* is added, so *first* becomes *irst-fay*. Words
-   that start with a vowel have *hay* added to the end instead (*apple* becomes
-   *apple-hay*). Keep in mind the details about UTF-8 encoding!
+   the end of the word and _ay_ is added, so _first_ becomes _irst-fay_. Words
+   that start with a vowel have _hay_ added to the end instead (_apple_ becomes
+   _apple-hay_). Keep in mind the details about UTF-8 encoding!
 1. Using a hash map and vectors, create a text interface to allow a user to add
    employee names to a department in a company; for example, “Add Sally to
    Engineering” or “Add Amir to Sales.” Then let the user retrieve a list of all
@@ -243,7 +244,6 @@ and hash maps have that will be helpful for these exercises!
 We’re getting into more complex programs in which operations can fail, so it’s
 a perfect time to discuss error handling. We’ll do that next!
 
-[validating-references-with-lifetimes]:
-ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
+[validating-references-with-lifetimes]: ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 [access]: #accessing-values-in-a-hash-map
 [traits]: ch10-02-traits.html
