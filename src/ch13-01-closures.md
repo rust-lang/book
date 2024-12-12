@@ -330,12 +330,12 @@ called. If the `Option` is `None`, `f` will be called once. Because all
 closures implement `FnOnce`, `unwrap_or_else` accepts all three kinds of
 closures and is as flexible as it can be.
 
-> Note: Functions can implement all three of the `Fn` traits too. If what we
-> want to do doesn’t require capturing a value from the environment, we can use
-> the name of a function rather than a closure where we need something that
-> implements one of the `Fn` traits. For example, on an `Option<Vec<T>>` value,
-> we could call `unwrap_or_else(Vec::new)` to get a new, empty vector if the
-> value is `None`.
+> Note: If what we want to do doesn’t require capturing a value from the
+> environment, we can use the name of a function rather than a closure. For
+> example, we could call `unwrap_or_else(Vec::new)` on a `Option<Vec<T>>` value
+> to get a new, empty vector if the value is `None`. The compiler automatically
+> implements whichever of the `Fn` traits is applicable for a function
+> definition.
 
 Now let’s look at the standard library method `sort_by_key` defined on slices,
 to see how that differs from `unwrap_or_else` and why `sort_by_key` uses
