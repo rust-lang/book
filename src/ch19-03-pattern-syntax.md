@@ -19,16 +19,15 @@ value.
 ### Matching Named Variables
 
 Named variables are irrefutable patterns that match any value, and we’ve used
-them many times in the book. However, there is a complication when you use
-named variables in conditional expressions like `match`, `if let` or `while let`.
-All of them start a new scope, hence
-variables declared as part of a pattern inside the conditional will
-shadow those with the same name outside, as is the case
-with all variables. In Listing 19-11, we declare a variable named `x` with the
-value `Some(5)` and a variable `y` with the value `10`. We then create a
-`match` expression on the value `x`. Look at the patterns in the match arms and
-`println!` at the end, and try to figure out what the code will print before
-running this code or reading further.
+them many times in the book. However, there is a complication when you use named
+variables in `match`, `if let`, or `while let` expressions. Because each of
+these kinds of expression starts a new scope, variables declared as part of a
+pattern inside the expression will shadow those with the same name outside, as
+is the case with all variables. In Listing 19-11, we declare a variable named
+`x` with the value `Some(5)` and a variable `y` with the value `10`. We then
+create a `match` expression on the value `x`. Look at the patterns in the match
+arms and `println!` at the end, and try to figure out what the code will print
+before running this code or reading further.
 
 <Listing number="19-11" file-name="src/main.rs" caption="A `match` expression with an arm that introduces a new variable which shadows an existing variable `y`">
 
@@ -65,15 +64,13 @@ To create a `match` expression that compares the values of the outer `x` and
 variable, we would need to use a match guard conditional instead. We’ll talk
 about match guards later in the [“Extra Conditionals with Match
 Guards”](#extra-conditionals-with-match-guards)<!-- ignore --> section.
-There is no such mechanism for either `if let` or `while let`.
 
 ### Multiple Patterns
 
-You can match multiple patterns using the `|` syntax,
-which is the pattern _or_ operator. For example, in the following code we match
-the value of `x` against the match arms, the first of which has an _or_ option,
-meaning if the value of `x` matches either of the values in that arm, that
-arm’s code will run:
+You can match multiple patterns using the `|` syntax, which is the pattern _or_
+operator. For example, in the following code we match the value of `x` against
+the match arms, the first of which has an _or_ option, meaning if the value of
+`x` matches either of the values in that arm, that arm’s code will run:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-02-multiple-patterns/src/main.rs:here}}
@@ -454,7 +451,9 @@ compiler error because using `..` in two places like this is ambiguous.
 
 A _match guard_ is an additional `if` condition, specified after the pattern in
 a `match` arm, that must also match for that arm to be chosen. Match guards are
-useful for expressing more complex ideas than a pattern alone allows.
+useful for expressing more complex ideas than a pattern alone allows. They are
+only available in `match` expressions, not in `if let` or `while let`
+expressions.
 
 The condition can use variables created in the pattern. Listing 19-26 shows a
 `match` where the first arm has the pattern `Some(x)` and also has a match
