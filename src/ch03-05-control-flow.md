@@ -11,8 +11,8 @@ An `if` expression allows you to branch your code depending on conditions. You
 provide a condition and then state, “If this condition is met, run this block
 of code. If the condition is not met, do not run this block of code.”
 
-Create a new project called *branches* in your *projects* directory to explore
-the `if` expression. In the *src/main.rs* file, input the following:
+Create a new project called _branches_ in your _projects_ directory to explore
+the `if` expression. In the _src/main.rs_ file, input the following:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -24,7 +24,7 @@ All `if` expressions start with the keyword `if`, followed by a condition. In
 this case, the condition checks whether or not the variable `number` has a
 value less than 5. We place the block of code to execute if the condition is
 `true` immediately after the condition inside curly brackets. Blocks of code
-associated with the conditions in `if` expressions are sometimes called *arms*,
+associated with the conditions in `if` expressions are sometimes called _arms_,
 just like the arms in `match` expressions that we discussed in the [“Comparing
 the Guess to the Secret Number”][comparing-the-guess-to-the-secret-number]<!--
 ignore --> section of Chapter 2.
@@ -54,7 +54,7 @@ Run the program again, and look at the output:
 {{#include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/output.txt}}
 ```
 
-It’s also worth noting that the condition in this code *must* be a `bool`. If
+It’s also worth noting that the condition in this code _must_ be a `bool`. If
 the condition isn’t a `bool`, we’ll get an error. For example, try running the
 following code:
 
@@ -120,14 +120,13 @@ Rust branching construct called `match` for these cases.
 Because `if` is an expression, we can use it on the right side of a `let`
 statement to assign the outcome to a variable, as in Listing 3-2.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="3-2" file-name="src/main.rs" caption="Assigning the result of an `if` expression to a variable">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-02/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-2: Assigning the result of an `if` expression
-to a variable</span>
+</Listing>
 
 The `number` variable will be bound to a value based on the outcome of the `if`
 expression. Run this code to see what happens:
@@ -170,9 +169,9 @@ if it had to keep track of multiple hypothetical types for any variable.
 ### Repetition with Loops
 
 It’s often useful to execute a block of code more than once. For this task,
-Rust provides several *loops*, which will run through the code inside the loop
+Rust provides several _loops_, which will run through the code inside the loop
 body to the end and then start immediately back at the beginning. To experiment
-with loops, let’s make a new project called *loops*.
+with loops, let’s make a new project called _loops_.
 
 Rust has three kinds of loops: `loop`, `while`, and `for`. Let’s try each one.
 
@@ -181,7 +180,7 @@ Rust has three kinds of loops: `loop`, `while`, and `for`. Let’s try each one.
 The `loop` keyword tells Rust to execute a block of code over and over again
 forever or until you explicitly tell it to stop.
 
-As an example, change the *src/main.rs* file in your *loops* directory to look
+As an example, change the _src/main.rs_ file in your _loops_ directory to look
 like this:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -191,9 +190,9 @@ like this:
 ```
 
 When we run this program, we’ll see `again!` printed over and over continuously
-until we stop the program manually. Most terminals support the keyboard
-shortcut <span class="keystroke">ctrl-c</span> to interrupt a program that is
-stuck in a continual loop. Give it a try:
+until we stop the program manually. Most terminals support the keyboard shortcut
+<kbd>ctrl</kbd>-<kbd>c</kbd> to interrupt a program that is stuck in a continual
+loop. Give it a try:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-32-loop
@@ -204,7 +203,7 @@ CTRL-C
 ```console
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.29s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.08s
      Running `target/debug/loops`
 again!
 again!
@@ -213,10 +212,9 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <span
-class="keystroke">ctrl-c</span>. You may or may not see the word `again!`
-printed after the `^C`, depending on where the code was in the loop when it
-received the interrupt signal.
+The symbol `^C` represents where you pressed <kbd>ctrl</kbd>-<kbd>c</kbd>. You
+may or may not see the word `again!` printed after the `^C`, depending on where
+the code was in the loop when it received the interrupt signal.
 
 Fortunately, Rust also provides a way to break out of a loop using code. You
 can place the `break` keyword within the loop to tell the program when to stop
@@ -250,10 +248,13 @@ and then check whether the `counter` is equal to `10`. When it is, we use the
 semicolon to end the statement that assigns the value to `result`. Finally, we
 print the value in `result`, which in this case is `20`.
 
+You can also `return` from inside a loop. While `break` only exits the current
+loop, `return` always exits the current function.
+
 #### Loop Labels to Disambiguate Between Multiple Loops
 
 If you have loops within loops, `break` and `continue` apply to the innermost
-loop at that point. You can optionally specify a *loop label* on a loop that
+loop at that point. You can optionally specify a _loop label_ on a loop that
 you can then use with `break` or `continue` to specify that those keywords
 apply to the labeled loop instead of the innermost loop. Loop labels must begin
 with a single quote. Here’s an example with two nested loops:
@@ -282,14 +283,13 @@ that Rust has a built-in language construct for it, called a `while` loop. In
 Listing 3-3, we use `while` to loop the program three times, counting down each
 time, and then, after the loop, print a message and exit.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="3-3" file-name="src/main.rs" caption="Using a `while` loop to run code while a condition holds true">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-03/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-3: Using a `while` loop to run code while a
-condition holds true</span>
+</Listing>
 
 This construct eliminates a lot of nesting that would be necessary if you used
 `loop`, `if`, `else`, and `break`, and it’s clearer. While a condition
@@ -297,18 +297,17 @@ evaluates to `true`, the code runs; otherwise, it exits the loop.
 
 #### Looping Through a Collection with `for`
 
-You can choose to use the `while` construct to loop over the elements of a
+You can also use the `while` construct to loop over the elements of a
 collection, such as an array. For example, the loop in Listing 3-4 prints each
 element in the array `a`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="3-4" file-name="src/main.rs" caption="Looping through each element of a collection using a `while` loop">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-4: Looping through each element of a collection
-using a `while` loop</span>
+</Listing>
 
 Here, the code counts up through the elements in the array. It starts at index
 `0`, and then loops until it reaches the final index in the array (that is,
@@ -333,14 +332,13 @@ index is within the bounds of the array on every iteration through the loop.
 As a more concise alternative, you can use a `for` loop and execute some code
 for each item in a collection. A `for` loop looks like the code in Listing 3-5.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="3-5" file-name="src/main.rs" caption="Looping through each element of a collection using a `for` loop">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-5: Looping through each element of a collection
-using a `for` loop</span>
+</Listing>
 
 When we run this code, we’ll see the same output as in Listing 3-4. More
 importantly, we’ve now increased the safety of the code and eliminated the
@@ -377,15 +375,13 @@ and compound data types, functions, comments, `if` expressions, and loops! To
 practice with the concepts discussed in this chapter, try building programs to
 do the following:
 
-* Convert temperatures between Fahrenheit and Celsius.
-* Generate the *n*th Fibonacci number.
-* Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
+- Convert temperatures between Fahrenheit and Celsius.
+- Generate the *n*th Fibonacci number.
+- Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
   taking advantage of the repetition in the song.
 
-When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t*
+When you’re ready to move on, we’ll talk about a concept in Rust that _doesn’t_
 commonly exist in other programming languages: ownership.
 
-[comparing-the-guess-to-the-secret-number]:
-ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
-[quitting-after-a-correct-guess]:
-ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess
+[comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+[quitting-after-a-correct-guess]: ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess

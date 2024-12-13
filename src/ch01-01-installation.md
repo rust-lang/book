@@ -39,7 +39,7 @@ for your password. If the install is successful, the following line will appear:
 Rust is installed now. Great!
 ```
 
-You will also need a *linker*, which is a program that Rust uses to join its
+You will also need a _linker_, which is a program that Rust uses to join its
 compiled outputs into one file. It is likely you already have one. If you get
 linker errors, you should install a C compiler, which will typically include a
 linker. A C compiler is also useful because some common Rust packages depend on
@@ -59,18 +59,11 @@ the `build-essential` package.
 
 On Windows, go to [https://www.rust-lang.org/tools/install][install] and follow
 the instructions for installing Rust. At some point in the installation, you’ll
-receive a message explaining that you’ll also need the MSVC build tools for
-Visual Studio 2013 or later.
+be prompted to install Visual Studio. This provides a linker and the native
+libraries needed to compile programs. If you need more help with this step, see
+[https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]
 
-To acquire the build tools, you’ll need to install [Visual Studio
-2022][visualstudio]. When asked which workloads to install, include:
-
-* “Desktop Development with C++”
-* The Windows 10 or 11 SDK
-* The English language pack component, along with any other language pack of
-  your choosing
-
-The rest of this book uses commands that work in both *cmd.exe* and PowerShell.
+The rest of this book uses commands that work in both _cmd.exe_ and PowerShell.
 If there are specific differences, we’ll explain which to use.
 
 ### Troubleshooting
@@ -141,7 +134,16 @@ Any time a type or function is provided by the standard library and you’re not
 sure what it does or how to use it, use the application programming interface
 (API) documentation to find out!
 
+### Text Editors and Integrated Development Environments
+
+This book makes no assumptions about what tools you use to author Rust code.
+Just about any text editor will get the job done! However, many text editors and
+integrated development environments (IDEs) have built-in support for Rust. You
+can always find a fairly current list of many editors and IDEs on [the tools
+page][tools] on the Rust website.
+
 [otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 [install]: https://www.rust-lang.org/tools/install
-[visualstudio]: https://visualstudio.microsoft.com/downloads/
+[msvc]: https://rust-lang.github.io/rustup/installation/windows-msvc.html
 [community]: https://www.rust-lang.org/community
+[tools]: https://www.rust-lang.org/tools

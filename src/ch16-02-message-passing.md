@@ -1,13 +1,12 @@
 ## Using Message Passing to Transfer Data Between Threads
 
-One increasingly popular approach to ensuring safe concurrency is *message
-passing*, where threads or actors communicate by sending each other messages
-containing data. Here’s the idea in a slogan from [the Go language
-documentation](https://golang.org/doc/effective_go.html#concurrency):
+One increasingly popular approach to ensuring safe concurrency is _message
+passing_, where threads or actors communicate by sending each other messages
+containing data. Here’s the idea in a slogan from [the Go language documentation](https://golang.org/doc/effective_go.html#concurrency):
 “Do not communicate by sharing memory; instead, share memory by communicating.”
 
 To accomplish message-sending concurrency, Rust's standard library provides an
-implementation of *channels*. A channel is a general programming concept by
+implementation of _channels_. A channel is a general programming concept by
 which data is sent from one thread to another.
 
 You can imagine a channel in programming as being like a directional channel of
@@ -19,7 +18,7 @@ the upstream location where you put rubber ducks into the river, and the
 receiver half is where the rubber duck ends up downstream. One part of your
 code calls methods on the transmitter with the data you want to send, and
 another part checks the receiving end for arriving messages. A channel is said
-to be *closed* if either the transmitter or receiver half is dropped.
+to be _closed_ if either the transmitter or receiver half is dropped.
 
 Here, we’ll work up to a program that has one thread to generate values and
 send them down a channel, and another thread that will receive the values and
@@ -43,21 +42,21 @@ want to send over the channel.
 halves to `tx` and `rx`</span>
 
 We create a new channel using the `mpsc::channel` function; `mpsc` stands for
-*multiple producer, single consumer*. In short, the way Rust’s standard library
-implements channels means a channel can have multiple *sending* ends that
-produce values but only one *receiving* end that consumes those values. Imagine
+_multiple producer, single consumer_. In short, the way Rust’s standard library
+implements channels means a channel can have multiple _sending_ ends that
+produce values but only one _receiving_ end that consumes those values. Imagine
 multiple streams flowing together into one big river: everything sent down any
 of the streams will end up in one river at the end. We’ll start with a single
 producer for now, but we’ll add multiple producers when we get this example
 working.
 
 The `mpsc::channel` function returns a tuple, the first element of which is the
-sending end--the transmitter--and the second element is the receiving end--the
+sending end—the transmitter—and the second element is the receiving end—the
 receiver. The abbreviations `tx` and `rx` are traditionally used in many fields
-for *transmitter* and *receiver* respectively, so we name our variables as such
+for _transmitter_ and _receiver_ respectively, so we name our variables as such
 to indicate each end. We’re using a `let` statement with a pattern that
 destructures the tuples; we’ll discuss the use of patterns in `let` statements
-and destructuring in Chapter 18. For now, know that using a `let` statement
+and destructuring in Chapter 19. For now, know that using a `let` statement
 this way is a convenient approach to extract the pieces of the tuple returned
 by `mpsc::channel`.
 
@@ -66,14 +65,13 @@ string so the spawned thread is communicating with the main thread, as shown in
 Listing 16-7. This is like putting a rubber duck in the river upstream or
 sending a chat message from one thread to another.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-7" file-name="src/main.rs" caption="Moving `tx` to a spawned thread and sending “hi”">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-07/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-7: Moving `tx` to a spawned thread and sending
-“hi”</span>
+</Listing>
 
 Again, we’re using `thread::spawn` to create a new thread and then using `move`
 to move `tx` into the closure so the spawned thread owns `tx`. The spawned
@@ -89,17 +87,16 @@ In Listing 16-8, we’ll get the value from the receiver in the main thread. Thi
 is like retrieving the rubber duck from the water at the end of the river or
 receiving a chat message.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-8" file-name="src/main.rs" caption="Receiving the value “hi” in the main thread and printing it">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-08/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-8: Receiving the value “hi” in the main thread
-and printing it</span>
+</Listing>
 
 The receiver has two useful methods: `recv` and `try_recv`. We’re using `recv`,
-short for *receive*, which will block the main thread’s execution and wait
+short for _receive_, which will block the main thread’s execution and wait
 until a value is sent down the channel. Once a value is sent, `recv` will
 return it in a `Result<T, E>`. When the transmitter closes, `recv` will return
 an error to signal that no more values will be coming.
@@ -135,18 +132,17 @@ The ownership rules play a vital role in message sending because they help you
 write safe, concurrent code. Preventing errors in concurrent programming is the
 advantage of thinking about ownership throughout your Rust programs. Let’s do
 an experiment to show how channels and ownership work together to prevent
-problems: we’ll try to use a `val` value in the spawned thread *after* we’ve
+problems: we’ll try to use a `val` value in the spawned thread _after_ we’ve
 sent it down the channel. Try compiling the code in Listing 16-9 to see why
 this code isn’t allowed:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-9" file-name="src/main.rs" caption="Attempting to use `val` after we’ve sent it down the channel">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-09/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-9: Attempting to use `val` after we’ve sent it
-down the channel</span>
+</Listing>
 
 Here, we try to print `val` after we’ve sent it down the channel via `tx.send`.
 Allowing this would be a bad idea: once the value has been sent to another
@@ -172,14 +168,13 @@ two separate threads were talking to each other over the channel. In Listing
 running concurrently: the spawned thread will now send multiple messages and
 pause for a second between each message.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-10" file-name="src/main.rs" caption="Sending multiple messages and pausing between each">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-10/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-10: Sending multiple messages and pausing
-between each</span>
+</Listing>
 
 This time, the spawned thread has a vector of strings that we want to send to
 the main thread. We iterate over them, sending each individually, and pause
@@ -210,19 +205,18 @@ the spawned thread.
 
 ### Creating Multiple Producers by Cloning the Transmitter
 
-Earlier we mentioned that `mpsc` was an acronym for *multiple producer,
-single consumer*. Let’s put `mpsc` to use and expand the code in Listing 16-10
+Earlier we mentioned that `mpsc` was an acronym for _multiple producer,
+single consumer_. Let’s put `mpsc` to use and expand the code in Listing 16-10
 to create multiple threads that all send values to the same receiver. We can do
 so by cloning the transmitter, as shown in Listing 16-11:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-11" file-name="src/main.rs" caption="Sending multiple messages from multiple producers">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 16-11: Sending multiple messages from multiple
-producers</span>
+</Listing>
 
 This time, before we create the first spawned thread, we call `clone` on the
 transmitter. This will give us a new transmitter we can pass to the first

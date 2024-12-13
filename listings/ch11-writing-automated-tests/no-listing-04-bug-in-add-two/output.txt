@@ -1,6 +1,6 @@
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished test [unoptimized + debuginfo] target(s) in 0.61s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.61s
      Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 running 1 test
@@ -9,9 +9,10 @@ test tests::it_adds_two ... FAILED
 failures:
 
 ---- tests::it_adds_two stdout ----
-thread 'tests::it_adds_two' panicked at 'assertion failed: `(left == right)`
-  left: `4`,
- right: `5`', src/lib.rs:11:9
+thread 'tests::it_adds_two' panicked at src/lib.rs:12:9:
+assertion `left == right` failed
+  left: 5
+ right: 4
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 

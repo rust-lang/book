@@ -4,9 +4,9 @@ To determine whether to use loops or iterators, you need to know which
 implementation is faster: the version of the `search` function with an explicit
 `for` loop or the version with iterators.
 
-We ran a benchmark by loading the entire contents of *The Adventures of
-Sherlock Holmes* by Sir Arthur Conan Doyle into a `String` and looking for the
-word *the* in the contents. Here are the results of the benchmark on the
+We ran a benchmark by loading the entire contents of _The Adventures of
+Sherlock Holmes_ by Sir Arthur Conan Doyle into a `String` and looking for the
+word _the_ in the contents. Here are the results of the benchmark on the
 version of `search` using the `for` loop and the version using iterators:
 
 ```text
@@ -24,10 +24,10 @@ various sizes as the `contents`, different words and words of different lengths
 as the `query`, and all kinds of other variations. The point is this:
 iterators, although a high-level abstraction, get compiled down to roughly the
 same code as if you’d written the lower-level code yourself. Iterators are one
-of Rust’s *zero-cost abstractions*, by which we mean using the abstraction
+of Rust’s _zero-cost abstractions_, by which we mean using the abstraction
 imposes no additional runtime overhead. This is analogous to how Bjarne
 Stroustrup, the original designer and implementor of C++, defines
-*zero-overhead* in “Foundations of C++” (2012):
+_zero-overhead_ in “Foundations of C++” (2012):
 
 > In general, C++ implementations obey the zero-overhead principle: What you
 > don’t use, you don’t pay for. And further: What you do use, you couldn’t hand
@@ -65,12 +65,12 @@ multiply the values together, sum all the results, and shift the bits in the
 sum `qlp_shift` bits to the right.
 
 Calculations in applications like audio decoders often prioritize performance
-most highly. Here, we’re creating an iterator, using two adaptors, and then
+most highly. Here, we’re creating an iterator, using two adapters, and then
 consuming the value. What assembly code would this Rust code compile to? Well,
 as of this writing, it compiles down to the same assembly you’d write by hand.
 There’s no loop at all corresponding to the iteration over the values in
 `coefficients`: Rust knows that there are 12 iterations, so it “unrolls” the
-loop. *Unrolling* is an optimization that removes the overhead of the loop
+loop. _Unrolling_ is an optimization that removes the overhead of the loop
 controlling code and instead generates repetitive code for each iteration of
 the loop.
 

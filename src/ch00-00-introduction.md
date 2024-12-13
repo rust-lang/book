@@ -7,7 +7,7 @@
 [nsprust]: https://nostarch.com/rust-programming-language-2nd-edition
 [nsp]: https://nostarch.com/
 
-Welcome to *The Rust Programming Language*, an introductory book about Rust.
+Welcome to _The Rust Programming Language_, an introductory book about Rust.
 The Rust programming language helps you write faster, more reliable software.
 High-level ergonomics and low-level control are often at odds in programming
 language design; Rust challenges that conflict. Through balancing powerful
@@ -33,12 +33,12 @@ logic rather than chasing down bugs.
 
 Rust also brings contemporary developer tools to the systems programming world:
 
-* Cargo, the included dependency manager and build tool, makes adding,
+- Cargo, the included dependency manager and build tool, makes adding,
   compiling, and managing dependencies painless and consistent across the Rust
   ecosystem.
-* The Rustfmt formatting tool ensures a consistent coding style across
+- The Rustfmt formatting tool ensures a consistent coding style across
   developers.
-* The Rust Language Server powers Integrated Development Environment (IDE)
+- The rust-analyzer powers Integrated Development Environment (IDE)
   integration for code completion and inline error messages.
 
 By using these and other tools in the Rust ecosystem, developers can be
@@ -81,7 +81,7 @@ code be fast code as well.
 The Rust language hopes to support many other users as well; those mentioned
 here are merely some of the biggest stakeholders. Overall, Rust’s greatest
 ambition is to eliminate the trade-offs that programmers have accepted for
-decades by providing safety *and* productivity, speed *and* ergonomics. Give
+decades by providing safety _and_ productivity, speed _and_ ergonomics. Give
 Rust a try and see if its choices work for you.
 
 ## Who This Book Is For
@@ -89,7 +89,7 @@ Rust a try and see if its choices work for you.
 This book assumes that you’ve written code in another programming language but
 doesn’t make any assumptions about which one. We’ve tried to make the material
 broadly accessible to those from a wide variety of programming backgrounds. We
-don’t spend a lot of time talking about what programming *is* or how to think
+don’t spend a lot of time talking about what programming _is_ or how to think
 about it. If you’re entirely new to programming, you would be better served by
 reading a book that specifically provides an introduction to programming.
 
@@ -103,7 +103,7 @@ the topic in a later chapter.
 You’ll find two kinds of chapters in this book: concept chapters and project
 chapters. In concept chapters, you’ll learn about an aspect of Rust. In project
 chapters, we’ll build small programs together, applying what you’ve learned so
-far. Chapters 2, 12, and 20 are project chapters; the rest are concept chapters.
+far. Chapters 2, 12, and 21 are project chapters; the rest are concept chapters.
 
 Chapter 1 explains how to install Rust, how to write a “Hello, world!” program,
 and how to use Cargo, Rust’s package manager and build tool. Chapter 2 is a
@@ -141,17 +141,20 @@ depth and talk about best practices for sharing your libraries with others.
 Chapter 15 discusses smart pointers that the standard library provides and the
 traits that enable their functionality.
 
-In Chapter 16, we’ll walk through different models of concurrent programming
-and talk about how Rust helps you to program in multiple threads fearlessly.
-Chapter 17 looks at how Rust idioms compare to object-oriented programming
+In Chapter 16, we’ll walk through different models of concurrent programming and
+talk about how Rust helps you to program in multiple threads fearlessly. In
+Chapter 17, we will build on that by exploring Rust’s async and await syntax and
+the lightweight concurrency model they support.
+
+Chapter 18 looks at how Rust idioms compare to object-oriented programming
 principles you might be familiar with.
 
-Chapter 18 is a reference on patterns and pattern matching, which are powerful
-ways of expressing ideas throughout Rust programs. Chapter 19 contains a
+Chapter 19 is a reference on patterns and pattern matching, which are powerful
+ways of expressing ideas throughout Rust programs. Chapter 20 contains a
 smorgasbord of advanced topics of interest, including unsafe Rust, macros, and
 more about lifetimes, traits, types, functions, and closures.
 
-In Chapter 20, we’ll complete a project in which we’ll implement a low-level
+In Chapter 21, we’ll complete a project in which we’ll implement a low-level
 multithreaded web server!
 
 Finally, some appendices contain useful information about the language in a
@@ -177,7 +180,7 @@ surrounding text to see whether the example you’re trying to run is meant to
 error. Ferris will also help you distinguish code that isn’t meant to work:
 
 | Ferris                                                                                                           | Meaning                                          |
-|------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+| ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
 | <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="Ferris with a question mark"/>            | This code does not compile!                      |
 | <img src="img/ferris/panics.svg" class="ferris-explain" alt="Ferris throwing up their hands"/>                   | This code panics!                                |
 | <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="Ferris with one claw up, shrugging"/> | This code does not produce the desired behavior. |

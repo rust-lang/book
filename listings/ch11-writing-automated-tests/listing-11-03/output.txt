@@ -1,6 +1,6 @@
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished test [unoptimized + debuginfo] target(s) in 0.72s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.72s
      Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 running 2 tests
@@ -10,7 +10,8 @@ test tests::exploration ... ok
 failures:
 
 ---- tests::another stdout ----
-thread 'tests::another' panicked at 'Make this test fail', src/lib.rs:10:9
+thread 'tests::another' panicked at src/lib.rs:17:9:
+Make this test fail
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 

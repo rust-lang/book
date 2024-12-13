@@ -28,14 +28,13 @@ Listing 15-14 shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print `Dropping CustomSmartPointer!` when the
 instance goes out of scope, to show when Rust runs the `drop` function.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-14" file-name="src/main.rs" caption="A `CustomSmartPointer` struct that implements the `Drop` trait where we would put our cleanup code">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-14/src/main.rs}}
 ```
 
-<span class="caption">Listing 15-14: A `CustomSmartPointer` struct that
-implements the `Drop` trait where we would put our cleanup code</span>
+</Listing>
 
 The `Drop` trait is included in the prelude, so we don’t need to bring it into
 scope. We implement the `Drop` trait on `CustomSmartPointer` and provide an
@@ -79,14 +78,13 @@ If we try to call the `Drop` trait’s `drop` method manually by modifying the
 `main` function from Listing 15-14, as shown in Listing 15-15, we’ll get a
 compiler error:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-15" file-name="src/main.rs" caption="Attempting to call the `drop` method from the `Drop` trait manually to clean up early">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-15/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-15: Attempting to call the `drop` method from
-the `Drop` trait manually to clean up early</span>
+</Listing>
 
 When we try to compile this code, we’ll get this error:
 
@@ -95,14 +93,14 @@ When we try to compile this code, we’ll get this error:
 ```
 
 This error message states that we’re not allowed to explicitly call `drop`. The
-error message uses the term *destructor*, which is the general programming term
-for a function that cleans up an instance. A *destructor* is analogous to a
-*constructor*, which creates an instance. The `drop` function in Rust is one
+error message uses the term _destructor_, which is the general programming term
+for a function that cleans up an instance. A _destructor_ is analogous to a
+_constructor_, which creates an instance. The `drop` function in Rust is one
 particular destructor.
 
 Rust doesn’t let us call `drop` explicitly because Rust would still
 automatically call `drop` on the value at the end of `main`. This would cause a
-*double free* error because Rust would be trying to clean up the same value
+_double free_ error because Rust would be trying to clean up the same value
 twice.
 
 We can’t disable the automatic insertion of `drop` when a value goes out of
@@ -114,14 +112,13 @@ trait. We call it by passing as an argument the value we want to force drop.
 The function is in the prelude, so we can modify `main` in Listing 15-15 to
 call the `drop` function, as shown in Listing 15-16:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-16" file-name="src/main.rs" caption="Calling `std::mem::drop` to explicitly drop a value before it goes out of scope">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-16/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-16: Calling `std::mem::drop` to explicitly
-drop a value before it goes out of scope</span>
+</Listing>
 
 Running this code will print the following:
 
@@ -129,7 +126,7 @@ Running this code will print the following:
 {{#include ../listings/ch15-smart-pointers/listing-15-16/output.txt}}
 ```
 
-The text ```Dropping CustomSmartPointer with data `some data`!``` is printed
+The text ``Dropping CustomSmartPointer with data `some data`!`` is printed
 between the `CustomSmartPointer created.` and `CustomSmartPointer dropped
 before the end of main.` text, showing that the `drop` method code is called to
 drop `c` at that point.
