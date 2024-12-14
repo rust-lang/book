@@ -567,13 +567,14 @@ let s: &'static str = "I have a static lifetime.";
 The text of this string is stored directly in the program’s binary, which is
 always available. Therefore, the lifetime of all string literals is `'static`.
 
-You might see suggestions to use the `'static` lifetime in error messages. But
-before specifying `'static` as the lifetime for a reference, think about
-whether the reference you have actually lives the entire lifetime of your
-program or not, and whether you want it to. Most of the time, an error message
-suggesting the `'static` lifetime results from attempting to create a dangling
-reference or a mismatch of the available lifetimes. In such cases, the solution
-is to fix those problems, not to specify the `'static` lifetime.
+You might see some error messages from the compiler suggesting that you use the
+`'static'` lifetime to fix a problem. However, before specifying `'static` as
+the lifetime for a reference, think about whether the reference you have
+actually lives the entire lifetime of your program or not, and whether you want
+it to. Most of the time, an error message suggesting the `'static` lifetime
+results from attempting to create a dangling reference or a mismatch of the
+available lifetimes. In such cases, the solution is to fix those problems, not
+to specify the `'static` lifetime.
 
 ## Generic Type Parameters, Trait Bounds, and Lifetimes Together
 
