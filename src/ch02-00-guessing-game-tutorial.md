@@ -238,8 +238,8 @@ possible state a _variant_.
 of these `Result` types is to encode error-handling information.
 
 `Result`’s variants are `Ok` and `Err`. The `Ok` variant indicates the
-operation was successful, and inside `Ok` is the successfully generated value.
-The `Err` variant means the operation failed, and `Err` contains information
+operation was successful, and it contains the successfully generated value.
+The `Err` variant means the operation failed, and it contains information
 about how or why the operation failed.
 
 Values of the `Result` type, like values of any type, have methods defined on
