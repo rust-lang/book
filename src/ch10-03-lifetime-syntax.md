@@ -567,7 +567,7 @@ let s: &'static str = "I have a static lifetime.";
 The text of this string is stored directly in the program’s binary, which is
 always available. Therefore, the lifetime of all string literals is `'static`.
 
-You might see suggestions to use the `'static` lifetime in error messages. But
+You might see suggestions in error messages to use the `'static` lifetime. But
 before specifying `'static` as the lifetime for a reference, think about
 whether the reference you have actually lives the entire lifetime of your
 program or not, and whether you want it to. Most of the time, an error message
