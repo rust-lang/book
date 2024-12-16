@@ -534,6 +534,9 @@ annotation makes it easier to track down the source of problems when they occur.
 Whenever you write unsafe code, you can use Miri to help you be more confident
 that the code you have written upholds Rust’s rules.
 
+For a much deeper exploration of how to work effectively with unsafe Rust, read
+Rust’s official guide to the subject, the [Rustonomicon][nomicon].
+
 [dangling-references]: ch04-02-references-and-borrowing.html#dangling-references
 [differences-between-variables-and-constants]: ch03-01-variables-and-mutability.html#constants
 [extensible-concurrency-with-the-sync-and-send-traits]: ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits
@@ -541,3 +544,4 @@ that the code you have written upholds Rust’s rules.
 [reference]: ../reference/items/unions.html
 [miri]: https://github.com/rust-lang/miri
 [nightly]: appendix-07-nightly-rust.html
+[nomicon]: https://doc.rust-lang.org/nomicon/
