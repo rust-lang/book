@@ -1,0 +1,27 @@
+$ cargo check
+    Checking hello v0.1.0 (file:///projects/hello)
+error[E0382]: use of moved value: `receiver`
+  --> src/lib.rs:26:42
+   |
+21 |         let (sender, receiver) = mpsc::channel();
+   |                      -------- move occurs because `receiver` has type `std::sync::mpsc::Receiver<Job>`, which does not implement the `Copy` trait
+...
+25 |         for id in 0..size {
+   |         ----------------- inside of this loop
+26 |             workers.push(Worker::new(id, receiver));
+   |                                          ^^^^^^^^ value moved here, in previous iteration of loop
+   |
+note: consider changing this parameter type in method `new` to borrow instead if owning the value isn't necessary
+  --> src/lib.rs:47:33
+   |
+47 |     fn new(id: usize, receiver: mpsc::Receiver<Job>) -> Worker {
+   |        --- in this method       ^^^^^^^^^^^^^^^^^^^ this parameter takes ownership of the value
+help: consider moving the expression out of the loop so it is only moved once
+   |
+25 ~         let mut value = Worker::new(id, receiver);
+26 ~         for id in 0..size {
+27 ~             workers.push(value);
+   |
+
+For more information about this error, try `rustc --explain E0382`.
+error: could not compile `hello` (lib) due to 1 previous error

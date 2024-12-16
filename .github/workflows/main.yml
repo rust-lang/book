@@ -12,20 +12,50 @@ jobs:
     - name: Install Rust
       run: |
         rustup set profile minimal
-        rustup toolchain install 1.57 -c rust-docs
-        rustup default 1.57
+        rustup toolchain install 1.82 -c rust-docs
+        rustup default 1.82
     - name: Install mdbook
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.12/mdbook-v0.4.12-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
-        echo "$(pwd)/bin" >> ${GITHUB_PATH}
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        echo "$(pwd)/bin" >> "${GITHUB_PATH}"
     - name: Report versions
       run: |
         rustup --version
         rustc -Vv
         mdbook --version
+
+    # mdBook does not currently have particularly good support for “external”
+    # crates. To make the test suite work correctly with `trpl`, we must first
+    # build `trpl` itself (`mdbook` will not do it), and then explicitly pass
+    # its `deps` path as a library search path for `mdbook test`. That will make
+    # sure all the crates can be resolved when running the tests.
+    - name: Build `trpl` crate
+      run: |
+        cd packages/trpl
+        cargo build
     - name: Run tests
-      run: mdbook test
+      run:
+        mdbook test --library-path packages/trpl/target/debug/deps
+  package_tests:
+    name: Run package tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Update rustup
+      run: rustup self update
+    - name: Install Rust
+      run: |
+        rustup set profile minimal
+        rustup toolchain install 1.82 -c rust-docs
+        rustup default 1.82
+    - name: Run `tools` package tests
+      run: |
+        cargo test
+    - name: Run `mdbook-trpl` package tests
+      working-directory: packages/mdbook-trpl
+      run: |
+        cargo test
   lint:
     name: Run lints
     runs-on: ubuntu-latest
@@ -41,13 +71,23 @@ jobs:
     - name: Install mdbook
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.12/mdbook-v0.4.12-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
-        echo "$(pwd)/bin" >> ${GITHUB_PATH}
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        echo "$(pwd)/bin" >> "${GITHUB_PATH}"
+    - name: Install mdbook-trpl binaries
+      run: cargo install --path packages/mdbook-trpl
+    - name: Install aspell
+      run: sudo apt-get install aspell
+    - name: Install shellcheck
+      run: sudo apt-get install shellcheck
     - name: Report versions
       run: |
         rustup --version
         rustc -Vv
         mdbook --version
+        aspell --version
+        shellcheck --version
+    - name: Shellcheck
+      run: find . -name '*.sh' -print0 | xargs -0 shellcheck
     - name: Spellcheck
       run: bash ci/spellcheck.sh list
     - name: Lint for local file paths

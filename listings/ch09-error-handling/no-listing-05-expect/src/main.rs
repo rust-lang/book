@@ -1,5 +1,6 @@
 use std::fs::File;
 
 fn main() {
-    let f = File::open("hello.txt").expect("Failed to open hello.txt");
+    let greeting_file = File::open("hello.txt")
+        .expect("hello.txt should be included in this project");
 }

@@ -6,8 +6,8 @@ struct Rectangle {
 
 // ANCHOR: here
 impl Rectangle {
-    fn square(size: u32) -> Rectangle {
-        Rectangle {
+    fn square(size: u32) -> Self {
+        Self {
             width: size,
             height: size,
         }
