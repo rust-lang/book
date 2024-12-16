@@ -12,7 +12,7 @@ For resources in languages other than English. Most are still in progress; see
 - [Українська](https://rust-lang-ua.github.io/rustbook_ukrainian)
 - [Español](https://github.com/thecodix/book), [alternate](https://github.com/ManRR/rust-book-es), [Español por RustLangES](https://github.com/RustLangES/rust-book-es)
 - [Русский](https://github.com/rust-lang-ru/book)
-- [한국어](https://github.com/rinthel/rust-lang-book-ko)
+- [한국어](https://github.com/rust-kr/doc.rust-kr.org)
 - [日本語](https://github.com/rust-lang-ja/book-ja)
 - [Français](https://github.com/Jimskapt/rust-book-fr)
 - [Polski](https://github.com/paytchoo/book-pl)
