@@ -21,4 +21,4 @@ Here are the relevant sections in the new and old books:
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/traits.html
 [2]: ch10-02-traits.html
-[3]: ch19-03-advanced-traits.html
+[3]: ch20-03-advanced-traits.html

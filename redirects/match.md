@@ -34,5 +34,5 @@ Here are the relevant sections in the new and old books:
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/match.html
 [2]: ch06-02-match.html
-[3]: ch18-00-patterns.html
+[3]: ch19-00-patterns.html
 

@@ -8,9 +8,9 @@ struct User {
 // ANCHOR: here
 fn build_user(email: String, username: String) -> User {
     User {
-        email: email,
-        username: username,
         active: true,
+        username: username,
+        email: email,
         sign_in_count: 1,
     }
 }

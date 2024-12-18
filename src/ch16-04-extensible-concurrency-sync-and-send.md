@@ -1,6 +1,6 @@
 ## Extensible Concurrency with the `Sync` and `Send` Traits
 
-Interestingly, the Rust language has *very* few concurrency features. Almost
+Interestingly, the Rust language has _very_ few concurrency features. Almost
 every concurrency feature we’ve talked about so far in this chapter has been
 part of the standard library, not the language. Your options for handling
 concurrency are not limited to the language or the standard library; you can
@@ -28,7 +28,7 @@ compiled.
 
 Any type composed entirely of `Send` types is automatically marked as `Send` as
 well. Almost all primitive types are `Send`, aside from raw pointers, which
-we’ll discuss in Chapter 19.
+we’ll discuss in Chapter 20.
 
 ### Allowing Access from Multiple Threads with `Sync`
 
@@ -54,7 +54,7 @@ marker traits, they don’t even have any methods to implement. They’re just
 useful for enforcing invariants related to concurrency.
 
 Manually implementing these traits involves implementing unsafe Rust code.
-We’ll talk about using unsafe Rust code in Chapter 19; for now, the important
+We’ll talk about using unsafe Rust code in Chapter 20; for now, the important
 information is that building new concurrent types not made up of `Send` and
 `Sync` parts requires careful thought to uphold the safety guarantees. [“The
 Rustonomicon”][nomicon] has more information about these guarantees and how to
@@ -62,9 +62,10 @@ uphold them.
 
 ## Summary
 
-This isn’t the last you’ll see of concurrency in this book: the project in
-Chapter 20 will use the concepts in this chapter in a more realistic situation
-than the smaller examples discussed here.
+This isn’t the last you’ll see of concurrency in this book: the whole next
+chapter focuses on async programming, and the project in Chapter 21 will use the
+concepts in this chapter in a more realistic situation than the smaller examples
+discussed here.
 
 As mentioned earlier, because very little of how Rust handles concurrency is
 part of the language, many concurrency solutions are implemented as crates.
@@ -81,10 +82,5 @@ run on multiple threads without the kinds of hard-to-track-down bugs common in
 other languages. Concurrent programming is no longer a concept to be afraid of:
 go forth and make your programs concurrent, fearlessly!
 
-Next, we’ll talk about idiomatic ways to model problems and structure solutions
-as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idioms
-relate to those you might be familiar with from object-oriented programming.
-
-[sharing-a-mutext-between-multiple-threads]:
-ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads
+[sharing-a-mutext-between-multiple-threads]: ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads
 [nomicon]: ../nomicon/index.html
