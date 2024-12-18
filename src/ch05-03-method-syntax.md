@@ -98,7 +98,7 @@ are and how to designate a field or method as public or private in [Chapter
 >
 > Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
 > feature called _automatic referencing and dereferencing_. Calling methods is
-> one of the few places in Rust that has this behavior.
+> one of the few places in Rust with this behavior.
 >
 > Here’s how it works: when you call a method with `object.something()`, Rust
 > automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
