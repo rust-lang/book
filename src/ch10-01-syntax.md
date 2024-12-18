@@ -210,9 +210,9 @@ generic type after `impl`, Rust can identify that the type in the angle
 brackets in `Point` is a generic type rather than a concrete type. We could
 have chosen a different name for this generic parameter than the generic
 parameter declared in the struct definition, but using the same name is
-conventional. Methods written within an `impl` that declares the generic type
-will be defined on any instance of the type, no matter what concrete type ends
-up substituting for the generic type.
+conventional. If you write a method within an `impl` that declares a generic
+type, that method will be defined on any instance of the type, no matter what
+concrete type ends up substituting for the generic type.
 
 We can also specify constraints on generic types when defining methods on the
 type. We could, for example, implement methods only on `Point<f32>` instances
