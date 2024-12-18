@@ -117,7 +117,7 @@ This code will compile just fine—but it wouldn’t if we had tried to stick wi
 `impl Fn(i32) -> i32`. For more about trait objects, refer to the section
 [“Using Trait Objects That Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
---> in Chapter 19.
+--> in Chapter 18.
 
 Next, let’s look at macros!
 
