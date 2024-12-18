@@ -622,6 +622,5 @@ to consider first, though:
   the fact that it is from the `stream` part of the crate; it works just fine
   with any collection of futures.)
 
-[collections]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [dyn]: ch12-03-improving-error-handling-and-modularity.html
 [async-program]: ch17-01-futures-and-syntax.html#our-first-async-program
