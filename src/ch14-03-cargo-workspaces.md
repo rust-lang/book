@@ -30,9 +30,6 @@ members to the workspace. We also make a point to use the latest and greatest
 version of Cargo’s resolver algorithm in our workspace by setting the
 `resolver` to `"2"`.
 
-by specifying the path to the package with our binary
-crate; in this case, that path is _adder_:
-
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
