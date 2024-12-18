@@ -9,12 +9,12 @@ We’ve talked about how to pass closures to functions; you can also pass regula
 functions to functions! This technique is useful when you want to pass a
 function you’ve already defined rather than defining a new closure. Functions
 coerce to the type `fn` (with a lowercase f), not to be confused with the `Fn`
-closure trait. The `fn` type is called a *function pointer*. Passing functions
+closure trait. The `fn` type is called a _function pointer_. Passing functions
 with function pointers will allow you to use functions as arguments to other
 functions.
 
 The syntax for specifying that a parameter is a function pointer is similar to
-that of closures, as shown in Listing 20-27, where we’ve defined a function
+that of closures, as shown in Listing 20-28, where we’ve defined a function
 `add_one` that adds one to its parameter. The function `do_twice` takes two
 parameters: a function pointer to any function that takes an `i32` parameter
 and returns an `i32`, and one `i32` value. The `do_twice` function calls the
@@ -22,10 +22,10 @@ function `f` twice, passing it the `arg` value, then adds the two function call
 results together. The `main` function calls `do_twice` with the arguments
 `add_one` and `5`.
 
-<Listing number="20-27" file-name="src/main.rs" caption="Using the `fn` type to accept a function pointer as an argument">
+<Listing number="20-28" file-name="src/main.rs" caption="Using the `fn` type to accept a function pointer as an argument">
 
 ```rust
-{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-27/src/main.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-28/src/main.rs}}
 ```
 
 </Listing>
@@ -95,35 +95,33 @@ function. However, you can’t do that with closures because they don’t have a
 concrete type that is returnable; you’re not allowed to use the function
 pointer `fn` as a return type, for example.
 
-The following code tries to return a closure directly, but it won’t compile:
+Instead, you will normally use the `impl Trait` syntax we learned about in
+Chapter 10. You can return any function type, using `Fn`, `FnOnce` and `FnMut`.
+For example, this code will work just fine:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-18-returns-closure/src/lib.rs}}
 ```
 
-The compiler error is as follows:
-
-```console
-{{#include ../listings/ch20-advanced-features/no-listing-18-returns-closure/output.txt}}
-```
-
-The error references the `Sized` trait again! Rust doesn’t know how much space
-it will need to store the closure. We saw a solution to this problem earlier.
-We can use a trait object:
+However, as we noted in the [“Closure Type Inference and
+Annotation”][closure-types]<!-- ignore --> section in Chapter 13, each closure
+is also its own distinct type. If you need to work with multiple functions that
+have the same signature but different implementations, you will need to use a
+trait object for them:
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-19-returns-closure-trait-object/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/no-listing-19-returns-closure-trait-object/src/main.rs}}
 ```
 
-This code will compile just fine. For more about trait objects, refer to the
-section [“Using Trait Objects That Allow for Values of Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
-ignore --> in Chapter 19.
+This code will compile just fine—but it wouldn’t if we had tried to stick with
+`impl Fn(i32) -> i32`. For more about trait objects, refer to the section
+[“Using Trait Objects That Allow for Values of Different
+Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
+--> in Chapter 19.
 
 Next, let’s look at macros!
 
-[advanced-traits]:
-ch20-03-advanced-traits.html#advanced-traits
+[advanced-traits]: ch20-03-advanced-traits.html#advanced-traits
 [enum-values]: ch06-01-defining-an-enum.html#enum-values
-[using-trait-objects-that-allow-for-values-of-different-types]:
-ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[closure-types]: ch13-01-closures.html#closure-type-inference-and-annotation
+[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

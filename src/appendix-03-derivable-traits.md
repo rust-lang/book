@@ -8,11 +8,11 @@ type you’ve annotated with the `derive` syntax.
 In this appendix, we provide a reference of all the traits in the standard
 library that you can use with `derive`. Each section covers:
 
-* What operators and methods deriving this trait will enable
-* What the implementation of the trait provided by `derive` does
-* What implementing the trait signifies about the type
-* The conditions in which you’re allowed or not allowed to implement the trait
-* Examples of operations that require the trait
+- What operators and methods deriving this trait will enable
+- What the implementation of the trait provided by `derive` does
+- What implementing the trait signifies about the type
+- The conditions in which you’re allowed or not allowed to implement the trait
+- Examples of operations that require the trait
 
 If you want different behavior from that provided by the `derive` attribute,
 consult the [standard library documentation](../std/index.html)<!-- ignore -->
@@ -55,7 +55,7 @@ The `PartialEq` trait allows you to compare instances of a type to check for
 equality and enables use of the `==` and `!=` operators.
 
 Deriving `PartialEq` implements the `eq` method. When `PartialEq` is derived on
-structs, two instances are equal only if *all* fields are equal, and the
+structs, two instances are equal only if _all_ fields are equal, and the
 instances are not equal if any fields are not equal. When derived on enums,
 each variant is equal to itself and not equal to the other variants.
 
@@ -178,10 +178,7 @@ The `Default` trait is required when you use the method `unwrap_or_default` on
 `unwrap_or_default` will return the result of `Default::default` for the type
 `T` stored in the `Option<T>`.
 
-[creating-instances-from-other-instances-with-struct-update-syntax]:
-ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
-[stack-only-data-copy]:
-ch04-01-what-is-ownership.html#stack-only-data-copy
-[ways-variables-and-data-interact-clone]:
-ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone
+[creating-instances-from-other-instances-with-struct-update-syntax]: ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
+[stack-only-data-copy]: ch04-01-what-is-ownership.html#stack-only-data-copy
+[ways-variables-and-data-interact-clone]: ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone
 [macros]: ch20-06-macros.html#macros

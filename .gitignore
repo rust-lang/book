@@ -6,3 +6,5 @@ target
 tmp
 
 .nova
+.vscode
+.zed

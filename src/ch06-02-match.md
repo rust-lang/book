@@ -1,5 +1,7 @@
 <!-- Old heading. Do not remove or links may break. -->
+
 <a id="the-match-control-flow-operator"></a>
+
 ## The `match` Control Flow Construct
 
 Rust has an extremely powerful control flow construct called `match` that
@@ -185,7 +187,7 @@ error:
 ```
 
 Rust knows that we didn’t cover every possible case, and even knows which
-pattern we forgot! Matches in Rust are *exhaustive*: we must exhaust every last
+pattern we forgot! Matches in Rust are _exhaustive_: we must exhaust every last
 possibility in order for the code to be valid. Especially in the case of
 `Option<T>`, when Rust prevents us from forgetting to explicitly handle the
 `None` case, it protects us from assuming that we have a value when we might
@@ -220,7 +222,7 @@ patterns are evaluated in order. If we put the catch-all arm earlier, the other
 arms would never run, so Rust will warn us if we add arms after a catch-all!
 
 Rust also has a pattern we can use when we want a catch-all but don’t want to
-*use* the value in the catch-all pattern: `_` is a special pattern that matches
+_use_ the value in the catch-all pattern: `_` is a special pattern that matches
 any value and does not bind to that value. This tells Rust we aren’t going to
 use the value, so Rust won’t warn us about an unused variable.
 
@@ -254,5 +256,4 @@ There’s more about patterns and matching that we’ll cover in [Chapter
 is a bit wordy.
 
 [tuples]: ch03-02-data-types.html#the-tuple-type
-
 [ch19-00-patterns]: ch19-00-patterns.html

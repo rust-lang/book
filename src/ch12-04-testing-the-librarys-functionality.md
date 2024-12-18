@@ -1,7 +1,7 @@
 ## Developing the Library’s Functionality with Test-Driven Development
 
-Now that we’ve extracted the logic into *src/lib.rs* and left the argument
-collecting and error handling in *src/main.rs*, it’s much easier to write tests
+Now that we’ve extracted the logic into _src/lib.rs_ and left the argument
+collecting and error handling in _src/main.rs_, it’s much easier to write tests
 for the core functionality of our code. We can call functions directly with
 various arguments and check return values without having to call our binary
 from the command line.
@@ -28,8 +28,8 @@ lines that match the query. We’ll add this functionality in a function called
 ### Writing a Failing Test
 
 Because we don’t need them anymore, let’s remove the `println!` statements from
-*src/lib.rs* and *src/main.rs* that we used to check the program’s behavior.
-Then, in *src/lib.rs*, we’ll add a `tests` module with a test function, as we
+_src/lib.rs_ and _src/main.rs_ that we used to check the program’s behavior.
+Then, in _src/lib.rs_, we’ll add a `tests` module with a test function, as we
 did in [Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies
 the behavior we want the `search` function to have: it will take a query and
 the text to search, and it will return only the lines from the text that
@@ -75,7 +75,7 @@ argument `query`).
 
 In other words, we tell Rust that the data returned by the `search` function
 will live as long as the data passed into the `search` function in the
-`contents` argument. This is important! The data referenced *by* a slice needs
+`contents` argument. This is important! The data referenced _by_ a slice needs
 to be valid for the reference to be valid; if the compiler assumes we’re making
 string slices of `query` rather than `contents`, it will do its safety checking
 incorrectly.
@@ -205,20 +205,20 @@ will print each line returned from `search`:
 We’re still using a `for` loop to return each line from `search` and print it.
 
 Now the entire program should work! Let’s try it out, first with a word that
-should return exactly one line from the Emily Dickinson poem: *frog*.
+should return exactly one line from the Emily Dickinson poem: _frog_.
 
 ```console
 {{#include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/output.txt}}
 ```
 
-Cool! Now let’s try a word that will match multiple lines, like *body*:
+Cool! Now let’s try a word that will match multiple lines, like _body_:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-03-multiple-matches/output.txt}}
 ```
 
 And finally, let’s make sure that we don’t get any lines when we search for a
-word that isn’t anywhere in the poem, such as *monomorphization*:
+word that isn’t anywhere in the poem, such as _monomorphization_:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-04-no-matches/output.txt}}
@@ -232,8 +232,7 @@ To round out this project, we’ll briefly demonstrate how to work with
 environment variables and how to print to standard error, both of which are
 useful when you’re writing command line programs.
 
-[validating-references-with-lifetimes]:
-ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
+[validating-references-with-lifetimes]: ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 [ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function
 [ch10-lifetimes]: ch10-03-lifetime-syntax.html
 [ch3-iter]: ch03-05-control-flow.html#looping-through-a-collection-with-for

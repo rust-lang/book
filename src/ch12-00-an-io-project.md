@@ -29,11 +29,11 @@ background knowledge you need to understand a real-world project such as
 
 Our `grep` project will combine a number of concepts you’ve learned so far:
 
-* Organizing code ([Chapter 7][ch7]<!-- ignore -->)
-* Using vectors and strings ([Chapter 8][ch8]<!-- ignore -->)
-* Handling errors ([Chapter 9][ch9]<!-- ignore -->)
-* Using traits and lifetimes where appropriate ([Chapter 10][ch10]<!-- ignore -->)
-* Writing tests ([Chapter 11][ch11]<!-- ignore -->)
+- Organizing code ([Chapter 7][ch7]<!-- ignore -->)
+- Using vectors and strings ([Chapter 8][ch8]<!-- ignore -->)
+- Handling errors ([Chapter 9][ch9]<!-- ignore -->)
+- Using traits and lifetimes where appropriate ([Chapter 10][ch10]<!-- ignore -->)
+- Writing tests ([Chapter 11][ch11]<!-- ignore -->)
 
 We’ll also briefly introduce closures, iterators, and trait objects, which
 [Chapter 13][ch13]<!-- ignore --> and [Chapter 18][ch18]<!-- ignore --> will

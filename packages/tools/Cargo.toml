@@ -36,6 +36,11 @@ path = "src/bin/remove_links.rs"
 name = "remove_markup"
 path = "src/bin/remove_markup.rs"
 
+[[bin]]
+name = "cleanup_blockquotes"
+path = "src/bin/cleanup_blockquotes.rs"
+
+
 [dependencies]
 walkdir = { workspace = true }
 docopt = { workspace = true }

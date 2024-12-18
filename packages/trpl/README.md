@@ -5,7 +5,7 @@
 This repository is the home of the `trpl` crate used in _The Rust Programming
 Language_ book materials.
 
-This crate mostly just re-exports items from *other* crates. It exists for two
+This crate mostly just re-exports items from _other_ crates. It exists for two
 main reasons:
 
 1. So that as you read along in _The Rust Programming Language_, you can add

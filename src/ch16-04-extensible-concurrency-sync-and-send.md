@@ -1,6 +1,6 @@
 ## Extensible Concurrency with the `Sync` and `Send` Traits
 
-Interestingly, the Rust language has *very* few concurrency features. Almost
+Interestingly, the Rust language has _very_ few concurrency features. Almost
 every concurrency feature we’ve talked about so far in this chapter has been
 part of the standard library, not the language. Your options for handling
 concurrency are not limited to the language or the standard library; you can
@@ -82,6 +82,5 @@ run on multiple threads without the kinds of hard-to-track-down bugs common in
 other languages. Concurrent programming is no longer a concept to be afraid of:
 go forth and make your programs concurrent, fearlessly!
 
-[sharing-a-mutext-between-multiple-threads]:
-ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads
+[sharing-a-mutext-between-multiple-threads]: ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads
 [nomicon]: ../nomicon/index.html

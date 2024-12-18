@@ -10,23 +10,23 @@ Rust supports it.
 
 ### Objects Contain Data and Behavior
 
-The book *Design Patterns: Elements of Reusable Object-Oriented Software* by
+The book _Design Patterns: Elements of Reusable Object-Oriented Software_ by
 Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides (Addison-Wesley
-Professional, 1994), colloquially referred to as *The Gang of Four* book, is a
+Professional, 1994), colloquially referred to as _The Gang of Four_ book, is a
 catalog of object-oriented design patterns. It defines OOP this way:
 
-> Object-oriented programs are made up of objects. An *object* packages both
+> Object-oriented programs are made up of objects. An _object_ packages both
 > data and the procedures that operate on that data. The procedures are
-> typically called *methods* or *operations*.
+> typically called _methods_ or _operations_.
 
 Using this definition, Rust is object-oriented: structs and enums have data,
 and `impl` blocks provide methods on structs and enums. Even though structs and
-enums with methods aren’t *called* objects, they provide the same
+enums with methods aren’t _called_ objects, they provide the same
 functionality, according to the Gang of Four’s definition of objects.
 
 ### Encapsulation that Hides Implementation Details
 
-Another aspect commonly associated with OOP is the idea of *encapsulation*,
+Another aspect commonly associated with OOP is the idea of _encapsulation_,
 which means that the implementation details of an object aren’t accessible to
 code using that object. Therefore, the only way to interact with an object is
 through its public API; code using the object shouldn’t be able to reach into
@@ -94,7 +94,7 @@ not for different parts of code enables encapsulation of implementation details.
 
 ### Inheritance as a Type System and as Code Sharing
 
-*Inheritance* is a mechanism whereby an object can inherit elements from
+_Inheritance_ is a mechanism whereby an object can inherit elements from
 another object’s definition, thus gaining the parent object’s data and behavior
 without you having to define them again.
 
@@ -121,7 +121,7 @@ implementation of a method inherited from a parent class.
 
 The other reason to use inheritance relates to the type system: to enable a
 child type to be used in the same places as the parent type. This is also
-called *polymorphism*, which means that you can substitute multiple objects for
+called _polymorphism_, which means that you can substitute multiple objects for
 each other at runtime if they share certain characteristics.
 
 > ### Polymorphism
@@ -132,7 +132,7 @@ each other at runtime if they share certain characteristics.
 >
 > Rust instead uses generics to abstract over different possible types and
 > trait bounds to impose constraints on what those types must provide. This is
-> sometimes called *bounded parametric polymorphism*.
+> sometimes called _bounded parametric polymorphism_.
 
 Inheritance has recently fallen out of favor as a programming design solution
 in many programming languages because it’s often at risk of sharing more code

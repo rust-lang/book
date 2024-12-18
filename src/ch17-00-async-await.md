@@ -27,10 +27,10 @@ happen while the network operation is still ongoing.
 
 > Note: The video export is the kind of operation which is often described as
 > “CPU-bound” or “compute-bound”. It’s limited by the speed of the computer’s
-> ability to process data within the *CPU* or *GPU*, and how much of that speed
+> ability to process data within the _CPU_ or _GPU_, and how much of that speed
 > it can use. The video download is the kind of operation which is often
 > described as “IO-bound,” because it’s limited by the speed of the computer’s
-> *input and output*. It can only go as fast as the data can be sent across the
+> _input and output_. It can only go as fast as the data can be sent across the
 > network.
 
 In both of these examples, the operating system’s invisible interrupts provide a
@@ -44,14 +44,14 @@ For example, if we’re building a tool to manage file downloads, we should be
 able to write our program in such a way that starting one download does not lock
 up the UI, and users should be able to start multiple downloads at the same
 time. Many operating system APIs for interacting with the network are
-*blocking*, though. That is, these APIs block the program’s progress until the
+_blocking_, though. That is, these APIs block the program’s progress until the
 data that they are processing is completely ready.
 
-> Note: This is how *most* function calls work, if you think about it! However,
+> Note: This is how _most_ function calls work, if you think about it! However,
 > we normally reserve the term “blocking” for function calls which interact with
 > files, the network, or other resources on the computer, because those are the
 > places where an individual program would benefit from the operation being
-> *non*-blocking.
+> _non_-blocking.
 
 We could avoid blocking our main thread by spawning a dedicated thread to
 download each file. However, we would eventually find that the overhead of those
@@ -79,7 +79,7 @@ could assign a single individual multiple tasks, or we could assign one task per
 team member, or we could do a mix of both approaches.
 
 When an individual works on several different tasks before any of them is
-complete, this is *concurrency*. Maybe you have two different projects checked
+complete, this is _concurrency_. Maybe you have two different projects checked
 out on your computer, and when you get bored or stuck on one project, you switch
 to the other. You’re just one person, so you can’t make progress on both tasks
 at the exact same time—but you can multi-task, making progress on multiple
@@ -94,7 +94,7 @@ tasks by switching between them.
 </figure>
 
 When you agree to split up a group of tasks between the people on the team, with
-each person taking one task and working on it alone, this is *parallelism*. Each
+each person taking one task and working on it alone, this is _parallelism_. Each
 person on the team can make progress at the exact same time.
 
 <figure>
@@ -106,10 +106,10 @@ person on the team can make progress at the exact same time.
 </figure>
 
 With both of these situations, you might have to coordinate between different
-tasks. Maybe you *thought* the task that one person was working on was totally
+tasks. Maybe you _thought_ the task that one person was working on was totally
 independent from everyone else’s work, but it actually needs something finished
 by another person on the team. Some of the work could be done in parallel, but
-some of it was actually *serial*: it could only happen in a series, one thing
+some of it was actually _serial_: it could only happen in a series, one thing
 after the other, as in Figure 17-3.
 
 <figure>
@@ -146,8 +146,8 @@ under the hood.
 Now, let’s dive into how async programming in Rust actually works! In the rest
 of this chapter, we will:
 
-* see how to use Rust’s `async` and `await` syntax
-* explore how to use the async model to solve some of the same challenges we
+- see how to use Rust’s `async` and `await` syntax
+- explore how to use the async model to solve some of the same challenges we
   looked at in Chapter 16
-* look at how multithreading and async provide complementary solutions, which
+- look at how multithreading and async provide complementary solutions, which
   you can even use together in many cases

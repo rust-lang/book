@@ -52,12 +52,8 @@ jobs:
     - name: Run `tools` package tests
       run: |
         cargo test
-    - name: Run `mdbook-trpl-note` package tests
-      working-directory: packages/mdbook-trpl-note
-      run: |
-        cargo test
-    - name: Run `mdbook-trpl-listing` package tests
-      working-directory: packages/mdbook-trpl-listing
+    - name: Run `mdbook-trpl` package tests
+      working-directory: packages/mdbook-trpl
       run: |
         cargo test
   lint:
@@ -77,10 +73,8 @@ jobs:
         mkdir bin
         curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> "${GITHUB_PATH}"
-    - name: Install mdbook-trpl-note
-      run: cargo install --path packages/mdbook-trpl-note
-    - name: Install mdbook-trpl-listing
-      run: cargo install --path packages/mdbook-trpl-listing
+    - name: Install mdbook-trpl binaries
+      run: cargo install --path packages/mdbook-trpl
     - name: Install aspell
       run: sudo apt-get install aspell
     - name: Install shellcheck

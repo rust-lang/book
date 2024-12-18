@@ -32,7 +32,7 @@ match x {
 The patterns in this `match` expression are the `None` and `Some(i)` on the
 left of each arrow.
 
-One requirement for `match` expressions is that they need to be *exhaustive* in
+One requirement for `match` expressions is that they need to be _exhaustive_ in
 the sense that all possibilities for the value in the `match` expression must
 be accounted for. One way to ensure you’ve covered every possibility is to have
 a catchall pattern for the last arm: for example, a variable name matching any
@@ -82,13 +82,13 @@ This conditional structure lets us support complex requirements. With the
 hardcoded values we have here, this example will print `Using purple as the
 background color`.
 
-You can see that `if let` can also introduce shadowed variables in the same way
-that `match` arms can: the line `if let Ok(age) = age` introduces a new
-shadowed `age` variable that contains the value inside the `Ok` variant. This
-means we need to place the `if age > 30` condition within that block: we can’t
-combine these two conditions into `if let Ok(age) = age && age > 30`. The
-shadowed `age` we want to compare to 30 isn’t valid until the new scope starts
-with the curly bracket.
+You can see that `if let` can also introduce new variables which shadow existing
+variables in the same way that `match` arms can: the line `if let Ok(age) = age`
+introduces a new `age` variable that contains the value inside the `Ok` variant,
+shadowing the existing `age` variable. This means we need to place the `if age >
+30` condition within that block: we can’t combine these two conditions into `if
+let Ok(age) = age && age > 30`. The new `age` we want to compare to 30 isn’t
+valid until the new scope starts with the curly bracket.
 
 The downside of using `if let` expressions is that the compiler doesn’t check
 for exhaustiveness, whereas with `match` expressions it does. If we omitted the
@@ -251,5 +251,4 @@ work the same in every place we can use them. In some places, the patterns must
 be irrefutable; in other circumstances, they can be refutable. We’ll discuss
 these two concepts next.
 
-[ignoring-values-in-a-pattern]:
-ch19-03-pattern-syntax.html#ignoring-values-in-a-pattern
+[ignoring-values-in-a-pattern]: ch19-03-pattern-syntax.html#ignoring-values-in-a-pattern

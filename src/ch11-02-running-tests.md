@@ -13,7 +13,11 @@ binary. To separate these two types of arguments, you list the arguments that
 go to `cargo test` followed by the separator `--` and then the ones that go to
 the test binary. Running `cargo test --help` displays the options you can use
 with `cargo test`, and running `cargo test -- --help` displays the options you
-can use after the separator.
+can use after the separator. Those options are also documented in [the “Tests”
+section][tests] of the [the rustc book][rustc].
+
+[tests]: https://doc.rust-lang.org/rustc/tests/index.html
+[rustc]: https://doc.rust-lang.org/rustc/index.html
 
 ### Running Tests in Parallel or Consecutively
 
@@ -24,7 +28,7 @@ on each other or on any shared state, including a shared environment, such as
 the current working directory or environment variables.
 
 For example, say each of your tests runs some code that creates a file on disk
-named *test-output.txt* and writes some data to that file. Then each test reads
+named _test-output.txt_ and writes some data to that file. Then each test reads
 the data in that file and asserts that the file contains a particular value,
 which is different in each test. Because the tests run at the same time, one
 test might overwrite the file in the time between another test writing and

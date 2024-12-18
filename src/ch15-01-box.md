@@ -1,6 +1,6 @@
 ## Using `Box<T>` to Point to Data on the Heap
 
-The most straightforward smart pointer is a *box*, whose type is written
+The most straightforward smart pointer is a _box_, whose type is written
 `Box<T>`. Boxes allow you to store data on the heap rather than the stack. What
 remains on the stack is the pointer to the heap data. Refer to Chapter 4 to
 review the difference between the stack and the heap.
@@ -9,11 +9,11 @@ Boxes don’t have performance overhead, other than storing their data on the
 heap instead of on the stack. But they don’t have many extra capabilities
 either. You’ll use them most often in these situations:
 
-* When you have a type whose size can’t be known at compile time and you want
+- When you have a type whose size can’t be known at compile time and you want
   to use a value of that type in a context that requires an exact size
-* When you have a large amount of data and you want to transfer ownership but
+- When you have a large amount of data and you want to transfer ownership but
   ensure the data won’t be copied when you do so
-* When you want to own a value and you care only that it’s a type that
+- When you want to own a value and you care only that it’s a type that
   implements a particular trait rather than being of a specific type
 
 We’ll demonstrate the first situation in the [“Enabling Recursive Types with
@@ -23,7 +23,7 @@ time because the data is copied around on the stack. To improve performance in
 this situation, we can store the large amount of data on the heap in a box.
 Then, only the small amount of pointer data is copied around on the stack,
 while the data it references stays in one place on the heap. The third case is
-known as a *trait object*, and Chapter 18 devotes an entire section, [“Using
+known as a _trait object_, and Chapter 18 devotes an entire section, [“Using
 Trait Objects That Allow for Values of Different Types,”][trait-objects]<!--
 ignore --> just to that topic. So what you learn here you’ll apply again in
 Chapter 18!
@@ -59,14 +59,14 @@ wouldn’t be allowed to if we didn’t have boxes.
 
 ### Enabling Recursive Types with Boxes
 
-A value of *recursive type* can have another value of the same type as part of
+A value of _recursive type_ can have another value of the same type as part of
 itself. Recursive types pose an issue because at compile time Rust needs to
 know how much space a type takes up. However, the nesting of values of
 recursive types could theoretically continue infinitely, so Rust can’t know how
 much space the value needs. Because boxes have a known size, we can enable
 recursive types by inserting a box in the recursive type definition.
 
-As an example of a recursive type, let’s explore the *cons list*. This is a data
+As an example of a recursive type, let’s explore the _cons list_. This is a data
 type commonly found in functional programming languages. The cons list type
 we’ll define is straightforward except for the recursion; therefore, the
 concepts in the example we’ll work with will be useful any time you get into
@@ -74,7 +74,7 @@ more complex situations involving recursive types.
 
 #### More Information About the Cons List
 
-A *cons list* is a data structure that comes from the Lisp programming language
+A _cons list_ is a data structure that comes from the Lisp programming language
 and its dialects and is made up of nested pairs, and is the Lisp version of a
 linked list. Its name comes from the `cons` function (short for “construct
 function”) in Lisp that constructs a new pair from its two arguments. By
@@ -97,7 +97,7 @@ which is an invalid or absent value.
 
 The cons list isn’t a commonly used data structure in Rust. Most of the time
 when you have a list of items in Rust, `Vec<T>` is a better choice to use.
-Other, more complex recursive data types *are* useful in various situations,
+Other, more complex recursive data types _are_ useful in various situations,
 but by starting with the cons list in this chapter, we can explore how boxes
 let us define a recursive data type without much distraction.
 

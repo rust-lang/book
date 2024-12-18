@@ -1,11 +1,11 @@
 ## Traits: Defining Shared Behavior
 
-A *trait* defines the functionality a particular type has and can share with
+A _trait_ defines the functionality a particular type has and can share with
 other types. We can use traits to define shared behavior in an abstract way. We
-can use *trait bounds* to specify that a generic type can be any type that has
+can use _trait bounds_ to specify that a generic type can be any type that has
 certain behavior.
 
-> Note: Traits are similar to a feature often called *interfaces* in other
+> Note: Traits are similar to a feature often called _interfaces_ in other
 > languages, although with some differences.
 
 ### Defining a Trait
@@ -105,7 +105,7 @@ But we can’t implement external traits on external types. For example, we can�
 implement the `Display` trait on `Vec<T>` within our `aggregator` crate because
 `Display` and `Vec<T>` are both defined in the standard library and aren’t
 local to our `aggregator` crate. This restriction is part of a property called
-*coherence*, and more specifically the *orphan rule*, so named because the
+_coherence_, and more specifically the _orphan rule_, so named because the
 parent type is not present. This rule ensures that other people’s code can’t
 break your code and vice versa. Without the rule, two crates could implement
 the same trait for the same type, and Rust wouldn’t know which implementation
@@ -206,12 +206,13 @@ function with any other type, such as a `String` or an `i32`, won’t compile
 because those types don’t implement `Summary`.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="fixing-the-largest-function-with-trait-bounds"></a>
 
 #### Trait Bound Syntax
 
 The `impl Trait` syntax works for straightforward cases but is actually syntax
-sugar for a longer form known as a *trait bound*; it looks like this:
+sugar for a longer form known as a _trait bound_; it looks like this:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: &T) {
@@ -334,7 +335,7 @@ traits. For example, the type `Pair<T>` in Listing 10-15 always implements the
 is a type alias for the type of the `impl` block, which in this case is
 `Pair<T>`). But in the next `impl` block, `Pair<T>` only implements the
 `cmp_display` method if its inner type `T` implements the `PartialOrd` trait
-that enables comparison *and* the `Display` trait that enables printing.
+that enables comparison _and_ the `Display` trait that enables printing.
 
 <Listing number="10-15" file-name="src/lib.rs" caption="Conditionally implementing methods on a generic type depending on trait bounds">
 
@@ -346,7 +347,7 @@ that enables comparison *and* the `Display` trait that enables printing.
 
 We can also conditionally implement a trait for any type that implements
 another trait. Implementations of a trait on any type that satisfies the trait
-bounds are called *blanket implementations* and are used extensively in the
+bounds are called _blanket implementations_ and are used extensively in the
 Rust standard library. For example, the standard library implements the
 `ToString` trait on any type that implements the `Display` trait. The `impl`
 block in the standard library looks similar to this code:

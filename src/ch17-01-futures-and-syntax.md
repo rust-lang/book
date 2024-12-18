@@ -1,9 +1,9 @@
 ## Futures and the Async Syntax
 
-The key elements of asynchronous programming in Rust are *futures* and Rust’s
+The key elements of asynchronous programming in Rust are _futures_ and Rust’s
 `async` and `await` keywords.
 
-A *future* is a value which may not be ready now, but will become ready at some
+A _future_ is a value which may not be ready now, but will become ready at some
 point in the future. (This same concept shows up in many languages, sometimes
 under other names such as “task” or “promise”.) Rust provides a `Future` trait
 as a building block so different async operations can be implemented with
@@ -14,10 +14,10 @@ made and what "ready" means.
 
 The `async` keyword can be applied to blocks and functions to specify that they
 can be interrupted and resumed. Within an async block or async function, you can
-use the `await` keyword to wait for a future to become ready, called *awaiting a
-future*. Each place you await a future within an async block or function is a
+use the `await` keyword to wait for a future to become ready, called _awaiting a
+future_. Each place you await a future within an async block or function is a
 place that async block or function may get paused and resumed. The process of
-checking with a future to see if its value is available yet is called *polling*.
+checking with a future to see if its value is available yet is called _polling_.
 
 Some other languages also use `async` and `await` keywords for async
 programming. If you’re familiar with those languages, you may notice some
@@ -44,8 +44,8 @@ everything you need to know as we go.
 To keep this chapter focused on learning async, rather than juggling parts of
 the ecosystem, we have created the `trpl` crate (`trpl` is short for “The Rust
 Programming Language”). It re-exports all the types, traits, and functions
-you’ll need, primarily from the [`futures`][futures-crate] and [`tokio`][tokio]
-crates.
+you’ll need, primarily from the [`futures`][futures-crate]<!-- ignore --> and
+[`tokio`][tokio]<!-- ignore --> crates.
 
 - The `futures` crate is an official home for Rust experimentation for async
   code, and is actually where the `Future` type was originally designed.
@@ -57,9 +57,10 @@ crates.
 
 In some cases, `trpl` also renames or wraps the original APIs to let us stay
 focused on the details relevant to this chapter. If you want to understand what
-the crate does, we encourage you to check out [its source code][crate-source].
-You’ll be able to see what crate each re-export comes from, and we’ve left
-extensive comments explaining what the crate does.
+the crate does, we encourage you to check out [its source
+code][crate-source]<!-- ignore -->. You’ll be able to see what crate each
+re-export comes from, and we’ve left extensive comments explaining what the
+crate does.
 
 Create a new binary project named `hello-async` and add the `trpl` crate as a
 dependency:
@@ -95,13 +96,14 @@ we need to wait for the server to send back the first part of its response,
 which will include HTTP headers, cookies, and so on. That part of the response
 can be delivered separately from the body of the request. Especially if the
 body is very large, it can take some time for it all to arrive. Thus, we have
-to wait for the *entirety* of the response to arrive, so the `text` method is
+to wait for the _entirety_ of the response to arrive, so the `text` method is
 also async.
 
 We have to explicitly await both of these futures, because futures in Rust are
-*lazy*: they don’t do anything until you ask them to with `await`. (In fact,
+_lazy_: they don’t do anything until you ask them to with `await`. (In fact,
 Rust will show a compiler warning if you don’t use a future.) This should
-remind you of our discussion of iterators [back in Chapter 13][iterators-lazy].
+remind you of our discussion of iterators [back in Chapter 13][iterators-lazy]<!--
+ignore -->.
 Iterators do nothing unless you call their `next` method—whether directly, or
 using `for` loops or methods such as `map` which use `next` under the hood. With
 futures, the same basic idea applies: they do nothing unless you explicitly ask
@@ -127,7 +129,7 @@ here, but `map` is more idiomatic.) In the body of the function we supply to
 a `String`. When all is said and done, we have an `Option<String>`.
 
 Notice that Rust’s `await` keyword goes after the expression you’re awaiting,
-not before it. That is, it’s a *postfix keyword*. This may be different from
+not before it. That is, it’s a _postfix keyword_. This may be different from
 what you might be used to if you have used async in other languages. Rust chose
 this because it makes chains of methods much nicer to work with. As a result, we
 can change the body of `page_url_for` to chain the `trpl::get` and `text`
@@ -152,7 +154,7 @@ body is an async block. An async function’s return type is the type of the
 anonymous data type the compiler creates for that async block.
 
 Thus, writing `async fn` is equivalent to writing a function which returns a
-*future* of the return type. When the compiler sees a function definition such
+_future_ of the return type. When the compiler sees a function definition such
 as the `async fn page_title` in Listing 17-1, it’s equivalent to a non-async
 function defined like this:
 
@@ -173,26 +175,26 @@ fn page_title(url: &str) -> impl Future<Output = Option<String>> + '_ {
 
 Let’s walk through each part of the transformed version:
 
-* It uses the `impl Trait` syntax we discussed back in the [“Traits as
-  Parameters”][impl-trait] section in Chapter 10.
-* The returned trait is a `Future`, with an associated type of `Output`. Notice
+- It uses the `impl Trait` syntax we discussed back in the [“Traits as
+  Parameters”][impl-trait]<!-- ignore --> section in Chapter 10.
+- The returned trait is a `Future`, with an associated type of `Output`. Notice
   that the `Output` type is `Option<String>`, which is the same as the the
   original return type from the `async fn` version of `page_title`.
-* All of the code called in the body of the original function is wrapped in an
+- All of the code called in the body of the original function is wrapped in an
   `async move` block. Remember that blocks are expressions. This whole block is
   the expression returned from the function.
-* This async block produces a value with the type `Option<String>`, as described
+- This async block produces a value with the type `Option<String>`, as described
   above. That value matches the `Output` type in the return type. This is just
   like other blocks you have seen.
-* The new function body is an `async move` block because of how it uses the
+- The new function body is an `async move` block because of how it uses the
   `url` parameter. (We’ll talk about `async` vs. `async move` much more later
   in the chapter.)
-* The new version of the function has a kind of lifetime we haven’t seen before
+- The new version of the function has a kind of lifetime we haven’t seen before
   in the output type: `'_`. Because the function returns a `Future` which refers
   to a reference—in this case, the reference from the `url` parameter—we need to
   tell Rust that we mean for that reference to be included. We don’t have to
   name the lifetime here, because Rust is smart enough to know there is only one
-  reference which could be involved, but we *do* have to be explicit that the
+  reference which could be involved, but we _do_ have to be explicit that the
   resulting `Future` is bound by that lifetime.
 
 Now we can call `page_title` in `main`. To start, we’ll just get the title
@@ -228,10 +230,10 @@ error[E0752]: `main` function is not allowed to be `async`
   | ^^^^^^^^^^^^^^^ `main` function is not allowed to be `async`
 ```
 
-The reason `main` can’t be marked `async` is that async code needs a *runtime*:
+The reason `main` can’t be marked `async` is that async code needs a _runtime_:
 a Rust crate which manages the details of executing asynchronous code. A
-program’s `main` function can *initialize* a runtime, but it’s not a runtime
-*itself*. (We’ll see more about why this is a bit later.) Every Rust program
+program’s `main` function can _initialize_ a runtime, but it’s not a runtime
+_itself_. (We’ll see more about why this is a bit later.) Every Rust program
 that executes async code has at least one place where it sets up a runtime and
 executes the futures.
 
@@ -288,7 +290,7 @@ Phew: we finally have some working async code! This now compiles, and we can run
 it. Before we add code to race two sites against each other, let’s briefly turn
 our attention back to how futures work.
 
-Each *await point*—that is, every place where the code uses the `await`
+Each _await point_—that is, every place where the code uses the `await`
 keyword—represents a place where control gets handed back to the runtime. To
 make that work, Rust needs to keep track of the state involved in the async
 block, so that the runtime can kick off some other work and then come back when
@@ -309,7 +311,7 @@ the compiler also handles checking those for us, and has good error messages.
 We’ll work through a few of those later in the chapter!
 
 Ultimately, something has to execute that state machine. That something is a
-runtime. (This is why you may sometimes come across references to *executors*
+runtime. (This is why you may sometimes come across references to _executors_
 when looking into runtimes: an executor is the part of a runtime responsible for
 executing the async code.)
 
@@ -320,7 +322,7 @@ but `main` is the starting point for the program! Instead, we call the
 `trpl::run` function in `main`, which sets up a runtime and runs the future
 returned by the `async` block until it returns `Ready`.
 
-> Note: some runtimes provide macros to make it so you *can* write an async main
+> Note: some runtimes provide macros to make it so you _can_ write an async main
 > function. Those macros rewrite `async fn main() { ... }` to be a normal `fn
 > main` which does the same thing we did by hand in Listing 17-5: call a
 > function which runs a future to completion the way `trpl::run` does.
@@ -367,7 +369,7 @@ enum Either<A, B> {
 
 The `race` function returns `Left` if the first argument finishes first, with
 that future’s output, and `Right` with the second future argument’s output if
-*that* one finishes first. This matches the order the arguments appear when
+_that_ one finishes first. This matches the order the arguments appear when
 calling the function: the first argument is to the left of the second argument.
 
 We also update `page_title` to return the same URL passed in. That way, if
@@ -384,7 +386,9 @@ dig into even more of the things we can do with async.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
 [iterators-lazy]: ch13-02-iterators.html
+
 <!-- TODO: map source link version to version of Rust? -->
+
 [crate-source]: https://github.com/rust-lang/book/tree/main/packages/trpl
 [futures-crate]: https://crates.io/crates/futures
 [tokio]: https://tokio.rs
