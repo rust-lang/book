@@ -400,8 +400,7 @@ value.
 </Listing>
 
 Static variables are similar to constants, which we discussed in the
-[“Differences Between Variables and
-Constants”][differences-between-variables-and-constants]<!-- ignore --> section
+[“Constants”][differences-between-variables-and-constants]<!-- ignore --> section
 in Chapter 3. The names of static variables are in `SCREAMING_SNAKE_CASE` by
 convention. Static variables can only store references with the `'static`
 lifetime, which means the Rust compiler can figure out the lifetime and we
