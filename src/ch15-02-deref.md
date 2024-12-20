@@ -260,6 +260,25 @@ match the parameter’s type. The number of times that `Deref::deref` needs to b
 inserted is resolved at compile time, so there is no runtime penalty for taking
 advantage of deref coercion!
 
+### Calling methods on smart pointers
+
+If your smart pointer implements `Deref` (or if it implements another trait,
+called `Receiver`) then methods on the referent can also receive their `self`
+type using your smart pointer.
+
+<Listing number="15-30" file-name="src/main.rs" caption="Calling `hello` on a reference to a `MyBox<Foo>` value, which also works because of deref coercion">
+
+```rust
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-30/src/main.rs:here}}
+```
+
+</Listing>
+
+You should normally implement `Deref` rather than directly implementing
+`Receiver`. You'd implement `Receiver` only in cases where it's not safe to
+create a reference to your smart pointer's referent, often in cases involving
+cross-language interoperability.
+
 ### How Deref Coercion Interacts with Mutability
 
 Similar to how you use the `Deref` trait to override the `*` operator on
