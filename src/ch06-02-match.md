@@ -191,7 +191,7 @@ pattern we forgot! Matches in Rust are _exhaustive_: we must exhaust every last
 possibility in order for the code to be valid. Especially in the case of
 `Option<T>`, when Rust prevents us from forgetting to explicitly handle the
 `None` case, it protects us from assuming that we have a value when we might
-have null, thus making the billion-dollar mistake discussed earlier impossible.
+have null, thus avoiding a major trap set by the billion-dollar mistake discussed earlier.
 
 ### Catch-all Patterns and the `_` Placeholder
 
