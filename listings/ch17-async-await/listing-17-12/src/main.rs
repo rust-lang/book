@@ -23,7 +23,7 @@ fn main() {
 
         let rx_fut = async {
             while let Some(value) = rx.recv().await {
-                eprintln!("received '{value}'");
+                println!("received '{value}'");
             }
         };
 
