@@ -13,7 +13,7 @@ impl Config {
     pub fn build(
         mut args: impl Iterator<Item = String>,
     ) -> Result<Config, &'static str> {
-        args.next();
+        let _ = args.next();
 
         let query = match args.next() {
             Some(arg) => arg,
