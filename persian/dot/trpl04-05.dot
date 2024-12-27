@@ -1,0 +1,38 @@
+digraph {
+   rankdir = LR;
+   overlap = false;
+   dpi = 300.0;
+   node [shape = "plaintext";];
+   
+   s [label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+      <TR><TD COLSPAN="2" SIDES="B">s</TD></TR>
+      <TR><TD>name</TD><TD>value</TD></TR>
+      <TR><TD>ptr</TD><TD PORT="pointer"></TD></TR>
+      <TR><TD>len</TD><TD>4</TD></TR>
+      <TR><TD>capacity</TD><TD>4</TD></TR>
+      </TABLE>>;];
+   
+   subgraph cluster_heap {
+      peripheries = 0;
+      rank = "same";
+      
+      hello [label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="gray">
+         <TR><TD>index</TD><TD>value</TD></TR>
+         <TR><TD PORT="pointee">0</TD><TD>h</TD></TR>
+         <TR><TD>1</TD><TD>e</TD></TR>
+         <TR><TD>2</TD><TD>l</TD></TR>
+         <TR><TD>3</TD><TD>l</TD></TR>
+         <TR><TD>4</TD><TD>o</TD></TR>
+         </TABLE>>;];
+      
+      ahoy [label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+         <TR><TD>index</TD><TD>value</TD></TR>
+         <TR><TD PORT="pointee">0</TD><TD>a</TD></TR>
+         <TR><TD>1</TD><TD>h</TD></TR>
+         <TR><TD>2</TD><TD>o</TD></TR>
+         <TR><TD>3</TD><TD>y</TD></TR>
+         </TABLE>>;];
+   }
+   
+   s -> ahoy [tailport = "pointer:c"; headport = "pointee"; tailclip = false;];
+}

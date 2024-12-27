@@ -1,0 +1,10 @@
+book/
+*~
+.idea
+.DS_Store
+target
+tmp
+
+.nova
+.vscode
+.zed
