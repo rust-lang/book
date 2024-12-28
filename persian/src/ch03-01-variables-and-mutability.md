@@ -8,6 +8,7 @@
 
 سپس، در دایرکتوری جدید _variables_ خود، فایل _src/main.rs_ را باز کنید و کد آن را با کد زیر جایگزین کنید، که هنوز کامپایل نخواهد شد:
 
+<span class="filename">تام فایل: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
@@ -74,6 +75,8 @@ const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 ### Shadowing
 
 همان‌طور که در آموزش بازی حدس زدن در [فصل ۲][comparing-the-guess-to-the-secret-number]<!-- ignore --> دیدید، شما می‌توانید یک متغیر جدید با همان نام متغیر قبلی تعریف کنید. Rustaceanها می‌گویند که متغیر اول توسط متغیر دوم _سایه انداخته شده است_، به این معنا که متغیر دوم چیزی است که کامپایلر وقتی از نام متغیر استفاده می‌کنید می‌بیند. در واقع، متغیر دوم متغیر اول را تحت‌الشعاع قرار می‌دهد، استفاده‌های مربوط به نام متغیر را به خود اختصاص می‌دهد تا زمانی که یا خودش تحت‌الشعاع قرار بگیرد یا دامنه تمام شود. ما می‌توانیم یک متغیر را با استفاده از همان نام متغیر و تکرار استفاده از کلیدواژه `let` به شرح زیر سایه‌اندازی کنیم:
+
+<span class="filename">نام فایل: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/src/main.rs}}
