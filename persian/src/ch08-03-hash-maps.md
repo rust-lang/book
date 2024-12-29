@@ -1,30 +1,29 @@
-## Storing Keys with Associated Values in Hash Maps
+<div dir="rtl">
 
-The last of our common collections is the _hash map_. The type `HashMap<K, V>`
-stores a mapping of keys of type `K` to values of type `V` using a _hashing
-function_, which determines how it places these keys and values into memory.
-Many programming languages support this kind of data structure, but they often
-use a different name, such as _hash_, _map_, _object_, _hash table_,
-_dictionary_, or _associative array_, just to name a few.
+## ذخیره کلیدها با مقادیر مرتبط در هش مپ‌ها
 
-Hash maps are useful when you want to look up data not by using an index, as
-you can with vectors, but by using a key that can be of any type. For example,
-in a game, you could keep track of each team’s score in a hash map in which
-each key is a team’s name and the values are each team’s score. Given a team
-name, you can retrieve its score.
+آخرین مورد از مجموعه‌های رایج ما، _هش مپ_ است. نوع `HashMap<K, V>` یک نگاشت از کلیدهایی
+با نوع `K` به مقادیری با نوع `V` را با استفاده از یک _تابع هش_ ذخیره می‌کند، که تعیین می‌کند
+چگونه این کلیدها و مقادیر در حافظه قرار بگیرند. بسیاری از زبان‌های برنامه‌نویسی از این نوع
+ساختار داده پشتیبانی می‌کنند، اما اغلب از نام‌های متفاوتی مانند _هش_، _مپ_، _شیء_،
+_جدول هش_، _دایرکتوری_، یا _آرایه ارتباطی_ برای اشاره به آن استفاده می‌کنند.
 
-We’ll go over the basic API of hash maps in this section, but many more goodies
-are hiding in the functions defined on `HashMap<K, V>` by the standard library.
-As always, check the standard library documentation for more information.
+هش مپ‌ها زمانی مفید هستند که بخواهید داده‌ها را نه با استفاده از یک اندیس، مانند بردارها،
+بلکه با استفاده از یک کلید که می‌تواند هر نوعی باشد، جستجو کنید. برای مثال، در یک بازی،
+می‌توانید امتیاز هر تیم را در یک هش مپ ذخیره کنید که هر کلید نام یک تیم و هر مقدار
+امتیاز آن تیم باشد. با داشتن نام یک تیم، می‌توانید امتیاز آن را بازیابی کنید.
 
-### Creating a New Hash Map
+در این بخش، به API اصلی هش مپ‌ها می‌پردازیم، اما امکانات بیشتری در توابع تعریف شده
+روی `HashMap<K, V>` در کتابخانه استاندارد وجود دارد. مانند همیشه، مستندات کتابخانه
+استاندارد را برای اطلاعات بیشتر بررسی کنید.
 
-One way to create an empty hash map is to use `new` and to add elements with
-`insert`. In Listing 8-20, we’re keeping track of the scores of two teams whose
-names are _Blue_ and _Yellow_. The Blue team starts with 10 points, and the
-Yellow team starts with 50.
+### ایجاد یک هش مپ جدید
 
-<Listing number="8-20" caption="Creating a new hash map and inserting some keys and values">
+یکی از راه‌های ایجاد یک هش مپ خالی استفاده از `new` و افزودن عناصر با `insert` است.
+در لیست ۸-۲۰، ما امتیازات دو تیم به نام‌های _Blue_ و _Yellow_ را پیگیری می‌کنیم. تیم
+آبی با ۱۰ امتیاز و تیم زرد با ۵۰ امتیاز شروع می‌کنند.
+
+<Listing number="8-20" caption="ایجاد یک هش مپ جدید و درج تعدادی کلید و مقدار">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-20/src/main.rs:here}}
@@ -32,23 +31,21 @@ Yellow team starts with 50.
 
 </Listing>
 
-Note that we need to first `use` the `HashMap` from the collections portion of
-the standard library. Of our three common collections, this one is the least
-often used, so it’s not included in the features brought into scope
-automatically in the prelude. Hash maps also have less support from the
-standard library; there’s no built-in macro to construct them, for example.
+توجه داشته باشید که ابتدا باید `HashMap` را از بخش مجموعه‌های کتابخانه استاندارد `use`
+کنیم. از میان سه مجموعه رایج ما، این یکی کمتر مورد استفاده قرار می‌گیرد، بنابراین به طور
+پیش‌فرض در محدوده وارد نمی‌شود. همچنین، هش مپ‌ها از حمایت کمتری از کتابخانه استاندارد
+برخوردارند؛ برای مثال، هیچ ماکروی داخلی برای ساخت آن‌ها وجود ندارد.
 
-Just like vectors, hash maps store their data on the heap. This `HashMap` has
-keys of type `String` and values of type `i32`. Like vectors, hash maps are
-homogeneous: all of the keys must have the same type, and all of the values
-must have the same type.
+همانند بردارها، هش مپ‌ها داده‌های خود را روی heap ذخیره می‌کنند. این `HashMap` دارای
+کلیدهایی از نوع `String` و مقادیری از نوع `i32` است. مانند بردارها، هش مپ‌ها همگن هستند:
+تمام کلیدها باید از یک نوع باشند و تمام مقادیر نیز باید از یک نوع باشند.
 
-### Accessing Values in a Hash Map
+### دسترسی به مقادیر در یک هش مپ
 
-We can get a value out of the hash map by providing its key to the `get`
-method, as shown in Listing 8-21.
+می‌توانیم یک مقدار را با ارائه کلید آن به متد `get` از هش مپ دریافت کنیم، همانطور که
+در لیست ۸-۲۱ نشان داده شده است.
 
-<Listing number="8-21" caption="Accessing the score for the Blue team stored in the hash map">
+<Listing number="8-21" caption="دسترسی به امتیاز تیم Blue ذخیره شده در هش مپ">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
@@ -56,34 +53,33 @@ method, as shown in Listing 8-21.
 
 </Listing>
 
-Here, `score` will have the value that’s associated with the Blue team, and the
-result will be `10`. The `get` method returns an `Option<&V>`; if there’s no
-value for that key in the hash map, `get` will return `None`. This program
-handles the `Option` by calling `copied` to get an `Option<i32>` rather than an
-`Option<&i32>`, then `unwrap_or` to set `score` to zero if `scores` doesn’t
-have an entry for the key.
+اینجا، مقدار `score` برابر با مقداری خواهد بود که به تیم Blue مرتبط است، و نتیجه `10` خواهد بود.
+متد `get` یک `Option<&V>` را بازمی‌گرداند؛ اگر هیچ مقداری برای آن کلید در هش مپ وجود نداشته
+باشد، `get` مقدار `None` را بازمی‌گرداند. این برنامه مقدار `Option` را با فراخوانی `copied`
+برای دریافت یک `Option<i32>` به جای `Option<&i32>` مدیریت می‌کند، سپس با استفاده از `unwrap_or`
+مقدار `score` را به صفر تنظیم می‌کند اگر `scores` یک ورودی برای کلید نداشته باشد.
 
-We can iterate over each key–value pair in a hash map in a similar manner as we
-do with vectors, using a `for` loop:
+می‌توانیم بر روی هر جفت کلید–مقدار در یک هش مپ مشابه کاری که با بردارها انجام می‌دهیم،
+با استفاده از یک حلقه `for` پیمایش کنیم:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/no-listing-03-iterate-over-hashmap/src/main.rs:here}}
 ```
 
-This code will print each pair in an arbitrary order:
+این کد هر جفت را به ترتیب دلخواه چاپ خواهد کرد:
 
 ```text
 Yellow: 50
 Blue: 10
 ```
 
-### Hash Maps and Ownership
+### هش مپ‌ها و مالکیت
 
-For types that implement the `Copy` trait, like `i32`, the values are copied
-into the hash map. For owned values like `String`, the values will be moved and
-the hash map will be the owner of those values, as demonstrated in Listing 8-22.
+برای انواعی که ویژگی `Copy` را پیاده‌سازی می‌کنند، مانند `i32`، مقادیر درون هش مپ کپی می‌شوند.
+برای مقادیر مالک مانند `String`، مقادیر منتقل شده و هش مپ مالک آن‌ها خواهد شد، همانطور که در
+لیست ۸-۲۲ نشان داده شده است.
 
-<Listing number="8-22" caption="Showing that keys and values are owned by the hash map once they’re inserted">
+<Listing number="8-22" caption="نشان دادن اینکه کلیدها و مقادیر پس از وارد شدن به هش مپ، متعلق به آن می‌شوند">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-22/src/main.rs:here}}
@@ -91,39 +87,33 @@ the hash map will be the owner of those values, as demonstrated in Listing 8-22.
 
 </Listing>
 
-We aren’t able to use the variables `field_name` and `field_value` after
-they’ve been moved into the hash map with the call to `insert`.
+پس از انتقال متغیرهای `field_name` و `field_value` به هش مپ با فراخوانی `insert`، دیگر نمی‌توانیم
+از آن‌ها استفاده کنیم.
 
-If we insert references to values into the hash map, the values won’t be moved
-into the hash map. The values that the references point to must be valid for at
-least as long as the hash map is valid. We’ll talk more about these issues in
-the [“Validating References with
-Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> section in
-Chapter 10.
+اگر مراجع به مقادیر را درون هش مپ وارد کنیم، مقادیر به هش مپ منتقل نخواهند شد. مقادیری که
+مراجع به آن‌ها اشاره می‌کنند باید حداقل تا زمانی که هش مپ معتبر است، معتبر باقی بمانند. درباره
+این مسائل در بخش [“تأیید مراجع با عمرها”][validating-references-with-lifetimes]<!-- ignore -->
+در فصل ۱۰ بیشتر صحبت خواهیم کرد.
 
-### Updating a Hash Map
+### به‌روزرسانی یک هش مپ
 
-Although the number of key and value pairs is growable, each unique key can
-only have one value associated with it at a time (but not vice versa: for
-example, both the Blue team and the Yellow team could have the value `10`
-stored in the `scores` hash map).
+اگرچه تعداد جفت‌های کلید و مقدار قابل افزایش است، هر کلید یکتا فقط می‌تواند یک مقدار
+مرتبط داشته باشد (اما نه بالعکس: برای مثال، هر دو تیم Blue و Yellow می‌توانند مقدار `10`
+را در هش مپ `scores` ذخیره کنند).
 
-When you want to change the data in a hash map, you have to decide how to
-handle the case when a key already has a value assigned. You could replace the
-old value with the new value, completely disregarding the old value. You could
-keep the old value and ignore the new value, only adding the new value if the
-key _doesn’t_ already have a value. Or you could combine the old value and the
-new value. Let’s look at how to do each of these!
+وقتی می‌خواهید داده‌ها را در یک هش مپ تغییر دهید، باید تصمیم بگیرید چگونه با حالتی که
+یک کلید قبلاً دارای مقدار است برخورد کنید. می‌توانید مقدار قدیمی را با مقدار جدید جایگزین کنید
+و مقدار قدیمی را کاملاً نادیده بگیرید. می‌توانید مقدار قدیمی را نگه دارید و مقدار جدید را نادیده بگیرید،
+فقط مقدار جدید را اضافه کنید اگر کلید _ندارد_ قبلاً یک مقدار. یا می‌توانید مقدار قدیمی و مقدار جدید
+را با هم ترکیب کنید. بیایید ببینیم چگونه هر یک از این کارها را انجام دهیم!
 
-#### Overwriting a Value
+#### بازنویسی یک مقدار
 
-If we insert a key and a value into a hash map and then insert that same key
-with a different value, the value associated with that key will be replaced.
-Even though the code in Listing 8-23 calls `insert` twice, the hash map will
-only contain one key–value pair because we’re inserting the value for the Blue
-team’s key both times.
+اگر یک کلید و مقدار را به یک هش مپ وارد کنیم و سپس همان کلید را با یک مقدار متفاوت وارد کنیم،
+مقداری که با آن کلید مرتبط است جایگزین خواهد شد. حتی اگر کد در لیست ۸-۲۳ دوبار `insert` را فراخوانی کند،
+هش مپ فقط یک جفت کلید–مقدار را شامل خواهد شد زیرا ما مقدار مرتبط با کلید تیم Blue را در هر دو بار وارد می‌کنیم.
 
-<Listing number="8-23" caption="Replacing a value stored with a particular key">
+<Listing number="8-23" caption="جایگزینی یک مقدار ذخیره شده با یک کلید خاص">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-23/src/main.rs:here}}
@@ -131,28 +121,23 @@ team’s key both times.
 
 </Listing>
 
-This code will print `{"Blue": 25}`. The original value of `10` has been
-overwritten.
-
-<!-- Old headings. Do not remove or links may break. -->
+این کد مقدار `{"Blue": 25}` را چاپ خواهد کرد. مقدار اصلی `10` بازنویسی شده است.
 
 <a id="only-inserting-a-value-if-the-key-has-no-value"></a>
 
-#### Adding a Key and Value Only If a Key Isn’t Present
+#### اضافه کردن یک کلید و مقدار فقط اگر کلید وجود ندارد
 
-It’s common to check whether a particular key already exists in the hash map
-with a value and then to take the following actions: if the key does exist in
-the hash map, the existing value should remain the way it is; if the key
-doesn’t exist, insert it and a value for it.
+بررسی اینکه آیا یک کلید خاص در هش مپ دارای مقدار است یا خیر و سپس انجام اقدامات زیر رایج است:
+اگر کلید در هش مپ وجود دارد، مقدار موجود باید همانطور که هست باقی بماند؛ اگر کلید وجود ندارد،
+آن را به همراه یک مقدار وارد کنید.
 
-Hash maps have a special API for this called `entry` that takes the key you
-want to check as a parameter. The return value of the `entry` method is an enum
-called `Entry` that represents a value that might or might not exist. Let’s say
-we want to check whether the key for the Yellow team has a value associated
-with it. If it doesn’t, we want to insert the value `50`, and the same for the
-Blue team. Using the `entry` API, the code looks like Listing 8-24.
+هش مپ‌ها یک API خاص برای این کار دارند که به نام `entry` شناخته می‌شود و کلیدی که می‌خواهید بررسی کنید
+را به عنوان پارامتر می‌گیرد. مقدار بازگشتی متد `entry` یک enum به نام `Entry` است که نشان‌دهنده مقداری
+است که ممکن است وجود داشته باشد یا نداشته باشد. فرض کنید می‌خواهیم بررسی کنیم که آیا کلید تیم Yellow
+دارای مقدار مرتبط است یا خیر. اگر ندارد، می‌خواهیم مقدار `50` را وارد کنیم، و همینطور برای تیم Blue.
+با استفاده از API `entry`، کد به شکل لیست ۸-۲۴ خواهد بود.
 
-<Listing number="8-24" caption="Using the `entry` method to only insert if the key does not already have a value">
+<Listing number="8-24" caption="استفاده از متد `entry` برای وارد کردن مقدار فقط در صورتی که کلید قبلاً مقدار ندارد">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
@@ -160,28 +145,25 @@ Blue team. Using the `entry` API, the code looks like Listing 8-24.
 
 </Listing>
 
-The `or_insert` method on `Entry` is defined to return a mutable reference to
-the value for the corresponding `Entry` key if that key exists, and if not, it
-inserts the parameter as the new value for this key and returns a mutable
-reference to the new value. This technique is much cleaner than writing the
-logic ourselves and, in addition, plays more nicely with the borrow checker.
+متد `or_insert` روی `Entry` به گونه‌ای تعریف شده است که یک مرجع قابل تغییر به مقدار مرتبط با کلید
+`Entry` برمی‌گرداند اگر آن کلید وجود داشته باشد، و اگر نه، پارامتر را به عنوان مقدار جدید برای
+این کلید وارد کرده و یک مرجع قابل تغییر به مقدار جدید بازمی‌گرداند. این تکنیک بسیار تمیزتر از نوشتن
+منطق به صورت دستی است و علاوه بر این، با بررسی‌کننده قرض بهتر کار می‌کند.
 
-Running the code in Listing 8-24 will print `{"Yellow": 50, "Blue": 10}`. The
-first call to `entry` will insert the key for the Yellow team with the value
-`50` because the Yellow team doesn’t have a value already. The second call to
-`entry` will not change the hash map because the Blue team already has the
-value `10`.
+اجرای کد در لیست ۸-۲۴ مقدار `{"Yellow": 50, "Blue": 10}` را چاپ خواهد کرد. اولین فراخوانی به `entry`
+کلید تیم Yellow را با مقدار `50` وارد می‌کند زیرا تیم Yellow قبلاً مقداری ندارد. دومین فراخوانی
+به `entry` هش مپ را تغییر نمی‌دهد زیرا تیم Blue قبلاً مقدار `10` را دارد.
 
-#### Updating a Value Based on the Old Value
 
-Another common use case for hash maps is to look up a key’s value and then
-update it based on the old value. For instance, Listing 8-25 shows code that
-counts how many times each word appears in some text. We use a hash map with
-the words as keys and increment the value to keep track of how many times we’ve
-seen that word. If it’s the first time we’ve seen a word, we’ll first insert
-the value `0`.
+#### به‌روزرسانی یک مقدار بر اساس مقدار قدیمی
 
-<Listing number="8-25" caption="Counting occurrences of words using a hash map that stores words and counts">
+یکی دیگر از موارد استفاده رایج برای هش مپ‌ها این است که مقدار یک کلید را جستجو کرده و سپس بر اساس
+مقدار قدیمی آن را به‌روزرسانی کنیم. برای مثال، لیست ۸-۲۵ کدی را نشان می‌دهد که تعداد دفعات ظاهر شدن
+هر کلمه در یک متن را می‌شمارد. ما از یک هش مپ با کلمات به عنوان کلید و مقدار برای نگهداری تعداد دفعات
+ظاهر شدن هر کلمه استفاده می‌کنیم. اگر این اولین بار باشد که یک کلمه را مشاهده می‌کنیم، ابتدا مقدار
+`0` را وارد می‌کنیم.
+
+<Listing number="8-25" caption="شمارش تعداد وقوع کلمات با استفاده از یک هش مپ که کلمات و تعداد دفعات آن‌ها را ذخیره می‌کند">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
@@ -189,61 +171,59 @@ the value `0`.
 
 </Listing>
 
-This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see
-the same key–value pairs printed in a different order: recall from the
-[“Accessing Values in a Hash Map”][access]<!-- ignore --> section that
-iterating over a hash map happens in an arbitrary order.
+این کد مقدار `{"world": 2, "hello": 1, "wonderful": 1}` را چاپ خواهد کرد. ممکن است همین جفت‌های
+کلید–مقدار را به ترتیب دیگری مشاهده کنید: به بخش [“دسترسی به مقادیر در یک هش مپ”][access]<!-- ignore -->
+رجوع کنید که توضیح می‌دهد پیمایش بر روی یک هش مپ به صورت دلخواه انجام می‌شود.
 
-The `split_whitespace` method returns an iterator over subslices, separated by
-whitespace, of the value in `text`. The `or_insert` method returns a mutable
-reference (`&mut V`) to the value for the specified key. Here, we store that
-mutable reference in the `count` variable, so in order to assign to that value,
-we must first dereference `count` using the asterisk (`*`). The mutable
-reference goes out of scope at the end of the `for` loop, so all of these
-changes are safe and allowed by the borrowing rules.
+متد `split_whitespace` یک iterator بر روی زیررشته‌هایی که با فضای خالی جدا شده‌اند از مقدار موجود
+در `text` بازمی‌گرداند. متد `or_insert` یک مرجع قابل تغییر (`&mut V`) به مقدار مرتبط با کلید مشخص
+برمی‌گرداند. اگر آن کلید وجود داشته باشد، مقدار بازگشتی همان مقدار موجود است؛ و اگر نه، پارامتر
+را به عنوان مقدار جدید برای این کلید وارد می‌کند و مرجع قابل تغییر به مقدار جدید را بازمی‌گرداند.
+در اینجا، ما این مرجع قابل تغییر را در متغیر `count` ذخیره می‌کنیم، بنابراین برای تخصیص مقدار
+به آن، باید ابتدا `count` را با استفاده از عملگر ستاره (`*`) dereference کنیم. مرجع قابل تغییر
+در انتهای حلقه `for` از محدوده خارج می‌شود، بنابراین تمام این تغییرات ایمن هستند و قوانین
+قرض‌گیری را نقض نمی‌کنند.
 
-### Hashing Functions
+### توابع هش
 
-By default, `HashMap` uses a hashing function called _SipHash_ that can provide
-resistance to denial-of-service (DoS) attacks involving hash
-tables[^siphash]<!-- ignore -->. This is not the fastest hashing algorithm
-available, but the trade-off for better security that comes with the drop in
-performance is worth it. If you profile your code and find that the default
-hash function is too slow for your purposes, you can switch to another function
-by specifying a different hasher. A _hasher_ is a type that implements the
-`BuildHasher` trait. We’ll talk about traits and how to implement them in
-[Chapter 10][traits]<!-- ignore -->. You don’t necessarily have to implement
-your own hasher from scratch; [crates.io](https://crates.io/)<!-- ignore -->
-has libraries shared by other Rust users that provide hashers implementing many
-common hashing algorithms.
+به طور پیش‌فرض، `HashMap` از یک تابع هش به نام _SipHash_ استفاده می‌کند که مقاومت در برابر
+حملات انکار سرویس (DoS) مربوط به جداول هش[^siphash]<!-- ignore --> را فراهم می‌کند. این سریع‌ترین
+الگوریتم هش موجود نیست، اما مبادله برای امنیت بهتر با کاهش عملکرد ارزشمند است. اگر کد خود را
+پروفایل کنید و متوجه شوید که تابع هش پیش‌فرض برای اهداف شما بسیار کند است، می‌توانید با مشخص کردن
+یک هش‌کننده دیگر آن را تغییر دهید. یک _هش‌کننده_ نوعی است که ویژگی `BuildHasher` را پیاده‌سازی
+می‌کند. درباره ویژگی‌ها (traits) و نحوه پیاده‌سازی آن‌ها در [فصل ۱۰][traits]<!-- ignore --> صحبت
+خواهیم کرد. نیازی نیست حتماً هش‌کننده خود را از ابتدا پیاده‌سازی کنید؛ در
+[crates.io](https://crates.io/)<!-- ignore --> کتابخانه‌هایی موجود هستند که توسط کاربران Rust به
+اشتراک گذاشته شده‌اند و هش‌کننده‌هایی با بسیاری از الگوریتم‌های هش رایج ارائه می‌دهند.
 
 [^siphash]: [https://en.wikipedia.org/wiki/SipHash](https://en.wikipedia.org/wiki/SipHash)
 
-## Summary
+## خلاصه
 
-Vectors, strings, and hash maps will provide a large amount of functionality
-necessary in programs when you need to store, access, and modify data. Here are
-some exercises you should now be equipped to solve:
+بردارها، رشته‌ها، و هش مپ‌ها مقدار زیادی از قابلیت‌های مورد نیاز برای ذخیره، دسترسی، و
+تغییر داده‌ها در برنامه‌ها را فراهم می‌کنند. در اینجا چند تمرین وجود دارد که اکنون باید
+قادر به حل آن‌ها باشید:
 
-1. Given a list of integers, use a vector and return the median (when sorted,
-   the value in the middle position) and mode (the value that occurs most
-   often; a hash map will be helpful here) of the list.
-1. Convert strings to pig latin. The first consonant of each word is moved to
-   the end of the word and _ay_ is added, so _first_ becomes _irst-fay_. Words
-   that start with a vowel have _hay_ added to the end instead (_apple_ becomes
-   _apple-hay_). Keep in mind the details about UTF-8 encoding!
-1. Using a hash map and vectors, create a text interface to allow a user to add
-   employee names to a department in a company; for example, “Add Sally to
-   Engineering” or “Add Amir to Sales.” Then let the user retrieve a list of all
-   people in a department or all people in the company by department, sorted
-   alphabetically.
+1. با داشتن یک لیست از اعداد صحیح، از یک بردار استفاده کرده و میانه (وقتی مرتب‌سازی شود، مقداری که
+   در موقعیت وسط قرار دارد) و مد (مقداری که بیشترین بار ظاهر می‌شود؛ یک هش مپ در اینجا مفید خواهد بود)
+   لیست را بازگردانید.
+2. رشته‌ها را به زبان لاتین خوکی تبدیل کنید. اولین صامت هر کلمه به انتهای کلمه منتقل شده و _ay_
+   به آن اضافه می‌شود، بنابراین _first_ به _irst-fay_ تبدیل می‌شود. کلماتی که با یک حرف صدادار
+   شروع می‌شوند، _hay_ به انتهای آن‌ها اضافه می‌شود (_apple_ به _apple-hay_ تبدیل می‌شود). جزئیات
+   مربوط به کدگذاری UTF-8 را در نظر داشته باشید!
+3. با استفاده از یک هش مپ و بردارها، یک رابط متنی ایجاد کنید تا به کاربر امکان اضافه کردن نام کارمندان
+   به یک دپارتمان در شرکت را بدهد؛ برای مثال، "Add Sally to Engineering" یا "Add Amir to Sales".
+   سپس به کاربر اجازه دهید لیستی از تمام افراد در یک دپارتمان یا تمام افراد در شرکت بر اساس
+   دپارتمان، مرتب شده به صورت حروف الفبا، بازیابی کند.
 
-The standard library API documentation describes methods that vectors, strings,
-and hash maps have that will be helpful for these exercises!
+مستندات API کتابخانه استاندارد متدهایی را که بردارها، رشته‌ها، و هش مپ‌ها دارند و برای این تمرین‌ها
+مفید خواهند بود توصیف می‌کنند!
 
-We’re getting into more complex programs in which operations can fail, so it’s
-a perfect time to discuss error handling. We’ll do that next!
+ما وارد برنامه‌های پیچیده‌تری شده‌ایم که در آن‌ها عملیات ممکن است با شکست مواجه شوند، بنابراین
+زمان مناسبی است تا درباره مدیریت خطا صحبت کنیم. این کار را در ادامه انجام خواهیم داد!
 
 [validating-references-with-lifetimes]: ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 [access]: #accessing-values-in-a-hash-map
 [traits]: ch10-02-traits.html
+
+</div>

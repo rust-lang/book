@@ -1,17 +1,19 @@
-## Storing Lists of Values with Vectors
+<div dir="rtl">
 
-The first collection type we’ll look at is `Vec<T>`, also known as a _vector_.
-Vectors allow you to store more than one value in a single data structure that
-puts all the values next to each other in memory. Vectors can only store values
-of the same type. They are useful when you have a list of items, such as the
-lines of text in a file or the prices of items in a shopping cart.
+## ذخیره لیست‌هایی از مقادیر با بردارها
 
-### Creating a New Vector
+اولین نوع مجموعه‌ای که به آن خواهیم پرداخت، `Vec<T>` یا همان _بردار_ است.
+بردارها به شما اجازه می‌دهند که بیش از یک مقدار را در یک ساختار داده ذخیره کنید
+که تمامی مقادیر را در کنار یکدیگر در حافظه قرار می‌دهد. بردارها فقط می‌توانند
+مقادیر از یک نوع را ذخیره کنند. این ابزار زمانی مفید است که لیستی از آیتم‌ها
+مانند خطوط متنی در یک فایل یا قیمت آیتم‌ها در یک سبد خرید داشته باشید.
 
-To create a new empty vector, we call the `Vec::new` function, as shown in
-Listing 8-1.
+### ایجاد یک بردار جدید
 
-<Listing number="8-1" caption="Creating a new, empty vector to hold values of type `i32`">
+برای ایجاد یک بردار خالی جدید، از تابع `Vec::new` استفاده می‌کنیم، همانطور که
+در لیست ۸-۱ نشان داده شده است.
+
+<Listing number="8-1" caption="ایجاد یک بردار جدید و خالی برای نگهداری مقادیر نوع `i32`">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-01/src/main.rs:here}}
@@ -19,24 +21,24 @@ Listing 8-1.
 
 </Listing>
 
-Note that we added a type annotation here. Because we aren’t inserting any
-values into this vector, Rust doesn’t know what kind of elements we intend to
-store. This is an important point. Vectors are implemented using generics;
-we’ll cover how to use generics with your own types in Chapter 10. For now,
-know that the `Vec<T>` type provided by the standard library can hold any type.
-When we create a vector to hold a specific type, we can specify the type within
-angle brackets. In Listing 8-1, we’ve told Rust that the `Vec<T>` in `v` will
-hold elements of the `i32` type.
+توجه داشته باشید که ما یک توضیح نوع اضافه کرده‌ایم. چون ما هیچ مقداری به این بردار
+اضافه نکرده‌ایم، Rust نمی‌داند چه نوع عناصری را قصد داریم ذخیره کنیم. این نکته
+مهمی است. بردارها با استفاده از جنریک‌ها پیاده‌سازی شده‌اند؛ در فصل ۱۰ خواهیم دید
+که چگونه می‌توان جنریک‌ها را در انواع خودتان استفاده کرد. در حال حاضر بدانید که
+نوع `Vec<T>` ارائه شده توسط کتابخانه استاندارد می‌تواند هر نوعی را نگهداری کند.
+وقتی یک بردار برای نگهداری نوع خاصی ایجاد می‌کنیم، می‌توانیم نوع موردنظر را داخل
+براکت‌های زاویه‌ای مشخص کنیم. در لیست ۸-۱، ما به Rust اعلام کرده‌ایم که بردار `Vec<T>` 
+در `v` عناصر نوع `i32` را نگهداری خواهد کرد.
 
-More often, you’ll create a `Vec<T>` with initial values and Rust will infer
-the type of value you want to store, so you rarely need to do this type
-annotation. Rust conveniently provides the `vec!` macro, which will create a
-new vector that holds the values you give it. Listing 8-2 creates a new
-`Vec<i32>` that holds the values `1`, `2`, and `3`. The integer type is `i32`
-because that’s the default integer type, as we discussed in the [“Data
-Types”][data-types]<!-- ignore --> section of Chapter 3.
+بیشتر اوقات، شما یک `Vec<T>` با مقادیر اولیه ایجاد خواهید کرد و Rust نوع مقادیر
+را از روی آنها استنتاج خواهد کرد، بنابراین به ندرت نیاز به توضیح نوع خواهید داشت.
+Rust به راحتی ماکروی `vec!` را فراهم می‌کند که یک بردار جدید ایجاد کرده و مقادیر
+مورد نظر شما را در آن قرار می‌دهد. لیست ۸-۲ یک بردار جدید `Vec<i32>` را ایجاد می‌کند
+که مقادیر `1`، `2` و `3` را نگهداری می‌کند. نوع عدد صحیح `i32` است چون این نوع
+پیش‌فرض برای اعداد صحیح است، همانطور که در بخش [“انواع داده‌ها”][data-types]<!-- ignore -->
+فصل ۳ بحث کردیم.
 
-<Listing number="8-2" caption="Creating a new vector containing values">
+<Listing number="8-2" caption="ایجاد یک بردار جدید شامل مقادیر">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-02/src/main.rs:here}}
@@ -44,16 +46,16 @@ Types”][data-types]<!-- ignore --> section of Chapter 3.
 
 </Listing>
 
-Because we’ve given initial `i32` values, Rust can infer that the type of `v`
-is `Vec<i32>`, and the type annotation isn’t necessary. Next, we’ll look at how
-to modify a vector.
+چون مقادیر اولیه `i32` داده‌ایم، Rust می‌تواند استنتاج کند که نوع `v` 
+`Vec<i32>` است و نیازی به توضیح نوع نیست. حالا به نحوه به‌روزرسانی یک بردار
+خواهیم پرداخت.
 
-### Updating a Vector
+### به‌روزرسانی یک بردار
 
-To create a vector and then add elements to it, we can use the `push` method,
-as shown in Listing 8-3.
+برای ایجاد یک بردار و سپس اضافه کردن عناصر به آن، می‌توانیم از متد `push` استفاده کنیم،
+همانطور که در لیست ۸-۳ نشان داده شده است.
 
-<Listing number="8-3" caption="Using the `push` method to add values to a vector">
+<Listing number="8-3" caption="استفاده از متد `push` برای اضافه کردن مقادیر به یک بردار">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-03/src/main.rs:here}}
@@ -61,21 +63,21 @@ as shown in Listing 8-3.
 
 </Listing>
 
-As with any variable, if we want to be able to change its value, we need to
-make it mutable using the `mut` keyword, as discussed in Chapter 3. The numbers
-we place inside are all of type `i32`, and Rust infers this from the data, so
-we don’t need the `Vec<i32>` annotation.
+همانطور که با هر متغیری دیگر انجام می‌دهیم، اگر بخواهیم بتوانیم مقدار آن را تغییر دهیم،
+باید آن را با استفاده از کلیدواژه `mut` قابل تغییر کنیم، همانطور که در فصل ۳ بحث شد.
+اعدادی که در داخل بردار قرار می‌دهیم همه از نوع `i32` هستند و Rust این نوع را از داده‌ها
+استنتاج می‌کند، بنابراین نیازی به توضیح نوع `Vec<i32>` نیست.
 
-### Reading Elements of Vectors
+### خواندن عناصر بردار
 
-There are two ways to reference a value stored in a vector: via indexing or by
-using the `get` method. In the following examples, we’ve annotated the types of
-the values that are returned from these functions for extra clarity.
+دو روش برای ارجاع به یک مقدار ذخیره شده در بردار وجود دارد: از طریق استفاده از اندیس یا
+با استفاده از متد `get`. در مثال‌های زیر، انواع مقادیر بازگشتی از این توابع برای وضوح بیشتر
+مشخص شده‌اند.
 
-Listing 8-4 shows both methods of accessing a value in a vector, with indexing
-syntax and the `get` method.
+لیست ۸-۴ هر دو روش دسترسی به یک مقدار در بردار، با استفاده از سینتکس اندیس و متد `get`
+را نشان می‌دهد.
 
-<Listing number="8-4" caption="Using indexing syntax and using the `get` method to access an item in a vector">
+<Listing number="8-4" caption="استفاده از سینتکس اندیس و متد `get` برای دسترسی به یک آیتم در بردار">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-04/src/main.rs:here}}
@@ -83,19 +85,17 @@ syntax and the `get` method.
 
 </Listing>
 
-Note a few details here. We use the index value of `2` to get the third element
-because vectors are indexed by number, starting at zero. Using `&` and `[]`
-gives us a reference to the element at the index value. When we use the `get`
-method with the index passed as an argument, we get an `Option<&T>` that we can
-use with `match`.
+به چند جزئیات اینجا توجه کنید. ما از مقدار اندیس `2` برای دسترسی به عنصر سوم استفاده می‌کنیم
+زیرا بردارها با شماره از صفر اندیس‌گذاری می‌شوند. استفاده از `&` و `[]` یک مرجع به عنصر
+در مقدار اندیس را به ما می‌دهد. وقتی از متد `get` با اندیسی که به عنوان آرگومان داده می‌شود
+استفاده می‌کنیم، یک `Option<&T>` دریافت می‌کنیم که می‌توانیم با `match` از آن استفاده کنیم.
 
-Rust provides these two ways to reference an element so you can choose how the
-program behaves when you try to use an index value outside the range of
-existing elements. As an example, let’s see what happens when we have a vector
-of five elements and then we try to access an element at index 100 with each
-technique, as shown in Listing 8-5.
+Rust این دو روش ارجاع به یک عنصر را ارائه می‌دهد تا بتوانید انتخاب کنید که برنامه شما چگونه رفتار کند
+وقتی تلاش می‌کنید از یک مقدار اندیس خارج از محدوده عناصر موجود استفاده کنید. به عنوان یک مثال،
+بیایید ببینیم چه اتفاقی می‌افتد وقتی یک بردار با پنج عنصر داشته باشیم و سپس تلاش کنیم به یک عنصر
+در اندیس ۱۰۰ با هر دو تکنیک دسترسی پیدا کنیم، همانطور که در لیست ۸-۵ نشان داده شده است.
 
-<Listing number="8-5" caption="Attempting to access the element at index 100 in a vector containing five elements">
+<Listing number="8-5" caption="تلاش برای دسترسی به عنصر در اندیس ۱۰۰ در یک بردار شامل پنج عنصر">
 
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-05/src/main.rs:here}}
@@ -103,32 +103,27 @@ technique, as shown in Listing 8-5.
 
 </Listing>
 
-When we run this code, the first `[]` method will cause the program to panic
-because it references a nonexistent element. This method is best used when you
-want your program to crash if there’s an attempt to access an element past the
-end of the vector.
+وقتی این کد را اجرا می‌کنیم، روش اول `[]` باعث می‌شود برنامه متوقف شود زیرا به یک
+عنصر غیرموجود اشاره می‌کند. این روش زمانی بهترین استفاده را دارد که بخواهید برنامه‌تان
+در صورت تلاش برای دسترسی به عنصری خارج از انتهای بردار، متوقف شود.
 
-When the `get` method is passed an index that is outside the vector, it returns
-`None` without panicking. You would use this method if accessing an element
-beyond the range of the vector may happen occasionally under normal
-circumstances. Your code will then have logic to handle having either
-`Some(&element)` or `None`, as discussed in Chapter 6. For example, the index
-could be coming from a person entering a number. If they accidentally enter a
-number that’s too large and the program gets a `None` value, you could tell the
-user how many items are in the current vector and give them another chance to
-enter a valid value. That would be more user-friendly than crashing the program
-due to a typo!
+وقتی متد `get` یک اندیس خارج از بردار دریافت می‌کند، مقدار `None` را بدون متوقف کردن
+برنامه بازمی‌گرداند. شما از این روش استفاده می‌کنید اگر دسترسی به عنصری خارج از محدوده بردار
+ممکن است گاه‌به‌گاه در شرایط عادی رخ دهد. کد شما سپس منطق لازم برای مدیریت داشتن
+`Some(&element)` یا `None` را خواهد داشت، همانطور که در فصل ۶ بحث شد. برای مثال،
+اندیس ممکن است از یک عدد ورودی توسط کاربر بیاید. اگر کاربر تصادفاً عددی وارد کند که بیش از حد
+بزرگ باشد و برنامه مقدار `None` دریافت کند، شما می‌توانید به کاربر اطلاع دهید که چند آیتم
+در بردار موجود است و به او فرصت دیگری برای وارد کردن یک مقدار معتبر بدهید. این راهکار برای
+کاربر پسندتر است تا این که برنامه به دلیل یک اشتباه تایپی متوقف شود!
 
-When the program has a valid reference, the borrow checker enforces the
-ownership and borrowing rules (covered in Chapter 4) to ensure this reference
-and any other references to the contents of the vector remain valid. Recall the
-rule that states you can’t have mutable and immutable references in the same
-scope. That rule applies in Listing 8-6, where we hold an immutable reference
-to the first element in a vector and try to add an element to the end. This
-program won’t work if we also try to refer to that element later in the
-function.
+وقتی برنامه یک مرجع معتبر دارد، بررسی‌کننده قرض قوانین مالکیت و قرض‌گیری (که در فصل ۴ پوشش داده شد)
+را اعمال می‌کند تا اطمینان حاصل کند که این مرجع و هر مرجع دیگری به محتوای بردار معتبر باقی می‌مانند.
+به یاد بیاورید که قانون بیان می‌کند نمی‌توانید مرجع‌های قابل تغییر و غیرقابل تغییر را در یک حوزه
+داشته باشید. این قانون در لیست ۸-۶ اعمال می‌شود، جایی که یک مرجع غیرقابل تغییر به اولین عنصر
+در یک بردار نگه داشته شده است و سعی داریم یک عنصر به انتها اضافه کنیم. این برنامه زمانی کار نخواهد کرد
+اگر همچنین بخواهیم بعداً در تابع به آن عنصر ارجاع دهیم.
 
-<Listing number="8-6" caption="Attempting to add an element to a vector while holding a reference to an item">
+<Listing number="8-6" caption="تلاش برای اضافه کردن یک عنصر به یک بردار در حالی که یک مرجع به یک آیتم نگه داشته شده است">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-06/src/main.rs:here}}
@@ -136,33 +131,31 @@ function.
 
 </Listing>
 
-Compiling this code will result in this error:
+کامپایل کردن این کد به این خطا منجر می‌شود:
 
 ```console
 {{#include ../listings/ch08-common-collections/listing-08-06/output.txt}}
 ```
 
-The code in Listing 8-6 might look like it should work: why should a reference
-to the first element care about changes at the end of the vector? This error is
-due to the way vectors work: because vectors put the values next to each other
-in memory, adding a new element onto the end of the vector might require
-allocating new memory and copying the old elements to the new space, if there
-isn’t enough room to put all the elements next to each other where the vector
-is currently stored. In that case, the reference to the first element would be
-pointing to deallocated memory. The borrowing rules prevent programs from
-ending up in that situation.
+کد در لیست ۸-۶ ممکن است به نظر بیاید که باید کار کند: چرا یک مرجع به اولین عنصر باید
+به تغییرات انتهای بردار اهمیت دهد؟ این خطا به نحوه کار بردارها مربوط است: چون بردارها مقادیر
+را در کنار یکدیگر در حافظه قرار می‌دهند، اضافه کردن یک عنصر جدید به انتهای بردار ممکن است نیازمند
+اختصاص حافظه جدید و کپی کردن عناصر قدیمی به مکان جدید باشد، اگر فضای کافی برای قرار دادن
+همه عناصر در کنار یکدیگر در محل کنونی بردار وجود نداشته باشد. در این حالت، مرجع به اولین
+عنصر به حافظه‌ای اشاره می‌کند که آزاد شده است. قوانین قرض‌گیری از به وجود آمدن این شرایط
+در برنامه‌ها جلوگیری می‌کنند.
 
-> Note: For more on the implementation details of the `Vec<T>` type, see [“The
-> Rustonomicon”][nomicon].
+> نکته: برای اطلاعات بیشتر درباره جزئیات پیاده‌سازی نوع `Vec<T>`، به [“The Rustonomicon”][nomicon] مراجعه کنید.
 
-### Iterating Over the Values in a Vector
 
-To access each element in a vector in turn, we would iterate through all of the
-elements rather than use indices to access one at a time. Listing 8-7 shows how
-to use a `for` loop to get immutable references to each element in a vector of
-`i32` values and print them.
+### پیمایش بر روی مقادیر در یک بردار
 
-<Listing number="8-7" caption="Printing each element in a vector by iterating over the elements using a `for` loop">
+برای دسترسی به هر عنصر در یک بردار به ترتیب، می‌توانیم به جای استفاده از اندیس‌ها
+برای دسترسی به یک عنصر در هر بار، بر روی تمامی عناصر پیمایش کنیم. لیست ۸-۷ نشان می‌دهد
+چگونه می‌توان از یک حلقه `for` برای گرفتن مرجع‌های غیرقابل تغییر به هر عنصر در یک بردار
+از مقادیر `i32` استفاده کرد و آنها را چاپ کرد.
+
+<Listing number="8-7" caption="چاپ هر عنصر در یک بردار با پیمایش بر روی عناصر با استفاده از یک حلقه `for`">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-07/src/main.rs:here}}
@@ -170,11 +163,10 @@ to use a `for` loop to get immutable references to each element in a vector of
 
 </Listing>
 
-We can also iterate over mutable references to each element in a mutable vector
-in order to make changes to all the elements. The `for` loop in Listing 8-8
-will add `50` to each element.
+همچنین می‌توانیم بر روی مرجع‌های قابل تغییر به هر عنصر در یک بردار قابل تغییر پیمایش کنیم
+تا تغییراتی روی تمام عناصر اعمال کنیم. حلقه `for` در لیست ۸-۸ مقدار `50` را به هر عنصر اضافه می‌کند.
 
-<Listing number="8-8" caption="Iterating over mutable references to elements in a vector">
+<Listing number="8-8" caption="پیمایش بر روی مرجع‌های قابل تغییر به عناصر در یک بردار">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-08/src/main.rs:here}}
@@ -182,35 +174,35 @@ will add `50` to each element.
 
 </Listing>
 
-To change the value that the mutable reference refers to, we have to use the
-`*` dereference operator to get to the value in `i` before we can use the `+=`
-operator. We’ll talk more about the dereference operator in the [“Following the
-Pointer to the Value with the Dereference Operator”][deref]<!-- ignore -->
-section of Chapter 15.
+برای تغییر مقدار مرجع قابل تغییر، باید از عملگر * (dereference) استفاده کنیم تا به مقدار
+موجود در `i` دسترسی پیدا کنیم، سپس می‌توانیم از عملگر `+=` استفاده کنیم. درباره عملگر dereference
+در بخش [“دنبال کردن اشاره‌گر به مقدار با عملگر dereference”][deref]<!-- ignore --> در فصل ۱۵
+بیشتر صحبت خواهیم کرد.
 
-Iterating over a vector, whether immutably or mutably, is safe because of the
-borrow checker’s rules. If we attempted to insert or remove items in the `for`
-loop bodies in Listing 8-7 and Listing 8-8, we would get a compiler error
-similar to the one we got with the code in Listing 8-6. The reference to the
-vector that the `for` loop holds prevents simultaneous modification of the
-whole vector.
+پیمایش بر روی یک بردار، چه به صورت غیرقابل تغییر و چه به صورت قابل تغییر، امن است
+زیرا از قوانین بررسی‌کننده قرض پیروی می‌کند. اگر بخواهیم در بدنه حلقه‌های `for` در لیست ۸-۷
+و لیست ۸-۸ آیتم‌ها را درج یا حذف کنیم، با خطای کامپایل مشابهی با کدی که در لیست ۸-۶ دیدیم
+روبرو خواهیم شد. مرجع به برداری که حلقه `for` نگه می‌دارد از تغییر همزمان کل بردار
+جلوگیری می‌کند.
 
-### Using an Enum to Store Multiple Types
 
-Vectors can only store values that are of the same type. This can be
-inconvenient; there are definitely use cases for needing to store a list of
-items of different types. Fortunately, the variants of an enum are defined
-under the same enum type, so when we need one type to represent elements of
-different types, we can define and use an enum!
+### استفاده از Enum برای ذخیره انواع مختلف
 
-For example, say we want to get values from a row in a spreadsheet in which
-some of the columns in the row contain integers, some floating-point numbers,
-and some strings. We can define an enum whose variants will hold the different
-value types, and all the enum variants will be considered the same type: that
-of the enum. Then we can create a vector to hold that enum and so, ultimately,
-hold different types. We’ve demonstrated this in Listing 8-9.
+بردارها فقط می‌توانند مقادیر از یک نوع را ذخیره کنند. این موضوع ممکن است گاهی
+ناخوشایند باشد؛ مطمئناً موارد استفاده‌ای وجود دارند که نیاز به ذخیره یک لیست
+از آیتم‌ها با انواع مختلف دارید. خوشبختانه، متغیرهای یک `enum` تحت یک نوع
+`enum` تعریف شده‌اند، بنابراین وقتی نیاز به یک نوع برای نمایش عناصر از انواع
+مختلف دارید، می‌توانید یک `enum` تعریف کرده و از آن استفاده کنید!
 
-<Listing number="8-9" caption="Defining an `enum` to store values of different types in one vector">
+برای مثال، فرض کنید می‌خواهیم مقادیر یک ردیف از یک صفحه گسترده را که برخی از
+ستون‌های آن شامل اعداد صحیح، برخی شامل اعداد اعشاری و برخی شامل رشته‌ها
+می‌باشند، دریافت کنیم. می‌توانیم یک `enum` تعریف کنیم که متغیرهای آن انواع
+مختلف مقادیر را نگهداری کنند، و تمام متغیرهای `enum` به عنوان یک نوع مشابه
+(یعنی نوع `enum`) در نظر گرفته می‌شوند. سپس می‌توانیم یک بردار ایجاد کنیم
+که این `enum` را نگهداری کند و در نتیجه انواع مختلف را ذخیره کند. این موضوع
+در لیست ۸-۹ نمایش داده شده است.
+
+<Listing number="8-9" caption="تعریف یک `enum` برای ذخیره انواع مختلف در یک بردار">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-09/src/main.rs:here}}
@@ -218,29 +210,31 @@ hold different types. We’ve demonstrated this in Listing 8-9.
 
 </Listing>
 
-Rust needs to know what types will be in the vector at compile time so it knows
-exactly how much memory on the heap will be needed to store each element. We
-must also be explicit about what types are allowed in this vector. If Rust
-allowed a vector to hold any type, there would be a chance that one or more of
-the types would cause errors with the operations performed on the elements of
-the vector. Using an enum plus a `match` expression means that Rust will ensure
-at compile time that every possible case is handled, as discussed in Chapter 6.
+Rust باید بداند چه انواعی در بردار خواهند بود تا بتواند در زمان کامپایل
+دقیقاً مشخص کند چه مقدار حافظه در heap برای ذخیره هر عنصر نیاز است.
+همچنین باید به طور صریح مشخص کنیم که چه انواعی در این بردار مجاز هستند.
+اگر Rust اجازه می‌داد که بردار هر نوعی را نگهداری کند، احتمال داشت که
+یک یا چند نوع باعث ایجاد خطا در عملیات انجام شده روی عناصر بردار شوند.
+استفاده از یک `enum` به علاوه یک عبارت `match` به این معنی است که Rust
+در زمان کامپایل اطمینان حاصل خواهد کرد که تمام حالت‌های ممکن مدیریت شده‌اند،
+همانطور که در فصل ۶ بحث شد.
 
-If you don’t know the exhaustive set of types a program will get at runtime to
-store in a vector, the enum technique won’t work. Instead, you can use a trait
-object, which we’ll cover in Chapter 18.
+اگر مجموعه جامعی از انواعی که برنامه در زمان اجرا دریافت می‌کند و باید
+در بردار ذخیره شود را نمی‌دانید، تکنیک `enum` کار نخواهد کرد. به جای آن،
+می‌توانید از یک شیء ویژگی (`trait object`) استفاده کنید که در فصل ۱۸
+مورد بررسی قرار خواهد گرفت.
 
-Now that we’ve discussed some of the most common ways to use vectors, be sure
-to review [the API documentation][vec-api]<!-- ignore --> for all of the many
-useful methods defined on `Vec<T>` by the standard library. For example, in
-addition to `push`, a `pop` method removes and returns the last element.
+اکنون که برخی از رایج‌ترین روش‌های استفاده از بردارها را بحث کردیم، مطمئن شوید
+که [مستندات API][vec-api]<!-- ignore --> را برای تمام متدهای مفیدی که کتابخانه
+استاندارد روی `Vec<T>` تعریف کرده است مرور کنید. برای مثال، علاوه بر `push`،
+متد `pop` عنصر آخر را حذف کرده و بازمی‌گرداند.
 
-### Dropping a Vector Drops Its Elements
+### حذف یک بردار، عناصر آن را نیز حذف می‌کند
 
-Like any other `struct`, a vector is freed when it goes out of scope, as
-annotated in Listing 8-10.
+مانند هر `struct` دیگری، یک بردار وقتی از محدوده خارج می‌شود آزاد می‌شود،
+همانطور که در لیست ۸-۱۰ نشان داده شده است.
 
-<Listing number="8-10" caption="Showing where the vector and its elements are dropped">
+<Listing number="8-10" caption="نمایش زمان حذف بردار و عناصر آن">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-10/src/main.rs:here}}
@@ -248,14 +242,15 @@ annotated in Listing 8-10.
 
 </Listing>
 
-When the vector gets dropped, all of its contents are also dropped, meaning the
-integers it holds will be cleaned up. The borrow checker ensures that any
-references to contents of a vector are only used while the vector itself is
-valid.
+وقتی بردار حذف می‌شود، تمام محتوای آن نیز حذف می‌شوند، به این معنی که اعداد
+صحیحی که نگهداری می‌کند تمیزکاری می‌شوند. بررسی‌کننده قرض اطمینان حاصل می‌کند
+که هر مرجع به محتوای یک بردار فقط تا زمانی که خود بردار معتبر است استفاده شود.
 
-Let’s move on to the next collection type: `String`!
+حال به نوع مجموعه بعدی می‌پردازیم: `String`!
 
 [data-types]: ch03-02-data-types.html#data-types
 [nomicon]: ../nomicon/vec/vec.html
 [vec-api]: ../std/vec/struct.Vec.html
 [deref]: ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator
+
+</div>

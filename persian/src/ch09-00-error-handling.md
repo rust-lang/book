@@ -1,24 +1,24 @@
-# Error Handling
+<div dir="rtl">
 
-Errors are a fact of life in software, so Rust has a number of features for
-handling situations in which something goes wrong. In many cases, Rust requires
-you to acknowledge the possibility of an error and take some action before your
-code will compile. This requirement makes your program more robust by ensuring
-that you’ll discover errors and handle them appropriately before you’ve
-deployed your code to production!
+# مدیریت خطاها
 
-Rust groups errors into two major categories: _recoverable_ and _unrecoverable_
-errors. For a recoverable error, such as a _file not found_ error, we most
-likely just want to report the problem to the user and retry the operation.
-Unrecoverable errors are always symptoms of bugs, such as trying to access a
-location beyond the end of an array, and so we want to immediately stop the
-program.
+خطاها واقعیتی در نرم‌افزار هستند، بنابراین Rust تعدادی ویژگی برای مدیریت شرایطی که در آن‌ها
+چیزی اشتباه می‌رود ارائه می‌دهد. در بسیاری از موارد، Rust شما را مجبور می‌کند امکان وقوع خطا را
+تشخیص داده و اقدامی انجام دهید تا کد شما کامپایل شود. این الزام برنامه شما را مقاوم‌تر می‌کند
+زیرا اطمینان حاصل می‌کند که قبل از انتشار کد به تولید، خطاها را کشف کرده و آن‌ها را به درستی مدیریت
+می‌کنید!
 
-Most languages don’t distinguish between these two kinds of errors and handle
-both in the same way, using mechanisms such as exceptions. Rust doesn’t have
-exceptions. Instead, it has the type `Result<T, E>` for recoverable errors and
-the `panic!` macro that stops execution when the program encounters an
-unrecoverable error. This chapter covers calling `panic!` first and then talks
-about returning `Result<T, E>` values. Additionally, we’ll explore
-considerations when deciding whether to try to recover from an error or to stop
-execution.
+Rust خطاها را به دو دسته اصلی تقسیم می‌کند: خطاهای _قابل بازیابی_ و خطاهای _غیرقابل بازیابی_.
+برای یک خطای قابل بازیابی، مانند خطای _فایل یافت نشد_، احتمالاً می‌خواهیم مشکل را به کاربر
+گزارش دهیم و عملیات را دوباره انجام دهیم. خطاهای غیرقابل بازیابی همیشه نشانه‌های باگ‌ها هستند،
+مانند تلاش برای دسترسی به مکانی خارج از انتهای یک آرایه، بنابراین می‌خواهیم بلافاصله برنامه
+را متوقف کنیم.
+
+بیشتر زبان‌ها بین این دو نوع خطا تفاوت قائل نمی‌شوند و هر دو را به یک شکل مدیریت می‌کنند،
+با استفاده از مکانیزم‌هایی مانند استثناها. Rust استثناها ندارد. در عوض، نوع `Result<T, E>` برای
+خطاهای قابل بازیابی و ماکروی `panic!` که اجرای برنامه را زمانی که با یک خطای غیرقابل بازیابی
+روبرو می‌شود متوقف می‌کند، ارائه می‌دهد. این فصل ابتدا به فراخوانی `panic!` می‌پردازد و سپس
+در مورد بازگرداندن مقادیر `Result<T, E>` صحبت می‌کند. علاوه بر این، ملاحظاتی را هنگام تصمیم‌گیری
+در مورد اینکه آیا سعی در بازیابی از یک خطا کنیم یا اجرای برنامه را متوقف کنیم، بررسی خواهیم کرد.
+
+</div>
