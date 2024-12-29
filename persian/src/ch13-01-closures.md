@@ -1,43 +1,30 @@
 <!-- Old heading. Do not remove or links may break. -->
 
+<div dir="rtl">
+
 <a id="closures-anonymous-functions-that-can-capture-their-environment"></a>
 
-## Closures: Anonymous Functions that Capture Their Environment
+<div dir="rtl">
 
-Rust’s closures are anonymous functions you can save in a variable or pass as
-arguments to other functions. You can create the closure in one place and then
-call the closure elsewhere to evaluate it in a different context. Unlike
-functions, closures can capture values from the scope in which they’re defined.
-We’ll demonstrate how these closure features allow for code reuse and behavior
-customization.
+<h2> closureها: توابع ناشناسی که محیط خود را می‌گیرند</h2>
 
-<!-- Old headings. Do not remove or links may break. -->
+</div>
+
+closureهای Rust توابع ناشناسی هستند که می‌توانید آن‌ها را در یک متغیر ذخیره کنید یا به عنوان آرگومان به توابع دیگر ارسال کنید. شما می‌توانید closure را در یک مکان ایجاد کنید و سپس آن را در جای دیگری فراخوانی کنید تا در یک زمینه متفاوت ارزیابی شود. برخلاف توابع، closureها می‌توانند مقادیر را از محیطی که در آن تعریف شده‌اند، بگیرند. ما نشان خواهیم داد که چگونه این ویژگی‌های closure امکان استفاده مجدد از کد و سفارشی‌سازی رفتار را فراهم می‌کند.
+
+<!-- عناوین قدیمی. حذف نکنید تا لینک‌ها خراب نشوند. -->
 
 <a id="creating-an-abstraction-of-behavior-with-closures"></a>
 <a id="refactoring-using-functions"></a>
 <a id="refactoring-with-closures-to-store-code"></a>
 
-### Capturing the Environment with Closures
+### گرفتن محیط با closureها
 
-We’ll first examine how we can use closures to capture values from the
-environment they’re defined in for later use. Here’s the scenario: Every so
-often, our t-shirt company gives away an exclusive, limited-edition shirt to
-someone on our mailing list as a promotion. People on the mailing list can
-optionally add their favorite color to their profile. If the person chosen for
-a free shirt has their favorite color set, they get that color shirt. If the
-person hasn’t specified a favorite color, they get whatever color the company
-currently has the most of.
+ابتدا بررسی خواهیم کرد که چگونه می‌توان از closureها برای گرفتن مقادیر از محیطی که در آن تعریف شده‌اند، برای استفاده در آینده استفاده کرد. سناریوی زیر را در نظر بگیرید: هر چند وقت یک بار، شرکت تی‌شرت ما یک تی‌شرت انحصاری و نسخه محدود به شخصی از لیست پستی خود به عنوان تبلیغ هدیه می‌دهد. افرادی که در لیست پستی هستند می‌توانند به صورت اختیاری رنگ مورد علاقه خود را به پروفایل خود اضافه کنند. اگر شخصی که برای تی‌شرت رایگان انتخاب شده است رنگ مورد علاقه خود را تنظیم کرده باشد، آن رنگ را دریافت می‌کند. اگر شخص رنگ مورد علاقه‌ای مشخص نکرده باشد، رنگی که شرکت بیشترین تعداد آن را دارد، به او داده می‌شود.
 
-There are many ways to implement this. For this example, we’re going to use an
-enum called `ShirtColor` that has the variants `Red` and `Blue` (limiting the
-number of colors available for simplicity). We represent the company’s
-inventory with an `Inventory` struct that has a field named `shirts` that
-contains a `Vec<ShirtColor>` representing the shirt colors currently in stock.
-The method `giveaway` defined on `Inventory` gets the optional shirt
-color preference of the free shirt winner, and returns the shirt color the
-person will get. This setup is shown in Listing 13-1:
+راه‌های زیادی برای پیاده‌سازی این سناریو وجود دارد. در این مثال، ما از یک `enum` به نام `ShirtColor` استفاده می‌کنیم که شامل مقادیر `Red` و `Blue` است (برای سادگی تعداد رنگ‌های موجود را محدود کرده‌ایم). موجودی شرکت را با یک ساختار `Inventory` نشان می‌دهیم که یک فیلد به نام `shirts` دارد که یک `Vec<ShirtColor>` از رنگ‌های تی‌شرت موجود را نشان می‌دهد. متدی به نام `giveaway` که در `Inventory` تعریف شده است، اولویت رنگ تی‌شرت کاربر برنده را دریافت کرده و رنگ تی‌شرتی که به آن فرد داده می‌شود را برمی‌گرداند. این تنظیمات در لیستینگ 13-1 نشان داده شده است:
 
-<Listing number="13-1" file-name="src/main.rs" caption="Shirt company giveaway situation">
+<Listing number="13-1" file-name="src/main.rs" caption="سناریوی هدیه شرکت تی‌شرت">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-01/src/main.rs}}
@@ -45,69 +32,34 @@ person will get. This setup is shown in Listing 13-1:
 
 </Listing>
 
-The `store` defined in `main` has two blue shirts and one red shirt remaining
-to distribute for this limited-edition promotion. We call the `giveaway` method
-for a user with a preference for a red shirt and a user without any preference.
+در این کد، `store` تعریف‌شده در `main` دو تی‌شرت آبی و یک تی‌شرت قرمز باقی‌مانده برای توزیع در این تبلیغ نسخه محدود دارد. ما متد `giveaway` را برای یک کاربر با ترجیح یک تی‌شرت قرمز و یک کاربر بدون هیچ ترجیحی فراخوانی می‌کنیم.
 
-Again, this code could be implemented in many ways, and here, to focus on
-closures, we’ve stuck to concepts you’ve already learned except for the body of
-the `giveaway` method that uses a closure. In the `giveaway` method, we get the
-user preference as a parameter of type `Option<ShirtColor>` and call the
-`unwrap_or_else` method on `user_preference`. The [`unwrap_or_else` method on
-`Option<T>`][unwrap-or-else]<!-- ignore --> is defined by the standard library.
-It takes one argument: a closure without any arguments that returns a value `T`
-(the same type stored in the `Some` variant of the `Option<T>`, in this case
-`ShirtColor`). If the `Option<T>` is the `Some` variant, `unwrap_or_else`
-returns the value from within the `Some`. If the `Option<T>` is the `None`
-variant, `unwrap_or_else` calls the closure and returns the value returned by
-the closure.
+دوباره تأکید می‌کنیم که این کد را می‌توان به روش‌های مختلفی پیاده‌سازی کرد. در اینجا، برای تمرکز بر closureها، به مفاهیمی که قبلاً آموخته‌اید پایبند مانده‌ایم، به جز بخش بدنه متد `giveaway` که از یک closure استفاده می‌کند. در متد `giveaway`، ما اولویت کاربر را به عنوان یک آرگومان از نوع `Option<ShirtColor>` دریافت می‌کنیم و متد `unwrap_or_else` را روی `user_preference` فراخوانی می‌کنیم. 
 
-We specify the closure expression `|| self.most_stocked()` as the argument to
-`unwrap_or_else`. This is a closure that takes no parameters itself (if the
-closure had parameters, they would appear between the two vertical bars). The
-body of the closure calls `self.most_stocked()`. We’re defining the closure
-here, and the implementation of `unwrap_or_else` will evaluate the closure
-later if the result is needed.
+متد [`unwrap_or_else` روی `Option<T>`][unwrap-or-else]<!-- ignore --> توسط کتابخانه استاندارد تعریف شده است. این متد یک آرگومان می‌گیرد: یک closure بدون هیچ آرگومانی که یک مقدار `T` را بازمی‌گرداند (همان نوعی که در متغیر `Some` از `Option<T>` ذخیره شده است، در این مورد `ShirtColor`). اگر `Option<T>` مقدار `Some` داشته باشد، `unwrap_or_else` مقدار داخل `Some` را بازمی‌گرداند. اگر `Option<T>` مقدار `None` باشد، `unwrap_or_else` closure را فراخوانی کرده و مقداری که closure بازمی‌گرداند را بازمی‌گرداند.
 
-Running this code prints:
+ما عبارت closure `|| self.most_stocked()` را به عنوان آرگومان به `unwrap_or_else` ارسال می‌کنیم. این یک closure است که خود هیچ آرگومانی نمی‌گیرد (اگر closure آرگومان‌هایی داشت، آن‌ها بین دو خط عمودی قرار می‌گرفتند). بدنه closure متد `self.most_stocked()` را فراخوانی می‌کند. ما closure را اینجا تعریف می‌کنیم و پیاده‌سازی `unwrap_or_else` در صورت نیاز، closure را ارزیابی می‌کند.
+
+
+اجرای این کد موارد زیر را چاپ می‌کند:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-01/output.txt}}
 ```
 
-One interesting aspect here is that we’ve passed a closure that calls
-`self.most_stocked()` on the current `Inventory` instance. The standard library
-didn’t need to know anything about the `Inventory` or `ShirtColor` types we
-defined, or the logic we want to use in this scenario. The closure captures an
-immutable reference to the `self` `Inventory` instance and passes it with the
-code we specify to the `unwrap_or_else` method. Functions, on the other hand,
-are not able to capture their environment in this way.
+یکی از جنبه‌های جالب در اینجا این است که ما یک closure ارسال کرده‌ایم که متد `self.most_stocked()` را روی نمونه فعلی `Inventory` فراخوانی می‌کند. کتابخانه استاندارد نیازی به دانستن چیزی درباره انواع `Inventory` یا `ShirtColor` که تعریف کرده‌ایم یا منطقی که می‌خواهیم در این سناریو استفاده کنیم، ندارد. closure یک ارجاع غیرقابل تغییر به نمونه `self` از `Inventory` را می‌گیرد و آن را همراه با کدی که مشخص کرده‌ایم به متد `unwrap_or_else` ارسال می‌کند. از طرف دیگر، توابع قادر به گرفتن محیط خود به این صورت نیستند.
 
-### Closure Type Inference and Annotation
+### استنباط نوع closure و حاشیه‌نویسی
 
-There are more differences between functions and closures. Closures don’t
-usually require you to annotate the types of the parameters or the return value
-like `fn` functions do. Type annotations are required on functions because the
-types are part of an explicit interface exposed to your users. Defining this
-interface rigidly is important for ensuring that everyone agrees on what types
-of values a function uses and returns. Closures, on the other hand, aren’t used
-in an exposed interface like this: they’re stored in variables and used without
-naming them and exposing them to users of our library.
+تفاوت‌های بیشتری بین توابع و closureها وجود دارد. closureها معمولاً نیازی به حاشیه‌نویسی انواع آرگومان‌ها یا مقدار بازگشتی ندارند، برخلاف توابع `fn` که به این حاشیه‌نویسی نیاز دارند. حاشیه‌نویسی انواع در توابع ضروری است زیرا این انواع بخشی از رابط کاربری صریحی هستند که برای کاربران شما ارائه می‌شود. تعریف این رابط به صورت سختگیرانه برای اطمینان از توافق همه در مورد انواع مقادیر استفاده شده و بازگشتی یک تابع مهم است. از طرف دیگر، closureها به این صورت در یک رابط کاربری صریح استفاده نمی‌شوند: آن‌ها در متغیرها ذخیره می‌شوند و بدون نام‌گذاری و افشای آن‌ها به کاربران کتابخانه ما استفاده می‌شوند.
 
-Closures are typically short and relevant only within a narrow context rather
-than in any arbitrary scenario. Within these limited contexts, the compiler can
-infer the types of the parameters and the return type, similar to how it’s able
-to infer the types of most variables (there are rare cases where the compiler
-needs closure type annotations too).
+<div dir="rtl">
+closureها معمولاً کوتاه هستند و فقط در یک زمینه محدود مرتبط هستند، نه در هر سناریوی دلخواه. در این زمینه‌های محدود، کامپایلر می‌تواند انواع پارامترها و مقدار بازگشتی را استنباط کند، مشابه آنچه که می‌تواند انواع اکثر متغیرها را استنباط کند (موارد نادری وجود دارند که کامپایلر به حاشیه‌نویسی نوع closure نیز نیاز دارد).
+</div>
+<br>
+همانند متغیرها، ما می‌توانیم حاشیه‌نویسی نوع اضافه کنیم اگر بخواهیم وضوح و شفافیت را افزایش دهیم، به قیمت پرحرف‌تر شدن از آنچه که به طور دقیق ضروری است. افزودن حاشیه‌نویسی نوع برای یک closure به این صورت است که در لیستینگ 13-2 نشان داده شده است. در این مثال، ما یک closure تعریف کرده و آن را در یک متغیر ذخیره می‌کنیم، به جای اینکه closure را در مکانی که به عنوان آرگومان ارسال می‌کنیم تعریف کنیم، همانطور که در لیستینگ 13-1 انجام دادیم.
 
-As with variables, we can add type annotations if we want to increase
-explicitness and clarity at the cost of being more verbose than is strictly
-necessary. Annotating the types for a closure would look like the definition
-shown in Listing 13-2. In this example, we’re defining a closure and storing it
-in a variable rather than defining the closure in the spot we pass it as an
-argument as we did in Listing 13-1.
-
-<Listing number="13-2" file-name="src/main.rs" caption="Adding optional type annotations of the parameter and return value types in the closure">
+<Listing number="13-2" file-name="src/main.rs" caption="افزودن حاشیه‌نویسی‌های اختیاری برای انواع آرگومان‌ها و مقدار بازگشتی در closure">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-02/src/main.rs:here}}
@@ -115,12 +67,7 @@ argument as we did in Listing 13-1.
 
 </Listing>
 
-With type annotations added, the syntax of closures looks more similar to the
-syntax of functions. Here we define a function that adds 1 to its parameter and
-a closure that has the same behavior, for comparison. We’ve added some spaces
-to line up the relevant parts. This illustrates how closure syntax is similar
-to function syntax except for the use of pipes and the amount of syntax that is
-optional:
+با اضافه کردن حاشیه‌نویسی نوع، نحوه نوشتن closureها بیشتر شبیه به نوشتن توابع می‌شود. در اینجا، ما یک تابع تعریف کرده‌ایم که 1 به آرگومان خود اضافه می‌کند و یک closure که همان رفتار را دارد، برای مقایسه. ما فضاهایی اضافه کرده‌ایم تا بخش‌های مرتبط را هم‌ردیف کنیم. این نشان می‌دهد که نحو closure چقدر شبیه به نحو توابع است، به جز استفاده از خطوط عمودی و میزان نحوی که اختیاری است.
 
 ```rust,ignore
 fn  add_one_v1   (x: u32) -> u32 { x + 1 }
@@ -129,26 +76,11 @@ let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
 
-The first line shows a function definition, and the second line shows a fully
-annotated closure definition. In the third line, we remove the type annotations
-from the closure definition. In the fourth line, we remove the brackets, which
-are optional because the closure body has only one expression. These are all
-valid definitions that will produce the same behavior when they’re called. The
-`add_one_v3` and `add_one_v4` lines require the closures to be evaluated to be
-able to compile because the types will be inferred from their usage. This is
-similar to `let v = Vec::new();` needing either type annotations or values of
-some type to be inserted into the `Vec` for Rust to be able to infer the type.
+خط اول تعریف یک تابع را نشان می‌دهد، و خط دوم تعریف یک closure با حاشیه‌نویسی کامل را نمایش می‌دهد. در خط سوم، حاشیه‌نویسی انواع از تعریف closure حذف شده است. در خط چهارم، براکت‌ها را حذف می‌کنیم، که اختیاری هستند زیرا بدنه closure فقط یک عبارت دارد. همه این‌ها تعاریف معتبری هستند که هنگام فراخوانی رفتار یکسانی تولید می‌کنند. خطوط `add_one_v3` و `add_one_v4` نیاز دارند که closureها ارزیابی شوند تا کامپایل شوند زیرا انواع از نحوه استفاده آن‌ها استنباط خواهند شد. این مشابه با `let v = Vec::new();` است که نیاز دارد یا حاشیه‌نویسی نوع داشته باشد یا مقادیر از نوعی در `Vec` وارد شوند تا Rust بتواند نوع را استنباط کند.
 
-For closure definitions, the compiler will infer one concrete type for each of
-their parameters and for their return value. For instance, Listing 13-3 shows
-the definition of a short closure that just returns the value it receives as a
-parameter. This closure isn’t very useful except for the purposes of this
-example. Note that we haven’t added any type annotations to the definition.
-Because there are no type annotations, we can call the closure with any type,
-which we’ve done here with `String` the first time. If we then try to call
-`example_closure` with an integer, we’ll get an error.
+برای تعریف closureها، کامپایلر یک نوع مشخص برای هر یک از پارامترها و مقدار بازگشتی آن‌ها استنباط می‌کند. برای مثال، لیستینگ 13-3 تعریف یک closure کوتاه را نشان می‌دهد که فقط مقداری که به عنوان پارامتر دریافت می‌کند را بازمی‌گرداند. این closure برای اهداف این مثال استفاده چندانی ندارد. توجه کنید که هیچ حاشیه‌نویسی نوعی به تعریف اضافه نکرده‌ایم. چون هیچ حاشیه‌نویسی وجود ندارد، می‌توانیم closure را با هر نوعی فراخوانی کنیم، همان‌طور که اولین بار این کار را با `String` انجام دادیم. اگر سپس سعی کنیم `example_closure` را با یک عدد صحیح فراخوانی کنیم، خطایی دریافت خواهیم کرد.
 
-<Listing number="13-3" file-name="src/main.rs" caption="Attempting to call a closure whose types are inferred with two different types">
+<Listing number="13-3" file-name="src/main.rs" caption="تلاش برای فراخوانی یک closure که انواع آن با استفاده از دو نوع مختلف استنباط شده است">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-03/src/main.rs:here}}
@@ -156,30 +88,21 @@ which we’ve done here with `String` the first time. If we then try to call
 
 </Listing>
 
-The compiler gives us this error:
+کامپایلر این خطا را می‌دهد:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-03/output.txt}}
 ```
 
-The first time we call `example_closure` with the `String` value, the compiler
-infers the type of `x` and the return type of the closure to be `String`. Those
-types are then locked into the closure in `example_closure`, and we get a type
-error when we next try to use a different type with the same closure.
+اولین باری که `example_closure` را با مقدار `String` فراخوانی می‌کنیم، کامپایلر نوع `x` و مقدار بازگشتی closure را به عنوان `String` استنباط می‌کند. سپس این انواع در closure `example_closure` قفل می‌شوند و هنگام تلاش برای استفاده از یک نوع دیگر با همان closure، یک خطای نوع دریافت می‌کنیم.
 
-### Capturing References or Moving Ownership
+### گرفتن ارجاعات یا انتقال مالکیت
 
-Closures can capture values from their environment in three ways, which
-directly map to the three ways a function can take a parameter: borrowing
-immutably, borrowing mutably, and taking ownership. The closure will decide
-which of these to use based on what the body of the function does with the
-captured values.
+closureها می‌توانند مقادیر را از محیط خود به سه روش بگیرند که مستقیماً به سه روشی که یک تابع می‌تواند یک پارامتر بگیرد، نگاشت می‌شوند: قرض‌گیری غیرقابل تغییر، قرض‌گیری قابل تغییر، و گرفتن مالکیت. closure تصمیم می‌گیرد که کدام یک از این‌ها را بر اساس کاری که بدنه تابع با مقادیر گرفته شده انجام می‌دهد، استفاده کند.
 
-In Listing 13-4, we define a closure that captures an immutable reference to
-the vector named `list` because it only needs an immutable reference to print
-the value:
+در لیستینگ 13-4، یک closure تعریف می‌کنیم که یک ارجاع غیرقابل تغییر به بردار با نام `list` را می‌گیرد زیرا فقط به یک ارجاع غیرقابل تغییر نیاز دارد تا مقدار را چاپ کند:
 
-<Listing number="13-4" file-name="src/main.rs" caption="Defining and calling a closure that captures an immutable reference">
+<Listing number="13-4" file-name="src/main.rs" caption="تعریف و فراخوانی یک closure که یک ارجاع غیرقابل تغییر می‌گیرد">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-04/src/main.rs}}
@@ -187,23 +110,17 @@ the value:
 
 </Listing>
 
-This example also illustrates that a variable can bind to a closure definition,
-and we can later call the closure by using the variable name and parentheses as
-if the variable name were a function name.
+این مثال همچنین نشان می‌دهد که یک متغیر می‌تواند به تعریف یک closure متصل شود و بعداً می‌توان closure را با استفاده از نام متغیر و پرانتزها فراخوانی کرد، گویی که نام متغیر یک نام تابع است.
 
-Because we can have multiple immutable references to `list` at the same time,
-`list` is still accessible from the code before the closure definition, after
-the closure definition but before the closure is called, and after the closure
-is called. This code compiles, runs, and prints:
+از آنجا که می‌توانیم چندین ارجاع غیرقابل تغییر به `list` به طور همزمان داشته باشیم، `list` همچنان از کدی که قبل از تعریف closure، بعد از تعریف closure اما قبل از فراخوانی closure و بعد از فراخوانی closure وجود دارد، قابل دسترسی است. این کد کامپایل شده، اجرا می‌شود و نتیجه زیر را چاپ می‌کند:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-04/output.txt}}
 ```
 
-Next, in Listing 13-5, we change the closure body so that it adds an element to
-the `list` vector. The closure now captures a mutable reference:
+در ادامه، در لیستینگ 13-5، بدنه closure را تغییر می‌دهیم تا یک عنصر به بردار `list` اضافه کند. closure اکنون یک ارجاع قابل تغییر می‌گیرد:
 
-<Listing number="13-5" file-name="src/main.rs" caption="Defining and calling a closure that captures a mutable reference">
+<Listing number="13-5" file-name="src/main.rs" caption="تعریف و فراخوانی یک closure که یک ارجاع قابل تغییر می‌گیرد">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-05/src/main.rs}}
@@ -211,32 +128,19 @@ the `list` vector. The closure now captures a mutable reference:
 
 </Listing>
 
-This code compiles, runs, and prints:
+این کد کامپایل شده، اجرا می‌شود و نتیجه زیر را چاپ می‌کند:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-05/output.txt}}
 ```
 
-Note that there’s no longer a `println!` between the definition and the call of
-the `borrows_mutably` closure: when `borrows_mutably` is defined, it captures a
-mutable reference to `list`. We don’t use the closure again after the closure
-is called, so the mutable borrow ends. Between the closure definition and the
-closure call, an immutable borrow to print isn’t allowed because no other
-borrows are allowed when there’s a mutable borrow. Try adding a `println!`
-there to see what error message you get!
+توجه داشته باشید که دیگر `println!` بین تعریف و فراخوانی closure `borrows_mutably` وجود ندارد: زمانی که `borrows_mutably` تعریف می‌شود، یک ارجاع قابل تغییر به `list` می‌گیرد. ما بعد از فراخوانی closure دوباره از آن استفاده نمی‌کنیم، بنابراین قرض‌گیری قابل تغییر پایان می‌یابد. بین تعریف closure و فراخوانی آن، قرض‌گیری غیرقابل تغییر برای چاپ مجاز نیست، زیرا هیچ قرض دیگری هنگام وجود یک قرض قابل تغییر مجاز نیست. سعی کنید یک `println!` در آنجا اضافه کنید تا ببینید چه پیام خطایی دریافت می‌کنید!
 
-If you want to force the closure to take ownership of the values it uses in the
-environment even though the body of the closure doesn’t strictly need
-ownership, you can use the `move` keyword before the parameter list.
+اگر بخواهید closure را مجبور کنید که مالکیت مقادیر استفاده‌شده در محیط را بگیرد، حتی اگر بدنه closure به طور دقیق به مالکیت نیاز نداشته باشد، می‌توانید از کلیدواژه `move` قبل از لیست پارامترها استفاده کنید.
 
-This technique is mostly useful when passing a closure to a new thread to move
-the data so that it’s owned by the new thread. We’ll discuss threads and why
-you would want to use them in detail in Chapter 16 when we talk about
-concurrency, but for now, let’s briefly explore spawning a new thread using a
-closure that needs the `move` keyword. Listing 13-6 shows Listing 13-4 modified
-to print the vector in a new thread rather than in the main thread:
+این تکنیک بیشتر زمانی مفید است که یک closure را به یک نخ جدید ارسال می‌کنید تا داده‌ها به گونه‌ای انتقال داده شوند که توسط نخ جدید مالکیت پیدا کنند. ما موضوع نخ‌ها و دلایلی که ممکن است بخواهید از آن‌ها استفاده کنید را به تفصیل در فصل 16 زمانی که در مورد هم‌زمانی صحبت می‌کنیم، بررسی خواهیم کرد. اما برای حالا، بیایید به صورت مختصر ایجاد یک نخ جدید با استفاده از یک closure که به کلیدواژه `move` نیاز دارد را بررسی کنیم. لیستینگ 13-6 لیستینگ 13-4 را اصلاح می‌کند تا بردار را در یک نخ جدید چاپ کند به جای اینکه در نخ اصلی این کار را انجام دهد:
 
-<Listing number="13-6" file-name="src/main.rs" caption="Using `move` to force the closure for the thread to take ownership of `list`">
+<Listing number="13-6" file-name="src/main.rs" caption="استفاده از `move` برای مجبور کردن closure به گرفتن مالکیت `list` برای نخ">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-06/src/main.rs}}
@@ -244,59 +148,42 @@ to print the vector in a new thread rather than in the main thread:
 
 </Listing>
 
-We spawn a new thread, giving the thread a closure to run as an argument. The
-closure body prints out the list. In Listing 13-4, the closure only captured
-`list` using an immutable reference because that's the least amount of access
-to `list` needed to print it. In this example, even though the closure body
-still only needs an immutable reference, we need to specify that `list` should
-be moved into the closure by putting the `move` keyword at the beginning of the
-closure definition. The new thread might finish before the rest of the main
-thread finishes, or the main thread might finish first. If the main thread
-maintained ownership of `list` but ended before the new thread did and dropped
-`list`, the immutable reference in the thread would be invalid. Therefore, the
-compiler requires that `list` be moved into the closure given to the new thread
-so the reference will be valid. Try removing the `move` keyword or using `list`
-in the main thread after the closure is defined to see what compiler errors you
-get!
+ما یک نخ جدید ایجاد می‌کنیم و به نخ یک closure می‌دهیم تا به عنوان آرگومان اجرا شود. بدنه closure لیست را چاپ می‌کند. در لیستینگ 13-4، closure فقط با استفاده از یک ارجاع غیرقابل تغییر `list` را گرفت زیرا این کمترین دسترسی مورد نیاز برای چاپ `list` بود. در این مثال، اگرچه بدنه closure هنوز فقط به یک ارجاع غیرقابل تغییر نیاز دارد، باید مشخص کنیم که `list` باید به داخل closure منتقل شود. این کار را با قرار دادن کلمه کلیدی `move` در ابتدای تعریف closure انجام می‌دهیم. 
 
-<!-- Old headings. Do not remove or links may break. -->
+نخ جدید ممکن است قبل از تکمیل نخ اصلی تمام شود، یا نخ اصلی ممکن است زودتر تمام شود. اگر نخ اصلی مالکیت `list` را حفظ می‌کرد اما قبل از نخ جدید به پایان می‌رسید و `list` را حذف می‌کرد، ارجاع غیرقابل تغییر در نخ دیگر معتبر نبود. بنابراین، کامپایلر نیاز دارد که `list` به داخل closure داده‌شده به نخ جدید منتقل شود تا ارجاع معتبر باقی بماند. سعی کنید کلمه کلیدی `move` را حذف کنید یا از `list` در نخ اصلی پس از تعریف closure استفاده کنید تا ببینید چه خطاهای کامپایلری دریافت می‌کنید!
+
+<!-- عناوین قدیمی. حذف نکنید تا لینک‌ها خراب نشوند. -->
 
 <a id="storing-closures-using-generic-parameters-and-the-fn-traits"></a>
 <a id="limitations-of-the-cacher-implementation"></a>
 <a id="moving-captured-values-out-of-the-closure-and-the-fn-traits"></a>
 
-### Moving Captured Values Out of Closures and the `Fn` Traits
+### انتقال مقادیر گرفته‌شده به خارج از closureها و صفات `Fn`
 
-Once a closure has captured a reference or captured ownership of a value from
-the environment where the closure is defined (thus affecting what, if anything,
-is moved _into_ the closure), the code in the body of the closure defines what
-happens to the references or values when the closure is evaluated later (thus
-affecting what, if anything, is moved _out of_ the closure). A closure body can
-do any of the following: move a captured value out of the closure, mutate the
-captured value, neither move nor mutate the value, or capture nothing from the
-environment to begin with.
+پس از اینکه یک closure ارجاعی را گرفت یا مالکیت مقداری را از محیطی که closure در آن تعریف شده است دریافت کرد (و به این ترتیب تعیین کرد چه چیزی، اگر وجود داشته باشد، به _داخل_ closure منتقل شود)، کد در بدنه closure مشخص می‌کند که چه اتفاقی برای ارجاعات یا مقادیر هنگام ارزیابی closure در آینده می‌افتد (و به این ترتیب تعیین می‌کند چه چیزی، اگر وجود داشته باشد، به _خارج از_ closure منتقل شود). بدنه یک closure می‌تواند هر یک از موارد زیر را انجام دهد: 
 
-The way a closure captures and handles values from the environment affects
-which traits the closure implements, and traits are how functions and structs
-can specify what kinds of closures they can use. Closures will automatically
-implement one, two, or all three of these `Fn` traits, in an additive fashion,
-depending on how the closure’s body handles the values:
+<ul dir="rtl">
+  <li>انتقال یک مقدار گرفته‌شده به خارج از closure،</li>
+  <li>تغییر مقدار گرفته‌شده،</li>
+  <li>نه انتقال و نه تغییر مقدار،</li>
+  <li>یا از ابتدا هیچ چیزی از محیط نگرفتن.</li>
+</ul>
 
-1. `FnOnce` applies to closures that can be called once. All closures implement
-   at least this trait, because all closures can be called. A closure that
-   moves captured values out of its body will only implement `FnOnce` and none
-   of the other `Fn` traits, because it can only be called once.
-2. `FnMut` applies to closures that don’t move captured values out of their
-   body, but that might mutate the captured values. These closures can be
-   called more than once.
-3. `Fn` applies to closures that don’t move captured values out of their body
-   and that don’t mutate captured values, as well as closures that capture
-   nothing from their environment. These closures can be called more than once
-   without mutating their environment, which is important in cases such as
-   calling a closure multiple times concurrently.
+نحوه گرفتن و مدیریت مقادیر توسط closure از محیط مشخص می‌کند که closure کدام صفات را پیاده‌سازی می‌کند. صفات روشی هستند که توابع و ساختارها می‌توانند مشخص کنند از چه نوع closureهایی می‌توانند استفاده کنند. closureها به صورت خودکار یکی، دو یا هر سه این صفات `Fn` را پیاده‌سازی می‌کنند، به صورت افزایشی، بسته به نحوه مدیریت مقادیر توسط بدنه closure:
 
-Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
-we used in Listing 13-1:
+<ol dir="rtl">
+  <li>
+    <code>FnOnce</code>: برای closureهایی که می‌توانند فقط یک بار فراخوانی شوند اعمال می‌شود. همه closureها حداقل این صفت را پیاده‌سازی می‌کنند، زیرا همه closureها قابل فراخوانی هستند. closureی که مقادیر گرفته‌شده را از بدنه خود انتقال می‌دهد فقط صفت <code>FnOnce</code> را پیاده‌سازی می‌کند و هیچ‌یک از دیگر صفات <code>Fn</code> را پیاده‌سازی نمی‌کند، زیرا فقط یک بار قابل فراخوانی است.
+  </li>
+  <li>
+    <code>FnMut</code>: برای closureهایی که مقادیر گرفته‌شده را از بدنه خود انتقال نمی‌دهند اما ممکن است مقادیر گرفته‌شده را تغییر دهند اعمال می‌شود. این closureها می‌توانند بیش از یک بار فراخوانی شوند.
+  </li>
+  <li>
+    <code>Fn</code>: برای closureهایی که مقادیر گرفته‌شده را از بدنه خود انتقال نمی‌دهند و مقادیر گرفته‌شده را تغییر نمی‌دهند، همچنین closureهایی که هیچ چیزی از محیط نمی‌گیرند اعمال می‌شود. این closureها می‌توانند بیش از یک بار بدون تغییر محیط خود فراخوانی شوند، که در مواردی مانند فراخوانی یک closure به طور همزمان چندین بار مهم است.
+  </li>
+</ol>
+
+بیایید تعریف متد `unwrap_or_else` در `Option<T>` را که در لیستینگ 13-1 استفاده کردیم بررسی کنیم:
 
 ```rust,ignore
 impl<T> Option<T> {
@@ -312,41 +199,18 @@ impl<T> Option<T> {
 }
 ```
 
-Recall that `T` is the generic type representing the type of the value in the
-`Some` variant of an `Option`. That type `T` is also the return type of the
-`unwrap_or_else` function: code that calls `unwrap_or_else` on an
-`Option<String>`, for example, will get a `String`.
 
-Next, notice that the `unwrap_or_else` function has the additional generic type
-parameter `F`. The `F` type is the type of the parameter named `f`, which is
-the closure we provide when calling `unwrap_or_else`.
+به یاد داشته باشید که `T` نوع جنریک است که نوع مقدار موجود در واریانت `Some` از `Option` را نشان می‌دهد. این نوع `T` همچنین نوع بازگشتی تابع `unwrap_or_else` است: به عنوان مثال، کدی که `unwrap_or_else` را روی یک `Option<String>` فراخوانی می‌کند، یک `String` دریافت خواهد کرد.
 
-The trait bound specified on the generic type `F` is `FnOnce() -> T`, which
-means `F` must be able to be called once, take no arguments, and return a `T`.
-Using `FnOnce` in the trait bound expresses the constraint that
-`unwrap_or_else` is only going to call `f` at most one time. In the body of
-`unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be
-called. If the `Option` is `None`, `f` will be called once. Because all
-closures implement `FnOnce`, `unwrap_or_else` accepts all three kinds of
-closures and is as flexible as it can be.
+بعدی، توجه داشته باشید که تابع `unwrap_or_else` پارامتر نوع جنریک اضافی `F` را دارد. نوع `F` نوع پارامتر نام‌گذاری‌شده `f` است، که closureی است که هنگام فراخوانی `unwrap_or_else` ارائه می‌دهیم.
 
-> Note: If what we want to do doesn’t require capturing a value from the
-> environment, we can use the name of a function rather than a closure. For
-> example, we could call `unwrap_or_else(Vec::new)` on a `Option<Vec<T>>` value
-> to get a new, empty vector if the value is `None`. The compiler automatically
-> implements whichever of the `Fn` traits is applicable for a function
-> definition.
+محدودیت صفت مشخص‌شده روی نوع جنریک `F`، `FnOnce() -> T` است، که به این معناست که `F` باید بتواند یک بار فراخوانی شود، هیچ آرگومانی نگیرد و یک `T` بازگرداند. استفاده از `FnOnce` در محدودیت صفت، محدودیت این موضوع را بیان می‌کند که `unwrap_or_else` حداکثر یک بار `f` را فراخوانی خواهد کرد. در بدنه `unwrap_or_else`، می‌بینیم که اگر `Option` برابر با `Some` باشد، `f` فراخوانی نمی‌شود. اگر `Option` برابر با `None` باشد، `f` یک بار فراخوانی خواهد شد. از آنجایی که تمام closureها `FnOnce` را پیاده‌سازی می‌کنند، `unwrap_or_else` همه انواع سه‌گانه closureها را می‌پذیرد و به اندازه کافی انعطاف‌پذیر است.
 
-Now let’s look at the standard library method `sort_by_key` defined on slices,
-to see how that differs from `unwrap_or_else` and why `sort_by_key` uses
-`FnMut` instead of `FnOnce` for the trait bound. The closure gets one argument
-in the form of a reference to the current item in the slice being considered,
-and returns a value of type `K` that can be ordered. This function is useful
-when you want to sort a slice by a particular attribute of each item. In
-Listing 13-7, we have a list of `Rectangle` instances and we use `sort_by_key`
-to order them by their `width` attribute from low to high:
+> نکته: اگر کاری که می‌خواهیم انجام دهیم نیاز به گرفتن مقداری از محیط نداشته باشد، می‌توانیم به جای closure از نام یک تابع استفاده کنیم. به عنوان مثال، می‌توانیم `unwrap_or_else(Vec::new)` را روی یک مقدار `Option<Vec<T>>` فراخوانی کنیم تا اگر مقدار `None` بود، یک وکتور جدید و خالی دریافت کنیم. کامپایلر به طور خودکار هر کدام از صفات `Fn` که برای تعریف تابع کاربرد دارد را پیاده‌سازی می‌کند.
 
-<Listing number="13-7" file-name="src/main.rs" caption="Using `sort_by_key` to order rectangles by width">
+اکنون بیایید به متد استاندارد کتابخانه `sort_by_key` که روی برش‌ها (slices) تعریف شده است نگاهی بیندازیم تا ببینیم چگونه با `unwrap_or_else` متفاوت است و چرا `sort_by_key` به جای `FnOnce` از `FnMut` برای محدودیت صفت استفاده می‌کند. closure یک آرگومان به شکل یک ارجاع به آیتم جاری در برشی که در نظر گرفته می‌شود می‌گیرد و یک مقدار از نوع `K` را که قابل مرتب‌سازی است بازمی‌گرداند. این تابع زمانی مفید است که بخواهید یک برش را بر اساس ویژگی خاصی از هر آیتم مرتب کنید. در لیست 13-7، ما لیستی از نمونه‌های `Rectangle` داریم و از `sort_by_key` برای مرتب کردن آن‌ها بر اساس ویژگی `width` از کم به زیاد استفاده می‌کنیم:
+
+<Listing number="13-7" file-name="src/main.rs" caption="استفاده از `sort_by_key` برای مرتب‌سازی مستطیل‌ها بر اساس عرض">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs}}
@@ -354,22 +218,17 @@ to order them by their `width` attribute from low to high:
 
 </Listing>
 
-This code prints:
+این کد خروجی زیر را چاپ می‌کند:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-07/output.txt}}
 ```
 
-The reason `sort_by_key` is defined to take an `FnMut` closure is that it calls
-the closure multiple times: once for each item in the slice. The closure `|r|
-r.width` doesn’t capture, mutate, or move out anything from its environment, so
-it meets the trait bound requirements.
+دلیل اینکه `sort_by_key` به گونه‌ای تعریف شده که یک closure `FnMut` بگیرد این است که closure را چندین بار فراخوانی می‌کند: یک بار برای هر آیتم در برش. closure `|r| r.width` چیزی را از محیط خود نمی‌گیرد، تغییر نمی‌دهد یا منتقل نمی‌کند، بنابراین با الزامات محدودیت صفت مطابقت دارد.
 
-In contrast, Listing 13-8 shows an example of a closure that implements just
-the `FnOnce` trait, because it moves a value out of the environment. The
-compiler won’t let us use this closure with `sort_by_key`:
+در مقابل، لیست 13-8 مثالی از closureی را نشان می‌دهد که فقط صفت `FnOnce` را پیاده‌سازی می‌کند، زیرا مقداری را از محیط منتقل می‌کند. کامپایلر اجازه نمی‌دهد از این closure با `sort_by_key` استفاده کنیم:
 
-<Listing number="13-8" file-name="src/main.rs" caption="Attempting to use an `FnOnce` closure with `sort_by_key`">
+<Listing number="13-8" file-name="src/main.rs" caption="تلاش برای استفاده از closure `FnOnce` با `sort_by_key`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs}}
@@ -377,32 +236,15 @@ compiler won’t let us use this closure with `sort_by_key`:
 
 </Listing>
 
-This is a contrived, convoluted way (that doesn’t work) to try and count the
-number of times `sort_by_key` calls the closure when sorting `list`. This code
-attempts to do this counting by pushing `value`—a `String` from the closure’s
-environment—into the `sort_operations` vector. The closure captures `value`
-then moves `value` out of the closure by transferring ownership of `value` to
-the `sort_operations` vector. This closure can be called once; trying to call
-it a second time wouldn’t work because `value` would no longer be in the
-environment to be pushed into `sort_operations` again! Therefore, this closure
-only implements `FnOnce`. When we try to compile this code, we get this error
-that `value` can’t be moved out of the closure because the closure must
-implement `FnMut`:
+این یک روش مصنوعی و پیچیده (که کار نمی‌کند) برای تلاش در شمارش تعداد دفعاتی است که `sort_by_key` closure را هنگام مرتب کردن `list` فراخوانی می‌کند. این کد سعی می‌کند این شمارش را با افزودن `value`—یک `String` از محیط closure—به وکتور `sort_operations` انجام دهد. closure، `value` را می‌گیرد و سپس با انتقال مالکیت `value` به وکتور `sort_operations`، `value` را از closure منتقل می‌کند. این closure فقط یک بار می‌تواند فراخوانی شود؛ تلاش برای فراخوانی آن برای بار دوم کار نمی‌کند زیرا `value` دیگر در محیط وجود ندارد که دوباره به `sort_operations` اضافه شود! بنابراین، این closure فقط صفت `FnOnce` را پیاده‌سازی می‌کند. وقتی سعی می‌کنیم این کد را کامپایل کنیم، این خطا دریافت می‌شود که `value` نمی‌تواند از closure منتقل شود، زیرا closure باید `FnMut` را پیاده‌سازی کند:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
 ```
 
-The error points to the line in the closure body that moves `value` out of the
-environment. To fix this, we need to change the closure body so that it doesn’t
-move values out of the environment. To count the number of times the closure
-is called, keeping a counter in the environment and incrementing its value in
-the closure body is a more straightforward way to calculate that. The closure
-in Listing 13-9 works with `sort_by_key` because it is only capturing a mutable
-reference to the `num_sort_operations` counter and can therefore be called more
-than once:
+این خطا به خطی در بدنه closure اشاره می‌کند که `value` را از محیط منتقل می‌کند. برای رفع این مشکل، باید بدنه closure را تغییر دهیم تا مقادیر را از محیط منتقل نکند. برای شمارش تعداد دفعاتی که closure فراخوانی می‌شود، نگه داشتن یک شمارنده در محیط و افزایش مقدار آن در بدنه closure روشی ساده‌تر برای محاسبه آن است. closure در لیست 13-9 با `sort_by_key` کار می‌کند زیرا فقط یک ارجاع قابل تغییر به شمارنده `num_sort_operations` را می‌گیرد و بنابراین می‌تواند بیش از یک بار فراخوانی شود:
 
-<Listing number="13-9" file-name="src/main.rs" caption="Using an `FnMut` closure with `sort_by_key` is allowed">
+<Listing number="13-9" file-name="src/main.rs" caption="استفاده از یک closure `FnMut` با `sort_by_key` مجاز است">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-09/src/main.rs}}
@@ -410,9 +252,8 @@ than once:
 
 </Listing>
 
-The `Fn` traits are important when defining or using functions or types that
-make use of closures. In the next section, we’ll discuss iterators. Many
-iterator methods take closure arguments, so keep these closure details in mind
-as we continue!
+صفات `Fn` هنگام تعریف یا استفاده از توابع یا انواعی که از closureها استفاده می‌کنند، مهم هستند. در بخش بعدی، ما درباره iteratorها بحث خواهیم کرد. بسیاری از متدهای iterator آرگومان‌های closure می‌گیرند، بنابراین این جزئیات closure را هنگام ادامه مطالعه در نظر داشته باشید!
 
 [unwrap-or-else]: ../std/option/enum.Option.html#method.unwrap_or_else
+
+</div>

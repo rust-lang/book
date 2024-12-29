@@ -1,24 +1,27 @@
-# Functional Language Features: Iterators and Closures
+<div dir="rtl">
 
-Rust’s design has taken inspiration from many existing languages and
-techniques, and one significant influence is _functional programming_.
-Programming in a functional style often includes using functions as values by
-passing them in arguments, returning them from other functions, assigning them
-to variables for later execution, and so forth.
+# ویژگی‌های زبان‌های تابعی: تکرارگرها و closureها
 
-In this chapter, we won’t debate the issue of what functional programming is or
-isn’t but will instead discuss some features of Rust that are similar to
-features in many languages often referred to as functional.
+طراحی زبان Rust از بسیاری از زبان‌ها و تکنیک‌های موجود الهام گرفته است و یکی از تأثیرات مهم آن 
+_برنامه‌نویسی تابعی_ است. برنامه‌نویسی به سبک تابعی اغلب شامل استفاده از توابع به عنوان مقادیر 
+است، از طریق ارسال آن‌ها به عنوان آرگومان، بازگرداندن آن‌ها از دیگر توابع، اختصاص آن‌ها به 
+متغیرها برای اجرای بعدی و موارد دیگر.
 
-More specifically, we’ll cover:
+در این فصل، ما بحث نخواهیم کرد که برنامه‌نویسی تابعی چیست یا چه نیست، بلکه به جای آن درباره 
+برخی از ویژگی‌های Rust که مشابه ویژگی‌های بسیاری از زبان‌هایی است که اغلب به آن‌ها تابعی گفته 
+می‌شود، صحبت خواهیم کرد.
 
-- _Closures_, a function-like construct you can store in a variable
-- _Iterators_, a way of processing a series of elements
-- How to use closures and iterators to improve the I/O project in Chapter 12
-- The performance of closures and iterators (Spoiler alert: they’re faster than
-  you might think!)
+به طور خاص، ما پوشش خواهیم داد:
 
-We’ve already covered some other Rust features, such as pattern matching and
-enums, that are also influenced by the functional style. Because mastering
-closures and iterators is an important part of writing idiomatic, fast Rust
-code, we’ll devote this entire chapter to them.
+<ul dir="rtl">
+
+<li> _closureها_، یک ساختار شبیه به تابع که می‌توان آن را در یک متغیر ذخیره کرد. </li>
+<li> _تکرارگرها_، روشی برای پردازش یک سری عناصر. </li>
+<li> نحوه استفاده از closureها و تکرارگرها برای بهبود پروژه I/O در فصل 12. </li>
+<li> عملکرد closureها و تکرارگرها (هشدار: آن‌ها سریع‌تر از چیزی هستند که ممکن است تصور کنید!) </li>
+
+</ul>
+
+ما قبلاً برخی از ویژگی‌های دیگر Rust، مانند الگوها و enums را پوشش داده‌ایم که همچنین از 
+سبک تابعی تأثیر گرفته‌اند. از آنجایی که تسلط بر closureها و تکرارگرها بخش مهمی از نوشتن کد 
+ایدوماکتیک و سریع در Rust است، ما کل این فصل را به آن‌ها اختصاص خواهیم داد.
