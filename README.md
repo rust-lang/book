@@ -1,13 +1,18 @@
 
 # زبان برنامه‌نویسی راست
 
-<div dir="rtl">
-
+<div align="right">
+  
 ![وضعیت ساخت](https://github.com/rust-lang/book/workflows/CI/badge.svg)
+</div>
 
-<p style="text-align:center;">
-<a href="README-EN.md">English</a> | <a href="README.md">فارسی</a>
-</p>
+<div align="center">
+  
+[English](README-EN.md) | [فارسی](README.md)
+  
+</div>
+
+<div dir="rtl">
 
 این مخزن شامل منبع کتاب "زبان برنامه‌نویسی راست" به زبان فارسی است.
 

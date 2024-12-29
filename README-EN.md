@@ -2,9 +2,11 @@
 
 ![Build Status](https://github.com/rust-lang/book/workflows/CI/badge.svg)
 
-<p style="text-align:center;">
-<a href="README-EN.md">English</a> | <a href="README.md">فارسی</a>
-</p>
+<div align="center">
+  
+[English](README-EN.md) | [فارسی](README.md)
+  
+</div>
 
 
 This repository contains the source of "The Rust Programming Language" book.

@@ -2,6 +2,12 @@
 
 ## Prose
 
+<div align="center">
+  
+[English](style-guide-EN.md) | [فارسی](style-guide.md)
+  
+</div>
+
 - Prefer title case for chapter/section headings, ex: `## Generating a Secret
   Number` rather than `## Generating a secret number`.
 - Prefer italics over single quotes when calling out a term, ex: `is an

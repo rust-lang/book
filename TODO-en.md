@@ -1,5 +1,11 @@
 # In each chapter
 
+<div align="center">
+  
+[English](TODO-EN.md) | [فارسی](TODO.md)
+  
+</div>
+
 - [ ] Manual regeneration
 - [ ] Check for upstream changes from last snapshot
 - [ ] Propagate updated output to docx

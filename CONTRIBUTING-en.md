@@ -1,5 +1,11 @@
 # Contributing
 
+<div align="center">
+  
+[English](CONTRIBUTING-EN.md) | [فارسی](CONTRIBUTING.md)
+  
+</div>
+
 We'd love your help! Thanks for caring about the book.
 
 ## Where to Edit

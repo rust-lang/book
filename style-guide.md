@@ -2,6 +2,12 @@
 
 # راهنمای سبک
 
+<div align="center">
+  
+[English](style-guide-EN.md) | [فارسی](style-guide.md)
+  
+</div>
+
 ## نثر
 
 <ul dir="rtl">

@@ -1,6 +1,13 @@
+<div dir="rtl">
+
+
 # در هر فصل
 
-<div dir="rtl">
+<div align="center">
+  
+[English](TODO-EN.md) | [فارسی](TODO.md)
+  
+</div>
 
 <ul dir="rtl">
   <li>[ ] بازتولید دستی</li>
