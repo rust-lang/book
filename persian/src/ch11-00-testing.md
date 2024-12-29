@@ -1,33 +1,17 @@
-# Writing Automated Tests
+<div dir="rtl">
 
-In his 1972 essay “The Humble Programmer,” Edsger W. Dijkstra said that
-“Program testing can be a very effective way to show the presence of bugs, but
-it is hopelessly inadequate for showing their absence.” That doesn’t mean we
-shouldn’t try to test as much as we can!
+# نوشتن تست‌های خودکار
 
-Correctness in our programs is the extent to which our code does what we intend
-it to do. Rust is designed with a high degree of concern about the correctness
-of programs, but correctness is complex and not easy to prove. Rust’s type
-system shoulders a huge part of this burden, but the type system cannot catch
-everything. As such, Rust includes support for writing automated software tests.
+در مقاله‌ای در سال ۱۹۷۲ به نام “The Humble Programmer”، Edsger W. Dijkstra گفت:  
+«آزمایش برنامه می‌تواند راهی بسیار مؤثر برای نشان دادن وجود باگ‌ها باشد، اما برای نشان دادن عدم وجود آن‌ها کاملاً ناکافی است.»  
+این به این معنی نیست که نباید تلاش کنیم تا جایی که ممکن است آزمایش کنیم!
 
-Say we write a function `add_two` that adds 2 to whatever number is passed to
-it. This function’s signature accepts an integer as a parameter and returns an
-integer as a result. When we implement and compile that function, Rust does all
-the type checking and borrow checking that you’ve learned so far to ensure
-that, for instance, we aren’t passing a `String` value or an invalid reference
-to this function. But Rust _can’t_ check that this function will do precisely
-what we intend, which is return the parameter plus 2 rather than, say, the
-parameter plus 10 or the parameter minus 50! That’s where tests come in.
+درستی در برنامه‌های ما میزان انطباق کد ما با آنچه که قصد انجامش را داریم، است. Rust با نگرانی بالایی درباره درستی برنامه‌ها طراحی شده است، اما درستی پیچیده و اثبات آن آسان نیست. سیستم نوع Rust بخش عظیمی از این بار را به دوش می‌کشد، اما سیستم نوع نمی‌تواند همه چیز را پوشش دهد. به همین دلیل، Rust شامل پشتیبانی برای نوشتن تست‌های خودکار نرم‌افزار است.
 
-We can write tests that assert, for example, that when we pass `3` to the
-`add_two` function, the returned value is `5`. We can run these tests whenever
-we make changes to our code to make sure any existing correct behavior has not
-changed.
+فرض کنید یک تابع به نام `add_two` می‌نویسیم که ۲ را به هر عددی که به آن پاس داده شود اضافه می‌کند. امضای این تابع یک عدد صحیح به عنوان پارامتر می‌پذیرد و یک عدد صحیح به عنوان نتیجه بازمی‌گرداند. هنگامی که این تابع را پیاده‌سازی و کامپایل می‌کنیم، Rust تمام بررسی‌های نوع و قرض‌گیری را که تا کنون آموخته‌اید انجام می‌دهد تا اطمینان حاصل شود که، به عنوان مثال، ما یک مقدار `String` یا یک مرجع نامعتبر را به این تابع پاس نمی‌دهیم. اما Rust _نمی‌تواند_ بررسی کند که این تابع دقیقاً همان کاری را که ما قصد داریم انجام دهد، که بازگرداندن پارامتر به علاوه ۲ است نه مثلاً پارامتر به علاوه ۱۰ یا پارامتر منهای ۵۰! اینجا جایی است که تست‌ها وارد می‌شوند.
 
-Testing is a complex skill: although we can’t cover in one chapter every detail
-about how to write good tests, in this chapter we will discuss the mechanics of
-Rust’s testing facilities. We’ll talk about the annotations and macros
-available to you when writing your tests, the default behavior and options
-provided for running your tests, and how to organize tests into unit tests and
-integration tests.
+ما می‌توانیم تست‌هایی بنویسیم که، به عنوان مثال، تأیید می‌کنند که وقتی `3` را به تابع `add_two` پاس می‌دهیم، مقدار بازگردانده شده `5` است. می‌توانیم این تست‌ها را هر زمان که تغییری در کد خود ایجاد می‌کنیم اجرا کنیم تا مطمئن شویم که هر رفتار درستی که وجود داشته تغییر نکرده است.
+
+تست‌نویسی یک مهارت پیچیده است: اگرچه نمی‌توانیم در یک فصل تمام جزئیات مربوط به نحوه نوشتن تست‌های خوب را پوشش دهیم، در این فصل درباره مکانیک تسهیلات تست Rust بحث خواهیم کرد. درباره حاشیه‌نویسی‌ها و ماکروهایی که هنگام نوشتن تست‌ها در اختیار دارید صحبت خواهیم کرد، رفتار پیش‌فرض و گزینه‌های ارائه‌شده برای اجرای تست‌ها را بررسی خواهیم کرد، و نحوه سازماندهی تست‌ها به تست‌های واحد و تست‌های یکپارچه را یاد خواهیم گرفت.
+
+</div>
