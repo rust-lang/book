@@ -1,48 +1,24 @@
-# Managing Growing Projects with Packages, Crates, and Modules
+<div dir="rtl">
 
-As you write large programs, organizing your code will become increasingly
-important. By grouping related functionality and separating code with distinct
-features, you’ll clarify where to find code that implements a particular
-feature and where to go to change how a feature works.
+# مدیریت پروژه‌های بزرگ با بسته‌ها، کرت‌ها و ماژول‌ها
 
-The programs we’ve written so far have been in one module in one file. As a
-project grows, you should organize code by splitting it into multiple modules
-and then multiple files. A package can contain multiple binary crates and
-optionally one library crate. As a package grows, you can extract parts into
-separate crates that become external dependencies. This chapter covers all
-these techniques. For very large projects comprising a set of interrelated
-packages that evolve together, Cargo provides _workspaces_, which we’ll cover
-in the [“Cargo Workspaces”][workspaces]<!-- ignore --> section in Chapter 14.
+با نوشتن برنامه‌های بزرگ‌تر، سازماندهی کد شما اهمیت بیشتری پیدا می‌کند. با گروه‌بندی قابلیت‌های مرتبط و جدا کردن کدی که ویژگی‌های متمایزی دارد، می‌توانید مشخص کنید که کد یک ویژگی خاص در کجا پیاده‌سازی شده و کجا می‌توان آن را تغییر داد.
 
-We’ll also discuss encapsulating implementation details, which lets you reuse
-code at a higher level: once you’ve implemented an operation, other code can
-call your code via its public interface without having to know how the
-implementation works. The way you write code defines which parts are public for
-other code to use and which parts are private implementation details that you
-reserve the right to change. This is another way to limit the amount of detail
-you have to keep in your head.
+برنامه‌هایی که تاکنون نوشته‌ایم در یک ماژول و یک فایل بوده‌اند. همان‌طور که پروژه رشد می‌کند، باید کد را با تقسیم آن به ماژول‌های مختلف و سپس فایل‌های مختلف سازماندهی کنید. یک بسته می‌تواند شامل چندین کرت باینری و به صورت اختیاری یک کرت کتابخانه باشد. همان‌طور که بسته رشد می‌کند، می‌توانید بخش‌هایی را به کرت‌های جداگانه‌ای که به عنوان وابستگی‌های خارجی عمل می‌کنند استخراج کنید. این فصل تمام این تکنیک‌ها را پوشش می‌دهد. برای پروژه‌های بسیار بزرگ که شامل مجموعه‌ای از بسته‌های مرتبط است که با یکدیگر تکامل می‌یابند، Cargo ویژگی‌هایی به نام _فضای کاری_ ارائه می‌دهد که در بخش [«فضای کاری Cargo»][workspaces] فصل ۱۴ به آن می‌پردازیم.
 
-A related concept is scope: the nested context in which code is written has a
-set of names that are defined as “in scope.” When reading, writing, and
-compiling code, programmers and compilers need to know whether a particular
-name at a particular spot refers to a variable, function, struct, enum, module,
-constant, or other item and what that item means. You can create scopes and
-change which names are in or out of scope. You can’t have two items with the
-same name in the same scope; tools are available to resolve name conflicts.
+همچنین درباره جزئیات پیاده‌سازی که به شما امکان می‌دهد کد را در سطح بالاتری بازاستفاده کنید صحبت خواهیم کرد: وقتی یک عملیات را پیاده‌سازی کرده‌اید، سایر کدها می‌توانند از طریق رابط عمومی کد شما آن را فراخوانی کنند بدون این که لازم باشد بدانند چگونه پیاده‌سازی شده است. نحوه نوشتن کد شما مشخص می‌کند که کدام بخش‌ها برای سایر کدها عمومی و قابل استفاده هستند و کدام بخش‌ها جزئیات پیاده‌سازی خصوصی هستند که می‌توانید هر زمان بخواهید تغییر دهید. این رویکرد یکی دیگر از روش‌هایی است که مقدار جزئیاتی که باید به خاطر بسپارید را محدود می‌کند.
 
-Rust has a number of features that allow you to manage your code’s
-organization, including which details are exposed, which details are private,
-and what names are in each scope in your programs. These features, sometimes
-collectively referred to as the _module system_, include:
+یک مفهوم مرتبط، محدوده (scope) است: زمینه‌ای که در آن کد نوشته شده است و مجموعه‌ای از نام‌ها که به عنوان «در محدوده» تعریف می‌شوند. هنگام خواندن، نوشتن و کامپایل کد، برنامه‌نویسان و کامپایلرها باید بدانند که آیا یک نام خاص در یک مکان خاص به متغیر، تابع، ساختار، enum، ماژول، ثابت یا مورد دیگری اشاره دارد و معنای آن مورد چیست. شما می‌توانید محدوده‌ها ایجاد کنید و مشخص کنید که کدام نام‌ها در محدوده هستند یا خارج از آن. نمی‌توانید دو مورد با نام یکسان در یک محدوده داشته باشید؛ ابزارهایی برای رفع تعارض نام‌ها در دسترس هستند.
 
-- **Packages:** A Cargo feature that lets you build, test, and share crates
-- **Crates:** A tree of modules that produces a library or executable
-- **Modules** and **use:** Let you control the organization, scope, and
-  privacy of paths
-- **Paths:** A way of naming an item, such as a struct, function, or module
+Rust مجموعه‌ای از ویژگی‌ها دارد که به شما امکان می‌دهد سازماندهی کد خود را مدیریت کنید، از جمله جزئیاتی که آشکار می‌شوند، جزئیاتی که خصوصی هستند، و نام‌هایی که در هر محدوده در برنامه‌های شما قرار دارند. این ویژگی‌ها که گاهی به صورت جمعی _سیستم ماژول_ نامیده می‌شوند شامل موارد زیر هستند:
 
-In this chapter, we’ll cover all these features, discuss how they interact, and
-explain how to use them to manage scope. By the end, you should have a solid
-understanding of the module system and be able to work with scopes like a pro!
+- **بسته‌ها:** ویژگی‌ای در Cargo که به شما امکان ساخت، تست و اشتراک‌گذاری کرت‌ها را می‌دهد.
+- **کرت‌ها:** درختی از ماژول‌ها که یک کتابخانه یا یک اجرایی تولید می‌کنند.
+- **ماژول‌ها** و **use:** به شما اجازه می‌دهند سازماندهی، محدوده و حریم خصوصی مسیرها را کنترل کنید.
+- **مسیرها:** راهی برای نام‌گذاری یک مورد مانند یک ساختار، تابع یا ماژول.
+
+در این فصل، تمام این ویژگی‌ها را پوشش خواهیم داد، نحوه تعامل آن‌ها را توضیح می‌دهیم و نحوه استفاده از آن‌ها برای مدیریت محدوده را بررسی می‌کنیم. تا پایان، باید درک جامعی از سیستم ماژول داشته باشید و بتوانید با محدوده‌ها مانند یک حرفه‌ای کار کنید!
 
 [workspaces]: ch14-03-cargo-workspaces.html
+
+</div>
