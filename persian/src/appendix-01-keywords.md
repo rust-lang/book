@@ -1,92 +1,86 @@
-## Appendix A: Keywords
+<div dir="rtl">
 
-The following list contains keywords that are reserved for current or future
-use by the Rust language. As such, they cannot be used as identifiers (except
-as raw identifiers as we’ll discuss in the “[Raw
-Identifiers][raw-identifiers]<!-- ignore -->” section). Identifiers are names
-of functions, variables, parameters, struct fields, modules, crates, constants,
-macros, static values, attributes, types, traits, or lifetimes.
+## ضمیمه الف: کلمات کلیدی
+
+لیست زیر شامل کلمات کلیدی است که برای استفاده فعلی یا آینده توسط زبان Rust رزرو شده‌اند. به همین دلیل، نمی‌توان از آن‌ها به عنوان شناسه استفاده کرد (مگر به عنوان شناسه خام، همان‌طور که در بخش “[شناسه‌های خام][raw-identifiers]” توضیح داده خواهد شد). شناسه‌ها نام‌هایی هستند که برای توابع، متغیرها، پارامترها، فیلدهای ساختار، ماژول‌ها، کرت‌ها، ثابت‌ها، ماکروها، مقادیر استاتیک، ویژگی‌ها، انواع، ویژگی‌ها، یا طول عمرها استفاده می‌شوند.
 
 [raw-identifiers]: #raw-identifiers
 
-### Keywords Currently in Use
+### کلمات کلیدی در حال استفاده
 
-The following is a list of keywords currently in use, with their functionality
-described.
-
-- `as` - perform primitive casting, disambiguate the specific trait containing
-  an item, or rename items in `use` statements
-- `async` - return a `Future` instead of blocking the current thread
-- `await` - suspend execution until the result of a `Future` is ready
-- `break` - exit a loop immediately
-- `const` - define constant items or constant raw pointers
-- `continue` - continue to the next loop iteration
-- `crate` - in a module path, refers to the crate root
-- `dyn` - dynamic dispatch to a trait object
-- `else` - fallback for `if` and `if let` control flow constructs
-- `enum` - define an enumeration
-- `extern` - link an external function or variable
-- `false` - Boolean false literal
-- `fn` - define a function or the function pointer type
-- `for` - loop over items from an iterator, implement a trait, or specify a
-  higher-ranked lifetime
-- `if` - branch based on the result of a conditional expression
-- `impl` - implement inherent or trait functionality
-- `in` - part of `for` loop syntax
-- `let` - bind a variable
-- `loop` - loop unconditionally
-- `match` - match a value to patterns
-- `mod` - define a module
-- `move` - make a closure take ownership of all its captures
-- `mut` - denote mutability in references, raw pointers, or pattern bindings
-- `pub` - denote public visibility in struct fields, `impl` blocks, or modules
-- `ref` - bind by reference
-- `return` - return from function
-- `Self` - a type alias for the type we are defining or implementing
-- `self` - method subject or current module
-- `static` - global variable or lifetime lasting the entire program execution
-- `struct` - define a structure
-- `super` - parent module of the current module
-- `trait` - define a trait
-- `true` - Boolean true literal
-- `type` - define a type alias or associated type
-- `union` - define a [union][union]<!-- ignore -->; is only a keyword when used
-  in a union declaration
-- `unsafe` - denote unsafe code, functions, traits, or implementations
-- `use` - bring symbols into scope
-- `where` - denote clauses that constrain a type
-- `while` - loop conditionally based on the result of an expression
+لیست زیر شامل کلمات کلیدی در حال استفاده است، همراه با توضیح عملکرد آن‌ها:
+<ul dir="rtl">
+  <li>`as` - انجام تبدیل‌های اولیه، مشخص کردن ویژگی خاص شامل یک آیتم، یا تغییر نام آیتم‌ها در دستورات `use`</li>
+  <li>`async` - بازگرداندن یک `Future` به جای مسدود کردن نخ جاری</li>
+  <li>`await` - متوقف کردن اجرا تا زمانی که نتیجه یک `Future` آماده شود</li>
+  <li>`break` - بلافاصله خروج از یک حلقه</li>
+  <li>`const` - تعریف آیتم‌های ثابت یا اشاره‌گرهای خام ثابت</li>
+  <li>`continue` - ادامه به تکرار بعدی حلقه</li>
+  <li>`crate` - در یک مسیر ماژول، به ریشه کرت اشاره دارد</li>
+  <li>`dyn` - ارسال پویا به یک شیء ویژگی</li>
+  <li>`else` - حالت پیش‌فرض برای ساختارهای کنترلی `if` و `if let`</li>
+  <li>`enum` - تعریف یک شمارش</li>
+  <li>`extern` - لینک‌دهی به یک تابع یا متغیر خارجی</li>
+  <li>`false` - مقدار بولی کاذب</li>
+  <li>`fn` - تعریف یک تابع یا نوع اشاره‌گر تابع</li>
+  <li>`for` - حلقه بر روی آیتم‌های یک iterator، پیاده‌سازی یک ویژگی، یا مشخص کردن یک طول عمر سطح بالاتر</li>
+  <li>`if` - انشعاب بر اساس نتیجه یک عبارت شرطی</li>
+  <li>`impl` - پیاده‌سازی عملکرد ذاتی یا ویژگی</li>
+  <li>`in` - بخشی از سینتکس حلقه `for`</li>
+  <li>`let` - بایند کردن یک متغیر</li>
+  <li>`loop` - حلقه بدون قید و شرط</li>
+  <li>`match` - مطابقت یک مقدار با الگوها</li>
+  <li>`mod` - تعریف یک ماژول</li>
+  <li>`move` - وادار کردن یک closure به تملک تمام مقادیر گرفته‌شده</li>
+  <li>`mut` - نشان دادن تغییرپذیری در ارجاعات، اشاره‌گرهای خام، یا الگوهای بایندینگ</li>
+  <li>`pub` - نشان دادن قابلیت دید عمومی در فیلدهای ساختار، بلوک‌های `impl`، یا ماژول‌ها</li>
+  <li>`ref` - بایند کردن با ارجاع</li>
+  <li>`return` - بازگشت از تابع</li>
+  <li>`Self` - یک نوع مستعار برای نوعی که در حال تعریف یا پیاده‌سازی آن هستیم</li>
+  <li>`self` - موضوع متد یا ماژول جاری</li>
+  <li>`static` - متغیر جهانی یا طول عمر در کل اجرای برنامه</li>
+  <li>`struct` - تعریف یک ساختار</li>
+  <li>`super` - ماژول والد ماژول جاری</li>
+  <li>`trait` - تعریف یک ویژگی</li>
+  <li>`true` - مقدار بولی صحیح</li>
+  <li>`type` - تعریف یک نوع مستعار یا نوع مرتبط</li>
+  <li>`union` - تعریف یک [union][union]؛ فقط زمانی کلمه کلیدی است که در یک اعلان union استفاده شود</li>
+  <li>`unsafe` - نشان دادن کد، توابع، ویژگی‌ها، یا پیاده‌سازی‌های ناامن</li>
+  <li>`use` - وارد کردن نمادها به محدوده</li>
+  <li>`where` - نشان دادن قیودی که یک نوع را محدود می‌کنند</li>
+  <li>`while` - اجرای حلقه به صورت شرطی بر اساس نتیجه یک عبارت</li>
+</ul>
 
 [union]: ../reference/items/unions.html
 
-### Keywords Reserved for Future Use
+### کلمات کلیدی رزرو شده برای استفاده در آینده
 
-The following keywords do not yet have any functionality but are reserved by
-Rust for potential future use.
+کلمات کلیدی زیر هنوز هیچ کاربردی ندارند اما توسط Rust برای استفاده احتمالی در آینده رزرو شده‌اند:
 
-- `abstract`
-- `become`
-- `box`
-- `do`
-- `final`
-- `macro`
-- `override`
-- `priv`
-- `try`
-- `typeof`
-- `unsized`
-- `virtual`
-- `yield`
+<ul dir="rtl">
+  <li>`abstract`</li>
+  <li>`become`</li>
+  <li>`box`</li>
+  <li>`do`</li>
+  <li>`final`</li>
+  <li>`macro`</li>
+  <li>`override`</li>
+  <li>`priv`</li>
+  <li>`try`</li>
+  <li>`typeof`</li>
+  <li>`unsized`</li>
+  <li>`virtual`</li>
+  <li>`yield`</li>
+</ul>
 
-### Raw Identifiers
 
-_Raw identifiers_ are the syntax that lets you use keywords where they wouldn’t
-normally be allowed. You use a raw identifier by prefixing a keyword with `r#`.
+### شناسه‌های خام
 
-For example, `match` is a keyword. If you try to compile the following function
-that uses `match` as its name:
+_شناسه‌های خام_ سینتکسی هستند که به شما اجازه می‌دهند از کلمات کلیدی در جایی که معمولاً مجاز نیستند استفاده کنید. برای استفاده از یک شناسه خام، یک `r#` قبل از کلمه کلیدی اضافه کنید.
 
-<span class="filename">Filename: src/main.rs</span>
+برای مثال، `match` یک کلمه کلیدی است. اگر بخواهید تابع زیر را که از `match` به عنوان نام خود استفاده می‌کند کامپایل کنید:
+
+<span class="filename">نام فایل: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 fn match(needle: &str, haystack: &str) -> bool {
@@ -94,7 +88,7 @@ fn match(needle: &str, haystack: &str) -> bool {
 }
 ```
 
-you’ll get this error:
+شما این خطا را دریافت خواهید کرد:
 
 ```text
 error: expected identifier, found keyword `match`
@@ -104,11 +98,15 @@ error: expected identifier, found keyword `match`
   |    ^^^^^ expected identifier, found keyword
 ```
 
-The error shows that you can’t use the keyword `match` as the function
-identifier. To use `match` as a function name, you need to use the raw
-identifier syntax, like this:
+این خطا نشان می‌دهد که نمی‌توانید از کلمه کلیدی `match` به عنوان شناسه تابع استفاده کنید. برای استفاده از `match` به عنوان نام تابع، باید از سینتکس شناسه خام به این شکل استفاده کنید:
 
-<span class="filename">Filename: src/main.rs</span>
+```rust
+fn r#match(needle: &str, haystack: &str) -> bool {
+    haystack.contains(needle)
+}
+```
+
+<span class="filename">نام فایل: src/main.rs</span>
 
 ```rust
 fn r#match(needle: &str, haystack: &str) -> bool {
@@ -120,18 +118,13 @@ fn main() {
 }
 ```
 
-This code will compile without any errors. Note the `r#` prefix on the function
-name in its definition as well as where the function is called in `main`.
+این کد بدون هیچ خطایی کامپایل خواهد شد. به پیشوند `r#` روی نام تابع در تعریف آن و همچنین جایی که تابع در `main` فراخوانی می‌شود، توجه کنید.
 
-Raw identifiers allow you to use any word you choose as an identifier, even if
-that word happens to be a reserved keyword. This gives us more freedom to
-choose identifier names, as well as lets us integrate with programs written in
-a language where these words aren’t keywords. In addition, raw identifiers
-allow you to use libraries written in a different Rust edition than your crate
-uses. For example, `try` isn’t a keyword in the 2015 edition but is in the 2018
-edition. If you depend on a library that’s written using the 2015 edition and
-has a `try` function, you’ll need to use the raw identifier syntax, `r#try` in
-this case, to call that function from your 2018 edition code. See [Appendix
-E][appendix-e]<!-- ignore --> for more information on editions.
+شناسه‌های خام به شما اجازه می‌دهند از هر کلمه‌ای که انتخاب می‌کنید به عنوان یک شناسه استفاده کنید، حتی اگر آن کلمه به طور پیش‌فرض یک کلمه کلیدی رزرو شده باشد. این ویژگی آزادی بیشتری برای انتخاب نام شناسه‌ها به ما می‌دهد و همچنین امکان ادغام با برنامه‌هایی که به زبان‌هایی نوشته شده‌اند که این کلمات در آن‌ها کلمه کلیدی نیستند را فراهم می‌کند. علاوه بر این، شناسه‌های خام به شما اجازه می‌دهند از کتابخانه‌هایی استفاده کنید که با ویرایشی متفاوت از Rust نسبت به کرت شما نوشته شده‌اند. 
+
+برای مثال، `try` در ویرایش ۲۰۱۵ یک کلمه کلیدی نیست اما در ویرایش ۲۰۱۸ یک کلمه کلیدی است. اگر به کتابخانه‌ای وابسته باشید که با ویرایش ۲۰۱۵ نوشته شده و دارای تابع `try` باشد، برای فراخوانی آن تابع از کد خود که با ویرایش ۲۰۱۸ نوشته شده است، باید از سینتکس شناسه خام، یعنی `r#try` در این مورد، استفاده کنید. برای اطلاعات بیشتر در مورد ویرایش‌ها، به [پیوست E][appendix-e] مراجعه کنید.
 
 [appendix-e]: appendix-05-editions.html
+
+
+</div>

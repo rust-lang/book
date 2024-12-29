@@ -1,7 +1,8 @@
-## Appendix F: Translations of the Book
+<div dir="rtl">
 
-For resources in languages other than English. Most are still in progress; see
-[the Translations label][label] to help or let us know about a new translation!
+## ضمیمه و: ترجمه‌های کتاب
+
+برای منابع به زبان‌هایی غیر از انگلیسی. بیشتر آن‌ها هنوز در حال پیشرفت هستند؛ برای کمک یا اطلاع دادن از ترجمه جدید، به [برچسب ترجمه‌ها][label] مراجعه کنید!
 
 [label]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 
@@ -21,8 +22,10 @@ For resources in languages other than English. Most are still in progress; see
 - [Esperanto](https://github.com/psychoslave/Rust-libro)
 - [ελληνική](https://github.com/TChatzigiannakis/rust-book-greek)
 - [Svenska](https://github.com/sebras/book)
-- [Farsi](https://github.com/RustFarsi/book)
+- [Persian | فارسی](https://github.com/drunkleen/rust-book-persian)
 - [Deutsch](https://github.com/rust-lang-de/rustbook-de)
 - [हिंदी](https://github.com/venkatarun95/rust-book-hindi)
 - [ไทย](https://github.com/rust-lang-th/book-th)
 - [Danske](https://github.com/DanKHansen/book-dk)
+
+</div>

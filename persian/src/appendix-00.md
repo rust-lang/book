@@ -1,4 +1,7 @@
-# Appendix
+<div dir="rtl">
 
-The following sections contain reference material you may find useful in your
-Rust journey.
+# پیوست
+
+بخش‌های زیر حاوی مطالب مرجعی هستند که ممکن است در مسیر یادگیری Rust برای شما مفید باشند.
+
+</div>

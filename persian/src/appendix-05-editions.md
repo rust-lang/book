@@ -1,56 +1,31 @@
-## Appendix E - Editions
+<div dir="rtl">
 
-In Chapter 1, you saw that `cargo new` adds a bit of metadata to your
-_Cargo.toml_ file about an edition. This appendix talks about what that means!
+## ضمیمه ه - نسخه‌ها
 
-The Rust language and compiler have a six-week release cycle, meaning users get
-a constant stream of new features. Other programming languages release larger
-changes less often; Rust releases smaller updates more frequently. After a
-while, all of these tiny changes add up. But from release to release, it can be
-difficult to look back and say, “Wow, between Rust 1.10 and Rust 1.31, Rust has
-changed a lot!”
+در فصل 1 دیدید که `cargo new` کمی متاداده به فایل _Cargo.toml_ شما اضافه می‌کند که درباره نسخه است. این ضمیمه توضیح می‌دهد که این به چه معناست!
 
-Every two or three years, the Rust team produces a new Rust _edition_. Each
-edition brings together the features that have landed into a clear package with
-fully updated documentation and tooling. New editions ship as part of the usual
-six-week release process.
+زبان Rust و کامپایلر آن یک چرخه انتشار شش‌هفته‌ای دارند، به این معنی که کاربران به طور مداوم به ویژگی‌های جدید دسترسی پیدا می‌کنند. زبان‌های برنامه‌نویسی دیگر تغییرات بزرگ را کمتر منتشر می‌کنند؛ در حالی که Rust به طور مرتب به‌روزرسانی‌های کوچک ارائه می‌دهد. پس از مدتی، همه این تغییرات کوچک جمع می‌شوند. اما از انتشار به انتشار، ممکن است سخت باشد که بگویید: «وای، بین Rust 1.10 و Rust 1.31، Rust خیلی تغییر کرده است!»
 
-Editions serve different purposes for different people:
+هر دو یا سه سال، تیم Rust یک نسخه جدید از Rust ارائه می‌دهد. هر نسخه ویژگی‌هایی که ارائه شده‌اند را در یک بسته‌بندی واضح با مستندات و ابزارهای کاملاً به‌روزشده جمع می‌کند. نسخه‌های جدید به‌عنوان بخشی از فرآیند انتشار معمول شش‌هفته‌ای منتشر می‌شوند.
 
-- For active Rust users, a new edition brings together incremental changes into
-  an easy-to-understand package.
-- For non-users, a new edition signals that some major advancements have
-  landed, which might make Rust worth another look.
-- For those developing Rust, a new edition provides a rallying point for the
-  project as a whole.
+نسخه‌ها اهداف مختلفی برای افراد مختلف دارند:
 
-At the time of this writing, three Rust editions are available: Rust 2015, Rust
-2018, and Rust 2021. This book is written using Rust 2021 edition idioms.
+<ul dir="rtl">
+  <li>برای کاربران فعال Rust، یک نسخه جدید تغییرات تدریجی را در یک بسته آسان برای درک جمع می‌کند.</li>
+  <li>برای غیرکاربران، یک نسخه جدید نشان‌دهنده این است که پیشرفت‌های عمده‌ای انجام شده است که ممکن است ارزش داشته باشد Rust را دوباره بررسی کنند.</li>
+  <li>برای کسانی که Rust را توسعه می‌دهند، یک نسخه جدید نقطه‌ای برای گردهمایی پروژه به عنوان یک کل فراهم می‌کند.</li>
+</ul>
 
-The `edition` key in _Cargo.toml_ indicates which edition the compiler should
-use for your code. If the key doesn’t exist, Rust uses `2015` as the edition
-value for backward compatibility reasons.
+در زمان نگارش این متن، سه نسخه از Rust در دسترس هستند: Rust 2015، Rust 2018 و Rust 2021. این کتاب با استفاده از نسخه Rust 2021 نوشته شده است.
 
-Each project can opt in to an edition other than the default 2015 edition.
-Editions can contain incompatible changes, such as including a new keyword that
-conflicts with identifiers in code. However, unless you opt in to those
-changes, your code will continue to compile even as you upgrade the Rust
-compiler version you use.
+کلید `edition` در فایل _Cargo.toml_ نشان می‌دهد که کامپایلر باید از کدام نسخه برای کد شما استفاده کند. اگر این کلید وجود نداشته باشد، Rust به دلایل سازگاری با نسخه‌های قبلی از مقدار `2015` به‌عنوان نسخه پیش‌فرض استفاده می‌کند.
 
-All Rust compiler versions support any edition that existed prior to that
-compiler’s release, and they can link crates of any supported editions
-together. Edition changes only affect the way the compiler initially parses
-code. Therefore, if you’re using Rust 2015 and one of your dependencies uses
-Rust 2018, your project will compile and be able to use that dependency. The
-opposite situation, where your project uses Rust 2018 and a dependency uses
-Rust 2015, works as well.
+هر پروژه می‌تواند به یک نسخه غیر از نسخه پیش‌فرض 2015 مهاجرت کند. نسخه‌ها می‌توانند تغییرات ناسازگار داشته باشند، مانند اضافه کردن یک کلمه کلیدی جدید که با شناسه‌ها در کد تداخل دارد. اما تا زمانی که به این تغییرات مهاجرت نکنید، کد شما همچنان کامپایل خواهد شد حتی اگر نسخه کامپایلر Rust خود را ارتقا دهید.
 
-To be clear: most features will be available on all editions. Developers using
-any Rust edition will continue to see improvements as new stable releases are
-made. However, in some cases, mainly when new keywords are added, some new
-features might only be available in later editions. You will need to switch
-editions if you want to take advantage of such features.
+تمام نسخه‌های کامپایلر Rust از هر نسخه‌ای که پیش از انتشار آن کامپایلر وجود داشته باشد پشتیبانی می‌کنند و می‌توانند کتابخانه‌هایی از هر نسخه پشتیبانی‌شده را به یکدیگر لینک کنند. تغییرات نسخه فقط بر نحوه تجزیه اولیه کد توسط کامپایلر تأثیر می‌گذارد. بنابراین، اگر از Rust 2015 استفاده می‌کنید و یکی از وابستگی‌های شما از Rust 2018 استفاده می‌کند، پروژه شما کامپایل خواهد شد و می‌تواند از آن وابستگی استفاده کند. وضعیت معکوس، جایی که پروژه شما از Rust 2018 و یک وابستگی از Rust 2015 استفاده می‌کند، نیز کار می‌کند.
 
-For more details, the [_Edition Guide_](https://doc.rust-lang.org/stable/edition-guide/) is a complete book
-about editions that enumerates the differences between editions and explains
-how to automatically upgrade your code to a new edition via `cargo fix`.
+برای روشن شدن: بیشتر ویژگی‌ها در همه نسخه‌ها در دسترس خواهند بود. توسعه‌دهندگان با استفاده از هر نسخه‌ای از Rust همچنان بهبودهایی را با انتشارهای پایدار جدید مشاهده خواهند کرد. اما در برخی موارد، عمدتاً زمانی که کلمات کلیدی جدید اضافه می‌شوند، برخی ویژگی‌های جدید ممکن است فقط در نسخه‌های بعدی در دسترس باشند. اگر می‌خواهید از چنین ویژگی‌هایی استفاده کنید، باید به نسخه‌های جدیدتر مهاجرت کنید.
+
+برای جزئیات بیشتر، [_راهنمای نسخه‌ها_](https://doc.rust-lang.org/stable/edition-guide/) کتاب کاملی درباره نسخه‌ها است که تفاوت‌های بین نسخه‌ها را فهرست می‌کند و توضیح می‌دهد که چگونه می‌توانید کد خود را با استفاده از `cargo fix` به نسخه جدید ارتقا دهید.
+
+</div>
