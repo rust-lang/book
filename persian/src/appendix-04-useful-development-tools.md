@@ -28,7 +28,7 @@ $ cargo fmt
 
 ابزار `rustfix` که همراه با نصب‌های Rust ارائه می‌شود، می‌تواند به طور خودکار هشدارهای کامپایلر را که یک راه حل واضح برای رفع مشکل دارند و احتمالاً همان چیزی است که می‌خواهید، اصلاح کند. احتمالاً قبلاً هشدارهای کامپایلر را دیده‌اید. به عنوان مثال، کد زیر را در نظر بگیرید:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn do_something() {}
@@ -67,7 +67,7 @@ $ cargo fix
 
 وقتی دوباره فایل _src/main.rs_ را بررسی کنیم، خواهیم دید که `cargo fix` کد را تغییر داده است:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn do_something() {}
@@ -101,7 +101,7 @@ $ cargo clippy
 
 به عنوان مثال، فرض کنید برنامه‌ای می‌نویسید که از یک مقدار تقریبی برای یک ثابت ریاضی، مانند pi، استفاده می‌کند، همانطور که این برنامه انجام می‌دهد:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -127,7 +127,7 @@ error: approximate value of `f{32, 64}::consts::PI` found
 
 این خطا به شما اطلاع می‌دهد که Rust از قبل یک ثابت دقیق‌تر `PI` تعریف کرده است و برنامه شما اگر از این ثابت استفاده کند، صحیح‌تر خواهد بود. سپس کد خود را تغییر می‌دهید تا از ثابت `PI` استفاده کنید. کد زیر هیچ خطا یا هشداری از Clippy تولید نمی‌کند:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {

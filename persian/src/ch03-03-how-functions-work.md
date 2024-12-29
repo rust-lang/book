@@ -6,7 +6,7 @@
 
 کدهای راست از _حالت snake case_ به عنوان سبک متعارف برای نام‌گذاری توابع و متغیرها استفاده می‌کنند، که در آن تمام حروف کوچک هستند و کلمات با زیرخط از یکدیگر جدا می‌شوند. این یک برنامه است که شامل یک مثال از تعریف تابع می‌باشد:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-16-functions/src/main.rs}}
@@ -30,7 +30,7 @@
 
 در این نسخه از `another_function`، ما یک پارامتر اضافه می‌کنیم:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/src/main.rs}}
@@ -48,7 +48,7 @@
 
 هنگام تعریف چندین پارامتر، اعلام پارامترها را با کاما جدا کنید، مانند این:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/src/main.rs}}
@@ -85,7 +85,7 @@
 
 اظهارات هیچ مقداری باز نمی‌گردانند. بنابراین، نمی‌توانید یک اظهار `let` را به یک متغیر دیگر اختصاص دهید، همانطور که کد زیر سعی دارد انجام دهد؛ شما با یک خطا روبرو خواهید شد:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/src/main.rs}}
@@ -101,7 +101,7 @@
 
 عبارات به یک مقدار ارزیابی می‌شوند و بیشتر بقیه کدی که در راست می‌نویسید را تشکیل می‌دهند. به عنوان مثال یک عملیات ریاضی، مانند `5 + 6`، که یک عبارت است که به مقدار `11` ارزیابی می‌شود. عبارات می‌توانند بخشی از اظهارات باشند: در لیستینگ ۳-۱، مقدار `6` در اظهار `let y = 6;` یک عبارت است که به مقدار `6` ارزیابی می‌شود. فراخوانی یک تابع یک عبارت است. فراخوانی یک ماکرو یک عبارت است. یک بلوک جدید از دامنه که با کروشه‌های باز و بسته ایجاد شده است نیز یک عبارت است، برای مثال:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-20-blocks-are-expressions/src/main.rs}}
@@ -122,7 +122,7 @@
 
 توابع می‌توانند مقادیری را به کدی که آنها را فراخوانی کرده است بازگردانند. ما به مقادیر بازگشتی نام نمی‌دهیم، اما باید نوع آنها را بعد از یک فلش (`->`) اعلام کنیم. در راست، مقدار بازگشتی تابع معادل مقدار عبارت نهایی در بلوک بدنه تابع است. شما می‌توانید با استفاده از کلمه کلیدی `return` و مشخص کردن یک مقدار، زودتر از یک تابع بازگردید، اما بیشتر توابع به طور ضمنی مقدار آخرین عبارت را بازمی‌گردانند. در اینجا یک مثال از یک تابع که مقدار بازمی‌گرداند آورده شده است:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/src/main.rs}}
@@ -144,7 +144,7 @@ let x = 5;
 
 بیایید به مثال دیگری نگاه کنیم:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-22-function-parameter-and-return/src/main.rs}}
@@ -152,7 +152,7 @@ let x = 5;
 
 اجرای این کد مقدار `The value of x is: 6` را چاپ خواهد کرد. اما اگر یک نقطه ویرگول به انتهای خط حاوی `x + 1` اضافه کنیم و آن را از یک عبارت به یک اظهار تبدیل کنیم، با خطا مواجه خواهیم شد:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/src/main.rs}}

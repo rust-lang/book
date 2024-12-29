@@ -113,7 +113,7 @@ Here is the continuation of the translation for **"ch05-03-method-syntax.md"** i
 
 توابع مرتبطی که متد نیستند اغلب برای سازنده‌ها استفاده می‌شوند که نمونه جدیدی از ساختار را بازمی‌گردانند. این توابع معمولاً `new` نامیده می‌شوند، اما `new` یک نام خاص نیست و در زبان به صورت داخلی تعریف نشده است. برای مثال، ما می‌توانیم تصمیم بگیریم تابع مرتبطی به نام `square` ارائه دهیم که یک پارامتر برای ابعاد بگیرد و از آن به عنوان عرض و ارتفاع استفاده کند، بنابراین ایجاد یک `Rectangle` مربعی را آسان‌تر می‌کند به جای اینکه مجبور باشیم مقدار یکسان را دو بار مشخص کنیم:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-03-associated-functions/src/main.rs:here}}

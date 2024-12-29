@@ -1,60 +1,36 @@
-## Writing Error Messages to Standard Error Instead of Standard Output
+<div dir="rtl">
 
-At the moment, we’re writing all of our output to the terminal using the
-`println!` macro. In most terminals, there are two kinds of output: _standard
-output_ (`stdout`) for general information and _standard error_ (`stderr`) for
-error messages. This distinction enables users to choose to direct the
-successful output of a program to a file but still print error messages to the
-screen.
+## نوشتن پیام‌های خطا به خروجی خطای استاندارد به جای خروجی استاندارد
 
-The `println!` macro is only capable of printing to standard output, so we have
-to use something else to print to standard error.
+در حال حاضر، ما تمام خروجی‌های خود را با استفاده از ماکروی `println!` به ترمینال می‌نویسیم. در بیشتر ترمینال‌ها، دو نوع خروجی وجود دارد: _خروجی استاندارد_ (`stdout`) برای اطلاعات عمومی و _خروجی خطای استاندارد_ (`stderr`) برای پیام‌های خطا. این تمایز به کاربران امکان می‌دهد که خروجی موفقیت‌آمیز یک برنامه را به یک فایل هدایت کنند اما همچنان پیام‌های خطا را روی صفحه ببینند.
 
-### Checking Where Errors Are Written
+ماکروی `println!` فقط قادر به نوشتن در خروجی استاندارد است، بنابراین برای نوشتن به خروجی خطای استاندارد باید از چیزی دیگر استفاده کنیم.
 
-First let’s observe how the content printed by `minigrep` is currently being
-written to standard output, including any error messages we want to write to
-standard error instead. We’ll do that by redirecting the standard output stream
-to a file while intentionally causing an error. We won’t redirect the standard
-error stream, so any content sent to standard error will continue to display on
-the screen.
+### بررسی محل نوشتن خطاها
 
-Command line programs are expected to send error messages to the standard error
-stream so we can still see error messages on the screen even if we redirect the
-standard output stream to a file. Our program is not currently well behaved:
-we’re about to see that it saves the error message output to a file instead!
+ابتدا بررسی می‌کنیم که محتوای چاپ‌شده توسط `minigrep` در حال حاضر به خروجی استاندارد نوشته می‌شود، از جمله پیام‌های خطایی که می‌خواهیم به جای آن‌ها در خروجی خطای استاندارد نوشته شوند. این کار را با هدایت جریان خروجی استاندارد به یک فایل و عمداً ایجاد یک خطا انجام خواهیم داد. ما جریان خروجی خطای استاندارد را هدایت نمی‌کنیم، بنابراین هر محتوایی که به خروجی خطای استاندارد ارسال شود همچنان روی صفحه نمایش داده خواهد شد.
 
-To demonstrate this behavior, we’ll run the program with `>` and the file path,
-_output.txt_, that we want to redirect the standard output stream to. We won’t
-pass any arguments, which should cause an error:
+برنامه‌های خط فرمان انتظار می‌رود که پیام‌های خطای خود را به جریان خروجی خطای استاندارد ارسال کنند تا در صورت هدایت جریان خروجی استاندارد به یک فایل، پیام‌های خطا همچنان روی صفحه نمایش داده شوند. برنامه ما در حال حاضر به درستی عمل نمی‌کند: ما به زودی خواهیم دید که پیام خطا به جای صفحه نمایش به فایل ذخیره می‌شود!
+
+برای نشان دادن این رفتار، برنامه را با استفاده از دستور `>` و مسیر فایل _output.txt_ که می‌خواهیم جریان خروجی استاندارد را به آن هدایت کنیم، اجرا می‌کنیم. هیچ آرگومانی ارائه نخواهیم کرد، که باید منجر به یک خطا شود:
 
 ```console
 $ cargo run > output.txt
 ```
 
-The `>` syntax tells the shell to write the contents of standard output to
-_output.txt_ instead of the screen. We didn’t see the error message we were
-expecting printed to the screen, so that means it must have ended up in the
-file. This is what _output.txt_ contains:
+دستور `>` به شل می‌گوید که محتوای جریان خروجی استاندارد را به _output.txt_ بنویسد به جای اینکه آن را روی صفحه نمایش دهد. ما پیام خطایی که انتظار داشتیم روی صفحه ببینیم را ندیدیم، بنابراین به این معنی است که باید در فایل ذخیره شده باشد. این همان چیزی است که _output.txt_ شامل می‌شود:
 
 ```text
 Problem parsing arguments: not enough arguments
 ```
 
-Yup, our error message is being printed to standard output. It’s much more
-useful for error messages like this to be printed to standard error so only
-data from a successful run ends up in the file. We’ll change that.
+بله، پیام خطای ما به خروجی استاندارد چاپ می‌شود. برای پیام‌های خطایی مانند این بهتر است که به خروجی خطای استاندارد چاپ شوند تا فقط داده‌های حاصل از اجرای موفقیت‌آمیز در فایل قرار گیرند. ما این موضوع را تغییر خواهیم داد.
 
-### Printing Errors to Standard Error
+### نوشتن خطاها به خروجی خطای استاندارد
 
-We’ll use the code in Listing 12-24 to change how error messages are printed.
-Because of the refactoring we did earlier in this chapter, all the code that
-prints error messages is in one function, `main`. The standard library provides
-the `eprintln!` macro that prints to the standard error stream, so let’s change
-the two places we were calling `println!` to print errors to use `eprintln!`
-instead.
+ما از کدی که در لیستینگ 12-24 نشان داده شده است برای تغییر نحوه چاپ پیام‌های خطا استفاده می‌کنیم. به دلیل بازسازی‌ای که قبلاً در این فصل انجام دادیم، تمام کدی که پیام‌های خطا را چاپ می‌کند در یک تابع به نام `main` قرار دارد. کتابخانه استاندارد ماکروی `eprintln!` را ارائه می‌دهد که به جریان خروجی خطای استاندارد چاپ می‌کند، بنابراین دو جایی که ما `println!` را برای چاپ خطاها فراخوانی کرده‌ایم را به `eprintln!` تغییر می‌دهیم.
 
-<Listing number="12-24" file-name="src/main.rs" caption="Writing error messages to standard error instead of standard output using `eprintln!`">
+<Listing number="12-24" file-name="src/main.rs" caption="نوشتن پیام‌های خطا به خروجی خطای استاندارد به جای خروجی استاندارد با استفاده از `eprintln!`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-24/src/main.rs:here}}
@@ -62,26 +38,22 @@ instead.
 
 </Listing>
 
-Let’s now run the program again in the same way, without any arguments and
-redirecting standard output with `>`:
+حالا برنامه را دوباره اجرا می‌کنیم به همان روش، بدون هیچ آرگومانی و با هدایت خروجی استاندارد با استفاده از `>`:
 
 ```console
 $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
 
-Now we see the error onscreen and _output.txt_ contains nothing, which is the
-behavior we expect of command line programs.
+حالا خطا را روی صفحه می‌بینیم و _output.txt_ خالی است، که همان رفتاری است که از برنامه‌های خط فرمان انتظار داریم.
 
-Let’s run the program again with arguments that don’t cause an error but still
-redirect standard output to a file, like so:
+برنامه را دوباره اجرا می‌کنیم با آرگومان‌هایی که خطایی ایجاد نمی‌کنند اما همچنان خروجی استاندارد را به یک فایل هدایت می‌کنند، مانند این:
 
 ```console
 $ cargo run -- to poem.txt > output.txt
 ```
 
-We won’t see any output to the terminal, and _output.txt_ will contain our
-results:
+هیچ خروجی روی ترمینال نخواهیم دید و _output.txt_ شامل نتایج ما خواهد بود:
 
 <span class="filename">Filename: output.txt</span>
 
@@ -90,18 +62,10 @@ Are you nobody, too?
 How dreary to be somebody!
 ```
 
-This demonstrates that we’re now using standard output for successful output
-and standard error for error output as appropriate.
+این نشان می‌دهد که اکنون از خروجی استاندارد برای خروجی‌های موفقیت‌آمیز و از خروجی خطای استاندارد برای خروجی‌های خطا استفاده می‌کنیم، همان‌طور که مناسب است.
 
-## Summary
+## خلاصه
 
-This chapter recapped some of the major concepts you’ve learned so far and
-covered how to perform common I/O operations in Rust. By using command line
-arguments, files, environment variables, and the `eprintln!` macro for printing
-errors, you’re now prepared to write command line applications. Combined with
-the concepts in previous chapters, your code will be well organized, store data
-effectively in the appropriate data structures, handle errors nicely, and be
-well tested.
+این فصل به طور خلاصه برخی از مفاهیم اصلی که تاکنون آموخته‌اید را مرور کرد و توضیح داد که چگونه عملیات ورودی/خروجی معمول را در Rust انجام دهید. با استفاده از آرگومان‌های خط فرمان، فایل‌ها، متغیرهای محیطی و ماکروی `eprintln!` برای چاپ خطاها، شما اکنون آماده‌اید تا برنامه‌های خط فرمان بنویسید. همراه با مفاهیم فصل‌های قبلی، کد شما سازماندهی خوبی خواهد داشت، داده‌ها را به طور مؤثر در ساختارهای داده مناسب ذخیره می‌کند، خطاها را به خوبی مدیریت می‌کند و به خوبی تست شده است.
 
-Next, we’ll explore some Rust features that were influenced by functional
-languages: closures and iterators.
+</div>

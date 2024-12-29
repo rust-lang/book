@@ -80,7 +80,7 @@ _شناسه‌های خام_ سینتکسی هستند که به شما اجاز
 
 برای مثال، `match` یک کلمه کلیدی است. اگر بخواهید تابع زیر را که از `match` به عنوان نام خود استفاده می‌کند کامپایل کنید:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 fn match(needle: &str, haystack: &str) -> bool {
@@ -106,7 +106,7 @@ fn r#match(needle: &str, haystack: &str) -> bool {
 }
 ```
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn r#match(needle: &str, haystack: &str) -> bool {

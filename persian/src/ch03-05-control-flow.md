@@ -10,7 +10,7 @@
 
 یک پروژه جدید به نام _branches_ در دایرکتوری _projects_ خود ایجاد کنید تا عبارت `if` را بررسی کنید. در فایل _src/main.rs_ کد زیر را وارد کنید:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/src/main.rs}}
@@ -40,7 +40,7 @@
 
 همچنین قابل توجه است که شرط در این کد _باید_ یک `bool` باشد. اگر شرط یک `bool` نباشد، خطا دریافت خواهیم کرد. به عنوان مثال، این کد را اجرا کنید:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/src/main.rs}}
@@ -54,7 +54,7 @@
 
 خطا نشان می‌دهد که راست انتظار یک `bool` داشت اما یک عدد صحیح دریافت کرد. برخلاف زبان‌هایی مانند Ruby و JavaScript، راست به‌صورت خودکار تلاش نمی‌کند انواع غیر `bool` را به یک `bool` تبدیل کند. شما باید صریح باشید و همیشه یک `bool` را به‌عنوان شرط به `if` بدهید. اگر می‌خواهید بلوک کد `if` فقط زمانی اجرا شود که یک عدد برابر `0` نباشد، می‌توانید عبارت `if` را به این صورت تغییر دهید:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-29-if-not-equal-0/src/main.rs}}
@@ -66,7 +66,7 @@
 
 شما می‌توانید با ترکیب `if` و `else` در یک عبارت `else if`، شرایط متعددی را مدیریت کنید. به عنوان مثال:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-30-else-if/src/main.rs}}
@@ -102,7 +102,7 @@
 
 به خاطر داشته باشید که بلوک‌های کد به آخرین عبارت در آن‌ها ارزیابی می‌شوند و اعداد به تنهایی نیز عبارات محسوب می‌شوند. در این حالت، مقدار کل عبارت `if` بستگی به این دارد که کدام بلوک کد اجرا شود. این بدان معناست که مقادیری که می‌توانند نتایج هر بازوی `if` باشند، باید از یک نوع باشند. در لیست 3-2، نتایج بازوی `if` و بازوی `else` هر دو اعداد صحیح `i32` بودند. اگر انواع ناسازگار باشند، مانند مثال زیر، خطایی دریافت خواهیم کرد:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/src/main.rs}}
@@ -128,7 +128,7 @@ Rust سه نوع حلقه دارد: `loop`، `while` و `for`. بیایید هر
 
 به عنوان مثال، فایل _src/main.rs_ را در دایرکتوری _loops_ خود به شکل زیر تغییر دهید:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-loop/src/main.rs}}

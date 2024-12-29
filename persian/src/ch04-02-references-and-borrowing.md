@@ -13,7 +13,7 @@
 در اینجا نحوه تعریف و استفاده از یک تابع 
 `calculate_length` آورده شده است که به جای گرفتن مالکیت مقدار، یک ارجاع به یک شی به عنوان پارامتر دارد:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:all}}
@@ -146,7 +146,7 @@ Rust یک قانون مشابه برای ترکیب ارجاعات متغیر و
 
 بیایید سعی کنیم یک ارجاع آویزان ایجاد کنیم تا ببینیم چگونه Rust با یک خطای زمان کامپایل از این اتفاق جلوگیری می‌کند:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/src/main.rs}}
@@ -167,7 +167,7 @@ for it to be borrowed from
 
 بیایید نگاهی دقیق‌تر به آنچه که در هر مرحله از کد `dangle` اتفاق می‌افتد بیندازیم:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-15-dangling-reference-annotated/src/main.rs:here}}

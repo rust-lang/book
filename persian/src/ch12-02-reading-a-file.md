@@ -1,13 +1,10 @@
-## Reading a File
+<div dir="rtl">
 
-Now we’ll add functionality to read the file specified in the `file_path`
-argument. First we need a sample file to test it with: we’ll use a file with a
-small amount of text over multiple lines with some repeated words. Listing 12-3
-has an Emily Dickinson poem that will work well! Create a file called
-_poem.txt_ at the root level of your project, and enter the poem “I’m Nobody!
-Who are you?”
+## خواندن یک فایل
 
-<Listing number="12-3" file-name="poem.txt" caption="A poem by Emily Dickinson makes a good test case.">
+اکنون قابلیت خواندن فایل مشخص‌شده در آرگومان `file_path` را اضافه می‌کنیم. ابتدا به یک فایل نمونه برای تست نیاز داریم: از یک فایل با مقدار کمی متن در چندین خط که برخی کلمات در آن تکرار شده‌اند استفاده می‌کنیم. لیست ۱۲-۳ شامل شعری از امیلی دیکینسون است که به خوبی برای این منظور مناسب است! یک فایل به نام _poem.txt_ در سطح اصلی پروژه خود ایجاد کنید و شعر "I’m Nobody! Who are you?" را وارد کنید.
+
+<Listing number="12-3" file-name="poem.txt" caption="شعری از امیلی دیکینسون که مورد تست مناسبی است.">
 
 ```text
 {{#include ../listings/ch12-an-io-project/listing-12-03/poem.txt}}
@@ -15,10 +12,9 @@ Who are you?”
 
 </Listing>
 
-With the text in place, edit _src/main.rs_ and add code to read the file, as
-shown in Listing 12-4.
+با متن در جای خود، فایل _src/main.rs_ را ویرایش کرده و کدی برای خواندن فایل اضافه کنید، همانطور که در لیست ۱۲-۴ نشان داده شده است.
 
-<Listing number="12-4" file-name="src/main.rs" caption="Reading the contents of the file specified by the second argument">
+<Listing number="12-4" file-name="src/main.rs" caption="خواندن محتوای فایل مشخص‌شده توسط آرگومان دوم">
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/src/main.rs:here}}
@@ -26,31 +22,18 @@ shown in Listing 12-4.
 
 </Listing>
 
-First we bring in a relevant part of the standard library with a `use`
-statement: we need `std::fs` to handle files.
+ابتدا بخشی مرتبط از کتابخانه استاندارد را با یک دستور `use` وارد می‌کنیم: برای مدیریت فایل‌ها به `std::fs` نیاز داریم.
 
-In `main`, the new statement `fs::read_to_string` takes the `file_path`, opens
-that file, and returns a value of type `std::io::Result<String>` that contains
-the file’s contents.
+در تابع `main`، دستور جدید `fs::read_to_string` مقدار `file_path` را می‌گیرد، آن فایل را باز می‌کند و مقداری از نوع `std::io::Result<String>` را که شامل محتوای فایل است، بازمی‌گرداند.
 
-After that, we again add a temporary `println!` statement that prints the value
-of `contents` after the file is read, so we can check that the program is
-working so far.
+پس از آن، دوباره یک دستور موقت `println!` اضافه می‌کنیم که مقدار `contents` را پس از خواندن فایل چاپ می‌کند تا مطمئن شویم برنامه تا اینجا کار می‌کند.
 
-Let’s run this code with any string as the first command line argument (because
-we haven’t implemented the searching part yet) and the _poem.txt_ file as the
-second argument:
+بیایید این کد را با هر رشته‌ای به عنوان اولین آرگومان خط فرمان (چون هنوز بخش جستجو را پیاده‌سازی نکرده‌ایم) و فایل _poem.txt_ به عنوان آرگومان دوم اجرا کنیم:
 
 ```console
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/output.txt}}
 ```
 
-Great! The code read and then printed the contents of the file. But the code
-has a few flaws. At the moment, the `main` function has multiple
-responsibilities: generally, functions are clearer and easier to maintain if
-each function is responsible for only one idea. The other problem is that we’re
-not handling errors as well as we could. The program is still small, so these
-flaws aren’t a big problem, but as the program grows, it will be harder to fix
-them cleanly. It’s a good practice to begin refactoring early on when
-developing a program because it’s much easier to refactor smaller amounts of
-code. We’ll do that next.
+عالی است! کد محتوای فایل را خواند و سپس چاپ کرد. اما کد چند نقص دارد. در حال حاضر، تابع `main` چندین مسئولیت دارد: به طور کلی، توابع واضح‌تر و آسان‌تر برای نگهداری هستند اگر هر تابع فقط مسئول یک ایده باشد. مشکل دیگر این است که ما خطاها را به خوبی مدیریت نمی‌کنیم. برنامه هنوز کوچک است، بنابراین این مشکلات مشکل بزرگی نیستند، اما با رشد برنامه، رفع آن‌ها به صورت تمیز سخت‌تر خواهد شد. بهتر است که زودتر در فرایند توسعه برنامه شروع به بازسازی کنیم، زیرا بازسازی کدهای کمتر بسیار آسان‌تر است. در مرحله بعد این کار را انجام خواهیم داد.
+
+</div>

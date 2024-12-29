@@ -76,7 +76,7 @@ let guess: u32 = "42".parse().expect("Not a number!");
 
 در اینجا مثالی که اعداد اعشاری را در عمل نشان می‌دهد آورده شده است:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-06-floating-point/src/main.rs}}
@@ -88,7 +88,7 @@ let guess: u32 = "42".parse().expect("Not a number!");
 
 راست از عملیات ریاضی پایه‌ای که برای تمام انواع عددی انتظار دارید پشتیبانی می‌کند: جمع، تفریق، ضرب، تقسیم و باقی‌مانده. تقسیم اعداد صحیح به نزدیک‌ترین عدد صحیح به سمت صفر گرد می‌شود. کد زیر نشان می‌دهد چگونه می‌توانید از هر عملیات عددی در یک عبارت `let` استفاده کنید:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-07-numeric-operations/src/main.rs}}
@@ -100,7 +100,7 @@ let guess: u32 = "42".parse().expect("Not a number!");
 
 مانند اکثر زبان‌های برنامه‌نویسی دیگر، نوع بولین در راست دو مقدار ممکن دارد: `true` و `false`. نوع بولین در راست یک بایت اندازه دارد. نوع بولین در راست با استفاده از `bool` مشخص می‌شود. برای مثال:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-08-boolean/src/main.rs}}
@@ -112,7 +112,7 @@ let guess: u32 = "42".parse().expect("Not a number!");
 
 نوع `char` در راست ابتدایی‌ترین نوع الفبایی زبان است. در اینجا برخی از مثال‌های اعلام مقادیر `char` آورده شده است:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-09-char/src/main.rs}}
@@ -130,7 +130,7 @@ _تاپل_ یک روش کلی برای گروه‌بندی چند مقدار ب�
 
 ما یک تاپل را با نوشتن یک لیست جدا شده با کاما از مقادیر در داخل پرانتز ایجاد می‌کنیم. هر موقعیت در تاپل یک نوع دارد، و انواع مقادیر مختلف در تاپل نیازی به یکسان بودن ندارند. ما در این مثال حاشیه‌نویسی نوع اختیاری اضافه کرده‌ایم:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-10-tuples/src/main.rs}}
@@ -138,7 +138,7 @@ _تاپل_ یک روش کلی برای گروه‌بندی چند مقدار ب�
 
 متغیر `tup` به کل تاپل متصل می‌شود زیرا یک تاپل به عنوان یک عنصر ترکیبی واحد در نظر گرفته می‌شود. برای استخراج مقادیر جداگانه از یک تاپل، می‌توانیم از تطابق الگو برای تجزیه مقدار تاپل استفاده کنیم، مانند این:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-11-destructuring-tuples/src/main.rs}}
@@ -148,7 +148,7 @@ _تاپل_ یک روش کلی برای گروه‌بندی چند مقدار ب�
 
 ما همچنین می‌توانیم یک عنصر از تاپل را مستقیماً با استفاده از یک نقطه (`.`) به دنبال شماره شاخص مقدار مورد نظر دسترسی داشته باشیم. برای مثال:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-12-tuple-indexing/src/main.rs}}
@@ -164,7 +164,7 @@ _تاپل_ یک روش کلی برای گروه‌بندی چند مقدار ب�
 
 ما مقادیر یک آرایه را به صورت یک لیست جدا شده با کاما در داخل کروشه می‌نویسیم:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-13-arrays/src/main.rs}}
@@ -199,7 +199,7 @@ let a = [3; 5];
 
 یک آرایه یک بخش واحد از حافظه با اندازه‌ای مشخص و ثابت است که می‌تواند روی استک تخصیص داده شود. شما می‌توانید به عناصر یک آرایه با استفاده از ایندکس دسترسی پیدا کنید، مانند این:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-14-array-indexing/src/main.rs}}
@@ -211,7 +211,7 @@ let a = [3; 5];
 
 ببینیم چه اتفاقی می‌افتد اگر بخواهید به عنصری از آرایه دسترسی پیدا کنید که خارج از محدوده آرایه است. فرض کنید این کد را اجرا کنید که مشابه بازی حدس در فصل ۲ است، تا یک ایندکس آرایه را از کاربر دریافت کند:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,panics
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}

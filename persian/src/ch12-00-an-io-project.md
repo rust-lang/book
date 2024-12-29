@@ -1,48 +1,31 @@
-# An I/O Project: Building a Command Line Program
+<div dir="rtl">
 
-This chapter is a recap of the many skills you’ve learned so far and an
-exploration of a few more standard library features. We’ll build a command line
-tool that interacts with file and command line input/output to practice some of
-the Rust concepts you now have under your belt.
+# یک پروژه ورودی/خروجی: ساخت یک برنامه خط فرمان
 
-Rust’s speed, safety, single binary output, and cross-platform support make it
-an ideal language for creating command line tools, so for our project, we’ll
-make our own version of the classic command line search tool `grep`
-(**g**lobally search a **r**egular **e**xpression and **p**rint). In the
-simplest use case, `grep` searches a specified file for a specified string. To
-do so, `grep` takes as its arguments a file path and a string. Then it reads
-the file, finds lines in that file that contain the string argument, and prints
-those lines.
+این فصل مروری بر بسیاری از مهارت‌هایی است که تا کنون آموخته‌اید و همچنین بررسی چند ویژگی دیگر از کتابخانه استاندارد. ما یک ابزار خط فرمان خواهیم ساخت که با ورودی/خروجی فایل و خط فرمان تعامل می‌کند تا برخی از مفاهیم Rust را که اکنون در اختیار دارید تمرین کنیم.
 
-Along the way, we’ll show how to make our command line tool use the terminal
-features that many other command line tools use. We’ll read the value of an
-environment variable to allow the user to configure the behavior of our tool.
-We’ll also print error messages to the standard error console stream (`stderr`)
-instead of standard output (`stdout`) so that, for example, the user can
-redirect successful output to a file while still seeing error messages onscreen.
+سرعت، ایمنی، خروجی تک‌باینری و پشتیبانی چند‌پلتفرمی Rust، آن را به زبانی ایده‌آل برای ایجاد ابزارهای خط فرمان تبدیل می‌کند. بنابراین برای پروژه خود، نسخه‌ای از ابزار جستجوی خط فرمان کلاسیک `grep` (**g**lobally search a **r**egular **e**xpression and **p**rint) را خواهیم ساخت. در ساده‌ترین حالت، `grep` یک فایل مشخص را برای یک رشته مشخص جستجو می‌کند. برای انجام این کار، `grep` به عنوان آرگومان‌های خود مسیر فایل و یک رشته را دریافت می‌کند. سپس فایل را می‌خواند، خطوطی که شامل آرگومان رشته هستند را پیدا می‌کند و آن خطوط را چاپ می‌کند.
 
-One Rust community member, Andrew Gallant, has already created a fully
-featured, very fast version of `grep`, called `ripgrep`. By comparison, our
-version will be fairly simple, but this chapter will give you some of the
-background knowledge you need to understand a real-world project such as
-`ripgrep`.
+در طول مسیر، نشان خواهیم داد که چگونه ابزار خط فرمان ما از ویژگی‌های ترمینال استفاده کند که بسیاری از ابزارهای خط فرمان دیگر از آن‌ها استفاده می‌کنند. مقدار یک متغیر محیطی را برای اجازه به کاربر برای پیکربندی رفتار ابزار خود می‌خوانیم. همچنین پیام‌های خطا را به جریان کنسول خطای استاندارد (`stderr`) به جای خروجی استاندارد (`stdout`) چاپ می‌کنیم تا مثلاً کاربر بتواند خروجی موفقیت‌آمیز را به یک فایل هدایت کند در حالی که هنوز پیام‌های خطا را روی صفحه مشاهده می‌کند.
 
-Our `grep` project will combine a number of concepts you’ve learned so far:
+یکی از اعضای جامعه Rust، Andrew Gallant، نسخه‌ای کامل، بسیار سریع از `grep` به نام `ripgrep` ایجاد کرده است. در مقایسه، نسخه ما نسبتاً ساده خواهد بود، اما این فصل به شما برخی از دانش‌های پایه‌ای که برای درک پروژه‌های واقعی مانند `ripgrep` نیاز دارید را خواهد داد.
 
-- Organizing code ([Chapter 7][ch7]<!-- ignore -->)
-- Using vectors and strings ([Chapter 8][ch8]<!-- ignore -->)
-- Handling errors ([Chapter 9][ch9]<!-- ignore -->)
-- Using traits and lifetimes where appropriate ([Chapter 10][ch10]<!-- ignore -->)
-- Writing tests ([Chapter 11][ch11]<!-- ignore -->)
+پروژه `grep` ما ترکیبی از تعدادی مفاهیمی است که تاکنون آموخته‌اید:
 
-We’ll also briefly introduce closures, iterators, and trait objects, which
-[Chapter 13][ch13]<!-- ignore --> and [Chapter 18][ch18]<!-- ignore --> will
-cover in detail.
+- سازماندهی کد ([فصل ۷][ch7]<!-- ignore -->)
+- استفاده از بردارها و رشته‌ها ([فصل ۸][ch8]<!-- ignore -->)
+- مدیریت خطاها ([فصل ۹][ch9]<!-- ignore -->)
+- استفاده از صفات و طول عمرها در موارد مناسب ([فصل ۱۰][ch10]<!-- ignore -->)
+- نوشتن تست‌ها ([فصل ۱۱][ch11]<!-- ignore -->)
 
-[ch7]: ch07-00-managing-growing-projects-with-packages-crates-and-modules.html
-[ch8]: ch08-00-common-collections.html
-[ch9]: ch09-00-error-handling.html
-[ch10]: ch10-00-generics.html
-[ch11]: ch11-00-testing.html
-[ch13]: ch13-00-functional-features.html
-[ch18]: ch18-00-oop.html
+همچنین به طور مختصر به معرفی closures، iterators، و trait objects می‌پردازیم که به طور کامل در [فصل ۱۳][ch13]<!-- ignore --> و [فصل ۱۸][ch18]<!-- ignore --> پوشش داده خواهند شد.
+
+[ch7]: ch07-00-managing-growing-projects-with-packages-crates-and-modules.html  
+[ch8]: ch08-00-common-collections.html  
+[ch9]: ch09-00-error-handling.html  
+[ch10]: ch10-00-generics.html  
+[ch11]: ch11-00-testing.html  
+[ch13]: ch13-00-functional-features.html  
+[ch18]: ch18-00-oop.html  
+
+</div>

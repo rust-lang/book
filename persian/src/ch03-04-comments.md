@@ -20,7 +20,7 @@
 
 کامنت‌ها همچنین می‌توانند در انتهای خطوطی که حاوی کد هستند قرار گیرند:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
@@ -28,7 +28,7 @@
 
 اما بیشتر مواقع کامنت‌ها را در این قالب خواهید دید، با کامنتی که در خط جداگانه‌ای بالای کدی که توضیح می‌دهد قرار دارد:
 
-<span class="filename">نام فایل: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
