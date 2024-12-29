@@ -37,7 +37,7 @@ version of Cargo’s resolver algorithm in our workspace by setting the
 ```
 
 Next, we’ll create the `adder` binary crate by running `cargo new` within the
-_add_ directory:
+_adder_ directory:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-01-adder-crate/add
