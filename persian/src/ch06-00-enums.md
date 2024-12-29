@@ -1,11 +1,12 @@
-# Enums and Pattern Matching
+<div dir="rtl">
 
-In this chapter, we’ll look at _enumerations_, also referred to as _enums_.
-Enums allow you to define a type by enumerating its possible _variants_. First
-we’ll define and use an enum to show how an enum can encode meaning along with
-data. Next, we’ll explore a particularly useful enum, called `Option`, which
-expresses that a value can be either something or nothing. Then we’ll look at
-how pattern matching in the `match` expression makes it easy to run different
-code for different values of an enum. Finally, we’ll cover how the `if let`
-construct is another convenient and concise idiom available to handle enums in
-your code.
+# شمارنده‌ها و تطابق الگو
+
+در این فصل، به *شمارنده‌ها* که همچنین به عنوان *enums* شناخته می‌شوند، می‌پردازیم. شمارنده‌ها به شما اجازه می‌دهند 
+یک نوع را با شمردن *مقادیر ممکن* آن تعریف کنید. ابتدا، یک شمارنده تعریف کرده و از آن استفاده می‌کنیم تا نشان دهیم چگونه 
+شمارنده می‌تواند معنی را همراه با داده کدگذاری کند. سپس، به شمارنده‌ای بسیار مفید به نام `Option` خواهیم پرداخت که 
+بیان می‌کند یک مقدار می‌تواند *چیزی* باشد یا *هیچ چیز*. بعد، بررسی خواهیم کرد که چگونه تطابق الگو در عبارت `match` 
+باعث می‌شود اجرای کد مختلف برای مقادیر مختلف یک شمارنده آسان شود. در نهایت، پوشش خواهیم داد که ساختار `if let` چگونه 
+ایده‌آل و مختصر برای مدیریت شمارنده‌ها در کد شما است.
+
+</div>
