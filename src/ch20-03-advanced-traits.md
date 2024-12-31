@@ -55,7 +55,7 @@ the `Item` type is `u32`:
 This syntax seems comparable to that of generics. So why not just define the
 `Iterator` trait with generics, as shown in Listing 20-14?
 
-<Listing number="20-14" number="A hypothetical definition of the `Iterator` trait using generics">
+<Listing number="20-14" caption="A hypothetical definition of the `Iterator` trait using generics">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-14/src/lib.rs}}
