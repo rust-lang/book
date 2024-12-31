@@ -8,6 +8,9 @@
   
 </div>
 
+**Please note, this translation is not yet finished and requires thorough reviewing and editing, which should be completed soon. You can find ongoing translations in the [`persian-draft` branch](https://github.com/drunkleen/rust-book-persian/tree/persian-draft) of the repository.**
+
+
 
 This repository contains the source of "The Rust Programming Language" book.
 
