@@ -1,57 +1,72 @@
-# The Rust Programming Language
 
-![Build Status](https://github.com/rust-lang/book/workflows/CI/badge.svg)
+# زبان برنامه‌نویسی راست
 
-This repository contains the source of "The Rust Programming Language" book.
+<div align="right">
+  
+![وضعیت ساخت](https://github.com/rust-lang/book/workflows/CI/badge.svg)
+</div>
 
-[The book is available in dead-tree form from No Starch Press][nostarch].
+<div align="center">
+  
+[English](README-EN.md) | [فارسی](README.md)
+  
+</div>
+
+<div dir="rtl">
+
+**لطفاً توجه داشته باشید که این ترجمه هنوز کامل نشده است و نیاز به بازبینی و ویرایش دقیق دارد که به زودی تکمیل خواهد شد. شما می‌توانید ترجمه‌های در حال انجام را در شاخه [`persian-draft`](https://github.com/drunkleen/rust-book-persian/tree/persian-draft) مخزن پیدا کنید.**
+
+
+
+
+این مخزن شامل منبع کتاب "زبان برنامه‌نویسی راست" به زبان فارسی است.
+
+[کتاب انگلیسی به صورت نسخه چاپی از No Starch Press در دسترس است][nostarch].
 
 [nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
 
-You can also read the book for free online. Please see the book as shipped with
-the latest [stable], [beta], or [nightly] Rust releases. Be aware that issues
-in those versions may have been fixed in this repository already, as those
-releases are updated less frequently.
+همچنین می‌توانید کتاب را به صورت رایگان آنلاین بخوانید. لطفاً کتاب را به صورت ارسال شده با آخرین نسخه‌های [stable]، [beta]، یا [nightly] راست مشاهده کنید. توجه داشته باشید که مشکلات در آن نسخه‌ها ممکن است در این مخزن قبلاً رفع شده باشد، زیرا آن نسخه‌ها به صورت مکرر به‌روز نمی‌شوند.
 
 [stable]: https://doc.rust-lang.org/stable/book/
 [beta]: https://doc.rust-lang.org/beta/book/
 [nightly]: https://doc.rust-lang.org/nightly/book/
 
-See the [releases] to download just the code of all the code listings that appear in the book.
+فقط برای دانلود تمام لیست‌های کد که در کتاب ظاهر می‌شوند، به [releases] مراجعه کنید.
 
-[releases]: https://github.com/rust-lang/book/releases
+[releases]: https://github.com/drunkleen/rust-book-persian/releases
 
-## Requirements
+## نیازمندی‌ها
 
-Building the book requires [mdBook], ideally the same version that
-rust-lang/rust uses in [this file][rust-mdbook]. To get it:
+برای ساخت کتاب نیاز به [mdBook] دارید، ترجیحاً همان نسخه‌ای که rust-lang/rust در [این فایل][rust-mdbook] استفاده می‌کند. برای دریافت آن:
 
 [mdBook]: https://github.com/rust-lang/mdBook
 [rust-mdbook]: https://github.com/rust-lang/rust/blob/master/src/tools/rustbook/Cargo.toml
 
 ```bash
-$ cargo install mdbook --locked --version <version_num>
+cargo install mdbook --locked --version <version_num>
 ```
-
-The book also uses two mdbook plugins which are part of this repository. If you
-do not install them, you will see warnings when building and the output will not
-look right, but you _will_ still be able to build the book. To use the plugins,
-you should run:
+Example:
 
 ```bash
-$ cargo install --locked --path packages/mdbook-trpl
+cargo install mdbook --locked --version 0.4.37
 ```
 
-## Building
+این کتاب همچنین از دو افزونه mdbook استفاده می‌کند که بخشی از این مخزن هستند. اگر آنها را نصب نکنید، هنگام ساخت هشدارهایی مشاهده خواهید کرد و خروجی به درستی نمایش داده نمی‌شود، اما هنوز هم می‌توانید کتاب را بسازید. برای استفاده از افزونه‌ها، باید دستور زیر را اجرا کنید:
 
-To build the book, type:
+```bash
+cargo install --locked --path packages/mdbook-trpl
+```
+
+## ساخت
+
+برای ساختن کتاب عبارات زیر را تایپ کنید:
 
 ```bash
 $ mdbook build
 ```
 
-The output will be in the `book` subdirectory. To check it out, open it in
-your web browser.
+
+خروجی در زیرمجموعه `book` خواهد بود. برای مشاهده، آن را در مرورگر وب خود باز کنید.
 
 _Firefox:_
 
@@ -66,51 +81,26 @@ _Chrome:_
 
 ```bash
 $ google-chrome book/index.html                 # Linux
-$ open -a "Google Chrome" book/index.html       # OS X
+$ open -a "Google Chrome" persian/book/index.html       # OS X
 $ Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
 $ start chrome.exe .\book\index.html            # Windows (Cmd)
 ```
 
-To run the tests:
+برای اجرای تست‌ها:
 
 ```bash
-$ cd packages/trpl
 $ mdbook test --library-path packages/trpl/target/debug/deps
 ```
+## مشارکت
 
-## Contributing
+ما از کمک شما خوشحال می‌شویم! لطفاً [CONTRIBUTING.md][contrib] را ببینید تا با انواع مشارکت‌هایی که به دنبال آنها هستیم آشنا شوید.
 
-We'd love your help! Please see [CONTRIBUTING.md][contrib] to learn about the
-kinds of contributions we're looking for.
+[contrib]: https://github.com/drunkleen/rust-book-persian/blob/main/CONTRIBUTING.md
 
-[contrib]: https://github.com/rust-lang/book/blob/main/CONTRIBUTING.md
+به دلیل اینکه کتاب [چاپ شده است][nostarch] و همچنین می‌خواهیم نسخه آنلاین کتاب را تا حد ممکن نزدیک به نسخه چاپی نگه داریم، ممکن است برای ما بیشتر از حد معمول طول بکشد تا به مشکل یا درخواست کشش شما رسیدگی کنیم.
 
-Because the book is [printed][nostarch], and because we want
-to keep the online version of the book close to the print version when
-possible, it may take longer than you're used to for us to address your issue
-or pull request.
+## بررسی املاء
 
-So far, we've been doing a larger revision to coincide with [Rust Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
-revisions, we will only be correcting errors. If your issue or pull request
-isn't strictly fixing an error, it might sit until the next time that we're
-working on a large revision: expect on the order of months or years. Thank you
-for your patience!
+برای اسکن فایل‌های منبع برای خطاهای املایی، می‌توانید از اسکریپت `spellcheck.sh` که در پوشه `ci` موجود است استفاده کنید. این اسکریپت به یک فرهنگ لغت از کلمات معتبر نیاز دارد که در `ci/dictionary.txt` ارائه شده است. اگر اسکریپت یک مثبت کاذب تولید کرد (مثلاً شما از کلمه `BTreeMap` استفاده کرده‌اید که اسکریپت آن را نامعتبر می‌داند)، باید این کلمه را به `ci/dictionary.txt` اضافه کنید (ترتیب مرتب‌شده را برای سازگاری حفظ کنید).
 
-### Translations
-
-We'd love help translating the book! See the [Translations] label to join in
-efforts that are currently in progress. Open a new issue to start working on
-a new language! We're waiting on [mdbook support] for multiple languages
-before we merge any in, but feel free to start!
-
-[Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
-[mdbook support]: https://github.com/rust-lang/mdBook/issues/5
-
-## Spellchecking
-
-To scan source files for spelling errors, you can use the `spellcheck.sh`
-script available in the `ci` directory. It needs a dictionary of valid words,
-which is provided in `ci/dictionary.txt`. If the script produces a false
-positive (say, you used the word `BTreeMap` which the script considers invalid),
-you need to add this word to `ci/dictionary.txt` (keep the sorted order for
-consistency).
+</div>

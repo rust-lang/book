@@ -1,34 +1,48 @@
-# Style Guide
+<div dir="rtl">
 
-## Prose
+# راهنمای سبک
 
-- Prefer title case for chapter/section headings, ex: `## Generating a Secret
-  Number` rather than `## Generating a secret number`.
-- Prefer italics over single quotes when calling out a term, ex: `is an
-  *associated function* of` rather than `is an ‘associated function’ of`.
-- When talking about a method in prose, DO NOT include the parentheses, ex:
-  `read_line` rather than `read_line()`.
-- Hard wrap at 80 chars
-- Prefer not mixing code and not-code in one word, ex: ``Remember when we wrote
-  `use std::io`?`` rather than ``Remember when we `use`d `std::io`?``
+<div align="center">
+  
+[English](style-guide-EN.md) | [فارسی](style-guide.md)
+  
+</div>
 
-## Code
+## نثر
 
-- Add the file name before markdown blocks to make it clear which file we're
-  talking about, when applicable.
-- When making changes to code, make it clear which parts of the code changed
-  and which stayed the same... not sure how to do this yet
-- Split up long lines as appropriate to keep them under 80 chars if possible
-- Use `bash` syntax highlighting for command line output code blocks
+<ul dir="rtl">
+  <li>برای عنوان‌های فصل/بخش از حروف بزرگ برای کلمات اصلی استفاده کنید، مثال:
+    `## تولید یک عدد مخفی` به جای `## تولید یک عدد مخفی`.</li>
+  <li>در زمان اشاره به یک اصطلاح، از ایتالیک به جای نقل قول استفاده کنید، مثال:
+    `یک *تابع وابسته* است` به جای `یک ‘تابع وابسته’ است`.</li>
+  <li>وقتی درباره یک متد در متن صحبت می‌کنید، از پرانتزها استفاده نکنید، مثال:
+    `read_line` به جای `read_line()`.</li>
+  <li>خطوط را در ۸۰ کاراکتر محدود کنید.</li>
+  <li>از ترکیب کد و غیرکد در یک کلمه خودداری کنید، مثال: 
+    ``به یاد دارید وقتی نوشتیم `use std::io`؟`` به جای
+    ``به یاد دارید وقتی `use`d `std::io`؟``.</li>
+</ul>
 
-## Links
+## کد
 
-Once all the scripts are done:
+<ul dir="rtl">
+  <li>قبل از بلوک‌های markdown نام فایل را اضافه کنید تا مشخص شود درباره کدام فایل صحبت می‌کنیم، در صورت لزوم.</li>
+  <li>وقتی تغییراتی در کد انجام می‌دهید، مشخص کنید کدام قسمت‌های کد تغییر کرده‌اند و کدام قسمت‌ها ثابت مانده‌اند... هنوز مطمئن نیستم چگونه این را انجام دهیم.</li>
+  <li>خطوط طولانی را به طور مناسب تقسیم کنید تا در صورت امکان زیر ۸۰ کاراکتر باقی بمانند.</li>
+  <li>برای بلوک‌های کد خروجی خط فرمان از برجسته‌سازی `bash` استفاده کنید.</li>
+</ul>
 
-- If a link shouldn't be printed, mark it to be ignored
-  - This includes all "Chapter XX" intra-book links, which _should_ be links
-    for the HTML version
-- Make intra-book links and stdlib API doc links relative so they work whether
-  the book is read offline or on docs.rust-lang.org
-- Use markdown links and keep in mind that they will be changed into `text at
-  *url*` in print, so word them in a way that it reads well in that format
+## لینک‌ها
+
+<ul dir="rtl">
+  <li>هنگامی که همه اسکریپت‌ها تکمیل شدند:
+    <ul dir="rtl">
+      <li>اگر نباید یک لینک چاپ شود، آن را برای نادیده گرفتن علامت‌گذاری کنید</li>
+      <li>این شامل همه لینک‌های "فصل XX" درون‌کتاب می‌شود، که _باید_ لینک باشند برای نسخه HTML</li>
+    </ul>
+  </li>
+  <li>لینک‌های درون‌کتاب و لینک‌های مستندات API کتابخانه استاندارد را نسبی کنید تا در حالت آفلاین یا روی docs.rust-lang.org کار کنند.</li>
+  <li>از لینک‌های markdown استفاده کنید و به یاد داشته باشید که آن‌ها به `متن در *url*` در چاپ تبدیل می‌شوند، بنابراین آن‌ها را طوری بنویسید که در این قالب خوانا باشند.</li>
+</ul>
+
+</div>

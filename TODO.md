@@ -1,17 +1,33 @@
-# In each chapter
+<div dir="rtl">
 
-- [ ] Manual regeneration
-- [ ] Check for upstream changes from last snapshot
-- [ ] Propagate updated output to docx
-- [ ] Extract docx and check diff
-- [ ] Answer all comments
-- [ ] Check cross references
-- [ ] Check indentation of --snip--
-- [ ] Numbered lines, Gray out unchanged lines
-- [ ] Check line wrapping
-- [ ] Check for unneeded command/compiling/running output
-- [ ] Check println style and error messages
-- [ ] Add alt text to images
-- [ ] Index tags
-  - [ ] search for "convention" conventions:naming:of blah
-  - [ ] check for double spaces, spaces at the end of paragraphs
+
+# در هر فصل
+
+<div align="center">
+  
+[English](TODO-EN.md) | [فارسی](TODO.md)
+  
+</div>
+
+<ul dir="rtl">
+  <li>[ ] بازتولید دستی</li>
+  <li>[ ] بررسی تغییرات بالادستی از آخرین اسنپ‌شات</li>
+  <li>[ ] انتقال خروجی به‌روزشده به docx</li>
+  <li>[ ] استخراج docx و بررسی تفاوت‌ها</li>
+  <li>[ ] پاسخ به تمام نظرات</li>
+  <li>[ ] بررسی ارجاعات متقابل</li>
+  <li>[ ] بررسی تورفتگی --snip--</li>
+  <li>[ ] خطوط شماره‌گذاری‌شده، خاکستری‌کردن خطوط بدون تغییر</li>
+  <li>[ ] بررسی پیچیدن خطوط</li>
+  <li>[ ] بررسی خروجی‌های دستوری/کامپایل/اجرا که نیاز نیستند</li>
+  <li>[ ] بررسی سبک println و پیام‌های خطا</li>
+  <li>[ ] افزودن متن جایگزین به تصاویر</li>
+  <li>[ ] برچسب‌های شاخص
+    <ul>
+      <li>[ ] جستجوی "convention" conventions:naming:of blah</li>
+      <li>[ ] بررسی وجود دو فاصله یا فاصله در انتهای پاراگراف‌ها</li>
+    </ul>
+  </li>
+</ul>
+
+</div>
