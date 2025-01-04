@@ -1,48 +1,21 @@
-## Characteristics of Object-Oriented Languages
+## ویژگی‌های زبان‌های شی‌گرا
 
-There is no consensus in the programming community about what features a
-language must have to be considered object-oriented. Rust is influenced by many
-programming paradigms, including OOP; for example, we explored the features
-that came from functional programming in Chapter 13. Arguably, OOP languages
-share certain common characteristics, namely objects, encapsulation, and
-inheritance. Let’s look at what each of those characteristics means and whether
-Rust supports it.
+در جامعه برنامه‌نویسی هیچ توافقی درباره اینکه یک زبان باید چه ویژگی‌هایی داشته باشد تا به‌عنوان شی‌گرا در نظر گرفته شود، وجود ندارد. Rust تحت تأثیر بسیاری از پارادایم‌های برنامه‌نویسی قرار گرفته است، از جمله OOP؛ برای مثال، ما ویژگی‌هایی که از برنامه‌نویسی تابعی آمده بودند را در فصل 13 بررسی کردیم. می‌توان گفت که زبان‌های شی‌گرا برخی ویژگی‌های مشترک دارند، یعنی اشیاء، کپسوله‌سازی (encapsulation) و وراثت (inheritance). بیایید بررسی کنیم که هر یک از این ویژگی‌ها چه معنایی دارند و آیا Rust از آن‌ها پشتیبانی می‌کند یا خیر.
 
-### Objects Contain Data and Behavior
+### اشیاء شامل داده‌ها و رفتار هستند
 
-The book _Design Patterns: Elements of Reusable Object-Oriented Software_ by
-Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides (Addison-Wesley
-Professional, 1994), colloquially referred to as _The Gang of Four_ book, is a
-catalog of object-oriented design patterns. It defines OOP this way:
+کتاب _Design Patterns: Elements of Reusable Object-Oriented Software_ نوشته Erich Gamma، Richard Helm، Ralph Johnson و John Vlissides (انتشارات Addison-Wesley Professional، 1994)، که به طور غیررسمی به عنوان کتاب _Gang of Four_ شناخته می‌شود، یک فهرست از الگوهای طراحی شی‌گرا است. این کتاب OOP را به این صورت تعریف می‌کند:
 
-> Object-oriented programs are made up of objects. An _object_ packages both
-> data and the procedures that operate on that data. The procedures are
-> typically called _methods_ or _operations_.
+> برنامه‌های شی‌گرا از اشیاء تشکیل شده‌اند. یک _شیء_ شامل داده‌ها و روش‌هایی که بر روی آن داده‌ها عمل می‌کنند، است. این روش‌ها معمولاً به نام _متدها_ یا _عملیات_ شناخته می‌شوند.
 
-Using this definition, Rust is object-oriented: structs and enums have data,
-and `impl` blocks provide methods on structs and enums. Even though structs and
-enums with methods aren’t _called_ objects, they provide the same
-functionality, according to the Gang of Four’s definition of objects.
+با استفاده از این تعریف، Rust یک زبان شی‌گرا است: structها و enumها داده دارند، و بلوک‌های `impl` متدهایی را برای structها و enumها ارائه می‌دهند. حتی اگر structها و enumها با متدهایی که دارند _اشیاء_ نامیده نشوند، بر اساس تعریف Gang of Four، آن‌ها همان عملکرد را ارائه می‌دهند.
 
-### Encapsulation that Hides Implementation Details
+### کپسوله‌سازی برای مخفی کردن جزئیات پیاده‌سازی
 
-Another aspect commonly associated with OOP is the idea of _encapsulation_,
-which means that the implementation details of an object aren’t accessible to
-code using that object. Therefore, the only way to interact with an object is
-through its public API; code using the object shouldn’t be able to reach into
-the object’s internals and change data or behavior directly. This enables the
-programmer to change and refactor an object’s internals without needing to
-change the code that uses the object.
+یکی دیگر از جنبه‌هایی که معمولاً با OOP مرتبط است، مفهوم _کپسوله‌سازی_ است، که به این معناست که جزئیات پیاده‌سازی یک شیء برای کدی که از آن شیء استفاده می‌کند قابل دسترسی نیست. بنابراین تنها راه تعامل با یک شیء از طریق API عمومی آن است؛ کدی که از شیء استفاده می‌کند نباید بتواند به جزئیات داخلی شیء دسترسی پیدا کند و داده‌ها یا رفتار را به صورت مستقیم تغییر دهد. این امکان را به برنامه‌نویس می‌دهد که جزئیات داخلی شیء را تغییر داده و بازسازی کند بدون اینکه نیازی به تغییر کدی که از آن شیء استفاده می‌کند، داشته باشد.
 
-We discussed how to control encapsulation in Chapter 7: we can use the `pub`
-keyword to decide which modules, types, functions, and methods in our code
-should be public, and by default everything else is private. For example, we
-can define a struct `AveragedCollection` that has a field containing a vector
-of `i32` values. The struct can also have a field that contains the average of
-the values in the vector, meaning the average doesn’t have to be computed
-on demand whenever anyone needs it. In other words, `AveragedCollection` will
-cache the calculated average for us. Listing 18-1 has the definition of the
-`AveragedCollection` struct:
+ما در فصل 7 بحث کردیم که چگونه می‌توان کپسوله‌سازی را کنترل کرد: می‌توانیم از کلمه کلیدی `pub` استفاده کنیم تا تصمیم بگیریم کدام ماژول‌ها، انواع، توابع و متدها در کد ما عمومی باشند، و به‌طور پیش‌فرض همه چیز دیگر خصوصی است. برای مثال، می‌توانیم یک struct به نام `AveragedCollection` تعریف کنیم که یک فیلد شامل یک بردار از مقادیر `i32` دارد. این struct همچنین می‌تواند یک فیلد داشته باشد که میانگین مقادیر موجود در بردار را نگه می‌دارد، به این معنا که نیازی به محاسبه میانگین به صورت لحظه‌ای نیست هر زمان که کسی به آن نیاز داشت. به عبارت دیگر، `AveragedCollection` میانگین محاسبه‌شده را برای ما کش می‌کند. لیستینگ 18-1 تعریف struct `AveragedCollection` را نشان می‌دهد:
+
 
 <Listing number="18-1" file-name="src/lib.rs" caption="An `AveragedCollection` struct that maintains a list of integers and the average of the items in the collection">
 
@@ -52,13 +25,9 @@ cache the calculated average for us. Listing 18-1 has the definition of the
 
 </Listing>
 
-The struct is marked `pub` so that other code can use it, but the fields within
-the struct remain private. This is important in this case because we want to
-ensure that whenever a value is added or removed from the list, the average is
-also updated. We do this by implementing `add`, `remove`, and `average` methods
-on the struct, as shown in Listing 18-2:
+ساختار `struct` با کلمه کلیدی `pub` علامت‌گذاری شده است تا کدهای دیگر بتوانند از آن استفاده کنند، اما فیلدهای داخل struct همچنان خصوصی باقی می‌مانند. این نکته در این مثال مهم است، زیرا می‌خواهیم اطمینان حاصل کنیم که هر زمان مقداری به لیست اضافه یا از آن حذف می‌شود، میانگین نیز به‌روزرسانی می‌شود. این کار را با پیاده‌سازی متدهای `add`، `remove` و `average` روی struct انجام می‌دهیم، همان‌طور که در لیستینگ 18-2 نشان داده شده است:
 
-<Listing number="18-2" file-name="src/lib.rs" caption="Implementations of the public methods `add`, `remove`, and `average` on `AveragedCollection`">
+<Listing number="18-2" file-name="src/lib.rs" caption="پیاده‌سازی متدهای عمومی `add`، `remove` و `average` در `AveragedCollection`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-02/src/lib.rs:here}}
@@ -66,84 +35,32 @@ on the struct, as shown in Listing 18-2:
 
 </Listing>
 
-The public methods `add`, `remove`, and `average` are the only ways to access
-or modify data in an instance of `AveragedCollection`. When an item is added
-to `list` using the `add` method or removed using the `remove` method, the
-implementations of each call the private `update_average` method that handles
-updating the `average` field as well.
+متدهای عمومی `add`، `remove` و `average` تنها راه‌های دسترسی یا تغییر داده‌ها در یک نمونه از `AveragedCollection` هستند. زمانی که یک آیتم با استفاده از متد `add` به `list` اضافه می‌شود یا با استفاده از متد `remove` از آن حذف می‌شود، پیاده‌سازی هر یک از آن‌ها متد خصوصی `update_average` را فراخوانی می‌کند که به‌روزرسانی فیلد `average` را مدیریت می‌کند.
 
-We leave the `list` and `average` fields private so there is no way for
-external code to add or remove items to or from the `list` field directly;
-otherwise, the `average` field might become out of sync when the `list`
-changes. The `average` method returns the value in the `average` field,
-allowing external code to read the `average` but not modify it.
+ما فیلدهای `list` و `average` را خصوصی نگه می‌داریم تا هیچ راهی برای کد خارجی وجود نداشته باشد که مستقیماً آیتم‌ها را به `list` اضافه یا از آن حذف کند. در غیر این صورت، فیلد `average` ممکن است با تغییرات `list` هماهنگ نباشد. متد `average` مقدار موجود در فیلد `average` را بازمی‌گرداند و به کد خارجی اجازه می‌دهد تا مقدار میانگین را بخواند اما آن را تغییر ندهد.
 
-Because we’ve encapsulated the implementation details of the struct
-`AveragedCollection`, we can easily change aspects, such as the data structure,
-in the future. For instance, we could use a `HashSet<i32>` instead of a
-`Vec<i32>` for the `list` field. As long as the signatures of the `add`,
-`remove`, and `average` public methods stay the same, code using
-`AveragedCollection` wouldn’t need to change in order to compile. If we made
-`list` public instead, this wouldn’t necessarily be the case: `HashSet<i32>` and
-`Vec<i32>` have different methods for adding and removing items, so the external
-code would likely have to change if it were modifying `list` directly.
+از آنجایی که جزئیات پیاده‌سازی ساختار `AveragedCollection` را کپسوله کرده‌ایم، می‌توانیم به راحتی جنبه‌هایی از آن را در آینده تغییر دهیم. برای مثال، می‌توانیم به جای استفاده از `Vec<i32>` برای فیلد `list`، از یک `HashSet<i32>` استفاده کنیم. تا زمانی که امضای متدهای عمومی `add`، `remove` و `average` یکسان باقی بماند، کدی که از `AveragedCollection` استفاده می‌کند نیازی به تغییر برای کامپایل شدن نخواهد داشت. اگر `list` عمومی بود، این موضوع لزوماً صادق نبود: `HashSet<i32>` و `Vec<i32>` متدهای متفاوتی برای اضافه کردن و حذف آیتم‌ها دارند، بنابراین کد خارجی احتمالاً باید تغییر کند اگر مستقیماً `list` را تغییر می‌داد.
 
-If encapsulation is a required aspect for a language to be considered
-object-oriented, then Rust meets that requirement. The option to use `pub` or
-not for different parts of code enables encapsulation of implementation details.
+اگر کپسوله‌سازی یکی از جنبه‌های ضروری برای در نظر گرفتن یک زبان به عنوان شی‌گرا باشد، Rust این نیاز را برآورده می‌کند. امکان استفاده یا عدم استفاده از `pub` برای بخش‌های مختلف کد، کپسوله‌سازی جزئیات پیاده‌سازی را ممکن می‌سازد.
 
-### Inheritance as a Type System and as Code Sharing
+### وراثت به‌عنوان سیستم نوع و به‌عنوان اشتراک‌گذاری کد
 
-_Inheritance_ is a mechanism whereby an object can inherit elements from
-another object’s definition, thus gaining the parent object’s data and behavior
-without you having to define them again.
+_وراثت_ مکانیزمی است که به یک شیء اجازه می‌دهد عناصر را از تعریف یک شیء دیگر به ارث ببرد و در نتیجه داده‌ها و رفتار شیء والد را بدون نیاز به تعریف مجدد آن‌ها به دست آورد.
 
-If a language must have inheritance to be an object-oriented language, then
-Rust is not one. There is no way to define a struct that inherits the parent
-struct’s fields and method implementations without using a macro.
+اگر وراثت باید برای یک زبان وجود داشته باشد تا شی‌گرا در نظر گرفته شود، Rust یک زبان شی‌گرا نیست. در Rust، نمی‌توانید یک struct تعریف کنید که فیلدها و پیاده‌سازی متدهای struct والد را بدون استفاده از یک ماکرو به ارث ببرد.
 
-However, if you’re used to having inheritance in your programming toolbox, you
-can use other solutions in Rust, depending on your reason for reaching for
-inheritance in the first place.
+با این حال، اگر به استفاده از وراثت در ابزارهای برنامه‌نویسی خود عادت کرده‌اید، می‌توانید بسته به دلیل خود برای استفاده از وراثت، از راه‌حل‌های دیگری در Rust استفاده کنید.
 
-You would choose inheritance for two main reasons. One is for reuse of code:
-you can implement particular behavior for one type, and inheritance enables you
-to reuse that implementation for a different type. You can do this in a limited
-way in Rust code using default trait method implementations, which you saw in
-Listing 10-14 when we added a default implementation of the `summarize` method
-on the `Summary` trait. Any type implementing the `Summary` trait would have
-the `summarize` method available on it without any further code. This is
-similar to a parent class having an implementation of a method and an
-inheriting child class also having the implementation of the method. We can
-also override the default implementation of the `summarize` method when we
-implement the `Summary` trait, which is similar to a child class overriding the
-implementation of a method inherited from a parent class.
+دو دلیل اصلی برای انتخاب وراثت وجود دارد. یکی برای استفاده مجدد از کد: می‌توانید یک رفتار خاص را برای یک نوع پیاده‌سازی کنید و وراثت این امکان را فراهم می‌کند که از آن پیاده‌سازی برای یک نوع دیگر استفاده مجدد کنید. در Rust، این کار را به صورت محدود با استفاده از پیاده‌سازی‌های پیش‌فرض متدهای صفت (trait) انجام دهید، همان‌طور که در لیستینگ 10-14 دیدیم که یک پیاده‌سازی پیش‌فرض برای متد `summarize` در صفت `Summary` اضافه کردیم. هر نوعی که صفت `Summary` را پیاده‌سازی کند، متد `summarize` را بدون نیاز به کد اضافی خواهد داشت. این شبیه به این است که یک کلاس والد یک پیاده‌سازی از یک متد داشته باشد و یک کلاس فرزند ارث‌برده نیز آن پیاده‌سازی متد را داشته باشد. همچنین می‌توانیم پیاده‌سازی پیش‌فرض متد `summarize` را زمانی که صفت `Summary` را پیاده‌سازی می‌کنیم، بازنویسی کنیم که شبیه به بازنویسی پیاده‌سازی یک متد ارث‌برده شده در کلاس فرزند است.
 
-The other reason to use inheritance relates to the type system: to enable a
-child type to be used in the same places as the parent type. This is also
-called _polymorphism_, which means that you can substitute multiple objects for
-each other at runtime if they share certain characteristics.
+دلیل دیگر استفاده از وراثت مربوط به سیستم نوع است: برای این که یک نوع فرزند بتواند در همان مکان‌هایی که نوع والد استفاده می‌شود، مورد استفاده قرار گیرد. این مفهوم _چندریختی (polymorphism)_ نیز نامیده می‌شود، که به این معناست که می‌توانید چندین شیء را در زمان اجرا جایگزین یکدیگر کنید اگر آن‌ها ویژگی‌های خاصی را به اشتراک بگذارند.
 
-> ### Polymorphism
+> ### چندریختی (Polymorphism)
 >
-> To many people, polymorphism is synonymous with inheritance. But it’s
-> actually a more general concept that refers to code that can work with data
-> of multiple types. For inheritance, those types are generally subclasses.
+> برای بسیاری از افراد، چندریختی مترادف با وراثت است. اما در واقع یک مفهوم عمومی‌تر است که به کدی اشاره دارد که می‌تواند با داده‌هایی از انواع مختلف کار کند. در مورد وراثت، این انواع معمولاً زیرکلاس‌ها هستند.
 >
-> Rust instead uses generics to abstract over different possible types and
-> trait bounds to impose constraints on what those types must provide. This is
-> sometimes called _bounded parametric polymorphism_.
+> در مقابل، Rust از جنریک‌ها برای انتزاع انواع ممکن مختلف استفاده می‌کند و محدودیت‌های صفت (trait bounds) را برای تحمیل این که این انواع باید چه ویژگی‌هایی ارائه دهند، اعمال می‌کند. این رویکرد گاهی _چندریختی پارامتریک محدودشده_ نامیده می‌شود.
 
-Inheritance has recently fallen out of favor as a programming design solution
-in many programming languages because it’s often at risk of sharing more code
-than necessary. Subclasses shouldn’t always share all characteristics of their
-parent class but will do so with inheritance. This can make a program’s design
-less flexible. It also introduces the possibility of calling methods on
-subclasses that don’t make sense or that cause errors because the methods don’t
-apply to the subclass. In addition, some languages will only allow single
-inheritance (meaning a subclass can only inherit from one class), further
-restricting the flexibility of a program’s design.
+وراثت اخیراً به‌عنوان یک راه‌حل طراحی برنامه‌نویسی در بسیاری از زبان‌ها محبوبیت خود را از دست داده است زیرا اغلب خطر اشتراک‌گذاری بیش از حد کد را به همراه دارد. زیرکلاس‌ها نباید همیشه تمام ویژگی‌های کلاس والد خود را به اشتراک بگذارند، اما با وراثت این اتفاق می‌افتد. این می‌تواند طراحی برنامه را کمتر انعطاف‌پذیر کند. همچنین امکان فراخوانی متدهایی روی زیرکلاس‌ها را فراهم می‌کند که معنا ندارند یا باعث خطا می‌شوند زیرا متدها برای زیرکلاس اعمال نمی‌شوند. علاوه بر این، برخی زبان‌ها فقط اجازه وراثت تک (single inheritance) را می‌دهند (یعنی یک زیرکلاس فقط می‌تواند از یک کلاس ارث ببرد)، که انعطاف‌پذیری طراحی برنامه را بیشتر محدود می‌کند.
 
-For these reasons, Rust takes the different approach of using trait objects
-instead of inheritance. Let’s look at how trait objects enable polymorphism in
-Rust.
+به این دلایل، Rust رویکرد متفاوتی را با استفاده از اشیاء صفت (trait objects) به جای وراثت اتخاذ می‌کند. بیایید ببینیم که چگونه اشیاء صفت در Rust چندریختی را ممکن می‌سازند.

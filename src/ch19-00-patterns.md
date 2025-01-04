@@ -1,29 +1,20 @@
-# Patterns and Matching
+# الگوها و Match
 
-_Patterns_ are a special syntax in Rust for matching against the structure of
-types, both complex and simple. Using patterns in conjunction with `match`
-expressions and other constructs gives you more control over a program’s
-control flow. A pattern consists of some combination of the following:
+_الگوها_ یک نحو خاص در Rust هستند که برای مطابقت با ساختار انواع، چه پیچیده و چه ساده، استفاده می‌شوند. استفاده از الگوها همراه با عبارات `match` و سایر سازه‌ها به شما کنترل بیشتری بر جریان کنترل برنامه می‌دهد. یک الگو از ترکیبی از موارد زیر تشکیل شده است:
 
-- Literals
-- Destructured arrays, enums, structs, or tuples
-- Variables
-- Wildcards
-- Placeholders
+<div dir="rtl">
+    <ul>
+        <li>مقادیر ثابت (Literals)</li>
+        <li>آرایه‌ها، enumها، structها یا tupleهای تخریب‌شده</li>
+        <li>متغیرها</li>
+        <li>کاراکترهای عمومی (Wildcards)</li>
+        <li>جای‌نگهدارها (Placeholders)</li>
+    </ul>
+</div>
 
-Some example patterns include `x`, `(a, 3)`, and `Some(Color::Red)`. In the
-contexts in which patterns are valid, these components describe the shape of
-data. Our program then matches values against the patterns to determine whether
-it has the correct shape of data to continue running a particular piece of code.
+برخی از نمونه الگوها عبارتند از `x`، `(a, 3)` و `Some(Color::Red)`. در زمینه‌هایی که الگوها معتبر هستند، این مؤلفه‌ها شکل داده‌ها را توصیف می‌کنند. سپس برنامه ما مقادیر را با الگوها مقایسه می‌کند تا مشخص شود آیا داده‌ها شکل درستی دارند تا یک قطعه خاص از کد اجرا شود یا خیر.
 
-To use a pattern, we compare it to some value. If the pattern matches the
-value, we use the value parts in our code. Recall the `match` expressions in
-Chapter 6 that used patterns, such as the coin-sorting machine example. If the
-value fits the shape of the pattern, we can use the named pieces. If it
-doesn’t, the code associated with the pattern won’t run.
+برای استفاده از یک الگو، آن را با یک مقدار مقایسه می‌کنیم. اگر الگو با مقدار مطابقت داشته باشد، از قطعات مقدار در کد خود استفاده می‌کنیم. به یاد آورید که در فصل 6 از عبارات `match` که از الگوها استفاده می‌کردند، مانند مثال ماشین مرتب‌سازی سکه، بحث کردیم. اگر مقدار با شکل الگو تطابق داشته باشد، می‌توانیم از قسمت‌های نام‌گذاری‌شده استفاده کنیم. اگر مطابقت نداشته باشد، کد مرتبط با آن الگو اجرا نخواهد شد.
 
-This chapter is a reference on all things related to patterns. We’ll cover the
-valid places to use patterns, the difference between refutable and irrefutable
-patterns, and the different kinds of pattern syntax that you might see. By the
-end of the chapter, you’ll know how to use patterns to express many concepts in
-a clear way.
+این فصل یک مرجع جامع در مورد هر چیزی است که به الگوها مربوط می‌شود. ما مکان‌های معتبری که می‌توان از الگوها استفاده کرد، تفاوت بین الگوهای قابل‌رد (refutable) و غیرقابل‌رد (irrefutable)، و انواع مختلف نحوی الگو که ممکن است ببینید را پوشش خواهیم داد. تا پایان فصل، خواهید دانست که چگونه از الگوها برای بیان بسیاری از مفاهیم به روشی واضح استفاده کنید.
+

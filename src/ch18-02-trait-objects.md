@@ -1,70 +1,20 @@
-## Using Trait Objects That Allow for Values of Different Types
+## استفاده از اشیاء صفت برای مقادیر با انواع مختلف
 
-In Chapter 8, we mentioned that one limitation of vectors is that they can
-store elements of only one type. We created a workaround in Listing 8-9 where
-we defined a `SpreadsheetCell` enum that had variants to hold integers, floats,
-and text. This meant we could store different types of data in each cell and
-still have a vector that represented a row of cells. This is a perfectly good
-solution when our interchangeable items are a fixed set of types that we know
-when our code is compiled.
+در فصل 8، اشاره کردیم که یکی از محدودیت‌های وکتورها این است که می‌توانند فقط عناصر یک نوع را ذخیره کنند. در لیستینگ 8-9، راه‌حلی ایجاد کردیم که در آن یک enum به نام `SpreadsheetCell` تعریف کردیم که انواع مختلفی مانند اعداد صحیح، اعداد اعشاری و متن را در خود جای می‌داد. این به ما اجازه می‌داد داده‌های مختلفی را در هر سلول ذخیره کنیم و همچنان یک وکتور داشته باشیم که نمایانگر یک ردیف از سلول‌ها باشد. این راه‌حل زمانی مناسب است که آیتم‌های قابل تعویض ما مجموعه‌ای ثابت از انواع باشد که هنگام کامپایل کد می‌دانیم.
 
-However, sometimes we want our library user to be able to extend the set of
-types that are valid in a particular situation. To show how we might achieve
-this, we’ll create an example graphical user interface (GUI) tool that iterates
-through a list of items, calling a `draw` method on each one to draw it to the
-screen—a common technique for GUI tools. We’ll create a library crate called
-`gui` that contains the structure of a GUI library. This crate might include
-some types for people to use, such as `Button` or `TextField`. In addition,
-`gui` users will want to create their own types that can be drawn: for
-instance, one programmer might add an `Image` and another might add a
-`SelectBox`.
+با این حال، گاهی اوقات می‌خواهیم کاربران کتابخانه ما بتوانند مجموعه‌ای از انواع معتبر در یک وضعیت خاص را گسترش دهند. برای نشان دادن نحوه انجام این کار، یک ابزار رابط کاربری گرافیکی (GUI) نمونه ایجاد می‌کنیم که از طریق یک لیست از آیتم‌ها تکرار می‌کند و متدی به نام `draw` را برای هر آیتم فراخوانی می‌کند تا آن را روی صفحه رسم کند—یک تکنیک رایج برای ابزارهای GUI. یک crate کتابخانه‌ای به نام `gui` ایجاد می‌کنیم که ساختار یک کتابخانه GUI را شامل می‌شود. این crate ممکن است شامل برخی انواع باشد که افراد از آن‌ها استفاده کنند، مانند `Button` یا `TextField`. علاوه بر این، کاربران `gui` می‌خواهند انواع خود را که می‌توانند رسم شوند ایجاد کنند: برای مثال، یک برنامه‌نویس ممکن است یک `Image` اضافه کند و دیگری ممکن است یک `SelectBox` اضافه کند.
 
-We won’t implement a fully fledged GUI library for this example but will show
-how the pieces would fit together. At the time of writing the library, we can’t
-know and define all the types other programmers might want to create. But we do
-know that `gui` needs to keep track of many values of different types, and it
-needs to call a `draw` method on each of these differently typed values. It
-doesn’t need to know exactly what will happen when we call the `draw` method,
-just that the value will have that method available for us to call.
+ما برای این مثال یک کتابخانه GUI کامل پیاده‌سازی نخواهیم کرد، اما نشان خواهیم داد که قطعات چگونه به هم متصل می‌شوند. هنگام نوشتن این کتابخانه، نمی‌توانیم تمام انواعی که برنامه‌نویسان دیگر ممکن است بخواهند ایجاد کنند را بدانیم و تعریف کنیم. اما می‌دانیم که `gui` باید مقادیر زیادی از انواع مختلف را پیگیری کند و باید متدی به نام `draw` را برای هر یک از این مقادیر با نوع متفاوت فراخوانی کند. نیازی به دانستن دقیق آنچه هنگام فراخوانی متد `draw` اتفاق می‌افتد نداریم، فقط اینکه مقدار باید این متد را داشته باشد.
 
-To do this in a language with inheritance, we might define a class named
-`Component` that has a method named `draw` on it. The other classes, such as
-`Button`, `Image`, and `SelectBox`, would inherit from `Component` and thus
-inherit the `draw` method. They could each override the `draw` method to define
-their custom behavior, but the framework could treat all of the types as if
-they were `Component` instances and call `draw` on them. But because Rust
-doesn’t have inheritance, we need another way to structure the `gui` library to
-allow users to extend it with new types.
+برای انجام این کار در یک زبان با وراثت، ممکن است یک کلاس به نام `Component` تعریف کنیم که یک متد به نام `draw` داشته باشد. سایر کلاس‌ها، مانند `Button`، `Image` و `SelectBox`، از `Component` ارث می‌برند و به این ترتیب متد `draw` را به ارث می‌برند. آن‌ها می‌توانند متد `draw` را بازنویسی کنند تا رفتار سفارشی خود را تعریف کنند، اما فریم‌ورک می‌تواند تمام این انواع را به گونه‌ای مدیریت کند که گویی نمونه‌هایی از `Component` هستند و متد `draw` را روی آن‌ها فراخوانی کند. اما چون Rust وراثت ندارد، باید راه دیگری برای ساختاردهی کتابخانه `gui` پیدا کنیم تا به کاربران اجازه دهد آن را با انواع جدید گسترش دهند.
 
-### Defining a Trait for Common Behavior
+### تعریف یک صفت برای رفتار مشترک
 
-To implement the behavior we want `gui` to have, we’ll define a trait named
-`Draw` that will have one method named `draw`. Then we can define a vector that
-takes a _trait object_. A trait object points to both an instance of a type
-implementing our specified trait and a table used to look up trait methods on
-that type at runtime. We create a trait object by specifying some sort of
-pointer, such as a `&` reference or a `Box<T>` smart pointer, then the `dyn`
-keyword, and then specifying the relevant trait. (We’ll talk about the reason
-trait objects must use a pointer in Chapter 20 in the section [“Dynamically
-Sized Types and the `Sized` Trait.”][dynamically-sized]<!-- ignore -->) We can
-use trait objects in place of a generic or concrete type. Wherever we use a
-trait object, Rust’s type system will ensure at compile time that any value
-used in that context will implement the trait object’s trait. Consequently, we
-don’t need to know all the possible types at compile time.
+برای پیاده‌سازی رفتاری که می‌خواهیم `gui` داشته باشد، یک صفت به نام `Draw` تعریف می‌کنیم که یک متد به نام `draw` خواهد داشت. سپس می‌توانیم یک وکتور تعریف کنیم که یک _شیء صفت_ را بگیرد. یک شیء صفت به یک نمونه از یک نوع که صفت مشخصی را پیاده‌سازی کرده اشاره می‌کند و همچنین یک جدول برای جستجوی متدهای صفت روی آن نوع در زمان اجرا را شامل می‌شود. برای ایجاد یک شیء صفت، باید نوع اشاره‌گر (مانند یک ارجاع `&` یا یک اشاره‌گر هوشمند `Box<T>`)، کلمه کلیدی `dyn` و سپس صفت مربوطه را مشخص کنیم. (در فصل 20، بخش [“انواع با اندازه پویا و صفت `Sized`”][dynamically-sized]<!-- ignore --> دلیل اینکه اشیاء صفت باید از یک اشاره‌گر استفاده کنند را توضیح خواهیم داد.) می‌توانیم از اشیاء صفت به جای یک نوع جنریک یا نوع مشخص استفاده کنیم. هر جا که از یک شیء صفت استفاده کنیم، سیستم نوع Rust در زمان کامپایل تضمین می‌کند که هر مقداری که در آن زمینه استفاده شود، صفت شیء صفت را پیاده‌سازی می‌کند. بنابراین نیازی به دانستن تمام انواع ممکن در زمان کامپایل نداریم.
 
-We’ve mentioned that, in Rust, we refrain from calling structs and enums
-“objects” to distinguish them from other languages’ objects. In a struct or
-enum, the data in the struct fields and the behavior in `impl` blocks are
-separated, whereas in other languages, the data and behavior combined into one
-concept is often labeled an object. However, trait objects _are_ more like
-objects in other languages in the sense that they combine data and behavior.
-But trait objects differ from traditional objects in that we can’t add data to
-a trait object. Trait objects aren’t as generally useful as objects in other
-languages: their specific purpose is to allow abstraction across common
-behavior.
+اشاره کردیم که در Rust از استفاده از اصطلاح "اشیاء" برای structها و enumها اجتناب می‌کنیم تا آن‌ها را از اشیاء سایر زبان‌ها متمایز کنیم. در یک struct یا enum، داده‌ها در فیلدهای struct و رفتار در بلوک‌های `impl` جدا شده‌اند، در حالی که در سایر زبان‌ها داده‌ها و رفتار معمولاً در یک مفهوم واحد به نام شیء ترکیب می‌شوند. اما اشیاء صفت در Rust بیشتر شبیه اشیاء در سایر زبان‌ها هستند، زیرا داده‌ها و رفتار را ترکیب می‌کنند. با این حال، اشیاء صفت از اشیاء سنتی متفاوت هستند زیرا نمی‌توان داده‌ای به یک شیء صفت اضافه کرد. اشیاء صفت به اندازه اشیاء در سایر زبان‌ها عمومی نیستند: هدف خاص آن‌ها فراهم کردن انتزاع در رفتار مشترک است.
 
-Listing 18-3 shows how to define a trait named `Draw` with one method named
-`draw`:
+لیستینگ 18-3 نشان می‌دهد چگونه می‌توان یک صفت به نام `Draw` با یک متد به نام `draw` تعریف کرد:
 
 <Listing number="18-3" file-name="src/lib.rs" caption="Definition of the `Draw` trait">
 
@@ -74,13 +24,9 @@ Listing 18-3 shows how to define a trait named `Draw` with one method named
 
 </Listing>
 
-This syntax should look familiar from our discussions on how to define traits
-in Chapter 10. Next comes some new syntax: Listing 18-4 defines a struct named
-`Screen` that holds a vector named `components`. This vector is of type
-`Box<dyn Draw>`, which is a trait object; it’s a stand-in for any type inside
-a `Box` that implements the `Draw` trait.
+این نحو باید از بحث‌های ما در فصل 10 در مورد نحوه تعریف صفات آشنا باشد. حالا به نحو جدیدی می‌رسیم: لیستینگ 18-4 یک ساختار به نام `Screen` را تعریف می‌کند که یک بردار به نام `components` دارد. این بردار از نوع `Box<dyn Draw>` است، که یک شیء صفت است؛ این به‌عنوان جایگزینی برای هر نوع داخل یک `Box` که صفت `Draw` را پیاده‌سازی کرده عمل می‌کند.
 
-<Listing number="18-4" file-name="src/lib.rs" caption="Definition of the `Screen` struct with a `components` field holding a vector of trait objects that implement the `Draw` trait">
+<Listing number="18-4" file-name="src/lib.rs" caption="تعریف ساختار `Screen` با یک فیلد `components` که یک بردار از اشیاء صفت را نگه می‌دارد که صفت `Draw` را پیاده‌سازی کرده‌اند">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-04/src/lib.rs:here}}
@@ -88,10 +34,9 @@ a `Box` that implements the `Draw` trait.
 
 </Listing>
 
-On the `Screen` struct, we’ll define a method named `run` that will call the
-`draw` method on each of its `components`, as shown in Listing 18-5:
+روی ساختار `Screen`، متدی به نام `run` تعریف می‌کنیم که متد `draw` را روی هر یک از `components` خود فراخوانی می‌کند، همان‌طور که در لیستینگ 18-5 نشان داده شده است:
 
-<Listing number="18-5" file-name="src/lib.rs" caption="A `run` method on `Screen` that calls the `draw` method on each component">
+<Listing number="18-5" file-name="src/lib.rs" caption="متد `run` روی `Screen` که متد `draw` را روی هر کامپوننت فراخوانی می‌کند">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-05/src/lib.rs:here}}
@@ -99,14 +44,9 @@ On the `Screen` struct, we’ll define a method named `run` that will call the
 
 </Listing>
 
-This works differently from defining a struct that uses a generic type
-parameter with trait bounds. A generic type parameter can only be substituted
-with one concrete type at a time, whereas trait objects allow for multiple
-concrete types to fill in for the trait object at runtime. For example, we
-could have defined the `Screen` struct using a generic type and a trait bound
-as in Listing 18-6:
+این روش متفاوت از تعریف ساختاری است که از یک پارامتر نوع جنریک با محدودیت‌های صفت استفاده می‌کند. یک پارامتر نوع جنریک فقط می‌تواند یک نوع مشخص را در هر زمان جایگزین کند، در حالی که اشیاء صفت به ما اجازه می‌دهند چندین نوع مشخص را در زمان اجرا به جای اشیاء صفت قرار دهیم. برای مثال، می‌توانستیم ساختار `Screen` را با استفاده از یک نوع جنریک و یک محدودیت صفت به صورت لیستینگ 18-6 تعریف کنیم:
 
-<Listing number="18-6" file-name="src/lib.rs" caption="An alternate implementation of the `Screen` struct and its `run` method using generics and trait bounds">
+<Listing number="18-6" file-name="src/lib.rs" caption="یک پیاده‌سازی جایگزین برای ساختار `Screen` و متد `run` آن با استفاده از جنریک‌ها و محدودیت‌های صفت">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-06/src/lib.rs:here}}
@@ -114,25 +54,15 @@ as in Listing 18-6:
 
 </Listing>
 
-This restricts us to a `Screen` instance that has a list of components all of
-type `Button` or all of type `TextField`. If you’ll only ever have homogeneous
-collections, using generics and trait bounds is preferable because the
-definitions will be monomorphized at compile time to use the concrete types.
+این روش ما را محدود به یک نمونه `Screen` می‌کند که لیستی از کامپوننت‌ها همه از نوع `Button` یا همه از نوع `TextField` داشته باشد. اگر فقط مجموعه‌های همگن داشته باشید، استفاده از جنریک‌ها و محدودیت‌های صفت ترجیح داده می‌شود زیرا این تعاریف در زمان کامپایل با استفاده از انواع مشخص مونومورفیزه می‌شوند.
 
-On the other hand, with the method using trait objects, one `Screen` instance
-can hold a `Vec<T>` that contains a `Box<Button>` as well as a
-`Box<TextField>`. Let’s look at how this works, and then we’ll talk about the
-runtime performance implications.
+از طرف دیگر، با استفاده از روش مبتنی بر اشیاء صفت، یک نمونه `Screen` می‌تواند یک `Vec<T>` داشته باشد که شامل یک `Box<Button>` و همچنین یک `Box<TextField>` باشد. بیایید ببینیم که چگونه این کار می‌کند، سپس درباره پیامدهای عملکرد در زمان اجرا صحبت کنیم.
 
-### Implementing the Trait
+### پیاده‌سازی صفت
 
-Now we’ll add some types that implement the `Draw` trait. We’ll provide the
-`Button` type. Again, actually implementing a GUI library is beyond the scope
-of this book, so the `draw` method won’t have any useful implementation in its
-body. To imagine what the implementation might look like, a `Button` struct
-might have fields for `width`, `height`, and `label`, as shown in Listing 18-7:
+حالا برخی از انواعی که صفت `Draw` را پیاده‌سازی می‌کنند اضافه می‌کنیم. نوع `Button` را ارائه می‌دهیم. دوباره، پیاده‌سازی یک کتابخانه GUI کامل فراتر از محدوده این کتاب است، بنابراین متد `draw` هیچ پیاده‌سازی مفیدی در بدنه خود نخواهد داشت. برای تصور اینکه پیاده‌سازی ممکن است چگونه باشد، یک ساختار `Button` ممکن است فیلدهایی برای `width`، `height` و `label` داشته باشد، همان‌طور که در لیستینگ 18-7 نشان داده شده است:
 
-<Listing number="18-7" file-name="src/lib.rs" caption="A `Button` struct that implements the `Draw` trait">
+<Listing number="18-7" file-name="src/lib.rs" caption="یک ساختار `Button` که صفت `Draw` را پیاده‌سازی می‌کند">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-07/src/lib.rs:here}}
@@ -140,21 +70,12 @@ might have fields for `width`, `height`, and `label`, as shown in Listing 18-7:
 
 </Listing>
 
-The `width`, `height`, and `label` fields on `Button` will differ from the
-fields on other components; for example, a `TextField` type might have those
-same fields plus a `placeholder` field. Each of the types we want to draw on
-the screen will implement the `Draw` trait but will use different code in the
-`draw` method to define how to draw that particular type, as `Button` has here
-(without the actual GUI code, as mentioned). The `Button` type, for instance,
-might have an additional `impl` block containing methods related to what
-happens when a user clicks the button. These kinds of methods won’t apply to
-types like `TextField`.
+فیلدهای `width`، `height` و `label` در `Button` با فیلدهای کامپوننت‌های دیگر متفاوت خواهند بود. برای مثال، یک نوع `TextField` ممکن است همان فیلدها به‌علاوه یک فیلد `placeholder` داشته باشد. هر یک از انواعی که می‌خواهیم روی صفحه رسم شوند، صفت `Draw` را پیاده‌سازی می‌کنند اما از کد متفاوتی در متد `draw` برای تعریف نحوه رسم آن نوع خاص استفاده می‌کنند، همان‌طور که در اینجا برای `Button` آمده است (بدون کد GUI واقعی، همان‌طور که ذکر شد). نوع `Button`، برای مثال، ممکن است یک بلوک `impl` اضافی شامل متدهایی مرتبط با آنچه هنگام کلیک کاربر روی دکمه اتفاق می‌افتد داشته باشد. این نوع متدها برای انواعی مانند `TextField` اعمال نمی‌شوند.
 
-If someone using our library decides to implement a `SelectBox` struct that has
-`width`, `height`, and `options` fields, they implement the `Draw` trait on the
-`SelectBox` type as well, as shown in Listing 18-8:
 
-<Listing number="18-8" file-name="src/main.rs" caption="Another crate using `gui` and implementing the `Draw` trait on a `SelectBox` struct">
+اگر کسی که از کتابخانه ما استفاده می‌کند تصمیم بگیرد یک ساختار `SelectBox` با فیلدهای `width`، `height` و `options` پیاده‌سازی کند، می‌تواند صفت `Draw` را روی نوع `SelectBox` نیز پیاده‌سازی کند، همان‌طور که در لیستینگ 18-8 نشان داده شده است:
+
+<Listing number="18-8" file-name="src/main.rs" caption="یک crate دیگر که از `gui` استفاده می‌کند و صفت `Draw` را روی یک ساختار `SelectBox` پیاده‌سازی می‌کند">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-08/src/main.rs:here}}
@@ -162,13 +83,9 @@ If someone using our library decides to implement a `SelectBox` struct that has
 
 </Listing>
 
-Our library’s user can now write their `main` function to create a `Screen`
-instance. To the `Screen` instance, they can add a `SelectBox` and a `Button`
-by putting each in a `Box<T>` to become a trait object. They can then call the
-`run` method on the `Screen` instance, which will call `draw` on each of the
-components. Listing 18-9 shows this implementation:
+اکنون کاربر کتابخانه ما می‌تواند تابع `main` خود را بنویسد تا یک نمونه `Screen` ایجاد کند. به نمونه `Screen`، آن‌ها می‌توانند یک `SelectBox` و یک `Button` اضافه کنند، با قرار دادن هر یک در یک `Box<T>` تا به یک شیء صفت تبدیل شوند. سپس می‌توانند متد `run` را روی نمونه `Screen` فراخوانی کنند، که متد `draw` را روی هر یک از کامپوننت‌ها فراخوانی می‌کند. لیستینگ 18-9 این پیاده‌سازی را نشان می‌دهد:
 
-<Listing number="18-9" file-name="src/main.rs" caption="Using trait objects to store values of different types that implement the same trait">
+<Listing number="18-9" file-name="src/main.rs" caption="استفاده از اشیاء صفت برای ذخیره مقادیری با انواع مختلف که یک صفت یکسان را پیاده‌سازی می‌کنند">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-09/src/main.rs:here}}
@@ -176,32 +93,15 @@ components. Listing 18-9 shows this implementation:
 
 </Listing>
 
-When we wrote the library, we didn’t know that someone might add the
-`SelectBox` type, but our `Screen` implementation was able to operate on the
-new type and draw it because `SelectBox` implements the `Draw` trait, which
-means it implements the `draw` method.
+وقتی کتابخانه را نوشتیم، نمی‌دانستیم که کسی ممکن است نوع `SelectBox` را اضافه کند، اما پیاده‌سازی `Screen` ما توانست روی نوع جدید عمل کند و آن را رسم کند زیرا `SelectBox` صفت `Draw` را پیاده‌سازی کرده است، که به این معناست که متد `draw` را پیاده‌سازی کرده است.
 
-This concept—of being concerned only with the messages a value responds to
-rather than the value’s concrete type—is similar to the concept of _duck
-typing_ in dynamically typed languages: if it walks like a duck and quacks
-like a duck, then it must be a duck! In the implementation of `run` on `Screen`
-in Listing 18-5, `run` doesn’t need to know what the concrete type of each
-component is. It doesn’t check whether a component is an instance of a `Button`
-or a `SelectBox`, it just calls the `draw` method on the component. By
-specifying `Box<dyn Draw>` as the type of the values in the `components`
-vector, we’ve defined `Screen` to need values that we can call the `draw`
-method on.
+این مفهوم—فقط به پیام‌هایی که یک مقدار به آن‌ها پاسخ می‌دهد اهمیت داده می‌شود، نه نوع دقیق مقدار—مشابه مفهوم _duck typing_ در زبان‌های با نوع‌دهی پویا است: اگر مانند اردک حرکت می‌کند و مانند اردک صدا می‌کند، پس حتماً یک اردک است! در پیاده‌سازی متد `run` روی `Screen` در لیستینگ 18-5، `run` نیازی ندارد بداند نوع دقیق هر کامپوننت چیست. نیازی ندارد بررسی کند که آیا یک کامپوننت نمونه‌ای از `Button` یا `SelectBox` است؛ فقط متد `draw` را روی کامپوننت فراخوانی می‌کند. با مشخص کردن `Box<dyn Draw>` به‌عنوان نوع مقادیر در بردار `components`، ما تعریف کرده‌ایم که `Screen` به مقادیری نیاز دارد که بتوانیم متد `draw` را روی آن‌ها فراخوانی کنیم.
 
-The advantage of using trait objects and Rust’s type system to write code
-similar to code using duck typing is that we never have to check whether a
-value implements a particular method at runtime or worry about getting errors
-if a value doesn’t implement a method but we call it anyway. Rust won’t compile
-our code if the values don’t implement the traits that the trait objects need.
+مزیت استفاده از اشیاء صفت و سیستم نوع Rust برای نوشتن کدی مشابه با duck typing این است که هرگز نیازی به بررسی نداریم که آیا یک مقدار متدی خاص را در زمان اجرا پیاده‌سازی کرده است یا خیر، یا نگران خطاهایی باشیم اگر یک مقدار متدی را پیاده‌سازی نکرده اما ما آن را فراخوانی کنیم. Rust کد ما را کامپایل نمی‌کند اگر مقادیر صفاتی را که اشیاء صفت نیاز دارند پیاده‌سازی نکنند.
 
-For example, Listing 18-10 shows what happens if we try to create a `Screen`
-with a `String` as a component:
+برای مثال، لیستینگ 18-10 نشان می‌دهد چه اتفاقی می‌افتد اگر بخواهیم یک `Screen` با یک `String` به‌عنوان یک کامپوننت ایجاد کنیم:
 
-<Listing number="18-10" file-name="src/main.rs" caption="Attempting to use a type that doesn’t implement the trait object’s trait">
+<Listing number="18-10" file-name="src/main.rs" caption="تلاش برای استفاده از نوعی که صفت شیء صفت را پیاده‌سازی نکرده است">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-10/src/main.rs}}
@@ -209,40 +109,19 @@ with a `String` as a component:
 
 </Listing>
 
-We’ll get this error because `String` doesn’t implement the `Draw` trait:
+ما این خطا را دریافت خواهیم کرد زیرا `String` صفت `Draw` را پیاده‌سازی نکرده است:
 
 ```console
 {{#include ../listings/ch18-oop/listing-18-10/output.txt}}
 ```
 
-This error lets us know that either we’re passing something to `Screen` we
-didn’t mean to pass and so should pass a different type or we should implement
-`Draw` on `String` so that `Screen` is able to call `draw` on it.
+این خطا به ما می‌گوید یا چیزی را به `Screen` ارسال می‌کنیم که قصد نداشتیم ارسال کنیم و بنابراین باید نوع دیگری را ارسال کنیم یا باید `Draw` را روی `String` پیاده‌سازی کنیم تا `Screen` بتواند متد `draw` را روی آن فراخوانی کند.
 
-### Trait Objects Perform Dynamic Dispatch
+### اشیاء صفت اجرای Dispatch پویا را انجام می‌دهند
 
-Recall in the [“Performance of Code Using
-Generics”][performance-of-code-using-generics]<!-- ignore --> section in Chapter
-10 our discussion on the monomorphization process performed on generics by the
-compiler: the compiler generates nongeneric implementations of functions and
-methods for each concrete type that we use in place of a generic type parameter.
-The code that results from monomorphization is doing _static dispatch_, which is
-when the compiler knows what method you’re calling at compile time. This is
-opposed to _dynamic dispatch_, which is when the compiler can’t tell at compile
-time which method you’re calling. In dynamic dispatch cases, the compiler emits
-code that at runtime will figure out which method to call.
+به یاد بیاورید که در بخش [“عملکرد کد با استفاده از جنریک‌ها”][performance-of-code-using-generics]<!-- ignore --> در فصل 10 بحث کردیم که کامپایلر فرایند مونومورفیزه کردن را روی جنریک‌ها انجام می‌دهد: کامپایلر پیاده‌سازی‌های غیربنریک از توابع و متدها را برای هر نوع مشخصی که به جای یک پارامتر نوع جنریک استفاده می‌کنیم، تولید می‌کند. کدی که از مونومورفیزه کردن به دست می‌آید، _dispatch استاتیک_ انجام می‌دهد، به این معنا که کامپایلر در زمان کامپایل می‌داند کدام متد را فراخوانی می‌کنید. این برخلاف _dispatch پویا_ است، که در آن کامپایلر نمی‌تواند در زمان کامپایل تشخیص دهد کدام متد را فراخوانی می‌کنید. در موارد dispatch پویا، کامپایلر کدی تولید می‌کند که در زمان اجرا تشخیص می‌دهد کدام متد باید فراخوانی شود.
 
-When we use trait objects, Rust must use dynamic dispatch. The compiler doesn’t
-know all the types that might be used with the code that’s using trait objects,
-so it doesn’t know which method implemented on which type to call. Instead, at
-runtime, Rust uses the pointers inside the trait object to know which method to
-call. This lookup incurs a runtime cost that doesn’t occur with static
-dispatch. Dynamic dispatch also prevents the compiler from choosing to inline a
-method’s code, which in turn prevents some optimizations, and Rust has some
-rules about where you can and cannot use dynamic dispatch, called [_dyn
-compatibility_][dyn-compatibility]. However, we did get extra flexibility in the code
-that we wrote in Listing 18-5 and were able to support in Listing 18-9, so it’s
-a trade-off to consider.
+وقتی از اشیاء صفت استفاده می‌کنیم، Rust مجبور است از dispatch پویا استفاده کند. کامپایلر نمی‌داند که چه نوع‌هایی ممکن است با کدی که از اشیاء صفت استفاده می‌کند، استفاده شوند، بنابراین نمی‌داند کدام متد پیاده‌سازی‌شده روی کدام نوع را باید فراخوانی کند. در عوض، در زمان اجرا، Rust از اشاره‌گرهای داخل شیء صفت استفاده می‌کند تا بداند کدام متد را باید فراخوانی کند. این جستجو هزینه زمان اجرایی به همراه دارد که با dispatch استاتیک اتفاق نمی‌افتد. dispatch پویا همچنین از این جلوگیری می‌کند که کامپایلر کد یک متد را inline کند، که به نوبه خود از برخی بهینه‌سازی‌ها جلوگیری می‌کند. Rust همچنین قوانینی دارد که مشخص می‌کنند کجا می‌توانید و کجا نمی‌توانید از dispatch پویا استفاده کنید، که به [_سازگاری dyn_][dyn-compatibility] معروف است. با این حال، ما در کدی که در لیستینگ 18-5 نوشتیم و توانستیم در لیستینگ 18-9 پشتیبانی کنیم، انعطاف‌پذیری بیشتری به دست آوردیم، بنابراین این موضوع یک موازنه است که باید مورد توجه قرار گیرد.
 
 [performance-of-code-using-generics]: ch10-01-syntax.html#performance-of-code-using-generics
 [dynamically-sized]: ch20-03-advanced-types.html#dynamically-sized-types-and-the-sized-trait

@@ -1,41 +1,28 @@
-# Final Project: Building a Multithreaded Web Server
+# پروژه نهایی: ساخت یک وب سرور چندنخی
 
-It’s been a long journey, but we’ve reached the end of the book. In this
-chapter, we’ll build one more project together to demonstrate some of the
-concepts we covered in the final chapters, as well as recap some earlier
-lessons.
+مسیر طولانی‌ای را طی کرده‌ایم، اما اکنون به انتهای کتاب رسیده‌ایم. در این فصل، یک پروژه دیگر را با هم می‌سازیم تا برخی از مفاهیمی که در فصل‌های پایانی پوشش داده‌ایم را نشان دهیم و همچنین درس‌های قبلی را مرور کنیم.
 
-For our final project, we’ll make a web server that says “hello” and looks like
-Figure 21-1 in a web browser.
+برای پروژه نهایی، یک وب سرور ایجاد می‌کنیم که عبارت "hello" را نمایش دهد و در یک مرورگر وب شبیه شکل 21-1 به نظر برسد.
 
 ![hello from rust](img/trpl21-01.png)
 
-<span class="caption">Figure 21-1: Our final shared project</span>
+<span class="caption">شکل 21-1: پروژه نهایی ما</span>
 
-Here is our plan for building the web server:
+برنامه ما برای ساخت وب سرور به این صورت است:
 
-1. Learn a bit about TCP and HTTP.
-2. Listen for TCP connections on a socket.
-3. Parse a small number of HTTP requests.
-4. Create a proper HTTP response.
-5. Improve the throughput of our server with a thread pool.
+<div dir="rtl">
+    <ul>
+        <li>کمی درباره TCP و HTTP یاد می‌گیریم.</li>
+        <li>گوش دادن به اتصالات TCP روی یک سوکت را پیاده‌سازی می‌کنیم.</li>
+        <li>تعداد کمی از درخواست‌های HTTP را تجزیه می‌کنیم.</li>
+        <li>یک پاسخ HTTP مناسب ایجاد می‌کنیم.</li>
+        <li>با استفاده از یک مجموعه نخ (thread pool) توان عملیاتی سرور را بهبود می‌بخشیم.</li>
+    </ul>
+</div>
 
-Before we get started, we should mention two details: First, the method we’ll
-use won’t be the best way to build a web server with Rust. Community members
-have published a number of production-ready crates available on
-[crates.io](https://crates.io/) that provide more complete web server and thread
-pool implementations than we’ll build. However, our intention in this chapter is
-to help you learn, not to take the easy route. Because Rust is a systems
-programming language, we can choose the level of abstraction we want to work
-with and can go to a lower level than is possible or practical in other
-languages.
 
-Second, we will not be using async and await here. Building a thread pool is a
-big enough challenge on its own, without adding in building an async runtime!
-However, we will note how async and await might be applicable to some of the
-same problems we will see in this chapter. Ultimately, as we noted back in
-Chapter 17, many async runtimes use thread pools for managing their work.
+قبل از شروع، باید به دو نکته اشاره کنیم: اول، روشی که استفاده خواهیم کرد بهترین روش برای ساخت یک وب سرور با Rust نخواهد بود. اعضای جامعه Rust تعداد زیادی crate آماده تولید در [crates.io](https://crates.io/) منتشر کرده‌اند که پیاده‌سازی‌های کامل‌تری از وب سرور و مجموعه نخ نسبت به آنچه که ما خواهیم ساخت ارائه می‌دهند. با این حال، هدف ما در این فصل کمک به یادگیری شماست، نه انتخاب مسیر آسان. از آنجا که Rust یک زبان برنامه‌نویسی سیستمی است، می‌توانیم سطح انتزاعی که می‌خواهیم با آن کار کنیم را انتخاب کنیم و به سطح پایین‌تری از آنچه در زبان‌های دیگر ممکن یا عملی است برویم.
 
-We’ll therefore write the basic HTTP server and thread pool manually so you can
-learn the general ideas and techniques behind the crates you might use in the
-future.
+دوم، ما اینجا از async و await استفاده نخواهیم کرد. ساخت یک مجموعه نخ به اندازه کافی چالش‌برانگیز است، بدون اینکه به ایجاد یک runtime async اضافه شود! با این حال، اشاره خواهیم کرد که async و await چگونه ممکن است برای برخی از همان مشکلاتی که در این فصل خواهیم دید کاربرد داشته باشند. در نهایت، همان‌طور که در فصل 17 ذکر کردیم، بسیاری از runtime‌های async از مجموعه نخ برای مدیریت کارهای خود استفاده می‌کنند.
+
+بنابراین، سرور HTTP ساده و مجموعه نخ را به صورت دستی خواهیم نوشت تا بتوانید ایده‌ها و تکنیک‌های کلی پشت crateهایی که ممکن است در آینده استفاده کنید را یاد بگیرید.

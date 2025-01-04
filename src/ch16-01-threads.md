@@ -1,46 +1,22 @@
-## Using Threads to Run Code Simultaneously
+## استفاده از نخ‌ها برای اجرای همزمان کد
 
-In most current operating systems, an executed program’s code is run in a
-_process_, and the operating system will manage multiple processes at once.
-Within a program, you can also have independent parts that run simultaneously.
-The features that run these independent parts are called _threads_. For
-example, a web server could have multiple threads so that it could respond to
-more than one request at the same time.
+در بیشتر سیستم‌عامل‌های مدرن، کدی که یک برنامه اجرا می‌کند در یک _فرایند_ اجرا می‌شود و سیستم‌عامل به طور همزمان چندین فرایند را مدیریت می‌کند. در یک برنامه، شما همچنین می‌توانید بخش‌های مستقلی داشته باشید که به صورت همزمان اجرا شوند. ویژگی‌هایی که این بخش‌های مستقل را اجرا می‌کنند _نخ‌ها_ نامیده می‌شوند. برای مثال، یک سرور وب می‌تواند چندین نخ داشته باشد تا بتواند به بیش از یک درخواست به طور همزمان پاسخ دهد.
 
-Splitting the computation in your program into multiple threads to run multiple
-tasks at the same time can improve performance, but it also adds complexity.
-Because threads can run simultaneously, there’s no inherent guarantee about the
-order in which parts of your code on different threads will run. This can lead
-to problems, such as:
+تقسیم محاسبات در برنامه شما به چندین نخ برای اجرای چندین کار به طور همزمان می‌تواند عملکرد را بهبود بخشد، اما همچنین پیچیدگی را افزایش می‌دهد. از آنجایی که نخ‌ها می‌توانند به طور همزمان اجرا شوند، هیچ تضمینی برای ترتیب اجرای بخش‌های کد در نخ‌های مختلف وجود ندارد. این موضوع می‌تواند به مشکلاتی منجر شود، مانند:
 
-- Race conditions, where threads are accessing data or resources in an
-  inconsistent order
-- Deadlocks, where two threads are waiting for each other, preventing both
-  threads from continuing
-- Bugs that happen only in certain situations and are hard to reproduce and fix
-  reliably
+- شرایط رقابتی (Race conditions)، جایی که نخ‌ها داده‌ها یا منابع را به ترتیب ناسازگار دسترسی دارند
+- بن‌بست‌ها (Deadlocks)، جایی که دو نخ منتظر یکدیگر هستند و مانع از ادامه کار هر دو نخ می‌شوند
+- باگ‌هایی که فقط در شرایط خاص رخ می‌دهند و به سختی قابل بازتولید و رفع هستند
 
-Rust attempts to mitigate the negative effects of using threads, but
-programming in a multithreaded context still takes careful thought and requires
-a code structure that is different from that in programs running in a single
-thread.
+Rust تلاش می‌کند اثرات منفی استفاده از نخ‌ها را کاهش دهد، اما برنامه‌نویسی در یک زمینه چندنخی همچنان نیاز به تفکر دقیق و ساختاری متفاوت از برنامه‌های تک‌نخی دارد.
 
-Programming languages implement threads in a few different ways, and many
-operating systems provide an API the language can call for creating new threads.
-The Rust standard library uses a _1:1_ model of thread implementation, whereby a
-program uses one operating system thread per one language thread. There are
-crates that implement other models of threading that make different tradeoffs to
-the 1:1 model. (Rust’s async system, which we will see in the next chapter,
-provides another approach to concurrency as well.)
+زبان‌های برنامه‌نویسی نخ‌ها را به چندین روش مختلف پیاده‌سازی می‌کنند و بسیاری از سیستم‌عامل‌ها API‌هایی ارائه می‌دهند که زبان می‌تواند برای ایجاد نخ‌های جدید فراخوانی کند. کتابخانه استاندارد Rust از یک مدل پیاده‌سازی نخ _1:1_ استفاده می‌کند، به این معنا که برنامه یک نخ سیستم‌عامل به ازای هر نخ زبان استفاده می‌کند. crateهایی وجود دارند که مدل‌های دیگر نخ را پیاده‌سازی می‌کنند و مبادله‌های متفاوتی نسبت به مدل 1:1 ارائه می‌دهند. (سیستم async در Rust، که در فصل بعدی آن را خواهیم دید، روش دیگری برای همزمانی ارائه می‌دهد.)
 
-### Creating a New Thread with `spawn`
+### ایجاد یک نخ جدید با `spawn`
 
-To create a new thread, we call the `thread::spawn` function and pass it a
-closure (we talked about closures in Chapter 13) containing the code we want to
-run in the new thread. The example in Listing 16-1 prints some text from a main
-thread and other text from a new thread:
+برای ایجاد یک نخ جدید، تابع `thread::spawn` را فراخوانی می‌کنیم و یک closure (که در فصل 13 در مورد آن صحبت کردیم) شامل کدی که می‌خواهیم در نخ جدید اجرا کنیم، به آن پاس می‌دهیم. مثال در لیستینگ 16-1 متنی را از نخ اصلی و متن دیگری را از یک نخ جدید چاپ می‌کند:
 
-<Listing number="16-1" file-name="src/main.rs" caption="Creating a new thread to print one thing while the main thread prints something else">
+<Listing number="16-1" file-name="src/main.rs" caption="ایجاد یک نخ جدید برای چاپ یک چیز در حالی که نخ اصلی چیز دیگری چاپ می‌کند">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-01/src/main.rs}}
@@ -48,10 +24,7 @@ thread and other text from a new thread:
 
 </Listing>
 
-Note that when the main thread of a Rust program completes, all spawned threads
-are shut down, whether or not they have finished running. The output from this
-program might be a little different every time, but it will look similar to the
-following:
+توجه داشته باشید که وقتی نخ اصلی یک برنامه Rust تکمیل می‌شود، تمام نخ‌های ایجادشده متوقف می‌شوند، چه آن‌ها اجرای خود را تکمیل کرده باشند یا نه. خروجی این برنامه ممکن است هر بار کمی متفاوت باشد، اما به صورت مشابه زیر خواهد بود:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -69,33 +42,17 @@ hi number 4 from the spawned thread!
 hi number 5 from the spawned thread!
 ```
 
-The calls to `thread::sleep` force a thread to stop its execution for a short
-duration, allowing a different thread to run. The threads will probably take
-turns, but that isn’t guaranteed: it depends on how your operating system
-schedules the threads. In this run, the main thread printed first, even though
-the print statement from the spawned thread appears first in the code. And even
-though we told the spawned thread to print until `i` is 9, it only got to 5
-before the main thread shut down.
+فراخوانی‌های `thread::sleep` باعث می‌شوند یک نخ اجرای خود را برای مدت کوتاهی متوقف کند و به نخ دیگری اجازه اجرا دهد. احتمالاً نخ‌ها نوبتی اجرا می‌شوند، اما این موضوع تضمین‌شده نیست: به نحوه زمان‌بندی نخ‌ها توسط سیستم‌عامل شما بستگی دارد. در این اجرای برنامه، نخ اصلی ابتدا چاپ کرد، حتی با اینکه دستور چاپ از نخ ایجادشده در کد ابتدا ظاهر می‌شود. و با اینکه به نخ ایجادشده گفتیم تا زمانی که مقدار `i` به 9 برسد چاپ کند، فقط تا مقدار 5 رسید قبل از اینکه نخ اصلی خاموش شود.
 
-If you run this code and only see output from the main thread, or don’t see any
-overlap, try increasing the numbers in the ranges to create more opportunities
-for the operating system to switch between the threads.
+اگر این کد را اجرا کردید و فقط خروجی نخ اصلی را دیدید یا هیچ تداخل زمانی مشاهده نکردید، سعی کنید اعداد موجود در بازه‌ها را افزایش دهید تا فرصت بیشتری برای سیستم‌عامل ایجاد شود تا بین نخ‌ها جابه‌جا شود.
 
-### Waiting for All Threads to Finish Using `join` Handles
+### منتظر ماندن برای تکمیل همه نخ‌ها با استفاده از `join` Handles
 
-The code in Listing 16-1 not only stops the spawned thread prematurely most of
-the time due to the main thread ending, but because there is no guarantee on
-the order in which threads run, we also can’t guarantee that the spawned thread
-will get to run at all!
+کد موجود در لیستینگ 16-1 نه تنها بیشتر اوقات نخ ایجادشده را به دلیل پایان نخ اصلی زودتر از موعد متوقف می‌کند، بلکه به دلیل اینکه هیچ تضمینی برای ترتیب اجرای نخ‌ها وجود ندارد، نمی‌توانیم اطمینان حاصل کنیم که نخ ایجادشده اجرا خواهد شد!
 
-We can fix the problem of the spawned thread not running or ending prematurely
-by saving the return value of `thread::spawn` in a variable. The return type of
-`thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned value that, when we
-call the `join` method on it, will wait for its thread to finish. Listing 16-2
-shows how to use the `JoinHandle` of the thread we created in Listing 16-1 and
-call `join` to make sure the spawned thread finishes before `main` exits:
+می‌توانیم مشکل اجرا نشدن یا پایان زودهنگام نخ ایجادشده را با ذخیره مقدار بازگشتی `thread::spawn` در یک متغیر رفع کنیم. نوع بازگشتی `thread::spawn` یک `JoinHandle` است. یک `JoinHandle` یک مقدار مالکیت‌دار است که وقتی متد `join` را روی آن فراخوانی می‌کنیم، منتظر می‌ماند تا نخ مرتبط با آن تکمیل شود. لیستینگ 16-2 نشان می‌دهد چگونه از `JoinHandle` نخ ایجادشده در لیستینگ 16-1 استفاده کنیم و `join` را فراخوانی کنیم تا مطمئن شویم نخ ایجادشده قبل از خروج `main` تکمیل می‌شود:
 
-<Listing number="16-2" file-name="src/main.rs" caption="Saving a `JoinHandle` from `thread::spawn` to guarantee the thread is run to completion">
+<Listing number="16-2" file-name="src/main.rs" caption="ذخیره یک `JoinHandle` از `thread::spawn` برای اطمینان از اینکه نخ تا پایان اجرا می‌شود">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-02/src/main.rs}}
@@ -103,15 +60,7 @@ call `join` to make sure the spawned thread finishes before `main` exits:
 
 </Listing>
 
-Calling `join` on the handle blocks the thread currently running until the
-thread represented by the handle terminates. _Blocking_ a thread means that
-thread is prevented from performing work or exiting. Because we’ve put the call
-to `join` after the main thread’s `for` loop, running Listing 16-2 should
-produce output similar to this:
-
-<!-- Not extracting output because changes to this output aren't significant;
-the changes are likely to be due to the threads running differently rather than
-changes in the compiler -->
+فراخوانی `join` روی handle نخ جاری را مسدود می‌کند تا زمانی که نخ نمایانده‌شده توسط handle خاتمه یابد. _مسدود کردن_ یک نخ به این معناست که آن نخ از انجام کار یا خروج جلوگیری می‌شود. چون فراخوانی `join` را بعد از حلقه `for` نخ اصلی قرار داده‌ایم، اجرای لیستینگ 16-2 باید خروجی مشابه زیر تولید کند:
 
 ```text
 hi number 1 from the main thread!
@@ -129,11 +78,9 @@ hi number 8 from the spawned thread!
 hi number 9 from the spawned thread!
 ```
 
-The two threads continue alternating, but the main thread waits because of the
-call to `handle.join()` and does not end until the spawned thread is finished.
+دو نخ همچنان به صورت متناوب اجرا می‌شوند، اما نخ اصلی به دلیل فراخوانی `handle.join()` منتظر می‌ماند و تا زمانی که نخ ایجادشده تکمیل نشود پایان نمی‌یابد.
 
-But let’s see what happens when we instead move `handle.join()` before the
-`for` loop in `main`, like this:
+اما بیایید ببینیم چه اتفاقی می‌افتد اگر `handle.join()` را قبل از حلقه `for` در `main` منتقل کنیم، به این صورت:
 
 <Listing file-name="src/main.rs">
 
@@ -143,8 +90,7 @@ But let’s see what happens when we instead move `handle.join()` before the
 
 </Listing>
 
-The main thread will wait for the spawned thread to finish and then run its
-`for` loop, so the output won’t be interleaved anymore, as shown here:
+نخ اصلی منتظر می‌ماند تا نخ ایجادشده خاتمه یابد و سپس حلقه `for` خود را اجرا می‌کند، بنابراین خروجی دیگر به صورت متناوب نخواهد بود، همان‌طور که در اینجا نشان داده شده است:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -166,26 +112,15 @@ hi number 3 from the main thread!
 hi number 4 from the main thread!
 ```
 
-Small details, such as where `join` is called, can affect whether or not your
-threads run at the same time.
+جزئیات کوچک، مانند مکان فراخوانی `join`، می‌توانند بر اینکه نخ‌های شما همزمان اجرا می‌شوند یا خیر تأثیر بگذارند.
 
-### Using `move` Closures with Threads
+### استفاده از Closureهای `move` با نخ‌ها
 
-We'll often use the `move` keyword with closures passed to `thread::spawn`
-because the closure will then take ownership of the values it uses from the
-environment, thus transferring ownership of those values from one thread to
-another. In the [“Capturing References or Moving Ownership”][capture]<!-- ignore
---> section of Chapter 13, we discussed `move` in the context of closures. Now,
-we’ll concentrate more on the interaction between `move` and `thread::spawn`.
+ما اغلب از کلمه کلیدی `move` با closureهایی که به `thread::spawn` پاس داده می‌شوند استفاده می‌کنیم، زیرا این closure سپس مالکیت مقادیری را که از محیط استفاده می‌کند، می‌گیرد و بنابراین مالکیت آن مقادیر را از یک نخ به نخ دیگر منتقل می‌کند. در بخش [“گرفتن ارجاع‌ها یا انتقال مالکیت”][capture]<!-- ignore --> در فصل 13، `move` را در زمینه closureها مورد بحث قرار دادیم. اکنون بیشتر روی تعامل بین `move` و `thread::spawn` تمرکز خواهیم کرد.
 
-Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
-arguments: we’re not using any data from the main thread in the spawned
-thread’s code. To use data from the main thread in the spawned thread, the
-spawned thread’s closure must capture the values it needs. Listing 16-3 shows
-an attempt to create a vector in the main thread and use it in the spawned
-thread. However, this won’t yet work, as you’ll see in a moment.
+توجه کنید که در لیستینگ 16-1، closureی که به `thread::spawn` پاس می‌دهیم هیچ آرگومانی نمی‌گیرد: ما از هیچ داده‌ای از نخ اصلی در کد نخ ایجادشده استفاده نمی‌کنیم. برای استفاده از داده‌های نخ اصلی در نخ ایجادشده، closure نخ ایجادشده باید مقادیری که نیاز دارد را بگیرد. لیستینگ 16-3 تلاشی برای ایجاد یک بردار در نخ اصلی و استفاده از آن در نخ ایجادشده را نشان می‌دهد. با این حال، این کد هنوز کار نخواهد کرد، همان‌طور که در لحظه‌ای خواهید دید.
 
-<Listing number="16-3" file-name="src/main.rs" caption="Attempting to use a vector created by the main thread in another thread">
+<Listing number="16-3" file-name="src/main.rs" caption="تلاش برای استفاده از یک بردار ایجادشده توسط نخ اصلی در یک نخ دیگر">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-03/src/main.rs}}
@@ -193,24 +128,17 @@ thread. However, this won’t yet work, as you’ll see in a moment.
 
 </Listing>
 
-The closure uses `v`, so it will capture `v` and make it part of the closure’s
-environment. Because `thread::spawn` runs this closure in a new thread, we
-should be able to access `v` inside that new thread. But when we compile this
-example, we get the following error:
+این closure از `v` استفاده می‌کند، بنابراین `v` را می‌گیرد و آن را بخشی از محیط closure می‌کند. از آنجا که `thread::spawn` این closure را در یک نخ جدید اجرا می‌کند، باید بتوانیم به `v` در داخل آن نخ جدید دسترسی داشته باشیم. اما وقتی این مثال را کامپایل می‌کنیم، خطای زیر را دریافت می‌کنیم:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-03/output.txt}}
 ```
 
-Rust _infers_ how to capture `v`, and because `println!` only needs a reference
-to `v`, the closure tries to borrow `v`. However, there’s a problem: Rust can’t
-tell how long the spawned thread will run, so it doesn’t know if the reference
-to `v` will always be valid.
+Rust به طور _استنتاجی_ تعیین می‌کند که چگونه `v` را بگیرد، و چون `println!` فقط به یک ارجاع به `v` نیاز دارد، closure سعی می‌کند `v` را قرض بگیرد. با این حال، مشکلی وجود دارد: Rust نمی‌تواند بگوید نخ ایجادشده چه مدت اجرا خواهد شد، بنابراین نمی‌داند که ارجاع به `v` همیشه معتبر خواهد بود.
 
-Listing 16-4 provides a scenario that’s more likely to have a reference to `v`
-that won’t be valid:
+لیستینگ 16-4 سناریویی را ارائه می‌دهد که احتمال بیشتری برای داشتن یک ارجاع نامعتبر به `v` دارد:
 
-<Listing number="16-4" file-name="src/main.rs" caption="A thread with a closure that attempts to capture a reference to `v` from a main thread that drops `v`">
+<Listing number="16-4" file-name="src/main.rs" caption="یک نخ با closureی که سعی می‌کند یک ارجاع به `v` را از نخ اصلی که `v` را حذف می‌کند بگیرد">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-04/src/main.rs}}
@@ -218,15 +146,9 @@ that won’t be valid:
 
 </Listing>
 
-If Rust allowed us to run this code, there’s a possibility the spawned thread
-would be immediately put in the background without running at all. The spawned
-thread has a reference to `v` inside, but the main thread immediately drops
-`v`, using the `drop` function we discussed in Chapter 15. Then, when the
-spawned thread starts to execute, `v` is no longer valid, so a reference to it
-is also invalid. Oh no!
+اگر Rust به ما اجازه اجرای این کد را می‌داد، این احتمال وجود داشت که نخ ایجادشده بلافاصله به پس‌زمینه برود بدون اینکه اصلاً اجرا شود. نخ ایجادشده یک ارجاع به `v` داخل خود دارد، اما نخ اصلی بلافاصله `v` را حذف می‌کند، با استفاده از تابع `drop` که در فصل 15 مورد بحث قرار گرفت. سپس، وقتی نخ ایجادشده شروع به اجرا می‌کند، `v` دیگر معتبر نیست، بنابراین ارجاع به آن نیز نامعتبر است. اوه نه!
 
-To fix the compiler error in Listing 16-3, we can use the error message’s
-advice:
+برای رفع خطای کامپایل در لیستینگ 16-3، می‌توانیم از مشاوره پیام خطا استفاده کنیم:
 
 <!-- manual-regeneration
 after automatic regeneration, look at listings/ch16-fearless-concurrency/listing-16-03/output.txt and copy the relevant part
@@ -239,12 +161,9 @@ help: to force the closure to take ownership of `v` (and any other referenced va
   |                                ++++
 ```
 
-By adding the `move` keyword before the closure, we force the closure to take
-ownership of the values it’s using rather than allowing Rust to infer that it
-should borrow the values. The modification to Listing 16-3 shown in Listing
-16-5 will compile and run as we intend:
+با افزودن کلمه کلیدی `move` قبل از closure، ما closure را مجبور می‌کنیم که مالکیت مقادیری که استفاده می‌کند را بگیرد، به جای اینکه به Rust اجازه دهیم استنتاج کند که باید مقادیر را قرض بگیرد. تغییرات اعمال‌شده به لیستینگ 16-3 که در لیستینگ 16-5 نشان داده شده است، همان‌طور که انتظار داریم کامپایل و اجرا خواهد شد:
 
-<Listing number="16-5" file-name="src/main.rs" caption="Using the `move` keyword to force a closure to take ownership of the values it uses">
+<Listing number="16-5" file-name="src/main.rs" caption="استفاده از کلمه کلیدی `move` برای مجبور کردن یک closure به گرفتن مالکیت مقادیری که استفاده می‌کند">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-05/src/main.rs}}
@@ -252,28 +171,14 @@ should borrow the values. The modification to Listing 16-3 shown in Listing
 
 </Listing>
 
-We might be tempted to try the same thing to fix the code in Listing 16-4 where
-the main thread called `drop` by using a `move` closure. However, this fix will
-not work because what Listing 16-4 is trying to do is disallowed for a
-different reason. If we added `move` to the closure, we would move `v` into the
-closure’s environment, and we could no longer call `drop` on it in the main
-thread. We would get this compiler error instead:
+ممکن است وسوسه شویم که همین کار را برای رفع کد در لیستینگ 16-4 که نخ اصلی `drop` را فراخوانی می‌کند با استفاده از یک closure `move` انجام دهیم. با این حال، این راه‌حل کار نخواهد کرد زیرا آنچه لیستینگ 16-4 تلاش می‌کند انجام دهد به دلیل دیگری مجاز نیست. اگر `move` را به closure اضافه کنیم، `v` را به محیط closure منتقل می‌کنیم و دیگر نمی‌توانیم `drop` را در نخ اصلی روی آن فراخوانی کنیم. در عوض، این خطای کامپایل را دریافت خواهیم کرد:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/output-only-01-move-drop/output.txt}}
 ```
 
-Rust’s ownership rules have saved us again! We got an error from the code in
-Listing 16-3 because Rust was being conservative and only borrowing `v` for the
-thread, which meant the main thread could theoretically invalidate the spawned
-thread’s reference. By telling Rust to move ownership of `v` to the spawned
-thread, we’re guaranteeing Rust that the main thread won’t use `v` anymore. If
-we change Listing 16-4 in the same way, we’re then violating the ownership
-rules when we try to use `v` in the main thread. The `move` keyword overrides
-Rust’s conservative default of borrowing; it doesn’t let us violate the
-ownership rules.
+قوانین مالکیت Rust دوباره ما را نجات دادند! ما از کد موجود در لیستینگ 16-3 خطا گرفتیم زیرا Rust محافظه‌کار بود و فقط `v` را برای نخ قرض گرفت، که به این معنا بود که نخ اصلی می‌توانست به‌صورت نظری مرجع نخ ایجادشده را نامعتبر کند. با گفتن به Rust که مالکیت `v` را به نخ ایجادشده منتقل کند، ما به Rust تضمین می‌دهیم که نخ اصلی دیگر از `v` استفاده نخواهد کرد. اگر لیستینگ 16-4 را به همان روش تغییر دهیم، آنگاه هنگام تلاش برای استفاده از `v` در نخ اصلی، قوانین مالکیت را نقض می‌کنیم. کلمه کلیدی `move` رفتار محافظه‌کارانه پیش‌فرض Rust در قرض‌گیری را لغو می‌کند؛ اما اجازه نمی‌دهد قوانین مالکیت را نقض کنیم.
 
-With a basic understanding of threads and the thread API, let’s look at what we
-can _do_ with threads.
+با داشتن درک اولیه‌ای از نخ‌ها و API مربوط به نخ‌ها، بیایید ببینیم که با نخ‌ها چه کاری می‌توانیم _انجام دهیم_.
 
 [capture]: ch13-01-closures.html#capturing-references-or-moving-ownership

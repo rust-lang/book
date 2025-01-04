@@ -1,163 +1,78 @@
-# Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams
+# اصول برنامه‌نویسی ناهمزمان: Async، Await، Futures، و Streams
 
-Many operations we ask the computer to do can take a while to finish. It would
-be nice if we could do something else while we are waiting for those
-long-running processes to complete. Modern computers offer two techniques for
-working on more than one operation at a time: parallelism and concurrency. Once
-we start writing programs that involve parallel or concurrent operations,
-though, we quickly encounter new challenges inherent to _asynchronous
-programming_, where operations may not finish sequentially in the order they
-were started. This chapter builds on Chapter 16’s use of threads for parallelism
-and concurrency by introducing an alternative approach to asynchronous
-programming: Rust’s Futures, Streams, the `async` and `await` syntax that
-supports them, and the tools for managing and coordinating between asynchronous
-operations.
+بسیاری از عملیات‌هایی که از کامپیوتر می‌خواهیم انجام دهد ممکن است مدتی طول بکشد تا کامل شوند. خوب می‌شد اگر می‌توانستیم در حالی که منتظر این فرآیندهای طولانی هستیم، کار دیگری انجام دهیم. کامپیوترهای مدرن دو تکنیک برای انجام هم‌زمان بیش از یک عملیات ارائه می‌دهند: _موازی‌سازی_ و _همزمانی_. اما وقتی شروع به نوشتن برنامه‌هایی می‌کنیم که شامل عملیات موازی یا همزمان هستند، به سرعت با چالش‌های جدیدی مواجه می‌شویم که در ذات _برنامه‌نویسی ناهمزمان_ هستند، جایی که عملیات‌ها ممکن است به ترتیب شروع‌شده تکمیل نشوند. این فصل بر اساس استفاده از Threadها برای موازی‌سازی و همزمانی که در فصل ۱۶ دیدیم، یک رویکرد جایگزین برای برنامه‌نویسی ناهمزمان معرفی می‌کند: Futures، Streams، سینتکس `async` و `await` در Rust، و ابزارهایی برای مدیریت و هماهنگی بین عملیات ناهمزمان.
 
-Let’s consider an example. Say you’re exporting a video you’ve created of a
-family celebration, an operation that could take anywhere from minutes to hours.
-The video export will use as much CPU and GPU power as it can. If you had only
-one CPU core and your operating system didn’t pause that export until it
-completed—that is, if it executed the export _synchronously_—you couldn’t do
-anything else on your computer while that task was running. That would be a
-pretty frustrating experience. Fortunately, your computer’s operating system
-can, and does, invisibly interrupt the export often enough to let you get other
-work done simultaneously.
+بیایید یک مثال را بررسی کنیم. فرض کنید در حال خروجی گرفتن از یک ویدئو هستید که از یک جشن خانوادگی ساخته‌اید؛ این عملیات ممکن است از چند دقیقه تا چند ساعت طول بکشد. خروجی ویدئو تا جایی که ممکن است از قدرت CPU و GPU استفاده خواهد کرد. اگر فقط یک هسته CPU داشتید و سیستم‌عامل شما آن خروجی را تا پایان تکمیل متوقف نمی‌کرد—یعنی اگر آن را به صورت _همزمان_ اجرا می‌کرد—در حالی که آن کار در حال اجرا بود نمی‌توانستید هیچ کار دیگری روی کامپیوتر خود انجام دهید. این تجربه بسیار ناامیدکننده‌ای می‌شد. خوشبختانه، سیستم‌عامل کامپیوتر شما می‌تواند و معمولاً هم می‌کند، به طور نامرئی خروجی را به اندازه کافی متوقف می‌کند تا بتوانید همزمان کارهای دیگری انجام دهید.
 
-Now say you’re downloading a video shared by someone else, which can also take a
-while but does not take up as much CPU time. In this case, the CPU has to wait
-for data to arrive from the network. While you can start reading the data once
-it starts to arrive, it might take some time for all of it to show up. Even once
-the data is all present, if the video is quite large, it could take at least a
-second or two to load it all. That might not sound like much, but it’s a very
-long time for a modern processor, which can perform billions of operations every
-second. Again, your operating system will invisibly interrupt your program to
-allow the CPU to perform other work while waiting for the network call to
-finish.
+حالا فرض کنید یک ویدئو که توسط شخص دیگری به اشتراک گذاشته شده است را دانلود می‌کنید، که این نیز ممکن است مدتی طول بکشد اما به اندازه خروجی گرفتن از CPU زمان نمی‌برد. در این حالت، CPU باید منتظر بماند تا داده از شبکه برسد. در حالی که می‌توانید داده را از زمانی که شروع به رسیدن می‌کند بخوانید، ممکن است مدتی طول بکشد تا همه آن برسد. حتی وقتی داده به طور کامل موجود باشد، اگر ویدئو خیلی بزرگ باشد، ممکن است حداقل یک یا دو ثانیه طول بکشد تا همه آن بارگذاری شود. شاید به نظر نرسد زمان زیادی باشد، اما برای یک پردازنده مدرن که می‌تواند میلیاردها عملیات را در هر ثانیه انجام دهد، این زمان بسیار طولانی است. باز هم، سیستم‌عامل برنامه شما را به طور نامرئی متوقف می‌کند تا CPU بتواند در حالی که منتظر تماس شبکه است، کارهای دیگری انجام دهد.
 
-The video export is an example of a _CPU-bound_ or _compute-bound_ operation.
-It’s limited by the computer’s potential data processing speed within the CPU or
-GPU, and how much of that speed it can dedicate to the operation. The video
-download is an example of an _IO-bound_ operation, because it’s limited by the
-speed of the computer’s _input and output_; it can only go as fast as the data
-can be sent across the network.
+خروجی ویدئو یک مثال از یک عملیات _وابسته به CPU_ یا _وابسته به محاسبه_ (_CPU-bound_) است. این عملیات محدود به سرعت پردازش داده کامپیوتر در CPU یا GPU و میزان توانایی آن برای اختصاص این سرعت به عملیات است. دانلود ویدئو یک مثال از یک عملیات _وابسته به ورودی و خروجی_ (_IO-bound_) است، زیرا محدود به سرعت _ورودی و خروجی_ کامپیوتر است؛ این عملیات فقط به سرعتی که داده می‌تواند از طریق شبکه ارسال شود، وابسته است.
 
-In both of these examples, the operating system’s invisible interrupts provide a
-form of concurrency. That concurrency happens only at the level of the entire
-program, though: the operating system interrupts one program to let other
-programs get work done. In many cases, because we understand our programs at a
-much more granular level than the operating system does, we can spot
-opportunities for concurrency that the operating system can’t see.
+در هر دو این مثال‌ها، وقفه‌های نامرئی سیستم‌عامل نوعی همزمانی فراهم می‌کنند. با این حال، این همزمانی فقط در سطح کل برنامه اتفاق می‌افتد: سیستم‌عامل یک برنامه را متوقف می‌کند تا برنامه‌های دیگر بتوانند کار انجام دهند. در بسیاری از موارد، از آنجا که ما برنامه‌های خود را در سطح بسیار جزئی‌تری نسبت به سیستم‌عامل درک می‌کنیم، می‌توانیم فرصت‌هایی برای همزمانی پیدا کنیم که سیستم‌عامل نمی‌تواند ببیند.
 
-For example, if we’re building a tool to manage file downloads, we should be
-able to write our program so that starting one download won’t lock up the UI,
-and users should be able to start multiple downloads at the same time. Many
-operating system APIs for interacting with the network are _blocking_, though;
-that is, they block the program’s progress until the data they’re processing is
-completely ready.
+به عنوان مثال، اگر در حال ساخت یک ابزار برای مدیریت دانلود فایل‌ها هستید، باید بتوانید برنامه خود را طوری بنویسید که شروع یک دانلود، رابط کاربری را قفل نکند، و کاربران بتوانند به طور همزمان چندین دانلود را آغاز کنند. بسیاری از APIهای سیستم‌عامل برای تعامل با شبکه _مسدودکننده_ (_blocking_) هستند؛ یعنی پیشرفت برنامه را تا زمانی که داده‌ای که پردازش می‌کنند کاملاً آماده باشد، متوقف می‌کنند.
 
-> Note: This is how _most_ function calls work, if you think about it. However,
-> the term _blocking_ is usually reserved for function calls that interact with
-> files, the network, or other resources on the computer, because those are the
-> cases where an individual program would benefit from the operation being
-> _non_-blocking.
+> نکته: این همان چیزی است که _بیشتر_ فراخوانی‌های توابع انجام می‌دهند، اگر در مورد آن فکر کنید. با این حال، اصطلاح _blocking_ معمولاً برای فراخوانی توابعی که با فایل‌ها، شبکه یا منابع دیگر روی کامپیوتر تعامل دارند استفاده می‌شود، زیرا این مواردی هستند که یک برنامه فردی می‌تواند از غیرمسدودکننده (_non-blocking_) بودن عملیات بهره‌مند شود.
 
-We could avoid blocking our main thread by spawning a dedicated thread to
-download each file. However, the overhead of those threads would eventually
-become a problem. It would be preferable if the call didn’t block in the first
-place. It would also be better if we could write in the same direct style we use
-in blocking code, similar to this:
+ما می‌توانیم با ایجاد یک Thread اختصاصی برای دانلود هر فایل، از مسدود شدن Thread اصلی جلوگیری کنیم. با این حال، سربار آن Threadها در نهایت به مشکل تبدیل خواهد شد. بهتر است که فراخوانی از ابتدا مسدودکننده نباشد. همچنین بهتر است که بتوانیم به همان سبک مستقیم کدی که در کد مسدودکننده استفاده می‌کنیم، بنویسیم، شبیه به این:
 
 ```rust,ignore,does_not_compile
 let data = fetch_data_from(url).await;
 println!("{data}");
 ```
 
-That is exactly what Rust’s _async_ (short for _asynchronous_) abstraction gives
-us. In this chapter, you’ll learn all about async as we cover the following
-topics:
+این دقیقاً همان چیزی است که انتزاع _async_ (مخفف _asynchronous_) در Rust به ما می‌دهد. در این فصل، همه چیز درباره async را یاد خواهید گرفت و موضوعات زیر را پوشش خواهیم داد:
 
-- How to use Rust’s `async` and `await` syntax
-- How to use the async model to solve some of the same challenges we looked at
-  in Chapter 16
-- How multithreading and async provide complementary solutions, that you can
-  combine in many cases
+- نحوه استفاده از سینتکس `async` و `await` در Rust
+- نحوه استفاده از مدل async برای حل برخی از چالش‌هایی که در فصل ۱۶ بررسی کردیم
+- چگونگی ارائه راه‌حل‌های مکمل توسط multithreading و async، که در بسیاری از موارد می‌توانید آن‌ها را با هم ترکیب کنید
 
-Before we see how async works in practice, though, we need to take a short
-detour to discuss the differences between parallelism and concurrency.
+با این حال، قبل از اینکه ببینیم async در عمل چگونه کار می‌کند، باید یک توقف کوتاه برای بحث درباره تفاوت‌های بین موازی‌سازی و همزمانی داشته باشیم.
 
-### Parallelism and Concurrency
+### تفاوت بین موازی‌سازی و همزمانی
 
-We’ve treated parallelism and concurrency as mostly interchangeable so far. Now
-we need to distinguish between them more precisely, because the differences will
-show up as we start working.
+ما تاکنون همزمانی (_concurrency_) و موازی‌سازی (_parallelism_) را تقریباً به جای هم در نظر گرفته‌ایم. اکنون باید آن‌ها را به طور دقیق‌تر از هم متمایز کنیم، زیرا تفاوت‌هایشان در هنگام کار مشخص خواهد شد.
 
-Consider the different ways a team could split up work on a software project.
-You could assign a single member multiple tasks, assign each member one task, or
-use a mix of the two approaches.
+به روش‌های مختلفی که یک تیم می‌تواند کار بر روی یک پروژه نرم‌افزاری را تقسیم کند فکر کنید. می‌توانید چندین وظیفه را به یک عضو اختصاص دهید، به هر عضو یک وظیفه اختصاص دهید، یا ترکیبی از این دو روش را استفاده کنید.
 
-When an individual works on several different tasks before any of them is
-complete, this is _concurrency_. Maybe you have two different projects checked
-out on your computer, and when you get bored or stuck on one project, you switch
-to the other. You’re just one person, so you can’t make progress on both tasks
-at the exact same time, but you can multi-task, making progress on one at a time
-by switching between them (see Figure 17-1).
+وقتی یک فرد روی چندین وظیفه مختلف قبل از اتمام هر یک از آن‌ها کار می‌کند، این _همزمانی_ است. شاید شما دو پروژه مختلف را روی کامپیوتر خود باز کرده‌اید و وقتی از یکی خسته یا در آن گیر کردید، به دیگری تغییر می‌دهید. شما فقط یک نفر هستید، بنابراین نمی‌توانید به طور همزمان روی هر دو وظیفه پیشرفت کنید، اما می‌توانید چندوظیفه‌ای (_multi-tasking_) کنید و با جابه‌جا شدن بین آن‌ها، یکی یکی پیشرفت کنید (نگاه کنید به شکل ۱۷-۱).
+
 
 <figure>
 
 <img src="img/trpl17-01.svg" class="center" alt="A diagram with boxes labeled Task A and Task B, with diamonds in them representing subtasks. There are arrows pointing from A1 to B1, B1 to A2, A2 to B2, B2 to A3, A3 to A4, and A4 to B3. The arrows between the subtasks cross the boxes between Task A and Task B." />
 
-<figcaption>Figure 17-1: A concurrent workflow, switching between Task A and Task B</figcaption>
+<figcaption>شکل ۱۷-۱: یک جریان کاری همزمان، که بین وظیفه A و وظیفه B جابه‌جا می‌شود.</figcaption>
 
 </figure>
 
-When the team splits up a group of tasks by having each member take one task and
-work on it alone, this is _parallelism_. Each person on the team can make
-progress at the exact same time (see Figure 17-2).
+وقتی تیم گروهی از وظایف را به این صورت تقسیم می‌کند که هر عضو یک وظیفه را بر عهده می‌گیرد و به تنهایی روی آن کار می‌کند، این _موازی‌سازی_ است. هر فرد در تیم می‌تواند دقیقاً به طور همزمان پیشرفت کند (نگاه کنید به شکل ۱۷-۲).
 
 <figure>
 
-<img src="img/trpl17-02.svg" class="center" alt="A diagram with boxes labeled Task A and Task B, with diamonds in them representing subtasks. There are arrows pointing from A1 to A2, A2 to A3, A3 to A4, B1 to B2, and B2 to B3. No arrows cross between the boxes for Task A and Task B." />
+<img src="img/trpl17-02.svg" class="center" alt="یک نمودار با جعبه‌هایی که با برچسب‌های وظیفه A و وظیفه B نام‌گذاری شده‌اند، و لوزی‌هایی درون آن‌ها که نمایانگر زیروظایف هستند. فلش‌هایی از A1 به A2، A2 به A3، A3 به A4، B1 به B2، و B2 به B3 اشاره می‌کنند. هیچ فلشی بین جعبه‌های وظیفه A و وظیفه B عبور نمی‌کند." />
 
-<figcaption>Figure 17-2: A parallel workflow, where work happens on Task A and Task B independently</figcaption>
+<figcaption>شکل ۱۷-۲: یک جریان کاری موازی، که در آن کار روی وظیفه A و وظیفه B به طور مستقل انجام می‌شود.</figcaption>
 
 </figure>
 
-In both of these workflows, you might have to coordinate between different
-tasks. Maybe you _thought_ the task assigned to one person was totally
-independent from everyone else’s work, but it actually requires another person
-on the team to finish their task first. Some of the work could be done in
-parallel, but some of it was actually _serial_: it could only happen in a
-series, one task after the other, as in Figure 17-3.
+در هر دو این جریان‌های کاری، ممکن است نیاز به هماهنگی بین وظایف مختلف داشته باشید. شاید _فکر_ می‌کردید وظیفه‌ای که به یک نفر اختصاص داده شده کاملاً مستقل از کار سایر اعضای تیم است، اما در واقع نیاز دارد که یک نفر دیگر در تیم ابتدا وظیفه خود را به پایان برساند. بخشی از کار می‌تواند به صورت موازی انجام شود، اما بخشی از آن در واقع _سریالی_ است: فقط می‌تواند به صورت متوالی انجام شود، یک وظیفه پس از دیگری، همان‌طور که در شکل ۱۷-۳ نشان داده شده است.
 
 <figure>
 
-<img src="img/trpl17-03.svg" class="center" alt="A diagram with boxes labeled Task A and Task B, with diamonds in them representing subtasks. There are arrows pointing from A1 to A2, A2 to a pair of thick vertical lines like a “pause” symbol, from that symbol to A3, B1 to B2, B2 to B3, which is below that symbol, B3 to A3, and B3 to B4." />
+<img src="img/trpl17-03.svg" class="center" alt="یک نمودار با جعبه‌هایی که با برچسب وظیفه A و وظیفه B نام‌گذاری شده‌اند، و لوزی‌هایی درون آن‌ها که نمایانگر زیروظایف هستند. فلش‌هایی از A1 به A2، A2 به یک جفت خطوط عمودی ضخیم مانند نماد 'توقف'، از آن نماد به A3، B1 به B2، B2 به B3 (که در زیر آن نماد قرار دارد)، B3 به A3، و B3 به B4 اشاره می‌کنند." />
 
-<figcaption>Figure 17-3: A partially parallel workflow, where work happens on Task A and Task B independently until Task A3 is blocked on the results of Task B3.</figcaption>
+<figcaption>شکل ۱۷-۳: یک جریان کاری نیمه موازی، که در آن کار روی وظیفه A و وظیفه B به طور مستقل انجام می‌شود تا زمانی که A3 به نتایج B3 وابسته باشد.</figcaption>
 
 </figure>
 
-Likewise, you might realize that one of your own tasks depends on another of
-your tasks. Now your concurrent work has also become serial.
+به همین ترتیب، ممکن است متوجه شوید که یکی از وظایف شما به وظیفه دیگری از کارهای شما بستگی دارد. اکنون کار همزمان شما نیز سریالی شده است.
 
-Parallelism and concurrency can intersect with each other, too. If you learn
-that a colleague is stuck until you finish one of your tasks, you’ll probably
-focus all your efforts on that task to “unblock” your colleague. You and your
-coworker are no longer able to work in parallel, and you’re also no longer able
-to work concurrently on your own tasks.
+موازی‌سازی و همزمانی می‌توانند با یکدیگر تقاطع داشته باشند. اگر متوجه شوید که یک همکار تا زمانی که یکی از وظایف شما به پایان نرسیده گیر کرده است، احتمالاً تمام تلاش خود را روی آن وظیفه متمرکز می‌کنید تا "همکارتان را از بن‌بست خارج کنید." شما و همکارتان دیگر نمی‌توانید به صورت موازی کار کنید، و همچنین دیگر نمی‌توانید به صورت همزمان روی وظایف خودتان کار کنید.
 
-The same basic dynamics come into play with software and hardware. On a machine
-with a single CPU core, the CPU can perform only one operation at a time, but it
-can still work concurrently. Using tools such as threads, processes, and async,
-the computer can pause one activity and switch to others before eventually
-cycling back to that first activity again. On a machine with multiple CPU cores,
-it can also do work in parallel. One core can be performing one task while
-another core performs a completely unrelated one, and those operations actually
-happen at the same time.
+همان دینامیک‌های اساسی در نرم‌افزار و سخت‌افزار نیز وجود دارند. روی ماشینی با یک هسته CPU، CPU فقط می‌تواند یک عملیات را در هر لحظه انجام دهد، اما همچنان می‌تواند به صورت همزمان کار کند. با استفاده از ابزارهایی مانند Threads، فرآیندها (_processes_) و async، کامپیوتر می‌تواند یک فعالیت را متوقف کند و به فعالیت‌های دیگر تغییر دهد، و در نهایت دوباره به فعالیت اول بازگردد. روی ماشینی با چندین هسته CPU، می‌تواند کارها را به صورت موازی نیز انجام دهد. یک هسته می‌تواند یک وظیفه را اجرا کند در حالی که هسته دیگری وظیفه‌ای کاملاً نامرتبط را اجرا می‌کند، و این عملیات‌ها واقعاً در یک زمان اتفاق می‌افتند.
 
-When working with async in Rust, we’re always dealing with concurrency.
-Depending on the hardware, the operating system, and the async runtime we are
-using (more on async runtimes shortly), that concurrency may also use parallelism
-under the hood.
+هنگام کار با async در Rust، همیشه با همزمانی سر و کار داریم. بسته به سخت‌افزار، سیستم‌عامل، و Runtime async که استفاده می‌کنیم (که در ادامه درباره Runtimeهای async بیشتر صحبت خواهیم کرد)، این همزمانی ممکن است در پس‌زمینه از موازی‌سازی نیز استفاده کند.
 
-Now, let’s dive into how async programming in Rust actually works.
+حالا بیایید به این بپردازیم که برنامه‌نویسی async در Rust در عمل چگونه کار می‌کند.
+

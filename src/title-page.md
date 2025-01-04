@@ -1,27 +1,20 @@
-# The Rust Programming Language
+# زبان برنامه‌نویسی راست
 
-_by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the
-Rust Community_
+_نوشته استیو کلابنیک، کارول نیکولز، و کریس کریچو، با مشارکت اعضای جامعه راست_
 
-This version of the text assumes you’re using Rust 1.82.0 (released 2024-10-17)
-or later. See the [“Installation” section of Chapter 1][install]<!-- ignore -->
-to install or update Rust.
+این نسخه از متن فرض می‌کند که شما از راست نسخه 1.82.0 (منتشر شده در تاریخ 17-10-2024) یا نسخه‌های جدیدتر استفاده می‌کنید. برای نصب یا به‌روزرسانی راست به [بخش “نصب” از فصل 1][install]<!-- ignore --> مراجعه کنید.
 
-The HTML format is available online at
-[https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/)
-and offline with installations of Rust made with `rustup`; run `rustup doc
---book` to open.
+فرمت HTML به‌صورت آنلاین در دسترس است در
+[https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/) 
+و به‌صورت آفلاین با نصب‌های راست که با `rustup` انجام شده‌اند؛ دستور `rustup doc --book` را اجرا کنید تا باز شود.
 
-Several community [translations] are also available.
+چندین [ترجمه] جامعه نیز در دسترس است.
 
-This text is available in [paperback and ebook format from No Starch
-Press][nsprust].
+این متن در [فرمت کاغذی و الکترونیکی از انتشارات No Starch Press][nsprust] نیز موجود است.
 
 [install]: ch01-01-installation.html
 [editions]: appendix-05-editions.html
 [nsprust]: https://nostarch.com/rust-programming-language-2nd-edition
 [translations]: appendix-06-translation.html
 
-> **🚨 Want a more interactive learning experience? Try out a different version
-> of the Rust Book, featuring: quizzes, highlighting, visualizations, and
-> more**: <https://rust-book.cs.brown.edu>
+> **🚨 می‌خواهید تجربه یادگیری تعاملی‌تری داشته باشید؟ نسخه دیگری از کتاب راست را امتحان کنید که شامل: آزمون‌ها، برجسته‌سازی‌ها، تجسم‌ها، و موارد دیگر است**: <https://rust-book.cs.brown.edu>
