@@ -37,7 +37,6 @@ println!("{data}");
 
 وقتی یک فرد روی چندین وظیفه مختلف قبل از اتمام هر یک از آن‌ها کار می‌کند، این _همزمانی_ است. شاید شما دو پروژه مختلف را روی کامپیوتر خود باز کرده‌اید و وقتی از یکی خسته یا در آن گیر کردید، به دیگری تغییر می‌دهید. شما فقط یک نفر هستید، بنابراین نمی‌توانید به طور همزمان روی هر دو وظیفه پیشرفت کنید، اما می‌توانید چندوظیفه‌ای (_multi-tasking_) کنید و با جابه‌جا شدن بین آن‌ها، یکی یکی پیشرفت کنید (نگاه کنید به شکل ۱۷-۱).
 
-
 <figure>
 
 <img src="img/trpl17-01.svg" class="center" alt="A diagram with boxes labeled Task A and Task B, with diamonds in them representing subtasks. There are arrows pointing from A1 to B1, B1 to A2, A2 to B2, B2 to A3, A3 to A4, and A4 to B3. The arrows between the subtasks cross the boxes between Task A and Task B." />
@@ -75,4 +74,3 @@ println!("{data}");
 هنگام کار با async در Rust، همیشه با همزمانی سر و کار داریم. بسته به سخت‌افزار، سیستم‌عامل، و Runtime async که استفاده می‌کنیم (که در ادامه درباره Runtimeهای async بیشتر صحبت خواهیم کرد)، این همزمانی ممکن است در پس‌زمینه از موازی‌سازی نیز استفاده کند.
 
 حالا بیایید به این بپردازیم که برنامه‌نویسی async در Rust در عمل چگونه کار می‌کند.
-

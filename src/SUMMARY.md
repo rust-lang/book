@@ -101,7 +101,6 @@
   - [همزمانی با وضعیت مشترک](ch16-03-shared-state.md)  
   - [همزمانی قابل گسترش با صفت‌های `Sync` و `Send`](ch16-04-extensible-concurrency-sync-and-send.md)  
 
-
 - [Async و Await](ch17-00-async-await.md)  
   - [Futures و نحو Async](ch17-01-futures-and-syntax.md)  
   - [همزمانی با Async](ch17-02-concurrency-with-async.md)  

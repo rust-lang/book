@@ -26,30 +26,13 @@
 {{#include ../listings/ch21-web-server/listing-21-22/output.txt}}
 ```
 
-The error tells us we can’t call `join` because we only have a mutable borrow of
-each `worker` and `join` takes ownership of its argument. To solve this issue,
-we need to move the thread out of the `Worker` instance that owns `thread` so
-`join` can consume the thread. One way to do this is by taking the same approach
-we did in Listing 18-15. If `Worker` held an `Option<thread::JoinHandle<()>>`,
-we could call the `take` method on the `Option` to move the value out of the
-`Some` variant and leave a `None` variant in its place. In other words, a
-`Worker` that is running would have a `Some` variant in `thread`, and when we
-wanted to clean up a `Worker`, we would replace `Some` with `None` so the
-`Worker` doesn’t have a thread to run.
+این خطا به ما می‌گوید که نمی‌توانیم `join` را فراخوانی کنیم زیرا فقط یک قرض قابل تغییر از هر `worker` داریم و `join` مالکیت آرگومان خود را می‌گیرد. برای حل این مشکل، باید نخ را از نمونه `Worker` که مالک `thread` است خارج کنیم تا `join` بتواند نخ را مصرف کند. یک راه برای انجام این کار استفاده از همان رویکردی است که در لیستینگ 18-15 استفاده کردیم. اگر `Worker` یک `Option<thread::JoinHandle<()>>` نگه می‌داشت، می‌توانستیم با استفاده از متد `take` مقدار را از نوع `Some` به نوع `None` منتقل کنیم.
 
-However, the _only_ time this would come up would be when dropping the `Worker`.
-In exchange, we would have to deal with an `Option<thread::JoinHandle<()>>`
-everywhere we access `worker.thread`. Idiomatic Rust uses `Option` quite a bit,
-but when you find yourself wrapping something in `Option` as a workaround even
-though you know the item will always be present, it is a good idea to look for
-alternative approaches. They can make your code cleaner and less error-prone.
+با این حال، تنها زمانی که این مسئله مطرح می‌شود زمانی است که `Worker` حذف می‌شود. در عوض، باید با یک `Option<thread::JoinHandle<()>>` در همه جا سر و کار داشته باشیم. Rust ایدئوماتیک اغلب از `Option` استفاده می‌کند، اما زمانی که متوجه شوید چیزی را در `Option` قرار می‌دهید به عنوان یک راه‌حل موقت، حتی اگر بدانید آن مورد همیشه حضور دارد، ایده خوبی است که به دنبال روش‌های جایگزین باشید.
 
-In this case, there is a better alternative: the `Vec::drain` method. It accepts
-a range parameter to specify which items to remove from the `Vec`, and returns
-an iterator of those items. Passing the `..` range syntax will remove *every*
-value from the `Vec`.
+در این حالت، یک جایگزین بهتر استفاده از متد `Vec::drain` است. این متد یک پارامتر محدوده می‌گیرد تا مشخص کند کدام آیتم‌ها باید از `Vec` حذف شوند و یک تکرارگر از آن آیتم‌ها بازمی‌گرداند. استفاده از `..` برای محدوده تمام مقادیر را از `Vec` حذف خواهد کرد.
 
-So we need to update the `ThreadPool` `drop` implementation like this:
+بنابراین باید پیاده‌سازی `drop` در `ThreadPool` را به این صورت به‌روزرسانی کنیم:
 
 <Listing file-name="src/lib.rs">
 
@@ -61,24 +44,13 @@ So we need to update the `ThreadPool` `drop` implementation like this:
 
 این تغییر خطای کامپایلر را برطرف می‌کند و نیازی به تغییرات دیگر در کد ما ندارد.
 
-### Signaling to the Threads to Stop Listening for Jobs
+### علامت‌دهی به نخ‌ها برای توقف گوش دادن به وظایف
 
-With all the changes we’ve made, our code compiles without any warnings.
-However, the bad news is this code doesn’t function the way we want it to yet.
-The key is the logic in the closures run by the threads of the `Worker`
-instances: at the moment, we call `join`, but that won’t shut down the threads
-because they `loop` forever looking for jobs. If we try to drop our
-`ThreadPool` with our current implementation of `drop`, the main thread will
-block forever waiting for the first thread to finish.
+با تمام تغییراتی که اعمال کرده‌ایم، کد ما بدون هیچ هشداری کامپایل می‌شود. با این حال، خبر بد این است که این کد هنوز به درستی کار نمی‌کند. کلید مشکل در منطق موجود در closureهایی است که توسط نخ‌های نمونه‌های `Worker` اجرا می‌شوند: در حال حاضر، ما `join` را فراخوانی می‌کنیم، اما این کار نخ‌ها را خاموش نمی‌کند زیرا آن‌ها برای همیشه در جستجوی وظایف `loop` می‌زنند. اگر با پیاده‌سازی فعلی `drop`، `ThreadPool` خود را حذف کنیم، نخ اصلی برای همیشه منتظر می‌ماند تا اولین نخ تکمیل شود.
 
-To fix this problem, we’ll need a change in the `ThreadPool` `drop`
-implementation and then a change in the `Worker` loop.
+برای حل این مشکل، باید تغییری در پیاده‌سازی `drop` در `ThreadPool` و سپس تغییری در حلقه `Worker` ایجاد کنیم.
 
-First, we’ll change the `ThreadPool` `drop` implementation to explicitly drop
-the `sender` before waiting for the threads to finish. Listing 21-23 shows the
-changes to `ThreadPool` to explicitly drop `sender`. Unlike with the `workers`,
-here we *do* need to use an `Option` to be able to move `sender` out of
-`ThreadPool` with `Option::take`.
+ابتدا، پیاده‌سازی `drop` در `ThreadPool` را تغییر می‌دهیم تا `sender` را قبل از منتظر ماندن برای تکمیل نخ‌ها به صورت صریح حذف کنیم. لیستینگ 21-23 تغییرات در `ThreadPool` برای حذف صریح `sender` را نشان می‌دهد. برخلاف `workers`، اینجا ما باید از یک `Option` استفاده کنیم تا بتوانیم `sender` را با `Option::take` از `ThreadPool` منتقل کنیم.
 
 <Listing number="21-23" file-name="src/lib.rs" caption="حذف صریح `sender` قبل از ملحق کردن نخ‌های worker">
 
