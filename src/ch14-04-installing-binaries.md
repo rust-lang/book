@@ -1,32 +1,14 @@
-<!-- Old link, do not remove -->
+<!-- لینک قدیمی، حذف نکنید -->
 
 <a id="installing-binaries-from-cratesio-with-cargo-install"></a>
 
-## Installing Binaries with `cargo install`
+## نصب باینری‌ها با استفاده از `cargo install`
 
-The `cargo install` command allows you to install and use binary crates
-locally. This isn’t intended to replace system packages; it’s meant to be a
-convenient way for Rust developers to install tools that others have shared on
-[crates.io](https://crates.io/)<!-- ignore -->. Note that you can only install
-packages that have binary targets. A _binary target_ is the runnable program
-that is created if the crate has a _src/main.rs_ file or another file specified
-as a binary, as opposed to a library target that isn’t runnable on its own but
-is suitable for including within other programs. Usually, crates have
-information in the _README_ file about whether a crate is a library, has a
-binary target, or both.
+دستور `cargo install` به شما این امکان را می‌دهد که crate‌های باینری را به صورت محلی نصب و استفاده کنید. این دستور به‌منظور جایگزینی بسته‌های سیستمی طراحی نشده است؛ بلکه یک راه آسان برای توسعه‌دهندگان Rust فراهم می‌کند تا ابزارهایی که دیگران در [crates.io](https://crates.io/)<!-- ignore --> به اشتراک گذاشته‌اند را نصب کنند. توجه داشته باشید که فقط پکیج‌هایی را که دارای هدف باینری هستند می‌توانید نصب کنید. _هدف باینری_ برنامه قابل‌اجرا است که در صورتی ایجاد می‌شود که crate شامل یک فایل _src/main.rs_ یا فایل دیگری باشد که به عنوان باینری مشخص شده است. این در مقابل هدف کتابخانه‌ای قرار دارد که به تنهایی قابل اجرا نیست، اما برای استفاده در سایر برنامه‌ها مناسب است. معمولاً crate‌ها در فایل _README_ اطلاعاتی در مورد اینکه آیا یک crate کتابخانه است، دارای هدف باینری است یا هر دو، ارائه می‌دهند.
 
-All binaries installed with `cargo install` are stored in the installation
-root’s _bin_ folder. If you installed Rust using _rustup.rs_ and don’t have any
-custom configurations, this directory will be *$HOME/.cargo/bin*. Ensure that
-directory is in your `$PATH`to be able to run programs you’ve installed with`cargo install`.
+تمام باینری‌هایی که با `cargo install` نصب می‌شوند، در پوشه _bin_ مسیر نصب ذخیره می‌شوند. اگر Rust را با استفاده از _rustup.rs_ نصب کرده باشید و هیچ تنظیمات سفارشی نداشته باشید، این مسیر معمولاً *$HOME/.cargo/bin* خواهد بود. مطمئن شوید که این مسیر در متغیر محیطی `$PATH` شما قرار دارد تا بتوانید برنامه‌هایی که با `cargo install` نصب کرده‌اید اجرا کنید.
 
-For example, in Chapter 12 we mentioned that there’s a Rust implementation of
-the `grep` tool called `ripgrep` for searching files. To install `ripgrep`, we
-can run the following:
-
-<!-- manual-regeneration
-cargo install something you don't have, copy relevant output below
--->
+برای مثال، در فصل 12 اشاره کردیم که یک پیاده‌سازی Rust از ابزار `grep` به نام `ripgrep` وجود دارد که برای جستجوی فایل‌ها استفاده می‌شود. برای نصب `ripgrep` می‌توانیم دستور زیر را اجرا کنیم:
 
 ```console
 $ cargo install ripgrep
@@ -41,7 +23,4 @@ $ cargo install ripgrep
    Installed package `ripgrep v13.0.0` (executable `rg`)
 ```
 
-The second-to-last line of the output shows the location and the name of the
-installed binary, which in the case of `ripgrep` is `rg`. As long as the
-installation directory is in your `$PATH`, as mentioned previously, you can
-then run `rg --help` and start using a faster, rustier tool for searching files!
+خط دوم به آخر خروجی نشان می‌دهد که باینری نصب‌شده در کجا و با چه نامی قرار دارد؛ که در مورد `ripgrep` این باینری `rg` نام دارد. تا زمانی که مسیر نصب در متغیر `$PATH` شما باشد، همان‌طور که قبلاً ذکر شد، می‌توانید با اجرای `rg --help` استفاده از این ابزار سریع‌تر و مرتبط با Rust برای جستجوی فایل‌ها را شروع کنید!
