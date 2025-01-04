@@ -103,6 +103,7 @@ Cargo فرض نمی‌کند که crate‌های موجود در یک workspace 
 
 <Listing number="14-7" file-name="adder/src/main.rs" caption="Using the `add_one` library crate in the `adder` crate">
 
+
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
 ```
