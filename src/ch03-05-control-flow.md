@@ -1,18 +1,12 @@
-## Control Flow
+## کنترل جریان
 
-The ability to run some code depending on whether a condition is `true` and to
-run some code repeatedly while a condition is `true` are basic building blocks
-in most programming languages. The most common constructs that let you control
-the flow of execution of Rust code are `if` expressions and loops.
+توانایی اجرای کدی که وابسته به درست بودن یا نبودن یک شرط است و اجرای مکرر کدی در حالی که یک شرط درست است، از ساختارهای اساسی در بیشتر زبان‌های برنامه‌نویسی محسوب می‌شود. رایج‌ترین ساختارهایی که به شما امکان کنترل جریان اجرای کد در راست را می‌دهند، عبارتند از عبارات `if` و حلقه‌ها.
 
-### `if` Expressions
+### عبارات `if`
 
-An `if` expression allows you to branch your code depending on conditions. You
-provide a condition and then state, “If this condition is met, run this block
-of code. If the condition is not met, do not run this block of code.”
+یک عبارت `if` به شما امکان می‌دهد کد خود را بسته به شرایطی شاخه‌بندی کنید. شما یک شرط مشخص می‌کنید و سپس می‌گویید: «اگر این شرط برقرار بود، این بلوک کد اجرا شود. اگر شرط برقرار نبود، این بلوک کد اجرا نشود.»
 
-Create a new project called _branches_ in your _projects_ directory to explore
-the `if` expression. In the _src/main.rs_ file, input the following:
+یک پروژه جدید به نام _branches_ در دایرکتوری _projects_ خود ایجاد کنید تا عبارت `if` را بررسی کنید. در فایل _src/main.rs_ کد زیر را وارد کنید:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -20,43 +14,29 @@ the `if` expression. In the _src/main.rs_ file, input the following:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/src/main.rs}}
 ```
 
-All `if` expressions start with the keyword `if`, followed by a condition. In
-this case, the condition checks whether or not the variable `number` has a
-value less than 5. We place the block of code to execute if the condition is
-`true` immediately after the condition inside curly brackets. Blocks of code
-associated with the conditions in `if` expressions are sometimes called _arms_,
-just like the arms in `match` expressions that we discussed in the [“Comparing
-the Guess to the Secret Number”][comparing-the-guess-to-the-secret-number]<!--
-ignore --> section of Chapter 2.
+تمام عبارات `if` با کلمه کلیدی `if` شروع می‌شوند و سپس یک شرط دنبال می‌شود. در این مثال، شرط بررسی می‌کند که آیا مقدار متغیر `number` کمتر از 5 است یا خیر. بلوک کدی که در صورت درست بودن شرط باید اجرا شود، بلافاصله بعد از شرط و داخل کروشه‌ها قرار می‌گیرد. بلوک‌های کدی که با شرایط در عبارات `if` مرتبط هستند، گاهی _بازو_ (arm) نامیده می‌شوند، همانند بازوهای موجود در عبارات `match` که در بخش [“مقایسه حدس با عدد مخفی”][comparing-the-guess-to-the-secret-number]<!-- ignore --> از فصل 2 مورد بحث قرار گرفت.
 
-Optionally, we can also include an `else` expression, which we chose to do
-here, to give the program an alternative block of code to execute should the
-condition evaluate to `false`. If you don’t provide an `else` expression and
-the condition is `false`, the program will just skip the `if` block and move on
-to the next bit of code.
+به‌صورت اختیاری، می‌توانیم یک عبارت `else` نیز اضافه کنیم، همان‌طور که اینجا انتخاب کردیم، تا به برنامه یک بلوک کد جایگزین برای اجرا ارائه دهیم، در صورتی که شرط به `false` ارزیابی شود. اگر عبارت `else` ارائه ندهید و شرط `false` باشد، برنامه بلوک `if` را نادیده گرفته و به بخش بعدی کد می‌رود.
 
-Try running this code; you should see the following output:
+این کد را اجرا کنید؛ باید خروجی زیر را مشاهده کنید:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/output.txt}}
 ```
 
-Let’s try changing the value of `number` to a value that makes the condition
-`false` to see what happens:
+بیایید مقدار `number` را به مقداری تغییر دهیم که شرط `false` شود تا ببینیم چه اتفاقی می‌افتد:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/src/main.rs:here}}
 ```
 
-Run the program again, and look at the output:
+برنامه را دوباره اجرا کنید و خروجی را مشاهده کنید:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/output.txt}}
 ```
 
-It’s also worth noting that the condition in this code _must_ be a `bool`. If
-the condition isn’t a `bool`, we’ll get an error. For example, try running the
-following code:
+همچنین قابل توجه است که شرط در این کد _باید_ یک `bool` باشد. اگر شرط یک `bool` نباشد، خطا دریافت خواهیم کرد. به عنوان مثال، این کد را اجرا کنید:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -64,19 +44,13 @@ following code:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/src/main.rs}}
 ```
 
-The `if` condition evaluates to a value of `3` this time, and Rust throws an
-error:
+این بار شرط `if` به مقدار `3` ارزیابی می‌شود و راست خطا می‌دهد:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/output.txt}}
 ```
 
-The error indicates that Rust expected a `bool` but got an integer. Unlike
-languages such as Ruby and JavaScript, Rust will not automatically try to
-convert non-Boolean types to a Boolean. You must be explicit and always provide
-`if` with a Boolean as its condition. If we want the `if` code block to run
-only when a number is not equal to `0`, for example, we can change the `if`
-expression to the following:
+خطا نشان می‌دهد که راست انتظار یک `bool` داشت اما یک عدد صحیح دریافت کرد. برخلاف زبان‌هایی مانند Ruby و JavaScript، راست به‌صورت خودکار تلاش نمی‌کند انواع غیر `bool` را به یک `bool` تبدیل کند. شما باید صریح باشید و همیشه یک `bool` را به‌عنوان شرط به `if` بدهید. اگر می‌خواهید بلوک کد `if` فقط زمانی اجرا شود که یک عدد برابر `0` نباشد، می‌توانید عبارت `if` را به این صورت تغییر دهید:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -84,12 +58,11 @@ expression to the following:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-29-if-not-equal-0/src/main.rs}}
 ```
 
-Running this code will print `number was something other than zero`.
+اجرای این کد `number was something other than zero` را چاپ خواهد کرد.
 
-#### Handling Multiple Conditions with `else if`
+#### مدیریت شرایط متعدد با `else if`
 
-You can use multiple conditions by combining `if` and `else` in an `else if`
-expression. For example:
+شما می‌توانید با ترکیب `if` و `else` در یک عبارت `else if`، شرایط متعددی را مدیریت کنید. به عنوان مثال:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -97,30 +70,21 @@ expression. For example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-30-else-if/src/main.rs}}
 ```
 
-This program has four possible paths it can take. After running it, you should
-see the following output:
+این برنامه چهار مسیر ممکن برای اجرا دارد. پس از اجرای آن، باید خروجی زیر را مشاهده کنید:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-30-else-if/output.txt}}
 ```
 
-When this program executes, it checks each `if` expression in turn and executes
-the first body for which the condition evaluates to `true`. Note that even
-though 6 is divisible by 2, we don’t see the output `number is divisible by 2`,
-nor do we see the `number is not divisible by 4, 3, or 2` text from the `else`
-block. That’s because Rust only executes the block for the first `true`
-condition, and once it finds one, it doesn’t even check the rest.
+هنگامی که این برنامه اجرا می‌شود، هر عبارت `if` را به ترتیب بررسی کرده و اولین بلوکی که شرط آن به `true` ارزیابی شود، اجرا می‌کند. توجه داشته باشید که حتی با وجود اینکه 6 بر 2 بخش‌پذیر است، خروجی `number is divisible by 2` را نمی‌بینیم و همچنین متن `number is not divisible by 4, 3, or 2` از بلوک `else` را نیز نمی‌بینیم. این به این دلیل است که راست فقط بلوک مربوط به اولین شرط درست را اجرا می‌کند و پس از یافتن آن، بقیه را بررسی نمی‌کند.
 
-Using too many `else if` expressions can clutter your code, so if you have more
-than one, you might want to refactor your code. Chapter 6 describes a powerful
-Rust branching construct called `match` for these cases.
+استفاده از تعداد زیادی عبارت `else if` می‌تواند کد شما را شلوغ کند، بنابراین اگر بیش از یک مورد دارید، ممکن است بخواهید کد خود را بازنویسی کنید. فصل 6 یک ساختار شاخه‌بندی قدرتمند در راست به نام `match` را برای این موارد توضیح می‌دهد.
 
-#### Using `if` in a `let` Statement
+#### استفاده از `if` در یک عبارت `let`
 
-Because `if` is an expression, we can use it on the right side of a `let`
-statement to assign the outcome to a variable, as in Listing 3-2.
+از آنجایی که `if` یک عبارت است، می‌توانیم از آن در سمت راست یک عبارت `let` برای تخصیص نتیجه به یک متغیر استفاده کنیم، همان‌طور که در لیست 3-2 نشان داده شده است.
 
-<Listing number="3-2" file-name="src/main.rs" caption="Assigning the result of an `if` expression to a variable">
+<Listing number="3-2" file-name="src/main.rs" caption="تخصیص نتیجه یک عبارت `if` به یک متغیر">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-02/src/main.rs}}
@@ -128,20 +92,13 @@ statement to assign the outcome to a variable, as in Listing 3-2.
 
 </Listing>
 
-The `number` variable will be bound to a value based on the outcome of the `if`
-expression. Run this code to see what happens:
+متغیر `number` به مقداری بر اساس نتیجه عبارت `if` متصل خواهد شد. این کد را اجرا کنید تا ببینید چه اتفاقی می‌افتد:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/listing-03-02/output.txt}}
 ```
 
-Remember that blocks of code evaluate to the last expression in them, and
-numbers by themselves are also expressions. In this case, the value of the
-whole `if` expression depends on which block of code executes. This means the
-values that have the potential to be results from each arm of the `if` must be
-the same type; in Listing 3-2, the results of both the `if` arm and the `else`
-arm were `i32` integers. If the types are mismatched, as in the following
-example, we’ll get an error:
+به خاطر داشته باشید که بلوک‌های کد به آخرین عبارت در آن‌ها ارزیابی می‌شوند و اعداد به تنهایی نیز عبارات محسوب می‌شوند. در این حالت، مقدار کل عبارت `if` بستگی به این دارد که کدام بلوک کد اجرا شود. این بدان معناست که مقادیری که می‌توانند نتایج هر بازوی `if` باشند، باید از یک نوع باشند. در لیست 3-2، نتایج بازوی `if` و بازوی `else` هر دو اعداد صحیح `i32` بودند. اگر انواع ناسازگار باشند، مانند مثال زیر، خطایی دریافت خواهیم کرد:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -149,39 +106,25 @@ example, we’ll get an error:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/src/main.rs}}
 ```
 
-When we try to compile this code, we’ll get an error. The `if` and `else` arms
-have value types that are incompatible, and Rust indicates exactly where to
-find the problem in the program:
+هنگامی که تلاش می‌کنیم این کد را کامپایل کنیم، خطایی دریافت می‌کنیم. بازوهای `if` و `else` دارای انواع مقداری ناسازگار هستند و راست دقیقاً نشان می‌دهد که مشکل در برنامه کجاست:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/output.txt}}
 ```
 
-The expression in the `if` block evaluates to an integer, and the expression in
-the `else` block evaluates to a string. This won’t work because variables must
-have a single type, and Rust needs to know at compile time what type the
-`number` variable is, definitively. Knowing the type of `number` lets the
-compiler verify the type is valid everywhere we use `number`. Rust wouldn’t be
-able to do that if the type of `number` was only determined at runtime; the
-compiler would be more complex and would make fewer guarantees about the code
-if it had to keep track of multiple hypothetical types for any variable.
+عبارت موجود در بلوک `if` به یک عدد صحیح ارزیابی می‌شود و عبارت موجود در بلوک `else` به یک رشته ارزیابی می‌شود. این کار نمی‌کند زیرا متغیرها باید یک نوع مشخص داشته باشند و راست باید در زمان کامپایل بداند که نوع متغیر `number` چیست. دانستن نوع `number` به کامپایلر این امکان را می‌دهد که بررسی کند نوع آن در هر جایی که از `number` استفاده می‌کنیم معتبر است. راست نمی‌توانست این کار را انجام دهد اگر نوع `number` تنها در زمان اجرا مشخص می‌شد. کامپایلر پیچیده‌تر می‌شد و تضمین‌های کمتری درباره کد ارائه می‌داد اگر مجبور بود انواع فرضی مختلفی را برای هر متغیر پیگیری کند.
 
-### Repetition with Loops
+### تکرار با حلقه‌ها
 
-It’s often useful to execute a block of code more than once. For this task,
-Rust provides several _loops_, which will run through the code inside the loop
-body to the end and then start immediately back at the beginning. To experiment
-with loops, let’s make a new project called _loops_.
+اغلب مفید است که یک بلوک کد بیش از یک بار اجرا شود. برای این کار، Rust چندین _حلقه_ ارائه می‌دهد که کد داخل بدنه حلقه را اجرا کرده و سپس بلافاصله به ابتدای حلقه بازمی‌گردند. برای آزمایش با حلقه‌ها، یک پروژه جدید به نام _loops_ ایجاد کنید.
 
-Rust has three kinds of loops: `loop`, `while`, and `for`. Let’s try each one.
+Rust سه نوع حلقه دارد: `loop`، `while` و `for`. بیایید هر کدام را امتحان کنیم.
 
-#### Repeating Code with `loop`
+#### تکرار کد با `loop`
 
-The `loop` keyword tells Rust to execute a block of code over and over again
-forever or until you explicitly tell it to stop.
+کلمه کلیدی `loop` به Rust می‌گوید که یک بلوک کد را بارها و بارها اجرا کند، تا زمانی که شما به طور صریح به آن بگویید متوقف شود.
 
-As an example, change the _src/main.rs_ file in your _loops_ directory to look
-like this:
+به عنوان مثال، فایل _src/main.rs_ را در دایرکتوری _loops_ خود به شکل زیر تغییر دهید:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -189,10 +132,7 @@ like this:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-loop/src/main.rs}}
 ```
 
-When we run this program, we’ll see `again!` printed over and over continuously
-until we stop the program manually. Most terminals support the keyboard shortcut
-<kbd>ctrl</kbd>-<kbd>c</kbd> to interrupt a program that is stuck in a continual
-loop. Give it a try:
+وقتی این برنامه را اجرا کنیم، `again!` بارها و بارها به طور مداوم چاپ می‌شود تا زمانی که برنامه را به صورت دستی متوقف کنیم. اکثر ترمینال‌ها از میانبر صفحه کلید <kbd>ctrl</kbd>-<kbd>c</kbd> برای متوقف کردن برنامه‌ای که در یک حلقه بی‌پایان گیر کرده است، پشتیبانی می‌کنند. آن را امتحان کنید:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-32-loop
@@ -212,78 +152,43 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <kbd>ctrl</kbd>-<kbd>c</kbd>. You
-may or may not see the word `again!` printed after the `^C`, depending on where
-the code was in the loop when it received the interrupt signal.
+نماد `^C` نشان می‌دهد که شما <kbd>ctrl</kbd>-<kbd>c</kbd> را فشار داده‌اید. ممکن است کلمه `again!` پس از `^C` چاپ شود یا نشود، بسته به اینکه کد در حلقه در چه مرحله‌ای بوده است که سیگنال قطع دریافت شده است.
 
-Fortunately, Rust also provides a way to break out of a loop using code. You
-can place the `break` keyword within the loop to tell the program when to stop
-executing the loop. Recall that we did this in the guessing game in the
-[“Quitting After a Correct Guess”][quitting-after-a-correct-guess]<!-- ignore
---> section of Chapter 2 to exit the program when the user won the game by
-guessing the correct number.
+خوشبختانه، Rust همچنین روشی برای خروج از یک حلقه با استفاده از کد ارائه می‌دهد. شما می‌توانید کلمه کلیدی `break` را درون حلقه قرار دهید تا به برنامه بگویید که چه زمانی اجرای حلقه را متوقف کند. به یاد داشته باشید که این کار را در بازی حدس عدد در بخش [“خروج پس از یک حدس درست”][quitting-after-a-correct-guess]<!-- ignore --> در فصل 2 انجام دادیم تا زمانی که کاربر با حدس درست بازی را برنده شد، برنامه خاتمه یابد.
 
-We also used `continue` in the guessing game, which in a loop tells the program
-to skip over any remaining code in this iteration of the loop and go to the
-next iteration.
+ما همچنین از `continue` در بازی حدس عدد استفاده کردیم که در یک حلقه به برنامه می‌گوید هر کد باقی‌مانده در این تکرار حلقه را نادیده بگیرد و به تکرار بعدی برود.
 
-#### Returning Values from Loops
+#### بازگرداندن مقادیر از حلقه‌ها
 
-One of the uses of a `loop` is to retry an operation you know might fail, such
-as checking whether a thread has completed its job. You might also need to pass
-the result of that operation out of the loop to the rest of your code. To do
-this, you can add the value you want returned after the `break` expression you
-use to stop the loop; that value will be returned out of the loop so you can
-use it, as shown here:
+یکی از کاربردهای `loop` این است که یک عملیات را که ممکن است شکست بخورد دوباره امتحان کنید، مثلاً بررسی کنید که آیا یک نخ (thread) کار خود را تمام کرده است یا نه. همچنین ممکن است نیاز داشته باشید نتیجه این عملیات را از حلقه به بقیه کد خود منتقل کنید. برای انجام این کار، می‌توانید مقداری که می‌خواهید برگردانده شود را پس از عبارت `break` اضافه کنید. این مقدار از حلقه بازگردانده می‌شود تا بتوانید از آن استفاده کنید، همان‌طور که در اینجا نشان داده شده است:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-33-return-value-from-loop/src/main.rs}}
 ```
 
-Before the loop, we declare a variable named `counter` and initialize it to
-`0`. Then we declare a variable named `result` to hold the value returned from
-the loop. On every iteration of the loop, we add `1` to the `counter` variable,
-and then check whether the `counter` is equal to `10`. When it is, we use the
-`break` keyword with the value `counter * 2`. After the loop, we use a
-semicolon to end the statement that assigns the value to `result`. Finally, we
-print the value in `result`, which in this case is `20`.
+قبل از حلقه، یک متغیر به نام `counter` اعلام می‌کنیم و مقدار آن را `0` مقداردهی اولیه می‌کنیم. سپس یک متغیر به نام `result` اعلام می‌کنیم تا مقدار بازگشتی از حلقه را نگه دارد. در هر تکرار حلقه، مقدار `1` را به متغیر `counter` اضافه می‌کنیم و سپس بررسی می‌کنیم که آیا مقدار `counter` برابر با `10` است یا نه. زمانی که این شرط برقرار باشد، از کلمه کلیدی `break` با مقدار `counter * 2` استفاده می‌کنیم. پس از حلقه، با استفاده از یک سمی‌کالن، مقدار به `result` تخصیص داده می‌شود. در نهایت، مقدار `result` را چاپ می‌کنیم که در این مثال برابر با `20` است.
 
-You can also `return` from inside a loop. While `break` only exits the current
-loop, `return` always exits the current function.
+شما همچنین می‌توانید از داخل یک حلقه `return` استفاده کنید. در حالی که `break` فقط از حلقه جاری خارج می‌شود، `return` همیشه از تابع جاری خارج می‌شود.
 
-#### Loop Labels to Disambiguate Between Multiple Loops
+#### برچسب حلقه‌ها برای رفع ابهام بین چندین حلقه
 
-If you have loops within loops, `break` and `continue` apply to the innermost
-loop at that point. You can optionally specify a _loop label_ on a loop that
-you can then use with `break` or `continue` to specify that those keywords
-apply to the labeled loop instead of the innermost loop. Loop labels must begin
-with a single quote. Here’s an example with two nested loops:
+اگر حلقه‌هایی تو در تو داشته باشید، `break` و `continue` به حلقه داخلی‌ترین حلقه در آن نقطه اعمال می‌شوند. به طور اختیاری می‌توانید یک _برچسب حلقه_ روی یک حلقه مشخص کنید که سپس می‌توانید از آن برچسب با `break` یا `continue` استفاده کنید تا مشخص کنید که این کلمات کلیدی به حلقه برچسب‌دار اعمال می‌شوند نه حلقه داخلی‌ترین. برچسب‌های حلقه باید با یک آپاستروف شروع شوند. در اینجا یک مثال با دو حلقه تو در تو آمده است:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/src/main.rs}}
 ```
 
-The outer loop has the label `'counting_up`, and it will count up from 0 to 2.
-The inner loop without a label counts down from 10 to 9. The first `break` that
-doesn’t specify a label will exit the inner loop only. The `break
-'counting_up;` statement will exit the outer loop. This code prints:
+حلقه بیرونی دارای برچسب `'counting_up` است و از 0 تا 2 شمارش می‌کند. حلقه داخلی بدون برچسب از 10 تا 9 شمارش معکوس می‌کند. اولین `break` که برچسبی مشخص نمی‌کند فقط از حلقه داخلی خارج می‌شود. عبارت `break 'counting_up;` از حلقه بیرونی خارج می‌شود. این کد موارد زیر را چاپ می‌کند:
 
 ```console
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/output.txt}}
 ```
 
-#### Conditional Loops with `while`
+#### حلقه‌های شرطی با `while`
 
-A program will often need to evaluate a condition within a loop. While the
-condition is `true`, the loop runs. When the condition ceases to be `true`, the
-program calls `break`, stopping the loop. It’s possible to implement behavior
-like this using a combination of `loop`, `if`, `else`, and `break`; you could
-try that now in a program, if you’d like. However, this pattern is so common
-that Rust has a built-in language construct for it, called a `while` loop. In
-Listing 3-3, we use `while` to loop the program three times, counting down each
-time, and then, after the loop, print a message and exit.
+یک برنامه اغلب نیاز دارد که یک شرط را درون یک حلقه ارزیابی کند. تا زمانی که شرط `true` باشد، حلقه اجرا می‌شود. زمانی که شرط دیگر `true` نباشد، برنامه با فراخوانی `break`، حلقه را متوقف می‌کند. امکان پیاده‌سازی چنین رفتاری با استفاده از ترکیب `loop`، `if`، `else` و `break` وجود دارد. می‌توانید این را اکنون در یک برنامه امتحان کنید، اگر مایل هستید. با این حال، این الگو آن‌قدر رایج است که Rust یک سازه زبان داخلی برای آن دارد که به آن حلقه `while` گفته می‌شود. در Listing 3-3، از `while` برای اجرای برنامه سه بار، شمارش معکوس در هر بار، و سپس چاپ یک پیام و خروج از حلقه استفاده می‌کنیم.
 
-<Listing number="3-3" file-name="src/main.rs" caption="Using a `while` loop to run code while a condition holds true">
+<Listing number="3-3" file-name="src/main.rs" caption="استفاده از یک حلقه `while` برای اجرای کد تا زمانی که شرط برقرار باشد">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-03/src/main.rs}}
@@ -291,17 +196,13 @@ time, and then, after the loop, print a message and exit.
 
 </Listing>
 
-This construct eliminates a lot of nesting that would be necessary if you used
-`loop`, `if`, `else`, and `break`, and it’s clearer. While a condition
-evaluates to `true`, the code runs; otherwise, it exits the loop.
+این سازه مقدار زیادی از تو در تویی که در صورت استفاده از `loop`، `if`، `else` و `break` لازم بود را حذف می‌کند و واضح‌تر است. تا زمانی که یک شرط به مقدار `true` ارزیابی شود، کد اجرا می‌شود؛ در غیر این صورت، حلقه متوقف می‌شود.
 
-#### Looping Through a Collection with `for`
+#### تکرار از طریق یک مجموعه با `for`
 
-You can also use the `while` construct to loop over the elements of a
-collection, such as an array. For example, the loop in Listing 3-4 prints each
-element in the array `a`.
+شما همچنین می‌توانید از ساختار `while` برای تکرار در عناصر یک مجموعه مانند یک آرایه استفاده کنید. به عنوان مثال، حلقه در Listing 3-4 هر عنصر در آرایه `a` را چاپ می‌کند.
 
-<Listing number="3-4" file-name="src/main.rs" caption="Looping through each element of a collection using a `while` loop">
+<Listing number="3-4" file-name="src/main.rs" caption="تکرار در هر عنصر یک مجموعه با استفاده از حلقه `while`">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-04/src/main.rs}}
@@ -309,30 +210,19 @@ element in the array `a`.
 
 </Listing>
 
-Here, the code counts up through the elements in the array. It starts at index
-`0`, and then loops until it reaches the final index in the array (that is,
-when `index < 5` is no longer `true`). Running this code will print every
-element in the array:
+در اینجا، کد از طریق عناصر آرایه شمارش می‌کند. از اندیس (index)`0` شروع می‌کند و سپس تا زمانی که به آخرین اندیس (index)در آرایه برسد (یعنی وقتی که `index < 5` دیگر `true` نباشد) حلقه می‌زند. اجرای این کد هر عنصر در آرایه را چاپ می‌کند:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/listing-03-04/output.txt}}
 ```
 
-All five array values appear in the terminal, as expected. Even though `index`
-will reach a value of `5` at some point, the loop stops executing before trying
-to fetch a sixth value from the array.
+همه پنج مقدار آرایه همانطور که انتظار می‌رود در ترمینال ظاهر می‌شوند. حتی اگر `index` در نهایت به مقدار `5` برسد، حلقه قبل از تلاش برای گرفتن مقدار ششم از آرایه متوقف می‌شود.
 
-However, this approach is error prone; we could cause the program to panic if
-the index value or test condition is incorrect. For example, if you changed the
-definition of the `a` array to have four elements but forgot to update the
-condition to `while index < 4`, the code would panic. It’s also slow, because
-the compiler adds runtime code to perform the conditional check of whether the
-index is within the bounds of the array on every iteration through the loop.
+با این حال، این روش مستعد خطاست؛ ما می‌توانیم باعث شویم برنامه در صورت اشتباه بودن مقدار اندیس (index)یا شرط آزمایشی متوقف شود. به عنوان مثال، اگر تعریف آرایه `a` را به چهار عنصر تغییر دهید اما فراموش کنید شرط را به `while index < 4` به‌روزرسانی کنید، کد متوقف خواهد شد. همچنین این روش کند است، زیرا کامپایلر کد زمان اجرا را برای انجام بررسی شرطی در مورد اینکه آیا اندیس (index)در محدوده آرایه است یا نه در هر تکرار حلقه اضافه می‌کند.
 
-As a more concise alternative, you can use a `for` loop and execute some code
-for each item in a collection. A `for` loop looks like the code in Listing 3-5.
+به عنوان یک جایگزین مختصرتر، می‌توانید از حلقه `for` استفاده کنید و برای هر مورد در یک مجموعه، کدی اجرا کنید. یک حلقه `for` شبیه کدی در Listing 3-5 است.
 
-<Listing number="3-5" file-name="src/main.rs" caption="Looping through each element of a collection using a `for` loop">
+<Listing number="3-5" file-name="src/main.rs" caption="تکرار در هر عنصر یک مجموعه با استفاده از حلقه `for`">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-05/src/main.rs}}
@@ -340,25 +230,13 @@ for each item in a collection. A `for` loop looks like the code in Listing 3-5.
 
 </Listing>
 
-When we run this code, we’ll see the same output as in Listing 3-4. More
-importantly, we’ve now increased the safety of the code and eliminated the
-chance of bugs that might result from going beyond the end of the array or not
-going far enough and missing some items.
+وقتی این کد را اجرا می‌کنیم، خروجی مشابه Listing 3-4 را مشاهده خواهیم کرد. مهم‌تر اینکه، اکنون ایمنی کد را افزایش داده‌ایم و احتمال خطاهایی که ممکن است ناشی از فراتر رفتن از انتهای آرایه یا عدم دسترسی به برخی از آیتم‌ها باشد را حذف کرده‌ایم.
 
-Using the `for` loop, you wouldn’t need to remember to change any other code if
-you changed the number of values in the array, as you would with the method
-used in Listing 3-4.
+با استفاده از حلقه `for`، نیازی به به خاطر سپردن تغییر کد دیگری ندارید اگر تعداد مقادیر در آرایه را تغییر دهید، همانطور که با روش استفاده شده در Listing 3-4 باید انجام می‌دادید.
 
-The safety and conciseness of `for` loops make them the most commonly used loop
-construct in Rust. Even in situations in which you want to run some code a
-certain number of times, as in the countdown example that used a `while` loop
-in Listing 3-3, most Rustaceans would use a `for` loop. The way to do that
-would be to use a `Range`, provided by the standard library, which generates
-all numbers in sequence starting from one number and ending before another
-number.
+ایمنی و مختصر بودن حلقه‌های `for` آنها را به رایج‌ترین سازه حلقه‌ای در Rust تبدیل کرده است. حتی در موقعیت‌هایی که می‌خواهید کدی را تعداد مشخصی از دفعات اجرا کنید، مانند مثال شمارش معکوس که از حلقه `while` در Listing 3-3 استفاده می‌کرد، اکثر برنامه‌نویسان Rust از حلقه `for` استفاده می‌کنند. روش انجام این کار استفاده از `Range`، که توسط کتابخانه استاندارد ارائه می‌شود، است که تمام اعداد را به ترتیب از یک عدد شروع کرده و قبل از عدد دیگری به پایان می‌رساند.
 
-Here’s what the countdown would look like using a `for` loop and another method
-we’ve not yet talked about, `rev`, to reverse the range:
+این چیزی است که شمارش معکوس با استفاده از یک حلقه `for` و روش دیگری که هنوز در مورد آن صحبت نکرده‌ایم، یعنی `rev` برای معکوس کردن محدوده، به نظر می‌رسد:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -366,22 +244,17 @@ we’ve not yet talked about, `rev`, to reverse the range:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-34-for-range/src/main.rs}}
 ```
 
-This code is a bit nicer, isn’t it?
+این کد کمی بهتر نیست؟
 
-## Summary
+## خلاصه
 
-You made it! This was a sizable chapter: you learned about variables, scalar
-and compound data types, functions, comments, `if` expressions, and loops! To
-practice with the concepts discussed in this chapter, try building programs to
-do the following:
+شما موفق شدید! این یک فصل بزرگ بود: شما درباره متغیرها، انواع داده اسکالر و مرکب، توابع، نظرات، عبارات `if` و حلقه‌ها یاد گرفتید! برای تمرین با مفاهیم مطرح‌شده در این فصل، سعی کنید برنامه‌هایی برای انجام موارد زیر بسازید:
 
-- Convert temperatures between Fahrenheit and Celsius.
-- Generate the *n*th Fibonacci number.
-- Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
-  taking advantage of the repetition in the song.
+- تبدیل دما بین فارنهایت و سلسیوس.
+- تولید عدد *n*ام دنباله فیبوناچی.
+- چاپ متن سرود کریسمس "The Twelve Days of Christmas"، با استفاده از تکرار موجود در این آهنگ.
 
-When you’re ready to move on, we’ll talk about a concept in Rust that _doesn’t_
-commonly exist in other programming languages: ownership.
+وقتی آماده شدید تا به مرحله بعد بروید، ما درباره مفهومی در Rust صحبت خواهیم کرد که _معمولاً_ در زبان‌های برنامه‌نویسی دیگر وجود ندارد: مالکیت.
 
 [comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [quitting-after-a-correct-guess]: ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess

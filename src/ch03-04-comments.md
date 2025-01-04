@@ -1,27 +1,22 @@
-## Comments
+## کامنت‌ها
 
-All programmers strive to make their code easy to understand, but sometimes
-extra explanation is warranted. In these cases, programmers leave _comments_ in
-their source code that the compiler will ignore but people reading the source
-code may find useful.
+تمام برنامه‌نویسان تلاش می‌کنند کدهایشان را به گونه‌ای بنویسند که به راحتی قابل فهم باشد، اما گاهی اوقات توضیحات اضافی لازم است. در این موارد، برنامه‌نویسان _کامنت‌هایی_ را در کد منبع خود می‌گذارند که کامپایلر آنها را نادیده می‌گیرد اما ممکن است برای افرادی که کد منبع را می‌خوانند مفید باشد.
 
-Here’s a simple comment:
+در اینجا یک کامنت ساده آورده شده است:
 
 ```rust
 // hello, world
 ```
 
-In Rust, the idiomatic comment style starts a comment with two slashes, and the
-comment continues until the end of the line. For comments that extend beyond a
-single line, you’ll need to include `//` on each line, like this:
+در راست، سبک متعارف کامنت‌گذاری با دو اسلش شروع می‌شود و کامنت تا پایان خط ادامه دارد. برای کامنت‌هایی که بیشتر از یک خط هستند، باید روی هر خط از `//` استفاده کنید، به این صورت:
 
 ```rust
-// So we’re doing something complicated here, long enough that we need
-// multiple lines of comments to do it! Whew! Hopefully, this comment will
-// explain what’s going on.
+// پس اینجا داریم کاری پیچیده انجام می‌دهیم، به قدری طولانی که به چندین
+// خط کامنت نیاز داریم! هاه! امیدواریم این کامنت توضیح دهد که چه اتفاقی
+// در حال وقوع است.
 ```
 
-Comments can also be placed at the end of lines containing code:
+کامنت‌ها همچنین می‌توانند در انتهای خطوطی که حاوی کد هستند قرار گیرند:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -29,8 +24,7 @@ Comments can also be placed at the end of lines containing code:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
 ```
 
-But you’ll more often see them used in this format, with the comment on a
-separate line above the code it’s annotating:
+اما بیشتر مواقع کامنت‌ها را در این قالب خواهید دید، با کامنتی که در خط جداگانه‌ای بالای کدی که توضیح می‌دهد قرار دارد:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -38,8 +32,6 @@ separate line above the code it’s annotating:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
 ```
 
-Rust also has another kind of comment, documentation comments, which we’ll
-discuss in the [“Publishing a Crate to Crates.io”][publishing]<!-- ignore -->
-section of Chapter 14.
+راست همچنین نوع دیگری از کامنت‌ها، کامنت‌های مستندات (documentation comments) دارد که آنها را در بخش [“انتشار یک کرات در Crates.io”][publishing]<!-- ignore --> از فصل 14 بررسی خواهیم کرد.
 
 [publishing]: ch14-02-publishing-to-crates-io.html

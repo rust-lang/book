@@ -1,29 +1,18 @@
-## The Slice Type
+## نوع Slice
 
-_Slices_ let you reference a contiguous sequence of elements in a
-[collection](ch08-00-common-collections.md) rather than the whole collection. A
-slice is a kind of reference, so it does not have ownership.
+_Slice_ ها به شما اجازه می‌دهند تا به یک توالی پیوسته از عناصر در یک [مجموعه](ch08-00-common-collections.md) ارجاع دهید، به جای کل مجموعه. یک slice نوعی ارجاع است، بنابراین مالکیت ندارد.
 
-Here’s a small programming problem: write a function that takes a string of
-words separated by spaces and returns the first word it finds in that string.
-If the function doesn’t find a space in the string, the whole string must be
-one word, so the entire string should be returned.
+در اینجا یک مسئله برنامه‌نویسی کوچک داریم: یک تابع بنویسید که یک رشته از کلمات جدا شده با فاصله‌ها را بگیرد و اولین کلمه‌ای که در آن رشته پیدا می‌کند را برگرداند. اگر تابع هیچ فاصله‌ای در رشته پیدا نکند، کل رشته باید یک کلمه باشد، بنابراین باید کل رشته برگردانده شود.
 
-Let’s work through how we’d write the signature of this function without using
-slices, to understand the problem that slices will solve:
+بیایید بررسی کنیم که چگونه می‌توانیم امضای این تابع را بدون استفاده از slices بنویسیم تا مسئله‌ای که slices حل می‌کنند را بهتر درک کنیم:
 
 ```rust,ignore
 fn first_word(s: &String) -> ?
 ```
 
-The `first_word` function has a `&String` as a parameter. We don’t need
-ownership, so this is fine. (In idiomatic Rust, functions do not take ownership
-of their arguments unless they need to, and the reasons for that will become
-clear as we keep going!) But what should we return? We don’t really have a way
-to talk about part of a string. However, we could return the index of the end of
-the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
+تابع `first_word` یک `&String` به عنوان پارامتر دارد. ما به مالکیت نیاز نداریم، بنابراین این مشکلی ندارد. (در Rust ایدئال، توابع مالکیت آرگومان‌های خود را مگر در مواقع ضروری نمی‌گیرند، و دلایل این موضوع در ادامه مشخص خواهد شد!) اما چه چیزی باید برگردانیم؟ ما واقعاً راهی برای صحبت درباره بخشی از یک رشته نداریم. با این حال، می‌توانیم شاخص انتهای کلمه را که با یک فاصله مشخص می‌شود، برگردانیم. بیایید این کار را انجام دهیم، همانطور که در لیستینگ 4-7 نشان داده شده است.
 
-<Listing number="4-7" file-name="src/main.rs" caption="The `first_word` function that returns a byte index value into the `String` parameter">
+<Listing number="4-7" file-name="src/main.rs" caption="تابع `first_word` که یک مقدار شاخص بایت در `String` پارامتر را برمی‌گرداند">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:here}}
@@ -31,50 +20,31 @@ the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
 </Listing>
 
-Because we need to go through the `String` element by element and check whether
-a value is a space, we’ll convert our `String` to an array of bytes using the
-`as_bytes` method.
+زیرا ما نیاز داریم عنصر به عنصر از `String` عبور کنیم و بررسی کنیم که آیا یک مقدار فاصله است یا خیر، رشته خود را به یک آرایه از بایت‌ها با استفاده از متد `as_bytes` تبدیل می‌کنیم.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
 ```
 
-Next, we create an iterator over the array of bytes using the `iter` method:
+در مرحله بعد، یک iterator روی آرایه بایت‌ها با استفاده از متد `iter` ایجاد می‌کنیم:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
 
-We’ll discuss iterators in more detail in [Chapter 13][ch13]<!-- ignore -->.
-For now, know that `iter` is a method that returns each element in a collection
-and that `enumerate` wraps the result of `iter` and returns each element as
-part of a tuple instead. The first element of the tuple returned from
-`enumerate` is the index, and the second element is a reference to the element.
-This is a bit more convenient than calculating the index ourselves.
+ما در [فصل 13][ch13]<!-- ignore --> بیشتر درباره iterators بحث خواهیم کرد. فعلاً بدانید که `iter` یک متد است که هر عنصر در یک مجموعه را برمی‌گرداند و `enumerate` نتیجه `iter` را می‌پیچد و هر عنصر را به عنوان بخشی از یک tuple برمی‌گرداند. اولین عنصر tuple برگردانده شده از `enumerate` شاخص است و دومین عنصر ارجاع به عنصر است. این کار کمی راحت‌تر از محاسبه شاخص به صورت دستی است.
 
-Because the `enumerate` method returns a tuple, we can use patterns to
-destructure that tuple. We’ll be discussing patterns more in [Chapter
-6][ch6]<!-- ignore -->. In the `for` loop, we specify a pattern that has `i`
-for the index in the tuple and `&item` for the single byte in the tuple.
-Because we get a reference to the element from `.iter().enumerate()`, we use
-`&` in the pattern.
+زیرا متد `enumerate` یک tuple برمی‌گرداند، می‌توانیم از الگوها برای جدا کردن این tuple استفاده کنیم. ما در [فصل 6][ch6]<!-- ignore --> بیشتر درباره الگوها صحبت خواهیم کرد. در حلقه `for`، الگویی مشخص می‌کنیم که `i` برای شاخص در tuple و `&item` برای بایت منفرد در tuple باشد. زیرا ما یک ارجاع به عنصر از `.iter().enumerate()` دریافت می‌کنیم، از `&` در الگو استفاده می‌کنیم.
 
-Inside the `for` loop, we search for the byte that represents the space by
-using the byte literal syntax. If we find a space, we return the position.
-Otherwise, we return the length of the string by using `s.len()`.
+داخل حلقه `for`، به دنبال بایتی که نماینده فاصله باشد می‌گردیم با استفاده از نحوه نوشتن بایت به صورت literale. اگر یک فاصله پیدا کردیم، موقعیت را برمی‌گردانیم. در غیر این صورت، طول رشته را با استفاده از `s.len()` برمی‌گردانیم.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:inside_for}}
 ```
 
-We now have a way to find out the index of the end of the first word in the
-string, but there’s a problem. We’re returning a `usize` on its own, but it’s
-only a meaningful number in the context of the `&String`. In other words,
-because it’s a separate value from the `String`, there’s no guarantee that it
-will still be valid in the future. Consider the program in Listing 4-8 that
-uses the `first_word` function from Listing 4-7.
+اکنون راهی برای یافتن شاخص انتهای اولین کلمه در رشته داریم، اما مشکلی وجود دارد. ما یک `usize` به تنهایی برمی‌گردانیم، اما این تنها یک عدد معنادار در زمینه `&String` است. به عبارت دیگر، زیرا این مقدار از `String` جدا است، هیچ تضمینی وجود ندارد که در آینده همچنان معتبر باشد. برنامه‌ای که در لیستینگ 4-8 استفاده می‌شود و از تابع `first_word` از لیستینگ 4-7 استفاده می‌کند را در نظر بگیرید.
 
-<Listing number="4-8" file-name="src/main.rs" caption="Storing the result from calling the `first_word` function and then changing the `String` contents">
+<Listing number="4-8" file-name="src/main.rs" caption="ذخیره نتیجه از فراخوانی تابع `first_word` و سپس تغییر محتوای `String`">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-08/src/main.rs:here}}
@@ -82,58 +52,35 @@ uses the `first_word` function from Listing 4-7.
 
 </Listing>
 
-This program compiles without any errors and would also do so if we used `word`
-after calling `s.clear()`. Because `word` isn’t connected to the state of `s`
-at all, `word` still contains the value `5`. We could use that value `5` with
-the variable `s` to try to extract the first word out, but this would be a bug
-because the contents of `s` have changed since we saved `5` in `word`.
+این برنامه بدون هیچ خطایی کامپایل می‌شود و حتی اگر `word` را بعد از فراخوانی `s.clear()` استفاده کنیم، همچنان درست کار خواهد کرد. زیرا `word` اصلاً به حالت `s` متصل نیست، `word` همچنان مقدار `5` را دارد. ما می‌توانیم از مقدار `5` همراه با متغیر `s` استفاده کنیم تا تلاش کنیم اولین کلمه را استخراج کنیم، اما این یک باگ خواهد بود زیرا محتوای `s` از زمانی که `5` را در `word` ذخیره کردیم، تغییر کرده است.
 
-Having to worry about the index in `word` getting out of sync with the data in
-`s` is tedious and error prone! Managing these indices is even more brittle if
-we write a `second_word` function. Its signature would have to look like this:
+نگران هماهنگ نگه داشتن شاخص در `word` با داده‌های موجود در `s` بودن، خسته‌کننده و مستعد خطاست! مدیریت این شاخص‌ها حتی شکننده‌تر می‌شود اگر بخواهیم یک تابع `second_word` بنویسیم. امضای آن باید به این صورت باشد:
 
 ```rust,ignore
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking a starting _and_ an ending index, and we have even more
-values that were calculated from data in a particular state but aren’t tied to
-that state at all. We have three unrelated variables floating around that need
-to be kept in sync.
+حالا ما یک شاخص شروع و یک شاخص پایان را دنبال می‌کنیم و مقادیر بیشتری داریم که از داده‌ها در یک وضعیت خاص محاسبه شده‌اند اما اصلاً به آن وضعیت مرتبط نیستند. ما سه متغیر نامرتبط داریم که باید همگام نگه داشته شوند.
 
-Luckily, Rust has a solution to this problem: string slices.
+خوشبختانه، Rust یک راه‌حل برای این مشکل دارد: برش‌های رشته‌ای.
 
-### String Slices
+### برش‌های رشته‌ای
 
-A _string slice_ is a reference to part of a `String`, and it looks like this:
+_برش رشته‌ای_ یک ارجاع به بخشی از یک `String` است و به این شکل به نظر می‌رسد:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
 ```
 
-Rather than a reference to the entire `String`, `hello` is a reference to a
-portion of the `String`, specified in the extra `[0..5]` bit. We create slices
-using a range within brackets by specifying `[starting_index..ending_index]`,
-where `starting_index` is the first position in the slice and `ending_index` is
-one more than the last position in the slice. Internally, the slice data
-structure stores the starting position and the length of the slice, which
-corresponds to `ending_index` minus `starting_index`. So, in the case of `let
-world = &s[6..11];`, `world` would be a slice that contains a pointer to the
-byte at index 6 of `s` with a length value of `5`.
+به جای یک ارجاع به کل `String`، `hello` یک ارجاع به بخشی از `String` است که در بخش اضافی `[0..5]` مشخص شده است. ما با استفاده از یک محدوده در داخل کروشه‌ها برش‌ها را ایجاد می‌کنیم، با مشخص کردن `[starting_index..ending_index]` که در آن `starting_index` اولین موقعیت در برش و `ending_index` یکی بیشتر از آخرین موقعیت در برش است. به صورت داخلی، ساختار داده برش موقعیت شروع و طول برش را ذخیره می‌کند که متناظر با `ending_index` منهای `starting_index` است. بنابراین، در حالت `let world = &s[6..11];`، `world` یک برش است که شامل یک اشاره‌گر به بایت در شاخص 6 از `s` با یک مقدار طول `5` است.
 
-Figure 4-7 shows this in a diagram.
+شکل 4-7 این موضوع را در یک نمودار نشان می‌دهد.
 
-<img alt="Three tables: a table representing the stack data of s, which points
-to the byte at index 0 in a table of the string data &quot;hello world&quot; on
-the heap. The third table rep-resents the stack data of the slice world, which
-has a length value of 5 and points to byte 6 of the heap data table."
-src="img/trpl04-07.svg" class="center" style="width: 50%;" />
+<img alt="سه جدول: جدولی که داده‌های پشته‌ای s را نشان می‌دهد، که به بایت در شاخص 0 در یک جدول از داده‌های رشته &quot;hello world&quot; در heap اشاره می‌کند. جدول سوم داده‌های پشته‌ای برش world را نشان می‌دهد که دارای مقدار طول 5 است و به بایت 6 از جدول داده‌های heap اشاره می‌کند." src="img/trpl04-07.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-7: String slice referring to part of a
-`String`</span>
+<span class="caption">شکل 4-7: برش رشته‌ای اشاره به بخشی از یک `String`</span>
 
-With Rust’s `..` range syntax, if you want to start at index 0, you can drop
-the value before the two periods. In other words, these are equal:
+با استفاده از نحوی محدوده `..` در Rust، اگر می‌خواهید از شاخص 0 شروع کنید، می‌توانید مقدار قبل از دو نقطه را حذف کنید. به عبارت دیگر، این دو معادل هستند:
 
 ```rust
 let s = String::from("hello");
@@ -142,8 +89,7 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if your slice includes the last byte of the `String`, you
-can drop the trailing number. That means these are equal:
+به همین ترتیب، اگر برش شما شامل آخرین بایت `String` باشد، می‌توانید عدد پایانی را حذف کنید. این به این معناست که این دو معادل هستند:
 
 ```rust
 let s = String::from("hello");
@@ -154,8 +100,7 @@ let slice = &s[3..len];
 let slice = &s[3..];
 ```
 
-You can also drop both values to take a slice of the entire string. So these
-are equal:
+شما همچنین می‌توانید هر دو مقدار را حذف کنید تا یک برش از کل رشته بگیرید. بنابراین این دو معادل هستند:
 
 ```rust
 let s = String::from("hello");
@@ -166,15 +111,9 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-> Note: String slice range indices must occur at valid UTF-8 character
-> boundaries. If you attempt to create a string slice in the middle of a
-> multibyte character, your program will exit with an error. For the purposes
-> of introducing string slices, we are assuming ASCII only in this section; a
-> more thorough discussion of UTF-8 handling is in the [“Storing UTF-8 Encoded
-> Text with Strings”][strings]<!-- ignore --> section of Chapter 8.
+> توجه: شاخص‌های محدوده برش رشته باید در مرزهای معتبر کاراکتر UTF-8 رخ دهند. اگر بخواهید یک برش رشته در وسط یک کاراکتر چندبایتی ایجاد کنید، برنامه شما با یک خطا خاتمه خواهد یافت. برای مقاصد معرفی برش‌های رشته‌ای، ما فقط ASCII را در این بخش در نظر گرفته‌ایم؛ بحث دقیق‌تری در مورد مدیریت UTF-8 در بخش [“ذخیره متن رمزگذاری شده UTF-8 با رشته‌ها”][strings]<!-- ignore --> در فصل 8 وجود دارد.
 
-With all this information in mind, let’s rewrite `first_word` to return a
-slice. The type that signifies “string slice” is written as `&str`:
+با در نظر گرفتن این اطلاعات، بیایید `first_word` را بازنویسی کنیم تا یک برش برگرداند. نوعی که نشان‌دهنده "برش رشته‌ای" است به صورت `&str` نوشته می‌شود:
 
 <Listing file-name="src/main.rs">
 
@@ -184,30 +123,17 @@ slice. The type that signifies “string slice” is written as `&str`:
 
 </Listing>
 
-We get the index for the end of the word the same way we did in Listing 4-7, by
-looking for the first occurrence of a space. When we find a space, we return a
-string slice using the start of the string and the index of the space as the
-starting and ending indices.
+ما شاخص پایان کلمه را به همان روشی که در لیستینگ 4-7 انجام دادیم، پیدا می‌کنیم، یعنی با جستجوی اولین فضای خالی. وقتی یک فضای خالی پیدا می‌کنیم، یک برش رشته‌ای با استفاده از شروع رشته و شاخص فضای خالی به‌عنوان شاخص‌های شروع و پایان برمی‌گردانیم.
 
-Now when we call `first_word`, we get back a single value that is tied to the
-underlying data. The value is made up of a reference to the starting point of
-the slice and the number of elements in the slice.
+اکنون وقتی `first_word` را فراخوانی می‌کنیم، یک مقدار واحد دریافت می‌کنیم که به داده‌های پایه متصل است. این مقدار شامل یک ارجاع به نقطه شروع برش و تعداد عناصر موجود در برش است.
 
-Returning a slice would also work for a `second_word` function:
+بازگرداندن یک برش برای یک تابع `second_word` نیز کار می‌کند:
 
 ```rust,ignore
 fn second_word(s: &String) -> &str {
 ```
 
-We now have a straightforward API that’s much harder to mess up because the
-compiler will ensure the references into the `String` remain valid. Remember
-the bug in the program in Listing 4-8, when we got the index to the end of the
-first word but then cleared the string so our index was invalid? That code was
-logically incorrect but didn’t show any immediate errors. The problems would
-show up later if we kept trying to use the first word index with an emptied
-string. Slices make this bug impossible and let us know we have a problem with
-our code much sooner. Using the slice version of `first_word` will throw a
-compile-time error:
+اکنون یک API ساده داریم که بسیار سخت‌تر است اشتباه شود زیرا کامپایلر اطمینان حاصل می‌کند که ارجاع‌ها به داخل `String` معتبر باقی می‌مانند. به یاد دارید خطای منطقی برنامه در لیستینگ 4-8، وقتی شاخص انتهای اولین کلمه را به دست آوردیم اما سپس رشته را پاک کردیم، بنابراین شاخص ما نامعتبر شد؟ آن کد منطقی نادرست بود اما هیچ خطای فوری نشان نمی‌داد. مشکلات بعداً وقتی تلاش می‌کردیم از شاخص اولین کلمه با یک رشته خالی استفاده کنیم، ظاهر می‌شد. برش‌ها این خطا را غیرممکن می‌کنند و به ما اطلاع می‌دهند که مشکلی در کد ما وجود دارد خیلی زودتر. استفاده از نسخه برش `first_word` یک خطای زمان کامپایل ایجاد می‌کند:
 
 <Listing file-name="src/main.rs">
 
@@ -217,52 +143,39 @@ compile-time error:
 
 </Listing>
 
-Here’s the compiler error:
+این هم خطای کامپایلر:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}
 ```
 
-Recall from the borrowing rules that if we have an immutable reference to
-something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it needs to get a mutable reference. The `println!`
-after the call to `clear` uses the reference in `word`, so the immutable
-reference must still be active at that point. Rust disallows the mutable
-reference in `clear` and the immutable reference in `word` from existing at the
-same time, and compilation fails. Not only has Rust made our API easier to use,
-but it has also eliminated an entire class of errors at compile time!
+به یاد بیاورید از قوانین وام گرفتن که اگر ما یک ارجاع غیرقابل تغییر به چیزی داشته باشیم، نمی‌توانیم یک ارجاع قابل تغییر نیز بگیریم. از آنجایی که `clear` نیاز دارد که `String` را کوتاه کند، نیاز دارد یک ارجاع قابل تغییر بگیرد. `println!` بعد از فراخوانی به `clear` از ارجاع در `word` استفاده می‌کند، بنابراین ارجاع غیرقابل تغییر باید هنوز در آن نقطه فعال باشد. Rust ارجاع قابل تغییر در `clear` و ارجاع غیرقابل تغییر در `word` را از همزمان وجود داشتن ممنوع می‌کند و کامپایل شکست می‌خورد. نه تنها Rust API ما را آسان‌تر کرده، بلکه یک دسته کامل از خطاها را در زمان کامپایل حذف کرده است!
 
-<!-- Old heading. Do not remove or links may break. -->
+<!-- عنوان قدیمی. حذف نکنید یا لینک‌ها ممکن است خراب شوند. -->
 
 <a id="string-literals-are-slices"></a>
 
-#### String Literals as Slices
+#### رشته‌های متنی به عنوان برش
 
-Recall that we talked about string literals being stored inside the binary. Now
-that we know about slices, we can properly understand string literals:
+به یاد بیاورید که ما درباره ذخیره رشته‌های متنی در داخل باینری صحبت کردیم. اکنون که درباره برش‌ها می‌دانیم، می‌توانیم رشته‌های متنی را به درستی درک کنیم:
 
 ```rust
 let s = "Hello, world!";
 ```
 
-The type of `s` here is `&str`: it’s a slice pointing to that specific point of
-the binary. This is also why string literals are immutable; `&str` is an
-immutable reference.
+نوع `s` در اینجا `&str` است: این یک برش است که به یک نقطه خاص از باینری اشاره می‌کند. این همچنین دلیل غیرقابل تغییر بودن رشته‌های متنی است؛ `&str` یک ارجاع غیرقابل تغییر است.
 
-#### String Slices as Parameters
+#### برش‌های رشته‌ای به عنوان پارامترها
 
-Knowing that you can take slices of literals and `String` values leads us to
-one more improvement on `first_word`, and that’s its signature:
+دانستن اینکه می‌توانید برش‌هایی از رشته‌های متنی و مقادیر `String` بگیرید ما را به یک بهبود دیگر در `first_word` می‌رساند، و آن امضای آن است:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the signature shown in Listing 4-9
-instead because it allows us to use the same function on both `&String` values
-and `&str` values.
+یک برنامه‌نویس باتجربه‌تر Rust امضای نشان داده شده در لیستینگ 4-9 را می‌نویسد زیرا این اجازه را می‌دهد که از همان تابع برای مقادیر `&String` و `&str` استفاده کنیم.
 
-<Listing number="4-9" caption="Improving the `first_word` function by using a string slice for the type of the `s` parameter">
+<Listing number="4-9" caption="بهبود تابع `first_word` با استفاده از برش رشته‌ای برای نوع پارامتر `s`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:here}}
@@ -270,14 +183,9 @@ and `&str` values.
 
 </Listing>
 
-If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the `String` or a reference to the `String`. This
-flexibility takes advantage of _deref coercions_, a feature we will cover in the
-[“Implicit Deref Coercions with Functions and
-Methods”][deref-coercions]<!--ignore--> section of Chapter 15.
+اگر ما یک برش رشته‌ای داشته باشیم، می‌توانیم آن را مستقیماً ارسال کنیم. اگر یک `String` داشته باشیم، می‌توانیم یک برش از `String` یا یک ارجاع به `String` ارسال کنیم. این انعطاف‌پذیری از ویژگی _دریف کوئرسین_ استفاده می‌کند، که در بخش [“Implicit Deref Coercions with Functions and Methods”][deref-coercions]<!--ignore--> در فصل 15 به آن خواهیم پرداخت.
 
-Defining a function to take a string slice instead of a reference to a `String`
-makes our API more general and useful without losing any functionality:
+تعریف یک تابع برای گرفتن یک برش رشته‌ای به جای یک ارجاع به `String`، API ما را عمومی‌تر و مفیدتر می‌کند بدون اینکه هیچ کاربردی از دست برود:
 
 <Listing file-name="src/main.rs">
 
@@ -287,17 +195,15 @@ makes our API more general and useful without losing any functionality:
 
 </Listing>
 
-### Other Slices
+### برش‌های دیگر
 
-String slices, as you might imagine, are specific to strings. But there’s a
-more general slice type too. Consider this array:
+برش‌های رشته‌ای، همانطور که تصور می‌کنید، مختص رشته‌ها هستند. اما یک نوع برش عمومی‌تر نیز وجود دارد. این آرایه را در نظر بگیرید:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
-Just as we might want to refer to part of a string, we might want to refer to
-part of an array. We’d do so like this:
+همانطور که ممکن است بخواهیم به بخشی از یک رشته ارجاع دهیم، ممکن است بخواهیم به بخشی از یک آرایه نیز ارجاع دهیم. این کار را می‌توانیم به این شکل انجام دهیم:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -307,22 +213,13 @@ let slice = &a[1..3];
 assert_eq!(slice, &[2, 3]);
 ```
 
-This slice has the type `&[i32]`. It works the same way as string slices do, by
-storing a reference to the first element and a length. You’ll use this kind of
-slice for all sorts of other collections. We’ll discuss these collections in
-detail when we talk about vectors in Chapter 8.
+این برش دارای نوع `&[i32]` است. این دقیقاً همانطور که برش‌های رشته‌ای کار می‌کنند، با ذخیره یک ارجاع به اولین عنصر و یک طول عمل می‌کند. شما از این نوع برش برای انواع دیگر مجموعه‌ها نیز استفاده خواهید کرد. ما این مجموعه‌ها را به تفصیل وقتی درباره وکتورها در فصل 8 صحبت کنیم، بررسی خواهیم کرد.
 
-## Summary
+## خلاصه
 
-The concepts of ownership, borrowing, and slices ensure memory safety in Rust
-programs at compile time. The Rust language gives you control over your memory
-usage in the same way as other systems programming languages, but having the
-owner of data automatically clean up that data when the owner goes out of scope
-means you don’t have to write and debug extra code to get this control.
+مفاهیم مالکیت، وام گرفتن، و برش‌ها، ایمنی حافظه را در برنامه‌های Rust در زمان کامپایل تضمین می‌کنند. زبان Rust به شما همان کنترلی بر استفاده از حافظه می‌دهد که سایر زبان‌های برنامه‌نویسی سیستم ارائه می‌دهند، اما این واقعیت که مالک داده به طور خودکار آن داده را هنگامی که مالک از حوزه خارج می‌شود، پاکسازی می‌کند، به این معنی است که نیازی به نوشتن و اشکال‌زدایی کد اضافی برای دستیابی به این کنترل ندارید.
 
-Ownership affects how lots of other parts of Rust work, so we’ll talk about
-these concepts further throughout the rest of the book. Let’s move on to
-Chapter 5 and look at grouping pieces of data together in a `struct`.
+مالکیت بر نحوه عملکرد بسیاری از بخش‌های دیگر Rust تأثیر می‌گذارد، بنابراین در طول بقیه کتاب این مفاهیم را بیشتر بررسی خواهیم کرد. بیایید به فصل 5 برویم و نگاهی به گروه‌بندی قطعات داده در یک `struct` بیندازیم.
 
 [ch13]: ch13-02-iterators.html
 [ch6]: ch06-02-match.html#patterns-that-bind-to-values
