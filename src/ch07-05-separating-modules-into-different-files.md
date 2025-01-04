@@ -1,22 +1,12 @@
-## Separating Modules into Different Files
+## جدا کردن ماژول‌ها به فایل‌های مختلف
 
-So far, all the examples in this chapter defined multiple modules in one file.
-When modules get large, you might want to move their definitions to a separate
-file to make the code easier to navigate.
+تا به اینجا، تمام مثال‌های این فصل چندین ماژول را در یک فایل تعریف کرده‌اند. هنگامی که ماژول‌ها بزرگ می‌شوند، ممکن است بخواهید تعریف‌های آن‌ها را به یک فایل جداگانه منتقل کنید تا کد آسان‌تر خوانده و مدیریت شود.
 
-For example, let’s start from the code in Listing 7-17 that had multiple
-restaurant modules. We’ll extract modules into files instead of having all the
-modules defined in the crate root file. In this case, the crate root file is
-_src/lib.rs_, but this procedure also works with binary crates whose crate root
-file is _src/main.rs_.
+برای مثال، بیایید از کد موجود در لیستینگ 7-17 شروع کنیم که شامل چندین ماژول مرتبط با رستوران بود. ما این ماژول‌ها را به جای تعریف در فایل ریشه کرت، به فایل‌های جداگانه منتقل می‌کنیم. در این مثال، فایل ریشه کرت _src/lib.rs_ است، اما این روش برای کرت‌های باینری که فایل ریشه آن‌ها _src/main.rs_ است نیز کار می‌کند.
 
-First we’ll extract the `front_of_house` module to its own file. Remove the
-code inside the curly brackets for the `front_of_house` module, leaving only
-the `mod front_of_house;` declaration, so that _src/lib.rs_ contains the code
-shown in Listing 7-21. Note that this won’t compile until we create the
-_src/front_of_house.rs_ file in Listing 7-22.
+ابتدا ماژول `front_of_house` را به فایل خودش منتقل می‌کنیم. کدی که داخل آکولادهای ماژول `front_of_house` است را حذف کرده و فقط اعلان `mod front_of_house;` را باقی می‌گذاریم. نتیجه کد در _src/lib.rs_ مانند لیستینگ 7-21 خواهد بود. توجه داشته باشید که این کد تا زمانی که فایل _src/front_of_house.rs_ مطابق لیستینگ 7-22 ایجاد نشود کامپایل نخواهد شد.
 
-<Listing number="7-21" file-name="src/lib.rs" caption="Declaring the `front_of_house` module whose body will be in *src/front_of_house.rs*">
+<Listing number="7-21" file-name="src/lib.rs" caption="اعلان ماژول `front_of_house` که بدنه آن در *src/front_of_house.rs* خواهد بود">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
@@ -24,12 +14,9 @@ _src/front_of_house.rs_ file in Listing 7-22.
 
 </Listing>
 
-Next, place the code that was in the curly brackets into a new file named
-_src/front_of_house.rs_, as shown in Listing 7-22. The compiler knows to look
-in this file because it came across the module declaration in the crate root
-with the name `front_of_house`.
+سپس، کدی که داخل آکولادهای ماژول `front_of_house` بود را به یک فایل جدید به نام _src/front_of_house.rs_ منتقل می‌کنیم، همان‌طور که در لیستینگ 7-22 نشان داده شده است. کامپایلر می‌داند که باید این فایل را بررسی کند زیرا در فایل ریشه کرت با نام `front_of_house` اعلان ماژول را دیده است.
 
-<Listing number="7-22" file-name="src/front_of_house.rs" caption="Definitions inside the `front_of_house` module in *src/front_of_house.rs*">
+<Listing number="7-22" file-name="src/front_of_house.rs" caption="تعریف‌های داخل ماژول `front_of_house` در *src/front_of_house.rs*">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
@@ -37,22 +24,11 @@ with the name `front_of_house`.
 
 </Listing>
 
-Note that you only need to load a file using a `mod` declaration _once_ in your
-module tree. Once the compiler knows the file is part of the project (and knows
-where in the module tree the code resides because of where you’ve put the `mod`
-statement), other files in your project should refer to the loaded file’s code
-using a path to where it was declared, as covered in the [“Paths for Referring
-to an Item in the Module Tree”][paths]<!-- ignore --> section. In other words,
-`mod` is _not_ an “include” operation that you may have seen in other
-programming languages.
+توجه داشته باشید که شما فقط یک بار نیاز دارید تا یک فایل را با استفاده از دستور `mod` در درخت ماژول خود بارگذاری کنید. وقتی کامپایلر می‌فهمد که فایل بخشی از پروژه است (و می‌فهمد که کد در کجای درخت ماژول قرار دارد به خاطر جایی که دستور `mod` را قرار داده‌اید)، سایر فایل‌های پروژه شما باید با استفاده از مسیری که به محل اعلان فایل اشاره می‌کند به کد بارگذاری شده ارجاع دهند، همان‌طور که در بخش [«مسیرها برای اشاره به یک آیتم در درخت ماژول»][paths] توضیح داده شد. به عبارت دیگر، `mod` یک عملیات "شامل کردن" (include) نیست که ممکن است در زبان‌های برنامه‌نویسی دیگر دیده باشید.
 
-Next, we’ll extract the `hosting` module to its own file. The process is a bit
-different because `hosting` is a child module of `front_of_house`, not of the
-root module. We’ll place the file for `hosting` in a new directory that will be
-named for its ancestors in the module tree, in this case _src/front_of_house_.
+در مرحله بعد، ماژول `hosting` را به فایل خودش منتقل می‌کنیم. این فرآیند کمی متفاوت است زیرا `hosting` یک زیرماژول از `front_of_house` است، نه از ماژول ریشه. فایل مربوط به `hosting` را در یک دایرکتوری جدید قرار می‌دهیم که به نام والدین آن در درخت ماژول نام‌گذاری شده است، که در اینجا _src/front_of_house_ است.
 
-To start moving `hosting`, we change _src/front_of_house.rs_ to contain only
-the declaration of the `hosting` module:
+برای شروع انتقال `hosting`، فایل _src/front_of_house.rs_ را تغییر می‌دهیم تا فقط شامل اعلان ماژول `hosting` باشد:
 
 <Listing file-name="src/front_of_house.rs">
 
@@ -62,8 +38,7 @@ the declaration of the `hosting` module:
 
 </Listing>
 
-Then we create a _src/front_of_house_ directory and a _hosting.rs_ file to
-contain the definitions made in the `hosting` module:
+سپس یک دایرکتوری به نام _src/front_of_house_ و یک فایل _hosting.rs_ ایجاد می‌کنیم تا تعریف‌هایی که در ماژول `hosting` انجام شده‌اند را در آن قرار دهیم:
 
 <Listing file-name="src/front_of_house/hosting.rs">
 
@@ -73,57 +48,32 @@ contain the definitions made in the `hosting` module:
 
 </Listing>
 
-If we instead put _hosting.rs_ in the _src_ directory, the compiler would
-expect the _hosting.rs_ code to be in a `hosting` module declared in the crate
-root, and not declared as a child of the `front_of_house` module. The
-compiler’s rules for which files to check for which modules’ code mean the
-directories and files more closely match the module tree.
+اگر به جای آن فایل _hosting.rs_ را در دایرکتوری _src_ قرار دهیم، کامپایلر انتظار خواهد داشت که کد _hosting.rs_ در یک ماژول `hosting` که در ریشه کرت اعلان شده باشد قرار داشته باشد، نه به عنوان یک زیرماژول از ماژول `front_of_house`. قوانین کامپایلر برای مشخص کردن این که کدام فایل‌ها برای کدام ماژول‌ها بررسی شوند، به این معناست که دایرکتوری‌ها و فایل‌ها با درخت ماژول مطابقت بیشتری دارند.
 
-> ### Alternate File Paths
+> ### مسیرهای فایل جایگزین
 >
-> So far we’ve covered the most idiomatic file paths the Rust compiler uses,
-> but Rust also supports an older style of file path. For a module named
-> `front_of_house` declared in the crate root, the compiler will look for the
-> module’s code in:
+> تاکنون مسیرهای فایل ایدیوماتیک را که کامپایلر Rust استفاده می‌کند پوشش داده‌ایم، اما Rust از یک سبک قدیمی‌تر از مسیر فایل نیز پشتیبانی می‌کند. برای یک ماژول به نام `front_of_house` که در ریشه کرت اعلان شده است، کامپایلر کد ماژول را در مکان‌های زیر جستجو می‌کند:
 >
-> - _src/front_of_house.rs_ (what we covered)
-> - _src/front_of_house/mod.rs_ (older style, still supported path)
+> - _src/front_of_house.rs_ (روشی که پوشش داده شد)
+> - _src/front_of_house/mod.rs_ (مسیر قدیمی‌تر، همچنان پشتیبانی‌شده)
 >
-> For a module named `hosting` that is a submodule of `front_of_house`, the
-> compiler will look for the module’s code in:
+> برای یک ماژول به نام `hosting` که زیرماژولی از `front_of_house` است، کامپایلر کد ماژول را در مکان‌های زیر جستجو می‌کند:
 >
-> - _src/front_of_house/hosting.rs_ (what we covered)
-> - _src/front_of_house/hosting/mod.rs_ (older style, still supported path)
+> - _src/front_of_house/hosting.rs_ (روشی که پوشش داده شد)
+> - _src/front_of_house/hosting/mod.rs_ (مسیر قدیمی‌تر، همچنان پشتیبانی‌شده)
 >
-> If you use both styles for the same module, you’ll get a compiler error.
-> Using a mix of both styles for different modules in the same project is
-> allowed, but might be confusing for people navigating your project.
+> اگر هر دو سبک را برای یک ماژول استفاده کنید، یک خطای کامپایلر دریافت خواهید کرد. استفاده از ترکیبی از هر دو سبک برای ماژول‌های مختلف در یک پروژه مجاز است، اما ممکن است برای کسانی که پروژه شما را مرور می‌کنند گیج‌کننده باشد.
 >
-> The main downside to the style that uses files named _mod.rs_ is that your
-> project can end up with many files named _mod.rs_, which can get confusing
-> when you have them open in your editor at the same time.
+> نکته منفی اصلی سبک استفاده از فایل‌هایی با نام _mod.rs_ این است که پروژه شما ممکن است تعداد زیادی فایل با نام _mod.rs_ داشته باشد، که می‌تواند هنگام باز بودن همزمان این فایل‌ها در ویرایشگر شما گیج‌کننده باشد.
 
-We’ve moved each module’s code to a separate file, and the module tree remains
-the same. The function calls in `eat_at_restaurant` will work without any
-modification, even though the definitions live in different files. This
-technique lets you move modules to new files as they grow in size.
+ما کد هر ماژول را به یک فایل جداگانه منتقل کرده‌ایم و درخت ماژول به همان شکل باقی مانده است. فراخوانی توابع در `eat_at_restaurant` بدون هیچ تغییری کار خواهد کرد، حتی اگر تعریف‌ها در فایل‌های مختلف قرار داشته باشند. این تکنیک به شما امکان می‌دهد ماژول‌ها را به فایل‌های جدید منتقل کنید زیرا اندازه آن‌ها افزایش می‌یابد.
 
-Note that the `pub use crate::front_of_house::hosting` statement in
-_src/lib.rs_ also hasn’t changed, nor does `use` have any impact on what files
-are compiled as part of the crate. The `mod` keyword declares modules, and Rust
-looks in a file with the same name as the module for the code that goes into
-that module.
+توجه داشته باشید که دستور `pub use crate::front_of_house::hosting` در _src/lib.rs_ نیز تغییری نکرده است، و همچنین `use` هیچ تأثیری بر اینکه چه فایل‌هایی به عنوان بخشی از کرت کامپایل شوند ندارد. کلمه کلیدی `mod` ماژول‌ها را اعلان می‌کند و Rust در فایلی با همان نام ماژول به دنبال کدی می‌گردد که وارد آن ماژول شود.
 
-## Summary
+## خلاصه
 
-Rust lets you split a package into multiple crates and a crate into modules so
-you can refer to items defined in one module from another module. You can do
-this by specifying absolute or relative paths. These paths can be brought into
-scope with a `use` statement so you can use a shorter path for multiple uses of
-the item in that scope. Module code is private by default, but you can make
-definitions public by adding the `pub` keyword.
+Rust به شما اجازه می‌دهد یک بسته را به چندین کرت و یک کرت را به ماژول‌ها تقسیم کنید تا بتوانید به آیتم‌هایی که در یک ماژول تعریف شده‌اند از ماژول دیگری ارجاع دهید. می‌توانید این کار را با مشخص کردن مسیرهای مطلق یا نسبی انجام دهید. این مسیرها می‌توانند با یک دستور `use` به محدوده وارد شوند تا بتوانید از یک مسیر کوتاه‌تر برای استفاده‌های متعدد از آن آیتم در آن محدوده استفاده کنید. کد ماژول به صورت پیش‌فرض خصوصی است، اما می‌توانید با افزودن کلمه کلیدی `pub` تعریف‌ها را عمومی کنید.
 
-In the next chapter, we’ll look at some collection data structures in the
-standard library that you can use in your neatly organized code.
+در فصل بعدی، به برخی از ساختارهای داده‌ای مجموعه در کتابخانه استاندارد خواهیم پرداخت که می‌توانید در کد مرتب و سازماندهی‌شده خود از آن‌ها استفاده کنید.
 
 [paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html

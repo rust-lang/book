@@ -1,33 +1,18 @@
-## Traits: Defining Shared Behavior
+## ویژگی‌ها (Traits): تعریف رفتار مشترک
 
-A _trait_ defines the functionality a particular type has and can share with
-other types. We can use traits to define shared behavior in an abstract way. We
-can use _trait bounds_ to specify that a generic type can be any type that has
-certain behavior.
+یک _ویژگی_ (trait) عملکردی را که یک نوع خاص دارد تعریف می‌کند و می‌تواند با انواع دیگر به اشتراک بگذارد. ما می‌توانیم از traitها برای تعریف رفتار مشترک به صورت انتزاعی استفاده کنیم. همچنین می‌توانیم از _محدودیت‌های ویژگی_ (trait bounds) برای مشخص کردن اینکه یک نوع جنریک می‌تواند هر نوعی باشد که رفتار خاصی دارد، استفاده کنیم.
 
-> Note: Traits are similar to a feature often called _interfaces_ in other
-> languages, although with some differences.
+> توجه: ویژگی‌ها شبیه به مفهومی هستند که اغلب در زبان‌های دیگر به نام _interfaces_ شناخته می‌شود، البته با برخی تفاوت‌ها.
 
-### Defining a Trait
+### تعریف یک trait
 
-A type’s behavior consists of the methods we can call on that type. Different
-types share the same behavior if we can call the same methods on all of those
-types. Trait definitions are a way to group method signatures together to
-define a set of behaviors necessary to accomplish some purpose.
+رفتار یک نوع شامل متدهایی است که می‌توانیم روی آن نوع فراخوانی کنیم. انواع مختلف یک رفتار مشترک دارند اگر بتوانیم همان متدها را روی تمام آن انواع فراخوانی کنیم. تعریف ویژگی‌ها راهی برای گروه‌بندی امضاهای متدها با هم است تا مجموعه‌ای از رفتارها را که برای دستیابی به یک هدف خاص ضروری است، تعریف کنیم.
 
-For example, let’s say we have multiple structs that hold various kinds and
-amounts of text: a `NewsArticle` struct that holds a news story filed in a
-particular location and a `Tweet` that can have, at most, 280 characters along
-with metadata that indicates whether it was a new tweet, a retweet, or a reply
-to another tweet.
+برای مثال، فرض کنید چندین ساختار داده داریم که انواع و مقادیر مختلفی از متن را نگه می‌دارند: یک ساختار `NewsArticle` که یک خبر ذخیره شده در یک مکان خاص را نگه می‌دارد و یک ساختار `Tweet` که می‌تواند حداکثر ۲۸۰ کاراکتر به همراه متادیتایی که نشان می‌دهد آیا این یک توییت جدید، بازتوییت، یا پاسخ به توییت دیگری بوده است را نگه دارد.
 
-We want to make a media aggregator library crate named `aggregator` that can
-display summaries of data that might be stored in a `NewsArticle` or `Tweet`
-instance. To do this, we need a summary from each type, and we’ll request that
-summary by calling a `summarize` method on an instance. Listing 10-12 shows the
-definition of a public `Summary` trait that expresses this behavior.
+ما می‌خواهیم یک کتابخانه گردآورنده رسانه به نام `aggregator` ایجاد کنیم که بتواند خلاصه‌هایی از داده‌هایی که ممکن است در یک نمونه از `NewsArticle` یا `Tweet` ذخیره شده باشند، نمایش دهد. برای این کار، نیاز به خلاصه‌ای از هر نوع داریم و این خلاصه را با فراخوانی متد `summarize` روی یک نمونه درخواست خواهیم کرد. لیست ۱۰-۱۲ تعریف یک ویژگی عمومی `Summary` را نشان می‌دهد که این رفتار را بیان می‌کند.
 
-<Listing number="10-12" file-name="src/lib.rs" caption="A `Summary` trait that consists of the behavior provided by a `summarize` method">
+<Listing number="10-12" file-name="src/lib.rs" caption="ویژگی `Summary` که شامل رفتار ارائه‌شده توسط یک متد `summarize` است">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-12/src/lib.rs}}
@@ -35,33 +20,18 @@ definition of a public `Summary` trait that expresses this behavior.
 
 </Listing>
 
-Here, we declare a trait using the `trait` keyword and then the trait’s name,
-which is `Summary` in this case. We also declare the trait as `pub` so that
-crates depending on this crate can make use of this trait too, as we’ll see in
-a few examples. Inside the curly brackets, we declare the method signatures
-that describe the behaviors of the types that implement this trait, which in
-this case is `fn summarize(&self) -> String`.
+در اینجا، یک ویژگی با استفاده از کلیدواژه `trait` و سپس نام ویژگی، که در اینجا `Summary` است، اعلام می‌کنیم. همچنین ویژگی را به عنوان `pub` اعلام می‌کنیم تا کرایت‌هایی که به این کرایت وابسته هستند نیز بتوانند از این ویژگی استفاده کنند، همانطور که در چند مثال خواهیم دید. در داخل آکولادها، امضاهای متدی را اعلام می‌کنیم که رفتارهای نوع‌هایی که این ویژگی را پیاده‌سازی می‌کنند توصیف می‌کنند، که در این مورد `fn summarize(&self) -> String` است.
 
-After the method signature, instead of providing an implementation within curly
-brackets, we use a semicolon. Each type implementing this trait must provide
-its own custom behavior for the body of the method. The compiler will enforce
-that any type that has the `Summary` trait will have the method `summarize`
-defined with this signature exactly.
+بعد از امضای متد، به جای ارائه یک پیاده‌سازی در داخل آکولادها، از یک نقطه‌ویرگول استفاده می‌کنیم. هر نوعی که این ویژگی را پیاده‌سازی می‌کند باید رفتار سفارشی خود را برای بدنه متد ارائه دهد. کامپایلر اطمینان خواهد داد که هر نوعی که ویژگی `Summary` را دارد، متد `summarize` را دقیقاً با این امضا تعریف خواهد کرد.
 
-A trait can have multiple methods in its body: the method signatures are listed
-one per line, and each line ends in a semicolon.
+یک ویژگی می‌تواند چندین متد در بدنه خود داشته باشد: امضاهای متدها به صورت یک خط در هر خط فهرست می‌شوند و هر خط با یک نقطه‌ویرگول پایان می‌یابد.
 
-### Implementing a Trait on a Type
+### پیاده‌سازی یک ویژگی روی یک نوع
 
-Now that we’ve defined the desired signatures of the `Summary` trait’s methods,
-we can implement it on the types in our media aggregator. Listing 10-13 shows
-an implementation of the `Summary` trait on the `NewsArticle` struct that uses
-the headline, the author, and the location to create the return value of
-`summarize`. For the `Tweet` struct, we define `summarize` as the username
-followed by the entire text of the tweet, assuming that the tweet content is
-already limited to 280 characters.
+اکنون که امضاهای مورد نظر متدهای ویژگی `Summary` را تعریف کرده‌ایم، می‌توانیم آن را روی نوع‌های موجود در گردآورنده رسانه خود پیاده‌سازی کنیم. لیست ۱۰-۱۳ یک پیاده‌سازی از ویژگی `Summary` روی ساختار `NewsArticle` را نشان می‌دهد که از تیتر، نویسنده، و مکان برای ایجاد مقدار بازگشتی `summarize` استفاده می‌کند. برای ساختار `Tweet`، متد `summarize` را به صورت نام کاربری به همراه تمام متن توییت تعریف می‌کنیم، با فرض اینکه محتوای توییت قبلاً به ۲۸۰ کاراکتر محدود شده است.
 
-<Listing number="10-13" file-name="src/lib.rs" caption="Implementing the `Summary` trait on the `NewsArticle` and `Tweet` types">
+<Listing number="10-13" file-name="src/lib.rs" caption="پیاده‌سازی ویژگی `Summary` روی نوع‌های `NewsArticle` و `Tweet`">
+
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-13/src/lib.rs:here}}
@@ -69,60 +39,27 @@ already limited to 280 characters.
 
 </Listing>
 
-Implementing a trait on a type is similar to implementing regular methods. The
-difference is that after `impl`, we put the trait name we want to implement,
-then use the `for` keyword, and then specify the name of the type we want to
-implement the trait for. Within the `impl` block, we put the method signatures
-that the trait definition has defined. Instead of adding a semicolon after each
-signature, we use curly brackets and fill in the method body with the specific
-behavior that we want the methods of the trait to have for the particular type.
+پیاده‌سازی یک ویژگی روی یک نوع مشابه پیاده‌سازی متدهای معمولی است. تفاوت این است که بعد از `impl`، نام ویژگی‌ای که می‌خواهیم پیاده‌سازی کنیم را قرار می‌دهیم، سپس از کلمه کلیدی `for` استفاده می‌کنیم و سپس نام نوعی که می‌خواهیم ویژگی را برای آن پیاده‌سازی کنیم مشخص می‌کنیم. درون بلوک `impl`، امضاهای متدی که تعریف ویژگی مشخص کرده‌اند را قرار می‌دهیم. به جای اضافه کردن یک نقطه‌ویرگول بعد از هر امضا، از آکولادها استفاده می‌کنیم و بدنه متد را با رفتار خاصی که می‌خواهیم متدهای ویژگی برای نوع خاص داشته باشند پر می‌کنیم.
 
-Now that the library has implemented the `Summary` trait on `NewsArticle` and
-`Tweet`, users of the crate can call the trait methods on instances of
-`NewsArticle` and `Tweet` in the same way we call regular methods. The only
-difference is that the user must bring the trait into scope as well as the
-types. Here’s an example of how a binary crate could use our `aggregator`
-library crate:
+حالا که کتابخانه ویژگی `Summary` را روی `NewsArticle` و `Tweet` پیاده‌سازی کرده است، کاربران این کرایت می‌توانند متدهای ویژگی را روی نمونه‌های `NewsArticle` و `Tweet` فراخوانی کنند، به همان روشی که متدهای معمولی را فراخوانی می‌کنیم. تنها تفاوت این است که کاربر باید ویژگی را به همراه نوع‌ها به محدوده وارد کند. در اینجا مثالی از اینکه چگونه یک کرایت باینری می‌تواند از کرایت کتابخانه `aggregator` ما استفاده کند آورده شده است:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs}}
 ```
 
-This code prints `1 new tweet: horse_ebooks: of course, as you probably already
-know, people`.
+این کد `1 new tweet: horse_ebooks: of course, as you probably already know, people` را چاپ می‌کند.
 
-Other crates that depend on the `aggregator` crate can also bring the `Summary`
-trait into scope to implement `Summary` on their own types. One restriction to
-note is that we can implement a trait on a type only if either the trait or the
-type, or both, are local to our crate. For example, we can implement standard
-library traits like `Display` on a custom type like `Tweet` as part of our
-`aggregator` crate functionality because the type `Tweet` is local to our
-`aggregator` crate. We can also implement `Summary` on `Vec<T>` in our
-`aggregator` crate because the trait `Summary` is local to our `aggregator`
-crate.
+کرایت‌های دیگری که به کرایت `aggregator` وابسته هستند نیز می‌توانند ویژگی `Summary` را به محدوده وارد کنند تا `Summary` را روی نوع‌های خودشان پیاده‌سازی کنند. یکی از محدودیت‌هایی که باید به آن توجه داشت این است که ما فقط می‌توانیم یک ویژگی را روی یک نوع پیاده‌سازی کنیم اگر یا ویژگی یا نوع، یا هر دو، به کرایت ما محلی باشند. برای مثال، ما می‌توانیم ویژگی‌هایی از کتابخانه استاندارد مانند `Display` را روی یک نوع سفارشی مانند `Tweet` به عنوان بخشی از عملکرد کرایت `aggregator` پیاده‌سازی کنیم زیرا نوع `Tweet` به کرایت `aggregator` محلی است. همچنین می‌توانیم `Summary` را روی `Vec<T>` در کرایت `aggregator` پیاده‌سازی کنیم زیرا ویژگی `Summary` به کرایت `aggregator` محلی است.
 
-But we can’t implement external traits on external types. For example, we can’t
-implement the `Display` trait on `Vec<T>` within our `aggregator` crate because
-`Display` and `Vec<T>` are both defined in the standard library and aren’t
-local to our `aggregator` crate. This restriction is part of a property called
-_coherence_, and more specifically the _orphan rule_, so named because the
-parent type is not present. This rule ensures that other people’s code can’t
-break your code and vice versa. Without the rule, two crates could implement
-the same trait for the same type, and Rust wouldn’t know which implementation
-to use.
+اما نمی‌توانیم ویژگی‌های خارجی را روی نوع‌های خارجی پیاده‌سازی کنیم. برای مثال، نمی‌توانیم ویژگی `Display` را روی `Vec<T>` در کرایت `aggregator` پیاده‌سازی کنیم زیرا `Display` و `Vec<T>` هر دو در کتابخانه استاندارد تعریف شده‌اند و به کرایت `aggregator` محلی نیستند. این محدودیت بخشی از خاصیتی به نام _انسجام_ (coherence) و به طور خاص‌تر _قانون یتیم_ (orphan rule) است، که به این دلیل نامگذاری شده است که نوع والد وجود ندارد. این قانون اطمینان می‌دهد که کد دیگران نمی‌تواند کد شما را خراب کند و برعکس. بدون این قانون، دو کرایت می‌توانستند همان ویژگی را برای همان نوع پیاده‌سازی کنند و Rust نمی‌دانست کدام پیاده‌سازی را استفاده کند.
 
-### Default Implementations
+### پیاده‌سازی‌های پیش‌فرض
 
-Sometimes it’s useful to have default behavior for some or all of the methods
-in a trait instead of requiring implementations for all methods on every type.
-Then, as we implement the trait on a particular type, we can keep or override
-each method’s default behavior.
+گاهی اوقات مفید است که رفتار پیش‌فرضی برای برخی یا همه متدهای یک ویژگی داشته باشید به جای اینکه پیاده‌سازی‌ها برای تمام متدها در هر نوع اجباری باشند. سپس، وقتی ویژگی را روی یک نوع خاص پیاده‌سازی می‌کنیم، می‌توانیم رفتار پیش‌فرض هر متد را نگه داریم یا جایگزین کنیم.
 
-In Listing 10-14, we specify a default string for the `summarize` method of the
-`Summary` trait instead of only defining the method signature, as we did in
-Listing 10-12.
+در لیست ۱۰-۱۴، یک رشته پیش‌فرض برای متد `summarize` ویژگی `Summary` مشخص می‌کنیم به جای اینکه فقط امضای متد را تعریف کنیم، همانطور که در لیست ۱۰-۱۲ انجام دادیم.
 
-<Listing number="10-14" file-name="src/lib.rs" caption="Defining a `Summary` trait with a default implementation of the `summarize` method">
+<Listing number="10-14" file-name="src/lib.rs" caption="تعریف ویژگی `Summary` با یک پیاده‌سازی پیش‌فرض برای متد `summarize`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-14/src/lib.rs:here}}
@@ -130,89 +67,58 @@ Listing 10-12.
 
 </Listing>
 
-To use a default implementation to summarize instances of `NewsArticle`, we
-specify an empty `impl` block with `impl Summary for NewsArticle {}`.
+برای استفاده از یک پیاده‌سازی پیش‌فرض برای خلاصه کردن نمونه‌های `NewsArticle`، یک بلوک `impl` خالی با `impl Summary for NewsArticle {}` مشخص می‌کنیم.
 
-Even though we’re no longer defining the `summarize` method on `NewsArticle`
-directly, we’ve provided a default implementation and specified that
-`NewsArticle` implements the `Summary` trait. As a result, we can still call
-the `summarize` method on an instance of `NewsArticle`, like this:
+اگرچه دیگر متد `summarize` را مستقیماً روی `NewsArticle` تعریف نمی‌کنیم، یک پیاده‌سازی پیش‌فرض ارائه داده‌ایم و مشخص کرده‌ایم که `NewsArticle` ویژگی `Summary` را پیاده‌سازی می‌کند. در نتیجه، همچنان می‌توانیم متد `summarize` را روی یک نمونه از `NewsArticle` فراخوانی کنیم، مانند این:
+
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-02-calling-default-impl/src/main.rs:here}}
 ```
 
-This code prints `New article available! (Read more...)`.
+این کد `New article available! (Read more...)` را چاپ می‌کند.
 
-Creating a default implementation doesn’t require us to change anything about
-the implementation of `Summary` on `Tweet` in Listing 10-13. The reason is that
-the syntax for overriding a default implementation is the same as the syntax
-for implementing a trait method that doesn’t have a default implementation.
+ایجاد یک پیاده‌سازی پیش‌فرض نیازی به تغییر چیزی در پیاده‌سازی ویژگی `Summary` روی `Tweet` در لیست ۱۰-۱۳ ندارد. دلیل آن این است که نحو برای بازنویسی یک پیاده‌سازی پیش‌فرض همانند نحو برای پیاده‌سازی یک متد ویژگی است که پیاده‌سازی پیش‌فرض ندارد.
 
-Default implementations can call other methods in the same trait, even if those
-other methods don’t have a default implementation. In this way, a trait can
-provide a lot of useful functionality and only require implementors to specify
-a small part of it. For example, we could define the `Summary` trait to have a
-`summarize_author` method whose implementation is required, and then define a
-`summarize` method that has a default implementation that calls the
-`summarize_author` method:
+پیاده‌سازی‌های پیش‌فرض می‌توانند متدهای دیگر را در همان ویژگی فراخوانی کنند، حتی اگر آن متدهای دیگر پیاده‌سازی پیش‌فرض نداشته باشند. به این روش، یک ویژگی می‌تواند مقدار زیادی عملکرد مفید ارائه دهد و فقط از پیاده‌سازان بخواهد که بخشی از آن را مشخص کنند. برای مثال، می‌توانیم ویژگی `Summary` را به گونه‌ای تعریف کنیم که یک متد `summarize_author` داشته باشد که پیاده‌سازی آن الزامی است و سپس یک متد `summarize` تعریف کنیم که یک پیاده‌سازی پیش‌فرض دارد و متد `summarize_author` را فراخوانی می‌کند:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:here}}
 ```
 
-To use this version of `Summary`, we only need to define `summarize_author`
-when we implement the trait on a type:
+برای استفاده از این نسخه از `Summary`، فقط باید `summarize_author` را هنگامی که ویژگی را روی یک نوع پیاده‌سازی می‌کنیم، تعریف کنیم:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:impl}}
 ```
 
-After we define `summarize_author`, we can call `summarize` on instances of the
-`Tweet` struct, and the default implementation of `summarize` will call the
-definition of `summarize_author` that we’ve provided. Because we’ve implemented
-`summarize_author`, the `Summary` trait has given us the behavior of the
-`summarize` method without requiring us to write any more code. Here’s what
-that looks like:
+بعد از اینکه `summarize_author` را تعریف کردیم، می‌توانیم متد `summarize` را روی نمونه‌های ساختار `Tweet` فراخوانی کنیم، و پیاده‌سازی پیش‌فرض `summarize`، تعریف متد `summarize_author` که ارائه داده‌ایم را فراخوانی خواهد کرد. از آنجا که ما `summarize_author` را پیاده‌سازی کرده‌ایم، ویژگی `Summary` رفتار متد `summarize` را بدون نیاز به نوشتن کد اضافی به ما داده است. به این شکل عمل می‌کند:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/main.rs:here}}
 ```
 
-This code prints `1 new tweet: (Read more from @horse_ebooks...)`.
+این کد `1 new tweet: (Read more from @horse_ebooks...)` را چاپ می‌کند.
 
-Note that it isn’t possible to call the default implementation from an
-overriding implementation of that same method.
+توجه داشته باشید که امکان فراخوانی پیاده‌سازی پیش‌فرض از یک پیاده‌سازی بازنویسی شده از همان متد وجود ندارد.
 
-### Traits as Parameters
+### ویژگی‌ها به عنوان پارامترها
 
-Now that you know how to define and implement traits, we can explore how to use
-traits to define functions that accept many different types. We’ll use the
-`Summary` trait we implemented on the `NewsArticle` and `Tweet` types in
-Listing 10-13 to define a `notify` function that calls the `summarize` method
-on its `item` parameter, which is of some type that implements the `Summary`
-trait. To do this, we use the `impl Trait` syntax, like this:
+اکنون که می‌دانید چگونه ویژگی‌ها را تعریف و پیاده‌سازی کنید، می‌توانیم بررسی کنیم که چگونه از ویژگی‌ها برای تعریف توابعی که انواع مختلفی را می‌پذیرند استفاده کنیم. ما از ویژگی `Summary` که روی نوع‌های `NewsArticle` و `Tweet` در لیست ۱۰-۱۳ پیاده‌سازی کردیم استفاده خواهیم کرد تا تابعی به نام `notify` تعریف کنیم که متد `summarize` را روی پارامتر `item` خود فراخوانی می‌کند، که از نوعی است که ویژگی `Summary` را پیاده‌سازی می‌کند. برای این کار، از نحو `impl Trait` استفاده می‌کنیم، مانند این:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-04-traits-as-parameters/src/lib.rs:here}}
 ```
 
-Instead of a concrete type for the `item` parameter, we specify the `impl`
-keyword and the trait name. This parameter accepts any type that implements the
-specified trait. In the body of `notify`, we can call any methods on `item`
-that come from the `Summary` trait, such as `summarize`. We can call `notify`
-and pass in any instance of `NewsArticle` or `Tweet`. Code that calls the
-function with any other type, such as a `String` or an `i32`, won’t compile
-because those types don’t implement `Summary`.
+به جای یک نوع مشخص برای پارامتر `item`، کلمه کلیدی `impl` و نام ویژگی را مشخص می‌کنیم. این پارامتر هر نوعی را که ویژگی مشخص‌شده را پیاده‌سازی می‌کند می‌پذیرد. در بدنه `notify`، می‌توانیم هر متدی روی `item` که از ویژگی `Summary` آمده باشد، مانند `summarize` را فراخوانی کنیم. می‌توانیم `notify` را فراخوانی کرده و هر نمونه‌ای از `NewsArticle` یا `Tweet` را به آن پاس دهیم. کدی که تابع را با هر نوع دیگری، مانند یک `String` یا یک `i32` فراخوانی کند، کامپایل نمی‌شود زیرا آن نوع‌ها ویژگی `Summary` را پیاده‌سازی نمی‌کنند.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="fixing-the-largest-function-with-trait-bounds"></a>
 
-#### Trait Bound Syntax
+#### نحو محدودیت ویژگی (Trait Bound Syntax)
 
-The `impl Trait` syntax works for straightforward cases but is actually syntax
-sugar for a longer form known as a _trait bound_; it looks like this:
+نحو `impl Trait` برای موارد ساده مناسب است اما در واقع یک شکل کوتاه‌شده از یک فرم طولانی‌تر به نام _محدودیت ویژگی_ (trait bound) است؛ به این صورت:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: &T) {
@@ -220,124 +126,79 @@ pub fn notify<T: Summary>(item: &T) {
 }
 ```
 
-This longer form is equivalent to the example in the previous section but is
-more verbose. We place trait bounds with the declaration of the generic type
-parameter after a colon and inside angle brackets.
+این فرم طولانی معادل مثال بخش قبلی است اما مفصل‌تر است. ما محدودیت‌های ویژگی را با اعلام پارامتر نوع جنریک بعد از یک دو‌نقطه و داخل پرانتزهای زاویه‌ای قرار می‌دهیم.
 
-The `impl Trait` syntax is convenient and makes for more concise code in simple
-cases, while the fuller trait bound syntax can express more complexity in other
-cases. For example, we can have two parameters that implement `Summary`. Doing
-so with the `impl Trait` syntax looks like this:
+نحو `impl Trait` در موارد ساده مناسب است و کد را مختصرتر می‌کند، در حالی که نحو کامل‌تر محدودیت ویژگی می‌تواند پیچیدگی بیشتری را در موارد دیگر بیان کند. برای مثال، می‌توانیم دو پارامتر داشته باشیم که ویژگی `Summary` را پیاده‌سازی می‌کنند. انجام این کار با نحو `impl Trait` به این صورت است:
 
 ```rust,ignore
 pub fn notify(item1: &impl Summary, item2: &impl Summary) {
 ```
 
-Using `impl Trait` is appropriate if we want this function to allow `item1` and
-`item2` to have different types (as long as both types implement `Summary`). If
-we want to force both parameters to have the same type, however, we must use a
-trait bound, like this:
+استفاده از `impl Trait` مناسب است اگر بخواهیم این تابع اجازه دهد `item1` و `item2` انواع مختلفی داشته باشند (به شرطی که هر دو نوع ویژگی `Summary` را پیاده‌سازی کنند). اما اگر بخواهیم هر دو پارامتر یک نوع یکسان داشته باشند، باید از محدودیت ویژگی استفاده کنیم، مانند این:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item1: &T, item2: &T) {
 ```
 
-The generic type `T` specified as the type of the `item1` and `item2`
-parameters constrains the function such that the concrete type of the value
-passed as an argument for `item1` and `item2` must be the same.
+نوع جنریک `T` که به عنوان نوع پارامترهای `item1` و `item2` مشخص شده است، تابع را محدود می‌کند به این صورت که نوع مشخص مقدار پاس‌داده‌شده به عنوان آرگومان برای `item1` و `item2` باید یکسان باشد.
 
-#### Specifying Multiple Trait Bounds with the `+` Syntax
+#### مشخص کردن محدودیت‌های ویژگی چندگانه با نحو `+`
 
-We can also specify more than one trait bound. Say we wanted `notify` to use
-display formatting as well as `summarize` on `item`: we specify in the `notify`
-definition that `item` must implement both `Display` and `Summary`. We can do
-so using the `+` syntax:
+ما همچنین می‌توانیم بیش از یک محدودیت ویژگی مشخص کنیم. فرض کنید می‌خواهیم `notify` از فرمت‌بندی نمایش (display formatting) و همچنین `summarize` روی `item` استفاده کند: در تعریف `notify` مشخص می‌کنیم که `item` باید هر دو ویژگی `Display` و `Summary` را پیاده‌سازی کند. این کار را می‌توانیم با نحو `+` انجام دهیم:
 
 ```rust,ignore
 pub fn notify(item: &(impl Summary + Display)) {
 ```
 
-The `+` syntax is also valid with trait bounds on generic types:
+نحو `+` همچنین با محدودیت ویژگی روی انواع جنریک معتبر است:
 
 ```rust,ignore
 pub fn notify<T: Summary + Display>(item: &T) {
 ```
 
-With the two trait bounds specified, the body of `notify` can call `summarize`
-and use `{}` to format `item`.
+با مشخص کردن این دو محدودیت ویژگی، بدنه `notify` می‌تواند متد `summarize` را فراخوانی کند و از `{}` برای فرمت‌بندی `item` استفاده کند.
 
-#### Clearer Trait Bounds with `where` Clauses
+#### محدودیت‌های ویژگی واضح‌تر با بندهای `where`
 
-Using too many trait bounds has its downsides. Each generic has its own trait
-bounds, so functions with multiple generic type parameters can contain lots of
-trait bound information between the function’s name and its parameter list,
-making the function signature hard to read. For this reason, Rust has alternate
-syntax for specifying trait bounds inside a `where` clause after the function
-signature. So, instead of writing this:
+استفاده از تعداد زیادی محدودیت ویژگی معایب خود را دارد. هر جنریک محدودیت‌های ویژگی مخصوص به خود را دارد، بنابراین توابعی با چندین پارامتر نوع جنریک می‌توانند شامل اطلاعات زیادی درباره محدودیت‌های ویژگی بین نام تابع و لیست پارامترهای آن باشند، که باعث سخت شدن خواندن امضای تابع می‌شود. به همین دلیل، Rust نحو جایگزینی برای مشخص کردن محدودیت‌های ویژگی در داخل یک بند `where` پس از امضای تابع ارائه می‌دهد. بنابراین، به جای نوشتن این:
 
 ```rust,ignore
 fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
 ```
 
-we can use a `where` clause, like this:
+می‌توانیم از یک بند `where` به این صورت استفاده کنیم:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-where-clause/src/lib.rs:here}}
 ```
 
-This function’s signature is less cluttered: the function name, parameter list,
-and return type are close together, similar to a function without lots of trait
-bounds.
+امضای این تابع کمتر شلوغ است: نام تابع، لیست پارامترها، و نوع بازگشتی به هم نزدیک‌تر هستند، مشابه یک تابع بدون محدودیت‌های ویژگی زیاد.
 
-### Returning Types That Implement Traits
+### بازگرداندن نوع‌هایی که ویژگی‌ها را پیاده‌سازی می‌کنند
 
-We can also use the `impl Trait` syntax in the return position to return a
-value of some type that implements a trait, as shown here:
+ما همچنین می‌توانیم از نحو `impl Trait` در موقعیت بازگشتی استفاده کنیم تا مقداری از نوعی که یک ویژگی را پیاده‌سازی می‌کند بازگردانیم، همانطور که در اینجا نشان داده شده است:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-05-returning-impl-trait/src/lib.rs:here}}
 ```
 
-By using `impl Summary` for the return type, we specify that the
-`returns_summarizable` function returns some type that implements the `Summary`
-trait without naming the concrete type. In this case, `returns_summarizable`
-returns a `Tweet`, but the code calling this function doesn’t need to know that.
+با استفاده از `impl Summary` برای نوع بازگشتی، مشخص می‌کنیم که تابع `returns_summarizable` مقداری از نوعی که ویژگی `Summary` را پیاده‌سازی می‌کند بازمی‌گرداند، بدون نیاز به نام بردن از نوع مشخص. در این مورد، `returns_summarizable` یک `Tweet` بازمی‌گرداند، اما کدی که این تابع را فراخوانی می‌کند نیازی به دانستن این موضوع ندارد.
 
-The ability to specify a return type only by the trait it implements is
-especially useful in the context of closures and iterators, which we cover in
-Chapter 13. Closures and iterators create types that only the compiler knows or
-types that are very long to specify. The `impl Trait` syntax lets you concisely
-specify that a function returns some type that implements the `Iterator` trait
-without needing to write out a very long type.
+توانایی مشخص کردن یک نوع بازگشتی تنها بر اساس ویژگی‌ای که پیاده‌سازی می‌کند، به ویژه در زمینه closures و iterators مفید است، که در فصل ۱۳ به آن‌ها می‌پردازیم. closures و iterators نوع‌هایی ایجاد می‌کنند که تنها کامپایلر آن‌ها را می‌شناسد یا نوع‌هایی که بسیار طولانی هستند تا مشخص شوند. نحو `impl Trait` به شما اجازه می‌دهد که به طور مختصر مشخص کنید یک تابع نوعی که ویژگی `Iterator` را پیاده‌سازی می‌کند بازمی‌گرداند، بدون نیاز به نوشتن یک نوع بسیار طولانی.
 
-However, you can only use `impl Trait` if you’re returning a single type. For
-example, this code that returns either a `NewsArticle` or a `Tweet` with the
-return type specified as `impl Summary` wouldn’t work:
+با این حال، فقط زمانی می‌توانید از `impl Trait` استفاده کنید که یک نوع بازگردانده شود. برای مثال، این کد که یا یک `NewsArticle` یا یک `Tweet` بازمی‌گرداند و نوع بازگشتی به عنوان `impl Summary` مشخص شده، کار نخواهد کرد:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-06-impl-trait-returns-one-type/src/lib.rs:here}}
 ```
 
-Returning either a `NewsArticle` or a `Tweet` isn’t allowed due to restrictions
-around how the `impl Trait` syntax is implemented in the compiler. We’ll cover
-how to write a function with this behavior in the [“Using Trait Objects That
-Allow for Values of Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
-ignore --> section of Chapter 18.
+بازگرداندن یا یک `NewsArticle` یا یک `Tweet` مجاز نیست به دلیل محدودیت‌هایی در نحوه پیاده‌سازی نحو `impl Trait` در کامپایلر. ما نحوه نوشتن یک تابع با این رفتار را در بخش [“استفاده از اشیاء ویژگی که مقادیر از نوع‌های مختلف را مجاز می‌سازد”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore --> در فصل ۱۸ بررسی خواهیم کرد.
 
-### Using Trait Bounds to Conditionally Implement Methods
+### استفاده از محدودیت‌های ویژگی برای پیاده‌سازی شرطی متدها
 
-By using a trait bound with an `impl` block that uses generic type parameters,
-we can implement methods conditionally for types that implement the specified
-traits. For example, the type `Pair<T>` in Listing 10-15 always implements the
-`new` function to return a new instance of `Pair<T>` (recall from the
-[“Defining Methods”][methods]<!-- ignore --> section of Chapter 5 that `Self`
-is a type alias for the type of the `impl` block, which in this case is
-`Pair<T>`). But in the next `impl` block, `Pair<T>` only implements the
-`cmp_display` method if its inner type `T` implements the `PartialOrd` trait
-that enables comparison _and_ the `Display` trait that enables printing.
+با استفاده از یک محدودیت ویژگی در یک بلوک `impl` که از پارامترهای نوع جنریک استفاده می‌کند، می‌توانیم متدها را به طور شرطی برای نوع‌هایی که ویژگی‌های مشخص‌شده را پیاده‌سازی می‌کنند پیاده‌سازی کنیم. برای مثال، نوع `Pair<T>` در لیست ۱۰-۱۵ همیشه تابع `new` را پیاده‌سازی می‌کند تا یک نمونه جدید از `Pair<T>` بازگرداند (به یاد داشته باشید از بخش [“تعریف متدها”][methods]<!-- ignore --> در فصل ۵ که `Self` یک نام مستعار برای نوع بلوک `impl` است که در اینجا `Pair<T>` است). اما در بلوک `impl` بعدی، `Pair<T>` فقط متد `cmp_display` را پیاده‌سازی می‌کند اگر نوع داخلی `T` ویژگی `PartialOrd` که مقایسه را ممکن می‌کند _و_ ویژگی `Display` که چاپ را ممکن می‌کند، پیاده‌سازی کند.
 
-<Listing number="10-15" file-name="src/lib.rs" caption="Conditionally implementing methods on a generic type depending on trait bounds">
+<Listing number="10-15" file-name="src/lib.rs" caption="پیاده‌سازی شرطی متدها روی یک نوع جنریک بر اساس محدودیت‌های ویژگی">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-15/src/lib.rs}}
@@ -345,12 +206,7 @@ that enables comparison _and_ the `Display` trait that enables printing.
 
 </Listing>
 
-We can also conditionally implement a trait for any type that implements
-another trait. Implementations of a trait on any type that satisfies the trait
-bounds are called _blanket implementations_ and are used extensively in the
-Rust standard library. For example, the standard library implements the
-`ToString` trait on any type that implements the `Display` trait. The `impl`
-block in the standard library looks similar to this code:
+ما همچنین می‌توانیم یک ویژگی را به طور شرطی برای هر نوعی که ویژگی دیگری را پیاده‌سازی می‌کند، پیاده‌سازی کنیم. پیاده‌سازی‌های یک ویژگی روی هر نوعی که محدودیت‌های ویژگی را برآورده می‌کند _پیاده‌سازی‌های کلی_ (blanket implementations) نامیده می‌شوند و به طور گسترده در کتابخانه استاندارد Rust استفاده می‌شوند. برای مثال، کتابخانه استاندارد ویژگی `ToString` را روی هر نوعی که ویژگی `Display` را پیاده‌سازی می‌کند، پیاده‌سازی می‌کند. بلوک `impl` در کتابخانه استاندارد شبیه به این کد است:
 
 ```rust,ignore
 impl<T: Display> ToString for T {
@@ -358,29 +214,15 @@ impl<T: Display> ToString for T {
 }
 ```
 
-Because the standard library has this blanket implementation, we can call the
-`to_string` method defined by the `ToString` trait on any type that implements
-the `Display` trait. For example, we can turn integers into their corresponding
-`String` values like this because integers implement `Display`:
+از آنجا که کتابخانه استاندارد این پیاده‌سازی کلی را دارد، می‌توانیم متد `to_string` تعریف‌شده توسط ویژگی `ToString` را روی هر نوعی که ویژگی `Display` را پیاده‌سازی می‌کند، فراخوانی کنیم. برای مثال، می‌توانیم اعداد صحیح را به مقادیر `String` متناظرشان تبدیل کنیم مانند این:
 
 ```rust
 let s = 3.to_string();
 ```
 
-Blanket implementations appear in the documentation for the trait in the
-“Implementors” section.
+پیاده‌سازی‌های کلی در مستندات ویژگی در بخش “Implementors” ظاهر می‌شوند.
 
-Traits and trait bounds let us write code that uses generic type parameters to
-reduce duplication but also specify to the compiler that we want the generic
-type to have particular behavior. The compiler can then use the trait bound
-information to check that all the concrete types used with our code provide the
-correct behavior. In dynamically typed languages, we would get an error at
-runtime if we called a method on a type which didn’t define the method. But
-Rust moves these errors to compile time so we’re forced to fix the problems
-before our code is even able to run. Additionally, we don’t have to write code
-that checks for behavior at runtime because we’ve already checked at compile
-time. Doing so improves performance without having to give up the flexibility
-of generics.
+ویژگی‌ها و محدودیت‌های ویژگی به ما امکان می‌دهند که کدی بنویسیم که از پارامترهای نوع جنریک برای کاهش تکرار استفاده کند اما همچنین به کامپایلر مشخص کند که می‌خواهیم نوع جنریک رفتار خاصی داشته باشد. سپس کامپایلر می‌تواند از اطلاعات محدودیت ویژگی استفاده کند تا بررسی کند که تمام نوع‌های مشخص استفاده‌شده با کد ما رفتار صحیح را ارائه می‌دهند. در زبان‌های تایپ‌گذاری پویا، ما هنگام اجرا خطا دریافت می‌کنیم اگر یک متد روی یک نوع که آن متد را تعریف نکرده فراخوانی کنیم. اما Rust این خطاها را به زمان کامپایل منتقل می‌کند تا ما مجبور شویم مشکلات را قبل از اینکه کد ما اجرا شود برطرف کنیم. علاوه بر این، نیازی به نوشتن کدی نداریم که رفتار را در زمان اجرا بررسی کند زیرا قبلاً آن را در زمان کامپایل بررسی کرده‌ایم. این کار عملکرد را بهبود می‌بخشد بدون اینکه انعطاف‌پذیری جنریک‌ها را قربانی کند.
 
-[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types  
 [methods]: ch05-03-method-syntax.html#defining-methods

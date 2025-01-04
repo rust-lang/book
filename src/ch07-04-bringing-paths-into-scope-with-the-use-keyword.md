@@ -1,18 +1,10 @@
-## Bringing Paths into Scope with the `use` Keyword
+## وارد کردن مسیرها به محدوده با کلمه کلیدی `use`
 
-Having to write out the paths to call functions can feel inconvenient and
-repetitive. In Listing 7-7, whether we chose the absolute or relative path to
-the `add_to_waitlist` function, every time we wanted to call `add_to_waitlist`
-we had to specify `front_of_house` and `hosting` too. Fortunately, there’s a
-way to simplify this process: we can create a shortcut to a path with the `use`
-keyword once, and then use the shorter name everywhere else in the scope.
+نوشتن مسیرهای کامل برای فراخوانی توابع می‌تواند خسته‌کننده و تکراری باشد. در لیستینگ 7-7، چه مسیر مطلق یا نسبی را برای تابع `add_to_waitlist` انتخاب کنیم، هر بار که بخواهیم این تابع را فراخوانی کنیم باید `front_of_house` و `hosting` را نیز مشخص کنیم. خوشبختانه، راهی برای ساده‌تر کردن این فرآیند وجود دارد: می‌توانیم یک میانبر به یک مسیر با استفاده از کلمه کلیدی `use` ایجاد کنیم و سپس در هر جای دیگر محدوده، از نام کوتاه‌تر استفاده کنیم.
 
-In Listing 7-11, we bring the `crate::front_of_house::hosting` module into the
-scope of the `eat_at_restaurant` function so we only have to specify
-`hosting::add_to_waitlist` to call the `add_to_waitlist` function in
-`eat_at_restaurant`.
+در لیستینگ 7-11، ماژول `crate::front_of_house::hosting` را به محدوده تابع `eat_at_restaurant` می‌آوریم تا فقط نیاز به مشخص کردن `hosting::add_to_waitlist` برای فراخوانی تابع `add_to_waitlist` در `eat_at_restaurant` داشته باشیم.
 
-<Listing number="7-11" file-name="src/lib.rs" caption="Bringing a module into scope with `use`">
+<Listing number="7-11" file-name="src/lib.rs" caption="وارد کردن یک ماژول به محدوده با `use`">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-11/src/lib.rs}}
@@ -20,18 +12,11 @@ scope of the `eat_at_restaurant` function so we only have to specify
 
 </Listing>
 
-Adding `use` and a path in a scope is similar to creating a symbolic link in
-the filesystem. By adding `use crate::front_of_house::hosting` in the crate
-root, `hosting` is now a valid name in that scope, just as though the `hosting`
-module had been defined in the crate root. Paths brought into scope with `use`
-also check privacy, like any other paths.
+اضافه کردن `use` و یک مسیر در یک محدوده مشابه ایجاد یک لینک نمادین در فایل‌سیستم است. با اضافه کردن `use crate::front_of_house::hosting` در ریشه کرت، `hosting` اکنون یک نام معتبر در آن محدوده است، درست مانند اینکه ماژول `hosting` در ریشه کرت تعریف شده باشد. مسیرهایی که با `use` به محدوده آورده می‌شوند مانند هر مسیر دیگری حریم خصوصی را بررسی می‌کنند.
 
-Note that `use` only creates the shortcut for the particular scope in which the
-`use` occurs. Listing 7-12 moves the `eat_at_restaurant` function into a new
-child module named `customer`, which is then a different scope than the `use`
-statement, so the function body won’t compile.
+توجه کنید که `use` فقط میانبر را برای محدوده خاصی که در آن `use` استفاده شده ایجاد می‌کند. لیستینگ 7-12 تابع `eat_at_restaurant` را به یک زیرماژول جدید به نام `customer` منتقل می‌کند که سپس یک محدوده متفاوت از دستور `use` است، بنابراین بدنه تابع کامپایل نمی‌شود.
 
-<Listing number="7-12" file-name="src/lib.rs" caption="A `use` statement only applies in the scope it’s in">
+<Listing number="7-12" file-name="src/lib.rs" caption="یک دستور `use` فقط در محدوده‌ای که در آن قرار دارد اعمال می‌شود">
 
 ```rust,noplayground,test_harness,does_not_compile,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
@@ -39,26 +24,19 @@ statement, so the function body won’t compile.
 
 </Listing>
 
-The compiler error shows that the shortcut no longer applies within the
-`customer` module:
+خطای کامپایلر نشان می‌دهد که میانبر دیگر در ماژول `customer` اعمال نمی‌شود:
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-12/output.txt}}
 ```
 
-Notice there’s also a warning that the `use` is no longer used in its scope! To
-fix this problem, move the `use` within the `customer` module too, or reference
-the shortcut in the parent module with `super::hosting` within the child
-`customer` module.
+توجه کنید که همچنین یک هشدار وجود دارد که `use` دیگر در محدوده خود استفاده نمی‌شود! برای رفع این مشکل، دستور `use` را نیز به داخل ماژول `customer` منتقل کنید، یا میانبر را در ماژول والد با `super::hosting` در داخل ماژول `customer` ارجاع دهید.
 
-### Creating Idiomatic `use` Paths
+### ایجاد مسیرهای `use` به صورت ایدیوماتیک
 
-In Listing 7-11, you might have wondered why we specified `use
-crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in
-`eat_at_restaurant`, rather than specifying the `use` path all the way out to
-the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
+در لیستینگ 7-11، ممکن است این سوال پیش بیاید که چرا ما `use crate::front_of_house::hosting` را مشخص کرده‌ایم و سپس `hosting::add_to_waitlist` را در `eat_at_restaurant` فراخوانی کرده‌ایم، به جای اینکه مسیر `use` را تا تابع `add_to_waitlist` مشخص کنیم تا همان نتیجه را به دست آوریم، همان‌طور که در لیستینگ 7-13 نشان داده شده است.
 
-<Listing number="7-13" file-name="src/lib.rs" caption="Bringing the `add_to_waitlist` function into scope with `use`, which is unidiomatic">
+<Listing number="7-13" file-name="src/lib.rs" caption="وارد کردن تابع `add_to_waitlist` به محدوده با `use` که غیر ایدیوماتیک است">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-13/src/lib.rs}}
@@ -66,20 +44,11 @@ the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 
 </Listing>
 
-Although both Listing 7-11 and Listing 7-13 accomplish the same task, Listing
-7-11 is the idiomatic way to bring a function into scope with `use`. Bringing
-the function’s parent module into scope with `use` means we have to specify the
-parent module when calling the function. Specifying the parent module when
-calling the function makes it clear that the function isn’t locally defined
-while still minimizing repetition of the full path. The code in Listing 7-13 is
-unclear as to where `add_to_waitlist` is defined.
+اگرچه هم لیستینگ 7-11 و هم لیستینگ 7-13 کار مشابهی انجام می‌دهند، لیستینگ 7-11 روش ایدیوماتیک برای وارد کردن یک تابع به محدوده با `use` است. وارد کردن ماژول والد تابع با `use` به این معنا است که باید ماژول والد را هنگام فراخوانی تابع مشخص کنیم. مشخص کردن ماژول والد هنگام فراخوانی تابع نشان می‌دهد که تابع به صورت محلی تعریف نشده است، در حالی که همچنان تکرار مسیر کامل را به حداقل می‌رساند. کد موجود در لیستینگ 7-13 مشخص نمی‌کند که `add_to_waitlist` کجا تعریف شده است.
 
-On the other hand, when bringing in structs, enums, and other items with `use`,
-it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way
-to bring the standard library’s `HashMap` struct into the scope of a binary
-crate.
+از طرف دیگر، وقتی ساختارها، enumها، و سایر آیتم‌ها را با `use` وارد می‌کنیم، ایدیوماتیک است که مسیر کامل را مشخص کنیم. لیستینگ 7-14 روش ایدیوماتیک برای وارد کردن ساختار `HashMap` از کتابخانه استاندارد به محدوده کرت باینری را نشان می‌دهد.
 
-<Listing number="7-14" file-name="src/main.rs" caption="Bringing `HashMap` into scope in an idiomatic way">
+<Listing number="7-14" file-name="src/main.rs" caption="وارد کردن `HashMap` به محدوده به روش ایدیوماتیک">
 
 ```rust
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-14/src/main.rs}}
@@ -87,15 +56,11 @@ crate.
 
 </Listing>
 
-There’s no strong reason behind this idiom: it’s just the convention that has
-emerged, and folks have gotten used to reading and writing Rust code this way.
+هیچ دلیل قوی پشت این عرف نیست: این فقط کنوانسیونی است که در جامعه Rust به وجود آمده و افراد به خواندن و نوشتن کد Rust به این روش عادت کرده‌اند.
 
-The exception to this idiom is if we’re bringing two items with the same name
-into scope with `use` statements, because Rust doesn’t allow that. Listing 7-15
-shows how to bring two `Result` types into scope that have the same name but
-different parent modules, and how to refer to them.
+استثنای این عرف زمانی است که دو آیتم با نام یکسان را با دستورات `use` وارد محدوده می‌کنیم، زیرا Rust این اجازه را نمی‌دهد. لیستینگ 7-15 نشان می‌دهد که چگونه دو نوع `Result` را که نام یکسانی دارند اما از ماژول‌های والد متفاوتی می‌آیند وارد محدوده کنیم و چگونه به آن‌ها ارجاع دهیم.
 
-<Listing number="7-15" file-name="src/lib.rs" caption="Bringing two types with the same name into the same scope requires using their parent modules.">
+<Listing number="7-15" file-name="src/lib.rs" caption="وارد کردن دو نوع با نام یکسان به یک محدوده نیازمند استفاده از ماژول‌های والد آن‌ها است.">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-15/src/lib.rs:here}}
@@ -103,19 +68,13 @@ different parent modules, and how to refer to them.
 
 </Listing>
 
-As you can see, using the parent modules distinguishes the two `Result` types.
-If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
-have two `Result` types in the same scope, and Rust wouldn’t know which one we
-meant when we used `Result`.
+همان‌طور که می‌بینید، استفاده از ماژول‌های والد دو نوع `Result` را از هم متمایز می‌کند. اگر به جای آن `use std::fmt::Result` و `use std::io::Result` مشخص کنیم، دو نوع `Result` در یک محدوده خواهیم داشت و Rust نمی‌تواند بفهمد منظور ما از `Result` کدام است.
 
-### Providing New Names with the `as` Keyword
+### ارائه نام‌های جدید با کلمه کلیدی `as`
 
-There’s another solution to the problem of bringing two types of the same name
-into the same scope with `use`: after the path, we can specify `as` and a new
-local name, or _alias_, for the type. Listing 7-16 shows another way to write
-the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
+یک راه‌حل دیگر برای مشکل وارد کردن دو نوع با نام یکسان به یک محدوده با `use` این است که پس از مسیر، با استفاده از `as` یک نام محلی جدید یا _نام مستعار_ برای نوع مشخص کنیم. لیستینگ 7-16 راه دیگری برای نوشتن کد در لیستینگ 7-15 را نشان می‌دهد که در آن یکی از دو نوع `Result` را با استفاده از `as` تغییر نام داده‌ایم.
 
-<Listing number="7-16" file-name="src/lib.rs" caption="Renaming a type when it’s brought into scope with the `as` keyword">
+<Listing number="7-16" file-name="src/lib.rs" caption="تغییر نام یک نوع هنگام وارد کردن به محدوده با کلمه کلیدی `as`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-16/src/lib.rs:here}}
@@ -123,24 +82,15 @@ the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 
 </Listing>
 
-In the second `use` statement, we chose the new name `IoResult` for the
-`std::io::Result` type, which won’t conflict with the `Result` from `std::fmt`
-that we’ve also brought into scope. Listing 7-15 and Listing 7-16 are
-considered idiomatic, so the choice is up to you!
+در دستور دوم `use`، ما نام جدید `IoResult` را برای نوع `std::io::Result` انتخاب کردیم، که با نوع `Result` از `std::fmt` که آن را نیز وارد محدوده کرده‌ایم، تضاد نخواهد داشت. هر دو لیستینگ 7-15 و 7-16 ایدیوماتیک در نظر گرفته می‌شوند، بنابراین انتخاب با شماست!
 
-### Re-exporting Names with `pub use`
+### دوباره صادر کردن نام‌ها با `pub use`
 
-When we bring a name into scope with the `use` keyword, the name available in
-the new scope is private. To enable the code that calls our code to refer to
-that name as if it had been defined in that code’s scope, we can combine `pub`
-and `use`. This technique is called _re-exporting_ because we’re bringing an
-item into scope but also making that item available for others to bring into
-their scope.
+وقتی با استفاده از کلمه کلیدی `use` یک نام را وارد محدوده می‌کنیم، نام وارد شده در محدوده جدید خصوصی است. برای این که کدی که کد ما را فراخوانی می‌کند بتواند به این نام به گونه‌ای ارجاع دهد که گویی در محدوده کد خود تعریف شده است، می‌توانیم `pub` و `use` را ترکیب کنیم. این تکنیک _دوباره صادر کردن_ نامیده می‌شود زیرا ما یک آیتم را وارد محدوده می‌کنیم و همچنین آن را برای دیگران در دسترس قرار می‌دهیم تا وارد محدوده خودشان کنند.
 
-Listing 7-17 shows the code in Listing 7-11 with `use` in the root module
-changed to `pub use`.
+لیستینگ 7-17 کد موجود در لیستینگ 7-11 را با تغییر دستور `use` در ماژول ریشه به `pub use` نشان می‌دهد.
 
-<Listing number="7-17" file-name="src/lib.rs" caption="Making a name available for any code to use from a new scope with `pub use`">
+<Listing number="7-17" file-name="src/lib.rs" caption="در دسترس قرار دادن یک نام برای هر کدی که از محدوده جدید استفاده می‌کند با `pub use`">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-17/src/lib.rs}}
@@ -148,36 +98,13 @@ changed to `pub use`.
 
 </Listing>
 
-Before this change, external code would have to call the `add_to_waitlist`
-function by using the path
-`restaurant::front_of_house::hosting::add_to_waitlist()`, which also would have
-required the `front_of_house` module to be marked as `pub`. Now that this `pub
-use` has re-exported the `hosting` module from the root module, external code
-can use the path `restaurant::hosting::add_to_waitlist()` instead.
+قبل از این تغییر، کد خارجی باید تابع `add_to_waitlist` را با استفاده از مسیر `restaurant::front_of_house::hosting::add_to_waitlist()` فراخوانی می‌کرد، که همچنین نیاز داشت ماژول `front_of_house` به عنوان `pub` علامت‌گذاری شود. حالا که این `pub use` ماژول `hosting` را از ماژول ریشه دوباره صادر کرده است، کد خارجی می‌تواند از مسیر `restaurant::hosting::add_to_waitlist()` استفاده کند.
 
-Re-exporting is useful when the internal structure of your code is different
-from how programmers calling your code would think about the domain. For
-example, in this restaurant metaphor, the people running the restaurant think
-about “front of house” and “back of house.” But customers visiting a restaurant
-probably won’t think about the parts of the restaurant in those terms. With
-`pub use`, we can write our code with one structure but expose a different
-structure. Doing so makes our library well organized for programmers working on
-the library and programmers calling the library. We’ll look at another example
-of `pub use` and how it affects your crate’s documentation in the [“Exporting a
-Convenient Public API with `pub use`”][ch14-pub-use]<!-- ignore --> section of
-Chapter 14.
+دوباره صادر کردن زمانی مفید است که ساختار داخلی کد شما با نحوه فکر کردن برنامه‌نویسانی که کد شما را فراخوانی می‌کنند در مورد دامنه متفاوت باشد. برای مثال، در این استعاره از رستوران، افرادی که رستوران را مدیریت می‌کنند در مورد "جلوی خانه" و "پشت خانه" فکر می‌کنند. اما مشتریانی که به رستوران می‌آیند احتمالاً در این قالب به بخش‌های رستوران فکر نمی‌کنند. با استفاده از `pub use`، می‌توانیم کد خود را با یک ساختار بنویسیم اما یک ساختار متفاوت را آشکار کنیم. این کار کتابخانه ما را برای برنامه‌نویسانی که روی آن کار می‌کنند و همچنین برای برنامه‌نویسانی که از آن استفاده می‌کنند، خوب سازمان‌دهی می‌کند. در [بخش «صادرات یک API عمومی مناسب با `pub use`»][ch14-pub-use] فصل ۱۴ به مثال دیگری از `pub use` و تأثیر آن بر مستندات کرت شما خواهیم پرداخت.
 
-### Using External Packages
+### استفاده از بسته‌های خارجی
 
-In Chapter 2, we programmed a guessing game project that used an external
-package called `rand` to get random numbers. To use `rand` in our project, we
-added this line to _Cargo.toml_:
-
-<!-- When updating the version of `rand` used, also update the version of
-`rand` used in these files so they all match:
-* ch02-00-guessing-game-tutorial.md
-* ch14-03-cargo-workspaces.md
--->
+در فصل ۲، ما یک پروژه بازی حدس‌زنی برنامه‌ریزی کردیم که از یک بسته خارجی به نام `rand` برای تولید اعداد تصادفی استفاده می‌کرد. برای استفاده از `rand` در پروژه خود، این خط را به _Cargo.toml_ اضافه کردیم:
 
 <Listing file-name="Cargo.toml">
 
@@ -187,44 +114,27 @@ added this line to _Cargo.toml_:
 
 </Listing>
 
-Adding `rand` as a dependency in _Cargo.toml_ tells Cargo to download the
-`rand` package and any dependencies from [crates.io](https://crates.io/) and
-make `rand` available to our project.
+اضافه کردن `rand` به عنوان یک وابستگی در _Cargo.toml_ به Cargo می‌گوید که بسته `rand` و هرگونه وابستگی را از [crates.io](https://crates.io/) دانلود کرده و `rand` را در پروژه ما در دسترس قرار دهد.
 
-Then, to bring `rand` definitions into the scope of our package, we added a
-`use` line starting with the name of the crate, `rand`, and listed the items
-we wanted to bring into scope. Recall that in the [“Generating a Random
-Number”][rand]<!-- ignore --> section in Chapter 2, we brought the `Rng` trait
-into scope and called the `rand::thread_rng` function:
+سپس، برای وارد کردن تعاریف `rand` به محدوده بسته خود، یک خط `use` اضافه کردیم که با نام کرت، `rand` شروع می‌شد و آیتم‌هایی را که می‌خواستیم وارد محدوده کنیم فهرست کردیم. به یاد بیاورید که در [بخش «تولید یک عدد تصادفی»][rand] فصل ۲، ما ویژگی `Rng` را به محدوده آوردیم و تابع `rand::thread_rng` را فراخوانی کردیم:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
 ```
 
-Members of the Rust community have made many packages available at
-[crates.io](https://crates.io/), and pulling any of them into your package
-involves these same steps: listing them in your package’s _Cargo.toml_ file and
-using `use` to bring items from their crates into scope.
+اعضای جامعه Rust بسیاری از بسته‌ها را در [crates.io](https://crates.io/) به اشتراک گذاشته‌اند، و وارد کردن هر یک از آن‌ها به بسته شما شامل این مراحل است: فهرست کردن آن‌ها در فایل _Cargo.toml_ بسته شما و استفاده از `use` برای وارد کردن آیتم‌ها از کرت آن‌ها به محدوده.
 
-Note that the standard `std` library is also a crate that’s external to our
-package. Because the standard library is shipped with the Rust language, we
-don’t need to change _Cargo.toml_ to include `std`. But we do need to refer to
-it with `use` to bring items from there into our package’s scope. For example,
-with `HashMap` we would use this line:
+توجه داشته باشید که کتابخانه استاندارد `std` نیز یک کرت خارجی برای بسته ما است. از آنجا که کتابخانه استاندارد همراه با زبان Rust ارائه می‌شود، نیازی به تغییر _Cargo.toml_ برای گنجاندن `std` نداریم. اما برای وارد کردن آیتم‌ها از آن به محدوده بسته خود، باید به آن با `use` ارجاع دهیم. برای مثال، با `HashMap` از این خط استفاده می‌کردیم:
 
 ```rust
 use std::collections::HashMap;
 ```
 
-This is an absolute path starting with `std`, the name of the standard library
-crate.
+این یک مسیر مطلق است که با `std`، نام کرت کتابخانه استاندارد، شروع می‌شود.
 
-### Using Nested Paths to Clean Up Large `use` Lists
+### استفاده از مسیرهای تو در تو برای ساده‌سازی لیست‌های بزرگ `use`
 
-If we’re using multiple items defined in the same crate or same module, listing
-each item on its own line can take up a lot of vertical space in our files. For
-example, these two `use` statements we had in the guessing game in Listing 2-4
-bring items from `std` into scope:
+اگر از چندین آیتم تعریف‌شده در یک کرت یا ماژول استفاده کنیم، فهرست کردن هر آیتم در خط خود می‌تواند فضای عمودی زیادی در فایل‌های ما اشغال کند. برای مثال، این دو دستور `use` که در بازی حدس‌زنی در لیستینگ ۲-۴ استفاده کردیم آیتم‌هایی از `std` را به محدوده می‌آورند:
 
 <Listing file-name="src/main.rs">
 
@@ -234,12 +144,9 @@ bring items from `std` into scope:
 
 </Listing>
 
-Instead, we can use nested paths to bring the same items into scope in one
-line. We do this by specifying the common part of the path, followed by two
-colons, and then curly brackets around a list of the parts of the paths that
-differ, as shown in Listing 7-18.
+در عوض، می‌توانیم از مسیرهای تو در تو استفاده کنیم تا همان آیتم‌ها را در یک خط به محدوده بیاوریم. این کار را با مشخص کردن بخش مشترک مسیر، به دنبال آن دو نقطه دوبل و سپس یک لیست از بخش‌های متفاوت مسیرها در داخل آکولاد انجام می‌دهیم، همان‌طور که در لیستینگ 7-18 نشان داده شده است.
 
-<Listing number="7-18" file-name="src/main.rs" caption="Specifying a nested path to bring multiple items with the same prefix into scope">
+<Listing number="7-18" file-name="src/main.rs" caption="مشخص کردن یک مسیر تو در تو برای وارد کردن چندین آیتم با پیشوند مشابه به محدوده">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:here}}
@@ -247,16 +154,11 @@ differ, as shown in Listing 7-18.
 
 </Listing>
 
-In bigger programs, bringing many items into scope from the same crate or
-module using nested paths can reduce the number of separate `use` statements
-needed by a lot!
+در برنامه‌های بزرگ‌تر، وارد کردن بسیاری از آیتم‌ها از یک کرت یا ماژول مشابه با استفاده از مسیرهای تو در تو می‌تواند تعداد دستورات `use` جداگانه مورد نیاز را به طور قابل‌توجهی کاهش دهد.
 
-We can use a nested path at any level in a path, which is useful when combining
-two `use` statements that share a subpath. For example, Listing 7-19 shows two
-`use` statements: one that brings `std::io` into scope and one that brings
-`std::io::Write` into scope.
+ما می‌توانیم در هر سطحی از یک مسیر، از یک مسیر تو در تو استفاده کنیم، که این کار در مواقعی که دو دستور `use` دارای یک زیرمسیر مشترک هستند، مفید است. برای مثال، لیستینگ 7-19 دو دستور `use` را نشان می‌دهد: یکی که `std::io` را به محدوده وارد می‌کند و دیگری که `std::io::Write` را به محدوده وارد می‌کند.
 
-<Listing number="7-19" file-name="src/lib.rs" caption="Two `use` statements where one is a subpath of the other">
+<Listing number="7-19" file-name="src/lib.rs" caption="دو دستور `use` که یکی زیرمسیر دیگری است">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-19/src/lib.rs}}
@@ -264,11 +166,9 @@ two `use` statements that share a subpath. For example, Listing 7-19 shows two
 
 </Listing>
 
-The common part of these two paths is `std::io`, and that’s the complete first
-path. To merge these two paths into one `use` statement, we can use `self` in
-the nested path, as shown in Listing 7-20.
+بخش مشترک این دو مسیر، `std::io` است که مسیر کامل اولین دستور `use` را تشکیل می‌دهد. برای ترکیب این دو مسیر به یک دستور `use`، می‌توانیم از `self` در مسیر تو در تو استفاده کنیم، همان‌طور که در لیستینگ 7-20 نشان داده شده است.
 
-<Listing number="7-20" file-name="src/lib.rs" caption="Combining the paths in Listing 7-19 into one `use` statement">
+<Listing number="7-20" file-name="src/lib.rs" caption="ترکیب مسیرهای موجود در لیستینگ 7-19 به یک دستور `use`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-20/src/lib.rs}}
@@ -276,28 +176,21 @@ the nested path, as shown in Listing 7-20.
 
 </Listing>
 
-This line brings `std::io` and `std::io::Write` into scope.
+این خط، `std::io` و `std::io::Write` را به محدوده وارد می‌کند.
 
-### The Glob Operator
+### عملگر Glob
 
-If we want to bring _all_ public items defined in a path into scope, we can
-specify that path followed by the `*` glob operator:
+اگر بخواهیم _تمام_ آیتم‌های عمومی تعریف‌شده در یک مسیر را به محدوده وارد کنیم، می‌توانیم آن مسیر را به همراه عملگر `*` مشخص کنیم:
 
 ```rust
 use std::collections::*;
 ```
 
-This `use` statement brings all public items defined in `std::collections` into
-the current scope. Be careful when using the glob operator! Glob can make it
-harder to tell what names are in scope and where a name used in your program
-was defined.
+این دستور `use` تمام آیتم‌های عمومی تعریف‌شده در `std::collections` را به محدوده فعلی وارد می‌کند. هنگام استفاده از عملگر glob دقت کنید! استفاده از glob می‌تواند تشخیص این که چه نام‌هایی در محدوده قرار دارند و نامی که در برنامه شما استفاده شده در کجا تعریف شده است را دشوارتر کند.
 
-The glob operator is often used when testing to bring everything under test
-into the `tests` module; we’ll talk about that in the [“How to Write
-Tests”][writing-tests]<!-- ignore --> section in Chapter 11. The glob operator
-is also sometimes used as part of the prelude pattern: see [the standard library documentation](../std/prelude/index.html#other-preludes)<!-- ignore -->
-for more information on that pattern.
+عملگر glob اغلب در زمان تست استفاده می‌شود تا همه چیز تحت تست به ماژول `tests` وارد شود؛ در بخش [«چگونه تست بنویسیم»][writing-tests] در فصل 11 در مورد این موضوع صحبت خواهیم کرد. عملگر glob همچنین گاهی به عنوان بخشی از الگوی prelude استفاده می‌شود: برای اطلاعات بیشتر در مورد این الگو، به [مستندات کتابخانه استاندارد](https://doc.rust-lang.org/std/prelude/index.html#other-preludes) مراجعه کنید.
 
 [ch14-pub-use]: ch14-02-publishing-to-crates-io.html#exporting-a-convenient-public-api-with-pub-use
 [rand]: ch02-00-guessing-game-tutorial.html#generating-a-random-number
 [writing-tests]: ch11-01-writing-tests.html#how-to-write-tests
+

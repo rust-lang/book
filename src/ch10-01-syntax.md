@@ -1,22 +1,14 @@
-## Generic Data Types
+## انواع داده جنریک
 
-We use generics to create definitions for items like function signatures or
-structs, which we can then use with many different concrete data types. Let’s
-first look at how to define functions, structs, enums, and methods using
-generics. Then we’ll discuss how generics affect code performance.
+ما از جنریک‌ها برای ایجاد تعریف‌هایی برای مواردی مانند امضای توابع یا ساختارها (struct) استفاده می‌کنیم، که سپس می‌توانیم با انواع داده مشخص مختلف از آن‌ها استفاده کنیم. بیایید ابتدا ببینیم چگونه می‌توان توابع، ساختارها، شمارش‌ها (enum)، و متدها را با استفاده از جنریک‌ها تعریف کرد. سپس درباره اینکه جنریک‌ها چگونه بر عملکرد کد تأثیر می‌گذارند صحبت خواهیم کرد.
 
-### In Function Definitions
+### در تعریف توابع
 
-When defining a function that uses generics, we place the generics in the
-signature of the function where we would usually specify the data types of the
-parameters and return value. Doing so makes our code more flexible and provides
-more functionality to callers of our function while preventing code duplication.
+هنگام تعریف یک تابع که از جنریک‌ها استفاده می‌کند، جنریک‌ها را در امضای تابع قرار می‌دهیم، جایی که معمولاً نوع داده پارامترها و مقدار بازگشتی را مشخص می‌کنیم. این کار کد ما را انعطاف‌پذیرتر می‌کند و به فراخوانی‌کنندگان تابع ما عملکرد بیشتری ارائه می‌دهد، در حالی که از تکرار کد جلوگیری می‌کند.
 
-Continuing with our `largest` function, Listing 10-4 shows two functions that
-both find the largest value in a slice. We’ll then combine these into a single
-function that uses generics.
+با ادامه تابع `largest`، لیست ۱۰-۴ دو تابع را نشان می‌دهد که هر دو بزرگ‌ترین مقدار را در یک بخش (slice) پیدا می‌کنند. سپس این‌ها را به یک تابع واحد که از جنریک‌ها استفاده می‌کند ترکیب خواهیم کرد.
 
-<Listing number="10-4" file-name="src/main.rs" caption="Two functions that differ only in their names and in the types in their signatures">
+<Listing number="10-4" file-name="src/main.rs" caption="دو تابع که فقط در نام‌ها و انواع موجود در امضاهایشان متفاوت هستند">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-04/src/main.rs:here}}
@@ -24,40 +16,21 @@ function that uses generics.
 
 </Listing>
 
-The `largest_i32` function is the one we extracted in Listing 10-3 that finds
-the largest `i32` in a slice. The `largest_char` function finds the largest
-`char` in a slice. The function bodies have the same code, so let’s eliminate
-the duplication by introducing a generic type parameter in a single function.
+تابع `largest_i32` همان تابعی است که در لیست ۱۰-۳ استخراج کردیم و بزرگ‌ترین مقدار `i32` را در یک بخش پیدا می‌کند. تابع `largest_char` بزرگ‌ترین مقدار `char` را در یک بخش پیدا می‌کند. بدنه توابع دارای کد یکسانی هستند، بنابراین با معرفی یک پارامتر نوع جنریک در یک تابع واحد، تکرار را حذف می‌کنیم.
 
-To parameterize the types in a new single function, we need to name the type
-parameter, just as we do for the value parameters to a function. You can use
-any identifier as a type parameter name. But we’ll use `T` because, by
-convention, type parameter names in Rust are short, often just one letter, and
-Rust’s type-naming convention is UpperCamelCase. Short for _type_, `T` is the
-default choice of most Rust programmers.
+برای پارامتری کردن نوع‌ها در یک تابع جدید، باید نام پارامتر نوع را مشخص کنیم، همانطور که برای پارامترهای مقداری در یک تابع انجام می‌دهیم. می‌توانید از هر شناسه‌ای به عنوان نام پارامتر نوع استفاده کنید. اما از آنجا که طبق قرارداد، نام‌های پارامتر نوع در Rust کوتاه هستند، اغلب فقط یک حرف، و قرارداد نام‌گذاری نوع در Rust UpperCamelCase است، ما از `T` استفاده می‌کنیم. کوتاه برای _type_، `T` انتخاب پیش‌فرض بیشتر برنامه‌نویسان Rust است.
 
-When we use a parameter in the body of the function, we have to declare the
-parameter name in the signature so the compiler knows what that name means.
-Similarly, when we use a type parameter name in a function signature, we have
-to declare the type parameter name before we use it. To define the generic
-`largest` function, we place type name declarations inside angle brackets,
-`<>`, between the name of the function and the parameter list, like this:
+وقتی از یک پارامتر در بدنه تابع استفاده می‌کنیم، باید نام پارامتر را در امضا اعلام کنیم تا کامپایلر بداند آن نام به چه معناست. به طور مشابه، وقتی از نام پارامتر نوع در امضای تابع استفاده می‌کنیم، باید نام پارامتر نوع را قبل از استفاده از آن اعلام کنیم. برای تعریف تابع جنریک `largest`، نام نوع‌ها را داخل پرانتزهای زاویه‌ای، `<>`، بین نام تابع و لیست پارامتر قرار می‌دهیم، مانند زیر:
 
 ```rust,ignore
 fn largest<T>(list: &[T]) -> &T {
 ```
 
-We read this definition as: the function `largest` is generic over some type
-`T`. This function has one parameter named `list`, which is a slice of values
-of type `T`. The `largest` function will return a reference to a value of the
-same type `T`.
+این تعریف را به این صورت می‌خوانیم: تابع `largest` بر روی یک نوع `T` جنریک است. این تابع یک پارامتر به نام `list` دارد، که یک بخش از مقادیر نوع `T` است. تابع `largest` یک مرجع به مقداری از همان نوع `T` بازمی‌گرداند.
 
-Listing 10-5 shows the combined `largest` function definition using the generic
-data type in its signature. The listing also shows how we can call the function
-with either a slice of `i32` values or `char` values. Note that this code won’t
-compile yet, but we’ll fix it later in this chapter.
+لیست ۱۰-۵ تعریف تابع ترکیبی `largest` با استفاده از نوع داده جنریک در امضای آن را نشان می‌دهد. این لیست همچنین نشان می‌دهد که چگونه می‌توان تابع را با یک بخش از مقادیر `i32` یا مقادیر `char` فراخوانی کرد. توجه داشته باشید که این کد هنوز کامپایل نمی‌شود، اما بعداً در این فصل آن را رفع خواهیم کرد.
 
-<Listing number="10-5" file-name="src/main.rs" caption="The `largest` function using generic type parameters; this doesn’t compile yet">
+<Listing number="10-5" file-name="src/main.rs" caption="تابع `largest` با استفاده از پارامترهای نوع جنریک؛ این کد هنوز کامپایل نمی‌شود">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/src/main.rs}}
@@ -65,30 +38,19 @@ compile yet, but we’ll fix it later in this chapter.
 
 </Listing>
 
-If we compile this code right now, we’ll get this error:
+اگر همین حالا این کد را کامپایل کنیم، این خطا را دریافت می‌کنیم:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
-The help text mentions `std::cmp::PartialOrd`, which is a _trait_, and we’re
-going to talk about traits in the next section. For now, know that this error
-states that the body of `largest` won’t work for all possible types that `T`
-could be. Because we want to compare values of type `T` in the body, we can
-only use types whose values can be ordered. To enable comparisons, the standard
-library has the `std::cmp::PartialOrd` trait that you can implement on types
-(see Appendix C for more on this trait). By following the help text’s
-suggestion, we restrict the types valid for `T` to only those that implement
-`PartialOrd` and this example will compile, because the standard library
-implements `PartialOrd` on both `i32` and `char`.
+متن کمکی به `std::cmp::PartialOrd` اشاره می‌کند که یک _ویژگی_ (trait) است، و ما در بخش بعدی درباره ویژگی‌ها صحبت خواهیم کرد. در حال حاضر، بدانید که این خطا بیان می‌کند که بدنه تابع `largest` برای همه نوع‌های ممکن که `T` می‌تواند باشد، کار نمی‌کند. از آنجا که می‌خواهیم مقادیر نوع `T` را در بدنه مقایسه کنیم، فقط می‌توانیم از نوع‌هایی استفاده کنیم که مقادیرشان قابل مرتب‌سازی باشد. برای فعال کردن مقایسه‌ها، کتابخانه استاندارد ویژگی `std::cmp::PartialOrd` را ارائه می‌دهد که می‌توانید روی نوع‌ها پیاده‌سازی کنید (برای اطلاعات بیشتر درباره این ویژگی به ضمیمه ج مراجعه کنید). با دنبال کردن پیشنهاد متن کمکی، نوع‌های معتبر برای `T` را به آن‌هایی که `PartialOrd` را پیاده‌سازی می‌کنند محدود می‌کنیم و این مثال کامپایل خواهد شد، زیرا کتابخانه استاندارد ویژگی `PartialOrd` را برای هر دو نوع `i32` و `char` پیاده‌سازی کرده است.
 
-### In Struct Definitions
+### در تعریف ساختارها (Struct)
 
-We can also define structs to use a generic type parameter in one or more
-fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
-`x` and `y` coordinate values of any type.
+ما می‌توانیم ساختارها را نیز به گونه‌ای تعریف کنیم که از یک پارامتر نوع جنریک در یک یا چند فیلد استفاده کنند، با استفاده از نحو `<>`. لیست ۱۰-۶ ساختار `Point<T>` را تعریف می‌کند که مقادیر مختصات `x` و `y` از هر نوعی را نگه می‌دارد.
 
-<Listing number="10-6" file-name="src/main.rs" caption="A `Point<T>` struct that holds `x` and `y` values of type `T`">
+<Listing number="10-6" file-name="src/main.rs" caption="ساختار `Point<T>` که مقادیر `x` و `y` از نوع `T` را نگه می‌دارد">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-06/src/main.rs}}
@@ -96,19 +58,11 @@ fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
 
 </Listing>
 
-The syntax for using generics in struct definitions is similar to that used in
-function definitions. First we declare the name of the type parameter inside
-angle brackets just after the name of the struct. Then we use the generic
-type in the struct definition where we would otherwise specify concrete data
-types.
+نحو استفاده از جنریک‌ها در تعریف ساختارها مشابه استفاده آن‌ها در تعریف توابع است. ابتدا نام پارامتر نوع را در داخل پرانتزهای زاویه‌ای بلافاصله پس از نام ساختار اعلام می‌کنیم. سپس نوع جنریک را در تعریف ساختار استفاده می‌کنیم، جایی که در غیر این صورت نوع داده مشخص را مشخص می‌کردیم.
 
-Note that because we’ve used only one generic type to define `Point<T>`, this
-definition says that the `Point<T>` struct is generic over some type `T`, and
-the fields `x` and `y` are _both_ that same type, whatever that type may be. If
-we create an instance of a `Point<T>` that has values of different types, as in
-Listing 10-7, our code won’t compile.
+توجه داشته باشید که از آنجا که فقط یک نوع جنریک برای تعریف `Point<T>` استفاده کرده‌ایم، این تعریف بیان می‌کند که ساختار `Point<T>` برای یک نوع `T` جنریک است و فیلدهای `x` و `y` _هر دو_ از همان نوع هستند، هرچه که آن نوع باشد. اگر نمونه‌ای از `Point<T>` ایجاد کنیم که مقادیر آن انواع مختلف داشته باشند، همانطور که در لیست ۱۰-۷ آمده است، کد ما کامپایل نخواهد شد.
 
-<Listing number="10-7" file-name="src/main.rs" caption="The fields `x` and `y` must be the same type because both have the same generic data type `T`.">
+<Listing number="10-7" file-name="src/main.rs" caption="فیلدهای `x` و `y` باید از همان نوع باشند زیرا هر دو دارای نوع داده جنریک `T` هستند.">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/src/main.rs}}
@@ -116,21 +70,15 @@ Listing 10-7, our code won’t compile.
 
 </Listing>
 
-In this example, when we assign the integer value `5` to `x`, we let the
-compiler know that the generic type `T` will be an integer for this instance of
-`Point<T>`. Then when we specify `4.0` for `y`, which we’ve defined to have the
-same type as `x`, we’ll get a type mismatch error like this:
+در این مثال، وقتی مقدار عدد صحیح `5` را به `x` اختصاص می‌دهیم، به کامپایلر اطلاع می‌دهیم که نوع جنریک `T` برای این نمونه از `Point<T>` یک عدد صحیح خواهد بود. سپس وقتی `4.0` را برای `y` مشخص می‌کنیم، که تعریف کرده‌ایم همان نوع `x` را داشته باشد، یک خطای عدم تطابق نوع دریافت می‌کنیم، مانند این:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/output.txt}}
 ```
 
-To define a `Point` struct where `x` and `y` are both generics but could have
-different types, we can use multiple generic type parameters. For example, in
-Listing 10-8, we change the definition of `Point` to be generic over types `T`
-and `U` where `x` is of type `T` and `y` is of type `U`.
+برای تعریف یک ساختار `Point` که در آن `x` و `y` هر دو جنریک هستند اما می‌توانند انواع مختلفی داشته باشند، می‌توانیم از پارامترهای نوع جنریک چندگانه استفاده کنیم. برای مثال، در لیست ۱۰-۸، تعریف `Point` را تغییر می‌دهیم تا برای نوع‌های `T` و `U` جنریک باشد، جایی که `x` از نوع `T` و `y` از نوع `U` است.
 
-<Listing number="10-8" file-name="src/main.rs" caption="A `Point<T, U>` generic over two types so that `x` and `y` can be values of different types">
+<Listing number="10-8" file-name="src/main.rs" caption="یک ساختار `Point<T, U>` جنریک بر روی دو نوع، به طوری که `x` و `y` می‌توانند مقادیری از انواع مختلف باشند">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-08/src/main.rs}}
@@ -138,17 +86,11 @@ and `U` where `x` is of type `T` and `y` is of type `U`.
 
 </Listing>
 
-Now all the instances of `Point` shown are allowed! You can use as many generic
-type parameters in a definition as you want, but using more than a few makes
-your code hard to read. If you’re finding you need lots of generic types in
-your code, it could indicate that your code needs restructuring into smaller
-pieces.
+حالا تمام نمونه‌های `Point` نشان داده شده معتبر هستند! شما می‌توانید به تعداد دلخواه پارامترهای نوع جنریک در یک تعریف استفاده کنید، اما استفاده از تعداد زیاد خوانایی کد شما را دشوار می‌کند. اگر می‌بینید که نیاز به انواع جنریک زیادی در کد خود دارید، ممکن است نشان‌دهنده این باشد که کد شما نیاز به ساختاربندی مجدد به بخش‌های کوچک‌تر دارد.
 
-### In Enum Definitions
+### در تعریف شمارش‌ها (Enum)
 
-As we did with structs, we can define enums to hold generic data types in their
-variants. Let’s take another look at the `Option<T>` enum that the standard
-library provides, which we used in Chapter 6:
+همانطور که با ساختارها انجام دادیم، می‌توانیم شمارش‌ها را به گونه‌ای تعریف کنیم که نوع داده‌های جنریک را در حالت‌های خود نگه دارند. بیایید دوباره به شمارش `Option<T>` که کتابخانه استاندارد ارائه می‌دهد و در فصل ۶ از آن استفاده کردیم نگاه کنیم:
 
 ```rust
 enum Option<T> {
@@ -157,15 +99,9 @@ enum Option<T> {
 }
 ```
 
-This definition should now make more sense to you. As you can see, the
-`Option<T>` enum is generic over type `T` and has two variants: `Some`, which
-holds one value of type `T`, and a `None` variant that doesn’t hold any value.
-By using the `Option<T>` enum, we can express the abstract concept of an
-optional value, and because `Option<T>` is generic, we can use this abstraction
-no matter what the type of the optional value is.
+این تعریف اکنون باید برای شما بیشتر معنا پیدا کند. همانطور که می‌بینید، شمارش `Option<T>` بر روی نوع `T` جنریک است و دو حالت دارد: `Some` که یک مقدار از نوع `T` را نگه می‌دارد و حالت `None` که هیچ مقداری را نگه نمی‌دارد. با استفاده از شمارش `Option<T>`، می‌توانیم مفهوم انتزاعی یک مقدار اختیاری را بیان کنیم، و از آنجا که `Option<T>` جنریک است، می‌توانیم از این انتزاع بدون توجه به نوع مقدار اختیاری استفاده کنیم.
 
-Enums can use multiple generic types as well. The definition of the `Result`
-enum that we used in Chapter 9 is one example:
+شمارش‌ها نیز می‌توانند از انواع جنریک چندگانه استفاده کنند. تعریف شمارش `Result` که در فصل ۹ استفاده کردیم یک مثال است:
 
 ```rust
 enum Result<T, E> {
@@ -174,26 +110,15 @@ enum Result<T, E> {
 }
 ```
 
-The `Result` enum is generic over two types, `T` and `E`, and has two variants:
-`Ok`, which holds a value of type `T`, and `Err`, which holds a value of type
-`E`. This definition makes it convenient to use the `Result` enum anywhere we
-have an operation that might succeed (return a value of some type `T`) or fail
-(return an error of some type `E`). In fact, this is what we used to open a
-file in Listing 9-3, where `T` was filled in with the type `std::fs::File` when
-the file was opened successfully and `E` was filled in with the type
-`std::io::Error` when there were problems opening the file.
+شمارش `Result` بر روی دو نوع جنریک `T` و `E` است و دو حالت دارد: `Ok` که یک مقدار از نوع `T` نگه می‌دارد و `Err` که یک مقدار از نوع `E` نگه می‌دارد. این تعریف استفاده از شمارش `Result` را در هر جایی که یک عملیات ممکن است موفق شود (یک مقدار از نوع `T` بازگرداند) یا شکست بخورد (یک خطا از نوع `E` بازگرداند) آسان می‌کند. در واقع، این همان چیزی است که برای باز کردن یک فایل در لیست ۹-۳ استفاده کردیم، جایی که `T` با نوع `std::fs::File` پر شده بود وقتی فایل با موفقیت باز شد و `E` با نوع `std::io::Error` پر شده بود وقتی مشکلاتی در باز کردن فایل وجود داشت.
 
-When you recognize situations in your code with multiple struct or enum
-definitions that differ only in the types of the values they hold, you can
-avoid duplication by using generic types instead.
+وقتی وضعیت‌هایی در کد خود را شناسایی کردید که چندین تعریف ساختار یا شمارش وجود دارد که فقط در نوع مقادیر نگهداری شده متفاوت هستند، می‌توانید با استفاده از نوع‌های جنریک از تکرار جلوگیری کنید.
 
-### In Method Definitions
+### در تعریف متدها
 
-We can implement methods on structs and enums (as we did in Chapter 5) and use
-generic types in their definitions too. Listing 10-9 shows the `Point<T>`
-struct we defined in Listing 10-6 with a method named `x` implemented on it.
+ما می‌توانیم متدهایی را روی ساختارها و شمارش‌ها پیاده‌سازی کنیم (همانطور که در فصل ۵ انجام دادیم) و از انواع جنریک در تعریف آن‌ها نیز استفاده کنیم. لیست ۱۰-۹ ساختار `Point<T>` که در لیست ۱۰-۶ تعریف کردیم را نشان می‌دهد، با متدی به نام `x` که روی آن پیاده‌سازی شده است.
 
-<Listing number="10-9" file-name="src/main.rs" caption="Implementing a method named `x` on the `Point<T>` struct that will return a reference to the `x` field of type `T`">
+<Listing number="10-9" file-name="src/main.rs" caption="پیاده‌سازی متدی به نام `x` روی ساختار `Point<T>` که یک مرجع به فیلد `x` از نوع `T` بازمی‌گرداند">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-09/src/main.rs}}
@@ -201,25 +126,13 @@ struct we defined in Listing 10-6 with a method named `x` implemented on it.
 
 </Listing>
 
-Here, we’ve defined a method named `x` on `Point<T>` that returns a reference
-to the data in the field `x`.
+در اینجا، یک متد به نام `x` روی `Point<T>` تعریف کرده‌ایم که یک مرجع به داده موجود در فیلد `x` بازمی‌گرداند.
 
-Note that we have to declare `T` just after `impl` so we can use `T` to specify
-that we’re implementing methods on the type `Point<T>`. By declaring `T` as a
-generic type after `impl`, Rust can identify that the type in the angle
-brackets in `Point` is a generic type rather than a concrete type. We could
-have chosen a different name for this generic parameter than the generic
-parameter declared in the struct definition, but using the same name is
-conventional. If you write a method within an `impl` that declares a generic
-type, that method will be defined on any instance of the type, no matter what
-concrete type ends up substituting for the generic type.
+توجه داشته باشید که باید `T` را بلافاصله بعد از `impl` اعلام کنیم تا بتوانیم از `T` برای مشخص کردن اینکه داریم متدها را روی نوع `Point<T>` پیاده‌سازی می‌کنیم، استفاده کنیم. با اعلام `T` به عنوان یک نوع جنریک بعد از `impl`، Rust می‌تواند تشخیص دهد که نوع موجود در پرانتزهای زاویه‌ای در `Point` یک نوع جنریک است، نه یک نوع مشخص. می‌توانستیم نامی متفاوت از پارامتر جنریک اعلام‌شده در تعریف ساختار برای این پارامتر جنریک انتخاب کنیم، اما استفاده از همان نام یک عرف است. اگر یک متد را درون یک `impl` که یک نوع جنریک اعلام می‌کند بنویسید، آن متد روی هر نمونه‌ای از آن نوع تعریف می‌شود، بدون توجه به اینکه چه نوع مشخصی جایگزین نوع جنریک می‌شود.
 
-We can also specify constraints on generic types when defining methods on the
-type. We could, for example, implement methods only on `Point<f32>` instances
-rather than on `Point<T>` instances with any generic type. In Listing 10-10 we
-use the concrete type `f32`, meaning we don’t declare any types after `impl`.
+همچنین می‌توانیم محدودیت‌هایی بر روی نوع‌های جنریک هنگام تعریف متدها روی یک نوع مشخص کنیم. می‌توانیم، برای مثال، متدهایی را فقط روی نمونه‌های `Point<f32>` پیاده‌سازی کنیم، نه روی نمونه‌های `Point<T>` با هر نوع جنریک. در لیست ۱۰-۱۰ از نوع مشخص `f32` استفاده کرده‌ایم، به این معنی که هیچ نوعی را بعد از `impl` اعلام نمی‌کنیم.
 
-<Listing number="10-10" file-name="src/main.rs" caption="An `impl` block that only applies to a struct with a particular concrete type for the generic type parameter `T`">
+<Listing number="10-10" file-name="src/main.rs" caption="یک بلوک `impl` که فقط برای یک ساختار با یک نوع مشخص برای پارامتر نوع جنریک `T` اعمال می‌شود">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-10/src/main.rs:here}}
@@ -227,20 +140,11 @@ use the concrete type `f32`, meaning we don’t declare any types after `impl`.
 
 </Listing>
 
-This code means the type `Point<f32>` will have a `distance_from_origin`
-method; other instances of `Point<T>` where `T` is not of type `f32` will not
-have this method defined. The method measures how far our point is from the
-point at coordinates (0.0, 0.0) and uses mathematical operations that are
-available only for floating-point types.
+این کد به این معنی است که نوع `Point<f32>` دارای یک متد `distance_from_origin` خواهد بود؛ سایر نمونه‌های `Point<T>` که `T` از نوع `f32` نیستند، این متد را تعریف نخواهند کرد. این متد فاصله نقطه ما از نقطه‌ای با مختصات (0.0, 0.0) را اندازه‌گیری می‌کند و از عملیات ریاضی استفاده می‌کند که فقط برای نوع‌های اعداد اعشاری در دسترس هستند.
 
-Generic type parameters in a struct definition aren’t always the same as those
-you use in that same struct’s method signatures. Listing 10-11 uses the generic
-types `X1` and `Y1` for the `Point` struct and `X2` `Y2` for the `mixup` method
-signature to make the example clearer. The method creates a new `Point`
-instance with the `x` value from the `self` `Point` (of type `X1`) and the `y`
-value from the passed-in `Point` (of type `Y2`).
+پارامترهای نوع جنریک در تعریف یک ساختار همیشه با آن‌هایی که در امضاهای متد همان ساختار استفاده می‌شوند یکسان نیستند. لیست ۱۰-۱۱ از نوع‌های جنریک `X1` و `Y1` برای ساختار `Point` و `X2` و `Y2` برای امضای متد `mixup` استفاده می‌کند تا مثال را واضح‌تر کند. این متد یک نمونه جدید از `Point` ایجاد می‌کند با مقدار `x` از `Point` `self` (از نوع `X1`) و مقدار `y` از `Point` پاس‌داده‌شده (از نوع `Y2`).
 
-<Listing number="10-11" file-name="src/main.rs" caption="A method that uses generic types different from its struct’s definition">
+<Listing number="10-11" file-name="src/main.rs" caption="یک متد که از نوع‌های جنریک متفاوت از تعریف ساختار خود استفاده می‌کند">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-11/src/main.rs}}
@@ -248,52 +152,26 @@ value from the passed-in `Point` (of type `Y2`).
 
 </Listing>
 
-In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
-and an `f64` for `y` (with value `10.4`). The `p2` variable is a `Point` struct
-that has a string slice for `x` (with value `"Hello"`) and a `char` for `y`
-(with value `c`). Calling `mixup` on `p1` with the argument `p2` gives us `p3`,
-which will have an `i32` for `x` because `x` came from `p1`. The `p3` variable
-will have a `char` for `y` because `y` came from `p2`. The `println!` macro
-call will print `p3.x = 5, p3.y = c`.
+در تابع `main`، یک `Point` تعریف کرده‌ایم که `x` آن یک `i32` (با مقدار `5`) و `y` آن یک `f64` (با مقدار `10.4`) است. متغیر `p2` یک ساختار `Point` است که `x` آن یک قطعه رشته (با مقدار `"Hello"`) و `y` آن یک `char` (با مقدار `c`) است. فراخوانی `mixup` روی `p1` با آرگومان `p2` به ما `p3` را می‌دهد، که `x` آن یک `i32` خواهد بود زیرا `x` از `p1` آمده است. متغیر `p3` یک `char` برای `y` خواهد داشت زیرا `y` از `p2` آمده است. فراخوانی ماکرو `println!` مقدار `p3.x = 5, p3.y = c` را چاپ می‌کند.
 
-The purpose of this example is to demonstrate a situation in which some generic
-parameters are declared with `impl` and some are declared with the method
-definition. Here, the generic parameters `X1` and `Y1` are declared after
-`impl` because they go with the struct definition. The generic parameters `X2`
-and `Y2` are declared after `fn mixup` because they’re only relevant to the
-method.
+هدف این مثال این است که وضعیتی را نشان دهد که در آن برخی پارامترهای جنریک با `impl` اعلام می‌شوند و برخی دیگر با تعریف متد اعلام می‌شوند. در اینجا، پارامترهای جنریک `X1` و `Y1` بعد از `impl` اعلام شده‌اند زیرا با تعریف ساختار همراه هستند. پارامترهای جنریک `X2` و `Y2` بعد از `fn mixup` اعلام شده‌اند زیرا فقط به متد مربوط هستند.
 
-### Performance of Code Using Generics
+### عملکرد کدی که از جنریک‌ها استفاده می‌کند
 
-You might be wondering whether there is a runtime cost when using generic type
-parameters. The good news is that using generic types won’t make your program
-run any slower than it would with concrete types.
+ممکن است این سوال برای شما پیش بیاید که آیا هنگام استفاده از پارامترهای نوع جنریک، هزینه‌ای در زمان اجرا وجود دارد یا خیر. خبر خوب این است که استفاده از انواع جنریک برنامه شما را کندتر از حالتی که از انواع مشخص استفاده می‌کردید، نمی‌کند.
 
-Rust accomplishes this by performing monomorphization of the code using
-generics at compile time. _Monomorphization_ is the process of turning generic
-code into specific code by filling in the concrete types that are used when
-compiled. In this process, the compiler does the opposite of the steps we used
-to create the generic function in Listing 10-5: the compiler looks at all the
-places where generic code is called and generates code for the concrete types
-the generic code is called with.
+Rust این کار را با انجام فرآیندی به نام _تک‌ریخت‌سازی_ (monomorphization) روی کدی که از جنریک‌ها استفاده می‌کند در زمان کامپایل انجام می‌دهد. _تک‌ریخت‌سازی_ فرآیند تبدیل کد جنریک به کد مشخص است با پر کردن انواع مشخصی که هنگام کامپایل استفاده می‌شوند. در این فرآیند، کامپایلر برعکس مراحلی که برای ایجاد تابع جنریک در لیست ۱۰-۵ استفاده کردیم را انجام می‌دهد: کامپایلر به تمام جاهایی که کد جنریک فراخوانی شده نگاه می‌کند و کدی را برای انواع مشخصی که کد جنریک با آن‌ها فراخوانی شده ایجاد می‌کند.
 
-Let’s look at how this works by using the standard library’s generic
-`Option<T>` enum:
+بیایید ببینیم این کار چگونه انجام می‌شود با استفاده از شمارش جنریک `Option<T>` در کتابخانه استاندارد:
 
 ```rust
 let integer = Some(5);
 let float = Some(5.0);
 ```
 
-When Rust compiles this code, it performs monomorphization. During that
-process, the compiler reads the values that have been used in `Option<T>`
-instances and identifies two kinds of `Option<T>`: one is `i32` and the other
-is `f64`. As such, it expands the generic definition of `Option<T>` into two
-definitions specialized to `i32` and `f64`, thereby replacing the generic
-definition with the specific ones.
+وقتی Rust این کد را کامپایل می‌کند، فرآیند تک‌ریخت‌سازی را انجام می‌دهد. در طول این فرآیند، کامپایلر مقادیر استفاده شده در نمونه‌های `Option<T>` را می‌خواند و دو نوع `Option<T>` را شناسایی می‌کند: یکی `i32` و دیگری `f64`. به این ترتیب، تعریف جنریک `Option<T>` را به دو تعریف ویژه برای `i32` و `f64` گسترش می‌دهد و بنابراین تعریف جنریک را با تعریف‌های مشخص جایگزین می‌کند.
 
-The monomorphized version of the code looks similar to the following (the
-compiler uses different names than what we’re using here for illustration):
+نسخه تک‌ریخت‌سازی شده کد شبیه به چیزی به نظر می‌رسد (کامپایلر از نام‌های متفاوتی استفاده می‌کند، اما برای توضیح از این نام‌ها استفاده کرده‌ایم):
 
 <Listing file-name="src/main.rs">
 
@@ -316,9 +194,4 @@ fn main() {
 
 </Listing>
 
-The generic `Option<T>` is replaced with the specific definitions created by
-the compiler. Because Rust compiles generic code into code that specifies the
-type in each instance, we pay no runtime cost for using generics. When the code
-runs, it performs just as it would if we had duplicated each definition by
-hand. The process of monomorphization makes Rust’s generics extremely efficient
-at runtime.
+شمارش جنریک `Option<T>` با تعریف‌های مشخص ایجاد شده توسط کامپایلر جایگزین شده است. از آنجا که Rust کد جنریک را به کدی که نوع را در هر نمونه مشخص می‌کند کامپایل می‌کند، هیچ هزینه‌ای در زمان اجرا برای استفاده از جنریک‌ها پرداخت نمی‌کنیم. وقتی کد اجرا می‌شود، دقیقاً همان‌طور عمل می‌کند که اگر هر تعریف را به صورت دستی تکرار کرده بودیم. فرآیند تک‌ریخت‌سازی جنریک‌های Rust را در زمان اجرا بسیار کارآمد می‌کند.

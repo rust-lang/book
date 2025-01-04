@@ -1,32 +1,16 @@
-## Validating References with Lifetimes
+## اعتبارسنجی مراجع با طول عمرها
 
-Lifetimes are another kind of generic that we’ve already been using. Rather
-than ensuring that a type has the behavior we want, lifetimes ensure that
-references are valid as long as we need them to be.
+طول عمرها نوع دیگری از جنریک‌ها هستند که ما قبلاً از آن‌ها استفاده کرده‌ایم. به جای اطمینان از اینکه یک نوع رفتار مورد نظر ما را دارد، طول عمرها تضمین می‌کنند که مراجع به اندازه‌ای که نیاز داریم معتبر باقی می‌مانند.
 
-One detail we didn’t discuss in the [“References and
-Borrowing”][references-and-borrowing]<!-- ignore --> section in Chapter 4 is
-that every reference in Rust has a _lifetime_, which is the scope for which
-that reference is valid. Most of the time, lifetimes are implicit and inferred,
-just like most of the time, types are inferred. We must annotate types only
-when multiple types are possible. In a similar way, we must annotate lifetimes
-when the lifetimes of references could be related in a few different ways. Rust
-requires us to annotate the relationships using generic lifetime parameters to
-ensure the actual references used at runtime will definitely be valid.
+یکی از جزئیاتی که در بخش [“مراجع و قرض گرفتن”][references-and-borrowing]<!-- ignore --> در فصل ۴ بررسی نکردیم این است که هر مرجع در Rust دارای یک _طول عمر_ است، که محدوده‌ای است که آن مرجع در آن معتبر است. بیشتر اوقات، طول عمرها ضمنی و استنتاج‌شده هستند، دقیقاً مانند انواع. ما فقط زمانی نیاز داریم که نوع‌ها را حاشیه‌نویسی کنیم که چندین نوع ممکن باشند. به طور مشابه، ما فقط زمانی نیاز داریم که طول عمرها را حاشیه‌نویسی کنیم که طول عمر مراجع بتوانند به چند روش مختلف مرتبط باشند. Rust ما را ملزم می‌کند تا روابط را با استفاده از پارامترهای جنریک طول عمر حاشیه‌نویسی کنیم تا اطمینان حاصل کنیم که مراجع واقعی استفاده‌شده در زمان اجرا قطعاً معتبر خواهند بود.
 
-Annotating lifetimes is not a concept most other programming languages have, so
-this is going to feel unfamiliar. Although we won’t cover lifetimes in their
-entirety in this chapter, we’ll discuss common ways you might encounter
-lifetime syntax so you can get comfortable with the concept.
+حاشیه‌نویسی طول عمر مفهومی نیست که بیشتر زبان‌های برنامه‌نویسی داشته باشند، بنابراین ممکن است این موضوع برای شما ناآشنا باشد. اگرچه در این فصل طول عمرها را به طور کامل پوشش نمی‌دهیم، اما روش‌های رایجی که ممکن است با نحو طول عمر مواجه شوید را بررسی می‌کنیم تا بتوانید با این مفهوم آشنا شوید.
 
-### Preventing Dangling References with Lifetimes
+### جلوگیری از مراجع آویزان (Dangling References) با طول عمرها
 
-The main aim of lifetimes is to prevent _dangling references_, which cause a
-program to reference data other than the data it’s intended to reference.
-Consider the program in Listing 10-16, which has an outer scope and an inner
-scope.
+هدف اصلی طول عمرها جلوگیری از _مراجع آویزان_ است، که باعث می‌شوند یک برنامه به داده‌هایی غیر از داده‌هایی که قرار بوده مراجعه کند اشاره کند. برنامه‌ای را در نظر بگیرید که در لیست ۱۰-۱۶ نشان داده شده است و دارای یک محدوده خارجی و یک محدوده داخلی است.
 
-<Listing number="10-16" caption="An attempt to use a reference whose value has gone out of scope">
+<Listing number="10-16" caption="تلاشی برای استفاده از مرجعی که مقدار آن از محدوده خارج شده است">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/src/main.rs}}
@@ -34,39 +18,21 @@ scope.
 
 </Listing>
 
-> Note: The examples in Listing 10-16, 10-17, and 10-23 declare variables
-> without giving them an initial value, so the variable name exists in the outer
-> scope. At first glance, this might appear to be in conflict with Rust’s having
-> no null values. However, if we try to use a variable before giving it a value,
-> we’ll get a compile-time error, which shows that Rust indeed does not allow
-> null values.
+> توجه: مثال‌های لیست ۱۰-۱۶، ۱۰-۱۷، و ۱۰-۲۳ متغیرهایی را بدون مقدار اولیه اعلام می‌کنند، بنابراین نام متغیر در محدوده خارجی وجود دارد. در نگاه اول، این ممکن است در تضاد با عدم وجود مقادیر null در Rust به نظر برسد. با این حال، اگر سعی کنیم از متغیری قبل از مقداردهی آن استفاده کنیم، یک خطای زمان کامپایل دریافت خواهیم کرد، که نشان می‌دهد Rust واقعاً مقادیر null را مجاز نمی‌داند.
 
-The outer scope declares a variable named `r` with no initial value, and the
-inner scope declares a variable named `x` with the initial value of `5`. Inside
-the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
-the inner scope ends, and we attempt to print the value in `r`. This code won’t
-compile because the value that `r` is referring to has gone out of scope before
-we try to use it. Here is the error message:
+محدوده خارجی یک متغیر به نام `r` را بدون مقدار اولیه اعلام می‌کند، و محدوده داخلی یک متغیر به نام `x` را با مقدار اولیه `5` اعلام می‌کند. در داخل محدوده داخلی، تلاش می‌کنیم مقدار `r` را به عنوان یک مرجع به `x` تنظیم کنیم. سپس محدوده داخلی به پایان می‌رسد و سعی می‌کنیم مقدار موجود در `r` را چاپ کنیم. این کد کامپایل نخواهد شد زیرا مقداری که `r` به آن اشاره می‌کند قبل از اینکه سعی کنیم از آن استفاده کنیم از محدوده خارج شده است. پیام خطای زیر را دریافت می‌کنیم:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/output.txt}}
 ```
 
-The error message says that the variable `x` “does not live long enough.” The
-reason is that `x` will be out of scope when the inner scope ends on line 7.
-But `r` is still valid for the outer scope; because its scope is larger, we say
-that it “lives longer.” If Rust allowed this code to work, `r` would be
-referencing memory that was deallocated when `x` went out of scope, and
-anything we tried to do with `r` wouldn’t work correctly. So how does Rust
-determine that this code is invalid? It uses a borrow checker.
+پیام خطا می‌گوید که متغیر `x` "به اندازه کافی طول عمر ندارد." دلیل این است که `x` وقتی محدوده داخلی در خط ۷ پایان می‌یابد، از محدوده خارج می‌شود. اما `r` همچنان برای محدوده خارجی معتبر است؛ زیرا محدوده آن بزرگ‌تر است، می‌گوییم که "طول عمر بیشتری دارد." اگر Rust به این کد اجازه کار کردن می‌داد، `r` به حافظه‌ای اشاره می‌کرد که وقتی `x` از محدوده خارج شد آزاد شده است، و هر کاری که سعی می‌کردیم با `r` انجام دهیم به درستی کار نمی‌کرد. پس چگونه Rust تشخیص می‌دهد که این کد نامعتبر است؟ از یک بررسی‌کننده قرض (borrow checker) استفاده می‌کند.
 
-### The Borrow Checker
+### بررسی‌کننده قرض (Borrow Checker)
 
-The Rust compiler has a _borrow checker_ that compares scopes to determine
-whether all borrows are valid. Listing 10-17 shows the same code as Listing
-10-16 but with annotations showing the lifetimes of the variables.
+کامپایلر Rust دارای یک _بررسی‌کننده قرض_ است که محدوده‌ها را مقایسه می‌کند تا تعیین کند که آیا تمام قرض‌ها معتبر هستند یا خیر. لیست ۱۰-۱۷ همان کد لیست ۱۰-۱۶ را نشان می‌دهد اما با حاشیه‌نویسی‌هایی که طول عمر متغیرها را نشان می‌دهد.
 
-<Listing number="10-17" caption="Annotations of the lifetimes of `r` and `x`, named `'a` and `'b`, respectively">
+<Listing number="10-17" caption="حاشیه‌نویسی طول عمرهای `r` و `x` که به ترتیب به نام‌های `'a` و `'b` نام‌گذاری شده‌اند">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/src/main.rs}}
@@ -74,17 +40,11 @@ whether all borrows are valid. Listing 10-17 shows the same code as Listing
 
 </Listing>
 
-Here, we’ve annotated the lifetime of `r` with `'a` and the lifetime of `x`
-with `'b`. As you can see, the inner `'b` block is much smaller than the outer
-`'a` lifetime block. At compile time, Rust compares the size of the two
-lifetimes and sees that `r` has a lifetime of `'a` but that it refers to memory
-with a lifetime of `'b`. The program is rejected because `'b` is shorter than
-`'a`: the subject of the reference doesn’t live as long as the reference.
+در اینجا، طول عمر `r` را با `'a` و طول عمر `x` را با `'b` حاشیه‌نویسی کرده‌ایم. همانطور که می‌بینید، بلوک داخلی `'b` بسیار کوچک‌تر از بلوک طول عمر خارجی `'a` است. در زمان کامپایل، Rust اندازه دو طول عمر را مقایسه می‌کند و می‌بیند که `r` دارای طول عمر `'a` است اما به حافظه‌ای اشاره می‌کند که طول عمر آن `'b` است. برنامه رد می‌شود زیرا `'b` کوتاه‌تر از `'a` است: موضوع مرجع به اندازه مرجع زنده نیست.
 
-Listing 10-18 fixes the code so it doesn’t have a dangling reference and it
-compiles without any errors.
+لیست ۱۰-۱۸ کد را اصلاح می‌کند تا یک مرجع آویزان نداشته باشد و بدون هیچ خطایی کامپایل شود.
 
-<Listing number="10-18" caption="A valid reference because the data has a longer lifetime than the reference">
+<Listing number="10-18" caption="یک مرجع معتبر زیرا داده‌ها طول عمری طولانی‌تر از مرجع دارند">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-18/src/main.rs}}
@@ -92,22 +52,15 @@ compiles without any errors.
 
 </Listing>
 
-Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
-means `r` can reference `x` because Rust knows that the reference in `r` will
-always be valid while `x` is valid.
+در اینجا، `x` دارای طول عمر `'b` است که در این مورد بزرگ‌تر از `'a` است. این بدان معناست که `r` می‌تواند به `x` اشاره کند زیرا Rust می‌داند که مرجع در `r` همیشه در حالی که `x` معتبر است، معتبر خواهد بود.
 
-Now that you know what the lifetimes of references are and how Rust analyzes
-lifetimes to ensure references will always be valid, let’s explore generic
-lifetimes of parameters and return values in the context of functions.
+حالا که می‌دانید طول عمر مراجع چیست و چگونه Rust طول عمرها را تحلیل می‌کند تا اطمینان حاصل کند که مراجع همیشه معتبر خواهند بود، بیایید طول عمرهای جنریک پارامترها و مقادیر بازگشتی را در زمینه توابع بررسی کنیم.
 
-### Generic Lifetimes in Functions
+### طول عمرهای جنریک در توابع
 
-We’ll write a function that returns the longer of two string slices. This
-function will take two string slices and return a single string slice. After
-we’ve implemented the `longest` function, the code in Listing 10-19 should
-print `The longest string is abcd`.
+ما تابعی خواهیم نوشت که طولانی‌ترین قطعه رشته (string slice) را بازمی‌گرداند. این تابع دو قطعه رشته می‌گیرد و یک قطعه رشته بازمی‌گرداند. پس از پیاده‌سازی تابع `longest`، کد در لیست ۱۰-۱۹ باید `The longest string is abcd` را چاپ کند.
 
-<Listing number="10-19" file-name="src/main.rs" caption="A `main` function that calls the `longest` function to find the longer of two string slices">
+<Listing number="10-19" file-name="src/main.rs" caption="یک تابع `main` که تابع `longest` را فراخوانی می‌کند تا طولانی‌ترین قطعه رشته را پیدا کند">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-19/src/main.rs}}
@@ -115,17 +68,11 @@ print `The longest string is abcd`.
 
 </Listing>
 
-Note that we want the function to take string slices, which are references,
-rather than strings, because we don’t want the `longest` function to take
-ownership of its parameters. Refer to the [“String Slices as
-Parameters”][string-slices-as-parameters]<!-- ignore --> section in Chapter 4
-for more discussion about why the parameters we use in Listing 10-19 are the
-ones we want.
+توجه داشته باشید که می‌خواهیم تابع قطعه رشته‌ها، که مراجع هستند، بگیرد نه رشته‌ها، زیرا نمی‌خواهیم تابع `longest` مالکیت پارامترهای خود را بگیرد. برای بحث بیشتر درباره اینکه چرا پارامترهایی که در لیست ۱۰-۱۹ استفاده می‌کنیم همان‌هایی هستند که می‌خواهیم، به بخش [“قطعه رشته‌ها به عنوان پارامترها”][string-slices-as-parameters]<!-- ignore --> در فصل ۴ مراجعه کنید.
 
-If we try to implement the `longest` function as shown in Listing 10-20, it
-won’t compile.
+اگر سعی کنیم تابع `longest` را همانطور که در لیست ۱۰-۲۰ نشان داده شده است پیاده‌سازی کنیم، کامپایل نمی‌شود.
 
-<Listing number="10-20" file-name="src/main.rs" caption="An implementation of the `longest` function that returns the longer of two string slices but does not yet compile">
+<Listing number="10-20" file-name="src/main.rs" caption="پیاده‌سازی تابع `longest` که طولانی‌ترین قطعه رشته را بازمی‌گرداند اما هنوز کامپایل نمی‌شود">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/src/main.rs:here}}
@@ -133,71 +80,39 @@ won’t compile.
 
 </Listing>
 
-Instead, we get the following error that talks about lifetimes:
+به جای آن، خطای زیر را دریافت می‌کنیم که درباره طول عمرها صحبت می‌کند:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/output.txt}}
 ```
 
-The help text reveals that the return type needs a generic lifetime parameter
-on it because Rust can’t tell whether the reference being returned refers to
-`x` or `y`. Actually, we don’t know either, because the `if` block in the body
-of this function returns a reference to `x` and the `else` block returns a
-reference to `y`!
+متن کمکی نشان می‌دهد که نوع بازگشتی نیاز به یک پارامتر طول عمر جنریک دارد زیرا Rust نمی‌تواند تشخیص دهد که مرجع بازگردانده‌شده به `x` اشاره می‌کند یا به `y`. در واقع، ما هم نمی‌دانیم، زیرا بلوک `if` در بدنه این تابع یک مرجع به `x` بازمی‌گرداند و بلوک `else` یک مرجع به `y` بازمی‌گرداند!
 
-When we’re defining this function, we don’t know the concrete values that will
-be passed into this function, so we don’t know whether the `if` case or the
-`else` case will execute. We also don’t know the concrete lifetimes of the
-references that will be passed in, so we can’t look at the scopes as we did in
-Listings 10-17 and 10-18 to determine whether the reference we return will
-always be valid. The borrow checker can’t determine this either, because it
-doesn’t know how the lifetimes of `x` and `y` relate to the lifetime of the
-return value. To fix this error, we’ll add generic lifetime parameters that
-define the relationship between the references so the borrow checker can
-perform its analysis.
+وقتی این تابع را تعریف می‌کنیم، مقادیر مشخصی که به این تابع پاس داده می‌شوند را نمی‌دانیم، بنابراین نمی‌دانیم که آیا حالت `if` یا حالت `else` اجرا خواهد شد. همچنین طول عمرهای مشخص مراجع پاس‌داده‌شده را نمی‌دانیم، بنابراین نمی‌توانیم به محدوده‌ها مانند لیست‌های ۱۰-۱۷ و ۱۰-۱۸ نگاه کنیم تا تعیین کنیم که مرجعی که بازمی‌گردانیم همیشه معتبر خواهد بود. بررسی‌کننده قرض هم نمی‌تواند این موضوع را تعیین کند زیرا نمی‌داند چگونه طول عمرهای `x` و `y` به طول عمر مقدار بازگشتی مرتبط هستند. برای رفع این خطا، پارامترهای طول عمر جنریک اضافه می‌کنیم که رابطه بین مراجع را تعریف می‌کنند تا بررسی‌کننده قرض بتواند تحلیل خود را انجام دهد.
 
-### Lifetime Annotation Syntax
+### نحو حاشیه‌نویسی طول عمر
 
-Lifetime annotations don’t change how long any of the references live. Rather,
-they describe the relationships of the lifetimes of multiple references to each
-other without affecting the lifetimes. Just as functions can accept any type
-when the signature specifies a generic type parameter, functions can accept
-references with any lifetime by specifying a generic lifetime parameter.
+حاشیه‌نویسی طول عمر طول عمر هیچ‌یک از مراجع را تغییر نمی‌دهد. بلکه، آن‌ها روابط طول عمرهای چندین مرجع را بدون تأثیر بر طول عمرها توصیف می‌کنند. همانطور که توابع می‌توانند هر نوعی را بپذیرند وقتی امضا یک پارامتر نوع جنریک را مشخص می‌کند، توابع می‌توانند مراجع با هر طول عمری را بپذیرند با مشخص کردن یک پارامتر طول عمر جنریک.
 
-Lifetime annotations have a slightly unusual syntax: the names of lifetime
-parameters must start with an apostrophe (`'`) and are usually all lowercase
-and very short, like generic types. Most people use the name `'a` for the first
-lifetime annotation. We place lifetime parameter annotations after the `&` of a
-reference, using a space to separate the annotation from the reference’s type.
+حاشیه‌نویسی طول عمر دارای نحو کمی غیرمعمول است: نام‌های پارامتر طول عمر باید با یک آپاستروف (`'`) شروع شوند و معمولاً همه حروف کوچک و بسیار کوتاه هستند، مانند نوع‌های جنریک. بیشتر افراد از نام `'a` برای اولین حاشیه‌نویسی طول عمر استفاده می‌کنند. ما حاشیه‌نویسی‌های پارامتر طول عمر را بعد از `&` یک مرجع قرار می‌دهیم و از یک فاصله برای جدا کردن حاشیه‌نویسی از نوع مرجع استفاده می‌کنیم.
 
-Here are some examples: a reference to an `i32` without a lifetime parameter, a
-reference to an `i32` that has a lifetime parameter named `'a`, and a mutable
-reference to an `i32` that also has the lifetime `'a`.
+در اینجا چند مثال آورده شده است: یک مرجع به یک `i32` بدون پارامتر طول عمر، یک مرجع به یک `i32` که یک پارامتر طول عمر به نام `'a` دارد، و یک مرجع قابل تغییر به یک `i32` که همچنین طول عمر `'a` دارد:
 
 ```rust,ignore
-&i32        // a reference
-&'a i32     // a reference with an explicit lifetime
-&'a mut i32 // a mutable reference with an explicit lifetime
+&i32        // یک مرجع
+&'a i32     // یک مرجع با طول عمر صریح
+&'a mut i32 // یک مرجع قابل تغییر با طول عمر صریح
 ```
 
-One lifetime annotation by itself doesn’t have much meaning because the
-annotations are meant to tell Rust how generic lifetime parameters of multiple
-references relate to each other. Let’s examine how the lifetime annotations
-relate to each other in the context of the `longest` function.
+یک حاشیه‌نویسی طول عمر به تنهایی معنای زیادی ندارد زیرا حاشیه‌نویسی‌ها برای توضیح دادن به Rust هستند که پارامترهای طول عمر جنریک چندین مرجع چگونه به یکدیگر مرتبط هستند. بیایید بررسی کنیم که حاشیه‌نویسی‌های طول عمر چگونه در زمینه تابع `longest` به یکدیگر مرتبط هستند.
 
-### Lifetime Annotations in Function Signatures
+### حاشیه‌نویسی طول عمر در امضاهای توابع
 
-To use lifetime annotations in function signatures, we need to declare the
-generic _lifetime_ parameters inside angle brackets between the function name
-and the parameter list, just as we did with generic _type_ parameters.
+برای استفاده از حاشیه‌نویسی‌های طول عمر در امضاهای توابع، باید پارامترهای طول عمر جنریک را در داخل پرانتزهای زاویه‌ای بین نام تابع و لیست پارامتر اعلام کنیم، همانطور که با پارامترهای نوع جنریک انجام دادیم.
 
-We want the signature to express the following constraint: the returned
-reference will be valid as long as both the parameters are valid. This is the
-relationship between lifetimes of the parameters and the return value. We’ll
-name the lifetime `'a` and then add it to each reference, as shown in Listing
-10-21.
+ما می‌خواهیم امضا محدودیت زیر را بیان کند: مرجع بازگردانده‌شده تا زمانی که هر دو پارامتر معتبر هستند معتبر خواهد بود. این رابطه بین طول عمرهای پارامترها و مقدار بازگشتی است. طول عمر را به نام `'a` می‌نامیم و سپس آن را به هر مرجع اضافه می‌کنیم، همانطور که در لیست ۱۰-۲۱ نشان داده شده است.
 
-<Listing number="10-21" file-name="src/main.rs" caption="The `longest` function definition specifying that all the references in the signature must have the same lifetime `'a`">
+<Listing number="10-21" file-name="src/main.rs" caption="تعریف تابع `longest` که مشخص می‌کند تمام مراجع در امضا باید طول عمر یکسانی به نام `'a` داشته باشند">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/src/main.rs:here}}
@@ -205,49 +120,20 @@ name the lifetime `'a` and then add it to each reference, as shown in Listing
 
 </Listing>
 
-This code should compile and produce the result we want when we use it with the
-`main` function in Listing 10-19.
+این کد باید کامپایل شود و نتیجه مورد نظر ما را زمانی که با تابع `main` در لیست ۱۰-۱۹ استفاده می‌کنیم تولید کند.
 
-The function signature now tells Rust that for some lifetime `'a`, the function
-takes two parameters, both of which are string slices that live at least as
-long as lifetime `'a`. The function signature also tells Rust that the string
-slice returned from the function will live at least as long as lifetime `'a`.
-In practice, it means that the lifetime of the reference returned by the
-`longest` function is the same as the smaller of the lifetimes of the values
-referred to by the function arguments. These relationships are what we want
-Rust to use when analyzing this code.
+امضای تابع اکنون به Rust می‌گوید که برای برخی طول عمر `'a`، تابع دو پارامتر می‌گیرد که هر دو قطعه رشته‌هایی هستند که حداقل به مدت طول عمر `'a` زندگی می‌کنند. امضای تابع همچنین به Rust می‌گوید که قطعه رشته‌ای که از تابع بازگردانده می‌شود حداقل به مدت طول عمر `'a` زندگی می‌کند. در عمل، این بدان معناست که طول عمر مرجعی که توسط تابع `longest` بازگردانده می‌شود همان طول عمر کوچکتر مقادیر اشاره‌شده توسط آرگومان‌های تابع است. این روابط چیزی است که ما می‌خواهیم Rust هنگام تحلیل این کد از آن‌ها استفاده کند.
 
-Remember, when we specify the lifetime parameters in this function signature,
-we’re not changing the lifetimes of any values passed in or returned. Rather,
-we’re specifying that the borrow checker should reject any values that don’t
-adhere to these constraints. Note that the `longest` function doesn’t need to
-know exactly how long `x` and `y` will live, only that some scope can be
-substituted for `'a` that will satisfy this signature.
+به یاد داشته باشید، وقتی پارامترهای طول عمر را در این امضای تابع مشخص می‌کنیم، طول عمر هیچ‌یک از مقادیر پاس‌داده‌شده یا بازگردانده‌شده را تغییر نمی‌دهیم. بلکه، مشخص می‌کنیم که بررسی‌کننده قرض باید هر مقداری را که به این محدودیت‌ها پایبند نیست رد کند. توجه داشته باشید که تابع `longest` نیازی به دانستن دقیق اینکه `x` و `y` چقدر زنده خواهند ماند ندارد، تنها اینکه برخی محدوده‌ها می‌توانند جایگزین `'a` شوند که این امضا را برآورده کنند.
 
-When annotating lifetimes in functions, the annotations go in the function
-signature, not in the function body. The lifetime annotations become part of
-the contract of the function, much like the types in the signature. Having
-function signatures contain the lifetime contract means the analysis the Rust
-compiler does can be simpler. If there’s a problem with the way a function is
-annotated or the way it is called, the compiler errors can point to the part of
-our code and the constraints more precisely. If, instead, the Rust compiler
-made more inferences about what we intended the relationships of the lifetimes
-to be, the compiler might only be able to point to a use of our code many steps
-away from the cause of the problem.
+هنگام حاشیه‌نویسی طول عمرها در توابع، حاشیه‌نویسی‌ها در امضای تابع قرار می‌گیرند، نه در بدنه تابع. حاشیه‌نویسی‌های طول عمر بخشی از قرارداد تابع می‌شوند، مشابه انواع موجود در امضا. داشتن امضای تابع که شامل قرارداد طول عمر است به این معنی است که تحلیلی که کامپایلر Rust انجام می‌دهد می‌تواند ساده‌تر باشد. اگر مشکلی در نحوه حاشیه‌نویسی یک تابع یا نحوه فراخوانی آن وجود داشته باشد، خطاهای کامپایلر می‌توانند به بخش مشخصی از کد ما و محدودیت‌ها اشاره کنند. اگر، به جای آن، کامپایلر Rust استنتاج بیشتری درباره آنچه که قصد داریم روابط طول عمرها باشند انجام دهد، کامپایلر ممکن است فقط بتواند به استفاده‌ای از کد ما اشاره کند که چندین مرحله دور از علت مشکل باشد.
 
-When we pass concrete references to `longest`, the concrete lifetime that is
-substituted for `'a` is the part of the scope of `x` that overlaps with the
-scope of `y`. In other words, the generic lifetime `'a` will get the concrete
-lifetime that is equal to the smaller of the lifetimes of `x` and `y`. Because
-we’ve annotated the returned reference with the same lifetime parameter `'a`,
-the returned reference will also be valid for the length of the smaller of the
-lifetimes of `x` and `y`.
+وقتی مراجع مشخصی را به `longest` پاس می‌دهیم، طول عمر مشخصی که برای `'a` جایگزین می‌شود بخشی از محدوده `x` است که با محدوده `y` هم‌پوشانی دارد. به عبارت دیگر، طول عمر جنریک `'a` طول عمر مشخصی را می‌گیرد که برابر با کوچک‌ترین طول عمرهای `x` و `y` است. از آنجا که مرجع بازگردانده‌شده را با همان پارامتر طول عمر `'a` حاشیه‌نویسی کرده‌ایم، مرجع بازگردانده‌شده نیز برای مدت کوچک‌ترین طول عمرهای `x` و `y` معتبر خواهد بود.
 
-Let’s look at how the lifetime annotations restrict the `longest` function by
-passing in references that have different concrete lifetimes. Listing 10-22 is
-a straightforward example.
+بیایید ببینیم حاشیه‌نویسی طول عمرها چگونه تابع `longest` را محدود می‌کند با پاس دادن مراجع که طول عمرهای مشخص مختلفی دارند. لیست ۱۰-۲۲ یک مثال ساده است.
 
-<Listing number="10-22" file-name="src/main.rs" caption="Using the `longest` function with references to `String` values that have different concrete lifetimes">
+<Listing number="10-22" file-name="src/main.rs" caption="استفاده از تابع `longest` با مراجع به مقادیر `String` که طول عمرهای مشخص مختلفی دارند">
+
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-22/src/main.rs:here}}
@@ -255,21 +141,11 @@ a straightforward example.
 
 </Listing>
 
-In this example, `string1` is valid until the end of the outer scope, `string2`
-is valid until the end of the inner scope, and `result` references something
-that is valid until the end of the inner scope. Run this code and you’ll see
-that the borrow checker approves; it will compile and print `The longest string
-is long string is long`.
+در این مثال، `string1` تا پایان محدوده خارجی معتبر است، `string2` تا پایان محدوده داخلی معتبر است، و `result` به چیزی اشاره می‌کند که تا پایان محدوده داخلی معتبر است. این کد را اجرا کنید و خواهید دید که بررسی‌کننده قرض آن را تأیید می‌کند؛ کد کامپایل می‌شود و `The longest string is long string is long` را چاپ می‌کند.
 
-Next, let’s try an example that shows that the lifetime of the reference in
-`result` must be the smaller lifetime of the two arguments. We’ll move the
-declaration of the `result` variable outside the inner scope but leave the
-assignment of the value to the `result` variable inside the scope with
-`string2`. Then we’ll move the `println!` that uses `result` to outside the
-inner scope, after the inner scope has ended. The code in Listing 10-23 will
-not compile.
+حال، بیایید مثالی را امتحان کنیم که نشان دهد طول عمر مرجع در `result` باید کوچک‌ترین طول عمر دو آرگومان باشد. اعلام متغیر `result` را به بیرون از محدوده داخلی منتقل می‌کنیم، اما مقداردهی به متغیر `result` را درون محدوده با `string2` نگه می‌داریم. سپس `println!` که از `result` استفاده می‌کند را به بیرون از محدوده داخلی، پس از پایان محدوده داخلی منتقل می‌کنیم. کد در لیست ۱۰-۲۳ کامپایل نمی‌شود.
 
-<Listing number="10-23" file-name="src/main.rs" caption="Attempting to use `result` after `string2` has gone out of scope">
+<Listing number="10-23" file-name="src/main.rs" caption="تلاش برای استفاده از `result` پس از اینکه `string2` از محدوده خارج شده است">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/src/main.rs:here}}
@@ -277,38 +153,21 @@ not compile.
 
 </Listing>
 
-When we try to compile this code, we get this error:
+وقتی تلاش می‌کنیم این کد را کامپایل کنیم، خطای زیر را دریافت می‌کنیم:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/output.txt}}
 ```
 
-The error shows that for `result` to be valid for the `println!` statement,
-`string2` would need to be valid until the end of the outer scope. Rust knows
-this because we annotated the lifetimes of the function parameters and return
-values using the same lifetime parameter `'a`.
+این خطا نشان می‌دهد که برای اینکه `result` برای دستور `println!` معتبر باشد، `string2` باید تا پایان محدوده خارجی معتبر باشد. Rust این را می‌داند زیرا طول عمرهای پارامترهای تابع و مقادیر بازگشتی را با استفاده از همان پارامتر طول عمر `'a` حاشیه‌نویسی کرده‌ایم.
 
-As humans, we can look at this code and see that `string1` is longer than
-`string2`, and therefore, `result` will contain a reference to `string1`.
-Because `string1` has not gone out of scope yet, a reference to `string1` will
-still be valid for the `println!` statement. However, the compiler can’t see
-that the reference is valid in this case. We’ve told Rust that the lifetime of
-the reference returned by the `longest` function is the same as the smaller of
-the lifetimes of the references passed in. Therefore, the borrow checker
-disallows the code in Listing 10-23 as possibly having an invalid reference.
+به عنوان انسان، می‌توانیم به این کد نگاه کنیم و ببینیم که `string1` طولانی‌تر از `string2` است، و بنابراین، `result` یک مرجع به `string1` خواهد داشت. زیرا `string1` هنوز از محدوده خارج نشده است، یک مرجع به `string1` برای دستور `println!` همچنان معتبر خواهد بود. با این حال، کامپایلر نمی‌تواند ببیند که این مرجع در این مورد معتبر است. ما به Rust گفته‌ایم که طول عمر مرجع بازگردانده‌شده توسط تابع `longest` همان طول عمر کوچک‌ترین مرجع‌های پاس‌داده‌شده است. بنابراین، بررسی‌کننده قرض کد در لیست ۱۰-۲۳ را به عنوان داشتن یک مرجع نامعتبر احتمالی رد می‌کند.
 
-Try designing more experiments that vary the values and lifetimes of the
-references passed in to the `longest` function and how the returned reference
-is used. Make hypotheses about whether or not your experiments will pass the
-borrow checker before you compile; then check to see if you’re right!
+سعی کنید آزمایش‌های بیشتری طراحی کنید که مقادیر و طول عمر مراجع پاس‌داده‌شده به تابع `longest` و نحوه استفاده از مرجع بازگردانده‌شده را تغییر دهند. فرضیاتی درباره اینکه آیا آزمایش‌های شما بررسی‌کننده قرض را پاس می‌کنند یا نه ایجاد کنید؛ سپس بررسی کنید که آیا درست می‌گویید!
 
-### Thinking in Terms of Lifetimes
+### تفکر بر اساس طول عمرها
 
-The way in which you need to specify lifetime parameters depends on what your
-function is doing. For example, if we changed the implementation of the
-`longest` function to always return the first parameter rather than the longest
-string slice, we wouldn’t need to specify a lifetime on the `y` parameter. The
-following code will compile:
+نحوه نیاز شما به مشخص کردن پارامترهای طول عمر به آنچه که تابع شما انجام می‌دهد بستگی دارد. برای مثال، اگر پیاده‌سازی تابع `longest` را تغییر دهیم تا همیشه اولین پارامتر را به جای طولانی‌ترین قطعه رشته بازگرداند، نیازی به مشخص کردن طول عمر برای پارامتر `y` نخواهیم داشت. کد زیر کامپایل می‌شود:
 
 <Listing file-name="src/main.rs">
 
@@ -318,17 +177,9 @@ following code will compile:
 
 </Listing>
 
-We’ve specified a lifetime parameter `'a` for the parameter `x` and the return
-type, but not for the parameter `y`, because the lifetime of `y` does not have
-any relationship with the lifetime of `x` or the return value.
+ما یک پارامتر طول عمر `'a` برای پارامتر `x` و نوع بازگشتی مشخص کرده‌ایم، اما برای پارامتر `y` نه، زیرا طول عمر `y` هیچ رابطه‌ای با طول عمر `x` یا مقدار بازگشتی ندارد.
 
-When returning a reference from a function, the lifetime parameter for the
-return type needs to match the lifetime parameter for one of the parameters. If
-the reference returned does _not_ refer to one of the parameters, it must refer
-to a value created within this function. However, this would be a dangling
-reference because the value will go out of scope at the end of the function.
-Consider this attempted implementation of the `longest` function that won’t
-compile:
+هنگام بازگرداندن یک مرجع از یک تابع، پارامتر طول عمر برای نوع بازگشتی باید با پارامتر طول عمر یکی از پارامترها مطابقت داشته باشد. اگر مرجع بازگردانده‌شده به یکی از پارامترها اشاره نکند، باید به مقداری که در این تابع ایجاد شده است اشاره کند. با این حال، این یک مرجع آویزان خواهد بود زیرا مقدار در پایان تابع از محدوده خارج می‌شود. به این پیاده‌سازی ناموفق تابع `longest` که کامپایل نمی‌شود توجه کنید:
 
 <Listing file-name="src/main.rs">
 
@@ -338,36 +189,21 @@ compile:
 
 </Listing>
 
-Here, even though we’ve specified a lifetime parameter `'a` for the return
-type, this implementation will fail to compile because the return value
-lifetime is not related to the lifetime of the parameters at all. Here is the
-error message we get:
+در اینجا، حتی اگر یک پارامتر طول عمر `'a` برای نوع بازگشتی مشخص کرده باشیم، این پیاده‌سازی کامپایل نمی‌شود زیرا طول عمر مقدار بازگشتی به هیچ وجه به طول عمر پارامترها مرتبط نیست. پیام خطایی که دریافت می‌کنیم به این شکل است:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/output.txt}}
 ```
 
-The problem is that `result` goes out of scope and gets cleaned up at the end
-of the `longest` function. We’re also trying to return a reference to `result`
-from the function. There is no way we can specify lifetime parameters that
-would change the dangling reference, and Rust won’t let us create a dangling
-reference. In this case, the best fix would be to return an owned data type
-rather than a reference so the calling function is then responsible for
-cleaning up the value.
+مشکل این است که `result` از محدوده خارج می‌شود و در پایان تابع `longest` پاک می‌شود. همچنین سعی می‌کنیم یک مرجع به `result` را از تابع بازگردانیم. هیچ راهی وجود ندارد که بتوانیم پارامترهای طول عمری مشخص کنیم که مرجع آویزان را تغییر دهد، و Rust به ما اجازه نمی‌دهد یک مرجع آویزان ایجاد کنیم. در این مورد، بهترین راه حل این است که یک نوع داده مالک (owned) به جای یک مرجع بازگردانیم تا تابع فراخوانی‌کننده مسئول پاک‌سازی مقدار باشد.
 
-Ultimately, lifetime syntax is about connecting the lifetimes of various
-parameters and return values of functions. Once they’re connected, Rust has
-enough information to allow memory-safe operations and disallow operations that
-would create dangling pointers or otherwise violate memory safety.
+در نهایت، نحو طول عمرها درباره ارتباط دادن طول عمرهای پارامترها و مقادیر بازگشتی توابع است. وقتی این ارتباط برقرار شد، Rust اطلاعات کافی برای اجازه دادن به عملیات‌های ایمن از نظر حافظه و منع عملیات‌هایی که باعث ایجاد اشاره‌گرهای آویزان یا نقض ایمنی حافظه می‌شوند، دارد.
 
-### Lifetime Annotations in Struct Definitions
+### حاشیه‌نویسی طول عمر در تعریف ساختارها
 
-So far, the structs we’ve defined all hold owned types. We can define structs
-to hold references, but in that case we would need to add a lifetime annotation
-on every reference in the struct’s definition. Listing 10-24 has a struct named
-`ImportantExcerpt` that holds a string slice.
+تا کنون، ساختارهایی که تعریف کرده‌ایم همه دارای نوع‌های مالک بوده‌اند. می‌توانیم ساختارهایی را تعریف کنیم که مراجع نگه می‌دارند، اما در این صورت باید برای هر مرجعی در تعریف ساختار یک حاشیه‌نویسی طول عمر اضافه کنیم. لیست ۱۰-۲۴ یک ساختار به نام `ImportantExcerpt` دارد که یک قطعه رشته نگه می‌دارد.
 
-<Listing number="10-24" file-name="src/main.rs" caption="A struct that holds a reference, requiring a lifetime annotation">
+<Listing number="10-24" file-name="src/main.rs" caption="یک ساختار که یک مرجع نگه می‌دارد و نیاز به یک حاشیه‌نویسی طول عمر دارد">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/src/main.rs}}
@@ -375,28 +211,16 @@ on every reference in the struct’s definition. Listing 10-24 has a struct name
 
 </Listing>
 
-This struct has the single field `part` that holds a string slice, which is a
-reference. As with generic data types, we declare the name of the generic
-lifetime parameter inside angle brackets after the name of the struct so we can
-use the lifetime parameter in the body of the struct definition. This
-annotation means an instance of `ImportantExcerpt` can’t outlive the reference
-it holds in its `part` field.
+این ساختار دارای یک فیلد به نام `part` است که یک قطعه رشته نگه می‌دارد، که یک مرجع است. همانند نوع‌های داده جنریک، ما نام پارامتر طول عمر جنریک را در داخل پرانتزهای زاویه‌ای بعد از نام ساختار اعلام می‌کنیم تا بتوانیم پارامتر طول عمر را در بدنه تعریف ساختار استفاده کنیم. این حاشیه‌نویسی به این معنی است که یک نمونه از `ImportantExcerpt` نمی‌تواند بیشتر از مرجعی که در فیلد `part` خود نگه می‌دارد زنده بماند.
 
-The `main` function here creates an instance of the `ImportantExcerpt` struct
-that holds a reference to the first sentence of the `String` owned by the
-variable `novel`. The data in `novel` exists before the `ImportantExcerpt`
-instance is created. In addition, `novel` doesn’t go out of scope until after
-the `ImportantExcerpt` goes out of scope, so the reference in the
-`ImportantExcerpt` instance is valid.
+تابع `main` در اینجا یک نمونه از ساختار `ImportantExcerpt` ایجاد می‌کند که یک مرجع به اولین جمله از `String` که توسط متغیر `novel` نگه داشته می‌شود، نگه می‌دارد. داده‌های `novel` قبل از ایجاد نمونه `ImportantExcerpt` وجود دارند. علاوه بر این، `novel` تا بعد از خروج `ImportantExcerpt` از محدوده از محدوده خارج نمی‌شود، بنابراین مرجع در نمونه `ImportantExcerpt` معتبر است.
 
-### Lifetime Elision
+### حذف طول عمر (Lifetime Elision)
 
-You’ve learned that every reference has a lifetime and that you need to specify
-lifetime parameters for functions or structs that use references. However, we
-had a function in Listing 4-9, shown again in Listing 10-25, that compiled
-without lifetime annotations.
+آموختید که هر مرجع دارای یک طول عمر است و شما باید برای توابع یا ساختارهایی که از مراجع استفاده می‌کنند پارامترهای طول عمر مشخص کنید. با این حال، ما تابعی در لیست ۴-۹ داشتیم که دوباره در لیست ۱۰-۲۵ نشان داده شده است، که بدون حاشیه‌نویسی طول عمر کامپایل شد.
 
-<Listing number="10-25" file-name="src/lib.rs" caption="A function we defined in Listing 4-9 that compiled without lifetime annotations, even though the parameter and return type are references">
+<Listing number="10-25" file-name="src/lib.rs" caption="یک تابع که در لیست ۴-۹ تعریف کردیم و بدون حاشیه‌نویسی طول عمر کامپایل شد، حتی با اینکه پارامتر و نوع بازگشتی مراجع هستند">
+
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-25/src/main.rs:here}}
@@ -404,213 +228,116 @@ without lifetime annotations.
 
 </Listing>
 
-The reason this function compiles without lifetime annotations is historical:
-in early versions (pre-1.0) of Rust, this code wouldn’t have compiled because
-every reference needed an explicit lifetime. At that time, the function
-signature would have been written like this:
+دلیل اینکه این تابع بدون حاشیه‌نویسی طول عمر کامپایل می‌شود تاریخی است: در نسخه‌های اولیه (قبل از 1.0) از Rust، این کد کامپایل نمی‌شد زیرا هر مرجع نیاز به یک طول عمر صریح داشت. در آن زمان، امضای تابع به این صورت نوشته می‌شد:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-After writing a lot of Rust code, the Rust team found that Rust programmers
-were entering the same lifetime annotations over and over in particular
-situations. These situations were predictable and followed a few deterministic
-patterns. The developers programmed these patterns into the compiler’s code so
-the borrow checker could infer the lifetimes in these situations and wouldn’t
-need explicit annotations.
+پس از نوشتن مقدار زیادی کد Rust، تیم Rust متوجه شد که برنامه‌نویسان Rust در موقعیت‌های خاصی حاشیه‌نویسی‌های طول عمر یکسانی را بارها و بارها وارد می‌کردند. این موقعیت‌ها قابل پیش‌بینی بودند و از چند الگوی تعیین‌کننده پیروی می‌کردند. توسعه‌دهندگان این الگوها را در کد کامپایلر برنامه‌ریزی کردند تا بررسی‌کننده قرض بتواند طول عمرها را در این موقعیت‌ها استنتاج کند و نیازی به حاشیه‌نویسی صریح نباشد.
 
-This piece of Rust history is relevant because it’s possible that more
-deterministic patterns will emerge and be added to the compiler. In the future,
-even fewer lifetime annotations might be required.
+این بخش از تاریخ Rust مرتبط است زیرا ممکن است الگوهای تعیین‌کننده بیشتری ظاهر شوند و به کامپایلر اضافه شوند. در آینده، حتی حاشیه‌نویسی‌های طول عمر کمتری ممکن است لازم باشد.
 
-The patterns programmed into Rust’s analysis of references are called the
-_lifetime elision rules_. These aren’t rules for programmers to follow; they’re
-a set of particular cases that the compiler will consider, and if your code
-fits these cases, you don’t need to write the lifetimes explicitly.
+الگوهایی که در تحلیل مراجع Rust برنامه‌ریزی شده‌اند _قوانین حذف طول عمر_ (lifetime elision rules) نامیده می‌شوند. این‌ها قوانینی نیستند که برنامه‌نویسان باید رعایت کنند؛ بلکه مجموعه‌ای از موارد خاص هستند که کامپایلر آن‌ها را در نظر می‌گیرد و اگر کد شما با این موارد مطابقت داشته باشد، نیازی به نوشتن طول عمرها به صورت صریح نخواهید داشت.
 
-The elision rules don’t provide full inference. If there is still ambiguity as
-to what lifetimes the references have after Rust applies the rules, the
-compiler won’t guess what the lifetime of the remaining references should be.
-Instead of guessing, the compiler will give you an error that you can resolve
-by adding the lifetime annotations.
+قوانین حذف طول عمر استنتاج کامل ارائه نمی‌دهند. اگر پس از اعمال قوانین توسط Rust همچنان ابهامی در مورد طول عمر مراجع وجود داشته باشد، کامپایلر حدس نمی‌زند که طول عمر باقی‌مانده چه باید باشد. به جای حدس زدن، کامپایلر به شما خطایی می‌دهد که می‌توانید با افزودن حاشیه‌نویسی‌های طول عمر آن را برطرف کنید.
 
-Lifetimes on function or method parameters are called _input lifetimes_, and
-lifetimes on return values are called _output lifetimes_.
+طول عمرهای روی پارامترهای تابع یا متد _طول عمر ورودی_ (input lifetimes) نامیده می‌شوند، و طول عمرهای روی مقادیر بازگشتی _طول عمر خروجی_ (output lifetimes) نامیده می‌شوند.
 
-The compiler uses three rules to figure out the lifetimes of the references
-when there aren’t explicit annotations. The first rule applies to input
-lifetimes, and the second and third rules apply to output lifetimes. If the
-compiler gets to the end of the three rules and there are still references for
-which it can’t figure out lifetimes, the compiler will stop with an error.
-These rules apply to `fn` definitions as well as `impl` blocks.
+کامپایلر از سه قانون برای تشخیص طول عمر مراجع استفاده می‌کند وقتی که حاشیه‌نویسی‌های صریح وجود ندارند. قانون اول برای طول عمرهای ورودی اعمال می‌شود، و قانون دوم و سوم برای طول عمرهای خروجی. اگر کامپایلر به انتهای این سه قانون برسد و هنوز مراجع وجود داشته باشند که نتواند طول عمرهای آن‌ها را تشخیص دهد، کامپایلر با یک خطا متوقف می‌شود. این قوانین به تعاریف `fn` و همچنین بلوک‌های `impl` اعمال می‌شوند.
 
-The first rule is that the compiler assigns a lifetime parameter to each
-parameter that’s a reference. In other words, a function with one parameter
-gets one lifetime parameter: `fn foo<'a>(x: &'a i32)`; a function with two
-parameters gets two separate lifetime parameters: `fn foo<'a, 'b>(x: &'a i32,
-y: &'b i32)`; and so on.
+- **قانون اول**: کامپایلر یک پارامتر طول عمر به هر پارامتر که یک مرجع است اختصاص می‌دهد. به عبارت دیگر، یک تابع با یک پارامتر یک پارامتر طول عمر می‌گیرد: `fn foo<'a>(x: &'a i32)`؛ یک تابع با دو پارامتر دو پارامتر طول عمر جداگانه می‌گیرد: `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)`؛ و به همین ترتیب.
+- **قانون دوم**: اگر دقیقاً یک پارامتر طول عمر ورودی وجود داشته باشد، آن طول عمر به تمام پارامترهای طول عمر خروجی اختصاص داده می‌شود: `fn foo<'a>(x: &'a i32) -> &'a i32`.
+- **قانون سوم**: اگر چندین پارامتر طول عمر ورودی وجود داشته باشد، اما یکی از آن‌ها `&self` یا `&mut self` باشد زیرا این یک متد است، طول عمر `self` به تمام پارامترهای طول عمر خروجی اختصاص داده می‌شود. این قانون سوم خواندن و نوشتن متدها را بسیار آسان‌تر می‌کند زیرا نمادهای کمتری لازم است.
 
-The second rule is that, if there is exactly one input lifetime parameter, that
-lifetime is assigned to all output lifetime parameters: `fn foo<'a>(x: &'a i32)
--> &'a i32`.
-
-The third rule is that, if there are multiple input lifetime parameters, but
-one of them is `&self` or `&mut self` because this is a method, the lifetime of
-`self` is assigned to all output lifetime parameters. This third rule makes
-methods much nicer to read and write because fewer symbols are necessary.
-
-Let’s pretend we’re the compiler. We’ll apply these rules to figure out the
-lifetimes of the references in the signature of the `first_word` function in
-Listing 10-25. The signature starts without any lifetimes associated with the
-references:
+بیایید وانمود کنیم که ما کامپایلر هستیم. این قوانین را برای تشخیص طول عمر مراجع در امضای تابع `first_word` در لیست ۱۰-۲۵ اعمال می‌کنیم. امضا بدون هیچ طول عمری که با مراجع مرتبط باشد شروع می‌شود:
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
 ```
 
-Then the compiler applies the first rule, which specifies that each parameter
-gets its own lifetime. We’ll call it `'a` as usual, so now the signature is
-this:
+سپس کامپایلر قانون اول را اعمال می‌کند که مشخص می‌کند هر پارامتر طول عمر خاص خود را دریافت می‌کند. ما آن را طبق معمول `'a` می‌نامیم، بنابراین امضا اکنون به این صورت است:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &str {
 ```
 
-The second rule applies because there is exactly one input lifetime. The second
-rule specifies that the lifetime of the one input parameter gets assigned to
-the output lifetime, so the signature is now this:
+قانون دوم اعمال می‌شود زیرا دقیقاً یک طول عمر ورودی وجود دارد. قانون دوم مشخص می‌کند که طول عمر یک پارامتر ورودی به طول عمر خروجی اختصاص داده می‌شود، بنابراین امضا اکنون به این صورت است:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-Now all the references in this function signature have lifetimes, and the
-compiler can continue its analysis without needing the programmer to annotate
-the lifetimes in this function signature.
+حالا تمام مراجع در این امضای تابع طول عمر دارند و کامپایلر می‌تواند تحلیل خود را بدون نیاز به برنامه‌نویس برای حاشیه‌نویسی طول عمرها در این امضای تابع ادامه دهد.
 
-Let’s look at another example, this time using the `longest` function that had
-no lifetime parameters when we started working with it in Listing 10-20:
+بیایید به یک مثال دیگر نگاه کنیم، این بار با استفاده از تابع `longest` که در ابتدا هیچ پارامتر طول عمری نداشت، همانطور که در لیست ۱۰-۲۰ کار خود را با آن شروع کردیم:
 
 ```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
 ```
 
-Let’s apply the first rule: each parameter gets its own lifetime. This time we
-have two parameters instead of one, so we have two lifetimes:
+بیایید قانون اول را اعمال کنیم: هر پارامتر طول عمر خاص خود را دریافت می‌کند. این بار دو پارامتر داریم، بنابراین دو طول عمر داریم:
 
 ```rust,ignore
 fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &str {
 ```
 
-You can see that the second rule doesn’t apply because there is more than one
-input lifetime. The third rule doesn’t apply either, because `longest` is a
-function rather than a method, so none of the parameters are `self`. After
-working through all three rules, we still haven’t figured out what the return
-type’s lifetime is. This is why we got an error trying to compile the code in
-Listing 10-20: the compiler worked through the lifetime elision rules but still
-couldn’t figure out all the lifetimes of the references in the signature.
+می‌بینید که قانون دوم اعمال نمی‌شود زیرا بیش از یک طول عمر ورودی وجود دارد. قانون سوم نیز اعمال نمی‌شود زیرا `longest` یک تابع است و نه یک متد، بنابراین هیچ یک از پارامترها `self` نیستند. پس از عبور از تمام سه قانون، هنوز طول عمر نوع بازگشتی را تعیین نکرده‌ایم. به همین دلیل است که هنگام تلاش برای کامپایل کد در لیست ۱۰-۲۰ خطا گرفتیم: کامپایلر قوانین حذف طول عمر را مرور کرد اما همچنان نتوانست تمام طول عمرهای مراجع در امضا را تعیین کند.
 
-Because the third rule really only applies in method signatures, we’ll look at
-lifetimes in that context next to see why the third rule means we don’t have to
-annotate lifetimes in method signatures very often.
+از آنجا که قانون سوم واقعاً فقط در امضاهای متد اعمال می‌شود، به بررسی طول عمرها در آن زمینه می‌پردازیم تا ببینیم چرا قانون سوم باعث می‌شود که اغلب نیازی به حاشیه‌نویسی طول عمر در امضاهای متد نداشته باشیم.
 
-### Lifetime Annotations in Method Definitions
+### حاشیه‌نویسی طول عمر در تعریف متدها
 
-When we implement methods on a struct with lifetimes, we use the same syntax as
-that of generic type parameters shown in Listing 10-11. Where we declare and
-use the lifetime parameters depends on whether they’re related to the struct
-fields or the method parameters and return values.
+وقتی متدهایی را روی یک ساختار با طول عمرها پیاده‌سازی می‌کنیم، از همان نحوی که برای پارامترهای نوع جنریک در لیست ۱۰-۱۱ استفاده شده است، بهره می‌بریم. جایی که پارامترهای طول عمر را اعلام و استفاده می‌کنیم به این بستگی دارد که آیا آن‌ها به فیلدهای ساختار یا به پارامترها و مقادیر بازگشتی متد مربوط هستند یا خیر.
 
-Lifetime names for struct fields always need to be declared after the `impl`
-keyword and then used after the struct’s name because those lifetimes are part
-of the struct’s type.
+نام‌های طول عمر برای فیلدهای ساختار همیشه باید بعد از کلمه کلیدی `impl` اعلام شوند و سپس بعد از نام ساختار استفاده شوند، زیرا این طول عمرها بخشی از نوع ساختار هستند.
 
-In method signatures inside the `impl` block, references might be tied to the
-lifetime of references in the struct’s fields, or they might be independent. In
-addition, the lifetime elision rules often make it so that lifetime annotations
-aren’t necessary in method signatures. Let’s look at some examples using the
-struct named `ImportantExcerpt` that we defined in Listing 10-24.
+در امضاهای متد در داخل بلوک `impl`، مراجع ممکن است به طول عمر مراجع در فیلدهای ساختار مرتبط باشند، یا ممکن است مستقل باشند. علاوه بر این، قوانین حذف طول عمر اغلب باعث می‌شوند که حاشیه‌نویسی طول عمر در امضاهای متد ضروری نباشد. بیایید به چند مثال با استفاده از ساختار `ImportantExcerpt` که در لیست ۱۰-۲۴ تعریف کردیم، نگاه کنیم.
 
-First we’ll use a method named `level` whose only parameter is a reference to
-`self` and whose return value is an `i32`, which is not a reference to anything:
+ابتدا از متدی به نام `level` استفاده می‌کنیم که تنها پارامتر آن مرجعی به `self` است و مقدار بازگشتی آن یک `i32` است که به چیزی اشاره نمی‌کند:
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:1st}}
 ```
 
-The lifetime parameter declaration after `impl` and its use after the type name
-are required, but we’re not required to annotate the lifetime of the reference
-to `self` because of the first elision rule.
+اعلام پارامتر طول عمر بعد از `impl` و استفاده از آن بعد از نام نوع الزامی است، اما ما نیازی به حاشیه‌نویسی طول عمر مرجع به `self` نداریم زیرا قانون اول حذف اعمال می‌شود.
 
-Here is an example where the third lifetime elision rule applies:
+در اینجا مثالی است که قانون سوم حذف طول عمر اعمال می‌شود:
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:3rd}}
 ```
 
-There are two input lifetimes, so Rust applies the first lifetime elision rule
-and gives both `&self` and `announcement` their own lifetimes. Then, because
-one of the parameters is `&self`, the return type gets the lifetime of `&self`,
-and all lifetimes have been accounted for.
+دو طول عمر ورودی وجود دارد، بنابراین Rust قانون اول حذف طول عمر را اعمال می‌کند و طول عمرهای جداگانه‌ای به `&self` و `announcement` می‌دهد. سپس، چون یکی از پارامترها `&self` است، نوع بازگشتی طول عمر `&self` را دریافت می‌کند، و تمام طول عمرها در نظر گرفته شده‌اند.
 
-### The Static Lifetime
+### طول عمر استاتیک
 
-One special lifetime we need to discuss is `'static`, which denotes that the
-affected reference _can_ live for the entire duration of the program. All
-string literals have the `'static` lifetime, which we can annotate as follows:
+یک طول عمر خاص که باید درباره آن صحبت کنیم `'static` است، که نشان می‌دهد مرجع مورد نظر _می‌تواند_ برای کل مدت اجرای برنامه زنده بماند. تمام رشته‌های لیتری دارای طول عمر `'static` هستند، که می‌توانیم آن را به این صورت حاشیه‌نویسی کنیم:
 
 ```rust
 let s: &'static str = "I have a static lifetime.";
 ```
 
-The text of this string is stored directly in the program’s binary, which is
-always available. Therefore, the lifetime of all string literals is `'static`.
+متن این رشته مستقیماً در باینری برنامه ذخیره می‌شود، که همیشه در دسترس است. بنابراین، طول عمر تمام رشته‌های لیتری `'static` است.
 
-You might see suggestions in error messages to use the `'static` lifetime. But
-before specifying `'static` as the lifetime for a reference, think about
-whether the reference you have actually lives the entire lifetime of your
-program or not, and whether you want it to. Most of the time, an error message
-suggesting the `'static` lifetime results from attempting to create a dangling
-reference or a mismatch of the available lifetimes. In such cases, the solution
-is to fix those problems, not to specify the `'static` lifetime.
+ممکن است در پیام‌های خطا پیشنهادهایی برای استفاده از طول عمر `'static` ببینید. اما قبل از مشخص کردن طول عمر `'static` برای یک مرجع، فکر کنید که آیا مرجعی که دارید واقعاً برای کل مدت اجرای برنامه زنده است یا خیر، و آیا می‌خواهید چنین باشد. بیشتر اوقات، یک پیام خطا که طول عمر `'static` را پیشنهاد می‌دهد نتیجه تلاش برای ایجاد یک مرجع آویزان یا ناسازگاری طول عمرهای موجود است. در چنین مواردی، راه حل این است که این مشکلات را برطرف کنید، نه اینکه طول عمر `'static` را مشخص کنید.
 
-## Generic Type Parameters, Trait Bounds, and Lifetimes Together
+## پارامترهای نوع جنریک، محدودیت ویژگی، و طول عمرها با هم
 
-Let’s briefly look at the syntax of specifying generic type parameters, trait
-bounds, and lifetimes all in one function!
+بیایید به طور مختصر به نحو مشخص کردن پارامترهای نوع جنریک، محدودیت ویژگی، و طول عمرها در یک تابع نگاه کنیم!
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-11-generics-traits-and-lifetimes/src/main.rs:here}}
 ```
 
-This is the `longest` function from Listing 10-21 that returns the longer of
-two string slices. But now it has an extra parameter named `ann` of the generic
-type `T`, which can be filled in by any type that implements the `Display`
-trait as specified by the `where` clause. This extra parameter will be printed
-using `{}`, which is why the `Display` trait bound is necessary. Because
-lifetimes are a type of generic, the declarations of the lifetime parameter
-`'a` and the generic type parameter `T` go in the same list inside the angle
-brackets after the function name.
+این تابع `longest` از لیست ۱۰-۲۱ است که طولانی‌ترین قطعه رشته را بازمی‌گرداند. اما اکنون یک پارامتر اضافی به نام `ann` دارد که از نوع جنریک `T` است، که می‌تواند با هر نوعی که ویژگی `Display` را پیاده‌سازی می‌کند، پر شود، همانطور که توسط بند `where` مشخص شده است. این پارامتر اضافی با استفاده از `{}` چاپ خواهد شد، به همین دلیل محدودیت ویژگی `Display` ضروری است. از آنجا که طول عمرها نوعی جنریک هستند، اعلام طول عمر `'a` و پارامتر نوع جنریک `T` در همان لیست داخل پرانتزهای زاویه‌ای بعد از نام تابع قرار می‌گیرند.
 
-## Summary
+## خلاصه
 
-We covered a lot in this chapter! Now that you know about generic type
-parameters, traits and trait bounds, and generic lifetime parameters, you’re
-ready to write code without repetition that works in many different situations.
-Generic type parameters let you apply the code to different types. Traits and
-trait bounds ensure that even though the types are generic, they’ll have the
-behavior the code needs. You learned how to use lifetime annotations to ensure
-that this flexible code won’t have any dangling references. And all of this
-analysis happens at compile time, which doesn’t affect runtime performance!
+در این فصل مطالب زیادی را پوشش دادیم! حالا که با پارامترهای نوع جنریک، ویژگی‌ها و محدودیت‌های ویژگی، و پارامترهای طول عمر جنریک آشنا شدید، آماده هستید تا کدی بدون تکرار بنویسید که در بسیاری از موقعیت‌های مختلف کار کند. پارامترهای نوع جنریک به شما اجازه می‌دهند که کد را روی انواع مختلف اعمال کنید. ویژگی‌ها و محدودیت‌های ویژگی اطمینان حاصل می‌کنند که حتی با اینکه نوع‌ها جنریک هستند، رفتار مورد نیاز کد را خواهند داشت. شما یاد گرفتید چگونه از حاشیه‌نویسی طول عمر استفاده کنید تا اطمینان حاصل شود که این کد انعطاف‌پذیر هیچ مرجع آویزانی نخواهد داشت. و تمام این تحلیل‌ها در زمان کامپایل انجام می‌شود، که بر عملکرد زمان اجرا تأثیری ندارد!
 
-Believe it or not, there is much more to learn on the topics we discussed in
-this chapter: Chapter 18 discusses trait objects, which are another way to use
-traits. There are also more complex scenarios involving lifetime annotations
-that you will only need in very advanced scenarios; for those, you should read
-the [Rust Reference][reference]. But next, you’ll learn how to write tests in
-Rust so you can make sure your code is working the way it should.
+باور کنید یا نه، مطالب بیشتری برای یادگیری در مورد موضوعاتی که در این فصل بحث شد وجود دارد: فصل ۱۸ به اشیاء ویژگی (trait objects) می‌پردازد، که راه دیگری برای استفاده از ویژگی‌ها است. همچنین سناریوهای پیچیده‌تری وجود دارد که شامل حاشیه‌نویسی طول عمر هستند و فقط در سناریوهای بسیار پیشرفته به آن‌ها نیاز خواهید داشت. برای این موارد، باید [مرجع Rust][reference] را مطالعه کنید. اما بعد از این، یاد خواهید گرفت که چگونه تست‌هایی در Rust بنویسید تا مطمئن شوید کد شما همانطور که باید کار می‌کند.
 
-[references-and-borrowing]: ch04-02-references-and-borrowing.html#references-and-borrowing
-[string-slices-as-parameters]: ch04-03-slices.html#string-slices-as-parameters
+[references-and-borrowing]: ch04-02-references-and-borrowing.html#references-and-borrowing  
+[string-slices-as-parameters]: ch04-03-slices.html#string-slices-as-parameters  
 [reference]: ../reference/index.html
