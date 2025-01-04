@@ -67,19 +67,19 @@ your web browser.
 _Firefox:_
 
 ```bash
-$ firefox persian/book/index.html                       # Linux
-$ open -a "Firefox" persian/book/index.html             # OS X
-$ Start-Process "firefox.exe" .\persian\book\index.html # Windows (PowerShell)
-$ start firefox.exe .\persian\book\index.html           # Windows (Cmd)
+$ firefox book/index.html                       # Linux
+$ open -a "Firefox" book/index.html             # OS X
+$ Start-Process "firefox.exe" .\book\index.html # Windows (PowerShell)
+$ start firefox.exe .\book\index.html           # Windows (Cmd)
 ```
 
 _Chrome:_
 
 ```bash
-$ google-chrome persian/book/index.html                 # Linux
-$ open -a "Google Chrome" persian/book/index.html       # OS X
-$ Start-Process "chrome.exe" .\persian\book\index.html  # Windows (PowerShell)
-$ start chrome.exe .\persian\book\index.html            # Windows (Cmd)
+$ google-chrome book/index.html                 # Linux
+$ open -a "Google Chrome" book/index.html       # OS X
+$ Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
+$ start chrome.exe .\book\index.html            # Windows (Cmd)
 ```
 
 To run the tests:
