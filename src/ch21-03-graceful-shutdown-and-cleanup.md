@@ -74,7 +74,7 @@ So we need to update the `ThreadPool` `drop` implementation like this:
 
 <Listing file-name="src/lib.rs">
 
-```rust,ignore,does_not_compile
+```rust
 {{#rustdoc_include ../listings/ch21-web-server/no-listing-04-update-drop-definition/src/lib.rs:here}}
 ```
 
