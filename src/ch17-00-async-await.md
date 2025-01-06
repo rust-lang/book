@@ -1,4 +1,4 @@
-## Async and Await
+# Async and Await
 
 Many operations we ask the computer to do can take a while to finish. For
 example, if you used a video editor to create a video of a family celebration,
