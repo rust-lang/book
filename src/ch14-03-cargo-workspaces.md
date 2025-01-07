@@ -149,11 +149,10 @@ Cargo doesn’t assume that crates in a workspace will depend on each other, so
 we need to be explicit about the dependency relationships.
 
 Next, let’s use the `add_one` function (from the `add_one` crate) in the
-`adder` crate. Open the _adder/src/main.rs_ file and add a `use` line at the
-top to bring the new `add_one` library crate into scope. Then change the `main`
+`adder` crate. Open the _adder/src/main.rs_ file and change the `main`
 function to call the `add_one` function, as in Listing 14-7.
 
-<Listing number="14-7" file-name="adder/src/main.rs" caption="Using the `add_one` library crate from the `adder` crate">
+<Listing number="14-7" file-name="adder/src/main.rs" caption="Using the `add_one` library crate in the `adder` crate">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}

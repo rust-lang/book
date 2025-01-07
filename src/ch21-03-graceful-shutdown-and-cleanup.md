@@ -67,7 +67,7 @@ alternative approaches. They can make your code cleaner and less error-prone.
 
 In this case, there is a better alternative: the `Vec::drain` method. It accepts
 a range parameter to specify which items to remove from the `Vec`, and returns
-an iterator of those items. Passing the `..` range syntax will remove *every*
+an iterator of those items. Passing the `..` range syntax will remove _every_
 value from the `Vec`.
 
 So we need to update the `ThreadPool` `drop` implementation like this:
@@ -99,7 +99,7 @@ implementation and then a change in the `Worker` loop.
 First, we’ll change the `ThreadPool` `drop` implementation to explicitly drop
 the `sender` before waiting for the threads to finish. Listing 21-23 shows the
 changes to `ThreadPool` to explicitly drop `sender`. Unlike with the `workers`,
-here we *do* need to use an `Option` to be able to move `sender` out of
+here we _do_ need to use an `Option` to be able to move `sender` out of
 `ThreadPool` with `Option::take`.
 
 <Listing number="21-23" file-name="src/lib.rs" caption="Explicitly drop `sender` before joining the worker threads">

@@ -107,7 +107,7 @@ To make this common pattern nicer to express, Rust has `let`-`else`. The
 `let`-`else` syntax takes a pattern on the left side and an expression on the
 right, very similar to `if let`, but it does not have an `if` branch, only an
 `else` branch. If the pattern matches, it will bind the value from the pattern
-in the outer scope. If the pattern does *not* match, the program will flow into
+in the outer scope. If the pattern does _not_ match, the program will flow into
 the `else` arm, which must return from the function.
 
 In Listing 6-9, you can see how Listing 6-8 looks when using `let`-`else` in
