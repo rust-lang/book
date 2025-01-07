@@ -1,15 +1,11 @@
+```markdown
 ## All the Places Patterns Can Be Used
 
-Patterns pop up in a number of places in Rust, and you’ve been using them a lot
-without realizing it! This section discusses all the places where patterns are
-valid.
+الگوها در بسیاری از جاها در راست ظاهر می‌شوند، و شما از آن‌ها زیاد استفاده کرده‌اید بدون اینکه متوجه شوید! این بخش تمام جاهایی که الگوها معتبر هستند را بررسی می‌کند.
 
 ### `match` Arms
 
-As discussed in Chapter 6, we use patterns in the arms of `match` expressions.
-Formally, `match` expressions are defined as the keyword `match`, a value to
-match on, and one or more match arms that consist of a pattern and an
-expression to run if the value matches that arm’s pattern, like this:
+همان‌طور که در فصل 6 بحث شد، ما از الگوها در بازوهای (arms) عبارات `match` استفاده می‌کنیم. به‌طور رسمی، عبارات `match` به‌صورت کلمه کلیدی `match`، یک مقدار برای مطابقت، و یک یا چند بازوی match که از یک الگو و یک عبارت برای اجرا در صورت مطابقت مقدار با الگوی آن بازو تشکیل شده‌اند، تعریف می‌شوند، مانند این:
 
 ```text
 match VALUE {
@@ -19,8 +15,7 @@ match VALUE {
 }
 ```
 
-For example, here's the `match` expression from Listing 6-5 that matches on an
-`Option<i32>` value in the variable `x`:
+برای مثال، اینجا عبارت `match` از فهرست 6-5 است که بر روی یک مقدار `Option<i32>` در متغیر `x` مطابقت می‌دهد:
 
 ```rust,ignore
 match x {
@@ -29,41 +24,21 @@ match x {
 }
 ```
 
-The patterns in this `match` expression are the `None` and `Some(i)` on the
-left of each arrow.
+الگوها در این عبارت `match` شامل `None` و `Some(i)` هستند که در سمت چپ هر پیکان قرار دارند.
 
-One requirement for `match` expressions is that they need to be _exhaustive_ in
-the sense that all possibilities for the value in the `match` expression must
-be accounted for. One way to ensure you’ve covered every possibility is to have
-a catchall pattern for the last arm: for example, a variable name matching any
-value can never fail and thus covers every remaining case.
+یکی از نیازمندی‌های عبارات `match` این است که باید به‌صورت _کامل_ باشند، به این معنا که تمام حالات ممکن برای مقدار در عبارت `match` باید پوشش داده شوند. یکی از راه‌های اطمینان از اینکه همه حالات را پوشش داده‌اید این است که یک الگوی عمومی (catchall) برای بازوی آخر داشته باشید: برای مثال، یک نام متغیر که هر مقداری را مطابقت می‌دهد هرگز شکست نمی‌خورد و بنابراین تمام موارد باقی‌مانده را پوشش می‌دهد.
 
-The particular pattern `_` will match anything, but it never binds to a
-variable, so it’s often used in the last match arm. The `_` pattern can be
-useful when you want to ignore any value not specified, for example. We’ll
-cover the `_` pattern in more detail in the [“Ignoring Values in a
-Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> section later in this
-chapter.
+الگوی خاص `_` هر چیزی را مطابقت می‌دهد، اما هرگز به یک متغیر متصل نمی‌شود، بنابراین اغلب در بازوی آخر match استفاده می‌شود. الگوی `_` می‌تواند زمانی مفید باشد که بخواهید هر مقداری که مشخص نشده است را نادیده بگیرید، برای مثال. ما الگوی `_` را در بخش [“Ignoring Values in a Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> بعداً در این فصل به‌طور مفصل بررسی خواهیم کرد.
 
 ### Conditional `if let` Expressions
 
-In Chapter 6 we discussed how to use `if let` expressions mainly as a shorter
-way to write the equivalent of a `match` that only matches one case.
-Optionally, `if let` can have a corresponding `else` containing code to run if
-the pattern in the `if let` doesn’t match.
+در فصل 6 بحث کردیم که چگونه از عبارات `if let` عمدتاً به‌عنوان یک روش کوتاه‌تر برای نوشتن معادل یک `match` که فقط یک حالت را مطابقت می‌دهد استفاده کنیم. به‌صورت اختیاری، `if let` می‌تواند یک `else` متناظر داشته باشد که شامل کدی برای اجرا در صورت عدم مطابقت الگو در `if let` باشد.
 
-Listing 19-1 shows that it’s also possible to mix and match `if let`, `else
-if`, and `else if let` expressions. Doing so gives us more flexibility than a
-`match` expression in which we can express only one value to compare with the
-patterns. Also, Rust doesn't require that the conditions in a series of `if
-let`, `else if`, `else if let` arms relate to each other.
+فهرست 19-1 نشان می‌دهد که همچنین ممکن است عبارات `if let`، `else if`، و `else if let` را با هم ترکیب و تطبیق دهید. این کار به ما انعطاف بیشتری نسبت به یک عبارت `match` می‌دهد، که در آن فقط می‌توانیم یک مقدار برای مقایسه با الگوها بیان کنیم. همچنین، راست نیاز ندارد که شرایط در یک سری از بازوهای `if let`، `else if`، `else if let` به یکدیگر مرتبط باشند.
 
-The code in Listing 19-1 determines what color to make your background based on
-a series of checks for several conditions. For this example, we’ve created
-variables with hardcoded values that a real program might receive from user
-input.
+کد در فهرست 19-1 تعیین می‌کند که بر اساس یک سری بررسی برای چندین شرط، پس‌زمینه شما چه رنگی داشته باشد. برای این مثال، متغیرهایی با مقادیر سخت‌کدشده ایجاد کرده‌ایم که یک برنامه واقعی ممکن است از ورودی کاربر دریافت کند.
 
-<Listing number="19-1" file-name="src/main.rs" caption="Mixing `if let`, `else if`, `else if let`, and `else`">
+<Listing number="19-1" file-name="src/main.rs" caption="ترکیب `if let`، `else if`، `else if let`، و `else`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-01/src/main.rs}}
@@ -71,40 +46,20 @@ input.
 
 </Listing>
 
-If the user specifies a favorite color, that color is used as the background.
-If no favorite color is specified and today is Tuesday, the background color is
-green. Otherwise, if the user specifies their age as a string and we can parse
-it as a number successfully, the color is either purple or orange depending on
-the value of the number. If none of these conditions apply, the background
-color is blue.
+```markdown
+اگر کاربر یک رنگ مورد علاقه مشخص کند، از آن رنگ به‌عنوان پس‌زمینه استفاده می‌شود. اگر هیچ رنگ مورد علاقه‌ای مشخص نشده باشد و امروز سه‌شنبه باشد، رنگ پس‌زمینه سبز است. در غیر این صورت، اگر کاربر سن خود را به‌عنوان یک رشته مشخص کند و بتوانیم آن را با موفقیت به یک عدد تبدیل کنیم، رنگ یا بنفش یا نارنجی است، بسته به مقدار عدد. اگر هیچ‌کدام از این شرایط صدق نکند، رنگ پس‌زمینه آبی خواهد بود.
 
-This conditional structure lets us support complex requirements. With the
-hardcoded values we have here, this example will print `Using purple as the
-background color`.
+این ساختار شرطی به ما امکان پشتیبانی از نیازهای پیچیده را می‌دهد. با مقادیر سخت‌کدشده‌ای که در اینجا داریم، این مثال پیام `Using purple as the background color` را چاپ خواهد کرد.
 
-You can see that `if let` can also introduce new variables which shadow existing
-variables in the same way that `match` arms can: the line `if let Ok(age) = age`
-introduces a new `age` variable that contains the value inside the `Ok` variant,
-shadowing the existing `age` variable. This means we need to place the `if age >
-30` condition within that block: we can’t combine these two conditions into `if
-let Ok(age) = age && age > 30`. The new `age` we want to compare to 30 isn’t
-valid until the new scope starts with the curly bracket.
+می‌توانید ببینید که `if let` نیز می‌تواند متغیرهای جدیدی را معرفی کند که متغیرهای موجود را به همان روشی که بازوهای `match` انجام می‌دهند، پوشش می‌دهند: خط `if let Ok(age) = age` یک متغیر جدید به نام `age` معرفی می‌کند که حاوی مقدار داخل حالت `Ok` است و متغیر موجود `age` را پوشش می‌دهد. این بدان معناست که باید شرط `if age > 30` را در داخل آن بلوک قرار دهیم: نمی‌توانیم این دو شرط را به‌صورت `if let Ok(age) = age && age > 30` ترکیب کنیم. متغیر جدید `age` که می‌خواهیم با 30 مقایسه کنیم تا شروع محدوده جدید با آکولاد معتبر نیست.
 
-The downside of using `if let` expressions is that the compiler doesn’t check
-for exhaustiveness, whereas with `match` expressions it does. If we omitted the
-last `else` block and therefore missed handling some cases, the compiler would
-not alert us to the possible logic bug.
+نقطه ضعف استفاده از عبارات `if let` این است که کامپایلر بررسی نمی‌کند که آیا همه حالات پوشش داده شده‌اند یا خیر، در حالی که با عبارات `match` این کار را انجام می‌دهد. اگر بلوک آخر `else` را حذف کنیم و بنابراین برخی موارد را پوشش ندهیم، کامپایلر به ما در مورد باگ احتمالی منطقی هشدار نمی‌دهد.
 
 ### `while let` Conditional Loops
 
-Similar in construction to `if let`, the `while let` conditional loop allows a
-`while` loop to run for as long as a pattern continues to match. We first saw a
-`while let` loop in Chapter 17, where we used it to keep looping as long as a
-stream produced new values. Similarly, in Listing 19-2 we show a `while let`
-loop that waits on messages sent between threads, but in this case checking a
-`Result` instead of an `Option`.
+مشابه با ساختار `if let`، حلقه شرطی `while let` به یک حلقه `while` اجازه می‌دهد تا زمانی که یک الگو همچنان مطابقت دارد، اجرا شود. اولین بار یک حلقه `while let` را در فصل 17 دیدیم، جایی که از آن برای ادامه حلقه زدن تا زمانی که یک stream مقادیر جدید تولید می‌کرد استفاده کردیم. به‌طور مشابه، در فهرست 19-2 یک حلقه `while let` نشان داده می‌شود که منتظر پیام‌هایی است که بین نخ‌ها ارسال می‌شود، اما در این مورد یک `Result` را بررسی می‌کند به‌جای یک `Option`.
 
-<Listing number="19-2" caption="Using a `while let` loop to print values for as long as `rx.recv()` returns `Ok`">
+<Listing number="19-2" caption="استفاده از یک حلقه `while let` برای چاپ مقادیر تا زمانی که `rx.recv()` مقدار `Ok` را بازمی‌گرداند">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-02/src/main.rs:here}}
@@ -112,19 +67,12 @@ loop that waits on messages sent between threads, but in this case checking a
 
 </Listing>
 
-This example prints 1, 2, and 3. When we saw `recv` back in Chapter 16, we
-unwrapped the error directly, or interacted with it as an iterator using a `for`
-loop. As Listing 19-2 shows, though, we can also use `while let`, because the
-`recv` method returns `Ok` as long as the sender is producing messages, and then
-produces an `Err` once the sender side disconnects.
+این مثال مقادیر 1، 2، و 3 را چاپ می‌کند. وقتی که `recv` را در فصل 16 دیدیم، خطا را مستقیماً unwrap می‌کردیم یا با استفاده از یک حلقه `for` به‌عنوان یک iterator با آن تعامل داشتیم. با این حال، همان‌طور که فهرست 19-2 نشان می‌دهد، می‌توانیم از `while let` نیز استفاده کنیم، زیرا متد `recv` تا زمانی که فرستنده پیام‌ها تولید می‌کند مقدار `Ok` بازمی‌گرداند و سپس زمانی که طرف فرستنده قطع می‌شود یک مقدار `Err` تولید می‌کند.
 
 ### `for` Loops
 
-In a `for` loop, the value that directly follows the keyword `for` is a
-pattern. For example, in `for x in y` the `x` is the pattern. Listing 19-3
-demonstrates how to use a pattern in a `for` loop to destructure, or break
-apart, a tuple as part of the `for` loop.
-
+در یک حلقه `for`، مقداری که مستقیماً بعد از کلمه کلیدی `for` می‌آید یک الگو است. برای مثال، در عبارت `for x in y` مقدار `x` یک الگو است. فهرست 19-3 نشان می‌دهد که چگونه می‌توان از یک الگو در یک حلقه `for` برای تخریب (destructure) یا تجزیه یک tuple به‌عنوان بخشی از حلقه `for` استفاده کرد.
+```markdown
 <Listing number="19-3" caption="Using a pattern in a `for` loop to destructure a tuple">
 
 ```rust
@@ -133,46 +81,31 @@ apart, a tuple as part of the `for` loop.
 
 </Listing>
 
-The code in Listing 19-3 will print the following:
+کد در فهرست 19-3 خروجی زیر را چاپ خواهد کرد:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-03/output.txt}}
 ```
 
-We adapt an iterator using the `enumerate` method so it produces a value and
-the index for that value, placed into a tuple. The first value produced is the
-tuple `(0, 'a')`. When this value is matched to the pattern `(index, value)`,
-`index` will be `0` and `value` will be `'a'`, printing the first line of the
-output.
+ما یک iterator را با استفاده از متد `enumerate` تطبیق می‌دهیم تا یک مقدار و شاخص آن مقدار را تولید کند، که در یک tuple قرار می‌گیرد. اولین مقدار تولیدشده tuple `(0, 'a')` است. وقتی این مقدار با الگوی `(index, value)` مطابقت داده می‌شود، مقدار `index` برابر با `0` و مقدار `value` برابر با `'a'` خواهد بود، و اولین خط خروجی چاپ می‌شود.
 
 ### `let` Statements
 
-Prior to this chapter, we had only explicitly discussed using patterns with
-`match` and `if let`, but in fact, we’ve used patterns in other places as well,
-including in `let` statements. For example, consider this straightforward
-variable assignment with `let`:
+پیش از این فصل، ما به‌طور خاص فقط درباره استفاده از الگوها با `match` و `if let` بحث کرده بودیم، اما در واقع، ما از الگوها در مکان‌های دیگری نیز استفاده کرده‌ایم، از جمله در عبارات `let`. برای مثال، به این تخصیص ساده متغیر با `let` توجه کنید:
 
 ```rust
 let x = 5;
 ```
 
-Every time you've used a `let` statement like this you've been using patterns,
-although you might not have realized it! More formally, a `let` statement looks
-like this:
+هر بار که از یک عبارت `let` مانند این استفاده کرده‌اید، از الگوها استفاده کرده‌اید، حتی اگر متوجه آن نشده باشید! به‌طور رسمی، یک عبارت `let` به این شکل است:
 
 ```text
 let PATTERN = EXPRESSION;
 ```
 
-In statements like `let x = 5;` with a variable name in the `PATTERN` slot, the
-variable name is just a particularly simple form of a pattern. Rust compares
-the expression against the pattern and assigns any names it finds. So in the
-`let x = 5;` example, `x` is a pattern that means “bind what matches here to
-the variable `x`.” Because the name `x` is the whole pattern, this pattern
-effectively means “bind everything to the variable `x`, whatever the value is.”
+در عبارات مانند `let x = 5;` با یک نام متغیر در محل `PATTERN`، نام متغیر فقط یک شکل ساده از یک الگو است. راست عبارت را با الگو مقایسه می‌کند و هر نامی که پیدا می‌کند را تخصیص می‌دهد. بنابراین در مثال `let x = 5;`، `x` الگویی است که به این معناست: «هر چیزی که در اینجا مطابقت دارد را به متغیر `x` اختصاص بده». چون نام `x` کل الگو است، این الگو به‌طور مؤثر به این معناست: «هر چیزی که هست را به متغیر `x` اختصاص بده».
 
-To see the pattern matching aspect of `let` more clearly, consider Listing
-19-4, which uses a pattern with `let` to destructure a tuple.
+برای مشاهده جنبه تطبیق الگو در `let` به‌صورت واضح‌تر، فهرست 19-4 را در نظر بگیرید، که از یک الگو با `let` برای تخریب یک tuple استفاده می‌کند.
 
 <Listing number="19-4" caption="Using a pattern to destructure a tuple and create three variables at once">
 
@@ -182,15 +115,9 @@ To see the pattern matching aspect of `let` more clearly, consider Listing
 
 </Listing>
 
-Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
-to the pattern `(x, y, z)` and sees that the value matches the pattern, so Rust
-binds `1` to `x`, `2` to `y`, and `3` to `z`. You can think of this tuple
-pattern as nesting three individual variable patterns inside it.
+اینجا، ما یک tuple را با یک الگو مطابقت می‌دهیم. راست مقدار `(1, 2, 3)` را با الگوی `(x, y, z)` مقایسه می‌کند و می‌بیند که مقدار با الگو مطابقت دارد، بنابراین راست `1` را به `x`، `2` را به `y`، و `3` را به `z` اختصاص می‌دهد. می‌توانید این الگوی tuple را به‌عنوان سه الگوی متغیر فردی که درون آن قرار دارند تصور کنید.
 
-If the number of elements in the pattern doesn’t match the number of elements
-in the tuple, the overall type won’t match and we’ll get a compiler error. For
-example, Listing 19-5 shows an attempt to destructure a tuple with three
-elements into two variables, which won’t work.
+اگر تعداد عناصر در الگو با تعداد عناصر در tuple مطابقت نداشته باشد، کل نوع مطابقت نخواهد داشت و یک خطای کامپایلر دریافت خواهیم کرد. برای مثال، فهرست 19-5 یک تلاش برای تخریب یک tuple با سه عنصر به دو متغیر را نشان می‌دهد، که کار نخواهد کرد.
 
 <Listing number="19-5" caption="Incorrectly constructing a pattern whose variables don’t match the number of elements in the tuple">
 
@@ -200,26 +127,20 @@ elements into two variables, which won’t work.
 
 </Listing>
 
-Attempting to compile this code results in this type error:
+تلاش برای کامپایل این کد منجر به این خطای type می‌شود:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-05/output.txt}}
 ```
 
-To fix the error, we could ignore one or more of the values in the tuple using
-`_` or `..`, as you’ll see in the [“Ignoring Values in a
-Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> section. If the problem
-is that we have too many variables in the pattern, the solution is to make the
-types match by removing variables so the number of variables equals the number
-of elements in the tuple.
+```markdown
+برای رفع خطا، می‌توانیم یک یا چند مقدار در tuple را با استفاده از `_` یا `..` نادیده بگیریم، همان‌طور که در بخش [“Ignoring Values in a Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> خواهید دید. اگر مشکل این است که تعداد متغیرها در الگو بیش از حد است، راه‌حل این است که نوع‌ها را با حذف متغیرها طوری تطبیق دهیم که تعداد متغیرها برابر با تعداد عناصر در tuple شود.
 
 ### Function Parameters
 
-Function parameters can also be patterns. The code in Listing 19-6, which
-declares a function named `foo` that takes one parameter named `x` of type
-`i32`, should by now look familiar.
+پارامترهای تابع نیز می‌توانند الگو باشند. کد در فهرست 19-6، که تابعی به نام `foo` را تعریف می‌کند که یک پارامتر به نام `x` از نوع `i32` می‌گیرد، باید تا الان آشنا به نظر برسد.
 
-<Listing number="19-6" caption="A function signature uses patterns in the parameters">
+<Listing number="19-6" caption="یک امضای تابع از الگوها در پارامترها استفاده می‌کند">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-06/src/main.rs:here}}
@@ -227,11 +148,9 @@ declares a function named `foo` that takes one parameter named `x` of type
 
 </Listing>
 
-The `x` part is a pattern! As we did with `let`, we could match a tuple in a
-function’s arguments to the pattern. Listing 19-7 splits the values in a tuple
-as we pass it to a function.
+قسمت `x` یک الگو است! همان‌طور که با `let` انجام دادیم، می‌توانیم یک tuple را در آرگومان‌های یک تابع با الگو مطابقت دهیم. فهرست 19-7 مقادیر یک tuple را هنگام ارسال به یک تابع تجزیه می‌کند.
 
-<Listing number="19-7" file-name="src/main.rs" caption="A function with parameters that destructure a tuple">
+<Listing number="19-7" file-name="src/main.rs" caption="یک تابع با پارامترهایی که یک tuple را تخریب می‌کنند">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-07/src/main.rs}}
@@ -239,16 +158,10 @@ as we pass it to a function.
 
 </Listing>
 
-This code prints `Current location: (3, 5)`. The values `&(3, 5)` match the
-pattern `&(x, y)`, so `x` is the value `3` and `y` is the value `5`.
+این کد پیام `Current location: (3, 5)` را چاپ می‌کند. مقادیر `&(3, 5)` با الگوی `&(x, y)` مطابقت دارند، بنابراین `x` مقدار `3` و `y` مقدار `5` است.
 
-We can also use patterns in closure parameter lists in the same way as in
-function parameter lists, because closures are similar to functions, as
-discussed in Chapter 13.
+ما همچنین می‌توانیم از الگوها در لیست پارامترهای closureها به همان روشی که در لیست پارامترهای تابع استفاده می‌کنیم، استفاده کنیم، زیرا closureها شبیه به توابع هستند، همان‌طور که در فصل 13 بحث شد.
 
-At this point, you’ve seen several ways of using patterns, but patterns don’t
-work the same in every place we can use them. In some places, the patterns must
-be irrefutable; in other circumstances, they can be refutable. We’ll discuss
-these two concepts next.
+تا اینجا، چندین روش برای استفاده از الگوها را دیده‌اید، اما الگوها در هر جایی که از آن‌ها استفاده کنیم به یک شکل کار نمی‌کنند. در برخی مکان‌ها، الگوها باید غیرقابل‌رد (irrefutable) باشند؛ در شرایط دیگر، می‌توانند قابل‌رد (refutable) باشند. در بخش بعدی این دو مفهوم را بررسی خواهیم کرد.
 
 [ignoring-values-in-a-pattern]: ch19-03-pattern-syntax.html#ignoring-values-in-a-pattern

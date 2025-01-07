@@ -1,25 +1,14 @@
-## A Closer Look at the Traits for Async
+## بررسی دقیق‌تر ویژگی‌ها برای Async
 
-<!-- Old headings. Do not remove or links may break. -->
-
-<a id="digging-into-the-traits-for-async"></a>
-
-Throughout the chapter, we’ve used the `Future`, `Pin`, `Unpin`, `Stream`, and
-`StreamExt` traits in various ways. So far, though, we’ve avoided getting too
-far into the details of how they work or how they fit together, which is fine
-most of the time for your day-to-day Rust work. Sometimes, though, you’ll
-encounter situations where you’ll need to understand a few more of these
-details. In this section, we’ll dig in just enough to help in those scenarios,
-still leaving the _really_ deep dive for other documentation.
+در طول این فصل، از ویژگی‌های `Future`، `Pin`، `Unpin`، `Stream`، و `StreamExt` به روش‌های مختلفی استفاده کرده‌ایم. تاکنون، از ورود بیش از حد به جزئیات نحوه کارکرد یا چگونگی تطبیق آن‌ها با یکدیگر اجتناب کرده‌ایم، که برای بیشتر کارهای روزمره شما با Rust کافی است. با این حال، گاهی اوقات با موقعیت‌هایی مواجه می‌شوید که نیاز دارید کمی بیشتر از این جزئیات را بفهمید. در این بخش، به اندازه‌ای به این موضوع می‌پردازیم که در این سناریوها کمک کند، در حالی که بررسی _عمیق‌تر_ را به مستندات دیگر می‌سپاریم.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="future"></a>
 
-### The `Future` Trait
+### ویژگی `Future`
 
-Let’s start by taking a closer look at how the `Future` trait works. Here’s how
-Rust defines it:
+بیایید با بررسی دقیق‌تر نحوه عملکرد ویژگی `Future` شروع کنیم. در اینجا نحوه تعریف آن در Rust آمده است:
 
 ```rust
 use std::pin::Pin;
@@ -32,16 +21,9 @@ pub trait Future {
 }
 ```
 
-That trait definition includes a bunch of new types and also some syntax we
-haven’t seen before, so let’s walk through the definition piece by piece.
+این تعریف Trait شامل چندین نوع جدید و همچنین نحوی است که قبلاً ندیده‌ایم، بنابراین بیایید قطعه به قطعه آن را بررسی کنیم.
 
-First, `Future`’s associated type `Output` says what the future resolves to.
-This is analogous to the `Item` associated type for the `Iterator` trait.
-Second, `Future` also has the `poll` method, which takes a special `Pin`
-reference for its `self` parameter and a mutable reference to a `Context` type,
-and returns a `Poll<Self::Output>`. We’ll talk more about `Pin` and
-`Context` in a moment. For now, let’s focus on what the method returns,
-the `Poll` type:
+ابتدا، نوع وابسته `Output` در ویژگی `Future` مشخص می‌کند که نتیجه future چه خواهد بود. این شبیه به نوع وابسته `Item` در ویژگی `Iterator` است. دوم، ویژگی `Future` همچنین متد `poll` را دارد که یک مرجع خاص `Pin` برای پارامتر `self` و یک مرجع متغیر به نوع `Context` می‌گیرد و یک `Poll<Self::Output>` بازمی‌گرداند. در ادامه درباره `Pin` و `Context` بیشتر صحبت خواهیم کرد. فعلاً بیایید روی چیزی که متد بازمی‌گرداند، یعنی نوع `Poll`، تمرکز کنیم:
 
 ```rust
 enum Poll<T> {
@@ -50,22 +32,11 @@ enum Poll<T> {
 }
 ```
 
-This `Poll` type is similar to an `Option`. It has one variant that has a value,
-`Ready(T)`, and one which does not, `Pending`. `Poll` means something quite
-different from `Option`, though! The `Pending` variant indicates that the future
-still has work to do, so the caller will need to check again later. The `Ready`
-variant indicates that the future has finished its work and the `T` value is
-available.
+نوع `Poll` شبیه به یک `Option` است. این نوع دو حالت دارد: یکی `Ready(T)` که شامل یک مقدار است و دیگری `Pending` که شامل مقدار نیست. با این حال، `Poll` معنای کاملاً متفاوتی از `Option` دارد! حالت `Pending` نشان می‌دهد که future هنوز کارهایی برای انجام دادن دارد، بنابراین فراخواننده باید بعداً دوباره بررسی کند. حالت `Ready` نشان می‌دهد که future کار خود را به پایان رسانده و مقدار `T` در دسترس است.
 
-> Note: With most futures, the caller should not call `poll` again after the
-> future has returned `Ready`. Many futures will panic if polled again after
-> becoming ready. Futures that are safe to poll again will say so explicitly in
-> their documentation. This is similar to how `Iterator::next` behaves.
+> نکته: برای بیشتر futures، فراخواننده نباید پس از اینکه future مقدار `Ready` بازگرداند، دوباره `poll` را فراخوانی کند. بسیاری از futures اگر پس از آماده شدن دوباره `poll` شوند، دچار وحشت (_panic_) می‌شوند. futuresی که ایمن برای poll دوباره هستند، به‌طور صریح این موضوع را در مستندات خود ذکر خواهند کرد. این شبیه به نحوه رفتار `Iterator::next` است.
 
-When you see code that uses `await`, Rust compiles it under the hood to code
-that calls `poll`. If you look back at Listing 17-4, where we printed out the
-page title for a single URL once it resolved, Rust compiles it into something
-kind of (although not exactly) like this:
+وقتی کدی را می‌بینید که از `await` استفاده می‌کند، Rust آن را در پشت صحنه به کدی که `poll` را فراخوانی می‌کند کامپایل می‌کند. اگر به لیست ۱۷-۴ که در آن عنوان صفحه برای یک URL واحد پس از حل‌شدن چاپ شد، نگاهی بیندازید، Rust آن را به چیزی که (اگرچه دقیقاً نه، اما تقریباً) شبیه به این است کامپایل می‌کند:
 
 ```rust,ignore
 match page_title(url).poll() {
@@ -79,9 +50,7 @@ match page_title(url).poll() {
 }
 ```
 
-What should we do when the future is still `Pending`? We need some way to try
-again, and again, and again, until the future is finally ready. In other words,
-we need a loop:
+وقتی که future هنوز در حالت `Pending` است، چه کاری باید انجام دهیم؟ نیاز داریم به نوعی دوباره امتحان کنیم، و این کار را بارها تکرار کنیم، تا زمانی که future در نهایت آماده شود. به عبارت دیگر، نیاز به یک حلقه داریم:
 
 ```rust,ignore
 let mut page_title_fut = page_title(url);
@@ -98,35 +67,17 @@ loop {
 }
 ```
 
-If Rust compiled it to exactly that code, though, every `await` would be
-blocking—exactly the opposite of what we were going for! Instead, Rust makes
-sure that the loop can hand off control to something that can pause work on this
-future to work on other futures and then check this one again later. As we’ve
-seen, that something is an async runtime, and this scheduling and coordination
-work is one of its main jobs.
+اگر Rust دقیقاً این کد را کامپایل می‌کرد، هر `await` مسدودکننده (_blocking_) می‌شد—دقیقاً برعکس چیزی که می‌خواستیم! در عوض، Rust اطمینان حاصل می‌کند که حلقه بتواند کنترل را به چیزی واگذار کند که بتواند کار روی این future را متوقف کرده، روی futures دیگر کار کند، و سپس دوباره این یکی را بررسی کند. همان‌طور که دیدیم، این وظیفه یک runtime async است، و این برنامه‌ریزی و هماهنگی یکی از وظایف اصلی آن است.
 
-Earlier in the chapter, we described waiting on `rx.recv`. The `recv` call
-returns a future, and awaiting the future polls it. We noted that a runtime will
-pause the future until it’s ready with either `Some(message)` or `None` when the
-channel closes. With our deeper understanding of the `Future` trait, and
-specifically `Future::poll`, we can see how that works. The runtime knows the
-future isn’t ready when it returns `Poll::Pending`. Conversely, the runtime
-knows the future _is_ ready and advances it when `poll` returns
-`Poll::Ready(Some(message))` or `Poll::Ready(None)`.
+در ابتدای فصل، درباره انتظار برای `rx.recv` صحبت کردیم. فراخوانی `recv` یک future بازمی‌گرداند و منتظر شدن برای future آن را poll می‌کند. اشاره کردیم که یک runtime future را تا زمانی که آماده شود—چه با `Some(message)` یا با `None` در صورت بسته شدن کانال—متوقف می‌کند. با درک عمیق‌تر از ویژگی `Future` و به‌طور خاص `Future::poll`، می‌توانیم ببینیم این چگونه کار می‌کند. وقتی future مقدار `Poll::Pending` بازمی‌گرداند، runtime می‌داند که آماده نیست. برعکس، وقتی `poll` مقدار `Poll::Ready(Some(message))` یا `Poll::Ready(None)` بازمی‌گرداند، runtime می‌داند که future آماده است و آن را پیش می‌برد.
 
-The exact details of how a runtime does that are beyond the scope of this book,
-but the key is to see the basic mechanics of futures: a runtime _polls_ each
-future it is responsible for, putting the future back to sleep when it is not
-yet ready.
-
-<!-- Old headings. Do not remove or links may break. -->
+جزئیات دقیق نحوه انجام این کار توسط یک runtime فراتر از محدوده این کتاب است، اما نکته کلیدی این است که مکانیک پایه‌ای futures را ببینیم: یک runtime هر future که مسئول آن است را _poll_ می‌کند و وقتی هنوز آماده نیست، future را دوباره به حالت خواب می‌برد.
 
 <a id="pinning-and-the-pin-and-unpin-traits"></a>
 
-### The `Pin` and `Unpin` Traits
+### ویژگی‌های `Pin` و `Unpin`
 
-When we introduced the idea of pinning in Listing 17-16, we ran into a very
-gnarly error message. Here is the relevant part of it again:
+وقتی مفهوم pinning را در لیست ۱۷-۱۶ معرفی کردیم، با یک پیام خطای بسیار پیچیده مواجه شدیم. در اینجا بخش مرتبط با آن دوباره آمده است:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-16
@@ -154,23 +105,13 @@ note: required by a bound in `futures_util::future::join_all::JoinAll`
    |        ^^^^^^ required by this bound in `JoinAll`
 ```
 
-This error message tells us not only that we need to pin the values but also why
-pinning is required. The `trpl::join_all` function returns a struct called
-`JoinAll`. That struct is generic over a type `F`, which is constrained to
-implement the `Future` trait. Directly awaiting a future with `await` pins the
-future implicitly. That’s why we don’t need to use `pin!` everywhere we want to
-await futures.
+این پیام خطا نه تنها به ما می‌گوید که باید مقادیر را pin کنیم، بلکه دلیل نیاز به pinning را نیز توضیح می‌دهد. تابع `trpl::join_all` یک ساختار به نام `JoinAll` بازمی‌گرداند. این ساختار به نوعی عمومی به نام `F` وابسته است که محدود به پیاده‌سازی ویژگی `Future` است. منتظر شدن مستقیم یک future با `await`، future را به‌طور ضمنی pin می‌کند. به همین دلیل نیازی نیست که از `pin!` در همه جاهایی که می‌خواهیم برای futures منتظر بمانیم، استفاده کنیم.
 
-However, we’re not directly awaiting a future here. Instead, we construct a new
-future, `JoinAll`, by passing a collection of futures to the `join_all`
-function. The signature for `join_all` requires that the types of the items in
-the collection all implement the `Future` trait, and `Box<T>` implements
-`Future` only if the `T` it wraps is a future that implements the `Unpin` trait.
+با این حال، ما اینجا مستقیماً منتظر یک future نیستیم. در عوض، یک future جدید به نام `JoinAll` می‌سازیم با ارسال مجموعه‌ای از futures به تابع `join_all`. امضای `join_all` نیاز دارد که نوع آیتم‌های مجموعه، ویژگی `Future` را پیاده‌سازی کنند، و `Box<T>` فقط در صورتی ویژگی `Future` را پیاده‌سازی می‌کند که `T` که بسته‌بندی می‌کند، یک future باشد که ویژگی `Unpin` را پیاده‌سازی کرده است.
 
-That’s a lot to absorb! To really understand it, let’s we dive a little further
-into how the `Future` trait actually works, in particular around _pinning_.
+این اطلاعات زیادی برای هضم کردن است! برای درک واقعی آن، بیایید کمی بیشتر به نحوه کار واقعی ویژگی `Future`، به‌ویژه در ارتباط با _pinning_، بپردازیم.
 
-Look again at the definition of the `Future` trait:
+دوباره به تعریف ویژگی `Future` نگاه کنید:
 
 ```rust
 use std::pin::Pin;
@@ -179,232 +120,116 @@ use std::task::{Context, Poll};
 pub trait Future {
     type Output;
 
-    // Required method
+    // متد مورد نیاز
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
 }
 ```
 
-The `cx` parameter and its `Context` type are the key to how a runtime actually
-knows when to check any given future while still being lazy. Again, the details
-of how that works are beyond the scope of this chapter, and you generally only
-need to think about this when writing a custom `Future` implementation. We’ll
-focus instead on the type for `self`, as this is the first time we’ve seen a
-method where `self` has a type annotation. A type annotation for `self` is works
-like type annotations for other function parameters, but with two key
-differences:
+پارامتر `cx` و نوع آن، `Context`، کلید اصلی برای این است که یک runtime چگونه می‌داند چه زمانی یک future خاص را بررسی کند، در حالی که همچنان تنبلی (_lazy_) باقی می‌ماند. باز هم، جزئیات نحوه کار این فرآیند فراتر از محدوده این فصل است، و معمولاً تنها زمانی که بخواهید یک پیاده‌سازی سفارشی برای `Future` بنویسید، نیاز به فکر کردن به این موضوع دارید. در عوض، ما بر روی نوع `self` تمرکز می‌کنیم، زیرا این اولین باری است که یک متد با یک نوع مشخص برای `self` روبرو می‌شویم. یک نوع مشخص برای `self` مانند نوع‌های مشخص برای سایر پارامترهای تابع عمل می‌کند، اما با دو تفاوت کلیدی:
 
-- It tells Rust what type `self` must be for the method to be called.
+- به Rust می‌گوید که نوع `self` برای فراخوانی متد باید چه باشد.
 
-- It can’t be just any type. It’s restricted to the type on which the method is
-  implemented, a reference or smart pointer to that type, or a `Pin` wrapping a
-  reference to that type.
+- نمی‌تواند هر نوعی باشد. این نوع به نوعی که متد روی آن پیاده‌سازی شده است، یا یک مرجع یا اشاره‌گر هوشمند به آن نوع، یا یک `Pin` که یک مرجع به آن نوع را بسته‌بندی می‌کند، محدود است.
 
-We’ll see more on this syntax in [Chapter 18][ch-18]<!-- ignore -->. For now,
-it’s enough to know that if we want to poll a future to check whether it is
-`Pending` or `Ready(Output)`, we need a `Pin`-wrapped mutable reference to the
-type.
+در [فصل ۱۸][ch-18]<!-- ignore --> بیشتر درباره این سینتکس صحبت خواهیم کرد. فعلاً کافی است بدانیم که اگر بخواهیم یک future را poll کنیم تا بررسی کنیم که آیا `Pending` یا `Ready(Output)` است، به یک مرجع متغیر بسته‌بندی‌شده در `Pin` برای آن نوع نیاز داریم.
 
-`Pin` is a wrapper for pointer-like types such as `&`, `&mut`, `Box`, and `Rc`.
-(Technically, `Pin` works with types that implement the `Deref` or `DerefMut`
-traits, but this is effectively equivalent to working only with pointers.) `Pin`
-is not a pointer itself and doesn’t have any behavior of its own like `Rc` and
-`Arc` do with reference counting; it’s purely a tool the compiler can use to
-enforce constraints on pointer usage.
+`Pin` یک بسته‌بندی برای انواع اشاره‌گر مانند `&`، `&mut`، `Box`، و `Rc` است. (به‌طور فنی، `Pin` با نوع‌هایی کار می‌کند که ویژگی‌های `Deref` یا `DerefMut` را پیاده‌سازی می‌کنند، اما این به طور مؤثر معادل کار با اشاره‌گرها است.) `Pin` خودش یک اشاره‌گر نیست و هیچ رفتاری مانند `Rc` و `Arc` که شمارش مرجع انجام می‌دهند ندارد؛ این صرفاً یک ابزار است که کامپایلر می‌تواند برای اعمال محدودیت‌ها در استفاده از اشاره‌گرها استفاده کند.
 
-Recalling that `await` is implemented in terms of calls to `poll` starts to
-explain the error message we saw earlier, but that was in terms of `Unpin`, not
-`Pin`. So how exactly does `Pin` relate to `Unpin`, and why does `Future` need
-`self` to be in a `Pin` type to call `poll`?
+به یاد آوردن این که `await` بر اساس فراخوانی‌های `poll` پیاده‌سازی شده است، شروع به توضیح پیام خطایی که قبلاً دیدیم می‌کند، اما آن پیام در مورد `Unpin` بود، نه `Pin`. پس دقیقاً چگونه `Pin` با `Unpin` مرتبط است، و چرا `Future` نیاز دارد که `self` در یک نوع `Pin` باشد تا بتواند `poll` را فراخوانی کند؟
 
-Remember from earlier in this chapter a series of await points in a future get
-compiled into a state machine, and the compiler makes sure that state machine
-follows all of Rust’s normal rules around safety, including borrowing and
-ownership. To make that work, Rust looks at what data is needed between one
-await point and either the next await point or the end of the async block. It
-then creates a corresponding variant in the compiled state machine. Each variant
-gets the access it needs to the data that will be used in that section of the
-source code, whether by taking ownership of that data or by getting a mutable or
-immutable reference to it.
+به یاد بیاورید که در اوایل این فصل، یک سری از نقاط انتظار (_await points_) در یک future به یک ماشین حالت کامپایل می‌شوند، و کامپایلر اطمینان حاصل می‌کند که این ماشین حالت تمام قوانین معمول ایمنی Rust، از جمله قرض‌گیری و مالکیت، را دنبال می‌کند. برای اینکه این کار انجام شود، Rust بررسی می‌کند که چه داده‌ای بین یک نقطه انتظار و یا نقطه انتظار بعدی یا پایان بلوک async مورد نیاز است. سپس یک حالت متناظر در ماشین حالت کامپایل‌شده ایجاد می‌کند. هر حالت دسترسی لازم به داده‌هایی که در آن بخش از کد منبع استفاده می‌شوند را دریافت می‌کند، چه با گرفتن مالکیت آن داده‌ها یا با دریافت یک مرجع متغیر یا غیرمتغیر به آن.
 
-So far, so good: if we get anything wrong about the ownership or references in a
-given async block, the borrow checker will tell us. When we want to move around
-the future that corresponds to that block—like moving it into a `Vec` to pass to
-`join_all`—things get trickier.
+تا اینجا خوب است: اگر در مورد مالکیت یا مراجع در یک بلوک async خطایی داشته باشیم، borrow checker به ما اطلاع می‌دهد. اما وقتی بخواهیم futureای که به آن بلوک مربوط می‌شود را جابه‌جا کنیم—مثلاً آن را به یک ساختار داده push کنیم تا به‌عنوان یک iterator با `join_all` استفاده شود یا آن را از یک تابع بازگردانیم—مسائل پیچیده‌تر می‌شوند.
 
-When we move a future—whether by pushing it into a data structure to use as an
-iterator with `join_all` or by returning it from a function—that actually means
-moving the state machine Rust creates for us. And unlike most other types in
-Rust, the futures Rust creates for async blocks can end up with references to
-themselves in the fields of any given variant, as shown in the simplified illustration in Figure 17-4.
+وقتی یک future را جابه‌جا می‌کنیم—چه با push کردن آن به یک ساختار داده برای استفاده به‌عنوان iterator با `join_all` یا با بازگرداندن آن از یک تابع—این در واقع به معنای جابه‌جا کردن ماشین حالتی است که Rust برای ما ایجاد می‌کند. و برخلاف بیشتر انواع دیگر در Rust، futureهایی که Rust برای بلوک‌های async ایجاد می‌کند، می‌توانند در فیلدهای هر حالت معین، دارای مراجع به خودشان باشند، همان‌طور که در تصویر ساده‌شده‌ای که در شکل ۱۷-۴ نشان داده شده است.
 
 <figure>
 
 <img alt="A single-column, three-row table representing a future, fut1, which has data values 0 and 1 in the first two rows and an arrow pointing from the third row back to the second row, representing an internal reference within the future." src="img/trpl17-04.svg" class="center" />
 
-<figcaption>Figure 17-4: A self-referential data type.</figcaption>
+<figcaption>شکل 17-4: یک نوع داده خودارجاعی.</figcaption>
 
 </figure>
 
-By default, though, any object that has a reference to itself is unsafe to move,
-because references always point to the actual memory address of whatever they
-refer to (see Figure 17-5). If you move the data structure itself, those
-internal references will be left pointing to the old location. However, that
-memory location is now invalid. For one thing, its value will not be updated
-when you make changes to the data structure. For another—more important—thing,
-the computer is now free to reuse that memory for other purposes! You could end
-up reading completely unrelated data later.
+به‌طور پیش‌فرض، هر شیئی که مرجعی به خودش دارد، جابه‌جا کردن آن ناایمن است، زیرا مراجع همیشه به آدرس حافظه واقعی چیزی که به آن اشاره می‌کنند اشاره دارند (نگاه کنید به شکل ۱۷-۵). اگر خود ساختار داده را جابه‌جا کنید، آن مراجع داخلی همچنان به مکان قدیمی اشاره می‌کنند. با این حال، آن مکان حافظه اکنون نامعتبر است. از یک طرف، مقدار آن هنگام ایجاد تغییرات در ساختار داده به‌روزرسانی نمی‌شود. از طرف دیگر—و مهم‌تر—کامپیوتر اکنون می‌تواند آن مکان حافظه را برای مقاصد دیگر بازاستفاده کند! ممکن است بعداً داده‌هایی کاملاً نامرتبط بخوانید.
 
 <figure>
 
 <img alt="Two tables, depicting two futures, fut1 and fut2, each of which has one column and three rows, representing the result of having moved a future out of fut1 into fut2. The first, fut1, is grayed out, with a question mark in each index, representing unknown memory. The second, fut2, has 0 and 1 in the first and second rows and an arrow pointing from its third row back to the second row of fut1, representing a pointer that is referencing the old location in memory of the future before it was moved." src="img/trpl17-05.svg" class="center" />
 
-<figcaption>Figure 17-5: The unsafe result of moving a self-referential data type</figcaption>
+<figcaption>شکل ۱۷-۵: نتیجه ناایمن جابه‌جایی یک نوع داده که به خودش ارجاع دارد</figcaption>
 
 </figure>
 
-Theoretically, the Rust compiler could try to update every reference to an
-object whenever it gets moved, but that could add a lot of performance overhead,
-especially if a whole web of references needs updating. If we could instead make
-sure the data structure in question _doesn’t move in memory_, we wouldn’t have
-to update any references. This is exactly what Rust’s borrow checker requires:
-in safe code, it prevents you from moving any item with an active reference to
-it.
+از نظر تئوری، کامپایلر Rust می‌تواند سعی کند هر مرجع به یک شیء را هر زمان که جابه‌جا می‌شود، به‌روزرسانی کند، اما این کار می‌تواند سربار عملکرد زیادی ایجاد کند، به‌ویژه اگر یک شبکه کامل از مراجع نیاز به به‌روزرسانی داشته باشد. اگر بتوانیم به جای آن مطمئن شویم که ساختار داده مورد نظر _در حافظه جابه‌جا نمی‌شود_، نیازی به به‌روزرسانی مراجع نخواهیم داشت. این دقیقاً همان چیزی است که borrow checker در Rust نیاز دارد: در کد ایمن، از جابه‌جا کردن هر آیتمی که مرجع فعالی به آن دارد جلوگیری می‌کند.
 
-`Pin` builds on that to give us the exact guarantee we need. When we _pin_ a
-value by wrapping a pointer to that value in `Pin`, it can no longer move. Thus,
-if you have `Pin<Box<SomeType>>`, you actually pin the `SomeType` value, _not_
-the `Box` pointer. Figure 17-6 illustrates this process.
+`Pin` بر اساس این اصل عمل می‌کند و تضمین دقیقی که نیاز داریم را ارائه می‌دهد. وقتی یک مقدار را با بسته‌بندی یک اشاره‌گر به آن مقدار در `Pin` _pin_ می‌کنیم، دیگر نمی‌تواند جابه‌جا شود. بنابراین، اگر `Pin<Box<SomeType>>` داشته باشید، در واقع مقدار `SomeType` را pin می‌کنید، _نه_ اشاره‌گر `Box`. شکل ۱۷-۶ این فرآیند را نشان می‌دهد.
 
 <figure>
 
 <img alt="Three boxes laid out side by side. The first is labeled “Pin”, the second “b1”, and the third “pinned”. Within “pinned” is a table labeled “fut”, with a single column; it represents a future with cells for each part of the data structure. Its first cell has the value “0”, its second cell has an arrow coming out of it and pointing to the fourth and final cell, which has the value “1” in it, and the third cell has dashed lines and an ellipsis to indicate there may be other parts to the data structure. All together, the “fut” table represents a future which is self-referential. An arrow leaves the box labeled “Pin”, goes through the box labeled “b1” and has terminates inside the “pinned” box at the “fut” table." src="img/trpl17-06.svg" class="center" />
 
-<figcaption>Figure 17-6: Pinning a `Box` that points to a self-referential future type.</figcaption>
+<figcaption>شکل 17-6: pin کردن یک `Box` که به یک نوع آینده خودارجاعی اشاره می‌کند.</figcaption>
 
 </figure>
 
-In fact, the `Box` pointer can still move around freely. Remember: we care about
-making sure the data ultimately being referenced stays in place. If a pointer
-moves around, _but the data it points to is in the same place_, as in Figure
-17-7, there’s no potential problem. As an independent exercise, look at the docs
-for the types as well as the `std::pin` module and try to work out how you’d do
-this with a `Pin` wrapping a `Box`.) The key is that the self-referential type
-itself cannot move, because it is still pinned.
+در واقع، اشاره‌گر `Box` هنوز می‌تواند به‌طور آزاد جابه‌جا شود. به یاد داشته باشید: ما به مطمئن شدن از اینکه داده‌ای که در نهایت به آن ارجاع داده می‌شود در جای خود باقی می‌ماند اهمیت می‌دهیم. اگر یک اشاره‌گر جابه‌جا شود اما داده‌ای که به آن اشاره می‌کند در همان مکان باقی بماند، همانطور که در شکل 17-7 نشان داده شده است، هیچ مشکلی پیش نمی‌آید. (چگونگی انجام این کار با یک `Pin` که یک `Box` را می‌پیچد فراتر از بحث این بخش خاص است، اما می‌تواند تمرین خوبی باشد! اگر به مستندات نوع‌ها و همچنین ماژول `std::pin` نگاه کنید، ممکن است بتوانید بفهمید چگونه این کار را انجام دهید.) نکته کلیدی این است که نوع خودارجاعی خود نمی‌تواند جابه‌جا شود، زیرا همچنان pin شده است.
 
 <figure>
 
 <img alt="Four boxes laid out in three rough columns, identical to the previous diagram with a change to the second column. Now there are two boxes in the second column, labeled “b1” and “b2”, “b1” is grayed out, and the arrow from “Pin” goes through “b2” instead of “b1”, indicating that the pointer has moved from “b1” to “b2”, but the data in “pinned” has not moved." src="img/trpl17-07.svg" class="center" />
 
-<figcaption>Figure 17-7: Moving a `Box` which points to a self-referential future type.</figcaption>
+<figcaption>شکل 17-7: جابه‌جایی یک `Box` که به یک نوع آینده خودارجاعی اشاره می‌کند.</figcaption>
 
 </figure>
 
-However, most types are perfectly safe to move around, even if they happen to be
-behind a `Pin` pointer. We only need to think about pinning when items have
-internal references. Primitive values such as numbers and Booleans are safe
-since they obviously don’t have any internal references, so they’re obviously
-safe. Neither do most types you normally work with in Rust. You can move around
-a `Vec`, for example, without worrying. Given only what we have seen so far, if
-you have a `Pin<Vec<String>>`, you’d have to do everything via the safe but
-restrictive APIs provided by `Pin`, even though a `Vec<String>` is always safe
-to move if there are no other references to it. We need a way to tell the
-compiler that it’s fine to move items around in cases like this—and there’s
-where `Unpin` comes into play.
+با این حال، اکثر انواع کاملاً برای جابه‌جایی ایمن هستند، حتی اگر پشت یک اشاره‌گر `Pin` قرار داشته باشند. فقط زمانی نیاز به فکر کردن به pinning داریم که آیتم‌ها دارای مراجع داخلی باشند. مقادیر اولیه (_primitive_) مانند اعداد و مقادیر Boolean ایمن هستند، زیرا به‌وضوح هیچ مرجع داخلی ندارند، بنابراین بدیهی است که ایمن هستند. بیشتر انواعی که معمولاً با آن‌ها در Rust کار می‌کنید نیز این‌گونه‌اند. برای مثال، می‌توانید یک `Vec` را بدون نگرانی جابه‌جا کنید. با توجه به آنچه تاکنون دیده‌ایم، اگر یک `Pin<Vec<String>>` داشته باشید، باید همه چیز را از طریق APIهای ایمن اما محدودکننده‌ای که `Pin` ارائه می‌دهد انجام دهید، حتی اگر یک `Vec<String>` همیشه برای جابه‌جایی ایمن باشد اگر هیچ مرجع دیگری به آن وجود نداشته باشد. ما به روشی نیاز داریم که به کامپایلر بگوییم در چنین مواردی جابه‌جا کردن آیتم‌ها مشکلی ندارد—و اینجا است که `Unpin` وارد عمل می‌شود.
 
-`Unpin` is a marker trait, similar to the `Send` and `Sync` traits we saw in
-Chapter 16, and thus has no functionality of its own. Marker traits exist only
-to tell the compiler it’s safe to use the type implementing a given trait in a
-particular context. `Unpin` informs the compiler that a given type does _not_
-need to uphold any guarantees about whether the value in question can be safely
-moved.
+`Unpin` یک ویژگی علامت‌گذار (_marker trait_) است، مشابه ویژگی‌های `Send` و `Sync` که در فصل ۱۶ دیدیم، و بنابراین هیچ عملکردی از خود ندارد. ویژگی‌های علامت‌گذار فقط برای این وجود دارند که به کامپایلر بگویند استفاده از نوعی که یک ویژگی خاص را پیاده‌سازی می‌کند در یک زمینه خاص ایمن است. `Unpin` به کامپایلر اطلاع می‌دهد که یک نوع خاص _نیازی_ به تضمین اینکه مقدار مربوطه به‌صورت ایمن جابه‌جا می‌شود، ندارد.
 
-<!--
-  The inline `<code>` in the next block is to allow the inline `<em>` inside it,
-  matching what NoStarch does style-wise, and emphasizing within the text here
-  that it is something distinct from a normal type.
--->
+مشابه `Send` و `Sync`، کامپایلر به‌طور خودکار `Unpin` را برای تمام انواعی که می‌تواند ثابت کند ایمن هستند، پیاده‌سازی می‌کند. یک مورد خاص، دوباره مشابه `Send` و `Sync`، این است که `Unpin` برای یک نوع _پیاده‌سازی نمی‌شود_. نشانه‌گذاری برای این حالت به شکل <code>impl !Unpin for <em>SomeType</em></code> است، که در آن <code><em>SomeType</em></code> نام نوعی است که _باید_ آن تضمین‌ها را برای ایمن بودن، هر زمان که اشاره‌گری به آن نوع در یک `Pin` استفاده می‌شود، حفظ کند.
 
-Just as with `Send` and `Sync`, the compiler implements `Unpin` automatically
-for all types where it can prove it is safe. A special case, again similar to
-`Send` and `Sync`, is where `Unpin` is _not_ implemented for a type. The
-notation for this is <code>impl !Unpin for <em>SomeType</em></code>, where
-<code><em>SomeType</em></code> is the name of a type that _does_ need to uphold
-those guarantees to be safe whenever a pointer to that type is used in a `Pin`.
+به عبارت دیگر، دو نکته در مورد رابطه بین `Pin` و `Unpin` باید در نظر داشته باشید. اول، `Unpin` حالت "معمولی" است و `!Unpin` حالت خاص. دوم، اینکه آیا یک نوع ویژگی `Unpin` یا `!Unpin` را پیاده‌سازی می‌کند _فقط_ زمانی اهمیت دارد که در حال استفاده از یک اشاره‌گر pin شده به آن نوع مانند <code>Pin<&mut <em>SomeType</em>></code> باشید.
 
-In other words, there are two things to keep in mind about the relationship
-between `Pin` and `Unpin`. First, `Unpin` is the “normal” case, and `!Unpin` is
-the special case. Second, whether a type implements `Unpin` or `!Unpin` _only_
-matters when you’re using a pinned pointer to that type like <code>Pin<&mut
-<em>SomeType</em>></code>.
-
-To make that concrete, think about a `String`: it has a length and the Unicode
-characters that make it up. We can wrap a `String` in `Pin`, as seen in Figure
-17-8. However, `String` automatically implements `Unpin`, as do most other types
-in Rust.
+برای روشن‌تر کردن این موضوع، به یک `String` فکر کنید: این نوع دارای طول و کاراکترهای Unicode است که آن را تشکیل می‌دهند. ما می‌توانیم یک `String` را در `Pin` بسته‌بندی کنیم، همان‌طور که در شکل ۱۷-۸ دیده می‌شود. با این حال، `String` به طور خودکار ویژگی `Unpin` را پیاده‌سازی می‌کند، همان‌طور که بیشتر انواع دیگر در Rust این کار را انجام می‌دهند.
 
 <figure>
 
 <img alt="Concurrent work flow" src="img/trpl17-08.svg" class="center" />
 
-<figcaption>Figure 17-8: Pinning a `String`; the dotted line indicates that the `String` implements the `Unpin` trait, and thus is not pinned.</figcaption>
+<figcaption>شکل ۱۷-۸: Pin کردن یک `String`؛ خط نقطه‌چین نشان می‌دهد که `String` ویژگی `Unpin` را پیاده‌سازی می‌کند و بنابراین pin نشده است.</figcaption>
 
 </figure>
 
-As a result, we can do things that would be illegal if `String` implemented
-`!Unpin` instead, such as replacing one string with another at the exact same
-location in memory as in Figure 17-9. This doesn’t violate the `Pin` contract,
-because `String` has no internal references that make it unsafe to move around!
-That is precisely why it implements `Unpin` rather than `!Unpin`.
+در نتیجه، می‌توانیم کارهایی انجام دهیم که اگر `String` ویژگی `!Unpin` را پیاده‌سازی می‌کرد غیرقانونی بود، مانند جایگزین کردن یک رشته با رشته‌ای دیگر در همان مکان حافظه، همان‌طور که در شکل ۱۷-۹ نشان داده شده است. این کار قرارداد `Pin` را نقض نمی‌کند، زیرا `String` هیچ مرجع داخلی ندارد که جابه‌جایی آن را ناایمن کند! این دقیقاً دلیلی است که ویژگی `Unpin` را به جای `!Unpin` پیاده‌سازی می‌کند.
 
 <figure>
 
 <img alt="Concurrent work flow" src="img/trpl17-09.svg" class="center" />
 
-<figcaption>Figure 17-9: Replacing the `String` with an entirely different `String` in memory.</figcaption>
+
+<figcaption>شکل 17-9: جایگزینی یک String با یک String کاملاً متفاوت در حافظه.</figcaption>
 
 </figure>
 
-Now we know enough to understand the errors reported for that `join_all` call
-from back in Listing 17-17. We originally tried to move the futures produced by
-async blocks into a `Vec<Box<dyn Future<Output = ()>>>`, but as we’ve seen,
-those futures may have internal references, so they don’t implement `Unpin`.
-They need to be pinned, and then we can pass the `Pin` type into the `Vec`,
-confident that the underlying data in the futures will _not_ be moved.
+اکنون به‌اندازه کافی می‌دانیم تا خطاهایی که برای آن فراخوانی `join_all` در فهرست 17-17 گزارش شدند را درک کنیم. ما در ابتدا سعی کردیم آینده‌های تولیدشده توسط بلوک‌های async را به یک `Vec<Box<dyn Future<Output = ()>>>` منتقل کنیم، اما همان‌طور که دیدیم، این آینده‌ها ممکن است ارجاعات داخلی داشته باشند، بنابراین ویژگی `Unpin` را پیاده‌سازی نمی‌کنند. آن‌ها نیاز به pin شدن دارند، و سپس می‌توانیم نوع `Pin` را به `Vec` ارسال کنیم، با اطمینان از اینکه داده‌های زیربنایی در آینده‌ها _جابه‌جا نخواهند شد_.
 
-`Pin` and `Unpin` are mostly important for building lower-level libraries, or
-when you’re building a runtime itself, rather than for day-to-day Rust code.
-When you see these traits in error messages, though, now you’ll have a better
-idea of how to fix your code!
+`Pin` و `Unpin` بیشتر برای ساخت کتابخانه‌های سطح پایین یا وقتی که خودتان یک runtime می‌سازید مهم هستند، نه برای کد روزمره راست. وقتی این Traits را در پیام‌های خطا مشاهده می‌کنید، اکنون ایده بهتری از نحوه رفع کد خواهید داشت!
 
-> Note: This combination of `Pin` and `Unpin` makes it possible to safely
-> implement a whole class of complex types in Rust that would otherwise prove
-> challenging because they’re self-referential. Types that require `Pin` show up
-> most commonly in async Rust today, but every once in a while, you might see
-> them in other contexts, too.
+> نکته: این ترکیب `Pin` و `Unpin` اجازه می‌دهد که یک کلاس کامل از نوع‌های پیچیده در راست ایمن باشند که در غیر این صورت به دلیل خودارجاعی بودن دشوار برای پیاده‌سازی هستند. نوع‌هایی که نیاز به `Pin` دارند _بیشتر_ در راست async امروزی ظاهر می‌شوند، اما ممکن است—بسیار به‌ندرت!—در زمینه‌های دیگر نیز ببینید.
 >
-> The specifics of how `Pin` and `Unpin` work, and the rules they’re required
-> to uphold, are covered extensively in the API documentation for `std::pin`, so
-> if you’re interested in learning more, that’s a great place to start.
+> جزئیات نحوه کار `Pin` و `Unpin` و قوانینی که باید رعایت کنند، به‌طور گسترده در مستندات API برای `std::pin` پوشش داده شده‌اند، بنابراین اگر می‌خواهید آن‌ها را عمیق‌تر درک کنید، این مکان خوبی برای شروع است.
 >
-> If you want to understand how things work under the hood in even more detail,
-> see Chapters [2][under-the-hood] and [4][pinning] of [_Asynchronous
-> Programming in Rust_][async-book].
+> اگر می‌خواهید بفهمید که "در پشت صحنه" چگونه کار می‌کنند، کتاب رسمی [_برنامه‌نویسی ناهمگام در راست_][async-book] پاسخگوی شماست:
+>
+> - [Chapter 2: Under the Hood: Executing Futures and Tasks][under-the-hood]
+> - [Chapter 4: Pinning][pinning]
 
-### The `Stream` Trait
+### The Stream Trait
 
-Now that you have a deeper grasp on the `Future`, `Pin`, and `Unpin` traits, we
-can turn our attention to the `Stream` trait. As you learned earlier in the
-chapter, streams are similar to asynchronous iterators. Unlike `Iterator` and
-`Future`, however, `Stream` has no definition in the standard library as of this
-writing, but there _is_ a very common definition from the `futures` crate used
-throughout the ecosystem.
+اکنون که درک عمیق‌تری از Traits‌های `Future`، `Pin`، و `Unpin` داریم، می‌توانیم توجه خود را به Trait `Stream` معطوف کنیم. همانطور که در بخش معرفی streams توضیح داده شد، streams مشابه iteratorهای ناهمگام هستند. برخلاف `Iterator` و `Future`، در زمان نگارش این متن، تعریف `Stream` در کتابخانه استاندارد وجود ندارد، اما یک تعریف بسیار رایج از crate `futures` وجود دارد که در سراسر اکوسیستم استفاده می‌شود.
 
-Let’s review the definitions of the `Iterator` and `Future` traits before
-looking at how a `Stream` trait might merge them together. From `Iterator`, we
-have the idea of a sequence: its `next` method provides an `Option<Self::Item>`.
-From `Future`, we have the idea of readiness over time: its `poll` method
-provides a `Poll<Self::Output>`. To represent a sequence of items that become
-ready over time, we define a `Stream` trait that puts those features together:
+بیایید تعاریف Traits‌های `Iterator` و `Future` را مرور کنیم تا بتوانیم تصور کنیم یک Trait `Stream` که این دو را ترکیب می‌کند چگونه ممکن است به نظر برسد. از `Iterator`، مفهوم یک توالی را داریم: متد `next` آن یک `Option<Self::Item>` فراهم می‌کند. از `Future`، مفهوم آماده شدن در طول زمان را داریم: متد `poll` آن یک `Poll<Self::Output>` فراهم می‌کند. برای نمایش یک توالی از آیتم‌هایی که در طول زمان آماده می‌شوند، یک Trait `Stream` تعریف می‌کنیم که این ویژگی‌ها را ترکیب می‌کند:
 
 ```rust
 use std::pin::Pin;
@@ -420,29 +245,15 @@ trait Stream {
 }
 ```
 
-The `Stream` trait defines an associated type called `Item` for the type of the
-items produced by the stream. This is similar to `Iterator`, where there may be
-zero to many items, and unlike `Future`, where there is always a single
-`Output`, even if it’s the unit type `()`.
 
-`Stream` also defines a method to get those items. We call it `poll_next`, to
-make it clear that it polls in the same way `Future::poll` does and produces a
-sequence of items in the same way `Iterator::next` does. Its return type
-combines `Poll` with `Option`. The outer type is `Poll`, because it has to be
-checked for readiness, just as a future does. The inner type is `Option`,
-because it needs to signal whether there are more messages, just as an iterator
-does.
+Trait `Stream` یک نوع مرتبط به نام `Item` برای نوع آیتم‌هایی که توسط stream تولید می‌شوند تعریف می‌کند. این مشابه با `Iterator` است: ممکن است تعداد این آیتم‌ها صفر تا بی‌نهایت باشد، برخلاف `Future` که همیشه یک `Output` واحد دارد (حتی اگر نوع واحد `()` باشد).
 
-Something very similar to this definition will likely end up as part of Rust’s
-standard library. In the meantime, it’s part of the toolkit of most runtimes, so
-you can rely on it, and everything we cover next should generally apply!
+`Stream` همچنین یک متد برای دریافت این آیتم‌ها تعریف می‌کند. ما آن را `poll_next` می‌نامیم تا واضح باشد که این متد به همان روشی که `Future::poll` بررسی می‌کند، آیتم‌ها را بررسی می‌کند و به همان روشی که `Iterator::next` یک توالی از آیتم‌ها تولید می‌کند، آیتم‌ها را تولید می‌کند. نوع بازگشتی آن `Poll` را با `Option` ترکیب می‌کند. نوع خارجی `Poll` است، زیرا باید برای آماده بودن بررسی شود، همان‌طور که یک آینده بررسی می‌شود. نوع داخلی `Option` است، زیرا باید نشان دهد که آیا پیام‌های بیشتری وجود دارد یا نه، همان‌طور که یک iterator انجام می‌دهد.
 
-In the example we saw in the section on streaming, though, we didn’t use
-`poll_next` _or_ `Stream`, but instead used `next` and `StreamExt`. We _could_
-work directly in terms of the `poll_next` API by hand-writing our own `Stream`
-state machines, of course, just as we _could_ work with futures directly via
-their `poll` method. Using `await` is much nicer, though, and the `StreamExt`
-trait supplies the `next` method so we can do just that:
+
+چیزی بسیار مشابه با این احتمالاً در نهایت به‌عنوان بخشی از کتابخانه استاندارد راست استانداردسازی خواهد شد. در حال حاضر، این Trait بخشی از ابزار اکثر runtime‌ها است، بنابراین می‌توانید روی آن حساب کنید و همه چیزهایی که در ادامه می‌بینید عموماً قابل اعمال هستند!
+
+با این حال، در مثالی که در بخش مربوط به streams دیدیم، ما از `poll_next` یا `Stream` استفاده نکردیم، بلکه از `next` و `StreamExt` استفاده کردیم. البته می‌توانیم مستقیماً از API `poll_next` استفاده کنیم و ماشین‌های حالت `Stream` خود را با دست بنویسیم، همان‌طور که می‌توانیم مستقیماً از طریق متد `poll` با آینده‌ها کار کنیم. اما استفاده از `await` بسیار دلپذیرتر است، بنابراین Trait `StreamExt` متد `next` را فراهم می‌کند تا بتوانیم دقیقاً این کار را انجام دهیم.
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/no-listing-stream-ext/src/lib.rs:here}}
@@ -453,34 +264,20 @@ TODO: update this if/when tokio/etc. update their MSRV and switch to using async
 in traits, since the lack thereof is the reason they do not yet have this.
 -->
 
-> Note: The actual definition we used earlier in the chapter looks slightly
-> different than this, because it supports versions of Rust that did not yet
-> support using async functions in traits. As a result, it looks like this:
+
+> نکته: تعریف واقعی که قبلاً در این فصل استفاده کردیم کمی متفاوت به نظر می‌رسد، زیرا از نسخه‌هایی از راست پشتیبانی می‌کند که هنوز از استفاده از توابع async در Traits پشتیبانی نمی‌کنند. در نتیجه، این‌گونه به نظر می‌رسد:
 >
 > ```rust,ignore
 > fn next(&mut self) -> Next<'_, Self> where Self: Unpin;
 > ```
 >
-> That `Next` type is a `struct` that implements `Future` and allows us to name
-> the lifetime of the reference to `self` with `Next<'_, Self>`, so that `await`
-> can work with this method.
+> نوع `Next` یک `struct` است که `Future` را پیاده‌سازی می‌کند و راهی برای نام‌گذاری طول عمر ارجاع به `self` با `Next<'_, Self>` فراهم می‌کند، به‌طوری که `await` بتواند با این متد کار کند!
 
-The `StreamExt` trait is also the home of all the interesting methods available
-to use with streams. `StreamExt` is automatically implemented for every type
-that implements `Stream`, but these traits are defined separately to enable the
-community to iterate on convenience APIs without affecting the foundational
-trait.
+Trait `StreamExt` همچنین محل تمام متدهای جالبی است که می‌توان با streams استفاده کرد. `StreamExt` به‌طور خودکار برای هر نوعی که `Stream` را پیاده‌سازی کند، پیاده‌سازی می‌شود، اما این Traits به‌طور جداگانه تعریف شده‌اند تا جامعه بتواند به‌صورت جداگانه روی Trait بنیادی و API‌های راحتی کار کند.
 
-In the version of `StreamExt` used in the `trpl` crate, the trait not only
-defines the `next` method but also supplies a default implementation of `next`
-that correctly handles the details of calling `Stream::poll_next`. This means
-that even when you need to write your own streaming data type, you _only_ have
-to implement `Stream`, and then anyone who uses your data type can use
-`StreamExt` and its methods with it automatically.
+در نسخه `StreamExt` استفاده‌شده در crate `trpl`، این Trait نه تنها متد `next` را تعریف می‌کند، بلکه یک پیاده‌سازی از `next` ارائه می‌دهد که جزئیات فراخوانی `Stream::poll_next` را به‌درستی مدیریت می‌کند. این بدان معناست که حتی زمانی که نیاز دارید نوع داده‌های جریان خود را بنویسید، فقط کافی است `Stream` را پیاده‌سازی کنید، و سپس هرکسی که از نوع داده شما استفاده کند، می‌تواند به‌طور خودکار از `StreamExt` و متدهای آن با آن استفاده کند.
 
-That’s all we’re going to cover for the lower-level details on these traits. To
-wrap up, let’s consider how futures (including streams), tasks, and threads all
-fit together!
+این تمام چیزی است که درباره جزئیات سطح پایین این Traits پوشش خواهیم داد. برای جمع‌بندی، بیایید در نظر بگیریم که چگونه آینده‌ها (شامل streams)، تسک‌ها، و نخ‌ها همگی با هم سازگار هستند!
 
 [ch-18]: ch18-00-oop.html
 [async-book]: https://rust-lang.github.io/async-book/

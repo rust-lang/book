@@ -34,6 +34,7 @@ $ cargo add trpl
 
 <Listing number="17-1" file-name="src/main.rs" caption="تعریف یک تابع async برای دریافت عنصر `<title>` از یک صفحه HTML">
 
+
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-01/src/main.rs:all}}
 ```
@@ -50,7 +51,7 @@ $ cargo add trpl
 
 توجه کنید که کلمه کلیدی `await` در Rust _بعد از_ عبارت مورد انتظار قرار می‌گیرد، نه قبل از آن. یعنی این یک کلمه کلیدی _postfix_ است. این ممکن است با چیزی که به آن عادت دارید اگر از async در زبان‌های دیگر استفاده کرده باشید، متفاوت باشد، اما در Rust این کار زنجیره‌ای از متدها را بسیار راحت‌تر می‌کند. در نتیجه، می‌توانیم بدنه `page_url_for` را تغییر دهیم تا فراخوانی‌های تابع `trpl::get` و `text` را با `await` بین آن‌ها به هم زنجیر کنیم، همان‌طور که در لیست ۱۷-۲ نشان داده شده است.
 
-<Listing number="17-2" file-name="src/main.rs" caption="Chaining with the `await` keyword">
+<Listing number="17-2" file-name="src/main.rs" caption="زنجیره کردن با کلمه کلیدی `await`">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-02/src/main.rs:chaining}}
@@ -63,6 +64,7 @@ $ cargo add trpl
 هنگامی که Rust یک بلوک که با کلمه کلیدی `async` علامت‌گذاری شده است را می‌بیند، آن را به یک نوع داده منحصربه‌فرد و ناشناس که ویژگی `Future` را پیاده‌سازی می‌کند، کامپایل می‌کند. هنگامی که Rust یک تابع که با `async` علامت‌گذاری شده است را می‌بیند، آن را به یک تابع غیر-async که بدنه آن یک بلوک async است، کامپایل می‌کند. نوع بازگشتی یک تابع async نوع داده ناشناسی است که کامپایلر برای آن بلوک async ایجاد می‌کند.
 
 بنابراین، نوشتن `async fn` معادل نوشتن تابعی است که یک _future_ از نوع بازگشتی برمی‌گرداند. برای کامپایلر، یک تعریف تابع مانند `async fn page_title` در لیست ۱۷-۱ معادل یک تابع غیر-async به شکل زیر است:
+
 
 ```rust
 # extern crate trpl; // required for mdbook test
@@ -104,6 +106,7 @@ fn page_title(url: &str) -> impl Future<Output = Option<String>> + '_ {
 
 متأسفانه، این کد کامپایل نمی‌شود. تنها جایی که می‌توانیم از کلمه کلیدی `await` استفاده کنیم، در توابع یا بلوک‌های async است، و Rust اجازه نمی‌دهد تابع ویژه `main` را به‌عنوان `async` علامت‌گذاری کنیم.
 
+
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-03
 cargo build
@@ -126,7 +129,7 @@ error[E0752]: `main` function is not allowed to be `async`
 
 می‌توانستیم future بازگردانده‌شده توسط `page_title` را مستقیماً به `run` ارسال کنیم، و وقتی کامل شد، می‌توانستیم بر اساس `Option<String>` نتیجه، یک `match` انجام دهیم، همان‌طور که در لیست ۱۷-۳ تلاش کردیم. با این حال، برای بیشتر مثال‌های این فصل (و بیشتر کد async در دنیای واقعی)، بیش از یک فراخوانی تابع async انجام خواهیم داد، بنابراین به‌جای آن یک بلوک `async` ارسال می‌کنیم و صراحتاً نتیجه فراخوانی `page_title` را انتظار می‌کشیم، همان‌طور که در لیست ۱۷-۴ نشان داده شده است.
 
-<Listing number="17-4" caption="Awaiting an async block with `trpl::run`" file-name="src/main.rs">
+<Listing number="17-4" caption="منتظر ماندن یک بلوک async با `trpl::run`" file-name="src/main.rs">
 
 <!-- should_panic,noplayground because mdbook test does not pass args -->
 
@@ -136,7 +139,7 @@ error[E0752]: `main` function is not allowed to be `async`
 
 </Listing>
 
-When we run this code, we get the behavior we expected initially:
+وقتی این کد را اجرا می‌کنیم، رفتاری را که ممکن است ابتدا انتظار داشتیم دریافت می‌کنیم:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-04
@@ -175,6 +178,7 @@ The title for https://www.rust-lang.org was
 
 در لیست ۱۷-۵، ما `page_title` را با دو URL مختلف که از خط فرمان ارسال شده‌اند، فراخوانی کرده و آن‌ها را با یکدیگر رقابت می‌دهیم.
 
+
 <Listing number="17-5" caption="" file-name="src/main.rs">
 
 <!-- should_panic,noplayground because mdbook does not pass args -->
@@ -203,6 +207,7 @@ enum Either<A, B> {
 همچنین تابع `page_title` را به‌روزرسانی می‌کنیم تا همان URL ارسال‌شده را بازگرداند. به این ترتیب، اگر صفحه‌ای که ابتدا بازمی‌گردد، دارای یک `<title>` نباشد که بتوانیم آن را استخراج کنیم، همچنان می‌توانیم یک پیام معنادار چاپ کنیم. با در دسترس بودن این اطلاعات، خروجی `println!` خود را به‌روزرسانی می‌کنیم تا مشخص کند کدام URL اول کامل شده است و `<title>` صفحه وب در آن URL چیست (اگر وجود داشته باشد).
 
 شما اکنون یک web scraper کوچک و کارا ساخته‌اید! چند URL انتخاب کنید و ابزار خط فرمان را اجرا کنید. ممکن است متوجه شوید که برخی سایت‌ها به طور مداوم سریع‌تر از بقیه هستند، در حالی که در موارد دیگر، سایت سریع‌تر از اجرای به اجرای دیگر متفاوت است. مهم‌تر از همه، شما اصول کار با futures را آموخته‌اید، بنابراین حالا می‌توانیم عمیق‌تر به آنچه می‌توان با async انجام داد، بپردازیم.
+
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
 [iterators-lazy]: ch13-02-iterators.html
