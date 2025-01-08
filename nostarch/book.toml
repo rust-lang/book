@@ -19,5 +19,8 @@ output-mode = "simple"
 [preprocessor.trpl-figure]
 output-mode = "simple"
 
+[preprocessor.trpl-heading]
+output-mode = "simple"
+
 [rust]
 edition = "2021"
