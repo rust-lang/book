@@ -1,10 +1,12 @@
 mod config;
 mod figure;
+mod heading;
 mod listing;
 mod note;
 
 pub use config::Mode;
 pub use figure::TrplFigure as Figure;
+pub use heading::TrplHeading as Heading;
 pub use listing::TrplListing as Listing;
 pub use note::TrplNote as Note;
 use pulldown_cmark::{Options, Parser};
@@ -32,4 +34,17 @@ pub fn parser(text: &str) -> Parser<'_> {
     opts.insert(Options::ENABLE_HEADING_ATTRIBUTES);
     opts.insert(Options::ENABLE_SMART_PUNCTUATION);
     Parser::new_ext(text, opts)
+}
+
+#[derive(Debug, thiserror::Error)]
+struct CompositeError(Vec<anyhow::Error>);
+
+impl std::fmt::Display for CompositeError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Error(s) rewriting input: {}",
+            self.0.iter().map(|e| format!("{e:?}")).collect::<String>()
+        )
+    }
 }
