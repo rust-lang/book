@@ -1,3 +1,4 @@
+use anyhow::anyhow;
 use html_parser::Dom;
 use mdbook::{
     book::Book,
@@ -8,7 +9,7 @@ use mdbook::{
 use pulldown_cmark::{html, Event};
 use pulldown_cmark_to_cmark::cmark;
 
-use crate::config::Mode;
+use crate::{config::Mode, CompositeError};
 
 /// A preprocessor for rendering listings more elegantly.
 ///
@@ -67,7 +68,7 @@ impl Preprocessor for TrplListing {
             if let BookItem::Chapter(ref mut chapter) = item {
                 match rewrite_listing(&chapter.content, mode) {
                     Ok(rewritten) => chapter.content = rewritten,
-                    Err(reason) => errors.push(reason),
+                    Err(reason) => errors.push(anyhow!(reason)),
                 }
             }
         });
@@ -75,7 +76,7 @@ impl Preprocessor for TrplListing {
         if errors.is_empty() {
             Ok(book)
         } else {
-            Err(CompositeError(errors.join("\n")).into())
+            Err(CompositeError(errors).into())
         }
     }
 
@@ -83,10 +84,6 @@ impl Preprocessor for TrplListing {
         renderer == "html" || renderer == "markdown" || renderer == "test"
     }
 }
-
-#[derive(Debug, thiserror::Error)]
-#[error("Error(s) rewriting input: {0}")]
-struct CompositeError(String);
 
 fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
     match mode {
@@ -96,7 +93,7 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
                     current: None,
                     events: vec![],
                 },
-                |mut state, ev| {
+                |mut state, ev| -> Result<RewriteState, String> {
                     match ev {
                         Event::Html(tag) => {
                             if tag.starts_with("<Listing") {
@@ -109,7 +106,7 @@ fn rewrite_listing(src: &str, mode: Mode) -> Result<String, String> {
                         }
                         ev => state.events.push(Ok(ev)),
                     };
-                    Ok::<RewriteState<'_>, String>(state)
+                    Ok(state)
                 },
             )?;
 

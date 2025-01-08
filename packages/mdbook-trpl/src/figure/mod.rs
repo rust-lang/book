@@ -5,7 +5,7 @@ use mdbook::{book::Book, preprocess::Preprocessor, BookItem};
 use pulldown_cmark::Event;
 use pulldown_cmark_to_cmark::cmark;
 
-use crate::config::Mode;
+use crate::{config::Mode, CompositeError};
 
 /// A simple preprocessor to rewrite `<figure>`s with `<img>`s.
 ///
@@ -71,19 +71,6 @@ impl Preprocessor for TrplFigure {
         } else {
             Err(CompositeError(errors).into())
         }
-    }
-}
-
-#[derive(Debug, thiserror::Error)]
-struct CompositeError(Vec<anyhow::Error>);
-
-impl std::fmt::Display for CompositeError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "Error(s) rewriting input: {}",
-            self.0.iter().map(|e| format!("{e:?}")).collect::<String>()
-        )
     }
 }
 
