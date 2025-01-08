@@ -2,7 +2,7 @@
 
 use mdbook::preprocess::PreprocessorContext;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Mode {
     Default,
     Simple,

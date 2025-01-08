@@ -12,6 +12,10 @@ name = "mdbook-trpl-listing"
 path = "src/bin/listing.rs"
 
 [[bin]]
+name = "mdbook-trpl-heading"
+path = "src/bin/heading.rs"
+
+[[bin]]
 name = "mdbook-trpl-figure"
 path = "src/bin/figure.rs"
 
