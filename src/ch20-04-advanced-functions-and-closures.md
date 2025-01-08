@@ -30,68 +30,41 @@ Pointerهای تابع تمام سه ویژگی Closureها (`Fn`، `FnMut`، و
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-15-map-closure/src/main.rs:here}}
 ```
 
-Or we could name a function as the argument to `map` instead of the closure,
-like this:
+یا می‌توانیم به جای کلوزر، نام یک تابع را به عنوان آرگومان به `map` ارسال کنیم، به این صورت:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-16-map-function/src/main.rs:here}}
 ```
 
-Note that we must use the fully qualified syntax that we talked about earlier
-in the [“Advanced Traits”][advanced-traits]<!-- ignore --> section because
-there are multiple functions available named `to_string`. Here, we’re using the
-`to_string` function defined in the `ToString` trait, which the standard
-library has implemented for any type that implements `Display`.
+توجه داشته باشید که باید از سینتکس کاملاً مشخصی که قبلاً در بخش [“ویژگی‌های پیشرفته”][advanced-traits]<!-- ignore --> توضیح داده شد استفاده کنیم، زیرا چندین تابع با نام `to_string` در دسترس هستند. در اینجا، ما از تابع `to_string` که در ویژگی `ToString` تعریف شده است استفاده می‌کنیم، که کتابخانه استاندارد برای هر نوعی که ویژگی `Display` را پیاده‌سازی کند، آن را پیاده‌سازی کرده است.
 
-Recall from the [“Enum values”][enum-values]<!-- ignore --> section of Chapter
-6 that the name of each enum variant that we define also becomes an initializer
-function. We can use these initializer functions as function pointers that
-implement the closure traits, which means we can specify the initializer
-functions as arguments for methods that take closures, like so:
+به یاد بیاورید که در بخش [“مقادیر Enum”][enum-values]<!-- ignore --> از فصل ۶ گفته شد که نام هر واریانت enum که تعریف می‌کنیم، همچنین به یک تابع مقداردهی اولیه تبدیل می‌شود. می‌توانیم از این توابع مقداردهی اولیه به عنوان اشاره‌گرهای تابع که ویژگی‌های کلوزر را پیاده‌سازی می‌کنند استفاده کنیم، به این معنی که می‌توانیم توابع مقداردهی اولیه را به عنوان آرگومان برای متدهایی که کلوزرها را می‌پذیرند مشخص کنیم، به این صورت:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-17-map-initializer/src/main.rs:here}}
 ```
 
-Here we create `Status::Value` instances using each `u32` value in the range
-that `map` is called on by using the initializer function of `Status::Value`.
-Some people prefer this style, and some people prefer to use closures. They
-compile to the same code, so use whichever style is clearer to you.
+در اینجا با استفاده از تابع مقداردهی اولیه `Status::Value`، نمونه‌هایی از `Status::Value` ایجاد می‌کنیم که از هر مقدار `u32` در محدوده‌ای که `map` روی آن فراخوانی می‌شود استفاده می‌کند. برخی افراد این سبک را ترجیح می‌دهند و برخی دیگر ترجیح می‌دهند از کلوزرها استفاده کنند. این‌ها به کدی یکسان کامپایل می‌شوند، بنابراین هر سبکی که برای شما واضح‌تر است را انتخاب کنید.
 
-### Returning Closures
+### بازگرداندن کلوزرها (Returning Closures)
 
-Closures are represented by traits, which means you can’t return closures
-directly. In most cases where you might want to return a trait, you can instead
-use the concrete type that implements the trait as the return value of the
-function. However, you can’t do that with closures because they don’t have a
-concrete type that is returnable; you’re not allowed to use the function
-pointer `fn` as a return type, for example.
+کلوزرها با ویژگی‌ها نمایش داده می‌شوند، به این معنی که نمی‌توانید مستقیماً کلوزرها را بازگردانید. در بیشتر مواردی که ممکن است بخواهید یک ویژگی را بازگردانید، می‌توانید به جای آن از نوع مشخصی که ویژگی را پیاده‌سازی می‌کند به عنوان مقدار بازگشتی تابع استفاده کنید. با این حال، نمی‌توانید این کار را با کلوزرها انجام دهید زیرا آن‌ها نوع مشخصی که قابل بازگشت باشد ندارند؛ به عنوان مثال، نمی‌توانید از اشاره‌گر تابع `fn` به عنوان نوع بازگشتی استفاده کنید.
 
-Instead, you will normally use the `impl Trait` syntax we learned about in
-Chapter 10. You can return any function type, using `Fn`, `FnOnce` and `FnMut`.
-For example, this code will work just fine:
+در عوض، معمولاً از سینتکس `impl Trait` که در فصل ۱۰ یاد گرفتیم استفاده می‌کنید. می‌توانید هر نوع تابعی را با استفاده از `Fn`، `FnOnce` و `FnMut` بازگردانید. برای مثال، این کد به خوبی کار می‌کند:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-18-returns-closure/src/lib.rs}}
 ```
 
-However, as we noted in the [“Closure Type Inference and
-Annotation”][closure-types]<!-- ignore --> section in Chapter 13, each closure
-is also its own distinct type. If you need to work with multiple functions that
-have the same signature but different implementations, you will need to use a
-trait object for them:
+با این حال، همان‌طور که در بخش [“استنتاج نوع کلوزر و حاشیه‌نویسی”][closure-types]<!-- ignore --> از فصل ۱۳ اشاره کردیم، هر کلوزر نوع مشخص خود را دارد. اگر نیاز داشته باشید با چندین تابع که امضای یکسانی دارند اما پیاده‌سازی‌های متفاوتی دارند کار کنید، باید از یک شیء ویژگی (_trait object_) برای آن‌ها استفاده کنید:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-19-returns-closure-trait-object/src/main.rs}}
 ```
 
-This code will compile just fine—but it wouldn’t if we had tried to stick with
-`impl Fn(i32) -> i32`. For more about trait objects, refer to the section
-[“Using Trait Objects That Allow for Values of Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
---> in Chapter 18.
+این کد به خوبی کامپایل می‌شود—اما اگر تلاش می‌کردیم از `impl Fn(i32) -> i32` استفاده کنیم، کامپایل نمی‌شد. برای اطلاعات بیشتر در مورد اشیاء ویژگی، به بخش [“استفاده از اشیاء ویژگی که امکان مقادیر با انواع مختلف را فراهم می‌کنند”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore --> در فصل ۱۸ مراجعه کنید.
 
-Next, let’s look at macros!
+در ادامه، بیایید نگاهی به ماکروها بیندازیم!
 
 [advanced-traits]: ch20-02-advanced-traits.html#advanced-traits
 [enum-values]: ch06-01-defining-an-enum.html#enum-values

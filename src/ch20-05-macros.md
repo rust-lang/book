@@ -1,81 +1,40 @@
-## Macros
+## ماکروها (Macros)
 
-We’ve used macros like `println!` throughout this book, but we haven’t fully
-explored what a macro is and how it works. The term _macro_ refers to a family
-of features in Rust: _declarative_ macros with `macro_rules!` and three kinds
-of _procedural_ macros:
+ما در طول این کتاب از ماکروهایی مانند `println!` استفاده کرده‌ایم، اما هنوز به طور کامل بررسی نکرده‌ایم که یک ماکرو چیست و چگونه کار می‌کند. اصطلاح _ماکرو_ به مجموعه‌ای از قابلیت‌ها در Rust اشاره دارد: ماکروهای _اعلانی_ (declarative) با `macro_rules!` و سه نوع ماکرو _رویه‌ای_ (procedural):
 
-- Custom `#[derive]` macros that specify code added with the `derive` attribute
-  used on structs and enums
-- Attribute-like macros that define custom attributes usable on any item
-- Function-like macros that look like function calls but operate on the tokens
-  specified as their argument
+- ماکروهای سفارشی `#[derive]` که کدی را که با ویژگی `derive` برای ساختارها (structs) و شمارش‌ها (enums) اضافه می‌شود مشخص می‌کنند.
+- ماکروهای شبیه ویژگی (Attribute-like) که ویژگی‌های سفارشی تعریف می‌کنند که می‌توانند روی هر آیتمی استفاده شوند.
+- ماکروهای شبیه تابع (Function-like) که مانند فراخوانی تابع به نظر می‌رسند اما روی توکن‌هایی که به عنوان آرگومان مشخص شده‌اند عمل می‌کنند.
 
-We’ll talk about each of these in turn, but first, let’s look at why we even
-need macros when we already have functions.
+ما به نوبت درباره هر یک از این‌ها صحبت خواهیم کرد، اما ابتدا بیایید نگاهی بیندازیم که چرا اصلاً به ماکروها نیاز داریم وقتی قبلاً توابع را داریم.
 
-### The Difference Between Macros and Functions
+### تفاوت بین ماکروها و توابع
 
-Fundamentally, macros are a way of writing code that writes other code, which
-is known as _metaprogramming_. In Appendix C, we discuss the `derive`
-attribute, which generates an implementation of various traits for you. We’ve
-also used the `println!` and `vec!` macros throughout the book. All of these
-macros _expand_ to produce more code than the code you’ve written manually.
+در اصل، ماکروها روشی برای نوشتن کدی هستند که کد دیگری را می‌نویسد، که به عنوان _فرابرنامه‌نویسی_ (metaprogramming) شناخته می‌شود. در پیوست C، ما ویژگی `derive` را بررسی می‌کنیم که پیاده‌سازی ویژگی‌های مختلف را برای شما تولید می‌کند. همچنین ما از ماکروهای `println!` و `vec!` در طول کتاب استفاده کرده‌ایم. همه این ماکروها _توسعه_ پیدا می‌کنند تا کدی بیشتر از کدی که به صورت دستی نوشته‌اید تولید کنند.
 
-Metaprogramming is useful for reducing the amount of code you have to write and
-maintain, which is also one of the roles of functions. However, macros have
-some additional powers that functions don’t.
+فرابرنامه‌نویسی برای کاهش مقدار کدی که باید بنویسید و نگهداری کنید مفید است، که یکی از نقش‌های توابع نیز هست. با این حال، ماکروها توانایی‌های اضافی دارند که توابع ندارند.
 
-A function signature must declare the number and type of parameters the
-function has. Macros, on the other hand, can take a variable number of
-parameters: we can call `println!("hello")` with one argument or
-`println!("hello {}", name)` with two arguments. Also, macros are expanded
-before the compiler interprets the meaning of the code, so a macro can, for
-example, implement a trait on a given type. A function can’t, because it gets
-called at runtime and a trait needs to be implemented at compile time.
+یک امضای تابع باید تعداد و نوع پارامترهایی که تابع دارد را مشخص کند. از سوی دیگر، ماکروها می‌توانند تعداد متغیری از پارامترها را بپذیرند: می‌توانیم `println!("hello")` را با یک آرگومان یا `println!("hello {}", name)` را با دو آرگومان فراخوانی کنیم. همچنین، ماکروها قبل از اینکه کامپایلر معنی کد را تفسیر کند گسترش می‌یابند، بنابراین یک ماکرو می‌تواند، به عنوان مثال، یک ویژگی را روی یک نوع مشخص پیاده‌سازی کند. اما یک تابع نمی‌تواند، زیرا در زمان اجرا فراخوانی می‌شود و یک ویژگی باید در زمان کامپایل پیاده‌سازی شود.
 
-The downside to implementing a macro instead of a function is that macro
-definitions are more complex than function definitions because you’re writing
-Rust code that writes Rust code. Due to this indirection, macro definitions are
-generally more difficult to read, understand, and maintain than function
-definitions.
+عیب پیاده‌سازی یک ماکرو به جای یک تابع این است که تعریف ماکروها پیچیده‌تر از تعریف توابع است زیرا شما در حال نوشتن کدی در Rust هستید که کد دیگری را در Rust می‌نویسد. به دلیل این واسطه‌گری، تعریف ماکروها به طور کلی سخت‌تر از توابع خوانده می‌شود، فهمیده می‌شود و نگهداری می‌شود.
 
-Another important difference between macros and functions is that you must
-define macros or bring them into scope _before_ you call them in a file, as
-opposed to functions you can define anywhere and call anywhere.
+یکی دیگر از تفاوت‌های مهم بین ماکروها و توابع این است که شما باید ماکروها را _قبل_ از فراخوانی آن‌ها در یک فایل تعریف کنید یا به دامنه بیاورید، برخلاف توابع که می‌توانید آن‌ها را در هر جایی تعریف کرده و در هر جایی فراخوانی کنید.
 
-### Declarative Macros with `macro_rules!` for General Metaprogramming
+### ماکروهای اعلانی با `macro_rules!` برای فرابرنامه‌نویسی عمومی
 
-The most widely used form of macros in Rust is the _declarative macro_. These
-are also sometimes referred to as “macros by example,” “`macro_rules!` macros,”
-or just plain “macros.” At their core, declarative macros allow you to write
-something similar to a Rust `match` expression. As discussed in Chapter 6,
-`match` expressions are control structures that take an expression, compare the
-resulting value of the expression to patterns, and then run the code associated
-with the matching pattern. Macros also compare a value to patterns that are
-associated with particular code: in this situation, the value is the literal
-Rust source code passed to the macro; the patterns are compared with the
-structure of that source code; and the code associated with each pattern, when
-matched, replaces the code passed to the macro. This all happens during
-compilation.
+پرکاربردترین شکل ماکروها در Rust، _ماکروهای اعلانی_ هستند. به این ماکروها گاهی اوقات “ماکروهای با مثال”، “ماکروهای `macro_rules!`” یا فقط “ماکروها” گفته می‌شود. در هسته خود، ماکروهای اعلانی به شما اجازه می‌دهند چیزی مشابه یک عبارت `match` در Rust بنویسید. همان‌طور که در فصل ۶ بحث شد، عبارات `match` ساختارهای کنترلی هستند که یک عبارت را می‌گیرند، مقدار حاصل از عبارت را با الگوها مقایسه می‌کنند و سپس کدی که با الگوی تطابق یافته مرتبط است را اجرا می‌کنند. ماکروها نیز مقدار را با الگوهایی که با کدی خاص مرتبط هستند مقایسه می‌کنند: در این حالت، مقدار کد منبع Rust است که به ماکرو ارسال شده است؛ الگوها با ساختار آن کد منبع مقایسه می‌شوند؛ و کدی که با هر الگو مرتبط است، وقتی تطابق یافت، جایگزین کدی می‌شود که به ماکرو ارسال شده است. همه این‌ها در طول کامپایل اتفاق می‌افتد.
 
-To define a macro, you use the `macro_rules!` construct. Let’s explore how to
-use `macro_rules!` by looking at how the `vec!` macro is defined. Chapter 8
-covered how we can use the `vec!` macro to create a new vector with particular
-values. For example, the following macro creates a new vector containing three
-integers:
+برای تعریف یک ماکرو، از ساختار `macro_rules!` استفاده می‌کنید. بیایید بررسی کنیم چگونه از `macro_rules!` استفاده کنیم با نگاهی به نحوه تعریف ماکروی `vec!`. فصل ۸ پوشش داد که چگونه می‌توانیم از ماکروی `vec!` برای ایجاد یک بردار جدید با مقادیر خاص استفاده کنیم. به عنوان مثال، ماکروی زیر یک بردار جدید حاوی سه عدد صحیح ایجاد می‌کند:
 
 ```rust
 let v: Vec<u32> = vec![1, 2, 3];
 ```
 
-We could also use the `vec!` macro to make a vector of two integers or a vector
-of five string slices. We wouldn’t be able to use a function to do the same
-because we wouldn’t know the number or type of values up front.
+ما همچنین می‌توانیم از ماکروی `vec!` برای ساخت یک بردار شامل دو عدد صحیح یا یک بردار شامل پنج برش رشته استفاده کنیم. نمی‌توانیم از یک تابع برای انجام همین کار استفاده کنیم زیرا نمی‌دانیم تعداد یا نوع مقادیر از پیش چیست.
 
-Listing 20-29 shows a slightly simplified definition of the `vec!` macro.
+لیست ۲۰-۲۹ یک تعریف کمی ساده‌شده از ماکروی `vec!` را نشان می‌دهد.
 
-<Listing number="20-29" file-name="src/lib.rs" caption="A simplified version of the `vec!` macro definition">
+<Listing number="20-29" file-name="src/lib.rs" caption="یک نسخه ساده‌شده از تعریف ماکروی `vec!`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-29/src/lib.rs}}
@@ -83,54 +42,23 @@ Listing 20-29 shows a slightly simplified definition of the `vec!` macro.
 
 </Listing>
 
-> Note: The actual definition of the `vec!` macro in the standard library
-> includes code to preallocate the correct amount of memory up front. That code
-> is an optimization that we don’t include here to make the example simpler.
+> نکته: تعریف واقعی ماکروی `vec!` در کتابخانه استاندارد شامل کدی است که مقدار حافظه مناسب را از پیش تخصیص می‌دهد. آن کد بهینه‌سازی‌ای است که در اینجا برای ساده‌تر شدن مثال شامل نشده است.
 
-The `#[macro_export]` annotation indicates that this macro should be made
-available whenever the crate in which the macro is defined is brought into
-scope. Without this annotation, the macro can’t be brought into scope.
+حاشیه‌نویسی `#[macro_export]` نشان می‌دهد که این ماکرو باید هر زمان که crate‌ای که ماکرو در آن تعریف شده است به دامنه آورده شود، در دسترس قرار گیرد. بدون این حاشیه‌نویسی، ماکرو نمی‌تواند به دامنه آورده شود.
 
-We then start the macro definition with `macro_rules!` and the name of the
-macro we’re defining _without_ the exclamation mark. The name, in this case
-`vec`, is followed by curly brackets denoting the body of the macro definition.
+سپس تعریف ماکرو را با `macro_rules!` و نام ماکرویی که تعریف می‌کنیم _بدون_ علامت تعجب شروع می‌کنیم. نام، که در اینجا `vec` است، با آکولادهایی دنبال می‌شود که بدنه تعریف ماکرو را مشخص می‌کنند.
 
-The structure in the `vec!` body is similar to the structure of a `match`
-expression. Here we have one arm with the pattern `( $( $x:expr ),* )`,
-followed by `=>` and the block of code associated with this pattern. If the
-pattern matches, the associated block of code will be emitted. Given that this
-is the only pattern in this macro, there is only one valid way to match; any
-other pattern will result in an error. More complex macros will have more than
-one arm.
+ساختار بدنه `vec!` مشابه ساختار یک عبارت `match` است. در اینجا یک بازو با الگوی `( $( $x:expr ),* )` داریم، که با `=>` و بلوک کدی که با این الگو مرتبط است دنبال می‌شود. اگر الگو تطابق یابد، بلوک کد مرتبط گسترش می‌یابد. با توجه به اینکه این تنها الگو در این ماکرو است، تنها یک روش معتبر برای تطابق وجود دارد؛ هر الگوی دیگری باعث خطا خواهد شد. ماکروهای پیچیده‌تر ممکن است بیش از یک بازو داشته باشند.
 
-Valid pattern syntax in macro definitions is different than the pattern syntax
-covered in Chapter 19 because macro patterns are matched against Rust code
-structure rather than values. Let’s walk through what the pattern pieces in
-Listing 20-29 mean; for the full macro pattern syntax, see the [Rust
-Reference][ref].
+سینتکس الگوی معتبر در تعریف ماکروها با سینتکسی که در فصل ۱۹ برای الگوها پوشش داده شد متفاوت است زیرا الگوهای ماکروها بر اساس ساختار کد Rust و نه مقادیر تطابق داده می‌شوند. بیایید مرور کنیم که قسمت‌های الگوی لیست ۲۰-۲۹ چه معنایی دارند؛ برای مشاهده کامل سینتکس الگوهای ماکرو، به [مستندات مرجع Rust][ref] مراجعه کنید.
 
-First, we use a set of parentheses to encompass the whole pattern. We use a
-dollar sign (`$`) to declare a variable in the macro system that will contain
-the Rust code matching the pattern. The dollar sign makes it clear this is a
-macro variable as opposed to a regular Rust variable. Next comes a set of
-parentheses that captures values that match the pattern within the parentheses
-for use in the replacement code. Within `$()` is `$x:expr`, which matches any
-Rust expression and gives the expression the name `$x`.
+ابتدا، مجموعه‌ای از پرانتزها را برای شامل کردن کل الگو استفاده می‌کنیم. از علامت دلار (`$`) برای اعلام یک متغیر در سیستم ماکرو استفاده می‌کنیم که کد Rust تطابق‌یافته با الگو را در خود جای می‌دهد. علامت دلار مشخص می‌کند که این یک متغیر ماکرو است، نه یک متغیر معمولی Rust. سپس مجموعه‌ای از پرانتزها می‌آیند که مقادیری را که با الگو درون پرانتزها تطابق دارند، برای استفاده در کد جایگزین ثبت می‌کنند. درون `$()`، `$x:expr` قرار دارد که با هر عبارت Rust تطابق دارد و به آن عبارت نام `$x` می‌دهد.
 
-The comma following `$()` indicates that a literal comma separator character
-must appear between each instance of the code that matches the code within
-`$()`. The `*` specifies that the pattern matches zero or more of whatever
-precedes the `*`.
+کامای بعد از `$()` نشان می‌دهد که یک کاراکتر کامای جداکننده باید بین هر نمونه از کدی که با کد درون `$()` تطابق دارد ظاهر شود. علامت `*` مشخص می‌کند که الگو با صفر یا بیشتر از هر چیزی که قبل از `*` است، تطابق دارد.
 
-When we call this macro with `vec![1, 2, 3];`, the `$x` pattern matches three
-times with the three expressions `1`, `2`, and `3`.
+وقتی این ماکرو را با `vec![1, 2, 3];` فراخوانی می‌کنیم، الگوی `$x` سه بار با سه عبارت `1`، `2` و `3` تطابق پیدا می‌کند.
 
-Now let’s look at the pattern in the body of the code associated with this arm:
-`temp_vec.push()` within `$()*` is generated for each part that matches `$()`
-in the pattern zero or more times depending on how many times the pattern
-matches. The `$x` is replaced with each expression matched. When we call this
-macro with `vec![1, 2, 3];`, the code generated that replaces this macro call
-will be the following:
+حالا بیایید به الگویی که در بدنه کد مرتبط با این بازو وجود دارد نگاه کنیم: `temp_vec.push()` درون `$()*` برای هر بخشی که با `$()` در الگو تطابق دارد، صفر یا بیشتر بار بسته به اینکه الگو چند بار تطابق پیدا می‌کند، تولید می‌شود. `$x` با هر عبارتی که تطابق پیدا کند جایگزین می‌شود. وقتی این ماکرو را با `vec![1, 2, 3];` فراخوانی می‌کنیم، کدی که جایگزین این فراخوانی ماکرو می‌شود به شکل زیر خواهد بود:
 
 ```rust,ignore
 {
@@ -142,29 +70,17 @@ will be the following:
 }
 ```
 
-We’ve defined a macro that can take any number of arguments of any type and can
-generate code to create a vector containing the specified elements.
+ما یک ماکرو تعریف کرده‌ایم که می‌تواند هر تعداد آرگومان از هر نوعی را بپذیرد و کدی برای ایجاد یک بردار که شامل عناصر مشخص‌شده است تولید کند.
 
-To learn more about how to write macros, consult the online documentation or
-other resources, such as [“The Little Book of Rust Macros”][tlborm] started by
-Daniel Keep and continued by Lukas Wirth.
+برای یادگیری بیشتر در مورد نحوه نوشتن ماکروها، به مستندات آنلاین یا منابع دیگر مانند [“The Little Book of Rust Macros”][tlborm] که توسط Daniel Keep آغاز و توسط Lukas Wirth ادامه داده شده است، مراجعه کنید.
 
-### Procedural Macros for Generating Code from Attributes
+### ماکروهای رویه‌ای (Procedural) برای تولید کد از ویژگی‌ها (Attributes)
 
-The second form of macros is the _procedural macro_, which acts more like a
-function (and is a type of procedure). Procedural macros accept some code as an
-input, operate on that code, and produce some code as an output rather than
-matching against patterns and replacing the code with other code as declarative
-macros do. The three kinds of procedural macros are custom derive,
-attribute-like, and function-like, and all work in a similar fashion.
+دومین شکل ماکروها، _ماکروی رویه‌ای_ (procedural macro) است که بیشتر شبیه به یک تابع عمل می‌کند (و نوعی رویه است). ماکروهای رویه‌ای کدی را به عنوان ورودی می‌پذیرند، روی آن کد عمل می‌کنند و به جای تطابق با الگوها و جایگزین کردن کد با کدی دیگر مانند ماکروهای اعلانی، کدی را به عنوان خروجی تولید می‌کنند. سه نوع ماکروی رویه‌ای شامل `derive` سفارشی، شبیه ویژگی (attribute-like) و شبیه تابع (function-like) هستند و همه به شیوه‌ای مشابه عمل می‌کنند.
 
-When creating procedural macros, the definitions must reside in their own crate
-with a special crate type. This is for complex technical reasons that we hope
-to eliminate in the future. In Listing 20-30, we show how to define a
-procedural macro, where `some_attribute` is a placeholder for using a specific
-macro variety.
+هنگام ایجاد ماکروهای رویه‌ای، تعاریف باید در یک crate مجزا با نوع crate خاص خود قرار گیرند. این به دلایل فنی پیچیده‌ای است که امیدواریم در آینده برطرف شود. در لیست ۲۰-۳۰، نحوه تعریف یک ماکروی رویه‌ای را نشان می‌دهیم که در آن `some_attribute` به عنوان جایگزین برای استفاده از نوع خاصی از ماکرو است.
 
-<Listing number="20-30" file-name="src/lib.rs" caption="An example of defining a procedural macro">
+<Listing number="20-30" file-name="src/lib.rs" caption="یک مثال از تعریف یک ماکروی رویه‌ای">
 
 ```rust,ignore
 use proc_macro;
@@ -176,32 +92,15 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 
 </Listing>
 
-The function that defines a procedural macro takes a `TokenStream` as an input
-and produces a `TokenStream` as an output. The `TokenStream` type is defined by
-the `proc_macro` crate that is included with Rust and represents a sequence of
-tokens. This is the core of the macro: the source code that the macro is
-operating on makes up the input `TokenStream`, and the code the macro produces
-is the output `TokenStream`. The function also has an attribute attached to it
-that specifies which kind of procedural macro we’re creating. We can have
-multiple kinds of procedural macros in the same crate.
+تابعی که یک ماکروی رویه‌ای را تعریف می‌کند، یک `TokenStream` را به عنوان ورودی می‌گیرد و یک `TokenStream` را به عنوان خروجی تولید می‌کند. نوع `TokenStream` توسط crate به نام `proc_macro` تعریف شده است که با Rust همراه است و نمایانگر یک توالی از توکن‌ها است. این هسته ماکرو است: کد منبعی که ماکرو روی آن عمل می‌کند ورودی `TokenStream` را تشکیل می‌دهد و کدی که ماکرو تولید می‌کند خروجی `TokenStream` است. این تابع همچنین دارای یک ویژگی (attribute) متصل به خود است که مشخص می‌کند کدام نوع از ماکروی رویه‌ای را ایجاد می‌کنیم. ما می‌توانیم چندین نوع از ماکروهای رویه‌ای را در یک crate داشته باشیم.
 
-Let’s look at the different kinds of procedural macros. We’ll start with a
-custom derive macro and then explain the small dissimilarities that make the
-other forms different.
+بیایید به انواع مختلف ماکروهای رویه‌ای نگاهی بیندازیم. با یک ماکروی `derive` سفارشی شروع می‌کنیم و سپس تفاوت‌های کوچک بین اشکال دیگر را توضیح می‌دهیم.
 
-### How to Write a Custom `derive` Macro
+### نحوه نوشتن یک ماکروی `derive` سفارشی
 
-Let’s create a crate named `hello_macro` that defines a trait named
-`HelloMacro` with one associated function named `hello_macro`. Rather than
-making our users implement the `HelloMacro` trait for each of their types,
-we’ll provide a procedural macro so users can annotate their type with
-`#[derive(HelloMacro)]` to get a default implementation of the `hello_macro`
-function. The default implementation will print `Hello, Macro! My name is
-TypeName!` where `TypeName` is the name of the type on which this trait has
-been defined. In other words, we’ll write a crate that enables another
-programmer to write code like Listing 20-31 using our crate.
+بیایید یک crate به نام `hello_macro` ایجاد کنیم که یک ویژگی به نام `HelloMacro` را با یک تابع وابسته به نام `hello_macro` تعریف کند. به جای اینکه کاربران ما ویژگی `HelloMacro` را برای هر یک از انواع خود پیاده‌سازی کنند، ما یک ماکروی رویه‌ای فراهم می‌کنیم تا کاربران بتوانند نوع خود را با `#[derive(HelloMacro)]` حاشیه‌نویسی کنند و یک پیاده‌سازی پیش‌فرض برای تابع `hello_macro` دریافت کنند. پیاده‌سازی پیش‌فرض متن `Hello, Macro! My name is TypeName!` را چاپ می‌کند که در آن `TypeName` نام نوعی است که این ویژگی روی آن تعریف شده است. به عبارت دیگر، ما crateای خواهیم نوشت که به برنامه‌نویس دیگری امکان می‌دهد کدی مانند لیست ۲۰-۳۱ را با استفاده از crate ما بنویسد.
 
-<Listing number="20-31" file-name="src/main.rs" caption="The code a user of our crate will be able to write when using our procedural macro">
+<Listing number="20-31" file-name="src/main.rs" caption="کدی که کاربر crate ما می‌تواند هنگام استفاده از ماکروی رویه‌ای ما بنویسد">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-31/src/main.rs}}
@@ -209,14 +108,13 @@ programmer to write code like Listing 20-31 using our crate.
 
 </Listing>
 
-This code will print `Hello, Macro! My name is Pancakes!` when we’re done. The
-first step is to make a new library crate, like this:
+این کد متن `Hello, Macro! My name is Pancakes!` را چاپ می‌کند وقتی کار ما تمام شود. اولین قدم این است که یک crate جدید از نوع کتابخانه بسازیم، به این صورت:
 
 ```console
 $ cargo new hello_macro --lib
 ```
 
-Next, we’ll define the `HelloMacro` trait and its associated function:
+سپس، ویژگی `HelloMacro` و تابع وابسته به آن را تعریف می‌کنیم:
 
 <Listing file-name="src/lib.rs">
 
@@ -226,48 +124,25 @@ Next, we’ll define the `HelloMacro` trait and its associated function:
 
 </Listing>
 
-We have a trait and its function. At this point, our crate user could implement
-the trait to achieve the desired functionality, like so:
+ما اکنون یک ویژگی و تابع وابسته به آن داریم. در این مرحله، کاربر crate ما می‌تواند ویژگی را پیاده‌سازی کند تا به عملکرد مورد نظر برسد، به این صورت:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-20-impl-hellomacro-for-pancakes/pancakes/src/main.rs}}
 ```
 
-However, they would need to write the implementation block for each type they
-wanted to use with `hello_macro`; we want to spare them from having to do this
-work.
+با این حال، آن‌ها باید بلوک پیاده‌سازی را برای هر نوعی که می‌خواهند با `hello_macro` استفاده کنند بنویسند؛ ما می‌خواهیم آن‌ها را از انجام این کار بی‌نیاز کنیم.
 
-Additionally, we can’t yet provide the `hello_macro` function with default
-implementation that will print the name of the type the trait is implemented
-on: Rust doesn’t have reflection capabilities, so it can’t look up the type’s
-name at runtime. We need a macro to generate code at compile time.
+علاوه بر این، ما هنوز نمی‌توانیم برای تابع `hello_macro` یک پیاده‌سازی پیش‌فرض ارائه دهیم که نام نوعی که ویژگی روی آن پیاده‌سازی شده است را چاپ کند: Rust قابلیت‌های بازتاب (reflection) ندارد، بنابراین نمی‌تواند نام نوع را در زمان اجرا جستجو کند. ما به یک ماکرو نیاز داریم تا کد را در زمان کامپایل تولید کند.
 
-The next step is to define the procedural macro. At the time of this writing,
-procedural macros need to be in their own crate. Eventually, this restriction
-might be lifted. The convention for structuring crates and macro crates is as
-follows: for a crate named `foo`, a custom derive procedural macro crate is
-called `foo_derive`. Let’s start a new crate called `hello_macro_derive` inside
-our `hello_macro` project:
+مرحله بعدی این است که ماکروی رویه‌ای را تعریف کنیم. در زمان نگارش این متن، ماکروهای رویه‌ای باید در یک crate جداگانه قرار گیرند. این محدودیت ممکن است در آینده برداشته شود. روش استاندارد برای ساختاردهی crateها و crateهای ماکرو به این صورت است: برای یک crate به نام `foo`، یک ماکروی رویه‌ای سفارشی `derive` به نام `foo_derive` نام‌گذاری می‌شود. بیایید یک crate جدید به نام `hello_macro_derive` در پروژه `hello_macro` ایجاد کنیم:
 
 ```console
 $ cargo new hello_macro_derive --lib
 ```
 
-Our two crates are tightly related, so we create the procedural macro crate
-within the directory of our `hello_macro` crate. If we change the trait
-definition in `hello_macro`, we’ll have to change the implementation of the
-procedural macro in `hello_macro_derive` as well. The two crates will need to
-be published separately, and programmers using these crates will need to add
-both as dependencies and bring them both into scope. We could instead have the
-`hello_macro` crate use `hello_macro_derive` as a dependency and re-export the
-procedural macro code. However, the way we’ve structured the project makes it
-possible for programmers to use `hello_macro` even if they don’t want the
-`derive` functionality.
+دو crate ما به شدت به هم مرتبط هستند، بنابراین ما crate ماکروی رویه‌ای را درون دایرکتوری crate `hello_macro` ایجاد می‌کنیم. اگر تعریف ویژگی را در `hello_macro` تغییر دهیم، باید پیاده‌سازی ماکروی رویه‌ای در `hello_macro_derive` را نیز تغییر دهیم. این دو crate باید به طور جداگانه منتشر شوند و برنامه‌نویسانی که از این crateها استفاده می‌کنند باید هر دو را به عنوان وابستگی اضافه کرده و آن‌ها را به دامنه بیاورند. در عوض، می‌توانستیم crate `hello_macro` از `hello_macro_derive` به عنوان یک وابستگی استفاده کند و کد ماکروی رویه‌ای را دوباره صادر کند. با این حال، روشی که پروژه را ساختاربندی کرده‌ایم، این امکان را فراهم می‌کند که برنامه‌نویسان از `hello_macro` حتی اگر عملکرد `derive` را نخواهند، استفاده کنند.
 
-We need to declare the `hello_macro_derive` crate as a procedural macro crate.
-We’ll also need functionality from the `syn` and `quote` crates, as you’ll see
-in a moment, so we need to add them as dependencies. Add the following to the
-_Cargo.toml_ file for `hello_macro_derive`:
+ما باید crate `hello_macro_derive` را به عنوان یک crate ماکروی رویه‌ای اعلام کنیم. همچنین به عملکردهایی از crateهای `syn` و `quote` نیاز خواهیم داشت، همان‌طور که به زودی خواهید دید، بنابراین باید آن‌ها را به عنوان وابستگی اضافه کنیم. موارد زیر را به فایل _Cargo.toml_ برای `hello_macro_derive` اضافه کنید:
 
 <Listing file-name="hello_macro_derive/Cargo.toml">
 
@@ -277,11 +152,9 @@ _Cargo.toml_ file for `hello_macro_derive`:
 
 </Listing>
 
-To start defining the procedural macro, place the code in Listing 20-32 into
-your _src/lib.rs_ file for the `hello_macro_derive` crate. Note that this code
-won’t compile until we add a definition for the `impl_hello_macro` function.
+برای شروع تعریف ماکروی رویه‌ای، کد لیست ۲۰-۳۲ را در فایل _src/lib.rs_ برای crate `hello_macro_derive` قرار دهید. توجه داشته باشید که این کد تا زمانی که تعریف تابع `impl_hello_macro` را اضافه نکنیم کامپایل نخواهد شد.
 
-<Listing number="20-32" file-name="hello_macro_derive/src/lib.rs" caption="Code that most procedural macro crates will require in order to process Rust code">
+<Listing number="20-32" file-name="hello_macro_derive/src/lib.rs" caption="کدی که اکثر crateهای ماکروی رویه‌ای برای پردازش کد Rust نیاز دارند">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-32/hello_macro/hello_macro_derive/src/lib.rs}}
@@ -289,40 +162,17 @@ won’t compile until we add a definition for the `impl_hello_macro` function.
 
 </Listing>
 
-Notice that we’ve split the code into the `hello_macro_derive` function, which
-is responsible for parsing the `TokenStream`, and the `impl_hello_macro`
-function, which is responsible for transforming the syntax tree: this makes
-writing a procedural macro more convenient. The code in the outer function
-(`hello_macro_derive` in this case) will be the same for almost every
-procedural macro crate you see or create. The code you specify in the body of
-the inner function (`impl_hello_macro` in this case) will be different
-depending on your procedural macro’s purpose.
+توجه کنید که کد را به دو تابع تقسیم کرده‌ایم: `hello_macro_derive` که مسئول پردازش `TokenStream` است، و `impl_hello_macro` که مسئول تبدیل درخت نحوی است. این کار نوشتن یک ماکروی رویه‌ای را آسان‌تر می‌کند. کد تابع بیرونی (`hello_macro_derive` در اینجا) تقریباً برای تمام crateهای ماکروی رویه‌ای که می‌بینید یا ایجاد می‌کنید یکسان خواهد بود. کدی که در بدنه تابع داخلی (`impl_hello_macro` در اینجا) مشخص می‌کنید بسته به هدف ماکروی رویه‌ای شما متفاوت خواهد بود.
 
-We’ve introduced three new crates: `proc_macro`, [`syn`], and [`quote`]. The
-`proc_macro` crate comes with Rust, so we didn’t need to add that to the
-dependencies in _Cargo.toml_. The `proc_macro` crate is the compiler’s API that
-allows us to read and manipulate Rust code from our code.
+ما سه crate جدید معرفی کرده‌ایم: `proc_macro`، [`syn`]، و [`quote`]. crate `proc_macro` همراه با Rust ارائه می‌شود، بنابراین نیازی به افزودن آن به وابستگی‌ها در _Cargo.toml_ نداریم. crate `proc_macro` API کامپایلر است که به ما اجازه می‌دهد کد Rust را از کد خود بخوانیم و دستکاری کنیم.
 
-The `syn` crate parses Rust code from a string into a data structure that we
-can perform operations on. The `quote` crate turns `syn` data structures back
-into Rust code. These crates make it much simpler to parse any sort of Rust
-code we might want to handle: writing a full parser for Rust code is no simple
-task.
+crate `syn` کد Rust را از یک رشته به یک ساختار داده‌ای تبدیل می‌کند که می‌توانیم عملیات روی آن انجام دهیم. crate `quote` ساختارهای داده `syn` را دوباره به کد Rust تبدیل می‌کند. این crateها پردازش هر نوع کد Rust که بخواهیم مدیریت کنیم را بسیار ساده‌تر می‌کنند: نوشتن یک تجزیه‌کننده کامل برای کد Rust کار ساده‌ای نیست.
 
-The `hello_macro_derive` function will be called when a user of our library
-specifies `#[derive(HelloMacro)]` on a type. This is possible because we’ve
-annotated the `hello_macro_derive` function here with `proc_macro_derive` and
-specified the name `HelloMacro`, which matches our trait name; this is the
-convention most procedural macros follow.
+تابع `hello_macro_derive` زمانی فراخوانی می‌شود که یک کاربر از کتابخانه ما ویژگی `#[derive(HelloMacro)]` را روی یک نوع مشخص کند. این امر به این دلیل ممکن است که ما تابع `hello_macro_derive` را با `proc_macro_derive` حاشیه‌نویسی کرده‌ایم و نام `HelloMacro` را مشخص کرده‌ایم، که با نام ویژگی ما مطابقت دارد؛ این روش معمولی‌ای است که بیشتر ماکروهای رویه‌ای دنبال می‌کنند.
 
-The `hello_macro_derive` function first converts the `input` from a
-`TokenStream` to a data structure that we can then interpret and perform
-operations on. This is where `syn` comes into play. The `parse` function in
-`syn` takes a `TokenStream` and returns a `DeriveInput` struct representing the
-parsed Rust code. Listing 20-33 shows the relevant parts of the `DeriveInput`
-struct we get from parsing the `struct Pancakes;` string:
+تابع `hello_macro_derive` ابتدا `input` را از یک `TokenStream` به یک ساختار داده تبدیل می‌کند که سپس می‌توانیم آن را تفسیر کرده و عملیات‌هایی روی آن انجام دهیم. اینجاست که crate `syn` به کار می‌آید. تابع `parse` در `syn` یک `TokenStream` می‌گیرد و یک ساختار `DeriveInput` را که نمایانگر کد Rust تجزیه‌شده است، بازمی‌گرداند. لیست ۲۰-۳۳ بخش‌های مرتبط از ساختار `DeriveInput` را نشان می‌دهد که هنگام تجزیه کد `struct Pancakes;` دریافت می‌کنیم:
 
-<Listing number="20-33" caption="The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-31">
+<Listing number="20-33" caption="نمونه‌ای از `DeriveInput` که هنگام تجزیه کدی که ویژگی ماکرو در لیست ۲۰-۳۱ را دارد، دریافت می‌کنیم">
 
 ```rust,ignore
 DeriveInput {
@@ -346,31 +196,15 @@ DeriveInput {
 
 </Listing>
 
-The fields of this struct show that the Rust code we’ve parsed is a unit struct
-with the `ident` (identifier, meaning the name) of `Pancakes`. There are more
-fields on this struct for describing all sorts of Rust code; check the [`syn`
-documentation for `DeriveInput`][syn-docs] for more information.
+فیلدهای این ساختار نشان می‌دهند که کد Rust که تجزیه کرده‌ایم یک ساختار واحد (_unit struct_) با شناسه (`ident`) به نام `Pancakes` است. این ساختار فیلدهای بیشتری برای توصیف انواع مختلف کد Rust دارد؛ برای اطلاعات بیشتر به [مستندات `syn` برای `DeriveInput`][syn-docs] مراجعه کنید.
 
-Soon we’ll define the `impl_hello_macro` function, which is where we’ll build
-the new Rust code we want to include. But before we do, note that the output
-for our derive macro is also a `TokenStream`. The returned `TokenStream` is
-added to the code that our crate users write, so when they compile their crate,
-they’ll get the extra functionality that we provide in the modified
-`TokenStream`.
+به زودی تابع `impl_hello_macro` را تعریف خواهیم کرد، جایی که کد جدیدی که می‌خواهیم اضافه کنیم را تولید خواهیم کرد. اما قبل از این کار، توجه داشته باشید که خروجی ماکروی `derive` ما نیز یک `TokenStream` است. `TokenStream` بازگردانده شده به کدی که کاربران crate ما می‌نویسند اضافه می‌شود، بنابراین وقتی crate آن‌ها کامپایل می‌شود، قابلیت‌های اضافی‌ای که ما در `TokenStream` تغییر داده‌شده فراهم کرده‌ایم را دریافت خواهند کرد.
 
-You might have noticed that we’re calling `unwrap` to cause the
-`hello_macro_derive` function to panic if the call to the `syn::parse` function
-fails here. It’s necessary for our procedural macro to panic on errors because
-`proc_macro_derive` functions must return `TokenStream` rather than `Result` to
-conform to the procedural macro API. We’ve simplified this example by using
-`unwrap`; in production code, you should provide more specific error messages
-about what went wrong by using `panic!` or `expect`.
+ممکن است متوجه شده باشید که ما از `unwrap` استفاده می‌کنیم تا در صورتی که فراخوانی تابع `syn::parse` شکست بخورد، تابع `hello_macro_derive` به وحشت بیفتد (_panic_). لازم است ماکروی رویه‌ای ما در صورت بروز خطا به وحشت بیفتد، زیرا توابع `proc_macro_derive` باید به جای `Result` یک `TokenStream` بازگردانند تا با API ماکروهای رویه‌ای سازگار باشند. برای ساده کردن این مثال از `unwrap` استفاده کرده‌ایم؛ در کد تولیدی، بهتر است پیام‌های خطای خاص‌تری درباره مشکل ایجاد شده با استفاده از `panic!` یا `expect` ارائه دهید.
 
-Now that we have the code to turn the annotated Rust code from a `TokenStream`
-into a `DeriveInput` instance, let’s generate the code that implements the
-`HelloMacro` trait on the annotated type, as shown in Listing 20-34.
+اکنون که کدی داریم که کد Rust حاشیه‌نویسی‌شده را از یک `TokenStream` به یک نمونه `DeriveInput` تبدیل می‌کند، بیایید کدی که ویژگی `HelloMacro` را روی نوع حاشیه‌نویسی‌شده پیاده‌سازی می‌کند، تولید کنیم، همان‌طور که در لیست ۲۰-۳۴ نشان داده شده است.
 
-<Listing number="20-34" file-name="hello_macro_derive/src/lib.rs" caption="Implementing the `HelloMacro` trait using the parsed Rust code">
+<Listing number="20-34" file-name="hello_macro_derive/src/lib.rs" caption="پیاده‌سازی ویژگی `HelloMacro` با استفاده از کد Rust تجزیه‌شده">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-34/hello_macro/hello_macro_derive/src/lib.rs:here}}
@@ -378,132 +212,68 @@ into a `DeriveInput` instance, let’s generate the code that implements the
 
 </Listing>
 
-We get an `Ident` struct instance containing the name (identifier) of the
-annotated type using `ast.ident`. The struct in Listing 20-33 shows that when
-we run the `impl_hello_macro` function on the code in Listing 20-31, the
-`ident` we get will have the `ident` field with a value of `"Pancakes"`. Thus,
-the `name` variable in Listing 20-34 will contain an `Ident` struct instance
-that, when printed, will be the string `"Pancakes"`, the name of the struct in
-Listing 20-31.
+ما با استفاده از `ast.ident` یک نمونه از ساختار `Ident` که شامل نام (شناسه) نوع حاشیه‌نویسی‌شده است، دریافت می‌کنیم. ساختار موجود در لیست ۲۰-۳۳ نشان می‌دهد که وقتی تابع `impl_hello_macro` را روی کد لیست ۲۰-۳۱ اجرا می‌کنیم، فیلد `ident` با مقدار `"Pancakes"` پر خواهد شد. بنابراین، متغیر `name` در لیست ۲۰-۳۴ یک نمونه از ساختار `Ident` را شامل می‌شود که وقتی چاپ می‌شود، رشته `"Pancakes"`، یعنی نام ساختار در لیست ۲۰-۳۱، خواهد بود.
 
-The `quote!` macro lets us define the Rust code that we want to return. The
-compiler expects something different to the direct result of the `quote!`
-macro’s execution, so we need to convert it to a `TokenStream`. We do this by
-calling the `into` method, which consumes this intermediate representation and
-returns a value of the required `TokenStream` type.
+ماکروی `quote!` به ما اجازه می‌دهد کد Rust مورد نظر خود برای بازگرداندن را تعریف کنیم. کامپایلر به چیزی متفاوت از نتیجه مستقیم اجرای ماکروی `quote!` نیاز دارد، بنابراین باید آن را به یک `TokenStream` تبدیل کنیم. این کار را با فراخوانی متد `into` انجام می‌دهیم که این نمایش میانی را مصرف کرده و مقداری از نوع `TokenStream` مورد نیاز بازمی‌گرداند.
 
-The `quote!` macro also provides some very cool templating mechanics: we can
-enter `#name`, and `quote!` will replace it with the value in the variable
-`name`. You can even do some repetition similar to the way regular macros work.
-Check out [the `quote` crate’s docs][quote-docs] for a thorough introduction.
+ماکروی `quote!` همچنین برخی قابلیت‌های جالب الگوگذاری (templating) ارائه می‌دهد: می‌توانیم `#name` را وارد کنیم و `quote!` آن را با مقدار موجود در متغیر `name` جایگزین می‌کند. حتی می‌توانید تکرارهایی مشابه با نحوه کار ماکروهای معمولی انجام دهید. برای مقدمه‌ای جامع به [مستندات crate `quote`][quote-docs] مراجعه کنید.
 
-We want our procedural macro to generate an implementation of our `HelloMacro`
-trait for the type the user annotated, which we can get by using `#name`. The
-trait implementation has the one function `hello_macro`, whose body contains the
-functionality we want to provide: printing `Hello, Macro! My name is` and then
-the name of the annotated type.
+ما می‌خواهیم ماکروی رویه‌ای ما یک پیاده‌سازی از ویژگی `HelloMacro` برای نوعی که کاربر حاشیه‌نویسی کرده است تولید کند، که می‌توانیم با استفاده از `#name` به آن دسترسی پیدا کنیم. پیاده‌سازی ویژگی شامل یک تابع به نام `hello_macro` است که بدنه آن قابلیت مورد نظر ما، یعنی چاپ `Hello, Macro! My name is` و سپس نام نوع حاشیه‌نویسی‌شده، را ارائه می‌دهد.
 
-The `stringify!` macro used here is built into Rust. It takes a Rust
-expression, such as `1 + 2`, and at compile time turns the expression into a
-string literal, such as `"1 + 2"`. This is different than `format!` or
-`println!`, macros which evaluate the expression and then turn the result into
-a `String`. There is a possibility that the `#name` input might be an
-expression to print literally, so we use `stringify!`. Using `stringify!` also
-saves an allocation by converting `#name` to a string literal at compile time.
+ماکروی `stringify!` که در اینجا استفاده شده است، به صورت داخلی در Rust ساخته شده است. این ماکرو یک عبارت Rust، مانند `1 + 2`، را گرفته و در زمان کامپایل آن را به یک رشته ثابت، مانند `"1 + 2"`، تبدیل می‌کند. این با ماکروهایی مانند `format!` یا `println!` که عبارت را ارزیابی کرده و سپس نتیجه را به یک `String` تبدیل می‌کنند، متفاوت است. احتمال دارد ورودی `#name` یک عبارتی برای چاپ باشد، بنابراین از `stringify!` استفاده می‌کنیم. استفاده از `stringify!` همچنین با تبدیل `#name` به یک رشته ثابت در زمان کامپایل، یک تخصیص را صرفه‌جویی می‌کند.
 
-At this point, `cargo build` should complete successfully in both `hello_macro`
-and `hello_macro_derive`. Let’s hook up these crates to the code in Listing
-20-31 to see the procedural macro in action! Create a new binary project in
-your _projects_ directory using `cargo new pancakes`. We need to add
-`hello_macro` and `hello_macro_derive` as dependencies in the `pancakes`
-crate’s _Cargo.toml_. If you’re publishing your versions of `hello_macro` and
-`hello_macro_derive` to [crates.io](https://crates.io/), they would be regular
-dependencies; if not, you can specify them as `path` dependencies as follows:
+در این مرحله، دستور `cargo build` باید با موفقیت در هر دو crate `hello_macro` و `hello_macro_derive` اجرا شود. بیایید این crateها را به کد موجود در لیست ۲۰-۳۱ متصل کنیم تا ماکروی رویه‌ای را در عمل ببینیم! یک پروژه باینری جدید در دایرکتوری _projects_ خود با استفاده از دستور `cargo new pancakes` ایجاد کنید. باید `hello_macro` و `hello_macro_derive` را به عنوان وابستگی در فایل _Cargo.toml_ crate `pancakes` اضافه کنیم. اگر نسخه‌های خود از `hello_macro` و `hello_macro_derive` را در [crates.io](https://crates.io/) منتشر می‌کنید، آن‌ها به عنوان وابستگی‌های معمولی خواهند بود؛ در غیر این صورت، می‌توانید آن‌ها را به صورت وابستگی‌های `path` به شکل زیر مشخص کنید:
 
 ```toml
 {{#include ../listings/ch20-advanced-features/no-listing-21-pancakes/pancakes/Cargo.toml:7:9}}
 ```
 
-Put the code in Listing 20-31 into _src/main.rs_, and run `cargo run`: it
-should print `Hello, Macro! My name is Pancakes!` The implementation of the
-`HelloMacro` trait from the procedural macro was included without the
-`pancakes` crate needing to implement it; the `#[derive(HelloMacro)]` added the
-trait implementation.
+کد موجود در لیست ۲۰-۳۱ را در فایل _src/main.rs_ قرار دهید و دستور `cargo run` را اجرا کنید: باید عبارت `Hello, Macro! My name is Pancakes!` را چاپ کند. پیاده‌سازی ویژگی `HelloMacro` که از ماکروی رویه‌ای آمده بود، بدون نیاز به پیاده‌سازی آن توسط crate `pancakes` اضافه شد؛ ویژگی `#[derive(HelloMacro)]` پیاده‌سازی ویژگی را اضافه کرد.
 
-Next, let’s explore how the other kinds of procedural macros differ from custom
-derive macros.
+در ادامه، بیایید بررسی کنیم که انواع دیگر ماکروهای رویه‌ای چه تفاوتی با ماکروهای سفارشی `derive` دارند.
 
-### Attribute-like macros
+### ماکروهای شبیه ویژگی (Attribute-like macros)
 
-Attribute-like macros are similar to custom derive macros, but instead of
-generating code for the `derive` attribute, they allow you to create new
-attributes. They’re also more flexible: `derive` only works for structs and
-enums; attributes can be applied to other items as well, such as functions.
-Here’s an example of using an attribute-like macro: say you have an attribute
-named `route` that annotates functions when using a web application framework:
+ماکروهای شبیه ویژگی مشابه ماکروهای سفارشی `derive` هستند، اما به جای تولید کد برای ویژگی `derive`، به شما امکان می‌دهند ویژگی‌های جدید ایجاد کنید. آن‌ها همچنین انعطاف‌پذیرتر هستند: `derive` فقط برای ساختارها (_structs_) و شمارش‌ها (_enums_) کار می‌کند؛ اما ویژگی‌ها می‌توانند به آیتم‌های دیگر نیز اعمال شوند، مانند توابع. در اینجا یک مثال از استفاده از یک ماکروی شبیه ویژگی آورده شده است: فرض کنید یک ویژگی به نام `route` دارید که توابع را هنگام استفاده از یک فریم‌ورک برنامه وب حاشیه‌نویسی می‌کند:
 
 ```rust,ignore
 #[route(GET, "/")]
 fn index() {
 ```
 
-This `#[route]` attribute would be defined by the framework as a procedural
-macro. The signature of the macro definition function would look like this:
+این ویژگی `#[route]` توسط فریم‌ورک به عنوان یک ماکروی رویه‌ای تعریف می‌شود. امضای تابع تعریف ماکرو به این صورت خواهد بود:
 
 ```rust,ignore
 #[proc_macro_attribute]
 pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 ```
 
-Here, we have two parameters of type `TokenStream`. The first is for the
-contents of the attribute: the `GET, "/"` part. The second is the body of the
-item the attribute is attached to: in this case, `fn index() {}` and the rest
-of the function’s body.
+در اینجا، دو پارامتر از نوع `TokenStream` داریم. پارامتر اول برای محتوای ویژگی است: بخش `GET, "/"`. پارامتر دوم برای بدنه آیتمی است که ویژگی به آن متصل شده است: در این مورد، `fn index() {}` و باقی بدنه تابع.
 
-Other than that, attribute-like macros work the same way as custom derive
-macros: you create a crate with the `proc-macro` crate type and implement a
-function that generates the code you want!
+علاوه بر این، ماکروهای شبیه ویژگی به همان شیوه ماکروهای سفارشی `derive` کار می‌کنند: شما یک crate با نوع `proc-macro` ایجاد می‌کنید و تابعی را پیاده‌سازی می‌کنید که کدی را که می‌خواهید تولید می‌کند!
 
-### Function-like macros
+### ماکروهای شبیه تابع
 
-Function-like macros define macros that look like function calls. Similarly to
-`macro_rules!` macros, they’re more flexible than functions; for example, they
-can take an unknown number of arguments. However, `macro_rules!` macros can be
-defined only using the match-like syntax we discussed in the section
-[“Declarative Macros with `macro_rules!` for General
-Metaprogramming”][decl]<!-- ignore --> earlier. Function-like macros take a
-`TokenStream` parameter and their definition manipulates that `TokenStream`
-using Rust code as the other two types of procedural macros do. An example of a
-function-like macro is an `sql!` macro that might be called like so:
+ماکروهای شبیه تابع، ماکروهایی را تعریف می‌کنند که شبیه به فراخوانی توابع به نظر می‌رسند. مشابه با ماکروهای `macro_rules!`، این ماکروها انعطاف‌پذیرتر از توابع هستند؛ برای مثال، می‌توانند تعداد نامشخصی از آرگومان‌ها را بپذیرند. با این حال، ماکروهای `macro_rules!` فقط می‌توانند با استفاده از سینتکس شبیه به `match` که در بخش [“ماکروهای اعلانی با `macro_rules!` برای فرابرنامه‌نویسی عمومی”][decl]<!-- ignore --> بحث شد تعریف شوند. ماکروهای شبیه تابع یک پارامتر `TokenStream` می‌گیرند و تعریف آن‌ها این `TokenStream` را با استفاده از کد Rust مانند دو نوع دیگر ماکروهای رویه‌ای دستکاری می‌کند. مثالی از یک ماکروی شبیه تابع، ماکروی `sql!` است که ممکن است به این صورت فراخوانی شود:
 
 ```rust,ignore
 let sql = sql!(SELECT * FROM posts WHERE id=1);
 ```
 
-This macro would parse the SQL statement inside it and check that it’s
-syntactically correct, which is much more complex processing than a
-`macro_rules!` macro can do. The `sql!` macro would be defined like this:
+این ماکرو عبارت SQL داخل خود را تجزیه کرده و بررسی می‌کند که از نظر نحوی درست باشد، که پردازش بسیار پیچیده‌تری نسبت به آنچه یک ماکروی `macro_rules!` می‌تواند انجام دهد، دارد. ماکروی `sql!` به این صورت تعریف می‌شود:
 
 ```rust,ignore
 #[proc_macro]
 pub fn sql(input: TokenStream) -> TokenStream {
 ```
 
-This definition is similar to the custom derive macro’s signature: we receive
-the tokens that are inside the parentheses and return the code we wanted to
-generate.
+این تعریف مشابه امضای ماکروی سفارشی `derive` است: ما توکن‌هایی که داخل پرانتزها قرار دارند را دریافت می‌کنیم و کدی را که می‌خواهیم تولید کنیم بازمی‌گردانیم.
 
-## Summary
+## خلاصه
 
-Whew! Now you have some Rust features in your toolbox that you likely won’t use
-often, but you’ll know they’re available in very particular circumstances.
-We’ve introduced several complex topics so that when you encounter them in
-error message suggestions or in other peoples’ code, you’ll be able to
-recognize these concepts and syntax. Use this chapter as a reference to guide
-you to solutions.
+وای! اکنون شما برخی از ویژگی‌های Rust را در ابزار خود دارید که احتمالاً به ندرت از آن‌ها استفاده می‌کنید، اما می‌دانید که در شرایط خاصی در دسترس هستند. ما موضوعات پیچیده متعددی را معرفی کردیم تا زمانی که با پیشنهادات پیام‌های خطا یا کدهای دیگران مواجه شدید، بتوانید این مفاهیم و سینتکس را بشناسید. از این فصل به عنوان مرجعی برای یافتن راه‌حل‌ها استفاده کنید.
 
-Next, we’ll put everything we’ve discussed throughout the book into practice
-and do one more project!
+در ادامه، همه چیزهایی که در طول کتاب بحث کردیم را در عمل پیاده‌سازی می‌کنیم و یک پروژه دیگر انجام خواهیم داد! 
 
 [ref]: ../reference/macros-by-example.html
 [tlborm]: https://veykril.github.io/tlborm/
