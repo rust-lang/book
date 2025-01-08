@@ -34,12 +34,9 @@
 
 </Listing>
 
-We’ve given the code an out! This code is perfectly valid now. However,
-if we give `if let` an irrefutable pattern (a pattern that will always
-match), such as `x`, as shown in Listing 19-10, the compiler will give a
-warning.
+ما به کد یک مسیر خروجی دادیم! این کد اکنون کاملاً معتبر است. با این حال، اگر به `if let` یک الگوی غیرقابل‌رد (الگویی که همیشه مطابقت دارد)، مانند `x`، بدهیم، همان‌طور که در فهرست 19-10 نشان داده شده است، کامپایلر یک هشدار خواهد داد.
 
-<Listing number="19-10" caption="Attempting to use an irrefutable pattern with `if let`">
+<Listing number="19-10" caption="تلاش برای استفاده از یک الگوی غیرقابل‌رد با `if let`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-10/src/main.rs:here}}
@@ -47,19 +44,12 @@ warning.
 
 </Listing>
 
-Rust complains that it doesn’t make sense to use `if let` with an irrefutable
-pattern:
+راست شکایت می‌کند که استفاده از `if let` با یک الگوی غیرقابل‌رد منطقی نیست:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-10/output.txt}}
 ```
 
-For this reason, match arms must use refutable patterns, except for the last
-arm, which should match any remaining values with an irrefutable pattern. Rust
-allows us to use an irrefutable pattern in a `match` with only one arm, but
-this syntax isn’t particularly useful and could be replaced with a simpler
-`let` statement.
+به این دلیل، بازوهای match باید از الگوهای قابل‌رد استفاده کنند، به‌جز بازوی آخر که باید با یک الگوی غیرقابل‌رد هر مقدار باقی‌مانده را مطابقت دهد. راست به ما اجازه می‌دهد از یک الگوی غیرقابل‌رد در یک `match` با تنها یک بازو استفاده کنیم، اما این نحو به‌ویژه مفید نیست و می‌تواند با یک عبارت ساده‌تر `let` جایگزین شود.
 
-Now that you know where to use patterns and the difference between refutable
-and irrefutable patterns, let’s cover all the syntax we can use to create
-patterns.
+اکنون که می‌دانید کجا می‌توان از الگوها استفاده کرد و تفاوت بین الگوهای قابل‌رد و غیرقابل‌رد چیست، بیایید تمام نحوهایی که می‌توانیم برای ایجاد الگوها استفاده کنیم را بررسی کنیم.

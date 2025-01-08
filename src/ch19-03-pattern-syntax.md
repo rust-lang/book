@@ -1,35 +1,22 @@
 ## Pattern Syntax
 
-In this section, we gather all the syntax valid in patterns and discuss why and
-when you might want to use each one.
+در این بخش، تمام نحوهایی که در الگوها معتبر هستند را جمع‌آوری کرده و بحث می‌کنیم که چرا و چه زمانی ممکن است بخواهید از هر کدام استفاده کنید.
 
 ### Matching Literals
 
-As you saw in Chapter 6, you can match patterns against literals directly. The
-following code gives some examples:
+همان‌طور که در فصل 6 دیدید، می‌توانید الگوها را مستقیماً با مقادیر ثابت (literals) تطبیق دهید. کد زیر برخی از مثال‌ها را نشان می‌دهد:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-01-literals/src/main.rs:here}}
 ```
 
-This code prints `one` because the value in `x` is 1. This syntax is useful
-when you want your code to take an action if it gets a particular concrete
-value.
+این کد `one` را چاپ می‌کند زیرا مقدار در `x` برابر با 1 است. این نحو زمانی مفید است که بخواهید کد شما در صورت دریافت یک مقدار مشخص خاص اقدامی انجام دهد.
 
 ### Matching Named Variables
 
-Named variables are irrefutable patterns that match any value, and we’ve used
-them many times in the book. However, there is a complication when you use named
-variables in `match`, `if let`, or `while let` expressions. Because each of
-these kinds of expression starts a new scope, variables declared as part of a
-pattern inside the expression will shadow those with the same name outside, as
-is the case with all variables. In Listing 19-11, we declare a variable named
-`x` with the value `Some(5)` and a variable `y` with the value `10`. We then
-create a `match` expression on the value `x`. Look at the patterns in the match
-arms and `println!` at the end, and try to figure out what the code will print
-before running this code or reading further.
+متغیرهای نام‌گذاری‌شده الگوهای غیرقابل‌رد هستند که با هر مقداری مطابقت دارند، و ما بارها در این کتاب از آن‌ها استفاده کرده‌ایم. با این حال، زمانی که از متغیرهای نام‌گذاری‌شده در عبارات `match`، `if let`، یا `while let` استفاده می‌کنید، یک پیچیدگی وجود دارد. زیرا هر یک از این نوع عبارات یک دامنه جدید را شروع می‌کنند، متغیرهایی که به‌عنوان بخشی از یک الگو در داخل عبارت تعریف می‌شوند، متغیرهایی با همان نام در خارج را پوشش می‌دهند، همان‌طور که برای همه متغیرها صدق می‌کند. در فهرست 19-11، یک متغیر به نام `x` با مقدار `Some(5)` و یک متغیر `y` با مقدار `10` تعریف می‌کنیم. سپس یک عبارت `match` روی مقدار `x` ایجاد می‌کنیم. به الگوها در بازوهای match و دستور `println!` در انتها نگاه کنید و سعی کنید قبل از اجرای این کد یا خواندن بیشتر، حدس بزنید که کد چه چیزی را چاپ خواهد کرد.
 
-<Listing number="19-11" file-name="src/main.rs" caption="A `match` expression with an arm that introduces a new variable which shadows an existing variable `y`">
+<Listing number="19-11" file-name="src/main.rs" caption="یک عبارت `match` با بازویی که یک متغیر جدید معرفی می‌کند که متغیر موجود `y` را پوشش می‌دهد">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-11/src/main.rs:here}}
@@ -37,87 +24,55 @@ before running this code or reading further.
 
 </Listing>
 
-Let’s walk through what happens when the `match` expression runs. The pattern
-in the first match arm doesn’t match the defined value of `x`, so the code
-continues.
+بیایید بررسی کنیم که وقتی عبارت `match` اجرا می‌شود چه اتفاقی می‌افتد. الگوی موجود در بازوی اول match با مقدار تعریف‌شده `x` مطابقت ندارد، بنابراین کد ادامه می‌یابد.
 
-The pattern in the second match arm introduces a new variable named `y` that
-will match any value inside a `Some` value. Because we’re in a new scope inside
-the `match` expression, this is a new `y` variable, not the `y` we declared at
-the beginning with the value 10. This new `y` binding will match any value
-inside a `Some`, which is what we have in `x`. Therefore, this new `y` binds to
-the inner value of the `Some` in `x`. That value is `5`, so the expression for
-that arm executes and prints `Matched, y = 5`.
+الگوی موجود در بازوی دوم match یک متغیر جدید به نام `y` معرفی می‌کند که با هر مقداری درون یک `Some` مطابقت خواهد داشت. از آنجا که ما در یک دامنه جدید داخل عبارت `match` هستیم، این یک متغیر جدید `y` است، نه متغیری که در ابتدا با مقدار 10 تعریف کردیم. این binding جدید `y` با هر مقداری درون یک `Some` مطابقت دارد، که همان چیزی است که ما در `x` داریم. بنابراین، این `y` جدید به مقدار داخلی `Some` در `x` متصل می‌شود. آن مقدار `5` است، بنابراین عبارت برای آن بازو اجرا می‌شود و `Matched, y = 5` را چاپ می‌کند.
 
-If `x` had been a `None` value instead of `Some(5)`, the patterns in the first
-two arms wouldn’t have matched, so the value would have matched to the
-underscore. We didn’t introduce the `x` variable in the pattern of the
-underscore arm, so the `x` in the expression is still the outer `x` that hasn’t
-been shadowed. In this hypothetical case, the `match` would print `Default
-case, x = None`.
+اگر `x` به جای `Some(5)` یک مقدار `None` بود، الگوهای موجود در دو بازوی اول مطابقت نداشتند، بنابراین مقدار به علامت زیرخط (`_`) مطابقت داده می‌شد. ما متغیر `x` را در الگوی بازوی زیرخط معرفی نکردیم، بنابراین `x` در عبارت همچنان همان `x` خارجی است که پوشش داده نشده است. در این حالت فرضی، عبارت `match` پیام `Default case, x = None` را چاپ می‌کرد.
 
-When the `match` expression is done, its scope ends, and so does the scope of
-the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
+وقتی عبارت `match` تمام می‌شود، دامنه آن نیز پایان می‌یابد، و همین‌طور دامنه `y` داخلی. دستور `println!` آخر پیام `at the end: x = Some(5), y = 10` را تولید می‌کند.
 
-To create a `match` expression that compares the values of the outer `x` and
-`y`, rather than introducing a new variable which shadows the existing `y`
-variable, we would need to use a match guard conditional instead. We’ll talk
-about match guards later in the [“Extra Conditionals with Match
-Guards”](#extra-conditionals-with-match-guards)<!-- ignore --> section.
+برای ایجاد یک عبارت `match` که مقادیر `x` و `y` خارجی را مقایسه کند، به جای معرفی یک متغیر جدید که متغیر موجود `y` را پوشش می‌دهد، باید از یک نگهبان شرطی (match guard) استفاده کنیم. ما درباره نگهبان‌های شرطی در بخش [“Extra Conditionals with Match Guards”](#extra-conditionals-with-match-guards)<!-- ignore --> صحبت خواهیم کرد.
 
 ### Multiple Patterns
 
-You can match multiple patterns using the `|` syntax, which is the pattern _or_
-operator. For example, in the following code we match the value of `x` against
-the match arms, the first of which has an _or_ option, meaning if the value of
-`x` matches either of the values in that arm, that arm’s code will run:
+می‌توانید با استفاده از نحو `|`، که عملگر _یا_ (or) برای الگوها است، چندین الگو را مطابقت دهید. برای مثال، در کد زیر مقدار `x` را با بازوهای match تطبیق می‌دهیم، که بازوی اول آن یک گزینه _یا_ دارد، به این معنا که اگر مقدار `x` با هر کدام از مقادیر در آن بازو مطابقت داشته باشد، کد آن بازو اجرا می‌شود:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-02-multiple-patterns/src/main.rs:here}}
 ```
 
-This code prints `one or two`.
+این کد `one or two` را چاپ می‌کند.
 
 ### Matching Ranges of Values with `..=`
 
-The `..=` syntax allows us to match to an inclusive range of values. In the
-following code, when a pattern matches any of the values within the given
-range, that arm will execute:
+نحو `..=` به ما اجازه می‌دهد یک بازه شامل مقادیر را مطابقت دهیم. در کد زیر، وقتی یک الگو با هر کدام از مقادیر در بازه داده‌شده مطابقت داشته باشد، آن بازو اجرا خواهد شد:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-03-ranges/src/main.rs:here}}
 ```
 
-If `x` is 1, 2, 3, 4, or 5, the first arm will match. This syntax is more
-convenient for multiple match values than using the `|` operator to express the
-same idea; if we were to use `|` we would have to specify `1 | 2 | 3 | 4 | 5`.
-Specifying a range is much shorter, especially if we want to match, say, any
-number between 1 and 1,000!
+اگر مقدار `x` برابر با 1، 2، 3، 4 یا 5 باشد، بازوی اول مطابقت خواهد داشت. این نحو برای مقادیر مطابقت چندگانه راحت‌تر از استفاده از عملگر `|` برای بیان همان ایده است؛ اگر بخواهیم از `|` استفاده کنیم، باید `1 | 2 | 3 | 4 | 5` را مشخص کنیم. مشخص کردن یک بازه بسیار کوتاه‌تر است، به‌ویژه اگر بخواهیم، برای مثال، هر عدد بین 1 و 1,000 را مطابقت دهیم!
 
-The compiler checks that the range isn’t empty at compile time, and because the
-only types for which Rust can tell if a range is empty or not are `char` and
-numeric values, ranges are only allowed with numeric or `char` values.
+کامپایلر بررسی می‌کند که بازه در زمان کامپایل خالی نیست، و چون تنها نوع‌هایی که راست می‌تواند تشخیص دهد که آیا یک بازه خالی است یا نه `char` و مقادیر عددی هستند، بازه‌ها فقط برای مقادیر عددی یا `char` مجاز هستند.
 
-Here is an example using ranges of `char` values:
+در اینجا یک مثال با استفاده از بازه‌هایی از مقادیر `char` آمده است:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-04-ranges-of-char/src/main.rs:here}}
 ```
 
-Rust can tell that `'c'` is within the first pattern’s range and prints `early
-ASCII letter`.
+راست می‌تواند تشخیص دهد که `'c'` در بازه الگوی اول است و پیام `early ASCII letter` را چاپ می‌کند.
 
 ### Destructuring to Break Apart Values
 
-We can also use patterns to destructure structs, enums, and tuples to use
-different parts of these values. Let’s walk through each value.
+ما همچنین می‌توانیم از الگوها برای تخریب (destructure) ساختارها (structs)، enums، و tuple‌ها استفاده کنیم تا از بخش‌های مختلف این مقادیر استفاده کنیم. بیایید به هر نوع مقدار نگاهی بیندازیم.
 
 #### Destructuring Structs
 
-Listing 19-12 shows a `Point` struct with two fields, `x` and `y`, that we can
-break apart using a pattern with a `let` statement.
+فهرست 19-12 یک struct به نام `Point` را با دو فیلد، `x` و `y` نشان می‌دهد که می‌توانیم با استفاده از یک الگو در یک عبارت `let` آن را تخریب کنیم.
 
-<Listing number="19-12" file-name="src/main.rs" caption="Destructuring a struct’s fields into separate variables">
+<Listing number="19-12" file-name="src/main.rs" caption="تخریب فیلدهای یک struct به متغیرهای جداگانه">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-12/src/main.rs}}
@@ -125,19 +80,9 @@ break apart using a pattern with a `let` statement.
 
 </Listing>
 
-This code creates the variables `a` and `b` that match the values of the `x`
-and `y` fields of the `p` struct. This example shows that the names of the
-variables in the pattern don’t have to match the field names of the struct.
-However, it’s common to match the variable names to the field names to make it
-easier to remember which variables came from which fields. Because of this
-common usage, and because writing `let Point { x: x, y: y } = p;` contains a
-lot of duplication, Rust has a shorthand for patterns that match struct fields:
-you only need to list the name of the struct field, and the variables created
-from the pattern will have the same names. Listing 19-13 behaves in the same
-way as the code in Listing 19-12, but the variables created in the `let`
-pattern are `x` and `y` instead of `a` and `b`.
+این کد متغیرهای `a` و `b` را ایجاد می‌کند که با مقادیر فیلدهای `x` و `y` از struct `p` مطابقت دارند. این مثال نشان می‌دهد که نام متغیرها در الگو نیازی به مطابقت با نام فیلدهای struct ندارند. با این حال، معمولاً نام متغیرها با نام فیلدها مطابقت داده می‌شوند تا یادآوری اینکه کدام متغیرها از کدام فیلدها آمده‌اند آسان‌تر شود. به‌دلیل این استفاده معمول و به‌دلیل اینکه نوشتن `let Point { x: x, y: y } = p;` تکرار زیادی دارد، راست یک نحو کوتاه برای الگوهایی که فیلدهای struct را مطابقت می‌دهند فراهم می‌کند: فقط کافی است نام فیلد struct را لیست کنید و متغیرهایی که از الگو ایجاد می‌شوند همان نام‌ها را خواهند داشت. فهرست 19-13 به همان روشی که کد در فهرست 19-12 عمل می‌کند، اما متغیرهای ایجادشده در الگوی `let` به‌جای `a` و `b`، `x` و `y` هستند.
 
-<Listing number="19-13" file-name="src/main.rs" caption="Destructuring struct fields using struct field shorthand">
+<Listing number="19-13" file-name="src/main.rs" caption="تخریب فیلدهای struct با استفاده از نحو کوتاه فیلد struct">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-13/src/main.rs}}
@@ -145,20 +90,13 @@ pattern are `x` and `y` instead of `a` and `b`.
 
 </Listing>
 
-This code creates the variables `x` and `y` that match the `x` and `y` fields
-of the `p` variable. The outcome is that the variables `x` and `y` contain the
-values from the `p` struct.
+این کد متغیرهای `x` و `y` را ایجاد می‌کند که با فیلدهای `x` و `y` از متغیر `p` مطابقت دارند. نتیجه این است که متغیرهای `x` و `y` مقادیر از ساختار `p` را شامل می‌شوند.
 
-We can also destructure with literal values as part of the struct pattern
-rather than creating variables for all the fields. Doing so allows us to test
-some of the fields for particular values while creating variables to
-destructure the other fields.
+ما همچنین می‌توانیم با مقادیر ثابت (literals) به‌عنوان بخشی از الگوی struct تخریب کنیم، به‌جای ایجاد متغیرهایی برای همه فیلدها. انجام این کار به ما اجازه می‌دهد برخی از فیلدها را برای مقادیر خاصی تست کنیم، در حالی که متغیرهایی برای تخریب فیلدهای دیگر ایجاد می‌کنیم.
 
-In Listing 19-14, we have a `match` expression that separates `Point` values
-into three cases: points that lie directly on the `x` axis (which is true when
-`y = 0`), on the `y` axis (`x = 0`), or neither.
+در فهرست 19-14، یک عبارت `match` داریم که مقادیر `Point` را به سه حالت تقسیم می‌کند: نقاطی که مستقیماً روی محور `x` قرار دارند (که در صورتی درست است که `y = 0`)، روی محور `y` (`x = 0`)، یا هیچ‌کدام.
 
-<Listing number="19-14" file-name="src/main.rs" caption="Destructuring and matching literal values in one pattern">
+<Listing number="19-14" file-name="src/main.rs" caption="تخریب و تطبیق مقادیر ثابت در یک الگو">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-14/src/main.rs:here}}
@@ -166,31 +104,19 @@ into three cases: points that lie directly on the `x` axis (which is true when
 
 </Listing>
 
-The first arm will match any point that lies on the `x` axis by specifying that
-the `y` field matches if its value matches the literal `0`. The pattern still
-creates an `x` variable that we can use in the code for this arm.
+بازوی اول هر نقطه‌ای که روی محور `x` قرار دارد را با مشخص کردن اینکه فیلد `y` در صورتی مطابقت دارد که مقدار آن با مقدار ثابت `0` مطابقت داشته باشد، تطبیق می‌دهد. الگو همچنان یک متغیر `x` ایجاد می‌کند که می‌توانیم در کد این بازو از آن استفاده کنیم.
 
-Similarly, the second arm matches any point on the `y` axis by specifying that
-the `x` field matches if its value is `0` and creates a variable `y` for the
-value of the `y` field. The third arm doesn’t specify any literals, so it
-matches any other `Point` and creates variables for both the `x` and `y` fields.
+به‌طور مشابه، بازوی دوم هر نقطه روی محور `y` را با مشخص کردن اینکه فیلد `x` در صورتی که مقدار آن `0` باشد مطابقت دارد و یک متغیر `y` برای مقدار فیلد `y` ایجاد می‌کند. بازوی سوم هیچ مقدار ثابتی را مشخص نمی‌کند، بنابراین هر `Point` دیگری را مطابقت می‌دهد و متغیرهایی برای هر دو فیلد `x` و `y` ایجاد می‌کند.
 
-In this example, the value `p` matches the second arm by virtue of `x`
-containing a 0, so this code will print `On the y axis at 7`.
+در این مثال، مقدار `p` به لطف `x` که مقدار `0` دارد، با بازوی دوم مطابقت دارد، بنابراین این کد پیام `On the y axis at 7` را چاپ می‌کند.
 
-Remember that a `match` expression stops checking arms once it has found the
-first matching pattern, so even though `Point { x: 0, y: 0}` is on the `x` axis
-and the `y` axis, this code would only print `On the x axis at 0`.
+به یاد داشته باشید که یک عبارت `match` پس از یافتن اولین الگوی مطابقت متوقف می‌شود، بنابراین حتی اگر `Point { x: 0, y: 0 }` روی محور `x` و محور `y` باشد، این کد فقط پیام `On the x axis at 0` را چاپ خواهد کرد.
 
 #### Destructuring Enums
 
-We've destructured enums in this book (for example, Listing 6-5 in Chapter 6),
-but haven’t yet explicitly discussed that the pattern to destructure an enum
-corresponds to the way the data stored within the enum is defined. As an
-example, in Listing 19-15 we use the `Message` enum from Listing 6-2 and write
-a `match` with patterns that will destructure each inner value.
+ما در این کتاب enums را تخریب کرده‌ایم (برای مثال، فهرست 6-5 در فصل 6)، اما هنوز به‌طور خاص بحث نکرده‌ایم که الگوی تخریب یک enum مطابق با نحوه تعریف داده‌های ذخیره‌شده درون enum است. به‌عنوان مثال، در فهرست 19-15 از enum `Message` از فهرست 6-2 استفاده می‌کنیم و یک `match` با الگوهایی می‌نویسیم که هر مقدار داخلی را تخریب می‌کنند.
 
-<Listing number="19-15" file-name="src/main.rs" caption="Destructuring enum variants that hold different kinds of values">
+<Listing number="19-15" file-name="src/main.rs" caption="تخریب متغیرهای enum که مقادیر مختلفی دارند">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-15/src/main.rs}}
@@ -198,33 +124,19 @@ a `match` with patterns that will destructure each inner value.
 
 </Listing>
 
-This code will print `Change the color to red 0, green 160, and blue 255`. Try
-changing the value of `msg` to see the code from the other arms run.
+این کد پیام `Change the color to red 0, green 160, and blue 255` را چاپ می‌کند. مقدار `msg` را تغییر دهید تا کد از بازوهای دیگر اجرا شود.
 
-For enum variants without any data, like `Message::Quit`, we can’t destructure
-the value any further. We can only match on the literal `Message::Quit` value,
-and no variables are in that pattern.
+برای متغیرهای enum بدون هیچ داده‌ای، مانند `Message::Quit`، نمی‌توان مقدار را بیشتر تخریب کرد. فقط می‌توان روی مقدار ثابت `Message::Quit` مطابقت داد، و هیچ متغیری در آن الگو وجود ندارد.
 
-For struct-like enum variants, such as `Message::Move`, we can use a pattern
-similar to the pattern we specify to match structs. After the variant name, we
-place curly brackets and then list the fields with variables so we break apart
-the pieces to use in the code for this arm. Here we use the shorthand form as
-we did in Listing 19-13.
+برای متغیرهای enum شبیه به struct، مانند `Message::Move`، می‌توانیم از الگویی مشابه الگوی مشخص‌شده برای تطبیق structs استفاده کنیم. پس از نام متغیر، آکولاد باز می‌کنیم و سپس فیلدها را با متغیرها لیست می‌کنیم تا بخش‌ها را برای استفاده در کد این بازو تجزیه کنیم. در اینجا از فرم کوتاه همان‌طور که در فهرست 19-13 استفاده کردیم استفاده می‌کنیم.
 
-For tuple-like enum variants, like `Message::Write` that holds a tuple with one
-element and `Message::ChangeColor` that holds a tuple with three elements, the
-pattern is similar to the pattern we specify to match tuples. The number of
-variables in the pattern must match the number of elements in the variant we’re
-matching.
+برای متغیرهای enum شبیه به tuple، مانند `Message::Write` که یک tuple با یک عنصر دارد و `Message::ChangeColor` که یک tuple با سه عنصر دارد، الگو مشابه الگویی است که برای تطبیق tuple‌ها مشخص می‌کنیم. تعداد متغیرها در الگو باید با تعداد عناصر در متغیر که تطبیق می‌دهیم مطابقت داشته باشد.
 
 #### Destructuring Nested Structs and Enums
 
-So far, our examples have all been matching structs or enums one level deep,
-but matching can work on nested items too! For example, we can refactor the
-code in Listing 19-15 to support RGB and HSV colors in the `ChangeColor`
-message, as shown in Listing 19-16.
+تاکنون، مثال‌های ما همه تطبیق ساختارها یا enums در یک سطح عمیق بوده‌اند، اما تطبیق می‌تواند روی آیتم‌های تو در تو نیز کار کند! برای مثال، می‌توانیم کد در فهرست 19-15 را بازسازی کنیم تا از رنگ‌های RGB و HSV در پیام `ChangeColor` پشتیبانی کند، همان‌طور که در فهرست 19-16 نشان داده شده است.
 
-<Listing number="19-16" caption="Matching on nested enums">
+<Listing number="19-16" caption="تطبیق روی enums تو در تو">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-16/src/main.rs}}
@@ -232,47 +144,29 @@ message, as shown in Listing 19-16.
 
 </Listing>
 
-The pattern of the first arm in the `match` expression matches a
-`Message::ChangeColor` enum variant that contains a `Color::Rgb` variant; then
-the pattern binds to the three inner `i32` values. The pattern of the second
-arm also matches a `Message::ChangeColor` enum variant, but the inner enum
-matches `Color::Hsv` instead. We can specify these complex conditions in one
-`match` expression, even though two enums are involved.
+الگوی بازوی اول در عبارت `match` یک متغیر enum به نام `Message::ChangeColor` را تطبیق می‌دهد که شامل یک متغیر `Color::Rgb` است؛ سپس الگو به سه مقدار داخلی `i32` متصل می‌شود. الگوی بازوی دوم نیز یک متغیر enum به نام `Message::ChangeColor` را تطبیق می‌دهد، اما enum داخلی به جای آن `Color::Hsv` را مطابقت می‌دهد. ما می‌توانیم این شرایط پیچیده را در یک عبارت `match` مشخص کنیم، حتی اگر دو enum درگیر باشند.
 
 #### Destructuring Structs and Tuples
 
-We can mix, match, and nest destructuring patterns in even more complex ways.
-The following example shows a complicated destructure where we nest structs and
-tuples inside a tuple and destructure all the primitive values out:
+ما می‌توانیم الگوهای تخریب را به روش‌های پیچیده‌تر ترکیب، تطبیق و تو در تو کنیم. مثال زیر یک تخریب پیچیده را نشان می‌دهد که در آن ساختارها و tuple‌ها را داخل یک tuple تو در تو می‌کنیم و تمام مقادیر اولیه را تخریب می‌کنیم:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-05-destructuring-structs-and-tuples/src/main.rs:here}}
 ```
 
-This code lets us break complex types into their component parts so we can use
-the values we’re interested in separately.
+این کد به ما اجازه می‌دهد انواع پیچیده را به اجزای سازنده آن‌ها بشکنیم تا بتوانیم مقادیری که به آن‌ها علاقه داریم را جداگانه استفاده کنیم.
 
-Destructuring with patterns is a convenient way to use pieces of values, such
-as the value from each field in a struct, separately from each other.
+تخریب با الگوها یک روش راحت برای استفاده از بخش‌هایی از مقادیر، مانند مقدار هر فیلد در یک ساختار، به‌صورت جداگانه است.
 
 ### Ignoring Values in a Pattern
 
-You’ve seen that it’s sometimes useful to ignore values in a pattern, such as
-in the last arm of a `match`, to get a catchall that doesn’t actually do
-anything but does account for all remaining possible values. There are a few
-ways to ignore entire values or parts of values in a pattern: using the `_`
-pattern (which you’ve seen), using the `_` pattern within another pattern,
-using a name that starts with an underscore, or using `..` to ignore remaining
-parts of a value. Let’s explore how and why to use each of these patterns.
+گاهی اوقات مفید است که مقادیر را در یک الگو نادیده بگیرید، مانند بازوی آخر یک `match`، برای دریافت یک catchall که هیچ کاری انجام نمی‌دهد اما تمام مقادیر باقی‌مانده ممکن را در نظر می‌گیرد. چندین روش برای نادیده گرفتن مقادیر کامل یا بخش‌هایی از مقادیر در یک الگو وجود دارد: استفاده از الگوی `_` (که دیده‌اید)، استفاده از الگوی `_` درون یک الگوی دیگر، استفاده از نامی که با یک زیرخط شروع می‌شود، یا استفاده از `..` برای نادیده گرفتن بخش‌های باقی‌مانده یک مقدار. بیایید بررسی کنیم چگونه و چرا از هر یک از این الگوها استفاده کنیم.
 
 #### Ignoring an Entire Value with `_`
 
-We’ve used the underscore as a wildcard pattern that will match any value but
-not bind to the value. This is especially useful as the last arm in a `match`
-expression, but we can also use it in any pattern, including function
-parameters, as shown in Listing 19-17.
+ما از زیرخط به‌عنوان یک الگوی wildcard استفاده کرده‌ایم که با هر مقداری مطابقت دارد اما به مقدار متصل نمی‌شود. این به‌ویژه به‌عنوان بازوی آخر در یک عبارت `match` مفید است، اما ما همچنین می‌توانیم آن را در هر الگویی استفاده کنیم، از جمله پارامترهای تابع، همان‌طور که در فهرست 19-17 نشان داده شده است.
 
-<Listing number="19-17" file-name="src/main.rs" caption="Using `_` in a function signature">
+<Listing number="19-17" file-name="src/main.rs" caption="استفاده از `_` در یک امضای تابع">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-17/src/main.rs}}
@@ -280,27 +174,15 @@ parameters, as shown in Listing 19-17.
 
 </Listing>
 
-This code will completely ignore the value `3` passed as the first argument,
-and will print `This code only uses the y parameter: 4`.
+این کد مقدار `3` را که به‌عنوان آرگومان اول ارسال شده است، کاملاً نادیده می‌گیرد و پیام `This code only uses the y parameter: 4` را چاپ می‌کند.
 
-In most cases when you no longer need a particular function parameter, you
-would change the signature so it doesn’t include the unused parameter. Ignoring
-a function parameter can be especially useful in cases when, for example,
-you're implementing a trait when you need a certain type signature but the
-function body in your implementation doesn’t need one of the parameters. You
-then avoid getting a compiler warning about unused function parameters, as you
-would if you used a name instead.
+در بیشتر موارد، زمانی که دیگر نیازی به یک پارامتر تابع خاص ندارید، امضای تابع را تغییر می‌دهید تا آن پارامتر استفاده‌نشده را شامل نشود. نادیده گرفتن یک پارامتر تابع می‌تواند به‌ویژه در مواردی مفید باشد که، برای مثال، شما در حال پیاده‌سازی یک trait هستید و به یک امضای خاص نیاز دارید، اما بدنه تابع در پیاده‌سازی شما نیازی به یکی از پارامترها ندارد. در این صورت، از دریافت هشدار کامپایلر درباره پارامترهای استفاده‌نشده جلوگیری می‌کنید، همان‌طور که اگر به جای آن از یک نام استفاده می‌کردید، هشدار دریافت می‌کردید.
 
 #### Ignoring Parts of a Value with a Nested `_`
 
-We can also use `_` inside another pattern to ignore just part of a value, for
-example, when we want to test for only part of a value but have no use for the
-other parts in the corresponding code we want to run. Listing 19-18 shows code
-responsible for managing a setting’s value. The business requirements are that
-the user should not be allowed to overwrite an existing customization of a
-setting but can unset the setting and give it a value if it is currently unset.
+ما همچنین می‌توانیم از `_` در داخل یک الگوی دیگر استفاده کنیم تا فقط بخشی از یک مقدار را نادیده بگیریم. برای مثال، وقتی می‌خواهیم فقط بخشی از یک مقدار را تست کنیم اما نیازی به استفاده از بخش‌های دیگر در کدی که می‌خواهیم اجرا کنیم نداریم. فهرست 19-18 کدی را نشان می‌دهد که مسئول مدیریت مقدار یک تنظیم است. نیازمندی‌های تجاری این است که کاربر نباید اجازه داشته باشد یک سفارشی‌سازی موجود برای یک تنظیم را بازنویسی کند، اما می‌تواند تنظیم را لغو کند و به آن یک مقدار بدهد اگر در حال حاضر لغو شده باشد.
 
-<Listing number="19-18" caption=" Using an underscore within patterns that match `Some` variants when we don’t need to use the value inside the `Some`">
+<Listing number="19-18" caption="استفاده از یک زیرخط در داخل الگوهایی که با متغیرهای `Some` مطابقت دارند وقتی نیازی به استفاده از مقدار داخل `Some` نداریم">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-18/src/main.rs:here}}
@@ -308,22 +190,13 @@ setting but can unset the setting and give it a value if it is currently unset.
 
 </Listing>
 
-This code will print `Can't overwrite an existing customized value` and then
-`setting is Some(5)`. In the first match arm, we don’t need to match on or use
-the values inside either `Some` variant, but we do need to test for the case
-when `setting_value` and `new_setting_value` are the `Some` variant. In that
-case, we print the reason for not changing `setting_value`, and it doesn’t get
-changed.
+این کد پیام `Can't overwrite an existing customized value` را چاپ می‌کند و سپس `setting is Some(5)` را چاپ می‌کند. در بازوی اول match، نیازی به مطابقت یا استفاده از مقادیر داخل هر یک از متغیرهای `Some` نداریم، اما باید حالت‌هایی را که در آن‌ها `setting_value` و `new_setting_value` در حالت `Some` هستند، تست کنیم. در این صورت، دلیل تغییر ندادن `setting_value` را چاپ می‌کنیم و این مقدار تغییر نمی‌کند.
 
-In all other cases (if either `setting_value` or `new_setting_value` are
-`None`) expressed by the `_` pattern in the second arm, we want to allow
-`new_setting_value` to become `setting_value`.
+در تمام موارد دیگر (اگر `setting_value` یا `new_setting_value` مقدار `None` داشته باشند) که توسط الگوی `_` در بازوی دوم بیان شده است، می‌خواهیم اجازه دهیم `new_setting_value` به `setting_value` تبدیل شود.
 
-We can also use underscores in multiple places within one pattern to ignore
-particular values. Listing 19-19 shows an example of ignoring the second and
-fourth values in a tuple of five items.
+ما همچنین می‌توانیم از زیرخط‌ها در مکان‌های مختلف در یک الگو برای نادیده گرفتن مقادیر خاص استفاده کنیم. فهرست 19-19 مثالی از نادیده گرفتن مقادیر دوم و چهارم در یک tuple پنج آیتمی را نشان می‌دهد.
 
-<Listing number="19-19" caption="Ignoring multiple parts of a tuple">
+<Listing number="19-19" caption="نادیده گرفتن بخش‌های مختلف یک tuple">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-19/src/main.rs:here}}
@@ -331,20 +204,13 @@ fourth values in a tuple of five items.
 
 </Listing>
 
-This code will print `Some numbers: 2, 8, 32`, and the values 4 and 16 will be
-ignored.
+این کد پیام `Some numbers: 2, 8, 32` را چاپ می‌کند و مقادیر 4 و 16 نادیده گرفته می‌شوند.
 
 #### Ignoring an Unused Variable by Starting Its Name with `_`
 
-If you create a variable but don’t use it anywhere, Rust will usually issue a
-warning because an unused variable could be a bug. However, sometimes it’s
-useful to be able to create a variable you won’t use yet, such as when you’re
-prototyping or just starting a project. In this situation, you can tell Rust
-not to warn you about the unused variable by starting the name of the variable
-with an underscore. In Listing 19-20, we create two unused variables, but when
-we compile this code, we should only get a warning about one of them.
+اگر یک متغیر ایجاد کنید اما از آن در هیچ جایی استفاده نکنید، راست معمولاً یک هشدار صادر می‌کند زیرا یک متغیر استفاده‌نشده ممکن است یک باگ باشد. با این حال، گاهی اوقات مفید است که بتوانید متغیری ایجاد کنید که هنوز از آن استفاده نمی‌کنید، مانند زمانی که در حال نمونه‌سازی یا تازه شروع یک پروژه هستید. در این وضعیت، می‌توانید به راست بگویید که درباره متغیر استفاده‌نشده هشدار ندهد، با شروع نام متغیر با یک زیرخط. در فهرست 19-20، دو متغیر استفاده‌نشده ایجاد می‌کنیم، اما وقتی این کد را کامپایل می‌کنیم، باید فقط یک هشدار درباره یکی از آن‌ها دریافت کنیم.
 
-<Listing number="19-20" file-name="src/main.rs" caption="Starting a variable name with an underscore to avoid getting unused variable warnings">
+<Listing number="19-20" file-name="src/main.rs" caption="شروع نام متغیر با یک زیرخط برای جلوگیری از هشدارهای متغیر استفاده‌نشده">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-20/src/main.rs}}
@@ -352,15 +218,11 @@ we compile this code, we should only get a warning about one of them.
 
 </Listing>
 
-Here we get a warning about not using the variable `y`, but we don’t get a
-warning about not using `_x`.
+اینجا درباره استفاده نکردن از متغیر `y` یک هشدار دریافت می‌کنیم، اما درباره استفاده نکردن از `_x` هشدار نمی‌گیریم.
 
-Note that there is a subtle difference between using only `_` and using a name
-that starts with an underscore. The syntax `_x` still binds the value to the
-variable, whereas `_` doesn’t bind at all. To show a case where this
-distinction matters, Listing 19-21 will provide us with an error.
+توجه داشته باشید که تفاوت ظریفی بین استفاده از فقط `_` و استفاده از نامی که با یک زیرخط شروع می‌شود وجود دارد. نحو `_x` همچنان مقدار را به متغیر متصل می‌کند، در حالی که `_` اصلاً متصل نمی‌شود. برای نشان دادن موردی که این تفاوت اهمیت دارد، فهرست 19-21 به ما یک خطا ارائه می‌دهد.
 
-<Listing number="19-21" caption="An unused variable starting with an underscore still binds the value, which might take ownership of the value">
+<Listing number="19-21" caption="یک متغیر استفاده‌نشده که با یک زیرخط شروع می‌شود همچنان مقدار را متصل می‌کند، که ممکن است مالکیت مقدار را بگیرد">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-21/src/main.rs:here}}
@@ -368,12 +230,9 @@ distinction matters, Listing 19-21 will provide us with an error.
 
 </Listing>
 
-We’ll receive an error because the `s` value will still be moved into `_s`,
-which prevents us from using `s` again. However, using the underscore by itself
-doesn’t ever bind to the value. Listing 19-22 will compile without any errors
-because `s` doesn’t get moved into `_`.
+ما یک خطا دریافت خواهیم کرد زیرا مقدار `s` همچنان به `_s` منتقل می‌شود، که مانع از استفاده دوباره از `s` می‌شود. با این حال، استفاده از زیرخط به‌تنهایی هرگز به مقدار متصل نمی‌شود. فهرست 19-22 بدون هیچ خطایی کامپایل خواهد شد زیرا `s` به `_` منتقل نمی‌شود.
 
-<Listing number="19-22" caption="Using an underscore does not bind the value">
+<Listing number="19-22" caption="استفاده از یک زیرخط مقدار را متصل نمی‌کند">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-22/src/main.rs:here}}
@@ -381,19 +240,13 @@ because `s` doesn’t get moved into `_`.
 
 </Listing>
 
-This code works just fine because we never bind `s` to anything; it isn’t moved.
+این کد به‌خوبی کار می‌کند زیرا ما هرگز `s` را به چیزی متصل نمی‌کنیم؛ بنابراین انتقال داده نمی‌شود.
 
 #### Ignoring Remaining Parts of a Value with `..`
 
-With values that have many parts, we can use the `..` syntax to use specific
-parts and ignore the rest, avoiding the need to list underscores for each
-ignored value. The `..` pattern ignores any parts of a value that we haven’t
-explicitly matched in the rest of the pattern. In Listing 19-23, we have a
-`Point` struct that holds a coordinate in three-dimensional space. In the
-`match` expression, we want to operate only on the `x` coordinate and ignore
-the values in the `y` and `z` fields.
+برای مقادیری که بخش‌های زیادی دارند، می‌توانیم از نحو `..` برای استفاده از بخش‌های خاص و نادیده گرفتن باقی بخش‌ها استفاده کنیم، و نیازی به لیست کردن زیرخط‌ها برای هر مقدار نادیده گرفته‌شده نخواهیم داشت. الگوی `..` هر بخشی از یک مقدار را که به‌طور صریح در بقیه الگو مطابقت داده نشده نادیده می‌گیرد. در فهرست 19-23، یک struct به نام `Point` داریم که یک مختصات در فضای سه‌بعدی نگه می‌دارد. در عبارت `match`، می‌خواهیم فقط روی مختصات `x` عمل کنیم و مقادیر موجود در فیلدهای `y` و `z` را نادیده بگیریم.
 
-<Listing number="19-23" caption="Ignoring all fields of a `Point` except for `x` by using `..`">
+<Listing number="19-23" caption="نادیده گرفتن تمام فیلدهای یک `Point` به‌جز `x` با استفاده از `..`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-23/src/main.rs:here}}
@@ -401,15 +254,11 @@ the values in the `y` and `z` fields.
 
 </Listing>
 
-We list the `x` value and then just include the `..` pattern. This is quicker
-than having to list `y: _` and `z: _`, particularly when we’re working with
-structs that have lots of fields in situations where only one or two fields are
-relevant.
+ما مقدار `x` را فهرست می‌کنیم و سپس فقط الگوی `..` را اضافه می‌کنیم. این سریع‌تر از این است که `y: _` و `z: _` را فهرست کنیم، به‌ویژه زمانی که با ساختارهایی کار می‌کنیم که فیلدهای زیادی دارند و فقط یکی یا دو فیلد مهم هستند.
 
-The syntax `..` will expand to as many values as it needs to be. Listing 19-24
-shows how to use `..` with a tuple.
+نحو `..` به هر تعداد مقداری که نیاز باشد گسترش می‌یابد. فهرست 19-24 نشان می‌دهد که چگونه از `..` با یک tuple استفاده کنیم.
 
-<Listing number="19-24" file-name="src/main.rs" caption="Matching only the first and last values in a tuple and ignoring all other values">
+<Listing number="19-24" file-name="src/main.rs" caption="تطبیق فقط اولین و آخرین مقادیر در یک tuple و نادیده گرفتن تمام مقادیر دیگر">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-24/src/main.rs}}
@@ -417,15 +266,11 @@ shows how to use `..` with a tuple.
 
 </Listing>
 
-In this code, the first and last value are matched with `first` and `last`. The
-`..` will match and ignore everything in the middle.
+در این کد، مقدار اول و آخر با `first` و `last` مطابقت داده می‌شوند. الگوی `..` تمام مقادیر میانی را مطابقت داده و نادیده می‌گیرد.
 
-However, using `..` must be unambiguous. If it is unclear which values are
-intended for matching and which should be ignored, Rust will give us an error.
-Listing 19-25 shows an example of using `..` ambiguously, so it will not
-compile.
+با این حال، استفاده از `..` باید بدون ابهام باشد. اگر مشخص نباشد کدام مقادیر برای تطبیق و کدام برای نادیده گرفتن در نظر گرفته شده‌اند، راست به ما خطا می‌دهد. فهرست 19-25 مثالی از استفاده از `..` به شکلی مبهم را نشان می‌دهد، بنابراین کامپایل نخواهد شد.
 
-<Listing number="19-25" file-name="src/main.rs" caption="An attempt to use `..` in an ambiguous way">
+<Listing number="19-25" file-name="src/main.rs" caption="تلاشی برای استفاده از `..` به شکلی مبهم">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-25/src/main.rs}}
@@ -433,33 +278,21 @@ compile.
 
 </Listing>
 
-When we compile this example, we get this error:
+وقتی این مثال را کامپایل می‌کنیم، این خطا را دریافت می‌کنیم:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-25/output.txt}}
 ```
 
-It’s impossible for Rust to determine how many values in the tuple to ignore
-before matching a value with `second` and then how many further values to
-ignore thereafter. This code could mean that we want to ignore `2`, bind
-`second` to `4`, and then ignore `8`, `16`, and `32`; or that we want to ignore
-`2` and `4`, bind `second` to `8`, and then ignore `16` and `32`; and so forth.
-The variable name `second` doesn’t mean anything special to Rust, so we get a
-compiler error because using `..` in two places like this is ambiguous.
+برای راست امکان‌پذیر نیست که تعیین کند چند مقدار در tuple باید نادیده گرفته شود قبل از اینکه یک مقدار را با `second` تطبیق دهد و سپس چند مقدار دیگر را بعد از آن نادیده بگیرد. این کد می‌تواند به این معنا باشد که می‌خواهیم `2` را نادیده بگیریم، `second` را به `4` متصل کنیم، و سپس `8`، `16` و `32` را نادیده بگیریم؛ یا اینکه می‌خواهیم `2` و `4` را نادیده بگیریم، `second` را به `8` متصل کنیم، و سپس `16` و `32` را نادیده بگیریم؛ و غیره. نام متغیر `second` برای راست معنی خاصی ندارد، بنابراین به دلیل استفاده از `..` در دو مکان به این شکل مبهم، خطای کامپایل دریافت می‌کنیم.
 
 ### Extra Conditionals with Match Guards
 
-A _match guard_ is an additional `if` condition, specified after the pattern in
-a `match` arm, that must also match for that arm to be chosen. Match guards are
-useful for expressing more complex ideas than a pattern alone allows. They are
-only available in `match` expressions, not in `if let` or `while let`
-expressions.
+یک _match guard_ یک شرط اضافی `if` است که پس از الگو در یک بازوی `match` مشخص می‌شود و باید برای انتخاب آن بازو نیز مطابقت داشته باشد. Match guardها برای بیان ایده‌های پیچیده‌تر از آنچه که یک الگو به‌تنهایی اجازه می‌دهد، مفید هستند. این قابلیت فقط در عبارات `match` در دسترس است، نه در عبارات `if let` یا `while let`.
 
-The condition can use variables created in the pattern. Listing 19-26 shows a
-`match` where the first arm has the pattern `Some(x)` and also has a match
-guard of `if x % 2 == 0` (which will be true if the number is even).
+شرط می‌تواند از متغیرهایی که در الگو ایجاد شده‌اند استفاده کند. فهرست 19-26 یک `match` را نشان می‌دهد که بازوی اول آن دارای الگوی `Some(x)` است و همچنین دارای یک match guard `if x % 2 == 0` است (که در صورتی که عدد زوج باشد، true خواهد بود).
 
-<Listing number="19-26" caption="Adding a match guard to a pattern">
+<Listing number="19-26" caption="افزودن یک match guard به یک الگو">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-26/src/main.rs:here}}
@@ -467,29 +300,15 @@ guard of `if x % 2 == 0` (which will be true if the number is even).
 
 </Listing>
 
-This example will print `The number 4 is even`. When `num` is compared to the
-pattern in the first arm, it matches, because `Some(4)` matches `Some(x)`. Then
-the match guard checks whether the remainder of dividing `x` by 2 is equal to
-0, and because it is, the first arm is selected.
+این مثال پیام `The number 4 is even` را چاپ می‌کند. وقتی `num` با الگوی بازوی اول مقایسه می‌شود، مطابقت دارد، زیرا `Some(4)` با `Some(x)` مطابقت دارد. سپس match guard بررسی می‌کند که آیا باقی‌مانده تقسیم `x` بر 2 برابر با 0 است یا نه، و چون این شرط برقرار است، بازوی اول انتخاب می‌شود.
 
-If `num` had been `Some(5)` instead, the match guard in the first arm would
-have been false because the remainder of 5 divided by 2 is 1, which is not
-equal to 0. Rust would then go to the second arm, which would match because the
-second arm doesn’t have a match guard and therefore matches any `Some` variant.
+اگر مقدار `num` برابر با `Some(5)` بود، match guard در بازوی اول false می‌شد زیرا باقی‌مانده تقسیم 5 بر 2 برابر با 1 است که برابر با 0 نیست. راست سپس به بازوی دوم می‌رود که مطابقت دارد زیرا بازوی دوم match guard ندارد و بنابراین با هر متغیر `Some` مطابقت دارد.
 
-There is no way to express the `if x % 2 == 0` condition within a pattern, so
-the match guard gives us the ability to express this logic. The downside of
-this additional expressiveness is that the compiler doesn't try to check for
-exhaustiveness when match guard expressions are involved.
+هیچ راهی برای بیان شرط `if x % 2 == 0` در داخل یک الگو وجود ندارد، بنابراین match guard به ما امکان بیان این منطق را می‌دهد. نقطه ضعف این قابلیت اضافی این است که کامپایلر سعی نمی‌کند بررسی کند که آیا تمام موارد پوشش داده شده‌اند یا نه وقتی که match guardها درگیر هستند.
 
-In Listing 19-11, we mentioned that we could use match guards to solve our
-pattern-shadowing problem. Recall that we created a new variable inside the
-pattern in the `match` expression instead of using the variable outside the
-`match`. That new variable meant we couldn’t test against the value of the
-outer variable. Listing 19-27 shows how we can use a match guard to fix this
-problem.
+در فهرست 19-11 اشاره کردیم که می‌توانیم از match guardها برای حل مشکل shadowing الگو استفاده کنیم. به یاد بیاورید که ما یک متغیر جدید در داخل الگو در عبارت `match` ایجاد کردیم به جای استفاده از متغیر بیرون از `match`. آن متغیر جدید به این معنا بود که نمی‌توانستیم مقدار متغیر بیرونی را تست کنیم. فهرست 19-27 نشان می‌دهد که چگونه می‌توانیم از یک match guard برای رفع این مشکل استفاده کنیم.
 
-<Listing number="19-27" file-name="src/main.rs" caption="Using a match guard to test for equality with an outer variable">
+<Listing number="19-27" file-name="src/main.rs" caption="استفاده از یک match guard برای آزمایش برابری با یک متغیر بیرونی">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-27/src/main.rs}}
@@ -497,26 +316,13 @@ problem.
 
 </Listing>
 
-This code will now print `Default case, x = Some(5)`. The pattern in the second
-match arm doesn’t introduce a new variable `y` that would shadow the outer `y`,
-meaning we can use the outer `y` in the match guard. Instead of specifying the
-pattern as `Some(y)`, which would have shadowed the outer `y`, we specify
-`Some(n)`. This creates a new variable `n` that doesn’t shadow anything because
-there is no `n` variable outside the `match`.
+این کد اکنون پیام `Default case, x = Some(5)` را چاپ می‌کند. الگوی بازوی دوم match یک متغیر جدید `y` که متغیر بیرونی `y` را shadow کند معرفی نمی‌کند، به این معنا که می‌توانیم از متغیر بیرونی `y` در match guard استفاده کنیم. به جای مشخص کردن الگو به‌عنوان `Some(y)` که متغیر بیرونی `y` را shadow می‌کرد، ما `Some(n)` را مشخص می‌کنیم. این یک متغیر جدید `n` ایجاد می‌کند که هیچ چیزی را shadow نمی‌کند زیرا هیچ متغیر `n` در خارج از `match` وجود ندارد.
 
-The match guard `if n == y` is not a pattern and therefore doesn’t introduce new
-variables. This `y` _is_ the outer `y` rather than a new `y` shadowing it, and
-we can look for a value that has the same value as the outer `y` by comparing
-`n` to `y`.
+Match guard `if n == y` یک الگو نیست و بنابراین متغیرهای جدیدی را معرفی نمی‌کند. این `y` _همان_ متغیر بیرونی `y` است و یک متغیر جدید که آن را shadow کند نیست، و می‌توانیم با مقایسه `n` با `y` به دنبال مقداری باشیم که با مقدار بیرونی `y` یکسان باشد.
 
-You can also use the _or_ operator `|` in a match guard to specify multiple
-patterns; the match guard condition will apply to all the patterns. Listing
-19-28 shows the precedence when combining a pattern that uses `|` with a match
-guard. The important part of this example is that the `if y` match guard
-applies to `4`, `5`, _and_ `6`, even though it might look like `if y` only
-applies to `6`.
+همچنین می‌توانید از عملگر _یا_ `|` در یک match guard استفاده کنید تا چندین الگو مشخص کنید؛ شرط match guard برای تمام الگوها اعمال خواهد شد. فهرست 19-28 تقدم هنگام ترکیب یک الگو که از `|` استفاده می‌کند با یک match guard را نشان می‌دهد. بخش مهم این مثال این است که match guard `if y` برای `4`، `5`، _و_ `6` اعمال می‌شود، حتی اگر ممکن است به نظر برسد که `if y` فقط برای `6` اعمال می‌شود.
 
-<Listing number="19-28" caption="Combining multiple patterns with a match guard">
+<Listing number="19-28" caption="ترکیب چندین الگو با یک match guard">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-28/src/main.rs:here}}
@@ -524,40 +330,25 @@ applies to `6`.
 
 </Listing>
 
-The match condition states that the arm only matches if the value of `x` is
-equal to `4`, `5`, or `6` _and_ if `y` is `true`. When this code runs, the
-pattern of the first arm matches because `x` is `4`, but the match guard `if y`
-is false, so the first arm is not chosen. The code moves on to the second arm,
-which does match, and this program prints `no`. The reason is that the `if`
-condition applies to the whole pattern `4 | 5 | 6`, not only to the last value
-`6`. In other words, the precedence of a match guard in relation to a pattern
-behaves like this:
+شرط مطابقت بیان می‌کند که بازو فقط زمانی مطابقت دارد که مقدار `x` برابر با `4`، `5`، یا `6` _و_ مقدار `y` برابر با `true` باشد. وقتی این کد اجرا می‌شود، الگوی بازوی اول مطابقت دارد زیرا `x` برابر با `4` است، اما match guard `if y` برابر با false است، بنابراین بازوی اول انتخاب نمی‌شود. کد به بازوی دوم می‌رود که مطابقت دارد، و این برنامه `no` را چاپ می‌کند. دلیل این است که شرط `if` برای کل الگوی `4 | 5 | 6` اعمال می‌شود، نه فقط برای مقدار آخر `6`. به عبارت دیگر، تقدم یک match guard نسبت به یک الگو به این شکل رفتار می‌کند:
 
 ```text
 (4 | 5 | 6) if y => ...
 ```
 
-rather than this:
+و نه به این شکل:
 
 ```text
 4 | 5 | (6 if y) => ...
 ```
 
-After running the code, the precedence behavior is evident: if the match guard
-were applied only to the final value in the list of values specified using the
-`|` operator, the arm would have matched and the program would have printed
-`yes`.
+بعد از اجرای کد، رفتار تقدم آشکار می‌شود: اگر match guard فقط برای مقدار نهایی در لیست مقادیر مشخص‌شده با استفاده از عملگر `|` اعمال می‌شد، بازو مطابقت می‌داشت و برنامه پیام `yes` را چاپ می‌کرد.
 
 ### `@` Bindings
 
-The _at_ operator `@` lets us create a variable that holds a value at the same
-time as we’re testing that value for a pattern match. In Listing 19-29, we want
-to test that a `Message::Hello` `id` field is within the range `3..=7`. We also
-want to bind the value to the variable `id_variable` so we can use it in the
-code associated with the arm. We could name this variable `id`, the same as the
-field, but for this example we’ll use a different name.
+عملگر _at_ (`@`) به ما امکان می‌دهد یک متغیر ایجاد کنیم که یک مقدار را نگه می‌دارد و همزمان آن مقدار را برای تطبیق با الگو آزمایش می‌کند. در فهرست 19-29، ما می‌خواهیم بررسی کنیم که آیا فیلد `id` در `Message::Hello` در بازه `3..=7` قرار دارد یا نه. همچنین می‌خواهیم مقدار را به متغیر `id_variable` متصل کنیم تا بتوانیم در کد مرتبط با بازو از آن استفاده کنیم. می‌توانستیم این متغیر را `id` بنامیم، مشابه فیلد، اما برای این مثال از نام متفاوتی استفاده خواهیم کرد.
 
-<Listing number="19-29" caption="Using `@` to bind to a value in a pattern while also testing it">
+<Listing number="19-29" caption="استفاده از `@` برای اتصال به یک مقدار در یک الگو و همزمان آزمایش آن">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-29/src/main.rs:here}}
@@ -565,33 +356,16 @@ field, but for this example we’ll use a different name.
 
 </Listing>
 
-This example will print `Found an id in range: 5`. By specifying `id_variable
-@` before the range `3..=7`, we’re capturing whatever value matched the range
-while also testing that the value matched the range pattern.
+این مثال پیام `Found an id in range: 5` را چاپ می‌کند. با مشخص کردن `id_variable @` قبل از بازه `3..=7`، ما هر مقداری که با بازه مطابقت داشت را ذخیره می‌کنیم و همزمان بررسی می‌کنیم که آیا مقدار با الگوی بازه مطابقت دارد.
 
-In the second arm, where we only have a range specified in the pattern, the code
-associated with the arm doesn’t have a variable that contains the actual value
-of the `id` field. The `id` field’s value could have been 10, 11, or 12, but
-the code that goes with that pattern doesn’t know which it is. The pattern code
-isn’t able to use the value from the `id` field, because we haven’t saved the
-`id` value in a variable.
+در بازوی دوم، جایی که فقط یک بازه در الگو مشخص شده است، کدی که با بازو مرتبط است متغیری ندارد که مقدار واقعی فیلد `id` را شامل شود. مقدار فیلد `id` می‌توانست 10، 11، یا 12 باشد، اما کدی که با آن الگو مرتبط است نمی‌داند مقدار چیست. کد بازو نمی‌تواند از مقدار فیلد `id` استفاده کند، زیرا ما مقدار `id` را در یک متغیر ذخیره نکرده‌ایم.
 
-In the last arm, where we’ve specified a variable without a range, we do have
-the value available to use in the arm’s code in a variable named `id`. The
-reason is that we’ve used the struct field shorthand syntax. But we haven’t
-applied any test to the value in the `id` field in this arm, as we did with the
-first two arms: any value would match this pattern.
+در بازوی آخر، جایی که یک متغیر بدون بازه مشخص کرده‌ایم، مقدار برای استفاده در کد بازو در متغیری به نام `id` در دسترس است. دلیل این است که ما از نحو کوتاه فیلدهای struct استفاده کرده‌ایم. اما در این بازو هیچ آزمایشی برای مقدار در فیلد `id` اعمال نکرده‌ایم، همان‌طور که در دو بازوی اول انجام دادیم: هر مقداری با این الگو مطابقت خواهد داشت.
 
-Using `@` lets us test a value and save it in a variable within one pattern.
+استفاده از `@` به ما امکان می‌دهد یک مقدار را آزمایش کنیم و همزمان آن را در یک متغیر ذخیره کنیم، همه در یک الگو.
 
 ## Summary
 
-Rust’s patterns are very useful in distinguishing between different kinds of
-data. When used in `match` expressions, Rust ensures your patterns cover every
-possible value, or your program won’t compile. Patterns in `let` statements and
-function parameters make those constructs more useful, enabling the
-destructuring of values into smaller parts at the same time as assigning to
-variables. We can create simple or complex patterns to suit our needs.
+الگوهای راست در تشخیص بین انواع مختلف داده بسیار مفید هستند. وقتی در عبارات `match` استفاده می‌شوند، راست اطمینان حاصل می‌کند که الگوهای شما تمام مقادیر ممکن را پوشش می‌دهند، وگرنه برنامه شما کامپایل نخواهد شد. الگوها در عبارات `let` و پارامترهای تابع این ساختارها را مفیدتر می‌کنند و تخریب مقادیر به بخش‌های کوچک‌تر را همزمان با تخصیص به متغیرها ممکن می‌سازند. ما می‌توانیم الگوهای ساده یا پیچیده‌ای ایجاد کنیم که نیازهای ما را برآورده کنند.
 
-Next, for the penultimate chapter of the book, we’ll look at some advanced
-aspects of a variety of Rust’s features.
+در فصل ماقبل آخر این کتاب، به برخی از جنبه‌های پیشرفته از ویژگی‌های مختلف راست خواهیم پرداخت.

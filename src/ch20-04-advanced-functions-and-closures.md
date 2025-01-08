@@ -1,28 +1,14 @@
-## Advanced Functions and Closures
+## توابع پیشرفته و Closureها
 
-This section explores some advanced features related to functions and closures,
-including function pointers and returning closures.
+این بخش به بررسی برخی از ویژگی‌های پیشرفته مربوط به توابع و Closureها می‌پردازد، از جمله Pointerهای تابع و بازگرداندن Closureها.
 
-### Function Pointers
+### Pointerهای تابع
 
-We’ve talked about how to pass closures to functions; you can also pass regular
-functions to functions! This technique is useful when you want to pass a
-function you’ve already defined rather than defining a new closure. Functions
-coerce to the type `fn` (with a lowercase f), not to be confused with the `Fn`
-closure trait. The `fn` type is called a _function pointer_. Passing functions
-with function pointers will allow you to use functions as arguments to other
-functions.
+قبلاً در مورد چگونگی ارسال Closureها به توابع صحبت کردیم؛ شما همچنین می‌توانید توابع معمولی را به توابع دیگر ارسال کنید! این تکنیک زمانی مفید است که بخواهید تابعی که قبلاً تعریف کرده‌اید را ارسال کنید به جای اینکه یک Closureها جدید تعریف کنید. توابع به نوع `fn` (با f کوچک) تبدیل می‌شوند، که نباید با ویژگی Closureها `Fn` اشتباه گرفته شود. نوع `fn` به عنوان یک _اشاره‌گر تابع_ شناخته می‌شود. ارسال توابع با استفاده از Pointerهای تابع به شما این امکان را می‌دهد که از توابع به عنوان آرگومان برای توابع دیگر استفاده کنید.
 
-The syntax for specifying that a parameter is a function pointer is similar to
-that of closures, as shown in Listing 20-28, where we’ve defined a function
-`add_one` that adds one to its parameter. The function `do_twice` takes two
-parameters: a function pointer to any function that takes an `i32` parameter
-and returns an `i32`, and one `i32` value. The `do_twice` function calls the
-function `f` twice, passing it the `arg` value, then adds the two function call
-results together. The `main` function calls `do_twice` with the arguments
-`add_one` and `5`.
+سینتکس مشخص کردن اینکه یک پارامتر یک اشاره‌گر تابع است، مشابه Closureها است، همان‌طور که در لیست ۲۰-۲۸ نشان داده شده است. در این مثال، تابعی به نام `add_one` تعریف کرده‌ایم که یک واحد به پارامتر خود اضافه می‌کند. تابع `do_twice` دو پارامتر می‌گیرد: یک اشاره‌گر تابع به هر تابعی که یک پارامتر `i32` بگیرد و یک مقدار `i32` برگرداند، و یک مقدار `i32`. تابع `do_twice` تابع `f` را دو بار فراخوانی می‌کند، مقدار `arg` را به آن می‌فرستد و سپس نتایج دو فراخوانی را با هم جمع می‌کند. تابع `main` تابع `do_twice` را با آرگومان‌های `add_one` و `5` فراخوانی می‌کند.
 
-<Listing number="20-28" file-name="src/main.rs" caption="Using the `fn` type to accept a function pointer as an argument">
+<Listing number="20-28" file-name="src/main.rs" caption="استفاده از نوع `fn` برای پذیرش یک اشاره‌گر تابع به عنوان آرگومان">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-28/src/main.rs}}
@@ -30,29 +16,15 @@ results together. The `main` function calls `do_twice` with the arguments
 
 </Listing>
 
-This code prints `The answer is: 12`. We specify that the parameter `f` in
-`do_twice` is an `fn` that takes one parameter of type `i32` and returns an
-`i32`. We can then call `f` in the body of `do_twice`. In `main`, we can pass
-the function name `add_one` as the first argument to `do_twice`.
+این کد مقدار `The answer is: 12` را چاپ می‌کند. ما مشخص کرده‌ایم که پارامتر `f` در `do_twice` یک `fn` است که یک پارامتر از نوع `i32` می‌گیرد و یک `i32` باز می‌گرداند. سپس می‌توانیم `f` را در بدنه تابع `do_twice` فراخوانی کنیم. در `main`، می‌توانیم نام تابع `add_one` را به عنوان آرگومان اول به `do_twice` ارسال کنیم.
 
-Unlike closures, `fn` is a type rather than a trait, so we specify `fn` as the
-parameter type directly rather than declaring a generic type parameter with one
-of the `Fn` traits as a trait bound.
+برخلاف Closureها `fn` یک نوع است و نه یک ویژگی، بنابراین ما `fn` را به طور مستقیم به عنوان نوع پارامتر مشخص می‌کنیم، به جای اعلام یک پارامتر جنریک با یکی از ویژگی‌های `Fn` به عنوان محدودیت ویژگی.
 
-Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
-`FnOnce`), meaning you can always pass a function pointer as an argument for a
-function that expects a closure. It’s best to write functions using a generic
-type and one of the closure traits so your functions can accept either
-functions or closures.
+Pointerهای تابع تمام سه ویژگی Closureها (`Fn`، `FnMut`، و `FnOnce`) را پیاده‌سازی می‌کنند، به این معنی که شما همیشه می‌توانید یک اشاره‌گر تابع را به عنوان آرگومان برای یک تابع که انتظار یک Closureها را دارد ارسال کنید. بهتر است توابع را با استفاده از یک نوع جنریک و یکی از ویژگی‌های Closureها بنویسید تا توابع شما بتوانند هم توابع و هم Closureها را بپذیرند.
 
-That said, one example of where you would want to only accept `fn` and not
-closures is when interfacing with external code that doesn’t have closures: C
-functions can accept functions as arguments, but C doesn’t have closures.
+با این حال، یک مثال از جایی که ممکن است بخواهید فقط `fn` را بپذیرید و نه Closureها زمانی است که با کد خارجی که Closureها ندارد تعامل می‌کنید: توابع C می‌توانند توابع را به عنوان آرگومان بپذیرند، اما C Closureها ندارد.
 
-As an example of where you could use either a closure defined inline or a named
-function, let’s look at a use of the `map` method provided by the `Iterator`
-trait in the standard library. To use the `map` function to turn a vector of
-numbers into a vector of strings, we could use a closure, like this:
+به عنوان مثالی از جایی که می‌توانید از یک Closureها تعریف‌شده درون‌خطی یا یک تابع نام‌گذاری‌شده استفاده کنید، بیایید به استفاده از متد `map` که توسط ویژگی `Iterator` در کتابخانه استاندارد ارائه شده است نگاهی بیندازیم. برای استفاده از تابع `map` برای تبدیل یک بردار اعداد به یک بردار رشته‌ها، می‌توانیم از یک Closureها به این صورت استفاده کنیم:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-15-map-closure/src/main.rs:here}}
