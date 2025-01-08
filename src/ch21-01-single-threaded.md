@@ -1,28 +1,14 @@
-## Building a Single-Threaded Web Server
+## ساخت یک وب سرور Single-Threaded
 
-We’ll start by getting a single-threaded web server working. Before we begin,
-let’s look at a quick overview of the protocols involved in building web
-servers. The details of these protocols are beyond the scope of this book, but
-a brief overview will give you the information you need.
+ما با راه‌اندازی یک وب سرور Single-Threaded شروع خواهیم کرد. پیش از شروع، بیایید یک مرور سریع بر پروتکل‌های مرتبط با ساخت وب سرورها داشته باشیم. جزئیات این پروتکل‌ها خارج از محدوده این کتاب است، اما یک نمای کلی اطلاعات لازم را به شما می‌دهد.
 
-The two main protocols involved in web servers are _Hypertext Transfer
-Protocol_ _(HTTP)_ and _Transmission Control Protocol_ _(TCP)_. Both protocols
-are _request-response_ protocols, meaning a _client_ initiates requests and a
-_server_ listens to the requests and provides a response to the client. The
-contents of those requests and responses are defined by the protocols.
+دو پروتکل اصلی که در وب سرورها درگیر هستند، _Hypertext Transfer Protocol_ _(HTTP)_ و _Transmission Control Protocol_ _(TCP)_ هستند. هر دو پروتکل _request-response_ هستند، به این معنی که یک _client_ درخواست‌ها را آغاز می‌کند و یک _server_ به درخواست‌ها گوش می‌دهد و پاسخی به client ارائه می‌دهد. محتوای این درخواست‌ها و پاسخ‌ها توسط پروتکل‌ها تعریف شده است.
 
-TCP is the lower-level protocol that describes the details of how information
-gets from one server to another but doesn’t specify what that information is.
-HTTP builds on top of TCP by defining the contents of the requests and
-responses. It’s technically possible to use HTTP with other protocols, but in
-the vast majority of cases, HTTP sends its data over TCP. We’ll work with the
-raw bytes of TCP and HTTP requests and responses.
+TCP یک پروتکل سطح پایین‌تر است که جزئیات چگونگی انتقال اطلاعات از یک سرور به سرور دیگر را توصیف می‌کند اما مشخص نمی‌کند که آن اطلاعات چیست. HTTP بر روی TCP ساخته شده است و محتوای درخواست‌ها و پاسخ‌ها را تعریف می‌کند. از لحاظ فنی امکان استفاده از HTTP با سایر پروتکل‌ها وجود دارد، اما در اکثر موارد، HTTP داده‌های خود را بر روی TCP ارسال می‌کند. ما با بایت‌های خام درخواست‌ها و پاسخ‌های TCP و HTTP کار خواهیم کرد.
 
-### Listening to the TCP Connection
+### گوش دادن به اتصال TCP
 
-Our web server needs to listen to a TCP connection, so that’s the first part
-we’ll work on. The standard library offers a `std::net` module that lets us do
-this. Let’s make a new project in the usual fashion:
+وب سرور ما نیاز دارد به اتصال TCP گوش دهد، بنابراین این اولین بخشی است که روی آن کار می‌کنیم. کتابخانه استاندارد یک ماژول `std::net` ارائه می‌دهد که به ما این امکان را می‌دهد این کار را انجام دهیم. بیایید یک پروژه جدید به روش معمول ایجاد کنیم:
 
 ```console
 $ cargo new hello
@@ -30,11 +16,9 @@ $ cargo new hello
 $ cd hello
 ```
 
-Now enter the code in Listing 21-1 in _src/main.rs_ to start. This code will
-listen at the local address `127.0.0.1:7878` for incoming TCP streams. When it
-gets an incoming stream, it will print `Connection established!`.
+حالا کد لیست ۲۱-۱ را در فایل _src/main.rs_ وارد کنید تا شروع کنیم. این کد به آدرس محلی `127.0.0.1:7878` برای جریان‌های ورودی TCP گوش می‌دهد. وقتی یک جریان ورودی دریافت می‌کند، پیام `Connection established!` را چاپ می‌کند.
 
-<Listing number="21-1" file-name="src/main.rs" caption="Listening for incoming streams and printing a message when we receive a stream">
+<Listing number="21-1" file-name="src/main.rs" caption="گوش دادن به جریان‌های ورودی و چاپ یک پیام هنگام دریافت یک جریان">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-01/src/main.rs}}
@@ -42,56 +26,17 @@ gets an incoming stream, it will print `Connection established!`.
 
 </Listing>
 
-Using `TcpListener`, we can listen for TCP connections at the address
-`127.0.0.1:7878`. In the address, the section before the colon is an IP address
-representing your computer (this is the same on every computer and doesn’t
-represent the authors’ computer specifically), and `7878` is the port. We’ve
-chosen this port for two reasons: HTTP isn’t normally accepted on this port so
-our server is unlikely to conflict with any other web server you might have
-running on your machine, and 7878 is _rust_ typed on a telephone.
+با استفاده از `TcpListener`، می‌توانیم به اتصالات TCP در آدرس `127.0.0.1:7878` گوش دهیم. در این آدرس، بخش قبل از دونقطه یک آدرس IP است که نمایانگر کامپیوتر شما است (این آدرس روی همه کامپیوترها یکسان است و نمایانگر کامپیوتر نویسندگان نیست) و `7878` پورت است. این پورت را به دو دلیل انتخاب کرده‌ایم: HTTP معمولاً روی این پورت پذیرفته نمی‌شود، بنابراین احتمالاً سرور ما با هیچ وب سرور دیگری که ممکن است روی دستگاه شما اجرا شود تداخل نخواهد داشت، و 7878 روی تلفن به صورت _rust_ تایپ می‌شود.
 
-The `bind` function in this scenario works like the `new` function in that it
-will return a new `TcpListener` instance. The function is called `bind`
-because, in networking, connecting to a port to listen to is known as “binding
-to a port.”
+تابع `bind` در این سناریو مانند تابع `new` عمل می‌کند به این صورت که یک نمونه جدید از `TcpListener` بازمی‌گرداند. این تابع `bind` نامیده می‌شود زیرا در شبکه، اتصال به یک پورت برای گوش دادن به آن به عنوان "binding to a port" شناخته می‌شود.
 
-The `bind` function returns a `Result<T, E>`, which indicates that it’s
-possible for binding to fail. For example, connecting to port 80 requires
-administrator privileges (nonadministrators can listen only on ports higher
-than 1023), so if we tried to connect to port 80 without being an
-administrator, binding wouldn’t work. Binding also wouldn’t work, for example,
-if we ran two instances of our program and so had two programs listening to the
-same port. Because we’re writing a basic server just for learning purposes, we
-won’t worry about handling these kinds of errors; instead, we use `unwrap` to
-stop the program if errors happen.
+تابع `bind` یک `Result<T, E>` بازمی‌گرداند که نشان می‌دهد امکان دارد فرآیند binding شکست بخورد. به عنوان مثال، اتصال به پورت 80 نیاز به دسترسی مدیر (_administrator_) دارد (کاربران عادی فقط می‌توانند به پورت‌های بالاتر از 1023 گوش دهند)، بنابراین اگر تلاش کنیم بدون دسترسی مدیر به پورت 80 متصل شویم، فرآیند binding کار نخواهد کرد. همچنین اگر دو نمونه از برنامه خود اجرا کنیم و در نتیجه دو برنامه به همان پورت گوش دهند، فرآیند binding شکست خواهد خورد. از آنجا که ما یک سرور ساده فقط برای اهداف آموزشی می‌نویسیم، نگرانی‌ای در مورد مدیریت این نوع خطاها نخواهیم داشت؛ در عوض از `unwrap` استفاده می‌کنیم تا در صورت بروز خطا برنامه متوقف شود.
 
-The `incoming` method on `TcpListener` returns an iterator that gives us a
-sequence of streams (more specifically, streams of type `TcpStream`). A single
-_stream_ represents an open connection between the client and the server. A
-_connection_ is the name for the full request and response process in which a
-client connects to the server, the server generates a response, and the server
-closes the connection. As such, we will read from the `TcpStream` to see what
-the client sent and then write our response to the stream to send data back to
-the client. Overall, this `for` loop will process each connection in turn and
-produce a series of streams for us to handle.
+متد `incoming` روی `TcpListener` یک iterator بازمی‌گرداند که به ما دنباله‌ای از جریان‌ها (_streams_) می‌دهد (به طور خاص، جریان‌هایی از نوع `TcpStream`). یک _stream_ نشان‌دهنده یک اتصال باز بین client و server است. یک _connection_ به فرآیند کامل درخواست و پاسخ گفته می‌شود که در آن یک client به سرور متصل می‌شود، سرور یک پاسخ تولید می‌کند، و سپس اتصال توسط سرور بسته می‌شود. بنابراین، ما از `TcpStream` برای خواندن آنچه client ارسال کرده استفاده می‌کنیم و سپس پاسخ خود را به جریان می‌نویسیم تا داده‌ها را به client بازگردانیم. به طور کلی، این حلقه `for` هر اتصال را به نوبت پردازش کرده و یک سری جریان‌ها را برای مدیریت به ما می‌دهد.
 
-For now, our handling of the stream consists of calling `unwrap` to terminate
-our program if the stream has any errors; if there aren’t any errors, the
-program prints a message. We’ll add more functionality for the success case in
-the next listing. The reason we might receive errors from the `incoming` method
-when a client connects to the server is that we’re not actually iterating over
-connections. Instead, we’re iterating over _connection attempts_. The
-connection might not be successful for a number of reasons, many of them
-operating system specific. For example, many operating systems have a limit to
-the number of simultaneous open connections they can support; new connection
-attempts beyond that number will produce an error until some of the open
-connections are closed.
+فعلاً، مدیریت ما روی جریان به فراخوانی `unwrap` محدود می‌شود تا در صورتی که جریان دارای خطا باشد، برنامه متوقف شود. اگر خطایی وجود نداشته باشد، برنامه یک پیام چاپ می‌کند. در لیست بعدی، عملکرد بیشتری برای حالت موفقیت اضافه خواهیم کرد. دلیل اینکه ممکن است از متد `incoming` هنگام اتصال یک client به سرور خطا دریافت کنیم این است که ما در واقع روی اتصالات تکرار نمی‌کنیم، بلکه روی _تلاش‌های اتصال_ تکرار می‌کنیم. اتصال ممکن است به دلایل مختلف موفقیت‌آمیز نباشد که بسیاری از آن‌ها مربوط به سیستم‌عامل هستند. برای مثال، بسیاری از سیستم‌عامل‌ها محدودیتی برای تعداد اتصالات همزمان باز دارند؛ تلاش‌های اتصال جدیدی که بیش از این تعداد باشند، تا زمانی که برخی از اتصالات باز بسته نشوند، خطا تولید خواهند کرد.
 
-Let’s try running this code! Invoke `cargo run` in the terminal and then load
-_127.0.0.1:7878_ in a web browser. The browser should show an error message
-like “Connection reset,” because the server isn’t currently sending back any
-data. But when you look at your terminal, you should see several messages that
-were printed when the browser connected to the server!
+بیایید این کد را اجرا کنیم! دستور `cargo run` را در ترمینال اجرا کنید و سپس آدرس _127.0.0.1:7878_ را در یک مرورگر وب باز کنید. مرورگر باید پیامی خطا مانند "Connection reset" را نشان دهد، زیرا سرور در حال حاضر هیچ داده‌ای باز نمی‌گرداند. اما وقتی به ترمینال خود نگاه کنید، باید چندین پیامی که هنگام اتصال مرورگر به سرور چاپ شده‌اند را ببینید:
 
 ```text
      Running `target/debug/hello`
@@ -100,33 +45,17 @@ Connection established!
 Connection established!
 ```
 
-Sometimes, you’ll see multiple messages printed for one browser request; the
-reason might be that the browser is making a request for the page as well as a
-request for other resources, like the _favicon.ico_ icon that appears in the
-browser tab.
+گاهی ممکن است برای یک درخواست مرورگر چندین پیام چاپ شود؛ دلیل آن می‌تواند این باشد که مرورگر علاوه بر درخواست صفحه، درخواست‌هایی برای منابع دیگر نیز ارسال می‌کند، مانند آیکون _favicon.ico_ که در تب مرورگر ظاهر می‌شود.
 
-It could also be that the browser is trying to connect to the server multiple
-times because the server isn’t responding with any data. When `stream` goes out
-of scope and is dropped at the end of the loop, the connection is closed as
-part of the `drop` implementation. Browsers sometimes deal with closed
-connections by retrying, because the problem might be temporary. The important
-factor is that we’ve successfully gotten a handle to a TCP connection!
+همچنین ممکن است مرورگر تلاش کند چندین بار به سرور متصل شود زیرا سرور هیچ داده‌ای باز نمی‌گرداند. وقتی `stream` از محدوده خارج می‌شود و در انتهای حلقه حذف می‌شود، اتصال به عنوان بخشی از پیاده‌سازی `drop` بسته می‌شود. مرورگرها گاهی با اتصالات بسته شده با تلاش مجدد مقابله می‌کنند، زیرا ممکن است مشکل موقتی باشد. نکته مهم این است که ما با موفقیت به یک اتصال TCP دست پیدا کرده‌ایم!
 
-Remember to stop the program by pressing <kbd>ctrl</kbd>-<kbd>c</kbd> when
-you’re done running a particular version of the code. Then restart the program
-by invoking the `cargo run` command after you’ve made each set of code changes
-to make sure you’re running the newest code.
+به یاد داشته باشید که برنامه را با فشار دادن کلیدهای <kbd>ctrl</kbd>-<kbd>c</kbd> متوقف کنید وقتی که اجرای نسخه خاصی از کد تمام شد. سپس برنامه را با اجرای دستور `cargo run` پس از ایجاد هر مجموعه از تغییرات کد، مجدداً راه‌اندازی کنید تا مطمئن شوید که جدیدترین کد اجرا می‌شود.
 
-### Reading the Request
+### خواندن درخواست
 
-Let’s implement the functionality to read the request from the browser! To
-separate the concerns of first getting a connection and then taking some action
-with the connection, we’ll start a new function for processing connections. In
-this new `handle_connection` function, we’ll read data from the TCP stream and
-print it so we can see the data being sent from the browser. Change the code to
-look like Listing 21-2.
+بیایید عملکرد خواندن درخواست از مرورگر را پیاده‌سازی کنیم! برای جدا کردن نگرانی‌ها از اتصال اولیه و سپس انجام برخی اقدامات با اتصال، یک تابع جدید برای پردازش اتصالات ایجاد می‌کنیم. در این تابع جدید `handle_connection`، داده‌ها را از جریان TCP می‌خوانیم و آن‌ها را چاپ می‌کنیم تا بتوانیم داده‌هایی که از مرورگر ارسال می‌شوند را ببینیم. کد را تغییر دهید تا شبیه لیست ۲۱-۲ شود.
 
-<Listing number="21-2" file-name="src/main.rs" caption="Reading from the `TcpStream` and printing the data">
+<Listing number="21-2" file-name="src/main.rs" caption="خواندن از `TcpStream` و چاپ داده‌ها">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-02/src/main.rs}}
@@ -134,38 +63,17 @@ look like Listing 21-2.
 
 </Listing>
 
-We bring `std::io::prelude` and `std::io::BufReader` into scope to get access
-to traits and types that let us read from and write to the stream. In the `for`
-loop in the `main` function, instead of printing a message that says we made a
-connection, we now call the new `handle_connection` function and pass the
-`stream` to it.
+ما `std::io::prelude` و `std::io::BufReader` را وارد دامنه می‌کنیم تا به ویژگی‌ها و نوع‌هایی که به ما اجازه خواندن و نوشتن از جریان را می‌دهند دسترسی داشته باشیم. در حلقه `for` در تابع `main`، به جای چاپ یک پیام که می‌گوید یک اتصال برقرار کردیم، حالا تابع جدید `handle_connection` را فراخوانی می‌کنیم و `stream` را به آن ارسال می‌کنیم.
 
-In the `handle_connection` function, we create a new `BufReader` instance that
-wraps a reference to the `stream`. The `BufReader` adds buffering by managing calls
-to the `std::io::Read` trait methods for us.
+در تابع `handle_connection`، یک نمونه جدید از `BufReader` ایجاد می‌کنیم که یک ارجاع به `stream` را در خود نگه می‌دارد. `BufReader` با مدیریت فراخوانی متدهای ویژگی `std::io::Read` برای ما، بافر را اضافه می‌کند.
 
-We create a variable named `http_request` to collect the lines of the request
-the browser sends to our server. We indicate that we want to collect these
-lines in a vector by adding the `Vec<_>` type annotation.
+ما یک متغیر به نام `http_request` ایجاد می‌کنیم تا خطوط درخواست ارسالی مرورگر به سرور را جمع‌آوری کنیم. مشخص می‌کنیم که می‌خواهیم این خطوط را در یک بردار جمع‌آوری کنیم با اضافه کردن نوع `Vec<_>` به عنوان حاشیه‌نویسی.
 
-`BufReader` implements the `std::io::BufRead` trait, which provides the `lines`
-method. The `lines` method returns an iterator of `Result<String,
-std::io::Error>` by splitting the stream of data whenever it sees a newline
-byte. To get each `String`, we map and `unwrap` each `Result`. The `Result`
-might be an error if the data isn’t valid UTF-8 or if there was a problem
-reading from the stream. Again, a production program should handle these errors
-more gracefully, but we’re choosing to stop the program in the error case for
-simplicity.
+`BufReader` ویژگی `std::io::BufRead` را پیاده‌سازی می‌کند که متد `lines` را ارائه می‌دهد. متد `lines` یک iterator از نوع `Result<String, std::io::Error>` بازمی‌گرداند، که با هر بار مشاهده یک بایت newline جریان داده را تقسیم می‌کند. برای دریافت هر `String`، هر `Result` را map و `unwrap` می‌کنیم. اگر داده‌ها UTF-8 معتبری نباشند یا اگر مشکلی در خواندن از جریان وجود داشته باشد، ممکن است `Result` خطایی باشد. باز هم، یک برنامه تولیدی باید این خطاها را به صورت کارآمدتری مدیریت کند، اما برای سادگی، ما انتخاب می‌کنیم که در حالت خطا برنامه متوقف شود.
 
-The browser signals the end of an HTTP request by sending two newline
-characters in a row, so to get one request from the stream, we take lines until
-we get a line that is the empty string. Once we’ve collected the lines into the
-vector, we’re printing them out using pretty debug formatting so we can take a
-look at the instructions the web browser is sending to our server.
+مرورگر پایان یک درخواست HTTP را با ارسال دو کاراکتر newline متوالی نشان می‌دهد، بنابراین برای دریافت یک درخواست از جریان، خطوط را می‌گیریم تا زمانی که به یک خط خالی برسیم. پس از جمع‌آوری خطوط در بردار، آن‌ها را با استفاده از فرمت دیباگ زیبا چاپ می‌کنیم تا بتوانیم دستورالعمل‌هایی که مرورگر وب به سرور ما ارسال می‌کند را ببینیم.
 
-Let’s try this code! Start the program and make a request in a web browser
-again. Note that we’ll still get an error page in the browser, but our
-program’s output in the terminal will now look similar to this:
+بیایید این کد را امتحان کنیم! برنامه را اجرا کنید و دوباره یک درخواست در مرورگر وب ارسال کنید. توجه داشته باشید که همچنان در مرورگر یک صفحه خطا خواهیم دید، اما خروجی برنامه در ترمینال اکنون مشابه این خواهد بود:
 
 ```console
 $ cargo run
@@ -190,19 +98,13 @@ Request: [
 ]
 ```
 
-Depending on your browser, you might get slightly different output. Now that
-we’re printing the request data, we can see why we get multiple connections
-from one browser request by looking at the path after `GET` in the first line
-of the request. If the repeated connections are all requesting _/_, we know the
-browser is trying to fetch _/_ repeatedly because it’s not getting a response
-from our program.
+بسته به مرورگری که استفاده می‌کنید، ممکن است خروجی کمی متفاوت دریافت کنید. اکنون که داده‌های درخواست را چاپ می‌کنیم، می‌توانیم دلیل دریافت چندین اتصال از یک درخواست مرورگر را با نگاه کردن به مسیر بعد از `GET` در خط اول درخواست متوجه شویم. اگر اتصالات تکراری همه _/_ را درخواست کنند، می‌دانیم که مرورگر سعی دارد _/_ را بارها و بارها درخواست کند زیرا پاسخی از برنامه ما دریافت نمی‌کند.
 
-Let’s break down this request data to understand what the browser is asking of
-our program.
+بیایید این داده‌های درخواست را تجزیه کنیم تا متوجه شویم مرورگر از برنامه ما چه چیزی می‌خواهد.
 
-### A Closer Look at an HTTP Request
+### نگاهی دقیق‌تر به یک درخواست HTTP
 
-HTTP is a text-based protocol, and a request takes this format:
+HTTP یک پروتکل مبتنی بر متن است و یک درخواست فرمت زیر را دارد:
 
 ```text
 Method Request-URI HTTP-Version CRLF
@@ -210,41 +112,23 @@ headers CRLF
 message-body
 ```
 
-The first line is the _request line_ that holds information about what the
-client is requesting. The first part of the request line indicates the _method_
-being used, such as `GET` or `POST`, which describes how the client is making
-this request. Our client used a `GET` request, which means it is asking for
-information.
+خط اول _خط درخواست_ است که اطلاعاتی درباره آنچه client درخواست می‌کند را نگه می‌دارد. قسمت اول خط درخواست، _method_ استفاده‌شده را نشان می‌دهد، مانند `GET` یا `POST`، که توضیح می‌دهد client چگونه این درخواست را انجام می‌دهد. client ما از یک درخواست `GET` استفاده کرده است، به این معنی که در حال درخواست اطلاعات است.
 
-The next part of the request line is _/_, which indicates the _Uniform Resource
-Identifier_ _(URI)_ the client is requesting: a URI is almost, but not quite,
-the same as a _Uniform Resource Locator_ _(URL)_. The difference between URIs
-and URLs isn’t important for our purposes in this chapter, but the HTTP spec
-uses the term URI, so we can just mentally substitute URL for URI here.
+قسمت بعدی خط درخواست، _/_ است که نشان‌دهنده _شناسه منبع یکسان_ _(Uniform Resource Identifier یا URI)_ است که client درخواست می‌کند: یک URI تقریباً اما نه کاملاً همان _مکان‌نمای منبع یکسان_ _(Uniform Resource Locator یا URL)_ است. تفاوت بین URIs و URLs برای اهداف ما در این فصل مهم نیست، اما استاندارد HTTP از اصطلاح URI استفاده می‌کند، بنابراین می‌توانیم ذهنی URL را به جای URI در نظر بگیریم.
 
-The last part is the HTTP version the client uses, and then the request line
-ends in a _CRLF sequence_. (CRLF stands for _carriage return_ and _line feed_,
-which are terms from the typewriter days!) The CRLF sequence can also be
-written as `\r\n`, where `\r` is a carriage return and `\n` is a line feed. The
-CRLF sequence separates the request line from the rest of the request data.
-Note that when the CRLF is printed, we see a new line start rather than `\r\n`.
+قسمت آخر نسخه HTTP است که client استفاده می‌کند، و سپس خط درخواست با یک _دنباله CRLF_ پایان می‌یابد. (CRLF به معنای _بازگشت حامل_ و _تغذیه خط_ است که اصطلاحاتی از روزهای ماشین تایپ هستند!) دنباله CRLF همچنین می‌تواند به صورت `\r\n` نوشته شود، جایی که `\r` یک بازگشت حامل و `\n` یک تغذیه خط است. دنباله CRLF خط درخواست را از بقیه داده‌های درخواست جدا می‌کند. توجه داشته باشید که وقتی CRLF چاپ می‌شود، به جای `\r\n`، یک خط جدید شروع می‌شود.
 
-Looking at the request line data we received from running our program so far,
-we see that `GET` is the method, _/_ is the request URI, and `HTTP/1.1` is the
-version.
+با نگاه کردن به داده‌های خط درخواست که تاکنون از اجرای برنامه خود دریافت کرده‌ایم، می‌بینیم که `GET` متد است، _/_ شناسه URI درخواست‌شده است، و `HTTP/1.1` نسخه است.
 
-After the request line, the remaining lines starting from `Host:` onward are
-headers. `GET` requests have no body.
+بعد از خط درخواست، خطوط باقی‌مانده از `Host:` به بعد هدرها هستند. درخواست‌های `GET` بدنه ندارند.
 
-Try making a request from a different browser or asking for a different
-address, such as _127.0.0.1:7878/test_, to see how the request data changes.
+سعی کنید یک درخواست از مرورگری دیگر یا آدرسی متفاوت، مانند _127.0.0.1:7878/test_، ارسال کنید تا ببینید داده‌های درخواست چگونه تغییر می‌کنند.
 
-Now that we know what the browser is asking for, let’s send back some data!
+اکنون که می‌دانیم مرورگر چه چیزی می‌خواهد، بیایید داده‌ای را به آن بازگردانیم!
 
-### Writing a Response
+### نوشتن یک پاسخ
 
-We’re going to implement sending data in response to a client request.
-Responses have the following format:
+ما قصد داریم ارسال داده در پاسخ به یک درخواست client را پیاده‌سازی کنیم. پاسخ‌ها فرمت زیر را دارند:
 
 ```text
 HTTP-Version Status-Code Reason-Phrase CRLF
@@ -252,26 +136,17 @@ headers CRLF
 message-body
 ```
 
-The first line is a _status line_ that contains the HTTP version used in the
-response, a numeric status code that summarizes the result of the request, and
-a reason phrase that provides a text description of the status code. After the
-CRLF sequence are any headers, another CRLF sequence, and the body of the
-response.
+خط اول یک _خط وضعیت_ است که شامل نسخه HTTP استفاده‌شده در پاسخ، یک کد وضعیت عددی که نتیجه درخواست را خلاصه می‌کند، و یک عبارت دلیل که توضیح متنی برای کد وضعیت ارائه می‌دهد. پس از دنباله CRLF، هر هدر و سپس یک دنباله CRLF دیگر و بدنه پاسخ قرار می‌گیرد.
 
-Here is an example response that uses HTTP version 1.1, has a status code of
-200, an OK reason phrase, no headers, and no body:
+در اینجا یک مثال پاسخ آورده شده است که از نسخه HTTP 1.1 استفاده می‌کند، کد وضعیت 200 دارد، عبارت دلیل "OK" است، هیچ هدر و بدنه‌ای ندارد:
 
 ```text
 HTTP/1.1 200 OK\r\n\r\n
 ```
 
-The status code 200 is the standard success response. The text is a tiny
-successful HTTP response. Let’s write this to the stream as our response to a
-successful request! From the `handle_connection` function, remove the
-`println!` that was printing the request data and replace it with the code in
-Listing 21-3.
+کد وضعیت 200 پاسخ استاندارد موفقیت است. این متن یک پاسخ HTTP کوچک و موفقیت‌آمیز است. بیایید این را به عنوان پاسخ خود به یک درخواست موفق به جریان بنویسیم! از تابع `handle_connection`، `println!` که داده‌های درخواست را چاپ می‌کرد، حذف کنید و آن را با کد موجود در لیست ۲۱-۳ جایگزین کنید.
 
-<Listing number="21-3" file-name="src/main.rs" caption="Writing a tiny successful HTTP response to the stream">
+<Listing number="21-3" file-name="src/main.rs" caption="نوشتن یک پاسخ HTTP کوچک و موفقیت‌آمیز به جریان">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-03/src/main.rs:here}}
@@ -279,27 +154,15 @@ Listing 21-3.
 
 </Listing>
 
-The first new line defines the `response` variable that holds the success
-message’s data. Then we call `as_bytes` on our `response` to convert the string
-data to bytes. The `write_all` method on `stream` takes a `&[u8]` and sends
-those bytes directly down the connection. Because the `write_all` operation
-could fail, we use `unwrap` on any error result as before. Again, in a real
-application you would add error handling here.
+خط جدید اول متغیر `response` را تعریف می‌کند که داده پیام موفقیت را در خود نگه می‌دارد. سپس با فراخوانی `as_bytes` روی `response` داده رشته‌ای را به بایت‌ها تبدیل می‌کنیم. متد `write_all` روی `stream` یک `&[u8]` می‌گیرد و آن بایت‌ها را مستقیماً به اتصال ارسال می‌کند. از آنجا که عملیات `write_all` ممکن است شکست بخورد، مانند قبل، روی هر نتیجه خطا از `unwrap` استفاده می‌کنیم. باز هم، در یک برنامه واقعی باید اینجا مدیریت خطا اضافه کنید.
 
-With these changes, let’s run our code and make a request. We’re no longer
-printing any data to the terminal, so we won’t see any output other than the
-output from Cargo. When you load _127.0.0.1:7878_ in a web browser, you should
-get a blank page instead of an error. You’ve just hand-coded receiving an HTTP
-request and sending a response!
+با این تغییرات، بیایید کد خود را اجرا کنیم و یک درخواست ارسال کنیم. دیگر هیچ داده‌ای به ترمینال چاپ نمی‌کنیم، بنابراین هیچ خروجی‌ای به غیر از خروجی Cargo نخواهید دید. وقتی آدرس _127.0.0.1:7878_ را در یک مرورگر وب بارگذاری می‌کنید، باید یک صفحه خالی به جای یک خطا دریافت کنید. شما اکنون دریافت یک درخواست HTTP و ارسال یک پاسخ را به صورت دستی کدنویسی کرده‌اید!
 
-### Returning Real HTML
+### بازگرداندن HTML واقعی (Returning Real HTML)
 
-Let’s implement the functionality for returning more than a blank page. Create
-the new file _hello.html_ in the root of your project directory, not in the
-_src_ directory. You can input any HTML you want; Listing 21-4 shows one
-possibility.
+بیایید عملکرد بازگرداندن چیزی بیش از یک صفحه خالی را پیاده‌سازی کنیم. فایل جدیدی به نام _hello.html_ در ریشه دایرکتوری پروژه خود ایجاد کنید، نه در دایرکتوری _src_. می‌توانید هر HTML که می‌خواهید وارد کنید؛ لیست ۲۱-۴ یک نمونه را نشان می‌دهد.
 
-<Listing number="21-4" file-name="hello.html" caption="A sample HTML file to return in a response">
+<Listing number="21-4" file-name="hello.html" caption="یک فایل نمونه HTML برای بازگرداندن در پاسخ">
 
 ```html
 {{#include ../listings/ch21-web-server/listing-21-05/hello.html}}
@@ -307,12 +170,9 @@ possibility.
 
 </Listing>
 
-This is a minimal HTML5 document with a heading and some text. To return this
-from the server when a request is received, we’ll modify `handle_connection` as
-shown in Listing 21-5 to read the HTML file, add it to the response as a body,
-and send it.
+این یک سند HTML5 حداقلی با یک عنوان و مقداری متن است. برای بازگرداندن این فایل از سرور هنگام دریافت یک درخواست، کد `handle_connection` را همان‌طور که در لیست ۲۱-۵ نشان داده شده است تغییر می‌دهیم تا فایل HTML را بخواند، آن را به عنوان بدنه پاسخ اضافه کند و ارسال کند.
 
-<Listing number="21-5" file-name="src/main.rs" caption="Sending the contents of *hello.html* as the body of the response">
+<Listing number="21-5" file-name="src/main.rs" caption="ارسال محتوای *hello.html* به عنوان بدنه پاسخ">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-05/src/main.rs:here}}
@@ -320,38 +180,19 @@ and send it.
 
 </Listing>
 
-We’ve added `fs` to the `use` statement to bring the standard library’s
-filesystem module into scope. The code for reading the contents of a file to a
-string should look familiar; we used it in Chapter 12 when we read the contents
-of a file for our I/O project in Listing 12-4.
+ما `fs` را به دستور `use` اضافه کرده‌ایم تا ماژول سیستم فایل کتابخانه استاندارد را وارد دامنه کنیم. کدی که محتوای یک فایل را به یک رشته می‌خواند باید آشنا به نظر برسد؛ ما در فصل ۱۲ زمانی که محتوای یک فایل را برای پروژه ورودی/خروجی خود خواندیم از آن استفاده کردیم (لیست ۱۲-۴).
 
-Next, we use `format!` to add the file’s contents as the body of the success
-response. To ensure a valid HTTP response, we add the `Content-Length` header
-which is set to the size of our response body, in this case the size of
-`hello.html`.
+سپس، از `format!` برای اضافه کردن محتوای فایل به عنوان بدنه پاسخ موفقیت استفاده می‌کنیم. برای اطمینان از یک پاسخ HTTP معتبر، هدر `Content-Length` را اضافه می‌کنیم که به اندازه بدنه پاسخ ما تنظیم شده است، که در این مورد اندازه فایل `hello.html` است.
 
-Run this code with `cargo run` and load _127.0.0.1:7878_ in your browser; you
-should see your HTML rendered!
+این کد را با دستور `cargo run` اجرا کنید و آدرس _127.0.0.1:7878_ را در مرورگر خود بارگذاری کنید؛ باید HTML خود را که به درستی رندر شده است ببینید!
 
-Currently, we’re ignoring the request data in `http_request` and just sending
-back the contents of the HTML file unconditionally. That means if you try
-requesting _127.0.0.1:7878/something-else_ in your browser, you’ll still get
-back this same HTML response. At the moment, our server is very limited and
-does not do what most web servers do. We want to customize our responses
-depending on the request and only send back the HTML file for a well-formed
-request to _/_.
+در حال حاضر، ما داده‌های درخواست در `http_request` را نادیده می‌گیریم و فقط محتوای فایل HTML را بدون شرط بازمی‌گردانیم. این بدان معناست که اگر در مرورگر خود آدرس _127.0.0.1:7878/something-else_ را درخواست کنید، همچنان همین پاسخ HTML را دریافت خواهید کرد. در این لحظه، سرور ما بسیار محدود است و کارهایی که اکثر وب سرورها انجام می‌دهند را انجام نمی‌دهد. ما می‌خواهیم پاسخ‌های خود را بر اساس درخواست سفارشی کنیم و فقط فایل HTML را برای یک درخواست خوش‌ساخت به _/_ بازگردانیم.
 
-### Validating the Request and Selectively Responding
+### اعتبارسنجی درخواست و پاسخ‌دهی انتخابی
 
-Right now, our web server will return the HTML in the file no matter what the
-client requested. Let’s add functionality to check that the browser is
-requesting _/_ before returning the HTML file and return an error if the
-browser requests anything else. For this we need to modify `handle_connection`,
-as shown in Listing 21-6. This new code checks the content of the request
-received against what we know a request for _/_ looks like and adds `if` and
-`else` blocks to treat requests differently.
+در حال حاضر، وب سرور ما محتوای فایل HTML را بدون توجه به درخواست client بازمی‌گرداند. بیایید عملکردی اضافه کنیم تا بررسی کند که مرورگر _/_ را درخواست کرده باشد، سپس فایل HTML را بازگرداند و اگر مرورگر چیز دیگری درخواست کرد، یک خطا بازگرداند. برای این کار باید تابع `handle_connection` را همان‌طور که در لیست ۲۱-۶ نشان داده شده است تغییر دهیم. این کد جدید محتوای درخواست دریافتی را با آنچه که می‌دانیم یک درخواست برای _/_ باید به نظر برسد مقایسه می‌کند و بلوک‌های `if` و `else` را اضافه می‌کند تا درخواست‌ها به صورت متفاوتی مدیریت شوند.
 
-<Listing number="21-6" file-name="src/main.rs" caption="Handling requests to */* differently from other requests">
+<Listing number="21-6" file-name="src/main.rs" caption="مدیریت درخواست‌های */* به صورت متفاوت با سایر درخواست‌ها">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-06/src/main.rs:here}}
@@ -359,32 +200,17 @@ received against what we know a request for _/_ looks like and adds `if` and
 
 </Listing>
 
-We’re only going to be looking at the first line of the HTTP request, so rather
-than reading the entire request into a vector, we’re calling `next` to get the
-first item from the iterator. The first `unwrap` takes care of the `Option` and
-stops the program if the iterator has no items. The second `unwrap` handles the
-`Result` and has the same effect as the `unwrap` that was in the `map` added in
-Listing 21-2.
+ما فقط به خط اول درخواست HTTP نگاه خواهیم کرد، بنابراین به جای خواندن کل درخواست در یک بردار، از `next` استفاده می‌کنیم تا اولین آیتم از iterator را بگیریم. اولین `unwrap` مقدار `Option` را مدیریت می‌کند و اگر iterator هیچ آیتمی نداشته باشد برنامه را متوقف می‌کند. دومین `unwrap` مقدار `Result` را مدیریت می‌کند و همان اثری را دارد که `unwrap` در `map` اضافه‌شده در لیست ۲۱-۲ داشت.
 
-Next, we check the `request_line` to see if it equals the request line of a GET
-request to the _/_ path. If it does, the `if` block returns the contents of our
-HTML file.
+سپس، مقدار `request_line` را بررسی می‌کنیم تا ببینیم آیا برابر با خط درخواست یک درخواست GET به مسیر _/_ است یا خیر. اگر این‌طور باشد، بلوک `if` محتوای فایل HTML ما را بازمی‌گرداند.
 
-If the `request_line` does _not_ equal the GET request to the _/_ path, it
-means we’ve received some other request. We’ll add code to the `else` block in
-a moment to respond to all other requests.
+اگر مقدار `request_line` برابر با درخواست GET به مسیر _/_ نباشد، به این معنی است که یک درخواست دیگر دریافت کرده‌ایم. در بلوک `else` کدی اضافه خواهیم کرد تا به سایر درخواست‌ها پاسخ دهد.
 
-Run this code now and request _127.0.0.1:7878_; you should get the HTML in
-_hello.html_. If you make any other request, such as
-_127.0.0.1:7878/something-else_, you’ll get a connection error like those you
-saw when running the code in Listing 21-1 and Listing 21-2.
+این کد را اجرا کنید و آدرس _127.0.0.1:7878_ را درخواست کنید؛ باید HTML موجود در فایل _hello.html_ را دریافت کنید. اگر درخواست دیگری مانند _127.0.0.1:7878/something-else_ ارسال کنید، یک خطای اتصال مشابه آنچه در اجرای کدهای لیست ۲۱-۱ و ۲۱-۲ دیدید دریافت خواهید کرد.
 
-Now let’s add the code in Listing 21-7 to the `else` block to return a response
-with the status code 404, which signals that the content for the request was
-not found. We’ll also return some HTML for a page to render in the browser
-indicating the response to the end user.
+حالا کد موجود در لیست ۲۱-۷ را به بلوک `else` اضافه کنید تا پاسخی با کد وضعیت 404 بازگرداند، که نشان می‌دهد محتوای درخواست‌شده پیدا نشد. همچنین مقداری HTML برای یک صفحه خطا بازمی‌گردانیم تا در مرورگر به کاربر نهایی نمایش داده شود.
 
-<Listing number="21-7" file-name="src/main.rs" caption="Responding with status code 404 and an error page if anything other than */* was requested">
+<Listing number="21-7" file-name="src/main.rs" caption="پاسخ‌دهی با کد وضعیت 404 و یک صفحه خطا اگر چیزی به غیر از */* درخواست شود">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-07/src/main.rs:here}}
@@ -392,13 +218,9 @@ indicating the response to the end user.
 
 </Listing>
 
-Here, our response has a status line with status code 404 and the reason phrase
-`NOT FOUND`. The body of the response will be the HTML in the file _404.html_.
-You’ll need to create a _404.html_ file next to _hello.html_ for the error
-page; again feel free to use any HTML you want or use the example HTML in
-Listing 21-8.
+در اینجا، پاسخ ما یک خط وضعیت با کد وضعیت 404 و عبارت دلیل `NOT FOUND` دارد. بدنه پاسخ HTML موجود در فایل _404.html_ خواهد بود. باید فایل _404.html_ را در کنار فایل _hello.html_ برای صفحه خطا ایجاد کنید؛ باز هم، می‌توانید هر HTML که می‌خواهید استفاده کنید یا از HTML نمونه موجود در لیست ۲۱-۸ استفاده کنید.
 
-<Listing number="21-8" file-name="404.html" caption="Sample content for the page to send back with any 404 response">
+<Listing number="21-8" file-name="404.html" caption="محتوای نمونه برای صفحه‌ای که با هر پاسخ 404 بازگردانده می‌شود">
 
 ```html
 {{#include ../listings/ch21-web-server/listing-21-07/404.html}}
@@ -406,22 +228,13 @@ Listing 21-8.
 
 </Listing>
 
-With these changes, run your server again. Requesting _127.0.0.1:7878_ should
-return the contents of _hello.html_, and any other request, like
-_127.0.0.1:7878/foo_, should return the error HTML from _404.html_.
+با این تغییرات، سرور خود را دوباره اجرا کنید. درخواست آدرس _127.0.0.1:7878_ باید محتوای فایل _hello.html_ را بازگرداند، و هر درخواست دیگری مانند _127.0.0.1:7878/foo_ باید HTML خطا از فایل _404.html_ را بازگرداند.
 
-### A Touch of Refactoring
+### کمی بازسازی (Refactoring)
 
-At the moment the `if` and `else` blocks have a lot of repetition: they’re both
-reading files and writing the contents of the files to the stream. The only
-differences are the status line and the filename. Let’s make the code more
-concise by pulling out those differences into separate `if` and `else` lines
-that will assign the values of the status line and the filename to variables;
-we can then use those variables unconditionally in the code to read the file
-and write the response. Listing 21-9 shows the resulting code after replacing
-the large `if` and `else` blocks.
+در حال حاضر، بلوک‌های `if` و `else` مقدار زیادی تکرار دارند: هر دو فایل‌ها را می‌خوانند و محتوای فایل‌ها را به جریان می‌نویسند. تنها تفاوت‌ها خط وضعیت و نام فایل هستند. بیایید کد را مختصرتر کنیم و این تفاوت‌ها را به خطوط جداگانه `if` و `else` انتقال دهیم که مقادیر خط وضعیت و نام فایل را به متغیرها اختصاص دهند؛ سپس می‌توانیم از این متغیرها به طور شرطی برای خواندن فایل و نوشتن پاسخ استفاده کنیم. لیست ۲۱-۹ کد نتیجه‌شده پس از جایگزینی بلوک‌های بزرگ `if` و `else` را نشان می‌دهد.
 
-<Listing number="21-9" file-name="src/main.rs" caption="Refactoring the `if` and `else` blocks to contain only the code that differs between the two cases">
+<Listing number="21-9" file-name="src/main.rs" caption="بازسازی بلوک‌های `if` و `else` برای شامل شدن تنها کدی که بین دو حالت متفاوت است">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-09/src/main.rs:here}}
@@ -429,23 +242,10 @@ the large `if` and `else` blocks.
 
 </Listing>
 
-Now the `if` and `else` blocks only return the appropriate values for the
-status line and filename in a tuple; we then use destructuring to assign these
-two values to `status_line` and `filename` using a pattern in the `let`
-statement, as discussed in Chapter 19.
+اکنون بلوک‌های `if` و `else` تنها مقادیر مناسب برای خط وضعیت و نام فایل را در یک تاپل بازمی‌گردانند؛ سپس با استفاده از یک الگو در دستور `let`، این دو مقدار به `status_line` و `filename` تخصیص داده می‌شوند، همان‌طور که در فصل ۱۹ بحث شد.
 
-The previously duplicated code is now outside the `if` and `else` blocks and
-uses the `status_line` and `filename` variables. This makes it easier to see
-the difference between the two cases, and it means we have only one place to
-update the code if we want to change how the file reading and response writing
-work. The behavior of the code in Listing 21-9 will be the same as that in
-Listing 21-7.
+کدی که قبلاً تکراری بود اکنون خارج از بلوک‌های `if` و `else` قرار دارد و از متغیرهای `status_line` و `filename` استفاده می‌کند. این کار تشخیص تفاوت بین دو حالت را آسان‌تر می‌کند و به این معنی است که اگر بخواهیم نحوه خواندن فایل و نوشتن پاسخ را تغییر دهیم، تنها یک مکان برای به‌روزرسانی کد داریم. رفتار کد در لیست ۲۱-۹ با لیست ۲۱-۷ یکسان خواهد بود.
 
-Awesome! We now have a simple web server in approximately 40 lines of Rust code
-that responds to one request with a page of content and responds to all other
-requests with a 404 response.
+عالی! اکنون یک وب سرور ساده با تقریباً ۴۰ خط کد Rust داریم که به یک درخواست با یک صفحه محتوا پاسخ می‌دهد و به تمام درخواست‌های دیگر یک پاسخ 404 می‌دهد.
 
-Currently, our server runs in a single thread, meaning it can only serve one
-request at a time. Let’s examine how that can be a problem by simulating some
-slow requests. Then we’ll fix it so our server can handle multiple requests at
-once.
+در حال حاضر، سرور ما در یک Thread اجرا می‌شود، به این معنی که تنها می‌تواند یک درخواست را در یک زمان سرویس دهد. بیایید بررسی کنیم که چگونه این موضوع می‌تواند مشکل‌ساز شود، با شبیه‌سازی برخی درخواست‌های کند. سپس سرور را طوری بهبود می‌دهیم که بتواند چندین درخواست را همزمان مدیریت کند.

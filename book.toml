@@ -8,7 +8,7 @@ authors = ["Steve Klabnik", "Carol Nichols", "Chris Krycho", "Contributions from
 [output.html]
 additional-css = ["ferris.css", "theme/2018-edition.css", "theme/semantic-notes.css", "theme/listing.css", "theme/custom.css"]
 additional-js = ["ferris.js", "theme/custom.js"]
-git-repository-url = "https://github.com/rust-lang/book"
+git-repository-url = "https://github.com/persian-rust/book"
 
 [output.html.redirect]
 "ch17-00-oop.html" = "ch18-00-oop.html"
