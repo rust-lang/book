@@ -16,14 +16,14 @@
 | `%`                    | `expr % expr`                                            | باقی‌مانده حسابی                                                      | `Rem`                |
 | `%=`                   | `var %= expr`                                            | باقی‌مانده حسابی و انتساب                                              | `RemAssign`          |
 | `&`                    | `&expr`, `&mut expr`                                     | ارجاع                                                                  |                      |
-| `&`                    | `&type`, `&mut type`, `&'a type`, `&'a mut type`         | نوع اشاره‌گر ارجاعی                                                    |                      |
+| `&`                    | `&type`, `&mut type`, `&'a type`, `&'a mut type`         | نوع اشاره‌گر (Pointer) ارجاعی                                                    |                      |
 | `&`                    | `expr & expr`                                            | AND بیتی                                                               | `BitAnd`             |
 | `&=`                   | `var &= expr`                                            | AND بیتی و انتساب                                                      | `BitAndAssign`       |
 | `&&`                   | `expr && expr`                                           | AND منطقی کوتاه                                                        |                      |
 | `*`                    | `expr * expr`                                            | ضرب حسابی                                                              | `Mul`                |
 | `*=`                   | `var *= expr`                                            | ضرب حسابی و انتساب                                                     | `MulAssign`          |
 | `*`                    | `*expr`                                                  | رفع ارجاع                                                              | `Deref`              |
-| `*`                    | `*const type`, `*mut type`                               | اشاره‌گر خام                                                           |                      |
+| `*`                    | `*const type`, `*mut type`                               | اشاره‌گر (Pointer) خام                                                           |                      |
 | `+`                    | `trait + trait`, `'a + trait`                            | محدودیت نوع ترکیبی                                                     |                      |
 | `+`                    | `expr + expr`                                            | جمع حسابی                                                              | `Add`                |
 | `+=`                   | `var += expr`                                            | جمع حسابی و انتساب                                                     | `AddAssign`          |

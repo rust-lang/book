@@ -7,7 +7,7 @@
 - Unsafe Rust: چگونه می‌توان از برخی از تضمین‌های راست چشم‌پوشی کرد و مسئولیت تضمین دستی این موارد را بر عهده گرفت.
 - Advanced traits: نوع‌های مرتبط (associated types)، پارامترهای نوع پیش‌فرض، نحو کاملاً واجد شرایط، ابر traits (supertraits)، و الگوی newtype در رابطه با traits.
 - Advanced types: بیشتر درباره الگوی newtype، نام مستعار نوع (type aliases)، نوع never، و نوع‌های با اندازه پویا.
-- Advanced functions and closures: اشاره‌گرهای تابع و بازگرداندن closures.
+- Advanced functions and closures: اشاره‌گر (Pointer)های تابع و بازگرداندن closures.
 - Macros: روش‌هایی برای تعریف کدی که در زمان کامپایل کد بیشتری تعریف می‌کند.
 
 این یک مجموعه گسترده از ویژگی‌های راست است که برای همه چیزی در آن وجود دارد! بیایید شروع کنیم!

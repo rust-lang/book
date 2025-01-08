@@ -87,11 +87,11 @@
   - [نصب باینری‌ها از Crates.io با `cargo install`](ch14-04-installing-binaries.md)  
   - [گسترش Cargo با دستورات سفارشی](ch14-05-extending-cargo.md)  
 
-- [اشاره‌گرهای هوشمند](ch15-00-smart-pointers.md)  
+- [اشاره‌گر (Pointer)های هوشمند](ch15-00-smart-pointers.md)  
   - [استفاده از `Box<T>` برای اشاره به داده‌ها در Heap](ch15-01-box.md)  
-  - [رفتار اشاره‌گرهای هوشمند مانند ارجاعات معمولی با صفت `Deref`](ch15-02-deref.md)  
+  - [رفتار اشاره‌گر (Pointer)های هوشمند مانند ارجاعات معمولی با صفت `Deref`](ch15-02-deref.md)  
   - [اجرای کد هنگام پاک‌سازی با صفت `Drop`](ch15-03-drop.md)  
-  - [`Rc<T>`، اشاره‌گر هوشمند با شمارش ارجاعات](ch15-04-rc.md)  
+  - [`Rc<T>`، اشاره‌گر (Pointer) هوشمند با شمارش ارجاعات](ch15-04-rc.md)  
   - [`RefCell<T>` و الگوی تغییرپذیری داخلی](ch15-05-interior-mutability.md)  
   - [چرخه‌های ارجاع می‌توانند باعث نشت حافظه شوند](ch15-06-reference-cycles.md)  
 
@@ -111,7 +111,7 @@
 
 - [ویژگی‌های برنامه‌نویسی شی‌گرا در Rust](ch18-00-oop.md)  
   - [ویژگی‌های زبان‌های شی‌گرا](ch18-01-what-is-oo.md)  
-  - [استفاده از صفت‌های شی‌گرا برای مقادیر از انواع مختلف](ch18-02-trait-objects.md)  
+  - [استفاده از صفت‌های شی‌گرا برای مقادیر از تایپ‌های مختلف](ch18-02-trait-objects.md)  
   - [پیاده‌سازی یک الگوی طراحی شی‌گرا](ch18-03-oo-design-patterns.md)  
 
 ## مباحث پیشرفته
@@ -125,12 +125,12 @@
 - [ویژگی‌های پیشرفته](ch20-00-advanced-features.md)  
   - [Rust ناامن](ch20-01-unsafe-rust.md)  
   - [صفت‌های پیشرفته](ch20-03-advanced-traits.md)  
-  - [انواع پیشرفته](ch20-04-advanced-types.md)  
+  - [تایپ‌های پیشرفته](ch20-04-advanced-types.md)  
   - [توابع و Closureهای پیشرفته](ch20-05-advanced-functions-and-closures.md)  
   - [ماکروها](ch20-06-macros.md)  
 
 - [پروژه نهایی: ساخت یک وب‌سرور چندنخی](ch21-00-final-project-a-web-server.md)  
-  - [ساخت یک وب‌سرور تک‌نخی](ch21-01-single-threaded.md)  
+  - [ساخت یک وب‌سرور single-threaded](ch21-01-single-threaded.md)  
   - [تبدیل وب‌سرور تک‌نخی به وب‌سرور چندنخی](ch21-02-multithreaded.md)  
   - [خاموشی ملایم و پاک‌سازی](ch21-03-graceful-shutdown-and-cleanup.md)  
 
