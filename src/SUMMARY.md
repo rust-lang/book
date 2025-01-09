@@ -37,8 +37,8 @@
 
 ## سواد پایه Rust
 
-- [مدیریت پروژه‌های در حال رشد با پکیج‌ها، crateها، و ماژول‌ها](ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)  
-  - [پکیج‌ها و crateها](ch07-01-packages-and-crates.md)  
+- [مدیریت پروژه‌های در حال رشد با پکیج‌ها، جعبه‌ها (crates)، و ماژول‌ها](ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)  
+  - [پکیج‌ها و جعبه‌ها (crates)](ch07-01-packages-and-crates.md)  
   - [تعریف ماژول‌ها برای کنترل دامنه و حریم خصوصی](ch07-02-defining-modules-to-control-scope-and-privacy.md)  
   - [مسیرها برای ارجاع به یک آیتم در درخت ماژول](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)  
   - [وارد کردن مسیرها با کلمه کلیدی `use`](ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)  
