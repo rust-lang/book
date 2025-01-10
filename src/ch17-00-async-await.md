@@ -1,72 +1,80 @@
 # Async and Await
 
-Many operations we ask the computer to do can take a while to finish. For
-example, if you used a video editor to create a video of a family celebration,
-exporting it could take anywhere from minutes to hours. Similarly, downloading a
-video shared by someone in your family might take a long time. It would be nice
-if we could do something else while we are waiting for those long-running
-processes to complete.
+Many operations we ask the computer to do can take a while to finish. It would
+be nice if we could do something else while we are waiting for those
+long-running processes to complete.
 
-The video export will use as much CPU and GPU power as it can. If you only had
-one CPU core, and your operating system never paused that export until it
-completed, you couldn’t do anything else on your computer while it was running.
-That would be a pretty frustrating experience, though. Instead, your computer’s
-operating system can—and does!—invisibly interrupt the export often enough to
-let you get other work done along the way.
+Let’s consider an example. Say you’re exporting a video you’ve created of a
+family celebration, an operation that could take anywhere from minutes to hours.
+The video export will use as much CPU and GPU power as it can. If you had only
+one CPU core and your operating system didn’t pause that export until it
+completed—that is, if it executed the export _synchronously_—you couldn’t do
+anything else on your computer while that task was running. That would be a
+pretty frustrating experience. Fortunately, your computer’s operating system
+can, and does, invisibly interrupt the export often enough to let you get other
+work done simultaneously.
 
-The file download is different. It does not take up very much CPU time. Instead,
-the CPU needs to wait on data to arrive from the network. While you can start
-reading the data once some of it is present, it might take a while for the rest
-to show up. Even once the data is all present, a video can be quite large, so it
-might take some time to load it all. Maybe it only takes a second or two—but
-that’s a very long time for a modern processor, which can do billions of
-operations every second. It would be nice to be able to put the CPU to use for
-other work while waiting for the network call to finish—so, again, your
-operating system will invisibly interrupt your program so other things can
-happen while the network operation is still ongoing.
+Now say you’re downloading a video shared by someone else, which can also take a
+while but does not take up as much CPU time. In this case, the CPU has to wait
+for data to arrive from the network. While you can start reading the data once
+it starts to arrive, it might take some time for all of it to show up. Even once
+the data is all present, if the video is quite large, it could take at least a
+second or two to load it all. That might not sound like much, but it’s a very
+long time for a modern processor, which can perform billions of operations every
+second. Again, your operating system will invisibly interrupt your program to
+allow the CPU to perform other work while waiting for the network call to
+finish.
 
-> Note: The video export is the kind of operation which is often described as
-> “CPU-bound” or “compute-bound”. It’s limited by the speed of the computer’s
-> ability to process data within the _CPU_ or _GPU_, and how much of that speed
-> it can use. The video download is the kind of operation which is often
-> described as “IO-bound,” because it’s limited by the speed of the computer’s
-> _input and output_. It can only go as fast as the data can be sent across the
-> network.
+The video export is an example of a _CPU-bound_ or _compute-bound_ operation.
+It’s limited by the computer’s potential data processing speed within the _CPU_
+or _GPU_, and how much of that speed it can dedicate to the operation. The video
+download is an example of an _IO-bound_ operation, because it’s limited by the
+speed of the computer’s _input and output_; it can only go as fast as the data
+can be sent across the network.
 
 In both of these examples, the operating system’s invisible interrupts provide a
-form of concurrency. That concurrency only happens at the level of a whole
+form of concurrency. That concurrency happens only at the level of the entire
 program, though: the operating system interrupts one program to let other
 programs get work done. In many cases, because we understand our programs at a
-much more granular level than the operating system does, we can spot lots of
-opportunities for concurrency that the operating system cannot see.
+much more granular level than the operating system does, we can spot
+opportunities for concurrency that the operating system can’t see.
 
 For example, if we’re building a tool to manage file downloads, we should be
-able to write our program in such a way that starting one download does not lock
-up the UI, and users should be able to start multiple downloads at the same
-time. Many operating system APIs for interacting with the network are
-_blocking_, though. That is, these APIs block the program’s progress until the
-data that they are processing is completely ready.
+able to write our program so that starting one download won’t lock up the UI,
+and users should be able to start multiple downloads at the same time. Many
+operating system APIs for interacting with the network are _blocking_, though;
+that is, they block the program’s progress until the data they’re processing is
+completely ready.
 
-> Note: This is how _most_ function calls work, if you think about it! However,
-> we normally reserve the term “blocking” for function calls which interact with
+> Note: This is how _most_ function calls work, if you think about it. However,
+> the term _blocking_ is usually reserved for function calls that interact with
 > files, the network, or other resources on the computer, because those are the
-> places where an individual program would benefit from the operation being
+> cases where an individual program would benefit from the operation being
 > _non_-blocking.
 
 We could avoid blocking our main thread by spawning a dedicated thread to
-download each file. However, we would eventually find that the overhead of those
-threads was a problem. It would also be nicer if the call were not blocking in
-the first place. Last but not least, it would be better if we could write in the
-same direct style we use in blocking code. Something similar to this:
+download each file. However, the overhead of those threads would eventually
+become a problem. It would be preferable if the call didn’t block in the first
+place. It would also be better if we could write in the same direct style we use
+in blocking code, similar to this:
 
 ```rust,ignore,does_not_compile
 let data = fetch_data_from(url).await;
 println!("{data}");
 ```
 
-That is exactly what Rust’s async abstraction gives us. Before we see how this
-works in practice, though, we need to take a short detour into the differences
-between parallelism and concurrency.
+That is exactly what Rust’s _async_ (short for _asynchronous_) abstraction gives
+us. In this chapter, you’ll learn all about async as we cover the following
+topics:
+
+- How to use Rust’s `async` and `await` syntax
+- How to use the async model to solve some of the same challenges we looked at
+  in Chapter 16
+- How multithreading and async provide complementary solutions, that you can
+  combine in many cases
+
+Before we see how async works in practice, though, we need to take a short
+detour to discuss the differences between parallelism and concurrency.
 
 ### Parallelism and Concurrency
 
@@ -143,11 +151,4 @@ Depending on the hardware, the operating system, and the async runtime we are
 using—more on async runtimes shortly!—that concurrency may also use parallelism
 under the hood.
 
-Now, let’s dive into how async programming in Rust actually works! In the rest
-of this chapter, we will:
-
-- see how to use Rust’s `async` and `await` syntax
-- explore how to use the async model to solve some of the same challenges we
-  looked at in Chapter 16
-- look at how multithreading and async provide complementary solutions, which
-  you can even use together in many cases
+Now, let’s dive into how async programming in Rust actually works!
