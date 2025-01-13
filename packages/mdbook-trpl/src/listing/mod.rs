@@ -252,7 +252,7 @@ impl Listing {
     fn opening_text(&self) -> String {
         self.file_name
             .as_ref()
-            .map(|file_name| format!("Filename: {file_name}\n"))
+            .map(|file_name| format!("{file_name}\n"))
             .unwrap_or_default()
     }
 
