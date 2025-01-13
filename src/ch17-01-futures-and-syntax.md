@@ -198,12 +198,16 @@ Let’s walk through each part of the transformed version:
   reference that could be involved, but we _do_ have to be explicit that the
   resulting `Future` is bound by that lifetime.
 
-Now we can call `page_title` in `main`. To start, we’ll just get the title
-for a single page. In Listing 17-3, we follow the same pattern we used for
-getting command line arguments back in Chapter 12. Then we pass the first URL
-`page_title`, and await the result. Because the value produced by the future is
-an `Option<String>`, we use a `match` expression to print different messages to
-account for whether the page had a `<title>`.
+Now we can call `page_title` in `main`.
+
+## Determining a Single Page’s Title
+
+To start, we’ll just get the title for a single page. In Listing 17-3, we follow
+the same pattern we used in Chapter 12 to get command line arguments in the
+[Accepting Command Line Arguments][cli-args]<!-- ignore --> section. Then we
+pass the first URL `page_title` and await the result. Because the value
+produced by the future is an `Option<String>`, we use a `match` expression to
+print different messages to account for whether the page had a `<title>`.
 
 <Listing number="17-3" file-name="src/main.rs" caption="Calling the `page_title` function from `main` with a user-supplied argument">
 
@@ -213,7 +217,7 @@ account for whether the page had a `<title>`.
 
 </Listing>
 
-Unfortunately, this doesn’t compile. The only place we can use the `await`
+Unfortunately, this code doesn’t compile. The only place we can use the `await`
 keyword is in async functions or blocks, and Rust won’t let us mark the
 special `main` function as `async`.
 
@@ -232,33 +236,32 @@ error[E0752]: `main` function is not allowed to be `async`
 ```
 
 The reason `main` can’t be marked `async` is that async code needs a _runtime_:
-a Rust crate which manages the details of executing asynchronous code. A
+a Rust crate that manages the details of executing asynchronous code. A
 program’s `main` function can _initialize_ a runtime, but it’s not a runtime
-_itself_. (We’ll see more about why this is a bit later.) Every Rust program
-that executes async code has at least one place where it sets up a runtime and
-executes the futures.
+_itself_. (We’ll see more about why this is the case in a bit.) Every Rust
+program that executes async code has at least one place where it sets up a
+runtime and executes the futures.
 
-Most languages which support async bundle a runtime with the language. Rust does
-not. Instead, there are many different async runtimes available, each of which
-makes different tradeoffs suitable to the use case they target. For example, a
-high-throughput web server with many CPU cores and a large amount of RAM has
-very different needs than a microcontroller with a single core, a small amount
-of RAM, and no ability to do heap allocations. The crates which provide those
-runtimes also often supply async versions of common functionality such as file
-or network I/O.
+Most languages that support async bundle a runtime, but Rust does not. Instead,
+there are many different async runtimes available, each of which makes different
+tradeoffs suitable to the use case it targets. For example, a high-throughput
+web server with many CPU cores and a large amount of RAM has very different
+needs than a microcontroller with a single core, a small amount of RAM, and no
+heap allocation ability. The crates that provide those runtimes also often
+supply async versions of common functionality such as file or network I/O.
 
-Here, and throughout the rest of this chapter, we’ll use the `run` function
-from the `trpl` crate, which takes a future as an argument and runs it to
-completion. Behind the scenes, calling `run` sets up a runtime to use to run the
-future passed in. Once the future completes, `run` returns whatever value the
-future produced.
+Here, and throughout the rest of this chapter, we’ll use the `run` function from
+the `trpl` crate, which takes a future as an argument and runs it to completion.
+Behind the scenes, calling `run` sets up a runtime that’s used to run the future
+passed in. Once the future completes, `run` returns whatever value the future
+produced.
 
-We could pass the future returned by `page_title` directly to `run`. Once it
-completed, we would be able to match on the resulting `Option<String>`, the way
+We could pass the future returned by `page_title` directly to `run`, and once it
+completed, we could match on the resulting `Option<String>`, as
 we tried to do in Listing 17-3. However, for most of the examples in the chapter
-(and most async code in the real world!), we’ll be doing more than just one
+(and most async code in the real world), we’ll be doing more than just one
 async function call, so instead we’ll pass an `async` block and explicitly
-await the result of calling `page_title`, as in Listing 17-4.
+await the result of the `page_title` call, as in Listing 17-4.
 
 <Listing number="17-4" caption="Awaiting an async block with `trpl::run`" file-name="src/main.rs">
 
@@ -270,7 +273,7 @@ await the result of calling `page_title`, as in Listing 17-4.
 
 </Listing>
 
-When we run this, we get the behavior we might have expected initially:
+When we run this code, we get the behavior we expected initially:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-04
@@ -287,16 +290,16 @@ The title for https://www.rust-lang.org was
             Rust Programming Language
 ```
 
-Phew: we finally have some working async code! This now compiles, and we can run
-it. Before we add code to race two sites against each other, let’s briefly turn
-our attention back to how futures work.
+Phew—we finally have some working async code! But before we add the code to race
+the two sites against each other, let’s briefly turn our attention back to how
+futures work.
 
 Each _await point_—that is, every place where the code uses the `await`
-keyword—represents a place where control gets handed back to the runtime. To
+keyword—represents a place where control is handed back to the runtime. To
 make that work, Rust needs to keep track of the state involved in the async
-block, so that the runtime can kick off some other work and then come back when
-it’s ready to try advancing this one again. This is an invisible state machine,
-as if you wrote an enum in this way to save the current state at each `await`
+block so that the runtime can kick off some other work and then come back when
+it’s ready to try advancing the first one again. This is an invisible state machine,
+as if you’d written an enum like this to save the current state at each await
 point:
 
 ```rust
@@ -304,33 +307,31 @@ point:
 ```
 
 Writing the code to transition between each state by hand would be tedious and
-error-prone, especially when adding more functionality and more states to the
-code later. Instead, the Rust compiler creates and manages the state machine
-data structures for async code automatically. If you’re wondering: yep, the
-normal borrowing and ownership rules around data structures all apply. Happily,
-the compiler also handles checking those for us, and has good error messages.
-We’ll work through a few of those later in the chapter!
+error-prone, however, especially when you need to add more functionality and
+more states to the code later. Fortunately, the Rust compiler creates and
+manages the state machine data structures for async code automatically. The
+normal borrowing and ownership rules around data structures all still apply, and
+happily, the compiler also handles checking those for us, and provides useful
+error messages. We’ll work through a few of those later in the chapter.
 
-Ultimately, something has to execute that state machine. That something is a
-runtime. (This is why you may sometimes come across references to _executors_
+Ultimately, something has to execute this state machine, and that something is a
+runtime. (This is why you may come across references to _executors_
 when looking into runtimes: an executor is the part of a runtime responsible for
 executing the async code.)
 
-Now we can understand why the compiler stopped us from making `main` itself an
-async function back in Listing 17-3. If `main` were an async function, something
-else would need to manage the state machine for whatever future `main` returned,
-but `main` is the starting point for the program! Instead, we call the
-`trpl::run` function in `main`, which sets up a runtime and runs the future
-returned by the `async` block until it returns `Ready`.
+Now you can see why the compiler stopped us from making `main` itself an async
+function back in Listing 17-3. If `main` were an async function, something else
+would need to manage the state machine for whatever future `main` returned, but
+`main` is the starting point for the program! Instead, we called the `trpl::run`
+function in `main` to set up a runtime and run the future returned by the
+`async` block until it returns `Ready`.
 
-> Note: some runtimes provide macros to make it so you _can_ write an async main
-> function. Those macros rewrite `async fn main() { ... }` to be a normal `fn
-> main` which does the same thing we did by hand in Listing 17-5: call a
-> function which runs a future to completion the way `trpl::run` does.
+> Note: Some runtimes provide macros so you _can_ write an async main function.
+> Those macros rewrite `async fn main() { ... }` to be a normal `fn main`, which
+> does the same thing we did by hand in Listing 17-5: call a function that runs
+> a future to completion the way `trpl::run` does.
 
-Let’s put these pieces together and see how we can write concurrent code, by
-calling `page_title` with two different URLs passed in from the command line
-and racing them.
+Now let’s put these pieces together and see how we can write concurrent code.
 
 <Listing number="17-5" caption="" file-name="src/main.rs">
 
@@ -388,6 +389,7 @@ dig into even more of the things we can do with async.
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
 [iterators-lazy]: ch13-02-iterators.html
 [thread-spawn]: ch16-01-threads.html#creating-a-new-thread-with-spawn
+[cli-args]: ch12-01-accepting-command-line-arguments.html
 
 <!-- TODO: map source link version to version of Rust? -->
 
