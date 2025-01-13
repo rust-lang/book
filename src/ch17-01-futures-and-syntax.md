@@ -333,6 +333,11 @@ function in `main` to set up a runtime and run the future returned by the
 
 Now let’s put these pieces together and see how we can write concurrent code.
 
+### Racing Our Two URLs Against Each Other
+
+In Listing 17-5, we call `page_title` with two different URLs passed in from the
+command line and race them.
+
 <Listing number="17-5" caption="" file-name="src/main.rs">
 
 <!-- should_panic,noplayground because mdbook does not pass args -->
@@ -343,24 +348,23 @@ Now let’s put these pieces together and see how we can write concurrent code.
 
 </Listing>
 
-In Listing 17-5, we begin by calling `page_title` for each of the user-supplied
-URLs. We save the futures produced by calling `page_title` as `title_fut_1` and
-`title_fut_2`. Remember, these don’t do anything yet, because futures are lazy,
-and we haven’t yet awaited them. Then we pass the futures to `trpl::race`,
-which returns a value to indicate which of the futures passed to it finishes
-first.
+We begin by calling `page_title` for each of the user-supplied URLs. We save the
+resulting futures as `title_fut_1` and `title_fut_2`. Remember, these don’t do
+anything yet, because futures are lazy and we haven’t yet awaited them. Then we
+pass the futures to `trpl::race`, which returns a value to indicate which of the
+futures passed to it finishes first.
 
 > Note: Under the hood, `race` is built on a more general function, `select`,
 > which you will encounter more often in real-world Rust code. A `select`
-> function can do a lot of things that `trpl::race` function can’t, but it also
-> has some additional complexity that we can skip over for now.
+> function can do a lot of things thatthe  `trpl::race` function can’t, but it
+> also has some additional complexity that we can skip over for now.
 
 Either future can legitimately “win,” so it doesn’t make sense to return a
 `Result`. Instead, `race` returns a type we haven’t seen before,
-`trpl::Either`. The `Either` type is somewhat similar to a `Result`, in that it
+`trpl::Either`. The `Either` type is somewhat similar to a `Result` in that it
 has two cases. Unlike `Result`, though, there is no notion of success or
 failure baked into `Either`. Instead, it uses `Left` and `Right` to indicate
-“one or the other”.
+“one or the other”:
 
 ```rust
 enum Either<A, B> {
@@ -369,22 +373,22 @@ enum Either<A, B> {
 }
 ```
 
-The `race` function returns `Left` if the first argument finishes first, with
-that future’s output, and `Right` with the second future argument’s output if
-_that_ one finishes first. This matches the order the arguments appear when
-calling the function: the first argument is to the left of the second argument.
+The `race` function returns `Left` with that future’s output if the first
+argument wins, and `Right` with the second future argument’s output if _that_
+one wins. This matches the order the arguments appear in when calling the
+function: the first argument is to the left of the second argument.
 
 We also update `page_title` to return the same URL passed in. That way, if
-the page which returns first does not have a `<title>` we can resolve, we can
+the page that returns first does not have a `<title>` we can resolve, we can
 still print a meaningful message. With that information available, we wrap up by
 updating our `println!` output to indicate both which URL finished first and
-what the `<title>` was for the web page at that URL, if any.
+what, if any, the `<title>` is for the web page at that URL.
 
 You have built a small working web scraper now! Pick a couple URLs and run the
-command line tool. You may discover that some sites are reliably faster than
-others, while in other cases which site “wins” varies from run to run. More
-importantly, you’ve learned the basics of working with futures, so we can now
-dig into even more of the things we can do with async.
+command line tool. You may discover that some sites are consistently faster than
+others, while in other cases the faster site varies from run to run. More
+importantly, you’ve learned the basics of working with futures, so now we can
+dig deeper into what we can do with async.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
 [iterators-lazy]: ch13-02-iterators.html
