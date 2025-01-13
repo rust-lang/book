@@ -78,7 +78,7 @@ page finishes that whole process first.
 ### Defining the page_title Function
 
 Let’s start by writing a function that takes one page URL as a parameter, makes
-a request to it, and returns the text of the title element:
+a request to it, and returns the text of the title element (see Listing 17-1).
 
 <Listing number="17-1" file-name="src/main.rs" caption="Defining an async function to get the title element from an HTML page">
 
@@ -88,41 +88,41 @@ a request to it, and returns the text of the title element:
 
 </Listing>
 
-In Listing 17-1, we define a function named `page_title`, and we mark it with
-the `async` keyword. Then we use the `trpl::get` function to fetch whatever URL
-is passed in, and we await the response by using the `await` keyword. Then we
-get the text of the response by calling its `text` method, and once again await
-it with the `await` keyword. Both of these steps are asynchronous. For `get`,
-we need to wait for the server to send back the first part of its response,
-which will include HTTP headers, cookies, and so on. That part of the response
-can be delivered separately from the body of the request. Especially if the
-body is very large, it can take some time for it all to arrive. Thus, we have
-to wait for the _entirety_ of the response to arrive, so the `text` method is
-also async.
+First, we define a function named `page_title` and mark it with the `async`
+keyword. Then we use the `trpl::get` function to fetch whatever URL is passed in
+and add the `await` keyword to await the response. To get the text of the
+response, we call its `text` method, and once again await it with the `await`
+keyword. Both of these steps are asynchronous. For the `get` function, we have
+to wait for the server to send back the first part of its response, which will
+include HTTP headers, cookies, and so on, and can be delivered separately from
+the response body. Especially if the body is very large, it can take some time
+for it all to arrive. Because we have to wait for the _entirety_ of the response
+to arrive, the `text` method is also async.
 
 We have to explicitly await both of these futures, because futures in Rust are
-_lazy_: they don’t do anything until you ask them to with `await`. (In fact,
-Rust will show a compiler warning if you don’t use a future.) This should
-remind you of our discussion of iterators [back in Chapter 13][iterators-lazy]<!--
-ignore -->.
-Iterators do nothing unless you call their `next` method—whether directly, or
-using `for` loops or methods such as `map` which use `next` under the hood. With
-futures, the same basic idea applies: they do nothing unless you explicitly ask
-them to. This laziness allows Rust to avoid running async code until it’s
-actually needed.
+_lazy_: they don’t do anything until you ask them to with the `await` keyword.
+(In fact, Rust will show a compiler warning if you don’t use a future.) This
+might remind you of Chapter 13’s discussion of iterators in the section
+[Processing a Series of Items With Iterators][iterators-lazy]<!-- ignore -->.
+Iterators do nothing unless you call their `next` method—whether directly or by
+using `for` loops or methods such as `map` that use `next` under the hood.
+Likewise, futures do nothing unless you explicitly ask them to. This laziness
+allows Rust to avoid running async code until it’s actually needed.
 
-> Note: This is different from the behavior we saw when using `thread::spawn` in
-> the previous chapter, where the closure we passed to another thread started
-> running immediately. It’s also different from how many other languages
-> approach async! But it’s important for Rust. We’ll see why that is later.
+> Note: This is different from the behavior we saw in the previous chapter when
+> using `thread::spawn` in the [Creating a New Thread with
+> spawn][thread-spawn]<!--ignore--> section, where the closure we passed to
+> another thread started running immediately. It’s also different from how many
+> other languages approach async. But it’s important for Rust, and we’ll see why
+> later.
 
-Once we have `response_text`, we can then parse it into an instance of the
-`Html` type using `Html::parse`. Instead of a raw string, we now have a data
-type we can use to work with the HTML as a richer data structure. In particular,
-we can use the `select_first` method to find the first instance of a given CSS
-selector. By passing the string `"title"`, we’ll get the first `<title>`
-element in the document, if there is one. Because there may not be any matching
-element, `select_first` returns an `Option<ElementRef>`. Finally, we use the
+Once we have `response_text`, we can parse it into an instance of the `Html`
+type using `Html::parse`. Instead of a raw string, we now have a data type we
+can use to work with the HTML as a richer data structure. In particular, we can
+use the `select_first` method to find the first instance of a given CSS
+selector. By passing the string `"title"`, we’ll get the first `<title>` element
+in the document, if there is one. Because there may not be any matching element,
+`select_first` returns an `Option<ElementRef>`. Finally, we use the
 `Option::map` method, which lets us work with the item in the `Option` if it’s
 present, and do nothing if it isn’t. (We could also use a `match` expression
 here, but `map` is more idiomatic.) In the body of the function we supply to
@@ -130,11 +130,11 @@ here, but `map` is more idiomatic.) In the body of the function we supply to
 a `String`. When all is said and done, we have an `Option<String>`.
 
 Notice that Rust’s `await` keyword goes after the expression you’re awaiting,
-not before it. That is, it’s a _postfix keyword_. This may be different from
-what you might be used to if you have used async in other languages. Rust chose
-this because it makes chains of methods much nicer to work with. As a result, we
-can change the body of `page_url_for` to chain the `trpl::get` and `text`
-function calls together with `await` between them, as shown in Listing 17-2:
+not before it. That is, it’s a _postfix keyword_. This may differ from what
+you’re used to if you’ve used async in other languages, but in Rust it makes
+chains of methods much nicer to work with. As a result, we can change the body
+of `page_url_for` to chain the `trpl::get` and `text` function calls together
+with `await` between them, as shown in Listing 17-2:
 
 <Listing number="17-2" file-name="src/main.rs" caption="Chaining with the `await` keyword">
 
@@ -149,15 +149,15 @@ some code in `main` to call it, let’s talk a little more about what we’ve
 written and what it means.
 
 When Rust sees a block marked with the `async` keyword, it compiles it into a
-unique, anonymous data type which implements the `Future` trait. When Rust sees
-a function marked with `async`, it compiles it into a non-async function whose
+unique, anonymous data type that implements the `Future` trait. When Rust sees a
+function marked with `async`, it compiles it into a non-async function whose
 body is an async block. An async function’s return type is the type of the
 anonymous data type the compiler creates for that async block.
 
-Thus, writing `async fn` is equivalent to writing a function which returns a
-_future_ of the return type. When the compiler sees a function definition such
-as the `async fn page_title` in Listing 17-1, it’s equivalent to a non-async
-function defined like this:
+Thus, writing `async fn` is equivalent to writing a function that returns a
+_future_ of the return type. To the compiler, a function definition such as the
+`async fn page_title` in Listing 17-1 is equivalent to a non-async function
+defined like this:
 
 ```rust
 # extern crate trpl; // required for mdbook test
@@ -176,26 +176,26 @@ fn page_title(url: &str) -> impl Future<Output = Option<String>> + '_ {
 
 Let’s walk through each part of the transformed version:
 
-- It uses the `impl Trait` syntax we discussed back in the [“Traits as
-  Parameters”][impl-trait]<!-- ignore --> section in Chapter 10.
-- The returned trait is a `Future`, with an associated type of `Output`. Notice
-  that the `Output` type is `Option<String>`, which is the same as the the
-  original return type from the `async fn` version of `page_title`.
+- It uses the `impl Trait` syntax we discussed back in Chapter 10 in the
+  [“Traits as Parameters”][impl-trait]<!-- ignore --> section.
+- The returned trait is a `Future` with an associated type of `Output`. Notice
+  that the `Output` type is `Option<String>`, which is the same as the original
+  return type from the `async fn` version of `page_title`.
 - All of the code called in the body of the original function is wrapped in an
   `async move` block. Remember that blocks are expressions. This whole block is
   the expression returned from the function.
-- This async block produces a value with the type `Option<String>`, as described
-  above. That value matches the `Output` type in the return type. This is just
-  like other blocks you have seen.
+- This async block produces a value with the type `Option<String>`, as just
+  described. That value matches the `Output` type in the return type. This
+  is just like other blocks you have seen.
 - The new function body is an `async move` block because of how it uses the
-  `url` parameter. (We’ll talk about `async` vs. `async move` much more later
+  `url` parameter. (We’ll talk much more about `async` versus `async move` later
   in the chapter.)
 - The new version of the function has a kind of lifetime we haven’t seen before
-  in the output type: `'_`. Because the function returns a `Future` which refers
+  in the output type: `'_`. Because the function returns a `Future` that refers
   to a reference—in this case, the reference from the `url` parameter—we need to
-  tell Rust that we mean for that reference to be included. We don’t have to
-  name the lifetime here, because Rust is smart enough to know there is only one
-  reference which could be involved, but we _do_ have to be explicit that the
+  tell Rust that we want that reference to be included. We don’t have to name
+  the lifetime here, because Rust is smart enough to know there’s only one
+  reference that could be involved, but we _do_ have to be explicit that the
   resulting `Future` is bound by that lifetime.
 
 Now we can call `page_title` in `main`. To start, we’ll just get the title
@@ -387,6 +387,7 @@ dig into even more of the things we can do with async.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters
 [iterators-lazy]: ch13-02-iterators.html
+[thread-spawn]: ch16-01-threads.html#creating-a-new-thread-with-spawn
 
 <!-- TODO: map source link version to version of Rust? -->
 
