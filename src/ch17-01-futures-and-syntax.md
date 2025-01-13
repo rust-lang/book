@@ -39,23 +39,22 @@ them concurrently, and return the result of whichever one finishes first. This
 example will have a fair bit of new syntax, but don’t worry—we’ll explain
 everything you need to know as we go.
 
-### Our First Async Program
+## Our First Async Program
 
-To keep this chapter focused on learning async, rather than juggling parts of
-the ecosystem, we have created the `trpl` crate (`trpl` is short for “The Rust
+To keep the focus of this chapter on learning async rather than juggling parts
+of the ecosystem, we’ve created the `trpl` crate (`trpl` is short for “The Rust
 Programming Language”). It re-exports all the types, traits, and functions
 you’ll need, primarily from the [`futures`][futures-crate]<!-- ignore --> and
 [`tokio`][tokio]<!-- ignore --> crates.
 
-- The `futures` crate is an official home for Rust experimentation for async
-  code, and is actually where the `Future` type was originally designed.
+The `futures` crate is an official home for Rust experimentation for async code,
+and it’s actually where the `Future` type was originally designed. Tokio is the
+most widely used async runtime in Rust today, especially for web applications.
+There are other great runtimes out there, and they may be more suitable for your
+purposes. We use the `tokio` crate under the hood for `trpl` because it’s well
+tested and widely used.
 
-- Tokio is the most widely used async runtime in Rust today, especially (but
-  not only!) for web applications. There are other great runtimes out there,
-  and they may be more suitable for your purposes. We use Tokio under the hood
-  for `trpl` because it’s well-tested and widely used.
-
-In some cases, `trpl` also renames or wraps the original APIs to let us stay
+In some cases, `trpl` also renames or wraps the original APIs to keep you
 focused on the details relevant to this chapter. If you want to understand what
 the crate does, we encourage you to check out [its source
 code][crate-source]<!-- ignore -->. You’ll be able to see what crate each
@@ -72,9 +71,11 @@ $ cargo add trpl
 ```
 
 Now we can use the various pieces provided by `trpl` to write our first async
-program. We’ll build a little command line tool which fetches two web pages,
+program. We’ll build a little command line tool that fetches two web pages,
 pulls the `<title>` element from each, and prints out the title of whichever
-finishes that whole process first.
+page finishes that whole process first.
+
+### Defining the page_title Function
 
 Let’s start by writing a function that takes one page URL as a parameter, makes
 a request to it, and returns the text of the title element:
