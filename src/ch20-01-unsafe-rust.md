@@ -424,18 +424,26 @@ static variable named `COUNTER`.
 </Listing>
 
 As with regular variables, we specify mutability using the `mut` keyword. Any
-code that reads or writes from `COUNTER` must be within an `unsafe` block. This
-code compiles and prints `COUNTER: 3` as we would expect because it’s single
-threaded. Having multiple threads access `COUNTER` would likely result in data
-races, so it is undefined behavior. Therefore, we need to mark the entire
-function as `unsafe`, and document the safety limitation, so anyone calling the
-function knows what they are and are not allowed to do safely.
+code that reads or writes from `COUNTER` must be within an `unsafe` block. The
+code in Listing 20-11 compiles and prints `COUNTER: 3` as we would expect
+because it’s single threaded. Having multiple threads access `COUNTER` would
+likely result in data races, so it is undefined behavior. Therefore, we need to
+mark the entire function as `unsafe`, and document the safety limitation, so
+anyone calling the function knows what they are and are not allowed to do
+safely.
 
 Whenever we write an unsafe function, it is idiomatic to write a comment
 starting with `SAFETY` and explaining what the caller needs to do to call the
 function safely. Likewise, whenever we perform an unsafe operation, it is
 idiomatic to write a comment starting with `SAFETY` to explain how the safety
 rules are upheld.
+
+Additionally, the compiler will not allow you to create references to a mutable
+static variable. You can only access it via a raw pointer, created with one of
+the raw borrow operators. That includes in cases where the reference is created
+invisibly, as when it is used in the `println!` in this code listing. The
+requirement that references to static mutable variables can only be created via
+raw pointers helps make the safety requirements for using them more obvious.
 
 With mutable data that is globally accessible, it’s difficult to ensure there
 are no data races, which is why Rust considers mutable static variables to be
