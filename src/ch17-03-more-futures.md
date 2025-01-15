@@ -322,7 +322,7 @@ even if they have different types. This is the same scenario we’d face when
 working with any other types in Rust. Futures are not special, even though we
 have some nice syntax for working with them, and that’s a good thing.
 
-### Racing futures
+### Racing Futures
 
 When we “join” futures with the `join` family of functions and macros, we
 require _all_ of them to finish before we move on. Sometimes, though, we only
@@ -330,13 +330,7 @@ need _some_ future from a set to finish before we move on—kind of similar to
 racing one future against another.
 
 In Listing 17-21, we once again use `trpl::race` to run two futures, `slow` and
-`fast`, against each other. Each one prints a message when it starts running,
-pauses for some amount of time by calling and awaiting `sleep`, and then prints
-another message when it finishes. Then we pass both to `trpl::race` and wait for
-one of them to finish. (The outcome here won’t be too surprising: `fast` wins!)
-Unlike when we used `race` back in [“Our First Async Program”][async-program]<!--
-ignore -->, we just ignore the `Either` instance it returns here, because all of
-the interesting behavior happens in the body of the async blocks.
+`fast`, against each other.
 
 <Listing number="17-21" caption="Using `race` to get the result of whichever future finishes first" file-name="src/main.rs">
 
@@ -346,28 +340,36 @@ the interesting behavior happens in the body of the async blocks.
 
 </Listing>
 
+Each future prints a message when it starts running, pauses for some amount of
+time by calling and awaiting `sleep`, and then prints another message when it
+finishes. Then we pass both `slow` and `fast` to `trpl::race` and wait for one
+of them to finish. (The outcome here isn’t too surprising: `fast` wins.) Unlike
+when we used `race` back in [“Our First Async Program”][async-program]<!--
+ignore -->, we just ignore the `Either` instance it returns here, because all of
+the interesting behavior happens in the body of the async blocks.
+
 Notice that if you flip the order of the arguments to `race`, the order of the
 “started” messages changes, even though the `fast` future always completes
 first. That’s because the implementation of this particular `race` function is
-not fair. It always runs the futures passed as arguments in the order they’re
-passed. Other implementations _are_ fair, and will randomly choose which future
-to poll first. Regardless of whether the implementation of race we’re using is
-fair, though, _one_ of the futures will run up to the first `await` in its body
-before another task can start.
+not fair. It always runs the futures passed in as arguments in the order in
+which they’re passed. Other implementations _are_ fair and will randomly choose
+which future to poll first. Regardless of whether the implementation of race
+we’re using is fair, though, _one_ of the futures will run up to the first
+`await` in its body before another task can start.
 
-Recall from [Our First Async Program][async-program]<!-- ignore --> that at each await point,
-Rust gives a runtime a chance to pause the task and switch to another one if the
-future being awaited isn’t ready. The inverse is also true: Rust _only_ pauses
-async blocks and hands control back to a runtime at an await point. Everything
-between await points is synchronous.
+Recall from [Our First Async Program][async-program]<!-- ignore --> that at each
+await point, Rust gives a runtime a chance to pause the task and switch to
+another one if the future being awaited isn’t ready. The inverse is also true:
+Rust _only_ pauses async blocks and hands control back to a runtime at an await
+point. Everything between await points is synchronous.
 
 That means if you do a bunch of work in an async block without an await point,
 that future will block any other futures from making progress. You may sometimes
 hear this referred to as one future _starving_ other futures. In some cases,
 that may not be a big deal. However, if you are doing some kind of expensive
-setup or long-running work, or if you have a future which will keep doing some
-particular task indefinitely, you’ll need to think about when and where to
-hand control back to the runtime.
+setup or long-running work, or if you have a future that will keep doing some
+particular task indefinitely, you’ll need to think about when and where to hand
+control back to the runtime.
 
 By the same token, if you have long-running blocking operations, async can be a
 useful tool for providing ways for different parts of the program to relate to
