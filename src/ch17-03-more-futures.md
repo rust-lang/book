@@ -377,13 +377,13 @@ each other.
 
 But _how_ would you hand control back to the runtime in those cases?
 
-### Yielding
+<!-- Old headings. Do not remove or links may break. -->
+<a id="yielding"></a>
+
+### Yielding Control to the Runtime
 
 Let’s simulate a long-running operation. Listing 17-22 introduces a `slow`
-function. It uses `std::thread::sleep` instead of `trpl::sleep` so that calling
-`slow` will block the current thread for some number of milliseconds. We can use
-`slow` to stand in for real-world operations which are both long-running and
-blocking.
+function.
 
 <Listing number="17-22" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
@@ -393,9 +393,13 @@ blocking.
 
 </Listing>
 
+This code uses `std::thread::sleep` instead of `trpl::sleep` so that calling
+`slow` will block the current thread for some number of milliseconds. We can use
+`slow` to stand in for real-world operations that are both long-running and
+blocking.
+
 In Listing 17-23, we use `slow` to emulate doing this kind of CPU-bound work in
-a pair of futures. To begin, each future only hands control back to the runtime
-_after_ carrying out a bunch of slow operations.
+a pair of futures.
 
 <Listing number="17-23" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
@@ -405,7 +409,8 @@ _after_ carrying out a bunch of slow operations.
 
 </Listing>
 
-If you run this, you will see this output:
+To begin, each future only hands control back to the runtime _after_ carrying
+out a bunch of slow operations. If you run this code, you will see this output:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-23/
@@ -429,15 +434,16 @@ copy just the output
 As with our earlier example, `race` still finishes as soon as `a` is done.
 There’s no interleaving between the two futures, though. The `a` future does all
 of its work until the `trpl::sleep` call is awaited, then the `b` future does
-all of its work until its own `trpl::sleep` call is awaited, and then the `a`
+all of its work until its own `trpl::sleep` call is awaited, and finally the `a`
 future completes. To allow both futures to make progress between their slow
 tasks, we need await points so we can hand control back to the runtime. That
 means we need something we can await!
 
 We can already see this kind of handoff happening in Listing 17-23: if we
 removed the `trpl::sleep` at the end of the `a` future, it would complete
-without the `b` future running _at all_. Maybe we could use the `sleep` function
-as a starting point?
+without the `b` future running _at all_. Let’s try using the `sleep` function as
+a starting point for letting operations switch off making progress, as shown in
+Listing 17-24.
 
 <Listing number="17-24" caption="Using `sleep` to let operations switch off making progress" file-name="src/main.rs">
 
@@ -471,8 +477,8 @@ copy just the output
 The `a` future still runs for a bit before handing off control to `b`, because
 it calls `slow` before ever calling `trpl::sleep`, but after that the futures
 swap back and forth each time one of them hits an await point. In this case, we
-have done that after every call to `slow`, but we could break up the work
-however makes the most sense to us.
+have done that after every call to `slow`, but we could break up the work in
+whatever way makes the most sense to us.
 
 We don’t really want to _sleep_ here, though: we want to make progress as fast
 as we can. We just need to hand back control to the runtime. We can do that
@@ -487,20 +493,16 @@ directly, using the `yield_now` function. In Listing 17-25, we replace all those
 
 </Listing>
 
-This is both clearer about the actual intent and can be significantly faster
-than using `sleep`, because timers such as the one used by `sleep` often have
-limits to how granular they can be. The version of `sleep` we are using, for
-example, will always sleep for at least a millisecond, even if we pass it a
+This code is both clearer about the actual intent and can be significantly
+faster than using `sleep`, because timers such as the one used by `sleep` often
+have limits on how granular they can be. The version of `sleep` we are using,
+for example, will always sleep for at least a millisecond, even if we pass it a
 `Duration` of one nanosecond. Again, modern computers are _fast_: they can do a
 lot in one millisecond!
 
 You can see this for yourself by setting up a little benchmark, such as the one
 in Listing 17-26. (This isn’t an especially rigorous way to do performance
-testing, but it suffices to show the difference here.) Here, we skip all the
-status printing, pass a one-nanosecond `Duration` to `trpl::sleep`, and let
-each future run by itself, with no switching between the futures. Then we run
-for 1,000 iterations and see how long the future using `trpl::sleep` takes
-compared to the future using `trpl::yield_now`.
+testing, but it suffices to show the difference here.)
 
 <Listing number="17-26" caption="Comparing the performance of `sleep` and `yield_now`" file-name="src/main.rs">
 
@@ -509,6 +511,11 @@ compared to the future using `trpl::yield_now`.
 ```
 
 </Listing>
+
+Here, we skip all the status printing, pass a one-nanosecond `Duration` to
+`trpl::sleep`, and let each future run by itself, with no switching between the
+futures. Then we run for 1,000 iterations and see how long the future using
+`trpl::sleep` takes compared to the future using `trpl::yield_now`.
 
 The version with `yield_now` is _way_ faster!
 
@@ -522,13 +529,12 @@ operating systems, this is the _only_ kind of multitasking!
 
 In real-world code, you won’t usually be alternating function calls with await
 points on every single line, of course. While yielding control in this way is
-relatively inexpensive, it’s not free! In many cases, trying to break up a
+relatively inexpensive, it’s not free. In many cases, trying to break up a
 compute-bound task might make it significantly slower, so sometimes it’s better
-for _overall_ performance to let an operation block briefly. You should always
+for _overall_ performance to let an operation block briefly. Always
 measure to see what your code’s actual performance bottlenecks are. The
-underlying dynamic is an important one to keep in mind if you _are_ seeing a
-lot of work happening in serial that you expected to happen concurrently,
-though!
+underlying dynamic is important to keep in mind, though, if you _are_ seeing a
+lot of work happening in serial that you expected to happen concurrently!
 
 ### Building Our Own Async Abstractions
 
