@@ -540,8 +540,8 @@ lot of work happening in serial that you expected to happen concurrently!
 
 We can also compose futures together to create new patterns. For example, we can
 build a `timeout` function with async building blocks we already have. When
-we’re done, the result will be another building block we could use to build up
-yet further async abstractions.
+we’re done, the result will be another building block we could use to create
+still more async abstractions.
 
 Listing 17-27 shows how we would expect this `timeout` to work with a slow
 future.
@@ -583,17 +583,14 @@ need: we want to race the future passed in against the duration. We can use
 `trpl::sleep` to make a timer future from the duration, and use `trpl::race` to
 run that timer with the future the caller passes in.
 
-We also know that `race` is not fair, and polls arguments in the order they are
-passed. Thus, we pass `future_to_try` to `race` first so it gets a chance to
-complete even if `max_time` is a very short duration. If `future_to_try`
-finishes first, `race` will return `Left` with the output from `future`. If
-`timer` finishes first, `race` will return `Right` with the timer’s output of
-`()`.
+We also know that `race` is not fair, polling arguments in the order in which
+they are passed. Thus, we pass `future_to_try` to `race` first so it gets a
+chance to complete even if `max_time` is a very short duration. If
+`future_to_try` finishes first, `race` will return `Left` with the output from
+`future`. If `timer` finishes first, `race` will return `Right` with the timer’s
+output of `()`.
 
-In Listing 17-29, we match on the result of awaiting `trpl::race`. If the
-`future_to_try` succeeded and we get a `Left(output)`, we return `Ok(output)`.
-If the sleep timer elapsed instead and we get a `Right(())`, we ignore the `()`
-with `_` and return `Err(max_time)` instead.
+In Listing 17-29, we match on the result of awaiting `trpl::race`.
 
 <Listing number="17-29" caption="Defining `timeout` with `race` and `sleep`" file-name="src/main.rs">
 
@@ -603,7 +600,11 @@ with `_` and return `Err(max_time)` instead.
 
 </Listing>
 
-With that, we have a working `timeout`, built out of two other async helpers. If
+If the `future_to_try` succeeds and we get a `Left(output)`, we return
+`Ok(output)`. If the sleep timer elapses instead and we get a `Right(())`, we
+ignore the `()` with `_` and return `Err(max_time)` instead.
+
+With that, we have a working `timeout` built out of two other async helpers. If
 we run our code, it will print the failure mode after the timeout:
 
 ```text
@@ -611,27 +612,27 @@ Failed after 2 seconds
 ```
 
 Because futures compose with other futures, you can build really powerful tools
-using smaller async building blocks. For example, you can use this same
-approach to combine timeouts with retries, and in turn use those with things
-such as network calls—one of the examples from the beginning of the chapter!
+using smaller async building blocks. For example, you can use this same approach
+to combine timeouts with retries, and in turn use those with operations such as
+network calls (one of the examples from the beginning of the chapter).
 
-In practice, you will usually work directly with `async` and `await`, and
-secondarily with functions and macros such as `join`, `join_all`, `race`, and
-so on. You’ll only need to reach for `pin` now and again to use them with those
+In practice, you’ll usually work directly with `async` and `await`, and
+secondarily with functions and macros such as `join`, `join_all`, `race`, and so
+on. You’ll only need to reach for `pin` now and again to use futures with those
 APIs.
 
 We’ve now seen a number of ways to work with multiple futures at the same
 time. Up next, we’ll look at how we can work with multiple futures in a
-sequence over time, with _streams_. Here are a couple more things you might want
+sequence over time with _streams_. Here are a couple more things you might want
 to consider first, though:
 
 - We used a `Vec` with `join_all` to wait for all of the futures in some group
   to finish. How could you use a `Vec` to process a group of futures in
-  sequence, instead? What are the tradeoffs of doing that?
+  sequence instead? What are the tradeoffs of doing that?
 
 - Take a look at the `futures::stream::FuturesUnordered` type from the `futures`
   crate. How would using it be different from using a `Vec`? (Don’t worry about
-  the fact that it is from the `stream` part of the crate; it works just fine
+  the fact that it’s from the `stream` part of the crate; it works just fine
   with any collection of futures.)
 
 [dyn]: ch12-03-improving-error-handling-and-modularity.html
