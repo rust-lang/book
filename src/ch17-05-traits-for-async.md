@@ -4,7 +4,6 @@
 <a id="digging-into-the-traits-for-async"></a>
 
 Throughout the chapter, we’ve used the `Future`, `Pin`, `Unpin`, `Stream`, and
-### Future
 `StreamExt` traits in various ways. So far, though, we’ve avoided getting too
 far into the details of how they work or how they fit together, which is fine
 most of the time for your day-to-day Rust work. Sometimes, though, you’ll
@@ -12,10 +11,13 @@ encounter situations where you’ll need to understand a few more of these
 details. In this section, we’ll dig in just enough to help in those scenarios,
 still leaving the _really_ deep dive for other documentation.
 
+<!-- Old headings. Do not remove or links may break. -->
+<a id="future"></a>
 
-Back in [“Futures and the Async Syntax”][futures-syntax]<!-- ignore -->, we
-noted that `Future` is a trait. Let’s start by taking a closer look at how it
-works. Here is how Rust defines a `Future`:
+### The `Future` Trait
+
+Let’s start by taking a closer look at how the `Future` trait works. Here’s how
+Rust defines it:
 
 ```rust
 use std::pin::Pin;
@@ -35,8 +37,8 @@ First, `Future`’s associated type `Output` says what the future resolves to.
 This is analogous to the `Item` associated type for the `Iterator` trait.
 Second, `Future` also has the `poll` method, which takes a special `Pin`
 reference for its `self` parameter and a mutable reference to a `Context` type,
-and returns a `Poll<Self::Output>`. We’ll talk a little more about `Pin` and
-`Context` later in the section. For now, let’s focus on what the method returns,
+and returns a `Poll<Self::Output>`. We’ll talk more about `Pin` and
+`Context` in a moment. For now, let’s focus on what the method returns,
 the `Poll` type:
 
 ```rust
@@ -46,8 +48,8 @@ enum Poll<T> {
 }
 ```
 
-This `Poll` type is similar to an `Option`: it has one variant which has a value
-(`Ready(T)`), and one which does not (`Pending`). It means something quite
+This `Poll` type is similar to an `Option`. It has one variant that has a value,
+`Ready(T)`, and one which does not, `Pending`. It means something quite
 different, though! The `Pending` variant indicates that the future still has
 work to do, so the caller will need to check again later. The `Ready` variant
 indicates that the `Future` has finished its work and the `T` value is
@@ -55,11 +57,11 @@ available.
 
 > Note: With most futures, the caller should not call `poll` again after the
 > future has returned `Ready`. Many futures will panic if polled again after
-> becoming ready! Futures which are safe to poll again will say so explicitly in
-> their documentation. This is similar to how `Iterator::next` behaves!
+> becoming ready. Futures that are safe to poll again will say so explicitly in
+> their documentation. This is similar to how `Iterator::next` behaves.
 
-Under the hood, when you see code which uses `await`, Rust compiles that to code
-which calls `poll`. If you look back at Listing 17-4, where we printed out the
+When you see code that uses `await`, Rust compiles it under the hood to code
+that calls `poll`. If you look back at Listing 17-4, where we printed out the
 page title for a single URL once it resolved, Rust compiles it into something
 kind of (although not exactly) like this:
 
@@ -76,8 +78,8 @@ match page_title(url).poll() {
 ```
 
 What should we do when the `Future` is still `Pending`? We need some way to try
-again… and again, and again, until the future is finally ready. In other words,
-a loop:
+again, and again, and again, until the future is finally ready. In other words,
+we need a loop:
 
 ```rust,ignore
 let mut page_title_fut = page_title(url);
@@ -96,25 +98,24 @@ loop {
 
 If Rust compiled it to exactly that code, though, every `await` would be
 blocking—exactly the opposite of what we were going for! Instead, Rust makes
-sure that the loop can hand off control to something which can pause work on
-this future and work on other futures and check this one again later. That
-“something” is an async runtime, and this scheduling and coordination work is
-one of the main jobs for a runtime.
+sure that the loop can hand off control to something that can pause work on this
+future to work on other futures and then check this one again later. As we’ve
+seen, that something is an async runtime, and this scheduling and coordination
+work is one of its main jobs.
 
-Recall our description (in the [Counting][counting] section) of waiting on
-`rx.recv`. The `recv` call returns a `Future`, and awaiting it polls it. In our
-initial discussion, we noted that a runtime will pause the future until it’s
-ready with either `Some(message)` or `None` when the channel closes. With our
-deeper understanding of `Future` in place, and specifically `Future::poll`, we
-can see how that works. The runtime knows the future isn’t ready when it
-returns `Poll::Pending`. Conversely, the runtime knows the future is ready and
-advances it when `poll` returns `Poll::Ready(Some(message))` or
-`Poll::Ready(None)`.
+Earlier in the chapter, we described waiting on `rx.recv`. The `recv` call
+returns a future, and awaiting the future polls it. We noted that a runtime will
+pause the future until it’s ready with either `Some(message)` or `None` when the
+channel closes. With our deeper understanding of the `Future` trait, and
+specifically `Future::poll`, we can see how that works. The runtime knows the
+future isn’t ready when it returns `Poll::Pending`. Conversely, the runtime
+knows the future _is_ ready and advances it when `poll` returns
+`Poll::Ready(Some(message))` or `Poll::Ready(None)`.
 
-The exact details of how a runtime does that are more than we will cover in even
-this deep dive section. The key here is to see the basic mechanic of futures: a
-runtime _polls_ each future it is responsible for, putting it back to sleep when
-it is not yet ready.
+The exact details of how a runtime does that are beyond the scope of this book,
+but the key is to see the basic mechanics of futures: a runtime _polls_ each
+future it is responsible for, putting the future back to sleep when it is not
+yet ready.
 
 ### Pinning and the Pin and Unpin Traits
 
