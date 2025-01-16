@@ -274,19 +274,11 @@ combining a stream of time intervals with this stream of messages.
 
 First, let’s create another stream, which will emit an item every millisecond if
 we let it run directly. For simplicity, we can use the `sleep` function to send
-a message on a delay, and combine it with the same approach of creating a stream
-from a channel we used in `get_messages`. The difference is that this time,
-we’re going to send back the count of intervals which has elapsed, so the return
-type will be `impl Stream<Item = u32>`, and we can call the function
-`get_intervals`.
-
-In Listing 17-36, we start by defining a `count` in the task. (We could define
-it outside the task, too, but it is clearer to limit the scope of any given
-variable.) Then we create an infinite loop. Each iteration of the loop
-asynchronously sleeps for one millisecond, increments the count, and then sends
-it over the channel. Because this is all wrapped in the task created by
-`spawn_task`, all of it will get cleaned up along with the runtime, including
-the infinite loop.
+a message on a delay and combine it with the same approach we used in
+`get_messages` of creating a stream from a channel. The difference is that this
+time, we’re going to send back the count of intervals that have elapsed, so the
+return type will be `impl Stream<Item = u32>`, and we can call the function
+`get_intervals` (see Listing 17-36).
 
 <Listing number="17-36" caption="Creating a stream with a counter that will be emitted once every millisecond" file-name="src/main.rs">
 
@@ -296,19 +288,22 @@ the infinite loop.
 
 </Listing>
 
-This kind of infinite loop, which only ends when the whole runtime gets torn
+We start by defining a `count` in the task. (We could define it outside the
+task, too, but it’s clearer to limit the scope of any given variable.) Then we
+create an infinite loop. Each iteration of the loop asynchronously sleeps for
+one millisecond, increments the count, and then sends it over the channel.
+Because this is all wrapped in the task created by `spawn_task`, all of
+it—including the infinite loop—will get cleaned up along with the runtime.
+
+This kind of infinite loop, which ends only when the whole runtime gets torn
 down, is fairly common in async Rust: many programs need to keep running
 indefinitely. With async, this doesn’t block anything else, as long as there is
 at least one await point in each iteration through the loop.
 
-Back in our main function’s async block, we start by calling `get_intervals`.
-Then we merge the `messages` and `intervals` streams with the `merge` method,
-which combines multiple streams into one stream that produces items from any of
-the source streams as soon as the items are available, without imposing any
-particular ordering. Finally, we loop over that combined stream instead of over
-`messages` (Listing 17-37).
+Now, back in our main function’s async block, we can attempt to merge the
+`messages` and `intervals` streams, as shown in Listing 17-37.
 
-<Listing number="17-37" caption="Attempting to merge streams of messages and intervals" file-name="src/main.rs">
+<Listing number="17-37" caption="Attempting to the `messages` and `intervals` streams" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-37/src/main.rs:main}}
@@ -316,29 +311,26 @@ particular ordering. Finally, we loop over that combined stream instead of over
 
 </Listing>
 
+We start by calling `get_intervals`. Then we merge the `messages` and
+`intervals` streams with the `merge` method, which combines multiple streams
+into one stream that produces items from any of the source streams as soon as
+the items are available, without imposing any particular ordering. Finally, we
+loop over that combined stream instead of over `messages`.
+
 At this point, neither `messages` nor `intervals` needs to be pinned or mutable,
 because both will be combined into the single `merged` stream. However, this
-call to `merge` does not compile! (Neither does the `next` call in the `while
-let` loop, but we’ll come back to that after fixing this.) The two streams
-have different types. The `messages` stream has the type `Timeout<impl
-Stream<Item = String>>`, where `Timeout` is the type which implements `Stream`
-for a `timeout` call. Meanwhile, the `intervals` stream has the type `impl
-Stream<Item = u32>`. To merge these two streams, we need to transform one of
-them to match the other.
-
-In Listing 17-38, we rework the `intervals` stream, because `messages` is
-already in the basic format we want and has to handle timeout errors. First, we
-can use the `map` helper method to transform the `intervals` into a string.
-Second, we need to match the `Timeout` from `messages`. Because we don’t
-actually _want_ a timeout for `intervals`, though, we can just create a timeout
-which is longer than the other durations we are using. Here, we create a
-10-second timeout with `Duration::from_secs(10)`. Finally, we need to make
-`stream` mutable, so that the `while let` loop’s `next` calls can iterate
-through the stream, and pin it so that it’s safe to do so.
+call to `merge` doesn’t compile! (Neither does the `next` call in the `while
+let` loop, but we’ll come back to that.) This is because the two streams have
+different types. The `messages` stream has the type `Timeout<impl Stream<Item =
+String>>`, where `Timeout` is the type that implements `Stream` for a `timeout`
+call. The `intervals` stream has the type `impl Stream<Item = u32>`. To merge
+these two streams, we need to transform one of them to match the other. We’ll
+rework the intervals stream, because messages is already in the basic format we
+want and has to handle timeout errors (see Listing 17-38).
 
 <!-- We cannot directly test this one, because it never stops. -->
 
-<Listing number="17-38" caption="Aligning the types of the the `intervals` stream with the type of the `messages` stream" file-name="src/main.rs">
+<Listing number="17-38" caption="Aligning the type of the the `intervals` stream with the type of the `messages` stream" file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-38/src/main.rs:main}}
@@ -346,11 +338,17 @@ through the stream, and pin it so that it’s safe to do so.
 
 </Listing>
 
-That gets us _almost_ to where we need to be. Everything type checks. If you run
-this, though, there will be two problems. First, it will never stop! You’ll
-need to stop it with <span class="keystroke">ctrl-c</span>. Second, the
-messages from the English alphabet will be buried in the midst of all the
-interval counter messages:
+First, we can use the `map` helper method to transform the `intervals` into a
+string. Second, we need to match the `Timeout` from `messages`. Because we don’t
+actually _want_ a timeout for `intervals`, though, we can just create a timeout
+which is longer than the other durations we are using. Here, we create a
+10-second timeout with `Duration::from_secs(10)`. Finally, we need to make
+`stream` mutable, so that the `while let` loop’s `next` calls can iterate
+through the stream, and pin it so that it’s safe to do so. That gets us _almost_
+to where we need to be. Everything type checks. If you run this, though, there
+will be two problems. First, it will never stop! You’ll need to stop it with
+<span class="keystroke">ctrl-c</span>. Second, the messages from the English
+alphabet will be buried in the midst of all the interval counter messages:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the tasks running differently rather than
@@ -368,16 +366,7 @@ Interval: 43
 --snip--
 ```
 
-Listing 17-39 shows one way to solve these last two problems. First, we use the
-`throttle` method on the `intervals` stream, so that it doesn’t overwhelm the
-`messages` stream. Throttling is a way of limiting the rate at which a function
-will be called—or, in this case, how often the stream will be polled. Once every
-hundred milliseconds should do, because that is in the same ballpark as how
-often our messages arrive.
-
-To limit the number of items we will accept from a stream, we can use the `take`
-method. We apply it to the _merged_ stream, because we want to limit the final
-output, not just one stream or the other.
+Listing 17-39 shows one way to solve these last two problems.
 
 <Listing number="17-39" caption="Using `throttle` and `take` to manage the merged streams" file-name="src/main.rs">
 
@@ -387,17 +376,26 @@ output, not just one stream or the other.
 
 </Listing>
 
-Now when we run the program, it stops after pulling twenty items from the
-stream, and the intervals don’t overwhelm the messages. We also don’t get
-`Interval: 100` or `Interval: 200` or so on, but instead get `Interval: 1`,
-`Interval: 2`, and so on—even though we have a source stream which _can_
-produce an event every millisecond. That’s because the `throttle` call
-produces a new stream, wrapping the original stream, so that the original
-stream only gets polled at the throttle rate, not its own “native” rate. We
-don’t have a bunch of unhandled interval messages we’re choosing to
-ignore. Instead, we never produce those interval messages in the first place!
-This is the inherent “laziness” of Rust’s futures at work again, allowing us to
-choose our performance characteristics.
+First, we use the `throttle` method on the `intervals` stream so that it doesn’t
+overwhelm the `messages` stream. _Throttling_ is a way of limiting the rate at
+which a function will be called—or, in this case, how often the stream will be
+polled. Once every 100 milliseconds should do, because that’s roughly how often
+our messages arrive.
+
+To limit the number of items we will accept from a stream, we apply the `take`
+method to the `merged` stream, because we want to limit the final output, not
+just one stream or the other.
+
+Now when we run the program, it stops after pulling 20 items from the stream,
+and the intervals don’t overwhelm the messages. We also don’t get `Interval:
+100` or `Interval: 200` or so on, but instead get `Interval: 1`, `Interval: 2`,
+and so on—even though we have a source stream that _can_ produce an event every
+millisecond. That’s because the `throttle` call produces a new stream that wraps
+the original stream so that the original stream gets polled only at the throttle
+rate, not its own “native” rate. We don’t have a bunch of unhandled interval
+messages we’re choosing to ignore. Instead, we never produce those interval
+messages in the first place! This is the inherent “laziness” of Rust’s futures
+at work again, allowing us to choose our performance characteristics.
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-39
@@ -431,12 +429,11 @@ Interval: 12
 There’s one last thing we need to handle: errors! With both of these
 channel-based streams, the `send` calls could fail when the other side of the
 channel closes—and that’s just a matter of how the runtime executes the futures
-which make up the stream. Up until now we have ignored this by calling `unwrap`,
-but in a well-behaved app, we should explicitly handle the error, at minimum by
-ending the loop so we don’t try to send any more messages! Listing 17-40 shows
-a simple error strategy: print the issue and then `break` from the loops. As
-usual, the correct way to handle a message send error will vary—just make sure
-you have a strategy.
+that make up the stream. Up until now, we’ve ignored this possibility by calling
+`unwrap`, but in a well-behaved app, we should explicitly handle the error, at
+minimum by ending the loop so we don’t try to send any more messages. Listing
+17-40 shows a simple error strategy: print the issue and then `break` from the
+loops.
 
 <Listing number="17-40" caption="Handling errors and shutting down the loops">
 
@@ -446,9 +443,12 @@ you have a strategy.
 
 </Listing>
 
-Now that we’ve seen a bunch of async in practice, let’s take a step back and
-dig into a few of the details of how `Future`, `Stream`, and the other key
-traits which Rust uses to make async work.
+As usual, the correct way to handle a message send error will vary; just make
+sure you have a strategy.
+
+Now that we’ve seen a bunch of async in practice, let’s take a step back and dig
+into a few of the details of how `Future`, `Stream`, and the other key traits
+Rust uses to make async work.
 
 [17-02-messages]: ch17-02-concurrency-with-async.html#message-passing
 [iterator-trait]: ch13-02-iterators.html#the-iterator-trait-and-the-next-method
