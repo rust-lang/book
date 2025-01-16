@@ -1,14 +1,17 @@
-## Digging Into the Traits for Async
+## A Closer Look at the Traits for Async
+
+<!-- Old headings. Do not remove or links may break. -->
+<a id="digging-into-the-traits-for-async"></a>
 
 Throughout the chapter, we’ve used the `Future`, `Pin`, `Unpin`, `Stream`, and
-`StreamExt` traits in various ways. So far, though, we’ve avoided digging too
-far into the details of how they work or how they fit together. Much of the time
-when writing Rust day to day, this is fine. Sometimes, though, you’ll hit
-situations where understanding a few more of these details matters. In this
-section, we’ll dig down _enough_ further to help with those situations—while
-still leaving the _really_ deep dive for other documentation!
-
 ### Future
+`StreamExt` traits in various ways. So far, though, we’ve avoided getting too
+far into the details of how they work or how they fit together, which is fine
+most of the time for your day-to-day Rust work. Sometimes, though, you’ll
+encounter situations where you’ll need to understand a few more of these
+details. In this section, we’ll dig in just enough to help in those scenarios,
+still leaving the _really_ deep dive for other documentation.
+
 
 Back in [“Futures and the Async Syntax”][futures-syntax]<!-- ignore -->, we
 noted that `Future` is a trait. Let’s start by taking a closer look at how it
