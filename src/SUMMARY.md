@@ -103,7 +103,7 @@
 
 - [Async and Await](ch17-00-async-await.md)
   - [Futures and the Async Syntax](ch17-01-futures-and-syntax.md)
-  - [Concurrency With Async](ch17-02-concurrency-with-async.md)
+  - [Combining Concurrency with Async](ch17-02-concurrency-with-async.md)
   - [Working With Any Number of Futures](ch17-03-more-futures.md)
   - [Streams: Futures in Sequence](ch17-04-streams.md)
   - [A Closer Look at the Traits for Async](ch17-05-traits-for-async.md)

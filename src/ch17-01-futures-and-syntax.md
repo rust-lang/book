@@ -7,7 +7,7 @@ A _future_ is a value that may not be ready now but will become ready at some
 point in the future. (This same concept shows up in many languages, sometimes
 under other names such as _task_ or _promise_.) Rust provides a `Future` trait
 as a building block so that different async operations can be implemented with
-different data structures, but with a common interface. In Rust, futures are
+different data structures but with a common interface. In Rust, futures are
 types that implement the `Future` trait. Each future holds its own information
 about the progress that has been made and what "ready" means.
 
@@ -45,14 +45,12 @@ To keep the focus of this chapter on learning async rather than juggling parts
 of the ecosystem, we’ve created the `trpl` crate (`trpl` is short for “The Rust
 Programming Language”). It re-exports all the types, traits, and functions
 you’ll need, primarily from the [`futures`][futures-crate]<!-- ignore --> and
-[`tokio`][tokio]<!-- ignore --> crates.
-
-The `futures` crate is an official home for Rust experimentation for async code,
-and it’s actually where the `Future` type was originally designed. Tokio is the
-most widely used async runtime in Rust today, especially for web applications.
-There are other great runtimes out there, and they may be more suitable for your
-purposes. We use the `tokio` crate under the hood for `trpl` because it’s well
-tested and widely used.
+[`tokio`][tokio]<!-- ignore --> crates. The `futures` crate is an official home
+for Rust experimentation for async code, and it’s actually where the `Future`
+type was originally designed. Tokio is the most widely used async runtime in
+Rust today, especially for web applications. There are other great runtimes out
+there, and they may be more suitable for your purposes. We use the `tokio` crate
+under the hood for `trpl` because it’s well tested and widely used.
 
 In some cases, `trpl` also renames or wraps the original APIs to keep you
 focused on the details relevant to this chapter. If you want to understand what
@@ -110,10 +108,10 @@ Likewise, futures do nothing unless you explicitly ask them to. This laziness
 allows Rust to avoid running async code until it’s actually needed.
 
 > Note: This is different from the behavior we saw in the previous chapter when
-> using `thread::spawn` in the [Creating a New Thread with
-> spawn][thread-spawn]<!--ignore--> section, where the closure we passed to
-> another thread started running immediately. It’s also different from how many
-> other languages approach async. But it’s important for Rust, and we’ll see why
+> using `thread::spawn` in [Creating a New Thread with
+> spawn][thread-spawn]<!--ignore-->, where the closure we passed to another
+> thread started running immediately. It’s also different from how many other
+> languages approach async. But it’s important for Rust, and we’ll see why
 > later.
 
 Once we have `response_text`, we can parse it into an instance of the `Html`
@@ -129,12 +127,12 @@ here, but `map` is more idiomatic.) In the body of the function we supply to
 `map`, we call `inner_html` on the `title_element` to get its content, which is
 a `String`. When all is said and done, we have an `Option<String>`.
 
-Notice that Rust’s `await` keyword goes after the expression you’re awaiting,
-not before it. That is, it’s a _postfix keyword_. This may differ from what
-you’re used to if you’ve used async in other languages, but in Rust it makes
+Notice that Rust’s `await` keyword goes _after_ the expression you’re awaiting,
+not before it. That is, it’s a _postfix_ keyword. This may differ from what
+you’re used to if you’ve used `async` in other languages, but in Rust it makes
 chains of methods much nicer to work with. As a result, we can change the body
 of `page_url_for` to chain the `trpl::get` and `text` function calls together
-with `await` between them, as shown in Listing 17-2:
+with `await` between them, as shown in Listing 17-2.
 
 <Listing number="17-2" file-name="src/main.rs" caption="Chaining with the `await` keyword">
 
@@ -311,7 +309,7 @@ error-prone, however, especially when you need to add more functionality and
 more states to the code later. Fortunately, the Rust compiler creates and
 manages the state machine data structures for async code automatically. The
 normal borrowing and ownership rules around data structures all still apply, and
-happily, the compiler also handles checking those for us, and provides useful
+happily, the compiler also handles checking those for us and provides useful
 error messages. We’ll work through a few of those later in the chapter.
 
 Ultimately, something has to execute this state machine, and that something is a
@@ -326,10 +324,10 @@ would need to manage the state machine for whatever future `main` returned, but
 function in `main` to set up a runtime and run the future returned by the
 `async` block until it returns `Ready`.
 
-> Note: Some runtimes provide macros so you _can_ write an async main function.
-> Those macros rewrite `async fn main() { ... }` to be a normal `fn main`, which
-> does the same thing we did by hand in Listing 17-5: call a function that runs
-> a future to completion the way `trpl::run` does.
+> Note: Some runtimes provide macros so you _can_ write an async `main`
+> function. Those macros rewrite `async fn main() { ... }` to be a normal `fn
+> main`, which does the same thing we did by hand in Listing 17-5: call a
+> function that runs a future to completion the way `trpl::run` does.
 
 Now let’s put these pieces together and see how we can write concurrent code.
 

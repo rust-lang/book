@@ -26,8 +26,8 @@ allow the CPU to perform other work while waiting for the network call to
 finish.
 
 The video export is an example of a _CPU-bound_ or _compute-bound_ operation.
-It’s limited by the computer’s potential data processing speed within the _CPU_
-or _GPU_, and how much of that speed it can dedicate to the operation. The video
+It’s limited by the computer’s potential data processing speed within the CPU or
+GPU, and how much of that speed it can dedicate to the operation. The video
 download is an example of an _IO-bound_ operation, because it’s limited by the
 speed of the computer’s _input and output_; it can only go as fast as the data
 can be sent across the network.
@@ -97,7 +97,7 @@ by switching between them (see Figure 17-1).
 
 <img src="img/trpl17-01.svg" class="center" alt="A diagram with boxes labeled Task A and Task B, with diamonds in them representing subtasks. There are arrows pointing from A1 to B1, B1 to A2, A2 to B2, B2 to A3, A3 to A4, and A4 to B3. The arrows between the subtasks cross the boxes between Task A and Task B." />
 
-<figcaption>Figure 17-1: A concurrent workflow, switching between Task A and Task B.</figcaption>
+<figcaption>Figure 17-1: A concurrent workflow, switching between Task A and Task B</figcaption>
 
 </figure>
 
@@ -109,7 +109,7 @@ progress at the exact same time (see Figure 17-2).
 
 <img src="img/trpl17-02.svg" class="center" alt="A diagram with boxes labeled Task A and Task B, with diamonds in them representing subtasks. There are arrows pointing from A1 to A2, A2 to A3, A3 to A4, B1 to B2, and B2 to B3. No arrows cross between the boxes for Task A and Task B." />
 
-<figcaption>Figure 17-2: A parallel workflow, where work happens on Task A and Task B independently.</figcaption>
+<figcaption>Figure 17-2: A parallel workflow, where work happens on Task A and Task B independently</figcaption>
 
 </figure>
 

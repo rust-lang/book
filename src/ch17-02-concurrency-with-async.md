@@ -1,4 +1,7 @@
-## Concurrency With Async
+## Combining Concurrency with Async
+
+<!-- Old headings. Do not remove or links may break. -->
+<a id="concurrency-with-async"></a>
 
 In this section, we’ll apply async to some of the same concurrency challenges
 we tackled with threads in chapter 16. Because we already talked about a lot of
@@ -31,8 +34,8 @@ to implement the counting example, as shown in Listing 17-6.
 
 </Listing>
 
-As our starting point, we set up our `main` function with `trpl::run`, so
-that our top-level function can be async.
+As our starting point, we set up our `main` function with `trpl::run` so that
+our top-level function can be async.
 
 > Note: From this point forward in the chapter, every example will include this
 > exact same wrapping code with `trpl::run` in `main`, so we’ll often skip it
@@ -63,8 +66,8 @@ hi number 4 from the second task!
 hi number 5 from the first task!
 ```
 
-This version stops as soon as the for loop in the body of the main async block
-finishes, because the task spawned by `spawn_task` is shut down when the main
+This version stops as soon as the `for` loop in the body of the main async block
+finishes, because the task spawned by `spawn_task` is shut down when the `main`
 function ends. If you want it to run all the way to the task’s completion, you
 will need to use a join handle to wait for the first task to complete. With
 threads, we used the `join` method to “block” until the thread was done running.
@@ -80,7 +83,7 @@ after awaiting it.
 
 </Listing>
 
-This updated version runs until _both_ loops finish:
+This updated version runs until _both_ loops finish.
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -213,7 +216,7 @@ because the channel we’re sending it into is unbounded.
 
 > Note: Because all of this async code runs in an async block in a `trpl::run`
 > call, everything within it can avoid blocking. However, the code _outside_ it
-> will block on the `run` function returning. That is the whole point of the
+> will block on the `run` function returning. That’s the whole point of the
 > `trpl::run` function: it lets you _choose_ where to block on some set of async
 > code, and thus where to transition between sync and async code. In most async
 > runtimes, `run` is actually named `block_on` for exactly this reason.
@@ -366,14 +369,14 @@ slightly slower delay. We happen to put this new async block after the async
 block for receiving messages, but it could go before it just as well. The key is
 the order in which the futures are awaited, not in which they’re created.
 
-Both of the async blocks for sending messages need to be `async move` blocks, so
+Both of the async blocks for sending messages need to be `async move` blocks so
 that both `tx` and `tx1` get dropped when those blocks finish. Otherwise, we’ll
 end up back in the same infinite loop we started out in. Finally, we switch from
 `trpl::join` to `trpl::join3` to handle the additional future.
 
 Now we see all the messages from both sending futures, and because the sending
 futures use slightly different delays after sending, the messages are also
-received at those different intervals:
+received at those different intervals.
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than

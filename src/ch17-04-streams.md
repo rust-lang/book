@@ -129,7 +129,7 @@ up events to avoid triggering too many network calls, set timeouts on sequences
 of long-running operations, or throttle user interface events to avoid doing
 needless work.
 
-Let’s start by building a little stream of messages, as a stand-in for a stream
+Let’s start by building a little stream of messages as a stand-in for a stream
 of data we might see from a WebSocket or another real-time communication
 protocol, as shown in Listing 17-33.
 

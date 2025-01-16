@@ -6,7 +6,7 @@ have to call a different function every time we changed the number of futures we
 wanted to join. Happily, we have a macro form of `join` to which we can pass an
 arbitrary number of arguments. It also handles awaiting the futures itself.
 Thus, we could rewrite the code from Listing 17-13 to use `join!` instead of
-`join3`, as in Listing 17-14:
+`join3`, as in Listing 17-14.
 
 <Listing number="17-14" caption="Using `join!` to wait for multiple futures" file-name="src/main.rs">
 
@@ -587,8 +587,8 @@ We also know that `race` is not fair, polling arguments in the order in which
 they are passed. Thus, we pass `future_to_try` to `race` first so it gets a
 chance to complete even if `max_time` is a very short duration. If
 `future_to_try` finishes first, `race` will return `Left` with the output from
-`future`. If `timer` finishes first, `race` will return `Right` with the timer’s
-output of `()`.
+`future_to_try`. If `timer` finishes first, `race` will return `Right` with the
+timer’s output of `()`.
 
 In Listing 17-29, we match on the result of awaiting `trpl::race`.
 

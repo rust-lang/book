@@ -49,10 +49,10 @@ enum Poll<T> {
 ```
 
 This `Poll` type is similar to an `Option`. It has one variant that has a value,
-`Ready(T)`, and one which does not, `Pending`. It means something quite
-different, though! The `Pending` variant indicates that the future still has
-work to do, so the caller will need to check again later. The `Ready` variant
-indicates that the `Future` has finished its work and the `T` value is
+`Ready(T)`, and one which does not, `Pending`. `Poll` means something quite
+different from `Option`, though! The `Pending` variant indicates that the future
+still has work to do, so the caller will need to check again later. The `Ready`
+variant indicates that the `Future` has finished its work and the `T` value is
 available.
 
 > Note: With most futures, the caller should not call `poll` again after the
@@ -122,8 +122,8 @@ yet ready.
 
 ### The `Pin` and `Unpin` Traits
 
-When we introduced the idea of pinning while working on Listing 17-16, we ran
-into a very gnarly error message. Here is the relevant part of it again:
+When we introduced the idea of pinning in Listing 17-16, we ran into a very
+gnarly error message. Here is the relevant part of it again:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-16
@@ -417,10 +417,10 @@ trait Stream {
 }
 ```
 
-The `Stream` trait defines an associated type called `Item` for the type of the items
-produced by the stream. This is similar to `Iterator`, where there may be zero to
-many items, and unlike `Future`, where there is always a single `Output`,
-even if it’s the unit type `()`.
+The `Stream` trait defines an associated type called `Item` for the type of the
+items produced by the stream. This is similar to `Iterator`, where there may be
+zero to many items, and unlike `Future`, where there is always a single
+`Output`, even if it’s the unit type `()`.
 
 `Stream` also defines a method to get those items. We call it `poll_next`, to
 make it clear that it polls in the same way `Future::poll` does and produces a
@@ -439,7 +439,7 @@ In the example we saw in the section on streaming, though, we didn’t use
 work directly in terms of the `poll_next` API by hand-writing our own `Stream`
 state machines, of course, just as we _could_ work with futures directly via
 their `poll` method. Using `await` is much nicer, though, and the `StreamExt`
-trait supplies the `next` method so we can do just that.
+trait supplies the `next` method so we can do just that:
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/no-listing-stream-ext/src/lib.rs:here}}
