@@ -52,7 +52,7 @@ This `Poll` type is similar to an `Option`. It has one variant that has a value,
 `Ready(T)`, and one which does not, `Pending`. `Poll` means something quite
 different from `Option`, though! The `Pending` variant indicates that the future
 still has work to do, so the caller will need to check again later. The `Ready`
-variant indicates that the `Future` has finished its work and the `T` value is
+variant indicates that the future has finished its work and the `T` value is
 available.
 
 > Note: With most futures, the caller should not call `poll` again after the
@@ -77,7 +77,7 @@ match page_title(url).poll() {
 }
 ```
 
-What should we do when the `Future` is still `Pending`? We need some way to try
+What should we do when the future is still `Pending`? We need some way to try
 again, and again, and again, until the future is finally ready. In other words,
 we need a loop:
 

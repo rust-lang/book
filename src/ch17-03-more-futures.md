@@ -286,7 +286,7 @@ However, we must still be explicit about the type of the pinned reference;
 otherwise, Rust will still not know to interpret these as dynamic trait objects,
 which is what we need them to be in the `Vec`. We therefore `pin!` each future
 when we define it, and define `futures` as a `Vec` containing pinned mutable
-references to the dynamic `Future` type, as in Listing 17-19.
+references to the dynamic future type, as in Listing 17-19.
 
 <Listing number="17-19" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
 

@@ -253,12 +253,12 @@ seen before: the `while let` conditional loop. This is the loop version of the
 let` and `let else`][if-let]<!-- ignore -->. The loop will continue executing as
 long as the pattern it specifies continues to match the value.
 
-The `rx.recv` call produces a `Future`, which we await. The runtime will pause
-the `Future` until it is ready. Once a message arrives, the `Future` will
-resolve to `Some(message)` as many times as a message arrives. When the channel
-closes, regardless of whether _any_ messages have arrived, the `Future` will
-instead resolve to `None` to indicate that there are no more values and thus we
-should stop polling—that is, stop awaiting.
+The `rx.recv` call produces a future, which we await. The runtime will pause the
+future until it is ready. Once a message arrives, the future will resolve to
+`Some(message)` as many times as a message arrives. When the channel closes,
+regardless of whether _any_ messages have arrived, the future will instead
+resolve to `None` to indicate that there are no more values and thus we should
+stop polling—that is, stop awaiting.
 
 The `while let` loop pulls all of this together. If the result of calling
 `rx.recv().await` is `Some(message)`, we get access to the message and we can

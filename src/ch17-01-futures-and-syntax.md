@@ -47,7 +47,7 @@ Programming Language”). It re-exports all the types, traits, and functions
 you’ll need, primarily from the [`futures`][futures-crate]<!-- ignore --> and
 [`tokio`][tokio]<!-- ignore --> crates. The `futures` crate is an official home
 for Rust experimentation for async code, and it’s actually where the `Future`
-type was originally designed. Tokio is the most widely used async runtime in
+trait was originally designed. Tokio is the most widely used async runtime in
 Rust today, especially for web applications. There are other great runtimes out
 there, and they may be more suitable for your purposes. We use the `tokio` crate
 under the hood for `trpl` because it’s well tested and widely used.
@@ -189,12 +189,12 @@ Let’s walk through each part of the transformed version:
   `url` parameter. (We’ll talk much more about `async` versus `async move` later
   in the chapter.)
 - The new version of the function has a kind of lifetime we haven’t seen before
-  in the output type: `'_`. Because the function returns a `Future` that refers
-  to a reference—in this case, the reference from the `url` parameter—we need to
+  in the output type: `'_`. Because the function returns a future that refers to
+  a reference—in this case, the reference from the `url` parameter—we need to
   tell Rust that we want that reference to be included. We don’t have to name
   the lifetime here, because Rust is smart enough to know there’s only one
   reference that could be involved, but we _do_ have to be explicit that the
-  resulting `Future` is bound by that lifetime.
+  resulting future is bound by that lifetime.
 
 Now we can call `page_title` in `main`.
 
