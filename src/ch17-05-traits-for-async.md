@@ -387,7 +387,7 @@ idea of how to fix your code!
 > see Chapters [2][under-the-hood] and [4][pinning] of [_Asynchronous
 > Programming in Rust_][async-book].
 
-### The Stream Trait
+### The `Stream` Trait
 
 Now that you have a deeper grasp on the `Future`, `Pin`, and `Unpin` traits, we
 can turn our attention to the `Stream` trait. As you learned earlier in the

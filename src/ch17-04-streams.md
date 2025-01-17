@@ -82,13 +82,14 @@ so far, you might reasonably expect that trait to be `Stream`, but it’s actual
 `StreamExt`. Short for _extension_, `Ext` is a common pattern in the
 Rust community for extending one trait with another.
 
-We’ll explain the Stream and StreamExt traits in a bit more detail at the end of
-the chapter, but for now all you need to know is that the `Stream` trait defines
-a low-level interface that effectively combines the `Iterator` and `Future`
-traits. `StreamExt` supplies a higher-level set of APIs on top of `Stream`,
-including the `next` method as well as other utility methods similar to those
-provided by the `Iterator` trait. `Stream` and `StreamExt` are not yet part of
-Rust’s standard library, but most ecosystem crates use the same definition.
+We’ll explain the `Stream` and `StreamExt` traits in a bit more detail at the
+end of the chapter, but for now all you need to know is that the `Stream` trait
+defines a low-level interface that effectively combines the `Iterator` and
+`Future` traits. `StreamExt` supplies a higher-level set of APIs on top of
+`Stream`, including the `next` method as well as other utility methods similar
+to those provided by the `Iterator` trait. `Stream` and `StreamExt` are not yet
+part of Rust’s standard library, but most ecosystem crates use the same
+definition.
 
 The fix to the compiler error is to add a `use` statement for `trpl::StreamExt`,
 as in Listing 17-31.
