@@ -1,4 +1,4 @@
-## Combining Concurrency with Async
+## Applying Concurrency with Async
 
 <!-- Old headings. Do not remove or links may break. -->
 <a id="concurrency-with-async"></a>
