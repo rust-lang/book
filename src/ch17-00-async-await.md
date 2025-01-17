@@ -2,7 +2,16 @@
 
 Many operations we ask the computer to do can take a while to finish. It would
 be nice if we could do something else while we are waiting for those
-long-running processes to complete. TODO. Operating systems often provide threading for parallelism and concurrency, as we covered in Chapter 16. This chapter will build on that discussion by showing an alternative to threads that works in cases where threads may not: Rust’s async and await.
+long-running processes to complete. Modern computers offer two techniques for
+working on more than one operation at a time: parallelism and concurrency. Once
+we start writing programs that involve parallel or concurrent operations,
+though, we quickly encounter new challenges inherent to *asynchronous
+programming*, where operations may not finish sequentially in the order they
+were started. This chapter builds on Chapter 16’s use of threads for parallelism
+and concurrency by introducing an alternative approach to asynchronous
+programming: Rust’s Futures, Streams, the `async` and `await` syntax that
+supports them, and the tools for managing and coordinating between asynchronous
+operations.
 
 Let’s consider an example. Say you’re exporting a video you’ve created of a
 family celebration, an operation that could take anywhere from minutes to hours.
