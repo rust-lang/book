@@ -1,8 +1,8 @@
-# Async and Await
+# Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams
 
 Many operations we ask the computer to do can take a while to finish. It would
 be nice if we could do something else while we are waiting for those
-long-running processes to complete.
+long-running processes to complete. TODO. Operating systems often provide threading for parallelism and concurrency, as we covered in Chapter 16. This chapter will build on that discussion by showing an alternative to threads that works in cases where threads may not: Rust’s async and await.
 
 Let’s consider an example. Say you’re exporting a video you’ve created of a
 family celebration, an operation that could take anywhere from minutes to hours.

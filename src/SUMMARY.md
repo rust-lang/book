@@ -101,7 +101,7 @@
   - [Shared-State Concurrency](ch16-03-shared-state.md)
   - [Extensible Concurrency with the `Sync` and `Send` Traits](ch16-04-extensible-concurrency-sync-and-send.md)
 
-- [Async and Await](ch17-00-async-await.md)
+- [Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams](ch17-00-async-await.md)
   - [Futures and the Async Syntax](ch17-01-futures-and-syntax.md)
   - [Applying Concurrency with Async](ch17-02-concurrency-with-async.md)
   - [Working With Any Number of Futures](ch17-03-more-futures.md)
