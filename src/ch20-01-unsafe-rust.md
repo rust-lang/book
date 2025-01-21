@@ -186,14 +186,11 @@ With the `unsafe` block, we’re asserting to Rust that we’ve read the functio
 documentation, we understand how to use it properly, and we’ve verified that
 we’re fulfilling the contract of the function.
 
-> Note: In earlier versions of Rust, the body of an unsafe function was treated
-> as an `unsafe` block, so you could perform any unsafe operation within the
-> body of an `unsafe` function. In later versions of Rust, the compiler will
-> warn you that you need to use an `unsafe` block to perform unsafe operations
-> in the body of an unsafe function. This is because Rust now distinguishes
-> between `unsafe fn`, which defines what you need to do to call the function
-> safely, and an `unsafe` block, where you actually uphold that “contract” the
-> function establishes.
+To perform unsafe operations in the body of an unsafe function, you still need
+to use an `unsafe` block just as within a regular function, and the compiler
+will warn you if you forget. This helps to keep `unsafe` blocks as small as
+possible, as unsafe operations may not be needed across the whole function
+body.
 
 #### Creating a Safe Abstraction over Unsafe Code
 
@@ -550,5 +547,6 @@ Rust’s official guide to the subject, the [Rustonomicon][nomicon].
 [the-slice-type]: ch04-03-slices.html#the-slice-type
 [reference]: ../reference/items/unions.html
 [miri]: https://github.com/rust-lang/miri
+[editions]: appendix-05-editions.html
 [nightly]: appendix-07-nightly-rust.html
 [nomicon]: https://doc.rust-lang.org/nomicon/
