@@ -123,10 +123,10 @@
 
 - [Advanced Features](ch20-00-advanced-features.md)
   - [Unsafe Rust](ch20-01-unsafe-rust.md)
-  - [Advanced Traits](ch20-03-advanced-traits.md)
-  - [Advanced Types](ch20-04-advanced-types.md)
-  - [Advanced Functions and Closures](ch20-05-advanced-functions-and-closures.md)
-  - [Macros](ch20-06-macros.md)
+  - [Advanced Traits](ch20-02-advanced-traits.md)
+  - [Advanced Types](ch20-03-advanced-types.md)
+  - [Advanced Functions and Closures](ch20-04-advanced-functions-and-closures.md)
+  - [Macros](ch20-05-macros.md)
 
 - [Final Project: Building a Multithreaded Web Server](ch21-00-final-project-a-web-server.md)
   - [Building a Single-Threaded Web Server](ch21-01-single-threaded.md)

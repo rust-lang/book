@@ -181,4 +181,4 @@ The `Default` trait is required when you use the method `unwrap_or_default` on
 [creating-instances-from-other-instances-with-struct-update-syntax]: ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
 [stack-only-data-copy]: ch04-01-what-is-ownership.html#stack-only-data-copy
 [ways-variables-and-data-interact-clone]: ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone
-[macros]: ch20-06-macros.html#macros
+[macros]: ch20-05-macros.html#macros
