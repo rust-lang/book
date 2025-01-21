@@ -479,7 +479,7 @@ That’s all we’re going to cover for the lower-level details on these traits.
 wrap up, let’s consider how futures (including streams), tasks, and threads all
 fit together!
 
-[ch-18]: 00-oop.html
+[ch-18]: ch18-00-oop.html
 [async-book]: https://rust-lang.github.io/async-book/
 [under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
 [pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
