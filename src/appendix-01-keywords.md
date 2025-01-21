@@ -69,9 +69,7 @@ Rust for potential future use.
 - `box`
 - `do`
 - `final`
-
-* `gen`
-
+- `gen`
 - `macro`
 - `override`
 - `priv`
