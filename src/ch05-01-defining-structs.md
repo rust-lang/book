@@ -138,17 +138,19 @@ corresponding fields in `user1`, but we can choose to specify values for as
 many fields as we want in any order, regardless of the order of the fields in
 the struct’s definition.
 
-Note that the struct update syntax uses `=` like an assignment; this is because
-it moves the data, just as we saw in the [“Variables and Data Interacting with
-Move”][move]<!-- ignore --> section. In this example, we can no longer use
-`user1` as a whole after creating `user2` because the `String` in the
-`username` field of `user1` was moved into `user2`. If we had given `user2` new
-`String` values for both `email` and `username`, and thus only used the
-`active` and `sign_in_count` values from `user1`, then `user1` would still be
-valid after creating `user2`. Both `active` and `sign_in_count` are types that
-implement the `Copy` trait, so the behavior we discussed in the [“Stack-Only
-Data: Copy”][copy]<!-- ignore --> section would apply. We can still use
-`user1.email` in this example, since its value was _not_ moved out.
+Note that the struct update syntax uses `=` like an assignment, so it handles 
+copies and moves just as we saw in the [“Variables and Data Interacting with
+Move”][move]<!-- ignore --> section. Fields that are of a type that implement
+the `Copy` trait are copied from `user1` to `user2`, as discussed in [“Stack-Only
+Data: Copy”][copy]<!-- ignore -->. Fields that are of a type that do not 
+implement the `Copy` trait are moved. In this example `user1.active` and 
+`user1.sign_in_count` have been copied, and so access to them is still valid.
+`user1.email` has not been moved and so access to it is also still valid.
+However `user1.username` has been moved and so access to it is no longer valid. 
+Furthermore, because one of its fields has been moved, access to `user1` directly 
+is also no longer valid (despite access to `user1.active`, `user1.sign_in_count` 
+and `user1.email` still being valid).
+
 
 ### Using Tuple Structs Without Named Fields to Create Different Types
 
