@@ -253,6 +253,7 @@ interoperate
 IntoFuture
 IntoIterator
 intra
+intratask
 InvalidDigit
 invariants
 ioerror
@@ -360,6 +361,7 @@ nondeterministic
 nonequality
 nongeneric
 noplayground
+NoStarch
 NotFound
 nsprust
 null's
@@ -523,6 +525,7 @@ suboptimal
 subpath
 subslices
 substring
+subtasks
 subteams
 subtree
 subtyping
