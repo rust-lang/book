@@ -245,5 +245,5 @@ that we wrote in Listing 18-5 and were able to support in Listing 18-9, so it’
 a trade-off to consider.
 
 [performance-of-code-using-generics]: ch10-01-syntax.html#performance-of-code-using-generics
-[dynamically-sized]: ch20-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait
+[dynamically-sized]: ch20-03-advanced-types.html#dynamically-sized-types-and-the-sized-trait
 [dyn-compatibility]: https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility

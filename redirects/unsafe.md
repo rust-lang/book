@@ -8,7 +8,7 @@
 
 Here are the relevant sections in the new and old books:
 
-* **[in the current edition: Ch 19.01 — Unsafe Rust][2]**
+* **[in the current edition: Ch 20.01 — Unsafe Rust][2]**
 * [The Rustonomicon, The Dark Arts of Advanced and Unsafe Rust Programming][3]
 * <small>[In the first edition: Ch 3.36 — `unsafe`][1]</small>
 

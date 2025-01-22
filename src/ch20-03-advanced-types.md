@@ -295,4 +295,4 @@ Next, we’ll talk about functions and closures!
 [string-slices]: ch04-03-slices.html#string-slices
 [the-match-control-flow-operator]: ch06-02-match.html#the-match-control-flow-operator
 [using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
-[using-the-newtype-pattern]: ch20-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
+[using-the-newtype-pattern]: ch20-02-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types

@@ -28,7 +28,7 @@ fn value_in_cents(coin: Coin) -> u32 {
 Here are the relevant sections in the new and old books:
 
 * **[in the current edition: Ch 6.02 — The `match` Control Flow Operator][2]**
-* [in the current edition: Ch 18.00 — Patterns][3]
+* [in the current edition: Ch 19.00 — Patterns][3]
 * <small>[In the first edition: Ch 3.14 — Match][1]</small>
 
 

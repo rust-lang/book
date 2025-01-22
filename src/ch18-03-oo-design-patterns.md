@@ -503,4 +503,4 @@ lots of flexibility. We’ve looked at them briefly throughout the book but
 haven’t seen their full capability yet. Let’s go!
 
 [more-info-than-rustc]: ch09-03-to-panic-or-not-to-panic.html#cases-in-which-you-have-more-information-than-the-compiler
-[macros]: ch20-06-macros.html#macros
+[macros]: ch20-05-macros.html#macros
