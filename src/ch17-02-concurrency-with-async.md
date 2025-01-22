@@ -1,6 +1,7 @@
 ## Applying Concurrency with Async
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="concurrency-with-async"></a>
 
 In this section, we’ll apply async to some of the same concurrency challenges
@@ -15,6 +16,7 @@ often have different behavior—and they nearly always have different performanc
 characteristics.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="counting"></a>
 
 ### Creating a New Task with `spawn_task`
@@ -178,6 +180,7 @@ For an extra challenge, see if you can figure out what the output will be in
 each case _before_ running the code!
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="message-passing"></a>
 
 ### Counting Up on Two Tasks Using Message Passing

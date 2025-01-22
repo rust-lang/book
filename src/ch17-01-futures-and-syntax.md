@@ -354,7 +354,7 @@ futures passed to it finishes first.
 
 > Note: Under the hood, `race` is built on a more general function, `select`,
 > which you will encounter more often in real-world Rust code. A `select`
-> function can do a lot of things that the  `trpl::race` function can’t, but it
+> function can do a lot of things that the `trpl::race` function can’t, but it
 > also has some additional complexity that we can skip over for now.
 
 Either future can legitimately “win,” so it doesn’t make sense to return a

@@ -1,8 +1,8 @@
 ## Streams: Futures in Sequence
 
 <!-- Old headings. Do not remove or links may break. -->
-<a id="streams"></a>
 
+<a id="streams"></a>
 
 So far in this chapter, we’ve mostly stuck to individual futures. The one big
 exception was the async channel we used. Recall how we used the receiver for our
@@ -122,7 +122,7 @@ we can do that _is_ unique to streams.
 ### Composing Streams
 
 Many concepts are naturally represented as streams: items becoming available in
-a queue, chunks of data being pulled incrementally from the filesystem  when the
+a queue, chunks of data being pulled incrementally from the filesystem when the
 full data set is too large for the computer’s , or data arriving over the
 network over time. Because streams are futures, we can use them with any other
 kind of future and combine them in interesting ways. For example, we can batch
@@ -173,8 +173,6 @@ Again, we could do this with the regular `Receiver` API or even the regular
 `Iterator` API, though, so let’s add a feature that requires streams: adding a
 timeout that applies to every item in the stream, and a delay on the items we
 emit, as shown in Listing 17-34.
-
-
 
 <Listing number="17-34" caption="Using the `StreamExt::timeout` method to set a time limit on the items in a stream" file-name="src/main.rs">
 
