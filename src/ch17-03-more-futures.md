@@ -378,6 +378,7 @@ each other.
 But _how_ would you hand control back to the runtime in those cases?
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="yielding"></a>
 
 ### Yielding Control to the Runtime

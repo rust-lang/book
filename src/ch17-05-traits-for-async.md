@@ -1,6 +1,7 @@
 ## A Closer Look at the Traits for Async
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="digging-into-the-traits-for-async"></a>
 
 Throughout the chapter, we’ve used the `Future`, `Pin`, `Unpin`, `Stream`, and
@@ -12,6 +13,7 @@ details. In this section, we’ll dig in just enough to help in those scenarios,
 still leaving the _really_ deep dive for other documentation.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="future"></a>
 
 ### The `Future` Trait
@@ -118,6 +120,7 @@ future it is responsible for, putting the future back to sleep when it is not
 yet ready.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="pinning-and-the-pin-and-unpin-traits"></a>
 
 ### The `Pin` and `Unpin` Traits
@@ -210,7 +213,7 @@ enforce constraints on pointer usage.
 
 Recalling that `await` is implemented in terms of calls to `poll` starts to
 explain the error message we saw earlier, but that was in terms of `Unpin`, not
-`Pin`. So how exactly does `Pin` relate to  `Unpin`, and why does `Future` need
+`Pin`. So how exactly does `Pin` relate to `Unpin`, and why does `Future` need
 `self` to be in a `Pin` type to call `poll`?
 
 Remember from earlier in this chapter a series of await points in a future get
