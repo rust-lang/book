@@ -53,7 +53,8 @@ described.
 - `union` - define a [union][union]<!-- ignore -->; is only a keyword when used
   in a union declaration
 - `unsafe` - denote unsafe code, functions, traits, or implementations
-- `use` - bring symbols into scope
+- `use` - bring symbols into scope; specify precise captures for generic and
+  lifetime bounds
 - `where` - denote clauses that constrain a type
 - `while` - loop conditionally based on the result of an expression
 
