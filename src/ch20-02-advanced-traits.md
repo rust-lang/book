@@ -20,8 +20,8 @@ than features explained in the rest of the book but more commonly than many of
 the other features discussed in this chapter.
 
 One example of a trait with an associated type is the `Iterator` trait that the
-standard library provides. The associated type is named `Item` and stands in
-for the type of the values the type implementing the `Iterator` trait is
+standard library provides. The associated type is named `Item` and stands for 
+the type of the values the type implementing the `Iterator` trait is
 iterating over. The definition of the `Iterator` trait is as shown in Listing
 20-13.
 
