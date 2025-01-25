@@ -1,27 +1,20 @@
-## Comments
+## মন্তব্য
 
-All programmers strive to make their code easy to understand, but sometimes
-extra explanation is warranted. In these cases, programmers leave _comments_ in
-their source code that the compiler will ignore but people reading the source
-code may find useful.
+সমস্ত প্রোগ্রামার তাদের কোডকে সহজে বোধগম্য করার চেষ্টা করে, তবে মাঝে মাঝে অতিরিক্ত ব্যাখ্যার প্রয়োজন হয়। এই ক্ষেত্রে, প্রোগ্রামাররা তাদের সোর্স কোডে _মন্তব্য_ রেখে যায় যা কম্পাইলার উপেক্ষা করবে তবে সোর্স কোড পাঠকরা এটিকে উপযোগী মনে করতে পারে।
 
-Here’s a simple comment:
+এখানে একটি সাধারণ মন্তব্য দেওয়া হল:
 
 ```rust
 // hello, world
 ```
 
-In Rust, the idiomatic comment style starts a comment with two slashes, and the
-comment continues until the end of the line. For comments that extend beyond a
-single line, you’ll need to include `//` on each line, like this:
+Rust-এ, ইডিওমেটিক মন্তব্য শৈলী দুটি স্ল্যাশ দিয়ে একটি মন্তব্য শুরু করে এবং মন্তব্যটি লাইনের শেষ পর্যন্ত চলতে থাকে। যে মন্তব্যগুলি একটি লাইনের বাইরেও বিস্তৃত, সেগুলির জন্য আপনাকে প্রতিটি লাইনে `//` অন্তর্ভুক্ত করতে হবে, যেমন:
 
 ```rust
-// So we’re doing something complicated here, long enough that we need
-// multiple lines of comments to do it! Whew! Hopefully, this comment will
-// explain what’s going on.
+// সুতরাং আমরা এখানে এমন কিছু জটিল কাজ করছি, যা এত দীর্ঘ যে এর জন্য আমাদের একাধিক লাইনের মন্তব্যের প্রয়োজন! ফুহ! আশা করি, এই মন্তব্যটি ব্যাখ্যা করবে যে কী ঘটছে।
 ```
 
-Comments can also be placed at the end of lines containing code:
+মন্তব্যগুলি কোড ধারণকারী লাইনের শেষেও স্থাপন করা যেতে পারে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -29,8 +22,7 @@ Comments can also be placed at the end of lines containing code:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
 ```
 
-But you’ll more often see them used in this format, with the comment on a
-separate line above the code it’s annotating:
+কিন্তু আপনি প্রায়শই এগুলিকে এই বিন্যাসে ব্যবহৃত দেখতে পাবেন, যেখানে মন্তব্যটি সেই কোডের উপরে একটি পৃথক লাইনে থাকে যাকে এটি টীকা দিচ্ছে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -38,8 +30,6 @@ separate line above the code it’s annotating:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
 ```
 
-Rust also has another kind of comment, documentation comments, which we’ll
-discuss in the [“Publishing a Crate to Crates.io”][publishing]<!-- ignore -->
-section of Chapter 14.
+Rust-এর আরও এক ধরনের মন্তব্য রয়েছে, ডকুমেন্টেশন মন্তব্য, যা আমরা অধ্যায় 14 এর [“Crates.io-এ একটি Crate প্রকাশ করা”][publishing]<!-- ignore --> বিভাগে আলোচনা করব।
 
 [publishing]: ch14-02-publishing-to-crates-io.html

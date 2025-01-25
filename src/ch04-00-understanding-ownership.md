@@ -1,7 +1,3 @@
-# Understanding Ownership
+# মালিকানা বোঝা
 
-Ownership is Rust’s most unique feature and has deep implications for the rest
-of the language. It enables Rust to make memory safety guarantees without
-needing a garbage collector, so it’s important to understand how ownership
-works. In this chapter, we’ll talk about ownership as well as several related
-features: borrowing, slices, and how Rust lays data out in memory.
+মালিকানা হল Rust-এর সবচেয়ে অনন্য বৈশিষ্ট্য এবং ভাষার বাকি অংশের উপর এর গভীর প্রভাব রয়েছে। এটি Rust কে আবর্জনা সংগ্রাহকের প্রয়োজন ছাড়াই মেমরি সুরক্ষার গ্যারান্টি দিতে সক্ষম করে, তাই মালিকানা কীভাবে কাজ করে তা বোঝা গুরুত্বপূর্ণ। এই অধ্যায়ে, আমরা মালিকানা এবং সেইসাথে কয়েকটি সম্পর্কিত বৈশিষ্ট্য নিয়ে কথা বলব: ধার করা, স্লাইস এবং Rust কীভাবে মেমরিতে ডেটা সাজায়।

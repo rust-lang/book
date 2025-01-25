@@ -1,13 +1,8 @@
-## Functions
+## ফাংশন
 
-Functions are prevalent in Rust code. You’ve already seen one of the most
-important functions in the language: the `main` function, which is the entry
-point of many programs. You’ve also seen the `fn` keyword, which allows you to
-declare new functions.
+ফাংশন Rust কোডে প্রচলিত। আপনি ইতিমধ্যেই ভাষার সবচেয়ে গুরুত্বপূর্ণ ফাংশনগুলির একটি দেখেছেন: `main` ফাংশন, যা অনেক প্রোগ্রামের প্রবেশদ্বার। আপনি `fn` কীওয়ার্ডও দেখেছেন, যা আপনাকে নতুন ফাংশন ঘোষণা করতে দেয়।
 
-Rust code uses _snake case_ as the conventional style for function and variable
-names, in which all letters are lowercase and underscores separate words.
-Here’s a program that contains an example function definition:
+Rust কোড ফাংশন এবং ভেরিয়েবলের নামের জন্য প্রচলিত শৈলী হিসাবে _স্নেক কেস_ ব্যবহার করে, যেখানে সমস্ত অক্ষর ছোট হাতের হয় এবং আন্ডারস্কোর শব্দগুলিকে আলাদা করে। এখানে একটি প্রোগ্রাম রয়েছে যাতে একটি উদাহরণ ফাংশন সংজ্ঞা রয়েছে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -15,40 +10,23 @@ Here’s a program that contains an example function definition:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-16-functions/src/main.rs}}
 ```
 
-We define a function in Rust by entering `fn` followed by a function name and a
-set of parentheses. The curly brackets tell the compiler where the function
-body begins and ends.
+আমরা Rust-এ একটি ফাংশন সংজ্ঞায়িত করি `fn` লেখার মাধ্যমে, তারপরে একটি ফাংশনের নাম এবং প্যারেনথেসিসের একটি সেট লিখি। কার্লি বন্ধনী কম্পাইলারকে বলে যে ফাংশন বডি কোথায় শুরু এবং শেষ হয়।
 
-We can call any function we’ve defined by entering its name followed by a set
-of parentheses. Because `another_function` is defined in the program, it can be
-called from inside the `main` function. Note that we defined `another_function`
-_after_ the `main` function in the source code; we could have defined it before
-as well. Rust doesn’t care where you define your functions, only that they’re
-defined somewhere in a scope that can be seen by the caller.
+আমরা প্যারেনথেসিসের একটি সেট অনুসরণ করে এর নাম প্রবেশ করে আমরা সংজ্ঞায়িত করা যেকোনো ফাংশনকে কল করতে পারি। যেহেতু `another_function` প্রোগ্রামে সংজ্ঞায়িত করা হয়েছে, তাই এটিকে `main` ফাংশনের ভিতর থেকে কল করা যেতে পারে। মনে রাখবেন যে আমরা সোর্স কোডে `main` ফাংশনের _পরে_ `another_function` সংজ্ঞায়িত করেছি; আমরা এটি আগে সংজ্ঞায়িত করতে পারতাম। Rust আপনার ফাংশনগুলি কোথায় সংজ্ঞায়িত করেন তা নিয়ে চিন্তা করে না, শুধুমাত্র সেগুলি এমন একটি স্কোপে সংজ্ঞায়িত করা হয়েছে কিনা যা কলার দ্বারা দেখা যায়।
 
-Let’s start a new binary project named _functions_ to explore functions
-further. Place the `another_function` example in _src/main.rs_ and run it. You
-should see the following output:
+আসুন ফাংশনগুলি আরও অন্বেষণ করতে _functions_ নামের একটি নতুন বাইনারি প্রকল্প শুরু করি। `another_function` উদাহরণটি _src/main.rs_-এ রাখুন এবং এটি চালান। আপনি নিম্নলিখিত আউটপুট দেখতে পাবেন:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-16-functions/output.txt}}
 ```
 
-The lines execute in the order in which they appear in the `main` function.
-First the “Hello, world!” message prints, and then `another_function` is called
-and its message is printed.
+লাইনগুলি `main` ফাংশনে যেভাবে প্রদর্শিত হয় সেই ক্রমে এক্সিকিউট হয়। প্রথমে "Hello, world!" বার্তা প্রিন্ট হয় এবং তারপর `another_function` কল করা হয় এবং এর বার্তা প্রিন্ট করা হয়।
 
-### Parameters
+### প্যারামিটার
 
-We can define functions to have _parameters_, which are special variables that
-are part of a function’s signature. When a function has parameters, you can
-provide it with concrete values for those parameters. Technically, the concrete
-values are called _arguments_, but in casual conversation, people tend to use
-the words _parameter_ and _argument_ interchangeably for either the variables
-in a function’s definition or the concrete values passed in when you call a
-function.
+আমরা ফাংশনগুলিকে _প্যারামিটার_ রাখার জন্য সংজ্ঞায়িত করতে পারি, যা বিশেষ ভেরিয়েবল যা একটি ফাংশনের স্বাক্ষরের অংশ। যখন একটি ফাংশনে প্যারামিটার থাকে, তখন আপনি সেই প্যারামিটারগুলির জন্য এটিকে নির্দিষ্ট মান সরবরাহ করতে পারেন। কারিগরিভাবে, নির্দিষ্ট মানগুলিকে _আর্গুমেন্ট_ বলা হয়, তবে সাধারণ কথোপকথনে, লোকেরা একটি ফাংশনের সংজ্ঞায় ভেরিয়েবল বা যখন আপনি একটি ফাংশনকে কল করেন তখন পাস করা নির্দিষ্ট মানগুলির জন্য _প্যারামিটার_ এবং _আর্গুমেন্ট_ শব্দগুলি পরস্পর পরিবর্তনযোগ্যভাবে ব্যবহার করে।
 
-In this version of `another_function` we add a parameter:
+`another_function` এর এই সংস্করণে আমরা একটি প্যারামিটার যোগ করি:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -56,25 +34,17 @@ In this version of `another_function` we add a parameter:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/src/main.rs}}
 ```
 
-Try running this program; you should get the following output:
+এই প্রোগ্রামটি চালানোর চেষ্টা করুন; আপনি নিম্নলিখিত আউটপুট পাবেন:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/output.txt}}
 ```
 
-The declaration of `another_function` has one parameter named `x`. The type of
-`x` is specified as `i32`. When we pass `5` in to `another_function`, the
-`println!` macro puts `5` where the pair of curly brackets containing `x` was
-in the format string.
+`another_function` এর ঘোষণায় `x` নামের একটি প্যারামিটার রয়েছে। `x` এর টাইপ `i32` হিসাবে নির্দিষ্ট করা হয়েছে। যখন আমরা `another_function`-এ `5` পাস করি, তখন `println!` ম্যাক্রোটি ফরম্যাট স্ট্রিং-এ `x` ধারণকারী কার্লি বন্ধনীর জোড়াটি যেখানে ছিল সেখানে `5` রাখে।
 
-In function signatures, you _must_ declare the type of each parameter. This is
-a deliberate decision in Rust’s design: requiring type annotations in function
-definitions means the compiler almost never needs you to use them elsewhere in
-the code to figure out what type you mean. The compiler is also able to give
-more helpful error messages if it knows what types the function expects.
+ফাংশন স্বাক্ষরে, আপনাকে _অবশ্যই_ প্রতিটি প্যারামিটারের প্রকার ঘোষণা করতে হবে। এটি Rust-এর ডিজাইনের একটি ইচ্ছাকৃত সিদ্ধান্ত: ফাংশন সংজ্ঞায় টাইপ টীকাগুলির প্রয়োজন হওয়ার অর্থ হল কম্পাইলারকে আপনি কোন প্রকারটি বোঝাতে চেয়েছেন তা বের করার জন্য কোডের অন্য কোথাও সেগুলি ব্যবহার করার প্রয়োজন প্রায় কখনও হয় না। কম্পাইলার আরও সহায়ক ত্রুটি বার্তা দিতে সক্ষম যদি এটি জানে যে ফাংশনটি কোন প্রকারগুলি আশা করে।
 
-When defining multiple parameters, separate the parameter declarations with
-commas, like this:
+একাধিক প্যারামিটার সংজ্ঞায়িত করার সময়, প্যারামিটার ঘোষণাগুলিকে কমা দিয়ে আলাদা করুন, যেমন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -82,41 +52,26 @@ commas, like this:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/src/main.rs}}
 ```
 
-This example creates a function named `print_labeled_measurement` with two
-parameters. The first parameter is named `value` and is an `i32`. The second is
-named `unit_label` and is type `char`. The function then prints text containing
-both the `value` and the `unit_label`.
+এই উদাহরণটি `print_labeled_measurement` নামের একটি ফাংশন তৈরি করে দুটি প্যারামিটার সহ। প্রথম প্যারামিটারটির নাম `value` এবং এটি একটি `i32`। দ্বিতীয়টির নাম `unit_label` এবং এটি `char` টাইপের। ফাংশনটি তখন `value` এবং `unit_label` উভয়ই ধারণকারী টেক্সট প্রিন্ট করে।
 
-Let’s try running this code. Replace the program currently in your _functions_
-project’s _src/main.rs_ file with the preceding example and run it using `cargo
-run`:
+আসুন এই কোডটি চালানোর চেষ্টা করি। আপনার _functions_ প্রকল্পের _src/main.rs_ ফাইলে বর্তমানে থাকা প্রোগ্রামটিকে পূর্ববর্তী উদাহরণ দিয়ে প্রতিস্থাপন করুন এবং `cargo run` ব্যবহার করে এটি চালান:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/output.txt}}
 ```
 
-Because we called the function with `5` as the value for `value` and `'h'` as
-the value for `unit_label`, the program output contains those values.
+যেহেতু আমরা ফাংশনটিকে `value` এর মান হিসাবে `5` এবং `unit_label` এর মান হিসাবে `'h'` দিয়ে কল করেছি, তাই প্রোগ্রাম আউটপুটে সেই মানগুলি রয়েছে।
 
-### Statements and Expressions
+### স্টেটমেন্ট এবং এক্সপ্রেশন
 
-Function bodies are made up of a series of statements optionally ending in an
-expression. So far, the functions we’ve covered haven’t included an ending
-expression, but you have seen an expression as part of a statement. Because
-Rust is an expression-based language, this is an important distinction to
-understand. Other languages don’t have the same distinctions, so let’s look at
-what statements and expressions are and how their differences affect the bodies
-of functions.
+ফাংশন বডিগুলি ঐচ্ছিকভাবে একটি এক্সপ্রেশনে শেষ হওয়া স্টেটমেন্টগুলির একটি সিরিজ দিয়ে গঠিত। এখন পর্যন্ত, আমরা যে ফাংশনগুলি কভার করেছি তাতে কোনও শেষ এক্সপ্রেশন অন্তর্ভুক্ত নেই, তবে আপনি একটি স্টেটমেন্টের অংশ হিসাবে একটি এক্সপ্রেশন দেখেছেন। যেহেতু Rust একটি এক্সপ্রেশন-ভিত্তিক ভাষা, তাই এটি বোঝার জন্য একটি গুরুত্বপূর্ণ পার্থক্য। অন্যান্য ভাষার একই পার্থক্য নেই, তাই আসুন দেখি স্টেটমেন্ট এবং এক্সপ্রেশন কী এবং তাদের পার্থক্যগুলি কীভাবে ফাংশনের বডিগুলিকে প্রভাবিত করে।
 
-- **Statements** are instructions that perform some action and do not return
-  a value.
-- **Expressions** evaluate to a resultant value. Let’s look at some examples.
+- **স্টেটমেন্ট** হল নির্দেশাবলী যা কিছু কাজ করে এবং মান রিটার্ন করে না।
+- **এক্সপ্রেশন** একটি ফলস্বরূপ মান মূল্যায়ন করে। আসুন কিছু উদাহরণ দেখি।
 
-We’ve actually already used statements and expressions. Creating a variable and
-assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
-`let y = 6;` is a statement.
+আমরা আসলে ইতিমধ্যেই স্টেটমেন্ট এবং এক্সপ্রেশন ব্যবহার করেছি। `let` কীওয়ার্ড দিয়ে একটি ভেরিয়েবল তৈরি করা এবং এটিকে একটি মান নির্ধারণ করা একটি স্টেটমেন্ট। Listing 3-1 এ, `let y = 6;` একটি স্টেটমেন্ট।
 
-<Listing number="3-1" file-name="src/main.rs" caption="A `main` function declaration containing one statement">
+<Listing number="3-1" file-name="src/main.rs" caption="একটি স্টেটমেন্ট ধারণকারী একটি `main` ফাংশন ঘোষণা">
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-01/src/main.rs}}
@@ -124,12 +79,9 @@ assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
 
 </Listing>
 
-Function definitions are also statements; the entire preceding example is a
-statement in itself. (As we will see below, _calling_ a function is not a
-statement.)
+ফাংশন সংজ্ঞাগুলিও স্টেটমেন্ট; পুরো পূর্ববর্তী উদাহরণটি নিজেই একটি স্টেটমেন্ট। (আমরা নীচে দেখব, একটি ফাংশনকে _কল_ করা কোনো স্টেটমেন্ট নয়।)
 
-Statements do not return values. Therefore, you can’t assign a `let` statement
-to another variable, as the following code tries to do; you’ll get an error:
+স্টেটমেন্টগুলি মান রিটার্ন করে না। অতএব, আপনি অন্য ভেরিয়েবলে একটি `let` স্টেটমেন্ট অ্যাসাইন করতে পারবেন না, যেমনটি নিম্নলিখিত কোডটি করার চেষ্টা করে; আপনি একটি ত্রুটি পাবেন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -137,25 +89,15 @@ to another variable, as the following code tries to do; you’ll get an error:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/src/main.rs}}
 ```
 
-When you run this program, the error you’ll get looks like this:
+আপনি যখন এই প্রোগ্রামটি চালাবেন, তখন আপনি যে ত্রুটি পাবেন তা এইরকম দেখাবে:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/output.txt}}
 ```
 
-The `let y = 6` statement does not return a value, so there isn’t anything for
-`x` to bind to. This is different from what happens in other languages, such as
-C and Ruby, where the assignment returns the value of the assignment. In those
-languages, you can write `x = y = 6` and have both `x` and `y` have the value
-`6`; that is not the case in Rust.
+`let y = 6` স্টেটমেন্ট কোনো মান রিটার্ন করে না, তাই `x`-এর সাথে বাইন্ড করার মতো কিছুই নেই। এটি অন্যান্য ভাষা, যেমন C এবং Ruby-তে যা ঘটে তার থেকে আলাদা, যেখানে অ্যাসাইনমেন্ট অ্যাসাইনমেন্টের মান রিটার্ন করে। সেই ভাষাগুলিতে, আপনি `x = y = 6` লিখতে পারেন এবং `x` এবং `y` উভয়েরই মান `6` হবে; Rust-এ তা নয়।
 
-Expressions evaluate to a value and make up most of the rest of the code that
-you’ll write in Rust. Consider a math operation, such as `5 + 6`, which is an
-expression that evaluates to the value `11`. Expressions can be part of
-statements: in Listing 3-1, the `6` in the statement `let y = 6;` is an
-expression that evaluates to the value `6`. Calling a function is an
-expression. Calling a macro is an expression. A new scope block created with
-curly brackets is an expression, for example:
+এক্সপ্রেশনগুলি একটি মান মূল্যায়ন করে এবং Rust-এ আপনি যে কোড লিখবেন তার বেশিরভাগ অংশ তৈরি করে। একটি গাণিতিক অপারেশন বিবেচনা করুন, যেমন `5 + 6`, যা একটি এক্সপ্রেশন যা `11` মানটিকে মূল্যায়ন করে। এক্সপ্রেশনগুলি স্টেটমেন্টের অংশ হতে পারে: Listing 3-1 এ, `let y = 6;` স্টেটমেন্টে `6` হল একটি এক্সপ্রেশন যা `6` মানটিকে মূল্যায়ন করে। একটি ফাংশনকে কল করা একটি এক্সপ্রেশন। একটি ম্যাক্রো কল করা একটি এক্সপ্রেশন। কার্লি বন্ধনী দিয়ে তৈরি একটি নতুন স্কোপ ব্লক একটি এক্সপ্রেশন, উদাহরণস্বরূপ:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -163,7 +105,7 @@ curly brackets is an expression, for example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-20-blocks-are-expressions/src/main.rs}}
 ```
 
-This expression:
+এই এক্সপ্রেশন:
 
 ```rust,ignore
 {
@@ -172,23 +114,11 @@ This expression:
 }
 ```
 
-is a block that, in this case, evaluates to `4`. That value gets bound to `y`
-as part of the `let` statement. Note that the `x + 1` line doesn’t have a
-semicolon at the end, which is unlike most of the lines you’ve seen so far.
-Expressions do not include ending semicolons. If you add a semicolon to the end
-of an expression, you turn it into a statement, and it will then not return a
-value. Keep this in mind as you explore function return values and expressions
-next.
+একটি ব্লক যা, এই ক্ষেত্রে, `4` তে মূল্যায়ন করে। সেই মানটি `let` স্টেটমেন্টের অংশ হিসাবে `y` এর সাথে আবদ্ধ হয়। মনে রাখবেন যে `x + 1` লাইনের শেষে একটি সেমিকোলন নেই, যা আপনি এখন পর্যন্ত দেখেছেন এমন বেশিরভাগ লাইনের থেকে আলাদা। এক্সপ্রেশনগুলিতে শেষ সেমিকোলন অন্তর্ভুক্ত থাকে না। আপনি যদি একটি এক্সপ্রেশনের শেষে একটি সেমিকোলন যোগ করেন তবে আপনি এটিকে একটি স্টেটমেন্টে পরিণত করেন এবং এটি তখন কোনও মান রিটার্ন করবে না। আপনি যখন ফাংশনের রিটার্ন মান এবং এক্সপ্রেশনগুলি অন্বেষণ করেন তখন এটি মনে রাখবেন।
 
-### Functions with Return Values
+### রিটার্ন মান সহ ফাংশন
 
-Functions can return values to the code that calls them. We don’t name return
-values, but we must declare their type after an arrow (`->`). In Rust, the
-return value of the function is synonymous with the value of the final
-expression in the block of the body of a function. You can return early from a
-function by using the `return` keyword and specifying a value, but most
-functions return the last expression implicitly. Here’s an example of a
-function that returns a value:
+ফাংশনগুলি যে কোড তাদেরকে কল করে সেই কোডে মান রিটার্ন করতে পারে। আমরা রিটার্ন মানগুলির নাম দিই না, তবে আমাদের একটি তীর (`->`) এর পরে তাদের প্রকার ঘোষণা করতে হবে। Rust এ, ফাংশনের রিটার্ন মান একটি ফাংশনের বডির ব্লকের শেষ এক্সপ্রেশনের মানের সমার্থক। আপনি `return` কীওয়ার্ড ব্যবহার করে এবং একটি মান নির্দিষ্ট করে একটি ফাংশন থেকে তাড়াতাড়ি রিটার্ন করতে পারেন, তবে বেশিরভাগ ফাংশন শেষ এক্সপ্রেশনটি পরোক্ষভাবে রিটার্ন করে। এখানে একটি ফাংশনের উদাহরণ দেওয়া হল যা একটি মান রিটার্ন করে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -196,30 +126,21 @@ function that returns a value:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/src/main.rs}}
 ```
 
-There are no function calls, macros, or even `let` statements in the `five`
-function—just the number `5` by itself. That’s a perfectly valid function in
-Rust. Note that the function’s return type is specified too, as `-> i32`. Try
-running this code; the output should look like this:
+`five` ফাংশনে কোনো ফাংশন কল, ম্যাক্রো বা `let` স্টেটমেন্টও নেই—শুধু একা `5` সংখ্যাটি। এটি Rust-এ একটি নিখুঁত বৈধ ফাংশন। মনে রাখবেন যে ফাংশনের রিটার্ন টাইপটিও `-> i32` হিসাবে নির্দিষ্ট করা হয়েছে। এই কোডটি চালানোর চেষ্টা করুন; আউটপুটটি এইরকম হওয়া উচিত:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/output.txt}}
 ```
 
-The `5` in `five` is the function’s return value, which is why the return type
-is `i32`. Let’s examine this in more detail. There are two important bits:
-first, the line `let x = five();` shows that we’re using the return value of a
-function to initialize a variable. Because the function `five` returns a `5`,
-that line is the same as the following:
+`five`-এ `5` হল ফাংশনের রিটার্ন মান, যে কারণে রিটার্ন টাইপ হল `i32`। আসুন এটি আরও বিস্তারিতভাবে পরীক্ষা করি। দুটি গুরুত্বপূর্ণ অংশ রয়েছে: প্রথমত, `let x = five();` লাইনটি দেখায় যে আমরা একটি ভেরিয়েবল শুরু করতে একটি ফাংশনের রিটার্ন মান ব্যবহার করছি। যেহেতু `five` ফাংশনটি `5` রিটার্ন করে, সেই লাইনটি নিম্নলিখিতটির মতোই:
 
 ```rust
 let x = 5;
 ```
 
-Second, the `five` function has no parameters and defines the type of the
-return value, but the body of the function is a lonely `5` with no semicolon
-because it’s an expression whose value we want to return.
+দ্বিতীয়ত, `five` ফাংশনে কোনো প্যারামিটার নেই এবং রিটার্ন মানের প্রকার সংজ্ঞায়িত করে, তবে ফাংশনের বডিটি একটি সেমিকোলন ছাড়া একটি নিঃসঙ্গ `5` কারণ এটি এমন একটি এক্সপ্রেশন যার মান আমরা রিটার্ন করতে চাই।
 
-Let’s look at another example:
+আসুন আরও একটি উদাহরণ দেখি:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -227,9 +148,7 @@ Let’s look at another example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-22-function-parameter-and-return/src/main.rs}}
 ```
 
-Running this code will print `The value of x is: 6`. But if we place a
-semicolon at the end of the line containing `x + 1`, changing it from an
-expression to a statement, we’ll get an error:
+এই কোডটি চালালে `The value of x is: 6` প্রিন্ট হবে। কিন্তু যদি আমরা `x + 1` ধারণকারী লাইনের শেষে একটি সেমিকোলন রাখি, এটিকে এক্সপ্রেশন থেকে স্টেটমেন্টে পরিবর্তন করি, তাহলে আমরা একটি ত্রুটি পাব:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -237,16 +156,10 @@ expression to a statement, we’ll get an error:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/src/main.rs}}
 ```
 
-Compiling this code produces an error, as follows:
+এই কোডটি কম্পাইল করলে নিম্নলিখিত হিসাবে একটি ত্রুটি তৈরি হয়:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/output.txt}}
 ```
 
-The main error message, `mismatched types`, reveals the core issue with this
-code. The definition of the function `plus_one` says that it will return an
-`i32`, but statements don’t evaluate to a value, which is expressed by `()`,
-the unit type. Therefore, nothing is returned, which contradicts the function
-definition and results in an error. In this output, Rust provides a message to
-possibly help rectify this issue: it suggests removing the semicolon, which
-would fix the error.
+`mismatched types` মূল ত্রুটি বার্তাটি এই কোডের মূল সমস্যাটি প্রকাশ করে। `plus_one` ফাংশনের সংজ্ঞা বলে যে এটি একটি `i32` রিটার্ন করবে, কিন্তু স্টেটমেন্টগুলি একটি মান মূল্যায়ন করে না, যা `()` ইউনিট টাইপ দ্বারা প্রকাশ করা হয়। অতএব, কিছুই রিটার্ন হয় না, যা ফাংশনের সংজ্ঞার সাথে সাংঘর্ষিক এবং এর ফলে একটি ত্রুটি দেখা যায়। এই আউটপুটে, Rust সম্ভবত এই সমস্যাটি সংশোধন করতে সাহায্য করার জন্য একটি বার্তা প্রদান করে: এটি সেমিকোলন সরানোর পরামর্শ দেয়, যা ত্রুটিটি ঠিক করবে।

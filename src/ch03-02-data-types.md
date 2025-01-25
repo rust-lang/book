@@ -1,139 +1,78 @@
-## Data Types
+## ডেটা টাইপ
 
-Every value in Rust is of a certain _data type_, which tells Rust what kind of
-data is being specified so it knows how to work with that data. We’ll look at
-two data type subsets: scalar and compound.
+Rust-এ প্রতিটি মানের একটি নির্দিষ্ট _ডেটা টাইপ_ থাকে, যা Rust-কে বলে যে কী ধরনের ডেটা নির্দিষ্ট করা হচ্ছে যাতে এটি সেই ডেটার সাথে কীভাবে কাজ করতে হয় তা জানতে পারে। আমরা দুটি ডেটা টাইপ উপসেট দেখব: স্কেলার এবং যৌগিক।
 
-Keep in mind that Rust is a _statically typed_ language, which means that it
-must know the types of all variables at compile time. The compiler can usually
-infer what type we want to use based on the value and how we use it. In cases
-when many types are possible, such as when we converted a `String` to a numeric
-type using `parse` in the [“Comparing the Guess to the Secret
-Number”][comparing-the-guess-to-the-secret-number]<!-- ignore --> section in
-Chapter 2, we must add a type annotation, like this:
+মনে রাখবেন যে Rust একটি _স্ট্যাটিকালি টাইপড_ ভাষা, যার মানে হল কম্পাইল করার সময় এটিকে সমস্ত ভেরিয়েবলের টাইপ জানতে হবে। কম্পাইলার সাধারণত মান এবং আমরা কীভাবে এটি ব্যবহার করি তার উপর ভিত্তি করে আমরা কোন টাইপ ব্যবহার করতে চাই তা অনুমান করতে পারে। যখন অনেকগুলো টাইপ সম্ভব হয়, যেমন আমরা অধ্যায় 2 এর [“অনুমানের সাথে গোপন সংখ্যার তুলনা করা”][comparing-the-guess-to-the-secret-number]<!-- ignore --> বিভাগে `parse` ব্যবহার করে একটি `String` কে সংখ্যাসূচক টাইপে রূপান্তর করার সময়, তখন আমাদের একটি টাইপ টীকা যোগ করতে হবে, যেমন:
 
 ```rust
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-If we don’t add the `: u32` type annotation shown in the preceding code, Rust
-will display the following error, which means the compiler needs more
-information from us to know which type we want to use:
+যদি আমরা উপরের কোডে দেখানো `: u32` টাইপ টীকা যোগ না করি, তাহলে Rust নিম্নলিখিত ত্রুটিটি দেখাবে, যার মানে হল কম্পাইলারকে জানতে হবে আমরা কোন টাইপ ব্যবহার করতে চাই তার জন্য আমাদের কাছ থেকে আরও তথ্যের প্রয়োজন:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/output-only-01-no-type-annotations/output.txt}}
 ```
 
-You’ll see different type annotations for other data types.
+আপনি অন্যান্য ডেটা টাইপের জন্য বিভিন্ন ধরনের টাইপ টীকা দেখতে পাবেন।
 
-### Scalar Types
+### স্কেলার টাইপ
 
-A _scalar_ type represents a single value. Rust has four primary scalar types:
-integers, floating-point numbers, Booleans, and characters. You may recognize
-these from other programming languages. Let’s jump into how they work in Rust.
+একটি _স্কেলার_ টাইপ একটি একক মান উপস্থাপন করে। Rust-এ চারটি প্রাথমিক স্কেলার টাইপ রয়েছে: ইন্টিজার, ফ্লোটিং-পয়েন্ট নম্বর, বুলিয়ান এবং ক্যারেক্টার। আপনি অন্যান্য প্রোগ্রামিং ভাষা থেকে এগুলো চিনতে পারবেন। আসুন দেখি Rust এ এগুলো কিভাবে কাজ করে।
 
-#### Integer Types
+#### ইন্টিজার টাইপ
 
-An _integer_ is a number without a fractional component. We used one integer
-type in Chapter 2, the `u32` type. This type declaration indicates that the
-value it’s associated with should be an unsigned integer (signed integer types
-start with `i` instead of `u`) that takes up 32 bits of space. Table 3-1 shows
-the built-in integer types in Rust. We can use any of these variants to declare
-the type of an integer value.
+একটি _ইন্টিজার_ হল একটি ভগ্নাংশ উপাদান ছাড়া একটি সংখ্যা। আমরা অধ্যায় 2 এ একটি ইন্টিজার টাইপ, `u32` ব্যবহার করেছি। এই টাইপ ঘোষণা নির্দেশ করে যে এর সাথে যুক্ত মানটি একটি আনসাইনড ইন্টিজার (সাইনড ইন্টিজার টাইপগুলি `u` এর পরিবর্তে `i` দিয়ে শুরু হয়) হওয়া উচিত যা 32 বিট স্থান নেয়। Rust এ বিল্ট-ইন ইন্টিজার টাইপগুলি সারণী 3-1 এ দেখানো হয়েছে। আমরা একটি ইন্টিজার মানের টাইপ ঘোষণা করতে এই ভেরিয়েন্টগুলির যেকোনো একটি ব্যবহার করতে পারি।
 
-<span class="caption">Table 3-1: Integer Types in Rust</span>
+<span class="caption">সারণী 3-1: Rust-এ ইন্টিজার টাইপ</span>
 
-| Length  | Signed  | Unsigned |
-| ------- | ------- | -------- |
-| 8-bit   | `i8`    | `u8`     |
-| 16-bit  | `i16`   | `u16`    |
-| 32-bit  | `i32`   | `u32`    |
-| 64-bit  | `i64`   | `u64`    |
-| 128-bit | `i128`  | `u128`   |
-| arch    | `isize` | `usize`  |
+| দৈর্ঘ্য   | সাইনড  | আনসাইনড |
+| -------- | ----- | ------- |
+| 8-বিট  | `i8`  | `u8`    |
+| 16-বিট | `i16` | `u16`   |
+| 32-বিট | `i32` | `u32`   |
+| 64-বিট | `i64` | `u64`   |
+| 128-বিট | `i128` | `u128` |
+| arch     | `isize` | `usize` |
 
-Each variant can be either signed or unsigned and has an explicit size.
-_Signed_ and _unsigned_ refer to whether it’s possible for the number to be
-negative—in other words, whether the number needs to have a sign with it
-(signed) or whether it will only ever be positive and can therefore be
-represented without a sign (unsigned). It’s like writing numbers on paper: when
-the sign matters, a number is shown with a plus sign or a minus sign; however,
-when it’s safe to assume the number is positive, it’s shown with no sign.
-Signed numbers are stored using [two’s complement][twos-complement]<!-- ignore
---> representation.
+প্রতিটি ভেরিয়েন্ট হয় সাইনড বা আনসাইনড হতে পারে এবং এর একটি সুস্পষ্ট আকার রয়েছে। _সাইনড_ এবং _আনসাইনড_ বলতে বোঝায় যে সংখ্যাটি ঋণাত্মক হওয়া সম্ভব কিনা—অন্য কথায়, সংখ্যাটির সাথে একটি চিহ্ন (সাইনড) থাকা দরকার কিনা বা এটি শুধুমাত্র ইতিবাচক হবে এবং তাই কোনো চিহ্ন ছাড়াই উপস্থাপন করা যেতে পারে (আনসাইনড)। এটি কাগজে সংখ্যা লেখার মতো: যখন চিহ্নের প্রয়োজন হয়, তখন একটি সংখ্যা প্লাস চিহ্ন বা মাইনাস চিহ্ন দিয়ে দেখানো হয়; তবে, যখন সংখ্যাটি ইতিবাচক ধরে নেওয়া নিরাপদ, তখন এটি কোনো চিহ্ন ছাড়াই দেখানো হয়। সাইনড সংখ্যাগুলি [দুই এর পরিপূরক][twos-complement]<!-- ignore --> উপস্থাপনা ব্যবহার করে সংরক্ষণ করা হয়।
 
-Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
-1</sup> - 1 inclusive, where _n_ is the number of bits that variant uses. So an
-`i8` can store numbers from -(2<sup>7</sup>) to 2<sup>7</sup> - 1, which equals
--128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1,
-so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
+প্রতিটি সাইনড ভেরিয়েন্ট -(2<sup>n - 1</sup>) থেকে 2<sup>n - 1</sup> - 1 পর্যন্ত সংখ্যাগুলি সংরক্ষণ করতে পারে, যেখানে _n_ হল বিটের সংখ্যা যা সেই ভেরিয়েন্ট ব্যবহার করে। সুতরাং একটি `i8` -(2<sup>7</sup>) থেকে 2<sup>7</sup> - 1 পর্যন্ত সংখ্যাগুলি সংরক্ষণ করতে পারে, যা -128 থেকে 127 এর সমান। আনসাইনড ভেরিয়েন্টগুলি 0 থেকে 2<sup>n</sup> - 1 পর্যন্ত সংখ্যাগুলি সংরক্ষণ করতে পারে, তাই একটি `u8` 0 থেকে 2<sup>8</sup> - 1 পর্যন্ত সংখ্যাগুলি সংরক্ষণ করতে পারে, যা 0 থেকে 255 এর সমান।
 
-Additionally, the `isize` and `usize` types depend on the architecture of the
-computer your program is running on, which is denoted in the table as “arch”:
-64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit
-architecture.
+এছাড়াও, `isize` এবং `usize` টাইপগুলি আপনার প্রোগ্রামের চলমান কম্পিউটারের আর্কিটেকচারের উপর নির্ভর করে, যা সারণীতে "arch" হিসাবে চিহ্নিত করা হয়েছে: আপনি যদি 64-বিট আর্কিটেকচারে থাকেন তবে 64 বিট এবং আপনি যদি 32-বিট আর্কিটেকচারে থাকেন তবে 32 বিট।
 
-You can write integer literals in any of the forms shown in Table 3-2. Note
-that number literals that can be multiple numeric types allow a type suffix,
-such as `57u8`, to designate the type. Number literals can also use `_` as a
-visual separator to make the number easier to read, such as `1_000`, which will
-have the same value as if you had specified `1000`.
+আপনি সারণী 3-2 এ দেখানো যেকোনো ফর্মে ইন্টিজার লিটারেল লিখতে পারেন। মনে রাখবেন যে সংখ্যা লিটারেলগুলি যা একাধিক সংখ্যাসূচক টাইপ হতে পারে, যেমন `57u8`, টাইপ নির্ধারণ করার জন্য একটি টাইপ সাফিক্স ব্যবহার করার অনুমতি দেয়। সংখ্যা লিটারেলগুলি সংখ্যাটিকে পড়া সহজ করার জন্য ভিজ্যুয়াল সেপারেটর হিসাবে `_` ব্যবহার করতে পারে, যেমন `1_000`, যার মান `1000` এর মতোই হবে।
 
-<span class="caption">Table 3-2: Integer Literals in Rust</span>
+<span class="caption">সারণী 3-2: Rust-এ ইন্টিজার লিটারেল</span>
 
-| Number literals  | Example       |
-| ---------------- | ------------- |
-| Decimal          | `98_222`      |
-| Hex              | `0xff`        |
-| Octal            | `0o77`        |
-| Binary           | `0b1111_0000` |
-| Byte (`u8` only) | `b'A'`        |
+| সংখ্যা লিটারেল | উদাহরণ    |
+| ------------- | -------- |
+| দশমিক        | `98_222` |
+| হেক্স        | `0xff`   |
+| অক্টাল       | `0o77`   |
+| বাইনারি       | `0b1111_0000` |
+| বাইট (`u8` শুধুমাত্র) | `b'A'`    |
 
-So how do you know which type of integer to use? If you’re unsure, Rust’s
-defaults are generally good places to start: integer types default to `i32`.
-The primary situation in which you’d use `isize` or `usize` is when indexing
-some sort of collection.
+তাহলে আপনি কিভাবে জানবেন কোন ধরনের ইন্টিজার ব্যবহার করতে হবে? আপনি যদি নিশ্চিত না হন, তাহলে Rust এর ডিফল্টগুলি সাধারণত শুরু করার জন্য ভাল জায়গা: ইন্টিজার টাইপগুলি ডিফল্টভাবে `i32` হয়। `isize` বা `usize` ব্যবহার করার প্রধান পরিস্থিতি হল যখন আপনি কোনো ধরনের কালেকশন ইনডেক্স করছেন।
 
-> ##### Integer Overflow
+> ##### ইন্টিজার ওভারফ্লো
 >
-> Let’s say you have a variable of type `u8` that can hold values between 0 and
-> 255. If you try to change the variable to a value outside that range, such as
-> 256, _integer overflow_ will occur, which can result in one of two behaviors.
-> When you’re compiling in debug mode, Rust includes checks for integer overflow
-> that cause your program to _panic_ at runtime if this behavior occurs. Rust
-> uses the term _panicking_ when a program exits with an error; we’ll discuss
-> panics in more depth in the [“Unrecoverable Errors with
-> `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> section in Chapter
-> 9.
+> ধরুন আপনার কাছে `u8` টাইপের একটি ভেরিয়েবল আছে যা 0 থেকে 255 এর মধ্যে মান ধারণ করতে পারে। আপনি যদি ভেরিয়েবলটিকে সেই সীমার বাইরের কোনো মান, যেমন 256 তে পরিবর্তন করার চেষ্টা করেন, তাহলে _ইন্টিজার ওভারফ্লো_ ঘটবে, যার ফলে দুটি আচরণের মধ্যে একটি হতে পারে। যখন আপনি ডিবাগ মোডে কম্পাইল করছেন, Rust ইন্টিজার ওভারফ্লোর জন্য পরীক্ষাগুলি অন্তর্ভুক্ত করে যা এই আচরণটি ঘটলে রানটাইমে আপনার প্রোগ্রামটিকে _প্যানিক_ করে। যখন একটি প্রোগ্রাম ত্রুটির সাথে প্রস্থান করে তখন Rust _প্যানিকিং_ শব্দটি ব্যবহার করে; আমরা অধ্যায় 9 এর [“`panic!` সহ আনরিকভারেবল ত্রুটি”][unrecoverable-errors-with-panic]<!-- ignore --> বিভাগে প্যানিক নিয়ে আরও বিস্তারিত আলোচনা করব।
 >
-> When you’re compiling in release mode with the `--release` flag, Rust does
-> _not_ include checks for integer overflow that cause panics. Instead, if
-> overflow occurs, Rust performs _two’s complement wrapping_. In short, values
-> greater than the maximum value the type can hold “wrap around” to the minimum
-> of the values the type can hold. In the case of a `u8`, the value 256 becomes
-> 0, the value 257 becomes 1, and so on. The program won’t panic, but the
-> variable will have a value that probably isn’t what you were expecting it to
-> have. Relying on integer overflow’s wrapping behavior is considered an error.
+> আপনি যখন `--release` ফ্ল্যাগ সহ রিলিজ মোডে কম্পাইল করছেন, তখন Rust ইন্টিজার ওভারফ্লোর জন্য কোনো পরীক্ষা অন্তর্ভুক্ত করে _না_ যা প্যানিক ঘটায়। পরিবর্তে, যদি ওভারফ্লো ঘটে, তাহলে Rust _দুই এর পরিপূরক মোড়ানো_ করে। সংক্ষেপে, মানগুলি যা টাইপ ধারণ করতে পারে তার সর্বাধিক মানের চেয়ে বেশি "মোড়ানো" হয়ে সেই টাইপটি ধারণ করতে পারে এমন মানের সর্বনিম্ন মানে চলে আসে। `u8` এর ক্ষেত্রে, 256 মানটি 0 হয়ে যায়, 257 মানটি 1 হয়ে যায় এবং আরও অনেক কিছু। প্রোগ্রামটি প্যানিক করবে না, তবে ভেরিয়েবলের এমন একটি মান থাকবে যা সম্ভবত আপনি আশা করেননি। ইন্টিজার ওভারফ্লোর মোড়ানো আচরণের উপর নির্ভর করা একটি ত্রুটি হিসাবে বিবেচিত হয়।
 >
-> To explicitly handle the possibility of overflow, you can use these families
-> of methods provided by the standard library for primitive numeric types:
+> ওভারফ্লো হওয়ার সম্ভাবনাকে স্পষ্টভাবে পরিচালনা করতে, আপনি আদিম সংখ্যাসূচক টাইপের জন্য স্ট্যান্ডার্ড লাইব্রেরি দ্বারা প্রদত্ত এই পদ্ধতিগুলির পরিবারগুলি ব্যবহার করতে পারেন:
 >
-> - Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`.
-> - Return the `None` value if there is overflow with the `checked_*` methods.
-> - Return the value and a boolean indicating whether there was overflow with
->   the `overflowing_*` methods.
-> - Saturate at the value’s minimum or maximum values with the `saturating_*`
->   methods.
+> - `wrapping_add` এর মতো `wrapping_*` পদ্ধতিগুলির সাথে সমস্ত মোডে মোড়ানো।
+> - `checked_*` পদ্ধতিগুলির সাথে ওভারফ্লো হলে `None` মান রিটার্ন করুন।
+> - মানটি রিটার্ন করুন এবং একটি বুলিয়ান নির্দেশ করুন যে `overflowing_*` পদ্ধতিগুলির সাথে ওভারফ্লো ছিল কিনা।
+> - `saturating_*` পদ্ধতিগুলির সাথে মানের সর্বনিম্ন বা সর্বোচ্চ মানগুলিতে স্যাচুরেট করুন।
 
-#### Floating-Point Types
+#### ফ্লোটিং-পয়েন্ট টাইপ
 
-Rust also has two primitive types for _floating-point numbers_, which are
-numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
-which are 32 bits and 64 bits in size, respectively. The default type is `f64`
-because on modern CPUs, it’s roughly the same speed as `f32` but is capable of
-more precision. All floating-point types are signed.
+Rust-এ _ফ্লোটিং-পয়েন্ট সংখ্যার_ জন্য দুটি আদিম টাইপ রয়েছে, যেগুলি দশমিক বিন্দু সহ সংখ্যা। Rust এর ফ্লোটিং-পয়েন্ট টাইপগুলি হল `f32` এবং `f64`, যেগুলি যথাক্রমে 32 বিট এবং 64 বিটের আকারের। ডিফল্ট টাইপ হল `f64` কারণ আধুনিক CPU-তে, এটি `f32` এর প্রায় একই গতি তবে আরও নির্ভুলতার সাথে কাজ করতে সক্ষম। সমস্ত ফ্লোটিং-পয়েন্ট টাইপ সাইনড।
 
-Here’s an example that shows floating-point numbers in action:
+এখানে একটি উদাহরণ দেওয়া হল যা ফ্লোটিং-পয়েন্ট সংখ্যাগুলিকে কাজে দেখায়:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -141,14 +80,11 @@ Here’s an example that shows floating-point numbers in action:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-06-floating-point/src/main.rs}}
 ```
 
-Floating-point numbers are represented according to the IEEE-754 standard.
+ফ্লোটিং-পয়েন্ট সংখ্যাগুলি IEEE-754 স্ট্যান্ডার্ড অনুযায়ী উপস্থাপন করা হয়।
 
-#### Numeric Operations
+#### সংখ্যাসূচক অপারেশন
 
-Rust supports the basic mathematical operations you’d expect for all the number
-types: addition, subtraction, multiplication, division, and remainder. Integer
-division truncates toward zero to the nearest integer. The following code shows
-how you’d use each numeric operation in a `let` statement:
+Rust সমস্ত সংখ্যার টাইপের জন্য আপনার প্রত্যাশিত মৌলিক গাণিতিক অপারেশনগুলি সমর্থন করে: যোগ, বিয়োগ, গুণ, ভাগ এবং ভাগশেষ। ইন্টিজার বিভাগ শূন্যের দিকে নিকটতম ইন্টিজারের দিকে ছেঁটে দেয়। নিম্নলিখিত কোডটি দেখায় যে আপনি কিভাবে `let` স্টেটমেন্টে প্রতিটি সংখ্যাসূচক অপারেশন ব্যবহার করবেন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -156,16 +92,11 @@ how you’d use each numeric operation in a `let` statement:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-07-numeric-operations/src/main.rs}}
 ```
 
-Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable. [Appendix
-B][appendix_b]<!-- ignore --> contains a list of all operators that Rust
-provides.
+এই স্টেটমেন্টগুলির প্রতিটি এক্সপ্রেশন একটি গাণিতিক অপারেটর ব্যবহার করে এবং একটি একক মান মূল্যায়ন করে, যা তারপরে একটি ভেরিয়েবলের সাথে আবদ্ধ হয়। [পরিশিষ্ট B][appendix_b]<!-- ignore --> তে Rust দ্বারা প্রদত্ত সমস্ত অপারেটরের একটি তালিকা রয়েছে।
 
-#### The Boolean Type
+#### বুলিয়ান টাইপ
 
-As in most other programming languages, a Boolean type in Rust has two possible
-values: `true` and `false`. Booleans are one byte in size. The Boolean type in
-Rust is specified using `bool`. For example:
+অন্যান্য প্রোগ্রামিং ভাষার মতো, Rust-এ একটি বুলিয়ান টাইপের দুটি সম্ভাব্য মান রয়েছে: `true` এবং `false`। বুলিয়ানগুলি আকারে এক বাইট। Rust-এ বুলিয়ান টাইপ `bool` ব্যবহার করে নির্দিষ্ট করা হয়। উদাহরণস্বরূপ:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -173,14 +104,11 @@ Rust is specified using `bool`. For example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-08-boolean/src/main.rs}}
 ```
 
-The main way to use Boolean values is through conditionals, such as an `if`
-expression. We’ll cover how `if` expressions work in Rust in the [“Control
-Flow”][control-flow]<!-- ignore --> section.
+বুলিয়ান মান ব্যবহার করার প্রধান উপায় হল কন্ডিশনাল, যেমন একটি `if` এক্সপ্রেশন। আমরা [“কন্ট্রোল ফ্লো”][control-flow]<!-- ignore --> বিভাগে Rust-এ `if` এক্সপ্রেশন কীভাবে কাজ করে তা আলোচনা করব।
 
-#### The Character Type
+#### ক্যারেক্টার টাইপ
 
-Rust’s `char` type is the language’s most primitive alphabetic type. Here are
-some examples of declaring `char` values:
+Rust এর `char` টাইপ হল ভাষার সবচেয়ে আদিম বর্ণমালা টাইপ। এখানে `char` মান ঘোষণা করার কিছু উদাহরণ দেওয়া হল:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -188,32 +116,17 @@ some examples of declaring `char` values:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-09-char/src/main.rs}}
 ```
 
-Note that we specify `char` literals with single quotes, as opposed to string
-literals, which use double quotes. Rust’s `char` type is four bytes in size and
-represents a Unicode Scalar Value, which means it can represent a lot more than
-just ASCII. Accented letters; Chinese, Japanese, and Korean characters; emoji;
-and zero-width spaces are all valid `char` values in Rust. Unicode Scalar
-Values range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF` inclusive.
-However, a “character” isn’t really a concept in Unicode, so your human
-intuition for what a “character” is may not match up with what a `char` is in
-Rust. We’ll discuss this topic in detail in [“Storing UTF-8 Encoded Text with
-Strings”][strings]<!-- ignore --> in Chapter 8.
+লক্ষ্য করুন যে আমরা স্ট্রিং লিটারেলের বিপরীতে, একক উদ্ধৃতি দিয়ে `char` লিটারেলগুলি নির্দিষ্ট করি, যা ডাবল উদ্ধৃতি ব্যবহার করে। Rust-এর `char` টাইপটি আকারে চার বাইট এবং একটি ইউনিকোড স্কেলার মান উপস্থাপন করে, যার মানে এটি ASCII-এর চেয়ে অনেক বেশি কিছু উপস্থাপন করতে পারে। অ্যাকসেন্ট করা অক্ষর; চীনা, জাপানি এবং কোরিয়ান অক্ষর; ইমোজি; এবং শূন্য-প্রস্থের স্পেস সবই Rust-এ বৈধ `char` মান। ইউনিকোড স্কেলার মানগুলি `U+0000` থেকে `U+D7FF` এবং `U+E000` থেকে `U+10FFFF` পর্যন্ত অন্তর্ভুক্ত। যাইহোক, একটি "ক্যারেক্টার" আসলে ইউনিকোডে কোনো ধারণা নয়, তাই একটি "ক্যারেক্টার" বলতে আপনি যা বোঝেন তার সাথে Rust-এ একটি `char` কী তার মিল নাও থাকতে পারে। আমরা [অধ্যায় 8][strings]<!-- ignore --> এর “স্ট্রিং দিয়ে UTF-8 এনকোডেড টেক্সট সংরক্ষণ করা” এ এই বিষয়টি বিস্তারিতভাবে আলোচনা করব।
 
-### Compound Types
+### যৌগিক টাইপ
 
-_Compound types_ can group multiple values into one type. Rust has two
-primitive compound types: tuples and arrays.
+_যৌগিক টাইপগুলি_ একাধিক মানকে একটি টাইপে গোষ্ঠীভুক্ত করতে পারে। Rust এ দুটি আদিম যৌগিক টাইপ রয়েছে: টাপল এবং অ্যারে।
 
-#### The Tuple Type
+#### টাপল টাইপ
 
-A _tuple_ is a general way of grouping together a number of values with a
-variety of types into one compound type. Tuples have a fixed length: once
-declared, they cannot grow or shrink in size.
+একটি _টাপল_ হল একটি যৌগিক টাইপে বিভিন্ন ধরনের মানকে একত্রিত করার একটি সাধারণ উপায়। টাপলগুলির একটি নির্দিষ্ট দৈর্ঘ্য থাকে: একবার ঘোষণা করা হলে, সেগুলি আকারে বাড়তে বা সংকুচিত হতে পারে না।
 
-We create a tuple by writing a comma-separated list of values inside
-parentheses. Each position in the tuple has a type, and the types of the
-different values in the tuple don’t have to be the same. We’ve added optional
-type annotations in this example:
+আমরা প্যারেনথেসিসের ভিতরে কমা-দ্বারা পৃথক করা মানগুলির একটি তালিকা লিখে একটি টাপল তৈরি করি। টাপলের প্রতিটি অবস্থানের একটি টাইপ থাকে এবং টাপলের বিভিন্ন মানের টাইপ একই হতে হবে না। আমরা এই উদাহরণে ঐচ্ছিক টাইপ টীকা যোগ করেছি:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -221,9 +134,7 @@ type annotations in this example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-10-tuples/src/main.rs}}
 ```
 
-The variable `tup` binds to the entire tuple because a tuple is considered a
-single compound element. To get the individual values out of a tuple, we can
-use pattern matching to destructure a tuple value, like this:
+ভেরিয়েবল `tup` পুরো টাপলের সাথে বাইন্ড করে কারণ একটি টাপলকে একটি একক যৌগিক উপাদান হিসাবে বিবেচনা করা হয়। একটি টাপল থেকে আলাদা মানগুলি বের করার জন্য, আমরা এইরকম একটি টাপল মানকে ডিস্ট্রাকচার করার জন্য প্যাটার্ন ম্যাচিং ব্যবহার করতে পারি:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -231,14 +142,9 @@ use pattern matching to destructure a tuple value, like this:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-11-destructuring-tuples/src/main.rs}}
 ```
 
-This program first creates a tuple and binds it to the variable `tup`. It then
-uses a pattern with `let` to take `tup` and turn it into three separate
-variables, `x`, `y`, and `z`. This is called _destructuring_ because it breaks
-the single tuple into three parts. Finally, the program prints the value of
-`y`, which is `6.4`.
+এই প্রোগ্রামটি প্রথমে একটি টাপল তৈরি করে এবং এটিকে `tup` ভেরিয়েবলের সাথে বাইন্ড করে। তারপর এটি `tup` নিতে এবং এটিকে তিনটি পৃথক ভেরিয়েবলে, `x`, `y` এবং `z` এ পরিণত করতে `let` সহ একটি প্যাটার্ন ব্যবহার করে। এটিকে _ডিস্ট্রাকচারিং_ বলা হয় কারণ এটি একক টাপলটিকে তিনটি অংশে ভেঙে দেয়। পরিশেষে, প্রোগ্রামটি `y` এর মান প্রিন্ট করে, যা হল `6.4`।
 
-We can also access a tuple element directly by using a period (`.`) followed by
-the index of the value we want to access. For example:
+আমরা যে মানটি অ্যাক্সেস করতে চাই তার ইনডেক্স অনুসরণ করে একটি পিরিয়ড (`.`) ব্যবহার করে সরাসরি একটি টাপল উপাদানে অ্যাক্সেস করতে পারি। উদাহরণস্বরূপ:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -246,23 +152,15 @@ the index of the value we want to access. For example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-12-tuple-indexing/src/main.rs}}
 ```
 
-This program creates the tuple `x` and then accesses each element of the tuple
-using their respective indices. As with most programming languages, the first
-index in a tuple is 0.
+এই প্রোগ্রামটি `x` টাপল তৈরি করে এবং তারপর তাদের নিজ নিজ ইন্ডেক্স ব্যবহার করে টাপলের প্রতিটি উপাদানে অ্যাক্সেস করে। বেশিরভাগ প্রোগ্রামিং ভাষার মতো, একটি টাপলের প্রথম ইনডেক্স হল 0।
 
-The tuple without any values has a special name, _unit_. This value and its
-corresponding type are both written `()` and represent an empty value or an
-empty return type. Expressions implicitly return the unit value if they don’t
-return any other value.
+কোনো মান ছাড়াই টাপলটির একটি বিশেষ নাম আছে, _ইউনিট_। এই মান এবং এর অনুরূপ টাইপ উভয়ই `()` লেখা হয় এবং একটি খালি মান বা একটি খালি রিটার্ন টাইপ উপস্থাপন করে। যদি এক্সপ্রেশনগুলি অন্য কোনো মান রিটার্ন না করে তাহলে তারা পরোক্ষভাবে ইউনিট মান রিটার্ন করে।
 
-#### The Array Type
+#### অ্যারে টাইপ
 
-Another way to have a collection of multiple values is with an _array_. Unlike
-a tuple, every element of an array must have the same type. Unlike arrays in
-some other languages, arrays in Rust have a fixed length.
+একাধিক মান সংগ্রহের আরেকটি উপায় হল একটি _অ্যারে_ ব্যবহার করা। টাপলের বিপরীতে, একটি অ্যারের প্রতিটি উপাদানের একই টাইপ থাকতে হবে। অন্যান্য ভাষার অ্যারের মতো নয়, Rust-এর অ্যারের একটি নির্দিষ্ট দৈর্ঘ্য থাকে।
 
-We write the values in an array as a comma-separated list inside square
-brackets:
+আমরা একটি অ্যারের মানগুলিকে তৃতীয় বন্ধনীর ভিতরে কমা-দ্বারা পৃথক করা তালিকা হিসাবে লিখি:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -270,52 +168,34 @@ brackets:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-13-arrays/src/main.rs}}
 ```
 
-Arrays are useful when you want your data allocated on the stack, the same as
-the other types we have seen so far, rather than the heap (we will discuss the
-stack and the heap more in [Chapter 4][stack-and-heap]<!-- ignore -->) or when
-you want to ensure you always have a fixed number of elements. An array isn’t as
-flexible as the vector type, though. A _vector_ is a similar collection type
-provided by the standard library that _is_ allowed to grow or shrink in size. If
-you’re unsure whether to use an array or a vector, chances are you should use a
-vector. [Chapter 8][vectors]<!-- ignore --> discusses vectors in more detail.
+অ্যারেগুলি কার্যকর যখন আপনি চান আপনার ডেটা স্ট্যাকের উপরে বরাদ্দ করা হোক, যেমনটি আমরা এখন পর্যন্ত দেখেছি অন্যান্য টাইপগুলির মতো, হিপের পরিবর্তে (আমরা [অধ্যায় 4][stack-and-heap]<!-- ignore --> এ স্ট্যাক এবং হিপ নিয়ে আরও আলোচনা করব) অথবা আপনি যখন নিশ্চিত করতে চান যে আপনার সর্বদা একটি নির্দিষ্ট সংখ্যক উপাদান থাকবে। যদিও একটি অ্যারে ভেক্টর টাইপের মতো নমনীয় নয়। একটি _ভেক্টর_ হল স্ট্যান্ডার্ড লাইব্রেরি দ্বারা প্রদত্ত একটি অনুরূপ কালেকশন টাইপ যা আকারে বাড়তে বা সংকুচিত হতে _পারে_। আপনি যদি নিশ্চিত না হন যে একটি অ্যারে বা একটি ভেক্টর ব্যবহার করবেন কিনা, তাহলে সম্ভবত আপনার একটি ভেক্টর ব্যবহার করা উচিত। [অধ্যায় 8][vectors]<!-- ignore --> ভেক্টরগুলি নিয়ে আরও বিস্তারিত আলোচনা করে।
 
-However, arrays are more useful when you know the number of elements will not
-need to change. For example, if you were using the names of the month in a
-program, you would probably use an array rather than a vector because you know
-it will always contain 12 elements:
+তবে, যখন আপনি জানেন যে উপাদানের সংখ্যা পরিবর্তন করার প্রয়োজন হবে না তখন অ্যারেগুলি আরও কার্যকর। উদাহরণস্বরূপ, আপনি যদি কোনও প্রোগ্রামে মাসের নামগুলি ব্যবহার করেন তবে আপনি সম্ভবত একটি ভেক্টরের পরিবর্তে একটি অ্যারে ব্যবহার করবেন কারণ আপনি জানেন যে এতে সর্বদা 12 টি উপাদান থাকবে:
 
 ```rust
 let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-You write an array’s type using square brackets with the type of each element,
-a semicolon, and then the number of elements in the array, like so:
+আপনি প্রতিটি উপাদানের টাইপ, একটি সেমিকোলন এবং তারপর অ্যারের উপাদানের সংখ্যা সহ তৃতীয় বন্ধনী ব্যবহার করে একটি অ্যারের টাইপ লিখুন, যেমন:
 
 ```rust
 let a: [i32; 5] = [1, 2, 3, 4, 5];
 ```
 
-Here, `i32` is the type of each element. After the semicolon, the number `5`
-indicates the array contains five elements.
+এখানে, `i32` হল প্রতিটি উপাদানের টাইপ। সেমিকোলনের পরে, সংখ্যা `5` নির্দেশ করে যে অ্যারেতে পাঁচটি উপাদান রয়েছে।
 
-You can also initialize an array to contain the same value for each element by
-specifying the initial value, followed by a semicolon, and then the length of
-the array in square brackets, as shown here:
+আপনি একটি অ্যারেকেও প্রতিটি উপাদানের জন্য একই মান ধারণ করার জন্য শুরু করতে পারেন, প্রাথমিক মানটি নির্দিষ্ট করে, তারপরে একটি সেমিকোলন এবং তারপর তৃতীয় বন্ধনীতে অ্যারের দৈর্ঘ্য লিখে, যেমন এখানে দেখানো হয়েছে:
 
 ```rust
 let a = [3; 5];
 ```
 
-The array named `a` will contain `5` elements that will all be set to the value
-`3` initially. This is the same as writing `let a = [3, 3, 3, 3, 3];` but in a
-more concise way.
+`a` নামের অ্যারেতে `5` টি উপাদান থাকবে যা প্রাথমিকভাবে `3` মানে সেট করা হবে। এটি `let a = [3, 3, 3, 3, 3];` লেখার মতোই কিন্তু আরও সংক্ষিপ্ত উপায়ে।
 
-##### Accessing Array Elements
+##### অ্যারে উপাদানে প্রবেশ করা
 
-An array is a single chunk of memory of a known, fixed size that can be
-allocated on the stack. You can access elements of an array using indexing,
-like this:
+একটি অ্যারে হল একটি পরিচিত, নির্দিষ্ট আকারের মেমরির একক খণ্ড যা স্ট্যাকে বরাদ্দ করা যেতে পারে। আপনি ইন্ডেক্সিং ব্যবহার করে একটি অ্যারের উপাদানগুলিতে অ্যাক্সেস করতে পারেন, যেমন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -323,15 +203,11 @@ like this:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-14-array-indexing/src/main.rs}}
 ```
 
-In this example, the variable named `first` will get the value `1` because that
-is the value at index `[0]` in the array. The variable named `second` will get
-the value `2` from index `[1]` in the array.
+এই উদাহরণে, `first` নামের ভেরিয়েবলটি `1` মান পাবে কারণ অ্যারের `[0]` ইনডেক্সে সেই মানটি রয়েছে। `second` নামের ভেরিয়েবলটি অ্যারের `[1]` ইনডেক্স থেকে `2` মান পাবে।
 
-##### Invalid Array Element Access
+##### অবৈধ অ্যারে উপাদানে প্রবেশ
 
-Let’s see what happens if you try to access an element of an array that is past
-the end of the array. Say you run this code, similar to the guessing game in
-Chapter 2, to get an array index from the user:
+আসুন দেখি কি হয় যদি আপনি অ্যারের শেষ অংশের বাইরে থাকা একটি অ্যারের উপাদানে অ্যাক্সেস করার চেষ্টা করেন। ধরুন আপনি অধ্যায় 2 এর গেসিং গেমের মতো এই কোডটি চালান, ব্যবহারকারীর কাছ থেকে একটি অ্যারে ইনডেক্স পেতে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -339,10 +215,7 @@ Chapter 2, to get an array index from the user:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}
 ```
 
-This code compiles successfully. If you run this code using `cargo run` and
-enter `0`, `1`, `2`, `3`, or `4`, the program will print out the corresponding
-value at that index in the array. If you instead enter a number past the end of
-the array, such as `10`, you’ll see output like this:
+এই কোডটি সফলভাবে কম্পাইল হয়। আপনি যদি `cargo run` ব্যবহার করে এই কোডটি চালান এবং `0`, `1`, `2`, `3` বা `4` প্রবেশ করান, তাহলে প্রোগ্রামটি অ্যারের সেই ইনডেক্সের সাথে সম্পর্কিত মান প্রিন্ট করবে। আপনি যদি পরিবর্তে অ্যারের শেষের বাইরের কোনো সংখ্যা প্রবেশ করান, যেমন `10`, তাহলে আপনি এইরকম আউটপুট দেখতে পাবেন:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access
@@ -356,21 +229,9 @@ index out of bounds: the len is 5 but the index is 10
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-The program resulted in a _runtime_ error at the point of using an invalid
-value in the indexing operation. The program exited with an error message and
-didn’t execute the final `println!` statement. When you attempt to access an
-element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than or equal to the length,
-Rust will panic. This check has to happen at runtime, especially in this case,
-because the compiler can’t possibly know what value a user will enter when they
-run the code later.
+প্রোগ্রামটি ইনডেক্সিং অপারেশনে একটি অবৈধ মান ব্যবহার করার সময় একটি _রানটাইম_ ত্রুটির সম্মুখীন হয়েছে। প্রোগ্রামটি একটি ত্রুটি বার্তা সহ প্রস্থান করেছে এবং চূড়ান্ত `println!` স্টেটমেন্টটি এক্সিকিউট করেনি। আপনি যখন ইনডেক্সিং ব্যবহার করে কোনও উপাদানে অ্যাক্সেস করার চেষ্টা করেন, তখন Rust পরীক্ষা করে দেখবে যে আপনি যে ইনডেক্সটি নির্দিষ্ট করেছেন তা অ্যারের দৈর্ঘ্যের চেয়ে কম কিনা। যদি ইনডেক্সটি দৈর্ঘ্যের চেয়ে বেশি বা সমান হয়, তাহলে Rust প্যানিক করবে। এই পরীক্ষাটি রানটাইমে ঘটতে হবে, বিশেষ করে এই ক্ষেত্রে, কারণ কম্পাইলার সম্ভবত জানতে পারে না যে ব্যবহারকারী পরে কোড চালানোর সময় কী মান প্রবেশ করবে।
 
-This is an example of Rust’s memory safety principles in action. In many
-low-level languages, this kind of check is not done, and when you provide an
-incorrect index, invalid memory can be accessed. Rust protects you against this
-kind of error by immediately exiting instead of allowing the memory access and
-continuing. Chapter 9 discusses more of Rust’s error handling and how you can
-write readable, safe code that neither panics nor allows invalid memory access.
+এটি Rust এর মেমরি সুরক্ষা নীতির একটি উদাহরণ। অনেক নিম্ন-স্তরের ভাষায়, এই ধরনের পরীক্ষা করা হয় না এবং যখন আপনি একটি ভুল ইনডেক্স প্রদান করেন তখন অবৈধ মেমরি অ্যাক্সেস করা যেতে পারে। Rust এই ধরনের ত্রুটি থেকে আপনাকে রক্ষা করে মেমরি অ্যাক্সেসের অনুমতি দেওয়া এবং চালিয়ে যাওয়ার পরিবর্তে অবিলম্বে প্রস্থান করার মাধ্যমে। অধ্যায় 9 Rust-এর ত্রুটি হ্যান্ডলিং এবং কীভাবে আপনি পাঠযোগ্য, নিরাপদ কোড লিখতে পারেন যা প্যানিক করে না বা অবৈধ মেমরি অ্যাক্সেসের অনুমতি দেয় না তা নিয়ে আরও আলোচনা করে।
 
 [comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [twos-complement]: https://en.wikipedia.org/wiki/Two%27s_complement

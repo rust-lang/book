@@ -1,23 +1,11 @@
-# Common Programming Concepts
+# সাধারণ প্রোগ্রামিং ধারণা
 
-This chapter covers concepts that appear in almost every programming language
-and how they work in Rust. Many programming languages have much in common at
-their core. None of the concepts presented in this chapter are unique to Rust,
-but we’ll discuss them in the context of Rust and explain the conventions
-around using these concepts.
+এই অধ্যায়ে প্রায় প্রতিটি প্রোগ্রামিং ভাষায় ব্যবহৃত ধারণাগুলো এবং Rust এ সেগুলি কীভাবে কাজ করে তা আলোচনা করা হয়েছে। অনেক প্রোগ্রামিং ভাষার মূল অংশে অনেক মিল রয়েছে। এই অধ্যায়ে উপস্থাপিত ধারণাগুলির কোনটিই Rust এর জন্য অনন্য নয়, তবে আমরা Rust এর প্রেক্ষাপটে সেগুলি নিয়ে আলোচনা করব এবং এই ধারণাগুলি ব্যবহারের নিয়মাবলী ব্যাখ্যা করব।
 
-Specifically, you’ll learn about variables, basic types, functions, comments,
-and control flow. These foundations will be in every Rust program, and learning
-them early will give you a strong core to start from.
+বিশেষভাবে, আপনি ভেরিয়েবল, মৌলিক টাইপ, ফাংশন, মন্তব্য এবং কন্ট্রোল ফ্লো সম্পর্কে শিখবেন। এই ভিত্তিগুলি প্রতিটি Rust প্রোগ্রামে থাকবে এবং এগুলি প্রথম দিকে শিখলে আপনি শুরু করার জন্য একটি শক্তিশালী ভিত্তি পাবেন।
 
-> #### Keywords
+> #### কীওয়ার্ড
 >
-> The Rust language has a set of _keywords_ that are reserved for use by the
-> language only, much as in other languages. Keep in mind that you cannot use
-> these words as names of variables or functions. Most of the keywords have
-> special meanings, and you’ll be using them to do various tasks in your Rust
-> programs; a few have no current functionality associated with them but have
-> been reserved for functionality that might be added to Rust in the future. You
-> can find a list of the keywords in [Appendix A][appendix_a]<!-- ignore -->.
+> Rust ভাষার _কীওয়ার্ড_গুলির একটি সেট রয়েছে যা শুধুমাত্র ভাষা দ্বারা ব্যবহারের জন্য সংরক্ষিত, অন্যান্য ভাষার মতোই। মনে রাখবেন যে আপনি এই শব্দগুলি ভেরিয়েবল বা ফাংশনের নাম হিসাবে ব্যবহার করতে পারবেন না। বেশিরভাগ কীওয়ার্ডের বিশেষ অর্থ রয়েছে এবং আপনি সেগুলিকে আপনার Rust প্রোগ্রামগুলিতে বিভিন্ন কাজ করার জন্য ব্যবহার করবেন; কয়েকটির সাথে বর্তমানে কোনও কার্যকারিতা যুক্ত নেই তবে ভবিষ্যতের জন্য Rust এ যোগ করা হতে পারে এমন কার্যকারিতার জন্য সংরক্ষিত করা হয়েছে। আপনি [পরিশিষ্ট A][appendix_a]<!-- ignore --> এ কীওয়ার্ডগুলির একটি তালিকা খুঁজে পেতে পারেন।
 
 [appendix_a]: appendix-01-keywords.md
