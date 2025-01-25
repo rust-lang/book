@@ -2,29 +2,15 @@
 
 <a id="the-match-control-flow-operator"></a>
 
-## The `match` Control Flow Construct
+## `match` কন্ট্রোল ফ্লো কনস্ট্রাক্ট
 
-Rust has an extremely powerful control flow construct called `match` that
-allows you to compare a value against a series of patterns and then execute
-code based on which pattern matches. Patterns can be made up of literal values,
-variable names, wildcards, and many other things; [Chapter
-19][ch19-00-patterns]<!-- ignore --> covers all the different kinds of patterns
-and what they do. The power of `match` comes from the expressiveness of the
-patterns and the fact that the compiler confirms that all possible cases are
-handled.
+Rust এ `match` নামক একটি অত্যন্ত শক্তিশালী কন্ট্রোল ফ্লো কনস্ট্রাক্ট রয়েছে যা আপনাকে একটি মানের সাথে patterns এর একটি সিরিজের তুলনা করতে এবং তারপর কোন pattern টি মেলে তার উপর ভিত্তি করে কোড এক্সিকিউট করতে দেয়। Patterns আক্ষরিক মান, ভেরিয়েবলের নাম, ওয়াইল্ডকার্ড এবং আরও অনেক কিছু দিয়ে তৈরি করা যেতে পারে; [Chapter 19][ch19-00-patterns]<!-- ignore --> সমস্ত বিভিন্ন ধরণের pattern এবং তারা কী করে তা কভার করে। `match` এর ক্ষমতা আসে patterns এর অভিব্যক্তি এবং কম্পাইলার নিশ্চিত করে যে সমস্ত সম্ভাব্য ক্ষেত্রে পরিচালনা করা হয়েছে এই কারণে।
 
-Think of a `match` expression as being like a coin-sorting machine: coins slide
-down a track with variously sized holes along it, and each coin falls through
-the first hole it encounters that it fits into. In the same way, values go
-through each pattern in a `match`, and at the first pattern the value “fits,”
-the value falls into the associated code block to be used during execution.
+একটি `match` এক্সপ্রেশনকে একটি কয়েন বাছাই করার মেশিনের মতো মনে করুন: কয়েনগুলি বিভিন্ন আকারের গর্ত সহ একটি ট্র্যাকের নীচে স্লাইড করে এবং প্রতিটি কয়েন প্রথম গর্ত দিয়ে পড়ে যার সাথে এটি ফিট করে। একইভাবে, মানগুলি `match` এর প্রতিটি pattern এর মধ্যে দিয়ে যায় এবং প্রথম pattern যেখানে মান "ফিট" হয়, সেই মানটি এক্সিকিউশনের সময় ব্যবহার করার জন্য সংশ্লিষ্ট কোড ব্লকের মধ্যে পড়ে যায়।
 
-Speaking of coins, let’s use them as an example using `match`! We can write a
-function that takes an unknown US coin and, in a similar way as the counting
-machine, determines which coin it is and returns its value in cents, as shown
-in Listing 6-3.
+কয়েনের কথা বলতে গেলে, আসুন `match` ব্যবহার করে সেগুলিকে একটি উদাহরণ হিসাবে ব্যবহার করি! আমরা একটি ফাংশন লিখতে পারি যা একটি অজানা US কয়েন নেয় এবং, গণনা মেশিনের মতোই, এটি কোন কয়েন তা নির্ধারণ করে এবং সেন্টে এর মান ফেরত দেয়, যেমন Listing 6-3 এ দেখানো হয়েছে।
 
-<Listing number="6-3" caption="An enum and a `match` expression that has the variants of the enum as its patterns">
+<Listing number="6-3" caption="একটি enum এবং একটি `match` এক্সপ্রেশন যার pattern হিসাবে enum এর variant গুলি রয়েছে">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-03/src/main.rs:here}}
@@ -32,53 +18,27 @@ in Listing 6-3.
 
 </Listing>
 
-Let’s break down the `match` in the `value_in_cents` function. First we list
-the `match` keyword followed by an expression, which in this case is the value
-`coin`. This seems very similar to a conditional expression used with `if`, but
-there’s a big difference: with `if`, the condition needs to evaluate to a
-Boolean value, but here it can be any type. The type of `coin` in this example
-is the `Coin` enum that we defined on the first line.
+আসুন `value_in_cents` ফাংশনে `match` বিশ্লেষণ করি। প্রথমে আমরা `match` কীওয়ার্ড তালিকাভুক্ত করি এবং তারপরে একটি এক্সপ্রেশন, এই ক্ষেত্রে যা `coin` মান। এটি `if` এর সাথে ব্যবহৃত একটি শর্তাধীন এক্সপ্রেশনের মতোই মনে হয়, তবে একটি বড় পার্থক্য রয়েছে: `if` এর সাথে, শর্তটিকে একটি বুলিয়ান মানে মূল্যায়ন করতে হবে, তবে এখানে এটি যেকোনো প্রকারের হতে পারে। এই উদাহরণে `coin` এর প্রকার হল `Coin` enum যা আমরা প্রথম লাইনে সংজ্ঞায়িত করেছি।
 
-Next are the `match` arms. An arm has two parts: a pattern and some code. The
-first arm here has a pattern that is the value `Coin::Penny` and then the `=>`
-operator that separates the pattern and the code to run. The code in this case
-is just the value `1`. Each arm is separated from the next with a comma.
+এর পরে `match` এর arm গুলি। একটি arm এর দুটি অংশ রয়েছে: একটি pattern এবং কিছু কোড। এখানে প্রথম arm টির একটি pattern আছে যা `Coin::Penny` মান এবং তারপরে `=>` অপারেটর যা pattern এবং রান করার কোডকে আলাদা করে। এই ক্ষেত্রে কোডটি কেবল `1` মান। প্রতিটি arm কমা দিয়ে পরেরটি থেকে আলাদা করা হয়েছে।
 
-When the `match` expression executes, it compares the resultant value against
-the pattern of each arm, in order. If a pattern matches the value, the code
-associated with that pattern is executed. If that pattern doesn’t match the
-value, execution continues to the next arm, much as in a coin-sorting machine.
-We can have as many arms as we need: in Listing 6-3, our `match` has four arms.
+যখন `match` এক্সপ্রেশন এক্সিকিউট হয়, তখন এটি প্রতিটি arm এর pattern এর সাথে ফলাফলের মানের তুলনা করে, ক্রমানুসারে। যদি কোনো pattern মানের সাথে মেলে, তবে সেই pattern এর সাথে যুক্ত কোডটি এক্সিকিউট করা হয়। যদি সেই pattern মানের সাথে না মেলে, তবে এক্সিকিউশনটি পরবর্তী arm এ চলতে থাকে, অনেকটা কয়েন বাছাই করার মেশিনের মতো। আমাদের যতগুলি arm প্রয়োজন ততগুলি রাখতে পারি: Listing 6-3 এ, আমাদের `match` এ চারটি arm রয়েছে।
 
-The code associated with each arm is an expression, and the resultant value of
-the expression in the matching arm is the value that gets returned for the
-entire `match` expression.
+প্রতিটি arm এর সাথে যুক্ত কোডটি একটি এক্সপ্রেশন এবং matching arm এর এক্সপ্রেশনের ফলস্বরূপ মান হল সেই মান যা পুরো `match` এক্সপ্রেশনের জন্য ফেরত দেওয়া হয়।
 
-We don’t typically use curly brackets if the match arm code is short, as it is
-in Listing 6-3 where each arm just returns a value. If you want to run multiple
-lines of code in a match arm, you must use curly brackets, and the comma
-following the arm is then optional. For example, the following code prints
-“Lucky penny!” every time the method is called with a `Coin::Penny`, but still
-returns the last value of the block, `1`:
+আমরা সাধারণত কার্লি ব্র্যাকেট ব্যবহার করি না যদি match arm কোডটি ছোট হয়, যেমন Listing 6-3 এ, যেখানে প্রতিটি arm শুধু একটি মান ফেরত দেয়। আপনি যদি একটি match arm এ একাধিক লাইনের কোড রান করতে চান, তবে আপনাকে কার্লি ব্র্যাকেট ব্যবহার করতে হবে এবং তারপরে arm এর পরে কমাটি ঐচ্ছিক। উদাহরণস্বরূপ, নিম্নলিখিত কোডটি প্রতিবার `Coin::Penny` দিয়ে method টি কল করা হলে "Lucky penny!" প্রিন্ট করে, কিন্তু তবুও ব্লকের শেষ মান `1` ফেরত দেয়:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-08-match-arm-multiple-lines/src/main.rs:here}}
 ```
 
-### Patterns That Bind to Values
+### Patterns যা মানের সাথে বাইন্ড করে
 
-Another useful feature of match arms is that they can bind to the parts of the
-values that match the pattern. This is how we can extract values out of enum
-variants.
+Match arm এর আরেকটি কার্যকর বৈশিষ্ট্য হল যে তারা pattern এর সাথে মেলে এমন মানগুলির অংশগুলির সাথে বাইন্ড করতে পারে। এইভাবেই আমরা enum variant থেকে মান বের করতে পারি।
 
-As an example, let’s change one of our enum variants to hold data inside it.
-From 1999 through 2008, the United States minted quarters with different
-designs for each of the 50 states on one side. No other coins got state
-designs, so only quarters have this extra value. We can add this information to
-our `enum` by changing the `Quarter` variant to include a `UsState` value
-stored inside it, which we’ve done in Listing 6-4.
+একটি উদাহরণ হিসাবে, আসুন আমাদের enum variant গুলির একটিকে এর ভিতরে ডেটা রাখার জন্য পরিবর্তন করি। 1999 থেকে 2008 সাল পর্যন্ত, মার্কিন যুক্তরাষ্ট্র একপাশে 50 টি রাজ্যের জন্য বিভিন্ন ডিজাইন সহ কোয়ার্টার তৈরি করত। অন্য কোনো কয়েনে রাজ্যের ডিজাইন ছিল না, তাই শুধুমাত্র কোয়ার্টারে এই অতিরিক্ত মান রয়েছে। আমরা `Quarter` variant কে এর ভিতরে একটি `UsState` মান অন্তর্ভুক্ত করার জন্য পরিবর্তন করে আমাদের `enum` এ এই তথ্য যোগ করতে পারি, যা আমরা Listing 6-4 এ করেছি।
 
-<Listing number="6-4" caption="A `Coin` enum in which the `Quarter` variant also holds a `UsState` value">
+<Listing number="6-4" caption="একটি `Coin` enum যেখানে `Quarter` variant একটি `UsState` মানও ধারণ করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-04/src/main.rs:here}}
@@ -86,44 +46,25 @@ stored inside it, which we’ve done in Listing 6-4.
 
 </Listing>
 
-Let’s imagine that a friend is trying to collect all 50 state quarters. While
-we sort our loose change by coin type, we’ll also call out the name of the
-state associated with each quarter so that if it’s one our friend doesn’t have,
-they can add it to their collection.
+ধরা যাক যে একজন বন্ধু 50টি রাজ্যের কোয়ার্টার সংগ্রহ করার চেষ্টা করছে। আমরা যখন কয়েন প্রকার অনুসারে আমাদের খুচরা পয়সা বাছাই করি, তখন আমরা প্রতিটি কোয়ার্টারের সাথে যুক্ত রাজ্যের নামও উল্লেখ করব যাতে যদি সেটি এমন একটি হয় যা আমাদের বন্ধুর কাছে নেই, তবে তারা এটিকে তাদের সংগ্রহে যোগ করতে পারে।
 
-In the match expression for this code, we add a variable called `state` to the
-pattern that matches values of the variant `Coin::Quarter`. When a
-`Coin::Quarter` matches, the `state` variable will bind to the value of that
-quarter’s state. Then we can use `state` in the code for that arm, like so:
+এই কোডের জন্য match এক্সপ্রেশনে, আমরা `Coin::Quarter` variant এর মানের সাথে মেলে এমন pattern এ `state` নামের একটি ভেরিয়েবল যোগ করি। যখন একটি `Coin::Quarter` মেলে, তখন `state` ভেরিয়েবলটি সেই কোয়ার্টারের রাজ্যের মানের সাথে বাইন্ড হবে। তারপরে আমরা সেই arm এর কোডে `state` ব্যবহার করতে পারি, যেমন:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-09-variable-in-pattern/src/main.rs:here}}
 ```
 
-If we were to call `value_in_cents(Coin::Quarter(UsState::Alaska))`, `coin`
-would be `Coin::Quarter(UsState::Alaska)`. When we compare that value with each
-of the match arms, none of them match until we reach `Coin::Quarter(state)`. At
-that point, the binding for `state` will be the value `UsState::Alaska`. We can
-then use that binding in the `println!` expression, thus getting the inner
-state value out of the `Coin` enum variant for `Quarter`.
+যদি আমরা `value_in_cents(Coin::Quarter(UsState::Alaska))` কল করি, তবে `coin` হবে `Coin::Quarter(UsState::Alaska)`। যখন আমরা সেই মানটিকে প্রতিটি match arm এর সাথে তুলনা করি, তখন `Coin::Quarter(state)` এ না পৌঁছানো পর্যন্ত সেগুলির কোনটিই মেলে না। সেই সময়ে, `state` এর বাইন্ডিং হবে `UsState::Alaska` মান। তারপরে আমরা `println!` এক্সপ্রেশনে সেই বাইন্ডিং ব্যবহার করতে পারি, এইভাবে `Quarter` এর জন্য `Coin` enum variant থেকে ভিতরের state মানটি বের করতে পারি।
 
-### Matching with `Option<T>`
+### `Option<T>` এর সাথে ম্যাচিং
 
-In the previous section, we wanted to get the inner `T` value out of the `Some`
-case when using `Option<T>`; we can also handle `Option<T>` using `match`, as
-we did with the `Coin` enum! Instead of comparing coins, we’ll compare the
-variants of `Option<T>`, but the way the `match` expression works remains the
-same.
+পূর্ববর্তী বিভাগে, আমরা `Option<T>` ব্যবহার করার সময় `Some` case থেকে ভিতরের `T` মানটি বের করতে চেয়েছিলাম; আমরা `match` ব্যবহার করে `Option<T>` ও পরিচালনা করতে পারি, যেমনটি আমরা `Coin` enum এর সাথে করেছি! কয়েনগুলির তুলনা করার পরিবর্তে, আমরা `Option<T>` এর variant গুলির তুলনা করব, তবে `match` এক্সপ্রেশনটি যেভাবে কাজ করে তা একই থাকে।
 
-Let’s say we want to write a function that takes an `Option<i32>` and, if
-there’s a value inside, adds 1 to that value. If there isn’t a value inside,
-the function should return the `None` value and not attempt to perform any
-operations.
+ধরুন আমরা এমন একটি ফাংশন লিখতে চাই যা একটি `Option<i32>` নেয় এবং যদি এর ভিতরে কোনো মান থাকে, তবে সেই মানের সাথে 1 যোগ করে। যদি এর ভিতরে কোনো মান না থাকে, তবে ফাংশনটির `None` মান ফেরত দেওয়া উচিত এবং কোনো অপারেশন করার চেষ্টা করা উচিত নয়।
 
-This function is very easy to write, thanks to `match`, and will look like
-Listing 6-5.
+`match` এর জন্য এই ফাংশনটি লেখা খুবই সহজ এবং এটি Listing 6-5 এর মতো দেখাবে।
 
-<Listing number="6-5" caption="A function that uses a `match` expression on an `Option<i32>`">
+<Listing number="6-5" caption="একটি ফাংশন যা `Option<i32>` এ একটি `match` এক্সপ্রেশন ব্যবহার করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:here}}
@@ -131,129 +72,77 @@ Listing 6-5.
 
 </Listing>
 
-Let’s examine the first execution of `plus_one` in more detail. When we call
-`plus_one(five)`, the variable `x` in the body of `plus_one` will have the
-value `Some(5)`. We then compare that against each match arm:
+আসুন `plus_one` এর প্রথম এক্সিকিউশনটি আরও বিস্তারিতভাবে পরীক্ষা করি। যখন আমরা `plus_one(five)` কল করি, তখন `plus_one` এর বডিতে ভেরিয়েবল `x` এর মান হবে `Some(5)`। তারপরে আমরা সেটিকে প্রতিটি match arm এর সাথে তুলনা করি:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:first_arm}}
 ```
 
-The `Some(5)` value doesn’t match the pattern `None`, so we continue to the
-next arm:
+`Some(5)` মানটি `None` pattern এর সাথে মেলে না, তাই আমরা পরবর্তী arm এ চলতে থাকি:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:second_arm}}
 ```
 
-Does `Some(5)` match `Some(i)`? It does! We have the same variant. The `i`
-binds to the value contained in `Some`, so `i` takes the value `5`. The code in
-the match arm is then executed, so we add 1 to the value of `i` and create a
-new `Some` value with our total `6` inside.
+`Some(5)` কি `Some(i)` এর সাথে মেলে? হ্যাঁ! আমাদের একই variant আছে। `i` `Some` এর মধ্যে থাকা মানের সাথে বাইন্ড করে, তাই `i` মান `5` নেয়। তারপরে match arm এর কোডটি এক্সিকিউট করা হয়, তাই আমরা `i` এর মানের সাথে 1 যোগ করি এবং ভিতরে আমাদের মোট `6` দিয়ে একটি নতুন `Some` মান তৈরি করি।
 
-Now let’s consider the second call of `plus_one` in Listing 6-5, where `x` is
-`None`. We enter the `match` and compare to the first arm:
+এখন Listing 6-5 এ `plus_one` এর দ্বিতীয় কলটি বিবেচনা করা যাক, যেখানে `x` হল `None`। আমরা `match` এ প্রবেশ করি এবং প্রথম arm এর সাথে তুলনা করি:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:first_arm}}
 ```
 
-It matches! There’s no value to add to, so the program stops and returns the
-`None` value on the right side of `=>`. Because the first arm matched, no other
-arms are compared.
+এটি মেলে! যোগ করার মতো কোনো মান নেই, তাই প্রোগ্রামটি বন্ধ হয়ে যায় এবং `=>` এর ডানদিকে `None` মানটি ফেরত দেয়। যেহেতু প্রথম arm টি মিলেছে, তাই অন্য কোনো arm তুলনা করা হয় না।
 
-Combining `match` and enums is useful in many situations. You’ll see this
-pattern a lot in Rust code: `match` against an enum, bind a variable to the
-data inside, and then execute code based on it. It’s a bit tricky at first, but
-once you get used to it, you’ll wish you had it in all languages. It’s
-consistently a user favorite.
+`match` এবং enums একত্রিত করা অনেক পরিস্থিতিতে কার্যকর। আপনি Rust কোডে এই pattern টি অনেক দেখবেন: একটি enum এর বিপরীতে `match`, ভিতরে ডেটাতে একটি ভেরিয়েবল বাইন্ড করুন এবং তারপরে এর উপর ভিত্তি করে কোড এক্সিকিউট করুন। প্রথমে এটি একটু কঠিন, তবে একবার আপনি এতে অভ্যস্ত হয়ে গেলে, আপনি চাইবেন যে এটি সমস্ত ভাষাতেই থাকুক। এটি ধারাবাহিকভাবে ব্যবহারকারীদের পছন্দের।
 
-### Matches Are Exhaustive
+### Matches সম্পূর্ণ হতে হবে
 
-There’s one other aspect of `match` we need to discuss: the arms’ patterns must
-cover all possibilities. Consider this version of our `plus_one` function,
-which has a bug and won’t compile:
+আমাদের `match` নিয়ে আলোচনা করার জন্য আরও একটি দিক রয়েছে: arm এর pattern গুলিকে সমস্ত সম্ভাবনা কভার করতে হবে। আমাদের `plus_one` ফাংশনের এই সংস্করণটি বিবেচনা করুন, যার একটি বাগ রয়েছে এবং এটি কম্পাইল হবে না:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/src/main.rs:here}}
 ```
 
-We didn’t handle the `None` case, so this code will cause a bug. Luckily, it’s
-a bug Rust knows how to catch. If we try to compile this code, we’ll get this
-error:
+আমরা `None` ক্ষেত্রটি পরিচালনা করিনি, তাই এই কোডটি একটি বাগ তৈরি করবে। সৌভাগ্যবশত, এটি একটি বাগ যা Rust জানে কিভাবে ধরতে হয়। যদি আমরা এই কোডটি কম্পাইল করার চেষ্টা করি, তাহলে আমরা এই ত্রুটিটি পাব:
 
 ```console
 {{#include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/output.txt}}
 ```
 
-Rust knows that we didn’t cover every possible case, and even knows which
-pattern we forgot! Matches in Rust are _exhaustive_: we must exhaust every last
-possibility in order for the code to be valid. Especially in the case of
-`Option<T>`, when Rust prevents us from forgetting to explicitly handle the
-`None` case, it protects us from assuming that we have a value when we might
-have null, thus making the billion-dollar mistake discussed earlier impossible.
+Rust জানে যে আমরা প্রতিটি সম্ভাব্য ক্ষেত্র কভার করিনি এবং এমনকি আমরা কোন pattern টি ভুলে গেছি তাও জানে! Rust এ Matches _সম্পূর্ণ_ হতে হবে: কোডটিকে বৈধ হওয়ার জন্য আমাদের অবশ্যই প্রতিটি শেষ সম্ভাবনাকে শেষ করতে হবে। বিশেষ করে `Option<T>` এর ক্ষেত্রে, যখন Rust আমাদের `None` ক্ষেত্রটিকে স্পষ্টভাবে পরিচালনা করতে ভুলে যাওয়া থেকে বাধা দেয়, তখন এটি আমাদের null থাকতে পারে এমন সময় একটি মান আছে বলে ধরে নেওয়া থেকে রক্ষা করে, এইভাবে আগে আলোচিত বিলিয়ন ডলারের ভুলটিকে অসম্ভব করে তোলে।
 
-### Catch-all Patterns and the `_` Placeholder
+### Catch-all Patterns এবং `_` প্লেসহোল্ডার
 
-Using enums, we can also take special actions for a few particular values, but
-for all other values take one default action. Imagine we’re implementing a game
-where, if you roll a 3 on a dice roll, your player doesn’t move, but instead
-gets a new fancy hat. If you roll a 7, your player loses a fancy hat. For all
-other values, your player moves that number of spaces on the game board. Here’s
-a `match` that implements that logic, with the result of the dice roll
-hardcoded rather than a random value, and all other logic represented by
-functions without bodies because actually implementing them is out of scope for
-this example:
+enums ব্যবহার করে, আমরা কয়েকটি নির্দিষ্ট মানের জন্য বিশেষ পদক্ষেপ নিতে পারি, কিন্তু অন্য সব মানের জন্য একটি ডিফল্ট পদক্ষেপ নিতে পারি। কল্পনা করুন যে আমরা এমন একটি গেম প্রয়োগ করছি যেখানে, আপনি যদি ডাইস রোলে 3 রোল করেন, তবে আপনার খেলোয়াড় সরবে না, তবে পরিবর্তে একটি নতুন অভিনব টুপি পাবে। আপনি যদি 7 রোল করেন, তবে আপনার খেলোয়াড় একটি অভিনব টুপি হারাবে। অন্য সব মানের জন্য, আপনার খেলোয়াড় গেম বোর্ডে সেই সংখ্যার স্থান সরবে। এখানে একটি `match` রয়েছে যা সেই যুক্তিটি প্রয়োগ করে, ডাইস রোলের ফলাফলের পরিবর্তে একটি র্যান্ডম মান এবং অন্যান্য সমস্ত যুক্তি বডি ছাড়া ফাংশন দ্বারা উপস্থাপিত হয় কারণ সেগুলিকে বাস্তবায়ন করা এই উদাহরণের জন্য খুব বেশি গুরুত্বপূর্ণ নয়:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-15-binding-catchall/src/main.rs:here}}
 ```
 
-For the first two arms, the patterns are the literal values `3` and `7`. For
-the last arm that covers every other possible value, the pattern is the
-variable we’ve chosen to name `other`. The code that runs for the `other` arm
-uses the variable by passing it to the `move_player` function.
+প্রথম দুটি arm এর জন্য, pattern গুলি হল আক্ষরিক মান `3` এবং `7`। শেষ arm টির জন্য, যা অন্য সব সম্ভাব্য মান কভার করে, pattern টি হল সেই ভেরিয়েবল যাকে আমরা `other` নাম দিতে পছন্দ করেছি। `other` arm এর জন্য রান করা কোডটি `move_player` ফাংশনে পাস করে ভেরিয়েবলটি ব্যবহার করে।
 
-This code compiles, even though we haven’t listed all the possible values a
-`u8` can have, because the last pattern will match all values not specifically
-listed. This catch-all pattern meets the requirement that `match` must be
-exhaustive. Note that we have to put the catch-all arm last because the
-patterns are evaluated in order. If we put the catch-all arm earlier, the other
-arms would never run, so Rust will warn us if we add arms after a catch-all!
+এই কোডটি কম্পাইল হয়, যদিও আমরা একটি `u8` এর সম্ভাব্য সমস্ত মান তালিকাভুক্ত করিনি, কারণ শেষ pattern টি বিশেষভাবে তালিকাভুক্ত নয় এমন সমস্ত মানের সাথে মিলবে। এই catch-all pattern টি `match` এর সম্পূর্ণ হওয়ার প্রয়োজনীয়তা পূরণ করে। মনে রাখবেন যে আমাদের catch-all arm টিকে শেষ রাখতে হবে কারণ pattern গুলি ক্রমানুসারে মূল্যায়ন করা হয়। যদি আমরা catch-all arm টিকে আগে রাখি, তবে অন্যান্য arm গুলো কখনই রান হবে না, তাই আমরা যদি catch-all এর পরে arm যোগ করি তবে Rust আমাদের সতর্ক করবে!
 
-Rust also has a pattern we can use when we want a catch-all but don’t want to
-_use_ the value in the catch-all pattern: `_` is a special pattern that matches
-any value and does not bind to that value. This tells Rust we aren’t going to
-use the value, so Rust won’t warn us about an unused variable.
+Rust এর এমন একটি pattern ও রয়েছে যা আমরা ব্যবহার করতে পারি যখন আমরা একটি catch-all চাই কিন্তু catch-all pattern এ মানটি _ব্যবহার_ করতে চাই না: `_` হল একটি বিশেষ pattern যা যেকোনো মানের সাথে মেলে এবং সেই মানের সাথে বাইন্ড করে না। এটি Rust কে বলে যে আমরা মানটি ব্যবহার করতে যাচ্ছি না, তাই Rust আমাদের অব্যবহৃত ভেরিয়েবল সম্পর্কে সতর্ক করবে না।
 
-Let’s change the rules of the game: now, if you roll anything other than a 3 or
-a 7, you must roll again. We no longer need to use the catch-all value, so we
-can change our code to use `_` instead of the variable named `other`:
+আসুন গেমের নিয়মগুলি পরিবর্তন করি: এখন, আপনি যদি 3 বা 7 ছাড়া অন্য কিছু রোল করেন তবে আপনাকে আবার রোল করতে হবে। আমাদের আর catch-all মানটি ব্যবহার করার প্রয়োজন নেই, তাই আমরা আমাদের কোড পরিবর্তন করে `other` নামের ভেরিয়েবলের পরিবর্তে `_` ব্যবহার করতে পারি:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-16-underscore-catchall/src/main.rs:here}}
 ```
 
-This example also meets the exhaustiveness requirement because we’re explicitly
-ignoring all other values in the last arm; we haven’t forgotten anything.
+এই উদাহরণটিও সম্পূর্ণতার প্রয়োজনীয়তা পূরণ করে কারণ আমরা শেষ arm এ স্পষ্টভাবে অন্য সমস্ত মান উপেক্ষা করছি; আমরা কিছুই ভুলিনি।
 
-Finally, we’ll change the rules of the game one more time so that nothing else
-happens on your turn if you roll anything other than a 3 or a 7. We can express
-that by using the unit value (the empty tuple type we mentioned in [“The Tuple
-Type”][tuples]<!-- ignore --> section) as the code that goes with the `_` arm:
+অবশেষে, আমরা গেমের নিয়মগুলি আরও একবার পরিবর্তন করব যাতে আপনি যদি 3 বা 7 ছাড়া অন্য কিছু রোল করেন তবে আপনার পালাক্রমে আর কিছুই ঘটবে না। আমরা `_` arm এর সাথে যাওয়া কোড হিসাবে unit মান (খালি tuple প্রকার যা আমরা [“The Tuple Type”][tuples]<!-- ignore --> বিভাগে উল্লেখ করেছি) ব্যবহার করে এটি প্রকাশ করতে পারি:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-17-underscore-unit/src/main.rs:here}}
 ```
 
-Here, we’re telling Rust explicitly that we aren’t going to use any other value
-that doesn’t match a pattern in an earlier arm, and we don’t want to run any
-code in this case.
+এখানে, আমরা Rust কে স্পষ্টভাবে বলছি যে আমরা অন্য কোনো মান ব্যবহার করতে যাচ্ছি না যা আগের arm এ একটি pattern এর সাথে মেলে না এবং আমরা এই ক্ষেত্রে কোনো কোড রান করতে চাই না।
 
-There’s more about patterns and matching that we’ll cover in [Chapter
-19][ch19-00-patterns]<!-- ignore -->. For now, we’re going to move on to the
-`if let` syntax, which can be useful in situations where the `match` expression
-is a bit wordy.
+patterns এবং matching সম্পর্কে আরও অনেক কিছু আছে যা আমরা [Chapter 19][ch19-00-patterns]<!-- ignore --> এ কভার করব। আপাতত, আমরা `if let` সিনট্যাক্সে যাব, যা এমন পরিস্থিতিতে কার্যকর হতে পারে যেখানে `match` এক্সপ্রেশনটি একটু বেশি শব্দবহুল।
 
 [tuples]: ch03-02-data-types.html#the-tuple-type
 [ch19-00-patterns]: ch19-00-patterns.html

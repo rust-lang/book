@@ -1,14 +1,5 @@
-# Using Structs to Structure Related Data
+# সম্পর্কিত ডেটা স্ট্রাকচার করতে Structs ব্যবহার করা
 
-A _struct_, or _structure_, is a custom data type that lets you package
-together and name multiple related values that make up a meaningful group. If
-you’re familiar with an object-oriented language, a _struct_ is like an
-object’s data attributes. In this chapter, we’ll compare and contrast tuples
-with structs to build on what you already know and demonstrate when structs are
-a better way to group data.
+একটি _struct_, বা _structure_, হল একটি কাস্টম ডেটা টাইপ যা আপনাকে একাধিক সম্পর্কিত মানকে একসাথে প্যাকেজ করতে এবং নাম দিতে দেয় যা একটি অর্থপূর্ণ গ্রুপ তৈরি করে। আপনি যদি কোনো অবজেক্ট-ওরিয়েন্টেড ভাষার সাথে পরিচিত হন, তাহলে একটি _struct_ হল একটি অবজেক্টের ডেটা অ্যাট্রিবিউটের মতো। এই অধ্যায়ে, আমরা আপনার জানা বিষয়গুলির উপর ভিত্তি করে তৈরি করতে এবং কখন structs ডেটা গ্রুপ করার একটি ভালো উপায় তা প্রমাণ করতে tuple এর সাথে structs এর তুলনা করব।
 
-We’ll demonstrate how to define and instantiate structs. We’ll discuss how to
-define associated functions, especially the kind of associated functions called
-_methods_, to specify behavior associated with a struct type. Structs and enums
-(discussed in Chapter 6) are the building blocks for creating new types in your
-program’s domain to take full advantage of Rust’s compile-time type checking.
+আমরা structs কিভাবে সংজ্ঞায়িত এবং ইনস্ট্যানশিয়েট করতে হয় তা দেখাব। আমরা associated ফাংশনগুলি কীভাবে সংজ্ঞায়িত করতে হয়, বিশেষ করে _methods_ নামক associated ফাংশনগুলি নিয়ে আলোচনা করব, struct টাইপের সাথে যুক্ত আচরণ নির্দিষ্ট করার জন্য। Structs এবং enums (Chapter 6 এ আলোচনা করা হয়েছে) আপনার প্রোগ্রামের ডোমেনে নতুন টাইপ তৈরি করার বিল্ডিং ব্লক, যা Rust এর compile-time টাইপ চেকিং এর সম্পূর্ণ সুবিধা নিতে পারে।
