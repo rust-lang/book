@@ -30,8 +30,8 @@ Task, তাহলে, আমাদের future এর উপর _additional_ c
 
 কখন কোন method ব্যবহার করবেন তা নিয়ে ভাবার সময়, এই rule of thumb গুলো consider করুন:
 
--   যদি কাজ _খুব বেশি parallelizable_ হয়, যেমন data এর bunch process করা যেখানে প্রত্যেক part separately process করা যায়, তাহলে thread ভালো choice।
--   যদি কাজ _খুব বেশি concurrent_ হয়, যেমন বিভিন্ন source থেকে message handle করা যা different interval বা different rate এ আসতে পারে, তাহলে async ভালো choice।
+- যদি কাজ _খুব বেশি parallelizable_ হয়, যেমন data এর bunch process করা যেখানে প্রত্যেক part separately process করা যায়, তাহলে thread ভালো choice।
+- যদি কাজ _খুব বেশি concurrent_ হয়, যেমন বিভিন্ন source থেকে message handle করা যা different interval বা different rate এ আসতে পারে, তাহলে async ভালো choice।
 
 এবং যদি আপনার parallelism এবং concurrency উভয়ের প্রয়োজন হয়, তাহলে আপনার thread এবং async এর মধ্যে choose করার প্রয়োজন নেই। আপনি সেগুলোকে freely একসাথে ব্যবহার করতে পারেন, প্রত্যেকটি তার best part play করতে দিয়ে। উদাহরণস্বরূপ, Listing 17-42 real-world Rust code এ এই ধরনের mix এর একটি common উদাহরণ দেখায়।
 
@@ -56,6 +56,4 @@ Chapter টি আমরা যে scenario দিয়ে open করেছিল
 এরপর, আমরা আলোচনা করব কিভাবে Rust program বড় হওয়ার সাথে সাথে problem model করার এবং solution structure করার idiomatic উপায়। এছাড়াও, আমরা আলোচনা করব Rust এর idiom গুলো object-oriented programming থেকে পরিচিত idiom গুলোর সাথে কিভাবে related।
 
 [ch16]: http://localhost:3000/ch16-00-concurrency.html
-[combining-futures]: ch17-03-more-futures.html#building-our-own-async-abstractions
-[streams]: ch17-04-streams.html#composing-streams
 [ch21]: ch21-00-final-project-a-web-server.html

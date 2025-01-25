@@ -9,8 +9,8 @@
 নতুন একটি প্রকল্প স্থাপন করতে, আপনি অধ্যায় 1 এ তৈরি করা _projects_ ডিরেক্টরিতে যান এবং Cargo ব্যবহার করে একটি নতুন প্রকল্প তৈরি করুন, যেমন:
 
 ```console
-$ cargo new guessing_game
-$ cd guessing_game
+cargo new guessing_game
+cd guessing_game
 ```
 
 প্রথম কমান্ড, `cargo new`, প্রকল্পের নাম (`guessing_game`) প্রথম আর্গুমেন্ট হিসেবে গ্রহণ করে। দ্বিতীয় কমান্ডটি নতুন প্রকল্পের ডিরেক্টরিতে পরিবর্তন করে।
@@ -600,7 +600,6 @@ You win!
 [comments]: ch03-04-comments.html
 [string]: ../std/string/struct.String.html
 [iostdin]: ../std/io/struct.Stdin.html
-[read_line]: ../std/io/struct.Stdin.html#method.read_line
 [result]: ../std/result/enum.Result.html
 [enums]: ch06-00-enums.html
 [expect]: ../std/result/enum.Result.html#method.expect

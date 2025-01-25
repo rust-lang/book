@@ -10,10 +10,10 @@ State pattern ব্যবহার করার advantage হলো, যখন 
 
 Final functionality টি দেখতে এমন হবে:
 
-1.  একটি blog post empty draft হিসেবে শুরু হবে।
-2.  যখন draft শেষ হয়ে যাবে, তখন post এর review request করা হবে।
-3.  যখন post approve করা হবে, তখন এটি publish হবে।
-4.  শুধুমাত্র published blog post print করার জন্য content return করবে, তাই unapproved post accidentally publish হওয়া উচিত নয়।
+1. একটি blog post empty draft হিসেবে শুরু হবে।
+2. যখন draft শেষ হয়ে যাবে, তখন post এর review request করা হবে।
+3. যখন post approve করা হবে, তখন এটি publish হবে।
+4. শুধুমাত্র published blog post print করার জন্য content return করবে, তাই unapproved post accidentally publish হওয়া উচিত নয়।
 
 Post এ attempt করা অন্য change এর কোনো effect থাকা উচিত নয়। উদাহরণস্বরূপ, review request করার আগে যদি আমরা কোনো draft blog post approve করার চেষ্টা করি, তাহলে post টি unpublished draft হিসেবে থেকে যাওয়া উচিত।
 
@@ -175,10 +175,10 @@ State pattern ব্যবহার করার advantage হলো, যখন 
 
 Final functionality টি দেখতে এমন হবে:
 
-1.  একটি blog post empty draft হিসেবে শুরু হবে।
-2.  যখন draft শেষ হয়ে যাবে, তখন post এর review request করা হবে।
-3.  যখন post approve করা হবে, তখন এটি publish হবে।
-4.  শুধুমাত্র published blog post print করার জন্য content return করবে, তাই unapproved post accidentally publish হওয়া উচিত নয়।
+1. একটি blog post empty draft হিসেবে শুরু হবে।
+2. যখন draft শেষ হয়ে যাবে, তখন post এর review request করা হবে।
+3. যখন post approve করা হবে, তখন এটি publish হবে।
+4. শুধুমাত্র published blog post print করার জন্য content return করবে, তাই unapproved post accidentally publish হওয়া উচিত নয়।
 
 Post এ attempt করা অন্য change এর কোনো effect থাকা উচিত নয়। উদাহরণস্বরূপ, review request করার আগে যদি আমরা কোনো draft blog post approve করার চেষ্টা করি, তাহলে post টি unpublished draft হিসেবে থেকে যাওয়া উচিত।
 
@@ -326,4 +326,3 @@ Note করুন যে এই method এ আমাদের lifetime annotatio
 >
 > আপনি হয়তো ভাবছিলেন কেন আমরা different possible post state variant হিসেবে `enum` ব্যবহার করিনি। এটা নিশ্চিতভাবেই একটি possible solution, try করুন এবং compare করে দেখুন আপনার কোনটি বেশি পছন্দ! একটি enum ব্যবহার করার একটি disadvantage হলো enum এর value check করা প্রত্যেক জায়গায় সব possible variant handle করার জন্য একটি `match` expression বা similar কিছু এর প্রয়োজন। এটা trait object solution এর চেয়ে বেশি repetitive হতে পারে।
 
-[more-info-than-rustc]: ch09-03-to-panic-or-not-to-panic.html#cases-in-which-you-have-more-information-than-the-compiler

@@ -10,11 +10,11 @@ Rust এর একটি unsafe alter ego থাকার অন্য কার
 
 Unsafe Rust এ switch করার জন্য, `unsafe` keyword ব্যবহার করুন এবং তারপর একটি নতুন block শুরু করুন যা unsafe code hold করে। আপনি unsafe Rust এ পাঁচটি action নিতে পারেন যা আপনি safe Rust এ পারেন না, যাকে আমরা _unsafe superpowers_ বলি। সেই superpower গুলোতে include আছে:
 
--   Raw pointer dereference করার ability
--   Unsafe function বা method call করা
--   Mutable static variable access বা modify করা
--   Unsafe trait implement করা
--   একটি `union` এর field access করা
+- Raw pointer dereference করার ability
+- Unsafe function বা method call করা
+- Mutable static variable access বা modify করা
+- Unsafe trait implement করা
+- একটি `union` এর field access করা
 
 এটা বোঝা গুরুত্বপূর্ণ যে `unsafe` borrow checker turn off করে না বা Rust এর অন্য কোনো safety check disable করে না: যদি আপনি unsafe code এ reference ব্যবহার করেন, তবুও সেটি check করা হবে। `unsafe` keyword শুধুমাত্র এই পাঁচটি feature এ access দেয় যা compiler memory safety এর জন্য check করে না। আপনি unsafe block এর ভিতরে still কিছু safety পাবেন।
 
@@ -32,10 +32,10 @@ Chapter 4 এর [“Dangling References”][dangling-references]<!-- ignore -->
 
 Reference এবং smart pointer থেকে different, raw pointer:
 
--   Borrowing rule ignore করার allow করে একই location এ immutable এবং mutable pointer বা multiple mutable pointer থাকার মাধ্যমে
--   Valid memory point করার guarantee দেয় না
--   Null হওয়ার allow করে
--   Automatic cleanup implement করে না
+- Borrowing rule ignore করার allow করে একই location এ immutable এবং mutable pointer বা multiple mutable pointer থাকার মাধ্যমে
+- Valid memory point করার guarantee দেয় না
+- Null হওয়ার allow করে
+- Automatic cleanup implement করে না
 
 Rust এর এই guarantee enforce করা থেকে opt out করার মাধ্যমে, আপনি greater performance বা অন্য কোনো language বা hardware এর সাথে interface করার ability এর বিনিময়ে guaranteed safety ছেড়ে দিতে পারেন যেখানে Rust এর guarantee apply হয় না।
 
@@ -205,6 +205,7 @@ Listing 20-8 দেখায় কিভাবে C standard library থেকে 
 > ```
 >
 > `extern` এর এই ব্যবহারের জন্য `unsafe` এর প্রয়োজন নেই।
+>
 ## Unsafe Rust
 
 এতক্ষণ পর্যন্ত আমরা যেসব code নিয়ে আলোচনা করেছি, সেগুলোর সব code compile time এ Rust এর memory safety guarantee enforce করেছে। তবে, Rust এর ভিতরে hidden একটি দ্বিতীয় language আছে যা এই memory safety guarantee enforce করে না: একে _unsafe Rust_ বলা হয় এবং এটি regular Rust এর মতোই কাজ করে, কিন্তু আমাদের extra superpower দেয়।
@@ -217,11 +218,11 @@ Rust এর একটি unsafe alter ego থাকার অন্য কার
 
 Unsafe Rust এ switch করার জন্য, `unsafe` keyword ব্যবহার করুন এবং তারপর একটি নতুন block শুরু করুন যা unsafe code hold করে। আপনি unsafe Rust এ পাঁচটি action নিতে পারেন যা আপনি safe Rust এ পারেন না, যাকে আমরা _unsafe superpowers_ বলি। সেই superpower গুলোতে include আছে:
 
--   Raw pointer dereference করার ability
--   Unsafe function বা method call করা
--   Mutable static variable access বা modify করা
--   Unsafe trait implement করা
--   একটি `union` এর field access করা
+- Raw pointer dereference করার ability
+- Unsafe function বা method call করা
+- Mutable static variable access বা modify করা
+- Unsafe trait implement করা
+- একটি `union` এর field access করা
 
 এটা বোঝা গুরুত্বপূর্ণ যে `unsafe` borrow checker turn off করে না বা Rust এর অন্য কোনো safety check disable করে না: যদি আপনি unsafe code এ reference ব্যবহার করেন, তবুও সেটি check করা হবে। `unsafe` keyword শুধুমাত্র এই পাঁচটি feature এ access দেয় যা compiler memory safety এর জন্য check করে না। আপনি unsafe block এর ভিতরে still কিছু safety পাবেন।
 
@@ -239,10 +240,10 @@ Chapter 4 এর [“Dangling References”][dangling-references]<!-- ignore -->
 
 Reference এবং smart pointer থেকে different, raw pointer:
 
--   Borrowing rule ignore করার allow করে একই location এ immutable এবং mutable pointer বা multiple mutable pointer থাকার মাধ্যমে
--   Valid memory point করার guarantee দেয় না
--   Null হওয়ার allow করে
--   Automatic cleanup implement করে না
+- Borrowing rule ignore করার allow করে একই location এ immutable এবং mutable pointer বা multiple mutable pointer থাকার মাধ্যমে
+- Valid memory point করার guarantee দেয় না
+- Null হওয়ার allow করে
+- Automatic cleanup implement করে না
 
 Rust এর এই guarantee enforce করা থেকে opt out করার মাধ্যমে, আপনি greater performance বা অন্য কোনো language বা hardware এর সাথে interface করার ability এর বিনিময়ে guaranteed safety ছেড়ে দিতে পারেন যেখানে Rust এর guarantee apply হয় না।
 

@@ -92,8 +92,8 @@ trait Add<Rhs=Self> {
 
 আপনি দুটি main way তে default type parameter ব্যবহার করবেন:
 
--   Existing code break না করে একটি type extend করার জন্য
--   Specific case এ customization allow করার জন্য যা বেশিরভাগ user এর প্রয়োজন হবে না
+- Existing code break না করে একটি type extend করার জন্য
+- Specific case এ customization allow করার জন্য যা বেশিরভাগ user এর প্রয়োজন হবে না
 
 Standard library এর `Add` trait হলো second purpose এর একটি উদাহরণ: সাধারণত, আপনি same ধরনের দুটি type add করবেন, কিন্তু `Add` trait এর বাইরে customize করার ability provide করে। `Add` trait definition এ default type parameter ব্যবহার করার মানে হলো আপনাকে বেশিরভাগ সময় extra parameter specify করার প্রয়োজন নেই। অন্যভাবে বলতে গেলে, implementation এর কিছু boilerplate এর প্রয়োজন নেই, যা trait ব্যবহার করা সহজ করে।
 

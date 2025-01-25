@@ -133,9 +133,9 @@ pub trait Future {
 
 `cx` parameter এবং এর `Context` type হলো সেই key যার মাধ্যমে runtime actually জানে কখন কোনো future check করতে হবে, lazy থাকা সত্ত্বেও। আবারও, কিভাবে কাজ করে তার detail এই chapter এর scope এর বাইরে, এবং যখন আপনি custom `Future` implementation লিখেন তখন সাধারণত আপনার এটা নিয়ে চিন্তা করার প্রয়োজন। আমরা `self` এর type এর উপর focus করব, কারণ এই প্রথম আমরা এমন method দেখছি যেখানে `self` এর একটি type annotation আছে। `self` এর type annotation অন্য function parameter এর type annotation এর মতোই কাজ করে, তবে দুটি key difference আছে:
 
--   এটি Rust কে বলে যে method call করার জন্য `self` এর type কি হতে হবে।
+- এটি Rust কে বলে যে method call করার জন্য `self` এর type কি হতে হবে।
 
--   এটা শুধু যেকোনো type হতে পারে না। এটা method যে type এর উপর implemented, সেই type, সেই type এর reference বা smart pointer, অথবা সেই type এর reference wrap করা `Pin` এর মধ্যে সীমাবদ্ধ।
+- এটা শুধু যেকোনো type হতে পারে না। এটা method যে type এর উপর implemented, সেই type, সেই type এর reference বা smart pointer, অথবা সেই type এর reference wrap করা `Pin` এর মধ্যে সীমাবদ্ধ।
 
 আমরা [Chapter 18][ch-18]<!-- ignore --> এ এই syntax নিয়ে আরও দেখব। আপাতত, আমাদের শুধু এতটুকু জানলেই হবে যে আমরা যদি একটি future কে `Pending` বা `Ready(Output)` কিনা তা check করার জন্য poll করতে চাই, তাহলে আমাদের type এর `Pin` wrap করা mutable reference এর প্রয়োজন।
 
@@ -290,5 +290,3 @@ in traits, since the lack thereof is the reason they do not yet have this.
 [async-book]: https://rust-lang.github.io/async-book/
 [under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
 [pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
-[first-async]: ch17-01-futures-and-syntax.html#our-first-async-program
-[any-number-futures]: ch17-03-more-futures.html#working-with-any-number-of-futures

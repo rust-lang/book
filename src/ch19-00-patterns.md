@@ -2,11 +2,11 @@
 
 _Patterns_ হলো Rust এ type এর structure এর সাথে match করার জন্য special syntax, complex এবং simple দুটোই। Pattern এর সাথে `match` expression এবং অন্যান্য construct ব্যবহার করা program এর control flow এর উপর আরও control দেয়। একটি pattern এ নিচের কিছু combination থাকে:
 
--   Literals
--   Destructured array, enum, struct, বা tuples
--   Variables
--   Wildcards
--   Placeholders
+- Literals
+- Destructured array, enum, struct, বা tuples
+- Variables
+- Wildcards
+- Placeholders
 
 কিছু example pattern হলো `x`, `(a, 3)`, এবং `Some(Color::Red)`। Pattern valid এমন context এ, এই component গুলো data এর shape describe করে। তারপর আমাদের program কোনো particular piece of code run করা continue করার জন্য data এর সঠিক shape আছে কিনা তা determine করার জন্য pattern এর সাথে value match করে।
 
