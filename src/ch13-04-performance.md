@@ -1,47 +1,22 @@
-## Comparing Performance: Loops vs. Iterators
+## مقایسه عملکرد: حلقه‌ها در برابر Iteratorها
 
-To determine whether to use loops or iterators, you need to know which
-implementation is faster: the version of the `search` function with an explicit
-`for` loop or the version with iterators.
+برای تعیین اینکه از حلقه‌ها یا iteratorها استفاده کنید، باید بدانید کدام پیاده‌سازی سریع‌تر است: نسخه تابع `search` با حلقه صریح `for` یا نسخه با iteratorها.
 
-We ran a benchmark by loading the entire contents of _The Adventures of
-Sherlock Holmes_ by Sir Arthur Conan Doyle into a `String` and looking for the
-word _the_ in the contents. Here are the results of the benchmark on the
-version of `search` using the `for` loop and the version using iterators:
+ما یک بنچمارک اجرا کردیم که در آن تمام محتوای کتاب _The Adventures of Sherlock Holmes_ اثر سر آرتور کانن دویل را در یک `String` بارگذاری کردیم و به دنبال کلمه _the_ در محتوا گشتیم. نتایج بنچمارک برای نسخه `search` با استفاده از حلقه `for` و نسخه با iteratorها به شرح زیر است:
 
 ```text
 test bench_search_for  ... bench:  19,620,300 ns/iter (+/- 915,700)
 test bench_search_iter ... bench:  19,234,900 ns/iter (+/- 657,200)
 ```
 
-The two implementations have similar performance! We won’t explain the
-benchmark code here, because the point is not to prove that the two versions
-are equivalent but to get a general sense of how these two implementations
-compare performance-wise.
+دو پیاده‌سازی عملکرد مشابهی دارند! ما کد بنچمارک (benchmark) را اینجا توضیح نمی‌دهیم، زیرا هدف این نیست که ثابت کنیم این دو نسخه معادل هستند، بلکه هدف این است که به یک درک کلی از نحوه مقایسه عملکردی این دو پیاده‌سازی برسیم.
 
-For a more comprehensive benchmark, you should check using various texts of
-various sizes as the `contents`, different words and words of different lengths
-as the `query`, and all kinds of other variations. The point is this:
-iterators, although a high-level abstraction, get compiled down to roughly the
-same code as if you’d written the lower-level code yourself. Iterators are one
-of Rust’s _zero-cost abstractions_, by which we mean using the abstraction
-imposes no additional runtime overhead. This is analogous to how Bjarne
-Stroustrup, the original designer and implementor of C++, defines
-_zero-overhead_ in “Foundations of C++” (2012):
+برای یک بنچمارک جامع‌تر، باید از متن‌های مختلف با اندازه‌های گوناگون به‌عنوان `contents`، کلمات مختلف و کلماتی با طول‌های متفاوت به‌عنوان `query`، و انواع دیگری از تغییرات استفاده کنید. نکته این است: iteratorها، اگرچه یک انتزاع سطح بالا هستند، به کدی که تقریباً همان سطح پایینی دارد کامپایل می‌شوند، انگار خودتان کد سطح پایین را نوشته باشید. iteratorها یکی از _انتزاع‌های بدون هزینه_ Rust هستند، به این معنی که استفاده از انتزاع هیچ هزینه اضافی زمان اجرای برنامه را تحمیل نمی‌کند. این موضوع مشابه تعریفی است که بیارنه استراس‌تروپ، طراح و پیاده‌ساز اصلی ++C، در مقاله "Foundations of C++" (2012) برای _بدون هزینه اضافی_ ارائه می‌دهد:
 
-> In general, C++ implementations obey the zero-overhead principle: What you
-> don’t use, you don’t pay for. And further: What you do use, you couldn’t hand
-> code any better.
+> به طور کلی، پیاده‌سازی‌های ++C از اصل بدون هزینه اضافی پیروی می‌کنند: چیزی که استفاده نمی‌کنید، هزینه‌ای برای شما ندارد. و علاوه بر این: چیزی که استفاده می‌کنید، نمی‌توانید بهتر از این دستی کدنویسی کنید.
 
-As another example, the following code is taken from an audio decoder. The
-decoding algorithm uses the linear prediction mathematical operation to
-estimate future values based on a linear function of the previous samples. This
-code uses an iterator chain to do some math on three variables in scope: a
-`buffer` slice of data, an array of 12 `coefficients`, and an amount by which
-to shift data in `qlp_shift`. We’ve declared the variables within this example
-but not given them any values; although this code doesn’t have much meaning
-outside of its context, it’s still a concise, real-world example of how Rust
-translates high-level ideas to low-level code.
+
+به‌عنوان یک مثال دیگر، کد زیر از یک دیکودر صوتی گرفته شده است. الگوریتم دیکودینگ از عملیات ریاضی پیش‌بینی خطی برای تخمین مقادیر آینده بر اساس یک تابع خطی از نمونه‌های قبلی استفاده می‌کند. این کد از یک زنجیره iterator برای انجام برخی محاسبات بر روی سه متغیر در محدوده استفاده می‌کند: یک برش داده‌ای `buffer`، یک آرایه از ۱۲ `coefficients`، و مقداری برای جابجایی داده‌ها در `qlp_shift`. ما متغیرها را در این مثال تعریف کرده‌ایم اما به آن‌ها مقداری نداده‌ایم؛ اگرچه این کد خارج از زمینه خود معنای زیادی ندارد، اما همچنان یک مثال مختصر و واقعی از نحوه تبدیل ایده‌های سطح بالا به کد سطح پایین در Rust است.
 
 ```rust,ignore
 let buffer: &mut [i32];
@@ -58,37 +33,16 @@ for i in 12..buffer.len() {
 }
 ```
 
-To calculate the value of `prediction`, this code iterates through each of the
-12 values in `coefficients` and uses the `zip` method to pair the coefficient
-values with the previous 12 values in `buffer`. Then, for each pair, we
-multiply the values together, sum all the results, and shift the bits in the
-sum `qlp_shift` bits to the right.
+برای محاسبه مقدار `prediction`، این کد از طریق هر یک از ۱۲ مقدار در `coefficients` پیمایش می‌کند و از متد `zip` برای جفت کردن مقادیر coefficients با ۱۲ مقدار قبلی در `buffer` استفاده می‌کند. سپس، برای هر جفت، مقادیر را در هم ضرب می‌کنیم، تمام نتایج را جمع می‌کنیم، و بیت‌های حاصل را به اندازه `qlp_shift` بیت به سمت راست جابجا می‌کنیم.
 
-Calculations in applications like audio decoders often prioritize performance
-most highly. Here, we’re creating an iterator, using two adapters, and then
-consuming the value. What assembly code would this Rust code compile to? Well,
-as of this writing, it compiles down to the same assembly you’d write by hand.
-There’s no loop at all corresponding to the iteration over the values in
-`coefficients`: Rust knows that there are 12 iterations, so it “unrolls” the
-loop. _Unrolling_ is an optimization that removes the overhead of the loop
-controlling code and instead generates repetitive code for each iteration of
-the loop.
+محاسبات در برنامه‌هایی مانند دیکودرهای صوتی اغلب عملکرد را در اولویت قرار می‌دهند. در اینجا، ما یک iterator ایجاد می‌کنیم، از دو تطبیق‌دهنده استفاده می‌کنیم، و سپس مقدار را مصرف می‌کنیم. کد اسمبلی که این کد Rust به آن کامپایل می‌شود چیست؟ خب، در زمان نگارش این متن، این کد به همان اسمبلی‌ای که ممکن است دستی بنویسید کامپایل می‌شود. هیچ حلقه‌ای وجود ندارد که با پیمایش روی مقادیر در `coefficients` مطابقت داشته باشد: Rust می‌داند که ۱۲ تکرار وجود دارد، بنابراین حلقه را "بازمی‌پیچد". _بازپیچیدن_ یک بهینه‌سازی است که سربار کد کنترل‌کننده حلقه را حذف می‌کند و به جای آن کد تکراری برای هر تکرار حلقه تولید می‌کند.
 
-All of the coefficients get stored in registers, which means accessing the
-values is very fast. There are no bounds checks on the array access at runtime.
-All these optimizations that Rust is able to apply make the resulting code
-extremely efficient. Now that you know this, you can use iterators and closures
-without fear! They make code seem like it’s higher level but don’t impose a
-runtime performance penalty for doing so.
+تمام مقادیر coefficients در ثبات‌ها ذخیره می‌شوند، به این معنی که دسترسی به مقادیر بسیار سریع است. در زمان اجرا هیچ بررسی حدودی برای دسترسی به آرایه انجام نمی‌شود. تمام این بهینه‌سازی‌هایی که Rust می‌تواند اعمال کند کد نهایی را به شدت کارآمد می‌سازد. حالا که این را می‌دانید، می‌توانید از iteratorها و closureها بدون ترس استفاده کنید! آن‌ها باعث می‌شوند کد سطح بالاتر به نظر برسد اما هیچ هزینه عملکردی در زمان اجرا اعمال نمی‌کنند.
 
-## Summary
+## خلاصه
 
-Closures and iterators are Rust features inspired by functional programming
-language ideas. They contribute to Rust’s capability to clearly express
-high-level ideas at low-level performance. The implementations of closures and
-iterators are such that runtime performance is not affected. This is part of
-Rust’s goal to strive to provide zero-cost abstractions.
+<div dir="rtl">
+closureها و iteratorها ویژگی‌های Rust هستند که از ایده‌های زبان‌های برنامه‌نویسی تابعی الهام گرفته‌اند. آن‌ها به توانایی Rust در بیان واضح ایده‌های سطح بالا با عملکرد سطح پایین کمک می‌کنند. پیاده‌سازی closureها و iteratorها به گونه‌ای است که عملکرد زمان اجرا تحت تأثیر قرار نمی‌گیرد. این بخشی از هدف Rust برای ارائه انتزاع‌های بدون هزینه است.
+</div>
 
-Now that we’ve improved the expressiveness of our I/O project, let’s look at
-some more features of `cargo` that will help us share the project with the
-world.
+اکنون که قابلیت بیان پروژه I/O خود را بهبود داده‌ایم، بیایید نگاهی به برخی ویژگی‌های بیشتر `cargo` بیندازیم که به ما کمک می‌کنند پروژه را با دنیا به اشتراک بگذاریم.

@@ -1,149 +1,107 @@
-## Installation
+## نصب
 
-The first step is to install Rust. We’ll download Rust through `rustup`, a
-command line tool for managing Rust versions and associated tools. You’ll need
-an internet connection for the download.
+اولین قدم نصب راست است. ما راست را از طریق `rustup` دانلود می‌کنیم، ابزاری خط فرمان برای مدیریت نسخه‌های راست و ابزارهای مربوطه. برای دانلود به اتصال اینترنتی نیاز دارید.
 
-> Note: If you prefer not to use `rustup` for some reason, please see the
-> [Other Rust Installation Methods page][otherinstall] for more options.
+> توجه: اگر به هر دلیلی ترجیح می‌دهید از `rustup` استفاده نکنید، لطفاً صفحه [روش‌های نصب دیگر راست][otherinstall] را برای گزینه‌های بیشتر مشاهده کنید.
 
-The following steps install the latest stable version of the Rust compiler.
-Rust’s stability guarantees ensure that all the examples in the book that
-compile will continue to compile with newer Rust versions. The output might
-differ slightly between versions because Rust often improves error messages and
-warnings. In other words, any newer, stable version of Rust you install using
-these steps should work as expected with the content of this book.
+مراحل زیر نسخه پایدار جدیدترین کامپایلر راست را نصب می‌کنند. تضمین‌های پایداری راست اطمینان می‌دهند که تمام مثال‌های کتاب که کامپایل می‌شوند، با نسخه‌های جدیدتر راست نیز کامپایل خواهند شد. خروجی ممکن است کمی متفاوت باشد، زیرا راست به طور مرتب پیغام‌های خطا و هشدارها را بهبود می‌بخشد. به عبارت دیگر، هر نسخه پایدار جدیدی که با این مراحل نصب کنید، باید با محتوای این کتاب به درستی کار کند.
 
-> ### Command Line Notation
+> ### یادداشت دستورات خط فرمان
 >
-> In this chapter and throughout the book, we’ll show some commands used in the
-> terminal. Lines that you should enter in a terminal all start with `$`. You
-> don’t need to type the `$` character; it’s the command line prompt shown to
-> indicate the start of each command. Lines that don’t start with `$` typically
-> show the output of the previous command. Additionally, PowerShell-specific
-> examples will use `>` rather than `$`.
+> در این فصل و throughout the book، ما برخی از دستورات استفاده شده در ترمینال را نمایش خواهیم داد. خطوطی که باید در ترمینال وارد کنید، همگی با `$` شروع می‌شوند. شما نیازی به وارد کردن نماد `$` ندارید؛ این نماد نشان‌دهنده شروع هر دستور است. خطوطی که با `$` شروع نمی‌شوند معمولاً خروجی دستور قبلی را نشان می‌دهند. علاوه بر این، مثال‌های خاص PowerShell از `>` به جای `$` استفاده می‌کنند.
 
-### Installing `rustup` on Linux or macOS
+### نصب `rustup` در لینوکس یا macOS
 
-If you’re using Linux or macOS, open a terminal and enter the following command:
+اگر از لینوکس یا macOS استفاده می‌کنید، یک ترمینال باز کرده و دستور زیر را وارد کنید:
 
 ```console
 $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
-The command downloads a script and starts the installation of the `rustup`
-tool, which installs the latest stable version of Rust. You might be prompted
-for your password. If the install is successful, the following line will appear:
+این دستور یک اسکریپت دانلود کرده و نصب ابزار `rustup` را آغاز می‌کند که نسخه پایدار جدید راست را نصب می‌کند. ممکن است از شما خواسته شود تا رمز عبور خود را وارد کنید. اگر نصب موفقیت‌آمیز بود، خط زیر ظاهر می‌شود:
 
 ```text
 Rust is installed now. Great!
 ```
 
-You will also need a _linker_, which is a program that Rust uses to join its
-compiled outputs into one file. It is likely you already have one. If you get
-linker errors, you should install a C compiler, which will typically include a
-linker. A C compiler is also useful because some common Rust packages depend on
-C code and will need a C compiler.
+همچنین به یک _لینکر_ نیاز خواهید داشت که برنامه‌ای است که راست از آن برای ترکیب خروجی‌های کامپایل شده خود به یک فایل استفاده می‌کند. احتمالاً شما یک لینکر دارید. اگر با ارورهای لینکر روبه‌رو شدید، باید یک کامپایلر C نصب کنید که معمولاً لینکر را نیز شامل می‌شود. یک کامپایلر C همچنین مفید است زیرا برخی از پکیج‌های رایج راست به کد C وابسته‌اند و به یک کامپایلر C نیاز دارند.
 
-On macOS, you can get a C compiler by running:
+برای نصب کامپایلر C در macOS، دستور زیر را اجرا کنید:
 
 ```console
 $ xcode-select --install
 ```
 
-Linux users should generally install GCC or Clang, according to their
-distribution’s documentation. For example, if you use Ubuntu, you can install
-the `build-essential` package.
+کاربران لینوکس معمولاً باید GCC یا Clang را طبق مستندات توزیع خود نصب کنند. برای مثال، اگر از اوبونتو استفاده می‌کنید، می‌توانید پکیج `build-essential` را نصب کنید.
 
-### Installing `rustup` on Windows
+### نصب `rustup` در ویندوز
 
-On Windows, go to [https://www.rust-lang.org/tools/install][install] and follow
-the instructions for installing Rust. At some point in the installation, you’ll
-be prompted to install Visual Studio. This provides a linker and the native
-libraries needed to compile programs. If you need more help with this step, see
-[https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]
+در ویندوز، به [https://www.rust-lang.org/tools/install][install] بروید و دستورالعمل‌های نصب راست را دنبال کنید. در یک مرحله از نصب، از شما خواسته می‌شود تا Visual Studio را نصب کنید. این ابزار یک لینکر و کتابخانه‌های بومی لازم برای کامپایل برنامه‌ها را فراهم می‌کند. اگر به کمک بیشتری نیاز دارید، این صفحه را مشاهده کنید [https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]
 
-The rest of this book uses commands that work in both _cmd.exe_ and PowerShell.
-If there are specific differences, we’ll explain which to use.
+بقیه کتاب از دستورات استفاده شده در _cmd.exe_ و PowerShell استفاده می‌کند. اگر تفاوت‌های خاصی وجود داشته باشد، توضیح خواهیم داد که کدام را باید استفاده کنید.
 
-### Troubleshooting
+### عیب‌یابی
 
-To check whether you have Rust installed correctly, open a shell and enter this
-line:
+برای بررسی اینکه راست به درستی نصب شده است یا خیر، یک شل باز کرده و این دستور را وارد کنید:
 
 ```console
 $ rustc --version
 ```
 
-You should see the version number, commit hash, and commit date for the latest
-stable version that has been released, in the following format:
+باید شماره نسخه، هش کمیّت و تاریخ کمیّت برای جدیدترین نسخه پایدار منتشر شده را به صورت زیر ببینید:
 
 ```text
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-If you see this information, you have installed Rust successfully! If you don’t
-see this information, check that Rust is in your `%PATH%` system variable as
-follows.
+اگر این اطلاعات را مشاهده کردید، راست به درستی نصب شده است! اگر این اطلاعات را مشاهده نکردید، بررسی کنید که راست در متغیر سیستم `%PATH%` شما قرار دارد.
 
-In Windows CMD, use:
+در CMD ویندوز، از دستور زیر استفاده کنید:
 
 ```console
 > echo %PATH%
 ```
 
-In PowerShell, use:
+در PowerShell، از دستور زیر استفاده کنید:
 
 ```powershell
 > echo $env:Path
 ```
 
-In Linux and macOS, use:
+در لینوکس و macOS، از دستور زیر استفاده کنید:
 
 ```console
 $ echo $PATH
 ```
 
-If that’s all correct and Rust still isn’t working, there are a number of
-places you can get help. Find out how to get in touch with other Rustaceans (a
-silly nickname we call ourselves) on [the community page][community].
+اگر همه چیز درست باشد و راست همچنان کار نکند، منابع زیادی برای کمک وجود دارد. برای تماس با سایر راست‌نویسان (لقب خنده‌داری که خودمان به کار می‌بریم)، به صفحه [اجتماع][community] مراجعه کنید.
 
-### Updating and Uninstalling
+### بروزرسانی و حذف نصب
 
-Once Rust is installed via `rustup`, updating to a newly released version is
-easy. From your shell, run the following update script:
+بعد از نصب راست از طریق `rustup`، بروزرسانی به نسخه جدید بسیار آسان است. از شل خود دستور زیر را اجرا کنید:
 
 ```console
 $ rustup update
 ```
 
-To uninstall Rust and `rustup`, run the following uninstall script from your
-shell:
+برای حذف نصب راست و `rustup`، اسکریپت حذف زیر را از شل خود اجرا کنید:
 
 ```console
 $ rustup self uninstall
 ```
 
-### Local Documentation
+### مستندات محلی
 
-The installation of Rust also includes a local copy of the documentation so
-that you can read it offline. Run `rustup doc` to open the local documentation
-in your browser.
+نصب راست همچنین شامل یک نسخه محلی از مستندات است تا بتوانید آن را به صورت آفلاین مطالعه کنید. برای باز کردن مستندات محلی در مرورگر خود، دستور `rustup doc` را اجرا کنید.
 
-Any time a type or function is provided by the standard library and you’re not
-sure what it does or how to use it, use the application programming interface
-(API) documentation to find out!
+هر زمان که از یک نوع یا تابع ارائه‌شده توسط کتابخانه استاندارد استفاده می‌کنید و مطمئن نیستید که چه کار می‌کند یا چگونه از آن استفاده کنید، از مستندات رابط برنامه‌نویسی (API) برای یافتن آن استفاده کنید!
 
-### Text Editors and Integrated Development Environments
+### ویرایشگرهای متن و محیط‌های توسعه یکپارچه
 
-This book makes no assumptions about what tools you use to author Rust code.
-Just about any text editor will get the job done! However, many text editors and
-integrated development environments (IDEs) have built-in support for Rust. You
-can always find a fairly current list of many editors and IDEs on [the tools
-page][tools] on the Rust website.
+این کتاب هیچ فرضی درباره ابزارهایی که برای نوشتن کد راست استفاده می‌کنید، ندارد. تقریباً هر ویرایشگر متنی کار را انجام می‌دهد! با این حال، بسیاری از ویرایشگرها و محیط‌های توسعه یکپارچه (IDE) پشتیبانی داخلی برای راست دارند. همیشه می‌توانید فهرست نسبتاً جدیدی از بسیاری از ویرایشگرها و IDEها را در [صفحه ابزارها][tools] در وب‌سایت راست پیدا کنید.
 
-[otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
-[install]: https://www.rust-lang.org/tools/install
-[msvc]: https://rust-lang.github.io/rustup/installation/windows-msvc.html
-[community]: https://www.rust-lang.org/community
+[otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html  
+[install]: https://www.rust-lang.org/tools/install  
+[msvc]: https://rust-lang.github.io/rustup/installation/windows-msvc.html  
+[community]: https://www.rust-lang.org/community  
 [tools]: https://www.rust-lang.org/tools

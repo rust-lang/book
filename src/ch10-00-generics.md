@@ -1,48 +1,22 @@
-# Generic Types, Traits, and Lifetimes
+# انواع جنریک، ویژگی‌ها (Traits)، و طول عمرها (Lifetimes)
 
-Every programming language has tools for effectively handling the duplication
-of concepts. In Rust, one such tool is _generics_: abstract stand-ins for
-concrete types or other properties. We can express the behavior of generics or
-how they relate to other generics without knowing what will be in their place
-when compiling and running the code.
+هر زبان برنامه‌نویسی ابزارهایی برای مدیریت موثر تکرار مفاهیم دارد. در Rust، یکی از این ابزارها _جنریک‌ها_ هستند: جایگزین‌های انتزاعی برای انواع مشخص یا ویژگی‌های دیگر. ما می‌توانیم رفتار جنریک‌ها یا نحوه ارتباط آن‌ها با جنریک‌های دیگر را بیان کنیم بدون اینکه بدانیم هنگام کامپایل و اجرای کد چه چیزی جایگزین آن‌ها خواهد شد.
 
-Functions can take parameters of some generic type, instead of a concrete type
-like `i32` or `String`, in the same way they take parameters with unknown
-values to run the same code on multiple concrete values. In fact, we’ve already
-used generics in Chapter 6 with `Option<T>`, in Chapter 8 with `Vec<T>` and
-`HashMap<K, V>`, and in Chapter 9 with `Result<T, E>`. In this chapter, you’ll
-explore how to define your own types, functions, and methods with generics!
+توابع می‌توانند پارامترهایی از نوع جنریک بگیرند، به جای یک نوع مشخص مانند `i32` یا `String`، به همان روشی که پارامترهایی با مقادیر ناشناخته می‌گیرند تا بتوانند کد مشابهی را روی مقادیر مشخص مختلف اجرا کنند. در واقع، ما قبلاً در فصل ۶ با `Option<T>`، در فصل ۸ با `Vec<T>` و `HashMap<K, V>`، و در فصل ۹ با `Result<T, E>` از جنریک‌ها استفاده کرده‌ایم. در این فصل، یاد خواهید گرفت که چگونه انواع، توابع، و متدهای خود را با جنریک‌ها تعریف کنید!
 
-First we’ll review how to extract a function to reduce code duplication. We’ll
-then use the same technique to make a generic function from two functions that
-differ only in the types of their parameters. We’ll also explain how to use
-generic types in struct and enum definitions.
+ابتدا نحوه استخراج یک تابع برای کاهش تکرار کد را مرور می‌کنیم. سپس از همان تکنیک برای ایجاد یک تابع جنریک از دو تابع که تنها در نوع پارامترهایشان متفاوت هستند استفاده خواهیم کرد. همچنین توضیح خواهیم داد که چگونه می‌توان از انواع جنریک در تعریف ساختار داده‌ها (struct) و شمارش‌ها (enum) استفاده کرد.
 
-Then you’ll learn how to use _traits_ to define behavior in a generic way. You
-can combine traits with generic types to constrain a generic type to accept
-only those types that have a particular behavior, as opposed to just any type.
+سپس یاد می‌گیرید که چگونه از _ویژگی‌ها_ (Traits) برای تعریف رفتار به صورت جنریک استفاده کنید. می‌توانید ویژگی‌ها را با انواع جنریک ترکیب کنید تا نوع جنریک را محدود کنید که فقط آن نوع‌هایی را بپذیرد که رفتار خاصی دارند، به جای هر نوعی.
 
-Finally, we’ll discuss _lifetimes_: a variety of generics that give the
-compiler information about how references relate to each other. Lifetimes allow
-us to give the compiler enough information about borrowed values so that it can
-ensure references will be valid in more situations than it could without our
-help.
+در نهایت، درباره _طول عمر‌ها_ (Lifetimes) صحبت خواهیم کرد: نوعی از جنریک‌ها که به کامپایلر اطلاعاتی درباره نحوه ارتباط مراجع با یکدیگر می‌دهند. طول عمرها به ما اجازه می‌دهند اطلاعات کافی درباره مقادیر قرض گرفته شده به کامپایلر بدهیم تا اطمینان حاصل کند که مراجع در شرایط بیشتری معتبر خواهند بود.
 
-## Removing Duplication by Extracting a Function
+## حذف تکرار با استخراج یک تابع
 
-Generics allow us to replace specific types with a placeholder that represents
-multiple types to remove code duplication. Before diving into generics syntax,
-let’s first look at how to remove duplication in a way that doesn’t involve
-generic types by extracting a function that replaces specific values with a
-placeholder that represents multiple values. Then we’ll apply the same
-technique to extract a generic function! By looking at how to recognize
-duplicated code you can extract into a function, you’ll start to recognize
-duplicated code that can use generics.
+جنریک‌ها به ما اجازه می‌دهند که نوع‌های مشخص را با یک جایگزین که نمایانگر چندین نوع است جایگزین کنیم تا تکرار کد را حذف کنیم. قبل از ورود به نحو جنریک‌ها، ابتدا به نحوه حذف تکرار به روشی که شامل انواع جنریک نمی‌شود، با استخراج یک تابع که مقادیر مشخص را با یک جایگزین که نمایانگر مقادیر چندگانه است جایگزین می‌کند، نگاه خواهیم کرد. سپس از همان تکنیک برای استخراج یک تابع جنریک استفاده خواهیم کرد! با بررسی نحوه تشخیص کد تکراری که می‌توانید به یک تابع استخراج کنید، شروع به تشخیص کد تکراری خواهید کرد که می‌تواند از جنریک‌ها استفاده کند.
 
-We’ll begin with the short program in Listing 10-1 that finds the largest
-number in a list.
+با برنامه کوتاه در لیست ۱۰-۱ که بزرگ‌ترین عدد را در یک لیست پیدا می‌کند، شروع می‌کنیم.
 
-<Listing number="10-1" file-name="src/main.rs" caption="Finding the largest number in a list of numbers">
+<Listing number="10-1" file-name="src/main.rs" caption="یافتن بزرگ‌ترین عدد در یک لیست اعداد">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-01/src/main.rs:here}}
@@ -50,20 +24,11 @@ number in a list.
 
 </Listing>
 
-We store a list of integers in the variable `number_list` and place a reference
-to the first number in the list in a variable named `largest`. We then iterate
-through all the numbers in the list, and if the current number is greater than
-the number stored in `largest`, we replace the reference in that variable.
-However, if the current number is less than or equal to the largest number seen
-so far, the variable doesn’t change, and the code moves on to the next number
-in the list. After considering all the numbers in the list, `largest` should
-refer to the largest number, which in this case is 100.
+ما یک لیست از اعداد صحیح را در متغیر `number_list` ذخیره می‌کنیم و یک مرجع به اولین عدد در لیست را در متغیری به نام `largest` قرار می‌دهیم. سپس تمام اعداد لیست را پیمایش می‌کنیم و اگر عدد فعلی بزرگ‌تر از عدد ذخیره شده در `largest` باشد، مرجع در آن متغیر را جایگزین می‌کنیم. با این حال، اگر عدد فعلی کوچک‌تر یا مساوی با بزرگ‌ترین عدد دیده شده تاکنون باشد، متغیر تغییری نمی‌کند و کد به عدد بعدی در لیست می‌رود. پس از بررسی تمام اعداد در لیست، `largest` باید به بزرگ‌ترین عدد اشاره کند که در این مورد ۱۰۰ است.
 
-We’ve now been tasked with finding the largest number in two different lists of
-numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
-the same logic at two different places in the program, as shown in Listing 10-2.
+اکنون از ما خواسته شده است که بزرگ‌ترین عدد را در دو لیست مختلف اعداد پیدا کنیم. برای انجام این کار، می‌توانیم انتخاب کنیم که کد در لیست ۱۰-۱ را تکرار کنیم و از همان منطق در دو مکان مختلف در برنامه استفاده کنیم، همانطور که در لیست ۱۰-۲ نشان داده شده است.
 
-<Listing number="10-2" file-name="src/main.rs" caption="Code to find the largest number in *two* lists of numbers">
+<Listing number="10-2" file-name="src/main.rs" caption="کدی برای یافتن بزرگ‌ترین عدد در *دو* لیست اعداد">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-02/src/main.rs}}
@@ -71,21 +36,13 @@ the same logic at two different places in the program, as shown in Listing 10-2.
 
 </Listing>
 
-Although this code works, duplicating code is tedious and error prone. We also
-have to remember to update the code in multiple places when we want to change
-it.
+اگرچه این کد کار می‌کند، تکرار کد خسته‌کننده و مستعد خطاست. همچنین وقتی بخواهیم کد را تغییر دهیم، باید به یاد داشته باشیم که آن را در مکان‌های مختلف به‌روزرسانی کنیم.
 
-To eliminate this duplication, we’ll create an abstraction by defining a
-function that operates on any list of integers passed in as a parameter. This
-solution makes our code clearer and lets us express the concept of finding the
-largest number in a list abstractly.
+برای حذف این تکرار، یک انتزاع ایجاد خواهیم کرد با تعریف یک تابع که روی هر لیستی از اعداد صحیح که به عنوان پارامتر پاس داده می‌شود عمل می‌کند. این راه‌حل کد ما را واضح‌تر می‌کند و به ما اجازه می‌دهد مفهوم یافتن بزرگ‌ترین عدد در یک لیست را به صورت انتزاعی بیان کنیم.
 
-In Listing 10-3, we extract the code that finds the largest number into a
-function named `largest`. Then we call the function to find the largest number
-in the two lists from Listing 10-2. We could also use the function on any other
-list of `i32` values we might have in the future.
+در لیست ۱۰-۳، کدی که بزرگ‌ترین عدد را پیدا می‌کند در تابعی به نام `largest` استخراج می‌کنیم. سپس این تابع را فراخوانی می‌کنیم تا بزرگ‌ترین عدد را در دو لیست از لیست ۱۰-۲ پیدا کنیم. همچنین می‌توانیم از این تابع روی هر لیست دیگری از مقادیر `i32` که ممکن است در آینده داشته باشیم استفاده کنیم.
 
-<Listing number="10-3" file-name="src/main.rs" caption="Abstracted code to find the largest number in two lists">
+<Listing number="10-3" file-name="src/main.rs" caption="کد انتزاعی برای یافتن بزرگ‌ترین عدد در دو لیست">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-03/src/main.rs:here}}
@@ -93,23 +50,14 @@ list of `i32` values we might have in the future.
 
 </Listing>
 
-The `largest` function has a parameter called `list`, which represents any
-concrete slice of `i32` values we might pass into the function. As a result,
-when we call the function, the code runs on the specific values that we pass
-in.
+تابع `largest` یک پارامتر به نام `list` دارد که نمایانگر هر بخش مشخصی از مقادیر `i32` است که ممکن است به تابع پاس دهیم. در نتیجه، وقتی تابع را فراخوانی می‌کنیم، کد روی مقادیر مشخصی که پاس می‌دهیم اجرا می‌شود.
 
-In summary, here are the steps we took to change the code from Listing 10-2 to
-Listing 10-3:
+به طور خلاصه، مراحل زیر را برای تغییر کد از لیست ۱۰-۲ به لیست ۱۰-۳ طی کردیم:
 
-1. Identify duplicate code.
-1. Extract the duplicate code into the body of the function, and specify the
-   inputs and return values of that code in the function signature.
-1. Update the two instances of duplicated code to call the function instead.
+1. کد تکراری را شناسایی کنید.
+2. کد تکراری را به بدنه یک تابع استخراج کرده و ورودی‌ها و مقادیر بازگشتی آن کد را در امضای تابع مشخص کنید.
+3. دو نمونه از کد تکراری را به جای آن با فراخوانی تابع به‌روزرسانی کنید.
 
-Next, we’ll use these same steps with generics to reduce code duplication. In
-the same way that the function body can operate on an abstract `list` instead
-of specific values, generics allow code to operate on abstract types.
+در مرحله بعد، از همین مراحل با جنریک‌ها برای کاهش تکرار کد استفاده خواهیم کرد. همانطور که بدنه تابع می‌تواند روی یک `list` انتزاعی به جای مقادیر مشخص عمل کند، جنریک‌ها به کد اجازه می‌دهند که روی انواع انتزاعی عمل کند.
 
-For example, say we had two functions: one that finds the largest item in a
-slice of `i32` values and one that finds the largest item in a slice of `char`
-values. How would we eliminate that duplication? Let’s find out!
+برای مثال، فرض کنید دو تابع داشتیم: یکی که بزرگ‌ترین مورد را در یک بخش از مقادیر `i32` پیدا می‌کند و دیگری که بزرگ‌ترین مورد را در یک بخش از مقادیر `char` پیدا می‌کند. چگونه می‌توانیم این تکرار را حذف کنیم؟ بیایید پیدا کنیم!

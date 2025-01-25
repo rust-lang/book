@@ -1,22 +1,21 @@
-## Working with Environment Variables
+## کار با متغیرهای محیطی
 
-We’ll improve `minigrep` by adding an extra feature: an option for
-case-insensitive searching that the user can turn on via an environment
-variable. We could make this feature a command line option and require that
-users enter it each time they want it to apply, but by instead making it an
-environment variable, we allow our users to set the environment variable once
-and have all their searches be case insensitive in that terminal session.
+ما قصد داریم برنامه `minigrep` را با افزودن یک ویژگی جدید بهبود دهیم: گزینه‌ای برای جستجوی 
+حساس به حروف کوچک و بزرگ که کاربر می‌تواند آن را از طریق یک متغیر محیطی فعال کند. ما می‌توانیم 
+این ویژگی را به عنوان یک گزینه خط فرمان قرار دهیم و کاربران را ملزم کنیم که هر بار که می‌خواهند 
+این ویژگی اعمال شود آن را وارد کنند، اما با استفاده از یک متغیر محیطی به جای آن، به کاربران 
+اجازه می‌دهیم که فقط یک بار متغیر محیطی را تنظیم کنند و همه جستجوهایشان در همان نشست ترمینال 
+به صورت غیرحساس به حروف کوچک و بزرگ باشد.
 
-### Writing a Failing Test for the Case-Insensitive `search` Function
+### نوشتن یک تست شکست‌خورده برای تابع `search_case_insensitive`
 
-We first add a new `search_case_insensitive` function that will be called when
-the environment variable has a value. We’ll continue to follow the TDD process,
-so the first step is again to write a failing test. We’ll add a new test for
-the new `search_case_insensitive` function and rename our old test from
-`one_result` to `case_sensitive` to clarify the differences between the two
-tests, as shown in Listing 12-20.
+ابتدا یک تابع جدید به نام `search_case_insensitive` اضافه می‌کنیم که زمانی که متغیر محیطی دارای 
+مقدار باشد، فراخوانی خواهد شد. ما همچنان از فرآیند TDD پیروی می‌کنیم، بنابراین اولین گام، 
+نوشتن یک تست شکست‌خورده است. یک تست جدید برای تابع `search_case_insensitive` اضافه می‌کنیم و 
+تست قدیمی خود را از `one_result` به `case_sensitive` تغییر نام می‌دهیم تا تفاوت بین این دو 
+تست مشخص شود، همان‌طور که در لیستینگ 12-20 نشان داده شده است.
 
-<Listing number="12-20" file-name="src/lib.rs" caption="Adding a new failing test for the case-insensitive function we’re about to add">
+<Listing number="12-20" file-name="src/lib.rs" caption="افزودن یک تست شکست‌خورده جدید برای تابع غیرحساس به حروف کوچک و بزرگ که قصد داریم اضافه کنیم">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-20/src/lib.rs:here}}
@@ -24,30 +23,29 @@ tests, as shown in Listing 12-20.
 
 </Listing>
 
-Note that we’ve edited the old test’s `contents` too. We’ve added a new line
-with the text `"Duct tape."` using a capital _D_ that shouldn’t match the query
-`"duct"` when we’re searching in a case-sensitive manner. Changing the old test
-in this way helps ensure that we don’t accidentally break the case-sensitive
-search functionality that we’ve already implemented. This test should pass now
-and should continue to pass as we work on the case-insensitive search.
+توجه کنید که ما متن تست قدیمی را نیز ویرایش کرده‌ایم. ما یک خط جدید با متن `"Duct tape."` با 
+حرف بزرگ _D_ اضافه کرده‌ایم که نباید با عبارت جستجو `"duct"` در حالت حساس به حروف کوچک و 
+بزرگ مطابقت داشته باشد. تغییر دادن تست قدیمی به این صورت کمک می‌کند که مطمئن شویم عملکرد 
+جستجوی حساس به حروف کوچک و بزرگ که قبلاً پیاده‌سازی کرده‌ایم به طور تصادفی شکسته نمی‌شود. 
+این تست باید اکنون عبور کند و همچنان باید عبور کند در حالی که ما روی جستجوی غیرحساس به حروف 
+کار می‌کنیم.
 
-The new test for the case-_insensitive_ search uses `"rUsT"` as its query. In
-the `search_case_insensitive` function we’re about to add, the query `"rUsT"`
-should match the line containing `"Rust:"` with a capital _R_ and match the
-line `"Trust me."` even though both have different casing from the query. This
-is our failing test, and it will fail to compile because we haven’t yet defined
-the `search_case_insensitive` function. Feel free to add a skeleton
-implementation that always returns an empty vector, similar to the way we did
-for the `search` function in Listing 12-16 to see the test compile and fail.
+تست جدید برای جستجوی غیرحساس به حروف کوچک و بزرگ از `"rUsT"` به عنوان عبارت جستجو استفاده 
+می‌کند. در تابع `search_case_insensitive` که قصد داریم اضافه کنیم، عبارت جستجوی `"rUsT"` 
+باید با خط حاوی `"Rust:"` با حرف بزرگ _R_ و خط `"Trust me."` مطابقت داشته باشد، حتی اگر هر 
+دو حالت متفاوتی نسبت به عبارت جستجو داشته باشند. این تست شکست‌خورده ما است و به دلیل اینکه 
+هنوز تابع `search_case_insensitive` تعریف نشده است، کامپایل نخواهد شد. می‌توانید یک 
+پیاده‌سازی موقتی که همیشه یک وکتور خالی برمی‌گرداند اضافه کنید، مشابه کاری که برای تابع 
+`search` در لیستینگ 12-16 انجام دادیم تا تست کامپایل شده و شکست بخورد.
 
-### Implementing the `search_case_insensitive` Function
+### پیاده‌سازی تابع `search_case_insensitive`
 
-The `search_case_insensitive` function, shown in Listing 12-21, will be almost
-the same as the `search` function. The only difference is that we’ll lowercase
-the `query` and each `line` so that whatever the case of the input arguments,
-they’ll be the same case when we check whether the line contains the query.
+تابع `search_case_insensitive` که در لیستینگ 12-21 نشان داده شده است، تقریباً مشابه تابع 
+`search` خواهد بود. تنها تفاوت این است که ما عبارت جستجو و هر خط را کوچک‌حرف می‌کنیم تا 
+صرف‌نظر از مورد ورودی‌ها، هنگام بررسی اینکه آیا خط شامل عبارت جستجو است، هر دو به یک مورد 
+تبدیل شوند.
 
-<Listing number="12-21" file-name="src/lib.rs" caption="Defining the `search_case_insensitive` function to lowercase the query and the line before comparing them">
+<Listing number="12-21" file-name="src/lib.rs" caption="تعریف تابع `search_case_insensitive` برای کوچک‌حرف کردن عبارت جستجو و خط قبل از مقایسه آنها">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-21/src/lib.rs:here}}
@@ -55,38 +53,35 @@ they’ll be the same case when we check whether the line contains the query.
 
 </Listing>
 
-First we lowercase the `query` string and store it in a new variable with the
-same name, shadowing the original. Calling `to_lowercase` on the query is
-necessary so that no matter whether the user’s query is `"rust"`, `"RUST"`,
-`"Rust"`, or `"rUsT"`, we’ll treat the query as if it were `"rust"` and be
-insensitive to the case. While `to_lowercase` will handle basic Unicode, it
-won’t be 100% accurate. If we were writing a real application, we’d want to do a
-bit more work here, but this section is about environment variables, not
-Unicode, so we’ll leave it at that here.
+ابتدا عبارت جستجوی `query` را کوچک‌حرف می‌کنیم و آن را در یک متغیر جدید با همان نام ذخیره می‌کنیم، 
+جایگزین متغیر اصلی می‌شود. فراخوانی `to_lowercase` بر روی عبارت جستجو ضروری است تا صرف‌نظر از 
+اینکه عبارت جستجو `"rust"`، `"RUST"`، `"Rust"` یا `"rUsT"` باشد، به گونه‌ای عمل کنیم که انگار 
+عبارت جستجو `"rust"` است و به حروف کوچک و بزرگ حساس نباشد. در حالی که `to_lowercase` یونیکد 
+پایه‌ای را مدیریت می‌کند، اما 100٪ دقیق نخواهد بود. اگر ما یک برنامه واقعی می‌نوشتیم، 
+می‌خواستیم در اینجا کمی بیشتر کار کنیم، اما این بخش درباره متغیرهای محیطی است، نه یونیکد، 
+بنابراین در اینجا به همین میزان بسنده می‌کنیم.
 
-Note that `query` is now a `String` rather than a string slice because calling
-`to_lowercase` creates new data rather than referencing existing data. Say the
-query is `"rUsT"`, as an example: that string slice doesn’t contain a lowercase
-`u` or `t` for us to use, so we have to allocate a new `String` containing
-`"rust"`. When we pass `query` as an argument to the `contains` method now, we
-need to add an ampersand because the signature of `contains` is defined to take
-a string slice.
+توجه کنید که اکنون `query` یک رشته (`String`) به جای برش رشته (`string slice`) است، زیرا 
+فراخوانی `to_lowercase` داده‌های جدید ایجاد می‌کند به جای اینکه به داده‌های موجود اشاره کند. 
+به عنوان مثال، بگویید عبارت جستجو `"rUsT"` است: آن رشته شامل یک `u` یا `t` کوچک نیست که بتوانیم 
+استفاده کنیم، بنابراین باید یک `String` جدید شامل `"rust"` تخصیص دهیم. وقتی اکنون `query` را 
+به عنوان یک آرگومان به متد `contains` منتقل می‌کنیم، نیاز داریم که یک علامت `&` اضافه کنیم 
+چون امضای `contains` به گونه‌ای تعریف شده است که یک برش رشته دریافت می‌کند.
 
-Next, we add a call to `to_lowercase` on each `line` to lowercase all
-characters. Now that we’ve converted `line` and `query` to lowercase, we’ll
-find matches no matter what the case of the query is.
+بعداً یک فراخوانی به `to_lowercase` بر روی هر `line` اضافه می‌کنیم تا همه کاراکترها کوچک‌حرف 
+شوند. اکنون که `line` و `query` را به کوچک‌حرف تبدیل کرده‌ایم، مطمئن می‌شویم که مطابقت‌ها 
+صرف‌نظر از مورد عبارت جستجو پیدا شوند.
 
-Let’s see if this implementation passes the tests:
+بیایید ببینیم آیا این پیاده‌سازی تست‌ها را پاس می‌کند یا خیر:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-21/output.txt}}
 ```
 
-Great! They passed. Now, let’s call the new `search_case_insensitive` function
-from the `run` function. First we’ll add a configuration option to the `Config`
-struct to switch between case-sensitive and case-insensitive search. Adding
-this field will cause compiler errors because we aren’t initializing this field
-anywhere yet:
+عالی! تست‌ها پاس شدند. حالا بیایید تابع جدید `search_case_insensitive` را از تابع `run` 
+فراخوانی کنیم. ابتدا یک گزینه پیکربندی به ساختار `Config` اضافه می‌کنیم تا بین جستجوی حساس 
+به حروف کوچک و بزرگ و غیرحساس به حروف کوچک و بزرگ سوئیچ کنیم. افزودن این فیلد باعث ایجاد 
+خطاهای کامپایل می‌شود زیرا هنوز این فیلد را در هیچ جا مقداردهی نکرده‌ایم:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -107,14 +102,12 @@ function, as shown in Listing 12-22. This still won’t compile yet.
 
 </Listing>
 
-Finally, we need to check for the environment variable. The functions for
-working with environment variables are in the `env` module in the standard
-library, so we bring that module into scope at the top of _src/lib.rs_. Then
-we’ll use the `var` function from the `env` module to check to see if any value
-has been set for an environment variable named `IGNORE_CASE`, as shown in
-Listing 12-23.
+توابع مربوط به کار با متغیرهای محیطی در ماژول `env` در کتابخانه استاندارد قرار دارند. بنابراین در 
+بالای فایل _src/lib.rs_ این ماژول را وارد محدوده (scope) می‌کنیم. سپس از تابع `var` از ماژول 
+`env` استفاده خواهیم کرد تا بررسی کنیم آیا مقدار خاصی برای یک متغیر محیطی به نام 
+`IGNORE_CASE` تنظیم شده است یا خیر، همان‌طور که در لیستینگ 12-23 نشان داده شده است.
 
-<Listing number="12-23" file-name="src/lib.rs" caption="Checking for any value in an environment variable named `IGNORE_CASE`">
+<Listing number="12-23" file-name="src/lib.rs" caption="بررسی مقدار متغیر محیطی با نام `IGNORE_CASE`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-23/src/lib.rs:here}}
@@ -122,61 +115,54 @@ Listing 12-23.
 
 </Listing>
 
-Here, we create a new variable, `ignore_case`. To set its value, we call the
-`env::var` function and pass it the name of the `IGNORE_CASE` environment
-variable. The `env::var` function returns a `Result` that will be the
-successful `Ok` variant that contains the value of the environment variable if
-the environment variable is set to any value. It will return the `Err` variant
-if the environment variable is not set.
+اینجا یک متغیر جدید به نام `ignore_case` ایجاد می‌کنیم. برای مقداردهی آن، تابع `env::var` را 
+فراخوانی کرده و نام متغیر محیطی `IGNORE_CASE` را به آن می‌دهیم. تابع `env::var` یک `Result` 
+برمی‌گرداند که در صورت تنظیم بودن متغیر محیطی به هر مقداری، مقدار `Ok` با مقدار متغیر محیطی را 
+دارد. اگر متغیر محیطی تنظیم نشده باشد، مقدار `Err` برگردانده می‌شود.
 
-We’re using the `is_ok` method on the `Result` to check whether the environment
-variable is set, which means the program should do a case-insensitive search.
-If the `IGNORE_CASE` environment variable isn’t set to anything, `is_ok` will
-return `false` and the program will perform a case-sensitive search. We don’t
-care about the _value_ of the environment variable, just whether it’s set or
-unset, so we’re checking `is_ok` rather than using `unwrap`, `expect`, or any
-of the other methods we’ve seen on `Result`.
+ما از متد `is_ok` روی `Result` استفاده می‌کنیم تا بررسی کنیم که آیا متغیر محیطی تنظیم شده است، 
+که نشان می‌دهد برنامه باید جستجو را به صورت غیرحساس به حروف کوچک و بزرگ انجام دهد. اگر متغیر 
+محیطی `IGNORE_CASE` به هیچ مقداری تنظیم نشده باشد، `is_ok` مقدار `false` برمی‌گرداند و برنامه 
+جستجو را به صورت حساس به حروف کوچک و بزرگ انجام می‌دهد. ما به مقدار متغیر محیطی نیازی نداریم، فقط 
+می‌خواهیم بررسی کنیم که آیا تنظیم شده است یا نه. بنابراین از `is_ok` به جای متدهایی مانند 
+`unwrap`، `expect` یا دیگر متدهای مرتبط با `Result` استفاده می‌کنیم.
 
-We pass the value in the `ignore_case` variable to the `Config` instance so the
-`run` function can read that value and decide whether to call
-`search_case_insensitive` or `search`, as we implemented in Listing 12-22.
+ما مقدار متغیر `ignore_case` را به نمونه `Config` منتقل می‌کنیم تا تابع `run` بتواند این مقدار 
+را بخواند و تصمیم بگیرد که آیا باید تابع `search_case_insensitive` یا `search` را فراخوانی کند.
 
-Let’s give it a try! First we’ll run our program without the environment
-variable set and with the query `to`, which should match any line that contains
-the word _to_ in all lowercase:
+### امتحان کردن برنامه
+
+حالا بیایید برنامه را امتحان کنیم! ابتدا برنامه را بدون تنظیم متغیر محیطی و با عبارت جستجوی 
+`to` اجرا می‌کنیم. این عبارت باید با هر خطی که شامل کلمه _to_ به صورت تمام حروف کوچک باشد، 
+مطابقت داشته باشد:
 
 ```console
-{{#include ../listings/ch12-an-io-project/listing-12-23/output.txt}}
+$ cargo run -- to poem.txt
 ```
 
-Looks like that still works! Now let’s run the program with `IGNORE_CASE` set
-to `1` but with the same query _to_:
+برنامه همچنان باید به درستی کار کند و تنها خطوطی که کاملاً با عبارت مطابقت دارند را برگرداند. 
+حالا برنامه را با متغیر محیطی `IGNORE_CASE` که به مقدار `1` تنظیم شده است اجرا می‌کنیم و 
+همان عبارت جستجو _to_ را امتحان می‌کنیم:
 
 ```console
 $ IGNORE_CASE=1 cargo run -- to poem.txt
 ```
 
-If you’re using PowerShell, you will need to set the environment variable and
-run the program as separate commands:
+در صورت استفاده از PowerShell، نیاز است که متغیر محیطی را تنظیم کنید و سپس برنامه را به صورت 
+دستورات جداگانه اجرا کنید:
 
 ```console
 PS> $Env:IGNORE_CASE=1; cargo run -- to poem.txt
 ```
 
-This will make `IGNORE_CASE` persist for the remainder of your shell session.
-It can be unset with the `Remove-Item` cmdlet:
+این دستور باعث می‌شود که `IGNORE_CASE` برای مدت زمان نشست ترمینال شما تنظیم باقی بماند. می‌توانید 
+آن را با دستور `Remove-Item` حذف کنید:
 
 ```console
 PS> Remove-Item Env:IGNORE_CASE
 ```
 
-We should get lines that contain _to_ that might have uppercase letters:
-
-<!-- manual-regeneration
-cd listings/ch12-an-io-project/listing-12-23
-IGNORE_CASE=1 cargo run -- to poem.txt
-can't extract because of the environment variable
--->
+برنامه باید خطوطی که شامل _to_ هستند و ممکن است حروف بزرگ داشته باشند را برگرداند:
 
 ```console
 Are you nobody, too?
@@ -185,18 +171,15 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent, we also got lines containing _To_! Our `minigrep` program can now do
-case-insensitive searching controlled by an environment variable. Now you know
-how to manage options set using either command line arguments or environment
-variables.
+عالی! حالا برنامه `minigrep` ما می‌تواند جستجوهای غیرحساس به حروف کوچک و بزرگ را انجام دهد که 
+با یک متغیر محیطی کنترل می‌شود. حالا شما می‌دانید چگونه گزینه‌هایی را که از طریق آرگومان‌های 
+خط فرمان یا متغیرهای محیطی تنظیم می‌شوند مدیریت کنید.
 
-Some programs allow arguments _and_ environment variables for the same
-configuration. In those cases, the programs decide that one or the other takes
-precedence. For another exercise on your own, try controlling case sensitivity
-through either a command line argument or an environment variable. Decide
-whether the command line argument or the environment variable should take
-precedence if the program is run with one set to case sensitive and one set to
-ignore case.
+برخی برنامه‌ها اجازه می‌دهند که آرگومان‌ها و متغیرهای محیطی برای یک پیکربندی واحد استفاده شوند. 
+در این موارد، برنامه‌ها تصمیم می‌گیرند که یکی از آن‌ها اولویت داشته باشد. برای تمرین بیشتر، 
+سعی کنید حساسیت به حروف کوچک و بزرگ را از طریق یک آرگومان خط فرمان یا یک متغیر محیطی کنترل کنید. 
+تصمیم بگیرید که در صورت تنظیم یکی به حساس و دیگری به غیرحساس بودن، آرگومان خط فرمان یا متغیر 
+محیطی باید اولویت داشته باشد.
 
-The `std::env` module contains many more useful features for dealing with
-environment variables: check out its documentation to see what is available.
+ماژول `std::env` ویژگی‌های مفید بسیاری برای کار با متغیرهای محیطی دارد: مستندات آن را بررسی کنید 
+تا ببینید چه امکاناتی در دسترس است.

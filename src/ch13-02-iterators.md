@@ -1,17 +1,10 @@
-## Processing a Series of Items with Iterators
+## پردازش یک سری از آیتم‌ها با استفاده از Iteratorها
 
-The iterator pattern allows you to perform some task on a sequence of items in
-turn. An iterator is responsible for the logic of iterating over each item and
-determining when the sequence has finished. When you use iterators, you don’t
-have to reimplement that logic yourself.
+الگوی iterator به شما اجازه می‌دهد تا به ترتیب روی یک دنباله از آیتم‌ها کاری انجام دهید. یک iterator مسئول منطق پیمایش هر آیتم و تعیین زمان پایان دنباله است. وقتی از iteratorها استفاده می‌کنید، نیازی به پیاده‌سازی مجدد آن منطق ندارید.
 
-In Rust, iterators are _lazy_, meaning they have no effect until you call
-methods that consume the iterator to use it up. For example, the code in
-Listing 13-10 creates an iterator over the items in the vector `v1` by calling
-the `iter` method defined on `Vec<T>`. This code by itself doesn’t do anything
-useful.
+در Rust، iteratorها _تنبل_ هستند، به این معنی که تا زمانی که متدهایی که iterator را مصرف می‌کنند فراخوانی نشوند، هیچ اثری ندارند. به عنوان مثال، کد در لیست 13-10 یک iterator را بر روی آیتم‌های وکتور `v1` با فراخوانی متد `iter` که روی `Vec<T>` تعریف شده است، ایجاد می‌کند. این کد به تنهایی هیچ کار مفیدی انجام نمی‌دهد.
 
-<Listing number="13-10" file-name="src/main.rs" caption="Creating an iterator">
+<Listing number="13-10" file-name="src/main.rs" caption="ایجاد یک iterator">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-10/src/main.rs:here}}
@@ -19,18 +12,11 @@ useful.
 
 </Listing>
 
-The iterator is stored in the `v1_iter` variable. Once we’ve created an
-iterator, we can use it in a variety of ways. In Listing 3-5 in Chapter 3, we
-iterated over an array using a `for` loop to execute some code on each of its
-items. Under the hood this implicitly created and then consumed an iterator,
-but we glossed over how exactly that works until now.
+این iterator در متغیر `v1_iter` ذخیره شده است. پس از ایجاد یک iterator، می‌توانیم از آن به روش‌های مختلف استفاده کنیم. در لیست 3-5 از فصل 3، ما روی یک آرایه با استفاده از یک حلقه `for` تکرار کردیم تا کدی را روی هر یک از آیتم‌های آن اجرا کنیم. در پشت صحنه، این کار به طور ضمنی یک iterator ایجاد و سپس مصرف می‌کرد، اما تا کنون دقیقاً توضیح ندادیم که چگونه کار می‌کند.
 
-In the example in Listing 13-11, we separate the creation of the iterator from
-the use of the iterator in the `for` loop. When the `for` loop is called using
-the iterator in `v1_iter`, each element in the iterator is used in one
-iteration of the loop, which prints out each value.
+در مثال لیست 13-11، ما ایجاد iterator را از استفاده از آن در حلقه `for` جدا می‌کنیم. وقتی حلقه `for` با استفاده از iterator در `v1_iter` فراخوانی می‌شود، هر عنصر در iterator در یک تکرار از حلقه استفاده می‌شود، که هر مقدار را چاپ می‌کند.
 
-<Listing number="13-11" file-name="src/main.rs" caption="Using an iterator in a `for` loop">
+<Listing number="13-11" file-name="src/main.rs" caption="استفاده از یک iterator در حلقه `for`">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-11/src/main.rs:here}}
@@ -38,21 +24,13 @@ iteration of the loop, which prints out each value.
 
 </Listing>
 
-In languages that don’t have iterators provided by their standard libraries,
-you would likely write this same functionality by starting a variable at index
-0, using that variable to index into the vector to get a value, and
-incrementing the variable value in a loop until it reached the total number of
-items in the vector.
+در زبان‌هایی که iteratorها توسط کتابخانه استاندارد آن‌ها ارائه نمی‌شوند، احتمالاً همین عملکرد را با شروع یک متغیر در شاخص 0، استفاده از آن متغیر برای شاخص‌گذاری در وکتور برای دریافت یک مقدار و افزایش مقدار متغیر در یک حلقه تا زمانی که به تعداد کل آیتم‌ها در وکتور برسد، می‌نوشتید.
 
-Iterators handle all that logic for you, cutting down on repetitive code you
-could potentially mess up. Iterators give you more flexibility to use the same
-logic with many different kinds of sequences, not just data structures you can
-index into, like vectors. Let’s examine how iterators do that.
+iteratorها تمام این منطق را برای شما مدیریت می‌کنند و کدهای تکراری را که ممکن است اشتباه کنید کاهش می‌دهند. iteratorها به شما انعطاف بیشتری می‌دهند تا از همان منطق با انواع مختلف دنباله‌ها استفاده کنید، نه فقط ساختارهای داده‌ای که می‌توان به آن‌ها شاخص زد، مانند وکتورها. بیایید بررسی کنیم که iteratorها چگونه این کار را انجام می‌دهند.
 
-### The `Iterator` Trait and the `next` Method
+### صفت `Iterator` و متد `next`
 
-All iterators implement a trait named `Iterator` that is defined in the
-standard library. The definition of the trait looks like this:
+همه iteratorها یک صفت به نام `Iterator` را پیاده‌سازی می‌کنند که در کتابخانه استاندارد تعریف شده است. تعریف این صفت به صورت زیر است:
 
 ```rust
 pub trait Iterator {
@@ -60,27 +38,17 @@ pub trait Iterator {
 
     fn next(&mut self) -> Option<Self::Item>;
 
-    // methods with default implementations elided
+    // متدهایی با پیاده‌سازی پیش‌فرض حذف شده‌اند
 }
 ```
 
-Notice this definition uses some new syntax: `type Item` and `Self::Item`,
-which are defining an _associated type_ with this trait. We’ll talk about
-associated types in depth in Chapter 20. For now, all you need to know is that
-this code says implementing the `Iterator` trait requires that you also define
-an `Item` type, and this `Item` type is used in the return type of the `next`
-method. In other words, the `Item` type will be the type returned from the
-iterator.
+توجه کنید که این تعریف از یک نحو جدید استفاده می‌کند: `type Item` و `Self::Item`، که یک _نوع مرتبط_ را با این صفت تعریف می‌کنند. ما در فصل 20 به طور مفصل درباره انواع مرتبط صحبت خواهیم کرد. فعلاً فقط باید بدانید که این کد می‌گوید پیاده‌سازی صفت `Iterator` نیاز دارد که شما یک نوع `Item` نیز تعریف کنید، و این نوع `Item` در نوع بازگشتی متد `next` استفاده می‌شود. به عبارت دیگر، نوع `Item` همان نوعی خواهد بود که از iterator بازگردانده می‌شود.
 
-The `Iterator` trait only requires implementors to define one method: the
-`next` method, which returns one item of the iterator at a time wrapped in
-`Some` and, when iteration is over, returns `None`.
+صفت `Iterator` فقط از پیاده‌کنندگان می‌خواهد یک متد را تعریف کنند: متد `next`، که یک آیتم از iterator را در هر زمان بازمی‌گرداند، که در `Some` بسته‌بندی شده است، و وقتی پیمایش تمام شد، `None` بازمی‌گرداند.
 
-We can call the `next` method on iterators directly; Listing 13-12 demonstrates
-what values are returned from repeated calls to `next` on the iterator created
-from the vector.
+ما می‌توانیم مستقیماً متد `next` را روی iteratorها فراخوانی کنیم؛ لیست 13-12 نشان می‌دهد چه مقادیری از فراخوانی‌های مکرر `next` روی iterator ایجادشده از وکتور بازگردانده می‌شود.
 
-<Listing number="13-12" file-name="src/lib.rs" caption="Calling the `next` method on an iterator">
+<Listing number="13-12" file-name="src/lib.rs" caption="فراخوانی متد `next` روی یک iterator">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-12/src/lib.rs:here}}
@@ -88,37 +56,17 @@ from the vector.
 
 </Listing>
 
-Note that we needed to make `v1_iter` mutable: calling the `next` method on an
-iterator changes internal state that the iterator uses to keep track of where
-it is in the sequence. In other words, this code _consumes_, or uses up, the
-iterator. Each call to `next` eats up an item from the iterator. We didn’t need
-to make `v1_iter` mutable when we used a `for` loop because the loop took
-ownership of `v1_iter` and made it mutable behind the scenes.
+توجه کنید که ما نیاز داشتیم `v1_iter` را قابل تغییر (mutable) کنیم: فراخوانی متد `next` روی یک iterator، وضعیت داخلی را تغییر می‌دهد که iterator از آن برای ردیابی موقعیت خود در دنباله استفاده می‌کند. به عبارت دیگر، این کد iterator را _مصرف_ می‌کند یا از بین می‌برد. هر فراخوانی به `next` یک آیتم از iterator را مصرف می‌کند. نیازی نبود `v1_iter` را هنگام استفاده از یک حلقه `for` قابل تغییر کنیم، زیرا حلقه مالکیت `v1_iter` را به عهده گرفت و به طور پنهانی آن را قابل تغییر کرد.
 
-Also note that the values we get from the calls to `next` are immutable
-references to the values in the vector. The `iter` method produces an iterator
-over immutable references. If we want to create an iterator that takes
-ownership of `v1` and returns owned values, we can call `into_iter` instead of
-`iter`. Similarly, if we want to iterate over mutable references, we can call
-`iter_mut` instead of `iter`.
+همچنین توجه کنید که مقادیری که از فراخوانی‌های `next` دریافت می‌کنیم، ارجاعات غیرقابل تغییر به مقادیر موجود در وکتور هستند. متد `iter` یک iterator روی ارجاعات غیرقابل تغییر تولید می‌کند. اگر بخواهیم یک iterator ایجاد کنیم که مالکیت `v1` را بگیرد و مقادیر مالک‌شده را بازگرداند، می‌توانیم به جای `iter`، `into_iter` را فراخوانی کنیم. به همین ترتیب، اگر بخواهیم روی ارجاعات قابل تغییر پیمایش کنیم، می‌توانیم به جای `iter`، `iter_mut` را فراخوانی کنیم.
 
-### Methods that Consume the Iterator
+### متدهایی که Iterator را مصرف می‌کنند
 
-The `Iterator` trait has a number of different methods with default
-implementations provided by the standard library; you can find out about these
-methods by looking in the standard library API documentation for the `Iterator`
-trait. Some of these methods call the `next` method in their definition, which
-is why you’re required to implement the `next` method when implementing the
-`Iterator` trait.
+صفت `Iterator` تعداد زیادی متد مختلف با پیاده‌سازی‌های پیش‌فرض ارائه‌شده توسط کتابخانه استاندارد دارد؛ می‌توانید درباره این متدها با نگاه کردن به مستندات API کتابخانه استاندارد برای صفت `Iterator` اطلاعات بیشتری کسب کنید. برخی از این متدها در تعریف خود متد `next` را فراخوانی می‌کنند، به همین دلیل است که شما باید متد `next` را هنگام پیاده‌سازی صفت `Iterator` تعریف کنید.
 
-Methods that call `next` are called _consuming adapters_, because calling them
-uses up the iterator. One example is the `sum` method, which takes ownership of
-the iterator and iterates through the items by repeatedly calling `next`, thus
-consuming the iterator. As it iterates through, it adds each item to a running
-total and returns the total when iteration is complete. Listing 13-13 has a
-test illustrating a use of the `sum` method:
+متدهایی که `next` را فراخوانی می‌کنند، _تطبیق‌دهنده‌های مصرفی_ نامیده می‌شوند، زیرا فراخوانی آن‌ها iterator را مصرف می‌کند. یک مثال، متد `sum` است که مالکیت iterator را به عهده می‌گیرد و با فراخوانی مکرر `next`، از میان آیتم‌ها عبور می‌کند، بنابراین iterator را مصرف می‌کند. هنگام عبور، هر آیتم را به یک مجموع در حال اجرا اضافه می‌کند و وقتی پیمایش کامل شد، مجموع را بازمی‌گرداند. لیست 13-13 یک تست را نشان می‌دهد که استفاده از متد `sum` را نشان می‌دهد:
 
-<Listing number="13-13" file-name="src/lib.rs" caption="Calling the `sum` method to get the total of all items in the iterator">
+<Listing number="13-13" file-name="src/lib.rs" caption="فراخوانی متد `sum` برای گرفتن مجموع همه آیتم‌ها در iterator">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-13/src/lib.rs:here}}
@@ -126,22 +74,16 @@ test illustrating a use of the `sum` method:
 
 </Listing>
 
-We aren’t allowed to use `v1_iter` after the call to `sum` because `sum` takes
-ownership of the iterator we call it on.
 
-### Methods that Produce Other Iterators
+ما اجازه نداریم پس از فراخوانی متد `sum` از `v1_iter` استفاده کنیم، زیرا `sum` مالکیت iteratorی که روی آن فراخوانی می‌شود را به عهده می‌گیرد.
 
-_Iterator adapters_ are methods defined on the `Iterator` trait that don’t
-consume the iterator. Instead, they produce different iterators by changing
-some aspect of the original iterator.
+### متدهایی که Iteratorهای دیگری تولید می‌کنند
 
-Listing 13-14 shows an example of calling the iterator adapter method `map`,
-which takes a closure to call on each item as the items are iterated through.
-The `map` method returns a new iterator that produces the modified items. The
-closure here creates a new iterator in which each item from the vector will be
-incremented by 1:
+_تطبیق‌دهنده‌های Iterator_ متدهایی هستند که روی صفت `Iterator` تعریف شده‌اند و iterator را مصرف نمی‌کنند. در عوض، آن‌ها با تغییر برخی جنبه‌های iterator اصلی، iteratorهای متفاوتی تولید می‌کنند.
 
-<Listing number="13-14" file-name="src/main.rs" caption="Calling the iterator adapter `map` to create a new iterator">
+لیست 13-14 مثالی از فراخوانی متد تطبیق‌دهنده iterator به نام `map` را نشان می‌دهد که یک closure را برای فراخوانی روی هر آیتم هنگام پیمایش از میان آیتم‌ها می‌گیرد. متد `map` یک iterator جدید بازمی‌گرداند که آیتم‌های تغییر یافته را تولید می‌کند. closure در اینجا یک iterator جدید ایجاد می‌کند که در آن هر آیتم از وکتور ۱ واحد افزایش می‌یابد:
+
+<Listing number="13-14" file-name="src/main.rs" caption="فراخوانی تطبیق‌دهنده iterator `map` برای ایجاد یک iterator جدید">
 
 ```rust,not_desired_behavior
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-14/src/main.rs:here}}
@@ -149,26 +91,19 @@ incremented by 1:
 
 </Listing>
 
-However, this code produces a warning:
+با این حال، این کد یک هشدار تولید می‌کند:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-14/output.txt}}
 ```
 
-The code in Listing 13-14 doesn’t do anything; the closure we’ve specified
-never gets called. The warning reminds us why: iterator adapters are lazy, and
-we need to consume the iterator here.
+کد در لیست 13-14 هیچ کاری انجام نمی‌دهد؛ closureی که مشخص کرده‌ایم هرگز فراخوانی نمی‌شود. این هشدار به ما یادآوری می‌کند چرا: تطبیق‌دهنده‌های iterator تنبل هستند و ما باید iterator را در اینجا مصرف کنیم.
 
-To fix this warning and consume the iterator, we’ll use the `collect` method,
-which we used in Chapter 12 with `env::args` in Listing 12-1. This method
-consumes the iterator and collects the resulting values into a collection data
-type.
+برای رفع این هشدار و مصرف iterator، از متد `collect` استفاده می‌کنیم، که در فصل 12 با `env::args` در لیست 12-1 استفاده کردیم. این متد iterator را مصرف کرده و مقادیر حاصل را در یک نوع داده مجموعه جمع‌آوری می‌کند.
 
-In Listing 13-15, we collect the results of iterating over the iterator that’s
-returned from the call to `map` into a vector. This vector will end up
-containing each item from the original vector incremented by 1.
+در لیست 13-15، نتایج پیمایش بر روی iterator بازگردانده‌شده از فراخوانی `map` را در یک وکتور جمع‌آوری می‌کنیم. این وکتور در نهایت شامل هر آیتم از وکتور اصلی با افزایش ۱ واحد خواهد بود.
 
-<Listing number="13-15" file-name="src/main.rs" caption="Calling the `map` method to create a new iterator and then calling the `collect` method to consume the new iterator and create a vector">
+<Listing number="13-15" file-name="src/main.rs" caption="فراخوانی متد `map` برای ایجاد یک iterator جدید و سپس فراخوانی متد `collect` برای مصرف iterator جدید و ایجاد یک وکتور">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-15/src/main.rs:here}}
@@ -176,31 +111,19 @@ containing each item from the original vector incremented by 1.
 
 </Listing>
 
-Because `map` takes a closure, we can specify any operation we want to perform
-on each item. This is a great example of how closures let you customize some
-behavior while reusing the iteration behavior that the `Iterator` trait
-provides.
+از آنجا که `map` یک closure می‌گیرد، می‌توانیم هر عملیاتی را که می‌خواهیم روی هر آیتم انجام دهیم مشخص کنیم. این مثال بسیار خوبی است از اینکه چگونه closureها به شما اجازه می‌دهند تا برخی رفتارها را سفارشی کنید در حالی که از رفتار پیمایشی که صفت `Iterator` فراهم می‌کند استفاده مجدد می‌کنید.
 
-You can chain multiple calls to iterator adapters to perform complex actions in
-a readable way. But because all iterators are lazy, you have to call one of the
-consuming adapter methods to get results from calls to iterator adapters.
+می‌توانید چندین فراخوانی به تطبیق‌دهنده‌های iterator را زنجیره کنید تا اقدامات پیچیده‌ای را به شکلی خوانا انجام دهید. اما از آنجا که همه iteratorها تنبل هستند، باید یکی از متدهای تطبیق‌دهنده مصرفی را برای گرفتن نتایج از فراخوانی تطبیق‌دهنده‌های iterator فراخوانی کنید.
 
-### Using Closures that Capture Their Environment
+### استفاده از closureهایی که محیط خود را می‌گیرند
 
-Many iterator adapters take closures as arguments, and commonly the closures
-we’ll specify as arguments to iterator adapters will be closures that capture
-their environment.
+بسیاری از تطبیق‌دهنده‌های iterator closureها را به عنوان آرگومان می‌پذیرند، و معمولاً closureهایی که به عنوان آرگومان به تطبیق‌دهنده‌های iterator مشخص می‌کنیم closureهایی هستند که محیط خود را می‌گیرند.
 
-For this example, we’ll use the `filter` method that takes a closure. The
-closure gets an item from the iterator and returns a `bool`. If the closure
-returns `true`, the value will be included in the iteration produced by
-`filter`. If the closure returns `false`, the value won’t be included.
+برای این مثال، از متد `filter` استفاده خواهیم کرد که یک closure می‌گیرد. closure یک آیتم از iterator دریافت کرده و یک مقدار `bool` بازمی‌گرداند. اگر closure مقدار `true` بازگرداند، مقدار در پیمایش تولید شده توسط `filter` گنجانده می‌شود. اگر closure مقدار `false` بازگرداند، مقدار گنجانده نخواهد شد.
 
-In Listing 13-16, we use `filter` with a closure that captures the `shoe_size`
-variable from its environment to iterate over a collection of `Shoe` struct
-instances. It will return only shoes that are the specified size.
+در لیست 13-16، از `filter` با یک closure که متغیر `shoe_size` را از محیط خود می‌گیرد استفاده می‌کنیم تا روی مجموعه‌ای از نمونه‌های ساختار `Shoe` پیمایش کنیم. این متد فقط کفش‌هایی را که اندازه مشخص شده دارند بازمی‌گرداند.
 
-<Listing number="13-16" file-name="src/lib.rs" caption="Using the `filter` method with a closure that captures `shoe_size`">
+<Listing number="13-16" file-name="src/lib.rs" caption="استفاده از متد `filter` با یک closure که `shoe_size` را می‌گیرد">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-16/src/lib.rs}}
@@ -208,19 +131,10 @@ instances. It will return only shoes that are the specified size.
 
 </Listing>
 
-The `shoes_in_size` function takes ownership of a vector of shoes and a shoe
-size as parameters. It returns a vector containing only shoes of the specified
-size.
+تابع `shoes_in_size` مالکیت یک وکتور از کفش‌ها و یک اندازه کفش را به عنوان پارامتر می‌گیرد. این تابع یک وکتور بازمی‌گرداند که فقط شامل کفش‌هایی با اندازه مشخص شده است.
 
-In the body of `shoes_in_size`, we call `into_iter` to create an iterator
-that takes ownership of the vector. Then we call `filter` to adapt that
-iterator into a new iterator that only contains elements for which the closure
-returns `true`.
+در بدنه `shoes_in_size`، ما `into_iter` را فراخوانی می‌کنیم تا یک iterator ایجاد کنیم که مالکیت وکتور را می‌گیرد. سپس `filter` را فراخوانی می‌کنیم تا آن iterator را به یک iterator جدید تبدیل کنیم که فقط شامل عناصری است که closure برای آن‌ها مقدار `true` بازمی‌گرداند.
 
-The closure captures the `shoe_size` parameter from the environment and
-compares the value with each shoe’s size, keeping only shoes of the size
-specified. Finally, calling `collect` gathers the values returned by the
-adapted iterator into a vector that’s returned by the function.
+closure پارامتر `shoe_size` را از محیط می‌گیرد و مقدار آن را با اندازه هر کفش مقایسه می‌کند و فقط کفش‌هایی با اندازه مشخص شده را نگه می‌دارد. در نهایت، با فراخوانی `collect` مقادیر بازگردانده‌شده توسط iterator تطبیق‌یافته در یک وکتور جمع‌آوری می‌شوند که توسط تابع بازگردانده می‌شود.
 
-The test shows that when we call `shoes_in_size`, we get back only shoes
-that have the same size as the value we specified.
+تست نشان می‌دهد که وقتی `shoes_in_size` را فراخوانی می‌کنیم، فقط کفش‌هایی را دریافت می‌کنیم که اندازه آن‌ها با مقداری که مشخص کرده‌ایم یکسان است.

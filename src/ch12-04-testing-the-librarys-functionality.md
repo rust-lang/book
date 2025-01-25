@@ -1,41 +1,25 @@
-## Developing the Library’s Functionality with Test-Driven Development
+## توسعه قابلیت‌های کتابخانه با توسعه آزمون‌محور (TDD) یا همان (Test-Driven Development)
 
-Now that we’ve extracted the logic into _src/lib.rs_ and left the argument
-collecting and error handling in _src/main.rs_, it’s much easier to write tests
-for the core functionality of our code. We can call functions directly with
-various arguments and check return values without having to call our binary
-from the command line.
+اکنون که منطق را به _src/lib.rs_ استخراج کرده‌ایم و جمع‌آوری آرگومان‌ها و مدیریت خطاها را در _src/main.rs_ باقی گذاشته‌ایم، نوشتن تست برای قابلیت‌های اصلی کد ما بسیار آسان‌تر شده است. می‌توانیم مستقیماً توابع را با آرگومان‌های مختلف فراخوانی کرده و مقادیر بازگشتی را بررسی کنیم، بدون اینکه نیاز باشد از باینری ما از خط فرمان استفاده کنیم.
 
-In this section, we’ll add the searching logic to the `minigrep` program using
-the test-driven development (TDD) process with the following steps:
+در این بخش، منطق جستجو را با استفاده از فرآیند توسعه آزمون‌محور (TDD) به برنامه `minigrep` اضافه خواهیم کرد. مراحل این فرآیند به شرح زیر است:
 
-1. Write a test that fails and run it to make sure it fails for the reason you
-   expect.
-2. Write or modify just enough code to make the new test pass.
-3. Refactor the code you just added or changed and make sure the tests continue
-   to pass.
-4. Repeat from step 1!
+<ol dir="rtl">
+  <li>نوشتن یک تست که شکست می‌خورد و اجرای آن برای اطمینان از اینکه به دلیلی که انتظار داشتید شکست می‌خورد.</li>
+  <li>نوشتن یا تغییر کد به اندازه‌ای که تست جدید پاس شود.</li>
+  <li>بازسازی کدی که به تازگی اضافه یا تغییر داده شده و اطمینان از اینکه تست‌ها همچنان پاس می‌شوند.</li>
+  <li>تکرار از مرحله ۱!</li>
+</ol>
 
-Though it’s just one of many ways to write software, TDD can help drive code
-design. Writing the test before you write the code that makes the test pass
-helps to maintain high test coverage throughout the process.
+TDD تنها یکی از روش‌های نوشتن نرم‌افزار است، اما می‌تواند به طراحی بهتر کد کمک کند. نوشتن تست قبل از نوشتن کدی که تست را پاس می‌کند، کمک می‌کند تا پوشش تست بالا در طول فرآیند حفظ شود.
 
-We’ll test-drive the implementation of the functionality that will actually do
-the searching for the query string in the file contents and produce a list of
-lines that match the query. We’ll add this functionality in a function called
-`search`.
+ما با استفاده از TDD پیاده‌سازی قابلیت جستجوی رشته کوئری در محتوای فایل و تولید لیستی از خطوط مطابق با کوئری را توسعه خواهیم داد. این قابلیت را در تابعی به نام `search` اضافه خواهیم کرد.
 
-### Writing a Failing Test
+### نوشتن یک تست که شکست می‌خورد
 
-Because we don’t need them anymore, let’s remove the `println!` statements from
-_src/lib.rs_ and _src/main.rs_ that we used to check the program’s behavior.
-Then, in _src/lib.rs_, we’ll add a `tests` module with a test function, as we
-did in [Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies
-the behavior we want the `search` function to have: it will take a query and
-the text to search, and it will return only the lines from the text that
-contain the query. Listing 12-15 shows this test, which won’t compile yet.
+از آنجا که دیگر به آن‌ها نیاز نداریم، بیایید عبارت‌های `println!` را از _src/lib.rs_ و _src/main.rs_ که برای بررسی رفتار برنامه استفاده می‌کردیم حذف کنیم. سپس، در _src/lib.rs_، یک ماژول `tests` با یک تابع تست اضافه خواهیم کرد، همانطور که در [فصل ۱۱][ch11-anatomy] انجام دادیم. تابع تست، رفتاری که می‌خواهیم تابع `search` داشته باشد را مشخص می‌کند: این تابع یک کوئری و متن برای جستجو دریافت می‌کند و تنها خطوطی از متن که شامل کوئری هستند را بازمی‌گرداند. لیست ۱۲-۱۵ این تست را نشان می‌دهد که هنوز کامپایل نخواهد شد.
 
-<Listing number="12-15" file-name="src/lib.rs" caption="Creating a failing test for the `search` function we wish we had">
+<Listing number="12-15" file-name="src/lib.rs" caption="ایجاد یک تست شکست‌خورده برای تابع `search` که آرزو می‌کنیم داشته باشیم">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-15/src/lib.rs:here}}
@@ -43,90 +27,60 @@ contain the query. Listing 12-15 shows this test, which won’t compile yet.
 
 </Listing>
 
-This test searches for the string `"duct"`. The text we’re searching is three
-lines, only one of which contains `"duct"` (note that the backslash after the
-opening double quote tells Rust not to put a newline character at the beginning
-of the contents of this string literal). We assert that the value returned from
-the `search` function contains only the line we expect.
+این تست به دنبال رشته `"duct"` می‌گردد. متنی که در آن جستجو می‌کنیم شامل سه خط است که تنها یکی از آن‌ها شامل `"duct"` است (توجه داشته باشید که بک‌اسلش بعد از علامت نقل قول بازکننده به Rust می‌گوید که کاراکتر newline در ابتدای محتویات این literal رشته قرار ندهد). ما تأیید می‌کنیم که مقدار بازگردانده شده از تابع `search` تنها شامل خطی است که انتظار داریم.
 
-We aren’t yet able to run this test and watch it fail because the test doesn’t
-even compile: the `search` function doesn’t exist yet! In accordance with TDD
-principles, we’ll add just enough code to get the test to compile and run by
-adding a definition of the `search` function that always returns an empty
-vector, as shown in Listing 12-16. Then the test should compile and fail
-because an empty vector doesn’t match a vector containing the line `"safe,
-fast, productive."`
+هنوز قادر به اجرای این تست و مشاهده شکست آن نیستیم زیرا تست حتی کامپایل نمی‌شود: تابع `search` هنوز وجود ندارد! بر اساس اصول TDD، ما تنها به اندازه‌ای کد اضافه می‌کنیم که تست کامپایل و اجرا شود، با اضافه کردن یک تعریف از تابع `search` که همیشه یک بردار خالی بازمی‌گرداند، همانطور که در لیست ۱۲-۱۶ نشان داده شده است. سپس تست باید کامپایل و شکست بخورد زیرا یک بردار خالی با یک بردار شامل خط `"safe, fast, productive."` مطابقت ندارد.
 
-<Listing number="12-16" file-name="src/lib.rs" caption="Defining just enough of the `search` function so our test will compile">
+<Listing number="12-16" file-name="src/lib.rs" caption="تعریف حداقل کد برای تابع `search` تا تست ما کامپایل شود">
 
-```rust,noplayground
+```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
 ```
 
 </Listing>
 
-Notice that we need to define an explicit lifetime `'a` in the signature of
-`search` and use that lifetime with the `contents` argument and the return
-value. Recall in [Chapter 10][ch10-lifetimes]<!-- ignore --> that the lifetime
-parameters specify which argument lifetime is connected to the lifetime of the
-return value. In this case, we indicate that the returned vector should contain
-string slices that reference slices of the argument `contents` (rather than the
-argument `query`).
 
-In other words, we tell Rust that the data returned by the `search` function
-will live as long as the data passed into the `search` function in the
-`contents` argument. This is important! The data referenced _by_ a slice needs
-to be valid for the reference to be valid; if the compiler assumes we’re making
-string slices of `query` rather than `contents`, it will do its safety checking
-incorrectly.
+متوجه می‌شوید که ما نیاز داریم یک طول عمر صریح `'a` در امضای تابع `search` تعریف کنیم و از آن طول عمر با آرگومان `contents` و مقدار بازگشتی استفاده کنیم. به یاد داشته باشید که در [فصل ۱۰][ch10-lifetimes] توضیح دادیم که پارامترهای طول عمر مشخص می‌کنند کدام طول عمر آرگومان به طول عمر مقدار بازگشتی متصل است. در این مورد، ما مشخص می‌کنیم که بردار بازگشتی باید شامل برش‌های رشته‌ای باشد که به برش‌های آرگومان `contents` اشاره دارند (نه آرگومان `query`).
 
-If we forget the lifetime annotations and try to compile this function, we’ll
-get this error:
+به عبارت دیگر، به Rust می‌گوییم داده‌ای که توسط تابع `search` بازگردانده می‌شود به اندازه داده‌ای که به تابع `search` در آرگومان `contents` منتقل می‌شود زنده خواهد بود. این مهم است! داده‌ای که توسط یک برش مرجع داده می‌شود باید معتبر باشد تا مرجع نیز معتبر باشد؛ اگر کامپایلر فرض کند که ما در حال ساختن برش‌های رشته‌ای از `query` هستیم به جای `contents`، بررسی‌های ایمنی را به اشتباه انجام خواهد داد.
+
+اگر طول عمرها را فراموش کنیم و سعی کنیم این تابع را کامپایل کنیم، این خطا را دریافت خواهیم کرد:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-02-missing-lifetimes/output.txt}}
 ```
 
-Rust can’t possibly know which of the two arguments we need, so we need to tell
-it explicitly. Because `contents` is the argument that contains all of our text
-and we want to return the parts of that text that match, we know `contents` is
-the argument that should be connected to the return value using the lifetime
-syntax.
+Rust به هیچ وجه نمی‌تواند بداند کدام یک از دو آرگومان مورد نیاز است، بنابراین ما باید به صورت صریح به آن بگوییم. از آنجایی که `contents` آرگومانی است که شامل تمام متن ما است و ما می‌خواهیم قسمت‌هایی از آن متن که مطابقت دارند را بازگردانیم، می‌دانیم که `contents` آرگومانی است که باید با استفاده از نحو طول عمر به مقدار بازگشتی متصل شود.
 
-Other programming languages don’t require you to connect arguments to return
-values in the signature, but this practice will get easier over time. You might
-want to compare this example with the examples in the [“Validating References
-with Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> section
-in Chapter 10.
+دیگر زبان‌های برنامه‌نویسی نیازی ندارند آرگومان‌ها را به مقادیر بازگشتی در امضا متصل کنید، اما این تمرین با گذشت زمان آسان‌تر می‌شود. ممکن است بخواهید این مثال را با مثال‌های موجود در بخش [“اعتبارسنجی مراجع با طول عمر”][validating-references-with-lifetimes] از فصل ۱۰ مقایسه کنید.
 
-Now let’s run the test:
+اکنون بیایید تست را اجرا کنیم:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-16/output.txt}}
 ```
 
-Great, the test fails, exactly as we expected. Let’s get the test to pass!
+عالی است، تست دقیقا همانطور که انتظار داشتیم شکست می‌خورد. بیایید تست را پاس کنیم!
 
-### Writing Code to Pass the Test
+### نوشتن کدی برای پاس کردن تست
 
-Currently, our test is failing because we always return an empty vector. To fix
-that and implement `search`, our program needs to follow these steps:
+در حال حاضر، تست ما به دلیل اینکه همیشه یک بردار خالی بازمی‌گرداند، شکست می‌خورد. برای رفع این مشکل و پیاده‌سازی `search`، برنامه ما باید این مراحل را دنبال کند:
 
-1. Iterate through each line of the contents.
-2. Check whether the line contains our query string.
-3. If it does, add it to the list of values we’re returning.
-4. If it doesn’t, do nothing.
-5. Return the list of results that match.
+<ol dir="rtl">
+  <li>تکرار از طریق هر خط از محتوای فایل.</li>
+  <li>بررسی اینکه آیا خط شامل رشته کوئری ما هست یا نه.</li>
+  <li>اگر خط شامل کوئری بود، آن را به لیست مقادیر بازگشتی اضافه کنیم.</li>
+  <li>اگر نبود، کاری انجام ندهیم.</li>
+  <li>لیست نتایجی که مطابقت دارند را بازگردانیم.</li>
+</ol>
 
-Let’s work through each step, starting with iterating through lines.
+بیایید هر مرحله را یکی‌یکی اجرا کنیم، با تکرار از طریق خطوط شروع می‌کنیم.
 
-#### Iterating Through Lines with the `lines` Method
+#### تکرار از طریق خطوط با متد `lines`
 
-Rust has a helpful method to handle line-by-line iteration of strings,
-conveniently named `lines`, that works as shown in Listing 12-17. Note that
-this won’t compile yet.
+Rust یک متد مفید برای مدیریت تکرار خط به خط در رشته‌ها ارائه می‌دهد که به طور مناسبی `lines` نامیده شده است و همانطور که در لیست ۱۲-۱۷ نشان داده شده کار می‌کند. توجه داشته باشید که این کد هنوز کامپایل نخواهد شد.
 
-<Listing number="12-17" file-name="src/lib.rs" caption="Iterating through each line in `contents`">
+<Listing number="12-17" file-name="src/lib.rs" caption="تکرار از طریق هر خط در `contents`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-17/src/lib.rs:here}}
@@ -134,19 +88,13 @@ this won’t compile yet.
 
 </Listing>
 
-The `lines` method returns an iterator. We’ll talk about iterators in depth in
-[Chapter 13][ch13-iterators]<!-- ignore -->, but recall that you saw this way
-of using an iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a
-`for` loop with an iterator to run some code on each item in a collection.
+متد `lines` یک iterator برمی‌گرداند. ما در [فصل ۱۳][ch13-iterators] عمیقاً در مورد iteratorها صحبت خواهیم کرد، اما به یاد داشته باشید که قبلاً این روش استفاده از یک iterator را در [لیست ۳-۵][ch3-iter] دیدید، جایی که از یک حلقه `for` با یک iterator برای اجرای کدی روی هر آیتم در یک مجموعه استفاده کردیم.
 
-#### Searching Each Line for the Query
+#### جستجو در هر خط برای کوئری
 
-Next, we’ll check whether the current line contains our query string.
-Fortunately, strings have a helpful method named `contains` that does this for
-us! Add a call to the `contains` method in the `search` function, as shown in
-Listing 12-18. Note that this still won’t compile yet.
+اکنون، بررسی خواهیم کرد که آیا خط فعلی شامل رشته کوئری ما هست یا نه. خوشبختانه، رشته‌ها یک متد مفید به نام `contains` دارند که این کار را برای ما انجام می‌دهد! یک فراخوانی به متد `contains` را در تابع `search` اضافه کنید، همانطور که در لیست ۱۲-۱۸ نشان داده شده است. توجه داشته باشید که این کد همچنان کامپایل نخواهد شد.
 
-<Listing number="12-18" file-name="src/lib.rs" caption="Adding functionality to see whether the line contains the string in `query`">
+<Listing number="12-18" file-name="src/lib.rs" caption="اضافه کردن قابلیت بررسی اینکه آیا خط شامل رشته موجود در `query` هست یا نه">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-18/src/lib.rs:here}}
@@ -154,18 +102,13 @@ Listing 12-18. Note that this still won’t compile yet.
 
 </Listing>
 
-At the moment, we’re building up functionality. To get the code to compile, we
-need to return a value from the body as we indicated we would in the function
-signature.
+در حال حاضر، ما در حال ایجاد قابلیت‌های بیشتر هستیم. برای اینکه کد کامپایل شود، نیاز داریم مقداری را از بدنه تابع بازگردانیم همانطور که در امضای تابع اشاره کردیم.
 
-#### Storing Matching Lines
+#### ذخیره خطوط مطابق
 
-To finish this function, we need a way to store the matching lines that we want
-to return. For that, we can make a mutable vector before the `for` loop and
-call the `push` method to store a `line` in the vector. After the `for` loop,
-we return the vector, as shown in Listing 12-19.
+برای تکمیل این تابع، نیاز داریم روشی برای ذخیره خطوط مطابق که می‌خواهیم بازگردانیم داشته باشیم. برای این کار، می‌توانیم یک بردار mutable قبل از حلقه `for` ایجاد کنیم و با استفاده از متد `push` یک خط را در بردار ذخیره کنیم. بعد از حلقه `for`، بردار را بازمی‌گردانیم، همانطور که در لیست ۱۲-۱۹ نشان داده شده است.
 
-<Listing number="12-19" file-name="src/lib.rs" caption="Storing the lines that match so we can return them">
+<Listing number="12-19" file-name="src/lib.rs" caption="ذخیره خطوط مطابق برای بازگرداندن آن‌ها">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:here}}
@@ -173,28 +116,19 @@ we return the vector, as shown in Listing 12-19.
 
 </Listing>
 
-Now the `search` function should return only the lines that contain `query`,
-and our test should pass. Let’s run the test:
+اکنون تابع `search` باید فقط خطوطی را که شامل `query` هستند بازگرداند، و تست ما باید پاس شود. بیایید تست را اجرا کنیم:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-19/output.txt}}
 ```
 
-Our test passed, so we know it works!
+تست ما پاس شد، بنابراین می‌دانیم که کار می‌کند!
 
-At this point, we could consider opportunities for refactoring the
-implementation of the search function while keeping the tests passing to
-maintain the same functionality. The code in the search function isn’t too bad,
-but it doesn’t take advantage of some useful features of iterators. We’ll
-return to this example in [Chapter 13][ch13-iterators]<!-- ignore -->, where
-we’ll explore iterators in detail, and look at how to improve it.
+در این مرحله، می‌توانیم فرصت‌هایی برای بازسازی پیاده‌سازی تابع جستجو در نظر بگیریم و در عین حال تست‌ها را پاس نگه داریم تا همان قابلیت را حفظ کنیم. کد در تابع جستجو چندان بد نیست، اما از برخی ویژگی‌های مفید iteratorها استفاده نمی‌کند. ما در [فصل ۱۳][ch13-iterators] به این مثال بازخواهیم گشت، جایی که iteratorها را با جزئیات بررسی می‌کنیم و به نحوه بهبود آن می‌پردازیم.
 
-#### Using the `search` Function in the `run` Function
+#### استفاده از تابع `search` در تابع `run`
 
-Now that the `search` function is working and tested, we need to call `search`
-from our `run` function. We need to pass the `config.query` value and the
-`contents` that `run` reads from the file to the `search` function. Then `run`
-will print each line returned from `search`:
+اکنون که تابع `search` کار می‌کند و تست شده است، باید تابع `search` را از تابع `run` فراخوانی کنیم. ما باید مقدار `config.query` و `contents` که `run` از فایل می‌خواند را به تابع `search` بدهیم. سپس `run` هر خطی که از `search` برگردانده شده را چاپ خواهد کرد:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -202,35 +136,29 @@ will print each line returned from `search`:
 {{#rustdoc_include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/src/lib.rs:here}}
 ```
 
-We’re still using a `for` loop to return each line from `search` and print it.
+ما هنوز از یک حلقه `for` برای بازگرداندن هر خط از `search` و چاپ آن استفاده می‌کنیم.
 
-Now the entire program should work! Let’s try it out, first with a word that
-should return exactly one line from the Emily Dickinson poem: _frog_.
+اکنون کل برنامه باید کار کند! بیایید آن را امتحان کنیم، ابتدا با کلمه‌ای که باید دقیقاً یک خط از شعر امیلی دیکینسون را برگرداند: _frog_.
 
 ```console
 {{#include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/output.txt}}
 ```
 
-Cool! Now let’s try a word that will match multiple lines, like _body_:
+عالی! حالا بیایید کلمه‌ای را امتحان کنیم که چندین خط را مطابقت دهد، مثل _body_:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-03-multiple-matches/output.txt}}
 ```
 
-And finally, let’s make sure that we don’t get any lines when we search for a
-word that isn’t anywhere in the poem, such as _monomorphization_:
+و در نهایت، مطمئن شویم که وقتی کلمه‌ای را جستجو می‌کنیم که در هیچ جای شعر وجود ندارد، مثل _monomorphization_، هیچ خطی دریافت نخواهیم کرد:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-04-no-matches/output.txt}}
 ```
 
-Excellent! We’ve built our own mini version of a classic tool and learned a lot
-about how to structure applications. We’ve also learned a bit about file input
-and output, lifetimes, testing, and command line parsing.
+عالی! ما نسخه کوچکی از یک ابزار کلاسیک ساختیم و چیزهای زیادی درباره نحوه ساختاردهی برنامه‌ها آموختیم. همچنین کمی درباره ورودی و خروجی فایل، طول عمر‌ها، تست کردن و تجزیه دستورات خط فرمان یاد گرفتیم.
 
-To round out this project, we’ll briefly demonstrate how to work with
-environment variables and how to print to standard error, both of which are
-useful when you’re writing command line programs.
+برای تکمیل این پروژه، به طور مختصر نشان خواهیم داد که چگونه با متغیرهای محیطی کار کنیم و چگونه به خطای استاندارد (standard error) چاپ کنیم، که هر دو در هنگام نوشتن برنامه‌های خط فرمان مفید هستند.
 
 [validating-references-with-lifetimes]: ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 [ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function

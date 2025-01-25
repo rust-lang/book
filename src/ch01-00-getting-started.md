@@ -1,8 +1,8 @@
-# Getting Started
+# شروع به کار
 
-Let’s start your Rust journey! There’s a lot to learn, but every journey starts
-somewhere. In this chapter, we’ll discuss:
+بیایید سفر خود به دنیای راست را آغاز کنیم! چیزهای زیادی برای یادگیری وجود دارد، اما هر سفری از جایی شروع می‌شود. در این فصل، درباره موارد زیر صحبت خواهیم کرد:
 
-- Installing Rust on Linux, macOS, and Windows
-- Writing a program that prints `Hello, world!`
-- Using `cargo`, Rust’s package manager and build system
+- نصب راست بر روی لینوکس، macOS، و ویندوز  
+- نوشتن برنامه‌ای که `سلام دنیا!` را چاپ می‌کند  
+- استفاده از `cargo`، مدیر بسته و سیستم ساخت راست
+

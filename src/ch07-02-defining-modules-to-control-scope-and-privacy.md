@@ -1,54 +1,26 @@
-## Defining Modules to Control Scope and Privacy
+## تعریف ماژول‌ها برای کنترل محدوده و حریم خصوصی
 
-In this section, we’ll talk about modules and other parts of the module system,
-namely _paths_, which allow you to name items; the `use` keyword that brings a
-path into scope; and the `pub` keyword to make items public. We’ll also discuss
-the `as` keyword, external packages, and the glob operator.
+در این بخش، ما درباره ماژول‌ها و سایر بخش‌های سیستم ماژول صحبت خواهیم کرد، یعنی _مسیرها_ که به شما امکان می‌دهند آیتم‌ها را نام‌گذاری کنید؛ کلمه کلیدی `use` که مسیر را به محدوده وارد می‌کند؛ و کلمه کلیدی `pub` برای عمومی کردن آیتم‌ها. همچنین درباره کلمه کلیدی `as`، بسته‌های خارجی، و عملگر `glob` صحبت خواهیم کرد.
 
-### Modules Cheat Sheet
+### خلاصه‌ای از ماژول‌ها
 
-Before we get to the details of modules and paths, here we provide a quick
-reference on how modules, paths, the `use` keyword, and the `pub` keyword work
-in the compiler, and how most developers organize their code. We’ll be going
-through examples of each of these rules throughout this chapter, but this is a
-great place to refer to as a reminder of how modules work.
+قبل از اینکه به جزئیات ماژول‌ها و مسیرها بپردازیم، اینجا یک مرجع سریع در مورد نحوه عملکرد ماژول‌ها، مسیرها، کلمه کلیدی `use` و کلمه کلیدی `pub` در کامپایلر ارائه می‌دهیم و همچنین نحوه سازماندهی کد توسط اکثر توسعه‌دهندگان را نشان می‌دهیم. ما در طول این فصل به مثال‌هایی از هر یک از این قواعد خواهیم پرداخت، اما این یک مکان عالی برای یادآوری نحوه عملکرد ماژول‌ها است.
 
-- **Start from the crate root**: When compiling a crate, the compiler first
-  looks in the crate root file (usually _src/lib.rs_ for a library crate or
-  _src/main.rs_ for a binary crate) for code to compile.
-- **Declaring modules**: In the crate root file, you can declare new modules;
-  say you declare a “garden” module with `mod garden;`. The compiler will look
-  for the module’s code in these places:
-  - Inline, within curly brackets that replace the semicolon following `mod
-    garden`
-  - In the file _src/garden.rs_
-  - In the file _src/garden/mod.rs_
-- **Declaring submodules**: In any file other than the crate root, you can
-  declare submodules. For example, you might declare `mod vegetables;` in
-  _src/garden.rs_. The compiler will look for the submodule’s code within the
-  directory named for the parent module in these places:
-  - Inline, directly following `mod vegetables`, within curly brackets instead
-    of the semicolon
-  - In the file _src/garden/vegetables.rs_
-  - In the file _src/garden/vegetables/mod.rs_
-- **Paths to code in modules**: Once a module is part of your crate, you can
-  refer to code in that module from anywhere else in that same crate, as long
-  as the privacy rules allow, using the path to the code. For example, an
-  `Asparagus` type in the garden vegetables module would be found at
+- **شروع از ریشه جعبه (crate):** هنگام کامپایل یک جعبه (crate)، کامپایلر ابتدا در فایل ریشه جعبه (crate) (معمولاً _src/lib.rs_ برای یک جعبه (crate) کتابخانه‌ای یا _src/main.rs_ برای یک جعبه (crate) باینری) به دنبال کد برای کامپایل می‌گردد.
+- **تعریف ماژول‌ها:** در فایل ریشه جعبه (crate)، می‌توانید ماژول‌های جدید تعریف کنید؛ مثلاً می‌توانید یک ماژول "garden" با `mod garden;` تعریف کنید. کامپایلر کد ماژول را در مکان‌های زیر جستجو می‌کند:
+  - به صورت درون‌خطی، داخل براکت‌های موج‌دار که به جای علامت نقطه‌ویرگول بعد از `mod garden` قرار می‌گیرند.
+  - در فایل _src/garden.rs_
+  - در فایل _src/garden/mod.rs_
+- **تعریف زیرماژول‌ها:** در هر فایلی به جز فایل ریشه جعبه (crate)، می‌توانید زیرماژول‌ها تعریف کنید. برای مثال، ممکن است `mod vegetables;` را در فایل _src/garden.rs_ تعریف کنید. کامپایلر کد زیرماژول را در دایرکتوری‌ای که به نام ماژول والد است، در مکان‌های زیر جستجو می‌کند:
+  - به صورت درون‌خطی، مستقیماً بعد از `mod vegetables`، داخل براکت‌های موج‌دار به جای نقطه‌ویرگول
+  - در فایل _src/garden/vegetables.rs_
+  - در فایل _src/garden/vegetables/mod.rs_
+- **مسیرها به کد در ماژول‌ها:** وقتی یک ماژول بخشی از جعبه (crate) شما باشد، می‌توانید از هر جای دیگر در همان جعبه (crate) (تا زمانی که قواعد حریم خصوصی اجازه دهند) با استفاده از مسیر به کد آن ارجاع دهید. برای مثال، یک نوع `Asparagus` در ماژول vegetables در garden به این صورت پیدا می‌شود:
   `crate::garden::vegetables::Asparagus`.
-- **Private vs. public**: Code within a module is private from its parent
-  modules by default. To make a module public, declare it with `pub mod`
-  instead of `mod`. To make items within a public module public as well, use
-  `pub` before their declarations.
-- **The `use` keyword**: Within a scope, the `use` keyword creates shortcuts to
-  items to reduce repetition of long paths. In any scope that can refer to
-  `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use
-  crate::garden::vegetables::Asparagus;` and from then on you only need to
-  write `Asparagus` to make use of that type in the scope.
+- **خصوصی در مقابل عمومی:** کد درون یک ماژول به صورت پیش‌فرض برای ماژول‌های والد خصوصی است. برای عمومی کردن یک ماژول، آن را با `pub mod` به جای `mod` تعریف کنید. برای عمومی کردن آیتم‌های داخل یک ماژول عمومی، از `pub` قبل از اعلان آن‌ها استفاده کنید.
+- **کلمه کلیدی `use`:** در یک محدوده، کلمه کلیدی `use` میانبری به آیتم‌ها ایجاد می‌کند تا تکرار مسیرهای طولانی کاهش یابد. در هر محدوده‌ای که می‌تواند به `crate::garden::vegetables::Asparagus` ارجاع دهد، می‌توانید یک میانبر با `use crate::garden::vegetables::Asparagus;` ایجاد کنید و از آن به بعد فقط کافی است `Asparagus` را در آن محدوده استفاده کنید.
 
-Here, we create a binary crate named `backyard` that illustrates these rules.
-The crate’s directory, also named `backyard`, contains these files and
-directories:
+اینجا، ما یک جعبه (crate) باینری به نام `backyard` ایجاد می‌کنیم که این قواعد را نشان می‌دهد. دایرکتوری جعبه (crate) که آن هم `backyard` نامیده می‌شود شامل این فایل‌ها و دایرکتوری‌ها است:
 
 ```text
 backyard
@@ -61,7 +33,7 @@ backyard
     └── main.rs
 ```
 
-The crate root file in this case is _src/main.rs_, and it contains:
+فایل ریشه جعبه (crate) در اینجا _src/main.rs_ است و حاوی موارد زیر است:
 
 <Listing file-name="src/main.rs">
 
@@ -71,8 +43,7 @@ The crate root file in this case is _src/main.rs_, and it contains:
 
 </Listing>
 
-The `pub mod garden;` line tells the compiler to include the code it finds in
-_src/garden.rs_, which is:
+خط `pub mod garden;` به کامپایلر می‌گوید که کدی را که در _src/garden.rs_ پیدا می‌کند وارد کند، که شامل موارد زیر است:
 
 <Listing file-name="src/garden.rs">
 
@@ -82,43 +53,25 @@ _src/garden.rs_, which is:
 
 </Listing>
 
-Here, `pub mod vegetables;` means the code in _src/garden/vegetables.rs_ is
-included too. That code is:
+اینجا، `pub mod vegetables;` به این معنا است که کد موجود در _src/garden/vegetables.rs_ نیز وارد می‌شود. آن کد به صورت زیر است:
 
 ```rust,noplayground,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden/vegetables.rs}}
 ```
 
-Now let’s get into the details of these rules and demonstrate them in action!
+حالا بیایید به جزئیات این قواعد بپردازیم و آن‌ها را در عمل نشان دهیم!
 
-### Grouping Related Code in Modules
+### گروه‌بندی کدهای مرتبط در ماژول‌ها
 
-_Modules_ let us organize code within a crate for readability and easy reuse.
-Modules also allow us to control the _privacy_ of items because code within a
-module is private by default. Private items are internal implementation details
-not available for outside use. We can choose to make modules and the items
-within them public, which exposes them to allow external code to use and depend
-on them.
+_ماژول‌ها_ به ما امکان می‌دهند کد را در یک جعبه (crate) برای خوانایی و بازاستفاده آسان سازماندهی کنیم. ماژول‌ها همچنین به ما امکان کنترل _حریم خصوصی_ آیتم‌ها را می‌دهند زیرا کد درون یک ماژول به صورت پیش‌فرض خصوصی است. آیتم‌های خصوصی جزئیات پیاده‌سازی داخلی هستند که برای استفاده خارجی در دسترس نیستند. ما می‌توانیم انتخاب کنیم که ماژول‌ها و آیتم‌های درون آن‌ها عمومی باشند، که این موارد را برای استفاده خارجی آشکار می‌کند.
 
-As an example, let’s write a library crate that provides the functionality of a
-restaurant. We’ll define the signatures of functions but leave their bodies
-empty to concentrate on the organization of the code rather than the
-implementation of a restaurant.
+برای مثال، بیایید یک جعبه (crate) کتابخانه‌ای بنویسیم که عملکرد یک رستوران را ارائه دهد. امضای توابع را تعریف می‌کنیم اما بدنه آن‌ها را خالی می‌گذاریم تا بیشتر بر سازماندهی کد تمرکز کنیم تا پیاده‌سازی عملکرد یک رستوران.
 
-In the restaurant industry, some parts of a restaurant are referred to as
-_front of house_ and others as _back of house_. Front of house is where
-customers are; this encompasses where the hosts seat customers, servers take
-orders and payment, and bartenders make drinks. Back of house is where the
-chefs and cooks work in the kitchen, dishwashers clean up, and managers do
-administrative work.
+در صنعت رستوران، برخی قسمت‌های یک رستوران به عنوان _جلوی خانه_ و دیگر قسمت‌ها به عنوان _پشت خانه_ شناخته می‌شوند. جلوی خانه جایی است که مشتریان هستند؛ این شامل جایی است که میزبان‌ها مشتریان را می‌نشانند، گارسون‌ها سفارش می‌گیرند و پرداخت‌ها را انجام می‌دهند، و بارتندرها نوشیدنی درست می‌کنند. پشت خانه جایی است که سرآشپزها و آشپزها در آشپزخانه کار می‌کنند، ظرف‌شورها ظروف را تمیز می‌کنند، و مدیران کارهای اداری انجام می‌دهند.
 
-To structure our crate in this way, we can organize its functions into nested
-modules. Create a new library named `restaurant` by running `cargo new
-restaurant --lib`. Then enter the code in Listing 7-1 into _src/lib.rs_ to
-define some modules and function signatures; this code is the front of house
-section.
+برای ساختاردهی جعبه (crate) خود به این روش، می‌توانیم عملکردها را در ماژول‌های تو در تو سازماندهی کنیم. یک کتابخانه جدید به نام `restaurant` با اجرای دستور `cargo new restaurant --lib` ایجاد کنید. سپس کد لیستینگ 7-1 را در _src/lib.rs_ وارد کنید تا برخی ماژول‌ها و امضای توابع تعریف شود. این کد بخش جلوی خانه را تعریف می‌کند.
 
-<Listing number="7-1" file-name="src/lib.rs" caption="A `front_of_house` module containing other modules that then contain functions">
+<Listing number="7-1" file-name="src/lib.rs" caption="یک ماژول `front_of_house` که شامل ماژول‌های دیگر است که سپس شامل توابع می‌شوند">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-01/src/lib.rs}}
@@ -126,27 +79,17 @@ section.
 
 </Listing>
 
-We define a module with the `mod` keyword followed by the name of the module
-(in this case, `front_of_house`). The body of the module then goes inside curly
-brackets. Inside modules, we can place other modules, as in this case with the
-modules `hosting` and `serving`. Modules can also hold definitions for other
-items, such as structs, enums, constants, traits, and—as in Listing
-7-1—functions.
+ما یک ماژول با کلمه کلیدی `mod` و سپس نام ماژول تعریف می‌کنیم (در این مورد، `front_of_house`). بدنه ماژول سپس داخل براکت‌های موج‌دار قرار می‌گیرد. داخل ماژول‌ها، می‌توانیم ماژول‌های دیگری قرار دهیم، همان‌طور که در اینجا با ماژول‌های `hosting` و `serving` انجام داده‌ایم. ماژول‌ها همچنین می‌توانند تعاریف آیتم‌های دیگر را نگه دارند، مانند ساختارها، enumها، ثابت‌ها، traits و—همان‌طور که در لیستینگ 7-1 دیده می‌شود—توابع.
 
-By using modules, we can group related definitions together and name why
-they’re related. Programmers using this code can navigate the code based on the
-groups rather than having to read through all the definitions, making it easier
-to find the definitions relevant to them. Programmers adding new functionality
-to this code would know where to place the code to keep the program organized.
+با استفاده از ماژول‌ها، می‌توانیم تعاریف مرتبط را با هم گروه‌بندی کنیم و دلیل ارتباط آن‌ها را نام‌گذاری کنیم. برنامه‌نویسانی که از این کد استفاده می‌کنند می‌توانند بر اساس گروه‌ها کد را مرور کنند، به جای اینکه مجبور باشند تمام تعاریف را بخوانند. این کار پیدا کردن تعاریف مرتبط با آن‌ها را آسان‌تر می‌کند. برنامه‌نویسانی که عملکرد جدیدی به این کد اضافه می‌کنند می‌دانند که کد را کجا قرار دهند تا برنامه سازماندهی شده باقی بماند.
 
-Earlier, we mentioned that _src/main.rs_ and _src/lib.rs_ are called crate
-roots. The reason for their name is that the contents of either of these two
-files form a module named `crate` at the root of the crate’s module structure,
-known as the _module tree_.
+### درخت ماژول
 
-Listing 7-2 shows the module tree for the structure in Listing 7-1.
+قبلاً اشاره کردیم که _src/main.rs_ و _src/lib.rs_ به نام ریشه جعبه (crate) شناخته می‌شوند. دلیل نام‌گذاری آن‌ها این است که محتوای هر یک از این دو فایل یک ماژول به نام `crate` را در ریشه ساختار ماژول جعبه (crate) تشکیل می‌دهند، که به عنوان _درخت ماژول_ شناخته می‌شود.
 
-<Listing number="7-2" caption="The module tree for the code in Listing 7-1">
+لیستینگ 7-2 درخت ماژول را برای ساختار موجود در لیستینگ 7-1 نشان می‌دهد.
+
+<Listing number="7-2" caption="درخت ماژول برای کد موجود در لیستینگ 7-1">
 
 ```text
 crate
@@ -162,15 +105,6 @@ crate
 
 </Listing>
 
-This tree shows how some of the modules nest inside other modules; for example,
-`hosting` nests inside `front_of_house`. The tree also shows that some modules
-are _siblings_, meaning they’re defined in the same module; `hosting` and
-`serving` are siblings defined within `front_of_house`. If module A is
-contained inside module B, we say that module A is the _child_ of module B and
-that module B is the _parent_ of module A. Notice that the entire module tree
-is rooted under the implicit module named `crate`.
+این درخت نشان می‌دهد که برخی از ماژول‌ها در داخل ماژول‌های دیگر قرار دارند؛ برای مثال، `hosting` در داخل `front_of_house` قرار دارد. درخت همچنین نشان می‌دهد که برخی از ماژول‌ها _هم‌سطح_ هستند، به این معنی که در همان ماژول تعریف شده‌اند؛ `hosting` و `serving` هم‌سطح هستند و درون `front_of_house` تعریف شده‌اند. اگر ماژول A درون ماژول B قرار گیرد، می‌گوییم ماژول A _فرزند_ ماژول B است و ماژول B _والد_ ماژول A است. توجه کنید که کل درخت ماژول در زیر ماژول ضمنی به نام `crate` ریشه دارد.
 
-The module tree might remind you of the filesystem’s directory tree on your
-computer; this is a very apt comparison! Just like directories in a filesystem,
-you use modules to organize your code. And just like files in a directory, we
-need a way to find our modules.
+درخت ماژول ممکن است شما را به یاد درخت دایرکتوری‌های فایل‌سیستم کامپیوتر بیندازد؛ این مقایسه بسیار مناسبی است! درست همان‌طور که دایرکتوری‌ها در فایل‌سیستم کد را سازماندهی می‌کنند، شما می‌توانید از ماژول‌ها برای سازماندهی کد خود استفاده کنید. و درست مانند فایل‌ها در یک دایرکتوری، ما نیاز به روشی برای پیدا کردن ماژول‌ها داریم.

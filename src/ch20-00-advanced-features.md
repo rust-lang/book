@@ -1,22 +1,13 @@
 # Advanced Features
 
-By now, you’ve learned the most commonly used parts of the Rust programming
-language. Before we do one more project in Chapter 21, we’ll look at a few
-aspects of the language you might run into every once in a while, but may not
-use every day. You can use this chapter as a reference for when you encounter
-any unknowns. The features covered here are useful in very specific situations.
-Although you might not reach for them often, we want to make sure you have a
-grasp of all the features Rust has to offer.
+تا اینجا، شما با رایج‌ترین بخش‌های زبان برنامه‌نویسی راست آشنا شده‌اید. پیش از اینکه در فصل 21 یک پروژه دیگر انجام دهیم، به برخی از جنبه‌های زبان می‌پردازیم که ممکن است هر از گاهی با آن‌ها روبرو شوید، اما شاید هر روز از آن‌ها استفاده نکنید. می‌توانید از این فصل به‌عنوان مرجعی استفاده کنید زمانی که با موارد ناشناخته‌ای روبرو می‌شوید. ویژگی‌هایی که اینجا پوشش داده می‌شوند در موقعیت‌های بسیار خاص مفید هستند. اگرچه ممکن است اغلب به آن‌ها نیاز نداشته باشید، ما می‌خواهیم اطمینان حاصل کنیم که شما درک خوبی از تمام ویژگی‌هایی که راست ارائه می‌دهد دارید.
 
-In this chapter, we’ll cover:
+در این فصل، ما به موضوعات زیر خواهیم پرداخت:
 
-- Unsafe Rust: how to opt out of some of Rust’s guarantees and take
-  responsibility for manually upholding those guarantees
-- Advanced traits: associated types, default type parameters, fully qualified
-  syntax, supertraits, and the newtype pattern in relation to traits
-- Advanced types: more about the newtype pattern, type aliases, the never type,
-  and dynamically sized types
-- Advanced functions and closures: function pointers and returning closures
-- Macros: ways to define code that defines more code at compile time
+- Unsafe Rust: چگونه می‌توان از برخی از تضمین‌های راست چشم‌پوشی کرد و مسئولیت تضمین دستی این موارد را بر عهده گرفت.
+- Advanced traits: نوع‌های مرتبط (associated types)، پارامترهای نوع پیش‌فرض، نحو کاملاً واجد شرایط، ابر traits (supertraits)، و الگوی newtype در رابطه با traits.
+- Advanced types: بیشتر درباره الگوی newtype، نام مستعار نوع (type aliases)، نوع never، و نوع‌های با اندازه پویا.
+- Advanced functions and closures: اشاره‌گر (Pointer)های تابع و بازگرداندن closures.
+- Macros: روش‌هایی برای تعریف کدی که در زمان کامپایل کد بیشتری تعریف می‌کند.
 
-It’s a panoply of Rust features with something for everyone! Let’s dive in!
+این یک مجموعه گسترده از ویژگی‌های راست است که برای همه چیزی در آن وجود دارد! بیایید شروع کنیم!

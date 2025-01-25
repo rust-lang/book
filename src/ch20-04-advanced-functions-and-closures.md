@@ -1,28 +1,14 @@
-## Advanced Functions and Closures
+## توابع پیشرفته و Closureها
 
-This section explores some advanced features related to functions and closures,
-including function pointers and returning closures.
+این بخش به بررسی برخی از ویژگی‌های پیشرفته مربوط به توابع و Closureها می‌پردازد، از جمله Pointerهای تابع و بازگرداندن Closureها.
 
-### Function Pointers
+### Pointerهای تابع
 
-We’ve talked about how to pass closures to functions; you can also pass regular
-functions to functions! This technique is useful when you want to pass a
-function you’ve already defined rather than defining a new closure. Functions
-coerce to the type `fn` (with a lowercase f), not to be confused with the `Fn`
-closure trait. The `fn` type is called a _function pointer_. Passing functions
-with function pointers will allow you to use functions as arguments to other
-functions.
+قبلاً در مورد چگونگی ارسال Closureها به توابع صحبت کردیم؛ شما همچنین می‌توانید توابع معمولی را به توابع دیگر ارسال کنید! این تکنیک زمانی مفید است که بخواهید تابعی که قبلاً تعریف کرده‌اید را ارسال کنید به جای اینکه یک Closureها جدید تعریف کنید. توابع به نوع `fn` (با f کوچک) تبدیل می‌شوند، که نباید با ویژگی Closureها `Fn` اشتباه گرفته شود. نوع `fn` به عنوان یک _اشاره‌گر (Pointer) تابع_ شناخته می‌شود. ارسال توابع با استفاده از Pointerهای تابع به شما این امکان را می‌دهد که از توابع به عنوان آرگومان برای توابع دیگر استفاده کنید.
 
-The syntax for specifying that a parameter is a function pointer is similar to
-that of closures, as shown in Listing 20-28, where we’ve defined a function
-`add_one` that adds one to its parameter. The function `do_twice` takes two
-parameters: a function pointer to any function that takes an `i32` parameter
-and returns an `i32`, and one `i32` value. The `do_twice` function calls the
-function `f` twice, passing it the `arg` value, then adds the two function call
-results together. The `main` function calls `do_twice` with the arguments
-`add_one` and `5`.
+سینتکس مشخص کردن اینکه یک پارامتر یک اشاره‌گر (Pointer) تابع است، مشابه Closureها است، همان‌طور که در لیست ۲۰-۲۸ نشان داده شده است. در این مثال، تابعی به نام `add_one` تعریف کرده‌ایم که یک واحد به پارامتر خود اضافه می‌کند. تابع `do_twice` دو پارامتر می‌گیرد: یک اشاره‌گر (Pointer) تابع به هر تابعی که یک پارامتر `i32` بگیرد و یک مقدار `i32` برگرداند، و یک مقدار `i32`. تابع `do_twice` تابع `f` را دو بار فراخوانی می‌کند، مقدار `arg` را به آن می‌فرستد و سپس نتایج دو فراخوانی را با هم جمع می‌کند. تابع `main` تابع `do_twice` را با آرگومان‌های `add_one` و `5` فراخوانی می‌کند.
 
-<Listing number="20-28" file-name="src/main.rs" caption="Using the `fn` type to accept a function pointer as an argument">
+<Listing number="20-28" file-name="src/main.rs" caption="استفاده از نوع `fn` برای پذیرش یک اشاره‌گر (Pointer) تابع به عنوان آرگومان">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-28/src/main.rs}}
@@ -30,96 +16,55 @@ results together. The `main` function calls `do_twice` with the arguments
 
 </Listing>
 
-This code prints `The answer is: 12`. We specify that the parameter `f` in
-`do_twice` is an `fn` that takes one parameter of type `i32` and returns an
-`i32`. We can then call `f` in the body of `do_twice`. In `main`, we can pass
-the function name `add_one` as the first argument to `do_twice`.
+این کد مقدار `The answer is: 12` را چاپ می‌کند. ما مشخص کرده‌ایم که پارامتر `f` در `do_twice` یک `fn` است که یک پارامتر از نوع `i32` می‌گیرد و یک `i32` باز می‌گرداند. سپس می‌توانیم `f` را در بدنه تابع `do_twice` فراخوانی کنیم. در `main`، می‌توانیم نام تابع `add_one` را به عنوان آرگومان اول به `do_twice` ارسال کنیم.
 
-Unlike closures, `fn` is a type rather than a trait, so we specify `fn` as the
-parameter type directly rather than declaring a generic type parameter with one
-of the `Fn` traits as a trait bound.
+برخلاف Closureها `fn` یک نوع است و نه یک ویژگی، بنابراین ما `fn` را به طور مستقیم به عنوان نوع پارامتر مشخص می‌کنیم، به جای اعلام یک پارامتر جنریک با یکی از ویژگی‌های `Fn` به عنوان محدودیت ویژگی.
 
-Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
-`FnOnce`), meaning you can always pass a function pointer as an argument for a
-function that expects a closure. It’s best to write functions using a generic
-type and one of the closure traits so your functions can accept either
-functions or closures.
+Pointerهای تابع تمام سه ویژگی Closureها (`Fn`، `FnMut`، و `FnOnce`) را پیاده‌سازی می‌کنند، به این معنی که شما همیشه می‌توانید یک اشاره‌گر (Pointer) تابع را به عنوان آرگومان برای یک تابع که انتظار یک Closureها را دارد ارسال کنید. بهتر است توابع را با استفاده از یک نوع جنریک و یکی از ویژگی‌های Closureها بنویسید تا توابع شما بتوانند هم توابع و هم Closureها را بپذیرند.
 
-That said, one example of where you would want to only accept `fn` and not
-closures is when interfacing with external code that doesn’t have closures: C
-functions can accept functions as arguments, but C doesn’t have closures.
+با این حال، یک مثال از جایی که ممکن است بخواهید فقط `fn` را بپذیرید و نه Closureها زمانی است که با کد خارجی که Closureها ندارد تعامل می‌کنید: توابع C می‌توانند توابع را به عنوان آرگومان بپذیرند، اما C Closureها ندارد.
 
-As an example of where you could use either a closure defined inline or a named
-function, let’s look at a use of the `map` method provided by the `Iterator`
-trait in the standard library. To use the `map` function to turn a vector of
-numbers into a vector of strings, we could use a closure, like this:
+به عنوان مثالی از جایی که می‌توانید از یک Closureها تعریف‌شده درون‌خطی یا یک تابع نام‌گذاری‌شده استفاده کنید، بیایید به استفاده از متد `map` که توسط ویژگی `Iterator` در کتابخانه استاندارد ارائه شده است نگاهی بیندازیم. برای استفاده از تابع `map` برای تبدیل یک بردار اعداد به یک بردار رشته‌ها، می‌توانیم از یک Closureها به این صورت استفاده کنیم:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-15-map-closure/src/main.rs:here}}
 ```
 
-Or we could name a function as the argument to `map` instead of the closure,
-like this:
+یا می‌توانیم به جای کلوزر، نام یک تابع را به عنوان آرگومان به `map` ارسال کنیم، به این صورت:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-16-map-function/src/main.rs:here}}
 ```
 
-Note that we must use the fully qualified syntax that we talked about earlier
-in the [“Advanced Traits”][advanced-traits]<!-- ignore --> section because
-there are multiple functions available named `to_string`. Here, we’re using the
-`to_string` function defined in the `ToString` trait, which the standard
-library has implemented for any type that implements `Display`.
+توجه داشته باشید که باید از سینتکس کاملاً مشخصی که قبلاً در بخش [“ویژگی‌های پیشرفته”][advanced-traits]<!-- ignore --> توضیح داده شد استفاده کنیم، زیرا چندین تابع با نام `to_string` در دسترس هستند. در اینجا، ما از تابع `to_string` که در ویژگی `ToString` تعریف شده است استفاده می‌کنیم، که کتابخانه استاندارد برای هر نوعی که ویژگی `Display` را پیاده‌سازی کند، آن را پیاده‌سازی کرده است.
 
-Recall from the [“Enum values”][enum-values]<!-- ignore --> section of Chapter
-6 that the name of each enum variant that we define also becomes an initializer
-function. We can use these initializer functions as function pointers that
-implement the closure traits, which means we can specify the initializer
-functions as arguments for methods that take closures, like so:
+به یاد بیاورید که در بخش [“مقادیر Enum”][enum-values]<!-- ignore --> از فصل ۶ گفته شد که نام هر واریانت enum که تعریف می‌کنیم، همچنین به یک تابع مقداردهی اولیه تبدیل می‌شود. می‌توانیم از این توابع مقداردهی اولیه به عنوان اشاره‌گر (Pointer)های تابع که ویژگی‌های کلوزر را پیاده‌سازی می‌کنند استفاده کنیم، به این معنی که می‌توانیم توابع مقداردهی اولیه را به عنوان آرگومان برای متدهایی که کلوزرها (closures) را می‌پذیرند مشخص کنیم، به این صورت:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-17-map-initializer/src/main.rs:here}}
 ```
 
-Here we create `Status::Value` instances using each `u32` value in the range
-that `map` is called on by using the initializer function of `Status::Value`.
-Some people prefer this style, and some people prefer to use closures. They
-compile to the same code, so use whichever style is clearer to you.
+در اینجا با استفاده از تابع مقداردهی اولیه `Status::Value`، نمونه‌هایی از `Status::Value` ایجاد می‌کنیم که از هر مقدار `u32` در محدوده‌ای که `map` روی آن فراخوانی می‌شود استفاده می‌کند. برخی افراد این سبک را ترجیح می‌دهند و برخی دیگر ترجیح می‌دهند از کلوزرها (closures) استفاده کنند. این‌ها به کدی یکسان کامپایل می‌شوند، بنابراین هر سبکی که برای شما واضح‌تر است را انتخاب کنید.
 
-### Returning Closures
+### بازگرداندن کلوزرها (closures) (Returning Closures)
 
-Closures are represented by traits, which means you can’t return closures
-directly. In most cases where you might want to return a trait, you can instead
-use the concrete type that implements the trait as the return value of the
-function. However, you can’t do that with closures because they don’t have a
-concrete type that is returnable; you’re not allowed to use the function
-pointer `fn` as a return type, for example.
+کلوزرها (closures) با ویژگی‌ها نمایش داده می‌شوند، به این معنی که نمی‌توانید مستقیماً کلوزرها (closures) را بازگردانید. در بیشتر مواردی که ممکن است بخواهید یک ویژگی را بازگردانید، می‌توانید به جای آن از نوع مشخصی که ویژگی را پیاده‌سازی می‌کند به عنوان مقدار بازگشتی تابع استفاده کنید. با این حال، نمی‌توانید این کار را با کلوزرها (closures) انجام دهید زیرا آن‌ها نوع مشخصی که قابل بازگشت باشد ندارند؛ به عنوان مثال، نمی‌توانید از اشاره‌گر (Pointer) تابع `fn` به عنوان نوع بازگشتی استفاده کنید.
 
-Instead, you will normally use the `impl Trait` syntax we learned about in
-Chapter 10. You can return any function type, using `Fn`, `FnOnce` and `FnMut`.
-For example, this code will work just fine:
+در عوض، معمولاً از سینتکس `impl Trait` که در فصل ۱۰ یاد گرفتیم استفاده می‌کنید. می‌توانید هر نوع تابعی را با استفاده از `Fn`، `FnOnce` و `FnMut` بازگردانید. برای مثال، این کد به خوبی کار می‌کند:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-18-returns-closure/src/lib.rs}}
 ```
 
-However, as we noted in the [“Closure Type Inference and
-Annotation”][closure-types]<!-- ignore --> section in Chapter 13, each closure
-is also its own distinct type. If you need to work with multiple functions that
-have the same signature but different implementations, you will need to use a
-trait object for them:
+با این حال، همان‌طور که در بخش [“استنتاج نوع کلوزر و حاشیه‌نویسی”][closure-types]<!-- ignore --> از فصل ۱۳ اشاره کردیم، هر کلوزر نوع مشخص خود را دارد. اگر نیاز داشته باشید با چندین تابع که امضای یکسانی دارند اما پیاده‌سازی‌های متفاوتی دارند کار کنید، باید از یک شیء ویژگی (_trait object_) برای آن‌ها استفاده کنید:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-19-returns-closure-trait-object/src/main.rs}}
 ```
 
-This code will compile just fine—but it wouldn’t if we had tried to stick with
-`impl Fn(i32) -> i32`. For more about trait objects, refer to the section
-[“Using Trait Objects That Allow for Values of Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
---> in Chapter 18.
+این کد به خوبی کامپایل می‌شود—اما اگر تلاش می‌کردیم از `impl Fn(i32) -> i32` استفاده کنیم، کامپایل نمی‌شد. برای اطلاعات بیشتر در مورد اشیاء ویژگی، به بخش [“استفاده از اشیاء ویژگی که امکان مقادیر با تایپ‌های مختلف را فراهم می‌کنند”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore --> در فصل ۱۸ مراجعه کنید.
 
-Next, let’s look at macros!
+در ادامه، بیایید نگاهی به ماکروها بیندازیم!
 
 [advanced-traits]: ch20-02-advanced-traits.html#advanced-traits
 [enum-values]: ch06-01-defining-an-enum.html#enum-values

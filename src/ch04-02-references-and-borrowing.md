@@ -1,75 +1,56 @@
-## References and Borrowing
+## ارجاعات و قرض گرفتن (References and Borrowing)
 
-The issue with the tuple code in Listing 4-5 is that we have to return the
-`String` to the calling function so we can still use the `String` after the
-call to `calculate_length`, because the `String` was moved into
-`calculate_length`. Instead, we can provide a reference to the `String` value.
-A _reference_ is like a pointer in that it’s an address we can follow to access
-the data stored at that address; that data is owned by some other variable.
-Unlike a pointer, a reference is guaranteed to point to a valid value of a
-particular type for the life of that reference.
+مشکل کدی که در لیستینگ 4-5 با استفاده از تاپل وجود دارد این است که باید 
+`String` را به تابع فراخوانی‌کننده بازگردانیم تا بعد از فراخوانی 
+`calculate_length` بتوانیم همچنان از 
+`String` استفاده کنیم، زیرا 
+`String` به 
+`calculate_length` منتقل شده است. در عوض، می‌توانیم یک ارجاع به مقدار 
+`String` ارائه دهیم. یک _ارجاع_ مشابه یک اشاره‌گر (Pointer) است، به این معنا که یک آدرس است که می‌توانیم از آن پیروی کنیم تا به داده‌هایی که در آن آدرس ذخیره شده‌اند دسترسی پیدا کنیم؛ این داده‌ها متعلق به متغیر دیگری هستند. برخلاف اشاره‌گر (Pointer)، یک ارجاع تضمین می‌کند که به یک مقدار معتبر از نوع خاصی در طول عمر آن ارجاع اشاره می‌کند.
 
-Here is how you would define and use a `calculate_length` function that has a
-reference to an object as a parameter instead of taking ownership of the value:
+در اینجا نحوه تعریف و استفاده از یک تابع 
+`calculate_length` آورده شده است که به جای گرفتن مالکیت مقدار، یک ارجاع به یک شی به عنوان پارامتر دارد:
 
-<Listing file-name="src/main.rs">
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:all}}
 ```
 
-</Listing>
+اول، توجه کنید که تمام کد مربوط به تاپل در اعلام متغیر و مقدار بازگشتی تابع حذف شده است. دوم، دقت کنید که ما 
+`&s1` را به 
+`calculate_length` می‌دهیم و در تعریف آن، 
+`&String` می‌گیریم به جای 
+`String`. این علامت‌های & نماینده‌ی _ارجاعات_ هستند و به شما اجازه می‌دهند تا به مقداری اشاره کنید بدون اینکه مالکیت آن را بگیرید. شکل 4-6 این مفهوم را نشان می‌دهد.
 
-First, notice that all the tuple code in the variable declaration and the
-function return value is gone. Second, note that we pass `&s1` into
-`calculate_length` and, in its definition, we take `&String` rather than
-`String`. These ampersands represent _references_, and they allow you to refer
-to some value without taking ownership of it. Figure 4-6 depicts this concept.
+<img alt="سه جدول: جدول s فقط یک اشاره‌گر (Pointer) به جدول s1 دارد. جدول s1 شامل داده‌های استک برای s1 است و به داده‌های رشته‌ای در هیپ اشاره می‌کند." src="img/trpl04-06.svg" class="center" />
 
-<img alt="Three tables: the table for s contains only a pointer to the table
-for s1. The table for s1 contains the stack data for s1 and points to the
-string data on the heap." src="img/trpl04-06.svg" class="center" />
+<span class="caption">شکل 4-6: نمودار `&String s` که به `String s1` اشاره می‌کند</span>
 
-<span class="caption">Figure 4-6: A diagram of `&String s` pointing at `String
-s1`</span>
+> توجه: متضاد ارجاع دادن با استفاده از `&`، _عدم ارجاع_ است که با عملگر عدم ارجاع، یعنی `*`، انجام می‌شود. برخی از موارد استفاده از عملگر عدم ارجاع را در فصل 8 خواهیم دید و جزئیات مربوط به عدم ارجاع را در فصل 15 بحث خواهیم کرد.
 
-> Note: The opposite of referencing by using `&` is _dereferencing_, which is
-> accomplished with the dereference operator, `*`. We’ll see some uses of the
-> dereference operator in Chapter 8 and discuss details of dereferencing in
-> Chapter 15.
-
-Let’s take a closer look at the function call here:
+بیایید نگاهی دقیق‌تر به فراخوانی تابع بیندازیم:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:here}}
 ```
 
-The `&s1` syntax lets us create a reference that _refers_ to the value of `s1`
-but does not own it. Because the reference does not own it, the value it points
-to will not be dropped when the reference stops being used.
+سینتکس `&s1` به ما اجازه می‌دهد یک ارجاع ایجاد کنیم که به مقدار 
+`s1` _اشاره می‌کند_ اما مالک آن نیست. از آنجایی که ارجاع مالک آن نیست، مقداری که به آن اشاره می‌کند زمانی که ارجاع استفاده نمی‌شود حذف نخواهد شد.
 
-Likewise, the signature of the function uses `&` to indicate that the type of
-the parameter `s` is a reference. Let’s add some explanatory annotations:
+به همین ترتیب، امضای تابع از `&` استفاده می‌کند تا نشان دهد که نوع پارامتر `s` یک ارجاع است. بیایید برخی توضیحات اضافه کنیم:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-08-reference-with-annotations/src/main.rs:here}}
 ```
 
-The scope in which the variable `s` is valid is the same as any function
-parameter’s scope, but the value pointed to by the reference is not dropped
-when `s` stops being used, because `s` doesn’t have ownership. When functions
-have references as parameters instead of the actual values, we won’t need to
-return the values in order to give back ownership, because we never had
-ownership.
+دامنه‌ای که متغیر `s` در آن معتبر است، مشابه دامنه‌ی هر پارامتر تابع است، اما مقدار اشاره‌شده توسط ارجاع زمانی که `s` استفاده نمی‌شود حذف نمی‌شود، زیرا `s` مالکیت ندارد. وقتی توابع ارجاعات را به جای مقادیر واقعی به عنوان پارامتر دارند، نیازی نخواهیم داشت مقادیر را بازگردانیم تا مالکیت را بازگردانیم، زیرا هرگز مالکیتی نداشته‌ایم.
 
-We call the action of creating a reference _borrowing_. As in real life, if a
-person owns something, you can borrow it from them. When you’re done, you have
-to give it back. You don’t own it.
+ما عمل ایجاد یک ارجاع را _قرض گرفتن_ می‌نامیم. همانند زندگی واقعی، اگر شخصی چیزی را مالک باشد، شما می‌توانید آن را از او قرض بگیرید. وقتی کارتان تمام شد، باید آن را بازگردانید. شما مالک آن نیستید.
 
-So, what happens if we try to modify something we’re borrowing? Try the code in
-Listing 4-6. Spoiler alert: it doesn’t work!
+پس چه اتفاقی می‌افتد اگر بخواهیم چیزی که قرض گرفته‌ایم را تغییر دهیم؟ کد موجود در لیستینگ 4-6 را امتحان کنید. هشدار: این کار نمی‌کند!
 
-<Listing number="4-6" file-name="src/main.rs" caption="Attempting to modify a borrowed value">
+<Listing number="4-6" file-name="src/main.rs" caption="تلاش برای تغییر مقدار قرض گرفته شده">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-06/src/main.rs}}
@@ -77,19 +58,17 @@ Listing 4-6. Spoiler alert: it doesn’t work!
 
 </Listing>
 
-Here’s the error:
+در اینجا خطا آورده شده است:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/listing-04-06/output.txt}}
 ```
 
-Just as variables are immutable by default, so are references. We’re not
-allowed to modify something we have a reference to.
+همانطور که متغیرها به صورت پیش‌فرض غیرقابل تغییر هستند، ارجاعات نیز به همین صورت هستند. ما اجازه نداریم چیزی که به آن ارجاع داریم را تغییر دهیم.
 
-### Mutable References
+### ارجاعات متغیر
 
-We can fix the code from Listing 4-6 to allow us to modify a borrowed value
-with just a few small tweaks that use, instead, a _mutable reference_:
+ما می‌توانیم کد موجود در لیستینگ 4-6 را طوری اصلاح کنیم که به ما اجازه دهد یک مقدار قرض گرفته شده را تغییر دهیم، با چند تغییر کوچک که به جای آن از _ارجاع متغیر_ استفاده کنیم:
 
 <Listing file-name="src/main.rs">
 
@@ -99,14 +78,9 @@ with just a few small tweaks that use, instead, a _mutable reference_:
 
 </Listing>
 
-First we change `s` to be `mut`. Then we create a mutable reference with `&mut
-s` where we call the `change` function, and update the function signature to
-accept a mutable reference with `some_string: &mut String`. This makes it very
-clear that the `change` function will mutate the value it borrows.
+ابتدا `s` را به `mut` تغییر می‌دهیم. سپس یک ارجاع متغیر با `&mut s` ایجاد می‌کنیم، جایی که تابع `change` را فراخوانی می‌کنیم، و امضای تابع را به‌روزرسانی می‌کنیم تا یک ارجاع متغیر با `some_string: &mut String` بپذیرد. این بسیار واضح می‌کند که تابع `change` مقدار قرض گرفته شده را تغییر خواهد داد.
 
-Mutable references have one big restriction: if you have a mutable reference to
-a value, you can have no other references to that value. This code that
-attempts to create two mutable references to `s` will fail:
+ارجاعات متغیر یک محدودیت بزرگ دارند: اگر یک ارجاع متغیر به یک مقدار داشته باشید، نمی‌توانید هیچ ارجاع دیگری به آن مقدار داشته باشید. این کد که تلاش می‌کند دو ارجاع متغیر به `s` ایجاد کند، ناموفق خواهد بود:
 
 <Listing file-name="src/main.rs">
 
@@ -116,148 +90,102 @@ attempts to create two mutable references to `s` will fail:
 
 </Listing>
 
-Here’s the error:
+در اینجا خطا آورده شده است:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/output.txt}}
 ```
 
-This error says that this code is invalid because we cannot borrow `s` as
-mutable more than once at a time. The first mutable borrow is in `r1` and must
-last until it’s used in the `println!`, but between the creation of that
-mutable reference and its usage, we tried to create another mutable reference
-in `r2` that borrows the same data as `r1`.
+این خطا می‌گوید که این کد نامعتبر است زیرا نمی‌توانیم `s` را به طور همزمان بیش از یک بار به صورت متغیر قرض بگیریم. اولین قرض متغیر در `r1` است و باید تا زمانی که در `println!` استفاده شود باقی بماند، اما بین ایجاد آن ارجاع متغیر و استفاده از آن، ما سعی کردیم یک ارجاع متغیر دیگر در `r2` ایجاد کنیم که همان داده‌ای را قرض می‌گیرد که `r1` نیز قرض گرفته است.
 
-The restriction preventing multiple mutable references to the same data at the
-same time allows for mutation but in a very controlled fashion. It’s something
-that new Rustaceans struggle with because most languages let you mutate
-whenever you’d like. The benefit of having this restriction is that Rust can
-prevent data races at compile time. A _data race_ is similar to a race
-condition and happens when these three behaviors occur:
+محدودیتی که از ایجاد چند ارجاع متغیر به داده‌های یکسان به طور همزمان جلوگیری می‌کند، امکان تغییر داده‌ها را فراهم می‌کند اما به صورت بسیار کنترل شده. این چیزی است که تازه‌کاران زبان Rust ممکن است با آن مشکل داشته باشند زیرا اکثر زبان‌ها به شما اجازه می‌دهند هر زمان که بخواهید داده‌ها را تغییر دهید. مزیت این محدودیت این است که Rust می‌تواند از مسابقات داده (_data race_) در زمان کامپایل جلوگیری کند. یک _مسابقه داده_ مشابه یک شرایط مسابقه (_race condition_) است و زمانی رخ می‌دهد که این سه رفتار اتفاق بیفتند:
 
-- Two or more pointers access the same data at the same time.
-- At least one of the pointers is being used to write to the data.
-- There’s no mechanism being used to synchronize access to the data.
+- دو یا چند اشاره‌گر (Pointer) به طور همزمان به داده‌های یکسان دسترسی پیدا می‌کنند.
+- حداقل یکی از اشاره‌گر (Pointer)ها برای نوشتن در داده‌ها استفاده می‌شود.
+- هیچ مکانیزمی برای هماهنگ کردن دسترسی به داده‌ها استفاده نمی‌شود.
 
-Data races cause undefined behavior and can be difficult to diagnose and fix
-when you’re trying to track them down at runtime; Rust prevents this problem by
-refusing to compile code with data races!
+مسابقات داده باعث رفتار نامشخص می‌شوند و در زمان اجرای برنامه ممکن است یافتن و رفع آن‌ها دشوار باشد؛ Rust با عدم کامپایل کدهای دارای مسابقات داده از این مشکل جلوگیری می‌کند!
 
-As always, we can use curly brackets to create a new scope, allowing for
-multiple mutable references, just not _simultaneous_ ones:
+همانطور که همیشه، می‌توانیم از آکولادها برای ایجاد یک اسکوپ جدید استفاده کنیم که امکان وجود ارجاعات متغیر متعدد را فراهم می‌کند، اما نه به صورت _همزمان_:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-11-muts-in-separate-scopes/src/main.rs:here}}
 ```
 
-Rust enforces a similar rule for combining mutable and immutable references.
-This code results in an error:
+Rust یک قانون مشابه برای ترکیب ارجاعات متغیر و غیرمتغیر اعمال می‌کند. این کد منجر به خطا می‌شود:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/src/main.rs:here}}
 ```
 
-Here’s the error:
+در اینجا خطا آورده شده است:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/output.txt}}
 ```
 
-Whew! We _also_ cannot have a mutable reference while we have an immutable one
-to the same value.
+ای وای! ما _همچنین_ نمی‌توانیم یک ارجاع متغیر داشته باشیم در حالی که یک ارجاع غیرمتغیر به همان مقدار داریم.
 
-Users of an immutable reference don’t expect the value to suddenly change out
-from under them! However, multiple immutable references are allowed because no
-one who is just reading the data has the ability to affect anyone else’s
-reading of the data.
+کاربرانی که از یک ارجاع غیرمتغیر استفاده می‌کنند، انتظار ندارند که مقدار به طور ناگهانی تغییر کند! با این حال، چندین ارجاع غیرمتغیر مجاز هستند زیرا هیچ‌کسی که فقط داده‌ها را می‌خواند، نمی‌تواند خواندن دیگران را تحت تأثیر قرار دهد.
 
-Note that a reference’s scope starts from where it is introduced and continues
-through the last time that reference is used. For instance, this code will
-compile because the last usage of the immutable references is in the `println!`,
-before the mutable reference is introduced:
+توجه داشته باشید که اسکوپ یک ارجاع از جایی که معرفی می‌شود شروع شده و تا آخرین باری که از آن استفاده می‌شود ادامه دارد. به عنوان مثال، این کد کامپایل می‌شود زیرا آخرین استفاده از ارجاعات غیرمتغیر در `println!` است، قبل از اینکه ارجاع متغیر معرفی شود:
 
 ```rust,edition2021
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
 ```
 
-The scopes of the immutable references `r1` and `r2` end after the `println!`
-where they are last used, which is before the mutable reference `r3` is
-created. These scopes don’t overlap, so this code is allowed: the compiler can
-tell that the reference is no longer being used at a point before the end of
-the scope.
+اسکوپ‌های ارجاعات غیرمتغیر `r1` و `r2` بعد از `println!` که در آنجا آخرین بار استفاده شده‌اند به پایان می‌رسند، که این قبل از ایجاد ارجاع متغیر `r3` است. این اسکوپ‌ها همپوشانی ندارند، بنابراین این کد مجاز است: کامپایلر می‌تواند تشخیص دهد که ارجاع دیگر در نقطه‌ای قبل از پایان اسکوپ استفاده نمی‌شود.
 
-Even though borrowing errors may be frustrating at times, remember that it’s
-the Rust compiler pointing out a potential bug early (at compile time rather
-than at runtime) and showing you exactly where the problem is. Then you don’t
-have to track down why your data isn’t what you thought it was.
+حتی اگر خطاهای قرض گرفتن ممکن است گاهی اوقات ناامیدکننده باشند، به یاد داشته باشید که این کامپایلر Rust است که به شما نشان می‌دهد یک باگ بالقوه در اوایل (در زمان کامپایل به جای زمان اجرا) وجود دارد و دقیقا به شما می‌گوید مشکل کجاست. سپس نیازی نیست که پیگیری کنید چرا داده‌های شما آن چیزی نیست که فکر می‌کردید.
 
-### Dangling References
+### ارجاعات آویزان
 
-In languages with pointers, it’s easy to erroneously create a _dangling
-pointer_—a pointer that references a location in memory that may have been
-given to someone else—by freeing some memory while preserving a pointer to that
-memory. In Rust, by contrast, the compiler guarantees that references will
-never be dangling references: if you have a reference to some data, the
-compiler will ensure that the data will not go out of scope before the
-reference to the data does.
+در زبان‌هایی که از اشاره‌گر (Pointer)ها استفاده می‌کنند، ایجاد اشتباه یک _اشاره‌گر (Pointer) آویزان_ آسان است—اشاره‌گر (Pointer)ی که به مکانی در حافظه اشاره می‌کند که ممکن است به شخص دیگری داده شده باشد—با آزاد کردن مقداری حافظه در حالی که اشاره‌گر (Pointer) به آن حافظه را حفظ می‌کنید. در Rust، برعکس، کامپایلر تضمین می‌کند که ارجاعات هرگز ارجاعات آویزان نخواهند بود: اگر به داده‌هایی ارجاع دارید، کامپایلر اطمینان می‌دهد که داده‌ها قبل از ارجاع به داده‌ها از محدوده خارج نمی‌شوند.
 
-Let’s try to create a dangling reference to see how Rust prevents them with a
-compile-time error:
+بیایید سعی کنیم یک ارجاع آویزان ایجاد کنیم تا ببینیم چگونه Rust با یک خطای زمان کامپایل از این اتفاق جلوگیری می‌کند:
 
-<Listing file-name="src/main.rs">
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/src/main.rs}}
 ```
 
-</Listing>
-
-Here’s the error:
+در اینجا خطا آورده شده است:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/output.txt}}
 ```
 
-This error message refers to a feature we haven’t covered yet: lifetimes. We’ll
-discuss lifetimes in detail in Chapter 10. But, if you disregard the parts
-about lifetimes, the message does contain the key to why this code is a problem:
+این پیام خطا به ویژگی‌ای اشاره دارد که هنوز پوشش نداده‌ایم: طول عمرها (_lifetimes_). ما طول عمرها را به طور مفصل در فصل 10 مورد بحث قرار خواهیم داد. اما، اگر بخش‌های مربوط به طول عمرها را نادیده بگیرید، پیام کلید مشکل این کد را بیان می‌کند:
 
 ```text
 this function's return type contains a borrowed value, but there is no value
 for it to be borrowed from
 ```
 
-Let’s take a closer look at exactly what’s happening at each stage of our
-`dangle` code:
+بیایید نگاهی دقیق‌تر به آنچه که در هر مرحله از کد `dangle` اتفاق می‌افتد بیندازیم:
 
-<Listing file-name="src/main.rs">
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-15-dangling-reference-annotated/src/main.rs:here}}
 ```
 
-</Listing>
+از آنجا که `s` داخل `dangle` ایجاد می‌شود، زمانی که کد `dangle` تمام می‌شود، `s` از محدوده خارج می‌شود و آزاد می‌گردد. اما ما سعی کردیم یک ارجاع به آن برگردانیم. این بدان معناست که این ارجاع به یک `String` نامعتبر اشاره می‌کند. این خوب نیست! Rust اجازه نمی‌دهد این کار را انجام دهیم.
 
-Because `s` is created inside `dangle`, when the code of `dangle` is finished,
-`s` will be deallocated. But we tried to return a reference to it. That means
-this reference would be pointing to an invalid `String`. That’s no good! Rust
-won’t let us do this.
-
-The solution here is to return the `String` directly:
+راه‌حل در اینجا این است که به جای آن `String` را به طور مستقیم برگردانید:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-16-no-dangle/src/main.rs:here}}
 ```
 
-This works without any problems. Ownership is moved out, and nothing is
-deallocated.
+این بدون هیچ مشکلی کار می‌کند. مالکیت به بیرون منتقل می‌شود و هیچ چیزی آزاد نمی‌شود.
 
-### The Rules of References
+### قوانین ارجاعات
 
-Let’s recap what we’ve discussed about references:
+بیایید آنچه درباره ارجاعات بحث کردیم را مرور کنیم:
 
-- At any given time, you can have _either_ one mutable reference _or_ any
-  number of immutable references.
-- References must always be valid.
+- در هر زمان مشخص، می‌توانید _یا_ یک ارجاع متغیر داشته باشید _یا_ هر تعداد ارجاع غیرمتغیر.
+- ارجاعات باید همیشه معتبر باشند.
 
-Next, we’ll look at a different kind of reference: slices.
+در مرحله بعد، به نوع دیگری از ارجاع خواهیم پرداخت: بخش‌ها (_slices_).

@@ -1,46 +1,38 @@
-## Implementing an Object-Oriented Design Pattern
+## پیاده‌سازی یک الگوی طراحی شی‌گرا
 
-The _state pattern_ is an object-oriented design pattern. The crux of the
-pattern is that we define a set of states a value can have internally. The
-states are represented by a set of _state objects_, and the value’s behavior
-changes based on its state. We’re going to work through an example of a blog
-post struct that has a field to hold its state, which will be a state object
-from the set "draft", "review", or "published".
+_الگوی وضعیت_ یک الگوی طراحی شی‌گرا است. هسته این الگو این است که مجموعه‌ای از وضعیت‌ها را که یک مقدار می‌تواند 
+به‌طور داخلی داشته باشد، تعریف کنیم. این وضعیت‌ها با مجموعه‌ای از _اشیای وضعیت_ نمایش داده می‌شوند و رفتار مقدار 
+بر اساس وضعیت آن تغییر می‌کند. قصد داریم مثالی از یک ساختار blog post (پست وبلاگ) را بررسی کنیم که یک فیلد برای 
+نگه‌داشتن وضعیت دارد. این وضعیت یک شیء از مجموعه "پیش‌نویس" (draft)، "در حال بررسی" (review)، یا "منتشرشده" 
+(published) خواهد بود.
 
-The state objects share functionality: in Rust, of course, we use structs and
-traits rather than objects and inheritance. Each state object is responsible
-for its own behavior and for governing when it should change into another
-state. The value that holds a state object knows nothing about the different
-behavior of the states or when to transition between states.
+اشیای وضعیت قابلیت‌هایی را به اشتراک می‌گذارند: در Rust، البته، ما از ساختارها (structs) و صفت‌ها (traits) به جای 
+اشیا و ارث‌بری استفاده می‌کنیم. هر شیء وضعیت مسئول رفتار خود و مدیریت زمانی است که باید به وضعیت دیگری تغییر کند. 
+مقداری که یک شیء وضعیت را نگه می‌دارد، هیچ اطلاعی از رفتارهای مختلف وضعیت‌ها یا زمان تغییر وضعیت ندارد.
 
-The advantage of using the state pattern is that, when the business
-requirements of the program change, we won’t need to change the code of the
-value holding the state or the code that uses the value. We’ll only need to
-update the code inside one of the state objects to change its rules or perhaps
-add more state objects.
+مزیت استفاده از الگوی وضعیت این است که وقتی نیازهای تجاری برنامه تغییر می‌کنند، نیازی به تغییر کد مقداری که وضعیت 
+را نگه می‌دارد یا کدی که از آن مقدار استفاده می‌کند، نداریم. تنها لازم است کد داخل یکی از اشیای وضعیت را برای تغییر 
+قوانین آن یا شاید اضافه کردن اشیای وضعیت جدید به‌روزرسانی کنیم.
 
-First, we’re going to implement the state pattern in a more traditional
-object-oriented way, then we’ll use an approach that’s a bit more natural in
-Rust. Let’s dig in to incrementally implementing a blog post workflow using the
-state pattern.
+ابتدا الگوی وضعیت را به روش سنتی شی‌گرایی پیاده‌سازی می‌کنیم، سپس از رویکردی که در Rust طبیعی‌تر است استفاده خواهیم 
+کرد. بیایید به‌صورت مرحله‌به‌مرحله پیاده‌سازی یک فرآیند کاری پست وبلاگ با استفاده از الگوی وضعیت را بررسی کنیم.
 
-The final functionality will look like this:
+قابلیت نهایی به این شکل خواهد بود:
 
-1. A blog post starts as an empty draft.
-2. When the draft is done, a review of the post is requested.
-3. When the post is approved, it gets published.
-4. Only published blog posts return content to print, so unapproved posts can’t
-   accidentally be published.
+1. یک پست وبلاگ به‌صورت یک پیش‌نویس خالی شروع می‌شود.  
+2. وقتی پیش‌نویس تمام شد، بررسی پست درخواست می‌شود.  
+3. وقتی پست تأیید شد، منتشر می‌شود.  
+4. تنها پست‌های وبلاگی که منتشر شده‌اند متن را برای چاپ بازمی‌گردانند، بنابراین پست‌های تأییدنشده نمی‌توانند به‌طور 
+   تصادفی منتشر شوند.
 
-Any other changes attempted on a post should have no effect. For example, if we
-try to approve a draft blog post before we’ve requested a review, the post
-should remain an unpublished draft.
+هر تغییر دیگری که روی یک پست تلاش شود نباید تأثیری داشته باشد. برای مثال، اگر بخواهیم یک پست وبلاگ پیش‌نویس را 
+قبل از درخواست بررسی تأیید کنیم، پست باید به‌عنوان پیش‌نویس منتشرنشده باقی بماند.
 
-Listing 18-11 shows this workflow in code form: this is an example usage of the
-API we’ll implement in a library crate named `blog`. This won’t compile yet
-because we haven’t implemented the `blog` crate.
+لیستینگ 18-11 این فرآیند کاری را به‌صورت کدی نشان می‌دهد: این یک نمونه از استفاده از API است که قصد داریم در یک 
+crate کتابخانه‌ای به نام `blog` پیاده‌سازی کنیم. این کد هنوز کامپایل نخواهد شد زیرا هنوز crate `blog` را پیاده‌سازی 
+نکرده‌ایم.
 
-<Listing number="18-11" file-name="src/main.rs" caption="Code that demonstrates the desired behavior we want our `blog` crate to have">
+<Listing number="18-11" file-name="src/main.rs" caption="کدی که رفتار مورد نظر ما برای crate `blog` را نشان می‌دهد">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-11/src/main.rs:all}}
@@ -48,42 +40,33 @@ because we haven’t implemented the `blog` crate.
 
 </Listing>
 
-We want to allow the user to create a new draft blog post with `Post::new`. We
-want to allow text to be added to the blog post. If we try to get the post’s
-content immediately, before approval, we shouldn’t get any text because the
-post is still a draft. We’ve added `assert_eq!` in the code for demonstration
-purposes. An excellent unit test for this would be to assert that a draft blog
-post returns an empty string from the `content` method, but we’re not going to
-write tests for this example.
+ما می‌خواهیم به کاربر اجازه دهیم یک پست وبلاگ پیش‌نویس جدید با `Post::new` ایجاد کند. می‌خواهیم امکان اضافه کردن 
+متن به پست وبلاگ را فراهم کنیم. اگر فوراً بخواهیم محتوای پست را دریافت کنیم، قبل از تأیید، نباید هیچ متنی دریافت 
+کنیم، زیرا پست هنوز یک پیش‌نویس است. ما از `assert_eq!` در کد برای اهداف نمایشی استفاده کرده‌ایم. یک تست واحد عالی 
+برای این مورد این است که تأیید کنیم یک پست وبلاگ پیش‌نویس یک رشته خالی از متد `content` بازمی‌گرداند، اما قصد نداریم 
+برای این مثال تست بنویسیم.
 
-Next, we want to enable a request for a review of the post, and we want
-`content` to return an empty string while waiting for the review. When the post
-receives approval, it should get published, meaning the text of the post will
-be returned when `content` is called.
+سپس می‌خواهیم امکان درخواست بررسی برای پست فراهم شود و می‌خواهیم `content` در حین انتظار برای بررسی یک رشته خالی 
+بازگرداند. وقتی پست تأیید شود، باید منتشر شود، به این معنی که متن پست هنگام فراخوانی `content` بازگردانده خواهد شد.
 
-Notice that the only type we’re interacting with from the crate is the `Post`
-type. This type will use the state pattern and will hold a value that will be
-one of three state objects representing the various states a post can be
-in—draft, waiting for review, or published. Changing from one state to another
-will be managed internally within the `Post` type. The states change in
-response to the methods called by our library’s users on the `Post` instance,
-but they don’t have to manage the state changes directly. Also, users can’t
-make a mistake with the states, like publishing a post before it’s reviewed.
+توجه داشته باشید که تنها نوعی که از crate تعامل داریم، نوع `Post` است. این نوع از الگوی وضعیت استفاده خواهد کرد و 
+مقداری نگه می‌دارد که یکی از سه شیء وضعیت نمایش‌دهنده وضعیت‌های مختلف یک پست باشد—پیش‌نویس، در انتظار بررسی، یا 
+منتشرشده. تغییر از یک وضعیت به وضعیت دیگر به‌صورت داخلی در نوع `Post` مدیریت می‌شود. تغییر وضعیت‌ها در پاسخ به 
+متدهایی که کاربران کتابخانه ما روی نمونه `Post` فراخوانی می‌کنند اتفاق می‌افتد، اما کاربران مجبور نیستند تغییر 
+وضعیت‌ها را مستقیماً مدیریت کنند. همچنین، کاربران نمی‌توانند در مورد وضعیت‌ها اشتباه کنند، مانند انتشار یک پست قبل 
+از بررسی آن.
 
-### Defining `Post` and Creating a New Instance in the Draft State
+### تعریف `Post` و ایجاد یک نمونه جدید در وضعیت پیش‌نویس
 
-Let’s get started on the implementation of the library! We know we need a
-public `Post` struct that holds some content, so we’ll start with the
-definition of the struct and an associated public `new` function to create an
-instance of `Post`, as shown in Listing 18-12. We’ll also make a private
-`State` trait that will define the behavior that all state objects for a `Post`
-must have.
+بیایید پیاده‌سازی کتابخانه را شروع کنیم! می‌دانیم که به یک ساختار `Post` عمومی نیاز داریم که مقداری محتوا را نگه
+می‌دارد، بنابراین با تعریف این ساختار و یک تابع مرتبط `new` عمومی برای ایجاد یک نمونه از `Post` شروع می‌کنیم. این
+تعاریف در لیستینگ 18-12 آمده‌اند. همچنین، یک صفت خصوصی `State` ایجاد خواهیم کرد که رفتاری را که تمام اشیای وضعیت
+برای `Post` باید داشته باشند تعریف می‌کند.
 
-Then `Post` will hold a trait object of `Box<dyn State>` inside an `Option<T>`
-in a private field named `state` to hold the state object. You’ll see why the
-`Option<T>` is necessary in a bit.
+سپس، `Post` یک شیء صفت `Box<dyn State>` را درون یک `Option<T>` در یک فیلد خصوصی به نام `state` نگه خواهد داشت تا
+شیء وضعیت را مدیریت کند. در ادامه خواهید دید که چرا `Option<T>` ضروری است.
 
-<Listing number="18-12" file-name="src/lib.rs" caption="Definition of a `Post` struct and a `new` function that creates a new `Post` instance, a `State` trait, and a `Draft` struct">
+<Listing number="18-12" file-name="src/lib.rs" caption="تعریف یک ساختار `Post` و یک تابع `new` که یک نمونه جدید از `Post` ایجاد می‌کند، یک صفت `State`، و یک ساختار `Draft`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-12/src/lib.rs}}
@@ -91,30 +74,25 @@ in a private field named `state` to hold the state object. You’ll see why the
 
 </Listing>
 
-The `State` trait defines the behavior shared by different post states. The
-state objects are `Draft`, `PendingReview`, and `Published`, and they will all
-implement the `State` trait. For now, the trait doesn’t have any methods, and
-we’ll start by defining just the `Draft` state because that is the state we
-want a post to start in.
+صفت `State` رفتاری را که وضعیت‌های مختلف پست‌ها به اشتراک می‌گذارند تعریف می‌کند. اشیای وضعیت شامل `Draft`,
+`PendingReview` و `Published` هستند و همه آن‌ها صفت `State` را پیاده‌سازی خواهند کرد. فعلاً صفت هیچ متدی ندارد و
+ما با تعریف تنها وضعیت `Draft` شروع می‌کنیم، زیرا این وضعیت است که می‌خواهیم پست در آن شروع شود.
 
-When we create a new `Post`, we set its `state` field to a `Some` value that
-holds a `Box`. This `Box` points to a new instance of the `Draft` struct.
-This ensures whenever we create a new instance of `Post`, it will start out as
-a draft. Because the `state` field of `Post` is private, there is no way to
-create a `Post` in any other state! In the `Post::new` function, we set the
-`content` field to a new, empty `String`.
+وقتی یک `Post` جدید ایجاد می‌کنیم، فیلد `state` آن را به یک مقدار `Some` تنظیم می‌کنیم که یک `Box` را نگه می‌دارد.
+این `Box` به یک نمونه جدید از ساختار `Draft` اشاره می‌کند. این کار تضمین می‌کند که هرگاه یک نمونه جدید از `Post`
+ایجاد شود، به‌عنوان یک پیش‌نویس شروع شود. از آنجا که فیلد `state` در `Post` خصوصی است، هیچ راهی برای ایجاد یک
+`Post` در وضعیت دیگری وجود ندارد! در تابع `Post::new`، فیلد `content` را به یک `String` جدید و خالی تنظیم
+می‌کنیم.
 
-### Storing the Text of the Post Content
+### ذخیره متن محتوای پست
 
-We saw in Listing 18-11 that we want to be able to call a method named
-`add_text` and pass it a `&str` that is then added as the text content of the
-blog post. We implement this as a method, rather than exposing the `content`
-field as `pub`, so that later we can implement a method that will control how
-the `content` field’s data is read. The `add_text` method is pretty
-straightforward, so let’s add the implementation in Listing 18-13 to the `impl
-Post` block:
+در لیستینگ 18-11 دیدیم که می‌خواهیم بتوانیم یک متد به نام `add_text` فراخوانی کنیم و یک `&str` به آن بدهیم که به
+عنوان محتوای متنی پست وبلاگ اضافه شود. این کار را به‌صورت یک متد پیاده‌سازی می‌کنیم تا فیلد `content` را به‌جای
+تعریف آن به‌صورت `pub` کنترل کنیم و بتوانیم در آینده متدی برای کنترل چگونگی خواندن داده فیلد `content`
+پیاده‌سازی کنیم. متد `add_text` نسبتاً ساده است، بنابراین بیایید پیاده‌سازی آن را به بلوک `impl Post` در لیستینگ
+18-13 اضافه کنیم:
 
-<Listing number="18-13" file-name="src/lib.rs" caption="Implementing the `add_text` method to add text to a post’s `content`">
+<Listing number="18-13" file-name="src/lib.rs" caption="پیاده‌سازی متد `add_text` برای افزودن متن به `content` یک پست">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-13/src/lib.rs:here}}
@@ -122,26 +100,20 @@ Post` block:
 
 </Listing>
 
-The `add_text` method takes a mutable reference to `self`, because we’re
-changing the `Post` instance that we’re calling `add_text` on. We then call
-`push_str` on the `String` in `content` and pass the `text` argument to add to
-the saved `content`. This behavior doesn’t depend on the state the post is in,
-so it’s not part of the state pattern. The `add_text` method doesn’t interact
-with the `state` field at all, but it is part of the behavior we want to
-support.
+متد `add_text` یک ارجاع متغیر به `self` می‌گیرد، زیرا در حال تغییر نمونه `Post` هستیم که `add_text` روی آن فراخوانی
+شده است. سپس، متد `push_str` را روی `String` موجود در `content` فراخوانی می‌کنیم و آرگومان `text` را برای افزودن
+به محتوای ذخیره‌شده به آن می‌دهیم. این رفتار به وضعیتی که پست در آن قرار دارد وابسته نیست، بنابراین بخشی از الگوی
+وضعیت نیست. متد `add_text` هیچ تعاملی با فیلد `state` ندارد، اما بخشی از رفتاری است که می‌خواهیم پشتیبانی کنیم.
 
-### Ensuring the Content of a Draft Post Is Empty
+### اطمینان از خالی بودن محتوای یک پست پیش‌نویس
 
-Even after we’ve called `add_text` and added some content to our post, we still
-want the `content` method to return an empty string slice because the post is
-still in the draft state, as shown on line 7 of Listing 18-11. For now, let’s
-implement the `content` method with the simplest thing that will fulfill this
-requirement: always returning an empty string slice. We’ll change this later
-once we implement the ability to change a post’s state so it can be published.
-So far, posts can only be in the draft state, so the post content should always
-be empty. Listing 18-14 shows this placeholder implementation:
+حتی پس از فراخوانی `add_text` و افزودن محتوایی به پست، همچنان می‌خواهیم متد `content` یک برش رشته خالی بازگرداند،
+زیرا پست هنوز در وضعیت پیش‌نویس است، همان‌طور که در خط 7 لیستینگ 18-11 نشان داده شده است. فعلاً متد `content` را
+با ساده‌ترین چیزی که این نیاز را برآورده می‌کند پیاده‌سازی می‌کنیم: همیشه بازگرداندن یک برش رشته خالی. بعداً این را
+تغییر خواهیم داد تا قابلیت تغییر وضعیت پست به حالت منتشرشده را اضافه کنیم. تاکنون، پست‌ها فقط می‌توانند در وضعیت
+پیش‌نویس باشند، بنابراین محتوای پست باید همیشه خالی باشد. لیستینگ 18-14 این پیاده‌سازی موقت را نشان می‌دهد:
 
-<Listing number="18-14" file-name="src/lib.rs" caption="Adding a placeholder implementation for the `content` method on `Post` that always returns an empty string slice">
+<Listing number="18-14" file-name="src/lib.rs" caption="افزودن یک پیاده‌سازی موقت برای متد `content` در `Post` که همیشه یک برش رشته خالی بازمی‌گرداند">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-14/src/lib.rs:here}}
@@ -149,15 +121,14 @@ be empty. Listing 18-14 shows this placeholder implementation:
 
 </Listing>
 
-With this added `content` method, everything in Listing 18-11 up to line 7
-works as intended.
+با افزودن این متد `content`، تمام موارد تا خط 7 لیستینگ 18-11 به درستی کار می‌کنند.
 
-### Requesting a Review of the Post Changes Its State
+### درخواست بررسی پست و تغییر وضعیت آن
 
-Next, we need to add functionality to request a review of a post, which should
-change its state from `Draft` to `PendingReview`. Listing 18-15 shows this code:
+در مرحله بعد، باید قابلیت درخواست بررسی پست را اضافه کنیم، که باید وضعیت آن را از `Draft` به `PendingReview`
+تغییر دهد. لیستینگ 18-15 این کد را نشان می‌دهد:
 
-<Listing number="18-15" file-name="src/lib.rs" caption="Implementing `request_review` methods on `Post` and the `State` trait">
+<Listing number="18-15" file-name="src/lib.rs" caption="پیاده‌سازی متدهای `request_review` برای `Post` و صفت `State`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-15/src/lib.rs:here}}
@@ -165,59 +136,48 @@ change its state from `Draft` to `PendingReview`. Listing 18-15 shows this code:
 
 </Listing>
 
-We give `Post` a public method named `request_review` that will take a mutable
-reference to `self`. Then we call an internal `request_review` method on the
-current state of `Post`, and this second `request_review` method consumes the
-current state and returns a new state.
+ما یک متد عمومی به نام `request_review` به `Post` اضافه می‌کنیم که یک ارجاع متغیر به `self` می‌گیرد. سپس یک متد
+داخلی `request_review` را روی وضعیت فعلی `Post` فراخوانی می‌کنیم، و این متد دوم وضعیت فعلی را مصرف کرده و یک وضعیت
+جدید بازمی‌گرداند.
 
-We add the `request_review` method to the `State` trait; all types that
-implement the trait will now need to implement the `request_review` method.
-Note that rather than having `self`, `&self`, or `&mut self` as the first
-parameter of the method, we have `self: Box<Self>`. This syntax means the
-method is only valid when called on a `Box` holding the type. This syntax takes
-ownership of `Box<Self>`, invalidating the old state so the state value of the
-`Post` can transform into a new state.
+ما متد `request_review` را به صفت `State` اضافه می‌کنیم؛ تمام انواعی که این صفت را پیاده‌سازی می‌کنند اکنون باید
+متد `request_review` را پیاده‌سازی کنند. توجه داشته باشید که به جای `self`، `&self` یا `&mut self` به‌عنوان اولین
+پارامتر متد، از `self: Box<Self>` استفاده کرده‌ایم. این نحو به این معنی است که متد فقط زمانی معتبر است که روی
+یک `Box` نگه‌دارنده نوع فراخوانی شود. این نحو مالکیت `Box<Self>` را می‌گیرد و وضعیت قدیمی را باطل می‌کند تا مقدار
+وضعیت `Post` بتواند به یک وضعیت جدید تبدیل شود.
 
-To consume the old state, the `request_review` method needs to take ownership
-of the state value. This is where the `Option` in the `state` field of `Post`
-comes in: we call the `take` method to take the `Some` value out of the `state`
-field and leave a `None` in its place, because Rust doesn’t let us have
-unpopulated fields in structs. This lets us move the `state` value out of
-`Post` rather than borrowing it. Then we’ll set the post’s `state` value to the
-result of this operation.
+برای مصرف وضعیت قدیمی، متد `request_review` نیاز به گرفتن مالکیت مقدار وضعیت دارد. اینجاست که `Option` در فیلد
+`state` از `Post` وارد عمل می‌شود: ما متد `take` را فراخوانی می‌کنیم تا مقدار `Some` را از فیلد `state` خارج کرده
+و یک مقدار `None` به جای آن قرار دهیم، زیرا Rust به ما اجازه نمی‌دهد فیلدهای ساختار را بدون مقدار رها کنیم. این
+کار به ما امکان می‌دهد مقدار `state` را از `Post` منتقل کنیم، نه اینکه آن را قرض بگیریم. سپس مقدار `state` پست را
+به نتیجه این عملیات تنظیم خواهیم کرد.
 
-We need to set `state` to `None` temporarily rather than setting it directly
-with code like `self.state = self.state.request_review();` to get ownership of
-the `state` value. This ensures `Post` can’t use the old `state` value after
-we’ve transformed it into a new state.
+باید به‌طور موقت `state` را به `None` تنظیم کنیم، نه اینکه مستقیماً آن را با کدی مانند
+`self.state = self.state.request_review();` تنظیم کنیم، تا مالکیت مقدار `state` را بدست آوریم. این کار اطمینان
+می‌دهد که `Post` نمی‌تواند از مقدار قدیمی `state` پس از تبدیل آن به یک وضعیت جدید استفاده کند.
 
-The `request_review` method on `Draft` returns a new, boxed instance of a new
-`PendingReview` struct, which represents the state when a post is waiting for a
-review. The `PendingReview` struct also implements the `request_review` method
-but doesn’t do any transformations. Rather, it returns itself, because when we
-request a review on a post already in the `PendingReview` state, it should stay
-in the `PendingReview` state.
+متد `request_review` در `Draft` یک نمونه جدید از ساختار `PendingReview` را که نشان‌دهنده وضعیت زمانی است که یک
+پست منتظر بررسی است بازمی‌گرداند. ساختار `PendingReview` نیز متد `request_review` را پیاده‌سازی می‌کند، اما هیچ
+تبدیلی انجام نمی‌دهد. بلکه خودش را بازمی‌گرداند، زیرا وقتی برای یک پست در وضعیت `PendingReview` درخواست بررسی
+می‌کنیم، باید در همان وضعیت باقی بماند.
 
-Now we can start seeing the advantages of the state pattern: the
-`request_review` method on `Post` is the same no matter its `state` value. Each
-state is responsible for its own rules.
+اکنون می‌توانیم مزایای الگوی وضعیت را مشاهده کنیم: متد `request_review` در `Post` بدون توجه به مقدار `state` آن
+یکسان است. هر وضعیت مسئول قوانین خاص خود است.
 
-We’ll leave the `content` method on `Post` as is, returning an empty string
-slice. We can now have a `Post` in the `PendingReview` state as well as in the
-`Draft` state, but we want the same behavior in the `PendingReview` state.
-Listing 18-11 now works up to line 10!
+ما متد `content` در `Post` را به همان صورت باقی می‌گذاریم که یک برش رشته خالی بازمی‌گرداند. اکنون می‌توانیم
+یک `Post` در وضعیت `PendingReview` و همچنین در وضعیت `Draft` داشته باشیم، اما می‌خواهیم همان رفتار در وضعیت
+`PendingReview` نیز باشد. لیستینگ 18-11 اکنون تا خط 10 کار می‌کند!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="adding-the-approve-method-that-changes-the-behavior-of-content"></a>
 
-### Adding `approve` to Change the Behavior of `content`
+### افزودن `approve` برای تغییر رفتار `content`
 
-The `approve` method will be similar to the `request_review` method: it will
-set `state` to the value that the current state says it should have when that
-state is approved, as shown in Listing 18-16:
+متد `approve` شبیه متد `request_review` خواهد بود: این متد مقدار `state` را به مقداری تنظیم می‌کند که وضعیت فعلی هنگام 
+تأیید باید داشته باشد، همان‌طور که در لیستینگ 18-16 نشان داده شده است:
 
-<Listing number="18-16" file-name="src/lib.rs" caption="Implementing the `approve` method on `Post` and the `State` trait">
+<Listing number="18-16" file-name="src/lib.rs" caption="پیاده‌سازی متد `approve` در `Post` و صفت `State`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-16/src/lib.rs:here}}
@@ -225,23 +185,20 @@ state is approved, as shown in Listing 18-16:
 
 </Listing>
 
-We add the `approve` method to the `State` trait and add a new struct that
-implements `State`, the `Published` state.
+ما متد `approve` را به صفت `State` اضافه می‌کنیم و یک ساختار جدید که صفت `State` را پیاده‌سازی می‌کند، یعنی وضعیت 
+`Published`، اضافه می‌کنیم.
 
-Similar to the way `request_review` on `PendingReview` works, if we call the
-`approve` method on a `Draft`, it will have no effect because `approve` will
-return `self`. When we call `approve` on `PendingReview`, it returns a new,
-boxed instance of the `Published` struct. The `Published` struct implements the
-`State` trait, and for both the `request_review` method and the `approve`
-method, it returns itself, because the post should stay in the `Published`
-state in those cases.
+مشابه کاری که `request_review` در `PendingReview` انجام می‌دهد، اگر متد `approve` را روی یک `Draft` فراخوانی کنیم، 
+هیچ تأثیری نخواهد داشت زیرا `approve` مقدار `self` را بازمی‌گرداند. وقتی `approve` را روی `PendingReview` فراخوانی 
+می‌کنیم، یک نمونه جدید از ساختار `Published` که در یک `Box` قرار دارد، بازمی‌گرداند. ساختار `Published` صفت 
+`State` را پیاده‌سازی می‌کند، و برای متدهای `request_review` و `approve` خودش را بازمی‌گرداند، زیرا در این موارد 
+پست باید در وضعیت `Published` باقی بماند.
 
-Now we need to update the `content` method on `Post`. We want the value
-returned from `content` to depend on the current state of the `Post`, so we’re
-going to have the `Post` delegate to a `content` method defined on its `state`,
-as shown in Listing 18-17:
+اکنون باید متد `content` در `Post` را به‌روزرسانی کنیم. می‌خواهیم مقدار بازگشتی از `content` به وضعیت فعلی `Post` 
+بستگی داشته باشد، بنابراین می‌خواهیم `Post` این وظیفه را به متد `content` تعریف‌شده در وضعیت خود واگذار کند، همان‌طور 
+که در لیستینگ 18-17 نشان داده شده است:
 
-<Listing number="18-17" file-name="src/lib.rs" caption="Updating the `content` method on `Post` to delegate to a `content` method on `State`">
+<Listing number="18-17" file-name="src/lib.rs" caption="به‌روزرسانی متد `content` در `Post` برای ارجاع به متد `content` در `State`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-17/src/lib.rs:here}}
@@ -249,31 +206,25 @@ as shown in Listing 18-17:
 
 </Listing>
 
-Because the goal is to keep all these rules inside the structs that implement
-`State`, we call a `content` method on the value in `state` and pass the post
-instance (that is, `self`) as an argument. Then we return the value that’s
-returned from using the `content` method on the `state` value.
+چون هدف این است که تمام این قوانین در داخل ساختارهایی که صفت `State` را پیاده‌سازی می‌کنند باقی بماند، ما یک متد 
+`content` را روی مقدار `state` فراخوانی می‌کنیم و نمونه پست (یعنی `self`) را به‌عنوان آرگومان به آن می‌دهیم. سپس 
+مقداری که از متد `content` روی مقدار `state` بازمی‌گردد را بازمی‌گردانیم.
 
-We call the `as_ref` method on the `Option` because we want a reference to the
-value inside the `Option` rather than ownership of the value. Because `state`
-is an `Option<Box<dyn State>>`, when we call `as_ref`, an `Option<&Box<dyn
-State>>` is returned. If we didn’t call `as_ref`, we would get an error because
-we can’t move `state` out of the borrowed `&self` of the function parameter.
+ما متد `as_ref` را روی `Option` فراخوانی می‌کنیم زیرا می‌خواهیم یک ارجاع به مقدار داخل `Option` داشته باشیم، نه 
+مالکیت مقدار. چون `state` یک `Option<Box<dyn State>>` است، وقتی `as_ref` را فراخوانی می‌کنیم، یک 
+`Option<&Box<dyn State>>` بازمی‌گردد. اگر `as_ref` را فراخوانی نکنیم، با یک خطا مواجه می‌شویم زیرا نمی‌توانیم 
+`state` را از `&self` که به‌عنوان پارامتر به تابع داده شده است خارج کنیم.
 
-We then call the `unwrap` method, which we know will never panic, because we
-know the methods on `Post` ensure that `state` will always contain a `Some`
-value when those methods are done. This is one of the cases we talked about in
-the [“Cases In Which You Have More Information Than the
-Compiler”][more-info-than-rustc]<!-- ignore --> section of Chapter 9 when we
-know that a `None` value is never possible, even though the compiler isn’t able
-to understand that.
+سپس متد `unwrap` را فراخوانی می‌کنیم که می‌دانیم هرگز وحشت (panic) نخواهد کرد، زیرا می‌دانیم متدهای `Post` 
+تضمین می‌کنند که `state` همیشه یک مقدار `Some` دارد وقتی این متدها کارشان را تمام می‌کنند. این یکی از مواردی است 
+که در بخش [“مواردی که شما اطلاعات بیشتری نسبت به کامپایلر دارید”][more-info-than-rustc]<!-- ignore --> در فصل 9 
+در مورد آن صحبت کردیم، زمانی که می‌دانیم یک مقدار `None` هرگز ممکن نیست، حتی اگر کامپایلر نتواند این موضوع را 
+درک کند.
 
-At this point, when we call `content` on the `&Box<dyn State>`, deref coercion
-will take effect on the `&` and the `Box` so the `content` method will
-ultimately be called on the type that implements the `State` trait. That means
-we need to add `content` to the `State` trait definition, and that is where
-we’ll put the logic for what content to return depending on which state we
-have, as shown in Listing 18-18:
+در این مرحله، وقتی `content` را روی `&Box<dyn State>` فراخوانی می‌کنیم، تبدیل خودکار به نوع ارجاع (`deref coercion`) 
+روی `&` و `Box` اعمال می‌شود تا متد `content` در نهایت روی نوعی که صفت `State` را پیاده‌سازی می‌کند، فراخوانی شود. 
+این بدان معناست که باید `content` را به تعریف صفت `State` اضافه کنیم، و اینجا جایی است که منطق مربوط به بازگرداندن 
+محتوا بر اساس وضعیت فعلی قرار خواهد گرفت، همان‌طور که در لیستینگ 18-18 نشان داده شده است:
 
 <Listing number="18-18" file-name="src/lib.rs" caption="Adding the `content` method to the `State` trait">
 
@@ -283,97 +234,77 @@ have, as shown in Listing 18-18:
 
 </Listing>
 
-We add a default implementation for the `content` method that returns an empty
-string slice. That means we don’t need to implement `content` on the `Draft`
-and `PendingReview` structs. The `Published` struct will override the `content`
-method and return the value in `post.content`.
+ما برای متد `content` یک پیاده‌سازی پیش‌فرض اضافه می‌کنیم که یک برش رشته خالی بازمی‌گرداند. این کار باعث می‌شود 
+نیازی به پیاده‌سازی `content` روی ساختارهای `Draft` و `PendingReview` نداشته باشیم. ساختار `Published` متد 
+`content` را بازنویسی کرده و مقدار موجود در `post.content` را بازمی‌گرداند.
 
-Note that we need lifetime annotations on this method, as we discussed in
-Chapter 10. We’re taking a reference to a `post` as an argument and returning a
-reference to part of that `post`, so the lifetime of the returned reference is
-related to the lifetime of the `post` argument.
+توجه داشته باشید که برای این متد نیاز به حاشیه‌نویسی طول عمر داریم، همان‌طور که در فصل 10 توضیح داده شد. چون یک 
+ارجاع به یک `post` را به‌عنوان آرگومان می‌گیریم و یک ارجاع به بخشی از آن `post` را بازمی‌گردانیم، طول عمر ارجاع 
+بازگشتی به طول عمر آرگومان `post` مرتبط است.
 
-And we’re done—all of Listing 18-11 now works! We’ve implemented the state
-pattern with the rules of the blog post workflow. The logic related to the
-rules lives in the state objects rather than being scattered throughout `Post`.
+و تمام—اکنون تمام لیستینگ 18-11 کار می‌کند! ما الگوی وضعیت را با قوانین مربوط به فرآیند کاری پست وبلاگ پیاده‌سازی 
+کرده‌ایم. منطق مربوط به قوانین در اشیای وضعیت قرار دارد، نه اینکه در سراسر `Post` پراکنده باشد.
 
-> #### Why Not An Enum?
+> #### چرا از Enum استفاده نکردیم؟
 >
-> You may have been wondering why we didn’t use an `enum` with the different
-> possible post states as variants. That’s certainly a possible solution, try
-> it and compare the end results to see which you prefer! One disadvantage of
-> using an enum is every place that checks the value of the enum will need a
-> `match` expression or similar to handle every possible variant. This could
-> get more repetitive than this trait object solution.
+> ممکن است این سؤال برای شما پیش آمده باشد که چرا از یک `enum` با حالت‌های مختلف پست به‌عنوان متغیرها استفاده 
+> نکردیم. این قطعاً یک راه‌حل ممکن است؛ آن را امتحان کنید و نتایج نهایی را مقایسه کنید تا ببینید کدام را ترجیح 
+> می‌دهید! یکی از معایب استفاده از `enum` این است که هر جا مقدار `enum` بررسی می‌شود نیاز به یک عبارت `match` یا 
+> چیزی مشابه برای مدیریت تمام متغیرهای ممکن داریم. این می‌تواند نسبت به راه‌حل اشیای صفتی که استفاده کردیم 
+> تکراری‌تر باشد.
 
-### Trade-offs of the State Pattern
+### مزایا و معایب الگوی وضعیت
 
-We’ve shown that Rust is capable of implementing the object-oriented state
-pattern to encapsulate the different kinds of behavior a post should have in
-each state. The methods on `Post` know nothing about the various behaviors. The
-way we organized the code, we have to look in only one place to know the
-different ways a published post can behave: the implementation of the `State`
-trait on the `Published` struct.
+ما نشان داده‌ایم که Rust قادر است الگوی وضعیت شی‌گرا را برای کپسوله کردن رفتارهای مختلف یک پست در هر حالت 
+پیاده‌سازی کند. متدهای `Post` هیچ اطلاعی از رفتارهای مختلف ندارند. با روشی که کد را سازمان‌دهی کرده‌ایم، تنها 
+باید در یک مکان به‌دنبال راه‌های مختلف رفتار یک پست منتشرشده بگردیم: پیاده‌سازی صفت `State` روی ساختار 
+`Published`.
 
-If we were to create an alternative implementation that didn’t use the state
-pattern, we might instead use `match` expressions in the methods on `Post` or
-even in the `main` code that checks the state of the post and changes behavior
-in those places. That would mean we would have to look in several places to
-understand all the implications of a post being in the published state! This
-would only increase the more states we added: each of those `match` expressions
-would need another arm.
+اگر بخواهیم یک پیاده‌سازی جایگزین ایجاد کنیم که از الگوی وضعیت استفاده نمی‌کند، ممکن است به‌جای آن از عبارات 
+`match` در متدهای `Post` یا حتی در کد `main` استفاده کنیم که وضعیت پست را بررسی کرده و رفتار را در همان مکان‌ها 
+تغییر می‌دهد. این به این معناست که باید در مکان‌های مختلفی جست‌وجو کنیم تا تمام پیامدهای یک پست در حالت منتشرشده 
+را بفهمیم! و با اضافه شدن حالت‌های بیشتر، این موضوع فقط بدتر خواهد شد: هر یک از آن عبارات `match` نیاز به یک 
+شاخه دیگر خواهند داشت.
 
-With the state pattern, the `Post` methods and the places we use `Post` don’t
-need `match` expressions, and to add a new state, we would only need to add a
-new struct and implement the trait methods on that one struct.
+با الگوی وضعیت، متدهای `Post` و مکان‌هایی که از `Post` استفاده می‌کنیم نیازی به عبارات `match` ندارند، و برای 
+اضافه کردن یک حالت جدید، فقط کافی است یک ساختار جدید اضافه کرده و متدهای صفت را روی همان ساختار پیاده‌سازی کنیم.
 
-The implementation using the state pattern is easy to extend to add more
-functionality. To see the simplicity of maintaining code that uses the state
-pattern, try a few of these suggestions:
+پیاده‌سازی با استفاده از الگوی وضعیت به‌راحتی قابلیت گسترش برای اضافه کردن عملکردهای بیشتر را دارد. برای دیدن 
+سادگی نگهداری کدی که از الگوی وضعیت استفاده می‌کند، چند پیشنهاد زیر را امتحان کنید:
 
-- Add a `reject` method that changes the post’s state from `PendingReview` back
-  to `Draft`.
-- Require two calls to `approve` before the state can be changed to `Published`.
-- Allow users to add text content only when a post is in the `Draft` state.
-  Hint: have the state object responsible for what might change about the
-  content but not responsible for modifying the `Post`.
+- یک متد `reject` اضافه کنید که وضعیت پست را از `PendingReview` به `Draft` تغییر دهد.  
+- دو فراخوانی به `approve` نیاز داشته باشید تا وضعیت به `Published` تغییر کند.  
+- اجازه دهید کاربران فقط زمانی که یک پست در حالت `Draft` است متن محتوا اضافه کنند. نکته: بگذارید شیء وضعیت 
+  مسئول تغییراتی باشد که ممکن است در محتوا ایجاد شود، اما مسئول اصلاح مستقیم `Post` نباشد.  
 
-One downside of the state pattern is that, because the states implement the
-transitions between states, some of the states are coupled to each other. If we
-add another state between `PendingReview` and `Published`, such as `Scheduled`,
-we would have to change the code in `PendingReview` to transition to
-`Scheduled` instead. It would be less work if `PendingReview` didn’t need to
-change with the addition of a new state, but that would mean switching to
-another design pattern.
+یکی از معایب الگوی وضعیت این است که به دلیل اینکه وضعیت‌ها انتقال بین حالت‌ها را پیاده‌سازی می‌کنند، برخی از 
+وضعیت‌ها به یکدیگر وابسته هستند. اگر یک حالت دیگر بین `PendingReview` و `Published` اضافه کنیم، مانند 
+`Scheduled`، باید کد در `PendingReview` را تغییر دهیم تا به `Scheduled` منتقل شود. اگر نیازی نبود که 
+`PendingReview` با اضافه شدن یک حالت جدید تغییر کند، کار کمتری می‌داشتیم، اما این به معنای تغییر به یک الگوی 
+طراحی دیگر خواهد بود.
 
-Another downside is that we’ve duplicated some logic. To eliminate some of the
-duplication, we might try to make default implementations for the
-`request_review` and `approve` methods on the `State` trait that return `self`;
-however, this would not be dyn compatible, because the trait doesn’t know what
-the concrete `self` will be exactly. We want to be able to use `State` as a
-trait object, so we need its methods to be dyn compatible.
+یکی دیگر از معایب این است که ما برخی از منطق‌ها را تکرار کرده‌ایم. برای حذف برخی از این تکرارها، ممکن است سعی 
+کنیم برای متدهای `request_review` و `approve` در صفت `State` پیاده‌سازی پیش‌فرضی ایجاد کنیم که `self` را 
+بازمی‌گرداند؛ با این حال، این با `dyn` سازگار نخواهد بود، زیرا صفت دقیقاً نمی‌داند `self` چه خواهد بود. ما 
+می‌خواهیم بتوانیم از `State` به‌عنوان یک شیء صفت استفاده کنیم، بنابراین متدهای آن باید با `dyn` سازگار باشند.
 
-Other duplication includes the similar implementations of the `request_review`
-and `approve` methods on `Post`. Both methods delegate to the implementation of
-the same method on the value in the `state` field of `Option` and set the new
-value of the `state` field to the result. If we had a lot of methods on `Post`
-that followed this pattern, we might consider defining a macro to eliminate the
-repetition (see the [“Macros”][macros]<!-- ignore --> section in Chapter 20).
+پیاده‌سازی مشابه متدهای `request_review` و `approve` روی `Post` نیز نوعی تکرار است. هر دو متد اجرای متد مشابه 
+روی مقدار موجود در فیلد `state` از `Option` را به آن واگذار کرده و مقدار جدید فیلد `state` را به نتیجه تنظیم 
+می‌کنند. اگر متدهای زیادی روی `Post` داشته باشیم که این الگو را دنبال می‌کنند، ممکن است تعریف یک ماکرو را برای حذف 
+این تکرار در نظر بگیریم (بخش [“ماکروها”][macros]<!-- ignore --> در فصل 20 را ببینید).
 
-By implementing the state pattern exactly as it’s defined for object-oriented
-languages, we’re not taking as full advantage of Rust’s strengths as we could.
-Let’s look at some changes we can make to the `blog` crate that can make
-invalid states and transitions into compile time errors.
+با پیاده‌سازی الگوی وضعیت دقیقاً همان‌طور که برای زبان‌های شی‌گرا تعریف شده است، به‌طور کامل از نقاط قوت Rust 
+استفاده نمی‌کنیم. بیایید نگاهی به تغییراتی بیندازیم که می‌توانیم در crate `blog` ایجاد کنیم تا وضعیت‌ها و 
+انتقالات نامعتبر به خطاهای زمان کامپایل تبدیل شوند.
 
-#### Encoding States and Behavior as Types
+#### کدگذاری وضعیت‌ها و رفتار به‌عنوان انواع
 
-We’ll show you how to rethink the state pattern to get a different set of
-trade-offs. Rather than encapsulating the states and transitions completely so
-outside code has no knowledge of them, we’ll encode the states into different
-types. Consequently, Rust’s type checking system will prevent attempts to use
-draft posts where only published posts are allowed by issuing a compiler error.
+به شما نشان خواهیم داد که چگونه الگوی وضعیت را دوباره طراحی کنید تا مجموعه‌ای متفاوت از مزایا و معایب به دست 
+آورید. به‌جای اینکه وضعیت‌ها و انتقالات را کاملاً کپسوله کنیم تا کد خارجی از آن‌ها اطلاعی نداشته باشد، وضعیت‌ها را 
+به انواع مختلف کدگذاری می‌کنیم. در نتیجه، سیستم بررسی نوع Rust تلاش برای استفاده از پست‌های پیش‌نویس در جاهایی که 
+فقط پست‌های منتشرشده مجاز هستند را با صدور یک خطای کامپایلر متوقف می‌کند.
 
-Let’s consider the first part of `main` in Listing 18-11:
+ابتدا قسمت اول `main` در لیستینگ 18-11 را در نظر بگیرید:
 
 <Listing file-name="src/main.rs">
 
@@ -383,17 +314,14 @@ Let’s consider the first part of `main` in Listing 18-11:
 
 </Listing>
 
-We still enable the creation of new posts in the draft state using `Post::new`
-and the ability to add text to the post’s content. But instead of having a
-`content` method on a draft post that returns an empty string, we’ll make it so
-draft posts don’t have the `content` method at all. That way, if we try to get
-a draft post’s content, we’ll get a compiler error telling us the method
-doesn’t exist. As a result, it will be impossible for us to accidentally
-display draft post content in production, because that code won’t even compile.
-Listing 18-19 shows the definition of a `Post` struct and a `DraftPost` struct,
-as well as methods on each:
+ما همچنان امکان ایجاد پست‌های جدید در وضعیت پیش‌نویس با استفاده از `Post::new` و افزودن متن به محتوای پست را فراهم 
+می‌کنیم. اما به‌جای داشتن متد `content` روی یک پست پیش‌نویس که یک رشته خالی بازمی‌گرداند، آن را به گونه‌ای طراحی 
+می‌کنیم که پست‌های پیش‌نویس اصلاً متد `content` نداشته باشند. به این ترتیب، اگر بخواهیم محتوای یک پست پیش‌نویس 
+را دریافت کنیم، خطای کامپایلر دریافت خواهیم کرد که به ما می‌گوید این متد وجود ندارد. در نتیجه، نمایش محتوای 
+پست‌های پیش‌نویس در محیط تولید به‌طور تصادفی غیرممکن می‌شود، زیرا آن کد حتی کامپایل نخواهد شد. لیستینگ 18-19 
+تعریف یک ساختار `Post` و یک ساختار `DraftPost` و همچنین متدهایی روی هرکدام را نشان می‌دهد:
 
-<Listing number="18-19" file-name="src/lib.rs" caption="A `Post` with a `content` method and `DraftPost` without a `content` method">
+<Listing number="18-19" file-name="src/lib.rs" caption="یک `Post` با یک متد `content` و یک `DraftPost` بدون متد `content`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-19/src/lib.rs}}
@@ -401,34 +329,28 @@ as well as methods on each:
 
 </Listing>
 
-Both the `Post` and `DraftPost` structs have a private `content` field that
-stores the blog post text. The structs no longer have the `state` field because
-we’re moving the encoding of the state to the types of the structs. The `Post`
-struct will represent a published post, and it has a `content` method that
-returns the `content`.
+هر دو ساختار `Post` و `DraftPost` دارای یک فیلد خصوصی به نام `content` هستند که متن پست وبلاگ را ذخیره می‌کند. این 
+ساختارها دیگر فیلد `state` ندارند زیرا کدگذاری وضعیت را به انواع ساختارها منتقل کرده‌ایم. ساختار `Post` نماینده 
+یک پست منتشرشده است و دارای متد `content` است که مقدار `content` را بازمی‌گرداند.
 
-We still have a `Post::new` function, but instead of returning an instance of
-`Post`, it returns an instance of `DraftPost`. Because `content` is private
-and there aren’t any functions that return `Post`, it’s not possible to create
-an instance of `Post` right now.
+ما همچنان یک تابع `Post::new` داریم، اما به‌جای بازگرداندن نمونه‌ای از `Post`، یک نمونه از `DraftPost` بازمی‌گرداند. 
+از آنجا که `content` خصوصی است و هیچ تابعی وجود ندارد که `Post` را بازگرداند، در حال حاضر امکان ایجاد نمونه‌ای از 
+`Post` وجود ندارد.
 
-The `DraftPost` struct has an `add_text` method, so we can add text to
-`content` as before, but note that `DraftPost` does not have a `content` method
-defined! So now the program ensures all posts start as draft posts, and draft
-posts don’t have their content available for display. Any attempt to get around
-these constraints will result in a compiler error.
+ساختار `DraftPost` یک متد `add_text` دارد، بنابراین می‌توانیم همانند قبل متن را به `content` اضافه کنیم، اما 
+توجه کنید که `DraftPost` متد `content` تعریف‌شده ندارد! بنابراین اکنون برنامه تضمین می‌کند که تمام پست‌ها به‌صورت 
+پست‌های پیش‌نویس شروع می‌شوند و پست‌های پیش‌نویس محتوای خود را برای نمایش در دسترس ندارند. هر تلاشی برای دور زدن 
+این محدودیت‌ها منجر به خطای کامپایلر خواهد شد.
 
-#### Implementing Transitions as Transformations into Different Types
+#### پیاده‌سازی انتقال‌ها به‌عنوان تبدیل به انواع مختلف
 
-So how do we get a published post? We want to enforce the rule that a draft
-post has to be reviewed and approved before it can be published. A post in the
-pending review state should still not display any content. Let’s implement
-these constraints by adding another struct, `PendingReviewPost`, defining the
-`request_review` method on `DraftPost` to return a `PendingReviewPost`, and
-defining an `approve` method on `PendingReviewPost` to return a `Post`, as
-shown in Listing 18-20:
+چگونه می‌توانیم یک پست منتشرشده داشته باشیم؟ ما می‌خواهیم قانون را اجرا کنیم که یک پست پیش‌نویس باید بررسی و 
+تأیید شود قبل از اینکه بتواند منتشر شود. یک پست در حالت "در انتظار بررسی" همچنان نباید هیچ محتوایی نمایش دهد. بیایید 
+این محدودیت‌ها را با اضافه کردن یک ساختار دیگر به نام `PendingReviewPost`، تعریف متد `request_review` روی 
+`DraftPost` برای بازگرداندن یک `PendingReviewPost` و تعریف یک متد `approve` روی `PendingReviewPost` برای 
+بازگرداندن یک `Post`، همان‌طور که در لیستینگ 18-20 نشان داده شده است، پیاده‌سازی کنیم:
 
-<Listing number="18-20" file-name="src/lib.rs" caption="A `PendingReviewPost` that gets created by calling `request_review` on `DraftPost` and an `approve` method that turns a `PendingReviewPost` into a published `Post`">
+<Listing number="18-20" file-name="src/lib.rs" caption="یک `PendingReviewPost` که با فراخوانی `request_review` روی `DraftPost` ایجاد می‌شود و یک متد `approve` که یک `PendingReviewPost` را به یک `Post` منتشرشده تبدیل می‌کند">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-20/src/lib.rs:here}}
@@ -436,27 +358,22 @@ shown in Listing 18-20:
 
 </Listing>
 
-The `request_review` and `approve` methods take ownership of `self`, thus
-consuming the `DraftPost` and `PendingReviewPost` instances and transforming
-them into a `PendingReviewPost` and a published `Post`, respectively. This way,
-we won’t have any lingering `DraftPost` instances after we’ve called
-`request_review` on them, and so forth. The `PendingReviewPost` struct doesn’t
-have a `content` method defined on it, so attempting to read its content
-results in a compiler error, as with `DraftPost`. Because the only way to get a
-published `Post` instance that does have a `content` method defined is to call
-the `approve` method on a `PendingReviewPost`, and the only way to get a
-`PendingReviewPost` is to call the `request_review` method on a `DraftPost`,
-we’ve now encoded the blog post workflow into the type system.
+متدهای `request_review` و `approve` مالکیت `self` را می‌گیرند، بنابراین نمونه‌های `DraftPost` و `PendingReviewPost` 
+را مصرف کرده و آن‌ها را به‌ترتیب به یک `PendingReviewPost` و یک `Post` منتشرشده تبدیل می‌کنند. به این ترتیب، 
+پس از فراخوانی `request_review` روی یک `DraftPost` و به همین ترتیب، هیچ نمونه‌ای از `DraftPost` باقی نمی‌ماند. 
+ساختار `PendingReviewPost` متد `content` تعریف‌شده‌ای ندارد، بنابراین تلاش برای خواندن محتوای آن منجر به خطای 
+کامپایلر می‌شود، همان‌طور که در مورد `DraftPost` اتفاق می‌افتد. چون تنها راه برای گرفتن یک نمونه از `Post` منتشرشده 
+که متد `content` تعریف‌شده‌ای دارد، فراخوانی متد `approve` روی یک `PendingReviewPost` است، و تنها راه برای گرفتن 
+یک `PendingReviewPost` فراخوانی متد `request_review` روی یک `DraftPost` است، ما اکنون فرآیند کاری پست وبلاگ را به 
+سیستم نوع کدگذاری کرده‌ایم.
 
-But we also have to make some small changes to `main`. The `request_review` and
-`approve` methods return new instances rather than modifying the struct they’re
-called on, so we need to add more `let post =` shadowing assignments to save
-the returned instances. We also can’t have the assertions about the draft and
-pending review posts’ contents be empty strings, nor do we need them: we can’t
-compile code that tries to use the content of posts in those states any longer.
-The updated code in `main` is shown in Listing 18-21:
+اما همچنین باید تغییرات کوچکی در `main` ایجاد کنیم. متدهای `request_review` و `approve` نمونه‌های جدیدی بازمی‌گردانند 
+به‌جای اینکه ساختاری که روی آن فراخوانی شده‌اند را تغییر دهند، بنابراین باید تخصیص‌های مجدد با `let post =` اضافه کنیم 
+تا نمونه‌های بازگشتی را ذخیره کنیم. همچنین نمی‌توانیم تأییدیه‌های مربوط به خالی بودن محتوای پست‌های پیش‌نویس و در 
+انتظار بررسی را داشته باشیم، و نیازی به آن‌ها نیست: دیگر نمی‌توانیم کدی که سعی می‌کند محتوای پست‌های در این حالت‌ها را 
+استفاده کند، کامپایل کنیم. کد به‌روزشده در `main` در لیستینگ 18-21 نشان داده شده است:
 
-<Listing number="18-21" file-name="src/main.rs" caption="Modifications to `main` to use the new implementation of the blog post workflow">
+<Listing number="18-21" file-name="src/main.rs" caption="تغییرات در `main` برای استفاده از پیاده‌سازی جدید فرآیند کاری پست وبلاگ">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-21/src/main.rs}}
@@ -464,43 +381,33 @@ The updated code in `main` is shown in Listing 18-21:
 
 </Listing>
 
-The changes we needed to make to `main` to reassign `post` mean that this
-implementation doesn’t quite follow the object-oriented state pattern anymore:
-the transformations between the states are no longer encapsulated entirely
-within the `Post` implementation. However, our gain is that invalid states are
-now impossible because of the type system and the type checking that happens at
-compile time! This ensures that certain bugs, such as display of the content of
-an unpublished post, will be discovered before they make it to production.
+تغییراتی که باید در `main` برای تخصیص مجدد `post` انجام می‌دادیم، به این معناست که این پیاده‌سازی دیگر کاملاً از 
+الگوی وضعیت شی‌گرا پیروی نمی‌کند: انتقالات بین حالت‌ها دیگر به‌طور کامل در پیاده‌سازی `Post` کپسوله نشده‌اند. 
+اما، مزیت ما این است که اکنون وضعیت‌های نامعتبر به دلیل سیستم نوع و بررسی نوعی که در زمان کامپایل انجام می‌شود، 
+غیرممکن هستند! این تضمین می‌کند که برخی از باگ‌ها، مانند نمایش محتوای یک پست منتشرنشده، قبل از رسیدن به تولید 
+کشف شوند.
 
-Try the tasks suggested at the start of this section on the `blog` crate as it
-is after Listing 18-21 to see what you think about the design of this version
-of the code. Note that some of the tasks might be completed already in this
-design.
+تکالیف پیشنهادی در ابتدای این بخش را روی crate `blog` همان‌طور که پس از لیستینگ 18-21 است امتحان کنید تا ببینید 
+درباره طراحی این نسخه از کد چه نظری دارید. توجه داشته باشید که برخی از تکالیف ممکن است در این طراحی از پیش 
+انجام شده باشند.
 
-We’ve seen that even though Rust is capable of implementing object-oriented
-design patterns, other patterns, such as encoding state into the type system,
-are also available in Rust. These patterns have different trade-offs. Although
-you might be very familiar with object-oriented patterns, rethinking the
-problem to take advantage of Rust’s features can provide benefits, such as
-preventing some bugs at compile time. Object-oriented patterns won’t always be
-the best solution in Rust due to certain features, like ownership, that
-object-oriented languages don’t have.
+دیدیم که حتی با وجود اینکه Rust قادر به پیاده‌سازی الگوهای طراحی شی‌گرا است، الگوهای دیگر، مانند کدگذاری حالت 
+در سیستم نوع، نیز در Rust در دسترس هستند. این الگوها مزایا و معایب متفاوتی دارند. اگرچه ممکن است با الگوهای شی‌گرا 
+بسیار آشنا باشید، بازاندیشی مسئله برای بهره‌بردن از ویژگی‌های Rust می‌تواند مزایایی مانند جلوگیری از برخی باگ‌ها 
+در زمان کامپایل را فراهم کند. الگوهای شی‌گرا همیشه بهترین راه‌حل در Rust نخواهند بود، به دلیل ویژگی‌هایی مانند 
+مالکیت که زبان‌های شی‌گرا ندارند.
 
-## Summary
+## خلاصه
 
-No matter whether or not you think Rust is an object-oriented language after
-reading this chapter, you now know that you can use trait objects to get some
-object-oriented features in Rust. Dynamic dispatch can give your code some
-flexibility in exchange for a bit of runtime performance. You can use this
-flexibility to implement object-oriented patterns that can help your code’s
-maintainability. Rust also has other features, like ownership, that
-object-oriented languages don’t have. An object-oriented pattern won’t always
-be the best way to take advantage of Rust’s strengths, but is an available
-option.
+فارغ از اینکه پس از خواندن این فصل فکر می‌کنید Rust یک زبان شی‌گرا است یا نه، اکنون می‌دانید که می‌توانید از 
+اشیای صفت برای دریافت برخی ویژگی‌های شی‌گرایی در Rust استفاده کنید. تخصیص پویا (Dynamic Dispatch) می‌تواند 
+انعطاف‌پذیری به کد شما بدهد، اما در ازای آن کمی از عملکرد زمان اجرا را قربانی می‌کند. می‌توانید از این انعطاف‌پذیری 
+برای پیاده‌سازی الگوهای شی‌گرا که می‌توانند به نگه‌داری کد شما کمک کنند، استفاده کنید. Rust همچنین دارای ویژگی‌های 
+دیگری مانند مالکیت است که زبان‌های شی‌گرا ندارند. یک الگوی شی‌گرا همیشه بهترین راه برای بهره‌بردن از نقاط قوت 
+Rust نخواهد بود، اما به‌عنوان یک گزینه در دسترس است.
 
-Next, we’ll look at patterns, which are another of Rust’s features that enable
-lots of flexibility. We’ve looked at them briefly throughout the book but
-haven’t seen their full capability yet. Let’s go!
+در ادامه، به بررسی الگوها خواهیم پرداخت که یکی دیگر از ویژگی‌های Rust است که انعطاف‌پذیری زیادی را فراهم 
+می‌کنند. در طول کتاب به‌طور مختصر به آن‌ها اشاره کرده‌ایم، اما هنوز به‌طور کامل توانایی آن‌ها را ندیده‌ایم. برویم!
 
 [more-info-than-rustc]: ch09-03-to-panic-or-not-to-panic.html#cases-in-which-you-have-more-information-than-the-compiler
 [macros]: ch20-05-macros.html#macros

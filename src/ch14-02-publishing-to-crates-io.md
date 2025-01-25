@@ -1,32 +1,16 @@
-## Publishing a Crate to Crates.io
+## انتشار یک Crate در Crates.io
 
-We’ve used packages from [crates.io](https://crates.io/)<!-- ignore --> as
-dependencies of our project, but you can also share your code with other people
-by publishing your own packages. The crate registry at
-[crates.io](https://crates.io/)<!-- ignore --> distributes the source code of
-your packages, so it primarily hosts code that is open source.
+ما از پکیج‌های موجود در [crates.io](https://crates.io/)<!-- ignore --> به عنوان وابستگی‌های پروژه خود استفاده کرده‌ایم، اما شما همچنین می‌توانید کد خود را با دیگران به اشتراک بگذارید با انتشار پکیج‌های خودتان. رجیستری Crates.io کد منبع پکیج‌های شما را توزیع می‌کند، بنابراین به طور عمده میزبان کدهای منبع باز است.
 
-Rust and Cargo have features that make your published package easier for people
-to find and use. We’ll talk about some of these features next and then explain
-how to publish a package.
+Rust و Cargo ویژگی‌هایی دارند که باعث می‌شود پکیج منتشرشده شما برای دیگران راحت‌تر پیدا شده و استفاده شود. ما ابتدا درباره برخی از این ویژگی‌ها صحبت می‌کنیم و سپس توضیح می‌دهیم چگونه یک پکیج منتشر کنیم.
 
-### Making Useful Documentation Comments
+### ایجاد نظرات مستندات مفید
 
-Accurately documenting your packages will help other users know how and when to
-use them, so it’s worth investing the time to write documentation. In Chapter
-3, we discussed how to comment Rust code using two slashes, `//`. Rust also has
-a particular kind of comment for documentation, known conveniently as a
-_documentation comment_, that will generate HTML documentation. The HTML
-displays the contents of documentation comments for public API items intended
-for programmers interested in knowing how to _use_ your crate as opposed to how
-your crate is _implemented_.
+مستندسازی دقیق پکیج‌های شما به دیگر کاربران کمک می‌کند بدانند چگونه و چه زمانی از آن‌ها استفاده کنند، بنابراین ارزش دارد که وقت خود را برای نوشتن مستندات صرف کنید. در فصل 3، نحوه اضافه کردن نظرات به کد Rust با استفاده از دو اسلش `//` را بررسی کردیم. Rust همچنین نوع خاصی از نظرات برای مستندات دارد که به نام _نظرات مستندات_ شناخته می‌شود و مستندات HTML تولید می‌کند. این مستندات HTML محتوای نظرات مستندات را برای آیتم‌های عمومی API نمایش می‌دهد که برای برنامه‌نویسانی که به دنبال دانستن چگونگی _استفاده از_ crate شما هستند، طراحی شده است و نه چگونگی _پیاده‌سازی_ crate شما.
 
-Documentation comments use three slashes, `///`, instead of two and support
-Markdown notation for formatting the text. Place documentation comments just
-before the item they’re documenting. Listing 14-1 shows documentation comments
-for an `add_one` function in a crate named `my_crate`.
+نظرات مستندات به جای دو اسلش از سه اسلش `///` استفاده می‌کنند و از نشانه‌گذاری Markdown برای قالب‌بندی متن پشتیبانی می‌کنند. نظرات مستندات را درست قبل از آیتمی که قرار است مستندسازی شود قرار دهید. لیستینگ 14-1 نظرات مستندات برای یک تابع `add_one` در یک crate به نام `my_crate` را نشان می‌دهد.
 
-<Listing number="14-1" file-name="src/lib.rs" caption="A documentation comment for a function">
+<Listing number="14-1" file-name="src/lib.rs" caption="یک نظر مستند برای یک تابع">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-01/src/lib.rs}}
@@ -34,60 +18,27 @@ for an `add_one` function in a crate named `my_crate`.
 
 </Listing>
 
-Here, we give a description of what the `add_one` function does, start a
-section with the heading `Examples`, and then provide code that demonstrates
-how to use the `add_one` function. We can generate the HTML documentation from
-this documentation comment by running `cargo doc`. This command runs the
-`rustdoc` tool distributed with Rust and puts the generated HTML documentation
-in the _target/doc_ directory.
+اینجا، ما توضیحی درباره عملکرد تابع `add_one` می‌دهیم، بخشی با عنوان `Examples` شروع می‌کنیم، و سپس کدی که نشان می‌دهد چگونه از تابع `add_one` استفاده کنیم ارائه می‌دهیم. می‌توانیم مستندات HTML را از این نظر مستند با اجرای دستور `cargo doc` تولید کنیم. این دستور ابزار `rustdoc` که با Rust توزیع شده را اجرا می‌کند و مستندات HTML تولیدشده را در دایرکتوری _target/doc_ قرار می‌دهد.
 
-For convenience, running `cargo doc --open` will build the HTML for your
-current crate’s documentation (as well as the documentation for all of your
-crate’s dependencies) and open the result in a web browser. Navigate to the
-`add_one` function and you’ll see how the text in the documentation comments is
-rendered, as shown in Figure 14-1:
+برای راحتی، اجرای دستور `cargo doc --open` مستندات HTML را برای crate فعلی شما (و همچنین مستندات همه وابستگی‌های crate شما) می‌سازد و نتیجه را در مرورگر وب باز می‌کند. به تابع `add_one` بروید و خواهید دید که چگونه متن موجود در نظرات مستندات نمایش داده می‌شود، همانطور که در شکل 14-1 نشان داده شده است:
 
-<img alt="Rendered HTML documentation for the `add_one` function of `my_crate`" src="img/trpl14-01.png" class="center" />
+<img alt="مستندات HTML تولیدشده برای تابع `add_one` از `my_crate`" src="img/trpl14-01.png" class="center" />
 
-<span class="caption">Figure 14-1: HTML documentation for the `add_one`
-function</span>
+<span class="caption">شکل 14-1: مستندات HTML برای تابع `add_one`</span>
 
-#### Commonly Used Sections
+#### بخش‌های متداول مورد استفاده
 
-We used the `# Examples` Markdown heading in Listing 14-1 to create a section
-in the HTML with the title “Examples.” Here are some other sections that crate
-authors commonly use in their documentation:
+ما در لیستینگ 14-1 از عنوان Markdown `# Examples` برای ایجاد یک بخش در HTML با عنوان "Examples" استفاده کردیم. در اینجا برخی دیگر از بخش‌هایی که نویسندگان crate معمولاً در مستندات خود استفاده می‌کنند آورده شده است:
 
-- **Panics**: The scenarios in which the function being documented could
-  panic. Callers of the function who don’t want their programs to panic should
-  make sure they don’t call the function in these situations.
-- **Errors**: If the function returns a `Result`, describing the kinds of
-  errors that might occur and what conditions might cause those errors to be
-  returned can be helpful to callers so they can write code to handle the
-  different kinds of errors in different ways.
-- **Safety**: If the function is `unsafe` to call (we discuss unsafety in
-  Chapter 20), there should be a section explaining why the function is unsafe
-  and covering the invariants that the function expects callers to uphold.
+- **Panics**: سناریوهایی که در آن ممکن است تابع مستند شده باعث ایجاد panic شود. فراخوانان تابع که نمی‌خواهند برنامه‌هایشان panic کنند باید مطمئن شوند که تابع را در این شرایط فراخوانی نمی‌کنند.
+- **Errors**: اگر تابع یک مقدار `Result` بازگرداند، توضیح انواع خطاهایی که ممکن است رخ دهد و شرایطی که ممکن است این خطاها را ایجاد کند، برای فراخوانان مفید است تا بتوانند کدهایی برای مدیریت انواع مختلف خطاها بنویسند.
+- **Safety**: اگر تابع `unsafe` برای فراخوانی باشد (ما عدم ایمنی را در فصل 20 بررسی خواهیم کرد)، باید بخشی توضیح دهد که چرا تابع ناامن است و اصولی را که تابع از فراخوانان انتظار دارد رعایت کنند پوشش دهد.
 
-Most documentation comments don’t need all of these sections, but this is a
-good checklist to remind you of the aspects of your code users will be
-interested in knowing about.
+بیشتر نظرات مستندات به همه این بخش‌ها نیاز ندارند، اما این یک چک‌لیست خوب برای یادآوری جنبه‌هایی از کد شما است که کاربران علاقه‌مند به دانستن آن هستند.
 
-#### Documentation Comments as Tests
+#### نظرات مستندات به عنوان تست
 
-Adding example code blocks in your documentation comments can help demonstrate
-how to use your library, and doing so has an additional bonus: running `cargo
-test` will run the code examples in your documentation as tests! Nothing is
-better than documentation with examples. But nothing is worse than examples
-that don’t work because the code has changed since the documentation was
-written. If we run `cargo test` with the documentation for the `add_one`
-function from Listing 14-1, we will see a section in the test results like this:
-
-<!-- manual-regeneration
-cd listings/ch14-more-about-cargo/listing-14-01/
-cargo test
-copy just the doc-tests section below
--->
+اضافه کردن بلوک‌های کد مثال به نظرات مستندات شما می‌تواند به نمایش نحوه استفاده از کتابخانه شما کمک کند، و انجام این کار یک مزیت اضافی دارد: اجرای دستور `cargo test`، مثال‌های کد در مستندات شما را به عنوان تست اجرا خواهد کرد! هیچ چیزی بهتر از مستندات با مثال نیست. اما هیچ چیزی بدتر از مثال‌هایی نیست که کار نمی‌کنند زیرا کد از زمان نوشته شدن مستندات تغییر کرده است. اگر `cargo test` را با مستندات تابع `add_one` از لیستینگ 14-1 اجرا کنیم، بخشی در نتایج تست مانند زیر خواهیم دید:
 
 ```text
    Doc-tests my_crate
@@ -98,23 +49,15 @@ test src/lib.rs - add_one (line 5) ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
 ```
 
-Now if we change either the function or the example so the `assert_eq!` in the
-example panics and run `cargo test` again, we’ll see that the doc tests catch
-that the example and the code are out of sync with each other!
+اکنون، اگر تابع یا مثال را تغییر دهیم به طوری که `assert_eq!` در مثال باعث panic شود و دوباره `cargo test` را اجرا کنیم، خواهیم دید که تست‌های مستندات تشخیص می‌دهند که مثال و کد با یکدیگر همگام نیستند!
 
-#### Commenting Contained Items
+#### مستندسازی آیتم‌های شامل شده
 
-The style of doc comment `//!` adds documentation to the item that contains the
-comments rather than to the items following the comments. We typically use
-these doc comments inside the crate root file (_src/lib.rs_ by convention) or
-inside a module to document the crate or the module as a whole.
+سبک نظر مستند `//!` مستندات را به آیتمی که نظرات را شامل می‌شود اضافه می‌کند، به جای آیتم‌هایی که بعد از نظرات قرار دارند. ما معمولاً از این نظرات مستند در فایل اصلی crate (_src/lib.rs_ بر اساس قرارداد) یا در داخل یک ماژول برای مستندسازی کل crate یا ماژول استفاده می‌کنیم.
 
-For example, to add documentation that describes the purpose of the `my_crate`
-crate that contains the `add_one` function, we add documentation comments that
-start with `//!` to the beginning of the _src/lib.rs_ file, as shown in Listing
-14-2:
+برای مثال، برای اضافه کردن مستنداتی که هدف crate `my_crate` را که شامل تابع `add_one` است توضیح می‌دهد، نظرات مستندی که با `//!` شروع می‌شوند را به ابتدای فایل _src/lib.rs_ اضافه می‌کنیم، همان‌طور که در لیستینگ 14-2 نشان داده شده است:
 
-<Listing number="14-2" file-name="src/lib.rs" caption="Documentation for the `my_crate` crate as a whole">
+<Listing number="14-2" file-name="src/lib.rs" caption="مستندات برای کل crate `my_crate`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-02/src/lib.rs:here}}
@@ -122,55 +65,27 @@ start with `//!` to the beginning of the _src/lib.rs_ file, as shown in Listing
 
 </Listing>
 
-Notice there isn’t any code after the last line that begins with `//!`. Because
-we started the comments with `//!` instead of `///`, we’re documenting the item
-that contains this comment rather than an item that follows this comment. In
-this case, that item is the _src/lib.rs_ file, which is the crate root. These
-comments describe the entire crate.
+توجه داشته باشید که هیچ کدی بعد از آخرین خطی که با `//!` شروع می‌شود وجود ندارد. چون ما نظرات را با `//!` شروع کرده‌ایم به جای `///`، ما در حال مستندسازی آیتمی هستیم که این نظر را شامل می‌شود به جای آیتمی که بعد از این نظر قرار دارد. در این مورد، آن آیتم فایل _src/lib.rs_ است که ریشه crate است. این نظرات کل crate را توضیح می‌دهند.
 
-When we run `cargo doc --open`, these comments will display on the front
-page of the documentation for `my_crate` above the list of public items in the
-crate, as shown in Figure 14-2:
+وقتی `cargo doc --open` را اجرا می‌کنیم، این نظرات در صفحه اول مستندات crate `my_crate` بالای لیست آیتم‌های عمومی در crate نمایش داده می‌شوند، همان‌طور که در شکل 14-2 نشان داده شده است:
 
 <img alt="Rendered HTML documentation with a comment for the crate as a whole" src="img/trpl14-02.png" class="center" />
 
-<span class="caption">Figure 14-2: Rendered documentation for `my_crate`,
-including the comment describing the crate as a whole</span>
+<span class="caption">شکل 14-2: مستندات تولید شده برای `my_crate`، شامل توضیحات در مورد کل crate</span>
 
-Documentation comments within items are useful for describing crates and
-modules especially. Use them to explain the overall purpose of the container to
-help your users understand the crate’s organization.
+نظرات مستندات داخل آیتم‌ها به ویژه برای توصیف crates و ماژول‌ها مفید هستند. از آن‌ها برای توضیح هدف کلی container استفاده کنید تا به کاربران خود در درک سازمان‌دهی crate کمک کنید.
 
-### Exporting a Convenient Public API with `pub use`
+### صادرات یک API عمومی کارآمد با استفاده از `pub use`
 
-The structure of your public API is a major consideration when publishing a
-crate. People who use your crate are less familiar with the structure than you
-are and might have difficulty finding the pieces they want to use if your crate
-has a large module hierarchy.
+ساختار API عمومی شما یک موضوع مهم هنگام انتشار یک crate است. افرادی که از crate شما استفاده می‌کنند، کمتر از شما با ساختار آن آشنا هستند و ممکن است در یافتن قسمت‌هایی که می‌خواهند استفاده کنند، اگر crate شما دارای یک سلسله‌مراتب ماژول بزرگ باشد، دچار مشکل شوند.
 
-In Chapter 7, we covered how to make items public using the `pub` keyword, and
-bring items into a scope with the `use` keyword. However, the structure that
-makes sense to you while you’re developing a crate might not be very convenient
-for your users. You might want to organize your structs in a hierarchy
-containing multiple levels, but then people who want to use a type you’ve
-defined deep in the hierarchy might have trouble finding out that type exists.
-They might also be annoyed at having to enter `use`
-`my_crate::some_module::another_module::UsefulType;` rather than `use`
-`my_crate::UsefulType;`.
+در فصل 7، نحوه عمومی کردن آیتم‌ها با استفاده از کلمه کلیدی `pub` و آوردن آیتم‌ها به یک scope با استفاده از کلمه کلیدی `use` را پوشش دادیم. با این حال، ساختاری که هنگام توسعه یک crate برای شما منطقی به نظر می‌رسد ممکن است برای کاربران شما چندان مناسب نباشد. ممکن است بخواهید ساختارهای خود را در یک سلسله‌مراتب با چندین سطح سازماندهی کنید، اما سپس افرادی که می‌خواهند از یک نوع تعریف‌شده عمیق در سلسله‌مراتب استفاده کنند ممکن است در پیدا کردن آن نوع دچار مشکل شوند. همچنین ممکن است مجبور شوند به جای `use my_crate::UsefulType;`، چیزی مانند `use my_crate::some_module::another_module::UsefulType;` بنویسند که ناخوشایند است.
 
-The good news is that if the structure _isn’t_ convenient for others to use
-from another library, you don’t have to rearrange your internal organization:
-instead, you can re-export items to make a public structure that’s different
-from your private structure by using `pub use`. Re-exporting takes a public
-item in one location and makes it public in another location, as if it were
-defined in the other location instead.
+خبر خوب این است که اگر ساختار _برای دیگران راحت نیست_، نیازی نیست سازمان‌دهی داخلی خود را دوباره بچینید: به جای آن می‌توانید آیتم‌ها را با استفاده از `pub use` مجدداً صادر کنید تا یک ساختار عمومی متفاوت از ساختار خصوصی خود ایجاد کنید. صادرات مجدد یک آیتم عمومی در یک مکان را می‌گیرد و آن را در یک مکان دیگر عمومی می‌کند، گویی که در مکان دیگر تعریف شده است.
 
-For example, say we made a library named `art` for modeling artistic concepts.
-Within this library are two modules: a `kinds` module containing two enums
-named `PrimaryColor` and `SecondaryColor` and a `utils` module containing a
-function named `mix`, as shown in Listing 14-3:
+برای مثال، فرض کنید ما یک کتابخانه به نام `art` برای مدل‌سازی مفاهیم هنری ایجاد کرده‌ایم. در این کتابخانه دو ماژول وجود دارند: یک ماژول `kinds` که شامل دو enum به نام‌های `PrimaryColor` و `SecondaryColor` است و یک ماژول `utils` که شامل یک تابع به نام `mix` است، همان‌طور که در لیستینگ 14-3 نشان داده شده است:
 
-<Listing number="14-3" file-name="src/lib.rs" caption="An `art` library with items organized into `kinds` and `utils` modules">
+<Listing number="14-3" file-name="src/lib.rs" caption="یک کتابخانه `art` با آیتم‌هایی که در ماژول‌های `kinds` و `utils` سازماندهی شده‌اند">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-03/src/lib.rs:here}}
@@ -178,22 +93,15 @@ function named `mix`, as shown in Listing 14-3:
 
 </Listing>
 
-Figure 14-3 shows what the front page of the documentation for this crate
-generated by `cargo doc` would look like:
+شکل 14-3 نشان می‌دهد که صفحه اول مستندات این crate که توسط `cargo doc` تولید شده است چگونه به نظر می‌رسد:
 
-<img alt="Rendered documentation for the `art` crate that lists the `kinds` and `utils` modules" src="img/trpl14-03.png" class="center" />
+<img alt="مستندات تولید شده برای crate `art` که ماژول‌های `kinds` و `utils` را لیست می‌کند" src="img/trpl14-03.png" class="center" />
 
-<span class="caption">Figure 14-3: Front page of the documentation for `art`
-that lists the `kinds` and `utils` modules</span>
+<span class="caption">شکل 14-3: صفحه اول مستندات crate `art` که ماژول‌های `kinds` و `utils` را لیست می‌کند</span>
 
-Note that the `PrimaryColor` and `SecondaryColor` types aren’t listed on the
-front page, nor is the `mix` function. We have to click `kinds` and `utils` to
-see them.
+توجه کنید که انواع `PrimaryColor` و `SecondaryColor` در صفحه اول لیست نشده‌اند، و تابع `mix` نیز لیست نشده است. برای دیدن آن‌ها باید روی `kinds` و `utils` کلیک کنیم.
 
-Another crate that depends on this library would need `use` statements that
-bring the items from `art` into scope, specifying the module structure that’s
-currently defined. Listing 14-4 shows an example of a crate that uses the
-`PrimaryColor` and `mix` items from the `art` crate:
+یک crate دیگر که به این کتابخانه وابسته است نیاز دارد که بیانیه‌های `use` مشخص کنند که آیتم‌ها را از `art` به scope می‌آورند، و ساختار ماژول تعریف‌شده کنونی را بیان کنند. لیستینگ 14-4 یک مثال از crate‌ای که آیتم‌های `PrimaryColor` و `mix` را از crate `art` استفاده می‌کند نشان می‌دهد:
 
 <Listing number="14-4" file-name="src/main.rs" caption="A crate using the `art` crate’s items with its internal structure exported">
 
@@ -203,20 +111,11 @@ currently defined. Listing 14-4 shows an example of a crate that uses the
 
 </Listing>
 
-The author of the code in Listing 14-4, which uses the `art` crate, had to
-figure out that `PrimaryColor` is in the `kinds` module and `mix` is in the
-`utils` module. The module structure of the `art` crate is more relevant to
-developers working on the `art` crate than to those using it. The internal
-structure doesn’t contain any useful information for someone trying to
-understand how to use the `art` crate, but rather causes confusion because
-developers who use it have to figure out where to look, and must specify the
-module names in the `use` statements.
+نویسنده کدی که در لیستینگ 14-4 نشان داده شده و از crate `art` استفاده می‌کند، مجبور بوده متوجه شود که `PrimaryColor` در ماژول `kinds` و `mix` در ماژول `utils` قرار دارد. ساختار ماژول crate `art` بیشتر برای توسعه‌دهندگانی که روی این crate کار می‌کنند مرتبط است تا کسانی که از آن استفاده می‌کنند. ساختار داخلی اطلاعات مفیدی برای کسی که می‌خواهد نحوه استفاده از crate `art` را بفهمد ارائه نمی‌دهد، بلکه بیشتر باعث سردرگمی می‌شود، زیرا توسعه‌دهندگانی که از آن استفاده می‌کنند باید بفهمند کجا را باید جستجو کنند و نام‌های ماژول را در بیانیه‌های `use` مشخص کنند.
 
-To remove the internal organization from the public API, we can modify the
-`art` crate code in Listing 14-3 to add `pub use` statements to re-export the
-items at the top level, as shown in Listing 14-5:
+برای حذف سازمان‌دهی داخلی از API عمومی، می‌توانیم کد crate `art` را در لیستینگ 14-3 تغییر دهیم تا بیانیه‌های `pub use` را برای صادرات مجدد آیتم‌ها در سطح بالا اضافه کنیم، همان‌طور که در لیستینگ 14-5 نشان داده شده است:
 
-<Listing number="14-5" file-name="src/lib.rs" caption="Adding `pub use` statements to re-export items">
+<Listing number="14-5" file-name="src/lib.rs" caption="افزودن بیانیه‌های `pub use` برای صادرات مجدد آیتم‌ها">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-05/src/lib.rs:here}}
@@ -224,20 +123,15 @@ items at the top level, as shown in Listing 14-5:
 
 </Listing>
 
-The API documentation that `cargo doc` generates for this crate will now list
-and link re-exports on the front page, as shown in Figure 14-4, making the
-`PrimaryColor` and `SecondaryColor` types and the `mix` function easier to find.
+مستندات API که `cargo doc` برای این crate تولید می‌کند اکنون صادرات‌های مجدد را در صفحه اول لیست کرده و به آن‌ها لینک می‌دهد، همان‌طور که در شکل 14-4 نشان داده شده است. این کار پیدا کردن انواع `PrimaryColor` و `SecondaryColor` و تابع `mix` را آسان‌تر می‌کند.
 
-<img alt="Rendered documentation for the `art` crate with the re-exports on the front page" src="img/trpl14-04.png" class="center" />
+<img alt="مستندات تولیدشده برای crate `art` با صادرات‌های مجدد در صفحه اول" src="img/trpl14-04.png" class="center" />
 
-<span class="caption">Figure 14-4: The front page of the documentation for `art`
-that lists the re-exports</span>
+<span class="caption">شکل 14-4: صفحه اول مستندات برای crate `art` که صادرات‌های مجدد را لیست می‌کند</span>
 
-The `art` crate users can still see and use the internal structure from Listing
-14-3 as demonstrated in Listing 14-4, or they can use the more convenient
-structure in Listing 14-5, as shown in Listing 14-6:
+کاربران crate `art` همچنان می‌توانند ساختار داخلی را از لیستینگ 14-3 ببینند و استفاده کنند، همان‌طور که در لیستینگ 14-4 نشان داده شده است، یا می‌توانند از ساختار راحت‌تر در لیستینگ 14-5 استفاده کنند، همان‌طور که در لیستینگ 14-6 نشان داده شده است:
 
-<Listing number="14-6" file-name="src/main.rs" caption="A program using the re-exported items from the `art` crate">
+<Listing number="14-6" file-name="src/main.rs" caption="یک برنامه که از آیتم‌های صادرات‌شده مجدد crate `art` استفاده می‌کند">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-06/src/main.rs:here}}
@@ -245,55 +139,26 @@ structure in Listing 14-5, as shown in Listing 14-6:
 
 </Listing>
 
-In cases where there are many nested modules, re-exporting the types at the top
-level with `pub use` can make a significant difference in the experience of
-people who use the crate. Another common use of `pub use` is to re-export
-definitions of a dependency in the current crate to make that crate's
-definitions part of your crate’s public API.
+در مواردی که ماژول‌های تو در تو زیادی وجود دارند، صادرات مجدد انواع در سطح بالا با `pub use` می‌تواند تفاوت بزرگی در تجربه افرادی که از crate استفاده می‌کنند ایجاد کند. یکی دیگر از استفاده‌های رایج `pub use`، صادرات مجدد تعاریف یک وابستگی در crate فعلی برای تبدیل تعاریف آن به بخشی از API عمومی crate شما است.
 
-Creating a useful public API structure is more of an art than a science, and
-you can iterate to find the API that works best for your users. Choosing `pub
-use` gives you flexibility in how you structure your crate internally and
-decouples that internal structure from what you present to your users. Look at
-some of the code of crates you’ve installed to see if their internal structure
-differs from their public API.
+ایجاد یک ساختار API عمومی مفید بیشتر شبیه یک هنر است تا یک علم، و می‌توانید با آزمون و خطا API‌ای پیدا کنید که بهترین کارکرد را برای کاربران شما داشته باشد. انتخاب `pub use` به شما انعطاف می‌دهد که چگونه crate خود را به صورت داخلی ساختار دهید و آن ساختار داخلی را از چیزی که به کاربران خود ارائه می‌دهید جدا کنید. به برخی از کدهای crate‌هایی که نصب کرده‌اید نگاهی بیندازید تا ببینید آیا ساختار داخلی آن‌ها با API عمومی آن‌ها تفاوت دارد یا خیر.
 
-### Setting Up a Crates.io Account
+### تنظیم یک حساب در Crates.io
 
-Before you can publish any crates, you need to create an account on
-[crates.io](https://crates.io/)<!-- ignore --> and get an API token. To do so,
-visit the home page at [crates.io](https://crates.io/)<!-- ignore --> and log
-in via a GitHub account. (The GitHub account is currently a requirement, but
-the site might support other ways of creating an account in the future.) Once
-you’re logged in, visit your account settings at
-[https://crates.io/me/](https://crates.io/me/)<!-- ignore --> and retrieve your
-API key. Then run the `cargo login` command and paste your API key when prompted, like this:
+قبل از اینکه بتوانید هر crate‌ای را منتشر کنید، نیاز دارید که یک حساب در [crates.io](https://crates.io/)<!-- ignore --> ایجاد کنید و یک توکن API دریافت کنید. برای این کار، به صفحه اصلی در [crates.io](https://crates.io/)<!-- ignore --> بروید و از طریق حساب GitHub وارد شوید. (در حال حاضر حساب GitHub یک نیاز است، اما ممکن است سایت در آینده از روش‌های دیگری برای ایجاد حساب پشتیبانی کند.) پس از ورود به سیستم، به تنظیمات حساب خود در [https://crates.io/me/](https://crates.io/me/)<!-- ignore --> بروید و کلید API خود را دریافت کنید. سپس دستور `cargo login` را اجرا کرده و کلید API خود را وارد کنید، مانند این:
 
 ```console
 $ cargo login
 abcdefghijklmnopqrstuvwxyz012345
 ```
 
-This command will inform Cargo of your API token and store it locally in
-_~/.cargo/credentials_. Note that this token is a _secret_: do not share it
-with anyone else. If you do share it with anyone for any reason, you should
-revoke it and generate a new token on [crates.io](https://crates.io/)<!-- ignore
--->.
+این دستور Cargo را از توکن API شما مطلع کرده و آن را به صورت محلی در فایل _~/.cargo/credentials_ ذخیره می‌کند. توجه داشته باشید که این توکن یک _راز_ است: آن را با هیچ‌کس دیگری به اشتراک نگذارید. اگر به هر دلیلی این توکن را با کسی به اشتراک گذاشتید، باید آن را لغو کنید و یک توکن جدید در [crates.io](https://crates.io/)<!-- ignore --> ایجاد کنید.
 
-### Adding Metadata to a New Crate
+### افزودن متادیتا به یک Crate جدید
 
-Let’s say you have a crate you want to publish. Before publishing, you’ll need
-to add some metadata in the `[package]` section of the crate’s _Cargo.toml_
-file.
+فرض کنید یک crate دارید که می‌خواهید منتشر کنید. قبل از انتشار، نیاز دارید که برخی متادیتا را در بخش `[package]` فایل _Cargo.toml_ crate خود اضافه کنید.
 
-Your crate will need a unique name. While you’re working on a crate locally,
-you can name a crate whatever you’d like. However, crate names on
-[crates.io](https://crates.io/)<!-- ignore --> are allocated on a first-come,
-first-served basis. Once a crate name is taken, no one else can publish a crate
-with that name. Before attempting to publish a crate, search for the name you
-want to use. If the name has been used, you will need to find another name and
-edit the `name` field in the _Cargo.toml_ file under the `[package]` section to
-use the new name for publishing, like so:
+crate شما باید یک نام منحصر به فرد داشته باشد. در حالی که به صورت محلی روی یک crate کار می‌کنید، می‌توانید هر نامی که دوست دارید برای crate خود انتخاب کنید. با این حال، نام‌های crate در [crates.io](https://crates.io/)<!-- ignore --> به صورت اولین درخواست‌کننده تخصیص داده می‌شوند. هنگامی که یک نام برای یک crate گرفته شود، هیچ کس دیگری نمی‌تواند یک crate با آن نام منتشر کند. قبل از تلاش برای انتشار یک crate، جستجو کنید که نامی که می‌خواهید استفاده کنید در دسترس است یا خیر. اگر نام استفاده شده باشد، باید یک نام دیگر پیدا کنید و فیلد `name` را در فایل _Cargo.toml_ در زیر بخش `[package]` ویرایش کنید تا از نام جدید برای انتشار استفاده کنید، مانند زیر:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -302,14 +167,7 @@ use the new name for publishing, like so:
 name = "guessing_game"
 ```
 
-Even if you’ve chosen a unique name, when you run `cargo publish` to publish
-the crate at this point, you’ll get a warning and then an error:
-
-<!-- manual-regeneration
-cd listings/ch14-more-about-cargo/listing-14-01/
-cargo publish
-copy just the relevant lines below
--->
+حتی اگر یک نام منحصر به فرد انتخاب کرده باشید، زمانی که `cargo publish` را برای انتشار crate در این مرحله اجرا کنید، یک هشدار و سپس یک خطا دریافت خواهید کرد:
 
 ```console
 $ cargo publish
@@ -323,14 +181,7 @@ Caused by:
   the remote server responded with an error (status 400 Bad Request): missing or empty metadata fields: description, license. Please see https://doc.rust-lang.org/cargo/reference/manifest.html for more information on configuring these field
 ```
 
-This errors because you’re missing some crucial information: a description and
-license are required so people will know what your crate does and under what
-terms they can use it. In _Cargo.toml_, add a description that's just a
-sentence or two, because it will appear with your crate in search results. For
-the `license` field, you need to give a _license identifier value_. The [Linux
-Foundation’s Software Package Data Exchange (SPDX)][spdx] lists the identifiers
-you can use for this value. For example, to specify that you’ve licensed your
-crate using the MIT License, add the `MIT` identifier:
+این خطا به دلیل این است که شما برخی اطلاعات حیاتی را از دست داده‌اید: یک توضیح و یک مجوز مورد نیاز است تا افراد بدانند crate شما چه کاری انجام می‌دهد و تحت چه شرایطی می‌توانند از آن استفاده کنند. در فایل _Cargo.toml_، یک توضیح اضافه کنید که فقط یک یا دو جمله باشد، زیرا این توضیح همراه crate شما در نتایج جستجو ظاهر خواهد شد. برای فیلد `license`، باید یک _مقدار شناسگر مجوز_ ارائه دهید. [پروژه Software Package Data Exchange (SPDX)](http://spdx.org/licenses/) لیستی از شناسگرهایی که می‌توانید برای این مقدار استفاده کنید را ارائه می‌دهد. برای مثال، برای مشخص کردن اینکه crate خود را با استفاده از مجوز MIT منتشر کرده‌اید، شناسگر `MIT` را اضافه کنید:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -340,19 +191,11 @@ name = "guessing_game"
 license = "MIT"
 ```
 
-If you want to use a license that doesn’t appear in the SPDX, you need to place
-the text of that license in a file, include the file in your project, and then
-use `license-file` to specify the name of that file instead of using the
-`license` key.
+اگر می‌خواهید از مجوزی استفاده کنید که در لیست SPDX موجود نیست، باید متن آن مجوز را در یک فایل قرار دهید، فایل را در پروژه خود اضافه کنید و سپس از کلید `license-file` برای مشخص کردن نام آن فایل به جای استفاده از کلید `license` استفاده کنید.
 
-Guidance on which license is appropriate for your project is beyond the scope
-of this book. Many people in the Rust community license their projects in the
-same way as Rust by using a dual license of `MIT OR Apache-2.0`. This practice
-demonstrates that you can also specify multiple license identifiers separated
-by `OR` to have multiple licenses for your project.
+راهنمایی درباره اینکه کدام مجوز برای پروژه شما مناسب است، فراتر از محدوده این کتاب است. بسیاری از افراد در جامعه Rust پروژه‌های خود را به همان روشی که Rust مجوز داده است، با استفاده از یک مجوز دوگانه `MIT OR Apache-2.0` مجوز می‌دهند. این روش نشان می‌دهد که شما می‌توانید چندین شناسه مجوز را با جدا کردن آن‌ها با `OR` مشخص کنید تا چندین مجوز برای پروژه خود داشته باشید.
 
-With a unique name, the version, your description, and a license added, the
-_Cargo.toml_ file for a project that is ready to publish might look like this:
+با یک نام منحصر به فرد، نسخه، توضیحات، و یک مجوز اضافه شده، فایل _Cargo.toml_ برای یک پروژه آماده انتشار ممکن است به این صورت باشد:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -367,26 +210,15 @@ license = "MIT OR Apache-2.0"
 [dependencies]
 ```
 
-[Cargo’s documentation](https://doc.rust-lang.org/cargo/) describes other
-metadata you can specify to ensure others can discover and use your crate more
-easily.
+[مستندات Cargo](https://doc.rust-lang.org/cargo/) سایر متادیتاهایی که می‌توانید مشخص کنید تا دیگران بتوانند crate شما را راحت‌تر پیدا کرده و استفاده کنند توضیح می‌دهد.
 
-### Publishing to Crates.io
+### انتشار در Crates.io
 
-Now that you’ve created an account, saved your API token, chosen a name for
-your crate, and specified the required metadata, you’re ready to publish!
-Publishing a crate uploads a specific version to
-[crates.io](https://crates.io/)<!-- ignore --> for others to use.
+اکنون که یک حساب ایجاد کرده‌اید، توکن API خود را ذخیره کرده‌اید، نامی برای crate خود انتخاب کرده‌اید، و متادیتای مورد نیاز را مشخص کرده‌اید، آماده انتشار هستید! انتشار یک crate نسخه‌ای خاص از آن را در [crates.io](https://crates.io/)<!-- ignore --> آپلود می‌کند تا دیگران بتوانند از آن استفاده کنند.
 
-Be careful, because a publish is _permanent_. The version can never be
-overwritten, and the code cannot be deleted. One major goal of
-[crates.io](https://crates.io/)<!-- ignore --> is to act as a permanent archive
-of code so that builds of all projects that depend on crates from
-[crates.io](https://crates.io/)<!-- ignore --> will continue to work. Allowing
-version deletions would make fulfilling that goal impossible. However, there is
-no limit to the number of crate versions you can publish.
+دقت کنید، زیرا انتشار _دائمی_ است. نسخه هرگز نمی‌تواند بازنویسی شود، و کد نمی‌تواند حذف شود. یکی از اهداف اصلی [crates.io](https://crates.io/)<!-- ignore --> این است که به عنوان یک آرشیو دائمی از کد عمل کند، به طوری که ساخت‌های همه پروژه‌هایی که به crates از [crates.io](https://crates.io/)<!-- ignore --> وابسته هستند، همچنان کار کنند. اجازه حذف نسخه‌ها تحقق این هدف را غیرممکن می‌کند. با این حال، هیچ محدودیتی برای تعداد نسخه‌های crate که می‌توانید منتشر کنید وجود ندارد.
 
-Run the `cargo publish` command again. It should succeed now:
+دستور `cargo publish` را دوباره اجرا کنید. اکنون باید موفق شود:
 
 <!-- manual-regeneration
 go to some valid crate, publish a new version
@@ -405,43 +237,23 @@ $ cargo publish
    Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
-Congratulations! You’ve now shared your code with the Rust community, and
-anyone can easily add your crate as a dependency of their project.
+تبریک می‌گویم! شما اکنون کد خود را با جامعه Rust به اشتراک گذاشته‌اید و هر کسی می‌تواند به راحتی crate شما را به عنوان یک وابستگی به پروژه خود اضافه کند.
 
-### Publishing a New Version of an Existing Crate
+### انتشار نسخه جدیدی از یک Crate موجود
 
-When you’ve made changes to your crate and are ready to release a new version,
-you change the `version` value specified in your _Cargo.toml_ file and
-republish. Use the [Semantic Versioning rules][semver] to decide what an
-appropriate next version number is based on the kinds of changes you’ve made.
-Then run `cargo publish` to upload the new version.
+وقتی تغییراتی در crate خود ایجاد کرده‌اید و آماده انتشار یک نسخه جدید هستید، مقدار `version` مشخص‌شده در فایل _Cargo.toml_ خود را تغییر داده و دوباره منتشر کنید. از [قوانین نسخه‌بندی معنایی (Semantic Versioning)][semver] استفاده کنید تا تصمیم بگیرید که بر اساس نوع تغییراتی که ایجاد کرده‌اید، چه شماره نسخه‌ای مناسب است. سپس دستور `cargo publish` را اجرا کنید تا نسخه جدید آپلود شود.
 
-<!-- Old link, do not remove -->
+<!-- لینک قدیمی، حذف نکنید -->
 
 <a id="removing-versions-from-cratesio-with-cargo-yank"></a>
 
-### Deprecating Versions from Crates.io with `cargo yank`
+### از رده خارج کردن نسخه‌ها از Crates.io با استفاده از `cargo yank`
 
-Although you can’t remove previous versions of a crate, you can prevent any
-future projects from adding them as a new dependency. This is useful when a
-crate version is broken for one reason or another. In such situations, Cargo
-supports _yanking_ a crate version.
+اگرچه نمی‌توانید نسخه‌های قبلی یک crate را حذف کنید، می‌توانید از اضافه شدن آن‌ها به عنوان وابستگی جدید در پروژه‌های آینده جلوگیری کنید. این ویژگی زمانی مفید است که یک نسخه از crate به هر دلیلی خراب باشد. در چنین مواردی، Cargo از _یَنک کردن_ (yanking) یک نسخه از crate پشتیبانی می‌کند.
 
-Yanking a version prevents new projects from depending on that version while
-allowing all existing projects that depend on it to continue. Essentially, a
-yank means that all projects with a _Cargo.lock_ will not break, and any future
-_Cargo.lock_ files generated will not use the yanked version.
+یَنک کردن یک نسخه باعث می‌شود که پروژه‌های جدید نتوانند به آن نسخه وابسته شوند، در حالی که تمام پروژه‌های موجود که به آن نسخه وابسته هستند به کار خود ادامه می‌دهند. به طور خلاصه، یَنک به این معناست که تمام پروژه‌هایی که دارای فایل _Cargo.lock_ هستند شکسته نخواهند شد و هر فایل _Cargo.lock_ جدیدی که تولید شود از نسخه یَنک‌شده استفاده نخواهد کرد.
 
-To yank a version of a crate, in the directory of the crate that you’ve
-previously published, run `cargo yank` and specify which version you want to
-yank. For example, if we've published a crate named `guessing_game` version
-1.0.1 and we want to yank it, in the project directory for `guessing_game` we'd
-run:
-
-<!-- manual-regeneration:
-cargo yank carol-test --version 2.1.0
-cargo yank carol-test --version 2.1.0 --undo
--->
+برای یَنک کردن یک نسخه از یک crate، در دایرکتوری crate‌ای که قبلاً منتشر کرده‌اید، دستور `cargo yank` را اجرا کرده و نسخه‌ای که می‌خواهید یَنک کنید را مشخص کنید. به عنوان مثال، اگر ما یک crate به نام `guessing_game` نسخه 1.0.1 منتشر کرده باشیم و بخواهیم آن را یَنک کنیم، در دایرکتوری پروژه `guessing_game` این دستور را اجرا می‌کنیم:
 
 ```console
 $ cargo yank --vers 1.0.1
@@ -449,8 +261,7 @@ $ cargo yank --vers 1.0.1
         Yank guessing_game@1.0.1
 ```
 
-By adding `--undo` to the command, you can also undo a yank and allow projects
-to start depending on a version again:
+با افزودن گزینه `--undo` به دستور، می‌توانید یَنک را لغو کرده و به پروژه‌ها اجازه دهید دوباره به آن نسخه وابسته شوند:
 
 ```console
 $ cargo yank --vers 1.0.1 --undo
@@ -458,8 +269,7 @@ $ cargo yank --vers 1.0.1 --undo
       Unyank guessing_game@1.0.1
 ```
 
-A yank _does not_ delete any code. It cannot, for example, delete accidentally
-uploaded secrets. If that happens, you must reset those secrets immediately.
+یَنک _هیچ کدی را حذف نمی‌کند_. به عنوان مثال، نمی‌تواند اطلاعات حساسی که به طور تصادفی آپلود شده‌اند را حذف کند. اگر چنین اتفاقی افتاد، باید فوراً آن اطلاعات حساس را بازنشانی کنید.
 
 [spdx]: http://spdx.org/licenses/
 [semver]: http://semver.org/

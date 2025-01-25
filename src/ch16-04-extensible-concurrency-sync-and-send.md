@@ -1,86 +1,81 @@
-## Extensible Concurrency with the `Sync` and `Send` Traits
+## همزمانی قابل‌توسعه با ویژگی‌های `Sync` و `Send`
 
-Interestingly, the Rust language has _very_ few concurrency features. Almost
-every concurrency feature we’ve talked about so far in this chapter has been
-part of the standard library, not the language. Your options for handling
-concurrency are not limited to the language or the standard library; you can
-write your own concurrency features or use those written by others.
+جالب است که زبان راست ویژگی‌های _بسیار_ کمی برای همزمانی دارد. تقریباً هر ویژگی 
+همزمانی که تاکنون در این فصل درباره آن صحبت کرده‌ایم بخشی از کتابخانه استاندارد 
+بوده است، نه زبان. گزینه‌های شما برای مدیریت همزمانی محدود به زبان یا کتابخانه 
+استاندارد نیستند؛ می‌توانید ویژگی‌های همزمانی خود را بنویسید یا از ویژگی‌هایی که 
+دیگران نوشته‌اند استفاده کنید.
 
-However, two concurrency concepts are embedded in the language: the
-`std::marker` traits `Sync` and `Send`.
+با این حال، دو مفهوم همزمانی در زبان تعبیه شده‌اند: ویژگی‌های `std::marker` 
+به نام‌های `Sync` و `Send`.
 
-### Allowing Transference of Ownership Between Threads with `Send`
+### اجازه انتقال مالکیت بین نخ‌ها با `Send`
 
-The `Send` marker trait indicates that ownership of values of the type
-implementing `Send` can be transferred between threads. Almost every Rust type
-is `Send`, but there are some exceptions, including `Rc<T>`: this cannot be
-`Send` because if you cloned an `Rc<T>` value and tried to transfer ownership
-of the clone to another thread, both threads might update the reference count
-at the same time. For this reason, `Rc<T>` is implemented for use in
-single-threaded situations where you don’t want to pay the thread-safe
-performance penalty.
+ویژگی نشانگر `Send` نشان می‌دهد که مالکیت مقادیر نوعی که `Send` را پیاده‌سازی 
+می‌کند می‌تواند بین نخ‌ها منتقل شود. تقریباً هر نوعی در راست `Send` است، اما 
+برخی استثناها وجود دارند، از جمله `Rc<T>`: این نوع نمی‌تواند `Send` باشد زیرا 
+اگر یک مقدار `Rc<T>` را کلون کنید و سعی کنید مالکیت کلون را به نخ دیگری منتقل 
+کنید، هر دو نخ ممکن است شمارش ارجاع را هم‌زمان به‌روزرسانی کنند. به این دلیل، 
+`Rc<T>` برای استفاده در شرایط تک‌ریسمانی طراحی شده است که نمی‌خواهید جریمه 
+عملکرد ایمنی نخ را پرداخت کنید.
 
-Therefore, Rust’s type system and trait bounds ensure that you can never
-accidentally send an `Rc<T>` value across threads unsafely. When we tried to do
-this in Listing 16-14, we got the error `the trait Send is not implemented for
-Rc<Mutex<i32>>`. When we switched to `Arc<T>`, which is `Send`, the code
-compiled.
+بنابراین، سیستم نوعی و محدودیت‌های ویژگی راست تضمین می‌کنند که هرگز به‌طور 
+ناخواسته یک مقدار `Rc<T>` را به صورت ناایمن بین نخ‌ها ارسال نکنید. وقتی سعی 
+کردیم این کار را در فهرست 16-14 انجام دهیم، خطای `the trait Send is not 
+implemented for Rc<Mutex<i32>>` دریافت کردیم. وقتی به `Arc<T>` که `Send` است 
+تغییر دادیم، کد کامپایل شد.
 
-Any type composed entirely of `Send` types is automatically marked as `Send` as
-well. Almost all primitive types are `Send`, aside from raw pointers, which
-we’ll discuss in Chapter 20.
+هر نوعی که به‌طور کامل از نوع‌های `Send` تشکیل شده باشد به‌طور خودکار به عنوان 
+`Send` علامت‌گذاری می‌شود. تقریباً تمام نوع‌های اولیه `Send` هستند، به جز 
+اشاره‌گر (Pointer)های خام، که در فصل 20 درباره آن‌ها صحبت خواهیم کرد.
 
-### Allowing Access from Multiple Threads with `Sync`
+### اجازه دسترسی از چندین نخ با `Sync`
 
-The `Sync` marker trait indicates that it is safe for the type implementing
-`Sync` to be referenced from multiple threads. In other words, any type `T` is
-`Sync` if `&T` (an immutable reference to `T`) is `Send`, meaning the reference
-can be sent safely to another thread. Similar to `Send`, primitive types are
-`Sync`, and types composed entirely of types that are `Sync` are also `Sync`.
+ویژگی نشانگر `Sync` نشان می‌دهد که نوعی که `Sync` را پیاده‌سازی می‌کند می‌تواند 
+از چندین نخ به آن ارجاع داده شود. به عبارت دیگر، هر نوع `T`، `Sync` است اگر 
+`&T` (یک ارجاع غیرقابل‌تغییر به `T`) `Send` باشد، به این معنی که ارجاع می‌تواند 
+به صورت ایمن به نخ دیگری ارسال شود. مشابه `Send`، نوع‌های اولیه `Sync` هستند و 
+نوع‌هایی که به طور کامل از نوع‌های `Sync` تشکیل شده‌اند نیز `Sync` هستند.
 
-The smart pointer `Rc<T>` is also not `Sync` for the same reasons that it’s not
-`Send`. The `RefCell<T>` type (which we talked about in Chapter 15) and the
-family of related `Cell<T>` types are not `Sync`. The implementation of borrow
-checking that `RefCell<T>` does at runtime is not thread-safe. The smart
-pointer `Mutex<T>` is `Sync` and can be used to share access with multiple
-threads as you saw in the [“Sharing a `Mutex<T>` Between Multiple
-Threads”][sharing-a-mutext-between-multiple-threads]<!-- ignore --> section.
+اسمارت پوینتر `Rc<T>` نیز به همان دلایلی که `Send` نیست، `Sync` هم نیست. نوع 
+`RefCell<T>` (که در فصل 15 درباره آن صحبت کردیم) و خانواده نوع‌های مرتبط `Cell<T>` 
+نیز `Sync` نیستند. پیاده‌سازی بررسی وام‌دهی که `RefCell<T>` در زمان اجرا انجام 
+می‌دهد، برای نخ ایمن نیست. اسمارت پوینتر `Mutex<T>`، `Sync` است و می‌تواند 
+برای اشتراک‌گذاری دسترسی بین چندین نخ استفاده شود، همانطور که در بخش [«اشتراک 
+یک `Mutex<T>` بین چندین نخ»][sharing-a-mutext-between-multiple-threads]<!-- ignore --> 
+مشاهده کردید.
 
-### Implementing `Send` and `Sync` Manually Is Unsafe
+### پیاده‌سازی دستی `Send` و `Sync` ناایمن است
 
-Because types that are made up of `Send` and `Sync` traits are automatically
-also `Send` and `Sync`, we don’t have to implement those traits manually. As
-marker traits, they don’t even have any methods to implement. They’re just
-useful for enforcing invariants related to concurrency.
+از آنجا که نوع‌هایی که از ویژگی‌های `Send` و `Sync` تشکیل شده‌اند به‌طور خودکار 
+به‌عنوان `Send` و `Sync` علامت‌گذاری می‌شوند، ما نیازی به پیاده‌سازی دستی این 
+ویژگی‌ها نداریم. به عنوان ویژگی‌های نشانگر، آن‌ها حتی هیچ متدی برای پیاده‌سازی 
+ندارند. آن‌ها فقط برای اعمال اصول مربوط به همزمانی مفید هستند.
 
-Manually implementing these traits involves implementing unsafe Rust code.
-We’ll talk about using unsafe Rust code in Chapter 20; for now, the important
-information is that building new concurrent types not made up of `Send` and
-`Sync` parts requires careful thought to uphold the safety guarantees. [“The
-Rustonomicon”][nomicon] has more information about these guarantees and how to
-uphold them.
+پیاده‌سازی دستی این ویژگی‌ها شامل پیاده‌سازی کد ناایمن در راست می‌شود. ما در فصل 
+20 درباره استفاده از کد ناایمن در راست صحبت خواهیم کرد؛ فعلاً، اطلاعات مهم این 
+است که ساخت نوع‌های همزمان جدید که از قسمت‌های `Send` و `Sync` تشکیل نشده‌اند 
+نیاز به دقت زیادی دارد تا اصول ایمنی رعایت شوند. [“The Rustonomicon”][nomicon] 
+اطلاعات بیشتری درباره این اصول و نحوه رعایت آن‌ها ارائه می‌دهد.
 
-## Summary
+## خلاصه
 
-This isn’t the last you’ll see of concurrency in this book: the whole next
-chapter focuses on async programming, and the project in Chapter 21 will use the
-concepts in this chapter in a more realistic situation than the smaller examples
-discussed here.
+این آخرین باری نیست که در این کتاب با همزمانی روبه‌رو می‌شوید: کل فصل بعدی بر برنامه‌نویسی 
+async تمرکز دارد، و پروژه در فصل 21 از مفاهیم این فصل در یک موقعیت واقعی‌تر نسبت به 
+مثال‌های کوچک‌تر مطرح‌شده در اینجا استفاده خواهد کرد.
 
-As mentioned earlier, because very little of how Rust handles concurrency is
-part of the language, many concurrency solutions are implemented as crates.
-These evolve more quickly than the standard library, so be sure to search
-online for the current, state-of-the-art crates to use in multithreaded
-situations.
+همانطور که قبلاً اشاره شد، به دلیل اینکه بخش بسیار کمی از نحوه مدیریت همزمانی در راست 
+بخشی از زبان است، بسیاری از راه‌حل‌های همزمانی به‌عنوان crate پیاده‌سازی شده‌اند. 
+این‌ها سریع‌تر از کتابخانه استاندارد تکامل می‌یابند، بنابراین حتماً به صورت آنلاین جستجو 
+کنید تا crate‌های به‌روز و پیشرفته‌ای که برای موقعیت‌های چندریسمانی مناسب هستند را پیدا کنید.
 
-The Rust standard library provides channels for message passing and smart
-pointer types, such as `Mutex<T>` and `Arc<T>`, that are safe to use in
-concurrent contexts. The type system and the borrow checker ensure that the
-code using these solutions won’t end up with data races or invalid references.
-Once you get your code to compile, you can rest assured that it will happily
-run on multiple threads without the kinds of hard-to-track-down bugs common in
-other languages. Concurrent programming is no longer a concept to be afraid of:
-go forth and make your programs concurrent, fearlessly!
+کتابخانه استاندارد راست کانال‌هایی برای ارسال پیام و انواع اسمارت پوینتر، مانند `Mutex<T>` 
+و `Arc<T>`، فراهم می‌کند که استفاده از آن‌ها در زمینه‌های همزمان ایمن است. سیستم نوعی 
+و کنترل‌کننده وام‌دهی تضمین می‌کنند که کدی که از این راه‌حل‌ها استفاده می‌کند با رقابت‌های 
+داده یا ارجاع‌های نامعتبر مواجه نمی‌شود. هنگامی که کد شما کامپایل شود، می‌توانید مطمئن 
+باشید که بدون آن دسته از اشکال‌های سخت‌ردیابی که در زبان‌های دیگر معمول است، به خوبی 
+روی چندین نخ اجرا خواهد شد. برنامه‌نویسی همزمان دیگر مفهومی برای ترسیدن نیست: 
+پیش بروید و برنامه‌های خود را بی‌باکانه همزمان کنید!
 
 [sharing-a-mutext-between-multiple-threads]: ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads
 [nomicon]: ../nomicon/index.html

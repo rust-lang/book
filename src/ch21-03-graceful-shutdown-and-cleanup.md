@@ -1,32 +1,16 @@
-## Graceful Shutdown and Cleanup
+## خاموشی و پاک‌سازی منظم
 
-The code in Listing 21-20 is responding to requests asynchronously through the
-use of a thread pool, as we intended. We get some warnings about the `workers`,
-`id`, and `thread` fields that we’re not using in a direct way that reminds us
-we’re not cleaning up anything. When we use the less elegant
-<kbd>ctrl</kbd>-<kbd>c</kbd> method to halt the main thread, all other threads
-are stopped immediately as well, even if they’re in the middle of serving a
-request.
+کدی که در لیستینگ 21-20 وجود دارد، همان‌طور که انتظار داشتیم، با استفاده از یک مجموعه نخ (thread pool) به درخواست‌ها به صورت غیرهمزمان پاسخ می‌دهد. ما هشدارهایی در مورد فیلدهای `workers`، `id` و `thread` دریافت می‌کنیم که به طور مستقیم از آن‌ها استفاده نمی‌کنیم و به ما یادآوری می‌کنند که هیچ چیزی را پاک‌سازی نمی‌کنیم. وقتی از روش کم‌ظرافت <kbd>ctrl</kbd>-<kbd>c</kbd> برای متوقف کردن نخ اصلی استفاده می‌کنیم، تمام نخ‌های دیگر نیز بلافاصله متوقف می‌شوند، حتی اگر در میانه ارائه یک درخواست باشند.
 
-Next, then, we’ll implement the `Drop` trait to call `join` on each of the
-threads in the pool so they can finish the requests they’re working on before
-closing. Then we’ll implement a way to tell the threads they should stop
-accepting new requests and shut down. To see this code in action, we’ll modify
-our server to accept only two requests before gracefully shutting down its
-thread pool.
+سپس، ما `Drop` trait را پیاده‌سازی خواهیم کرد تا `join` را روی هر یک از نخ‌های موجود در مجموعه نخ فراخوانی کنیم تا بتوانند درخواست‌هایی که در حال کار روی آن‌ها هستند را قبل از بسته‌شدن تکمیل کنند. سپس روشی برای اطلاع به نخ‌ها که نباید درخواست‌های جدید بپذیرند و باید خاموش شوند، پیاده‌سازی خواهیم کرد. برای مشاهده عملکرد این کد، سرور خود را تغییر می‌دهیم تا فقط دو درخواست را قبل از خاموشی منظم مجموعه نخ‌ها بپذیرد.
 
-One thing to notice as we go: none of this affects the parts of the code that
-handle executing the closures, so everything here would be just the same if we
-were using a thread pool for an async runtime.
+چیزی که باید توجه داشته باشید این است که هیچ‌کدام از این موارد بخش‌هایی از کد را که مدیریت اجرای closureها را بر عهده دارند، تحت تأثیر قرار نمی‌دهند، بنابراین همه چیز در اینجا همان‌طور باقی می‌ماند اگر از یک مجموعه نخ برای یک runtime غیرهمزمان استفاده می‌کردیم.
 
-### Implementing the `Drop` Trait on `ThreadPool`
+### پیاده‌سازی `Drop` Trait روی `ThreadPool`
 
-Let’s start with implementing `Drop` on our thread pool. When the pool is
-dropped, our threads should all join to make sure they finish their work.
-Listing 21-22 shows a first attempt at a `Drop` implementation; this code won’t
-quite work yet.
+بیایید با پیاده‌سازی `Drop` روی مجموعه نخ شروع کنیم. وقتی مجموعه نخ حذف می‌شود، تمام نخ‌های ما باید به یکدیگر ملحق شوند تا مطمئن شویم کار خود را تکمیل می‌کنند. لیستینگ 21-22 اولین تلاش برای پیاده‌سازی `Drop` را نشان می‌دهد؛ این کد هنوز به درستی کار نخواهد کرد.
 
-<Listing number="21-22" file-name="src/lib.rs" caption="Joining each thread when the thread pool goes out of scope">
+<Listing number="21-22" file-name="src/lib.rs" caption="ملحق کردن هر نخ وقتی مجموعه نخ از محدوده خارج می‌شود">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-22/src/lib.rs:here}}
@@ -34,43 +18,21 @@ quite work yet.
 
 </Listing>
 
-First, we loop through each of the thread pool `workers`. We use `&mut` for
-this because `self` is a mutable reference, and we also need to be able to
-mutate `worker`. For each worker, we print a message saying that this
-particular worker is shutting down, and then we call `join` on that worker’s
-thread. If the call to `join` fails, we use `unwrap` to make Rust panic and go
-into an ungraceful shutdown.
+ابتدا، ما از میان هر یک از `workers` موجود در مجموعه نخ حلقه می‌زنیم. ما برای این کار از `&mut` استفاده می‌کنیم زیرا `self` یک ارجاع قابل تغییر است و ما همچنین نیاز داریم که بتوانیم `worker` را تغییر دهیم. برای هر `worker`، پیامی چاپ می‌کنیم که نشان می‌دهد این `worker` خاص در حال خاموش‌شدن است، و سپس `join` را روی نخ آن `worker` فراخوانی می‌کنیم. اگر فراخوانی `join` شکست بخورد، از `unwrap` استفاده می‌کنیم تا باعث panic شود و خاموشی غیرمنظم اتفاق بیفتد.
 
-Here is the error we get when we compile this code:
+اینجا خطایی که هنگام کامپایل این کد دریافت می‌کنیم آمده است:
 
 ```console
 {{#include ../listings/ch21-web-server/listing-21-22/output.txt}}
 ```
 
-The error tells us we can’t call `join` because we only have a mutable borrow of
-each `worker` and `join` takes ownership of its argument. To solve this issue,
-we need to move the thread out of the `Worker` instance that owns `thread` so
-`join` can consume the thread. One way to do this is by taking the same approach
-we did in Listing 18-15. If `Worker` held an `Option<thread::JoinHandle<()>>`,
-we could call the `take` method on the `Option` to move the value out of the
-`Some` variant and leave a `None` variant in its place. In other words, a
-`Worker` that is running would have a `Some` variant in `thread`, and when we
-wanted to clean up a `Worker`, we would replace `Some` with `None` so the
-`Worker` doesn’t have a thread to run.
+این خطا به ما می‌گوید که نمی‌توانیم `join` را فراخوانی کنیم زیرا فقط یک قرض قابل تغییر از هر `worker` داریم و `join` مالکیت آرگومان خود را می‌گیرد. برای حل این مشکل، باید نخ را از نمونه `Worker` که مالک `thread` است خارج کنیم تا `join` بتواند نخ را مصرف کند. یک راه برای انجام این کار استفاده از همان رویکردی است که در لیستینگ 18-15 استفاده کردیم. اگر `Worker` یک `Option<thread::JoinHandle<()>>` نگه می‌داشت، می‌توانستیم با استفاده از متد `take` مقدار را از نوع `Some` به نوع `None` منتقل کنیم.
 
-However, the _only_ time this would come up would be when dropping the `Worker`.
-In exchange, we would have to deal with an `Option<thread::JoinHandle<()>>`
-everywhere we access `worker.thread`. Idiomatic Rust uses `Option` quite a bit,
-but when you find yourself wrapping something in `Option` as a workaround even
-though you know the item will always be present, it is a good idea to look for
-alternative approaches. They can make your code cleaner and less error-prone.
+با این حال، تنها زمانی که این مسئله مطرح می‌شود زمانی است که `Worker` حذف می‌شود. در عوض، باید با یک `Option<thread::JoinHandle<()>>` در همه جا سر و کار داشته باشیم. Rust ایدئوماتیک اغلب از `Option` استفاده می‌کند، اما زمانی که متوجه شوید چیزی را در `Option` قرار می‌دهید به عنوان یک راه‌حل موقت، حتی اگر بدانید آن مورد همیشه حضور دارد، ایده خوبی است که به دنبال روش‌های جایگزین باشید.
 
-In this case, there is a better alternative: the `Vec::drain` method. It accepts
-a range parameter to specify which items to remove from the `Vec`, and returns
-an iterator of those items. Passing the `..` range syntax will remove _every_
-value from the `Vec`.
+در این حالت، یک جایگزین بهتر استفاده از متد `Vec::drain` است. این متد یک پارامتر محدوده می‌گیرد تا مشخص کند کدام آیتم‌ها باید از `Vec` حذف شوند و یک تکرارگر از آن آیتم‌ها بازمی‌گرداند. استفاده از `..` برای محدوده تمام مقادیر را از `Vec` حذف خواهد کرد.
 
-So we need to update the `ThreadPool` `drop` implementation like this:
+بنابراین باید پیاده‌سازی `drop` در `ThreadPool` را به این صورت به‌روزرسانی کنیم:
 
 <Listing file-name="src/lib.rs">
 
@@ -80,29 +42,17 @@ So we need to update the `ThreadPool` `drop` implementation like this:
 
 </Listing>
 
-This resolves the compiler error and does not require any other changes to our
-code.
+این تغییر خطای کامپایلر را برطرف می‌کند و نیازی به تغییرات دیگر در کد ما ندارد.
 
-### Signaling to the Threads to Stop Listening for Jobs
+### علامت‌دهی به نخ‌ها برای توقف گوش دادن به وظایف
 
-With all the changes we’ve made, our code compiles without any warnings.
-However, the bad news is this code doesn’t function the way we want it to yet.
-The key is the logic in the closures run by the threads of the `Worker`
-instances: at the moment, we call `join`, but that won’t shut down the threads
-because they `loop` forever looking for jobs. If we try to drop our
-`ThreadPool` with our current implementation of `drop`, the main thread will
-block forever waiting for the first thread to finish.
+با تمام تغییراتی که اعمال کرده‌ایم، کد ما بدون هیچ هشداری کامپایل می‌شود. با این حال، خبر بد این است که این کد هنوز به درستی کار نمی‌کند. کلید مشکل در منطق موجود در closureهایی است که توسط نخ‌های نمونه‌های `Worker` اجرا می‌شوند: در حال حاضر، ما `join` را فراخوانی می‌کنیم، اما این کار نخ‌ها را خاموش نمی‌کند زیرا آن‌ها برای همیشه در جستجوی وظایف `loop` می‌زنند. اگر با پیاده‌سازی فعلی `drop`، `ThreadPool` خود را حذف کنیم، نخ اصلی برای همیشه منتظر می‌ماند تا اولین نخ تکمیل شود.
 
-To fix this problem, we’ll need a change in the `ThreadPool` `drop`
-implementation and then a change in the `Worker` loop.
+برای حل این مشکل، باید تغییری در پیاده‌سازی `drop` در `ThreadPool` و سپس تغییری در حلقه `Worker` ایجاد کنیم.
 
-First, we’ll change the `ThreadPool` `drop` implementation to explicitly drop
-the `sender` before waiting for the threads to finish. Listing 21-23 shows the
-changes to `ThreadPool` to explicitly drop `sender`. Unlike with the `workers`,
-here we _do_ need to use an `Option` to be able to move `sender` out of
-`ThreadPool` with `Option::take`.
+ابتدا، پیاده‌سازی `drop` در `ThreadPool` را تغییر می‌دهیم تا `sender` را قبل از منتظر ماندن برای تکمیل نخ‌ها به صورت صریح حذف کنیم. لیستینگ 21-23 تغییرات در `ThreadPool` برای حذف صریح `sender` را نشان می‌دهد. برخلاف `workers`، اینجا ما باید از یک `Option` استفاده کنیم تا بتوانیم `sender` را با `Option::take` از `ThreadPool` منتقل کنیم.
 
-<Listing number="21-23" file-name="src/lib.rs" caption="Explicitly drop `sender` before joining the worker threads">
+<Listing number="21-23" file-name="src/lib.rs" caption="حذف صریح `sender` قبل از ملحق کردن نخ‌های worker">
 
 ```rust,noplayground,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-23/src/lib.rs:here}}
@@ -110,13 +60,9 @@ here we _do_ need to use an `Option` to be able to move `sender` out of
 
 </Listing>
 
-Dropping `sender` closes the channel, which indicates no more messages will be
-sent. When that happens, all the calls to `recv` that the workers do in the
-infinite loop will return an error. In Listing 21-24, we change the `Worker`
-loop to gracefully exit the loop in that case, which means the threads will
-finish when the `ThreadPool` `drop` implementation calls `join` on them.
+حذف `sender` کانال را می‌بندد، که نشان می‌دهد دیگر هیچ پیامی ارسال نخواهد شد. وقتی این اتفاق می‌افتد، تمام فراخوانی‌های `recv` که workers در حلقه بی‌نهایت انجام می‌دهند یک خطا برمی‌گرداند. در لیستینگ 21-24، حلقه `Worker` را تغییر می‌دهیم تا در چنین حالتی به صورت منظم از حلقه خارج شود، که به این معناست که نخ‌ها وقتی پیاده‌سازی `drop` در `ThreadPool` روی آن‌ها `join` را فراخوانی می‌کند تکمیل خواهند شد.
 
-<Listing number="21-24" file-name="src/lib.rs" caption="Explicitly break out of the loop when `recv` returns an error">
+<Listing number="21-24" file-name="src/lib.rs" caption="خروج صریح از حلقه وقتی `recv` یک خطا برمی‌گرداند">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-24/src/lib.rs:here}}
@@ -124,10 +70,9 @@ finish when the `ThreadPool` `drop` implementation calls `join` on them.
 
 </Listing>
 
-To see this code in action, let’s modify `main` to accept only two requests
-before gracefully shutting down the server, as shown in Listing 21-25.
+برای دیدن این کد در عمل، بیایید `main` را تغییر دهیم تا فقط دو درخواست را قبل از خاموش‌شدن منظم سرور بپذیرد، همان‌طور که در لیستینگ 21-25 نشان داده شده است.
 
-<Listing number="21-25" file-name="src/main.rs" caption="Shut down the server after serving two requests by exiting the loop">
+<Listing number="21-25" file-name="src/main.rs" caption="خاموش‌کردن سرور پس از ارائه دو درخواست با خروج از حلقه">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-25/src/main.rs:here}}
@@ -135,16 +80,11 @@ before gracefully shutting down the server, as shown in Listing 21-25.
 
 </Listing>
 
-You wouldn’t want a real-world web server to shut down after serving only two
-requests. This code just demonstrates that the graceful shutdown and cleanup is
-in working order.
+شما نمی‌خواهید یک سرور وب واقعی پس از فقط دو درخواست خاموش شود. این کد فقط نشان می‌دهد که خاموشی منظم و پاک‌سازی به درستی کار می‌کند.
 
-The `take` method is defined in the `Iterator` trait and limits the iteration
-to the first two items at most. The `ThreadPool` will go out of scope at the
-end of `main`, and the `drop` implementation will run.
+متد `take` که در trait `Iterator` تعریف شده است، تکرار را به حداکثر دو آیتم محدود می‌کند. `ThreadPool` در انتهای `main` از محدوده خارج می‌شود و پیاده‌سازی `drop` اجرا خواهد شد.
 
-Start the server with `cargo run`, and make three requests. The third request
-should error, and in your terminal you should see output similar to this:
+سرور را با دستور `cargo run` راه‌اندازی کنید و سه درخواست ارسال کنید. درخواست سوم باید با خطا مواجه شود و در ترمینال خود باید خروجی مشابه زیر را ببینید:
 
 <!-- manual-regeneration
 cd listings/ch21-web-server/listing-21-25
@@ -175,27 +115,13 @@ Shutting down worker 2
 Shutting down worker 3
 ```
 
-You might see a different ordering of workers and messages printed. We can see
-how this code works from the messages: workers 0 and 3 got the first two
-requests. The server stopped accepting connections after the second connection,
-and the `Drop` implementation on `ThreadPool` starts executing before worker 3
-even starts its job. Dropping the `sender` disconnects all the workers and
-tells them to shut down. The workers each print a message when they disconnect,
-and then the thread pool calls `join` to wait for each worker thread to finish.
+ممکن است ترتیب متفاوتی از کارگران و پیام‌های چاپ‌شده را مشاهده کنید. از پیام‌ها می‌توان فهمید که این کد چگونه کار می‌کند: کارگران 0 و 3 اولین دو درخواست را دریافت کردند. سرور پس از اتصال دوم دیگر اتصال‌ها را نمی‌پذیرد و پیاده‌سازی `Drop` روی `ThreadPool` شروع به اجرا می‌کند قبل از اینکه کارگر 3 حتی کار خود را شروع کند. حذف `sender` تمام کارگران را قطع کرده و به آن‌ها می‌گوید که خاموش شوند. هر کارگر هنگام قطع شدن یک پیام چاپ می‌کند و سپس مجموعه نخ (thread pool) `join` را فراخوانی می‌کند تا منتظر تکمیل هر نخ کارگر بماند.
 
-Notice one interesting aspect of this particular execution: the `ThreadPool`
-dropped the `sender`, and before any worker received an error, we tried to join
-worker 0. Worker 0 had not yet gotten an error from `recv`, so the main thread
-blocked waiting for worker 0 to finish. In the meantime, worker 3 received a
-job and then all threads received an error. When worker 0 finished, the main
-thread waited for the rest of the workers to finish. At that point, they had
-all exited their loops and stopped.
+به یک جنبه جالب از این اجرای خاص توجه کنید: `ThreadPool` فرستنده را حذف کرد، و قبل از اینکه هر کارگری خطایی دریافت کند، ما سعی کردیم به کارگر 0 ملحق شویم. کارگر 0 هنوز از `recv` خطایی دریافت نکرده بود، بنابراین نخ اصلی منتظر ماند تا کارگر 0 کار خود را به پایان برساند. در همین حال، کارگر 3 یک کار دریافت کرد و سپس تمام نخ‌ها خطا دریافت کردند. وقتی کارگر 0 تمام شد، نخ اصلی منتظر ماند تا بقیه کارگران کار خود را تمام کنند. در آن زمان، همه آن‌ها از حلقه‌های خود خارج شده و متوقف شده بودند.
 
-Congrats! We’ve now completed our project; we have a basic web server that uses
-a thread pool to respond asynchronously. We’re able to perform a graceful
-shutdown of the server, which cleans up all the threads in the pool.
+تبریک می‌گویم! پروژه خود را کامل کردید؛ ما یک سرور وب ساده داریم که از یک مجموعه نخ برای پاسخ‌دهی غیرهمزمان استفاده می‌کند. ما توانستیم سرور را به صورت منظم خاموش کنیم و تمام نخ‌ها در مجموعه را پاک‌سازی کنیم.
 
-Here’s the full code for reference:
+در اینجا کد کامل برای مرجع آورده شده است:
 
 <Listing file-name="src/main.rs">
 
@@ -213,21 +139,14 @@ Here’s the full code for reference:
 
 </Listing>
 
-We could do more here! If you want to continue enhancing this project, here are
-some ideas:
+می‌توانستیم بیشتر اینجا انجام دهیم! اگر می‌خواهید این پروژه را بیشتر گسترش دهید، اینجا چند ایده آمده است:
 
-- Add more documentation to `ThreadPool` and its public methods.
-- Add tests of the library’s functionality.
-- Change calls to `unwrap` to more robust error handling.
-- Use `ThreadPool` to perform some task other than serving web requests.
-- Find a thread pool crate on [crates.io](https://crates.io/) and implement a
-  similar web server using the crate instead. Then compare its API and
-  robustness to the thread pool we implemented.
+- مستندات بیشتری به `ThreadPool` و متدهای عمومی آن اضافه کنید.
+- تست‌هایی برای عملکرد کتابخانه اضافه کنید.
+- فراخوانی‌های `unwrap` را به مدیریت خطای قوی‌تر تغییر دهید.
+- از `ThreadPool` برای انجام برخی کارها به غیر از ارائه درخواست‌های وب استفاده کنید.
+- یک crate مجموعه نخ از [crates.io](https://crates.io/) پیدا کنید و یک سرور وب مشابه با استفاده از آن crate پیاده‌سازی کنید. سپس API و مقاومت آن را با مجموعه نخی که ما پیاده‌سازی کردیم مقایسه کنید.
 
-## Summary
+## خلاصه
 
-Well done! You’ve made it to the end of the book! We want to thank you for
-joining us on this tour of Rust. You’re now ready to implement your own Rust
-projects and help with other peoples’ projects. Keep in mind that there is a
-welcoming community of other Rustaceans who would love to help you with any
-challenges you encounter on your Rust journey.
+آفرین! شما به انتهای این کتاب رسیدید! از شما بابت پیوستن به ما در این سفر با Rust سپاسگزاریم. اکنون آماده‌اید که پروژه‌های Rust خود را پیاده‌سازی کنید و به پروژه‌های دیگران کمک کنید. به یاد داشته باشید که جامعه‌ای خوش‌آمدگوی از Rustaceans وجود دارد که مشتاقانه منتظر کمک به شما در هر چالشی هستند که در مسیر Rust خود با آن مواجه می‌شوید.

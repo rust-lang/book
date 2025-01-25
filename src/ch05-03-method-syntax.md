@@ -1,21 +1,12 @@
-## Method Syntax
+## متد
 
-_Methods_ are similar to functions: we declare them with the `fn` keyword and a
-name, they can have parameters and a return value, and they contain some code
-that’s run when the method is called from somewhere else. Unlike functions,
-methods are defined within the context of a struct (or an enum or a trait
-object, which we cover in [Chapter 6][enums]<!-- ignore --> and [Chapter
-17][trait-objects]<!-- ignore -->, respectively), and their first parameter is
-always `self`, which represents the instance of the struct the method is being
-called on.
+_متدها_ شبیه به توابع هستند: ما آن‌ها را با کلمه کلیدی `fn` و یک نام تعریف می‌کنیم، می‌توانند پارامترها و یک مقدار بازگشتی داشته باشند و شامل کدی هستند که وقتی متد از جایی دیگر فراخوانی می‌شود، اجرا می‌شود. برخلاف توابع، متدها در زمینه یک ساختار (یا یک Enum یا یک Trait Object، که آن‌ها را به ترتیب در [فصل ۶][enums]<!-- ignore --> و [فصل ۱۷][trait-objects]<!-- ignore --> پوشش می‌دهیم) تعریف می‌شوند و پارامتر اول آن‌ها همیشه `self` است که نمونه‌ای از ساختاری که متد روی آن فراخوانی شده است را نمایش می‌دهد.
 
-### Defining Methods
+### تعریف متدها
 
-Let’s change the `area` function that has a `Rectangle` instance as a parameter
-and instead make an `area` method defined on the `Rectangle` struct, as shown
-in Listing 5-13.
+بیایید تابع `area` که یک نمونه از `Rectangle` را به عنوان پارامتر می‌گیرد، تغییر دهیم و به جای آن، یک متد `area` تعریف کنیم که روی ساختار `Rectangle` تعریف شده است، همان‌طور که در لیست ۵-۱۳ نشان داده شده است.
 
-<Listing number="5-13" file-name="src/main.rs" caption="Defining an `area` method on the `Rectangle` struct">
+<Listing number="5-13" file-name="src/main.rs" caption="تعریف یک متد `area` روی ساختار `Rectangle`">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-13/src/main.rs}}
@@ -23,46 +14,15 @@ in Listing 5-13.
 
 </Listing>
 
-To define the function within the context of `Rectangle`, we start an `impl`
-(implementation) block for `Rectangle`. Everything within this `impl` block
-will be associated with the `Rectangle` type. Then we move the `area` function
-within the `impl` curly brackets and change the first (and in this case, only)
-parameter to be `self` in the signature and everywhere within the body. In
-`main`, where we called the `area` function and passed `rect1` as an argument,
-we can instead use _method syntax_ to call the `area` method on our `Rectangle`
-instance. The method syntax goes after an instance: we add a dot followed by
-the method name, parentheses, and any arguments.
+برای تعریف تابع در زمینه `Rectangle`، یک بلوک `impl` (پیاده‌سازی) برای `Rectangle` شروع می‌کنیم. هر چیزی در این بلوک `impl` با نوع `Rectangle` مرتبط خواهد بود. سپس، تابع `area` را به درون آکولادهای `impl` منتقل کرده و اولین (و در اینجا تنها) پارامتر آن را در امضا و در هر جایی در بدنه به `self` تغییر می‌دهیم. در `main`، جایی که تابع `area` را فراخوانی می‌کردیم و `rect1` را به عنوان آرگومان ارسال می‌کردیم، اکنون می‌توانیم از _نحو متد_ برای فراخوانی متد `area` روی نمونه `Rectangle` خود استفاده کنیم. نحو متد بعد از یک نمونه قرار می‌گیرد: نقطه‌ای اضافه می‌کنیم و به دنبال آن نام متد، پرانتزها و هر آرگومان دیگری قرار می‌دهیم.
 
-In the signature for `area`, we use `&self` instead of `rectangle: &Rectangle`.
-The `&self` is actually short for `self: &Self`. Within an `impl` block, the
-type `Self` is an alias for the type that the `impl` block is for. Methods must
-have a parameter named `self` of type `Self` for their first parameter, so Rust
-lets you abbreviate this with only the name `self` in the first parameter spot.
-Note that we still need to use the `&` in front of the `self` shorthand to
-indicate that this method borrows the `Self` instance, just as we did in
-`rectangle: &Rectangle`. Methods can take ownership of `self`, borrow `self`
-immutably, as we’ve done here, or borrow `self` mutably, just as they can any
-other parameter.
+در امضای `area`، از `&self` به جای `rectangle: &Rectangle` استفاده می‌کنیم. `&self` در واقع معادل کوتاه‌شده‌ای از `self: &Self` است. درون یک بلوک `impl`، نوع `Self` نام مستعاری برای نوعی است که بلوک `impl` برای آن تعریف شده است. متدها باید به عنوان پارامتر اول خود یک پارامتری به نام `self` از نوع `Self` داشته باشند، بنابراین Rust به شما اجازه می‌دهد این عبارت را با فقط نوشتن `self` در محل اولین پارامتر کوتاه کنید. توجه داشته باشید که همچنان باید از `&` در مقابل اختصار `self` استفاده کنیم تا نشان دهیم که این متد نمونه `Self` را قرض می‌گیرد، دقیقاً همان‌طور که در `rectangle: &Rectangle` استفاده می‌کردیم. متدها می‌توانند مالکیت `self` را بگیرند، `self` را به صورت غیرقابل تغییر قرض بگیرند، همان‌طور که در اینجا انجام داده‌ایم، یا `self` را به صورت قابل تغییر قرض بگیرند، دقیقاً مانند هر پارامتر دیگری.
 
-We chose `&self` here for the same reason we used `&Rectangle` in the function
-version: we don’t want to take ownership, and we just want to read the data in
-the struct, not write to it. If we wanted to change the instance that we’ve
-called the method on as part of what the method does, we’d use `&mut self` as
-the first parameter. Having a method that takes ownership of the instance by
-using just `self` as the first parameter is rare; this technique is usually
-used when the method transforms `self` into something else and you want to
-prevent the caller from using the original instance after the transformation.
+ما در اینجا `&self` را انتخاب کرده‌ایم به همان دلیلی که در نسخه تابع از `&Rectangle` استفاده کردیم: ما نمی‌خواهیم مالکیت را بگیریم و فقط می‌خواهیم داده‌ها را در ساختار بخوانیم، نه اینکه آن‌ها را تغییر دهیم. اگر بخواهیم نمونه‌ای که متد روی آن فراخوانی شده است را به عنوان بخشی از کاری که متد انجام می‌دهد تغییر دهیم، به عنوان پارامتر اول از `&mut self` استفاده می‌کنیم. داشتن متدی که مالکیت نمونه را می‌گیرد با استفاده از فقط `self` به عنوان پارامتر اول به ندرت اتفاق می‌افتد؛ این تکنیک معمولاً زمانی استفاده می‌شود که متد `self` را به چیز دیگری تبدیل کند و شما بخواهید از استفاده از نمونه اصلی پس از تبدیل جلوگیری کنید.
 
-The main reason for using methods instead of functions, in addition to
-providing method syntax and not having to repeat the type of `self` in every
-method’s signature, is for organization. We’ve put all the things we can do
-with an instance of a type in one `impl` block rather than making future users
-of our code search for capabilities of `Rectangle` in various places in the
-library we provide.
+دلیل اصلی استفاده از متدها به جای توابع، علاوه بر ارائه نحو متد و عدم نیاز به تکرار نوع `self` در امضای هر متد، سازمان‌دهی است. ما تمام کارهایی که می‌توانیم با یک نمونه از یک نوع انجام دهیم را در یک بلوک `impl` قرار داده‌ایم، به جای اینکه کاربران آینده کد ما به دنبال قابلیت‌های `Rectangle` در مکان‌های مختلف در کتابخانه‌ای که ارائه می‌دهیم بگردند.
 
-Note that we can choose to give a method the same name as one of the struct’s
-fields. For example, we can define a method on `Rectangle` that is also named
-`width`:
+توجه داشته باشید که می‌توانیم تصمیم بگیریم متدی با همان نام یک فیلد ساختار تعریف کنیم. برای مثال، می‌توانیم متدی روی `Rectangle` تعریف کنیم که نام آن نیز `width` باشد:
 
 <Listing file-name="src/main.rs">
 
@@ -72,37 +32,19 @@ fields. For example, we can define a method on `Rectangle` that is also named
 
 </Listing>
 
-Here, we’re choosing to make the `width` method return `true` if the value in
-the instance’s `width` field is greater than `0` and `false` if the value is
-`0`: we can use a field within a method of the same name for any purpose. In
-`main`, when we follow `rect1.width` with parentheses, Rust knows we mean the
-method `width`. When we don’t use parentheses, Rust knows we mean the field
-`width`.
+Here is the continuation of the translation for **"ch05-03-method-syntax.md"** into Persian:
 
-Often, but not always, when we give a method the same name as a field we want
-it to only return the value in the field and do nothing else. Methods like this
-are called _getters_, and Rust does not implement them automatically for struct
-fields as some other languages do. Getters are useful because you can make the
-field private but the method public, and thus enable read-only access to that
-field as part of the type’s public API. We will discuss what public and private
-are and how to designate a field or method as public or private in [Chapter
-7][public]<!-- ignore -->.
+در اینجا ما تصمیم گرفته‌ایم متد `width` را طوری تعریف کنیم که اگر مقدار در فیلد `width` نمونه بزرگ‌تر از `0` باشد مقدار `true` و در غیر این صورت مقدار `false` برگرداند: ما می‌توانیم از یک فیلد درون یک متد با همان نام برای هر منظوری استفاده کنیم. در `main`، وقتی که ما `rect1.width` را با پرانتز دنبال می‌کنیم، Rust می‌داند که منظور ما متد `width` است. وقتی از پرانتز استفاده نمی‌کنیم، Rust می‌داند که منظور ما فیلد `width` است.
 
-> ### Where’s the `->` Operator?
+اغلب، اما نه همیشه، زمانی که به یک متد نامی مشابه یک فیلد می‌دهیم، می‌خواهیم که این متد تنها مقدار موجود در فیلد را بازگرداند و هیچ کار دیگری انجام ندهد. متدهایی مانند این‌ها _getter_ نامیده می‌شوند، و Rust آن‌ها را به صورت خودکار برای فیلدهای ساختار پیاده‌سازی نمی‌کند، همان‌طور که برخی از زبان‌های دیگر انجام می‌دهند. Getterها مفید هستند زیرا می‌توانید فیلد را خصوصی کنید اما متد را عمومی کنید و به این ترتیب دسترسی فقط-خواندنی به آن فیلد را به عنوان بخشی از API عمومی نوع فعال کنید. ما در فصل [۷][public]<!-- ignore --> در مورد عمومی و خصوصی بودن و چگونگی تعیین عمومی یا خصوصی بودن یک فیلد یا متد بحث خواهیم کرد.
+
+> ### کجاست عملگر `->`؟
 >
-> In C and C++, two different operators are used for calling methods: you use
-> `.` if you’re calling a method on the object directly and `->` if you’re
-> calling the method on a pointer to the object and need to dereference the
-> pointer first. In other words, if `object` is a pointer,
-> `object->something()` is similar to `(*object).something()`.
+> در C و C++، دو عملگر مختلف برای فراخوانی متدها استفاده می‌شود: شما از `.` استفاده می‌کنید اگر متد را روی خود شیء فراخوانی می‌کنید و از `->` اگر متد را روی یک اشاره‌گر (Pointer) به شیء فراخوانی می‌کنید و نیاز دارید ابتدا اشاره‌گر (Pointer) را اشاره‌برداری کنید. به عبارت دیگر، اگر `object` یک اشاره‌گر (Pointer) باشد، `object->something()` شبیه به `(*object).something()` است.
 >
-> Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
-> feature called _automatic referencing and dereferencing_. Calling methods is
-> one of the few places in Rust with this behavior.
+> Rust معادل عملگر `->` را ندارد؛ به جای آن، Rust یک ویژگی به نام _ارجاع‌دهی و اشاره‌برداری خودکار_ دارد. فراخوانی متدها یکی از معدود مکان‌هایی در Rust است که این رفتار را دارد.
 >
-> Here’s how it works: when you call a method with `object.something()`, Rust
-> automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
-> the method. In other words, the following are the same:
+> این‌گونه کار می‌کند: وقتی یک متد را با `object.something()` فراخوانی می‌کنید، Rust به طور خودکار `&`، `&mut` یا `*` را اضافه می‌کند تا `object` با امضای متد مطابقت داشته باشد. به عبارت دیگر، موارد زیر یکسان هستند:
 >
 > <!-- CAN'T EXTRACT SEE BUG https://github.com/rust-lang/mdBook/issues/1127 -->
 >
@@ -127,23 +69,13 @@ are and how to designate a field or method as public or private in [Chapter
 > (&p1).distance(&p2);
 > ```
 >
-> The first one looks much cleaner. This automatic referencing behavior works
-> because methods have a clear receiver—the type of `self`. Given the receiver
-> and name of a method, Rust can figure out definitively whether the method is
-> reading (`&self`), mutating (`&mut self`), or consuming (`self`). The fact
-> that Rust makes borrowing implicit for method receivers is a big part of
-> making ownership ergonomic in practice.
+> اولین مورد خیلی تمیزتر به نظر می‌رسد. این رفتار ارجاع‌دهی خودکار کار می‌کند زیرا متدها یک گیرنده واضح دارند—نوع `self`. با توجه به گیرنده و نام یک متد، Rust می‌تواند به طور قطعی تعیین کند که آیا متد در حال خواندن (`&self`)، تغییر (`&mut self`) یا مصرف (`self`) است. این واقعیت که Rust قرض‌گیری را برای گیرنده‌های متد ضمنی می‌کند، بخش بزرگی از راحتی کار با مالکیت در عمل است.
 
-### Methods with More Parameters
+### متدهایی با پارامترهای بیشتر
 
-Let’s practice using methods by implementing a second method on the `Rectangle`
-struct. This time we want an instance of `Rectangle` to take another instance
-of `Rectangle` and return `true` if the second `Rectangle` can fit completely
-within `self` (the first `Rectangle`); otherwise, it should return `false`.
-That is, once we’ve defined the `can_hold` method, we want to be able to write
-the program shown in Listing 5-14.
+بیایید با تعریف یک متد دیگر روی ساختار `Rectangle` تمرین کنیم. این بار می‌خواهیم یک نمونه از `Rectangle` نمونه دیگری از `Rectangle` را بگیرد و مقدار `true` برگرداند اگر `Rectangle` دوم کاملاً در `self` (اولین `Rectangle`) جای گیرد؛ در غیر این صورت مقدار `false` برگرداند. به عبارت دیگر، پس از تعریف متد `can_hold`، می‌خواهیم بتوانیم برنامه‌ای بنویسیم که در لیست ۵-۱۴ نشان داده شده است.
 
-<Listing number="5-14" file-name="src/main.rs" caption="Using the as-yet-unwritten `can_hold` method">
+<Listing number="5-14" file-name="src/main.rs" caption="استفاده از متد `can_hold` که هنوز نوشته نشده است">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-14/src/main.rs}}
@@ -151,30 +83,16 @@ the program shown in Listing 5-14.
 
 </Listing>
 
-The expected output would look like the following because both dimensions of
-`rect2` are smaller than the dimensions of `rect1`, but `rect3` is wider than
-`rect1`:
+خروجی مورد انتظار به صورت زیر خواهد بود زیرا هر دو بُعد `rect2` کوچکتر از ابعاد `rect1` هستند، اما `rect3` از `rect1` عریض‌تر است:
 
 ```text
 Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 ```
 
-We know we want to define a method, so it will be within the `impl Rectangle`
-block. The method name will be `can_hold`, and it will take an immutable borrow
-of another `Rectangle` as a parameter. We can tell what the type of the
-parameter will be by looking at the code that calls the method:
-`rect1.can_hold(&rect2)` passes in `&rect2`, which is an immutable borrow to
-`rect2`, an instance of `Rectangle`. This makes sense because we only need to
-read `rect2` (rather than write, which would mean we’d need a mutable borrow),
-and we want `main` to retain ownership of `rect2` so we can use it again after
-calling the `can_hold` method. The return value of `can_hold` will be a
-Boolean, and the implementation will check whether the width and height of
-`self` are greater than the width and height of the other `Rectangle`,
-respectively. Let’s add the new `can_hold` method to the `impl` block from
-Listing 5-13, shown in Listing 5-15.
+ما می‌دانیم که می‌خواهیم یک متد تعریف کنیم، بنابراین این متد در بلوک `impl Rectangle` خواهد بود. نام متد `can_hold` خواهد بود و یک قرض غیرقابل تغییر از یک `Rectangle` دیگر به عنوان پارامتر خواهد گرفت. می‌توانیم نوع پارامتر را با نگاه به کدی که متد را فراخوانی می‌کند تشخیص دهیم: `rect1.can_hold(&rect2)` مقدار `&rect2` را ارسال می‌کند، که یک قرض غیرقابل تغییر به `rect2`، یک نمونه از `Rectangle` است. این منطقی است زیرا ما فقط نیاز به خواندن `rect2` داریم (نه نوشتن، که به یک قرض قابل تغییر نیاز داشت) و می‌خواهیم مالکیت `rect2` در `main` باقی بماند تا بتوانیم پس از فراخوانی متد `can_hold` دوباره از آن استفاده کنیم. مقدار بازگشتی `can_hold` یک مقدار بولی خواهد بود و پیاده‌سازی بررسی می‌کند که آیا عرض و ارتفاع `self` به ترتیب بزرگ‌تر از عرض و ارتفاع `Rectangle` دیگر هستند. بیایید متد جدید `can_hold` را به بلوک `impl` از لیست ۵-۱۳ اضافه کنیم، همان‌طور که در لیست ۵-۱۵ نشان داده شده است.
 
-<Listing number="5-15" file-name="src/main.rs" caption="Implementing the `can_hold` method on `Rectangle` that takes another `Rectangle` instance as a parameter">
+<Listing number="5-15" file-name="src/main.rs" caption="پیاده‌سازی متد `can_hold` روی `Rectangle` که یک نمونه دیگر از `Rectangle` را به عنوان پارامتر می‌گیرد">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-15/src/main.rs:here}}
@@ -182,27 +100,16 @@ Listing 5-13, shown in Listing 5-15.
 
 </Listing>
 
-When we run this code with the `main` function in Listing 5-14, we’ll get our
-desired output. Methods can take multiple parameters that we add to the
-signature after the `self` parameter, and those parameters work just like
-parameters in functions.
 
-### Associated Functions
+Here is the continuation of the translation for **"ch05-03-method-syntax.md"** into Persian:
 
-All functions defined within an `impl` block are called _associated functions_
-because they’re associated with the type named after the `impl`. We can define
-associated functions that don’t have `self` as their first parameter (and thus
-are not methods) because they don’t need an instance of the type to work with.
-We’ve already used one function like this: the `String::from` function that’s
-defined on the `String` type.
+وقتی این کد را با تابع `main` موجود در لیست ۵-۱۴ اجرا می‌کنیم، خروجی دلخواه را دریافت خواهیم کرد. متدها می‌توانند چندین پارامتر بگیرند که ما آن‌ها را پس از پارامتر `self` به امضا اضافه می‌کنیم، و این پارامترها همانند پارامترهای توابع عمل می‌کنند.
 
-Associated functions that aren’t methods are often used for constructors that
-will return a new instance of the struct. These are often called `new`, but
-`new` isn’t a special name and isn’t built into the language. For example, we
-could choose to provide an associated function named `square` that would have
-one dimension parameter and use that as both width and height, thus making it
-easier to create a square `Rectangle` rather than having to specify the same
-value twice:
+### توابع مرتبط
+
+تمام توابعی که در یک بلوک `impl` تعریف شده‌اند _توابع مرتبط_ نامیده می‌شوند، زیرا با نوعی که بعد از `impl` نام‌گذاری شده است، مرتبط هستند. ما می‌توانیم توابع مرتبطی را تعریف کنیم که `self` را به عنوان اولین پارامتر خود ندارند (و بنابراین متد نیستند) زیرا نیازی به کار با یک نمونه از نوع ندارند. ما قبلاً از یک تابع مشابه استفاده کرده‌ایم: تابع `String::from` که روی نوع `String` تعریف شده است.
+
+توابع مرتبطی که متد نیستند اغلب برای سازنده‌ها استفاده می‌شوند که نمونه جدیدی از ساختار را بازمی‌گردانند. این توابع معمولاً `new` نامیده می‌شوند، اما `new` یک نام خاص نیست و در زبان به صورت داخلی تعریف نشده است. برای مثال، ما می‌توانیم تصمیم بگیریم تابع مرتبطی به نام `square` ارائه دهیم که یک پارامتر برای ابعاد بگیرد و از آن به عنوان عرض و ارتفاع استفاده کند، بنابراین ایجاد یک `Rectangle` مربعی را آسان‌تر می‌کند به جای اینکه مجبور باشیم مقدار یکسان را دو بار مشخص کنیم:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -210,23 +117,15 @@ value twice:
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-03-associated-functions/src/main.rs:here}}
 ```
 
-The `Self` keywords in the return type and in the body of the function are
-aliases for the type that appears after the `impl` keyword, which in this case
-is `Rectangle`.
+کلمات کلیدی `Self` در نوع بازگشتی و در بدنه تابع، نام مستعاری برای نوعی هستند که بعد از کلمه کلیدی `impl` ظاهر می‌شود، که در اینجا `Rectangle` است.
 
-To call this associated function, we use the `::` syntax with the struct name;
-`let sq = Rectangle::square(3);` is an example. This function is namespaced by
-the struct: the `::` syntax is used for both associated functions and
-namespaces created by modules. We’ll discuss modules in [Chapter
-7][modules]<!-- ignore -->.
+برای فراخوانی این تابع مرتبط، از نحو `::` همراه با نام ساختار استفاده می‌کنیم؛ برای مثال: `let sq = Rectangle::square(3);`. این تابع با ساختار فضای نام‌گذاری شده است: نحو `::` برای توابع مرتبط و فضای نام‌های ایجاد شده توسط ماژول‌ها استفاده می‌شود. ما ماژول‌ها را در [فصل ۷][modules]<!-- ignore --> بررسی خواهیم کرد.
 
-### Multiple `impl` Blocks
+### بلوک‌های متعدد `impl`
 
-Each struct is allowed to have multiple `impl` blocks. For example, Listing
-5-15 is equivalent to the code shown in Listing 5-16, which has each method in
-its own `impl` block.
+هر ساختار اجازه دارد چندین بلوک `impl` داشته باشد. برای مثال، لیست ۵-۱۵ معادل کدی است که در لیست ۵-۱۶ نشان داده شده است، که هر متد در بلوک `impl` خود قرار دارد.
 
-<Listing number="5-16" caption="Rewriting Listing 5-15 using multiple `impl` blocks">
+<Listing number="5-16" caption="بازنویسی لیست ۵-۱۵ با استفاده از بلوک‌های متعدد `impl`">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-16/src/main.rs:here}}
@@ -234,21 +133,13 @@ its own `impl` block.
 
 </Listing>
 
-There’s no reason to separate these methods into multiple `impl` blocks here,
-but this is valid syntax. We’ll see a case in which multiple `impl` blocks are
-useful in Chapter 10, where we discuss generic types and traits.
+هیچ دلیلی برای جدا کردن این متدها به بلوک‌های متعدد `impl` در اینجا وجود ندارد، اما این یک نحو معتبر است. ما در فصل ۱۰ موردی را خواهیم دید که در آن بلوک‌های متعدد `impl` مفید هستند، جایی که ما نوع‌های عمومی و ویژگی‌ها را بررسی خواهیم کرد.
 
-## Summary
+## خلاصه
 
-Structs let you create custom types that are meaningful for your domain. By
-using structs, you can keep associated pieces of data connected to each other
-and name each piece to make your code clear. In `impl` blocks, you can define
-functions that are associated with your type, and methods are a kind of
-associated function that let you specify the behavior that instances of your
-structs have.
+ساختارها به شما اجازه می‌دهند تا نوع‌های سفارشی ایجاد کنید که برای حوزه کاری شما معنادار باشند. با استفاده از ساختارها، می‌توانید قطعات داده‌ای مرتبط را به هم متصل کنید و برای هر قطعه نامی تعیین کنید تا کد شما شفاف شود. در بلوک‌های `impl`، شما می‌توانید توابعی را تعریف کنید که با نوع شما مرتبط هستند، و متدها نوعی از توابع مرتبط هستند که به شما اجازه می‌دهند رفتار نمونه‌های ساختارهایتان را مشخص کنید.
 
-But structs aren’t the only way you can create custom types: let’s turn to
-Rust’s enum feature to add another tool to your toolbox.
+اما ساختارها تنها راه ایجاد نوع‌های سفارشی نیستند: بیایید به ویژگی Enum در Rust بپردازیم تا ابزار دیگری به جعبه ابزار شما اضافه کنیم.
 
 [enums]: ch06-00-enums.html
 [trait-objects]: ch18-02-trait-objects.md

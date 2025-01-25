@@ -1,36 +1,17 @@
-## Using Message Passing to Transfer Data Between Threads
+## استفاده از پیام‌رسانی برای انتقال داده بین نخ‌ها
 
-One increasingly popular approach to ensuring safe concurrency is _message
-passing_, where threads or actors communicate by sending each other messages
-containing data. Here’s the idea in a slogan from [the Go language documentation](https://golang.org/doc/effective_go.html#concurrency):
-“Do not communicate by sharing memory; instead, share memory by communicating.”
+یکی از رویکردهای محبوب و فزاینده برای اطمینان از همزمانی ایمن، _پیام‌رسانی_ است، جایی که نخ‌ها یا بازیگران با ارسال پیام‌های حاوی داده به یکدیگر ارتباط برقرار می‌کنند. ایده این رویکرد در یک شعار از [مستندات زبان Go](https://golang.org/doc/effective_go.html#concurrency) آمده است:  
+«با به اشتراک گذاشتن حافظه ارتباط برقرار نکنید؛ بلکه حافظه را با ارتباط برقرار کردن به اشتراک بگذارید.»
 
-To accomplish message-sending concurrency, Rust's standard library provides an
-implementation of _channels_. A channel is a general programming concept by
-which data is sent from one thread to another.
+برای رسیدن به همزمانی مبتنی بر ارسال پیام، کتابخانه استاندارد Rust یک پیاده‌سازی از _کانال‌ها_ ارائه می‌دهد. کانال یک مفهوم عمومی برنامه‌نویسی است که داده‌ها را از یک نخ به نخ دیگر ارسال می‌کند.
 
-You can imagine a channel in programming as being like a directional channel of
-water, such as a stream or a river. If you put something like a rubber duck
-into a river, it will travel downstream to the end of the waterway.
+می‌توانید یک کانال در برنامه‌نویسی را مانند یک کانال آبی جهت‌دار، مانند یک جریان یا رودخانه تصور کنید. اگر چیزی مانند یک اردک پلاستیکی را به داخل رودخانه بیندازید، آن اردک به پایین‌دست رودخانه سفر می‌کند و به انتهای آن می‌رسد.
 
-A channel has two halves: a transmitter and a receiver. The transmitter half is
-the upstream location where you put rubber ducks into the river, and the
-receiver half is where the rubber duck ends up downstream. One part of your
-code calls methods on the transmitter with the data you want to send, and
-another part checks the receiving end for arriving messages. A channel is said
-to be _closed_ if either the transmitter or receiver half is dropped.
+یک کانال دو نیمه دارد: یک فرستنده و یک گیرنده. نیمه فرستنده محل بالادستی است که اردک‌های پلاستیکی را به داخل رودخانه می‌اندازید، و نیمه گیرنده جایی است که اردک پلاستیکی در پایین‌دست پایان می‌یابد. یک بخش از کد شما متدهایی روی فرستنده با داده‌ای که می‌خواهید ارسال کنید فراخوانی می‌کند، و بخش دیگری انتهای گیرنده را برای پیام‌های واردشده بررسی می‌کند. اگر هر یک از نیمه‌های فرستنده یا گیرنده حذف شوند، کانال به عنوان _بسته‌شده_ در نظر گرفته می‌شود.
 
-Here, we’ll work up to a program that has one thread to generate values and
-send them down a channel, and another thread that will receive the values and
-print them out. We’ll be sending simple values between threads using a channel
-to illustrate the feature. Once you’re familiar with the technique, you could
-use channels for any threads that need to communicate between each other, such
-as a chat system or a system where many threads perform parts of a calculation
-and send the parts to one thread that aggregates the results.
+اینجا، برنامه‌ای ایجاد می‌کنیم که یک نخ برای تولید مقادیر و ارسال آن‌ها از طریق یک کانال دارد، و نخ دیگری مقادیر را دریافت کرده و چاپ می‌کند. برای نمایش این ویژگی، مقادیر ساده‌ای بین نخ‌ها از طریق یک کانال ارسال خواهیم کرد. پس از آشنایی با این تکنیک، می‌توانید از کانال‌ها برای هر نخ‌هایی که نیاز به ارتباط با یکدیگر دارند استفاده کنید، مانند یک سیستم چت یا سیستمی که بسیاری از نخ‌ها بخش‌هایی از یک محاسبه را انجام می‌دهند و آن بخش‌ها را به یک نخ ارسال می‌کنند که نتایج را تجمیع می‌کند.
 
-First, in Listing 16-6, we’ll create a channel but not do anything with it.
-Note that this won’t compile yet because Rust can’t tell what type of values we
-want to send over the channel.
+ابتدا، در لیستینگ 16-6، یک کانال ایجاد می‌کنیم اما هنوز کاری با آن انجام نمی‌دهیم. توجه داشته باشید که این کد هنوز کامپایل نمی‌شود زیرا Rust نمی‌تواند نوع مقادیری که می‌خواهیم از طریق کانال ارسال کنیم را تعیین کند.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -38,34 +19,15 @@ want to send over the channel.
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-6: Creating a channel and assigning the two
-halves to `tx` and `rx`</span>
+<span class="caption">لیستینگ 16-6: ایجاد یک کانال و اختصاص دو نیمه آن به `tx` و `rx`</span>
 
-We create a new channel using the `mpsc::channel` function; `mpsc` stands for
-_multiple producer, single consumer_. In short, the way Rust’s standard library
-implements channels means a channel can have multiple _sending_ ends that
-produce values but only one _receiving_ end that consumes those values. Imagine
-multiple streams flowing together into one big river: everything sent down any
-of the streams will end up in one river at the end. We’ll start with a single
-producer for now, but we’ll add multiple producers when we get this example
-working.
+ما یک کانال جدید با استفاده از تابع `mpsc::channel` ایجاد می‌کنیم؛ `mpsc` مخفف _تولیدکننده‌های چندگانه، مصرف‌کننده تک‌گانه_ است. به طور خلاصه، نحوه پیاده‌سازی کانال‌ها توسط کتابخانه استاندارد Rust به این معناست که یک کانال می‌تواند چندین انتهای _ارسال‌کننده_ داشته باشد که مقادیر تولید می‌کنند، اما فقط یک انتهای _گیرنده_ که آن مقادیر را مصرف می‌کند. تصور کنید چندین جریان کوچک به یک رودخانه بزرگ می‌ریزند: هر چیزی که در هر یک از جریان‌ها ارسال شود، در نهایت به رودخانه بزرگ در انتها می‌رسد. فعلاً با یک تولیدکننده شروع می‌کنیم، اما وقتی این مثال کار کرد، چندین تولیدکننده اضافه خواهیم کرد.
 
-The `mpsc::channel` function returns a tuple, the first element of which is the
-sending end—the transmitter—and the second element is the receiving end—the
-receiver. The abbreviations `tx` and `rx` are traditionally used in many fields
-for _transmitter_ and _receiver_ respectively, so we name our variables as such
-to indicate each end. We’re using a `let` statement with a pattern that
-destructures the tuples; we’ll discuss the use of patterns in `let` statements
-and destructuring in Chapter 19. For now, know that using a `let` statement
-this way is a convenient approach to extract the pieces of the tuple returned
-by `mpsc::channel`.
+تابع `mpsc::channel` یک جفت را برمی‌گرداند که عنصر اول آن انتهای ارسال‌کننده (فرستنده) و عنصر دوم آن انتهای گیرنده (گیرنده) است. اختصارات `tx` و `rx` در بسیاری از حوزه‌ها به ترتیب برای _فرستنده_ و _گیرنده_ استفاده می‌شوند، بنابراین متغیرهای خود را به این نام‌ها می‌نامیم تا هر انتها را نشان دهیم. ما از یک دستور `let` با یک الگو که جفت را تخریب می‌کند استفاده می‌کنیم؛ در فصل 19 درباره استفاده از الگوها در دستورات `let` و تخریب بحث خواهیم کرد. فعلاً بدانید که استفاده از یک دستور `let` به این روش یک رویکرد مناسب برای استخراج قطعات جفت بازگشتی توسط `mpsc::channel` است.
 
-Let’s move the transmitting end into a spawned thread and have it send one
-string so the spawned thread is communicating with the main thread, as shown in
-Listing 16-7. This is like putting a rubber duck in the river upstream or
-sending a chat message from one thread to another.
+بیایید انتهای ارسال‌کننده را به یک نخ ایجادشده منتقل کنیم و یک رشته ارسال کنیم تا نخ ایجادشده با نخ اصلی ارتباط برقرار کند، همان‌طور که در لیستینگ 16-7 نشان داده شده است. این شبیه به انداختن یک اردک پلاستیکی در رودخانه در بالادست یا ارسال یک پیام چت از یک نخ به نخ دیگر است.
 
-<Listing number="16-7" file-name="src/main.rs" caption="Moving `tx` to a spawned thread and sending “hi”">
+<Listing number="16-7" file-name="src/main.rs" caption="انتقال `tx` به یک نخ ایجادشده و ارسال 'hi'">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-07/src/main.rs}}
@@ -73,19 +35,9 @@ sending a chat message from one thread to another.
 
 </Listing>
 
-Again, we’re using `thread::spawn` to create a new thread and then using `move`
-to move `tx` into the closure so the spawned thread owns `tx`. The spawned
-thread needs to own the transmitter to be able to send messages through the
-channel. The transmitter has a `send` method that takes the value we want to
-send. The `send` method returns a `Result<T, E>` type, so if the receiver has
-already been dropped and there’s nowhere to send a value, the send operation
-will return an error. In this example, we’re calling `unwrap` to panic in case
-of an error. But in a real application, we would handle it properly: return to
-Chapter 9 to review strategies for proper error handling.
+دوباره از `thread::spawn` برای ایجاد یک نخ جدید استفاده می‌کنیم و سپس از `move` برای انتقال `tx` به closure استفاده می‌کنیم تا نخ ایجادشده مالک `tx` شود. نخ ایجادشده باید مالک فرستنده باشد تا بتواند پیام‌ها را از طریق کانال ارسال کند. فرستنده یک متد `send` دارد که مقداری که می‌خواهیم ارسال کنیم را می‌گیرد. متد `send` نوع `Result<T, E>` را برمی‌گرداند، بنابراین اگر گیرنده قبلاً حذف شده باشد و جایی برای ارسال مقدار وجود نداشته باشد، عملیات ارسال یک خطا برمی‌گرداند. در این مثال، ما `unwrap` را برای panic در صورت خطا فراخوانی می‌کنیم. اما در یک برنامه واقعی، باید آن را به درستی مدیریت کنیم: برای مرور استراتژی‌های مدیریت خطای مناسب به فصل 9 بازگردید.
 
-In Listing 16-8, we’ll get the value from the receiver in the main thread. This
-is like retrieving the rubber duck from the water at the end of the river or
-receiving a chat message.
+در لیستینگ 16-8، مقداری را از گیرنده در نخ اصلی دریافت می‌کنیم. این شبیه به گرفتن اردک پلاستیکی از آب در انتهای رودخانه یا دریافت یک پیام چت است.
 
 <Listing number="16-8" file-name="src/main.rs" caption="Receiving the value “hi” in the main thread and printing it">
 
@@ -95,48 +47,25 @@ receiving a chat message.
 
 </Listing>
 
-The receiver has two useful methods: `recv` and `try_recv`. We’re using `recv`,
-short for _receive_, which will block the main thread’s execution and wait
-until a value is sent down the channel. Once a value is sent, `recv` will
-return it in a `Result<T, E>`. When the transmitter closes, `recv` will return
-an error to signal that no more values will be coming.
+گیرنده دو متد مفید دارد: `recv` و `try_recv`. ما از `recv`، که مخفف _receive_ است، استفاده می‌کنیم. این متد اجرای نخ اصلی را مسدود کرده و منتظر می‌ماند تا مقداری از طریق کانال ارسال شود. هنگامی که مقداری ارسال شد، `recv` آن را در یک مقدار `Result<T, E>` بازمی‌گرداند. وقتی فرستنده بسته می‌شود، `recv` یک خطا برمی‌گرداند تا نشان دهد که هیچ مقدار دیگری نمی‌آید.
 
-The `try_recv` method doesn’t block, but will instead return a `Result<T, E>`
-immediately: an `Ok` value holding a message if one is available and an `Err`
-value if there aren’t any messages this time. Using `try_recv` is useful if
-this thread has other work to do while waiting for messages: we could write a
-loop that calls `try_recv` every so often, handles a message if one is
-available, and otherwise does other work for a little while until checking
-again.
+متد `try_recv` مسدود نمی‌کند، بلکه بلافاصله یک مقدار `Result<T, E>` بازمی‌گرداند: یک مقدار `Ok` حاوی یک پیام اگر موجود باشد، و یک مقدار `Err` اگر این بار هیچ پیامی موجود نباشد. استفاده از `try_recv` زمانی مفید است که این نخ کار دیگری برای انجام دارد در حالی که منتظر پیام‌ها است: می‌توانیم یک حلقه بنویسیم که هر چند وقت یک بار `try_recv` را فراخوانی کند، یک پیام را اگر موجود باشد پردازش کند، و در غیر این صورت کار دیگری را برای مدتی انجام دهد تا دوباره بررسی کند.
 
-We’ve used `recv` in this example for simplicity; we don’t have any other work
-for the main thread to do other than wait for messages, so blocking the main
-thread is appropriate.
+ما در این مثال برای سادگی از `recv` استفاده کرده‌ایم؛ نخ اصلی کار دیگری جز منتظر ماندن برای پیام‌ها ندارد، بنابراین مسدود کردن نخ اصلی مناسب است.
 
-When we run the code in Listing 16-8, we’ll see the value printed from the main
-thread:
-
-<!-- Not extracting output because changes to this output aren't significant;
-the changes are likely to be due to the threads running differently rather than
-changes in the compiler -->
+وقتی کد موجود در لیستینگ 16-8 را اجرا کنیم، مقدار چاپ‌شده از نخ اصلی را خواهیم دید:
 
 ```text
 Got: hi
 ```
 
-Perfect!
+عالی!
 
-### Channels and Ownership Transference
+### کانال‌ها و انتقال مالکیت
 
-The ownership rules play a vital role in message sending because they help you
-write safe, concurrent code. Preventing errors in concurrent programming is the
-advantage of thinking about ownership throughout your Rust programs. Let’s do
-an experiment to show how channels and ownership work together to prevent
-problems: we’ll try to use a `val` value in the spawned thread _after_ we’ve
-sent it down the channel. Try compiling the code in Listing 16-9 to see why
-this code isn’t allowed:
+قوانین مالکیت نقش حیاتی در ارسال پیام دارند زیرا به شما کمک می‌کنند کد ایمن و همزمان بنویسید. جلوگیری از خطاها در برنامه‌نویسی همزمان مزیت فکر کردن به مالکیت در سراسر برنامه‌های Rust شما است. بیایید یک آزمایش انجام دهیم تا نشان دهیم کانال‌ها و مالکیت چگونه با هم کار می‌کنند تا از مشکلات جلوگیری کنند: ما سعی خواهیم کرد مقدار `val` را در نخ ایجادشده _پس از_ ارسال آن از طریق کانال استفاده کنیم. کد موجود در لیستینگ 16-9 را کامپایل کنید تا ببینید چرا این کد مجاز نیست:
 
-<Listing number="16-9" file-name="src/main.rs" caption="Attempting to use `val` after we’ve sent it down the channel">
+<Listing number="16-9" file-name="src/main.rs" caption="تلاش برای استفاده از `val` پس از ارسال آن از طریق کانال">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-09/src/main.rs}}
@@ -144,29 +73,17 @@ this code isn’t allowed:
 
 </Listing>
 
-Here, we try to print `val` after we’ve sent it down the channel via `tx.send`.
-Allowing this would be a bad idea: once the value has been sent to another
-thread, that thread could modify or drop it before we try to use the value
-again. Potentially, the other thread’s modifications could cause errors or
-unexpected results due to inconsistent or nonexistent data. However, Rust gives
-us an error if we try to compile the code in Listing 16-9:
+در اینجا، ما سعی می‌کنیم `val` را پس از ارسال آن از طریق `tx.send` چاپ کنیم. اجازه دادن به این کار ایده بدی خواهد بود: هنگامی که مقدار به نخ دیگری ارسال شده است، آن نخ می‌تواند قبل از اینکه سعی کنیم دوباره از مقدار استفاده کنیم، آن را تغییر دهد یا حذف کند. به طور بالقوه، تغییرات نخ دیگر می‌تواند باعث خطاها یا نتایج غیرمنتظره به دلیل داده‌های ناسازگار یا غیرموجود شود. با این حال، Rust اگر سعی کنیم کد موجود در لیستینگ 16-9 را کامپایل کنیم، به ما خطا می‌دهد:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-09/output.txt}}
 ```
 
-Our concurrency mistake has caused a compile time error. The `send` function
-takes ownership of its parameter, and when the value is moved, the receiver
-takes ownership of it. This stops us from accidentally using the value again
-after sending it; the ownership system checks that everything is okay.
+اشتباه ما در همزمانی باعث ایجاد یک خطای زمان کامپایل شده است. تابع `send` مالکیت پارامتر خود را می‌گیرد و وقتی مقدار منتقل می‌شود، گیرنده مالکیت آن را می‌گیرد. این از استفاده تصادفی مجدد مقدار پس از ارسال آن جلوگیری می‌کند؛ سیستم مالکیت بررسی می‌کند که همه چیز درست است.
 
-### Sending Multiple Values and Seeing the Receiver Waiting
+### ارسال مقادیر متعدد و مشاهده انتظار گیرنده
 
-The code in Listing 16-8 compiled and ran, but it didn’t clearly show us that
-two separate threads were talking to each other over the channel. In Listing
-16-10 we’ve made some modifications that will prove the code in Listing 16-8 is
-running concurrently: the spawned thread will now send multiple messages and
-pause for a second between each message.
+کد موجود در لیستینگ 16-8 کامپایل و اجرا شد، اما به وضوح نشان نمی‌داد که دو نخ جداگانه از طریق کانال با یکدیگر صحبت می‌کنند. در لیستینگ 16-10 تغییراتی اعمال کرده‌ایم که ثابت می‌کند کد موجود در لیستینگ 16-8 به صورت همزمان اجرا می‌شود: نخ ایجادشده اکنون چندین پیام ارسال می‌کند و بین هر پیام یک ثانیه مکث می‌کند.
 
 <Listing number="16-10" file-name="src/main.rs" caption="Sending multiple messages and pausing between each">
 
@@ -176,21 +93,11 @@ pause for a second between each message.
 
 </Listing>
 
-This time, the spawned thread has a vector of strings that we want to send to
-the main thread. We iterate over them, sending each individually, and pause
-between each by calling the `thread::sleep` function with a `Duration` value of
-1 second.
+این بار، نخ ایجادشده یک بردار از رشته‌هایی دارد که می‌خواهیم به نخ اصلی ارسال کنیم. ما روی آن‌ها پیمایش می‌کنیم، هر کدام را به صورت جداگانه ارسال می‌کنیم و بین هر پیام با فراخوانی تابع `thread::sleep` با یک مقدار `Duration` برابر با 1 ثانیه مکث می‌کنیم.
 
-In the main thread, we’re not calling the `recv` function explicitly anymore:
-instead, we’re treating `rx` as an iterator. For each value received, we’re
-printing it. When the channel is closed, iteration will end.
+در نخ اصلی، دیگر تابع `recv` را به طور صریح فراخوانی نمی‌کنیم: در عوض، با `rx` به عنوان یک تکرارگر رفتار می‌کنیم. برای هر مقداری که دریافت می‌شود، آن را چاپ می‌کنیم. هنگامی که کانال بسته می‌شود، تکرار متوقف خواهد شد.
 
-When running the code in Listing 16-10, you should see the following output
-with a 1-second pause in between each line:
-
-<!-- Not extracting output because changes to this output aren't significant;
-the changes are likely to be due to the threads running differently rather than
-changes in the compiler -->
+وقتی کد موجود در لیستینگ 16-10 را اجرا می‌کنید، باید خروجی زیر را ببینید، با یک مکث 1 ثانیه‌ای بین هر خط:
 
 ```text
 Got: hi
@@ -199,18 +106,13 @@ Got: the
 Got: thread
 ```
 
-Because we don’t have any code that pauses or delays in the `for` loop in the
-main thread, we can tell that the main thread is waiting to receive values from
-the spawned thread.
+از آنجا که هیچ کدی در حلقه `for` نخ اصلی نداریم که مکث یا تأخیری ایجاد کند، می‌توانیم بگوییم که نخ اصلی منتظر دریافت مقادیر از نخ ایجادشده است.
 
-### Creating Multiple Producers by Cloning the Transmitter
+### ایجاد تولیدکننده‌های متعدد با کلون کردن فرستنده
 
-Earlier we mentioned that `mpsc` was an acronym for _multiple producer,
-single consumer_. Let’s put `mpsc` to use and expand the code in Listing 16-10
-to create multiple threads that all send values to the same receiver. We can do
-so by cloning the transmitter, as shown in Listing 16-11:
+قبلاً اشاره کردیم که `mpsc` مخفف _چندین تولیدکننده، یک مصرف‌کننده_ است. بیایید از `mpsc` استفاده کنیم و کد موجود در لیستینگ 16-10 را گسترش دهیم تا چندین نخ ایجاد کنیم که همگی مقادیر را به همان گیرنده ارسال می‌کنند. می‌توانیم این کار را با کلون کردن فرستنده انجام دهیم، همان‌طور که در لیستینگ 16-11 نشان داده شده است:
 
-<Listing number="16-11" file-name="src/main.rs" caption="Sending multiple messages from multiple producers">
+<Listing number="16-11" file-name="src/main.rs" caption="ارسال چندین پیام از چندین تولیدکننده">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-11/src/main.rs:here}}
@@ -218,16 +120,9 @@ so by cloning the transmitter, as shown in Listing 16-11:
 
 </Listing>
 
-This time, before we create the first spawned thread, we call `clone` on the
-transmitter. This will give us a new transmitter we can pass to the first
-spawned thread. We pass the original transmitter to a second spawned thread.
-This gives us two threads, each sending different messages to the one receiver.
+این بار، قبل از اینکه نخ ایجادشده اول را ایجاد کنیم، روی فرستنده `clone` فراخوانی می‌کنیم. این کار به ما یک فرستنده جدید می‌دهد که می‌توانیم به نخ ایجادشده اول ارسال کنیم. فرستنده اصلی را به نخ ایجادشده دوم ارسال می‌کنیم. این کار به ما دو نخ می‌دهد که هر کدام پیام‌های مختلفی را به یک گیرنده ارسال می‌کنند.
 
-When you run the code, your output should look something like this:
-
-<!-- Not extracting output because changes to this output aren't significant;
-the changes are likely to be due to the threads running differently rather than
-changes in the compiler -->
+وقتی کد را اجرا می‌کنید، خروجی شما باید چیزی شبیه به این باشد:
 
 ```text
 Got: hi
@@ -240,10 +135,6 @@ Got: thread
 Got: you
 ```
 
-You might see the values in another order, depending on your system. This is
-what makes concurrency interesting as well as difficult. If you experiment with
-`thread::sleep`, giving it various values in the different threads, each run
-will be more nondeterministic and create different output each time.
+ممکن است مقادیر را به ترتیب دیگری ببینید، بسته به سیستم شما. این همان چیزی است که همزمانی را هم جالب و هم دشوار می‌کند. اگر با `thread::sleep` آزمایش کنید و مقادیر مختلفی را در نخ‌های مختلف به آن بدهید، هر اجرا غیرقطعی‌تر خواهد شد و هر بار خروجی متفاوتی ایجاد می‌کند.
 
-Now that we’ve looked at how channels work, let’s look at a different method of
-concurrency.
+اکنون که دیدیم کانال‌ها چگونه کار می‌کنند، بیایید به یک روش دیگر همزمانی نگاهی بیندازیم.

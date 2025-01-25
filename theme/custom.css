@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap");
+
+
+code {
+    direction: ltr;
+    text-align: left;
+}
+
+.content {
+    text-align: justify;
+    direction: rtl;
+    font-family: "Vazirmatn", Arial, sans-serif;
+}
+
+.sidebar-scrollbox {
+    font-family: "Vazirmatn", Arial, sans-serif;
+}

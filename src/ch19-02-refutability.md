@@ -1,33 +1,14 @@
 ## Refutability: Whether a Pattern Might Fail to Match
 
-Patterns come in two forms: refutable and irrefutable. Patterns that will match
-for any possible value passed are _irrefutable_. An example would be `x` in the
-statement `let x = 5;` because `x` matches anything and therefore cannot fail
-to match. Patterns that can fail to match for some possible value are
-_refutable_. An example would be `Some(x)` in the expression `if let Some(x) =
-a_value` because if the value in the `a_value` variable is `None` rather than
-`Some`, the `Some(x)` pattern will not match.
+الگوها به دو شکل هستند: قابل‌رد (refutable) و غیرقابل‌رد (irrefutable). الگوهایی که برای هر مقدار ممکن مطابقت دارند _غیرقابل‌رد_ هستند. به‌عنوان مثال، `x` در عبارت `let x = 5;`، زیرا `x` با هر چیزی مطابقت دارد و بنابراین نمی‌تواند از تطابق باز بماند. الگوهایی که ممکن است برای برخی مقادیر ممکن مطابقت نداشته باشند _قابل‌رد_ هستند. به‌عنوان مثال، `Some(x)` در عبارت `if let Some(x) = a_value`، زیرا اگر مقدار در متغیر `a_value` `None` باشد به‌جای `Some`، الگوی `Some(x)` مطابقت نخواهد داشت.
 
-Function parameters, `let` statements, and `for` loops can only accept
-irrefutable patterns, because the program cannot do anything meaningful when
-values don’t match. The `if let` and `while let` expressions and the
-`let`-`else` statement accept refutable and irrefutable patterns, but the
-compiler warns against irrefutable patterns because by definition they’re
-intended to handle possible failure: the functionality of a conditional is in
-its ability to perform differently depending on success or failure.
+پارامترهای تابع، عبارات `let`، و حلقه‌های `for` فقط می‌توانند الگوهای غیرقابل‌رد بپذیرند، زیرا برنامه نمی‌تواند کاری معنادار انجام دهد وقتی مقادیر مطابقت ندارند. عبارات `if let` و `while let` و عبارت `let`-`else` الگوهای قابل‌رد و غیرقابل‌رد را می‌پذیرند، اما کامپایلر درباره الگوهای غیرقابل‌رد هشدار می‌دهد زیرا به‌طور تعریف‌شده برای مدیریت شکست احتمالی طراحی شده‌اند: عملکرد شرطی در توانایی آن است که بسته به موفقیت یا شکست به‌طور متفاوت عمل کند.
 
-In general, you shouldn’t have to worry about the distinction between refutable
-and irrefutable patterns; however, you do need to be familiar with the concept
-of refutability so you can respond when you see it in an error message. In
-those cases, you’ll need to change either the pattern or the construct you’re
-using the pattern with, depending on the intended behavior of the code.
+به‌طور کلی، نباید نیازی به نگرانی در مورد تمایز بین الگوهای قابل‌رد و غیرقابل‌رد داشته باشید؛ با این حال، باید با مفهوم قابل‌رد بودن آشنا باشید تا بتوانید زمانی که آن را در یک پیام خطا می‌بینید، واکنش نشان دهید. در این موارد، باید یا الگو را تغییر دهید یا ساختاری که الگو را با آن استفاده می‌کنید، بسته به رفتار موردنظر کد تغییر دهید.
 
-Let’s look at an example of what happens when we try to use a refutable pattern
-where Rust requires an irrefutable pattern and vice versa. Listing 19-8 shows a
-`let` statement, but for the pattern we’ve specified `Some(x)`, a refutable
-pattern. As you might expect, this code will not compile.
+بیایید به مثالی نگاه کنیم که وقتی سعی می‌کنیم از یک الگوی قابل‌رد جایی که راست نیاز به یک الگوی غیرقابل‌رد دارد استفاده کنیم، و برعکس، چه اتفاقی می‌افتد. فهرست 19-8 یک عبارت `let` را نشان می‌دهد، اما برای الگو ما `Some(x)`، یک الگوی قابل‌رد مشخص کرده‌ایم. همان‌طور که ممکن است انتظار داشته باشید، این کد کامپایل نخواهد شد.
 
-<Listing number="19-8" caption="Attempting to use a refutable pattern with `let`">
+<Listing number="19-8" caption="تلاش برای استفاده از یک الگوی قابل‌رد با `let`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-08/src/main.rs:here}}
@@ -35,26 +16,17 @@ pattern. As you might expect, this code will not compile.
 
 </Listing>
 
-If `some_option_value` was a `None` value, it would fail to match the pattern
-`Some(x)`, meaning the pattern is refutable. However, the `let` statement can
-only accept an irrefutable pattern because there is nothing valid the code can
-do with a `None` value. At compile time, Rust will complain that we’ve tried to
-use a refutable pattern where an irrefutable pattern is required:
+اگر مقدار `some_option_value` `None` باشد، مطابقت با الگوی `Some(x)` شکست خواهد خورد، به این معنا که الگو قابل‌رد است. با این حال، عبارت `let` فقط می‌تواند یک الگوی غیرقابل‌رد بپذیرد زیرا چیزی معتبر وجود ندارد که کد بتواند با مقدار `None` انجام دهد. در زمان کامپایل، راست شکایت می‌کند که ما سعی کرده‌ایم از یک الگوی قابل‌رد جایی که یک الگوی غیرقابل‌رد نیاز است استفاده کنیم:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-08/output.txt}}
 ```
 
-Because we didn’t cover (and couldn’t cover!) every valid value with the
-pattern `Some(x)`, Rust rightfully produces a compiler error.
+زیرا ما هر مقدار معتبری را با الگوی `Some(x)` پوشش ندادیم (و نمی‌توانستیم پوشش دهیم!)، راست به‌درستی یک خطای کامپایلر تولید می‌کند.
 
-If we have a refutable pattern where an irrefutable pattern is needed, we can
-fix it by changing the code that uses the pattern: instead of using `let`, we
-can use `if let`. Then if the pattern doesn’t match, the code will just skip
-the code in the curly brackets, giving it a way to continue validly. Listing
-19-9 shows how to fix the code in Listing 19-8.
+اگر یک الگوی قابل‌رد داشته باشیم جایی که یک الگوی غیرقابل‌رد نیاز است، می‌توانیم با تغییر کدی که از الگو استفاده می‌کند آن را رفع کنیم: به‌جای استفاده از `let`، می‌توانیم از `if let` استفاده کنیم. سپس اگر الگو مطابقت نداشته باشد، کد به‌سادگی از اجرای کد داخل آکولادها صرف‌نظر می‌کند و راهی برای ادامه معتبر فراهم می‌کند. فهرست 19-9 نشان می‌دهد که چگونه کد در فهرست 19-8 را رفع کنیم.
 
-<Listing number="19-9" caption="Using `if let` and a block with refutable patterns instead of `let`">
+<Listing number="19-9" caption="استفاده از `if let` و یک بلوک با الگوهای قابل‌رد به‌جای `let`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-09/src/main.rs:here}}
@@ -62,12 +34,9 @@ the code in the curly brackets, giving it a way to continue validly. Listing
 
 </Listing>
 
-We’ve given the code an out! This code is perfectly valid now. However,
-if we give `if let` an irrefutable pattern (a pattern that will always
-match), such as `x`, as shown in Listing 19-10, the compiler will give a
-warning.
+ما به کد یک مسیر خروجی دادیم! این کد اکنون کاملاً معتبر است. با این حال، اگر به `if let` یک الگوی غیرقابل‌رد (الگویی که همیشه مطابقت دارد)، مانند `x`، بدهیم، همان‌طور که در فهرست 19-10 نشان داده شده است، کامپایلر یک هشدار خواهد داد.
 
-<Listing number="19-10" caption="Attempting to use an irrefutable pattern with `if let`">
+<Listing number="19-10" caption="تلاش برای استفاده از یک الگوی غیرقابل‌رد با `if let`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-10/src/main.rs:here}}
@@ -75,19 +44,12 @@ warning.
 
 </Listing>
 
-Rust complains that it doesn’t make sense to use `if let` with an irrefutable
-pattern:
+راست شکایت می‌کند که استفاده از `if let` با یک الگوی غیرقابل‌رد منطقی نیست:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-10/output.txt}}
 ```
 
-For this reason, match arms must use refutable patterns, except for the last
-arm, which should match any remaining values with an irrefutable pattern. Rust
-allows us to use an irrefutable pattern in a `match` with only one arm, but
-this syntax isn’t particularly useful and could be replaced with a simpler
-`let` statement.
+به این دلیل، بازوهای match باید از الگوهای قابل‌رد استفاده کنند، به‌جز بازوی آخر که باید با یک الگوی غیرقابل‌رد هر مقدار باقی‌مانده را مطابقت دهد. راست به ما اجازه می‌دهد از یک الگوی غیرقابل‌رد در یک `match` با تنها یک بازو استفاده کنیم، اما این نحو به‌ویژه مفید نیست و می‌تواند با یک عبارت ساده‌تر `let` جایگزین شود.
 
-Now that you know where to use patterns and the difference between refutable
-and irrefutable patterns, let’s cover all the syntax we can use to create
-patterns.
+اکنون که می‌دانید کجا می‌توان از الگوها استفاده کرد و تفاوت بین الگوهای قابل‌رد و غیرقابل‌رد چیست، بیایید تمام نحوهایی که می‌توانیم برای ایجاد الگوها استفاده کنیم را بررسی کنیم.

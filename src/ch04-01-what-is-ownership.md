@@ -1,119 +1,48 @@
-## What Is Ownership?
+## مالکیت چیست؟
 
-_Ownership_ is a set of rules that govern how a Rust program manages memory.
-All programs have to manage the way they use a computer’s memory while running.
-Some languages have garbage collection that regularly looks for no-longer-used
-memory as the program runs; in other languages, the programmer must explicitly
-allocate and free the memory. Rust uses a third approach: memory is managed
-through a system of ownership with a set of rules that the compiler checks. If
-any of the rules are violated, the program won’t compile. None of the features
-of ownership will slow down your program while it’s running.
+_مالکیت_ مجموعه‌ای از قوانین است که نحوه مدیریت حافظه را در برنامه‌های Rust تعیین می‌کند. همه برنامه‌ها باید نحوه استفاده از حافظه کامپیوتر را در هنگام اجرا مدیریت کنند. برخی زبان‌ها از جمع‌آوری زباله استفاده می‌کنند که به طور منظم حافظه‌ای را که دیگر استفاده نمی‌شود بررسی می‌کند؛ در دیگر زبان‌ها، برنامه‌نویس باید حافظه را به صورت صریح تخصیص داده و آزاد کند. Rust از یک روش سوم استفاده می‌کند: حافظه از طریق سیستمی از مالکیت با مجموعه‌ای از قوانین مدیریت می‌شود که کامپایلر آن‌ها را بررسی می‌کند. اگر هر یک از این قوانین نقض شود، برنامه کامپایل نخواهد شد. هیچ‌یک از ویژگی‌های مالکیت برنامه شما را در هنگام اجرا کند نمی‌کند.
 
-Because ownership is a new concept for many programmers, it does take some time
-to get used to. The good news is that the more experienced you become with Rust
-and the rules of the ownership system, the easier you’ll find it to naturally
-develop code that is safe and efficient. Keep at it!
+از آنجا که مالکیت یک مفهوم جدید برای بسیاری از برنامه‌نویسان است، زمان می‌برد تا به آن عادت کنید. خبر خوب این است که هر چه بیشتر با Rust و قوانین سیستم مالکیت آن آشنا شوید، نوشتن کدی که امن و کارآمد باشد برایتان آسان‌تر خواهد شد. به تلاش ادامه دهید!
 
-When you understand ownership, you’ll have a solid foundation for understanding
-the features that make Rust unique. In this chapter, you’ll learn ownership by
-working through some examples that focus on a very common data structure:
-strings.
+وقتی مالکیت را درک کنید، پایه‌ای محکم برای درک ویژگی‌هایی که Rust را منحصر به فرد می‌کنند خواهید داشت. در این فصل، مالکیت را با کار بر روی چند مثال که بر یک ساختار داده بسیار رایج تمرکز دارند یاد خواهید گرفت: رشته‌ها.
 
-> ### The Stack and the Heap
+> ### پشته و حافظه
 >
-> Many programming languages don’t require you to think about the stack and the
-> heap very often. But in a systems programming language like Rust, whether a
-> value is on the stack or the heap affects how the language behaves and why
-> you have to make certain decisions. Parts of ownership will be described in
-> relation to the stack and the heap later in this chapter, so here is a brief
-> explanation in preparation.
+> بسیاری از زبان‌های برنامه‌نویسی شما را مجبور نمی‌کنند که به پشته و حافظه زیاد فکر کنید. اما در یک زبان برنامه‌نویسی سیستمی مانند Rust، این که آیا یک مقدار در پشته است یا در حافظه تأثیر می‌گذارد که زبان چگونه رفتار می‌کند و چرا باید تصمیمات خاصی بگیرید. بخش‌هایی از مالکیت در رابطه با پشته و حافظه در ادامه این فصل توضیح داده خواهند شد، بنابراین در اینجا توضیحی مختصر به عنوان آمادگی آورده شده است.
 >
-> Both the stack and the heap are parts of memory available to your code to use
-> at runtime, but they are structured in different ways. The stack stores
-> values in the order it gets them and removes the values in the opposite
-> order. This is referred to as _last in, first out_. Think of a stack of
-> plates: when you add more plates, you put them on top of the pile, and when
-> you need a plate, you take one off the top. Adding or removing plates from
-> the middle or bottom wouldn’t work as well! Adding data is called _pushing
-> onto the stack_, and removing data is called _popping off the stack_. All
-> data stored on the stack must have a known, fixed size. Data with an unknown
-> size at compile time or a size that might change must be stored on the heap
-> instead.
+> پشته و حافظه هر دو بخش‌هایی از حافظه هستند که در زمان اجرا در اختیار کد شما قرار می‌گیرند، اما به روش‌های مختلفی ساختار یافته‌اند. پشته مقادیر را به ترتیبی که دریافت می‌کند ذخیره می‌کند و مقادیر را به ترتیب معکوس حذف می‌کند. این به عنوان _آخرین ورودی، اولین خروجی_ شناخته می‌شود. به یک دسته بشقاب فکر کنید: وقتی بشقاب‌های بیشتری اضافه می‌کنید، آن‌ها را روی بالای دسته قرار می‌دهید و وقتی به یک بشقاب نیاز دارید، یکی را از بالای دسته برمی‌دارید. افزودن یا حذف بشقاب‌ها از وسط یا پایین دسته به خوبی کار نمی‌کند! افزودن داده به پشته _پوش‌کردن به پشته_ نامیده می‌شود و حذف داده از آن _پاپ‌کردن از پشته_. تمام داده‌هایی که در پشته ذخیره می‌شوند باید اندازه‌ای شناخته‌شده و ثابت داشته باشند. داده‌هایی با اندازه ناشناخته در زمان کامپایل یا اندازه‌ای که ممکن است تغییر کند باید در حافظه ذخیره شوند.
 >
-> The heap is less organized: when you put data on the heap, you request a
-> certain amount of space. The memory allocator finds an empty spot in the heap
-> that is big enough, marks it as being in use, and returns a _pointer_, which
-> is the address of that location. This process is called _allocating on the
-> heap_ and is sometimes abbreviated as just _allocating_ (pushing values onto
-> the stack is not considered allocating). Because the pointer to the heap is a
-> known, fixed size, you can store the pointer on the stack, but when you want
-> the actual data, you must follow the pointer. Think of being seated at a
-> restaurant. When you enter, you state the number of people in your group, and
-> the host finds an empty table that fits everyone and leads you there. If
-> someone in your group comes late, they can ask where you’ve been seated to
-> find you.
+> حافظه کمتر سازمان‌یافته است: وقتی داده‌ای را در حافظه قرار می‌دهید، مقدار مشخصی از فضا را درخواست می‌کنید. تخصیص‌دهنده حافظه یک مکان خالی در حافظه پیدا می‌کند که به اندازه کافی بزرگ باشد، آن را به عنوان استفاده شده علامت‌گذاری می‌کند و یک _اشاره‌گر (Pointer)_ بازمی‌گرداند که آدرس آن مکان است. این فرآیند _تخصیص در حافظه_ نامیده می‌شود و گاهی اوقات به اختصار _تخصیص_ نامیده می‌شود (پوش‌کردن مقادیر به پشته به عنوان تخصیص در نظر گرفته نمی‌شود). از آنجا که اشاره‌گر (Pointer) به حافظه اندازه‌ای شناخته‌شده و ثابت دارد، می‌توانید اشاره‌گر (Pointer) را در پشته ذخیره کنید، اما وقتی داده واقعی را می‌خواهید، باید اشاره‌گر (Pointer) را دنبال کنید. به ورود به یک رستوران فکر کنید. وقتی وارد می‌شوید، تعداد افراد گروه خود را اعلام می‌کنید و میزبان یک میز خالی پیدا می‌کند که همه را جا دهد و شما را به آنجا می‌برد. اگر کسی از گروه شما دیر برسد، می‌تواند بپرسد کجا نشسته‌اید تا شما را پیدا کند.
 >
-> Pushing to the stack is faster than allocating on the heap because the
-> allocator never has to search for a place to store new data; that location is
-> always at the top of the stack. Comparatively, allocating space on the heap
-> requires more work because the allocator must first find a big enough space
-> to hold the data and then perform bookkeeping to prepare for the next
-> allocation.
+> پوش‌کردن به پشته سریع‌تر از تخصیص در حافظه است، زیرا تخصیص‌دهنده هرگز مجبور نیست مکان جدیدی برای ذخیره داده‌ها جستجو کند؛ آن مکان همیشه بالای پشته است. در مقایسه، تخصیص فضا در حافظه نیاز به کار بیشتری دارد زیرا تخصیص‌دهنده باید ابتدا مکانی به اندازه کافی بزرگ برای داده پیدا کند و سپس برای تخصیص بعدی آماده‌سازی انجام دهد.
 >
-> Accessing data in the heap is slower than accessing data on the stack because
-> you have to follow a pointer to get there. Contemporary processors are faster
-> if they jump around less in memory. Continuing the analogy, consider a server
-> at a restaurant taking orders from many tables. It’s most efficient to get
-> all the orders at one table before moving on to the next table. Taking an
-> order from table A, then an order from table B, then one from A again, and
-> then one from B again would be a much slower process. By the same token, a
-> processor can do its job better if it works on data that’s close to other
-> data (as it is on the stack) rather than farther away (as it can be on the
-> heap).
+> دسترسی به داده در حافظه کندتر از دسترسی به داده در پشته است زیرا باید یک اشاره‌گر (Pointer) را دنبال کنید تا به آن برسید. پردازنده‌های معاصر سریع‌تر هستند اگر در حافظه کمتر پرش کنند. ادامه دادن این تمثیل، در نظر بگیرید که یک پیشخدمت در رستوران سفارش‌های بسیاری از میزها را می‌گیرد. این کارآمدتر است که تمام سفارش‌های یک میز را بگیرد قبل از اینکه به میز بعدی برود. گرفتن سفارش از میز A، سپس از میز B، سپس دوباره یکی از A، و سپس یکی از B فرآیند بسیار کندتری خواهد بود. به همین ترتیب، یک پردازنده می‌تواند بهتر کار خود را انجام دهد اگر روی داده‌ای کار کند که به داده‌های دیگر نزدیک باشد (مانند آنچه در پشته است) تا داده‌ای که دورتر باشد (مانند آنچه ممکن است در حافظه باشد).
 >
-> When your code calls a function, the values passed into the function
-> (including, potentially, pointers to data on the heap) and the function’s
-> local variables get pushed onto the stack. When the function is over, those
-> values get popped off the stack.
+> وقتی کد شما یک تابع را فراخوانی می‌کند، مقادیری که به تابع منتقل می‌شوند (از جمله، احتمالاً، اشاره‌گر (Pointer)هایی به داده در حافظه) و متغیرهای محلی تابع به پشته پوش می‌شوند. وقتی تابع تمام می‌شود، آن مقادیر از پشته پاپ می‌شوند.
 >
-> Keeping track of what parts of code are using what data on the heap,
-> minimizing the amount of duplicate data on the heap, and cleaning up unused
-> data on the heap so you don’t run out of space are all problems that ownership
-> addresses. Once you understand ownership, you won’t need to think about the
-> stack and the heap very often, but knowing that the main purpose of ownership
-> is to manage heap data can help explain why it works the way it does.
+> پیگیری این که چه بخش‌هایی از کد از چه داده‌هایی در حافظه استفاده می‌کنند، به حداقل رساندن مقدار داده‌های تکراری در حافظه، و پاک کردن داده‌های استفاده نشده در حافظه به طوری که فضای بیشتری اشغال نشود همه مشکلاتی هستند که مالکیت به آن‌ها می‌پردازد. هنگامی که مالکیت را درک کنید، نیازی نخواهید داشت که اغلب به پشته و حافظه فکر کنید، اما دانستن این که هدف اصلی مالکیت مدیریت داده‌های حافظه است می‌تواند توضیح دهد که چرا به این صورت عمل می‌کند.
 
-### Ownership Rules
+### قوانین مالکیت
 
-First, let’s take a look at the ownership rules. Keep these rules in mind as we
-work through the examples that illustrate them:
+ابتدا، بیایید نگاهی به قوانین مالکیت بیندازیم. این قوانین را در ذهن داشته باشید زیرا با مثال‌هایی که آن‌ها را نشان می‌دهند کار می‌کنیم:
 
-- Each value in Rust has an _owner_.
-- There can only be one owner at a time.
-- When the owner goes out of scope, the value will be dropped.
+- هر مقدار در Rust یک _مالک_ دارد.
+- در یک زمان فقط می‌تواند یک مالک وجود داشته باشد.
+- زمانی که مالک از دامنه خارج شود، مقدار _حذف_ خواهد شد.
 
-### Variable Scope
+### دامنه متغیر
 
-Now that we’re past basic Rust syntax, we won’t include all the `fn main() {`
-code in examples, so if you’re following along, make sure to put the following
-examples inside a `main` function manually. As a result, our examples will be a
-bit more concise, letting us focus on the actual details rather than
-boilerplate code.
+حال که از سینتکس پایه Rust گذشته‌ایم، در مثال‌ها کد کامل `fn main() {` را نخواهیم آورد. بنابراین، اگر دنبال می‌کنید، مطمئن شوید که مثال‌های زیر را به صورت دستی داخل یک تابع `main` قرار دهید. در نتیجه، مثال‌های ما کمی مختصرتر خواهند بود و می‌توانیم بر روی جزئیات واقعی به جای کد ابتدایی تمرکز کنیم.
 
-As a first example of ownership, we’ll look at the _scope_ of some variables. A
-scope is the range within a program for which an item is valid. Take the
-following variable:
+به عنوان اولین مثال از مالکیت، به _دامنه_ برخی متغیرها نگاه می‌کنیم. دامنه محدوده‌ای است که در آن یک آیتم در یک برنامه معتبر است. به متغیر زیر توجه کنید:
 
 ```rust
 let s = "hello";
 ```
 
-The variable `s` refers to a string literal, where the value of the string is
-hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current _scope_. Listing 4-1 shows a
-program with comments annotating where the variable `s` would be valid.
+متغیر `s` به یک رشته‌ی ثابت اشاره دارد، جایی که مقدار رشته به صورت ثابت در متن برنامه ما کدنویسی شده است. این متغیر از نقطه‌ای که اعلام شده معتبر است تا انتهای _دامنه_ جاری. لیست 4-1 برنامه‌ای را با توضیحاتی که نشان می‌دهند متغیر `s` در کجا معتبر است، نمایش می‌دهد.
 
-<Listing number="4-1" caption="A variable and the scope in which it is valid">
+<Listing number="4-1" caption="یک متغیر و دامنه‌ای که در آن معتبر است">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-01/src/main.rs:here}}
@@ -121,127 +50,67 @@ program with comments annotating where the variable `s` would be valid.
 
 </Listing>
 
-In other words, there are two important points in time here:
+به عبارت دیگر، در اینجا دو نقطه‌ی مهم زمانی وجود دارد:
 
-- When `s` comes _into_ scope, it is valid.
-- It remains valid until it goes _out of_ scope.
+- وقتی `s` وارد دامنه می‌شود، معتبر است.
+- تا زمانی که از دامنه خارج شود معتبر باقی می‌ماند.
 
-At this point, the relationship between scopes and when variables are valid is
-similar to that in other programming languages. Now we’ll build on top of this
-understanding by introducing the `String` type.
+در این نقطه، رابطه بین دامنه‌ها و زمان‌هایی که متغیرها معتبر هستند مشابه با زبان‌های برنامه‌نویسی دیگر است. حالا بر اساس این درک، نوع `String` را معرفی می‌کنیم.
 
-### The `String` Type
+### نوع `String`
 
-To illustrate the rules of ownership, we need a data type that is more complex
-than those we covered in the [“Data Types”][data-types]<!-- ignore --> section
-of Chapter 3. The types covered previously are of a known size, can be stored
-on the stack and popped off the stack when their scope is over, and can be
-quickly and trivially copied to make a new, independent instance if another
-part of code needs to use the same value in a different scope. But we want to
-look at data that is stored on the heap and explore how Rust knows when to
-clean up that data, and the `String` type is a great example.
+برای نشان دادن قوانین مالکیت، به نوع داده‌ای نیاز داریم که پیچیده‌تر از آن‌هایی باشد که در بخش [“انواع داده”][data-types]<!-- ignore --> فصل ۳ بررسی کردیم. انواعی که قبلاً پوشش داده شد، اندازه‌ی مشخصی دارند، می‌توانند در استک ذخیره شوند و وقتی دامنه‌شان تمام شد از استک برداشته شوند و می‌توانند به سرعت و به سادگی برای ساختن یک نمونه‌ی جدید و مستقل کپی شوند اگر قسمت دیگری از کد بخواهد همان مقدار را در دامنه‌ی دیگری استفاده کند. اما ما می‌خواهیم به داده‌هایی نگاه کنیم که در هیپ ذخیره شده‌اند و بررسی کنیم چگونه Rust می‌داند چه زمانی باید این داده‌ها را پاکسازی کند، و نوع `String` یک مثال عالی است.
 
-We’ll concentrate on the parts of `String` that relate to ownership. These
-aspects also apply to other complex data types, whether they are provided by
-the standard library or created by you. We’ll discuss `String` in more depth in
-[Chapter 8][ch8]<!-- ignore -->.
+ما روی بخش‌هایی از `String` تمرکز خواهیم کرد که به مالکیت مربوط می‌شوند. این جنبه‌ها همچنین به سایر انواع داده‌های پیچیده اعمال می‌شوند، چه آن‌هایی که توسط کتابخانه استاندارد ارائه شده‌اند و چه آن‌هایی که خودتان ایجاد کرده‌اید. ما `String` را در فصل [۸][ch8]<!-- ignore --> با جزئیات بیشتری بررسی خواهیم کرد.
 
-We’ve already seen string literals, where a string value is hardcoded into our
-program. String literals are convenient, but they aren’t suitable for every
-situation in which we may want to use text. One reason is that they’re
-immutable. Another is that not every string value can be known when we write
-our code: for example, what if we want to take user input and store it? For
-these situations, Rust has a second string type, `String`. This type manages
-data allocated on the heap and as such is able to store an amount of text that
-is unknown to us at compile time. You can create a `String` from a string
-literal using the `from` function, like so:
+قبلاً رشته‌های ثابت را دیده‌ایم، جایی که مقدار رشته در کد ما به صورت ثابت قرار گرفته است. رشته‌های ثابت راحت هستند، اما برای هر موقعیتی که ممکن است بخواهیم از متن استفاده کنیم مناسب نیستند. یکی از دلایل این است که آن‌ها تغییرناپذیر هستند. دلیل دیگر این است که نمی‌توان هر مقدار رشته را هنگام نوشتن کد خود دانست: به عنوان مثال، اگر بخواهیم ورودی کاربر را بگیریم و ذخیره کنیم چه؟ برای این شرایط، Rust یک نوع رشته‌ی دیگر به نام `String` دارد. این نوع داده‌های تخصیص‌یافته در هیپ را مدیریت می‌کند و به همین دلیل می‌تواند مقدار متنی را ذخیره کند که اندازه‌ی آن در زمان کامپایل برای ما ناشناخته است. شما می‌توانید یک `String` را از یک رشته‌ی ثابت با استفاده از تابع `from` ایجاد کنید، به این صورت:
 
 ```rust
 let s = String::from("hello");
 ```
 
-The double colon `::` operator allows us to namespace this particular `from`
-function under the `String` type rather than using some sort of name like
-`string_from`. We’ll discuss this syntax more in the [“Method
-Syntax”][method-syntax]<!-- ignore --> section of Chapter 5, and when we talk
-about namespacing with modules in [“Paths for Referring to an Item in the
-Module Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
+عملگر `::` به ما اجازه می‌دهد این تابع `from` خاص را تحت نوع `String` نام‌گذاری کنیم به جای استفاده از نوعی نام مانند `string_from`. این سینتکس را بیشتر در بخش [“سینتکس متد”][method-syntax]<!-- ignore --> فصل ۵ و هنگامی که در مورد نام‌گذاری با ماژول‌ها صحبت می‌کنیم در بخش [“مسیرها برای ارجاع به یک آیتم در درخت ماژول”][paths-module-tree]<!-- ignore --> فصل ۷ بررسی خواهیم کرد.
 
-This kind of string _can_ be mutated:
+این نوع رشته _می‌تواند_ تغییر کند:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-01-can-mutate-string/src/main.rs:here}}
 ```
 
-So, what’s the difference here? Why can `String` be mutated but literals
-cannot? The difference is in how these two types deal with memory.
+پس، تفاوت اینجا چیست؟ چرا `String` می‌تواند تغییر کند اما رشته‌های ثابت نمی‌توانند؟ تفاوت در نحوه‌ی مدیریت حافظه توسط این دو نوع است.
 
-### Memory and Allocation
+### حافظه و تخصیص
 
-In the case of a string literal, we know the contents at compile time, so the
-text is hardcoded directly into the final executable. This is why string
-literals are fast and efficient. But these properties only come from the string
-literal’s immutability. Unfortunately, we can’t put a blob of memory into the
-binary for each piece of text whose size is unknown at compile time and whose
-size might change while running the program.
+در مورد یک رشته‌ی ثابت، ما محتوا را در زمان کامپایل می‌دانیم، بنابراین متن به طور مستقیم در فایل اجرایی نهایی کدنویسی شده است. به همین دلیل رشته‌های ثابت سریع و کارآمد هستند. اما این ویژگی‌ها فقط از تغییرناپذیری رشته‌ی ثابت ناشی می‌شوند. متأسفانه، نمی‌توانیم یک تکه حافظه را برای هر قطعه متنی که اندازه‌ی آن در زمان کامپایل ناشناخته است و ممکن است در حین اجرای برنامه تغییر کند، در فایل باینری قرار دهیم.
 
-With the `String` type, in order to support a mutable, growable piece of text,
-we need to allocate an amount of memory on the heap, unknown at compile time,
-to hold the contents. This means:
+با نوع `String`، برای پشتیبانی از یک متن قابل تغییر و قابل رشد، ما نیاز داریم مقداری حافظه را در هیپ تخصیص دهیم که در زمان کامپایل ناشناخته است تا محتوا را نگه داریم. این به این معناست که:
 
-- The memory must be requested from the memory allocator at runtime.
-- We need a way of returning this memory to the allocator when we’re done with
-  our `String`.
+- حافظه باید در زمان اجرا از تخصیص‌دهنده حافظه درخواست شود.
+- ما نیاز داریم راهی برای بازگرداندن این حافظه به تخصیص‌دهنده زمانی که کارمان با `String` تمام شد، داشته باشیم.
 
-That first part is done by us: when we call `String::from`, its implementation
-requests the memory it needs. This is pretty much universal in programming
-languages.
+قسمت اول توسط ما انجام می‌شود: وقتی که `String::from` را فراخوانی می‌کنیم، پیاده‌سازی آن حافظه‌ای را که نیاز دارد درخواست می‌کند. این تقریباً در تمام زبان‌های برنامه‌نویسی رایج است.
 
-However, the second part is different. In languages with a _garbage collector
-(GC)_, the GC keeps track of and cleans up memory that isn’t being used
-anymore, and we don’t need to think about it. In most languages without a GC,
-it’s our responsibility to identify when memory is no longer being used and to
-call code to explicitly free it, just as we did to request it. Doing this
-correctly has historically been a difficult programming problem. If we forget,
-we’ll waste memory. If we do it too early, we’ll have an invalid variable. If
-we do it twice, that’s a bug too. We need to pair exactly one `allocate` with
-exactly one `free`.
+اما قسمت دوم متفاوت است. در زبان‌هایی که دارای _جمع‌کننده زباله (GC)_ هستند، GC حافظه‌ای را که دیگر استفاده نمی‌شود پیگیری و پاک‌سازی می‌کند و ما نیازی به فکر کردن در مورد آن نداریم. در بیشتر زبان‌هایی که GC ندارند، این مسئولیت بر عهده ماست که مشخص کنیم چه زمانی حافظه دیگر استفاده نمی‌شود و کدی را برای آزادسازی صریح آن فراخوانی کنیم، دقیقاً همان‌طور که آن را درخواست کرده‌ایم. انجام درست این کار در تاریخ برنامه‌نویسی یک مشکل دشوار بوده است. اگر فراموش کنیم، حافظه هدر می‌رود. اگر خیلی زود این کار را انجام دهیم، یک متغیر نامعتبر خواهیم داشت. اگر دو بار این کار را انجام دهیم، این هم یک باگ است. ما نیاز داریم دقیقاً یک `allocate` را با دقیقاً یک `free` جفت کنیم.
 
-Rust takes a different path: the memory is automatically returned once the
-variable that owns it goes out of scope. Here’s a version of our scope example
-from Listing 4-1 using a `String` instead of a string literal:
+Rust مسیر متفاوتی را طی می‌کند: حافظه به طور خودکار وقتی که متغیری که مالک آن است از دامنه خارج می‌شود بازگردانده می‌شود. در اینجا نسخه‌ای از مثال دامنه ما از فهرست ۴-۱ وجود دارد که از یک `String` به جای یک رشته‌ی ثابت استفاده می‌کند:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-02-string-scope/src/main.rs:here}}
 ```
 
-There is a natural point at which we can return the memory our `String` needs
-to the allocator: when `s` goes out of scope. When a variable goes out of
-scope, Rust calls a special function for us. This function is called
-[`drop`][drop]<!-- ignore -->, and it’s where the author of `String` can put
-the code to return the memory. Rust calls `drop` automatically at the closing
-curly bracket.
+یک نقطه طبیعی وجود دارد که می‌توانیم حافظه‌ای را که `String` ما نیاز دارد به تخصیص‌دهنده بازگردانیم: وقتی `s` از دامنه خارج می‌شود. وقتی یک متغیر از دامنه خارج می‌شود، Rust یک تابع خاص را برای ما فراخوانی می‌کند. این تابع [`drop`][drop]<!-- ignore --> نامیده می‌شود، و اینجا جایی است که نویسنده `String` می‌تواند کدی برای بازگرداندن حافظه قرار دهد. Rust به طور خودکار `drop` را در زمان بستن آکولاد فراخوانی می‌کند.
 
-> Note: In C++, this pattern of deallocating resources at the end of an item’s
-> lifetime is sometimes called _Resource Acquisition Is Initialization (RAII)_.
-> The `drop` function in Rust will be familiar to you if you’ve used RAII
-> patterns.
+> نکته: در C++، این الگو که منابع در انتهای دوره عمر یک آیتم آزاد می‌شوند گاهی اوقات _Resource Acquisition Is Initialization (RAII)_ نامیده می‌شود. تابع `drop` در Rust برای کسانی که از الگوهای RAII استفاده کرده‌اند آشنا خواهد بود.
 
-This pattern has a profound impact on the way Rust code is written. It may seem
-simple right now, but the behavior of code can be unexpected in more
-complicated situations when we want to have multiple variables use the data
-we’ve allocated on the heap. Let’s explore some of those situations now.
-
-<!-- Old heading. Do not remove or links may break. -->
+این الگو تأثیر عمیقی بر نحوه نوشتن کد در Rust دارد. ممکن است اکنون ساده به نظر برسد، اما رفتار کد می‌تواند در موقعیت‌های پیچیده‌تر که می‌خواهیم متغیرهای متعددی از داده‌هایی که در هیپ تخصیص داده‌ایم استفاده کنند، غیرمنتظره باشد. اکنون به بررسی برخی از این موقعیت‌ها می‌پردازیم.
 
 <a id="ways-variables-and-data-interact-move"></a>
 
-#### Variables and Data Interacting with Move
+#### تعامل متغیرها و داده‌ها با انتقال (Move)
 
-Multiple variables can interact with the same data in different ways in Rust.
-Let’s look at an example using an integer in Listing 4-2.
+متغیرهای مختلف می‌توانند در Rust به روش‌های مختلفی با داده‌ها تعامل داشته باشند. بیایید به مثالی با استفاده از یک عدد صحیح در فهرست ۴-۲ نگاه کنیم.
 
-<Listing number="4-2" caption="Assigning the integer value of variable `x` to `y`">
+<Listing number="4-2" caption="اختصاص مقدار عدد صحیح متغیر `x` به `y`">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-02/src/main.rs:here}}
@@ -249,222 +118,123 @@ Let’s look at an example using an integer in Listing 4-2.
 
 </Listing>
 
-We can probably guess what this is doing: “bind the value `5` to `x`; then make
-a copy of the value in `x` and bind it to `y`.” We now have two variables, `x`
-and `y`, and both equal `5`. This is indeed what is happening, because integers
-are simple values with a known, fixed size, and these two `5` values are pushed
-onto the stack.
+ما احتمالاً می‌توانیم حدس بزنیم این کد چه می‌کند: "مقدار `5` را به `x` اختصاص بده؛ سپس یک کپی از مقدار `x` بگیر و آن را به `y` اختصاص بده." اکنون دو متغیر داریم، `x` و `y`، و هر دو برابر `5` هستند. این دقیقاً همان چیزی است که اتفاق می‌افتد، زیرا اعداد صحیح مقادیر ساده‌ای با اندازه‌ی مشخص هستند، و این دو مقدار `5` به استک اضافه می‌شوند.
 
-Now let’s look at the `String` version:
+اکنون بیایید به نسخه `String` نگاه کنیم:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-03-string-move/src/main.rs:here}}
 ```
 
-This looks very similar, so we might assume that the way it works would be the
-same: that is, the second line would make a copy of the value in `s1` and bind
-it to `s2`. But this isn’t quite what happens.
+این بسیار مشابه به نظر می‌رسد، بنابراین ممکن است فرض کنیم که نحوه عملکرد آن نیز مشابه است: یعنی، خط دوم یک کپی از مقدار موجود در `s1` می‌گیرد و آن را به `s2` اختصاص می‌دهد. اما این دقیقاً چیزی نیست که اتفاق می‌افتد.
 
-Take a look at Figure 4-1 to see what is happening to `String` under the
-covers. A `String` is made up of three parts, shown on the left: a pointer to
-the memory that holds the contents of the string, a length, and a capacity.
-This group of data is stored on the stack. On the right is the memory on the
-heap that holds the contents.
+به شکل ۴-۱ نگاه کنید تا ببینید که در پشت صحنه با `String` چه اتفاقی می‌افتد. یک `String` از سه بخش تشکیل شده است که در سمت چپ نشان داده شده‌اند: یک اشاره‌گر (Pointer) به حافظه‌ای که محتوای رشته را نگه می‌دارد، یک طول، و یک ظرفیت. این گروه داده‌ها روی استک ذخیره می‌شوند. در سمت راست، حافظه روی هیپ قرار دارد که محتوای رشته را نگه می‌دارد.
 
-<img alt="Two tables: the first table contains the representation of s1 on the
-stack, consisting of its length (5), capacity (5), and a pointer to the first
-value in the second table. The second table contains the representation of the
-string data on the heap, byte by byte." src="img/trpl04-01.svg" class="center"
-style="width: 50%;" />
+<img alt="دو جدول: جدول اول نمایش s1 روی استک را نشان می‌دهد که شامل طول (۵)، ظرفیت (۵)، و اشاره‌گر (Pointer)ی به اولین مقدار در جدول دوم است. جدول دوم نمایش داده‌های رشته روی هیپ را بایت به بایت نشان می‌دهد." src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-1: Representation in memory of a `String`
-holding the value `"hello"` bound to `s1`</span>
+<span class="caption">شکل ۴-۱: نمایش در حافظه یک `String` که مقدار `"hello"` به `s1` متصل است</span>
 
-The length is how much memory, in bytes, the contents of the `String` are
-currently using. The capacity is the total amount of memory, in bytes, that the
-`String` has received from the allocator. The difference between length and
-capacity matters, but not in this context, so for now, it’s fine to ignore the
-capacity.
+طول مشخص می‌کند که محتوای `String` در حال حاضر چقدر حافظه به بایت استفاده می‌کند. ظرفیت مقدار کل حافظه‌ای است که `String` از تخصیص‌دهنده دریافت کرده است. تفاوت بین طول و ظرفیت اهمیت دارد، اما نه در این زمینه، بنابراین در حال حاضر می‌توان ظرفیت را نادیده گرفت.
 
-When we assign `s1` to `s2`, the `String` data is copied, meaning we copy the
-pointer, the length, and the capacity that are on the stack. We do not copy the
-data on the heap that the pointer refers to. In other words, the data
-representation in memory looks like Figure 4-2.
+وقتی `s1` را به `s2` اختصاص می‌دهیم، داده‌های `String` کپی می‌شوند، به این معنی که اشاره‌گر (Pointer)، طول، و ظرفیت موجود روی استک را کپی می‌کنیم. ما داده‌های روی هیپ را که اشاره‌گر (Pointer) به آن اشاره می‌کند، کپی نمی‌کنیم. به عبارت دیگر، نمایش داده‌ها در حافظه به شکل ۴-۲ به نظر می‌رسد.
 
-<img alt="Three tables: tables s1 and s2 representing those strings on the
-stack, respectively, and both pointing to the same string data on the heap."
-src="img/trpl04-02.svg" class="center" style="width: 50%;" />
+<img alt="سه جدول: جدول‌های s1 و s2 به ترتیب نمایش‌دهنده رشته‌ها روی استک هستند و هر دو به داده‌های رشته یکسان روی هیپ اشاره می‌کنند." src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-2: Representation in memory of the variable `s2`
-that has a copy of the pointer, length, and capacity of `s1`</span>
+<span class="caption">شکل ۴-۲: نمایش در حافظه متغیر `s2` که یک کپی از اشاره‌گر (Pointer)، طول، و ظرفیت `s1` دارد</span>
 
-The representation does _not_ look like Figure 4-3, which is what memory would
-look like if Rust instead copied the heap data as well. If Rust did this, the
-operation `s2 = s1` could be very expensive in terms of runtime performance if
-the data on the heap were large.
+نمایش داده‌ها _به این شکل_ نیست که در شکل ۴-۳ آمده است، که نشان می‌دهد حافظه به گونه‌ای باشد که Rust همچنین داده‌های هیپ را کپی کند. اگر Rust این کار را انجام می‌داد، عملیات `s2 = s1` می‌توانست از نظر عملکرد زمان اجرا بسیار گران باشد اگر داده‌های روی هیپ بزرگ بودند.
 
-<img alt="Four tables: two tables representing the stack data for s1 and s2,
-and each points to its own copy of string data on the heap."
-src="img/trpl04-03.svg" class="center" style="width: 50%;" />
+<img alt="چهار جدول: دو جدول نمایانگر داده‌های استک برای s1 و s2 هستند و هر کدام به نسخه خود از داده‌های رشته روی هیپ اشاره می‌کنند." src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-3: Another possibility for what `s2 = s1` might
-do if Rust copied the heap data as well</span>
+<span class="caption">شکل ۴-۳: یک امکان دیگر برای آنچه که `s2 = s1` ممکن است انجام دهد اگر Rust داده‌های هیپ را نیز کپی کند</span>
 
-Earlier, we said that when a variable goes out of scope, Rust automatically
-calls the `drop` function and cleans up the heap memory for that variable. But
-Figure 4-2 shows both data pointers pointing to the same location. This is a
-problem: when `s2` and `s1` go out of scope, they will both try to free the
-same memory. This is known as a _double free_ error and is one of the memory
-safety bugs we mentioned previously. Freeing memory twice can lead to memory
-corruption, which can potentially lead to security vulnerabilities.
+قبلاً گفتیم که وقتی یک متغیر از دامنه خارج می‌شود، Rust به طور خودکار تابع `drop` را فراخوانی می‌کند و حافظه هیپ را برای آن متغیر پاک‌سازی می‌کند. اما شکل ۴-۲ نشان می‌دهد که هر دو اشاره‌گر (Pointer) داده‌ها به یک مکان اشاره می‌کنند. این یک مشکل است: وقتی `s2` و `s1` از دامنه خارج می‌شوند، هر دو سعی می‌کنند همان حافظه را آزاد کنند. این به عنوان یک خطای _آزادسازی دوباره_ شناخته می‌شود و یکی از مشکلات ایمنی حافظه است که قبلاً ذکر کردیم. آزادسازی حافظه دو بار می‌تواند منجر به خراب شدن حافظه شود، که به طور بالقوه می‌تواند منجر به آسیب‌پذیری‌های امنیتی شود.
 
-To ensure memory safety, after the line `let s2 = s1;`, Rust considers `s1` as
-no longer valid. Therefore, Rust doesn’t need to free anything when `s1` goes
-out of scope. Check out what happens when you try to use `s1` after `s2` is
-created; it won’t work:
+برای اطمینان از ایمنی حافظه، پس از خط `let s2 = s1;`، Rust متغیر `s1` را دیگر معتبر نمی‌داند. بنابراین، Rust نیازی به آزادسازی هیچ چیزی ندارد وقتی `s1` از دامنه خارج می‌شود. بررسی کنید که وقتی سعی می‌کنید `s1` را پس از ایجاد `s2` استفاده کنید، چه اتفاقی می‌افتد؛ این کار جواب نمی‌دهد:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/src/main.rs:here}}
 ```
 
-You’ll get an error like this because Rust prevents you from using the
-invalidated reference:
+شما خطایی مشابه این دریافت خواهید کرد زیرا Rust از استفاده از مرجع نامعتبر جلوگیری می‌کند:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/output.txt}}
 ```
 
-If you’ve heard the terms _shallow copy_ and _deep copy_ while working with
-other languages, the concept of copying the pointer, length, and capacity
-without copying the data probably sounds like making a shallow copy. But
-because Rust also invalidates the first variable, instead of being called a
-shallow copy, it’s known as a _move_. In this example, we would say that `s1`
-was _moved_ into `s2`. So, what actually happens is shown in Figure 4-4.
+اگر اصطلاحات _کپی سطحی_ و _کپی عمیق_ را هنگام کار با زبان‌های دیگر شنیده‌اید، مفهوم کپی کردن اشاره‌گر (Pointer)، طول، و ظرفیت بدون کپی کردن داده احتمالاً شبیه به انجام یک کپی سطحی است. اما به دلیل اینکه Rust همچنین متغیر اول را نامعتبر می‌کند، به جای اینکه آن را کپی سطحی بنامند، به عنوان یک _انتقال_ شناخته می‌شود. در این مثال، می‌توانیم بگوییم که `s1` به `s2` _منتقل_ شده است. بنابراین، آنچه در واقع اتفاق می‌افتد در شکل ۴-۴ نشان داده شده است.
 
-<img alt="Three tables: tables s1 and s2 representing those strings on the
-stack, respectively, and both pointing to the same string data on the heap.
-Table s1 is grayed out be-cause s1 is no longer valid; only s2 can be used to
-access the heap data." src="img/trpl04-04.svg" class="center" style="width:
-50%;" />
+<img alt="سه جدول: جدول‌های s1 و s2 که به ترتیب نمایش‌دهنده رشته‌ها روی استک هستند و هر دو به داده‌های رشته یکسان روی هیپ اشاره می‌کنند. جدول s1 خاکستری شده زیرا s1 دیگر معتبر نیست؛ تنها s2 می‌تواند برای دسترسی به داده‌های هیپ استفاده شود." src="img/trpl04-04.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-4: Representation in memory after `s1` has been
-invalidated</span>
+<span class="caption">شکل ۴-۴: نمایش در حافظه پس از اینکه `s1` نامعتبر شده است</span>
 
-That solves our problem! With only `s2` valid, when it goes out of scope it
-alone will free the memory, and we’re done.
+این مشکل ما را حل می‌کند! با تنها `s2` که معتبر است، وقتی از دامنه خارج می‌شود، تنها آن حافظه را آزاد خواهد کرد و کار ما تمام است.
 
-In addition, there’s a design choice that’s implied by this: Rust will never
-automatically create “deep” copies of your data. Therefore, any _automatic_
-copying can be assumed to be inexpensive in terms of runtime performance.
+علاوه بر این، یک انتخاب طراحی وجود دارد که از این نتیجه‌گیری می‌شود: Rust هرگز به طور خودکار "کپی عمیق" داده‌های شما را ایجاد نمی‌کند. بنابراین، هر گونه کپی _خودکار_ می‌تواند به‌عنوان عملی ارزان از نظر عملکرد زمان اجرا در نظر گرفته شود.
 
-#### Scope and Assignment
+#### دامنه و انتساب
 
-The inverse of this is true for the relationship between scoping, ownership, and
-memory being freed via the `drop` function as well. When you assign a completely
-new value to an existing variable, Rust will call `drop` and free the original
-value’s memory immediately. Consider this code, for example:
+عکس این رابطه بین دامنه‌بندی، مالکیت، و آزادسازی حافظه از طریق تابع `drop` نیز صحیح است. وقتی یک مقدار کاملاً جدید به یک متغیر موجود اختصاص می‌دهید، Rust تابع `drop` را فراخوانی می‌کند و حافظه مقدار اصلی را بلافاصله آزاد می‌کند. به این کد توجه کنید:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04b-replacement-drop/src/main.rs:here}}
 ```
 
-We initially declare a variable `s` and bind it to a `String` with the value
-`"hello"`. Then we immediately create a new `String` with the value `"ahoy"` and
-assign it to `s`. At this point, nothing is referring to the original value on
-the heap at all.
+ابتدا یک متغیر `s` را اعلان می‌کنیم و آن را به یک `String` با مقدار `"hello"` اختصاص می‌دهیم. سپس بلافاصله یک `String` جدید با مقدار `"ahoy"` ایجاد می‌کنیم و آن را به `s` اختصاص می‌دهیم. در این نقطه، هیچ چیزی به مقدار اصلی روی هیپ اشاره نمی‌کند.
 
-<img alt="One table s representing the string value on the stack, pointing to
-the second piece of string data (ahoy) on the heap, with the original string
-data (hello) grayed out because it cannot be accessed anymore."
-src="img/trpl04-05.svg"
-class="center"
-style="width: 50%;"
-/>
+<img alt="یک جدول s که نمایانگر مقدار رشته روی استک است و به بخش دوم داده‌های رشته (ahoy) روی هیپ اشاره می‌کند، با داده‌های رشته اصلی (hello) که خاکستری شده زیرا دیگر نمی‌توان به آن دسترسی داشت." src="img/trpl04-05.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-5: Representation in memory after the initial
-value has been replaced in its entirety.</span>
+<span class="caption">شکل ۴-۵: نمایش در حافظه پس از اینکه مقدار اولیه به طور کامل جایگزین شده است.</span>
 
-The original string thus immediately goes out of scope. Rust will run the `drop`
-function on it and its memory will be freed right away. When we print the value
-at the end, it will be `"ahoy, world!"`.
+رشته اصلی بلافاصله از دامنه خارج می‌شود. Rust تابع `drop` را روی آن اجرا می‌کند و حافظه آن بلافاصله آزاد می‌شود. وقتی مقدار را در انتها چاپ می‌کنیم، مقدار `"ahoy, world!"` خواهد بود.
 
 <!-- Old heading. Do not remove or links may break. -->
 
 <a id="ways-variables-and-data-interact-clone"></a>
 
-#### Variables and Data Interacting with Clone
+#### تعامل متغیرها و داده‌ها با Clone
 
-If we _do_ want to deeply copy the heap data of the `String`, not just the
-stack data, we can use a common method called `clone`. We’ll discuss method
-syntax in Chapter 5, but because methods are a common feature in many
-programming languages, you’ve probably seen them before.
+اگر بخواهیم داده‌های هیپ `String` را عمیقاً کپی کنیم، نه فقط داده‌های استک، می‌توانیم از یک متد معمول به نام `clone` استفاده کنیم. ما نحو متدها را در فصل ۵ بررسی خواهیم کرد، اما از آنجا که متدها یک ویژگی رایج در بسیاری از زبان‌های برنامه‌نویسی هستند، احتمالاً قبلاً آنها را دیده‌اید.
 
-Here’s an example of the `clone` method in action:
+در اینجا یک مثال از روش `clone` در عمل آورده شده است:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-05-clone/src/main.rs:here}}
 ```
 
-This works just fine and explicitly produces the behavior shown in Figure 4-3,
-where the heap data _does_ get copied.
+این کد به خوبی کار می‌کند و به وضوح رفتار نشان داده شده در شکل ۴-۳ را تولید می‌کند، جایی که داده‌های هیپ _کپی_ می‌شوند.
 
-When you see a call to `clone`, you know that some arbitrary code is being
-executed and that code may be expensive. It’s a visual indicator that something
-different is going on.
+وقتی یک فراخوانی به `clone` می‌بینید، می‌دانید که کدی دلخواه اجرا می‌شود و ممکن است این کد هزینه‌بر باشد. این یک شاخص بصری است که نشان می‌دهد چیزی متفاوت در حال رخ دادن است.
 
-#### Stack-Only Data: Copy
+#### داده‌های فقط استک: Copy
 
-There’s another wrinkle we haven’t talked about yet. This code using
-integers—part of which was shown in Listing 4-2—works and is valid:
+یک نکته دیگر وجود دارد که هنوز درباره آن صحبت نکرده‌ایم. این کد که از اعداد صحیح استفاده می‌کند - بخشی از آن در لیستینگ ۴-۲ نشان داده شده است - کار می‌کند و معتبر است:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
 ```
 
-But this code seems to contradict what we just learned: we don’t have a call to
-`clone`, but `x` is still valid and wasn’t moved into `y`.
+اما این کد به نظر می‌رسد با آنچه که به تازگی یاد گرفتیم تناقض دارد: ما یک فراخوانی به `clone` نداریم، اما `x` همچنان معتبر است و به `y` منتقل نشده است.
 
-The reason is that types such as integers that have a known size at compile
-time are stored entirely on the stack, so copies of the actual values are quick
-to make. That means there’s no reason we would want to prevent `x` from being
-valid after we create the variable `y`. In other words, there’s no difference
-between deep and shallow copying here, so calling `clone` wouldn’t do anything
-different from the usual shallow copying, and we can leave it out.
+دلیل این است که انواعی مانند اعداد صحیح که اندازه مشخصی در زمان کامپایل دارند، به طور کامل روی استک ذخیره می‌شوند، بنابراین کپی کردن مقادیر واقعی سریع است. این به این معناست که هیچ دلیلی وجود ندارد که بخواهیم `x` پس از ایجاد متغیر `y` نامعتبر شود. به عبارت دیگر، در اینجا تفاوتی بین کپی عمیق و کپی سطحی وجود ندارد، بنابراین فراخوانی `clone` کاری متفاوت از کپی سطحی معمول انجام نمی‌دهد و می‌توانیم آن را حذف کنیم.
 
-Rust has a special annotation called the `Copy` trait that we can place on
-types that are stored on the stack, as integers are (we’ll talk more about
-traits in [Chapter 10][traits]<!-- ignore -->). If a type implements the `Copy`
-trait, variables that use it do not move, but rather are trivially copied,
-making them still valid after assignment to another variable.
+Rust دارای یک نشانه‌گذاری ویژه به نام ویژگی `Copy` است که می‌توانیم روی انواعی که روی استک ذخیره می‌شوند (مانند اعداد صحیح) اعمال کنیم (ما در [فصل ۱۰][traits]<!-- ignore --> بیشتر درباره ویژگی‌ها صحبت خواهیم کرد). اگر یک نوع ویژگی `Copy` را پیاده‌سازی کند، متغیرهایی که از آن استفاده می‌کنند جابه‌جا نمی‌شوند، بلکه به سادگی کپی می‌شوند و پس از اختصاص به متغیر دیگری همچنان معتبر باقی می‌مانند.
 
-Rust won’t let us annotate a type with `Copy` if the type, or any of its parts,
-has implemented the `Drop` trait. If the type needs something special to happen
-when the value goes out of scope and we add the `Copy` annotation to that type,
-we’ll get a compile-time error. To learn about how to add the `Copy` annotation
-to your type to implement the trait, see [“Derivable
-Traits”][derivable-traits]<!-- ignore --> in Appendix C.
+Rust به ما اجازه نمی‌دهد یک نوع را با `Copy` نشانه‌گذاری کنیم اگر نوع یا هر یک از اجزای آن ویژگی `Drop` را پیاده‌سازی کرده باشند. اگر نوع به چیزی خاص نیاز داشته باشد تا زمانی که مقدار از دامنه خارج شود و ما ویژگی `Copy` را به آن نوع اضافه کنیم، یک خطای زمان کامپایل دریافت خواهیم کرد. برای یادگیری نحوه افزودن ویژگی `Copy` به نوع خود برای پیاده‌سازی این ویژگی، به [“ویژگی‌های قابل اشتقاق”][derivable-traits]<!-- ignore --> در ضمیمه ج مراجعه کنید.
 
-So, what types implement the `Copy` trait? You can check the documentation for
-the given type to be sure, but as a general rule, any group of simple scalar
-values can implement `Copy`, and nothing that requires allocation or is some
-form of resource can implement `Copy`. Here are some of the types that
-implement `Copy`:
+پس، چه نوع‌هایی ویژگی `Copy` را پیاده‌سازی می‌کنند؟ می‌توانید برای اطمینان، مستندات نوع داده شده را بررسی کنید، اما به عنوان یک قانون کلی، هر گروه از مقادیر ساده و اسکالر می‌توانند ویژگی `Copy` را پیاده‌سازی کنند و هیچ چیزی که نیاز به تخصیص یا نوعی منبع داشته باشد نمی‌تواند ویژگی `Copy` را پیاده‌سازی کند. در اینجا تعدادی از انواعی که ویژگی `Copy` را پیاده‌سازی می‌کنند آورده شده است:
 
-- All the integer types, such as `u32`.
-- The Boolean type, `bool`, with values `true` and `false`.
-- All the floating-point types, such as `f64`.
-- The character type, `char`.
-- Tuples, if they only contain types that also implement `Copy`. For example,
-  `(i32, i32)` implements `Copy`, but `(i32, String)` does not.
+- تمام انواع اعداد صحیح، مانند `u32`.
+- نوع بولی، `bool`، با مقادیر `true` و `false`.
+- تمام انواع اعشاری، مانند `f64`.
+- نوع کاراکتر، `char`.
+- تاپل‌ها، اگر تنها شامل انواعی باشند که ویژگی `Copy` را نیز پیاده‌سازی می‌کنند. برای مثال، `(i32, i32)` ویژگی `Copy` را پیاده‌سازی می‌کند، اما `(i32, String)` این کار را نمی‌کند.
 
-### Ownership and Functions
+### مالکیت و توابع
 
-The mechanics of passing a value to a function are similar to those when
-assigning a value to a variable. Passing a variable to a function will move or
-copy, just as assignment does. Listing 4-3 has an example with some annotations
-showing where variables go into and out of scope.
+مکانیزم‌های انتقال یک مقدار به یک تابع مشابه زمانی است که مقداری را به یک متغیر اختصاص می‌دهیم. انتقال یک متغیر به یک تابع به همان صورت که تخصیص انجام می‌شود، جابه‌جا یا کپی می‌شود. لیستینگ ۴-۳ مثالی با برخی حاشیه‌نویسی‌ها دارد که نشان می‌دهد متغیرها کجا وارد و از دامنه خارج می‌شوند.
 
-<Listing number="4-3" file-name="src/main.rs" caption="Functions with ownership and scope annotated">
+<Listing number="4-3" file-name="src/main.rs" caption="توابع با مالکیت و دامنه حاشیه‌نویسی شده">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-03/src/main.rs}}
@@ -472,18 +242,13 @@ showing where variables go into and out of scope.
 
 </Listing>
 
-If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
-compile-time error. These static checks protect us from mistakes. Try adding
-code to `main` that uses `s` and `x` to see where you can use them and where
-the ownership rules prevent you from doing so.
+اگر بخواهیم از `s` پس از فراخوانی به `takes_ownership` استفاده کنیم، Rust یک خطای زمان کامپایل صادر می‌کند. این بررسی‌های استاتیک ما را از اشتباهات محافظت می‌کنند. سعی کنید کدی به `main` اضافه کنید که از `s` و `x` استفاده کند تا ببینید کجا می‌توانید از آن‌ها استفاده کنید و کجا قوانین مالکیت مانع شما می‌شوند.
 
-### Return Values and Scope
+### مقادیر بازگشتی و دامنه
 
-Returning values can also transfer ownership. Listing 4-4 shows an example of a
-function that returns some value, with similar annotations as those in Listing
-4-3.
+بازگرداندن مقادیر نیز می‌تواند مالکیت را منتقل کند. لیستینگ ۴-۴ مثالی از یک تابع که مقداری را بازمی‌گرداند نشان می‌دهد، با حاشیه‌نویسی‌هایی مشابه آنچه در لیستینگ ۴-۳ وجود داشت.
 
-<Listing number="4-4" file-name="src/main.rs" caption="Transferring ownership of return values">
+<Listing number="4-4" file-name="src/main.rs" caption="انتقال مالکیت مقادیر بازگشتی">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-04/src/main.rs}}
@@ -491,20 +256,13 @@ function that returns some value, with similar annotations as those in Listing
 
 </Listing>
 
-The ownership of a variable follows the same pattern every time: assigning a
-value to another variable moves it. When a variable that includes data on the
-heap goes out of scope, the value will be cleaned up by `drop` unless ownership
-of the data has been moved to another variable.
+مالکیت یک متغیر همیشه از یک الگوی یکسان پیروی می‌کند: تخصیص یک مقدار به متغیر دیگر آن را جابه‌جا می‌کند. زمانی که یک متغیر شامل داده‌هایی در هیپ از دامنه خارج می‌شود، مقدار با استفاده از `drop` پاک‌سازی می‌شود مگر اینکه مالکیت داده‌ها به متغیر دیگری منتقل شده باشد.
 
-While this works, taking ownership and then returning ownership with every
-function is a bit tedious. What if we want to let a function use a value but
-not take ownership? It’s quite annoying that anything we pass in also needs to
-be passed back if we want to use it again, in addition to any data resulting
-from the body of the function that we might want to return as well.
+در حالی که این روش کار می‌کند، گرفتن مالکیت و سپس بازگرداندن آن با هر تابع کمی خسته‌کننده است. اگر بخواهیم اجازه دهیم یک تابع از یک مقدار استفاده کند اما مالکیت آن را نگیرد، چه می‌شود؟ این که هر چیزی که به تابع ارسال می‌کنیم باید بازگردانده شود تا بتوانیم دوباره از آن استفاده کنیم، علاوه بر هر داده‌ای که از بدنه تابع ممکن است بخواهیم بازگردانیم، کمی آزاردهنده است.
 
-Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
+Rust به ما اجازه می‌دهد مقادیر متعددی را با استفاده از یک tuple بازگردانیم، همانطور که در لیستینگ ۴-۵ نشان داده شده است.
 
-<Listing number="4-5" file-name="src/main.rs" caption="Returning ownership of parameters">
+<Listing number="4-5" file-name="src/main.rs" caption="بازگرداندن مالکیت پارامترها">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-05/src/main.rs}}
@@ -512,9 +270,7 @@ Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
 
 </Listing>
 
-But this is too much ceremony and a lot of work for a concept that should be
-common. Luckily for us, Rust has a feature for using a value without
-transferring ownership, called _references_.
+اما این کار بسیار رسمی و زمان‌بر است برای مفهومی که باید رایج باشد. خوشبختانه، Rust ویژگی‌ای برای استفاده از یک مقدار بدون انتقال مالکیت دارد که _ارجاعات_ نامیده می‌شود.
 
 [data-types]: ch03-02-data-types.html#data-types
 [ch8]: ch08-02-strings.html
@@ -522,4 +278,5 @@ transferring ownership, called _references_.
 [derivable-traits]: appendix-03-derivable-traits.html
 [method-syntax]: ch05-03-method-syntax.html#method-syntax
 [paths-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
-[drop]: ../std/ops/trait.Drop.html#tymethod.drop
+[drop]: https://doc.rust-lang.org/std/ops/trait.Drop.html#tymethod.drop
+

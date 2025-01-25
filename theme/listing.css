@@ -1,8 +1,12 @@
 figure.listing {
+  direction: ltr;
+  text-align: left;
   margin: 0;
 }
 
 .listing figcaption {
+  direction: ltr;
+  text-align: left;
   font-size: 0.8em;
   font-weight: 600;
 }

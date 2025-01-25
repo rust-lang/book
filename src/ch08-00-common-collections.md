@@ -1,25 +1,26 @@
-# Common Collections
+# مجموعه‌های معمول
 
-Rust’s standard library includes a number of very useful data structures called
-_collections_. Most other data types represent one specific value, but
-collections can contain multiple values. Unlike the built-in array and tuple
-types, the data these collections point to is stored on the heap, which means
-the amount of data does not need to be known at compile time and can grow or
-shrink as the program runs. Each kind of collection has different capabilities
-and costs, and choosing an appropriate one for your current situation is a
-skill you’ll develop over time. In this chapter, we’ll discuss three
-collections that are used very often in Rust programs:
+کتابخانه استاندارد زبان Rust شامل تعدادی ساختار داده بسیار مفید به نام
+_مجموعه‌ها_ می‌باشد. اکثر انواع داده‌ها نماینده یک مقدار مشخص هستند، اما
+مجموعه‌ها می‌توانند شامل مقادیر متعددی باشند. برخلاف انواع داخلی آرایه و
+تاپل، داده‌ای که این مجموعه‌ها به آن اشاره می‌کنند در heap ذخیره می‌شود،
+که به این معنی است که مقدار داده نیازی به شناخته شدن در زمان کامپایل ندارد
+و می‌تواند در حین اجرای برنامه رشد کند یا کوچک شود. هر نوع مجموعه قابلیت‌ها
+و هزینه‌های متفاوتی دارد و انتخاب نوع مناسب برای موقعیت فعلی شما، مهارتی
+است که با گذشت زمان توسعه خواهید داد. در این فصل، سه مجموعه‌ای که به طور
+متداول در برنامه‌های Rust استفاده می‌شوند، مورد بحث قرار خواهند گرفت:
 
-- A _vector_ allows you to store a variable number of values next to each other.
-- A _string_ is a collection of characters. We’ve mentioned the `String` type
-  previously, but in this chapter we’ll talk about it in depth.
-- A _hash map_ allows you to associate a value with a specific key. It’s a
-  particular implementation of the more general data structure called a _map_.
+- یک _بردار_ به شما اجازه می‌دهد که تعداد متغیری از مقادیر را در کنار
+  یکدیگر ذخیره کنید.
+- یک _رشته_ یک مجموعه از کاراکترها است. ما قبلاً نوع `String` را ذکر کرده‌ایم،
+  اما در این فصل به طور عمیق‌تر درباره آن صحبت خواهیم کرد.
+- یک _هش مپ_ به شما اجازه می‌دهد که یک مقدار را با یک کلید مشخص مرتبط کنید.
+  این یک پیاده‌سازی خاص از ساختار داده کلی‌تر به نام _نقشه_ است.
 
-To learn about the other kinds of collections provided by the standard library,
-see [the documentation][collections].
+برای یادگیری درباره انواع دیگر مجموعه‌هایی که توسط کتابخانه استاندارد ارائه شده‌اند،
+[مستندات][collections] را مشاهده کنید.
 
-We’ll discuss how to create and update vectors, strings, and hash maps, as well
-as what makes each special.
+ما درباره نحوه ایجاد و به‌روزرسانی بردارها، رشته‌ها و هش مپ‌ها، همچنین ویژگی‌هایی
+که هر کدام را خاص می‌کند، صحبت خواهیم کرد.
 
-[collections]: ../std/collections/index.html
+[collections]: https://doc.rust-lang.org/std/collections/index.html

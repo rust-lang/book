@@ -1,49 +1,20 @@
-# Fearless Concurrency
+# همزمانی بدون ترس
 
-Handling concurrent programming safely and efficiently is another of Rust’s
-major goals. _Concurrent programming_, where different parts of a program
-execute independently, and _parallel programming_, where different parts of a
-program execute at the same time, are becoming increasingly important as more
-computers take advantage of their multiple processors. Historically,
-programming in these contexts has been difficult and error prone: Rust hopes to
-change that.
+مدیریت برنامه‌نویسی همزمان به صورت ایمن و کارآمد یکی از اهداف اصلی Rust است. _برنامه‌نویسی همزمان_، جایی که بخش‌های مختلف یک برنامه به صورت مستقل اجرا می‌شوند، و _برنامه‌نویسی موازی_، جایی که بخش‌های مختلف یک برنامه به صورت همزمان اجرا می‌شوند، در حال تبدیل شدن به جنبه‌های فزاینده‌ای مهم هستند زیرا تعداد بیشتری از کامپیوترها از پردازنده‌های چندگانه خود استفاده می‌کنند. به طور تاریخی، برنامه‌نویسی در این زمینه‌ها سخت و مستعد خطا بوده است: Rust امیدوار است این موضوع را تغییر دهد.
 
-Initially, the Rust team thought that ensuring memory safety and preventing
-concurrency problems were two separate challenges to be solved with different
-methods. Over time, the team discovered that the ownership and type systems are
-a powerful set of tools to help manage memory safety _and_ concurrency
-problems! By leveraging ownership and type checking, many concurrency errors
-are compile-time errors in Rust rather than runtime errors. Therefore, rather
-than making you spend lots of time trying to reproduce the exact circumstances
-under which a runtime concurrency bug occurs, incorrect code will refuse to
-compile and present an error explaining the problem. As a result, you can fix
-your code while you’re working on it rather than potentially after it has been
-shipped to production. We’ve nicknamed this aspect of Rust _fearless_
-_concurrency_. Fearless concurrency allows you to write code that is free of
-subtle bugs and is easy to refactor without introducing new bugs.
+در ابتدا، تیم Rust فکر می‌کرد که تضمین ایمنی حافظه و جلوگیری از مشکلات همزمانی دو چالش جداگانه هستند که باید با روش‌های متفاوت حل شوند. با گذشت زمان، تیم دریافت که سیستم‌های مالکیت و نوع مجموعه‌ای قدرتمند از ابزارها هستند که به مدیریت ایمنی حافظه _و_ مشکلات همزمانی کمک می‌کنند! با استفاده از مالکیت و بررسی نوع، بسیاری از خطاهای همزمانی در Rust به جای خطاهای زمان اجرا، به خطاهای زمان کامپایل تبدیل می‌شوند. بنابراین، به جای اینکه وقت زیادی را صرف بازتولید دقیق شرایطی کنید که در آن یک خطای همزمانی در زمان اجرا رخ می‌دهد، کد نادرست از کامپایل خودداری کرده و یک خطا ارائه می‌دهد که مشکل را توضیح می‌دهد. در نتیجه، می‌توانید کد خود را در حین کار روی آن برطرف کنید، به جای اینکه احتمالاً بعد از ارسال آن به تولید. ما این جنبه از Rust را _همزمانی بدون ترس_ نامیده‌ایم. همزمانی بدون ترس به شما امکان می‌دهد کدی بنویسید که بدون باگ‌های ظریف باشد و به راحتی بازسازی شود بدون اینکه باگ‌های جدید معرفی کند.
 
-> Note: For simplicity’s sake, we’ll refer to many of the problems as
-> _concurrent_ rather than being more precise by saying _concurrent and/or
-> parallel_. If this book were about concurrency and/or parallelism, we’d be
-> more specific. For this chapter, please mentally substitute _concurrent
-> and/or parallel_ whenever we use _concurrent_.
+> نکته: برای سادگی، ما به بسیاری از مشکلات به عنوان _همزمان_ اشاره خواهیم کرد به جای اینکه دقیق‌تر بگوییم _همزمان و/یا موازی_. اگر این کتاب درباره همزمانی و/یا موازی بودن بود، دقیق‌تر بودیم. برای این فصل، لطفاً هر جا که از _همزمان_ استفاده می‌کنیم، به صورت ذهنی _همزمان و/یا موازی_ را جایگزین کنید.
 
-Many languages are dogmatic about the solutions they offer for handling
-concurrent problems. For example, Erlang has elegant functionality for
-message-passing concurrency but has only obscure ways to share state between
-threads. Supporting only a subset of possible solutions is a reasonable
-strategy for higher-level languages, because a higher-level language promises
-benefits from giving up some control to gain abstractions. However, lower-level
-languages are expected to provide the solution with the best performance in any
-given situation and have fewer abstractions over the hardware. Therefore, Rust
-offers a variety of tools for modeling problems in whatever way is appropriate
-for your situation and requirements.
+بسیاری از زبان‌ها درباره راه‌حل‌هایی که برای مدیریت مشکلات همزمان ارائه می‌دهند بسیار دگماتیک هستند. برای مثال، Erlang عملکرد زیبا و کارآمدی برای همزمانی مبتنی بر پیام‌رسانی ارائه می‌دهد اما فقط روش‌های پیچیده‌ای برای اشتراک وضعیت بین نخ‌ها دارد. پشتیبانی از یک زیرمجموعه از راه‌حل‌های ممکن یک استراتژی منطقی برای زبان‌های سطح بالا است، زیرا یک زبان سطح بالا وعده‌هایی در ازای از دست دادن بخشی از کنترل برای به دست آوردن انتزاع‌ها ارائه می‌دهد. با این حال، از زبان‌های سطح پایین انتظار می‌رود که بهترین راه‌حل را برای هر وضعیت خاص با بهترین عملکرد ارائه دهند و انتزاع کمتری نسبت به سخت‌افزار داشته باشند. بنابراین، Rust مجموعه‌ای از ابزارها را برای مدل‌سازی مشکلات در هر راهی که برای وضعیت و نیازهای شما مناسب باشد، ارائه می‌دهد.
 
-Here are the topics we’ll cover in this chapter:
+موضوعاتی که در این فصل پوشش خواهیم داد عبارت‌اند از:
 
-- How to create threads to run multiple pieces of code at the same time
-- _Message-passing_ concurrency, where channels send messages between threads
-- _Shared-state_ concurrency, where multiple threads have access to some piece
-  of data
-- The `Sync` and `Send` traits, which extend Rust’s concurrency guarantees to
-  user-defined types as well as types provided by the standard library
+<div dir="rtl">
+    <ul>
+        <li>نحوه ایجاد نخ‌ها برای اجرای همزمان چندین بخش از کد</li>
+        <li>همزمانی <em>پیام‌رسانی</em>، جایی که کانال‌ها پیام‌ها را بین نخ‌ها ارسال می‌کنند</li>
+        <li>همزمانی <em>حالت اشتراکی</em>، جایی که چندین نخ به بخشی از داده دسترسی دارند</li>
+        <li>صفات <code>Sync</code> و <code>Send</code>، که تضمین‌های همزمانی Rust را به انواع تعریف‌شده توسط کاربر و همچنین انواع ارائه‌شده توسط کتابخانه استاندارد گسترش می‌دهند</li>
+    </ul>
+</div>

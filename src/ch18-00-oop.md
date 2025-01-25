@@ -1,13 +1,3 @@
-# Object-Oriented Programming Features of Rust
+# ویژگی‌های برنامه‌نویسی شی‌گرا (OOP) در Rust
 
-Object-oriented programming (OOP) is a way of modeling programs. Objects as a
-programmatic concept were introduced in the programming language Simula in the
-1960s. Those objects influenced Alan Kay’s programming architecture in which
-objects pass messages to each other. To describe this architecture, he coined
-the term _object-oriented programming_ in 1967. Many competing definitions
-describe what OOP is, and by some of these definitions Rust is object-oriented,
-but by others it is not. In this chapter, we’ll explore certain characteristics
-that are commonly considered object-oriented and how those characteristics
-translate to idiomatic Rust. We’ll then show you how to implement an
-object-oriented design pattern in Rust and discuss the trade-offs of doing so
-versus implementing a solution using some of Rust’s strengths instead.
+برنامه‌نویسی شی‌گرا (OOP) روشی برای مدل‌سازی برنامه‌ها است. مفهوم اشیاء به‌عنوان یک مفهوم برنامه‌نویسی در دهه 1960 در زبان برنامه‌نویسی Simula معرفی شد. این اشیاء بر معماری برنامه‌نویسی آلن کی تأثیر گذاشتند که در آن اشیاء پیام‌هایی را به یکدیگر ارسال می‌کنند. برای توصیف این معماری، او اصطلاح _برنامه‌نویسی شی‌گرا_ را در سال 1967 ابداع کرد. تعاریف متعددی با یکدیگر رقابت می‌کنند تا توضیح دهند که OOP چیست، و بر اساس برخی از این تعاریف Rust شی‌گرا است، اما بر اساس برخی دیگر این‌گونه نیست. در این فصل، ویژگی‌هایی که معمولاً شی‌گرا در نظر گرفته می‌شوند و چگونگی ترجمه آن ویژگی‌ها به Rust ایدئوماتیک را بررسی خواهیم کرد. سپس نشان می‌دهیم چگونه یک الگوی طراحی شی‌گرا را در Rust پیاده‌سازی کنیم و مزایا و معایب انجام این کار در مقابل استفاده از نقاط قوت Rust را بررسی خواهیم کرد.
