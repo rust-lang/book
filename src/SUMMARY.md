@@ -122,12 +122,12 @@
   - [نحو الگوها](ch19-03-pattern-syntax.md)  
 
 
-- [ویژگی‌های پیشرفته](ch20-00-advanced-features.md)  
-  - [Rust ناامن](ch20-01-unsafe-rust.md)  
-  - [صفت‌های پیشرفته](ch20-03-advanced-traits.md)  
-  - [تایپ‌های پیشرفته](ch20-04-advanced-types.md)  
-  - [توابع و Closureهای پیشرفته](ch20-05-advanced-functions-and-closures.md)  
-  - [ماکروها](ch20-06-macros.md)  
+- [ویژگی‌های پیشرفته](ch20-00-advanced-features.md)
+  - [Rust ناایمن](ch20-01-unsafe-rust.md)
+  - [Traits پیشرفته](ch20-02-advanced-traits.md)
+  - [تایپ‌های پیشرفته](ch20-03-advanced-types.md)
+  - [توابع و Closures پیشرفته](ch20-04-advanced-functions-and-closures.md)
+  - [ماکروها](ch20-05-macros.md)
 
 - [پروژه نهایی: ساخت یک وب‌سرور چندنخی](ch21-00-final-project-a-web-server.md)  
   - [ساخت یک وب‌سرور single-threaded](ch21-01-single-threaded.md)  
