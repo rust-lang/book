@@ -170,4 +170,4 @@ Rust نیاز دارد که بداند چقدر حافظه برای هر مقد�
 [string-slices]: ch04-03-slices.html#string-slices
 [the-match-control-flow-operator]: ch06-02-match.html#the-match-control-flow-operator
 [using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
-[using-the-newtype-pattern]: ch20-02-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
+[using-the-newtype-pattern]: ch20-02-advanced-traits.html#استفاده-از-الگوی-newtype-برای-پیادهسازی-traits-خارجی-روی-انواع-خارجی
