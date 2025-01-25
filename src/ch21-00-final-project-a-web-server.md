@@ -1,41 +1,23 @@
-# Final Project: Building a Multithreaded Web Server
+# ফাইনাল প্রজেক্ট: একটি মাল্টিথ্রেডেড ওয়েব সার্ভার তৈরি করা
 
-It’s been a long journey, but we’ve reached the end of the book. In this
-chapter, we’ll build one more project together to demonstrate some of the
-concepts we covered in the final chapters, as well as recap some earlier
-lessons.
+এটি একটি দীর্ঘ যাত্রা ছিল, তবে আমরা বইটির শেষ প্রান্তে পৌঁছেছি। এই অধ্যায়ে, আমরা একসাথে আরও একটি প্রজেক্ট তৈরি করব যাতে শেষ অধ্যায়গুলিতে আলোচিত কিছু ধারণা প্রদর্শন করা যায়, সেইসাথে আগের কিছু পাঠের সারসংক্ষেপ করা যায়।
 
-For our final project, we’ll make a web server that says “hello” and looks like
-Figure 21-1 in a web browser.
+আমাদের ফাইনাল প্রজেক্টের জন্য, আমরা একটি ওয়েব সার্ভার তৈরি করব যা "hello" বলে এবং ওয়েব ব্রাউজারে চিত্র 21-1 এর মতো দেখায়।
 
 ![hello from rust](img/trpl21-01.png)
 
-<span class="caption">Figure 21-1: Our final shared project</span>
+<span class="caption">চিত্র 21-1: আমাদের ফাইনাল শেয়ার্ড প্রজেক্ট</span>
 
-Here is our plan for building the web server:
+ওয়েব সার্ভার তৈরির জন্য আমাদের পরিকল্পনা এখানে দেওয়া হল:
 
-1. Learn a bit about TCP and HTTP.
-2. Listen for TCP connections on a socket.
-3. Parse a small number of HTTP requests.
-4. Create a proper HTTP response.
-5. Improve the throughput of our server with a thread pool.
+1. TCP এবং HTTP সম্পর্কে কিছু জানা।
+2. একটি সকেটে TCP সংযোগের জন্য শোনা।
+3. অল্প সংখ্যক HTTP অনুরোধ পার্স করা।
+4. একটি সঠিক HTTP প্রতিক্রিয়া তৈরি করা।
+5. একটি থ্রেড পুলের সাহায্যে আমাদের সার্ভারের থ্রুপুট উন্নত করা।
 
-Before we get started, we should mention two details: First, the method we’ll
-use won’t be the best way to build a web server with Rust. Community members
-have published a number of production-ready crates available on
-[crates.io](https://crates.io/) that provide more complete web server and thread
-pool implementations than we’ll build. However, our intention in this chapter is
-to help you learn, not to take the easy route. Because Rust is a systems
-programming language, we can choose the level of abstraction we want to work
-with and can go to a lower level than is possible or practical in other
-languages.
+শুরু করার আগে, আমাদের দুটি বিষয় উল্লেখ করা উচিত: প্রথমত, আমরা যে পদ্ধতিটি ব্যবহার করব সেটি Rust-এর সাথে একটি ওয়েব সার্ভার তৈরি করার সেরা উপায় হবে না। কমিউনিটির সদস্যরা [crates.io](https://crates.io/)-এ বেশ কিছু প্রোডাকশন-রেডি ক্রেট প্রকাশ করেছেন যা আমরা তৈরি করব তার চেয়ে বেশি সম্পূর্ণ ওয়েব সার্ভার এবং থ্রেড পুল বাস্তবায়ন প্রদান করে। তবে, এই অধ্যায়ে আমাদের উদ্দেশ্য হল আপনাকে শিখতে সাহায্য করা, সহজ পথ বেছে নেওয়া নয়। যেহেতু Rust একটি সিস্টেম প্রোগ্রামিং ভাষা, তাই আমরা যে স্তরের অ্যাবস্ট্রাকশন নিয়ে কাজ করতে চাই তা বেছে নিতে পারি এবং অন্যান্য ভাষায় সম্ভব বা ব্যবহারিক হওয়ার চেয়ে কম স্তরে যেতে পারি।
 
-Second, we will not be using async and await here. Building a thread pool is a
-big enough challenge on its own, without adding in building an async runtime!
-However, we will note how async and await might be applicable to some of the
-same problems we will see in this chapter. Ultimately, as we noted back in
-Chapter 17, many async runtimes use thread pools for managing their work.
+দ্বিতীয়ত, আমরা এখানে async এবং await ব্যবহার করব না। একটি async রানটাইম তৈরি করার সাথে সাথে একটি থ্রেড পুল তৈরি করা নিজের মধ্যে যথেষ্ট বড় একটি চ্যালেঞ্জ! তবে, আমরা এই অধ্যায়ে যে সমস্যাগুলি দেখব তার মধ্যে async এবং await কীভাবে প্রযোজ্য হতে পারে তা আমরা উল্লেখ করব। পরিশেষে, আমরা অধ্যায় 17-এ যেমন উল্লেখ করেছি, অনেক async রানটাইম তাদের কাজ পরিচালনার জন্য থ্রেড পুল ব্যবহার করে।
 
-We’ll therefore write the basic HTTP server and thread pool manually so you can
-learn the general ideas and techniques behind the crates you might use in the
-future.
+তাই আমরা ম্যানুয়ালি বেসিক HTTP সার্ভার এবং থ্রেড পুল লিখব যাতে আপনি ভবিষ্যতে ব্যবহার করতে পারেন এমন ক্রেটগুলির পিছনের সাধারণ ধারণা এবং কৌশলগুলি শিখতে পারেন।

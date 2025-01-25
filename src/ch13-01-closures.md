@@ -2,14 +2,9 @@
 
 <a id="closures-anonymous-functions-that-can-capture-their-environment"></a>
 
-## Closures: Anonymous Functions that Capture Their Environment
+## ক্লোজার: বেনামী ফাংশন যা তাদের এনভায়রনমেন্ট ক্যাপচার করতে পারে
 
-Rust’s closures are anonymous functions you can save in a variable or pass as
-arguments to other functions. You can create the closure in one place and then
-call the closure elsewhere to evaluate it in a different context. Unlike
-functions, closures can capture values from the scope in which they’re defined.
-We’ll demonstrate how these closure features allow for code reuse and behavior
-customization.
+রাস্টের ক্লোজারগুলো হল বেনামী ফাংশন যা আপনি একটি ভেরিয়েবলে সেভ করতে পারেন বা অন্যান্য ফাংশনে আর্গুমেন্ট হিসাবে পাস করতে পারেন। আপনি এক জায়গায় ক্লোজার তৈরি করতে পারেন এবং তারপরে অন্য জায়গায় ক্লোজারটিকে কল করতে পারেন অন্য একটি প্রেক্ষাপটে এটিকে মূল্যায়ন করতে। ফাংশনগুলোর বিপরীতে, ক্লোজারগুলো যে স্কোপে সংজ্ঞায়িত করা হয়েছে সেই স্কোপ থেকে ভ্যালু ক্যাপচার করতে পারে। আমরা দেখাব কিভাবে এই ক্লোজার বৈশিষ্ট্যগুলো কোড পুনর্ব্যবহার এবং আচরণ কাস্টমাইজেশনের অনুমতি দেয়।
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -17,27 +12,13 @@ customization.
 <a id="refactoring-using-functions"></a>
 <a id="refactoring-with-closures-to-store-code"></a>
 
-### Capturing the Environment with Closures
+### ক্লোজার দিয়ে এনভায়রনমেন্ট ক্যাপচার করা
 
-We’ll first examine how we can use closures to capture values from the
-environment they’re defined in for later use. Here’s the scenario: Every so
-often, our t-shirt company gives away an exclusive, limited-edition shirt to
-someone on our mailing list as a promotion. People on the mailing list can
-optionally add their favorite color to their profile. If the person chosen for
-a free shirt has their favorite color set, they get that color shirt. If the
-person hasn’t specified a favorite color, they get whatever color the company
-currently has the most of.
+আমরা প্রথমে পরীক্ষা করব যে কিভাবে আমরা পরবর্তীতে ব্যবহারের জন্য সংজ্ঞায়িত করা এনভায়রনমেন্ট থেকে ভ্যালু ক্যাপচার করতে ক্লোজারগুলো ব্যবহার করতে পারি। এখানে পরিস্থিতিটি দেওয়া হল: আমাদের টি-শার্ট কোম্পানিটি মাঝে মাঝে আমাদের মেইলিং তালিকার কারোকে একটি বিশেষ, সীমিত সংস্করণের শার্ট উপহার হিসেবে দেয়। মেইলিং তালিকার লোকেরা ঐচ্ছিকভাবে তাদের প্রোফাইলে তাদের পছন্দের রঙ যোগ করতে পারে। বিনামূল্যে শার্টের জন্য নির্বাচিত ব্যক্তির যদি তার পছন্দের রঙ সেট করা থাকে, তবে তারা সেই রঙের শার্ট পায়। যদি ব্যক্তিটি কোনো পছন্দের রঙ নির্দিষ্ট না করে থাকে, তবে কোম্পানি বর্তমানে যে রঙের শার্ট সবচেয়ে বেশি পরিমাণে মজুদ রাখে সেই রঙের শার্ট পায়।
 
-There are many ways to implement this. For this example, we’re going to use an
-enum called `ShirtColor` that has the variants `Red` and `Blue` (limiting the
-number of colors available for simplicity). We represent the company’s
-inventory with an `Inventory` struct that has a field named `shirts` that
-contains a `Vec<ShirtColor>` representing the shirt colors currently in stock.
-The method `giveaway` defined on `Inventory` gets the optional shirt
-color preference of the free shirt winner, and returns the shirt color the
-person will get. This setup is shown in Listing 13-1:
+এটি বাস্তবায়নের অনেক উপায় আছে। এই উদাহরণের জন্য, আমরা `ShirtColor` নামের একটি enum ব্যবহার করতে যাচ্ছি, যার ভেরিয়েন্টগুলো হল `Red` এবং `Blue` (সরলতার জন্য উপলব্ধ রঙের সংখ্যা সীমিত করা হয়েছে)। আমরা কোম্পানির ইনভেন্টরিকে `Inventory` struct দিয়ে উপস্থাপন করি যার `shirts` নামের একটি ফিল্ড আছে যাতে স্টকে থাকা শার্টের রঙগুলো উপস্থাপন করে এমন একটি `Vec<ShirtColor>` থাকে। `Inventory`-তে সংজ্ঞায়িত মেথড `giveaway` বিনামূল্যে শার্ট বিজয়ীর ঐচ্ছিক শার্ট রঙের পছন্দটি পায় এবং ব্যক্তিটি কোন রঙের শার্ট পাবে তা রিটার্ন করে। এই সেটআপটি Listing 13-1-এ দেখানো হয়েছে:
 
-<Listing number="13-1" file-name="src/main.rs" caption="Shirt company giveaway situation">
+<Listing number="13-1" file-name="src/main.rs" caption="শার্ট কোম্পানির উপহারের পরিস্থিতি">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-01/src/main.rs}}
@@ -45,69 +26,29 @@ person will get. This setup is shown in Listing 13-1:
 
 </Listing>
 
-The `store` defined in `main` has two blue shirts and one red shirt remaining
-to distribute for this limited-edition promotion. We call the `giveaway` method
-for a user with a preference for a red shirt and a user without any preference.
+`main`-এ সংজ্ঞায়িত `store`-এ এই সীমিত সংস্করণের প্রচারের জন্য বিতরণ করার জন্য দুটি নীল শার্ট এবং একটি লাল শার্ট অবশিষ্ট আছে। আমরা লাল শার্টের পছন্দের একজন ব্যবহারকারী এবং কোনো পছন্দ নেই এমন একজন ব্যবহারকারীর জন্য `giveaway` মেথড কল করি।
 
-Again, this code could be implemented in many ways, and here, to focus on
-closures, we’ve stuck to concepts you’ve already learned except for the body of
-the `giveaway` method that uses a closure. In the `giveaway` method, we get the
-user preference as a parameter of type `Option<ShirtColor>` and call the
-`unwrap_or_else` method on `user_preference`. The [`unwrap_or_else` method on
-`Option<T>`][unwrap-or-else]<!-- ignore --> is defined by the standard library.
-It takes one argument: a closure without any arguments that returns a value `T`
-(the same type stored in the `Some` variant of the `Option<T>`, in this case
-`ShirtColor`). If the `Option<T>` is the `Some` variant, `unwrap_or_else`
-returns the value from within the `Some`. If the `Option<T>` is the `None`
-variant, `unwrap_or_else` calls the closure and returns the value returned by
-the closure.
+আবারও বলছি, এই কোডটি অনেক উপায়ে প্রয়োগ করা যেতে পারত, এবং এখানে, ক্লোজারের উপর ফোকাস করার জন্য, আমরা ক্লোজার ব্যবহার করে `giveaway` মেথডের বডি ছাড়া আপনি ইতিমধ্যে শিখেছেন এমন ধারণাগুলোর সাথেই আটকে আছি। `giveaway` মেথডে, আমরা ব্যবহারকারীর পছন্দ `Option<ShirtColor>` টাইপের প্যারামিটার হিসাবে পাই এবং `user_preference`-এ `unwrap_or_else` মেথড কল করি। [`Option<T>`-এ `unwrap_or_else` মেথড][unwrap-or-else]<!-- ignore --> স্ট্যান্ডার্ড লাইব্রেরি দ্বারা সংজ্ঞায়িত করা হয়েছে। এটি একটি আর্গুমেন্ট নেয়: কোনো আর্গুমেন্ট ছাড়াই একটি ক্লোজার যা একটি ভ্যালু `T` রিটার্ন করে (`Option<T>`-এর `Some` ভেরিয়েন্টে স্টোর করা একই টাইপ, এই ক্ষেত্রে `ShirtColor`)। যদি `Option<T>` `Some` ভেরিয়েন্ট হয়, `unwrap_or_else` `Some`-এর ভিতরের ভ্যালুটি রিটার্ন করে। যদি `Option<T>` `None` ভেরিয়েন্ট হয়, `unwrap_or_else` ক্লোজারটিকে কল করে এবং ক্লোজার দ্বারা রিটার্ন করা ভ্যালুটি রিটার্ন করে।
 
-We specify the closure expression `|| self.most_stocked()` as the argument to
-`unwrap_or_else`. This is a closure that takes no parameters itself (if the
-closure had parameters, they would appear between the two vertical bars). The
-body of the closure calls `self.most_stocked()`. We’re defining the closure
-here, and the implementation of `unwrap_or_else` will evaluate the closure
-later if the result is needed.
+আমরা ক্লোজার এক্সপ্রেশন `|| self.most_stocked()` `unwrap_or_else`-এর আর্গুমেন্ট হিসাবে উল্লেখ করি। এটি এমন একটি ক্লোজার যা নিজে থেকে কোনো প্যারামিটার নেয় না (ক্লোজারের প্যারামিটার থাকলে, সেগুলো দুটি উল্লম্ব বারের মধ্যে প্রদর্শিত হত)। ক্লোজারের বডি `self.most_stocked()` কল করে। আমরা এখানে ক্লোজারটি সংজ্ঞায়িত করছি এবং `unwrap_or_else`-এর বাস্তবায়নটি ফলাফলের প্রয়োজন হলে পরে ক্লোজারটিকে মূল্যায়ন করবে।
 
-Running this code prints:
+এই কোডটি চালালে প্রিন্ট হবে:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-01/output.txt}}
 ```
 
-One interesting aspect here is that we’ve passed a closure that calls
-`self.most_stocked()` on the current `Inventory` instance. The standard library
-didn’t need to know anything about the `Inventory` or `ShirtColor` types we
-defined, or the logic we want to use in this scenario. The closure captures an
-immutable reference to the `self` `Inventory` instance and passes it with the
-code we specify to the `unwrap_or_else` method. Functions, on the other hand,
-are not able to capture their environment in this way.
+এখানে একটি আকর্ষণীয় দিক হল যে আমরা এমন একটি ক্লোজার পাস করেছি যা বর্তমান `Inventory` ইনস্ট্যান্সে `self.most_stocked()` কল করে। স্ট্যান্ডার্ড লাইব্রেরিকে আমাদের সংজ্ঞায়িত করা `Inventory` বা `ShirtColor` টাইপ বা এই পরিস্থিতিতে আমরা যে লজিক ব্যবহার করতে চাইছি সে সম্পর্কে কিছুই জানার প্রয়োজন ছিল না। ক্লোজার `self` `Inventory` ইনস্ট্যান্সের একটি ইমিউটেবল রেফারেন্স ক্যাপচার করে এবং এটিকে `unwrap_or_else` মেথডে আমরা নির্দিষ্ট করা কোডের সাথে পাস করে। অন্যদিকে, ফাংশনগুলো এইভাবে তাদের এনভায়রনমেন্ট ক্যাপচার করতে সক্ষম নয়।
 
-### Closure Type Inference and Annotation
+### ক্লোজার টাইপ অনুমান এবং টীকা
 
-There are more differences between functions and closures. Closures don’t
-usually require you to annotate the types of the parameters or the return value
-like `fn` functions do. Type annotations are required on functions because the
-types are part of an explicit interface exposed to your users. Defining this
-interface rigidly is important for ensuring that everyone agrees on what types
-of values a function uses and returns. Closures, on the other hand, aren’t used
-in an exposed interface like this: they’re stored in variables and used without
-naming them and exposing them to users of our library.
+ফাংশন এবং ক্লোজারের মধ্যে আরও পার্থক্য রয়েছে। ক্লোজারগুলোর সাধারণত `fn` ফাংশনগুলোর মতো প্যারামিটার বা রিটার্ন ভ্যালুর প্রকারগুলো টীকা করার প্রয়োজন হয় না। ফাংশনগুলোতে টাইপ টীকাগুলোর প্রয়োজন হয় কারণ প্রকারগুলো আপনার ব্যবহারকারীদের কাছে উন্মুক্ত একটি সুস্পষ্ট ইন্টারফেসের অংশ। এই ইন্টারফেসটিকে কঠোরভাবে সংজ্ঞায়িত করা গুরুত্বপূর্ণ যাতে সবাই একটি ফাংশন কোন ধরনের ভ্যালু ব্যবহার করে এবং রিটার্ন করে সে সম্পর্কে একমত হতে পারে। অন্যদিকে, ক্লোজারগুলো এইরকম একটি উন্মুক্ত ইন্টারফেসে ব্যবহার করা হয় না: সেগুলোকে ভেরিয়েবলে স্টোর করা হয় এবং সেগুলোকে নাম না দিয়ে এবং আমাদের লাইব্রেরির ব্যবহারকারীদের কাছে প্রকাশ না করেই ব্যবহার করা হয়।
 
-Closures are typically short and relevant only within a narrow context rather
-than in any arbitrary scenario. Within these limited contexts, the compiler can
-infer the types of the parameters and the return type, similar to how it’s able
-to infer the types of most variables (there are rare cases where the compiler
-needs closure type annotations too).
+ক্লোজারগুলো সাধারণত ছোট হয় এবং কোনো নির্বিচারে পরিস্থিতির পরিবর্তে শুধুমাত্র সংকীর্ণ প্রেক্ষাপটের মধ্যেই প্রাসঙ্গিক। এই সীমিত প্রেক্ষাপটের মধ্যে, কম্পাইলার প্যারামিটার এবং রিটার্ন টাইপের প্রকারগুলো অনুমান করতে পারে, অনেকটা যেভাবে এটি বেশিরভাগ ভেরিয়েবলের প্রকারগুলো অনুমান করতে সক্ষম (এমন কিছু বিরল ক্ষেত্র রয়েছে যেখানে কম্পাইলারের ক্লোজার টাইপ টীকাগুলোরও প্রয়োজন হয়)।
 
-As with variables, we can add type annotations if we want to increase
-explicitness and clarity at the cost of being more verbose than is strictly
-necessary. Annotating the types for a closure would look like the definition
-shown in Listing 13-2. In this example, we’re defining a closure and storing it
-in a variable rather than defining the closure in the spot we pass it as an
-argument as we did in Listing 13-1.
+ভেরিয়েবলের মতো, আমরা চাইলে আরও বেশি সুস্পষ্টতা এবং স্বচ্ছতার জন্য টাইপ টীকা যোগ করতে পারি এবং এর জন্য কঠোরভাবে প্রয়োজনীয়তার চেয়ে বেশি বিস্তারিত হতে পারি। ক্লোজারের জন্য টাইপ টীকা করলে Listing 13-2-এ দেখানো সংজ্ঞার মতো দেখাবে। এই উদাহরণে, আমরা একটি ক্লোজার সংজ্ঞায়িত করছি এবং এটিকে একটি ভেরিয়েবলে স্টোর করছি, Listing 13-1-এর মতো আর্গুমেন্ট হিসাবে পাস করার জায়গায় ক্লোজারটিকে সংজ্ঞায়িত করার পরিবর্তে।
 
-<Listing number="13-2" file-name="src/main.rs" caption="Adding optional type annotations of the parameter and return value types in the closure">
+<Listing number="13-2" file-name="src/main.rs" caption="ক্লোজারে প্যারামিটার এবং রিটার্ন ভ্যালু টাইপের ঐচ্ছিক টাইপ টীকা যোগ করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-02/src/main.rs:here}}
@@ -115,12 +56,7 @@ argument as we did in Listing 13-1.
 
 </Listing>
 
-With type annotations added, the syntax of closures looks more similar to the
-syntax of functions. Here we define a function that adds 1 to its parameter and
-a closure that has the same behavior, for comparison. We’ve added some spaces
-to line up the relevant parts. This illustrates how closure syntax is similar
-to function syntax except for the use of pipes and the amount of syntax that is
-optional:
+টাইপ টীকা যোগ করার সাথে, ক্লোজারের সিনট্যাক্স ফাংশনের সিনট্যাক্সের মতো আরও বেশি দেখায়। এখানে আমরা একটি ফাংশন সংজ্ঞায়িত করি যা এর প্যারামিটারে 1 যোগ করে এবং একটি ক্লোজার যা তুলনার জন্য একই আচরণ করে। প্রাসঙ্গিক অংশগুলোকে সারিবদ্ধ করতে আমরা কিছু স্পেস যোগ করেছি। এটি দেখায় যে পাইপগুলোর ব্যবহার এবং ঐচ্ছিক সিনট্যাক্সের পরিমাণ ছাড়া ক্লোজার সিনট্যাক্স ফাংশন সিনট্যাক্সের সাথে কতটা মিল:
 
 ```rust,ignore
 fn  add_one_v1   (x: u32) -> u32 { x + 1 }
@@ -129,26 +65,11 @@ let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
 
-The first line shows a function definition, and the second line shows a fully
-annotated closure definition. In the third line, we remove the type annotations
-from the closure definition. In the fourth line, we remove the brackets, which
-are optional because the closure body has only one expression. These are all
-valid definitions that will produce the same behavior when they’re called. The
-`add_one_v3` and `add_one_v4` lines require the closures to be evaluated to be
-able to compile because the types will be inferred from their usage. This is
-similar to `let v = Vec::new();` needing either type annotations or values of
-some type to be inserted into the `Vec` for Rust to be able to infer the type.
+প্রথম লাইনটি একটি ফাংশনের সংজ্ঞা দেখায় এবং দ্বিতীয় লাইনটি সম্পূর্ণরূপে টীকা করা একটি ক্লোজারের সংজ্ঞা দেখায়। তৃতীয় লাইনে, আমরা ক্লোজার সংজ্ঞা থেকে টাইপ টীকাগুলো সরিয়ে দিই। চতুর্থ লাইনে, আমরা বন্ধনীগুলো সরিয়ে দিই, যেগুলো ঐচ্ছিক কারণ ক্লোজারের বডিতে শুধুমাত্র একটি এক্সপ্রেশন আছে। এগুলো সবই বৈধ সংজ্ঞা যা কল করার সময় একই আচরণ তৈরি করবে। `add_one_v3` এবং `add_one_v4` লাইনগুলোর কম্পাইল করার জন্য ক্লোজারগুলোর মূল্যায়ন করা প্রয়োজন কারণ প্রকারগুলো তাদের ব্যবহার থেকে অনুমান করা হবে। এটি `let v = Vec::new();`-এর মতোই, যার জন্য রাস্টের টাইপ অনুমান করার জন্য হয় টাইপ টীকা বা `Vec`-এ কোনো টাইপের ভ্যালু ঢোকানোর প্রয়োজন।
 
-For closure definitions, the compiler will infer one concrete type for each of
-their parameters and for their return value. For instance, Listing 13-3 shows
-the definition of a short closure that just returns the value it receives as a
-parameter. This closure isn’t very useful except for the purposes of this
-example. Note that we haven’t added any type annotations to the definition.
-Because there are no type annotations, we can call the closure with any type,
-which we’ve done here with `String` the first time. If we then try to call
-`example_closure` with an integer, we’ll get an error.
+ক্লোজার সংজ্ঞাগুলোর জন্য, কম্পাইলার তাদের প্যারামিটারগুলোর প্রত্যেকটির জন্য এবং তাদের রিটার্ন ভ্যালুর জন্য একটি কংক্রিট টাইপ অনুমান করবে। উদাহরণস্বরূপ, Listing 13-3-এ একটি ছোট ক্লোজারের সংজ্ঞা দেখানো হয়েছে যা প্যারামিটার হিসাবে প্রাপ্ত ভ্যালুটি রিটার্ন করে। এই ক্লোজারটি এই উদাহরণের উদ্দেশ্য ছাড়া খুব বেশি কাজে লাগে না। মনে রাখবেন যে আমরা সংজ্ঞাতে কোনো টাইপ টীকা যোগ করিনি। যেহেতু কোনো টাইপ টীকা নেই, তাই আমরা ক্লোজারটিকে যেকোনো টাইপ দিয়ে কল করতে পারি, যা আমরা এখানে প্রথমবার `String` দিয়ে করেছি। এর পরে যদি আমরা একটি পূর্ণসংখ্যা দিয়ে `example_closure` কল করার চেষ্টা করি, তাহলে আমরা একটি এরর পাব।
 
-<Listing number="13-3" file-name="src/main.rs" caption="Attempting to call a closure whose types are inferred with two different types">
+<Listing number="13-3" file-name="src/main.rs" caption="একটি ক্লোজারকে কল করার চেষ্টা করা যার প্রকারগুলো দুটি ভিন্ন প্রকারের সাথে অনুমান করা হয়েছে">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-03/src/main.rs:here}}
@@ -156,30 +77,21 @@ which we’ve done here with `String` the first time. If we then try to call
 
 </Listing>
 
-The compiler gives us this error:
+কম্পাইলার আমাদের এই এররটি দেয়:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-03/output.txt}}
 ```
 
-The first time we call `example_closure` with the `String` value, the compiler
-infers the type of `x` and the return type of the closure to be `String`. Those
-types are then locked into the closure in `example_closure`, and we get a type
-error when we next try to use a different type with the same closure.
+আমরা যখন প্রথমবার `String` ভ্যালু দিয়ে `example_closure` কল করি, তখন কম্পাইলার `x`-এর টাইপ এবং ক্লোজারের রিটার্ন টাইপ `String` হিসাবে অনুমান করে। সেই প্রকারগুলো তখন `example_closure`-এর ক্লোজারে লক হয়ে যায় এবং তারপরে আমরা যখন একই ক্লোজারের সাথে একটি ভিন্ন প্রকার ব্যবহার করার চেষ্টা করি তখন আমরা একটি টাইপ এরর পাই।
 
-### Capturing References or Moving Ownership
+### রেফারেন্স ক্যাপচার করা বা মালিকানা সরানো
 
-Closures can capture values from their environment in three ways, which
-directly map to the three ways a function can take a parameter: borrowing
-immutably, borrowing mutably, and taking ownership. The closure will decide
-which of these to use based on what the body of the function does with the
-captured values.
+ক্লোজারগুলো তিনটি উপায়ে তাদের এনভায়রনমেন্ট থেকে ভ্যালু ক্যাপচার করতে পারে, যা সরাসরি তিনটি উপায়ের সাথে ম্যাপ করে যেভাবে একটি ফাংশন একটি প্যারামিটার নিতে পারে: ইমিউটেবল ধার করা, মিউটেবল ধার করা এবং মালিকানা নেওয়া। ক্লোজারটি কোনগুলো ব্যবহার করবে তা সেই ফাংশনের বডি ক্যাপচার করা ভ্যালুগুলোর সাথে কী করে তার উপর ভিত্তি করে সিদ্ধান্ত নেবে।
 
-In Listing 13-4, we define a closure that captures an immutable reference to
-the vector named `list` because it only needs an immutable reference to print
-the value:
+Listing 13-4-এ, আমরা একটি ক্লোজার সংজ্ঞায়িত করি যা `list` নামের ভেক্টরের একটি ইমিউটেবল রেফারেন্স ক্যাপচার করে কারণ এটির ভ্যালু প্রিন্ট করার জন্য শুধুমাত্র একটি ইমিউটেবল রেফারেন্স প্রয়োজন:
 
-<Listing number="13-4" file-name="src/main.rs" caption="Defining and calling a closure that captures an immutable reference">
+<Listing number="13-4" file-name="src/main.rs" caption="একটি ক্লোজার সংজ্ঞায়িত এবং কল করা যা একটি ইমিউটেবল রেফারেন্স ক্যাপচার করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-04/src/main.rs}}
@@ -187,23 +99,17 @@ the value:
 
 </Listing>
 
-This example also illustrates that a variable can bind to a closure definition,
-and we can later call the closure by using the variable name and parentheses as
-if the variable name were a function name.
+এই উদাহরণটি আরও দেখায় যে একটি ভেরিয়েবল একটি ক্লোজার সংজ্ঞার সাথে বাইন্ড করতে পারে এবং আমরা পরে ভেরিয়েবলের নাম এবং বন্ধনী ব্যবহার করে ক্লোজারটিকে কল করতে পারি যেন ভেরিয়েবলের নামটি একটি ফাংশনের নাম।
 
-Because we can have multiple immutable references to `list` at the same time,
-`list` is still accessible from the code before the closure definition, after
-the closure definition but before the closure is called, and after the closure
-is called. This code compiles, runs, and prints:
+যেহেতু আমরা একই সময়ে `list`-এর একাধিক ইমিউটেবল রেফারেন্স রাখতে পারি, তাই ক্লোজার সংজ্ঞা দেওয়ার আগে, ক্লোজার সংজ্ঞা দেওয়ার পরে কিন্তু ক্লোজার কল করার আগে এবং ক্লোজার কল করার পরে `list` কোড থেকে অ্যাক্সেসযোগ্য থাকে। এই কোডটি কম্পাইল হয়, চলে এবং প্রিন্ট করে:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-04/output.txt}}
 ```
 
-Next, in Listing 13-5, we change the closure body so that it adds an element to
-the `list` vector. The closure now captures a mutable reference:
+এরপর, Listing 13-5-এ, আমরা ক্লোজারের বডি পরিবর্তন করি যাতে এটি `list` ভেক্টরে একটি উপাদান যোগ করে। ক্লোজারটি এখন একটি মিউটেবল রেফারেন্স ক্যাপচার করে:
 
-<Listing number="13-5" file-name="src/main.rs" caption="Defining and calling a closure that captures a mutable reference">
+<Listing number="13-5" file-name="src/main.rs" caption="একটি ক্লোজার সংজ্ঞায়িত এবং কল করা যা একটি মিউটেবল রেফারেন্স ক্যাপচার করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-05/src/main.rs}}
@@ -211,32 +117,19 @@ the `list` vector. The closure now captures a mutable reference:
 
 </Listing>
 
-This code compiles, runs, and prints:
+এই কোডটি কম্পাইল হয়, চলে এবং প্রিন্ট করে:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-05/output.txt}}
 ```
 
-Note that there’s no longer a `println!` between the definition and the call of
-the `borrows_mutably` closure: when `borrows_mutably` is defined, it captures a
-mutable reference to `list`. We don’t use the closure again after the closure
-is called, so the mutable borrow ends. Between the closure definition and the
-closure call, an immutable borrow to print isn’t allowed because no other
-borrows are allowed when there’s a mutable borrow. Try adding a `println!`
-there to see what error message you get!
+মনে রাখবেন যে `borrows_mutably` ক্লোজারের সংজ্ঞা এবং কলের মধ্যে আর কোনো `println!` নেই: যখন `borrows_mutably` সংজ্ঞায়িত করা হয়, তখন এটি `list`-এর একটি মিউটেবল রেফারেন্স ক্যাপচার করে। আমরা ক্লোজারটি কল করার পরে আর ক্লোজারটি ব্যবহার করি না, তাই মিউটেবল বরো শেষ হয়। ক্লোজার সংজ্ঞা এবং ক্লোজার কলের মধ্যে, প্রিন্ট করার জন্য একটি ইমিউটেবল বরো অনুমোদিত নয় কারণ যখন একটি মিউটেবল বরো থাকে তখন অন্য কোনো বরো অনুমোদিত নয়। আপনি কী এরর বার্তা পান তা দেখতে সেখানে একটি `println!` যোগ করার চেষ্টা করুন!
 
-If you want to force the closure to take ownership of the values it uses in the
-environment even though the body of the closure doesn’t strictly need
-ownership, you can use the `move` keyword before the parameter list.
+যদি আপনি ক্লোজারটিকে এনভায়রনমেন্টে ব্যবহৃত ভ্যালুগুলোর মালিকানা নিতে বাধ্য করতে চান যদিও ক্লোজারের বডির কঠোরভাবে মালিকানার প্রয়োজন নেই, তবে আপনি প্যারামিটার তালিকার আগে `move` কিওয়ার্ড ব্যবহার করতে পারেন।
 
-This technique is mostly useful when passing a closure to a new thread to move
-the data so that it’s owned by the new thread. We’ll discuss threads and why
-you would want to use them in detail in Chapter 16 when we talk about
-concurrency, but for now, let’s briefly explore spawning a new thread using a
-closure that needs the `move` keyword. Listing 13-6 shows Listing 13-4 modified
-to print the vector in a new thread rather than in the main thread:
+এই কৌশলটি মূলত তখনই উপযোগী যখন ডেটা সরানোর জন্য একটি নতুন থ্রেডে ক্লোজার পাস করা হয় যাতে এটি নতুন থ্রেডের মালিকানাধীন হয়। আমরা Chapter 16-এ থ্রেডগুলো নিয়ে বিস্তারিত আলোচনা করব যখন আমরা কনকারেন্সি নিয়ে কথা বলব এবং কেন আপনি সেগুলো ব্যবহার করতে চাইবেন, তবে আপাতত, আসুন `move` কিওয়ার্ড প্রয়োজন এমন একটি ক্লোজার ব্যবহার করে একটি নতুন থ্রেড স্পন করা সংক্ষেপে অন্বেষণ করি। Listing 13-6 Listing 13-4-এর একটি পরিবর্তিত সংস্করণ দেখায় যেখানে মূল থ্রেডের পরিবর্তে একটি নতুন থ্রেডে ভেক্টরটি প্রিন্ট করা হয়েছে:
 
-<Listing number="13-6" file-name="src/main.rs" caption="Using `move` to force the closure for the thread to take ownership of `list`">
+<Listing number="13-6" file-name="src/main.rs" caption="থ্রেডের জন্য ক্লোজারটিকে `list`-এর মালিকানা নিতে বাধ্য করতে `move` ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-06/src/main.rs}}
@@ -244,20 +137,7 @@ to print the vector in a new thread rather than in the main thread:
 
 </Listing>
 
-We spawn a new thread, giving the thread a closure to run as an argument. The
-closure body prints out the list. In Listing 13-4, the closure only captured
-`list` using an immutable reference because that's the least amount of access
-to `list` needed to print it. In this example, even though the closure body
-still only needs an immutable reference, we need to specify that `list` should
-be moved into the closure by putting the `move` keyword at the beginning of the
-closure definition. The new thread might finish before the rest of the main
-thread finishes, or the main thread might finish first. If the main thread
-maintained ownership of `list` but ended before the new thread did and dropped
-`list`, the immutable reference in the thread would be invalid. Therefore, the
-compiler requires that `list` be moved into the closure given to the new thread
-so the reference will be valid. Try removing the `move` keyword or using `list`
-in the main thread after the closure is defined to see what compiler errors you
-get!
+আমরা একটি নতুন থ্রেড স্পন করি, থ্রেডটিকে আর্গুমেন্ট হিসাবে চালানোর জন্য একটি ক্লোজার দিই। ক্লোজার বডি তালিকাটি প্রিন্ট করে। Listing 13-4-এ, ক্লোজারটি `list` প্রিন্ট করার জন্য প্রয়োজনীয় সর্বনিম্ন অ্যাক্সেস হওয়ার কারণে শুধুমাত্র একটি ইমিউটেবল রেফারেন্স ব্যবহার করে `list` ক্যাপচার করেছে। এই উদাহরণে, যদিও ক্লোজারের বডির এখনও শুধুমাত্র একটি ইমিউটেবল রেফারেন্সের প্রয়োজন, তবুও আমাদের ক্লোজার সংজ্ঞার শুরুতে `move` কিওয়ার্ডটি লিখে নির্দিষ্ট করতে হবে যে `list` কে ক্লোজারের মধ্যে সরিয়ে নেওয়া উচিত। নতুন থ্রেডটি মূল থ্রেডের বাকি অংশ শেষ হওয়ার আগে শেষ হতে পারে বা মূল থ্রেডটি আগে শেষ হতে পারে। যদি মূল থ্রেডটি `list`-এর মালিকানা বজায় রাখে কিন্তু নতুন থ্রেডটি শেষ হওয়ার আগে শেষ হয়ে যায় এবং `list` ড্রপ করে, তাহলে থ্রেডের ইমিউটেবল রেফারেন্সটি অবৈধ হবে। অতএব, কম্পাইলারের প্রয়োজন যে নতুন থ্রেডে দেওয়া ক্লোজারের মধ্যে `list` সরিয়ে নেওয়া উচিত যাতে রেফারেন্সটি বৈধ হয়। `move` কিওয়ার্ডটি সরিয়ে বা ক্লোজার সংজ্ঞায়িত হওয়ার পরে মূল থ্রেডে `list` ব্যবহার করে আপনি কী কম্পাইলার এরর পান তা দেখার চেষ্টা করুন!
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -265,38 +145,17 @@ get!
 <a id="limitations-of-the-cacher-implementation"></a>
 <a id="moving-captured-values-out-of-the-closure-and-the-fn-traits"></a>
 
-### Moving Captured Values Out of Closures and the `Fn` Traits
+### ক্লোজার থেকে ক্যাপচার করা ভ্যালু সরানো এবং `Fn` ট্রেট
 
-Once a closure has captured a reference or captured ownership of a value from
-the environment where the closure is defined (thus affecting what, if anything,
-is moved _into_ the closure), the code in the body of the closure defines what
-happens to the references or values when the closure is evaluated later (thus
-affecting what, if anything, is moved _out of_ the closure). A closure body can
-do any of the following: move a captured value out of the closure, mutate the
-captured value, neither move nor mutate the value, or capture nothing from the
-environment to begin with.
+একবার একটি ক্লোজার একটি রেফারেন্স ক্যাপচার করলে বা ক্লোজারটি সংজ্ঞায়িত করা হয়েছে এমন এনভায়রনমেন্ট থেকে একটি ভ্যালুর মালিকানা ক্যাপচার করলে (ফলে ক্লোজারে _কী_ সরানো হয়েছে তা প্রভাবিত করে), ক্লোজারের বডির কোডটি নির্ধারণ করে যে ক্লোজারটি পরে মূল্যায়ন করার সময় রেফারেন্স বা ভ্যালুগুলোর কী হয় (ফলে ক্লোজার থেকে _কী_ সরানো হয়েছে তা প্রভাবিত করে)। একটি ক্লোজার বডি নিম্নলিখিত যেকোনো কাজ করতে পারে: ক্যাপচার করা ভ্যালুকে ক্লোজার থেকে সরিয়ে নিতে পারে, ক্যাপচার করা ভ্যালুকে পরিবর্তন করতে পারে, ভ্যালুকে না সরাতে বা পরিবর্তন করতে পারে, বা শুরুতেই এনভায়রনমেন্ট থেকে কিছুই ক্যাপচার করতে না পারে।
 
-The way a closure captures and handles values from the environment affects
-which traits the closure implements, and traits are how functions and structs
-can specify what kinds of closures they can use. Closures will automatically
-implement one, two, or all three of these `Fn` traits, in an additive fashion,
-depending on how the closure’s body handles the values:
+একটি ক্লোজার কীভাবে এনভায়রনমেন্ট থেকে ভ্যালু ক্যাপচার করে এবং পরিচালনা করে তা প্রভাবিত করে ক্লোজারটি কোন ট্রেটগুলো প্রয়োগ করে এবং ট্রেটগুলো হল ফাংশন এবং struct-গুলো কীভাবে নির্দিষ্ট করতে পারে যে তারা কোন ধরণের ক্লোজার ব্যবহার করতে পারে। ক্লোজারগুলো স্বয়ংক্রিয়ভাবে এই তিনটি `Fn` ট্রেটের একটি, দুটি বা তিনটি প্রয়োগ করবে, সংযোজনমূলকভাবে, ক্লোজারের বডি ভ্যালুগুলো কীভাবে পরিচালনা করে তার উপর নির্ভর করে:
 
-1. `FnOnce` applies to closures that can be called once. All closures implement
-   at least this trait, because all closures can be called. A closure that
-   moves captured values out of its body will only implement `FnOnce` and none
-   of the other `Fn` traits, because it can only be called once.
-2. `FnMut` applies to closures that don’t move captured values out of their
-   body, but that might mutate the captured values. These closures can be
-   called more than once.
-3. `Fn` applies to closures that don’t move captured values out of their body
-   and that don’t mutate captured values, as well as closures that capture
-   nothing from their environment. These closures can be called more than once
-   without mutating their environment, which is important in cases such as
-   calling a closure multiple times concurrently.
+1. `FnOnce` उन ক্লোজারগুলোতে প্রয়োগ করা হয় যা একবার কল করা যেতে পারে। সমস্ত ক্লোজার অন্তত এই ট্রেটটি প্রয়োগ করে, কারণ সমস্ত ক্লোজারকে কল করা যেতে পারে। একটি ক্লোজার যা তার বডি থেকে ক্যাপচার করা ভ্যালু সরিয়ে নেয় তা শুধুমাত্র `FnOnce` প্রয়োগ করবে এবং অন্য কোনো `Fn` ট্রেট প্রয়োগ করবে না, কারণ এটিকে শুধুমাত্র একবার কল করা যেতে পারে।
+2. `FnMut` उन ক্লোজারগুলোতে প্রয়োগ করা হয় যা তাদের বডি থেকে ক্যাপচার করা ভ্যালু সরিয়ে নেয় না, তবে ক্যাপচার করা ভ্যালুগুলোকে পরিবর্তন করতে পারে। এই ক্লোজারগুলোকে একাধিকবার কল করা যেতে পারে।
+3. `Fn` उन ক্লোজারগুলোতে প্রয়োগ করা হয় যা তাদের বডি থেকে ক্যাপচার করা ভ্যালু সরিয়ে নেয় না এবং ক্যাপচার করা ভ্যালুগুলোকে পরিবর্তনও করে না, সেইসাথে সেই ক্লোজারগুলোতেও প্রয়োগ করা হয় যা তাদের এনভায়রনমেন্ট থেকে কিছুই ক্যাপচার করে না। এই ক্লোজারগুলোকে তাদের এনভায়রনমেন্ট পরিবর্তন না করে একাধিকবার কল করা যেতে পারে, যা এমন ক্ষেত্রে গুরুত্বপূর্ণ যেখানে একটি ক্লোজারকে একাধিকবার সমবর্তীভাবে কল করা হয়।
 
-Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
-we used in Listing 13-1:
+আসুন `Option<T>`-এর উপর `unwrap_or_else` মেথডের সংজ্ঞা দেখি যা আমরা Listing 13-1-এ ব্যবহার করেছি:
 
 ```rust,ignore
 impl<T> Option<T> {
@@ -312,41 +171,17 @@ impl<T> Option<T> {
 }
 ```
 
-Recall that `T` is the generic type representing the type of the value in the
-`Some` variant of an `Option`. That type `T` is also the return type of the
-`unwrap_or_else` function: code that calls `unwrap_or_else` on an
-`Option<String>`, for example, will get a `String`.
+মনে রাখবেন যে `T` হল জেনেরিক টাইপ যা `Option`-এর `Some` ভেরিয়েন্টের ভ্যালুর প্রকারের প্রতিনিধিত্ব করে। সেই `T` টাইপটিও `unwrap_or_else` ফাংশনের রিটার্ন টাইপ: উদাহরণস্বরূপ, `Option<String>`-এ `unwrap_or_else` কল করে এমন কোড একটি `String` পাবে।
 
-Next, notice that the `unwrap_or_else` function has the additional generic type
-parameter `F`. The `F` type is the type of the parameter named `f`, which is
-the closure we provide when calling `unwrap_or_else`.
+এরপর, লক্ষ্য করুন যে `unwrap_or_else` ফাংশনের অতিরিক্ত জেনেরিক টাইপ প্যারামিটার `F` আছে। `F` টাইপটি `f` নামের প্যারামিটারের টাইপ, যা হল ক্লোজার যা আমরা `unwrap_or_else` কল করার সময় সরবরাহ করি।
 
-The trait bound specified on the generic type `F` is `FnOnce() -> T`, which
-means `F` must be able to be called once, take no arguments, and return a `T`.
-Using `FnOnce` in the trait bound expresses the constraint that
-`unwrap_or_else` is only going to call `f` at most one time. In the body of
-`unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be
-called. If the `Option` is `None`, `f` will be called once. Because all
-closures implement `FnOnce`, `unwrap_or_else` accepts all three kinds of
-closures and is as flexible as it can be.
+জেনেরিক টাইপ `F`-এ নির্দিষ্ট করা ট্রেট বাউন্ড হল `FnOnce() -> T`, যার মানে `F`-কে একবার কল করা যেতে হবে, কোনো আর্গুমেন্ট নিতে পারবে না এবং `T` রিটার্ন করতে হবে। ট্রেট বাউন্ডে `FnOnce` ব্যবহার করা এই সীমাবদ্ধতা প্রকাশ করে যে `unwrap_or_else` `f`-কে সর্বোচ্চ একবার কল করবে। `unwrap_or_else`-এর বডিতে, আমরা দেখতে পাচ্ছি যে `Option` যদি `Some` হয়, তাহলে `f` কল করা হবে না। যদি `Option` `None` হয়, তাহলে `f` একবার কল করা হবে। যেহেতু সমস্ত ক্লোজার `FnOnce` প্রয়োগ করে, তাই `unwrap_or_else` সমস্ত তিন ধরনের ক্লোজার গ্রহণ করে এবং যতটা সম্ভব নমনীয়।
 
-> Note: If what we want to do doesn’t require capturing a value from the
-> environment, we can use the name of a function rather than a closure. For
-> example, we could call `unwrap_or_else(Vec::new)` on a `Option<Vec<T>>` value
-> to get a new, empty vector if the value is `None`. The compiler automatically
-> implements whichever of the `Fn` traits is applicable for a function
-> definition.
+> দ্রষ্টব্য: যদি আমরা যা করতে চাই তার জন্য এনভায়রনমেন্ট থেকে একটি ভ্যালু ক্যাপচার করার প্রয়োজন না হয়, তবে আমরা একটি ক্লোজারের পরিবর্তে একটি ফাংশনের নাম ব্যবহার করতে পারি। উদাহরণস্বরূপ, যদি ভ্যালুটি `None` হয়, তবে একটি নতুন, খালি ভেক্টর পেতে আমরা `Option<Vec<T>>` ভ্যালুতে `unwrap_or_else(Vec::new)` কল করতে পারতাম। কম্পাইলার স্বয়ংক্রিয়ভাবে একটি ফাংশন সংজ্ঞার জন্য প্রযোজ্য `Fn` ট্রেটগুলোর যেকোনো একটি প্রয়োগ করে।
 
-Now let’s look at the standard library method `sort_by_key` defined on slices,
-to see how that differs from `unwrap_or_else` and why `sort_by_key` uses
-`FnMut` instead of `FnOnce` for the trait bound. The closure gets one argument
-in the form of a reference to the current item in the slice being considered,
-and returns a value of type `K` that can be ordered. This function is useful
-when you want to sort a slice by a particular attribute of each item. In
-Listing 13-7, we have a list of `Rectangle` instances and we use `sort_by_key`
-to order them by their `width` attribute from low to high:
+এখন আসুন স্লাইসে সংজ্ঞায়িত স্ট্যান্ডার্ড লাইব্রেরি মেথড `sort_by_key` দেখি, যাতে এটি `unwrap_or_else` থেকে কীভাবে আলাদা এবং কেন `sort_by_key` ট্রেট বাউন্ডের জন্য `FnOnce`-এর পরিবর্তে `FnMut` ব্যবহার করে। ক্লোজারটি স্লাইসে বিবেচিত বর্তমান আইটেমের রেফারেন্সের আকারে একটি আর্গুমেন্ট পায় এবং `K` টাইপের একটি ভ্যালু রিটার্ন করে যা অর্ডার করা যায়। এই ফাংশনটি তখন কাজে লাগে যখন আপনি প্রতিটি আইটেমের একটি নির্দিষ্ট অ্যাট্রিবিউট দ্বারা একটি স্লাইস সাজাতে চান। Listing 13-7-এ, আমাদের কাছে `Rectangle` ইনস্ট্যান্সের একটি তালিকা আছে এবং আমরা তাদের `width` অ্যাট্রিবিউট অনুসারে নিচ থেকে উপরের দিকে সাজানোর জন্য `sort_by_key` ব্যবহার করি:
 
-<Listing number="13-7" file-name="src/main.rs" caption="Using `sort_by_key` to order rectangles by width">
+<Listing number="13-7" file-name="src/main.rs" caption="প্রস্থ অনুসারে আয়তক্ষেত্র সাজানোর জন্য `sort_by_key` ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs}}
@@ -354,22 +189,18 @@ to order them by their `width` attribute from low to high:
 
 </Listing>
 
-This code prints:
+এই কোডটি প্রিন্ট করে:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-07/output.txt}}
 ```
 
-The reason `sort_by_key` is defined to take an `FnMut` closure is that it calls
-the closure multiple times: once for each item in the slice. The closure `|r|
-r.width` doesn’t capture, mutate, or move out anything from its environment, so
-it meets the trait bound requirements.
+`sort_by_key`-কে `FnMut` ক্লোজার নিতে সংজ্ঞায়িত করার কারণ হল এটি ক্লোজারটিকে একাধিকবার কল করে: স্লাইসের প্রতিটি আইটেমের জন্য একবার। ক্লোজার `|r|
+r.width` এর এনভায়রনমেন্ট থেকে কিছুই ক্যাপচার করে না, পরিবর্তন করে না বা সরিয়ে নেয় না, তাই এটি ট্রেট বাউন্ডের প্রয়োজনীয়তা পূরণ করে।
 
-In contrast, Listing 13-8 shows an example of a closure that implements just
-the `FnOnce` trait, because it moves a value out of the environment. The
-compiler won’t let us use this closure with `sort_by_key`:
+বিপরীতে, Listing 13-8-এ একটি ক্লোজারের উদাহরণ দেখানো হয়েছে যা শুধুমাত্র `FnOnce` ট্রেট প্রয়োগ করে, কারণ এটি এনভায়রনমেন্ট থেকে একটি ভ্যালু সরিয়ে নেয়। কম্পাইলার `sort_by_key`-এর সাথে এই ক্লোজারটি ব্যবহার করতে দেবে না:
 
-<Listing number="13-8" file-name="src/main.rs" caption="Attempting to use an `FnOnce` closure with `sort_by_key`">
+<Listing number="13-8" file-name="src/main.rs" caption="`sort_by_key`-এর সাথে একটি `FnOnce` ক্লোজার ব্যবহার করার চেষ্টা করা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs}}
@@ -377,32 +208,15 @@ compiler won’t let us use this closure with `sort_by_key`:
 
 </Listing>
 
-This is a contrived, convoluted way (that doesn’t work) to try and count the
-number of times `sort_by_key` calls the closure when sorting `list`. This code
-attempts to do this counting by pushing `value`—a `String` from the closure’s
-environment—into the `sort_operations` vector. The closure captures `value`
-then moves `value` out of the closure by transferring ownership of `value` to
-the `sort_operations` vector. This closure can be called once; trying to call
-it a second time wouldn’t work because `value` would no longer be in the
-environment to be pushed into `sort_operations` again! Therefore, this closure
-only implements `FnOnce`. When we try to compile this code, we get this error
-that `value` can’t be moved out of the closure because the closure must
-implement `FnMut`:
+এটি `list` বাছাই করার সময় `sort_by_key` ক্লোজারটিকে কতবার কল করে তা গণনা করার চেষ্টা করার একটি কৃত্রিম, জটিল উপায় (যা কাজ করে না)। এই কোডটি `sort_operations` ভেক্টরে `value`—ক্লোজারের এনভায়রনমেন্ট থেকে একটি `String`—পুশ করে এই গণনা করার চেষ্টা করে। ক্লোজারটি `value` ক্যাপচার করে তারপর `sort_operations` ভেক্টরে `value`-এর মালিকানা স্থানান্তর করে ক্লোজার থেকে `value` সরিয়ে দেয়। এই ক্লোজারটিকে একবার কল করা যেতে পারে; এটিকে দ্বিতীয়বার কল করার চেষ্টা করলে কাজ করবে না কারণ `sort_operations`-এ আবার পুশ করার জন্য `value` আর এনভায়রনমেন্টে থাকবে না! অতএব, এই ক্লোজারটি শুধুমাত্র `FnOnce` প্রয়োগ করে। যখন আমরা এই কোডটি কম্পাইল করার চেষ্টা করি, তখন আমরা এই এররটি পাই যে `value`-কে ক্লোজার থেকে সরানো যাবে না কারণ ক্লোজারটিকে `FnMut` প্রয়োগ করতে হবে:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
 ```
 
-The error points to the line in the closure body that moves `value` out of the
-environment. To fix this, we need to change the closure body so that it doesn’t
-move values out of the environment. To count the number of times the closure
-is called, keeping a counter in the environment and incrementing its value in
-the closure body is a more straightforward way to calculate that. The closure
-in Listing 13-9 works with `sort_by_key` because it is only capturing a mutable
-reference to the `num_sort_operations` counter and can therefore be called more
-than once:
+এররটি ক্লোজার বডির সেই লাইনটিকে নির্দেশ করে যা এনভায়রনমেন্ট থেকে `value` সরিয়ে নেয়। এটি ঠিক করতে, আমাদের ক্লোজারের বডিটিকে পরিবর্তন করতে হবে যাতে এটি এনভায়রনমেন্ট থেকে ভ্যালু না সরায়। ক্লোজারটিকে কতবার কল করা হয় তা গণনা করতে, এনভায়রনমেন্টে একটি কাউন্টার রাখা এবং ক্লোজারের বডিতে এর ভ্যালু বাড়ানো হল গণনা করার একটি সরল উপায়। Listing 13-9-এর ক্লোজারটি `sort_by_key`-এর সাথে কাজ করে কারণ এটি শুধুমাত্র `num_sort_operations` কাউন্টারের একটি মিউটেবল রেফারেন্স ক্যাপচার করছে এবং সেইজন্য এটিকে একাধিকবার কল করা যেতে পারে:
 
-<Listing number="13-9" file-name="src/main.rs" caption="Using an `FnMut` closure with `sort_by_key` is allowed">
+<Listing number="13-9" file-name="src/main.rs" caption="`sort_by_key`-এর সাথে একটি `FnMut` ক্লোজার ব্যবহার করার অনুমতি আছে">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-09/src/main.rs}}
@@ -410,9 +224,6 @@ than once:
 
 </Listing>
 
-The `Fn` traits are important when defining or using functions or types that
-make use of closures. In the next section, we’ll discuss iterators. Many
-iterator methods take closure arguments, so keep these closure details in mind
-as we continue!
+যখন ফাংশন বা টাইপগুলো সংজ্ঞায়িত বা ব্যবহার করা হয় যা ক্লোজার ব্যবহার করে তখন `Fn` ট্রেটগুলো গুরুত্বপূর্ণ। পরবর্তী বিভাগে, আমরা ইটারেটরগুলো নিয়ে আলোচনা করব। অনেক ইটারেটর মেথড ক্লোজার আর্গুমেন্ট নেয়, তাই আমরা যখন চালিয়ে যাব তখন এই ক্লোজারের বিবরণগুলো মনে রাখবেন!
 
 [unwrap-or-else]: ../std/option/enum.Option.html#method.unwrap_or_else

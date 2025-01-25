@@ -1,71 +1,32 @@
-## Using Message Passing to Transfer Data Between Threads
+## থ্রেডগুলির মধ্যে ডেটা স্থানান্তর করতে মেসেজ পাসিং ব্যবহার করা
 
-One increasingly popular approach to ensuring safe concurrency is _message
-passing_, where threads or actors communicate by sending each other messages
-containing data. Here’s the idea in a slogan from [the Go language documentation](https://golang.org/doc/effective_go.html#concurrency):
-“Do not communicate by sharing memory; instead, share memory by communicating.”
+নিরাপদ কনকারেন্সি নিশ্চিত করার জন্য ক্রমবর্ধমান জনপ্রিয় একটি পদ্ধতি হল _মেসেজ পাসিং_, যেখানে থ্রেড বা অভিনেতা একে অপরের কাছে ডেটা সম্বলিত বার্তা পাঠিয়ে যোগাযোগ করে। এখানে [Go ভাষা ডকুমেন্টেশন](https://golang.org/doc/effective_go.html#concurrency) থেকে একটি স্লোগানে ধারণাটি দেওয়া হল: "মেমরি শেয়ার করে যোগাযোগ করবেন না; পরিবর্তে, যোগাযোগের মাধ্যমে মেমরি শেয়ার করুন।"
 
-To accomplish message-sending concurrency, Rust's standard library provides an
-implementation of _channels_. A channel is a general programming concept by
-which data is sent from one thread to another.
+মেসেজ-সেন্ডিং কনকারেন্সি সম্পন্ন করার জন্য, Rust-এর স্ট্যান্ডার্ড লাইব্রেরি _চ্যানেলগুলির_ একটি বাস্তবায়ন প্রদান করে। একটি চ্যানেল হল একটি সাধারণ প্রোগ্রামিং ধারণা যার মাধ্যমে একটি থ্রেড থেকে অন্য থ্রেডে ডেটা পাঠানো হয়।
 
-You can imagine a channel in programming as being like a directional channel of
-water, such as a stream or a river. If you put something like a rubber duck
-into a river, it will travel downstream to the end of the waterway.
+আপনি প্রোগ্রামিং-এ একটি চ্যানেলকে জলের একটি দিকনির্দেশক চ্যানেলের মতো কল্পনা করতে পারেন, যেমন একটি স্রোত বা একটি নদী। আপনি যদি নদীর মতো কোনো কিছুর মধ্যে একটি রাবারের হাঁস রাখেন, তবে এটি জলপথের শেষ পর্যন্ত নিচের দিকে ভ্রমণ করবে।
 
-A channel has two halves: a transmitter and a receiver. The transmitter half is
-the upstream location where you put rubber ducks into the river, and the
-receiver half is where the rubber duck ends up downstream. One part of your
-code calls methods on the transmitter with the data you want to send, and
-another part checks the receiving end for arriving messages. A channel is said
-to be _closed_ if either the transmitter or receiver half is dropped.
+একটি চ্যানেলের দুটি অংশ রয়েছে: একটি ট্রান্সমিটার এবং একটি রিসিভার। ট্রান্সমিটার অংশটি হল সেই আপস্ট্রিম অবস্থান যেখানে আপনি নদীতে রাবারের হাঁস রাখেন এবং রিসিভার অংশটি হল যেখানে রাবারের হাঁসটি শেষ পর্যন্ত নিচের দিকে এসে পৌঁছায়। আপনার কোডের একটি অংশ আপনি যে ডেটা পাঠাতে চান তা দিয়ে ট্রান্সমিটারের পদ্ধতিগুলিতে কল করে এবং অন্য অংশটি আগত বার্তাগুলির জন্য রিসিভিং প্রান্ত পরীক্ষা করে। একটি চ্যানেলকে _বন্ধ_ বলা হয় যদি ট্রান্সমিটার বা রিসিভার অংশের যেকোনো একটি ড্রপ করা হয়।
 
-Here, we’ll work up to a program that has one thread to generate values and
-send them down a channel, and another thread that will receive the values and
-print them out. We’ll be sending simple values between threads using a channel
-to illustrate the feature. Once you’re familiar with the technique, you could
-use channels for any threads that need to communicate between each other, such
-as a chat system or a system where many threads perform parts of a calculation
-and send the parts to one thread that aggregates the results.
+এখানে, আমরা এমন একটি প্রোগ্রামের দিকে কাজ করব যেখানে মান তৈরি করতে এবং সেগুলিকে একটি চ্যানেলে পাঠাতে একটি থ্রেড থাকবে এবং অন্য একটি থ্রেড থাকবে যা মানগুলি গ্রহণ করবে এবং সেগুলিকে প্রিন্ট করবে। বৈশিষ্ট্যটি চিত্রিত করার জন্য আমরা একটি চ্যানেল ব্যবহার করে থ্রেডগুলির মধ্যে সাধারণ মান পাঠাব। একবার আপনি কৌশলের সাথে পরিচিত হয়ে গেলে, আপনি যে কোনও থ্রেডের জন্য চ্যানেলগুলি ব্যবহার করতে পারেন যেগুলির মধ্যে একে অপরের সাথে যোগাযোগ করার প্রয়োজন হয়, যেমন একটি চ্যাট সিস্টেম বা এমন একটি সিস্টেম যেখানে অনেক থ্রেড একটি গণনার অংশগুলি সম্পাদন করে এবং ফলাফলগুলিকে একত্রিত করে এমন একটি থ্রেডে অংশগুলি পাঠায়।
 
-First, in Listing 16-6, we’ll create a channel but not do anything with it.
-Note that this won’t compile yet because Rust can’t tell what type of values we
-want to send over the channel.
+প্রথমত, Listing 16-6-এ, আমরা একটি চ্যানেল তৈরি করব কিন্তু এটি দিয়ে কিছুই করব না। মনে রাখবেন যে এটি এখনও কম্পাইল হবে না কারণ Rust বলতে পারে না যে আমরা চ্যানেলের মাধ্যমে কোন ধরনের মান পাঠাতে চাই।
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ফাইলের নাম: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-6: Creating a channel and assigning the two
-halves to `tx` and `rx`</span>
+<span class="caption">Listing 16-6: একটি চ্যানেল তৈরি করা এবং দুটি অংশ `tx` এবং `rx`-এ বরাদ্দ করা</span>
 
-We create a new channel using the `mpsc::channel` function; `mpsc` stands for
-_multiple producer, single consumer_. In short, the way Rust’s standard library
-implements channels means a channel can have multiple _sending_ ends that
-produce values but only one _receiving_ end that consumes those values. Imagine
-multiple streams flowing together into one big river: everything sent down any
-of the streams will end up in one river at the end. We’ll start with a single
-producer for now, but we’ll add multiple producers when we get this example
-working.
+আমরা `mpsc::channel` ফাংশন ব্যবহার করে একটি নতুন চ্যানেল তৈরি করি; `mpsc` মানে _মাল্টিপল প্রডিউসার, সিঙ্গেল কনজিউমার_। সংক্ষেপে, Rust-এর স্ট্যান্ডার্ড লাইব্রেরি যেভাবে চ্যানেলগুলি প্রয়োগ করে তার অর্থ হল একটি চ্যানেলে একাধিক _প্রেরণকারী_ প্রান্ত থাকতে পারে যা মান তৈরি করে কিন্তু শুধুমাত্র একটি _গ্রহীতা_ প্রান্ত থাকে যা সেই মানগুলি গ্রহণ করে। কল্পনা করুন একাধিক স্রোত একসাথে একটি বড় নদীতে প্রবাহিত হচ্ছে: কোনো স্রোতের মধ্য দিয়ে যা কিছু পাঠানো হোক না কেন, সবকিছু শেষে একটি নদীতে গিয়ে শেষ হবে। আমরা এখন একটি একক প্রডিউসার দিয়ে শুরু করব, তবে আমরা এই উদাহরণটি কাজ করার সময় একাধিক প্রডিউসার যুক্ত করব।
 
-The `mpsc::channel` function returns a tuple, the first element of which is the
-sending end—the transmitter—and the second element is the receiving end—the
-receiver. The abbreviations `tx` and `rx` are traditionally used in many fields
-for _transmitter_ and _receiver_ respectively, so we name our variables as such
-to indicate each end. We’re using a `let` statement with a pattern that
-destructures the tuples; we’ll discuss the use of patterns in `let` statements
-and destructuring in Chapter 19. For now, know that using a `let` statement
-this way is a convenient approach to extract the pieces of the tuple returned
-by `mpsc::channel`.
+`mpsc::channel` ফাংশন একটি টাপল রিটার্ন করে, যার প্রথম উপাদানটি প্রেরণের প্রান্ত—ট্রান্সমিটার—এবং দ্বিতীয় উপাদানটি হল গ্রহণের প্রান্ত—রিসিভার। `tx` এবং `rx` সংক্ষিপ্ত রূপগুলি ঐতিহ্যগতভাবে অনেক ক্ষেত্রে যথাক্রমে _ট্রান্সমিটার_ এবং _রিসিভারের_ জন্য ব্যবহৃত হয়, তাই আমরা আমাদের ভেরিয়েবলগুলিকে এই প্রান্তগুলি নির্দেশ করার জন্য এই নামে নামকরণ করি। আমরা একটি প্যাটার্ন সহ একটি `let` স্টেটমেন্ট ব্যবহার করছি যা টাপলগুলিকে ধ্বংস করে; আমরা অধ্যায় 19-এ `let` স্টেটমেন্ট এবং ধ্বংস করার ক্ষেত্রে প্যাটার্নের ব্যবহার নিয়ে আলোচনা করব। আপাতত, জেনে রাখুন যে এইভাবে `let` স্টেটমেন্ট ব্যবহার করা `mpsc::channel` দ্বারা ফেরত দেওয়া টাপলের অংশগুলি বের করার একটি সুবিধাজনক পদ্ধতি।
 
-Let’s move the transmitting end into a spawned thread and have it send one
-string so the spawned thread is communicating with the main thread, as shown in
-Listing 16-7. This is like putting a rubber duck in the river upstream or
-sending a chat message from one thread to another.
+আসুন ট্রান্সমিটিং প্রান্তটিকে একটি স্পন করা থ্রেডে সরিয়ে দিই এবং এটিকে একটি স্ট্রিং পাঠাই যাতে স্পন করা থ্রেডটি প্রধান থ্রেডের সাথে যোগাযোগ করে, যেমন Listing 16-7-এ দেখানো হয়েছে। এটি নদীর উজানে একটি রাবারের হাঁস রাখার বা একটি থ্রেড থেকে অন্য থ্রেডে একটি চ্যাট বার্তা পাঠানোর মতো।
 
-<Listing number="16-7" file-name="src/main.rs" caption="Moving `tx` to a spawned thread and sending “hi”">
+<Listing number="16-7" file-name="src/main.rs" caption="`tx`-কে একটি স্পন করা থ্রেডে সরানো এবং “hi” পাঠানো">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-07/src/main.rs}}
@@ -73,21 +34,11 @@ sending a chat message from one thread to another.
 
 </Listing>
 
-Again, we’re using `thread::spawn` to create a new thread and then using `move`
-to move `tx` into the closure so the spawned thread owns `tx`. The spawned
-thread needs to own the transmitter to be able to send messages through the
-channel. The transmitter has a `send` method that takes the value we want to
-send. The `send` method returns a `Result<T, E>` type, so if the receiver has
-already been dropped and there’s nowhere to send a value, the send operation
-will return an error. In this example, we’re calling `unwrap` to panic in case
-of an error. But in a real application, we would handle it properly: return to
-Chapter 9 to review strategies for proper error handling.
+আবার, আমরা একটি নতুন থ্রেড তৈরি করতে `thread::spawn` ব্যবহার করছি এবং তারপর `tx`-কে ক্লোজারে সরাতে `move` ব্যবহার করছি যাতে স্পন করা থ্রেড `tx`-এর মালিক হয়। চ্যানেলের মাধ্যমে বার্তা পাঠাতে সক্ষম হওয়ার জন্য স্পন করা থ্রেডের ট্রান্সমিটারের মালিক হওয়া দরকার। ট্রান্সমিটারের একটি `send` পদ্ধতি রয়েছে যা আমরা যে মানটি পাঠাতে চাই তা গ্রহণ করে। `send` পদ্ধতিটি একটি `Result<T, E>` টাইপ রিটার্ন করে, তাই যদি রিসিভারটি ইতিমধ্যেই ড্রপ হয়ে যায় এবং মান পাঠানোর কোথাও না থাকে, তাহলে `send` অপারেশনটি একটি এরর রিটার্ন করবে। এই উদাহরণে, আমরা কোনো এরর হলে প্যানিক করার জন্য `unwrap` কল করছি। কিন্তু একটি বাস্তব অ্যাপ্লিকেশনে, আমরা এটিকে সঠিকভাবে পরিচালনা করব: সঠিক এরর হ্যান্ডলিংয়ের কৌশলগুলির জন্য অধ্যায় 9-এ ফিরে যান।
 
-In Listing 16-8, we’ll get the value from the receiver in the main thread. This
-is like retrieving the rubber duck from the water at the end of the river or
-receiving a chat message.
+Listing 16-8-এ, আমরা প্রধান থ্রেডে রিসিভার থেকে মানটি পাব। এটি নদীর শেষে জল থেকে রাবারের হাঁসটি পুনরুদ্ধার করার বা একটি চ্যাট বার্তা পাওয়ার মতো।
 
-<Listing number="16-8" file-name="src/main.rs" caption="Receiving the value “hi” in the main thread and printing it">
+<Listing number="16-8" file-name="src/main.rs" caption="প্রধান থ্রেডে “hi” মানটি গ্রহণ করা এবং তা প্রিন্ট করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-08/src/main.rs}}
@@ -95,26 +46,13 @@ receiving a chat message.
 
 </Listing>
 
-The receiver has two useful methods: `recv` and `try_recv`. We’re using `recv`,
-short for _receive_, which will block the main thread’s execution and wait
-until a value is sent down the channel. Once a value is sent, `recv` will
-return it in a `Result<T, E>`. When the transmitter closes, `recv` will return
-an error to signal that no more values will be coming.
+রিসিভারের দুটি দরকারী পদ্ধতি রয়েছে: `recv` এবং `try_recv`। আমরা `recv` ব্যবহার করছি, যার অর্থ _রিসিভ_, যা প্রধান থ্রেডের নির্বাহকে ব্লক করবে এবং চ্যানেলটিতে একটি মান পাঠানো না হওয়া পর্যন্ত অপেক্ষা করবে। একবার একটি মান পাঠানো হলে, `recv` এটিকে একটি `Result<T, E>`-এ ফেরত দেবে। যখন ট্রান্সমিটার বন্ধ হয়ে যায়, তখন `recv` একটি এরর ফেরত দেবে এই সংকেত দিতে যে আর কোনো মান আসছে না।
 
-The `try_recv` method doesn’t block, but will instead return a `Result<T, E>`
-immediately: an `Ok` value holding a message if one is available and an `Err`
-value if there aren’t any messages this time. Using `try_recv` is useful if
-this thread has other work to do while waiting for messages: we could write a
-loop that calls `try_recv` every so often, handles a message if one is
-available, and otherwise does other work for a little while until checking
-again.
+`try_recv` পদ্ধতিটি ব্লক করে না, তবে এর পরিবর্তে একটি `Result<T, E>` অবিলম্বে রিটার্ন করবে: একটি `Ok` মান যদি কোনো বার্তা উপলব্ধ থাকে তবে সেই মান ধারণ করে এবং যদি এই সময়ে কোনো বার্তা না থাকে তবে একটি `Err` মান। যদি বার্তাগুলির জন্য অপেক্ষা করার সময় এই থ্রেডের অন্য কাজ করার থাকে তবে `try_recv` ব্যবহার করা কার্যকর: আমরা একটি লুপ লিখতে পারি যা কিছুক্ষণ পর পর `try_recv` কল করে, কোনো বার্তা উপলব্ধ থাকলে তা পরিচালনা করে এবং অন্যথায় আবার পরীক্ষা না করা পর্যন্ত কিছুক্ষণ অন্য কাজ করে।
 
-We’ve used `recv` in this example for simplicity; we don’t have any other work
-for the main thread to do other than wait for messages, so blocking the main
-thread is appropriate.
+আমরা সরলতার জন্য এই উদাহরণে `recv` ব্যবহার করেছি; বার্তাগুলির জন্য অপেক্ষা করা ছাড়া প্রধান থ্রেডের আর কোনো কাজ নেই, তাই প্রধান থ্রেডটিকে ব্লক করা উপযুক্ত।
 
-When we run the code in Listing 16-8, we’ll see the value printed from the main
-thread:
+যখন আমরা Listing 16-8-এর কোডটি চালাই, তখন আমরা প্রধান থ্রেড থেকে প্রিন্ট করা মান দেখতে পাব:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -124,19 +62,13 @@ changes in the compiler -->
 Got: hi
 ```
 
-Perfect!
+চমৎকার!
 
-### Channels and Ownership Transference
+### চ্যানেল এবং মালিকানা হস্তান্তর
 
-The ownership rules play a vital role in message sending because they help you
-write safe, concurrent code. Preventing errors in concurrent programming is the
-advantage of thinking about ownership throughout your Rust programs. Let’s do
-an experiment to show how channels and ownership work together to prevent
-problems: we’ll try to use a `val` value in the spawned thread _after_ we’ve
-sent it down the channel. Try compiling the code in Listing 16-9 to see why
-this code isn’t allowed:
+মালিকানার নিয়মগুলি বার্তা পাঠানোর ক্ষেত্রে একটি গুরুত্বপূর্ণ ভূমিকা পালন করে কারণ তারা আপনাকে নিরাপদ, কনকারেন্ট কোড লিখতে সাহায্য করে। কনকারেন্ট প্রোগ্রামিংয়ে এরর প্রতিরোধ করাই হল আপনার Rust প্রোগ্রাম জুড়ে মালিকানা নিয়ে চিন্তা করার সুবিধা। চ্যানেল এবং মালিকানা কীভাবে একসাথে কাজ করে সমস্যা প্রতিরোধ করে তা দেখানোর জন্য আসুন একটি পরীক্ষা করি: আমরা স্পন করা থ্রেডে `val` মানটি ব্যবহার করার চেষ্টা করব _পরে_ আমরা এটিকে চ্যানেলে পাঠিয়েছি। কেন এই কোডের অনুমতি নেই তা দেখতে Listing 16-9-এর কোডটি কম্পাইল করার চেষ্টা করুন:
 
-<Listing number="16-9" file-name="src/main.rs" caption="Attempting to use `val` after we’ve sent it down the channel">
+<Listing number="16-9" file-name="src/main.rs" caption="চ্যানেলে পাঠানোর পরে `val` ব্যবহার করার চেষ্টা করা হচ্ছে">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-09/src/main.rs}}
@@ -144,31 +76,19 @@ this code isn’t allowed:
 
 </Listing>
 
-Here, we try to print `val` after we’ve sent it down the channel via `tx.send`.
-Allowing this would be a bad idea: once the value has been sent to another
-thread, that thread could modify or drop it before we try to use the value
-again. Potentially, the other thread’s modifications could cause errors or
-unexpected results due to inconsistent or nonexistent data. However, Rust gives
-us an error if we try to compile the code in Listing 16-9:
+এখানে, আমরা `tx.send` এর মাধ্যমে চ্যানেলে পাঠানোর পরে `val` প্রিন্ট করার চেষ্টা করি। এটির অনুমতি দেওয়া একটি খারাপ ধারণা হবে: একবার মানটি অন্য থ্রেডে পাঠানো হয়ে গেলে, সেই থ্রেডটি আবার মানটি ব্যবহার করার চেষ্টা করার আগে এটি পরিবর্তন বা ড্রপ করতে পারত। সম্ভাব্যভাবে, অন্য থ্রেডের পরিবর্তনের কারণে অসামঞ্জস্যপূর্ণ বা অস্তিত্বহীন ডেটার কারণে এরর বা অপ্রত্যাশিত ফলাফল হতে পারত। যাইহোক, Rust Listing 16-9-এর কোড কম্পাইল করার চেষ্টা করলে আমাদের একটি এরর দেয়:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-09/output.txt}}
 ```
 
-Our concurrency mistake has caused a compile time error. The `send` function
-takes ownership of its parameter, and when the value is moved, the receiver
-takes ownership of it. This stops us from accidentally using the value again
-after sending it; the ownership system checks that everything is okay.
+আমাদের কনকারেন্সির ভুলের কারণে একটি কম্পাইল টাইম এরর হয়েছে। `send` ফাংশনটি তার প্যারামিটারের মালিকানা গ্রহণ করে এবং যখন মানটি সরানো হয়, তখন রিসিভার এটির মালিকানা গ্রহণ করে। এটি আমাদের পাঠানোর পরে দুর্ঘটনাক্রমে মানটি আবার ব্যবহার করা থেকে বিরত রাখে; মালিকানা সিস্টেম পরীক্ষা করে যে সবকিছু ঠিক আছে।
 
-### Sending Multiple Values and Seeing the Receiver Waiting
+### একাধিক মান পাঠানো এবং রিসিভারের অপেক্ষা দেখা
 
-The code in Listing 16-8 compiled and ran, but it didn’t clearly show us that
-two separate threads were talking to each other over the channel. In Listing
-16-10 we’ve made some modifications that will prove the code in Listing 16-8 is
-running concurrently: the spawned thread will now send multiple messages and
-pause for a second between each message.
+Listing 16-8-এর কোডটি কম্পাইল এবং রান করেছে, কিন্তু এটি স্পষ্টভাবে আমাদের দেখায়নি যে দুটি পৃথক থ্রেড চ্যানেলের মাধ্যমে একে অপরের সাথে কথা বলছে। Listing 16-10-এ আমরা কিছু পরিবর্তন করেছি যা প্রমাণ করবে যে Listing 16-8-এর কোডটি একই সাথে চলছে: স্পন করা থ্রেডটি এখন একাধিক বার্তা পাঠাবে এবং প্রতিটি বার্তার মধ্যে এক সেকেন্ডের জন্য বিরতি দেবে।
 
-<Listing number="16-10" file-name="src/main.rs" caption="Sending multiple messages and pausing between each">
+<Listing number="16-10" file-name="src/main.rs" caption="একাধিক বার্তা পাঠানো এবং প্রতিটির মধ্যে বিরতি দেওয়া">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-10/src/main.rs}}
@@ -176,17 +96,11 @@ pause for a second between each message.
 
 </Listing>
 
-This time, the spawned thread has a vector of strings that we want to send to
-the main thread. We iterate over them, sending each individually, and pause
-between each by calling the `thread::sleep` function with a `Duration` value of
-1 second.
+এইবার, স্পন করা থ্রেডে স্ট্রিংগুলির একটি ভেক্টর রয়েছে যা আমরা প্রধান থ্রেডে পাঠাতে চাই। আমরা সেগুলির উপর পুনরাবৃত্তি করি, প্রতিটি আলাদাভাবে পাঠাই এবং 1 সেকেন্ডের `Duration` মান সহ `thread::sleep` ফাংশন কল করে প্রতিটির মধ্যে বিরতি দিই।
 
-In the main thread, we’re not calling the `recv` function explicitly anymore:
-instead, we’re treating `rx` as an iterator. For each value received, we’re
-printing it. When the channel is closed, iteration will end.
+প্রধান থ্রেডে, আমরা আর স্পষ্টভাবে `recv` ফাংশনটি কল করছি না: পরিবর্তে, আমরা `rx`-কে একটি পুনরাবৃত্তিকারী হিসাবে ব্যবহার করছি। প্রতিটি প্রাপ্ত মানের জন্য, আমরা এটিকে প্রিন্ট করছি। চ্যানেল বন্ধ হয়ে গেলে, পুনরাবৃত্তি শেষ হয়ে যাবে।
 
-When running the code in Listing 16-10, you should see the following output
-with a 1-second pause in between each line:
+Listing 16-10-এর কোডটি চালানোর সময়, প্রতিটি লাইনের মধ্যে 1-সেকেন্ডের বিরতি সহ আপনার নিম্নলিখিত আউটপুটটি দেখতে হবে:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -199,18 +113,13 @@ Got: the
 Got: thread
 ```
 
-Because we don’t have any code that pauses or delays in the `for` loop in the
-main thread, we can tell that the main thread is waiting to receive values from
-the spawned thread.
+যেহেতু আমাদের প্রধান থ্রেডের `for` লুপে কোনো কোড নেই যা বিরতি বা বিলম্ব ঘটায়, তাই আমরা বলতে পারি যে প্রধান থ্রেডটি স্পন করা থ্রেড থেকে মান পাওয়ার জন্য অপেক্ষা করছে।
 
-### Creating Multiple Producers by Cloning the Transmitter
+### ট্রান্সমিটার ক্লোন করে একাধিক প্রডিউসার তৈরি করা
 
-Earlier we mentioned that `mpsc` was an acronym for _multiple producer,
-single consumer_. Let’s put `mpsc` to use and expand the code in Listing 16-10
-to create multiple threads that all send values to the same receiver. We can do
-so by cloning the transmitter, as shown in Listing 16-11:
+পূর্বে আমরা উল্লেখ করেছি যে `mpsc` মানে ছিল _মাল্টিপল প্রডিউসার, সিঙ্গেল কনজিউমার_। আসুন `mpsc` ব্যবহার করি এবং Listing 16-10-এর কোডটিকে প্রসারিত করে একাধিক থ্রেড তৈরি করি যা একই রিসিভারে সমস্ত মান পাঠায়। আমরা ট্রান্সমিটারটি ক্লোন করে তা করতে পারি, যেমন Listing 16-11-এ দেখানো হয়েছে:
 
-<Listing number="16-11" file-name="src/main.rs" caption="Sending multiple messages from multiple producers">
+<Listing number="16-11" file-name="src/main.rs" caption="একাধিক প্রডিউসার থেকে একাধিক বার্তা পাঠানো">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-11/src/main.rs:here}}
@@ -218,12 +127,9 @@ so by cloning the transmitter, as shown in Listing 16-11:
 
 </Listing>
 
-This time, before we create the first spawned thread, we call `clone` on the
-transmitter. This will give us a new transmitter we can pass to the first
-spawned thread. We pass the original transmitter to a second spawned thread.
-This gives us two threads, each sending different messages to the one receiver.
+এইবার, প্রথম স্পন করা থ্রেড তৈরি করার আগে, আমরা ট্রান্সমিটারের উপর `clone` কল করি। এটি আমাদের একটি নতুন ট্রান্সমিটার দেবে যা আমরা প্রথম স্পন করা থ্রেডে পাস করতে পারি। আমরা দ্বিতীয় স্পন করা থ্রেডে আসল ট্রান্সমিটারটি পাস করি। এটি আমাদের দুটি থ্রেড দেয়, প্রতিটি একটি রিসিভারে বিভিন্ন বার্তা পাঠাচ্ছে।
 
-When you run the code, your output should look something like this:
+যখন আপনি কোডটি চালান, তখন আপনার আউটপুটটি নীচের মত দেখতে হবে:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -240,10 +146,6 @@ Got: thread
 Got: you
 ```
 
-You might see the values in another order, depending on your system. This is
-what makes concurrency interesting as well as difficult. If you experiment with
-`thread::sleep`, giving it various values in the different threads, each run
-will be more nondeterministic and create different output each time.
+আপনার সিস্টেমের উপর নির্ভর করে আপনি মানগুলি অন্য ক্রমে দেখতে পারেন। এটি কনকারেন্সিকেও আকর্ষণীয় করে তোলে এবং সেইসাথে কঠিনও করে তোলে। আপনি যদি `thread::sleep` নিয়ে পরীক্ষা করেন, বিভিন্ন থ্রেডে বিভিন্ন মান দেন, তবে প্রতিটি রান আরও অনির্দিষ্ট হবে এবং প্রতিবার আলাদা আউটপুট তৈরি করবে।
 
-Now that we’ve looked at how channels work, let’s look at a different method of
-concurrency.
+যেহেতু আমরা চ্যানেলগুলি কীভাবে কাজ করে তা দেখেছি, তাই আসুন কনকারেন্সির একটি ভিন্ন পদ্ধতি দেখি।

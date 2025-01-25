@@ -1,135 +1,65 @@
-## `RefCell<T>` and the Interior Mutability Pattern
+## `RefCell<T>` এবং অভ্যন্তরীণ পরিবর্তনশীলতা প্যাটার্ন
 
-_Interior mutability_ is a design pattern in Rust that allows you to mutate
-data even when there are immutable references to that data; normally, this
-action is disallowed by the borrowing rules. To mutate data, the pattern uses
-`unsafe` code inside a data structure to bend Rust’s usual rules that govern
-mutation and borrowing. Unsafe code indicates to the compiler that we’re
-checking the rules manually instead of relying on the compiler to check them
-for us; we will discuss unsafe code more in Chapter 20.
+_অভ্যন্তরীণ পরিবর্তনশীলতা_ Rust-এর একটি ডিজাইন প্যাটার্ন যা আপনাকে ডেটার অপরিবর্তনীয় রেফারেন্স থাকা সত্ত্বেও ডেটা পরিবর্তন করতে দেয়; সাধারণত, এই কাজটি ধার করার নিয়ম দ্বারা নিষিদ্ধ। ডেটা পরিবর্তন করার জন্য, প্যাটার্নটি ডেটা স্ট্রাকচারের ভিতরে `unsafe` কোড ব্যবহার করে Rust-এর সাধারণ নিয়মগুলিকে বাঁকানোর জন্য যা পরিবর্তন এবং ধার করাকে নিয়ন্ত্রণ করে। `Unsafe` কোড কম্পাইলারকে নির্দেশ করে যে আমরা কম্পাইলারের উপর নির্ভর করার পরিবর্তে নিজেরাই নিয়মগুলি পরীক্ষা করছি; আমরা অধ্যায় 20-এ অনিরাপদ কোড নিয়ে আরও আলোচনা করব।
 
-We can use types that use the interior mutability pattern only when we can
-ensure that the borrowing rules will be followed at runtime, even though the
-compiler can’t guarantee that. The `unsafe` code involved is then wrapped in a
-safe API, and the outer type is still immutable.
+আমরা অভ্যন্তরীণ পরিবর্তনশীলতা প্যাটার্ন ব্যবহার করে এমন টাইপগুলি ব্যবহার করতে পারি শুধুমাত্র তখনই যখন আমরা নিশ্চিত করতে পারি যে রানটাইমে ধার করার নিয়মগুলি অনুসরণ করা হবে, যদিও কম্পাইলার এটির নিশ্চয়তা দিতে পারে না। `Unsafe` কোড জড়িত, তারপর একটি নিরাপদ API-তে মোড়ানো হয়, এবং বাইরের টাইপটি এখনও অপরিবর্তনীয়।
 
-Let’s explore this concept by looking at the `RefCell<T>` type that follows the
-interior mutability pattern.
+আসুন `RefCell<T>` টাইপ দেখে এই ধারণাটি অন্বেষণ করি যা অভ্যন্তরীণ পরিবর্তনশীলতা প্যাটার্ন অনুসরণ করে।
 
-### Enforcing Borrowing Rules at Runtime with `RefCell<T>`
+### `RefCell<T>` দিয়ে রানটাইমে ধার করার নিয়ম প্রয়োগ করা
 
-Unlike `Rc<T>`, the `RefCell<T>` type represents single ownership over the data
-it holds. So, what makes `RefCell<T>` different from a type like `Box<T>`?
-Recall the borrowing rules you learned in Chapter 4:
+`Rc<T>`-এর বিপরীতে, `RefCell<T>` টাইপটি এটির ধারণ করা ডেটার উপর একক মালিকানা উপস্থাপন করে। তাহলে, `RefCell<T>`-কে `Box<T>`-এর মতো টাইপ থেকে কী আলাদা করে? অধ্যায় 4-এ আপনি যে ধার করার নিয়মগুলি শিখেছেন তা মনে করুন:
 
-- At any given time, you can have _either_ (but not both) one mutable reference
-  or any number of immutable references.
-- References must always be valid.
+- যেকোনো সময়ে, আপনার কাছে _হয়_ (তবে উভয়ই নয়) একটি পরিবর্তনযোগ্য রেফারেন্স বা যেকোনো সংখ্যক অপরিবর্তনীয় রেফারেন্স থাকতে পারে।
+- রেফারেন্স সবসময় বৈধ হতে হবে।
 
-With references and `Box<T>`, the borrowing rules’ invariants are enforced at
-compile time. With `RefCell<T>`, these invariants are enforced _at runtime_.
-With references, if you break these rules, you’ll get a compiler error. With
-`RefCell<T>`, if you break these rules, your program will panic and exit.
+রেফারেন্স এবং `Box<T>`-এর সাথে, ধার করার নিয়মগুলির অপরিবর্তনীয়তা কম্পাইল করার সময় প্রয়োগ করা হয়। `RefCell<T>`-এর সাথে, এই অপরিবর্তনীয়তাগুলি _রানটাইমে_ প্রয়োগ করা হয়। রেফারেন্সের সাথে, যদি আপনি এই নিয়মগুলি ভাঙেন, তাহলে আপনি একটি কম্পাইলার এরর পাবেন। `RefCell<T>`-এর সাথে, যদি আপনি এই নিয়মগুলি ভাঙেন, তাহলে আপনার প্রোগ্রামটি প্যানিক করবে এবং প্রস্থান করবে।
 
-The advantages of checking the borrowing rules at compile time are that errors
-will be caught sooner in the development process, and there is no impact on
-runtime performance because all the analysis is completed beforehand. For those
-reasons, checking the borrowing rules at compile time is the best choice in the
-majority of cases, which is why this is Rust’s default.
+কম্পাইল করার সময় ধার করার নিয়মগুলি পরীক্ষা করার সুবিধা হল যে বিকাশের প্রক্রিয়ায় আগে ত্রুটি ধরা পড়বে, এবং রানটাইম পারফরম্যান্সের উপর কোনো প্রভাব পড়বে না কারণ সমস্ত বিশ্লেষণ আগে থেকেই সম্পন্ন করা হয়। সেই কারণে, কম্পাইল করার সময় ধার করার নিয়মগুলি পরীক্ষা করা বেশিরভাগ ক্ষেত্রে সেরা পছন্দ, তাই এটি Rust-এর ডিফল্ট।
 
-The advantage of checking the borrowing rules at runtime instead is that
-certain memory-safe scenarios are then allowed, where they would’ve been
-disallowed by the compile-time checks. Static analysis, like the Rust compiler,
-is inherently conservative. Some properties of code are impossible to detect by
-analyzing the code: the most famous example is the Halting Problem, which is
-beyond the scope of this book but is an interesting topic to research.
+পরিবর্তে রানটাইমে ধার করার নিয়মগুলি পরীক্ষা করার সুবিধা হল যে কিছু মেমরি-সুরক্ষিত পরিস্থিতি অনুমোদিত, যেখানে সেগুলি কম্পাইল-টাইমের চেক দ্বারা নিষিদ্ধ করা হত। স্ট্যাটিক বিশ্লেষণ, যেমন Rust কম্পাইলার, সহজাতভাবে রক্ষণশীল। কোডের কিছু বৈশিষ্ট্য কোড বিশ্লেষণ করে সনাক্ত করা অসম্ভব: সবচেয়ে বিখ্যাত উদাহরণ হল হল্টিং সমস্যা, যা এই বইয়ের সুযোগের বাইরে তবে গবেষণা করার জন্য একটি আকর্ষণীয় বিষয়।
 
-Because some analysis is impossible, if the Rust compiler can’t be sure the
-code complies with the ownership rules, it might reject a correct program; in
-this way, it’s conservative. If Rust accepted an incorrect program, users
-wouldn’t be able to trust in the guarantees Rust makes. However, if Rust
-rejects a correct program, the programmer will be inconvenienced, but nothing
-catastrophic can occur. The `RefCell<T>` type is useful when you’re sure your
-code follows the borrowing rules but the compiler is unable to understand and
-guarantee that.
+যেহেতু কিছু বিশ্লেষণ করা অসম্ভব, যদি Rust কম্পাইলার নিশ্চিত না হতে পারে যে কোডটি মালিকানার নিয়মগুলি মেনে চলে, তবে এটি একটি সঠিক প্রোগ্রাম প্রত্যাখ্যান করতে পারে; এইভাবে, এটি রক্ষণশীল। যদি Rust একটি ভুল প্রোগ্রাম গ্রহণ করত, তবে ব্যবহারকারীরা Rust-এর দেওয়া নিশ্চয়তার উপর আস্থা রাখতে পারত না। যাইহোক, যদি Rust একটি সঠিক প্রোগ্রাম প্রত্যাখ্যান করে, তবে প্রোগ্রামারকে অসুবিধায় পড়তে হবে, তবে কোনো বিপর্যয়কর ঘটনা ঘটতে পারে না। `RefCell<T>` টাইপটি কাজে লাগে যখন আপনি নিশ্চিত হন যে আপনার কোডটি ধার করার নিয়মগুলি অনুসরণ করে কিন্তু কম্পাইলার তা বুঝতে এবং নিশ্চিত করতে সক্ষম নয়।
 
-Similar to `Rc<T>`, `RefCell<T>` is only for use in single-threaded scenarios
-and will give you a compile-time error if you try using it in a multithreaded
-context. We’ll talk about how to get the functionality of `RefCell<T>` in a
-multithreaded program in Chapter 16.
+`Rc<T>`-এর মতোই, `RefCell<T>` শুধুমাত্র সিঙ্গেল-থ্রেডেড পরিস্থিতিতে ব্যবহারের জন্য এবং আপনি যদি মাল্টিথ্রেডেড প্রেক্ষাপটে এটি ব্যবহার করার চেষ্টা করেন তবে আপনাকে একটি কম্পাইল-টাইম এরর দেবে। আমরা অধ্যায় 16-এ মাল্টিথ্রেডেড প্রোগ্রামে `RefCell<T>`-এর কার্যকারিতা কীভাবে পেতে হয় সে সম্পর্কে আলোচনা করব।
 
-Here is a recap of the reasons to choose `Box<T>`, `Rc<T>`, or `RefCell<T>`:
+এখানে `Box<T>`, `Rc<T>`, বা `RefCell<T>` বেছে নেওয়ার কারণগুলির একটি সারসংক্ষেপ দেওয়া হল:
 
-- `Rc<T>` enables multiple owners of the same data; `Box<T>` and `RefCell<T>`
-  have single owners.
-- `Box<T>` allows immutable or mutable borrows checked at compile time; `Rc<T>`
-  allows only immutable borrows checked at compile time; `RefCell<T>` allows
-  immutable or mutable borrows checked at runtime.
-- Because `RefCell<T>` allows mutable borrows checked at runtime, you can
-  mutate the value inside the `RefCell<T>` even when the `RefCell<T>` is
-  immutable.
+- `Rc<T>` একই ডেটার একাধিক মালিককে সক্ষম করে; `Box<T>` এবং `RefCell<T>`-এর একক মালিক রয়েছে।
+- `Box<T>` কম্পাইল করার সময় যাচাই করা অপরিবর্তনীয় বা পরিবর্তনযোগ্য ধার করার অনুমতি দেয়; `Rc<T>` শুধুমাত্র কম্পাইল করার সময় যাচাই করা অপরিবর্তনীয় ধার করার অনুমতি দেয়; `RefCell<T>` রানটাইমে যাচাই করা অপরিবর্তনীয় বা পরিবর্তনযোগ্য ধার করার অনুমতি দেয়।
+- যেহেতু `RefCell<T>` রানটাইমে যাচাই করা পরিবর্তনযোগ্য ধার করার অনুমতি দেয়, তাই `RefCell<T]` অপরিবর্তনীয় হলেও আপনি `RefCell<T>`-এর ভিতরের মান পরিবর্তন করতে পারেন।
 
-Mutating the value inside an immutable value is the _interior mutability_
-pattern. Let’s look at a situation in which interior mutability is useful and
-examine how it’s possible.
+একটি অপরিবর্তনীয় মানের ভিতরে মান পরিবর্তন করা হল _অভ্যন্তরীণ পরিবর্তনশীলতা_ প্যাটার্ন। আসুন এমন একটি পরিস্থিতি দেখি যেখানে অভ্যন্তরীণ পরিবর্তনশীলতা কাজে লাগে এবং এটি কীভাবে সম্ভব তা পরীক্ষা করি।
 
-### Interior Mutability: A Mutable Borrow to an Immutable Value
+### অভ্যন্তরীণ পরিবর্তনশীলতা: একটি অপরিবর্তনীয় ভ্যালুর পরিবর্তনযোগ্য ধার
 
-A consequence of the borrowing rules is that when you have an immutable value,
-you can’t borrow it mutably. For example, this code won’t compile:
+ধার করার নিয়মগুলির একটি পরিণতি হল যখন আপনার একটি অপরিবর্তনীয় ভ্যালু থাকে, তখন আপনি এটিকে পরিবর্তনযোগ্যভাবে ধার করতে পারবেন না। উদাহরণস্বরূপ, এই কোডটি কম্পাইল হবে না:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/no-listing-01-cant-borrow-immutable-as-mutable/src/main.rs}}
 ```
 
-If you tried to compile this code, you’d get the following error:
+যদি আপনি এই কোডটি কম্পাইল করার চেষ্টা করেন, তাহলে আপনি নিম্নলিখিত এররটি পাবেন:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/no-listing-01-cant-borrow-immutable-as-mutable/output.txt}}
 ```
 
-However, there are situations in which it would be useful for a value to mutate
-itself in its methods but appear immutable to other code. Code outside the
-value’s methods would not be able to mutate the value. Using `RefCell<T>` is
-one way to get the ability to have interior mutability, but `RefCell<T>`
-doesn’t get around the borrowing rules completely: the borrow checker in the
-compiler allows this interior mutability, and the borrowing rules are checked
-at runtime instead. If you violate the rules, you’ll get a `panic!` instead of
-a compiler error.
+যাইহোক, এমন কিছু পরিস্থিতি রয়েছে যেখানে কোনও মানের পক্ষে তার পদ্ধতিতে নিজেকে পরিবর্তন করা উপযোগী হবে তবে অন্য কোডের কাছে অপরিবর্তনীয় দেখাবে। মানের পদ্ধতির বাইরের কোডটি মান পরিবর্তন করতে সক্ষম হবে না। অভ্যন্তরীণ পরিবর্তনশীলতা রাখার ক্ষমতা পাওয়ার একটি উপায় হল `RefCell<T>` ব্যবহার করা, তবে `RefCell<T>` সম্পূর্ণরূপে ধার করার নিয়মগুলি এড়িয়ে যায় না: কম্পাইলারে ধার পরীক্ষক এই অভ্যন্তরীণ পরিবর্তনশীলতার অনুমতি দেয় এবং ধার করার নিয়মগুলি পরিবর্তে রানটাইমে পরীক্ষা করা হয়। আপনি যদি নিয়ম লঙ্ঘন করেন তবে আপনি কম্পাইলার এররের পরিবর্তে একটি `panic!` পাবেন।
 
-Let’s work through a practical example where we can use `RefCell<T>` to mutate
-an immutable value and see why that is useful.
+আসুন একটি ব্যবহারিক উদাহরণের মাধ্যমে কাজ করি যেখানে আমরা একটি অপরিবর্তনীয় মান পরিবর্তন করতে `RefCell<T>` ব্যবহার করতে পারি এবং দেখি কেন এটি দরকারী।
 
-#### A Use Case for Interior Mutability: Mock Objects
+#### অভ্যন্তরীণ পরিবর্তনশীলতার একটি ব্যবহারের ক্ষেত্র: মক অবজেক্ট
 
-Sometimes during testing a programmer will use a type in place of another type,
-in order to observe particular behavior and assert it’s implemented correctly.
-This placeholder type is called a _test double_. Think of it in the sense of a
-“stunt double” in filmmaking, where a person steps in and substitutes for an
-actor to do a particular tricky scene. Test doubles stand in for other types
-when we’re running tests. _Mock objects_ are specific types of test doubles
-that record what happens during a test so you can assert that the correct
-actions took place.
+পরীক্ষার সময় কখনও কখনও একজন প্রোগ্রামার অন্য টাইপের পরিবর্তে একটি টাইপ ব্যবহার করবেন, যাতে নির্দিষ্ট আচরণ পর্যবেক্ষণ করা যায় এবং এটি সঠিকভাবে প্রয়োগ করা হয়েছে কিনা তা নিশ্চিত করা যায়। এই প্লেসহোল্ডার টাইপটিকে _টেস্ট ডাবল_ বলা হয়। ফিল্ম তৈরিতে "স্টান্ট ডাবল"-এর অর্থে এটি চিন্তা করুন, যেখানে একজন ব্যক্তি প্রবেশ করেন এবং একটি বিশেষ কঠিন দৃশ্য করার জন্য অভিনেতার বিকল্প হন। টেস্ট ডাবলগুলি যখন আমরা পরীক্ষা চালাচ্ছি তখন অন্যান্য টাইপের জন্য দাঁড়িয়ে থাকে। _মক অবজেক্ট_ হল নির্দিষ্ট ধরনের টেস্ট ডাবল যা একটি পরীক্ষার সময় কী ঘটে তা রেকর্ড করে যাতে আপনি নিশ্চিত করতে পারেন যে সঠিক পদক্ষেপগুলি নেওয়া হয়েছে।
 
-Rust doesn’t have objects in the same sense as other languages have objects,
-and Rust doesn’t have mock object functionality built into the standard library
-as some other languages do. However, you can definitely create a struct that
-will serve the same purposes as a mock object.
+অন্যান্য ভাষার মতো Rust-এর একই অর্থে অবজেক্ট নেই এবং Rust-এর স্ট্যান্ডার্ড লাইব্রেরিতে মক অবজেক্ট কার্যকারিতা তৈরি করা নেই যেমনটি অন্য কিছু ভাষায় আছে। যাইহোক, আপনি অবশ্যই একটি স্ট্রাক্ট তৈরি করতে পারেন যা একটি মক অবজেক্টের মতোই কাজ করবে।
 
-Here’s the scenario we’ll test: we’ll create a library that tracks a value
-against a maximum value and sends messages based on how close to the maximum
-value the current value is. This library could be used to keep track of a
-user’s quota for the number of API calls they’re allowed to make, for example.
+এখানে আমরা যে পরিস্থিতিটি পরীক্ষা করব: আমরা এমন একটি লাইব্রেরি তৈরি করব যা একটি সর্বোচ্চ মানের বিপরীতে একটি মান ট্র্যাক করে এবং বর্তমান মানটি সর্বোচ্চ মানের কতটা কাছাকাছি তার উপর ভিত্তি করে বার্তা পাঠায়। এই লাইব্রেরিটি উদাহরণস্বরূপ, ব্যবহারকারীর API কলের সংখ্যার জন্য তাদের কোটা ট্র্যাক রাখতে ব্যবহার করা যেতে পারে।
 
-Our library will only provide the functionality of tracking how close to the
-maximum a value is and what the messages should be at what times. Applications
-that use our library will be expected to provide the mechanism for sending the
-messages: the application could put a message in the application, send an
-email, send a text message, or something else. The library doesn’t need to know
-that detail. All it needs is something that implements a trait we’ll provide
-called `Messenger`. Listing 15-20 shows the library code:
+আমাদের লাইব্রেরি শুধুমাত্র একটি মান সর্বোচ্চ মানের কতটা কাছাকাছি এবং কোন সময়ে বার্তাগুলি কী হওয়া উচিত তা ট্র্যাক করার কার্যকারিতা প্রদান করবে। আমাদের লাইব্রেরি ব্যবহার করে এমন অ্যাপ্লিকেশনগুলি বার্তা পাঠানোর প্রক্রিয়া সরবরাহ করার আশা করা হবে: অ্যাপ্লিকেশনটি অ্যাপ্লিকেশনে একটি বার্তা রাখতে পারে, একটি ইমেল পাঠাতে পারে, একটি টেক্সট মেসেজ পাঠাতে পারে বা অন্য কিছু করতে পারে। লাইব্রেরির সেই বিবরণ জানার প্রয়োজন নেই। এটির যা প্রয়োজন তা হল এমন কিছু যা `Messenger` নামের একটি trait প্রয়োগ করে যা আমরা সরবরাহ করব। Listing 15-20 লাইব্রেরি কোড দেখায়:
 
-<Listing number="15-20" file-name="src/lib.rs" caption="A library to keep track of how close a value is to a maximum value and warn when the value is at certain levels">
+<Listing number="15-20" file-name="src/lib.rs" caption="একটি মান সর্বোচ্চ মানের কতটা কাছাকাছি তা ট্র্যাক করতে এবং মানটি নির্দিষ্ট স্তরে থাকলে সতর্ক করতে একটি লাইব্রেরি">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-20/src/lib.rs}}
@@ -137,25 +67,11 @@ called `Messenger`. Listing 15-20 shows the library code:
 
 </Listing>
 
-One important part of this code is that the `Messenger` trait has one method
-called `send` that takes an immutable reference to `self` and the text of the
-message. This trait is the interface our mock object needs to implement so that
-the mock can be used in the same way a real object is. The other important part
-is that we want to test the behavior of the `set_value` method on the
-`LimitTracker`. We can change what we pass in for the `value` parameter, but
-`set_value` doesn’t return anything for us to make assertions on. We want to be
-able to say that if we create a `LimitTracker` with something that implements
-the `Messenger` trait and a particular value for `max`, when we pass different
-numbers for `value`, the messenger is told to send the appropriate messages.
+এই কোডের একটি গুরুত্বপূর্ণ অংশ হল `Messenger` trait-এর `send` নামের একটি পদ্ধতি রয়েছে যা `self`-এর একটি অপরিবর্তনীয় রেফারেন্স এবং বার্তার টেক্সট নেয়। এই trait হল সেই ইন্টারফেস যা আমাদের মক অবজেক্টকে প্রয়োগ করতে হবে যাতে মকটিকে একটি বাস্তব অবজেক্টের মতোই ব্যবহার করা যায়। অন্য গুরুত্বপূর্ণ অংশটি হল আমরা `LimitTracker`-এ `set_value` পদ্ধতির আচরণ পরীক্ষা করতে চাই। আমরা `value` প্যারামিটারের জন্য যা পাস করি তা পরিবর্তন করতে পারি, তবে `set_value` আমাদের নিশ্চিত করার জন্য কিছুই ফেরত দেয় না। আমরা বলতে সক্ষম হতে চাই যে যদি আমরা `Messenger` trait প্রয়োগ করে এমন কিছু দিয়ে এবং `max`-এর জন্য একটি নির্দিষ্ট মান দিয়ে একটি `LimitTracker` তৈরি করি, যখন আমরা `value`-এর জন্য বিভিন্ন সংখ্যা পাস করি, তখন মেসেঞ্জারকে উপযুক্ত বার্তা পাঠাতে বলা হয়।
 
-We need a mock object that, instead of sending an email or text message when we
-call `send`, will only keep track of the messages it’s told to send. We can
-create a new instance of the mock object, create a `LimitTracker` that uses the
-mock object, call the `set_value` method on `LimitTracker`, and then check that
-the mock object has the messages we expect. Listing 15-21 shows an attempt to
-implement a mock object to do just that, but the borrow checker won’t allow it:
+আমাদের এমন একটি মক অবজেক্ট দরকার যা, যখন আমরা `send` কল করি তখন একটি ইমেল বা টেক্সট মেসেজ পাঠানোর পরিবর্তে, এটি শুধুমাত্র সেই বার্তাগুলির ট্র্যাক রাখবে যা এটিকে পাঠাতে বলা হয়েছে। আমরা মক অবজেক্টের একটি নতুন উদাহরণ তৈরি করতে পারি, একটি `LimitTracker` তৈরি করতে পারি যা মক অবজেক্ট ব্যবহার করে, `LimitTracker`-এ `set_value` পদ্ধতি কল করতে পারি এবং তারপর পরীক্ষা করতে পারি যে মক অবজেক্টে আমাদের প্রত্যাশিত বার্তাগুলি আছে কিনা। Listing 15-21 ঠিক তাই করার জন্য একটি মক অবজেক্ট বাস্তবায়নের একটি প্রচেষ্টা দেখায়, তবে ধার পরীক্ষক এটিকে অনুমতি দেবে না:
 
-<Listing number="15-21" file-name="src/lib.rs" caption="An attempt to implement a `MockMessenger` that isn’t allowed by the borrow checker">
+<Listing number="15-21" file-name="src/lib.rs" caption="একটি `MockMessenger` বাস্তবায়নের চেষ্টা যা ধার পরীক্ষকের দ্বারা অনুমোদিত নয়">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-21/src/lib.rs:here}}
@@ -163,43 +79,21 @@ implement a mock object to do just that, but the borrow checker won’t allow it
 
 </Listing>
 
-This test code defines a `MockMessenger` struct that has a `sent_messages`
-field with a `Vec` of `String` values to keep track of the messages it’s told
-to send. We also define an associated function `new` to make it convenient to
-create new `MockMessenger` values that start with an empty list of messages. We
-then implement the `Messenger` trait for `MockMessenger` so we can give a
-`MockMessenger` to a `LimitTracker`. In the definition of the `send` method, we
-take the message passed in as a parameter and store it in the `MockMessenger`
-list of `sent_messages`.
+এই পরীক্ষা কোডটি একটি `MockMessenger` স্ট্রাক্ট সংজ্ঞায়িত করে যার `sent_messages` ফিল্ডে `String` মানের একটি `Vec` রয়েছে যা এটি পাঠানোর জন্য বলা বার্তাগুলির ট্র্যাক রাখতে পারে। আমরা নতুন `MockMessenger` মান তৈরি করার সুবিধার জন্য একটি সহযোগী ফাংশন `new` সংজ্ঞায়িত করি যা বার্তাগুলির একটি খালি তালিকা দিয়ে শুরু হয়। তারপরে আমরা `MockMessenger`-এর জন্য `Messenger` trait প্রয়োগ করি যাতে আমরা `LimitTracker`-কে একটি `MockMessenger` দিতে পারি। `send` পদ্ধতির সংজ্ঞায়, আমরা একটি প্যারামিটার হিসাবে পাস করা বার্তাটি নিই এবং এটিকে `MockMessenger`-এর `sent_messages` তালিকায় সংরক্ষণ করি।
 
-In the test, we’re testing what happens when the `LimitTracker` is told to set
-`value` to something that is more than 75 percent of the `max` value. First, we
-create a new `MockMessenger`, which will start with an empty list of messages.
-Then we create a new `LimitTracker` and give it a reference to the new
-`MockMessenger` and a `max` value of 100. We call the `set_value` method on the
-`LimitTracker` with a value of 80, which is more than 75 percent of 100. Then
-we assert that the list of messages that the `MockMessenger` is keeping track
-of should now have one message in it.
+পরীক্ষায়, আমরা পরীক্ষা করছি যে `LimitTracker`-কে যখন `value` সেট করতে বলা হয় এমন কিছুতে যা `max` মানের 75 শতাংশের বেশি তখন কী ঘটে। প্রথমে, আমরা একটি নতুন `MockMessenger` তৈরি করি, যা বার্তাগুলির একটি খালি তালিকা দিয়ে শুরু হবে। তারপর আমরা একটি নতুন `LimitTracker` তৈরি করি এবং এটিকে নতুন `MockMessenger`-এর একটি রেফারেন্স এবং 100-এর একটি `max` মান দিই। আমরা `LimitTracker`-এ `set_value` পদ্ধতিটিকে 80-এর মান দিয়ে কল করি, যা 100-এর 75 শতাংশের বেশি। তারপরে আমরা নিশ্চিত করি যে `MockMessenger` যে বার্তাগুলির ট্র্যাক রাখছে সেই তালিকায় এখন একটি বার্তা থাকা উচিত।
 
-However, there’s one problem with this test, as shown here:
+যাইহোক, এই পরীক্ষার সাথে একটি সমস্যা আছে, যেমনটি এখানে দেখানো হয়েছে:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-21/output.txt}}
 ```
 
-We can’t modify the `MockMessenger` to keep track of the messages, because the
-`send` method takes an immutable reference to `self`. We also can’t take the
-suggestion from the error text to use `&mut self` in both the `impl` method and
-the `trait` definition. We do not want to change the `Messenger` trait solely
-for the sake of testing. Instead, we need to find a way to make our test code
-work correctly with our existing design.
+আমরা বার্তাগুলির ট্র্যাক রাখতে `MockMessenger` পরিবর্তন করতে পারি না, কারণ `send` পদ্ধতি `self`-এর একটি অপরিবর্তনীয় রেফারেন্স নেয়। আমরা `impl` পদ্ধতি এবং `trait` সংজ্ঞা উভয় ক্ষেত্রেই `&mut self` ব্যবহার করার জন্য এরর টেক্সট থেকে পরামর্শও নিতে পারি না। আমরা শুধুমাত্র পরীক্ষার জন্য `Messenger` trait পরিবর্তন করতে চাই না। পরিবর্তে, আমাদের বিদ্যমান ডিজাইনের সাথে আমাদের পরীক্ষা কোডটিকে সঠিকভাবে কাজ করার একটি উপায় খুঁজে বের করতে হবে।
 
-This is a situation in which interior mutability can help! We’ll store the
-`sent_messages` within a `RefCell<T>`, and then the `send` method will be
-able to modify `sent_messages` to store the messages we’ve seen. Listing 15-22
-shows what that looks like:
+এটি এমন একটি পরিস্থিতি যেখানে অভ্যন্তরীণ পরিবর্তনশীলতা সাহায্য করতে পারে! আমরা `sent_messages`-কে `RefCell<T>`-এর ভিতরে সংরক্ষণ করব, এবং তারপর `send` পদ্ধতিটি আমরা যে বার্তাগুলি দেখেছি তা সংরক্ষণ করার জন্য `sent_messages` পরিবর্তন করতে সক্ষম হবে। Listing 15-22 দেখায় যে এটি দেখতে কেমন:
 
-<Listing number="15-22" file-name="src/lib.rs" caption="Using `RefCell<T>` to mutate an inner value while the outer value is considered immutable">
+<Listing number="15-22" file-name="src/lib.rs" caption="বাইরের মানটিকে অপরিবর্তনীয় হিসাবে বিবেচনা করার সময় একটি ভিতরের মান পরিবর্তন করতে `RefCell<T>` ব্যবহার করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-22/src/lib.rs:here}}
@@ -207,47 +101,23 @@ shows what that looks like:
 
 </Listing>
 
-The `sent_messages` field is now of type `RefCell<Vec<String>>` instead of
-`Vec<String>`. In the `new` function, we create a new `RefCell<Vec<String>>`
-instance around the empty vector.
+`sent_messages` ফিল্ডটি এখন `Vec<String>`-এর পরিবর্তে `RefCell<Vec<String>>` টাইপের। `new` ফাংশনে, আমরা খালি ভেক্টরের চারপাশে একটি নতুন `RefCell<Vec<String>>` উদাহরণ তৈরি করি।
 
-For the implementation of the `send` method, the first parameter is still an
-immutable borrow of `self`, which matches the trait definition. We call
-`borrow_mut` on the `RefCell<Vec<String>>` in `self.sent_messages` to get a
-mutable reference to the value inside the `RefCell<Vec<String>>`, which is the
-vector. Then we can call `push` on the mutable reference to the vector to keep
-track of the messages sent during the test.
+`send` পদ্ধতির বাস্তবায়নের জন্য, প্রথম প্যারামিটারটি এখনও `self`-এর একটি অপরিবর্তনীয় ধার, যা trait সংজ্ঞার সাথে মেলে। আমরা `RefCell<Vec<String>>`-এর ভিতরে থাকা মানের একটি পরিবর্তনযোগ্য রেফারেন্স পেতে `self.sent_messages`-এ `RefCell<Vec<String>>`-এ `borrow_mut` কল করি, যা ভেক্টর। তারপরে আমরা পরীক্ষার সময় পাঠানো বার্তাগুলির ট্র্যাক রাখতে ভেক্টরের পরিবর্তনযোগ্য রেফারেন্সে `push` কল করতে পারি।
 
-The last change we have to make is in the assertion: to see how many items are
-in the inner vector, we call `borrow` on the `RefCell<Vec<String>>` to get an
-immutable reference to the vector.
+আমাদের শেষ পরিবর্তনটি করতে হবে অ্যাসারশনে: ভিতরের ভেক্টরে কতগুলি আইটেম আছে তা দেখতে, আমরা ভেক্টরের একটি অপরিবর্তনীয় রেফারেন্স পেতে `RefCell<Vec<String>>`-এ `borrow` কল করি।
 
-Now that you’ve seen how to use `RefCell<T>`, let’s dig into how it works!
+এখন যেহেতু আপনি `RefCell<T>` কীভাবে ব্যবহার করতে হয় তা দেখেছেন, আসুন এটি কীভাবে কাজ করে তা নিয়ে আলোচনা করি!
 
-#### Keeping Track of Borrows at Runtime with `RefCell<T>`
+#### `RefCell<T>` দিয়ে রানটাইমে ধার ট্র্যাক করা
 
-When creating immutable and mutable references, we use the `&` and `&mut`
-syntax, respectively. With `RefCell<T>`, we use the `borrow` and `borrow_mut`
-methods, which are part of the safe API that belongs to `RefCell<T>`. The
-`borrow` method returns the smart pointer type `Ref<T>`, and `borrow_mut`
-returns the smart pointer type `RefMut<T>`. Both types implement `Deref`, so we
-can treat them like regular references.
+অপরিবর্তনীয় এবং পরিবর্তনযোগ্য রেফারেন্স তৈরি করার সময়, আমরা যথাক্রমে `&` এবং `&mut` সিনট্যাক্স ব্যবহার করি। `RefCell<T>`-এর সাথে, আমরা `borrow` এবং `borrow_mut` পদ্ধতিগুলি ব্যবহার করি, যা `RefCell<T>`-এর অন্তর্গত নিরাপদ API-এর অংশ। `borrow` পদ্ধতিটি `Ref<T>` স্মার্ট পয়েন্টার টাইপ রিটার্ন করে এবং `borrow_mut` `RefMut<T>` স্মার্ট পয়েন্টার টাইপ রিটার্ন করে। উভয় টাইপই `Deref` প্রয়োগ করে, তাই আমরা সেগুলিকে সাধারণ রেফারেন্সের মতো ব্যবহার করতে পারি।
 
-The `RefCell<T>` keeps track of how many `Ref<T>` and `RefMut<T>` smart
-pointers are currently active. Every time we call `borrow`, the `RefCell<T>`
-increases its count of how many immutable borrows are active. When a `Ref<T>`
-value goes out of scope, the count of immutable borrows goes down by one. Just
-like the compile-time borrowing rules, `RefCell<T>` lets us have many immutable
-borrows or one mutable borrow at any point in time.
+`RefCell<T>` ট্র্যাক করে যে বর্তমানে কতগুলি `Ref<T>` এবং `RefMut<T>` স্মার্ট পয়েন্টার সক্রিয় রয়েছে। যতবার আমরা `borrow` কল করি, `RefCell<T>` কতগুলি অপরিবর্তনীয় ধার সক্রিয় রয়েছে তার গণনা বাড়িয়ে দেয়। যখন একটি `Ref<T>` ভ্যালু স্কোপের বাইরে চলে যায়, তখন অপরিবর্তনীয় ধারগুলির গণনা এক করে কমে যায়। কম্পাইল-টাইমের ধার করার নিয়মগুলির মতোই, `RefCell<T)` আমাদের যেকোনো সময়ে অনেক অপরিবর্তনীয় ধার বা একটি পরিবর্তনযোগ্য ধার রাখার অনুমতি দেয়।
 
-If we try to violate these rules, rather than getting a compiler error as we
-would with references, the implementation of `RefCell<T>` will panic at
-runtime. Listing 15-23 shows a modification of the implementation of `send` in
-Listing 15-22. We’re deliberately trying to create two mutable borrows active
-for the same scope to illustrate that `RefCell<T>` prevents us from doing this
-at runtime.
+যদি আমরা এই নিয়মগুলি লঙ্ঘন করার চেষ্টা করি, তাহলে রেফারেন্সের মতো কম্পাইলার এরর পাওয়ার পরিবর্তে, `RefCell<T)`-এর বাস্তবায়ন রানটাইমে প্যানিক করবে। Listing 15-23 Listing 15-22-এ `send`-এর বাস্তবায়নের একটি পরিবর্তন দেখায়। আমরা ইচ্ছাকৃতভাবে একই স্কোপের জন্য দুটি পরিবর্তনযোগ্য ধার সক্রিয় করার চেষ্টা করছি যাতে দেখানো যায় যে `RefCell<T>` রানটাইমে আমাদের এটি করতে বাধা দেয়।
 
-<Listing number="15-23" file-name="src/lib.rs" caption="Creating two mutable references in the same scope to see that `RefCell<T>` will panic">
+<Listing number="15-23" file-name="src/lib.rs" caption="একই স্কোপে দুটি পরিবর্তনযোগ্য রেফারেন্স তৈরি করা যাতে দেখা যায় যে `RefCell<T)` প্যানিক করবে">
 
 ```rust,ignore,panics
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-23/src/lib.rs:here}}
@@ -255,47 +125,23 @@ at runtime.
 
 </Listing>
 
-We create a variable `one_borrow` for the `RefMut<T>` smart pointer returned
-from `borrow_mut`. Then we create another mutable borrow in the same way in the
-variable `two_borrow`. This makes two mutable references in the same scope,
-which isn’t allowed. When we run the tests for our library, the code in Listing
-15-23 will compile without any errors, but the test will fail:
+আমরা `borrow_mut` থেকে ফেরত আসা `RefMut<T>` স্মার্ট পয়েন্টারের জন্য একটি ভেরিয়েবল `one_borrow` তৈরি করি। তারপর আমরা `two_borrow` ভেরিয়েবলে একই উপায়ে আরেকটি পরিবর্তনযোগ্য ধার তৈরি করি। এটি একই স্কোপে দুটি পরিবর্তনযোগ্য রেফারেন্স তৈরি করে, যা অনুমোদিত নয়। যখন আমরা আমাদের লাইব্রেরির জন্য পরীক্ষা চালাই, তখন Listing 15-23-এর কোডটি কোনো এরর ছাড়াই কম্পাইল হবে, তবে পরীক্ষাটি ব্যর্থ হবে:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-23/output.txt}}
 ```
 
-Notice that the code panicked with the message `already borrowed:
-BorrowMutError`. This is how `RefCell<T>` handles violations of the borrowing
-rules at runtime.
+লক্ষ্য করুন যে `already borrowed: BorrowMutError` বার্তা দিয়ে কোডটি প্যানিক করেছে। এই হল `RefCell<T)` রানটাইমে ধার করার নিয়ম লঙ্ঘনের সাথে কীভাবে মোকাবিলা করে।
 
-Choosing to catch borrowing errors at runtime rather than compile time, as
-we’ve done here, means you’d potentially be finding mistakes in your code later
-in the development process: possibly not until your code was deployed to
-production. Also, your code would incur a small runtime performance penalty as
-a result of keeping track of the borrows at runtime rather than compile time.
-However, using `RefCell<T>` makes it possible to write a mock object that can
-modify itself to keep track of the messages it has seen while you’re using it
-in a context where only immutable values are allowed. You can use `RefCell<T>`
-despite its trade-offs to get more functionality than regular references
-provide.
+আমরা এখানে যা করেছি, তার পরিবর্তে কম্পাইল করার সময় ধার করার এররগুলিকে ধরা মানে হল আপনি সম্ভবত বিকাশের প্রক্রিয়ায় পরে আপনার কোডে ভুল খুঁজে পাবেন: সম্ভবত আপনার কোডটি উৎপাদনে স্থাপন করার পরেই তা পাওয়া যাবে। এছাড়াও, আপনার কোডটি রানটাইমে ধার ট্র্যাক রাখার ফলে একটি ছোট রানটাইম পারফরম্যান্স জরিমানা বহন করবে কম্পাইল করার সময়ের পরিবর্তে। যাইহোক, `RefCell<T)` ব্যবহার করা একটি মক অবজেক্ট লেখা সম্ভব করে তোলে যা নিজেকে পরিবর্তন করতে পারে এবং বার্তাগুলির ট্র্যাক রাখতে পারে যখন আপনি এটিকে এমন একটি প্রেক্ষাপটে ব্যবহার করছেন যেখানে শুধুমাত্র অপরিবর্তনীয় মানগুলির অনুমতি দেওয়া হয়। নিয়মিত রেফারেন্সগুলি যা প্রদান করে তার চেয়ে বেশি কার্যকারিতা পেতে আপনি `RefCell<T)` ব্যবহার করতে পারেন তার ট্রেড-অফ সত্ত্বেও।
 
-### Having Multiple Owners of Mutable Data by Combining `Rc<T>` and `RefCell<T>`
+### `Rc<T>` এবং `RefCell<T>` একত্রিত করে পরিবর্তনযোগ্য ডেটার একাধিক মালিক থাকা
 
-A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
-`Rc<T>` lets you have multiple owners of some data, but it only gives immutable
-access to that data. If you have an `Rc<T>` that holds a `RefCell<T>`, you can
-get a value that can have multiple owners _and_ that you can mutate!
+`RefCell<T>` ব্যবহার করার একটি সাধারণ উপায় হল `Rc<T>`-এর সাথে একত্রিত করে। মনে রাখবেন যে `Rc<T)` আপনাকে কিছু ডেটার একাধিক মালিক রাখতে দেয়, তবে এটি সেই ডেটাতে শুধুমাত্র অপরিবর্তনীয় অ্যাক্সেস দেয়। যদি আপনার কাছে একটি `Rc<T>` থাকে যা একটি `RefCell<T>` ধারণ করে, তাহলে আপনি এমন একটি মান পেতে পারেন যার একাধিক মালিক থাকতে পারে _এবং_ আপনি যা পরিবর্তন করতে পারেন!
 
-For example, recall the cons list example in Listing 15-18 where we used
-`Rc<T>` to allow multiple lists to share ownership of another list. Because
-`Rc<T>` holds only immutable values, we can’t change any of the values in the
-list once we’ve created them. Let’s add in `RefCell<T>` to gain the ability to
-change the values in the lists. Listing 15-24 shows that by using a
-`RefCell<T>` in the `Cons` definition, we can modify the value stored in all
-the lists:
+উদাহরণস্বরূপ, Listing 15-18-এর কন্স তালিকার উদাহরণটি মনে করুন যেখানে আমরা `Rc<T>` ব্যবহার করে একাধিক তালিকাকে অন্য তালিকার মালিকানা ভাগ করার অনুমতি দিয়েছিলাম। যেহেতু `Rc<T)` শুধুমাত্র অপরিবর্তনীয় মান ধারণ করে, তাই আমরা একবার তৈরি করার পরে তালিকার কোনো মান পরিবর্তন করতে পারি না। আসুন `RefCell<T>` যোগ করি যাতে তালিকাগুলির মান পরিবর্তন করার ক্ষমতা পাওয়া যায়। Listing 15-24 দেখায় যে `Cons` সংজ্ঞায় একটি `RefCell<T>` ব্যবহার করে, আমরা সমস্ত তালিকায় সংরক্ষিত মান পরিবর্তন করতে পারি:
 
-<Listing number="15-24" file-name="src/main.rs" caption="Using `Rc<RefCell<i32>>` to create a `List` that we can mutate">
+<Listing number="15-24" file-name="src/main.rs" caption="একটি `List` তৈরি করতে `Rc<RefCell<i32>>` ব্যবহার করা যা আমরা পরিবর্তন করতে পারি">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-24/src/main.rs}}
@@ -303,38 +149,18 @@ the lists:
 
 </Listing>
 
-We create a value that is an instance of `Rc<RefCell<i32>>` and store it in a
-variable named `value` so we can access it directly later. Then we create a
-`List` in `a` with a `Cons` variant that holds `value`. We need to clone
-`value` so both `a` and `value` have ownership of the inner `5` value rather
-than transferring ownership from `value` to `a` or having `a` borrow from
-`value`.
+আমরা একটি মান তৈরি করি যা `Rc<RefCell<i32>>`-এর একটি উদাহরণ এবং এটিকে `value` নামের একটি ভেরিয়েবলে সংরক্ষণ করি যাতে আমরা পরে সরাসরি অ্যাক্সেস করতে পারি। তারপরে আমরা `a`-এ একটি `List` তৈরি করি `Cons` ভেরিয়েন্ট সহ যা `value` ধারণ করে। `value` থেকে `a`-তে মালিকানা স্থানান্তরিত করার বা `a`-কে `value` থেকে ধার করার পরিবর্তে `value`-এর ক্লোন করা দরকার যাতে `a` এবং `value` উভয়েরই ভিতরের `5` মানের মালিকানা থাকে।
 
-We wrap the list `a` in an `Rc<T>` so when we create lists `b` and `c`, they
-can both refer to `a`, which is what we did in Listing 15-18.
+আমরা তালিকা `a`-কে একটি `Rc<T>`-এ মোড়ানো করি যাতে যখন আমরা তালিকা `b` এবং `c` তৈরি করি, তখন তারা উভয়ই `a`-কে উল্লেখ করতে পারে, যা আমরা Listing 15-18-এ করেছিলাম।
 
-After we’ve created the lists in `a`, `b`, and `c`, we want to add 10 to the
-value in `value`. We do this by calling `borrow_mut` on `value`, which uses the
-automatic dereferencing feature we discussed in Chapter 5 (see the section
-[“Where’s the `->` Operator?”][wheres-the---operator]<!-- ignore -->) to
-dereference the `Rc<T>` to the inner `RefCell<T>` value. The `borrow_mut`
-method returns a `RefMut<T>` smart pointer, and we use the dereference operator
-on it and change the inner value.
+`a`, `b` এবং `c`-তে তালিকা তৈরি করার পরে, আমরা `value`-এর মানটিতে 10 যোগ করতে চাই। আমরা `value`-এ `borrow_mut` কল করে এটি করি, যা আমরা অধ্যায় 5-এ আলোচনা করা স্বয়ংক্রিয় ডিরেফারেন্সিং বৈশিষ্ট্যটি ব্যবহার করে (বিভাগটি দেখুন [“`->` অপারেটরটি কোথায়?”][wheres-the---operator]<!-- ignore -->) ভিতরের `RefCell<T>` মানটিতে `Rc<T>`-কে ডিরেফারেন্স করতে। `borrow_mut` পদ্ধতিটি একটি `RefMut<T>` স্মার্ট পয়েন্টার রিটার্ন করে, এবং আমরা এর উপর ডিরেফারেন্স অপারেটর ব্যবহার করি এবং ভিতরের মান পরিবর্তন করি।
 
-When we print `a`, `b`, and `c`, we can see that they all have the modified
-value of 15 rather than 5:
+যখন আমরা `a`, `b` এবং `c` প্রিন্ট করি, তখন আমরা দেখতে পাই যে তাদের সকলেরই 5-এর পরিবর্তে 15-এর পরিবর্তিত মান রয়েছে:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-24/output.txt}}
 ```
 
-This technique is pretty neat! By using `RefCell<T>`, we have an outwardly
-immutable `List` value. But we can use the methods on `RefCell<T>` that provide
-access to its interior mutability so we can modify our data when we need to.
-The runtime checks of the borrowing rules protect us from data races, and it’s
-sometimes worth trading a bit of speed for this flexibility in our data
-structures. Note that `RefCell<T>` does not work for multithreaded code!
-`Mutex<T>` is the thread-safe version of `RefCell<T>` and we’ll discuss
-`Mutex<T>` in Chapter 16.
+এই কৌশলটি বেশ সুন্দর! `RefCell<T)` ব্যবহার করে, আমাদের কাছে একটি বাহ্যিকভাবে অপরিবর্তনীয় `List` মান রয়েছে। কিন্তু আমরা `RefCell<T>`-এর পদ্ধতিগুলি ব্যবহার করতে পারি যা এটির অভ্যন্তরীণ পরিবর্তনশীলতায় অ্যাক্সেস প্রদান করে যাতে আমরা প্রয়োজন হলে আমাদের ডেটা পরিবর্তন করতে পারি। ধার করার নিয়মগুলির রানটাইম চেকগুলি আমাদের ডেটা রেস থেকে রক্ষা করে এবং আমাদের ডেটা স্ট্রাকচারে এই নমনীয়তার জন্য কিছুটা গতি কমানো মাঝে মাঝে মূল্যবান। মনে রাখবেন যে `RefCell<T>` মাল্টিথ্রেডেড কোডের জন্য কাজ করে না! `Mutex<T>` হল `RefCell<T>`-এর থ্রেড-নিরাপদ সংস্করণ এবং আমরা অধ্যায় 16-এ `Mutex<T>` নিয়ে আলোচনা করব।
 
 [wheres-the---operator]: ch05-03-method-syntax.html#wheres-the---operator

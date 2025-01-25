@@ -1,50 +1,22 @@
 ## Characteristics of Object-Oriented Languages
 
-There is no consensus in the programming community about what features a
-language must have to be considered object-oriented. Rust is influenced by many
-programming paradigms, including OOP; for example, we explored the features
-that came from functional programming in Chapter 13. Arguably, OOP languages
-share certain common characteristics, namely objects, encapsulation, and
-inheritance. Let’s look at what each of those characteristics means and whether
-Rust supports it.
+Programming community তে object-oriented consider করার জন্য একটি language এ কি কি feature থাকা উচিত সে বিষয়ে কোনো consensus নেই। Rust অনেক programming paradigm দ্বারা influenced, OOP সহ; উদাহরণস্বরূপ, আমরা Chapter 13 এ functional programming থেকে আসা feature গুলো explore করেছিলাম। Arguably, OOP language গুলো কিছু common characteristic share করে, যেমন objects, encapsulation, এবং inheritance। চলুন দেখা যাক সেই characteristic গুলোর প্রত্যেকটির মানে কি এবং Rust সেগুলোকে support করে কিনা।
 
 ### Objects Contain Data and Behavior
 
-The book _Design Patterns: Elements of Reusable Object-Oriented Software_ by
-Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides (Addison-Wesley
-Professional, 1994), colloquially referred to as _The Gang of Four_ book, is a
-catalog of object-oriented design patterns. It defines OOP this way:
+Erich Gamma, Richard Helm, Ralph Johnson, এবং John Vlissides (Addison-Wesley Professional, 1994) এর লেখা বই _Design Patterns: Elements of Reusable Object-Oriented Software_, colloquially _The Gang of Four_ book নামে পরিচিত, object-oriented design pattern এর একটি catalog। এটি OOP কে এভাবে define করে:
 
-> Object-oriented programs are made up of objects. An _object_ packages both
-> data and the procedures that operate on that data. The procedures are
-> typically called _methods_ or _operations_.
+> Object-oriented program গুলো object দিয়ে তৈরি। একটি _object_ data এবং সেই data তে operate করা procedure দুটোই package করে। Procedure গুলোকে সাধারণত _method_ বা _operation_ বলা হয়।
 
-Using this definition, Rust is object-oriented: structs and enums have data,
-and `impl` blocks provide methods on structs and enums. Even though structs and
-enums with methods aren’t _called_ objects, they provide the same
-functionality, according to the Gang of Four’s definition of objects.
+এই definition ব্যবহার করে, Rust object-oriented: struct এবং enum এ data থাকে, এবং `impl` block struct এবং enum এ method provide করে। যদিও struct এবং enum method এর সাথে _object_ হিসেবে _call_ করা হয় না, তবুও তারা object এর Gang of Four এর definition অনুযায়ী same functionality provide করে।
 
 ### Encapsulation that Hides Implementation Details
 
-Another aspect commonly associated with OOP is the idea of _encapsulation_,
-which means that the implementation details of an object aren’t accessible to
-code using that object. Therefore, the only way to interact with an object is
-through its public API; code using the object shouldn’t be able to reach into
-the object’s internals and change data or behavior directly. This enables the
-programmer to change and refactor an object’s internals without needing to
-change the code that uses the object.
+OOP এর সাথে commonly associated আরেকটি aspect হলো _encapsulation_ এর idea, যার মানে হলো object ব্যবহার করা code এর কাছে object এর implementation detail accessible নয়। তাই, একটি object এর সাথে interact করার একমাত্র উপায় হলো এর public API; object ব্যবহার করা code এর internal এ reach করে data বা behaviour সরাসরি change করতে পারার কথা না। এটা programmer কে object ব্যবহার করা code change করার প্রয়োজন ছাড়াই object এর internal change এবং refactor করতে enable করে।
 
-We discussed how to control encapsulation in Chapter 7: we can use the `pub`
-keyword to decide which modules, types, functions, and methods in our code
-should be public, and by default everything else is private. For example, we
-can define a struct `AveragedCollection` that has a field containing a vector
-of `i32` values. The struct can also have a field that contains the average of
-the values in the vector, meaning the average doesn’t have to be computed
-on demand whenever anyone needs it. In other words, `AveragedCollection` will
-cache the calculated average for us. Listing 18-1 has the definition of the
-`AveragedCollection` struct:
+আমরা Chapter 7 এ discuss করেছিলাম কিভাবে encapsulation control করতে হয়: আমরা `pub` keyword ব্যবহার করে decide করতে পারি আমাদের code এর কোন module, type, function, এবং method public হওয়া উচিত, এবং default হিসেবে বাকি সবকিছু private থাকে। উদাহরণস্বরূপ, আমরা `AveragedCollection` নামে একটি struct define করতে পারি যার field এ `i32` value এর একটি vector থাকবে। Struct এ এমন একটি field ও থাকতে পারে যেখানে vector এর value গুলোর average থাকবে, মানে average কারো প্রয়োজন হলেই on demand compute করার প্রয়োজন নেই। অন্যভাবে বলতে গেলে, `AveragedCollection` আমাদের জন্য calculated average cache করে রাখবে। Listing 18-1 এ `AveragedCollection` struct এর definition দেওয়া আছে:
 
-<Listing number="18-1" file-name="src/lib.rs" caption="An `AveragedCollection` struct that maintains a list of integers and the average of the items in the collection">
+<Listing number="18-1" file-name="src/lib.rs" caption="একটি `AveragedCollection` struct যা integer এর একটি list এবং collection এর item গুলোর average maintain করে">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-01/src/lib.rs}}
@@ -52,13 +24,9 @@ cache the calculated average for us. Listing 18-1 has the definition of the
 
 </Listing>
 
-The struct is marked `pub` so that other code can use it, but the fields within
-the struct remain private. This is important in this case because we want to
-ensure that whenever a value is added or removed from the list, the average is
-also updated. We do this by implementing `add`, `remove`, and `average` methods
-on the struct, as shown in Listing 18-2:
+Struct টি `pub` mark করা যাতে অন্য code এটি ব্যবহার করতে পারে, কিন্তু struct এর ভিতরের field গুলো private থাকে। এটি এই ক্ষেত্রে গুরুত্বপূর্ণ কারণ আমরা নিশ্চিত করতে চাই যখনই list থেকে কোনো value add বা remove করা হয়, তখনই average ও update হয়। এটা করার জন্য আমরা struct এর উপর `add`, `remove`, এবং `average` method implement করি, যা Listing 18-2 এ দেখানো হয়েছে:
 
-<Listing number="18-2" file-name="src/lib.rs" caption="Implementations of the public methods `add`, `remove`, and `average` on `AveragedCollection`">
+<Listing number="18-2" file-name="src/lib.rs" caption="`AveragedCollection` এর উপর public method `add`, `remove`, এবং `average` এর implementation">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-02/src/lib.rs:here}}
@@ -66,84 +34,32 @@ on the struct, as shown in Listing 18-2:
 
 </Listing>
 
-The public methods `add`, `remove`, and `average` are the only ways to access
-or modify data in an instance of `AveragedCollection`. When an item is added
-to `list` using the `add` method or removed using the `remove` method, the
-implementations of each call the private `update_average` method that handles
-updating the `average` field as well.
+`AveragedCollection` এর instance এ data access বা modify করার একমাত্র উপায় হলো public method `add`, `remove`, এবং `average`। যখন `add` method ব্যবহার করে `list` এ কোনো item add করা হয় অথবা `remove` method ব্যবহার করে remove করা হয়, তখন প্রত্যেকটির implementation private `update_average` method call করে যা `average` field ও update করে।
 
-We leave the `list` and `average` fields private so there is no way for
-external code to add or remove items to or from the `list` field directly;
-otherwise, the `average` field might become out of sync when the `list`
-changes. The `average` method returns the value in the `average` field,
-allowing external code to read the `average` but not modify it.
+আমরা `list` এবং `average` field গুলো private রাখি যাতে external code `list` field এ সরাসরি item add বা remove করতে না পারে; অন্যথায়, যখন `list` change হয় তখন `average` field out of sync হয়ে যেতে পারে। `average` method `average` field এর value return করে, external code কে `average` read করার সুযোগ দেয় কিন্তু modify করার সুযোগ দেয় না।
 
-Because we’ve encapsulated the implementation details of the struct
-`AveragedCollection`, we can easily change aspects, such as the data structure,
-in the future. For instance, we could use a `HashSet<i32>` instead of a
-`Vec<i32>` for the `list` field. As long as the signatures of the `add`,
-`remove`, and `average` public methods stay the same, code using
-`AveragedCollection` wouldn’t need to change in order to compile. If we made
-`list` public instead, this wouldn’t necessarily be the case: `HashSet<i32>` and
-`Vec<i32>` have different methods for adding and removing items, so the external
-code would likely have to change if it were modifying `list` directly.
+যেহেতু আমরা `AveragedCollection` struct এর implementation detail encapsulate করেছি, তাই আমরা ভবিষ্যতে data structure এর মতো aspect গুলো easily change করতে পারি। উদাহরণস্বরূপ, আমরা `list` field এর জন্য `Vec<i32>` এর পরিবর্তে `HashSet<i32>` ব্যবহার করতে পারি। যতক্ষণ `add`, `remove`, এবং `average` public method এর signature same থাকে, ততক্ষণ `AveragedCollection` ব্যবহার করা code compile করার জন্য change করার প্রয়োজন হবে না। যদি আমরা `list` কে public বানাতাম, তাহলে এটা necessarily সঠিক হতো না: `HashSet<i32>` এবং `Vec<i32>` এর item add এবং remove করার জন্য ভিন্ন method আছে, তাই external code কে likely change করতে হতো যদি তারা `list` সরাসরি modify করত।
 
-If encapsulation is a required aspect for a language to be considered
-object-oriented, then Rust meets that requirement. The option to use `pub` or
-not for different parts of code enables encapsulation of implementation details.
+যদি একটি language কে object-oriented consider করার জন্য encapsulation একটি required aspect হয়, তাহলে Rust সেই requirement meet করে। Code এর বিভিন্ন অংশের জন্য `pub` ব্যবহার করার option implementation detail এর encapsulation enable করে।
 
 ### Inheritance as a Type System and as Code Sharing
 
-_Inheritance_ is a mechanism whereby an object can inherit elements from
-another object’s definition, thus gaining the parent object’s data and behavior
-without you having to define them again.
+_Inheritance_ হলো এমন একটি mechanism যার মাধ্যমে একটি object অন্য object এর definition থেকে element inherit করতে পারে, ফলে parent object এর data এবং behaviour আবার define না করেই gain করতে পারে।
 
-If a language must have inheritance to be an object-oriented language, then
-Rust is not one. There is no way to define a struct that inherits the parent
-struct’s fields and method implementations without using a macro.
+যদি একটি object-oriented language হওয়ার জন্য inheritance থাকা প্রয়োজন হয়, তাহলে Rust object-oriented নয়। Macro ব্যবহার করা ছাড়া parent struct এর field এবং method implementation inherit করে এমন struct define করার কোনো উপায় নেই।
 
-However, if you’re used to having inheritance in your programming toolbox, you
-can use other solutions in Rust, depending on your reason for reaching for
-inheritance in the first place.
+তবে, যদি আপনি আপনার programming toolbox এ inheritance রাখতে অভ্যস্ত হন, তাহলে আপনি Rust এ অন্য solution ব্যবহার করতে পারেন, যা মূলত inheritance ব্যবহার করার কারণের উপর depend করে।
 
-You would choose inheritance for two main reasons. One is for reuse of code:
-you can implement particular behavior for one type, and inheritance enables you
-to reuse that implementation for a different type. You can do this in a limited
-way in Rust code using default trait method implementations, which you saw in
-Listing 10-14 when we added a default implementation of the `summarize` method
-on the `Summary` trait. Any type implementing the `Summary` trait would have
-the `summarize` method available on it without any further code. This is
-similar to a parent class having an implementation of a method and an
-inheriting child class also having the implementation of the method. We can
-also override the default implementation of the `summarize` method when we
-implement the `Summary` trait, which is similar to a child class overriding the
-implementation of a method inherited from a parent class.
+আপনি দুটি main reason এর জন্য inheritance choose করতে পারেন। একটি হলো code reuse করার জন্য: আপনি একটি type এর জন্য particular behaviour implement করতে পারেন, এবং inheritance আপনাকে সেই implementation অন্য type এর জন্য reuse করতে enable করে। Rust code এ আপনি default trait method implementation ব্যবহার করে limited way তে এটা করতে পারেন, যা আপনি Listing 10-14 এ দেখেছিলেন যখন আমরা `Summary` trait এ `summarize` method এর একটি default implementation যোগ করেছিলাম। `Summary` trait implement করা যেকোনো type এ আর কোনো code ছাড়াই `summarize` method available থাকতো। এটা অনেকটা parent class এর একটি method এর implementation থাকা এবং inherit করা child class এর ও method এর implementation থাকার মতোই। আমরা `Summary` trait implement করার সময় `summarize` method এর default implementation override ও করতে পারি, যা parent class থেকে inherit করা method এর implementation override করা child class এর মতো।
 
-The other reason to use inheritance relates to the type system: to enable a
-child type to be used in the same places as the parent type. This is also
-called _polymorphism_, which means that you can substitute multiple objects for
-each other at runtime if they share certain characteristics.
+Inheritance ব্যবহার করার অন্য কারণ হলো type system এর সাথে related: parent type এর মতো একই জায়গায় child type ব্যবহার করতে enable করা। এটাকে _polymorphism_ ও বলা হয়, যার মানে হলো runtime এ multiple object একে অপরের সাথে substitute করতে পারা যদি তারা কিছু particular characteristic share করে।
 
 > ### Polymorphism
 >
-> To many people, polymorphism is synonymous with inheritance. But it’s
-> actually a more general concept that refers to code that can work with data
-> of multiple types. For inheritance, those types are generally subclasses.
+> অনেকের কাছে, polymorphism হলো inheritance এর synonym। কিন্তু এটা আসলে একটি আরও general concept যা এমন code refer করে যা multiple type এর data এর সাথে কাজ করতে পারে। Inheritance এর জন্য, সেই type গুলো সাধারণত subclass হয়।
 >
-> Rust instead uses generics to abstract over different possible types and
-> trait bounds to impose constraints on what those types must provide. This is
-> sometimes called _bounded parametric polymorphism_.
+> এর পরিবর্তে Rust different possible type এর উপর abstract করার জন্য generics এবং সেই type গুলো কি provide করবে তার উপর constraint impose করার জন্য trait bound ব্যবহার করে। এটাকে মাঝে মাঝে _bounded parametric polymorphism_ ও বলা হয়।
 
-Inheritance has recently fallen out of favor as a programming design solution
-in many programming languages because it’s often at risk of sharing more code
-than necessary. Subclasses shouldn’t always share all characteristics of their
-parent class but will do so with inheritance. This can make a program’s design
-less flexible. It also introduces the possibility of calling methods on
-subclasses that don’t make sense or that cause errors because the methods don’t
-apply to the subclass. In addition, some languages will only allow single
-inheritance (meaning a subclass can only inherit from one class), further
-restricting the flexibility of a program’s design.
+Inheritance recent সময়ে অনেক programming language এ programming design solution হিসেবে favor হারাচ্ছে কারণ এটি প্রায়ই প্রয়োজনের চেয়ে বেশি code share করার risk এ থাকে। Subclass এর সবসময় parent class এর সব characteristic share করা উচিত না কিন্তু inheritance এর সাথে সেটা করবে। এর কারণে program design কম flexible হতে পারে। এটি subclass এ এমন method call করার possibility introduce করে যা কোনো sense করে না বা error cause করে কারণ method গুলো subclass এর জন্য apply হয় না। এছাড়াও, কিছু language এ শুধুমাত্র single inheritance allow করবে (মানে একটি subclass শুধুমাত্র একটি class থেকে inherit করতে পারে), যা আরও বেশি করে program design এর flexibility restrict করে।
 
-For these reasons, Rust takes the different approach of using trait objects
-instead of inheritance. Let’s look at how trait objects enable polymorphism in
-Rust.
+এই reason গুলোর জন্য, Rust inheritance এর পরিবর্তে trait object ব্যবহার করার ভিন্ন approach নেয়। চলুন দেখা যাক কিভাবে trait object Rust এ polymorphism enable করে।

@@ -1,22 +1,14 @@
-## Generic Data Types
+## জেনেরিক ডেটা টাইপ
 
-We use generics to create definitions for items like function signatures or
-structs, which we can then use with many different concrete data types. Let’s
-first look at how to define functions, structs, enums, and methods using
-generics. Then we’ll discuss how generics affect code performance.
+আমরা ফাংশন সিগনেচার বা struct-এর মতো আইটেমগুলোর জন্য সংজ্ঞা তৈরি করতে জেনেরিক ব্যবহার করি, যা আমরা তারপর বিভিন্ন কংক্রিট ডেটা টাইপের সাথে ব্যবহার করতে পারি। আসুন প্রথমে দেখি কিভাবে জেনেরিক ব্যবহার করে ফাংশন, struct, enum এবং মেথড সংজ্ঞায়িত করতে হয়। তারপর আমরা আলোচনা করব কিভাবে জেনেরিক কোড কর্মক্ষমতাকে প্রভাবিত করে।
 
-### In Function Definitions
+### ফাংশন সংজ্ঞায়
 
-When defining a function that uses generics, we place the generics in the
-signature of the function where we would usually specify the data types of the
-parameters and return value. Doing so makes our code more flexible and provides
-more functionality to callers of our function while preventing code duplication.
+যখন জেনেরিক ব্যবহার করে এমন একটি ফাংশন সংজ্ঞায়িত করা হয়, তখন আমরা ফাংশনের সিগনেচারে জেনেরিকগুলি রাখি যেখানে আমরা সাধারণত প্যারামিটার এবং রিটার্ন ভ্যালুর ডেটা টাইপ উল্লেখ করি। এটি করলে আমাদের কোড আরও নমনীয় হয় এবং কোড ডুপ্লিকেশন প্রতিরোধ করার সময় আমাদের ফাংশনের কলকারীদের আরও কার্যকারিতা প্রদান করে।
 
-Continuing with our `largest` function, Listing 10-4 shows two functions that
-both find the largest value in a slice. We’ll then combine these into a single
-function that uses generics.
+আমাদের `largest` ফাংশনটি চালিয়ে, Listing 10-4 দুটি ফাংশন দেখায় যা উভয়ই একটি স্লাইসে বৃহত্তম মান খুঁজে বের করে। তারপর আমরা এগুলিকে একটি একক ফাংশনে একত্রিত করব যা জেনেরিক ব্যবহার করে।
 
-<Listing number="10-4" file-name="src/main.rs" caption="Two functions that differ only in their names and in the types in their signatures">
+<Listing number="10-4" file-name="src/main.rs" caption="দুটি ফাংশন যা শুধুমাত্র তাদের নাম এবং তাদের সিগনেচারের প্রকারভেদে ভিন্ন">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-04/src/main.rs:here}}
@@ -24,40 +16,21 @@ function that uses generics.
 
 </Listing>
 
-The `largest_i32` function is the one we extracted in Listing 10-3 that finds
-the largest `i32` in a slice. The `largest_char` function finds the largest
-`char` in a slice. The function bodies have the same code, so let’s eliminate
-the duplication by introducing a generic type parameter in a single function.
+`largest_i32` ফাংশনটি হল সেটি যা আমরা Listing 10-3-এ বের করেছিলাম যা একটি স্লাইসে বৃহত্তম `i32` খুঁজে বের করে। `largest_char` ফাংশনটি একটি স্লাইসে বৃহত্তম `char` খুঁজে বের করে। ফাংশনের বডিগুলোতে একই কোড আছে, তাই আসুন একটি একক ফাংশনে একটি জেনেরিক টাইপ প্যারামিটার প্রবর্তন করে প্রতিলিপিটি দূর করি।
 
-To parameterize the types in a new single function, we need to name the type
-parameter, just as we do for the value parameters to a function. You can use
-any identifier as a type parameter name. But we’ll use `T` because, by
-convention, type parameter names in Rust are short, often just one letter, and
-Rust’s type-naming convention is UpperCamelCase. Short for _type_, `T` is the
-default choice of most Rust programmers.
+একটি নতুন একক ফাংশনে টাইপগুলিকে প্যারামিটারাইজ করতে, আমাদের টাইপ প্যারামিটারের নামকরণ করতে হবে, ঠিক যেমন আমরা একটি ফাংশনের ভ্যালু প্যারামিটারগুলোর জন্য করি। আপনি টাইপ প্যারামিটার নাম হিসাবে যেকোনো শনাক্তকারী ব্যবহার করতে পারেন। তবে আমরা `T` ব্যবহার করব কারণ, প্রথা অনুসারে, রাস্টে টাইপ প্যারামিটারের নামগুলো ছোট হয়, প্রায়শই মাত্র একটি অক্ষর এবং রাস্টের টাইপ-নামকরণের প্রথা হল UpperCamelCase। _টাইপ_ এর সংক্ষিপ্ত রূপ, `T` হল বেশিরভাগ রাস্ট প্রোগ্রামারদের ডিফল্ট পছন্দ।
 
-When we use a parameter in the body of the function, we have to declare the
-parameter name in the signature so the compiler knows what that name means.
-Similarly, when we use a type parameter name in a function signature, we have
-to declare the type parameter name before we use it. To define the generic
-`largest` function, we place type name declarations inside angle brackets,
-`<>`, between the name of the function and the parameter list, like this:
+যখন আমরা ফাংশনের বডিতে একটি প্যারামিটার ব্যবহার করি, তখন আমাদের সিগনেচারে প্যারামিটারের নাম ঘোষণা করতে হয় যাতে কম্পাইলার জানতে পারে যে সেই নামের অর্থ কী। একইভাবে, যখন আমরা একটি ফাংশন সিগনেচারে একটি টাইপ প্যারামিটারের নাম ব্যবহার করি, তখন আমাদের এটি ব্যবহার করার আগে টাইপ প্যারামিটারের নাম ঘোষণা করতে হয়। জেনেরিক `largest` ফাংশন সংজ্ঞায়িত করতে, আমরা কোণের বন্ধনী, `<>`-এর ভিতরে টাইপ নামের ঘোষণাগুলো রাখি, ফাংশনের নাম এবং প্যারামিটার তালিকার মধ্যে, যেমন:
 
 ```rust,ignore
 fn largest<T>(list: &[T]) -> &T {
 ```
 
-We read this definition as: the function `largest` is generic over some type
-`T`. This function has one parameter named `list`, which is a slice of values
-of type `T`. The `largest` function will return a reference to a value of the
-same type `T`.
+আমরা এই সংজ্ঞাটিকে এভাবে পড়ি: `largest` ফাংশনটি `T` টাইপের উপর জেনেরিক। এই ফাংশনের `list` নামের একটি প্যারামিটার রয়েছে, যা `T` টাইপের ভ্যালুর একটি স্লাইস। `largest` ফাংশনটি একই টাইপ `T`-এর একটি ভ্যালুর রেফারেন্স রিটার্ন করবে।
 
-Listing 10-5 shows the combined `largest` function definition using the generic
-data type in its signature. The listing also shows how we can call the function
-with either a slice of `i32` values or `char` values. Note that this code won’t
-compile yet, but we’ll fix it later in this chapter.
+Listing 10-5 সিগনেচারে জেনেরিক ডেটা টাইপ ব্যবহার করে সম্মিলিত `largest` ফাংশনের সংজ্ঞা দেখায়। তালিকাটি আরও দেখায় কিভাবে আমরা `i32` ভ্যালু বা `char` ভ্যালুর একটি স্লাইস দিয়ে ফাংশনটিকে কল করতে পারি। মনে রাখবেন এই কোডটি এখনও কম্পাইল হবে না, তবে আমরা এই অধ্যায়ে পরে এটি ঠিক করব।
 
-<Listing number="10-5" file-name="src/main.rs" caption="The `largest` function using generic type parameters; this doesn’t compile yet">
+<Listing number="10-5" file-name="src/main.rs" caption="জেনেরিক টাইপ প্যারামিটার ব্যবহার করে `largest` ফাংশন; এটি এখনও কম্পাইল হয় না">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/src/main.rs}}
@@ -65,30 +38,19 @@ compile yet, but we’ll fix it later in this chapter.
 
 </Listing>
 
-If we compile this code right now, we’ll get this error:
+যদি আমরা এখনই এই কোডটি কম্পাইল করি, তাহলে আমরা এই এররটি পাব:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
-The help text mentions `std::cmp::PartialOrd`, which is a _trait_, and we’re
-going to talk about traits in the next section. For now, know that this error
-states that the body of `largest` won’t work for all possible types that `T`
-could be. Because we want to compare values of type `T` in the body, we can
-only use types whose values can be ordered. To enable comparisons, the standard
-library has the `std::cmp::PartialOrd` trait that you can implement on types
-(see Appendix C for more on this trait). By following the help text’s
-suggestion, we restrict the types valid for `T` to only those that implement
-`PartialOrd` and this example will compile, because the standard library
-implements `PartialOrd` on both `i32` and `char`.
+সহায়তা পাঠ্যে `std::cmp::PartialOrd` উল্লেখ করা হয়েছে, যা একটি _ট্রেট_, এবং আমরা পরবর্তী বিভাগে ট্রেট নিয়ে কথা বলতে যাচ্ছি। আপাতত, জেনে রাখুন যে এই এররটি বলছে যে `largest`-এর বডি `T` হতে পারে এমন সমস্ত সম্ভাব্য টাইপের জন্য কাজ করবে না। যেহেতু আমরা বডিতে `T` টাইপের ভ্যালু তুলনা করতে চাই, তাই আমরা শুধুমাত্র সেই টাইপগুলো ব্যবহার করতে পারি যেগুলোর ভ্যালু অর্ডার করা যায়। তুলনা সক্ষম করতে, স্ট্যান্ডার্ড লাইব্রেরিতে `std::cmp::PartialOrd` ট্রেট রয়েছে যা আপনি টাইপের উপর প্রয়োগ করতে পারেন (এই ট্রেট সম্পর্কে আরও জানতে Appendix C দেখুন)। সহায়তার পাঠ্যের পরামর্শ অনুসরণ করে, আমরা `T`-এর জন্য বৈধ টাইপগুলিকে শুধুমাত্র সেইগুলির মধ্যে সীমাবদ্ধ করি যা `PartialOrd` প্রয়োগ করে এবং এই উদাহরণটি কম্পাইল হবে, কারণ স্ট্যান্ডার্ড লাইব্রেরি `i32` এবং `char` উভয়ের উপর `PartialOrd` প্রয়োগ করে।
 
-### In Struct Definitions
+### Struct সংজ্ঞায়
 
-We can also define structs to use a generic type parameter in one or more
-fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
-`x` and `y` coordinate values of any type.
+আমরা `<>` সিনট্যাক্স ব্যবহার করে এক বা একাধিক ফিল্ডে জেনেরিক টাইপ প্যারামিটার ব্যবহার করার জন্য struct-ও সংজ্ঞায়িত করতে পারি। Listing 10-6 যেকোনো টাইপের `x` এবং `y` স্থানাঙ্ক ভ্যালু ধারণ করার জন্য একটি `Point<T>` struct সংজ্ঞায়িত করে।
 
-<Listing number="10-6" file-name="src/main.rs" caption="A `Point<T>` struct that holds `x` and `y` values of type `T`">
+<Listing number="10-6" file-name="src/main.rs" caption="একটি `Point<T>` struct যা `T` টাইপের `x` এবং `y` ভ্যালু ধারণ করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-06/src/main.rs}}
@@ -96,19 +58,11 @@ fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
 
 </Listing>
 
-The syntax for using generics in struct definitions is similar to that used in
-function definitions. First we declare the name of the type parameter inside
-angle brackets just after the name of the struct. Then we use the generic
-type in the struct definition where we would otherwise specify concrete data
-types.
+struct সংজ্ঞায় জেনেরিক ব্যবহার করার সিনট্যাক্স ফাংশন সংজ্ঞায় ব্যবহৃত সিনট্যাক্সের মতোই। প্রথমে আমরা struct-এর নামের ঠিক পরে কোণের বন্ধনীর ভিতরে টাইপ প্যারামিটারের নামটি ঘোষণা করি। তারপর আমরা struct সংজ্ঞায় জেনেরিক টাইপ ব্যবহার করি যেখানে আমরা অন্যথায় কংক্রিট ডেটা টাইপ উল্লেখ করব।
 
-Note that because we’ve used only one generic type to define `Point<T>`, this
-definition says that the `Point<T>` struct is generic over some type `T`, and
-the fields `x` and `y` are _both_ that same type, whatever that type may be. If
-we create an instance of a `Point<T>` that has values of different types, as in
-Listing 10-7, our code won’t compile.
+মনে রাখবেন যে যেহেতু আমরা `Point<T>` সংজ্ঞায়িত করতে শুধুমাত্র একটি জেনেরিক টাইপ ব্যবহার করেছি, তাই এই সংজ্ঞাটি বলে যে `Point<T>` struct টি কিছু টাইপ `T` এর উপর জেনেরিক, এবং `x` এবং `y` ফিল্ড _উভয়ই_ সেই একই টাইপের, সেই টাইপ যাই হোক না কেন। যদি আমরা `Point<T>`-এর একটি উদাহরণ তৈরি করি যাতে বিভিন্ন প্রকারের ভ্যালু থাকে, যেমন Listing 10-7-এ, তাহলে আমাদের কোড কম্পাইল হবে না।
 
-<Listing number="10-7" file-name="src/main.rs" caption="The fields `x` and `y` must be the same type because both have the same generic data type `T`.">
+<Listing number="10-7" file-name="src/main.rs" caption="ফিল্ড `x` এবং `y` অবশ্যই একই টাইপের হতে হবে কারণ উভয়েরই একই জেনেরিক ডেটা টাইপ `T` আছে।">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/src/main.rs}}
@@ -116,21 +70,15 @@ Listing 10-7, our code won’t compile.
 
 </Listing>
 
-In this example, when we assign the integer value `5` to `x`, we let the
-compiler know that the generic type `T` will be an integer for this instance of
-`Point<T>`. Then when we specify `4.0` for `y`, which we’ve defined to have the
-same type as `x`, we’ll get a type mismatch error like this:
+এই উদাহরণে, যখন আমরা `x`-এ পূর্ণসংখ্যা ভ্যালু `5` নির্ধারণ করি, তখন আমরা কম্পাইলারকে জানিয়ে দিই যে জেনেরিক টাইপ `T` `Point<T>`-এর এই উদাহরণের জন্য একটি পূর্ণসংখ্যা হবে। তারপর যখন আমরা `y`-এর জন্য `4.0` উল্লেখ করি, যা আমরা `x`-এর মতো একই টাইপের হিসাবে সংজ্ঞায়িত করেছি, তখন আমরা এইরকম একটি টাইপ মিসম্যাচ এরর পাব:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/output.txt}}
 ```
 
-To define a `Point` struct where `x` and `y` are both generics but could have
-different types, we can use multiple generic type parameters. For example, in
-Listing 10-8, we change the definition of `Point` to be generic over types `T`
-and `U` where `x` is of type `T` and `y` is of type `U`.
+একটি `Point` struct সংজ্ঞায়িত করতে যেখানে `x` এবং `y` উভয়ই জেনেরিক কিন্তু বিভিন্ন প্রকারের হতে পারে, আমরা একাধিক জেনেরিক টাইপ প্যারামিটার ব্যবহার করতে পারি। উদাহরণস্বরূপ, Listing 10-8-এ, আমরা `Point`-এর সংজ্ঞা পরিবর্তন করে `T` এবং `U` টাইপের উপর জেনেরিক করি যেখানে `x` হল `T` টাইপের এবং `y` হল `U` টাইপের।
 
-<Listing number="10-8" file-name="src/main.rs" caption="A `Point<T, U>` generic over two types so that `x` and `y` can be values of different types">
+<Listing number="10-8" file-name="src/main.rs" caption="একটি `Point<T, U>` দুটি টাইপের উপর জেনেরিক যাতে `x` এবং `y` বিভিন্ন টাইপের ভ্যালু হতে পারে">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-08/src/main.rs}}
@@ -138,17 +86,11 @@ and `U` where `x` is of type `T` and `y` is of type `U`.
 
 </Listing>
 
-Now all the instances of `Point` shown are allowed! You can use as many generic
-type parameters in a definition as you want, but using more than a few makes
-your code hard to read. If you’re finding you need lots of generic types in
-your code, it could indicate that your code needs restructuring into smaller
-pieces.
+এখন দেখানো `Point`-এর সমস্ত ইনস্ট্যান্স অনুমোদিত! আপনি একটি সংজ্ঞায় যত খুশি জেনেরিক টাইপ প্যারামিটার ব্যবহার করতে পারেন, তবে কয়েকটির বেশি ব্যবহার করলে আপনার কোড পড়া কঠিন হয়ে যায়। আপনি যদি দেখেন যে আপনার কোডে প্রচুর জেনেরিক টাইপের প্রয়োজন, তবে এটি নির্দেশ করতে পারে যে আপনার কোডটিকে ছোট ছোট অংশে পুনর্গঠিত করার প্রয়োজন।
 
-### In Enum Definitions
+### Enum সংজ্ঞায়
 
-As we did with structs, we can define enums to hold generic data types in their
-variants. Let’s take another look at the `Option<T>` enum that the standard
-library provides, which we used in Chapter 6:
+struct-এর মতো, আমরা enum-গুলিকে তাদের ভেরিয়েন্টে জেনেরিক ডেটা টাইপ ধারণ করার জন্য সংজ্ঞায়িত করতে পারি। আসুন `Option<T>` enum-এর দিকে আরও একবার নজর দিই যা স্ট্যান্ডার্ড লাইব্রেরি প্রদান করে, যা আমরা Chapter 6-এ ব্যবহার করেছি:
 
 ```rust
 enum Option<T> {
@@ -157,15 +99,9 @@ enum Option<T> {
 }
 ```
 
-This definition should now make more sense to you. As you can see, the
-`Option<T>` enum is generic over type `T` and has two variants: `Some`, which
-holds one value of type `T`, and a `None` variant that doesn’t hold any value.
-By using the `Option<T>` enum, we can express the abstract concept of an
-optional value, and because `Option<T>` is generic, we can use this abstraction
-no matter what the type of the optional value is.
+এই সংজ্ঞাটি এখন আপনার কাছে আরও বোধগম্য হওয়া উচিত। আপনি দেখতে পাচ্ছেন, `Option<T>` enum টি `T` টাইপের উপর জেনেরিক এবং এর দুটি ভেরিয়েন্ট রয়েছে: `Some`, যা `T` টাইপের একটি ভ্যালু ধারণ করে এবং একটি `None` ভেরিয়েন্ট যা কোনো ভ্যালু ধারণ করে না। `Option<T>` enum ব্যবহার করে, আমরা একটি ঐচ্ছিক ভ্যালুর বিমূর্ত ধারণা প্রকাশ করতে পারি এবং যেহেতু `Option<T>` জেনেরিক, তাই ঐচ্ছিক ভ্যালুটির টাইপ যাই হোক না কেন আমরা এই বিমূর্ততা ব্যবহার করতে পারি।
 
-Enums can use multiple generic types as well. The definition of the `Result`
-enum that we used in Chapter 9 is one example:
+enum গুলো একাধিক জেনেরিক টাইপও ব্যবহার করতে পারে। `Result` enum-এর সংজ্ঞা যা আমরা Chapter 9-এ ব্যবহার করেছি তার একটি উদাহরণ:
 
 ```rust
 enum Result<T, E> {
@@ -174,26 +110,15 @@ enum Result<T, E> {
 }
 ```
 
-The `Result` enum is generic over two types, `T` and `E`, and has two variants:
-`Ok`, which holds a value of type `T`, and `Err`, which holds a value of type
-`E`. This definition makes it convenient to use the `Result` enum anywhere we
-have an operation that might succeed (return a value of some type `T`) or fail
-(return an error of some type `E`). In fact, this is what we used to open a
-file in Listing 9-3, where `T` was filled in with the type `std::fs::File` when
-the file was opened successfully and `E` was filled in with the type
-`std::io::Error` when there were problems opening the file.
+`Result` enum টি দুটি টাইপ, `T` এবং `E`-এর উপর জেনেরিক এবং এর দুটি ভেরিয়েন্ট রয়েছে: `Ok`, যা `T` টাইপের একটি ভ্যালু ধারণ করে এবং `Err`, যা `E` টাইপের একটি ভ্যালু ধারণ করে। এই সংজ্ঞাটি `Result` enum ব্যবহার করা সুবিধাজনক করে তোলে যেখানে আমাদের এমন একটি অপারেশন আছে যা সফল হতে পারে (কিছু টাইপ `T`-এর একটি ভ্যালু রিটার্ন করে) বা ব্যর্থ হতে পারে (কিছু টাইপ `E`-এর একটি এরর রিটার্ন করে)। প্রকৃতপক্ষে, এই কারণেই আমরা Listing 9-3-এ একটি ফাইল খুলতে ব্যবহার করেছিলাম, যেখানে ফাইলটি সফলভাবে খোলা হলে `T` `std::fs::File` টাইপ দিয়ে এবং ফাইল খুলতে সমস্যা হলে `E` `std::io::Error` টাইপ দিয়ে পূরণ করা হয়েছিল।
 
-When you recognize situations in your code with multiple struct or enum
-definitions that differ only in the types of the values they hold, you can
-avoid duplication by using generic types instead.
+আপনি যখন আপনার কোডে একাধিক struct বা enum সংজ্ঞার সাথে পরিস্থিতি চিনতে পারেন যা শুধুমাত্র তাদের ধারণ করা ভ্যালুগুলোর প্রকারভেদে ভিন্ন, তখন আপনি পরিবর্তে জেনেরিক টাইপ ব্যবহার করে ডুপ্লিকেশন এড়াতে পারেন।
 
-### In Method Definitions
+### মেথড সংজ্ঞায়
 
-We can implement methods on structs and enums (as we did in Chapter 5) and use
-generic types in their definitions too. Listing 10-9 shows the `Point<T>`
-struct we defined in Listing 10-6 with a method named `x` implemented on it.
+আমরা struct এবং enum-এ মেথড প্রয়োগ করতে পারি (যেমন আমরা Chapter 5-এ করেছিলাম) এবং তাদের সংজ্ঞায় জেনেরিক টাইপও ব্যবহার করতে পারি। Listing 10-9 Listing 10-6-এ সংজ্ঞায়িত `Point<T>` struct-টি দেখায় যার উপর `x` নামের একটি মেথড প্রয়োগ করা হয়েছে।
 
-<Listing number="10-9" file-name="src/main.rs" caption="Implementing a method named `x` on the `Point<T>` struct that will return a reference to the `x` field of type `T`">
+<Listing number="10-9" file-name="src/main.rs" caption="`Point<T>` struct-এ `x` নামের একটি মেথড প্রয়োগ করা যা `T` টাইপের `x` ফিল্ডের একটি রেফারেন্স রিটার্ন করবে">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-09/src/main.rs}}
@@ -201,25 +126,13 @@ struct we defined in Listing 10-6 with a method named `x` implemented on it.
 
 </Listing>
 
-Here, we’ve defined a method named `x` on `Point<T>` that returns a reference
-to the data in the field `x`.
+এখানে, আমরা `Point<T>`-এ `x` নামের একটি মেথড সংজ্ঞায়িত করেছি যা ফিল্ড `x`-এর ডেটার একটি রেফারেন্স রিটার্ন করে।
 
-Note that we have to declare `T` just after `impl` so we can use `T` to specify
-that we’re implementing methods on the type `Point<T>`. By declaring `T` as a
-generic type after `impl`, Rust can identify that the type in the angle
-brackets in `Point` is a generic type rather than a concrete type. We could
-have chosen a different name for this generic parameter than the generic
-parameter declared in the struct definition, but using the same name is
-conventional. If you write a method within an `impl` that declares a generic
-type, that method will be defined on any instance of the type, no matter what
-concrete type ends up substituting for the generic type.
+মনে রাখবেন যে `impl`-এর ঠিক পরেই আমাদের `T` ঘোষণা করতে হবে যাতে আমরা `T` ব্যবহার করে নির্দিষ্ট করতে পারি যে আমরা `Point<T>` টাইপের উপর মেথড প্রয়োগ করছি। `impl`-এর পরে `T`-কে একটি জেনেরিক টাইপ হিসাবে ঘোষণা করার মাধ্যমে, রাস্ট সনাক্ত করতে পারে যে `Point`-এর কোণের বন্ধনীর ভিতরের টাইপটি একটি কংক্রিট টাইপের পরিবর্তে একটি জেনেরিক টাইপ। আমরা struct সংজ্ঞায় ঘোষিত জেনেরিক প্যারামিটারের থেকে ভিন্ন একটি নাম এই জেনেরিক প্যারামিটারের জন্য বেছে নিতে পারতাম, তবে একই নাম ব্যবহার করা প্রচলিত। আপনি যদি একটি `impl`-এর মধ্যে একটি মেথড লেখেন যা একটি জেনেরিক টাইপ ঘোষণা করে, তবে সেই মেথডটি টাইপের যেকোনো উদাহরণের উপর সংজ্ঞায়িত করা হবে, সেই জেনেরিক টাইপের জন্য শেষ পর্যন্ত যে কংক্রিট টাইপ প্রতিস্থাপিত হোক না কেন।
 
-We can also specify constraints on generic types when defining methods on the
-type. We could, for example, implement methods only on `Point<f32>` instances
-rather than on `Point<T>` instances with any generic type. In Listing 10-10 we
-use the concrete type `f32`, meaning we don’t declare any types after `impl`.
+আমরা টাইপের মেথড সংজ্ঞায়িত করার সময় জেনেরিক টাইপের উপর সীমাবদ্ধতাও উল্লেখ করতে পারি। উদাহরণস্বরূপ, আমরা যেকোনো জেনেরিক টাইপ সহ `Point<T>` ইনস্ট্যান্সের পরিবর্তে শুধুমাত্র `Point<f32>` ইনস্ট্যান্সের উপর মেথড প্রয়োগ করতে পারি। Listing 10-10-এ আমরা কংক্রিট টাইপ `f32` ব্যবহার করি, যার অর্থ `impl`-এর পরে আমরা কোনো টাইপ ঘোষণা করি না।
 
-<Listing number="10-10" file-name="src/main.rs" caption="An `impl` block that only applies to a struct with a particular concrete type for the generic type parameter `T`">
+<Listing number="10-10" file-name="src/main.rs" caption="একটি `impl` ব্লক যা শুধুমাত্র জেনেরিক টাইপ প্যারামিটার `T`-এর জন্য একটি বিশেষ কংক্রিট টাইপ সহ struct-এর ক্ষেত্রে প্রযোজ্য">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-10/src/main.rs:here}}
@@ -227,20 +140,11 @@ use the concrete type `f32`, meaning we don’t declare any types after `impl`.
 
 </Listing>
 
-This code means the type `Point<f32>` will have a `distance_from_origin`
-method; other instances of `Point<T>` where `T` is not of type `f32` will not
-have this method defined. The method measures how far our point is from the
-point at coordinates (0.0, 0.0) and uses mathematical operations that are
-available only for floating-point types.
+এই কোডের মানে হল `Point<f32>` টাইপের `distance_from_origin` মেথড থাকবে; `Point<T>`-এর অন্যান্য ইনস্ট্যান্স যেখানে `T` `f32` টাইপের নয়, সেখানে এই মেথডটি সংজ্ঞায়িত থাকবে না। মেথডটি পরিমাপ করে যে আমাদের পয়েন্টটি স্থানাঙ্ক (0.0, 0.0)-এর পয়েন্ট থেকে কতটা দূরে এবং গাণিতিক ক্রিয়াকলাপ ব্যবহার করে যা শুধুমাত্র ফ্লোটিং-পয়েন্ট টাইপের জন্য উপলব্ধ।
 
-Generic type parameters in a struct definition aren’t always the same as those
-you use in that same struct’s method signatures. Listing 10-11 uses the generic
-types `X1` and `Y1` for the `Point` struct and `X2` `Y2` for the `mixup` method
-signature to make the example clearer. The method creates a new `Point`
-instance with the `x` value from the `self` `Point` (of type `X1`) and the `y`
-value from the passed-in `Point` (of type `Y2`).
+একটি struct সংজ্ঞায় জেনেরিক টাইপ প্যারামিটারগুলি সর্বদা একই হয় না যা আপনি সেই একই struct-এর মেথড সিগনেচারে ব্যবহার করেন। Listing 10-11 উদাহরণটিকে আরও স্পষ্ট করার জন্য `Point` struct-এর জন্য জেনেরিক টাইপ `X1` এবং `Y1` এবং `mixup` মেথড সিগনেচারের জন্য `X2` `Y2` ব্যবহার করে। মেথডটি `self` `Point` (টাইপ `X1`-এর) থেকে `x` ভ্যালু এবং পাস করা `Point` (টাইপ `Y2`-এর) থেকে `y` ভ্যালু দিয়ে একটি নতুন `Point` ইনস্ট্যান্স তৈরি করে।
 
-<Listing number="10-11" file-name="src/main.rs" caption="A method that uses generic types different from its struct’s definition">
+<Listing number="10-11" file-name="src/main.rs" caption="একটি মেথড যা তার struct-এর সংজ্ঞা থেকে ভিন্ন জেনেরিক টাইপ ব্যবহার করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-11/src/main.rs}}
@@ -248,52 +152,26 @@ value from the passed-in `Point` (of type `Y2`).
 
 </Listing>
 
-In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
-and an `f64` for `y` (with value `10.4`). The `p2` variable is a `Point` struct
-that has a string slice for `x` (with value `"Hello"`) and a `char` for `y`
-(with value `c`). Calling `mixup` on `p1` with the argument `p2` gives us `p3`,
-which will have an `i32` for `x` because `x` came from `p1`. The `p3` variable
-will have a `char` for `y` because `y` came from `p2`. The `println!` macro
-call will print `p3.x = 5, p3.y = c`.
+`main`-এ, আমরা একটি `Point` সংজ্ঞায়িত করেছি যার `x`-এর জন্য একটি `i32` (ভ্যালু `5` সহ) এবং `y`-এর জন্য একটি `f64` (ভ্যালু `10.4` সহ) রয়েছে। `p2` ভেরিয়েবলটি একটি `Point` struct যাতে `x`-এর জন্য একটি স্ট্রিং স্লাইস (ভ্যালু `"Hello"` সহ) এবং `y`-এর জন্য একটি `char` (ভ্যালু `c` সহ) রয়েছে। `p2` আর্গুমেন্ট সহ `p1`-এ `mixup` কল করলে আমরা `p3` পাই, যার `x`-এর জন্য একটি `i32` থাকবে কারণ `x` এসেছে `p1` থেকে। `p3` ভেরিয়েবলের `y`-এর জন্য একটি `char` থাকবে কারণ `y` এসেছে `p2` থেকে। `println!` ম্যাক্রো কল `p3.x = 5, p3.y = c` প্রিন্ট করবে।
 
-The purpose of this example is to demonstrate a situation in which some generic
-parameters are declared with `impl` and some are declared with the method
-definition. Here, the generic parameters `X1` and `Y1` are declared after
-`impl` because they go with the struct definition. The generic parameters `X2`
-and `Y2` are declared after `fn mixup` because they’re only relevant to the
-method.
+এই উদাহরণের উদ্দেশ্য হল এমন একটি পরিস্থিতি প্রদর্শন করা যেখানে কিছু জেনেরিক প্যারামিটার `impl` দিয়ে এবং কিছু মেথড সংজ্ঞার সাথে ঘোষণা করা হয়। এখানে, জেনেরিক প্যারামিটার `X1` এবং `Y1` `impl`-এর পরে ঘোষণা করা হয়েছে কারণ সেগুলি struct সংজ্ঞার সাথে যায়। জেনেরিক প্যারামিটার `X2` এবং `Y2` `fn mixup`-এর পরে ঘোষণা করা হয়েছে কারণ সেগুলি শুধুমাত্র মেথডের সাথে প্রাসঙ্গিক।
 
-### Performance of Code Using Generics
+### জেনেরিক ব্যবহার করে কোডের কর্মক্ষমতা
 
-You might be wondering whether there is a runtime cost when using generic type
-parameters. The good news is that using generic types won’t make your program
-run any slower than it would with concrete types.
+আপনি হয়তো ভাবছেন যে জেনেরিক টাইপ প্যারামিটার ব্যবহার করার সময় কোনো রানটাইম খরচ আছে কিনা। ভালো খবর হল জেনেরিক টাইপ ব্যবহার করলে আপনার প্রোগ্রাম কংক্রিট টাইপের চেয়ে ধীর গতিতে চলবে না।
 
-Rust accomplishes this by performing monomorphization of the code using
-generics at compile time. _Monomorphization_ is the process of turning generic
-code into specific code by filling in the concrete types that are used when
-compiled. In this process, the compiler does the opposite of the steps we used
-to create the generic function in Listing 10-5: the compiler looks at all the
-places where generic code is called and generates code for the concrete types
-the generic code is called with.
+রাস্ট কম্পাইল করার সময় জেনেরিক ব্যবহার করে কোডের মনোমরফাইজেশন করে এটি সম্পন্ন করে। _মনোমরফাইজেশন_ হল কম্পাইল করার সময় ব্যবহৃত কংক্রিট টাইপগুলি পূরণ করে জেনেরিক কোডকে নির্দিষ্ট কোডে পরিণত করার প্রক্রিয়া। এই প্রক্রিয়ায়, কম্পাইলার Listing 10-5-এ জেনেরিক ফাংশন তৈরি করতে আমরা যে ধাপগুলো ব্যবহার করেছি তার বিপরীত কাজ করে: কম্পাইলার সেই সমস্ত জায়গা দেখে যেখানে জেনেরিক কোড কল করা হয়েছে এবং জেনেরিক কোডটি যে কংক্রিট টাইপগুলোর সাথে কল করা হয়েছে সেগুলোর জন্য কোড তৈরি করে।
 
-Let’s look at how this works by using the standard library’s generic
-`Option<T>` enum:
+আসুন দেখি এটি কিভাবে কাজ করে স্ট্যান্ডার্ড লাইব্রেরির জেনেরিক `Option<T>` enum ব্যবহার করে:
 
 ```rust
 let integer = Some(5);
 let float = Some(5.0);
 ```
 
-When Rust compiles this code, it performs monomorphization. During that
-process, the compiler reads the values that have been used in `Option<T>`
-instances and identifies two kinds of `Option<T>`: one is `i32` and the other
-is `f64`. As such, it expands the generic definition of `Option<T>` into two
-definitions specialized to `i32` and `f64`, thereby replacing the generic
-definition with the specific ones.
+যখন রাস্ট এই কোডটি কম্পাইল করে, তখন এটি মনোমরফাইজেশন করে। সেই প্রক্রিয়ার সময়, কম্পাইলার `Option<T>` ইনস্ট্যান্সে ব্যবহৃত ভ্যালুগুলো পড়ে এবং দুই ধরনের `Option<T>` সনাক্ত করে: একটি হল `i32` এবং অন্যটি হল `f64`। যেমন, এটি `Option<T>`-এর জেনেরিক সংজ্ঞাটিকে `i32` এবং `f64`-এর জন্য বিশেষায়িত দুটি সংজ্ঞায় প্রসারিত করে, যার ফলে জেনেরিক সংজ্ঞাটিকে নির্দিষ্ট সংজ্ঞা দিয়ে প্রতিস্থাপন করা হয়।
 
-The monomorphized version of the code looks similar to the following (the
-compiler uses different names than what we’re using here for illustration):
+কোডের মনোমরফাইজড সংস্করণটি দেখতে নিচের মতো (কম্পাইলার এখানে উদাহরণের জন্য আমরা যা ব্যবহার করছি তার থেকে ভিন্ন নাম ব্যবহার করে):
 
 <Listing file-name="src/main.rs">
 
@@ -316,9 +194,4 @@ fn main() {
 
 </Listing>
 
-The generic `Option<T>` is replaced with the specific definitions created by
-the compiler. Because Rust compiles generic code into code that specifies the
-type in each instance, we pay no runtime cost for using generics. When the code
-runs, it performs just as it would if we had duplicated each definition by
-hand. The process of monomorphization makes Rust’s generics extremely efficient
-at runtime.
+জেনেরিক `Option<T>` কম্পাইলার দ্বারা তৈরি করা নির্দিষ্ট সংজ্ঞা দিয়ে প্রতিস্থাপিত হয়। যেহেতু রাস্ট জেনেরিক কোডকে এমন কোডে কম্পাইল করে যা প্রতিটি ইনস্ট্যান্সে টাইপ নির্দিষ্ট করে, তাই জেনেরিক ব্যবহার করার জন্য আমাদের কোনো রানটাইম খরচ দিতে হয় না। যখন কোডটি রান করে, তখন এটি ঠিক তেমনভাবেই পারফর্ম করে যেমনটি আমরা প্রতিটি সংজ্ঞা হাতে ডুপ্লিকেট করলে করত। মনোমরফাইজেশনের প্রক্রিয়া রানটাইমে রাস্টের জেনেরিককে অত্যন্ত দক্ষ করে তোলে।

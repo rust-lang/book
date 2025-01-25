@@ -1,36 +1,20 @@
-## Treating Smart Pointers Like Regular References with the `Deref` Trait
+## `Deref` trait ব্যবহার করে স্মার্ট পয়েন্টারগুলোকে সাধারণ রেফারেন্সের মতো ব্যবহার করা
 
-Implementing the `Deref` trait allows you to customize the behavior of the
-_dereference operator_ `*` (not to be confused with the multiplication or glob
-operator). By implementing `Deref` in such a way that a smart pointer can be
-treated like a regular reference, you can write code that operates on
-references and use that code with smart pointers too.
+`Deref` trait প্রয়োগ করার মাধ্যমে আপনি _ডিরেফারেন্স অপারেটর_ `*`-এর আচরণ কাস্টমাইজ করতে পারবেন (গুণ বা গ্লোব অপারেটরের সাথে বিভ্রান্ত হবেন না)। এমনভাবে `Deref` প্রয়োগ করার মাধ্যমে যে একটি স্মার্ট পয়েন্টারকে সাধারণ রেফারেন্সের মতো ব্যবহার করা যায়, আপনি এমন কোড লিখতে পারেন যা রেফারেন্সের উপর কাজ করে এবং সেই কোড স্মার্ট পয়েন্টারগুলোর সাথেও ব্যবহার করতে পারেন।
 
-Let’s first look at how the dereference operator works with regular references.
-Then we’ll try to define a custom type that behaves like `Box<T>`, and see why
-the dereference operator doesn’t work like a reference on our newly defined
-type. We’ll explore how implementing the `Deref` trait makes it possible for
-smart pointers to work in ways similar to references. Then we’ll look at
-Rust’s _deref coercion_ feature and how it lets us work with either references
-or smart pointers.
+আসুন প্রথমে দেখি কিভাবে ডিরেফারেন্স অপারেটর সাধারণ রেফারেন্সের সাথে কাজ করে। তারপর আমরা `Box<T>`-এর মতো আচরণ করে এমন একটি কাস্টম টাইপ সংজ্ঞায়িত করার চেষ্টা করব, এবং দেখব কেন ডিরেফারেন্স অপারেটর আমাদের নতুন সংজ্ঞায়িত টাইপের উপর রেফারেন্সের মতো কাজ করে না। আমরা আলোচনা করব কিভাবে `Deref` trait প্রয়োগ করলে স্মার্ট পয়েন্টারগুলো রেফারেন্সের মতোই কাজ করতে পারে। তারপর আমরা Rust-এর _ডিরেফ কোয়েরশন_ বৈশিষ্ট্য এবং কিভাবে এটি আমাদের রেফারেন্স বা স্মার্ট পয়েন্টারগুলোর সাথে কাজ করতে দেয় তা দেখব।
 
-> Note: There’s one big difference between the `MyBox<T>` type we’re about to
-> build and the real `Box<T>`: our version will not store its data on the heap.
-> We are focusing this example on `Deref`, so where the data is actually stored
-> is less important than the pointer-like behavior.
+> দ্রষ্টব্য: `MyBox<T>` টাইপ যা আমরা তৈরি করতে যাচ্ছি এবং আসল `Box<T>`-এর মধ্যে একটি বড় পার্থক্য আছে: আমাদের সংস্করণটি হিপে তার ডেটা সংরক্ষণ করবে না। আমরা এই উদাহরণে `Deref`-এর উপর ফোকাস করছি, তাই ডেটা কোথায় আসলে সংরক্ষিত আছে সেটা পয়েন্টার-সদৃশ আচরণের চেয়ে কম গুরুত্বপূর্ণ।
 
 <!-- Old link, do not remove -->
 
 <a id="following-the-pointer-to-the-value-with-the-dereference-operator"></a>
 
-### Following the Pointer to the Value
+### পয়েন্টার অনুসরণ করে ভ্যালুতে যাওয়া
 
-A regular reference is a type of pointer, and one way to think of a pointer is
-as an arrow to a value stored somewhere else. In Listing 15-6, we create a
-reference to an `i32` value and then use the dereference operator to follow the
-reference to the value:
+একটি সাধারণ রেফারেন্স হল এক ধরনের পয়েন্টার, এবং পয়েন্টারকে অন্য কোথাও সংরক্ষিত একটি ভ্যালুর দিকে নির্দেশিত তীর হিসেবে মনে করা যেতে পারে। Listing 15-6-এ, আমরা একটি `i32` ভ্যালুর রেফারেন্স তৈরি করি এবং তারপর ডিরেফারেন্স অপারেটর ব্যবহার করে রেফারেন্সটিকে অনুসরণ করে ভ্যালুতে যাই:
 
-<Listing number="15-6" file-name="src/main.rs" caption="Using the dereference operator to follow a reference to an `i32` value">
+<Listing number="15-6" file-name="src/main.rs" caption="একটি `i32` ভ্যালুর রেফারেন্স অনুসরণ করতে ডিরেফারেন্স অপারেটর ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-06/src/main.rs}}
@@ -38,32 +22,21 @@ reference to the value:
 
 </Listing>
 
-The variable `x` holds an `i32` value `5`. We set `y` equal to a reference to
-`x`. We can assert that `x` is equal to `5`. However, if we want to make an
-assertion about the value in `y`, we have to use `*y` to follow the reference
-to the value it’s pointing to (hence _dereference_) so the compiler can compare
-the actual value. Once we dereference `y`, we have access to the integer value
-`y` is pointing to that we can compare with `5`.
+ভেরিয়েবল `x` একটি `i32` ভ্যালু `5` ধরে রাখে। আমরা `y`-কে `x`-এর একটি রেফারেন্সের সমান করি। আমরা নিশ্চিত করতে পারি যে `x`, `5`-এর সমান। তবে, যদি আমরা `y`-এর ভ্যালু সম্পর্কে কোনো নিশ্চিততা তৈরি করতে চাই, তাহলে `y`-এর পয়েন্ট করা ভ্যালু অনুসরণ করার জন্য আমাদের `*y` ব্যবহার করতে হবে (তাই _ডিরেফারেন্স_), যাতে কম্পাইলার প্রকৃত ভ্যালু তুলনা করতে পারে। একবার আমরা `y`-কে ডিরেফারেন্স করলে, আমরা `y` যে ইন্টিজার ভ্যালু পয়েন্ট করছে, সেই ভ্যালুতে অ্যাক্সেস পাই, যা আমরা `5`-এর সাথে তুলনা করতে পারি।
 
-If we tried to write `assert_eq!(5, y);` instead, we would get this compilation
-error:
+যদি আমরা `assert_eq!(5, y);` লেখার চেষ্টা করতাম, তাহলে আমরা এই কম্পাইলেশন এরর পেতাম:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/output-only-01-comparing-to-reference/output.txt}}
 ```
 
-Comparing a number and a reference to a number isn’t allowed because they’re
-different types. We must use the dereference operator to follow the reference
-to the value it’s pointing to.
+একটি সংখ্যা এবং একটি সংখ্যার রেফারেন্সের তুলনা করার অনুমতি নেই কারণ তারা ভিন্ন টাইপ। যে ভ্যালুটির দিকে এটি নির্দেশ করছে, সেখানে যাওয়ার জন্য আমাদের অবশ্যই ডিরেফারেন্স অপারেটর ব্যবহার করতে হবে।
 
-### Using `Box<T>` Like a Reference
+### রেফারেন্সের মতো `Box<T>` ব্যবহার করা
 
-We can rewrite the code in Listing 15-6 to use a `Box<T>` instead of a
-reference; the dereference operator used on the `Box<T>` in Listing 15-7
-functions in the same way as the dereference operator used on the reference in
-Listing 15-6:
+আমরা Listing 15-6-এর কোডটিকে রেফারেন্সের পরিবর্তে `Box<T>` ব্যবহার করার জন্য পুনরায় লিখতে পারি; Listing 15-7-এ `Box<T>`-এর উপর ব্যবহৃত ডিরেফারেন্স অপারেটর Listing 15-6-এ রেফারেন্সের উপর ব্যবহৃত ডিরেফারেন্স অপারেটরের মতোই কাজ করে:
 
-<Listing number="15-7" file-name="src/main.rs" caption="Using the dereference operator on a `Box<i32>`">
+<Listing number="15-7" file-name="src/main.rs" caption="একটি `Box<i32>`-এর উপর ডিরেফারেন্স অপারেটর ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-07/src/main.rs}}
@@ -71,26 +44,15 @@ Listing 15-6:
 
 </Listing>
 
-The main difference between Listing 15-7 and Listing 15-6 is that here we set
-`y` to be an instance of a `Box<T>` pointing to a copied value of `x` rather
-than a reference pointing to the value of `x`. In the last assertion, we can
-use the dereference operator to follow the pointer of the `Box<T>` in the same
-way that we did when `y` was a reference. Next, we’ll explore what is special
-about `Box<T>` that enables us to use the dereference operator by defining our
-own type.
+Listing 15-7 এবং Listing 15-6-এর মধ্যে প্রধান পার্থক্য হল এখানে আমরা `y`-কে `x`-এর ভ্যালুর রেফারেন্স পয়েন্ট করার পরিবর্তে `x`-এর একটি কপি করা ভ্যালু পয়েন্ট করে এমন একটি `Box<T>`-এর উদাহরণ হিসেবে সেট করি। শেষ অ্যাসারশনে, `Box<T>`-এর পয়েন্টার অনুসরণ করতে আমরা ডিরেফারেন্স অপারেটর ব্যবহার করতে পারি, ঠিক যেমনটি আমরা করেছিলাম যখন `y` একটি রেফারেন্স ছিল। এরপর, আমরা আলোচনা করব `Box<T>` সম্পর্কে যা আমাদের নিজস্ব টাইপ সংজ্ঞায়িত করে ডিরেফারেন্স অপারেটর ব্যবহার করতে সক্ষম করে।
 
-### Defining Our Own Smart Pointer
+### আমাদের নিজস্ব স্মার্ট পয়েন্টার সংজ্ঞায়িত করা
 
-Let’s build a smart pointer similar to the `Box<T>` type provided by the
-standard library to experience how smart pointers behave differently from
-references by default. Then we’ll look at how to add the ability to use the
-dereference operator.
+আসুন স্ট্যান্ডার্ড লাইব্রেরি দ্বারা প্রদত্ত `Box<T>` টাইপের মতো একটি স্মার্ট পয়েন্টার তৈরি করি যাতে স্মার্ট পয়েন্টারগুলি ডিফল্টভাবে রেফারেন্স থেকে কীভাবে আলাদা আচরণ করে তা অনুভব করা যায়। তারপরে আমরা ডিরেফারেন্স অপারেটর ব্যবহার করার ক্ষমতা যুক্ত করার উপায় দেখব।
 
-The `Box<T>` type is ultimately defined as a tuple struct with one element, so
-Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
-`new` function to match the `new` function defined on `Box<T>`.
+`Box<T>` টাইপটি মূলত একটি উপাদান সহ একটি টাপল স্ট্রাক্ট হিসাবে সংজ্ঞায়িত করা হয়েছে, তাই Listing 15-8 একইভাবে একটি `MyBox<T>` টাইপ সংজ্ঞায়িত করে। আমরা `Box<T>`-এ সংজ্ঞায়িত `new` ফাংশনের সাথে মিল রাখার জন্য একটি `new` ফাংশনও সংজ্ঞায়িত করব।
 
-<Listing number="15-8" file-name="src/main.rs" caption="Defining a `MyBox<T>` type">
+<Listing number="15-8" file-name="src/main.rs" caption="একটি `MyBox<T>` টাইপ সংজ্ঞায়িত করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-08/src/main.rs:here}}
@@ -98,17 +60,11 @@ Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
 
 </Listing>
 
-We define a struct named `MyBox` and declare a generic parameter `T`, because
-we want our type to hold values of any type. The `MyBox` type is a tuple struct
-with one element of type `T`. The `MyBox::new` function takes one parameter of
-type `T` and returns a `MyBox` instance that holds the value passed in.
+আমরা `MyBox` নামের একটি স্ট্রাক্ট সংজ্ঞায়িত করি এবং একটি জেনেরিক প্যারামিটার `T` ঘোষণা করি, কারণ আমরা চাই আমাদের টাইপ যেন যেকোনো টাইপের ভ্যালু ধরে রাখতে পারে। `MyBox` টাইপটি `T` টাইপের একটি উপাদান সহ একটি টাপল স্ট্রাক্ট। `MyBox::new` ফাংশনটি `T` টাইপের একটি প্যারামিটার নেয় এবং একটি `MyBox` উদাহরণ রিটার্ন করে যা ভিতরে পাস করা ভ্যালু ধরে রাখে।
 
-Let’s try adding the `main` function in Listing 15-7 to Listing 15-8 and
-changing it to use the `MyBox<T>` type we’ve defined instead of `Box<T>`. The
-code in Listing 15-9 won’t compile because Rust doesn’t know how to dereference
-`MyBox`.
+আসুন Listing 15-7-এর `main` ফাংশনটি Listing 15-8-এ যোগ করার চেষ্টা করি এবং `Box<T>`-এর পরিবর্তে আমরা সংজ্ঞায়িত করা `MyBox<T>` টাইপ ব্যবহার করার জন্য এটিকে পরিবর্তন করি। Listing 15-9-এর কোডটি কম্পাইল হবে না কারণ Rust জানে না কিভাবে `MyBox`-কে ডিরেফারেন্স করতে হয়।
 
-<Listing number="15-9" file-name="src/main.rs" caption="Attempting to use `MyBox<T>` in the same way we used references and `Box<T>`">
+<Listing number="15-9" file-name="src/main.rs" caption="`MyBox<T>`-কে সেইভাবে ব্যবহার করার চেষ্টা করছি যেভাবে আমরা রেফারেন্স এবং `Box<T>` ব্যবহার করতাম">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-09/src/main.rs:here}}
@@ -116,26 +72,19 @@ code in Listing 15-9 won’t compile because Rust doesn’t know how to derefere
 
 </Listing>
 
-Here’s the resulting compilation error:
+এখানে কম্পাইলেশন এরর দেওয়া হলো:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-09/output.txt}}
 ```
 
-Our `MyBox<T>` type can’t be dereferenced because we haven’t implemented that
-ability on our type. To enable dereferencing with the `*` operator, we
-implement the `Deref` trait.
+আমাদের `MyBox<T>` টাইপ ডিরেফারেন্স করা যাবে না কারণ আমরা আমাদের টাইপে সেই ক্ষমতা প্রয়োগ করিনি। `*` অপারেটর দিয়ে ডিরেফারেন্সিং সক্ষম করতে, আমরা `Deref` trait প্রয়োগ করি।
 
-### Treating a Type Like a Reference by Implementing the `Deref` Trait
+### `Deref` Trait প্রয়োগ করার মাধ্যমে একটি টাইপকে রেফারেন্সের মতো ব্যবহার করা
 
-As discussed in the [“Implementing a Trait on a Type”][impl-trait]<!-- ignore
---> section of Chapter 10, to implement a trait, we need to provide
-implementations for the trait’s required methods. The `Deref` trait, provided
-by the standard library, requires us to implement one method named `deref` that
-borrows `self` and returns a reference to the inner data. Listing 15-10
-contains an implementation of `Deref` to add to the definition of `MyBox`:
+অধ্যায় 10-এর [“একটি টাইপের উপর একটি Trait প্রয়োগ করা”][impl-trait]<!-- ignore --> বিভাগে আলোচনা করা হয়েছে, একটি trait প্রয়োগ করতে, আমাদের trait-এর প্রয়োজনীয় পদ্ধতির জন্য বাস্তবায়ন প্রদান করতে হবে। স্ট্যান্ডার্ড লাইব্রেরি দ্বারা প্রদত্ত `Deref` trait-এর জন্য আমাদের `deref` নামের একটি পদ্ধতি প্রয়োগ করতে হবে যা `self`-কে ধার করে এবং ভিতরের ডেটার একটি রেফারেন্স প্রদান করে। Listing 15-10-এ `MyBox` সংজ্ঞায় যোগ করার জন্য `Deref`-এর একটি প্রয়োগ রয়েছে:
 
-<Listing number="15-10" file-name="src/main.rs" caption="Implementing `Deref` on `MyBox<T>`">
+<Listing number="15-10" file-name="src/main.rs" caption="`MyBox<T>`-এর উপর `Deref` প্রয়োগ করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-10/src/main.rs:here}}
@@ -143,72 +92,33 @@ contains an implementation of `Deref` to add to the definition of `MyBox`:
 
 </Listing>
 
-The `type Target = T;` syntax defines an associated type for the `Deref`
-trait to use. Associated types are a slightly different way of declaring a
-generic parameter, but you don’t need to worry about them for now; we’ll cover
-them in more detail in Chapter 20.
+`type Target = T;` সিনট্যাক্স `Deref` trait ব্যবহার করার জন্য একটি অ্যাসোসিয়েটেড টাইপ সংজ্ঞায়িত করে। অ্যাসোসিয়েটেড টাইপগুলি জেনেরিক প্যারামিটার ঘোষণার একটি সামান্য ভিন্ন উপায়, তবে আপাতত আপনাকে সেগুলি নিয়ে চিন্তা করতে হবে না; আমরা সেগুলি অধ্যায় 20-এ আরও বিস্তারিতভাবে আলোচনা করব।
 
-We fill in the body of the `deref` method with `&self.0` so `deref` returns a
-reference to the value we want to access with the `*` operator; recall from the
-[“Using Tuple Structs without Named Fields to Create Different
-Types”][tuple-structs]<!-- ignore --> section of Chapter 5 that `.0` accesses
-the first value in a tuple struct. The `main` function in Listing 15-9 that
-calls `*` on the `MyBox<T>` value now compiles, and the assertions pass!
+আমরা `deref` পদ্ধতির বডি `&self.0` দিয়ে পূরণ করি, যাতে `deref` সেই ভ্যালুটির একটি রেফারেন্স রিটার্ন করে যা আমরা `*` অপারেটর দিয়ে অ্যাক্সেস করতে চাই; অধ্যায় 5-এর [“বিভিন্ন টাইপ তৈরি করার জন্য নামবিহীন ফিল্ড সহ টাপল স্ট্রাক্ট ব্যবহার করা”][tuple-structs]<!-- ignore --> বিভাগ থেকে মনে করুন যে `.0` একটি টাপল স্ট্রাক্টের প্রথম ভ্যালু অ্যাক্সেস করে। Listing 15-9-এর `main` ফাংশন যা `MyBox<T>` ভ্যালুতে `*` কল করে, এখন কম্পাইল হয় এবং অ্যাসারশনগুলো পাস হয়!
 
-Without the `Deref` trait, the compiler can only dereference `&` references.
-The `deref` method gives the compiler the ability to take a value of any type
-that implements `Deref` and call the `deref` method to get a `&` reference that
-it knows how to dereference.
+`Deref` trait ছাড়া, কম্পাইলার শুধুমাত্র `&` রেফারেন্সগুলোকে ডিরেফারেন্স করতে পারে। `deref` পদ্ধতি কম্পাইলারকে `Deref` প্রয়োগ করে এমন যেকোনো টাইপের একটি ভ্যালু নিতে এবং একটি `&` রেফারেন্স পেতে `deref` পদ্ধতি কল করার ক্ষমতা দেয় যা এটি ডিরেফারেন্স করতে জানে।
 
-When we entered `*y` in Listing 15-9, behind the scenes Rust actually ran this
-code:
+যখন আমরা Listing 15-9-এ `*y` লিখি, তখন Rust আসলে ব্যাকগ্রাউন্ডে এই কোডটি চালায়:
 
 ```rust,ignore
 *(y.deref())
 ```
 
-Rust substitutes the `*` operator with a call to the `deref` method and then a
-plain dereference so we don’t have to think about whether or not we need to
-call the `deref` method. This Rust feature lets us write code that functions
-identically whether we have a regular reference or a type that implements
-`Deref`.
+Rust `*` অপারেটরের পরিবর্তে `deref` পদ্ধতিতে কল করে এবং তারপর একটি সাধারণ ডিরেফারেন্স করে, তাই আমাদের `deref` পদ্ধতি কল করার প্রয়োজন আছে কিনা তা নিয়ে ভাবতে হয় না। এই Rust বৈশিষ্ট্যটি আমাদের এমন কোড লিখতে দেয় যা আমরা একটি সাধারণ রেফারেন্স বা `Deref` প্রয়োগ করে এমন একটি টাইপ ব্যবহার করি কিনা তা নির্বিশেষে একই রকম কাজ করে।
 
-The reason the `deref` method returns a reference to a value, and that the
-plain dereference outside the parentheses in `*(y.deref())` is still necessary,
-is to do with the ownership system. If the `deref` method returned the value
-directly instead of a reference to the value, the value would be moved out of
-`self`. We don’t want to take ownership of the inner value inside `MyBox<T>` in
-this case or in most cases where we use the dereference operator.
+`deref` পদ্ধতি একটি ভ্যালুর রেফারেন্স রিটার্ন করার কারণ, এবং `*(y.deref())`-এ প্যারেন্থেসিসের বাইরের সাধারণ ডিরেফারেন্স এখনও প্রয়োজনীয়, এর কারণ হল মালিকানা সিস্টেমের সাথে এর সম্পর্ক। যদি `deref` পদ্ধতি ভ্যালুর রেফারেন্সের পরিবর্তে সরাসরি ভ্যালু রিটার্ন করত, তাহলে ভ্যালুটি `self` থেকে সরিয়ে নেওয়া হত। আমরা এই ক্ষেত্রে বা বেশিরভাগ ক্ষেত্রে যেখানে আমরা ডিরেফারেন্স অপারেটর ব্যবহার করি, সেখানে `MyBox<T>`-এর ভিতরের ভ্যালুর মালিকানা নিতে চাই না।
 
-Note that the `*` operator is replaced with a call to the `deref` method and
-then a call to the `*` operator just once, each time we use a `*` in our code.
-Because the substitution of the `*` operator does not recurse infinitely, we
-end up with data of type `i32`, which matches the `5` in `assert_eq!` in
-Listing 15-9.
+লক্ষ্য করুন যে `*` অপারেটরটি `deref` পদ্ধতিতে কল এবং তারপর `*` অপারেটরের কলে প্রতিস্থাপিত হয়, প্রত্যেকবার যখন আমরা আমাদের কোডে `*` ব্যবহার করি। যেহেতু `*` অপারেটরের প্রতিস্থাপন অসীমভাবে পুনরাবৃত্তি হয় না, তাই আমরা `i32` টাইপের ডেটা পাই, যা Listing 15-9-এ `assert_eq!`-এ `5`-এর সাথে মিলে যায়।
 
-### Implicit Deref Coercions with Functions and Methods
+### ফাংশন এবং পদ্ধতির সাথে অন্তর্নিহিত ডিরেফ কোয়েরশন
 
-_Deref coercion_ converts a reference to a type that implements the `Deref`
-trait into a reference to another type. For example, deref coercion can convert
-`&String` to `&str` because `String` implements the `Deref` trait such that it
-returns `&str`. Deref coercion is a convenience Rust performs on arguments to
-functions and methods, and works only on types that implement the `Deref`
-trait. It happens automatically when we pass a reference to a particular type’s
-value as an argument to a function or method that doesn’t match the parameter
-type in the function or method definition. A sequence of calls to the `deref`
-method converts the type we provided into the type the parameter needs.
+_ডিরেফ কোয়েরশন_ একটি টাইপের রেফারেন্সকে `Deref` trait প্রয়োগ করে এমন অন্য টাইপের রেফারেন্সে রূপান্তরিত করে। উদাহরণস্বরূপ, ডিরেফ কোয়েরশন `&String`-কে `&str`-এ রূপান্তর করতে পারে কারণ `String` `Deref` trait প্রয়োগ করে যা `&str` রিটার্ন করে। ডিরেফ কোয়েরশন হল একটি সুবিধা যা Rust ফাংশন এবং পদ্ধতির আর্গুমেন্টগুলিতে প্রয়োগ করে এবং এটি শুধুমাত্র `Deref` trait প্রয়োগ করে এমন টাইপগুলির উপর কাজ করে। যখন আমরা একটি ফাংশন বা পদ্ধতির সংজ্ঞায় প্যারামিটার টাইপের সাথে মেলে না এমন একটি ফাংশন বা পদ্ধতিতে একটি নির্দিষ্ট টাইপের ভ্যালুর রেফারেন্স আর্গুমেন্ট হিসাবে পাস করি তখন এটি স্বয়ংক্রিয়ভাবে ঘটে। `deref` পদ্ধতিতে কল করার একটি ক্রম আমাদের দেওয়া টাইপটিকে প্যারামিটারের প্রয়োজনীয় টাইপে রূপান্তর করে।
 
-Deref coercion was added to Rust so that programmers writing function and
-method calls don’t need to add as many explicit references and dereferences
-with `&` and `*`. The deref coercion feature also lets us write more code that
-can work for either references or smart pointers.
+Rust-এ ডিরেফ কোয়েরশন যোগ করা হয়েছে যাতে ফাংশন এবং মেথড কল লেখার প্রোগ্রামারদের `&` এবং `*` দিয়ে অনেক বেশি স্পষ্ট রেফারেন্স এবং ডিরেফারেন্স যোগ করার প্রয়োজন না হয়। ডিরেফ কোয়েরশন বৈশিষ্ট্যটি আমাদের আরও কোড লিখতে দেয় যা রেফারেন্স বা স্মার্ট পয়েন্টার উভয়ের জন্যই কাজ করতে পারে।
 
-To see deref coercion in action, let’s use the `MyBox<T>` type we defined in
-Listing 15-8 as well as the implementation of `Deref` that we added in Listing
-15-10. Listing 15-11 shows the definition of a function that has a string slice
-parameter:
+ডিরেফ কোয়েরশন বাস্তবে দেখতে, আসুন আমরা Listing 15-8-এ সংজ্ঞায়িত `MyBox<T>` টাইপ এবং Listing 15-10-এ যোগ করা `Deref`-এর প্রয়োগ ব্যবহার করি। Listing 15-11 একটি ফাংশনের সংজ্ঞা দেখায় যেখানে একটি স্ট্রিং স্লাইস প্যারামিটার রয়েছে:
 
-<Listing number="15-11" file-name="src/main.rs" caption="A `hello` function that has the parameter `name` of type `&str`">
+<Listing number="15-11" file-name="src/main.rs" caption="একটি `hello` ফাংশন যেখানে প্যারামিটার `name` -এর টাইপ `&str`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-11/src/main.rs:here}}
@@ -216,11 +126,9 @@ parameter:
 
 </Listing>
 
-We can call the `hello` function with a string slice as an argument, such as
-`hello("Rust");` for example. Deref coercion makes it possible to call `hello`
-with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12:
+আমরা একটি স্ট্রিং স্লাইস আর্গুমেন্ট যেমন, `hello("Rust");` দিয়ে `hello` ফাংশন কল করতে পারি। ডিরেফ কোয়েরশন `MyBox<String>` টাইপের একটি ভ্যালুর রেফারেন্স সহ `hello` কল করা সম্ভব করে, যেমনটি Listing 15-12-এ দেখানো হয়েছে:
 
-<Listing number="15-12" file-name="src/main.rs" caption="Calling `hello` with a reference to a `MyBox<String>` value, which works because of deref coercion">
+<Listing number="15-12" file-name="src/main.rs" caption="একটি `MyBox<String>` ভ্যালুর রেফারেন্স দিয়ে `hello` কল করা, যা ডিরেফ কোয়েরশনের কারণে কাজ করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-12/src/main.rs:here}}
@@ -228,19 +136,11 @@ with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12:
 
 </Listing>
 
-Here we’re calling the `hello` function with the argument `&m`, which is a
-reference to a `MyBox<String>` value. Because we implemented the `Deref` trait
-on `MyBox<T>` in Listing 15-10, Rust can turn `&MyBox<String>` into `&String`
-by calling `deref`. The standard library provides an implementation of `Deref`
-on `String` that returns a string slice, and this is in the API documentation
-for `Deref`. Rust calls `deref` again to turn the `&String` into `&str`, which
-matches the `hello` function’s definition.
+এখানে আমরা `hello` ফাংশনটি `&m` আর্গুমেন্ট দিয়ে কল করছি, যা একটি `MyBox<String>` ভ্যালুর রেফারেন্স। যেহেতু আমরা Listing 15-10-এ `MyBox<T>`-এ `Deref` trait প্রয়োগ করেছি, Rust `&MyBox<String>`-কে `deref` কল করে `&String`-এ রূপান্তর করতে পারে। স্ট্যান্ডার্ড লাইব্রেরি `String`-এ `Deref`-এর একটি প্রয়োগ প্রদান করে যা একটি স্ট্রিং স্লাইস রিটার্ন করে এবং এটি `Deref`-এর API ডকুমেন্টেশনে রয়েছে। Rust `&String`-কে `&str`-এ পরিণত করতে আবার `deref` কল করে, যা `hello` ফাংশনের সংজ্ঞার সাথে মিলে যায়।
 
-If Rust didn’t implement deref coercion, we would have to write the code in
-Listing 15-13 instead of the code in Listing 15-12 to call `hello` with a value
-of type `&MyBox<String>`.
+যদি Rust ডিরেফ কোয়েরশন প্রয়োগ না করত, তাহলে `&MyBox<String>` টাইপের একটি ভ্যালু দিয়ে `hello` কল করতে Listing 15-12-এর কোডের পরিবর্তে Listing 15-13-এর কোড লিখতে হত।
 
-<Listing number="15-13" file-name="src/main.rs" caption="The code we would have to write if Rust didn’t have deref coercion">
+<Listing number="15-13" file-name="src/main.rs" caption="যদি Rust-এর ডিরেফ কোয়েরশন না থাকত তাহলে আমাদের এই কোড লিখতে হত">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-13/src/main.rs:here}}
@@ -248,47 +148,23 @@ of type `&MyBox<String>`.
 
 </Listing>
 
-The `(*m)` dereferences the `MyBox<String>` into a `String`. Then the `&` and
-`[..]` take a string slice of the `String` that is equal to the whole string to
-match the signature of `hello`. This code without deref coercions is harder to
-read, write, and understand with all of these symbols involved. Deref coercion
-allows Rust to handle these conversions for us automatically.
+`(*m)` `MyBox<String>`-কে ডিরেফারেন্স করে একটি `String`-এ পরিণত করে। তারপর `&` এবং `[..]` `String`-এর একটি স্ট্রিং স্লাইস নেয় যা `hello`-এর সিগনেচারের সাথে মেলানোর জন্য পুরো স্ট্রিংটির সমান। ডিরেফ কোয়েরশন ছাড়া এই কোডটি এই সমস্ত চিহ্নগুলির সাথে পড়া, লেখা এবং বোঝা কঠিন। ডিরেফ কোয়েরশন Rust-কে আমাদের জন্য স্বয়ংক্রিয়ভাবে এই রূপান্তরগুলি পরিচালনা করতে দেয়।
 
-When the `Deref` trait is defined for the types involved, Rust will analyze the
-types and use `Deref::deref` as many times as necessary to get a reference to
-match the parameter’s type. The number of times that `Deref::deref` needs to be
-inserted is resolved at compile time, so there is no runtime penalty for taking
-advantage of deref coercion!
+যখন জড়িত টাইপগুলির জন্য `Deref` trait সংজ্ঞায়িত করা হয়, তখন Rust টাইপগুলি বিশ্লেষণ করবে এবং প্যারামিটারের টাইপের সাথে মেলে এমন একটি রেফারেন্স পেতে যতবার প্রয়োজন ততবার `Deref::deref` ব্যবহার করবে। `Deref::deref` কতবার যোগ করতে হবে তা কম্পাইল করার সময় সমাধান করা হয়, তাই ডিরেফ কোয়েরশনের সুবিধা নেওয়ার জন্য কোনো রানটাইম জরিমানা নেই!
 
-### How Deref Coercion Interacts with Mutability
+### মিউটেবিলিটির সাথে ডিরেফ কোয়েরশন কিভাবে কাজ করে
 
-Similar to how you use the `Deref` trait to override the `*` operator on
-immutable references, you can use the `DerefMut` trait to override the `*`
-operator on mutable references.
+ঠিক যেভাবে আপনি অপরিবর্তনযোগ্য রেফারেন্সের উপর `*` অপারেটরটিকে ওভাররাইড করতে `Deref` trait ব্যবহার করেন, তেমনি আপনি পরিবর্তনযোগ্য রেফারেন্সের উপর `*` অপারেটরটিকে ওভাররাইড করতে `DerefMut` trait ব্যবহার করতে পারেন।
 
-Rust does deref coercion when it finds types and trait implementations in three
-cases:
+Rust তিনটি ক্ষেত্রে টাইপ এবং trait বাস্তবায়ন খুঁজে পেলে ডিরেফ কোয়েরশন করে:
 
-- From `&T` to `&U` when `T: Deref<Target=U>`
-- From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
-- From `&mut T` to `&U` when `T: Deref<Target=U>`
+- `&T` থেকে `&U`-এ যখন `T: Deref<Target=U>`
+- `&mut T` থেকে `&mut U`-এ যখন `T: DerefMut<Target=U>`
+- `&mut T` থেকে `&U`-এ যখন `T: Deref<Target=U>`
 
-The first two cases are the same as each other except that the second
-implements mutability. The first case states that if you have a `&T`, and `T`
-implements `Deref` to some type `U`, you can get a `&U` transparently. The
-second case states that the same deref coercion happens for mutable references.
+প্রথম দুটি ক্ষেত্র একে অপরের মতোই, শুধু দ্বিতীয়টি পরিবর্তনযোগ্যতা প্রয়োগ করে। প্রথম ক্ষেত্রটি বলছে যে যদি আপনার কাছে একটি `&T` থাকে এবং `T` কিছু টাইপ `U`-এর জন্য `Deref` প্রয়োগ করে, তাহলে আপনি স্বচ্ছভাবে একটি `&U` পেতে পারেন। দ্বিতীয় ক্ষেত্রটি বলছে যে একই ডিরেফ কোয়েরশন পরিবর্তনযোগ্য রেফারেন্সের জন্য ঘটে।
 
-The third case is trickier: Rust will also coerce a mutable reference to an
-immutable one. But the reverse is _not_ possible: immutable references will
-never coerce to mutable references. Because of the borrowing rules, if you have
-a mutable reference, that mutable reference must be the only reference to that
-data (otherwise, the program wouldn’t compile). Converting one mutable
-reference to one immutable reference will never break the borrowing rules.
-Converting an immutable reference to a mutable reference would require that the
-initial immutable reference is the only immutable reference to that data, but
-the borrowing rules don’t guarantee that. Therefore, Rust can’t make the
-assumption that converting an immutable reference to a mutable reference is
-possible.
+তৃতীয় ক্ষেত্রটি আরও জটিল: Rust একটি পরিবর্তনযোগ্য রেফারেন্সকে একটি অপরিবর্তনযোগ্য রেফারেন্সেও বাধ্য করবে। কিন্তু বিপরীতটি সম্ভব _নয়_: অপরিবর্তনযোগ্য রেফারেন্সগুলি কখনই পরিবর্তনযোগ্য রেফারেন্সে বাধ্য করবে না। ধার করার নিয়মগুলির কারণে, যদি আপনার কাছে একটি পরিবর্তনযোগ্য রেফারেন্স থাকে, তবে সেই পরিবর্তনযোগ্য রেফারেন্সটি সেই ডেটার একমাত্র রেফারেন্স হতে হবে (অন্যথায়, প্রোগ্রামটি কম্পাইল হবে না)। একটি পরিবর্তনযোগ্য রেফারেন্সকে একটি অপরিবর্তনযোগ্য রেফারেন্সে রূপান্তর করলে ধার করার নিয়ম ভাঙবে না। একটি অপরিবর্তনযোগ্য রেফারেন্সকে পরিবর্তনযোগ্য রেফারেন্সে রূপান্তর করার জন্য প্রয়োজন হবে যে প্রাথমিক অপরিবর্তনযোগ্য রেফারেন্সটি সেই ডেটার একমাত্র অপরিবর্তনযোগ্য রেফারেন্স, কিন্তু ধার করার নিয়মগুলি এটির নিশ্চয়তা দেয় না। অতএব, Rust এই অনুমান করতে পারে না যে একটি অপরিবর্তনযোগ্য রেফারেন্সকে পরিবর্তনযোগ্য রেফারেন্সে রূপান্তর করা সম্ভব।
 
 [impl-trait]: ch10-02-traits.html#implementing-a-trait-on-a-type
 [tuple-structs]: ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types

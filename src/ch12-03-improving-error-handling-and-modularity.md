@@ -1,76 +1,38 @@
-## Refactoring to Improve Modularity and Error Handling
+## মডুলারিটি এবং এরর হ্যান্ডলিং উন্নত করতে রিফ্যাক্টরিং
 
-To improve our program, we’ll fix four problems that have to do with the
-program’s structure and how it’s handling potential errors. First, our `main`
-function now performs two tasks: it parses arguments and reads files. As our
-program grows, the number of separate tasks the `main` function handles will
-increase. As a function gains responsibilities, it becomes more difficult to
-reason about, harder to test, and harder to change without breaking one of its
-parts. It’s best to separate functionality so each function is responsible for
-one task.
+আমাদের প্রোগ্রামটি উন্নত করার জন্য, আমরা চারটি সমস্যা সমাধান করব যা প্রোগ্রামের গঠন এবং সম্ভাব্য এররগুলো কীভাবে হ্যান্ডেল করছে তার সাথে সম্পর্কিত। প্রথমত, আমাদের `main` ফাংশন এখন দুটি কাজ করে: এটি আর্গুমেন্ট পার্স করে এবং ফাইল পড়ে। আমাদের প্রোগ্রামটি বড় হওয়ার সাথে সাথে `main` ফাংশনটি যে আলাদা কাজগুলো হ্যান্ডেল করে সেগুলোর সংখ্যা বাড়বে। একটি ফাংশন যত বেশি দায়িত্ব পায়, সেটি সম্পর্কে যুক্তি দেওয়া, পরীক্ষা করা এবং এর কোনো একটি অংশ ভেঙে না দিয়ে পরিবর্তন করা তত বেশি কঠিন হয়ে পড়ে। কার্যকারিতা আলাদা করাই ভালো যাতে প্রতিটি ফাংশন একটি কাজের জন্য দায়ী থাকে।
 
-This issue also ties into the second problem: although `query` and `file_path`
-are configuration variables to our program, variables like `contents` are used
-to perform the program’s logic. The longer `main` becomes, the more variables
-we’ll need to bring into scope; the more variables we have in scope, the harder
-it will be to keep track of the purpose of each. It’s best to group the
-configuration variables into one structure to make their purpose clear.
+এই সমস্যাটি দ্বিতীয় সমস্যার সাথেও জড়িত: যদিও `query` এবং `file_path` আমাদের প্রোগ্রামের কনফিগারেশন ভেরিয়েবল, `contents`-এর মতো ভেরিয়েবলগুলো প্রোগ্রামের লজিক সম্পাদন করতে ব্যবহৃত হয়। `main` যত লম্বা হবে, তত বেশি ভেরিয়েবল আমাদের স্কোপে আনতে হবে; আমাদের স্কোপে যত বেশি ভেরিয়েবল থাকবে, তত বেশি প্রতিটি ভেরিয়েবলের উদ্দেশ্য ট্র্যাক করা কঠিন হবে। তাদের উদ্দেশ্য স্পষ্ট করার জন্য কনফিগারেশন ভেরিয়েবলগুলোকে একটি কাঠামোতে গ্রুপ করাই ভালো।
 
-The third problem is that we’ve used `expect` to print an error message when
-reading the file fails, but the error message just prints `Should have been
-able to read the file`. Reading a file can fail in a number of ways: for
-example, the file could be missing, or we might not have permission to open it.
-Right now, regardless of the situation, we’d print the same error message for
-everything, which wouldn’t give the user any information!
+তৃতীয় সমস্যাটি হল ফাইল পড়তে ব্যর্থ হলে এরর বার্তা প্রিন্ট করার জন্য আমরা `expect` ব্যবহার করেছি, কিন্তু এরর বার্তাটি শুধু প্রিন্ট করে `Should have been
+able to read the file`। একটি ফাইল পড়া বিভিন্ন উপায়ে ব্যর্থ হতে পারে: উদাহরণস্বরূপ, ফাইলটি অনুপস্থিত থাকতে পারে বা আমাদের এটি খোলার অনুমতি নাও থাকতে পারে। এই মুহূর্তে, পরিস্থিতি নির্বিশেষে, আমরা সবকিছুর জন্য একই এরর বার্তা প্রিন্ট করব, যা ব্যবহারকারীকে কোনো তথ্য দেবে না!
 
-Fourth, we use `expect` to handle an error, and if the user runs our program
-without specifying enough arguments, they’ll get an `index out of bounds` error
-from Rust that doesn’t clearly explain the problem. It would be best if all the
-error-handling code were in one place so future maintainers had only one place
-to consult the code if the error-handling logic needed to change. Having all the
-error-handling code in one place will also ensure that we’re printing messages
-that will be meaningful to our end users.
+চতুর্থত, আমরা একটি এরর হ্যান্ডেল করার জন্য `expect` ব্যবহার করি এবং যদি ব্যবহারকারী পর্যাপ্ত আর্গুমেন্ট নির্দিষ্ট না করে আমাদের প্রোগ্রামটি চালায়, তবে তারা রাস্ট থেকে `index out of bounds` এরর পাবে যা সমস্যাটি পরিষ্কারভাবে ব্যাখ্যা করে না। এটা ভালো হবে যদি সমস্ত এরর-হ্যান্ডলিং কোড এক জায়গায় থাকত যাতে ভবিষ্যতে রক্ষণাবেক্ষণকারীরা এরর-হ্যান্ডলিং লজিক পরিবর্তন করার প্রয়োজন হলে শুধুমাত্র একটি জায়গাতেই কোড দেখতে পায়। সমস্ত এরর-হ্যান্ডলিং কোড এক জায়গায় রাখাও নিশ্চিত করবে যে আমরা এমন বার্তাগুলো প্রিন্ট করছি যা আমাদের শেষ ব্যবহারকারীদের কাছে অর্থবহ হবে।
 
-Let’s address these four problems by refactoring our project.
+আসুন আমাদের প্রজেক্ট রিফ্যাক্টর করে এই চারটি সমস্যা সমাধান করি।
 
-### Separation of Concerns for Binary Projects
+### বাইনারি প্রজেক্টের জন্য উদ্বেগের পৃথকীকরণ
 
-The organizational problem of allocating responsibility for multiple tasks to
-the `main` function is common to many binary projects. As a result, the Rust
-community has developed guidelines for splitting the separate concerns of a
-binary program when `main` starts getting large. This process has the following
-steps:
+`main` ফাংশনে একাধিক কাজের জন্য দায়িত্ব বরাদ্দ করার সাংগঠনিক সমস্যাটি অনেক বাইনারি প্রজেক্টের জন্য সাধারণ। ফলস্বরূপ, রাস্ট সম্প্রদায় যখন `main` বড় হতে শুরু করে তখন একটি বাইনারি প্রোগ্রামের পৃথক উদ্বেগকে বিভক্ত করার জন্য নির্দেশিকা তৈরি করেছে। এই প্রক্রিয়াটির নিম্নলিখিত ধাপ রয়েছে:
 
-- Split your program into a _main.rs_ file and a _lib.rs_ file and move your
-  program’s logic to _lib.rs_.
-- As long as your command line parsing logic is small, it can remain in
-  _main.rs_.
-- When the command line parsing logic starts getting complicated, extract it
-  from _main.rs_ and move it to _lib.rs_.
+- আপনার প্রোগ্রামটিকে একটি _main.rs_ ফাইল এবং একটি _lib.rs_ ফাইলে ভাগ করুন এবং আপনার প্রোগ্রামের লজিক _lib.rs_-এ সরান।
+- যতক্ষণ পর্যন্ত আপনার কমান্ড লাইন পার্সিং লজিক ছোট থাকে, ততক্ষণ এটি _main.rs_-এ থাকতে পারে।
+- যখন কমান্ড লাইন পার্সিং লজিক জটিল হতে শুরু করে, তখন এটিকে _main.rs_ থেকে বের করে _lib.rs_-এ সরান।
 
-The responsibilities that remain in the `main` function after this process
-should be limited to the following:
+এই প্রক্রিয়ার পরে `main` ফাংশনে যে দায়িত্বগুলো অবশিষ্ট থাকে তা নিম্নলিখিতগুলোর মধ্যে সীমাবদ্ধ হওয়া উচিত:
 
-- Calling the command line parsing logic with the argument values
-- Setting up any other configuration
-- Calling a `run` function in _lib.rs_
-- Handling the error if `run` returns an error
+- আর্গুমেন্টের ভ্যালু সহ কমান্ড লাইন পার্সিং লজিক কল করা
+- অন্য কোনো কনফিগারেশন সেট আপ করা
+- _lib.rs_-এ একটি `run` ফাংশন কল করা
+- `run` একটি এরর রিটার্ন করলে সেই এরর হ্যান্ডেল করা
 
-This pattern is about separating concerns: _main.rs_ handles running the
-program and _lib.rs_ handles all the logic of the task at hand. Because you
-can’t test the `main` function directly, this structure lets you test all of
-your program’s logic by moving it into functions in _lib.rs_. The code that
-remains in _main.rs_ will be small enough to verify its correctness by reading
-it. Let’s rework our program by following this process.
+এই প্যাটার্নটি উদ্বেগের পৃথকীকরণ সম্পর্কে: _main.rs_ প্রোগ্রাম চালানো পরিচালনা করে এবং _lib.rs_ হাতের কাজের সমস্ত লজিক পরিচালনা করে। যেহেতু আপনি সরাসরি `main` ফাংশনটি পরীক্ষা করতে পারবেন না, তাই এই কাঠামোটি আপনাকে আপনার প্রোগ্রামের সমস্ত লজিক _lib.rs_-এর ফাংশনে সরিয়ে পরীক্ষা করতে দেয়। _main.rs_-এ থাকা কোডটি পড়ে এর সঠিকতা যাচাই করার জন্য যথেষ্ট ছোট হবে। আসুন এই প্রক্রিয়া অনুসরণ করে আমাদের প্রোগ্রামটি পুনরায় কাজ করি।
 
-#### Extracting the Argument Parser
+#### আর্গুমেন্ট পার্সার বের করা
 
-We’ll extract the functionality for parsing arguments into a function that
-`main` will call to prepare for moving the command line parsing logic to
-_src/lib.rs_. Listing 12-5 shows the new start of `main` that calls a new
-function `parse_config`, which we’ll define in _src/main.rs_ for the moment.
+আমরা আর্গুমেন্ট পার্স করার কার্যকারিতা এমন একটি ফাংশনে বের করব যা `main` কমান্ড লাইন পার্সিং লজিকটিকে _src/lib.rs_-এ সরানোর জন্য প্রস্তুত করতে কল করবে। Listing 12-5 `main`-এর নতুন শুরু দেখায় যা একটি নতুন ফাংশন `parse_config` কল করে, যা আমরা এই মুহূর্তে _src/main.rs_-এ সংজ্ঞায়িত করব।
 
-<Listing number="12-5" file-name="src/main.rs" caption="Extracting a `parse_config` function from `main`">
+<Listing number="12-5" file-name="src/main.rs" caption="`main` থেকে একটি `parse_config` ফাংশন বের করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-05/src/main.rs:here}}
@@ -78,40 +40,19 @@ function `parse_config`, which we’ll define in _src/main.rs_ for the moment.
 
 </Listing>
 
-We’re still collecting the command line arguments into a vector, but instead of
-assigning the argument value at index 1 to the variable `query` and the
-argument value at index 2 to the variable `file_path` within the `main`
-function, we pass the whole vector to the `parse_config` function. The
-`parse_config` function then holds the logic that determines which argument
-goes in which variable and passes the values back to `main`. We still create
-the `query` and `file_path` variables in `main`, but `main` no longer has the
-responsibility of determining how the command line arguments and variables
-correspond.
+আমরা এখনও কমান্ড লাইন আর্গুমেন্টগুলোকে একটি ভেক্টরে সংগ্রহ করছি, কিন্তু `main` ফাংশনের ভিতরে ইনডেক্স 1-এর আর্গুমেন্টের ভ্যালু `query` ভেরিয়েবলে এবং ইনডেক্স 2-এর আর্গুমেন্টের ভ্যালু `file_path` ভেরিয়েবলে নির্ধারণ করার পরিবর্তে, আমরা পুরো ভেক্টরটিকে `parse_config` ফাংশনে পাস করি। `parse_config` ফাংশনটি তখন সেই লজিকটি ধারণ করে যা নির্ধারণ করে কোন আর্গুমেন্ট কোন ভেরিয়েবলে যায় এবং ভ্যালুগুলোকে `main`-এ ফিরিয়ে দেয়। আমরা এখনও `main`-এ `query` এবং `file_path` ভেরিয়েবলগুলো তৈরি করি, তবে কমান্ড লাইন আর্গুমেন্ট এবং ভেরিয়েবলগুলো কীভাবে সম্পর্কিত তা নির্ধারণ করার দায়িত্ব `main`-এর আর নেই।
 
-This rework may seem like overkill for our small program, but we’re refactoring
-in small, incremental steps. After making this change, run the program again to
-verify that the argument parsing still works. It’s good to check your progress
-often, to help identify the cause of problems when they occur.
+এই পরিবর্তনের ফলে আমাদের ছোট প্রোগ্রামের জন্য এটিকে অতিরিক্ত মনে হতে পারে, তবে আমরা ছোট, ক্রমবর্ধমান ধাপে রিফ্যাক্টর করছি। এই পরিবর্তন করার পরে, আর্গুমেন্ট পার্সিং এখনও কাজ করে কিনা তা যাচাই করার জন্য প্রোগ্রামটি আবার চালান। যখন সমস্যা দেখা দেয় তখন সেগুলোর কারণ চিহ্নিত করতে সাহায্য করার জন্য প্রায়শই আপনার অগ্রগতি পরীক্ষা করা ভাল।
 
-#### Grouping Configuration Values
+#### কনফিগারেশনের ভ্যালুগুলো গ্রুপ করা
 
-We can take another small step to improve the `parse_config` function further.
-At the moment, we’re returning a tuple, but then we immediately break that
-tuple into individual parts again. This is a sign that perhaps we don’t have
-the right abstraction yet.
+আমরা `parse_config` ফাংশনটিকে আরও উন্নত করতে আরেকটি ছোট পদক্ষেপ নিতে পারি। এই মুহূর্তে, আমরা একটি টাপল রিটার্ন করছি, কিন্তু তারপরে আমরা অবিলম্বে সেই টাপলটিকে আবার পৃথক অংশে ভেঙে দিচ্ছি। এটি একটি লক্ষণ যে সম্ভবত আমাদের কাছে এখনও সঠিক বিমূর্ততা নেই।
 
-Another indicator that shows there’s room for improvement is the `config` part
-of `parse_config`, which implies that the two values we return are related and
-are both part of one configuration value. We’re not currently conveying this
-meaning in the structure of the data other than by grouping the two values into
-a tuple; we’ll instead put the two values into one struct and give each of the
-struct fields a meaningful name. Doing so will make it easier for future
-maintainers of this code to understand how the different values relate to each
-other and what their purpose is.
+আরেকটি সূচক যা দেখায় যে উন্নতির সুযোগ রয়েছে তা হল `parse_config`-এর `config` অংশ, যা বোঝায় যে আমরা যে দুটি ভ্যালু রিটার্ন করি সেগুলো সম্পর্কিত এবং উভয়ই একটি কনফিগারেশন ভ্যালুর অংশ। আমরা বর্তমানে দুটি ভ্যালুকে একটি টাপলে গ্রুপ করা ছাড়া ডেটার কাঠামোতে এই অর্থ প্রকাশ করছি না; পরিবর্তে আমরা দুটি ভ্যালুকে একটি struct-এ রাখব এবং struct ফিল্ডগুলোর প্রত্যেকটিকে একটি অর্থপূর্ণ নাম দেব। এটি করলে এই কোডের ভবিষ্যত রক্ষণাবেক্ষণকারীদের জন্য বিভিন্ন ভ্যালু একে অপরের সাথে কীভাবে সম্পর্কিত এবং তাদের উদ্দেশ্য কী তা বোঝা সহজ হবে।
 
-Listing 12-6 shows the improvements to the `parse_config` function.
+Listing 12-6 `parse_config` ফাংশনের উন্নতিগুলো দেখায়।
 
-<Listing number="12-6" file-name="src/main.rs" caption="Refactoring `parse_config` to return an instance of a `Config` struct">
+<Listing number="12-6" file-name="src/main.rs" caption="একটি `Config` struct-এর একটি ইনস্ট্যান্স রিটার্ন করার জন্য `parse_config` কে রিফ্যাক্টর করা">
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-06/src/main.rs:here}}
@@ -119,65 +60,25 @@ Listing 12-6 shows the improvements to the `parse_config` function.
 
 </Listing>
 
-We’ve added a struct named `Config` defined to have fields named `query` and
-`file_path`. The signature of `parse_config` now indicates that it returns a
-`Config` value. In the body of `parse_config`, where we used to return
-string slices that reference `String` values in `args`, we now define `Config`
-to contain owned `String` values. The `args` variable in `main` is the owner of
-the argument values and is only letting the `parse_config` function borrow
-them, which means we’d violate Rust’s borrowing rules if `Config` tried to take
-ownership of the values in `args`.
+আমরা `Config` নামের একটি struct যোগ করেছি যা `query` এবং `file_path` নামের ফিল্ড রাখার জন্য সংজ্ঞায়িত করা হয়েছে। `parse_config`-এর সিগনেচার এখন নির্দেশ করে যে এটি একটি `Config` ভ্যালু রিটার্ন করে। `parse_config`-এর বডিতে, যেখানে আমরা `args`-এ `String` ভ্যালুগুলোর রেফারেন্স দিয়ে স্ট্রিং স্লাইস রিটার্ন করতাম, এখন আমরা ওনড `String` ভ্যালু ধারণ করার জন্য `Config` সংজ্ঞায়িত করি। `main`-এর `args` ভেরিয়েবলটি আর্গুমেন্টের ভ্যালুগুলোর মালিক এবং এটি শুধুমাত্র `parse_config` ফাংশনকে ধার করতে দিচ্ছে, যার মানে যদি `Config` `args`-এর ভ্যালুগুলোর মালিকানা নেওয়ার চেষ্টা করে তবে আমরা রাস্টের বরো করার নিয়মগুলো লঙ্ঘন করব।
 
-There are a number of ways we could manage the `String` data; the easiest,
-though somewhat inefficient, route is to call the `clone` method on the values.
-This will make a full copy of the data for the `Config` instance to own, which
-takes more time and memory than storing a reference to the string data.
-However, cloning the data also makes our code very straightforward because we
-don’t have to manage the lifetimes of the references; in this circumstance,
-giving up a little performance to gain simplicity is a worthwhile trade-off.
+আমরা `String` ডেটা পরিচালনা করার বেশ কয়েকটি উপায় খুঁজে বের করতে পারতাম; তবে সবচেয়ে সহজ, যদিও কিছুটা অদক্ষ, উপায় হল ভ্যালুগুলোতে `clone` মেথড কল করা। এটি `Config` ইনস্ট্যান্সের মালিকানার জন্য ডেটার একটি সম্পূর্ণ কপি তৈরি করবে, যা স্ট্রিং ডেটার একটি রেফারেন্স স্টোর করার চেয়ে বেশি সময় এবং মেমরি নেয়। যাইহোক, ডেটা ক্লোন করা আমাদের কোডটিকেও খুব সোজা করে তোলে কারণ আমাদের রেফারেন্সগুলোর লাইফটাইম পরিচালনা করতে হয় না; এই পরিস্থিতিতে, সরলতা অর্জনের জন্য একটু পারফরম্যান্স ছেড়ে দেওয়া একটি মূল্যবান আপস।
 
-> ### The Trade-Offs of Using `clone`
+> ### `clone` ব্যবহারের আপস
 >
-> There’s a tendency among many Rustaceans to avoid using `clone` to fix
-> ownership problems because of its runtime cost. In
-> [Chapter 13][ch13]<!-- ignore -->, you’ll learn how to use more efficient
-> methods in this type of situation. But for now, it’s okay to copy a few
-> strings to continue making progress because you’ll make these copies only
-> once and your file path and query string are very small. It’s better to have
-> a working program that’s a bit inefficient than to try to hyperoptimize code
-> on your first pass. As you become more experienced with Rust, it’ll be
-> easier to start with the most efficient solution, but for now, it’s
-> perfectly acceptable to call `clone`.
+> অনেক রাস্টেসিয়ানের মধ্যে এর রানটাইম খরচের কারণে মালিকানার সমস্যাগুলো সমাধানের জন্য `clone` ব্যবহার করা এড়ানোর প্রবণতা রয়েছে। [Chapter 13][ch13]<!-- ignore -->-এ, আপনি এই ধরনের পরিস্থিতিতে আরও দক্ষ পদ্ধতি ব্যবহার করতে শিখবেন। তবে আপাতত, কয়েকটি স্ট্রিং কপি করে অগ্রগতি চালিয়ে যাওয়া ঠিক আছে কারণ আপনি এই কপিগুলো শুধুমাত্র একবারই করবেন এবং আপনার ফাইলের পথ এবং কোয়েরি স্ট্রিং খুব ছোট। প্রথমবারে কোডকে হাইপারঅপটিমাইজ করার চেষ্টা করার চেয়ে একটু অদক্ষ একটি ওয়ার্কিং প্রোগ্রাম তৈরি করা ভালো। আপনি যখন রাস্টের সাথে আরও অভিজ্ঞ হবেন, তখন সবচেয়ে দক্ষ সমাধান দিয়ে শুরু করা সহজ হবে, তবে আপাতত, `clone` কল করা একেবারে গ্রহণযোগ্য।
 
-We’ve updated `main` so it places the instance of `Config` returned by
-`parse_config` into a variable named `config`, and we updated the code that
-previously used the separate `query` and `file_path` variables so it now uses
-the fields on the `Config` struct instead.
+আমরা `main` আপডেট করেছি যাতে `parse_config` দ্বারা রিটার্ন করা `Config`-এর ইনস্ট্যান্সটিকে `config` নামের একটি ভেরিয়েবলে রাখে এবং আমরা আগে যে কোডটি `query` এবং `file_path` ভেরিয়েবলগুলো ব্যবহার করত, সেটিকেও `Config` struct-এর ফিল্ডগুলো ব্যবহার করার জন্য আপডেট করেছি।
 
-Now our code more clearly conveys that `query` and `file_path` are related and
-that their purpose is to configure how the program will work. Any code that
-uses these values knows to find them in the `config` instance in the fields
-named for their purpose.
+এখন আমাদের কোডটি আরও স্পষ্টভাবে জানায় যে `query` এবং `file_path` সম্পর্কিত এবং তাদের উদ্দেশ্য হল প্রোগ্রামটি কীভাবে কাজ করবে তা কনফিগার করা। এই ভ্যালুগুলো ব্যবহার করে এমন যেকোনো কোড জানে যে সেগুলোকে `config` ইনস্ট্যান্সে তাদের উদ্দেশ্যের জন্য নামকরণ করা ফিল্ডগুলোতে খুঁজে বের করতে হবে।
 
-#### Creating a Constructor for `Config`
+#### `Config`-এর জন্য একটি কনস্ট্রাক্টর তৈরি করা
 
-So far, we’ve extracted the logic responsible for parsing the command line
-arguments from `main` and placed it in the `parse_config` function. Doing so
-helped us see that the `query` and `file_path` values were related, and that
-relationship should be conveyed in our code. We then added a `Config` struct to
-name the related purpose of `query` and `file_path` and to be able to return the
-values’ names as struct field names from the `parse_config` function.
+এখন পর্যন্ত, আমরা `main` থেকে কমান্ড লাইন আর্গুমেন্ট পার্স করার জন্য দায়ী লজিক বের করেছি এবং এটিকে `parse_config` ফাংশনে রেখেছি। এটি আমাদের দেখতে সাহায্য করেছে যে `query` এবং `file_path` ভ্যালুগুলো সম্পর্কিত এবং সেই সম্পর্কটি আমাদের কোডে প্রকাশ করা উচিত। তারপর আমরা `query` এবং `file_path`-এর সম্পর্কিত উদ্দেশ্যের নাম দেওয়ার জন্য এবং `parse_config` ফাংশন থেকে struct ফিল্ড নাম হিসাবে ভ্যালুগুলোর নামগুলো রিটার্ন করতে সক্ষম হওয়ার জন্য একটি `Config` struct যোগ করেছি।
 
-So now that the purpose of the `parse_config` function is to create a `Config`
-instance, we can change `parse_config` from a plain function to a function
-named `new` that is associated with the `Config` struct. Making this change
-will make the code more idiomatic. We can create instances of types in the
-standard library, such as `String`, by calling `String::new`. Similarly, by
-changing `parse_config` into a `new` function associated with `Config`, we’ll
-be able to create instances of `Config` by calling `Config::new`. Listing 12-7
-shows the changes we need to make.
+সুতরাং এখন যেহেতু `parse_config` ফাংশনের উদ্দেশ্য হল একটি `Config` ইনস্ট্যান্স তৈরি করা, আমরা `parse_config`-কে একটি সাধারণ ফাংশন থেকে `Config` struct-এর সাথে যুক্ত `new` নামের একটি ফাংশনে পরিবর্তন করতে পারি। এই পরিবর্তন করলে কোডটি আরও ইডিওম্যাটিক হয়ে উঠবে। আমরা স্ট্যান্ডার্ড লাইব্রেরির টাইপগুলোর ইনস্ট্যান্স তৈরি করতে পারি, যেমন `String`, `String::new` কল করে। একইভাবে, `parse_config`-কে `Config`-এর সাথে যুক্ত একটি `new` ফাংশনে পরিবর্তন করে, আমরা `Config::new` কল করে `Config`-এর ইনস্ট্যান্স তৈরি করতে সক্ষম হব। Listing 12-7 আমাদের যে পরিবর্তনগুলো করতে হবে তা দেখায়।
 
-<Listing number="12-7" file-name="src/main.rs" caption="Changing `parse_config` into `Config::new`">
+<Listing number="12-7" file-name="src/main.rs" caption="`parse_config`-কে `Config::new`-এ পরিবর্তন করা">
 
 ```rust,should_panic,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-07/src/main.rs:here}}
@@ -185,33 +86,23 @@ shows the changes we need to make.
 
 </Listing>
 
-We’ve updated `main` where we were calling `parse_config` to instead call
-`Config::new`. We’ve changed the name of `parse_config` to `new` and moved it
-within an `impl` block, which associates the `new` function with `Config`. Try
-compiling this code again to make sure it works.
+আমরা `main` আপডেট করেছি যেখানে আমরা `parse_config` কল করছিলাম এবং পরিবর্তে `Config::new` কল করছি। আমরা `parse_config`-এর নাম পরিবর্তন করে `new` করেছি এবং এটিকে `impl` ব্লকের মধ্যে সরিয়ে নিয়েছি, যা `new` ফাংশনকে `Config`-এর সাথে যুক্ত করে। এটি কাজ করে কিনা তা নিশ্চিত করার জন্য আবার এই কোডটি কম্পাইল করার চেষ্টা করুন।
 
-### Fixing the Error Handling
+### এরর হ্যান্ডলিং ঠিক করা
 
-Now we’ll work on fixing our error handling. Recall that attempting to access
-the values in the `args` vector at index 1 or index 2 will cause the program to
-panic if the vector contains fewer than three items. Try running the program
-without any arguments; it will look like this:
+এখন আমরা আমাদের এরর হ্যান্ডলিং ঠিক করার জন্য কাজ করব। মনে রাখবেন যে `args` ভেক্টরের ভ্যালুগুলো 1 বা 2 ইনডেক্সে অ্যাক্সেস করার চেষ্টা করলে প্রোগ্রামটি প্যানিক করবে যদি ভেক্টরে তিনটি আইটেমের কম থাকে। কোনো আর্গুমেন্ট ছাড়াই প্রোগ্রামটি চালানোর চেষ্টা করুন; এটি এইরকম দেখাবে:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-07/output.txt}}
 ```
 
-The line `index out of bounds: the len is 1 but the index is 1` is an error
-message intended for programmers. It won’t help our end users understand what
-they should do instead. Let’s fix that now.
+`index out of bounds: the len is 1 but the index is 1` লাইনটি প্রোগ্রামারদের জন্য তৈরি করা একটি এরর বার্তা। এটি আমাদের শেষ ব্যবহারকারীদের বুঝতে সাহায্য করবে না যে তাদের পরিবর্তে কী করা উচিত। আসুন আমরা এখনই এটি ঠিক করি।
 
-#### Improving the Error Message
+#### এরর বার্তা উন্নত করা
 
-In Listing 12-8, we add a check in the `new` function that will verify that the
-slice is long enough before accessing index 1 and index 2. If the slice isn’t
-long enough, the program panics and displays a better error message.
+Listing 12-8-এ, আমরা `new` ফাংশনে একটি চেক যোগ করি যা 1 এবং 2 ইনডেক্স অ্যাক্সেস করার আগে যাচাই করবে যে স্লাইসটি যথেষ্ট দীর্ঘ কিনা। যদি স্লাইসটি যথেষ্ট দীর্ঘ না হয়, তাহলে প্রোগ্রামটি প্যানিক করে এবং একটি ভাল এরর বার্তা দেখায়।
 
-<Listing number="12-8" file-name="src/main.rs" caption="Adding a check for the number of arguments">
+<Listing number="12-8" file-name="src/main.rs" caption="আর্গুমেন্টের সংখ্যার জন্য একটি চেক যোগ করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-08/src/main.rs:here}}
@@ -219,50 +110,27 @@ long enough, the program panics and displays a better error message.
 
 </Listing>
 
-This code is similar to [the `Guess::new` function we wrote in Listing
-9-13][ch9-custom-types]<!-- ignore -->, where we called `panic!` when the
-`value` argument was out of the range of valid values. Instead of checking for
-a range of values here, we’re checking that the length of `args` is at least
-`3` and the rest of the function can operate under the assumption that this
-condition has been met. If `args` has fewer than three items, this condition
-will be `true`, and we call the `panic!` macro to end the program immediately.
+এই কোডটি [Listing 9-13-এ আমরা যে `Guess::new` ফাংশনটি লিখেছিলাম][ch9-custom-types]<!-- ignore --> তার মতোই, যেখানে `value` আর্গুমেন্টটি বৈধ ভ্যালুর সীমার বাইরে থাকলে আমরা `panic!` কল করেছিলাম। এখানে ভ্যালুর সীমার জন্য পরীক্ষা করার পরিবর্তে, আমরা পরীক্ষা করছি যে `args`-এর দৈর্ঘ্য কমপক্ষে `3` কিনা এবং ফাংশনের বাকি অংশটি এই অনুমান নিয়ে কাজ করতে পারে যে এই শর্তটি পূরণ হয়েছে। যদি `args`-এ তিনটি আইটেমের কম থাকে, তাহলে এই শর্তটি `true` হবে এবং আমরা প্রোগ্রামটি অবিলম্বে শেষ করতে `panic!` ম্যাক্রো কল করি।
 
-With these extra few lines of code in `new`, let’s run the program without any
-arguments again to see what the error looks like now:
+`new`-এ এই কয়েকটি অতিরিক্ত লাইন যোগ করে, আসুন কোনো আর্গুমেন্ট ছাড়াই আবার প্রোগ্রামটি চালিয়ে দেখি যে এররটি এখন কেমন দেখায়:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-08/output.txt}}
 ```
 
-This output is better: we now have a reasonable error message. However, we also
-have extraneous information we don’t want to give to our users. Perhaps the
-technique we used in Listing 9-13 isn’t the best one to use here: a call to
-`panic!` is more appropriate for a programming problem than a usage problem,
-[as discussed in Chapter 9][ch9-error-guidelines]<!-- ignore -->. Instead,
-we’ll use the other technique you learned about in Chapter 9—[returning a
-`Result`][ch9-result]<!-- ignore --> that indicates either success or an error.
+এই আউটপুটটি আরও ভাল: এখন আমাদের কাছে একটি যুক্তিসঙ্গত এরর বার্তা রয়েছে। যাইহোক, আমাদের কাছে অতিরিক্ত তথ্যও রয়েছে যা আমরা আমাদের ব্যবহারকারীদের দিতে চাই না। সম্ভবত Listing 9-13-এ আমরা যে কৌশলটি ব্যবহার করেছি সেটি এখানে ব্যবহার করার জন্য সবচেয়ে ভালো নয়: `panic!`-এর একটি কল ব্যবহারের সমস্যার চেয়ে প্রোগ্রামিং সমস্যার জন্য বেশি উপযুক্ত, যেমনটি [Chapter 9-এ আলোচনা করা হয়েছে][ch9-error-guidelines]<!-- ignore -->। পরিবর্তে, আমরা Chapter 9-এ আপনি যে অন্য কৌশলটি শিখেছেন সেটি ব্যবহার করব—[একটি `Result` রিটার্ন করা][ch9-result]<!-- ignore --> যা হয় সাফল্য বা এরর নির্দেশ করে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="returning-a-result-from-new-instead-of-calling-panic"></a>
 
-#### Returning a `Result` Instead of Calling `panic!`
+#### `panic!` কল করার পরিবর্তে একটি `Result` রিটার্ন করা
 
-We can instead return a `Result` value that will contain a `Config` instance in
-the successful case and will describe the problem in the error case. We’re also
-going to change the function name from `new` to `build` because many
-programmers expect `new` functions to never fail. When `Config::build` is
-communicating to `main`, we can use the `Result` type to signal there was a
-problem. Then we can change `main` to convert an `Err` variant into a more
-practical error for our users without the surrounding text about `thread
-'main'` and `RUST_BACKTRACE` that a call to `panic!` causes.
+পরিবর্তে, আমরা একটি `Result` ভ্যালু রিটার্ন করতে পারি যা সফল ক্ষেত্রে একটি `Config` ইনস্ট্যান্স ধারণ করবে এবং এরর ক্ষেত্রে সমস্যাটি বর্ণনা করবে। আমরা `new` থেকে ফাংশনের নাম পরিবর্তন করে `build` করতে যাচ্ছি কারণ অনেক প্রোগ্রামার `new` ফাংশনগুলোকে কখনো ব্যর্থ না হওয়ার প্রত্যাশা করে। যখন `Config::build` `main`-এর সাথে যোগাযোগ করছে, তখন আমরা `Result` টাইপটি ব্যবহার করে একটি সমস্যা ছিল কিনা তা সংকেত দিতে পারি। তারপরে আমরা `main` পরিবর্তন করতে পারি একটি `Err` ভেরিয়েন্টকে `panic!` কল করার কারণে `thread 'main'` এবং `RUST_BACKTRACE` সম্পর্কে চারপাশের টেক্সট ছাড়াই আমাদের ব্যবহারকারীদের জন্য আরও ব্যবহারিক এররে রূপান্তর করতে পারি।
 
-Listing 12-9 shows the changes we need to make to the return value of the
-function we’re now calling `Config::build` and the body of the function needed
-to return a `Result`. Note that this won’t compile until we update `main` as
-well, which we’ll do in the next listing.
+Listing 12-9 দেখায় `Config::build` নামে আমরা এখন যে ফাংশনটি কল করছি তার রিটার্ন ভ্যালুতে আমাদের যে পরিবর্তনগুলো করতে হবে এবং `Result` রিটার্ন করার জন্য ফাংশনের বডিতে প্রয়োজনীয় পরিবর্তনগুলো দেখায়। মনে রাখবেন যে `main`-ও আপডেট না করা পর্যন্ত এটি কম্পাইল হবে না, যা আমরা পরবর্তী তালিকায় করব।
 
-<Listing number="12-9" file-name="src/main.rs" caption="Returning a `Result` from `Config::build`">
+<Listing number="12-9" file-name="src/main.rs" caption="`Config::build` থেকে একটি `Result` রিটার্ন করা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-09/src/main.rs:here}}
@@ -270,33 +138,21 @@ well, which we’ll do in the next listing.
 
 </Listing>
 
-Our `build` function returns a `Result` with a `Config` instance in the success
-case and a string literal in the error case. Our error values will always be
-string literals that have the `'static` lifetime.
+আমাদের `build` ফাংশনটি সফল ক্ষেত্রে একটি `Config` ইনস্ট্যান্স এবং এরর ক্ষেত্রে একটি স্ট্রিং লিটারেল সহ একটি `Result` রিটার্ন করে। আমাদের এরর ভ্যালুগুলো সবসময় `'static` লাইফটাইমযুক্ত স্ট্রিং লিটারেল হবে।
 
-We’ve made two changes in the body of the function: instead of calling `panic!`
-when the user doesn’t pass enough arguments, we now return an `Err` value, and
-we’ve wrapped the `Config` return value in an `Ok`. These changes make the
-function conform to its new type signature.
+আমরা ফাংশনের বডিতে দুটি পরিবর্তন করেছি: ব্যবহারকারী পর্যাপ্ত আর্গুমেন্ট পাস না করলে `panic!` কল করার পরিবর্তে, আমরা এখন একটি `Err` ভ্যালু রিটার্ন করি এবং আমরা `Ok`-এ `Config` রিটার্ন ভ্যালু র‍্যাপ করেছি। এই পরিবর্তনগুলো ফাংশনটিকে এর নতুন টাইপ সিগনেচারের সাথে সঙ্গতিপূর্ণ করে।
 
-Returning an `Err` value from `Config::build` allows the `main` function to
-handle the `Result` value returned from the `build` function and exit the
-process more cleanly in the error case.
+`Config::build` থেকে একটি `Err` ভ্যালু রিটার্ন করা `main` ফাংশনকে `build` ফাংশন থেকে রিটার্ন হওয়া `Result` ভ্যালুটি হ্যান্ডেল করতে এবং এরর ক্ষেত্রে আরও পরিষ্কারভাবে প্রক্রিয়া থেকে প্রস্থান করতে দেয়।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="calling-confignew-and-handling-errors"></a>
 
-#### Calling `Config::build` and Handling Errors
+#### `Config::build` কল করা এবং এরর হ্যান্ডেল করা
 
-To handle the error case and print a user-friendly message, we need to update
-`main` to handle the `Result` being returned by `Config::build`, as shown in
-Listing 12-10. We’ll also take the responsibility of exiting the command line
-tool with a nonzero error code away from `panic!` and instead implement it by
-hand. A nonzero exit status is a convention to signal to the process that
-called our program that the program exited with an error state.
+এরর কেসটি হ্যান্ডেল করতে এবং একটি ইউজার-ফ্রেন্ডলি বার্তা প্রিন্ট করতে, `Config::build` দ্বারা রিটার্ন করা `Result` হ্যান্ডেল করতে আমাদের `main` আপডেট করতে হবে, যেমন Listing 12-10-এ দেখানো হয়েছে। আমরা `panic!` থেকে দূরে সরে গিয়ে নিজের হাতে একটি অ-শূন্য এরর কোড দিয়ে কমান্ড লাইন টুল থেকে প্রস্থান করার দায়িত্বও নেব। একটি অ-শূন্য প্রস্থান স্থিতি হল সেই প্রক্রিয়াটিকে সংকেত দেওয়ার একটি প্রথা যা আমাদের প্রোগ্রামটিকে একটি এরর অবস্থায় প্রস্থান করা হয়েছিল বলে ডাকে।
 
-<Listing number="12-10" file-name="src/main.rs" caption="Exiting with an error code if building a `Config` fails">
+<Listing number="12-10" file-name="src/main.rs" caption="একটি `Config` তৈরি করতে ব্যর্থ হলে একটি এরর কোড দিয়ে প্রস্থান করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-10/src/main.rs:here}}
@@ -304,49 +160,23 @@ called our program that the program exited with an error state.
 
 </Listing>
 
-In this listing, we’ve used a method we haven’t covered in detail yet:
-`unwrap_or_else`, which is defined on `Result<T, E>` by the standard library.
-Using `unwrap_or_else` allows us to define some custom, non-`panic!` error
-handling. If the `Result` is an `Ok` value, this method’s behavior is similar
-to `unwrap`: it returns the inner value that `Ok` is wrapping. However, if the
-value is an `Err` value, this method calls the code in the _closure_, which is
-an anonymous function we define and pass as an argument to `unwrap_or_else`.
-We’ll cover closures in more detail in [Chapter 13][ch13]<!-- ignore -->. For
-now, you just need to know that `unwrap_or_else` will pass the inner value of
-the `Err`, which in this case is the static string `"not enough arguments"`
-that we added in Listing 12-9, to our closure in the argument `err` that
-appears between the vertical pipes. The code in the closure can then use the
-`err` value when it runs.
+এই তালিকায়, আমরা এমন একটি মেথড ব্যবহার করেছি যা আমরা এখনও বিস্তারিতভাবে আলোচনা করিনি: `unwrap_or_else`, যা স্ট্যান্ডার্ড লাইব্রেরি দ্বারা `Result<T, E>`-এর উপর সংজ্ঞায়িত করা হয়েছে। `unwrap_or_else` ব্যবহার করে, আমরা কিছু কাস্টম, অ-`panic!` এরর হ্যান্ডলিং সংজ্ঞায়িত করতে পারি। যদি `Result` একটি `Ok` ভ্যালু হয়, তবে এই মেথডের আচরণ `unwrap`-এর মতোই: এটি ভিতরের ভ্যালু রিটার্ন করে যা `Ok` র‍্যাপ করছে। যাইহোক, যদি ভ্যালুটি একটি `Err` ভ্যালু হয়, তবে এই মেথডটি _ক্লোজারের_ কোড কল করে, যা একটি বেনামী ফাংশন যা আমরা সংজ্ঞায়িত করি এবং `unwrap_or_else`-এ একটি আর্গুমেন্ট হিসাবে পাস করি। আমরা [Chapter 13][ch13]<!-- ignore -->-এ ক্লোজারগুলো নিয়ে আরও বিস্তারিত আলোচনা করব। আপাতত, আপনাকে শুধু জানতে হবে যে `unwrap_or_else` `Err`-এর ভিতরের ভ্যালুটি পাস করবে, যা এই ক্ষেত্রে স্ট্যাটিক স্ট্রিং `"not enough arguments"`, আমাদের ক্লোজারে `err` আর্গুমেন্টের মধ্যে, যা উল্লম্ব পাইপের মধ্যে প্রদর্শিত হয়। ক্লোজারের কোডটি তখন চালানোর সময় `err` ভ্যালু ব্যবহার করতে পারে।
 
-We’ve added a new `use` line to bring `process` from the standard library into
-scope. The code in the closure that will be run in the error case is only two
-lines: we print the `err` value and then call `process::exit`. The
-`process::exit` function will stop the program immediately and return the
-number that was passed as the exit status code. This is similar to the
-`panic!`-based handling we used in Listing 12-8, but we no longer get all the
-extra output. Let’s try it:
+আমরা স্ট্যান্ডার্ড লাইব্রেরি থেকে `process`-কে স্কোপে আনার জন্য একটি নতুন `use` লাইন যোগ করেছি। এরর ক্ষেত্রে চালানো হবে এমন ক্লোজারের কোডটি মাত্র দুটি লাইন: আমরা `err` ভ্যালু প্রিন্ট করি এবং তারপরে `process::exit` কল করি। `process::exit` ফাংশনটি প্রোগ্রামটিকে অবিলম্বে বন্ধ করে দেবে এবং প্রস্থান স্ট্যাটাস কোড হিসাবে পাস করা নম্বরটি রিটার্ন করবে। এটি Listing 12-8-এ আমরা যে `panic!`-ভিত্তিক হ্যান্ডলিং ব্যবহার করেছি তার মতোই, কিন্তু আমরা আর কোনো অতিরিক্ত আউটপুট পাই না। আসুন চেষ্টা করে দেখি:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-10/output.txt}}
 ```
 
-Great! This output is much friendlier for our users.
+চমৎকার! এই আউটপুটটি আমাদের ব্যবহারকারীদের জন্য অনেক বেশি বন্ধুত্বপূর্ণ।
 
-### Extracting Logic from `main`
+### `main` থেকে লজিক বের করা
 
-Now that we’ve finished refactoring the configuration parsing, let’s turn to
-the program’s logic. As we stated in [“Separation of Concerns for Binary
-Projects”](#separation-of-concerns-for-binary-projects)<!-- ignore -->, we’ll
-extract a function named `run` that will hold all the logic currently in the
-`main` function that isn’t involved with setting up configuration or handling
-errors. When we’re done, `main` will be concise and easy to verify by
-inspection, and we’ll be able to write tests for all the other logic.
+এখন যেহেতু আমরা কনফিগারেশন পার্সিং রিফ্যাক্টর করা শেষ করেছি, আসুন প্রোগ্রামের লজিকের দিকে মনোযোগ দিই। [“বাইনারি প্রজেক্টের জন্য উদ্বেগের পৃথকীকরণ”](#separation-of-concerns-for-binary-projects)<!-- ignore -->-এ যেমনটি উল্লেখ করেছি, আমরা `run` নামের একটি ফাংশন বের করব যাতে বর্তমানে `main` ফাংশনে থাকা সমস্ত লজিক থাকবে যা কনফিগারেশন সেট আপ বা এরর হ্যান্ডেলিং এর সাথে জড়িত নয়। যখন আমরা কাজ শেষ করব, `main` সংক্ষিপ্ত হবে এবং পরিদর্শন করে যাচাই করা সহজ হবে, এবং আমরা অন্য সমস্ত লজিকের জন্য পরীক্ষা লিখতে সক্ষম হব।
 
-Listing 12-11 shows the extracted `run` function. For now, we’re just making
-the small, incremental improvement of extracting the function. We’re still
-defining the function in _src/main.rs_.
+Listing 12-11 বের করা `run` ফাংশনটি দেখায়। আপাতত, আমরা শুধু ফাংশনটি বের করে ছোট, ক্রমবর্ধমান উন্নতি করছি। আমরা এখনও _src/main.rs_-এ ফাংশনটি সংজ্ঞায়িত করছি।
 
-<Listing number="12-11" file-name="src/main.rs" caption="Extracting a `run` function containing the rest of the program logic">
+<Listing number="12-11" file-name="src/main.rs" caption="প্রোগ্রামের বাকি লজিক ধারণ করে `run` নামের একটি ফাংশন বের করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-11/src/main.rs:here}}
@@ -354,21 +184,13 @@ defining the function in _src/main.rs_.
 
 </Listing>
 
-The `run` function now contains all the remaining logic from `main`, starting
-from reading the file. The `run` function takes the `Config` instance as an
-argument.
+`run` ফাংশনটিতে এখন ফাইল পড়া থেকে শুরু করে `main`-এর বাকি সমস্ত লজিক রয়েছে। `run` ফাংশনটি `Config` ইনস্ট্যান্সটিকে একটি আর্গুমেন্ট হিসাবে নেয়।
 
-#### Returning Errors from the `run` Function
+#### `run` ফাংশন থেকে এরর রিটার্ন করা
 
-With the remaining program logic separated into the `run` function, we can
-improve the error handling, as we did with `Config::build` in Listing 12-9.
-Instead of allowing the program to panic by calling `expect`, the `run`
-function will return a `Result<T, E>` when something goes wrong. This will let
-us further consolidate the logic around handling errors into `main` in a
-user-friendly way. Listing 12-12 shows the changes we need to make to the
-signature and body of `run`.
+বাকি প্রোগ্রামের লজিকটিকে `run` ফাংশনে আলাদা করার সাথে, আমরা এরর হ্যান্ডলিং উন্নত করতে পারি, যেমনটি আমরা Listing 12-9-এ `Config::build`-এর সাথে করেছিলাম। `expect` কল করে প্রোগ্রামটিকে প্যানিক করার অনুমতি দেওয়ার পরিবর্তে, `run` ফাংশনটি যখন কিছু ভুল হয় তখন `Result<T, E>` রিটার্ন করবে। এটি আমাদের `main`-এ এরর হ্যান্ডেলিং এর চারপাশে আরও বেশি লজিককে ইউজার-ফ্রেন্ডলি উপায়ে একত্রিত করতে দেবে। Listing 12-12 `run`-এর সিগনেচার এবং বডিতে আমাদের যে পরিবর্তনগুলো করতে হবে তা দেখায়।
 
-<Listing number="12-12" file-name="src/main.rs" caption="Changing the `run` function to return `Result`">
+<Listing number="12-12" file-name="src/main.rs" caption="`Result` রিটার্ন করার জন্য `run` ফাংশন পরিবর্তন করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-12/src/main.rs:here}}
@@ -376,47 +198,25 @@ signature and body of `run`.
 
 </Listing>
 
-We’ve made three significant changes here. First, we changed the return type of
-the `run` function to `Result<(), Box<dyn Error>>`. This function previously
-returned the unit type, `()`, and we keep that as the value returned in the
-`Ok` case.
+আমরা এখানে তিনটি উল্লেখযোগ্য পরিবর্তন করেছি। প্রথমত, আমরা `run` ফাংশনের রিটার্ন টাইপ পরিবর্তন করে `Result<(), Box<dyn Error>>` করেছি। এই ফাংশনটি পূর্বে ইউনিট টাইপ, `()` রিটার্ন করত এবং আমরা `Ok` ক্ষেত্রে রিটার্ন করা ভ্যালু হিসাবে সেটি রাখি।
 
-For the error type, we used the _trait object_ `Box<dyn Error>` (and we’ve
-brought `std::error::Error` into scope with a `use` statement at the top).
-We’ll cover trait objects in [Chapter 18][ch18]<!-- ignore -->. For now, just
-know that `Box<dyn Error>` means the function will return a type that
-implements the `Error` trait, but we don’t have to specify what particular type
-the return value will be. This gives us flexibility to return error values that
-may be of different types in different error cases. The `dyn` keyword is short
-for _dynamic_.
+এরর টাইপের জন্য, আমরা _ট্রেট অবজেক্ট_ `Box<dyn Error>` ব্যবহার করেছি (এবং আমরা উপরে `use` স্টেটমেন্ট দিয়ে `std::error::Error`-কে স্কোপে এনেছি)। আমরা [Chapter 18][ch18]<!-- ignore -->-এ ট্রেট অবজেক্টগুলো নিয়ে আলোচনা করব। আপাতত, শুধু জেনে রাখুন যে `Box<dyn Error>` মানে হল ফাংশনটি এমন একটি টাইপ রিটার্ন করবে যা `Error` ট্রেট প্রয়োগ করে, কিন্তু রিটার্ন ভ্যালুটি কোন নির্দিষ্ট টাইপের হবে তা আমাদের উল্লেখ করতে হবে না। এটি বিভিন্ন এরর ক্ষেত্রে বিভিন্ন প্রকারের হতে পারে এমন এরর ভ্যালুগুলো রিটার্ন করার জন্য আমাদের নমনীয়তা দেয়। `dyn` কিওয়ার্ডটি _ডায়নামিক_-এর সংক্ষিপ্ত রূপ।
 
-Second, we’ve removed the call to `expect` in favor of the `?` operator, as we
-talked about in [Chapter 9][ch9-question-mark]<!-- ignore -->. Rather than
-`panic!` on an error, `?` will return the error value from the current function
-for the caller to handle.
+দ্বিতীয়ত, আমরা [Chapter 9][ch9-question-mark]<!-- ignore -->-এ আলোচনা করার মতো `?` অপারেটরের পক্ষে `expect`-এর কলটি সরিয়ে দিয়েছি। এররের উপর `panic!` করার পরিবর্তে, `?` কলারকে হ্যান্ডেল করার জন্য বর্তমান ফাংশন থেকে এরর ভ্যালু রিটার্ন করবে।
 
-Third, the `run` function now returns an `Ok` value in the success case.
-We’ve declared the `run` function’s success type as `()` in the signature,
-which means we need to wrap the unit type value in the `Ok` value. This
-`Ok(())` syntax might look a bit strange at first, but using `()` like this is
-the idiomatic way to indicate that we’re calling `run` for its side effects
-only; it doesn’t return a value we need.
+তৃতীয়ত, `run` ফাংশনটি এখন সফল ক্ষেত্রে একটি `Ok` ভ্যালু রিটার্ন করে। আমরা সিগনেচারে `run` ফাংশনের সাফল্যের টাইপটিকে `()` হিসাবে ঘোষণা করেছি, যার মানে আমাদের ইউনিট টাইপ ভ্যালুটিকে `Ok` ভ্যালুতে র‍্যাপ করতে হবে। এই `Ok(())` সিনট্যাক্সটি প্রথমে কিছুটা অদ্ভুত মনে হতে পারে, তবে এটি ইঙ্গিত করার জন্য যে আমরা শুধুমাত্র এর পার্শ্ব প্রতিক্রিয়াগুলোর জন্য `run` কল করছি, এটি কোনো ভ্যালু রিটার্ন করে না যার আমাদের প্রয়োজন, সেটির ইডিওম্যাটিক উপায় হল এইভাবে `()` ব্যবহার করা।
 
-When you run this code, it will compile but will display a warning:
+আপনি যখন এই কোডটি চালাবেন, তখন এটি কম্পাইল হবে কিন্তু একটি সতর্কতা দেখাবে:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-12/output.txt}}
 ```
 
-Rust tells us that our code ignored the `Result` value and the `Result` value
-might indicate that an error occurred. But we’re not checking to see whether or
-not there was an error, and the compiler reminds us that we probably meant to
-have some error-handling code here! Let’s rectify that problem now.
+রাস্ট আমাদের বলছে যে আমাদের কোড `Result` ভ্যালুটি উপেক্ষা করেছে এবং `Result` ভ্যালুটি নির্দেশ করতে পারে যে একটি এরর ঘটেছে। তবে আমরা দেখছি না যে কোনো এরর ছিল কিনা এবং কম্পাইলার আমাদের মনে করিয়ে দিচ্ছে যে সম্ভবত এখানে আমাদের কিছু এরর-হ্যান্ডলিং কোড রাখার কথা ছিল! আসুন এখনই সেই সমস্যাটি সংশোধন করি।
 
-#### Handling Errors Returned from `run` in `main`
+#### `main`-এ `run` থেকে রিটার্ন হওয়া এররগুলো হ্যান্ডেল করা
 
-We’ll check for errors and handle them using a technique similar to one we used
-with `Config::build` in Listing 12-10, but with a slight difference:
+আমরা Listing 12-10-এ `Config::build` সহ আমরা যে কৌশলটি ব্যবহার করেছি তার অনুরূপ একটি কৌশল ব্যবহার করে এররগুলো পরীক্ষা করব এবং পরিচালনা করব, তবে সামান্য পার্থক্য সহ:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -424,35 +224,32 @@ with `Config::build` in Listing 12-10, but with a slight difference:
 {{#rustdoc_include ../listings/ch12-an-io-project/no-listing-01-handling-errors-in-main/src/main.rs:here}}
 ```
 
-We use `if let` rather than `unwrap_or_else` to check whether `run` returns an
-`Err` value and to call `process::exit(1)` if it does. The `run` function
-doesn’t return a value that we want to `unwrap` in the same way that
-`Config::build` returns the `Config` instance. Because `run` returns `()` in
-the success case, we only care about detecting an error, so we don’t need
-`unwrap_or_else` to return the unwrapped value, which would only be `()`.
+আমরা `run` একটি `Err` ভ্যালু রিটার্ন করে কিনা তা পরীক্ষা করতে এবং যদি করে তবে `process::exit(1)` কল করার জন্য `unwrap_or_else`-এর পরিবর্তে `if let` ব্যবহার করি। `Config::build` যেভাবে `Config` ইনস্ট্যান্সটি রিটার্ন করে, `run` সেইভাবে কোনো ভ্যালু রিটার্ন করে না যা আমরা `unwrap` করতে চাই। যেহেতু `run` সফল ক্ষেত্রে `()` রিটার্ন করে, তাই আমরা শুধুমাত্র একটি এরর সনাক্ত করতে চাই, তাই `unwrap_or_else`-এর আনর‍্যাপ করা ভ্যালু রিটার্ন করার প্রয়োজন নেই, যা শুধু `()` হত।
 
-The bodies of the `if let` and the `unwrap_or_else` functions are the same in
-both cases: we print the error and exit.
+`if let` এবং `unwrap_or_else` ফাংশনগুলোর বডি উভয় ক্ষেত্রেই একই: আমরা এরর প্রিন্ট করি এবং প্রস্থান করি।
 
-### Splitting Code into a Library Crate
+[ch13]: ch13-00-functional-features.html
+[ch9-question-mark]: ch09-02-recoverable-errors-with-result.html#a-shortcut-for-propagating-errors-the--operator
+[ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation
+[ch9-error-guidelines]: ch09-03-to-panic-or-not-to-panic.html#guidelines-for-error-handling
+[ch9-result]: ch09-02-recoverable-errors-with-result.html
+[ch18]: ch18-00-oop.html
 
-Our `minigrep` project is looking good so far! Now we’ll split the
-_src/main.rs_ file and put some code into the _src/lib.rs_ file. That way, we
-can test the code and have a _src/main.rs_ file with fewer responsibilities.
 
-Let’s move all the code that isn’t in the `main` function from _src/main.rs_ to
-_src/lib.rs_:
+### একটি লাইব্রেরি ক্রেটে কোড বিভক্ত করা
 
-- The `run` function definition
-- The relevant `use` statements
-- The definition of `Config`
-- The `Config::build` function definition
+আমাদের `minigrep` প্রজেক্টটি এখন পর্যন্ত ভালো দেখাচ্ছে! এখন আমরা _src/main.rs_ ফাইলটিকে বিভক্ত করব এবং কিছু কোড _src/lib.rs_ ফাইলে রাখব। এইভাবে, আমরা কোডটি পরীক্ষা করতে পারি এবং কম দায়িত্ব সহ একটি _src/main.rs_ ফাইল রাখতে পারি।
 
-The contents of _src/lib.rs_ should have the signatures shown in Listing 12-13
-(we’ve omitted the bodies of the functions for brevity). Note that this won’t
-compile until we modify _src/main.rs_ in Listing 12-14.
+আসুন _src/main.rs_ থেকে `main` ফাংশনে নেই এমন সমস্ত কোড _src/lib.rs_-এ সরিয়ে নিই:
 
-<Listing number="12-13" file-name="src/lib.rs" caption="Moving `Config` and `run` into *src/lib.rs*">
+- `run` ফাংশনের সংজ্ঞা
+- প্রাসঙ্গিক `use` স্টেটমেন্ট
+- `Config`-এর সংজ্ঞা
+- `Config::build` ফাংশনের সংজ্ঞা
+
+_src/lib.rs_-এর কন্টেন্টগুলো Listing 12-13-এ দেখানো সিগনেচারগুলো ধারণ করা উচিত (আমরা সংক্ষিপ্ততার জন্য ফাংশনগুলোর বডি বাদ দিয়েছি)। মনে রাখবেন যে Listing 12-14-এ আমরা _src/main.rs_ পরিবর্তন না করা পর্যন্ত এটি কম্পাইল হবে না।
+
+<Listing number="12-13" file-name="src/lib.rs" caption="`Config` এবং `run`-কে *src/lib.rs*-এ সরানো">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs:here}}
@@ -460,14 +257,11 @@ compile until we modify _src/main.rs_ in Listing 12-14.
 
 </Listing>
 
-We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its
-`build` method, and on the `run` function. We now have a library crate that has
-a public API we can test!
+আমরা `pub` কিওয়ার্ডটি উদারভাবে ব্যবহার করেছি: `Config`-এ, এর ফিল্ডগুলোতে এবং এর `build` মেথডে এবং `run` ফাংশনে। আমাদের এখন একটি লাইব্রেরি ক্রেট আছে যার একটি পাবলিক API আছে যা আমরা পরীক্ষা করতে পারি!
 
-Now we need to bring the code we moved to _src/lib.rs_ into the scope of the
-binary crate in _src/main.rs_, as shown in Listing 12-14.
+এখন আমাদের _src/lib.rs_-এ সরানো কোডটিকে _src/main.rs_-এর বাইনারি ক্রেটের স্কোপে আনতে হবে, যেমন Listing 12-14-এ দেখানো হয়েছে।
 
-<Listing number="12-14" file-name="src/main.rs" caption="Using the `minigrep` library crate in *src/main.rs*">
+<Listing number="12-14" file-name="src/main.rs" caption="*src/main.rs*-এ `minigrep` লাইব্রেরি ক্রেট ব্যবহার করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/main.rs:here}}
@@ -475,18 +269,11 @@ binary crate in _src/main.rs_, as shown in Listing 12-14.
 
 </Listing>
 
-We add a `use minigrep::Config` line to bring the `Config` type from the
-library crate into the binary crate’s scope, and we prefix the `run` function
-with our crate name. Now all the functionality should be connected and should
-work. Run the program with `cargo run` and make sure everything works correctly.
+লাইব্রেরি ক্রেট থেকে বাইনারি ক্রেটের স্কোপে `Config` টাইপটি আনার জন্য আমরা একটি `use minigrep::Config` লাইন যোগ করি এবং আমরা আমাদের ক্রেটের নাম দিয়ে `run` ফাংশনটি উপসর্গযুক্ত করি। এখন সমস্ত কার্যকারিতা সংযুক্ত করা উচিত এবং কাজ করা উচিত। `cargo run` দিয়ে প্রোগ্রামটি চালান এবং নিশ্চিত করুন যে সবকিছু সঠিকভাবে কাজ করছে।
 
-Whew! That was a lot of work, but we’ve set ourselves up for success in the
-future. Now it’s much easier to handle errors, and we’ve made the code more
-modular. Almost all of our work will be done in _src/lib.rs_ from here on out.
+উফ! এটি অনেক কাজ ছিল, কিন্তু আমরা ভবিষ্যতে সাফল্যের জন্য নিজেদের প্রস্তুত করেছি। এখন এররগুলো হ্যান্ডেল করা অনেক সহজ এবং আমরা কোডটিকে আরও মডুলার করেছি। এখান থেকে আমাদের প্রায় সব কাজ _src/lib.rs_-এ করা হবে।
 
-Let’s take advantage of this newfound modularity by doing something that would
-have been difficult with the old code but is easy with the new code: we’ll
-write some tests!
+আসুন এই নতুন মডুলারিটির সুবিধা নিয়ে এমন কিছু করি যা পুরানো কোডের সাথে করা কঠিন হত কিন্তু নতুন কোডের সাথে সহজ: আমরা কিছু পরীক্ষা লিখব!
 
 [ch13]: ch13-00-functional-features.html
 [ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation

@@ -1,17 +1,7 @@
-## Extending Cargo with Custom Commands
+## কাস্টম কমান্ড দিয়ে Cargo প্রসারিত করা
 
-Cargo is designed so you can extend it with new subcommands without having to
-modify Cargo. If a binary in your `$PATH` is named `cargo-something`, you can
-run it as if it was a Cargo subcommand by running `cargo something`. Custom
-commands like this are also listed when you run `cargo --list`. Being able to
-use `cargo install` to install extensions and then run them just like the
-built-in Cargo tools is a super convenient benefit of Cargo’s design!
+Cargo এমনভাবে ডিজাইন করা হয়েছে যাতে আপনি Cargo পরিবর্তন না করেই নতুন সাবকমান্ড দিয়ে এটিকে প্রসারিত করতে পারেন। যদি আপনার `$PATH`-এ একটি বাইনারির নাম `cargo-something` হয়, তাহলে আপনি `cargo something` চালিয়ে এটিকে Cargo সাবকমান্ডের মতো চালাতে পারেন। এই ধরনের কাস্টম কমান্ডগুলি `cargo --list` চালালে তালিকাভুক্ত করা হয়। এক্সটেনশনগুলি ইনস্টল করতে `cargo install` ব্যবহার করতে সক্ষম হওয়া এবং তারপরে সেগুলিকে বিল্ট-ইন Cargo টুলের মতোই চালানো Cargo-এর ডিজাইনের একটি অতি সুবিধাজনক সুবিধা!
 
-## Summary
+## সারসংক্ষেপ
 
-Sharing code with Cargo and [crates.io](https://crates.io/)<!-- ignore --> is
-part of what makes the Rust ecosystem useful for many different tasks. Rust’s
-standard library is small and stable, but crates are easy to share, use, and
-improve on a timeline different from that of the language. Don’t be shy about
-sharing code that’s useful to you on [crates.io](https://crates.io/)<!-- ignore
--->; it’s likely that it will be useful to someone else as well!
+Cargo এবং [crates.io](https://crates.io/)<!-- ignore --> এর সাথে কোড শেয়ার করা Rust ইকোসিস্টেমকে বিভিন্ন কাজের জন্য উপযোগী করে তোলার একটি অংশ। Rust-এর স্ট্যান্ডার্ড লাইব্রেরি ছোট এবং স্থিতিশীল, তবে crateগুলি ভাষা থেকে আলাদা একটি সময়রেখায় শেয়ার করা, ব্যবহার করা এবং উন্নত করা সহজ। [crates.io](https://crates.io/)<!-- ignore -->-এ আপনার কাছে উপযোগী কোড শেয়ার করতে দ্বিধা বোধ করবেন না; সম্ভবত এটি অন্য কারো জন্যও উপযোগী হবে!

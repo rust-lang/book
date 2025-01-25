@@ -1,41 +1,24 @@
-## Developing the Library’s Functionality with Test-Driven Development
+```markdown
+## Test-Driven Development (TDD) ব্যবহার করে লাইব্রেরির কার্যকারিতা তৈরি করা
 
-Now that we’ve extracted the logic into _src/lib.rs_ and left the argument
-collecting and error handling in _src/main.rs_, it’s much easier to write tests
-for the core functionality of our code. We can call functions directly with
-various arguments and check return values without having to call our binary
-from the command line.
+এখন যেহেতু আমরা যুক্তি _src/lib.rs_-এ নিয়ে এসেছি এবং _src/main.rs_-এ আর্গুমেন্ট সংগ্রহ এবং error হ্যান্ডেল করার কাজ রেখেছি, তাই আমাদের কোডের মূল কার্যকারিতার জন্য test লেখা অনেক সহজ। কমান্ড লাইন থেকে আমাদের বাইনারি কল না করেই আমরা সরাসরি বিভিন্ন আর্গুমেন্ট দিয়ে ফাংশন কল করতে পারি এবং রিটার্ন ভ্যালুগুলো পরীক্ষা করতে পারি।
 
-In this section, we’ll add the searching logic to the `minigrep` program using
-the test-driven development (TDD) process with the following steps:
+এই বিভাগে, আমরা test-driven development (TDD) প্রক্রিয়া ব্যবহার করে `minigrep` প্রোগ্রামে অনুসন্ধানের যুক্তি যোগ করব। TDD এর জন্য নিম্নলিখিত ধাপগুলো অনুসরণ করব:
 
-1. Write a test that fails and run it to make sure it fails for the reason you
-   expect.
-2. Write or modify just enough code to make the new test pass.
-3. Refactor the code you just added or changed and make sure the tests continue
-   to pass.
-4. Repeat from step 1!
+1.  একটি test লিখুন যা fail করে এবং এটি নিশ্চিত করার জন্য চালান যে এটি আপনার প্রত্যাশিত কারণে fail করেছে।
+2.  নতুন test পাস করার জন্য যথেষ্ট কোড লিখুন বা পরিবর্তন করুন।
+3.  আপনি এইমাত্র যে কোড যোগ করেছেন বা পরিবর্তন করেছেন তা Refactor করুন এবং নিশ্চিত করুন যে test গুলো এখনও পাস করছে।
+4.  ১ নম্বর ধাপ থেকে পুনরাবৃত্তি করুন!
 
-Though it’s just one of many ways to write software, TDD can help drive code
-design. Writing the test before you write the code that makes the test pass
-helps to maintain high test coverage throughout the process.
+যদিও এটি সফ্টওয়্যার লেখার অনেক পদ্ধতির মধ্যে একটি, TDD কোড ডিজাইন করতে সাহায্য করতে পারে। test পাস করার জন্য কোড লেখার আগে test লিখলে পুরো প্রক্রিয়া জুড়ে উচ্চ test কভারেজ বজায় রাখতে সাহায্য করে।
 
-We’ll test-drive the implementation of the functionality that will actually do
-the searching for the query string in the file contents and produce a list of
-lines that match the query. We’ll add this functionality in a function called
-`search`.
+আমরা সেই কার্যকারিতার বাস্তবায়ন test-drive করব যা আসলে ফাইলের বিষয়বস্তুতে query string অনুসন্ধান করবে এবং query এর সাথে মেলে এমন লাইনগুলোর একটি তালিকা তৈরি করবে। আমরা `search` নামের একটি ফাংশনে এই কার্যকারিতা যোগ করব।
 
-### Writing a Failing Test
+### একটি Fail করা Test লেখা
 
-Because we don’t need them anymore, let’s remove the `println!` statements from
-_src/lib.rs_ and _src/main.rs_ that we used to check the program’s behavior.
-Then, in _src/lib.rs_, we’ll add a `tests` module with a test function, as we
-did in [Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies
-the behavior we want the `search` function to have: it will take a query and
-the text to search, and it will return only the lines from the text that
-contain the query. Listing 12-15 shows this test, which won’t compile yet.
+যেহেতু আমাদের এখন আর তাদের প্রয়োজন নেই, তাই _src/lib.rs_ এবং _src/main.rs_ থেকে `println!` স্টেটমেন্টগুলি সরিয়ে ফেলুন যা আমরা প্রোগ্রামের আচরণ পরীক্ষা করতে ব্যবহার করতাম। তারপরে, _src/lib.rs_-এ, আমরা একটি test ফাংশন সহ একটি `tests` মডিউল যোগ করব, যেমনটি আমরা [অধ্যায় 11][ch11-anatomy]<!-- ignore -->-এ করেছিলাম। test ফাংশনটি `search` ফাংশনের আচরণ নির্দিষ্ট করে যা আমরা চাই: এটি একটি query এবং অনুসন্ধান করার জন্য text নেবে এবং এটি text থেকে শুধুমাত্র সেই লাইনগুলি ফেরত দেবে যেগুলোতে query আছে। Listing 12-15 এই test দেখায়, যা এখনও compile হবে না।
 
-<Listing number="12-15" file-name="src/lib.rs" caption="Creating a failing test for the `search` function we wish we had">
+<Listing number="12-15" file-name="src/lib.rs" caption="`search` ফাংশনের জন্য একটি fail করা test তৈরি করা যা আমরা পেতে চাই">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-15/src/lib.rs:here}}
@@ -43,21 +26,11 @@ contain the query. Listing 12-15 shows this test, which won’t compile yet.
 
 </Listing>
 
-This test searches for the string `"duct"`. The text we’re searching is three
-lines, only one of which contains `"duct"` (note that the backslash after the
-opening double quote tells Rust not to put a newline character at the beginning
-of the contents of this string literal). We assert that the value returned from
-the `search` function contains only the line we expect.
+এই test `"duct"` string-এর জন্য অনুসন্ধান করে। আমরা যে text অনুসন্ধান করছি তা তিনটি লাইনের, যার মধ্যে শুধুমাত্র একটিতে `"duct"` আছে (লক্ষ্য করুন যে opening double quote-এর পরে backslash Rust কে এই string literal-এর শুরুতে একটি newline character না রাখার জন্য বলছে)। আমরা দাবি করি যে `search` ফাংশন থেকে ফেরত মানটিতে শুধুমাত্র সেই লাইনটি রয়েছে যা আমরা আশা করি।
 
-We aren’t yet able to run this test and watch it fail because the test doesn’t
-even compile: the `search` function doesn’t exist yet! In accordance with TDD
-principles, we’ll add just enough code to get the test to compile and run by
-adding a definition of the `search` function that always returns an empty
-vector, as shown in Listing 12-16. Then the test should compile and fail
-because an empty vector doesn’t match a vector containing the line `"safe,
-fast, productive."`
+আমরা এখনও এই test টি চালাতে এবং fail করতে দেখতে পাচ্ছি না কারণ test টি compile ও হচ্ছে না: `search` ফাংশনটি এখনও বিদ্যমান নেই! TDD নীতি অনুসারে, আমরা `search` ফাংশনের একটি সংজ্ঞা যোগ করে test টি compile এবং চালানোর জন্য যথেষ্ট কোড যোগ করব যা সবসময় একটি খালি ভেক্টর প্রদান করে, যেমন Listing 12-16 এ দেখানো হয়েছে। তারপর test compile এবং fail করা উচিত কারণ একটি খালি ভেক্টর `“safe, fast, productive.”` লাইন ধারণকারী একটি ভেক্টরের সাথে মেলে না।
 
-<Listing number="12-16" file-name="src/lib.rs" caption="Defining just enough of the `search` function so our test will compile">
+<Listing number="12-16" file-name="src/lib.rs" caption="`search` ফাংশনের কেবল যথেষ্ট সংজ্ঞা দেওয়া যাতে আমাদের test compile হবে">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
@@ -65,68 +38,45 @@ fast, productive."`
 
 </Listing>
 
-Notice that we need to define an explicit lifetime `'a` in the signature of
-`search` and use that lifetime with the `contents` argument and the return
-value. Recall in [Chapter 10][ch10-lifetimes]<!-- ignore --> that the lifetime
-parameters specify which argument lifetime is connected to the lifetime of the
-return value. In this case, we indicate that the returned vector should contain
-string slices that reference slices of the argument `contents` (rather than the
-argument `query`).
+লক্ষ্য করুন যে `search`-এর সংজ্ঞায় আমাদের একটি স্পষ্ট লাইফটাইম `'a` সংজ্ঞায়িত করতে হবে এবং `contents` আর্গুমেন্ট এবং রিটার্ন ভ্যালু সহ সেই লাইফটাইম ব্যবহার করতে হবে। [অধ্যায় 10][ch10-lifetimes]<!-- ignore -->-এ মনে রাখবেন যে লাইফটাইম প্যারামিটারগুলি নির্দিষ্ট করে যে কোন আর্গুমেন্টের লাইফটাইম রিটার্ন ভ্যালুর লাইফটাইমের সাথে সংযুক্ত। এই ক্ষেত্রে, আমরা নির্দেশ করি যে রিটার্ন করা ভেক্টরে স্ট্রিং স্লাইস থাকা উচিত যা আর্গুমেন্ট `contents`-এর স্লাইসগুলিকে রেফারেন্স করে (আর্গুমেন্ট `query` এর পরিবর্তে)।
 
-In other words, we tell Rust that the data returned by the `search` function
-will live as long as the data passed into the `search` function in the
-`contents` argument. This is important! The data referenced _by_ a slice needs
-to be valid for the reference to be valid; if the compiler assumes we’re making
-string slices of `query` rather than `contents`, it will do its safety checking
-incorrectly.
+অন্য কথায়, আমরা Rust কে বলি যে `search` ফাংশন দ্বারা ফেরত দেওয়া ডেটা `contents` আর্গুমেন্টে `search` ফাংশনে পাস করা ডেটা যতক্ষণ থাকবে ততক্ষণ পর্যন্ত লাইভ থাকবে। এটা গুরুত্বপূর্ণ! একটি স্লাইস দ্বারা রেফারেন্স করা ডেটা বৈধ হওয়ার জন্য রেফারেন্সটি বৈধ হতে হবে; যদি কম্পাইলার ধরে নেয় যে আমরা `contents` এর পরিবর্তে `query` এর স্ট্রিং স্লাইস তৈরি করছি, তবে এটি তার নিরাপত্তা পরীক্ষা ভুলভাবে করবে।
 
-If we forget the lifetime annotations and try to compile this function, we’ll
-get this error:
+যদি আমরা লাইফটাইম টীকাগুলি ভুলে যাই এবং এই ফাংশনটি কম্পাইল করার চেষ্টা করি তবে আমরা এই error পাব:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-02-missing-lifetimes/output.txt}}
 ```
 
-Rust can’t possibly know which of the two arguments we need, so we need to tell
-it explicitly. Because `contents` is the argument that contains all of our text
-and we want to return the parts of that text that match, we know `contents` is
-the argument that should be connected to the return value using the lifetime
-syntax.
+Rust সম্ভবত জানতে পারে না যে আমাদের কোন দুটি আর্গুমেন্টের প্রয়োজন, তাই আমাদের এটি স্পষ্টভাবে জানাতে হবে। যেহেতু `contents` হল সেই আর্গুমেন্ট যাতে আমাদের সমস্ত text রয়েছে এবং আমরা সেই text-এর অংশগুলি ফেরত দিতে চাই যা মিলে যায়, তাই আমরা জানি যে `contents` হল সেই আর্গুমেন্ট যা লাইফটাইম সিনট্যাক্স ব্যবহার করে রিটার্ন ভ্যালুর সাথে সংযুক্ত হওয়া উচিত।
 
-Other programming languages don’t require you to connect arguments to return
-values in the signature, but this practice will get easier over time. You might
-want to compare this example with the examples in the [“Validating References
-with Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> section
-in Chapter 10.
+অন্যান্য প্রোগ্রামিং ভাষাগুলিতে আপনাকে সংজ্ঞায় রিটার্ন ভ্যালুর সাথে আর্গুমেন্টগুলিকে সংযুক্ত করার প্রয়োজন হয় না, তবে এই অনুশীলন সময়ের সাথে সহজ হয়ে যাবে। আপনি [“লাইফটাইম সহ রেফারেন্স যাচাইকরণ”][validating-references-with-lifetimes]<!-- ignore --> বিভাগে অধ্যায় 10-এর উদাহরণগুলির সাথে এই উদাহরণটি তুলনা করতে চাইতে পারেন।
 
-Now let’s run the test:
+এখন test টি চালাই:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-16/output.txt}}
 ```
 
-Great, the test fails, exactly as we expected. Let’s get the test to pass!
+দারুণ, test টি fail করেছে, ঠিক যেমনটি আমরা আশা করেছিলাম। চলুন test টি পাস করাই!
 
-### Writing Code to Pass the Test
+### Test পাস করার জন্য কোড লেখা
 
-Currently, our test is failing because we always return an empty vector. To fix
-that and implement `search`, our program needs to follow these steps:
+বর্তমানে, আমাদের test fail করছে কারণ আমরা সবসময় একটি খালি ভেক্টর ফেরত দিই। এটি ঠিক করতে এবং `search` প্রয়োগ করতে, আমাদের প্রোগ্রামকে নিম্নলিখিত পদক্ষেপগুলি অনুসরণ করতে হবে:
 
-1. Iterate through each line of the contents.
-2. Check whether the line contains our query string.
-3. If it does, add it to the list of values we’re returning.
-4. If it doesn’t, do nothing.
-5. Return the list of results that match.
+1.  বিষয়বস্তুর প্রতিটি লাইনের মাধ্যমে পুনরাবৃত্তি করুন।
+2.  লাইনটিতে আমাদের query string আছে কিনা তা পরীক্ষা করুন।
+3.  যদি থাকে, তাহলে আমরা যে মানগুলি ফেরত দিচ্ছি তার তালিকায় যোগ করুন।
+4.  যদি না থাকে তবে কিছুই করবেন না।
+5.  ফলাফলের তালিকাটি ফেরত দিন যা মিলে যায়।
 
-Let’s work through each step, starting with iterating through lines.
+আসুন প্রতিটি ধাপের মাধ্যমে কাজ করি, লাইনগুলির মাধ্যমে পুনরাবৃত্তি করা দিয়ে শুরু করি।
 
-#### Iterating Through Lines with the `lines` Method
+#### `lines` মেথড দিয়ে লাইনের মধ্যে পুনরাবৃত্তি করা
 
-Rust has a helpful method to handle line-by-line iteration of strings,
-conveniently named `lines`, that works as shown in Listing 12-17. Note that
-this won’t compile yet.
+Rust-এর string-এর লাইন-বাই-লাইন পুনরাবৃত্তি করার জন্য একটি সহায়ক মেথড রয়েছে, যার নাম `lines`, যা Listing 12-17 এ দেখানো হয়েছে। মনে রাখবেন যে এটি এখনও compile হবে না।
 
-<Listing number="12-17" file-name="src/lib.rs" caption="Iterating through each line in `contents`">
+<Listing number="12-17" file-name="src/lib.rs" caption="`contents`-এর প্রতিটি লাইনের মাধ্যমে পুনরাবৃত্তি করা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-17/src/lib.rs:here}}
@@ -134,19 +84,13 @@ this won’t compile yet.
 
 </Listing>
 
-The `lines` method returns an iterator. We’ll talk about iterators in depth in
-[Chapter 13][ch13-iterators]<!-- ignore -->, but recall that you saw this way
-of using an iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a
-`for` loop with an iterator to run some code on each item in a collection.
+`lines` মেথড একটি iterator ফেরত দেয়। আমরা [অধ্যায় 13][ch13-iterators]<!-- ignore -->-এ iterator নিয়ে বিস্তারিত আলোচনা করব, কিন্তু মনে রাখবেন যে আপনি [Listing 3-5][ch3-iter]<!-- ignore -->-এ iterator ব্যবহারের এই উপায়টি দেখেছিলেন, যেখানে আমরা একটি `for` লুপ ব্যবহার করেছি একটি iterator এর সাথে একটি collection এর প্রতিটি আইটেমের উপর কিছু কোড চালানোর জন্য।
 
-#### Searching Each Line for the Query
+#### Query-এর জন্য প্রতিটি লাইন অনুসন্ধান করা
 
-Next, we’ll check whether the current line contains our query string.
-Fortunately, strings have a helpful method named `contains` that does this for
-us! Add a call to the `contains` method in the `search` function, as shown in
-Listing 12-18. Note that this still won’t compile yet.
+এর পরে, আমরা পরীক্ষা করব যে বর্তমান লাইনে আমাদের query string আছে কিনা। সৌভাগ্যক্রমে, string-এর `contains` নামের একটি সহায়ক মেথড আছে যা আমাদের জন্য এটি করে! `search` ফাংশনে `contains` মেথডের একটি কল যোগ করুন, যেমন Listing 12-18 এ দেখানো হয়েছে। মনে রাখবেন যে এটি এখনও compile হবে না।
 
-<Listing number="12-18" file-name="src/lib.rs" caption="Adding functionality to see whether the line contains the string in `query`">
+<Listing number="12-18" file-name="src/lib.rs" caption="লাইনটিতে `query`-এর string আছে কিনা তা দেখার জন্য কার্যকারিতা যোগ করা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-18/src/lib.rs:here}}
@@ -154,18 +98,13 @@ Listing 12-18. Note that this still won’t compile yet.
 
 </Listing>
 
-At the moment, we’re building up functionality. To get the code to compile, we
-need to return a value from the body as we indicated we would in the function
-signature.
+এই মুহূর্তে, আমরা কার্যকারিতা তৈরি করছি। কোডটি compile করার জন্য, আমাদের ফাংশন সংজ্ঞায় যেমন ইঙ্গিত দিয়েছিলাম বডি থেকে একটি মান ফেরত দিতে হবে।
 
-#### Storing Matching Lines
+#### ম্যাচিং লাইনগুলি সংরক্ষণ করা
 
-To finish this function, we need a way to store the matching lines that we want
-to return. For that, we can make a mutable vector before the `for` loop and
-call the `push` method to store a `line` in the vector. After the `for` loop,
-we return the vector, as shown in Listing 12-19.
+এই ফাংশনটি শেষ করতে, আমাদের ম্যাচিং লাইনগুলি সংরক্ষণ করার একটি উপায় প্রয়োজন যা আমরা ফেরত দিতে চাই। এর জন্য, আমরা `for` লুপের আগে একটি পরিবর্তনযোগ্য ভেক্টর তৈরি করতে পারি এবং ভেক্টরে একটি `line` সংরক্ষণ করতে `push` মেথড কল করতে পারি। `for` লুপের পরে, আমরা ভেক্টরটি ফেরত দিই, যেমন Listing 12-19 এ দেখানো হয়েছে।
 
-<Listing number="12-19" file-name="src/lib.rs" caption="Storing the lines that match so we can return them">
+<Listing number="12-19" file-name="src/lib.rs" caption="যে লাইনগুলো মিলে যায় সেগুলো সংরক্ষণ করা যাতে আমরা সেগুলো ফেরত দিতে পারি">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:here}}
@@ -173,28 +112,19 @@ we return the vector, as shown in Listing 12-19.
 
 </Listing>
 
-Now the `search` function should return only the lines that contain `query`,
-and our test should pass. Let’s run the test:
+এখন `search` ফাংশনটি শুধুমাত্র সেই লাইনগুলি ফেরত দেবে যেগুলিতে `query` আছে, এবং আমাদের test পাস করা উচিত। test চালাই:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-19/output.txt}}
 ```
 
-Our test passed, so we know it works!
+আমাদের test পাস করেছে, তাই আমরা জানি যে এটি কাজ করে!
 
-At this point, we could consider opportunities for refactoring the
-implementation of the search function while keeping the tests passing to
-maintain the same functionality. The code in the search function isn’t too bad,
-but it doesn’t take advantage of some useful features of iterators. We’ll
-return to this example in [Chapter 13][ch13-iterators]<!-- ignore -->, where
-we’ll explore iterators in detail, and look at how to improve it.
+এই মুহুর্তে, আমরা `search` ফাংশনের বাস্তবতাকে refactor করার সুযোগগুলি বিবেচনা করতে পারি যখন test পাস করে একই কার্যকারিতা বজায় রাখে। `search` ফাংশনের কোড খুব খারাপ নয়, তবে এটি iterator-এর কিছু দরকারী বৈশিষ্ট্য ব্যবহার করে না। আমরা [অধ্যায় 13][ch13-iterators]<!-- ignore -->-এ এই উদাহরণে ফিরে আসব, যেখানে আমরা iterator নিয়ে বিস্তারিত আলোচনা করব এবং এটিকে কীভাবে উন্নত করা যায় তা দেখব।
 
-#### Using the `search` Function in the `run` Function
+#### `run` ফাংশনে `search` ফাংশন ব্যবহার করা
 
-Now that the `search` function is working and tested, we need to call `search`
-from our `run` function. We need to pass the `config.query` value and the
-`contents` that `run` reads from the file to the `search` function. Then `run`
-will print each line returned from `search`:
+এখন যেহেতু `search` ফাংশনটি কাজ করছে এবং test করা হয়েছে, তাই আমাদের `run` ফাংশন থেকে `search` কল করতে হবে। `search` ফাংশনে আমাদের `config.query` মান এবং `run` ফাংশন ফাইল থেকে যে `contents` পড়ে তা পাস করতে হবে। তারপর `run` ফাংশন `search` থেকে ফেরত আসা প্রতিটি লাইন প্রিন্ট করবে:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -202,38 +132,33 @@ will print each line returned from `search`:
 {{#rustdoc_include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/src/lib.rs:here}}
 ```
 
-We’re still using a `for` loop to return each line from `search` and print it.
+আমরা এখনও `search` থেকে প্রতিটি লাইন ফেরত দিতে এবং প্রিন্ট করতে একটি `for` লুপ ব্যবহার করছি।
 
-Now the entire program should work! Let’s try it out, first with a word that
-should return exactly one line from the Emily Dickinson poem: _frog_.
+এখন পুরো প্রোগ্রাম কাজ করা উচিত! আসুন এটি চেষ্টা করে দেখি, প্রথমে এমন একটি শব্দ দিয়ে যা এমিলি ডিকিনসনের কবিতা থেকে ঠিক একটি লাইন ফেরত দেবে: _frog_।
 
 ```console
 {{#include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/output.txt}}
 ```
 
-Cool! Now let’s try a word that will match multiple lines, like _body_:
+দারুণ! এখন এমন একটি শব্দ চেষ্টা করা যাক যা একাধিক লাইনের সাথে মিলবে, যেমন _body_:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-03-multiple-matches/output.txt}}
 ```
 
-And finally, let’s make sure that we don’t get any lines when we search for a
-word that isn’t anywhere in the poem, such as _monomorphization_:
+এবং অবশেষে, আসুন নিশ্চিত করি যে আমরা যখন এমন একটি শব্দ খুঁজি যা কবিতার কোথাও নেই, যেমন _monomorphization_: তখন আমরা কোনো লাইন পাব না:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-04-no-matches/output.txt}}
 ```
 
-Excellent! We’ve built our own mini version of a classic tool and learned a lot
-about how to structure applications. We’ve also learned a bit about file input
-and output, lifetimes, testing, and command line parsing.
+চমৎকার! আমরা একটি ক্লাসিক টুলের নিজস্ব মিনি সংস্করণ তৈরি করেছি এবং অ্যাপ্লিকেশনগুলি কীভাবে তৈরি করতে হয় সে সম্পর্কে অনেক কিছু শিখেছি। আমরা ফাইল ইনপুট এবং আউটপুট, লাইফটাইম, টেস্টিং এবং কমান্ড লাইন পার্সিং সম্পর্কেও কিছুটা শিখেছি।
 
-To round out this project, we’ll briefly demonstrate how to work with
-environment variables and how to print to standard error, both of which are
-useful when you’re writing command line programs.
+এই প্রকল্পটি শেষ করতে, আমরা সংক্ষেপে দেখাব কিভাবে এনভায়রনমেন্ট ভেরিয়েবলগুলির সাথে কাজ করতে হয় এবং কীভাবে স্ট্যান্ডার্ড error-এ প্রিন্ট করতে হয়, এই দুটিই কমান্ড লাইন প্রোগ্রাম লেখার সময় কাজে লাগে।
 
 [validating-references-with-lifetimes]: ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 [ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function
 [ch10-lifetimes]: ch10-03-lifetime-syntax.html
 [ch3-iter]: ch03-05-control-flow.html#looping-through-a-collection-with-for
 [ch13-iterators]: ch13-02-iterators.html
+```

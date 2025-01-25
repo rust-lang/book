@@ -1,39 +1,18 @@
-## Test Organization
+## পরীক্ষা কিভাবে সাজানো হয়
 
-As mentioned at the start of the chapter, testing is a complex discipline, and
-different people use different terminology and organization. The Rust community
-thinks about tests in terms of two main categories: unit tests and integration
-tests. _Unit tests_ are small and more focused, testing one module in isolation
-at a time, and can test private interfaces. _Integration tests_ are entirely
-external to your library and use your code in the same way any other external
-code would, using only the public interface and potentially exercising multiple
-modules per test.
+অধ্যায়ের শুরুতে যেমন উল্লেখ করা হয়েছে, পরীক্ষা একটি জটিল শৃঙ্খলা, এবং বিভিন্ন লোক বিভিন্ন শব্দ এবং সংগঠন ব্যবহার করে। রাস্ট সম্প্রদায় পরীক্ষাগুলোকে দুটি প্রধান বিভাগে বিবেচনা করে: ইউনিট পরীক্ষা এবং ইন্টিগ্রেশন পরীক্ষা। _ইউনিট পরীক্ষা_ ছোট এবং আরও ফোকাসড, যা একবারে একটি মডিউলকে আলাদাভাবে পরীক্ষা করে এবং ব্যক্তিগত ইন্টারফেসগুলো পরীক্ষা করতে পারে। _ইন্টিগ্রেশন পরীক্ষা_ আপনার লাইব্রেরির থেকে সম্পূর্ণভাবে বাহ্যিক এবং আপনার কোডটিকে অন্য কোনো বাহ্যিক কোড যেভাবে ব্যবহার করবে সেভাবে ব্যবহার করে, শুধুমাত্র পাবলিক ইন্টারফেস ব্যবহার করে এবং সম্ভবত প্রতি পরীক্ষায় একাধিক মডিউল ব্যবহার করে।
 
-Writing both kinds of tests is important to ensure that the pieces of your
-library are doing what you expect them to, separately and together.
+আপনার লাইব্রেরির অংশগুলো পৃথকভাবে এবং একত্রে আপনার প্রত্যাশা অনুযায়ী কাজ করছে কিনা তা নিশ্চিত করার জন্য উভয় ধরণের পরীক্ষা লেখা গুরুত্বপূর্ণ।
 
-### Unit Tests
+### ইউনিট পরীক্ষা
 
-The purpose of unit tests is to test each unit of code in isolation from the
-rest of the code to quickly pinpoint where code is and isn’t working as
-expected. You’ll put unit tests in the _src_ directory in each file with the
-code that they’re testing. The convention is to create a module named `tests`
-in each file to contain the test functions and to annotate the module with
-`cfg(test)`.
+ইউনিট পরীক্ষার উদ্দেশ্য হল কোডের প্রতিটি ইউনিটকে বাকি কোড থেকে আলাদা করে পরীক্ষা করা যাতে দ্রুত সনাক্ত করা যায় কোথায় কোডটি প্রত্যাশা অনুযায়ী কাজ করছে এবং কোথায় কাজ করছে না। আপনি আপনার ইউনিট পরীক্ষাগুলো _src_ ডিরেক্টরিতে প্রতিটি ফাইলের সাথে রাখবেন, যেখানে কোডটি পরীক্ষা করা হচ্ছে। প্রতিটি ফাইলে পরীক্ষা ফাংশনগুলো রাখার জন্য `tests` নামের একটি মডিউল তৈরি করা এবং মডিউলটিকে `cfg(test)` দিয়ে টীকা দেওয়া হল প্রথা।
 
-#### The Tests Module and `#[cfg(test)]`
+#### পরীক্ষা মডিউল এবং `#[cfg(test)]`
 
-The `#[cfg(test)]` annotation on the `tests` module tells Rust to compile and
-run the test code only when you run `cargo test`, not when you run `cargo
-build`. This saves compile time when you only want to build the library and
-saves space in the resultant compiled artifact because the tests are not
-included. You’ll see that because integration tests go in a different
-directory, they don’t need the `#[cfg(test)]` annotation. However, because unit
-tests go in the same files as the code, you’ll use `#[cfg(test)]` to specify
-that they shouldn’t be included in the compiled result.
+`tests` মডিউলের `#[cfg(test)]` টীকাটি রাস্টকে বলে যে আপনি যখন `cargo test` চালান তখনই শুধুমাত্র পরীক্ষার কোড কম্পাইল এবং রান করতে, `cargo build` চালানোর সময় নয়। এটি কম্পাইল করার সময় বাঁচায় যখন আপনি শুধুমাত্র লাইব্রেরি তৈরি করতে চান এবং ফলস্বরূপ কম্পাইল করা আর্টিফ্যাক্টে স্থান বাঁচায় কারণ পরীক্ষাগুলো অন্তর্ভুক্ত করা হয় না। আপনি দেখতে পাবেন যে ইন্টিগ্রেশন পরীক্ষাগুলো একটি ভিন্ন ডিরেক্টরিতে যাওয়ায়, তাদের `#[cfg(test)]` টীকার প্রয়োজন নেই। যাইহোক, যেহেতু ইউনিট পরীক্ষাগুলো কোডের মতো একই ফাইলে যায়, তাই আপনি `#[cfg(test)]` ব্যবহার করে নির্দিষ্ট করবেন যে সেগুলো কম্পাইল করা ফলাফলে অন্তর্ভুক্ত করা উচিত নয়।
 
-Recall that when we generated the new `adder` project in the first section of
-this chapter, Cargo generated this code for us:
+মনে রাখবেন যে আমরা যখন এই অধ্যায়ের প্রথম বিভাগে নতুন `adder` প্রজেক্ট তৈরি করেছি, তখন Cargo আমাদের জন্য এই কোডটি তৈরি করেছিল:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -41,23 +20,15 @@ this chapter, Cargo generated this code for us:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-01/src/lib.rs}}
 ```
 
-On the automatically generated `tests` module, the attribute `cfg` stands for
-_configuration_ and tells Rust that the following item should only be included
-given a certain configuration option. In this case, the configuration option is
-`test`, which is provided by Rust for compiling and running tests. By using the
-`cfg` attribute, Cargo compiles our test code only if we actively run the tests
-with `cargo test`. This includes any helper functions that might be within this
-module, in addition to the functions annotated with `#[test]`.
+</Listing>
 
-#### Testing Private Functions
+স্বয়ংক্রিয়ভাবে তৈরি হওয়া `tests` মডিউলে, `cfg` অ্যাট্রিবিউটটি _কনফিগারেশন_ এর জন্য বোঝানো হয়েছে এবং রাস্টকে বলে যে নিম্নলিখিত আইটেমটি শুধুমাত্র একটি নির্দিষ্ট কনফিগারেশন অপশন দেওয়া হলেই অন্তর্ভুক্ত করা উচিত। এই ক্ষেত্রে, কনফিগারেশন অপশনটি হল `test`, যা রাস্ট দ্বারা পরীক্ষা কম্পাইল এবং চালানোর জন্য প্রদান করা হয়। `cfg` অ্যাট্রিবিউট ব্যবহার করে, Cargo আমাদের পরীক্ষার কোড তখনই কম্পাইল করে যখন আমরা `cargo test` দিয়ে সক্রিয়ভাবে পরীক্ষাগুলো চালাই। এর মধ্যে `#[test]` দিয়ে টীকা করা ফাংশনগুলোর পাশাপাশি এই মডিউলের মধ্যে থাকা যেকোনো সহায়ক ফাংশনও অন্তর্ভুক্ত।
 
-There’s debate within the testing community about whether or not private
-functions should be tested directly, and other languages make it difficult or
-impossible to test private functions. Regardless of which testing ideology you
-adhere to, Rust’s privacy rules do allow you to test private functions.
-Consider the code in Listing 11-12 with the private function `internal_adder`.
+#### ব্যক্তিগত ফাংশন পরীক্ষা করা
 
-<Listing number="11-12" file-name="src/lib.rs" caption="Testing a private function">
+পরীক্ষার সম্প্রদায়ের মধ্যে একটি বিতর্ক রয়েছে যে ব্যক্তিগত ফাংশনগুলো সরাসরি পরীক্ষা করা উচিত কিনা, এবং অন্যান্য ভাষা ব্যক্তিগত ফাংশনগুলো পরীক্ষা করা কঠিন বা অসম্ভব করে তোলে। আপনি যে পরীক্ষার আদর্শই মেনে চলেন না কেন, রাস্টের গোপনীয়তার নিয়মগুলো আপনাকে ব্যক্তিগত ফাংশন পরীক্ষা করার অনুমতি দেয়। Listing 11-12-এ `internal_adder` নামের ব্যক্তিগত ফাংশন সহ কোডটি বিবেচনা করুন।
+
+<Listing number="11-12" file-name="src/lib.rs" caption="একটি ব্যক্তিগত ফাংশন পরীক্ষা করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-12/src/lib.rs}}
@@ -65,35 +36,17 @@ Consider the code in Listing 11-12 with the private function `internal_adder`.
 
 </Listing>
 
-Note that the `internal_adder` function is not marked as `pub`. Tests are just
-Rust code, and the `tests` module is just another module. As we discussed in
-the [“Paths for Referring to an Item in the Module Tree”][paths]<!-- ignore -->
-section, items in child modules can use the items in their ancestor modules. In
-this test, we bring all of the `tests` module’s parent’s items into scope with
-`use super::*`, and then the test can call `internal_adder`. If you don’t think
-private functions should be tested, there’s nothing in Rust that will compel
-you to do so.
+মনে রাখবেন যে `internal_adder` ফাংশনটিকে `pub` হিসাবে চিহ্নিত করা হয়নি। পরীক্ষাগুলো কেবল রাস্ট কোড এবং `tests` মডিউলটি অন্য একটি মডিউল। [“মডিউল ট্রি-এর একটি আইটেম উল্লেখ করার জন্য পাথ”][paths]<!-- ignore --> বিভাগে আমরা যেমন আলোচনা করেছি, চাইল্ড মডিউলের আইটেমগুলো তাদের পূর্বপুরুষ মডিউলের আইটেমগুলো ব্যবহার করতে পারে। এই পরীক্ষায়, আমরা `use super::*` দিয়ে `tests` মডিউলের প্যারেন্টের সমস্ত আইটেমকে স্কোপে আনি, এবং তারপরে পরীক্ষাটি `internal_adder` কল করতে পারে। আপনি যদি মনে করেন যে ব্যক্তিগত ফাংশনগুলো পরীক্ষা করা উচিত নয়, তবে রাস্টে এমন কিছু নেই যা আপনাকে তা করতে বাধ্য করবে।
 
-### Integration Tests
+### ইন্টিগ্রেশন পরীক্ষা
 
-In Rust, integration tests are entirely external to your library. They use your
-library in the same way any other code would, which means they can only call
-functions that are part of your library’s public API. Their purpose is to test
-whether many parts of your library work together correctly. Units of code that
-work correctly on their own could have problems when integrated, so test
-coverage of the integrated code is important as well. To create integration
-tests, you first need a _tests_ directory.
+রাস্টে, ইন্টিগ্রেশন পরীক্ষাগুলো আপনার লাইব্রেরির থেকে সম্পূর্ণভাবে বাহ্যিক। তারা আপনার লাইব্রেরিটিকে অন্য যেকোনো কোডের মতো ব্যবহার করে, যার মানে তারা শুধুমাত্র আপনার লাইব্রেরির পাবলিক API-এর অংশ এমন ফাংশনগুলোকে কল করতে পারে। তাদের উদ্দেশ্য হল পরীক্ষা করা যে আপনার লাইব্রেরির বিভিন্ন অংশ সঠিকভাবে কাজ করে কিনা। কোডের ইউনিটগুলো নিজেরাই সঠিকভাবে কাজ করলে ইন্টিগ্রেট করার সময় সমস্যা হতে পারে, তাই ইন্টিগ্রেটেড কোডের পরীক্ষা কভারেজও গুরুত্বপূর্ণ। ইন্টিগ্রেশন পরীক্ষা তৈরি করতে, প্রথমে আপনার একটি _tests_ ডিরেক্টরি প্রয়োজন।
 
-#### The _tests_ Directory
+#### _tests_ ডিরেক্টরি
 
-We create a _tests_ directory at the top level of our project directory, next
-to _src_. Cargo knows to look for integration test files in this directory. We
-can then make as many test files as we want, and Cargo will compile each of the
-files as an individual crate.
+আমরা আমাদের প্রজেক্ট ডিরেক্টরির একেবারে উপরে _src_ এর পাশে একটি _tests_ ডিরেক্টরি তৈরি করি। Cargo এই ডিরেক্টরিতে ইন্টিগ্রেশন পরীক্ষার ফাইলগুলো দেখতে জানে। তারপরে আমরা যত খুশি পরীক্ষার ফাইল তৈরি করতে পারি এবং Cargo প্রতিটি ফাইলকে একটি পৃথক ক্রেট হিসাবে কম্পাইল করবে।
 
-Let’s create an integration test. With the code in Listing 11-12 still in the
-_src/lib.rs_ file, make a _tests_ directory, and create a new file named
-_tests/integration_test.rs_. Your directory structure should look like this:
+আসুন একটি ইন্টিগ্রেশন পরীক্ষা তৈরি করি। _src/lib.rs_ ফাইলে Listing 11-12-এর কোডটি রেখে, একটি _tests_ ডিরেক্টরি তৈরি করুন এবং _tests/integration_test.rs_ নামের একটি নতুন ফাইল তৈরি করুন। আপনার ডিরেক্টরি কাঠামোটি দেখতে এইরকম হওয়া উচিত:
 
 ```text
 adder
@@ -105,9 +58,9 @@ adder
     └── integration_test.rs
 ```
 
-Enter the code in Listing 11-13 into the _tests/integration_test.rs_ file.
+Listing 11-13-এর কোডটি _tests/integration_test.rs_ ফাইলে লিখুন।
 
-<Listing number="11-13" file-name="tests/integration_test.rs" caption="An integration test of a function in the `adder` crate">
+<Listing number="11-13" file-name="tests/integration_test.rs" caption="`adder` ক্রেটের একটি ফাংশনের একটি ইন্টিগ্রেশন পরীক্ষা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-13/tests/integration_test.rs}}
@@ -115,65 +68,37 @@ Enter the code in Listing 11-13 into the _tests/integration_test.rs_ file.
 
 </Listing>
 
-Each file in the _tests_ directory is a separate crate, so we need to bring our
-library into each test crate’s scope. For that reason we add `use
-adder::add_two;` at the top of the code, which we didn’t need in the unit tests.
+_tests_ ডিরেক্টরির প্রতিটি ফাইল একটি পৃথক ক্রেট, তাই আমাদের প্রতিটি পরীক্ষার ক্রেটের স্কোপে আমাদের লাইব্রেরি আনতে হবে। সেই কারণে আমরা কোডের শীর্ষে `use
+adder::add_two;` যোগ করি, যা ইউনিট পরীক্ষাগুলোতে আমাদের প্রয়োজন ছিল না।
 
-We don’t need to annotate any code in _tests/integration_test.rs_ with
-`#[cfg(test)]`. Cargo treats the _tests_ directory specially and compiles files
-in this directory only when we run `cargo test`. Run `cargo test` now:
+আমাদের _tests/integration_test.rs_-এ কোনো কোড `#[cfg(test)]` দিয়ে টীকা করার প্রয়োজন নেই। Cargo _tests_ ডিরেক্টরিটিকে বিশেষভাবে বিবেচনা করে এবং আমরা যখন `cargo test` চালাই তখনই শুধুমাত্র এই ডিরেক্টরির ফাইলগুলো কম্পাইল করে। এখন `cargo test` চালান:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-13/output.txt}}
 ```
 
-The three sections of output include the unit tests, the integration test, and
-the doc tests. Note that if any test in a section fails, the following sections
-will not be run. For example, if a unit test fails, there won’t be any output
-for integration and doc tests because those tests will only be run if all unit
-tests are passing.
+আউটপুটের তিনটি বিভাগে ইউনিট পরীক্ষা, ইন্টিগ্রেশন পরীক্ষা এবং ডক পরীক্ষা অন্তর্ভুক্ত রয়েছে। মনে রাখবেন যে একটি বিভাগের কোনো পরীক্ষা ব্যর্থ হলে, নিম্নলিখিত বিভাগগুলো চলবে না। উদাহরণস্বরূপ, যদি একটি ইউনিট পরীক্ষা ব্যর্থ হয়, তাহলে ইন্টিগ্রেশন এবং ডক পরীক্ষার জন্য কোনো আউটপুট থাকবে না কারণ সেই পরীক্ষাগুলো শুধুমাত্র তখনই চলবে যদি সমস্ত ইউনিট পরীক্ষা পাস হয়।
 
-The first section for the unit tests is the same as we’ve been seeing: one line
-for each unit test (one named `internal` that we added in Listing 11-12) and
-then a summary line for the unit tests.
+ইউনিট পরীক্ষাগুলোর জন্য প্রথম বিভাগটি আগের মতোই: প্রতিটি ইউনিট পরীক্ষার জন্য একটি লাইন (একটি `internal` নামের যা আমরা Listing 11-12-এ যোগ করেছি) এবং তারপরে ইউনিট পরীক্ষাগুলোর জন্য একটি সারসংক্ষেপ লাইন।
 
-The integration tests section starts with the line `Running
-tests/integration_test.rs`. Next, there is a line for each test function in
-that integration test and a summary line for the results of the integration
-test just before the `Doc-tests adder` section starts.
+ইন্টিগ্রেশন পরীক্ষার বিভাগটি `Running
+tests/integration_test.rs` লাইন দিয়ে শুরু হয়। এর পরে, সেই ইন্টিগ্রেশন পরীক্ষার প্রতিটি পরীক্ষা ফাংশনের জন্য একটি লাইন এবং `Doc-tests adder` বিভাগটি শুরু হওয়ার ঠিক আগে ইন্টিগ্রেশন পরীক্ষার ফলাফলের জন্য একটি সারসংক্ষেপ লাইন রয়েছে।
 
-Each integration test file has its own section, so if we add more files in the
-_tests_ directory, there will be more integration test sections.
+প্রতিটি ইন্টিগ্রেশন পরীক্ষা ফাইলের নিজস্ব বিভাগ রয়েছে, তাই যদি আমরা _tests_ ডিরেক্টরিতে আরও ফাইল যোগ করি, তাহলে আরও ইন্টিগ্রেশন পরীক্ষার বিভাগ থাকবে।
 
-We can still run a particular integration test function by specifying the test
-function’s name as an argument to `cargo test`. To run all the tests in a
-particular integration test file, use the `--test` argument of `cargo test`
-followed by the name of the file:
+আমরা এখনও `cargo test`-এর একটি আর্গুমেন্ট হিসাবে পরীক্ষার ফাংশনের নামটি উল্লেখ করে একটি নির্দিষ্ট ইন্টিগ্রেশন পরীক্ষা ফাংশন চালাতে পারি। একটি নির্দিষ্ট ইন্টিগ্রেশন পরীক্ষা ফাইলের সমস্ত পরীক্ষা চালাতে, `cargo test`-এর `--test` আর্গুমেন্টটি ব্যবহার করুন এবং তারপরে ফাইলটির নাম দিন:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/output-only-05-single-integration/output.txt}}
 ```
 
-This command runs only the tests in the _tests/integration_test.rs_ file.
+এই কমান্ডটি শুধুমাত্র _tests/integration_test.rs_ ফাইলের পরীক্ষাগুলো চালায়।
 
-#### Submodules in Integration Tests
+#### ইন্টিগ্রেশন পরীক্ষায় সাবমডিউল
 
-As you add more integration tests, you might want to make more files in the
-_tests_ directory to help organize them; for example, you can group the test
-functions by the functionality they’re testing. As mentioned earlier, each file
-in the _tests_ directory is compiled as its own separate crate, which is useful
-for creating separate scopes to more closely imitate the way end users will be
-using your crate. However, this means files in the _tests_ directory don’t
-share the same behavior as files in _src_ do, as you learned in Chapter 7
-regarding how to separate code into modules and files.
+আপনি যখন আরও ইন্টিগ্রেশন পরীক্ষা যোগ করেন, তখন আপনি সেগুলোকে সাজাতে সাহায্য করার জন্য _tests_ ডিরেক্টরিতে আরও ফাইল তৈরি করতে চাইতে পারেন; উদাহরণস্বরূপ, আপনি পরীক্ষা করা কার্যকারিতা অনুসারে পরীক্ষা ফাংশনগুলোকে গ্রুপ করতে পারেন। পূর্বে উল্লিখিত হিসাবে, _tests_ ডিরেক্টরির প্রতিটি ফাইল তার নিজস্ব পৃথক ক্রেট হিসাবে কম্পাইল করা হয়, যা শেষ ব্যবহারকারীরা আপনার ক্রেটটি কীভাবে ব্যবহার করবে তার সাথে আরও ঘনিষ্ঠভাবে অনুকরণ করার জন্য পৃথক স্কোপ তৈরি করার জন্য উপযোগী। যাইহোক, এর মানে হল _tests_ ডিরেক্টরির ফাইলগুলো _src_-এর ফাইলগুলোর মতো একই আচরণ শেয়ার করে না, যেমনটি আপনি Chapter 7-এ শিখেছেন কিভাবে কোডকে মডিউল এবং ফাইলগুলোতে আলাদা করতে হয় সে সম্পর্কে।
 
-The different behavior of _tests_ directory files is most noticeable when you
-have a set of helper functions to use in multiple integration test files and
-you try to follow the steps in the [“Separating Modules into Different
-Files”][separating-modules-into-files]<!-- ignore --> section of Chapter 7 to
-extract them into a common module. For example, if we create _tests/common.rs_
-and place a function named `setup` in it, we can add some code to `setup` that
-we want to call from multiple test functions in multiple test files:
+_tests_ ডিরেক্টরি ফাইলগুলোর ভিন্ন আচরণ সবচেয়ে বেশি লক্ষণীয় যখন আপনার একাধিক ইন্টিগ্রেশন পরীক্ষার ফাইলে ব্যবহার করার জন্য সহায়ক ফাংশনগুলোর একটি সেট থাকে এবং আপনি সেগুলোকে একটি সাধারণ মডিউলে বের করার জন্য Chapter 7-এর [“বিভিন্ন ফাইলে মডিউলগুলো আলাদা করা”][separating-modules-into-files]<!-- ignore --> বিভাগের ধাপগুলো অনুসরণ করার চেষ্টা করেন। উদাহরণস্বরূপ, যদি আমরা _tests/common.rs_ তৈরি করি এবং এর মধ্যে `setup` নামের একটি ফাংশন রাখি, তবে আমরা `setup`-এ কিছু কোড যোগ করতে পারি যা আমরা একাধিক পরীক্ষার ফাইলগুলোতে একাধিক পরীক্ষা ফাংশন থেকে কল করতে চাই:
 
 <span class="filename">Filename: tests/common.rs</span>
 
@@ -181,19 +106,13 @@ we want to call from multiple test functions in multiple test files:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-12-shared-test-code-problem/tests/common.rs}}
 ```
 
-When we run the tests again, we’ll see a new section in the test output for the
-_common.rs_ file, even though this file doesn’t contain any test functions nor
-did we call the `setup` function from anywhere:
+যখন আমরা আবার পরীক্ষাগুলো চালাব, তখন আমরা _common.rs_ ফাইলের জন্য পরীক্ষার আউটপুটে একটি নতুন বিভাগ দেখতে পাব, যদিও এই ফাইলে কোনো পরীক্ষা ফাংশন নেই এবং আমরা কোথাও থেকে `setup` ফাংশনটিও কল করিনি:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-12-shared-test-code-problem/output.txt}}
 ```
 
-Having `common` appear in the test results with `running 0 tests` displayed for
-it is not what we wanted. We just wanted to share some code with the other
-integration test files. To avoid having `common` appear in the test output,
-instead of creating _tests/common.rs_, we’ll create _tests/common/mod.rs_. The
-project directory now looks like this:
+`common`-কে `running 0 tests` সহ পরীক্ষার ফলাফলে দেখানো আমরা যা চেয়েছিলাম তা নয়। আমরা শুধু অন্যান্য ইন্টিগ্রেশন পরীক্ষার ফাইলের সাথে কিছু কোড শেয়ার করতে চেয়েছিলাম। পরীক্ষার আউটপুটে `common` দেখানো এড়াতে, _tests/common.rs_ তৈরি করার পরিবর্তে, আমরা _tests/common/mod.rs_ তৈরি করব। প্রজেক্ট ডিরেক্টরিটি এখন এইরকম দেখাচ্ছে:
 
 ```text
 ├── Cargo.lock
@@ -206,18 +125,9 @@ project directory now looks like this:
     └── integration_test.rs
 ```
 
-This is the older naming convention that Rust also understands that we
-mentioned in the [“Alternate File Paths”][alt-paths]<!-- ignore --> section of
-Chapter 7. Naming the file this way tells Rust not to treat the `common` module
-as an integration test file. When we move the `setup` function code into
-_tests/common/mod.rs_ and delete the _tests/common.rs_ file, the section in the
-test output will no longer appear. Files in subdirectories of the _tests_
-directory don’t get compiled as separate crates or have sections in the test
-output.
+এটি পুরানো নামকরণের প্রথা যা রাস্টও বোঝে যা আমরা Chapter 7-এর [“বিকল্প ফাইল পাথ”][alt-paths]<!-- ignore --> বিভাগে উল্লেখ করেছি। এইভাবে ফাইলটির নামকরণ করা রাস্টকে বলে যে `common` মডিউলটিকে একটি ইন্টিগ্রেশন পরীক্ষার ফাইল হিসাবে বিবেচনা না করতে। যখন আমরা `setup` ফাংশনের কোডটি _tests/common/mod.rs_-এ নিয়ে যাই এবং _tests/common.rs_ ফাইলটি মুছে ফেলি, তখন পরীক্ষার আউটপুটে সেই বিভাগটি আর প্রদর্শিত হবে না। _tests_ ডিরেক্টরির সাবডিরেক্টরিগুলোর ফাইলগুলো আলাদা ক্রেট হিসাবে কম্পাইল করা হয় না বা পরীক্ষার আউটপুটে তাদের বিভাগ থাকে না।
 
-After we’ve created _tests/common/mod.rs_, we can use it from any of the
-integration test files as a module. Here’s an example of calling the `setup`
-function from the `it_adds_two` test in _tests/integration_test.rs_:
+_tests/common/mod.rs_ তৈরি করার পরে, আমরা এটিকে যেকোনো ইন্টিগ্রেশন পরীক্ষার ফাইল থেকে একটি মডিউল হিসাবে ব্যবহার করতে পারি। এখানে _tests/integration_test.rs_-এ `it_adds_two` পরীক্ষা থেকে `setup` ফাংশন কল করার একটি উদাহরণ দেওয়া হল:
 
 <span class="filename">Filename: tests/integration_test.rs</span>
 
@@ -225,38 +135,19 @@ function from the `it_adds_two` test in _tests/integration_test.rs_:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-13-fix-shared-test-code-problem/tests/integration_test.rs}}
 ```
 
-Note that the `mod common;` declaration is the same as the module declaration
-we demonstrated in Listing 7-21. Then, in the test function, we can call the
-`common::setup()` function.
+মনে রাখবেন যে `mod common;` ঘোষণাটি মডিউল ঘোষণার মতোই যা আমরা Listing 7-21-এ দেখিয়েছি। তারপর, পরীক্ষার ফাংশনে, আমরা `common::setup()` ফাংশন কল করতে পারি।
 
-#### Integration Tests for Binary Crates
+#### বাইনারি ক্রেটের জন্য ইন্টিগ্রেশন পরীক্ষা
 
-If our project is a binary crate that only contains a _src/main.rs_ file and
-doesn’t have a _src/lib.rs_ file, we can’t create integration tests in the
-_tests_ directory and bring functions defined in the _src/main.rs_ file into
-scope with a `use` statement. Only library crates expose functions that other
-crates can use; binary crates are meant to be run on their own.
+যদি আমাদের প্রজেক্টটি একটি বাইনারি ক্রেট হয় যাতে শুধুমাত্র একটি _src/main.rs_ ফাইল থাকে এবং _src/lib.rs_ ফাইল না থাকে, তাহলে আমরা _tests_ ডিরেক্টরিতে ইন্টিগ্রেশন পরীক্ষা তৈরি করতে পারি না এবং `use` স্টেটমেন্ট দিয়ে _src/main.rs_ ফাইলে সংজ্ঞায়িত ফাংশনগুলোকে স্কোপে আনতে পারি না। শুধুমাত্র লাইব্রেরি ক্রেটগুলো এমন ফাংশন প্রকাশ করে যা অন্য ক্রেটগুলো ব্যবহার করতে পারে; বাইনারি ক্রেটগুলো নিজেদের চালানোর জন্য তৈরি করা হয়েছে।
 
-This is one of the reasons Rust projects that provide a binary have a
-straightforward _src/main.rs_ file that calls logic that lives in the
-_src/lib.rs_ file. Using that structure, integration tests _can_ test the
-library crate with `use` to make the important functionality available. If the
-important functionality works, the small amount of code in the _src/main.rs_
-file will work as well, and that small amount of code doesn’t need to be tested.
+এটি সেই কারণগুলোর মধ্যে একটি যার জন্য বাইনারি প্রদানকারী রাস্ট প্রজেক্টগুলোতে একটি সরল _src/main.rs_ ফাইল থাকে যা _src/lib.rs_ ফাইলে থাকা লজিককে কল করে। সেই কাঠামো ব্যবহার করে, ইন্টিগ্রেশন পরীক্ষাগুলো গুরুত্বপূর্ণ কার্যকারিতা উপলব্ধ করতে `use` ব্যবহার করে লাইব্রেরি ক্রেটটি পরীক্ষা করতে _পারে_। যদি গুরুত্বপূর্ণ কার্যকারিতা কাজ করে, তবে _src/main.rs_ ফাইলের সামান্য কোডটিও কাজ করবে এবং সেই সামান্য কোডটি পরীক্ষা করার প্রয়োজন নেই।
 
-## Summary
+## সারসংক্ষেপ
 
-Rust’s testing features provide a way to specify how code should function to
-ensure it continues to work as you expect, even as you make changes. Unit tests
-exercise different parts of a library separately and can test private
-implementation details. Integration tests check that many parts of the library
-work together correctly, and they use the library’s public API to test the code
-in the same way external code will use it. Even though Rust’s type system and
-ownership rules help prevent some kinds of bugs, tests are still important to
-reduce logic bugs having to do with how your code is expected to behave.
+রাস্টের পরীক্ষার বৈশিষ্ট্যগুলো কোডটি কীভাবে কাজ করা উচিত তা নির্দিষ্ট করার একটি উপায় প্রদান করে যাতে আপনি পরিবর্তন করার পরেও এটি আপনার প্রত্যাশা অনুযায়ী কাজ করা চালিয়ে যায়। ইউনিট পরীক্ষাগুলো একটি লাইব্রেরির বিভিন্ন অংশকে আলাদাভাবে ব্যবহার করে এবং ব্যক্তিগত বাস্তবায়নের বিবরণ পরীক্ষা করতে পারে। ইন্টিগ্রেশন পরীক্ষাগুলো পরীক্ষা করে যে লাইব্রেরির বিভিন্ন অংশ একসাথে সঠিকভাবে কাজ করে কিনা এবং তারা কোড পরীক্ষা করার জন্য লাইব্রেরির পাবলিক API ব্যবহার করে, ঠিক যেমন বাহ্যিক কোড এটিকে ব্যবহার করবে। এমনকি রাস্টের টাইপ সিস্টেম এবং মালিকানার নিয়মগুলো কিছু ধরণের বাগ প্রতিরোধ করতে সাহায্য করলেও, আপনার কোডটি কীভাবে আচরণ করার কথা তার সাথে সম্পর্কিত লজিক বাগগুলো কমাতে পরীক্ষাগুলো এখনও গুরুত্বপূর্ণ।
 
-Let’s combine the knowledge you learned in this chapter and in previous
-chapters to work on a project!
+আসুন এই অধ্যায় এবং আগের অধ্যায়গুলোতে আপনি যে জ্ঞান শিখেছেন তা একত্রিত করে একটি প্রজেক্টে কাজ করি!
 
 [paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
 [separating-modules-into-files]: ch07-05-separating-modules-into-different-files.html

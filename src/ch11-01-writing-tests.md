@@ -1,38 +1,22 @@
-## How to Write Tests
+## কিভাবে পরীক্ষা লিখতে হয়
 
-Tests are Rust functions that verify that the non-test code is functioning in
-the expected manner. The bodies of test functions typically perform these three
-actions:
+পরীক্ষা হল রাস্ট ফাংশন যা যাচাই করে যে অ-পরীক্ষা কোডটি প্রত্যাশিত পদ্ধতিতে কাজ করছে। পরীক্ষার ফাংশনের বডিগুলো সাধারণত এই তিনটি কাজ করে:
 
-- Set up any needed data or state.
-- Run the code you want to test.
-- Assert that the results are what you expect.
+- প্রয়োজনীয় ডেটা বা অবস্থা সেট আপ করুন।
+- আপনি যে কোডটি পরীক্ষা করতে চান সেটি চালান।
+- দাবি করুন যে ফলাফলগুলো আপনার প্রত্যাশা অনুযায়ী।
 
-Let’s look at the features Rust provides specifically for writing tests that
-take these actions, which include the `test` attribute, a few macros, and the
-`should_panic` attribute.
+আসুন দেখি রাস্ট বিশেষভাবে পরীক্ষা লেখার জন্য কী কী বৈশিষ্ট্য প্রদান করে, যার মধ্যে `test` অ্যাট্রিবিউট, কয়েকটি ম্যাক্রো এবং `should_panic` অ্যাট্রিবিউট অন্তর্ভুক্ত রয়েছে।
 
-### The Anatomy of a Test Function
+### একটি পরীক্ষার ফাংশনের গঠন
 
-At its simplest, a test in Rust is a function that’s annotated with the `test`
-attribute. Attributes are metadata about pieces of Rust code; one example is
-the `derive` attribute we used with structs in Chapter 5. To change a function
-into a test function, add `#[test]` on the line before `fn`. When you run your
-tests with the `cargo test` command, Rust builds a test runner binary that runs
-the annotated functions and reports on whether each test function passes or
-fails.
+সবচেয়ে সহজভাবে, রাস্টে একটি পরীক্ষা হল একটি ফাংশন যা `test` অ্যাট্রিবিউট দিয়ে টীকা করা হয়। অ্যাট্রিবিউট হল রাস্ট কোডের অংশ সম্পর্কে মেটাডেটা; একটি উদাহরণ হল `derive` অ্যাট্রিবিউট যা আমরা Chapter 5-এ struct-এর সাথে ব্যবহার করেছি। একটি ফাংশনকে একটি পরীক্ষা ফাংশনে পরিবর্তন করতে, `fn`-এর আগের লাইনে `#[test]` যোগ করুন। আপনি যখন `cargo test` কমান্ড দিয়ে আপনার পরীক্ষাগুলো চালান, তখন রাস্ট একটি পরীক্ষা রানার বাইনারি তৈরি করে যা টীকা করা ফাংশনগুলো চালায় এবং প্রতিটি পরীক্ষা ফাংশন পাস হয়েছে নাকি ব্যর্থ হয়েছে তা রিপোর্ট করে।
 
-Whenever we make a new library project with Cargo, a test module with a test
-function in it is automatically generated for us. This module gives you a
-template for writing your tests so you don’t have to look up the exact
-structure and syntax every time you start a new project. You can add as many
-additional test functions and as many test modules as you want!
+যখনই আমরা Cargo-এর সাথে একটি নতুন লাইব্রেরি প্রজেক্ট তৈরি করি, তখন স্বয়ংক্রিয়ভাবে আমাদের জন্য একটি পরীক্ষা মডিউল তৈরি হয় যার ভিতরে একটি পরীক্ষা ফাংশন থাকে। এই মডিউলটি আপনাকে আপনার পরীক্ষা লেখার জন্য একটি টেমপ্লেট দেয় তাই প্রতিবার নতুন প্রজেক্ট শুরু করার সময় আপনাকে সঠিক গঠন এবং সিনট্যাক্স খুঁজে বের করতে হবে না। আপনি যত খুশি অতিরিক্ত পরীক্ষা ফাংশন এবং যত খুশি পরীক্ষা মডিউল যোগ করতে পারেন!
 
-We’ll explore some aspects of how tests work by experimenting with the template
-test before we actually test any code. Then we’ll write some real-world tests
-that call some code that we’ve written and assert that its behavior is correct.
+আমরা কোনো কোড পরীক্ষা করার আগে টেমপ্লেট পরীক্ষাটি নিয়ে পরীক্ষা করে দেখব কিভাবে পরীক্ষাগুলো কাজ করে, এবং এরপর আমরা কিছু বাস্তব পরীক্ষা লিখব যা আমরা লিখেছি এমন কিছু কোড কল করে এবং দাবি করে যে এর আচরণ সঠিক।
 
-Let’s create a new library project called `adder` that will add two numbers:
+আসুন `adder` নামের একটি নতুন লাইব্রেরি প্রজেক্ট তৈরি করি যা দুটি সংখ্যা যোগ করবে:
 
 ```console
 $ cargo new adder --lib
@@ -40,10 +24,9 @@ $ cargo new adder --lib
 $ cd adder
 ```
 
-The contents of the _src/lib.rs_ file in your `adder` library should look like
-Listing 11-1.
+আপনার `adder` লাইব্রেরির _src/lib.rs_ ফাইলের কন্টেন্টগুলো Listing 11-1 এর মতো হওয়া উচিত।
 
-<Listing number="11-1" file-name="src/lib.rs" caption="The code generated automatically by `cargo new`">
+<Listing number="11-1" file-name="src/lib.rs" caption="`cargo new` দ্বারা স্বয়ংক্রিয়ভাবে তৈরি করা কোড">
 
 <!-- manual-regeneration
 cd listings/ch11-writing-automated-tests
@@ -62,24 +45,15 @@ cd ../../..
 
 </Listing>
 
-The file starts with an example `add` function, so that we have something
-to test.
+ফাইলটি একটি উদাহরণ `add` ফাংশন দিয়ে শুরু হয়, যাতে আমাদের পরীক্ষা করার মতো কিছু থাকে।
 
-For now, let’s focus solely on the `it_works` function. Note the `#[test]`
-annotation: this attribute indicates this is a test function, so the test
-runner knows to treat this function as a test. We might also have non-test
-functions in the `tests` module to help set up common scenarios or perform
-common operations, so we always need to indicate which functions are tests.
+আপাতত, আসুন শুধুমাত্র `it_works` ফাংশনের উপর মনোযোগ দিই। `#[test]` টীকাটি লক্ষ্য করুন: এই অ্যাট্রিবিউটটি নির্দেশ করে যে এটি একটি পরীক্ষা ফাংশন, তাই পরীক্ষা রানার জানে যে এই ফাংশনটিকে একটি পরীক্ষা হিসাবে বিবেচনা করতে হবে। সাধারণ পরিস্থিতি সেট আপ করতে বা সাধারণ ক্রিয়াকলাপগুলো সম্পাদন করতে আমাদের `tests` মডিউলে অ-পরীক্ষা ফাংশনও থাকতে পারে, তাই কোন ফাংশনগুলো পরীক্ষা তা আমাদের সবসময় উল্লেখ করতে হবে।
 
-The example function body uses the `assert_eq!` macro to assert that `result`,
-which contains the result of calling `add` with 2 and 2, equals 4. This
-assertion serves as an example of the format for a typical test. Let’s run it
-to see that this test passes.
+উদাহরণ ফাংশন বডিটি `assert_eq!` ম্যাক্রো ব্যবহার করে দাবি করে যে `result`, যাতে 2 এবং 2 এর সাথে `add` কল করার ফলাফল রয়েছে, তা 4 এর সমান। এই দাবিটি একটি সাধারণ পরীক্ষার বিন্যাসের উদাহরণ হিসাবে কাজ করে। আসুন এটি চালিয়ে দেখি যে এই পরীক্ষাটি পাস হয় কিনা।
 
-The `cargo test` command runs all tests in our project, as shown in Listing
-11-2.
+`cargo test` কমান্ড আমাদের প্রজেক্টের সমস্ত পরীক্ষা চালায়, যেমন Listing 11-2-এ দেখানো হয়েছে।
 
-<Listing number="11-2" caption="The output from running the automatically generated test">
+<Listing number="11-2" caption="স্বয়ংক্রিয়ভাবে তৈরি করা পরীক্ষা চালানোর আউটপুট">
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-01/output.txt}}
@@ -87,37 +61,20 @@ The `cargo test` command runs all tests in our project, as shown in Listing
 
 </Listing>
 
-Cargo compiled and ran the test. We see the line `running 1 test`. The next
-line shows the name of the generated test function, called `tests::it_works`,
-and that the result of running that test is `ok`. The overall summary `test
-result: ok.` means that all the tests passed, and the portion that reads `1
-passed; 0 failed` totals the number of tests that passed or failed.
+Cargo কম্পাইল করেছে এবং পরীক্ষাটি চালিয়েছে। আমরা `running 1 test` লাইনটি দেখতে পাচ্ছি। পরবর্তী লাইনে জেনারেট করা পরীক্ষা ফাংশনের নাম দেখায়, যা `tests::it_works` নামে পরিচিত এবং সেই পরীক্ষা চালানোর ফলাফল `ok`। সামগ্রিক সারসংক্ষেপ `test
+result: ok.` মানে হল যে সমস্ত পরীক্ষা পাস হয়েছে, এবং `1
+passed; 0 failed` অংশটি পাস বা ব্যর্থ হওয়া পরীক্ষার সংখ্যা যোগ করে।
 
-It’s possible to mark a test as ignored so it doesn’t run in a particular
-instance; we’ll cover that in the [“Ignoring Some Tests Unless Specifically
-Requested”][ignoring]<!-- ignore --> section later in this chapter. Because we
-haven’t done that here, the summary shows `0 ignored`.
+একটি পরীক্ষাকে উপেক্ষা করা হিসাবে চিহ্নিত করা সম্ভব যাতে এটি একটি নির্দিষ্ট উদাহরণে না চলে; আমরা এই অধ্যায়ের পরে [“বিশেষভাবে অনুরোধ না করা পর্যন্ত কিছু পরীক্ষা উপেক্ষা করা”][ignoring]<!-- ignore --> বিভাগে এটি নিয়ে আলোচনা করব। যেহেতু আমরা এখানে তা করিনি, তাই সারসংক্ষেপ `0 ignored` দেখায়।
 
-The `0 measured` statistic is for benchmark tests that measure performance.
-Benchmark tests are, as of this writing, only available in nightly Rust. See
-[the documentation about benchmark tests][bench] to learn more.
+`0 measured` পরিসংখ্যানটি বেঞ্চমার্ক পরীক্ষাগুলোর জন্য যা কর্মক্ষমতা পরিমাপ করে। বেঞ্চমার্ক পরীক্ষাগুলো, এই লেখার সময় পর্যন্ত, শুধুমাত্র রাতের বেলা রাস্টে উপলব্ধ। আরও জানতে [বেঞ্চমার্ক পরীক্ষা সম্পর্কে ডকুমেন্টেশন][bench] দেখুন।
 
-We can pass an argument to the `cargo test` command to run only tests whose
-name matches a string; this is called _filtering_ and we’ll cover that in the
-[“Running a Subset of Tests by Name”][subset]<!-- ignore --> section. Here we
-haven’t filtered the tests being run, so the end of the summary shows `0
-filtered out`.
+আমরা শুধুমাত্র সেই পরীক্ষাগুলো চালানোর জন্য `cargo test` কমান্ডে একটি আর্গুমেন্ট পাস করতে পারি যেগুলোর নাম একটি স্ট্রিংয়ের সাথে মেলে; এটিকে _ফিল্টারিং_ বলা হয় এবং আমরা এটি [“নাম দিয়ে পরীক্ষার একটি উপসেট চালানো”][subset]<!-- ignore --> বিভাগে আলোচনা করব। এখানে আমরা যে পরীক্ষাগুলো চালানো হচ্ছে সেগুলোকে ফিল্টার করিনি, তাই সারসংক্ষেপের শেষে `0
+filtered out` দেখায়।
 
-The next part of the test output starting at `Doc-tests adder` is for the
-results of any documentation tests. We don’t have any documentation tests yet,
-but Rust can compile any code examples that appear in our API documentation.
-This feature helps keep your docs and your code in sync! We’ll discuss how to
-write documentation tests in the [“Documentation Comments as
-Tests”][doc-comments]<!-- ignore --> section of Chapter 14. For now, we’ll
-ignore the `Doc-tests` output.
+`Doc-tests adder` থেকে শুরু হওয়া পরীক্ষার আউটপুটের পরবর্তী অংশটি কোনো ডকুমেন্টেশন পরীক্ষার ফলাফলের জন্য। আমাদের এখনও কোনো ডকুমেন্টেশন পরীক্ষা নেই, তবে রাস্ট আমাদের API ডকুমেন্টেশনে প্রদর্শিত যেকোনো কোড উদাহরণ কম্পাইল করতে পারে। এই বৈশিষ্ট্যটি আপনার ডক্স এবং আপনার কোডকে সিঙ্ক রাখতে সাহায্য করে! আমরা Chapter 14-এর [“টেস্ট হিসাবে ডকুমেন্টেশন মন্তব্য”][doc-comments]<!-- ignore --> বিভাগে ডকুমেন্টেশন পরীক্ষা লেখার পদ্ধতি নিয়ে আলোচনা করব। আপাতত, আমরা `Doc-tests` আউটপুটটি উপেক্ষা করব।
 
-Let’s start to customize the test to our own needs. First, change the name of
-the `it_works` function to a different name, such as `exploration`, like so:
+আসুন আমাদের নিজস্ব প্রয়োজন অনুযায়ী পরীক্ষাটি কাস্টমাইজ করা শুরু করি। প্রথমে, `it_works` ফাংশনের নাম পরিবর্তন করে `exploration` এর মতো অন্য একটি নাম দিন, যেমন:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -125,21 +82,15 @@ the `it_works` function to a different name, such as `exploration`, like so:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/src/lib.rs}}
 ```
 
-Then run `cargo test` again. The output now shows `exploration` instead of
-`it_works`:
+তারপর আবার `cargo test` চালান। আউটপুট এখন `it_works`-এর পরিবর্তে `exploration` দেখাচ্ছে:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/output.txt}}
 ```
 
-Now we’ll add another test, but this time we’ll make a test that fails! Tests
-fail when something in the test function panics. Each test is run in a new
-thread, and when the main thread sees that a test thread has died, the test is
-marked as failed. In Chapter 9, we talked about how the simplest way to panic
-is to call the `panic!` macro. Enter the new test as a function named
-`another`, so your _src/lib.rs_ file looks like Listing 11-3.
+এখন আমরা আরেকটি পরীক্ষা যোগ করব, তবে এবার আমরা এমন একটি পরীক্ষা করব যা ব্যর্থ হবে! যখন পরীক্ষার ফাংশনের ভিতরে কিছু প্যানিক করে তখন পরীক্ষাগুলো ব্যর্থ হয়। প্রতিটি পরীক্ষা একটি নতুন থ্রেডে চালানো হয় এবং যখন মূল থ্রেড দেখে যে একটি পরীক্ষার থ্রেড মারা গেছে, তখন পরীক্ষাটিকে ব্যর্থ হিসাবে চিহ্নিত করা হয়। Chapter 9-এ, আমরা আলোচনা করেছি কিভাবে প্যানিক করার সবচেয়ে সহজ উপায় হল `panic!` ম্যাক্রো কল করা। `another` নামের একটি ফাংশন হিসাবে নতুন পরীক্ষাটি প্রবেশ করান, যাতে আপনার _src/lib.rs_ ফাইলটি Listing 11-3-এর মতো দেখায়।
 
-<Listing number="11-3" file-name="src/lib.rs" caption="Adding a second test that will fail because we call the `panic!` macro">
+<Listing number="11-3" file-name="src/lib.rs" caption="দ্বিতীয় একটি পরীক্ষা যোগ করা যা ব্যর্থ হবে কারণ আমরা `panic!` ম্যাক্রো কল করছি">
 
 ```rust,panics,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-03/src/lib.rs}}
@@ -147,10 +98,9 @@ is to call the `panic!` macro. Enter the new test as a function named
 
 </Listing>
 
-Run the tests again using `cargo test`. The output should look like Listing
-11-4, which shows that our `exploration` test passed and `another` failed.
+`cargo test` ব্যবহার করে আবার পরীক্ষাগুলো চালান। আউটপুটটি Listing 11-4-এর মতো হওয়া উচিত, যা দেখায় যে আমাদের `exploration` পরীক্ষাটি পাস হয়েছে এবং `another` ব্যর্থ হয়েছে।
 
-<Listing number="11-4" caption="Test results when one test passes and one test fails">
+<Listing number="11-4" caption="পরীক্ষার ফলাফল যখন একটি পরীক্ষা পাস হয় এবং একটি পরীক্ষা ব্যর্থ হয়">
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-03/output.txt}}
@@ -163,37 +113,19 @@ rg panicked listings/ch11-writing-automated-tests/listing-11-03/output.txt
 check the line number of the panic matches the line number in the following paragraph
  -->
 
-Instead of `ok`, the line `test tests::another` shows `FAILED`. Two new
-sections appear between the individual results and the summary: the first
-displays the detailed reason for each test failure. In this case, we get the
-details that `another` failed because it `panicked at 'Make this test fail'` on
-line 17 in the _src/lib.rs_ file. The next section lists just the names of all
-the failing tests, which is useful when there are lots of tests and lots of
-detailed failing test output. We can use the name of a failing test to run just
-that test to more easily debug it; we’ll talk more about ways to run tests in
-the [“Controlling How Tests Are Run”][controlling-how-tests-are-run]<!-- ignore
---> section.
+`ok`-এর পরিবর্তে, `test tests::another` লাইনটি `FAILED` দেখাচ্ছে। পৃথক ফলাফল এবং সারসংক্ষেপের মধ্যে দুটি নতুন বিভাগ প্রদর্শিত হয়: প্রথমটি প্রতিটি পরীক্ষার ব্যর্থতার বিস্তারিত কারণ দেখায়। এই ক্ষেত্রে, আমরা বিস্তারিত জানতে পারি যে `another` ব্যর্থ হয়েছে কারণ এটি _src/lib.rs_ ফাইলের 17 নম্বর লাইনে `panicked at 'Make this test fail'`। পরবর্তী বিভাগে শুধুমাত্র ব্যর্থ হওয়া পরীক্ষাগুলোর নাম তালিকাভুক্ত করা হয়েছে, যা কাজে লাগে যখন প্রচুর পরীক্ষা এবং প্রচুর বিস্তারিত ব্যর্থ পরীক্ষার আউটপুট থাকে। আমরা একটি ব্যর্থ পরীক্ষার নাম ব্যবহার করে শুধুমাত্র সেই পরীক্ষাটি চালিয়ে আরও সহজে ডিবাগ করতে পারি; আমরা [“পরীক্ষাগুলো কীভাবে চালানো হয় তা নিয়ন্ত্রণ করা”][controlling-how-tests-are-run]<!-- ignore --> বিভাগে পরীক্ষা চালানোর পদ্ধতি নিয়ে আরও আলোচনা করব।
 
-The summary line displays at the end: overall, our test result is `FAILED`. We
-had one test pass and one test fail.
+সারসংক্ষেপ লাইনটি শেষে প্রদর্শিত হয়: সামগ্রিকভাবে, আমাদের পরীক্ষার ফলাফল হল `FAILED`। আমাদের একটি পরীক্ষা পাস হয়েছে এবং একটি পরীক্ষা ব্যর্থ হয়েছে।
 
-Now that you’ve seen what the test results look like in different scenarios,
-let’s look at some macros other than `panic!` that are useful in tests.
+এখন যেহেতু আপনি বিভিন্ন পরিস্থিতিতে পরীক্ষার ফলাফলগুলো কেমন দেখায় তা দেখেছেন, আসুন `panic!` ছাড়াও অন্য কিছু ম্যাক্রো দেখি যা পরীক্ষায় কাজে লাগে।
 
-### Checking Results with the `assert!` Macro
+### `assert!` ম্যাক্রো দিয়ে ফলাফল পরীক্ষা করা
 
-The `assert!` macro, provided by the standard library, is useful when you want
-to ensure that some condition in a test evaluates to `true`. We give the
-`assert!` macro an argument that evaluates to a Boolean. If the value is
-`true`, nothing happens and the test passes. If the value is `false`, the
-`assert!` macro calls `panic!` to cause the test to fail. Using the `assert!`
-macro helps us check that our code is functioning in the way we intend.
+স্ট্যান্ডার্ড লাইব্রেরি দ্বারা প্রদত্ত `assert!` ম্যাক্রোটি কাজে লাগে যখন আপনি নিশ্চিত করতে চান যে কোনো পরীক্ষার শর্ত `true` হিসাবে মূল্যায়ন করে। আমরা `assert!` ম্যাক্রোতে একটি আর্গুমেন্ট দিই যা একটি বুলিয়ান হিসাবে মূল্যায়ন করে। যদি ভ্যালুটি `true` হয়, তবে কিছুই ঘটে না এবং পরীক্ষাটি পাস হয়। যদি ভ্যালুটি `false` হয়, তাহলে `assert!` ম্যাক্রো পরীক্ষাটিকে ব্যর্থ করার জন্য `panic!` কল করে। `assert!` ম্যাক্রো ব্যবহার করা আমাদের কোডটি আমাদের উদ্দেশ্য অনুযায়ী কাজ করছে কিনা তা পরীক্ষা করতে সাহায্য করে।
 
-In Chapter 5, Listing 5-15, we used a `Rectangle` struct and a `can_hold`
-method, which are repeated here in Listing 11-5. Let’s put this code in the
-_src/lib.rs_ file, then write some tests for it using the `assert!` macro.
+Chapter 5-এ, Listing 5-15-এ, আমরা একটি `Rectangle` struct এবং একটি `can_hold` মেথড ব্যবহার করেছি, যা এখানে Listing 11-5-এ পুনরাবৃত্তি করা হয়েছে। আসুন এই কোডটি _src/lib.rs_ ফাইলে রাখি, তারপর `assert!` ম্যাক্রো ব্যবহার করে এর জন্য কিছু পরীক্ষা লিখি।
 
-<Listing number="11-5" file-name="src/lib.rs" caption="The `Rectangle` struct and its `can_hold` method from Chapter 5">
+<Listing number="11-5" file-name="src/lib.rs" caption="Chapter 5 থেকে `Rectangle` struct এবং এর `can_hold` মেথড">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-05/src/lib.rs}}
@@ -201,13 +133,9 @@ _src/lib.rs_ file, then write some tests for it using the `assert!` macro.
 
 </Listing>
 
-The `can_hold` method returns a Boolean, which means it’s a perfect use case
-for the `assert!` macro. In Listing 11-6, we write a test that exercises the
-`can_hold` method by creating a `Rectangle` instance that has a width of 8 and
-a height of 7 and asserting that it can hold another `Rectangle` instance that
-has a width of 5 and a height of 1.
+`can_hold` মেথড একটি বুলিয়ান রিটার্ন করে, যার মানে এটি `assert!` ম্যাক্রোর জন্য একটি নিখুঁত ব্যবহারের ক্ষেত্র। Listing 11-6-এ, আমরা একটি পরীক্ষা লিখি যা `can_hold` মেথডটি 8 চওড়া এবং 7 উঁচু একটি `Rectangle` ইনস্ট্যান্স তৈরি করে এবং দাবি করে যে এটি 5 চওড়া এবং 1 উঁচু অন্য `Rectangle` ইনস্ট্যান্সকে ধরে রাখতে পারে।
 
-<Listing number="11-6" file-name="src/lib.rs" caption="A test for `can_hold` that checks whether a larger rectangle can indeed hold a smaller rectangle">
+<Listing number="11-6" file-name="src/lib.rs" caption="`can_hold`-এর জন্য একটি পরীক্ষা যা পরীক্ষা করে যে একটি বড় আয়তক্ষেত্র আসলে একটি ছোট আয়তক্ষেত্রকে ধরে রাখতে পারে কিনা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-06/src/lib.rs:here}}
@@ -215,26 +143,15 @@ has a width of 5 and a height of 1.
 
 </Listing>
 
-Note the `use super::*;` line inside the `tests` module. The `tests` module is
-a regular module that follows the usual visibility rules we covered in Chapter
-7 in the [“Paths for Referring to an Item in the Module
-Tree”][paths-for-referring-to-an-item-in-the-module-tree]<!-- ignore -->
-section. Because the `tests` module is an inner module, we need to bring the
-code under test in the outer module into the scope of the inner module. We use
-a glob here, so anything we define in the outer module is available to this
-`tests` module.
+`tests` মডিউলের ভিতরে `use super::*;` লাইনটি লক্ষ্য করুন। `tests` মডিউল হল একটি নিয়মিত মডিউল যা Chapter 7-এর [“মডিউল ট্রি-এর একটি আইটেম উল্লেখ করার জন্য পাথ”][paths-for-referring-to-an-item-in-the-module-tree]<!-- ignore --> বিভাগে আলোচিত সাধারণ দৃশ্যমানতার নিয়ম অনুসরণ করে। যেহেতু `tests` মডিউলটি একটি ভিতরের মডিউল, তাই আমাদের ভিতরের মডিউলের স্কোপে বাইরের মডিউলের পরীক্ষার অধীনে থাকা কোডটি আনতে হবে। আমরা এখানে একটি গ্লোব ব্যবহার করি, তাই বাইরের মডিউলে আমরা যা সংজ্ঞায়িত করি তা এই `tests` মডিউলের জন্য উপলব্ধ।
 
-We’ve named our test `larger_can_hold_smaller`, and we’ve created the two
-`Rectangle` instances that we need. Then we called the `assert!` macro and
-passed it the result of calling `larger.can_hold(&smaller)`. This expression is
-supposed to return `true`, so our test should pass. Let’s find out!
+আমরা আমাদের পরীক্ষার নাম `larger_can_hold_smaller` রেখেছি এবং আমরা দুটি `Rectangle` ইনস্ট্যান্স তৈরি করেছি যা আমাদের প্রয়োজন। তারপর আমরা `assert!` ম্যাক্রো কল করেছি এবং এটিকে `larger.can_hold(&smaller)` কল করার ফলাফল পাস করেছি। এই এক্সপ্রেশনটির `true` রিটার্ন করার কথা, তাই আমাদের পরীক্ষাটি পাস করা উচিত। আসুন খুঁজে বের করি!
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-06/output.txt}}
 ```
 
-It does pass! Let’s add another test, this time asserting that a smaller
-rectangle cannot hold a larger rectangle:
+এটা পাস হয়! আসুন আরেকটি পরীক্ষা যোগ করি, এবার দাবি করে যে একটি ছোট আয়তক্ষেত্র একটি বড় আয়তক্ষেত্রকে ধরে রাখতে পারে না:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -242,50 +159,33 @@ rectangle cannot hold a larger rectangle:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-02-adding-another-rectangle-test/src/lib.rs:here}}
 ```
 
-Because the correct result of the `can_hold` function in this case is `false`,
-we need to negate that result before we pass it to the `assert!` macro. As a
-result, our test will pass if `can_hold` returns `false`:
+এই ক্ষেত্রে `can_hold` ফাংশনের সঠিক ফলাফল `false` হওয়ার কারণে, `assert!` ম্যাক্রোতে পাস করার আগে আমাদের সেই ফলাফলটিকে নেতিবাচক করতে হবে। ফলস্বরূপ, যদি `can_hold` `false` রিটার্ন করে তবে আমাদের পরীক্ষাটি পাস হবে:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-02-adding-another-rectangle-test/output.txt}}
 ```
 
-Two tests that pass! Now let’s see what happens to our test results when we
-introduce a bug in our code. We’ll change the implementation of the `can_hold`
-method by replacing the greater-than sign with a less-than sign when it
-compares the widths:
+দুটি পরীক্ষা যা পাস হয়! এখন দেখা যাক যখন আমরা আমাদের কোডে একটি বাগ প্রবর্তন করি তখন আমাদের পরীক্ষার ফলাফলের কী হয়। আমরা `can_hold` মেথডের বাস্তবায়ন পরিবর্তন করব যখন এটি প্রস্থগুলো তুলনা করে তখন বৃহত্তর চিহ্নের পরিবর্তে একটি কম চিহ্ন দিয়ে:
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-03-introducing-a-bug/src/lib.rs:here}}
 ```
 
-Running the tests now produces the following:
+এখন পরীক্ষাগুলো চালালে নিম্নলিখিতটি তৈরি হয়:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-03-introducing-a-bug/output.txt}}
 ```
 
-Our tests caught the bug! Because `larger.width` is `8` and `smaller.width` is
-`5`, the comparison of the widths in `can_hold` now returns `false`: 8 is not
-less than 5.
+আমাদের পরীক্ষাগুলো বাগটি ধরেছে! যেহেতু `larger.width` হল `8` এবং `smaller.width` হল `5`, তাই `can_hold`-এ প্রস্থগুলোর তুলনা এখন `false` রিটার্ন করে: 8, 5-এর চেয়ে ছোট নয়।
 
-### Testing Equality with the `assert_eq!` and `assert_ne!` Macros
+### `assert_eq!` এবং `assert_ne!` ম্যাক্রো দিয়ে সমতা পরীক্ষা করা
 
-A common way to verify functionality is to test for equality between the result
-of the code under test and the value you expect the code to return. You could
-do this by using the `assert!` macro and passing it an expression using the
-`==` operator. However, this is such a common test that the standard library
-provides a pair of macros—`assert_eq!` and `assert_ne!`—to perform this test
-more conveniently. These macros compare two arguments for equality or
-inequality, respectively. They’ll also print the two values if the assertion
-fails, which makes it easier to see _why_ the test failed; conversely, the
-`assert!` macro only indicates that it got a `false` value for the `==`
-expression, without printing the values that led to the `false` value.
+কার্যকারিতা যাচাই করার একটি সাধারণ উপায় হল পরীক্ষার অধীনে থাকা কোডের ফলাফল এবং আপনি কোডটি রিটার্ন করার প্রত্যাশিত ভ্যালুর মধ্যে সমতা পরীক্ষা করা। আপনি `assert!` ম্যাক্রো ব্যবহার করে এবং `==` অপারেটর ব্যবহার করে একটি এক্সপ্রেশন পাস করে এটি করতে পারেন। যাইহোক, এটি এত সাধারণ একটি পরীক্ষা যে স্ট্যান্ডার্ড লাইব্রেরি এই পরীক্ষাটিকে আরও সহজে করার জন্য `assert_eq!` এবং `assert_ne!` নামের দুটি ম্যাক্রো প্রদান করে। এই ম্যাক্রো দুটি যথাক্রমে দুটি আর্গুমেন্টকে সমতা বা বৈষম্যের জন্য তুলনা করে। যদি দাবিটি ব্যর্থ হয় তবে তারা দুটি ভ্যালুও প্রিন্ট করবে, যা দেখতে সহজ করে তোলে যে কেন পরীক্ষাটি ব্যর্থ হয়েছে; বিপরীতে, `assert!` ম্যাক্রো শুধুমাত্র `==` এক্সপ্রেশনের জন্য একটি `false` ভ্যালু পেয়েছে কিনা তা নির্দেশ করে, `false` ভ্যালুর দিকে নিয়ে যাওয়া ভ্যালুগুলো প্রিন্ট না করে।
 
-In Listing 11-7, we write a function named `add_two` that adds `2` to its
-parameter, then we test this function using the `assert_eq!` macro.
+Listing 11-7-এ, আমরা `add_two` নামের একটি ফাংশন লিখি যা এর প্যারামিটারে `2` যোগ করে, তারপর আমরা `assert_eq!` ম্যাক্রো ব্যবহার করে এই ফাংশনটি পরীক্ষা করি।
 
-<Listing number="11-7" file-name="src/lib.rs" caption="Testing the function `add_two` using the `assert_eq!` macro">
+<Listing number="11-7" file-name="src/lib.rs" caption="`assert_eq!` ম্যাক্রো ব্যবহার করে `add_two` ফাংশন পরীক্ষা করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-07/src/lib.rs}}
@@ -293,81 +193,39 @@ parameter, then we test this function using the `assert_eq!` macro.
 
 </Listing>
 
-Let’s check that it passes!
+আসুন পরীক্ষা করি যে এটি পাস হয় কিনা!
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-07/output.txt}}
 ```
 
-We create a variable named `result` that holds the result of calling
-`add_two(2)`. Then we pass `result` and `4` as the arguments to `assert_eq!`.
-The output line for this test is `test tests::it_adds_two ... ok`, and the `ok`
-text indicates that our test passed!
+আমরা `result` নামের একটি ভেরিয়েবল তৈরি করি যা `add_two(2)` কল করার ফলাফল ধারণ করে। তারপর আমরা `assert_eq!`-এ `result` এবং `4` কে আর্গুমেন্ট হিসাবে পাস করি। এই পরীক্ষার আউটপুট লাইনটি হল `test tests::it_adds_two ... ok`, এবং `ok` টেক্সটটি নির্দেশ করে যে আমাদের পরীক্ষা পাস হয়েছে!
 
-Let’s introduce a bug into our code to see what `assert_eq!` looks like when it
-fails. Change the implementation of the `add_two` function to instead add `3`:
+আসুন আমাদের কোডে একটি বাগ প্রবর্তন করি এবং দেখি যখন এটি ব্যর্থ হয় তখন `assert_eq!` কেমন দেখায়। `add_two` ফাংশনের বাস্তবায়ন পরিবর্তন করে পরিবর্তে `3` যোগ করুন:
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-04-bug-in-add-two/src/lib.rs:here}}
 ```
 
-Run the tests again:
+আবার পরীক্ষাগুলো চালান:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-04-bug-in-add-two/output.txt}}
 ```
 
-Our test caught the bug! The `it_adds_two` test failed, and the message tells
-us ``assertion `left == right` failed`` and what the `left` and `right` values
-are. This message helps us start debugging: the `left` argument, where we had
-the result of calling `add_two(2)`, was `5` but the `right` argument was `4`.
-You can imagine that this would be especially helpful when we have a lot of
-tests going on.
+আমাদের পরীক্ষাটি বাগটি ধরেছে! `it_adds_two` পরীক্ষাটি ব্যর্থ হয়েছে এবং বার্তাটি আমাদের বলছে ``assertion `left == right` failed`` এবং `left` এবং `right` ভ্যালুগুলো কী। এই বার্তাটি আমাদের ডিবাগিং শুরু করতে সাহায্য করে: `left` আর্গুমেন্ট, যেখানে আমাদের `add_two(2)` কল করার ফলাফল ছিল, তা `5` ছিল কিন্তু `right` আর্গুমেন্টটি ছিল `4`। আপনি কল্পনা করতে পারেন যে যখন আমাদের প্রচুর পরীক্ষা চলছে তখন এটি বিশেষভাবে সহায়ক হবে।
 
-Note that in some languages and test frameworks, the parameters to equality
-assertion functions are called `expected` and `actual`, and the order in which
-we specify the arguments matters. However, in Rust, they’re called `left` and
-`right`, and the order in which we specify the value we expect and the value
-the code produces doesn’t matter. We could write the assertion in this test as
-`assert_eq!(4, result)`, which would produce the same failure message
-that displays `` assertion failed: `(left == right)` ``.
+মনে রাখবেন যে কিছু ভাষা এবং পরীক্ষা কাঠামোতে, সমতা দাবি ফাংশনগুলোর প্যারামিটারগুলোকে `expected` এবং `actual` বলা হয়, এবং আমরা যে ক্রমে আর্গুমেন্টগুলো উল্লেখ করি তা গুরুত্বপূর্ণ। যাইহোক, রাস্টে, সেগুলোকে `left` এবং `right` বলা হয় এবং আমরা যে ক্রমে আমরা যে ভ্যালু আশা করি এবং কোডটি তৈরি করে তা নির্দিষ্ট করি তা গুরুত্বপূর্ণ নয়। আমরা এই পরীক্ষার দাবিটিকে `assert_eq!(4, result)` হিসাবে লিখতে পারি, যা একই ব্যর্থতা বার্তা তৈরি করবে যা `` assertion failed: `(left == right)` `` দেখায়।
 
-The `assert_ne!` macro will pass if the two values we give it are not equal and
-fail if they’re equal. This macro is most useful for cases when we’re not sure
-what a value _will_ be, but we know what the value definitely _shouldn’t_ be.
-For example, if we’re testing a function that is guaranteed to change its input
-in some way, but the way in which the input is changed depends on the day of
-the week that we run our tests, the best thing to assert might be that the
-output of the function is not equal to the input.
+`assert_ne!` ম্যাক্রো পাস হবে যদি আমরা এটিকে যে দুটি ভ্যালু দিই তা সমান না হয় এবং যদি সেগুলো সমান হয় তবে ব্যর্থ হবে। এই ম্যাক্রোটি সেইসব ক্ষেত্রে সবচেয়ে বেশি কাজে লাগে যখন আমরা নিশ্চিত নই যে একটি ভ্যালু কী _হবে_, তবে আমরা জানি যে ভ্যালু কী _হওয়া উচিত নয়_। উদাহরণস্বরূপ, যদি আমরা এমন একটি ফাংশন পরীক্ষা করি যা তার ইনপুট পরিবর্তন করার নিশ্চয়তা দেয়, কিন্তু ইনপুটটি পরিবর্তন করার উপায়টি আমরা আমাদের পরীক্ষা চালানোর সপ্তাহের দিনের উপর নির্ভর করে, তাহলে দাবি করার সবচেয়ে ভাল জিনিস হতে পারে যে ফাংশনের আউটপুট ইনপুটের সমান নয়।
 
-Under the surface, the `assert_eq!` and `assert_ne!` macros use the operators
-`==` and `!=`, respectively. When the assertions fail, these macros print their
-arguments using debug formatting, which means the values being compared must
-implement the `PartialEq` and `Debug` traits. All primitive types and most of
-the standard library types implement these traits. For structs and enums that
-you define yourself, you’ll need to implement `PartialEq` to assert equality of
-those types. You’ll also need to implement `Debug` to print the values when the
-assertion fails. Because both traits are derivable traits, as mentioned in
-Listing 5-12 in Chapter 5, this is usually as straightforward as adding the
-`#[derive(PartialEq, Debug)]` annotation to your struct or enum definition. See
-Appendix C, [“Derivable Traits,”][derivable-traits]<!-- ignore --> for more
-details about these and other derivable traits.
+ভিতরে, `assert_eq!` এবং `assert_ne!` ম্যাক্রো যথাক্রমে `==` এবং `!=` অপারেটর ব্যবহার করে। যখন দাবিগুলো ব্যর্থ হয়, তখন এই ম্যাক্রোগুলো ডিবাগ ফরম্যাটিং ব্যবহার করে তাদের আর্গুমেন্টগুলো প্রিন্ট করে, যার মানে তুলনা করা ভ্যালুগুলোকে অবশ্যই `PartialEq` এবং `Debug` ট্রেট প্রয়োগ করতে হবে। সমস্ত প্রিমিটিভ টাইপ এবং স্ট্যান্ডার্ড লাইব্রেরির বেশিরভাগ টাইপ এই ট্রেটগুলো প্রয়োগ করে। আপনি নিজে সংজ্ঞায়িত করা struct এবং enum-এর জন্য, সেই টাইপগুলোর সমতা দাবি করার জন্য আপনাকে `PartialEq` প্রয়োগ করতে হবে। দাবি ব্যর্থ হলে ভ্যালুগুলো প্রিন্ট করার জন্য আপনাকে `Debug`-ও প্রয়োগ করতে হবে। যেহেতু উভয় ট্রেটই ডেরাইভ করা যায় এমন ট্রেট, যেমন Chapter 5-এর Listing 5-12-এ উল্লেখ করা হয়েছে, তাই আপনার struct বা enum সংজ্ঞাতে `#[derive(PartialEq, Debug)]` টীকা যোগ করার মতোই এটি সাধারণত সোজা। এই এবং অন্যান্য ডেরাইভ করা যায় এমন ট্রেট সম্পর্কে আরও বিস্তারিত জানার জন্য Appendix C, [“ডেরাইভ করা যায় এমন ট্রেট”][derivable-traits]<!-- ignore --> দেখুন।
 
-### Adding Custom Failure Messages
+### কাস্টম ব্যর্থতা বার্তা যোগ করা
 
-You can also add a custom message to be printed with the failure message as
-optional arguments to the `assert!`, `assert_eq!`, and `assert_ne!` macros. Any
-arguments specified after the required arguments are passed along to the
-`format!` macro (discussed in Chapter 8 in the [“Concatenation with the `+`
-Operator or the `format!`
-Macro”][concatenation-with-the--operator-or-the-format-macro]<!-- ignore -->
-section), so you can pass a format string that contains `{}` placeholders and
-values to go in those placeholders. Custom messages are useful for documenting
-what an assertion means; when a test fails, you’ll have a better idea of what
-the problem is with the code.
+আপনি `assert!`, `assert_eq!` এবং `assert_ne!` ম্যাক্রোগুলোতে ঐচ্ছিক আর্গুমেন্ট হিসাবে ব্যর্থতার বার্তার সাথে প্রিন্ট করার জন্য একটি কাস্টম বার্তাও যোগ করতে পারেন। প্রয়োজনীয় আর্গুমেন্টের পরে নির্দিষ্ট করা যেকোনো আর্গুমেন্ট `format!` ম্যাক্রোতে (Chapter 8-এ [“`+` অপারেটর বা `format!` ম্যাক্রো দিয়ে কনক্যাটেনেশন”][concatenation-with-the--operator-or-the-format-macro]<!-- ignore --> বিভাগে আলোচনা করা হয়েছে) পাস করা হয়, তাই আপনি একটি ফরম্যাট স্ট্রিং পাস করতে পারেন যাতে `{}` স্থানধারক এবং সেই স্থানধারকগুলোতে যাওয়ার ভ্যালু থাকে। কাস্টম বার্তাগুলো একটি দাবি কী বোঝায় তা নথিভুক্ত করার জন্য উপযোগী; যখন একটি পরীক্ষা ব্যর্থ হয়, তখন আপনার কোডের সমস্যা কী তা সম্পর্কে আপনার আরও ভাল ধারণা থাকবে।
 
-For example, let’s say we have a function that greets people by name and we
-want to test that the name we pass into the function appears in the output:
+উদাহরণস্বরূপ, ধরা যাক আমাদের কাছে এমন একটি ফাংশন আছে যা নাম ধরে লোকেদের অভিবাদন জানায় এবং আমরা পরীক্ষা করতে চাই যে আমরা ফাংশনে যে নামটি পাস করি তা আউটপুটে প্রদর্শিত হয় কিনা:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -375,62 +233,43 @@ want to test that the name we pass into the function appears in the output:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-05-greeter/src/lib.rs}}
 ```
 
-The requirements for this program haven’t been agreed upon yet, and we’re
-pretty sure the `Hello` text at the beginning of the greeting will change. We
-decided we don’t want to have to update the test when the requirements change,
-so instead of checking for exact equality to the value returned from the
-`greeting` function, we’ll just assert that the output contains the text of the
-input parameter.
+এই প্রোগ্রামের প্রয়োজনীয়তাগুলো এখনও সম্মত হয়নি, এবং আমরা মোটামুটি নিশ্চিত যে অভিবাদনের শুরুতে `Hello` টেক্সটটি পরিবর্তন হবে। আমরা সিদ্ধান্ত নিয়েছি যে প্রয়োজনীয়তাগুলো পরিবর্তিত হলে আমরা পরীক্ষাটি আপডেট করতে চাই না, তাই `greeting` ফাংশন থেকে রিটার্ন করা ভ্যালুর সাথে সঠিক সমতা পরীক্ষা করার পরিবর্তে, আমরা শুধু দাবি করব যে আউটপুটে ইনপুট প্যারামিটারের টেক্সট রয়েছে।
 
-Now let’s introduce a bug into this code by changing `greeting` to exclude
-`name` to see what the default test failure looks like:
+এখন আসুন `greeting` পরিবর্তন করে `name` বাদ দিয়ে এই কোডে একটি বাগ প্রবর্তন করি এবং দেখি ডিফল্ট পরীক্ষার ব্যর্থতা কেমন দেখায়:
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-06-greeter-with-bug/src/lib.rs:here}}
 ```
 
-Running this test produces the following:
+এই পরীক্ষা চালালে নিম্নলিখিতটি তৈরি হয়:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-06-greeter-with-bug/output.txt}}
 ```
 
-This result just indicates that the assertion failed and which line the
-assertion is on. A more useful failure message would print the value from the
-`greeting` function. Let’s add a custom failure message composed of a format
-string with a placeholder filled in with the actual value we got from the
-`greeting` function:
+এই ফলাফলটি শুধুমাত্র নির্দেশ করে যে দাবিটি ব্যর্থ হয়েছে এবং কোন লাইনে দাবিটি করা হয়েছে। একটি আরও দরকারী ব্যর্থতার বার্তা `greeting` ফাংশন থেকে ভ্যালু প্রিন্ট করবে। আসুন একটি কাস্টম ব্যর্থতার বার্তা যোগ করি যা `greeting` ফাংশন থেকে আমরা যে প্রকৃত ভ্যালু পেয়েছি তা দিয়ে পূরণ করা একটি স্থানধারক সহ একটি ফরম্যাট স্ট্রিং দিয়ে গঠিত:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-07-custom-failure-message/src/lib.rs:here}}
 ```
 
-Now when we run the test, we’ll get a more informative error message:
+এখন যখন আমরা পরীক্ষাটি চালাব, তখন আমরা আরও তথ্যপূর্ণ একটি এরর বার্তা পাব:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-07-custom-failure-message/output.txt}}
 ```
 
-We can see the value we actually got in the test output, which would help us
-debug what happened instead of what we were expecting to happen.
+আমরা পরীক্ষার আউটপুটে আসলে যে ভ্যালুটি পেয়েছি তা দেখতে পাচ্ছি, যা আমাদের কী ঘটেছে তা ডিবাগ করতে সাহায্য করবে, আমরা কী ঘটতে আশা করছিলাম তা নয়।
 
-### Checking for Panics with `should_panic`
+### `should_panic` দিয়ে প্যানিক পরীক্ষা করা
 
-In addition to checking return values, it’s important to check that our code
-handles error conditions as we expect. For example, consider the `Guess` type
-that we created in Chapter 9, Listing 9-13. Other code that uses `Guess`
-depends on the guarantee that `Guess` instances will contain only values
-between 1 and 100. We can write a test that ensures that attempting to create a
-`Guess` instance with a value outside that range panics.
+রিটার্ন ভ্যালুগুলো পরীক্ষা করার পাশাপাশি, আমাদের কোডটি আমাদের প্রত্যাশা অনুযায়ী এরর পরিস্থিতিগুলো পরিচালনা করে কিনা তা পরীক্ষা করাও গুরুত্বপূর্ণ। উদাহরণস্বরূপ, `Guess` টাইপটি বিবেচনা করুন যা আমরা Chapter 9, Listing 9-13-এ তৈরি করেছি। `Guess` ব্যবহার করে এমন অন্যান্য কোড এই গ্যারান্টির উপর নির্ভর করে যে `Guess` ইনস্ট্যান্সগুলোতে শুধুমাত্র 1 থেকে 100-এর মধ্যে ভ্যালু থাকবে। আমরা একটি পরীক্ষা লিখতে পারি যা নিশ্চিত করে যে সেই সীমার বাইরের ভ্যালু দিয়ে `Guess` ইনস্ট্যান্স তৈরি করার চেষ্টা করলে প্যানিক হয়।
 
-We do this by adding the attribute `should_panic` to our test function. The
-test passes if the code inside the function panics; the test fails if the code
-inside the function doesn’t panic.
+আমরা আমাদের পরীক্ষা ফাংশনে `should_panic` অ্যাট্রিবিউট যোগ করে এটি করি। ফাংশনের ভিতরের কোডটি প্যানিক করলে পরীক্ষাটি পাস হয়; ফাংশনের ভিতরের কোডটি প্যানিক না করলে পরীক্ষাটি ব্যর্থ হয়।
 
-Listing 11-8 shows a test that checks that the error conditions of `Guess::new`
-happen when we expect them to.
+Listing 11-8 একটি পরীক্ষা দেখায় যা পরীক্ষা করে যে `Guess::new`-এর এরর কন্ডিশনগুলো কখন আমরা আশা করি তখন ঘটে কিনা।
 
-<Listing number="11-8" file-name="src/lib.rs" caption="Testing that a condition will cause a `panic!`">
+<Listing number="11-8" file-name="src/lib.rs" caption="একটি কন্ডিশন `panic!` সৃষ্টি করবে কিনা তা পরীক্ষা করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-08/src/lib.rs}}
@@ -438,41 +277,29 @@ happen when we expect them to.
 
 </Listing>
 
-We place the `#[should_panic]` attribute after the `#[test]` attribute and
-before the test function it applies to. Let’s look at the result when this test
-passes:
+আমরা `#[test]` অ্যাট্রিবিউটের পরে এবং এটি প্রয়োগ করে এমন পরীক্ষা ফাংশনের আগে `#[should_panic]` অ্যাট্রিবিউট রাখি। আসুন এই পরীক্ষাটি পাস হলে এর ফলাফলটি দেখি:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-08/output.txt}}
 ```
 
-Looks good! Now let’s introduce a bug in our code by removing the condition
-that the `new` function will panic if the value is greater than 100:
+ভাল দেখাচ্ছে! এখন আসুন আমাদের কোডে একটি বাগ প্রবর্তন করি `new` ফাংশনটি যদি ভ্যালুটি 100-এর চেয়ে বড় হয় তবে প্যানিক করবে সেই কন্ডিশনটি সরিয়ে দিয়ে:
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-08-guess-with-bug/src/lib.rs:here}}
 ```
 
-When we run the test in Listing 11-8, it will fail:
+যখন আমরা Listing 11-8-এ পরীক্ষাটি চালাই, তখন এটি ব্যর্থ হবে:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-08-guess-with-bug/output.txt}}
 ```
 
-We don’t get a very helpful message in this case, but when we look at the test
-function, we see that it’s annotated with `#[should_panic]`. The failure we got
-means that the code in the test function did not cause a panic.
+এই ক্ষেত্রে আমরা খুব বেশি সহায়ক বার্তা পাই না, তবে যখন আমরা পরীক্ষা ফাংশনটি দেখি, তখন আমরা দেখি যে এটি `#[should_panic]` দিয়ে টীকা করা আছে। আমরা যে ব্যর্থতা পেয়েছি তার মানে হল পরীক্ষা ফাংশনের কোড প্যানিক সৃষ্টি করেনি।
 
-Tests that use `should_panic` can be imprecise. A `should_panic` test would
-pass even if the test panics for a different reason from the one we were
-expecting. To make `should_panic` tests more precise, we can add an optional
-`expected` parameter to the `should_panic` attribute. The test harness will
-make sure that the failure message contains the provided text. For example,
-consider the modified code for `Guess` in Listing 11-9 where the `new` function
-panics with different messages depending on whether the value is too small or
-too large.
+`should_panic` ব্যবহার করে পরীক্ষাগুলো ভুল হতে পারে। `should_panic` পরীক্ষাটি পাস হবে এমনকি যদি আমরা যে কারণে প্যানিক আশা করছিলাম তার থেকে ভিন্ন কারণে পরীক্ষাটি প্যানিক করে। `should_panic` পরীক্ষাগুলোকে আরও নির্ভুল করতে, আমরা `should_panic` অ্যাট্রিবিউটে একটি ঐচ্ছিক `expected` প্যারামিটার যোগ করতে পারি। পরীক্ষার সরঞ্জামটি নিশ্চিত করবে যে ব্যর্থতার বার্তায় প্রদত্ত টেক্সট রয়েছে। উদাহরণস্বরূপ, Listing 11-9-এর `Guess`-এর জন্য পরিবর্তিত কোডটি বিবেচনা করুন যেখানে `new` ফাংশনটি ভ্যালু খুব ছোট বা খুব বড় কিনা তার উপর নির্ভর করে বিভিন্ন বার্তা দিয়ে প্যানিক করে।
 
-<Listing number="11-9" file-name="src/lib.rs" caption="Testing for a `panic!` with a panic message containing a specified substring">
+<Listing number="11-9" file-name="src/lib.rs" caption="একটি নির্দিষ্ট সাবস্ট্রিং ধারণকারী প্যানিক বার্তা সহ একটি `panic!` এর জন্য পরীক্ষা করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-09/src/lib.rs:here}}
@@ -480,62 +307,42 @@ too large.
 
 </Listing>
 
-This test will pass because the value we put in the `should_panic` attribute’s
-`expected` parameter is a substring of the message that the `Guess::new`
-function panics with. We could have specified the entire panic message that we
-expect, which in this case would be `Guess value must be less than or equal to
-100, got 200`. What you choose to specify depends on how much of the panic
-message is unique or dynamic and how precise you want your test to be. In this
-case, a substring of the panic message is enough to ensure that the code in the
-test function executes the `else if value > 100` case.
+এই পরীক্ষাটি পাস হবে কারণ আমরা `should_panic` অ্যাট্রিবিউটের `expected` প্যারামিটারে যে ভ্যালুটি রেখেছি তা হল সেই বার্তার একটি সাবস্ট্রিং যা `Guess::new` ফাংশনটি প্যানিক করার সময় ব্যবহার করে। আমরা সম্পূর্ণ প্যানিক বার্তাটি উল্লেখ করতে পারতাম যা আমরা আশা করি, যা এই ক্ষেত্রে হত `Guess value must be less than or equal to 100, got 200`। আপনি কী উল্লেখ করতে চান তা নির্ভর করে প্যানিক বার্তার কতটুকু অনন্য বা ডায়নামিক এবং আপনি আপনার পরীক্ষাকে কতটা নির্ভুল করতে চান তার উপর। এই ক্ষেত্রে, প্যানিক বার্তার একটি সাবস্ট্রিং যথেষ্ট নিশ্চিত করার জন্য যে পরীক্ষা ফাংশনের কোড `else if value > 100` কেসটি কার্যকর করে।
 
-To see what happens when a `should_panic` test with an `expected` message
-fails, let’s again introduce a bug into our code by swapping the bodies of the
-`if value < 1` and the `else if value > 100` blocks:
+`expected` বার্তা সহ একটি `should_panic` পরীক্ষা ব্যর্থ হলে কী ঘটে তা দেখতে, আসুন আমরা আবার `if value < 1` এবং `else if value > 100` ব্লকের বডি অদলবদল করে আমাদের কোডে একটি বাগ প্রবর্তন করি:
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/src/lib.rs:here}}
 ```
 
-This time when we run the `should_panic` test, it will fail:
+এইবার যখন আমরা `should_panic` পরীক্ষাটি চালাব, তখন এটি ব্যর্থ হবে:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/output.txt}}
 ```
 
-The failure message indicates that this test did indeed panic as we expected,
-but the panic message did not include the expected string `less than or equal
-to 100`. The panic message that we did get in this case was `Guess value must
-be greater than or equal to 1, got 200.` Now we can start figuring out where
-our bug is!
+ব্যর্থতার বার্তাটি নির্দেশ করে যে এই পরীক্ষাটি আসলেই প্যানিক করেছে যেমনটি আমরা আশা করেছিলাম, কিন্তু প্যানিক বার্তায় `less than or equal
+to 100` নামক প্রত্যাশিত স্ট্রিংটি অন্তর্ভুক্ত ছিল না। এই ক্ষেত্রে আমরা যে প্যানিক বার্তাটি পেয়েছিলাম তা হল `Guess value must
+be greater than or equal to 1, got 200.` এখন আমরা কোথায় আমাদের বাগ আছে তা বের করা শুরু করতে পারি!
 
-### Using `Result<T, E>` in Tests
+### পরীক্ষায় `Result<T, E>` ব্যবহার করা
 
-Our tests so far all panic when they fail. We can also write tests that use
-`Result<T, E>`! Here’s the test from Listing 11-1, rewritten to use `Result<T,
-E>` and return an `Err` instead of panicking:
+আমাদের পরীক্ষাগুলো এখন পর্যন্ত ব্যর্থ হলে প্যানিক করে। আমরা `Result<T, E>` ব্যবহার করে এমন পরীক্ষাও লিখতে পারি! Listing 11-1 থেকে পরীক্ষাটি এখানে `Result<T,
+E>` ব্যবহার করার জন্য পুনরায় লেখা হয়েছে এবং প্যানিক করার পরিবর্তে একটি `Err` রিটার্ন করা হয়েছে:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-10-result-in-tests/src/lib.rs:here}}
 ```
 
-The `it_works` function now has the `Result<(), String>` return type. In the
-body of the function, rather than calling the `assert_eq!` macro, we return
-`Ok(())` when the test passes and an `Err` with a `String` inside when the test
-fails.
+`it_works` ফাংশনের এখন `Result<(), String>` রিটার্ন টাইপ আছে। ফাংশনের বডিতে, `assert_eq!` ম্যাক্রো কল করার পরিবর্তে, আমরা যখন পরীক্ষাটি পাস হয় তখন `Ok(())` এবং যখন পরীক্ষাটি ব্যর্থ হয় তখন ভিতরে একটি `String` সহ একটি `Err` রিটার্ন করি।
 
-Writing tests so they return a `Result<T, E>` enables you to use the question
-mark operator in the body of tests, which can be a convenient way to write
-tests that should fail if any operation within them returns an `Err` variant.
+পরীক্ষাগুলো এমনভাবে লেখা যাতে তারা একটি `Result<T, E>` রিটার্ন করে, তাহলে আপনি পরীক্ষার বডিতে প্রশ্নবোধক চিহ্ন অপারেটর ব্যবহার করতে পারবেন, যা এমন পরীক্ষা লেখার একটি সুবিধাজনক উপায় হতে পারে যা ব্যর্থ হওয়া উচিত যদি তাদের ভিতরের কোনো অপারেশন একটি `Err` ভেরিয়েন্ট রিটার্ন করে।
 
-You can’t use the `#[should_panic]` annotation on tests that use `Result<T,
-E>`. To assert that an operation returns an `Err` variant, _don’t_ use the
-question mark operator on the `Result<T, E>` value. Instead, use
-`assert!(value.is_err())`.
+আপনি `Result<T,
+E>` ব্যবহার করে এমন পরীক্ষায় `#[should_panic]` টীকা ব্যবহার করতে পারবেন না। একটি অপারেশন `Err` ভেরিয়েন্ট রিটার্ন করে কিনা তা দাবি করতে, `Result<T, E>` ভ্যালুতে প্রশ্নবোধক চিহ্ন অপারেটর ব্যবহার _করবেন না_। পরিবর্তে, `assert!(value.is_err())` ব্যবহার করুন।
 
-Now that you know several ways to write tests, let’s look at what is happening
-when we run our tests and explore the different options we can use with `cargo
-test`.
+এখন যেহেতু আপনি পরীক্ষা লেখার বিভিন্ন উপায় জানেন, আসুন দেখি যখন আমরা আমাদের পরীক্ষাগুলো চালাই তখন কী ঘটছে এবং `cargo
+test`-এর সাথে আমরা যে বিভিন্ন অপশন ব্যবহার করতে পারি সেগুলো অন্বেষণ করি।
 
 [concatenation-with-the--operator-or-the-format-macro]: ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
 [bench]: ../unstable-book/library-features/test.html

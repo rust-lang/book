@@ -1,22 +1,13 @@
 # Advanced Features
 
-By now, you’ve learned the most commonly used parts of the Rust programming
-language. Before we do one more project in Chapter 21, we’ll look at a few
-aspects of the language you might run into every once in a while, but may not
-use every day. You can use this chapter as a reference for when you encounter
-any unknowns. The features covered here are useful in very specific situations.
-Although you might not reach for them often, we want to make sure you have a
-grasp of all the features Rust has to offer.
+এই মুহূর্তে, আপনি Rust programming language এর most commonly used part গুলো শিখেছেন। Chapter 21 এ আরও একটি project করার আগে, চলুন language এর কিছু aspect দেখি যা মাঝে মাঝে আপনার প্রয়োজন হতে পারে, কিন্তু হয়তো প্রতিদিন ব্যবহার নাও করতে পারেন। আপনি এই chapter কে reference হিসেবে ব্যবহার করতে পারেন যখন আপনি কোনো unknown এর সম্মুখীন হন। এখানে cover করা feature গুলো specific situation এ useful। যদিও আপনি হয়তো প্রায়ই সেগুলোর দিকে reach করবেন না, তবুও আমরা নিশ্চিত করতে চাই যে Rust এর offer করার মতো সব feature এর উপর আপনার grasp আছে।
 
-In this chapter, we’ll cover:
+এই chapter এ, আমরা আলোচনা করব:
 
-- Unsafe Rust: how to opt out of some of Rust’s guarantees and take
-  responsibility for manually upholding those guarantees
-- Advanced traits: associated types, default type parameters, fully qualified
-  syntax, supertraits, and the newtype pattern in relation to traits
-- Advanced types: more about the newtype pattern, type aliases, the never type,
-  and dynamically sized types
-- Advanced functions and closures: function pointers and returning closures
-- Macros: ways to define code that defines more code at compile time
+-   Unsafe Rust: Rust এর কিছু guarantee থেকে কিভাবে opt out করতে হয় এবং সেই guarantee গুলো manually uphold করার responsibility নেওয়া
+-   Advanced traits: associated type, default type parameter, fully qualified syntax, supertraits, এবং trait এর সাথে সম্পর্কিত newtype pattern
+-   Advanced types: newtype pattern, type alias, never type, এবং dynamically sized type নিয়ে আরও আলোচনা
+-   Advanced function এবং closure: function pointer এবং closure return করা
+-   Macro: compile time এ আরও code define করে এমন code define করার উপায়
 
-It’s a panoply of Rust features with something for everyone! Let’s dive in!
+এটা সবার জন্য কিছু না কিছু আছে এমন Rust feature এর একটি panoply! চলুন dive in করি!

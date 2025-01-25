@@ -1,25 +1,13 @@
-# Common Collections
+# সাধারণ কালেকশন
 
-Rust’s standard library includes a number of very useful data structures called
-_collections_. Most other data types represent one specific value, but
-collections can contain multiple values. Unlike the built-in array and tuple
-types, the data these collections point to is stored on the heap, which means
-the amount of data does not need to be known at compile time and can grow or
-shrink as the program runs. Each kind of collection has different capabilities
-and costs, and choosing an appropriate one for your current situation is a
-skill you’ll develop over time. In this chapter, we’ll discuss three
-collections that are used very often in Rust programs:
+রাস্টের স্ট্যান্ডার্ড লাইব্রেরিতে বেশ কিছু দরকারি ডেটা স্ট্রাকচার আছে, যেগুলোকে _কালেকশন_ বলা হয়। বেশিরভাগ ডেটা টাইপ একটি নির্দিষ্ট ভ্যালুকে প্রকাশ করে, কিন্তু কালেকশনগুলো একাধিক ভ্যালু ধারণ করতে পারে। বিল্ট-ইন অ্যারে এবং টাপল টাইপের থেকে ভিন্ন, এই কালেকশনগুলো যে ডেটা নির্দেশ করে, তা হিপের মধ্যে স্টোর করা থাকে। এর মানে হল, কম্পাইল করার সময় ডেটার পরিমাণ জানার দরকার নেই এবং প্রোগ্রাম চলার সময় এটি বাড়তে বা কমতে পারে। প্রতিটি কালেকশনের আলাদা আলাদা ক্ষমতা এবং খরচ আছে, এবং আপনার বর্তমান পরিস্থিতির জন্য সঠিক কালেকশন বেছে নেওয়া একটি দক্ষতা যা সময়ের সাথে সাথে আপনি অর্জন করবেন। এই অধ্যায়ে, আমরা তিনটি কালেকশন নিয়ে আলোচনা করব যা রাস্ট প্রোগ্রামে প্রায়ই ব্যবহার করা হয়:
 
-- A _vector_ allows you to store a variable number of values next to each other.
-- A _string_ is a collection of characters. We’ve mentioned the `String` type
-  previously, but in this chapter we’ll talk about it in depth.
-- A _hash map_ allows you to associate a value with a specific key. It’s a
-  particular implementation of the more general data structure called a _map_.
+- একটি _ভেক্টর_ আপনাকে একে অপরের পাশে পরিবর্তনশীল সংখ্যক ভ্যালু স্টোর করতে দেয়।
+- একটি _স্ট্রিং_ হল ক্যারেক্টারের কালেকশন। আমরা আগে `String` টাইপ নিয়ে আলোচনা করেছি, কিন্তু এই অধ্যায়ে আমরা এটি নিয়ে বিস্তারিত আলোচনা করব।
+- একটি _হ্যাশ ম্যাপ_ আপনাকে একটি নির্দিষ্ট কি (key) এর সাথে একটি ভ্যালু যুক্ত করতে দেয়। এটি _ম্যাপ_ নামক আরও সাধারণ ডেটা স্ট্রাকচারের একটি বিশেষ বাস্তবায়ন।
 
-To learn about the other kinds of collections provided by the standard library,
-see [the documentation][collections].
+স্ট্যান্ডার্ড লাইব্রেরি দ্বারা প্রদত্ত অন্যান্য ধরনের কালেকশন সম্পর্কে জানতে, [ডকুমেন্টেশন][collections] দেখুন।
 
-We’ll discuss how to create and update vectors, strings, and hash maps, as well
-as what makes each special.
+আমরা ভেক্টর, স্ট্রিং এবং হ্যাশ ম্যাপ তৈরি এবং আপডেট করার পদ্ধতি নিয়ে আলোচনা করব, সেইসাথে প্রত্যেকটিকে কী বিশেষ করে তোলে তা নিয়েও আলোচনা করব।
 
 [collections]: ../std/collections/index.html

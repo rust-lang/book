@@ -1,48 +1,22 @@
-# Generic Types, Traits, and Lifetimes
+# জেনেরিক টাইপ, ট্রেট এবং লাইফটাইম
 
-Every programming language has tools for effectively handling the duplication
-of concepts. In Rust, one such tool is _generics_: abstract stand-ins for
-concrete types or other properties. We can express the behavior of generics or
-how they relate to other generics without knowing what will be in their place
-when compiling and running the code.
+প্রত্যেক প্রোগ্রামিং ভাষার ধারণাগুলোর কার্যকরভাবে প্রতিলিপি তৈরি করার জন্য সরঞ্জাম রয়েছে। রাস্টে, এই ধরনের একটি সরঞ্জাম হল _জেনেরিক_: কংক্রিট টাইপ বা অন্যান্য বৈশিষ্ট্যের জন্য বিমূর্ত স্থান-ধারক। কম্পাইল এবং কোড চালানোর সময় তাদের জায়গায় কী থাকবে তা না জেনেই আমরা জেনেরিকের আচরণ বা অন্যান্য জেনেরিকের সাথে তাদের সম্পর্ক প্রকাশ করতে পারি।
 
-Functions can take parameters of some generic type, instead of a concrete type
-like `i32` or `String`, in the same way they take parameters with unknown
-values to run the same code on multiple concrete values. In fact, we’ve already
-used generics in Chapter 6 with `Option<T>`, in Chapter 8 with `Vec<T>` and
-`HashMap<K, V>`, and in Chapter 9 with `Result<T, E>`. In this chapter, you’ll
-explore how to define your own types, functions, and methods with generics!
+ফাংশনগুলো `i32` বা `String`-এর মতো কংক্রিট টাইপের পরিবর্তে কিছু জেনেরিক টাইপের প্যারামিটার নিতে পারে, ঠিক যেমন তারা একাধিক কংক্রিট ভ্যালুতে একই কোড চালানোর জন্য অজানা ভ্যালু সহ প্যারামিটার নেয়। প্রকৃতপক্ষে, আমরা Chapter 6-এ `Option<T>`-এর সাথে, Chapter 8-এ `Vec<T>` এবং `HashMap<K, V>`-এর সাথে এবং Chapter 9-এ `Result<T, E>`-এর সাথে ইতিমধ্যে জেনেরিক ব্যবহার করেছি। এই অধ্যায়ে, আপনি জেনেরিক দিয়ে আপনার নিজের টাইপ, ফাংশন এবং মেথড সংজ্ঞায়িত করতে শিখবেন!
 
-First we’ll review how to extract a function to reduce code duplication. We’ll
-then use the same technique to make a generic function from two functions that
-differ only in the types of their parameters. We’ll also explain how to use
-generic types in struct and enum definitions.
+প্রথমে আমরা কোডের প্রতিলিপি হ্রাস করতে একটি ফাংশন কীভাবে বের করতে হয় তা পর্যালোচনা করব। তারপর আমরা দুটি ফাংশন থেকে একটি জেনেরিক ফাংশন তৈরি করতে একই কৌশল ব্যবহার করব যা শুধুমাত্র তাদের প্যারামিটারের প্রকারভেদে ভিন্ন। আমরা struct এবং enum সংজ্ঞায় জেনেরিক টাইপগুলি কীভাবে ব্যবহার করতে হয় তাও ব্যাখ্যা করব।
 
-Then you’ll learn how to use _traits_ to define behavior in a generic way. You
-can combine traits with generic types to constrain a generic type to accept
-only those types that have a particular behavior, as opposed to just any type.
+তারপর আপনি একটি জেনেরিক উপায়ে আচরণ সংজ্ঞায়িত করতে _ট্রেট_ ব্যবহার করতে শিখবেন। আপনি একটি জেনেরিক টাইপকে শুধুমাত্র সেই টাইপগুলো গ্রহণ করার জন্য সীমাবদ্ধ করতে জেনেরিক টাইপের সাথে ট্রেটগুলিকে একত্রিত করতে পারেন যেগুলোর একটি বিশেষ আচরণ আছে, শুধু যেকোনো টাইপের বিপরীতে।
 
-Finally, we’ll discuss _lifetimes_: a variety of generics that give the
-compiler information about how references relate to each other. Lifetimes allow
-us to give the compiler enough information about borrowed values so that it can
-ensure references will be valid in more situations than it could without our
-help.
+অবশেষে, আমরা _লাইফটাইম_ নিয়ে আলোচনা করব: বিভিন্ন ধরণের জেনেরিক যা কম্পাইলারকে রেফারেন্সগুলো কীভাবে একে অপরের সাথে সম্পর্কিত সে সম্পর্কে তথ্য দেয়। লাইফটাইম আমাদের ধার করা ভ্যালুগুলো সম্পর্কে কম্পাইলারকে পর্যাপ্ত তথ্য দিতে দেয় যাতে এটি নিশ্চিত করতে পারে যে রেফারেন্সগুলো আমাদের সাহায্য ছাড়াই আগের চেয়ে বেশি পরিস্থিতিতে বৈধ হবে।
 
-## Removing Duplication by Extracting a Function
+## একটি ফাংশন বের করে প্রতিলিপি সরানো
 
-Generics allow us to replace specific types with a placeholder that represents
-multiple types to remove code duplication. Before diving into generics syntax,
-let’s first look at how to remove duplication in a way that doesn’t involve
-generic types by extracting a function that replaces specific values with a
-placeholder that represents multiple values. Then we’ll apply the same
-technique to extract a generic function! By looking at how to recognize
-duplicated code you can extract into a function, you’ll start to recognize
-duplicated code that can use generics.
+জেনেরিক আমাদের কোডের প্রতিলিপি সরাতে একাধিক টাইপের প্রতিনিধিত্বকারী একটি স্থানধারক দিয়ে নির্দিষ্ট টাইপগুলিকে প্রতিস্থাপন করতে দেয়। জেনেরিক সিনট্যাক্সে যাওয়ার আগে, আসুন প্রথমে জেনেরিক টাইপগুলিকে অন্তর্ভুক্ত না করে কীভাবে প্রতিলিপি সরাতে হয় তা দেখি, একটি ফাংশন বের করে যা নির্দিষ্ট ভ্যালুগুলিকে একটি স্থানধারক দিয়ে প্রতিস্থাপন করে যা একাধিক ভ্যালুর প্রতিনিধিত্ব করে। তারপর আমরা একই কৌশল প্রয়োগ করে একটি জেনেরিক ফাংশন বের করব! একটি ফাংশনে বের করা যায় এমন ডুপ্লিকেট কোড কীভাবে চিনতে হয় তা দেখে, আপনি ডুপ্লিকেট কোড চিনতে শুরু করবেন যা জেনেরিক ব্যবহার করতে পারে।
 
-We’ll begin with the short program in Listing 10-1 that finds the largest
-number in a list.
+আমরা Listing 10-1-এর ছোট প্রোগ্রাম দিয়ে শুরু করব যা একটি তালিকার বৃহত্তম সংখ্যা খুঁজে বের করে।
 
-<Listing number="10-1" file-name="src/main.rs" caption="Finding the largest number in a list of numbers">
+<Listing number="10-1" file-name="src/main.rs" caption="সংখ্যার তালিকায় বৃহত্তম সংখ্যা খুঁজে বের করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-01/src/main.rs:here}}
@@ -50,20 +24,11 @@ number in a list.
 
 </Listing>
 
-We store a list of integers in the variable `number_list` and place a reference
-to the first number in the list in a variable named `largest`. We then iterate
-through all the numbers in the list, and if the current number is greater than
-the number stored in `largest`, we replace the reference in that variable.
-However, if the current number is less than or equal to the largest number seen
-so far, the variable doesn’t change, and the code moves on to the next number
-in the list. After considering all the numbers in the list, `largest` should
-refer to the largest number, which in this case is 100.
+আমরা `number_list` ভেরিয়েবলে পূর্ণসংখ্যার একটি তালিকা স্টোর করি এবং `largest` নামের একটি ভেরিয়েবলে তালিকার প্রথম সংখ্যার একটি রেফারেন্স রাখি। তারপর আমরা তালিকার সমস্ত সংখ্যার উপর পুনরাবৃত্তি করি, এবং যদি বর্তমান সংখ্যাটি `largest`-এ স্টোর করা সংখ্যার চেয়ে বড় হয়, তাহলে আমরা সেই ভেরিয়েবলে রেফারেন্সটি প্রতিস্থাপন করি। যাইহোক, যদি বর্তমান সংখ্যাটি এখন পর্যন্ত দেখা বৃহত্তম সংখ্যার চেয়ে কম বা সমান হয়, তবে ভেরিয়েবলটি পরিবর্তন হয় না এবং কোডটি তালিকার পরবর্তী সংখ্যায় চলে যায়। তালিকার সমস্ত সংখ্যা বিবেচনা করার পরে, `largest`-এর বৃহত্তম সংখ্যাটিকে রেফার করা উচিত, যা এই ক্ষেত্রে 100।
 
-We’ve now been tasked with finding the largest number in two different lists of
-numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
-the same logic at two different places in the program, as shown in Listing 10-2.
+এখন আমাদের দুটি ভিন্ন সংখ্যার তালিকায় বৃহত্তম সংখ্যা খুঁজে বের করার কাজ দেওয়া হয়েছে। এটি করার জন্য, আমরা Listing 10-1-এর কোডটি ডুপ্লিকেট করতে এবং প্রোগ্রামের দুটি ভিন্ন স্থানে একই লজিক ব্যবহার করতে বেছে নিতে পারি, যেমন Listing 10-2-এ দেখানো হয়েছে।
 
-<Listing number="10-2" file-name="src/main.rs" caption="Code to find the largest number in *two* lists of numbers">
+<Listing number="10-2" file-name="src/main.rs" caption="সংখ্যার *দুটি* তালিকায় বৃহত্তম সংখ্যা খুঁজে বের করার কোড">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-02/src/main.rs}}
@@ -71,21 +36,13 @@ the same logic at two different places in the program, as shown in Listing 10-2.
 
 </Listing>
 
-Although this code works, duplicating code is tedious and error prone. We also
-have to remember to update the code in multiple places when we want to change
-it.
+যদিও এই কোডটি কাজ করে, কোড ডুপ্লিকেট করা ক্লান্তিকর এবং এরর প্রবণ। আমরা যখন এটি পরিবর্তন করতে চাই তখন আমাদের একাধিক স্থানে কোড আপডেট করতেও মনে রাখতে হবে।
 
-To eliminate this duplication, we’ll create an abstraction by defining a
-function that operates on any list of integers passed in as a parameter. This
-solution makes our code clearer and lets us express the concept of finding the
-largest number in a list abstractly.
+এই প্রতিলিপি দূর করতে, আমরা একটি ফাংশন সংজ্ঞায়িত করে একটি বিমূর্ততা তৈরি করব যা প্যারামিটার হিসাবে পাস করা যেকোনো পূর্ণসংখ্যার তালিকার উপর কাজ করে। এই সমাধানটি আমাদের কোডকে আরও স্পষ্ট করে এবং আমাদের একটি তালিকায় বৃহত্তম সংখ্যা খুঁজে বের করার ধারণাটিকে বিমূর্তভাবে প্রকাশ করতে দেয়।
 
-In Listing 10-3, we extract the code that finds the largest number into a
-function named `largest`. Then we call the function to find the largest number
-in the two lists from Listing 10-2. We could also use the function on any other
-list of `i32` values we might have in the future.
+Listing 10-3-এ, আমরা বৃহত্তম সংখ্যা খুঁজে বের করার কোডটিকে `largest` নামের একটি ফাংশনে বের করে নিই। তারপর আমরা Listing 10-2 থেকে দুটি তালিকায় বৃহত্তম সংখ্যা খুঁজে বের করার জন্য ফাংশনটি কল করি। আমরা ভবিষ্যতে আমাদের কাছে থাকা `i32` ভ্যালুর অন্য যেকোনো তালিকাতেও ফাংশনটি ব্যবহার করতে পারি।
 
-<Listing number="10-3" file-name="src/main.rs" caption="Abstracted code to find the largest number in two lists">
+<Listing number="10-3" file-name="src/main.rs" caption="দুটি তালিকায় বৃহত্তম সংখ্যা খুঁজে বের করার জন্য বিমূর্ত কোড">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-03/src/main.rs:here}}
@@ -93,23 +50,14 @@ list of `i32` values we might have in the future.
 
 </Listing>
 
-The `largest` function has a parameter called `list`, which represents any
-concrete slice of `i32` values we might pass into the function. As a result,
-when we call the function, the code runs on the specific values that we pass
-in.
+`largest` ফাংশনের `list` নামের একটি প্যারামিটার আছে, যা `i32` ভ্যালুর যেকোনো কংক্রিট স্লাইসের প্রতিনিধিত্ব করে যা আমরা ফাংশনে পাস করতে পারি। ফলস্বরূপ, যখন আমরা ফাংশনটি কল করি, তখন কোডটি আমরা যে নির্দিষ্ট ভ্যালুগুলো পাস করি সেগুলোর উপর রান করে।
 
-In summary, here are the steps we took to change the code from Listing 10-2 to
-Listing 10-3:
+সংক্ষেপে, Listing 10-2 থেকে Listing 10-3-এ কোড পরিবর্তন করতে আমরা এখানে যে পদক্ষেপগুলো নিয়েছি:
 
-1. Identify duplicate code.
-1. Extract the duplicate code into the body of the function, and specify the
-   inputs and return values of that code in the function signature.
-1. Update the two instances of duplicated code to call the function instead.
+1. ডুপ্লিকেট কোড চিহ্নিত করুন।
+2. ডুপ্লিকেট কোডটিকে ফাংশনের বডিতে বের করুন এবং ফাংশন সিগনেচারে সেই কোডের ইনপুট এবং রিটার্ন ভ্যালু উল্লেখ করুন।
+3. ডুপ্লিকেট করা কোডের দুটি ইনস্ট্যান্সকে ফাংশন কল করার জন্য আপডেট করুন।
 
-Next, we’ll use these same steps with generics to reduce code duplication. In
-the same way that the function body can operate on an abstract `list` instead
-of specific values, generics allow code to operate on abstract types.
+এরপর, আমরা কোড ডুপ্লিকেশন কমাতে জেনেরিক সহ এই একই ধাপগুলো ব্যবহার করব। ঠিক যেভাবে ফাংশন বডি নির্দিষ্ট ভ্যালুর পরিবর্তে একটি বিমূর্ত `list`-এ কাজ করতে পারে, তেমনি জেনেরিক কোডকে বিমূর্ত টাইপে কাজ করতে দেয়।
 
-For example, say we had two functions: one that finds the largest item in a
-slice of `i32` values and one that finds the largest item in a slice of `char`
-values. How would we eliminate that duplication? Let’s find out!
+উদাহরণস্বরূপ, ধরা যাক আমাদের দুটি ফাংশন ছিল: একটি `i32` ভ্যালুর একটি স্লাইসে বৃহত্তম আইটেম খুঁজে বের করে এবং অন্যটি `char` ভ্যালুর একটি স্লাইসে বৃহত্তম আইটেম খুঁজে বের করে। আমরা কিভাবে সেই প্রতিলিপি দূর করব? আসুন জেনে নিই!

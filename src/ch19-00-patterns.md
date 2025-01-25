@@ -1,29 +1,15 @@
 # Patterns and Matching
 
-_Patterns_ are a special syntax in Rust for matching against the structure of
-types, both complex and simple. Using patterns in conjunction with `match`
-expressions and other constructs gives you more control over a program’s
-control flow. A pattern consists of some combination of the following:
+_Patterns_ হলো Rust এ type এর structure এর সাথে match করার জন্য special syntax, complex এবং simple দুটোই। Pattern এর সাথে `match` expression এবং অন্যান্য construct ব্যবহার করা program এর control flow এর উপর আরও control দেয়। একটি pattern এ নিচের কিছু combination থাকে:
 
-- Literals
-- Destructured arrays, enums, structs, or tuples
-- Variables
-- Wildcards
-- Placeholders
+-   Literals
+-   Destructured array, enum, struct, বা tuples
+-   Variables
+-   Wildcards
+-   Placeholders
 
-Some example patterns include `x`, `(a, 3)`, and `Some(Color::Red)`. In the
-contexts in which patterns are valid, these components describe the shape of
-data. Our program then matches values against the patterns to determine whether
-it has the correct shape of data to continue running a particular piece of code.
+কিছু example pattern হলো `x`, `(a, 3)`, এবং `Some(Color::Red)`। Pattern valid এমন context এ, এই component গুলো data এর shape describe করে। তারপর আমাদের program কোনো particular piece of code run করা continue করার জন্য data এর সঠিক shape আছে কিনা তা determine করার জন্য pattern এর সাথে value match করে।
 
-To use a pattern, we compare it to some value. If the pattern matches the
-value, we use the value parts in our code. Recall the `match` expressions in
-Chapter 6 that used patterns, such as the coin-sorting machine example. If the
-value fits the shape of the pattern, we can use the named pieces. If it
-doesn’t, the code associated with the pattern won’t run.
+Pattern ব্যবহার করার জন্য, আমরা এটিকে কোনো value এর সাথে compare করি। যদি pattern value এর সাথে match করে, তাহলে আমরা আমাদের code এ value এর অংশগুলো ব্যবহার করি। Chapter 6 এ match expression মনে করুন যেখানে pattern ব্যবহার করা হয়েছিল, যেমন coin-sorting machine এর উদাহরণ। যদি value pattern এর shape fit করে, তাহলে আমরা named piece গুলো ব্যবহার করতে পারি। যদি না করে, তাহলে pattern এর সাথে associated code run হবে না।
 
-This chapter is a reference on all things related to patterns. We’ll cover the
-valid places to use patterns, the difference between refutable and irrefutable
-patterns, and the different kinds of pattern syntax that you might see. By the
-end of the chapter, you’ll know how to use patterns to express many concepts in
-a clear way.
+এই chapter টি হলো pattern related সব কিছু নিয়ে একটি reference। আমরা pattern ব্যবহার করার valid জায়গা, refutable এবং irrefutable pattern এর মধ্যে পার্থক্য, এবং pattern syntax এর বিভিন্ন type নিয়ে আলোচনা করব যা আপনি দেখতে পারেন। Chapter এর শেষে, আপনি clear way তে অনেক concept express করার জন্য pattern ব্যবহার করতে শিখবেন।

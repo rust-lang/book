@@ -1,144 +1,48 @@
-## To `panic!` or Not to `panic!`
+## `panic!` অথবা `panic!` না করা
 
-So how do you decide when you should call `panic!` and when you should return
-`Result`? When code panics, there’s no way to recover. You could call `panic!`
-for any error situation, whether there’s a possible way to recover or not, but
-then you’re making the decision that a situation is unrecoverable on behalf of
-the calling code. When you choose to return a `Result` value, you give the
-calling code options. The calling code could choose to attempt to recover in a
-way that’s appropriate for its situation, or it could decide that an `Err`
-value in this case is unrecoverable, so it can call `panic!` and turn your
-recoverable error into an unrecoverable one. Therefore, returning `Result` is a
-good default choice when you’re defining a function that might fail.
+তাহলে আপনি কিভাবে সিদ্ধান্ত নেবেন কখন আপনার `panic!` কল করা উচিত এবং কখন আপনার `Result` রিটার্ন করা উচিত? যখন কোড প্যানিক করে, তখন পুনরুদ্ধার করার কোনো উপায় থাকে না। আপনি যেকোনো এরর পরিস্থিতির জন্য `panic!` কল করতে পারেন, পুনরুদ্ধার করার কোনো সম্ভাব্য উপায় থাকুক বা না থাকুক, কিন্তু তারপর আপনি কলিং কোডের পক্ষ থেকে সিদ্ধান্ত নিচ্ছেন যে একটি পরিস্থিতি পুনরুদ্ধার করা সম্ভব নয়। যখন আপনি একটি `Result` ভ্যালু রিটার্ন করতে পছন্দ করেন, তখন আপনি কলিং কোডকে অপশন দেন। কলিং কোড তার পরিস্থিতির জন্য উপযুক্ত উপায়ে পুনরুদ্ধার করার চেষ্টা করতে বেছে নিতে পারে, অথবা এটি সিদ্ধান্ত নিতে পারে যে এই ক্ষেত্রে একটি `Err` ভ্যালু পুনরুদ্ধার করা সম্ভব নয়, তাই এটি `panic!` কল করতে পারে এবং আপনার পুনরুদ্ধারযোগ্য এররটিকে একটি পুনরুদ্ধার করা অসম্ভব এররে পরিণত করতে পারে। অতএব, যখন আপনি এমন একটি ফাংশন সংজ্ঞায়িত করছেন যা ব্যর্থ হতে পারে, তখন `Result` রিটার্ন করা একটি ভাল ডিফল্ট পছন্দ।
 
-In situations such as examples, prototype code, and tests, it’s more
-appropriate to write code that panics instead of returning a `Result`. Let’s
-explore why, then discuss situations in which the compiler can’t tell that
-failure is impossible, but you as a human can. The chapter will conclude with
-some general guidelines on how to decide whether to panic in library code.
+উদাহরণ, প্রোটোটাইপ কোড এবং পরীক্ষার মতো পরিস্থিতিতে, `Result` রিটার্ন করার পরিবর্তে প্যানিক করে এমন কোড লেখা আরও উপযুক্ত। আসুন অন্বেষণ করি কেন, তারপর সেই পরিস্থিতিগুলো নিয়ে আলোচনা করি যেখানে কম্পাইলার বলতে পারে না যে ব্যর্থতা অসম্ভব, কিন্তু আপনি একজন মানুষ হিসাবে তা বলতে পারেন। এই অধ্যায়টি লাইব্রেরি কোডে প্যানিক করা উচিত কিনা তা সিদ্ধান্ত নেওয়ার কিছু সাধারণ নির্দেশিকা দিয়ে শেষ হবে।
 
-### Examples, Prototype Code, and Tests
+### উদাহরণ, প্রোটোটাইপ কোড এবং পরীক্ষা
 
-When you’re writing an example to illustrate some concept, also including
-robust error-handling code can make the example less clear. In examples, it’s
-understood that a call to a method like `unwrap` that could panic is meant as a
-placeholder for the way you’d want your application to handle errors, which can
-differ based on what the rest of your code is doing.
+যখন আপনি কোনো ধারণা বোঝানোর জন্য একটি উদাহরণ লিখছেন, তখন শক্তিশালী এরর-হ্যান্ডলিং কোড অন্তর্ভুক্ত করলে উদাহরণটি কম স্পষ্ট হতে পারে। উদাহরণে, এটা বোঝা যায় যে `unwrap`-এর মতো কোনো মেথডের কল, যা প্যানিক করতে পারে, সেটি আপনার অ্যাপ্লিকেশন এররগুলো কীভাবে হ্যান্ডেল করতে চায় তার একটি স্থানধারক হিসেবে বোঝানো হয়েছে, যা আপনার বাকি কোড কী করছে তার উপর ভিত্তি করে আলাদা হতে পারে।
 
-Similarly, the `unwrap` and `expect` methods are very handy when prototyping,
-before you’re ready to decide how to handle errors. They leave clear markers in
-your code for when you’re ready to make your program more robust.
+একইভাবে, `unwrap` এবং `expect` মেথডগুলো প্রোটোটাইপ করার সময় খুব কাজে লাগে, যখন আপনি এররগুলো কীভাবে হ্যান্ডেল করবেন তা সিদ্ধান্ত নিতে প্রস্তুত হন। যখন আপনি আপনার প্রোগ্রামটিকে আরও শক্তিশালী করতে প্রস্তুত হন, তখন তারা আপনার কোডে স্পষ্ট মার্কার রেখে যায়।
 
-If a method call fails in a test, you’d want the whole test to fail, even if
-that method isn’t the functionality under test. Because `panic!` is how a test
-is marked as a failure, calling `unwrap` or `expect` is exactly what should
-happen.
+যদি একটি পরীক্ষায় একটি মেথড কল ব্যর্থ হয়, তবে আপনি চাইবেন পুরো পরীক্ষাটি ব্যর্থ হোক, এমনকি যদি সেই মেথডটি পরীক্ষার অধীনে থাকা কার্যকারিতা না হয়। যেহেতু `panic!` হল একটি পরীক্ষাকে ব্যর্থ হিসাবে চিহ্নিত করার উপায়, তাই `unwrap` বা `expect` কল করাই সঠিক কাজ।
 
-### Cases in Which You Have More Information Than the Compiler
+### সেইসব ক্ষেত্র যেখানে আপনার কাছে কম্পাইলারের চেয়ে বেশি তথ্য আছে
 
-It would also be appropriate to call `unwrap` or `expect` when you have some
-other logic that ensures the `Result` will have an `Ok` value, but the logic
-isn’t something the compiler understands. You’ll still have a `Result` value
-that you need to handle: whatever operation you’re calling still has the
-possibility of failing in general, even though it’s logically impossible in
-your particular situation. If you can ensure by manually inspecting the code
-that you’ll never have an `Err` variant, it’s perfectly acceptable to call
-`unwrap`, and even better to document the reason you think you’ll never have an
-`Err` variant in the `expect` text. Here’s an example:
+`unwrap` বা `expect` কল করাও উপযুক্ত হবে যখন আপনার কাছে অন্য কোনো লজিক থাকে যা নিশ্চিত করে যে `Result`-এর একটি `Ok` ভ্যালু থাকবে, কিন্তু সেই লজিকটি কম্পাইলার বোঝে না। আপনার কাছে এখনও একটি `Result` ভ্যালু থাকবে যা আপনাকে হ্যান্ডেল করতে হবে: আপনি যে অপারেশনটি কল করছেন সেটি এখনও সাধারণভাবে ব্যর্থ হওয়ার সম্ভাবনা রয়েছে, যদিও এটি আপনার বিশেষ পরিস্থিতিতে যৌক্তিকভাবে অসম্ভব। আপনি যদি ম্যানুয়ালি কোড পরিদর্শন করে নিশ্চিত করতে পারেন যে আপনার কখনও `Err` ভেরিয়েন্ট থাকবে না, তবে `unwrap` কল করা একেবারে গ্রহণযোগ্য, এবং `expect` টেক্সটে আপনি কেন মনে করেন যে আপনার কখনও `Err` ভেরিয়েন্ট থাকবে না তার কারণটি নথিভুক্ত করা আরও ভাল। এখানে একটি উদাহরণ:
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-08-unwrap-that-cant-fail/src/main.rs:here}}
 ```
 
-We’re creating an `IpAddr` instance by parsing a hardcoded string. We can see
-that `127.0.0.1` is a valid IP address, so it’s acceptable to use `expect`
-here. However, having a hardcoded, valid string doesn’t change the return type
-of the `parse` method: we still get a `Result` value, and the compiler will
-still make us handle the `Result` as if the `Err` variant is a possibility
-because the compiler isn’t smart enough to see that this string is always a
-valid IP address. If the IP address string came from a user rather than being
-hardcoded into the program and therefore _did_ have a possibility of failure,
-we’d definitely want to handle the `Result` in a more robust way instead.
-Mentioning the assumption that this IP address is hardcoded will prompt us to
-change `expect` to better error-handling code if, in the future, we need to get
-the IP address from some other source instead.
+আমরা একটি হার্ডকোড করা স্ট্রিং পার্স করে একটি `IpAddr` ইনস্ট্যান্স তৈরি করছি। আমরা দেখতে পাচ্ছি যে `127.0.0.1` একটি বৈধ IP ঠিকানা, তাই এখানে `expect` ব্যবহার করা গ্রহণযোগ্য। যাইহোক, একটি হার্ডকোড করা, বৈধ স্ট্রিং থাকা `parse` মেথডের রিটার্ন টাইপ পরিবর্তন করে না: আমরা এখনও একটি `Result` ভ্যালু পাই, এবং কম্পাইলার এখনও `Result`-কে এমনভাবে হ্যান্ডেল করতে বাধ্য করবে যেন `Err` ভেরিয়েন্ট একটি সম্ভাবনা, কারণ কম্পাইলার এত স্মার্ট নয় যে দেখতে পায় এই স্ট্রিংটি সর্বদা একটি বৈধ IP ঠিকানা। যদি IP ঠিকানা স্ট্রিংটি প্রোগ্রামে হার্ডকোড করার পরিবর্তে কোনো ব্যবহারকারীর কাছ থেকে আসত এবং তাই ব্যর্থ হওয়ার সম্ভাবনা _থাকত_, তাহলে আমরা অবশ্যই `Result`-কে আরও শক্তিশালী উপায়ে হ্যান্ডেল করতে চাইতাম। এই IP ঠিকানাটি হার্ডকোড করা আছে এমন অনুমান উল্লেখ করলে ভবিষ্যতে যদি আমাদের অন্য কোনো উৎস থেকে IP ঠিকানা পেতে হয়, তাহলে `expect`-কে আরও ভাল এরর-হ্যান্ডলিং কোডে পরিবর্তন করতে আমাদের প্ররোচিত করবে।
 
-### Guidelines for Error Handling
+### এরর হ্যান্ডলিংয়ের জন্য নির্দেশিকা
 
-It’s advisable to have your code panic when it’s possible that your code could
-end up in a bad state. In this context, a _bad state_ is when some assumption,
-guarantee, contract, or invariant has been broken, such as when invalid values,
-contradictory values, or missing values are passed to your code—plus one or
-more of the following:
+পরামর্শ দেওয়া হয় যে আপনার কোড প্যানিক করুক যখন এমন সম্ভাবনা থাকে যে আপনার কোড খারাপ অবস্থায় শেষ হতে পারে। এই প্রেক্ষাপটে, একটি _খারাপ অবস্থা_ হল যখন কিছু অনুমান, গ্যারান্টি, চুক্তি বা অপরিবর্তনীয়তা ভেঙে গেছে, যেমন যখন অবৈধ ভ্যালু, পরস্পরবিরোধী ভ্যালু বা অনুপস্থিত ভ্যালু আপনার কোডে পাস করা হয়—সাথে নিম্নলিখিত এক বা একাধিক:
 
-- The bad state is something that is unexpected, as opposed to something that
-  will likely happen occasionally, like a user entering data in the wrong
-  format.
-- Your code after this point needs to rely on not being in this bad state,
-  rather than checking for the problem at every step.
-- There’s not a good way to encode this information in the types you use. We’ll
-  work through an example of what we mean in the [“Encoding States and Behavior
-  as Types”][encoding]<!-- ignore --> section of Chapter 18.
+- খারাপ অবস্থাটি অপ্রত্যাশিত কিছু, এমন কিছু হওয়ার বিপরীতে যা সম্ভবত মাঝে মাঝে ঘটবে, যেমন কোনো ব্যবহারকারী ভুল ফরম্যাটে ডেটা প্রবেশ করা।
+- এই পয়েন্টের পরে আপনার কোডকে এই খারাপ অবস্থায় না থাকার উপর নির্ভর করতে হবে, প্রতিটি ধাপে সমস্যার জন্য পরীক্ষা করার পরিবর্তে।
+- আপনি যে টাইপগুলো ব্যবহার করেন তাতে এই তথ্য এনকোড করার কোনো ভালো উপায় নেই। আমরা Chapter 18-এর [“Encoding States and Behavior as Types”][encoding]<!-- ignore --> বিভাগে এর মানে কী তা নিয়ে একটি উদাহরণের মাধ্যমে কাজ করব।
 
-If someone calls your code and passes in values that don’t make sense, it’s
-best to return an error if you can so the user of the library can decide what
-they want to do in that case. However, in cases where continuing could be
-insecure or harmful, the best choice might be to call `panic!` and alert the
-person using your library to the bug in their code so they can fix it during
-development. Similarly, `panic!` is often appropriate if you’re calling
-external code that is out of your control and it returns an invalid state that
-you have no way of fixing.
+যদি কেউ আপনার কোড কল করে এবং এমন ভ্যালু পাস করে যা বোধগম্য নয়, তাহলে যদি আপনি পারেন তবে একটি এরর রিটার্ন করাই ভাল যাতে লাইব্রেরির ব্যবহারকারী সিদ্ধান্ত নিতে পারে যে তারা সেই ক্ষেত্রে কী করতে চায়। যাইহোক, এমন ক্ষেত্রে যেখানে চালিয়ে যাওয়া অনিরাপদ বা ক্ষতিকর হতে পারে, সেখানে `panic!` কল করা এবং তাদের কোডের বাগ সম্পর্কে আপনার লাইব্রেরি ব্যবহার করা ব্যক্তিকে সতর্ক করা সেরা পছন্দ হতে পারে যাতে তারা ডেভেলপমেন্টের সময় এটি ঠিক করতে পারে। একইভাবে, আপনি যদি আপনার নিয়ন্ত্রণের বাইরের কোনো বাহ্যিক কোড কল করেন এবং এটি একটি অবৈধ অবস্থা ফেরত দেয় যা আপনি ঠিক করতে পারবেন না, তাহলে `panic!` প্রায়ই উপযুক্ত।
 
-However, when failure is expected, it’s more appropriate to return a `Result`
-than to make a `panic!` call. Examples include a parser being given malformed
-data or an HTTP request returning a status that indicates you have hit a rate
-limit. In these cases, returning a `Result` indicates that failure is an
-expected possibility that the calling code must decide how to handle.
+তবে, যখন ব্যর্থতা প্রত্যাশিত, তখন `panic!` কল করার চেয়ে একটি `Result` রিটার্ন করা আরও উপযুক্ত। উদাহরণস্বরূপ, একটি পার্সারকে ত্রুটিপূর্ণ ডেটা দেওয়া বা একটি HTTP অনুরোধ এমন একটি স্ট্যাটাস ফেরত দেওয়া যা নির্দেশ করে যে আপনি রেট সীমাতে পৌঁছেছেন। এই ক্ষেত্রে, একটি `Result` রিটার্ন করা ইঙ্গিত দেয় যে ব্যর্থতা একটি প্রত্যাশিত সম্ভাবনা যা কলিং কোডকে কীভাবে হ্যান্ডেল করতে হবে তা সিদ্ধান্ত নিতে হবে।
 
-When your code performs an operation that could put a user at risk if it’s
-called using invalid values, your code should verify the values are valid first
-and panic if the values aren’t valid. This is mostly for safety reasons:
-attempting to operate on invalid data can expose your code to vulnerabilities.
-This is the main reason the standard library will call `panic!` if you attempt
-an out-of-bounds memory access: trying to access memory that doesn’t belong to
-the current data structure is a common security problem. Functions often have
-_contracts_: their behavior is only guaranteed if the inputs meet particular
-requirements. Panicking when the contract is violated makes sense because a
-contract violation always indicates a caller-side bug, and it’s not a kind of
-error you want the calling code to have to explicitly handle. In fact, there’s
-no reasonable way for calling code to recover; the calling _programmers_ need
-to fix the code. Contracts for a function, especially when a violation will
-cause a panic, should be explained in the API documentation for the function.
+যখন আপনার কোড এমন একটি অপারেশন চালায় যা অবৈধ ভ্যালু ব্যবহার করে কল করা হলে ব্যবহারকারীকে ঝুঁকিতে ফেলতে পারে, তখন আপনার কোড প্রথমে ভ্যালুগুলো বৈধ কিনা তা যাচাই করা উচিত এবং ভ্যালুগুলো বৈধ না হলে প্যানিক করা উচিত। এটি মূলত নিরাপত্তার কারণে: অবৈধ ডেটাতে কাজ করার চেষ্টা করলে আপনার কোড দুর্বলতার শিকার হতে পারে। এই প্রধান কারণে স্ট্যান্ডার্ড লাইব্রেরি `panic!` কল করে যদি আপনি কোনো সীমার বাইরের মেমরি অ্যাক্সেস করার চেষ্টা করেন: মেমরি অ্যাক্সেস করার চেষ্টা করা যা বর্তমান ডেটা স্ট্রাকচারের অন্তর্ভুক্ত নয় সেটি একটি সাধারণ নিরাপত্তা সমস্যা। ফাংশনগুলোর প্রায়শই _চুক্তি_ থাকে: তাদের আচরণ তখনই নিশ্চিত করা হয় যদি ইনপুটগুলো নির্দিষ্ট প্রয়োজনীয়তা পূরণ করে। চুক্তি লঙ্ঘন হলে প্যানিক করা বোধগম্য, কারণ চুক্তি লঙ্ঘন সবসময় কলার-সাইড বাগ নির্দেশ করে এবং এটি এমন ধরনের এরর নয় যা কলিং কোডকে স্পষ্টভাবে হ্যান্ডেল করতে হবে। প্রকৃতপক্ষে, কলিং কোডের পুনরুদ্ধারের কোনো যুক্তিসঙ্গত উপায় নেই; কলিং _প্রোগ্রামারদের_ কোডটি ঠিক করতে হবে। একটি ফাংশনের চুক্তি, বিশেষ করে যখন একটি লঙ্ঘন প্যানিক সৃষ্টি করবে, তখন ফাংশনের API ডকুমেন্টেশনে ব্যাখ্যা করা উচিত।
 
-However, having lots of error checks in all of your functions would be verbose
-and annoying. Fortunately, you can use Rust’s type system (and thus the type
-checking done by the compiler) to do many of the checks for you. If your
-function has a particular type as a parameter, you can proceed with your code’s
-logic knowing that the compiler has already ensured you have a valid value. For
-example, if you have a type rather than an `Option`, your program expects to
-have _something_ rather than _nothing_. Your code then doesn’t have to handle
-two cases for the `Some` and `None` variants: it will only have one case for
-definitely having a value. Code trying to pass nothing to your function won’t
-even compile, so your function doesn’t have to check for that case at runtime.
-Another example is using an unsigned integer type such as `u32`, which ensures
-the parameter is never negative.
+যাইহোক, আপনার সমস্ত ফাংশনে প্রচুর এরর চেক থাকলে তা বিস্তারিত এবং বিরক্তিকর হবে। সৌভাগ্যবশত, আপনি রাস্টের টাইপ সিস্টেম (এবং সেইজন্য কম্পাইলার দ্বারা করা টাইপ চেকিং) ব্যবহার করে আপনার জন্য অনেক চেক করতে পারেন। যদি আপনার ফাংশনের প্যারামিটার হিসাবে একটি নির্দিষ্ট টাইপ থাকে, তবে আপনি আপনার কোডের লজিক নিয়ে এগিয়ে যেতে পারেন এই জেনে যে কম্পাইলার ইতিমধ্যেই নিশ্চিত করেছে যে আপনার কাছে একটি বৈধ ভ্যালু আছে। উদাহরণস্বরূপ, যদি আপনার কাছে `Option`-এর পরিবর্তে একটি টাইপ থাকে, তবে আপনার প্রোগ্রামটি _কিছু_ থাকার আশা করে, _কিছু না_ থাকার নয়। আপনার কোডটিকে তখন `Some` এবং `None` ভেরিয়েন্টের জন্য দুটি কেস হ্যান্ডেল করতে হবে না: এটি নিশ্চিতভাবে একটি ভ্যালু থাকার জন্য শুধুমাত্র একটি কেস থাকবে। আপনার ফাংশনে কিছুই পাস করার চেষ্টা করা কোড কম্পাইলও হবে না, তাই আপনার ফাংশনকে রানটাইমে সেই কেসের জন্য পরীক্ষা করতে হবে না। আরেকটি উদাহরণ হল `u32`-এর মতো একটি আনসাইন্ড ইন্টিজার টাইপ ব্যবহার করা, যা নিশ্চিত করে যে প্যারামিটারটি কখনও নেতিবাচক নয়।
 
-### Creating Custom Types for Validation
+### বৈধতার জন্য কাস্টম টাইপ তৈরি করা
 
-Let’s take the idea of using Rust’s type system to ensure we have a valid value
-one step further and look at creating a custom type for validation. Recall the
-guessing game in Chapter 2 in which our code asked the user to guess a number
-between 1 and 100. We never validated that the user’s guess was between those
-numbers before checking it against our secret number; we only validated that
-the guess was positive. In this case, the consequences were not very dire: our
-output of “Too high” or “Too low” would still be correct. But it would be a
-useful enhancement to guide the user toward valid guesses and have different
-behavior when the user guesses a number that’s out of range versus when the
-user types, for example, letters instead.
+আসুন রাস্টের টাইপ সিস্টেম ব্যবহার করে নিশ্চিত করার ধারণাটিকে আরও একধাপ এগিয়ে নিয়ে যাই এবং বৈধতার জন্য একটি কাস্টম টাইপ তৈরি করা দেখি। Chapter 2-এর গেসিং গেমের কথা মনে করুন যেখানে আমাদের কোড ব্যবহারকারীকে 1 থেকে 100-এর মধ্যে একটি সংখ্যা অনুমান করতে বলেছিল। আমাদের গোপন নম্বরের সাথে তুলনা করার আগে আমরা কখনই যাচাই করিনি যে ব্যবহারকারীর অনুমান সেই সংখ্যাগুলোর মধ্যে ছিল কিনা; আমরা শুধুমাত্র যাচাই করেছিলাম যে অনুমানটি ইতিবাচক কিনা। এই ক্ষেত্রে, পরিণতি খুব মারাত্মক ছিল না: আমাদের "খুব বেশি" বা "খুব কম" আউটপুট এখনও সঠিক হবে। কিন্তু ব্যবহারকারীকে বৈধ অনুমানের দিকে গাইড করা এবং ব্যবহারকারী যখন রেঞ্জের বাইরের কোনো সংখ্যা অনুমান করে এবং যখন ব্যবহারকারী, উদাহরণস্বরূপ, অক্ষর টাইপ করে তখন ভিন্ন আচরণ করা একটি দরকারী উন্নতি হবে।
 
-One way to do this would be to parse the guess as an `i32` instead of only a
-`u32` to allow potentially negative numbers, and then add a check for the
-number being in range, like so:
+এটি করার একটি উপায় হল সম্ভাব্য নেতিবাচক সংখ্যার অনুমতি দেওয়ার জন্য শুধুমাত্র `u32`-এর পরিবর্তে অনুমানটিকে `i32` হিসাবে পার্স করা এবং তারপর সংখ্যাটি রেঞ্জের মধ্যে আছে কিনা তা পরীক্ষা করা, যেমন:
 
 <Listing file-name="src/main.rs">
 
@@ -148,25 +52,13 @@ number being in range, like so:
 
 </Listing>
 
-The `if` expression checks whether our value is out of range, tells the user
-about the problem, and calls `continue` to start the next iteration of the loop
-and ask for another guess. After the `if` expression, we can proceed with the
-comparisons between `guess` and the secret number knowing that `guess` is
-between 1 and 100.
+`if` এক্সপ্রেশনটি পরীক্ষা করে দেখে যে আমাদের ভ্যালুটি রেঞ্জের বাইরে আছে কিনা, ব্যবহারকারীকে সমস্যাটি সম্পর্কে জানায় এবং লুপের পরবর্তী পুনরাবৃত্তি শুরু করতে এবং অন্য একটি অনুমান চাইতে `continue` কল করে। `if` এক্সপ্রেশনের পরে, আমরা `guess` এবং গোপন নম্বরের মধ্যে তুলনা চালিয়ে যেতে পারি এই জেনে যে `guess` 1 থেকে 100-এর মধ্যে রয়েছে।
 
-However, this is not an ideal solution: if it were absolutely critical that the
-program only operated on values between 1 and 100, and it had many functions
-with this requirement, having a check like this in every function would be
-tedious (and might impact performance).
+তবে, এটি একটি আদর্শ সমাধান নয়: যদি এটি একেবারে গুরুত্বপূর্ণ হত যে প্রোগ্রামটি শুধুমাত্র 1 থেকে 100-এর মধ্যে ভ্যালু নিয়ে কাজ করবে এবং এটির এই প্রয়োজনীয়তা সহ অনেক ফাংশন থাকত, তবে প্রতিটি ফাংশনে এই ধরনের চেক করা ক্লান্তিকর (এবং কর্মক্ষমতাকে প্রভাবিত করতে পারে)।
 
-Instead, we can make a new type and put the validations in a function to create
-an instance of the type rather than repeating the validations everywhere. That
-way, it’s safe for functions to use the new type in their signatures and
-confidently use the values they receive. Listing 9-13 shows one way to define a
-`Guess` type that will only create an instance of `Guess` if the `new` function
-receives a value between 1 and 100.
+পরিবর্তে, আমরা একটি নতুন টাইপ তৈরি করতে পারি এবং সর্বত্র বৈধতা পুনরাবৃত্তি করার পরিবর্তে টাইপের একটি ইনস্ট্যান্স তৈরি করার জন্য একটি ফাংশনে বৈধতা রাখতে পারি। এইভাবে, ফাংশনগুলোর জন্য তাদের সিগনেচারে নতুন টাইপ ব্যবহার করা এবং তারা যে ভ্যালুগুলো পায় তা আত্মবিশ্বাসের সাথে ব্যবহার করা নিরাপদ। Listing 9-13 `Guess` টাইপ সংজ্ঞায়িত করার একটি উপায় দেখায় যা শুধুমাত্র তখনই `Guess`-এর একটি ইনস্ট্যান্স তৈরি করবে যদি `new` ফাংশন 1 থেকে 100-এর মধ্যে একটি ভ্যালু পায়।
 
-<Listing number="9-13" caption="A `Guess` type that will only continue with values between 1 and 100">
+<Listing number="9-13" caption="একটি `Guess` টাইপ যা শুধুমাত্র 1 থেকে 100-এর মধ্যে ভ্যালু নিয়ে কাজ করবে">
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/lib.rs}}
@@ -174,50 +66,18 @@ receives a value between 1 and 100.
 
 </Listing>
 
-First we define a struct named `Guess` that has a field named `value` that
-holds an `i32`. This is where the number will be stored.
+প্রথমে আমরা `Guess` নামের একটি struct সংজ্ঞায়িত করি যার `value` নামের একটি ফিল্ড আছে যা একটি `i32` ধারণ করে। এখানেই সংখ্যাটি স্টোর করা হবে।
 
-Then we implement an associated function named `new` on `Guess` that creates
-instances of `Guess` values. The `new` function is defined to have one
-parameter named `value` of type `i32` and to return a `Guess`. The code in the
-body of the `new` function tests `value` to make sure it’s between 1 and 100.
-If `value` doesn’t pass this test, we make a `panic!` call, which will alert
-the programmer who is writing the calling code that they have a bug they need
-to fix, because creating a `Guess` with a `value` outside this range would
-violate the contract that `Guess::new` is relying on. The conditions in which
-`Guess::new` might panic should be discussed in its public-facing API
-documentation; we’ll cover documentation conventions indicating the possibility
-of a `panic!` in the API documentation that you create in Chapter 14. If
-`value` does pass the test, we create a new `Guess` with its `value` field set
-to the `value` parameter and return the `Guess`.
+তারপর আমরা `Guess`-এ `new` নামের একটি অ্যাসোসিয়েটেড ফাংশন প্রয়োগ করি যা `Guess` ভ্যালুর ইনস্ট্যান্স তৈরি করে। `new` ফাংশনটি `i32` টাইপের `value` নামের একটি প্যারামিটার এবং একটি `Guess` রিটার্ন করার জন্য সংজ্ঞায়িত করা হয়েছে। `new` ফাংশনের বডির কোডটি `value`-কে পরীক্ষা করে দেখে যে এটি 1 থেকে 100-এর মধ্যে আছে কিনা। যদি `value` এই পরীক্ষায় উত্তীর্ণ না হয়, তাহলে আমরা একটি `panic!` কল করি, যা কলিং কোড লিখছেন এমন প্রোগ্রামারকে সতর্ক করবে যে তাদের একটি বাগ আছে যা তাদের ঠিক করতে হবে, কারণ এই রেঞ্জের বাইরের `value` সহ একটি `Guess` তৈরি করলে `Guess::new` যে চুক্তির উপর নির্ভর করে তা লঙ্ঘন করবে। `Guess::new` কোন পরিস্থিতিতে প্যানিক করতে পারে তা এর পাবলিক-ফেসিং API ডকুমেন্টেশনে আলোচনা করা উচিত; আমরা Chapter 14-এ আপনার তৈরি করা API ডকুমেন্টেশনে একটি `panic!`-এর সম্ভাবনা নির্দেশ করে এমন ডকুমেন্টেশন কনভেনশনগুলি নিয়ে আলোচনা করব। যদি `value` পরীক্ষায় উত্তীর্ণ হয়, তাহলে আমরা এর `value` ফিল্ডটিকে `value` প্যারামিটারে সেট করে একটি নতুন `Guess` তৈরি করি এবং `Guess` রিটার্ন করি।
 
-Next, we implement a method named `value` that borrows `self`, doesn’t have any
-other parameters, and returns an `i32`. This kind of method is sometimes called
-a _getter_ because its purpose is to get some data from its fields and return
-it. This public method is necessary because the `value` field of the `Guess`
-struct is private. It’s important that the `value` field be private so code
-using the `Guess` struct is not allowed to set `value` directly: code outside
-the module _must_ use the `Guess::new` function to create an instance of
-`Guess`, thereby ensuring there’s no way for a `Guess` to have a `value` that
-hasn’t been checked by the conditions in the `Guess::new` function.
+এরপর, আমরা `value` নামের একটি মেথড প্রয়োগ করি যা `self`-কে বরো করে, অন্য কোনো প্যারামিটার নেই এবং একটি `i32` রিটার্ন করে। এই ধরনের মেথডকে কখনও কখনও _গেটার_ বলা হয় কারণ এর উদ্দেশ্য হল এর ফিল্ড থেকে কিছু ডেটা পাওয়া এবং তা ফেরত দেওয়া। এই পাবলিক মেথডটি প্রয়োজনীয় কারণ `Guess` struct-এর `value` ফিল্ডটি প্রাইভেট। এটি গুরুত্বপূর্ণ যে `value` ফিল্ডটি প্রাইভেট হোক যাতে `Guess` struct ব্যবহার করা কোডকে সরাসরি `value` সেট করার অনুমতি দেওয়া না হয়: মডিউলের বাইরের কোডকে `Guess` struct-এর একটি ইনস্ট্যান্স তৈরি করতে `Guess::new` ফাংশন ব্যবহার করতে _হবে_, এইভাবে নিশ্চিত করা হয় যে `Guess`-এর এমন `value` থাকার কোনো উপায় নেই যা `Guess::new` ফাংশনের শর্তগুলো দ্বারা পরীক্ষা করা হয়নি।
 
-A function that has a parameter or returns only numbers between 1 and 100 could
-then declare in its signature that it takes or returns a `Guess` rather than an
-`i32` and wouldn’t need to do any additional checks in its body.
+একটি ফাংশন যার প্যারামিটার বা রিটার্ন ভ্যালু শুধুমাত্র 1 থেকে 100-এর মধ্যে সংখ্যা থাকে, সেটি তখন তার সিগনেচারে ঘোষণা করতে পারে যে এটি `i32`-এর পরিবর্তে একটি `Guess` নেয় বা রিটার্ন করে এবং এর বডিতে কোনো অতিরিক্ত চেক করার প্রয়োজন হবে না।
 
-## Summary
+## সারসংক্ষেপ
 
-Rust’s error-handling features are designed to help you write more robust code.
-The `panic!` macro signals that your program is in a state it can’t handle and
-lets you tell the process to stop instead of trying to proceed with invalid or
-incorrect values. The `Result` enum uses Rust’s type system to indicate that
-operations might fail in a way that your code could recover from. You can use
-`Result` to tell code that calls your code that it needs to handle potential
-success or failure as well. Using `panic!` and `Result` in the appropriate
-situations will make your code more reliable in the face of inevitable problems.
+রাস্টের এরর-হ্যান্ডলিং বৈশিষ্ট্যগুলো আপনাকে আরও শক্তিশালী কোড লিখতে সাহায্য করার জন্য ডিজাইন করা হয়েছে। `panic!` ম্যাক্রো সংকেত দেয় যে আপনার প্রোগ্রাম এমন একটি অবস্থায় আছে যা এটি পরিচালনা করতে পারে না এবং আপনাকে অবৈধ বা ভুল ভ্যালু নিয়ে কাজ করার চেষ্টা করার পরিবর্তে প্রক্রিয়াটিকে থামাতে বলার সুযোগ দেয়। `Result` enum রাস্টের টাইপ সিস্টেম ব্যবহার করে নির্দেশ করে যে অপারেশনগুলো এমনভাবে ব্যর্থ হতে পারে যা থেকে আপনার কোড পুনরুদ্ধার করতে পারে। আপনি আপনার কোডকে কল করে এমন কোডকে বলতে `Result` ব্যবহার করতে পারেন যে এটির সম্ভাব্য সাফল্য বা ব্যর্থতাও হ্যান্ডেল করতে হবে। উপযুক্ত পরিস্থিতিতে `panic!` এবং `Result` ব্যবহার করলে আপনার কোড অনিবার্য সমস্যার মুখে আরও নির্ভরযোগ্য হবে।
 
-Now that you’ve seen useful ways that the standard library uses generics with
-the `Option` and `Result` enums, we’ll talk about how generics work and how you
-can use them in your code.
+এখন যেহেতু আপনি `Option` এবং `Result` enum-এর সাথে স্ট্যান্ডার্ড লাইব্রেরি জেনেরিক ব্যবহার করার দরকারী উপায়গুলো দেখেছেন, তাই আমরা আলোচনা করব কিভাবে জেনেরিক কাজ করে এবং আপনি কীভাবে আপনার কোডে সেগুলো ব্যবহার করতে পারেন।
 
 [encoding]: ch18-03-oo-design-patterns.html#encoding-states-and-behavior-as-types

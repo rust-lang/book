@@ -1,28 +1,14 @@
-## Building a Single-Threaded Web Server
+## একটি সিঙ্গেল-থ্রেডেড ওয়েব সার্ভার তৈরি করা
 
-We’ll start by getting a single-threaded web server working. Before we begin,
-let’s look at a quick overview of the protocols involved in building web
-servers. The details of these protocols are beyond the scope of this book, but
-a brief overview will give you the information you need.
+আমরা একটি সিঙ্গেল-থ্রেডেড ওয়েব সার্ভার চালু করার মাধ্যমে শুরু করব। শুরু করার আগে, আসুন ওয়েব সার্ভার তৈরির সাথে জড়িত প্রোটোকলগুলির একটি দ্রুত ওভারভিউ দেখে নিই। এই প্রোটোকলগুলির বিশদ বিবরণ এই বইটির আওতার বাইরে, তবে একটি সংক্ষিপ্ত ওভারভিউ আপনাকে প্রয়োজনীয় তথ্য দেবে।
 
-The two main protocols involved in web servers are _Hypertext Transfer
-Protocol_ _(HTTP)_ and _Transmission Control Protocol_ _(TCP)_. Both protocols
-are _request-response_ protocols, meaning a _client_ initiates requests and a
-_server_ listens to the requests and provides a response to the client. The
-contents of those requests and responses are defined by the protocols.
+ওয়েব সার্ভারগুলিতে জড়িত দুটি প্রধান প্রোটোকল হল _হাইপারটেক্সট ট্রান্সফার প্রোটোকল_ _(HTTP)_ এবং _ট্রান্সমিশন কন্ট্রোল প্রোটোকল_ _(TCP)_। উভয় প্রোটোকলই হল _অনুরোধ-প্রতিক্রিয়া_ প্রোটোকল, যার অর্থ একটি _ক্লায়েন্ট_ অনুরোধ শুরু করে এবং একটি _সার্ভার_ অনুরোধগুলি শোনে এবং ক্লায়েন্টকে একটি প্রতিক্রিয়া প্রদান করে। সেই অনুরোধ এবং প্রতিক্রিয়ার বিষয়বস্তু প্রোটোকল দ্বারা সংজ্ঞায়িত করা হয়।
 
-TCP is the lower-level protocol that describes the details of how information
-gets from one server to another but doesn’t specify what that information is.
-HTTP builds on top of TCP by defining the contents of the requests and
-responses. It’s technically possible to use HTTP with other protocols, but in
-the vast majority of cases, HTTP sends its data over TCP. We’ll work with the
-raw bytes of TCP and HTTP requests and responses.
+TCP হল নিম্ন-স্তরের প্রোটোকল যা তথ্য কীভাবে এক সার্ভার থেকে অন্য সার্ভারে যায় তার বিশদ বিবরণ দেয় কিন্তু সেই তথ্যটি কী তা নির্দিষ্ট করে না। HTTP অনুরোধ এবং প্রতিক্রিয়ার বিষয়বস্তু সংজ্ঞায়িত করে TCP-এর উপরে তৈরি করে। প্রযুক্তিগতভাবে অন্যান্য প্রোটোকলের সাথে HTTP ব্যবহার করা সম্ভব, তবে বেশিরভাগ ক্ষেত্রে, HTTP তার ডেটা TCP এর মাধ্যমে পাঠায়। আমরা TCP এবং HTTP অনুরোধ এবং প্রতিক্রিয়ার কাঁচা বাইট নিয়ে কাজ করব।
 
-### Listening to the TCP Connection
+### TCP সংযোগ শোনা
 
-Our web server needs to listen to a TCP connection, so that’s the first part
-we’ll work on. The standard library offers a `std::net` module that lets us do
-this. Let’s make a new project in the usual fashion:
+আমাদের ওয়েব সার্ভারকে একটি TCP সংযোগ শুনতে হবে, তাই এটিই প্রথম অংশ যা নিয়ে আমরা কাজ করব। স্ট্যান্ডার্ড লাইব্রেরি একটি `std::net` মডিউল অফার করে যা আমাদের এটি করতে দেয়। আসুন স্বাভাবিক পদ্ধতিতে একটি নতুন প্রকল্প তৈরি করি:
 
 ```console
 $ cargo new hello
@@ -30,11 +16,9 @@ $ cargo new hello
 $ cd hello
 ```
 
-Now enter the code in Listing 21-1 in _src/main.rs_ to start. This code will
-listen at the local address `127.0.0.1:7878` for incoming TCP streams. When it
-gets an incoming stream, it will print `Connection established!`.
+এখন শুরু করতে _src/main.rs_-এ তালিকা 21-1-এর কোডটি প্রবেশ করান। এই কোডটি স্থানীয় ঠিকানা `127.0.0.1:7878`-এ আগত TCP স্ট্রিমগুলির জন্য শুনবে। যখন এটি একটি আগত স্ট্রিম পাবে, তখন এটি `Connection established!` প্রিন্ট করবে।
 
-<Listing number="21-1" file-name="src/main.rs" caption="Listening for incoming streams and printing a message when we receive a stream">
+<Listing number="21-1" file-name="src/main.rs" caption="আগত স্ট্রিমগুলির জন্য শোনা এবং যখন আমরা একটি স্ট্রিম পাই তখন একটি বার্তা প্রিন্ট করা">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-01/src/main.rs}}
@@ -42,56 +26,17 @@ gets an incoming stream, it will print `Connection established!`.
 
 </Listing>
 
-Using `TcpListener`, we can listen for TCP connections at the address
-`127.0.0.1:7878`. In the address, the section before the colon is an IP address
-representing your computer (this is the same on every computer and doesn’t
-represent the authors’ computer specifically), and `7878` is the port. We’ve
-chosen this port for two reasons: HTTP isn’t normally accepted on this port so
-our server is unlikely to conflict with any other web server you might have
-running on your machine, and 7878 is _rust_ typed on a telephone.
+`TcpListener` ব্যবহার করে, আমরা `127.0.0.1:7878` ঠিকানায় TCP সংযোগের জন্য শুনতে পারি। ঠিকানায়, কোলনের আগের অংশটি আপনার কম্পিউটারের প্রতিনিধিত্বকারী একটি IP ঠিকানা (এটি প্রতিটি কম্পিউটারে একই এবং বিশেষভাবে লেখকদের কম্পিউটারের প্রতিনিধিত্ব করে না), এবং `7878` হল পোর্ট। আমরা দুটি কারণে এই পোর্টটি বেছে নিয়েছি: HTTP সাধারণত এই পোর্টে গৃহীত হয় না তাই আমাদের সার্ভার আপনার মেশিনে চলমান অন্য কোনো ওয়েব সার্ভারের সাথে সংঘাত সৃষ্টি করার সম্ভাবনা কম, এবং 7878 হল একটি টেলিফোনে _rust_ টাইপ করা।
 
-The `bind` function in this scenario works like the `new` function in that it
-will return a new `TcpListener` instance. The function is called `bind`
-because, in networking, connecting to a port to listen to is known as “binding
-to a port.”
+এই পরিস্থিতিতে `bind` ফাংশনটি `new` ফাংশনের মতো কাজ করে যে এটি একটি নতুন `TcpListener` উদাহরণ ফেরত দেবে। ফাংশনটিকে `bind` বলা হয় কারণ নেটওয়ার্কিংয়ে, শোনার জন্য একটি পোর্টের সাথে সংযোগ করা "একটি পোর্টে আবদ্ধ" হিসাবে পরিচিত।
 
-The `bind` function returns a `Result<T, E>`, which indicates that it’s
-possible for binding to fail. For example, connecting to port 80 requires
-administrator privileges (nonadministrators can listen only on ports higher
-than 1023), so if we tried to connect to port 80 without being an
-administrator, binding wouldn’t work. Binding also wouldn’t work, for example,
-if we ran two instances of our program and so had two programs listening to the
-same port. Because we’re writing a basic server just for learning purposes, we
-won’t worry about handling these kinds of errors; instead, we use `unwrap` to
-stop the program if errors happen.
+`bind` ফাংশনটি একটি `Result<T, E>` ফেরত দেয়, যা নির্দেশ করে যে আবদ্ধ হতে ব্যর্থ হওয়া সম্ভব। উদাহরণস্বরূপ, পোর্ট 80-এর সাথে সংযোগ করার জন্য প্রশাসক সুবিধাগুলির প্রয়োজন (অপ্রশাসকরা শুধুমাত্র 1023-এর বেশি পোর্টে শুনতে পারেন), তাই যদি আমরা প্রশাসক না হয়ে পোর্ট 80-এর সাথে সংযোগ করার চেষ্টা করি তবে আবদ্ধ কাজ করবে না। উদাহরণস্বরূপ, যদি আমরা আমাদের প্রোগ্রামের দুটি উদাহরণ চালাই এবং তাই একই পোর্টে দুটি প্রোগ্রাম শুনছি, তাহলে আবদ্ধও কাজ করবে না। যেহেতু আমরা শুধুমাত্র শেখার উদ্দেশ্যে একটি বেসিক সার্ভার লিখছি, তাই আমরা এই ধরনের ত্রুটিগুলি পরিচালনা করার বিষয়ে চিন্তা করব না; পরিবর্তে, ত্রুটি ঘটলে প্রোগ্রামটি বন্ধ করতে আমরা `unwrap` ব্যবহার করি।
 
-The `incoming` method on `TcpListener` returns an iterator that gives us a
-sequence of streams (more specifically, streams of type `TcpStream`). A single
-_stream_ represents an open connection between the client and the server. A
-_connection_ is the name for the full request and response process in which a
-client connects to the server, the server generates a response, and the server
-closes the connection. As such, we will read from the `TcpStream` to see what
-the client sent and then write our response to the stream to send data back to
-the client. Overall, this `for` loop will process each connection in turn and
-produce a series of streams for us to handle.
+`TcpListener`-এ `incoming` পদ্ধতি একটি পুনরাবৃত্তিকারী প্রদান করে যা আমাদের স্ট্রিমের একটি ক্রম দেয় (আরও নির্দিষ্টভাবে, `TcpStream` প্রকারের স্ট্রিম)। একটি একক _স্ট্রিম_ ক্লায়েন্ট এবং সার্ভারের মধ্যে একটি খোলা সংযোগের প্রতিনিধিত্ব করে। একটি _সংযোগ_ হল সম্পূর্ণ অনুরোধ এবং প্রতিক্রিয়া প্রক্রিয়ার নাম যেখানে একটি ক্লায়েন্ট সার্ভারের সাথে সংযোগ করে, সার্ভার একটি প্রতিক্রিয়া তৈরি করে এবং সার্ভার সংযোগটি বন্ধ করে। যেমন, ক্লায়েন্ট কী পাঠিয়েছে তা দেখতে আমরা `TcpStream` থেকে পড়ব এবং তারপরে ক্লায়েন্টকে ডেটা ফেরত পাঠাতে স্ট্রিমে আমাদের প্রতিক্রিয়া লিখব। সামগ্রিকভাবে, এই `for` লুপটি প্রতিটি সংযোগকে একে একে প্রক্রিয়া করবে এবং আমাদের পরিচালনা করার জন্য স্ট্রিমের একটি সিরিজ তৈরি করবে।
 
-For now, our handling of the stream consists of calling `unwrap` to terminate
-our program if the stream has any errors; if there aren’t any errors, the
-program prints a message. We’ll add more functionality for the success case in
-the next listing. The reason we might receive errors from the `incoming` method
-when a client connects to the server is that we’re not actually iterating over
-connections. Instead, we’re iterating over _connection attempts_. The
-connection might not be successful for a number of reasons, many of them
-operating system specific. For example, many operating systems have a limit to
-the number of simultaneous open connections they can support; new connection
-attempts beyond that number will produce an error until some of the open
-connections are closed.
+আপাতত, স্ট্রিমটিকে পরিচালনা করার জন্য আমাদের প্রোগ্রামে যদি স্ট্রিমের কোনো ত্রুটি থাকে তবে `unwrap` কল করে শেষ করা হয়েছে; যদি কোনো ত্রুটি না থাকে, তবে প্রোগ্রামটি একটি বার্তা প্রিন্ট করে। আমরা পরবর্তী তালিকায় সাফল্যের ক্ষেত্রে আরও কার্যকারিতা যোগ করব। ক্লায়েন্ট যখন সার্ভারের সাথে সংযোগ স্থাপন করে তখন `incoming` পদ্ধতি থেকে ত্রুটি পাওয়ার কারণ হল আমরা আসলে সংযোগগুলির উপর পুনরাবৃত্তি করছি না। পরিবর্তে, আমরা _সংযোগ প্রচেষ্টার_ উপর পুনরাবৃত্তি করছি। সংযোগটি বেশ কয়েকটি কারণে সফল নাও হতে পারে, যার মধ্যে অনেকগুলি অপারেটিং সিস্টেমের নির্দিষ্ট। উদাহরণস্বরূপ, অনেক অপারেটিং সিস্টেমে একই সাথে খোলা সংযোগের সংখ্যার একটি সীমা রয়েছে যা তারা সমর্থন করতে পারে; সেই সংখ্যার বাইরে নতুন সংযোগ প্রচেষ্টা কিছু খোলা সংযোগ বন্ধ না হওয়া পর্যন্ত একটি ত্রুটি তৈরি করবে।
 
-Let’s try running this code! Invoke `cargo run` in the terminal and then load
-_127.0.0.1:7878_ in a web browser. The browser should show an error message
-like “Connection reset,” because the server isn’t currently sending back any
-data. But when you look at your terminal, you should see several messages that
-were printed when the browser connected to the server!
+আসুন এই কোডটি চালানোর চেষ্টা করি! টার্মিনালে `cargo run` চালু করুন এবং তারপরে ওয়েব ব্রাউজারে _127.0.0.1:7878_ লোড করুন। ব্রাউজারে "Connection reset"-এর মতো একটি ত্রুটি বার্তা দেখানো উচিত, কারণ সার্ভার বর্তমানে কোনো ডেটা ফেরত পাঠাচ্ছে না। কিন্তু যখন আপনি আপনার টার্মিনালটি দেখবেন, তখন ব্রাউজারটি যখন সার্ভারের সাথে সংযুক্ত হয়েছিল তখন মুদ্রিত বেশ কয়েকটি বার্তা দেখতে পাবেন!
 
 ```text
      Running `target/debug/hello`
@@ -100,33 +45,17 @@ Connection established!
 Connection established!
 ```
 
-Sometimes, you’ll see multiple messages printed for one browser request; the
-reason might be that the browser is making a request for the page as well as a
-request for other resources, like the _favicon.ico_ icon that appears in the
-browser tab.
+মাঝে মাঝে, আপনি একটি ব্রাউজার অনুরোধের জন্য একাধিক বার্তা প্রিন্ট করা দেখতে পাবেন; এর কারণ হতে পারে ব্রাউজারটি পৃষ্ঠার জন্য একটি অনুরোধ করার পাশাপাশি ব্রাউজার ট্যাবে প্রদর্শিত _favicon.ico_ আইকনের মতো অন্যান্য সংস্থানগুলির জন্য অনুরোধ করছে।
 
-It could also be that the browser is trying to connect to the server multiple
-times because the server isn’t responding with any data. When `stream` goes out
-of scope and is dropped at the end of the loop, the connection is closed as
-part of the `drop` implementation. Browsers sometimes deal with closed
-connections by retrying, because the problem might be temporary. The important
-factor is that we’ve successfully gotten a handle to a TCP connection!
+এটিও হতে পারে যে ব্রাউজারটি সার্ভারের সাথে একাধিকবার সংযোগ করার চেষ্টা করছে কারণ সার্ভার কোনও ডেটা দিয়ে সাড়া দিচ্ছে না। যখন `stream` লুপের শেষে স্কোপের বাইরে চলে যায় এবং ড্রপ করা হয়, তখন `drop` বাস্তবায়নের অংশ হিসাবে সংযোগটি বন্ধ হয়ে যায়। ব্রাউজারগুলি কখনও কখনও পুনরায় চেষ্টা করে বন্ধ সংযোগগুলির সাথে মোকাবিলা করে, কারণ সমস্যাটি অস্থায়ী হতে পারে। গুরুত্বপূর্ণ বিষয় হল আমরা সফলভাবে একটি TCP সংযোগের একটি হ্যান্ডেল পেয়েছি!
 
-Remember to stop the program by pressing <kbd>ctrl</kbd>-<kbd>c</kbd> when
-you’re done running a particular version of the code. Then restart the program
-by invoking the `cargo run` command after you’ve made each set of code changes
-to make sure you’re running the newest code.
+মনে রাখবেন, যখন আপনি কোডের একটি নির্দিষ্ট সংস্করণ চালানো শেষ করে ফেলেন তখন <kbd>ctrl</kbd>-<kbd>c</kbd> টিপে প্রোগ্রামটি বন্ধ করুন। তারপরে আপনি প্রতিটি কোড পরিবর্তনের পরে `cargo run` কমান্ড চালু করে প্রোগ্রামটি পুনরায় চালু করুন, যাতে আপনি নিশ্চিত হন যে আপনি নতুন কোডটি চালাচ্ছেন।
 
-### Reading the Request
+### অনুরোধ পড়া
 
-Let’s implement the functionality to read the request from the browser! To
-separate the concerns of first getting a connection and then taking some action
-with the connection, we’ll start a new function for processing connections. In
-this new `handle_connection` function, we’ll read data from the TCP stream and
-print it so we can see the data being sent from the browser. Change the code to
-look like Listing 21-2.
+আসুন ব্রাউজার থেকে অনুরোধটি পড়ার কার্যকারিতা প্রয়োগ করি! প্রথমে একটি সংযোগ পাওয়া এবং তারপরে সংযোগের সাথে কিছু পদক্ষেপ নেওয়ার বিষয়ে উদ্বেগগুলিকে আলাদা করতে, আমরা সংযোগগুলি প্রক্রিয়াকরণের জন্য একটি নতুন ফাংশন শুরু করব। এই নতুন `handle_connection` ফাংশনে, আমরা TCP স্ট্রিম থেকে ডেটা পড়ব এবং এটি প্রিন্ট করব যাতে আমরা ব্রাউজার থেকে পাঠানো ডেটা দেখতে পারি। তালিকা 21-2 এর মতো দেখতে কোডটি পরিবর্তন করুন।
 
-<Listing number="21-2" file-name="src/main.rs" caption="Reading from the `TcpStream` and printing the data">
+<Listing number="21-2" file-name="src/main.rs" caption="`TcpStream` থেকে পড়া এবং ডেটা প্রিন্ট করা">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-02/src/main.rs}}
@@ -134,38 +63,17 @@ look like Listing 21-2.
 
 </Listing>
 
-We bring `std::io::prelude` and `std::io::BufReader` into scope to get access
-to traits and types that let us read from and write to the stream. In the `for`
-loop in the `main` function, instead of printing a message that says we made a
-connection, we now call the new `handle_connection` function and pass the
-`stream` to it.
+স্ট্রিম থেকে পড়তে এবং লিখতে সক্ষম করে এমন trait এবং প্রকারগুলিতে অ্যাক্সেস পেতে আমরা `std::io::prelude` এবং `std::io::BufReader`-কে স্কোপে নিয়ে আসি। `main` ফাংশনের `for` লুপে, আমরা একটি সংযোগ তৈরি করার বার্তা প্রিন্ট করার পরিবর্তে, আমরা এখন নতুন `handle_connection` ফাংশন কল করি এবং এর কাছে `stream` পাস করি।
 
-In the `handle_connection` function, we create a new `BufReader` instance that
-wraps a reference to the `stream`. The `BufReader` adds buffering by managing calls
-to the `std::io::Read` trait methods for us.
+`handle_connection` ফাংশনে, আমরা `stream`-এর একটি রেফারেন্স মোড়ানো একটি নতুন `BufReader` উদাহরণ তৈরি করি। `BufReader` আমাদের জন্য `std::io::Read` trait পদ্ধতির কলগুলি পরিচালনা করে বাফারিং যোগ করে।
 
-We create a variable named `http_request` to collect the lines of the request
-the browser sends to our server. We indicate that we want to collect these
-lines in a vector by adding the `Vec<_>` type annotation.
+আমরা একটি ভেরিয়েবল তৈরি করি যার নাম `http_request` যা ব্রাউজার আমাদের সার্ভারে পাঠানো অনুরোধের লাইনগুলি সংগ্রহ করতে ব্যবহার করা হবে। আমরা `Vec<_>` টাইপ টীকা যোগ করে নির্দেশ করি যে আমরা এই লাইনগুলিকে একটি ভেক্টরে সংগ্রহ করতে চাই।
 
-`BufReader` implements the `std::io::BufRead` trait, which provides the `lines`
-method. The `lines` method returns an iterator of `Result<String,
-std::io::Error>` by splitting the stream of data whenever it sees a newline
-byte. To get each `String`, we map and `unwrap` each `Result`. The `Result`
-might be an error if the data isn’t valid UTF-8 or if there was a problem
-reading from the stream. Again, a production program should handle these errors
-more gracefully, but we’re choosing to stop the program in the error case for
-simplicity.
+`BufReader` `std::io::BufRead` trait প্রয়োগ করে, যা `lines` পদ্ধতি প্রদান করে। `lines` পদ্ধতি যখনই একটি নতুন লাইন বাইট দেখে তখনই ডেটার স্ট্রিমকে বিভক্ত করে `Result<String, std::io::Error>`-এর একটি পুনরাবৃত্তিকারী প্রদান করে। প্রতিটি `String` পেতে, আমরা প্রতিটি `Result` ম্যাপ করি এবং `unwrap` করি। ডেটাটি বৈধ UTF-8 না হলে বা স্ট্রিম থেকে পড়ার ক্ষেত্রে কোনো সমস্যা হলে `Result` একটি ত্রুটি হতে পারে। আবারও, একটি প্রোডাকশন প্রোগ্রামে এই ত্রুটিগুলি আরও সুন্দরভাবে পরিচালনা করা উচিত, তবে আমরা সরলতার জন্য ত্রুটির ক্ষেত্রে প্রোগ্রামটি বন্ধ করতে বেছে নিচ্ছি।
 
-The browser signals the end of an HTTP request by sending two newline
-characters in a row, so to get one request from the stream, we take lines until
-we get a line that is the empty string. Once we’ve collected the lines into the
-vector, we’re printing them out using pretty debug formatting so we can take a
-look at the instructions the web browser is sending to our server.
+ব্রাউজার পরপর দুটি নতুন লাইন অক্ষর পাঠিয়ে একটি HTTP অনুরোধের শেষ সংকেত দেয়, তাই স্ট্রিম থেকে একটি অনুরোধ পেতে, আমরা একটি খালি স্ট্রিং না পাওয়া পর্যন্ত লাইন নিই। একবার আমরা ভেক্টরের লাইনগুলি সংগ্রহ করার পরে, আমরা সেগুলি সুন্দর ডিবাগ ফর্ম্যাটিং ব্যবহার করে প্রিন্ট করছি যাতে আমরা ওয়েব ব্রাউজারটি আমাদের সার্ভারে কী নির্দেশাবলী পাঠাচ্ছে তা দেখতে পারি।
 
-Let’s try this code! Start the program and make a request in a web browser
-again. Note that we’ll still get an error page in the browser, but our
-program’s output in the terminal will now look similar to this:
+আসুন এই কোডটি চেষ্টা করি! প্রোগ্রামটি শুরু করুন এবং আবার একটি ওয়েব ব্রাউজারে একটি অনুরোধ করুন। মনে রাখবেন যে আমরা ব্রাউজারে এখনও একটি ত্রুটি পৃষ্ঠা পাব, তবে টার্মিনালে আমাদের প্রোগ্রামের আউটপুট এখন এইরকম দেখাবে:
 
 ```console
 $ cargo run
@@ -190,19 +98,13 @@ Request: [
 ]
 ```
 
-Depending on your browser, you might get slightly different output. Now that
-we’re printing the request data, we can see why we get multiple connections
-from one browser request by looking at the path after `GET` in the first line
-of the request. If the repeated connections are all requesting _/_, we know the
-browser is trying to fetch _/_ repeatedly because it’s not getting a response
-from our program.
+আপনার ব্রাউজারের উপর নির্ভর করে, আপনি সামান্য ভিন্ন আউটপুট পেতে পারেন। এখন যেহেতু আমরা অনুরোধ ডেটা প্রিন্ট করছি, তাই আমরা দেখতে পাচ্ছি কেন আমরা অনুরোধের প্রথম লাইনে `GET`-এর পরে পাথ দেখে একটি ব্রাউজার অনুরোধ থেকে একাধিক সংযোগ পাচ্ছি। যদি পুনরাবৃত্ত সংযোগগুলি সব _/_ অনুরোধ করে, তাহলে আমরা জানি যে ব্রাউজারটি বারবার _/_ আনতে চেষ্টা করছে কারণ এটি আমাদের প্রোগ্রাম থেকে কোনও প্রতিক্রিয়া পাচ্ছে না।
 
-Let’s break down this request data to understand what the browser is asking of
-our program.
+আসুন এই অনুরোধ ডেটা ভেঙে বুঝি যে ব্রাউজার আমাদের প্রোগ্রামের কাছে কী চাইছে।
 
-### A Closer Look at an HTTP Request
+### একটি HTTP অনুরোধের একটি ক্লোজার লুক
 
-HTTP is a text-based protocol, and a request takes this format:
+HTTP একটি টেক্সট-ভিত্তিক প্রোটোকল, এবং একটি অনুরোধ এই বিন্যাস নেয়:
 
 ```text
 Method Request-URI HTTP-Version CRLF
@@ -210,41 +112,23 @@ headers CRLF
 message-body
 ```
 
-The first line is the _request line_ that holds information about what the
-client is requesting. The first part of the request line indicates the _method_
-being used, such as `GET` or `POST`, which describes how the client is making
-this request. Our client used a `GET` request, which means it is asking for
-information.
+প্রথম লাইনটি হল _অনুরোধ লাইন_ যা ক্লায়েন্ট কী অনুরোধ করছে সে সম্পর্কে তথ্য ধারণ করে। অনুরোধ লাইনের প্রথম অংশটি ব্যবহৃত _পদ্ধতি_ নির্দেশ করে, যেমন `GET` বা `POST`, যা বর্ণনা করে যে ক্লায়েন্ট কীভাবে এই অনুরোধটি করছে। আমাদের ক্লায়েন্ট একটি `GET` অনুরোধ ব্যবহার করেছে, যার মানে এটি তথ্য চাইছে।
 
-The next part of the request line is _/_, which indicates the _Uniform Resource
-Identifier_ _(URI)_ the client is requesting: a URI is almost, but not quite,
-the same as a _Uniform Resource Locator_ _(URL)_. The difference between URIs
-and URLs isn’t important for our purposes in this chapter, but the HTTP spec
-uses the term URI, so we can just mentally substitute URL for URI here.
+অনুরোধ লাইনের পরবর্তী অংশটি হল _/_ যা _ইউনিফর্ম রিসোর্স আইডেন্টিফায়ার_ _(URI)_ নির্দেশ করে যা ক্লায়েন্ট অনুরোধ করছে: একটি URI প্রায়, তবে সম্পূর্ণরূপে নয়, একটি _ইউনিফর্ম রিসোর্স লোকেটার_ _(URL)_ এর মতো। এই অধ্যায়ে আমাদের উদ্দেশ্যের জন্য URI এবং URL-এর মধ্যে পার্থক্য গুরুত্বপূর্ণ নয়, তবে HTTP স্পেসিফিকেশন URI শব্দটি ব্যবহার করে, তাই আমরা এখানে URI-এর জন্য URL-কে মানসিকভাবে প্রতিস্থাপন করতে পারি।
 
-The last part is the HTTP version the client uses, and then the request line
-ends in a _CRLF sequence_. (CRLF stands for _carriage return_ and _line feed_,
-which are terms from the typewriter days!) The CRLF sequence can also be
-written as `\r\n`, where `\r` is a carriage return and `\n` is a line feed. The
-CRLF sequence separates the request line from the rest of the request data.
-Note that when the CRLF is printed, we see a new line start rather than `\r\n`.
+শেষ অংশটি হল ক্লায়েন্ট যে HTTP সংস্করণ ব্যবহার করে, এবং তারপরে অনুরোধ লাইনটি একটি _CRLF সিকোয়েন্সে_ শেষ হয়। (CRLF মানে _ক্যারেজ রিটার্ন_ এবং _লাইন ফিড_, যা টাইপরাইটারের দিন থেকে শব্দ!) CRLF সিকোয়েন্সটিকে `\r\n` হিসাবেও লেখা যেতে পারে, যেখানে `\r` হল একটি ক্যারেজ রিটার্ন এবং `\n` হল একটি লাইন ফিড। CRLF সিকোয়েন্স অনুরোধ লাইনটিকে অনুরোধ ডেটার বাকি অংশ থেকে আলাদা করে। মনে রাখবেন যে যখন CRLF প্রিন্ট করা হয়, তখন আমরা `\r\n`-এর পরিবর্তে একটি নতুন লাইন শুরু দেখতে পাই।
 
-Looking at the request line data we received from running our program so far,
-we see that `GET` is the method, _/_ is the request URI, and `HTTP/1.1` is the
-version.
+আমরা এখন পর্যন্ত আমাদের প্রোগ্রাম চালানোর থেকে যে অনুরোধ লাইনের ডেটা পেয়েছি তা দেখে, আমরা দেখতে পাচ্ছি যে `GET` হল পদ্ধতি, _/_ হল অনুরোধ URI, এবং `HTTP/1.1` হল সংস্করণ।
 
-After the request line, the remaining lines starting from `Host:` onward are
-headers. `GET` requests have no body.
+অনুরোধ লাইনের পরে, `Host:` থেকে শুরু করে বাকি লাইনগুলি হল হেডার। `GET` অনুরোধে কোনো বডি নেই।
 
-Try making a request from a different browser or asking for a different
-address, such as _127.0.0.1:7878/test_, to see how the request data changes.
+বিভিন্ন ব্রাউজার থেকে অনুরোধ করার চেষ্টা করুন বা _127.0.0.1:7878/test_ এর মতো একটি ভিন্ন ঠিকানার জন্য জিজ্ঞাসা করুন, অনুরোধ ডেটা কীভাবে পরিবর্তিত হয় তা দেখতে।
 
-Now that we know what the browser is asking for, let’s send back some data!
+এখন যেহেতু আমরা জানি যে ব্রাউজারটি কী চাইছে, আসুন কিছু ডেটা ফেরত পাঠাই!
 
-### Writing a Response
+### একটি প্রতিক্রিয়া লেখা
 
-We’re going to implement sending data in response to a client request.
-Responses have the following format:
+আমরা একটি ক্লায়েন্ট অনুরোধের প্রতিক্রিয়ায় ডেটা পাঠানোর বাস্তবায়ন করতে যাচ্ছি। প্রতিক্রিয়ার বিন্যাসটি নিম্নরূপ:
 
 ```text
 HTTP-Version Status-Code Reason-Phrase CRLF
@@ -252,26 +136,17 @@ headers CRLF
 message-body
 ```
 
-The first line is a _status line_ that contains the HTTP version used in the
-response, a numeric status code that summarizes the result of the request, and
-a reason phrase that provides a text description of the status code. After the
-CRLF sequence are any headers, another CRLF sequence, and the body of the
-response.
+প্রথম লাইনটি হল একটি _স্ট্যাটাস লাইন_ যাতে প্রতিক্রিয়ায় ব্যবহৃত HTTP সংস্করণ, অনুরোধের ফলাফলের সংক্ষিপ্তসারকারী একটি সাংখ্যিক স্ট্যাটাস কোড এবং স্ট্যাটাস কোডের একটি পাঠ্য বিবরণ প্রদানকারী একটি কারণ বাক্যাংশ রয়েছে। CRLF সিকোয়েন্সের পরে কোনো হেডার, অন্য CRLF সিকোয়েন্স এবং প্রতিক্রিয়ার বডি থাকে।
 
-Here is an example response that uses HTTP version 1.1, has a status code of
-200, an OK reason phrase, no headers, and no body:
+এখানে একটি প্রতিক্রিয়ার উদাহরণ দেওয়া হল যা HTTP সংস্করণ 1.1 ব্যবহার করে, যার স্ট্যাটাস কোড 200, একটি OK কারণ বাক্যাংশ, কোনো হেডার নেই এবং কোনো বডি নেই:
 
 ```text
 HTTP/1.1 200 OK\r\n\r\n
 ```
 
-The status code 200 is the standard success response. The text is a tiny
-successful HTTP response. Let’s write this to the stream as our response to a
-successful request! From the `handle_connection` function, remove the
-`println!` that was printing the request data and replace it with the code in
-Listing 21-3.
+স্ট্যাটাস কোড 200 হল স্ট্যান্ডার্ড সাফল্যের প্রতিক্রিয়া। টেক্সটটি একটি ছোট সফল HTTP প্রতিক্রিয়া। আসুন এটিকে একটি সফল অনুরোধের প্রতিক্রিয়ায় আমাদের প্রতিক্রিয়া হিসাবে স্ট্রিমে লিখি! `handle_connection` ফাংশন থেকে, অনুরোধ ডেটা প্রিন্ট করা `println!` সরিয়ে দিন এবং এটিকে তালিকা 21-3-এর কোড দিয়ে প্রতিস্থাপন করুন।
 
-<Listing number="21-3" file-name="src/main.rs" caption="Writing a tiny successful HTTP response to the stream">
+<Listing number="21-3" file-name="src/main.rs" caption="স্ট্রিমে একটি ছোট সফল HTTP প্রতিক্রিয়া লেখা">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-03/src/main.rs:here}}
@@ -279,27 +154,15 @@ Listing 21-3.
 
 </Listing>
 
-The first new line defines the `response` variable that holds the success
-message’s data. Then we call `as_bytes` on our `response` to convert the string
-data to bytes. The `write_all` method on `stream` takes a `&[u8]` and sends
-those bytes directly down the connection. Because the `write_all` operation
-could fail, we use `unwrap` on any error result as before. Again, in a real
-application you would add error handling here.
+প্রথম নতুন লাইনটি `response` ভেরিয়েবলটিকে সংজ্ঞায়িত করে যা সাফল্যের বার্তার ডেটা ধারণ করে। তারপরে আমরা স্ট্রিং ডেটাকে বাইটে রূপান্তর করতে আমাদের `response`-এ `as_bytes` কল করি। `stream`-এর `write_all` পদ্ধতি একটি `&[u8]` নেয় এবং সেই বাইটগুলিকে সরাসরি সংযোগের মাধ্যমে পাঠায়। যেহেতু `write_all` অপারেশন ব্যর্থ হতে পারে, তাই আমরা আগের মতোই যেকোনো ত্রুটির ফলাফলে `unwrap` ব্যবহার করি। আবারও, একটি বাস্তব অ্যাপ্লিকেশনে আপনি এখানে ত্রুটি হ্যান্ডলিং যোগ করবেন।
 
-With these changes, let’s run our code and make a request. We’re no longer
-printing any data to the terminal, so we won’t see any output other than the
-output from Cargo. When you load _127.0.0.1:7878_ in a web browser, you should
-get a blank page instead of an error. You’ve just hand-coded receiving an HTTP
-request and sending a response!
+এই পরিবর্তনগুলির সাথে, আসুন আমাদের কোড চালাই এবং একটি অনুরোধ করি। আমরা আর টার্মিনালে কোনো ডেটা প্রিন্ট করছি না, তাই আমরা Cargo থেকে আউটপুট ছাড়া অন্য কোনো আউটপুট দেখতে পাব না। আপনি যখন ওয়েব ব্রাউজারে _127.0.0.1:7878_ লোড করবেন, তখন আপনি একটি ত্রুটির পরিবর্তে একটি ফাঁকা পৃষ্ঠা পাবেন। আপনি সবেমাত্র হাতে-কোড করে একটি HTTP অনুরোধ গ্রহণ করেছেন এবং একটি প্রতিক্রিয়া পাঠিয়েছেন!
 
-### Returning Real HTML
+### আসল HTML ফেরত দেওয়া
 
-Let’s implement the functionality for returning more than a blank page. Create
-the new file _hello.html_ in the root of your project directory, not in the
-_src_ directory. You can input any HTML you want; Listing 21-4 shows one
-possibility.
+আসুন একটি ফাঁকা পৃষ্ঠার চেয়ে বেশি কিছু ফেরত দেওয়ার কার্যকারিতা প্রয়োগ করি। আপনার প্রকল্পের মূল ডিরেক্টরিতে _hello.html_ নামে একটি নতুন ফাইল তৈরি করুন, _src_ ডিরেক্টরিতে নয়। আপনি যেকোনো HTML ইনপুট করতে পারেন; তালিকা 21-4 একটি সম্ভাবনা দেখায়।
 
-<Listing number="21-4" file-name="hello.html" caption="A sample HTML file to return in a response">
+<Listing number="21-4" file-name="hello.html" caption="একটি প্রতিক্রিয়ায় ফেরত দেওয়ার জন্য একটি নমুনা HTML ফাইল">
 
 ```html
 {{#include ../listings/ch21-web-server/listing-21-05/hello.html}}
@@ -307,12 +170,9 @@ possibility.
 
 </Listing>
 
-This is a minimal HTML5 document with a heading and some text. To return this
-from the server when a request is received, we’ll modify `handle_connection` as
-shown in Listing 21-5 to read the HTML file, add it to the response as a body,
-and send it.
+এটি একটি শিরোনাম এবং কিছু টেক্সট সহ একটি ন্যূনতম HTML5 ডকুমেন্ট। যখন একটি অনুরোধ পাওয়া যায় তখন সার্ভার থেকে এটি ফেরত দিতে, আমরা HTML ফাইলটি পড়তে, এটিকে বডি হিসাবে প্রতিক্রিয়ায় যোগ করতে এবং এটি পাঠাতে তালিকা 21-5-এ দেখানো হিসাবে `handle_connection` সংশোধন করব।
 
-<Listing number="21-5" file-name="src/main.rs" caption="Sending the contents of *hello.html* as the body of the response">
+<Listing number="21-5" file-name="src/main.rs" caption="প্রতিক্রিয়ার বডি হিসাবে *hello.html*-এর বিষয়বস্তু পাঠানো">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-05/src/main.rs:here}}
@@ -320,38 +180,19 @@ and send it.
 
 </Listing>
 
-We’ve added `fs` to the `use` statement to bring the standard library’s
-filesystem module into scope. The code for reading the contents of a file to a
-string should look familiar; we used it in Chapter 12 when we read the contents
-of a file for our I/O project in Listing 12-4.
+আমরা স্ট্যান্ডার্ড লাইব্রেরির ফাইলসিস্টেম মডিউলকে স্কোপে আনতে `use` স্টেটমেন্টে `fs` যোগ করেছি। একটি ফাইলের বিষয়বস্তু একটি স্ট্রিং-এ পড়ার কোডটি পরিচিত হওয়া উচিত; আমরা এটি অধ্যায় 12-এ ব্যবহার করেছি যখন আমরা তালিকা 12-4-এ আমাদের I/O প্রকল্পের জন্য একটি ফাইলের বিষয়বস্তু পড়েছিলাম।
 
-Next, we use `format!` to add the file’s contents as the body of the success
-response. To ensure a valid HTTP response, we add the `Content-Length` header
-which is set to the size of our response body, in this case the size of
-`hello.html`.
+এর পরে, আমরা সাফল্যের প্রতিক্রিয়ার বডি হিসাবে ফাইলের বিষয়বস্তু যোগ করতে `format!` ব্যবহার করি। একটি বৈধ HTTP প্রতিক্রিয়া নিশ্চিত করতে, আমরা `Content-Length` হেডার যোগ করি যা আমাদের প্রতিক্রিয়া বডির আকারের সাথে সেট করা হয়, এই ক্ষেত্রে `hello.html`-এর আকার।
 
-Run this code with `cargo run` and load _127.0.0.1:7878_ in your browser; you
-should see your HTML rendered!
+`cargo run` দিয়ে এই কোডটি চালান এবং আপনার ব্রাউজারে _127.0.0.1:7878_ লোড করুন; আপনি আপনার HTML রেন্ডার করা দেখতে পাবেন!
 
-Currently, we’re ignoring the request data in `http_request` and just sending
-back the contents of the HTML file unconditionally. That means if you try
-requesting _127.0.0.1:7878/something-else_ in your browser, you’ll still get
-back this same HTML response. At the moment, our server is very limited and
-does not do what most web servers do. We want to customize our responses
-depending on the request and only send back the HTML file for a well-formed
-request to _/_.
+বর্তমানে, আমরা `http_request`-এর অনুরোধ ডেটা উপেক্ষা করছি এবং শর্তসাপেক্ষভাবে HTML ফাইলের বিষয়বস্তু ফেরত পাঠাচ্ছি। এর মানে হল যদি আপনি আপনার ব্রাউজারে _127.0.0.1:7878/something-else_ অনুরোধ করার চেষ্টা করেন, তাহলেও আপনি একই HTML প্রতিক্রিয়া ফিরে পাবেন। এই মুহূর্তে, আমাদের সার্ভার খুবই সীমিত এবং বেশিরভাগ ওয়েব সার্ভার যা করে তা করে না। আমরা অনুরোধের উপর নির্ভর করে আমাদের প্রতিক্রিয়াগুলি কাস্টমাইজ করতে চাই এবং শুধুমাত্র _/_ এর জন্য একটি সুগঠিত অনুরোধের জন্য HTML ফাইলটি ফেরত পাঠাতে চাই।
 
-### Validating the Request and Selectively Responding
+### অনুরোধ যাচাই করা এবং নির্বাচনীভাবে সাড়া দেওয়া
 
-Right now, our web server will return the HTML in the file no matter what the
-client requested. Let’s add functionality to check that the browser is
-requesting _/_ before returning the HTML file and return an error if the
-browser requests anything else. For this we need to modify `handle_connection`,
-as shown in Listing 21-6. This new code checks the content of the request
-received against what we know a request for _/_ looks like and adds `if` and
-`else` blocks to treat requests differently.
+এখন, আমাদের ওয়েব সার্ভার ক্লায়েন্ট যা অনুরোধ করুক না কেন ফাইলের HTML ফেরত দেবে। আসুন কার্যকারিতা যোগ করি যাতে ব্রাউজার HTML ফাইলটি ফেরত দেওয়ার আগে _/_ অনুরোধ করছে কিনা তা পরীক্ষা করা যায় এবং যদি ব্রাউজার অন্য কিছু অনুরোধ করে তবে একটি ত্রুটি ফেরত দেওয়া যায়। এর জন্য আমাদের তালিকা 21-6-এ দেখানো হিসাবে `handle_connection` পরিবর্তন করতে হবে। এই নতুন কোডটি _/_ এর অনুরোধ দেখতে কেমন তা জানার সাথে প্রাপ্ত অনুরোধের বিষয়বস্তু পরীক্ষা করে এবং অনুরোধগুলিকে আলাদাভাবে বিবেচনা করার জন্য `if` এবং `else` ব্লক যোগ করে।
 
-<Listing number="21-6" file-name="src/main.rs" caption="Handling requests to */* differently from other requests">
+<Listing number="21-6" file-name="src/main.rs" caption="অন্যান্য অনুরোধ থেকে */* এর অনুরোধগুলি আলাদাভাবে পরিচালনা করা">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-06/src/main.rs:here}}
@@ -359,32 +200,17 @@ received against what we know a request for _/_ looks like and adds `if` and
 
 </Listing>
 
-We’re only going to be looking at the first line of the HTTP request, so rather
-than reading the entire request into a vector, we’re calling `next` to get the
-first item from the iterator. The first `unwrap` takes care of the `Option` and
-stops the program if the iterator has no items. The second `unwrap` handles the
-`Result` and has the same effect as the `unwrap` that was in the `map` added in
-Listing 21-2.
+আমরা HTTP অনুরোধের প্রথম লাইনটিই দেখব, তাই একটি ভেক্টরে পুরো অনুরোধটি পড়ার পরিবর্তে, আমরা পুনরাবৃত্তিকারী থেকে প্রথম আইটেমটি পেতে `next` কল করছি। প্রথম `unwrap` `Option`-এর যত্ন নেয় এবং যদি পুনরাবৃত্তিকারীর কোনো আইটেম না থাকে তবে প্রোগ্রামটি বন্ধ করে দেয়। দ্বিতীয় `unwrap` `Result` পরিচালনা করে এবং তালিকা 21-2-এ যোগ করা `map`-এ থাকা `unwrap`-এর মতোই কাজ করে।
 
-Next, we check the `request_line` to see if it equals the request line of a GET
-request to the _/_ path. If it does, the `if` block returns the contents of our
-HTML file.
+এর পরে, আমরা `request_line` পরীক্ষা করে দেখি এটি _/_ পাথে একটি GET অনুরোধের অনুরোধ লাইনের সমান কিনা। যদি তা হয়, তবে `if` ব্লকটি আমাদের HTML ফাইলের বিষয়বস্তু ফেরত দেয়।
 
-If the `request_line` does _not_ equal the GET request to the _/_ path, it
-means we’ve received some other request. We’ll add code to the `else` block in
-a moment to respond to all other requests.
+যদি `request_line` _/_ পাথের GET অনুরোধের সমান _না_ হয়, এর মানে হল আমরা অন্য কোনো অনুরোধ পেয়েছি। আমরা অন্য সমস্ত অনুরোধের প্রতিক্রিয়া জানাতে কিছুক্ষণের মধ্যেই `else` ব্লকে কোড যোগ করব।
 
-Run this code now and request _127.0.0.1:7878_; you should get the HTML in
-_hello.html_. If you make any other request, such as
-_127.0.0.1:7878/something-else_, you’ll get a connection error like those you
-saw when running the code in Listing 21-1 and Listing 21-2.
+এখন এই কোডটি চালান এবং _127.0.0.1:7878_ অনুরোধ করুন; আপনি _hello.html_-এ HTML পাবেন। আপনি যদি অন্য কোনো অনুরোধ করেন, যেমন _127.0.0.1:7878/something-else_, তাহলে আপনি তালিকা 21-1 এবং তালিকা 21-2-এ কোড চালানোর সময় যে সংযোগ ত্রুটিগুলি দেখেছিলেন তার মতো একটি সংযোগ ত্রুটি পাবেন।
 
-Now let’s add the code in Listing 21-7 to the `else` block to return a response
-with the status code 404, which signals that the content for the request was
-not found. We’ll also return some HTML for a page to render in the browser
-indicating the response to the end user.
+এখন আসুন তালিকা 21-7-এর কোডটি `else` ব্লকে যোগ করি যাতে 404 স্ট্যাটাস কোড সহ একটি প্রতিক্রিয়া ফেরত দেওয়া যায়, যা ইঙ্গিত দেয় যে অনুরোধের জন্য বিষয়বস্তু পাওয়া যায়নি। আমরা শেষ ব্যবহারকারীর কাছে প্রতিক্রিয়া নির্দেশ করে ব্রাউজারে রেন্ডার করার জন্য একটি পৃষ্ঠার জন্য কিছু HTML ও ফেরত দেব।
 
-<Listing number="21-7" file-name="src/main.rs" caption="Responding with status code 404 and an error page if anything other than */* was requested">
+<Listing number="21-7" file-name="src/main.rs" caption="যদি */*-এর পরিবর্তে অন্য কিছু অনুরোধ করা হয় তবে 404 স্ট্যাটাস কোড এবং একটি ত্রুটি পৃষ্ঠা দিয়ে সাড়া দেওয়া">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-07/src/main.rs:here}}
@@ -392,13 +218,9 @@ indicating the response to the end user.
 
 </Listing>
 
-Here, our response has a status line with status code 404 and the reason phrase
-`NOT FOUND`. The body of the response will be the HTML in the file _404.html_.
-You’ll need to create a _404.html_ file next to _hello.html_ for the error
-page; again feel free to use any HTML you want or use the example HTML in
-Listing 21-8.
+এখানে, আমাদের প্রতিক্রিয়ায় 404 স্ট্যাটাস কোড এবং `NOT FOUND` কারণ বাক্যাংশ সহ একটি স্ট্যাটাস লাইন রয়েছে। প্রতিক্রিয়ার বডিটি _404.html_ ফাইলের HTML হবে। ত্রুটি পৃষ্ঠার জন্য আপনাকে _404.html_ ফাইলটি _hello.html_ এর পাশে তৈরি করতে হবে; আবার আপনি যেকোনো HTML ব্যবহার করতে পারেন বা তালিকা 21-8-এ উদাহরণ HTML ব্যবহার করতে পারেন।
 
-<Listing number="21-8" file-name="404.html" caption="Sample content for the page to send back with any 404 response">
+<Listing number="21-8" file-name="404.html" caption="404 প্রতিক্রিয়ার সাথে ফেরত পাঠানোর জন্য পৃষ্ঠার নমুনার বিষয়বস্তু">
 
 ```html
 {{#include ../listings/ch21-web-server/listing-21-07/404.html}}
@@ -406,22 +228,13 @@ Listing 21-8.
 
 </Listing>
 
-With these changes, run your server again. Requesting _127.0.0.1:7878_ should
-return the contents of _hello.html_, and any other request, like
-_127.0.0.1:7878/foo_, should return the error HTML from _404.html_.
+এই পরিবর্তনগুলির সাথে, আপনার সার্ভারটি আবার চালান। _127.0.0.1:7878_ অনুরোধ করলে _hello.html_-এর বিষয়বস্তু ফেরত দেওয়া উচিত, এবং _127.0.0.1:7878/foo_-এর মতো অন্য যেকোনো অনুরোধ _404.html_ থেকে ত্রুটি HTML ফেরত দেবে।
 
-### A Touch of Refactoring
+### রিফ্যাক্টরিংয়ের একটি স্পর্শ
 
-At the moment the `if` and `else` blocks have a lot of repetition: they’re both
-reading files and writing the contents of the files to the stream. The only
-differences are the status line and the filename. Let’s make the code more
-concise by pulling out those differences into separate `if` and `else` lines
-that will assign the values of the status line and the filename to variables;
-we can then use those variables unconditionally in the code to read the file
-and write the response. Listing 21-9 shows the resulting code after replacing
-the large `if` and `else` blocks.
+এই মুহূর্তে `if` এবং `else` ব্লকে প্রচুর পুনরাবৃত্তি রয়েছে: উভয়ই ফাইল পড়ছে এবং ফাইলের বিষয়বস্তু স্ট্রিমে লিখছে। শুধুমাত্র পার্থক্য হল স্ট্যাটাস লাইন এবং ফাইলের নাম। আসুন সেই পার্থক্যগুলিকে আলাদা `if` এবং `else` লাইনে টেনে এনে কোডটিকে আরও সংক্ষিপ্ত করি যা স্ট্যাটাস লাইন এবং ফাইলের নামের মান ভেরিয়েবলে অর্পণ করবে; তারপরে আমরা ফাইলটি পড়তে এবং প্রতিক্রিয়া লিখতে কোডে শর্তসাপেক্ষভাবে সেই ভেরিয়েবলগুলি ব্যবহার করতে পারি। তালিকা 21-9 বড় `if` এবং `else` ব্লকগুলি প্রতিস্থাপন করার পরে ফলাফলস্বরূপ কোডটি দেখায়।
 
-<Listing number="21-9" file-name="src/main.rs" caption="Refactoring the `if` and `else` blocks to contain only the code that differs between the two cases">
+<Listing number="21-9" file-name="src/main.rs" caption="`if` এবং `else` ব্লকগুলিকে রিফ্যাক্টর করে শুধুমাত্র দুটি ক্ষেত্রে ভিন্ন কোড ধারণ করা">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-09/src/main.rs:here}}
@@ -429,23 +242,10 @@ the large `if` and `else` blocks.
 
 </Listing>
 
-Now the `if` and `else` blocks only return the appropriate values for the
-status line and filename in a tuple; we then use destructuring to assign these
-two values to `status_line` and `filename` using a pattern in the `let`
-statement, as discussed in Chapter 19.
+এখন `if` এবং `else` ব্লকগুলি শুধুমাত্র একটি টাপলে স্ট্যাটাস লাইন এবং ফাইলের নামের জন্য উপযুক্ত মান ফেরত দেয়; তারপরে আমরা অধ্যায় 19-এ আলোচনা করা হয়েছে, `let` স্টেটমেন্টে একটি প্যাটার্ন ব্যবহার করে `status_line` এবং `filename`-এ এই দুটি মান অর্পণ করতে ডিস্ট্রাকচারিং ব্যবহার করি।
 
-The previously duplicated code is now outside the `if` and `else` blocks and
-uses the `status_line` and `filename` variables. This makes it easier to see
-the difference between the two cases, and it means we have only one place to
-update the code if we want to change how the file reading and response writing
-work. The behavior of the code in Listing 21-9 will be the same as that in
-Listing 21-7.
+পূর্বে ডুপ্লিকেট করা কোডটি এখন `if` এবং `else` ব্লকের বাইরে এবং `status_line` এবং `filename` ভেরিয়েবল ব্যবহার করে। এটি দুটি ক্ষেত্রের মধ্যে পার্থক্য দেখা সহজ করে তোলে, এবং এর মানে হল ফাইল পড়া এবং প্রতিক্রিয়া লেখার কাজটি কীভাবে করা যায় তা পরিবর্তন করতে চাইলে আমাদের কাছে কোডটি আপডেট করার জন্য শুধুমাত্র একটি স্থান রয়েছে। তালিকা 21-9-এর কোডের আচরণ তালিকা 21-7-এর মতোই হবে।
 
-Awesome! We now have a simple web server in approximately 40 lines of Rust code
-that responds to one request with a page of content and responds to all other
-requests with a 404 response.
+অসাধারণ! আমাদের কাছে এখন প্রায় 40 লাইনের Rust কোডে একটি সাধারণ ওয়েব সার্ভার রয়েছে যা একটি পৃষ্ঠার বিষয়বস্তু সহ একটি অনুরোধের প্রতিক্রিয়া জানায় এবং অন্যান্য সমস্ত অনুরোধের 404 প্রতিক্রিয়া জানায়।
 
-Currently, our server runs in a single thread, meaning it can only serve one
-request at a time. Let’s examine how that can be a problem by simulating some
-slow requests. Then we’ll fix it so our server can handle multiple requests at
-once.
+বর্তমানে, আমাদের সার্ভার একটি একক থ্রেডে চলে, যার মানে এটি একবারে শুধুমাত্র একটি অনুরোধ পরিবেশন করতে পারে। আসুন কিছু ধীর অনুরোধ অনুকরণ করে দেখি যে এটি কীভাবে একটি সমস্যা হতে পারে। তারপরে আমরা এটিকে ঠিক করব যাতে আমাদের সার্ভার একসাথে একাধিক অনুরোধ পরিচালনা করতে পারে।

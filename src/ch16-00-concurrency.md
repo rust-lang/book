@@ -1,49 +1,16 @@
-# Fearless Concurrency
+# নির্ভীক কনকারেন্সি
 
-Handling concurrent programming safely and efficiently is another of Rust’s
-major goals. _Concurrent programming_, where different parts of a program
-execute independently, and _parallel programming_, where different parts of a
-program execute at the same time, are becoming increasingly important as more
-computers take advantage of their multiple processors. Historically,
-programming in these contexts has been difficult and error prone: Rust hopes to
-change that.
+নিরাপদে এবং দক্ষতার সাথে কনকারেন্ট প্রোগ্রামিং পরিচালনা করা Rust-এর আরেকটি প্রধান লক্ষ্য। _কনকারেন্ট প্রোগ্রামিং_, যেখানে একটি প্রোগ্রামের বিভিন্ন অংশ স্বাধীনভাবে কার্যকর হয় এবং _প্যারালাল প্রোগ্রামিং_, যেখানে একটি প্রোগ্রামের বিভিন্ন অংশ একই সময়ে কার্যকর হয়, আরও বেশি সংখ্যক কম্পিউটার তাদের একাধিক প্রসেসরের সুবিধা নেওয়ার সাথে সাথে ক্রমবর্ধমান গুরুত্বপূর্ণ হয়ে উঠছে। ঐতিহাসিকভাবে, এই প্রেক্ষাপটে প্রোগ্রামিং কঠিন এবং ত্রুটি প্রবণ ছিল: Rust সেই অবস্থার পরিবর্তন করতে চায়।
 
-Initially, the Rust team thought that ensuring memory safety and preventing
-concurrency problems were two separate challenges to be solved with different
-methods. Over time, the team discovered that the ownership and type systems are
-a powerful set of tools to help manage memory safety _and_ concurrency
-problems! By leveraging ownership and type checking, many concurrency errors
-are compile-time errors in Rust rather than runtime errors. Therefore, rather
-than making you spend lots of time trying to reproduce the exact circumstances
-under which a runtime concurrency bug occurs, incorrect code will refuse to
-compile and present an error explaining the problem. As a result, you can fix
-your code while you’re working on it rather than potentially after it has been
-shipped to production. We’ve nicknamed this aspect of Rust _fearless_
-_concurrency_. Fearless concurrency allows you to write code that is free of
-subtle bugs and is easy to refactor without introducing new bugs.
+প্রাথমিকভাবে, Rust টিম মনে করত যে মেমরি নিরাপত্তা নিশ্চিত করা এবং কনকারেন্সি সমস্যা প্রতিরোধ করা দুটি পৃথক চ্যালেঞ্জ যা বিভিন্ন পদ্ধতির মাধ্যমে সমাধান করতে হবে। সময়ের সাথে সাথে, টিম আবিষ্কার করেছে যে মালিকানা এবং টাইপ সিস্টেম মেমরি নিরাপত্তা _এবং_ কনকারেন্সি সমস্যাগুলি পরিচালনা করতে সাহায্য করার জন্য একটি শক্তিশালী সরঞ্জাম! মালিকানা এবং টাইপ চেকিং ব্যবহার করে, Rust-এ অনেক কনকারেন্সি এরর রানটাইম এররের পরিবর্তে কম্পাইল-টাইম এরর হয়। অতএব, একটি রানটাইম কনকারেন্সি বাগ ঘটার সঠিক পরিস্থিতি পুনরুত্পাদন করার চেষ্টা করে অনেক সময় ব্যয় করার পরিবর্তে, ভুল কোড কম্পাইল করতে অস্বীকার করবে এবং সমস্যাটি ব্যাখ্যা করে একটি এরর উপস্থাপন করবে। ফলস্বরূপ, আপনার কোডটি সম্ভাব্যভাবে উৎপাদনে পাঠানোর পরে না করে যখন আপনি এটির উপর কাজ করছেন তখনই আপনি আপনার কোডটি ঠিক করতে পারেন। আমরা Rust-এর এই দিকটিকে _নির্ভীক_ _কনকারেন্সি_ নামে অভিহিত করেছি। নির্ভীক কনকারেন্সি আপনাকে এমন কোড লিখতে দেয় যা সূক্ষ্ম বাগ থেকে মুক্ত এবং নতুন বাগ প্রবর্তন না করে রিফ্যাক্টর করা সহজ।
 
-> Note: For simplicity’s sake, we’ll refer to many of the problems as
-> _concurrent_ rather than being more precise by saying _concurrent and/or
-> parallel_. If this book were about concurrency and/or parallelism, we’d be
-> more specific. For this chapter, please mentally substitute _concurrent
-> and/or parallel_ whenever we use _concurrent_.
+> দ্রষ্টব্য: সরলতার স্বার্থে, আমরা অনেক সমস্যাকে _কনকারেন্ট_ হিসাবে উল্লেখ করব, _কনকারেন্ট এবং/অথবা প্যারালাল_ বলার চেয়ে। যদি এই বইটি কনকারেন্সি এবং/অথবা প্যারালালিটি সম্পর্কে হত, তবে আমরা আরও নির্দিষ্ট হতাম। এই অধ্যায়ের জন্য, যখনই আমরা _কনকারেন্ট_ ব্যবহার করি তখন দয়া করে মানসিকভাবে _কনকারেন্ট এবং/অথবা প্যারালাল_ প্রতিস্থাপন করুন।
 
-Many languages are dogmatic about the solutions they offer for handling
-concurrent problems. For example, Erlang has elegant functionality for
-message-passing concurrency but has only obscure ways to share state between
-threads. Supporting only a subset of possible solutions is a reasonable
-strategy for higher-level languages, because a higher-level language promises
-benefits from giving up some control to gain abstractions. However, lower-level
-languages are expected to provide the solution with the best performance in any
-given situation and have fewer abstractions over the hardware. Therefore, Rust
-offers a variety of tools for modeling problems in whatever way is appropriate
-for your situation and requirements.
+অনেক ভাষা কনকারেন্ট সমস্যাগুলি পরিচালনার জন্য তারা যে সমাধানগুলি সরবরাহ করে সে সম্পর্কে গোঁড়া। উদাহরণস্বরূপ, এরলাং-এর মেসেজ-পাসিং কনকারেন্সির জন্য মার্জিত কার্যকারিতা রয়েছে তবে থ্রেডগুলির মধ্যে স্টেট শেয়ার করার জন্য শুধুমাত্র অস্পষ্ট উপায় রয়েছে। সম্ভাব্য সমাধানগুলির একটি উপসেটকে সমর্থন করা উচ্চ-স্তরের ভাষাগুলির জন্য একটি যুক্তিসঙ্গত কৌশল, কারণ একটি উচ্চ-স্তরের ভাষা অ্যাবস্ট্রাকশন অর্জনের জন্য কিছু নিয়ন্ত্রণ ছেড়ে দেওয়ার সুবিধাগুলির প্রতিশ্রুতি দেয়। যাইহোক, নিম্ন-স্তরের ভাষাগুলি যে কোনও পরিস্থিতিতে সেরা পারফরম্যান্সের সাথে সমাধান প্রদান করবে এবং হার্ডওয়্যারের উপর কম অ্যাবস্ট্রাকশন রাখবে বলে আশা করা হয়। অতএব, Rust আপনার পরিস্থিতি এবং প্রয়োজনীয়তার জন্য উপযুক্ত যে কোনও উপায়ে সমস্যাগুলি মডেলিং করার জন্য বিভিন্ন সরঞ্জাম সরবরাহ করে।
 
-Here are the topics we’ll cover in this chapter:
+এই অধ্যায়ে আমরা যে বিষয়গুলি আলোচনা করব তা এখানে দেওয়া হল:
 
-- How to create threads to run multiple pieces of code at the same time
-- _Message-passing_ concurrency, where channels send messages between threads
-- _Shared-state_ concurrency, where multiple threads have access to some piece
-  of data
-- The `Sync` and `Send` traits, which extend Rust’s concurrency guarantees to
-  user-defined types as well as types provided by the standard library
+- একই সময়ে একাধিক কোড চালানোর জন্য থ্রেডগুলি কীভাবে তৈরি করতে হয়
+- _মেসেজ-পাসিং_ কনকারেন্সি, যেখানে চ্যানেলগুলি থ্রেডগুলির মধ্যে বার্তা পাঠায়
+- _শেয়ার্ড-স্টেট_ কনকারেন্সি, যেখানে একাধিক থ্রেডের কিছু ডেটাতে অ্যাক্সেস থাকে
+- `Sync` এবং `Send` trait, যা স্ট্যান্ডার্ড লাইব্রেরি দ্বারা প্রদত্ত প্রকারের পাশাপাশি ব্যবহারকারী-সংজ্ঞায়িত প্রকারগুলিতেও Rust-এর কনকারেন্সি গ্যারান্টি প্রসারিত করে
