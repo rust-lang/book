@@ -1,64 +1,37 @@
-## Hello, Cargo!
+## হ্যালো, কার্গো!
 
-Cargo is Rust’s build system and package manager. Most Rustaceans use this tool
-to manage their Rust projects because Cargo handles a lot of tasks for you,
-such as building your code, downloading the libraries your code depends on, and
-building those libraries. (We call the libraries that your code needs
-_dependencies_.)
+কার্গো হল Rust এর বিল্ড সিস্টেম এবং প্যাকেজ ম্যানেজার। বেশিরভাগ Rustaceans তাদের Rust প্রোজেক্টগুলি পরিচালনা করতে এই সরঞ্জামটি ব্যবহার করে কারণ কার্গো আপনার জন্য অনেক কাজ পরিচালনা করে, যেমন আপনার কোড তৈরি করা, আপনার কোড যে লাইব্রেরিগুলির উপর নির্ভর করে সেগুলি ডাউনলোড করা এবং সেই লাইব্রেরিগুলি তৈরি করা। (আমরা যে লাইব্রেরিগুলির আপনার কোডের প্রয়োজন সেগুলিকে _নির্ভরতা_ বলি।)
 
-The simplest Rust programs, like the one we’ve written so far, don’t have any
-dependencies. If we had built the “Hello, world!” project with Cargo, it would
-only use the part of Cargo that handles building your code. As you write more
-complex Rust programs, you’ll add dependencies, and if you start a project
-using Cargo, adding dependencies will be much easier to do.
+সহজ Rust প্রোগ্রামগুলি, যেমন আমরা এখন পর্যন্ত যা লিখেছি, তার কোনো নির্ভরতা নেই। আমরা যদি কার্গো দিয়ে "Hello, world!" প্রোজেক্ট তৈরি করতাম, তবে এটি শুধুমাত্র কার্গোর সেই অংশটি ব্যবহার করত যা আপনার কোড তৈরি করে। আপনি আরও জটিল Rust প্রোগ্রাম লেখার সাথে সাথে, আপনি নির্ভরতা যোগ করবেন এবং আপনি যদি কার্গো ব্যবহার করে একটি প্রোজেক্ট শুরু করেন, তবে নির্ভরতা যোগ করা অনেক সহজ হবে।
 
-Because the vast majority of Rust projects use Cargo, the rest of this book
-assumes that you’re using Cargo too. Cargo comes installed with Rust if you
-used the official installers discussed in the
-[“Installation”][installation]<!-- ignore --> section. If you installed Rust
-through some other means, check whether Cargo is installed by entering the
-following in your terminal:
+যেহেতু Rust প্রোজেক্টের বিশাল সংখ্যাগরিষ্ঠ কার্গো ব্যবহার করে, তাই এই বইটির বাকি অংশে ধরে নেওয়া হয়েছে যে আপনিও কার্গো ব্যবহার করছেন। আপনি যদি [ "ইনস্টলেশন" ] [installation] বিভাগে আলোচিত অফিসিয়াল ইনস্টলার ব্যবহার করেন, তবে কার্গো Rust এর সাথে ইনস্টল হয়ে আসে। যদি আপনি অন্য কোনো উপায়ে Rust ইনস্টল করেন, তবে আপনার টার্মিনালে নিম্নলিখিতটি প্রবেশ করে কার্গো ইনস্টল করা আছে কিনা তা পরীক্ষা করুন:
 
 ```console
 $ cargo --version
 ```
 
-If you see a version number, you have it! If you see an error, such as `command
-not found`, look at the documentation for your method of installation to
-determine how to install Cargo separately.
+যদি আপনি একটি সংস্করণ নম্বর দেখেন তবে আপনার কাছে এটি আছে! আপনি যদি `command not found` এর মতো কোনো এরর দেখেন তবে, কার্গোকে আলাদাভাবে ইনস্টল করার জন্য আপনার ইনস্টলেশন পদ্ধতির ডকুমেন্টেশন দেখুন।
 
-### Creating a Project with Cargo
+### কার্গো দিয়ে একটি প্রোজেক্ট তৈরি করা
 
-Let’s create a new project using Cargo and look at how it differs from our
-original “Hello, world!” project. Navigate back to your _projects_ directory
-(or wherever you decided to store your code). Then, on any operating system,
-run the following:
+আসুন কার্গো ব্যবহার করে একটি নতুন প্রোজেক্ট তৈরি করি এবং দেখি এটি আমাদের আসল "Hello, world!" প্রোজেক্ট থেকে কীভাবে আলাদা। আপনার _projects_ ডিরেক্টরিতে ফিরে যান (বা আপনি যেখানে আপনার কোড সংরক্ষণ করার সিদ্ধান্ত নিয়েছেন)। তারপর, যেকোনো অপারেটিং সিস্টেমে, নিম্নলিখিতটি চালান:
 
 ```console
 $ cargo new hello_cargo
 $ cd hello_cargo
 ```
 
-The first command creates a new directory and project called _hello_cargo_.
-We’ve named our project _hello_cargo_, and Cargo creates its files in a
-directory of the same name.
+প্রথম কমান্ডটি _hello_cargo_ নামে একটি নতুন ডিরেক্টরি এবং প্রোজেক্ট তৈরি করে। আমরা আমাদের প্রোজেক্টের নাম _hello_cargo_ দিয়েছি এবং কার্গো একই নামে একটি ডিরেক্টরিতে এর ফাইলগুলি তৈরি করে।
 
-Go into the _hello_cargo_ directory and list the files. You’ll see that Cargo
-has generated two files and one directory for us: a _Cargo.toml_ file and a
-_src_ directory with a _main.rs_ file inside.
+_hello_cargo_ ডিরেক্টরিতে প্রবেশ করুন এবং ফাইলগুলির তালিকা দিন। আপনি দেখতে পাবেন যে কার্গো আমাদের জন্য দুটি ফাইল এবং একটি ডিরেক্টরি তৈরি করেছে: একটি _Cargo.toml_ ফাইল এবং _src_ ডিরেক্টরির ভিতরে একটি _main.rs_ ফাইল।
 
-It has also initialized a new Git repository along with a _.gitignore_ file.
-Git files won’t be generated if you run `cargo new` within an existing Git
-repository; you can override this behavior by using `cargo new --vcs=git`.
+এটি একটি _.gitignore_ ফাইল সহ একটি নতুন Git রিপোজিটরিও শুরু করেছে। আপনি যদি একটি বিদ্যমান Git রিপোজিটরির মধ্যে `cargo new` চালান তবে Git ফাইল তৈরি হবে না; `cargo new --vcs=git` ব্যবহার করে আপনি এই আচরণ পরিবর্তন করতে পারেন।
 
-> Note: Git is a common version control system. You can change `cargo new` to
-> use a different version control system or no version control system by using
-> the `--vcs` flag. Run `cargo new --help` to see the available options.
+> দ্রষ্টব্য: Git হল একটি সাধারণ সংস্করণ নিয়ন্ত্রণ ব্যবস্থা। আপনি `--vcs` ফ্ল্যাগ ব্যবহার করে একটি ভিন্ন সংস্করণ নিয়ন্ত্রণ ব্যবস্থা ব্যবহার করতে বা কোনো সংস্করণ নিয়ন্ত্রণ ব্যবস্থা ব্যবহার না করতে `cargo new` পরিবর্তন করতে পারেন। উপলব্ধ বিকল্পগুলি দেখতে `cargo new --help` চালান।
 
-Open _Cargo.toml_ in your text editor of choice. It should look similar to the
-code in Listing 1-2.
+আপনার পছন্দের টেক্সট এডিটরে _Cargo.toml_ খুলুন। এটি তালিকা 1-2-এর কোডের মতো হওয়া উচিত।
 
-<Listing number="1-2" file-name="Cargo.toml" caption="Contents of *Cargo.toml* generated by `cargo new`">
+<Listing number="1-2" file-name="Cargo.toml" caption="`cargo new` দ্বারা তৈরি *Cargo.toml* এর বিষয়বস্তু">
 
 ```toml
 [package]
@@ -73,23 +46,15 @@ edition = "2021"
 
 </Listing>
 
-This file is in the [_TOML_][toml]<!-- ignore --> (_Tom’s Obvious, Minimal
-Language_) format, which is Cargo’s configuration format.
+এই ফাইলটি [_TOML_][toml] (_টম'স অভিয়াস, মিনিমাল ল্যাঙ্গুয়েজ_) ফর্ম্যাটে আছে, যা কার্গোর কনফিগারেশন ফর্ম্যাট।
 
-The first line, `[package]`, is a section heading that indicates that the
-following statements are configuring a package. As we add more information to
-this file, we’ll add other sections.
+প্রথম লাইন, `[package]`, একটি বিভাগ শিরোনাম যা নির্দেশ করে যে নিম্নলিখিত স্টেটমেন্টগুলি একটি প্যাকেজ কনফিগার করছে। আমরা যখন এই ফাইলে আরও তথ্য যোগ করব, তখন আমরা অন্যান্য বিভাগ যোগ করব।
 
-The next three lines set the configuration information Cargo needs to compile
-your program: the name, the version, and the edition of Rust to use. We’ll talk
-about the `edition` key in [Appendix E][appendix-e]<!-- ignore -->.
+পরের তিনটি লাইন কার্গোকে আপনার প্রোগ্রাম কম্পাইল করার জন্য প্রয়োজনীয় কনফিগারেশন তথ্য সেট করে: নাম, সংস্করণ এবং Rust-এর সংস্করণ ব্যবহার করতে। আমরা [পরিশিষ্ট E][appendix-e]-এ `edition` কী নিয়ে কথা বলব।
 
-The last line, `[dependencies]`, is the start of a section for you to list any
-of your project’s dependencies. In Rust, packages of code are referred to as
-_crates_. We won’t need any other crates for this project, but we will in the
-first project in Chapter 2, so we’ll use this dependencies section then.
+শেষ লাইন, `[dependencies]`, আপনার প্রোজেক্টের কোনো নির্ভরতা তালিকাভুক্ত করার জন্য একটি বিভাগের শুরু। Rust-এ, কোডের প্যাকেজগুলিকে _ক্রেইটস_ হিসাবে উল্লেখ করা হয়। এই প্রোজেক্টের জন্য আমাদের অন্য কোনো ক্রেইটের প্রয়োজন হবে না, তবে আমরা দ্বিতীয় অধ্যায়ের প্রথম প্রোজেক্টে ব্যবহার করব, তাই আমরা তখন এই নির্ভরতা বিভাগটি ব্যবহার করব।
 
-Now open _src/main.rs_ and take a look:
+এখন _src/main.rs_ খুলুন এবং একবার দেখে নিন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -99,28 +64,15 @@ fn main() {
 }
 ```
 
-Cargo has generated a “Hello, world!” program for you, just like the one we
-wrote in Listing 1-1! So far, the differences between our project and the
-project Cargo generated are that Cargo placed the code in the _src_ directory
-and we have a _Cargo.toml_ configuration file in the top directory.
+কার্গো আপনার জন্য একটি "Hello, world!" প্রোগ্রাম তৈরি করেছে, ঠিক যেমনটি আমরা তালিকা 1-1 এ লিখেছিলাম! এখন পর্যন্ত, আমাদের প্রোজেক্ট এবং কার্গো দ্বারা জেনারেট করা প্রোজেক্টের মধ্যে পার্থক্য হল যে কার্গো কোডটিকে _src_ ডিরেক্টরিতে রেখেছে এবং আমাদের শীর্ষ ডিরেক্টরিতে একটি _Cargo.toml_ কনফিগারেশন ফাইল রয়েছে।
 
-Cargo expects your source files to live inside the _src_ directory. The
-top-level project directory is just for README files, license information,
-configuration files, and anything else not related to your code. Using Cargo
-helps you organize your projects. There’s a place for everything, and
-everything is in its place.
+কার্গো আশা করে যে আপনার সোর্স ফাইলগুলি _src_ ডিরেক্টরির ভিতরে থাকবে। টপ-লেভেল প্রোজেক্ট ডিরেক্টরি শুধুমাত্র README ফাইল, লাইসেন্সের তথ্য, কনফিগারেশন ফাইল এবং আপনার কোডের সাথে সম্পর্কিত নয় এমন অন্য যেকোনো কিছুর জন্য। কার্গো ব্যবহার করা আপনাকে আপনার প্রোজেক্টগুলিকে সংগঠিত করতে সাহায্য করে। এখানে সবকিছু জন্য একটি স্থান আছে এবং সবকিছু তার স্থানে আছে।
 
-If you started a project that doesn’t use Cargo, as we did with the “Hello,
-world!” project, you can convert it to a project that does use Cargo. Move the
-project code into the _src_ directory and create an appropriate _Cargo.toml_
-file. One easy way to get that _Cargo.toml_ file is to run `cargo init`, which
-will create it for you automatically.
+আপনি যদি কোনো প্রোজেক্ট শুরু করেন যা কার্গো ব্যবহার করে না, যেমনটি আমরা "Hello, world!" প্রোজেক্টের সাথে করেছিলাম, তবে আপনি এটিকে কার্গো ব্যবহার করে এমন একটি প্রোজেক্টে রূপান্তর করতে পারেন। প্রোজেক্ট কোডটি _src_ ডিরেক্টরিতে সরান এবং একটি উপযুক্ত _Cargo.toml_ ফাইল তৈরি করুন। _Cargo.toml_ ফাইল পাওয়ার একটি সহজ উপায় হল `cargo init` চালানো, যা স্বয়ংক্রিয়ভাবে আপনার জন্য এটি তৈরি করবে।
 
-### Building and Running a Cargo Project
+### একটি কার্গো প্রোজেক্ট তৈরি এবং চালানো
 
-Now let’s look at what’s different when we build and run the “Hello, world!”
-program with Cargo! From your _hello_cargo_ directory, build your project by
-entering the following command:
+এখন আসুন দেখি কার্গোর সাথে "Hello, world!" প্রোগ্রামটি তৈরি এবং চালানোর সময় কী পার্থক্য রয়েছে! আপনার _hello_cargo_ ডিরেক্টরি থেকে, নিম্নলিখিত কমান্ডটি প্রবেশ করে আপনার প্রোজেক্টটি তৈরি করুন:
 
 ```console
 $ cargo build
@@ -128,26 +80,16 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.85 secs
 ```
 
-This command creates an executable file in _target/debug/hello_cargo_ (or
-_target\debug\hello_cargo.exe_ on Windows) rather than in your current
-directory. Because the default build is a debug build, Cargo puts the binary in
-a directory named _debug_. You can run the executable with this command:
+এই কমান্ডটি আপনার বর্তমান ডিরেক্টরির পরিবর্তে _target/debug/hello_cargo_ (_target\debug\hello_cargo.exe_ on Windows) এ একটি এক্সিকিউটেবল ফাইল তৈরি করে। যেহেতু ডিফল্ট বিল্ড হল একটি ডিবাগ বিল্ড, কার্গো বাইনারিটিকে _debug_ নামের একটি ডিরেক্টরিতে রাখে। আপনি এই কমান্ডের মাধ্যমে এক্সিকিউটেবলটি চালাতে পারেন:
 
 ```console
-$ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
+$ ./target/debug/hello_cargo # অথবা Windows-এ .\target\debug\hello_cargo.exe
 Hello, world!
 ```
 
-If all goes well, `Hello, world!` should print to the terminal. Running `cargo
-build` for the first time also causes Cargo to create a new file at the top
-level: _Cargo.lock_. This file keeps track of the exact versions of
-dependencies in your project. This project doesn’t have dependencies, so the
-file is a bit sparse. You won’t ever need to change this file manually; Cargo
-manages its contents for you.
+যদি সবকিছু ঠিকঠাক থাকে, `Hello, world!` টার্মিনালে প্রিন্ট হওয়া উচিত। প্রথমবারের জন্য `cargo build` চালানোর কারণে কার্গো টপ লেভেলে একটি নতুন ফাইল তৈরি করে: _Cargo.lock_। এই ফাইলটি আপনার প্রোজেক্টের নির্ভরতার সঠিক সংস্করণ ট্র্যাক করে। এই প্রোজেক্টের কোনো নির্ভরতা নেই, তাই ফাইলটি কিছুটা হালকা। আপনাকে কখনই এই ফাইলটি ম্যানুয়ালি পরিবর্তন করার প্রয়োজন হবে না; কার্গো আপনার জন্য এর বিষয়বস্তু পরিচালনা করে।
 
-We just built a project with `cargo build` and ran it with
-`./target/debug/hello_cargo`, but we can also use `cargo run` to compile the
-code and then run the resultant executable all in one command:
+আমরা এইমাত্র `cargo build` দিয়ে একটি প্রোজেক্ট তৈরি করেছি এবং `./target/debug/hello_cargo` দিয়ে রান করেছি, তবে আমরা কোড কম্পাইল করতে এবং তারপর ফলাফলস্বরূপ এক্সিকিউটেবলটিকে একটি কমান্ডে রান করতে `cargo run`-ও ব্যবহার করতে পারি:
 
 ```console
 $ cargo run
@@ -156,15 +98,9 @@ $ cargo run
 Hello, world!
 ```
 
-Using `cargo run` is more convenient than having to remember to run `cargo
-build` and then use the whole path to the binary, so most developers use `cargo
-run`.
+`cargo run` ব্যবহার করা `cargo build` চালানো এবং তারপর বাইনারির পুরো পাথ ব্যবহার করার চেয়ে অনেক বেশি সুবিধাজনক, তাই বেশিরভাগ ডেভেলপার `cargo run` ব্যবহার করেন।
 
-Notice that this time we didn’t see output indicating that Cargo was compiling
-`hello_cargo`. Cargo figured out that the files hadn’t changed, so it didn’t
-rebuild but just ran the binary. If you had modified your source code, Cargo
-would have rebuilt the project before running it, and you would have seen this
-output:
+লক্ষ্য করুন যে এইবার আমরা কোনো আউটপুট দেখিনি যা নির্দেশ করে যে কার্গো `hello_cargo` কম্পাইল করছে। কার্গো বুঝতে পেরেছিল যে ফাইলগুলি পরিবর্তন হয়নি, তাই এটি পুনরায় তৈরি করেনি, তবে বাইনারিটি রান করেছে। আপনি যদি আপনার সোর্স কোড পরিবর্তন করতেন, তবে কার্গো রান করার আগে প্রোজেক্টটি পুনরায় তৈরি করত এবং আপনি এই আউটপুটটি দেখতে পেতেন:
 
 ```console
 $ cargo run
@@ -174,8 +110,7 @@ $ cargo run
 Hello, world!
 ```
 
-Cargo also provides a command called `cargo check`. This command quickly checks
-your code to make sure it compiles but doesn’t produce an executable:
+কার্গো `cargo check` নামে একটি কমান্ডও প্রদান করে। এই কমান্ডটি দ্রুত আপনার কোড চেক করে, যাতে এটি কম্পাইল হয় কিনা তা নিশ্চিত করা যায়, তবে এটি কোনো এক্সিকিউটেবল তৈরি করে না:
 
 ```console
 $ cargo check
@@ -183,52 +118,27 @@ $ cargo check
     Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
 ```
 
-Why would you not want an executable? Often, `cargo check` is much faster than
-`cargo build` because it skips the step of producing an executable. If you’re
-continually checking your work while writing the code, using `cargo check` will
-speed up the process of letting you know if your project is still compiling! As
-such, many Rustaceans run `cargo check` periodically as they write their
-program to make sure it compiles. Then they run `cargo build` when they’re
-ready to use the executable.
+কেন আপনি একটি এক্সিকিউটেবল চাইবেন না? প্রায়শই, `cargo check`, `cargo build` এর চেয়ে অনেক দ্রুত কারণ এটি একটি এক্সিকিউটেবল তৈরির ধাপটি এড়িয়ে যায়। আপনি যখন কোড লেখার সময় ক্রমাগত আপনার কাজ পরীক্ষা করেন, তখন `cargo check` ব্যবহার করলে আপনার প্রোজেক্ট কম্পাইল হচ্ছে কিনা তা আপনাকে জানাতে প্রক্রিয়াটিকে দ্রুততর করবে! সেই কারণে, অনেক Rustacean তাদের প্রোগ্রাম লেখার সময় পর্যায়ক্রমে `cargo check` চালান, যাতে এটি কম্পাইল হচ্ছে কিনা তা নিশ্চিত করা যায়। তারপর যখন তারা এক্সিকিউটেবল ব্যবহার করার জন্য প্রস্তুত হন তখন তারা `cargo build` চালান।
 
-Let’s recap what we’ve learned so far about Cargo:
+আসুন কার্গো সম্পর্কে এখন পর্যন্ত আমরা যা শিখেছি তা পুনরায় দেখি:
 
-- We can create a project using `cargo new`.
-- We can build a project using `cargo build`.
-- We can build and run a project in one step using `cargo run`.
-- We can build a project without producing a binary to check for errors using
-  `cargo check`.
-- Instead of saving the result of the build in the same directory as our code,
-  Cargo stores it in the _target/debug_ directory.
+- আমরা `cargo new` ব্যবহার করে একটি প্রোজেক্ট তৈরি করতে পারি।
+- আমরা `cargo build` ব্যবহার করে একটি প্রোজেক্ট তৈরি করতে পারি।
+- আমরা `cargo run` ব্যবহার করে একটি ধাপে একটি প্রোজেক্ট তৈরি করতে এবং রান করতে পারি।
+- আমরা `cargo check` ব্যবহার করে এরর চেক করার জন্য বাইনারি তৈরি না করেই একটি প্রোজেক্ট তৈরি করতে পারি।
+- আমাদের কোডের মতো একই ডিরেক্টরিতে বিল্ডের ফলাফল সংরক্ষণ করার পরিবর্তে কার্গো এটিকে _target/debug_ ডিরেক্টরিতে সংরক্ষণ করে।
 
-An additional advantage of using Cargo is that the commands are the same no
-matter which operating system you’re working on. So, at this point, we’ll no
-longer provide specific instructions for Linux and macOS versus Windows.
+কার্গো ব্যবহারের অতিরিক্ত সুবিধা হল কমান্ডগুলি আপনি যে অপারেটিং সিস্টেমেই কাজ করেন না কেন একই থাকে। সুতরাং, এই সময়ে, আমরা Linux এবং macOS বনাম Windows-এর জন্য নির্দিষ্ট নির্দেশাবলী আর প্রদান করব না।
 
-### Building for Release
+### রিলিজের জন্য তৈরি করা
 
-When your project is finally ready for release, you can use `cargo build
---release` to compile it with optimizations. This command will create an
-executable in _target/release_ instead of _target/debug_. The optimizations
-make your Rust code run faster, but turning them on lengthens the time it takes
-for your program to compile. This is why there are two different profiles: one
-for development, when you want to rebuild quickly and often, and another for
-building the final program you’ll give to a user that won’t be rebuilt
-repeatedly and that will run as fast as possible. If you’re benchmarking your
-code’s running time, be sure to run `cargo build --release` and benchmark with
-the executable in _target/release_.
+যখন আপনার প্রোজেক্ট অবশেষে রিলিজের জন্য প্রস্তুত হয়ে যায়, তখন আপনি অপটিমাইজেশন সহ কম্পাইল করার জন্য `cargo build --release` ব্যবহার করতে পারেন। এই কমান্ডটি _target/debug_ এর পরিবর্তে _target/release_ এ একটি এক্সিকিউটেবল তৈরি করবে। অপটিমাইজেশনগুলি আপনার Rust কোডকে দ্রুত রান করতে সাহায্য করে, তবে সেগুলিকে চালু করলে আপনার প্রোগ্রামটি কম্পাইল করার জন্য যে সময় লাগে তা দীর্ঘ হয়। এই কারণে দুটি ভিন্ন প্রোফাইল রয়েছে: একটি ডেভেলপমেন্টের জন্য, যখন আপনি দ্রুত এবং প্রায়শই পুনরায় তৈরি করতে চান, এবং অন্যটি চূড়ান্ত প্রোগ্রাম তৈরি করার জন্য যা আপনি এমন ব্যবহারকারীকে দেবেন যা বারবার পুনরায় তৈরি করা হবে না এবং যত দ্রুত সম্ভব রান হবে। আপনি যদি আপনার কোডের রানিং টাইমের বেঞ্চমার্কিং করছেন, তাহলে `cargo build --release` এবং _target/release_-এর এক্সিকিউটেবল দিয়ে বেঞ্চমার্ক করতে ভুলবেন না।
 
-### Cargo as Convention
+### কনভেনশন হিসাবে কার্গো
 
-With simple projects, Cargo doesn’t provide a lot of value over just using
-`rustc`, but it will prove its worth as your programs become more intricate.
-Once programs grow to multiple files or need a dependency, it’s much easier to
-let Cargo coordinate the build.
+সহজ প্রোজেক্টগুলির সাথে, কার্গো শুধুমাত্র `rustc` ব্যবহার করার চেয়ে বেশি সুবিধা দেয় না, তবে আপনার প্রোগ্রামগুলি আরও জটিল হওয়ার সাথে সাথে এটি তার মূল্য প্রমাণ করবে। একবার প্রোগ্রামগুলি একাধিক ফাইলে বৃদ্ধি পেলে বা একটি নির্ভরতার প্রয়োজন হলে, কার্গোকে বিল্ডের সমন্বয় করতে দেওয়া অনেক সহজ।
 
-Even though the `hello_cargo` project is simple, it now uses much of the real
-tooling you’ll use in the rest of your Rust career. In fact, to work on any
-existing projects, you can use the following commands to check out the code
-using Git, change to that project’s directory, and build:
+এমনকি যদিও `hello_cargo` প্রোজেক্টটি সহজ, তবে এটি এখন সেইসব সরঞ্জামের বেশিরভাগই ব্যবহার করে যা আপনি আপনার বাকি Rust ক্যারিয়ারে ব্যবহার করবেন। প্রকৃতপক্ষে, যেকোনো বিদ্যমান প্রোজেক্টে কাজ করার জন্য, আপনি Git ব্যবহার করে কোড চেক আউট করতে, সেই প্রোজেক্টের ডিরেক্টরিতে পরিবর্তন করতে এবং তৈরি করতে নিম্নলিখিত কমান্ডগুলি ব্যবহার করতে পারেন:
 
 ```console
 $ git clone example.org/someproject
@@ -236,23 +146,19 @@ $ cd someproject
 $ cargo build
 ```
 
-For more information about Cargo, check out [its documentation][cargo].
+কার্গো সম্পর্কে আরও তথ্যের জন্য, [এর ডকুমেন্টেশন][cargo] দেখুন।
 
-## Summary
+## সারসংক্ষেপ
 
-You’re already off to a great start on your Rust journey! In this chapter,
-you’ve learned how to:
+আপনি ইতিমধ্যে আপনার Rust যাত্রায় একটি দুর্দান্ত শুরু করেছেন! এই অধ্যায়ে, আপনি শিখেছেন কিভাবে:
 
-- Install the latest stable version of Rust using `rustup`
-- Update to a newer Rust version
-- Open locally installed documentation
-- Write and run a “Hello, world!” program using `rustc` directly
-- Create and run a new project using the conventions of Cargo
+- `rustup` ব্যবহার করে Rust-এর সর্বশেষ স্থিতিশীল সংস্করণ ইনস্টল করতে হয়
+- Rust-এর নতুন সংস্করণে আপডেট করতে হয়
+- স্থানীয়ভাবে ইনস্টল করা ডকুমেন্টেশন খুলতে হয়
+- সরাসরি `rustc` ব্যবহার করে একটি "Hello, world!" প্রোগ্রাম লিখতে এবং চালাতে হয়
+- কার্গোর নিয়ম ব্যবহার করে একটি নতুন প্রোজেক্ট তৈরি এবং রান করতে হয়
 
-This is a great time to build a more substantial program to get used to reading
-and writing Rust code. So, in Chapter 2, we’ll build a guessing game program.
-If you would rather start by learning how common programming concepts work in
-Rust, see Chapter 3 and then return to Chapter 2.
+Rust কোড পড়া এবং লেখার সাথে অভ্যস্ত হওয়ার জন্য একটি আরও বড় প্রোগ্রাম তৈরি করার এটি একটি দুর্দান্ত সময়। সুতরাং, দ্বিতীয় অধ্যায়ে আমরা একটি সংখ্যা অনুমান করার গেম প্রোগ্রাম তৈরি করব। আপনি যদি Rust-এ সাধারণ প্রোগ্রামিং ধারণাগুলি কীভাবে কাজ করে তা শিখে শুরু করতে চান, তাহলে অধ্যায় 3 দেখুন এবং তারপর অধ্যায় 2-এ ফিরে আসুন।
 
 [installation]: ch01-01-installation.html#installation
 [toml]: https://toml.io

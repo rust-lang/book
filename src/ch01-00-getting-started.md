@@ -1,8 +1,7 @@
-# Getting Started
+# শুরু করা যাক
 
-Let’s start your Rust journey! There’s a lot to learn, but every journey starts
-somewhere. In this chapter, we’ll discuss:
+আসুন আপনার Rust যাত্রা শুরু করি! শেখার মতো অনেক কিছু আছে, তবে প্রতিটি যাত্রা কোথাও না কোথাও শুরু হয়। এই অধ্যায়ে, আমরা আলোচনা করব:
 
-- Installing Rust on Linux, macOS, and Windows
-- Writing a program that prints `Hello, world!`
-- Using `cargo`, Rust’s package manager and build system
+- Linux, macOS এবং Windows-এ Rust ইনস্টল করা
+- `Hello, world!` প্রিন্ট করে এমন একটি প্রোগ্রাম লেখা
+- `cargo` ব্যবহার করা, Rust এর প্যাকেজ ম্যানেজার এবং বিল্ড সিস্টেম
