@@ -1,57 +1,25 @@
-## Appendix E - Editions
+## পরিশিষ্ট E - সংস্করণ
 
-In Chapter 1, you saw that `cargo new` adds a bit of metadata to your
-_Cargo.toml_ file about an edition. This appendix talks about what that means!
+অধ্যায় ১-এ, আপনি দেখেছেন যে `cargo new` আপনার _Cargo.toml_ ফাইলে সংস্করণ সম্পর্কে কিছুটা মেটাডেটা যোগ করে। এই পরিশিষ্টটি আলোচনা করে যে এর মানে কী!
 
-The Rust language and compiler have a six-week release cycle, meaning users get
-a constant stream of new features. Other programming languages release larger
-changes less often; Rust releases smaller updates more frequently. After a
-while, all of these tiny changes add up. But from release to release, it can be
-difficult to look back and say, “Wow, between Rust 1.10 and Rust 1.31, Rust has
-changed a lot!”
+Rust ভাষা এবং কম্পাইলারের ছয় সপ্তাহের রিলিজ চক্র রয়েছে, যার অর্থ ব্যবহারকারীরা নতুন বৈশিষ্ট্যগুলির একটি অবিচ্ছিন্ন প্রবাহ পান। অন্যান্য প্রোগ্রামিং ভাষাগুলি কম ঘন ঘন বৃহত্তর পরিবর্তনগুলি প্রকাশ করে; Rust আরও ঘন ঘন ছোট আপডেট প্রকাশ করে। কিছুক্ষণ পরে, এই সমস্ত ছোট পরিবর্তন যোগ হয়ে যায়। কিন্তু রিলিজ থেকে রিলিজ পর্যন্ত, পিছনের দিকে তাকানো এবং বলা কঠিন হতে পারে, "ওয়াও, Rust 1.10 এবং Rust 1.31 এর মধ্যে Rust অনেক পরিবর্তিত হয়েছে!"
 
-Every two or three years, the Rust team produces a new Rust _edition_. Each
-edition brings together the features that have landed into a clear package with
-fully updated documentation and tooling. New editions ship as part of the usual
-six-week release process.
+প্রতি দুই বা তিন বছর পর, Rust দল একটি নতুন Rust _সংস্করণ_ তৈরি করে। প্রতিটি সংস্করণ সম্পূর্ণরূপে আপডেট করা ডকুমেন্টেশন এবং সরঞ্জাম সহ একটি সুস্পষ্ট প্যাকেজে ল্যান্ড করা বৈশিষ্ট্যগুলিকে একত্রিত করে। নতুন সংস্করণগুলি সাধারণ ছয় সপ্তাহের রিলিজ প্রক্রিয়ার অংশ হিসাবে প্রকাশ করা হয়।
 
-Editions serve different purposes for different people:
+সংস্করণগুলি বিভিন্ন ব্যক্তির জন্য বিভিন্ন উদ্দেশ্য পূরণ করে:
 
-- For active Rust users, a new edition brings together incremental changes into
-  an easy-to-understand package.
-- For non-users, a new edition signals that some major advancements have
-  landed, which might make Rust worth another look.
-- For those developing Rust, a new edition provides a rallying point for the
-  project as a whole.
+-   সক্রিয় Rust ব্যবহারকারীদের জন্য, একটি নতুন সংস্করণ ধীরে ধীরে পরিবর্তনগুলিকে একত্রিত করে একটি সহজে বোঝার প্যাকেজে নিয়ে আসে।
+-   অ-ব্যবহারকারীদের জন্য, একটি নতুন সংস্করণ সংকেত দেয় যে কিছু বড় অগ্রগতি হয়েছে, যা Rust কে আবার দেখার মতো করে তুলতে পারে।
+-   Rust-এর উন্নয়নকারীদের জন্য, একটি নতুন সংস্করণ সামগ্রিকভাবে প্রকল্পের জন্য একটি গুরুত্বপূর্ণ বিষয় প্রদান করে।
 
-At the time of this writing, four Rust editions are available: Rust 2015, Rust
-2018, Rust 2021, and Rust 2024. This book is written using Rust 2024 edition
-idioms.
+এই লেখার সময়, চারটি Rust সংস্করণ উপলব্ধ রয়েছে: Rust 2015, Rust 2018, Rust 2021 এবং Rust 2024। এই বইটি Rust 2024 সংস্করণ এর নিয়মাবলী ব্যবহার করে লেখা হয়েছে।
 
-The `edition` key in _Cargo.toml_ indicates which edition the compiler should
-use for your code. If the key doesn’t exist, Rust uses `2015` as the edition
-value for backward compatibility reasons.
+_Cargo.toml_-এ `edition` কী নির্দেশ করে যে কম্পাইলার আপনার কোডের জন্য কোন সংস্করণ ব্যবহার করবে। যদি কীটি বিদ্যমান না থাকে তবে, Rust পিছনের দিকে সামঞ্জস্যতার কারণে `2015` কে সংস্করণের মান হিসাবে ব্যবহার করে।
 
-Each project can opt in to an edition other than the default 2015 edition.
-Editions can contain incompatible changes, such as including a new keyword that
-conflicts with identifiers in code. However, unless you opt in to those
-changes, your code will continue to compile even as you upgrade the Rust
-compiler version you use.
+প্রতিটি প্রকল্প ডিফল্ট 2015 সংস্করণ ছাড়া অন্য একটি সংস্করণ বেছে নিতে পারে। সংস্করণগুলিতে বেমানান পরিবর্তন থাকতে পারে, যেমন একটি নতুন কীওয়ার্ড অন্তর্ভুক্ত করা যা কোডের আইডেন্টিফায়ারের সাথে বিরোধপূর্ণ। যাইহোক, যদি না আপনি সেই পরিবর্তনগুলি বেছে নেন, আপনার কোডটি আপনি যে Rust কম্পাইলার সংস্করণ ব্যবহার করেন তা আপগ্রেড করার সাথে সাথেও কম্পাইল হতে থাকবে।
 
-All Rust compiler versions support any edition that existed prior to that
-compiler’s release, and they can link crates of any supported editions
-together. Edition changes only affect the way the compiler initially parses
-code. Therefore, if you’re using Rust 2015 and one of your dependencies uses
-Rust 2018, your project will compile and be able to use that dependency. The
-opposite situation, where your project uses Rust 2018 and a dependency uses
-Rust 2015, works as well.
+সমস্ত Rust কম্পাইলার সংস্করণ সেই কম্পাইলার প্রকাশের পূর্বে বিদ্যমান যেকোনো সংস্করণকে সমর্থন করে এবং তারা যেকোনো সমর্থিত সংস্করণের ক্রেটগুলিকে একসাথে লিঙ্ক করতে পারে। সংস্করণের পরিবর্তনগুলি কেবলমাত্র কম্পাইলার কীভাবে কোডটি প্রাথমিকভাবে পার্স করে তার উপর প্রভাব ফেলে। অতএব, আপনি যদি Rust 2015 ব্যবহার করেন এবং আপনার নির্ভরতাগুলির মধ্যে একটি Rust 2018 ব্যবহার করে, তবে আপনার প্রকল্পটি কম্পাইল হবে এবং সেই নির্ভরতাটি ব্যবহার করতে সক্ষম হবে। বিপরীত পরিস্থিতি, যেখানে আপনার প্রকল্প Rust 2018 ব্যবহার করে এবং একটি নির্ভরতা Rust 2015 ব্যবহার করে, সেটিও কাজ করে।
 
-To be clear: most features will be available on all editions. Developers using
-any Rust edition will continue to see improvements as new stable releases are
-made. However, in some cases, mainly when new keywords are added, some new
-features might only be available in later editions. You will need to switch
-editions if you want to take advantage of such features.
+স্পষ্টভাবে বলতে গেলে: বেশিরভাগ বৈশিষ্ট্য সমস্ত সংস্করণে উপলব্ধ থাকবে। যেকোনো Rust সংস্করণ ব্যবহারকারী বিকাশকারীরা নতুন স্থিতিশীল রিলিজ হওয়ার সাথে সাথে উন্নতি দেখতে পাবেন। যাইহোক, কিছু ক্ষেত্রে, প্রধানত যখন নতুন কীওয়ার্ড যুক্ত করা হয়, তখন কিছু নতুন বৈশিষ্ট্য শুধুমাত্র পরবর্তী সংস্করণগুলিতে উপলব্ধ হতে পারে। আপনি যদি এই ধরনের বৈশিষ্ট্যগুলির সুবিধা নিতে চান তবে আপনাকে সংস্করণ পরিবর্তন করতে হবে।
 
-For more details, the [_Edition Guide_](https://doc.rust-lang.org/stable/edition-guide/) is a complete book
-about editions that enumerates the differences between editions and explains
-how to automatically upgrade your code to a new edition via `cargo fix`.
+আরও বিস্তারিত জানার জন্য, [_সংস্করণ নির্দেশিকা_](https://doc.rust-lang.org/stable/edition-guide/) সংস্করণগুলি সম্পর্কে একটি সম্পূর্ণ বই যা সংস্করণগুলির মধ্যে পার্থক্যগুলি গণনা করে এবং কীভাবে `cargo fix` এর মাধ্যমে স্বয়ংক্রিয়ভাবে আপনার কোডটিকে একটি নতুন সংস্করণে আপগ্রেড করতে হয় তা ব্যাখ্যা করে।

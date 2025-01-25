@@ -1,4 +1,3 @@
-# Appendix
+# পরিশিষ্ট
 
-The following sections contain reference material you may find useful in your
-Rust journey.
+নিম্নলিখিত বিভাগগুলোতে কিছু রেফারেন্স উপাদান রয়েছে যা আপনি আপনার রাস্ট যাত্রায় কাজে লাগাতে পারেন।
