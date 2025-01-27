@@ -205,6 +205,7 @@ grapheme
 Grapheme
 growable
 gzip
+handcoded
 handoff
 hardcode
 hardcoded

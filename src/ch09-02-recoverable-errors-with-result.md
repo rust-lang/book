@@ -502,15 +502,15 @@ code will now compile.
 
 </Listing>
 
-The `Box<dyn Error>` type is a _trait object_, which we’ll talk about in the
-[“Using Trait Objects that Allow for Values of Different
-Types”][trait-objects]<!-- ignore --> section in Chapter 18. For now, you can
-read `Box<dyn Error>` to mean “any kind of error.” Using `?` on a `Result`
-value in a `main` function with the error type `Box<dyn Error>` is allowed
-because it allows any `Err` value to be returned early. Even though the body of
-this `main` function will only ever return errors of type `std::io::Error`, by
-specifying `Box<dyn Error>`, this signature will continue to be correct even if
-more code that returns other errors is added to the body of `main`.
+The `Box<dyn Error>` type is a _trait object_, which we’ll talk about in [“Using
+Trait Objects That Allow for Values of Different Types”][trait-objects]<!--
+ignore --> in Chapter 18. For now, you can read `Box<dyn Error>` to mean “any
+kind of error.” Using `?` on a `Result` value in a `main` function with the
+error type `Box<dyn Error>` is allowed because it allows any `Err` value to be
+returned early. Even though the body of this `main` function will only ever
+return errors of type `std::io::Error`, by specifying `Box<dyn Error>`, this
+signature will continue to be correct even if more code that returns other
+errors is added to the body of `main`.
 
 When a `main` function returns a `Result<(), E>`, the executable will exit with
 a value of `0` if `main` returns `Ok(())` and will exit with a nonzero value if

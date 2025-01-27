@@ -31,7 +31,7 @@ Note that `use` only creates the shortcut for the particular scope in which the
 child module named `customer`, which is then a different scope than the `use`
 statement, so the function body won’t compile.
 
-<Listing number="7-12" file-name="src/lib.rs" caption="A `use` statement only applies in the scope it’s in">
+<Listing number="7-12" file-name="src/lib.rs" caption="A `use` statement only applies in the scope it’s in.">
 
 ```rust,noplayground,test_harness,does_not_compile,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
@@ -159,13 +159,12 @@ Re-exporting is useful when the internal structure of your code is different
 from how programmers calling your code would think about the domain. For
 example, in this restaurant metaphor, the people running the restaurant think
 about “front of house” and “back of house.” But customers visiting a restaurant
-probably won’t think about the parts of the restaurant in those terms. With
-`pub use`, we can write our code with one structure but expose a different
-structure. Doing so makes our library well organized for programmers working on
-the library and programmers calling the library. We’ll look at another example
-of `pub use` and how it affects your crate’s documentation in the [“Exporting a
-Convenient Public API with `pub use`”][ch14-pub-use]<!-- ignore --> section of
-Chapter 14.
+probably won’t think about the parts of the restaurant in those terms. With `pub
+use`, we can write our code with one structure but expose a different structure.
+Doing so makes our library well organized for programmers working on the library
+and programmers calling the library. We’ll look at another example of `pub use`
+and how it affects your crate’s documentation in [“Exporting a Convenient Public
+API with `pub use`”][ch14-pub-use]<!-- ignore --> in Chapter 14.
 
 ### Using External Packages
 
@@ -192,10 +191,10 @@ Adding `rand` as a dependency in _Cargo.toml_ tells Cargo to download the
 make `rand` available to our project.
 
 Then, to bring `rand` definitions into the scope of our package, we added a
-`use` line starting with the name of the crate, `rand`, and listed the items
-we wanted to bring into scope. Recall that in the [“Generating a Random
-Number”][rand]<!-- ignore --> section in Chapter 2, we brought the `Rng` trait
-into scope and called the `rand::thread_rng` function:
+`use` line starting with the name of the crate, `rand`, and listed the items we
+wanted to bring into scope. Recall that in [“Generating a Random
+Number”][rand]<!-- ignore --> in Chapter 2, we brought the `Rng` trait into
+scope and called the `rand::thread_rng` function:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
@@ -292,11 +291,12 @@ the current scope. Be careful when using the glob operator! Glob can make it
 harder to tell what names are in scope and where a name used in your program
 was defined.
 
-The glob operator is often used when testing to bring everything under test
-into the `tests` module; we’ll talk about that in the [“How to Write
-Tests”][writing-tests]<!-- ignore --> section in Chapter 11. The glob operator
-is also sometimes used as part of the prelude pattern: see [the standard library documentation](../std/prelude/index.html#other-preludes)<!-- ignore -->
-for more information on that pattern.
+The glob operator is often used when testing to bring everything under test into
+the `tests` module; we’ll talk about that in [“How to Write
+Tests”][writing-tests]<!-- ignore --> in Chapter 11. The glob operator is also
+sometimes used as part of the prelude pattern: see [the standard library
+documentation](../std/prelude/index.html#other-preludes)<!-- ignore --> for more
+information on that pattern.
 
 [ch14-pub-use]: ch14-02-publishing-to-crates-io.html#exporting-a-convenient-public-api-with-pub-use
 [rand]: ch02-00-guessing-game-tutorial.html#generating-a-random-number

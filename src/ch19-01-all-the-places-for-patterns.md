@@ -35,7 +35,7 @@ left of each arrow.
 One requirement for `match` expressions is that they need to be _exhaustive_ in
 the sense that all possibilities for the value in the `match` expression must
 be accounted for. One way to ensure you’ve covered every possibility is to have
-a catchall pattern for the last arm: for example, a variable name matching any
+a catch-all pattern for the last arm: for example, a variable name matching any
 value can never fail and thus covers every remaining case.
 
 The particular pattern `_` will match anything, but it never binds to a

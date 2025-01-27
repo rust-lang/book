@@ -65,17 +65,17 @@ like this:
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-16-map-function/src/main.rs:here}}
 ```
 
-Note that we must use the fully qualified syntax that we talked about earlier
-in the [“Advanced Traits”][advanced-traits]<!-- ignore --> section because
-there are multiple functions available named `to_string`. Here, we’re using the
-`to_string` function defined in the `ToString` trait, which the standard
-library has implemented for any type that implements `Display`.
+Note that we must use the fully qualified syntax that we talked about in
+[“Advanced Traits”][advanced-traits]<!-- ignore --> because there are multiple
+functions available named `to_string`. Here, we’re using the `to_string`
+function defined in the `ToString` trait, which the standard library has
+implemented for any type that implements `Display`.
 
-Recall from the [“Enum values”][enum-values]<!-- ignore --> section of Chapter
-6 that the name of each enum variant that we define also becomes an initializer
-function. We can use these initializer functions as function pointers that
-implement the closure traits, which means we can specify the initializer
-functions as arguments for methods that take closures, like so:
+Recall from [“Enum values”][enum-values]<!-- ignore --> in Chapter 6 that the
+name of each enum variant that we define also becomes an initializer function.
+We can use these initializer functions as function pointers that implement the
+closure traits, which means we can specify the initializer functions as
+arguments for methods that take closures, like so:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-17-map-initializer/src/main.rs:here}}

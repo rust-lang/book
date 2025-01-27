@@ -30,9 +30,9 @@ mutex is described as _guarding_ the data it holds via the locking system.
 Mutexes have a reputation for being difficult to use because you have to
 remember two rules:
 
-- You must attempt to acquire the lock before using the data.
-- When you’re done with the data that the mutex guards, you must unlock the
-  data so other threads can acquire the lock.
+1. You must attempt to acquire the lock before using the data.
+2. When you’re done with the data that the mutex guards, you must unlock the
+   data so other threads can acquire the lock.
 
 For a real-world metaphor for a mutex, imagine a panel discussion at a
 conference with only one microphone. Before a panelist can speak, they have to
@@ -144,8 +144,8 @@ the `Rc<T>` before moving ownership to the thread.
 
 </Listing>
 
-Once again, we compile and get... different errors! The compiler is teaching us
-a lot.
+Once again, we compile and get… different errors! The compiler is teaching us a
+lot.
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-14/output.txt}}
@@ -164,14 +164,14 @@ subtracts from the count when each clone is dropped. But it doesn’t use any
 concurrency primitives to make sure that changes to the count can’t be
 interrupted by another thread. This could lead to wrong counts—subtle bugs that
 could in turn lead to memory leaks or a value being dropped before we’re done
-with it. What we need is a type exactly like `Rc<T>` but one that makes changes
-to the reference count in a thread-safe way.
+with it. What we need is a type that is exactly like `Rc<T>` but one that makes
+changes to the reference count in a thread-safe way.
 
 #### Atomic Reference Counting with `Arc<T>`
 
 Fortunately, `Arc<T>` _is_ a type like `Rc<T>` that is safe to use in
 concurrent situations. The _a_ stands for _atomic_, meaning it’s an _atomically
-reference counted_ type. Atomics are an additional kind of concurrency
+reference-counted_ type. Atomics are an additional kind of concurrency
 primitive that we won’t cover in detail here: see the standard library
 documentation for [`std::sync::atomic`][atomic]<!-- ignore --> for more
 details. At this point, you just need to know that atomics work like primitive
@@ -221,14 +221,14 @@ type for this example so we could concentrate on how `Mutex<T>` works.
 
 ### Similarities Between `RefCell<T>`/`Rc<T>` and `Mutex<T>`/`Arc<T>`
 
-You might have noticed that `counter` is immutable but we could get a mutable
+You might have noticed that `counter` is immutable, but we could get a mutable
 reference to the value inside it; this means `Mutex<T>` provides interior
 mutability, as the `Cell` family does. In the same way we used `RefCell<T>` in
 Chapter 15 to allow us to mutate contents inside an `Rc<T>`, we use `Mutex<T>`
 to mutate contents inside an `Arc<T>`.
 
 Another detail to note is that Rust can’t protect you from all kinds of logic
-errors when you use `Mutex<T>`. Recall in Chapter 15 that using `Rc<T>` came
+errors when you use `Mutex<T>`. Recall from Chapter 15 that using `Rc<T>` came
 with the risk of creating reference cycles, where two `Rc<T>` values refer to
 each other, causing memory leaks. Similarly, `Mutex<T>` comes with the risk of
 creating _deadlocks_. These occur when an operation needs to lock two resources

@@ -43,8 +43,8 @@ The smart pointer `Rc<T>` is also not `Sync` for the same reasons that it’s no
 family of related `Cell<T>` types are not `Sync`. The implementation of borrow
 checking that `RefCell<T>` does at runtime is not thread-safe. The smart
 pointer `Mutex<T>` is `Sync` and can be used to share access with multiple
-threads as you saw in the [“Sharing a `Mutex<T>` Between Multiple
-Threads”][sharing-a-mutext-between-multiple-threads]<!-- ignore --> section.
+threads as you saw in [“Sharing a `Mutex<T>` Between Multiple
+Threads”][sharing-a-mutext-between-multiple-threads]<!-- ignore -->.
 
 ### Implementing `Send` and `Sync` Manually Is Unsafe
 

@@ -96,17 +96,15 @@ passed; 0 failed` totals the number of tests that passed or failed.
 It’s possible to mark a test as ignored so it doesn’t run in a particular
 instance; we’ll cover that in the [“Ignoring Some Tests Unless Specifically
 Requested”][ignoring]<!-- ignore --> section later in this chapter. Because we
-haven’t done that here, the summary shows `0 ignored`.
+haven’t done that here, the summary shows `0 ignored`. We can also pass an
+argument to the `cargo test` command to run only tests whose name matches a
+string; this is called _filtering_ and we’ll cover that in the [“Running a
+Subset of Tests by Name”][subset]<!-- ignore --> section. Here we haven’t
+filtered the tests being run, so the end of the summary shows `0 filtered out`.
 
 The `0 measured` statistic is for benchmark tests that measure performance.
 Benchmark tests are, as of this writing, only available in nightly Rust. See
 [the documentation about benchmark tests][bench] to learn more.
-
-We can pass an argument to the `cargo test` command to run only tests whose
-name matches a string; this is called _filtering_ and we’ll cover that in the
-[“Running a Subset of Tests by Name”][subset]<!-- ignore --> section. Here we
-haven’t filtered the tests being run, so the end of the summary shows `0
-filtered out`.
 
 The next part of the test output starting at `Doc-tests adder` is for the
 results of any documentation tests. We don’t have any documentation tests yet,
@@ -317,19 +315,19 @@ Run the tests again:
 {{#include ../listings/ch11-writing-automated-tests/no-listing-04-bug-in-add-two/output.txt}}
 ```
 
-Our test caught the bug! The `it_adds_two` test failed, and the message tells
-us ``assertion `left == right` failed`` and what the `left` and `right` values
-are. This message helps us start debugging: the `left` argument, where we had
-the result of calling `add_two(2)`, was `5` but the `right` argument was `4`.
-You can imagine that this would be especially helpful when we have a lot of
-tests going on.
+Our test caught the bug! The `it_adds_two` test failed, and the message tells us
+that the assertion that failed was ``assertion `left == right` failed`` and what
+the `left` and `right` values are. This message helps us start debugging: the
+`left` argument, where we had the result of calling `add_two(2)`, was `5` but
+the `right` argument was `4`. You can imagine that this would be especially
+helpful when we have a lot of tests going on.
 
 Note that in some languages and test frameworks, the parameters to equality
 assertion functions are called `expected` and `actual`, and the order in which
 we specify the arguments matters. However, in Rust, they’re called `left` and
-`right`, and the order in which we specify the value we expect and the value
-the code produces doesn’t matter. We could write the assertion in this test as
-`assert_eq!(4, result)`, which would produce the same failure message
+`right`, and the order in which we specify the value we expect and the value the
+code produces doesn’t matter. We could write the assertion in this test as
+`assert_eq!(4, result)`, which would result in the same failure message that
 that displays `` assertion failed: `(left == right)` ``.
 
 The `assert_ne!` macro will pass if the two values we give it are not equal and
@@ -358,13 +356,12 @@ details about these and other derivable traits.
 You can also add a custom message to be printed with the failure message as
 optional arguments to the `assert!`, `assert_eq!`, and `assert_ne!` macros. Any
 arguments specified after the required arguments are passed along to the
-`format!` macro (discussed in Chapter 8 in the [“Concatenation with the `+`
-Operator or the `format!`
-Macro”][concatenation-with-the--operator-or-the-format-macro]<!-- ignore -->
-section), so you can pass a format string that contains `{}` placeholders and
-values to go in those placeholders. Custom messages are useful for documenting
-what an assertion means; when a test fails, you’ll have a better idea of what
-the problem is with the code.
+`format!` macro (discussed in [“Concatenation with the `+` Operator or the
+`format!` Macro”][concatenation-with-the--operator-or-the-format-macro]<!--
+ignore --> in Chapter 8), so you can pass a format string that contains `{}`
+placeholders and values to go in those placeholders. Custom messages are useful
+for documenting what an assertion means; when a test fails, you’ll have a better
+idea of what the problem is with the code.
 
 For example, let’s say we have a function that greets people by name and we
 want to test that the name we pass into the function appears in the output:

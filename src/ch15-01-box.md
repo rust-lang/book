@@ -45,7 +45,7 @@ Listing 15-1 shows how to use a box to store an `i32` value on the heap:
 
 We define the variable `b` to have the value of a `Box` that points to the
 value `5`, which is allocated on the heap. This program will print `b = 5`; in
-this case, we can access the data in the box similar to how we would if this
+this case, we can access the data in the box similarly to how we would if this
 data were on the stack. Just like any owned value, when a box goes out of
 scope, as `b` does at the end of `main`, it will be deallocated. The
 deallocation happens both for the box (stored on the stack) and the data it
@@ -60,7 +60,7 @@ wouldn’t be allowed to if we didn’t have boxes.
 ### Enabling Recursive Types with Boxes
 
 A value of _recursive type_ can have another value of the same type as part of
-itself. Recursive types pose an issue because at compile time Rust needs to
+itself. Recursive types pose an issue because, at compile time, Rust needs to
 know how much space a type takes up. However, the nesting of values of
 recursive types could theoretically continue infinitely, so Rust can’t know how
 much space the value needs. Because boxes have a known size, we can enable
@@ -92,8 +92,8 @@ Each item in a cons list contains two elements: the value of the current item
 and the next item. The last item in the list contains only a value called `Nil`
 without a next item. A cons list is produced by recursively calling the `cons`
 function. The canonical name to denote the base case of the recursion is `Nil`.
-Note that this is not the same as the “null” or “nil” concept in Chapter 6,
-which is an invalid or absent value.
+Note that this is not the same as the “null” or “nil” concept discussed in
+Chapter 6, which is an invalid or absent value.
 
 The cons list isn’t a commonly used data structure in Rust. Most of the time
 when you have a list of items in Rust, `Vec<T>` is a better choice to use.

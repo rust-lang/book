@@ -33,8 +33,8 @@ struct, smart pointers implement the `Deref` and `Drop` traits. The `Deref`
 trait allows an instance of the smart pointer struct to behave like a reference
 so you can write your code to work with either references or smart pointers.
 The `Drop` trait allows you to customize the code that’s run when an instance
-of the smart pointer goes out of scope. In this chapter, we’ll discuss both
-traits and demonstrate why they’re important to smart pointers.
+of the smart pointer goes out of scope. In this chapter, we’ll discuss both of
+these traits and demonstrate why they’re important to smart pointers.
 
 Given that the smart pointer pattern is a general design pattern used
 frequently in Rust, this chapter won’t cover every existing smart pointer. Many

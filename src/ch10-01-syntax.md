@@ -33,8 +33,8 @@ To parameterize the types in a new single function, we need to name the type
 parameter, just as we do for the value parameters to a function. You can use
 any identifier as a type parameter name. But we’ll use `T` because, by
 convention, type parameter names in Rust are short, often just one letter, and
-Rust’s type-naming convention is UpperCamelCase. Short for _type_, `T` is the
-default choice of most Rust programmers.
+Rust’s type-naming convention is CamelCase. Short for _type_, `T` is the default
+choice of most Rust programmers.
 
 When we use a parameter in the body of the function, we have to declare the
 parameter name in the signature so the compiler knows what that name means.

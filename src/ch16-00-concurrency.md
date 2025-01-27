@@ -1,11 +1,11 @@
 # Fearless Concurrency
 
 Handling concurrent programming safely and efficiently is another of Rust’s
-major goals. _Concurrent programming_, where different parts of a program
-execute independently, and _parallel programming_, where different parts of a
-program execute at the same time, are becoming increasingly important as more
+major goals. _Concurrent programming_, in which different parts of a program
+execute independently, and _parallel programming_, in which different parts of
+a program execute at the same time, are becoming increasingly important as more
 computers take advantage of their multiple processors. Historically,
-programming in these contexts has been difficult and error prone: Rust hopes to
+programming in these contexts has been difficult and error prone. Rust hopes to
 change that.
 
 Initially, the Rust team thought that ensuring memory safety and preventing

@@ -15,9 +15,9 @@ Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides (Addison-Wesley
 Professional, 1994), colloquially referred to as _The Gang of Four_ book, is a
 catalog of object-oriented design patterns. It defines OOP this way:
 
-> Object-oriented programs are made up of objects. An _object_ packages both
+> Object-oriented programs are made up of objects. An **object** packages both
 > data and the procedures that operate on that data. The procedures are
-> typically called _methods_ or _operations_.
+> typically called **methods** or **operations**.
 
 Using this definition, Rust is object-oriented: structs and enums have data,
 and `impl` blocks provide methods on structs and enums. Even though structs and
@@ -140,8 +140,8 @@ than necessary. Subclasses shouldn’t always share all characteristics of their
 parent class but will do so with inheritance. This can make a program’s design
 less flexible. It also introduces the possibility of calling methods on
 subclasses that don’t make sense or that cause errors because the methods don’t
-apply to the subclass. In addition, some languages will only allow single
-inheritance (meaning a subclass can only inherit from one class), further
+apply to the subclass. In addition, some languages will only allow _single
+inheritance_ (meaning a subclass can only inherit from one class), further
 restricting the flexibility of a program’s design.
 
 For these reasons, Rust takes the different approach of using trait objects
