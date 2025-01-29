@@ -7,7 +7,67 @@ functions, external crates, and more! In the following chapters, we’ll explore
 these ideas in more detail. In this chapter, you’ll just practice the
 fundamentals.
 
-We’ll implement a classic beginner programming problem: a guessing game. Here’s
+We’ll implement a classic beginner progdoc.rust-lang.org/book/
+Topics
+rust book mdbook rust-programming-language
+Resources
+ Readme
+License
+ Apache-2.0, MIT licenses found
+Security policy
+ Security policy
+ Activity
+ Custom properties
+Stars
+ 15.6k stars
+Watchers
+ 226 watching
+Forks
+ 3.5k forks
+Report repository
+Releases 3
+Add async chapter
+Latest
+on Nov 7, 2024
++ 2 releases
+Packages
+No packages published
+Contributors
+647
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+￼
+￼
++ 633 contributors
+Deployments
+337
+ github-pages 3 months ago
++ 336 deployments
+Languages
+Rust
+89.7%
+ 
+XSLT
+4.4%
+ 
+Shell
+2.6%
+ 
+HTML
+2.1%
+ 
+Other
+1.2%ramming problem: a guessing game. Here’s
 how it works: the program will generate a random integer between 1 and 100. It
 will then prompt the player to enter a guess. After a guess is entered, the
 program will indicate whether the guess is too low or too high. If the guess is
@@ -528,12 +588,12 @@ random number generators implement, and this trait must be in scope for us to
 use those methods. Chapter 10 will cover traits in detail.
 
 Next, we’re adding two lines in the middle. In the first line, we call the
-`rand::thread_rng` function that gives us the particular random number
+`rand::rng` function that gives us the particular random number
 generator we’re going to use: one that is local to the current thread of
-execution and is seeded by the operating system. Then we call the `gen_range`
+execution and is seeded by the operating system. Then we call the `random_range`
 method on the random number generator. This method is defined by the `Rng`
 trait that we brought into scope with the `use rand::Rng;` statement. The
-`gen_range` method takes a range expression as an argument and generates a
+`random_range` method takes a range expression as an argument and generates a
 random number in the range. The kind of range expression we’re using here takes
 the form `start..=end` and is inclusive on the lower and upper bounds, so we
 need to specify `1..=100` to request a number between 1 and 100.
