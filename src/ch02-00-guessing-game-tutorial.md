@@ -7,67 +7,7 @@ functions, external crates, and more! In the following chapters, we’ll explore
 these ideas in more detail. In this chapter, you’ll just practice the
 fundamentals.
 
-We’ll implement a classic beginner progdoc.rust-lang.org/book/
-Topics
-rust book mdbook rust-programming-language
-Resources
- Readme
-License
- Apache-2.0, MIT licenses found
-Security policy
- Security policy
- Activity
- Custom properties
-Stars
- 15.6k stars
-Watchers
- 226 watching
-Forks
- 3.5k forks
-Report repository
-Releases 3
-Add async chapter
-Latest
-on Nov 7, 2024
-+ 2 releases
-Packages
-No packages published
-Contributors
-647
-￼
-￼
-￼
-￼
-￼
-￼
-￼
-￼
-￼
-￼
-￼
-￼
-￼
-￼
-+ 633 contributors
-Deployments
-337
- github-pages 3 months ago
-+ 336 deployments
-Languages
-Rust
-89.7%
- 
-XSLT
-4.4%
- 
-Shell
-2.6%
- 
-HTML
-2.1%
- 
-Other
-1.2%ramming problem: a guessing game. Here’s
+We’ll implement a classic beginner programming problem: a guessing game. Here’s
 how it works: the program will generate a random integer between 1 and 100. It
 will then prompt the player to enter a guess. After a guess is entered, the
 program will indicate whether the guess is too low or too high. If the guess is
