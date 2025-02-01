@@ -302,7 +302,7 @@ at least one await point in each iteration through the loop.
 Now, back in our main function’s async block, we can attempt to merge the
 `messages` and `intervals` streams, as shown in Listing 17-37.
 
-<Listing number="17-37" caption="Attempting to the `messages` and `intervals` streams" file-name="src/main.rs">
+<Listing number="17-37" caption="Attempting to merge the `messages` and `intervals` streams" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-37/src/main.rs:main}}
