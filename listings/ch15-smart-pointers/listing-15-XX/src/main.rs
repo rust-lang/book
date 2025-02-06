@@ -23,7 +23,7 @@ struct Point(i32, i32, i32);
 
 impl Point {
     fn describe(self: &MyBox<Self>) {
-        println!("x: {} | y: {} | z : {}", self.0, self.1, self.2);
+        println!("x: {} | y: {} | z : {}", self.0.0, self.0.1, self.0.2);
     }
 }
 
