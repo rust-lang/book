@@ -19,11 +19,11 @@ impl<T> Deref for MyBox <T> {
     }
 }
 
-struct Pointee;
+struct Point(i32, i32, i32);
 
-impl Pointee {
-    fn hello(self: &CustomSmartPointer<Self>) {
-        println!("Hello!");
+impl Point {
+    fn describe(self: &MyBox<Self>) {
+        println!("x: {} | y: {} | z : {}", self.0, self.1, self.2);
     }
 }
 
