@@ -266,7 +266,7 @@ If your smart pointer implements `Deref` (or if it implements another trait,
 called `Receiver`) then methods on the referent can also receive their `self`
 type using your smart pointer.
 
-<Listing number="15-30" file-name="src/main.rs" caption="Calling `hello` on a reference to a `MyBox<Foo>` value, which also works because of deref coercion">
+<Listing number="15-XX" file-name="src/main.rs" caption="Calling `describe` on a reference to a `MyBox<Point>` value, which also works because of deref coercion">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-30/src/main.rs:here}}
