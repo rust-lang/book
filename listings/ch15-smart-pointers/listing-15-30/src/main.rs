@@ -28,6 +28,6 @@ impl Pointee {
 }
 
 fn main() {
-    let ptr = CustomSmartPointer(Pointee);
-    ptr.hello();
+    let point = MyBox::new(Point(1.2, -3.5, 1.4));
+    point.describe();
 }
