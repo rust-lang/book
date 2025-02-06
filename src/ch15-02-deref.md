@@ -268,7 +268,7 @@ it as their `self` type, as shown in Listing XX.
 <Listing number="15-XX" file-name="src/main.rs" caption="Calling `describe` on a reference to a `MyBox<Point>` value, which also works because of deref coercion">
 
 ```rust
-{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-30/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-XX/src/main.rs:here}}
 ```
 
 </Listing>
@@ -282,6 +282,7 @@ type that did *not* implement `Deref` for `Point`, the code would not compile.
 
 This means that implementing `Deref` gives you many of the same abilities as the
 smart pointer types that come in the standard library.
+
 ### How Deref Coercion Interacts with Mutability
 
 Similar to how you use the `Deref` trait to override the `*` operator on

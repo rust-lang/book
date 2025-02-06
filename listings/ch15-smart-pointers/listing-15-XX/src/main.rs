@@ -28,6 +28,6 @@ impl Point {
 }
 
 fn main() {
-    let point = MyBox::new(Point(1.2, -3.5, 1.4));
+    let point = MyBox::new(Point(1, -3, 1));
     point.describe();
 }
