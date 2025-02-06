@@ -262,9 +262,8 @@ advantage of deref coercion!
 
 ### Calling methods on smart pointers
 
-If your smart pointer implements `Deref` (or if it implements another trait,
-called `Receiver`) then methods on the referent can also receive their `self`
-type using your smart pointer.
+Because `MyBox` implements implements `Deref`,  methods on a struct can also use
+it as their `self` type, as shown in Listing XX.
 
 <Listing number="15-XX" file-name="src/main.rs" caption="Calling `describe` on a reference to a `MyBox<Point>` value, which also works because of deref coercion">
 
