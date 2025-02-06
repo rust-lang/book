@@ -3,9 +3,15 @@
 
 use std::ops::Deref;
 
-struct CustomSmartPointer<T>(T);
+struct MyBox<T>(T);
 
-impl<T> Deref for CustomSmartPointer<T> {
+impl<T> MyBox<T> {
+    fn new(x: T) -> MyBox<T> {
+        MyBox(x)
+    }
+}
+
+impl<T> Deref for MyBox <T> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
