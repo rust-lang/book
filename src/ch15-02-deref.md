@@ -273,11 +273,15 @@ it as their `self` type, as shown in Listing XX.
 
 </Listing>
 
-You should normally implement `Deref` rather than directly implementing
-`Receiver`. You'd implement `Receiver` only in cases where it's not safe to
-create a reference to your smart pointer's referent, often in cases involving
-cross-language interoperability.
+First, we introduce a `Point` type, representing x, y, and z coordinates. Then
+we add a `describe` method. The `describe` method defines the type of `self` as
+`&MyBox<Self>`. This enforces that this method can only be called on a reference
+to `MyBox<Point>`. This is only allowed because `MyBox` implements `Deref` for
+any type it wraps, including `Point`. If we tried to use a different wrapper
+type that did *not* implement `Deref` for `Point`, the code would not compile.
 
+This means that implementing `Deref` gives you many of the same abilities as the
+smart pointer types that come in the standard library.
 ### How Deref Coercion Interacts with Mutability
 
 Similar to how you use the `Deref` trait to override the `*` operator on
