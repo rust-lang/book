@@ -39,34 +39,30 @@ consider this code:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn do_something() {}
-
 fn main() {
-    for i in 0..100 {
-        do_something();
-    }
+    let mut x = 42;
+    println!("{x}");
 }
 ```
 
-Here, we’re calling the `do_something` function 100 times, but we never use the
-variable `i` in the body of the `for` loop. Rust warns us about that:
+Here, we’re defining variable `x` as mutable, but we never actually mutate it.
+Rust warns us about that:
 
 ```console
 $ cargo build
    Compiling myprogram v0.1.0 (file:///projects/myprogram)
-warning: unused variable: `i`
- --> src/main.rs:4:9
+warning: variable does not need to be mutable
+ --> src/main.rs:2:9
   |
-4 |     for i in 0..100 {
-  |         ^ help: consider using `_i` instead
+2 |     let mut x = 0;
+  |         ----^
+  |         |
+  |         help: remove this `mut`
   |
-  = note: #[warn(unused_variables)] on by default
-
-    Finished dev [unoptimized + debuginfo] target(s) in 0.50s
+  = note: `#[warn(unused_mut)]` on by default
 ```
 
-The warning suggests that we use `_i` as a name instead: the underscore
-indicates that we intend for this variable to be unused. We can automatically
+The warning suggests that we remove the `mut` keyword. We can automatically
 apply that suggestion using the `rustfix` tool by running the command `cargo
 fix`:
 
@@ -83,16 +79,13 @@ code:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn do_something() {}
-
 fn main() {
-    for _i in 0..100 {
-        do_something();
-    }
+    let x = 42;
+    println!("{x}");
 }
 ```
 
-The `for` loop variable is now named `_i`, and the warning no longer appears.
+The `x` variable is now immutable, and the warning no longer appears.
 
 You can also use the `cargo fix` command to transition your code between
 different Rust editions. Editions are covered in [Appendix E][editions].
