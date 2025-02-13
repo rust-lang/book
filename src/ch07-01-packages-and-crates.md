@@ -32,9 +32,11 @@ build those crates. Cargo is actually a package that contains the binary crate
 for the command line tool you’ve been using to build your code. The Cargo
 package also contains a library crate that the binary crate depends on. Other
 projects can depend on the Cargo library crate to use the same logic the Cargo
-command line tool uses. A package can contain as many binary crates as you
-like, but at most only one library crate. A package must contain at least one
-crate, whether that’s a library or binary crate.
+command line tool uses.
+
+A package can contain as many binary crates as you like, but at most only one
+library crate. A package must contain at least one crate, whether that’s a
+library or binary crate.
 
 Let’s walk through what happens when we create a package. First we enter the
 command `cargo new my-project`:
