@@ -74,8 +74,8 @@ mean both how quickly Rust code can run and the speed at which Rust lets you
 write programs. The Rust compiler’s checks ensure stability through feature
 additions and refactoring. This is in contrast to the brittle legacy code in
 languages without these checks, which developers are often afraid to modify. By
-striving for zero-cost abstractions, higher-level features that compile to
-lower-level code as fast as code written manually, Rust endeavors to make safe
+striving for zero-cost abstractions—higher-level features that compile to
+lower-level code as fast as code written manually—Rust endeavors to make safe
 code be fast code as well.
 
 The Rust language hopes to support many other users as well; those mentioned
@@ -157,13 +157,13 @@ more about lifetimes, traits, types, functions, and closures.
 In Chapter 21, we’ll complete a project in which we’ll implement a low-level
 multithreaded web server!
 
-Finally, some appendices contain useful information about the language in a
-more reference-like format. Appendix A covers Rust’s keywords, Appendix B
-covers Rust’s operators and symbols, Appendix C covers derivable traits
-provided by the standard library, Appendix D covers some useful development
-tools, and Appendix E explains Rust editions. In Appendix F, you can find
-translations of the book, and in Appendix G we’ll cover how Rust is made and
-what nightly Rust is.
+Finally, some appendixes contain useful information about the language in a more
+reference-like format. **Appendix A** covers Rust’s keywords, **Appendix B**
+covers Rust’s operators and symbols, **Appendix C** covers derivable traits
+provided by the standard library, **Appendix D** covers some useful development
+tools, and **Appendix E** explains Rust editions. In **Appendix F**, you can
+find translations of the book, and in **Appendix G** we’ll cover how Rust is
+made and what nightly Rust is.
 
 There is no wrong way to read this book: if you want to skip ahead, go for it!
 You might have to jump back to earlier chapters if you experience any

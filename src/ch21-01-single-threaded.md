@@ -57,7 +57,7 @@ to a port.”
 
 The `bind` function returns a `Result<T, E>`, which indicates that it’s
 possible for binding to fail. For example, connecting to port 80 requires
-administrator privileges (nonadministrators can listen only on ports higher
+administrator privileges (non-administrators can listen only on ports higher
 than 1023), so if we tried to connect to port 80 without being an
 administrator, binding wouldn’t work. Binding also wouldn’t work, for example,
 if we ran two instances of our program and so had two programs listening to the
@@ -89,7 +89,7 @@ connections are closed.
 
 Let’s try running this code! Invoke `cargo run` in the terminal and then load
 _127.0.0.1:7878_ in a web browser. The browser should show an error message
-like “Connection reset,” because the server isn’t currently sending back any
+like “Connection reset” because the server isn’t currently sending back any
 data. But when you look at your terminal, you should see several messages that
 were printed when the browser connected to the server!
 
@@ -100,7 +100,7 @@ Connection established!
 Connection established!
 ```
 
-Sometimes, you’ll see multiple messages printed for one browser request; the
+Sometimes you’ll see multiple messages printed for one browser request; the
 reason might be that the browser is making a request for the page as well as a
 request for other resources, like the _favicon.ico_ icon that appears in the
 browser tab.
@@ -216,17 +216,17 @@ being used, such as `GET` or `POST`, which describes how the client is making
 this request. Our client used a `GET` request, which means it is asking for
 information.
 
-The next part of the request line is _/_, which indicates the _Uniform Resource
-Identifier_ _(URI)_ the client is requesting: a URI is almost, but not quite,
-the same as a _Uniform Resource Locator_ _(URL)_. The difference between URIs
+The next part of the request line is _/_, which indicates the _uniform resource
+identifier_ _(URI)_ the client is requesting: a URI is almost, but not quite,
+the same as a _uniform resource locator_ _(URL)_. The difference between URIs
 and URLs isn’t important for our purposes in this chapter, but the HTTP spec
-uses the term URI, so we can just mentally substitute URL for URI here.
+uses the term URI, so we can just mentally substitute _URL_ for _URI_ here.
 
 The last part is the HTTP version the client uses, and then the request line
-ends in a _CRLF sequence_. (CRLF stands for _carriage return_ and _line feed_,
+ends in a CRLF sequence. (CRLF stands for _carriage return_ and _line feed_,
 which are terms from the typewriter days!) The CRLF sequence can also be
 written as `\r\n`, where `\r` is a carriage return and `\n` is a line feed. The
-CRLF sequence separates the request line from the rest of the request data.
+_CRLF sequence_ separates the request line from the rest of the request data.
 Note that when the CRLF is printed, we see a new line start rather than `\r\n`.
 
 Looking at the request line data we received from running our program so far,
@@ -258,7 +258,7 @@ a reason phrase that provides a text description of the status code. After the
 CRLF sequence are any headers, another CRLF sequence, and the body of the
 response.
 
-Here is an example response that uses HTTP version 1.1, has a status code of
+Here is an example response that uses HTTP version 1.1, and has a status code of
 200, an OK reason phrase, no headers, and no body:
 
 ```text
@@ -289,7 +289,7 @@ application you would add error handling here.
 With these changes, let’s run our code and make a request. We’re no longer
 printing any data to the terminal, so we won’t see any output other than the
 output from Cargo. When you load _127.0.0.1:7878_ in a web browser, you should
-get a blank page instead of an error. You’ve just hand-coded receiving an HTTP
+get a blank page instead of an error. You’ve just handcoded receiving an HTTP
 request and sending a response!
 
 ### Returning Real HTML
@@ -322,8 +322,8 @@ and send it.
 
 We’ve added `fs` to the `use` statement to bring the standard library’s
 filesystem module into scope. The code for reading the contents of a file to a
-string should look familiar; we used it in Chapter 12 when we read the contents
-of a file for our I/O project in Listing 12-4.
+string should look familiar; we used it when we read the contents of a file for
+our I/O project in Listing 12-4.
 
 Next, we use `format!` to add the file’s contents as the body of the success
 response. To ensure a valid HTTP response, we add the `Content-Length` header
@@ -412,14 +412,14 @@ _127.0.0.1:7878/foo_, should return the error HTML from _404.html_.
 
 ### A Touch of Refactoring
 
-At the moment the `if` and `else` blocks have a lot of repetition: they’re both
+At the moment, the `if` and `else` blocks have a lot of repetition: they’re both
 reading files and writing the contents of the files to the stream. The only
 differences are the status line and the filename. Let’s make the code more
 concise by pulling out those differences into separate `if` and `else` lines
-that will assign the values of the status line and the filename to variables;
-we can then use those variables unconditionally in the code to read the file
-and write the response. Listing 21-9 shows the resulting code after replacing
-the large `if` and `else` blocks.
+that will assign the values of the status line and the filename to variables; we
+can then use those variables unconditionally in the code to read the file and
+write the response. Listing 21-9 shows the resultant code after replacing the
+large `if` and `else` blocks.
 
 <Listing number="21-9" file-name="src/main.rs" caption="Refactoring the `if` and `else` blocks to contain only the code that differs between the two cases">
 

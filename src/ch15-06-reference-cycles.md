@@ -70,7 +70,7 @@ this point, because its reference count is 1, not 0. Then Rust drops `a`, which
 decreases the reference count of the `a` `Rc<List>` instance from 2 to 1 as
 well. This instance’s memory can’t be dropped either, because the other
 `Rc<List>` instance still refers to it. The memory allocated to the list will
-remain uncollected forever. To visualize this reference cycle, we’ve created a
+remain uncollected forever. To visualize this reference cycle, we’ve created the
 diagram in Figure 15-4.
 
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
@@ -79,8 +79,8 @@ diagram in Figure 15-4.
 pointing to each other</span>
 
 If you uncomment the last `println!` and run the program, Rust will try to
-print this cycle with `a` pointing to `b` pointing to `a` and so forth until it
-overflows the stack.
+print this cycle with `a` pointing to `b` pointing to `a`, and so forth, until
+it overflows the stack.
 
 Compared to a real-world program, the consequences of creating a reference cycle
 in this example aren’t very dire: right after we create the reference cycle,
@@ -113,8 +113,8 @@ So far, we’ve demonstrated that calling `Rc::clone` increases the
 `strong_count` of an `Rc<T>` instance, and an `Rc<T>` instance is only cleaned
 up if its `strong_count` is 0. You can also create a _weak reference_ to the
 value within an `Rc<T>` instance by calling `Rc::downgrade` and passing a
-reference to the `Rc<T>`. Strong references are how you can share ownership of
-an `Rc<T>` instance. Weak references don’t express an ownership relationship,
+reference to the `Rc<T>`. _Strong references_ are how you can share ownership of
+an `Rc<T>` instance. _Weak references_ don’t express an ownership relationship,
 and their count doesn’t affect when an `Rc<T>` instance is cleaned up. They
 won’t cause a reference cycle because any cycle involving some weak references
 will be broken once the strong reference count of values involved is 0.
@@ -266,7 +266,7 @@ in Listing 15-29:
 
 After `leaf` is created, its `Rc<Node>` has a strong count of 1 and a weak
 count of 0. In the inner scope, we create `branch` and associate it with
-`leaf`, at which point when we print the counts, the `Rc<Node>` in `branch`
+`leaf`, at which point, when we print the counts, the `Rc<Node>` in `branch`
 will have a strong count of 1 and a weak count of 1 (for `leaf.parent` pointing
 to `branch` with a `Weak<Node>`). When we print the counts in `leaf`, we’ll see
 it will have a strong count of 2, because `branch` now has a clone of the

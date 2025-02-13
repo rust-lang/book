@@ -6,7 +6,7 @@ containing data. Here’s the idea in a slogan from [the Go language documentati
 “Do not communicate by sharing memory; instead, share memory by communicating.”
 
 To accomplish message-sending concurrency, Rust's standard library provides an
-implementation of _channels_. A channel is a general programming concept by
+implementation of channels. A _channel_ is a general programming concept by
 which data is sent from one thread to another.
 
 You can imagine a channel in programming as being like a directional channel of
@@ -61,9 +61,9 @@ this way is a convenient approach to extract the pieces of the tuple returned
 by `mpsc::channel`.
 
 Let’s move the transmitting end into a spawned thread and have it send one
-string so the spawned thread is communicating with the main thread, as shown in
-Listing 16-7. This is like putting a rubber duck in the river upstream or
-sending a chat message from one thread to another.
+string so that the spawned thread is communicating with the main thread, as
+shown in Listing 16-7. This is like putting a rubber duck in the river upstream
+or sending a chat message from one thread to another.
 
 <Listing number="16-7" file-name="src/main.rs" caption="Moving `tx` to a spawned thread and sending “hi”">
 
@@ -74,13 +74,15 @@ sending a chat message from one thread to another.
 </Listing>
 
 Again, we’re using `thread::spawn` to create a new thread and then using `move`
-to move `tx` into the closure so the spawned thread owns `tx`. The spawned
+to move `tx` into the closure so that the spawned thread owns `tx`. The spawned
 thread needs to own the transmitter to be able to send messages through the
-channel. The transmitter has a `send` method that takes the value we want to
-send. The `send` method returns a `Result<T, E>` type, so if the receiver has
-already been dropped and there’s nowhere to send a value, the send operation
-will return an error. In this example, we’re calling `unwrap` to panic in case
-of an error. But in a real application, we would handle it properly: return to
+channel.
+
+The transmitter has a `send` method that takes the value we want to send. The
+`send` method returns a `Result<T, E>` type, so if the receiver has already
+been dropped and there’s nowhere to send a value, the send operation will
+return an error. In this example, we’re calling `unwrap` to panic in case of an
+error. But in a real application, we would handle it properly: return to
 Chapter 9 to review strategies for proper error handling.
 
 In Listing 16-8, we’ll get the value from the receiver in the main thread. This

@@ -193,7 +193,7 @@ possibility in order for the code to be valid. Especially in the case of
 `None` case, it protects us from assuming that we have a value when we might
 have null, thus making the billion-dollar mistake discussed earlier impossible.
 
-### Catch-all Patterns and the `_` Placeholder
+### Catch-All Patterns and the `_` Placeholder
 
 Using enums, we can also take special actions for a few particular values, but
 for all other values take one default action. Imagine we’re implementing a game

@@ -258,7 +258,7 @@ as the value from each field in a struct, separately from each other.
 ### Ignoring Values in a Pattern
 
 You’ve seen that it’s sometimes useful to ignore values in a pattern, such as
-in the last arm of a `match`, to get a catchall that doesn’t actually do
+in the last arm of a `match`, to get a catch-all that doesn’t actually do
 anything but does account for all remaining possible values. There are a few
 ways to ignore entire values or parts of values in a pattern: using the `_`
 pattern (which you’ve seen), using the `_` pattern within another pattern,
@@ -590,7 +590,7 @@ Rust’s patterns are very useful in distinguishing between different kinds of
 data. When used in `match` expressions, Rust ensures your patterns cover every
 possible value, or your program won’t compile. Patterns in `let` statements and
 function parameters make those constructs more useful, enabling the
-destructuring of values into smaller parts at the same time as assigning to
+destructuring of values into smaller parts and assigning those parts to
 variables. We can create simple or complex patterns to suit our needs.
 
 Next, for the penultimate chapter of the book, we’ll look at some advanced

@@ -857,7 +857,7 @@ If `parse` is _not_ able to turn the string into a number, it will return an
 `Err` value that contains more information about the error. The `Err` value
 does not match the `Ok(num)` pattern in the first `match` arm, but it does
 match the `Err(_)` pattern in the second arm. The underscore, `_`, is a
-catchall value; in this example, we’re saying we want to match all `Err`
+catch-all value; in this example, we’re saying we want to match all `Err`
 values, no matter what information they have inside them. So the program will
 execute the second arm’s code, `continue`, which tells the program to go to the
 next iteration of the `loop` and ask for another guess. So, effectively, the

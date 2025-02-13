@@ -433,7 +433,7 @@ trait implementation.
 Next, let’s explore how the other kinds of procedural macros differ from custom
 derive macros.
 
-### Attribute-like macros
+### Attribute-Like macros
 
 Attribute-like macros are similar to custom derive macros, but instead of
 generating code for the `derive` attribute, they allow you to create new
@@ -464,17 +464,17 @@ Other than that, attribute-like macros work the same way as custom derive
 macros: you create a crate with the `proc-macro` crate type and implement a
 function that generates the code you want!
 
-### Function-like macros
+### Function-Like macros
 
 Function-like macros define macros that look like function calls. Similarly to
 `macro_rules!` macros, they’re more flexible than functions; for example, they
-can take an unknown number of arguments. However, `macro_rules!` macros can be
-defined only using the match-like syntax we discussed in the section
-[“Declarative Macros with `macro_rules!` for General
-Metaprogramming”][decl]<!-- ignore --> earlier. Function-like macros take a
-`TokenStream` parameter and their definition manipulates that `TokenStream`
-using Rust code as the other two types of procedural macros do. An example of a
-function-like macro is an `sql!` macro that might be called like so:
+can take an unknown number of arguments. However, `macro_rules!` macros can only
+be defined using the match-like syntax we discussed in [“Declarative Macros with
+`macro_rules!` for General Metaprogramming”][decl]<!-- ignore --> earlier.
+Function-like macros take a `TokenStream` parameter and their definition
+manipulates that `TokenStream` using Rust code as the other two types of
+procedural macros do. An example of a function-like macro is an `sql!` macro
+that might be called like so:
 
 ```rust,ignore
 let sql = sql!(SELECT * FROM posts WHERE id=1);

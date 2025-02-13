@@ -40,17 +40,17 @@ allow users to extend it with new types.
 
 To implement the behavior we want `gui` to have, we’ll define a trait named
 `Draw` that will have one method named `draw`. Then we can define a vector that
-takes a _trait object_. A trait object points to both an instance of a type
+takes a trait object. A _trait object_ points to both an instance of a type
 implementing our specified trait and a table used to look up trait methods on
 that type at runtime. We create a trait object by specifying some sort of
-pointer, such as a `&` reference or a `Box<T>` smart pointer, then the `dyn`
+pointer, such as an `&` reference or a `Box<T>` smart pointer, then the `dyn`
 keyword, and then specifying the relevant trait. (We’ll talk about the reason
-trait objects must use a pointer in Chapter 20 in the section [“Dynamically
-Sized Types and the `Sized` Trait.”][dynamically-sized]<!-- ignore -->) We can
-use trait objects in place of a generic or concrete type. Wherever we use a
-trait object, Rust’s type system will ensure at compile time that any value
-used in that context will implement the trait object’s trait. Consequently, we
-don’t need to know all the possible types at compile time.
+trait objects must use a pointer in [“Dynamically Sized Types and the `Sized`
+Trait”][dynamically-sized]<!-- ignore --> in Chapter 20.) We can use trait
+objects in place of a generic or concrete type. Wherever we use a trait object,
+Rust’s type system will ensure at compile time that any value used in that
+context will implement the trait object’s trait. Consequently, we don’t need to
+know all the possible types at compile time.
 
 We’ve mentioned that, in Rust, we refrain from calling structs and enums
 “objects” to distinguish them from other languages’ objects. In a struct or
@@ -100,8 +100,8 @@ On the `Screen` struct, we’ll define a method named `run` that will call the
 </Listing>
 
 This works differently from defining a struct that uses a generic type
-parameter with trait bounds. A generic type parameter can only be substituted
-with one concrete type at a time, whereas trait objects allow for multiple
+parameter with trait bounds. A generic type parameter can be substituted with
+only one concrete type at a time, whereas trait objects allow for multiple
 concrete types to fill in for the trait object at runtime. For example, we
 could have defined the `Screen` struct using a generic type and a trait bound
 as in Listing 18-6:
@@ -221,9 +221,9 @@ didn’t mean to pass and so should pass a different type or we should implement
 
 ### Trait Objects Perform Dynamic Dispatch
 
-Recall in the [“Performance of Code Using
-Generics”][performance-of-code-using-generics]<!-- ignore --> section in Chapter
-10 our discussion on the monomorphization process performed on generics by the
+Recall in [“Performance of Code Using
+Generics”][performance-of-code-using-generics]<!-- ignore --> in Chapter 10 our
+discussion on the monomorphization process performed on generics by the
 compiler: the compiler generates nongeneric implementations of functions and
 methods for each concrete type that we use in place of a generic type parameter.
 The code that results from monomorphization is doing _static dispatch_, which is

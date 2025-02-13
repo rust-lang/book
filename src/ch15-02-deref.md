@@ -126,14 +126,18 @@ Our `MyBox<T>` type can’t be dereferenced because we haven’t implemented tha
 ability on our type. To enable dereferencing with the `*` operator, we
 implement the `Deref` trait.
 
-### Treating a Type Like a Reference by Implementing the `Deref` Trait
+<!-- Old link, do not remove -->
 
-As discussed in the [“Implementing a Trait on a Type”][impl-trait]<!-- ignore
---> section of Chapter 10, to implement a trait, we need to provide
-implementations for the trait’s required methods. The `Deref` trait, provided
-by the standard library, requires us to implement one method named `deref` that
-borrows `self` and returns a reference to the inner data. Listing 15-10
-contains an implementation of `Deref` to add to the definition of `MyBox`:
+<a id="treating-a-type-like-a-reference-by-implementing-the-deref-trait"></a>
+
+### Implementing the `Deref` Trait
+
+As discussed in [“Implementing a Trait on a Type”][impl-trait]<!-- ignore --> in
+Chapter 10, to implement a trait, we need to provide implementations for the
+trait’s required methods. The `Deref` trait, provided by the standard library,
+requires us to implement one method named `deref` that borrows `self` and
+returns a reference to the inner data. Listing 15-10 contains an implementation
+of `Deref` to add to the definition of `MyBox<T>`:
 
 <Listing number="15-10" file-name="src/main.rs" caption="Implementing `Deref` on `MyBox<T>`">
 
@@ -157,7 +161,7 @@ calls `*` on the `MyBox<T>` value now compiles, and the assertions pass!
 
 Without the `Deref` trait, the compiler can only dereference `&` references.
 The `deref` method gives the compiler the ability to take a value of any type
-that implements `Deref` and call the `deref` method to get a `&` reference that
+that implements `Deref` and call the `deref` method to get an `&` reference that
 it knows how to dereference.
 
 When we entered `*y` in Listing 15-9, behind the scenes Rust actually ran this
@@ -269,9 +273,9 @@ operator on mutable references.
 Rust does deref coercion when it finds types and trait implementations in three
 cases:
 
-- From `&T` to `&U` when `T: Deref<Target=U>`
-- From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
-- From `&mut T` to `&U` when `T: Deref<Target=U>`
+1. From `&T` to `&U` when `T: Deref<Target=U>`
+2. From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
+3. From `&mut T` to `&U` when `T: Deref<Target=U>`
 
 The first two cases are the same as each other except that the second
 implements mutability. The first case states that if you have a `&T`, and `T`

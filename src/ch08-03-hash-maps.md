@@ -63,7 +63,7 @@ handles the `Option` by calling `copied` to get an `Option<i32>` rather than an
 `Option<&i32>`, then `unwrap_or` to set `score` to zero if `scores` doesn’t
 have an entry for the key.
 
-We can iterate over each key–value pair in a hash map in a similar manner as we
+We can iterate over each key-value pair in a hash map in a similar manner as we
 do with vectors, using a `for` loop:
 
 ```rust
@@ -97,9 +97,8 @@ they’ve been moved into the hash map with the call to `insert`.
 If we insert references to values into the hash map, the values won’t be moved
 into the hash map. The values that the references point to must be valid for at
 least as long as the hash map is valid. We’ll talk more about these issues in
-the [“Validating References with
-Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> section in
-Chapter 10.
+[“Validating References with
+Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> in Chapter 10.
 
 ### Updating a Hash Map
 
@@ -120,7 +119,7 @@ new value. Let’s look at how to do each of these!
 If we insert a key and a value into a hash map and then insert that same key
 with a different value, the value associated with that key will be replaced.
 Even though the code in Listing 8-23 calls `insert` twice, the hash map will
-only contain one key–value pair because we’re inserting the value for the Blue
+only contain one key-value pair because we’re inserting the value for the Blue
 team’s key both times.
 
 <Listing number="8-23" caption="Replacing a value stored with a particular key">
@@ -190,9 +189,9 @@ the value `0`.
 </Listing>
 
 This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see
-the same key–value pairs printed in a different order: recall from the
-[“Accessing Values in a Hash Map”][access]<!-- ignore --> section that
-iterating over a hash map happens in an arbitrary order.
+the same key-value pairs printed in a different order: recall from [“Accessing
+Values in a Hash Map”][access]<!-- ignore --> that iterating over a hash map
+happens in an arbitrary order.
 
 The `split_whitespace` method returns an iterator over subslices, separated by
 whitespace, of the value in `text`. The `or_insert` method returns a mutable

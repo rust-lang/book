@@ -1,9 +1,9 @@
 ## Advanced Traits
 
-We first covered traits in the [“Traits: Defining Shared
-Behavior”][traits-defining-shared-behavior]<!-- ignore --> section of Chapter
-10, but we didn’t discuss the more advanced details. Now that you know more
-about Rust, we can get into the nitty-gritty.
+We first covered traits in [“Traits: Defining Shared
+Behavior”][traits-defining-shared-behavior]<!-- ignore --> in Chapter 10, but we
+didn’t discuss the more advanced details. Now that you know more about Rust, we
+can get into the nitty-gritty.
 
 ### Specifying Placeholder Types in Trait Definitions with Associated Types
 
@@ -160,8 +160,8 @@ value of the `Rhs` type parameter instead of using the default of `Self`.
 
 You’ll use default type parameters in two main ways:
 
-- To extend a type without breaking existing code
-- To allow customization in specific cases most users won’t need
+1. To extend a type without breaking existing code
+2. To allow customization in specific cases most users won’t need
 
 The standard library’s `Add` trait is an example of the second purpose:
 usually, you’ll add two like types, but the `Add` trait provides the ability to
@@ -406,19 +406,18 @@ it within an outline of asterisks.
 
 ### Using the Newtype Pattern to Implement External Traits on External Types
 
-In Chapter 10 in the [“Implementing a Trait on a
-Type”][implementing-a-trait-on-a-type]<!-- ignore --> section, we mentioned the
-orphan rule that states we’re only allowed to implement a trait on a type if
-either the trait or the type are local to our crate. It’s possible to get
-around this restriction using the _newtype pattern_, which involves creating a
-new type in a tuple struct. (We covered tuple structs in the [“Using Tuple
-Structs without Named Fields to Create Different Types”][tuple-structs]<!--
-ignore --> section of Chapter 5.) The tuple struct will have one field and be a
-thin wrapper around the type we want to implement a trait for. Then the wrapper
-type is local to our crate, and we can implement the trait on the wrapper.
-_Newtype_ is a term that originates from the Haskell programming language.
-There is no runtime performance penalty for using this pattern, and the wrapper
-type is elided at compile time.
+In [“Implementing a Trait on a Type”][implementing-a-trait-on-a-type]<!-- ignore
+--> in Chapter 10, we mentioned the orphan rule that states we’re only allowed
+to implement a trait on a type if either the trait or the type are local to our
+crate. It’s possible to get around this restriction using the _newtype pattern_,
+which involves creating a new type in a tuple struct. (We covered tuple structs
+in [“Using Tuple Structs without Named Fields to Create Different
+Types”][tuple-structs]<!-- ignore --> in Chapter 5.) The tuple struct will have
+one field and be a thin wrapper around the type we want to implement a trait
+for. Then the wrapper type is local to our crate, and we can implement the trait
+on the wrapper. _Newtype_ is a term that originates from the Haskell programming
+language. There is no runtime performance penalty for using this pattern, and
+the wrapper type is elided at compile time.
 
 As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the
@@ -440,15 +439,15 @@ tuple. Then we can use the functionality of the `Display` trait on `Wrapper`.
 
 The downside of using this technique is that `Wrapper` is a new type, so it
 doesn’t have the methods of the value it’s holding. We would have to implement
-all the methods of `Vec<T>` directly on `Wrapper` such that the methods
-delegate to `self.0`, which would allow us to treat `Wrapper` exactly like a
-`Vec<T>`. If we wanted the new type to have every method the inner type has,
-implementing the `Deref` trait (discussed in Chapter 15 in the [“Treating Smart
-Pointers Like Regular References with the `Deref`
-Trait”][smart-pointer-deref]<!-- ignore --> section) on the `Wrapper` to return
-the inner type would be a solution. If we don’t want the `Wrapper` type to have
-all the methods of the inner type—for example, to restrict the `Wrapper` type’s
-behavior—we would have to implement just the methods we do want manually.
+all the methods of `Vec<T>` directly on `Wrapper` such that the methods delegate
+to `self.0`, which would allow us to treat `Wrapper` exactly like a `Vec<T>`. If
+we wanted the new type to have every method the inner type has, implementing the
+`Deref` trait (discussed in [“Treating Smart Pointers Like Regular References
+with the `Deref` Trait”][smart-pointer-deref]<!-- ignore --> in Chapter 15) on
+the `Wrapper` to return the inner type would be a solution. If we don’t want the
+`Wrapper` type to have all the methods of the inner type—for example, to
+restrict the `Wrapper` type’s behavior—we would have to implement just the
+methods we do want manually.
 
 This newtype pattern is also useful even when traits are not involved. Let’s
 switch focus and look at some advanced ways to interact with Rust’s type system.

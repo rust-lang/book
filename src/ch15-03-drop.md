@@ -7,7 +7,7 @@ be used to release resources like files or network connections.
 
 We’re introducing `Drop` in the context of smart pointers because the
 functionality of the `Drop` trait is almost always used when implementing a
-smart pointer. For example, when a `Box<T>` is dropped it will deallocate the
+smart pointer. For example, when a `Box<T>` is dropped, it will deallocate the
 space on the heap that the box points to.
 
 In some languages, for some types, the programmer must call code to free memory
@@ -94,7 +94,7 @@ When we try to compile this code, we’ll get this error:
 
 This error message states that we’re not allowed to explicitly call `drop`. The
 error message uses the term _destructor_, which is the general programming term
-for a function that cleans up an instance. A _destructor_ is analogous to a
+for a function that cleans up an instance. A destructor is analogous to a
 _constructor_, which creates an instance. The `drop` function in Rust is one
 particular destructor.
 
