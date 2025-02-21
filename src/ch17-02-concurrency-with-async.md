@@ -153,8 +153,8 @@ hi number 9 from the first task!
 
 <Listing number="17-10" caption="ارسال و دریافت چندین پیام از طریق کانال async و استفاده از `await` بین هر پیام" file-name="src/main.rs">
 
-```rust
-{{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:multiple-messages}}
+```rust,ignore
+{{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:many-messages}}
 ```
 
 </Listing>
