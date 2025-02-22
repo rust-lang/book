@@ -16,7 +16,7 @@ overload that operator is listed.
 | Operator                  | Example                                                 | Explanation                                                           | Overloadable?  |
 | ------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------- | -------------- |
 | `!`                       | `ident!(...)`, `ident!{...}`, `ident![...]`             | Macro expansion                                                       |                |
-| `!`                       | `!expr`                                                 | Bitwise or logical complement                                         | `Not`          |
+| `!`                       | `!expr`                                                 | Bitwise NOT or logical complement                                     | `Not`          |
 | `!=`                      | `expr != expr`                                          | Nonequality comparison                                                | `PartialEq`    |
 | `%`                       | `expr % expr`                                           | Arithmetic remainder                                                  | `Rem`          |
 | `%=`                      | `var %= expr`                                           | Arithmetic remainder and assignment                                   | `RemAssign`    |
