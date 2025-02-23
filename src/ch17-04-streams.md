@@ -18,7 +18,7 @@ channel receiver. The first difference is time: iterators are synchronous, while
 the channel receiver is asynchronous. The second is the API. When working
 directly with `Iterator`, we call its synchronous `next` method. With the
 `trpl::Receiver` stream in particular, we called an asynchronous `recv` method
-instead. Otherwise, these APIs otherwise feel very similar, and that similarity
+instead. Otherwise, these APIs feel very similar, and that similarity
 isn’t a coincidence. A stream is like an asynchronous form of iteration. Whereas
 the `trpl::Receiver` specifically waits to receive messages, though, the
 general-purpose stream API is much broader: it provides the next item the
@@ -123,7 +123,7 @@ we can do that _is_ unique to streams.
 
 Many concepts are naturally represented as streams: items becoming available in
 a queue, chunks of data being pulled incrementally from the filesystem when the
-full data set is too large for the computer’s , or data arriving over the
+full data set is too large for the computer’s memory, or data arriving over the
 network over time. Because streams are futures, we can use them with any other
 kind of future and combine them in interesting ways. For example, we can batch
 up events to avoid triggering too many network calls, set timeouts on sequences

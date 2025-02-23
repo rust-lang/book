@@ -167,7 +167,7 @@ function. The signature for `join_all` requires that the types of the items in
 the collection all implement the `Future` trait, and `Box<T>` implements
 `Future` only if the `T` it wraps is a future that implements the `Unpin` trait.
 
-That’s a lot to absorb! To really understand it, let’s we dive a little further
+That’s a lot to absorb! To really understand it, let’s dive a little further
 into how the `Future` trait actually works, in particular around _pinning_.
 
 Look again at the definition of the `Future` trait:
@@ -189,7 +189,7 @@ knows when to check any given future while still being lazy. Again, the details
 of how that works are beyond the scope of this chapter, and you generally only
 need to think about this when writing a custom `Future` implementation. We’ll
 focus instead on the type for `self`, as this is the first time we’ve seen a
-method where `self` has a type annotation. A type annotation for `self` is works
+method where `self` has a type annotation. A type annotation for `self` works
 like type annotations for other function parameters, but with two key
 differences:
 
