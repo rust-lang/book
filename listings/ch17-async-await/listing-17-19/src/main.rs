@@ -2,7 +2,7 @@ extern crate trpl; // required for mdbook test
 
 use std::{
     future::Future,
-    pin::{pin, Pin},
+    pin::{Pin, pin},
     time::Duration,
 };
 

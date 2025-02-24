@@ -21,7 +21,7 @@ use futures::future;
 
 // Re-exports, to be used like `trpl::join`.
 pub use futures::{
-    future::{join, join3, join_all, Either},
+    future::{Either, join, join_all, join3},
     join,
 };
 pub use tokio::{
@@ -39,17 +39,16 @@ pub use tokio::{
     // readers are not asking why `unbounded` is now important and can focus on
     // the more important differences between sync and async APIs.
     sync::mpsc::{
-        unbounded_channel as channel, UnboundedReceiver as Receiver,
-        UnboundedSender as Sender,
+        UnboundedReceiver as Receiver, UnboundedSender as Sender,
+        unbounded_channel as channel,
     },
-    task::{spawn as spawn_task, yield_now, JoinHandle},
+    task::{JoinHandle, spawn as spawn_task, yield_now},
     time::{interval, sleep},
 };
 
 pub use tokio_stream::{
-    iter as stream_from_iter,
+    Stream, StreamExt, iter as stream_from_iter,
     wrappers::{IntervalStream, UnboundedReceiverStream as ReceiverStream},
-    Stream, StreamExt,
 };
 
 /// Run a single future to completion on a bespoke Tokio `Runtime`.

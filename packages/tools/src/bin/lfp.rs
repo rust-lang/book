@@ -215,8 +215,8 @@ mod tests {
     }
 
     #[test]
-    fn is_file_of_interest_returns_false_when_the_filename_does_not_have_the_md_extension(
-    ) {
+    fn is_file_of_interest_returns_false_when_the_filename_does_not_have_the_md_extension()
+     {
         let uninteresting_fn = "src/img/foo1.png";
 
         assert!(!super::is_file_of_interest(path::Path::new(
@@ -233,8 +233,8 @@ mod tests {
     }
 
     #[test]
-    fn is_line_of_interest_does_not_report_a_line_if_the_line_contains_a_file_url_which_is_directly_followed_by_the_project_path(
-    ) {
+    fn is_line_of_interest_does_not_report_a_line_if_the_line_contains_a_file_url_which_is_directly_followed_by_the_project_path()
+     {
         let sample_line =
             "Compiling guessing_game v0.1.0 (file:///projects/guessing_game)";
 
@@ -242,8 +242,8 @@ mod tests {
     }
 
     #[test]
-    fn is_line_of_interest_reports_a_line_if_the_line_contains_a_file_url_which_is_not_directly_followed_by_the_project_path(
-    ) {
+    fn is_line_of_interest_reports_a_line_if_the_line_contains_a_file_url_which_is_not_directly_followed_by_the_project_path()
+     {
         let sample_line = "Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)";
 
         assert!(super::is_line_of_interest(sample_line));

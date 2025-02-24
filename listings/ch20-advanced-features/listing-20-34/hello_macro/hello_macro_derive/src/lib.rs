@@ -14,13 +14,13 @@ pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
 // ANCHOR: here
 fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    let gen = quote! {
+    let generated = quote! {
         impl HelloMacro for #name {
             fn hello_macro() {
                 println!("Hello, Macro! My name is {}!", stringify!(#name));
             }
         }
     };
-    gen.into()
+    generated.into()
 }
 // ANCHOR_END: here

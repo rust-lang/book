@@ -3,7 +3,7 @@
 _by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the
 Rust Community_
 
-This version of the text assumes you’re using Rust 1.82.0 (released 2024-10-17)
+This version of the text assumes you’re using Rust 1.85.0 (released 2025-02-17)
 or later. See the [“Installation” section of Chapter 1][install]<!-- ignore -->
 to install or update Rust.
 
