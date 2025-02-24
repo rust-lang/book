@@ -41,6 +41,7 @@ _add_ directory:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-01-adder-crate/add
+remove `members = ["adder"]` from Cargo.toml
 rm -rf adder
 cargo new adder
 copy output below
@@ -100,6 +101,7 @@ Then generate a new library crate named `add_one`:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-02-add-one/add
+remove `"add_one"` from `members` list in Cargo.toml
 rm -rf add_one
 cargo new add_one --lib
 copy output below
@@ -313,14 +315,14 @@ $ cargo test
    Compiling add_one v0.1.0 (file:///projects/add/add_one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.20s
-     Running unittests src/lib.rs (target/debug/deps/add_one-f0253159197f7841)
+     Running unittests src/lib.rs (target/debug/deps/add_one-93c49ee75dc46543)
 
 running 1 test
 test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-     Running unittests src/main.rs (target/debug/deps/adder-49979ff40686fa8e)
+     Running unittests src/main.rs (target/debug/deps/adder-3a47283c568d2b6a)
 
 running 0 tests
 
@@ -351,7 +353,7 @@ copy output below; the output updating script doesn't handle subdirectories in p
 ```console
 $ cargo test -p add_one
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
-     Running unittests src/lib.rs (target/debug/deps/add_one-b3235fea9a156f74)
+     Running unittests src/lib.rs (target/debug/deps/add_one-93c49ee75dc46543)
 
 running 1 test
 test tests::it_works ... ok
