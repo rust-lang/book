@@ -39,7 +39,7 @@ overload that operator is listed.
 | `->`                      | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | Function and closure return type                                      |                |
 | `.`                       | `expr.ident`                                            | Field access                                                          |                |
 | `.`                       | `expr.ident(expr, ...)`                                 | Method call                                                           |                |
-| `(`                       | `expr(expr, ...)`                                       | Function call                                                         |                |
+| `.`                       | `expr.0`, `expr.1`, etc.                                | Tuple indexing                                                        |                |
 | `..`                      | `..`, `expr..`, `..expr`, `expr..expr`                  | Right-exclusive range literal                                         | `PartialOrd`   |
 | `..=`                     | `..=expr`, `expr..=expr`                                | Right-inclusive range literal                                         | `PartialOrd`   |
 | `..`                      | `..expr`                                                | Struct literal update syntax                                          |                |
@@ -170,9 +170,9 @@ Table B-7 shows symbols that create comments.
 | `/*!...*/` | Inner block doc comment |
 | `/**...*/` | Outer block doc comment |
 
-Table B-8 shows symbols that appear in the context of using tuples.
+Table B-8 shows the contexts in which parentheses are used.
 
-<span class="caption">Table B-8: Tuples</span>
+<span class="caption">Table B-8: Parentheses</span>
 
 | Symbol                   | Explanation                                                                                 |
 | ------------------------ | ------------------------------------------------------------------------------------------- |
@@ -183,7 +183,6 @@ Table B-8 shows symbols that appear in the context of using tuples.
 | `(expr, ...)`            | Tuple expression                                                                            |
 | `(type, ...)`            | Tuple type                                                                                  |
 | `expr(expr, ...)`        | Function call expression; also used to initialize tuple `struct`s and tuple `enum` variants |
-| `expr.0`, `expr.1`, etc. | Tuple indexing                                                                              |
 
 Table B-9 shows the contexts in which curly braces are used.
 
