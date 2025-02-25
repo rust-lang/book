@@ -111,8 +111,8 @@ allows Rust to avoid running async code until it’s actually needed.
 > using `thread::spawn` in [Creating a New Thread with
 > spawn][thread-spawn]<!--ignore-->, where the closure we passed to another
 > thread started running immediately. It’s also different from how many other
-> languages approach async. But it’s important for Rust, and we’ll see why
-> later.
+> languages approach async. But it’s important for Rust to be able to provide
+> its performance guarantees, just as it is with iterators.
 
 Once we have `response_text`, we can parse it into an instance of the `Html`
 type using `Html::parse`. Instead of a raw string, we now have a data type we
@@ -315,7 +315,7 @@ function back in Listing 17-3. If `main` were an async function, something else
 would need to manage the state machine for whatever future `main` returned, but
 `main` is the starting point for the program! Instead, we called the `trpl::run`
 function in `main` to set up a runtime and run the future returned by the
-`async` block until it returns `Ready`.
+`async` block until it is done.
 
 > Note: Some runtimes provide macros so you _can_ write an async `main`
 > function. Those macros rewrite `async fn main() { ... }` to be a normal `fn
