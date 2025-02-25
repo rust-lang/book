@@ -3,10 +3,6 @@
 version = 4
 
 [[package]]
-name = "adder"
-version = "0.1.0"
-
-[[package]]
 name = "adler"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -91,10 +87,6 @@ dependencies = [
  "crc32fast",
  "miniz_oxide",
 ]
-
-[[package]]
-name = "guessing_game"
-version = "0.1.0"
 
 [[package]]
 name = "lazy_static"
