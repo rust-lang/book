@@ -1,5 +1,5 @@
 use std::{
-    sync::{mpsc, Arc, Mutex},
+    sync::{Arc, Mutex, mpsc},
     thread,
 };
 
@@ -65,12 +65,14 @@ impl Worker {
         // --snip--
 
         // ANCHOR_END: here
-        let thread = thread::spawn(move || loop {
-            let job = receiver.lock().unwrap().recv().unwrap();
+        let thread = thread::spawn(move || {
+            loop {
+                let job = receiver.lock().unwrap().recv().unwrap();
 
-            println!("Worker {id} got a job; executing.");
+                println!("Worker {id} got a job; executing.");
 
-            job();
+                job();
+            }
         });
 
         // ANCHOR: here

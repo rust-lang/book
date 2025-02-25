@@ -57,7 +57,7 @@ error[E0599]: no method named `next` found for struct `Iter` in the current scop
 10 |         while let Some(value) = stream.next().await {
    |                                        ^^^^
    |
-   = note: the full type name has been written to 'file:///projects/async_await/target/debug/deps/async_await-9de943556a6001b8.long-type-1281356139287206597.txt'
+   = note: the full type name has been written to '/Users/chris/dev/rust-lang/book/main/listings/ch17-async-await/listing-17-30/target/debug/deps/async_await-575db3dd3197d257.long-type-14490787947592691573.txt'
    = note: consider using `--verbose` to print the full type name to the console
    = help: items from traits can only be used if the trait is in scope
 help: the following traits which provide `next` are implemented but not in scope; perhaps you want to import one of them
@@ -235,11 +235,9 @@ and we spawn a task to handle the async `sleep` calls.
 Now our code has a much more interesting result. Between every other pair of
 messages, a `Problem: Elapsed(())` error.
 
-<!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-35
-cargo run
-copy only the program output, *not* the compiler output
--->
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 Message: 'a'
@@ -396,11 +394,9 @@ messages we’re choosing to ignore. Instead, we never produce those interval
 messages in the first place! This is the inherent “laziness” of Rust’s futures
 at work again, allowing us to choose our performance characteristics.
 
-<!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-39
-cargo run
-copy and paste only the program output
--->
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 Interval: 1
