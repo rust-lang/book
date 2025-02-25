@@ -91,15 +91,16 @@ compile to the same code, so use whichever style is clearer to you.
 Closures are represented by traits, which means you can’t return closures
 directly. In most cases where you might want to return a trait, you can instead
 use the concrete type that implements the trait as the return value of the
-function. However, you can’t do that with closures because they don’t have a
-concrete type that is returnable; you’re not allowed to use the function
-pointer `fn` as a return type, for example.
+function. However, you can’t usually do that with closures because they don’t
+usually have a concrete type that is returnable. You’re not allowed to use the
+function pointer `fn` as a return type if the closure captures any values from
+its scope, for example.
 
 Instead, you will normally use the `impl Trait` syntax we learned about in
 Chapter 10. You can return any function type, using `Fn`, `FnOnce` and `FnMut`.
 For example, this code will work just fine:
 
-```rust,ignore,does_not_compile
+```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-18-returns-closure/src/lib.rs}}
 ```
 
