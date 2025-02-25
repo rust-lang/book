@@ -1,5 +1,5 @@
 [workspace]
-members = [ "listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new", "listings/ch11-writing-automated-tests/listing-11-01","packages/tools"]
+members = ["packages/tools"]
 default-members = ["packages/tools"]
 resolver = "2"
 exclude = [
