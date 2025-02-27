@@ -17,15 +17,16 @@ define a set of behaviors necessary to accomplish some purpose.
 
 For example, let’s say we have multiple structs that hold various kinds and
 amounts of text: a `NewsArticle` struct that holds a news story filed in a
-particular location and a `Tweet` that can have, at most, 280 characters along
-with metadata that indicates whether it was a new tweet, a retweet, or a reply
-to another tweet.
+particular location and a `SocialPost` that can have, at most, 280 characters
+along with metadata that indicates whether it was a new post, a repost, or a
+reply to another post.
 
 We want to make a media aggregator library crate named `aggregator` that can
-display summaries of data that might be stored in a `NewsArticle` or `Tweet`
-instance. To do this, we need a summary from each type, and we’ll request that
-summary by calling a `summarize` method on an instance. Listing 10-12 shows the
-definition of a public `Summary` trait that expresses this behavior.
+display summaries of data that might be stored in a `NewsArticle` or
+`SocialPost` instance. To do this, we need a summary from each type, and we’ll
+request that summary by calling a `summarize` method on an instance. Listing
+10-12 shows the definition of a public `Summary` trait that expresses this
+behavior.
 
 <Listing number="10-12" file-name="src/lib.rs" caption="A `Summary` trait that consists of the behavior provided by a `summarize` method">
 
@@ -57,11 +58,11 @@ Now that we’ve defined the desired signatures of the `Summary` trait’s metho
 we can implement it on the types in our media aggregator. Listing 10-13 shows
 an implementation of the `Summary` trait on the `NewsArticle` struct that uses
 the headline, the author, and the location to create the return value of
-`summarize`. For the `Tweet` struct, we define `summarize` as the username
-followed by the entire text of the tweet, assuming that the tweet content is
+`summarize`. For the `SocialPost` struct, we define `summarize` as the username
+followed by the entire text of the post, assuming that the post content is
 already limited to 280 characters.
 
-<Listing number="10-13" file-name="src/lib.rs" caption="Implementing the `Summary` trait on the `NewsArticle` and `Tweet` types">
+<Listing number="10-13" file-name="src/lib.rs" caption="Implementing the `Summary` trait on the `NewsArticle` and `SocialPost` types">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-13/src/lib.rs:here}}
@@ -78,8 +79,8 @@ signature, we use curly brackets and fill in the method body with the specific
 behavior that we want the methods of the trait to have for the particular type.
 
 Now that the library has implemented the `Summary` trait on `NewsArticle` and
-`Tweet`, users of the crate can call the trait methods on instances of
-`NewsArticle` and `Tweet` in the same way we call regular methods. The only
+`SocialPost`, users of the crate can call the trait methods on instances of
+`NewsArticle` and `SocialPost` in the same way we call regular methods. The only
 difference is that the user must bring the trait into scope as well as the
 types. Here’s an example of how a binary crate could use our `aggregator`
 library crate:
@@ -88,15 +89,15 @@ library crate:
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs}}
 ```
 
-This code prints `1 new tweet: horse_ebooks: of course, as you probably already
+This code prints `1 new post: horse_ebooks: of course, as you probably already
 know, people`.
 
 Other crates that depend on the `aggregator` crate can also bring the `Summary`
 trait into scope to implement `Summary` on their own types. One restriction to
 note is that we can implement a trait on a type only if either the trait or the
 type, or both, are local to our crate. For example, we can implement standard
-library traits like `Display` on a custom type like `Tweet` as part of our
-`aggregator` crate functionality because the type `Tweet` is local to our
+library traits like `Display` on a custom type like `SocialPost` as part of our
+`aggregator` crate functionality because the type `SocialPost` is local to our
 `aggregator` crate. We can also implement `Summary` on `Vec<T>` in our
 `aggregator` crate because the trait `Summary` is local to our `aggregator`
 crate.
@@ -145,9 +146,10 @@ the `summarize` method on an instance of `NewsArticle`, like this:
 This code prints `New article available! (Read more...)`.
 
 Creating a default implementation doesn’t require us to change anything about
-the implementation of `Summary` on `Tweet` in Listing 10-13. The reason is that
-the syntax for overriding a default implementation is the same as the syntax
-for implementing a trait method that doesn’t have a default implementation.
+the implementation of `Summary` on `SocialPost` in Listing 10-13. The reason is
+that the syntax for overriding a default implementation is the same as the
+syntax for implementing a trait method that doesn’t have a default
+implementation.
 
 Default implementations can call other methods in the same trait, even if those
 other methods don’t have a default implementation. In this way, a trait can
@@ -169,7 +171,7 @@ when we implement the trait on a type:
 ```
 
 After we define `summarize_author`, we can call `summarize` on instances of the
-`Tweet` struct, and the default implementation of `summarize` will call the
+`SocialPost` struct, and the default implementation of `summarize` will call the
 definition of `summarize_author` that we’ve provided. Because we’ve implemented
 `summarize_author`, the `Summary` trait has given us the behavior of the
 `summarize` method without requiring us to write any more code. Here’s what
@@ -179,7 +181,7 @@ that looks like:
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/main.rs:here}}
 ```
 
-This code prints `1 new tweet: (Read more from @horse_ebooks...)`.
+This code prints `1 new post: (Read more from @horse_ebooks...)`.
 
 Note that it isn’t possible to call the default implementation from an
 overriding implementation of that same method.
@@ -188,7 +190,7 @@ overriding implementation of that same method.
 
 Now that you know how to define and implement traits, we can explore how to use
 traits to define functions that accept many different types. We’ll use the
-`Summary` trait we implemented on the `NewsArticle` and `Tweet` types in
+`Summary` trait we implemented on the `NewsArticle` and `SocialPost` types in
 Listing 10-13 to define a `notify` function that calls the `summarize` method
 on its `item` parameter, which is of some type that implements the `Summary`
 trait. To do this, we use the `impl Trait` syntax, like this:
@@ -201,7 +203,7 @@ Instead of a concrete type for the `item` parameter, we specify the `impl`
 keyword and the trait name. This parameter accepts any type that implements the
 specified trait. In the body of `notify`, we can call any methods on `item`
 that come from the `Summary` trait, such as `summarize`. We can call `notify`
-and pass in any instance of `NewsArticle` or `Tweet`. Code that calls the
+and pass in any instance of `NewsArticle` or `SocialPost`. Code that calls the
 function with any other type, such as a `String` or an `i32`, won’t compile
 because those types don’t implement `Summary`.
 
@@ -301,7 +303,8 @@ value of some type that implements a trait, as shown here:
 By using `impl Summary` for the return type, we specify that the
 `returns_summarizable` function returns some type that implements the `Summary`
 trait without naming the concrete type. In this case, `returns_summarizable`
-returns a `Tweet`, but the code calling this function doesn’t need to know that.
+returns a `SocialPost`, but the code calling this function doesn’t need to know
+that.
 
 The ability to specify a return type only by the trait it implements is
 especially useful in the context of closures and iterators, which we cover in
@@ -311,19 +314,19 @@ specify that a function returns some type that implements the `Iterator` trait
 without needing to write out a very long type.
 
 However, you can only use `impl Trait` if you’re returning a single type. For
-example, this code that returns either a `NewsArticle` or a `Tweet` with the
-return type specified as `impl Summary` wouldn’t work:
+example, this code that returns either a `NewsArticle` or a `SocialPost` with
+the return type specified as `impl Summary` wouldn’t work:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-06-impl-trait-returns-one-type/src/lib.rs:here}}
 ```
 
-Returning either a `NewsArticle` or a `Tweet` isn’t allowed due to restrictions
-around how the `impl Trait` syntax is implemented in the compiler. We’ll cover
-how to write a function with this behavior in the [“Using Trait Objects That
-Allow for Values of Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
-ignore --> section of Chapter 18.
+Returning either a `NewsArticle` or a `SocialPost` isn’t allowed due to
+restrictions around how the `impl Trait` syntax is implemented in the compiler.
+We’ll cover how to write a function with this behavior in the [“Using Trait
+Objects That Allow for Values of Different
+Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
+--> section of Chapter 18.
 
 ### Using Trait Bounds to Conditionally Implement Methods
 
