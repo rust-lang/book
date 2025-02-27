@@ -44,7 +44,7 @@ you would likely write this same functionality by starting a variable at index
 incrementing the variable value in a loop until it reached the total number of
 items in the vector.
 
-Iterators handle all that logic for you, cutting down on repetitive code you
+Iterators handle all of that logic for you, cutting down on repetitive code you
 could potentially mess up. Iterators give you more flexibility to use the same
 logic with many different kinds of sequences, not just data structures you can
 index into, like vectors. Let’s examine how iterators do that.
@@ -64,7 +64,7 @@ pub trait Iterator {
 }
 ```
 
-Notice this definition uses some new syntax: `type Item` and `Self::Item`,
+Notice that this definition uses some new syntax: `type Item` and `Self::Item`,
 which are defining an _associated type_ with this trait. We’ll talk about
 associated types in depth in Chapter 20. For now, all you need to know is that
 this code says implementing the `Iterator` trait requires that you also define
@@ -73,7 +73,7 @@ method. In other words, the `Item` type will be the type returned from the
 iterator.
 
 The `Iterator` trait only requires implementors to define one method: the
-`next` method, which returns one item of the iterator at a time wrapped in
+`next` method, which returns one item of the iterator at a time, wrapped in
 `Some` and, when iteration is over, returns `None`.
 
 We can call the `next` method on iterators directly; Listing 13-12 demonstrates
@@ -102,7 +102,7 @@ ownership of `v1` and returns owned values, we can call `into_iter` instead of
 `iter`. Similarly, if we want to iterate over mutable references, we can call
 `iter_mut` instead of `iter`.
 
-### Methods that Consume the Iterator
+### Methods That Consume the Iterator
 
 The `Iterator` trait has a number of different methods with default
 implementations provided by the standard library; you can find out about these
@@ -111,12 +111,12 @@ trait. Some of these methods call the `next` method in their definition, which
 is why you’re required to implement the `next` method when implementing the
 `Iterator` trait.
 
-Methods that call `next` are called _consuming adapters_, because calling them
+Methods that call `next` are called _consuming adapters_ because calling them
 uses up the iterator. One example is the `sum` method, which takes ownership of
 the iterator and iterates through the items by repeatedly calling `next`, thus
 consuming the iterator. As it iterates through, it adds each item to a running
 total and returns the total when iteration is complete. Listing 13-13 has a
-test illustrating a use of the `sum` method:
+test illustrating a use of the `sum` method.
 
 <Listing number="13-13" file-name="src/lib.rs" caption="Calling the `sum` method to get the total of all items in the iterator">
 
@@ -161,12 +161,12 @@ we need to consume the iterator here.
 
 To fix this warning and consume the iterator, we’ll use the `collect` method,
 which we used in Chapter 12 with `env::args` in Listing 12-1. This method
-consumes the iterator and collects the resulting values into a collection data
+consumes the iterator and collects the resultant values into a collection data
 type.
 
 In Listing 13-15, we collect the results of iterating over the iterator that’s
 returned from the call to `map` into a vector. This vector will end up
-containing each item from the original vector incremented by 1.
+containing each item from the original vector, incremented by 1.
 
 <Listing number="13-15" file-name="src/main.rs" caption="Calling the `map` method to create a new iterator and then calling the `collect` method to consume the new iterator and create a vector">
 
@@ -185,7 +185,7 @@ You can chain multiple calls to iterator adapters to perform complex actions in
 a readable way. But because all iterators are lazy, you have to call one of the
 consuming adapter methods to get results from calls to iterator adapters.
 
-### Using Closures that Capture Their Environment
+### Using Closures That Capture Their Environment
 
 Many iterator adapters take closures as arguments, and commonly the closures
 we’ll specify as arguments to iterator adapters will be closures that capture

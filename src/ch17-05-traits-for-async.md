@@ -301,14 +301,15 @@ itself cannot move, because it is still pinned.
 
 However, most types are perfectly safe to move around, even if they happen to be
 behind a `Pin` wrapper. We only need to think about pinning when items have
-internal references. Primitive values such as numbers and Booleans obviously
-don’t have any internal references, so they’re safe. Neither do most types you
-normally work with in Rust. You can move around a `Vec`, for example, without
-worrying. Given only what we have seen so far, if you have a `Pin<Vec<String>>`,
-you’d have to do everything via the safe but restrictive APIs provided by `Pin`,
-even though a `Vec<String>` is always safe to move if there are no other
-references to it. We need a way to tell the compiler that it’s fine to move
-items around in cases like this—and there’s where `Unpin` comes into play.
+internal references. Primitive values such as numbers and Booleans are safe
+because they obviously don’t have any internal references. Neither do most types
+you normally work with in Rust. You can move around a `Vec`, for example,
+without worrying. Given only what we have seen so far, if you have a
+`Pin<Vec<String>>`, you’d have to do everything via the safe but restrictive
+APIs provided by `Pin`, even though a `Vec<String>` is always safe to move if
+there are no other references to it. We need a way to tell the compiler that
+it’s fine to move items around in cases like this—and that’s where `Unpin` comes
+into play.
 
 `Unpin` is a marker trait, similar to the `Send` and `Sync` traits we saw in
 Chapter 16, and thus has no functionality of its own. Marker traits exist only

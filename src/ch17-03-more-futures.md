@@ -124,72 +124,24 @@ the errors mentioning `Unpin`. Although there are three of them, their contents
 are very similar.
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-16
+cd listings/ch17-async-await/listing-17-17
 cargo build
 # copy *only* the errors
 # fix the paths
 -->
 
 ```text
-error[E0308]: mismatched types
-   --> src/main.rs:46:46
+error[E0277]: `dyn Future<Output = ()>` cannot be unpinned
+   --> src/main.rs:49:24
     |
-10  |         let tx1_fut = async move {
-    |                       ---------- the expected `async` block
-...
-24  |         let rx_fut = async {
-    |                      ----- the found `async` block
-...
-46  |             vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
-    |                                     -------- ^^^^^^ expected `async` block, found a different `async` block
-    |                                     |
-    |                                     arguments to this function are incorrect
-    |
-    = note: expected `async` block `{async block@src/main.rs:10:23: 10:33}`
-               found `async` block `{async block@src/main.rs:24:22: 24:27}`
-    = note: no two async blocks, even if identical, have the same type
-    = help: consider pinning your async block and casting it to a trait object
-note: associated function defined here
-   --> file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/alloc/src/boxed.rs:252:12
-    |
-252 |     pub fn new(x: T) -> Self {
-    |            ^^^
-
-error[E0308]: mismatched types
-   --> src/main.rs:46:64
-    |
-10  |         let tx1_fut = async move {
-    |                       ---------- the expected `async` block
-...
-30  |         let tx_fut = async move {
-    |                      ---------- the found `async` block
-...
-46  |             vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
-    |                                                       -------- ^^^^^^ expected `async` block, found a different `async` block
-    |                                                       |
-    |                                                       arguments to this function are incorrect
-    |
-    = note: expected `async` block `{async block@src/main.rs:10:23: 10:33}`
-               found `async` block `{async block@src/main.rs:30:22: 30:32}`
-    = note: no two async blocks, even if identical, have the same type
-    = help: consider pinning your async block and casting it to a trait object
-note: associated function defined here
-   --> file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/alloc/src/boxed.rs:252:12
-    |
-252 |     pub fn new(x: T) -> Self {
-    |            ^^^
-
-error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
-   --> src/main.rs:48:24
-    |
-48  |         trpl::join_all(futures).await;
-    |         -------------- ^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`
+49  |         trpl::join_all(futures).await;
+    |         -------------- ^^^^^^^ the trait `Unpin` is not implemented for `dyn Future<Output = ()>`
     |         |
     |         required by a bound introduced by this call
     |
     = note: consider using the `pin!` macro
             consider using `Box::pin` if you need to access the pinned value outside of the current scope
-    = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
+    = note: required for `Box<dyn Future<Output = ()>>` to implement `Future`
 note: required by a bound in `join_all`
    --> file:///home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.30/src/future/join_all.rs:105:14
     |
@@ -199,15 +151,15 @@ note: required by a bound in `join_all`
 105 |     I::Item: Future,
     |              ^^^^^^ required by this bound in `join_all`
 
-error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
-  --> src/main.rs:48:9
+error[E0277]: `dyn Future<Output = ()>` cannot be unpinned
+  --> src/main.rs:49:9
    |
-48 |         trpl::join_all(futures).await;
-   |         ^^^^^^^^^^^^^^^^^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`
+49 |         trpl::join_all(futures).await;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ the trait `Unpin` is not implemented for `dyn Future<Output = ()>`
    |
    = note: consider using the `pin!` macro
            consider using `Box::pin` if you need to access the pinned value outside of the current scope
-   = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
+   = note: required for `Box<dyn Future<Output = ()>>` to implement `Future`
 note: required by a bound in `futures_util::future::join_all::JoinAll`
   --> file:///home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.30/src/future/join_all.rs:29:8
    |
@@ -217,15 +169,15 @@ note: required by a bound in `futures_util::future::join_all::JoinAll`
 29 |     F: Future,
    |        ^^^^^^ required by this bound in `JoinAll`
 
-error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
-  --> src/main.rs:48:33
+error[E0277]: `dyn Future<Output = ()>` cannot be unpinned
+  --> src/main.rs:49:33
    |
-48 |         trpl::join_all(futures).await;
-   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`
+49 |         trpl::join_all(futures).await;
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `dyn Future<Output = ()>`
    |
    = note: consider using the `pin!` macro
            consider using `Box::pin` if you need to access the pinned value outside of the current scope
-   = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
+   = note: required for `Box<dyn Future<Output = ()>>` to implement `Future`
 note: required by a bound in `futures_util::future::join_all::JoinAll`
   --> file:///home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.30/src/future/join_all.rs:29:8
    |
@@ -234,6 +186,9 @@ note: required by a bound in `futures_util::future::join_all::JoinAll`
 28 | where
 29 |     F: Future,
    |        ^^^^^^ required by this bound in `JoinAll`
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `async_await` (bin "async_await") due to 3 previous errors
 ```
 
 That is a _lot_ to digest, so let’s pull it apart. The first part of the message

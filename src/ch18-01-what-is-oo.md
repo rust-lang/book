@@ -1,7 +1,7 @@
 ## Characteristics of Object-Oriented Languages
 
 There is no consensus in the programming community about what features a
-language must have to be considered object-oriented. Rust is influenced by many
+language must have to be considered object oriented. Rust is influenced by many
 programming paradigms, including OOP; for example, we explored the features
 that came from functional programming in Chapter 13. Arguably, OOP languages
 share certain common characteristics, namely objects, encapsulation, and
@@ -11,20 +11,20 @@ Rust supports it.
 ### Objects Contain Data and Behavior
 
 The book _Design Patterns: Elements of Reusable Object-Oriented Software_ by
-Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides (Addison-Wesley
-Professional, 1994), colloquially referred to as _The Gang of Four_ book, is a
-catalog of object-oriented design patterns. It defines OOP this way:
+Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides (Addison-Wesley,
+1994), colloquially referred to as _The Gang of Four_ book, is a catalog of
+object-oriented design patterns. It defines OOP in this way:
 
 > Object-oriented programs are made up of objects. An **object** packages both
 > data and the procedures that operate on that data. The procedures are
 > typically called **methods** or **operations**.
 
-Using this definition, Rust is object-oriented: structs and enums have data,
+Using this definition, Rust is object oriented: structs and enums have data,
 and `impl` blocks provide methods on structs and enums. Even though structs and
 enums with methods aren’t _called_ objects, they provide the same
 functionality, according to the Gang of Four’s definition of objects.
 
-### Encapsulation that Hides Implementation Details
+### Encapsulation That Hides Implementation Details
 
 Another aspect commonly associated with OOP is the idea of _encapsulation_,
 which means that the implementation details of an object aren’t accessible to
@@ -82,14 +82,14 @@ Because we’ve encapsulated the implementation details of the struct
 `AveragedCollection`, we can easily change aspects, such as the data structure,
 in the future. For instance, we could use a `HashSet<i32>` instead of a
 `Vec<i32>` for the `list` field. As long as the signatures of the `add`,
-`remove`, and `average` public methods stay the same, code using
-`AveragedCollection` wouldn’t need to change in order to compile. If we made
-`list` public instead, this wouldn’t necessarily be the case: `HashSet<i32>` and
-`Vec<i32>` have different methods for adding and removing items, so the external
-code would likely have to change if it were modifying `list` directly.
+`remove`, and `average` public methods stayed the same, code using
+`AveragedCollection` wouldn’t need to change. If we made `list` public instead,
+this wouldn’t necessarily be the case: `HashSet<i32>` and `Vec<i32>` have
+different methods for adding and removing items, so the external code would
+likely have to change if it were modifying `list` directly.
 
 If encapsulation is a required aspect for a language to be considered
-object-oriented, then Rust meets that requirement. The option to use `pub` or
+object oriented, then Rust meets that requirement. The option to use `pub` or
 not for different parts of code enables encapsulation of implementation details.
 
 ### Inheritance as a Type System and as Code Sharing
@@ -98,9 +98,9 @@ _Inheritance_ is a mechanism whereby an object can inherit elements from
 another object’s definition, thus gaining the parent object’s data and behavior
 without you having to define them again.
 
-If a language must have inheritance to be an object-oriented language, then
-Rust is not one. There is no way to define a struct that inherits the parent
-struct’s fields and method implementations without using a macro.
+If a language must have inheritance to be object oriented, then Rust is not such
+a language. There is no way to define a struct that inherits the parent struct’s
+fields and method implementations without using a macro.
 
 However, if you’re used to having inheritance in your programming toolbox, you
 can use other solutions in Rust, depending on your reason for reaching for
@@ -134,15 +134,15 @@ each other at runtime if they share certain characteristics.
 > trait bounds to impose constraints on what those types must provide. This is
 > sometimes called _bounded parametric polymorphism_.
 
-Inheritance has recently fallen out of favor as a programming design solution
-in many programming languages because it’s often at risk of sharing more code
-than necessary. Subclasses shouldn’t always share all characteristics of their
-parent class but will do so with inheritance. This can make a program’s design
-less flexible. It also introduces the possibility of calling methods on
-subclasses that don’t make sense or that cause errors because the methods don’t
-apply to the subclass. In addition, some languages will only allow _single
-inheritance_ (meaning a subclass can only inherit from one class), further
-restricting the flexibility of a program’s design.
+Inheritance has recently fallen out of favor as a programming design solution in
+many programming languages because it’s often at risk of sharing more code than
+necessary. Subclasses shouldn’t always share all characteristics of their parent
+class but will do so with inheritance. This can make a program’s design less
+flexible. It also introduces the possibility of calling methods on subclasses
+that don’t make sense or that cause errors because the methods don’t apply to
+the subclass. In addition, some languages will only allow single inheritance
+(meaning a subclass can only inherit from one class), further restricting the
+flexibility of a program’s design.
 
 For these reasons, Rust takes the different approach of using trait objects
 instead of inheritance. Let’s look at how trait objects enable polymorphism in

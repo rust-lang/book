@@ -5,7 +5,7 @@ pattern is that we define a set of states a value can have internally. The
 states are represented by a set of _state objects_, and the value’s behavior
 changes based on its state. We’re going to work through an example of a blog
 post struct that has a field to hold its state, which will be a state object
-from the set "draft", "review", or "published".
+from the set “draft”, “review”, or “published”.
 
 The state objects share functionality: in Rust, of course, we use structs and
 traits rather than objects and inheritance. Each state object is responsible
@@ -19,9 +19,9 @@ value holding the state or the code that uses the value. We’ll only need to
 update the code inside one of the state objects to change its rules or perhaps
 add more state objects.
 
-First, we’re going to implement the state pattern in a more traditional
+First we’re going to implement the state pattern in a more traditional
 object-oriented way, then we’ll use an approach that’s a bit more natural in
-Rust. Let’s dig in to incrementally implementing a blog post workflow using the
+Rust. Let’s dig in to incrementally implement a blog post workflow using the
 state pattern.
 
 The final functionality will look like this:
@@ -64,11 +64,11 @@ be returned when `content` is called.
 Notice that the only type we’re interacting with from the crate is the `Post`
 type. This type will use the state pattern and will hold a value that will be
 one of three state objects representing the various states a post can be
-in—draft, waiting for review, or published. Changing from one state to another
-will be managed internally within the `Post` type. The states change in
-response to the methods called by our library’s users on the `Post` instance,
-but they don’t have to manage the state changes directly. Also, users can’t
-make a mistake with the states, like publishing a post before it’s reviewed.
+in—draft, review, or published. Changing from one state to another will be
+managed internally within the `Post` type. The states change in response to the
+methods called by our library’s users on the `Post` instance, but they don’t
+have to manage the state changes directly. Also, users can’t make a mistake with
+the states, such as publishing a post before it’s reviewed.
 
 ### Defining `Post` and Creating a New Instance in the Draft State
 
@@ -98,11 +98,11 @@ we’ll start by defining just the `Draft` state because that is the state we
 want a post to start in.
 
 When we create a new `Post`, we set its `state` field to a `Some` value that
-holds a `Box`. This `Box` points to a new instance of the `Draft` struct.
-This ensures whenever we create a new instance of `Post`, it will start out as
-a draft. Because the `state` field of `Post` is private, there is no way to
-create a `Post` in any other state! In the `Post::new` function, we set the
-`content` field to a new, empty `String`.
+holds a `Box`. This `Box` points to a new instance of the `Draft` struct. This
+ensures that whenever we create a new instance of `Post`, it will start out as a
+draft. Because the `state` field of `Post` is private, there is no way to create
+a `Post` in any other state! In the `Post::new` function, we set the `content`
+field to a new, empty `String`.
 
 ### Storing the Text of the Post Content
 
@@ -112,7 +112,7 @@ blog post. We implement this as a method, rather than exposing the `content`
 field as `pub`, so that later we can implement a method that will control how
 the `content` field’s data is read. The `add_text` method is pretty
 straightforward, so let’s add the implementation in Listing 18-13 to the `impl
-Post` block:
+Post` block.
 
 <Listing number="18-13" file-name="src/lib.rs" caption="Implementing the `add_text` method to add text to a post’s `content`">
 
@@ -122,7 +122,7 @@ Post` block:
 
 </Listing>
 
-The `add_text` method takes a mutable reference to `self`, because we’re
+The `add_text` method takes a mutable reference to `self` because we’re
 changing the `Post` instance that we’re calling `add_text` on. We then call
 `push_str` on the `String` in `content` and pass the `text` argument to add to
 the saved `content`. This behavior doesn’t depend on the state the post is in,
@@ -139,7 +139,7 @@ implement the `content` method with the simplest thing that will fulfill this
 requirement: always returning an empty string slice. We’ll change this later
 once we implement the ability to change a post’s state so it can be published.
 So far, posts can only be in the draft state, so the post content should always
-be empty. Listing 18-14 shows this placeholder implementation:
+be empty. Listing 18-14 shows this placeholder implementation.
 
 <Listing number="18-14" file-name="src/lib.rs" caption="Adding a placeholder implementation for the `content` method on `Post` that always returns an empty string slice">
 
@@ -152,10 +152,14 @@ be empty. Listing 18-14 shows this placeholder implementation:
 With this added `content` method, everything in Listing 18-11 up to line 7
 works as intended.
 
-### Requesting a Review of the Post Changes Its State
+<!-- Old link, do not remove -->
+
+<a id="requesting-a-review-of-the-post-changes-its-state"></a>
+
+### Requesting a Review Changes the Post’s State
 
 Next, we need to add functionality to request a review of a post, which should
-change its state from `Draft` to `PendingReview`. Listing 18-15 shows this code:
+change its state from `Draft` to `PendingReview`. Listing 18-15 shows this code.
 
 <Listing number="18-15" file-name="src/lib.rs" caption="Implementing `request_review` methods on `Post` and the `State` trait">
 
@@ -181,7 +185,7 @@ ownership of `Box<Self>`, invalidating the old state so the state value of the
 To consume the old state, the `request_review` method needs to take ownership
 of the state value. This is where the `Option` in the `state` field of `Post`
 comes in: we call the `take` method to take the `Some` value out of the `state`
-field and leave a `None` in its place, because Rust doesn’t let us have
+field and leave a `None` in its place because Rust doesn’t let us have
 unpopulated fields in structs. This lets us move the `state` value out of
 `Post` rather than borrowing it. Then we’ll set the post’s `state` value to the
 result of this operation.
@@ -194,7 +198,7 @@ we’ve transformed it into a new state.
 The `request_review` method on `Draft` returns a new, boxed instance of a new
 `PendingReview` struct, which represents the state when a post is waiting for a
 review. The `PendingReview` struct also implements the `request_review` method
-but doesn’t do any transformations. Rather, it returns itself, because when we
+but doesn’t do any transformations. Rather, it returns itself because when we
 request a review on a post already in the `PendingReview` state, it should stay
 in the `PendingReview` state.
 
@@ -249,7 +253,7 @@ as shown in Listing 18-17:
 
 </Listing>
 
-Because the goal is to keep all these rules inside the structs that implement
+Because the goal is to keep all of these rules inside the structs that implement
 `State`, we call a `content` method on the value in `state` and pass the post
 instance (that is, `self`) as an argument. Then we return the value that’s
 returned from using the `content` method on the `state` value.
@@ -263,10 +267,10 @@ we can’t move `state` out of the borrowed `&self` of the function parameter.
 We then call the `unwrap` method, which we know will never panic, because we
 know the methods on `Post` ensure that `state` will always contain a `Some`
 value when those methods are done. This is one of the cases we talked about in
-the [“Cases In Which You Have More Information Than the
-Compiler”][more-info-than-rustc]<!-- ignore --> section of Chapter 9 when we
-know that a `None` value is never possible, even though the compiler isn’t able
-to understand that.
+[“Cases in Which You Have More Information Than the
+Compiler”][more-info-than-rustc]<!-- ignore --> in Chapter 9 when we know that a
+`None` value is never possible, even though the compiler isn’t able to
+understand that.
 
 At this point, when we call `content` on the `&Box<dyn State>`, deref coercion
 will take effect on the `&` and the `Box` so the `content` method will
@@ -297,13 +301,13 @@ And we’re done—all of Listing 18-11 now works! We’ve implemented the state
 pattern with the rules of the blog post workflow. The logic related to the
 rules lives in the state objects rather than being scattered throughout `Post`.
 
-> #### Why Not An Enum?
+> ### Why Not An Enum?
 >
 > You may have been wondering why we didn’t use an `enum` with the different
-> possible post states as variants. That’s certainly a possible solution, try
+> possible post states as variants. That’s certainly a possible solution; try
 > it and compare the end results to see which you prefer! One disadvantage of
-> using an enum is every place that checks the value of the enum will need a
-> `match` expression or similar to handle every possible variant. This could
+> using an enum is that every place that checks the value of the enum will need
+> a `match` expression or similar to handle every possible variant. This could
 > get more repetitive than this trait object solution.
 
 ### Trade-offs of the State Pattern
@@ -349,21 +353,22 @@ another design pattern.
 Another downside is that we’ve duplicated some logic. To eliminate some of the
 duplication, we might try to make default implementations for the
 `request_review` and `approve` methods on the `State` trait that return `self`;
-however, this would not be dyn compatible, because the trait doesn’t know what
-the concrete `self` will be exactly. We want to be able to use `State` as a
-trait object, so we need its methods to be dyn compatible.
+however, this wouldn’t work: when using `State` as a trait object, the trait
+doesn’t know what the concrete `self` will be exactly, so the return type isn’t
+known at compile time. (This is one of the dyn compatibility rules mentioned
+earlier.)
 
 Other duplication includes the similar implementations of the `request_review`
 and `approve` methods on `Post`. Both methods delegate to the implementation of
 the same method on the value in the `state` field of `Option` and set the new
 value of the `state` field to the result. If we had a lot of methods on `Post`
 that followed this pattern, we might consider defining a macro to eliminate the
-repetition (see the [“Macros”][macros]<!-- ignore --> section in Chapter 20).
+repetition (see [“Macros”][macros]<!-- ignore --> in Chapter 20).
 
 By implementing the state pattern exactly as it’s defined for object-oriented
 languages, we’re not taking as full advantage of Rust’s strengths as we could.
 Let’s look at some changes we can make to the `blog` crate that can make
-invalid states and transitions into compile time errors.
+invalid states and transitions into compile-time errors.
 
 #### Encoding States and Behavior as Types
 
@@ -389,9 +394,9 @@ and the ability to add text to the post’s content. But instead of having a
 draft posts don’t have the `content` method at all. That way, if we try to get
 a draft post’s content, we’ll get a compiler error telling us the method
 doesn’t exist. As a result, it will be impossible for us to accidentally
-display draft post content in production, because that code won’t even compile.
+display draft post content in production because that code won’t even compile.
 Listing 18-19 shows the definition of a `Post` struct and a `DraftPost` struct,
-as well as methods on each:
+as well as methods on each.
 
 <Listing number="18-19" file-name="src/lib.rs" caption="A `Post` with a `content` method and `DraftPost` without a `content` method">
 
@@ -424,9 +429,9 @@ So how do we get a published post? We want to enforce the rule that a draft
 post has to be reviewed and approved before it can be published. A post in the
 pending review state should still not display any content. Let’s implement
 these constraints by adding another struct, `PendingReviewPost`, defining the
-`request_review` method on `DraftPost` to return a `PendingReviewPost`, and
+`request_review` method on `DraftPost` to return a `PendingReviewPost` and
 defining an `approve` method on `PendingReviewPost` to return a `Post`, as
-shown in Listing 18-20:
+shown in Listing 18-20.
 
 <Listing number="18-20" file-name="src/lib.rs" caption="A `PendingReviewPost` that gets created by calling `request_review` on `DraftPost` and an `approve` method that turns a `PendingReviewPost` into a published `Post`">
 
@@ -454,7 +459,7 @@ called on, so we need to add more `let post =` shadowing assignments to save
 the returned instances. We also can’t have the assertions about the draft and
 pending review posts’ contents be empty strings, nor do we need them: we can’t
 compile code that tries to use the content of posts in those states any longer.
-The updated code in `main` is shown in Listing 18-21:
+The updated code in `main` is shown in Listing 18-21.
 
 <Listing number="18-21" file-name="src/main.rs" caption="Modifications to `main` to use the new implementation of the blog post workflow">
 
@@ -488,14 +493,14 @@ object-oriented languages don’t have.
 
 ## Summary
 
-No matter whether or not you think Rust is an object-oriented language after
+Regardless of whether you think Rust is an object-oriented language after
 reading this chapter, you now know that you can use trait objects to get some
 object-oriented features in Rust. Dynamic dispatch can give your code some
 flexibility in exchange for a bit of runtime performance. You can use this
 flexibility to implement object-oriented patterns that can help your code’s
 maintainability. Rust also has other features, like ownership, that
-object-oriented languages don’t have. An object-oriented pattern won’t always
-be the best way to take advantage of Rust’s strengths, but is an available
+object-oriented languages don’t have. An object-oriented pattern won’t always be
+the best way to take advantage of Rust’s strengths, but it is an available
 option.
 
 Next, we’ll look at patterns, which are another of Rust’s features that enable

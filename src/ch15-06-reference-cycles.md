@@ -13,7 +13,7 @@ will never be dropped.
 
 Let’s look at how a reference cycle might happen and how to prevent it,
 starting with the definition of the `List` enum and a `tail` method in Listing
-15-25:
+15-25.
 
 <Listing number="15-25" file-name="src/main.rs" caption="A cons list definition that holds a `RefCell<T>` so we can modify what a `Cons` variant is referring to">
 
@@ -46,7 +46,7 @@ reference counts are at various points in this process.
 
 We create an `Rc<List>` instance holding a `List` value in the variable `a`
 with an initial list of `5, Nil`. We then create an `Rc<List>` instance holding
-another `List` value in the variable `b` that contains the value 10 and points
+another `List` value in the variable `b` that contains the value `10` and points
 to the list in `a`.
 
 We modify `a` so it points to `b` instead of `Nil`, creating a cycle. We do
@@ -62,7 +62,7 @@ moment, we’ll get this output:
 {{#include ../listings/ch15-smart-pointers/listing-15-26/output.txt}}
 ```
 
-The reference count of the `Rc<List>` instances in both `a` and `b` are 2 after
+The reference count of the `Rc<List>` instances in both `a` and `b` is 2 after
 we change the list in `a` to point to `b`. At the end of `main`, Rust drops the
 variable `b`, which decreases the reference count of the `b` `Rc<List>` instance
 from 2 to 1. The memory that `Rc<List>` has on the heap won’t be dropped at
@@ -78,9 +78,9 @@ diagram in Figure 15-4.
 <span class="caption">Figure 15-4: A reference cycle of lists `a` and `b`
 pointing to each other</span>
 
-If you uncomment the last `println!` and run the program, Rust will try to
-print this cycle with `a` pointing to `b` pointing to `a`, and so forth, until
-it overflows the stack.
+If you uncomment the last `println!` and run the program, Rust will try to print
+this cycle with `a` pointing to `b` pointing to `a` and so forth until it
+overflows the stack.
 
 Compared to a real-world program, the consequences of creating a reference cycle
 in this example aren’t very dire: right after we create the reference cycle,
@@ -107,17 +107,21 @@ Let’s look at an example using graphs made up of parent nodes and child nodes
 to see when non-ownership relationships are an appropriate way to prevent
 reference cycles.
 
-### Preventing Reference Cycles: Turning an `Rc<T>` into a `Weak<T>`
+<!-- Old link, do not remove -->
 
-So far, we’ve demonstrated that calling `Rc::clone` increases the
-`strong_count` of an `Rc<T>` instance, and an `Rc<T>` instance is only cleaned
-up if its `strong_count` is 0. You can also create a _weak reference_ to the
-value within an `Rc<T>` instance by calling `Rc::downgrade` and passing a
-reference to the `Rc<T>`. _Strong references_ are how you can share ownership of
-an `Rc<T>` instance. _Weak references_ don’t express an ownership relationship,
-and their count doesn’t affect when an `Rc<T>` instance is cleaned up. They
-won’t cause a reference cycle because any cycle involving some weak references
-will be broken once the strong reference count of values involved is 0.
+<a id="preventing-reference-cycles-turning-an-rct-into-a-weakt"></a>
+
+### Preventing Reference Cycles Using `Weak<T>`
+
+So far, we’ve demonstrated that calling `Rc::clone` increases the `strong_count`
+of an `Rc<T>` instance, and an `Rc<T>` instance is only cleaned up if its
+`strong_count` is 0. You can also create a _weak reference_ to the value within
+an `Rc<T>` instance by calling `Rc::downgrade` and passing a reference to the
+`Rc<T>`. Strong references are how you can share ownership of an `Rc<T>`
+instance. Weak references don’t express an ownership relationship, and their
+count doesn’t affect when an `Rc<T>` instance is cleaned up. They won’t cause a
+reference cycle because any cycle involving some weak references will be broken
+once the strong reference count of values involved is 0.
 
 When you call `Rc::downgrade`, you get a smart pointer of type `Weak<T>`.
 Instead of increasing the `strong_count` in the `Rc<T>` instance by 1, calling
@@ -127,7 +131,7 @@ Instead of increasing the `strong_count` in the `Rc<T>` instance by 1, calling
 `Rc<T>` instance to be cleaned up.
 
 Because the value that `Weak<T>` references might have been dropped, to do
-anything with the value that a `Weak<T>` is pointing to, you must make sure the
+anything with the value that a `Weak<T>` is pointing to you must make sure the
 value still exists. Do this by calling the `upgrade` method on a `Weak<T>`
 instance, which will return an `Option<Rc<T>>`. You’ll get a result of `Some`
 if the `Rc<T>` value has not been dropped yet and a result of `None` if the
@@ -139,7 +143,7 @@ As an example, rather than using a list whose items know only about the next
 item, we’ll create a tree whose items know about their children items _and_
 their parent items.
 
-#### Creating a Tree Data Structure: a `Node` with Child Nodes
+#### Creating a Tree Data Structure: A `Node` with Child Nodes
 
 To start, we’ll build a tree with nodes that know about their child nodes.
 We’ll create a struct named `Node` that holds its own `i32` value as well as
@@ -158,8 +162,8 @@ modify which nodes are children of another node, so we have a `RefCell<T>` in
 `children` around the `Vec<Rc<Node>>`.
 
 Next, we’ll use our struct definition and create one `Node` instance named
-`leaf` with the value 3 and no children, and another instance named `branch`
-with the value 5 and `leaf` as one of its children, as shown in Listing 15-27:
+`leaf` with the value `3` and no children, and another instance named `branch`
+with the value `5` and `leaf` as one of its children, as shown in Listing 15-27.
 
 <Listing number="15-27" file-name="src/main.rs" caption="Creating a `leaf` node with no children and a `branch` node with `leaf` as one of its children">
 
@@ -180,7 +184,7 @@ parent. We’ll do that next.
 
 To make the child node aware of its parent, we need to add a `parent` field to
 our `Node` struct definition. The trouble is in deciding what the type of
-`parent` should be. We know it can’t contain an `Rc<T>`, because that would
+`parent` should be. We know it can’t contain an `Rc<T>` because that would
 create a reference cycle with `leaf.parent` pointing to `branch` and
 `branch.children` pointing to `leaf`, which would cause their `strong_count`
 values to never be 0.
@@ -190,7 +194,7 @@ children: if a parent node is dropped, its child nodes should be dropped as
 well. However, a child should not own its parent: if we drop a child node, the
 parent should still exist. This is a case for weak references!
 
-So instead of `Rc<T>`, we’ll make the type of `parent` use `Weak<T>`,
+So, instead of `Rc<T>`, we’ll make the type of `parent` use `Weak<T>`,
 specifically a `RefCell<Weak<Node>>`. Now our `Node` struct definition looks
 like this:
 
@@ -202,7 +206,7 @@ like this:
 
 A node will be able to refer to its parent node but doesn’t own its parent.
 In Listing 15-28, we update `main` to use this new definition so the `leaf`
-node will have a way to refer to its parent, `branch`:
+node will have a way to refer to its parent, `branch`.
 
 <Listing number="15-28" file-name="src/main.rs" caption="A `leaf` node with a weak reference to its parent node `branch`">
 
@@ -254,7 +258,7 @@ Let’s look at how the `strong_count` and `weak_count` values of the `Rc<Node>`
 instances change by creating a new inner scope and moving the creation of
 `branch` into that scope. By doing so, we can see what happens when `branch` is
 created and then dropped when it goes out of scope. The modifications are shown
-in Listing 15-29:
+in Listing 15-29.
 
 <Listing number="15-29" file-name="src/main.rs" caption="Creating `branch` in an inner scope and examining strong and weak reference counts">
 
@@ -266,10 +270,10 @@ in Listing 15-29:
 
 After `leaf` is created, its `Rc<Node>` has a strong count of 1 and a weak
 count of 0. In the inner scope, we create `branch` and associate it with
-`leaf`, at which point, when we print the counts, the `Rc<Node>` in `branch`
+`leaf`, at which point when we print the counts, the `Rc<Node>` in `branch`
 will have a strong count of 1 and a weak count of 1 (for `leaf.parent` pointing
 to `branch` with a `Weak<Node>`). When we print the counts in `leaf`, we’ll see
-it will have a strong count of 2, because `branch` now has a clone of the
+it will have a strong count of 2 because `branch` now has a clone of the
 `Rc<Node>` of `leaf` stored in `branch.children`, but will still have a weak
 count of 0.
 

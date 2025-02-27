@@ -1,4 +1,8 @@
-## Treating Smart Pointers Like Regular References with the `Deref` Trait
+## Treating Smart Pointers Like Regular References with `Deref`
+
+<!-- Old link, do not remove -->
+
+<a id="treating-smart-pointers-like-regular-references-with-the-deref-trait"></a>
 
 Implementing the `Deref` trait allows you to customize the behavior of the
 _dereference operator_ `*` (not to be confused with the multiplication or glob
@@ -28,7 +32,7 @@ or smart pointers.
 A regular reference is a type of pointer, and one way to think of a pointer is
 as an arrow to a value stored somewhere else. In Listing 15-6, we create a
 reference to an `i32` value and then use the dereference operator to follow the
-reference to the value:
+reference to the value.
 
 <Listing number="15-6" file-name="src/main.rs" caption="Using the dereference operator to follow a reference to an `i32` value">
 
@@ -72,12 +76,11 @@ Listing 15-6:
 </Listing>
 
 The main difference between Listing 15-7 and Listing 15-6 is that here we set
-`y` to be an instance of a `Box<T>` pointing to a copied value of `x` rather
-than a reference pointing to the value of `x`. In the last assertion, we can
-use the dereference operator to follow the pointer of the `Box<T>` in the same
-way that we did when `y` was a reference. Next, we’ll explore what is special
-about `Box<T>` that enables us to use the dereference operator by defining our
-own type.
+`y` to be an instance of a box pointing to a copied value of `x` rather than a
+reference pointing to the value of `x`. In the last assertion, we can use the
+dereference operator to follow the box’s pointer in the same way that we did
+when `y` was a reference. Next, we’ll explore what is special about `Box<T>`
+that enables us to use the dereference operator by defining our own type.
 
 ### Defining Our Own Smart Pointer
 
@@ -98,7 +101,7 @@ Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
 
 </Listing>
 
-We define a struct named `MyBox` and declare a generic parameter `T`, because
+We define a struct named `MyBox` and declare a generic parameter `T` because
 we want our type to hold values of any type. The `MyBox` type is a tuple struct
 with one element of type `T`. The `MyBox::new` function takes one parameter of
 type `T` and returns a `MyBox` instance that holds the value passed in.
@@ -116,7 +119,7 @@ code in Listing 15-9 won’t compile because Rust doesn’t know how to derefere
 
 </Listing>
 
-Here’s the resulting compilation error:
+Here’s the resultant compilation error:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-09/output.txt}}
@@ -137,7 +140,7 @@ Chapter 10, to implement a trait, we need to provide implementations for the
 trait’s required methods. The `Deref` trait, provided by the standard library,
 requires us to implement one method named `deref` that borrows `self` and
 returns a reference to the inner data. Listing 15-10 contains an implementation
-of `Deref` to add to the definition of `MyBox<T>`:
+of `Deref` to add to the definition of `MyBox<T>`.
 
 <Listing number="15-10" file-name="src/main.rs" caption="Implementing `Deref` on `MyBox<T>`">
 
@@ -153,11 +156,11 @@ generic parameter, but you don’t need to worry about them for now; we’ll cov
 them in more detail in Chapter 20.
 
 We fill in the body of the `deref` method with `&self.0` so `deref` returns a
-reference to the value we want to access with the `*` operator; recall from the
-[“Using Tuple Structs without Named Fields to Create Different
-Types”][tuple-structs]<!-- ignore --> section of Chapter 5 that `.0` accesses
-the first value in a tuple struct. The `main` function in Listing 15-9 that
-calls `*` on the `MyBox<T>` value now compiles, and the assertions pass!
+reference to the value we want to access with the `*` operator; recall from
+[“Using Tuple Structs Without Named Fields to Create Different
+Types”][tuple-structs]<!-- ignore --> in Chapter 5 that `.0` accesses the first
+value in a tuple struct. The `main` function in Listing 15-9 that calls `*` on
+the `MyBox<T>` value now compiles, and the assertions pass!
 
 Without the `Deref` trait, the compiler can only dereference `&` references.
 The `deref` method gives the compiler the ability to take a value of any type
@@ -179,7 +182,7 @@ identically whether we have a regular reference or a type that implements
 
 The reason the `deref` method returns a reference to a value, and that the
 plain dereference outside the parentheses in `*(y.deref())` is still necessary,
-is to do with the ownership system. If the `deref` method returned the value
+has to do with the ownership system. If the `deref` method returned the value
 directly instead of a reference to the value, the value would be moved out of
 `self`. We don’t want to take ownership of the inner value inside `MyBox<T>` in
 this case or in most cases where we use the dereference operator.
@@ -210,7 +213,7 @@ can work for either references or smart pointers.
 To see deref coercion in action, let’s use the `MyBox<T>` type we defined in
 Listing 15-8 as well as the implementation of `Deref` that we added in Listing
 15-10. Listing 15-11 shows the definition of a function that has a string slice
-parameter:
+parameter.
 
 <Listing number="15-11" file-name="src/main.rs" caption="A `hello` function that has the parameter `name` of type `&str`">
 
@@ -221,8 +224,8 @@ parameter:
 </Listing>
 
 We can call the `hello` function with a string slice as an argument, such as
-`hello("Rust");` for example. Deref coercion makes it possible to call `hello`
-with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12:
+`hello("Rust");`, for example. Deref coercion makes it possible to call `hello`
+with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12.
 
 <Listing number="15-12" file-name="src/main.rs" caption="Calling `hello` with a reference to a `MyBox<String>` value, which works because of deref coercion">
 
@@ -277,10 +280,10 @@ cases:
 2. From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
 3. From `&mut T` to `&U` when `T: Deref<Target=U>`
 
-The first two cases are the same as each other except that the second
-implements mutability. The first case states that if you have a `&T`, and `T`
-implements `Deref` to some type `U`, you can get a `&U` transparently. The
-second case states that the same deref coercion happens for mutable references.
+The first two cases are the same except that the second implements mutability.
+The first case states that if you have a `&T`, and `T` implements `Deref` to
+some type `U`, you can get a `&U` transparently. The second case states that the
+same deref coercion happens for mutable references.
 
 The third case is trickier: Rust will also coerce a mutable reference to an
 immutable one. But the reverse is _not_ possible: immutable references will
