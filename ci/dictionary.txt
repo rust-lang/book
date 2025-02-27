@@ -442,6 +442,7 @@ reformats
 refutability
 reimplement
 RemAssign
+repost
 repr
 representable
 request's
@@ -487,6 +488,7 @@ sizeof
 SliceIndex
 Smalltalk
 snuck
+SocialPost
 someproject
 SomeType
 someusername
