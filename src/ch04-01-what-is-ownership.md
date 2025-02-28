@@ -215,7 +215,7 @@ from Listing 4-1 using a `String` instead of a string literal:
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-02-string-scope/src/main.rs:here}}
 ```
 
-There is a natural point at which we can return the memory our `String` needs
+There is a natural point at which we can return the memory owned by our `String` 
 to the allocator: when `s` goes out of scope. When a variable goes out of
 scope, Rust calls a special function for us. This function is called
 [`drop`][drop]<!-- ignore -->, and it’s where the author of `String` can put
