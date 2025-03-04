@@ -1,19 +1,11 @@
-## Defining and Instantiating Structs
+```markdown
+## স্ট্রাকট সংজ্ঞায়িত এবং ইন্সট্যানশিয়েট করা (Defining and Instantiating Structs)
 
-Structs are similar to tuples, discussed in [“The Tuple Type”][tuples]<!--
-ignore --> section, in that both hold multiple related values. Like tuples, the
-pieces of a struct can be different types. Unlike with tuples, in a struct
-you’ll name each piece of data so it’s clear what the values mean. Adding these
-names means that structs are more flexible than tuples: you don’t have to rely
-on the order of the data to specify or access the values of an instance.
+স্ট্রাকটগুলো টাপলগুলোর মতোই, যা [“টাপল টাইপ”][tuples]<!-- ignore --> বিভাগে আলোচিত হয়েছে। উভয়ই একাধিক সম্পর্কিত মান ধারণ করে। টাপলগুলোর মতো, একটি স্ট্রাকটের অংশগুলো বিভিন্ন টাইপের হতে পারে। টাপলগুলোর বিপরীতে, একটি স্ট্রাকটে আপনি ডেটার প্রতিটি অংশের নাম দেবেন যাতে মানগুলোর অর্থ স্পষ্ট হয়। এই নামগুলো যুক্ত করার অর্থ হল স্ট্রাকটগুলো টাপলগুলোর চেয়ে বেশি নমনীয়: একটি ইন্সট্যান্সের মান নির্দিষ্ট করতে বা অ্যাক্সেস করতে আপনাকে ডেটার ক্রমের উপর নির্ভর করতে হবে না।
 
-To define a struct, we enter the keyword `struct` and name the entire struct. A
-struct’s name should describe the significance of the pieces of data being
-grouped together. Then, inside curly brackets, we define the names and types of
-the pieces of data, which we call _fields_. For example, Listing 5-1 shows a
-struct that stores information about a user account.
+একটি স্ট্রাকট সংজ্ঞায়িত করতে, আমরা `struct` কীওয়ার্ডটি লিখি এবং পুরো স্ট্রাকটটির নাম দিই। একটি স্ট্রাকটের নাম ডেটার অংশগুলোকে একত্রিত করার তাৎপর্য বর্ণনা করবে। তারপর, কার্লি ব্র্যাকেটের ভিতরে, আমরা ডেটার অংশগুলোর নাম এবং টাইপ সংজ্ঞায়িত করি, যাকে আমরা *ফিল্ড (fields)* বলি। উদাহরণস্বরূপ, Listing 5-1 একটি ব্যবহারকারী অ্যাকাউন্ট সম্পর্কে তথ্য সংরক্ষণ করে এমন একটি স্ট্রাকট দেখায়।
 
-<Listing number="5-1" file-name="src/main.rs" caption="A `User` struct definition">
+<Listing number="5-1" file-name="src/main.rs" caption="একটি `User` স্ট্রাকট সংজ্ঞা">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-01/src/main.rs:here}}
@@ -21,17 +13,9 @@ struct that stores information about a user account.
 
 </Listing>
 
-To use a struct after we’ve defined it, we create an _instance_ of that struct
-by specifying concrete values for each of the fields. We create an instance by
-stating the name of the struct and then add curly brackets containing _key:
-value_ pairs, where the keys are the names of the fields and the values are the
-data we want to store in those fields. We don’t have to specify the fields in
-the same order in which we declared them in the struct. In other words, the
-struct definition is like a general template for the type, and instances fill
-in that template with particular data to create values of the type. For
-example, we can declare a particular user as shown in Listing 5-2.
+একটি স্ট্রাকট সংজ্ঞায়িত করার পরে সেটি ব্যবহার করতে, আমরা প্রতিটি ফিল্ডের জন্য নির্দিষ্ট মান উল্লেখ করে সেই স্ট্রাকটের একটি *ইন্সট্যান্স (instance)* তৈরি করি। আমরা স্ট্রাকটের নাম উল্লেখ করে এবং তারপর *কী (key): মান (value)* জোড়া ধারণকারী কার্লি ব্র্যাকেট যুক্ত করে একটি ইন্সট্যান্স তৈরি করি, যেখানে কীগুলো হল ফিল্ডগুলোর নাম এবং মানগুলো হল সেই ফিল্ডগুলোতে আমরা যে ডেটা সংরক্ষণ করতে চাই। আমাদেরকে স্ট্রাকটে যে ক্রমে ফিল্ডগুলো ঘোষণা করেছি সেই একই ক্রমে নির্দিষ্ট করতে হবে না। অন্য কথায়, স্ট্রাকট সংজ্ঞাটি টাইপের জন্য একটি সাধারণ টেমপ্লেটের মতো এবং ইন্সট্যান্সগুলো সেই টেমপ্লেটটিকে নির্দিষ্ট ডেটা দিয়ে পূরণ করে টাইপের মান তৈরি করে। উদাহরণস্বরূপ, আমরা Listing 5-2-তে দেখানো একটি নির্দিষ্ট ব্যবহারকারী ঘোষণা করতে পারি।
 
-<Listing number="5-2" file-name="src/main.rs" caption="Creating an instance of the `User` struct">
+<Listing number="5-2" file-name="src/main.rs" caption="`User` স্ট্রাকটের একটি ইন্সট্যান্স তৈরি করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-02/src/main.rs:here}}
@@ -39,13 +23,9 @@ example, we can declare a particular user as shown in Listing 5-2.
 
 </Listing>
 
-To get a specific value from a struct, we use dot notation. For example, to
-access this user’s email address, we use `user1.email`. If the instance is
-mutable, we can change a value by using the dot notation and assigning into a
-particular field. Listing 5-3 shows how to change the value in the `email`
-field of a mutable `User` instance.
+একটি স্ট্রাকট থেকে একটি নির্দিষ্ট মান পেতে, আমরা ডট নোটেশন ব্যবহার করি। উদাহরণস্বরূপ, এই ব্যবহারকারীর ইমেল ঠিকানা অ্যাক্সেস করতে, আমরা `user1.email` ব্যবহার করি। যদি ইন্সট্যান্সটি মিউটেবল হয়, তাহলে আমরা ডট নোটেশন ব্যবহার করে এবং একটি নির্দিষ্ট ফিল্ডে অ্যাসাইন করে একটি মান পরিবর্তন করতে পারি। Listing 5-3 একটি মিউটেবল `User` ইন্সট্যান্সের `email` ফিল্ডের মান কীভাবে পরিবর্তন করতে হয় তা দেখায়।
 
-<Listing number="5-3" file-name="src/main.rs" caption="Changing the value in the `email` field of a `User` instance">
+<Listing number="5-3" file-name="src/main.rs" caption="একটি `User` ইন্সট্যান্সের `email` ফিল্ডের মান পরিবর্তন করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-03/src/main.rs:here}}
@@ -53,16 +33,11 @@ field of a mutable `User` instance.
 
 </Listing>
 
-Note that the entire instance must be mutable; Rust doesn’t allow us to mark
-only certain fields as mutable. As with any expression, we can construct a new
-instance of the struct as the last expression in the function body to
-implicitly return that new instance.
+মনে রাখবেন যে সম্পূর্ণ ইন্সট্যান্সটি অবশ্যই মিউটেবল হতে হবে; Rust আমাদেরকে শুধুমাত্র নির্দিষ্ট ফিল্ডগুলোকে মিউটেবল হিসাবে চিহ্নিত করার অনুমতি দেয় না। যেকোনো এক্সপ্রেশনের মতো, আমরা ফাংশন বডির শেষ এক্সপ্রেশন হিসাবে স্ট্রাকটের একটি নতুন ইন্সট্যান্স তৈরি করতে পারি, পরোক্ষভাবে সেই নতুন ইন্সট্যান্সটি রিটার্ন করতে পারি।
 
-Listing 5-4 shows a `build_user` function that returns a `User` instance with
-the given email and username. The `active` field gets the value of `true`, and
-the `sign_in_count` gets a value of `1`.
+Listing 5-4 একটি `build_user` ফাংশন দেখায় যা প্রদত্ত ইমেল এবং ব্যবহারকারীর নাম সহ একটি `User` ইন্সট্যান্স রিটার্ন করে। `active` ফিল্ডটি `true` মান পায় এবং `sign_in_count` `1` মান পায়।
 
-<Listing number="5-4" file-name="src/main.rs" caption="A `build_user` function that takes an email and username and returns a `User` instance">
+<Listing number="5-4" file-name="src/main.rs" caption="একটি `build_user` ফাংশন যা একটি ইমেল এবং ব্যবহারকারীর নাম নেয় এবং একটি `User` ইন্সট্যান্স রিটার্ন করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-04/src/main.rs:here}}
@@ -70,23 +45,17 @@ the `sign_in_count` gets a value of `1`.
 
 </Listing>
 
-It makes sense to name the function parameters with the same name as the struct
-fields, but having to repeat the `email` and `username` field names and
-variables is a bit tedious. If the struct had more fields, repeating each name
-would get even more annoying. Luckily, there’s a convenient shorthand!
+ফাংশন প্যারামিটারগুলোর নাম স্ট্রাকট ফিল্ডগুলোর মতোই রাখা অর্থপূর্ণ, কিন্তু `email` এবং `username` ফিল্ডের নাম এবং ভেরিয়েবলগুলো পুনরাবৃত্তি করা কিছুটা ক্লান্তিকর। যদি স্ট্রাকটে আরও ফিল্ড থাকত, তাহলে প্রতিটি নাম পুনরাবৃত্তি করা আরও বিরক্তিকর হয়ে উঠত। সৌভাগ্যবশত, একটি সুবিধাজনক শর্টহ্যান্ড রয়েছে!
 
 <!-- Old heading. Do not remove or links may break. -->
 
 <a id="using-the-field-init-shorthand-when-variables-and-fields-have-the-same-name"></a>
 
-### Using the Field Init Shorthand
+### ফিল্ড ইনিট শর্টহ্যান্ড ব্যবহার করা (Using the Field Init Shorthand)
 
-Because the parameter names and the struct field names are exactly the same in
-Listing 5-4, we can use the _field init shorthand_ syntax to rewrite
-`build_user` so it behaves exactly the same but doesn’t have the repetition of
-`username` and `email`, as shown in Listing 5-5.
+যেহেতু Listing 5-4-এ প্যারামিটারের নাম এবং স্ট্রাকট ফিল্ডের নামগুলো হুবহু একই, তাই আমরা *ফিল্ড ইনিট শর্টহ্যান্ড (field init shorthand)* সিনট্যাক্স ব্যবহার করে `build_user` পুনরায় লিখতে পারি যাতে এটি একই আচরণ করে কিন্তু `username` এবং `email`-এর পুনরাবৃত্তি না থাকে, যেমনটি Listing 5-5-এ দেখানো হয়েছে।
 
-<Listing number="5-5" file-name="src/main.rs" caption="A `build_user` function that uses field init shorthand because the `username` and `email` parameters have the same name as struct fields">
+<Listing number="5-5" file-name="src/main.rs" caption="একটি `build_user` ফাংশন যা ফিল্ড ইনিট শর্টহ্যান্ড ব্যবহার করে কারণ `username` এবং `email` প্যারামিটারগুলোর নাম স্ট্রাকট ফিল্ডগুলোর মতোই">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-05/src/main.rs:here}}
@@ -94,23 +63,15 @@ Listing 5-4, we can use the _field init shorthand_ syntax to rewrite
 
 </Listing>
 
-Here, we’re creating a new instance of the `User` struct, which has a field
-named `email`. We want to set the `email` field’s value to the value in the
-`email` parameter of the `build_user` function. Because the `email` field and
-the `email` parameter have the same name, we only need to write `email` rather
-than `email: email`.
+এখানে, আমরা `User` স্ট্রাকটের একটি নতুন ইন্সট্যান্স তৈরি করছি, যার একটি ফিল্ডের নাম `email`। আমরা `email` ফিল্ডের মান `build_user` ফাংশনের `email` প্যারামিটারের মানটিতে সেট করতে চাই। যেহেতু `email` ফিল্ড এবং `email` প্যারামিটারের নাম একই, তাই আমাদের `email: email`-এর পরিবর্তে শুধুমাত্র `email` লিখতে হবে।
 
-### Creating Instances from Other Instances with Struct Update Syntax
+### স্ট্রাকট আপডেট সিনট্যাক্স সহ অন্যান্য ইন্সট্যান্স থেকে ইন্সট্যান্স তৈরি করা (Creating Instances from Other Instances with Struct Update Syntax)
 
-It’s often useful to create a new instance of a struct that includes most of
-the values from another instance, but changes some. You can do this using
-_struct update syntax_.
+প্রায়শই একটি স্ট্রাকটের একটি নতুন ইন্সট্যান্স তৈরি করা দরকারী যা অন্য ইন্সট্যান্সের বেশিরভাগ মান অন্তর্ভুক্ত করে, কিন্তু কিছু পরিবর্তন করে। আপনি এটি *স্ট্রাকট আপডেট সিনট্যাক্স (struct update syntax)* ব্যবহার করে করতে পারেন।
 
-First, in Listing 5-6 we show how to create a new `User` instance in `user2`
-regularly, without the update syntax. We set a new value for `email` but
-otherwise use the same values from `user1` that we created in Listing 5-2.
+প্রথমে, Listing 5-6-এ আমরা দেখাই কিভাবে `user2`-তে একটি নতুন `User` ইন্সট্যান্স নিয়মিতভাবে তৈরি করা যায়, আপডেট সিনট্যাক্স ছাড়া। আমরা `email`-এর জন্য একটি নতুন মান সেট করি কিন্তু অন্যথায় Listing 5-2-তে তৈরি করা `user1` থেকে একই মান ব্যবহার করি।
 
-<Listing number="5-6" file-name="src/main.rs" caption="Creating a new `User` instance using all but one of the values from `user1`">
+<Listing number="5-6" file-name="src/main.rs" caption="`user1`-এর একটি মান বাদে অন্য মানগুলো ব্যবহার করে একটি নতুন `User` ইন্সট্যান্স তৈরি করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-06/src/main.rs:here}}
@@ -118,11 +79,9 @@ otherwise use the same values from `user1` that we created in Listing 5-2.
 
 </Listing>
 
-Using struct update syntax, we can achieve the same effect with less code, as
-shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
-explicitly set should have the same value as the fields in the given instance.
+স্ট্রাকট আপডেট সিনট্যাক্স ব্যবহার করে, আমরা কম কোড দিয়ে একই প্রভাব অর্জন করতে পারি, যেমনটি Listing 5-7-এ দেখানো হয়েছে। সিনট্যাক্স `..` নির্দিষ্ট করে যে অবশিষ্ট ফিল্ডগুলো যেগুলো স্পষ্টভাবে সেট করা হয়নি সেগুলোর মান প্রদত্ত ইন্সট্যান্সের ফিল্ডগুলোর মতোই হওয়া উচিত।
 
-<Listing number="5-7" file-name="src/main.rs" caption="Using struct update syntax to set a new `email` value for a `User` instance but to use the rest of the values from `user1`">
+<Listing number="5-7" file-name="src/main.rs" caption="একটি `User` ইন্সট্যান্সের জন্য একটি নতুন `email` মান সেট করতে স্ট্রাকট আপডেট সিনট্যাক্স ব্যবহার করা, কিন্তু `user1` থেকে বাকি মানগুলো ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-07/src/main.rs:here}}
@@ -130,38 +89,15 @@ explicitly set should have the same value as the fields in the given instance.
 
 </Listing>
 
-The code in Listing 5-7 also creates an instance in `user2` that has a
-different value for `email` but has the same values for the `username`,
-`active`, and `sign_in_count` fields from `user1`. The `..user1` must come last
-to specify that any remaining fields should get their values from the
-corresponding fields in `user1`, but we can choose to specify values for as
-many fields as we want in any order, regardless of the order of the fields in
-the struct’s definition.
+Listing 5-7-এর কোডটিও `user2`-তে একটি ইন্সট্যান্স তৈরি করে যার `email`-এর জন্য একটি ভিন্ন মান রয়েছে কিন্তু `user1` থেকে `username`, `active` এবং `sign_in_count` ফিল্ডগুলোর জন্য একই মান রয়েছে। `..user1` অবশ্যই শেষে আসতে হবে যাতে এটি নির্দিষ্ট করা যায় যে অবশিষ্ট ক্ষেত্রগুলির মান `user1`-এর সংশ্লিষ্ট ক্ষেত্রগুলি থেকে পাওয়া উচিত, তবে আমরা স্ট্রাকটের সংজ্ঞায় ক্ষেত্রগুলির ক্রম নির্বিশেষে, যে কোনও ক্রমে যতগুলি ক্ষেত্রের জন্য মান নির্দিষ্ট করতে পারি।
 
-Note that the struct update syntax uses `=` like an assignment; this is because
-it moves the data, just as we saw in the [“Variables and Data Interacting with
-Move”][move]<!-- ignore --> section. In this example, we can no longer use
-`user1` after creating `user2` because the `String` in the `username` field of
-`user1` was moved into `user2`. If we had given `user2` new `String` values for
-both `email` and `username`, and thus only used the `active` and `sign_in_count`
-values from `user1`, then `user1` would still be valid after creating `user2`.
-Both `active` and `sign_in_count` are types that implement the `Copy` trait, so
-the behavior we discussed in the [“Stack-Only Data: Copy”][copy]<!-- ignore -->
-section would apply. We can still use `user1.email` in this example, because its
-value was _not_ moved out.
+লক্ষ্য করুন যে স্ট্রাকট আপডেট সিনট্যাক্স একটি অ্যাসাইনমেন্টের মতো `=` ব্যবহার করে; এর কারণ হল এটি ডেটা মুভ করে, যেমনটি আমরা [“ভেরিয়েবল এবং ডেটার মধ্যে মিথস্ক্রিয়া: মুভ”][move]<!-- ignore --> বিভাগে দেখেছি। এই উদাহরণে, `user2` তৈরি করার পরে আমরা আর `user1` ব্যবহার করতে পারি না কারণ `user1`-এর `username` ফিল্ডের `String` `user2`-তে সরানো হয়েছে। যদি আমরা `email` এবং `username` উভয়ের জন্য `user2`-কে নতুন `String` মান দিতাম এবং এইভাবে শুধুমাত্র `user1` থেকে `active` এবং `sign_in_count` মান ব্যবহার করতাম, তাহলে `user2` তৈরি করার পরেও `user1` বৈধ থাকত। `active` এবং `sign_in_count` উভয়ই এমন টাইপ যা `Copy` ট্রেইট ইমপ্লিমেন্ট করে, তাই [“শুধুমাত্র স্ট্যাক-ডেটা: কপি”][copy]<!-- ignore --> বিভাগে আমরা যে আচরণ নিয়ে আলোচনা করেছি তা প্রযোজ্য হবে। এই উদাহরণে আমরা এখনও `user1.email` ব্যবহার করতে পারি, কারণ এর মান সরানো *হয়নি*।
 
-### Using Tuple Structs Without Named Fields to Create Different Types
+### নামযুক্ত ক্ষেত্র ছাড়া টাপল স্ট্রাকট ব্যবহার করে ভিন্ন টাইপ তৈরি করা (Using Tuple Structs Without Named Fields to Create Different Types)
 
-Rust also supports structs that look similar to tuples, called _tuple structs_.
-Tuple structs have the added meaning the struct name provides but don’t have
-names associated with their fields; rather, they just have the types of the
-fields. Tuple structs are useful when you want to give the whole tuple a name
-and make the tuple a different type from other tuples, and when naming each
-field as in a regular struct would be verbose or redundant.
+Rust টাপলের মতো দেখতে স্ট্রাকটগুলোকেও সমর্থন করে, যাকে *টাপল স্ট্রাকট (tuple structs)* বলা হয়। টাপল স্ট্রাকটগুলোর অতিরিক্ত অর্থ রয়েছে যা স্ট্রাকটের নাম সরবরাহ করে কিন্তু তাদের ক্ষেত্রগুলোর সাথে যুক্ত নাম নেই; বরং, তাদের কেবল ক্ষেত্রগুলোর টাইপ রয়েছে। টাপল স্ট্রাকটগুলো দরকারী যখন আপনি পুরো টাপলটিকে একটি নাম দিতে চান এবং টাপলটিকে অন্যান্য টাপল থেকে আলাদা টাইপ করতে চান এবং যখন প্রতিটি ক্ষেত্রের নামকরণ করা নিয়মিত স্ট্রাকটের মতো শব্দবহুল বা অপ্রয়োজনীয় হবে।
 
-To define a tuple struct, start with the `struct` keyword and the struct name
-followed by the types in the tuple. For example, here we define and use two
-tuple structs named `Color` and `Point`:
+একটি টাপল স্ট্রাকট সংজ্ঞায়িত করতে, `struct` কীওয়ার্ড এবং স্ট্রাকটের নাম দিয়ে শুরু করুন এবং তারপরে টাপলের টাইপগুলো দিন। উদাহরণস্বরূপ, এখানে আমরা `Color` এবং `Point` নামে দুটি টাপল স্ট্রাকট সংজ্ঞায়িত এবং ব্যবহার করি:
 
 <Listing file-name="src/main.rs">
 
@@ -171,26 +107,11 @@ tuple structs named `Color` and `Point`:
 
 </Listing>
 
-Note that the `black` and `origin` values are different types because they’re
-instances of different tuple structs. Each struct you define is its own type,
-even though the fields within the struct might have the same types. For
-example, a function that takes a parameter of type `Color` cannot take a
-`Point` as an argument, even though both types are made up of three `i32`
-values. Otherwise, tuple struct instances are similar to tuples in that you can
-destructure them into their individual pieces, and you can use a `.` followed
-by the index to access an individual value. Unlike tuples, tuple structs
-require you to name the type of the struct when you destructure them. For
-example, we would write `let Point(x, y, z) = point`.
+লক্ষ্য করুন যে `black` এবং `origin` মানগুলো ভিন্ন টাইপের, কারণ সেগুলো ভিন্ন টাপল স্ট্রাকটের ইন্সট্যান্স। আপনি সংজ্ঞায়িত করা প্রতিটি স্ট্রাকট তার নিজস্ব টাইপ, যদিও স্ট্রাকটের ভেতরের ক্ষেত্রগুলোর একই টাইপ থাকতে পারে। উদাহরণস্বরূপ, `Color` টাইপের একটি প্যারামিটার নেয় এমন একটি ফাংশন `Point`-কে আর্গুমেন্ট হিসাবে নিতে পারে না, যদিও উভয় টাইপ তিনটি `i32` মান দিয়ে তৈরি। অন্যথায়, টাপল স্ট্রাকট ইন্সট্যান্সগুলো টাপলের মতোই, যেখানে আপনি সেগুলোকে তাদের পৃথক অংশে ডিস্ট্রাকচার করতে পারেন এবং আপনি একটি `.` ব্যবহার করতে পারেন। ইনডেক্স দ্বারা একটি পৃথক মান অ্যাক্সেস করতে পারেন। টাপলের মতন, টাপল স্ট্রাকটগুলিকে ডিস্ট্রাকচার করার সময় আপনাকে স্ট্রাকটের টাইপের নাম দিতে হবে। উদাহরণস্বরূপ, আমরা `let Point(x, y, z) = point` লিখব।
 
-### Unit-Like Structs Without Any Fields
+### কোনো ক্ষেত্র ছাড়া ইউনিট-সদৃশ স্ট্রাকট (Unit-Like Structs Without Any Fields)
 
-You can also define structs that don’t have any fields! These are called
-_unit-like structs_ because they behave similarly to `()`, the unit type that
-we mentioned in [“The Tuple Type”][tuples]<!-- ignore --> section. Unit-like
-structs can be useful when you need to implement a trait on some type but don’t
-have any data that you want to store in the type itself. We’ll discuss traits
-in Chapter 10. Here’s an example of declaring and instantiating a unit struct
-named `AlwaysEqual`:
+আপনি এমন স্ট্রাকটও সংজ্ঞায়িত করতে পারেন যেগুলোর কোনো ক্ষেত্র নেই! এগুলোকে *ইউনিট-সদৃশ স্ট্রাকট (unit-like structs)* বলা হয় কারণ সেগুলো `()`-এর মতোই আচরণ করে, ইউনিট টাইপ যা আমরা [“টাপল টাইপ”][tuples]<!-- ignore --> বিভাগে উল্লেখ করেছি। ইউনিট-সদৃশ স্ট্রাকটগুলো কার্যকর হতে পারে যখন আপনাকে কোনো টাইপের উপর একটি ট্রেইট ইমপ্লিমেন্ট করতে হবে কিন্তু টাইপের মধ্যে নিজে কোনো ডেটা সংরক্ষণ করতে চান না। আমরা চ্যাপ্টার ১০-এ ট্রেইট নিয়ে আলোচনা করব। এখানে `AlwaysEqual` নামক একটি ইউনিট স্ট্রাকট ঘোষণা এবং ইন্সট্যানশিয়েট করার একটি উদাহরণ দেওয়া হল:
 
 <Listing file-name="src/main.rs">
 
@@ -200,28 +121,13 @@ named `AlwaysEqual`:
 
 </Listing>
 
-To define `AlwaysEqual`, we use the `struct` keyword, the name we want, and
-then a semicolon. No need for curly brackets or parentheses! Then we can get an
-instance of `AlwaysEqual` in the `subject` variable in a similar way: using the
-name we defined, without any curly brackets or parentheses. Imagine that later
-we’ll implement behavior for this type such that every instance of
-`AlwaysEqual` is always equal to every instance of any other type, perhaps to
-have a known result for testing purposes. We wouldn’t need any data to
-implement that behavior! You’ll see in Chapter 10 how to define traits and
-implement them on any type, including unit-like structs.
+`AlwaysEqual` সংজ্ঞায়িত করতে, আমরা `struct` কীওয়ার্ড, আমাদের কাঙ্ক্ষিত নাম এবং তারপর একটি সেমিকোলন ব্যবহার করি। কোঁকড়া ধনুর্বন্ধনী বা বৃত্তাকার বন্ধনীর প্রয়োজন নেই! তারপর আমরা `subject` ভেরিয়েবলে `AlwaysEqual`-এর একটি ইন্সট্যান্স একইভাবে পেতে পারি: আমরা যে নামটি সংজ্ঞায়িত করেছি সেটি ব্যবহার করে, কোনো কোঁকড়া ধনুর্বন্ধনী বা বৃত্তাকার বন্ধনী ছাড়াই। কল্পনা করুন যে পরবর্তীতে আমরা এই টাইপের জন্য এমন আচরণ প্রয়োগ করব যাতে `AlwaysEqual`-এর প্রতিটি ইন্সট্যান্স অন্য যেকোনো টাইপের প্রতিটি ইন্সট্যান্সের সমান হয়, সম্ভবত পরীক্ষার উদ্দেশ্যে একটি পরিচিত ফলাফল পাওয়ার জন্য। সেই আচরণ বাস্তবায়ন করার জন্য আমাদের কোনো ডেটার প্রয়োজন হবে না! আপনি চ্যাপ্টার ১০-এ দেখতে পাবেন কীভাবে ট্রেইট সংজ্ঞায়িত করতে হয় এবং সেগুলো ইউনিট-সদৃশ স্ট্রাকট সহ যেকোনো টাইপে প্রয়োগ করতে হয়।
 
-> ### Ownership of Struct Data
+> ### স্ট্রাকট ডেটার ওনারশিপ (Ownership of Struct Data)
 >
-> In the `User` struct definition in Listing 5-1, we used the owned `String`
-> type rather than the `&str` string slice type. This is a deliberate choice
-> because we want each instance of this struct to own all of its data and for
-> that data to be valid for as long as the entire struct is valid.
+> Listing 5-1-এর `User` স্ট্রাকট সংজ্ঞায়, আমরা `&str` স্ট্রিং স্লাইস টাইপের পরিবর্তে ওনড (owned) `String` টাইপ ব্যবহার করেছি। এটি একটি ইচ্ছাকৃত পছন্দ কারণ আমরা চাই এই স্ট্রাকটের প্রতিটি ইন্সট্যান্স তার সমস্ত ডেটার মালিক হোক এবং সেই ডেটা যতদিন পর্যন্ত সম্পূর্ণ স্ট্রাকটটি বৈধ ততদিন পর্যন্ত বৈধ থাকুক।
 >
-> It’s also possible for structs to store references to data owned by something
-> else, but to do so requires the use of _lifetimes_, a Rust feature that we’ll
-> discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
-> is valid for as long as the struct is. Let’s say you try to store a reference
-> in a struct without specifying lifetimes, like the following; this won’t work:
+> স্ট্রাকটগুলোর জন্য অন্য কিছুর মালিকানাধীন ডেটার রেফারেন্স সংরক্ষণ করাও সম্ভব, কিন্তু সেটি করার জন্য *লাইফটাইম (lifetimes)* ব্যবহার করতে হবে, একটি Rust ফিচার যা আমরা চ্যাপ্টার ১০-এ আলোচনা করব। লাইফটাইম নিশ্চিত করে যে একটি স্ট্রাকট দ্বারা রেফারেন্স করা ডেটা যতদিন স্ট্রাকটটি বৈধ ততদিন পর্যন্ত বৈধ। ধরুন আপনি লাইফটাইম নির্দিষ্ট না করে একটি স্ট্রাকটে একটি রেফারেন্স সংরক্ষণ করার চেষ্টা করছেন, যেমনটি নিচে দেওয়া হলো; এটি কাজ করবে না:
 >
 > <Listing file-name="src/main.rs">
 >
@@ -247,7 +153,7 @@ implement them on any type, including unit-like structs.
 >
 > </Listing>
 >
-> The compiler will complain that it needs lifetime specifiers:
+> কম্পাইলার অভিযোগ করবে যে এটির লাইফটাইম স্পেসিফায়ার প্রয়োজন:
 >
 > ```console
 > $ cargo run
@@ -283,9 +189,7 @@ implement them on any type, including unit-like structs.
 > error: could not compile `structs` (bin "structs") due to 2 previous errors
 > ```
 >
-> In Chapter 10, we’ll discuss how to fix these errors so you can store
-> references in structs, but for now, we’ll fix errors like these using owned
-> types like `String` instead of references like `&str`.
+> চ্যাপ্টার ১০-এ, আমরা এই এররগুলো কীভাবে ঠিক করতে হয় তা নিয়ে আলোচনা করব যাতে আপনি স্ট্রাকটগুলোতে রেফারেন্স সংরক্ষণ করতে পারেন, কিন্তু আপাতত, আমরা `&str`-এর মতো রেফারেন্সের পরিবর্তে `String`-এর মতো ওনড টাইপ ব্যবহার করে এইরকম এররগুলো ঠিক করব।
 
 <!-- manual-regeneration
 for the error above

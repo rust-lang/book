@@ -1,30 +1,16 @@
-## Storing Keys with Associated Values in Hash Maps
+## হ্যাশ ম্যাপে অ্যাসোসিয়েটেড ভ্যালু সহ কী সংরক্ষণ করা (Storing Keys with Associated Values in Hash Maps)
 
-The last of our common collections is the _hash map_. The type `HashMap<K, V>`
-stores a mapping of keys of type `K` to values of type `V` using a _hashing
-function_, which determines how it places these keys and values into memory.
-Many programming languages support this kind of data structure, but they often
-use a different name, such as _hash_, _map_, _object_, _hash table_,
-_dictionary_, or _associative array_, just to name a few.
+আমাদের সাধারণ কালেকশনগুলোর মধ্যে সর্বশেষ হল *হ্যাশ ম্যাপ (hash map)*। `HashMap<K, V>` টাইপ একটি *হ্যাশিং ফাংশন (hashing function)* ব্যবহার করে `K` টাইপের কী (key)-গুলোকে `V` টাইপের ভ্যালু (value)-তে ম্যাপ করে। এই হ্যাশিং ফাংশন নির্ধারণ করে যে কীভাবে এই কী এবং ভ্যালুগুলোকে মেমরিতে রাখা হবে। অনেক প্রোগ্রামিং ল্যাঙ্গুয়েজ এই ধরনের ডেটা স্ট্রাকচার সমর্থন করে, কিন্তু সেগুলোতে প্রায়শই ভিন্ন নাম ব্যবহার করা হয়, যেমন *হ্যাশ (hash)*, *ম্যাপ (map)*, *অবজেক্ট (object)*, *হ্যাশ টেবিল (hash table)*, *ডিকশনারি (dictionary)*, বা *অ্যাসোসিয়েটিভ অ্যারে (associative array)*।
 
-Hash maps are useful when you want to look up data not by using an index, as
-you can with vectors, but by using a key that can be of any type. For example,
-in a game, you could keep track of each team’s score in a hash map in which
-each key is a team’s name and the values are each team’s score. Given a team
-name, you can retrieve its score.
+হ্যাশ ম্যাপগুলো দরকারী যখন আপনি ইনডেক্স ব্যবহার করে ডেটা খুঁজতে চান না, যেমনটি ভেক্টরের ক্ষেত্রে করা হয়, বরং এমন একটি কী ব্যবহার করে ডেটা খুঁজতে চান যা যেকোনো টাইপের হতে পারে। উদাহরণস্বরূপ, একটি গেমে, আপনি একটি হ্যাশ ম্যাপে প্রতিটি দলের স্কোর ট্র্যাক রাখতে পারেন যেখানে প্রতিটি কী হল একটি দলের নাম এবং ভ্যালুগুলো হল প্রতিটি দলের স্কোর। একটি দলের নাম দিলে, আপনি তার স্কোর পুনরুদ্ধার করতে পারবেন।
 
-We’ll go over the basic API of hash maps in this section, but many more goodies
-are hiding in the functions defined on `HashMap<K, V>` by the standard library.
-As always, check the standard library documentation for more information.
+আমরা এই বিভাগে হ্যাশ ম্যাপের বেসিক API নিয়ে আলোচনা করব, তবে স্ট্যান্ডার্ড লাইব্রেরি দ্বারা `HashMap<K, V>`-তে সংজ্ঞায়িত ফাংশনগুলোতে আরও অনেক কিছু রয়েছে। যথারীতি, আরও তথ্যের জন্য স্ট্যান্ডার্ড লাইব্রেরির ডকুমেন্টেশন দেখুন।
 
-### Creating a New Hash Map
+### একটি নতুন হ্যাশ ম্যাপ তৈরি করা (Creating a New Hash Map)
 
-One way to create an empty hash map is to use `new` and to add elements with
-`insert`. In Listing 8-20, we’re keeping track of the scores of two teams whose
-names are _Blue_ and _Yellow_. The Blue team starts with 10 points, and the
-Yellow team starts with 50.
+খালি হ্যাশ ম্যাপ তৈরি করার একটি উপায় হল `new` ব্যবহার করা এবং `insert` দিয়ে এলিমেন্ট যোগ করা। Listing 8-20-তে, আমরা দুটি দলের স্কোর ট্র্যাক করছি যাদের নাম *Blue* এবং *Yellow*। Blue টিম 10 পয়েন্ট দিয়ে শুরু করে এবং Yellow টিম 50 পয়েন্ট দিয়ে শুরু করে।
 
-<Listing number="8-20" caption="Creating a new hash map and inserting some keys and values">
+<Listing number="8-20" caption="একটি নতুন হ্যাশ ম্যাপ তৈরি করা এবং কিছু কী ও ভ্যালু যোগ করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-20/src/main.rs:here}}
@@ -32,23 +18,15 @@ Yellow team starts with 50.
 
 </Listing>
 
-Note that we need to first `use` the `HashMap` from the collections portion of
-the standard library. Of our three common collections, this one is the least
-often used, so it’s not included in the features brought into scope
-automatically in the prelude. Hash maps also have less support from the
-standard library; there’s no built-in macro to construct them, for example.
+লক্ষ্য করুন যে আমাদের প্রথমে স্ট্যান্ডার্ড লাইব্রেরির কালেকশন অংশ থেকে `HashMap` ব্যবহার (`use`) করতে হবে। আমাদের তিনটি সাধারণ কালেকশনের মধ্যে, এটি সবচেয়ে কম ব্যবহৃত হয়, তাই এটিকে প্রেলিউডে স্বয়ংক্রিয়ভাবে স্কোপে আনা ফিচারগুলোর মধ্যে অন্তর্ভুক্ত করা হয়নি। হ্যাশ ম্যাপগুলোর স্ট্যান্ডার্ড লাইব্রেরি থেকে কম সাপোর্টও রয়েছে; উদাহরণস্বরূপ, এগুলো তৈরি করার জন্য কোনো বিল্ট-ইন ম্যাক্রো নেই।
 
-Just like vectors, hash maps store their data on the heap. This `HashMap` has
-keys of type `String` and values of type `i32`. Like vectors, hash maps are
-homogeneous: all of the keys must have the same type, and all of the values
-must have the same type.
+ভেক্টরের মতোই, হ্যাশ ম্যাপগুলো তাদের ডেটা হিপে সংরক্ষণ করে। এই `HashMap`-এর `String` টাইপের কী এবং `i32` টাইপের ভ্যালু রয়েছে। ভেক্টরের মতো, হ্যাশ ম্যাপগুলোও হোমোজিনিয়াস (homogeneous): সমস্ত কী-এর একই টাইপ হতে হবে এবং সমস্ত ভ্যালুর একই টাইপ হতে হবে।
 
-### Accessing Values in a Hash Map
+### হ্যাশ ম্যাপের ভ্যালু অ্যাক্সেস করা (Accessing Values in a Hash Map)
 
-We can get a value out of the hash map by providing its key to the `get`
-method, as shown in Listing 8-21.
+আমরা হ্যাশ ম্যাপ থেকে একটি ভ্যালু পেতে পারি `get` মেথডে তার কী প্রদান করে, যেমনটি Listing 8-21-এ দেখানো হয়েছে।
 
-<Listing number="8-21" caption="Accessing the score for the Blue team stored in the hash map">
+<Listing number="8-21" caption="হ্যাশ ম্যাপে সংরক্ষিত Blue টিমের স্কোর অ্যাক্সেস করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
@@ -56,34 +34,26 @@ method, as shown in Listing 8-21.
 
 </Listing>
 
-Here, `score` will have the value that’s associated with the Blue team, and the
-result will be `10`. The `get` method returns an `Option<&V>`; if there’s no
-value for that key in the hash map, `get` will return `None`. This program
-handles the `Option` by calling `copied` to get an `Option<i32>` rather than an
-`Option<&i32>`, then `unwrap_or` to set `score` to zero if `scores` doesn’t
-have an entry for the key.
+এখানে, `score`-এ Blue টিমের সাথে সম্পর্কিত মান থাকবে এবং ফলাফল হবে `10`। `get` মেথড একটি `Option<&V>` রিটার্ন করে; যদি হ্যাশ ম্যাপে সেই কী-এর জন্য কোনো মান না থাকে, তাহলে `get` `None` রিটার্ন করবে। এই প্রোগ্রামটি `Option` হ্যান্ডেল করে `copied` কল করে একটি `Option<&i32>`-এর পরিবর্তে একটি `Option<i32>` পেতে, তারপর `unwrap_or` ব্যবহার করে `score`-কে শূন্যে সেট করে যদি `scores`-এ কী-এর জন্য কোনো এন্ট্রি না থাকে।
 
-We can iterate over each key-value pair in a hash map in a similar manner as we
-do with vectors, using a `for` loop:
+আমরা ভেক্টরের মতোই হ্যাশ ম্যাপের প্রতিটি কী-ভ্যালু পেয়ারের উপর ইটারেট করতে পারি, একটি `for` লুপ ব্যবহার করে:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/no-listing-03-iterate-over-hashmap/src/main.rs:here}}
 ```
 
-This code will print each pair in an arbitrary order:
+এই কোডটি প্রতিটি পেয়ারকে একটি নির্বিচার ক্রমে প্রিন্ট করবে:
 
 ```text
 Yellow: 50
 Blue: 10
 ```
 
-### Hash Maps and Ownership
+### হ্যাশ ম্যাপ এবং ওনারশিপ (Hash Maps and Ownership)
 
-For types that implement the `Copy` trait, like `i32`, the values are copied
-into the hash map. For owned values like `String`, the values will be moved and
-the hash map will be the owner of those values, as demonstrated in Listing 8-22.
+`i32`-এর মতো `Copy` ট্রেইট ইমপ্লিমেন্ট করে এমন টাইপের জন্য, মানগুলো হ্যাশ ম্যাপে কপি করা হয়। `String`-এর মতো ওনড (owned) ভ্যালুগুলোর জন্য, ভ্যালুগুলো সরানো হবে এবং হ্যাশ ম্যাপ সেই ভ্যালুগুলোর ওনার হবে, যেমনটি Listing 8-22-এ দেখানো হয়েছে।
 
-<Listing number="8-22" caption="Showing that keys and values are owned by the hash map once they’re inserted">
+<Listing number="8-22" caption="কী এবং ভ্যালুগুলো হ্যাশ ম্যাপে ইনসার্ট করার পরে সেগুলো হ্যাশ ম্যাপের মালিকানাধীন হয়">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-22/src/main.rs:here}}
@@ -91,38 +61,21 @@ the hash map will be the owner of those values, as demonstrated in Listing 8-22.
 
 </Listing>
 
-We aren’t able to use the variables `field_name` and `field_value` after
-they’ve been moved into the hash map with the call to `insert`.
+`insert` কলে হ্যাশ ম্যাপে স্থানান্তরিত হওয়ার পরে আমরা `field_name` এবং `field_value` ভেরিয়েবলগুলো ব্যবহার করতে পারব না।
 
-If we insert references to values into the hash map, the values won’t be moved
-into the hash map. The values that the references point to must be valid for at
-least as long as the hash map is valid. We’ll talk more about these issues in
-[“Validating References with
-Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> in Chapter 10.
+যদি আমরা হ্যাশ ম্যাপে ভ্যালুগুলোর রেফারেন্স ইনসার্ট করি, তাহলে ভ্যালুগুলো হ্যাশ ম্যাপে সরানো হবে না। রেফারেন্সগুলো যে মানগুলোর দিকে নির্দেশ করে সেগুলো অবশ্যই হ্যাশ ম্যাপটি বৈধ থাকা পর্যন্ত বৈধ থাকতে হবে। আমরা চ্যাপ্টার ১০-এ [“লাইফটাইম দিয়ে রেফারেন্স বৈধ করা”][validating-references-with-lifetimes]<!-- ignore -->-তে এই বিষয়গুলো নিয়ে আরও কথা বলব।
 
-### Updating a Hash Map
+### একটি হ্যাশ ম্যাপ আপডেট করা (Updating a Hash Map)
 
-Although the number of key and value pairs is growable, each unique key can
-only have one value associated with it at a time (but not vice versa: for
-example, both the Blue team and the Yellow team could have the value `10`
-stored in the `scores` hash map).
+যদিও কী এবং ভ্যালু পেয়ারের সংখ্যা বাড়তে পারে, প্রতিটি ইউনিক কী-এর সাথে একবারে শুধুমাত্র একটি ভ্যালু যুক্ত থাকতে পারে (কিন্তু বিপরীতটি সত্য নয়: উদাহরণস্বরূপ, Blue টিম এবং Yellow টিম উভয়েরই `scores` হ্যাশ ম্যাপে `10` মান সংরক্ষিত থাকতে পারে)।
 
-When you want to change the data in a hash map, you have to decide how to
-handle the case when a key already has a value assigned. You could replace the
-old value with the new value, completely disregarding the old value. You could
-keep the old value and ignore the new value, only adding the new value if the
-key _doesn’t_ already have a value. Or you could combine the old value and the
-new value. Let’s look at how to do each of these!
+আপনি যখন একটি হ্যাশ ম্যাপের ডেটা পরিবর্তন করতে চান, তখন আপনাকে সিদ্ধান্ত নিতে হবে যে একটি কী-তে ইতিমধ্যেই একটি ভ্যালু অ্যাসাইন করা থাকলে কীভাবে সেই পরিস্থিতিটি পরিচালনা করবেন। আপনি পুরানো ভ্যালুটিকে নতুন ভ্যালু দিয়ে প্রতিস্থাপন করতে পারেন, পুরানো ভ্যালুটিকে সম্পূর্ণরূপে উপেক্ষা করে। আপনি পুরানো ভ্যালুটি রাখতে পারেন এবং নতুন ভ্যালুটিকে উপেক্ষা করতে পারেন, শুধুমাত্র তখনই নতুন ভ্যালু যোগ করতে পারেন যদি কী-টিতে *ইতিমধ্যেই* কোনো ভ্যালু না থাকে। অথবা আপনি পুরানো ভ্যালু এবং নতুন ভ্যালুকে একত্রিত করতে পারেন। চলুন দেখি কিভাবে এই প্রতিটি কাজ করতে হয়!
 
-#### Overwriting a Value
+#### একটি ভ্যালু ওভাররাইট করা (Overwriting a Value)
 
-If we insert a key and a value into a hash map and then insert that same key
-with a different value, the value associated with that key will be replaced.
-Even though the code in Listing 8-23 calls `insert` twice, the hash map will
-only contain one key-value pair because we’re inserting the value for the Blue
-team’s key both times.
+যদি আমরা একটি হ্যাশ ম্যাপে একটি কী এবং একটি ভ্যালু ইনসার্ট করি এবং তারপর সেই একই কী-তে একটি ভিন্ন ভ্যালু ইনসার্ট করি, তাহলে সেই কী-এর সাথে সম্পর্কিত ভ্যালুটি প্রতিস্থাপিত হবে। যদিও Listing 8-23-এর কোডটি দুবার `insert` কল করে, হ্যাশ ম্যাপটিতে কেবল একটি কী-ভ্যালু পেয়ার থাকবে কারণ আমরা উভয়বারই Blue টিমের কী-এর জন্য ভ্যালু ইনসার্ট করছি।
 
-<Listing number="8-23" caption="Replacing a value stored with a particular key">
+<Listing number="8-23" caption="একটি নির্দিষ্ট কী-তে সংরক্ষিত একটি মান প্রতিস্থাপন করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-23/src/main.rs:here}}
@@ -130,28 +83,19 @@ team’s key both times.
 
 </Listing>
 
-This code will print `{"Blue": 25}`. The original value of `10` has been
-overwritten.
+এই কোডটি `{"Blue": 25}` প্রিন্ট করবে। `10`-এর আসল মানটি ওভাররাইট করা হয়েছে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="only-inserting-a-value-if-the-key-has-no-value"></a>
 
-#### Adding a Key and Value Only If a Key Isn’t Present
+#### একটি কী এবং ভ্যালু যোগ করা শুধুমাত্র যদি একটি কী উপস্থিত না থাকে (Adding a Key and Value Only If a Key Isn’t Present)
 
-It’s common to check whether a particular key already exists in the hash map
-with a value and then to take the following actions: if the key does exist in
-the hash map, the existing value should remain the way it is; if the key
-doesn’t exist, insert it and a value for it.
+একটি নির্দিষ্ট কী-এর ஏற்கனவே একটি ভ্যালু সহ হ্যাশ ম্যাপে আছে কিনা তা পরীক্ষা করা এবং তারপর নিম্নলিখিত পদক্ষেপগুলো নেওয়া সাধারণ: যদি কী-টি হ্যাশ ম্যাপে বিদ্যমান থাকে, তাহলে বিদ্যমান মানটি যেমন আছে তেমনই থাকা উচিত। যদি কী-টি বিদ্যমান না থাকে, তাহলে এটি এবং এর জন্য একটি ভ্যালু ইনসার্ট করুন।
 
-Hash maps have a special API for this called `entry` that takes the key you
-want to check as a parameter. The return value of the `entry` method is an enum
-called `Entry` that represents a value that might or might not exist. Let’s say
-we want to check whether the key for the Yellow team has a value associated
-with it. If it doesn’t, we want to insert the value `50`, and the same for the
-Blue team. Using the `entry` API, the code looks like Listing 8-24.
+হ্যাশ ম্যাপগুলোর জন্য এই কাজের জন্য একটি বিশেষ API রয়েছে যাকে `entry` বলা হয়, যা আপনি যে কী-টি পরীক্ষা করতে চান সেটি প্যারামিটার হিসাবে নেয়। `entry` মেথডের রিটার্ন মান হল `Entry` নামক একটি এনাম, যা এমন একটি মান উপস্থাপন করে যা বিদ্যমান থাকতে পারে বা নাও থাকতে পারে। ধরা যাক, আমরা পরীক্ষা করতে চাই যে Yellow টিমের কী-টির সাথে কোনো ভ্যালু যুক্ত আছে কিনা। যদি না থাকে, তাহলে আমরা `50` মানটি ইনসার্ট করতে চাই, এবং Blue টিমের জন্যও একই কাজ করতে চাই। `entry` API ব্যবহার করে, কোডটি Listing 8-24-এর মতো দেখায়।
 
-<Listing number="8-24" caption="Using the `entry` method to only insert if the key does not already have a value">
+<Listing number="8-24" caption="কী-তে ইতিমধ্যেই কোনো ভ্যালু না থাকলে শুধুমাত্র ইনসার্ট করার জন্য `entry` মেথড ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
@@ -159,28 +103,15 @@ Blue team. Using the `entry` API, the code looks like Listing 8-24.
 
 </Listing>
 
-The `or_insert` method on `Entry` is defined to return a mutable reference to
-the value for the corresponding `Entry` key if that key exists, and if not, it
-inserts the parameter as the new value for this key and returns a mutable
-reference to the new value. This technique is much cleaner than writing the
-logic ourselves and, in addition, plays more nicely with the borrow checker.
+`Entry`-তে `or_insert` মেথডটি সংজ্ঞায়িত করা হয়েছে সংশ্লিষ্ট `Entry` কী-এর জন্য ভ্যালুর একটি মিউটেবল রেফারেন্স (`&mut V`) রিটার্ন করার জন্য যদি সেই কী বিদ্যমান থাকে, এবং যদি না থাকে, তাহলে এটি এই কী-এর জন্য নতুন ভ্যালু হিসাবে প্যারামিটারটি ইনসার্ট করে এবং নতুন ভ্যালুতে একটি মিউটেবল রেফারেন্স রিটার্ন করে। এই কৌশলটি নিজে থেকে লজিক লেখার চেয়ে অনেক বেশি পরিষ্কার এবং এছাড়াও, বোরো চেকারের (borrow checker) সাথে আরও ভালোভাবে কাজ করে।
 
-Running the code in Listing 8-24 will print `{"Yellow": 50, "Blue": 10}`. The
-first call to `entry` will insert the key for the Yellow team with the value
-`50` because the Yellow team doesn’t have a value already. The second call to
-`entry` will not change the hash map because the Blue team already has the
-value `10`.
+Listing 8-24-এর কোড চালালে `{"Yellow": 50, "Blue": 10}` প্রিন্ট হবে। `entry`-তে প্রথম কলটি Yellow টিমের কী-এর জন্য `50` মান ইনসার্ট করবে কারণ Yellow টিমের ইতিমধ্যেই কোনো ভ্যালু ছিল না। `entry`-তে দ্বিতীয় কলটি হ্যাশ ম্যাপ পরিবর্তন করবে না কারণ Blue টিমের ইতিমধ্যেই `10` মান রয়েছে।
 
-#### Updating a Value Based on the Old Value
+#### পুরানো মানের উপর ভিত্তি করে একটি মান আপডেট করা (Updating a Value Based on the Old Value)
 
-Another common use case for hash maps is to look up a key’s value and then
-update it based on the old value. For instance, Listing 8-25 shows code that
-counts how many times each word appears in some text. We use a hash map with
-the words as keys and increment the value to keep track of how many times we’ve
-seen that word. If it’s the first time we’ve seen a word, we’ll first insert
-the value `0`.
+হ্যাশ ম্যাপের জন্য আরেকটি সাধারণ ব্যবহারের ক্ষেত্র হল একটি কী-এর মান সন্ধান করা এবং তারপর পুরানো মানের উপর ভিত্তি করে এটি আপডেট করা। উদাহরণস্বরূপ, Listing 8-25 এমন কোড দেখায় যা গণনা করে যে কিছু টেক্সটে প্রতিটি শব্দ কতবার এসেছে। আমরা শব্দগুলোকে কী হিসাবে ব্যবহার করে একটি হ্যাশ ম্যাপ ব্যবহার করি এবং আমরা কতবার সেই শব্দটি দেখেছি তা ট্র্যাক রাখতে মান বৃদ্ধি করি। যদি এটি এমন একটি শব্দ হয় যা আমরা প্রথমবার দেখেছি, তাহলে আমরা প্রথমে `0` মানটি ইনসার্ট করব।
 
-<Listing number="8-25" caption="Counting occurrences of words using a hash map that stores words and counts">
+<Listing number="8-25" caption="শব্দ এবং গণনা সংরক্ষণকারী একটি হ্যাশ ম্যাপ ব্যবহার করে শব্দের ঘটনার সংখ্যা গণনা করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
@@ -188,60 +119,27 @@ the value `0`.
 
 </Listing>
 
-This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see
-the same key-value pairs printed in a different order: recall from [“Accessing
-Values in a Hash Map”][access]<!-- ignore --> that iterating over a hash map
-happens in an arbitrary order.
+এই কোডটি `{"world": 2, "hello": 1, "wonderful": 1}` প্রিন্ট করবে। আপনি হয়তো একই কী-ভ্যালু পেয়ারগুলো ভিন্ন ক্রমে প্রিন্ট হতে দেখতে পারেন: [“হ্যাশ ম্যাপের ভ্যালু অ্যাক্সেস করা”][access]<!-- ignore --> থেকে মনে রাখবেন যে একটি হ্যাশ ম্যাপের উপর ইটারেটিং একটি নির্বিচার ক্রমে ঘটে।
 
-The `split_whitespace` method returns an iterator over subslices, separated by
-whitespace, of the value in `text`. The `or_insert` method returns a mutable
-reference (`&mut V`) to the value for the specified key. Here, we store that
-mutable reference in the `count` variable, so in order to assign to that value,
-we must first dereference `count` using the asterisk (`*`). The mutable
-reference goes out of scope at the end of the `for` loop, so all of these
-changes are safe and allowed by the borrowing rules.
+`split_whitespace` মেথডটি `text`-এর মানের হোয়াইটস্পেস দ্বারা পৃথক করা সাবস্লাইসের উপর একটি ইটারেটর রিটার্ন করে। `or_insert` মেথডটি নির্দিষ্ট কী-এর জন্য মানের একটি মিউটেবল রেফারেন্স (`&mut V`) রিটার্ন করে। এখানে, আমরা সেই মিউটেবল রেফারেন্সটি `count` ভেরিয়েবলে সংরক্ষণ করি, তাই সেই মানটিতে অ্যাসাইন করার জন্য, আমাদের প্রথমে তারকাচিহ্ন (`*`) ব্যবহার করে `count` ডিরেফারেন্স করতে হবে। মিউটেবল রেফারেন্সটি `for` লুপের শেষে স্কোপের বাইরে চলে যায়, তাই এই সমস্ত পরিবর্তনগুলো নিরাপদ এবং বোরোয়িং নিয়ম দ্বারা অনুমোদিত।
 
-### Hashing Functions
+### হ্যাশিং ফাংশন (Hashing Functions)
 
-By default, `HashMap` uses a hashing function called _SipHash_ that can provide
-resistance to denial-of-service (DoS) attacks involving hash
-tables[^siphash]<!-- ignore -->. This is not the fastest hashing algorithm
-available, but the trade-off for better security that comes with the drop in
-performance is worth it. If you profile your code and find that the default
-hash function is too slow for your purposes, you can switch to another function
-by specifying a different hasher. A _hasher_ is a type that implements the
-`BuildHasher` trait. We’ll talk about traits and how to implement them in
-[Chapter 10][traits]<!-- ignore -->. You don’t necessarily have to implement
-your own hasher from scratch; [crates.io](https://crates.io/)<!-- ignore -->
-has libraries shared by other Rust users that provide hashers implementing many
-common hashing algorithms.
+ডিফল্টরূপে, `HashMap` _SipHash_ নামক একটি হ্যাশিং ফাংশন ব্যবহার করে যা হ্যাশ টেবিল[^siphash]<!-- ignore --> জড়িত ডিনায়াল-অফ-সার্ভিস (DoS) আক্রমণের বিরুদ্ধে প্রতিরোধ প্রদান করতে পারে। এটি উপলব্ধ দ্রুততম হ্যাশিং অ্যালগরিদম নয়, তবে পারফরম্যান্সের ড্রপের সাথে আসা আরও ভাল নিরাপত্তার জন্য ট্রেড-অফটি মূল্যবান। আপনি যদি আপনার কোড প্রোফাইল করেন এবং দেখেন যে ডিফল্ট হ্যাশ ফাংশনটি আপনার উদ্দেশ্যের জন্য খুব ধীর, তাহলে আপনি একটি ভিন্ন *হ্যাশার (hasher)* নির্দিষ্ট করে অন্য ফাংশনে স্যুইচ করতে পারেন। একটি হ্যাশার হল এমন একটি টাইপ যা `BuildHasher` ট্রেইট ইমপ্লিমেন্ট করে। আমরা চ্যাপ্টার 10-এ [ট্রেইটস][traits]<!-- ignore --> এবং কিভাবে সেগুলো ইমপ্লিমেন্ট করতে হয় সে সম্পর্কে কথা বলব। আপনাকে শুরু থেকেই নিজের হ্যাশার ইমপ্লিমেন্ট করতে হবে না; [crates.io](https://crates.io/)<!-- ignore -->-তে অন্যান্য Rust ব্যবহারকারীদের শেয়ার করা লাইব্রেরি রয়েছে যা অনেক সাধারণ হ্যাশিং অ্যালগরিদম ইমপ্লিমেন্ট করে এমন হ্যাশার সরবরাহ করে।
 
 [^siphash]: [https://en.wikipedia.org/wiki/SipHash](https://en.wikipedia.org/wiki/SipHash)
 
-## Summary
+## সারসংক্ষেপ (Summary)
 
-Vectors, strings, and hash maps will provide a large amount of functionality
-necessary in programs when you need to store, access, and modify data. Here are
-some exercises you should now be equipped to solve:
+ভেক্টর, স্ট্রিং এবং হ্যাশ ম্যাপগুলো এমন প্রোগ্রামগুলোতে প্রয়োজনীয় কার্যকারিতার একটি বড় অংশ সরবরাহ করবে যেখানে আপনাকে ডেটা সংরক্ষণ, অ্যাক্সেস এবং পরিবর্তন করতে হবে। এখানে কিছু অনুশীলন রয়েছে যা সমাধান করার জন্য আপনার এখন সজ্জিত হওয়া উচিত:
 
-1. Given a list of integers, use a vector and return the median (when sorted,
-   the value in the middle position) and mode (the value that occurs most
-   often; a hash map will be helpful here) of the list.
-1. Convert strings to pig latin. The first consonant of each word is moved to
-   the end of the word and _ay_ is added, so _first_ becomes _irst-fay_. Words
-   that start with a vowel have _hay_ added to the end instead (_apple_ becomes
-   _apple-hay_). Keep in mind the details about UTF-8 encoding!
-1. Using a hash map and vectors, create a text interface to allow a user to add
-   employee names to a department in a company; for example, “Add Sally to
-   Engineering” or “Add Amir to Sales.” Then let the user retrieve a list of all
-   people in a department or all people in the company by department, sorted
-   alphabetically.
+1.  পূর্ণসংখ্যার একটি তালিকা দেওয়া হলে, একটি ভেক্টর ব্যবহার করুন এবং তালিকার মিডিয়ান (median) (সাজানো হলে, মাঝের অবস্থানের মান) এবং মোড (mode) (যে মানটি সবচেয়ে বেশি ঘটে; এখানে একটি হ্যাশ ম্যাপ সহায়ক হবে) রিটার্ন করুন।
+2.  স্ট্রিংগুলোকে পিগ ল্যাটিনে (pig latin) রূপান্তর করুন। প্রতিটি শব্দের প্রথম ব্যঞ্জনবর্ণটি শব্দের শেষে সরানো হয় এবং _ay_ যোগ করা হয়, তাই _first_ হয়ে যায় _irst-fay_। যেসব শব্দ স্বরবর্ণ দিয়ে শুরু হয় সেগুলোর পরিবর্তে শেষে _hay_ যোগ করা হয় (_apple_ হয়ে যায় _apple-hay_)। UTF-8 এনকোডিং সম্পর্কে বিস্তারিত মনে রাখবেন!
+3.  একটি হ্যাশ ম্যাপ এবং ভেক্টর ব্যবহার করে, একটি টেক্সট ইন্টারফেস তৈরি করুন যাতে একজন ব্যবহারকারী একটি কোম্পানিতে একটি বিভাগে কর্মচারীর নাম যোগ করতে পারে; উদাহরণস্বরূপ, “Add Sally to Engineering” বা “Add Amir to Sales”। তারপর ব্যবহারকারীকে একটি বিভাগের সমস্ত লোকের তালিকা বা কোম্পানির সমস্ত লোককে বিভাগ অনুসারে, বর্ণানুক্রমে সাজানো তালিকা পুনরুদ্ধার করতে দিন।
 
-The standard library API documentation describes methods that vectors, strings,
-and hash maps have that will be helpful for these exercises!
+স্ট্যান্ডার্ড লাইব্রেরি API ডকুমেন্টেশন ভেক্টর, স্ট্রিং এবং হ্যাশ ম্যাপের মেথডগুলো বর্ণনা করে যা এই অনুশীলনগুলোর জন্য সহায়ক হবে!
 
-We’re getting into more complex programs in which operations can fail, so it’s
-a perfect time to discuss error handling. We’ll do that next!
+আমরা আরও জটিল প্রোগ্রামগুলোর মধ্যে যাচ্ছি যেখানে অপারেশনগুলো ব্যর্থ হতে পারে, তাই এরর হ্যান্ডলিং নিয়ে আলোচনা করার জন্য এটি একটি উপযুক্ত সময়। আমরা এরপর সেটাই করব!
 
 [validating-references-with-lifetimes]: ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 [access]: #accessing-values-in-a-hash-map

@@ -1,24 +1,7 @@
-# Error Handling
+# এরর হ্যান্ডলিং (Error Handling)
 
-Errors are a fact of life in software, so Rust has a number of features for
-handling situations in which something goes wrong. In many cases, Rust requires
-you to acknowledge the possibility of an error and take some action before your
-code will compile. This requirement makes your program more robust by ensuring
-that you’ll discover errors and handle them appropriately before deploying your
-code to production!
+সফটওয়্যারে এরর একটি বাস্তব ঘটনা, তাই Rust-এ এমন পরিস্থিতিগুলো হ্যান্ডেল করার জন্য বেশ কিছু ফিচার রয়েছে যেখানে কোনো কিছু ভুল হয়। অনেক ক্ষেত্রে, Rust চায় যে আপনি এররের সম্ভাবনা স্বীকার করুন এবং আপনার কোড কম্পাইল করার আগে কোনো পদক্ষেপ নিন। এই প্রয়োজনীয়তা আপনার প্রোগ্রামকে আরও শক্তিশালী করে তোলে, এটি নিশ্চিত করে যে আপনি প্রোডাকশনে আপনার কোড ডিপ্লয় (deploy) করার আগে এররগুলো আবিষ্কার করবেন এবং সেগুলোকে যথাযথভাবে হ্যান্ডেল করবেন!
 
-Rust groups errors into two major categories: _recoverable_ and _unrecoverable_
-errors. For a recoverable error, such as a _file not found_ error, we most
-likely just want to report the problem to the user and retry the operation.
-Unrecoverable errors are always symptoms of bugs, such as trying to access a
-location beyond the end of an array, and so we want to immediately stop the
-program.
+Rust এররগুলোকে দুটি প্রধান বিভাগে ভাগ করে: *রিকভারেবল (recoverable)* এবং *আনরিকভারেবল (unrecoverable)* এরর। একটি রিকভারেবল এরর, যেমন *file not found* এররের ক্ষেত্রে, আমরা সম্ভবত শুধুমাত্র ব্যবহারকারীকে সমস্যাটি জানাতে চাই এবং অপারেশনটি পুনরায় চেষ্টা করতে চাই। আনরিকভারেবল এররগুলো সর্বদাই বাগের লক্ষণ, যেমন একটি অ্যারের শেষের বাইরের কোনো লোকেশন অ্যাক্সেস করার চেষ্টা করা, এবং তাই আমরা অবিলম্বে প্রোগ্রামটি বন্ধ করতে চাই।
 
-Most languages don’t distinguish between these two kinds of errors and handle
-both in the same way, using mechanisms such as exceptions. Rust doesn’t have
-exceptions. Instead, it has the type `Result<T, E>` for recoverable errors and
-the `panic!` macro that stops execution when the program encounters an
-unrecoverable error. This chapter covers calling `panic!` first and then talks
-about returning `Result<T, E>` values. Additionally, we’ll explore
-considerations when deciding whether to try to recover from an error or to stop
-execution.
+বেশিরভাগ ভাষা এই দুটি ধরণের এররের মধ্যে পার্থক্য করে না এবং এক্সেপশন (exception)-এর মতো মেকানিজম ব্যবহার করে উভয়কেই একইভাবে হ্যান্ডেল করে। Rust-এ এক্সেপশন নেই। পরিবর্তে, এটির রিকভারেবল এররের জন্য `Result<T, E>` টাইপ এবং `panic!` ম্যাক্রো রয়েছে, যা প্রোগ্রামটি কোনো আনরিকভারেবল এররের সম্মুখীন হলে এক্সিকিউশন বন্ধ করে দেয়। এই চ্যাপ্টারটি প্রথমে `panic!` কল করা এবং তারপর `Result<T, E>` মান রিটার্ন করা নিয়ে আলোচনা করে। উপরন্তু, আমরা একটি এরর থেকে পুনরুদ্ধার করার চেষ্টা করব নাকি এক্সিকিউশন বন্ধ করব, তা সিদ্ধান্ত নেওয়ার সময় বিবেচ্য বিষয়গুলো অন্বেষণ করব।

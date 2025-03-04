@@ -1,22 +1,12 @@
-## Separating Modules into Different Files
+## মডিউলগুলোকে বিভিন্ন ফাইলে আলাদা করা (Separating Modules into Different Files)
 
-So far, all the examples in this chapter defined multiple modules in one file.
-When modules get large, you might want to move their definitions to a separate
-file to make the code easier to navigate.
+এখন পর্যন্ত, এই চ্যাপ্টারের সমস্ত উদাহরণে একটি ফাইলের মধ্যে একাধিক মডিউল সংজ্ঞায়িত করা হয়েছে। যখন মডিউলগুলো বড় হয়ে যায়, তখন আপনি কোড নেভিগেট করা সহজ করার জন্য সেগুলোর সংজ্ঞাগুলো একটি পৃথক ফাইলে সরিয়ে নিতে চাইতে পারেন।
 
-For example, let’s start from the code in Listing 7-17 that had multiple
-restaurant modules. We’ll extract modules into files instead of having all the
-modules defined in the crate root file. In this case, the crate root file is
-_src/lib.rs_, but this procedure also works with binary crates whose crate root
-file is _src/main.rs_.
+উদাহরণস্বরূপ, আসুন Listing 7-17-এর কোড থেকে শুরু করি যেখানে একাধিক রেস্তোরাঁ মডিউল ছিল। আমরা সমস্ত মডিউলকে ক্রেট রুট ফাইলে সংজ্ঞায়িত করার পরিবর্তে মডিউলগুলোকে ফাইলে এক্সট্র্যাক্ট করব। এই ক্ষেত্রে, ক্রেট রুট ফাইলটি হল _src/lib.rs_, কিন্তু এই পদ্ধতিটি বাইনারি ক্রেটগুলোর সাথেও কাজ করে যাদের ক্রেট রুট ফাইল _src/main.rs_।
 
-First we’ll extract the `front_of_house` module to its own file. Remove the
-code inside the curly brackets for the `front_of_house` module, leaving only
-the `mod front_of_house;` declaration, so that _src/lib.rs_ contains the code
-shown in Listing 7-21. Note that this won’t compile until we create the
-_src/front_of_house.rs_ file in Listing 7-22.
+প্রথমে আমরা `front_of_house` মডিউলটিকে তার নিজস্ব ফাইলে এক্সট্র্যাক্ট করব। `front_of_house` মডিউলের কোঁকড়া ধনুর্বন্ধনীর ভিতরের কোডটি সরিয়ে ফেলুন, শুধুমাত্র `mod front_of_house;` ঘোষণাটি রেখে দিন, যাতে _src/lib.rs_-এ Listing 7-21-এ দেখানো কোড থাকে। মনে রাখবেন যে এটি কম্পাইল হবে না যতক্ষণ না আমরা Listing 7-22-এ _src/front_of_house.rs_ ফাইল তৈরি করি।
 
-<Listing number="7-21" file-name="src/lib.rs" caption="Declaring the `front_of_house` module whose body will be in *src/front_of_house.rs*">
+<Listing number="7-21" file-name="src/lib.rs" caption="`front_of_house` মডিউল ঘোষণা করা হচ্ছে যার বডি থাকবে *src/front_of_house.rs*-এ">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
@@ -24,12 +14,9 @@ _src/front_of_house.rs_ file in Listing 7-22.
 
 </Listing>
 
-Next, place the code that was in the curly brackets into a new file named
-_src/front_of_house.rs_, as shown in Listing 7-22. The compiler knows to look
-in this file because it came across the module declaration in the crate root
-with the name `front_of_house`.
+এরপর, কোঁকড়া ধনুর্বন্ধনীর মধ্যে থাকা কোডটি _src/front_of_house.rs_ নামে একটি নতুন ফাইলে রাখুন, যেমনটি Listing 7-22-এ দেখানো হয়েছে। কম্পাইলার জানে যে এই ফাইলটিতে খুঁজতে হবে কারণ এটি ক্রেট রুটে `front_of_house` নামের মডিউল ঘোষণার সম্মুখীন হয়েছে।
 
-<Listing number="7-22" file-name="src/front_of_house.rs" caption="Definitions inside the `front_of_house` module in *src/front_of_house.rs*">
+<Listing number="7-22" file-name="src/front_of_house.rs" caption="*src/front_of_house.rs*-এ `front_of_house` মডিউলের ভেতরের সংজ্ঞাগুলো">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
@@ -37,22 +24,11 @@ with the name `front_of_house`.
 
 </Listing>
 
-Note that you only need to load a file using a `mod` declaration _once_ in your
-module tree. Once the compiler knows the file is part of the project (and knows
-where in the module tree the code resides because of where you’ve put the `mod`
-statement), other files in your project should refer to the loaded file’s code
-using a path to where it was declared, as covered in the [“Paths for Referring
-to an Item in the Module Tree”][paths]<!-- ignore --> section. In other words,
-`mod` is _not_ an “include” operation that you may have seen in other
-programming languages.
+লক্ষ্য করুন যে আপনাকে আপনার মডিউল ট্রিতে একটি `mod` ঘোষণা ব্যবহার করে শুধুমাত্র *একবার* একটি ফাইল লোড করতে হবে। কম্পাইলার যখন জানে যে ফাইলটি প্রোজেক্টের অংশ (এবং আপনি যেখানে `mod` স্টেটমেন্ট রেখেছেন তার কারণে মডিউল ট্রিতে কোডটি কোথায় রয়েছে তা জানে), তখন আপনার প্রোজেক্টের অন্যান্য ফাইলগুলোর লোড করা ফাইলের কোডটিকে রেফার করা উচিত যেখানে এটি ঘোষণা করা হয়েছিল, যেমনটি [“মডিউল ট্রিতে একটি আইটেমকে রেফার করার জন্য পাথ”][paths]<!-- ignore --> বিভাগে আলোচনা করা হয়েছে। অন্য কথায়, `mod` একটি "অন্তর্ভুক্ত (include)" অপারেশন *নয়* যা আপনি হয়তো অন্য প্রোগ্রামিং ভাষাগুলোতে দেখেছেন।
 
-Next, we’ll extract the `hosting` module to its own file. The process is a bit
-different because `hosting` is a child module of `front_of_house`, not of the
-root module. We’ll place the file for `hosting` in a new directory that will be
-named for its ancestors in the module tree, in this case _src/front_of_house_.
+এরপর, আমরা `hosting` মডিউলটিকে তার নিজস্ব ফাইলে এক্সট্র্যাক্ট করব। প্রক্রিয়াটি একটু ভিন্ন কারণ `hosting` হল রুট মডিউলের চাইল্ড মডিউল নয়, `front_of_house`-এর চাইল্ড মডিউল। আমরা `hosting`-এর জন্য ফাইলটিকে একটি নতুন ডিরেক্টরিতে রাখব যার নাম মডিউল ট্রিতে এর পূর্বপুরুষদের নামে হবে, এই ক্ষেত্রে _src/front_of_house_।
 
-To start moving `hosting`, we change _src/front_of_house.rs_ to contain only
-the declaration of the `hosting` module:
+`hosting` সরানো শুরু করতে, আমরা _src/front_of_house.rs_ পরিবর্তন করে শুধুমাত্র `hosting` মডিউলের ঘোষণা রাখি:
 
 <Listing file-name="src/front_of_house.rs">
 
@@ -62,8 +38,7 @@ the declaration of the `hosting` module:
 
 </Listing>
 
-Then we create a _src/front_of_house_ directory and a _hosting.rs_ file to
-contain the definitions made in the `hosting` module:
+তারপর আমরা একটি _src/front_of_house_ ডিরেক্টরি এবং `hosting` মডিউলে তৈরি করা সংজ্ঞাগুলো ধারণ করার জন্য একটি _hosting.rs_ ফাইল তৈরি করি:
 
 <Listing file-name="src/front_of_house/hosting.rs">
 
@@ -73,57 +48,32 @@ contain the definitions made in the `hosting` module:
 
 </Listing>
 
-If we instead put _hosting.rs_ in the _src_ directory, the compiler would
-expect the _hosting.rs_ code to be in a `hosting` module declared in the crate
-root, and not declared as a child of the `front_of_house` module. The
-compiler’s rules for which files to check for which modules’ code mean the
-directories and files more closely match the module tree.
+যদি আমরা পরিবর্তে _hosting.rs_ কে _src_ ডিরেক্টরিতে রাখতাম, তাহলে কম্পাইলার আশা করত যে _hosting.rs_ কোডটি ক্রেট রুটে ঘোষিত একটি `hosting` মডিউলে রয়েছে, `front_of_house` মডিউলের চাইল্ড হিসাবে ঘোষিত নয়। কোন মডিউলের কোডের জন্য কোন ফাইলগুলো পরীক্ষা করতে হবে সে সম্পর্কে কম্পাইলারের নিয়মগুলোর অর্থ হল ডিরেক্টরি এবং ফাইলগুলো মডিউল ট্রির সাথে আরও ঘনিষ্ঠভাবে মেলে।
 
-> ### Alternate File Paths
+> ### বিকল্প ফাইলের পাথ (Alternate File Paths)
 >
-> So far we’ve covered the most idiomatic file paths the Rust compiler uses,
-> but Rust also supports an older style of file path. For a module named
-> `front_of_house` declared in the crate root, the compiler will look for the
-> module’s code in:
+> ఇప్పటి পর্যন্ত আমরা Rust কম্পাইলার ব্যবহার করে এমন সবচেয়ে ইডিওমেটিক ফাইলের পাথগুলো কভার করেছি, কিন্তু Rust একটি পুরানো স্টাইলের ফাইল পাথও সমর্থন করে। ক্রেট রুটে ঘোষিত `front_of_house` নামক একটি মডিউলের জন্য, কম্পাইলার মডিউলের কোড খুঁজবে:
 >
-> - _src/front_of_house.rs_ (what we covered)
-> - _src/front_of_house/mod.rs_ (older style, still supported path)
+> -   _src/front_of_house.rs_-এ (যা আমরা কভার করেছি)
+> -   _src/front_of_house/mod.rs_-এ (পুরানো স্টাইল, এখনও সমর্থিত পাথ)
 >
-> For a module named `hosting` that is a submodule of `front_of_house`, the
-> compiler will look for the module’s code in:
+> `front_of_house`-এর একটি সাবমডিউল `hosting` নামক মডিউলের জন্য, কম্পাইলার মডিউলের কোড খুঁজবে:
 >
-> - _src/front_of_house/hosting.rs_ (what we covered)
-> - _src/front_of_house/hosting/mod.rs_ (older style, still supported path)
+> -   _src/front_of_house/hosting.rs_-এ (যা আমরা কভার করেছি)
+> -   _src/front_of_house/hosting/mod.rs_-এ (পুরানো স্টাইল, এখনও সমর্থিত পাথ)
 >
-> If you use both styles for the same module, you’ll get a compiler error.
-> Using a mix of both styles for different modules in the same project is
-> allowed, but might be confusing for people navigating your project.
+> আপনি যদি একই মডিউলের জন্য উভয় স্টাইল ব্যবহার করেন, তাহলে আপনি একটি কম্পাইলার এরর পাবেন। একই প্রোজেক্টে বিভিন্ন মডিউলের জন্য উভয় স্টাইলের মিশ্রণ ব্যবহার করার অনুমতি রয়েছে, তবে এটি আপনার প্রোজেক্ট নেভিগেট করা লোকেদের জন্য বিভ্রান্তিকর হতে পারে।
 >
-> The main downside to the style that uses files named _mod.rs_ is that your
-> project can end up with many files named _mod.rs_, which can get confusing
-> when you have them open in your editor at the same time.
+> _mod.rs_ নামে ফাইলগুলো ব্যবহার করা স্টাইলের প্রধান অসুবিধা হল আপনার প্রোজেক্টে _mod.rs_ নামে অনেকগুলো ফাইল থাকতে পারে, যা আপনার এডিটরে একসাথে খোলা থাকলে বিভ্রান্তিকর হতে পারে।
 
-We’ve moved each module’s code to a separate file, and the module tree remains
-the same. The function calls in `eat_at_restaurant` will work without any
-modification, even though the definitions live in different files. This
-technique lets you move modules to new files as they grow in size.
+আমরা প্রতিটি মডিউলের কোডকে একটি পৃথক ফাইলে সরিয়ে নিয়েছি এবং মডিউল ট্রি একই রয়েছে। `eat_at_restaurant`-এর ফাংশন কলগুলো কোনো পরিবর্তন ছাড়াই কাজ করবে, যদিও সংজ্ঞাগুলো ভিন্ন ফাইলে রয়েছে। এই কৌশলটি আপনাকে মডিউলগুলোর আকার বাড়ার সাথে সাথে সেগুলোকে নতুন ফাইলে সরিয়ে নিতে দেয়।
 
-Note that the `pub use crate::front_of_house::hosting` statement in
-_src/lib.rs_ also hasn’t changed, nor does `use` have any impact on what files
-are compiled as part of the crate. The `mod` keyword declares modules, and Rust
-looks in a file with the same name as the module for the code that goes into
-that module.
+লক্ষ্য করুন যে _src/lib.rs_-এ `pub use crate::front_of_house::hosting` স্টেটমেন্টটিও পরিবর্তিত হয়নি, `use`-এরও ক্রেটের অংশ হিসাবে কোন ফাইলগুলো কম্পাইল করা হয় তার উপর কোনো প্রভাব নেই। `mod` কীওয়ার্ড মডিউলগুলো ঘোষণা করে এবং Rust সেই মডিউলের নামের সাথে একই নামের একটি ফাইলে সেই মডিউলে যাওয়া কোডের জন্য সন্ধান করে।
 
-## Summary
+## সারসংক্ষেপ (Summary)
 
-Rust lets you split a package into multiple crates and a crate into modules so
-you can refer to items defined in one module from another module. You can do
-this by specifying absolute or relative paths. These paths can be brought into
-scope with a `use` statement so you can use a shorter path for multiple uses of
-the item in that scope. Module code is private by default, but you can make
-definitions public by adding the `pub` keyword.
+Rust আপনাকে একটি প্যাকেজকে একাধিক ক্রেট এবং একটি ক্রেটকে মডিউলে বিভক্ত করতে দেয় যাতে আপনি একটি মডিউলে সংজ্ঞায়িত আইটেমগুলোকে অন্য মডিউল থেকে রেফার করতে পারেন। আপনি অ্যাবসোলিউট বা রিলেটিভ পাথ নির্দিষ্ট করে এটি করতে পারেন। এই পাথগুলো একটি `use` স্টেটমেন্ট দিয়ে স্কোপে আনা যেতে পারে যাতে আপনি সেই স্কোপে আইটেমটির একাধিক ব্যবহারের জন্য একটি সংক্ষিপ্ত পাথ ব্যবহার করতে পারেন। মডিউল কোড ডিফল্টরূপে প্রাইভেট, কিন্তু আপনি `pub` কীওয়ার্ড যোগ করে সংজ্ঞাগুলোকে পাবলিক করতে পারেন।
 
-In the next chapter, we’ll look at some collection data structures in the
-standard library that you can use in your neatly organized code.
+পরবর্তী চ্যাপ্টারে, আমরা স্ট্যান্ডার্ড লাইব্রেরির কিছু কালেকশন ডেটা স্ট্রাকচার দেখব যা আপনি আপনার সুসংগঠিত কোডে ব্যবহার করতে পারেন।
 
 [paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html

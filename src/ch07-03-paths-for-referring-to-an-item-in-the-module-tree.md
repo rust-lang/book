@@ -1,35 +1,21 @@
-## Paths for Referring to an Item in the Module Tree
+## মডিউল ট্রিতে একটি আইটেমকে রেফার করার জন্য পাথ (Paths for Referring to an Item in the Module Tree)
 
-To show Rust where to find an item in a module tree, we use a path in the same
-way we use a path when navigating a filesystem. To call a function, we need to
-know its path.
+একটি মডিউল ট্রিতে একটি আইটেম কোথায় খুঁজতে হবে তা Rust-কে দেখানোর জন্য, আমরা ফাইল সিস্টেমে নেভিগেট করার সময় যেভাবে পাথ ব্যবহার করি সেভাবেই একটি পাথ ব্যবহার করি। একটি ফাংশন কল করার জন্য, আমাদের এর পাথ জানতে হবে।
 
-A path can take two forms:
+একটি পাথ দুটি রূপ নিতে পারে:
 
-- An _absolute path_ is the full path starting from a crate root; for code
-  from an external crate, the absolute path begins with the crate name, and for
-  code from the current crate, it starts with the literal `crate`.
-- A _relative path_ starts from the current module and uses `self`, `super`, or
-  an identifier in the current module.
+-   একটি *অ্যাবসোলিউট পাথ (absolute path)* হল একটি ক্রেট রুট থেকে শুরু হওয়া সম্পূর্ণ পাথ; এক্সটার্নাল ক্রেটের কোডের জন্য, অ্যাবসোলিউট পাথ ক্রেটের নাম দিয়ে শুরু হয় এবং বর্তমান ক্রেটের কোডের জন্য, এটি লিটারেল `crate` দিয়ে শুরু হয়।
+-   একটি *রিলেটিভ পাথ (relative path)* বর্তমান মডিউল থেকে শুরু হয় এবং `self`, `super`, বা বর্তমান মডিউলের একটি আইডেন্টিফায়ার ব্যবহার করে।
 
-Both absolute and relative paths are followed by one or more identifiers
-separated by double colons (`::`).
+অ্যাবসোলিউট এবং রিলেটিভ উভয় পাথই ডাবল কোলন (`::`) দ্বারা পৃথক করা এক বা একাধিক আইডেন্টিফায়ার অনুসরণ করে।
 
-Returning to Listing 7-1, say we want to call the `add_to_waitlist` function.
-This is the same as asking: what’s the path of the `add_to_waitlist` function?
-Listing 7-3 contains Listing 7-1 with some of the modules and functions
-removed.
+Listing 7-1-এ ফিরে গিয়ে, ধরা যাক আমরা `add_to_waitlist` ফাংশনটি কল করতে চাই। এটি একই প্রশ্ন: `add_to_waitlist` ফাংশনের পাথ কী? Listing 7-3-তে Listing 7-1-এর কিছু মডিউল এবং ফাংশন সরিয়ে দেওয়া হয়েছে।
 
-We’ll show two ways to call the `add_to_waitlist` function from a new function,
-`eat_at_restaurant`, defined in the crate root. These paths are correct, but
-there’s another problem remaining that will prevent this example from compiling
-as is. We’ll explain why in a bit.
+আমরা ক্রেট রুটে সংজ্ঞায়িত একটি নতুন ফাংশন, `eat_at_restaurant` থেকে `add_to_waitlist` ফাংশনটিকে কল করার দুটি উপায় দেখাব। এই পাথগুলো সঠিক, কিন্তু অন্য একটি সমস্যা রয়েছে যা এই উদাহরণটিকে কম্পাইল হতে বাধা দেবে। আমরা একটু পরেই এর কারণ ব্যাখ্যা করব।
 
-The `eat_at_restaurant` function is part of our library crate’s public API, so
-we mark it with the `pub` keyword. In the [“Exposing Paths with the `pub`
-Keyword”][pub]<!-- ignore --> section, we’ll go into more detail about `pub`.
+`eat_at_restaurant` ফাংশনটি আমাদের লাইব্রেরি ক্রেটের পাবলিক API-এর অংশ, তাই আমরা এটিকে `pub` কীওয়ার্ড দিয়ে চিহ্নিত করি। [“`pub` কীওয়ার্ড দিয়ে পাথ এক্সপোজ করা”][pub]<!-- ignore --> বিভাগে, আমরা `pub` সম্পর্কে আরও বিস্তারিত আলোচনা করব।
 
-<Listing number="7-3" file-name="src/lib.rs" caption="Calling the `add_to_waitlist` function using absolute and relative paths">
+<Listing number="7-3" file-name="src/lib.rs" caption="অ্যাবসোলিউট এবং রিলেটিভ পাথ ব্যবহার করে `add_to_waitlist` ফাংশন কল করা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-03/src/lib.rs}}
@@ -37,39 +23,15 @@ Keyword”][pub]<!-- ignore --> section, we’ll go into more detail about `pub`
 
 </Listing>
 
-The first time we call the `add_to_waitlist` function in `eat_at_restaurant`,
-we use an absolute path. The `add_to_waitlist` function is defined in the same
-crate as `eat_at_restaurant`, which means we can use the `crate` keyword to
-start an absolute path. We then include each of the successive modules until we
-make our way to `add_to_waitlist`. You can imagine a filesystem with the same
-structure: we’d specify the path `/front_of_house/hosting/add_to_waitlist` to
-run the `add_to_waitlist` program; using the `crate` name to start from the
-crate root is like using `/` to start from the filesystem root in your shell.
+প্রথমবার যখন আমরা `eat_at_restaurant`-এ `add_to_waitlist` ফাংশনটি কল করি, তখন আমরা একটি অ্যাবসোলিউট পাথ ব্যবহার করি। `add_to_waitlist` ফাংশনটি `eat_at_restaurant`-এর মতোই একই ক্রেটে সংজ্ঞায়িত করা হয়েছে, যার মানে হল আমরা একটি অ্যাবসোলিউট পাথ শুরু করতে `crate` কীওয়ার্ড ব্যবহার করতে পারি। তারপর আমরা `add_to_waitlist`-এ পৌঁছানো পর্যন্ত ক্রমাগত প্রতিটি মডিউল অন্তর্ভুক্ত করি। আপনি একই কাঠামোর একটি ফাইল সিস্টেম কল্পনা করতে পারেন: `add_to_waitlist` প্রোগ্রামটি চালানোর জন্য আমরা `/front_of_house/hosting/add_to_waitlist` পাথটি নির্দিষ্ট করব; ক্রেট রুট থেকে শুরু করার জন্য `crate` নামটি ব্যবহার করা আপনার শেলে ফাইল সিস্টেম রুট থেকে শুরু করার জন্য `/` ব্যবহার করার মতো।
 
-The second time we call `add_to_waitlist` in `eat_at_restaurant`, we use a
-relative path. The path starts with `front_of_house`, the name of the module
-defined at the same level of the module tree as `eat_at_restaurant`. Here the
-filesystem equivalent would be using the path
-`front_of_house/hosting/add_to_waitlist`. Starting with a module name means
-that the path is relative.
+দ্বিতীয়বার যখন আমরা `eat_at_restaurant`-এ `add_to_waitlist` কল করি, তখন আমরা একটি রিলেটিভ পাথ ব্যবহার করি। পাথটি `front_of_house` দিয়ে শুরু হয়, যে মডিউলটির নাম `eat_at_restaurant`-এর মতোই মডিউল ট্রির একই স্তরে সংজ্ঞায়িত করা হয়েছে। এখানে ফাইল সিস্টেমের সমতুল্য হবে `front_of_house/hosting/add_to_waitlist` পাথ ব্যবহার করা। একটি মডিউলের নাম দিয়ে শুরু করার অর্থ হল পাথটি রিলেটিভ।
 
-Choosing whether to use a relative or absolute path is a decision you’ll make
-based on your project, and it depends on whether you’re more likely to move
-item definition code separately from or together with the code that uses the
-item. For example, if we moved the `front_of_house` module and the
-`eat_at_restaurant` function into a module named `customer_experience`, we’d
-need to update the absolute path to `add_to_waitlist`, but the relative path
-would still be valid. However, if we moved the `eat_at_restaurant` function
-separately into a module named `dining`, the absolute path to the
-`add_to_waitlist` call would stay the same, but the relative path would need to
-be updated. Our preference in general is to specify absolute paths because it’s
-more likely we’ll want to move code definitions and item calls independently of
-each other.
+রিলেটিভ বা অ্যাবসোলিউট পাথ ব্যবহার করবেন কিনা তা বেছে নেওয়া আপনার প্রোজেক্টের উপর ভিত্তি করে একটি সিদ্ধান্ত, এবং এটি নির্ভর করে আপনি আইটেম সংজ্ঞার কোডটি আইটেমটি ব্যবহার করা কোড থেকে আলাদাভাবে নাকি একসাথে সরানোর সম্ভাবনা বেশি কিনা। উদাহরণস্বরূপ, যদি আমরা `front_of_house` মডিউল এবং `eat_at_restaurant` ফাংশনটিকে `customer_experience` নামক একটি মডিউলে সরিয়ে নিই, তাহলে আমাদের `add_to_waitlist`-এর অ্যাবসোলিউট পাথ আপডেট করতে হবে, কিন্তু রিলেটিভ পাথটি এখনও বৈধ থাকবে। যাইহোক, যদি আমরা `eat_at_restaurant` ফাংশনটিকে আলাদাভাবে `dining` নামক একটি মডিউলে সরিয়ে নিই, তাহলে `add_to_waitlist` কলের অ্যাবসোলিউট পাথ একই থাকবে, কিন্তু রিলেটিভ পাথটি আপডেট করতে হবে। সাধারণভাবে আমাদের পছন্দ হল অ্যাবসোলিউট পাথগুলো নির্দিষ্ট করা কারণ আমরা কোড সংজ্ঞা এবং আইটেম কলগুলো একে অপরের থেকে স্বাধীনভাবে সরাতে চাইতে পারি।
 
-Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
-errors we get are shown in Listing 7-4.
+আসুন Listing 7-3 কম্পাইল করার চেষ্টা করি এবং জেনে নিই কেন এটি এখনও কম্পাইল হবে না! আমরা যে এররগুলো পাই সেগুলো Listing 7-4-এ দেখানো হয়েছে।
 
-<Listing number="7-4" caption="Compiler errors from building the code in Listing 7-3">
+<Listing number="7-4" caption="Listing 7-3-এর কোড কম্পাইল করার ফলে কম্পাইলার এরর">
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-03/output.txt}}
@@ -77,35 +39,17 @@ errors we get are shown in Listing 7-4.
 
 </Listing>
 
-The error messages say that module `hosting` is private. In other words, we
-have the correct paths for the `hosting` module and the `add_to_waitlist`
-function, but Rust won’t let us use them because it doesn’t have access to the
-private sections. In Rust, all items (functions, methods, structs, enums,
-modules, and constants) are private to parent modules by default. If you want
-to make an item like a function or struct private, you put it in a module.
+এরর মেসেজগুলো বলে যে `hosting` মডিউলটি প্রাইভেট। অন্য কথায়, আমাদের কাছে `hosting` মডিউল এবং `add_to_waitlist` ফাংশনের জন্য সঠিক পাথ রয়েছে, কিন্তু Rust আমাদের সেগুলো ব্যবহার করতে দেবে না কারণ এটির প্রাইভেট বিভাগে অ্যাক্সেস নেই। Rust-এ, সমস্ত আইটেম (ফাংশন, মেথড, স্ট্রাকট, এনাম, মডিউল এবং কনস্ট্যান্ট) ডিফল্টরূপে প্যারেন্ট মডিউলগুলোর কাছে প্রাইভেট। আপনি যদি একটি ফাংশন বা স্ট্রাকটের মতো একটি আইটেমকে প্রাইভেট করতে চান তবে আপনি এটিকে একটি মডিউলে রাখবেন।
 
-Items in a parent module can’t use the private items inside child modules, but
-items in child modules can use the items in their ancestor modules. This is
-because child modules wrap and hide their implementation details, but the child
-modules can see the context in which they’re defined. To continue with our
-metaphor, think of the privacy rules as being like the back office of a
-restaurant: what goes on in there is private to restaurant customers, but
-office managers can see and do everything in the restaurant they operate.
+প্যারেন্ট মডিউলের আইটেমগুলো চাইল্ড মডিউলের ভেতরের প্রাইভেট আইটেমগুলো ব্যবহার করতে পারে না, তবে চাইল্ড মডিউলের আইটেমগুলো তাদের পূর্বপুরুষ মডিউলগুলোর আইটেমগুলো ব্যবহার করতে পারে। এর কারণ হল চাইল্ড মডিউলগুলো তাদের ইমপ্লিমেন্টেশনের বিবরণ র‍্যাপ করে এবং লুকিয়ে রাখে, কিন্তু চাইল্ড মডিউলগুলো সেই প্রেক্ষাপটটি দেখতে পারে যেখানে সেগুলো সংজ্ঞায়িত করা হয়েছে। আমাদের রূপকটি চালিয়ে যেতে, গোপনীয়তার নিয়মগুলোকে একটি রেস্তোরাঁর ব্যাক অফিসের মতো ভাবুন: সেখানে যা ঘটে তা রেস্তোরাঁর গ্রাহকদের কাছে প্রাইভেট, কিন্তু অফিসের ম্যানেজাররা তারা যে রেস্তোরাঁটি পরিচালনা করেন তার সবকিছু দেখতে এবং করতে পারেন।
 
-Rust chose to have the module system function this way so that hiding inner
-implementation details is the default. That way, you know which parts of the
-inner code you can change without breaking outer code. However, Rust does give
-you the option to expose inner parts of child modules’ code to outer ancestor
-modules by using the `pub` keyword to make an item public.
+Rust মডিউল সিস্টেমটিকে এমনভাবে কাজ করার জন্য বেছে নিয়েছে যাতে অভ্যন্তরীণ ইমপ্লিমেন্টেশনের বিবরণ লুকানো ডিফল্ট হয়। এইভাবে, আপনি জানেন যে আপনি বাইরের কোড না ভেঙে ভিতরের কোডের কোন অংশগুলো পরিবর্তন করতে পারেন। যাইহোক, Rust আপনাকে একটি আইটেমকে পাবলিক করতে `pub` কীওয়ার্ড ব্যবহার করে চাইল্ড মডিউলের কোডের ভেতরের অংশগুলো বাইরের পূর্বপুরুষ মডিউলগুলোতে প্রকাশ করার অপশন দেয়।
 
-### Exposing Paths with the `pub` Keyword
+### `pub` কীওয়ার্ড দিয়ে পাথ এক্সপোজ করা (Exposing Paths with the `pub` Keyword)
 
-Let’s return to the error in Listing 7-4 that told us the `hosting` module is
-private. We want the `eat_at_restaurant` function in the parent module to have
-access to the `add_to_waitlist` function in the child module, so we mark the
-`hosting` module with the `pub` keyword, as shown in Listing 7-5.
+আসুন Listing 7-4-এর এররটিতে ফিরে যাই যা আমাদের বলেছিল যে `hosting` মডিউলটি প্রাইভেট। আমরা চাই প্যারেন্ট মডিউলের `eat_at_restaurant` ফাংশনটির চাইল্ড মডিউলের `add_to_waitlist` ফাংশনে অ্যাক্সেস থাকুক, তাই আমরা `hosting` মডিউলটিকে `pub` কীওয়ার্ড দিয়ে চিহ্নিত করি, যেমনটি Listing 7-5-এ দেখানো হয়েছে।
 
-<Listing number="7-5" file-name="src/lib.rs" caption="Declaring the `hosting` module as `pub` to use it from `eat_at_restaurant`">
+<Listing number="7-5" file-name="src/lib.rs" caption="`hosting` মডিউলটিকে `pub` হিসাবে ঘোষণা করা যাতে `eat_at_restaurant` থেকে এটি ব্যবহার করা যায়">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-05/src/lib.rs:here}}
@@ -113,10 +57,9 @@ access to the `add_to_waitlist` function in the child module, so we mark the
 
 </Listing>
 
-Unfortunately, the code in Listing 7-5 still results in compiler errors, as
-shown in Listing 7-6.
+দুর্ভাগ্যবশত, Listing 7-5-এর কোডটি এখনও কম্পাইলার এরর দেয়, যেমনটি Listing 7-6-এ দেখানো হয়েছে।
 
-<Listing number="7-6" caption="Compiler errors from building the code in Listing 7-5">
+<Listing number="7-6" caption="Listing 7-5-এর কোড কম্পাইল করার ফলে কম্পাইলার এরর">
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-05/output.txt}}
@@ -124,23 +67,13 @@ shown in Listing 7-6.
 
 </Listing>
 
-What happened? Adding the `pub` keyword in front of `mod hosting` makes the
-module public. With this change, if we can access `front_of_house`, we can
-access `hosting`. But the _contents_ of `hosting` are still private; making the
-module public doesn’t make its contents public. The `pub` keyword on a module
-only lets code in its ancestor modules refer to it, not access its inner code.
-Because modules are containers, there’s not much we can do by only making the
-module public; we need to go further and choose to make one or more of the
-items within the module public as well.
+কী ঘটল? `mod hosting`-এর সামনে `pub` কীওয়ার্ড যোগ করলে মডিউলটি পাবলিক হয়। এই পরিবর্তনের সাথে, যদি আমরা `front_of_house` অ্যাক্সেস করতে পারি, তাহলে আমরা `hosting` অ্যাক্সেস করতে পারব। কিন্তু `hosting`-এর *কনটেন্টগুলো* এখনও প্রাইভেট; মডিউলটিকে পাবলিক করা এর কনটেন্টগুলোকে পাবলিক করে না। একটি মডিউলে `pub` কীওয়ার্ড শুধুমাত্র তার পূর্বপুরুষ মডিউলগুলোর কোডকে এটি রেফার করার অনুমতি দেয়, এর ভেতরের কোড অ্যাক্সেস করতে নয়। যেহেতু মডিউলগুলো হল কন্টেইনার, তাই শুধুমাত্র মডিউলটিকে পাবলিক করে আমরা খুব বেশি কিছু করতে পারি না; আমাদের আরও এগিয়ে যেতে হবে এবং মডিউলের ভেতরের এক বা একাধিক আইটেমকেও পাবলিক করতে হবে।
 
-The errors in Listing 7-6 say that the `add_to_waitlist` function is private.
-The privacy rules apply to structs, enums, functions, and methods as well as
-modules.
+Listing 7-6-এর এররগুলো বলে যে `add_to_waitlist` ফাংশনটি প্রাইভেট। গোপনীয়তার নিয়মগুলো স্ট্রাকট, এনাম, ফাংশন এবং মেথডের পাশাপাশি মডিউলগুলোর ক্ষেত্রেও প্রযোজ্য।
 
-Let’s also make the `add_to_waitlist` function public by adding the `pub`
-keyword before its definition, as in Listing 7-7.
+আসুন Listing 7-7-এর মতো `add_to_waitlist` ফাংশনটিকেও এর সংজ্ঞার আগে `pub` কীওয়ার্ড যোগ করে পাবলিক করি।
 
-<Listing number="7-7" file-name="src/lib.rs" caption="Adding the `pub` keyword to `mod hosting` and `fn add_to_waitlist` lets us call the function from `eat_at_restaurant`">
+<Listing number="7-7" file-name="src/lib.rs" caption="`mod hosting` এবং `fn add_to_waitlist`-এ `pub` কীওয়ার্ড যোগ করলে আমাদের `eat_at_restaurant` থেকে ফাংশনটি কল করতে দেয়">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-07/src/lib.rs:here}}
@@ -148,73 +81,29 @@ keyword before its definition, as in Listing 7-7.
 
 </Listing>
 
-Now the code will compile! To see why adding the `pub` keyword lets us use
-these paths in `eat_at_restaurant` with respect to the privacy rules, let’s look
-at the absolute and the relative paths.
+এখন কোডটি কম্পাইল হবে! গোপনীয়তার নিয়মগুলোর সাপেক্ষে `pub` কীওয়ার্ড যোগ করলে কেন আমাদের `eat_at_restaurant`-এ এই পাথগুলো ব্যবহার করার অনুমতি দেয় তা দেখতে, আসুন অ্যাবসোলিউট এবং রিলেটিভ পাথগুলো দেখি।
 
-In the absolute path, we start with `crate`, the root of our crate’s module
-tree. The `front_of_house` module is defined in the crate root. While
-`front_of_house` isn’t public, because the `eat_at_restaurant` function is
-defined in the same module as `front_of_house` (that is, `eat_at_restaurant`
-and `front_of_house` are siblings), we can refer to `front_of_house` from
-`eat_at_restaurant`. Next is the `hosting` module marked with `pub`. We can
-access the parent module of `hosting`, so we can access `hosting`. Finally, the
-`add_to_waitlist` function is marked with `pub` and we can access its parent
-module, so this function call works!
+অ্যাবসোলিউট পাথে, আমরা `crate` দিয়ে শুরু করি, আমাদের ক্রেটের মডিউল ট্রির রুট। `front_of_house` মডিউলটি ক্রেট রুটে সংজ্ঞায়িত করা হয়েছে। যদিও `front_of_house` পাবলিক নয়, কারণ `eat_at_restaurant` ফাংশনটি `front_of_house`-এর মতোই একই মডিউলে সংজ্ঞায়িত করা হয়েছে (অর্থাৎ, `eat_at_restaurant` এবং `front_of_house` হল সিবলিং), আমরা `eat_at_restaurant` থেকে `front_of_house`-কে রেফার করতে পারি। এরপর `hosting` মডিউলটি `pub` দিয়ে চিহ্নিত করা হয়েছে। আমরা `hosting`-এর প্যারেন্ট মডিউল অ্যাক্সেস করতে পারি, তাই আমরা `hosting` অ্যাক্সেস করতে পারি। অবশেষে, `add_to_waitlist` ফাংশনটি `pub` দিয়ে চিহ্নিত করা হয়েছে এবং আমরা এর প্যারেন্ট মডিউল অ্যাক্সেস করতে পারি, তাই এই ফাংশন কলটি কাজ করে!
 
-In the relative path, the logic is the same as the absolute path except for the
-first step: rather than starting from the crate root, the path starts from
-`front_of_house`. The `front_of_house` module is defined within the same module
-as `eat_at_restaurant`, so the relative path starting from the module in which
-`eat_at_restaurant` is defined works. Then, because `hosting` and
-`add_to_waitlist` are marked with `pub`, the rest of the path works, and this
-function call is valid!
+রিলেটিভ পাথের ক্ষেত্রে, লজিকটি অ্যাবসোলিউট পাথের মতোই, প্রথম ধাপটি ছাড়া: ক্রেট রুট থেকে শুরু করার পরিবর্তে, পাথটি `front_of_house` থেকে শুরু হয়। `front_of_house` মডিউলটি `eat_at_restaurant`-এর মতোই একই মডিউলে সংজ্ঞায়িত করা হয়েছে, তাই `eat_at_restaurant` যে মডিউলে সংজ্ঞায়িত করা হয়েছে সেখান থেকে শুরু হওয়া রিলেটিভ পাথটি কাজ করে। তারপর, যেহেতু `hosting` এবং `add_to_waitlist` `pub` দিয়ে চিহ্নিত করা হয়েছে, তাই পাথের বাকি অংশটি কাজ করে এবং এই ফাংশন কলটি বৈধ!
 
-If you plan on sharing your library crate so other projects can use your code,
-your public API is your contract with users of your crate that determines how
-they can interact with your code. There are many considerations around managing
-changes to your public API to make it easier for people to depend on your
-crate. These considerations are beyond the scope of this book; if you’re
-interested in this topic, see [The Rust API Guidelines][api-guidelines].
+যদি আপনি আপনার লাইব্রেরি ক্রেট শেয়ার করার পরিকল্পনা করেন যাতে অন্য প্রোজেক্টগুলো আপনার কোড ব্যবহার করতে পারে, তাহলে আপনার পাবলিক API হল আপনার ক্রেটের ব্যবহারকারীদের সাথে আপনার চুক্তি যা নির্ধারণ করে যে তারা কীভাবে আপনার কোডের সাথে ইন্টারঅ্যাক্ট করতে পারে। আপনার ক্রেটের উপর নির্ভর করা লোকেদের জন্য এটিকে সহজতর করার জন্য আপনার পাবলিক API-তে পরিবর্তনগুলো পরিচালনা করার বিষয়ে অনেক বিবেচনা রয়েছে। এই বিবেচনাগুলো এই বইয়ের সুযোগের বাইরে; আপনি যদি এই বিষয়ে আগ্রহী হন, তাহলে [The Rust API Guidelines][api-guidelines] দেখুন।
 
-> #### Best Practices for Packages with a Binary and a Library
+> #### বাইনারি এবং লাইব্রেরি সহ প্যাকেজগুলোর জন্য সর্বোত্তম অনুশীলন (Best Practices for Packages with a Binary and a Library)
 >
-> We mentioned that a package can contain both a _src/main.rs_ binary crate
-> root as well as a _src/lib.rs_ library crate root, and both crates will have
-> the package name by default. Typically, packages with this pattern of
-> containing both a library and a binary crate will have just enough code in the
-> binary crate to start an executable that calls code within the library crate.
-> This lets other projects benefit from most of the functionality that the
-> package provides because the library crate’s code can be shared.
+> আমরা উল্লেখ করেছি যে একটি প্যাকেজে একটি _src/main.rs_ বাইনারি ক্রেট রুট এবং সেইসাথে একটি _src/lib.rs_ লাইব্রেরি ক্রেট রুট উভয়ই থাকতে পারে এবং উভয় ক্রেটের নাম ডিফল্টরূপে প্যাকেজের নামের মতো হবে। সাধারণত, লাইব্রেরি এবং বাইনারি ক্রেট উভয়ই ধারণকারী এই প্যাটার্নের প্যাকেজগুলোতে বাইনারি ক্রেটে শুধুমাত্র একটি এক্সিকিউটেবল শুরু করার জন্য যথেষ্ট কোড থাকবে যা লাইব্রেরি ক্রেটের মধ্যে কোড কল করে। এটি অন্য প্রোজেক্টগুলোকে প্যাকেজ যে কার্যকারিতা সরবরাহ করে তার বেশিরভাগ থেকে উপকৃত হতে দেয় কারণ লাইব্রেরি ক্রেটের কোড শেয়ার করা যেতে পারে।
 >
-> The module tree should be defined in _src/lib.rs_. Then, any public items can
-> be used in the binary crate by starting paths with the name of the package.
-> The binary crate becomes a user of the library crate just like a completely
-> external crate would use the library crate: it can only use the public API.
-> This helps you design a good API; not only are you the author, you’re also a
-> client!
+> মডিউল ট্রিটি _src/lib.rs_-এ সংজ্ঞায়িত করা উচিত। তারপর, যেকোনো পাবলিক আইটেম প্যাকেজের নাম দিয়ে পাথ শুরু করে বাইনারি ক্রেটে ব্যবহার করা যেতে পারে। বাইনারি ক্রেটটি লাইব্রেরি ক্রেটের একজন ব্যবহারকারী হয়ে ওঠে ঠিক যেমন একটি সম্পূর্ণ এক্সটার্নাল ক্রেট লাইব্রেরি ক্রেট ব্যবহার করবে: এটি শুধুমাত্র পাবলিক API ব্যবহার করতে পারে। এটি আপনাকে একটি ভাল API ডিজাইন করতে সহায়তা করে; আপনি কেবল লেখক নন, আপনি একজন ক্লায়েন্টও!
 >
-> In [Chapter 12][ch12]<!-- ignore -->, we’ll demonstrate this organizational
-> practice with a command line program that will contain both a binary crate
-> and a library crate.
+> [চ্যাপ্টার 12][ch12]<!-- ignore -->-এ, আমরা একটি কমান্ড লাইন প্রোগ্রাম দিয়ে এই সাংগঠনিক অনুশীলনটি প্রদর্শন করব যাতে একটি বাইনারি ক্রেট এবং একটি লাইব্রেরি ক্রেট উভয়ই থাকবে।
 
-### Starting Relative Paths with `super`
+### `super` দিয়ে রিলেটিভ পাথ শুরু করা (Starting Relative Paths with `super`)
 
-We can construct relative paths that begin in the parent module, rather than
-the current module or the crate root, by using `super` at the start of the
-path. This is like starting a filesystem path with the `..` syntax. Using
-`super` allows us to reference an item that we know is in the parent module,
-which can make rearranging the module tree easier when the module is closely
-related to the parent but the parent might be moved elsewhere in the module
-tree someday.
+আমরা `super` দিয়ে পাথের শুরুতে প্যারেন্ট মডিউল থেকে শুরু হওয়া রিলেটিভ পাথ তৈরি করতে পারি, কারেন্ট মডিউল বা ক্রেট রুট থেকে নয়। এটি ফাইল সিস্টেমের পাথ `..` সিনট্যাক্স দিয়ে শুরু করার মতো। `super` ব্যবহার করা আমাদের এমন একটি আইটেমকে রেফার করতে দেয় যা আমরা জানি প্যারেন্ট মডিউলে রয়েছে, যা মডিউল ট্রিকে পুনরায় সাজানো সহজ করে তুলতে পারে যখন মডিউলটি প্যারেন্টের সাথে ঘনিষ্ঠভাবে সম্পর্কিত কিন্তু প্যারেন্টকে হয়তো কোনো একদিন মডিউল ট্রির অন্য কোথাও সরানো হতে পারে।
 
-Consider the code in Listing 7-8 that models the situation in which a chef
-fixes an incorrect order and personally brings it out to the customer. The
-function `fix_incorrect_order` defined in the `back_of_house` module calls the
-function `deliver_order` defined in the parent module by specifying the path to
-`deliver_order`, starting with `super`.
+Listing 7-8-এর কোডটি বিবেচনা করুন যা এমন পরিস্থিতিকে মডেল করে যেখানে একজন শেফ একটি ভুল অর্ডার ঠিক করে এবং ব্যক্তিগতভাবে সেটি গ্রাহকের কাছে নিয়ে আসে। `back_of_house` মডিউলে সংজ্ঞায়িত `fix_incorrect_order` ফাংশনটি প্যারেন্ট মডিউলে সংজ্ঞায়িত `deliver_order` ফাংশনটিকে কল করে, `super` দিয়ে শুরু করে `deliver_order`-এর পাথ নির্দিষ্ট করে।
 
-<Listing number="7-8" file-name="src/lib.rs" caption="Calling a function using a relative path starting with `super`">
+<Listing number="7-8" file-name="src/lib.rs" caption="`super` দিয়ে শুরু হওয়া একটি রিলেটিভ পাথ ব্যবহার করে একটি ফাংশন কল করা">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-08/src/lib.rs}}
@@ -222,29 +111,13 @@ function `deliver_order` defined in the parent module by specifying the path to
 
 </Listing>
 
-The `fix_incorrect_order` function is in the `back_of_house` module, so we can
-use `super` to go to the parent module of `back_of_house`, which in this case
-is `crate`, the root. From there, we look for `deliver_order` and find it.
-Success! We think the `back_of_house` module and the `deliver_order` function
-are likely to stay in the same relationship to each other and get moved
-together should we decide to reorganize the crate’s module tree. Therefore, we
-used `super` so we’ll have fewer places to update code in the future if this
-code gets moved to a different module.
+`fix_incorrect_order` ফাংশনটি `back_of_house` মডিউলে রয়েছে, তাই আমরা `super` ব্যবহার করে `back_of_house`-এর প্যারেন্ট মডিউলে যেতে পারি, যা এই ক্ষেত্রে `crate`, অর্থাৎ রুট। সেখান থেকে, আমরা `deliver_order` খুঁজি এবং এটি খুঁজে পাই। সফল! আমরা মনে করি `back_of_house` মডিউল এবং `deliver_order` ফাংশন একে অপরের সাথে একই সম্পর্কে থাকবে এবং যদি আমরা ক্রেটের মডিউল ট্রি পুনরায় সংগঠিত করার সিদ্ধান্ত নিই তবে একসাথে সরানো হবে। অতএব, আমরা `super` ব্যবহার করেছি যাতে ভবিষ্যতে যদি এই কোডটি অন্য কোনো মডিউলে সরানো হয় তবে আমাদের কম জায়গায় কোড আপডেট করতে হবে।
 
-### Making Structs and Enums Public
+### স্ট্রাকট এবং এনামগুলোকে পাবলিক করা (Making Structs and Enums Public)
 
-We can also use `pub` to designate structs and enums as public, but there are a
-few extra details to the usage of `pub` with structs and enums. If we use `pub`
-before a struct definition, we make the struct public, but the struct’s fields
-will still be private. We can make each field public or not on a case-by-case
-basis. In Listing 7-9, we’ve defined a public `back_of_house::Breakfast` struct
-with a public `toast` field but a private `seasonal_fruit` field. This models
-the case in a restaurant where the customer can pick the type of bread that
-comes with a meal, but the chef decides which fruit accompanies the meal based
-on what’s in season and in stock. The available fruit changes quickly, so
-customers can’t choose the fruit or even see which fruit they’ll get.
+আমরা স্ট্রাকট এবং এনামগুলোকেও পাবলিক হিসাবে মনোনীত করতে `pub` ব্যবহার করতে পারি, কিন্তু স্ট্রাকট এবং এনামগুলোর সাথে `pub` ব্যবহারের কয়েকটি অতিরিক্ত বিবরণ রয়েছে। যদি আমরা একটি স্ট্রাকট সংজ্ঞার আগে `pub` ব্যবহার করি, তাহলে আমরা স্ট্রাকটটিকে পাবলিক করি, কিন্তু স্ট্রাকটের ফিল্ডগুলো এখনও প্রাইভেট থাকবে। আমরা প্রতিটি ফিল্ডকে কেস-বাই-কেস ভিত্তিতে পাবলিক করতে পারি বা নাও করতে পারি। Listing 7-9-এ, আমরা একটি পাবলিক `toast` ফিল্ড কিন্তু একটি প্রাইভেট `seasonal_fruit` ফিল্ড সহ একটি পাবলিক `back_of_house::Breakfast` স্ট্রাকট সংজ্ঞায়িত করেছি। এটি একটি রেস্তোরাঁর ক্ষেত্রটিকে মডেল করে যেখানে গ্রাহক খাবারের সাথে আসা রুটির টাইপ বেছে নিতে পারে, কিন্তু শেফ সিদ্ধান্ত নেন কোন ফল পরিবেশন করা হবে, সেটি সিজনে কী আছে এবং স্টকে কী আছে তার উপর ভিত্তি করে। উপলব্ধ ফল দ্রুত পরিবর্তন হয়, তাই গ্রাহকরা ফল বেছে নিতে পারে না বা এমনকি তারা কোন ফল পাবে তাও দেখতে পায় না।
 
-<Listing number="7-9" file-name="src/lib.rs" caption="A struct with some public fields and some private fields">
+<Listing number="7-9" file-name="src/lib.rs" caption="কিছু পাবলিক ফিল্ড এবং কিছু প্রাইভেট ফিল্ড সহ একটি স্ট্রাকট">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-09/src/lib.rs}}
@@ -252,23 +125,13 @@ customers can’t choose the fruit or even see which fruit they’ll get.
 
 </Listing>
 
-Because the `toast` field in the `back_of_house::Breakfast` struct is public,
-in `eat_at_restaurant` we can write and read to the `toast` field using dot
-notation. Notice that we can’t use the `seasonal_fruit` field in
-`eat_at_restaurant`, because `seasonal_fruit` is private. Try uncommenting the
-line modifying the `seasonal_fruit` field value to see what error you get!
+যেহেতু `back_of_house::Breakfast` স্ট্রাকটের `toast` ফিল্ডটি পাবলিক, তাই `eat_at_restaurant`-এ আমরা ডট নোটেশন ব্যবহার করে `toast` ফিল্ডে লিখতে এবং পড়তে পারি। লক্ষ্য করুন যে আমরা `eat_at_restaurant`-এ `seasonal_fruit` ফিল্ডটি ব্যবহার করতে পারি না, কারণ `seasonal_fruit` প্রাইভেট। `seasonal_fruit` ফিল্ডের মান পরিবর্তন করার লাইনটি আনকমেন্ট করার চেষ্টা করুন, দেখুন আপনি কী এরর পান!
 
-Also, note that because `back_of_house::Breakfast` has a private field, the
-struct needs to provide a public associated function that constructs an
-instance of `Breakfast` (we’ve named it `summer` here). If `Breakfast` didn’t
-have such a function, we couldn’t create an instance of `Breakfast` in
-`eat_at_restaurant` because we couldn’t set the value of the private
-`seasonal_fruit` field in `eat_at_restaurant`.
+এছাড়াও, মনে রাখবেন যে যেহেতু `back_of_house::Breakfast`-এর একটি প্রাইভেট ফিল্ড রয়েছে, তাই স্ট্রাকটটির একটি পাবলিক অ্যাসোসিয়েটেড ফাংশন সরবরাহ করা দরকার যা `Breakfast`-এর একটি ইন্সট্যান্স তৈরি করে (আমরা এখানে এটির নাম দিয়েছি `summer`)। যদি `Breakfast`-এর এমন কোনো ফাংশন না থাকত, তাহলে আমরা `eat_at_restaurant`-এ `Breakfast`-এর একটি ইন্সট্যান্স তৈরি করতে পারতাম না কারণ আমরা `eat_at_restaurant`-এ প্রাইভেট `seasonal_fruit` ফিল্ডের মান সেট করতে পারতাম না।
 
-In contrast, if we make an enum public, all of its variants are then public. We
-only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
+বিপরীতে, যদি আমরা একটি এনামকে পাবলিক করি, তাহলে এর সমস্ত ভেরিয়েন্ট পাবলিক হয়ে যায়। আমাদের শুধুমাত্র `enum` কীওয়ার্ডের আগে `pub` প্রয়োজন, যেমনটি Listing 7-10-এ দেখানো হয়েছে।
 
-<Listing number="7-10" file-name="src/lib.rs" caption="Designating an enum as public makes all its variants public.">
+<Listing number="7-10" file-name="src/lib.rs" caption="একটি এনামকে পাবলিক হিসাবে মনোনীত করলে এর সমস্ত ভেরিয়েন্ট পাবলিক হয়ে যায়।">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-10/src/lib.rs}}
@@ -276,18 +139,11 @@ only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
 
 </Listing>
 
-Because we made the `Appetizer` enum public, we can use the `Soup` and `Salad`
-variants in `eat_at_restaurant`.
+যেহেতু আমরা `Appetizer` এনামটিকে পাবলিক করেছি, তাই আমরা `eat_at_restaurant`-এ `Soup` এবং `Salad` ভেরিয়েন্টগুলো ব্যবহার করতে পারি।
 
-Enums aren’t very useful unless their variants are public; it would be annoying
-to have to annotate all enum variants with `pub` in every case, so the default
-for enum variants is to be public. Structs are often useful without their
-fields being public, so struct fields follow the general rule of everything
-being private by default unless annotated with `pub`.
+এনামগুলো খুব একটা দরকারী নয় যদি না তাদের ভেরিয়েন্টগুলো পাবলিক হয়; প্রতিটি ক্ষেত্রে সমস্ত এনাম ভেরিয়েন্টকে `pub` দিয়ে অ্যানোটেট করতে হলে বিরক্তিকর হবে, তাই এনাম ভেরিয়েন্টগুলোর জন্য ডিফল্ট হল পাবলিক হওয়া। স্ট্রাকটগুলো প্রায়শই তাদের ফিল্ডগুলো পাবলিক না করেই দরকারী, তাই স্ট্রাকট ফিল্ডগুলো সবকিছু ডিফল্টরূপে প্রাইভেট হওয়ার সাধারণ নিয়ম অনুসরণ করে, যদি না `pub` দিয়ে অ্যানোটেট করা হয়।
 
-There’s one more situation involving `pub` that we haven’t covered, and that is
-our last module system feature: the `use` keyword. We’ll cover `use` by itself
-first, and then we’ll show how to combine `pub` and `use`.
+`pub` জড়িত আরও একটি পরিস্থিতি রয়েছে যা আমরা কভার করিনি, এবং সেটি হল আমাদের শেষ মডিউল সিস্টেম ফিচার: `use` কীওয়ার্ড। আমরা প্রথমে `use` নিয়ে নিজে থেকেই আলোচনা করব, এবং তারপর আমরা দেখাব কিভাবে `pub` এবং `use` একত্রিত করতে হয়।
 
 [pub]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword
 [api-guidelines]: https://rust-lang.github.io/api-guidelines/

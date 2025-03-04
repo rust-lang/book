@@ -1,65 +1,42 @@
-## Defining an Enum
+## একটি এনাম সংজ্ঞায়িত করা (Defining an Enum)
 
-Where structs give you a way of grouping together related fields and data, like
-a `Rectangle` with its `width` and `height`, enums give you a way of saying a
-value is one of a possible set of values. For example, we may want to say that
-`Rectangle` is one of a set of possible shapes that also includes `Circle` and
-`Triangle`. To do this, Rust allows us to encode these possibilities as an enum.
+স্ট্রাকটগুলো যেমন আপনাকে সম্পর্কিত ফিল্ড এবং ডেটা একত্রিত করার একটি উপায় দেয়, যেমন `width` এবং `height` সহ একটি `Rectangle`, এনামগুলো আপনাকে সম্ভাব্য মানগুলোর একটি সেট থেকে একটি মান বলার উপায় দেয়। উদাহরণস্বরূপ, আমরা বলতে চাইতে পারি যে `Rectangle` হল সম্ভাব্য আকারগুলোর একটি সেটের মধ্যে একটি, যার মধ্যে `Circle` এবং `Triangle`-ও রয়েছে। এটি করার জন্য, Rust আমাদের এই সম্ভাবনাগুলোকে একটি এনাম হিসাবে এনকোড করার অনুমতি দেয়।
 
-Let’s look at a situation we might want to express in code and see why enums
-are useful and more appropriate than structs in this case. Say we need to work
-with IP addresses. Currently, two major standards are used for IP addresses:
-version four and version six. Because these are the only possibilities for an
-IP address that our program will come across, we can _enumerate_ all possible
-variants, which is where enumeration gets its name.
+আসুন এমন একটি পরিস্থিতি দেখি যা আমরা কোডে প্রকাশ করতে চাইতে পারি এবং দেখি কেন এই ক্ষেত্রে এনামগুলো দরকারী এবং স্ট্রাকটগুলোর চেয়ে বেশি উপযুক্ত। ধরুন আমাদের IP অ্যাড্রেস নিয়ে কাজ করতে হবে। বর্তমানে, IP অ্যাড্রেসের জন্য দুটি প্রধান স্ট্যান্ডার্ড ব্যবহার করা হয়: ভার্সন চার এবং ভার্সন ছয়। যেহেতু এগুলোই আমাদের প্রোগ্রামের সামনে আসতে পারে এমন IP অ্যাড্রেসের একমাত্র সম্ভাবনা, তাই আমরা সমস্ত সম্ভাব্য ভেরিয়েন্টগুলো *_গণনা_* করতে পারি, যেখান থেকে এনিউমারেশন (enumeration) নামটি এসেছে।
 
-Any IP address can be either a version four or a version six address, but not
-both at the same time. That property of IP addresses makes the enum data
-structure appropriate because an enum value can only be one of its variants.
-Both version four and version six addresses are still fundamentally IP
-addresses, so they should be treated as the same type when the code is handling
-situations that apply to any kind of IP address.
+যেকোনো IP অ্যাড্রেস হয় একটি ভার্সন চার বা একটি ভার্সন ছয় অ্যাড্রেস হতে পারে, কিন্তু একই সময়ে উভয়ই নয়। IP অ্যাড্রেসের এই বৈশিষ্ট্যটি এনাম ডেটা স্ট্রাকচারকে উপযুক্ত করে তোলে কারণ একটি এনাম মান শুধুমাত্র তার ভেরিয়েন্টগুলোর মধ্যে একটি হতে পারে। ভার্সন চার এবং ভার্সন ছয় উভয় অ্যাড্রেসই এখনও মৌলিকভাবে IP অ্যাড্রেস, তাই কোড যখন যেকোনো ধরনের IP অ্যাড্রেসের ক্ষেত্রে প্রযোজ্য পরিস্থিতিগুলো পরিচালনা করে তখন তাদের একই টাইপ হিসাবে বিবেচনা করা উচিত।
 
-We can express this concept in code by defining an `IpAddrKind` enumeration and
-listing the possible kinds an IP address can be, `V4` and `V6`. These are the
-variants of the enum:
+আমরা কোডে এই ধারণাটি প্রকাশ করতে পারি একটি `IpAddrKind` এনিউমারেশন সংজ্ঞায়িত করে এবং একটি IP অ্যাড্রেস হতে পারে এমন সম্ভাব্য প্রকারগুলো তালিকাভুক্ত করে, `V4` এবং `V6`। এগুলো হল এনামের ভেরিয়েন্ট:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-01-defining-enums/src/main.rs:def}}
 ```
 
-`IpAddrKind` is now a custom data type that we can use elsewhere in our code.
+`IpAddrKind` এখন একটি কাস্টম ডেটা টাইপ যা আমরা আমাদের কোডের অন্য কোথাও ব্যবহার করতে পারি।
 
-### Enum Values
+### এনাম মান (Enum Values)
 
-We can create instances of each of the two variants of `IpAddrKind` like this:
+আমরা `IpAddrKind`-এর দুটি ভেরিয়েন্টের প্রত্যেকটির ইন্সট্যান্স তৈরি করতে পারি এইভাবে:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-01-defining-enums/src/main.rs:instance}}
 ```
 
-Note that the variants of the enum are namespaced under its identifier, and we
-use a double colon to separate the two. This is useful because now both values
-`IpAddrKind::V4` and `IpAddrKind::V6` are of the same type: `IpAddrKind`. We
-can then, for instance, define a function that takes any `IpAddrKind`:
+লক্ষ্য করুন যে এনামের ভেরিয়েন্টগুলো এর আইডেন্টিফায়ারের অধীনে নেমস্পেস করা হয়েছে এবং আমরা দুটিকে আলাদা করতে একটি ডাবল কোলন ব্যবহার করি। এটি দরকারী কারণ এখন `IpAddrKind::V4` এবং `IpAddrKind::V6` উভয় মান একই টাইপের: `IpAddrKind`। তারপর আমরা, উদাহরণস্বরূপ, এমন একটি ফাংশন সংজ্ঞায়িত করতে পারি যা যেকোনো `IpAddrKind` নেয়:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-01-defining-enums/src/main.rs:fn}}
 ```
 
-And we can call this function with either variant:
+এবং আমরা এই ফাংশনটিকে যেকোনো ভেরিয়েন্ট দিয়ে কল করতে পারি:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-01-defining-enums/src/main.rs:fn_call}}
 ```
 
-Using enums has even more advantages. Thinking more about our IP address type,
-at the moment we don’t have a way to store the actual IP address _data_; we
-only know what _kind_ it is. Given that you just learned about structs in
-Chapter 5, you might be tempted to tackle this problem with structs as shown in
-Listing 6-1.
+এনাম ব্যবহারের আরও সুবিধা রয়েছে। আমাদের IP অ্যাড্রেস টাইপ সম্পর্কে আরও চিন্তা করলে, এই মুহূর্তে আমাদের কাছে প্রকৃত IP অ্যাড্রেস *ডেটা* সংরক্ষণ করার কোনো উপায় নেই; আমরা কেবল জানি এটি কোন *ধরনের*। যেহেতু আপনি এইমাত্র চ্যাপ্টার ৫-এ স্ট্রাকট সম্পর্কে শিখেছেন, তাই আপনি হয়তো Listing 6-1-এ দেখানো স্ট্রাকটগুলো দিয়ে এই সমস্যার সমাধান করতে চাইতে পারেন।
 
-<Listing number="6-1" caption="Storing the data and `IpAddrKind` variant of an IP address using a `struct`">
+<Listing number="6-1" caption="একটি `struct` ব্যবহার করে একটি IP অ্যাড্রেসের ডেটা এবং `IpAddrKind` ভেরিয়েন্ট সংরক্ষণ করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-01/src/main.rs:here}}
@@ -67,51 +44,23 @@ Listing 6-1.
 
 </Listing>
 
-Here, we’ve defined a struct `IpAddr` that has two fields: a `kind` field that
-is of type `IpAddrKind` (the enum we defined previously) and an `address` field
-of type `String`. We have two instances of this struct. The first is `home`,
-and it has the value `IpAddrKind::V4` as its `kind` with associated address
-data of `127.0.0.1`. The second instance is `loopback`. It has the other
-variant of `IpAddrKind` as its `kind` value, `V6`, and has address `::1`
-associated with it. We’ve used a struct to bundle the `kind` and `address`
-values together, so now the variant is associated with the value.
+এখানে, আমরা একটি স্ট্রাকট `IpAddr` সংজ্ঞায়িত করেছি যাতে দুটি ফিল্ড রয়েছে: একটি `kind` ফিল্ড যার টাইপ `IpAddrKind` (আমরা পূর্বে সংজ্ঞায়িত করা এনাম) এবং একটি `address` ফিল্ড যার টাইপ `String`। আমাদের কাছে এই স্ট্রাকটের দুটি ইন্সট্যান্স রয়েছে। প্রথমটি হল `home`, এবং এর `kind`-এর মান হল `IpAddrKind::V4` যার সাথে `127.0.0.1`-এর সংশ্লিষ্ট অ্যাড্রেস ডেটা রয়েছে। দ্বিতীয় ইন্সট্যান্সটি হল `loopback`। এটির `kind` মান হিসাবে `IpAddrKind`-এর অন্য ভেরিয়েন্টটি রয়েছে, `V6`, এবং এর সাথে `::1` অ্যাড্রেস যুক্ত রয়েছে। আমরা `kind` এবং `address` মানগুলোকে একসাথে বান্ডিল করার জন্য একটি স্ট্রাকট ব্যবহার করেছি, তাই এখন ভেরিয়েন্টটি মানের সাথে সম্পর্কিত।
 
-However, representing the same concept using just an enum is more concise:
-rather than an enum inside a struct, we can put data directly into each enum
-variant. This new definition of the `IpAddr` enum says that both `V4` and `V6`
-variants will have associated `String` values:
+যাইহোক, শুধুমাত্র একটি এনাম ব্যবহার করে একই ধারণাটি উপস্থাপন করা আরও সংক্ষিপ্ত: একটি স্ট্রাকটের ভিতরে একটি এনামের পরিবর্তে, আমরা সরাসরি প্রতিটি এনাম ভেরিয়েন্টের মধ্যে ডেটা রাখতে পারি। `IpAddr` এনামের এই নতুন সংজ্ঞাটি বলে যে `V4` এবং `V6` উভয় ভেরিয়েন্টের সাথেই `String` মান যুক্ত থাকবে:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-02-enum-with-data/src/main.rs:here}}
 ```
 
-We attach data to each variant of the enum directly, so there is no need for an
-extra struct. Here, it’s also easier to see another detail of how enums work:
-the name of each enum variant that we define also becomes a function that
-constructs an instance of the enum. That is, `IpAddr::V4()` is a function call
-that takes a `String` argument and returns an instance of the `IpAddr` type. We
-automatically get this constructor function defined as a result of defining the
-enum.
+আমরা সরাসরি এনামের প্রতিটি ভেরিয়েন্টের সাথে ডেটা সংযুক্ত করি, তাই একটি অতিরিক্ত স্ট্রাকটের প্রয়োজন নেই। এখানে, এনামগুলো কীভাবে কাজ করে তার আরেকটি বিশদ বিবরণ দেখাও সহজ: আমরা যে প্রতিটি এনাম ভেরিয়েন্টের নাম সংজ্ঞায়িত করি সেটিও একটি ফাংশন হয়ে যায় যা এনামের একটি ইন্সট্যান্স তৈরি করে। অর্থাৎ, `IpAddr::V4()` হল একটি ফাংশন কল যা একটি `String` আর্গুমেন্ট নেয় এবং `IpAddr` টাইপের একটি ইন্সট্যান্স রিটার্ন করে। এনাম সংজ্ঞায়িত করার ফলে আমরা স্বয়ংক্রিয়ভাবে এই কনস্ট্রাক্টর ফাংশনটি সংজ্ঞায়িত করি।
 
-There’s another advantage to using an enum rather than a struct: each variant
-can have different types and amounts of associated data. Version four IP
-addresses will always have four numeric components that will have values
-between 0 and 255. If we wanted to store `V4` addresses as four `u8` values but
-still express `V6` addresses as one `String` value, we wouldn’t be able to with
-a struct. Enums handle this case with ease:
+একটি স্ট্রাকটের পরিবর্তে একটি এনাম ব্যবহার করার আরেকটি সুবিধা রয়েছে: প্রতিটি ভেরিয়েন্টের বিভিন্ন টাইপ এবং পরিমাণের ডেটা থাকতে পারে। ভার্সন চার IP অ্যাড্রেসগুলোতে সর্বদা চারটি সংখ্যাসূচক উপাদান থাকবে যার মান 0 থেকে 255 এর মধ্যে থাকবে। যদি আমরা `V4` অ্যাড্রেসগুলোকে চারটি `u8` মান হিসাবে সংরক্ষণ করতে চাইতাম কিন্তু এখনও `V6` অ্যাড্রেসগুলোকে একটি `String` মান হিসাবে প্রকাশ করতে চাইতাম, তাহলে আমরা একটি স্ট্রাকট দিয়ে তা করতে পারতাম না। এনামগুলো এই ক্ষেত্রটি সহজে পরিচালনা করে:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-03-variants-with-different-data/src/main.rs:here}}
 ```
 
-We’ve shown several different ways to define data structures to store version
-four and version six IP addresses. However, as it turns out, wanting to store
-IP addresses and encode which kind they are is so common that [the standard
-library has a definition we can use!][IpAddr]<!-- ignore --> Let’s look at how
-the standard library defines `IpAddr`: it has the exact enum and variants that
-we’ve defined and used, but it embeds the address data inside the variants in
-the form of two different structs, which are defined differently for each
-variant:
+আমরা ভার্সন চার এবং ভার্সন ছয় IP অ্যাড্রেস সংরক্ষণ করার জন্য ডেটা স্ট্রাকচার সংজ্ঞায়িত করার বিভিন্ন উপায় দেখিয়েছি। যাইহোক, দেখা যাচ্ছে যে, IP অ্যাড্রেস সংরক্ষণ করা এবং সেগুলো কোন ধরনের তা এনকোড করা এতটাই সাধারণ যে [স্ট্যান্ডার্ড লাইব্রেরিতে আমাদের ব্যবহারের জন্য একটি সংজ্ঞা রয়েছে!][IpAddr]<!-- ignore --> চলুন দেখি কিভাবে স্ট্যান্ডার্ড লাইব্রেরি `IpAddr` সংজ্ঞায়িত করে: এতে ঠিক সেই এনাম এবং ভেরিয়েন্টগুলো রয়েছে যা আমরা সংজ্ঞায়িত করেছি এবং ব্যবহার করেছি, কিন্তু এটি অ্যাড্রেস ডেটাকে দুটি ভিন্ন স্ট্রাকটের আকারে ভেরিয়েন্টগুলোর ভিতরে এমবেড করে, যা প্রতিটি ভেরিয়েন্টের জন্য ভিন্নভাবে সংজ্ঞায়িত করা হয়েছে:
 
 ```rust
 struct Ipv4Addr {
@@ -128,20 +77,13 @@ enum IpAddr {
 }
 ```
 
-This code illustrates that you can put any kind of data inside an enum variant:
-strings, numeric types, or structs, for example. You can even include another
-enum! Also, standard library types are often not much more complicated than
-what you might come up with.
+এই কোডটি ব্যাখ্যা করে যে আপনি একটি এনাম ভেরিয়েন্টের ভিতরে যেকোনো ধরনের ডেটা রাখতে পারেন: উদাহরণস্বরূপ, স্ট্রিং, সাংখ্যিক টাইপ বা স্ট্রাকট। আপনি এমনকি অন্য একটি এনামও অন্তর্ভুক্ত করতে পারেন! এছাড়াও, স্ট্যান্ডার্ড লাইব্রেরির টাইপগুলো প্রায়শই আপনার তৈরি করা জিনিসের চেয়ে বেশি জটিল হয় না।
 
-Note that even though the standard library contains a definition for `IpAddr`,
-we can still create and use our own definition without conflict because we
-haven’t brought the standard library’s definition into our scope. We’ll talk
-more about bringing types into scope in Chapter 7.
+লক্ষ্য করুন যে যদিও স্ট্যান্ডার্ড লাইব্রেরিতে `IpAddr`-এর জন্য একটি সংজ্ঞা রয়েছে, তবুও আমরা কোনো বিরোধ ছাড়াই আমাদের নিজস্ব সংজ্ঞা তৈরি এবং ব্যবহার করতে পারি কারণ আমরা স্ট্যান্ডার্ড লাইব্রেরির সংজ্ঞাটিকে আমাদের স্কোপে আনিনি। আমরা চ্যাপ্টার ৭-এ স্কোপে টাইপ আনার বিষয়ে আরও কথা বলব।
 
-Let’s look at another example of an enum in Listing 6-2: this one has a wide
-variety of types embedded in its variants.
+Listing 6-2-তে এনামের আরেকটি উদাহরণ দেখা যাক: এটির ভেরিয়েন্টগুলোতে বিভিন্ন ধরনের ডেটা এমবেড করা আছে।
 
-<Listing number="6-2" caption="A `Message` enum whose variants each store different amounts and types of values">
+<Listing number="6-2" caption="একটি `Message` এনাম যার ভেরিয়েন্টগুলো প্রতিটি ভিন্ন পরিমাণ এবং টাইপের মান সংরক্ষণ করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-02/src/main.rs:here}}
@@ -149,86 +91,48 @@ variety of types embedded in its variants.
 
 </Listing>
 
-This enum has four variants with different types:
+এই এনামটিতে চারটি ভেরিয়েন্ট রয়েছে যাদের বিভিন্ন টাইপ রয়েছে:
 
-- `Quit` has no data associated with it at all.
-- `Move` has named fields, like a struct does.
-- `Write` includes a single `String`.
-- `ChangeColor` includes three `i32` values.
+- `Quit`-এর সাথে কোনো ডেটা যুক্ত নেই।
+- `Move`-এর নামযুক্ত ফিল্ড রয়েছে, যেমন একটি স্ট্রাকটে থাকে।
+- `Write` একটি একক `String` অন্তর্ভুক্ত করে।
+- `ChangeColor`-এ তিনটি `i32` মান রয়েছে।
 
-Defining an enum with variants such as the ones in Listing 6-2 is similar to
-defining different kinds of struct definitions, except the enum doesn’t use the
-`struct` keyword and all the variants are grouped together under the `Message`
-type. The following structs could hold the same data that the preceding enum
-variants hold:
+Listing 6-2-এর মতো ভেরিয়েন্ট সহ একটি এনাম সংজ্ঞায়িত করা বিভিন্ন ধরণের স্ট্রাকট সংজ্ঞা সংজ্ঞায়িত করার মতোই, পার্থক্য হল এনামটি `struct` কীওয়ার্ড ব্যবহার করে না এবং সমস্ত ভেরিয়েন্ট `Message` টাইপের অধীনে একত্রিত হয়। নিম্নলিখিত স্ট্রাকটগুলো পূর্ববর্তী এনাম ভেরিয়েন্টগুলোর মতো একই ডেটা ধারণ করতে পারে:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-04-structs-similar-to-message-enum/src/main.rs:here}}
 ```
 
-But if we used the different structs, each of which has its own type, we
-couldn’t as easily define a function to take any of these kinds of messages as
-we could with the `Message` enum defined in Listing 6-2, which is a single type.
+কিন্তু যদি আমরা বিভিন্ন স্ট্রাকট ব্যবহার করতাম, যেগুলোর প্রত্যেকের নিজস্ব টাইপ রয়েছে, তাহলে আমরা Listing 6-2-তে সংজ্ঞায়িত `Message` এনামের মতো এই সমস্ত ধরণের মেসেজ নিতে পারে এমন একটি ফাংশন সংজ্ঞায়িত করতে পারতাম না, যেটি একটি একক টাইপ।
 
-There is one more similarity between enums and structs: just as we’re able to
-define methods on structs using `impl`, we’re also able to define methods on
-enums. Here’s a method named `call` that we could define on our `Message` enum:
+এনাম এবং স্ট্রাকটগুলোর মধ্যে আরও একটি মিল রয়েছে: যেমন আমরা `impl` ব্যবহার করে স্ট্রাকটগুলোতে মেথড সংজ্ঞায়িত করতে পারি, তেমনই আমরা এনামগুলোতেও মেথড সংজ্ঞায়িত করতে পারি। এখানে `call` নামে একটি মেথড রয়েছে যা আমরা আমাদের `Message` এনামে সংজ্ঞায়িত করতে পারি:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-05-methods-on-enums/src/main.rs:here}}
 ```
 
-The body of the method would use `self` to get the value that we called the
-method on. In this example, we’ve created a variable `m` that has the value
-`Message::Write(String::from("hello"))`, and that is what `self` will be in the
-body of the `call` method when `m.call()` runs.
+মেথডের বডি `self` ব্যবহার করে সেই মানটি পেতে পারে যেটিতে আমরা মেথডটি কল করেছি। এই উদাহরণে, আমরা একটি ভেরিয়েবল `m` তৈরি করেছি যার মান `Message::Write(String::from("hello"))`, এবং `m.call()` রান করার সময় `call` মেথডের বডিতে `self` হবে এটি।
 
-Let’s look at another enum in the standard library that is very common and
-useful: `Option`.
+আসুন স্ট্যান্ডার্ড লাইব্রেরির আরেকটি এনাম দেখি যা খুব সাধারণ এবং দরকারী: `Option`।
 
-### The `Option` Enum and Its Advantages Over Null Values
+### `Option` এনাম এবং নাল (Null) মানের উপর এর সুবিধা (The `Option` Enum and Its Advantages Over Null Values)
 
-This section explores a case study of `Option`, which is another enum defined
-by the standard library. The `Option` type encodes the very common scenario in
-which a value could be something or it could be nothing.
+এই বিভাগে `Option`-এর একটি কেস স্টাডি অন্বেষণ করা হয়েছে, যেটি স্ট্যান্ডার্ড লাইব্রেরি দ্বারা সংজ্ঞায়িত আরেকটি এনাম। `Option` টাইপটি খুব সাধারণ পরিস্থিতিকে এনকোড করে যেখানে একটি মান কিছু হতে পারে বা কিছুই নাও হতে পারে।
 
-For example, if you request the first item in a non-empty list, you would get
-a value. If you request the first item in an empty list, you would get nothing.
-Expressing this concept in terms of the type system means the compiler can
-check whether you’ve handled all the cases you should be handling; this
-functionality can prevent bugs that are extremely common in other programming
-languages.
+উদাহরণস্বরূপ, আপনি যদি একটি খালি নয় এমন তালিকার প্রথম আইটেমটির অনুরোধ করেন, তাহলে আপনি একটি মান পাবেন। আপনি যদি একটি খালি তালিকার প্রথম আইটেমটির অনুরোধ করেন, তাহলে আপনি কিছুই পাবেন না। টাইপ সিস্টেমের পরিপ্রেক্ষিতে এই ধারণাটি প্রকাশ করার অর্থ হল কম্পাইলার পরীক্ষা করতে পারে যে আপনি যে সমস্ত ক্ষেত্রগুলো হ্যান্ডেল করা উচিত সেগুলো হ্যান্ডেল করেছেন কিনা; এই কার্যকারিতা অন্যান্য প্রোগ্রামিং ল্যাঙ্গুয়েজে অত্যন্ত সাধারণ বাগগুলো প্রতিরোধ করতে পারে।
 
-Programming language design is often thought of in terms of which features you
-include, but the features you exclude are important too. Rust doesn’t have the
-null feature that many other languages have. _Null_ is a value that means there
-is no value there. In languages with null, variables can always be in one of
-two states: null or not-null.
+প্রোগ্রামিং ল্যাঙ্গুয়েজ ডিজাইন প্রায়শই কোন ফিচারগুলো আপনি অন্তর্ভুক্ত করেন তার পরিপ্রেক্ষিতে ভাবা হয়, তবে আপনি যে ফিচারগুলো বাদ দেন সেগুলোও গুরুত্বপূর্ণ। Rust-এর নাল (null) ফিচার নেই যা অন্য অনেক ভাষার আছে। *নাল* হল এমন একটি মান যার অর্থ সেখানে কোনো মান নেই। নাল সহ ভাষাগুলোতে, ভেরিয়েবলগুলো সর্বদাই দুটি অবস্থার মধ্যে একটিতে থাকতে পারে: নাল বা নাল-নয়।
 
-In his 2009 presentation “Null References: The Billion Dollar Mistake,” Tony
-Hoare, the inventor of null, has this to say:
+২০০৯ সালে তার উপস্থাপনা “Null References: The Billion Dollar Mistake,”-এ নালের উদ্ভাবক টনি হোর (Tony Hoare) এটি বলেছেন:
 
-> I call it my billion-dollar mistake. At that time, I was designing the first
-> comprehensive type system for references in an object-oriented language. My
-> goal was to ensure that all use of references should be absolutely safe, with
-> checking performed automatically by the compiler. But I couldn’t resist the
-> temptation to put in a null reference, simply because it was so easy to
-> implement. This has led to innumerable errors, vulnerabilities, and system
-> crashes, which have probably caused a billion dollars of pain and damage in
-> the last forty years.
+> আমি এটিকে আমার বিলিয়ন-ডলার ভুল বলি। সেই সময়ে, আমি একটি অবজেক্ট-ওরিয়েন্টেড ভাষায় রেফারেন্সের জন্য প্রথম ব্যাপক টাইপ সিস্টেম ডিজাইন করছিলাম। আমার লক্ষ্য ছিল নিশ্চিত করা যে রেফারেন্সের সমস্ত ব্যবহার যেন একেবারে নিরাপদ হয়, কম্পাইলার দ্বারা স্বয়ংক্রিয়ভাবে পরীক্ষা করা হয়। কিন্তু আমি একটি নাল রেফারেন্স রাখার প্রলোভন প্রতিরোধ করতে পারিনি, কারণ এটি বাস্তবায়ন করা খুব সহজ ছিল। এটি অসংখ্য এরর, দুর্বলতা এবং সিস্টেম ক্র্যাশের দিকে পরিচালিত করেছে, যা সম্ভবত গত চল্লিশ বছরে এক বিলিয়ন ডলারের কষ্ট এবং ক্ষতির কারণ হয়েছে।
 
-The problem with null values is that if you try to use a null value as a
-not-null value, you’ll get an error of some kind. Because this null or not-null
-property is pervasive, it’s extremely easy to make this kind of error.
+নাল মানগুলোর সমস্যা হল যে আপনি যদি একটি নাল মানকে নাল-নয় মান হিসাবে ব্যবহার করার চেষ্টা করেন, তাহলে আপনি কোনো না কোনো ধরনের এরর পাবেন। যেহেতু এই নাল বা নাল-নয় বৈশিষ্ট্যটি ব্যাপক, তাই এই ধরনের এরর করা অত্যন্ত সহজ।
 
-However, the concept that null is trying to express is still a useful one: a
-null is a value that is currently invalid or absent for some reason.
+যাইহোক, নাল যে ধারণাটি প্রকাশ করার চেষ্টা করছে সেটি এখনও একটি দরকারী ধারণা: একটি নাল হল এমন একটি মান যা বর্তমানে কোনো কারণে অবৈধ বা অনুপস্থিত।
 
-The problem isn’t really with the concept but with the particular
-implementation. As such, Rust does not have nulls, but it does have an enum
-that can encode the concept of a value being present or absent. This enum is
-`Option<T>`, and it is [defined by the standard library][option]<!-- ignore -->
-as follows:
+সমস্যাটি আসলে ধারণার সাথে নয়, নির্দিষ্ট বাস্তবায়নের সাথে। সেই অনুযায়ী, Rust-এর নাল নেই, তবে এটিতে একটি এনাম রয়েছে যা একটি মান উপস্থিত বা অনুপস্থিত থাকার ধারণাটিকে এনকোড করতে পারে। এই এনামটি হল `Option<T>`, এবং এটি [স্ট্যান্ডার্ড লাইব্রেরি দ্বারা সংজ্ঞায়িত][option]<!-- ignore --> করা হয়েছে এইভাবে:
 
 ```rust
 enum Option<T> {
@@ -237,89 +141,39 @@ enum Option<T> {
 }
 ```
 
-The `Option<T>` enum is so useful that it’s even included in the prelude; you
-don’t need to bring it into scope explicitly. Its variants are also included in
-the prelude: you can use `Some` and `None` directly without the `Option::`
-prefix. The `Option<T>` enum is still just a regular enum, and `Some(T)` and
-`None` are still variants of type `Option<T>`.
+`Option<T>` এনামটি এতটাই দরকারী যে এটি প্রেলিউডে (prelude) অন্তর্ভুক্ত করা হয়েছে; আপনাকে এটিকে স্পষ্টতই স্কোপে আনতে হবে না। এর ভেরিয়েন্টগুলোও প্রেলিউডে অন্তর্ভুক্ত করা হয়েছে: আপনি সরাসরি `Option::` উপসর্গ ছাড়াই `Some` এবং `None` ব্যবহার করতে পারেন। `Option<T>` এনামটি এখনও একটি নিয়মিত এনাম এবং `Some(T)` এবং `None` এখনও `Option<T>` টাইপের ভেরিয়েন্ট।
 
-The `<T>` syntax is a feature of Rust we haven’t talked about yet. It’s a
-generic type parameter, and we’ll cover generics in more detail in Chapter 10.
-For now, all you need to know is that `<T>` means that the `Some` variant of
-the `Option` enum can hold one piece of data of any type, and that each
-concrete type that gets used in place of `T` makes the overall `Option<T>` type
-a different type. Here are some examples of using `Option` values to hold
-number types and char types:
+`<T>` সিনট্যাক্স হল Rust-এর একটি ফিচার যা নিয়ে আমরা এখনও কথা বলিনি। এটি একটি জেনেরিক টাইপ প্যারামিটার এবং আমরা চ্যাপ্টার ১০-এ জেনেরিকগুলো নিয়ে আরও বিস্তারিত আলোচনা করব। আপাতত, আপনাকে শুধু জানতে হবে যে `<T>` মানে হল `Option` এনামের `Some` ভেরিয়েন্টটি যেকোনো টাইপের এক টুকরো ডেটা ধারণ করতে পারে এবং `T`-এর পরিবর্তে ব্যবহৃত প্রতিটি কংক্রিট টাইপ সামগ্রিক `Option<T>` টাইপটিকে একটি ভিন্ন টাইপ করে তোলে। এখানে সংখ্যা টাইপ এবং অক্ষর টাইপ ধারণ করতে `Option` মান ব্যবহারের কিছু উদাহরণ দেওয়া হল:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-06-option-examples/src/main.rs:here}}
 ```
 
-The type of `some_number` is `Option<i32>`. The type of `some_char` is
-`Option<char>`, which is a different type. Rust can infer these types because
-we’ve specified a value inside the `Some` variant. For `absent_number`, Rust
-requires us to annotate the overall `Option` type: the compiler can’t infer the
-type that the corresponding `Some` variant will hold by looking only at a
-`None` value. Here, we tell Rust that we mean for `absent_number` to be of type
-`Option<i32>`.
+`some_number`-এর টাইপ হল `Option<i32>`। `some_char`-এর টাইপ হল `Option<char>`, যেটি একটি ভিন্ন টাইপ। Rust এই টাইপগুলো অনুমান করতে পারে কারণ আমরা `Some` ভেরিয়েন্টের ভিতরে একটি মান নির্দিষ্ট করেছি। `absent_number`-এর জন্য, Rust আমাদের সামগ্রিক `Option` টাইপটি অ্যানোটেট করতে বলে: কম্পাইলার শুধুমাত্র একটি `None` মান দেখে সংশ্লিষ্ট `Some` ভেরিয়েন্টটি কী টাইপ ধারণ করবে তা অনুমান করতে পারে না। এখানে, আমরা Rust-কে বলি যে আমরা চাই `absent_number`-এর টাইপ `Option<i32>` হোক।
 
-When we have a `Some` value, we know that a value is present and the value is
-held within the `Some`. When we have a `None` value, in some sense it means the
-same thing as null: we don’t have a valid value. So why is having `Option<T>`
-any better than having null?
+যখন আমাদের কাছে একটি `Some` মান থাকে, তখন আমরা জানি যে একটি মান উপস্থিত রয়েছে এবং মানটি `Some`-এর মধ্যে রয়েছে। যখন আমাদের কাছে একটি `None` মান থাকে, তখন এক অর্থে এর অর্থ নালের মতোই: আমাদের কাছে একটি বৈধ মান নেই। তাহলে `Option<T>` থাকা নাল থাকার চেয়ে ভালো কেন?
 
-In short, because `Option<T>` and `T` (where `T` can be any type) are different
-types, the compiler won’t let us use an `Option<T>` value as if it were
-definitely a valid value. For example, this code won’t compile, because it’s
-trying to add an `i8` to an `Option<i8>`:
+সংক্ষেপে, যেহেতু `Option<T>` এবং `T` (যেখানে `T` যেকোনো টাইপ হতে পারে) ভিন্ন টাইপ, তাই কম্পাইলার আমাদের একটি `Option<T>` মানকে নিশ্চিতভাবে একটি বৈধ মান হিসাবে ব্যবহার করতে দেবে না। উদাহরণস্বরূপ, এই কোডটি কম্পাইল হবে না, কারণ এটি একটি `i8`-এর সাথে একটি `Option<i8>` যোগ করার চেষ্টা করছে:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-07-cant-use-option-directly/src/main.rs:here}}
 ```
 
-If we run this code, we get an error message like this one:
+যদি আমরা এই কোডটি চালাই, তাহলে আমরা এইরকম একটি এরর মেসেজ পাব:
 
 ```console
 {{#include ../listings/ch06-enums-and-pattern-matching/no-listing-07-cant-use-option-directly/output.txt}}
 ```
 
-Intense! In effect, this error message means that Rust doesn’t understand how
-to add an `i8` and an `Option<i8>`, because they’re different types. When we
-have a value of a type like `i8` in Rust, the compiler will ensure that we
-always have a valid value. We can proceed confidently without having to check
-for null before using that value. Only when we have an `Option<i8>` (or
-whatever type of value we’re working with) do we have to worry about possibly
-not having a value, and the compiler will make sure we handle that case before
-using the value.
+দারুণ! আসলে, এই এরর মেসেজটির অর্থ হল Rust বুঝতে পারছে না কিভাবে একটি `i8` এবং একটি `Option<i8>` যোগ করতে হয়, কারণ তারা ভিন্ন টাইপ। যখন Rust-এ আমাদের `i8`-এর মতো একটি টাইপের মান থাকে, তখন কম্পাইলার নিশ্চিত করবে যে আমাদের কাছে সর্বদাই একটি বৈধ মান রয়েছে। আমরা সেই মানটি ব্যবহার করার আগে নালের জন্য পরীক্ষা না করেই আত্মবিশ্বাসের সাথে এগিয়ে যেতে পারি। শুধুমাত্র যখন আমাদের কাছে একটি `Option<i8>` থাকে (অথবা আমরা যে মানের টাইপ নিয়ে কাজ করছি) তখনই আমাদের একটি মান নাও থাকতে পারে এমন বিষয়ে চিন্তা করতে হবে এবং কম্পাইলার নিশ্চিত করবে যে আমরা মানটি ব্যবহার করার আগে সেই ক্ষেত্রটি হ্যান্ডেল করেছি।
 
-In other words, you have to convert an `Option<T>` to a `T` before you can
-perform `T` operations with it. Generally, this helps catch one of the most
-common issues with null: assuming that something isn’t null when it actually is.
+অন্য কথায়, আপনি `Option<T>`-এর সাথে `T` অপারেশনগুলো সম্পাদন করার আগে আপনাকে এটিকে `T`-তে রূপান্তর করতে হবে। সাধারণত, এটি নালের সাথে সবচেয়ে সাধারণ সমস্যাগুলোর মধ্যে একটি ধরতে সাহায্য করে: এমন কিছুকে নাল নয় বলে ধরে নেওয়া যা আসলে নাল।
 
-Eliminating the risk of incorrectly assuming a not-null value helps you to be
-more confident in your code. In order to have a value that can possibly be
-null, you must explicitly opt in by making the type of that value `Option<T>`.
-Then, when you use that value, you are required to explicitly handle the case
-when the value is null. Everywhere that a value has a type that isn’t an
-`Option<T>`, you _can_ safely assume that the value isn’t null. This was a
-deliberate design decision for Rust to limit null’s pervasiveness and increase
-the safety of Rust code.
+একটি নাল-নয় মান ভুলভাবে ধরে নেওয়ার ঝুঁকি দূর করা আপনাকে আপনার কোডে আরও আত্মবিশ্বাসী হতে সাহায্য করে। এমন একটি মান থাকতে যা সম্ভবত নাল হতে পারে, আপনাকে অবশ্যই স্পষ্টতই অপ্ট ইন করতে হবে সেই মানটির টাইপ `Option<T>` করে। তারপর, যখন আপনি সেই মানটি ব্যবহার করেন, তখন আপনাকে স্পষ্টতই সেই ক্ষেত্রটি হ্যান্ডেল করতে হবে যখন মানটি নাল হয়। যেখানেই একটি মানের টাইপ `Option<T>` নয়, সেখানে আপনি নিরাপদে ধরে নিতে পারেন যে মানটি নাল নয়। Rust-এর জন্য এটি একটি ইচ্ছাকৃত ডিজাইনের সিদ্ধান্ত ছিল নালের ব্যাপকতা সীমিত করতে এবং Rust কোডের নিরাপত্তা বাড়াতে।
 
-So how do you get the `T` value out of a `Some` variant when you have a value
-of type `Option<T>` so that you can use that value? The `Option<T>` enum has a
-large number of methods that are useful in a variety of situations; you can
-check them out in [its documentation][docs]<!-- ignore -->. Becoming familiar
-with the methods on `Option<T>` will be extremely useful in your journey with
-Rust.
+তাহলে আপনি কীভাবে একটি `Option<T>` টাইপের মান থাকলে `Some` ভেরিয়েন্ট থেকে `T` মানটি বের করবেন যাতে আপনি সেই মানটি ব্যবহার করতে পারেন? `Option<T>` এনামের বিভিন্ন পরিস্থিতিতে দরকারী প্রচুর সংখ্যক মেথড রয়েছে; আপনি [এর ডকুমেন্টেশনে][docs]<!-- ignore --> সেগুলো দেখতে পারেন। `Option<T>`-এর মেথডগুলোর সাথে পরিচিত হওয়া আপনার Rust যাত্রায় অত্যন্ত দরকারী হবে।
 
-In general, in order to use an `Option<T>` value, you want to have code that
-will handle each variant. You want some code that will run only when you have a
-`Some(T)` value, and this code is allowed to use the inner `T`. You want some
-other code to run only if you have a `None` value, and that code doesn’t have a
-`T` value available. The `match` expression is a control flow construct that
-does just this when used with enums: it will run different code depending on
-which variant of the enum it has, and that code can use the data inside the
-matching value.
+সাধারণভাবে, একটি `Option<T>` মান ব্যবহার করার জন্য, আপনি প্রতিটি ভেরিয়েন্ট হ্যান্ডেল করার জন্য কোড রাখতে চান। আপনি কিছু কোড চান যা শুধুমাত্র তখনই চলবে যখন আপনার কাছে একটি `Some(T)` মান থাকবে এবং এই কোডটিকে ভিতরের `T` ব্যবহার করার অনুমতি দেওয়া হয়। আপনার কাছে যদি একটি `None` মান থাকে তবে আপনি অন্য কিছু কোড চালাতে চান এবং সেই কোডে একটি `T` মান উপলব্ধ নেই। `match` এক্সপ্রেশন হল একটি কন্ট্রোল ফ্লো কনস্ট্রাক্ট যা এনামগুলোর সাথে ব্যবহার করার সময় ঠিক এটিই করে: এটি এনামের কোন ভেরিয়েন্ট রয়েছে তার উপর নির্ভর করে ভিন্ন কোড চালাবে এবং সেই কোডটি মিলিত মানের ভিতরের ডেটা ব্যবহার করতে পারে।
 
 [IpAddr]: ../std/net/enum.IpAddr.html
 [option]: ../std/option/enum.Option.html

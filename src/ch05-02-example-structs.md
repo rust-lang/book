@@ -1,15 +1,10 @@
-## An Example Program Using Structs
+## স্ট্রাকট ব্যবহার করে একটি উদাহরণ প্রোগ্রাম (An Example Program Using Structs)
 
-To understand when we might want to use structs, let’s write a program that
-calculates the area of a rectangle. We’ll start by using single variables, and
-then refactor the program until we’re using structs instead.
+কখন আমরা স্ট্রাকট ব্যবহার করতে চাইতে পারি তা বোঝার জন্য, আসুন একটি প্রোগ্রাম লিখি যা একটি আয়তক্ষেত্রের ক্ষেত্রফল গণনা করে। আমরা প্রথমে আলাদা ভেরিয়েবল ব্যবহার করে শুরু করব, এবং তারপর স্ট্রাকট ব্যবহার না করা পর্যন্ত প্রোগ্রামটিকে রিফ্যাক্টর (refactor) করব।
 
-Let’s make a new binary project with Cargo called _rectangles_ that will take
-the width and height of a rectangle specified in pixels and calculate the area
-of the rectangle. Listing 5-8 shows a short program with one way of doing
-exactly that in our project’s _src/main.rs_.
+আসুন, Cargo দিয়ে _rectangles_ নামে একটি নতুন বাইনারি প্রোজেক্ট তৈরি করি, যেটি পিক্সেলের সাপেক্ষে একটি আয়তক্ষেত্রের প্রস্থ এবং উচ্চতা নেবে এবং আয়তক্ষেত্রটির ক্ষেত্রফল গণনা করবে। Listing 5-8 আমাদের প্রোজেক্টের _src/main.rs_-এ ঠিক এটি করার একটি সংক্ষিপ্ত প্রোগ্রাম দেখায়।
 
-<Listing number="5-8" file-name="src/main.rs" caption="Calculating the area of a rectangle specified by separate width and height variables">
+<Listing number="5-8" file-name="src/main.rs" caption="আলাদা প্রস্থ এবং উচ্চতা ভেরিয়েবল দ্বারা নির্দিষ্ট করা একটি আয়তক্ষেত্রের ক্ষেত্রফল গণনা করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-08/src/main.rs:all}}
@@ -17,34 +12,27 @@ exactly that in our project’s _src/main.rs_.
 
 </Listing>
 
-Now, run this program using `cargo run`:
+এবার, `cargo run` ব্যবহার করে এই প্রোগ্রামটি চালান:
 
 ```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-08/output.txt}}
 ```
 
-This code succeeds in figuring out the area of the rectangle by calling the
-`area` function with each dimension, but we can do more to make this code clear
-and readable.
+এই কোডটি প্রতিটি ডাইমেনশন (dimension) দিয়ে `area` ফাংশন কল করে আয়তক্ষেত্রের ক্ষেত্রফল বের করতে সফল হয়, কিন্তু আমরা এই কোডটিকে আরও স্পষ্ট এবং পাঠযোগ্য করতে পারি।
 
-The issue with this code is evident in the signature of `area`:
+এই কোডের সমস্যাটি `area`-এর সিগনেচারে স্পষ্ট:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-08/src/main.rs:here}}
 ```
 
-The `area` function is supposed to calculate the area of one rectangle, but the
-function we wrote has two parameters, and it’s not clear anywhere in our
-program that the parameters are related. It would be more readable and more
-manageable to group width and height together. We’ve already discussed one way
-we might do that in [“The Tuple Type”][the-tuple-type]<!-- ignore --> section
-of Chapter 3: by using tuples.
+`area` ফাংশনটি একটি আয়তক্ষেত্রের ক্ষেত্রফল গণনা করার কথা, কিন্তু আমরা যে ফাংশনটি লিখেছি তাতে দুটি প্যারামিটার রয়েছে এবং আমাদের প্রোগ্রামে এটি কোথাও স্পষ্ট নয় যে প্যারামিটারগুলো সম্পর্কিত। প্রস্থ এবং উচ্চতাকে একসাথে গ্রুপ করা আরও পাঠযোগ্য এবং পরিচালনাযোগ্য হবে। আমরা ইতিমধ্যেই চ্যাপ্টার ৩-এর [“টাপল টাইপ”][the-tuple-type]<!-- ignore --> বিভাগে এটি করার একটি উপায় নিয়ে আলোচনা করেছি: টাপল ব্যবহার করে।
 
-### Refactoring with Tuples
+### টাপল দিয়ে রিফ্যাক্টরিং (Refactoring with Tuples)
 
-Listing 5-9 shows another version of our program that uses tuples.
+Listing 5-9 আমাদের প্রোগ্রামের আরেকটি ভার্সন দেখায় যা টাপল ব্যবহার করে।
 
-<Listing number="5-9" file-name="src/main.rs" caption="Specifying the width and height of the rectangle with a tuple">
+<Listing number="5-9" file-name="src/main.rs" caption="একটি টাপল দিয়ে আয়তক্ষেত্রের প্রস্থ এবং উচ্চতা নির্দিষ্ট করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-09/src/main.rs}}
@@ -52,25 +40,15 @@ Listing 5-9 shows another version of our program that uses tuples.
 
 </Listing>
 
-In one way, this program is better. Tuples let us add a bit of structure, and
-we’re now passing just one argument. But in another way, this version is less
-clear: tuples don’t name their elements, so we have to index into the parts of
-the tuple, making our calculation less obvious.
+একভাবে, এই প্রোগ্রামটি ভাল। টাপলগুলো আমাদের কিছুটা স্ট্রাকচার যুক্ত করতে দেয় এবং আমরা এখন কেবল একটি আর্গুমেন্ট পাস করছি। কিন্তু অন্যভাবে, এই ভার্সনটি কম স্পষ্ট: টাপলগুলো তাদের উপাদানগুলোর নাম দেয় না, তাই আমাদেরকে টাপলের অংশগুলোতে ইনডেক্স করতে হবে, যা আমাদের গণনাকে কম সুস্পষ্ট করে তোলে।
 
-Mixing up the width and height wouldn’t matter for the area calculation, but if
-we want to draw the rectangle on the screen, it would matter! We would have to
-keep in mind that `width` is the tuple index `0` and `height` is the tuple
-index `1`. This would be even harder for someone else to figure out and keep in
-mind if they were to use our code. Because we haven’t conveyed the meaning of
-our data in our code, it’s now easier to introduce errors.
+ক্ষেত্রফল গণনার জন্য প্রস্থ এবং উচ্চতা মিশিয়ে ফেললে কিছু যায় আসে না, কিন্তু আমরা যদি স্ক্রিনে আয়তক্ষেত্রটি আঁকতে চাই, তাহলে সেটি গুরুত্বপূর্ণ হবে! আমাদের মনে রাখতে হবে যে `width` হল টাপল ইনডেক্স `0` এবং `height` হল টাপল ইনডেক্স `1`। অন্য কারও জন্য এটি বোঝা এবং মনে রাখা আরও কঠিন হবে যদি তারা আমাদের কোড ব্যবহার করে। যেহেতু আমরা আমাদের কোডে আমাদের ডেটার অর্থ প্রকাশ করিনি, তাই এখন এরর আনা সহজ।
 
-### Refactoring with Structs: Adding More Meaning
+### স্ট্রাকট দিয়ে রিফ্যাক্টরিং: আরও অর্থ যোগ করা (Refactoring with Structs: Adding More Meaning)
 
-We use structs to add meaning by labeling the data. We can transform the tuple
-we’re using into a struct with a name for the whole as well as names for the
-parts, as shown in Listing 5-10.
+আমরা ডেটাকে লেবেল করে অর্থ যোগ করতে স্ট্রাকট ব্যবহার করি। আমরা যে টাপলটি ব্যবহার করছি সেটিকে আমরা সম্পূর্ণ অংশের জন্য একটি নাম এবং অংশগুলোর জন্য নাম সহ একটি স্ট্রাকটে রূপান্তর করতে পারি, যেমনটি Listing 5-10-এ দেখানো হয়েছে।
 
-<Listing number="5-10" file-name="src/main.rs" caption="Defining a `Rectangle` struct">
+<Listing number="5-10" file-name="src/main.rs" caption="একটি `Rectangle` স্ট্রাকট সংজ্ঞায়িত করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-10/src/main.rs}}
@@ -78,35 +56,17 @@ parts, as shown in Listing 5-10.
 
 </Listing>
 
-Here we’ve defined a struct and named it `Rectangle`. Inside the curly
-brackets, we defined the fields as `width` and `height`, both of which have
-type `u32`. Then, in `main`, we created a particular instance of `Rectangle`
-that has a width of `30` and a height of `50`.
+এখানে আমরা একটি স্ট্রাকট সংজ্ঞায়িত করেছি এবং এর নাম দিয়েছি `Rectangle`। কার্লি ব্র্যাকেটের ভিতরে, আমরা ফিল্ডগুলোকে `width` এবং `height` হিসাবে সংজ্ঞায়িত করেছি, যেগুলোর উভয়ের টাইপ `u32`। তারপর, `main`-এ, আমরা `Rectangle`-এর একটি নির্দিষ্ট ইন্সট্যান্স তৈরি করেছি যার প্রস্থ `30` এবং উচ্চতা `50`।
 
-Our `area` function is now defined with one parameter, which we’ve named
-`rectangle`, whose type is an immutable borrow of a struct `Rectangle`
-instance. As mentioned in Chapter 4, we want to borrow the struct rather than
-take ownership of it. This way, `main` retains its ownership and can continue
-using `rect1`, which is the reason we use the `&` in the function signature and
-where we call the function.
+আমাদের `area` ফাংশনটি এখন একটি প্যারামিটার দিয়ে সংজ্ঞায়িত করা হয়েছে, যার নাম আমরা দিয়েছি `rectangle`, যার টাইপ হল একটি স্ট্রাকট `Rectangle` ইন্সট্যান্সের ইমিউটেবল বোরো। চ্যাপ্টার ৪-এ যেমন উল্লেখ করা হয়েছে, আমরা স্ট্রাকটটির ওনারশিপ নেওয়ার পরিবর্তে বোরো করতে চাই। এইভাবে, `main` তার ওনারশিপ বজায় রাখে এবং `rect1` ব্যবহার করা চালিয়ে যেতে পারে, যে কারণে আমরা ফাংশন সিগনেচারে এবং যেখানে আমরা ফাংশনটি কল করি সেখানে `&` ব্যবহার করি।
 
-The `area` function accesses the `width` and `height` fields of the `Rectangle`
-instance (note that accessing fields of a borrowed struct instance does not
-move the field values, which is why you often see borrows of structs). Our
-function signature for `area` now says exactly what we mean: calculate the area
-of `Rectangle`, using its `width` and `height` fields. This conveys that the
-width and height are related to each other, and it gives descriptive names to
-the values rather than using the tuple index values of `0` and `1`. This is a
-win for clarity.
+`area` ফাংশনটি `Rectangle` ইন্সট্যান্সের `width` এবং `height` ফিল্ড অ্যাক্সেস করে (মনে রাখবেন যে একটি ধার করা স্ট্রাকট ইন্সট্যান্সের ফিল্ডগুলো অ্যাক্সেস করলে ফিল্ডের মানগুলো সরানো হয় না, যে কারণে আপনি প্রায়শই স্ট্রাকটগুলোর বোরো দেখতে পান)। `area`-এর জন্য আমাদের ফাংশন সিগনেচারটি এখন ঠিক সেটাই বলে যা আমরা বোঝাতে চাই: `Rectangle`-এর ক্ষেত্রফল গণনা করুন, এর `width` এবং `height` ফিল্ড ব্যবহার করে। এটি প্রকাশ করে যে প্রস্থ এবং উচ্চতা একে অপরের সাথে সম্পর্কিত এবং এটি `0` এবং `1`-এর টাপল ইনডেক্স মানগুলো ব্যবহার করার পরিবর্তে মানগুলোকে বর্ণনামূলক নাম দেয়। এটি স্পষ্টতার জন্য একটি জয়।
 
-### Adding Useful Functionality with Derived Traits
+### ডিরাইভড ট্রেইট দিয়ে দরকারী কার্যকারিতা যোগ করা (Adding Useful Functionality with Derived Traits)
 
-It’d be useful to be able to print an instance of `Rectangle` while we’re
-debugging our program and see the values for all its fields. Listing 5-11 tries
-using the [`println!` macro][println]<!-- ignore --> as we have used in
-previous chapters. This won’t work, however.
+আমরা যখন আমাদের প্রোগ্রাম ডিবাগ করছি তখন `Rectangle`-এর একটি ইন্সট্যান্স প্রিন্ট করতে এবং এর সমস্ত ফিল্ডের মান দেখতে পারা দরকারী হবে। Listing 5-11 আগের চ্যাপ্টারগুলোতে ব্যবহৃত [`println!` ম্যাক্রো][println]<!-- ignore --> ব্যবহার করার চেষ্টা করে। তবে, এটি কাজ করবে না।
 
-<Listing number="5-11" file-name="src/main.rs" caption="Attempting to print a `Rectangle` instance">
+<Listing number="5-11" file-name="src/main.rs" caption="একটি `Rectangle` ইন্সট্যান্স প্রিন্ট করার চেষ্টা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/src/main.rs}}
@@ -114,53 +74,37 @@ previous chapters. This won’t work, however.
 
 </Listing>
 
-When we compile this code, we get an error with this core message:
+আমরা যখন এই কোডটি কম্পাইল করি, তখন আমরা এই মূল মেসেজ সহ একটি এরর পাই:
 
 ```text
 {{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/output.txt:3}}
 ```
 
-The `println!` macro can do many kinds of formatting, and by default, the curly
-brackets tell `println!` to use formatting known as `Display`: output intended
-for direct end user consumption. The primitive types we’ve seen so far
-implement `Display` by default because there’s only one way you’d want to show
-a `1` or any other primitive type to a user. But with structs, the way
-`println!` should format the output is less clear because there are more
-display possibilities: Do you want commas or not? Do you want to print the
-curly brackets? Should all the fields be shown? Due to this ambiguity, Rust
-doesn’t try to guess what we want, and structs don’t have a provided
-implementation of `Display` to use with `println!` and the `{}` placeholder.
+`println!` ম্যাক্রো অনেক ধরনের ফরম্যাটিং করতে পারে এবং ডিফল্টরূপে, কার্লি ব্র্যাকেটগুলো `println!`-কে `Display` নামে পরিচিত ফরম্যাটিং ব্যবহার করতে বলে: সরাসরি শেষ ব্যবহারকারীর ব্যবহারের জন্য উদ্দিষ্ট আউটপুট। আমরা ఇప్పటి পর্যন্ত যে প্রিমিটিভ টাইপগুলো দেখেছি সেগুলো ডিফল্টরূপে `Display` ইমপ্লিমেন্ট করে কারণ ব্যবহারকারীর কাছে `1` বা অন্য কোনো প্রিমিটিভ টাইপ দেখানোর একটিমাত্র উপায় রয়েছে। কিন্তু স্ট্রাকটগুলোর সাথে, `println!` কীভাবে আউটপুট ফরম্যাট করবে তা কম স্পষ্ট কারণ আরও প্রদর্শনের সম্ভাবনা রয়েছে: আপনি কি কমা চান নাকি চান না? আপনি কি কার্লি ব্র্যাকেটগুলো প্রিন্ট করতে চান? সমস্ত ফিল্ড দেখানো উচিত? এই অস্পষ্টতার কারণে, Rust আমরা কী চাই তা অনুমান করার চেষ্টা করে না এবং স্ট্রাকটগুলোতে `println!` এবং `{}` প্লেসহোল্ডারের সাথে ব্যবহার করার জন্য `Display`-এর কোনো প্রদত্ত ইমপ্লিমেন্টেশন নেই।
 
-If we continue reading the errors, we’ll find this helpful note:
+আমরা যদি এররগুলো পড়া চালিয়ে যাই, তাহলে আমরা এই সহায়ক নোটটি খুঁজে পাব:
 
 ```text
 {{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/output.txt:9:10}}
 ```
 
-Let’s try it! The `println!` macro call will now look like `println!("rect1 is
-{rect1:?}");`. Putting the specifier `:?` inside the curly brackets tells
-`println!` we want to use an output format called `Debug`. The `Debug` trait
-enables us to print our struct in a way that is useful for developers so we can
-see its value while we’re debugging our code.
+চলুন চেষ্টা করি! `println!` ম্যাক্রো কলটি এখন `println!("rect1 is {rect1:?}");`-এর মতো হবে। কার্লি ব্র্যাকেটগুলোর ভিতরে `:?` স্পেসিফায়ার রাখলে `println!`-কে বলা হয় যে আমরা `Debug` নামক একটি আউটপুট ফর্ম্যাট ব্যবহার করতে চাই। `Debug` ট্রেইটটি আমাদের স্ট্রাকটটিকে এমনভাবে প্রিন্ট করতে সক্ষম করে যা ডেভেলপারদের জন্য দরকারী, যাতে আমরা আমাদের কোড ডিবাগ করার সময় এর মান দেখতে পারি।
 
-Compile the code with this change. Drat! We still get an error:
+এই পরিবর্তন সহ কোড কম্পাইল করুন। ধুর! আমরা এখনও একটি এরর পাই:
 
 ```text
 {{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:3}}
 ```
 
-But again, the compiler gives us a helpful note:
+কিন্তু আবারও, কম্পাইলার আমাদের একটি সহায়ক নোট দেয়:
 
 ```text
 {{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:9:10}}
 ```
 
-Rust _does_ include functionality to print out debugging information, but we
-have to explicitly opt in to make that functionality available for our struct.
-To do that, we add the outer attribute `#[derive(Debug)]` just before the
-struct definition, as shown in Listing 5-12.
+Rust-এ ডিবাগিং তথ্য প্রিন্ট করার কার্যকারিতা *অন্তর্ভুক্ত*, কিন্তু আমাদের স্ট্রাকটের জন্য সেই কার্যকারিতা উপলব্ধ করতে স্পষ্টভাবে অপ্ট ইন করতে হবে। সেটি করার জন্য, আমরা স্ট্রাকট সংজ্ঞার ঠিক আগে আউটার অ্যাট্রিবিউট `#[derive(Debug)]` যোগ করি, যেমনটি Listing 5-12-তে দেখানো হয়েছে।
 
-<Listing number="5-12" file-name="src/main.rs" caption="Adding the attribute to derive the `Debug` trait and printing the `Rectangle` instance using debug formatting">
+<Listing number="5-12" file-name="src/main.rs" caption="`Debug` ট্রেইট ডিরাইভ করার জন্য অ্যাট্রিবিউট যোগ করা এবং ডিবাগ ফরম্যাটিং ব্যবহার করে `Rectangle` ইন্সট্যান্স প্রিন্ট করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-12/src/main.rs}}
@@ -168,73 +112,39 @@ struct definition, as shown in Listing 5-12.
 
 </Listing>
 
-Now when we run the program, we won’t get any errors, and we’ll see the
-following output:
+এখন আমরা যখন প্রোগ্রামটি চালাই, তখন আমরা কোনো এরর পাব না এবং আমরা নিম্নলিখিত আউটপুট দেখতে পাব:
 
 ```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-12/output.txt}}
 ```
 
-Nice! It’s not the prettiest output, but it shows the values of all the fields
-for this instance, which would definitely help during debugging. When we have
-larger structs, it’s useful to have output that’s a bit easier to read; in
-those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string. In
-this example, using the `{:#?}` style will output the following:
+দারুণ! এটি সবচেয়ে সুন্দর আউটপুট নয়, তবে এটি এই ইন্সট্যান্সের সমস্ত ফিল্ডের মান দেখায়, যা অবশ্যই ডিবাগিংয়ের সময় সাহায্য করবে। যখন আমাদের কাছে বড় স্ট্রাকট থাকে, তখন এমন আউটপুট পাওয়া দরকারী যা পড়া একটু সহজ; সেই ক্ষেত্রগুলোতে, আমরা `println!` স্ট্রিং-এ `{:?}`-এর পরিবর্তে `{:#?}` ব্যবহার করতে পারি। এই উদাহরণে, `{:#?}` স্টাইল ব্যবহার করলে নিম্নলিখিত আউটপুট আসবে:
 
 ```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-02-pretty-debug/output.txt}}
 ```
 
-Another way to print out a value using the `Debug` format is to use the [`dbg!`
-macro][dbg]<!-- ignore -->, which takes ownership of an expression (as opposed
-to `println!`, which takes a reference), prints the file and line number of
-where that `dbg!` macro call occurs in your code along with the resultant value
-of that expression, and returns ownership of the value.
+`Debug` ফর্ম্যাট ব্যবহার করে একটি মান প্রিন্ট করার আরেকটি উপায় হল [`dbg!` ম্যাক্রো][dbg]<!-- ignore --> ব্যবহার করা, যা একটি এক্সপ্রেশনের ওনারশিপ নেয় (`println!`-এর বিপরীতে, যেটি একটি রেফারেন্স নেয়), সেই `dbg!` ম্যাক্রো কলটি আপনার কোডের কোথায় ঘটছে তার ফাইল এবং লাইন নম্বর প্রিন্ট করে, সেই এক্সপ্রেশনের ফলাফলের মান সহ এবং মানের ওনারশিপ ফিরিয়ে দেয়।
 
-> Note: Calling the `dbg!` macro prints to the standard error console stream
-> (`stderr`), as opposed to `println!`, which prints to the standard output
-> console stream (`stdout`). We’ll talk more about `stderr` and `stdout` in the
-> [“Writing Error Messages to Standard Error Instead of Standard Output”
-> section in Chapter 12][err]<!-- ignore -->.
+> দ্রষ্টব্য: `dbg!` ম্যাক্রো কলটি স্ট্যান্ডার্ড এরর কনসোল স্ট্রিমে (`stderr`) প্রিন্ট করে, `println!`-এর বিপরীতে, যেটি স্ট্যান্ডার্ড আউটপুট কনসোল স্ট্রিমে (`stdout`) প্রিন্ট করে। আমরা চ্যাপ্টার ১২-এর [“স্ট্যান্ডার্ড আউটপুটের পরিবর্তে স্ট্যান্ডার্ড এরর-এ এরর মেসেজ লেখা”][err]<!-- ignore --> বিভাগে `stderr` এবং `stdout` সম্পর্কে আরও কথা বলব।
 
-Here’s an example where we’re interested in the value that gets assigned to the
-`width` field, as well as the value of the whole struct in `rect1`:
+এখানে একটি উদাহরণ দেওয়া হল যেখানে আমরা `width` ফিল্ডে অ্যাসাইন করা মান এবং `rect1`-এর সম্পূর্ণ স্ট্রাকটের মান জানতে আগ্রহী:
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-05-dbg-macro/src/main.rs}}
 ```
 
-We can put `dbg!` around the expression `30 * scale` and, because `dbg!`
-returns ownership of the expression’s value, the `width` field will get the
-same value as if we didn’t have the `dbg!` call there. We don’t want `dbg!` to
-take ownership of `rect1`, so we use a reference to `rect1` in the next call.
-Here’s what the output of this example looks like:
+আমরা `30 * scale` এক্সপ্রেশনের চারপাশে `dbg!` রাখতে পারি এবং যেহেতু `dbg!` এক্সপ্রেশনের মানের ওনারশিপ রিটার্ন করে, তাই `width` ফিল্ডটি একই মান পাবে যেন আমাদের সেখানে `dbg!` কল না থাকে। আমরা চাই না `dbg!` `rect1`-এর ওনারশিপ নিক, তাই আমরা পরের কলে `rect1`-এর একটি রেফারেন্স ব্যবহার করি। এই উদাহরণের আউটপুট দেখতে কেমন তা এখানে দেওয়া হল:
 
 ```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/no-listing-05-dbg-macro/output.txt}}
 ```
 
-We can see the first bit of output came from _src/main.rs_ line 10 where we’re
-debugging the expression `30 * scale`, and its resultant value is `60` (the
-`Debug` formatting implemented for integers is to print only their value). The
-`dbg!` call on line 14 of _src/main.rs_ outputs the value of `&rect1`, which is
-the `Rectangle` struct. This output uses the pretty `Debug` formatting of the
-`Rectangle` type. The `dbg!` macro can be really helpful when you’re trying to
-figure out what your code is doing!
+আমরা দেখতে পাচ্ছি যে আউটপুটের প্রথম অংশটি _src/main.rs_ লাইন ১০ থেকে এসেছে যেখানে আমরা `30 * scale` এক্সপ্রেশনটি ডিবাগ করছি এবং এর ফলাফলের মান হল `60` (ইন্টিজারগুলোর জন্য ইমপ্লিমেন্ট করা `Debug` ফরম্যাটিং হল শুধুমাত্র তাদের মান প্রিন্ট করা)। _src/main.rs_-এর ১৪ লাইনে `dbg!` কলটি `&rect1`-এর মান আউটপুট করে, যেটি হল `Rectangle` স্ট্রাকট। এই আউটপুটটি `Rectangle` টাইপের প্রিটি `Debug` ফরম্যাটিং ব্যবহার করে। আপনার কোড কী করছে তা বোঝার চেষ্টা করার সময় `dbg!` ম্যাক্রো সত্যিই সহায়ক হতে পারে!
 
-In addition to the `Debug` trait, Rust has provided a number of traits for us
-to use with the `derive` attribute that can add useful behavior to our custom
-types. Those traits and their behaviors are listed in [Appendix C][app-c]<!--
-ignore -->. We’ll cover how to implement these traits with custom behavior as
-well as how to create your own traits in Chapter 10. There are also many
-attributes other than `derive`; for more information, see [the “Attributes”
-section of the Rust Reference][attributes].
+`Debug` ট্রেইট ছাড়াও, Rust আমাদের `derive` অ্যাট্রিবিউট দিয়ে ব্যবহার করার জন্য বেশ কয়েকটি ট্রেইট সরবরাহ করেছে যা আমাদের কাস্টম টাইপগুলোতে দরকারী আচরণ যোগ করতে পারে। সেই ট্রেইটগুলো এবং তাদের আচরণগুলো [Appendix C][app-c]<!-- ignore -->-তে তালিকাভুক্ত করা হয়েছে। আমরা চ্যাপ্টার ১০-এ কাস্টম আচরণ সহ এই ট্রেইটগুলো কীভাবে ইমপ্লিমেন্ট করতে হয় এবং সেইসাথে কীভাবে আপনার নিজের ট্রেইট তৈরি করতে হয় তা কভার করব। `derive` ছাড়াও আরও অনেক অ্যাট্রিবিউট রয়েছে; আরও তথ্যের জন্য, [Rust রেফারেন্সের “অ্যাট্রিবিউটস” বিভাগ][attributes] দেখুন।
 
-Our `area` function is very specific: it only computes the area of rectangles.
-It would be helpful to tie this behavior more closely to our `Rectangle` struct
-because it won’t work with any other type. Let’s look at how we can continue to
-refactor this code by turning the `area` function into an `area` _method_
-defined on our `Rectangle` type.
+আমাদের `area` ফাংশনটি খুব নির্দিষ্ট: এটি শুধুমাত্র আয়তক্ষেত্রের ক্ষেত্রফল গণনা করে। এই আচরণটিকে আমাদের `Rectangle` স্ট্রাকটের সাথে আরও ঘনিষ্ঠভাবে যুক্ত করা সহায়ক হবে কারণ এটি অন্য কোনো টাইপের সাথে কাজ করবে না। চলুন দেখি কিভাবে আমরা এই কোডটিকে রিফ্যাক্টর করে `area` ফাংশনকে আমাদের `Rectangle` টাইপে সংজ্ঞায়িত একটি `area` *মেথডে* পরিণত করতে পারি।
 
 [the-tuple-type]: ch03-02-data-types.html#the-tuple-type
 [app-c]: appendix-03-derivable-traits.md
@@ -242,3 +152,5 @@ defined on our `Rectangle` type.
 [dbg]: ../std/macro.dbg.html
 [err]: ch12-06-writing-to-stderr-instead-of-stdout.html
 [attributes]: ../reference/attributes.html
+[move]: ch04-01-what-is-ownership.html#variables-and-data-interacting-with-move
+[copy]: ch04-01-what-is-ownership.html#stack-only-data-copy

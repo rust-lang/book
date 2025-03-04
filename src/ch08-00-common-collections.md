@@ -1,25 +1,13 @@
-# Common Collections
+# সাধারণ কালেকশন (Common Collections)
 
-Rust’s standard library includes a number of very useful data structures called
-_collections_. Most other data types represent one specific value, but
-collections can contain multiple values. Unlike the built-in array and tuple
-types, the data that these collections point to is stored on the heap, which
-means the amount of data does not need to be known at compile time and can grow
-or shrink as the program runs. Each kind of collection has different
-capabilities and costs, and choosing an appropriate one for your current
-situation is a skill you’ll develop over time. In this chapter, we’ll discuss
-three collections that are used very often in Rust programs:
+Rust-এর স্ট্যান্ডার্ড লাইব্রেরিতে বেশ কিছু দরকারী ডেটা স্ট্রাকচার রয়েছে, যেগুলোকে *কালেকশন (collections)* বলা হয়। বেশিরভাগ অন্যান্য ডেটা টাইপ একটি নির্দিষ্ট মান উপস্থাপন করে, কিন্তু কালেকশনগুলো একাধিক মান ধারণ করতে পারে। বিল্ট-ইন অ্যারে এবং টাপল টাইপের বিপরীতে, এই কালেকশনগুলো যে ডেটা নির্দেশ করে তা হিপে (heap) সংরক্ষণ করা হয়, যার মানে ডেটার পরিমাণ কম্পাইল করার সময় জানার প্রয়োজন নেই এবং প্রোগ্রাম চলার সাথে সাথে এটি বাড়তে বা কমতে পারে। প্রতিটি ধরণের কালেকশনের বিভিন্ন ক্ষমতা এবং খরচ রয়েছে এবং আপনার বর্তমান পরিস্থিতির জন্য উপযুক্ত একটি বেছে নেওয়া এমন একটি দক্ষতা যা আপনি সময়ের সাথে সাথে বিকশিত করবেন। এই চ্যাপ্টারে, আমরা তিনটি কালেকশন নিয়ে আলোচনা করব যা Rust প্রোগ্রামগুলোতে প্রায়শই ব্যবহৃত হয়:
 
-- A _vector_ allows you to store a variable number of values next to each other.
-- A _string_ is a collection of characters. We’ve mentioned the `String` type
-  previously, but in this chapter we’ll talk about it in depth.
-- A _hash map_ allows you to associate a value with a specific key. It’s a
-  particular implementation of the more general data structure called a _map_.
+-   একটি *ভেক্টর (vector)* আপনাকে একে অপরের পাশে পরিবর্তনশীল সংখ্যক মান সংরক্ষণ করতে দেয়।
+-   একটি *স্ট্রিং (string)* হল অক্ষরের একটি কালেকশন। আমরা আগে `String` টাইপ উল্লেখ করেছি, কিন্তু এই চ্যাপ্টারে আমরা এটি সম্পর্কে বিস্তারিত আলোচনা করব।
+-   একটি *হ্যাশ ম্যাপ (hash map)* আপনাকে একটি নির্দিষ্ট কী (key)-এর সাথে একটি মান যুক্ত করতে দেয়। এটি *ম্যাপ (map)* নামক আরও সাধারণ ডেটা স্ট্রাকচারের একটি বিশেষ বাস্তবায়ন।
 
-To learn about the other kinds of collections provided by the standard library,
-see [the documentation][collections].
+স্ট্যান্ডার্ড লাইব্রেরি দ্বারা সরবরাহ করা অন্যান্য ধরণের কালেকশন সম্পর্কে জানতে, [ডকুমেন্টেশন][collections] দেখুন।
 
-We’ll discuss how to create and update vectors, strings, and hash maps, as well
-as what makes each special.
+আমরা ভেক্টর, স্ট্রিং এবং হ্যাশ ম্যাপ কীভাবে তৈরি এবং আপডেট করতে হয়, সেইসাথে কী প্রত্যেকটিকে বিশেষ করে তোলে তা নিয়ে আলোচনা করব।
 
 [collections]: ../std/collections/index.html

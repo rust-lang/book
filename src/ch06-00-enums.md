@@ -1,11 +1,3 @@
-# Enums and Pattern Matching
+# এনাম এবং প্যাটার্ন ম্যাচিং (Enums and Pattern Matching)
 
-In this chapter, we’ll look at _enumerations_, also referred to as _enums_.
-Enums allow you to define a type by enumerating its possible _variants_. First
-we’ll define and use an enum to show how an enum can encode meaning along with
-data. Next, we’ll explore a particularly useful enum, called `Option`, which
-expresses that a value can be either something or nothing. Then we’ll look at
-how pattern matching in the `match` expression makes it easy to run different
-code for different values of an enum. Finally, we’ll cover how the `if let`
-construct is another convenient and concise idiom available to handle enums in
-your code.
+এই চ্যাপ্টারে, আমরা *এনিউমারেশন (enumerations)* দেখব, যাকে *এনাম (enums)*-ও বলা হয়। এনামগুলো আপনাকে এর সম্ভাব্য *ভেরিয়েন্ট (variants)* গণনা করে একটি টাইপ সংজ্ঞায়িত করতে দেয়। প্রথমে আমরা একটি এনাম সংজ্ঞায়িত করব এবং ব্যবহার করব, এটি দেখানোর জন্য যে কীভাবে একটি এনাম ডেটার সাথে অর্থ এনকোড করতে পারে। এরপর, আমরা একটি বিশেষভাবে দরকারী এনাম অন্বেষণ করব, যার নাম `Option`, যা প্রকাশ করে যে একটি মান কিছু হতে পারে অথবা কিছুই না। তারপর আমরা দেখব কিভাবে `match` এক্সপ্রেশনের প্যাটার্ন ম্যাচিং, এনামের বিভিন্ন মানের জন্য আলাদা কোড চালানো সহজ করে তোলে। সবশেষে, আমরা দেখব কিভাবে `if let` কনস্ট্রাক্ট আপনার কোডে এনামগুলো হ্যান্ডেল করার জন্য আরেকটি সুবিধাজনক এবং সংক্ষিপ্ত উপায়।

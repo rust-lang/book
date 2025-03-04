@@ -1,14 +1,5 @@
-# Using Structs to Structure Related Data
+# স্ট্রাকট ব্যবহার করে সম্পর্কিত ডেটা স্ট্রাকচার করা (Using Structs to Structure Related Data)
 
-A _struct_, or _structure_, is a custom data type that lets you package
-together and name multiple related values that make up a meaningful group. If
-you’re familiar with an object-oriented language, a _struct_ is like an
-object’s data attributes. In this chapter, we’ll compare and contrast tuples
-with structs to build on what you already know and demonstrate when structs are
-a better way to group data.
+একটি *স্ট্রাকট (struct)*, বা *স্ট্রাকচার (structure)*, হল একটি কাস্টম ডেটা টাইপ যা আপনাকে একাধিক সম্পর্কিত মানকে একসাথে প্যাকেজ করতে এবং নাম দিতে দেয়, যা একটি অর্থপূর্ণ গ্রুপ তৈরি করে। আপনি যদি অবজেক্ট-ওরিয়েন্টেড ভাষার সাথে পরিচিত হন, তাহলে একটি *স্ট্রাকট* হল একটি অবজেক্টের ডেটা অ্যাট্রিবিউটের মতো। এই চ্যাপ্টারে, আপনি ইতিমধ্যেই যা জানেন তার উপর ভিত্তি করে আমরা টাপলগুলোর সাথে স্ট্রাকটগুলোর তুলনা করব এবং কখন ডেটা গ্রুপ করার জন্য স্ট্রাকটগুলো একটি ভাল উপায় তা প্রদর্শন করব।
 
-We’ll demonstrate how to define and instantiate structs. We’ll discuss how to
-define associated functions, especially the kind of associated functions called
-_methods_, to specify behavior associated with a struct type. Structs and enums
-(discussed in Chapter 6) are the building blocks for creating new types in your
-program’s domain to take full advantage of Rust’s compile-time type checking.
+আমরা স্ট্রাকটগুলো কীভাবে সংজ্ঞায়িত এবং ইন্সট্যানশিয়েট (instantiate) করতে হয় তা প্রদর্শন করব। আমরা অ্যাসোসিয়েটেড ফাংশনগুলো কীভাবে সংজ্ঞায়িত করতে হয় তা নিয়ে আলোচনা করব, বিশেষ করে *মেথড (methods)* নামক অ্যাসোসিয়েটেড ফাংশনগুলো, যা একটি স্ট্রাকট টাইপের সাথে সম্পর্কিত আচরণ নির্দিষ্ট করে। স্ট্রাকট এবং এনাম (enum) (চ্যাপ্টার ৬-এ আলোচিত) হল আপনার প্রোগ্রামের ডোমেনে নতুন টাইপ তৈরি করার বিল্ডিং ব্লক, যাতে Rust-এর কম্পাইল-টাইম টাইপ চেকিং-এর সম্পূর্ণ সুবিধা নেওয়া যায়।

@@ -1,34 +1,18 @@
-## Traits: Defining Shared Behavior
+## ট্রেইট: সাধারণ আচরণ সংজ্ঞায়িত করা (Traits: Defining Shared Behavior)
 
-A _trait_ defines the functionality a particular type has and can share with
-other types. We can use traits to define shared behavior in an abstract way. We
-can use _trait bounds_ to specify that a generic type can be any type that has
-certain behavior.
+একটি *ট্রেইট (trait)* একটি নির্দিষ্ট টাইপের কার্যকারিতা সংজ্ঞায়িত করে এবং অন্যান্য টাইপের সাথে শেয়ার করতে পারে। আমরা অ্যাবস্ট্রাক্ট উপায়ে সাধারণ আচরণ সংজ্ঞায়িত করতে ট্রেইট ব্যবহার করতে পারি। আমরা *ট্রেইট বাউন্ড (trait bounds)* ব্যবহার করে নির্দিষ্ট করতে পারি যে একটি জেনেরিক টাইপ যেকোনো টাইপ হতে পারে যার নির্দিষ্ট আচরণ রয়েছে।
 
-> Note: Traits are similar to a feature often called _interfaces_ in other
-> languages, although with some differences.
+> দ্রষ্টব্য: ট্রেইটগুলো অন্যান্য ভাষার একটি ফিচারের মতো যাকে প্রায়শই *ইন্টারফেস (interfaces)* বলা হয়, যদিও কিছু পার্থক্য রয়েছে।
 
-### Defining a Trait
+### একটি ট্রেইট সংজ্ঞায়িত করা (Defining a Trait)
 
-A type’s behavior consists of the methods we can call on that type. Different
-types share the same behavior if we can call the same methods on all of those
-types. Trait definitions are a way to group method signatures together to
-define a set of behaviors necessary to accomplish some purpose.
+একটি টাইপের আচরণ সেই টাইপের উপর আমরা যে মেথডগুলো কল করতে পারি তা নিয়ে গঠিত। বিভিন্ন টাইপ একই আচরণ শেয়ার করে যদি আমরা সেই সমস্ত টাইপের উপর একই মেথড কল করতে পারি। ট্রেইট সংজ্ঞাগুলো হল মেথড সিগনেচারগুলোকে একত্রিত করার একটি উপায়, যা কিছু উদ্দেশ্য পূরণের জন্য প্রয়োজনীয় আচরণের একটি সেট সংজ্ঞায়িত করে।
 
-For example, let’s say we have multiple structs that hold various kinds and
-amounts of text: a `NewsArticle` struct that holds a news story filed in a
-particular location and a `SocialPost` that can have, at most, 280 characters
-along with metadata that indicates whether it was a new post, a repost, or a
-reply to another post.
+উদাহরণস্বরূপ, ধরা যাক আমাদের কাছে একাধিক স্ট্রাকট রয়েছে যা বিভিন্ন ধরণের এবং পরিমাণের টেক্সট ধারণ করে: একটি `NewsArticle` স্ট্রাকট যা একটি নির্দিষ্ট স্থানে ফাইল করা একটি সংবাদ ধারণ করে এবং একটি `SocialPost` যাতে সর্বাধিক 280টি অক্ষর থাকতে পারে, সাথে মেটাডেটা যা নির্দেশ করে যে এটি একটি নতুন পোস্ট, একটি রিপোস্ট, নাকি অন্য কোনো পোস্টের উত্তর।
 
-We want to make a media aggregator library crate named `aggregator` that can
-display summaries of data that might be stored in a `NewsArticle` or
-`SocialPost` instance. To do this, we need a summary from each type, and we’ll
-request that summary by calling a `summarize` method on an instance. Listing
-10-12 shows the definition of a public `Summary` trait that expresses this
-behavior.
+আমরা `aggregator` নামে একটি মিডিয়া অ্যাগ্রিগেটর লাইব্রেরি ক্রেট তৈরি করতে চাই যা `NewsArticle` বা `SocialPost` ইন্সট্যান্সে সংরক্ষিত ডেটার সারাংশ প্রদর্শন করতে পারে। এটি করার জন্য, আমাদের প্রতিটি টাইপ থেকে একটি সারাংশ প্রয়োজন, এবং আমরা একটি ইন্সট্যান্সে একটি `summarize` মেথড কল করে সেই সারাংশের অনুরোধ করব। Listing 10-12 একটি পাবলিক `Summary` ট্রেইটের সংজ্ঞা দেখায় যা এই আচরণটিকে প্রকাশ করে।
 
-<Listing number="10-12" file-name="src/lib.rs" caption="A `Summary` trait that consists of the behavior provided by a `summarize` method">
+<Listing number="10-12" file-name="src/lib.rs" caption="একটি `Summary` ট্রেইট যা `summarize` মেথড দ্বারা প্রদত্ত আচরণ নিয়ে গঠিত">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-12/src/lib.rs}}
@@ -36,33 +20,17 @@ behavior.
 
 </Listing>
 
-Here, we declare a trait using the `trait` keyword and then the trait’s name,
-which is `Summary` in this case. We also declare the trait as `pub` so that
-crates depending on this crate can make use of this trait too, as we’ll see in
-a few examples. Inside the curly brackets, we declare the method signatures
-that describe the behaviors of the types that implement this trait, which in
-this case is `fn summarize(&self) -> String`.
+এখানে, আমরা `trait` কীওয়ার্ড এবং তারপর ট্রেইটের নাম ব্যবহার করে একটি ট্রেইট ঘোষণা করি, যা এই ক্ষেত্রে `Summary`। আমরা ট্রেইটটিকে `pub` হিসাবেও ঘোষণা করি যাতে এই ক্রেটের উপর নির্ভরশীল ক্রেটগুলোও এই ট্রেইটটি ব্যবহার করতে পারে, যেমনটি আমরা কয়েকটি উদাহরণে দেখব। কোঁকড়া ধনুর্বন্ধনীর ভিতরে, আমরা মেথড সিগনেচারগুলো ঘোষণা করি যা এই ট্রেইটটি ইমপ্লিমেন্ট করে এমন টাইপগুলোর আচরণ বর্ণনা করে, যা এই ক্ষেত্রে `fn summarize(&self) -> String`।
 
-After the method signature, instead of providing an implementation within curly
-brackets, we use a semicolon. Each type implementing this trait must provide
-its own custom behavior for the body of the method. The compiler will enforce
-that any type that has the `Summary` trait will have the method `summarize`
-defined with this signature exactly.
+মেথড সিগনেচারের পরে, কোঁকড়া ধনুর্বন্ধনীর মধ্যে একটি ইমপ্লিমেন্টেশন দেওয়ার পরিবর্তে, আমরা একটি সেমিকোলন ব্যবহার করি। এই ট্রেইটটি ইমপ্লিমেন্ট করা প্রতিটি টাইপকে অবশ্যই মেথডের বডির জন্য নিজস্ব কাস্টম আচরণ প্রদান করতে হবে। কম্পাইলার এনফোর্স (enforce) করবে যে `Summary` ট্রেইট আছে এমন যেকোনো টাইপের অবশ্যই `summarize` মেথড সংজ্ঞায়িত থাকবে এবং সিগনেচার হুবহু একই হবে।
 
-A trait can have multiple methods in its body: the method signatures are listed
-one per line, and each line ends in a semicolon.
+একটি ট্রেইটের বডিতে একাধিক মেথড থাকতে পারে: মেথড সিগনেচারগুলো প্রতি লাইনে তালিকাভুক্ত করা হয় এবং প্রতিটি লাইন একটি সেমিকোলন দিয়ে শেষ হয়।
 
-### Implementing a Trait on a Type
+### একটি টাইপে একটি ট্রেইট ইমপ্লিমেন্ট করা (Implementing a Trait on a Type)
 
-Now that we’ve defined the desired signatures of the `Summary` trait’s methods,
-we can implement it on the types in our media aggregator. Listing 10-13 shows
-an implementation of the `Summary` trait on the `NewsArticle` struct that uses
-the headline, the author, and the location to create the return value of
-`summarize`. For the `SocialPost` struct, we define `summarize` as the username
-followed by the entire text of the post, assuming that the post content is
-already limited to 280 characters.
+এখন আমরা `Summary` ট্রেইটের মেথডগুলোর কাঙ্ক্ষিত সিগনেচার সংজ্ঞায়িত করেছি, আমরা এটিকে আমাদের মিডিয়া অ্যাগ্রিগেটরের টাইপগুলোতে ইমপ্লিমেন্ট করতে পারি। Listing 10-13 `NewsArticle` স্ট্রাকটে `Summary` ট্রেইটের একটি ইমপ্লিমেন্টেশন দেখায় যা হেডলাইন, লেখক এবং অবস্থান ব্যবহার করে `summarize`-এর রিটার্ন ভ্যালু তৈরি করে। `SocialPost` স্ট্রাকটের জন্য, আমরা `summarize`-কে ব্যবহারকারীর নাম এবং তারপর পোস্টের সম্পূর্ণ টেক্সট হিসাবে সংজ্ঞায়িত করি, ধরে নিই যে পোস্টের কনটেন্ট ইতিমধ্যেই 280 অক্ষরে সীমাবদ্ধ।
 
-<Listing number="10-13" file-name="src/lib.rs" caption="Implementing the `Summary` trait on the `NewsArticle` and `SocialPost` types">
+<Listing number="10-13" file-name="src/lib.rs" caption="`NewsArticle` এবং `SocialPost` টাইপগুলোতে `Summary` ট্রেইট ইমপ্লিমেন্ট করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-13/src/lib.rs:here}}
@@ -70,60 +38,28 @@ already limited to 280 characters.
 
 </Listing>
 
-Implementing a trait on a type is similar to implementing regular methods. The
-difference is that after `impl`, we put the trait name we want to implement,
-then use the `for` keyword, and then specify the name of the type we want to
-implement the trait for. Within the `impl` block, we put the method signatures
-that the trait definition has defined. Instead of adding a semicolon after each
-signature, we use curly brackets and fill in the method body with the specific
-behavior that we want the methods of the trait to have for the particular type.
+একটি টাইপে একটি ট্রেইট ইমপ্লিমেন্ট করা নিয়মিত মেথড ইমপ্লিমেন্ট করার মতোই। পার্থক্য হল `impl`-এর পরে, আমরা যে ট্রেইটটি ইমপ্লিমেন্ট করতে চাই তার নাম রাখি, তারপর `for` কীওয়ার্ড ব্যবহার করি এবং তারপর যে টাইপের জন্য আমরা ট্রেইটটি ইমপ্লিমেন্ট করতে চাই তার নাম নির্দিষ্ট করি। `impl` ব্লকের মধ্যে, আমরা মেথড সিগনেচারগুলো রাখি যা ট্রেইট সংজ্ঞায় সংজ্ঞায়িত করা হয়েছে। প্রতিটি সিগনেচারের পরে একটি সেমিকোলন যোগ করার পরিবর্তে, আমরা কোঁকড়া ধনুর্বন্ধনী ব্যবহার করি এবং মেথড বডিতে নির্দিষ্ট আচরণ পূরণ করি যা আমরা চাই যে ট্রেইটের মেথডগুলোতে নির্দিষ্ট টাইপের জন্য থাকুক।
 
-Now that the library has implemented the `Summary` trait on `NewsArticle` and
-`SocialPost`, users of the crate can call the trait methods on instances of
-`NewsArticle` and `SocialPost` in the same way we call regular methods. The only
-difference is that the user must bring the trait into scope as well as the
-types. Here’s an example of how a binary crate could use our `aggregator`
-library crate:
+এখন লাইব্রেরিটি `NewsArticle` এবং `SocialPost`-এ `Summary` ট্রেইট ইমপ্লিমেন্ট করেছে, ক্রেটের ব্যবহারকারীরা `NewsArticle` এবং `SocialPost`-এর ইন্সট্যান্সগুলোতে ট্রেইট মেথডগুলোকে একইভাবে কল করতে পারে যেভাবে আমরা নিয়মিত মেথড কল করি। একমাত্র পার্থক্য হল ব্যবহারকারীকে অবশ্যই ট্রেইটটিকে টাইপের মতোই স্কোপে আনতে হবে। এখানে একটি বাইনারি ক্রেট কীভাবে আমাদের `aggregator` লাইব্রেরি ক্রেট ব্যবহার করতে পারে তার একটি উদাহরণ দেওয়া হল:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs}}
 ```
 
-This code prints `1 new post: horse_ebooks: of course, as you probably already
-know, people`.
+এই কোডটি `1 new post: horse_ebooks: of course, as you probably already
+know, people` প্রিন্ট করে।
 
-Other crates that depend on the `aggregator` crate can also bring the `Summary`
-trait into scope to implement `Summary` on their own types. One restriction to
-note is that we can implement a trait on a type only if either the trait or the
-type, or both, are local to our crate. For example, we can implement standard
-library traits like `Display` on a custom type like `SocialPost` as part of our
-`aggregator` crate functionality because the type `SocialPost` is local to our
-`aggregator` crate. We can also implement `Summary` on `Vec<T>` in our
-`aggregator` crate because the trait `Summary` is local to our `aggregator`
-crate.
+অন্যান্য ক্রেট যেগুলো `aggregator` ক্রেটের উপর নির্ভর করে তারাও `Summary` ট্রেইটটিকে স্কোপে এনে তাদের নিজস্ব টাইপগুলোতে `Summary` ইমপ্লিমেন্ট করতে পারে। একটি সীমাবদ্ধতা লক্ষ্য করার মতো যে আমরা শুধুমাত্র তখনই একটি টাইপের উপর একটি ট্রেইট ইমপ্লিমেন্ট করতে পারি যদি ট্রেইট বা টাইপ, অথবা উভয়ই, আমাদের ক্রেটের লোকাল হয়। উদাহরণস্বরূপ, আমরা স্ট্যান্ডার্ড লাইব্রেরি ট্রেইট যেমন `Display`-কে আমাদের `aggregator` ক্রেট কার্যকারিতার অংশ হিসাবে `SocialPost`-এর মতো কাস্টম টাইপে ইমপ্লিমেন্ট করতে পারি কারণ `SocialPost` টাইপটি আমাদের `aggregator` ক্রেটের লোকাল। আমরা আমাদের `aggregator` ক্রেটে `Vec<T>`-তে `Summary` ইমপ্লিমেন্ট করতে পারি কারণ `Summary` ট্রেইটটি আমাদের `aggregator` ক্রেটের লোকাল।
 
-But we can’t implement external traits on external types. For example, we can’t
-implement the `Display` trait on `Vec<T>` within our `aggregator` crate because
-`Display` and `Vec<T>` are both defined in the standard library and aren’t
-local to our `aggregator` crate. This restriction is part of a property called
-_coherence_, and more specifically the _orphan rule_, so named because the
-parent type is not present. This rule ensures that other people’s code can’t
-break your code and vice versa. Without the rule, two crates could implement
-the same trait for the same type, and Rust wouldn’t know which implementation
-to use.
+কিন্তু আমরা এক্সটার্নাল টাইপগুলোতে এক্সটার্নাল ট্রেইট ইমপ্লিমেন্ট করতে পারি না। উদাহরণস্বরূপ, আমরা আমাদের `aggregator` ক্রেটের মধ্যে `Vec<T>`-তে `Display` ট্রেইট ইমপ্লিমেন্ট করতে পারি না কারণ `Display` এবং `Vec<T>` উভয়ই স্ট্যান্ডার্ড লাইব্রেরিতে সংজ্ঞায়িত করা হয়েছে এবং আমাদের `aggregator` ক্রেটের লোকাল নয়। এই সীমাবদ্ধতাটি *কোহেরেন্স (coherence)* নামক একটি বৈশিষ্ট্যের অংশ, এবং আরও নির্দিষ্টভাবে *অর্ফান রুল (orphan rule)*, এটির নামকরণ করা হয়েছে কারণ প্যারেন্ট টাইপ উপস্থিত নেই। এই নিয়মটি নিশ্চিত করে যে অন্য লোকেদের কোড আপনার কোড ভাঙতে পারবে না এবং এর বিপরীতটিও সত্য। নিয়মটি ছাড়া, দুটি ক্রেট একই টাইপের জন্য একই ট্রেইট ইমপ্লিমেন্ট করতে পারত এবং Rust জানত না কোন ইমপ্লিমেন্টেশন ব্যবহার করতে হবে।
 
-### Default Implementations
+### ডিফল্ট ইমপ্লিমেন্টেশন (Default Implementations)
 
-Sometimes it’s useful to have default behavior for some or all of the methods
-in a trait instead of requiring implementations for all methods on every type.
-Then, as we implement the trait on a particular type, we can keep or override
-each method’s default behavior.
+কখনও কখনও প্রতিটি টাইপের সমস্ত মেথডের জন্য ইমপ্লিমেন্টেশনের প্রয়োজন হওয়ার পরিবর্তে একটি ট্রেইটের কিছু বা সমস্ত মেথডের জন্য ডিফল্ট আচরণ থাকা দরকারী। তারপর, যখন আমরা একটি নির্দিষ্ট টাইপের উপর ট্রেইটটি ইমপ্লিমেন্ট করি, তখন আমরা প্রতিটি মেথডের ডিফল্ট আচরণ রাখতে বা ওভাররাইড করতে পারি।
 
-In Listing 10-14, we specify a default string for the `summarize` method of the
-`Summary` trait instead of only defining the method signature, as we did in
-Listing 10-12.
+Listing 10-14-এ, আমরা `Summary` ট্রেইটের `summarize` মেথডের জন্য শুধুমাত্র মেথড সিগনেচার সংজ্ঞায়িত করার পরিবর্তে একটি ডিফল্ট স্ট্রিং নির্দিষ্ট করি, যেমনটি আমরা Listing 10-12-তে করেছি।
 
-<Listing number="10-14" file-name="src/lib.rs" caption="Defining a `Summary` trait with a default implementation of the `summarize` method">
+<Listing number="10-14" file-name="src/lib.rs" caption="`summarize` মেথডের একটি ডিফল্ট ইমপ্লিমেন্টেশন সহ একটি `Summary` ট্রেইট সংজ্ঞায়িত করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-14/src/lib.rs:here}}
@@ -131,90 +67,57 @@ Listing 10-12.
 
 </Listing>
 
-To use a default implementation to summarize instances of `NewsArticle`, we
-specify an empty `impl` block with `impl Summary for NewsArticle {}`.
+`NewsArticle`-এর ইন্সট্যান্সগুলো সংক্ষিপ্ত করতে একটি ডিফল্ট ইমপ্লিমেন্টেশন ব্যবহার করতে, আমরা `impl Summary for NewsArticle {}` দিয়ে একটি খালি `impl` ব্লক নির্দিষ্ট করি।
 
-Even though we’re no longer defining the `summarize` method on `NewsArticle`
-directly, we’ve provided a default implementation and specified that
-`NewsArticle` implements the `Summary` trait. As a result, we can still call
-the `summarize` method on an instance of `NewsArticle`, like this:
+যদিও আমরা সরাসরি `NewsArticle`-এ `summarize` মেথড সংজ্ঞায়িত করছি না, তবুও আমরা একটি ডিফল্ট ইমপ্লিমেন্টেশন সরবরাহ করেছি এবং নির্দিষ্ট করেছি যে `NewsArticle` `Summary` ট্রেইট ইমপ্লিমেন্ট করে। ফলস্বরূপ, আমরা এখনও `NewsArticle`-এর একটি ইন্সট্যান্সে `summarize` মেথড কল করতে পারি, এইভাবে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-02-calling-default-impl/src/main.rs:here}}
 ```
 
-This code prints `New article available! (Read more...)`.
+এই কোডটি `New article available! (Read more...)` প্রিন্ট করে।
 
-Creating a default implementation doesn’t require us to change anything about
-the implementation of `Summary` on `SocialPost` in Listing 10-13. The reason is
-that the syntax for overriding a default implementation is the same as the
-syntax for implementing a trait method that doesn’t have a default
-implementation.
+একটি ডিফল্ট ইমপ্লিমেন্টেশন তৈরি করা Listing 10-13-এ `SocialPost`-এ `Summary`-এর ইমপ্লিমেন্টেশন সম্পর্কে আমাদের কোনো কিছু পরিবর্তন করার প্রয়োজন নেই। কারণ হল একটি ডিফল্ট ইমপ্লিমেন্টেশন ওভাররাইড করার সিনট্যাক্স একটি ট্রেইট মেথড ইমপ্লিমেন্ট করার সিনট্যাক্সের মতোই যা একটি ডিফল্ট ইমপ্লিমেন্টেশন নেই।
 
-Default implementations can call other methods in the same trait, even if those
-other methods don’t have a default implementation. In this way, a trait can
-provide a lot of useful functionality and only require implementors to specify
-a small part of it. For example, we could define the `Summary` trait to have a
-`summarize_author` method whose implementation is required, and then define a
-`summarize` method that has a default implementation that calls the
-`summarize_author` method:
+ডিফল্ট ইমপ্লিমেন্টেশনগুলো একই ট্রেইটের অন্যান্য মেথডগুলোকে কল করতে পারে, এমনকী যদি সেই অন্য মেথডগুলোর ডিফল্ট ইমপ্লিমেন্টেশন না থাকে। এইভাবে, একটি ট্রেইট অনেক দরকারী কার্যকারিতা সরবরাহ করতে পারে এবং ইমপ্লিমেন্টরদের কেবল এটির একটি ছোট অংশ নির্দিষ্ট করতে হয়। উদাহরণস্বরূপ, আমরা `Summary` ট্রেইটটিকে একটি `summarize_author` মেথড সংজ্ঞায়িত করতে পারি যার ইমপ্লিমেন্টেশন প্রয়োজন, এবং তারপর একটি `summarize` মেথড সংজ্ঞায়িত করতে পারি যার একটি ডিফল্ট ইমপ্লিমেন্টেশন রয়েছে যা `summarize_author` মেথডকে কল করে:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:here}}
 ```
 
-To use this version of `Summary`, we only need to define `summarize_author`
-when we implement the trait on a type:
+`Summary`-এর এই ভার্সনটি ব্যবহার করার জন্য, আমাদের শুধুমাত্র একটি টাইপের উপর ট্রেইট ইমপ্লিমেন্ট করার সময় `summarize_author` সংজ্ঞায়িত করতে হবে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:impl}}
 ```
 
-After we define `summarize_author`, we can call `summarize` on instances of the
-`SocialPost` struct, and the default implementation of `summarize` will call the
-definition of `summarize_author` that we’ve provided. Because we’ve implemented
-`summarize_author`, the `Summary` trait has given us the behavior of the
-`summarize` method without requiring us to write any more code. Here’s what
-that looks like:
+আমরা `summarize_author` সংজ্ঞায়িত করার পরে, আমরা `SocialPost` স্ট্রাকটের ইন্সট্যান্সগুলোতে `summarize` কল করতে পারি এবং `summarize`-এর ডিফল্ট ইমপ্লিমেন্টেশনটি আমাদের দেওয়া `summarize_author`-এর সংজ্ঞাকে কল করবে। যেহেতু আমরা `summarize_author` ইমপ্লিমেন্ট করেছি, তাই `Summary` ট্রেইট আমাদের আরও কোনো কোড লেখার প্রয়োজন ছাড়াই `summarize` মেথডের আচরণ দিয়েছে। এখানে এটি দেখতে কেমন:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/main.rs:here}}
 ```
 
-This code prints `1 new post: (Read more from @horse_ebooks...)`.
+এই কোডটি `1 new post: (Read more from @horse_ebooks...)` প্রিন্ট করে।
 
-Note that it isn’t possible to call the default implementation from an
-overriding implementation of that same method.
+মনে রাখবেন যে একই মেথডের ওভাররাইডিং ইমপ্লিমেন্টেশন থেকে ডিফল্ট ইমপ্লিমেন্টেশনকে কল করা সম্ভব নয়।
 
-### Traits as Parameters
+### প্যারামিটার হিসাবে ট্রেইট (Traits as Parameters)
 
-Now that you know how to define and implement traits, we can explore how to use
-traits to define functions that accept many different types. We’ll use the
-`Summary` trait we implemented on the `NewsArticle` and `SocialPost` types in
-Listing 10-13 to define a `notify` function that calls the `summarize` method
-on its `item` parameter, which is of some type that implements the `Summary`
-trait. To do this, we use the `impl Trait` syntax, like this:
+এখন আপনি জানেন কিভাবে ট্রেইট সংজ্ঞায়িত এবং ইমপ্লিমেন্ট করতে হয়, আমরা এমন ফাংশন সংজ্ঞায়িত করতে ট্রেইটগুলো কীভাবে ব্যবহার করতে হয় তা অন্বেষণ করতে পারি যা বিভিন্ন টাইপ গ্রহণ করে। আমরা Listing 10-13-এ `NewsArticle` এবং `SocialPost` টাইপগুলোতে যে `Summary` ট্রেইট ইমপ্লিমেন্ট করেছি তা ব্যবহার করে একটি `notify` ফাংশন সংজ্ঞায়িত করব যা তার `item` প্যারামিটারে `summarize` মেথড কল করে, যেটি কিছু টাইপের যা `Summary` ট্রেইট ইমপ্লিমেন্ট করে। এটি করার জন্য, আমরা `impl Trait` সিনট্যাক্স ব্যবহার করি, এইভাবে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-04-traits-as-parameters/src/lib.rs:here}}
 ```
 
-Instead of a concrete type for the `item` parameter, we specify the `impl`
-keyword and the trait name. This parameter accepts any type that implements the
-specified trait. In the body of `notify`, we can call any methods on `item`
-that come from the `Summary` trait, such as `summarize`. We can call `notify`
-and pass in any instance of `NewsArticle` or `SocialPost`. Code that calls the
-function with any other type, such as a `String` or an `i32`, won’t compile
-because those types don’t implement `Summary`.
+`item` প্যারামিটারের জন্য একটি কংক্রিট টাইপের পরিবর্তে, আমরা `impl` কীওয়ার্ড এবং ট্রেইটের নাম নির্দিষ্ট করি। এই প্যারামিটারটি নির্দিষ্ট ট্রেইট ইমপ্লিমেন্ট করে এমন যেকোনো টাইপ গ্রহণ করে। `notify`-এর বডিতে, আমরা `item`-এ `Summary` ট্রেইট থেকে আসা যেকোনো মেথড কল করতে পারি, যেমন `summarize`। আমরা `notify` কল করতে পারি এবং `NewsArticle` বা `SocialPost`-এর যেকোনো ইন্সট্যান্স পাস করতে পারি। এই ফাংশনটিকে অন্য কোনো টাইপ, যেমন একটি `String` বা একটি `i32` দিয়ে কল করা কোড কম্পাইল হবে না কারণ সেই টাইপগুলো `Summary` ইমপ্লিমেন্ট করে না।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="fixing-the-largest-function-with-trait-bounds"></a>
 
-#### Trait Bound Syntax
+#### ট্রেইট বাউন্ড সিনট্যাক্স (Trait Bound Syntax)
 
-The `impl Trait` syntax works for straightforward cases but is actually syntax
-sugar for a longer form known as a _trait bound_; it looks like this:
+`impl Trait` সিনট্যাক্সটি সহজ ক্ষেত্রের জন্য কাজ করে কিন্তু আসলে একটি দীর্ঘ ফর্মের জন্য সিনট্যাক্স সুগার যা *ট্রেইট বাউন্ড (trait bound)* নামে পরিচিত; এটি দেখতে এইরকম:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: &T) {
@@ -222,125 +125,79 @@ pub fn notify<T: Summary>(item: &T) {
 }
 ```
 
-This longer form is equivalent to the example in the previous section but is
-more verbose. We place trait bounds with the declaration of the generic type
-parameter after a colon and inside angle brackets.
+এই দীর্ঘ ফর্মটি পূর্ববর্তী বিভাগের উদাহরণের সমতুল্য কিন্তু আরও শব্দবহুল। আমরা একটি কোলন এবং অ্যাঙ্গেল ব্র্যাকেটের মধ্যে জেনেরিক টাইপ প্যারামিটারের ঘোষণার সাথে ট্রেইট বাউন্ডগুলো রাখি।
 
-The `impl Trait` syntax is convenient and makes for more concise code in simple
-cases, while the fuller trait bound syntax can express more complexity in other
-cases. For example, we can have two parameters that implement `Summary`. Doing
-so with the `impl Trait` syntax looks like this:
+`impl Trait` সিনট্যাক্সটি সুবিধাজনক এবং সহজ ক্ষেত্রে আরও সংক্ষিপ্ত কোড তৈরি করে, যেখানে সম্পূর্ণ ট্রেইট বাউন্ড সিনট্যাক্স অন্যান্য ক্ষেত্রে আরও জটিলতা প্রকাশ করতে পারে। উদাহরণস্বরূপ, আমাদের দুটি প্যারামিটার থাকতে পারে যা `Summary` ইমপ্লিমেন্ট করে। `impl Trait` সিনট্যাক্স দিয়ে এটি করা এইরকম দেখায়:
 
 ```rust,ignore
 pub fn notify(item1: &impl Summary, item2: &impl Summary) {
 ```
 
-Using `impl Trait` is appropriate if we want this function to allow `item1` and
-`item2` to have different types (as long as both types implement `Summary`). If
-we want to force both parameters to have the same type, however, we must use a
-trait bound, like this:
+যদি আমরা চাই যে এই ফাংশনটি `item1` এবং `item2`-কে বিভিন্ন টাইপের অনুমতি দিক (যতক্ষণ উভয় টাইপ `Summary` ইমপ্লিমেন্ট করে) ততক্ষণ `impl Trait` ব্যবহার করা উপযুক্ত। যাইহোক, যদি আমরা উভয় প্যারামিটারকে একই টাইপ হতে বাধ্য করতে চাই, তাহলে আমাদের অবশ্যই একটি ট্রেইট বাউন্ড ব্যবহার করতে হবে, এইভাবে:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item1: &T, item2: &T) {
 ```
 
-The generic type `T` specified as the type of the `item1` and `item2`
-parameters constrains the function such that the concrete type of the value
-passed as an argument for `item1` and `item2` must be the same.
+`item1` এবং `item2` প্যারামিটারের টাইপ হিসাবে নির্দিষ্ট করা জেনেরিক টাইপ `T` ফাংশনটিকে সীমাবদ্ধ করে যাতে `item1` এবং `item2`-এর জন্য আর্গুমেন্ট হিসাবে পাস করা মানের কংক্রিট টাইপ একই হতে হবে।
 
-#### Specifying Multiple Trait Bounds with the `+` Syntax
+#### `+` সিনট্যাক্স দিয়ে একাধিক ট্রেইট বাউন্ড নির্দিষ্ট করা (Specifying Multiple Trait Bounds with the `+` Syntax)
 
-We can also specify more than one trait bound. Say we wanted `notify` to use
-display formatting as well as `summarize` on `item`: we specify in the `notify`
-definition that `item` must implement both `Display` and `Summary`. We can do
-so using the `+` syntax:
+আমরা একাধিক ট্রেইট বাউন্ডও নির্দিষ্ট করতে পারি। ধরা যাক, আমরা চেয়েছিলাম `notify` `item`-এ ডিসপ্লে ফরম্যাটিং এবং `summarize` ব্যবহার করুক: আমরা `notify` সংজ্ঞায় নির্দিষ্ট করি যে `item`-কে অবশ্যই `Display` এবং `Summary` উভয়ই ইমপ্লিমেন্ট করতে হবে। আমরা `+` সিনট্যাক্স ব্যবহার করে এটি করতে পারি:
 
 ```rust,ignore
 pub fn notify(item: &(impl Summary + Display)) {
 ```
 
-The `+` syntax is also valid with trait bounds on generic types:
+`+` সিনট্যাক্স জেনেরিক টাইপের উপর ট্রেইট বাউন্ডের সাথেও বৈধ:
 
 ```rust,ignore
 pub fn notify<T: Summary + Display>(item: &T) {
 ```
 
-With the two trait bounds specified, the body of `notify` can call `summarize`
-and use `{}` to format `item`.
+দুটি ট্রেইট বাউন্ড নির্দিষ্ট করার সাথে, `notify`-এর বডি `summarize` কল করতে পারে এবং `item` ফর্ম্যাট করতে `{}` ব্যবহার করতে পারে।
 
-#### Clearer Trait Bounds with `where` Clauses
+#### `where` ক্লজ সহ ক্লিনার ট্রেইট বাউন্ড (Clearer Trait Bounds with `where` Clauses)
 
-Using too many trait bounds has its downsides. Each generic has its own trait
-bounds, so functions with multiple generic type parameters can contain lots of
-trait bound information between the function’s name and its parameter list,
-making the function signature hard to read. For this reason, Rust has alternate
-syntax for specifying trait bounds inside a `where` clause after the function
-signature. So, instead of writing this:
+অত্যধিক ট্রেইট বাউন্ড ব্যবহার করার অসুবিধা রয়েছে। প্রতিটি জেনেরিকের নিজস্ব ট্রেইট বাউন্ড রয়েছে, তাই একাধিক জেনেরিক টাইপ প্যারামিটারযুক্ত ফাংশনগুলোতে ফাংশনের নাম এবং এর প্যারামিটার তালিকার মধ্যে প্রচুর ট্রেইট বাউন্ডের তথ্য থাকতে পারে, যা ফাংশন সিগনেচারকে পড়া কঠিন করে তোলে। এই কারণে, Rust-এর ফাংশন সিগনেচারের পরে একটি `where` ক্লজের মধ্যে ট্রেইট বাউন্ডগুলো নির্দিষ্ট করার জন্য বিকল্প সিনট্যাক্স রয়েছে। সুতরাং, এটি লেখার পরিবর্তে:
 
 ```rust,ignore
 fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
 ```
 
-we can use a `where` clause, like this:
+আমরা একটি `where` ক্লজ ব্যবহার করতে পারি, এইভাবে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-where-clause/src/lib.rs:here}}
 ```
 
-This function’s signature is less cluttered: the function name, parameter list,
-and return type are close together, similar to a function without lots of trait
-bounds.
+এই ফাংশনের সিগনেচারটি কম বিশৃঙ্খল: ফাংশনের নাম, প্যারামিটার তালিকা এবং রিটার্ন টাইপ কাছাকাছি, প্রচুর ট্রেইট বাউন্ড ছাড়া একটি ফাংশনের মতো।
 
-### Returning Types That Implement Traits
+### ট্রেইট ইমপ্লিমেন্ট করে এমন টাইপ রিটার্ন করা (Returning Types That Implement Traits)
 
-We can also use the `impl Trait` syntax in the return position to return a
-value of some type that implements a trait, as shown here:
+আমরা রিটার্ন পজিশনে `impl Trait` সিনট্যাক্স ব্যবহার করে এমন কিছু টাইপের মান রিটার্ন করতে পারি যা একটি ট্রেইট ইমপ্লিমেন্ট করে, যেমনটি এখানে দেখানো হয়েছে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-05-returning-impl-trait/src/lib.rs:here}}
 ```
 
-By using `impl Summary` for the return type, we specify that the
-`returns_summarizable` function returns some type that implements the `Summary`
-trait without naming the concrete type. In this case, `returns_summarizable`
-returns a `SocialPost`, but the code calling this function doesn’t need to know
-that.
+রিটার্ন টাইপের জন্য `impl Summary` ব্যবহার করে, আমরা নির্দিষ্ট করি যে `returns_summarizable` ফাংশনটি কংক্রিট টাইপের নাম না দিয়েই `Summary` ট্রেইট ইমপ্লিমেন্ট করে এমন কিছু টাইপ রিটার্ন করে। এই ক্ষেত্রে, `returns_summarizable` একটি `SocialPost` রিটার্ন করে, কিন্তু এই ফাংশনটিকে কল করা কোডটি সেটি জানার প্রয়োজন নেই।
 
-The ability to specify a return type only by the trait it implements is
-especially useful in the context of closures and iterators, which we cover in
-Chapter 13. Closures and iterators create types that only the compiler knows or
-types that are very long to specify. The `impl Trait` syntax lets you concisely
-specify that a function returns some type that implements the `Iterator` trait
-without needing to write out a very long type.
+শুধুমাত্র যে ট্রেইটটি ইমপ্লিমেন্ট করে তার দ্বারা একটি রিটার্ন টাইপ নির্দিষ্ট করার ক্ষমতা ক্লোজার (closures) এবং ইটারেটরগুলোর (iterators) প্রসঙ্গে বিশেষভাবে কার্যকর, যা আমরা চ্যাপ্টার 13-এ কভার করব। ক্লোজার এবং ইটারেটরগুলো এমন টাইপ তৈরি করে যা শুধুমাত্র কম্পাইলার জানে বা টাইপগুলো উল্লেখ করার জন্য খুব দীর্ঘ। `impl Trait` সিনট্যাক্স আপনাকে সংক্ষিপ্তভাবে নির্দিষ্ট করতে দেয় যে একটি ফাংশন `Iterator` ট্রেইট ইমপ্লিমেন্ট করে এমন কিছু টাইপ রিটার্ন করে, খুব দীর্ঘ টাইপ লেখার প্রয়োজন ছাড়াই।
 
-However, you can only use `impl Trait` if you’re returning a single type. For
-example, this code that returns either a `NewsArticle` or a `SocialPost` with
-the return type specified as `impl Summary` wouldn’t work:
+যাইহোক, আপনি শুধুমাত্র তখনই `impl Trait` ব্যবহার করতে পারেন যদি আপনি একটি একক টাইপ রিটার্ন করেন। উদাহরণস্বরূপ, এই কোডটি যা একটি `NewsArticle` বা একটি `SocialPost` রিটার্ন করে এবং রিটার্ন টাইপটিকে `impl Summary` হিসাবে নির্দিষ্ট করা হয়েছে তা কাজ করবে না:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-06-impl-trait-returns-one-type/src/lib.rs:here}}
 ```
 
-Returning either a `NewsArticle` or a `SocialPost` isn’t allowed due to
-restrictions around how the `impl Trait` syntax is implemented in the compiler.
-We’ll cover how to write a function with this behavior in the [“Using Trait
-Objects That Allow for Values of Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
---> section of Chapter 18.
+একটি `NewsArticle` বা একটি `SocialPost` রিটার্ন করার অনুমতি নেই কারণ কম্পাইলারে `impl Trait` সিনট্যাক্স কীভাবে ইমপ্লিমেন্ট করা হয় তার চারপাশে সীমাবদ্ধতা রয়েছে। এই আচরণ সহ একটি ফাংশন কীভাবে লিখতে হয় তা আমরা চ্যাপ্টার 18-এর [“ভিন্ন টাইপের মানের জন্য অনুমতি দেয় এমন ট্রেইট অবজেক্ট ব্যবহার করা”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore --> বিভাগে কভার করব।
 
-### Using Trait Bounds to Conditionally Implement Methods
+### ট্রেইট বাউন্ড ব্যবহার করে শর্তসাপেক্ষে মেথড ইমপ্লিমেন্ট করা (Using Trait Bounds to Conditionally Implement Methods)
 
-By using a trait bound with an `impl` block that uses generic type parameters,
-we can implement methods conditionally for types that implement the specified
-traits. For example, the type `Pair<T>` in Listing 10-15 always implements the
-`new` function to return a new instance of `Pair<T>` (recall from the
-[“Defining Methods”][methods]<!-- ignore --> section of Chapter 5 that `Self`
-is a type alias for the type of the `impl` block, which in this case is
-`Pair<T>`). But in the next `impl` block, `Pair<T>` only implements the
-`cmp_display` method if its inner type `T` implements the `PartialOrd` trait
-that enables comparison _and_ the `Display` trait that enables printing.
+জেনেরিক টাইপ প্যারামিটার ব্যবহার করে এমন একটি `impl` ব্লকের সাথে একটি ট্রেইট বাউন্ড ব্যবহার করে, আমরা নির্দিষ্ট ট্রেইটগুলো ইমপ্লিমেন্ট করে এমন টাইপগুলোর জন্য শর্তসাপেক্ষে মেথড ইমপ্লিমেন্ট করতে পারি। উদাহরণস্বরূপ, Listing 10-15-এর `Pair<T>` টাইপটি সর্বদাই `new` ফাংশন ইমপ্লিমেন্ট করে `Pair<T>`-এর একটি নতুন ইন্সট্যান্স রিটার্ন করার জন্য (চ্যাপ্টার ৫-এর [“মেথড সংজ্ঞায়িত করা”][methods]<!-- ignore --> বিভাগ থেকে স্মরণ করুন যে `Self` হল `impl` ব্লকের টাইপের জন্য একটি টাইপ অ্যালিয়াস, যা এই ক্ষেত্রে `Pair<T>`)। কিন্তু পরবর্তী `impl` ব্লকে, `Pair<T>` শুধুমাত্র তখনই `cmp_display` মেথড ইমপ্লিমেন্ট করে যদি এর ভেতরের টাইপ `T` `PartialOrd` ট্রেইট ইমপ্লিমেন্ট করে যা তুলনা সক্ষম করে *এবং* `Display` ট্রেইট যা প্রিন্টিং সক্ষম করে।
 
-<Listing number="10-15" file-name="src/lib.rs" caption="Conditionally implementing methods on a generic type depending on trait bounds">
+<Listing number="10-15" file-name="src/lib.rs" caption="ট্রেইট বাউন্ডের উপর নির্ভর করে একটি জেনেরিক টাইপে শর্তসাপেক্ষে মেথড ইমপ্লিমেন্ট করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-15/src/lib.rs}}
@@ -348,12 +205,7 @@ that enables comparison _and_ the `Display` trait that enables printing.
 
 </Listing>
 
-We can also conditionally implement a trait for any type that implements
-another trait. Implementations of a trait on any type that satisfies the trait
-bounds are called _blanket implementations_ and are used extensively in the
-Rust standard library. For example, the standard library implements the
-`ToString` trait on any type that implements the `Display` trait. The `impl`
-block in the standard library looks similar to this code:
+আমরা যেকোনো টাইপের জন্য শর্তসাপেক্ষে একটি ট্রেইট ইমপ্লিমেন্ট করতে পারি যা অন্য একটি ট্রেইট ইমপ্লিমেন্ট করে। ট্রেইট বাউন্ড সন্তুষ্ট করে এমন যেকোনো টাইপের উপর একটি ট্রেইটের ইমপ্লিমেন্টেশনগুলোকে *ব্ল্যাঙ্কেট ইমপ্লিমেন্টেশন (blanket implementations)* বলা হয় এবং Rust স্ট্যান্ডার্ড লাইব্রেরিতে ব্যাপকভাবে ব্যবহৃত হয়। উদাহরণস্বরূপ, স্ট্যান্ডার্ড লাইব্রেরি যেকোনো টাইপের উপর `ToString` ট্রেইট ইমপ্লিমেন্ট করে যা `Display` ট্রেইট ইমপ্লিমেন্ট করে। স্ট্যান্ডার্ড লাইব্রেরির `impl` ব্লকটি এই কোডের মতো দেখায়:
 
 ```rust,ignore
 impl<T: Display> ToString for T {
@@ -361,29 +213,15 @@ impl<T: Display> ToString for T {
 }
 ```
 
-Because the standard library has this blanket implementation, we can call the
-`to_string` method defined by the `ToString` trait on any type that implements
-the `Display` trait. For example, we can turn integers into their corresponding
-`String` values like this because integers implement `Display`:
+যেহেতু স্ট্যান্ডার্ড লাইব্রেরিতে এই ব্ল্যাঙ্কেট ইমপ্লিমেন্টেশন রয়েছে, তাই আমরা `ToString` ট্রেইট দ্বারা সংজ্ঞায়িত `to_string` মেথডটিকে যেকোনো টাইপে কল করতে পারি যা `Display` ট্রেইট ইমপ্লিমেন্ট করে। উদাহরণস্বরূপ, আমরা ইন্টিজারগুলোকে তাদের সংশ্লিষ্ট `String` মানগুলোতে পরিণত করতে পারি কারণ ইন্টিজারগুলো `Display` ইমপ্লিমেন্ট করে:
 
 ```rust
 let s = 3.to_string();
 ```
 
-Blanket implementations appear in the documentation for the trait in the
-“Implementors” section.
+ব্ল্যাঙ্কেট ইমপ্লিমেন্টেশনগুলো ট্রেইটের জন্য ডকুমেন্টেশনের “Implementors” বিভাগে প্রদর্শিত হয়।
 
-Traits and trait bounds let us write code that uses generic type parameters to
-reduce duplication but also specify to the compiler that we want the generic
-type to have particular behavior. The compiler can then use the trait bound
-information to check that all the concrete types used with our code provide the
-correct behavior. In dynamically typed languages, we would get an error at
-runtime if we called a method on a type which didn’t define the method. But
-Rust moves these errors to compile time so we’re forced to fix the problems
-before our code is even able to run. Additionally, we don’t have to write code
-that checks for behavior at runtime because we’ve already checked at compile
-time. Doing so improves performance without having to give up the flexibility
-of generics.
+ট্রেইট এবং ট্রেইট বাউন্ড আমাদের জেনেরিক টাইপ প্যারামিটার ব্যবহার করে কোড লিখতে দেয় যাতে ডুপ্লিকেশন কমানো যায়, কিন্তু কম্পাইলারকে এটিও নির্দিষ্ট করতে দেয় যে আমরা চাই জেনেরিক টাইপের নির্দিষ্ট আচরণ থাকুক। কম্পাইলার তখন ট্রেইট বাউন্ডের তথ্য ব্যবহার করে পরীক্ষা করতে পারে যে আমাদের কোডের সাথে ব্যবহৃত সমস্ত কংক্রিট টাইপ সঠিক আচরণ প্রদান করে কিনা। ডায়নামিকালি টাইপ করা ভাষাগুলোতে, আমরা যদি এমন কোনো টাইপে একটি মেথড কল করি যা মেথডটি সংজ্ঞায়িত করে না, তাহলে আমরা রানটাইমে একটি এরর পাব। কিন্তু Rust এই এররগুলোকে কম্পাইল টাইমে নিয়ে যায় তাই আমাদের কোড চালানোর আগেই সমস্যাগুলো ঠিক করতে বাধ্য করা হয়। উপরন্তু, আমাদের এমন কোড লিখতে হবে না যা রানটাইমে আচরণের জন্য পরীক্ষা করে কারণ আমরা ইতিমধ্যেই কম্পাইল টাইমে এটি পরীক্ষা করেছি। এটি জেনেরিকের নমনীয়তা ত্যাগ না করেই পারফরম্যান্স উন্নত করে।
 
 [using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [methods]: ch05-03-method-syntax.html#defining-methods

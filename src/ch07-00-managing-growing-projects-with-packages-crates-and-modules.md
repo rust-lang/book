@@ -1,48 +1,20 @@
-# Managing Growing Projects with Packages, Crates, and Modules
+# প্যাকেজ, ক্রেট এবং মডিউল ব্যবহার করে ক্রমবর্ধমান প্রোজেক্ট পরিচালনা করা (Managing Growing Projects with Packages, Crates, and Modules)
 
-As you write large programs, organizing your code will become increasingly
-important. By grouping related functionality and separating code with distinct
-features, you’ll clarify where to find code that implements a particular
-feature and where to go to change how a feature works.
+আপনি যখন বড় প্রোগ্রাম লিখবেন, তখন আপনার কোড সংগঠিত করা ক্রমবর্ধমান গুরুত্বপূর্ণ হয়ে উঠবে। সম্পর্কিত কার্যকারিতা গ্রুপ করে এবং স্বতন্ত্র বৈশিষ্ট্যযুক্ত কোড আলাদা করার মাধ্যমে, আপনি স্পষ্ট করবেন যে কোনো নির্দিষ্ট ফিচার ইমপ্লিমেন্ট করে এমন কোড কোথায় পাওয়া যাবে এবং কোনো ফিচারের কাজ পরিবর্তন করতে কোথায় যেতে হবে।
 
-The programs we’ve written so far have been in one module in one file. As a
-project grows, you should organize code by splitting it into multiple modules
-and then multiple files. A package can contain multiple binary crates and
-optionally one library crate. As a package grows, you can extract parts into
-separate crates that become external dependencies. This chapter covers all
-these techniques. For very large projects comprising a set of interrelated
-packages that evolve together, Cargo provides _workspaces_, which we’ll cover
-in [“Cargo Workspaces”][workspaces]<!-- ignore --> in Chapter 14.
+আমরা இதுவரை যে প্রোগ্রামগুলো লিখেছি সেগুলো একটি ফাইলের মধ্যে একটি মডিউলে ছিল। একটি প্রোজেক্ট বাড়ার সাথে সাথে, আপনাকে কোডটিকে একাধিক মডিউল এবং তারপর একাধিক ফাইলে বিভক্ত করে সংগঠিত করা উচিত। একটি প্যাকেজে একাধিক বাইনারি ক্রেট এবং ঐচ্ছিকভাবে একটি লাইব্রেরি ক্রেট থাকতে পারে। একটি প্যাকেজ বাড়ার সাথে সাথে, আপনি অংশগুলোকে আলাদা ক্রেট হিসেবে বের করে নিতে পারেন যা এক্সটার্নাল ডিপেন্ডেন্সি (external dependencies) হয়ে যায়। এই চ্যাপ্টারটি এই সমস্ত কৌশল কভার করে। খুব বড় প্রোজেক্টগুলোর জন্য, যেখানে সম্পর্কযুক্ত প্যাকেজের একটি সেট একসাথে বিকশিত হয়, Cargo *ওয়ার্কস্পেস (workspaces)* সরবরাহ করে, যা আমরা চ্যাপ্টার 14-এর [“কার্গো ওয়ার্কস্পেস”][workspaces]<!-- ignore -->-এ কভার করব।
 
-We’ll also discuss encapsulating implementation details, which lets you reuse
-code at a higher level: once you’ve implemented an operation, other code can
-call your code via its public interface without having to know how the
-implementation works. The way you write code defines which parts are public for
-other code to use and which parts are private implementation details that you
-reserve the right to change. This is another way to limit the amount of detail
-you have to keep in your head.
+আমরা ইমপ্লিমেন্টেশনের বিবরণ এনক্যাপসুলেট (encapsulate) করা নিয়েও আলোচনা করব, যা আপনাকে উচ্চ স্তরে কোড পুনরায় ব্যবহার করতে দেয়: একবার আপনি একটি অপারেশন ইমপ্লিমেন্ট করলে, অন্য কোড তার পাবলিক ইন্টারফেসের মাধ্যমে আপনার কোডকে কল করতে পারে, ইমপ্লিমেন্টেশন কীভাবে কাজ করে তা না জেনেই। আপনি যেভাবে কোড লেখেন তা নির্ধারণ করে যে কোন অংশগুলো অন্য কোডের ব্যবহারের জন্য পাবলিক এবং কোন অংশগুলো প্রাইভেট ইমপ্লিমেন্টেশন বিবরণ যা পরিবর্তন করার অধিকার আপনি সংরক্ষণ করেন। এটি আপনার মাথায় রাখতে হবে এমন বিস্তারিত বিবরণের পরিমাণ সীমিত করার আরেকটি উপায়।
 
-A related concept is scope: the nested context in which code is written has a
-set of names that are defined as “in scope.” When reading, writing, and
-compiling code, programmers and compilers need to know whether a particular
-name at a particular spot refers to a variable, function, struct, enum, module,
-constant, or other item and what that item means. You can create scopes and
-change which names are in or out of scope. You can’t have two items with the
-same name in the same scope; tools are available to resolve name conflicts.
+একটি সম্পর্কিত ধারণা হল স্কোপ: কোড যে নেস্টেড প্রসঙ্গে লেখা হয় সেখানে "স্কোপের মধ্যে" হিসাবে সংজ্ঞায়িত নামের একটি সেট রয়েছে। কোড পড়ার, লেখার এবং কম্পাইল করার সময়, প্রোগ্রামার এবং কম্পাইলারদের জানা দরকার যে কোনো নির্দিষ্ট স্থানের একটি নির্দিষ্ট নাম একটি ভেরিয়েবল, ফাংশন, স্ট্রাকট, এনাম, মডিউল, কনস্ট্যান্ট বা অন্য কোনো আইটেমকে নির্দেশ করে কিনা এবং সেই আইটেমটির অর্থ কী। আপনি স্কোপ তৈরি করতে পারেন এবং কোন নামগুলো স্কোপের ভিতরে বা বাইরে আছে তা পরিবর্তন করতে পারেন। আপনি একই স্কোপে একই নামের দুটি আইটেম রাখতে পারবেন না; নামের দ্বন্দ্ব সমাধানের জন্য টুল উপলব্ধ রয়েছে।
 
-Rust has a number of features that allow you to manage your code’s
-organization, including which details are exposed, which details are private,
-and what names are in each scope in your programs. These features, sometimes
-collectively referred to as the _module system_, include:
+Rust-এর বেশ কয়েকটি ফিচার রয়েছে যা আপনাকে আপনার কোডের সংগঠন পরিচালনা করতে দেয়, যার মধ্যে কোন বিবরণগুলো উন্মুক্ত, কোন বিবরণগুলো প্রাইভেট এবং আপনার প্রোগ্রামগুলোর প্রতিটি স্কোপে কোন নামগুলো রয়েছে তা সহ। এই ফিচারগুলো, কখনও কখনও সম্মিলিতভাবে *মডিউল সিস্টেম (module system)* হিসাবে উল্লেখ করা হয়, এর মধ্যে নিম্নলিখিতগুলো অন্তর্ভুক্ত:
 
-- **Packages:** A Cargo feature that lets you build, test, and share crates
-- **Crates:** A tree of modules that produces a library or executable
-- **Modules** and **use:** Let you control the organization, scope, and
-  privacy of paths
-- **Paths:** A way of naming an item, such as a struct, function, or module
+-   **প্যাকেজ (Packages):** একটি Cargo ফিচার যা আপনাকে ক্রেট তৈরি, পরীক্ষা এবং শেয়ার করতে দেয়।
+-   **ক্রেট (Crates):** মডিউলের একটি ট্রি যা একটি লাইব্রেরি বা এক্সিকিউটেবল তৈরি করে।
+-   **মডিউল (Modules)** এবং **use:** আপনাকে পাথগুলোর সংগঠন, স্কোপ এবং গোপনীয়তা নিয়ন্ত্রণ করতে দেয়।
+-   **পাথ (Paths):** একটি আইটেম, যেমন একটি স্ট্রাকট, ফাংশন বা মডিউলের নামকরণের একটি উপায়।
 
-In this chapter, we’ll cover all these features, discuss how they interact, and
-explain how to use them to manage scope. By the end, you should have a solid
-understanding of the module system and be able to work with scopes like a pro!
+এই চ্যাপ্টারে, আমরা এই সমস্ত ফিচারগুলো কভার করব, সেগুলো কীভাবে ইন্টারঅ্যাক্ট করে তা নিয়ে আলোচনা করব এবং স্কোপ পরিচালনা করতে সেগুলো কীভাবে ব্যবহার করতে হয় তা ব্যাখ্যা করব। শেষ পর্যন্ত, আপনার মডিউল সিস্টেম সম্পর্কে একটি দৃঢ় বোধ থাকা উচিত এবং একজন পেশাদারের মতো স্কোপ নিয়ে কাজ করতে সক্ষম হওয়া উচিত!
 
 [workspaces]: ch14-03-cargo-workspaces.html

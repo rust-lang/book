@@ -1,47 +1,20 @@
-## Storing UTF-8 Encoded Text with Strings
+## স্ট্রিং দিয়ে UTF-8 এনকোডেড টেক্সট সংরক্ষণ করা (Storing UTF-8 Encoded Text with Strings)
 
-We talked about strings in Chapter 4, but we’ll look at them in more depth now.
-New Rustaceans commonly get stuck on strings for a combination of three
-reasons: Rust’s propensity for exposing possible errors, strings being a more
-complicated data structure than many programmers give them credit for, and
-UTF-8. These factors combine in a way that can seem difficult when you’re
-coming from other programming languages.
+আমরা চ্যাপ্টার ৪-এ স্ট্রিং নিয়ে কথা বলেছি, কিন্তু এখন আমরা সেগুলোর দিকে আরও গভীরভাবে দেখব। নতুন Rustacean-রা সাধারণত স্ট্রিং নিয়ে সমস্যায় পড়েন তিনটি কারণে: Rust-এর সম্ভাব্য এররগুলো প্রকাশ করার প্রবণতা, স্ট্রিং অনেকের ধারণার চেয়ে বেশি জটিল ডেটা স্ট্রাকচার এবং UTF-8। এই বিষয়গুলো একত্রিত হয়ে এমন একটি পরিস্থিতির সৃষ্টি করে যা অন্যান্য প্রোগ্রামিং ভাষা থেকে আসা লোকেদের কাছে কঠিন মনে হতে পারে।
 
-We discuss strings in the context of collections because strings are
-implemented as a collection of bytes, plus some methods to provide useful
-functionality when those bytes are interpreted as text. In this section, we’ll
-talk about the operations on `String` that every collection type has, such as
-creating, updating, and reading. We’ll also discuss the ways in which `String`
-is different from the other collections, namely how indexing into a `String` is
-complicated by the differences between how people and computers interpret
-`String` data.
+আমরা কালেকশনের পরিপ্রেক্ষিতে স্ট্রিং নিয়ে আলোচনা করি কারণ স্ট্রিংগুলো বাইটের একটি কালেকশন হিসাবে প্রয়োগ করা হয়, সেইসাথে কিছু মেথড যা সেই বাইটগুলোকে টেক্সট হিসাবে ব্যাখ্যা করা হলে দরকারী কার্যকারিতা প্রদান করে। এই বিভাগে, আমরা `String`-এর অপারেশনগুলো নিয়ে কথা বলব যা প্রতিটি কালেকশন টাইপের আছে, যেমন তৈরি করা, আপডেট করা এবং পড়া। আমরা আরও আলোচনা করব কিভাবে `String` অন্যান্য কালেকশন থেকে আলাদা, অর্থাৎ কিভাবে একটি `String`-এ ইনডেক্সিং করা মানুষের এবং কম্পিউটারের `String` ডেটা ব্যাখ্যা করার পার্থক্যের কারণে জটিল।
 
-### What Is a String?
+### স্ট্রিং কী? (What Is a String?)
 
-We’ll first define what we mean by the term _string_. Rust has only one string
-type in the core language, which is the string slice `str` that is usually seen
-in its borrowed form `&str`. In Chapter 4, we talked about _string slices_,
-which are references to some UTF-8 encoded string data stored elsewhere. String
-literals, for example, are stored in the program’s binary and are therefore
-string slices.
+আমরা প্রথমে *স্ট্রিং (string)* বলতে কী বোঝায় তা সংজ্ঞায়িত করব। Rust-এর কোর ল্যাঙ্গুয়েজে শুধুমাত্র একটি স্ট্রিং টাইপ রয়েছে, সেটি হল স্ট্রিং স্লাইস `str` যা সাধারণত এর বোরোড (borrowed) ফর্ম `&str`-এ দেখা যায়। চ্যাপ্টার ৪-এ, আমরা *স্ট্রিং স্লাইস* নিয়ে কথা বলেছি, যেগুলো অন্য কোথাও সংরক্ষিত কিছু UTF-8 এনকোডেড স্ট্রিং ডেটার রেফারেন্স। উদাহরণস্বরূপ, স্ট্রিং লিটারেলগুলো প্রোগ্রামের বাইনারিতে সংরক্ষণ করা হয় এবং তাই সেগুলো স্ট্রিং স্লাইস।
 
-The `String` type, which is provided by Rust’s standard library rather than
-coded into the core language, is a growable, mutable, owned, UTF-8 encoded
-string type. When Rustaceans refer to “strings” in Rust, they might be
-referring to either the `String` or the string slice `&str` types, not just one
-of those types. Although this section is largely about `String`, both types are
-used heavily in Rust’s standard library, and both `String` and string slices
-are UTF-8 encoded.
+`String` টাইপ, যা Rust-এর স্ট্যান্ডার্ড লাইব্রেরি দ্বারা সরবরাহ করা হয়, কোর ল্যাঙ্গুয়েজের মধ্যে কোড করা হয়নি, এটি একটি প্রসারণযোগ্য, পরিবর্তনযোগ্য, ওনড (owned), UTF-8 এনকোডেড স্ট্রিং টাইপ। যখন Rustacean-রা Rust-এ "স্ট্রিং" উল্লেখ করে, তখন তারা `String` বা স্ট্রিং স্লাইস `&str` টাইপ উভয়কেই বোঝাতে পারে, শুধু একটি টাইপকে নয়। যদিও এই বিভাগটি মূলত `String` সম্পর্কে, উভয় টাইপই Rust-এর স্ট্যান্ডার্ড লাইব্রেরিতে প্রচুর ব্যবহৃত হয় এবং `String` ও স্ট্রিং স্লাইস উভয়ই UTF-8 এনকোডেড।
 
-### Creating a New String
+### একটি নতুন স্ট্রিং তৈরি করা (Creating a New String)
 
-Many of the same operations available with `Vec<T>` are available with `String`
-as well because `String` is actually implemented as a wrapper around a vector
-of bytes with some extra guarantees, restrictions, and capabilities. An example
-of a function that works the same way with `Vec<T>` and `String` is the `new`
-function to create an instance, shown in Listing 8-11.
+`Vec<T>`-এর সাথে উপলব্ধ অনেকগুলি অপারেশন `String`-এর সাথেও উপলব্ধ, কারণ `String` আসলে কিছু অতিরিক্ত গ্যারান্টি, সীমাবদ্ধতা এবং ক্ষমতা সহ বাইটের একটি ভেক্টরের চারপাশে একটি র‍্যাপার (wrapper) হিসাবে প্রয়োগ করা হয়। `Vec<T>` এবং `String`-এর সাথে একইভাবে কাজ করে এমন একটি ফাংশনের উদাহরণ হল একটি ইন্সট্যান্স তৈরি করার জন্য `new` ফাংশন, যা Listing 8-11-তে দেখানো হয়েছে।
 
-<Listing number="8-11" caption="Creating a new, empty `String`">
+<Listing number="8-11" caption="একটি নতুন, খালি `String` তৈরি করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-11/src/main.rs:here}}
@@ -49,13 +22,9 @@ function to create an instance, shown in Listing 8-11.
 
 </Listing>
 
-This line creates a new, empty string called `s`, into which we can then load
-data. Often, we’ll have some initial data with which we want to start the
-string. For that, we use the `to_string` method, which is available on any type
-that implements the `Display` trait, as string literals do. Listing 8-12 shows
-two examples.
+এই লাইনটি `s` নামে একটি নতুন, খালি স্ট্রিং তৈরি করে, যেখানে আমরা ডেটা লোড করতে পারি। প্রায়শই, আমাদের কাছে কিছু প্রাথমিক ডেটা থাকবে যা দিয়ে আমরা স্ট্রিং শুরু করতে চাই। এর জন্য, আমরা `to_string` মেথড ব্যবহার করি, যা যেকোনো টাইপে উপলব্ধ যা `Display` ট্রেইট ইমপ্লিমেন্ট করে, যেমনটি স্ট্রিং লিটারেলগুলো করে। Listing 8-12 দুটি উদাহরণ দেখায়।
 
-<Listing number="8-12" caption="Using the `to_string` method to create a `String` from a string literal">
+<Listing number="8-12" caption="একটি স্ট্রিং লিটারেল থেকে একটি `String` তৈরি করতে `to_string` মেথড ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-12/src/main.rs:here}}
@@ -63,13 +32,11 @@ two examples.
 
 </Listing>
 
-This code creates a string containing `initial contents`.
+এই কোডটি `initial contents` ধারণকারী একটি স্ট্রিং তৈরি করে।
 
-We can also use the function `String::from` to create a `String` from a string
-literal. The code in Listing 8-13 is equivalent to the code in Listing 8-12
-that uses `to_string`.
+আমরা একটি স্ট্রিং লিটারেল থেকে একটি `String` তৈরি করতে `String::from` ফাংশনটিও ব্যবহার করতে পারি। Listing 8-13-এর কোডটি Listing 8-12-এর কোডের সমতুল্য যা `to_string` ব্যবহার করে।
 
-<Listing number="8-13" caption="Using the `String::from` function to create a `String` from a string literal">
+<Listing number="8-13" caption="একটি স্ট্রিং লিটারেল থেকে একটি `String` তৈরি করতে `String::from` ফাংশন ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-13/src/main.rs:here}}
@@ -77,16 +44,11 @@ that uses `to_string`.
 
 </Listing>
 
-Because strings are used for so many things, we can use many different generic
-APIs for strings, providing us with a lot of options. Some of them can seem
-redundant, but they all have their place! In this case, `String::from` and
-`to_string` do the same thing, so which one you choose is a matter of style and
-readability.
+যেহেতু স্ট্রিংগুলো অনেক কিছুর জন্য ব্যবহার করা হয়, তাই আমরা স্ট্রিংয়ের জন্য অনেকগুলি ভিন্ন জেনেরিক API ব্যবহার করতে পারি, যা আমাদের অনেক অপশন সরবরাহ করে। এগুলোর মধ্যে কিছু অপ্রয়োজনীয় মনে হতে পারে, তবে সবারই নিজস্ব স্থান রয়েছে! এই ক্ষেত্রে, `String::from` এবং `to_string` একই কাজ করে, তাই আপনি কোনটি বেছে নেবেন তা স্টাইল এবং পঠনযোগ্যতার উপর নির্ভর করে।
 
-Remember that strings are UTF-8 encoded, so we can include any properly encoded
-data in them, as shown in Listing 8-14.
+মনে রাখবেন যে স্ট্রিংগুলো UTF-8 এনকোডেড, তাই আমরা সেগুলোর মধ্যে যেকোনো সঠিকভাবে এনকোড করা ডেটা অন্তর্ভুক্ত করতে পারি, যেমনটি Listing 8-14-তে দেখানো হয়েছে।
 
-<Listing number="8-14" caption="Storing greetings in different languages in strings">
+<Listing number="8-14" caption="স্ট্রিং-এ বিভিন্ন ভাষায় অভিবাদন সংরক্ষণ করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:here}}
@@ -94,20 +56,17 @@ data in them, as shown in Listing 8-14.
 
 </Listing>
 
-All of these are valid `String` values.
+এগুলো সবই বৈধ `String` মান।
 
-### Updating a String
+### একটি স্ট্রিং আপডেট করা (Updating a String)
 
-A `String` can grow in size and its contents can change, just like the contents
-of a `Vec<T>`, if you push more data into it. In addition, you can conveniently
-use the `+` operator or the `format!` macro to concatenate `String` values.
+একটি `String` আকারে বাড়তে পারে এবং এর কনটেন্ট পরিবর্তন হতে পারে, ঠিক `Vec<T>`-এর কনটেন্টের মতোই, যদি আপনি এতে আরও ডেটা পুশ করেন। এছাড়াও, আপনি সুবিধাজনকভাবে `+` অপারেটর বা `format!` ম্যাক্রো ব্যবহার করে `String` মানগুলোকে সংযুক্ত করতে পারেন।
 
-#### Appending to a String with `push_str` and `push`
+#### `push_str` এবং `push` দিয়ে একটি স্ট্রিং-এ যুক্ত করা (Appending to a String with `push_str` and `push`)
 
-We can grow a `String` by using the `push_str` method to append a string slice,
-as shown in Listing 8-15.
+আমরা একটি স্ট্রিং স্লাইস যুক্ত করতে `push_str` মেথড ব্যবহার করে একটি `String` বাড়াতে পারি, যেমনটি Listing 8-15-তে দেখানো হয়েছে।
 
-<Listing number="8-15" caption="Appending a string slice to a `String` using the `push_str` method">
+<Listing number="8-15" caption="`push_str` মেথড ব্যবহার করে একটি `String`-এ একটি স্ট্রিং স্লাইস যুক্ত করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-15/src/main.rs:here}}
@@ -115,12 +74,9 @@ as shown in Listing 8-15.
 
 </Listing>
 
-After these two lines, `s` will contain `foobar`. The `push_str` method takes a
-string slice because we don’t necessarily want to take ownership of the
-parameter. For example, in the code in Listing 8-16, we want to be able to use
-`s2` after appending its contents to `s1`.
+এই দুটি লাইনের পরে, `s`-এ `foobar` থাকবে। `push_str` মেথডটি একটি স্ট্রিং স্লাইস নেয় কারণ আমরা অপরিহার্যভাবে প্যারামিটারের ওনারশিপ নিতে চাই না। উদাহরণস্বরূপ, Listing 8-16-এর কোডে, আমরা `s1`-এ এর কনটেন্ট যুক্ত করার পরে `s2` ব্যবহার করতে সক্ষম হতে চাই।
 
-<Listing number="8-16" caption="Using a string slice after appending its contents to a `String`">
+<Listing number="8-16" caption="একটি `String`-এ এর কনটেন্ট যুক্ত করার পরে একটি স্ট্রিং স্লাইস ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-16/src/main.rs:here}}
@@ -128,14 +84,11 @@ parameter. For example, in the code in Listing 8-16, we want to be able to use
 
 </Listing>
 
-If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
-its value on the last line. However, this code works as we’d expect!
+যদি `push_str` মেথডটি `s2`-এর ওনারশিপ নিত, তাহলে আমরা শেষ লাইনে এর মান প্রিন্ট করতে পারতাম না। যাইহোক, এই কোডটি আমাদের প্রত্যাশা অনুযায়ী কাজ করে!
 
-The `push` method takes a single character as a parameter and adds it to the
-`String`. Listing 8-17 adds the letter _l_ to a `String` using the `push`
-method.
+`push` মেথডটি একটি একক অক্ষরকে প্যারামিটার হিসাবে নেয় এবং এটিকে `String`-এ যুক্ত করে। Listing 8-17 `push` মেথড ব্যবহার করে একটি `String`-এ _l_ অক্ষর যোগ করে।
 
-<Listing number="8-17" caption="Adding one character to a `String` value using `push`">
+<Listing number="8-17" caption="`push` ব্যবহার করে একটি `String` মানে একটি অক্ষর যোগ করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-17/src/main.rs:here}}
@@ -143,14 +96,13 @@ method.
 
 </Listing>
 
-As a result, `s` will contain `lol`.
+ফলস্বরূপ, `s`-এ `lol` থাকবে।
 
-#### Concatenation with the `+` Operator or the `format!` Macro
+#### `+` অপারেটর বা `format!` ম্যাক্রো দিয়ে কনক্যাটেনেশন (Concatenation with the `+` Operator or the `format!` Macro)
 
-Often, you’ll want to combine two existing strings. One way to do so is to use
-the `+` operator, as shown in Listing 8-18.
+প্রায়শই, আপনি দুটি বিদ্যমান স্ট্রিংকে একত্রিত করতে চাইবেন। এটি করার একটি উপায় হল `+` অপারেটর ব্যবহার করা, যেমনটি Listing 8-18-এ দেখানো হয়েছে।
 
-<Listing number="8-18" caption="Using the `+` operator to combine two `String` values into a new `String` value">
+<Listing number="8-18" caption="দুটি `String` মানকে একটি নতুন `String` মানে একত্রিত করতে `+` অপারেটর ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-18/src/main.rs:here}}
@@ -158,73 +110,39 @@ the `+` operator, as shown in Listing 8-18.
 
 </Listing>
 
-The string `s3` will contain `Hello, world!`. The reason `s1` is no longer
-valid after the addition, and the reason we used a reference to `s2`, has to do
-with the signature of the method that’s called when we use the `+` operator.
-The `+` operator uses the `add` method, whose signature looks something like
-this:
+স্ট্রিং `s3`-তে থাকবে `Hello, world!`। `s1` যোগ করার পরে আর বৈধ না হওয়ার কারণ এবং আমরা `s2`-এর একটি রেফারেন্স ব্যবহার করার কারণ হল আমরা যখন `+` অপারেটর ব্যবহার করি তখন যে মেথডটি কল করা হয় তার সিগনেচার। `+` অপারেটর `add` মেথড ব্যবহার করে, যার সিগনেচার অনেকটা এরকম দেখায়:
 
 ```rust,ignore
 fn add(self, s: &str) -> String {
 ```
 
-In the standard library, you’ll see `add` defined using generics and associated
-types. Here, we’ve substituted in concrete types, which is what happens when we
-call this method with `String` values. We’ll discuss generics in Chapter 10.
-This signature gives us the clues we need in order to understand the tricky
-bits of the `+` operator.
+স্ট্যান্ডার্ড লাইব্রেরিতে, আপনি `add` কে জেনেরিক এবং অ্যাসোসিয়েটেড টাইপ ব্যবহার করে সংজ্ঞায়িত দেখতে পাবেন। এখানে, আমরা কংক্রিট টাইপগুলোতে প্রতিস্থাপিত করেছি, যা ঘটে যখন আমরা এই মেথডটিকে `String` মান দিয়ে কল করি। আমরা চ্যাপ্টার ১০-এ জেনেরিক নিয়ে আলোচনা করব। এই সিগনেচারটি আমাদের `+` অপারেটরের জটিল বিটগুলো বোঝার জন্য প্রয়োজনীয় ক্লু দেয়।
 
-First, `s2` has an `&`, meaning that we’re adding a _reference_ of the second
-string to the first string. This is because of the `s` parameter in the `add`
-function: we can only add a `&str` to a `String`; we can’t add two `String`
-values together. But wait—the type of `&s2` is `&String`, not `&str`, as
-specified in the second parameter to `add`. So why does Listing 8-18 compile?
+প্রথমত, `s2`-এর একটি `&` রয়েছে, যার অর্থ হল আমরা দ্বিতীয় স্ট্রিংটির একটি *রেফারেন্স* প্রথম স্ট্রিংটিতে যুক্ত করছি। এটি `add` ফাংশনের `s` প্যারামিটারের কারণে: আমরা শুধুমাত্র একটি `String`-এর সাথে একটি `&str` যোগ করতে পারি; আমরা দুটি `String` মান একসাথে যোগ করতে পারি না। কিন্তু অপেক্ষা করুন—`&s2`-এর টাইপ হল `&String`, `&str` নয়, যেমনটি `add`-এর দ্বিতীয় প্যারামিটারে নির্দিষ্ট করা হয়েছে। তাহলে Listing 8-18 কেন কম্পাইল হয়?
 
-The reason we’re able to use `&s2` in the call to `add` is that the compiler
-can _coerce_ the `&String` argument into a `&str`. When we call the `add`
-method, Rust uses a _deref coercion_, which here turns `&s2` into `&s2[..]`.
-We’ll discuss deref coercion in more depth in Chapter 15. Because `add` does
-not take ownership of the `s` parameter, `s2` will still be a valid `String`
-after this operation.
+আমরা `add` কলে `&s2` ব্যবহার করতে সক্ষম হওয়ার কারণ হল কম্পাইলার `&String` আর্গুমেন্টটিকে একটি `&str`-এ *কোয়ার্স (coerce)* করতে পারে। যখন আমরা `add` মেথডটি কল করি, তখন Rust একটি *ডিরেফ কোয়েরশন (deref coercion)* ব্যবহার করে, যা এখানে `&s2` কে `&s2[..]`-তে পরিণত করে। আমরা চ্যাপ্টার ১৫-এ ডিরেফ কোয়েরশন নিয়ে আরও বিস্তারিত আলোচনা করব। যেহেতু `add` `s` প্যারামিটারের ওনারশিপ নেয় না, তাই `s2` এই অপারেশনের পরেও একটি বৈধ `String` থাকবে।
 
-Second, we can see in the signature that `add` takes ownership of `self`
-because `self` does _not_ have an `&`. This means `s1` in Listing 8-18 will be
-moved into the `add` call and will no longer be valid after that. So, although
-`let s3 = s1 + &s2;` looks like it will copy both strings and create a new one,
-this statement actually takes ownership of `s1`, appends a copy of the contents
-of `s2`, and then returns ownership of the result. In other words, it looks
-like it’s making a lot of copies, but it isn’t; the implementation is more
-efficient than copying.
+দ্বিতীয়ত, আমরা সিগনেচারে দেখতে পাচ্ছি যে `add` `self`-এর ওনারশিপ নেয় কারণ `self`-এর `&` *নেই*। এর মানে Listing 8-18-এর `s1` `add` কলে সরানো হবে এবং তার পরে আর বৈধ থাকবে না। সুতরাং, যদিও `let s3 = s1 + &s2;` দেখে মনে হচ্ছে এটি উভয় স্ট্রিং কপি করবে এবং একটি নতুন তৈরি করবে, এই স্টেটমেন্টটি আসলে `s1`-এর ওনারশিপ নেয়, `s2`-এর কনটেন্টের একটি কপি যুক্ত করে এবং তারপর ফলাফলের ওনারশিপ ফিরিয়ে দেয়। অন্য কথায়, এটি দেখতে অনেকগুলো কপি তৈরি করার মতো, কিন্তু তা নয়; ইমপ্লিমেন্টেশনটি কপি করার চেয়ে বেশি কার্যকরী।
 
-If we need to concatenate multiple strings, the behavior of the `+` operator
-gets unwieldy:
+যদি আমাদের একাধিক স্ট্রিংকে কনক্যাটেনেট করতে হয়, তাহলে `+` অপারেটরের আচরণ জটিল হয়ে যায়:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/no-listing-01-concat-multiple-strings/src/main.rs:here}}
 ```
 
-At this point, `s` will be `tic-tac-toe`. With all of the `+` and `"`
-characters, it’s difficult to see what’s going on. For combining strings in
-more complicated ways, we can instead use the `format!` macro:
+এই পর্যায়ে, `s` হবে `tic-tac-toe`। সমস্ত `+` এবং `"` অক্ষরগুলোর সাথে, কী ঘটছে তা দেখা কঠিন। আরও জটিল উপায়ে স্ট্রিংগুলোকে একত্রিত করার জন্য, আমরা পরিবর্তে `format!` ম্যাক্রো ব্যবহার করতে পারি:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/no-listing-02-format/src/main.rs:here}}
 ```
 
-This code also sets `s` to `tic-tac-toe`. The `format!` macro works like
-`println!`, but instead of printing the output to the screen, it returns a
-`String` with the contents. The version of the code using `format!` is much
-easier to read, and the code generated by the `format!` macro uses references
-so that this call doesn’t take ownership of any of its parameters.
+এই কোডটিও `s`-কে `tic-tac-toe`-তে সেট করে। `format!` ম্যাক্রো `println!`-এর মতোই কাজ করে, কিন্তু স্ক্রিনে আউটপুট প্রিন্ট করার পরিবর্তে, এটি কনটেন্ট সহ একটি `String` রিটার্ন করে। `format!` ব্যবহার করে কোডের ভার্সনটি পড়া অনেক সহজ এবং `format!` ম্যাক্রো দ্বারা জেনারেট করা কোড রেফারেন্স ব্যবহার করে যাতে এই কলটি এর কোনো প্যারামিটারের ওনারশিপ না নেয়।
 
-### Indexing into Strings
+### স্ট্রিংগুলোতে ইনডেক্সিং (Indexing into Strings)
 
-In many other programming languages, accessing individual characters in a
-string by referencing them by index is a valid and common operation. However,
-if you try to access parts of a `String` using indexing syntax in Rust, you’ll
-get an error. Consider the invalid code in Listing 8-19.
+অন্যান্য অনেক প্রোগ্রামিং ল্যাঙ্গুয়েজে, ইনডেক্সের মাধ্যমে রেফারেন্স করে একটি স্ট্রিংয়ের পৃথক অক্ষরগুলো অ্যাক্সেস করা একটি বৈধ এবং সাধারণ অপারেশন। যাইহোক, আপনি যদি Rust-এ ইনডেক্সিং সিনট্যাক্স ব্যবহার করে একটি `String`-এর অংশগুলো অ্যাক্সেস করার চেষ্টা করেন, তাহলে আপনি একটি এরর পাবেন। Listing 8-19-এর অবৈধ কোডটি বিবেচনা করুন।
 
-<Listing number="8-19" caption="Attempting to use indexing syntax with a String">
+<Listing number="8-19" caption="একটি String-এর সাথে ইনডেক্সিং সিনট্যাক্স ব্যবহার করার চেষ্টা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-19/src/main.rs:here}}
@@ -232,109 +150,71 @@ get an error. Consider the invalid code in Listing 8-19.
 
 </Listing>
 
-This code will result in the following error:
+এই কোডটির ফলে নিম্নলিখিত এরর হবে:
 
 ```console
 {{#include ../listings/ch08-common-collections/listing-08-19/output.txt}}
 ```
 
-The error and the note tell the story: Rust strings don’t support indexing. But
-why not? To answer that question, we need to discuss how Rust stores strings in
-memory.
+এরর এবং নোটটি গল্পটি বলে: Rust স্ট্রিংগুলো ইনডেক্সিং সমর্থন করে না। কিন্তু কেন নয়? এই প্রশ্নের উত্তর দেওয়ার জন্য, আমাদের আলোচনা করতে হবে কিভাবে Rust মেমরিতে স্ট্রিংগুলো সংরক্ষণ করে।
 
-#### Internal Representation
+#### অভ্যন্তরীণ উপস্থাপনা (Internal Representation)
 
-A `String` is a wrapper over a `Vec<u8>`. Let’s look at some of our properly
-encoded UTF-8 example strings from Listing 8-14. First, this one:
+একটি `String` হল একটি `Vec<u8>`-এর উপর একটি র‍্যাপার। Listing 8-14 থেকে আমাদের সঠিকভাবে এনকোড করা UTF-8 উদাহরণের কিছু স্ট্রিং দেখা যাক। প্রথমে, এটি:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:spanish}}
 ```
 
-In this case, `len` will be `4`, which means the vector storing the string
-`"Hola"` is 4 bytes long. Each of these letters takes one byte when encoded in
-UTF-8. The following line, however, may surprise you (note that this string
-begins with the capital Cyrillic letter _Ze_, not the number 3):
+এই ক্ষেত্রে, `len` হবে `4`, যার অর্থ `"Hola"` স্ট্রিংটি সংরক্ষণ করা ভেক্টরটি 4 বাইট লম্বা। UTF-8-এ এনকোড করা হলে এই প্রতিটি অক্ষর এক বাইট নেয়। নিম্নলিখিত লাইনটি, যাইহোক, আপনাকে অবাক করতে পারে (মনে রাখবেন যে এই স্ট্রিংটি বড় হাতের সিরিলিক অক্ষর _Ze_ দিয়ে শুরু হয়, সংখ্যা 3 নয়):
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:russian}}
 ```
 
-If you were asked how long the string is, you might say 12. In fact, Rust’s
-answer is 24: that’s the number of bytes it takes to encode “Здравствуйте” in
-UTF-8, because each Unicode scalar value in that string takes 2 bytes of
-storage. Therefore, an index into the string’s bytes will not always correlate
-to a valid Unicode scalar value. To demonstrate, consider this invalid Rust
-code:
+আপনাকে যদি জিজ্ঞাসা করা হয় স্ট্রিংটি কত লম্বা, তাহলে আপনি হয়তো বলবেন 12। আসলে, Rust-এর উত্তর হল 24: UTF-8-এ “Здравствуйте” এনকোড করতে যত বাইট লাগে, কারণ সেই স্ট্রিংয়ের প্রতিটি ইউনিকোড স্কেলার মান 2 বাইট স্টোরেজ নেয়। অতএব, স্ট্রিংয়ের বাইটগুলোতে একটি ইনডেক্স সর্বদাই একটি বৈধ ইউনিকোড স্কেলার মানের সাথে সম্পর্কযুক্ত হবে না। এটি প্রদর্শন করতে, এই অবৈধ Rust কোডটি বিবেচনা করুন:
 
 ```rust,ignore,does_not_compile
 let hello = "Здравствуйте";
 let answer = &hello[0];
 ```
 
-You already know that `answer` will not be `З`, the first letter. When encoded
-in UTF-8, the first byte of `З` is `208` and the second is `151`, so it would
-seem that `answer` should in fact be `208`, but `208` is not a valid character
-on its own. Returning `208` is likely not what a user would want if they asked
-for the first letter of this string; however, that’s the only data that Rust
-has at byte index 0. Users generally don’t want the byte value returned, even
-if the string contains only Latin letters: if `&"hi"[0]` were valid code that
-returned the byte value, it would return `104`, not `h`.
+আপনি ইতিমধ্যেই জানেন যে `answer` `З` হবে না, প্রথম অক্ষর। UTF-8-এ এনকোড করা হলে, `З`-এর প্রথম বাইট হল `208` এবং দ্বিতীয়টি হল `151`, তাই মনে হতে পারে যে `answer` আসলে `208` হওয়া উচিত, কিন্তু `208` নিজে থেকে একটি বৈধ অক্ষর নয়। `208` রিটার্ন করা সম্ভবত ব্যবহারকারী যা চাইবেন তা নয় যদি তারা এই স্ট্রিংটির প্রথম অক্ষরটি জিজ্ঞাসা করে; তবে, Rust-এর কাছে বাইট ইনডেক্স 0-তে সেই ডেটাই রয়েছে। ব্যবহারকারীরা সাধারণত বাইট মান রিটার্ন চান না, এমনকী যদি স্ট্রিংটিতে শুধুমাত্র ল্যাটিন অক্ষর থাকে: যদি `&"hi"[0]` বৈধ কোড হত যা বাইট মান রিটার্ন করত, তাহলে এটি `h` নয়, `104` রিটার্ন করত।
 
-The answer, then, is that to avoid returning an unexpected value and causing
-bugs that might not be discovered immediately, Rust doesn’t compile this code
-at all and prevents misunderstandings early in the development process.
+তাহলে, উত্তর হল, একটি অপ্রত্যাশিত মান রিটার্ন করা এবং বাগগুলো এড়াতে যা অবিলম্বে আবিষ্কার নাও হতে পারে, Rust এই কোডটি কম্পাইল করে না এবং ডেভেলপমেন্ট প্রক্রিয়ার শুরুতেই ভুল বোঝাবুঝি প্রতিরোধ করে।
 
-#### Bytes and Scalar Values and Grapheme Clusters! Oh My!
+#### বাইট এবং স্কেলার মান এবং গ্রাফিম ক্লাস্টার! ওহ মাই! (Bytes and Scalar Values and Grapheme Clusters! Oh My!)
 
-Another point about UTF-8 is that there are actually three relevant ways to
-look at strings from Rust’s perspective: as bytes, scalar values, and grapheme
-clusters (the closest thing to what we would call _letters_).
+UTF-8 সম্পর্কে আরেকটি বিষয় হল যে Rust-এর দৃষ্টিকোণ থেকে স্ট্রিংগুলো দেখার জন্য আসলে তিনটি প্রাসঙ্গিক উপায় রয়েছে: বাইট হিসাবে, স্কেলার মান হিসাবে এবং গ্রাফিম ক্লাস্টার হিসাবে (আমরা যাকে *অক্ষর* বলব তার সবচেয়ে কাছের জিনিস)।
 
-If we look at the Hindi word “नमस्ते” written in the Devanagari script, it is
-stored as a vector of `u8` values that looks like this:
+আমরা যদি দেবনাগরী লিপিতে লেখা হিন্দি শব্দ “नमस्ते”-এর দিকে তাকাই, তাহলে এটি `u8` মানগুলোর একটি ভেক্টর হিসাবে সংরক্ষিত হয় যা দেখতে এইরকম:
 
 ```text
 [224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164,
 224, 165, 135]
 ```
 
-That’s 18 bytes and is how computers ultimately store this data. If we look at
-them as Unicode scalar values, which are what Rust’s `char` type is, those
-bytes look like this:
+এটি 18 বাইট এবং কম্পিউটারগুলো শেষ পর্যন্ত এই ডেটা এভাবেই সংরক্ষণ করে। আমরা যদি সেগুলোকে ইউনিকোড স্কেলার মান হিসাবে দেখি, যেগুলো Rust-এর `char` টাইপ, তাহলে সেই বাইটগুলো দেখতে এইরকম:
 
 ```text
 ['न', 'म', 'स', '्', 'त', 'े']
 ```
 
-There are six `char` values here, but the fourth and sixth are not letters:
-they’re diacritics that don’t make sense on their own. Finally, if we look at
-them as grapheme clusters, we’d get what a person would call the four letters
-that make up the Hindi word:
+এখানে ছয়টি `char` মান রয়েছে, কিন্তু চতুর্থ এবং ষষ্ঠটি অক্ষর নয়: সেগুলো হল ডায়াক্রিটিকস (diacritics) যেগুলোর নিজস্ব কোনো অর্থ নেই। অবশেষে, যদি আমরা সেগুলোকে গ্রাফিম ক্লাস্টার হিসাবে দেখি, তাহলে আমরা একজন ব্যক্তি যাকে হিন্দি শব্দটি তৈরি করা চারটি অক্ষর বলবে তা পাব:
 
 ```text
 ["न", "म", "स्", "ते"]
 ```
 
-Rust provides different ways of interpreting the raw string data that computers
-store so that each program can choose the interpretation it needs, no matter
-what human language the data is in.
+Rust কম্পিউটারগুলোর সংরক্ষণ করা কাঁচা স্ট্রিং ডেটা ব্যাখ্যা করার বিভিন্ন উপায় সরবরাহ করে যাতে প্রতিটি প্রোগ্রাম তার প্রয়োজনীয় ব্যাখ্যাটি বেছে নিতে পারে, ডেটাটি কোন মানব ভাষা হোক না কেন।
 
-A final reason Rust doesn’t allow us to index into a `String` to get a
-character is that indexing operations are expected to always take constant time
-(O(1)). But it isn’t possible to guarantee that performance with a `String`,
-because Rust would have to walk through the contents from the beginning to the
-index to determine how many valid characters there were.
+Rust আমাদের একটি অক্ষর পাওয়ার জন্য একটি `String`-এ ইনডেক্স করার অনুমতি দেয় না তার একটি শেষ কারণ হল ইনডেক্সিং অপারেশনগুলো সর্বদাই কনস্ট্যান্ট টাইমে (O(1)) নেওয়ার আশা করা হয়। কিন্তু একটি `String` দিয়ে সেই পারফরম্যান্স গ্যারান্টি দেওয়া সম্ভব নয়, কারণ Rust-কে শুরু থেকে ইনডেক্স পর্যন্ত কনটেন্টের মধ্যে দিয়ে যেতে হবে যাতে কতগুলো বৈধ অক্ষর ছিল তা নির্ধারণ করতে হয়।
 
-### Slicing Strings
+### স্ট্রিং স্লাইসিং (Slicing Strings)
 
-Indexing into a string is often a bad idea because it’s not clear what the
-return type of the string-indexing operation should be: a byte value, a
-character, a grapheme cluster, or a string slice. If you really need to use
-indices to create string slices, therefore, Rust asks you to be more specific.
+একটি স্ট্রিং-এ ইনডেক্সিং করা প্রায়শই একটি খারাপ ধারণা কারণ এটি স্পষ্ট নয় যে স্ট্রিং-ইনডেক্সিং অপারেশনের রিটার্ন টাইপ কী হওয়া উচিত: একটি বাইট মান, একটি অক্ষর, একটি গ্রাফিম ক্লাস্টার বা একটি স্ট্রিং স্লাইস। অতএব, যদি আপনার সত্যিই স্ট্রিং স্লাইস তৈরি করতে ইনডেক্স ব্যবহার করার প্রয়োজন হয়, তাহলে Rust আপনাকে আরও নির্দিষ্ট হতে বলে।
 
-Rather than indexing using `[]` with a single number, you can use `[]` with a
-range to create a string slice containing particular bytes:
+একটি একক সংখ্যা সহ `[]` ব্যবহার করে ইনডেক্সিং করার পরিবর্তে, আপনি নির্দিষ্ট বাইট ধারণকারী একটি স্ট্রিং স্লাইস তৈরি করতে একটি রেঞ্জ সহ `[]` ব্যবহার করতে পারেন:
 
 ```rust
 let hello = "Здравствуйте";
@@ -342,27 +222,19 @@ let hello = "Здравствуйте";
 let s = &hello[0..4];
 ```
 
-Here, `s` will be a `&str` that contains the first four bytes of the string.
-Earlier, we mentioned that each of these characters was two bytes, which means
-`s` will be `Зд`.
+এখানে, `s` হবে একটি `&str` যাতে স্ট্রিং-এর প্রথম চারটি বাইট রয়েছে। এর আগে, আমরা উল্লেখ করেছি যে এই অক্ষরগুলোর প্রতিটি দুই বাইট ছিল, যার মানে `s` হবে `Зд`।
 
-If we were to try to slice only part of a character’s bytes with something like
-`&hello[0..1]`, Rust would panic at runtime in the same way as if an invalid
-index were accessed in a vector:
+যদি আমরা `&hello[0..1]`-এর মতো কিছু দিয়ে একটি অক্ষরের বাইটের শুধুমাত্র অংশ স্লাইস করার চেষ্টা করতাম, তাহলে Rust রানটাইমে প্যানিক করবে, যেমনটি একটি ভেক্টরে একটি অবৈধ ইনডেক্স অ্যাক্সেস করা হলে ঘটে:
 
 ```console
 {{#include ../listings/ch08-common-collections/output-only-01-not-char-boundary/output.txt}}
 ```
 
-You should use caution when creating string slices with ranges, because doing
-so can crash your program.
+রেঞ্জ দিয়ে স্ট্রিং স্লাইস তৈরি করার সময় আপনার সতর্কতা অবলম্বন করা উচিত, কারণ এটি করলে আপনার প্রোগ্রাম ক্র্যাশ করতে পারে।
 
-### Methods for Iterating Over Strings
+### স্ট্রিংগুলোর উপর ইটারেট করার মেথড (Methods for Iterating Over Strings)
 
-The best way to operate on pieces of strings is to be explicit about whether
-you want characters or bytes. For individual Unicode scalar values, use the
-`chars` method. Calling `chars` on “Зд” separates out and returns two values of
-type `char`, and you can iterate over the result to access each element:
+স্ট্রিং-এর অংশগুলোতে কাজ করার সর্বোত্তম উপায় হল আপনি অক্ষর চান নাকি বাইট চান সে সম্পর্কে স্পষ্ট হওয়া। পৃথক ইউনিকোড স্কেলার মানগুলোর জন্য, `chars` মেথড ব্যবহার করুন। “Зд”-তে `chars` কল করা আলাদা করে এবং `char` টাইপের দুটি মান রিটার্ন করে এবং আপনি প্রতিটি এলিমেন্ট অ্যাক্সেস করতে ফলাফলের উপর ইটারেট করতে পারেন:
 
 ```rust
 for c in "Зд".chars() {
@@ -370,15 +242,14 @@ for c in "Зд".chars() {
 }
 ```
 
-This code will print the following:
+এই কোডটি নিম্নলিখিতগুলো প্রিন্ট করবে:
 
 ```text
 З
 д
 ```
 
-Alternatively, the `bytes` method returns each raw byte, which might be
-appropriate for your domain:
+বিকল্পভাবে, `bytes` মেথড প্রতিটি কাঁচা বাইট রিটার্ন করে, যা আপনার ডোমেনের জন্য উপযুক্ত হতে পারে:
 
 ```rust
 for b in "Зд".bytes() {
@@ -386,7 +257,7 @@ for b in "Зд".bytes() {
 }
 ```
 
-This code will print the four bytes that make up this string:
+এই কোডটি এই স্ট্রিং তৈরি করা চারটি বাইট প্রিন্ট করবে:
 
 ```text
 208
@@ -395,29 +266,14 @@ This code will print the four bytes that make up this string:
 180
 ```
 
-But be sure to remember that valid Unicode scalar values may be made up of more
-than one byte.
+কিন্তু মনে রাখতে ভুলবেন না যে বৈধ ইউনিকোড স্কেলার মানগুলো একাধিক বাইট দিয়ে তৈরি হতে পারে।
 
-Getting grapheme clusters from strings, as with the Devanagari script, is
-complex, so this functionality is not provided by the standard library. Crates
-are available on [crates.io](https://crates.io/)<!-- ignore --> if this is the
-functionality you need.
+স্ট্রিং থেকে গ্রাফিম ক্লাস্টার পাওয়া, যেমন দেবনাগরী লিপির সাথে, জটিল, তাই এই কার্যকারিতা স্ট্যান্ডার্ড লাইব্রেরি দ্বারা সরবরাহ করা হয় না। আপনার যদি এই কার্যকারিতার প্রয়োজন হয় তবে [crates.io](https://crates.io/)<!-- ignore -->-তে ক্রেট উপলব্ধ রয়েছে।
 
-### Strings Are Not So Simple
+### স্ট্রিংগুলো এত সহজ নয় (Strings Are Not So Simple)
 
-To summarize, strings are complicated. Different programming languages make
-different choices about how to present this complexity to the programmer. Rust
-has chosen to make the correct handling of `String` data the default behavior
-for all Rust programs, which means programmers have to put more thought into
-handling UTF-8 data up front. This trade-off exposes more of the complexity of
-strings than is apparent in other programming languages, but it prevents you
-from having to handle errors involving non-ASCII characters later in your
-development life cycle.
+সংক্ষেপে, স্ট্রিংগুলো জটিল। বিভিন্ন প্রোগ্রামিং ভাষাগুলো প্রোগ্রামারের কাছে এই জটিলতা কীভাবে উপস্থাপন করতে হয় সে সম্পর্কে বিভিন্ন পছন্দ করে। Rust সমস্ত Rust প্রোগ্রামের জন্য `String` ডেটার সঠিক হ্যান্ডলিংকে ডিফল্ট আচরণ হিসাবে তৈরি করতে বেছে নিয়েছে, যার অর্থ হল প্রোগ্রামারদের সামনে UTF-8 ডেটা হ্যান্ডেল করার বিষয়ে আরও বেশি চিন্তা করতে হবে। এই ট্রেড-অফটি অন্যান্য প্রোগ্রামিং ভাষাগুলোর তুলনায় স্ট্রিংগুলোর আরও জটিলতা প্রকাশ করে, তবে এটি আপনাকে আপনার ডেভেলপমেন্ট লাইফ সাইকেলের পরে নন-ASCII অক্ষর জড়িত এররগুলো হ্যান্ডেল করা থেকে বিরত রাখে।
 
-The good news is that the standard library offers a lot of functionality built
-off the `String` and `&str` types to help handle these complex situations
-correctly. Be sure to check out the documentation for useful methods like
-`contains` for searching in a string and `replace` for substituting parts of a
-string with another string.
+ভাল খবর হল স্ট্যান্ডার্ড লাইব্রেরি এই জটিল পরিস্থিতিগুলোকে সঠিকভাবে পরিচালনা করতে সহায়তা করার জন্য `String` এবং `&str` টাইপের উপর নির্মিত প্রচুর কার্যকারিতা সরবরাহ করে। স্ট্রিং-এ অনুসন্ধানের জন্য `contains`-এর মতো এবং একটি স্ট্রিং-এর অংশগুলোকে অন্য স্ট্রিং দিয়ে প্রতিস্থাপন করার জন্য `replace`-এর মতো দরকারী মেথডগুলোর জন্য ডকুমেন্টেশন পরীক্ষা করতে ভুলবেন না।
 
-Let’s switch to something a bit less complex: hash maps!
+আসুন একটু কম জটিল কিছুতে যাই: হ্যাশ ম্যাপ!
