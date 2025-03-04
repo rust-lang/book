@@ -1,29 +1,18 @@
-## The Slice Type
+## স্লাইস টাইপ (The Slice Type)
 
-_Slices_ let you reference a contiguous sequence of elements in a
-[collection](ch08-00-common-collections.md) rather than the whole collection. A
-slice is a kind of reference, so it does not have ownership.
+*স্লাইস (slices)* আপনাকে সম্পূর্ণ কালেকশনের পরিবর্তে [কালেকশনের](ch08-00-common-collections.md) উপাদানগুলোর একটি ধারাবাহিক অংশকে রেফারেন্স করতে দেয়। একটি স্লাইস হল এক ধরনের রেফারেন্স, তাই এর ওনারশিপ নেই।
 
-Here’s a small programming problem: write a function that takes a string of
-words separated by spaces and returns the first word it finds in that string.
-If the function doesn’t find a space in the string, the whole string must be
-one word, so the entire string should be returned.
+এখানে একটি ছোট প্রোগ্রামিং সমস্যা রয়েছে: এমন একটি ফাংশন লিখুন যা স্পেস দ্বারা পৃথক করা শব্দের একটি স্ট্রিং নেয় এবং সেই স্ট্রিংটিতে পাওয়া প্রথম শব্দটি রিটার্ন করে। যদি ফাংশনটি স্ট্রিংটিতে কোনো স্পেস খুঁজে না পায়, তাহলে পুরো স্ট্রিংটি অবশ্যই একটি শব্দ হবে, তাই সম্পূর্ণ স্ট্রিংটি রিটার্ন করা উচিত।
 
-Let’s work through how we’d write the signature of this function without using
-slices, to understand the problem that slices will solve:
+স্লাইস ব্যবহার না করে আমরা কীভাবে এই ফাংশনের সিগনেচার লিখব তা নিয়ে কাজ করি, যাতে স্লাইসগুলো যে সমস্যার সমাধান করবে তা বোঝা যায়:
 
 ```rust,ignore
 fn first_word(s: &String) -> ?
 ```
 
-The `first_word` function has a `&String` as a parameter. We don’t need
-ownership, so this is fine. (In idiomatic Rust, functions do not take ownership
-of their arguments unless they need to, and the reasons for that will become
-clear as we keep going!) But what should we return? We don’t really have a way
-to talk about part of a string. However, we could return the index of the end of
-the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
+`first_word` ফাংশনটির প্যারামিটার হিসাবে একটি `&String` রয়েছে। আমাদের ওনারশিপের প্রয়োজন নেই, তাই এটি ঠিক আছে। (প্রচলিত Rust-এ, ফাংশনগুলো তাদের আর্গুমেন্টের ওনারশিপ নেয় না যদি না তাদের প্রয়োজন হয়, এবং এর কারণগুলো আমরা যত এগোব ততই স্পষ্ট হয়ে উঠবে!) কিন্তু আমরা কী রিটার্ন করব? আমাদের কাছে স্ট্রিং-এর অংশ সম্পর্কে কথা বলার কোনো উপায় নেই। তবে, আমরা একটি স্পেস দ্বারা নির্দেশিত শব্দের শেষের ইনডেক্সটি রিটার্ন করতে পারি। চলুন Listing 4-7-এ দেখানো মতো সেটি চেষ্টা করি।
 
-<Listing number="4-7" file-name="src/main.rs" caption="The `first_word` function that returns a byte index value into the `String` parameter">
+<Listing number="4-7" file-name="src/main.rs" caption="`first_word` ফাংশন যা `String` প্যারামিটারে একটি বাইট ইনডেক্স মান রিটার্ন করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:here}}
@@ -31,50 +20,31 @@ the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
 </Listing>
 
-Because we need to go through the `String` element by element and check whether
-a value is a space, we’ll convert our `String` to an array of bytes using the
-`as_bytes` method.
+যেহেতু আমাদের `String`-এর প্রতিটি এলিমেন্টের মধ্যে গিয়ে পরীক্ষা করতে হবে যে কোনো মান স্পেস কিনা, তাই আমরা `as_bytes` মেথড ব্যবহার করে আমাদের `String`-কে বাইটের অ্যারেতে রূপান্তর করব।
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
 ```
 
-Next, we create an iterator over the array of bytes using the `iter` method:
+এরপর, আমরা `iter` মেথড ব্যবহার করে বাইটের অ্যারের উপর একটি ইটারেটর তৈরি করি:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
 
-We’ll discuss iterators in more detail in [Chapter 13][ch13]<!-- ignore -->.
-For now, know that `iter` is a method that returns each element in a collection
-and that `enumerate` wraps the result of `iter` and returns each element as
-part of a tuple instead. The first element of the tuple returned from
-`enumerate` is the index, and the second element is a reference to the element.
-This is a bit more convenient than calculating the index ourselves.
+আমরা [চ্যাপ্টার 13][ch13]<!-- ignore -->-এ ইটারেটরগুলো নিয়ে আরও বিস্তারিত আলোচনা করব। আপাতত, জেনে রাখুন যে `iter` হল একটি মেথড যা একটি কালেকশনের প্রতিটি এলিমেন্ট রিটার্ন করে এবং `enumerate` `iter`-এর ফলাফলকে র‍্যাপ করে এবং প্রতিটি এলিমেন্টকে একটি টাপলের অংশ হিসাবে রিটার্ন করে। `enumerate` থেকে রিটার্ন করা টাপলের প্রথম এলিমেন্টটি হল ইনডেক্স এবং দ্বিতীয় এলিমেন্টটি হল এলিমেন্টের একটি রেফারেন্স। এটি নিজে থেকে ইনডেক্স গণনা করার চেয়ে একটু বেশি সুবিধাজনক।
 
-Because the `enumerate` method returns a tuple, we can use patterns to
-destructure that tuple. We’ll be discussing patterns more in [Chapter
-6][ch6]<!-- ignore -->. In the `for` loop, we specify a pattern that has `i`
-for the index in the tuple and `&item` for the single byte in the tuple.
-Because we get a reference to the element from `.iter().enumerate()`, we use
-`&` in the pattern.
+যেহেতু `enumerate` মেথড একটি টাপল রিটার্ন করে, তাই আমরা সেই টাপলটিকে ডিস্ট্রাকচার করতে প্যাটার্ন ব্যবহার করতে পারি। আমরা [চ্যাপ্টার 6][ch6]<!-- ignore -->-এ প্যাটার্নগুলো নিয়ে আরও আলোচনা করব। `for` লুপে, আমরা একটি প্যাটার্ন নির্দিষ্ট করি যেখানে টাপলের ইনডেক্সের জন্য `i` এবং টাপলের একক বাইটের জন্য `&item` রয়েছে। যেহেতু আমরা `.iter().enumerate()` থেকে এলিমেন্টের একটি রেফারেন্স পাই, তাই আমরা প্যাটার্নে `&` ব্যবহার করি।
 
-Inside the `for` loop, we search for the byte that represents the space by
-using the byte literal syntax. If we find a space, we return the position.
-Otherwise, we return the length of the string by using `s.len()`.
+`for` লুপের ভিতরে, আমরা বাইট লিটারেল সিনট্যাক্স ব্যবহার করে স্পেস উপস্থাপন করে এমন বাইটটি খুঁজি। যদি আমরা একটি স্পেস খুঁজে পাই, তাহলে আমরা অবস্থানটি রিটার্ন করি। অন্যথায়, আমরা `s.len()` ব্যবহার করে স্ট্রিংটির দৈর্ঘ্য রিটার্ন করি।
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:inside_for}}
 ```
 
-We now have a way to find out the index of the end of the first word in the
-string, but there’s a problem. We’re returning a `usize` on its own, but it’s
-only a meaningful number in the context of the `&String`. In other words,
-because it’s a separate value from the `String`, there’s no guarantee that it
-will still be valid in the future. Consider the program in Listing 4-8 that
-uses the `first_word` function from Listing 4-7.
+আমাদের কাছে এখন স্ট্রিং-এর প্রথম শব্দের শেষের ইনডেক্স খুঁজে বের করার একটি উপায় আছে, কিন্তু একটি সমস্যা আছে। আমরা নিজে থেকে একটি `usize` রিটার্ন করছি, কিন্তু এটি শুধুমাত্র `&String`-এর পরিপ্রেক্ষিতে একটি অর্থপূর্ণ সংখ্যা। অন্য কথায়, যেহেতু এটি `String` থেকে একটি পৃথক মান, তাই ভবিষ্যতে এটি বৈধ থাকবে এমন কোনো নিশ্চয়তা নেই। Listing 4-8-এর প্রোগ্রামটি বিবেচনা করুন, যেটি Listing 4-7 থেকে `first_word` ফাংশন ব্যবহার করে।
 
-<Listing number="4-8" file-name="src/main.rs" caption="Storing the result from calling the `first_word` function and then changing the `String` contents">
+<Listing number="4-8" file-name="src/main.rs" caption="`first_word` ফাংশন কল করার ফলাফল সংরক্ষণ করা এবং তারপর `String`-এর কনটেন্ট পরিবর্তন করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-08/src/main.rs:here}}
@@ -82,58 +52,36 @@ uses the `first_word` function from Listing 4-7.
 
 </Listing>
 
-This program compiles without any errors and would also do so if we used `word`
-after calling `s.clear()`. Because `word` isn’t connected to the state of `s`
-at all, `word` still contains the value `5`. We could use that value `5` with
-the variable `s` to try to extract the first word out, but this would be a bug
-because the contents of `s` have changed since we saved `5` in `word`.
+এই প্রোগ্রামটি কোনো এরর ছাড়াই কম্পাইল হয় এবং `s.clear()` কল করার পরেও যদি আমরা `word` ব্যবহার করি তাহলেও কম্পাইল হবে। যেহেতু `word` কোনোভাবেই `s`-এর অবস্থার সাথে সংযুক্ত নয়, তাই `word`-এ এখনও `5` মান রয়েছে। আমরা সেই `5` মানটি `s` ভেরিয়েবলের সাথে ব্যবহার করে প্রথম শব্দটি বের করার চেষ্টা করতে পারি, কিন্তু এটি একটি বাগ হবে কারণ আমরা `word`-এ `5` সংরক্ষণ করার পর থেকে `s`-এর কনটেন্ট পরিবর্তন হয়েছে।
 
-Having to worry about the index in `word` getting out of sync with the data in
-`s` is tedious and error prone! Managing these indices is even more brittle if
-we write a `second_word` function. Its signature would have to look like this:
+`word`-এর ইনডেক্সটি `s`-এর ডেটার সাথে সিঙ্কের বাইরে চলে যাওয়া নিয়ে চিন্তা করা ক্লান্তিকর এবং এরর-প্রবণ! আমরা যদি একটি `second_word` ফাংশন লিখি তাহলে এই ইনডেক্সগুলো পরিচালনা করা আরও কঠিন। এর সিগনেচারটি এমন হতে হবে:
 
 ```rust,ignore
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking a starting _and_ an ending index, and we have even more
-values that were calculated from data in a particular state but aren’t tied to
-that state at all. We have three unrelated variables floating around that need
-to be kept in sync.
+এখন আমরা একটি শুরুর *এবং* একটি শেষের ইনডেক্স ট্র্যাক করছি এবং আমাদের কাছে আরও বেশি মান রয়েছে যা একটি নির্দিষ্ট অবস্থার ডেটা থেকে গণনা করা হয়েছে কিন্তু সেই অবস্থার সাথে কোনোভাবেই সংযুক্ত নয়। আমাদের কাছে তিনটি সম্পর্কহীন ভেরিয়েবল রয়েছে যেগুলোকে সিঙ্কে রাখতে হবে।
 
-Luckily, Rust has a solution to this problem: string slices.
+সৌভাগ্যবশত, Rust-এর এই সমস্যার একটি সমাধান রয়েছে: স্ট্রিং স্লাইস।
 
-### String Slices
+### স্ট্রিং স্লাইস (String Slices)
 
-A _string slice_ is a reference to part of a `String`, and it looks like this:
+একটি *স্ট্রিং স্লাইস* হল একটি `String`-এর অংশের একটি রেফারেন্স, এবং এটি দেখতে এরকম:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
 ```
 
-Rather than a reference to the entire `String`, `hello` is a reference to a
-portion of the `String`, specified in the extra `[0..5]` bit. We create slices
-using a range within brackets by specifying `[starting_index..ending_index]`,
-where _`starting_index`_ is the first position in the slice and _`ending_index`_
-is one more than the last position in the slice. Internally, the slice data
-structure stores the starting position and the length of the slice, which
-corresponds to _`ending_index`_ minus _`starting_index`_. So, in the case of `let
-world = &s[6..11];`, `world` would be a slice that contains a pointer to the
-byte at index 6 of `s` with a length value of `5`.
+সম্পূর্ণ `String`-এর রেফারেন্সের পরিবর্তে, `hello` হল `String`-এর একটি অংশের রেফারেন্স, যা অতিরিক্ত `[0..5]` বিটে নির্দিষ্ট করা হয়েছে। আমরা `[starting_index..ending_index]` নির্দিষ্ট করে ব্র্যাকেটের মধ্যে একটি রেঞ্জ ব্যবহার করে স্লাইস তৈরি করি, যেখানে _`starting_index`_ হল স্লাইসের প্রথম অবস্থান এবং _`ending_index`_ হল স্লাইসের শেষ অবস্থানের চেয়ে এক বেশি। অভ্যন্তরীণভাবে, স্লাইস ডেটা স্ট্রাকচারটি শুরুর অবস্থান এবং স্লাইসের দৈর্ঘ্য সংরক্ষণ করে, যা _`ending_index`_ বিয়োগ _`starting_index`_-এর সাথে সঙ্গতিপূর্ণ। সুতরাং, `let world = &s[6..11];`-এর ক্ষেত্রে, `world` হবে একটি স্লাইস যাতে `s`-এর 6 ইনডেক্সের বাইটের একটি পয়েন্টার থাকবে এবং দৈর্ঘ্য হবে `5`।
 
-Figure 4-7 shows this in a diagram.
+Figure 4-7 এটি একটি ডায়াগ্রামে দেখায়।
 
-<img alt="Three tables: a table representing the stack data of s, which points
-to the byte at index 0 in a table of the string data &quot;hello world&quot; on
-the heap. The third table rep-resents the stack data of the slice world, which
-has a length value of 5 and points to byte 6 of the heap data table."
+<img alt="তিনটি টেবিল: s-এর স্ট্যাক ডেটা উপস্থাপনকারী একটি টেবিল, যা হিপের স্ট্রিং ডেটা &quot;hello world&quot; এর একটি টেবিলে 0 ইনডেক্সের বাইটকে নির্দেশ করে। তৃতীয় টেবিলটি স্লাইস ওয়ার্ল্ডের স্ট্যাক ডেটা পুনরায় উপস্থাপন করে, যার একটি দৈর্ঘ্যের মান 5 এবং হিপ ডেটা টেবিলের 6 বাইটকে নির্দেশ করে।"
 src="img/trpl04-07.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-7: String slice referring to part of a
-`String`</span>
+<span class="caption">Figure 4-7: একটি `String`-এর অংশকে রেফারেন্স করা স্ট্রিং স্লাইস</span>
 
-With Rust’s `..` range syntax, if you want to start at index 0, you can drop
-the value before the two periods. In other words, these are equal:
+Rust-এর `..` রেঞ্জ সিনট্যাক্সের সাথে, আপনি যদি 0 ইনডেক্স থেকে শুরু করতে চান, তাহলে আপনি দুটি পিরিয়ডের আগের মানটি বাদ দিতে পারেন। অন্য কথায়, এগুলো সমান:
 
 ```rust
 let s = String::from("hello");
@@ -142,8 +90,7 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if your slice includes the last byte of the `String`, you
-can drop the trailing number. That means these are equal:
+একইভাবে, যদি আপনার স্লাইসটিতে `String`-এর শেষ বাইট অন্তর্ভুক্ত থাকে, তাহলে আপনি ট্রেইলিং সংখ্যাটি বাদ দিতে পারেন। তার মানে এগুলো সমান:
 
 ```rust
 let s = String::from("hello");
@@ -154,8 +101,7 @@ let slice = &s[3..len];
 let slice = &s[3..];
 ```
 
-You can also drop both values to take a slice of the entire string. So these
-are equal:
+আপনি সম্পূর্ণ স্ট্রিং-এর একটি স্লাইস নিতে উভয় মানও বাদ দিতে পারেন। তাই এগুলো সমান:
 
 ```rust
 let s = String::from("hello");
@@ -166,15 +112,9 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-> Note: String slice range indices must occur at valid UTF-8 character
-> boundaries. If you attempt to create a string slice in the middle of a
-> multibyte character, your program will exit with an error. For the purposes
-> of introducing string slices, we are assuming ASCII only in this section; a
-> more thorough discussion of UTF-8 handling is in the [“Storing UTF-8 Encoded
-> Text with Strings”][strings]<!-- ignore --> section of Chapter 8.
+> দ্রষ্টব্য: স্ট্রিং স্লাইস রেঞ্জ ইনডেক্সগুলো অবশ্যই বৈধ UTF-8 ক্যারেক্টার সীমানায় ঘটতে হবে। আপনি যদি একটি মাল্টিবাইট ক্যারেক্টারের মাঝখানে একটি স্ট্রিং স্লাইস তৈরি করার চেষ্টা করেন, তাহলে আপনার প্রোগ্রামটি একটি এরর দিয়ে প্রস্থান করবে। স্ট্রিং স্লাইস প্রবর্তনের উদ্দেশ্যে, আমরা এই বিভাগে শুধুমাত্র ASCII অনুমান করছি; UTF-8 হ্যান্ডলিং-এর আরও বিশদ আলোচনা চ্যাপ্টার 8-এর [“স্ট্রিং দিয়ে UTF-8 এনকোডেড টেক্সট সংরক্ষণ করা”][strings]<!-- ignore --> বিভাগে রয়েছে।
 
-With all this information in mind, let’s rewrite `first_word` to return a
-slice. The type that signifies “string slice” is written as `&str`:
+এই সমস্ত তথ্য মাথায় রেখে, চলুন `first_word` পুনরায় লিখি যাতে এটি একটি স্লাইস রিটার্ন করে। "স্ট্রিং স্লাইস" বোঝায় এমন টাইপটি `&str` হিসাবে লেখা হয়:
 
 <Listing file-name="src/main.rs">
 
@@ -184,30 +124,17 @@ slice. The type that signifies “string slice” is written as `&str`:
 
 </Listing>
 
-We get the index for the end of the word the same way we did in Listing 4-7, by
-looking for the first occurrence of a space. When we find a space, we return a
-string slice using the start of the string and the index of the space as the
-starting and ending indices.
+আমরা Listing 4-7-এর মতোই শব্দের শেষের ইনডেক্সটি পাই, একটি স্পেসের প্রথম ঘটনাটি সন্ধান করে। যখন আমরা একটি স্পেস খুঁজে পাই, তখন আমরা স্ট্রিং-এর শুরু এবং স্পেসের ইনডেক্সটিকে শুরুর এবং শেষের ইনডেক্স হিসাবে ব্যবহার করে একটি স্ট্রিং স্লাইস রিটার্ন করি।
 
-Now when we call `first_word`, we get back a single value that is tied to the
-underlying data. The value is made up of a reference to the starting point of
-the slice and the number of elements in the slice.
+এখন যখন আমরা `first_word` কল করি, তখন আমরা একটি একক মান ফিরে পাই যা অন্তর্নিহিত ডেটার সাথে সংযুক্ত। মানটি স্লাইসের শুরুর বিন্দুর একটি রেফারেন্স এবং স্লাইসের উপাদানগুলোর সংখ্যা নিয়ে গঠিত।
 
-Returning a slice would also work for a `second_word` function:
+একটি `second_word` ফাংশনের জন্যও একটি স্লাইস রিটার্ন করা কাজ করবে:
 
 ```rust,ignore
 fn second_word(s: &String) -> &str {
 ```
 
-We now have a straightforward API that’s much harder to mess up because the
-compiler will ensure the references into the `String` remain valid. Remember
-the bug in the program in Listing 4-8, when we got the index to the end of the
-first word but then cleared the string so our index was invalid? That code was
-logically incorrect but didn’t show any immediate errors. The problems would
-show up later if we kept trying to use the first word index with an emptied
-string. Slices make this bug impossible and let us know we have a problem with
-our code much sooner. Using the slice version of `first_word` will throw a
-compile-time error:
+আমাদের কাছে এখন একটি সরল API রয়েছে যা এলোমেলো করা অনেক কঠিন, কারণ কম্পাইলার নিশ্চিত করবে যে `String`-এর রেফারেন্সগুলো বৈধ থাকবে। Listing 4-8-এর প্রোগ্রামের বাগটি মনে আছে, যখন আমরা প্রথম শব্দের শেষের ইনডেক্স পেয়েছিলাম কিন্তু তারপর স্ট্রিংটি পরিষ্কার করেছিলাম যাতে আমাদের ইনডেক্সটি অবৈধ হয়ে গিয়েছিল? সেই কোডটি যুক্তিগতভাবে ভুল ছিল কিন্তু কোনো তাৎক্ষণিক এরর দেখায়নি। সমস্যাগুলো পরে দেখা যেত যদি আমরা খালি স্ট্রিং দিয়ে প্রথম শব্দের ইনডেক্স ব্যবহার করতে থাকতাম। স্লাইসগুলো এই বাগটিকে অসম্ভব করে তোলে এবং আমাদের কোডে কোনো সমস্যা থাকলে তা অনেক আগেই জানিয়ে দেয়। `first_word`-এর স্লাইস ভার্সন ব্যবহার করলে একটি কম্পাইল-টাইম এরর হবে:
 
 <Listing file-name="src/main.rs">
 
@@ -217,52 +144,39 @@ compile-time error:
 
 </Listing>
 
-Here’s the compiler error:
+এখানে কম্পাইলার এররটি দেওয়া হলো:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}
 ```
 
-Recall from the borrowing rules that if we have an immutable reference to
-something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it needs to get a mutable reference. The `println!`
-after the call to `clear` uses the reference in `word`, so the immutable
-reference must still be active at that point. Rust disallows the mutable
-reference in `clear` and the immutable reference in `word` from existing at the
-same time, and compilation fails. Not only has Rust made our API easier to use,
-but it has also eliminated an entire class of errors at compile time!
+বোরোয়িং-এর নিয়ম থেকে মনে করুন যে যদি আমাদের কাছে কোনো কিছুর ইমিউটেবল রেফারেন্স থাকে, তাহলে আমরা একটি মিউটেবল রেফারেন্সও নিতে পারি না। যেহেতু `clear`-এর `String` ছোট করা দরকার, তাই এটিকে একটি মিউটেবল রেফারেন্স নিতে হবে। `clear` কলের পরে `println!` `word`-এর রেফারেন্স ব্যবহার করে, তাই সেই সময়ে ইমিউটেবল রেফারেন্সটি এখনও সক্রিয় থাকতে হবে। Rust `clear`-এর মিউটেবল রেফারেন্স এবং `word`-এর ইমিউটেবল রেফারেন্সকে একই সময়ে বিদ্যমান থাকতে দেয় না এবং কম্পাইলেশন ব্যর্থ হয়। Rust শুধুমাত্র আমাদের API ব্যবহার করা সহজ করেনি, এটি কম্পাইল করার সময়ই এক শ্রেণীর এরর সম্পূর্ণরূপে দূর করেছে!
 
 <!-- Old heading. Do not remove or links may break. -->
 
 <a id="string-literals-are-slices"></a>
 
-#### String Literals as Slices
+#### স্ট্রিং লিটারেলগুলো স্লাইস (String Literals as Slices)
 
-Recall that we talked about string literals being stored inside the binary. Now
-that we know about slices, we can properly understand string literals:
+মনে করে দেখুন যে আমরা স্ট্রিং লিটারেলগুলো বাইনারির ভিতরে সংরক্ষিত থাকার বিষয়ে কথা বলেছি। এখন যেহেতু আমরা স্লাইস সম্পর্কে জানি, তাই আমরা স্ট্রিং লিটারেলগুলোকে সঠিকভাবে বুঝতে পারি:
 
 ```rust
 let s = "Hello, world!";
 ```
 
-The type of `s` here is `&str`: it’s a slice pointing to that specific point of
-the binary. This is also why string literals are immutable; `&str` is an
-immutable reference.
+এখানে `s`-এর টাইপ হল `&str`: এটি বাইনারির সেই নির্দিষ্ট পয়েন্টকে নির্দেশ করা একটি স্লাইস। এই কারণেই স্ট্রিং লিটারেলগুলো ইমিউটেবল; `&str` হল একটি ইমিউটেবল রেফারেন্স।
 
-#### String Slices as Parameters
+#### প্যারামিটার হিসাবে স্ট্রিং স্লাইস (String Slices as Parameters)
 
-Knowing that you can take slices of literals and `String` values leads us to
-one more improvement on `first_word`, and that’s its signature:
+লিটারেল এবং `String` মানগুলোর স্লাইস নিতে পারা আমাদের `first_word`-এ আরও একটি উন্নতির দিকে নিয়ে যায়, এবং সেটি হল এর সিগনেচার:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the signature shown in Listing 4-9
-instead because it allows us to use the same function on both `&String` values
-and `&str` values.
+একজন আরও অভিজ্ঞ Rustacean পরিবর্তে Listing 4-9-এ দেখানো সিগনেচারটি লিখবেন কারণ এটি আমাদের একই ফাংশনটি `&String` মান এবং `&str` মান, উভয়ের উপর ব্যবহার করার অনুমতি দেয়।
 
-<Listing number="4-9" caption="Improving the `first_word` function by using a string slice for the type of the `s` parameter">
+<Listing number="4-9" caption="`s` প্যারামিটারের টাইপের জন্য একটি স্ট্রিং স্লাইস ব্যবহার করে `first_word` ফাংশনের উন্নতি করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:here}}
@@ -270,14 +184,9 @@ and `&str` values.
 
 </Listing>
 
-If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the `String` or a reference to the `String`. This
-flexibility takes advantage of _deref coercions_, a feature we will cover in the
-[“Implicit Deref Coercions with Functions and
-Methods”][deref-coercions]<!--ignore--> section of Chapter 15.
+যদি আমাদের কাছে একটি স্ট্রিং স্লাইস থাকে, তাহলে আমরা সেটি সরাসরি পাস করতে পারি। যদি আমাদের কাছে একটি `String` থাকে, তাহলে আমরা `String`-এর একটি স্লাইস বা `String`-এর একটি রেফারেন্স পাস করতে পারি। এই নমনীয়তা *ডিরেফ কোয়েরশনস (deref coercions)*-এর সুবিধা নেয়, একটি ফিচার যা আমরা চ্যাপ্টার ১৫-এর [“ফাংশন এবং মেথড সহ ইমপ্লিসিট ডিরেফ কোয়েরশনস”][deref-coercions]<!-- ignore --> বিভাগে কভার করব।
 
-Defining a function to take a string slice instead of a reference to a `String`
-makes our API more general and useful without losing any functionality:
+একটি `String`-এর রেফারেন্সের পরিবর্তে একটি স্ট্রিং স্লাইস নেওয়ার জন্য একটি ফাংশন সংজ্ঞায়িত করা আমাদের API-কে আরও সাধারণ এবং দরকারী করে তোলে, কোনো কার্যকারিতা না হারিয়ে:
 
 <Listing file-name="src/main.rs">
 
@@ -287,17 +196,15 @@ makes our API more general and useful without losing any functionality:
 
 </Listing>
 
-### Other Slices
+### অন্যান্য স্লাইস (Other Slices)
 
-String slices, as you might imagine, are specific to strings. But there’s a
-more general slice type too. Consider this array:
+আপনি যেমন কল্পনা করতে পারেন, স্ট্রিং স্লাইসগুলো স্ট্রিং-এর জন্য নির্দিষ্ট। কিন্তু আরও একটি সাধারণ স্লাইস টাইপও রয়েছে। এই অ্যারেটি বিবেচনা করুন:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
-Just as we might want to refer to part of a string, we might want to refer to
-part of an array. We’d do so like this:
+যেমন আমরা একটি স্ট্রিং-এর অংশের উল্লেখ করতে চাইতে পারি, তেমনি আমরা একটি অ্যারের অংশের উল্লেখ করতে চাইতে পারি। আমরা এটি এইভাবে করব:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -307,22 +214,13 @@ let slice = &a[1..3];
 assert_eq!(slice, &[2, 3]);
 ```
 
-This slice has the type `&[i32]`. It works the same way as string slices do, by
-storing a reference to the first element and a length. You’ll use this kind of
-slice for all sorts of other collections. We’ll discuss these collections in
-detail when we talk about vectors in Chapter 8.
+এই স্লাইসটির টাইপ হল `&[i32]`। এটি স্ট্রিং স্লাইসগুলোর মতোই কাজ করে, প্রথম উপাদানের একটি রেফারেন্স এবং একটি দৈর্ঘ্য সংরক্ষণ করে। আপনি অন্যান্য সমস্ত ধরণের কালেকশনের জন্য এই ধরনের স্লাইস ব্যবহার করবেন। আমরা চ্যাপ্টার ৮-এ ভেক্টর নিয়ে কথা বলার সময় এই কালেকশনগুলো নিয়ে বিস্তারিত আলোচনা করব।
 
-## Summary
+## সারসংক্ষেপ (Summary)
 
-The concepts of ownership, borrowing, and slices ensure memory safety in Rust
-programs at compile time. The Rust language gives you control over your memory
-usage in the same way as other systems programming languages, but having the
-owner of data automatically clean up that data when the owner goes out of scope
-means you don’t have to write and debug extra code to get this control.
+ওনারশিপ, বোরোয়িং এবং স্লাইসের ধারণাগুলো কম্পাইল করার সময় Rust প্রোগ্রামগুলোতে মেমরির নিরাপত্তা নিশ্চিত করে। Rust ল্যাঙ্গুয়েজ আপনাকে অন্যান্য সিস্টেম প্রোগ্রামিং ল্যাঙ্গুয়েজের মতোই আপনার মেমরি ব্যবহারের উপর নিয়ন্ত্রণ দেয়, কিন্তু ডেটার ওনার স্বয়ংক্রিয়ভাবে সেই ডেটা পরিষ্কার করার মানে হল আপনাকে এই নিয়ন্ত্রণ পেতে অতিরিক্ত কোড লিখতে এবং ডিবাগ করতে হবে না।
 
-Ownership affects how lots of other parts of Rust work, so we’ll talk about
-these concepts further throughout the rest of the book. Let’s move on to
-Chapter 5 and look at grouping pieces of data together in a `struct`.
+ওনারশিপ Rust-এর আরও অনেক অংশের কাজকে প্রভাবিত করে, তাই আমরা বই জুড়ে এই ধারণাগুলো নিয়ে আরও কথা বলব। চলুন চ্যাপ্টার ৫-এ যাই এবং একটি `struct`-এ ডেটার অংশগুলোকে একত্রিত করা দেখি।
 
 [ch13]: ch13-02-iterators.html
 [ch6]: ch06-02-match.html#patterns-that-bind-to-values

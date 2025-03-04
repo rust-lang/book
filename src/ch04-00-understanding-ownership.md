@@ -1,7 +1,3 @@
-# Understanding Ownership
+# ওনারশিপ বোঝা (Understanding Ownership)
 
-Ownership is Rust’s most unique feature and has deep implications for the rest
-of the language. It enables Rust to make memory safety guarantees without
-needing a garbage collector, so it’s important to understand how ownership
-works. In this chapter, we’ll talk about ownership as well as several related
-features: borrowing, slices, and how Rust lays data out in memory.
+ওনারশিপ হল Rust-এর সবচেয়ে অনন্য বৈশিষ্ট্য এবং এটি ভাষার বাকি অংশের জন্য গভীর প্রভাব ফেলে। এটি Rust-কে গারবেজ কালেক্টর (garbage collector) ছাড়াই মেমরি নিরাপত্তার গ্যারান্টি দিতে সক্ষম করে, তাই ওনারশিপ কীভাবে কাজ করে তা বোঝা গুরুত্বপূর্ণ। এই চ্যাপ্টারে, আমরা ওনারশিপ এবং সেইসাথে এর সাথে সম্পর্কিত বেশ কয়েকটি ফিচার নিয়ে আলোচনা করব: বোরোয়িং (borrowing), স্লাইস (slices), এবং Rust কীভাবে মেমরিতে ডেটা সাজায়।

@@ -1,16 +1,9 @@
-## References and Borrowing
+```markdown
+## রেফারেন্স এবং বোরোয়িং (References and Borrowing)
 
-The issue with the tuple code in Listing 4-5 is that we have to return the
-`String` to the calling function so we can still use the `String` after the
-call to `calculate_length`, because the `String` was moved into
-`calculate_length`. Instead, we can provide a reference to the `String` value.
-A _reference_ is like a pointer in that it’s an address we can follow to access
-the data stored at that address; that data is owned by some other variable.
-Unlike a pointer, a reference is guaranteed to point to a valid value of a
-particular type for the life of that reference.
+Listing 4-5-এর টাপল কোডের সমস্যা হল, `calculate_length` ফাংশন কল করার পরেও আমরা যাতে `String` ব্যবহার করতে পারি, সেজন্য আমাদের এটিকে কলিং ফাংশনে (calling function) ফেরত দিতে হবে, কারণ `String`-টি `calculate_length`-এর মধ্যে সরানো (move) হয়েছিল। এর পরিবর্তে, আমরা `String` মানের একটি রেফারেন্স দিতে পারি। একটি *রেফারেন্স* হল একটি পয়েন্টারের মতো, এটি একটি ঠিকানা যা অনুসরণ করে আমরা সেই ঠিকানায় সংরক্ষিত ডেটা অ্যাক্সেস করতে পারি; সেই ডেটার মালিক অন্য কোনো ভেরিয়েবল। পয়েন্টারের বিপরীতে, একটি রেফারেন্স গ্যারান্টি দেয় যে এটি তার লাইফটাইম (lifetime)-এর জন্য একটি নির্দিষ্ট টাইপের বৈধ মানকে নির্দেশ করবে।
 
-Here is how you would define and use a `calculate_length` function that has a
-reference to an object as a parameter instead of taking ownership of the value:
+এখানে একটি `calculate_length` ফাংশন কীভাবে সংজ্ঞায়িত এবং ব্যবহার করা যেতে পারে, যা মানের ওনারশিপ নেওয়ার পরিবর্তে প্যারামিটার হিসাবে একটি অবজেক্টের রেফারেন্স নেয়:
 
 <Listing file-name="src/main.rs">
 
@@ -20,56 +13,35 @@ reference to an object as a parameter instead of taking ownership of the value:
 
 </Listing>
 
-First, notice that all the tuple code in the variable declaration and the
-function return value is gone. Second, note that we pass `&s1` into
-`calculate_length` and, in its definition, we take `&String` rather than
-`String`. These ampersands represent _references_, and they allow you to refer
-to some value without taking ownership of it. Figure 4-6 depicts this concept.
+প্রথমত, লক্ষ্য করুন যে ভেরিয়েবল ডিক্লারেশন এবং ফাংশন রিটার্ন ভ্যালুর সমস্ত টাপল কোড চলে গেছে। দ্বিতীয়ত, লক্ষ্য করুন যে আমরা `calculate_length`-এ `&s1` পাস করি এবং এর সংজ্ঞায়, আমরা `String`-এর পরিবর্তে `&String` নিই। এই অ্যাম্পারস্যান্ডগুলো (ampersands) *রেফারেন্স* উপস্থাপন করে এবং এগুলো আপনাকে কোনো মান এর ওনারশিপ না নিয়ে সেটি ব্যবহার করতে দেয়। Figure 4-6 এই ধারণাটি চিত্রিত করে।
 
-<img alt="Three tables: the table for s contains only a pointer to the table
-for s1. The table for s1 contains the stack data for s1 and points to the
-string data on the heap." src="img/trpl04-06.svg" class="center" />
+<img alt="তিনটি টেবিল: s-এর টেবিলটিতে শুধুমাত্র s1-এর টেবিলের একটি পয়েন্টার রয়েছে। s1-এর টেবিলটিতে s1-এর জন্য স্ট্যাক ডেটা রয়েছে এবং এটি হিপের স্ট্রিং ডেটার দিকে নির্দেশ করে।" src="img/trpl04-06.svg" class="center" />
 
-<span class="caption">Figure 4-6: A diagram of `&String s` pointing at `String
-s1`</span>
+<span class="caption">Figure 4-6: `&String s`-এর একটি ডায়াগ্রাম যা `String s1`-এর দিকে নির্দেশ করছে</span>
 
-> Note: The opposite of referencing by using `&` is _dereferencing_, which is
-> accomplished with the dereference operator, `*`. We’ll see some uses of the
-> dereference operator in Chapter 8 and discuss details of dereferencing in
-> Chapter 15.
+> দ্রষ্টব্য: `&` ব্যবহার করে রেফারেন্সিংয়ের বিপরীত হল *ডিরেফারেন্সিং (dereferencing)*, যা ডিরেফারেন্স অপারেটর, `*` দিয়ে সম্পন্ন করা হয়। আমরা চ্যাপ্টার ৮-এ ডিরেফারেন্স অপারেটরের কিছু ব্যবহার দেখব এবং চ্যাপ্টার ১৫-তে ডিরেফারেন্সিংয়ের বিশদ আলোচনা করব।
 
-Let’s take a closer look at the function call here:
+আসুন এখানে ফাংশন কলটি আরও ঘনিষ্ঠভাবে দেখি:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:here}}
 ```
 
-The `&s1` syntax lets us create a reference that _refers_ to the value of `s1`
-but does not own it. Because the reference does not own it, the value it points
-to will not be dropped when the reference stops being used.
+`&s1` সিনট্যাক্স আমাদের একটি রেফারেন্স তৈরি করতে দেয় যা `s1`-এর মানকে *রেফার* করে কিন্তু এটির মালিকানা নেয় না। যেহেতু রেফারেন্সটির মালিকানা নেই, তাই রেফারেন্সটি ব্যবহার করা বন্ধ হয়ে গেলে এটি যে মানটির দিকে নির্দেশ করে সেটি ড্রপ হবে না।
 
-Likewise, the signature of the function uses `&` to indicate that the type of
-the parameter `s` is a reference. Let’s add some explanatory annotations:
+একইভাবে, ফাংশনের সিগনেচার `&` ব্যবহার করে বোঝায় যে প্যারামিটার `s`-এর টাইপ হল একটি রেফারেন্স। চলুন কিছু ব্যাখ্যামূলক টীকা যোগ করি:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-08-reference-with-annotations/src/main.rs:here}}
 ```
 
-The scope in which the variable `s` is valid is the same as any function
-parameter’s scope, but the value pointed to by the reference is not dropped
-when `s` stops being used, because `s` doesn’t have ownership. When functions
-have references as parameters instead of the actual values, we won’t need to
-return the values in order to give back ownership, because we never had
-ownership.
+ভেরিয়েবল `s` যে স্কোপে বৈধ সেটি যেকোনো ফাংশন প্যারামিটারের স্কোপের মতোই, কিন্তু `s` ব্যবহার করা বন্ধ হয়ে গেলে রেফারেন্স দ্বারা নির্দেশিত মানটি ড্রপ হয় না, কারণ `s`-এর ওনারশিপ নেই। যখন ফাংশনগুলো প্রকৃত মানের পরিবর্তে প্যারামিটার হিসাবে রেফারেন্স নেয়, তখন আমাদের ওনারশিপ ফিরিয়ে দেওয়ার জন্য মানগুলো রিটার্ন করার প্রয়োজন হবে না, কারণ আমাদের কখনই ওনারশিপ ছিল না।
 
-We call the action of creating a reference _borrowing_. As in real life, if a
-person owns something, you can borrow it from them. When you’re done, you have
-to give it back. You don’t own it.
+আমরা একটি রেফারেন্স তৈরির ক্রিয়াকে *বোরোয়িং (borrowing)* বলি। বাস্তব জীবনের মতো, যদি কোনো ব্যক্তির কাছে কোনো কিছু থাকে, তাহলে আপনি সেটি তার কাছ থেকে ধার নিতে পারেন। আপনার কাজ শেষ হয়ে গেলে, আপনাকে এটি ফিরিয়ে দিতে হবে। আপনি এটির মালিক নন।
 
-So, what happens if we try to modify something we’re borrowing? Try the code in
-Listing 4-6. Spoiler alert: it doesn’t work!
+তাহলে, আমরা যদি কোনো কিছু ধার করে পরিবর্তন করার চেষ্টা করি তাহলে কী হবে? Listing 4-6-এর কোডটি চেষ্টা করুন। স্পয়লার অ্যালার্ট: এটি কাজ করে না!
 
-<Listing number="4-6" file-name="src/main.rs" caption="Attempting to modify a borrowed value">
+<Listing number="4-6" file-name="src/main.rs" caption="ধার করা মান পরিবর্তন করার চেষ্টা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-06/src/main.rs}}
@@ -77,19 +49,17 @@ Listing 4-6. Spoiler alert: it doesn’t work!
 
 </Listing>
 
-Here’s the error:
+এখানে এররটি দেওয়া হলো:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/listing-04-06/output.txt}}
 ```
 
-Just as variables are immutable by default, so are references. We’re not
-allowed to modify something we have a reference to.
+ভেরিয়েবলগুলো যেমন ডিফল্টরূপে ইমিউটেবল, তেমনই রেফারেন্সগুলোও। আমরা যেটির রেফারেন্স নিয়েছি সেটি পরিবর্তন করার অনুমতি নেই।
 
-### Mutable References
+### মিউটেবল রেফারেন্স (Mutable References)
 
-We can fix the code from Listing 4-6 to allow us to modify a borrowed value
-with just a few small tweaks that use, instead, a _mutable reference_:
+আমরা Listing 4-6-এর কোডটিকে কয়েকটি ছোট পরিবর্তনের মাধ্যমে ঠিক করতে পারি, যাতে একটি ধার করা মান পরিবর্তন করা যায়। এর জন্য, আমরা একটি *মিউটেবল রেফারেন্স* ব্যবহার করব:
 
 <Listing file-name="src/main.rs">
 
@@ -99,14 +69,9 @@ with just a few small tweaks that use, instead, a _mutable reference_:
 
 </Listing>
 
-First we change `s` to be `mut`. Then we create a mutable reference with `&mut
-s` where we call the `change` function, and update the function signature to
-accept a mutable reference with `some_string: &mut String`. This makes it very
-clear that the `change` function will mutate the value it borrows.
+প্রথমে আমরা `s`-কে `mut` করি। তারপর আমরা `change` ফাংশন কল করার সময় `&mut s` দিয়ে একটি মিউটেবল রেফারেন্স তৈরি করি এবং `some_string: &mut String` দিয়ে একটি মিউটেবল রেফারেন্স গ্রহণ করার জন্য ফাংশন সিগনেচার আপডেট করি। এটি খুব স্পষ্ট করে তোলে যে `change` ফাংশনটি যে মানটি ধার করে সেটি পরিবর্তন করবে।
 
-Mutable references have one big restriction: if you have a mutable reference to
-a value, you can have no other references to that value. This code that
-attempts to create two mutable references to `s` will fail:
+মিউটেবল রেফারেন্সগুলোর একটি বড় সীমাবদ্ধতা রয়েছে: যদি আপনার কাছে একটি মানের মিউটেবল রেফারেন্স থাকে, তাহলে আপনি সেই মানের অন্য কোনো রেফারেন্স রাখতে পারবেন না। `s`-এর দুটি মিউটেবল রেফারেন্স তৈরি করার চেষ্টা করা এই কোডটি ব্যর্থ হবে:
 
 <Listing file-name="src/main.rs">
 
@@ -116,93 +81,60 @@ attempts to create two mutable references to `s` will fail:
 
 </Listing>
 
-Here’s the error:
+এখানে এররটি দেওয়া হলো:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/output.txt}}
 ```
 
-This error says that this code is invalid because we cannot borrow `s` as
-mutable more than once at a time. The first mutable borrow is in `r1` and must
-last until it’s used in the `println!`, but between the creation of that
-mutable reference and its usage, we tried to create another mutable reference
-in `r2` that borrows the same data as `r1`.
+এই এররটি বলে যে এই কোডটি অবৈধ কারণ আমরা `s`-কে একবারে একাধিকবার মিউটেবল হিসাবে ধার করতে পারি না। প্রথম মিউটেবল ধার `r1`-এ রয়েছে এবং `println!`-এ ব্যবহৃত হওয়া পর্যন্ত এটি অবশ্যই স্থায়ী হতে হবে, কিন্তু সেই মিউটেবল রেফারেন্স তৈরি এবং এর ব্যবহারের মধ্যে, আমরা `r2`-তে আরেকটি মিউটেবল রেফারেন্স তৈরি করার চেষ্টা করেছি যা `r1`-এর মতো একই ডেটা ধার করে।
 
-The restriction preventing multiple mutable references to the same data at the
-same time allows for mutation but in a very controlled fashion. It’s something
-that new Rustaceans struggle with because most languages let you mutate
-whenever you’d like. The benefit of having this restriction is that Rust can
-prevent data races at compile time. A _data race_ is similar to a race
-condition and happens when these three behaviors occur:
+একই সময়ে একই ডেটার একাধিক মিউটেবল রেফারেন্স প্রতিরোধ করার সীমাবদ্ধতা মিউটেশনের অনুমতি দেয় কিন্তু খুব নিয়ন্ত্রিত পদ্ধতিতে। এটি এমন কিছু যা নিয়ে নতুন Rustacean-রা সংগ্রাম করে কারণ বেশিরভাগ ল্যাঙ্গুয়েজ আপনাকে যখন খুশি মিউটেট করতে দেয়। এই সীমাবদ্ধতা থাকার সুবিধা হল Rust কম্পাইল করার সময় ডেটা রেস (data races) প্রতিরোধ করতে পারে। একটি *ডেটা রেস* একটি রেস কন্ডিশনের অনুরূপ এবং এটি ঘটে যখন এই তিনটি আচরণ ঘটে:
 
-- Two or more pointers access the same data at the same time.
-- At least one of the pointers is being used to write to the data.
-- There’s no mechanism being used to synchronize access to the data.
+-   দুই বা ততোধিক পয়েন্টার একই ডেটা অ্যাক্সেস করে।
+-   অন্তত একটি পয়েন্টার ডেটাতে লেখার জন্য ব্যবহার করা হচ্ছে।
+-   ডেটাতে অ্যাক্সেস সিঙ্ক্রোনাইজ করার জন্য কোনো মেকানিজম ব্যবহার করা হচ্ছে না।
 
-Data races cause undefined behavior and can be difficult to diagnose and fix
-when you’re trying to track them down at runtime; Rust prevents this problem by
-refusing to compile code with data races!
+ডেটা রেস অনির্ধারিত আচরণ ঘটায় এবং রানটাইমে সেগুলোকে ট্র্যাক করার চেষ্টা করার সময় নির্ণয় এবং ঠিক করা কঠিন হতে পারে; Rust ডেটা রেস সহ কোড কম্পাইল করতে অস্বীকার করে এই সমস্যাটি প্রতিরোধ করে!
 
-As always, we can use curly brackets to create a new scope, allowing for
-multiple mutable references, just not _simultaneous_ ones:
+বরাবরের মতো, আমরা একাধিক মিউটেবল রেফারেন্সের অনুমতি দেওয়ার জন্য একটি নতুন স্কোপ তৈরি করতে কার্লি ব্র্যাকেট ব্যবহার করতে পারি, তবে *একযোগে* নয়:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-11-muts-in-separate-scopes/src/main.rs:here}}
 ```
 
-Rust enforces a similar rule for combining mutable and immutable references.
-This code results in an error:
+মিউটেবল এবং ইমিউটেবল রেফারেন্স একত্রিত করার জন্য Rust একই ধরনের নিয়ম প্রয়োগ করে। এই কোডটির ফলে একটি এরর হয়:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/src/main.rs:here}}
 ```
 
-Here’s the error:
+এখানে এররটি দেওয়া হলো:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/output.txt}}
 ```
 
-Whew! We _also_ cannot have a mutable reference while we have an immutable one
-to the same value.
+যাক বাবা! আমরা একই মানের একটি ইমিউটেবল রেফারেন্স থাকাকালীন একটি মিউটেবল রেফারেন্স রাখতে *পারি না*।
 
-Users of an immutable reference don’t expect the value to suddenly change out
-from under them! However, multiple immutable references are allowed because no
-one who is just reading the data has the ability to affect anyone else’s
-reading of the data.
+একটি ইমিউটেবল রেফারেন্সের ব্যবহারকারীরা আশা করে না যে মানটি হঠাৎ করে তাদের অজান্তেই পরিবর্তিত হয়ে যাবে! তবে, একাধিক ইমিউটেবল রেফারেন্স অনুমোদিত কারণ যারা শুধুমাত্র ডেটা পড়ছে তাদের কারও ডেটা পড়ার উপর প্রভাব ফেলার ক্ষমতা নেই।
 
-Note that a reference’s scope starts from where it is introduced and continues
-through the last time that reference is used. For instance, this code will
-compile because the last usage of the immutable references is in the `println!`,
-before the mutable reference is introduced:
+মনে রাখবেন যে একটি রেফারেন্সের স্কোপ শুরু হয় যেখানে এটি প্রবর্তিত হয় এবং সেই রেফারেন্সটি শেষবার ব্যবহার করা পর্যন্ত চলতে থাকে। উদাহরণস্বরূপ, এই কোডটি কম্পাইল হবে কারণ ইমিউটেবল রেফারেন্সগুলোর শেষ ব্যবহার `println!`-এ, মিউটেবল রেফারেন্স প্রবর্তিত হওয়ার আগে:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
 ```
 
-The scopes of the immutable references `r1` and `r2` end after the `println!`
-where they are last used, which is before the mutable reference `r3` is
-created. These scopes don’t overlap, so this code is allowed: the compiler can
-tell that the reference is no longer being used at a point before the end of
-the scope.
+ইমিউটেবল রেফারেন্স `r1` এবং `r2`-এর স্কোপগুলো `println!`-এর পরে শেষ হয় যেখানে সেগুলো শেষবার ব্যবহার করা হয়েছে, যা মিউটেবল রেফারেন্স `r3` তৈরি হওয়ার আগে। এই স্কোপগুলো ওভারল্যাপ করে না, তাই এই কোডটি অনুমোদিত: কম্পাইলার বলতে পারে যে রেফারেন্সটি স্কোপের শেষ হওয়ার আগে একটি বিন্দুতে আর ব্যবহার করা হচ্ছে না।
 
-Even though borrowing errors may be frustrating at times, remember that it’s
-the Rust compiler pointing out a potential bug early (at compile time rather
-than at runtime) and showing you exactly where the problem is. Then you don’t
-have to track down why your data isn’t what you thought it was.
+এমনকি যদি বোরোয়িং এররগুলো মাঝে মাঝে হতাশাজনক হতে পারে, মনে রাখবেন যে এটি হল Rust কম্পাইলার একটি সম্ভাব্য বাগ তাড়াতাড়ি (রানটাইমের পরিবর্তে কম্পাইল করার সময়) নির্দেশ করছে এবং আপনাকে ঠিক কোথায় সমস্যাটি রয়েছে তা দেখাচ্ছে। তাহলে আপনাকে ট্র্যাক করতে হবে না কেন আপনার ডেটা আপনার ভাবনার মতো নয়।
 
-### Dangling References
+### ড্যাংলিং রেফারেন্স (Dangling References)
 
-In languages with pointers, it’s easy to erroneously create a _dangling
-pointer_—a pointer that references a location in memory that may have been
-given to someone else—by freeing some memory while preserving a pointer to that
-memory. In Rust, by contrast, the compiler guarantees that references will
-never be dangling references: if you have a reference to some data, the
-compiler will ensure that the data will not go out of scope before the
-reference to the data does.
+পয়েন্টার সহ ভাষাগুলোতে, ভুলবশত একটি *ড্যাংলিং পয়েন্টার (dangling
+pointer)*—একটি পয়েন্টার যা মেমরির এমন একটি লোকেশনকে নির্দেশ করে যা হয়তো অন্য কাউকে দেওয়া হয়েছে—তৈরি করা সহজ, কিছু মেমরি মুক্ত করার সময় সেই মেমরির একটি পয়েন্টার সংরক্ষণ করে। অন্যদিকে, Rust-এ, কম্পাইলার গ্যারান্টি দেয় যে রেফারেন্সগুলো কখনই ড্যাংলিং রেফারেন্স হবে না: যদি আপনার কাছে কিছু ডেটার রেফারেন্স থাকে, তাহলে কম্পাইলার নিশ্চিত করবে যে ডেটার রেফারেন্স শেষ হওয়ার আগে ডেটা স্কোপের বাইরে যাবে না।
 
-Let’s try to create a dangling reference to see how Rust prevents them with a
-compile-time error:
+আসুন একটি ড্যাংলিং রেফারেন্স তৈরি করার চেষ্টা করি, এটা দেখতে যে Rust কীভাবে কম্পাইল-টাইম এরর দিয়ে সেগুলো প্রতিরোধ করে:
 
 <Listing file-name="src/main.rs">
 
@@ -212,23 +144,20 @@ compile-time error:
 
 </Listing>
 
-Here’s the error:
+এখানে এররটি দেওয়া হলো:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/output.txt}}
 ```
 
-This error message refers to a feature we haven’t covered yet: lifetimes. We’ll
-discuss lifetimes in detail in Chapter 10. But, if you disregard the parts
-about lifetimes, the message does contain the key to why this code is a problem:
+এই এরর মেসেজটি এমন একটি ফিচারের কথা বলে যা আমরা এখনও কভার করিনি: লাইফটাইম। আমরা চ্যাপ্টার ১০-এ লাইফটাইম নিয়ে বিস্তারিত আলোচনা করব। কিন্তু, আপনি যদি লাইফটাইম সম্পর্কিত অংশগুলো উপেক্ষা করেন, তাহলে মেসেজটিতে এই কোডটি কেন সমস্যাযুক্ত তার মূল বিষয় রয়েছে:
 
 ```text
 this function's return type contains a borrowed value, but there is no value
 for it to be borrowed from
 ```
 
-Let’s take a closer look at exactly what’s happening at each stage of our
-`dangle` code:
+আসুন আরও ঘনিষ্ঠভাবে দেখি আমাদের `dangle` কোডের প্রতিটি পর্যায়ে ঠিক কী ঘটছে:
 
 <Listing file-name="src/main.rs">
 
@@ -238,26 +167,21 @@ Let’s take a closer look at exactly what’s happening at each stage of our
 
 </Listing>
 
-Because `s` is created inside `dangle`, when the code of `dangle` is finished,
-`s` will be deallocated. But we tried to return a reference to it. That means
-this reference would be pointing to an invalid `String`. That’s no good! Rust
-won’t let us do this.
+যেহেতু `s` `dangle`-এর ভিতরে তৈরি করা হয়েছে, তাই `dangle`-এর কোড শেষ হয়ে গেলে, `s` ডিলোক্যাট করা হবে। কিন্তু আমরা এটির একটি রেফারেন্স রিটার্ন করার চেষ্টা করেছি। এর মানে হল এই রেফারেন্সটি একটি অকার্যকর `String`-এর দিকে নির্দেশ করবে। সেটি ভালো নয়! Rust আমাদের এটি করতে দেবে না।
 
-The solution here is to return the `String` directly:
+এখানে সমাধান হল সরাসরি `String` রিটার্ন করা:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-16-no-dangle/src/main.rs:here}}
 ```
 
-This works without any problems. Ownership is moved out, and nothing is
-deallocated.
+এটি কোনো সমস্যা ছাড়াই কাজ করে। ওনারশিপ সরানো হয়েছে এবং কিছুই ডিলোক্যাট করা হয়নি।
 
-### The Rules of References
+### রেফারেন্সের নিয়ম (The Rules of References)
 
-Let’s recap what we’ve discussed about references:
+আসুন, রেফারেন্স সম্পর্কে আমরা যা আলোচনা করেছি তার পুনরাবৃত্তি করি:
 
-- At any given time, you can have _either_ one mutable reference _or_ any
-  number of immutable references.
-- References must always be valid.
+-   যেকোনো সময়ে, আপনি *হয়* একটি মিউটেবল রেফারেন্স *অথবা* যেকোনো সংখ্যক ইমিউটেবল রেফারেন্স রাখতে পারেন।
+-   রেফারেন্সগুলো সর্বদাই বৈধ হতে হবে।
 
-Next, we’ll look at a different kind of reference: slices.
+এরপর, আমরা একটি ভিন্ন ধরনের রেফারেন্স দেখব: স্লাইস।
