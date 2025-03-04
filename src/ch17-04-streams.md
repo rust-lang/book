@@ -1,35 +1,16 @@
-## Streams: Futures in Sequence
+## স্ট্রিমস: সিকোয়েন্সে ফিউচার (Streams: Futures in Sequence)
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="streams"></a>
 
-So far in this chapter, we’ve mostly stuck to individual futures. The one big
-exception was the async channel we used. Recall how we used the receiver for our
-async channel earlier in this chapter in the [“Message
-Passing”][17-02-messages]<!-- ignore --> section. The async `recv` method
-produces a sequence of items over time. This is an instance of a much more
-general pattern known as a _stream_.
+এই চ্যাপ্টারে ఇప్పటి পর্যন্ত, আমরা বেশিরভাগ ক্ষেত্রে individual ফিউচারের মধ্যেই আটকে ছিলাম। একটি বড় ব্যতিক্রম ছিল অ্যাসিঙ্ক্রোনাস চ্যানেল যা আমরা ব্যবহার করেছি। এই চ্যাপ্টারের [“Message Passing”][17-02-messages]<!-- ignore --> বিভাগে আমরা কীভাবে আমাদের অ্যাসিঙ্ক্রোনাস চ্যানেলের জন্য রিসিভার ব্যবহার করেছি তা স্মরণ করুন। অ্যাসিঙ্ক্রোনাস `recv` মেথড সময়ের সাথে আইটেমগুলির একটি সিকোয়েন্স তৈরি করে। এটি _স্ট্রিম_ নামে পরিচিত আরও অনেক সাধারণ প্যাটার্নের একটি উদাহরণ।
 
-We saw a sequence of items back in Chapter 13, when we looked at the `Iterator`
-trait in [The Iterator Trait and the `next` Method][iterator-trait]<!-- ignore
---> section, but there are two differences between iterators and the async
-channel receiver. The first difference is time: iterators are synchronous, while
-the channel receiver is asynchronous. The second is the API. When working
-directly with `Iterator`, we call its synchronous `next` method. With the
-`trpl::Receiver` stream in particular, we called an asynchronous `recv` method
-instead. Otherwise, these APIs feel very similar, and that similarity
-isn’t a coincidence. A stream is like an asynchronous form of iteration. Whereas
-the `trpl::Receiver` specifically waits to receive messages, though, the
-general-purpose stream API is much broader: it provides the next item the
-way `Iterator` does, but asynchronously.
+আমরা Chapter 13-এর [The Iterator Trait and the `next` Method][iterator-trait]<!-- ignore --> বিভাগে `Iterator` trait দেখার সময় আইটেমগুলির একটি সিকোয়েন্স দেখেছিলাম, কিন্তু ইটারেটর এবং অ্যাসিঙ্ক্রোনাস চ্যানেল রিসিভারের মধ্যে দুটি পার্থক্য রয়েছে। প্রথম পার্থক্য হল সময়: ইটারেটরগুলি সিঙ্ক্রোনাস, যেখানে চ্যানেল রিসিভার অ্যাসিঙ্ক্রোনাস। দ্বিতীয়টি হল API। `Iterator`-এর সাথে সরাসরি কাজ করার সময়, আমরা এর সিঙ্ক্রোনাস `next` মেথড কল করি। বিশেষ করে `trpl::Receiver` স্ট্রিমের সাথে, আমরা পরিবর্তে একটি অ্যাসিঙ্ক্রোনাস `recv` মেথড কল করেছি। অন্যথায়, এই API গুলি খুব একই রকম মনে হয় এবং সেই মিলটি কোনও কাকতালীয় ঘটনা নয়। একটি স্ট্রিম হল ইটারেশনের একটি অ্যাসিঙ্ক্রোনাস ফর্মের মতো। যেখানে `trpl::Receiver` বিশেষভাবে মেসেজ পাওয়ার জন্য অপেক্ষা করে, যদিও, সাধারণ-উদ্দেশ্যের স্ট্রিম API অনেক বিস্তৃত: এটি `Iterator`-এর মতোই পরবর্তী আইটেম সরবরাহ করে, কিন্তু অ্যাসিঙ্ক্রোনাসভাবে।
 
-The similarity between iterators and streams in Rust means we can actually
-create a stream from any iterator. As with an iterator, we can work with a
-stream by calling its `next` method and then awaiting the output, as in Listing
-17-30.
+Rust-এ ইটারেটর এবং স্ট্রিমের মধ্যে মিলের অর্থ হল আমরা আসলে যেকোনো ইটারেটর থেকে একটি স্ট্রিম তৈরি করতে পারি। একটি ইটারেটরের মতো, আমরা একটি স্ট্রিমের `next` মেথড কল করে এবং তারপর আউটপুটের জন্য অপেক্ষা করে একটি স্ট্রিমের সাথে কাজ করতে পারি, যেমনটি Listing 17-30-এ রয়েছে।
 
-<Listing number="17-30" caption="Creating a stream from an iterator and printing its values" file-name="src/main.rs">
+<Listing number="17-30" caption="একটি ইটারেটর থেকে একটি স্ট্রিম তৈরি করা এবং এর মানগুলি প্রিন্ট করা" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-30/src/main.rs:stream}}
@@ -37,12 +18,9 @@ stream by calling its `next` method and then awaiting the output, as in Listing
 
 </Listing>
 
-We start with an array of numbers, which we convert to an iterator and then call
-`map` on to double all the values. Then we convert the iterator into a stream
-using the `trpl::stream_from_iter` function. Next, we loop over the items in the
-stream as they arrive with the `while let` loop.
+আমরা সংখ্যার একটি অ্যারে দিয়ে শুরু করি, যেটিকে আমরা একটি ইটারেটরে রূপান্তর করি এবং তারপর সমস্ত মান দ্বিগুণ করতে `map` কল করি। তারপর আমরা `trpl::stream_from_iter` ফাংশন ব্যবহার করে ইটারেটরটিকে একটি স্ট্রিমে রূপান্তর করি। এরপর, আমরা `while let` লুপ দিয়ে স্ট্রিমে আইটেমগুলি আসার সাথে সাথে সেগুলির উপর লুপ করি।
 
-Unfortunately, when we try to run the code, it doesn’t compile, but instead it reports that there’s no `next` method available:
+দুর্ভাগ্যবশত, যখন আমরা কোডটি চালানোর চেষ্টা করি, তখন এটি কম্পাইল হয় না, তবে পরিবর্তে এটি রিপোর্ট করে যে কোনও `next` মেথড উপলব্ধ নেই:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-30
@@ -76,25 +54,13 @@ help: there is a method `try_next` with a similar name
    |                                        ~~~~~~~~
 ```
 
-As this output explains, the reason for the compiler error is that we need the
-right trait in scope to be able to use the `next` method. Given our discussion
-so far, you might reasonably expect that trait to be `Stream`, but it’s actually
-`StreamExt`. Short for _extension_, `Ext` is a common pattern in the
-Rust community for extending one trait with another.
+এই আউটপুটটি যেমন ব্যাখ্যা করে, কম্পাইলার error-এর কারণ হল `next` মেথডটি ব্যবহার করতে সক্ষম হওয়ার জন্য আমাদের স্কোপে সঠিক trait-এর প্রয়োজন। আমাদের এখন পর্যন্ত আলোচনা দেওয়া হলে, আপনি যুক্তিসঙ্গতভাবে আশা করতে পারেন যে trait টি হবে `Stream`, কিন্তু এটি আসলে `StreamExt`। _এক্সটেনশনের_ জন্য সংক্ষিপ্ত, `Ext` হল Rust কমিউনিটিতে একটি trait-কে অন্যটির সাথে প্রসারিত করার জন্য একটি সাধারণ প্যাটার্ন।
 
-We’ll explain the `Stream` and `StreamExt` traits in a bit more detail at the
-end of the chapter, but for now all you need to know is that the `Stream` trait
-defines a low-level interface that effectively combines the `Iterator` and
-`Future` traits. `StreamExt` supplies a higher-level set of APIs on top of
-`Stream`, including the `next` method as well as other utility methods similar
-to those provided by the `Iterator` trait. `Stream` and `StreamExt` are not yet
-part of Rust’s standard library, but most ecosystem crates use the same
-definition.
+আমরা চ্যাপ্টারের শেষে `Stream` এবং `StreamExt` trait গুলিকে আরও একটু বিশদে ব্যাখ্যা করব, কিন্তু আপাতত আপনার যা জানা দরকার তা হল `Stream` trait একটি নিম্ন-স্তরের ইন্টারফেস সংজ্ঞায়িত করে যা কার্যকরভাবে `Iterator` এবং `Future` trait গুলিকে একত্রিত করে। `StreamExt` `Stream`-এর উপরে API-গুলির একটি উচ্চ-স্তরের সেট সরবরাহ করে, যার মধ্যে `next` মেথড এবং সেইসাথে `Iterator` trait দ্বারা প্রদত্ত ইউটিলিটি মেথডগুলির অনুরূপ অন্যান্য ইউটিলিটি মেথড রয়েছে। `Stream` এবং `StreamExt` এখনও Rust-এর স্ট্যান্ডার্ড লাইব্রেরির অংশ নয়, তবে বেশিরভাগ ইকোসিস্টেম ক্রেট একই সংজ্ঞা ব্যবহার করে।
 
-The fix to the compiler error is to add a `use` statement for `trpl::StreamExt`,
-as in Listing 17-31.
+কম্পাইলার error-এর সমাধান হল `trpl::StreamExt`-এর জন্য একটি `use` স্টেটমেন্ট যুক্ত করা, যেমনটি Listing 17-31-এ রয়েছে।
 
-<Listing number="17-31" caption="Successfully using an iterator as the basis for a stream" file-name="src/main.rs">
+<Listing number="17-31" caption="একটি স্ট্রিমের ভিত্তি হিসাবে একটি ইটারেটর সফলভাবে ব্যবহার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-31/src/main.rs:all}}
@@ -102,12 +68,9 @@ as in Listing 17-31.
 
 </Listing>
 
-With all those pieces put together, this code works the way we want! What’s
-more, now that we have `StreamExt` in scope, we can use all of its utility
-methods, just as with iterators. For example, in Listing 17-32, we use the
-`filter` method to filter out everything but multiples of three and five.
+এই সমস্ত টুকরোগুলি একসাথে রাখলে, এই কোডটি আমরা যেভাবে চাই সেভাবে কাজ করে! আরও কী, এখন যেহেতু আমাদের স্কোপে `StreamExt` রয়েছে, আমরা এর সমস্ত ইউটিলিটি মেথড ব্যবহার করতে পারি, ঠিক ইটারেটরের মতোই। উদাহরণস্বরূপ, Listing 17-32-এ, আমরা তিন এবং পাঁচের গুণিতক ব্যতীত অন্য সবকিছু ফিল্টার করতে `filter` মেথড ব্যবহার করি।
 
-<Listing number="17-32" caption="Filtering a stream with the `StreamExt::filter` method" file-name="src/main.rs">
+<Listing number="17-32" caption="`StreamExt::filter` মেথড দিয়ে একটি স্ট্রিম ফিল্টার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-32/src/main.rs:all}}
@@ -115,26 +78,15 @@ methods, just as with iterators. For example, in Listing 17-32, we use the
 
 </Listing>
 
-Of course, this isn’t very interesting, since we could do the same with normal
-iterators and without any async at all. Let’s look at what
-we can do that _is_ unique to streams.
+অবশ্যই, এটি খুব আকর্ষণীয় নয়, যেহেতু আমরা সাধারণ ইটারেটর দিয়ে এবং কোনও অ্যাসিঙ্ক্রোনাস ছাড়াই একই কাজ করতে পারি। আসুন দেখি আমরা কী করতে পারি যা স্ট্রিমের জন্য _অনন্য_।
 
-### Composing Streams
+### কম্পোজিং স্ট্রিম (Composing Streams)
 
-Many concepts are naturally represented as streams: items becoming available in
-a queue, chunks of data being pulled incrementally from the filesystem when the
-full data set is too large for the computer’s memory, or data arriving over the
-network over time. Because streams are futures, we can use them with any other
-kind of future and combine them in interesting ways. For example, we can batch
-up events to avoid triggering too many network calls, set timeouts on sequences
-of long-running operations, or throttle user interface events to avoid doing
-needless work.
+অনেকগুলি ধারণা স্বাভাবিকভাবেই স্ট্রিম হিসাবে উপস্থাপিত হয়: একটি সারিতে উপলব্ধ হওয়া আইটেম, ফাইল সিস্টেম থেকে ক্রমবর্ধমানভাবে ডেটার অংশগুলি টেনে আনা যখন সম্পূর্ণ ডেটা সেট কম্পিউটারের মেমরির জন্য খুব বড় হয়, অথবা সময়ের সাথে নেটওয়ার্কের মাধ্যমে ডেটা আসা। যেহেতু স্ট্রিমগুলি ফিউচার, তাই আমরা সেগুলিকে অন্য যেকোনো ধরনের ফিউচারের সাথে ব্যবহার করতে পারি এবং সেগুলিকে আকর্ষণীয় উপায়ে একত্রিত করতে পারি। উদাহরণস্বরূপ, আমরা অনেকগুলি নেটওয়ার্ক কল ট্রিগার করা এড়াতে ইভেন্টগুলিকে ব্যাচ আপ করতে পারি, দীর্ঘ-চলমান অপারেশনগুলির সিকোয়েন্সে টাইমআউট সেট করতে পারি, অথবা অপ্রয়োজনীয় কাজ এড়াতে ইউজার ইন্টারফেস ইভেন্টগুলিকে থ্রোটল করতে পারি।
 
-Let’s start by building a little stream of messages as a stand-in for a stream
-of data we might see from a WebSocket or another real-time communication
-protocol, as shown in Listing 17-33.
+আসুন একটি ওয়েব সকেট বা অন্য রিয়েল-টাইম কমিউনিকেশন প্রোটোকল থেকে আমরা যে ডেটা স্ট্রিম দেখতে পারি তার জন্য একটি স্ট্যান্ড-ইন হিসাবে মেসেজের একটি ছোট স্ট্রিম তৈরি করে শুরু করি, যেমনটি Listing 17-33-এ দেখানো হয়েছে।
 
-<Listing number="17-33" caption="Using the `rx` receiver as a `ReceiverStream`" file-name="src/main.rs">
+<Listing number="17-33" caption="`rx` রিসিভারকে `ReceiverStream` হিসাবে ব্যবহার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-33/src/main.rs:all}}
@@ -142,15 +94,11 @@ protocol, as shown in Listing 17-33.
 
 </Listing>
 
-First, we create a function called `get_messages` that returns `impl Stream<Item
-= String>`. For its implementation, we create an async channel, loop over the
-first 10 letters of the English alphabet, and send them across the channel.
+প্রথমে, আমরা `get_messages` নামে একটি ফাংশন তৈরি করি যা `impl Stream<Item = String>` রিটার্ন করে। এর ইমপ্লিমেন্টেশনের জন্য, আমরা একটি অ্যাসিঙ্ক্রোনাস চ্যানেল তৈরি করি, ইংরেজি বর্ণমালার প্রথম 10টি অক্ষরের উপর লুপ করি এবং সেগুলিকে চ্যানেলের মাধ্যমে পাঠাই।
 
-We also use a new type: `ReceiverStream`, which converts the `rx` receiver from
-the `trpl::channel` into a `Stream` with a `next` method. Back in `main`, we use
-a `while let` loop to print all the messages from the stream.
+আমরা একটি নতুন টাইপও ব্যবহার করি: `ReceiverStream`, যা `trpl::channel` থেকে `rx` রিসিভারকে একটি `next` মেথড সহ একটি `Stream`-এ রূপান্তর করে। `main`-এ ফিরে, আমরা স্ট্রিম থেকে সমস্ত মেসেজ প্রিন্ট করতে একটি `while let` লুপ ব্যবহার করি।
 
-When we run this code, we get exactly the results we would expect:
+যখন আমরা এই কোডটি চালাই, তখন আমরা ঠিক সেই ফলাফলগুলি পাই যা আমরা আশা করব:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -169,12 +117,9 @@ Message: 'i'
 Message: 'j'
 ```
 
-Again, we could do this with the regular `Receiver` API or even the regular
-`Iterator` API, though, so let’s add a feature that requires streams: adding a
-timeout that applies to every item in the stream, and a delay on the items we
-emit, as shown in Listing 17-34.
+আবার, আমরা এটি রেগুলার `Receiver` API বা এমনকি রেগুলার `Iterator` API দিয়ে করতে পারি, যদিও, তাই আসুন এমন একটি বৈশিষ্ট্য যুক্ত করি যার জন্য স্ট্রিমের প্রয়োজন: স্ট্রীমের প্রতিটি আইটেমে প্রযোজ্য একটি টাইমআউট এবং আমরা যে আইটেমগুলি নির্গত করি তাতে একটি বিলম্ব যোগ করা, যেমনটি Listing 17-34-এ দেখানো হয়েছে।
 
-<Listing number="17-34" caption="Using the `StreamExt::timeout` method to set a time limit on the items in a stream" file-name="src/main.rs">
+<Listing number="17-34" caption="একটি স্ট্রীমের আইটেমগুলিতে একটি সময়সীমা সেট করতে `StreamExt::timeout` মেথড ব্যবহার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-34/src/main.rs:timeout}}
@@ -182,21 +127,11 @@ emit, as shown in Listing 17-34.
 
 </Listing>
 
-We start by adding a timeout to the stream with the `timeout` method, which
-comes from the `StreamExt` trait. Then we update the body of the `while let`
-loop, because the stream now returns a `Result`. The `Ok` variant indicates a
-message arrived in time; the `Err` variant indicates that the timeout elapsed
-before any message arrived. We `match` on that result and either print the
-message when we receive it successfully or print a notice about the timeout.
-Finally, notice that we pin the messages after applying the timeout to them,
-because the timeout helper produces a stream that needs to be pinned to be
-polled.
+আমরা `timeout` মেথড দিয়ে স্ট্রিমে একটি টাইমআউট যুক্ত করে শুরু করি, যা `StreamExt` trait থেকে আসে। তারপর আমরা `while let` লুপের বডি আপডেট করি, কারণ স্ট্রিমটি এখন একটি `Result` রিটার্ন করে। `Ok` ভেরিয়েন্ট নির্দেশ করে যে একটি মেসেজ সময়মতো এসেছে; `Err` ভেরিয়েন্ট নির্দেশ করে যে কোনও মেসেজ আসার আগেই টাইমআউট শেষ হয়ে গেছে। আমরা সেই ফলাফলের উপর `match` করি এবং হয় মেসেজটি সফলভাবে পেলে প্রিন্ট করি অথবা টাইমআউট সম্পর্কে একটি নোটিশ প্রিন্ট করি। অবশেষে, লক্ষ্য করুন যে আমরা টাইমআউট প্রয়োগ করার পরে মেসেজগুলিকে পিন করি, কারণ টাইমআউট হেল্পার একটি স্ট্রিম তৈরি করে যেটিকে পোল করার জন্য পিন করা প্রয়োজন।
 
-However, because there are no delays between messages, this timeout does not
-change the behavior of the program. Let’s add a variable delay to the messages
-we send, as shown in Listing 17-35.
+যাইহোক, যেহেতু মেসেজগুলির মধ্যে কোনও বিলম্ব নেই, তাই এই টাইমআউট প্রোগ্রামের আচরণ পরিবর্তন করে না। আসুন আমরা যে মেসেজগুলি পাঠাই তাতে একটি পরিবর্তনশীল বিলম্ব যুক্ত করি, যেমনটি Listing 17-35-এ দেখানো হয়েছে।
 
-<Listing number="17-35" caption="Sending messages through `tx` with an async delay without making `get_messages` an async function" file-name="src/main.rs">
+<Listing number="17-35" caption="`get_messages`-কে অ্যাসিঙ্ক্রোনাস ফাংশন না করেই অ্যাসিঙ্ক্রোনাস বিলম্ব সহ `tx`-এর মাধ্যমে মেসেজ পাঠানো" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-35/src/main.rs:messages}}
@@ -204,36 +139,15 @@ we send, as shown in Listing 17-35.
 
 </Listing>
 
-In `get_messages`, we use the `enumerate` iterator method with the `messages`
-array so that we can get the index of each item we’re sending along with the
-item itself. Then we apply a 100-millisecond delay to even-index items and a
-300-millisecond delay to odd-index items to simulate the different delays we
-might see from a stream of messages in the real world. Because our timeout is
-for 200 milliseconds, this should affect half of the messages.
+`get_messages`-এ, আমরা `messages` অ্যারের সাথে `enumerate` ইটারেটর মেথড ব্যবহার করি যাতে আমরা যে প্রতিটি আইটেম পাঠাচ্ছি তার ইনডেক্স এবং সেইসাথে আইটেমটিও পেতে পারি। তারপর আমরা বাস্তব জগতে মেসেজের একটি স্ট্রিম থেকে আমরা যে বিভিন্ন বিলম্ব দেখতে পারি তা অনুকরণ করতে জোড়-ইনডেক্স আইটেমগুলিতে 100-মিলিসেকেন্ড বিলম্ব এবং বিজোড়-ইনডেক্স আইটেমগুলিতে 300-মিলিসেকেন্ড বিলম্ব প্রয়োগ করি। যেহেতু আমাদের টাইমআউট 200 মিলিসেকেন্ডের জন্য, তাই এটি অর্ধেক মেসেজকে প্রভাবিত করবে।
 
-To sleep between messages in the `get_messages` function without blocking, we
-need to use async. However, we can’t make `get_messages` itself into an async
-function, because then we’d return a `Future<Output = Stream<Item = String>>`
-instead of a `Stream<Item = String>>`. The caller would have to await
-`get_messages` itself to get access to the stream. But remember: everything in a
-given future happens linearly; concurrency happens _between_ futures. Awaiting
-`get_messages` would require it to send all the messages, including the sleep
-delay between each message, before returning the receiver stream. As a result,
-the timeout would be useless. There would be no delays in the stream itself;
-they would all happen before the stream was even available.
+`get_messages` ফাংশনে মেসেজগুলির মধ্যে স্লিপ করার জন্য ব্লক না করে, আমাদের অ্যাসিঙ্ক্রোনাস ব্যবহার করতে হবে। যাইহোক, আমরা `get_messages`-কে নিজেই একটি অ্যাসিঙ্ক্রোনাস ফাংশন করতে পারি না, কারণ তাহলে আমরা একটি `Stream<Item = String>>`-এর পরিবর্তে একটি `Future<Output = Stream<Item = String>>` রিটার্ন করব। কলারকে স্ট্রিমটিতে অ্যাক্সেস পেতে `get_messages`-এর জন্য নিজেই অপেক্ষা করতে হবে। কিন্তু মনে রাখবেন: একটি প্রদত্ত ফিউচারের মধ্যে সবকিছু লিনিয়ারভাবে ঘটে; কনকারেন্সি ঘটে ফিউচারগুলির _মধ্যে_। `get_messages`-এর জন্য অপেক্ষা করার জন্য এটিকে সমস্ত মেসেজ পাঠাতে হবে, প্রতিটি মেসেজের মধ্যে স্লিপ বিলম্ব সহ, রিসিভার স্ট্রিম রিটার্ন করার আগে। ফলস্বরূপ, টাইমআউটটি অকেজো হবে। স্ট্রীমের মধ্যে কোনও বিলম্ব থাকবে না; সেগুলি স্ট্রিমটি উপলব্ধ হওয়ার আগেই ঘটবে।
 
-Instead, we leave `get_messages` as a regular function that returns a stream,
-and we spawn a task to handle the async `sleep` calls.
+পরিবর্তে, আমরা `get_messages`-কে একটি রেগুলার ফাংশন হিসাবে ছেড়ে দিই যা একটি স্ট্রিম রিটার্ন করে এবং অ্যাসিঙ্ক্রোনাস `sleep` কলগুলি পরিচালনা করার জন্য আমরা একটি টাস্ক স্পন করি।
 
-> Note: Calling `spawn_task` in this way works because we already set up our
-> runtime; had we not, it would cause a panic. Other implementations choose
-> different tradeoffs: they might spawn a new runtime and avoid the panic but
-> end up with a bit of extra overhead, or they may simply not provide a
-> standalone way to spawn tasks without reference to a runtime. Make sure you
-> know what tradeoff your runtime has chosen and write your code accordingly!
+> Note: এইভাবে `spawn_task` কল করা কাজ করে কারণ আমরা ইতিমধ্যেই আমাদের রানটাইম সেট আপ করেছি; যদি আমরা তা না করতাম, তাহলে এটি একটি প্যানিকের কারণ হত। অন্যান্য ইমপ্লিমেন্টেশনগুলি বিভিন্ন ট্রেডঅফ বেছে নেয়: তারা একটি নতুন রানটাইম স্পন করতে পারে এবং প্যানিক এড়াতে পারে কিন্তু সামান্য অতিরিক্ত ওভারহেড সহ শেষ হতে পারে, অথবা তারা রানটাইমের রেফারেন্স ছাড়াই টাস্ক স্পন করার কোনও স্বতন্ত্র উপায় সরবরাহ নাও করতে পারে। আপনি নিশ্চিত করুন যে আপনার রানটাইম কোন ট্রেডঅফ বেছে নিয়েছে এবং সেই অনুযায়ী আপনার কোড লিখুন!
 
-Now our code has a much more interesting result. Between every other pair of
-messages, a `Problem: Elapsed(())` error.
+এখন আমাদের কোডের অনেক বেশি আকর্ষণীয় ফলাফল রয়েছে। অন্য প্রতিটি জোড়া মেসেজের মধ্যে, একটি `Problem: Elapsed(())` error।
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -257,27 +171,15 @@ Problem: Elapsed(())
 Message: 'j'
 ```
 
-The timeout doesn’t prevent the messages from arriving in the end. We still get
-all of the original messages, because our channel is _unbounded_: it can hold as
-many messages as we can fit in memory. If the message doesn’t arrive before the
-timeout, our stream handler will account for that, but when it polls the stream
-again, the message may now have arrived.
+টাইমআউট শেষ পর্যন্ত মেসেজগুলিকে আসা থেকে আটকাতে পারে না। আমরা এখনও সমস্ত মূল মেসেজ পাই, কারণ আমাদের চ্যানেলটি _আনবাউন্ডেড_: এটি মেমরিতে যতগুলি মেসেজ ফিট করতে পারে ততগুলি ধারণ করতে পারে। যদি মেসেজটি টাইমআউটের আগে না আসে, তাহলে আমাদের স্ট্রিম হ্যান্ডলার সেটি বিবেচনা করবে, কিন্তু যখন এটি আবার স্ট্রিমটি পোল করবে, তখন মেসেজটি এসে যেতে পারে।
 
-You can get different behavior if needed by using other kinds of channels or
-other kinds of streams more generally. Let’s see one of those in practice by
-combining a stream of time intervals with this stream of messages.
+প্রয়োজনের ভিত্তিতে আপনি অন্যান্য ধরণের চ্যানেল বা আরও সাধারণভাবে অন্যান্য ধরণের স্ট্রিম ব্যবহার করে আলাদা আচরণ পেতে পারেন। আসুন তাদের মধ্যে একটিকে বাস্তবে দেখি, সময়ের ব্যবধানের একটি স্ট্রিমের সাথে এই মেসেজের স্ট্রিমটিকে একত্রিত করে।
 
-### Merging Streams
+## স্ট্রিমগুলিকে মার্জ করা (Merging Streams)
 
-First, let’s create another stream, which will emit an item every millisecond if
-we let it run directly. For simplicity, we can use the `sleep` function to send
-a message on a delay and combine it with the same approach we used in
-`get_messages` of creating a stream from a channel. The difference is that this
-time, we’re going to send back the count of intervals that have elapsed, so the
-return type will be `impl Stream<Item = u32>`, and we can call the function
-`get_intervals` (see Listing 17-36).
+প্রথমে, আসুন আরেকটি স্ট্রিম তৈরি করি, যেটি সরাসরি চলতে দিলে প্রতি মিলি সেকেন্ডে একটি আইটেম নির্গত করবে। সরলতার জন্য, আমরা একটি বিলম্বের সাথে একটি মেসেজ পাঠাতে `sleep` ফাংশনটি ব্যবহার করতে পারি এবং এটিকে `get_messages`-এ আমরা যে পদ্ধতি ব্যবহার করেছি তার সাথে একত্রিত করতে পারি একটি চ্যানেল থেকে একটি স্ট্রিম তৈরি করার জন্য। পার্থক্য হল যে এবার, আমরা যে ব্যবধানগুলি অতিক্রান্ত হয়েছে তার সংখ্যা ফেরত পাঠাব, তাই রিটার্ন টাইপ হবে `impl Stream<Item = u32>`, এবং আমরা ফাংশনটিকে `get_intervals` বলতে পারি (Listing 17-36 দেখুন)।
 
-<Listing number="17-36" caption="Creating a stream with a counter that will be emitted once every millisecond" file-name="src/main.rs">
+<Listing number="17-36" caption="একটি কাউন্টার সহ একটি স্ট্রিম তৈরি করা যা প্রতি মিলি সেকেন্ডে একবার নির্গত হবে" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-36/src/main.rs:intervals}}
@@ -285,22 +187,13 @@ return type will be `impl Stream<Item = u32>`, and we can call the function
 
 </Listing>
 
-We start by defining a `count` in the task. (We could define it outside the
-task, too, but it’s clearer to limit the scope of any given variable.) Then we
-create an infinite loop. Each iteration of the loop asynchronously sleeps for
-one millisecond, increments the count, and then sends it over the channel.
-Because this is all wrapped in the task created by `spawn_task`, all of
-it—including the infinite loop—will get cleaned up along with the runtime.
+আমরা টাস্কের মধ্যে একটি `count` সংজ্ঞায়িত করে শুরু করি। (আমরা এটিকে টাস্কের বাইরেও সংজ্ঞায়িত করতে পারি, তবে যেকোনো প্রদত্ত variable-এর সুযোগ সীমিত করা আরও পরিষ্কার।) তারপর আমরা একটি অসীম লুপ তৈরি করি। লুপের প্রতিটি পুনরাবৃত্তি অ্যাসিঙ্ক্রোনাসভাবে এক মিলি সেকেন্ডের জন্য স্লিপ করে, কাউন্ট বাড়ায় এবং তারপর এটিকে চ্যানেলের মাধ্যমে পাঠায়। যেহেতু এটি `spawn_task` দ্বারা তৈরি টাস্কের মধ্যে র‍্যাপ করা হয়েছে, তাই অসীম লুপ সহ এটির সমস্ত কিছুই রানটাইমের সাথে পরিষ্কার হয়ে যাবে।
 
-This kind of infinite loop, which ends only when the whole runtime gets torn
-down, is fairly common in async Rust: many programs need to keep running
-indefinitely. With async, this doesn’t block anything else, as long as there is
-at least one await point in each iteration through the loop.
+এই ধরনের অসীম লুপ, যা শুধুমাত্র তখনই শেষ হয় যখন পুরো রানটাইমটি ভেঙে যায়, অ্যাসিঙ্ক্রোনাস Rust-এ বেশ সাধারণ: অনেক প্রোগ্রামের অনির্দিষ্টকালের জন্য চলতে থাকা প্রয়োজন। অ্যাসিঙ্ক্রোনাসের সাথে, এটি অন্য কিছু ব্লক করে না, যতক্ষণ লুপের প্রতিটি পুনরাবৃত্তিতে কমপক্ষে একটি অ্যাওয়েট পয়েন্ট থাকে।
 
-Now, back in our main function’s async block, we can attempt to merge the
-`messages` and `intervals` streams, as shown in Listing 17-37.
+এখন, আমাদের main ফাংশনের অ্যাসিঙ্ক্রোনাস ব্লকে ফিরে, আমরা `messages` এবং `intervals` স্ট্রিমগুলিকে মার্জ করার চেষ্টা করতে পারি, যেমনটি Listing 17-37-এ দেখানো হয়েছে।
 
-<Listing number="17-37" caption="Attempting to merge the `messages` and `intervals` streams" file-name="src/main.rs">
+<Listing number="17-37" caption="`messages` এবং `intervals` স্ট্রিমগুলিকে মার্জ করার চেষ্টা করা" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-37/src/main.rs:main}}
@@ -308,26 +201,13 @@ Now, back in our main function’s async block, we can attempt to merge the
 
 </Listing>
 
-We start by calling `get_intervals`. Then we merge the `messages` and
-`intervals` streams with the `merge` method, which combines multiple streams
-into one stream that produces items from any of the source streams as soon as
-the items are available, without imposing any particular ordering. Finally, we
-loop over that combined stream instead of over `messages`.
+আমরা `get_intervals` কল করে শুরু করি। তারপর আমরা `messages` এবং `intervals` স্ট্রিমগুলিকে `merge` মেথড দিয়ে মার্জ করি, যা একাধিক স্ট্রিমকে একটি স্ট্রিমে একত্রিত করে যা আইটেমগুলি উপলব্ধ হওয়ার সাথে সাথেই যেকোনো সোর্স স্ট্রিম থেকে আইটেম তৈরি করে, কোনও নির্দিষ্ট ক্রম আরোপ না করে। অবশেষে, আমরা সেই সম্মিলিত স্ট্রিমের উপর লুপ করি `messages`-এর পরিবর্তে।
 
-At this point, neither `messages` nor `intervals` needs to be pinned or mutable,
-because both will be combined into the single `merged` stream. However, this
-call to `merge` doesn’t compile! (Neither does the `next` call in the `while
-let` loop, but we’ll come back to that.) This is because the two streams have
-different types. The `messages` stream has the type `Timeout<impl Stream<Item =
-String>>`, where `Timeout` is the type that implements `Stream` for a `timeout`
-call. The `intervals` stream has the type `impl Stream<Item = u32>`. To merge
-these two streams, we need to transform one of them to match the other. We’ll
-rework the intervals stream, because messages is already in the basic format we
-want and has to handle timeout errors (see Listing 17-38).
+এই সময়ে, `messages` বা `intervals` কোনওটিরই পিন করা বা মিউটেবল হওয়ার প্রয়োজন নেই, কারণ উভয়কেই একক `merged` স্ট্রিমে একত্রিত করা হবে। যাইহোক, `merge`-এ এই কলটি কম্পাইল হয় না! (`while let` লুপের `next` কলটিও নয়, তবে আমরা সেটিতে ফিরে আসব।) এর কারণ হল দুটি স্ট্রিমের আলাদা টাইপ রয়েছে। `messages` স্ট্রিমের টাইপ হল `Timeout<impl Stream<Item = String>>`, যেখানে `Timeout` হল সেই টাইপ যা একটি `timeout` কলের জন্য `Stream` ইমপ্লিমেন্ট করে। `intervals` স্ট্রিমের টাইপ হল `impl Stream<Item = u32>`। এই দুটি স্ট্রিম মার্জ করার জন্য, আমাদের তাদের মধ্যে একটিকে অন্যটির সাথে মেলানোর জন্য রূপান্তর করতে হবে। আমরা intervals স্ট্রিমটিকে পুনরায় কাজ করব, কারণ messages ইতিমধ্যেই আমাদের কাঙ্ক্ষিত বেসিক ফর্ম্যাটে রয়েছে এবং টাইমআউট error গুলিকে হ্যান্ডেল করতে হবে (Listing 17-38 দেখুন)।
 
 <!-- We cannot directly test this one, because it never stops. -->
 
-<Listing number="17-38" caption="Aligning the type of the the `intervals` stream with the type of the `messages` stream" file-name="src/main.rs">
+<Listing number="17-38" caption="`intervals` স্ট্রিমের টাইপকে `messages` স্ট্রিমের টাইপের সাথে সারিবদ্ধ করা" file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-38/src/main.rs:main}}
@@ -335,17 +215,7 @@ want and has to handle timeout errors (see Listing 17-38).
 
 </Listing>
 
-First, we can use the `map` helper method to transform the `intervals` into a
-string. Second, we need to match the `Timeout` from `messages`. Because we don’t
-actually _want_ a timeout for `intervals`, though, we can just create a timeout
-which is longer than the other durations we are using. Here, we create a
-10-second timeout with `Duration::from_secs(10)`. Finally, we need to make
-`stream` mutable, so that the `while let` loop’s `next` calls can iterate
-through the stream, and pin it so that it’s safe to do so. That gets us _almost_
-to where we need to be. Everything type checks. If you run this, though, there
-will be two problems. First, it will never stop! You’ll need to stop it with
-<span class="keystroke">ctrl-c</span>. Second, the messages from the English
-alphabet will be buried in the midst of all the interval counter messages:
+প্রথমে, আমরা `intervals`-কে একটি স্ট্রিং-এ রূপান্তর করতে `map` হেল্পার মেথড ব্যবহার করতে পারি। দ্বিতীয়ত, আমাদের `messages` থেকে `Timeout`-এর সাথে মেলাতে হবে। যেহেতু আমরা আসলে `intervals`-এর জন্য একটি টাইমআউট _চাই না_, যদিও, আমরা কেবল একটি টাইমআউট তৈরি করতে পারি যা আমরা যে অন্যান্য সময়কাল ব্যবহার করছি তার চেয়ে দীর্ঘ। এখানে, আমরা `Duration::from_secs(10)` দিয়ে একটি 10-সেকেন্ডের টাইমআউট তৈরি করি। অবশেষে, আমাদের `stream` কে মিউটেবল করতে হবে, যাতে `while let` লুপের `next` কলগুলি স্ট্রিমের মধ্য দিয়ে পুনরাবৃত্তি করতে পারে এবং এটিকে পিন করতে হবে যাতে এটি করা নিরাপদ হয়। এটি আমাদের _প্রায়_ যেখানে আমাদের থাকা দরকার সেখানে পৌঁছে দেয়। সবকিছু টাইপ চেক করে। আপনি যদি এটি চালান, যদিও, দুটি সমস্যা হবে। প্রথমত, এটি কখনই বন্ধ হবে না! আপনাকে <span class="keystroke">ctrl-c</span> দিয়ে এটি বন্ধ করতে হবে। দ্বিতীয়ত, ইংরেজি বর্ণমালার মেসেজগুলি সমস্ত ইন্টারভাল কাউন্টার মেসেজের মধ্যে চাপা পড়ে যাবে:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the tasks running differently rather than
@@ -363,9 +233,9 @@ Interval: 43
 --snip--
 ```
 
-Listing 17-39 shows one way to solve these last two problems.
+Listing 17-39 এই শেষ দুটি সমস্যা সমাধানের একটি উপায় দেখায়।
 
-<Listing number="17-39" caption="Using `throttle` and `take` to manage the merged streams" file-name="src/main.rs">
+<Listing number="17-39" caption="মার্জ করা স্ট্রিমগুলি পরিচালনা করতে `throttle` এবং `take` ব্যবহার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-39/src/main.rs:throttle}}
@@ -373,26 +243,11 @@ Listing 17-39 shows one way to solve these last two problems.
 
 </Listing>
 
-First, we use the `throttle` method on the `intervals` stream so that it doesn’t
-overwhelm the `messages` stream. _Throttling_ is a way of limiting the rate at
-which a function will be called—or, in this case, how often the stream will be
-polled. Once every 100 milliseconds should do, because that’s roughly how often
-our messages arrive.
+প্রথমে, আমরা `intervals` স্ট্রিমে `throttle` মেথড ব্যবহার করি যাতে এটি `messages` স্ট্রিমকে অভিভূত না করে। _থ্রটলিং_ হল একটি ফাংশন কল করার হার সীমিত করার একটি উপায়—অথবা, এক্ষেত্রে, স্ট্রিমটি কত ঘন ঘন পোল করা হবে। প্রতি 100 মিলিসেকেন্ডে একবার যথেষ্ট হওয়া উচিত, কারণ আমাদের মেসেজগুলি প্রায় সেই সময়ে আসে।
 
-To limit the number of items we will accept from a stream, we apply the `take`
-method to the `merged` stream, because we want to limit the final output, not
-just one stream or the other.
+আমরা একটি স্ট্রিম থেকে যে আইটেমগুলি গ্রহণ করব তার সংখ্যা সীমিত করতে, আমরা `merged` স্ট্রিমে `take` মেথড প্রয়োগ করি, কারণ আমরা চূড়ান্ত আউটপুট সীমিত করতে চাই, শুধুমাত্র একটি স্ট্রিম বা অন্যটি নয়।
 
-Now when we run the program, it stops after pulling 20 items from the stream,
-and the intervals don’t overwhelm the messages. We also don’t get `Interval:
-100` or `Interval: 200` or so on, but instead get `Interval: 1`, `Interval: 2`,
-and so on—even though we have a source stream that _can_ produce an event every
-millisecond. That’s because the `throttle` call produces a new stream that wraps
-the original stream so that the original stream gets polled only at the throttle
-rate, not its own “native” rate. We don’t have a bunch of unhandled interval
-messages we’re choosing to ignore. Instead, we never produce those interval
-messages in the first place! This is the inherent “laziness” of Rust’s futures
-at work again, allowing us to choose our performance characteristics.
+এখন যখন আমরা প্রোগ্রামটি চালাই, তখন এটি স্ট্রিম থেকে 20টি আইটেম টানার পরে বন্ধ হয়ে যায় এবং ইন্টারভালগুলি মেসেজগুলিকে অভিভূত করে না। আমরা `Interval: 100` বা `Interval: 200` বা এই জাতীয় কিছু পাই না, তবে পরিবর্তে `Interval: 1`, `Interval: 2` ইত্যাদি পাই—এমনকি আমাদের একটি সোর্স স্ট্রিম থাকা সত্ত্বেও যা প্রতি মিলি সেকেন্ডে একটি ইভেন্ট তৈরি _করতে পারে_। এর কারণ হল `throttle` কলটি একটি নতুন স্ট্রিম তৈরি করে যা মূল স্ট্রিমটিকে র‍্যাপ করে যাতে মূল স্ট্রিমটি শুধুমাত্র থ্রোটল হারে পোল করা হয়, তার নিজস্ব "নেটিভ" হারে নয়। আমাদের কাছে একগুচ্ছ আনহ্যান্ডেলড ইন্টারভাল মেসেজ নেই যা আমরা উপেক্ষা করতে বেছে নিচ্ছি। পরিবর্তে, আমরা সেই ইন্টারভাল মেসেজগুলি প্রথমেই তৈরি করি না! এটি হল Rust-এর ফিউচারের অন্তর্নিহিত "অলসতা", যা আমাদের পারফরম্যান্সের বৈশিষ্ট্যগুলি বেছে নিতে দেয়।
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -421,16 +276,9 @@ Problem: Elapsed(())
 Interval: 12
 ```
 
-There’s one last thing we need to handle: errors! With both of these
-channel-based streams, the `send` calls could fail when the other side of the
-channel closes—and that’s just a matter of how the runtime executes the futures
-that make up the stream. Up until now, we’ve ignored this possibility by calling
-`unwrap`, but in a well-behaved app, we should explicitly handle the error, at
-minimum by ending the loop so we don’t try to send any more messages. Listing
-17-40 shows a simple error strategy: print the issue and then `break` from the
-loops.
+আমাদের শেষ একটি জিনিস হ্যান্ডেল করতে হবে: error! এই উভয় চ্যানেল-ভিত্তিক স্ট্রিমের সাথে, চ্যানেলের অন্য দিকটি বন্ধ হয়ে গেলে `send` কলগুলি ব্যর্থ হতে পারে—এবং এটি কেবল রানটাইম কীভাবে স্ট্রিম তৈরি করা ফিউচারগুলিকে এক্সিকিউট করে তার বিষয়। ఇప్పటి অবধি, আমরা `unwrap` কল করে এই সম্ভাবনাটিকে উপেক্ষা করেছি, কিন্তু একটি ভাল আচরণ করা অ্যাপে, আমাদের স্পষ্টভাবে error টি হ্যান্ডেল করা উচিত, অন্তত লুপটি শেষ করে যাতে আমরা আর কোনও মেসেজ পাঠানোর চেষ্টা না করি। Listing 17-40 একটি সহজ error কৌশল দেখায়: সমস্যাটি প্রিন্ট করুন এবং তারপর লুপগুলি থেকে `break` করুন।
 
-<Listing number="17-40" caption="Handling errors and shutting down the loops">
+<Listing number="17-40" caption="Error গুলি হ্যান্ডেল করা এবং লুপগুলি বন্ধ করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-40/src/main.rs:errors}}
@@ -438,12 +286,9 @@ loops.
 
 </Listing>
 
-As usual, the correct way to handle a message send error will vary; just make
-sure you have a strategy.
+যথারীতি, একটি মেসেজ পাঠানোর error হ্যান্ডেল করার সঠিক উপায়টি ভিন্ন হবে; শুধু নিশ্চিত করুন যে আপনার একটি কৌশল আছে।
 
-Now that we’ve seen a bunch of async in practice, let’s take a step back and dig
-into a few of the details of how `Future`, `Stream`, and the other key traits
-Rust uses to make async work.
+এখন যেহেতু আমরা অনেকগুলি অ্যাসিঙ্ক্রোনাস বাস্তবে দেখেছি, আসুন এক ধাপ পিছিয়ে যাই এবং `Future`, `Stream` এবং Rust অ্যাসিঙ্ক্রোনাস কাজ করার জন্য যে অন্যান্য মূল trait গুলি ব্যবহার করে তার কয়েকটি বিশদ বিবরণে ডুব দিই।
 
 [17-02-messages]: ch17-02-concurrency-with-async.html#message-passing
 [iterator-trait]: ch13-02-iterators.html#the-iterator-trait-and-the-next-method

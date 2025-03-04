@@ -1,75 +1,40 @@
-## Advanced Types
+# অ্যাডভান্সড টাইপস (Advanced Types)
 
-The Rust type system has some features that we’ve so far mentioned but haven’t
-yet discussed. We’ll start by discussing newtypes in general as we examine why
-newtypes are useful as types. Then we’ll move on to type aliases, a feature
-similar to newtypes but with slightly different semantics. We’ll also discuss
-the `!` type and dynamically sized types.
+Rust-এর টাইপ সিস্টেমে কিছু বৈশিষ্ট্য রয়েছে যা আমরা ఇప్పటి পর্যন্ত উল্লেখ করেছি কিন্তু এখনও আলোচনা করিনি। টাইপ হিসাবে নিউটাইপগুলি কেন দরকারী তা পরীক্ষা করার সময় আমরা সাধারণভাবে নিউটাইপ নিয়ে আলোচনা শুরু করব। তারপর আমরা টাইপ অ্যালিয়াস-এ যাব, যা নিউটাইপের মতোই একটি বৈশিষ্ট্য কিন্তু সামান্য ভিন্ন শব্দার্থ সহ। আমরা `!` টাইপ এবং ডায়নামিকভাবে সাইজড টাইপ নিয়েও আলোচনা করব।
 
-### Using the Newtype Pattern for Type Safety and Abstraction
+### টাইপ নিরাপত্তা এবং অ্যাবস্ট্রাকশনের জন্য নিউটাইপ প্যাটার্ন ব্যবহার করা (Using the Newtype Pattern for Type Safety and Abstraction)
 
-This section assumes you’ve read the earlier section [“Using the Newtype Pattern
-to Implement External Traits on External Types.”][using-the-newtype-pattern]<!--
-ignore --> The newtype pattern is also useful for tasks beyond those we’ve
-discussed so far, including statically enforcing that values are never confused
-and indicating the units of a value. You saw an example of using newtypes to
-indicate units in Listing 20-16: recall that the `Millimeters` and `Meters`
-structs wrapped `u32` values in a newtype. If we wrote a function with a
-parameter of type `Millimeters`, we couldn’t compile a program that accidentally
-tried to call that function with a value of type `Meters` or a plain `u32`.
+এই অংশটি ধরে নিচ্ছে যে আপনি আগের অংশটি পড়েছেন [“Using the Newtype Pattern to Implement External Traits on External Types.”][using-the-newtype-pattern]<!-- ignore --> নিউটাইপ প্যাটার্নটি আমরা இதுவரை যে কাজগুলি নিয়ে আলোচনা করেছি তার বাইরেও দরকারী, যার মধ্যে রয়েছে স্ট্যাটিকালি এনফোর্স করা যে মানগুলি কখনও বিভ্রান্ত হয় না এবং একটি মানের একক নির্দেশ করা। আপনি Listing 20-16-এ ইউনিট নির্দেশ করার জন্য নিউটাইপ ব্যবহারের একটি উদাহরণ দেখেছেন: মনে রাখবেন যে `Millimeters` এবং `Meters` স্ট্রাক্টগুলি একটি নিউটাইপে `u32` মানগুলিকে র‍্যাপ করেছে। যদি আমরা `Millimeters` টাইপের একটি প্যারামিটার সহ একটি ফাংশন লিখি, তাহলে আমরা এমন একটি প্রোগ্রাম কম্পাইল করতে পারব না যেটি ভুলবশত `Meters` টাইপের মান বা একটি সাধারণ `u32` দিয়ে সেই ফাংশনটিকে কল করার চেষ্টা করে।
 
-We can also use the newtype pattern to abstract away some implementation
-details of a type: the new type can expose a public API that is different from
-the API of the private inner type.
+আমরা একটি টাইপের কিছু ইমপ্লিমেন্টেশন বিবরণ অ্যাবস্ট্রাক্ট করার জন্য নিউটাইপ প্যাটার্নটিও ব্যবহার করতে পারি: নতুন টাইপটি একটি পাবলিক API প্রকাশ করতে পারে যা প্রাইভেট ইনার টাইপের API থেকে ভিন্ন।
 
-Newtypes can also hide internal implementation. For example, we could provide a
-`People` type to wrap a `HashMap<i32, String>` that stores a person’s ID
-associated with their name. Code using `People` would only interact with the
-public API we provide, such as a method to add a name string to the `People`
-collection; that code wouldn’t need to know that we assign an `i32` ID to names
-internally. The newtype pattern is a lightweight way to achieve encapsulation to
-hide implementation details, which we discussed in [“Encapsulation that Hides
-Implementation Details”][encapsulation-that-hides-implementation-details]<!--
-ignore --> in Chapter 18.
+নিউটাইপগুলি অভ্যন্তরীণ ইমপ্লিমেন্টেশনও লুকাতে পারে। উদাহরণস্বরূপ, আমরা একটি `People` টাইপ সরবরাহ করতে পারি যা একটি `HashMap<i32, String>` র‍্যাপ করে যা একজন ব্যক্তির ID-কে তার নামের সাথে যুক্ত করে সংরক্ষণ করে। `People` ব্যবহার করা কোড শুধুমাত্র আমাদের দেওয়া পাবলিক API-এর সাথে ইন্টারঅ্যাক্ট করবে, যেমন `People` কালেকশনে একটি নামের স্ট্রিং যোগ করার একটি মেথড; সেই কোডটির জানার প্রয়োজন হবে না যে আমরা অভ্যন্তরীণভাবে নামগুলিতে একটি `i32` ID অ্যাসাইন করি। নিউটাইপ প্যাটার্ন হল ইমপ্লিমেন্টেশনের বিশদ বিবরণ লুকানোর জন্য এনক্যাপসুলেশন অর্জনের একটি হালকা উপায়, যা আমরা Chapter 18-এর [“Encapsulation that Hides Implementation Details”][encapsulation-that-hides-implementation-details]<!-- ignore -->-এ আলোচনা করেছি।
 
-### Creating Type Synonyms with Type Aliases
+### টাইপ অ্যালিয়াস দিয়ে টাইপ সিনোনিম তৈরি করা (Creating Type Synonyms with Type Aliases)
 
-Rust provides the ability to declare a _type alias_ to give an existing type
-another name. For this we use the `type` keyword. For example, we can create
-the alias `Kilometers` to `i32` like so:
+Rust একটি বিদ্যমান টাইপকে অন্য নাম দেওয়ার জন্য একটি _টাইপ অ্যালিয়াস_ ঘোষণা করার ক্ষমতা প্রদান করে। এর জন্য আমরা `type` কীওয়ার্ড ব্যবহার করি। উদাহরণস্বরূপ, আমরা `i32`-এর জন্য `Kilometers` অ্যালিয়াস তৈরি করতে পারি এভাবে:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-04-kilometers-alias/src/main.rs:here}}
 ```
 
-Now, the alias `Kilometers` is a _synonym_ for `i32`; unlike the `Millimeters`
-and `Meters` types we created in Listing 20-16, `Kilometers` is not a separate,
-new type. Values that have the type `Kilometers` will be treated the same as
-values of type `i32`:
+এখন, `Kilometers` অ্যালিয়াসটি `i32`-এর জন্য একটি _সমার্থক শব্দ_; Listing 20-16-এ আমরা যে `Millimeters` এবং `Meters` টাইপ তৈরি করেছি তার বিপরীতে, `Kilometers` একটি পৃথক, নতুন টাইপ নয়। `Kilometers` টাইপের মানগুলিকে `i32` টাইপের মানগুলির মতোই বিবেচনা করা হবে:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-04-kilometers-alias/src/main.rs:there}}
 ```
 
-Because `Kilometers` and `i32` are the same type, we can add values of both
-types and we can pass `Kilometers` values to functions that take `i32`
-parameters. However, using this method, we don’t get the type checking benefits
-that we get from the newtype pattern discussed earlier. In other words, if we
-mix up `Kilometers` and `i32` values somewhere, the compiler will not give us
-an error.
+যেহেতু `Kilometers` এবং `i32` একই টাইপ, তাই আমরা উভয় টাইপের মান যোগ করতে পারি এবং আমরা `Kilometers` মানগুলিকে এমন ফাংশনগুলিতে পাস করতে পারি যা `i32` প্যারামিটার নেয়। যাইহোক, এই পদ্ধতি ব্যবহার করে, আমরা টাইপ চেকিং সুবিধা পাই না যা আমরা আগে আলোচনা করা নিউটাইপ প্যাটার্ন থেকে পাই। অন্য কথায়, আমরা যদি কোথাও `Kilometers` এবং `i32` মানগুলিকে মিশিয়ে ফেলি, তাহলে কম্পাইলার আমাদের কোনও error দেবে না।
 
-The main use case for type synonyms is to reduce repetition. For example, we
-might have a lengthy type like this:
+টাইপ সিনোনিমের প্রধান ব্যবহারের ক্ষেত্র হল পুনরাবৃত্তি কমানো। উদাহরণস্বরূপ, আমাদের কাছে এইরকম একটি দীর্ঘ টাইপ থাকতে পারে:
 
 ```rust,ignore
 Box<dyn Fn() + Send + 'static>
 ```
 
-Writing this lengthy type in function signatures and as type annotations all
-over the code can be tiresome and error prone. Imagine having a project full of
-code like that in Listing 20-25.
+ফাংশন স্বাক্ষর এবং টাইপ অ্যানোটেশন হিসাবে এই দীর্ঘ টাইপটি কোডের সর্বত্র লেখা ক্লান্তিকর এবং ত্রুটিপ্রবণ হতে পারে। Listing 20-25-এর মতো কোডে পূর্ণ একটি প্রোজেক্ট থাকার কল্পনা করুন।
 
-<Listing number="20-25" caption="Using a long type in many places">
+<Listing number="20-25" caption="অনেক জায়গায় একটি দীর্ঘ টাইপ ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-25/src/main.rs:here}}
@@ -77,11 +42,9 @@ code like that in Listing 20-25.
 
 </Listing>
 
-A type alias makes this code more manageable by reducing the repetition. In
-Listing 20-26, we’ve introduced an alias named `Thunk` for the verbose type and
-can replace all uses of the type with the shorter alias `Thunk`.
+একটি টাইপ অ্যালিয়াস পুনরাবৃত্তি কমিয়ে এই কোডটিকে আরও পরিচালনাযোগ্য করে তোলে। Listing 20-26-এ, আমরা ভারবোস টাইপের জন্য `Thunk` নামে একটি অ্যালিয়াস চালু করেছি এবং টাইপের সমস্ত ব্যবহারকে ছোট অ্যালিয়াস `Thunk` দিয়ে প্রতিস্থাপন করতে পারি।
 
-<Listing number="20-26" caption="Introducing a type alias, `Thunk`, to reduce repetition">
+<Listing number="20-26" caption="পুনরাবৃত্তি কমাতে একটি টাইপ অ্যালিয়াস, `Thunk` প্রবর্তন করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-26/src/main.rs:here}}
@@ -89,64 +52,41 @@ can replace all uses of the type with the shorter alias `Thunk`.
 
 </Listing>
 
-This code is much easier to read and write! Choosing a meaningful name for a
-type alias can help communicate your intent as well (_thunk_ is a word for code
-to be evaluated at a later time, so it’s an appropriate name for a closure that
-gets stored).
+এই কোডটি পড়া এবং লেখা অনেক সহজ! একটি টাইপ অ্যালিয়াসের জন্য একটি অর্থপূর্ণ নাম নির্বাচন করা আপনার অভিপ্রায় জানাতে সাহায্য করতে পারে (_thunk_ হল এমন কোডের জন্য একটি শব্দ যা পরবর্তীতে মূল্যায়ন করা হবে, তাই এটি একটি ক্লোজারের জন্য একটি উপযুক্ত নাম যা সংরক্ষণ করা হয়)।
 
-Type aliases are also commonly used with the `Result<T, E>` type for reducing
-repetition. Consider the `std::io` module in the standard library. I/O
-operations often return a `Result<T, E>` to handle situations when operations
-fail to work. This library has a `std::io::Error` struct that represents all
-possible I/O errors. Many of the functions in `std::io` will be returning
-`Result<T, E>` where the `E` is `std::io::Error`, such as these functions in
-the `Write` trait:
+টাইপ অ্যালিয়াসগুলি পুনরাবৃত্তি কমানোর জন্য `Result<T, E>` টাইপের সাথেও সাধারণত ব্যবহৃত হয়। স্ট্যান্ডার্ড লাইব্রেরির `std::io` মডিউলটি বিবেচনা করুন। I/O অপারেশনগুলি প্রায়শই `Result<T, E>` রিটার্ন করে এমন পরিস্থিতিগুলি পরিচালনা করার জন্য যখন অপারেশনগুলি কাজ করতে ব্যর্থ হয়। এই লাইব্রেরিতে একটি `std::io::Error` স্ট্রাক্ট রয়েছে যা সমস্ত সম্ভাব্য I/O ত্রুটিগুলিকে উপস্থাপন করে। `std::io`-এর অনেকগুলি ফাংশন `Result<T, E>` রিটার্ন করবে যেখানে `E` হল `std::io::Error`, যেমন `Write` ট্রেইটের এই ফাংশনগুলি:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-05-write-trait/src/lib.rs}}
 ```
 
-The `Result<..., Error>` is repeated a lot. As such, `std::io` has this type
-alias declaration:
+`Result<..., Error>` অনেক পুনরাবৃত্তি হয়। যেমন, `std::io`-এর এই টাইপ অ্যালিয়াস ডিক্লারেশন রয়েছে:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-06-result-alias/src/lib.rs:here}}
 ```
 
-Because this declaration is in the `std::io` module, we can use the fully
-qualified alias `std::io::Result<T>`; that is, a `Result<T, E>` with the `E`
-filled in as `std::io::Error`. The `Write` trait function signatures end up
-looking like this:
+যেহেতু এই ডিক্লারেশনটি `std::io` মডিউলে রয়েছে, তাই আমরা সম্পূর্ণরূপে যোগ্যতাসম্পন্ন অ্যালিয়াস `std::io::Result<T>` ব্যবহার করতে পারি; অর্থাৎ, একটি `Result<T, E>` যেখানে `E` পূরণ করা হয়েছে `std::io::Error` হিসাবে। `Write` ট্রেইট ফাংশন স্বাক্ষরগুলি দেখতে এইরকম হয়:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-06-result-alias/src/lib.rs:there}}
 ```
 
-The type alias helps in two ways: it makes code easier to write _and_ it gives
-us a consistent interface across all of `std::io`. Because it’s an alias, it’s
-just another `Result<T, E>`, which means we can use any methods that work on
-`Result<T, E>` with it, as well as special syntax like the `?` operator.
+টাইপ অ্যালিয়াস দুটি উপায়ে সাহায্য করে: এটি কোড লেখা সহজ করে _এবং_ এটি আমাদের `std::io` জুড়ে একটি সামঞ্জস্যপূর্ণ ইন্টারফেস দেয়। কারণ এটি একটি অ্যালিয়াস, এটি শুধুমাত্র আরেকটি `Result<T, E>`, যার মানে হল যে আমরা এটির সাথে `Result<T, E>`-তে কাজ করে এমন কোনও মেথড ব্যবহার করতে পারি, সেইসাথে `?` অপারেটরের মতো বিশেষ সিনট্যাক্সও ব্যবহার করতে পারি।
 
-### The Never Type that Never Returns
+### নেভার টাইপ যা কখনও রিটার্ন করে না (The Never Type that Never Returns)
 
-Rust has a special type named `!` that’s known in type theory lingo as the
-_empty type_ because it has no values. We prefer to call it the _never type_
-because it stands in the place of the return type when a function will never
-return. Here is an example:
+Rust-এর একটি বিশেষ টাইপ রয়েছে যার নাম `!` যা টাইপ থিওরির পরিভাষায় _এম্পটি টাইপ_ নামে পরিচিত কারণ এর কোনও মান নেই। আমরা এটিকে _নেভার টাইপ_ বলতে পছন্দ করি কারণ এটি ফাংশনের রিটার্ন টাইপের জায়গায় ব্যবহৃত হয় যখন একটি ফাংশন কখনও রিটার্ন করবে না। এখানে একটি উদাহরণ:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-07-never-type/src/lib.rs:here}}
 ```
 
-This code is read as “the function `bar` returns never.” Functions that return
-never are called _diverging functions_. We can’t create values of the type `!`
-so `bar` can never possibly return.
+এই কোডটি এভাবে পড়া হয় “`bar` ফাংশনটি কখনও রিটার্ন করে না।” যে ফাংশনগুলি কখনও রিটার্ন করে না তাদের _ডাইভার্জিং ফাংশন_ বলা হয়। আমরা `!` টাইপের মান তৈরি করতে পারি না তাই `bar` কখনও রিটার্ন করতে পারে না।
 
-But what use is a type you can never create values for? Recall the code from
-Listing 2-5, part of the number guessing game; we’ve reproduced a bit of it
-here in Listing 20-27.
+কিন্তু যে টাইপের জন্য আপনি কখনই মান তৈরি করতে পারবেন না তার ব্যবহার কী? Listing 2-5-এর কোডটি স্মরণ করুন, সংখ্যা অনুমান করার গেমের অংশ; আমরা এখানে Listing 20-27-এ এর একটি অংশ পুনরুত্পাদন করেছি।
 
-<Listing number="20-27" caption="A `match` with an arm that ends in `continue`">
+<Listing number="20-27" caption="একটি `match` যার একটি আর্ম `continue`-তে শেষ হয়">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:ch19}}
@@ -154,138 +94,73 @@ here in Listing 20-27.
 
 </Listing>
 
-At the time, we skipped over some details in this code. In [“The `match` Control
-Flow Operator”][the-match-control-flow-operator]<!-- ignore --> in Chapter 6, we
-discussed that `match` arms must all return the same type. So, for example, the
-following code doesn’t work:
+সেই সময়ে, আমরা এই কোডের কিছু বিবরণ এড়িয়ে গেছি। [“The `match` Control Flow Operator”][the-match-control-flow-operator]<!-- ignore --> in Chapter 6-এ, আমরা আলোচনা করেছি যে `match` আর্মগুলিকে অবশ্যই একই টাইপ রিটার্ন করতে হবে। সুতরাং, উদাহরণস্বরূপ, নিম্নলিখিত কোডটি কাজ করে না:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-08-match-arms-different-types/src/main.rs:here}}
 ```
 
-The type of `guess` in this code would have to be an integer _and_ a string,
-and Rust requires that `guess` have only one type. So what does `continue`
-return? How were we allowed to return a `u32` from one arm and have another arm
-that ends with `continue` in Listing 20-27?
+এই কোডে `guess`-এর টাইপটি অবশ্যই একটি পূর্ণসংখ্যা _এবং_ একটি স্ট্রিং হতে হবে এবং Rust-এর প্রয়োজন যে `guess`-এর শুধুমাত্র একটি টাইপ থাকুক। তাহলে `continue` কী রিটার্ন করে? Listing 20-27-এ আমরা কীভাবে একটি আর্ম থেকে একটি `u32` রিটার্ন করতে পেরেছিলাম এবং অন্য একটি আর্ম যা `continue` দিয়ে শেষ হয়েছিল?
 
-As you might have guessed, `continue` has a `!` value. That is, when Rust
-computes the type of `guess`, it looks at both match arms, the former with a
-value of `u32` and the latter with a `!` value. Because `!` can never have a
-value, Rust decides that the type of `guess` is `u32`.
+আপনি যেমন অনুমান করতে পারেন, `continue`-এর একটি `!` মান রয়েছে। অর্থাৎ, যখন Rust `guess`-এর টাইপ গণনা করে, তখন এটি উভয় ম্যাচ আর্মের দিকে তাকায়, পূর্বেরটি `u32` মান সহ এবং পরেরটি `!` মান সহ। যেহেতু `!`-এর কখনও কোনও মান থাকতে পারে না, তাই Rust সিদ্ধান্ত নেয় যে `guess`-এর টাইপ হল `u32`।
 
-The formal way of describing this behavior is that expressions of type `!` can
-be coerced into any other type. We’re allowed to end this `match` arm with
-`continue` because `continue` doesn’t return a value; instead, it moves control
-back to the top of the loop, so in the `Err` case, we never assign a value to
-`guess`.
+এই আচরণের আনুষ্ঠানিক উপায় হল যে `!` টাইপের এক্সপ্রেশনগুলিকে অন্য কোনও টাইপে জোর করে আনা যেতে পারে। আমাদের এই `match` আর্মটিকে `continue` দিয়ে শেষ করার অনুমতি দেওয়া হয়েছে কারণ `continue` কোনও মান রিটার্ন করে না; পরিবর্তে, এটি কন্ট্রোলটিকে লুপের শীর্ষে ফিরিয়ে নিয়ে যায়, তাই `Err` ক্ষেত্রে, আমরা কখনই `guess`-এ কোনও মান অ্যাসাইন করি না।
 
-The never type is useful with the `panic!` macro as well. Recall the `unwrap`
-function that we call on `Option<T>` values to produce a value or panic with
-this definition:
+নেভার টাইপটি `panic!` ম্যাক্রোর সাথেও দরকারী। `Option<T>` মানগুলিতে আমরা যে `unwrap` ফাংশনটি কল করি তা একটি মান তৈরি করতে বা প্যানিক করতে এই সংজ্ঞা সহ:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-09-unwrap-definition/src/lib.rs:here}}
 ```
 
-In this code, the same thing happens as in the `match` in Listing 20-27: Rust
-sees that `val` has the type `T` and `panic!` has the type `!`, so the result
-of the overall `match` expression is `T`. This code works because `panic!`
-doesn’t produce a value; it ends the program. In the `None` case, we won’t be
-returning a value from `unwrap`, so this code is valid.
+এই কোডে, Listing 20-27-এর `match`-এর মতোই একই জিনিস ঘটে: Rust দেখে যে `val`-এর টাইপ `T` এবং `panic!`-এর টাইপ `!`, তাই সামগ্রিক `match` এক্সপ্রেশনের ফলাফল হল `T`। এই কোডটি কাজ করে কারণ `panic!` কোনও মান তৈরি করে না; এটি প্রোগ্রামটি শেষ করে দেয়। `None` ক্ষেত্রে, আমরা `unwrap` থেকে কোনও মান রিটার্ন করব না, তাই এই কোডটি বৈধ।
 
-One final expression that has the type `!` is a `loop`:
+`!` টাইপের একটি চূড়ান্ত এক্সপ্রেশন হল একটি `loop`:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-10-loop-returns-never/src/main.rs:here}}
 ```
 
-Here, the loop never ends, so `!` is the value of the expression. However, this
-wouldn’t be true if we included a `break`, because the loop would terminate
-when it got to the `break`.
+এখানে, লুপটি কখনই শেষ হয় না, তাই `!` হল এক্সপ্রেশনের মান। যাইহোক, আমরা যদি একটি `break` অন্তর্ভুক্ত করি তবে এটি সত্য হবে না, কারণ লুপটি যখন `break`-এ পৌঁছাবে তখন শেষ হবে।
 
-### Dynamically Sized Types and the `Sized` Trait
+### ডায়নামিকভাবে সাইজড টাইপ এবং `Sized` ট্রেইট (Dynamically Sized Types and the `Sized` Trait)
 
-Rust needs to know certain details about its types, such as how much space to
-allocate for a value of a particular type. This leaves one corner of its type
-system a little confusing at first: the concept of _dynamically sized types_.
-Sometimes referred to as _DSTs_ or _unsized types_, these types let us write
-code using values whose size we can know only at runtime.
+Rust-কে তার টাইপ সম্পর্কে কিছু বিশদ জানতে হবে, যেমন একটি নির্দিষ্ট টাইপের মানের জন্য কতটা জায়গা বরাদ্দ করতে হবে। এটি তার টাইপ সিস্টেমের একটি কোণকে প্রথমে একটু বিভ্রান্তিকর করে তোলে: _ডায়নামিকালি সাইজড টাইপের_ ধারণা। কখনও কখনও _DST_ বা _আনসাইজড টাইপ_ হিসাবে উল্লেখ করা হয়, এই টাইপগুলি আমাদের এমন মান ব্যবহার করে কোড লিখতে দেয় যার আকার আমরা শুধুমাত্র রানটাইমে জানতে পারি।
 
-Let’s dig into the details of a dynamically sized type called `str`, which
-we’ve been using throughout the book. That’s right, not `&str`, but `str` on
-its own, is a DST. We can’t know how long the string is until runtime, meaning
-we can’t create a variable of type `str`, nor can we take an argument of type
-`str`. Consider the following code, which does not work:
+আসুন `str` নামক একটি ডায়নামিকালি সাইজড টাইপের বিশদ বিবরণে ডুব দিই, যা আমরা পুরো বইটি জুড়ে ব্যবহার করে আসছি। ঠিক আছে, `&str` নয়, শুধুমাত্র `str`, একটি DST। আমরা রানটাইম পর্যন্ত জানতে পারি না স্ট্রিংটি কত লম্বা, মানে আমরা `str` টাইপের একটি ভেরিয়েবল তৈরি করতে পারি না, বা আমরা `str` টাইপের একটি আর্গুমেন্ট নিতে পারি না। নিম্নলিখিত কোডটি বিবেচনা করুন, যা কাজ করে না:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-11-cant-create-str/src/main.rs:here}}
 ```
 
-Rust needs to know how much memory to allocate for any value of a particular
-type, and all values of a type must use the same amount of memory. If Rust
-allowed us to write this code, these two `str` values would need to take up the
-same amount of space. But they have different lengths: `s1` needs 12 bytes of
-storage and `s2` needs 15. This is why it’s not possible to create a variable
-holding a dynamically sized type.
+Rust-কে জানতে হবে একটি নির্দিষ্ট টাইপের যেকোনো মানের জন্য কতটা মেমরি বরাদ্দ করতে হবে এবং একটি টাইপের সমস্ত মানের অবশ্যই একই পরিমাণ মেমরি ব্যবহার করতে হবে। যদি Rust আমাদের এই কোডটি লেখার অনুমতি দিত, তাহলে এই দুটি `str` মানকে একই পরিমাণ জায়গা নিতে হত। কিন্তু তাদের দৈর্ঘ্য ভিন্ন: `s1`-এর 12 বাইট স্টোরেজ প্রয়োজন এবং `s2`-এর 15 বাইট প্রয়োজন। এই কারণেই ডায়নামিকালি সাইজড টাইপ ধারণকারী একটি ভেরিয়েবল তৈরি করা সম্ভব নয়।
 
-So what do we do? In this case, you already know the answer: we make the types
-of `s1` and `s2` a `&str` rather than a `str`. Recall from [“String
-Slices”][string-slices]<!-- ignore --> in Chapter 4 that the slice data
-structure just stores the starting position and the length of the slice. So
-although a `&T` is a single value that stores the memory address of where the
-`T` is located, a `&str` is _two_ values: the address of the `str` and its
-length. As such, we can know the size of a `&str` value at compile time: it’s
-twice the length of a `usize`. That is, we always know the size of a `&str`, no
-matter how long the string it refers to is. In general, this is the way in which
-dynamically sized types are used in Rust: they have an extra bit of metadata
-that stores the size of the dynamic information. The golden rule of dynamically
-sized types is that we must always put values of dynamically sized types behind
-a pointer of some kind.
+তাহলে আমরা কি করব? এই ক্ষেত্রে, আপনি ইতিমধ্যেই উত্তরটি জানেন: আমরা `s1` এবং `s2`-এর টাইপ `str`-এর পরিবর্তে `&str` করি। [“String Slices”][string-slices]<!-- ignore --> in Chapter 4 থেকে স্মরণ করুন যে স্লাইস ডেটা স্ট্রাকচারটি শুধুমাত্র স্লাইসের শুরুর অবস্থান এবং দৈর্ঘ্য সংরক্ষণ করে। সুতরাং যদিও একটি `&T` হল একটি একক মান যা মেমরির ঠিকানা সংরক্ষণ করে যেখানে `T` অবস্থিত, একটি `&str` হল _দুটি_ মান: `str`-এর ঠিকানা এবং এর দৈর্ঘ্য। যেমন, আমরা কম্পাইল করার সময় একটি `&str` মানের আকার জানতে পারি: এটি একটি `usize`-এর দৈর্ঘ্যের দ্বিগুণ। অর্থাৎ, আমরা সবসময় একটি `&str`-এর আকার জানি, এটি যে স্ট্রিংটিকে নির্দেশ করে সেটি যতই দীর্ঘ হোক না কেন। সাধারণভাবে, এইভাবেই Rust-এ ডায়নামিকালি সাইজড টাইপগুলি ব্যবহার করা হয়: তাদের কাছে অতিরিক্ত মেটাডেটা থাকে যা ডায়নামিক তথ্যের আকার সংরক্ষণ করে। ডায়নামিকালি সাইজড টাইপের গোল্ডেন রুল হল যে আমাদের অবশ্যই ডায়নামিকালি সাইজড টাইপের মানগুলিকে কোনও ধরণের পয়েন্টারের পিছনে রাখতে হবে।
 
-We can combine `str` with all kinds of pointers: for example, `Box<str>` or
-`Rc<str>`. In fact, you’ve seen this before but with a different dynamically
-sized type: traits. Every trait is a dynamically sized type we can refer to by
-using the name of the trait. In [“Using Trait Objects That Allow for Values of
-Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
---> in Chapter 18, we mentioned that to use traits as trait objects, we must put
-them behind a pointer, such as `&dyn Trait` or `Box<dyn Trait>` (`Rc<dyn Trait>`
-would work too).
+আমরা `str`-কে সব ধরনের পয়েন্টারের সাথে একত্রিত করতে পারি: উদাহরণস্বরূপ, `Box<str>` বা `Rc<str>`। প্রকৃতপক্ষে, আপনি এটি আগেও দেখেছেন কিন্তু একটি ভিন্ন ডায়নামিকালি সাইজড টাইপের সাথে: ট্রেইট। প্রতিটি ট্রেইট হল একটি ডায়নামিকালি সাইজড টাইপ যা আমরা ট্রেইটের নাম ব্যবহার করে উল্লেখ করতে পারি। [“Using Trait Objects That Allow for Values of Different Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore --> in Chapter 18-এ, আমরা উল্লেখ করেছি যে ট্রেইটগুলিকে ট্রেইট অবজেক্ট হিসাবে ব্যবহার করার জন্য, আমাদের অবশ্যই সেগুলিকে একটি পয়েন্টারের পিছনে রাখতে হবে, যেমন `&dyn Trait` বা `Box<dyn Trait>` (`Rc<dyn Trait>`-ও কাজ করবে)।
 
-To work with DSTs, Rust provides the `Sized` trait to determine whether or not
-a type’s size is known at compile time. This trait is automatically implemented
-for everything whose size is known at compile time. In addition, Rust
-implicitly adds a bound on `Sized` to every generic function. That is, a
-generic function definition like this:
+DST-গুলির সাথে কাজ করার জন্য, Rust কম্পাইল করার সময় কোনও টাইপের আকার জানা আছে কিনা তা নির্ধারণ করতে `Sized` ট্রেইট সরবরাহ করে। এই ট্রেইটটি স্বয়ংক্রিয়ভাবে সবকিছুর জন্য ইমপ্লিমেন্ট করা হয় যার আকার কম্পাইল করার সময় জানা যায়। এছাড়াও, Rust স্পষ্টভাবে প্রতিটি জেনেরিক ফাংশনে `Sized`-এর উপর একটি বাউন্ড যোগ করে। অর্থাৎ, এইরকম একটি জেনেরিক ফাংশন সংজ্ঞা:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-12-generic-fn-definition/src/lib.rs}}
 ```
 
-is actually treated as though we had written this:
+আসলে এমনভাবে আচরণ করে যেন আমরা এটি লিখেছি:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-13-generic-implicit-sized-bound/src/lib.rs}}
 ```
 
-By default, generic functions will work only on types that have a known size at
-compile time. However, you can use the following special syntax to relax this
-restriction:
+ডিফল্টরূপে, জেনেরিক ফাংশনগুলি শুধুমাত্র সেই টাইপগুলিতে কাজ করবে যেগুলির কম্পাইল করার সময় একটি পরিচিত আকার রয়েছে। যাইহোক, আপনি এই সীমাবদ্ধতা শিথিল করতে নিম্নলিখিত বিশেষ সিনট্যাক্স ব্যবহার করতে পারেন:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-14-generic-maybe-sized/src/lib.rs}}
 ```
 
-A trait bound on `?Sized` means “`T` may or may not be `Sized`” and this
-notation overrides the default that generic types must have a known size at
-compile time. The `?Trait` syntax with this meaning is only available for
-`Sized`, not any other traits.
+`?Sized`-এর উপর একটি ট্রেইট বাউন্ড মানে "`T` `Sized` হতে পারে বা নাও হতে পারে" এবং এই নোটেশনটি ডিফল্টকে ওভাররাইড করে যে জেনেরিক টাইপগুলির কম্পাইল করার সময় একটি পরিচিত আকার থাকতে হবে। এই অর্থ সহ `?Trait` সিনট্যাক্স শুধুমাত্র `Sized`-এর জন্য উপলব্ধ, অন্য কোনও ট্রেইটের জন্য নয়।
 
-Also note that we switched the type of the `t` parameter from `T` to `&T`.
-Because the type might not be `Sized`, we need to use it behind some kind of
-pointer. In this case, we’ve chosen a reference.
+এছাড়াও লক্ষ্য করুন যে আমরা `t` প্যারামিটারের টাইপ `T` থেকে `&T`-তে পরিবর্তন করেছি। কারণ টাইপটি `Sized` নাও হতে পারে, আমাদের এটিকে কোনও ধরণের পয়েন্টারের পিছনে ব্যবহার করতে হবে। এক্ষেত্রে, আমরা একটি রেফারেন্স বেছে নিয়েছি।
 
-Next, we’ll talk about functions and closures!
+এরপর, আমরা ফাংশন এবং ক্লোজার সম্পর্কে কথা বলব!
 
 [encapsulation-that-hides-implementation-details]: ch18-01-what-is-oo.html#encapsulation-that-hides-implementation-details
 [string-slices]: ch04-03-slices.html#string-slices

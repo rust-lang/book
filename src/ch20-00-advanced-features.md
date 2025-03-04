@@ -1,22 +1,13 @@
-# Advanced Features
+# উন্নত বৈশিষ্ট্য (Advanced Features)
 
-By now, you’ve learned the most commonly used parts of the Rust programming
-language. Before we do one more project in Chapter 21, we’ll look at a few
-aspects of the language you might run into every once in a while, but may not
-use every day. You can use this chapter as a reference for when you encounter
-any unknowns. The features covered here are useful in very specific situations.
-Although you might not reach for them often, we want to make sure you have a
-grasp of all the features Rust has to offer.
+এখন পর্যন্ত, আপনি Rust প্রোগ্রামিং ভাষার সর্বাধিক ব্যবহৃত অংশগুলি শিখেছেন। Chapter 21-এ আরও একটি প্রোজেক্ট করার আগে, আমরা ভাষার কয়েকটি দিক দেখব যেগুলির সাথে আপনি হয়তো মাঝেমধ্যে পরিচিত হবেন, কিন্তু প্রতিদিন ব্যবহার নাও করতে পারেন। আপনি যখন কোনও অজানা বিষয়ের সম্মুখীন হন তখন এই চ্যাপ্টারটিকে একটি রেফারেন্স হিসাবে ব্যবহার করতে পারেন। এখানে আলোচিত বৈশিষ্ট্যগুলি খুব নির্দিষ্ট পরিস্থিতিতে দরকারী। যদিও আপনি প্রায়শই এগুলি ব্যবহার নাও করতে পারেন, আমরা নিশ্চিত করতে চাই যে Rust-এর সমস্ত বৈশিষ্ট্য সম্পর্কে আপনার ধারণা রয়েছে।
 
-In this chapter, we’ll cover:
+এই চ্যাপ্টারে, আমরা যা যা কভার করব:
 
-- Unsafe Rust: how to opt out of some of Rust’s guarantees and take
-  responsibility for manually upholding those guarantees
-- Advanced traits: associated types, default type parameters, fully qualified
-  syntax, supertraits, and the newtype pattern in relation to traits
-- Advanced types: more about the newtype pattern, type aliases, the never type,
-  and dynamically sized types
-- Advanced functions and closures: function pointers and returning closures
-- Macros: ways to define code that defines more code at compile time
+- আনসেফ রাস্ট (Unsafe Rust): কীভাবে Rust-এর কিছু গ্যারান্টি থেকে বেরিয়ে আসা যায় এবং ম্যানুয়ালি সেই গ্যারান্টিগুলি বহাল রাখার দায়িত্ব নেওয়া যায়।
+- অ্যাডভান্সড ট্রেইট (Advanced traits): অ্যাসোসিয়েটেড টাইপ, ডিফল্ট টাইপ প্যারামিটার, ফুললি কোয়ালিফাইড সিনট্যাক্স, সুপারট্রেইট এবং ট্রেইটের সাথে সম্পর্কিত নিউটাইপ প্যাটার্ন।
+- অ্যাডভান্সড টাইপ (Advanced types): নিউটাইপ প্যাটার্ন, টাইপ অ্যালিয়াস, নেভার টাইপ এবং ডায়নামিকালি সাইজড টাইপ সম্পর্কে আরও অনেক কিছু।
+- অ্যাডভান্সড ফাংশন এবং ক্লোজার (Advanced functions and closures): ফাংশন পয়েন্টার এবং রিটার্নিং ক্লোজার।
+- ম্যাক্রো (Macros): কম্পাইল করার সময় আরও কোড সংজ্ঞায়িত করে এমন কোড সংজ্ঞায়িত করার উপায়।
 
-It’s a panoply of Rust features with something for everyone! Let’s dive in!
+এটি সবার জন্য Rust-এর বৈশিষ্ট্যগুলির একটি সমাহার! চলুন শুরু করা যাক!

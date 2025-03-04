@@ -1,163 +1,76 @@
-# Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams
+# অ্যাসিঙ্ক্রোনাস প্রোগ্রামিং-এর মূল বিষয়: Async, Await, Futures, এবং Streams
 
-Many operations we ask the computer to do can take a while to finish. It would
-be nice if we could do something else while we are waiting for those
-long-running processes to complete. Modern computers offer two techniques for
-working on more than one operation at a time: parallelism and concurrency. Once
-we start writing programs that involve parallel or concurrent operations,
-though, we quickly encounter new challenges inherent to _asynchronous
-programming_, where operations may not finish sequentially in the order they
-were started. This chapter builds on Chapter 16’s use of threads for parallelism
-and concurrency by introducing an alternative approach to asynchronous
-programming: Rust’s Futures, Streams, the `async` and `await` syntax that
-supports them, and the tools for managing and coordinating between asynchronous
-operations.
+আমরা কম্পিউটারকে যে কাজগুলি করতে বলি তার অনেকগুলি শেষ হতে বেশ কিছুটা সময় নিতে পারে। এই দীর্ঘ-চলমান প্রক্রিয়াগুলি সম্পূর্ণ হওয়ার জন্য অপেক্ষা করার সময় আমরা যদি অন্য কিছু করতে পারতাম তবে ভাল হত। আধুনিক কম্পিউটারগুলি একবারে একাধিক অপারেশনে কাজ করার জন্য দুটি কৌশল সরবরাহ করে: প্যারালেলিজম (parallelism) এবং কনকারেন্সি (concurrency)। একবার যখন আমরা প্যারালাল বা কনকারেন্ট অপারেশন যুক্ত প্রোগ্রাম লেখা শুরু করি, তখন আমরা দ্রুত _অ্যাসিঙ্ক্রোনাস প্রোগ্রামিং_-এর অন্তর্নিহিত নতুন চ্যালেঞ্জগুলির সম্মুখীন হই, যেখানে অপারেশনগুলি শুরু হওয়ার ক্রমে ধারাবাহিকভাবে শেষ নাও হতে পারে। এই চ্যাপ্টারটি প্যারালেলিজম এবং কনকারেন্সির জন্য থ্রেড ব্যবহারের বিষয়ে Chapter 16-এর উপর ভিত্তি করে তৈরি হয়েছে এবং অ্যাসিঙ্ক্রোনাস প্রোগ্রামিং-এর একটি বিকল্প পদ্ধতির পরিচয় দেয়: Rust-এর Futures, Streams, সেগুলিকে সমর্থন করে এমন `async` এবং `await` সিনট্যাক্স এবং অ্যাসিঙ্ক্রোনাস অপারেশনগুলির মধ্যে পরিচালনা ও সমন্বয় করার টুল।
 
-Let’s consider an example. Say you’re exporting a video you’ve created of a
-family celebration, an operation that could take anywhere from minutes to hours.
-The video export will use as much CPU and GPU power as it can. If you had only
-one CPU core and your operating system didn’t pause that export until it
-completed—that is, if it executed the export _synchronously_—you couldn’t do
-anything else on your computer while that task was running. That would be a
-pretty frustrating experience. Fortunately, your computer’s operating system
-can, and does, invisibly interrupt the export often enough to let you get other
-work done simultaneously.
+আসুন একটি উদাহরণ বিবেচনা করা যাক। ধরুন আপনি একটি পারিবারিক উদযাপনের একটি ভিডিও এক্সপোর্ট করছেন, এমন একটি অপারেশন যা কয়েক মিনিট থেকে কয়েক ঘন্টা পর্যন্ত সময় নিতে পারে। ভিডিও এক্সপোর্ট যতটা সম্ভব CPU এবং GPU পাওয়ার ব্যবহার করবে। যদি আপনার কেবল একটি CPU কোর থাকত এবং আপনার অপারেটিং সিস্টেম সেই এক্সপোর্টটি সম্পূর্ণ না হওয়া পর্যন্ত এটিকে স্থগিত না করত—অর্থাৎ, যদি এটি এক্সপোর্টটিকে _synchronously_ এক্সিকিউট করত—তাহলে সেই কাজটি চলার সময় আপনি আপনার কম্পিউটারে অন্য কিছু করতে পারতেন না। এটি একটি হতাশাজনক অভিজ্ঞতা হত। সৌভাগ্যবশত, আপনার কম্পিউটারের অপারেটিং সিস্টেম অন্যান্য কাজগুলিকে যুগপতভাবে সম্পন্ন করার সুযোগ দিতে যথেষ্ট পরিমাণে এক্সপোর্টকে অদৃশ্যভাবে বাধা দিতে পারে এবং দেয়।
 
-Now say you’re downloading a video shared by someone else, which can also take a
-while but does not take up as much CPU time. In this case, the CPU has to wait
-for data to arrive from the network. While you can start reading the data once
-it starts to arrive, it might take some time for all of it to show up. Even once
-the data is all present, if the video is quite large, it could take at least a
-second or two to load it all. That might not sound like much, but it’s a very
-long time for a modern processor, which can perform billions of operations every
-second. Again, your operating system will invisibly interrupt your program to
-allow the CPU to perform other work while waiting for the network call to
-finish.
+এখন ধরুন আপনি অন্য কারও শেয়ার করা একটি ভিডিও ডাউনলোড করছেন, যেটিতেও কিছুক্ষণ সময় লাগতে পারে কিন্তু এটি CPU-এর বেশি সময় নেয় না। এই ক্ষেত্রে, CPU-কে নেটওয়ার্ক থেকে ডেটা আসার জন্য অপেক্ষা করতে হবে। আপনি ডেটা আসা শুরু করার সাথে সাথেই পড়া শুরু করতে পারলেও, সমস্ত ডেটা আসতে কিছুটা সময় লাগতে পারে। এমনকি সমস্ত ডেটা উপস্থিত থাকলেও, যদি ভিডিওটি বেশ বড় হয়, তবে এটি লোড হতে কমপক্ষে এক বা দুই সেকেন্ড সময় লাগতে পারে। এটি খুব বেশি মনে নাও হতে পারে, তবে এটি একটি আধুনিক প্রসেসরের জন্য অনেক দীর্ঘ সময়, যা প্রতি সেকেন্ডে কয়েক বিলিয়ন অপারেশন সম্পাদন করতে পারে। আবারও, আপনার অপারেটিং সিস্টেম নেটওয়ার্ক কলের কাজ শেষ হওয়ার অপেক্ষার সময় CPU-কে অন্য কাজ করার অনুমতি দেওয়ার জন্য আপনার প্রোগ্রামটিকে অদৃশ্যভাবে বাধা দেবে।
 
-The video export is an example of a _CPU-bound_ or _compute-bound_ operation.
-It’s limited by the computer’s potential data processing speed within the CPU or
-GPU, and how much of that speed it can dedicate to the operation. The video
-download is an example of an _IO-bound_ operation, because it’s limited by the
-speed of the computer’s _input and output_; it can only go as fast as the data
-can be sent across the network.
+ভিডিও এক্সপোর্ট হল একটি _CPU-bound_ বা _compute-bound_ অপারেশনের উদাহরণ। এটি CPU বা GPU-এর মধ্যে কম্পিউটারের সম্ভাব্য ডেটা প্রসেসিং গতি এবং সেই গতির কতটা এটি অপারেশনে ডেডিকেট করতে পারে তার দ্বারা সীমাবদ্ধ। ভিডিও ডাউনলোড হল একটি _IO-bound_ অপারেশনের উদাহরণ, কারণ এটি কম্পিউটারের _input এবং output_-এর গতির দ্বারা সীমাবদ্ধ; এটি কেবল ততটাই দ্রুত চলতে পারে যতটা দ্রুত নেটওয়ার্ক জুড়ে ডেটা পাঠানো যায়।
 
-In both of these examples, the operating system’s invisible interrupts provide a
-form of concurrency. That concurrency happens only at the level of the entire
-program, though: the operating system interrupts one program to let other
-programs get work done. In many cases, because we understand our programs at a
-much more granular level than the operating system does, we can spot
-opportunities for concurrency that the operating system can’t see.
+এই উভয় উদাহরণেই, অপারেটিং সিস্টেমের অদৃশ্য বাধাগুলি এক ধরনের কনকারেন্সি সরবরাহ করে। সেই কনকারেন্সি অবশ্য কেবল সম্পূর্ণ প্রোগ্রামের স্তরে ঘটে: অপারেটিং সিস্টেম অন্য প্রোগ্রামগুলিকে কাজ করার সুযোগ দেওয়ার জন্য একটি প্রোগ্রামকে বাধা দেয়। অনেক ক্ষেত্রে, যেহেতু আমরা অপারেটিং সিস্টেমের চেয়ে অনেক বেশি সুক্ষ্ম স্তরে আমাদের প্রোগ্রামগুলি বুঝতে পারি, তাই আমরা কনকারেন্সির এমন সুযোগগুলি দেখতে পাই যা অপারেটিং সিস্টেম দেখতে পায় না।
 
-For example, if we’re building a tool to manage file downloads, we should be
-able to write our program so that starting one download won’t lock up the UI,
-and users should be able to start multiple downloads at the same time. Many
-operating system APIs for interacting with the network are _blocking_, though;
-that is, they block the program’s progress until the data they’re processing is
-completely ready.
+উদাহরণস্বরূপ, যদি আমরা ফাইল ডাউনলোড পরিচালনা করার জন্য একটি টুল তৈরি করি, তাহলে আমাদের প্রোগ্রামটি এমনভাবে লিখতে পারা উচিত যাতে একটি ডাউনলোড শুরু করলে UI লক না হয় এবং ব্যবহারকারীরা একই সাথে একাধিক ডাউনলোড শুরু করতে পারে। নেটওয়ার্কের সাথে ইন্টারঅ্যাক্ট করার জন্য অনেকগুলি অপারেটিং সিস্টেম API _blocking_, যদিও; অর্থাৎ, তারা প্রোগ্রামের অগ্রগতি ব্লক করে যতক্ষণ না তারা যে ডেটা প্রসেস করছে তা সম্পূর্ণরূপে প্রস্তুত হয়।
 
-> Note: This is how _most_ function calls work, if you think about it. However,
-> the term _blocking_ is usually reserved for function calls that interact with
-> files, the network, or other resources on the computer, because those are the
-> cases where an individual program would benefit from the operation being
-> _non_-blocking.
+> Note: আপনি যদি এটি সম্পর্কে চিন্তা করেন তবে _বেশিরভাগ_ ফাংশন কল এইভাবে কাজ করে। যাইহোক, _blocking_ শব্দটি সাধারণত ফাইল, নেটওয়ার্ক বা কম্পিউটারের অন্যান্য রিসোর্সের সাথে ইন্টারঅ্যাক্ট করা ফাংশন কলগুলির জন্য সংরক্ষিত থাকে, কারণ সেই ক্ষেত্রগুলিতে একটি individual প্রোগ্রাম _non_-blocking অপারেশনে উপকৃত হবে।
 
-We could avoid blocking our main thread by spawning a dedicated thread to
-download each file. However, the overhead of those threads would eventually
-become a problem. It would be preferable if the call didn’t block in the first
-place. It would also be better if we could write in the same direct style we use
-in blocking code, similar to this:
+আমরা প্রতিটি ফাইল ডাউনলোড করার জন্য একটি ডেডিকেটেড থ্রেড স্পন করে আমাদের main থ্রেডকে ব্লক করা এড়াতে পারি। যাইহোক, সেই থ্রেডগুলির ওভারহেড অবশেষে একটি সমস্যা হয়ে দাঁড়াবে। কলের শুরুতেই যদি ব্লক না করে তবে সেটি আরও ভাল হত। আমরা যদি ব্লকিং কোডে ব্যবহার করা একই ডিরেক্ট স্টাইলে লিখতে পারতাম, তাহলে আরও ভাল হত, অনেকটা এইরকম:
 
 ```rust,ignore,does_not_compile
 let data = fetch_data_from(url).await;
 println!("{data}");
 ```
 
-That is exactly what Rust’s _async_ (short for _asynchronous_) abstraction gives
-us. In this chapter, you’ll learn all about async as we cover the following
-topics:
+Rust-এর _async_ ( _asynchronous_-এর সংক্ষিপ্ত) অ্যাবস্ট্রাকশন আমাদের ঠিক সেটাই দেয়। এই চ্যাপ্টারে, আপনি নিম্নলিখিত বিষয়গুলি কভার করার সাথে সাথে async সম্পর্কে সমস্ত কিছু শিখবেন:
 
-- How to use Rust’s `async` and `await` syntax
-- How to use the async model to solve some of the same challenges we looked at
-  in Chapter 16
-- How multithreading and async provide complementary solutions, that you can
-  combine in many cases
+-   কীভাবে Rust-এর `async` এবং `await` সিনট্যাক্স ব্যবহার করবেন
+-   Chapter 16-এ আমরা যে চ্যালেঞ্জগুলি দেখেছিলাম তার কিছু সমাধান করতে কীভাবে async মডেল ব্যবহার করবেন
+-   কীভাবে multithreading এবং async একে অপরের পরিপূরক সমাধান সরবরাহ করে, যা আপনি অনেক ক্ষেত্রে একত্রিত করতে পারেন
 
-Before we see how async works in practice, though, we need to take a short
-detour to discuss the differences between parallelism and concurrency.
+বাস্তবে async কীভাবে কাজ করে তা দেখার আগে, আমাদের প্যারালেলিজম এবং কনকারেন্সির মধ্যে পার্থক্যগুলি নিয়ে আলোচনা করার জন্য একটি সংক্ষিপ্ত বিরতি নিতে হবে।
 
-### Parallelism and Concurrency
+### প্যারালেলিজম এবং কনকারেন্সি (Parallelism and Concurrency)
 
-We’ve treated parallelism and concurrency as mostly interchangeable so far. Now
-we need to distinguish between them more precisely, because the differences will
-show up as we start working.
+আমরা ఇప్పటి পর্যন্ত প্যারালেলিজম এবং কনকারেন্সিকে বেশিরভাগ ক্ষেত্রে বিনিময়যোগ্য হিসাবে বিবেচনা করেছি। এখন আমাদের তাদের মধ্যে আরও সুনির্দিষ্টভাবে পার্থক্য করতে হবে, কারণ আমরা কাজ শুরু করার সাথে সাথে পার্থক্যগুলি দেখা যাবে।
 
-Consider the different ways a team could split up work on a software project.
-You could assign a single member multiple tasks, assign each member one task, or
-use a mix of the two approaches.
+একটি সফ্টওয়্যার প্রোজেক্টে একটি দল কীভাবে কাজ ভাগ করতে পারে তার বিভিন্ন উপায় বিবেচনা করুন। আপনি একজন individual সদস্যকে একাধিক কাজ বরাদ্দ করতে পারেন, প্রতিটি সদস্যকে একটি কাজ বরাদ্দ করতে পারেন, বা দুটি পদ্ধতির মিশ্রণ ব্যবহার করতে পারেন।
 
-When an individual works on several different tasks before any of them is
-complete, this is _concurrency_. Maybe you have two different projects checked
-out on your computer, and when you get bored or stuck on one project, you switch
-to the other. You’re just one person, so you can’t make progress on both tasks
-at the exact same time, but you can multi-task, making progress on one at a time
-by switching between them (see Figure 17-1).
+যখন একজন ব্যক্তি কোনও কাজ সম্পূর্ণ হওয়ার আগেই বেশ কয়েকটি ভিন্ন কাজ নিয়ে কাজ করেন, তখন এটি হল _কনকারেন্সি_। হতে পারে আপনার কম্পিউটারে দুটি ভিন্ন প্রোজেক্ট চেক আউট করা আছে, এবং যখন আপনি একটি প্রোজেক্টে বিরক্ত হন বা আটকে যান, তখন আপনি অন্যটিতে স্যুইচ করেন। আপনি কেবল একজন ব্যক্তি, তাই আপনি একই সময়ে উভয় কাজেই অগ্রগতি করতে পারবেন না, তবে আপনি মাল্টি-টাস্ক করতে পারেন, তাদের মধ্যে স্যুইচ করে একবারে একটিতে অগ্রগতি করতে পারেন (চিত্র 17-1 দেখুন)।
 
 <figure>
 
-<img src="img/trpl17-01.svg" class="center" alt="A diagram with boxes labeled Task A and Task B, with diamonds in them representing subtasks. There are arrows pointing from A1 to B1, B1 to A2, A2 to B2, B2 to A3, A3 to A4, and A4 to B3. The arrows between the subtasks cross the boxes between Task A and Task B." />
+<img src="img/trpl17-01.svg" class="center" alt="Task A এবং Task B লেবেলযুক্ত বাক্স সহ একটি ডায়াগ্রাম, যার মধ্যে সাবটাস্কগুলিকে উপস্থাপন করে ডায়মন্ড রয়েছে। A1 থেকে B1, B1 থেকে A2, A2 থেকে B2, B2 থেকে A3, A3 থেকে A4, এবং A4 থেকে B3 পর্যন্ত তীর রয়েছে। সাবটাস্কগুলির মধ্যে তীরগুলি Task A এবং Task B-এর মধ্যে বাক্সগুলিকে অতিক্রম করে।" />
 
-<figcaption>Figure 17-1: A concurrent workflow, switching between Task A and Task B</figcaption>
+<figcaption>চিত্র 17-1: একটি কনকারেন্ট ওয়ার্কফ্লো, Task A এবং Task B-এর মধ্যে স্যুইচ করা</figcaption>
 
 </figure>
 
-When the team splits up a group of tasks by having each member take one task and
-work on it alone, this is _parallelism_. Each person on the team can make
-progress at the exact same time (see Figure 17-2).
+যখন দলটি প্রতিটি সদস্যকে একটি করে কাজ নেয় এবং একা একা কাজ করে, তখন এটি _প্যারালেলিজম_। দলের প্রত্যেকে একই সময়ে অগ্রগতি করতে পারে (চিত্র 17-2 দেখুন)।
 
 <figure>
 
-<img src="img/trpl17-02.svg" class="center" alt="A diagram with boxes labeled Task A and Task B, with diamonds in them representing subtasks. There are arrows pointing from A1 to A2, A2 to A3, A3 to A4, B1 to B2, and B2 to B3. No arrows cross between the boxes for Task A and Task B." />
+<img src="img/trpl17-02.svg" class="center" alt="Task A এবং Task B লেবেলযুক্ত বাক্স সহ একটি ডায়াগ্রাম, যার মধ্যে সাবটাস্কগুলিকে উপস্থাপন করে ডায়মন্ড রয়েছে। A1 থেকে A2, A2 থেকে A3, A3 থেকে A4, B1 থেকে B2 এবং B2 থেকে B3 পর্যন্ত তীর রয়েছে। Task A এবং Task B-এর বাক্সগুলির মধ্যে কোনও তীর অতিক্রম করে না।" />
 
-<figcaption>Figure 17-2: A parallel workflow, where work happens on Task A and Task B independently</figcaption>
+<figcaption>চিত্র 17-2: একটি প্যারালাল ওয়ার্কফ্লো, যেখানে Task A এবং Task B-তে স্বাধীনভাবে কাজ হয়</figcaption>
 
 </figure>
 
-In both of these workflows, you might have to coordinate between different
-tasks. Maybe you _thought_ the task assigned to one person was totally
-independent from everyone else’s work, but it actually requires another person
-on the team to finish their task first. Some of the work could be done in
-parallel, but some of it was actually _serial_: it could only happen in a
-series, one task after the other, as in Figure 17-3.
+এই উভয় ওয়ার্কফ্লোতেই, আপনাকে বিভিন্ন কাজের মধ্যে সমন্বয় করতে হতে পারে। হতে পারে আপনি _ভেবেছিলেন_ একজন ব্যক্তিকে দেওয়া কাজটি অন্য সবার কাজ থেকে সম্পূর্ণ স্বাধীন, কিন্তু আসলে এটির জন্য দলের অন্য একজন ব্যক্তির প্রথমে তাদের কাজটি শেষ করা প্রয়োজন। কিছু কাজ প্যারালালে করা যেতে পারে, তবে এর মধ্যে কিছু আসলে _সিরিয়াল_: এটি কেবল একটি সিরিজে ঘটতে পারে, একের পর এক কাজ, যেমন চিত্র 17-3-এ।
 
 <figure>
 
-<img src="img/trpl17-03.svg" class="center" alt="A diagram with boxes labeled Task A and Task B, with diamonds in them representing subtasks. There are arrows pointing from A1 to A2, A2 to a pair of thick vertical lines like a “pause” symbol, from that symbol to A3, B1 to B2, B2 to B3, which is below that symbol, B3 to A3, and B3 to B4." />
+<img src="img/trpl17-03.svg" class="center" alt="Task A এবং Task B লেবেলযুক্ত বাক্স সহ একটি ডায়াগ্রাম, যার মধ্যে সাবটাস্কগুলিকে উপস্থাপন করে ডায়মন্ড রয়েছে। A1 থেকে A2, A2 থেকে একটি “পজ” চিহ্নের মতো দুটি পুরু উল্লম্ব রেখার জোড়া, সেই প্রতীক থেকে A3, B1 থেকে B2, B2 থেকে B3, যা সেই প্রতীকের নীচে, B3 থেকে A3 এবং B3 থেকে B4 পর্যন্ত তীর রয়েছে।" />
 
-<figcaption>Figure 17-3: A partially parallel workflow, where work happens on Task A and Task B independently until Task A3 is blocked on the results of Task B3.</figcaption>
+<figcaption>চিত্র 17-3: একটি আংশিকভাবে প্যারালাল ওয়ার্কফ্লো, যেখানে Task B3-এর ফলাফলের উপর Task A3 ব্লক না হওয়া পর্যন্ত Task A এবং Task B-তে স্বাধীনভাবে কাজ হয়।</figcaption>
 
 </figure>
 
-Likewise, you might realize that one of your own tasks depends on another of
-your tasks. Now your concurrent work has also become serial.
+একইভাবে, আপনি বুঝতে পারেন যে আপনার নিজের একটি কাজ আপনার অন্য একটি কাজের উপর নির্ভরশীল। এখন আপনার কনকারেন্ট কাজও সিরিয়াল হয়ে গেছে।
 
-Parallelism and concurrency can intersect with each other, too. If you learn
-that a colleague is stuck until you finish one of your tasks, you’ll probably
-focus all your efforts on that task to “unblock” your colleague. You and your
-coworker are no longer able to work in parallel, and you’re also no longer able
-to work concurrently on your own tasks.
+প্যারালেলিজম এবং কনকারেন্সি একে অপরের সাথে ছেদ করতে পারে। আপনি যদি জানতে পারেন যে আপনার একজন সহকর্মী আপনার একটি কাজ শেষ না করা পর্যন্ত আটকে আছেন, তাহলে আপনি সম্ভবত আপনার সহকর্মীকে "আনব্লক" করার জন্য সেই কাজের উপর সমস্ত মনোযোগ দেবেন। আপনি এবং আপনার সহকর্মী আর প্যারালালে কাজ করতে পারবেন না, এবং আপনি আপনার নিজের কাজগুলিতেও আর কনকারেন্টলি কাজ করতে পারবেন না।
 
-The same basic dynamics come into play with software and hardware. On a machine
-with a single CPU core, the CPU can perform only one operation at a time, but it
-can still work concurrently. Using tools such as threads, processes, and async,
-the computer can pause one activity and switch to others before eventually
-cycling back to that first activity again. On a machine with multiple CPU cores,
-it can also do work in parallel. One core can be performing one task while
-another core performs a completely unrelated one, and those operations actually
-happen at the same time.
+সফ্টওয়্যার এবং হার্ডওয়্যারের ক্ষেত্রেও একই বেসিক ডায়নামিকগুলি কার্যকর হয়। একটি single CPU কোর সহ একটি মেশিনে, CPU একবারে কেবল একটি অপারেশন সম্পাদন করতে পারে, তবে এটি এখনও কনকারেন্টলি কাজ করতে পারে। থ্রেড, প্রসেস এবং async-এর মতো টুল ব্যবহার করে, কম্পিউটার একটি অ্যাক্টিভিটি পজ করতে পারে এবং অন্যগুলিতে স্যুইচ করতে পারে, অবশেষে আবার সেই প্রথম অ্যাক্টিভিটিতে ফিরে আসার আগে। একাধিক CPU কোর সহ একটি মেশিনে, এটি প্যারালালে কাজও করতে পারে। একটি কোর একটি কাজ সম্পাদন করতে পারে যখন অন্য কোর সম্পূর্ণ সম্পর্কহীন একটি কাজ সম্পাদন করে এবং সেই অপারেশনগুলি আসলে একই সময়ে ঘটে।
 
-When working with async in Rust, we’re always dealing with concurrency.
-Depending on the hardware, the operating system, and the async runtime we are
-using (more on async runtimes shortly), that concurrency may also use parallelism
-under the hood.
+Rust-এ async নিয়ে কাজ করার সময়, আমরা সবসময় কনকারেন্সির সাথে কাজ করি। হার্ডওয়্যার, অপারেটিং সিস্টেম এবং আমরা যে async রানটাইম ব্যবহার করছি তার উপর নির্ভর করে (async রানটাইম সম্পর্কে শীঘ্রই আরও আলোচনা করা হবে), সেই কনকারেন্সি হুডের নিচে প্যারালেলিজমও ব্যবহার করতে পারে।
 
-Now, let’s dive into how async programming in Rust actually works.
+এখন, আসুন Rust-এ অ্যাসিঙ্ক্রোনাস প্রোগ্রামিং কীভাবে কাজ করে তাতে ডুব দেওয়া যাক।

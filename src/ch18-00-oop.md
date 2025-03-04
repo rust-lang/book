@@ -1,13 +1,3 @@
-# Object-Oriented Programming Features of Rust
+# Rust-এর অবজেক্ট-ওরিয়েন্টেড প্রোগ্রামিং বৈশিষ্ট্য
 
-Object-oriented programming (OOP) is a way of modeling programs. Objects as a
-programmatic concept were introduced in the programming language Simula in the
-1960s. Those objects influenced Alan Kay’s programming architecture in which
-objects pass messages to each other. To describe this architecture, he coined
-the term _object-oriented programming_ in 1967. Many competing definitions
-describe what OOP is, and by some of these definitions Rust is object-oriented,
-but by others it is not. In this chapter, we’ll explore certain characteristics
-that are commonly considered object-oriented and how those characteristics
-translate to idiomatic Rust. We’ll then show you how to implement an
-object-oriented design pattern in Rust and discuss the trade-offs of doing so
-versus implementing a solution using some of Rust’s strengths instead.
+অবজেক্ট-ওরিয়েন্টেড প্রোগ্রামিং (OOP) হল প্রোগ্রাম মডেল করার একটি উপায়। ১৯৬০-এর দশকে সিমুলা (Simula) নামক প্রোগ্রামিং ভাষায় প্রোগ্রামিং ধারণা হিসাবে অবজেক্টের প্রচলন ঘটে। সেই অবজেক্টগুলি অ্যালান কে-এর প্রোগ্রামিং আর্কিটেকচারকে প্রভাবিত করেছিল, যেখানে অবজেক্টগুলি একে অপরের কাছে মেসেজ পাঠায়। এই আর্কিটেকচার বর্ণনা করার জন্য, তিনি ১৯৬৭ সালে _অবজেক্ট-ওরিয়েন্টেড প্রোগ্রামিং_ শব্দটি তৈরি করেন। OOP কী, তা নিয়ে অনেক পরস্পরবিরোধী সংজ্ঞা রয়েছে, এবং এই সংজ্ঞাগুলির মধ্যে কিছু অনুযায়ী Rust অবজেক্ট-ওরিয়েন্টেড, কিন্তু অন্য সংজ্ঞা অনুযায়ী তা নয়। এই চ্যাপ্টারে, আমরা সাধারণত অবজেক্ট-ওরিয়েন্টেড হিসাবে বিবেচিত কিছু বৈশিষ্ট্য এবং সেই বৈশিষ্ট্যগুলি কীভাবে প্রচলিত Rust-এ রূপান্তরিত হয় তা অন্বেষণ করব। তারপরে আমরা আপনাকে দেখাব কীভাবে Rust-এ একটি অবজেক্ট-ওরিয়েন্টেড ডিজাইন প্যাটার্ন বাস্তবায়ন করা যায় এবং এর পরিবর্তে Rust-এর কিছু শক্তির ব্যবহার করে সমাধান বাস্তবায়নের সুবিধা-অসুবিধা নিয়ে আলোচনা করব।

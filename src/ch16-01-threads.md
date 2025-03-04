@@ -1,46 +1,22 @@
-## Using Threads to Run Code Simultaneously
+## থ্রেড ব্যবহার করে একই সাথে কোড চালানো
 
-In most current operating systems, an executed program’s code is run in a
-_process_, and the operating system will manage multiple processes at once.
-Within a program, you can also have independent parts that run simultaneously.
-The features that run these independent parts are called _threads_. For
-example, a web server could have multiple threads so that it can respond to
-more than one request at the same time.
+বেশিরভাগ current অপারেটিং সিস্টেমে, একটি executed প্রোগ্রামের কোড একটি _প্রসেস_-এ run হয় এবং অপারেটিং সিস্টেম একসাথে multiple প্রসেস manage করবে। একটি প্রোগ্রামের মধ্যে, আপনার independent অংশগুলোও থাকতে পারে যেগুলো simultaneously চলে। এই independent অংশগুলো run করে এমন feature গুলোকে _থ্রেড_ বলা হয়। উদাহরণস্বরূপ, একটি ওয়েব সার্ভারে multiple থ্রেড থাকতে পারে যাতে এটি একই সময়ে একাধিক অনুরোধে respond করতে পারে।
 
-Splitting the computation in your program into multiple threads to run multiple
-tasks at the same time can improve performance, but it also adds complexity.
-Because threads can run simultaneously, there’s no inherent guarantee about the
-order in which parts of your code on different threads will run. This can lead
-to problems, such as:
+আপনার প্রোগ্রামের computation-কে multiple থ্রেডে বিভক্ত করে একই সময়ে multiple task চালানো পারফরম্যান্স improve করতে পারে, তবে এটি complexity-ও বাড়িয়ে দেয়। যেহেতু থ্রেডগুলো simultaneously চলতে পারে, তাই বিভিন্ন থ্রেডে আপনার কোডের অংশগুলো কোন ক্রমে চলবে সে সম্পর্কে কোনো inherent গ্যারান্টি নেই। এটি সমস্যার দিকে নিয়ে যেতে পারে, যেমন:
 
-- Race conditions, in which threads are accessing data or resources in an
-  inconsistent order
-- Deadlocks, in which two threads are waiting for each other, preventing both
-  threads from continuing
-- Bugs that happen only in certain situations and are hard to reproduce and fix
-  reliably
+-   রেস কন্ডিশন, যেখানে থ্রেডগুলো একটি অসঙ্গত ক্রমে ডেটা বা রিসোর্স অ্যাক্সেস করছে
+-   ডেডলক, যেখানে দুটি থ্রেড একে অপরের জন্য অপেক্ষা করছে, উভয় থ্রেডকে continue করা থেকে বিরত রাখছে
+-   বাগ যেগুলো শুধুমাত্র certain পরিস্থিতিতে ঘটে এবং reliably reproduce এবং ঠিক করা কঠিন
 
-Rust attempts to mitigate the negative effects of using threads, but
-programming in a multithreaded context still takes careful thought and requires
-a code structure that is different from that in programs running in a single
-thread.
+Rust থ্রেড ব্যবহারের negative effect গুলো প্রশমিত করার চেষ্টা করে, কিন্তু একটি multithreaded context-এ প্রোগ্রামিং করার জন্য এখনও careful thought প্রয়োজন এবং এর জন্য একটি কোড স্ট্রাকচার প্রয়োজন যা single thread-এ চলা প্রোগ্রামগুলোর থেকে আলাদা।
 
-Programming languages implement threads in a few different ways, and many
-operating systems provide an API the language can call for creating new threads.
-The Rust standard library uses a _1:1_ model of thread implementation, whereby a
-program uses one operating system thread per one language thread. There are
-crates that implement other models of threading that make different tradeoffs to
-the 1:1 model. (Rust’s async system, which we will see in the next chapter,
-provides another approach to concurrency as well.)
+প্রোগ্রামিং ল্যাঙ্গুয়েজগুলো কয়েকটি different উপায়ে থ্রেড implement করে এবং অনেক অপারেটিং সিস্টেম একটি API provide করে যা ল্যাঙ্গুয়েজ new থ্রেড তৈরি করার জন্য কল করতে পারে। Rust standard library থ্রেড ইমপ্লিমেন্টেশনের একটি _1:1_ মডেল ব্যবহার করে, যেখানে একটি প্রোগ্রাম প্রতি language থ্রেডের জন্য একটি অপারেটিং সিস্টেম থ্রেড ব্যবহার করে। এমন কিছু crate রয়েছে যেগুলো থ্রেডিংয়ের অন্যান্য মডেল implement করে যা 1:1 মডেলের সাথে different trade-off করে। (Rust-এর async সিস্টেম, যা আমরা அடுத்த chapter-এ দেখব, concurrency-র জন্য আরেকটি অ্যাপ্রোচ প্রদান করে।)
 
-### Creating a New Thread with `spawn`
+### `spawn`-এর সাহায্যে একটি New Thread তৈরি করা
 
-To create a new thread, we call the `thread::spawn` function and pass it a
-closure (we talked about closures in Chapter 13) containing the code we want to
-run in the new thread. The example in Listing 16-1 prints some text from a main
-thread and other text from a new thread:
+একটি new thread তৈরি করতে, আমরা `thread::spawn` ফাংশনটি কল করি এবং এটিকে একটি ক্লোজার (আমরা Chapter 13-এ ক্লোজার নিয়ে আলোচনা করেছি) pass করি যেখানে new thread-এ আমরা যে কোডটি চালাতে চাই তা থাকে। Listing 16-1-এর উদাহরণটি একটি main thread থেকে কিছু text এবং একটি new thread থেকে অন্য text প্রিন্ট করে:
 
-<Listing number="16-1" file-name="src/main.rs" caption="Creating a new thread to print one thing while the main thread prints something else">
+<Listing number="16-1" file-name="src/main.rs" caption="Main thread-এ অন্য কিছু প্রিন্ট করার সময় একটি new thread-এ কিছু প্রিন্ট করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-01/src/main.rs}}
@@ -48,10 +24,7 @@ thread and other text from a new thread:
 
 </Listing>
 
-Note that when the main thread of a Rust program completes, all spawned threads
-are shut down, whether or not they have finished running. The output from this
-program might be a little different every time, but it will look similar to the
-following:
+লক্ষ্য করুন যে যখন একটি Rust প্রোগ্রামের main thread complete হয়, তখন সমস্ত spawned thread গুলো বন্ধ হয়ে যায়, সেগুলো running শেষ করুক বা না করুক। এই প্রোগ্রাম থেকে আউটপুট প্রতিবার একটু ভিন্ন হতে পারে, তবে এটি নিম্নলিখিতগুলোর মতো দেখাবে:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -69,33 +42,17 @@ hi number 4 from the spawned thread!
 hi number 5 from the spawned thread!
 ```
 
-The calls to `thread::sleep` force a thread to stop its execution for a short
-duration, allowing a different thread to run. The threads will probably take
-turns, but that isn’t guaranteed: it depends on how your operating system
-schedules the threads. In this run, the main thread printed first, even though
-the print statement from the spawned thread appears first in the code. And even
-though we told the spawned thread to print until `i` is `9`, it only got to `5`
-before the main thread shut down.
+`Thread::sleep`-এর কলগুলো একটি থ্রেডকে অল্প সময়ের জন্য তার execution stop করতে বাধ্য করে, অন্য একটি থ্রেডকে চলতে দেয়। থ্রেডগুলো সম্ভবত পালাক্রমে চলবে, তবে এটির গ্যারান্টি নেই: এটি নির্ভর করে আপনার অপারেটিং সিস্টেম কীভাবে থ্রেডগুলোকে schedule করে তার উপর। এই run-এ, main thread টি প্রথমে প্রিন্ট করেছে, যদিও spawned thread থেকে প্রিন্ট স্টেটমেন্টটি কোডে প্রথমে appear করে। এবং যদিও আমরা spawned thread-টিকে `i` `9` না হওয়া পর্যন্ত প্রিন্ট করতে বলেছিলাম, main thread বন্ধ হওয়ার আগে এটি শুধুমাত্র `5`-এ পৌঁছেছে।
 
-If you run this code and only see output from the main thread, or don’t see any
-overlap, try increasing the numbers in the ranges to create more opportunities
-for the operating system to switch between the threads.
+যদি আপনি এই কোডটি চালান এবং শুধুমাত্র main thread থেকে আউটপুট দেখেন, অথবা কোনো overlap না দেখেন, তাহলে range-গুলোতে সংখ্যা বাড়ানোর চেষ্টা করুন যাতে অপারেটিং সিস্টেমের থ্রেডগুলোর মধ্যে switch করার আরও সুযোগ তৈরি হয়।
 
-### Waiting for All Threads to Finish Using `join` Handles
+### `join` Handle ব্যবহার করে সমস্ত Thread শেষ হওয়ার জন্য অপেক্ষা করা
 
-The code in Listing 16-1 not only stops the spawned thread prematurely most of
-the time due to the main thread ending, but because there is no guarantee on
-the order in which threads run, we also can’t guarantee that the spawned thread
-will get to run at all!
+Listing 16-1-এর কোডটি শুধুমাত্র main thread শেষ হওয়ার কারণে বেশিরভাগ সময় spawned thread-টিকে prematurely থামিয়ে দেয় না, কিন্তু যেহেতু থ্রেডগুলো কোন ক্রমে run করে সে সম্পর্কে কোনো গ্যারান্টি নেই, তাই আমরা এটাও গ্যারান্টি দিতে পারি না যে spawned thread টি আদৌ run করতে পারবে!
 
-We can fix the problem of the spawned thread not running or ending prematurely
-by saving the return value of `thread::spawn` in a variable. The return type of
-`thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned value that, when we
-call the `join` method on it, will wait for its thread to finish. Listing 16-2
-shows how to use the `JoinHandle` of the thread we created in Listing 16-1 and
-how to call `join` to make sure the spawned thread finishes before `main` exits:
+আমরা `thread::spawn`-এর return value একটি variable-এ save করে spawned thread-টি না চলা বা prematurely শেষ হওয়ার সমস্যাটি সমাধান করতে পারি। `Thread::spawn`-এর return type হল `JoinHandle`। একটি `JoinHandle` হল একটি owned value যা, যখন আমরা এটিতে `join` method কল করি, তখন এর থ্রেড শেষ হওয়ার জন্য অপেক্ষা করবে। Listing 16-2 দেখায় কিভাবে Listing 16-1-এ তৈরি করা থ্রেডের `JoinHandle` ব্যবহার করতে হয় এবং `main` exit করার আগে spawned thread টি শেষ হয়েছে তা নিশ্চিত করতে `join` কল করতে হয়:
 
-<Listing number="16-2" file-name="src/main.rs" caption="Saving a `JoinHandle` from `thread::spawn` to guarantee the thread is run to completion">
+<Listing number="16-2" file-name="src/main.rs" caption="থ্রেডটি সম্পূর্ণ run হয়েছে তা নিশ্চিত করতে `thread::spawn` থেকে একটি `JoinHandle` সংরক্ষণ করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-02/src/main.rs}}
@@ -103,11 +60,7 @@ how to call `join` to make sure the spawned thread finishes before `main` exits:
 
 </Listing>
 
-Calling `join` on the handle blocks the thread currently running until the
-thread represented by the handle terminates. _Blocking_ a thread means that
-thread is prevented from performing work or exiting. Because we’ve put the call
-to `join` after the main thread’s `for` loop, running Listing 16-2 should
-produce output similar to this:
+হ্যান্ডেলে `join` কল করা currently running থ্রেডটিকে ব্লক করে যতক্ষণ না হ্যান্ডেল দ্বারা represented থ্রেডটি terminate হয়। একটি থ্রেডকে _ব্লক_ করার অর্থ হল সেই থ্রেডটিকে কাজ করা বা exit করা থেকে বিরত রাখা। যেহেতু আমরা main thread-এর `for` লুপের পরে `join`-এর কলটি রেখেছি, তাই Listing 16-2 চালালে এইরকম আউটপুট produce হওয়া উচিত:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -129,11 +82,9 @@ hi number 8 from the spawned thread!
 hi number 9 from the spawned thread!
 ```
 
-The two threads continue alternating, but the main thread waits because of the
-call to `handle.join()` and does not end until the spawned thread is finished.
+দুটি থ্রেড alternating ভাবে চলতে থাকে, কিন্তু main thread টি `handle.join()`-এ কলের কারণে অপেক্ষা করে এবং spawned thread শেষ না হওয়া পর্যন্ত শেষ হয় না।
 
-But let’s see what happens when we instead move `handle.join()` before the
-`for` loop in `main`, like this:
+কিন্তু আসুন দেখি কি হয় যখন আমরা পরিবর্তে `main`-এ `for` লুপের আগে `handle.join()` move করি, এইভাবে:
 
 <Listing file-name="src/main.rs">
 
@@ -143,8 +94,7 @@ But let’s see what happens when we instead move `handle.join()` before the
 
 </Listing>
 
-The main thread will wait for the spawned thread to finish and then run its
-`for` loop, so the output won’t be interleaved anymore, as shown here:
+Main thread টি spawned thread শেষ হওয়ার জন্য অপেক্ষা করবে এবং তারপর তার `for` লুপ চালাবে, তাই আউটপুটটি আর interleaved হবে না, যেমনটি এখানে দেখানো হয়েছে:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -166,26 +116,15 @@ hi number 3 from the main thread!
 hi number 4 from the main thread!
 ```
 
-Small details, such as where `join` is called, can affect whether or not your
-threads run at the same time.
+ছোট details, যেমন `join` কোথায় কল করা হয়েছে, তা আপনার থ্রেডগুলো একই সময়ে run করবে কিনা তা প্রভাবিত করতে পারে।
 
-### Using `move` Closures with Threads
+### থ্রেডগুলোর সাথে `move` ক্লোজার ব্যবহার করা
 
-We'll often use the `move` keyword with closures passed to `thread::spawn`
-because the closure will then take ownership of the values it uses from the
-environment, thus transferring ownership of those values from one thread to
-another. In [“Capturing References or Moving Ownership”][capture]<!-- ignore -->
-in Chapter 13, we discussed `move` in the context of closures. Now, we’ll
-concentrate more on the interaction between `move` and `thread::spawn`.
+আমরা প্রায়শই `thread::spawn`-এ pass করা closure-গুলোর সাথে `move` keyword ব্যবহার করব কারণ closure টি তখন environment থেকে ব্যবহৃত value গুলোর ownership নেবে, এইভাবে সেই value গুলোর ownership এক থ্রেড থেকে অন্য থ্রেডে transfer করবে। Chapter 13-এ [“Reference Capture করা বা Ownership Move করা”][capture]-এ, আমরা closure-এর context-এ `move` নিয়ে আলোচনা করেছি। এখন, আমরা `move` এবং `thread::spawn`-এর মধ্যে interaction-এর উপর বেশি concentrate করব।
 
-Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
-arguments: we’re not using any data from the main thread in the spawned
-thread’s code. To use data from the main thread in the spawned thread, the
-spawned thread’s closure must capture the values it needs. Listing 16-3 shows
-an attempt to create a vector in the main thread and use it in the spawned
-thread. However, this won’t yet work, as you’ll see in a moment.
+Listing 16-1-এ লক্ষ্য করুন যে আমরা `thread::spawn`-এ যে closure টি pass করি সেটি কোনো argument নেয় না: আমরা spawned thread-এর কোডে main thread থেকে কোনো ডেটা ব্যবহার করছি না। Spawned thread-এ main thread থেকে ডেটা ব্যবহার করার জন্য, spawned thread-এর closure-এর প্রয়োজনীয় value গুলো capture করতে হবে। Listing 16-3 main thread-এ একটি vector তৈরি করার এবং অন্য thread-এ এটি ব্যবহার করার একটি প্রচেষ্টা দেখায়। যাইহোক, এটি এখনও কাজ করবে না, যেমনটি আপনি একটু পরেই দেখতে পাবেন।
 
-<Listing number="16-3" file-name="src/main.rs" caption="Attempting to use a vector created by the main thread in another thread">
+<Listing number="16-3" file-name="src/main.rs" caption="অন্য থ্রেডে main thread দ্বারা তৈরি একটি vector ব্যবহার করার চেষ্টা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-03/src/main.rs}}
@@ -193,24 +132,17 @@ thread. However, this won’t yet work, as you’ll see in a moment.
 
 </Listing>
 
-The closure uses `v`, so it will capture `v` and make it part of the closure’s
-environment. Because `thread::spawn` runs this closure in a new thread, we
-should be able to access `v` inside that new thread. But when we compile this
-example, we get the following error:
+Closure টি `v` ব্যবহার করে, তাই এটি `v` ক্যাপচার করবে এবং এটিকে closure-এর environment-এর অংশ করে তুলবে। যেহেতু `thread::spawn` এই closure-টিকে একটি new thread-এ চালায়, তাই আমাদের সেই new thread-এর মধ্যে `v` অ্যাক্সেস করতে সক্ষম হওয়া উচিত। কিন্তু যখন আমরা এই উদাহরণটি compile করি, তখন আমরা নিম্নলিখিত error টি পাই:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-03/output.txt}}
 ```
 
-Rust _infers_ how to capture `v`, and because `println!` only needs a reference
-to `v`, the closure tries to borrow `v`. However, there’s a problem: Rust can’t
-tell how long the spawned thread will run, so it doesn’t know if the reference
-to `v` will always be valid.
+Rust _infer_ করে কিভাবে `v` ক্যাপচার করতে হবে, এবং যেহেতু `println!`-এর শুধুমাত্র `v`-এর একটি reference প্রয়োজন, তাই closure টি `v` borrow করার চেষ্টা করে। যাইহোক, একটি সমস্যা আছে: Rust বলতে পারে না spawned thread টি কতক্ষণ চলবে, তাই এটি জানে না যে `v`-এর reference সব সময় valid থাকবে কিনা।
 
-Listing 16-4 provides a scenario that’s more likely to have a reference to `v`
-that won’t be valid:
+Listing 16-4 এমন একটি scenario provide করে যেখানে `v`-এর একটি reference থাকার সম্ভাবনা বেশি যা valid হবে না:
 
-<Listing number="16-4" file-name="src/main.rs" caption="A thread with a closure that attempts to capture a reference to `v` from a main thread that drops `v`">
+<Listing number="16-4" file-name="src/main.rs" caption="একটি থ্রেড যেখানে একটি ক্লোজার রয়েছে যা `v`-এর একটি reference ক্যাপচার করার চেষ্টা করে এমন একটি main thread থেকে যা `v` ড্রপ করে">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-04/src/main.rs}}
@@ -218,15 +150,9 @@ that won’t be valid:
 
 </Listing>
 
-If Rust allowed us to run this code, there’s a possibility the spawned thread
-would be immediately put in the background without running at all. The spawned
-thread has a reference to `v` inside, but the main thread immediately drops
-`v`, using the `drop` function we discussed in Chapter 15. Then, when the
-spawned thread starts to execute, `v` is no longer valid, so a reference to it
-is also invalid. Oh no!
+যদি Rust আমাদের এই কোডটি চালানোর অনুমতি দিত, তাহলে spawned thread-টি immediately background-এ চলে যাওয়ার সম্ভাবনা থাকত, আদৌ না চলে। Spawned thread-টির ভিতরে `v`-এর একটি reference রয়েছে, কিন্তু main thread অবিলম্বে `v` ড্রপ করে, Chapter 15-এ আলোচনা করা `drop` ফাংশনটি ব্যবহার করে। তারপর, যখন spawned thread execute করা শুরু করে, তখন `v` আর valid থাকে না, তাই এটির একটি reference-ও invalid। ওহ না!
 
-To fix the compiler error in Listing 16-3, we can use the error message’s
-advice:
+Listing 16-3-এর compiler error ঠিক করতে, আমরা error message-এর পরামর্শ ব্যবহার করতে পারি:
 
 <!-- manual-regeneration
 after automatic regeneration, look at listings/ch16-fearless-concurrency/listing-16-03/output.txt and copy the relevant part
@@ -239,12 +165,9 @@ help: to force the closure to take ownership of `v` (and any other referenced va
   |                                ++++
 ```
 
-By adding the `move` keyword before the closure, we force the closure to take
-ownership of the values it’s using rather than allowing Rust to infer that it
-should borrow the values. The modification to Listing 16-3 shown in Listing
-16-5 will compile and run as we intend:
+Closure-এর আগে `move` keyword যোগ করে, আমরা closure-টিকে এটি যে value গুলো ব্যবহার করছে সেগুলোর ownership নিতে বাধ্য করি, Rust-কে infer করার অনুমতি দেওয়ার পরিবর্তে যে এটির value গুলো borrow করা উচিত। Listing 16-5-এ দেখানো Listing 16-3-এর modification টি compile হবে এবং আমরা যেভাবে চাই সেভাবে চলবে:
 
-<Listing number="16-5" file-name="src/main.rs" caption="Using the `move` keyword to force a closure to take ownership of the values it uses">
+<Listing number="16-5" file-name="src/main.rs" caption="`move` keyword ব্যবহার করে একটি closure-কে এটি যে value গুলো ব্যবহার করে সেগুলোর ownership নিতে বাধ্য করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-05/src/main.rs}}
@@ -252,28 +175,14 @@ should borrow the values. The modification to Listing 16-3 shown in Listing
 
 </Listing>
 
-We might be tempted to try the same thing to fix the code in Listing 16-4 where
-the main thread called `drop` by using a `move` closure. However, this fix will
-not work because what Listing 16-4 is trying to do is disallowed for a
-different reason. If we added `move` to the closure, we would move `v` into the
-closure’s environment, and we could no longer call `drop` on it in the main
-thread. We would get this compiler error instead:
+আমরা Listing 16-4-এর কোডটি ঠিক করার জন্য একই কাজ করার চেষ্টা করতে প্রলুব্ধ হতে পারি যেখানে main thread একটি `move` closure ব্যবহার করে `drop` কল করেছে। যাইহোক, এই fix কাজ করবে না কারণ Listing 16-4 যা করার চেষ্টা করছে তা একটি ভিন্ন কারণে অনুমোদিত নয়। যদি আমরা closure-এ `move` যোগ করি, তাহলে আমরা `v`-কে closure-এর environment-এ move করব এবং আমরা main thread-এ এটিতে আর `drop` কল করতে পারব না। পরিবর্তে আমরা এই compiler error টি পাব:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/output-only-01-move-drop/output.txt}}
 ```
 
-Rust’s ownership rules have saved us again! We got an error from the code in
-Listing 16-3 because Rust was being conservative and only borrowing `v` for the
-thread, which meant the main thread could theoretically invalidate the spawned
-thread’s reference. By telling Rust to move ownership of `v` to the spawned
-thread, we’re guaranteeing to Rust that the main thread won’t use `v` anymore.
-If we change Listing 16-4 in the same way, we’re then violating the ownership
-rules when we try to use `v` in the main thread. The `move` keyword overrides
-Rust’s conservative default of borrowing; it doesn’t let us violate the
-ownership rules.
+Rust-এর ownership rule গুলো আবার আমাদের বাঁচিয়েছে! আমরা Listing 16-3-এর কোড থেকে একটি error পেয়েছি কারণ Rust রক্ষণশীল ছিল এবং thread-এর জন্য শুধুমাত্র `v` ধার করছিল, যার অর্থ main thread তাত্ত্বিকভাবে spawned thread-এর reference-কে invalidate করতে পারত। Rust-কে `v`-এর ownership spawned thread-এ move করতে বলে, আমরা Rust-কে গ্যারান্টি দিচ্ছি যে main thread আর `v` ব্যবহার করবে না। যদি আমরা Listing 16-4-কে একইভাবে পরিবর্তন করি, তাহলে আমরা ownership rule গুলো লঙ্ঘন করছি যখন আমরা main thread-এ `v` ব্যবহার করার চেষ্টা করি। `Move` keyword Rust-এর borrowing-এর রক্ষণশীল default-কে override করে; এটি আমাদের ownership rule গুলো লঙ্ঘন করতে দেয় না।
 
-With a basic understanding of threads and the thread API, let’s look at what we
-can _do_ with threads.
+থ্রেড এবং থ্রেড API-এর একটি basic understanding-এর সাথে, আসুন দেখি আমরা থ্রেড দিয়ে কী _করতে পারি_।
 
 [capture]: ch13-01-closures.html#capturing-references-or-moving-ownership

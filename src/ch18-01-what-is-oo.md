@@ -1,50 +1,22 @@
-## Characteristics of Object-Oriented Languages
+## অবজেক্ট-ওরিয়েন্টেড ভাষাগুলির বৈশিষ্ট্য (Characteristics of Object-Oriented Languages)
 
-There is no consensus in the programming community about what features a
-language must have to be considered object-oriented. Rust is influenced by many
-programming paradigms, including OOP; for example, we explored the features
-that came from functional programming in Chapter 13. Arguably, OOP languages
-share certain common characteristics, namely objects, encapsulation, and
-inheritance. Let’s look at what each of those characteristics means and whether
-Rust supports it.
+প্রোগ্রামিং কমিউনিটিতে কোনো ভাষা অবজেক্ট-ওরিয়েন্টেড হওয়ার জন্য কী কী বৈশিষ্ট্য থাকা আবশ্যক, সে সম্পর্কে কোনো সর্বসম্মত মতামত নেই। Rust অনেক প্রোগ্রামিং প্যারাডাইম দ্বারা প্রভাবিত, যার মধ্যে OOP অন্তর্ভুক্ত; উদাহরণস্বরূপ, আমরা Chapter 13-এ ফাংশনাল প্রোগ্রামিং থেকে আসা বৈশিষ্ট্যগুলি অন্বেষণ করেছি। তর্কসাপেক্ষে, OOP ভাষাগুলি কিছু সাধারণ বৈশিষ্ট্য শেয়ার করে, যেমন অবজেক্ট, এনক্যাপসুলেশন এবং ইনহেরিটেন্স। আসুন দেখি সেই বৈশিষ্ট্যগুলির প্রত্যেকটির অর্থ কী এবং Rust সেগুলিকে সমর্থন করে কিনা।
 
-### Objects Contain Data and Behavior
+### অবজেক্ট ডেটা এবং আচরণ ধারণ করে (Objects Contain Data and Behavior)
 
-The book _Design Patterns: Elements of Reusable Object-Oriented Software_ by
-Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides (Addison-Wesley
-Professional, 1994), colloquially referred to as _The Gang of Four_ book, is a
-catalog of object-oriented design patterns. It defines OOP this way:
+এরিক গামা, রিচার্ড হেলম, রালফ জনসন এবং জন ভ্লিসাইডস-এর লেখা _Design Patterns: Elements of Reusable Object-Oriented Software_ বইটি (অ্যাডিসন-ওয়েসলি প্রফেশনাল, ১৯৯৪), যাকে সাধারণত _The Gang of Four_ বই বলা হয়, অবজেক্ট-ওরিয়েন্টেড ডিজাইন প্যাটার্নের একটি ক্যাটালগ। এটি OOP-কে এইভাবে সংজ্ঞায়িত করে:
 
-> Object-oriented programs are made up of objects. An **object** packages both
-> data and the procedures that operate on that data. The procedures are
-> typically called **methods** or **operations**.
+> অবজেক্ট-ওরিয়েন্টেড প্রোগ্রামগুলি অবজেক্ট দিয়ে গঠিত। একটি **অবজেক্ট** ডেটা এবং সেই ডেটার উপর কাজ করে এমন পদ্ধতি উভয়কেই প্যাকেজ করে। পদ্ধতিগুলিকে সাধারণত **মেথড** বা **অপারেশন** বলা হয়।
 
-Using this definition, Rust is object-oriented: structs and enums have data,
-and `impl` blocks provide methods on structs and enums. Even though structs and
-enums with methods aren’t _called_ objects, they provide the same
-functionality, according to the Gang of Four’s definition of objects.
+এই সংজ্ঞা ব্যবহার করে, Rust অবজেক্ট-ওরিয়েন্টেড: স্ট্রাক্ট এবং এনাম-এর ডেটা রয়েছে এবং `impl` ব্লকগুলি স্ট্রাক্ট এবং এনাম-এ মেথড সরবরাহ করে। যদিও মেথড সহ স্ট্রাক্ট এবং এনামগুলিকে অবজেক্ট _বলা হয় না_, তারা Gang of Four-এর অবজেক্টের সংজ্ঞা অনুযায়ী একই কার্যকারিতা প্রদান করে।
 
-### Encapsulation that Hides Implementation Details
+### এনক্যাপসুলেশন যা ইমপ্লিমেন্টেশনের বিবরণ লুকায় (Encapsulation that Hides Implementation Details)
 
-Another aspect commonly associated with OOP is the idea of _encapsulation_,
-which means that the implementation details of an object aren’t accessible to
-code using that object. Therefore, the only way to interact with an object is
-through its public API; code using the object shouldn’t be able to reach into
-the object’s internals and change data or behavior directly. This enables the
-programmer to change and refactor an object’s internals without needing to
-change the code that uses the object.
+OOP-এর সাথে সাধারণত যুক্ত আরেকটি দিক হল _এনক্যাপসুলেশন_-এর ধারণা, যার অর্থ হল একটি অবজেক্টের ইমপ্লিমেন্টেশনের বিবরণ সেই অবজেক্ট ব্যবহার করা কোডের কাছে অ্যাক্সেসযোগ্য নয়। অতএব, একটি অবজেক্টের সাথে ইন্টারঅ্যাক্ট করার একমাত্র উপায় হল এর পাবলিক API-এর মাধ্যমে; অবজেক্ট ব্যবহার করা কোড অবজেক্টের অভ্যন্তরে প্রবেশ করে ডেটা বা আচরণ সরাসরি পরিবর্তন করতে সক্ষম হওয়া উচিত নয়। এটি প্রোগ্রামারকে অবজেক্ট ব্যবহার করা কোড পরিবর্তন না করেই একটি অবজেক্টের অভ্যন্তরীণ পরিবর্তন এবং রিফ্যাক্টর করতে সক্ষম করে।
 
-We discussed how to control encapsulation in Chapter 7: we can use the `pub`
-keyword to decide which modules, types, functions, and methods in our code
-should be public, and by default everything else is private. For example, we
-can define a struct `AveragedCollection` that has a field containing a vector
-of `i32` values. The struct can also have a field that contains the average of
-the values in the vector, meaning the average doesn’t have to be computed
-on demand whenever anyone needs it. In other words, `AveragedCollection` will
-cache the calculated average for us. Listing 18-1 has the definition of the
-`AveragedCollection` struct:
+আমরা Chapter 7-এ এনক্যাপসুলেশন কীভাবে নিয়ন্ত্রণ করতে হয় তা নিয়ে আলোচনা করেছি: আমরা `pub` কীওয়ার্ড ব্যবহার করে সিদ্ধান্ত নিতে পারি যে আমাদের কোডের কোন মডিউল, টাইপ, ফাংশন এবং মেথডগুলি পাবলিক হওয়া উচিত এবং ডিফল্টরূপে অন্য সবকিছু প্রাইভেট। উদাহরণস্বরূপ, আমরা একটি `AveragedCollection` স্ট্রাক্ট সংজ্ঞায়িত করতে পারি যাতে `i32` মানের একটি ভেক্টর রয়েছে এমন একটি ফিল্ড থাকে। স্ট্রাক্টে একটি ফিল্ডও থাকতে পারে যাতে ভেক্টরের মানগুলির গড় থাকে, অর্থাৎ যখনই কারও এটির প্রয়োজন হয় তখনই গড় গণনা করার প্রয়োজন হয় না। অন্য কথায়, `AveragedCollection` আমাদের জন্য গণনা করা গড় ক্যাশে করবে। Listing 18-1-এ `AveragedCollection` স্ট্রাক্টের সংজ্ঞা রয়েছে:
 
-<Listing number="18-1" file-name="src/lib.rs" caption="An `AveragedCollection` struct that maintains a list of integers and the average of the items in the collection">
+<Listing number="18-1" file-name="src/lib.rs" caption="একটি `AveragedCollection` স্ট্রাক্ট যা পূর্ণসংখ্যার একটি তালিকা এবং কালেকশনের আইটেমগুলির গড় বজায় রাখে">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-01/src/lib.rs}}
@@ -52,13 +24,9 @@ cache the calculated average for us. Listing 18-1 has the definition of the
 
 </Listing>
 
-The struct is marked `pub` so that other code can use it, but the fields within
-the struct remain private. This is important in this case because we want to
-ensure that whenever a value is added or removed from the list, the average is
-also updated. We do this by implementing `add`, `remove`, and `average` methods
-on the struct, as shown in Listing 18-2:
+স্ট্রাক্টটিকে `pub` হিসাবে চিহ্নিত করা হয়েছে যাতে অন্য কোড এটি ব্যবহার করতে পারে, কিন্তু স্ট্রাক্টের ভেতরের ফিল্ডগুলি প্রাইভেট থাকে। এটি এই ক্ষেত্রে গুরুত্বপূর্ণ কারণ আমরা নিশ্চিত করতে চাই যে যখনই তালিকাটিতে কোনও মান যোগ করা বা সরানো হয়, তখনও গড় আপডেট করা হয়। আমরা Listing 18-2-এ দেখানো স্ট্রাক্টে `add`, `remove` এবং `average` মেথড ইমপ্লিমেন্ট করে এটি করি:
 
-<Listing number="18-2" file-name="src/lib.rs" caption="Implementations of the public methods `add`, `remove`, and `average` on `AveragedCollection`">
+<Listing number="18-2" file-name="src/lib.rs" caption="`AveragedCollection`-এ পাবলিক মেথড `add`, `remove` এবং `average`-এর ইমপ্লিমেন্টেশন">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-02/src/lib.rs:here}}
@@ -66,84 +34,32 @@ on the struct, as shown in Listing 18-2:
 
 </Listing>
 
-The public methods `add`, `remove`, and `average` are the only ways to access
-or modify data in an instance of `AveragedCollection`. When an item is added
-to `list` using the `add` method or removed using the `remove` method, the
-implementations of each call the private `update_average` method that handles
-updating the `average` field as well.
+পাবলিক মেথড `add`, `remove` এবং `average` হল `AveragedCollection`-এর একটি ইনস্ট্যান্সের ডেটা অ্যাক্সেস বা পরিবর্তন করার একমাত্র উপায়। যখন `add` মেথড ব্যবহার করে `list`-এ কোনও আইটেম যোগ করা হয় বা `remove` মেথড ব্যবহার করে সরানো হয়, তখন প্রত্যেকটির ইমপ্লিমেন্টেশন প্রাইভেট `update_average` মেথডকে কল করে যা `average` ফিল্ড আপডেট করার কাজটিও পরিচালনা করে।
 
-We leave the `list` and `average` fields private so there is no way for
-external code to add or remove items to or from the `list` field directly;
-otherwise, the `average` field might become out of sync when the `list`
-changes. The `average` method returns the value in the `average` field,
-allowing external code to read the `average` but not modify it.
+আমরা `list` এবং `average` ফিল্ডগুলিকে প্রাইভেট রেখেছি যাতে বাইরের কোডের জন্য সরাসরি `list` ফিল্ডে আইটেম যোগ বা সরানোর কোনও উপায় না থাকে; অন্যথায়, `list` পরিবর্তন হলে `average` ফিল্ডটি সিঙ্কের বাইরে চলে যেতে পারে। `average` মেথডটি `average` ফিল্ডের মান রিটার্ন করে, বাইরের কোডকে `average` পড়তে দেয় কিন্তু পরিবর্তন করতে দেয় না।
 
-Because we’ve encapsulated the implementation details of the struct
-`AveragedCollection`, we can easily change aspects, such as the data structure,
-in the future. For instance, we could use a `HashSet<i32>` instead of a
-`Vec<i32>` for the `list` field. As long as the signatures of the `add`,
-`remove`, and `average` public methods stay the same, code using
-`AveragedCollection` wouldn’t need to change in order to compile. If we made
-`list` public instead, this wouldn’t necessarily be the case: `HashSet<i32>` and
-`Vec<i32>` have different methods for adding and removing items, so the external
-code would likely have to change if it were modifying `list` directly.
+যেহেতু আমরা `AveragedCollection` স্ট্রাক্টের ইমপ্লিমেন্টেশনের বিবরণ এনক্যাপসুলেট করেছি, তাই আমরা ভবিষ্যতে ডেটা স্ট্রাকচারের মতো দিকগুলি সহজেই পরিবর্তন করতে পারি। উদাহরণস্বরূপ, আমরা `list` ফিল্ডের জন্য `Vec<i32>`-এর পরিবর্তে একটি `HashSet<i32>` ব্যবহার করতে পারি। যতক্ষণ `add`, `remove` এবং `average` পাবলিক মেথডগুলির স্বাক্ষর একই থাকে, ততক্ষণ `AveragedCollection` ব্যবহার করা কোড কম্পাইল করার জন্য পরিবর্তন করার প্রয়োজন হবে না। পরিবর্তে যদি আমরা `list`-কে পাবলিক করতাম, তাহলে এটি নাও হতে পারত: `HashSet<i32>` এবং `Vec<i32>`-এর আইটেম যোগ এবং সরানোর জন্য ভিন্ন মেথড রয়েছে, তাই বাইরের কোডটি যদি সরাসরি `list` পরিবর্তন করত তাহলে সম্ভবত পরিবর্তন করতে হত।
 
-If encapsulation is a required aspect for a language to be considered
-object-oriented, then Rust meets that requirement. The option to use `pub` or
-not for different parts of code enables encapsulation of implementation details.
+যদি কোনও ভাষাকে অবজেক্ট-ওরিয়েন্টেড হিসাবে বিবেচনা করার জন্য এনক্যাপসুলেশন একটি প্রয়োজনীয় দিক হয়, তাহলে Rust সেই প্রয়োজনীয়তা পূরণ করে। কোডের বিভিন্ন অংশের জন্য `pub` ব্যবহার করার বা না করার বিকল্পটি ইমপ্লিমেন্টেশনের বিবরণের এনক্যাপসুলেশন সক্ষম করে।
 
-### Inheritance as a Type System and as Code Sharing
+### টাইপ সিস্টেম এবং কোড শেয়ারিং হিসাবে ইনহেরিটেন্স (Inheritance as a Type System and as Code Sharing)
 
-_Inheritance_ is a mechanism whereby an object can inherit elements from
-another object’s definition, thus gaining the parent object’s data and behavior
-without you having to define them again.
+_ইনহেরিটেন্স_ হল এমন একটি মেকানিজম যার মাধ্যমে একটি অবজেক্ট অন্য অবজেক্টের সংজ্ঞা থেকে উপাদানগুলি ইনহেরিট করতে পারে, এইভাবে আপনাকে আবার সেগুলি সংজ্ঞায়িত না করেই প্যারেন্ট অবজেক্টের ডেটা এবং আচরণ লাভ করতে পারে।
 
-If a language must have inheritance to be an object-oriented language, then
-Rust is not one. There is no way to define a struct that inherits the parent
-struct’s fields and method implementations without using a macro.
+যদি কোনও ভাষা অবজেক্ট-ওরিয়েন্টেড হওয়ার জন্য ইনহেরিটেন্স থাকা আবশ্যক হয়, তাহলে Rust তা নয়। কোনও ম্যাক্রো ব্যবহার না করে এমন একটি স্ট্রাক্ট সংজ্ঞায়িত করার কোনও উপায় নেই যা প্যারেন্ট স্ট্রাক্টের ফিল্ড এবং মেথড ইমপ্লিমেন্টেশন ইনহেরিট করে।
 
-However, if you’re used to having inheritance in your programming toolbox, you
-can use other solutions in Rust, depending on your reason for reaching for
-inheritance in the first place.
+যাইহোক, আপনি যদি আপনার প্রোগ্রামিং টুলবক্সে ইনহেরিটেন্স রাখতে অভ্যস্ত হন, তাহলে আপনি Rust-এ অন্যান্য সমাধান ব্যবহার করতে পারেন, প্রাথমিকভাবে ইনহেরিটেন্সের জন্য আপনার কারণের উপর নির্ভর করে।
 
-You would choose inheritance for two main reasons. One is for reuse of code:
-you can implement particular behavior for one type, and inheritance enables you
-to reuse that implementation for a different type. You can do this in a limited
-way in Rust code using default trait method implementations, which you saw in
-Listing 10-14 when we added a default implementation of the `summarize` method
-on the `Summary` trait. Any type implementing the `Summary` trait would have
-the `summarize` method available on it without any further code. This is
-similar to a parent class having an implementation of a method and an
-inheriting child class also having the implementation of the method. We can
-also override the default implementation of the `summarize` method when we
-implement the `Summary` trait, which is similar to a child class overriding the
-implementation of a method inherited from a parent class.
+আপনি দুটি প্রধান কারণে ইনহেরিটেন্স বেছে নেবেন। একটি হল কোড পুনঃব্যবহারের জন্য: আপনি একটি টাইপের জন্য নির্দিষ্ট আচরণ ইমপ্লিমেন্ট করতে পারেন এবং ইনহেরিটেন্স আপনাকে সেই ইমপ্লিমেন্টেশনটি অন্য টাইপের জন্য পুনরায় ব্যবহার করতে সক্ষম করে। আপনি Rust কোডে ডিফল্ট trait মেথড ইমপ্লিমেন্টেশন ব্যবহার করে সীমিত উপায়ে এটি করতে পারেন, যেটি আপনি Listing 10-14-এ দেখেছিলেন যখন আমরা `Summary` trait-এ `summarize` মেথডের একটি ডিফল্ট ইমপ্লিমেন্টেশন যোগ করেছি। `Summary` trait ইমপ্লিমেন্ট করা যেকোনো টাইপের জন্য কোনও অতিরিক্ত কোড ছাড়াই `summarize` মেথড উপলব্ধ থাকবে। এটি একটি প্যারেন্ট ক্লাসের একটি মেথডের ইমপ্লিমেন্টেশন থাকার এবং একটি ইনহেরিটিং চাইল্ড ক্লাসেরও মেথডের ইমপ্লিমেন্টেশন থাকার অনুরূপ। আমরা যখন `Summary` trait ইমপ্লিমেন্ট করি তখনও আমরা `summarize` মেথডের ডিফল্ট ইমপ্লিমেন্টেশন ওভাররাইড করতে পারি, যা একটি চাইল্ড ক্লাস প্যারেন্ট ক্লাস থেকে ইনহেরিট করা একটি মেথডের ইমপ্লিমেন্টেশন ওভাররাইড করার অনুরূপ।
 
-The other reason to use inheritance relates to the type system: to enable a
-child type to be used in the same places as the parent type. This is also
-called _polymorphism_, which means that you can substitute multiple objects for
-each other at runtime if they share certain characteristics.
+ইনহেরিটেন্স ব্যবহার করার অন্য কারণটি টাইপ সিস্টেমের সাথে সম্পর্কিত: একটি চাইল্ড টাইপকে প্যারেন্ট টাইপের মতো একই জায়গায় ব্যবহার করতে সক্ষম করা। এটিকে _পলিমরফিজম_ও বলা হয়, যার অর্থ হল আপনি যদি কিছু বৈশিষ্ট্য শেয়ার করেন তবে রানটাইমে একাধিক অবজেক্ট একে অপরের জন্য প্রতিস্থাপন করতে পারেন।
 
-> ### Polymorphism
+> ### পলিমরফিজম (Polymorphism)
 >
-> To many people, polymorphism is synonymous with inheritance. But it’s
-> actually a more general concept that refers to code that can work with data
-> of multiple types. For inheritance, those types are generally subclasses.
+> অনেকের কাছে, পলিমরফিজম ইনহেরিটেন্সের সমার্থক। কিন্তু এটি আসলে একটি আরও সাধারণ ধারণা যা একাধিক টাইপের ডেটা নিয়ে কাজ করতে পারে এমন কোডকে বোঝায়। ইনহেরিটেন্সের জন্য, সেই টাইপগুলি সাধারণত সাবক্লাস।
 >
-> Rust instead uses generics to abstract over different possible types and
-> trait bounds to impose constraints on what those types must provide. This is
-> sometimes called _bounded parametric polymorphism_.
+> Rust পরিবর্তে বিভিন্ন সম্ভাব্য টাইপের উপর অ্যাবস্ট্রাক্ট করতে জেনেরিক ব্যবহার করে এবং সেই টাইপগুলিকে কী সরবরাহ করতে হবে তার উপর সীমাবদ্ধতা আরোপ করতে trait bound ব্যবহার করে। এটিকে কখনও কখনও _বাউন্ডেড প্যারামেট্রিক পলিমরফিজম_ বলা হয়।
 
-Inheritance has recently fallen out of favor as a programming design solution
-in many programming languages because it’s often at risk of sharing more code
-than necessary. Subclasses shouldn’t always share all characteristics of their
-parent class but will do so with inheritance. This can make a program’s design
-less flexible. It also introduces the possibility of calling methods on
-subclasses that don’t make sense or that cause errors because the methods don’t
-apply to the subclass. In addition, some languages will only allow _single
-inheritance_ (meaning a subclass can only inherit from one class), further
-restricting the flexibility of a program’s design.
+ইনহেরিটেন্স সম্প্রতি অনেক প্রোগ্রামিং ভাষায় একটি প্রোগ্রামিং ডিজাইন সমাধান হিসাবে অনুগ্রহ হারিয়েছে কারণ এটি প্রায়শই প্রয়োজনের চেয়ে বেশি কোড শেয়ার করার ঝুঁকিতে থাকে। সাবক্লাসগুলির সর্বদা তাদের প্যারেন্ট ক্লাসের সমস্ত বৈশিষ্ট্য শেয়ার করা উচিত নয় তবে ইনহেরিটেন্সের সাথে তা করবে। এটি একটি প্রোগ্রামের ডিজাইনকে কম নমনীয় করে তুলতে পারে। এটি সাবক্লাসগুলিতে এমন মেথড কল করার সম্ভাবনাও তৈরি করে যা অর্থবোধক নয় বা ত্রুটির কারণ হয় কারণ মেথডগুলি সাবক্লাসে প্রযোজ্য নয়। এছাড়াও, কিছু ভাষা শুধুমাত্র _একক ইনহেরিটেন্স_-এর অনুমতি দেবে (অর্থাৎ একটি সাবক্লাস শুধুমাত্র একটি ক্লাস থেকে ইনহেরিট করতে পারে), যা একটি প্রোগ্রামের ডিজাইনের নমনীয়তাকে আরও সীমাবদ্ধ করে।
 
-For these reasons, Rust takes the different approach of using trait objects
-instead of inheritance. Let’s look at how trait objects enable polymorphism in
-Rust.
+এই কারণগুলির জন্য, Rust ইনহেরিটেন্সের পরিবর্তে trait অবজেক্ট ব্যবহার করার ভিন্ন পদ্ধতি গ্রহণ করে। আসুন দেখি কিভাবে trait অবজেক্ট Rust-এ পলিমরফিজম সক্ষম করে।

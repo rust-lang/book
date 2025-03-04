@@ -1,28 +1,14 @@
-## Advanced Functions and Closures
+# অ্যাডভান্সড ফাংশন এবং ক্লোজার (Advanced Functions and Closures)
 
-This section explores some advanced features related to functions and closures,
-including function pointers and returning closures.
+এই বিভাগে ফাংশন এবং ক্লোজার সম্পর্কিত কিছু উন্নত বৈশিষ্ট্য অন্বেষণ করা হয়েছে, যার মধ্যে রয়েছে ফাংশন পয়েন্টার এবং রিটার্নিং ক্লোজার।
 
-### Function Pointers
+### ফাংশন পয়েন্টার (Function Pointers)
 
-We’ve talked about how to pass closures to functions; you can also pass regular
-functions to functions! This technique is useful when you want to pass a
-function you’ve already defined rather than defining a new closure. Functions
-coerce to the type `fn` (with a lowercase f), not to be confused with the `Fn`
-closure trait. The `fn` type is called a _function pointer_. Passing functions
-with function pointers will allow you to use functions as arguments to other
-functions.
+আমরা ফাংশনে ক্লোজার পাস করার বিষয়ে কথা বলেছি; আপনি ফাংশনে রেগুলার ফাংশনও পাস করতে পারেন! এই কৌশলটি দরকারী যখন আপনি একটি নতুন ক্লোজার সংজ্ঞায়িত করার পরিবর্তে ইতিমধ্যে সংজ্ঞায়িত একটি ফাংশন পাস করতে চান। ফাংশনগুলি `fn` টাইপে কোয়ার্স করে (ছোট হাতের f দিয়ে), `Fn` ক্লোজার ট্রেইটের সাথে বিভ্রান্ত হবেন না। `fn` টাইপকে _ফাংশন পয়েন্টার_ বলা হয়। ফাংশন পয়েন্টার সহ ফাংশন পাস করা আপনাকে অন্য ফাংশনের আর্গুমেন্ট হিসাবে ফাংশন ব্যবহার করার অনুমতি দেবে।
 
-The syntax for specifying that a parameter is a function pointer is similar to
-that of closures, as shown in Listing 20-28, where we’ve defined a function
-`add_one` that adds one to its parameter. The function `do_twice` takes two
-parameters: a function pointer to any function that takes an `i32` parameter
-and returns an `i32`, and one `i32` value. The `do_twice` function calls the
-function `f` twice, passing it the `arg` value, then adds the two function call
-results together. The `main` function calls `do_twice` with the arguments
-`add_one` and `5`.
+একটি প্যারামিটার যে একটি ফাংশন পয়েন্টার, তা নির্দিষ্ট করার সিনট্যাক্স ক্লোজারের মতোই, যেমনটি Listing 20-28-এ দেখানো হয়েছে, যেখানে আমরা `add_one` নামে একটি ফাংশন সংজ্ঞায়িত করেছি যা তার প্যারামিটারে এক যোগ করে। `do_twice` ফাংশনটি দুটি প্যারামিটার নেয়: একটি ফাংশন পয়েন্টার যে কোনও ফাংশনে যা একটি `i32` প্যারামিটার নেয় এবং একটি `i32` রিটার্ন করে এবং একটি `i32` মান। `do_twice` ফাংশনটি `f` ফাংশনটিকে দুবার কল করে, এটিকে `arg` মান পাস করে, তারপর দুটি ফাংশন কলের ফলাফল একসাথে যোগ করে। `main` ফাংশনটি `add_one` এবং `5` আর্গুমেন্ট সহ `do_twice` কল করে।
 
-<Listing number="20-28" file-name="src/main.rs" caption="Using the `fn` type to accept a function pointer as an argument">
+<Listing number="20-28" file-name="src/main.rs" caption="একটি আর্গুমেন্ট হিসাবে একটি ফাংশন পয়েন্টার গ্রহণ করতে `fn` টাইপ ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-28/src/main.rs}}
@@ -30,97 +16,55 @@ results together. The `main` function calls `do_twice` with the arguments
 
 </Listing>
 
-This code prints `The answer is: 12`. We specify that the parameter `f` in
-`do_twice` is an `fn` that takes one parameter of type `i32` and returns an
-`i32`. We can then call `f` in the body of `do_twice`. In `main`, we can pass
-the function name `add_one` as the first argument to `do_twice`.
+এই কোডটি `The answer is: 12` প্রিন্ট করে। আমরা নির্দিষ্ট করি যে `do_twice`-এ `f` প্যারামিটারটি হল একটি `fn` যা `i32` টাইপের একটি প্যারামিটার নেয় এবং একটি `i32` রিটার্ন করে। তারপর আমরা `do_twice`-এর বডিতে `f` কল করতে পারি। `main`-এ, আমরা ফাংশনের নাম `add_one`-কে `do_twice`-এর প্রথম আর্গুমেন্ট হিসাবে পাস করতে পারি।
 
-Unlike closures, `fn` is a type rather than a trait, so we specify `fn` as the
-parameter type directly rather than declaring a generic type parameter with one
-of the `Fn` traits as a trait bound.
+ক্লোজারের বিপরীতে, `fn` হল একটি টাইপ, ট্রেইট নয়, তাই আমরা সরাসরি প্যারামিটার টাইপ হিসাবে `fn` নির্দিষ্ট করি, ট্রেইট বাউন্ড হিসাবে `Fn` ট্রেইটগুলির মধ্যে একটি সহ একটি জেনেরিক টাইপ প্যারামিটার ঘোষণা করার পরিবর্তে।
 
-Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
-`FnOnce`), meaning you can always pass a function pointer as an argument for a
-function that expects a closure. It’s best to write functions using a generic
-type and one of the closure traits so your functions can accept either
-functions or closures.
+ফাংশন পয়েন্টারগুলি ক্লোজারের তিনটি ট্রেইটই (`Fn`, `FnMut` এবং `FnOnce`) ইমপ্লিমেন্ট করে, যার মানে আপনি সবসময় একটি ফাংশন পয়েন্টারকে একটি ফাংশনের আর্গুমেন্ট হিসাবে পাস করতে পারেন যা একটি ক্লোজার আশা করে। জেনেরিক টাইপ এবং ক্লোজার ট্রেইটগুলির মধ্যে একটি ব্যবহার করে ফাংশন লেখা ভাল যাতে আপনার ফাংশনগুলি ফাংশন বা ক্লোজার উভয়ই গ্রহণ করতে পারে।
 
-That said, one example of where you would want to only accept `fn` and not
-closures is when interfacing with external code that doesn’t have closures: C
-functions can accept functions as arguments, but C doesn’t have closures.
+বলা বাহুল্য, আপনি যেখানে শুধুমাত্র `fn` গ্রহণ করতে চান এবং ক্লোজার নয়, তার একটি উদাহরণ হল বাহ্যিক কোডের সাথে ইন্টারফেস করার সময় যেখানে ক্লোজার নেই: C ফাংশনগুলি আর্গুমেন্ট হিসাবে ফাংশন গ্রহণ করতে পারে, কিন্তু C-তে ক্লোজার নেই।
 
-As an example of where you could use either a closure defined inline or a named
-function, let’s look at a use of the `map` method provided by the `Iterator`
-trait in the standard library. To use the `map` function to turn a vector of
-numbers into a vector of strings, we could use a closure, like this:
+আপনি কোথায় ইনলাইনে সংজ্ঞায়িত একটি ক্লোজার বা একটি নামযুক্ত ফাংশন ব্যবহার করতে পারেন তার একটি উদাহরণ হিসাবে, আসুন স্ট্যান্ডার্ড লাইব্রেরিতে `Iterator` ট্রেইট দ্বারা সরবরাহ করা `map` মেথডের একটি ব্যবহার দেখি। সংখ্যার একটি ভেক্টরকে স্ট্রিং-এর ভেক্টরে পরিণত করতে `map` ফাংশনটি ব্যবহার করার জন্য, আমরা একটি ক্লোজার ব্যবহার করতে পারি, এইভাবে:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-15-map-closure/src/main.rs:here}}
 ```
 
-Or we could name a function as the argument to `map` instead of the closure,
-like this:
+অথবা আমরা ক্লোজারের পরিবর্তে `map`-এর আর্গুমেন্ট হিসাবে একটি ফাংশনের নাম দিতে পারি, এইভাবে:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-16-map-function/src/main.rs:here}}
 ```
 
-Note that we must use the fully qualified syntax that we talked about in
-[“Advanced Traits”][advanced-traits]<!-- ignore --> because there are multiple
-functions available named `to_string`. Here, we’re using the `to_string`
-function defined in the `ToString` trait, which the standard library has
-implemented for any type that implements `Display`.
+লক্ষ্য করুন যে আমাদের অবশ্যই সম্পূর্ণ যোগ্য সিনট্যাক্স ব্যবহার করতে হবে যা আমরা [“Advanced Traits”][advanced-traits]<!-- ignore -->-এ আলোচনা করেছি কারণ `to_string` নামে একাধিক ফাংশন উপলব্ধ রয়েছে। এখানে, আমরা `ToString` ট্রেইটে সংজ্ঞায়িত `to_string` ফাংশনটি ব্যবহার করছি, যা স্ট্যান্ডার্ড লাইব্রেরি যেকোনো টাইপের জন্য ইমপ্লিমেন্ট করেছে যা `Display` ইমপ্লিমেন্ট করে।
 
-Recall from [“Enum values”][enum-values]<!-- ignore --> in Chapter 6 that the
-name of each enum variant that we define also becomes an initializer function.
-We can use these initializer functions as function pointers that implement the
-closure traits, which means we can specify the initializer functions as
-arguments for methods that take closures, like so:
+Chapter 6-এর [“Enum values”][enum-values]<!-- ignore --> থেকে স্মরণ করুন যে আমরা যে প্রতিটি এনাম ভেরিয়েন্টের নাম সংজ্ঞায়িত করি সেটিও একটি ইনিশিয়ালাইজার ফাংশন হয়ে ওঠে। আমরা এই ইনিশিয়ালাইজার ফাংশনগুলিকে ফাংশন পয়েন্টার হিসাবে ব্যবহার করতে পারি যা ক্লোজার ট্রেইটগুলি ইমপ্লিমেন্ট করে, যার অর্থ হল আমরা ইনিশিয়ালাইজার ফাংশনগুলিকে মেথডগুলির আর্গুমেন্ট হিসাবে নির্দিষ্ট করতে পারি যা ক্লোজার নেয়, এইভাবে:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-17-map-initializer/src/main.rs:here}}
 ```
 
-Here we create `Status::Value` instances using each `u32` value in the range
-that `map` is called on by using the initializer function of `Status::Value`.
-Some people prefer this style, and some people prefer to use closures. They
-compile to the same code, so use whichever style is clearer to you.
+এখানে আমরা `Status::Value`-এর ইনিশিয়ালাইজার ফাংশন ব্যবহার করে `map`-এ কল করা প্রতিটি `u32` মানের জন্য `Status::Value` ইনস্ট্যান্স তৈরি করি। কিছু লোক এই স্টাইলটি পছন্দ করে এবং কিছু লোক ক্লোজার ব্যবহার করতে পছন্দ করে। এগুলি একই কোডে কম্পাইল হয়, তাই আপনার কাছে যেটি পরিষ্কার মনে হয় সেটি ব্যবহার করুন।
 
-### Returning Closures
+### ক্লোজার রিটার্ন করা (Returning Closures)
 
-Closures are represented by traits, which means you can’t return closures
-directly. In most cases where you might want to return a trait, you can instead
-use the concrete type that implements the trait as the return value of the
-function. However, you can’t usually do that with closures because they don’t
-usually have a concrete type that is returnable. You’re not allowed to use the
-function pointer `fn` as a return type if the closure captures any values from
-its scope, for example.
+ক্লোজারগুলি ট্রেইট দ্বারা উপস্থাপিত হয়, যার মানে আপনি সরাসরি ক্লোজার রিটার্ন করতে পারবেন না। বেশিরভাগ ক্ষেত্রে যেখানে আপনি একটি ট্রেইট রিটার্ন করতে চাইতে পারেন, আপনি পরিবর্তে ফাংশনের রিটার্ন মান হিসাবে ট্রেইটটি ইমপ্লিমেন্ট করে এমন কংক্রিট টাইপ ব্যবহার করতে পারেন। যাইহোক, আপনি সাধারণত ক্লোজারের সাথে এটি করতে পারবেন না কারণ তাদের সাধারণত একটি কংক্রিট টাইপ থাকে না যা রিটার্নযোগ্য। উদাহরণস্বরূপ, আপনি যদি ক্লোজারটি তার স্কোপ থেকে কোনও মান ক্যাপচার করে তবে ফাংশন পয়েন্টার `fn`-কে রিটার্ন টাইপ হিসাবে ব্যবহার করার অনুমতি নেই।
 
-Instead, you will normally use the `impl Trait` syntax we learned about in
-Chapter 10. You can return any function type, using `Fn`, `FnOnce` and `FnMut`.
-For example, this code will work just fine:
+পরিবর্তে, আপনি সাধারণত `impl Trait` সিনট্যাক্স ব্যবহার করবেন যা আমরা Chapter 10-এ শিখেছি। আপনি `Fn`, `FnOnce` এবং `FnMut` ব্যবহার করে যেকোনো ফাংশন টাইপ রিটার্ন করতে পারেন। উদাহরণস্বরূপ, এই কোডটি ঠিকঠাক কাজ করবে:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-18-returns-closure/src/lib.rs}}
 ```
 
-However, as we noted in the [“Closure Type Inference and
-Annotation”][closure-types]<!-- ignore --> section in Chapter 13, each closure
-is also its own distinct type. If you need to work with multiple functions that
-have the same signature but different implementations, you will need to use a
-trait object for them:
+যাইহোক, আমরা যেমন Chapter 13-এর [“Closure Type Inference and Annotation”][closure-types]<!-- ignore --> বিভাগে উল্লেখ করেছি, প্রতিটি ক্লোজারও তার নিজস্ব স্বতন্ত্র টাইপ। যদি আপনাকে একই স্বাক্ষর কিন্তু ভিন্ন ইমপ্লিমেন্টেশন সহ একাধিক ফাংশনের সাথে কাজ করতে হয়, তাহলে আপনাকে তাদের জন্য একটি ট্রেইট অবজেক্ট ব্যবহার করতে হবে:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-19-returns-closure-trait-object/src/main.rs}}
 ```
 
-This code will compile just fine—but it wouldn’t if we had tried to stick with
-`impl Fn(i32) -> i32`. For more about trait objects, refer to the section
-[“Using Trait Objects That Allow for Values of Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
---> in Chapter 18.
+এই কোডটি ঠিকঠাক কম্পাইল হবে—কিন্তু আমরা যদি `impl Fn(i32) -> i32` নিয়ে কাজ করার চেষ্টা করতাম তাহলে হত না। ট্রেইট অবজেক্ট সম্পর্কে আরও জানতে, Chapter 18-এর [“Using Trait Objects That Allow for Values of Different Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore --> বিভাগটি দেখুন।
 
-Next, let’s look at macros!
+এরপর, আসুন ম্যাক্রোগুলির দিকে তাকাই!
 
 [advanced-traits]: ch20-02-advanced-traits.html#advanced-traits
 [enum-values]: ch06-01-defining-an-enum.html#enum-values

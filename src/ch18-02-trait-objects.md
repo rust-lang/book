@@ -1,72 +1,22 @@
-## Using Trait Objects That Allow for Values of Different Types
+## বিভিন্ন টাইপের ভ্যালুর জন্য ট্রেইট অবজেক্ট ব্যবহার করা (Using Trait Objects That Allow for Values of Different Types)
 
-In Chapter 8, we mentioned that one limitation of vectors is that they can
-store elements of only one type. We created a workaround in Listing 8-9 where
-we defined a `SpreadsheetCell` enum that had variants to hold integers, floats,
-and text. This meant we could store different types of data in each cell and
-still have a vector that represented a row of cells. This is a perfectly good
-solution when our interchangeable items are a fixed set of types that we know
-when our code is compiled.
+আমরা Chapter 8-এ উল্লেখ করেছি যে ভেক্টরের একটি সীমাবদ্ধতা হল যে তারা শুধুমাত্র একটি টাইপের এলিমেন্ট সংরক্ষণ করতে পারে। আমরা Listing 8-9-এ একটি ওয়ার্কঅ্যারাউন্ড তৈরি করেছি যেখানে আমরা একটি `SpreadsheetCell` এনাম সংজ্ঞায়িত করেছি যাতে ইন্টিজার, ফ্লোট এবং টেক্সট ধারণ করার জন্য ভেরিয়েন্ট ছিল। এর মানে হল যে আমরা প্রতিটি সেলে বিভিন্ন ধরনের ডেটা সংরক্ষণ করতে পারি এবং তবুও একটি ভেক্টর রাখতে পারি যা সারির সেলগুলিকে উপস্থাপন করে। এটি একটি উপযুক্ত সমাধান যখন আমাদের বিনিময়যোগ্য আইটেমগুলি টাইপের একটি নির্দিষ্ট সেট হয় যা আমাদের কোড কম্পাইল করার সময় আমরা জানি।
 
-However, sometimes we want our library user to be able to extend the set of
-types that are valid in a particular situation. To show how we might achieve
-this, we’ll create an example graphical user interface (GUI) tool that iterates
-through a list of items, calling a `draw` method on each one to draw it to the
-screen—a common technique for GUI tools. We’ll create a library crate called
-`gui` that contains the structure of a GUI library. This crate might include
-some types for people to use, such as `Button` or `TextField`. In addition,
-`gui` users will want to create their own types that can be drawn: for
-instance, one programmer might add an `Image` and another might add a
-`SelectBox`.
+যাইহোক, কখনও কখনও আমরা চাই যে আমাদের লাইব্রেরি ব্যবহারকারী কোনও নির্দিষ্ট পরিস্থিতিতে বৈধ টাইপের সেট প্রসারিত করতে সক্ষম হোক। এটি কীভাবে অর্জন করা যেতে পারে তা দেখানোর জন্য, আমরা একটি গ্রাফিক্যাল ইউজার ইন্টারফেস (GUI) টুলের উদাহরণ তৈরি করব যা আইটেমগুলির একটি তালিকার মধ্যে পুনরাবৃত্তি করে, প্রতিটি আইটেমকে স্ক্রিনে আঁকার জন্য একটি `draw` মেথড কল করে—GUI টুলগুলির জন্য এটি একটি সাধারণ কৌশল। আমরা `gui` নামে একটি লাইব্রেরি ক্রেট তৈরি করব যাতে একটি GUI লাইব্রেরির গঠন থাকবে। এই ক্রেটে ব্যবহারকারীদের ব্যবহারের জন্য কিছু টাইপ থাকতে পারে, যেমন `Button` বা `TextField`। এছাড়াও, `gui` ব্যবহারকারীরা তাদের নিজস্ব টাইপ তৈরি করতে চাইবে যা আঁকা যায়: উদাহরণস্বরূপ, একজন প্রোগ্রামার একটি `Image` যোগ করতে পারে এবং অন্যজন একটি `SelectBox` যোগ করতে পারে।
 
-We won’t implement a fully fledged GUI library for this example but will show
-how the pieces would fit together. At the time of writing the library, we can’t
-know and define all the types other programmers might want to create. But we do
-know that `gui` needs to keep track of many values of different types, and it
-needs to call a `draw` method on each of these differently typed values. It
-doesn’t need to know exactly what will happen when we call the `draw` method,
-just that the value will have that method available for us to call.
+আমরা এই উদাহরণের জন্য সম্পূর্ণরূপে বিকশিত GUI লাইব্রেরি বাস্তবায়ন করব না কিন্তু দেখাব কিভাবে অংশগুলি একসাথে ফিট হবে। লাইব্রেরি লেখার সময়, আমরা জানতে এবং সংজ্ঞায়িত করতে পারি না যে অন্য প্রোগ্রামাররা কী কী টাইপ তৈরি করতে চাইতে পারে। কিন্তু আমরা জানি যে `gui`-কে বিভিন্ন টাইপের অনেকগুলি মানের ট্র্যাক রাখতে হবে এবং এই ভিন্ন টাইপের মানগুলির প্রত্যেকটিতে একটি `draw` মেথড কল করতে হবে। আমরা যখন `draw` মেথড কল করি তখন ঠিক কী ঘটবে তা জানার দরকার নেই, শুধুমাত্র এইটুকু জানলেই হবে যে মানটিতে সেই মেথডটি আমাদের কল করার জন্য উপলব্ধ থাকবে।
 
-To do this in a language with inheritance, we might define a class named
-`Component` that has a method named `draw` on it. The other classes, such as
-`Button`, `Image`, and `SelectBox`, would inherit from `Component` and thus
-inherit the `draw` method. They could each override the `draw` method to define
-their custom behavior, but the framework could treat all of the types as if
-they were `Component` instances and call `draw` on them. But because Rust
-doesn’t have inheritance, we need another way to structure the `gui` library to
-allow users to extend it with new types.
+ইনহেরিটেন্স সহ একটি ভাষায় এটি করার জন্য, আমরা `Component` নামে একটি ক্লাস সংজ্ঞায়িত করতে পারি যার উপর `draw` নামে একটি মেথড রয়েছে। অন্যান্য ক্লাস, যেমন `Button`, `Image`, এবং `SelectBox`, `Component` থেকে ইনহেরিট করবে এবং এইভাবে `draw` মেথড ইনহেরিট করবে। তারা প্রত্যেকে তাদের নিজস্ব আচরণ সংজ্ঞায়িত করতে `draw` মেথডটিকে ওভাররাইড করতে পারে, কিন্তু ফ্রেমওয়ার্কটি সমস্ত টাইপকে `Component` ইনস্ট্যান্সের মতো আচরণ করতে পারে এবং তাদের উপর `draw` কল করতে পারে। কিন্তু যেহেতু Rust-এ ইনহেরিটেন্স নেই, তাই আমাদের `gui` লাইব্রেরিটিকে গঠন করার জন্য অন্য একটি উপায় প্রয়োজন যাতে ব্যবহারকারীরা এটিকে নতুন টাইপ দিয়ে প্রসারিত করতে পারে।
 
-### Defining a Trait for Common Behavior
+### সাধারণ আচরণের জন্য একটি ট্রেইট সংজ্ঞায়িত করা (Defining a Trait for Common Behavior)
 
-To implement the behavior we want `gui` to have, we’ll define a trait named
-`Draw` that will have one method named `draw`. Then we can define a vector that
-takes a trait object. A _trait object_ points to both an instance of a type
-implementing our specified trait and a table used to look up trait methods on
-that type at runtime. We create a trait object by specifying some sort of
-pointer, such as an `&` reference or a `Box<T>` smart pointer, then the `dyn`
-keyword, and then specifying the relevant trait. (We’ll talk about the reason
-trait objects must use a pointer in [“Dynamically Sized Types and the `Sized`
-Trait”][dynamically-sized]<!-- ignore --> in Chapter 20.) We can use trait
-objects in place of a generic or concrete type. Wherever we use a trait object,
-Rust’s type system will ensure at compile time that any value used in that
-context will implement the trait object’s trait. Consequently, we don’t need to
-know all the possible types at compile time.
+আমরা `gui`-এর যে আচরণ চাই তা বাস্তবায়ন করতে, আমরা `Draw` নামে একটি ট্রেইট সংজ্ঞায়িত করব যাতে `draw` নামে একটি মেথড থাকবে। তারপর আমরা একটি ভেক্টর সংজ্ঞায়িত করতে পারি যা একটি ট্রেইট অবজেক্ট নেয়। একটি _ট্রেইট অবজেক্ট_ আমাদের নির্দিষ্ট করা trait ইমপ্লিমেন্ট করা টাইপের একটি ইনস্ট্যান্স এবং রানটাইমে সেই টাইপের ট্রেইট মেথডগুলি সন্ধান করার জন্য ব্যবহৃত একটি টেবিল উভয়ের দিকে নির্দেশ করে। আমরা কিছু ধরনের পয়েন্টার, যেমন একটি `&` রেফারেন্স বা একটি `Box<T>` স্মার্ট পয়েন্টার, তারপর `dyn` কীওয়ার্ড এবং তারপর প্রাসঙ্গিক trait উল্লেখ করে একটি ট্রেইট অবজেক্ট তৈরি করি। (আমরা Chapter 20-এর [“Dynamically Sized Types and the `Sized` Trait”][dynamically-sized]<!-- ignore -->-এ ট্রেইট অবজেক্টগুলিকে কেন একটি পয়েন্টার ব্যবহার করতে হবে সে সম্পর্কে কথা বলব।) আমরা জেনেরিক বা কংক্রিট টাইপের পরিবর্তে ট্রেইট অবজেক্ট ব্যবহার করতে পারি। আমরা যেখানেই একটি ট্রেইট অবজেক্ট ব্যবহার করি, Rust-এর টাইপ সিস্টেম কম্পাইল করার সময় নিশ্চিত করবে যে সেই প্রসঙ্গে ব্যবহৃত যেকোনো মান ট্রেইট অবজেক্টের trait ইমপ্লিমেন্ট করবে। ফলস্বরূপ, আমাদের কম্পাইল করার সময় সমস্ত সম্ভাব্য টাইপ জানার প্রয়োজন নেই।
 
-We’ve mentioned that, in Rust, we refrain from calling structs and enums
-“objects” to distinguish them from other languages’ objects. In a struct or
-enum, the data in the struct fields and the behavior in `impl` blocks are
-separated, whereas in other languages, the data and behavior combined into one
-concept is often labeled an object. However, trait objects _are_ more like
-objects in other languages in the sense that they combine data and behavior.
-But trait objects differ from traditional objects in that we can’t add data to
-a trait object. Trait objects aren’t as generally useful as objects in other
-languages: their specific purpose is to allow abstraction across common
-behavior.
+আমরা উল্লেখ করেছি যে, Rust-এ, আমরা স্ট্রাক্ট এবং এনামগুলিকে “অবজেক্ট” বলা থেকে বিরত থাকি যাতে সেগুলিকে অন্যান্য ভাষার অবজেক্ট থেকে আলাদা করা যায়। একটি স্ট্রাক্ট বা এনামে, স্ট্রাক্ট ফিল্ডের ডেটা এবং `impl` ব্লকের আচরণ আলাদা করা হয়, যেখানে অন্য ভাষাগুলিতে, ডেটা এবং আচরণকে একত্রিত করে একটি ধারণাকে প্রায়শই অবজেক্ট লেবেল করা হয়। যাইহোক, ট্রেইট অবজেক্টগুলি অন্যান্য ভাষার অবজেক্টের _মতো_, এই অর্থে যে তারা ডেটা এবং আচরণকে একত্রিত করে। কিন্তু ট্রেইট অবজেক্টগুলি ঐতিহ্যগত অবজেক্ট থেকে আলাদা যে আমরা একটি ট্রেইট অবজেক্টে ডেটা যোগ করতে পারি না। ট্রেইট অবজেক্টগুলি অন্যান্য ভাষার অবজেক্টের মতো সাধারণভাবে দরকারী নয়: তাদের নির্দিষ্ট উদ্দেশ্য হল সাধারণ আচরণ জুড়ে অ্যাবস্ট্রাকশনকে অনুমতি দেওয়া।
 
-Listing 18-3 shows how to define a trait named `Draw` with one method named
-`draw`:
+Listing 18-3 দেখায় কিভাবে `draw` নামে একটি মেথড সহ `Draw` নামে একটি ট্রেইট সংজ্ঞায়িত করতে হয়:
 
-<Listing number="18-3" file-name="src/lib.rs" caption="Definition of the `Draw` trait">
+<Listing number="18-3" file-name="src/lib.rs" caption="`Draw` ট্রেইটের সংজ্ঞা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-03/src/lib.rs}}
@@ -74,13 +24,9 @@ Listing 18-3 shows how to define a trait named `Draw` with one method named
 
 </Listing>
 
-This syntax should look familiar from our discussions on how to define traits
-in Chapter 10. Next comes some new syntax: Listing 18-4 defines a struct named
-`Screen` that holds a vector named `components`. This vector is of type
-`Box<dyn Draw>`, which is a trait object; it’s a stand-in for any type inside
-a `Box` that implements the `Draw` trait.
+এই সিনট্যাক্সটি Chapter 10-এ ট্রেইট সংজ্ঞায়িত করার বিষয়ে আমাদের আলোচনার মতোই পরিচিত। এরপর কিছু নতুন সিনট্যাক্স আসে: Listing 18-4 `Screen` নামক একটি স্ট্রাক্ট সংজ্ঞায়িত করে যাতে `components` নামক একটি ভেক্টর থাকে। এই ভেক্টরটি `Box<dyn Draw>` টাইপের, যা একটি ট্রেইট অবজেক্ট; এটি একটি `Box`-এর ভিতরের যেকোনো টাইপের জন্য একটি স্ট্যান্ড-ইন যা `Draw` trait ইমপ্লিমেন্ট করে।
 
-<Listing number="18-4" file-name="src/lib.rs" caption="Definition of the `Screen` struct with a `components` field holding a vector of trait objects that implement the `Draw` trait">
+<Listing number="18-4" file-name="src/lib.rs" caption="`Screen` স্ট্রাক্টের সংজ্ঞা যাতে `components` নামক একটি ফিল্ড থাকে, যেখানে `Draw` trait ইমপ্লিমেন্ট করা ট্রেইট অবজেক্টের একটি ভেক্টর রয়েছে">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-04/src/lib.rs:here}}
@@ -88,10 +34,9 @@ a `Box` that implements the `Draw` trait.
 
 </Listing>
 
-On the `Screen` struct, we’ll define a method named `run` that will call the
-`draw` method on each of its `components`, as shown in Listing 18-5:
+`Screen` স্ট্রাক্টে, আমরা `run` নামে একটি মেথড সংজ্ঞায়িত করব যা তার প্রতিটি `components`-এ `draw` মেথড কল করবে, যেমনটি Listing 18-5-এ দেখানো হয়েছে:
 
-<Listing number="18-5" file-name="src/lib.rs" caption="A `run` method on `Screen` that calls the `draw` method on each component">
+<Listing number="18-5" file-name="src/lib.rs" caption="`Screen`-এ একটি `run` মেথড যা প্রতিটি কম্পোনেন্টে `draw` মেথড কল করে">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-05/src/lib.rs:here}}
@@ -99,14 +44,9 @@ On the `Screen` struct, we’ll define a method named `run` that will call the
 
 </Listing>
 
-This works differently from defining a struct that uses a generic type
-parameter with trait bounds. A generic type parameter can be substituted with
-only one concrete type at a time, whereas trait objects allow for multiple
-concrete types to fill in for the trait object at runtime. For example, we
-could have defined the `Screen` struct using a generic type and a trait bound
-as in Listing 18-6:
+এটি ট্রেইট বাউন্ড সহ একটি জেনেরিক টাইপ প্যারামিটার ব্যবহার করে এমন একটি স্ট্রাক্ট সংজ্ঞায়িত করার চেয়ে আলাদাভাবে কাজ করে। একটি জেনেরিক টাইপ প্যারামিটার একবারে শুধুমাত্র একটি কংক্রিট টাইপ দিয়ে প্রতিস্থাপিত করা যেতে পারে, যেখানে ট্রেইট অবজেক্টগুলি রানটাইমে ট্রেইট অবজেক্টের জন্য একাধিক কংক্রিট টাইপ পূরণ করার অনুমতি দেয়। উদাহরণস্বরূপ, আমরা Listing 18-6-এর মতো একটি জেনেরিক টাইপ এবং একটি ট্রেইট বাউন্ড ব্যবহার করে `Screen` স্ট্রাক্ট সংজ্ঞায়িত করতে পারতাম:
 
-<Listing number="18-6" file-name="src/lib.rs" caption="An alternate implementation of the `Screen` struct and its `run` method using generics and trait bounds">
+<Listing number="18-6" file-name="src/lib.rs" caption="`Screen` স্ট্রাক্ট এবং এর `run` মেথডের একটি বিকল্প ইমপ্লিমেন্টেশন জেনেরিক এবং ট্রেইট বাউন্ড ব্যবহার করে">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-06/src/lib.rs:here}}
@@ -114,25 +54,15 @@ as in Listing 18-6:
 
 </Listing>
 
-This restricts us to a `Screen` instance that has a list of components all of
-type `Button` or all of type `TextField`. If you’ll only ever have homogeneous
-collections, using generics and trait bounds is preferable because the
-definitions will be monomorphized at compile time to use the concrete types.
+এটি আমাদের একটি `Screen` ইনস্ট্যান্সে সীমাবদ্ধ করে যেখানে সমস্ত কম্পোনেন্ট হয় `Button` টাইপের অথবা সমস্ত `TextField` টাইপের। আপনি যদি শুধুমাত্র হোমোজিনিয়াস কালেকশন রাখতে চান, তাহলে জেনেরিক এবং ট্রেইট বাউন্ড ব্যবহার করা বাঞ্ছনীয় কারণ সংজ্ঞাগুলি কংক্রিট টাইপ ব্যবহার করার জন্য কম্পাইল করার সময় মনোমরফাইজ করা হবে।
 
-On the other hand, with the method using trait objects, one `Screen` instance
-can hold a `Vec<T>` that contains a `Box<Button>` as well as a
-`Box<TextField>`. Let’s look at how this works, and then we’ll talk about the
-runtime performance implications.
+অন্যদিকে, ট্রেইট অবজেক্ট ব্যবহার করে মেথডের সাহায্যে, একটি `Screen` ইনস্ট্যান্স একটি `Vec<T>` ধারণ করতে পারে যাতে একটি `Box<Button>` এবং সেইসাথে একটি `Box<TextField>` থাকে। আসুন দেখি এটি কীভাবে কাজ করে এবং তারপরে আমরা রানটাইম পারফরম্যান্সের প্রভাব সম্পর্কে কথা বলব।
 
-### Implementing the Trait
+### ট্রেইট ইমপ্লিমেন্ট করা (Implementing the Trait)
 
-Now we’ll add some types that implement the `Draw` trait. We’ll provide the
-`Button` type. Again, actually implementing a GUI library is beyond the scope
-of this book, so the `draw` method won’t have any useful implementation in its
-body. To imagine what the implementation might look like, a `Button` struct
-might have fields for `width`, `height`, and `label`, as shown in Listing 18-7:
+এখন আমরা কিছু টাইপ যোগ করব যা `Draw` trait ইমপ্লিমেন্ট করে। আমরা `Button` টাইপ সরবরাহ করব। আবারও, একটি GUI লাইব্রেরি বাস্তবায়ন করা এই বইয়ের সুযোগের বাইরে, তাই `draw` মেথডের বডিতে কোনও দরকারী ইমপ্লিমেন্টেশন থাকবে না। ইমপ্লিমেন্টেশনটি দেখতে কেমন হতে পারে তা কল্পনা করার জন্য, একটি `Button` স্ট্রাক্টে `width`, `height` এবং `label`-এর জন্য ফিল্ড থাকতে পারে, যেমনটি Listing 18-7-এ দেখানো হয়েছে:
 
-<Listing number="18-7" file-name="src/lib.rs" caption="A `Button` struct that implements the `Draw` trait">
+<Listing number="18-7" file-name="src/lib.rs" caption="একটি `Button` স্ট্রাক্ট যা `Draw` ট্রেইট ইমপ্লিমেন্ট করে">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-07/src/lib.rs:here}}
@@ -140,21 +70,11 @@ might have fields for `width`, `height`, and `label`, as shown in Listing 18-7:
 
 </Listing>
 
-The `width`, `height`, and `label` fields on `Button` will differ from the
-fields on other components; for example, a `TextField` type might have those
-same fields plus a `placeholder` field. Each of the types we want to draw on
-the screen will implement the `Draw` trait but will use different code in the
-`draw` method to define how to draw that particular type, as `Button` has here
-(without the actual GUI code, as mentioned). The `Button` type, for instance,
-might have an additional `impl` block containing methods related to what
-happens when a user clicks the button. These kinds of methods won’t apply to
-types like `TextField`.
+`Button`-এর `width`, `height` এবং `label` ফিল্ডগুলি অন্যান্য কম্পোনেন্টের ফিল্ড থেকে আলাদা হবে; উদাহরণস্বরূপ, একটি `TextField` টাইপের সেই একই ফিল্ড এবং একটি `placeholder` ফিল্ড থাকতে পারে। আমরা স্ক্রিনে যে টাইপগুলি আঁকতে চাই তার প্রত্যেকটি `Draw` trait ইমপ্লিমেন্ট করবে কিন্তু সেই নির্দিষ্ট টাইপটি কীভাবে আঁকতে হয় তা সংজ্ঞায়িত করতে `draw` মেথডে ভিন্ন কোড ব্যবহার করবে, যেমনটি `Button` এখানে করেছে (উল্লেখিত প্রকৃত GUI কোড ছাড়া)। উদাহরণস্বরূপ, `Button` টাইপের একটি অতিরিক্ত `impl` ব্লক থাকতে পারে যাতে একজন ব্যবহারকারী বাটনে ক্লিক করলে কী ঘটে তার সাথে সম্পর্কিত মেথড থাকতে পারে। এই ধরনের মেথড `TextField`-এর মতো টাইপের ক্ষেত্রে প্রযোজ্য হবে না।
 
-If someone using our library decides to implement a `SelectBox` struct that has
-`width`, `height`, and `options` fields, they implement the `Draw` trait on the
-`SelectBox` type as well, as shown in Listing 18-8:
+যদি আমাদের লাইব্রেরি ব্যবহার করে এমন কেউ `SelectBox` স্ট্রাক্ট ইমপ্লিমেন্ট করার সিদ্ধান্ত নেয় যাতে `width`, `height` এবং `options` ফিল্ড থাকে, তাহলে তারা `SelectBox` টাইপেও `Draw` trait ইমপ্লিমেন্ট করে, যেমনটি Listing 18-8-এ দেখানো হয়েছে:
 
-<Listing number="18-8" file-name="src/main.rs" caption="Another crate using `gui` and implementing the `Draw` trait on a `SelectBox` struct">
+<Listing number="18-8" file-name="src/main.rs" caption="`gui` ব্যবহার করে অন্য একটি ক্রেট এবং একটি `SelectBox` স্ট্রাক্টে `Draw` ট্রেইট ইমপ্লিমেন্ট করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-08/src/main.rs:here}}
@@ -162,13 +82,9 @@ If someone using our library decides to implement a `SelectBox` struct that has
 
 </Listing>
 
-Our library’s user can now write their `main` function to create a `Screen`
-instance. To the `Screen` instance, they can add a `SelectBox` and a `Button`
-by putting each in a `Box<T>` to become a trait object. They can then call the
-`run` method on the `Screen` instance, which will call `draw` on each of the
-components. Listing 18-9 shows this implementation:
+আমাদের লাইব্রেরির ব্যবহারকারী এখন একটি `Screen` ইনস্ট্যান্স তৈরি করতে তাদের `main` ফাংশন লিখতে পারে। `Screen` ইনস্ট্যান্সে, তারা প্রতিটি `Box<T>`-তে রেখে একটি `SelectBox` এবং একটি `Button` যোগ করতে পারে যাতে সেগুলি ট্রেইট অবজেক্টে পরিণত হয়। তারপর তারা `Screen` ইনস্ট্যান্সে `run` মেথড কল করতে পারে, যা প্রতিটি কম্পোনেন্টে `draw` কল করবে। Listing 18-9 এই ইমপ্লিমেন্টেশনটি দেখায়:
 
-<Listing number="18-9" file-name="src/main.rs" caption="Using trait objects to store values of different types that implement the same trait">
+<Listing number="18-9" file-name="src/main.rs" caption="একই ট্রেইট ইমপ্লিমেন্ট করে এমন বিভিন্ন টাইপের মান সংরক্ষণ করতে ট্রেইট অবজেক্ট ব্যবহার করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-09/src/main.rs:here}}
@@ -176,32 +92,15 @@ components. Listing 18-9 shows this implementation:
 
 </Listing>
 
-When we wrote the library, we didn’t know that someone might add the
-`SelectBox` type, but our `Screen` implementation was able to operate on the
-new type and draw it because `SelectBox` implements the `Draw` trait, which
-means it implements the `draw` method.
+যখন আমরা লাইব্রেরিটি লিখেছিলাম, তখন আমরা জানতাম না যে কেউ `SelectBox` টাইপ যোগ করতে পারে, কিন্তু আমাদের `Screen` ইমপ্লিমেন্টেশন নতুন টাইপের উপর কাজ করতে এবং এটিকে আঁকতে সক্ষম হয়েছিল কারণ `SelectBox` `Draw` trait ইমপ্লিমেন্ট করে, যার মানে এটি `draw` মেথড ইমপ্লিমেন্ট করে।
 
-This concept—of being concerned only with the messages a value responds to
-rather than the value’s concrete type—is similar to the concept of _duck
-typing_ in dynamically typed languages: if it walks like a duck and quacks
-like a duck, then it must be a duck! In the implementation of `run` on `Screen`
-in Listing 18-5, `run` doesn’t need to know what the concrete type of each
-component is. It doesn’t check whether a component is an instance of a `Button`
-or a `SelectBox`, it just calls the `draw` method on the component. By
-specifying `Box<dyn Draw>` as the type of the values in the `components`
-vector, we’ve defined `Screen` to need values that we can call the `draw`
-method on.
+এই ধারণা—একটি মানের কংক্রিট টাইপের পরিবর্তে শুধুমাত্র সেই মানটি যে মেসেজগুলির প্রতিক্রিয়া জানায় সেগুলির প্রতি যত্নশীল হওয়া—ডায়নামিকালি টাইপ করা ভাষাগুলিতে _ডাক টাইপিং_-এর ধারণার অনুরূপ: যদি এটি হাঁসের মতো হাঁটে এবং হাঁসের মতো ডাকে, তাহলে এটি অবশ্যই একটি হাঁস! Listing 18-5-এ `Screen`-এ `run`-এর ইমপ্লিমেন্টেশনে, `run`-এর প্রতিটি কম্পোনেন্টের কংক্রিট টাইপ কী তা জানার প্রয়োজন নেই। এটি পরীক্ষা করে না যে কোনও কম্পোনেন্ট একটি `Button` বা একটি `SelectBox`-এর ইনস্ট্যান্স কিনা, এটি কেবল কম্পোনেন্টের `draw` মেথড কল করে। `components` ভেক্টরের মানগুলির টাইপ হিসাবে `Box<dyn Draw>` উল্লেখ করে, আমরা `Screen`-কে এমন মানগুলির প্রয়োজন হিসাবে সংজ্ঞায়িত করেছি যেগুলিতে আমরা `draw` মেথড কল করতে পারি।
 
-The advantage of using trait objects and Rust’s type system to write code
-similar to code using duck typing is that we never have to check whether a
-value implements a particular method at runtime or worry about getting errors
-if a value doesn’t implement a method but we call it anyway. Rust won’t compile
-our code if the values don’t implement the traits that the trait objects need.
+ট্রেইট অবজেক্ট এবং Rust-এর টাইপ সিস্টেম ব্যবহার করে ডাক টাইপিং ব্যবহার করে কোডের মতো কোড লেখার সুবিধা হল যে আমাদের কখনই রানটাইমে কোনও মান কোনও নির্দিষ্ট মেথড ইমপ্লিমেন্ট করে কিনা তা পরীক্ষা করতে হবে না বা কোনও মান একটি মেথড ইমপ্লিমেন্ট না করলে এবং আমরা এটি কল করলেও error পাওয়ার বিষয়ে চিন্তা করতে হবে না। যদি মানগুলি ট্রেইট অবজেক্টের প্রয়োজনীয় ট্রেইটগুলি ইমপ্লিমেন্ট না করে তবে Rust আমাদের কোড কম্পাইল করবে না।
 
-For example, Listing 18-10 shows what happens if we try to create a `Screen`
-with a `String` as a component:
+উদাহরণস্বরূপ, Listing 18-10 দেখায় যে আমরা যদি একটি কম্পোনেন্ট হিসাবে একটি `String` সহ একটি `Screen` তৈরি করার চেষ্টা করি তাহলে কী ঘটে:
 
-<Listing number="18-10" file-name="src/main.rs" caption="Attempting to use a type that doesn’t implement the trait object’s trait">
+<Listing number="18-10" file-name="src/main.rs" caption="ট্রেইট অবজেক্টের ট্রেইট ইমপ্লিমেন্ট করে না এমন একটি টাইপ ব্যবহার করার চেষ্টা করা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-10/src/main.rs}}
@@ -209,40 +108,19 @@ with a `String` as a component:
 
 </Listing>
 
-We’ll get this error because `String` doesn’t implement the `Draw` trait:
+আমরা এই error টি পাব কারণ `String` `Draw` trait ইমপ্লিমেন্ট করে না:
 
 ```console
 {{#include ../listings/ch18-oop/listing-18-10/output.txt}}
 ```
 
-This error lets us know that either we’re passing something to `Screen` we
-didn’t mean to pass and so should pass a different type or we should implement
-`Draw` on `String` so that `Screen` is able to call `draw` on it.
+এই error টি আমাদের জানায় যে হয় আমরা `Screen`-এ এমন কিছু পাস করছি যা পাস করার কথা ছিল না এবং তাই অন্য একটি টাইপ পাস করা উচিত অথবা আমাদের `String`-এ `Draw` ইমপ্লিমেন্ট করা উচিত যাতে `Screen` এটিতে `draw` কল করতে পারে।
 
-### Trait Objects Perform Dynamic Dispatch
+### ট্রেইট অবজেক্ট ডায়নামিক ডিসপ্যাচ সম্পাদন করে (Trait Objects Perform Dynamic Dispatch)
 
-Recall in [“Performance of Code Using
-Generics”][performance-of-code-using-generics]<!-- ignore --> in Chapter 10 our
-discussion on the monomorphization process performed on generics by the
-compiler: the compiler generates nongeneric implementations of functions and
-methods for each concrete type that we use in place of a generic type parameter.
-The code that results from monomorphization is doing _static dispatch_, which is
-when the compiler knows what method you’re calling at compile time. This is
-opposed to _dynamic dispatch_, which is when the compiler can’t tell at compile
-time which method you’re calling. In dynamic dispatch cases, the compiler emits
-code that at runtime will figure out which method to call.
+Chapter 10-এর [“Performance of Code Using Generics”][performance-of-code-using-generics]<!-- ignore -->-এ জেনেরিক্সে সম্পাদিত মনোমরফাইজেশন প্রক্রিয়া সম্পর্কে আমাদের আলোচনা স্মরণ করুন: কম্পাইলার প্রতিটি কংক্রিট টাইপের জন্য ফাংশন এবং মেথডগুলির ননজেনরিক ইমপ্লিমেন্টেশন তৈরি করে যা আমরা জেনেরিক টাইপ প্যারামিটারের পরিবর্তে ব্যবহার করি। মনোমরফাইজেশন থেকে প্রাপ্ত কোডটি _স্ট্যাটিক ডিসপ্যাচ_ করে, যখন কম্পাইলার কম্পাইল করার সময় জানে আপনি কোন মেথড কল করছেন। এটি _ডায়নামিক ডিসপ্যাচ_-এর বিপরীত, যখন কম্পাইলার কম্পাইল করার সময় বলতে পারে না আপনি কোন মেথড কল করছেন। ডায়নামিক ডিসপ্যাচের ক্ষেত্রে, কম্পাইলার এমন কোড নির্গত করে যা রানটাইমে কোন মেথড কল করতে হবে তা নির্ধারণ করবে।
 
-When we use trait objects, Rust must use dynamic dispatch. The compiler doesn’t
-know all the types that might be used with the code that’s using trait objects,
-so it doesn’t know which method implemented on which type to call. Instead, at
-runtime, Rust uses the pointers inside the trait object to know which method to
-call. This lookup incurs a runtime cost that doesn’t occur with static
-dispatch. Dynamic dispatch also prevents the compiler from choosing to inline a
-method’s code, which in turn prevents some optimizations, and Rust has some
-rules about where you can and cannot use dynamic dispatch, called [_dyn
-compatibility_][dyn-compatibility]. However, we did get extra flexibility in the code
-that we wrote in Listing 18-5 and were able to support in Listing 18-9, so it’s
-a trade-off to consider.
+যখন আমরা ট্রেইট অবজেক্ট ব্যবহার করি, তখন Rust-কে অবশ্যই ডায়নামিক ডিসপ্যাচ ব্যবহার করতে হবে। কম্পাইলার সমস্ত টাইপ জানে না যা ট্রেইট অবজেক্ট ব্যবহার করা কোডের সাথে ব্যবহার করা যেতে পারে, তাই এটি জানে না কোন টাইপে ইমপ্লিমেন্ট করা কোন মেথড কল করতে হবে। পরিবর্তে, রানটাইমে, Rust কোন মেথড কল করতে হবে তা জানতে ট্রেইট অবজেক্টের ভিতরের পয়েন্টারগুলি ব্যবহার করে। এই লুকআপে একটি রানটাইম খরচ হয় যা স্ট্যাটিক ডিসপ্যাচের সাথে ঘটে না। ডায়নামিক ডিসপ্যাচ কম্পাইলারকে একটি মেথডের কোড ইনলাইন করা থেকে বিরত রাখে, যা ফলস্বরূপ কিছু অপটিমাইজেশন প্রতিরোধ করে এবং Rust-এর কিছু নিয়ম রয়েছে যে আপনি কোথায় এবং কোথায় ডায়নামিক ডিসপ্যাচ ব্যবহার করতে পারবেন এবং পারবেন না, যাকে [_ডাইন কম্প্যাটিবিলিটি_][dyn-compatibility] বলা হয়। যাইহোক, আমরা Listing 18-5-এ যে কোডটি লিখেছিলাম এবং Listing 18-9-এ সমর্থন করতে সক্ষম হয়েছিলাম তাতে অতিরিক্ত নমনীয়তা পেয়েছি, তাই এটি বিবেচনা করার মতো একটি ট্রেড-অফ।
 
 [performance-of-code-using-generics]: ch10-01-syntax.html#performance-of-code-using-generics
 [dynamically-sized]: ch20-03-advanced-types.html#dynamically-sized-types-and-the-sized-trait

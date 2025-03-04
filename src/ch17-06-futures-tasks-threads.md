@@ -1,35 +1,14 @@
-## Putting It All Together: Futures, Tasks, and Threads
+## সবকিছু একসাথে: ফিউচার, টাস্ক এবং থ্রেড (Putting It All Together: Futures, Tasks, and Threads)
 
-As we saw in [Chapter 16][ch16]<!-- ignore -->, threads provide one approach to
-concurrency. We’ve seen another approach in this chapter: using async with
-futures and streams. If you‘re wondering when to choose method over the other,
-the answer is: it depends! And in many cases, the choice isn’t threads _or_
-async but rather threads _and_ async.
+আমরা যেমনটি [Chapter 16][ch16]<!-- ignore -->-এ দেখেছি, থ্রেডগুলি কনকারেন্সির একটি পদ্ধতি সরবরাহ করে। আমরা এই চ্যাপ্টারে আরেকটি পদ্ধতি দেখেছি: ফিউচার এবং স্ট্রিম সহ অ্যাসিঙ্ক্রোনাস ব্যবহার করা। আপনি যদি ভাবছেন কখন অন্যটির চেয়ে কোন পদ্ধতি বেছে নেবেন, তাহলে উত্তর হল: এটি নির্ভর করে! এবং অনেক ক্ষেত্রে, পছন্দটি থ্রেড _বা_ অ্যাসিঙ্ক্রোনাস নয়, বরং থ্রেড _এবং_ অ্যাসিঙ্ক্রোনাস।
 
-Many operating systems have supplied threading-based concurrency models for
-decades now, and many programming languages support them as a result. However,
-these models are not without their tradeoffs. On many operating systems, they
-use a fair bit of memory for each thread, and they come with some overhead for
-starting up and shutting down. Threads are also only an option when your
-operating system and hardware support them. Unlike mainstream desktop and mobile
-computers, some embedded systems don’t have an OS at all, so they also don’t
-have threads.
+অনেক অপারেটিং সিস্টেম এখন কয়েক দশক ধরে থ্রেডিং-ভিত্তিক কনকারেন্সি মডেল সরবরাহ করে আসছে এবং ফলস্বরূপ অনেক প্রোগ্রামিং ভাষা তাদের সমর্থন করে। যাইহোক, এই মডেলগুলি তাদের ট্রেডঅফ ছাড়া নয়। অনেক অপারেটিং সিস্টেমে, তারা প্রতিটি থ্রেডের জন্য বেশ কিছুটা মেমরি ব্যবহার করে এবং সেগুলি শুরু এবং বন্ধ করার জন্য কিছু ওভারহেড সহ আসে। থ্রেডগুলি তখনই একটি অপশন যখন আপনার অপারেটিং সিস্টেম এবং হার্ডওয়্যার তাদের সমর্থন করে। মূলধারার ডেস্কটপ এবং মোবাইল কম্পিউটারগুলির বিপরীতে, কিছু এমবেডেড সিস্টেমে কোনও OS নেই, তাই তাদের থ্রেডও নেই।
 
-The async model provides a different—and ultimately complementary—set of
-tradeoffs. In the async model, concurrent operations don’t require their own
-threads. Instead, they can run on tasks, as when we used `trpl::spawn_task` to
-kick off work from a synchronous function in the streams section. A task is
-similar to a thread, but instead of being managed by the operating system, it’s
-managed by library-level code: the runtime.
+অ্যাসিঙ্ক্রোনাস মডেলটি ট্রেডঅফের একটি ভিন্ন—এবং চূড়ান্তভাবে পরিপূরক—সেট সরবরাহ করে। অ্যাসিঙ্ক্রোনাস মডেলে, কনকারেন্ট অপারেশনগুলির জন্য তাদের নিজস্ব থ্রেডের প্রয়োজন হয় না। পরিবর্তে, তারা টাস্কগুলিতে চলতে পারে, যেমনটি আমরা স্ট্রিম বিভাগে একটি সিঙ্ক্রোনাস ফাংশন থেকে কাজ শুরু করতে `trpl::spawn_task` ব্যবহার করার সময় দেখেছি। একটি টাস্ক একটি থ্রেডের মতোই, কিন্তু অপারেটিং সিস্টেম দ্বারা পরিচালিত হওয়ার পরিবর্তে, এটি লাইব্রেরি-লেভেল কোড দ্বারা পরিচালিত হয়: রানটাইম।
 
-In the previous section, we saw that we could build a stream by using an async
-channel and spawning an async task we could call from synchronous code. We can
-do the exact same thing with a thread. In Listing 17-40, we used
-`trpl::spawn_task` and `trpl::sleep`. In Listing 17-41, we replace those with
-the `thread::spawn` and `thread::sleep` APIs from the standard library in the
-`get_intervals` function.
+পূর্ববর্তী বিভাগে, আমরা দেখেছি যে আমরা একটি অ্যাসিঙ্ক্রোনাস চ্যানেল ব্যবহার করে এবং একটি অ্যাসিঙ্ক্রোনাস টাস্ক স্পন করে একটি স্ট্রিম তৈরি করতে পারি যেটিকে আমরা সিঙ্ক্রোনাস কোড থেকে কল করতে পারি। আমরা একটি থ্রেড দিয়ে ঠিক একই কাজ করতে পারি। Listing 17-40-এ, আমরা `trpl::spawn_task` এবং `trpl::sleep` ব্যবহার করেছি। Listing 17-41-এ, আমরা সেগুলিকে `get_intervals` ফাংশনে স্ট্যান্ডার্ড লাইব্রেরি থেকে `thread::spawn` এবং `thread::sleep` API দিয়ে প্রতিস্থাপন করি।
 
-<Listing number="17-41" caption="Using the `std::thread` APIs instead of the async `trpl` APIs for the `get_intervals` function" file-name="src/main.rs">
+<Listing number="17-41" caption="`get_intervals` ফাংশনের জন্য অ্যাসিঙ্ক্রোনাস `trpl` API-এর পরিবর্তে `std::thread` API ব্যবহার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-41/src/main.rs:threads}}
@@ -37,69 +16,26 @@ the `thread::spawn` and `thread::sleep` APIs from the standard library in the
 
 </Listing>
 
-If you run this code, the output is identical to that of Listing 17-40. And
-notice how little changes here from the perspective of the calling code. What’s
-more, even though one of our functions spawned an async task on the runtime and
-the other spawned an OS thread, the resulting streams were unaffected by the
-differences.
+আপনি যদি এই কোডটি চালান, তাহলে আউটপুটটি Listing 17-40-এর মতোই হবে। এবং লক্ষ্য করুন কলিং কোডের দৃষ্টিকোণ থেকে এখানে কতটা সামান্য পরিবর্তন হয়েছে। আরও কী, যদিও আমাদের ফাংশনগুলির মধ্যে একটি রানটাইমে একটি অ্যাসিঙ্ক্রোনাস টাস্ক স্পন করেছে এবং অন্যটি একটি OS থ্রেড স্পন করেছে, ফলাফলের স্ট্রিমগুলি পার্থক্য দ্বারা প্রভাবিত হয়নি।
 
-Despite their similarities, these two approaches behave very differently,
-although we might have a hard time measuring it in this very simple example. We
-could spawn millions of async tasks on any modern personal computer. If we tried
-to do that with threads, we would literally run out of memory!
+তাদের মিল থাকা সত্ত্বেও, এই দুটি পদ্ধতির আচরণ খুব আলাদা, যদিও আমরা এই খুব সহজ উদাহরণে এটি পরিমাপ করতে কঠিন সময় পেতে পারি। আমরা যেকোনো আধুনিক ব্যক্তিগত কম্পিউটারে কয়েক মিলিয়ন অ্যাসিঙ্ক্রোনাস টাস্ক স্পন করতে পারি। আমরা যদি থ্রেড দিয়ে এটি করার চেষ্টা করতাম, তাহলে আমরা আক্ষরিক অর্থে মেমরির বাইরে চলে যেতাম!
 
-However, there’s a reason these APIs are so similar. Threads act as a boundary
-for sets of synchronous operations; concurrency is possible _between_ threads.
-Tasks act as a boundary for sets of _asynchronous_ operations; concurrency is
-possible both _between_ and _within_ tasks, because a task can switch between
-futures in its body. Finally, futures are Rust’s most granular unit of
-concurrency, and each future may represent a tree of other futures. The
-runtime—specifically, its executor—manages tasks, and tasks manage futures. In
-that regard, tasks are similar to lightweight, runtime-managed threads with
-added capabilities that come from being managed by a runtime instead of by the
-operating system.
+যাইহোক, এই API গুলি এত মিল থাকার একটি কারণ রয়েছে। থ্রেডগুলি সিঙ্ক্রোনাস অপারেশনের সেটগুলির জন্য একটি সীমানা হিসাবে কাজ করে; থ্রেডগুলির _মধ্যে_ কনকারেন্সি সম্ভব। টাস্কগুলি _অ্যাসিঙ্ক্রোনাস_ অপারেশনের সেটগুলির জন্য একটি সীমানা হিসাবে কাজ করে; টাস্কগুলির _মধ্যে_ এবং _ভিতরে_ উভয় ক্ষেত্রেই কনকারেন্সি সম্ভব, কারণ একটি টাস্ক তার বডিতে ফিউচারগুলির মধ্যে স্যুইচ করতে পারে। অবশেষে, ফিউচারগুলি হল Rust-এর কনকারেন্সির সবচেয়ে দানাদার একক এবং প্রতিটি ফিউচার অন্য ফিউচারের একটি গাছকে উপস্থাপন করতে পারে। রানটাইম—বিশেষ করে, এর এক্সিকিউটর—টাস্কগুলি পরিচালনা করে এবং টাস্কগুলি ফিউচারগুলি পরিচালনা করে। সেই ক্ষেত্রে, টাস্কগুলি হল হালকা, রানটাইম-পরিচালিত থ্রেডের মতো, অপারেটিং সিস্টেমের পরিবর্তে একটি রানটাইম দ্বারা পরিচালিত হওয়ার কারণে অতিরিক্ত ক্ষমতা সহ।
 
-This doesn’t mean that async tasks are always better than threads (or vice
-versa). Concurrency with threads is in some ways a simpler programming model
-than concurrency with `async`. That can be a strength or a weakness. Threads are
-somewhat “fire and forget”; they have no native equivalent to a future, so they
-simply run to completion without being interrupted except by the operating
-system itself. That is, they have no built-in support for _intratask
-concurrency_ the way futures do. Threads in Rust also have no mechanisms for
-cancellation—a subject we haven’t covered explicitly in this chapter but was
-implied by the fact that whenever we ended a future, its state got cleaned up
-correctly.
+এর মানে এই নয় যে অ্যাসিঙ্ক্রোনাস টাস্কগুলি সর্বদা থ্রেডের চেয়ে ভাল (বা এর বিপরীত)। থ্রেডের সাথে কনকারেন্সি কিছু উপায়ে `async`-এর সাথে কনকারেন্সির চেয়ে একটি সহজ প্রোগ্রামিং মডেল। এটি একটি শক্তি বা দুর্বলতা হতে পারে। থ্রেডগুলি কিছুটা “ফায়ার অ্যান্ড ফরগেট”; তাদের একটি ফিউচারের কোনও নেটিভ সমতুল্য নেই, তাই অপারেটিং সিস্টেম নিজেই বাধা না দেওয়া পর্যন্ত সেগুলি সম্পূর্ণ হওয়া পর্যন্ত চলে। অর্থাৎ, তাদের _ইন্ট্রাটাস্ক কনকারেন্সির_ জন্য কোনও অন্তর্নির্মিত সমর্থন নেই যেভাবে ফিউচারগুলি করে। Rust-এ থ্রেডগুলির কোনও বাতিলকরণ প্রক্রিয়াও নেই—এমন একটি বিষয় যা আমরা এই চ্যাপ্টারে স্পষ্টভাবে কভার করিনি কিন্তু এই সত্য দ্বারা বোঝানো হয়েছিল যে আমরা যখনই একটি ফিউচার শেষ করেছি, তার স্টেট সঠিকভাবে পরিষ্কার হয়ে গেছে।
 
-These limitations also make threads harder to compose than futures. It’s much
-more difficult, for example, to use threads to build helpers such as the
-`timeout` and `throttle` methods we built earlier in this chapter. The fact that
-futures are richer data structures means they can be composed together more
-naturally, as we have seen.
+এই সীমাবদ্ধতাগুলি থ্রেডগুলিকে ফিউচারের চেয়ে কম্পোজ করা আরও কঠিন করে তোলে। উদাহরণস্বরূপ, থ্রেড ব্যবহার করে এই চ্যাপ্টারে আমরা আগে তৈরি করা `timeout` এবং `throttle` মেথডগুলির মতো হেল্পার তৈরি করা আরও কঠিন। ফিউচারগুলি আরও সমৃদ্ধ ডেটা স্ট্রাকচার হওয়ার অর্থ হল সেগুলিকে আরও স্বাভাবিকভাবে একসাথে কম্পোজ করা যেতে পারে, যেমনটি আমরা দেখেছি।
 
-Tasks, then, give us _additional_ control over futures, allowing us to choose
-where and how to group them. And it turns out that threads and tasks often work
-very well together, because tasks can (at least in some runtimes) be moved
-around between threads. In fact, under the hood, the runtime we’ve been
-using—including the `spawn_blocking` and `spawn_task` functions—is multithreaded
-by default! Many runtimes use an approach called _work stealing_ to
-transparently move tasks around between threads, based on how the threads are
-currently being utilized, to improve the system’s overall performance. That
-approach actually requires threads _and_ tasks, and therefore futures.
+টাস্কগুলি, তাহলে, আমাদের ফিউচারগুলির উপর _অতিরিক্ত_ নিয়ন্ত্রণ দেয়, যা আমাদের কোথায় এবং কীভাবে সেগুলিকে গ্রুপ করতে হবে তা বেছে নিতে দেয়। এবং এটি দেখা যাচ্ছে যে থ্রেড এবং টাস্কগুলি প্রায়শই একসাথে খুব ভাল কাজ করে, কারণ টাস্কগুলি (অন্তত কিছু রানটাইমে) থ্রেডগুলির মধ্যে ঘোরাফেরা করা যেতে পারে। প্রকৃতপক্ষে, হুডের নিচে, আমরা যে রানটাইমটি ব্যবহার করে আসছি—`spawn_blocking` এবং `spawn_task` ফাংশন সহ—ডিফল্টভাবে মাল্টিথ্রেডেড! অনেকগুলি রানটাইম সিস্টেমের সামগ্রিক পারফরম্যান্স উন্নত করতে, থ্রেডগুলি বর্তমানে কীভাবে ব্যবহার করা হচ্ছে তার উপর ভিত্তি করে থ্রেডগুলির মধ্যে স্বচ্ছভাবে টাস্কগুলিকে সরানোর জন্য _ওয়ার্ক স্টিলিং_ নামক একটি পদ্ধতি ব্যবহার করে। সেই পদ্ধতির জন্য আসলে থ্রেড _এবং_ টাস্ক এবং সেইজন্য ফিউচারের প্রয়োজন।
 
-When thinking about which method to use when, consider these rules of thumb:
+কখন কোন পদ্ধতি ব্যবহার করবেন তা নিয়ে চিন্তা করার সময়, এই নিয়মগুলি বিবেচনা করুন:
 
-- If the work is _very parallelizable_, such as processing a bunch of data where
-  each part can be processed separately, threads are a better choice.
-- If the work is _very concurrent_, such as handling messages from a bunch of
-  different sources that may come in at different intervals or different rates,
-  async is a better choice.
+-   যদি কাজটি _খুব প্যারালাইজেবল_ হয়, যেমন প্রচুর ডেটা প্রসেস করা যেখানে প্রতিটি অংশ আলাদাভাবে প্রসেস করা যায়, তাহলে থ্রেডগুলি একটি ভাল পছন্দ।
+-   যদি কাজটি _খুব কনকারেন্ট_ হয়, যেমন বিভিন্ন উৎস থেকে মেসেজ হ্যান্ডেল করা যা বিভিন্ন বিরতিতে বা বিভিন্ন হারে আসতে পারে, তাহলে অ্যাসিঙ্ক্রোনাস একটি ভাল পছন্দ।
 
-And if you need both parallelism and concurrency, you don’t have to choose
-between threads and async. You can use them together freely, letting each one
-play the part it’s best at. For example, Listing 17-42 shows a fairly common
-example of this kind of mix in real-world Rust code.
+এবং যদি আপনার প্যারালেলিজম এবং কনকারেন্সি উভয়েরই প্রয়োজন হয়, তাহলে আপনাকে থ্রেড এবং অ্যাসিঙ্ক্রোনাসের মধ্যে বেছে নিতে হবে না। আপনি সেগুলিকে অবাধে একসাথে ব্যবহার করতে পারেন, প্রত্যেকটিকে তার সেরা অংশটি করতে দিয়ে। উদাহরণস্বরূপ, Listing 17-42 বাস্তব-বিশ্বের Rust কোডে এই ধরনের মিশ্রণের একটি মোটামুটি সাধারণ উদাহরণ দেখায়।
 
-<Listing number="17-42" caption="Sending messages with blocking code in a thread and awaiting the messages in an async block" file-name="src/main.rs">
+<Listing number="17-42" caption="একটি থ্রেডে ব্লকিং কোড সহ মেসেজ পাঠানো এবং একটি অ্যাসিঙ্ক্রোনাস ব্লকে মেসেজগুলির জন্য অপেক্ষা করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-42/src/main.rs:all}}
@@ -107,31 +43,17 @@ example of this kind of mix in real-world Rust code.
 
 </Listing>
 
-We begin by creating an async channel, then spawn a thread that takes
-ownership of the sender side of the channel. Within the thread, we send the
-numbers 1 through 10, sleeping for a second between each. Finally, we run a
-future created with an async block passed to `trpl::run` just as we have
-throughout the chapter. In that future, we await those messages, just as in
-the other message-passing examples we have seen.
+আমরা একটি অ্যাসিঙ্ক্রোনাস চ্যানেল তৈরি করে শুরু করি, তারপর একটি থ্রেড স্পন করি যা চ্যানেলের সেন্ডার সাইডের ownership নেয়। থ্রেডের মধ্যে, আমরা 1 থেকে 10 পর্যন্ত সংখ্যাগুলি পাঠাই, প্রতিটিটির মধ্যে এক সেকেন্ডের জন্য স্লিপ করি। অবশেষে, আমরা একটি অ্যাসিঙ্ক্রোনাস ব্লক সহ তৈরি একটি ফিউচার চালাই যা `trpl::run`-এ পাস করা হয় ঠিক যেমনটি আমরা চ্যাপ্টার জুড়ে করেছি। সেই ফিউচারে, আমরা সেই মেসেজগুলির জন্য অপেক্ষা করি, ঠিক যেমনটি আমরা দেখেছি অন্য মেসেজ-পাসিং উদাহরণগুলিতে।
 
-To return to the scenario we opened the chapter with, imagine running a set of
-video encoding tasks using a dedicated thread (because video encoding is
-compute-bound) but notifying the UI that those operations are done with an async
-channel. There are countless examples of these kinds of combinations in
-real-world use cases.
+আমরা যে দৃশ্যটি দিয়ে চ্যাপ্টারটি শুরু করেছি তাতে ফিরে যেতে, একটি ডেডিকেটেড থ্রেড ব্যবহার করে ভিডিও এনকোডিং টাস্কগুলির একটি সেট চালানোর কথা কল্পনা করুন (কারণ ভিডিও এনকোডিং কম্পিউট-বাউন্ড) কিন্তু সেই অপারেশনগুলি একটি অ্যাসিঙ্ক্রোনাস চ্যানেলের সাথে UI-কে জানানো হচ্ছে। বাস্তব-বিশ্বের ব্যবহারের ক্ষেত্রে এই ধরনের কম্বিনেশনের অসংখ্য উদাহরণ রয়েছে।
 
-## Summary
+## সারাংশ (Summary)
 
-This isn’t the last you’ll see of concurrency in this book. The project in
-[Chapter 21][ch21] will apply these concepts in a more realistic situation
-than the simpler examples discussed here and compare problem-solving with threading versus tasks more directly.
+এই বইয়ে আপনি কনকারেন্সির শেষ দেখা পাবেন না। [Chapter 21][ch21]-এর প্রোজেক্টটি এখানে আলোচিত সহজ উদাহরণগুলির চেয়ে আরও বাস্তব পরিস্থিতিতে এই ধারণাগুলি প্রয়োগ করবে এবং থ্রেডিং বনাম টাস্কগুলির সাথে সমস্যা সমাধানের তুলনা আরও সরাসরি করবে।
 
-No matter which of these approaches you choose, Rust gives you the tools you need to write safe, fast, concurrent
-code—whether for a high-throughput web server or an embedded operating system.
+আপনি এই পদ্ধতির মধ্যে কোনটি বেছে নিন না কেন, Rust আপনাকে নিরাপদ, দ্রুত, কনকারেন্ট কোড লেখার জন্য প্রয়োজনীয় টুল সরবরাহ করে—হোক সেটি একটি high-throughput ওয়েব সার্ভার বা একটি এমবেডেড অপারেটিং সিস্টেমের জন্য।
 
-Next, we’ll talk about idiomatic ways to model problems and structure solutions
-as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idioms
-relate to those you might be familiar with from object-oriented programming.
+এরপর, আমরা আপনার Rust প্রোগ্রামগুলি বড় হওয়ার সাথে সাথে সমস্যাগুলি মডেল করার এবং সমাধানগুলিকে গঠন করার প্রচলিত উপায়গুলি সম্পর্কে কথা বলব। এছাড়াও, আমরা আলোচনা করব কিভাবে Rust-এর প্রচলিত পদ্ধতিগুলি অবজেক্ট-ওরিয়েন্টেড প্রোগ্রামিং থেকে আপনার পরিচিত পদ্ধতিগুলির সাথে সম্পর্কিত।
 
 [ch16]: http://localhost:3000/ch16-00-concurrency.html
 [combining-futures]: ch17-03-more-futures.html#building-our-own-async-abstractions

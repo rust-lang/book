@@ -1,15 +1,10 @@
-## All the Places Patterns Can Be Used
+## যেখানে যেখানে প্যাটার্ন ব্যবহার করা যেতে পারে (All the Places Patterns Can Be Used)
 
-Patterns pop up in a number of places in Rust, and you’ve been using them a lot
-without realizing it! This section discusses all the places where patterns are
-valid.
+Rust-এ প্যাটার্নগুলি বেশ কয়েকটি জায়গায় ব্যবহৃত হয়, এবং আপনি না জেনেই সেগুলি অনেক ব্যবহার করেছেন! এই বিভাগে সেই সমস্ত স্থান নিয়ে আলোচনা করা হয়েছে যেখানে প্যাটার্ন বৈধ।
 
-### `match` Arms
+### `match` আর্ম (Arms)
 
-As discussed in Chapter 6, we use patterns in the arms of `match` expressions.
-Formally, `match` expressions are defined as the keyword `match`, a value to
-match on, and one or more match arms that consist of a pattern and an
-expression to run if the value matches that arm’s pattern, like this:
+Chapter 6-এ আলোচনা করা হয়েছে, আমরা `match` এক্সপ্রেশনের আর্ম-এ প্যাটার্ন ব্যবহার করি। আনুষ্ঠানিকভাবে, `match` এক্সপ্রেশনগুলিকে `match` কীওয়ার্ড, ম্যাচ করার জন্য একটি মান এবং এক বা একাধিক ম্যাচ আর্ম হিসাবে সংজ্ঞায়িত করা হয় যা একটি প্যাটার্ন এবং মানটি সেই আর্মের প্যাটার্নের সাথে মিললে চালানোর জন্য একটি এক্সপ্রেশন নিয়ে গঠিত, এইরকম:
 
 ```text
 match VALUE {
@@ -19,8 +14,7 @@ match VALUE {
 }
 ```
 
-For example, here's the `match` expression from Listing 6-5 that matches on an
-`Option<i32>` value in the variable `x`:
+উদাহরণস্বরূপ, Listing 6-5 থেকে `match` এক্সপ্রেশনটি এখানে দেওয়া হল, যা `x` ভেরিয়েবলের একটি `Option<i32>` মানের উপর ম্যাচ করে:
 
 ```rust,ignore
 match x {
@@ -29,41 +23,21 @@ match x {
 }
 ```
 
-The patterns in this `match` expression are the `None` and `Some(i)` on the
-left of each arrow.
+এই `match` এক্সপ্রেশনের প্যাটার্নগুলি হল প্রতিটি তীর চিহ্নের বাম দিকের `None` এবং `Some(i)`।
 
-One requirement for `match` expressions is that they need to be _exhaustive_ in
-the sense that all possibilities for the value in the `match` expression must
-be accounted for. One way to ensure you’ve covered every possibility is to have
-a catch-all pattern for the last arm: for example, a variable name matching any
-value can never fail and thus covers every remaining case.
+`match` এক্সপ্রেশনের একটি প্রয়োজনীয়তা হল যে মানটির জন্য `match` এক্সপ্রেশন ব্যবহার করা হচ্ছে, তার সমস্ত সম্ভাবনা অবশ্যই বিবেচনায় রাখতে হবে। এটিকে _এক্সহসটিভ_ (exhaustive) হতে হবে। প্রতিটি সম্ভাবনা কভার করা হয়েছে তা নিশ্চিত করার একটি উপায় হল শেষ আর্মের জন্য একটি ক্যাচ-অল প্যাটার্ন থাকা: উদাহরণস্বরূপ, যেকোনো মানের সাথে মেলে এমন একটি ভেরিয়েবলের নাম কখনই ব্যর্থ হতে পারে না এবং এইভাবে প্রতিটি অবশিষ্ট কেস কভার করে।
 
-The particular pattern `_` will match anything, but it never binds to a
-variable, so it’s often used in the last match arm. The `_` pattern can be
-useful when you want to ignore any value not specified, for example. We’ll
-cover the `_` pattern in more detail in the [“Ignoring Values in a
-Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> section later in this
-chapter.
+`_` নামক বিশেষ প্যাটার্নটি যেকোনো কিছুর সাথে মিলবে, কিন্তু এটি কখনই কোনো ভেরিয়েবলের সাথে বাইন্ড করে না, তাই এটি প্রায়শই শেষ ম্যাচ আর্মে ব্যবহৃত হয়। `_` প্যাটার্নটি দরকারী হতে পারে যখন আপনি নির্দিষ্ট করা হয়নি এমন কোনো মান উপেক্ষা করতে চান। আমরা এই চ্যাপ্টারের পরে [“Ignoring Values in a Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> বিভাগে `_` প্যাটার্নটি আরও বিশদে কভার করব।
 
-### Conditional `if let` Expressions
+### কন্ডিশনাল `if let` এক্সপ্রেশন (Conditional `if let` Expressions)
 
-In Chapter 6 we discussed how to use `if let` expressions mainly as a shorter
-way to write the equivalent of a `match` that only matches one case.
-Optionally, `if let` can have a corresponding `else` containing code to run if
-the pattern in the `if let` doesn’t match.
+Chapter 6-এ আমরা আলোচনা করেছি কিভাবে `if let` এক্সপ্রেশনগুলিকে মূলত একটি `match`-এর সমতুল্য লেখার সংক্ষিপ্ত উপায় হিসাবে ব্যবহার করতে হয় যা শুধুমাত্র একটি কেসের সাথে মেলে। ঐচ্ছিকভাবে, `if let`-এ একটি সংশ্লিষ্ট `else` থাকতে পারে যাতে কোড চালানোর জন্য থাকে যদি `if let`-এর প্যাটার্নটি না মেলে।
 
-Listing 19-1 shows that it’s also possible to mix and match `if let`, `else
-if`, and `else if let` expressions. Doing so gives us more flexibility than a
-`match` expression in which we can express only one value to compare with the
-patterns. Also, Rust doesn't require that the conditions in a series of `if
-let`, `else if`, `else if let` arms relate to each other.
+Listing 19-1 দেখায় যে `if let`, `else if`, এবং `else if let` এক্সপ্রেশনগুলিকে মিশ্রিত করা এবং মেলানোও সম্ভব। এটি আমাদের একটি `match` এক্সপ্রেশনের চেয়ে বেশি নমনীয়তা দেয় যেখানে আমরা প্যাটার্নগুলির সাথে তুলনা করার জন্য শুধুমাত্র একটি মান প্রকাশ করতে পারি। এছাড়াও, Rust-এর প্রয়োজন নেই যে `if let`, `else if`, `else if let` আর্মের একটি সিরিজের শর্তগুলি একে অপরের সাথে সম্পর্কিত হোক।
 
-The code in Listing 19-1 determines what color to make your background based on
-a series of checks for several conditions. For this example, we’ve created
-variables with hardcoded values that a real program might receive from user
-input.
+Listing 19-1-এর কোডটি বেশ কয়েকটি শর্তের জন্য একটি সিরিজের চেকের উপর ভিত্তি করে আপনার ব্যাকগ্রাউন্ডের রং কী হবে তা নির্ধারণ করে। এই উদাহরণের জন্য, আমরা হার্ডকোডেড মান সহ ভেরিয়েবল তৈরি করেছি যা একটি বাস্তব প্রোগ্রাম ব্যবহারকারীর ইনপুট থেকে পেতে পারে।
 
-<Listing number="19-1" file-name="src/main.rs" caption="Mixing `if let`, `else if`, `else if let`, and `else`">
+<Listing number="19-1" file-name="src/main.rs" caption="`if let`, `else if`, `else if let` এবং `else` মিশ্রিত করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-01/src/main.rs}}
@@ -71,40 +45,19 @@ input.
 
 </Listing>
 
-If the user specifies a favorite color, that color is used as the background.
-If no favorite color is specified and today is Tuesday, the background color is
-green. Otherwise, if the user specifies their age as a string and we can parse
-it as a number successfully, the color is either purple or orange depending on
-the value of the number. If none of these conditions apply, the background
-color is blue.
+যদি ব্যবহারকারী একটি প্রিয় রঙ নির্দিষ্ট করে, তাহলে সেই রঙটি ব্যাকগ্রাউন্ড হিসাবে ব্যবহৃত হয়। যদি কোনও প্রিয় রঙ নির্দিষ্ট করা না থাকে এবং আজ মঙ্গলবার হয়, তাহলে ব্যাকগ্রাউন্ডের রং সবুজ হবে। অন্যথায়, যদি ব্যবহারকারী তাদের বয়স একটি স্ট্রিং হিসাবে নির্দিষ্ট করে এবং আমরা এটিকে সফলভাবে একটি সংখ্যা হিসাবে পার্স করতে পারি, তাহলে সংখ্যার মানের উপর নির্ভর করে রংটি হয় বেগুনী বা কমলা হবে। যদি এই শর্তগুলির কোনওটিই প্রযোজ্য না হয়, তাহলে ব্যাকগ্রাউন্ডের রং নীল হবে।
 
-This conditional structure lets us support complex requirements. With the
-hardcoded values we have here, this example will print `Using purple as the
-background color`.
+এই কন্ডিশনাল স্ট্রাকচারটি আমাদের জটিল প্রয়োজনীয়তাগুলি সমর্থন করতে দেয়। এখানে আমাদের কাছে থাকা হার্ডকোডেড মানগুলির সাথে, এই উদাহরণটি `Using purple as the background color` প্রিন্ট করবে।
 
-You can see that `if let` can also introduce new variables which shadow existing
-variables in the same way that `match` arms can: the line `if let Ok(age) = age`
-introduces a new `age` variable that contains the value inside the `Ok` variant,
-shadowing the existing `age` variable. This means we need to place the `if age >
-30` condition within that block: we can’t combine these two conditions into `if
-let Ok(age) = age && age > 30`. The new `age` we want to compare to 30 isn’t
-valid until the new scope starts with the curly bracket.
+আপনি দেখতে পাচ্ছেন যে `if let` নতুন ভেরিয়েবলও প্রবর্তন করতে পারে যা বিদ্যমান ভেরিয়েবলগুলিকে শ্যাডো করে, একইভাবে যেভাবে `match` আর্মগুলি পারে: `if let Ok(age) = age` লাইনটি একটি নতুন `age` ভেরিয়েবল প্রবর্তন করে যাতে `Ok` ভেরিয়েন্টের ভিতরের মানটি থাকে, বিদ্যমান `age` ভেরিয়েবলটিকে শ্যাডো করে। এর মানে হল আমাদের `if age > 30` শর্তটি সেই ব্লকের মধ্যে রাখতে হবে: আমরা এই দুটি শর্তকে `if let Ok(age) = age && age > 30`-তে একত্রিত করতে পারি না। নতুন `age` যা আমরা 30-এর সাথে তুলনা করতে চাই তা কোঁকড়া বন্ধনী দিয়ে শুরু হওয়া নতুন স্কোপ শুরু না হওয়া পর্যন্ত বৈধ নয়।
 
-The downside of using `if let` expressions is that the compiler doesn’t check
-for exhaustiveness, whereas with `match` expressions it does. If we omitted the
-last `else` block and therefore missed handling some cases, the compiler would
-not alert us to the possible logic bug.
+`if let` এক্সপ্রেশন ব্যবহারের অসুবিধা হল কম্পাইলার এক্সহসটিভনেস পরীক্ষা করে না, যেখানে `match` এক্সপ্রেশনের সাথে এটি করে। যদি আমরা শেষ `else` ব্লকটি বাদ দিতাম এবং সেইজন্য কিছু কেস হ্যান্ডেল করতে মিস করতাম, তাহলে কম্পাইলার আমাদের সম্ভাব্য লজিক বাগ সম্পর্কে সতর্ক করত না।
 
-### `while let` Conditional Loops
+### `while let` কন্ডিশনাল লুপ (`while let` Conditional Loops)
 
-Similar in construction to `if let`, the `while let` conditional loop allows a
-`while` loop to run for as long as a pattern continues to match. We first saw a
-`while let` loop in Chapter 17, where we used it to keep looping as long as a
-stream produced new values. Similarly, in Listing 19-2 we show a `while let`
-loop that waits on messages sent between threads, but in this case checking a
-`Result` instead of an `Option`.
+`if let`-এর গঠনের অনুরূপ, `while let` কন্ডিশনাল লুপ একটি `while` লুপকে ততক্ষণ চলতে দেয় যতক্ষণ একটি প্যাটার্ন মিলতে থাকে। আমরা প্রথমবার Chapter 17-এ একটি `while let` লুপ দেখেছিলাম, যেখানে আমরা এটিকে ততক্ষণ লুপ করতে ব্যবহার করেছি যতক্ষণ একটি স্ট্রিম নতুন মান তৈরি করে। একইভাবে, Listing 19-2-তে আমরা একটি `while let` লুপ দেখাই যা থ্রেডগুলির মধ্যে পাঠানো মেসেজগুলির জন্য অপেক্ষা করে, কিন্তু এক্ষেত্রে একটি `Option`-এর পরিবর্তে একটি `Result` পরীক্ষা করে।
 
-<Listing number="19-2" caption="Using a `while let` loop to print values for as long as `rx.recv()` returns `Ok`">
+<Listing number="19-2" caption="`rx.recv()` যতক্ষণ `Ok` রিটার্ন করে ততক্ষণ মান প্রিন্ট করার জন্য একটি `while let` লুপ ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-02/src/main.rs:here}}
@@ -112,20 +65,13 @@ loop that waits on messages sent between threads, but in this case checking a
 
 </Listing>
 
-This example prints 1, 2, and 3. When we saw `recv` back in Chapter 16, we
-unwrapped the error directly, or interacted with it as an iterator using a `for`
-loop. As Listing 19-2 shows, though, we can also use `while let`, because the
-`recv` method returns `Ok` as long as the sender is producing messages, and then
-produces an `Err` once the sender side disconnects.
+এই উদাহরণটি 1, 2 এবং 3 প্রিন্ট করে। যখন আমরা Chapter 16-এ `recv` দেখেছিলাম, তখন আমরা সরাসরি error টি আনর‍্যাপ করেছি, অথবা একটি `for` লুপ ব্যবহার করে একটি ইটারেটর হিসাবে এটির সাথে ইন্টারঅ্যাক্ট করেছি। Listing 19-2 যেমন দেখায়, যদিও, আমরা `while let` ব্যবহার করতে পারি, কারণ `recv` মেথডটি যতক্ষণ সেন্ডার মেসেজ তৈরি করছে ততক্ষণ `Ok` রিটার্ন করে এবং তারপর সেন্ডার সাইড ডিসকানেক্ট হয়ে গেলে একটি `Err` তৈরি করে।
 
-### `for` Loops
+### `for` লুপ (`for` Loops)
 
-In a `for` loop, the value that directly follows the keyword `for` is a
-pattern. For example, in `for x in y` the `x` is the pattern. Listing 19-3
-demonstrates how to use a pattern in a `for` loop to destructure, or break
-apart, a tuple as part of the `for` loop.
+একটি `for` লুপে, `for` কীওয়ার্ডের ঠিক পরে যে মানটি আসে সেটি হল একটি প্যাটার্ন। উদাহরণস্বরূপ, `for x in y`-তে `x` হল প্যাটার্ন। Listing 19-3 প্রদর্শন করে কিভাবে একটি `for` লুপে একটি প্যাটার্ন ব্যবহার করে একটি টাপলকে ডিস্ট্রাকচার বা ভেঙে আলাদা করা যায়, `for` লুপের অংশ হিসাবে।
 
-<Listing number="19-3" caption="Using a pattern in a `for` loop to destructure a tuple">
+<Listing number="19-3" caption="একটি টাপল ডিস্ট্রাকচার করার জন্য একটি `for` লুপে একটি প্যাটার্ন ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-03/src/main.rs:here}}
@@ -133,48 +79,33 @@ apart, a tuple as part of the `for` loop.
 
 </Listing>
 
-The code in Listing 19-3 will print the following:
+Listing 19-3-এর কোডটি নিম্নলিখিতগুলি প্রিন্ট করবে:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-03/output.txt}}
 ```
 
-We adapt an iterator using the `enumerate` method so it produces a value and
-the index for that value, placed into a tuple. The first value produced is the
-tuple `(0, 'a')`. When this value is matched to the pattern `(index, value)`,
-`index` will be `0` and `value` will be `'a'`, printing the first line of the
-output.
+আমরা `enumerate` মেথড ব্যবহার করে একটি ইটারেটরকে অ্যাডাপ্ট করি যাতে এটি একটি মান এবং সেই মানের জন্য ইনডেক্স তৈরি করে, একটি টাপলে স্থাপন করা হয়। উৎপাদিত প্রথম মান হল `(0, 'a')` টাপল। যখন এই মানটি `(index, value)` প্যাটার্নের সাথে মেলানো হয়, তখন `index` হবে `0` এবং `value` হবে `'a'`, আউটপুটের প্রথম লাইনটি প্রিন্ট করবে।
 
-### `let` Statements
+### `let` স্টেটমেন্ট (`let` Statements)
 
-Prior to this chapter, we had only explicitly discussed using patterns with
-`match` and `if let`, but in fact, we’ve used patterns in other places as well,
-including in `let` statements. For example, consider this straightforward
-variable assignment with `let`:
+এই চ্যাপ্টারের আগে, আমরা শুধুমাত্র `match` এবং `if let`-এর সাথে প্যাটার্ন ব্যবহার করার বিষয়ে স্পষ্টভাবে আলোচনা করেছি, কিন্তু আসলে, আমরা অন্যান্য জায়গাতেও প্যাটার্ন ব্যবহার করেছি, যার মধ্যে `let` স্টেটমেন্টও রয়েছে। উদাহরণস্বরূপ, `let` সহ এই সরল ভেরিয়েবল অ্যাসাইনমেন্টটি বিবেচনা করুন:
 
 ```rust
 let x = 5;
 ```
 
-Every time you've used a `let` statement like this you've been using patterns,
-although you might not have realized it! More formally, a `let` statement looks
-like this:
+আপনি যখনই এইরকম একটি `let` স্টেটমেন্ট ব্যবহার করেছেন তখনই আপনি প্যাটার্ন ব্যবহার করছেন, যদিও আপনি এটি উপলব্ধি নাও করতে পারেন! আরও আনুষ্ঠানিকভাবে, একটি `let` স্টেটমেন্ট এইরকম দেখায়:
 
 ```text
 let PATTERN = EXPRESSION;
 ```
 
-In statements like `let x = 5;` with a variable name in the `PATTERN` slot, the
-variable name is just a particularly simple form of a pattern. Rust compares
-the expression against the pattern and assigns any names it finds. So in the
-`let x = 5;` example, `x` is a pattern that means “bind what matches here to
-the variable `x`.” Because the name `x` is the whole pattern, this pattern
-effectively means “bind everything to the variable `x`, whatever the value is.”
+`let x = 5;`-এর মতো স্টেটমেন্টে `PATTERN` স্লটে একটি ভেরিয়েবলের নাম সহ, ভেরিয়েবলের নামটি কেবল একটি প্যাটার্নের একটি বিশেষ সরল রূপ। Rust এক্সপ্রেশনটিকে প্যাটার্নের সাথে তুলনা করে এবং যে কোনও নাম খুঁজে পায় তা অ্যাসাইন করে। তাই `let x = 5;` উদাহরণে, `x` হল একটি প্যাটার্ন যার অর্থ “এখানে যা মেলে তাকে `x` ভেরিয়েবলের সাথে বাইন্ড করুন।” যেহেতু `x` নামটি সম্পূর্ণ প্যাটার্ন, তাই এই প্যাটার্নটির কার্যকরী অর্থ হল “মান যাই হোক না কেন, সবকিছুকে `x` ভেরিয়েবলের সাথে বাইন্ড করুন।”
 
-To see the pattern matching aspect of `let` more clearly, consider Listing
-19-4, which uses a pattern with `let` to destructure a tuple.
+`let`-এর প্যাটার্ন ম্যাচিং দিকটি আরও স্পষ্টভাবে দেখতে, Listing 19-4 বিবেচনা করুন, যা একটি টাপল ডিস্ট্রাকচার করতে `let`-এর সাথে একটি প্যাটার্ন ব্যবহার করে।
 
-<Listing number="19-4" caption="Using a pattern to destructure a tuple and create three variables at once">
+<Listing number="19-4" caption="একটি টাপল ডিস্ট্রাকচার করতে এবং একবারে তিনটি ভেরিয়েবল তৈরি করতে একটি প্যাটার্ন ব্যবহার করা">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-04/src/main.rs:here}}
@@ -182,17 +113,11 @@ To see the pattern matching aspect of `let` more clearly, consider Listing
 
 </Listing>
 
-Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
-to the pattern `(x, y, z)` and sees that the value matches the pattern, so Rust
-binds `1` to `x`, `2` to `y`, and `3` to `z`. You can think of this tuple
-pattern as nesting three individual variable patterns inside it.
+এখানে, আমরা একটি টাপলকে একটি প্যাটার্নের সাথে মেলাই। Rust `(1, 2, 3)` মানটিকে `(x, y, z)` প্যাটার্নের সাথে তুলনা করে এবং দেখে যে মানটি প্যাটার্নের সাথে মেলে, তাই Rust `1`-কে `x`-এর সাথে, `2`-কে `y`-এর সাথে এবং `3`-কে `z`-এর সাথে বাইন্ড করে। আপনি এই টাপল প্যাটার্নটিকে এর মধ্যে তিনটি পৃথক ভেরিয়েবল প্যাটার্ন নেস্ট করার মতো ভাবতে পারেন।
 
-If the number of elements in the pattern doesn’t match the number of elements
-in the tuple, the overall type won’t match and we’ll get a compiler error. For
-example, Listing 19-5 shows an attempt to destructure a tuple with three
-elements into two variables, which won’t work.
+যদি প্যাটার্নের এলিমেন্টের সংখ্যা টাপলের এলিমেন্টের সংখ্যার সাথে না মেলে, তাহলে সামগ্রিক টাইপ মিলবে না এবং আমরা একটি কম্পাইলার error পাব। উদাহরণস্বরূপ, Listing 19-5 দুটি ভেরিয়েবলের মধ্যে তিনটি এলিমেন্ট সহ একটি টাপল ডিস্ট্রাকচার করার একটি প্রচেষ্টা দেখায়, যা কাজ করবে না।
 
-<Listing number="19-5" caption="Incorrectly constructing a pattern whose variables don’t match the number of elements in the tuple">
+<Listing number="19-5" caption="ভুলভাবে একটি প্যাটার্ন তৈরি করা যার ভেরিয়েবলগুলি টাপলের এলিমেন্টের সংখ্যার সাথে মেলে না">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-05/src/main.rs:here}}
@@ -200,26 +125,19 @@ elements into two variables, which won’t work.
 
 </Listing>
 
-Attempting to compile this code results in this type error:
+এই কোডটি কম্পাইল করার চেষ্টা করলে এই টাইপ error পাওয়া যায়:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-05/output.txt}}
 ```
 
-To fix the error, we could ignore one or more of the values in the tuple using
-`_` or `..`, as you’ll see in the [“Ignoring Values in a
-Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> section. If the problem
-is that we have too many variables in the pattern, the solution is to make the
-types match by removing variables so the number of variables equals the number
-of elements in the tuple.
+Error টি ঠিক করার জন্য, আমরা `_` বা `..` ব্যবহার করে টাপলের এক বা একাধিক মান উপেক্ষা করতে পারি, যেমনটি আপনি [“Ignoring Values in a Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> বিভাগে দেখতে পাবেন। যদি সমস্যাটি হয় যে প্যাটার্নে আমাদের অনেকগুলি ভেরিয়েবল রয়েছে, তাহলে সমাধান হল ভেরিয়েবলগুলি সরিয়ে টাইপগুলিকে মেলানো যাতে ভেরিয়েবলের সংখ্যা টাপলের এলিমেন্টের সংখ্যার সমান হয়।
 
-### Function Parameters
+### ফাংশন প্যারামিটার (Function Parameters)
 
-Function parameters can also be patterns. The code in Listing 19-6, which
-declares a function named `foo` that takes one parameter named `x` of type
-`i32`, should by now look familiar.
+ফাংশন প্যারামিটারগুলিও প্যাটার্ন হতে পারে। Listing 19-6-এর কোড, যা `foo` নামে একটি ফাংশন ঘোষণা করে যা `i32` টাইপের `x` নামে একটি প্যারামিটার নেয়, এখন আপনার কাছে পরিচিত হওয়া উচিত।
 
-<Listing number="19-6" caption="A function signature uses patterns in the parameters">
+<Listing number="19-6" caption="প্যারামিটারে প্যাটার্ন ব্যবহার করে একটি ফাংশনের স্বাক্ষর">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-06/src/main.rs:here}}
@@ -227,11 +145,9 @@ declares a function named `foo` that takes one parameter named `x` of type
 
 </Listing>
 
-The `x` part is a pattern! As we did with `let`, we could match a tuple in a
-function’s arguments to the pattern. Listing 19-7 splits the values in a tuple
-as we pass it to a function.
+`x` অংশটি একটি প্যাটার্ন! যেমনটি আমরা `let`-এর সাথে করেছি, আমরা একটি ফাংশনের আর্গুমেন্টে একটি টাপলকে প্যাটার্নের সাথে মেলাতে পারি। Listing 19-7 একটি ফাংশনে পাস করার সময় একটি টাপলের মানগুলিকে বিভক্ত করে।
 
-<Listing number="19-7" file-name="src/main.rs" caption="A function with parameters that destructure a tuple">
+<Listing number="19-7" file-name="src/main.rs" caption="প্যারামিটার সহ একটি ফাংশন যা একটি টাপল ডিস্ট্রাকচার করে">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-07/src/main.rs}}
@@ -239,16 +155,10 @@ as we pass it to a function.
 
 </Listing>
 
-This code prints `Current location: (3, 5)`. The values `&(3, 5)` match the
-pattern `&(x, y)`, so `x` is the value `3` and `y` is the value `5`.
+এই কোডটি `Current location: (3, 5)` প্রিন্ট করে। `&(3, 5)` মানগুলি `&(x, y)` প্যাটার্নের সাথে মেলে, তাই `x` হল `3` মান এবং `y` হল `5` মান।
 
-We can also use patterns in closure parameter lists in the same way as in
-function parameter lists, because closures are similar to functions, as
-discussed in Chapter 13.
+আমরা ক্লোজার প্যারামিটার তালিকাতেও একইভাবে প্যাটার্ন ব্যবহার করতে পারি যেমনটি ফাংশন প্যারামিটার তালিকায় করা হয়, কারণ ক্লোজারগুলি ফাংশনের মতোই, যেমনটি Chapter 13-এ আলোচনা করা হয়েছে।
 
-At this point, you’ve seen several ways of using patterns, but patterns don’t
-work the same in every place we can use them. In some places, the patterns must
-be irrefutable; in other circumstances, they can be refutable. We’ll discuss
-these two concepts next.
+এই সময়ে, আপনি প্যাটার্ন ব্যবহার করার বেশ কয়েকটি উপায় দেখেছেন, কিন্তু প্যাটার্নগুলি আমরা যেখানে ব্যবহার করতে পারি সেখানে সব জায়গায় একই কাজ করে না। কিছু জায়গায়, প্যাটার্নগুলিকে অবশ্যই ইরিফিউটেবল হতে হবে; অন্য পরিস্থিতিতে, সেগুলি রিফিউটেবল হতে পারে। আমরা পরবর্তীতে এই দুটি ধারণা নিয়ে আলোচনা করব।
 
 [ignoring-values-in-a-pattern]: ch19-03-pattern-syntax.html#ignoring-values-in-a-pattern

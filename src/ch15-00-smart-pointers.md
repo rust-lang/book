@@ -1,53 +1,21 @@
 # Smart Pointers
 
-A _pointer_ is a general concept for a variable that contains an address in
-memory. This address refers to, or “points at,” some other data. The most
-common kind of pointer in Rust is a reference, which you learned about in
-Chapter 4. References are indicated by the `&` symbol and borrow the value they
-point to. They don’t have any special capabilities other than referring to
-data, and have no overhead.
+একটি _পয়েন্টার_ হল একটি variable-এর জন্য একটি general concept যাতে মেমরির একটি address থাকে। এই address টি অন্য কোনো ডেটাকে refer করে, বা "পয়েন্ট করে"। Rust-এ সবচেয়ে common ধরনের পয়েন্টার হল একটি reference, যেটি সম্পর্কে আপনি Chapter 4-এ শিখেছেন। Reference গুলো `&` চিহ্ন দ্বারা নির্দেশিত হয় এবং যে value-টিকে point করে সেটিকে borrow করে। ডেটা refer করা ছাড়া এগুলোর অন্য কোনো special capabilities নেই এবং কোনো overhead নেই।
 
-_Smart pointers_, on the other hand, are data structures that act like a
-pointer but also have additional metadata and capabilities. The concept of
-smart pointers isn’t unique to Rust: smart pointers originated in C++ and exist
-in other languages as well. Rust has a variety of smart pointers defined in the
-standard library that provide functionality beyond that provided by references.
-To explore the general concept, we’ll look at a couple of different examples of
-smart pointers, including a _reference counting_ smart pointer type. This
-pointer enables you to allow data to have multiple owners by keeping track of
-the number of owners and, when no owners remain, cleaning up the data.
+অন্যদিকে, _স্মার্ট পয়েন্টারগুলো_ হল ডেটা স্ট্রাকচার যা পয়েন্টারের মতো কাজ করে কিন্তু অতিরিক্ত মেটাডেটা এবং capabilities-ও রাখে। স্মার্ট পয়েন্টারের concept টি Rust-এর জন্য unique নয়: স্মার্ট পয়েন্টারগুলোর উৎপত্তি C++-এ এবং অন্যান্য language-এও রয়েছে। Rust-এর standard library-তে বিভিন্ন ধরনের স্মার্ট পয়েন্টার define করা আছে যা reference-এর মাধ্যমে provide করা functionality-এর চেয়েও বেশি কিছু provide করে। General concept টি explore করার জন্য, আমরা স্মার্ট পয়েন্টারের কয়েকটি ভিন্ন উদাহরণ দেখব, যার মধ্যে একটি _reference counting_ স্মার্ট পয়েন্টার type রয়েছে। এই পয়েন্টারটি আপনাকে ডেটার একাধিক owner রাখার অনুমতি দেয় owner-এর সংখ্যা ট্র্যাক করে এবং যখন কোনো owner অবশিষ্ট থাকে না, তখন ডেটা clean up করে।
 
-Rust, with its concept of ownership and borrowing, has an additional difference
-between references and smart pointers: while references only borrow data, in
-many cases, smart pointers _own_ the data they point to.
+Rust-এর, ownership এবং borrowing-এর concept সহ, reference এবং স্মার্ট পয়েন্টারের মধ্যে একটি additional পার্থক্য রয়েছে: যেখানে reference গুলো শুধুমাত্র ডেটা borrow করে, সেখানে অনেক ক্ষেত্রে স্মার্ট পয়েন্টারগুলো যে ডেটা point করে তার _owner_ হয়।
 
-Though we didn’t call them as such at the time, we’ve already encountered a few
-smart pointers in this book, including `String` and `Vec<T>` in Chapter 8. Both
-these types count as smart pointers because they own some memory and allow you
-to manipulate it. They also have metadata and extra capabilities or guarantees.
-`String`, for example, stores its capacity as metadata and has the extra
-ability to ensure its data will always be valid UTF-8.
+যদিও আমরা সেগুলোকে সেই সময়ে সেই নামে ডাকিনি, আমরা ইতিমধ্যেই এই বইয়ে কয়েকটি স্মার্ট পয়েন্টারের সম্মুখীন হয়েছি, যার মধ্যে Chapter 8-এর `String` এবং `Vec<T>` রয়েছে। এই দুটি type-কেই স্মার্ট পয়েন্টার হিসেবে গণ্য করা হয় কারণ তারা কিছু মেমরির owner এবং আপনাকে এটিকে manipulate করার অনুমতি দেয়। এগুলোর metadata এবং extra capabilities বা guarantee-ও রয়েছে। উদাহরণস্বরূপ, `String` তার capacity-কে metadata হিসেবে store করে এবং এর ডেটা সব সময় valid UTF-8 হবে তা নিশ্চিত করার additional ability রাখে।
 
-Smart pointers are usually implemented using structs. Unlike an ordinary
-struct, smart pointers implement the `Deref` and `Drop` traits. The `Deref`
-trait allows an instance of the smart pointer struct to behave like a reference
-so you can write your code to work with either references or smart pointers.
-The `Drop` trait allows you to customize the code that’s run when an instance
-of the smart pointer goes out of scope. In this chapter, we’ll discuss both of
-these traits and demonstrate why they’re important to smart pointers.
+স্মার্ট পয়েন্টারগুলো সাধারণত struct ব্যবহার করে implement করা হয়। একটি ordinary struct-এর বিপরীতে, স্মার্ট পয়েন্টারগুলো `Deref` এবং `Drop` trait গুলোকে implement করে। `Deref` trait-টি স্মার্ট পয়েন্টার struct-এর একটি instance-কে একটি reference-এর মতো আচরণ করার অনুমতি দেয় যাতে আপনি আপনার কোড লিখতে পারেন reference বা স্মার্ট পয়েন্টার উভয়ের সাথেই কাজ করার জন্য। `Drop` trait আপনাকে সেই কোডটি কাস্টমাইজ করার অনুমতি দেয় যা স্মার্ট পয়েন্টারের একটি instance scope-এর বাইরে চলে গেলে run হয়। এই chapter-এ, আমরা এই দুটি trait নিয়ে আলোচনা করব এবং প্রদর্শন করব কেন সেগুলো স্মার্ট পয়েন্টারগুলোর জন্য important।
 
-Given that the smart pointer pattern is a general design pattern used
-frequently in Rust, this chapter won’t cover every existing smart pointer. Many
-libraries have their own smart pointers, and you can even write your own. We’ll
-cover the most common smart pointers in the standard library:
+যেহেতু স্মার্ট পয়েন্টার প্যাটার্নটি Rust-এ প্রায়শই ব্যবহৃত একটি general design pattern, তাই এই chapter-এ existing সমস্ত স্মার্ট পয়েন্টার cover করা হবে না। অনেক লাইব্রেরির নিজস্ব স্মার্ট পয়েন্টার রয়েছে এবং আপনি নিজেও লিখতে পারেন। আমরা standard library-এর সবচেয়ে common স্মার্ট পয়েন্টারগুলো cover করব:
 
-- `Box<T>` for allocating values on the heap
-- `Rc<T>`, a reference counting type that enables multiple ownership
-- `Ref<T>` and `RefMut<T>`, accessed through `RefCell<T>`, a type that enforces
-  the borrowing rules at runtime instead of compile time
+-   `Box<T>` heap-এ value allocate করার জন্য
+-   `Rc<T>`, একটি reference counting type যা multiple ownership-এর অনুমতি দেয়
+-   `Ref<T>` এবং `RefMut<T>`, `RefCell<T>`-এর মাধ্যমে অ্যাক্সেস করা হয়, এমন একটি type যা compile time-এর পরিবর্তে runtime-এ borrowing rule গুলো enforce করে
 
-In addition, we’ll cover the _interior mutability_ pattern where an immutable
-type exposes an API for mutating an interior value. We’ll also discuss
-_reference cycles_: how they can leak memory and how to prevent them.
+এছাড়াও, আমরা _ইন্টেরিয়র মিউটেবিলিটি_ প্যাটার্নটি কভার করব যেখানে একটি immutable type একটি ভেতরের value mutate করার জন্য একটি API expose করে। আমরা _reference cycle_ নিয়েও আলোচনা করব: কীভাবে সেগুলো মেমরি লিক করতে পারে এবং কীভাবে সেগুলো প্রতিরোধ করা যায়।
 
-Let’s dive in!
+আসুন শুরু করা যাক!

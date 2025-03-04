@@ -1,29 +1,15 @@
-# Patterns and Matching
+# প্যাটার্ন এবং ম্যাচিং (Patterns and Matching)
 
-_Patterns_ are a special syntax in Rust for matching against the structure of
-types, both complex and simple. Using patterns in conjunction with `match`
-expressions and other constructs gives you more control over a program’s
-control flow. A pattern consists of some combination of the following:
+_প্যাটার্ন_ হল Rust-এ টাইপের স্ট্রাকচারের সাথে মেলানোর জন্য একটি বিশেষ সিনট্যাক্স, যা জটিল এবং সরল উভয় ধরনের হতে পারে। `match` এক্সপ্রেশন এবং অন্যান্য গঠনের সাথে প্যাটার্ন ব্যবহার করলে আপনি একটি প্রোগ্রামের কন্ট্রোল ফ্লো-এর উপর আরও বেশি নিয়ন্ত্রণ পাবেন। একটি প্যাটার্ন নিম্নলিখিতগুলির মধ্যে কয়েকটির সমন্বয়ে গঠিত:
 
-- Literals
-- Destructured arrays, enums, structs, or tuples
-- Variables
-- Wildcards
-- Placeholders
+-   লিটারেল (Literals)
+-   ডিস্ট্রাকচার্ড অ্যারে, এনাম, স্ট্রাক্ট বা টাপল
+-   ভেরিয়েবল
+-   ওয়াইল্ডকার্ড
+-   প্লেসহোল্ডার
 
-Some example patterns include `x`, `(a, 3)`, and `Some(Color::Red)`. In the
-contexts in which patterns are valid, these components describe the shape of
-data. Our program then matches values against the patterns to determine whether
-it has the correct shape of data to continue running a particular piece of code.
+কিছু উদাহরণ প্যাটার্নের মধ্যে রয়েছে `x`, `(a, 3)`, এবং `Some(Color::Red)`। যে প্রসঙ্গগুলিতে প্যাটার্নগুলি বৈধ, এই উপাদানগুলি ডেটার আকার বর্ণনা করে। আমাদের প্রোগ্রাম তারপর কোডের একটি নির্দিষ্ট অংশ চালানো চালিয়ে যাওয়ার জন্য ডেটার সঠিক আকার আছে কিনা তা নির্ধারণ করতে মানগুলিকে প্যাটার্নের সাথে মেলায়।
 
-To use a pattern, we compare it to some value. If the pattern matches the
-value, we use the value parts in our code. Recall the `match` expressions in
-Chapter 6 that used patterns, such as the coin-sorting machine example. If the
-value fits the shape of the pattern, we can use the named pieces. If it
-doesn’t, the code associated with the pattern won’t run.
+একটি প্যাটার্ন ব্যবহার করার জন্য, আমরা এটিকে কিছু মানের সাথে তুলনা করি। যদি প্যাটার্নটি মানের সাথে মেলে, তাহলে আমরা আমাদের কোডে মানের অংশগুলি ব্যবহার করি। Chapter 6-এর `match` এক্সপ্রেশনগুলি স্মরণ করুন যা প্যাটার্ন ব্যবহার করে, যেমন মুদ্রা-বাছাই মেশিনের উদাহরণ। যদি মানটি প্যাটার্নের আকারের সাথে খাপ খায়, তাহলে আমরা নামযুক্ত অংশগুলি ব্যবহার করতে পারি। যদি তা না হয়, তাহলে প্যাটার্নের সাথে সম্পর্কিত কোড চলবে না।
 
-This chapter is a reference on all things related to patterns. We’ll cover the
-valid places to use patterns, the difference between refutable and irrefutable
-patterns, and the different kinds of pattern syntax that you might see. By the
-end of the chapter, you’ll know how to use patterns to express many concepts in
-a clear way.
+এই চ্যাপ্টারটি প্যাটার্ন সম্পর্কিত সমস্ত কিছুর একটি রেফারেন্স। আমরা প্যাটার্ন ব্যবহার করার বৈধ স্থান, রিফিউটেবল এবং ইরিফিউটেবল প্যাটার্নের মধ্যে পার্থক্য এবং বিভিন্ন ধরনের প্যাটার্ন সিনট্যাক্স যা আপনি দেখতে পারেন তা কভার করব। চ্যাপ্টারের শেষে, আপনি পরিষ্কারভাবে অনেক ধারণা প্রকাশ করার জন্য কীভাবে প্যাটার্ন ব্যবহার করবেন তা জানতে পারবেন।

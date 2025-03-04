@@ -1,34 +1,22 @@
-## Applying Concurrency with Async
+## অ্যাসিঙ্ক্রোনাস ব্যবহার করে কনকারেন্সি প্রয়োগ করা (Applying Concurrency with Async)
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="concurrency-with-async"></a>
 
-In this section, we’ll apply async to some of the same concurrency challenges
-we tackled with threads in chapter 16. Because we already talked about a lot of
-the key ideas there, in this section we’ll focus on what’s different between
-threads and futures.
+এই বিভাগে, আমরা Chapter 16-এ থ্রেড দিয়ে মোকাবিলা করা একই কনকারেন্সি চ্যালেঞ্জগুলির মধ্যে কয়েকটিতে অ্যাসিঙ্ক্রোনাস প্রয়োগ করব। যেহেতু আমরা ইতিমধ্যে সেখানে মূল ধারণাগুলির অনেকগুলি নিয়ে কথা বলেছি, তাই এই বিভাগে আমরা থ্রেড এবং ফিউচারের মধ্যে কী আলাদা তার উপর ফোকাস করব।
 
-In many cases, the APIs for working with concurrency using async are very
-similar to those for using threads. In other cases, they end up being quite
-different. Even when the APIs _look_ similar between threads and async, they
-often have different behavior—and they nearly always have different performance
-characteristics.
+অনেক ক্ষেত্রে, অ্যাসিঙ্ক্রোনাস ব্যবহার করে কনকারেন্সির সাথে কাজ করার জন্য API গুলি থ্রেড ব্যবহার করার API-গুলির মতোই। অন্য ক্ষেত্রে, সেগুলি বেশ ভিন্ন হয়। এমনকি যখন API গুলি থ্রেড এবং অ্যাসিঙ্ক্রোনাসের মধ্যে দেখতে একই রকম _দেখায়_, তখনও তাদের প্রায়শই আলাদা আচরণ থাকে—এবং তাদের প্রায় সবসময়ই আলাদা পারফরম্যান্স বৈশিষ্ট্য থাকে।
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="counting"></a>
 
-### Creating a New Task with `spawn_task`
+### `spawn_task` দিয়ে একটি নতুন টাস্ক তৈরি করা (Creating a New Task with `spawn_task`)
 
-The first operation we tackled in [Creating a New Thread with
-Spawn][thread-spawn]<!-- ignore --> was counting up on two separate threads.
-Let’s do the same using async. The `trpl` crate supplies a `spawn_task` function
-that looks very similar to the `thread::spawn` API, and a `sleep` function
-that is an async version of the `thread::sleep` API. We can use these together
-to implement the counting example, as shown in Listing 17-6.
+আমরা [Creating a New Thread with Spawn][thread-spawn]<!-- ignore -->-এ যে প্রথম অপারেশনটি মোকাবেলা করেছি তা হল দুটি পৃথক থ্রেডে গণনা করা। আসুন অ্যাসিঙ্ক্রোনাস ব্যবহার করে একই কাজ করি। `trpl` ক্রেট একটি `spawn_task` ফাংশন সরবরাহ করে যা `thread::spawn` API-এর মতোই এবং একটি `sleep` ফাংশন যা `thread::sleep` API-এর একটি অ্যাসিঙ্ক্রোনাস সংস্করণ। আমরা এইগুলিকে একসাথে ব্যবহার করে গণনার উদাহরণটি ইমপ্লিমেন্ট করতে পারি, যেমনটি Listing 17-6-এ দেখানো হয়েছে।
 
-<Listing number="17-6" caption="Creating a new task to print one thing while the main task prints something else" file-name="src/main.rs">
+<Listing number="17-6" caption="main টাস্ক অন্য কিছু প্রিন্ট করার সময় একটি নতুন টাস্ক তৈরি করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-06/src/main.rs:all}}
@@ -36,21 +24,13 @@ to implement the counting example, as shown in Listing 17-6.
 
 </Listing>
 
-As our starting point, we set up our `main` function with `trpl::run` so that
-our top-level function can be async.
+আমাদের শুরুর পয়েন্ট হিসাবে, আমরা আমাদের `main` ফাংশনটিকে `trpl::run` দিয়ে সেট আপ করি যাতে আমাদের টপ-লেভেল ফাংশনটি অ্যাসিঙ্ক্রোনাস হতে পারে।
 
-> Note: From this point forward in the chapter, every example will include this
-> exact same wrapping code with `trpl::run` in `main`, so we’ll often skip it
-> just as we do with `main`. Don’t forget to include it in your code!
+> Note: এই চ্যাপ্টারের এখন থেকে সামনের দিকে, প্রতিটি উদাহরণে `main`-এ `trpl::run` সহ এই একই র‍্যাপিং কোড অন্তর্ভুক্ত থাকবে, তাই আমরা প্রায়শই এটিকে বাদ দেব যেমনটি আমরা `main`-এর সাথে করি। আপনার কোডে এটি অন্তর্ভুক্ত করতে ভুলবেন না!
 
-Then we write two loops within that block, each containing a `trpl::sleep` call,
-which waits for half a second (500 milliseconds) before sending the next
-message. We put one loop in the body of a `trpl::spawn_task` and the other in a
-top-level `for` loop. We also add an `await` after the `sleep` calls.
+তারপর আমরা সেই ব্লকের মধ্যে দুটি লুপ লিখি, প্রত্যেকটিতে একটি `trpl::sleep` কল রয়েছে, যা পরবর্তী মেসেজ পাঠানোর আগে আধা সেকেন্ড (500 মিলিসেকেন্ড) অপেক্ষা করে। আমরা একটি লুপ `trpl::spawn_task`-এর বডিতে রাখি এবং অন্যটি একটি টপ-লেভেল `for` লুপে রাখি। আমরা `sleep` কলের পরেও একটি `await` যুক্ত করি।
 
-This code behaves similarly to the thread-based implementation—including the
-fact that you may see the messages appear in a different order in your own
-terminal when you run it:
+এই কোডটি থ্রেড-ভিত্তিক ইমপ্লিমেন্টেশনের মতোই আচরণ করে—এই সত্যটি সহ যে আপনি যখন এটি চালাবেন তখন আপনার নিজের টার্মিনালে মেসেজগুলি ভিন্ন ক্রমে প্রদর্শিত হতে পারে:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -68,16 +48,9 @@ hi number 4 from the second task!
 hi number 5 from the first task!
 ```
 
-This version stops as soon as the `for` loop in the body of the main async block
-finishes, because the task spawned by `spawn_task` is shut down when the `main`
-function ends. If you want it to run all the way to the task’s completion, you
-will need to use a join handle to wait for the first task to complete. With
-threads, we used the `join` method to “block” until the thread was done running.
-In Listing 17-7, we can use `await` to do the same thing, because the task
-handle itself is a future. Its `Output` type is a `Result`, so we also unwrap it
-after awaiting it.
+এই সংস্করণটি main অ্যাসিঙ্ক্রোনাস ব্লকের বডির `for` লুপ শেষ হওয়ার সাথে সাথেই বন্ধ হয়ে যায়, কারণ `main` ফাংশন শেষ হলে `spawn_task` দ্বারা স্পন করা টাস্কটি বন্ধ হয়ে যায়। আপনি যদি এটিকে টাস্কটি সম্পূর্ণ হওয়া পর্যন্ত চালাতে চান তবে আপনাকে প্রথম টাস্কটি সম্পূর্ণ হওয়ার জন্য অপেক্ষা করতে একটি join handle ব্যবহার করতে হবে। থ্রেডের সাথে, আমরা থ্রেডটি চালানো শেষ না হওয়া পর্যন্ত “ব্লক” করতে `join` মেথড ব্যবহার করেছি। Listing 17-7-এ, আমরা একই কাজ করতে `await` ব্যবহার করতে পারি, কারণ টাস্ক হ্যান্ডেল নিজেই একটি ফিউচার। এর `Output` টাইপ হল একটি `Result`, তাই আমরা এটির জন্য অপেক্ষা করার পরেও এটিকে আনর‍্যাপ করি।
 
-<Listing number="17-7" caption="Using `await` with a join handle to run a task to completion" file-name="src/main.rs">
+<Listing number="17-7" caption="একটি টাস্ক সম্পূর্ণ হওয়া পর্যন্ত চালানোর জন্য একটি join handle-এর সাথে `await` ব্যবহার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-07/src/main.rs:handle}}
@@ -85,7 +58,7 @@ after awaiting it.
 
 </Listing>
 
-This updated version runs until _both_ loops finish.
+এই আপডেটেড সংস্করণটি _উভয়_ লুপ শেষ না হওয়া পর্যন্ত চলে।
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -107,27 +80,13 @@ hi number 8 from the first task!
 hi number 9 from the first task!
 ```
 
-So far, it looks like async and threads give us the same basic outcomes, just
-with different syntax: using `await` instead of calling `join` on the join
-handle, and awaiting the `sleep` calls.
+এখন পর্যন্ত, মনে হচ্ছে অ্যাসিঙ্ক্রোনাস এবং থ্রেড আমাদের একই বেসিক ফলাফল দেয়, শুধুমাত্র ভিন্ন সিনট্যাক্স সহ: join handle-এ `join` কল করার পরিবর্তে `await` ব্যবহার করা এবং `sleep` কলের জন্য অপেক্ষা করা।
 
-The bigger difference is that we didn’t need to spawn another operating system
-thread to do this. In fact, we don’t even need to spawn a task here. Because
-async blocks compile to anonymous futures, we can put each loop in an async
-block and have the runtime run them both to completion using the `trpl::join`
-function.
+বড় পার্থক্য হল এটি করার জন্য আমাদের অন্য অপারেটিং সিস্টেম থ্রেড স্পন করার প্রয়োজন হয়নি। আসলে, আমাদের এখানে একটি টাস্কও স্পন করার দরকার নেই। যেহেতু অ্যাসিঙ্ক্রোনাস ব্লকগুলি বেনামী ফিউচারে কম্পাইল হয়, তাই আমরা প্রতিটি লুপকে একটি অ্যাসিঙ্ক্রোনাস ব্লকে রাখতে পারি এবং `trpl::join` ফাংশন ব্যবহার করে রানটাইমকে উভয়কেই সম্পূর্ণ হওয়া পর্যন্ত চালাতে দিতে পারি।
 
-In the section [Waiting for All Threads to Finishing Using `join`
-Handles][join-handles]<!-- ignore -->, we showed how to use the `join` method on
-the `JoinHandle` type returned when you call `std::thread::spawn`. The
-`trpl::join` function is similar, but for futures. When you give it two futures,
-it produces a single new future whose output is a tuple containing the output of
-each future you passed in once they _both_ complete. Thus, in Listing 17-8, we
-use `trpl::join` to wait for both `fut1` and `fut2` to finish. We do _not_ await
-`fut1` and `fut2` but instead the new future produced by `trpl::join`. We ignore
-the output, because it’s just a tuple containing two unit values.
+[Waiting for All Threads to Finishing Using `join` Handles][join-handles]<!-- ignore --> বিভাগে, আমরা দেখিয়েছি কিভাবে আপনি `std::thread::spawn` কল করলে রিটার্ন করা `JoinHandle` টাইপের `join` মেথড ব্যবহার করবেন। `trpl::join` ফাংশনটি একই রকম, কিন্তু ফিউচারের জন্য। আপনি যখন এটিকে দুটি ফিউচার দেন, তখন এটি একটি একক নতুন ফিউচার তৈরি করে যার আউটপুট হল একটি টাপল যাতে আপনি যে প্রতিটি ফিউচার পাস করেছেন তার আউটপুট থাকে একবার সেগুলি _উভয়ই_ সম্পূর্ণ হয়ে গেলে। সুতরাং, Listing 17-8-এ, আমরা `fut1` এবং `fut2` উভয়ের শেষ হওয়ার জন্য অপেক্ষা করতে `trpl::join` ব্যবহার করি। আমরা `fut1` এবং `fut2`-এর জন্য অপেক্ষা করি _না_ বরং `trpl::join` দ্বারা উৎপাদিত নতুন ফিউচারের জন্য অপেক্ষা করি। আমরা আউটপুট উপেক্ষা করি, কারণ এটি কেবল দুটি ইউনিট মান ধারণকারী একটি টাপল।
 
-<Listing number="17-8" caption="Using `trpl::join` to await two anonymous futures" file-name="src/main.rs">
+<Listing number="17-8" caption="দুটি বেনামী ফিউচারের জন্য অপেক্ষা করতে `trpl::join` ব্যবহার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-08/src/main.rs:join}}
@@ -135,7 +94,7 @@ the output, because it’s just a tuple containing two unit values.
 
 </Listing>
 
-When we run this, we see both futures run to completion:
+যখন আমরা এটি চালাই, তখন আমরা উভয় ফিউচার সম্পূর্ণ হওয়া পর্যন্ত চলতে দেখি:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -157,43 +116,25 @@ hi number 8 from the first task!
 hi number 9 from the first task!
 ```
 
-Now, you’ll see the exact same order every time, which is very different from
-what we saw with threads. That is because the `trpl::join` function is _fair_,
-meaning it checks each future equally often, alternating between them, and never
-lets one race ahead if the other is ready. With threads, the operating system
-decides which thread to check and how long to let it run. With async Rust, the
-runtime decides which task to check. (In practice, the details get complicated
-because an async runtime might use operating system threads under the hood as
-part of how it manages concurrency, so guaranteeing fairness can be more work
-for a runtime—but it’s still possible!) Runtimes don’t have to guarantee
-fairness for any given operation, and they often offer different APIs to let you
-choose whether or not you want fairness.
+এখন, আপনি প্রতিবার একই ক্রম দেখতে পাবেন, যা আমরা থ্রেড দিয়ে যা দেখেছি তার থেকে খুব আলাদা। এর কারণ হল `trpl::join` ফাংশনটি _ফেয়ার_, অর্থাৎ এটি প্রতিটি ফিউচারকে সমানভাবে প্রায়শই পরীক্ষা করে, তাদের মধ্যে পরিবর্তন করে এবং অন্যটি প্রস্তুত থাকলে কখনই একটিকে এগিয়ে যেতে দেয় না। থ্রেডের সাথে, অপারেটিং সিস্টেম সিদ্ধান্ত নেয় কোন থ্রেডটি পরীক্ষা করতে হবে এবং কতক্ষণ চলতে দিতে হবে। অ্যাসিঙ্ক্রোনাস Rust-এর সাথে, রানটাইম সিদ্ধান্ত নেয় কোন টাস্কটি পরীক্ষা করতে হবে। (বাস্তবে, বিশদগুলি জটিল হয়ে যায় কারণ একটি অ্যাসিঙ্ক্রোনাস রানটাইম হুডের নিচে অপারেটিং সিস্টেম থ্রেডগুলিকে কনকারেন্সি পরিচালনার অংশ হিসাবে ব্যবহার করতে পারে, তাই ফেয়ারনেস গ্যারান্টি দেওয়া একটি রানটাইমের জন্য আরও বেশি কাজ হতে পারে—তবে এটি এখনও সম্ভব!) রানটাইমগুলিকে কোনও প্রদত্ত অপারেশনের জন্য ফেয়ারনেসের গ্যারান্টি দিতে হবে না এবং তারা প্রায়শই বিভিন্ন API সরবরাহ করে যাতে আপনি ফেয়ারনেস চান কিনা তা বেছে নিতে পারেন।
 
-Try some of these variations on awaiting the futures and see what they do:
+ফিউচারগুলির জন্য অপেক্ষা করার এই কিছু ভেরিয়েশন চেষ্টা করুন এবং দেখুন তারা কী করে:
 
-- Remove the async block from around either or both of the loops.
-- Await each async block immediately after defining it.
-- Wrap only the first loop in an async block, and await the resulting future
-  after the body of second loop.
+-   যেকোনো একটি বা উভয় লুপের চারপাশ থেকে অ্যাসিঙ্ক্রোনাস ব্লকটি সরিয়ে দিন।
+-   প্রতিটি অ্যাসিঙ্ক্রোনাস ব্লককে সংজ্ঞায়িত করার পরপরই এটির জন্য অপেক্ষা করুন।
+-   শুধুমাত্র প্রথম লুপটিকে একটি অ্যাসিঙ্ক্রোনাস ব্লকে র‍্যাপ করুন এবং দ্বিতীয় লুপের বডির পরে ফলাফলের ফিউচারের জন্য অপেক্ষা করুন।
 
-For an extra challenge, see if you can figure out what the output will be in
-each case _before_ running the code!
+একটি অতিরিক্ত চ্যালেঞ্জের জন্য, কোড চালানোর _আগে_ প্রতিটি ক্ষেত্রে আউটপুট কী হবে তা বের করার চেষ্টা করুন!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="message-passing"></a>
 
-### Counting Up on Two Tasks Using Message Passing
+### মেসেজ পাসিং ব্যবহার করে দুটি টাস্কে গণনা করা (Counting Up on Two Tasks Using Message Passing)
 
-Sharing data between futures will also be familiar: we’ll use message passing
-again, but this time with async versions of the types and functions. We’ll take
-a slightly different path than we did in [Using Message Passing to Transfer Data
-Between Threads][message-passing-threads]<!-- ignore --> to illustrate some of
-the key differences between thread-based and futures-based concurrency. In
-Listing 17-9, we’ll begin with just a single async block—_not_ spawning a
-separate task as we spawned a separate thread.
+ফিউচারের মধ্যে ডেটা শেয়ার করাও পরিচিত হবে: আমরা আবার মেসেজ পাসিং ব্যবহার করব, কিন্তু এবার টাইপ এবং ফাংশনের অ্যাসিঙ্ক্রোনাস সংস্করণ সহ। থ্রেড-ভিত্তিক এবং ফিউচার-ভিত্তিক কনকারেন্সির মধ্যে কিছু মূল পার্থক্য বোঝানোর জন্য আমরা [Using Message Passing to Transfer Data Between Threads][message-passing-threads]<!-- ignore -->-এ যা করেছি তার থেকে সামান্য ভিন্ন পথ নেব। Listing 17-9-এ, আমরা শুধুমাত্র একটি একক অ্যাসিঙ্ক্রোনাস ব্লক দিয়ে শুরু করব—একটি পৃথক থ্রেড স্পন করার মতো একটি পৃথক টাস্ক স্পন _না_ করে।
 
-<Listing number="17-9" caption="Creating an async channel and assigning the two halves to `tx` and `rx`" file-name="src/main.rs">
+<Listing number="17-9" caption="একটি অ্যাসিঙ্ক্রোনাস চ্যানেল তৈরি করা এবং দুটি অংশকে `tx` এবং `rx`-এ অ্যাসাইন করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-09/src/main.rs:channel}}
@@ -201,40 +142,19 @@ separate task as we spawned a separate thread.
 
 </Listing>
 
-Here, we use `trpl::channel`, an async version of the multiple-producer,
-single-consumer channel API we used with threads back in Chapter 16. The async
-version of the API is only a little different from the thread-based version: it
-uses a mutable rather than an immutable receiver `rx`, and its `recv` method
-produces a future we need to await rather than producing the value directly. Now
-we can send messages from the sender to the receiver. Notice that we don’t have
-to spawn a separate thread or even a task; we merely need to await the `rx.recv`
-call.
+এখানে, আমরা `trpl::channel` ব্যবহার করি, যা Chapter 16-এ থ্রেডের সাথে ব্যবহার করা মাল্টিপল-প্রডিউসার, সিঙ্গল-কনজিউমার চ্যানেল API-এর একটি অ্যাসিঙ্ক্রোনাস সংস্করণ। API-এর অ্যাসিঙ্ক্রোনাস সংস্করণটি থ্রেড-ভিত্তিক সংস্করণের থেকে সামান্য আলাদা: এটি একটি ইমিউটেবল রিসিভার `rx`-এর পরিবর্তে একটি মিউটেবল ব্যবহার করে এবং এর `recv` মেথড সরাসরি মান তৈরি করার পরিবর্তে আমাদের অপেক্ষা করতে হবে এমন একটি ফিউচার তৈরি করে। এখন আমরা সেন্ডার থেকে রিসিভারে মেসেজ পাঠাতে পারি। লক্ষ্য করুন যে আমাদের একটি পৃথক থ্রেড বা এমনকি একটি টাস্কও স্পন করতে হবে না; আমাদের কেবল `rx.recv` কলের জন্য অপেক্ষা করতে হবে।
 
-The synchronous `Receiver::recv` method in `std::mpsc::channel` blocks until
-it receives a message. The `trpl::Receiver::recv` method does not, because it
-is async. Instead of blocking, it hands control back to the runtime until either
-a message is received or the send side of the channel closes. By contrast, we
-don’t await the `send` call, because it doesn’t block. It doesn’t need to,
-because the channel we’re sending it into is unbounded.
+`std::mpsc::channel`-এর সিঙ্ক্রোনাস `Receiver::recv` মেথড একটি মেসেজ না পাওয়া পর্যন্ত ব্লক করে। `trpl::Receiver::recv` মেথডটি তা করে না, কারণ এটি অ্যাসিঙ্ক্রোনাস। ব্লক করার পরিবর্তে, এটি রানটাইমে কন্ট্রোল ফিরিয়ে দেয় যতক্ষণ না হয় একটি মেসেজ রিসিভ করা হয় বা চ্যানেলের সেন্ড সাইড বন্ধ হয়ে যায়। বিপরীতে, আমরা `send` কলের জন্য অপেক্ষা করি না, কারণ এটি ব্লক করে না। এটির প্রয়োজন নেই, কারণ আমরা যে চ্যানেলে এটি পাঠাচ্ছি সেটি আনবাউন্ডেড।
 
-> Note: Because all of this async code runs in an async block in a `trpl::run`
-> call, everything within it can avoid blocking. However, the code _outside_ it
-> will block on the `run` function returning. That’s the whole point of the
-> `trpl::run` function: it lets you _choose_ where to block on some set of async
-> code, and thus where to transition between sync and async code. In most async
-> runtimes, `run` is actually named `block_on` for exactly this reason.
+> Note: যেহেতু এই সমস্ত অ্যাসিঙ্ক্রোনাস কোড একটি `trpl::run` কলের মধ্যে একটি অ্যাসিঙ্ক্রোনাস ব্লকে চলে, তাই এর ভেতরের সবকিছু ব্লক করা এড়াতে পারে। যাইহোক, এর _বাইরের_ কোডটি `run` ফাংশন রিটার্ন করার উপর ব্লক করবে। `trpl::run` ফাংশনের মূল উদ্দেশ্য হল এটি: এটি আপনাকে _বেছে নিতে_ দেয় কোথায় অ্যাসিঙ্ক্রোনাস কোডের কিছু সেটের উপর ব্লক করতে হবে এবং এইভাবে কোথায় সিঙ্ক্রোনাস এবং অ্যাসিঙ্ক্রোনাস কোডের মধ্যে ট্রানজিশন করতে হবে। বেশিরভাগ অ্যাসিঙ্ক্রোনাস রানটাইমে, `run`-এর নাম আসলে `block_on` রাখা হয়েছে ঠিক এই কারণেই।
 
-Notice two things about this example. First, the message will arrive right away.
-Second, although we use a future here, there’s no concurrency yet. Everything
-in the listing happens in sequence, just as it would if there were no futures
-involved.
+এই উদাহরণ সম্পর্কে দুটি জিনিস লক্ষ্য করুন। প্রথমত, মেসেজটি অবিলম্বে আসবে। দ্বিতীয়ত, যদিও আমরা এখানে একটি ফিউচার ব্যবহার করি, এখনও কোনও কনকারেন্সি নেই। লিস্টিং-এর সবকিছু ক্রমানুসারে ঘটে, ঠিক যেমন কোনও ফিউচার জড়িত না থাকলে হত।
 
-Let’s address the first part by sending a series of messages and sleeping in
-between them, as shown in Listing 17-10.
+আসুন Listing 17-10-এ দেখানো মতো করে মেসেজের একটি সিরিজ পাঠিয়ে এবং তাদের মধ্যে স্লিপ করে প্রথম অংশটি সমাধান করি।
 
 <!-- We cannot test this one because it never stops! -->
 
-<Listing number="17-10" caption="Sending and receiving multiple messages over the async channel and sleeping with an `await` between each message" file-name="src/main.rs">
+<Listing number="17-10" caption="অ্যাসিঙ্ক্রোনাস চ্যানেলের মাধ্যমে একাধিক মেসেজ পাঠানো এবং গ্রহণ করা এবং প্রতিটি মেসেজের মধ্যে একটি `await` সহ স্লিপ করা" file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-10/src/main.rs:many-messages}}
@@ -242,62 +162,25 @@ between them, as shown in Listing 17-10.
 
 </Listing>
 
-In addition to sending the messages, we need to receive them. In this case,
-because we know how many messages are coming in, we could do that manually by
-calling `rx.recv().await` four times. In the real world, though, we’ll generally
-be waiting on some _unknown_ number of messages, so we need to keep waiting
-until we determine that there are no more messages.
+মেসেজ পাঠানোর পাশাপাশি, আমাদের সেগুলি গ্রহণ করতে হবে। এক্ষেত্রে, যেহেতু আমরা জানি কতগুলি মেসেজ আসছে, তাই আমরা `rx.recv().await` চারবার কল করে ম্যানুয়ালি এটি করতে পারি। বাস্তব জগতে, যদিও, আমরা সাধারণত _অজানা_ সংখ্যক মেসেজের জন্য অপেক্ষা করব, তাই আমাদের অপেক্ষা করতে হবে যতক্ষণ না আমরা নির্ধারণ করি যে আর কোনও মেসেজ নেই।
 
-In Listing 16-10, we used a `for` loop to process all the items received from a
-synchronous channel. Rust doesn’t yet have a way to write a `for` loop over an
-_asynchronous_ series of items, however, so we need to use a loop we haven’t
-seen before: the `while let` conditional loop. This is the loop version of the
-`if let` construct we saw back in the section [Concise Control Flow with `if
-let` and `let else`][if-let]<!-- ignore -->. The loop will continue executing as
-long as the pattern it specifies continues to match the value.
+Listing 16-10-এ, আমরা একটি সিঙ্ক্রোনাস চ্যানেল থেকে প্রাপ্ত সমস্ত আইটেম প্রসেস করতে একটি `for` লুপ ব্যবহার করেছি। Rust-এ এখনও একটি `for` লুপ লেখার কোনও উপায় নেই আইটেমগুলির একটি _অ্যাসিঙ্ক্রোনাস_ সিরিজের উপর, যাইহোক, তাই আমাদের একটি লুপ ব্যবহার করতে হবে যা আমরা আগে দেখিনি: `while let` কন্ডিশনাল লুপ। এটি [Concise Control Flow with `if let` and `let else`][if-let]<!-- ignore --> বিভাগে আমরা যে `if let` গঠন দেখেছি তার লুপ সংস্করণ। এটি যে প্যাটার্নটি নির্দিষ্ট করে তা মানের সাথে মিলতে থাকলে লুপটি এক্সিকিউট করা চালিয়ে যাবে।
 
-The `rx.recv` call produces a future, which we await. The runtime will pause the
-future until it is ready. Once a message arrives, the future will resolve to
-`Some(message)` as many times as a message arrives. When the channel closes,
-regardless of whether _any_ messages have arrived, the future will instead
-resolve to `None` to indicate that there are no more values and thus we should
-stop polling—that is, stop awaiting.
+`rx.recv` কলটি একটি ফিউচার তৈরি করে, যার জন্য আমরা অপেক্ষা করি। রানটাইম ফিউচারটি প্রস্তুত না হওয়া পর্যন্ত এটিকে থামিয়ে রাখবে। একবার একটি মেসেজ এলে, ফিউচারটি যতবার একটি মেসেজ আসবে ততবার `Some(message)`-এ রেজলভ করবে। যখন চ্যানেলটি বন্ধ হয়ে যায়, _কোনও_ মেসেজ এসেছে কিনা তা নির্বিশেষে, ফিউচারটি পরিবর্তে `None`-এ রেজলভ করবে যাতে নির্দেশ করে যে আর কোনও মান নেই এবং তাই আমাদের পোলিং বন্ধ করা উচিত—অর্থাৎ, অপেক্ষা করা বন্ধ করা উচিত।
 
-The `while let` loop pulls all of this together. If the result of calling
-`rx.recv().await` is `Some(message)`, we get access to the message and we can
-use it in the loop body, just as we could with `if let`. If the result is
-`None`, the loop ends. Every time the loop completes, it hits the await point
-again, so the runtime pauses it again until another message arrives.
+`while let` লুপ এই সমস্ত কিছুকে একত্রিত করে। `rx.recv().await` কলের ফলাফল যদি `Some(message)` হয়, তাহলে আমরা মেসেজটিতে অ্যাক্সেস পাব এবং আমরা এটিকে লুপ বডিতে ব্যবহার করতে পারি, ঠিক যেমনটি আমরা `if let`-এর সাথে করতে পারতাম। যদি ফলাফলটি `None` হয়, তাহলে লুপটি শেষ হয়। প্রতিবার লুপটি সম্পূর্ণ হলে, এটি আবার অ্যাওয়েট পয়েন্টে আঘাত করে, তাই রানটাইম এটিকে আবার থামিয়ে দেয় যতক্ষণ না অন্য কোনও মেসেজ আসে।
 
-The code now successfully sends and receives all of the messages. Unfortunately,
-there are still a couple of problems. For one thing, the messages do not arrive
-at half-second intervals. They arrive all at once, 2 (2,000 milliseconds) after
-we start the program. For another, this program also never exits! Instead, it
-waits forever for new messages. You will need to shut it down using <span
-class="keystroke">ctrl-c</span>.
+কোডটি এখন সফলভাবে সমস্ত মেসেজ পাঠায় এবং গ্রহণ করে। দুর্ভাগ্যবশত, এখনও কয়েকটি সমস্যা রয়েছে। একটির জন্য, মেসেজগুলি আধা-সেকেন্ডের ব্যবধানে আসে না। সেগুলি আমাদের প্রোগ্রাম শুরু করার 2 সেকেন্ড (2,000 মিলিসেকেন্ড) পরে একবারে আসে। অন্যটির জন্য, এই প্রোগ্রামটিও কখনও শেষ হয় না! পরিবর্তে, এটি নতুন মেসেজের জন্য চিরকাল অপেক্ষা করে। আপনাকে <span class="keystroke">ctrl-c</span> ব্যবহার করে এটি বন্ধ করতে হবে।
 
-Let’s start by examining why the messages come in all at once after the full
-delay, rather than coming in with delays between each one. Within a given async
-block, the order in which `await` keywords appear in the code is also the order
-in which they’re executed when the program runs.
+আসুন প্রথমে পরীক্ষা করে দেখি কেন মেসেজগুলি প্রতিটিটির মধ্যে বিলম্ব সহ আসার পরিবর্তে সম্পূর্ণ বিলম্বের পরে একবারে আসে। একটি প্রদত্ত অ্যাসিঙ্ক্রোনাস ব্লকের মধ্যে, কোডে `await` কীওয়ার্ডগুলি যে ক্রমে প্রদর্শিত হয় সেই ক্রমেই প্রোগ্রামটি চলার সময় সেগুলি এক্সিকিউট করা হয়।
 
-There’s only one async block in Listing 17-10, so everything in it runs
-linearly. There’s still no concurrency. All the `tx.send` calls happen,
-interspersed with all of the `trpl::sleep` calls and their associated await
-points. Only then does the `while let` loop get to go through any of the `await`
-points on the `recv` calls.
+Listing 17-10-এ শুধুমাত্র একটি অ্যাসিঙ্ক্রোনাস ব্লক রয়েছে, তাই এর সবকিছু লিনিয়ারভাবে চলে। এখনও কোনও কনকারেন্সি নেই। সমস্ত `tx.send` কলগুলি ঘটে, সমস্ত `trpl::sleep` কল এবং তাদের সম্পর্কিত অ্যাওয়েট পয়েন্টগুলির সাথে ইন্টারস্পার্সড। শুধুমাত্র তখনই `while let` লুপ `recv` কলের অ্যাওয়েট পয়েন্টগুলির মধ্য দিয়ে যেতে পারে।
 
-To get the behavior we want, where the sleep delay happens between each message,
-we need to put the `tx` and `rx` operations in their own async blocks, as shown
-in Listing 17-11. Then the runtime can execute each of them separately using
-`trpl::join`, just as in the counting example. Once again, we await the result
-of calling `trpl::join`, not the individual futures. If we awaited the
-individual futures in sequence, we would just end up back in a sequential
-flow—exactly what we’re trying _not_ to do.
+আমরা যে আচরণটি চাই তা পেতে, যেখানে প্রতিটি মেসেজের মধ্যে স্লিপ বিলম্ব ঘটে, আমাদের `tx` এবং `rx` অপারেশনগুলিকে তাদের নিজস্ব অ্যাসিঙ্ক্রোনাস ব্লকে রাখতে হবে, যেমনটি Listing 17-11-এ দেখানো হয়েছে। তারপর রানটাইম `trpl::join` ব্যবহার করে তাদের প্রত্যেকটিকে আলাদাভাবে এক্সিকিউট করতে পারে, ঠিক গণনার উদাহরণের মতো। আবারও, আমরা `trpl::join` কলের ফলাফলের জন্য অপেক্ষা করি, individual ফিউচারগুলির জন্য নয়। আমরা যদি individual ফিউচারগুলির জন্য ক্রমানুসারে অপেক্ষা করতাম, তাহলে আমরা একটি সিকোয়েন্সিয়াল ফ্লো-তে ফিরে যেতাম—ঠিক যা আমরা করার চেষ্টা _করছি না_।
 
 <!-- We cannot test this one because it never stops! -->
 
-<Listing number="17-11" caption="Separating `send` and `recv` into their own `async` blocks and awaiting the futures for those blocks" file-name="src/main.rs">
+<Listing number="17-11" caption="`send` এবং `recv` কে তাদের নিজস্ব `async` ব্লকে আলাদা করা এবং সেই ব্লকগুলির ফিউচারের জন্য অপেক্ষা করা" file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-11/src/main.rs:futures}}
@@ -305,47 +188,26 @@ flow—exactly what we’re trying _not_ to do.
 
 </Listing>
 
-With the updated code in Listing 17-11, the messages get printed at
-500-millisecond intervals, rather than all in a rush after 2 seconds.
+Listing 17-11-এর আপডেটেড কোডের সাথে, মেসেজগুলি 2 সেকেন্ড পরে তাড়াহুড়ো করে আসার পরিবর্তে 500-মিলিসেকেন্ডের ব্যবধানে প্রিন্ট করা হয়।
 
-The program still never exits, though, because of the way `while let` loop
-interacts with `trpl::join`:
+প্রোগ্রামটি এখনও শেষ হয় না, যদিও, `while let` লুপ যেভাবে `trpl::join`-এর সাথে ইন্টারঅ্যাক্ট করে তার কারণে:
 
-- The future returned from `trpl::join` completes only once _both_ futures
-  passed to it have completed.
-- The `tx` future completes once it finishes sleeping after sending the last
-  message in `vals`.
-- The `rx` future won’t complete until the `while let` loop ends.
-- The `while let` loop won’t end until awaiting `rx.recv` produces `None`.
-- Awaiting `rx.recv` will return `None` only once the other end of the channel
-  is closed.
-- The channel will close only if we call `rx.close` or when the sender side,
-  `tx`, is dropped.
-- We don’t call `rx.close` anywhere, and `tx` won’t be dropped until the
-  outermost async block passed to `trpl::run` ends.
-- The block can’t end because it is blocked on `trpl::join` completing, which
-  takes us back to the top of this list.
+-   `trpl::join` থেকে রিটার্ন করা ফিউচার তখনই সম্পূর্ণ হয় যখন _উভয়_ ফিউচার এটিকে পাস করা হয়েছে সম্পূর্ণ হয়।
+-   `tx` ফিউচারটি `vals`-এ শেষ মেসেজ পাঠানোর পরে স্লিপ শেষ করার পরে সম্পূর্ণ হয়।
+-   `rx` ফিউচারটি `while let` লুপ শেষ না হওয়া পর্যন্ত সম্পূর্ণ হবে না।
+-   `while let` লুপটি শেষ হবে না যতক্ষণ না `rx.recv`-এর জন্য অপেক্ষা করলে `None` পাওয়া যায়।
+-    `rx.recv`-এর জন্য অপেক্ষা করলে `None` রিটার্ন করবে শুধুমাত্র চ্যানেলের অন্য প্রান্তটি বন্ধ হয়ে গেলে।
+-   চ্যানেলটি বন্ধ হবে শুধুমাত্র যদি আমরা `rx.close` কল করি বা যখন সেন্ডার সাইড, `tx`, ড্রপ করা হয়।
+-   আমরা কোথাও `rx.close` কল করি না এবং `trpl::run`-এ পাস করা বাইরের অ্যাসিঙ্ক্রোনাস ব্লকটি শেষ না হওয়া পর্যন্ত `tx` ড্রপ করা হবে না।
+-   ব্লকটি শেষ হতে পারে না কারণ এটি `trpl::join` সম্পূর্ণ হওয়ার উপর ব্লক করা, যা আমাদের এই তালিকার শীর্ষে ফিরিয়ে নিয়ে যায়।
 
-We could manually close `rx` by calling `rx.close` somewhere, but that doesn’t
-make much sense. Stopping after handling some arbitrary number of messages would
-make the program shut down, but we could miss messages. We need some other way
-to make sure that `tx` gets dropped _before_ the end of the function.
+আমরা কোথাও `rx.close` কল করে ম্যানুয়ালি `rx` বন্ধ করতে পারি, তবে এটি খুব বেশি অর্থবোধক নয়। কিছু arbitrary সংখ্যক মেসেজ হ্যান্ডেল করার পরে বন্ধ করা প্রোগ্রামটি বন্ধ করে দেবে, কিন্তু আমরা মেসেজ মিস করতে পারি। আমাদের অন্য কোনও উপায়ের প্রয়োজন যাতে `tx` ফাংশনের শেষের _আগে_ ড্রপ করা হয় তা নিশ্চিত করা যায়।
 
-Right now, the async block where we send the messages only borrows `tx` because
-sending a message doesn’t require ownership, but if we could move `tx` into that
-async block, it would be dropped once that block ends. In the Chapter 13 section
-[Capturing References or Moving Ownership][capture-or-move]<!-- ignore -->, you
-learned how to use the `move` keyword with closures, and, as discussed in the
-Chapter 16 section [Using `move` Closures with Threads][move-threads]<!-- ignore
--->, we often need to move data into closures when working with threads. The
-same basic dynamics apply to async blocks, so the `move` keyword works with
-async blocks just as it does with closures.
+এখন, যে অ্যাসিঙ্ক্রোনাস ব্লকে আমরা মেসেজ পাঠাই সেটি শুধুমাত্র `tx` ধার করে কারণ একটি মেসেজ পাঠানোর জন্য ownership-এর প্রয়োজন হয় না, কিন্তু আমরা যদি `tx` কে সেই অ্যাসিঙ্ক্রোনাস ব্লকে move করতে পারতাম, তাহলে সেই ব্লকটি শেষ হয়ে গেলে এটি ড্রপ করা হত। Chapter 13-এর [Capturing References or Moving Ownership][capture-or-move]<!-- ignore --> বিভাগে, আপনি শিখেছেন কিভাবে ক্লোজারের সাথে `move` কীওয়ার্ড ব্যবহার করতে হয় এবং Chapter 16-এর [Using `move` Closures with Threads][move-threads]<!-- ignore --> বিভাগে আলোচনা করা হয়েছে, থ্রেডের সাথে কাজ করার সময় আমাদের প্রায়শই ডেটা ক্লোজারে move করতে হয়। একই বেসিক ডায়নামিকগুলি অ্যাসিঙ্ক্রোনাস ব্লকের ক্ষেত্রে প্রযোজ্য, তাই `move` কীওয়ার্ডটি অ্যাসিঙ্ক্রোনাস ব্লকের সাথে একইভাবে কাজ করে যেমনটি ক্লোজারের সাথে করে।
 
-In Listing 17-12, we change the block used to send messages from `async` to
-`async move`. When we run _this_ version of the code, it shuts down gracefully
-after the last message is sent and received.
+Listing 17-12-এ, আমরা মেসেজ পাঠানোর জন্য ব্যবহৃত ব্লকটিকে `async` থেকে `async move`-এ পরিবর্তন করি। যখন আমরা কোডের _এই_ সংস্করণটি চালাই, তখন শেষ মেসেজটি পাঠানো এবং গ্রহণ করার পরে এটি সুন্দরভাবে বন্ধ হয়ে যায়।
 
-<Listing number="17-12" caption="A  revision of the code from Listing 17-11 that correctly shuts down when complete" file-name="src/main.rs">
+<Listing number="17-12" caption="Listing 17-11-এর কোডের একটি সংশোধন যা সম্পূর্ণ হলে সঠিকভাবে বন্ধ হয়ে যায়" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-12/src/main.rs:with-move}}
@@ -353,11 +215,9 @@ after the last message is sent and received.
 
 </Listing>
 
-This async channel is also a multiple-producer channel, so we can call `clone`
-on `tx` if we want to send messages from multiple futures, as shown in Listing
-17-13.
+এই অ্যাসিঙ্ক্রোনাস চ্যানেলটিও একটি মাল্টিপল-প্রডিউসার চ্যানেল, তাই আমরা একাধিক ফিউচার থেকে মেসেজ পাঠাতে চাইলে `tx`-এ `clone` কল করতে পারি, যেমনটি Listing 17-13-এ দেখানো হয়েছে।
 
-<Listing number="17-13" caption="Using multiple producers with async blocks" file-name="src/main.rs">
+<Listing number="17-13" caption="অ্যাসিঙ্ক্রোনাস ব্লকের সাথে একাধিক প্রডিউসার ব্যবহার করা" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-13/src/main.rs:here}}
@@ -365,21 +225,11 @@ on `tx` if we want to send messages from multiple futures, as shown in Listing
 
 </Listing>
 
-First, we clone `tx`, creating `tx1` outside the first async block. We move
-`tx1` into that block just as we did before with `tx`. Then, later, we move the
-original `tx` into a _new_ async block, where we send more messages on a
-slightly slower delay. We happen to put this new async block after the async
-block for receiving messages, but it could go before it just as well. The key is
-the order in which the futures are awaited, not in which they’re created.
+প্রথমে, আমরা প্রথম অ্যাসিঙ্ক্রোনাস ব্লকের বাইরে `tx` ক্লোন করে `tx1` তৈরি করি। আমরা `tx1`-কে সেই ব্লকে move করি ঠিক যেমনটি আমরা আগে `tx`-এর সাথে করেছি। তারপর, পরে, আমরা মূল `tx`-কে একটি _নতুন_ অ্যাসিঙ্ক্রোনাস ব্লকে move করি, যেখানে আমরা সামান্য ধীর বিলম্বের সাথে আরও মেসেজ পাঠাই। আমরা এই নতুন অ্যাসিঙ্ক্রোনাস ব্লকটিকে মেসেজ গ্রহণ করার অ্যাসিঙ্ক্রোনাস ব্লকের পরে রাখি, তবে এটি এর আগেও যেতে পারত। মূল বিষয় হল ফিউচারগুলি যে ক্রমে অপেক্ষা করা হয়, সেগুলি যে ক্রমে তৈরি করা হয় তাতে নয়।
 
-Both of the async blocks for sending messages need to be `async move` blocks so
-that both `tx` and `tx1` get dropped when those blocks finish. Otherwise, we’ll
-end up back in the same infinite loop we started out in. Finally, we switch from
-`trpl::join` to `trpl::join3` to handle the additional future.
+মেসেজ পাঠানোর জন্য উভয় অ্যাসিঙ্ক্রোনাস ব্লককেই `async move` ব্লক হতে হবে যাতে `tx` এবং `tx1` উভয়ই সেই ব্লকগুলি শেষ হলে ড্রপ করা হয়। অন্যথায়, আমরা একই অসীম লুপে ফিরে যাব যেখানে আমরা শুরু করেছিলাম। অবশেষে, আমরা অতিরিক্ত ফিউচার হ্যান্ডেল করতে `trpl::join` থেকে `trpl::join3`-এ পরিবর্তন করি।
 
-Now we see all the messages from both sending futures, and because the sending
-futures use slightly different delays after sending, the messages are also
-received at those different intervals.
+এখন আমরা উভয় সেন্ডিং ফিউচার থেকে সমস্ত মেসেজ দেখতে পাই এবং যেহেতু সেন্ডিং ফিউচারগুলি পাঠানোর পরে সামান্য ভিন্ন বিলম্ব ব্যবহার করে, তাই মেসেজগুলিও সেই ভিন্ন ব্যবধানে রিসিভ করা হয়।
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -396,8 +246,7 @@ received 'for'
 received 'you'
 ```
 
-This is a good start, but it limits us to just a handful of futures: two with
-`join`, or three with `join3`. Let’s see how we might work with more futures.
+এটি একটি ভাল শুরু, তবে এটি আমাদের শুধুমাত্র কয়েকটি ফিউচারের মধ্যে সীমাবদ্ধ করে: `join`-এর সাথে দুটি বা `join3`-এর সাথে তিনটি। আসুন দেখি কিভাবে আমরা আরও ফিউচারের সাথে কাজ করতে পারি।
 
 [thread-spawn]: ch16-01-threads.html#creating-a-new-thread-with-spawn
 [join-handles]: ch16-01-threads.html#waiting-for-all-threads-to-finish-using-join-handles
