@@ -1,7 +1,24 @@
-# ত্রুটি হ্যান্ডলিং
+# Error Handling
 
-সফটওয়্যারে ত্রুটি একটি স্বাভাবিক ঘটনা, তাই Rust এ এমন অনেক বৈশিষ্ট্য রয়েছে যা কোনো সমস্যা হলে পরিস্থিতিগুলি হ্যান্ডেল করার জন্য। অনেক ক্ষেত্রে, Rust এর জন্য প্রয়োজন যে আপনি একটি ত্রুটির সম্ভাবনা স্বীকার করেন এবং আপনার কোড কম্পাইল করার আগে কিছু পদক্ষেপ নেন। এই প্রয়োজনীয়তা আপনার প্রোগ্রামটিকে আরও শক্তিশালী করে তোলে যাতে আপনি আপনার কোডটিকে প্রোডাকশনে স্থাপন করার আগে ত্রুটিগুলি আবিষ্কার করতে এবং সেগুলিকে যথাযথভাবে হ্যান্ডেল করতে পারেন!
+Errors are a fact of life in software, so Rust has a number of features for
+handling situations in which something goes wrong. In many cases, Rust requires
+you to acknowledge the possibility of an error and take some action before your
+code will compile. This requirement makes your program more robust by ensuring
+that you’ll discover errors and handle them appropriately before deploying your
+code to production!
 
-Rust ত্রুটিগুলিকে দুটি প্রধান বিভাগে গোষ্ঠীভুক্ত করে: _পুনরুদ্ধারযোগ্য_ এবং _অপুনরুদ্ধারযোগ্য_ ত্রুটি। একটি পুনরুদ্ধারযোগ্য ত্রুটির জন্য, যেমন একটি _ফাইল খুঁজে পাওয়া যায়নি_ ত্রুটি, আমরা সম্ভবত সমস্যাটি ব্যবহারকারীকে জানাতে এবং অপারেশনটি পুনরায় চেষ্টা করতে চাই। অপুনরুদ্ধারযোগ্য ত্রুটিগুলি সর্বদা বাগের লক্ষণ, যেমন একটি অ্যারের শেষ সীমার বাইরে একটি অবস্থানে অ্যাক্সেস করার চেষ্টা করা এবং তাই আমরা প্রোগ্রামটি অবিলম্বে বন্ধ করতে চাই।
+Rust groups errors into two major categories: _recoverable_ and _unrecoverable_
+errors. For a recoverable error, such as a _file not found_ error, we most
+likely just want to report the problem to the user and retry the operation.
+Unrecoverable errors are always symptoms of bugs, such as trying to access a
+location beyond the end of an array, and so we want to immediately stop the
+program.
 
-বেশিরভাগ ভাষা এই দুই ধরনের ত্রুটির মধ্যে পার্থক্য করে না এবং ব্যতিক্রমের মতো প্রক্রিয়াগুলি ব্যবহার করে একই উপায়ে উভয়টি পরিচালনা করে। Rust এ ব্যতিক্রম নেই। পরিবর্তে, এতে পুনরুদ্ধারযোগ্য ত্রুটির জন্য `Result<T, E>` টাইপ এবং প্রোগ্রাম যখন একটি অপুনরুদ্ধারযোগ্য ত্রুটির সম্মুখীন হয় তখন এক্সিকিউশন বন্ধ করে দেয় এমন `panic!` macro রয়েছে। এই অধ্যায়টি প্রথমে `panic!` কল করা কভার করে এবং তারপরে `Result<T, E>` মান ফেরত দেওয়া নিয়ে আলোচনা করে। অতিরিক্তভাবে, আমরা একটি ত্রুটি থেকে পুনরুদ্ধার করার চেষ্টা করব নাকি এক্সিকিউশন বন্ধ করব তা সিদ্ধান্ত নেওয়ার সময় বিবেচনাগুলি অন্বেষণ করব।
+Most languages don’t distinguish between these two kinds of errors and handle
+both in the same way, using mechanisms such as exceptions. Rust doesn’t have
+exceptions. Instead, it has the type `Result<T, E>` for recoverable errors and
+the `panic!` macro that stops execution when the program encounters an
+unrecoverable error. This chapter covers calling `panic!` first and then talks
+about returning `Result<T, E>` values. Additionally, we’ll explore
+considerations when deciding whether to try to recover from an error or to stop
+execution.

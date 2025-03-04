@@ -1,50 +1,119 @@
-## Ownership কি?
+## What Is Ownership?
 
-_Ownership_ হলো কিছু নিয়ম যা একটি Rust প্রোগ্রাম কিভাবে মেমরি ম্যানেজ করে তা নির্ধারণ করে।
+_Ownership_ is a set of rules that govern how a Rust program manages memory.
+All programs have to manage the way they use a computer’s memory while running.
+Some languages have garbage collection that regularly looks for no-longer-used
+memory as the program runs; in other languages, the programmer must explicitly
+allocate and free the memory. Rust uses a third approach: memory is managed
+through a system of ownership with a set of rules that the compiler checks. If
+any of the rules are violated, the program won’t compile. None of the features
+of ownership will slow down your program while it’s running.
 
-সব প্রোগ্রামকেই চলার সময় কম্পিউটারের মেমরি ব্যবহারের পদ্ধতি ম্যানেজ করতে হয়। কিছু ভাষায় garbage collection থাকে যা প্রোগ্রাম চলার সময় নিয়মিতভাবে অব্যবহৃত মেমরি খুঁজে বের করে; অন্যান্য ভাষায়, প্রোগ্রামারকে স্পষ্টভাবে মেমরি allocate এবং free করতে হয়। Rust তৃতীয় একটি পদ্ধতি ব্যবহার করে: Ownership সিস্টেমের মাধ্যমে মেমরি ম্যানেজ করা হয়, যেখানে কিছু নিয়ম আছে যা কম্পাইলার চেক করে। যদি কোনো নিয়ম ভঙ্গ হয়, তাহলে প্রোগ্রাম compile হবে না। Ownership এর কোনো বৈশিষ্ট্যই প্রোগ্রাম চলার সময় এর গতি কমাবে না।
+Because ownership is a new concept for many programmers, it does take some time
+to get used to. The good news is that the more experienced you become with Rust
+and the rules of the ownership system, the easier you’ll find it to naturally
+develop code that is safe and efficient. Keep at it!
 
-যেহেতু Ownership অনেক প্রোগ্রামারের জন্য একটি নতুন ধারণা, তাই এটি আয়ত্ত করতে কিছুটা সময় লাগে। ভালো খবর হলো, Rust এবং Ownership সিস্টেমের নিয়মগুলির সাথে আপনি যত বেশি অভিজ্ঞ হবেন, তত সহজে আপনি নিরাপদ এবং কার্যকর কোড তৈরি করতে পারবেন। চেষ্টা চালিয়ে যান!
+When you understand ownership, you’ll have a solid foundation for understanding
+the features that make Rust unique. In this chapter, you’ll learn ownership by
+working through some examples that focus on a very common data structure:
+strings.
 
-যখন আপনি Ownership বুঝবেন, তখন আপনি Rust এর বৈশিষ্ট্যগুলি বোঝার জন্য একটি শক্ত ভিত্তি পাবেন। এই অধ্যায়ে, আপনি Ownership শিখবেন কিছু উদাহরণের মাধ্যমে, যা একটি খুব সাধারণ ডেটা স্ট্রাকচার: স্ট্রিং-এর উপর ফোকাস করবে।
-
-> ### Stack এবং Heap
+> ### The Stack and the Heap
 >
-> অনেক প্রোগ্রামিং ভাষায় আপনাকে Stack এবং Heap নিয়ে বেশি চিন্তা করতে হয় না। কিন্তু Rust এর মতো একটি সিস্টেম প্রোগ্রামিং ভাষায়, একটি ভ্যালু Stack এ আছে নাকি Heap এ, তা ভাষার আচরণ এবং কিছু সিদ্ধান্ত নেওয়ার ক্ষেত্রে প্রভাব ফেলে। Ownership এর কিছু অংশ Stack এবং Heap এর সাথে সম্পর্কিত করে এই অধ্যায়ের পরে আলোচনা করা হবে, তাই এখানে একটি সংক্ষিপ্ত ব্যাখ্যা দেওয়া হলো।
+> Many programming languages don’t require you to think about the stack and the
+> heap very often. But in a systems programming language like Rust, whether a
+> value is on the stack or the heap affects how the language behaves and why
+> you have to make certain decisions. Parts of ownership will be described in
+> relation to the stack and the heap later in this chapter, so here is a brief
+> explanation in preparation.
 >
-> Stack এবং Heap দুটোই রানটাইমে আপনার কোড ব্যবহারের জন্য উপলব্ধ মেমরির অংশ, তবে এগুলি ভিন্নভাবে গঠিত। Stack ভ্যালুগুলিকে সেই অর্ডারে স্টোর করে যেভাবে সেগুলি পায় এবং বিপরীত অর্ডারে ভ্যালুগুলিকে সরিয়ে দেয়। একে _last in, first out_ বলা হয়। প্লেটের একটি স্তূপের কথা ভাবুন: যখন আপনি আরও প্লেট যোগ করেন, তখন আপনি সেগুলিকে স্তূপের উপরে রাখেন, এবং যখন আপনার প্লেটের প্রয়োজন হয়, তখন আপনি উপরের একটি সরিয়ে নেন। মাঝখান থেকে বা নিচ থেকে প্লেট যোগ বা সরানো ততটা ভালোভাবে কাজ করবে না! ডেটা যোগ করাকে _pushing onto the stack_ বলা হয় এবং ডেটা সরানোকে _popping off the stack_ বলা হয়। Stack এ স্টোর করা সমস্ত ডেটার একটি পরিচিত, fixed size থাকতে হবে। compile time এ অজানা আকারের বা পরিবর্তন হতে পারে এমন ডেটা অবশ্যই Heap এ স্টোর করতে হবে।
+> Both the stack and the heap are parts of memory available to your code to use
+> at runtime, but they are structured in different ways. The stack stores
+> values in the order it gets them and removes the values in the opposite
+> order. This is referred to as _last in, first out_. Think of a stack of
+> plates: when you add more plates, you put them on top of the pile, and when
+> you need a plate, you take one off the top. Adding or removing plates from
+> the middle or bottom wouldn’t work as well! Adding data is called _pushing
+> onto the stack_, and removing data is called _popping off the stack_. All
+> data stored on the stack must have a known, fixed size. Data with an unknown
+> size at compile time or a size that might change must be stored on the heap
+> instead.
 >
-> Heap কম সুসংগঠিত: যখন আপনি Heap এ ডেটা রাখেন, তখন আপনি একটি নির্দিষ্ট পরিমাণ জায়গার জন্য অনুরোধ করেন। মেমরি অ্যালোকেটর Heap এ যথেষ্ট বড় একটি খালি জায়গা খুঁজে বের করে, এটিকে ব্যবহার করা হচ্ছে বলে চিহ্নিত করে, এবং একটি _pointer_ রিটার্ন করে, যা সেই লোকেশনের ঠিকানা। এই প্রক্রিয়াকে _allocating on the heap_ বলা হয় এবং মাঝে মাঝে শুধু _allocating_ হিসাবেও লেখা হয় (Stack এ ভ্যালু push করাকে allocating হিসাবে ধরা হয় না)। যেহেতু Heap এর pointer একটি পরিচিত, fixed size, তাই আপনি pointer টিকে Stack এ স্টোর করতে পারেন, কিন্তু যখন আপনার আসল ডেটার প্রয়োজন হয়, তখন আপনাকে pointer অনুসরণ করতে হবে। একটি রেস্টুরেন্টে বসার কথা ভাবুন। যখন আপনি প্রবেশ করেন, তখন আপনি আপনার গ্রুপের লোকের সংখ্যা বলেন, এবং হোস্ট এমন একটি খালি টেবিল খুঁজে বের করেন যা সবার জন্য উপযুক্ত এবং আপনাকে সেখানে নিয়ে যান। যদি আপনার গ্রুপের কেউ পরে আসে, তবে তারা আপনাকে খুঁজে বের করার জন্য জিজ্ঞাসা করতে পারে যে আপনি কোথায় বসেছেন।
+> The heap is less organized: when you put data on the heap, you request a
+> certain amount of space. The memory allocator finds an empty spot in the heap
+> that is big enough, marks it as being in use, and returns a _pointer_, which
+> is the address of that location. This process is called _allocating on the
+> heap_ and is sometimes abbreviated as just _allocating_ (pushing values onto
+> the stack is not considered allocating). Because the pointer to the heap is a
+> known, fixed size, you can store the pointer on the stack, but when you want
+> the actual data, you must follow the pointer. Think of being seated at a
+> restaurant. When you enter, you state the number of people in your group, and
+> the host finds an empty table that fits everyone and leads you there. If
+> someone in your group comes late, they can ask where you’ve been seated to
+> find you.
 >
-> Stack এ push করা Heap এ allocate করার চেয়ে দ্রুত, কারণ অ্যালোকেটরকে নতুন ডেটা স্টোর করার জন্য কোনো জায়গা খুঁজতে হয় না; সেই লোকেশন সবসময় Stack এর উপরে থাকে। তুলনামূলকভাবে, Heap এ জায়গা allocate করার জন্য আরও বেশি কাজ করতে হয়, কারণ অ্যালোকেটরকে প্রথমে ডেটা রাখার জন্য যথেষ্ট বড় জায়গা খুঁজে বের করতে হয় এবং তারপরে পরবর্তী allocation এর জন্য প্রস্তুতি নিতে বুককিপিং করতে হয়।
+> Pushing to the stack is faster than allocating on the heap because the
+> allocator never has to search for a place to store new data; that location is
+> always at the top of the stack. Comparatively, allocating space on the heap
+> requires more work because the allocator must first find a big enough space
+> to hold the data and then perform bookkeeping to prepare for the next
+> allocation.
 >
-> Heap এ ডেটা অ্যাক্সেস করা Stack এর ডেটা অ্যাক্সেস করার চেয়ে ধীর, কারণ সেখানে পৌঁছানোর জন্য আপনাকে একটি pointer অনুসরণ করতে হয়। আধুনিক প্রসেসরগুলি মেমরিতে কম ঘোরাঘুরি করলে দ্রুত কাজ করে। সাদৃশ্য বজায় রেখে, একটি রেস্টুরেন্টে একজন ওয়েটার অনেক টেবিল থেকে অর্ডার নেওয়ার কথা ভাবুন। এক টেবিলের সব অর্ডার নিয়ে তারপর অন্য টেবিলে যাওয়া সবচেয়ে ভালো। টেবিল A থেকে একটি অর্ডার, তারপর টেবিল B থেকে একটি অর্ডার, তারপর আবার A থেকে একটি এবং তারপর আবার B থেকে একটি অর্ডার নেওয়া অনেক ধীর প্রক্রিয়া হবে। একইভাবে, একটি প্রসেসর ডেটার কাছাকাছি থাকলে (যেমন Stack এ থাকে) ভালোভাবে কাজ করতে পারে, দূর থেকে (যেমন Heap এ থাকতে পারে) কাজ করার চেয়ে।
+> Accessing data in the heap is slower than accessing data on the stack because
+> you have to follow a pointer to get there. Contemporary processors are faster
+> if they jump around less in memory. Continuing the analogy, consider a server
+> at a restaurant taking orders from many tables. It’s most efficient to get
+> all the orders at one table before moving on to the next table. Taking an
+> order from table A, then an order from table B, then one from A again, and
+> then one from B again would be a much slower process. By the same token, a
+> processor can do its job better if it works on data that’s close to other
+> data (as it is on the stack) rather than farther away (as it can be on the
+> heap).
 >
-> যখন আপনার কোড কোনো function কল করে, তখন function এ পাস করা ভ্যালুগুলি (সম্ভাব্যত Heap এ ডেটার pointer সহ) এবং function এর local ভেরিয়েবলগুলি Stack এ push করা হয়। যখন function শেষ হয়, তখন সেই ভ্যালুগুলি Stack থেকে pop করা হয়।
+> When your code calls a function, the values passed into the function
+> (including, potentially, pointers to data on the heap) and the function’s
+> local variables get pushed onto the stack. When the function is over, those
+> values get popped off the stack.
 >
-> Heap এ কোডের কোন অংশ কোন ডেটা ব্যবহার করছে, Heap এ ডুপ্লিকেট ডেটার পরিমাণ কমানো এবং অব্যবহৃত ডেটা পরিষ্কার করা যাতে আপনার জায়গা শেষ না হয়ে যায়, এই সব সমস্যা ownership সমাধান করে। একবার আপনি ownership বুঝতে পারলে, আপনাকে Stack এবং Heap নিয়ে বেশি চিন্তা করতে হবে না, তবে ownership এর মূল উদ্দেশ্য হল Heap ডেটা ম্যানেজ করা, যা এটি কেন এভাবে কাজ করে তা ব্যাখ্যা করতে সাহায্য করতে পারে।
+> Keeping track of what parts of code are using what data on the heap,
+> minimizing the amount of duplicate data on the heap, and cleaning up unused
+> data on the heap so you don’t run out of space are all problems that ownership
+> addresses. Once you understand ownership, you won’t need to think about the
+> stack and the heap very often, but knowing that the main purpose of ownership
+> is to manage heap data can help explain why it works the way it does.
 
-### Ownership এর নিয়ম
+### Ownership Rules
 
-প্রথমে, Ownership এর নিয়মগুলো দেখে নেওয়া যাক। এই নিয়মগুলো মনে রাখুন যখন আমরা উদাহরণগুলো দেখব:
+First, let’s take a look at the ownership rules. Keep these rules in mind as we
+work through the examples that illustrate them:
 
-- Rust এ প্রতিটি ভ্যালুর একজন _owner_ থাকে।
-- এক সময়ে শুধুমাত্র একজন owner থাকতে পারে।
-- যখন owner scope এর বাইরে চলে যায়, তখন ভ্যালু drop হয়ে যায়।
+- Each value in Rust has an _owner_.
+- There can only be one owner at a time.
+- When the owner goes out of scope, the value will be dropped.
 
 ### Variable Scope
 
-এখন যেহেতু আমরা Rust এর মৌলিক সিনট্যাক্স পেরিয়ে এসেছি, তাই আমরা উদাহরণগুলিতে `fn main() {` কোড অন্তর্ভুক্ত করব না, তাই আপনি যদি অনুসরণ করেন, তবে নিশ্চিত করুন যে আপনি নিম্নলিখিত উদাহরণগুলি ম্যানুয়ালি একটি `main` ফাংশনের ভিতরে রেখেছেন। ফলস্বরূপ, আমাদের উদাহরণগুলি আরও সংক্ষিপ্ত হবে, যা আমাদের boilerplate কোডের পরিবর্তে আসল বিবরণের দিকে মনোযোগ দিতে দেবে।
+Now that we’re past basic Rust syntax, we won’t include all the `fn main() {`
+code in examples, so if you’re following along, make sure to put the following
+examples inside a `main` function manually. As a result, our examples will be a
+bit more concise, letting us focus on the actual details rather than
+boilerplate code.
 
-Ownership এর প্রথম উদাহরণ হিসাবে, আমরা কিছু ভেরিয়েবলের _scope_ দেখব। একটি scope হল প্রোগ্রামের মধ্যে সেই পরিসর যেখানে একটি আইটেম বৈধ। নিম্নলিখিত ভেরিয়েবলটি নিন:
+As a first example of ownership, we’ll look at the _scope_ of some variables. A
+scope is the range within a program for which an item is valid. Take the
+following variable:
 
 ```rust
 let s = "hello";
 ```
 
-ভেরিয়েবল `s` একটি string literal কে নির্দেশ করে, যেখানে string এর ভ্যালু আমাদের প্রোগ্রামের টেক্সটে হার্ডকোড করা আছে। ভেরিয়েবলটি সেই পয়েন্ট থেকে বৈধ যেখানে এটি ডিক্লেয়ার করা হয়েছে, বর্তমান _scope_ শেষ না হওয়া পর্যন্ত। Listing 4-1 এ একটি প্রোগ্রাম দেখানো হয়েছে যেখানে কমেন্ট দিয়ে চিহ্নিত করা হয়েছে যে ভেরিয়েবল `s` কোথায় বৈধ হবে।
+The variable `s` refers to a string literal, where the value of the string is
+hardcoded into the text of our program. The variable is valid from the point at
+which it’s declared until the end of the current _scope_. Listing 4-1 shows a
+program with comments annotating where the variable `s` would be valid.
 
-<Listing number="4-1" caption="একটি ভেরিয়েবল এবং যে scope এ এটি বৈধ">
+<Listing number="4-1" caption="A variable and the scope in which it is valid">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-01/src/main.rs:here}}
@@ -52,69 +121,127 @@ let s = "hello";
 
 </Listing>
 
-অন্য কথায়, এখানে দুটি গুরুত্বপূর্ণ সময় আছে:
+In other words, there are two important points in time here:
 
-- যখন `s` scope _এ আসে_, তখন এটি বৈধ হয়।
-- এটি scope _এর বাইরে_ না যাওয়া পর্যন্ত বৈধ থাকে।
+- When `s` comes _into_ scope, it is valid.
+- It remains valid until it goes _out of_ scope.
 
-এই মুহুর্তে, scope এবং কখন ভেরিয়েবল বৈধ থাকে তার মধ্যেকার সম্পর্ক অন্যান্য প্রোগ্রামিং ভাষার মতোই। এখন আমরা `String` টাইপ প্রবর্তন করে এই বোঝার উপর ভিত্তি তৈরি করব।
+At this point, the relationship between scopes and when variables are valid is
+similar to that in other programming languages. Now we’ll build on top of this
+understanding by introducing the `String` type.
 
-### `String` টাইপ
+### The `String` Type
 
-Ownership এর নিয়মগুলি ব্যাখ্যা করার জন্য, আমাদের এমন একটি ডেটা টাইপের প্রয়োজন যা [“Data Types”][data-types]<!-- ignore --> বিভাগে কভার করা ডেটা টাইপের চেয়ে জটিল। পূর্বে কভার করা টাইপগুলির একটি পরিচিত আকার আছে, সেগুলিকে Stack এ স্টোর করা যায় এবং যখন তাদের scope শেষ হয়ে যায় তখন pop করা যায়, এবং যদি কোডের অন্য কোনো অংশের একই ভ্যালু অন্য scope এ ব্যবহার করার প্রয়োজন হয়, তাহলে নতুন, স্বাধীন ইনস্ট্যান্স তৈরি করার জন্য দ্রুত এবং সহজে কপি করা যেতে পারে। কিন্তু আমরা এমন ডেটা দেখতে চাই যা Heap এ স্টোর করা আছে এবং Rust কিভাবে সেই ডেটা পরিষ্কার করতে জানে তা জানতে চাই, এবং `String` টাইপটি এর জন্য একটি দারুণ উদাহরণ।
+To illustrate the rules of ownership, we need a data type that is more complex
+than those we covered in the [“Data Types”][data-types]<!-- ignore --> section
+of Chapter 3. The types covered previously are of a known size, can be stored
+on the stack and popped off the stack when their scope is over, and can be
+quickly and trivially copied to make a new, independent instance if another
+part of code needs to use the same value in a different scope. But we want to
+look at data that is stored on the heap and explore how Rust knows when to
+clean up that data, and the `String` type is a great example.
 
-আমরা `String` এর সেই অংশগুলির উপর মনোযোগ দেব যা Ownership এর সাথে সম্পর্কিত। এই দিকগুলি অন্যান্য জটিল ডেটা টাইপের ক্ষেত্রেও প্রযোজ্য, সেগুলি স্ট্যান্ডার্ড লাইব্রেরি দ্বারা সরবরাহ করা হোক বা আপনার দ্বারা তৈরি করা হোক। আমরা [Chapter 8][ch8]<!-- ignore --> এ `String` নিয়ে আরও বিস্তারিত আলোচনা করব।
+We’ll concentrate on the parts of `String` that relate to ownership. These
+aspects also apply to other complex data types, whether they are provided by
+the standard library or created by you. We’ll discuss `String` in more depth in
+[Chapter 8][ch8]<!-- ignore -->.
 
-আমরা ইতিমধ্যেই string literal দেখেছি, যেখানে একটি string ভ্যালু আমাদের প্রোগ্রামে হার্ডকোড করা থাকে। string literal সুবিধাজনক, কিন্তু সেগুলি সব পরিস্থিতিতে উপযুক্ত নয় যেখানে আমরা টেক্সট ব্যবহার করতে চাই। এর একটি কারণ হল সেগুলি immutable। আরেকটি কারণ হল, আমরা যখন কোড লিখি তখন প্রতিটি string ভ্যালু জানা সম্ভব নয়: উদাহরণস্বরূপ, যদি আমরা ব্যবহারকারীর ইনপুট নিতে এবং তা স্টোর করতে চাই? এই পরিস্থিতিতে, Rust এর কাছে দ্বিতীয় একটি string টাইপ আছে, `String`। এই টাইপটি Heap এ allocate করা ডেটা ম্যানেজ করে এবং সেই কারণে compile time এ অজানা পরিমাণের টেক্সট স্টোর করতে সক্ষম। আপনি `from` ফাংশন ব্যবহার করে একটি string literal থেকে `String` তৈরি করতে পারেন, যেমন:
+We’ve already seen string literals, where a string value is hardcoded into our
+program. String literals are convenient, but they aren’t suitable for every
+situation in which we may want to use text. One reason is that they’re
+immutable. Another is that not every string value can be known when we write
+our code: for example, what if we want to take user input and store it? For
+these situations, Rust has a second string type, `String`. This type manages
+data allocated on the heap and as such is able to store an amount of text that
+is unknown to us at compile time. You can create a `String` from a string
+literal using the `from` function, like so:
 
 ```rust
 let s = String::from("hello");
 ```
 
-ডাবল কোলন `::` অপারেটরটি `string_from` এর মতো কোনো নাম ব্যবহার না করে `String` টাইপের অধীনে এই বিশেষ `from` ফাংশনটিকে namespace করার অনুমতি দেয়। আমরা [“Method Syntax”][method-syntax]<!-- ignore --> বিভাগে Chapter 5 এ এবং [“Paths for Referring to an Item in the Module Tree”][paths-module-tree]<!-- ignore --> বিভাগে Chapter 7 এ মডিউল সহ namespace নিয়ে আলোচনা করব।
+The double colon `::` operator allows us to namespace this particular `from`
+function under the `String` type rather than using some sort of name like
+`string_from`. We’ll discuss this syntax more in the [“Method
+Syntax”][method-syntax]<!-- ignore --> section of Chapter 5, and when we talk
+about namespacing with modules in [“Paths for Referring to an Item in the
+Module Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
 
-এই ধরনের string _পরিবর্তন করা যেতে পারে_:
+This kind of string _can_ be mutated:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-01-can-mutate-string/src/main.rs:here}}
 ```
 
-তাহলে, এখানে পার্থক্য কি? কেন `String` পরিবর্তন করা যেতে পারে কিন্তু literals করা যায় না? পার্থক্য হল এই দুটি টাইপ কিভাবে মেমরি নিয়ে কাজ করে তার মধ্যে।
+So, what’s the difference here? Why can `String` be mutated but literals
+cannot? The difference is in how these two types deal with memory.
 
-### মেমরি এবং Allocation
+### Memory and Allocation
 
-String literal এর ক্ষেত্রে, আমরা compile time এ কন্টেন্ট জানি, তাই টেক্সট সরাসরি ফাইনাল এক্সিকিউটেবলে হার্ডকোড করা থাকে। এই কারণে string literal দ্রুত এবং কার্যকর। কিন্তু এই বৈশিষ্ট্যগুলি শুধুমাত্র string literal এর immutability থেকে আসে। দুর্ভাগ্যবশত, আমরা মেমরির একটি blob বাইনারিতে রাখতে পারি না প্রতিটি টেক্সটের জন্য যার আকার compile time এ অজানা এবং প্রোগ্রাম চলার সময় যার আকার পরিবর্তন হতে পারে।
+In the case of a string literal, we know the contents at compile time, so the
+text is hardcoded directly into the final executable. This is why string
+literals are fast and efficient. But these properties only come from the string
+literal’s immutability. Unfortunately, we can’t put a blob of memory into the
+binary for each piece of text whose size is unknown at compile time and whose
+size might change while running the program.
 
-`String` টাইপের সাথে, একটি পরিবর্তনযোগ্য, growable টেক্সট সমর্থন করার জন্য, আমাদের Heap এ একটি নির্দিষ্ট পরিমাণ মেমরি allocate করতে হবে, যা compile time এ অজানা, কন্টেন্টগুলি রাখার জন্য। এর মানে হল:
+With the `String` type, in order to support a mutable, growable piece of text,
+we need to allocate an amount of memory on the heap, unknown at compile time,
+to hold the contents. This means:
 
-- রানটাইমে মেমরি অ্যালোকেটরের কাছ থেকে মেমরির জন্য অনুরোধ করতে হবে।
-- যখন আমাদের `String` এর কাজ শেষ হয়ে যাবে, তখন এই মেমরি অ্যালোকেটরকে ফেরত দেওয়ার একটি উপায় আমাদের দরকার।
+- The memory must be requested from the memory allocator at runtime.
+- We need a way of returning this memory to the allocator when we’re done with
+  our `String`.
 
-প্রথম কাজটি আমরা করি: যখন আমরা `String::from` কল করি, তখন এর বাস্তবায়ন প্রয়োজনীয় মেমরির জন্য অনুরোধ করে। প্রোগ্রামিং ভাষাগুলিতে এটি প্রায় সার্বজনীন।
+That first part is done by us: when we call `String::from`, its implementation
+requests the memory it needs. This is pretty much universal in programming
+languages.
 
-তবে, দ্বিতীয় অংশটি আলাদা। _garbage collector (GC)_ সহ ভাষাগুলিতে, GC সেই মেমরি ট্র্যাক করে এবং পরিষ্কার করে যা আর ব্যবহার করা হচ্ছে না, এবং আমাদের এটি নিয়ে চিন্তা করার প্রয়োজন নেই। GC ছাড়া বেশিরভাগ ভাষায়, যখন মেমরি আর ব্যবহার করা হচ্ছে না তা সনাক্ত করা এবং এটিকে স্পষ্টভাবে free করার জন্য কোড কল করা আমাদের দায়িত্ব, ঠিক যেমন আমরা এটির জন্য অনুরোধ করেছিলাম। সঠিকভাবে এটি করা ঐতিহাসিকভাবে একটি কঠিন প্রোগ্রামিং সমস্যা ছিল। যদি আমরা ভুলে যাই, তাহলে আমরা মেমরি নষ্ট করব। যদি আমরা খুব তাড়াতাড়ি করি, তাহলে আমাদের একটি অবৈধ ভেরিয়েবল থাকবে। যদি আমরা এটি দুবার করি, তবে সেটিও একটি বাগ। আমাদের ঠিক একটি `allocate` এর সাথে একটি `free` যুক্ত করতে হবে।
+However, the second part is different. In languages with a _garbage collector
+(GC)_, the GC keeps track of and cleans up memory that isn’t being used
+anymore, and we don’t need to think about it. In most languages without a GC,
+it’s our responsibility to identify when memory is no longer being used and to
+call code to explicitly free it, just as we did to request it. Doing this
+correctly has historically been a difficult programming problem. If we forget,
+we’ll waste memory. If we do it too early, we’ll have an invalid variable. If
+we do it twice, that’s a bug too. We need to pair exactly one `allocate` with
+exactly one `free`.
 
-Rust একটি ভিন্ন পথ নেয়: মেমরি স্বয়ংক্রিয়ভাবে ফেরত দেওয়া হয় যখন ভেরিয়েবল যার মালিকানা আছে তা স্কোপের বাইরে চলে যায়। এখানে Listing 4-1 থেকে আমাদের স্কোপ উদাহরণের একটি সংস্করণ দেওয়া হল, যেখানে একটি string literal এর পরিবর্তে `String` ব্যবহার করা হয়েছে:
+Rust takes a different path: the memory is automatically returned once the
+variable that owns it goes out of scope. Here’s a version of our scope example
+from Listing 4-1 using a `String` instead of a string literal:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-02-string-scope/src/main.rs:here}}
 ```
 
-একটি স্বাভাবিক বিন্দু আছে যেখানে আমরা আমাদের `String` এর জন্য প্রয়োজনীয় মেমরি অ্যালোকেটরকে ফেরত দিতে পারি: যখন `s` scope এর বাইরে চলে যায়। যখন একটি ভেরিয়েবল scope এর বাইরে চলে যায়, তখন Rust আমাদের জন্য একটি বিশেষ ফাংশন কল করে। এই ফাংশনটিকে [`drop`][drop]<!-- ignore --> বলা হয়, এবং এটি সেই জায়গা যেখানে `String` এর লেখক মেমরি ফেরত দেওয়ার জন্য কোড রাখতে পারেন। Rust closing curly bracket এ স্বয়ংক্রিয়ভাবে `drop` কল করে।
+There is a natural point at which we can return the memory our `String` needs
+to the allocator: when `s` goes out of scope. When a variable goes out of
+scope, Rust calls a special function for us. This function is called
+[`drop`][drop]<!-- ignore -->, and it’s where the author of `String` can put
+the code to return the memory. Rust calls `drop` automatically at the closing
+curly bracket.
 
-> মনে রাখবেন: C++ এ, একটি আইটেমের জীবনকালের শেষে রিসোর্স ডিঅ্যালোকেট করার এই প্যাটার্নটিকে কখনও কখনও _Resource Acquisition Is Initialization (RAII)_ বলা হয়। আপনি যদি RAII প্যাটার্ন ব্যবহার করে থাকেন তবে Rust এর `drop` ফাংশন আপনার কাছে পরিচিত হবে।
+> Note: In C++, this pattern of deallocating resources at the end of an item’s
+> lifetime is sometimes called _Resource Acquisition Is Initialization (RAII)_.
+> The `drop` function in Rust will be familiar to you if you’ve used RAII
+> patterns.
 
-এই প্যাটার্নটি Rust কোড লেখার পদ্ধতিতে গভীর প্রভাব ফেলে। এখন এটি সহজ মনে হতে পারে, তবে কোডের আচরণ আরও জটিল পরিস্থিতিতে অপ্রত্যাশিত হতে পারে যখন আমরা চাই একাধিক ভেরিয়েবল Heap এ allocate করা ডেটা ব্যবহার করুক। আসুন এখন সেই পরিস্থিতিগুলির কিছু অন্বেষণ করি।
+This pattern has a profound impact on the way Rust code is written. It may seem
+simple right now, but the behavior of code can be unexpected in more
+complicated situations when we want to have multiple variables use the data
+we’ve allocated on the heap. Let’s explore some of those situations now.
 
 <!-- Old heading. Do not remove or links may break. -->
 
 <a id="ways-variables-and-data-interact-move"></a>
 
-#### ভেরিয়েবল এবং ডেটা Move এর সাথে ইন্টারঅ্যাক্ট করা
+#### Variables and Data Interacting with Move
 
-Rust এ একাধিক ভেরিয়েবল একই ডেটার সাথে বিভিন্নভাবে ইন্টারঅ্যাক্ট করতে পারে। Listing 4-2 এ একটি ইন্টিজার ব্যবহার করে একটি উদাহরণ দেখা যাক।
+Multiple variables can interact with the same data in different ways in Rust.
+Let’s look at an example using an integer in Listing 4-2.
 
-<Listing number="4-2" caption="ভেরিয়েবল `x` এর ইন্টিজার ভ্যালু `y` এ অ্যাসাইন করা">
+<Listing number="4-2" caption="Assigning the integer value of variable `x` to `y`">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-02/src/main.rs:here}}
@@ -122,17 +249,27 @@ Rust এ একাধিক ভেরিয়েবল একই ডেটা�
 
 </Listing>
 
-আমরা সম্ভবত অনুমান করতে পারি যে এটি কী করছে: “`5` ভ্যালুটিকে `x` এর সাথে বাইন্ড করুন; তারপর `x` এর ভ্যালুর একটি কপি তৈরি করুন এবং সেটিকে `y` এর সাথে বাইন্ড করুন।” এখন আমাদের কাছে দুটি ভেরিয়েবল আছে, `x` এবং `y`, এবং উভয়ই `5` এর সমান। প্রকৃতপক্ষে এটাই ঘটছে, কারণ ইন্টিজারগুলি একটি পরিচিত, fixed size সহ সহজ ভ্যালু, এবং এই দুটি `5` ভ্যালু Stack এ push করা হয়েছে।
+We can probably guess what this is doing: “bind the value `5` to `x`; then make
+a copy of the value in `x` and bind it to `y`.” We now have two variables, `x`
+and `y`, and both equal `5`. This is indeed what is happening, because integers
+are simple values with a known, fixed size, and these two `5` values are pushed
+onto the stack.
 
-এখন `String` এর সংস্করণটি দেখা যাক:
+Now let’s look at the `String` version:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-03-string-move/src/main.rs:here}}
 ```
 
-এটি দেখতে খুব একই রকম, তাই আমরা ধরে নিতে পারি যে এটি একই ভাবে কাজ করবে: অর্থাৎ, দ্বিতীয় লাইনটি `s1` এর ভ্যালুর একটি কপি তৈরি করবে এবং সেটিকে `s2` এর সাথে বাইন্ড করবে। কিন্তু এটি ঠিক তেমন ঘটে না।
+This looks very similar, so we might assume that the way it works would be the
+same: that is, the second line would make a copy of the value in `s1` and bind
+it to `s2`. But this isn’t quite what happens.
 
-ভেতরে `String` এর সাথে কী ঘটছে তা দেখতে Figure 4-1 এ একবার দেখে নিন। একটি `String` তিনটি অংশ দিয়ে তৈরি, যা বাম দিকে দেখানো হয়েছে: string এর কন্টেন্ট ধারণকারী মেমরির একটি pointer, একটি দৈর্ঘ্য এবং একটি ক্যাপাসিটি। এই ডেটার গ্রুপটি Stack এ স্টোর করা আছে। ডানদিকে Heap এ সেই মেমরি আছে যা কন্টেন্টগুলি ধরে রেখেছে।
+Take a look at Figure 4-1 to see what is happening to `String` under the
+covers. A `String` is made up of three parts, shown on the left: a pointer to
+the memory that holds the contents of the string, a length, and a capacity.
+This group of data is stored on the stack. On the right is the memory on the
+heap that holds the contents.
 
 <img alt="Two tables: the first table contains the representation of s1 on the
 stack, consisting of its length (5), capacity (5), and a pointer to the first
@@ -140,40 +277,69 @@ value in the second table. The second table contains the representation of the
 string data on the heap, byte by byte." src="img/trpl04-01.svg" class="center"
 style="width: 50%;" />
 
-<span class="caption">Figure 4-1: `String` এর মেমরিতে উপস্থাপনা, যার মান `"hello"` এবং যা `s1` এর সাথে বাইন্ড করা হয়েছে</span>
+<span class="caption">Figure 4-1: Representation in memory of a `String`
+holding the value `"hello"` bound to `s1`</span>
 
-দৈর্ঘ্য হল `String` এর কন্টেন্ট বর্তমানে কত মেমরি ব্যবহার করছে, বাইটে। ক্যাপাসিটি হল মেমরির মোট পরিমাণ, বাইটে, যা `String` অ্যালোকেটরের কাছ থেকে পেয়েছে। দৈর্ঘ্য এবং ক্যাপাসিটির মধ্যে পার্থক্য গুরুত্বপূর্ণ, তবে এই প্রসঙ্গে নয়, তাই আপাতত ক্যাপাসিটিকে উপেক্ষা করাই ভালো।
+The length is how much memory, in bytes, the contents of the `String` are
+currently using. The capacity is the total amount of memory, in bytes, that the
+`String` has received from the allocator. The difference between length and
+capacity matters, but not in this context, so for now, it’s fine to ignore the
+capacity.
 
-যখন আমরা `s1` কে `s2` এ অ্যাসাইন করি, তখন `String` ডেটা কপি করা হয়, যার মানে হল আমরা pointer, দৈর্ঘ্য এবং ক্যাপাসিটি কপি করি যা Stack এ আছে। আমরা Heap এ থাকা ডেটা কপি করি না যা pointer নির্দেশ করে। অন্য কথায়, মেমরিতে ডেটার উপস্থাপনা Figure 4-2 এর মতো দেখায়।
+When we assign `s1` to `s2`, the `String` data is copied, meaning we copy the
+pointer, the length, and the capacity that are on the stack. We do not copy the
+data on the heap that the pointer refers to. In other words, the data
+representation in memory looks like Figure 4-2.
 
 <img alt="Three tables: tables s1 and s2 representing those strings on the
 stack, respectively, and both pointing to the same string data on the heap."
 src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-2: ভেরিয়েবল `s2` এর মেমরিতে উপস্থাপনা, যার `s1` এর pointer, দৈর্ঘ্য এবং ক্যাপাসিটির একটি কপি আছে</span>
-মেমরি উপস্থাপনা Figure 4-3 এর মতো দেখায় না, যেখানে মেমরি দেখতে কেমন হতো যদি Rust Heap ডেটাও কপি করত। যদি Rust এটি করত, তাহলে Heap এ ডেটা বড় হলে `s2 = s1` অপারেশনটি রানটাইম পারফরম্যান্সের দিক থেকে খুব ব্যয়বহুল হতে পারত।
+<span class="caption">Figure 4-2: Representation in memory of the variable `s2`
+that has a copy of the pointer, length, and capacity of `s1`</span>
+
+The representation does _not_ look like Figure 4-3, which is what memory would
+look like if Rust instead copied the heap data as well. If Rust did this, the
+operation `s2 = s1` could be very expensive in terms of runtime performance if
+the data on the heap were large.
 
 <img alt="Four tables: two tables representing the stack data for s1 and s2,
 and each points to its own copy of string data on the heap."
 src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-3: `s2 = s1` করলে Rust যদি Heap ডেটাও কপি করত তাহলে আরেকটি সম্ভাবনা</span>
+<span class="caption">Figure 4-3: Another possibility for what `s2 = s1` might
+do if Rust copied the heap data as well</span>
 
-আগে, আমরা বলেছিলাম যে যখন একটি ভেরিয়েবল scope এর বাইরে চলে যায়, তখন Rust স্বয়ংক্রিয়ভাবে `drop` ফাংশন কল করে এবং সেই ভেরিয়েবলের জন্য Heap মেমরি পরিষ্কার করে। কিন্তু Figure 4-2 দেখায় যে উভয় ডেটা পয়েন্টার একই লোকেশন নির্দেশ করছে। এটি একটি সমস্যা: যখন `s2` এবং `s1` scope এর বাইরে চলে যায়, তখন তারা উভয়েই একই মেমরি free করার চেষ্টা করবে। একে _double free_ ত্রুটি বলা হয় এবং এটি হল মেমরি নিরাপত্তার সেই বাগগুলির মধ্যে একটি যা আমরা আগে উল্লেখ করেছি। দুবার মেমরি free করলে মেমরি করাপ্ট হতে পারে, যা সম্ভাব্যভাবে নিরাপত্তা দুর্বলতার দিকে নিয়ে যেতে পারে।
+Earlier, we said that when a variable goes out of scope, Rust automatically
+calls the `drop` function and cleans up the heap memory for that variable. But
+Figure 4-2 shows both data pointers pointing to the same location. This is a
+problem: when `s2` and `s1` go out of scope, they will both try to free the
+same memory. This is known as a _double free_ error and is one of the memory
+safety bugs we mentioned previously. Freeing memory twice can lead to memory
+corruption, which can potentially lead to security vulnerabilities.
 
-মেমরি নিরাপত্তা নিশ্চিত করার জন্য, `let s2 = s1;` লাইনটির পরে, Rust `s1` কে আর বৈধ মনে করে না। তাই, যখন `s1` scope এর বাইরে চলে যায় তখন Rust কে আর কিছু free করতে হয় না। `s2` তৈরি হওয়ার পরে আপনি যখন `s1` ব্যবহার করার চেষ্টা করেন তখন কী ঘটে তা দেখুন; এটি কাজ করবে না:
+To ensure memory safety, after the line `let s2 = s1;`, Rust considers `s1` as
+no longer valid. Therefore, Rust doesn’t need to free anything when `s1` goes
+out of scope. Check out what happens when you try to use `s1` after `s2` is
+created; it won’t work:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/src/main.rs:here}}
 ```
 
-আপনি এইরকম একটি ত্রুটি পাবেন কারণ Rust আপনাকে অবৈধ রেফারেন্স ব্যবহার করা থেকে বাধা দেয়:
+You’ll get an error like this because Rust prevents you from using the
+invalidated reference:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/output.txt}}
 ```
 
-আপনি যদি অন্য ভাষায় কাজ করার সময় _shallow copy_ এবং _deep copy_ শব্দগুলি শুনে থাকেন, তাহলে ডেটা কপি না করে pointer, দৈর্ঘ্য এবং ক্যাপাসিটি কপি করার ধারণাটিকে সম্ভবত shallow copy করার মতো শোনাচ্ছে। কিন্তু যেহেতু Rust প্রথম ভেরিয়েবলটিকে অবৈধ করে দেয়, তাই shallow copy না বলে একে _move_ বলা হয়। এই উদাহরণে, আমরা বলব যে `s1` কে `s2` তে _move_ করা হয়েছে। তাহলে, আসলে কী ঘটে তা Figure 4-4 এ দেখানো হয়েছে।
+If you’ve heard the terms _shallow copy_ and _deep copy_ while working with
+other languages, the concept of copying the pointer, length, and capacity
+without copying the data probably sounds like making a shallow copy. But
+because Rust also invalidates the first variable, instead of being called a
+shallow copy, it’s known as a _move_. In this example, we would say that `s1`
+was _moved_ into `s2`. So, what actually happens is shown in Figure 4-4.
 
 <img alt="Three tables: tables s1 and s2 representing those strings on the
 stack, respectively, and both pointing to the same string data on the heap.
@@ -181,21 +347,31 @@ Table s1 is grayed out be-cause s1 is no longer valid; only s2 can be used to
 access the heap data." src="img/trpl04-04.svg" class="center" style="width:
 50%;" />
 
-<span class="caption">Figure 4-4: `s1` অবৈধ হওয়ার পরে মেমরিতে উপস্থাপনা</span>
+<span class="caption">Figure 4-4: Representation in memory after `s1` has been
+invalidated</span>
 
-এটি আমাদের সমস্যার সমাধান করে! যেহেতু শুধুমাত্র `s2` বৈধ, তাই যখন এটি scope এর বাইরে চলে যায় তখন এটি একা মেমরি free করবে, এবং আমাদের কাজ শেষ।
+That solves our problem! With only `s2` valid, when it goes out of scope it
+alone will free the memory, and we’re done.
 
-এছাড়াও, এর মাধ্যমে একটি ডিজাইনের পছন্দ বোঝানো হয়েছে: Rust কখনই স্বয়ংক্রিয়ভাবে আপনার ডেটার "deep" কপি তৈরি করবে না। অতএব, কোনো _স্বয়ংক্রিয়_ কপি runtime পারফরম্যান্সের দিক থেকে সস্তা বলে ধরে নেওয়া যেতে পারে।
+In addition, there’s a design choice that’s implied by this: Rust will never
+automatically create “deep” copies of your data. Therefore, any _automatic_
+copying can be assumed to be inexpensive in terms of runtime performance.
 
-#### Scope এবং Assignment
+#### Scope and Assignment
 
-scoping, ownership এবং `drop` ফাংশনের মাধ্যমে মেমরি free হওয়ার মধ্যে সম্পর্কটির বিপরীতটিও সত্য। আপনি যখন কোনো বিদ্যমান ভেরিয়েবলে সম্পূর্ণ নতুন মান অ্যাসাইন করেন, তখন Rust `drop` কল করবে এবং মূল মানের মেমরি অবিলম্বে free করবে। উদাহরণস্বরূপ, এই কোডটি বিবেচনা করুন:
+The inverse of this is true for the relationship between scoping, ownership, and
+memory being freed via the `drop` function as well. When you assign a completely
+new value to an existing variable, Rust will call `drop` and free the original
+value’s memory immediately. Consider this code, for example:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04b-replacement-drop/src/main.rs:here}}
 ```
 
-আমরা প্রথমে একটি ভেরিয়েবল `s` ডিক্লেয়ার করি এবং এটিকে `"hello"` মান সহ একটি `String` এর সাথে বাইন্ড করি। তারপর আমরা অবিলম্বে `"ahoy"` মান সহ একটি নতুন `String` তৈরি করি এবং সেটিকে `s` এ অ্যাসাইন করি। এই মুহুর্তে, Heap এ থাকা আসল মানটিকে আর কেউ নির্দেশ করছে না।
+We initially declare a variable `s` and bind it to a `String` with the value
+`"hello"`. Then we immediately create a new `String` with the value `"ahoy"` and
+assign it to `s`. At this point, nothing is referring to the original value on
+the heap at all.
 
 <img alt="One table s representing the string value on the stack, pointing to
 the second piece of string data (ahoy) on the heap, with the original string
@@ -205,57 +381,90 @@ class="center"
 style="width: 50%;"
 />
 
-<span class="caption">Figure 4-5: মেমরিতে উপস্থাপনা যখন প্রাথমিক মান সম্পূর্ণরূপে প্রতিস্থাপিত করা হয়েছে।</span>
+<span class="caption">Figure 4-5: Representation in memory after the initial
+value has been replaced in its entirety.</span>
 
-সুতরাং মূল স্ট্রিংটি সঙ্গে সঙ্গেই scope এর বাইরে চলে যায়। Rust এটির উপর `drop` ফাংশন চালাবে এবং এর মেমরি সাথে সাথেই free হয়ে যাবে। যখন আমরা শেষে মানটি প্রিন্ট করব, তখন এটি হবে `"ahoy, world!"`।
+The original string thus immediately goes out of scope. Rust will run the `drop`
+function on it and its memory will be freed right away. When we print the value
+at the end, it will be `"ahoy, world!"`.
 
 <!-- Old heading. Do not remove or links may break. -->
 
 <a id="ways-variables-and-data-interact-clone"></a>
 
-#### ভেরিয়েবল এবং ডেটা Clone এর সাথে ইন্টারঅ্যাক্ট করা
+#### Variables and Data Interacting with Clone
 
-যদি আমরা `String` এর Heap ডেটার deep copy করতে চাই, শুধু Stack ডেটার নয়, তাহলে আমরা `clone` নামক একটি সাধারণ পদ্ধতি ব্যবহার করতে পারি। আমরা Chapter 5 এ মেথড সিনট্যাক্স নিয়ে আলোচনা করব, কিন্তু যেহেতু মেথডগুলি অনেক প্রোগ্রামিং ভাষায় একটি সাধারণ বৈশিষ্ট্য, তাই আপনি সম্ভবত সেগুলি আগে দেখেছেন।
+If we _do_ want to deeply copy the heap data of the `String`, not just the
+stack data, we can use a common method called `clone`. We’ll discuss method
+syntax in Chapter 5, but because methods are a common feature in many
+programming languages, you’ve probably seen them before.
 
-এখানে `clone` পদ্ধতির একটি উদাহরণ দেওয়া হল:
+Here’s an example of the `clone` method in action:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-05-clone/src/main.rs:here}}
 ```
 
-এটি ঠিকঠাক কাজ করে এবং স্পষ্টভাবে Figure 4-3 এ দেখানো আচরণ তৈরি করে, যেখানে Heap ডেটা _কপি_ করা হয়।
+This works just fine and explicitly produces the behavior shown in Figure 4-3,
+where the heap data _does_ get copied.
 
-যখন আপনি `clone` এর কল দেখেন, তখন আপনি জানেন যে কিছু নির্বিচারে কোড এক্সিকিউট করা হচ্ছে এবং সেই কোডটি ব্যয়বহুল হতে পারে। এটি একটি ভিজ্যুয়াল নির্দেশক যে কিছু ভিন্ন ঘটছে।
+When you see a call to `clone`, you know that some arbitrary code is being
+executed and that code may be expensive. It’s a visual indicator that something
+different is going on.
 
-#### শুধুমাত্র Stack ডেটা: Copy
+#### Stack-Only Data: Copy
 
-এখানে আরেকটি বিষয় আছে যা নিয়ে আমরা এখনও কথা বলিনি। ইন্টিজার ব্যবহার করে এই কোডটি—যার কিছু অংশ Listing 4-2 এ দেখানো হয়েছে—কাজ করে এবং বৈধ:
+There’s another wrinkle we haven’t talked about yet. This code using
+integers—part of which was shown in Listing 4-2—works and is valid:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
 ```
 
-কিন্তু এই কোডটি আমরা যা শিখলাম তার সাথে সাংঘর্ষিক মনে হচ্ছে: আমাদের `clone` এর কোনো কল নেই, কিন্তু `x` এখনও বৈধ এবং `y` তে move করা হয়নি।
+But this code seems to contradict what we just learned: we don’t have a call to
+`clone`, but `x` is still valid and wasn’t moved into `y`.
 
-এর কারণ হল ইন্টিজারের মতো টাইপগুলি, যাদের compile time এ একটি পরিচিত আকার আছে, সেগুলি সম্পূর্ণরূপে Stack এ স্টোর করা হয়, তাই আসল মানগুলির কপি তৈরি করা দ্রুত। এর মানে হল `y` ভেরিয়েবল তৈরি করার পরে `x` কে বৈধ হতে বাধা দেওয়ার কোনো কারণ নেই। অন্য কথায়, এখানে deep এবং shallow কপি করার মধ্যে কোনো পার্থক্য নেই, তাই `clone` কল করলে সাধারণ shallow কপি করা থেকে আলাদা কিছু হবে না, এবং আমরা এটিকে বাদ দিতে পারি।
+The reason is that types such as integers that have a known size at compile
+time are stored entirely on the stack, so copies of the actual values are quick
+to make. That means there’s no reason we would want to prevent `x` from being
+valid after we create the variable `y`. In other words, there’s no difference
+between deep and shallow copying here, so calling `clone` wouldn’t do anything
+different from the usual shallow copying, and we can leave it out.
 
-Rust এর `Copy` নামক একটি বিশেষ অ্যানোটেশন আছে যা আমরা Stack এ স্টোর করা টাইপের উপর রাখতে পারি, যেমন ইন্টিজার (আমরা [Chapter 10][traits]<!-- ignore --> এ traits সম্পর্কে আরও আলোচনা করব)। যদি কোনো টাইপ `Copy` trait প্রয়োগ করে, তবে যে ভেরিয়েবলগুলি এটি ব্যবহার করে সেগুলি move হয় না, বরং সাধারণভাবে কপি করা হয়, যা অন্য ভেরিয়েবলে অ্যাসাইন করার পরেও সেগুলিকে বৈধ রাখে।
+Rust has a special annotation called the `Copy` trait that we can place on
+types that are stored on the stack, as integers are (we’ll talk more about
+traits in [Chapter 10][traits]<!-- ignore -->). If a type implements the `Copy`
+trait, variables that use it do not move, but rather are trivially copied,
+making them still valid after assignment to another variable.
 
-যদি টাইপটি, বা এর কোনো অংশের `Drop` trait প্রয়োগ করা থাকে, তবে Rust আমাদের সেই টাইপটিকে `Copy` দিয়ে অ্যানোটেট করতে দেবে না। যদি টাইপের মান scope এর বাইরে গেলে বিশেষ কিছু করার প্রয়োজন হয় এবং আমরা সেই টাইপে `Copy` অ্যানোটেশন যোগ করি, তাহলে আমরা compile time এ একটি ত্রুটি পাব। আপনার টাইপে `Copy` অ্যানোটেশন যোগ করে trait প্রয়োগ করার বিষয়ে জানতে, Appendix C তে [“Derivable Traits”][derivable-traits]<!-- ignore --> দেখুন।
+Rust won’t let us annotate a type with `Copy` if the type, or any of its parts,
+has implemented the `Drop` trait. If the type needs something special to happen
+when the value goes out of scope and we add the `Copy` annotation to that type,
+we’ll get a compile-time error. To learn about how to add the `Copy` annotation
+to your type to implement the trait, see [“Derivable
+Traits”][derivable-traits]<!-- ignore --> in Appendix C.
 
-তাহলে, কোন টাইপগুলি `Copy` trait প্রয়োগ করে? আপনি নিশ্চিত হওয়ার জন্য প্রদত্ত টাইপের ডকুমেন্টেশন পরীক্ষা করতে পারেন, তবে একটি সাধারণ নিয়ম হিসাবে, সাধারণ স্কেলার মানের যেকোনো গ্রুপ `Copy` প্রয়োগ করতে পারে এবং allocation প্রয়োজন হয় বা কোনো রিসোর্স এমন কিছুই `Copy` প্রয়োগ করতে পারে না। এখানে কিছু টাইপ দেওয়া হল যা `Copy` প্রয়োগ করে:
+So, what types implement the `Copy` trait? You can check the documentation for
+the given type to be sure, but as a general rule, any group of simple scalar
+values can implement `Copy`, and nothing that requires allocation or is some
+form of resource can implement `Copy`. Here are some of the types that
+implement `Copy`:
 
-- সমস্ত ইন্টিজার টাইপ, যেমন `u32`।
-- বুলিয়ান টাইপ, `bool`, যার মান `true` এবং `false`।
-- সমস্ত ফ্লোটিং-পয়েন্ট টাইপ, যেমন `f64`।
-- ক্যারেক্টার টাইপ, `char`।
-- Tuple, যদি সেগুলিতে শুধুমাত্র সেই টাইপগুলি থাকে যা `Copy` প্রয়োগ করে। উদাহরণস্বরূপ, `(i32, i32)` `Copy` প্রয়োগ করে, কিন্তু `(i32, String)` করে না।
+- All the integer types, such as `u32`.
+- The Boolean type, `bool`, with values `true` and `false`.
+- All the floating-point types, such as `f64`.
+- The character type, `char`.
+- Tuples, if they only contain types that also implement `Copy`. For example,
+  `(i32, i32)` implements `Copy`, but `(i32, String)` does not.
 
-### Ownership এবং ফাংশন
+### Ownership and Functions
 
-একটি ফাংশনে একটি মান পাস করার নিয়মগুলি একটি ভেরিয়েবলে একটি মান অ্যাসাইন করার মতোই। একটি ভেরিয়েবলকে একটি ফাংশনে পাস করলে সেটি move বা copy হবে, ঠিক যেমন অ্যাসাইনমেন্টে হয়। Listing 4-3 এ কিছু অ্যানোটেশন সহ একটি উদাহরণ রয়েছে, যা দেখায় ভেরিয়েবলগুলি কোথায় scope এর ভিতরে এবং বাইরে যায়।
+The mechanics of passing a value to a function are similar to those when
+assigning a value to a variable. Passing a variable to a function will move or
+copy, just as assignment does. Listing 4-3 has an example with some annotations
+showing where variables go into and out of scope.
 
-<Listing number="4-3" file-name="src/main.rs" caption="Ownership এবং scope এর অ্যানোটেশন সহ ফাংশন">
+<Listing number="4-3" file-name="src/main.rs" caption="Functions with ownership and scope annotated">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-03/src/main.rs}}
@@ -263,13 +472,18 @@ Rust এর `Copy` নামক একটি বিশেষ অ্যানো�
 
 </Listing>
 
-যদি আমরা `takes_ownership` এ কল করার পরে `s` ব্যবহার করার চেষ্টা করি, তাহলে Rust একটি compile-time ত্রুটি দেখাবে। এই স্ট্যাটিক চেকগুলি আমাদের ভুল থেকে রক্ষা করে। `main` এ কোড যোগ করার চেষ্টা করুন যা `s` এবং `x` ব্যবহার করে, এটি দেখার জন্য যে আপনি সেগুলি কোথায় ব্যবহার করতে পারেন এবং কোথায় Ownership এর নিয়মগুলি আপনাকে তা করতে বাধা দেয়।
+If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
+compile-time error. These static checks protect us from mistakes. Try adding
+code to `main` that uses `s` and `x` to see where you can use them and where
+the ownership rules prevent you from doing so.
 
-### Return ভ্যালু এবং Scope
+### Return Values and Scope
 
-Return ভ্যালুগুলিও Ownership স্থানান্তর করতে পারে। Listing 4-4 এ একটি ফাংশনের উদাহরণ দেখানো হয়েছে যা কিছু মান রিটার্ন করে, Listing 4-3 এর মতো একই অ্যানোটেশন সহ।
+Returning values can also transfer ownership. Listing 4-4 shows an example of a
+function that returns some value, with similar annotations as those in Listing
+4-3.
 
-<Listing number="4-4" file-name="src/main.rs" caption="Return ভ্যালুগুলির Ownership স্থানান্তর করা">
+<Listing number="4-4" file-name="src/main.rs" caption="Transferring ownership of return values">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-04/src/main.rs}}
@@ -277,13 +491,20 @@ Return ভ্যালুগুলিও Ownership স্থানান্ত�
 
 </Listing>
 
-একটি ভেরিয়েবলের Ownership সবসময় একই প্যাটার্ন অনুসরণ করে: অন্য ভেরিয়েবলে একটি মান অ্যাসাইন করলে সেটি move হয়। যখন Heap এ ডেটা সহ একটি ভেরিয়েবল scope এর বাইরে চলে যায়, তখন `drop` দ্বারা মানটি পরিষ্কার করা হবে, যদি না ডেটার Ownership অন্য কোনো ভেরিয়েবলে move করা হয়ে থাকে।
+The ownership of a variable follows the same pattern every time: assigning a
+value to another variable moves it. When a variable that includes data on the
+heap goes out of scope, the value will be cleaned up by `drop` unless ownership
+of the data has been moved to another variable.
 
-যদিও এটি কাজ করে, প্রতিটি ফাংশনের সাথে ownership নেওয়া এবং তারপর ownership ফেরত দেওয়া একটু ক্লান্তিকর। যদি আমরা কোনো ফাংশনকে একটি মান ব্যবহার করতে দিতে চাই কিন্তু ownership নিতে না দিতে চাই তাহলে কি হবে? এটা খুবই বিরক্তিকর যে আমরা যা কিছু পাস করি তা যদি আমরা আবার ব্যবহার করতে চাই তবে তা ফেরতও দিতে হয়, সেই সাথে ফাংশনের বডি থেকে আসা ডেটা যোগ করে যা আমরা ফেরত দিতে চাই।
+While this works, taking ownership and then returning ownership with every
+function is a bit tedious. What if we want to let a function use a value but
+not take ownership? It’s quite annoying that anything we pass in also needs to
+be passed back if we want to use it again, in addition to any data resulting
+from the body of the function that we might want to return as well.
 
-Rust আমাদের একটি Tuple ব্যবহার করে একাধিক মান ফেরত দিতে দেয়, যেমন Listing 4-5 এ দেখানো হয়েছে।
+Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
 
-<Listing number="4-5" file-name="src/main.rs" caption="প্যারামিটারের Ownership ফেরত দেওয়া">
+<Listing number="4-5" file-name="src/main.rs" caption="Returning ownership of parameters">
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-05/src/main.rs}}
@@ -291,7 +512,9 @@ Rust আমাদের একটি Tuple ব্যবহার করে এ�
 
 </Listing>
 
-কিন্তু এটি খুব বেশি আনুষ্ঠানিকতা এবং এমন একটি ধারণার জন্য অনেক কাজ যা সাধারণ হওয়া উচিত। সৌভাগ্যবশত আমাদের জন্য, Rust এর এমন একটি বৈশিষ্ট্য রয়েছে যা Ownership স্থানান্তর না করে একটি মান ব্যবহার করার জন্য, যাকে _reference_ বলা হয়।
+But this is too much ceremony and a lot of work for a concept that should be
+common. Luckily for us, Rust has a feature for using a value without
+transferring ownership, called _references_.
 
 [data-types]: ch03-02-data-types.html#data-types
 [ch8]: ch08-02-strings.html

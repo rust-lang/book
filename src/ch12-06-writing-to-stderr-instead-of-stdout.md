@@ -1,34 +1,60 @@
-## স্ট্যান্ডার্ড আউটপুটের পরিবর্তে স্ট্যান্ডার্ড এররে Error মেসেজ লেখা
+## Writing Error Messages to Standard Error Instead of Standard Output
 
-এই মুহূর্তে, আমরা `println!` ম্যাক্রো ব্যবহার করে আমাদের সমস্ত আউটপুট টার্মিনালে লিখছি। বেশিরভাগ টার্মিনালে, দুই ধরনের আউটপুট রয়েছে: সাধারণ তথ্যের জন্য _স্ট্যান্ডার্ড আউটপুট_ (`stdout`) এবং error মেসেজের জন্য _স্ট্যান্ডার্ড এরর_ (`stderr`)। এই পার্থক্য ব্যবহারকারীদের একটি প্রোগ্রামের সফল আউটপুট একটি ফাইলে নির্দেশিত করতে এবং error মেসেজগুলি স্ক্রিনে প্রিন্ট করার সুযোগ দেয়।
+At the moment, we’re writing all of our output to the terminal using the
+`println!` macro. In most terminals, there are two kinds of output: _standard
+output_ (`stdout`) for general information and _standard error_ (`stderr`) for
+error messages. This distinction enables users to choose to direct the
+successful output of a program to a file but still print error messages to the
+screen.
 
-`println!` ম্যাক্রো শুধুমাত্র স্ট্যান্ডার্ড আউটপুটে প্রিন্ট করতে সক্ষম, তাই স্ট্যান্ডার্ড এররে প্রিন্ট করার জন্য আমাদের অন্য কিছু ব্যবহার করতে হবে।
+The `println!` macro is only capable of printing to standard output, so we have
+to use something else to print to standard error.
 
-### Error কোথায় লেখা হচ্ছে তা পরীক্ষা করা
+### Checking Where Errors Are Written
 
-প্রথমে আমরা দেখব কিভাবে `minigrep` দ্বারা প্রিন্ট করা কন্টেন্ট বর্তমানে স্ট্যান্ডার্ড আউটপুটে লেখা হচ্ছে, যার মধ্যে error মেসেজগুলিও রয়েছে যা আমরা স্ট্যান্ডার্ড এররে লিখতে চাই। আমরা স্ট্যান্ডার্ড আউটপুট স্ট্রিমটিকে একটি ফাইলে রিডাইরেক্ট করে এটি করব, সেই সাথে ইচ্ছাকৃতভাবে একটি error তৈরি করব। আমরা স্ট্যান্ডার্ড এরর স্ট্রিমটিকে রিডাইরেক্ট করব না, তাই স্ট্যান্ডার্ড এররে পাঠানো যেকোনো কন্টেন্ট স্ক্রিনে প্রদর্শিত হতে থাকবে।
+First let’s observe how the content printed by `minigrep` is currently being
+written to standard output, including any error messages we want to write to
+standard error instead. We’ll do that by redirecting the standard output stream
+to a file while intentionally causing an error. We won’t redirect the standard
+error stream, so any content sent to standard error will continue to display on
+the screen.
 
-কমান্ড লাইন প্রোগ্রামগুলি থেকে আশা করা হয় যে তারা error মেসেজগুলি স্ট্যান্ডার্ড এরর স্ট্রিমে পাঠাবে যাতে আমরা স্ট্যান্ডার্ড আউটপুট স্ট্রিমটিকে একটি ফাইলে রিডাইরেক্ট করলেও স্ক্রিনে error মেসেজগুলি দেখতে পারি। আমাদের প্রোগ্রামটি বর্তমানে ভালো আচরণ করছে না: আমরা দেখতে যাচ্ছি যে এটি error মেসেজ আউটপুট একটি ফাইলে সংরক্ষণ করে!
+Command line programs are expected to send error messages to the standard error
+stream so we can still see error messages on the screen even if we redirect the
+standard output stream to a file. Our program is not currently well behaved:
+we’re about to see that it saves the error message output to a file instead!
 
-এই আচরণটি প্রদর্শন করার জন্য, আমরা `>` এবং ফাইল পাথ, _output.txt_, দিয়ে প্রোগ্রামটি চালাব যেখানে আমরা স্ট্যান্ডার্ড আউটপুট স্ট্রিমটিকে রিডাইরেক্ট করতে চাই। আমরা কোনো আর্গুমেন্ট পাস করব না, যার ফলে একটি error হওয়া উচিত:
+To demonstrate this behavior, we’ll run the program with `>` and the file path,
+_output.txt_, that we want to redirect the standard output stream to. We won’t
+pass any arguments, which should cause an error:
 
 ```console
 $ cargo run > output.txt
 ```
 
-`>` সিনট্যাক্স শেলকে স্ট্যান্ডার্ড আউটপুটের কন্টেন্ট স্ক্রিনের পরিবর্তে _output.txt_-এ লিখতে বলে। আমরা স্ক্রিনে প্রিন্ট করা error মেসেজটি দেখতে পাইনি, তাই এর মানে এটি অবশ্যই ফাইলে শেষ হয়েছে। _output.txt_-এ নিম্নলিখিত বিষয়বস্তু রয়েছে:
+The `>` syntax tells the shell to write the contents of standard output to
+_output.txt_ instead of the screen. We didn’t see the error message we were
+expecting printed to the screen, so that means it must have ended up in the
+file. This is what _output.txt_ contains:
 
 ```text
 Problem parsing arguments: not enough arguments
 ```
 
-হ্যাঁ, আমাদের error মেসেজ স্ট্যান্ডার্ড আউটপুটে প্রিন্ট করা হচ্ছে। এই ধরনের error মেসেজগুলি স্ট্যান্ডার্ড এররে প্রিন্ট করা অনেক বেশি উপযোগী যাতে একটি সফল রান থেকে ডেটা ফাইলে শেষ হয়। আমরা সেটি পরিবর্তন করব।
+Yup, our error message is being printed to standard output. It’s much more
+useful for error messages like this to be printed to standard error so only
+data from a successful run ends up in the file. We’ll change that.
 
-### স্ট্যান্ডার্ড এররে Error প্রিন্ট করা
+### Printing Errors to Standard Error
 
-আমরা error মেসেজগুলি কীভাবে প্রিন্ট করা হয় তা পরিবর্তন করতে Listing 12-24 এর কোড ব্যবহার করব। এই অধ্যায়ে আমরা আগে যে রিফ্যাক্টরিং করেছি তার কারণে, error মেসেজ প্রিন্ট করা সমস্ত কোড একটি ফাংশনে আছে, `main`। স্ট্যান্ডার্ড লাইব্রেরি `eprintln!` ম্যাক্রো প্রদান করে যা স্ট্যান্ডার্ড এরর স্ট্রিমে প্রিন্ট করে, তাই আসুন আমরা error প্রিন্ট করার জন্য `println!` কল করার দুটি জায়গায় `eprintln!` ব্যবহার করি।
+We’ll use the code in Listing 12-24 to change how error messages are printed.
+Because of the refactoring we did earlier in this chapter, all the code that
+prints error messages is in one function, `main`. The standard library provides
+the `eprintln!` macro that prints to the standard error stream, so let’s change
+the two places we were calling `println!` to print errors to use `eprintln!`
+instead.
 
-<Listing number="12-24" file-name="src/main.rs" caption="`eprintln!` ব্যবহার করে স্ট্যান্ডার্ড আউটপুটের পরিবর্তে স্ট্যান্ডার্ড এররে error মেসেজ লেখা">
+<Listing number="12-24" file-name="src/main.rs" caption="Writing error messages to standard error instead of standard output using `eprintln!`">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-24/src/main.rs:here}}
@@ -36,22 +62,26 @@ Problem parsing arguments: not enough arguments
 
 </Listing>
 
-আসুন এখন আমরা একই ভাবে প্রোগ্রামটি আবার চালাই, কোনো আর্গুমেন্ট ছাড়াই এবং `>` দিয়ে স্ট্যান্ডার্ড আউটপুট রিডাইরেক্ট করে:
+Let’s now run the program again in the same way, without any arguments and
+redirecting standard output with `>`:
 
 ```console
 $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
 
-এখন আমরা error স্ক্রিনে দেখতে পাচ্ছি এবং _output.txt_-এ কিছুই নেই, যা আমরা কমান্ড লাইন প্রোগ্রাম থেকে আশা করি।
+Now we see the error onscreen and _output.txt_ contains nothing, which is the
+behavior we expect of command line programs.
 
-আসুন আমরা আবার আর্গুমেন্ট দিয়ে প্রোগ্রামটি চালাই যা কোনো error তৈরি করে না কিন্তু এখনও স্ট্যান্ডার্ড আউটপুট একটি ফাইলে রিডাইরেক্ট করে, যেমন:
+Let’s run the program again with arguments that don’t cause an error but still
+redirect standard output to a file, like so:
 
 ```console
 $ cargo run -- to poem.txt > output.txt
 ```
 
-আমরা টার্মিনালে কোনো আউটপুট দেখতে পাব না, এবং _output.txt_-এ আমাদের ফলাফল থাকবে:
+We won’t see any output to the terminal, and _output.txt_ will contain our
+results:
 
 <span class="filename">Filename: output.txt</span>
 
@@ -60,10 +90,18 @@ Are you nobody, too?
 How dreary to be somebody!
 ```
 
-এটি প্রমাণ করে যে আমরা এখন সফল আউটপুটের জন্য স্ট্যান্ডার্ড আউটপুট এবং error আউটপুটের জন্য স্ট্যান্ডার্ড এরর ব্যবহার করছি।
+This demonstrates that we’re now using standard output for successful output
+and standard error for error output as appropriate.
 
-## সারসংক্ষেপ
+## Summary
 
-এই অধ্যায়ে আপনি এ পর্যন্ত যা শিখেছেন তার কিছু প্রধান ধারণা আলোচনা করা হয়েছে এবং Rust-এ সাধারণ I/O অপারেশনগুলি কীভাবে করতে হয় তা আলোচনা করা হয়েছে। কমান্ড লাইন আর্গুমেন্ট, ফাইল, এনভায়রনমেন্ট ভেরিয়েবল এবং error প্রিন্ট করার জন্য `eprintln!` ম্যাক্রো ব্যবহার করে, আপনি এখন কমান্ড লাইন অ্যাপ্লিকেশন লিখতে প্রস্তুত। পূর্ববর্তী অধ্যায়গুলির ধারণাগুলির সাথে মিলিত হয়ে, আপনার কোডটি ভালোভাবে সাজানো হবে, উপযুক্ত ডেটা কাঠামোতে কার্যকরভাবে ডেটা সংরক্ষণ করবে, ভালোভাবে error হ্যান্ডেল করবে এবং ভালোভাবে test করা হবে।
+This chapter recapped some of the major concepts you’ve learned so far and
+covered how to perform common I/O operations in Rust. By using command line
+arguments, files, environment variables, and the `eprintln!` macro for printing
+errors, you’re now prepared to write command line applications. Combined with
+the concepts in previous chapters, your code will be well organized, store data
+effectively in the appropriate data structures, handle errors nicely, and be
+well tested.
 
-পরবর্তীকালে, আমরা Rust-এর কিছু বৈশিষ্ট্য নিয়ে আলোচনা করব যা functional ভাষাগুলি দ্বারা প্রভাবিত হয়েছে: ক্লোজার এবং iterator।
+Next, we’ll explore some Rust features that were influenced by functional
+languages: closures and iterators.

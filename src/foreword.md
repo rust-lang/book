@@ -1,15 +1,41 @@
-# ভূমিকা
+# Foreword
 
-এটা সবসময় এত স্পষ্ট ছিল না, কিন্তু Rust প্রোগ্রামিং ভাষা মূলত _ক্ষমতায়ন_ সম্পর্কে: আপনি এখন যে ধরনের কোডই লিখছেন না কেন, Rust আপনাকে আরও বেশি কিছুতে পৌঁছানোর ক্ষমতা দেয়, আগের চেয়ে আরও বেশি বৈচিত্র্যপূর্ণ ডোমেনে আত্মবিশ্বাসের সাথে প্রোগ্রাম করার ক্ষমতা দেয়।
+It wasn’t always so clear, but the Rust programming language is fundamentally
+about _empowerment_: no matter what kind of code you are writing now, Rust
+empowers you to reach farther, to program with confidence in a wider variety of
+domains than you did before.
 
-উদাহরণস্বরূপ, "সিস্টেম-লেভেল" কাজের কথা ধরুন যা মেমরি ম্যানেজমেন্ট, ডেটা উপস্থাপনা এবং কনকারেন্সির নিম্ন-স্তরের বিশদগুলির সাথে কাজ করে। ঐতিহ্যগতভাবে, প্রোগ্রামিংয়ের এই ক্ষেত্রটিকে রহস্যময় হিসাবে দেখা হয়, শুধুমাত্র সেই কয়েকজনের কাছে অ্যাক্সেসযোগ্য যারা এর কুখ্যাত ফাঁদগুলি এড়াতে প্রয়োজনীয় বছরগুলি উৎসর্গ করেছেন। এবং এমনকি যারা এটি অনুশীলন করেন তারাও সতর্কতার সাথে তা করেন, যাতে তাদের কোড শোষণ, ক্র্যাশ বা দুর্নীতির জন্য উন্মুক্ত না হয়।
+Take, for example, “systems-level” work that deals with low-level details of
+memory management, data representation, and concurrency. Traditionally, this
+realm of programming is seen as arcane, accessible only to a select few who
+have devoted the necessary years learning to avoid its infamous pitfalls. And
+even those who practice it do so with caution, lest their code be open to
+exploits, crashes, or corruption.
 
-Rust পুরানো ফাঁদগুলি দূর করে এবং আপনাকে পথে সাহায্য করার জন্য বন্ধুত্বপূর্ণ, পরিশীলিত সরঞ্জামগুলির একটি সেট সরবরাহ করে এই বাধাগুলি ভেঙে দেয়। যে প্রোগ্রামারদের নিম্ন-স্তরের নিয়ন্ত্রণে "ডুব দিতে" হবে তারা Rust-এর সাথে তা করতে পারে, ক্র্যাশ বা নিরাপত্তা ছিদ্রের প্রথাগত ঝুঁকি না নিয়ে এবং একটি পরিবর্তনশীল টুলchains-এর সূক্ষ্ম বিষয়গুলি শিখতে না গিয়ে। আরও ভালো, ভাষাটি আপনাকে স্বাভাবিকভাবেই নির্ভরযোগ্য কোডের দিকে গাইড করার জন্য ডিজাইন করা হয়েছে যা গতি এবং মেমরি ব্যবহারের দিক থেকে দক্ষ।
+Rust breaks down these barriers by eliminating the old pitfalls and providing a
+friendly, polished set of tools to help you along the way. Programmers who need
+to “dip down” into lower-level control can do so with Rust, without taking on
+the customary risk of crashes or security holes, and without having to learn
+the fine points of a fickle toolchain. Better yet, the language is designed to
+guide you naturally towards reliable code that is efficient in terms of speed
+and memory usage.
 
-যে প্রোগ্রামাররা ইতিমধ্যেই নিম্ন-স্তরের কোডের সাথে কাজ করছেন তারা তাদের উচ্চাকাঙ্ক্ষা বাড়াতে Rust ব্যবহার করতে পারেন। উদাহরণস্বরূপ, Rust-এ প্যারালালিজম চালু করা তুলনামূলকভাবে কম ঝুঁকিপূর্ণ একটি অপারেশন: কম্পাইলার আপনার জন্য ক্লাসিক্যাল ভুলগুলি ধরবে। এবং আপনি আত্মবিশ্বাসের সাথে আপনার কোডে আরও আক্রমণাত্মক অপ্টিমাইজেশন মোকাবেলা করতে পারেন যে আপনি ভুল করে ক্র্যাশ বা দুর্বলতা প্রবর্তন করবেন না।
+Programmers who are already working with low-level code can use Rust to raise
+their ambitions. For example, introducing parallelism in Rust is a relatively
+low-risk operation: the compiler will catch the classical mistakes for you. And
+you can tackle more aggressive optimizations in your code with the confidence
+that you won’t accidentally introduce crashes or vulnerabilities.
 
-কিন্তু Rust শুধুমাত্র নিম্ন-স্তরের সিস্টেম প্রোগ্রামিংয়ের মধ্যে সীমাবদ্ধ নয়। এটি CLI অ্যাপ, ওয়েব সার্ভার এবং অন্যান্য অনেক ধরণের কোড লেখার জন্য যথেষ্ট প্রকাশক এবং ergonomic — আপনি বইটিতে পরে উভয়টির সহজ উদাহরণ পাবেন। Rust-এর সাথে কাজ করা আপনাকে এমন দক্ষতা তৈরি করতে দেয় যা একটি ডোমেন থেকে অন্য ডোমেনে স্থানান্তরিত হয়; আপনি একটি ওয়েব অ্যাপ লিখে Rust শিখতে পারেন, তারপর সেই একই দক্ষতা আপনার Raspberry Pi-কে লক্ষ্য করতে প্রয়োগ করতে পারেন।
+But Rust isn’t limited to low-level systems programming. It’s expressive and
+ergonomic enough to make CLI apps, web servers, and many other kinds of code
+quite pleasant to write — you’ll find simple examples of both later in the
+book. Working with Rust allows you to build skills that transfer from one
+domain to another; you can learn Rust by writing a web app, then apply those
+same skills to target your Raspberry Pi.
 
-এই বইটি Rust-এর তার ব্যবহারকারীদের ক্ষমতায়নের সম্ভাবনাকে সম্পূর্ণরূপে গ্রহণ করে। এটি একটি বন্ধুত্বপূর্ণ এবং সহজবোধ্য পাঠ যা আপনাকে শুধুমাত্র Rust-এর জ্ঞান নয়, সাধারণভাবে একজন প্রোগ্রামার হিসাবে আপনার নাগাল এবং আত্মবিশ্বাসকেও উন্নত করতে সাহায্য করার উদ্দেশ্যে করা হয়েছে। তাই ঝাঁপিয়ে পড়ুন, শিখতে প্রস্তুত হন—এবং Rust সম্প্রদায়ে স্বাগতম!
+This book fully embraces the potential of Rust to empower its users. It’s a
+friendly and approachable text intended to help you level up not just your
+knowledge of Rust, but also your reach and confidence as a programmer in
+general. So dive in, get ready to learn—and welcome to the Rust community!
 
-— নিকোলাস মাতসাকিস এবং অ্যারন তুরন
+— Nicholas Matsakis and Aaron Turon

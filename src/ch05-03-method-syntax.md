@@ -1,12 +1,21 @@
-## Method সিনট্যাক্স
+## Method Syntax
 
-_Methods_ ফাংশনের মতোই: আমরা `fn` কীওয়ার্ড এবং একটি নাম দিয়ে সেগুলি ঘোষণা করি, তাদের প্যারামিটার এবং একটি রিটার্ন ভ্যালু থাকতে পারে এবং সেগুলিতে কিছু কোড থাকে যা অন্য কোথাও থেকে পদ্ধতিটি কল করা হলে রান হয়। ফাংশনগুলির বিপরীতে, methods একটি struct এর (অথবা একটি enum বা একটি trait object, যা আমরা [Chapter 6][enums]<!-- ignore --> এবং [Chapter 17][trait-objects]<!-- ignore --> এ আলোচনা করব) প্রেক্ষাপটের মধ্যে সংজ্ঞায়িত করা হয় এবং তাদের প্রথম প্যারামিটার সর্বদা `self` হয়, যা struct এর সেই instance কে প্রতিনিধিত্ব করে যার উপর পদ্ধতিটি কল করা হচ্ছে।
+_Methods_ are similar to functions: we declare them with the `fn` keyword and a
+name, they can have parameters and a return value, and they contain some code
+that’s run when the method is called from somewhere else. Unlike functions,
+methods are defined within the context of a struct (or an enum or a trait
+object, which we cover in [Chapter 6][enums]<!-- ignore --> and [Chapter
+18][trait-objects]<!-- ignore -->, respectively), and their first parameter is
+always `self`, which represents the instance of the struct the method is being
+called on.
 
-### Methods সংজ্ঞায়িত করা
+### Defining Methods
 
-আসুন `area` ফাংশনটি পরিবর্তন করি, যেখানে একটি প্যারামিটার হিসাবে `Rectangle` instance থাকে এবং পরিবর্তে `Rectangle` struct এ সংজ্ঞায়িত একটি `area` method তৈরি করি, যেমন Listing 5-13 এ দেখানো হয়েছে।
+Let’s change the `area` function that has a `Rectangle` instance as a parameter
+and instead make an `area` method defined on the `Rectangle` struct, as shown
+in Listing 5-13.
 
-<Listing number="5-13" file-name="src/main.rs" caption="`Rectangle` struct এ একটি `area` method সংজ্ঞায়িত করা">
+<Listing number="5-13" file-name="src/main.rs" caption="Defining an `area` method on the `Rectangle` struct">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-13/src/main.rs}}
@@ -14,15 +23,46 @@ _Methods_ ফাংশনের মতোই: আমরা `fn` কীওয়�
 
 </Listing>
 
-`Rectangle` এর প্রেক্ষাপটের মধ্যে ফাংশনটি সংজ্ঞায়িত করতে, আমরা `Rectangle` এর জন্য একটি `impl` (implementation) ব্লক শুরু করি। এই `impl` ব্লকের মধ্যে সবকিছু `Rectangle` টাইপের সাথে যুক্ত হবে। তারপর আমরা `impl` কার্লি ব্র্যাকেটের মধ্যে `area` ফাংশনটিকে move করি এবং সিগনেচারে এবং বডির ভিতরে সর্বত্র প্রথম (এবং এই ক্ষেত্রে, একমাত্র) প্যারামিটারটিকে `self` এ পরিবর্তন করি। `main`-এ, যেখানে আমরা `area` ফাংশন কল করেছি এবং `rect1` কে আর্গুমেন্ট হিসাবে পাস করেছি, সেখানে আমরা পরিবর্তে আমাদের `Rectangle` instance এ `area` method কল করতে _method syntax_ ব্যবহার করতে পারি। Method syntax একটি instance এর পরে যায়: আমরা একটি ডট যোগ করি এবং তারপরে method এর নাম, বন্ধনী এবং যেকোনো আর্গুমেন্ট দিই।
+To define the function within the context of `Rectangle`, we start an `impl`
+(implementation) block for `Rectangle`. Everything within this `impl` block
+will be associated with the `Rectangle` type. Then we move the `area` function
+within the `impl` curly brackets and change the first (and in this case, only)
+parameter to be `self` in the signature and everywhere within the body. In
+`main`, where we called the `area` function and passed `rect1` as an argument,
+we can instead use _method syntax_ to call the `area` method on our `Rectangle`
+instance. The method syntax goes after an instance: we add a dot followed by
+the method name, parentheses, and any arguments.
 
-`area` এর সিগনেচারে, আমরা `rectangle: &Rectangle` এর পরিবর্তে `&self` ব্যবহার করি। `&self` আসলে `self: &Self` এর সংক্ষিপ্ত রূপ। একটি `impl` ব্লকের মধ্যে, `Self` টাইপটি সেই টাইপের জন্য একটি alias যার জন্য `impl` ব্লকটি তৈরি করা হয়েছে। Methods এর প্রথম প্যারামিটারের জন্য `Self` টাইপের `self` নামের একটি প্যারামিটার থাকতে হবে, তাই Rust আপনাকে প্রথম প্যারামিটারের স্থানে শুধুমাত্র `self` নামটি দিয়ে এটিকে সংক্ষেপ করতে দেয়। মনে রাখবেন যে এই method টি `Self` instance কে borrow করে, তা নির্দেশ করার জন্য আমাদের এখনও `self` শর্টহ্যান্ডের সামনে `&` ব্যবহার করতে হবে, ঠিক যেমন আমরা `rectangle: &Rectangle` এ করেছিলাম। Methods `self` এর ownership নিতে পারে, `self` কে immutable ভাবে borrow করতে পারে, যেমনটা আমরা এখানে করেছি, অথবা `self` কে mutable ভাবে borrow করতে পারে, ঠিক যেমন তারা অন্য কোনো প্যারামিটার করতে পারে।
+In the signature for `area`, we use `&self` instead of `rectangle: &Rectangle`.
+The `&self` is actually short for `self: &Self`. Within an `impl` block, the
+type `Self` is an alias for the type that the `impl` block is for. Methods must
+have a parameter named `self` of type `Self` for their first parameter, so Rust
+lets you abbreviate this with only the name `self` in the first parameter spot.
+Note that we still need to use the `&` in front of the `self` shorthand to
+indicate that this method borrows the `Self` instance, just as we did in
+`rectangle: &Rectangle`. Methods can take ownership of `self`, borrow `self`
+immutably, as we’ve done here, or borrow `self` mutably, just as they can any
+other parameter.
 
-ফাংশন সংস্করণে আমরা `&Rectangle` ব্যবহার করার একই কারণে আমরা এখানে `&self` বেছে নিয়েছি: আমরা ownership নিতে চাই না এবং আমরা শুধু struct এ ডেটা পড়তে চাই, এতে লিখতে চাই না। যদি আমরা method এর অংশ হিসাবে method টি কল করা instance পরিবর্তন করতে চাই, তবে আমরা প্রথম প্যারামিটার হিসাবে `&mut self` ব্যবহার করব। প্রথম প্যারামিটার হিসাবে শুধুমাত্র `self` ব্যবহার করে instance এর ownership নেওয়া একটি method থাকা বিরল; এই কৌশলটি সাধারণত ব্যবহার করা হয় যখন method টি `self` কে অন্য কিছুতে রূপান্তরিত করে এবং আপনি রূপান্তরের পরে কলারকে মূল instance ব্যবহার করা থেকে আটকাতে চান।
+We chose `&self` here for the same reason we used `&Rectangle` in the function
+version: we don’t want to take ownership, and we just want to read the data in
+the struct, not write to it. If we wanted to change the instance that we’ve
+called the method on as part of what the method does, we’d use `&mut self` as
+the first parameter. Having a method that takes ownership of the instance by
+using just `self` as the first parameter is rare; this technique is usually
+used when the method transforms `self` into something else and you want to
+prevent the caller from using the original instance after the transformation.
 
-ফাংশনের পরিবর্তে methods ব্যবহার করার মূল কারণ, method syntax প্রদান করা এবং প্রতিটি method এর সিগনেচারে `self` এর টাইপ পুনরাবৃত্তি করতে না হওয়ার পাশাপাশি, সংগঠনের জন্য। আমরা একটি টাইপের instance দিয়ে করতে পারি এমন সমস্ত কিছু একটি `impl` ব্লকে রেখেছি, পরিবর্তে আমাদের কোডের ভবিষ্যতের ব্যবহারকারীদের লাইব্রেরিতে `Rectangle` এর ক্ষমতা বিভিন্ন জায়গায় খুঁজে বের করতে বাধ্য করার চেয়ে।
+The main reason for using methods instead of functions, in addition to
+providing method syntax and not having to repeat the type of `self` in every
+method’s signature, is for organization. We’ve put all the things we can do
+with an instance of a type in one `impl` block rather than making future users
+of our code search for capabilities of `Rectangle` in various places in the
+library we provide.
 
-মনে রাখবেন যে আমরা একটি method কে struct এর ফিল্ডগুলির একটির মতোই নাম দিতে পছন্দ করতে পারি। উদাহরণস্বরূপ, আমরা `Rectangle` এ একটি method সংজ্ঞায়িত করতে পারি যার নামও `width`:
+Note that we can choose to give a method the same name as one of the struct’s
+fields. For example, we can define a method on `Rectangle` that is also named
+`width`:
 
 <Listing file-name="src/main.rs">
 
@@ -32,17 +72,37 @@ _Methods_ ফাংশনের মতোই: আমরা `fn` কীওয়�
 
 </Listing>
 
-এখানে, আমরা `width` method টিকে এমনভাবে তৈরি করছি যাতে instance এর `width` ফিল্ডের মান `0` এর চেয়ে বেশি হলে `true` এবং মান `0` হলে `false` ফেরত দেয়: আমরা যেকোনো উদ্দেশ্যে একই নামের একটি method এর মধ্যে একটি ফিল্ড ব্যবহার করতে পারি। `main`-এ, যখন আমরা `rect1.width` এর পরে বন্ধনী ব্যবহার করি, তখন Rust জানে যে আমাদের `width` method বোঝানো হয়েছে। যখন আমরা বন্ধনী ব্যবহার করি না, তখন Rust জানে যে আমাদের `width` ফিল্ড বোঝানো হয়েছে।
+Here, we’re choosing to make the `width` method return `true` if the value in
+the instance’s `width` field is greater than `0` and `false` if the value is
+`0`: we can use a field within a method of the same name for any purpose. In
+`main`, when we follow `rect1.width` with parentheses, Rust knows we mean the
+method `width`. When we don’t use parentheses, Rust knows we mean the field
+`width`.
 
-প্রায়শই, কিন্তু সবসময় নয়, যখন আমরা একটি method কে একটি ফিল্ডের মতোই নাম দিই, তখন আমরা চাই যে এটি শুধুমাত্র ফিল্ডের মান ফেরত দিক এবং অন্য কিছু না করুক। এই ধরনের method গুলিকে _getters_ বলা হয় এবং Rust struct ফিল্ডগুলির জন্য স্বয়ংক্রিয়ভাবে সেগুলি প্রয়োগ করে না যেমন কিছু অন্যান্য ভাষা করে। Getters কার্যকর কারণ আপনি ফিল্ডটিকে private করতে পারেন কিন্তু method টিকে public করতে পারেন এবং এইভাবে টাইপের public API এর অংশ হিসাবে সেই ফিল্ডে শুধুমাত্র-পঠনযোগ্য অ্যাক্সেস সক্ষম করতে পারেন। public এবং private কী এবং কিভাবে একটি ফিল্ড বা method কে public বা private হিসাবে মনোনীত করতে হয় তা আমরা [Chapter 7][public]<!-- ignore --> এ আলোচনা করব।
+Often, but not always, when we give a method the same name as a field we want
+it to only return the value in the field and do nothing else. Methods like this
+are called _getters_, and Rust does not implement them automatically for struct
+fields as some other languages do. Getters are useful because you can make the
+field private but the method public, and thus enable read-only access to that
+field as part of the type’s public API. We will discuss what public and private
+are and how to designate a field or method as public or private in [Chapter
+7][public]<!-- ignore -->.
 
-> ### `->` অপারেটর কোথায়?
+> ### Where’s the `->` Operator?
 >
-> C এবং C++ এ, methods কল করার জন্য দুটি ভিন্ন অপারেটর ব্যবহার করা হয়: আপনি `.` ব্যবহার করেন যদি আপনি সরাসরি অবজেক্টে একটি method কল করেন এবং `->` ব্যবহার করেন যদি আপনি অবজেক্টের pointer এ method কল করেন এবং প্রথমে pointer টিকে dereference করতে হয়। অন্য কথায়, যদি `object` একটি pointer হয়, তবে `object->something()` হল `(*object).something()` এর অনুরূপ।
+> In C and C++, two different operators are used for calling methods: you use
+> `.` if you’re calling a method on the object directly and `->` if you’re
+> calling the method on a pointer to the object and need to dereference the
+> pointer first. In other words, if `object` is a pointer,
+> `object->something()` is similar to `(*object).something()`.
 >
-> Rust এ `->` অপারেটরের সমতুল্য কিছু নেই; পরিবর্তে, Rust এ _automatic referencing and dereferencing_ নামক একটি বৈশিষ্ট্য রয়েছে। Methods কল করা Rust এর কয়েকটি জায়গার মধ্যে একটি যেখানে এই আচরণ রয়েছে।
+> Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
+> feature called _automatic referencing and dereferencing_. Calling methods is
+> one of the few places in Rust with this behavior.
 >
-> এখানে এটি কিভাবে কাজ করে: যখন আপনি `object.something()` দিয়ে একটি method কল করেন, তখন Rust স্বয়ংক্রিয়ভাবে `&`, `&mut`, বা `*` যোগ করে যাতে `object` method এর সিগনেচারের সাথে মিলে যায়। অন্য কথায়, নিম্নলিখিতগুলি একই:
+> Here’s how it works: when you call a method with `object.something()`, Rust
+> automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
+> the method. In other words, the following are the same:
 >
 > <!-- CAN'T EXTRACT SEE BUG https://github.com/rust-lang/mdBook/issues/1127 -->
 >
@@ -67,13 +127,23 @@ _Methods_ ফাংশনের মতোই: আমরা `fn` কীওয়�
 > (&p1).distance(&p2);
 > ```
 >
-> প্রথমটি দেখতে অনেক পরিষ্কার। এই স্বয়ংক্রিয় referencing আচরণ কাজ করে কারণ methods এর একটি স্পষ্ট রিসিভার আছে—`self` এর প্রকার। একটি method এর রিসিভার এবং নাম দেওয়া হলে, Rust নিশ্চিতভাবে জানতে পারে যে method টি পড়ছে (`&self`), পরিবর্তন করছে (`&mut self`), অথবা ব্যবহার করছে (`self`)। Rust method রিসিভারদের জন্য borrowing কে অন্তর্নিহিত করে তোলে, এই বিষয়টি বাস্তবে ownership কে ergonomic করার একটি বড় অংশ।
+> The first one looks much cleaner. This automatic referencing behavior works
+> because methods have a clear receiver—the type of `self`. Given the receiver
+> and name of a method, Rust can figure out definitively whether the method is
+> reading (`&self`), mutating (`&mut self`), or consuming (`self`). The fact
+> that Rust makes borrowing implicit for method receivers is a big part of
+> making ownership ergonomic in practice.
 
-### একাধিক প্যারামিটার সহ Methods
+### Methods with More Parameters
 
-আসুন `Rectangle` struct এ দ্বিতীয় একটি method প্রয়োগ করে methods ব্যবহার করার অনুশীলন করি। এবার আমরা চাই `Rectangle` এর একটি instance অন্য একটি `Rectangle` এর instance নিক এবং `true` ফেরত দিক যদি দ্বিতীয় `Rectangle` টি সম্পূর্ণভাবে `self` (প্রথম `Rectangle`) এর মধ্যে ফিট হতে পারে; অন্যথায়, এটি `false` ফেরত দেবে। অর্থাৎ, একবার আমরা `can_hold` method সংজ্ঞায়িত করার পরে, আমরা Listing 5-14 এ দেখানো প্রোগ্রামটি লিখতে সক্ষম হতে চাই।
+Let’s practice using methods by implementing a second method on the `Rectangle`
+struct. This time we want an instance of `Rectangle` to take another instance
+of `Rectangle` and return `true` if the second `Rectangle` can fit completely
+within `self` (the first `Rectangle`); otherwise, it should return `false`.
+That is, once we’ve defined the `can_hold` method, we want to be able to write
+the program shown in Listing 5-14.
 
-<Listing number="5-14" file-name="src/main.rs" caption="এখনও লেখা হয়নি এমন `can_hold` method ব্যবহার করা">
+<Listing number="5-14" file-name="src/main.rs" caption="Using the as-yet-unwritten `can_hold` method">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-14/src/main.rs}}
@@ -81,16 +151,30 @@ _Methods_ ফাংশনের মতোই: আমরা `fn` কীওয়�
 
 </Listing>
 
-প্রত্যাশিত আউটপুটটি দেখতে এইরকম হবে কারণ `rect2` এর উভয় ডাইমেনশন `rect1` এর ডাইমেনশনগুলির চেয়ে ছোট, কিন্তু `rect3` হল `rect1` এর চেয়ে চওড়া:
+The expected output would look like the following because both dimensions of
+`rect2` are smaller than the dimensions of `rect1`, but `rect3` is wider than
+`rect1`:
 
 ```text
 Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 ```
 
-আমরা জানি যে আমরা একটি method সংজ্ঞায়িত করতে চাই, তাই এটি `impl Rectangle` ব্লকের মধ্যে থাকবে। Method এর নাম হবে `can_hold` এবং এটি প্যারামিটার হিসাবে অন্য `Rectangle` এর একটি immutable borrow নেবে। আমরা method কল করা কোডটি দেখে প্যারামিটারের প্রকার কী হবে তা বলতে পারি: `rect1.can_hold(&rect2)` `&rect2` পাস করে, যা `rect2` এর একটি immutable borrow, `Rectangle` এর একটি instance। এটি অর্থপূর্ণ কারণ আমাদের `rect2` কে শুধুমাত্র পড়তে হবে (লেখার পরিবর্তে, যার মানে আমাদের একটি mutable borrow প্রয়োজন হবে) এবং আমরা চাই `main` `rect2` এর ownership ধরে রাখুক যাতে আমরা `can_hold` method কল করার পরে এটিকে আবার ব্যবহার করতে পারি। `can_hold` এর রিটার্ন ভ্যালু একটি বুলিয়ান হবে এবং বাস্তবায়নটি পরীক্ষা করবে যে `self` এর প্রস্থ এবং উচ্চতা অন্য `Rectangle` এর প্রস্থ এবং উচ্চতার চেয়ে বেশি কিনা। আসুন Listing 5-13 থেকে `impl` ব্লকে নতুন `can_hold` method যোগ করি, যা Listing 5-15 এ দেখানো হয়েছে।
+We know we want to define a method, so it will be within the `impl Rectangle`
+block. The method name will be `can_hold`, and it will take an immutable borrow
+of another `Rectangle` as a parameter. We can tell what the type of the
+parameter will be by looking at the code that calls the method:
+`rect1.can_hold(&rect2)` passes in `&rect2`, which is an immutable borrow to
+`rect2`, an instance of `Rectangle`. This makes sense because we only need to
+read `rect2` (rather than write, which would mean we’d need a mutable borrow),
+and we want `main` to retain ownership of `rect2` so we can use it again after
+calling the `can_hold` method. The return value of `can_hold` will be a
+Boolean, and the implementation will check whether the width and height of
+`self` are greater than the width and height of the other `Rectangle`,
+respectively. Let’s add the new `can_hold` method to the `impl` block from
+Listing 5-13, shown in Listing 5-15.
 
-<Listing number="5-15" file-name="src/main.rs" caption="`Rectangle` এ `can_hold` method প্রয়োগ করা যা প্যারামিটার হিসাবে অন্য `Rectangle` instance নেয়">
+<Listing number="5-15" file-name="src/main.rs" caption="Implementing the `can_hold` method on `Rectangle` that takes another `Rectangle` instance as a parameter">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-15/src/main.rs:here}}
@@ -98,13 +182,27 @@ Can rect1 hold rect3? false
 
 </Listing>
 
-যখন আমরা Listing 5-14 এর `main` ফাংশন দিয়ে এই কোডটি চালাব, তখন আমরা আমাদের কাঙ্ক্ষিত আউটপুট পাব। Methods একাধিক প্যারামিটার নিতে পারে যা আমরা `self` প্যারামিটারের পরে সিগনেচারে যোগ করি এবং সেই প্যারামিটারগুলি ফাংশনের প্যারামিটারগুলির মতোই কাজ করে।
+When we run this code with the `main` function in Listing 5-14, we’ll get our
+desired output. Methods can take multiple parameters that we add to the
+signature after the `self` parameter, and those parameters work just like
+parameters in functions.
 
 ### Associated Functions
 
-একটি `impl` ব্লকের মধ্যে সংজ্ঞায়িত সমস্ত ফাংশনকে _associated functions_ বলা হয়, কারণ সেগুলি `impl` এর পরে নামের টাইপের সাথে যুক্ত। আমরা associated functions সংজ্ঞায়িত করতে পারি যার প্রথম প্যারামিটার হিসাবে `self` নেই (এবং তাই সেগুলি methods নয়) কারণ তাদের কাজ করার জন্য টাইপের instance এর প্রয়োজন হয় না। আমরা ইতিমধ্যেই এইরকম একটি ফাংশন ব্যবহার করেছি: `String` টাইপে সংজ্ঞায়িত `String::from` ফাংশন।
+All functions defined within an `impl` block are called _associated functions_
+because they’re associated with the type named after the `impl`. We can define
+associated functions that don’t have `self` as their first parameter (and thus
+are not methods) because they don’t need an instance of the type to work with.
+We’ve already used one function like this: the `String::from` function that’s
+defined on the `String` type.
 
-যে associated functions গুলো methods নয়, সেগুলি প্রায়শই কনস্ট্রাক্টরদের জন্য ব্যবহৃত হয় যা struct এর একটি নতুন instance ফেরত দেবে। এগুলিকে প্রায়ই `new` বলা হয়, তবে `new` কোনো বিশেষ নাম নয় এবং ভাষার মধ্যে তৈরি করা হয়নি। উদাহরণস্বরূপ, আমরা একটি associated function প্রদান করতে পছন্দ করতে পারি যার নাম `square`, যেখানে একটি ডাইমেনশন প্যারামিটার থাকবে এবং সেটিকেই প্রস্থ এবং উচ্চতা উভয় হিসাবে ব্যবহার করা হবে, এইভাবে একই মান দুবার উল্লেখ করার পরিবর্তে একটি বর্গক্ষেত্র `Rectangle` তৈরি করা সহজ হবে:
+Associated functions that aren’t methods are often used for constructors that
+will return a new instance of the struct. These are often called `new`, but
+`new` isn’t a special name and isn’t built into the language. For example, we
+could choose to provide an associated function named `square` that would have
+one dimension parameter and use that as both width and height, thus making it
+easier to create a square `Rectangle` rather than having to specify the same
+value twice:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -112,15 +210,23 @@ Can rect1 hold rect3? false
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-03-associated-functions/src/main.rs:here}}
 ```
 
-রিটার্ন টাইপে এবং ফাংশনের বডিতে থাকা `Self` কীওয়ার্ডগুলি সেই টাইপের alias যা `impl` কীওয়ার্ডের পরে আসে, এই ক্ষেত্রে যা হল `Rectangle`।
+The `Self` keywords in the return type and in the body of the function are
+aliases for the type that appears after the `impl` keyword, which in this case
+is `Rectangle`.
 
-এই associated function টি কল করতে, আমরা struct নামের সাথে `::` সিনট্যাক্স ব্যবহার করি; `let sq = Rectangle::square(3);` একটি উদাহরণ। এই ফাংশনটি struct দ্বারা namespaced: `::` সিনট্যাক্স associated functions এবং মডিউল দ্বারা তৈরি namespaces উভয়ের জন্যই ব্যবহৃত হয়। আমরা [Chapter 7][modules]<!-- ignore --> এ মডিউল নিয়ে আলোচনা করব।
+To call this associated function, we use the `::` syntax with the struct name;
+`let sq = Rectangle::square(3);` is an example. This function is namespaced by
+the struct: the `::` syntax is used for both associated functions and
+namespaces created by modules. We’ll discuss modules in [Chapter
+7][modules]<!-- ignore -->.
 
-### একাধিক `impl` ব্লক
+### Multiple `impl` Blocks
 
-প্রতিটি struct এর একাধিক `impl` ব্লক থাকতে পারে। উদাহরণস্বরূপ, Listing 5-15, Listing 5-16 এ দেখানো কোডের সমতুল্য, যেখানে প্রতিটি method এর নিজস্ব `impl` ব্লক রয়েছে।
+Each struct is allowed to have multiple `impl` blocks. For example, Listing
+5-15 is equivalent to the code shown in Listing 5-16, which has each method in
+its own `impl` block.
 
-<Listing number="5-16" caption="একাধিক `impl` ব্লক ব্যবহার করে Listing 5-15 পুনরায় লেখা">
+<Listing number="5-16" caption="Rewriting Listing 5-15 using multiple `impl` blocks">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-16/src/main.rs:here}}
@@ -128,13 +234,21 @@ Can rect1 hold rect3? false
 
 </Listing>
 
-এখানে এই methods গুলোকে একাধিক `impl` ব্লকে আলাদা করার কোনো কারণ নেই, তবে এটি বৈধ সিনট্যাক্স। আমরা Chapter 10 এ একটি ক্ষেত্র দেখব যেখানে একাধিক `impl` ব্লক কার্যকর, যেখানে আমরা জেনেরিক টাইপ এবং traits নিয়ে আলোচনা করব।
+There’s no reason to separate these methods into multiple `impl` blocks here,
+but this is valid syntax. We’ll see a case in which multiple `impl` blocks are
+useful in Chapter 10, where we discuss generic types and traits.
 
-## সারসংক্ষেপ
+## Summary
 
-Structs আপনাকে কাস্টম টাইপ তৈরি করতে দেয় যা আপনার ডোমেনের জন্য অর্থপূর্ণ। structs ব্যবহার করে, আপনি একে অপরের সাথে যুক্ত ডেটার অংশগুলিকে সংযুক্ত রাখতে পারেন এবং আপনার কোডটিকে পরিষ্কার করতে প্রতিটি অংশের নাম দিতে পারেন। `impl` ব্লকে, আপনি এমন ফাংশন সংজ্ঞায়িত করতে পারেন যা আপনার টাইপের সাথে যুক্ত, এবং methods হল এক ধরনের associated function যা আপনাকে আপনার structs এর instance গুলির আচরণ নির্দিষ্ট করতে দেয়।
+Structs let you create custom types that are meaningful for your domain. By
+using structs, you can keep associated pieces of data connected to each other
+and name each piece to make your code clear. In `impl` blocks, you can define
+functions that are associated with your type, and methods are a kind of
+associated function that let you specify the behavior that instances of your
+structs have.
 
-কিন্তু structs কাস্টম টাইপ তৈরি করার একমাত্র উপায় নয়: আসুন Rust এর enum বৈশিষ্ট্যের দিকে যাই যাতে আপনার টুলবক্সে আরও একটি টুল যোগ করা যায়।
+But structs aren’t the only way you can create custom types: let’s turn to
+Rust’s enum feature to add another tool to your toolbox.
 
 [enums]: ch06-00-enums.html
 [trait-objects]: ch18-02-trait-objects.md

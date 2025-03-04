@@ -1,25 +1,46 @@
 ## Implementing an Object-Oriented Design Pattern
 
-_State pattern_ হলো একটি object-oriented design pattern। Pattern টির মূল বিষয় হলো আমরা এমন set of state define করি যা একটি value internally hold করতে পারে। State গুলো set of _state object_ দ্বারা represent করা হয়, এবং value এর behaviour এর state এর উপর depend করে change হয়। আমরা একটি blog post struct এর উদাহরণ নিয়ে কাজ করতে যাচ্ছি যেখানে এর state hold করার জন্য একটি field থাকবে, যা "draft", "review", বা "published" set থেকে একটি state object হবে।
+The _state pattern_ is an object-oriented design pattern. The crux of the
+pattern is that we define a set of states a value can have internally. The
+states are represented by a set of _state objects_, and the value’s behavior
+changes based on its state. We’re going to work through an example of a blog
+post struct that has a field to hold its state, which will be a state object
+from the set "draft", "review", or "published".
 
-State object গুলো functionality share করে: Rust এ, অবশ্যই আমরা object এবং inheritance এর পরিবর্তে struct এবং trait ব্যবহার করি। প্রত্যেক state object তার নিজের behaviour এর জন্য responsible এবং কখন এটি অন্য state এ change হওয়া উচিত তা govern করার জন্য responsible। State object hold করা value state গুলোর different behaviour বা কখন state গুলোর মধ্যে transition করতে হবে সে বিষয়ে কিছুই জানে না।
+The state objects share functionality: in Rust, of course, we use structs and
+traits rather than objects and inheritance. Each state object is responsible
+for its own behavior and for governing when it should change into another
+state. The value that holds a state object knows nothing about the different
+behavior of the states or when to transition between states.
 
-State pattern ব্যবহার করার advantage হলো, যখন program এর business requirement change হয়, তখন state hold করা value এর code change করার প্রয়োজন হবে না বা সেই value ব্যবহার করা code change করার প্রয়োজন হবে না। Rules change করার জন্য বা হয়তো আরও state object add করার জন্য আমাদের শুধুমাত্র state object গুলোর ভিতরের code update করার প্রয়োজন হবে।
+The advantage of using the state pattern is that, when the business
+requirements of the program change, we won’t need to change the code of the
+value holding the state or the code that uses the value. We’ll only need to
+update the code inside one of the state objects to change its rules or perhaps
+add more state objects.
 
-প্রথমে, আমরা state pattern implement করতে যাচ্ছি more traditional object-oriented উপায়ে, তারপর আমরা এমন একটি approach ব্যবহার করব যা Rust এ আরও natural। চলুন state pattern ব্যবহার করে incrementally blog post workflow implement করা শুরু করি।
+First, we’re going to implement the state pattern in a more traditional
+object-oriented way, then we’ll use an approach that’s a bit more natural in
+Rust. Let’s dig in to incrementally implementing a blog post workflow using the
+state pattern.
 
-Final functionality টি দেখতে এমন হবে:
+The final functionality will look like this:
 
-1. একটি blog post empty draft হিসেবে শুরু হবে।
-2. যখন draft শেষ হয়ে যাবে, তখন post এর review request করা হবে।
-3. যখন post approve করা হবে, তখন এটি publish হবে।
-4. শুধুমাত্র published blog post print করার জন্য content return করবে, তাই unapproved post accidentally publish হওয়া উচিত নয়।
+1. A blog post starts as an empty draft.
+2. When the draft is done, a review of the post is requested.
+3. When the post is approved, it gets published.
+4. Only published blog posts return content to print, so unapproved posts can’t
+   accidentally be published.
 
-Post এ attempt করা অন্য change এর কোনো effect থাকা উচিত নয়। উদাহরণস্বরূপ, review request করার আগে যদি আমরা কোনো draft blog post approve করার চেষ্টা করি, তাহলে post টি unpublished draft হিসেবে থেকে যাওয়া উচিত।
+Any other changes attempted on a post should have no effect. For example, if we
+try to approve a draft blog post before we’ve requested a review, the post
+should remain an unpublished draft.
 
-Listing 18-11 এই workflow কে code form এ দেখায়: এটি `blog` নামের একটি library crate এ আমরা যে API implement করব তার একটি উদাহরণ। এটি এখনও compile হবে না কারণ আমরা এখনও `blog` crate implement করিনি।
+Listing 18-11 shows this workflow in code form: this is an example usage of the
+API we’ll implement in a library crate named `blog`. This won’t compile yet
+because we haven’t implemented the `blog` crate.
 
-<Listing number="18-11" file-name="src/main.rs" caption="Code যা `blog` crate এ আমরা যে desired behaviour চাই তা demonstrate করে">
+<Listing number="18-11" file-name="src/main.rs" caption="Code that demonstrates the desired behavior we want our `blog` crate to have">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-11/src/main.rs:all}}
@@ -27,19 +48,42 @@ Listing 18-11 এই workflow কে code form এ দেখায়: এটি `b
 
 </Listing>
 
-আমরা user কে `Post::new` দিয়ে নতুন draft blog post তৈরি করার allow করতে চাই। আমরা blog post এ text add করার allow করতে চাই। যদি আমরা approval এর আগে, post এর content immediately পাওয়ার চেষ্টা করি, তাহলে আমাদের কোনো text পাওয়া উচিত না কারণ post টি এখনও draft। আমরা demonstration purposes এর জন্য code এ `assert_eq!` add করেছি। এটার জন্য একটি excellent unit test হবে এটা assert করা যে একটি draft blog post `content` method থেকে একটি empty string return করে, কিন্তু আমরা এই উদাহরণের জন্য test লিখব না।
+We want to allow the user to create a new draft blog post with `Post::new`. We
+want to allow text to be added to the blog post. If we try to get the post’s
+content immediately, before approval, we shouldn’t get any text because the
+post is still a draft. We’ve added `assert_eq!` in the code for demonstration
+purposes. An excellent unit test for this would be to assert that a draft blog
+post returns an empty string from the `content` method, but we’re not going to
+write tests for this example.
 
-এরপর, আমরা post এর review request enable করতে চাই, এবং review এর জন্য wait করার সময় `content` কে একটি empty string return করা উচিত। যখন post approval পায়, তখন এটি publish হওয়া উচিত, মানে যখন `content` call করা হয় তখন post এর text return হবে।
+Next, we want to enable a request for a review of the post, and we want
+`content` to return an empty string while waiting for the review. When the post
+receives approval, it should get published, meaning the text of the post will
+be returned when `content` is called.
 
-লক্ষ্য করুন যে crate থেকে আমরা interact করছি এমন একমাত্র type হলো `Post` type। এই type টি state pattern ব্যবহার করবে এবং একটি value hold করবে যা তিনটি state object এর মধ্যে একটি হবে যা represent করে যে post টি draft, review এর জন্য waiting, বা published এর মতো বিভিন্ন state এ থাকতে পারে। একটি state থেকে অন্য state এ change করা `Post` type এর ভিতরে internally manage করা হবে। State গুলো change হয় আমাদের library এর user দ্বারা `Post` instance এর উপর call করা method এর response এ, কিন্তু তাদের state change directly manage করার প্রয়োজন নেই। এছাড়াও, user রা state নিয়ে ভুল করতে পারবে না, যেমন review করার আগে post publish করা।
+Notice that the only type we’re interacting with from the crate is the `Post`
+type. This type will use the state pattern and will hold a value that will be
+one of three state objects representing the various states a post can be
+in—draft, waiting for review, or published. Changing from one state to another
+will be managed internally within the `Post` type. The states change in
+response to the methods called by our library’s users on the `Post` instance,
+but they don’t have to manage the state changes directly. Also, users can’t
+make a mistake with the states, like publishing a post before it’s reviewed.
 
 ### Defining `Post` and Creating a New Instance in the Draft State
 
-চলুন library এর implementation শুরু করি! আমরা জানি আমাদের কিছু content hold করে এমন একটি public `Post` struct এর প্রয়োজন, তাই আমরা struct এর definition এবং `Post` এর একটি instance তৈরি করার জন্য associated public `new` function দিয়ে শুরু করব, যা Listing 18-12 এ দেখানো হয়েছে। আমরা একটি private `State` trait ও তৈরি করব যা এমন behaviour define করবে যা `Post` এর সব state object এর থাকা উচিত।
+Let’s get started on the implementation of the library! We know we need a
+public `Post` struct that holds some content, so we’ll start with the
+definition of the struct and an associated public `new` function to create an
+instance of `Post`, as shown in Listing 18-12. We’ll also make a private
+`State` trait that will define the behavior that all state objects for a `Post`
+must have.
 
-তারপর `Post` একটি `Option<T>` এর ভিতরে `Box<dyn State>` এর trait object hold করবে যা `state` নামের একটি private field এ state object hold করার জন্য। আপনি একটু পরেই দেখবেন কেন `Option<T>` প্রয়োজনীয়।
+Then `Post` will hold a trait object of `Box<dyn State>` inside an `Option<T>`
+in a private field named `state` to hold the state object. You’ll see why the
+`Option<T>` is necessary in a bit.
 
-<Listing number="18-12" file-name="src/lib.rs" caption="`Post` struct এর definition এবং একটি `new` function যা একটি নতুন `Post` instance, একটি `State` trait, এবং একটি `Draft` struct তৈরি করে">
+<Listing number="18-12" file-name="src/lib.rs" caption="Definition of a `Post` struct and a `new` function that creates a new `Post` instance, a `State` trait, and a `Draft` struct">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-12/src/lib.rs}}
@@ -47,15 +91,30 @@ Listing 18-11 এই workflow কে code form এ দেখায়: এটি `b
 
 </Listing>
 
-`State` trait different post state দ্বারা shared behavior define করে। State object গুলো হলো `Draft`, `PendingReview`, এবং `Published`, এবং তারা সবাই `State` trait implement করবে। আপাতত, trait এ কোনো method নেই, এবং আমরা শুধু `Draft` state define করে শুরু করব কারণ আমরা চাই post টি এই state এ শুরু হোক।
+The `State` trait defines the behavior shared by different post states. The
+state objects are `Draft`, `PendingReview`, and `Published`, and they will all
+implement the `State` trait. For now, the trait doesn’t have any methods, and
+we’ll start by defining just the `Draft` state because that is the state we
+want a post to start in.
 
-যখন আমরা একটি নতুন `Post` তৈরি করি, তখন আমরা এর `state` field একটি `Some` value set করি যা একটি `Box` hold করে। এই `Box` `Draft` struct এর একটি নতুন instance point করে। এটা নিশ্চিত করে যখনই আমরা `Post` এর নতুন instance তৈরি করি, তখনই এটি draft হিসেবে শুরু হবে। যেহেতু `Post` এর `state` field private, তাই অন্য কোনো state এ `Post` তৈরি করার কোনো উপায় নেই! `Post::new` function এ, আমরা `content` field কে একটি নতুন, empty `String` set করি।
+When we create a new `Post`, we set its `state` field to a `Some` value that
+holds a `Box`. This `Box` points to a new instance of the `Draft` struct.
+This ensures whenever we create a new instance of `Post`, it will start out as
+a draft. Because the `state` field of `Post` is private, there is no way to
+create a `Post` in any other state! In the `Post::new` function, we set the
+`content` field to a new, empty `String`.
 
 ### Storing the Text of the Post Content
 
-আমরা Listing 18-11 এ দেখেছিলাম যে আমরা `add_text` নামের একটি method call করতে চাই এবং এটিকে একটি `&str` pass করতে চাই যা তারপর blog post এর text content হিসেবে add হবে। আমরা `content` field কে `pub` হিসেবে expose করার পরিবর্তে এটিকে method হিসেবে implement করি, যাতে পরে আমরা এমন একটি method implement করতে পারি যা control করবে কিভাবে `content` field এর data read করা হবে। `add_text` method টি বেশ straightforward, তাই চলুন Listing 18-13 এ `impl Post` block এ implementation add করি:
+We saw in Listing 18-11 that we want to be able to call a method named
+`add_text` and pass it a `&str` that is then added as the text content of the
+blog post. We implement this as a method, rather than exposing the `content`
+field as `pub`, so that later we can implement a method that will control how
+the `content` field’s data is read. The `add_text` method is pretty
+straightforward, so let’s add the implementation in Listing 18-13 to the `impl
+Post` block:
 
-<Listing number="18-13" file-name="src/lib.rs" caption="Post এর `content` এ text add করার জন্য `add_text` method implement করা">
+<Listing number="18-13" file-name="src/lib.rs" caption="Implementing the `add_text` method to add text to a post’s `content`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-13/src/lib.rs:here}}
@@ -63,13 +122,26 @@ Listing 18-11 এই workflow কে code form এ দেখায়: এটি `b
 
 </Listing>
 
-`add_text` method `self` এ একটি mutable reference নেয়, কারণ আমরা সেই `Post` instance change করছি যার উপর আমরা `add_text` call করছি। তারপর আমরা `content` এ `String` এর উপর `push_str` call করি এবং saved `content` এ add করার জন্য `text` argument pass করি। এই behaviour post কোন state এ আছে তার উপর depend করে না, তাই এটা state pattern এর অংশ নয়। `add_text` method `state` field এর সাথে interact করে না, কিন্তু এটা সেই behaviour এর অংশ যা আমরা support করতে চাই।
+The `add_text` method takes a mutable reference to `self`, because we’re
+changing the `Post` instance that we’re calling `add_text` on. We then call
+`push_str` on the `String` in `content` and pass the `text` argument to add to
+the saved `content`. This behavior doesn’t depend on the state the post is in,
+so it’s not part of the state pattern. The `add_text` method doesn’t interact
+with the `state` field at all, but it is part of the behavior we want to
+support.
 
 ### Ensuring the Content of a Draft Post Is Empty
 
-এমনকি `add_text` call করে post এ কিছু content add করার পরেও, আমরা এখনও চাই যে `content` method একটি empty string slice return করুক কারণ post টি এখনও draft state এ আছে, যেমন Listing 18-11 এর 7 নম্বর লাইনে দেখানো হয়েছে। আপাতত, চলুন `content` method implement করি simplest জিনিস দিয়ে যা এই requirement fulfill করবে: সবসময় empty string slice return করে। একবার যখন আমরা post এর state change করার ability implement করব, তখন আমরা এটা change করব যাতে এটি publish হতে পারে। এখন পর্যন্ত, post শুধুমাত্র draft state এ থাকতে পারে, তাই post content সবসময় empty থাকা উচিত। Listing 18-14 এই placeholder implementation দেখায়:
+Even after we’ve called `add_text` and added some content to our post, we still
+want the `content` method to return an empty string slice because the post is
+still in the draft state, as shown on line 7 of Listing 18-11. For now, let’s
+implement the `content` method with the simplest thing that will fulfill this
+requirement: always returning an empty string slice. We’ll change this later
+once we implement the ability to change a post’s state so it can be published.
+So far, posts can only be in the draft state, so the post content should always
+be empty. Listing 18-14 shows this placeholder implementation:
 
-<Listing number="18-14" file-name="src/lib.rs" caption="`Post` এর উপর `content` method এর জন্য একটি placeholder implementation add করা যা সবসময় empty string slice return করে">
+<Listing number="18-14" file-name="src/lib.rs" caption="Adding a placeholder implementation for the `content` method on `Post` that always returns an empty string slice">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-14/src/lib.rs:here}}
@@ -77,13 +149,15 @@ Listing 18-11 এই workflow কে code form এ দেখায়: এটি `b
 
 </Listing>
 
-এই added `content` method এর সাথে, Listing 18-11 এর 7 নম্বর লাইন পর্যন্ত সবকিছু intended ভাবে কাজ করে।
+With this added `content` method, everything in Listing 18-11 up to line 7
+works as intended.
 
 ### Requesting a Review of the Post Changes Its State
 
-এরপর, আমাদের post এর review request করার জন্য functionality add করার প্রয়োজন, যা এর state `Draft` থেকে `PendingReview` এ change করবে। Listing 18-15 এই code দেখায়:
+Next, we need to add functionality to request a review of a post, which should
+change its state from `Draft` to `PendingReview`. Listing 18-15 shows this code:
 
-<Listing number="18-15" file-name="src/lib.rs" caption="`Post` এবং `State` trait এর উপর `request_review` method implement করা">
+<Listing number="18-15" file-name="src/lib.rs" caption="Implementing `request_review` methods on `Post` and the `State` trait">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-15/src/lib.rs:here}}
@@ -91,19 +165,47 @@ Listing 18-11 এই workflow কে code form এ দেখায়: এটি `b
 
 </Listing>
 
-আমরা `Post` কে `request_review` নামের একটি public method দেই যা `self` এ একটি mutable reference নেবে। তারপর আমরা `Post` এর current state এ একটি internal `request_review` method call করি, এবং এই second `request_review` method current state consume করে এবং একটি নতুন state return করে।
+We give `Post` a public method named `request_review` that will take a mutable
+reference to `self`. Then we call an internal `request_review` method on the
+current state of `Post`, and this second `request_review` method consumes the
+current state and returns a new state.
 
-আমরা `State` trait এ `request_review` method add করি; trait implement করা সব type এর এখন `request_review` method implement করার প্রয়োজন হবে। Note করুন যে method এর first parameter হিসেবে `self`, `&self`, বা `&mut self` থাকার পরিবর্তে, আমাদের `self: Box<Self>` আছে। এই syntax মানে হলো type hold করা `Box` এ call করলেই method টি valid। এই syntax `Box<Self>` এর ownership নেয়, old state কে invalid করে যাতে `Post` এর state value নতুন state এ transform হতে পারে।
+We add the `request_review` method to the `State` trait; all types that
+implement the trait will now need to implement the `request_review` method.
+Note that rather than having `self`, `&self`, or `&mut self` as the first
+parameter of the method, we have `self: Box<Self>`. This syntax means the
+method is only valid when called on a `Box` holding the type. This syntax takes
+ownership of `Box<Self>`, invalidating the old state so the state value of the
+`Post` can transform into a new state.
 
-Old state consume করার জন্য, `request_review` method এর state value এর ownership নেওয়ার প্রয়োজন। এখানেই `Post` এর `state` field এর `Option` কাজে লাগে: আমরা `state` field থেকে `Some` value নেওয়ার জন্য `take` method call করি এবং এর জায়গায় একটি `None` রাখি, কারণ Rust struct এ unpopulated field রাখার অনুমতি দেয় না। এটা আমাদের `Post` থেকে `state` value move করতে দেয় borrow করার পরিবর্তে। তারপর আমরা post এর `state` value এই operation এর result এ set করব।
+To consume the old state, the `request_review` method needs to take ownership
+of the state value. This is where the `Option` in the `state` field of `Post`
+comes in: we call the `take` method to take the `Some` value out of the `state`
+field and leave a `None` in its place, because Rust doesn’t let us have
+unpopulated fields in structs. This lets us move the `state` value out of
+`Post` rather than borrowing it. Then we’ll set the post’s `state` value to the
+result of this operation.
 
-আমরা `state` value এর ownership পাওয়ার জন্য directly `self.state = self.state.request_review();` এর মতো code দিয়ে directly set করার পরিবর্তে temporarily `state` কে `None` set করতে চাই। এটা নিশ্চিত করে যে `Post` নতুন state এ transform করার পর old `state` value ব্যবহার করতে পারবে না।
+We need to set `state` to `None` temporarily rather than setting it directly
+with code like `self.state = self.state.request_review();` to get ownership of
+the `state` value. This ensures `Post` can’t use the old `state` value after
+we’ve transformed it into a new state.
 
-`Draft` এর উপর `request_review` method একটি নতুন, boxed instance return করে একটি নতুন `PendingReview` struct এর, যা একটি post review এর জন্য wait করার সময় state represent করে। `PendingReview` struct ও `request_review` method implement করে কিন্তু কোনো transformation করে না। বরং, এটা self return করে, কারণ যখন আমরা ইতিমধ্যে `PendingReview` state এ থাকা post এর review request করি, তখন এটির `PendingReview` state এ থাকা উচিত।
+The `request_review` method on `Draft` returns a new, boxed instance of a new
+`PendingReview` struct, which represents the state when a post is waiting for a
+review. The `PendingReview` struct also implements the `request_review` method
+but doesn’t do any transformations. Rather, it returns itself, because when we
+request a review on a post already in the `PendingReview` state, it should stay
+in the `PendingReview` state.
 
-এখন আমরা state pattern এর advantage গুলো দেখতে শুরু করতে পারি: `Post` এর উপর `request_review` method একই থাকে তা `state` value যাই হোক না কেন। প্রত্যেক state তার নিজের rule এর জন্য responsible।
+Now we can start seeing the advantages of the state pattern: the
+`request_review` method on `Post` is the same no matter its `state` value. Each
+state is responsible for its own rules.
 
-আমরা `Post` এর `content` method as is রেখে দেবো, একটি empty string slice return করে। আমরা এখন `Draft` state এর সাথে সাথে `PendingReview` state এ একটি `Post` রাখতে পারি, কিন্তু আমরা `PendingReview` state এ একই behaviour চাই। Listing 18-11 এখন 10 নম্বর লাইন পর্যন্ত কাজ করে!
+We’ll leave the `content` method on `Post` as is, returning an empty string
+slice. We can now have a `Post` in the `PendingReview` state as well as in the
+`Draft` state, but we want the same behavior in the `PendingReview` state.
+Listing 18-11 now works up to line 10!
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -111,9 +213,11 @@ Old state consume করার জন্য, `request_review` method এর stat
 
 ### Adding `approve` to Change the Behavior of `content`
 
-`approve` method `request_review` method এর similar হবে: যখন সেই state approve হবে তখন current state যা বলবে সে অনুযায়ী এটি `state` set করবে, যা Listing 18-16 এ দেখানো হয়েছে:
+The `approve` method will be similar to the `request_review` method: it will
+set `state` to the value that the current state says it should have when that
+state is approved, as shown in Listing 18-16:
 
-<Listing number="18-16" file-name="src/lib.rs" caption="`Post` এবং `State` trait এর উপর `approve` method implement করা">
+<Listing number="18-16" file-name="src/lib.rs" caption="Implementing the `approve` method on `Post` and the `State` trait">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-16/src/lib.rs:here}}
@@ -121,13 +225,23 @@ Old state consume করার জন্য, `request_review` method এর stat
 
 </Listing>
 
-আমরা `State` trait এ `approve` method add করি এবং `State` implement করা একটি নতুন struct add করি, `Published` state।
+We add the `approve` method to the `State` trait and add a new struct that
+implements `State`, the `Published` state.
 
-`PendingReview` এর উপর `request_review` যেভাবে কাজ করে, সেভাবে, যদি আমরা একটি `Draft` এর উপর `approve` call করি, তাহলে এর কোনো effect হবে না কারণ `approve` `self` return করবে। যখন আমরা `PendingReview` এর উপর `approve` call করি, তখন এটি `Published` struct এর একটি নতুন, boxed instance return করে। `Published` struct `State` trait implement করে, এবং `request_review` method এবং `approve` method উভয়ের জন্য, এটি self return করে, কারণ post টি সেই case গুলোতে `Published` state এই থাকা উচিত।
+Similar to the way `request_review` on `PendingReview` works, if we call the
+`approve` method on a `Draft`, it will have no effect because `approve` will
+return `self`. When we call `approve` on `PendingReview`, it returns a new,
+boxed instance of the `Published` struct. The `Published` struct implements the
+`State` trait, and for both the `request_review` method and the `approve`
+method, it returns itself, because the post should stay in the `Published`
+state in those cases.
 
-এখন আমাদের `Post` এর `content` method update করার প্রয়োজন। আমরা `content` থেকে return হওয়া value `Post` এর current state এর উপর depend করতে চাই, তাই আমরা `Post` কে একটি `content` method এ delegate করব যা এর `state` এ defined, যা Listing 18-17 এ দেখানো হয়েছে:
+Now we need to update the `content` method on `Post`. We want the value
+returned from `content` to depend on the current state of the `Post`, so we’re
+going to have the `Post` delegate to a `content` method defined on its `state`,
+as shown in Listing 18-17:
 
-<Listing number="18-17" file-name="src/lib.rs" caption="`Post` এর `content` method update করে `State` এর উপর `content` method এ delegate করা">
+<Listing number="18-17" file-name="src/lib.rs" caption="Updating the `content` method on `Post` to delegate to a `content` method on `State`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-17/src/lib.rs:here}}
@@ -135,15 +249,33 @@ Old state consume করার জন্য, `request_review` method এর stat
 
 </Listing>
 
-যেহেতু goal হলো সব rule `State` implement করা struct এর ভিতরে রাখা, তাই আমরা `state` এ value এর উপর `content` method call করি এবং argument হিসেবে post instance (মানে `self`) pass করি। তারপর আমরা `state` value এর উপর `content` method ব্যবহার করে return হওয়া value return করি।
+Because the goal is to keep all these rules inside the structs that implement
+`State`, we call a `content` method on the value in `state` and pass the post
+instance (that is, `self`) as an argument. Then we return the value that’s
+returned from using the `content` method on the `state` value.
 
-আমরা `Option` এর উপর `as_ref` method call করি কারণ আমরা value এর ownership এর পরিবর্তে `Option` এর ভিতরের value এর reference চাই। যেহেতু `state` একটি `Option<Box<dyn State>>`, তাই যখন আমরা `as_ref` call করি, তখন একটি `Option<&Box<dyn State>>` return হয়। যদি আমরা `as_ref` call না করি, তাহলে আমরা error পেতাম কারণ function parameter এর borrowed `&self` থেকে আমরা `state` move করতে পারব না।
+We call the `as_ref` method on the `Option` because we want a reference to the
+value inside the `Option` rather than ownership of the value. Because `state`
+is an `Option<Box<dyn State>>`, when we call `as_ref`, an `Option<&Box<dyn
+State>>` is returned. If we didn’t call `as_ref`, we would get an error because
+we can’t move `state` out of the borrowed `&self` of the function parameter.
 
-তারপর আমরা `unwrap` method call করি, যা আমরা জানি কখনো panic করবে না, কারণ আমরা জানি যে `Post` এর method গুলো ensure করে যে যখন সেই method গুলো শেষ হয় তখন `state` এ সবসময় একটি `Some` value থাকে। এটা সেই case গুলোর মধ্যে একটি যা নিয়ে আমরা Chapter 9 এর [“Cases In Which You Have More Information Than the Compiler”][more-info-than-rustc]<!-- ignore --> section এ আলোচনা করেছিলাম যখন আমরা জানি যে `None` value never possible, যদিও compiler সেটা বুঝতে পারে না।
+We then call the `unwrap` method, which we know will never panic, because we
+know the methods on `Post` ensure that `state` will always contain a `Some`
+value when those methods are done. This is one of the cases we talked about in
+the [“Cases In Which You Have More Information Than the
+Compiler”][more-info-than-rustc]<!-- ignore --> section of Chapter 9 when we
+know that a `None` value is never possible, even though the compiler isn’t able
+to understand that.
 
-এই মুহূর্তে, যখন আমরা `&Box<dyn State>` এর উপর `content` call করি, তখন deref coercion `&` এবং `Box` এর উপর effect করবে তাই `content` method ultimately সেই type এর উপর call হবে যা `State` trait implement করে। এর মানে হলো আমাদের `State` trait definition এ `content` add করতে হবে, এবং সেখানেই আমরা কোন state এর উপর depend করে কি content return করবে তার logic রাখব, যা Listing 18-18 এ দেখানো হয়েছে:
+At this point, when we call `content` on the `&Box<dyn State>`, deref coercion
+will take effect on the `&` and the `Box` so the `content` method will
+ultimately be called on the type that implements the `State` trait. That means
+we need to add `content` to the `State` trait definition, and that is where
+we’ll put the logic for what content to return depending on which state we
+have, as shown in Listing 18-18:
 
-<Listing number="18-18" file-name="src/lib.rs" caption="`State` trait এ `content` method add করা">
+<Listing number="18-18" file-name="src/lib.rs" caption="Adding the `content` method to the `State` trait">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-18/src/lib.rs:here}}
@@ -151,178 +283,224 @@ Old state consume করার জন্য, `request_review` method এর stat
 
 </Listing>
 
-আমরা `content` method এর জন্য একটি default implementation add করি যা একটি empty string slice return করে। এর মানে হলো `Draft` এবং `PendingReview` struct এ আমাদের `content` implement করার প্রয়োজন নেই। `Published` struct `content` method override করবে এবং `post.content` এ value return করবে।
+We add a default implementation for the `content` method that returns an empty
+string slice. That means we don’t need to implement `content` on the `Draft`
+and `PendingReview` structs. The `Published` struct will override the `content`
+method and return the value in `post.content`.
 
-Note করুন যে এই method এ আমাদের lifetime annotation এর প্রয়োজন, যেমনটা আমরা Chapter 10 এ discuss করেছিলাম। আমরা argument হিসেবে `post` এ reference নিচ্ছি এবং সেই `post` এর part এ reference return করছি, তাই return হওয়া reference এর lifetime `post` argument এর lifetime এর সাথে related।
+Note that we need lifetime annotations on this method, as we discussed in
+Chapter 10. We’re taking a reference to a `post` as an argument and returning a
+reference to part of that `post`, so the lifetime of the returned reference is
+related to the lifetime of the `post` argument.
 
-এবং আমরা done—Listing 18-11 এর সবকিছু এখন কাজ করে! আমরা blog post workflow এর rules দিয়ে state pattern implement করেছি। Rule related logic `Post` জুড়ে scattered থাকার পরিবর্তে state object এ থাকে।
+And we’re done—all of Listing 18-11 now works! We’ve implemented the state
+pattern with the rules of the blog post workflow. The logic related to the
+rules lives in the state objects rather than being scattered throughout `Post`.
 
 > #### Why Not An Enum?
 >
-> আপনি হয়তো ভাবছিলেন কেন আমরা different possible post state variant হিসেবে `enum` ব্যবহার করিনি। এটা নিশ্চিতভাবেই একটি possible solution, try করুন এবং compare করে দেখুন আপনার কোনটি বেশি পছন্দ! একটি enum ব্যবহার করার একটি disadvantage হলো enum এর value check করা প্রত্যেক জায়গায় সব possible variant handle করার জন্য একটি `match` expression বা similar কিছু এর প্রয়োজন। এটা trait object solution এর চেয়ে বেশি repetitive হতে পারে।
+> You may have been wondering why we didn’t use an `enum` with the different
+> possible post states as variants. That’s certainly a possible solution, try
+> it and compare the end results to see which you prefer! One disadvantage of
+> using an enum is every place that checks the value of the enum will need a
+> `match` expression or similar to handle every possible variant. This could
+> get more repetitive than this trait object solution.
+
+### Trade-offs of the State Pattern
+
+We’ve shown that Rust is capable of implementing the object-oriented state
+pattern to encapsulate the different kinds of behavior a post should have in
+each state. The methods on `Post` know nothing about the various behaviors. The
+way we organized the code, we have to look in only one place to know the
+different ways a published post can behave: the implementation of the `State`
+trait on the `Published` struct.
+
+If we were to create an alternative implementation that didn’t use the state
+pattern, we might instead use `match` expressions in the methods on `Post` or
+even in the `main` code that checks the state of the post and changes behavior
+in those places. That would mean we would have to look in several places to
+understand all the implications of a post being in the published state! This
+would only increase the more states we added: each of those `match` expressions
+would need another arm.
+
+With the state pattern, the `Post` methods and the places we use `Post` don’t
+need `match` expressions, and to add a new state, we would only need to add a
+new struct and implement the trait methods on that one struct.
+
+The implementation using the state pattern is easy to extend to add more
+functionality. To see the simplicity of maintaining code that uses the state
+pattern, try a few of these suggestions:
+
+- Add a `reject` method that changes the post’s state from `PendingReview` back
+  to `Draft`.
+- Require two calls to `approve` before the state can be changed to `Published`.
+- Allow users to add text content only when a post is in the `Draft` state.
+  Hint: have the state object responsible for what might change about the
+  content but not responsible for modifying the `Post`.
+
+One downside of the state pattern is that, because the states implement the
+transitions between states, some of the states are coupled to each other. If we
+add another state between `PendingReview` and `Published`, such as `Scheduled`,
+we would have to change the code in `PendingReview` to transition to
+`Scheduled` instead. It would be less work if `PendingReview` didn’t need to
+change with the addition of a new state, but that would mean switching to
+another design pattern.
+
+Another downside is that we’ve duplicated some logic. To eliminate some of the
+duplication, we might try to make default implementations for the
+`request_review` and `approve` methods on the `State` trait that return `self`;
+however, this would not be dyn compatible, because the trait doesn’t know what
+the concrete `self` will be exactly. We want to be able to use `State` as a
+trait object, so we need its methods to be dyn compatible.
+
+Other duplication includes the similar implementations of the `request_review`
+and `approve` methods on `Post`. Both methods delegate to the implementation of
+the same method on the value in the `state` field of `Option` and set the new
+value of the `state` field to the result. If we had a lot of methods on `Post`
+that followed this pattern, we might consider defining a macro to eliminate the
+repetition (see the [“Macros”][macros]<!-- ignore --> section in Chapter 20).
+
+By implementing the state pattern exactly as it’s defined for object-oriented
+languages, we’re not taking as full advantage of Rust’s strengths as we could.
+Let’s look at some changes we can make to the `blog` crate that can make
+invalid states and transitions into compile time errors.
+
+#### Encoding States and Behavior as Types
+
+We’ll show you how to rethink the state pattern to get a different set of
+trade-offs. Rather than encapsulating the states and transitions completely so
+outside code has no knowledge of them, we’ll encode the states into different
+types. Consequently, Rust’s type checking system will prevent attempts to use
+draft posts where only published posts are allowed by issuing a compiler error.
+
+Let’s consider the first part of `main` in Listing 18-11:
+
+<Listing file-name="src/main.rs">
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch18-oop/listing-18-11/src/main.rs:here}}
+```
+
+</Listing>
+
+We still enable the creation of new posts in the draft state using `Post::new`
+and the ability to add text to the post’s content. But instead of having a
+`content` method on a draft post that returns an empty string, we’ll make it so
+draft posts don’t have the `content` method at all. That way, if we try to get
+a draft post’s content, we’ll get a compiler error telling us the method
+doesn’t exist. As a result, it will be impossible for us to accidentally
+display draft post content in production, because that code won’t even compile.
+Listing 18-19 shows the definition of a `Post` struct and a `DraftPost` struct,
+as well as methods on each:
+
+<Listing number="18-19" file-name="src/lib.rs" caption="A `Post` with a `content` method and `DraftPost` without a `content` method">
+
+```rust,noplayground
+{{#rustdoc_include ../listings/ch18-oop/listing-18-19/src/lib.rs}}
+```
+
+</Listing>
+
+Both the `Post` and `DraftPost` structs have a private `content` field that
+stores the blog post text. The structs no longer have the `state` field because
+we’re moving the encoding of the state to the types of the structs. The `Post`
+struct will represent a published post, and it has a `content` method that
+returns the `content`.
+
+We still have a `Post::new` function, but instead of returning an instance of
+`Post`, it returns an instance of `DraftPost`. Because `content` is private
+and there aren’t any functions that return `Post`, it’s not possible to create
+an instance of `Post` right now.
+
+The `DraftPost` struct has an `add_text` method, so we can add text to
+`content` as before, but note that `DraftPost` does not have a `content` method
+defined! So now the program ensures all posts start as draft posts, and draft
+posts don’t have their content available for display. Any attempt to get around
+these constraints will result in a compiler error.
+
+#### Implementing Transitions as Transformations into Different Types
+
+So how do we get a published post? We want to enforce the rule that a draft
+post has to be reviewed and approved before it can be published. A post in the
+pending review state should still not display any content. Let’s implement
+these constraints by adding another struct, `PendingReviewPost`, defining the
+`request_review` method on `DraftPost` to return a `PendingReviewPost`, and
+defining an `approve` method on `PendingReviewPost` to return a `Post`, as
+shown in Listing 18-20:
+
+<Listing number="18-20" file-name="src/lib.rs" caption="A `PendingReviewPost` that gets created by calling `request_review` on `DraftPost` and an `approve` method that turns a `PendingReviewPost` into a published `Post`">
+
+```rust,noplayground
+{{#rustdoc_include ../listings/ch18-oop/listing-18-20/src/lib.rs:here}}
+```
+
+</Listing>
+
+The `request_review` and `approve` methods take ownership of `self`, thus
+consuming the `DraftPost` and `PendingReviewPost` instances and transforming
+them into a `PendingReviewPost` and a published `Post`, respectively. This way,
+we won’t have any lingering `DraftPost` instances after we’ve called
+`request_review` on them, and so forth. The `PendingReviewPost` struct doesn’t
+have a `content` method defined on it, so attempting to read its content
+results in a compiler error, as with `DraftPost`. Because the only way to get a
+published `Post` instance that does have a `content` method defined is to call
+the `approve` method on a `PendingReviewPost`, and the only way to get a
+`PendingReviewPost` is to call the `request_review` method on a `DraftPost`,
+we’ve now encoded the blog post workflow into the type system.
+
+But we also have to make some small changes to `main`. The `request_review` and
+`approve` methods return new instances rather than modifying the struct they’re
+called on, so we need to add more `let post =` shadowing assignments to save
+the returned instances. We also can’t have the assertions about the draft and
+pending review posts’ contents be empty strings, nor do we need them: we can’t
+compile code that tries to use the content of posts in those states any longer.
+The updated code in `main` is shown in Listing 18-21:
+
+<Listing number="18-21" file-name="src/main.rs" caption="Modifications to `main` to use the new implementation of the blog post workflow">
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch18-oop/listing-18-21/src/main.rs}}
+```
+
+</Listing>
+
+The changes we needed to make to `main` to reassign `post` mean that this
+implementation doesn’t quite follow the object-oriented state pattern anymore:
+the transformations between the states are no longer encapsulated entirely
+within the `Post` implementation. However, our gain is that invalid states are
+now impossible because of the type system and the type checking that happens at
+compile time! This ensures that certain bugs, such as display of the content of
+an unpublished post, will be discovered before they make it to production.
+
+Try the tasks suggested at the start of this section on the `blog` crate as it
+is after Listing 18-21 to see what you think about the design of this version
+of the code. Note that some of the tasks might be completed already in this
+design.
+
+We’ve seen that even though Rust is capable of implementing object-oriented
+design patterns, other patterns, such as encoding state into the type system,
+are also available in Rust. These patterns have different trade-offs. Although
+you might be very familiar with object-oriented patterns, rethinking the
+problem to take advantage of Rust’s features can provide benefits, such as
+preventing some bugs at compile time. Object-oriented patterns won’t always be
+the best solution in Rust due to certain features, like ownership, that
+object-oriented languages don’t have.
+
+## Summary
+
+No matter whether or not you think Rust is an object-oriented language after
+reading this chapter, you now know that you can use trait objects to get some
+object-oriented features in Rust. Dynamic dispatch can give your code some
+flexibility in exchange for a bit of runtime performance. You can use this
+flexibility to implement object-oriented patterns that can help your code’s
+maintainability. Rust also has other features, like ownership, that
+object-oriented languages don’t have. An object-oriented pattern won’t always
+be the best way to take advantage of Rust’s strengths, but is an available
+option.
+
+Next, we’ll look at patterns, which are another of Rust’s features that enable
+lots of flexibility. We’ve looked at them briefly throughout the book but
+haven’t seen their full capability yet. Let’s go!
 
 [more-info-than-rustc]: ch09-03-to-panic-or-not-to-panic.html#cases-in-which-you-have-more-information-than-the-compiler
-
-## Implementing an Object-Oriented Design Pattern
-
-_State pattern_ হলো একটি object-oriented design pattern। Pattern টির মূল বিষয় হলো আমরা এমন set of state define করি যা একটি value internally hold করতে পারে। State গুলো set of _state object_ দ্বারা represent করা হয়, এবং value এর behaviour এর state এর উপর depend করে change হয়। আমরা একটি blog post struct এর উদাহরণ নিয়ে কাজ করতে যাচ্ছি যেখানে এর state hold করার জন্য একটি field থাকবে, যা "draft", "review", বা "published" set থেকে একটি state object হবে।
-
-State object গুলো functionality share করে: Rust এ, অবশ্যই আমরা object এবং inheritance এর পরিবর্তে struct এবং trait ব্যবহার করি। প্রত্যেক state object তার নিজের behaviour এর জন্য responsible এবং কখন এটি অন্য state এ change হওয়া উচিত তা govern করার জন্য responsible। State object hold করা value state গুলোর different behaviour বা কখন state গুলোর মধ্যে transition করতে হবে সে বিষয়ে কিছুই জানে না।
-
-State pattern ব্যবহার করার advantage হলো, যখন program এর business requirement change হয়, তখন state hold করা value এর code change করার প্রয়োজন হবে না বা সেই value ব্যবহার করা code change করার প্রয়োজন হবে না। Rules change করার জন্য বা হয়তো আরও state object add করার জন্য আমাদের শুধুমাত্র state object গুলোর ভিতরের code update করার প্রয়োজন হবে।
-
-প্রথমে, আমরা state pattern implement করতে যাচ্ছি more traditional object-oriented উপায়ে, তারপর আমরা এমন একটি approach ব্যবহার করব যা Rust এ আরও natural। চলুন state pattern ব্যবহার করে incrementally blog post workflow implement করা শুরু করি।
-
-Final functionality টি দেখতে এমন হবে:
-
-1. একটি blog post empty draft হিসেবে শুরু হবে।
-2. যখন draft শেষ হয়ে যাবে, তখন post এর review request করা হবে।
-3. যখন post approve করা হবে, তখন এটি publish হবে।
-4. শুধুমাত্র published blog post print করার জন্য content return করবে, তাই unapproved post accidentally publish হওয়া উচিত নয়।
-
-Post এ attempt করা অন্য change এর কোনো effect থাকা উচিত নয়। উদাহরণস্বরূপ, review request করার আগে যদি আমরা কোনো draft blog post approve করার চেষ্টা করি, তাহলে post টি unpublished draft হিসেবে থেকে যাওয়া উচিত।
-
-Listing 18-11 এই workflow কে code form এ দেখায়: এটি `blog` নামের একটি library crate এ আমরা যে API implement করব তার একটি উদাহরণ। এটি এখনও compile হবে না কারণ আমরা এখনও `blog` crate implement করিনি।
-
-<Listing number="18-11" file-name="src/main.rs" caption="Code যা `blog` crate এ আমরা যে desired behaviour চাই তা demonstrate করে">
-
-```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch18-oop/listing-18-11/src/main.rs:all}}
-```
-
-</Listing>
-
-আমরা user কে `Post::new` দিয়ে নতুন draft blog post তৈরি করার allow করতে চাই। আমরা blog post এ text add করার allow করতে চাই। যদি আমরা approval এর আগে, post এর content immediately পাওয়ার চেষ্টা করি, তাহলে আমাদের কোনো text পাওয়া উচিত না কারণ post টি এখনও draft। আমরা demonstration purposes এর জন্য code এ `assert_eq!` add করেছি। এটার জন্য একটি excellent unit test হবে এটা assert করা যে একটি draft blog post `content` method থেকে একটি empty string return করে, কিন্তু আমরা এই উদাহরণের জন্য test লিখব না।
-
-এরপর, আমরা post এর review request enable করতে চাই, এবং review এর জন্য wait করার সময় `content` কে একটি empty string return করা উচিত। যখন post approve করা হবে, তখন এটি publish হওয়া উচিত, মানে যখন `content` call করা হয় তখন post এর text return হবে।
-
-লক্ষ্য করুন যে crate থেকে আমরা interact করছি এমন একমাত্র type হলো `Post` type। এই type টি state pattern ব্যবহার করবে এবং একটি value hold করবে যা তিনটি state object এর মধ্যে একটি হবে যা represent করে যে post টি draft, review এর জন্য waiting, বা published এর মতো বিভিন্ন state এ থাকতে পারে। একটি state থেকে অন্য state এ change করা `Post` type এর ভিতরে internally manage করা হবে। State গুলো change হয় আমাদের library এর user দ্বারা `Post` instance এর উপর call করা method এর response এ, কিন্তু তাদের state change directly manage করার প্রয়োজন নেই। এছাড়াও, user রা state নিয়ে ভুল করতে পারবে না, যেমন review করার আগে post publish করা।
-
-### Defining `Post` and Creating a New Instance in the Draft State
-
-চলুন library এর implementation শুরু করি! আমরা জানি আমাদের কিছু content hold করে এমন একটি public `Post` struct এর প্রয়োজন, তাই আমরা struct এর definition এবং `Post` এর একটি instance তৈরি করার জন্য associated public `new` function দিয়ে শুরু করব, যা Listing 18-12 এ দেখানো হয়েছে। আমরা একটি private `State` trait ও তৈরি করব যা এমন behaviour define করবে যা `Post` এর সব state object এর থাকা উচিত।
-
-তারপর `Post` একটি `Option<T>` এর ভিতরে `Box<dyn State>` এর trait object hold করবে যা `state` নামের একটি private field এ state object hold করার জন্য। আপনি একটু পরেই দেখবেন কেন `Option<T>` প্রয়োজনীয়।
-
-<Listing number="18-12" file-name="src/lib.rs" caption="`Post` struct এর definition এবং একটি `new` function যা একটি নতুন `Post` instance, একটি `State` trait, এবং একটি `Draft` struct তৈরি করে">
-
-```rust,noplayground
-{{#rustdoc_include ../listings/ch18-oop/listing-18-12/src/lib.rs}}
-```
-
-</Listing>
-
-`State` trait different post state দ্বারা shared behavior define করে। State object গুলো হলো `Draft`, `PendingReview`, এবং `Published`, এবং তারা সবাই `State` trait implement করবে। আপাতত, trait এ কোনো method নেই, এবং আমরা শুধু `Draft` state define করে শুরু করব কারণ আমরা চাই post টি এই state এ শুরু হোক।
-
-যখন আমরা একটি নতুন `Post` তৈরি করি, তখন আমরা এর `state` field একটি `Some` value set করি যা একটি `Box` hold করে। এই `Box` `Draft` struct এর একটি নতুন instance point করে। এটা নিশ্চিত করে যখনই আমরা `Post` এর নতুন instance তৈরি করি, তখনই এটি draft হিসেবে শুরু হবে। যেহেতু `Post` এর `state` field private, তাই অন্য কোনো state এ `Post` তৈরি করার কোনো উপায় নেই! `Post::new` function এ, আমরা `content` field কে একটি নতুন, empty `String` set করি।
-
-### Storing the Text of the Post Content
-
-আমরা Listing 18-11 এ দেখেছিলাম যে আমরা `add_text` নামের একটি method call করতে চাই এবং এটিকে একটি `&str` pass করতে চাই যা তারপর blog post এর text content হিসেবে add হবে। আমরা `content` field কে `pub` হিসেবে expose করার পরিবর্তে এটিকে method হিসেবে implement করি, যাতে পরে আমরা এমন একটি method implement করতে পারি যা control করবে কিভাবে `content` field এর data read করা হবে। `add_text` method টি বেশ straightforward, তাই চলুন Listing 18-13 এ `impl Post` block এ implementation add করি:
-
-<Listing number="18-13" file-name="src/lib.rs" caption="Post এর `content` এ text add করার জন্য `add_text` method implement করা">
-
-```rust,noplayground
-{{#rustdoc_include ../listings/ch18-oop/listing-18-13/src/lib.rs:here}}
-```
-
-</Listing>
-
-`add_text` method `self` এ একটি mutable reference নেয়, কারণ আমরা সেই `Post` instance change করছি যার উপর আমরা `add_text` call করছি। তারপর আমরা `content` এ `String` এর উপর `push_str` call করি এবং saved `content` এ add করার জন্য `text` argument pass করি। এই behaviour post কোন state এ আছে তার উপর depend করে না, তাই এটা state pattern এর অংশ নয়। `add_text` method `state` field এর সাথে interact করে না, কিন্তু এটা সেই behaviour এর অংশ যা আমরা support করতে চাই।
-
-### Ensuring the Content of a Draft Post Is Empty
-
-এমনকি `add_text` call করে post এ কিছু content add করার পরেও, আমরা এখনও চাই যে `content` method একটি empty string slice return করুক কারণ post টি এখনও draft state এ আছে, যেমন Listing 18-11 এর 7 নম্বর লাইনে দেখানো হয়েছে। আপাতত, চলুন `content` method implement করি simplest জিনিস দিয়ে যা এই requirement fulfill করবে: সবসময় empty string slice return করে। একবার যখন আমরা post এর state change করার ability implement করব, তখন আমরা এটা change করব যাতে এটি publish হতে পারে। এখন পর্যন্ত, post শুধুমাত্র draft state এ থাকতে পারে, তাই post content সবসময় empty থাকা উচিত। Listing 18-14 এই placeholder implementation দেখায়:
-
-<Listing number="18-14" file-name="src/lib.rs" caption="`Post` এর উপর `content` method এর জন্য একটি placeholder implementation add করা যা সবসময় empty string slice return করে">
-
-```rust,noplayground
-{{#rustdoc_include ../listings/ch18-oop/listing-18-14/src/lib.rs:here}}
-```
-
-</Listing>
-
-এই added `content` method এর সাথে, Listing 18-11 এর 7 নম্বর লাইন পর্যন্ত সবকিছু intended ভাবে কাজ করে।
-
-### Requesting a Review of the Post Changes Its State
-
-এরপর, আমাদের post এর review request করার জন্য functionality add করার প্রয়োজন, যা এর state `Draft` থেকে `PendingReview` এ change করবে। Listing 18-15 এই code দেখায়:
-
-<Listing number="18-15" file-name="src/lib.rs" caption="`Post` এবং `State` trait এর উপর `request_review` method implement করা">
-
-```rust,noplayground
-{{#rustdoc_include ../listings/ch18-oop/listing-18-15/src/lib.rs:here}}
-```
-
-</Listing>
-
-আমরা `Post` কে `request_review` নামের একটি public method দেই যা `self` এ একটি mutable reference নেবে। তারপর আমরা `Post` এর current state এ একটি internal `request_review` method call করি, এবং এই second `request_review` method current state consume করে এবং একটি নতুন state return করে।
-
-আমরা `State` trait এ `request_review` method add করি; trait implement করা সব type এর এখন `request_review` method implement করার প্রয়োজন হবে। Note করুন যে method এর first parameter হিসেবে `self`, `&self`, বা `&mut self` থাকার পরিবর্তে, আমাদের `self: Box<Self>` আছে। এই syntax মানে হলো type hold করা `Box` এ call করলেই method টি valid। এই syntax `Box<Self>` এর ownership নেয়, old state কে invalid করে যাতে `Post` এর state value নতুন state এ transform হতে পারে।
-
-Old state consume করার জন্য, `request_review` method এর state value এর ownership নেওয়ার প্রয়োজন। এখানেই `Post` এর `state` field এর `Option` কাজে লাগে: আমরা `state` field থেকে `Some` value নেওয়ার জন্য `take` method call করি এবং এর জায়গায় একটি `None` রাখি, কারণ Rust struct এ unpopulated field রাখার অনুমতি দেয় না। এটা আমাদের `Post` থেকে `state` value move করতে দেয় borrow করার পরিবর্তে। তারপর আমরা post এর `state` value এই operation এর result এ set করব।
-
-আমরা `state` value এর ownership পাওয়ার জন্য directly `self.state = self.state.request_review();` এর মতো code দিয়ে directly set করার পরিবর্তে temporarily `state` কে `None` set করতে চাই। এটা নিশ্চিত করে যে `Post` নতুন state এ transform করার পর old `state` value ব্যবহার করতে পারবে না।
-
-`Draft` এর উপর `request_review` method একটি নতুন, boxed instance return করে একটি নতুন `PendingReview` struct এর, যা একটি post review এর জন্য wait করার সময় state represent করে। `PendingReview` struct ও `request_review` method implement করে কিন্তু কোনো transformation করে না। বরং, এটা self return করে, কারণ যখন আমরা ইতিমধ্যে `PendingReview` state এ থাকা post এর review request করি, তখন এটির `PendingReview` state এ থাকা উচিত।
-
-এখন আমরা state pattern এর advantage গুলো দেখতে শুরু করতে পারি: `Post` এর উপর `request_review` method একই থাকে তা `state` value যাই হোক না কেন। প্রত্যেক state তার নিজের rule এর জন্য responsible।
-
-আমরা `Post` এর `content` method as is রেখে দেবো, একটি empty string slice return করে। আমরা এখন `Draft` state এর সাথে সাথে `PendingReview` state এ একটি `Post` রাখতে পারি, কিন্তু আমরা `PendingReview` state এ একই behaviour চাই। Listing 18-11 এখন 10 নম্বর লাইন পর্যন্ত কাজ করে!
-
-<!-- Old headings. Do not remove or links may break. -->
-
-<a id="adding-the-approve-method-that-changes-the-behavior-of-content"></a>
-
-### Adding `approve` to Change the Behavior of `content`
-
-`approve` method `request_review` method এর similar হবে: যখন সেই state approve হবে তখন current state যা বলবে সে অনুযায়ী এটি `state` set করবে, যা Listing 18-16 এ দেখানো হয়েছে:
-
-<Listing number="18-16" file-name="src/lib.rs" caption="`Post` এবং `State` trait এর উপর `approve` method implement করা">
-
-```rust,noplayground
-{{#rustdoc_include ../listings/ch18-oop/listing-18-16/src/lib.rs:here}}
-```
-
-</Listing>
-
-আমরা `State` trait এ `approve` method add করি এবং `State` implement করা একটি নতুন struct add করি, `Published` state।
-
-`PendingReview` এর উপর `request_review` যেভাবে কাজ করে, সেভাবে, যদি আমরা একটি `Draft` এর উপর `approve` call করি, তাহলে এর কোনো effect হবে না কারণ `approve` `self` return করবে। যখন আমরা `PendingReview` এর উপর `approve` call করি, তখন এটি `Published` struct এর একটি নতুন, boxed instance return করে। `Published` struct `State` trait implement করে, এবং `request_review` method এবং `approve` method উভয়ের জন্য, এটি self return করে, কারণ post টি সেই case গুলোতে `Published` state এই থাকা উচিত।
-
-এখন আমাদের `Post` এর `content` method update করার প্রয়োজন। আমরা `content` থেকে return হওয়া value `Post` এর current state এর উপর depend করতে চাই, তাই আমরা `Post` কে একটি `content` method এ delegate করব যা এর `state` এ defined, যা Listing 18-17 এ দেখানো হয়েছে:
-
-<Listing number="18-17" file-name="src/lib.rs" caption="`Post` এর `content` method update করে `State` এর উপর `content` method এ delegate করা">
-
-```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch18-oop/listing-18-17/src/lib.rs:here}}
-```
-
-</Listing>
-
-যেহেতু goal হলো সব rule `State` implement করা struct এর ভিতরে রাখা, তাই আমরা `state` এ value এর উপর `content` method call করি এবং argument হিসেবে post instance (মানে `self`) pass করি। তারপর আমরা `state` value এর উপর `content` method ব্যবহার করে return হওয়া value return করি।
-
-আমরা `Option` এর উপর `as_ref` method call করি কারণ আমরা value এর ownership এর পরিবর্তে `Option` এর ভিতরের value এর reference চাই। যেহেতু `state` একটি `Option<Box<dyn State>>`, তাই যখন আমরা `as_ref` call করি, তখন একটি `Option<&Box<dyn State>>` return হয়। যদি আমরা `as_ref` call না করি, তাহলে আমরা error পেতাম কারণ function parameter এর borrowed `&self` থেকে আমরা `state` move করতে পারব না।
-
-তারপর আমরা `unwrap` method call করি, যা আমরা জানি কখনো panic করবে না, কারণ আমরা জানি যে `Post` এর method গুলো ensure করে যে যখন সেই method গুলো শেষ হয় তখন `state` এ সবসময় একটি `Some` value থাকে। এটা সেই case গুলোর মধ্যে একটি যা নিয়ে আমরা Chapter 9 এর [“Cases In Which You Have More Information Than the Compiler”][more-info-than-rustc]<!-- ignore --> section এ আলোচনা করেছিলাম যখন আমরা জানি যে `None` value never possible, যদিও compiler সেটা বুঝতে পারে না।
-
-এই মুহূর্তে, যখন আমরা `&Box<dyn State>` এর উপর `content` call করি, তখন deref coercion `&` এবং `Box` এর উপর effect করবে তাই `content` method ultimately সেই type এর উপর call হবে যা `State` trait implement করে। এর মানে হলো আমাদের `State` trait definition এ `content` add করতে হবে, এবং সেখানেই আমরা কোন state এর উপর depend করে কি content return করবে তার logic রাখব, যা Listing 18-18 এ দেখানো হয়েছে:
-
-<Listing number="18-18" file-name="src/lib.rs" caption="`State` trait এ `content` method add করা">
-
-```rust,noplayground
-{{#rustdoc_include ../listings/ch18-oop/listing-18-18/src/lib.rs:here}}
-```
-
-</Listing>
-
-আমরা `content` method এর জন্য একটি default implementation add করি যা একটি empty string slice return করে। এর মানে হলো `Draft` এবং `PendingReview` struct এ আমাদের `content` implement করার প্রয়োজন নেই। `Published` struct `content` method override করবে এবং `post.content` এ value return করবে।
-
-Note করুন যে এই method এ আমাদের lifetime annotation এর প্রয়োজন, যেমনটা আমরা Chapter 10 এ discuss করেছিলাম। আমরা argument হিসেবে `post` এ reference নিচ্ছি এবং সেই `post` এর part এ reference return করছি, তাই return হওয়া reference এর lifetime `post` argument এর lifetime এর সাথে related।
-
-এবং আমরা done—Listing 18-11 এর সবকিছু এখন কাজ করে! আমরা blog post workflow এর rules দিয়ে state pattern implement করেছি। Rule related logic `Post` জুড়ে scattered থাকার পরিবর্তে state object এ থাকে।
-
-> #### Why Not An Enum?
->
-> আপনি হয়তো ভাবছিলেন কেন আমরা different possible post state variant হিসেবে `enum` ব্যবহার করিনি। এটা নিশ্চিতভাবেই একটি possible solution, try করুন এবং compare করে দেখুন আপনার কোনটি বেশি পছন্দ! একটি enum ব্যবহার করার একটি disadvantage হলো enum এর value check করা প্রত্যেক জায়গায় সব possible variant handle করার জন্য একটি `match` expression বা similar কিছু এর প্রয়োজন। এটা trait object solution এর চেয়ে বেশি repetitive হতে পারে।
-
+[macros]: ch20-05-macros.html#macros

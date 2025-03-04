@@ -1,40 +1,81 @@
-## ম্যাক্রো
+## Macros
 
-আমরা এই বইটিতে `println!` এর মতো ম্যাক্রো ব্যবহার করেছি, কিন্তু ম্যাক্রো আসলে কী এবং এটি কীভাবে কাজ করে তা আমরা সম্পূর্ণরূপে আলোচনা করিনি। _ম্যাক্রো_ শব্দটি Rust-এ কিছু বৈশিষ্ট্যের সমষ্টিকে বোঝায়: `macro_rules!` সহ _ডিক্লারেটিভ_ ম্যাক্রো এবং তিন ধরনের _প্রসিডিউরাল_ ম্যাক্রো:
+We’ve used macros like `println!` throughout this book, but we haven’t fully
+explored what a macro is and how it works. The term _macro_ refers to a family
+of features in Rust: _declarative_ macros with `macro_rules!` and three kinds
+of _procedural_ macros:
 
-- কাস্টম `#[derive]` ম্যাক্রো যা স্ট্রাক্ট এবং এনামে ব্যবহৃত `derive` অ্যাট্রিবিউট সহ যোগ করা কোড নির্দিষ্ট করে।
-- অ্যাট্রিবিউট-সদৃশ ম্যাক্রো যা যেকোনো আইটেমের উপর ব্যবহারযোগ্য কাস্টম অ্যাট্রিবিউট নির্ধারণ করে।
-- ফাংশন-সদৃশ ম্যাক্রো যা ফাংশন কলের মতো দেখায় কিন্তু তাদের আর্গুমেন্ট হিসাবে নির্দিষ্ট টোকেনগুলির উপর কাজ করে।
+- Custom `#[derive]` macros that specify code added with the `derive` attribute
+  used on structs and enums
+- Attribute-like macros that define custom attributes usable on any item
+- Function-like macros that look like function calls but operate on the tokens
+  specified as their argument
 
-আমরা একে একে এই সব বিষয় নিয়ে আলোচনা করব, তবে প্রথমে, আমাদের যখন ফাংশন রয়েছে তখন ম্যাক্রোর প্রয়োজন কেন, তা দেখা যাক।
+We’ll talk about each of these in turn, but first, let’s look at why we even
+need macros when we already have functions.
 
-### ম্যাক্রো এবং ফাংশনের মধ্যে পার্থক্য
+### The Difference Between Macros and Functions
 
-মৌলিকভাবে, ম্যাক্রো হল কোড লেখার একটি উপায় যা অন্য কোড লেখে, যা _মেটাপ্রোগ্রামিং_ নামে পরিচিত। পরিশিষ্ট C-তে, আমরা `derive` অ্যাট্রিবিউট নিয়ে আলোচনা করি, যা আপনার জন্য বিভিন্ন trait এর একটি বাস্তবায়ন তৈরি করে। আমরা পুরো বইটিতে `println!` এবং `vec!` ম্যাক্রো ব্যবহার করেছি। এই সমস্ত ম্যাক্রো আপনি নিজে হাতে যে কোড লিখেছেন, তার থেকে বেশি কোড তৈরি করতে _এক্সপান্ড_ করে।
+Fundamentally, macros are a way of writing code that writes other code, which
+is known as _metaprogramming_. In Appendix C, we discuss the `derive`
+attribute, which generates an implementation of various traits for you. We’ve
+also used the `println!` and `vec!` macros throughout the book. All of these
+macros _expand_ to produce more code than the code you’ve written manually.
 
-মেটাপ্রোগ্রামিং কোডের পরিমাণ হ্রাস করার জন্য এবং রক্ষণাবেক্ষণের জন্য দরকারী, যা ফাংশনেরও একটি কাজ। তবে, ম্যাক্রোর কিছু অতিরিক্ত ক্ষমতা রয়েছে যা ফাংশনের নেই।
+Metaprogramming is useful for reducing the amount of code you have to write and
+maintain, which is also one of the roles of functions. However, macros have
+some additional powers that functions don’t.
 
-একটি ফাংশন সিগনেচারে ফাংশনের প্যারামিটারের সংখ্যা এবং প্রকার ঘোষণা করতে হয়। অন্যদিকে, ম্যাক্রো ভেরিয়েবল সংখ্যক প্যারামিটার নিতে পারে: আমরা একটি আর্গুমেন্ট দিয়ে `println!("hello")` অথবা দুটি আর্গুমেন্ট দিয়ে `println!("hello {}", name)` কল করতে পারি। এছাড়াও, কম্পাইলার কোডের অর্থ ব্যাখ্যা করার আগে ম্যাক্রোগুলি এক্সপান্ড করা হয়, তাই একটি ম্যাক্রো, উদাহরণস্বরূপ, একটি প্রদত্ত টাইপের উপর একটি trait প্রয়োগ করতে পারে। একটি ফাংশন তা করতে পারে না, কারণ এটি রানটাইমে কল করা হয় এবং একটি trait কম্পাইল টাইমে প্রয়োগ করতে হয়।
+A function signature must declare the number and type of parameters the
+function has. Macros, on the other hand, can take a variable number of
+parameters: we can call `println!("hello")` with one argument or
+`println!("hello {}", name)` with two arguments. Also, macros are expanded
+before the compiler interprets the meaning of the code, so a macro can, for
+example, implement a trait on a given type. A function can’t, because it gets
+called at runtime and a trait needs to be implemented at compile time.
 
-ফাংশনের পরিবর্তে একটি ম্যাক্রো প্রয়োগ করার অসুবিধা হল, ম্যাক্রো সংজ্ঞাগুলি ফাংশন সংজ্ঞাগুলির চেয়ে বেশি জটিল, কারণ আপনি Rust কোড লিখছেন যা Rust কোড লেখে। এই জটিলতার কারণে, ম্যাক্রো সংজ্ঞাগুলি সাধারণত ফাংশন সংজ্ঞাগুলির চেয়ে পড়া, বোঝা এবং বজায় রাখা আরও কঠিন।
+The downside to implementing a macro instead of a function is that macro
+definitions are more complex than function definitions because you’re writing
+Rust code that writes Rust code. Due to this indirection, macro definitions are
+generally more difficult to read, understand, and maintain than function
+definitions.
 
-ম্যাক্রো এবং ফাংশনের মধ্যে আরেকটি গুরুত্বপূর্ণ পার্থক্য হল, আপনাকে অবশ্যই ম্যাক্রো সংজ্ঞায়িত করতে হবে অথবা একটি ফাইলের মধ্যে কল করার _আগে_ তাদের স্কোপে আনতে হবে, যেখানে আপনি ফাংশন যেকোনো জায়গায় সংজ্ঞায়িত করতে পারেন এবং যেকোনো জায়গায় কল করতে পারেন।
+Another important difference between macros and functions is that you must
+define macros or bring them into scope _before_ you call them in a file, as
+opposed to functions you can define anywhere and call anywhere.
 
-### সাধারণ মেটাপ্রোগ্রামিংয়ের জন্য `macro_rules!` সহ ডিক্লারেটিভ ম্যাক্রো
+### Declarative Macros with `macro_rules!` for General Metaprogramming
 
-Rust-এ ম্যাক্রোর সবচেয়ে বেশি ব্যবহৃত ফর্ম হল _ডিক্লারেটিভ ম্যাক্রো_। এগুলিকে কখনও কখনও "উদাহরণ দ্বারা ম্যাক্রো", "`macro_rules!` ম্যাক্রো" বা শুধু "ম্যাক্রো" হিসাবেও উল্লেখ করা হয়। মূলত, ডিক্লারেটিভ ম্যাক্রো আপনাকে Rust `match` এক্সপ্রেশনের অনুরূপ কিছু লিখতে দেয়। অধ্যায় ৬-এ আলোচনা করা হয়েছে, `match` এক্সপ্রেশন হল কন্ট্রোল স্ট্রাকচার যা একটি এক্সপ্রেশন নেয়, এক্সপ্রেশনের ফলে প্রাপ্ত মানটিকে প্যাটার্নের সাথে তুলনা করে এবং তারপরে মিলে যাওয়া প্যাটার্নের সাথে যুক্ত কোডটি চালায়। ম্যাক্রোও একটি মানকে প্যাটার্নের সাথে তুলনা করে যা নির্দিষ্ট কোডের সাথে যুক্ত: এই পরিস্থিতিতে, মানটি হল ম্যাক্রোতে পাস করা লিটারাল Rust সোর্স কোড; প্যাটার্নগুলি সেই সোর্স কোডের কাঠামোর সাথে তুলনা করা হয়; এবং প্রতিটি প্যাটার্নের সাথে যুক্ত কোড, যখন মিলে যায়, তখন ম্যাক্রোতে পাস করা কোডটিকে প্রতিস্থাপন করে। এই সব কম্পাইলেশনের সময় ঘটে।
+The most widely used form of macros in Rust is the _declarative macro_. These
+are also sometimes referred to as “macros by example,” “`macro_rules!` macros,”
+or just plain “macros.” At their core, declarative macros allow you to write
+something similar to a Rust `match` expression. As discussed in Chapter 6,
+`match` expressions are control structures that take an expression, compare the
+resulting value of the expression to patterns, and then run the code associated
+with the matching pattern. Macros also compare a value to patterns that are
+associated with particular code: in this situation, the value is the literal
+Rust source code passed to the macro; the patterns are compared with the
+structure of that source code; and the code associated with each pattern, when
+matched, replaces the code passed to the macro. This all happens during
+compilation.
 
-একটি ম্যাক্রো সংজ্ঞায়িত করতে, আপনি `macro_rules!` কনস্ট্রাক্ট ব্যবহার করেন। `vec!` ম্যাক্রো কীভাবে সংজ্ঞায়িত করা হয় তা দেখে `macro_rules!` কীভাবে ব্যবহার করতে হয় তা দেখা যাক। অধ্যায় ৮-এ আলোচনা করা হয়েছে, কীভাবে আমরা `vec!` ম্যাক্রো ব্যবহার করে নির্দিষ্ট মান সহ একটি নতুন ভেক্টর তৈরি করতে পারি। উদাহরণস্বরূপ, নিম্নলিখিত ম্যাক্রো তিনটি পূর্ণসংখ্যাযুক্ত একটি নতুন ভেক্টর তৈরি করে:
+To define a macro, you use the `macro_rules!` construct. Let’s explore how to
+use `macro_rules!` by looking at how the `vec!` macro is defined. Chapter 8
+covered how we can use the `vec!` macro to create a new vector with particular
+values. For example, the following macro creates a new vector containing three
+integers:
 
 ```rust
 let v: Vec<u32> = vec![1, 2, 3];
 ```
 
-আমরা দুটি পূর্ণসংখ্যার ভেক্টর বা পাঁচটি স্ট্রিং স্লাইসের একটি ভেক্টর তৈরি করতে `vec!` ম্যাক্রো ব্যবহার করতে পারি। আমরা একই কাজ করার জন্য একটি ফাংশন ব্যবহার করতে পারতাম না, কারণ আমরা আগে থেকে মানগুলির সংখ্যা বা প্রকার জানতাম না।
+We could also use the `vec!` macro to make a vector of two integers or a vector
+of five string slices. We wouldn’t be able to use a function to do the same
+because we wouldn’t know the number or type of values up front.
 
-তালিকা 20-29 `vec!` ম্যাক্রোর একটি সামান্য সরলীকৃত সংজ্ঞা দেখায়।
+Listing 20-29 shows a slightly simplified definition of the `vec!` macro.
 
-<Listing number="20-29" file-name="src/lib.rs" caption="`vec!` ম্যাক্রো সংজ্ঞার একটি সরলীকৃত সংস্করণ">
+<Listing number="20-29" file-name="src/lib.rs" caption="A simplified version of the `vec!` macro definition">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-29/src/lib.rs}}
@@ -42,23 +83,54 @@ let v: Vec<u32> = vec![1, 2, 3];
 
 </Listing>
 
-> দ্রষ্টব্য: স্ট্যান্ডার্ড লাইব্রেরিতে `vec!` ম্যাক্রোর আসল সংজ্ঞাতে আগে থেকে সঠিক পরিমাণ মেমরি বরাদ্দ করার জন্য কোড অন্তর্ভুক্ত রয়েছে। সেই কোডটি একটি অপ্টিমাইজেশন যা উদাহরণটিকে সহজ করার জন্য আমরা এখানে অন্তর্ভুক্ত করিনি।
+> Note: The actual definition of the `vec!` macro in the standard library
+> includes code to preallocate the correct amount of memory up front. That code
+> is an optimization that we don’t include here to make the example simpler.
 
-`#[macro_export]` টীকাটি নির্দেশ করে যে এই ম্যাক্রোটি তখনই উপলব্ধ করা উচিত যখন ম্যাক্রোটি যে ক্রেটে সংজ্ঞায়িত করা হয়েছে তা স্কোপে আনা হয়। এই টীকা ছাড়া, ম্যাক্রোটিকে স্কোপে আনা যাবে না।
+The `#[macro_export]` annotation indicates that this macro should be made
+available whenever the crate in which the macro is defined is brought into
+scope. Without this annotation, the macro can’t be brought into scope.
 
-তারপরে আমরা `macro_rules!` এবং আমরা যে ম্যাক্রোটি সংজ্ঞায়িত করছি তার নাম _বিস্ময়বোধক চিহ্ন ছাড়া_ দিয়ে ম্যাক্রো সংজ্ঞা শুরু করি। নাম, এই ক্ষেত্রে `vec`, এর পরে ম্যাক্রো সংজ্ঞার বডি বোঝাতে কার্লি বন্ধনী রয়েছে।
+We then start the macro definition with `macro_rules!` and the name of the
+macro we’re defining _without_ the exclamation mark. The name, in this case
+`vec`, is followed by curly brackets denoting the body of the macro definition.
 
-`vec!` বডির গঠন `match` এক্সপ্রেশনের কাঠামোর অনুরূপ। এখানে আমাদের একটি বাহু রয়েছে যার প্যাটার্ন `( $( $x:expr ),* )`, তারপরে `=>` এবং এই প্যাটার্নের সাথে যুক্ত কোডের ব্লক। যদি প্যাটার্নটি মিলে যায়, তবে সংশ্লিষ্ট কোড ব্লকটি নির্গত হবে। যেহেতু এই ম্যাক্রোর মধ্যে এটিই একমাত্র প্যাটার্ন, তাই মেলানোর জন্য কেবল একটি বৈধ উপায় রয়েছে; অন্য যেকোনো প্যাটার্নের ফলে একটি ত্রুটি দেখা দেবে। আরও জটিল ম্যাক্রোর একাধিক বাহু থাকবে।
+The structure in the `vec!` body is similar to the structure of a `match`
+expression. Here we have one arm with the pattern `( $( $x:expr ),* )`,
+followed by `=>` and the block of code associated with this pattern. If the
+pattern matches, the associated block of code will be emitted. Given that this
+is the only pattern in this macro, there is only one valid way to match; any
+other pattern will result in an error. More complex macros will have more than
+one arm.
 
-ম্যাক্রো সংজ্ঞার বৈধ প্যাটার্ন সিনট্যাক্স অধ্যায় ১৯-এ আলোচিত প্যাটার্ন সিনট্যাক্সের থেকে আলাদা, কারণ ম্যাক্রো প্যাটার্নগুলি মানের পরিবর্তে Rust কোড কাঠামোর সাথে মেলানো হয়। আসুন তালিকা 20-29-এর প্যাটার্নের অংশগুলির অর্থ কী তা দেখা যাক; সম্পূর্ণ ম্যাক্রো প্যাটার্ন সিনট্যাক্সের জন্য, [Rust Reference][ref] দেখুন।
+Valid pattern syntax in macro definitions is different than the pattern syntax
+covered in Chapter 19 because macro patterns are matched against Rust code
+structure rather than values. Let’s walk through what the pattern pieces in
+Listing 20-29 mean; for the full macro pattern syntax, see the [Rust
+Reference][ref].
 
-প্রথমত, আমরা পুরো প্যাটার্নটিকে আবদ্ধ করতে বন্ধনীর একটি সেট ব্যবহার করি। আমরা ম্যাক্রো সিস্টেমে একটি ভেরিয়েবল ঘোষণা করতে একটি ডলার চিহ্ন (`$`) ব্যবহার করি যাতে Rust কোড থাকে যা প্যাটার্নের সাথে মিলে যায়। ডলার চিহ্নটি এটি স্পষ্ট করে যে এটি একটি নিয়মিত Rust ভেরিয়েবলের বিপরীতে একটি ম্যাক্রো ভেরিয়েবল। এর পরে বন্ধনীর একটি সেট আসে যা প্রতিস্থাপন কোডে ব্যবহারের জন্য বন্ধনীর মধ্যে প্যাটার্নের সাথে মেলে এমন মানগুলি ক্যাপচার করে। `$()` এর মধ্যে `$x:expr` রয়েছে, যা যেকোনো Rust এক্সপ্রেশনের সাথে মেলে এবং এক্সপ্রেশনটিকে `$x` নাম দেয়।
+First, we use a set of parentheses to encompass the whole pattern. We use a
+dollar sign (`$`) to declare a variable in the macro system that will contain
+the Rust code matching the pattern. The dollar sign makes it clear this is a
+macro variable as opposed to a regular Rust variable. Next comes a set of
+parentheses that captures values that match the pattern within the parentheses
+for use in the replacement code. Within `$()` is `$x:expr`, which matches any
+Rust expression and gives the expression the name `$x`.
 
-`$()` এর পরে কমা নির্দেশ করে যে কোডের প্রতিটি দৃষ্টান্তের মধ্যে একটি লিটারাল কমা বিভাজক অক্ষর অবশ্যই প্রদর্শিত হবে যা `$()` এর মধ্যে কোডের সাথে মেলে। `*` নির্দিষ্ট করে যে প্যাটার্নটি `*` এর আগের যেকোনো কিছুর শূন্য বা তার বেশি সংখ্যকবার মিলবে।
+The comma following `$()` indicates that a literal comma separator character
+must appear between each instance of the code that matches the code within
+`$()`. The `*` specifies that the pattern matches zero or more of whatever
+precedes the `*`.
 
-যখন আমরা `vec![1, 2, 3];` দিয়ে এই ম্যাক্রোটিকে কল করি, তখন `$x` প্যাটার্নটি তিনটি এক্সপ্রেশন `1`, `2`, এবং `3` সহ তিনবার মেলে।
+When we call this macro with `vec![1, 2, 3];`, the `$x` pattern matches three
+times with the three expressions `1`, `2`, and `3`.
 
-এখন আসুন এই বাহুর সাথে যুক্ত কোডের বডিতে প্যাটার্নটি দেখি: `$()*` এর মধ্যে `temp_vec.push()` প্যাটার্নের `$()` এর সাথে মেলে এমন প্রতিটি অংশের জন্য জেনারেট করা হয়, প্যাটার্নটি কতবার মেলে তার উপর নির্ভর করে শূন্য বা তার বেশি সংখ্যকবার। `$x` প্রতিটি মিলে যাওয়া এক্সপ্রেশন দিয়ে প্রতিস্থাপিত হয়। যখন আমরা `vec![1, 2, 3];` দিয়ে এই ম্যাক্রোটিকে কল করি, তখন এই ম্যাক্রো কলটিকে প্রতিস্থাপন করে যে কোডটি জেনারেট হবে তা হবে নিম্নরূপ:
+Now let’s look at the pattern in the body of the code associated with this arm:
+`temp_vec.push()` within `$()*` is generated for each part that matches `$()`
+in the pattern zero or more times depending on how many times the pattern
+matches. The `$x` is replaced with each expression matched. When we call this
+macro with `vec![1, 2, 3];`, the code generated that replaces this macro call
+will be the following:
 
 ```rust,ignore
 {
@@ -70,17 +142,29 @@ let v: Vec<u32> = vec![1, 2, 3];
 }
 ```
 
-আমরা একটি ম্যাক্রো সংজ্ঞায়িত করেছি যা যেকোনো প্রকারের যেকোনো সংখ্যক আর্গুমেন্ট নিতে পারে এবং নির্দিষ্ট উপাদানযুক্ত একটি ভেক্টর তৈরি করতে কোড তৈরি করতে পারে।
+We’ve defined a macro that can take any number of arguments of any type and can
+generate code to create a vector containing the specified elements.
 
-কীভাবে ম্যাক্রো লিখতে হয় সে সম্পর্কে আরও জানতে, অনলাইন ডকুমেন্টেশন বা অন্যান্য সংস্থান যেমন ড্যানিয়েল কিপ শুরু করা এবং লুকাস উইর্থ দ্বারা অব্যাহত রাখা [“The Little Book of Rust Macros”][tlborm] দেখুন।
+To learn more about how to write macros, consult the online documentation or
+other resources, such as [“The Little Book of Rust Macros”][tlborm] started by
+Daniel Keep and continued by Lukas Wirth.
 
-### অ্যাট্রিবিউট থেকে কোড জেনারেট করার জন্য প্রসিডিউরাল ম্যাক্রো
+### Procedural Macros for Generating Code from Attributes
 
-ম্যাক্রোর দ্বিতীয় রূপটি হল _প্রসিডিউরাল ম্যাক্রো_, যা অনেকটা ফাংশনের মতো কাজ করে (এবং এটি এক ধরনের পদ্ধতি)। প্রসিডিউরাল ম্যাক্রো কিছু কোডকে ইনপুট হিসাবে গ্রহণ করে, সেই কোডের উপর কাজ করে এবং ডিক্লারেটিভ ম্যাক্রোর মতো প্যাটার্নের সাথে মিলিয়ে কোডটিকে অন্য কোড দিয়ে প্রতিস্থাপন করার পরিবর্তে আউটপুট হিসাবে কিছু কোড তৈরি করে। প্রসিডিউরাল ম্যাক্রোর তিনটি প্রকার হল কাস্টম ডেরাইভ, অ্যাট্রিবিউট-সদৃশ এবং ফাংশন-সদৃশ, এবং সবগুলি একই পদ্ধতিতে কাজ করে।
+The second form of macros is the _procedural macro_, which acts more like a
+function (and is a type of procedure). Procedural macros accept some code as an
+input, operate on that code, and produce some code as an output rather than
+matching against patterns and replacing the code with other code as declarative
+macros do. The three kinds of procedural macros are custom derive,
+attribute-like, and function-like, and all work in a similar fashion.
 
-প্রসিডিউরাল ম্যাক্রো তৈরি করার সময়, সংজ্ঞাগুলিকে অবশ্যই একটি বিশেষ ক্রেট প্রকারের সাথে তাদের নিজস্ব ক্রেটে থাকতে হবে। এটি জটিল প্রযুক্তিগত কারণে যা আমরা ভবিষ্যতে দূর করতে আশা করি। তালিকা 20-30-এ, আমরা কীভাবে একটি প্রসিডিউরাল ম্যাক্রো সংজ্ঞায়িত করতে হয় তা দেখাই, যেখানে `some_attribute` একটি নির্দিষ্ট ম্যাক্রো প্রকার ব্যবহার করার জন্য একটি স্থানধারক।
+When creating procedural macros, the definitions must reside in their own crate
+with a special crate type. This is for complex technical reasons that we hope
+to eliminate in the future. In Listing 20-30, we show how to define a
+procedural macro, where `some_attribute` is a placeholder for using a specific
+macro variety.
 
-<Listing number="20-30" file-name="src/lib.rs" caption="একটি প্রসিডিউরাল ম্যাক্রো সংজ্ঞায়িত করার উদাহরণ">
+<Listing number="20-30" file-name="src/lib.rs" caption="An example of defining a procedural macro">
 
 ```rust,ignore
 use proc_macro;
@@ -92,15 +176,32 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 
 </Listing>
 
-যে ফাংশনটি একটি প্রসিডিউরাল ম্যাক্রো সংজ্ঞায়িত করে সেটি ইনপুট হিসাবে একটি `TokenStream` নেয় এবং আউটপুট হিসাবে একটি `TokenStream` তৈরি করে। `TokenStream` প্রকারটি `proc_macro` ক্রেট দ্বারা সংজ্ঞায়িত করা হয়েছে যা Rust-এর সাথে অন্তর্ভুক্ত এবং টোকেনের একটি ক্রম উপস্থাপন করে। এটি ম্যাক্রোর মূল বিষয়: ম্যাক্রোটি যে সোর্স কোডের উপর কাজ করছে তা ইনপুট `TokenStream` তৈরি করে এবং ম্যাক্রোটি যে কোড তৈরি করে তা হল আউটপুট `TokenStream`। ফাংশনের সাথে একটি অ্যাট্রিবিউটও সংযুক্ত থাকে যা আমরা যে ধরনের প্রসিডিউরাল ম্যাক্রো তৈরি করছি তা নির্দিষ্ট করে। একই ক্রেটে আমাদের একাধিক ধরনের প্রসিডিউরাল ম্যাক্রো থাকতে পারে।
+The function that defines a procedural macro takes a `TokenStream` as an input
+and produces a `TokenStream` as an output. The `TokenStream` type is defined by
+the `proc_macro` crate that is included with Rust and represents a sequence of
+tokens. This is the core of the macro: the source code that the macro is
+operating on makes up the input `TokenStream`, and the code the macro produces
+is the output `TokenStream`. The function also has an attribute attached to it
+that specifies which kind of procedural macro we’re creating. We can have
+multiple kinds of procedural macros in the same crate.
 
-আসুন বিভিন্ন ধরনের প্রসিডিউরাল ম্যাক্রো দেখি। আমরা একটি কাস্টম ডেরাইভ ম্যাক্রো দিয়ে শুরু করব এবং তারপরে অন্যান্য ফর্মগুলিকে আলাদা করে তোলে এমন ছোট পার্থক্যগুলি ব্যাখ্যা করব।
+Let’s look at the different kinds of procedural macros. We’ll start with a
+custom derive macro and then explain the small dissimilarities that make the
+other forms different.
 
-### কীভাবে একটি কাস্টম `derive` ম্যাক্রো লিখবেন
+### How to Write a Custom `derive` Macro
 
-আসুন `hello_macro` নামে একটি ক্রেট তৈরি করি যা `HelloMacro` নামের একটি trait কে সংজ্ঞায়িত করে যার `hello_macro` নামের একটি সংশ্লিষ্ট ফাংশন রয়েছে। আমাদের ব্যবহারকারীদের তাদের প্রতিটি প্রকারের জন্য `HelloMacro` trait প্রয়োগ করার পরিবর্তে, আমরা একটি প্রসিডিউরাল ম্যাক্রো সরবরাহ করব যাতে ব্যবহারকারীরা তাদের প্রকারকে `#[derive(HelloMacro)]` দিয়ে টীকা দিতে পারে `hello_macro` ফাংশনের একটি ডিফল্ট বাস্তবায়ন পেতে। ডিফল্ট বাস্তবায়ন `Hello, Macro! My name is TypeName!` প্রিন্ট করবে যেখানে `TypeName` হল সেই প্রকারের নাম যার উপর এই trait টি সংজ্ঞায়িত করা হয়েছে। অন্য কথায়, আমরা এমন একটি ক্রেট লিখব যা অন্য প্রোগ্রামারকে আমাদের ক্রেট ব্যবহার করে তালিকা 20-31 এর মতো কোড লিখতে সক্ষম করবে।
+Let’s create a crate named `hello_macro` that defines a trait named
+`HelloMacro` with one associated function named `hello_macro`. Rather than
+making our users implement the `HelloMacro` trait for each of their types,
+we’ll provide a procedural macro so users can annotate their type with
+`#[derive(HelloMacro)]` to get a default implementation of the `hello_macro`
+function. The default implementation will print `Hello, Macro! My name is
+TypeName!` where `TypeName` is the name of the type on which this trait has
+been defined. In other words, we’ll write a crate that enables another
+programmer to write code like Listing 20-31 using our crate.
 
-<Listing number="20-31" file-name="src/main.rs" caption="আমাদের প্রসিডিউরাল ম্যাক্রো ব্যবহার করার সময় আমাদের ক্রেটের একজন ব্যবহারকারী যে কোড লিখতে পারবে">
+<Listing number="20-31" file-name="src/main.rs" caption="The code a user of our crate will be able to write when using our procedural macro">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-31/src/main.rs}}
@@ -108,13 +209,14 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 
 </Listing>
 
-আমরা শেষ করার পরে এই কোডটি `Hello, Macro! My name is Pancakes!` প্রিন্ট করবে। প্রথম ধাপ হল একটি নতুন লাইব্রেরি ক্রেট তৈরি করা, যেমন:
+This code will print `Hello, Macro! My name is Pancakes!` when we’re done. The
+first step is to make a new library crate, like this:
 
 ```console
-cargo new hello_macro --lib
+$ cargo new hello_macro --lib
 ```
 
-এর পরে, আমরা `HelloMacro` trait এবং এর সংশ্লিষ্ট ফাংশন সংজ্ঞায়িত করব:
+Next, we’ll define the `HelloMacro` trait and its associated function:
 
 <Listing file-name="src/lib.rs">
 
@@ -124,25 +226,48 @@ cargo new hello_macro --lib
 
 </Listing>
 
-আমাদের একটি trait এবং এর ফাংশন রয়েছে। এই মুহুর্তে, আমাদের ক্রেট ব্যবহারকারী পছন্দসই কার্যকারিতা অর্জনের জন্য trait প্রয়োগ করতে পারে, যেমন:
+We have a trait and its function. At this point, our crate user could implement
+the trait to achieve the desired functionality, like so:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-20-impl-hellomacro-for-pancakes/pancakes/src/main.rs}}
 ```
 
-তবে, তাদের `hello_macro` এর সাথে ব্যবহার করতে চান এমন প্রতিটি প্রকারের জন্য বাস্তবায়ন ব্লক লিখতে হবে; আমরা তাদের এই কাজ করতে বাঁচতে চাই।
+However, they would need to write the implementation block for each type they
+wanted to use with `hello_macro`; we want to spare them from having to do this
+work.
 
-এছাড়াও, আমরা এখনও `hello_macro` ফাংশনটিকে ডিফল্ট বাস্তবায়ন প্রদান করতে পারি না যা trait টি যে টাইপের উপর প্রয়োগ করা হয়েছে তার নাম প্রিন্ট করবে: Rust-এর রিফ্লেকশন ক্ষমতা নেই, তাই এটি রানটাইমে টাইপের নাম দেখতে পারে না। কম্পাইল টাইমে কোড জেনারেট করার জন্য আমাদের একটি ম্যাক্রোর প্রয়োজন।
+Additionally, we can’t yet provide the `hello_macro` function with default
+implementation that will print the name of the type the trait is implemented
+on: Rust doesn’t have reflection capabilities, so it can’t look up the type’s
+name at runtime. We need a macro to generate code at compile time.
 
-পরবর্তী ধাপ হল প্রসিডিউরাল ম্যাক্রো সংজ্ঞায়িত করা। এই লেখার সময়, প্রসিডিউরাল ম্যাক্রো তাদের নিজস্ব ক্রেটে থাকা প্রয়োজন। অবশেষে, এই বিধিনিষেধ তুলে নেওয়া হতে পারে। ক্রেট এবং ম্যাক্রো ক্রেটগুলি কাঠামোগত করার নিয়মটি নিম্নরূপ: `foo` নামের একটি ক্রেটের জন্য, একটি কাস্টম ডেরাইভ প্রসিডিউরাল ম্যাক্রো ক্রেটকে `foo_derive` বলা হয়। আসুন আমাদের `hello_macro` প্রকল্পের ভিতরে `hello_macro_derive` নামে একটি নতুন ক্রেট শুরু করি:
+The next step is to define the procedural macro. At the time of this writing,
+procedural macros need to be in their own crate. Eventually, this restriction
+might be lifted. The convention for structuring crates and macro crates is as
+follows: for a crate named `foo`, a custom derive procedural macro crate is
+called `foo_derive`. Let’s start a new crate called `hello_macro_derive` inside
+our `hello_macro` project:
 
 ```console
-cargo new hello_macro_derive --lib
+$ cargo new hello_macro_derive --lib
 ```
 
-আমাদের দুটি ক্রেট ঘনিষ্ঠভাবে সম্পর্কিত, তাই আমরা আমাদের `hello_macro` ক্রেটের ডিরেক্টরির মধ্যে প্রসিডিউরাল ম্যাক্রো ক্রেট তৈরি করি। যদি আমরা `hello_macro`-তে trait সংজ্ঞা পরিবর্তন করি, তাহলে আমাদের `hello_macro_derive`-এ প্রসিডিউরাল ম্যাক্রোর বাস্তবায়নও পরিবর্তন করতে হবে। দুটি ক্রেটকে আলাদাভাবে প্রকাশ করতে হবে এবং এই ক্রেটগুলি ব্যবহার করা প্রোগ্রামারদের উভয়কেই নির্ভরতা হিসাবে যোগ করতে হবে এবং উভয়কেই স্কোপে আনতে হবে। আমরা পরিবর্তে `hello_macro` ক্রেটকে `hello_macro_derive` একটি নির্ভরতা হিসাবে ব্যবহার করতে এবং প্রসিডিউরাল ম্যাক্রো কোড পুনরায় রপ্তানি করতে পারতাম। তবে, আমরা যেভাবে প্রকল্পটি তৈরি করেছি, তা প্রোগ্রামারদের `derive` কার্যকারিতা না চাইলেও `hello_macro` ব্যবহার করা সম্ভব করে।
+Our two crates are tightly related, so we create the procedural macro crate
+within the directory of our `hello_macro` crate. If we change the trait
+definition in `hello_macro`, we’ll have to change the implementation of the
+procedural macro in `hello_macro_derive` as well. The two crates will need to
+be published separately, and programmers using these crates will need to add
+both as dependencies and bring them both into scope. We could instead have the
+`hello_macro` crate use `hello_macro_derive` as a dependency and re-export the
+procedural macro code. However, the way we’ve structured the project makes it
+possible for programmers to use `hello_macro` even if they don’t want the
+`derive` functionality.
 
-আমাদের `hello_macro_derive` ক্রেটটিকে একটি প্রসিডিউরাল ম্যাক্রো ক্রেট হিসাবে ঘোষণা করতে হবে। আমাদের `syn` এবং `quote` ক্রেট থেকেও কার্যকারিতা প্রয়োজন হবে, যেমন আপনি কিছুক্ষণের মধ্যেই দেখতে পাবেন, তাই আমাদের সেগুলিকে নির্ভরতা হিসাবে যোগ করতে হবে। `hello_macro_derive` এর জন্য _Cargo.toml_ ফাইলে নিম্নলিখিতগুলি যোগ করুন:
+We need to declare the `hello_macro_derive` crate as a procedural macro crate.
+We’ll also need functionality from the `syn` and `quote` crates, as you’ll see
+in a moment, so we need to add them as dependencies. Add the following to the
+_Cargo.toml_ file for `hello_macro_derive`:
 
 <Listing file-name="hello_macro_derive/Cargo.toml">
 
@@ -152,9 +277,11 @@ cargo new hello_macro_derive --lib
 
 </Listing>
 
-প্রসিডিউরাল ম্যাক্রো সংজ্ঞায়িত করা শুরু করতে, তালিকা 20-32-এর কোডটি `hello_macro_derive` ক্রেটের জন্য আপনার _src/lib.rs_ ফাইলে রাখুন। মনে রাখবেন যে `impl_hello_macro` ফাংশনের জন্য একটি সংজ্ঞা যোগ না করা পর্যন্ত এই কোডটি কম্পাইল হবে না।
+To start defining the procedural macro, place the code in Listing 20-32 into
+your _src/lib.rs_ file for the `hello_macro_derive` crate. Note that this code
+won’t compile until we add a definition for the `impl_hello_macro` function.
 
-<Listing number="20-32" file-name="hello_macro_derive/src/lib.rs" caption="Rust কোড প্রক্রিয়াকরণের জন্য বেশিরভাগ প্রসিডিউরাল ম্যাক্রো ক্রেটের প্রয়োজন হবে এমন কোড">
+<Listing number="20-32" file-name="hello_macro_derive/src/lib.rs" caption="Code that most procedural macro crates will require in order to process Rust code">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-32/hello_macro/hello_macro_derive/src/lib.rs}}
@@ -162,17 +289,40 @@ cargo new hello_macro_derive --lib
 
 </Listing>
 
-লক্ষ্য করুন যে আমরা কোডটিকে `hello_macro_derive` ফাংশনে বিভক্ত করেছি, যা `TokenStream` পার্স করার জন্য দায়ী, এবং `impl_hello_macro` ফাংশন, যা সিনট্যাক্স ট্রিকে রূপান্তর করার জন্য দায়ী: এটি একটি প্রসিডিউরাল ম্যাক্রো লেখা আরও সুবিধাজনক করে তোলে। বাইরের ফাংশনের কোড (এই ক্ষেত্রে `hello_macro_derive`) আপনি দেখেন বা তৈরি করেন এমন প্রায় প্রতিটি প্রসিডিউরাল ম্যাক্রো ক্রেটের জন্য একই হবে। ভিতরের ফাংশনের বডিতে আপনি যে কোডটি নির্দিষ্ট করেন (এই ক্ষেত্রে `impl_hello_macro`) সেটি আপনার প্রসিডিউরাল ম্যাক্রোর উদ্দেশ্যের উপর নির্ভর করে আলাদা হবে।
+Notice that we’ve split the code into the `hello_macro_derive` function, which
+is responsible for parsing the `TokenStream`, and the `impl_hello_macro`
+function, which is responsible for transforming the syntax tree: this makes
+writing a procedural macro more convenient. The code in the outer function
+(`hello_macro_derive` in this case) will be the same for almost every
+procedural macro crate you see or create. The code you specify in the body of
+the inner function (`impl_hello_macro` in this case) will be different
+depending on your procedural macro’s purpose.
 
-আমরা তিনটি নতুন ক্রেট চালু করেছি: `proc_macro`, [`syn`], এবং [`quote`]। `proc_macro` ক্রেট Rust-এর সাথে আসে, তাই আমাদের _Cargo.toml_-এ সেটিকে নির্ভরতা হিসাবে যোগ করার প্রয়োজন ছিল না। `proc_macro` ক্রেট হল কম্পাইলারের API যা আমাদের কোড থেকে Rust কোড পড়তে এবং ম্যানিপুলেট করতে দেয়।
+We’ve introduced three new crates: `proc_macro`, [`syn`], and [`quote`]. The
+`proc_macro` crate comes with Rust, so we didn’t need to add that to the
+dependencies in _Cargo.toml_. The `proc_macro` crate is the compiler’s API that
+allows us to read and manipulate Rust code from our code.
 
-`syn` ক্রেট একটি স্ট্রিং থেকে Rust কোডকে একটি ডেটা স্ট্রাকচারে পার্স করে যার উপর আমরা অপারেশন করতে পারি। `quote` ক্রেট `syn` ডেটা স্ট্রাকচারগুলিকে আবার Rust কোডে পরিণত করে। এই ক্রেটগুলি আমরা পরিচালনা করতে চাইতে পারি এমন যেকোনো ধরনের Rust কোড পার্স করা অনেক সহজ করে তোলে: Rust কোডের জন্য একটি সম্পূর্ণ পার্সার লেখা কোনো সহজ কাজ নয়।
+The `syn` crate parses Rust code from a string into a data structure that we
+can perform operations on. The `quote` crate turns `syn` data structures back
+into Rust code. These crates make it much simpler to parse any sort of Rust
+code we might want to handle: writing a full parser for Rust code is no simple
+task.
 
-যখন আমাদের লাইব্রেরির একজন ব্যবহারকারী একটি টাইপের উপর `#[derive(HelloMacro)]` নির্দিষ্ট করে তখন `hello_macro_derive` ফাংশন কল করা হবে। এটি সম্ভব কারণ আমরা এখানে `hello_macro_derive` ফাংশনটিকে `proc_macro_derive` দিয়ে টীকা দিয়েছি এবং `HelloMacro` নামটি নির্দিষ্ট করেছি, যা আমাদের trait নামের সাথে মেলে; এটিই বেশিরভাগ প্রসিডিউরাল ম্যাক্রো অনুসরণ করে।
+The `hello_macro_derive` function will be called when a user of our library
+specifies `#[derive(HelloMacro)]` on a type. This is possible because we’ve
+annotated the `hello_macro_derive` function here with `proc_macro_derive` and
+specified the name `HelloMacro`, which matches our trait name; this is the
+convention most procedural macros follow.
 
-`hello_macro_derive` ফাংশনটি প্রথমে `input`-কে `TokenStream` থেকে এমন একটি ডেটা স্ট্রাকচারে রূপান্তর করে যা আমরা তারপর ব্যাখ্যা করতে পারি এবং অপারেশন করতে পারি। এখানেই `syn` কাজে আসে। `syn`-এর `parse` ফাংশন একটি `TokenStream` নেয় এবং পার্স করা Rust কোড উপস্থাপন করে `DeriveInput` struct প্রদান করে। তালিকা 20-33 `DeriveInput` struct-এর প্রাসঙ্গিক অংশগুলি দেখায় যা আমরা `struct Pancakes;` স্ট্রিং পার্স করে পাই:
+The `hello_macro_derive` function first converts the `input` from a
+`TokenStream` to a data structure that we can then interpret and perform
+operations on. This is where `syn` comes into play. The `parse` function in
+`syn` takes a `TokenStream` and returns a `DeriveInput` struct representing the
+parsed Rust code. Listing 20-33 shows the relevant parts of the `DeriveInput`
+struct we get from parsing the `struct Pancakes;` string:
 
-<Listing number="20-33" caption="তালিকা 20-31-এ ম্যাক্রোর অ্যাট্রিবিউট থাকা কোড পার্স করার সময় আমরা যে `DeriveInput` উদাহরণ পাই">
+<Listing number="20-33" caption="The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-31">
 
 ```rust,ignore
 DeriveInput {
@@ -196,15 +346,31 @@ DeriveInput {
 
 </Listing>
 
-এই struct এর ক্ষেত্রগুলি দেখায় যে আমরা যে Rust কোড পার্স করেছি তা হল `Pancakes` এর `ident` (আইডেন্টিফায়ার, নামের অর্থ) সহ একটি ইউনিট struct। সব ধরণের Rust কোড বর্ণনা করার জন্য এই struct-এ আরও ক্ষেত্র রয়েছে; আরও তথ্যের জন্য [`syn` ডকুমেন্টেশনে `DeriveInput`][syn-docs] দেখুন।
+The fields of this struct show that the Rust code we’ve parsed is a unit struct
+with the `ident` (identifier, meaning the name) of `Pancakes`. There are more
+fields on this struct for describing all sorts of Rust code; check the [`syn`
+documentation for `DeriveInput`][syn-docs] for more information.
 
-শীঘ্রই আমরা `impl_hello_macro` ফাংশন সংজ্ঞায়িত করব, যেখানে আমরা নতুন Rust কোড তৈরি করব যা আমরা অন্তর্ভুক্ত করতে চাই। কিন্তু তার আগে, মনে রাখবেন যে আমাদের ডেরাইভ ম্যাক্রোর আউটপুটও একটি `TokenStream`। ফেরত দেওয়া `TokenStream` আমাদের ক্রেট ব্যবহারকারীরা যে কোড লেখেন তাতে যোগ করা হয়, তাই যখন তারা তাদের ক্রেট কম্পাইল করেন, তখন তারা পরিবর্তিত `TokenStream`-এ আমরা যে অতিরিক্ত কার্যকারিতা প্রদান করি তা পাবেন।
+Soon we’ll define the `impl_hello_macro` function, which is where we’ll build
+the new Rust code we want to include. But before we do, note that the output
+for our derive macro is also a `TokenStream`. The returned `TokenStream` is
+added to the code that our crate users write, so when they compile their crate,
+they’ll get the extra functionality that we provide in the modified
+`TokenStream`.
 
-আপনি হয়তো লক্ষ্য করেছেন যে আমরা `syn::parse` ফাংশনের কলটি এখানে ব্যর্থ হলে `hello_macro_derive` ফাংশনকে প্যানিক করার জন্য `unwrap` কল করছি। ত্রুটির ক্ষেত্রে আমাদের প্রসিডিউরাল ম্যাক্রো প্যানিক করা আবশ্যক, কারণ `proc_macro_derive` ফাংশনগুলিকে প্রসিডিউরাল ম্যাক্রো API এর সাথে সঙ্গতি রাখতে `Result`-এর পরিবর্তে `TokenStream` ফেরত দিতে হবে। আমরা `unwrap` ব্যবহার করে এই উদাহরণটিকে সহজ করেছি; প্রোডাকশন কোডে, আপনার `panic!` বা `expect` ব্যবহার করে কী ভুল হয়েছে সে সম্পর্কে আরও নির্দিষ্ট ত্রুটি বার্তা দেওয়া উচিত।
+You might have noticed that we’re calling `unwrap` to cause the
+`hello_macro_derive` function to panic if the call to the `syn::parse` function
+fails here. It’s necessary for our procedural macro to panic on errors because
+`proc_macro_derive` functions must return `TokenStream` rather than `Result` to
+conform to the procedural macro API. We’ve simplified this example by using
+`unwrap`; in production code, you should provide more specific error messages
+about what went wrong by using `panic!` or `expect`.
 
-এখন যেহেতু আমাদের কাছে একটি `TokenStream` থেকে টীকাযুক্ত Rust কোডকে একটি `DeriveInput` উদাহরণে পরিণত করার কোড রয়েছে, আসুন আমরা টীকাযুক্ত প্রকারের উপর `HelloMacro` trait প্রয়োগ করে এমন কোড তৈরি করি, যেমনটি তালিকা 20-34-এ দেখানো হয়েছে।
+Now that we have the code to turn the annotated Rust code from a `TokenStream`
+into a `DeriveInput` instance, let’s generate the code that implements the
+`HelloMacro` trait on the annotated type, as shown in Listing 20-34.
 
-<Listing number="20-34" file-name="hello_macro_derive/src/lib.rs" caption="পার্স করা Rust কোড ব্যবহার করে `HelloMacro` trait প্রয়োগ করা">
+<Listing number="20-34" file-name="hello_macro_derive/src/lib.rs" caption="Implementing the `HelloMacro` trait using the parsed Rust code">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-34/hello_macro/hello_macro_derive/src/lib.rs:here}}
@@ -212,68 +378,132 @@ DeriveInput {
 
 </Listing>
 
-আমরা `ast.ident` ব্যবহার করে টীকাযুক্ত প্রকারের নাম (আইডেন্টিফায়ার) সম্বলিত একটি `Ident` struct উদাহরণ পাই। তালিকা 20-33-এর struct দেখায় যে যখন আমরা তালিকা 20-31-এর কোডে `impl_hello_macro` ফাংশন চালাই, তখন আমরা যে `ident` পাব তাতে `ident` ক্ষেত্রটি `“Pancakes”` মান সহ থাকবে। সুতরাং, তালিকা 20-34-এর `name` ভেরিয়েবলে একটি `Ident` struct উদাহরণ থাকবে যা, প্রিন্ট করলে, `"Pancakes"` স্ট্রিং হবে, যা তালিকা 20-31-এর struct-এর নাম।
+We get an `Ident` struct instance containing the name (identifier) of the
+annotated type using `ast.ident`. The struct in Listing 20-33 shows that when
+we run the `impl_hello_macro` function on the code in Listing 20-31, the
+`ident` we get will have the `ident` field with a value of `"Pancakes"`. Thus,
+the `name` variable in Listing 20-34 will contain an `Ident` struct instance
+that, when printed, will be the string `"Pancakes"`, the name of the struct in
+Listing 20-31.
 
-`quote!` ম্যাক্রো আমাদের সেই Rust কোড সংজ্ঞায়িত করতে দেয় যা আমরা ফেরত দিতে চাই। কম্পাইলার `quote!` ম্যাক্রোর নির্বাহের সরাসরি ফলাফলের চেয়ে আলাদা কিছু আশা করে, তাই আমাদের এটিকে `TokenStream`-এ রূপান্তর করতে হবে। আমরা `into` পদ্ধতি কল করে এটি করি, যা এই মধ্যবর্তী উপস্থাপনাটিকে ব্যবহার করে এবং প্রয়োজনীয় `TokenStream` প্রকারের একটি মান ফেরত দেয়।
+The `quote!` macro lets us define the Rust code that we want to return. The
+compiler expects something different to the direct result of the `quote!`
+macro’s execution, so we need to convert it to a `TokenStream`. We do this by
+calling the `into` method, which consumes this intermediate representation and
+returns a value of the required `TokenStream` type.
 
-`quote!` ম্যাক্রো কিছু খুব দারুণ টেমপ্লেটিং মেকানিক্সও প্রদান করে: আমরা `#name` প্রবেশ করতে পারি এবং `quote!` এটিকে `name` ভেরিয়েবলের মান দিয়ে প্রতিস্থাপন করবে। এমনকি আপনি নিয়মিত ম্যাক্রোর মতো কিছু পুনরাবৃত্তিও করতে পারেন। একটি সম্পূর্ণ পরিচিতির জন্য [`quote` ক্রেটের ডক্স][quote-docs] দেখুন।
+The `quote!` macro also provides some very cool templating mechanics: we can
+enter `#name`, and `quote!` will replace it with the value in the variable
+`name`. You can even do some repetition similar to the way regular macros work.
+Check out [the `quote` crate’s docs][quote-docs] for a thorough introduction.
 
-আমরা চাই আমাদের প্রসিডিউরাল ম্যাক্রো ব্যবহারকারী টীকা দেওয়া প্রকারের জন্য আমাদের `HelloMacro` trait-এর একটি বাস্তবায়ন তৈরি করুক, যা আমরা `#name` ব্যবহার করে পেতে পারি। trait বাস্তবায়নে একটি ফাংশন `hello_macro` রয়েছে, যার বডিতে আমরা যে কার্যকারিতা প্রদান করতে চাই তা রয়েছে: `Hello, Macro! My name is` প্রিন্ট করা এবং তারপরে টীকাযুক্ত প্রকারের নাম।
+We want our procedural macro to generate an implementation of our `HelloMacro`
+trait for the type the user annotated, which we can get by using `#name`. The
+trait implementation has the one function `hello_macro`, whose body contains the
+functionality we want to provide: printing `Hello, Macro! My name is` and then
+the name of the annotated type.
 
-এখানে ব্যবহৃত `stringify!` ম্যাক্রো Rust-এ তৈরি করা হয়েছে। এটি একটি Rust এক্সপ্রেশন নেয়, যেমন `1 + 2`, এবং কম্পাইল করার সময় এক্সপ্রেশনটিকে একটি স্ট্রিং লিটারেল, যেমন `"1 + 2"` এ পরিণত করে। এটি `format!` বা `println!` থেকে আলাদা, যা এক্সপ্রেশন মূল্যায়ন করে এবং তারপর ফলাফলটিকে একটি `String`-এ পরিণত করে। এমন সম্ভাবনা রয়েছে যে `#name` ইনপুটটি আক্ষরিক অর্থে প্রিন্ট করার জন্য একটি এক্সপ্রেশন হতে পারে, তাই আমরা `stringify!` ব্যবহার করি। `stringify!` ব্যবহার করে কম্পাইল টাইমে `#name`-কে একটি স্ট্রিং লিটারেলে রূপান্তর করে একটি বরাদ্দও বাঁচানো হয়।
+The `stringify!` macro used here is built into Rust. It takes a Rust
+expression, such as `1 + 2`, and at compile time turns the expression into a
+string literal, such as `"1 + 2"`. This is different than `format!` or
+`println!`, macros which evaluate the expression and then turn the result into
+a `String`. There is a possibility that the `#name` input might be an
+expression to print literally, so we use `stringify!`. Using `stringify!` also
+saves an allocation by converting `#name` to a string literal at compile time.
 
-এই মুহুর্তে, `cargo build` `hello_macro` এবং `hello_macro_derive` উভয় ক্ষেত্রেই সফলভাবে সম্পন্ন হওয়া উচিত। আসুন প্রসিডিউরাল ম্যাক্রোটি বাস্তবে দেখার জন্য তালিকা 20-31 এর কোডের সাথে এই ক্রেটগুলি সংযুক্ত করি! `cargo new pancakes` ব্যবহার করে আপনার _projects_ ডিরেক্টরিতে একটি নতুন বাইনারি প্রকল্প তৈরি করুন। আমাদের `pancakes` ক্রেটের _Cargo.toml_-এ `hello_macro` এবং `hello_macro_derive` কে নির্ভরতা হিসাবে যোগ করতে হবে। আপনি যদি [crates.io](https://crates.io/)-এ `hello_macro` এবং `hello_macro_derive`-এর আপনার সংস্করণগুলি প্রকাশ করেন, তবে সেগুলি নিয়মিত নির্ভরতা হবে; যদি না হয়, আপনি সেগুলিকে `path` নির্ভরতা হিসাবে নির্দিষ্ট করতে পারেন:
+At this point, `cargo build` should complete successfully in both `hello_macro`
+and `hello_macro_derive`. Let’s hook up these crates to the code in Listing
+20-31 to see the procedural macro in action! Create a new binary project in
+your _projects_ directory using `cargo new pancakes`. We need to add
+`hello_macro` and `hello_macro_derive` as dependencies in the `pancakes`
+crate’s _Cargo.toml_. If you’re publishing your versions of `hello_macro` and
+`hello_macro_derive` to [crates.io](https://crates.io/), they would be regular
+dependencies; if not, you can specify them as `path` dependencies as follows:
 
 ```toml
 {{#include ../listings/ch20-advanced-features/no-listing-21-pancakes/pancakes/Cargo.toml:7:9}}
 ```
 
-তালিকা 20-31-এর কোডটি _src/main.rs_-এ রাখুন এবং `cargo run` চালান: এটি `Hello, Macro! My name is Pancakes!` প্রিন্ট করা উচিত। প্রসিডিউরাল ম্যাক্রো থেকে `HelloMacro` trait-এর বাস্তবায়ন `pancakes` ক্রেটকে এটি বাস্তবায়ন করার প্রয়োজন ছাড়াই অন্তর্ভুক্ত করা হয়েছিল; `#[derive(HelloMacro)]` trait বাস্তবায়ন যোগ করেছে।
+Put the code in Listing 20-31 into _src/main.rs_, and run `cargo run`: it
+should print `Hello, Macro! My name is Pancakes!` The implementation of the
+`HelloMacro` trait from the procedural macro was included without the
+`pancakes` crate needing to implement it; the `#[derive(HelloMacro)]` added the
+trait implementation.
 
-এর পরে, আসুন দেখি কীভাবে অন্যান্য ধরনের প্রসিডিউরাল ম্যাক্রো কাস্টম ডেরাইভ ম্যাক্রো থেকে আলাদা।
+Next, let’s explore how the other kinds of procedural macros differ from custom
+derive macros.
 
-### অ্যাট্রিবিউট-সদৃশ ম্যাক্রো
+### Attribute-Like macros
 
-অ্যাট্রিবিউট-সদৃশ ম্যাক্রো কাস্টম ডেরাইভ ম্যাক্রোর মতোই, তবে `derive` অ্যাট্রিবিউটের জন্য কোড তৈরি করার পরিবর্তে, তারা আপনাকে নতুন অ্যাট্রিবিউট তৈরি করতে দেয়। এগুলি আরও নমনীয়: `derive` শুধুমাত্র স্ট্রাক্ট এবং এনামের জন্য কাজ করে; অ্যাট্রিবিউটগুলি অন্যান্য আইটেম যেমন ফাংশনেও প্রয়োগ করা যেতে পারে। এখানে একটি অ্যাট্রিবিউট-সদৃশ ম্যাক্রো ব্যবহারের একটি উদাহরণ দেওয়া হল: ধরুন আপনার কাছে `route` নামের একটি অ্যাট্রিবিউট রয়েছে যা একটি ওয়েব অ্যাপ্লিকেশন ফ্রেমওয়ার্ক ব্যবহার করার সময় ফাংশনগুলিতে টীকা দেয়:
+Attribute-like macros are similar to custom derive macros, but instead of
+generating code for the `derive` attribute, they allow you to create new
+attributes. They’re also more flexible: `derive` only works for structs and
+enums; attributes can be applied to other items as well, such as functions.
+Here’s an example of using an attribute-like macro: say you have an attribute
+named `route` that annotates functions when using a web application framework:
 
 ```rust,ignore
 #[route(GET, "/")]
 fn index() {
 ```
 
-এই `#[route]` অ্যাট্রিবিউটটি ফ্রেমওয়ার্ক দ্বারা একটি প্রসিডিউরাল ম্যাক্রো হিসাবে সংজ্ঞায়িত করা হবে। ম্যাক্রো সংজ্ঞা ফাংশনের স্বাক্ষরটি দেখতে এইরকম হবে:
+This `#[route]` attribute would be defined by the framework as a procedural
+macro. The signature of the macro definition function would look like this:
 
 ```rust,ignore
 #[proc_macro_attribute]
 pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 ```
 
-এখানে, আমাদের `TokenStream` প্রকারের দুটি প্যারামিটার রয়েছে। প্রথমটি অ্যাট্রিবিউটের বিষয়বস্তুর জন্য: `GET, "/"` অংশ। দ্বিতীয়টি হল অ্যাট্রিবিউটটি যে আইটেমের সাথে সংযুক্ত করা হয়েছে তার বডি: এই ক্ষেত্রে, `fn index() {}` এবং ফাংশনের বাকি বডি।
+Here, we have two parameters of type `TokenStream`. The first is for the
+contents of the attribute: the `GET, "/"` part. The second is the body of the
+item the attribute is attached to: in this case, `fn index() {}` and the rest
+of the function’s body.
 
-এছাড়াও, অ্যাট্রিবিউট-সদৃশ ম্যাক্রো কাস্টম ডেরাইভ ম্যাক্রোর মতোই কাজ করে: আপনি `proc-macro` ক্রেট প্রকারের সাথে একটি ক্রেট তৈরি করেন এবং একটি ফাংশন প্রয়োগ করেন যা আপনার পছন্দের কোড জেনারেট করে!
+Other than that, attribute-like macros work the same way as custom derive
+macros: you create a crate with the `proc-macro` crate type and implement a
+function that generates the code you want!
 
-### ফাংশন-সদৃশ ম্যাক্রো
+### Function-Like macros
 
-ফাংশন-সদৃশ ম্যাক্রো এমন ম্যাক্রো সংজ্ঞায়িত করে যা ফাংশন কলের মতো দেখায়। `macro_rules!` ম্যাক্রোর মতোই, এগুলি ফাংশনের চেয়ে বেশি নমনীয়; উদাহরণস্বরূপ, তারা অজানা সংখ্যক আর্গুমেন্ট নিতে পারে। তবে, `macro_rules!` ম্যাক্রো শুধুমাত্র আমরা আগে আলোচনা করা [“সাধারণ মেটাপ্রোগ্রামিংয়ের জন্য `macro_rules!` সহ ডিক্লারেটিভ ম্যাক্রো”][decl] বিভাগে আলোচনা করা ম্যাচ-সদৃশ সিনট্যাক্স ব্যবহার করে সংজ্ঞায়িত করা যেতে পারে। ফাংশন-সদৃশ ম্যাক্রো একটি `TokenStream` প্যারামিটার নেয় এবং তাদের সংজ্ঞা অন্যান্য দুটি প্রকারের প্রসিডিউরাল ম্যাক্রোর মতো Rust কোড ব্যবহার করে সেই `TokenStream` ম্যানিপুলেট করে। ফাংশন-সদৃশ ম্যাক্রোর একটি উদাহরণ হল একটি `sql!` ম্যাক্রো যা এইরকম কল করা যেতে পারে:
+Function-like macros define macros that look like function calls. Similarly to
+`macro_rules!` macros, they’re more flexible than functions; for example, they
+can take an unknown number of arguments. However, `macro_rules!` macros can only
+be defined using the match-like syntax we discussed in [“Declarative Macros with
+`macro_rules!` for General Metaprogramming”][decl]<!-- ignore --> earlier.
+Function-like macros take a `TokenStream` parameter and their definition
+manipulates that `TokenStream` using Rust code as the other two types of
+procedural macros do. An example of a function-like macro is an `sql!` macro
+that might be called like so:
 
 ```rust,ignore
 let sql = sql!(SELECT * FROM posts WHERE id=1);
 ```
 
-এই ম্যাক্রোটি এর ভিতরের SQL স্টেটমেন্ট পার্স করবে এবং পরীক্ষা করবে যে এটি সিনট্যাক্টিকভাবে সঠিক কিনা, যা `macro_rules!` ম্যাক্রো করতে পারে তার চেয়ে অনেক বেশি জটিল প্রক্রিয়াকরণ। `sql!` ম্যাক্রোটি এইরকম সংজ্ঞায়িত করা হবে:
+This macro would parse the SQL statement inside it and check that it’s
+syntactically correct, which is much more complex processing than a
+`macro_rules!` macro can do. The `sql!` macro would be defined like this:
 
 ```rust,ignore
 #[proc_macro]
 pub fn sql(input: TokenStream) -> TokenStream {
 ```
 
-এই সংজ্ঞাটি কাস্টম ডেরাইভ ম্যাক্রোর স্বাক্ষরের মতোই: আমরা বন্ধনীর ভিতরের টোকেনগুলি পাই এবং আমরা যে কোড তৈরি করতে চেয়েছিলাম তা ফেরত দিই।
+This definition is similar to the custom derive macro’s signature: we receive
+the tokens that are inside the parentheses and return the code we wanted to
+generate.
 
-## সারসংক্ষেপ
+## Summary
 
-বাহ! এখন আপনার টুলবক্সে কিছু Rust বৈশিষ্ট্য রয়েছে যা আপনি সম্ভবত প্রায়শই ব্যবহার করবেন না, তবে আপনি জানতে পারবেন যে সেগুলি খুব নির্দিষ্ট পরিস্থিতিতে উপলব্ধ রয়েছে। আমরা বেশ কয়েকটি জটিল বিষয় প্রবর্তন করেছি যাতে আপনি যখন ত্রুটি বার্তার পরামর্শে বা অন্য লোকেদের কোডে সেগুলি সম্মুখীন হন, তখন আপনি এই ধারণাগুলি এবং সিনট্যাক্স চিনতে সক্ষম হন। সমাধানগুলির জন্য আপনাকে গাইড করার জন্য এই অধ্যায়টিকে একটি রেফারেন্স হিসাবে ব্যবহার করুন।
+Whew! Now you have some Rust features in your toolbox that you likely won’t use
+often, but you’ll know they’re available in very particular circumstances.
+We’ve introduced several complex topics so that when you encounter them in
+error message suggestions or in other peoples’ code, you’ll be able to
+recognize these concepts and syntax. Use this chapter as a reference to guide
+you to solutions.
 
-এর পরে, আমরা পুরো বইটিতে যা আলোচনা করেছি তা বাস্তবে প্রয়োগ করব এবং আরও একটি প্রকল্প করব!
+Next, we’ll put everything we’ve discussed throughout the book into practice
+and do one more project!
 
 [ref]: ../reference/macros-by-example.html
 [tlborm]: https://veykril.github.io/tlborm/

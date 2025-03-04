@@ -1,12 +1,21 @@
-## আমাদের সিঙ্গেল-থ্রেডেড সার্ভারকে মাল্টিথ্রেডেড সার্ভারে পরিণত করা
+## Turning Our Single-Threaded Server into a Multithreaded Server
 
-এই মুহূর্তে, সার্ভারটি প্রতিটি অনুরোধ একে একে প্রক্রিয়া করবে, যার মানে হল প্রথমটির প্রক্রিয়াকরণ শেষ না হওয়া পর্যন্ত এটি দ্বিতীয় সংযোগটি প্রক্রিয়া করবে না। যদি সার্ভারটি আরও বেশি সংখ্যক অনুরোধ পায়, তবে এই সিরিয়াল এক্সিকিউশন কম এবং কম অনুকূল হবে। যদি সার্ভার এমন একটি অনুরোধ পায় যা প্রক্রিয়া করতে দীর্ঘ সময় নেয়, তবে নতুন অনুরোধগুলি দ্রুত প্রক্রিয়া করা গেলেও, দীর্ঘ অনুরোধটি শেষ না হওয়া পর্যন্ত পরবর্তী অনুরোধগুলিকে অপেক্ষা করতে হবে। আমাদের এটি ঠিক করতে হবে, তবে প্রথমে, আমরা বাস্তবে সমস্যাটি দেখব।
+Right now, the server will process each request in turn, meaning it won’t
+process a second connection until the first is finished processing. If the
+server received more and more requests, this serial execution would be less and
+less optimal. If the server receives a request that takes a long time to
+process, subsequent requests will have to wait until the long request is
+finished, even if the new requests can be processed quickly. We’ll need to fix
+this, but first we’ll look at the problem in action.
 
-### বর্তমান সার্ভার বাস্তবায়নে একটি ধীর অনুরোধের সিমুলেশন
+### Simulating a Slow Request in the Current Server Implementation
 
-আমরা দেখব যে কীভাবে একটি ধীর-প্রক্রিয়াকরণের অনুরোধ আমাদের বর্তমান সার্ভার বাস্তবায়নে করা অন্যান্য অনুরোধগুলিকে প্রভাবিত করতে পারে। তালিকা 21-10 _/sleep_ এর একটি অনুরোধ পরিচালনা করার বাস্তবায়ন করে একটি সিমুলেটেড ধীর প্রতিক্রিয়ার সাথে যা প্রতিক্রিয়া জানানোর আগে সার্ভারকে 5 সেকেন্ডের জন্য ঘুমাতে বাধ্য করবে।
+We’ll look at how a slow-processing request can affect other requests made to
+our current server implementation. Listing 21-10 implements handling a request
+to _/sleep_ with a simulated slow response that will cause the server to sleep
+for five seconds before responding.
 
-<Listing number="21-10" file-name="src/main.rs" caption="5 সেকেন্ড ঘুমানোর মাধ্যমে একটি ধীর অনুরোধের সিমুলেশন">
+<Listing number="21-10" file-name="src/main.rs" caption="Simulating a slow request by sleeping for 5 seconds">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-10/src/main.rs:here}}
@@ -14,39 +23,91 @@
 
 </Listing>
 
-যেহেতু এখন আমাদের তিনটি ক্ষেত্র রয়েছে তাই আমরা `if` থেকে `match`-এ স্থানান্তরিত করেছি। স্ট্রিং লিটারাল মানগুলির বিপরীতে প্যাটার্নের সাথে মেলানোর জন্য আমাদের `request_line`-এর একটি স্লাইসের সাথে স্পষ্টভাবে মেলাতে হবে; `match` সমতা পদ্ধতির মতো স্বয়ংক্রিয় রেফারেন্সিং এবং ডিরেফারেন্সিং করে না।
+We switched from `if` to `match` now that we have three cases. We need to
+explicitly match on a slice of `request_line` to pattern match against the
+string literal values; `match` doesn’t do automatic referencing and
+dereferencing, like the equality method does.
 
-প্রথম বাহুটি তালিকা 21-9 থেকে `if` ব্লকের মতোই। দ্বিতীয় বাহুটি _/sleep_-এর একটি অনুরোধের সাথে মেলে। যখন সেই অনুরোধটি পাওয়া যায়, তখন সার্ভারটি সফল HTML পৃষ্ঠা রেন্ডার করার আগে 5 সেকেন্ডের জন্য ঘুমিয়ে থাকবে। তৃতীয় বাহুটি তালিকা 21-9 থেকে `else` ব্লকের মতোই।
+The first arm is the same as the `if` block from Listing 21-9. The second arm
+matches a request to _/sleep_. When that request is received, the server will
+sleep for five seconds before rendering the successful HTML page. The third arm
+is the same as the `else` block from Listing 21-9.
 
-আপনি দেখতে পাচ্ছেন আমাদের সার্ভারটি কতটা আদিম: আসল লাইব্রেরিগুলি আরও অনেক কম ভার্বোস উপায়ে একাধিক অনুরোধের স্বীকৃতি পরিচালনা করবে!
+You can see how primitive our server is: real libraries would handle the
+recognition of multiple requests in a much less verbose way!
 
-`cargo run` ব্যবহার করে সার্ভারটি শুরু করুন। তারপরে দুটি ব্রাউজার উইন্ডো খুলুন: একটি _http://127.0.0.1:7878/_ এর জন্য এবং অন্যটি _http://127.0.0.1:7878/sleep_ এর জন্য। আপনি যদি _/_ URI-এ কয়েকবার প্রবেশ করেন, আগের মতো, আপনি দেখতে পাবেন যে এটি দ্রুত প্রতিক্রিয়া জানায়। কিন্তু আপনি যদি _/sleep_ এ প্রবেশ করেন এবং তারপর _/_ লোড করেন, তাহলে আপনি দেখতে পাবেন যে _/_ লোড হওয়ার আগে `sleep`-এর পুরো 5 সেকেন্ড ঘুমানো পর্যন্ত অপেক্ষা করে।
+Start the server using `cargo run`. Then open two browser windows: one for
+_http://127.0.0.1:7878/_ and the other for _http://127.0.0.1:7878/sleep_. If
+you enter the _/_ URI a few times, as before, you’ll see it respond quickly.
+But if you enter _/sleep_ and then load _/_, you’ll see that _/_ waits until
+`sleep` has slept for its full five seconds before loading.
 
-আমরা একটি ধীর অনুরোধের পিছনে অনুরোধগুলির ব্যাক আপ করা এড়াতে বেশ কয়েকটি কৌশল ব্যবহার করতে পারি, যার মধ্যে অধ্যায় 17-এর মতো async ব্যবহার করাও রয়েছে; আমরা যেটি বাস্তবায়ন করব সেটি হল একটি থ্রেড পুল।
+There are multiple techniques we could use to avoid requests backing up behind
+a slow request, including using async as we did Chapter 17; the one we’ll
+implement is a thread pool.
 
-### থ্রেড পুলের সাহায্যে থ্রুপুট উন্নত করা
+### Improving Throughput with a Thread Pool
 
-একটি _থ্রেড পুল_ হল স্পন করা থ্রেডের একটি গ্রুপ যা একটি কাজ পরিচালনা করার জন্য অপেক্ষা করছে এবং প্রস্তুত। যখন প্রোগ্রামটি একটি নতুন কাজ পায়, তখন এটি পুলের একটি থ্রেডকে কাজটি অর্পণ করে এবং সেই থ্রেডটি কাজটি প্রক্রিয়া করবে। পুলের বাকি থ্রেডগুলি প্রথম থ্রেড প্রক্রিয়াকরণের সময় আসা অন্য যেকোনো কাজ পরিচালনা করার জন্য উপলব্ধ থাকে। যখন প্রথম থ্রেডটি তার কাজ প্রক্রিয়াকরণ শেষ করে, তখন এটি অলস থ্রেডের পুলে ফিরে আসে, একটি নতুন কাজ পরিচালনা করার জন্য প্রস্তুত। একটি থ্রেড পুল আপনাকে একই সাথে সংযোগগুলি প্রক্রিয়া করতে দেয়, আপনার সার্ভারের থ্রুপুট বৃদ্ধি করে।
+A _thread pool_ is a group of spawned threads that are waiting and ready to
+handle a task. When the program receives a new task, it assigns one of the
+threads in the pool to the task, and that thread will process the task. The
+remaining threads in the pool are available to handle any other tasks that come
+in while the first thread is processing. When the first thread is done
+processing its task, it’s returned to the pool of idle threads, ready to handle
+a new task. A thread pool allows you to process connections concurrently,
+increasing the throughput of your server.
 
-আমরা ডিনায়াল অফ সার্ভিস (DoS) আক্রমণ থেকে রক্ষা করার জন্য পুলের থ্রেডের সংখ্যা সীমিত করব; যদি আমাদের প্রোগ্রাম প্রতিটি অনুরোধের জন্য একটি নতুন থ্রেড তৈরি করত, তবে কেউ আমাদের সার্ভারে 10 মিলিয়ন অনুরোধ করে আমাদের সার্ভারের সমস্ত সংস্থান ব্যবহার করে এবং অনুরোধগুলির প্রক্রিয়াকরণ বন্ধ করে বিপর্যয় সৃষ্টি করতে পারত।
+We’ll limit the number of threads in the pool to a small number to protect us
+from DoS attacks; if we had our program create a new thread for each request as
+it came in, someone making 10 million requests to our server could create havoc
+by using up all our server’s resources and grinding the processing of requests
+to a halt.
 
-সুতরাং, সীমাহীন থ্রেড তৈরি করার পরিবর্তে, আমরা পুলে অপেক্ষারত একটি নির্দিষ্ট সংখ্যক থ্রেড রাখব। আসা অনুরোধগুলি প্রক্রিয়াকরণের জন্য পুলে পাঠানো হয়। পুল আগত অনুরোধের একটি সারি বজায় রাখবে। পুলের প্রতিটি থ্রেড এই সারি থেকে একটি অনুরোধ পপ অফ করবে, অনুরোধটি পরিচালনা করবে এবং তারপরে সারিতে অন্য অনুরোধের জন্য জিজ্ঞাসা করবে। এই নকশা দিয়ে, আমরা একই সাথে `N` সংখ্যক অনুরোধ প্রক্রিয়া করতে পারি, যেখানে `N` হল থ্রেডের সংখ্যা। যদি প্রতিটি থ্রেড একটি দীর্ঘ-চলমান অনুরোধের প্রতিক্রিয়া জানায়, তবে পরবর্তী অনুরোধগুলি এখনও সারিতে ব্যাক আপ হতে পারে, তবে আমরা সেই পর্যায়ে পৌঁছানোর আগে আমরা দীর্ঘ-চলমান অনুরোধগুলির সংখ্যা বাড়িয়েছি।
+Rather than spawning unlimited threads, then, we’ll have a fixed number of
+threads waiting in the pool. Requests that come in are sent to the pool for
+processing. The pool will maintain a queue of incoming requests. Each of the
+threads in the pool will pop off a request from this queue, handle the request,
+and then ask the queue for another request. With this design, we can process up
+to *`N`* requests concurrently, where *`N`* is the number of threads. If each
+thread is responding to a long-running request, subsequent requests can still
+back up in the queue, but we’ve increased the number of long-running requests
+we can handle before reaching that point.
 
-এই কৌশলটি ওয়েব সার্ভারের থ্রুপুট উন্নত করার অনেক উপায়ের মধ্যে একটি। অন্যান্য বিকল্প যা আপনি অন্বেষণ করতে পারেন তা হল _ফর্ক/জয়েন মডেল_, _সিঙ্গেল-থ্রেডেড async I/O মডেল_, বা _মাল্টি-থ্রেডেড async I/O মডেল_। আপনি যদি এই বিষয়ে আগ্রহী হন, তবে আপনি অন্যান্য সমাধান সম্পর্কে আরও পড়তে পারেন এবং সেগুলি বাস্তবায়ন করার চেষ্টা করতে পারেন; Rust-এর মতো একটি নিম্ন-স্তরের ভাষার সাথে, এই সমস্ত বিকল্প সম্ভব।
+This technique is just one of many ways to improve the throughput of a web
+server. Other options you might explore are the fork/join model, the
+single-threaded async I/O model, and the multi-threaded async I/O model. If
+you’re interested in this topic, you can read more about other solutions and
+try to implement them; with a low-level language like Rust, all of these
+options are possible.
 
-আমরা একটি থ্রেড পুল বাস্তবায়ন করা শুরু করার আগে, আসুন পুলটি ব্যবহার করা কেমন হওয়া উচিত তা নিয়ে কথা বলি। আপনি যখন কোড ডিজাইন করার চেষ্টা করছেন, তখন ক্লায়েন্ট ইন্টারফেসটি প্রথমে লেখা আপনার ডিজাইনকে গাইড করতে সাহায্য করতে পারে। কোডের API লিখুন যাতে আপনি এটিকে কল করতে চান এমনভাবে গঠন করা হয়; তারপরে কার্যকারিতা বাস্তবায়ন করার পরিবর্তে সেই কাঠামোর মধ্যে কার্যকারিতা বাস্তবায়ন করুন এবং তারপরে পাবলিক API ডিজাইন করুন।
+Before we begin implementing a thread pool, let’s talk about what using the
+pool should look like. When you’re trying to design code, writing the client
+interface first can help guide your design. Write the API of the code so it’s
+structured in the way you want to call it; then implement the functionality
+within that structure rather than implementing the functionality and then
+designing the public API.
 
-অধ্যায় 12-এর প্রকল্পে আমরা যেভাবে টেস্ট-চালিত উন্নয়ন ব্যবহার করেছি, তেমনি আমরা এখানে কম্পাইলার-চালিত উন্নয়ন ব্যবহার করব। আমরা যে ফাংশনগুলি চাই তা কল করে কোড লিখব এবং তারপরে কোডটি কাজ করার জন্য আমাদের পরবর্তীতে কী পরিবর্তন করা উচিত তা নির্ধারণ করতে আমরা কম্পাইলার থেকে ত্রুটিগুলি দেখব। তবে, আমরা তা করার আগে, আমরা যে কৌশলটি শুরু করার স্থান হিসাবে ব্যবহার করতে যাচ্ছি না তা অন্বেষণ করব।
+Similar to how we used test-driven development in the project in Chapter 12,
+we’ll use compiler-driven development here. We’ll write the code that calls the
+functions we want, and then we’ll look at errors from the compiler to determine
+what we should change next to get the code to work. Before we do that, however,
+we’ll explore the technique we’re not going to use as a starting point.
 
-<!-- পুরাতন শিরোনাম। সরিয়ে ফেলবেন না বা লিঙ্ক ভেঙ্গে যেতে পারে। -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="code-structure-if-we-could-spawn-a-thread-for-each-request"></a>
 
-#### প্রতিটি অনুরোধের জন্য একটি থ্রেড স্পন করলে কোড স্ট্রাকচার
+#### Spawning a Thread for Each Request
 
-প্রথমত, আসুন অন্বেষণ করি যে আমাদের কোডটি কেমন দেখতে পারে যদি এটি প্রতিটি সংযোগের জন্য একটি নতুন থ্রেড তৈরি করত। পূর্বে উল্লিখিত হিসাবে, সম্ভাব্য সীমাহীন সংখ্যক থ্রেড স্পন করার সমস্যাগুলির কারণে এটি আমাদের চূড়ান্ত পরিকল্পনা নয়, তবে এটি প্রথমে একটি কার্যকরী মাল্টিথ্রেডেড সার্ভার পাওয়ার জন্য একটি সূচনা বিন্দু। তারপরে আমরা একটি উন্নতি হিসাবে থ্রেড পুল যোগ করব এবং দুটি সমাধানের বৈপরীত্য সহজ হবে। তালিকা 21-11 `for` লুপের মধ্যে প্রতিটি স্ট্রিম পরিচালনা করার জন্য একটি নতুন থ্রেড স্পন করতে `main`-এ পরিবর্তনগুলি দেখায়।
+First, let’s explore how our code might look if it did create a new thread for
+every connection. As mentioned earlier, this isn’t our final plan due to the
+problems with potentially spawning an unlimited number of threads, but it is a
+starting point to get a working multithreaded server first. Then we’ll add the
+thread pool as an improvement, and contrasting the two solutions will be
+easier. Listing 21-11 shows the changes to make to `main` to spawn a new thread
+to handle each stream within the `for` loop.
 
-<Listing number="21-11" file-name="src/main.rs" caption="প্রতিটি স্ট্রিমের জন্য একটি নতুন থ্রেড স্পন করা">
+<Listing number="21-11" file-name="src/main.rs" caption="Spawning a new thread for each stream">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-11/src/main.rs:here}}
@@ -54,19 +115,29 @@
 
 </Listing>
 
-অধ্যায় 16-এ আপনি যেমন শিখেছেন, `thread::spawn` একটি নতুন থ্রেড তৈরি করবে এবং তারপরে নতুন থ্রেডে ক্লোজারের কোডটি চালাবে। আপনি যদি এই কোডটি চালান এবং আপনার ব্রাউজারে _/sleep_ লোড করেন, তারপর আরও দুটি ব্রাউজার ট্যাবে _/_ লোড করেন, তবে আপনি সত্যিই দেখতে পাবেন যে _/_ এর অনুরোধগুলিকে _/sleep_ শেষ হওয়ার জন্য অপেক্ষা করতে হয় না। তবে, আমরা যেমন উল্লেখ করেছি, এটি শেষ পর্যন্ত সিস্টেমকে অভিভূত করবে কারণ আপনি কোনও সীমা ছাড়াই নতুন থ্রেড তৈরি করতে থাকবেন।
+As you learned in Chapter 16, `thread::spawn` will create a new thread and then
+run the code in the closure in the new thread. If you run this code and load
+_/sleep_ in your browser, then _/_ in two more browser tabs, you’ll indeed see
+that the requests to _/_ don’t have to wait for _/sleep_ to finish. However, as
+we mentioned, this will eventually overwhelm the system because you’d be making
+new threads without any limit.
 
-আপনি অধ্যায় 17 থেকে আরও মনে করতে পারেন যে এটিই সেই পরিস্থিতি যেখানে async এবং await সত্যিই উজ্জ্বল! আমরা যখন থ্রেড পুল তৈরি করি তখন এটি মনে রাখুন এবং ভাবুন async এর সাথে জিনিসগুলি কীভাবে আলাদা বা একই দেখাবে।
+You may also recall from Chapter 17 that this is exactly the kind of situation
+where async and await really shine! Keep that in mind as we build the thread
+pool and think about how things would look different or the same with async.
 
-<!-- পুরাতন শিরোনাম। সরিয়ে ফেলবেন না বা লিঙ্ক ভেঙ্গে যেতে পারে। -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="creating-a-similar-interface-for-a-finite-number-of-threads"></a>
 
-#### একটি নির্দিষ্ট সংখ্যক থ্রেডের জন্য একটি অনুরূপ ইন্টারফেস তৈরি করা
+#### Creating a Finite Number of Threads
 
-আমরা চাই আমাদের থ্রেড পুলটি একটি অনুরূপ, পরিচিত উপায়ে কাজ করুক যাতে থ্রেড থেকে থ্রেড পুলে স্যুইচ করার জন্য আমাদের API ব্যবহার করে এমন কোডে বড় পরিবর্তন করার প্রয়োজন না হয়। তালিকা 21-12 একটি `ThreadPool` struct-এর জন্য অনুমানমূলক ইন্টারফেস দেখায় যা আমরা `thread::spawn`-এর পরিবর্তে ব্যবহার করতে চাই।
+We want our thread pool to work in a similar, familiar way so that switching
+from threads to a thread pool doesn’t require large changes to the code that
+uses our API. Listing 21-12 shows the hypothetical interface for a `ThreadPool`
+struct we want to use instead of `thread::spawn`.
 
-<Listing number="21-12" file-name="src/main.rs" caption="আমাদের আদর্শ `ThreadPool` ইন্টারফেস">
+<Listing number="21-12" file-name="src/main.rs" caption="Our ideal `ThreadPool` interface">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-12/src/main.rs:here}}
@@ -74,23 +145,37 @@
 
 </Listing>
 
-আমরা একটি কনফিগারযোগ্য সংখ্যক থ্রেড সহ একটি নতুন থ্রেড পুল তৈরি করতে `ThreadPool::new` ব্যবহার করি, এই ক্ষেত্রে চারটি। তারপরে, `for` লুপে, `pool.execute`-এর `thread::spawn`-এর মতোই একটি ইন্টারফেস রয়েছে যেখানে এটি প্রতিটি স্ট্রিমের জন্য পুলটি চালানোর জন্য একটি ক্লোজার নেয়। আমাদের `pool.execute` বাস্তবায়ন করতে হবে যাতে এটি ক্লোজার নেয় এবং চালানোর জন্য পুলের একটি থ্রেডে দেয়। এই কোডটি এখনও কম্পাইল হবে না, তবে আমরা চেষ্টা করব যাতে কম্পাইলার আমাদের এটি কীভাবে ঠিক করতে হয় তা নির্দেশ করতে পারে।
+We use `ThreadPool::new` to create a new thread pool with a configurable number
+of threads, in this case four. Then, in the `for` loop, `pool.execute` has a
+similar interface as `thread::spawn` in that it takes a closure the pool should
+run for each stream. We need to implement `pool.execute` so it takes the
+closure and gives it to a thread in the pool to run. This code won’t yet
+compile, but we’ll try so the compiler can guide us in how to fix it.
 
-<!-- পুরাতন শিরোনাম। সরিয়ে ফেলবেন না বা লিঙ্ক ভেঙ্গে যেতে পারে। -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="building-the-threadpool-struct-using-compiler-driven-development"></a>
 
-#### কম্পাইলার চালিত উন্নয়ন ব্যবহার করে `ThreadPool` তৈরি করা
+#### Building `ThreadPool` Using Compiler Driven Development
 
-_src/main.rs_-এ তালিকা 21-12-এর পরিবর্তনগুলি করুন এবং তারপরে আসুন আমরা আমাদের উন্নয়নে গাইড করার জন্য `cargo check` থেকে কম্পাইলার ত্রুটিগুলি ব্যবহার করি। এখানে আমরা প্রথম ত্রুটি পাই:
+Make the changes in Listing 21-12 to _src/main.rs_, and then let’s use the
+compiler errors from `cargo check` to drive our development. Here is the first
+error we get:
 
 ```console
 {{#include ../listings/ch21-web-server/listing-21-12/output.txt}}
 ```
 
-চমৎকার! এই ত্রুটিটি আমাদের বলছে যে আমাদের একটি `ThreadPool` প্রকার বা মডিউল প্রয়োজন, তাই আমরা এখন একটি তৈরি করব। আমাদের `ThreadPool` বাস্তবায়ন আমাদের ওয়েব সার্ভার কী ধরনের কাজ করছে তার থেকে স্বাধীন হবে। সুতরাং, আসুন আমাদের `ThreadPool` বাস্তবায়ন ধারণ করার জন্য `hello` ক্রেটটিকে একটি বাইনারি ক্রেট থেকে একটি লাইব্রেরি ক্রেটে পরিবর্তন করি। আমরা একটি লাইব্রেরি ক্রেটে পরিবর্তন করার পরে, আমরা ওয়েব অনুরোধগুলি পরিবেশন করার জন্য নয়, থ্রেড পুল ব্যবহার করে আমরা যে কোনও কাজ করতে এই পৃথক থ্রেড পুল লাইব্রেরিটিও ব্যবহার করতে পারি।
+Great! This error tells us we need a `ThreadPool` type or module, so we’ll
+build one now. Our `ThreadPool` implementation will be independent of the kind
+of work our web server is doing. So let’s switch the `hello` crate from a
+binary crate to a library crate to hold our `ThreadPool` implementation. After
+we change to a library crate, we could also use the separate thread pool
+library for any work we want to do using a thread pool, not just for serving
+web requests.
 
-একটি _src/lib.rs_ তৈরি করুন যাতে নিম্নলিখিত রয়েছে, যা এখন পর্যন্ত `ThreadPool` struct-এর সবচেয়ে সহজ সংজ্ঞা যা আমাদের থাকতে পারে:
+Create a _src/lib.rs_ file that contains the following, which is the simplest
+definition of a `ThreadPool` struct that we can have for now:
 
 <Listing file-name="src/lib.rs">
 
@@ -100,7 +185,8 @@ _src/main.rs_-এ তালিকা 21-12-এর পরিবর্তনগু
 
 </Listing>
 
-তারপরে লাইব্রেরি ক্রেট থেকে `ThreadPool`-কে স্কোপে আনতে _main.rs_ ফাইলটি সম্পাদনা করুন _src/main.rs_-এর উপরে নিম্নলিখিত কোডটি যোগ করে:
+Then edit _main.rs_ file to bring `ThreadPool` into scope from the library
+crate by adding the following code to the top of _src/main.rs_:
 
 <Listing file-name="src/main.rs">
 
@@ -110,13 +196,18 @@ _src/main.rs_-এ তালিকা 21-12-এর পরিবর্তনগু
 
 </Listing>
 
-এই কোডটি এখনও কাজ করবে না, তবে আসুন আমরা পরবর্তী ত্রুটিটি পেতে এটি আবার পরীক্ষা করি যা আমাদের সমাধান করতে হবে:
+This code still won’t work, but let’s check it again to get the next error that
+we need to address:
 
 ```console
 {{#include ../listings/ch21-web-server/no-listing-01-define-threadpool-struct/output.txt}}
 ```
 
-এই ত্রুটিটি নির্দেশ করে যে আমাদের `ThreadPool`-এর জন্য `new` নামের একটি সংশ্লিষ্ট ফাংশন তৈরি করতে হবে। আমরা আরও জানি যে `new`-এর একটি প্যারামিটার থাকতে হবে যা আর্গুমেন্ট হিসাবে `4` গ্রহণ করতে পারে এবং একটি `ThreadPool` উদাহরণ ফেরত দেওয়া উচিত। আসুন সবচেয়ে সহজ `new` ফাংশনটি বাস্তবায়ন করি যার এই বৈশিষ্ট্যগুলি থাকবে:
+This error indicates that next we need to create an associated function named
+`new` for `ThreadPool`. We also know that `new` needs to have one parameter
+that can accept `4` as an argument and should return a `ThreadPool` instance.
+Let’s implement the simplest `new` function that will have those
+characteristics:
 
 <Listing file-name="src/lib.rs">
 
@@ -126,17 +217,33 @@ _src/main.rs_-এ তালিকা 21-12-এর পরিবর্তনগু
 
 </Listing>
 
-আমরা `size` প্যারামিটারের প্রকার হিসাবে `usize` বেছে নিয়েছি, কারণ আমরা জানি যে থ্রেডের একটি নেতিবাচক সংখ্যা কোনও অর্থবোধক নয়। আমরা আরও জানি যে আমরা থ্রেডের একটি সংগ্রহের উপাদানগুলির সংখ্যা হিসাবে এই 4 ব্যবহার করব, যার জন্য `usize` প্রকারটি ব্যবহার করা হয়, যেমনটি অধ্যায় 3-এর ["পূর্ণসংখ্যা প্রকার"][integer-types] বিভাগে আলোচনা করা হয়েছে।
+We chose `usize` as the type of the `size` parameter because we know that a
+negative number of threads doesn’t make any sense. We also know we’ll use this
+`4` as the number of elements in a collection of threads, which is what the
+`usize` type is for, as discussed in [“Integer Types”][integer-types]<!-- ignore
+--> in Chapter 3.
 
-আসুন কোডটি আবার পরীক্ষা করি:
+Let’s check the code again:
 
 ```console
 {{#include ../listings/ch21-web-server/no-listing-02-impl-threadpool-new/output.txt}}
 ```
 
-এখন ত্রুটিটি ঘটে কারণ আমাদের `ThreadPool`-এ `execute` পদ্ধতি নেই। ["একটি নির্দিষ্ট সংখ্যক থ্রেড তৈরি করা"](#creating-a-finite-number-of-threads) বিভাগ থেকে মনে করুন যে আমরা সিদ্ধান্ত নিয়েছি আমাদের থ্রেড পুলের একটি ইন্টারফেস `thread::spawn`-এর মতো হওয়া উচিত। এছাড়াও, আমরা `execute` ফাংশনটি এমনভাবে বাস্তবায়ন করব যাতে এটি যে ক্লোজার দেওয়া হয়েছে তা নেয় এবং চালানোর জন্য পুলের একটি অলস থ্রেডে দেয়।
+Now the error occurs because we don’t have an `execute` method on `ThreadPool`.
+Recall from [“Creating a Finite Number of
+Threads”](#creating-a-finite-number-of-threads)<!-- ignore --> that we decided
+our thread pool should have an interface similar to `thread::spawn`. In
+addition, we’ll implement the `execute` function so it takes the closure it’s
+given and gives it to an idle thread in the pool to run.
 
-আমরা `ThreadPool`-এ `execute` পদ্ধতিটি সংজ্ঞায়িত করব একটি প্যারামিটার হিসাবে একটি ক্লোজার নিতে। অধ্যায় 13-এ ["ক্লোজার এবং `Fn` trait থেকে ক্যাপচার করা মান সরানো"][fn-traits] বিভাগ থেকে মনে করুন যে আমরা তিনটি ভিন্ন trait: `Fn`, `FnMut` এবং `FnOnce` সহ প্যারামিটার হিসাবে ক্লোজার নিতে পারি। আমাদের এখানে কোন ধরনের ক্লোজার ব্যবহার করতে হবে তা নির্ধারণ করতে হবে। আমরা জানি যে আমরা শেষ পর্যন্ত স্ট্যান্ডার্ড লাইব্রেরি `thread::spawn` বাস্তবায়নের অনুরূপ কিছু করব, তাই আমরা দেখতে পারি `thread::spawn`-এর স্বাক্ষরে তার প্যারামিটারে কী সীমা রয়েছে। ডকুমেন্টেশন আমাদের নিম্নলিখিতগুলি দেখায়:
+We’ll define the `execute` method on `ThreadPool` to take a closure as a
+parameter. Recall from [“Moving Captured Values Out of the Closure and the `Fn`
+Traits”][fn-traits]<!-- ignore --> in Chapter 13 that we can take closures as
+parameters with three different traits: `Fn`, `FnMut`, and `FnOnce`. We need to
+decide which kind of closure to use here. We know we’ll end up doing something
+similar to the standard library `thread::spawn` implementation, so we can look
+at what bounds the signature of `thread::spawn` has on its parameter. The
+documentation shows us the following:
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -146,9 +253,19 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
         T: Send + 'static,
 ```
 
-এখানে `F` টাইপ প্যারামিটারটি হল যা নিয়ে আমরা উদ্বিগ্ন; `T` টাইপ প্যারামিটারটি রিটার্ন মানের সাথে সম্পর্কিত, এবং আমরা তা নিয়ে উদ্বিগ্ন নই। আমরা দেখতে পাচ্ছি যে `spawn` `F`-এর trait বাউন্ড হিসাবে `FnOnce` ব্যবহার করে। সম্ভবত এটাই আমরাও চাই, কারণ আমরা শেষ পর্যন্ত `execute`-এ পাওয়া আর্গুমেন্টটিকে `spawn`-এ পাস করব। আমরা আরও আত্মবিশ্বাসী হতে পারি যে `FnOnce` হল সেই trait যা আমরা ব্যবহার করতে চাই, কারণ একটি অনুরোধ চালানোর জন্য থ্রেডটি শুধুমাত্র সেই অনুরোধের ক্লোজারটি একবারই চালাবে, যা `FnOnce`-এর `Once`-এর সাথে মিলে যায়।
+The `F` type parameter is the one we’re concerned with here; the `T` type
+parameter is related to the return value, and we’re not concerned with that. We
+can see that `spawn` uses `FnOnce` as the trait bound on `F`. This is probably
+what we want as well, because we’ll eventually pass the argument we get in
+`execute` to `spawn`. We can be further confident that `FnOnce` is the trait we
+want to use because the thread for running a request will only execute that
+request’s closure one time, which matches the `Once` in `FnOnce`.
 
-`F` টাইপ প্যারামিটারের trait বাউন্ড `Send` এবং লাইফটাইম বাউন্ড `'static`ও রয়েছে, যা আমাদের পরিস্থিতিতে উপযোগী: আমাদের একটি থ্রেড থেকে অন্য থ্রেডে ক্লোজার স্থানান্তর করার জন্য `Send` এবং `'static` প্রয়োজন, কারণ আমরা জানি না থ্রেডটি কার্যকর করতে কতক্ষণ সময় নেবে। আসুন `ThreadPool`-এ একটি `execute` পদ্ধতি তৈরি করি যা এই বাউন্ড সহ `F` প্রকারের একটি জেনেরিক প্যারামিটার নেবে:
+The `F` type parameter also has the trait bound `Send` and the lifetime bound
+`'static`, which are useful in our situation: we need `Send` to transfer the
+closure from one thread to another and `'static` because we don’t know how long
+the thread will take to execute. Let’s create an `execute` method on
+`ThreadPool` that will take a generic parameter of type `F` with these bounds:
 
 <Listing file-name="src/lib.rs">
 
@@ -158,25 +275,45 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 </Listing>
 
-আমরা এখনও `FnOnce`-এর পরে `()` ব্যবহার করি কারণ এই `FnOnce` এমন একটি ক্লোজারের প্রতিনিধিত্ব করে যা কোনো প্যারামিটার নেয় না এবং ইউনিট টাইপ `()` ফেরত দেয়। ফাংশন সংজ্ঞার মতোই, রিটার্ন টাইপ স্বাক্ষর থেকে বাদ দেওয়া যেতে পারে, তবে আমাদের কোনো প্যারামিটার না থাকলেও, আমাদের এখনও বন্ধনীগুলির প্রয়োজন।
+We still use the `()` after `FnOnce` because this `FnOnce` represents a closure
+that takes no parameters and returns the unit type `()`. Just like function
+definitions, the return type can be omitted from the signature, but even if we
+have no parameters, we still need the parentheses.
 
-আবার, এটি হল `execute` পদ্ধতির সবচেয়ে সহজ বাস্তবায়ন: এটি কিছুই করে না, তবে আমরা শুধুমাত্র আমাদের কোড কম্পাইল করার চেষ্টা করছি। আসুন এটি আবার পরীক্ষা করি:
+Again, this is the simplest implementation of the `execute` method: it does
+nothing, but we’re only trying to make our code compile. Let’s check it again:
 
 ```console
 {{#include ../listings/ch21-web-server/no-listing-03-define-execute/output.txt}}
 ```
 
-এটি কম্পাইল হয়েছে! তবে মনে রাখবেন, আপনি যদি `cargo run` চেষ্টা করেন এবং ব্রাউজারে একটি অনুরোধ করেন, তবে আপনি ব্রাউজারে সেই ত্রুটিগুলি দেখতে পাবেন যা আমরা অধ্যায়ের শুরুতে দেখেছি। আমাদের লাইব্রেরি এখনও `execute`-এ পাস করা ক্লোজারটিকে কল করছে না!
+It compiles! But note that if you try `cargo run` and make a request in the
+browser, you’ll see the errors in the browser that we saw at the beginning of
+the chapter. Our library isn’t actually calling the closure passed to `execute`
+yet!
 
-> দ্রষ্টব্য: হ্যাস্কেল এবং Rust-এর মতো কঠোর কম্পাইলারযুক্ত ভাষাগুলি সম্পর্কে আপনি একটি প্রবাদ শুনতে পারেন, "যদি কোড কম্পাইল হয়, তবে এটি কাজ করে।" কিন্তু এই প্রবাদটি সর্বজনীনভাবে সত্য নয়। আমাদের প্রকল্পটি কম্পাইল হয়, তবে এটি একেবারে কিছুই করে না! আমরা যদি একটি বাস্তব, সম্পূর্ণ প্রকল্প তৈরি করতাম, তবে এটি একটি ভাল সময় হত ইউনিট পরীক্ষা লিখতে শুরু করার জন্য যে কোডটি কম্পাইল হয় _এবং_ আমাদের পছন্দের আচরণ করে কিনা তা পরীক্ষা করার জন্য।
+> Note: A saying you might hear about languages with strict compilers, such as
+> Haskell and Rust, is “if the code compiles, it works.” But this saying is not
+> universally true. Our project compiles, but it does absolutely nothing! If we
+> were building a real, complete project, this would be a good time to start
+> writing unit tests to check that the code compiles _and_ has the behavior we
+> want.
 
-বিবেচনা করুন: যদি আমরা একটি ক্লোজারের পরিবর্তে একটি _ভবিষ্যৎ_ কার্যকর করতে যাচ্ছি তবে এখানে কী ভিন্ন হত?
+Consider: what would be different here if we were going to execute a _future_
+instead of a closure?
 
-#### `new`-এ থ্রেডের সংখ্যা যাচাই করা
+#### Validating the Number of Threads in `new`
 
-আমরা `new` এবং `execute`-এর প্যারামিটারগুলির সাথে কিছুই করছি না। আসুন আমরা এই ফাংশনগুলির বডিগুলিকে আমাদের পছন্দের আচরণ দিয়ে বাস্তবায়ন করি। শুরু করার জন্য, আসুন `new` নিয়ে চিন্তা করি। এর আগে আমরা `size` প্যারামিটারের জন্য একটি আনসাইনড প্রকার বেছে নিয়েছিলাম, কারণ থ্রেডের একটি নেতিবাচক সংখ্যা কোনও অর্থবোধক নয়। তবে, শূন্য থ্রেডের একটি পুলও কোনও অর্থবোধক নয়, তবুও শূন্য একটি নিখুঁত বৈধ `usize`। আমরা একটি `ThreadPool` উদাহরণ ফেরত দেওয়ার আগে `size` শূন্যের চেয়ে বড় কিনা তা পরীক্ষা করার জন্য কোড যোগ করব এবং তালিকা 21-13-এ দেখানো হিসাবে `assert!` ম্যাক্রো ব্যবহার করে যদি এটি শূন্য পায় তবে প্রোগ্রামটি প্যানিক করবে।
+We aren’t doing anything with the parameters to `new` and `execute`. Let’s
+implement the bodies of these functions with the behavior we want. To start,
+let’s think about `new`. Earlier we chose an unsigned type for the `size`
+parameter because a pool with a negative number of threads makes no sense.
+However, a pool with zero threads also makes no sense, yet zero is a perfectly
+valid `usize`. We’ll add code to check that `size` is greater than zero before
+we return a `ThreadPool` instance and have the program panic if it receives a
+zero by using the `assert!` macro, as shown in Listing 21-13.
 
-<Listing number="21-13" file-name="src/lib.rs" caption="`ThreadPool::new` বাস্তবায়ন করা যাতে `size` শূন্য হলে প্যানিক করে">
+<Listing number="21-13" file-name="src/lib.rs" caption="Implementing `ThreadPool::new` to panic if `size` is zero">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-13/src/lib.rs:here}}
@@ -184,17 +321,29 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 </Listing>
 
-আমরা doc কমেন্ট সহ আমাদের `ThreadPool`-এর জন্য কিছু ডকুমেন্টেশনও যোগ করেছি। মনে রাখবেন যে আমরা ভাল ডকুমেন্টেশন অনুশীলন অনুসরণ করেছি অধ্যায় 14-এ আলোচিত হিসাবে, আমাদের ফাংশনটি কোন পরিস্থিতিতে প্যানিক করতে পারে তা উল্লেখ করে একটি বিভাগ যোগ করে। `cargo doc --open` চালানোর চেষ্টা করুন এবং `ThreadPool` struct-এ ক্লিক করুন `new`-এর জন্য জেনারেট করা ডক্স কেমন দেখায় তা দেখতে!
+We’ve also added some documentation for our `ThreadPool` with doc comments.
+Note that we followed good documentation practices by adding a section that
+calls out the situations in which our function can panic, as discussed in
+Chapter 14. Try running `cargo doc --open` and clicking the `ThreadPool` struct
+to see what the generated docs for `new` look like!
 
-এখানে আমরা যেমন করেছি `assert!` ম্যাক্রো যোগ করার পরিবর্তে, আমরা `new`-কে `build`-এ পরিবর্তন করতে পারি এবং `Result` ফেরত দিতে পারি যেমনটি আমরা তালিকা 12-9-এ I/O প্রকল্পে `Config::build`-এর সাথে করেছিলাম। তবে আমরা এই ক্ষেত্রে সিদ্ধান্ত নিয়েছি যে কোনো থ্রেড ছাড়াই একটি থ্রেড পুল তৈরি করার চেষ্টা করা একটি অপূরণীয় ত্রুটি হওয়া উচিত। আপনি যদি উচ্চাকাঙ্ক্ষী বোধ করেন, তবে `new` ফাংশনের সাথে তুলনা করার জন্য নিম্নলিখিত স্বাক্ষর সহ `build` নামের একটি ফাংশন লেখার চেষ্টা করুন:
+Instead of adding the `assert!` macro as we’ve done here, we could change `new`
+into `build` and return a `Result` like we did with `Config::build` in the I/O
+project in Listing 12-9. But we’ve decided in this case that trying to create a
+thread pool without any threads should be an unrecoverable error. If you’re
+feeling ambitious, try to write a function named `build` with the following
+signature to compare with the `new` function:
 
 ```rust,ignore
 pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError> {
 ```
 
-#### থ্রেড সংরক্ষণের জন্য স্থান তৈরি করা
+#### Creating Space to Store the Threads
 
-এখন যেহেতু আমাদের কাছে পুলে সঞ্চয় করার জন্য থ্রেডের একটি বৈধ সংখ্যা আছে কিনা তা জানার একটি উপায় রয়েছে, আমরা সেই থ্রেডগুলি তৈরি করতে পারি এবং struct ফেরত দেওয়ার আগে `ThreadPool` struct-এ সংরক্ষণ করতে পারি। তবে আমরা কীভাবে একটি থ্রেড "সংরক্ষণ" করব? আসুন `thread::spawn` স্বাক্ষরের দিকে আবার তাকাই:
+Now that we have a way to know we have a valid number of threads to store in
+the pool, we can create those threads and store them in the `ThreadPool` struct
+before returning the struct. But how do we “store” a thread? Let’s take another
+look at the `thread::spawn` signature:
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -204,11 +353,18 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
         T: Send + 'static,
 ```
 
-`spawn` ফাংশনটি একটি `JoinHandle<T>` ফেরত দেয়, যেখানে `T` হল সেই প্রকার যা ক্লোজারটি ফেরত দেয়। আসুন `JoinHandle` ব্যবহার করার চেষ্টা করি এবং দেখি কী হয়। আমাদের ক্ষেত্রে, থ্রেড পুলে আমরা যে ক্লোজারগুলি পাস করছি সেগুলি সংযোগ পরিচালনা করবে এবং কিছুই ফেরত দেবে না, তাই `T` ইউনিট টাইপ `()` হবে।
+The `spawn` function returns a `JoinHandle<T>`, where `T` is the type that the
+closure returns. Let’s try using `JoinHandle` too and see what happens. In our
+case, the closures we’re passing to the thread pool will handle the connection
+and not return anything, so `T` will be the unit type `()`.
 
-তালিকা 21-14-এর কোডটি কম্পাইল হবে তবে এখনও কোনো থ্রেড তৈরি করে না। আমরা `ThreadPool`-এর সংজ্ঞা পরিবর্তন করেছি `thread::JoinHandle<()>` উদাহরণগুলির একটি ভেক্টর ধারণ করতে, `size`-এর ধারণক্ষমতা দিয়ে ভেক্টরটিকে আরম্ভ করেছি, একটি `for` লুপ সেট আপ করেছি যা থ্রেড তৈরি করার জন্য কিছু কোড চালাবে এবং সেগুলি ধারণকারী একটি `ThreadPool` উদাহরণ ফেরত দিয়েছি।
+The code in Listing 21-14 will compile but doesn’t create any threads yet.
+We’ve changed the definition of `ThreadPool` to hold a vector of
+`thread::JoinHandle<()>` instances, initialized the vector with a capacity of
+`size`, set up a `for` loop that will run some code to create the threads, and
+returned a `ThreadPool` instance containing them.
 
-<Listing number="21-14" file-name="src/lib.rs" caption="থ্রেড ধারণ করার জন্য `ThreadPool`-এর জন্য একটি ভেক্টর তৈরি করা">
+<Listing number="21-14" file-name="src/lib.rs" caption="Creating a vector for `ThreadPool` to hold the threads">
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-14/src/lib.rs:here}}
@@ -216,32 +372,65 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 </Listing>
 
-আমরা লাইব্রেরি ক্রেটে `std::thread`-কে স্কোপে নিয়ে এসেছি, কারণ আমরা `ThreadPool`-এর ভেক্টরের আইটেমগুলির প্রকার হিসাবে `thread::JoinHandle` ব্যবহার করছি।
+We’ve brought `std::thread` into scope in the library crate because we’re
+using `thread::JoinHandle` as the type of the items in the vector in
+`ThreadPool`.
 
-একবার একটি বৈধ আকার পাওয়া গেলে, আমাদের `ThreadPool` একটি নতুন ভেক্টর তৈরি করে যা `size` আইটেম ধারণ করতে পারে। `with_capacity` ফাংশনটি `Vec::new`-এর মতোই কাজ করে কিন্তু একটি গুরুত্বপূর্ণ পার্থক্য সহ: এটি ভেক্টরে আগে থেকেই স্থান বরাদ্দ করে। যেহেতু আমরা জানি যে আমাদের ভেক্টরে `size` উপাদান সংরক্ষণ করতে হবে, তাই `Vec::new` ব্যবহার করার চেয়ে আগে থেকেই এই বরাদ্দ করা একটু বেশি কার্যকর, যা উপাদান ঢোকানোর সাথে সাথে নিজেকে পুনরায় আকার দেয়।
+Once a valid size is received, our `ThreadPool` creates a new vector that can
+hold `size` items. The `with_capacity` function performs the same task as
+`Vec::new` but with an important difference: it pre-allocates space in the
+vector. Because we know we need to store `size` elements in the vector, doing
+this allocation up front is slightly more efficient than using `Vec::new`,
+which resizes itself as elements are inserted.
 
-আপনি যখন আবার `cargo check` চালান, তখন এটি সফল হওয়া উচিত।
+When you run `cargo check` again, it should succeed.
 
-#### `ThreadPool` থেকে একটি থ্রেডে কোড পাঠানোর জন্য দায়ী একটি `Worker` struct
+#### A `Worker` Struct Responsible for Sending Code from the `ThreadPool` to a Thread
 
-আমরা তালিকা 21-14-এর `for` লুপে থ্রেড তৈরি করার বিষয়ে একটি মন্তব্য রেখেছি। এখানে, আমরা দেখব কিভাবে আমরা আসলে থ্রেড তৈরি করি। স্ট্যান্ডার্ড লাইব্রেরি থ্রেড তৈরি করার উপায় হিসাবে `thread::spawn` প্রদান করে, এবং `thread::spawn` থ্রেডটি তৈরি হওয়ার সাথে সাথেই থ্রেডটি যে কোডটি চালাবে তা পাওয়ার আশা করে। তবে, আমাদের ক্ষেত্রে, আমরা থ্রেডগুলি তৈরি করতে চাই এবং সেগুলি পরে আমরা যে কোডটি পাঠাব তার জন্য _অপেক্ষা_ করতে চাই। থ্রেডের স্ট্যান্ডার্ড লাইব্রেরির বাস্তবায়নে তা করার কোনো উপায় নেই; আমাদের এটি ম্যানুয়ালি বাস্তবায়ন করতে হবে।
+We left a comment in the `for` loop in Listing 21-14 regarding the creation of
+threads. Here, we’ll look at how we actually create threads. The standard
+library provides `thread::spawn` as a way to create threads, and
+`thread::spawn` expects to get some code the thread should run as soon as the
+thread is created. However, in our case, we want to create the threads and have
+them _wait_ for code that we’ll send later. The standard library’s
+implementation of threads doesn’t include any way to do that; we have to
+implement it manually.
 
-আমরা এই নতুন আচরণটি পরিচালনা করবে এমন `ThreadPool` এবং থ্রেডগুলির মধ্যে একটি নতুন ডেটা স্ট্রাকচার চালু করে এই আচরণটি বাস্তবায়ন করব। আমরা এই ডেটা স্ট্রাকচারটিকে _Worker_ বলব, যা পুলিং বাস্তবায়নে একটি সাধারণ শব্দ। Worker সেই কোডটি তুলে নেয় যা চালানোর প্রয়োজন এবং Worker-এর থ্রেডে কোড চালায়। রেস্তোরাঁয় রান্নাঘরে কাজ করা লোকেদের কথা ভাবুন: কর্মীরা গ্রাহকদের কাছ থেকে অর্ডার না আসা পর্যন্ত অপেক্ষা করে এবং তারপরে তারা সেই অর্ডারগুলি নেওয়া এবং সেগুলি পূরণ করার জন্য দায়ী।
+We’ll implement this behavior by introducing a new data structure between the
+`ThreadPool` and the threads that will manage this new behavior. We’ll call
+this data structure _Worker_, which is a common term in pooling
+implementations. The `Worker` picks up code that needs to be run and runs the
+code in the Worker’s thread.
 
-থ্রেড পুলে `JoinHandle<()>` উদাহরণগুলির একটি ভেক্টর সংরক্ষণ করার পরিবর্তে, আমরা `Worker` struct-এর উদাহরণগুলি সংরক্ষণ করব। প্রতিটি `Worker` একটি একক `JoinHandle<()>` উদাহরণ সংরক্ষণ করবে। তারপরে আমরা `Worker`-এ একটি পদ্ধতি বাস্তবায়ন করব যা চালানোর জন্য কোডের একটি ক্লোজার নেবে এবং সেটি কার্যকর করার জন্য ইতিমধ্যেই চলমান থ্রেডে পাঠাবে। আমরা প্রতিটি কর্মীকে একটি `id` ও দেব যাতে লগিং বা ডিবাগিং করার সময় আমরা পুলের বিভিন্ন কর্মীদের মধ্যে পার্থক্য করতে পারি।
+Think of people working in the kitchen at a restaurant: the workers wait until
+orders come in from customers, and then they’re responsible for taking those
+orders and fulfilling them.
 
-এখানে নতুন প্রক্রিয়াটি দেওয়া হল যা `ThreadPool` তৈরি করার সময় ঘটবে। আমরা এই উপায়ে `Worker` সেট আপ করার পরে থ্রেডে ক্লোজার পাঠানোর কোডটি বাস্তবায়ন করব:
+Instead of storing a vector of `JoinHandle<()>` instances in the thread pool,
+we’ll store instances of the `Worker` struct. Each `Worker` will store a single
+`JoinHandle<()>` instance. Then we’ll implement a method on `Worker` that will
+take a closure of code to run and send it to the already running thread for
+execution. We’ll also give each `Worker` an `id` so we can distinguish between
+the different instances of `Worker` in the pool when logging or debugging.
 
-1. একটি `Worker` struct সংজ্ঞায়িত করুন যা একটি `id` এবং একটি `JoinHandle<()>` ধারণ করে।
-2. `ThreadPool`-কে `Worker` উদাহরণের একটি ভেক্টর ধারণ করতে পরিবর্তন করুন।
-3. একটি `Worker::new` ফাংশন সংজ্ঞায়িত করুন যা একটি `id` নম্বর নেয় এবং একটি `Worker` উদাহরণ ফেরত দেয় যা `id` এবং একটি খালি ক্লোজার দিয়ে স্পন করা একটি থ্রেড ধারণ করে।
-4. `ThreadPool::new`-এ, একটি `id` তৈরি করতে `for` লুপ কাউন্টার ব্যবহার করুন, সেই `id` সহ একটি নতুন `Worker` তৈরি করুন এবং ভেক্টরে কর্মীটিকে সংরক্ষণ করুন।
+Here is the new process that will happen when we create a `ThreadPool`. We’ll
+implement the code that sends the closure to the thread after we have `Worker`
+set up in this way:
 
-আপনি যদি একটি চ্যালেঞ্জের জন্য প্রস্তুত হন, তবে তালিকা 21-15-এর কোডটি দেখার আগে নিজের মতো করে এই পরিবর্তনগুলি বাস্তবায়ন করার চেষ্টা করুন।
+1. Define a `Worker` struct that holds an `id` and a `JoinHandle<()>`.
+2. Change `ThreadPool` to hold a vector of `Worker` instances.
+3. Define a `Worker::new` function that takes an `id` number and returns a
+   `Worker` instance that holds the `id` and a thread spawned with an empty
+   closure.
+4. In `ThreadPool::new`, use the `for` loop counter to generate an `id`, create
+   a new `Worker` with that `id`, and store the worker in the vector.
 
-প্রস্তুত? এখানে তালিকা 21-15 পূর্ববর্তী পরিবর্তনগুলি করার একটি উপায় সহ রয়েছে।
+If you’re up for a challenge, try implementing these changes on your own before
+looking at the code in Listing 21-15.
 
-<Listing number="21-15" file-name="src/lib.rs" caption="সরাসরি থ্রেড ধারণ করার পরিবর্তে `Worker` উদাহরণ ধারণ করার জন্য `ThreadPool` সংশোধন করা">
+Ready? Here is Listing 21-15 with one way to make the preceding modifications.
+
+<Listing number="21-15" file-name="src/lib.rs" caption="Modifying `ThreadPool` to hold `Worker` instances instead of holding threads directly">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-15/src/lib.rs:here}}
@@ -249,31 +438,59 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 </Listing>
 
-আমরা `ThreadPool`-এর ফিল্ডের নাম `threads` থেকে `workers`-এ পরিবর্তন করেছি, কারণ এটি এখন `JoinHandle<()>` উদাহরণের পরিবর্তে `Worker` উদাহরণ ধারণ করছে। আমরা `Worker::new`-এর একটি আর্গুমেন্ট হিসাবে `for` লুপের কাউন্টার ব্যবহার করি এবং আমরা `workers` নামের ভেক্টরে প্রতিটি নতুন `Worker` সংরক্ষণ করি।
+We’ve changed the name of the field on `ThreadPool` from `threads` to `workers`
+because it’s now holding `Worker` instances instead of `JoinHandle<()>`
+instances. We use the counter in the `for` loop as an argument to
+`Worker::new`, and we store each new `Worker` in the vector named `workers`.
 
-বাহ্যিক কোড (যেমন _src/main.rs_-এ আমাদের সার্ভার)-এর `ThreadPool`-এর মধ্যে একটি `Worker` struct ব্যবহার করার বিষয়ে বাস্তবায়নের বিশদ বিবরণ জানার প্রয়োজন নেই, তাই আমরা `Worker` struct এবং এর `new` ফাংশনকে ব্যক্তিগত করি। `Worker::new` ফাংশনটি আমরা এটিকে যে `id` দিই তা ব্যবহার করে এবং একটি নতুন থ্রেড স্পন করে তৈরি করা একটি `JoinHandle<()>` উদাহরণ সংরক্ষণ করে, একটি খালি ক্লোজার ব্যবহার করে।
+External code (like our server in _src/main.rs_) doesn’t need to know the
+implementation details regarding using a `Worker` struct within `ThreadPool`,
+so we make the `Worker` struct and its `new` function private. The
+`Worker::new` function uses the `id` we give it and stores a `JoinHandle<()>`
+instance that is created by spawning a new thread using an empty closure.
 
-> দ্রষ্টব্য: যদি অপারেটিং সিস্টেম যথেষ্ট সিস্টেম রিসোর্স না থাকার কারণে একটি থ্রেড তৈরি করতে না পারে, তবে `thread::spawn` প্যানিক করবে। এর ফলে আমাদের পুরো সার্ভার প্যানিক করবে, যদিও কিছু থ্রেড তৈরি সফল হতে পারে। সরলতার জন্য, এই আচরণটি ঠিক আছে, তবে একটি প্রোডাকশন থ্রেড পুল বাস্তবায়নে, আপনি সম্ভবত [`std::thread::Builder`][builder] এবং এর [`spawn`][builder-spawn] পদ্ধতি ব্যবহার করতে চাইবেন যা `Result` ফেরত দেয়।
+> Note: If the operating system can’t create a thread because there aren’t
+> enough system resources, `thread::spawn` will panic. That will cause our
+> whole server to panic, even though the creation of some threads might
+> succeed. For simplicity’s sake, this behavior is fine, but in a production
+> thread pool implementation, you’d likely want to use
+> [`std::thread::Builder`][builder]<!-- ignore --> and its
+> [`spawn`][builder-spawn]<!-- ignore --> method that returns `Result` instead.
 
-এই কোডটি কম্পাইল হবে এবং `ThreadPool::new`-এর আর্গুমেন্ট হিসাবে আমরা নির্দিষ্ট করা `Worker` উদাহরণের সংখ্যা সংরক্ষণ করবে। তবে আমরা _এখনও_ `execute`-এ আমরা যে ক্লোজারটি পাই তা প্রক্রিয়া করছি না। আসুন দেখি এর পরে কীভাবে এটি করতে হয়।
+This code will compile and will store the number of `Worker` instances we
+specified as an argument to `ThreadPool::new`. But we’re _still_ not processing
+the closure that we get in `execute`. Let’s look at how to do that next.
 
-#### চ্যানেলের মাধ্যমে থ্রেডে অনুরোধ পাঠানো
+#### Sending Requests to Threads via Channels
 
-আমরা যে পরবর্তী সমস্যাটি সমাধান করব তা হল `thread::spawn`-এ দেওয়া ক্লোজারগুলি একেবারে কিছুই করে না। বর্তমানে, আমরা `execute` পদ্ধতিতে কার্যকর করতে চাই এমন ক্লোজার পাই। তবে `ThreadPool` তৈরির সময় আমরা প্রতিটি `Worker` তৈরি করার সময় `thread::spawn`-কে চালানোর জন্য একটি ক্লোজার দিতে হবে।
+The next problem we’ll tackle is that the closures given to `thread::spawn` do
+absolutely nothing. Currently, we get the closure we want to execute in the
+`execute` method. But we need to give `thread::spawn` a closure to run when we
+create each `Worker` during the creation of the `ThreadPool`.
 
-আমরা চাই যে আমরা যে `Worker` structগুলি তৈরি করেছি সেগুলি `ThreadPool`-এ থাকা একটি সারি থেকে চালানোর জন্য কোডটি আনুক এবং সেই কোডটিকে চালানোর জন্য তার থ্রেডে পাঠাক।
+We want the `Worker` structs that we just created to fetch the code to run from
+a queue held in the `ThreadPool` and send that code to its thread to run.
 
-আমরা অধ্যায় 16-এ যে চ্যানেলগুলি সম্পর্কে শিখেছি—দুটি থ্রেডের মধ্যে যোগাযোগের একটি সহজ উপায়—এই ব্যবহারের ক্ষেত্রে এটি উপযুক্ত হবে। আমরা কাজগুলির সারি হিসাবে কাজ করার জন্য একটি চ্যানেল ব্যবহার করব এবং `execute` `ThreadPool` থেকে `Worker` উদাহরণগুলিতে একটি কাজ পাঠাবে, যা সেই কাজটি তার থ্রেডে পাঠাবে। এখানে পরিকল্পনাটি দেওয়া হল:
+The channels we learned about in Chapter 16—a simple way to communicate between
+two threads—would be perfect for this use case. We’ll use a channel to function
+as the queue of jobs, and `execute` will send a job from the `ThreadPool` to
+the `Worker` instances, which will send the job to its thread. Here is the plan:
 
-1. `ThreadPool` একটি চ্যানেল তৈরি করবে এবং প্রেরককে ধরে রাখবে।
-2. প্রতিটি `Worker` রিসিভারটিকে ধরে রাখবে।
-3. আমরা একটি নতুন `Job` struct তৈরি করব যা চ্যানেলে পাঠাতে চাই এমন ক্লোজারগুলিকে ধরে রাখবে।
-4. `execute` পদ্ধতিটি প্রেরকের মাধ্যমে যে কাজটি কার্যকর করতে চায় তা পাঠাবে।
-5. তার থ্রেডে, `Worker` তার রিসিভারের উপর লুপ করবে এবং এটি যে কোনো কাজের ক্লোজারগুলি পাবে তা কার্যকর করবে।
+1. The `ThreadPool` will create a channel and hold on to the sender.
+2. Each `Worker` will hold on to the receiver.
+3. We’ll create a new `Job` struct that will hold the closures we want to send
+   down the channel.
+4. The `execute` method will send the job it wants to execute through the
+   sender.
+5. In its thread, the `Worker` will loop over its receiver and execute the
+   closures of any jobs it receives.
 
-আসুন `ThreadPool::new`-এ একটি চ্যানেল তৈরি করে এবং তালিকা 21-16-এ দেখানো হিসাবে `ThreadPool` উদাহরণে প্রেরককে ধরে রেখে শুরু করি। `Job` struct বর্তমানে কিছুই ধরে রাখে না তবে এটি চ্যানেলে আমরা যে আইটেমটি পাঠাচ্ছি তার প্রকার হবে।
+Let’s start by creating a channel in `ThreadPool::new` and holding the sender
+in the `ThreadPool` instance, as shown in Listing 21-16. The `Job` struct
+doesn’t hold anything for now but will be the type of item we’re sending down
+the channel.
 
-<Listing number="21-16" file-name="src/lib.rs" caption="`Job` উদাহরণের প্রেরণকারীকে সঞ্চয় করার জন্য `ThreadPool` পরিবর্তন করা">
+<Listing number="21-16" file-name="src/lib.rs" caption="Modifying `ThreadPool` to store the sender of a channel that transmits `Job` instances">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-16/src/lib.rs:here}}
@@ -281,11 +498,15 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 </Listing>
 
-`ThreadPool::new`-এ, আমরা আমাদের নতুন চ্যানেল তৈরি করি এবং পুলে প্রেরককে ধরে রাখি। এটি সফলভাবে কম্পাইল হবে।
+In `ThreadPool::new`, we create our new channel and have the pool hold the
+sender. This will successfully compile.
 
-আসুন থ্রেড পুল চ্যানেল তৈরি করার সাথে সাথে চ্যানেলের একটি রিসিভার প্রতিটি কর্মীর মধ্যে পাস করার চেষ্টা করি। আমরা জানি যে আমরা কর্মীদের স্পন করা থ্রেডে রিসিভার ব্যবহার করতে চাই, তাই আমরা ক্লোজারে `receiver` প্যারামিটারটিকে উল্লেখ করব। তালিকা 21-17-এর কোডটি এখনও পুরোপুরি কম্পাইল হবে না।
+Let’s try passing a receiver of the channel into each `Worker` as the thread
+pool creates the channel. We know we want to use the receiver in the thread that
+the `Worker` instances spawn, so we’ll reference the `receiver` parameter in the
+closure. The code in Listing 21-17 won’t quite compile yet.
 
-<Listing number="21-17" file-name="src/lib.rs" caption="কর্মীদের কাছে রিসিভার পাস করা">
+<Listing number="21-17" file-name="src/lib.rs" caption="Passing the receiver to each `Worker`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-17/src/lib.rs:here}}
@@ -293,21 +514,34 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 </Listing>
 
-আমরা কিছু ছোট এবং সরল পরিবর্তন করেছি: আমরা `Worker::new`-এ রিসিভার পাস করি এবং তারপরে আমরা এটিকে ক্লোজারের ভিতরে ব্যবহার করি।
+We’ve made some small and straightforward changes: we pass the receiver into
+`Worker::new`, and then we use it inside the closure.
 
-যখন আমরা এই কোডটি পরীক্ষা করার চেষ্টা করি, তখন আমরা এই ত্রুটিটি পাই:
+When we try to check this code, we get this error:
 
 ```console
 {{#include ../listings/ch21-web-server/listing-21-17/output.txt}}
 ```
 
-কোডটি একাধিক `Worker` উদাহরণে `receiver` পাস করার চেষ্টা করছে। এটি কাজ করবে না, যেমনটি আপনি অধ্যায় 16 থেকে মনে করতে পারেন: Rust যে চ্যানেল বাস্তবায়ন প্রদান করে তা হল একাধিক _প্রডিউসার_, একক _কনজিউমার_। এর মানে হল আমরা এই কোডটি ঠিক করার জন্য চ্যানেলের কনজিউমিং প্রান্তটিকে ক্লোন করতে পারি না। আমরা একাধিক কনজিউমারের কাছে একাধিকবার একটি বার্তা পাঠাতেও চাই না; আমরা একাধিক কর্মী সহ বার্তার একটি তালিকা চাই যাতে প্রতিটি বার্তা একবার প্রক্রিয়া করা হয়।
+The code is trying to pass `receiver` to multiple `Worker` instances. This
+won’t work, as you’ll recall from Chapter 16: the channel implementation that
+Rust provides is multiple _producer_, single _consumer_. This means we can’t
+just clone the consuming end of the channel to fix this code. We also don’t
+want to send a message multiple times to multiple consumers; we want one list
+of messages with multiple `Worker` instances such that each message gets
+processed once.
 
-এছাড়াও, চ্যানেল সারি থেকে একটি কাজ নেওয়া `receiver`-কে পরিবর্তন করা জড়িত, তাই থ্রেডগুলির `receiver`-কে নিরাপদে ভাগ করে নেওয়ার এবং পরিবর্তন করার একটি উপায় প্রয়োজন; অন্যথায়, আমরা রেস কন্ডিশন পেতে পারি (যেমন অধ্যায় 16-এ আলোচনা করা হয়েছে)।
+Additionally, taking a job off the channel queue involves mutating the
+`receiver`, so the threads need a safe way to share and modify `receiver`;
+otherwise, we might get race conditions (as covered in Chapter 16).
 
-অধ্যায় 16-এ আলোচিত থ্রেড-সুরক্ষিত স্মার্ট পয়েন্টারগুলি মনে করুন: একাধিক থ্রেডে মালিকানা ভাগ করতে এবং থ্রেডগুলিকে মান পরিবর্তন করার অনুমতি দেওয়ার জন্য, আমাদের `Arc<Mutex<T>>` ব্যবহার করতে হবে। `Arc` প্রকারটি একাধিক কর্মীকে রিসিভারের মালিকানা দিতে দেবে এবং `Mutex` নিশ্চিত করবে যে শুধুমাত্র একজন কর্মী একই সময়ে রিসিভার থেকে একটি কাজ পায়। তালিকা 21-18 আমাদের যে পরিবর্তনগুলি করতে হবে তা দেখায়।
+Recall the thread-safe smart pointers discussed in Chapter 16: to share
+ownership across multiple threads and allow the threads to mutate the value, we
+need to use `Arc<Mutex<T>>`. The `Arc` type will let multiple `Worker` instances
+own the receiver, and `Mutex` will ensure that only one `Worker` gets a job from
+the receiver at a time. Listing 21-18 shows the changes we need to make.
 
-<Listing number="21-18" file-name="src/lib.rs" caption="`Arc` এবং `Mutex` ব্যবহার করে কর্মীদের মধ্যে রিসিভার শেয়ার করা">
+<Listing number="21-18" file-name="src/lib.rs" caption="Sharing the receiver among the `Worker` instances using `Arc` and `Mutex`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-18/src/lib.rs:here}}
@@ -315,15 +549,22 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 </Listing>
 
-`ThreadPool::new`-এ, আমরা রিসিভারটিকে একটি `Arc` এবং একটি `Mutex`-এ রাখি। প্রতিটি নতুন কর্মীর জন্য, আমরা রেফারেন্স গণনা বাড়াতে `Arc`-এর ক্লোন করি যাতে কর্মীরা রিসিভারের মালিকানা ভাগ করতে পারে।
+In `ThreadPool::new`, we put the receiver in an `Arc` and a `Mutex`. For each
+new `Worker`, we clone the `Arc` to bump the reference count so the `Worker`
+instances can share ownership of the receiver.
 
-এই পরিবর্তনগুলির সাথে, কোডটি কম্পাইল হয়! আমরা সেখানে পৌঁছে যাচ্ছি!
+With these changes, the code compiles! We’re getting there!
 
-#### `execute` পদ্ধতি বাস্তবায়ন করা
+#### Implementing the `execute` Method
 
-আসুন অবশেষে `ThreadPool`-এ `execute` পদ্ধতি বাস্তবায়ন করি। আমরা `Job`-কে একটি struct থেকে একটি trait অবজেক্টের জন্য একটি টাইপ অ্যালিয়াসে পরিবর্তন করব যা `execute` গ্রহণ করা ক্লোজারের ধরন ধারণ করে। অধ্যায় 20-এর ["টাইপ অ্যালিয়াস সহ টাইপ প্রতিশব্দ তৈরি করা"][creating-type-synonyms-with-type-aliases] বিভাগে আলোচনা করা হয়েছে, টাইপ অ্যালিয়াসগুলি আমাদের ব্যবহারের সুবিধার জন্য দীর্ঘ প্রকারগুলিকে ছোট করতে দেয়। তালিকা 21-19 দেখুন।
+Let’s finally implement the `execute` method on `ThreadPool`. We’ll also change
+`Job` from a struct to a type alias for a trait object that holds the type of
+closure that `execute` receives. As discussed in [“Creating Type Synonyms with
+Type Aliases”][creating-type-synonyms-with-type-aliases]<!-- ignore --> in
+Chapter 20, type aliases allow us to make long types shorter for ease of use.
+Look at Listing 21-19.
 
-<Listing number="21-19" file-name="src/lib.rs" caption="প্রতিটি ক্লোজার ধারণ করে এমন একটি `Box`-এর জন্য `Job` টাইপ অ্যালিয়াস তৈরি করা এবং তারপরে চ্যানেলের মাধ্যমে কাজটি পাঠানো">
+<Listing number="21-19" file-name="src/lib.rs" caption="Creating a `Job` type alias for a `Box` that holds each closure and then sending the job down the channel">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-19/src/lib.rs:here}}
@@ -331,11 +572,22 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 </Listing>
 
-`execute`-এ আমরা যে ক্লোজার পাই তা ব্যবহার করে একটি নতুন `Job` উদাহরণ তৈরি করার পরে, আমরা সেই কাজটি চ্যানেলের প্রেরক প্রান্তে পাঠাই। আমরা পাঠানোর ব্যর্থতার ক্ষেত্রে `send`-এ `unwrap` কল করছি। উদাহরণস্বরূপ, যদি আমরা আমাদের সমস্ত থ্রেড চালানো বন্ধ করে দিই তবে এটি ঘটতে পারে, যার মানে হল রিসিভিং প্রান্তটি নতুন বার্তা গ্রহণ করা বন্ধ করে দিয়েছে। এই মুহূর্তে, আমরা আমাদের থ্রেডগুলিকে কার্যকর করা থেকে থামাতে পারি না: পুলটি যতক্ষণ বিদ্যমান থাকে ততক্ষণ আমাদের থ্রেডগুলি কার্যকর হতে থাকে। আমরা `unwrap` ব্যবহার করার কারণ হল আমরা জানি ব্যর্থতার ঘটনা ঘটবে না, তবে কম্পাইলার তা জানে না।
+After creating a new `Job` instance using the closure we get in `execute`, we
+send that job down the sending end of the channel. We’re calling `unwrap` on
+`send` for the case that sending fails. This might happen if, for example, we
+stop all our threads from executing, meaning the receiving end has stopped
+receiving new messages. At the moment, we can’t stop our threads from
+executing: our threads continue executing as long as the pool exists. The
+reason we use `unwrap` is that we know the failure case won’t happen, but the
+compiler doesn’t know that.
 
-তবে আমরা এখনও পুরোপুরি শেষ করিনি! কর্মীতে, `thread::spawn`-এ পাস করা আমাদের ক্লোজারটি এখনও চ্যানেলের রিসিভিং প্রান্তটিকে _রেফারেন্স_ করে। পরিবর্তে, আমাদের ক্লোজারটিকে চিরকাল লুপ করতে হবে, চ্যানেলের রিসিভিং প্রান্তের কাছে একটি কাজের জন্য জিজ্ঞাসা করতে হবে এবং যখন এটি একটি পায় তখন কাজটি চালাতে হবে। আসুন `Worker::new`-এ তালিকা 21-20-এ দেখানো পরিবর্তন করি।
+But we’re not quite done yet! In the `Worker`, our closure being passed to
+`thread::spawn` still only _references_ the receiving end of the channel.
+Instead, we need the closure to loop forever, asking the receiving end of the
+channel for a job and running the job when it gets one. Let’s make the change
+shown in Listing 21-20 to `Worker::new`.
 
-<Listing number="21-20" file-name="src/lib.rs" caption="কর্মীর থ্রেডে কাজগুলি গ্রহণ এবং কার্যকর করা">
+<Listing number="21-20" file-name="src/lib.rs" caption="Receiving and executing the jobs in the `Worker` instance’s thread">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-20/src/lib.rs:here}}
@@ -343,13 +595,25 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 </Listing>
 
-এখানে, আমরা প্রথমে মিউটেক্স অর্জন করতে `receiver`-এ `lock` কল করি এবং তারপরে আমরা যেকোনো ত্রুটিতে প্যানিক করতে `unwrap` কল করি। যদি মিউটেক্স একটি _পয়জন্ড_ অবস্থায় থাকে তবে একটি লক অর্জন ব্যর্থ হতে পারে, যা ঘটতে পারে যদি অন্য কোনো থ্রেড লক প্রকাশ করার পরিবর্তে লক ধরে রাখার সময় প্যানিক করে। এই পরিস্থিতিতে, এই থ্রেডটিকে প্যানিক করার জন্য `unwrap` কল করা সঠিক কাজ। এই `unwrap`-কে একটি ত্রুটি বার্তার সাথে `expect`-এ পরিবর্তন করতে দ্বিধা বোধ করবেন না যা আপনার কাছে অর্থবহ।
+Here, we first call `lock` on the `receiver` to acquire the mutex, and then we
+call `unwrap` to panic on any errors. Acquiring a lock might fail if the mutex
+is in a _poisoned_ state, which can happen if some other thread panicked while
+holding the lock rather than releasing the lock. In this situation, calling
+`unwrap` to have this thread panic is the correct action to take. Feel free to
+change this `unwrap` to an `expect` with an error message that is meaningful to
+you.
 
-যদি আমরা মিউটেক্সের উপর লক পাই, তাহলে আমরা চ্যানেল থেকে একটি `Job` গ্রহণ করতে `recv` কল করি। একটি চূড়ান্ত `unwrap` এখানেও যেকোনো ত্রুটি অতিক্রম করে, যা ঘটতে পারে যদি প্রেরককে ধরে রাখা থ্রেডটি বন্ধ হয়ে যায়, যেমনটি `send` পদ্ধতি রিসিভার বন্ধ হয়ে গেলে `Err` ফেরত দেয়।
+If we get the lock on the mutex, we call `recv` to receive a `Job` from the
+channel. A final `unwrap` moves past any errors here as well, which might occur
+if the thread holding the sender has shut down, similar to how the `send`
+method returns `Err` if the receiver shuts down.
 
-`recv`-এর কল ব্লক করে, তাই যদি এখনও কোনো কাজ না থাকে, তাহলে বর্তমান থ্রেডটি কাজ উপলব্ধ না হওয়া পর্যন্ত অপেক্ষা করবে। `Mutex<T>` নিশ্চিত করে যে একবারে শুধুমাত্র একটি `Worker` থ্রেড একটি কাজের অনুরোধ করার চেষ্টা করছে।
+The call to `recv` blocks, so if there is no job yet, the current thread will
+wait until a job becomes available. The `Mutex<T>` ensures that only one
+`Worker` thread at a time is trying to request a job.
 
-আমাদের থ্রেড পুল এখন একটি কার্যকরী অবস্থায় আছে! এটিকে `cargo run` করুন এবং কিছু অনুরোধ করুন:
+Our thread pool is now in a working state! Give it a `cargo run` and make some
+requests:
 
 <!-- manual-regeneration
 cd listings/ch21-web-server/listing-21-20
@@ -396,15 +660,26 @@ Worker 0 got a job; executing.
 Worker 2 got a job; executing.
 ```
 
-সাফল্য! আমাদের এখন একটি থ্রেড পুল আছে যা অ্যাসিঙ্ক্রোনাসভাবে সংযোগগুলি চালায়। কখনও চারটি বেশি থ্রেড তৈরি হয় না, তাই সার্ভার প্রচুর অনুরোধ পেলে আমাদের সিস্টেম ওভারলোড হবে না। আমরা যদি _/sleep_-এ একটি অনুরোধ করি, তবে সার্ভার অন্য থ্রেড চালিয়ে অন্যান্য অনুরোধগুলি পরিবেশন করতে সক্ষম হবে।
+Success! We now have a thread pool that executes connections asynchronously.
+There are never more than four threads created, so our system won’t get
+overloaded if the server receives a lot of requests. If we make a request to
+_/sleep_, the server will be able to serve other requests by having another
+thread run them.
 
-> দ্রষ্টব্য: আপনি যদি একই সময়ে একাধিক ব্রাউজার উইন্ডোতে _/sleep_ খোলেন, তবে সেগুলি 5 সেকেন্ডের ব্যবধানে একবারে লোড হতে পারে। কিছু ওয়েব ব্রাউজার ক্যাশিং করার কারণে একই অনুরোধের একাধিক উদাহরণ পর্যায়ক্রমে চালায়। এই সীমাবদ্ধতা আমাদের ওয়েব সার্ভারের কারণে নয়।
+> Note: If you open _/sleep_ in multiple browser windows simultaneously, they
+> might load one at a time in five-second intervals. Some web browsers execute
+> multiple instances of the same request sequentially for caching reasons. This
+> limitation is not caused by our web server.
 
-এই মুহূর্তে বিরতি নেওয়া এবং বিবেচনা করা ভাল যে তালিকা 21-18, 21-19, এবং 21-20-এর কোডটি কীভাবে ভিন্ন হবে যদি আমরা কাজ করার জন্য ক্লোজারের পরিবর্তে ফিউচার ব্যবহার করতাম। কোন প্রকারগুলি পরিবর্তিত হবে? পদ্ধতির স্বাক্ষরগুলি কীভাবে ভিন্ন হবে, যদি থাকে? কোডের কোন অংশগুলি একই থাকবে?
+This is a good time to pause and consider how the code in Listings 21-18, 21-19,
+and 21-20 would be different if we were using futures instead of a closure for
+the work to be done. What types would change? How would the method signatures be
+different, if at all? What parts of the code would stay the same?
 
-অধ্যায় 17 এবং 18-এ `while let` লুপ সম্পর্কে জানার পরে, আপনি হয়তো ভাবছেন কেন আমরা কর্মী থ্রেডের কোডটি তালিকা 21-21-এ দেখানো হিসাবে লিখিনি।
+After learning about the `while let` loop in Chapters 17 and 18, you might be
+wondering why we didn’t write the worker thread code as shown in Listing 21-21.
 
-<Listing number="21-21" file-name="src/lib.rs" caption="`while let` ব্যবহার করে `Worker::new`-এর একটি বিকল্প বাস্তবায়ন">
+<Listing number="21-21" file-name="src/lib.rs" caption="An alternative implementation of `Worker::new` using `while let`">
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-21/src/lib.rs:here}}
@@ -412,9 +687,24 @@ Worker 2 got a job; executing.
 
 </Listing>
 
-এই কোডটি কম্পাইল হয় এবং রান করে তবে পছন্দসই থ্রেডিং আচরণ তৈরি করে না: একটি ধীর অনুরোধ এখনও অন্যান্য অনুরোধগুলিকে প্রক্রিয়া করার জন্য অপেক্ষা করতে বাধ্য করবে। এর কারণটি কিছুটা সূক্ষ্ম: `Mutex` struct-এর কোনো পাবলিক `unlock` পদ্ধতি নেই কারণ লকের মালিকানা `LockResult<MutexGuard<T>>`-এর মধ্যে থাকা `MutexGuard<T>`-এর জীবনকালের উপর ভিত্তি করে যা `lock` পদ্ধতি ফেরত দেয়। কম্পাইল করার সময়, বরো চেকার তখন নিয়ম প্রয়োগ করতে পারে যে `Mutex` দ্বারা সুরক্ষিত কোনো রিসোর্স অ্যাক্সেস করা যাবে না যদি না আমরা লকটি ধরে রাখি। তবে, এই বাস্তবায়নটির কারণে যদি আমরা `MutexGuard<T>`-এর জীবনকাল সম্পর্কে সচেতন না হই তবে লকটি ইচ্ছাকৃত সময়ের চেয়ে বেশি সময় ধরে রাখা হতে পারে।
+This code compiles and runs but doesn’t result in the desired threading
+behavior: a slow request will still cause other requests to wait to be
+processed. The reason is somewhat subtle: the `Mutex` struct has no public
+`unlock` method because the ownership of the lock is based on the lifetime of
+the `MutexGuard<T>` within the `LockResult<MutexGuard<T>>` that the `lock`
+method returns. At compile time, the borrow checker can then enforce the rule
+that a resource guarded by a `Mutex` cannot be accessed unless we hold the
+lock. However, this implementation can also result in the lock being held
+longer than intended if we aren’t mindful of the lifetime of the
+`MutexGuard<T>`.
 
-তালিকা 21-20-এর কোডটি যা `let job = receiver.lock().unwrap().recv().unwrap();` ব্যবহার করে কাজ করে কারণ `let` দিয়ে, সমান চিহ্নের ডান পাশের এক্সপ্রেশনে ব্যবহৃত যেকোনো অস্থায়ী মান `let` স্টেটমেন্ট শেষ হওয়ার সাথে সাথেই তাৎক্ষণিকভাবে ড্রপ করা হয়। তবে, `while let` (এবং `if let` এবং `match`) সংশ্লিষ্ট ব্লকের শেষ না হওয়া পর্যন্ত অস্থায়ী মানগুলি ড্রপ করে না। তালিকা 21-21-এ, `job()`-এ কলের সময়কালের জন্য লকটি ধরে রাখা হয়, যার অর্থ অন্যান্য কর্মীরা কাজ গ্রহণ করতে পারে না।
+The code in Listing 21-20 that uses `let job =
+receiver.lock().unwrap().recv().unwrap();` works because with `let`, any
+temporary values used in the expression on the right hand side of the equal
+sign are immediately dropped when the `let` statement ends. However, `while
+let` (and `if let` and `match`) does not drop temporary values until the end of
+the associated block. In Listing 21-21, the lock remains held for the duration
+of the call to `job()`, meaning other `Worker` instances cannot receive jobs.
 
 [creating-type-synonyms-with-type-aliases]: ch20-03-advanced-types.html#creating-type-synonyms-with-type-aliases
 [integer-types]: ch03-02-data-types.html#integer-types

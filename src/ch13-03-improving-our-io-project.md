@@ -1,12 +1,19 @@
-## আমাদের I/O প্রজেক্ট উন্নত করা
+## Improving Our I/O Project
 
-Iterators সম্পর্কে এই নতুন জ্ঞান দিয়ে, আমরা অধ্যায় 12-এর I/O প্রজেক্টে কোডটিকে আরও স্পষ্ট এবং সংক্ষিপ্ত করতে iterator ব্যবহার করে উন্নত করতে পারি। আসুন দেখি কিভাবে iterator আমাদের `Config::build` ফাংশন এবং `search` ফাংশনের বাস্তবায়নকে উন্নত করতে পারে।
+With this new knowledge about iterators, we can improve the I/O project in
+Chapter 12 by using iterators to make places in the code clearer and more
+concise. Let’s look at how iterators can improve our implementation of the
+`Config::build` function and the `search` function.
 
-### একটি Iterator ব্যবহার করে `clone` সরানো
+### Removing a `clone` Using an Iterator
 
-Listing 12-6-এ, আমরা এমন কোড যোগ করেছি যা `String` মানগুলির একটি slice নেয় এবং slice-এর মধ্যে indexing করে এবং মানগুলির `clone` করে `Config` struct-এর একটি উদাহরণ তৈরি করে, যা `Config` struct-কে সেই মানগুলির মালিক হতে দেয়। Listing 13-17-এ, আমরা `Config::build` ফাংশনের বাস্তবায়ন পুনরুত্পাদন করেছি যেমনটি Listing 12-23-এ ছিল:
+In Listing 12-6, we added code that took a slice of `String` values and created
+an instance of the `Config` struct by indexing into the slice and cloning the
+values, allowing the `Config` struct to own those values. In Listing 13-17,
+we’ve reproduced the implementation of the `Config::build` function as it was
+in Listing 12-23:
 
-<Listing number="13-17" file-name="src/lib.rs" caption="Listing 12-23 থেকে `Config::build` ফাংশনের পুনরুৎপাদন">
+<Listing number="13-17" file-name="src/lib.rs" caption="Reproduction of the `Config::build` function from Listing 12-23">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-23-reproduced/src/lib.rs:ch13}}
@@ -14,17 +21,27 @@ Listing 12-6-এ, আমরা এমন কোড যোগ করেছি য
 
 </Listing>
 
-সেই সময়, আমরা বলেছিলাম যে অদক্ষ `clone` কলগুলি নিয়ে চিন্তা না করতে কারণ আমরা ভবিষ্যতে সেগুলি সরিয়ে ফেলব। ভালো, সেই সময়টা এখন!
+At the time, we said not to worry about the inefficient `clone` calls because
+we would remove them in the future. Well, that time is now!
 
-এখানে আমাদের `clone`-এর প্রয়োজন ছিল কারণ প্যারামিটার `args`-এ `String` উপাদান সহ আমাদের একটি slice রয়েছে, কিন্তু `build` ফাংশন `args`-এর মালিক নয়। `Config` উদাহরণের ownership ফেরত দিতে, আমাদের `Config`-এর `query` এবং `file_path` ফিল্ড থেকে মানগুলি clone করতে হয়েছিল যাতে `Config` উদাহরণ তার মানগুলির মালিক হতে পারে।
+We needed `clone` here because we have a slice with `String` elements in the
+parameter `args`, but the `build` function doesn’t own `args`. To return
+ownership of a `Config` instance, we had to clone the values from the `query`
+and `file_path` fields of `Config` so the `Config` instance can own its values.
 
-iterators সম্পর্কে আমাদের নতুন জ্ঞান দিয়ে, আমরা `build` ফাংশনকে একটি slice ধার করার পরিবর্তে এর আর্গুমেন্ট হিসাবে একটি iterator এর ownership নেওয়ার জন্য পরিবর্তন করতে পারি। আমরা slice-এর দৈর্ঘ্য পরীক্ষা করে নির্দিষ্ট স্থানে index করার পরিবর্তে iterator এর কার্যকারিতা ব্যবহার করব। এটি `Config::build` ফাংশনটি কী করছে তা স্পষ্ট করবে কারণ iterator মানগুলি অ্যাক্সেস করবে।
+With our new knowledge about iterators, we can change the `build` function to
+take ownership of an iterator as its argument instead of borrowing a slice.
+We’ll use the iterator functionality instead of the code that checks the length
+of the slice and indexes into specific locations. This will clarify what the
+`Config::build` function is doing because the iterator will access the values.
 
-একবার `Config::build` iterator-এর ownership নিলে এবং ধার করা indexing অপারেশন ব্যবহার করা বন্ধ করলে, আমরা `clone` কল করে নতুন allocation করার পরিবর্তে iterator থেকে `String` মানগুলি `Config`-এ স্থানান্তরিত করতে পারি।
+Once `Config::build` takes ownership of the iterator and stops using indexing
+operations that borrow, we can move the `String` values from the iterator into
+`Config` rather than calling `clone` and making a new allocation.
 
-#### সরাসরি Return করা Iterator ব্যবহার করা
+#### Using the Returned Iterator Directly
 
-আপনার I/O প্রজেক্টের _src/main.rs_ ফাইলটি খুলুন, যা এইরকম হওয়া উচিত:
+Open your I/O project’s _src/main.rs_ file, which should look like this:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -32,9 +49,11 @@ iterators সম্পর্কে আমাদের নতুন জ্ঞা�
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-24-reproduced/src/main.rs:ch13}}
 ```
 
-আমরা প্রথমে `main` ফাংশনের শুরু পরিবর্তন করব যা আমাদের Listing 12-24-এ ছিল Listing 13-18 এর কোডে, যা এইবার একটি iterator ব্যবহার করে। আমরা `Config::build` আপডেট না করা পর্যন্ত এটি compile হবে না।
+We’ll first change the start of the `main` function that we had in Listing
+12-24 to the code in Listing 13-18, which this time uses an iterator. This
+won’t compile until we update `Config::build` as well.
 
-<Listing number="13-18" file-name="src/main.rs" caption="`Config::build`-এ `env::args`-এর return value পাস করা">
+<Listing number="13-18" file-name="src/main.rs" caption="Passing the return value of `env::args` to `Config::build`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-18/src/main.rs:here}}
@@ -42,11 +61,17 @@ iterators সম্পর্কে আমাদের নতুন জ্ঞা�
 
 </Listing>
 
-`env::args` ফাংশন একটি iterator ফেরত দেয়! iterator মানগুলিকে একটি ভেক্টরে সংগ্রহ করে এবং তারপরে `Config::build`-এ একটি slice পাস করার পরিবর্তে, এখন আমরা `env::args` থেকে ফেরত দেওয়া iterator-এর ownership সরাসরি `Config::build`-এ পাস করছি।
+The `env::args` function returns an iterator! Rather than collecting the
+iterator values into a vector and then passing a slice to `Config::build`, now
+we’re passing ownership of the iterator returned from `env::args` to
+`Config::build` directly.
 
-পরবর্তীকালে, আমাদের `Config::build`-এর সংজ্ঞা আপডেট করতে হবে। আপনার I/O প্রজেক্টের _src/lib.rs_ ফাইলে, `Config::build`-এর সংজ্ঞাকে Listing 13-19 এর মতো দেখতে পরিবর্তন করা যাক। এটি এখনও compile হবে না কারণ আমাদের ফাংশন বডি আপডেট করতে হবে।
+Next, we need to update the definition of `Config::build`. In your I/O
+project’s _src/lib.rs_ file, let’s change the signature of `Config::build` to
+look like Listing 13-19. This still won’t compile because we need to update the
+function body.
 
-<Listing number="13-19" file-name="src/lib.rs" caption="একটি iterator আশা করার জন্য `Config::build`-এর সংজ্ঞা আপডেট করা">
+<Listing number="13-19" file-name="src/lib.rs" caption="Updating the signature of `Config::build` to expect an iterator">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-19/src/lib.rs:here}}
@@ -54,17 +79,28 @@ iterators সম্পর্কে আমাদের নতুন জ্ঞা�
 
 </Listing>
 
-`env::args` ফাংশনের জন্য স্ট্যান্ডার্ড লাইব্রেরি ডকুমেন্টেশন দেখায় যে এটি যে iterator ফেরত দেয় তার টাইপ হল `std::env::Args`, এবং সেই টাইপটি `Iterator` trait implement করে এবং `String` মান ফেরত দেয়।
+The standard library documentation for the `env::args` function shows that the
+type of the iterator it returns is `std::env::Args`, and that type implements
+the `Iterator` trait and returns `String` values.
 
-আমরা `Config::build` ফাংশনের সংজ্ঞা আপডেট করেছি যাতে প্যারামিটার `args`-এর `&[String]` এর পরিবর্তে trait বাউন্ড `impl Iterator<Item = String>` সহ একটি জেনেরিক টাইপ থাকে। অধ্যায় 10-এর [“Traits as Parameters”][impl-trait]<!-- ignore --> বিভাগে আমরা আলোচনা করা `impl Trait` সিনট্যাক্সের এই ব্যবহারের অর্থ হল `args` এমন যেকোনো টাইপ হতে পারে যা `Iterator` trait implement করে এবং `String` আইটেম ফেরত দেয়।
+We’ve updated the signature of the `Config::build` function so the parameter
+`args` has a generic type with the trait bounds `impl Iterator<Item = String>`
+instead of `&[String]`. This usage of the `impl Trait` syntax we discussed in
+the [“Traits as Parameters”][impl-trait]<!-- ignore --> section of Chapter 10
+means that `args` can be any type that implements the `Iterator` trait and
+returns `String` items.
 
-যেহেতু আমরা `args`-এর ownership নিচ্ছি এবং এর উপর iterate করে `args` পরিবর্তন করব, তাই এটিকে mutable করার জন্য আমরা `args` প্যারামিটারের স্পেসিফিকেশনে `mut` কীওয়ার্ড যোগ করতে পারি।
+Because we’re taking ownership of `args` and we’ll be mutating `args` by
+iterating over it, we can add the `mut` keyword into the specification of the
+`args` parameter to make it mutable.
 
-#### Indexing এর পরিবর্তে `Iterator` Trait মেথড ব্যবহার করা
+#### Using `Iterator` Trait Methods Instead of Indexing
 
-পরবর্তীকালে, আমরা `Config::build`-এর বডি ঠিক করব। যেহেতু `args` `Iterator` trait implement করে, তাই আমরা জানি যে আমরা এর উপর `next` মেথড কল করতে পারি! Listing 13-20, `next` মেথড ব্যবহার করার জন্য Listing 12-23 থেকে কোড আপডেট করে:
+Next, we’ll fix the body of `Config::build`. Because `args` implements the
+`Iterator` trait, we know we can call the `next` method on it! Listing 13-20
+updates the code from Listing 12-23 to use the `next` method:
 
-<Listing number="13-20" file-name="src/lib.rs" caption="iterator মেথড ব্যবহার করার জন্য `Config::build`-এর বডি পরিবর্তন করা">
+<Listing number="13-20" file-name="src/lib.rs" caption="Changing the body of `Config::build` to use iterator methods">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-20/src/lib.rs:here}}
@@ -72,13 +108,20 @@ iterators সম্পর্কে আমাদের নতুন জ্ঞা�
 
 </Listing>
 
-মনে রাখবেন যে `env::args`-এর return value-এর প্রথম মানটি প্রোগ্রামের নাম। আমরা সেটাকে উপেক্ষা করতে চাই এবং পরবর্তী মান পেতে চাই, তাই প্রথমে আমরা `next` কল করি এবং return value দিয়ে কিছুই করি না। দ্বিতীয়ত, আমরা `Config`-এর `query` ফিল্ডে রাখতে চাই এমন মান পেতে `next` কল করি। যদি `next` একটি `Some` ফেরত দেয়, তাহলে আমরা মানটি বের করার জন্য একটি `match` ব্যবহার করি। যদি এটি `None` ফেরত দেয়, এর মানে পর্যাপ্ত আর্গুমেন্ট দেওয়া হয়নি এবং আমরা `Err` মান দিয়ে তাড়াতাড়ি ফেরত দিই। আমরা `file_path` মানের জন্যও একই কাজ করি।
+Remember that the first value in the return value of `env::args` is the name of
+the program. We want to ignore that and get to the next value, so first we call
+`next` and do nothing with the return value. Second, we call `next` to get the
+value we want to put in the `query` field of `Config`. If `next` returns a
+`Some`, we use a `match` to extract the value. If it returns `None`, it means
+not enough arguments were given and we return early with an `Err` value. We do
+the same thing for the `file_path` value.
 
-### Iterator Adapter দিয়ে কোড আরও স্পষ্ট করা
+### Making Code Clearer with Iterator Adapters
 
-আমরা আমাদের I/O প্রজেক্টের `search` ফাংশনেও iterator-এর সুবিধা নিতে পারি, যা Listing 13-21-এ Listing 12-19-এর মতো পুনরুত্পাদন করা হয়েছে:
+We can also take advantage of iterators in the `search` function in our I/O
+project, which is reproduced here in Listing 13-21 as it was in Listing 12-19:
 
-<Listing number="13-21" file-name="src/lib.rs" caption="Listing 12-19 থেকে `search` ফাংশনের বাস্তবায়ন">
+<Listing number="13-21" file-name="src/lib.rs" caption="The implementation of the `search` function from Listing 12-19">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:ch13}}
@@ -86,9 +129,14 @@ iterators সম্পর্কে আমাদের নতুন জ্ঞা�
 
 </Listing>
 
-আমরা iterator adapter মেথড ব্যবহার করে এই কোডটিকে আরও সংক্ষিপ্ত উপায়ে লিখতে পারি। এটি আমাদের mutable ইন্টারমিডিয়েট `results` ভেক্টর এড়াতেও দেয়। Functional প্রোগ্রামিং স্টাইল কোডকে আরও স্পষ্ট করার জন্য mutable state এর পরিমাণ কমাতে পছন্দ করে। mutable state সরিয়ে ভবিষ্যতে সমান্তরালভাবে অনুসন্ধান করার জন্য একটি উন্নতি করতে সক্ষম হতে পারে, কারণ `results` ভেক্টরের concurrent অ্যাক্সেস পরিচালনা করতে হবে না। Listing 13-22 এই পরিবর্তনটি দেখায়:
+We can write this code in a more concise way using iterator adapter methods.
+Doing so also lets us avoid having a mutable intermediate `results` vector. The
+functional programming style prefers to minimize the amount of mutable state to
+make code clearer. Removing the mutable state might enable a future enhancement
+to make searching happen in parallel, because we wouldn’t have to manage
+concurrent access to the `results` vector. Listing 13-22 shows this change:
 
-<Listing number="13-22" file-name="src/lib.rs" caption="`search` ফাংশনের বাস্তবায়নে iterator adapter মেথড ব্যবহার করা">
+<Listing number="13-22" file-name="src/lib.rs" caption="Using iterator adapter methods in the implementation of the `search` function">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-22/src/lib.rs:here}}
@@ -96,12 +144,29 @@ iterators সম্পর্কে আমাদের নতুন জ্ঞা�
 
 </Listing>
 
-মনে রাখবেন যে `search` ফাংশনের উদ্দেশ্য হল `contents`-এর সেই সমস্ত লাইনগুলি ফেরত দেওয়া যেখানে `query` রয়েছে। Listing 13-16-এর `filter` উদাহরণের মতো, এই কোডটি `filter` adapter ব্যবহার করে শুধুমাত্র সেই লাইনগুলি রাখতে যেখানে `line.contains(query)` `true` ফেরত দেয়। তারপরে আমরা `collect` দিয়ে মিলে যাওয়া লাইনগুলিকে অন্য একটি ভেক্টরে সংগ্রহ করি। অনেক সহজ! `search_case_insensitive` ফাংশনে iterator মেথড ব্যবহার করার জন্য একই পরিবর্তন করতে দ্বিধা বোধ করবেন না।
+Recall that the purpose of the `search` function is to return all lines in
+`contents` that contain the `query`. Similar to the `filter` example in Listing
+13-16, this code uses the `filter` adapter to keep only the lines that
+`line.contains(query)` returns `true` for. We then collect the matching lines
+into another vector with `collect`. Much simpler! Feel free to make the same
+change to use iterator methods in the `search_case_insensitive` function as
+well.
 
-### লুপ বা Iterators এর মধ্যে নির্বাচন করা
+### Choosing Between Loops or Iterators
 
-পরবর্তী যৌক্তিক প্রশ্ন হল আপনার নিজের কোডে কোন স্টাইলটি বেছে নেওয়া উচিত এবং কেন: Listing 13-21-এর আসল বাস্তবায়ন নাকি Listing 13-22-এ iterator ব্যবহার করা সংস্করণ। বেশিরভাগ Rust প্রোগ্রামার iterator স্টাইল ব্যবহার করতে পছন্দ করেন। প্রথমে এটি আয়ত্ত করা একটু কঠিন, কিন্তু একবার আপনি বিভিন্ন iterator adapter এবং তারা কী করে সে সম্পর্কে ধারণা পেলে, iterator বোঝা সহজ হতে পারে। লুপ এবং নতুন ভেক্টর তৈরির বিভিন্ন বিট নিয়ে কাজ করার পরিবর্তে, কোডটি লুপের উচ্চ-স্তরের উদ্দেশ্যের উপর দৃষ্টি নিবদ্ধ করে। এটি কিছু সাধারণ কোডকে abstract করে, তাই এই কোডের জন্য অনন্য ধারণাগুলি দেখা সহজ, যেমন iterator-এর প্রতিটি উপাদানকে যে ফিল্টারিং শর্তটি পাস করতে হবে।
+The next logical question is which style you should choose in your own code and
+why: the original implementation in Listing 13-21 or the version using
+iterators in Listing 13-22. Most Rust programmers prefer to use the iterator
+style. It’s a bit tougher to get the hang of at first, but once you get a feel
+for the various iterator adapters and what they do, iterators can be easier to
+understand. Instead of fiddling with the various bits of looping and building
+new vectors, the code focuses on the high-level objective of the loop. This
+abstracts away some of the commonplace code so it’s easier to see the concepts
+that are unique to this code, such as the filtering condition each element in
+the iterator must pass.
 
-কিন্তু দুটি বাস্তবায়ন কি সত্যিই সমতুল্য? স্বজ্ঞাত ধারণা হতে পারে যে আরও নিম্ন-স্তরের লুপটি দ্রুত হবে। আসুন কর্মক্ষমতা নিয়ে কথা বলি।
+But are the two implementations truly equivalent? The intuitive assumption
+might be that the more low-level loop will be faster. Let’s talk about
+performance.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters

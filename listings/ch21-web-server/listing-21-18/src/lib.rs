@@ -1,6 +1,6 @@
 // ANCHOR: here
 use std::{
-    sync::{mpsc, Arc, Mutex},
+    sync::{Arc, Mutex, mpsc},
     thread,
 };
 // --snip--

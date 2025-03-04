@@ -1,7 +1,7 @@
 // ANCHOR: here
 use std::{
     fs,
-    io::{prelude::*, BufReader},
+    io::{BufReader, prelude::*},
     net::{TcpListener, TcpStream},
 };
 // --snip--

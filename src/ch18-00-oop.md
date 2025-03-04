@@ -1,3 +1,13 @@
 # Object-Oriented Programming Features of Rust
 
-Object-oriented programming (OOP) হলো program model করার একটি উপায়। Programmatic concept হিসেবে object 1960 এর দশকে Simula programming language এ introduce করা হয়েছিল। সেই object গুলো Alan Kay এর programming architecture কে influence করেছিল যেখানে object গুলো একে অপরের কাছে message pass করে। এই architecture describe করার জন্য, তিনি 1967 সালে _object-oriented programming_ term টি তৈরি করেছিলেন। অনেক competing definition OOP কি তা describe করে, এবং এই definition গুলোর মধ্যে কিছু অনুসারে Rust object-oriented, কিন্তু অন্যগুলোর অনুসারে নয়। এই chapter এ, আমরা কিছু characteristic explore করব যা commonly object-oriented হিসেবে consider করা হয় এবং কিভাবে সেই characteristic গুলো idiomatic Rust এ translate হয়। তারপর আমরা Rust এ object-oriented design pattern কিভাবে implement করতে হয় তা দেখাব এবং Rust এর কিছু strength ব্যবহার করে একটি solution implement করার পরিবর্তে তা করার trade-off নিয়ে আলোচনা করব।
+Object-oriented programming (OOP) is a way of modeling programs. Objects as a
+programmatic concept were introduced in the programming language Simula in the
+1960s. Those objects influenced Alan Kay’s programming architecture in which
+objects pass messages to each other. To describe this architecture, he coined
+the term _object-oriented programming_ in 1967. Many competing definitions
+describe what OOP is, and by some of these definitions Rust is object-oriented,
+but by others it is not. In this chapter, we’ll explore certain characteristics
+that are commonly considered object-oriented and how those characteristics
+translate to idiomatic Rust. We’ll then show you how to implement an
+object-oriented design pattern in Rust and discuss the trade-offs of doing so
+versus implementing a solution using some of Rust’s strengths instead.

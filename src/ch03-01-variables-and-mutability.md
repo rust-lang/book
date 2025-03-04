@@ -1,10 +1,19 @@
-## ভেরিয়েবল এবং পরিবর্তনশীলতা
+## Variables and Mutability
 
-[“ভেরিয়েবল দিয়ে মান সংরক্ষণ করা”][storing-values-with-variables]<!-- ignore --> বিভাগে যেমন উল্লেখ করা হয়েছে, ডিফল্টরূপে, ভেরিয়েবলগুলি অপরিবর্তনীয়। Rust আপনাকে নিরাপত্তা এবং সহজ কনকারেন্সি সুবিধা গ্রহণ করে এমনভাবে আপনার কোড লেখার জন্য উৎসাহিত করে। তবে, আপনার ভেরিয়েবলগুলিকে পরিবর্তনযোগ্য করার বিকল্পও রয়েছে। আসুন আমরা Rust কেন আপনাকে অপরিবর্তনীয়তাকে সমর্থন করতে উৎসাহিত করে এবং কেন মাঝে মাঝে আপনি এটি থেকে বেরিয়ে যেতে চাইতে পারেন তা নিয়ে আলোচনা করি।
+As mentioned in the [“Storing Values with
+Variables”][storing-values-with-variables]<!-- ignore --> section, by default,
+variables are immutable. This is one of many nudges Rust gives you to write
+your code in a way that takes advantage of the safety and easy concurrency that
+Rust offers. However, you still have the option to make your variables mutable.
+Let’s explore how and why Rust encourages you to favor immutability and why
+sometimes you might want to opt out.
 
-যখন একটি ভেরিয়েবল অপরিবর্তনীয় হয়, একবার একটি মান একটি নামের সাথে আবদ্ধ হয়ে গেলে, আপনি সেই মান পরিবর্তন করতে পারবেন না। এটি চিত্রিত করার জন্য, `cargo new variables` ব্যবহার করে আপনার _projects_ ডিরেক্টরিতে _variables_ নামের একটি নতুন প্রকল্প তৈরি করুন।
+When a variable is immutable, once a value is bound to a name, you can’t change
+that value. To illustrate this, generate a new project called _variables_ in
+your _projects_ directory by using `cargo new variables`.
 
-তারপর, আপনার নতুন _variables_ ডিরেক্টরিতে, _src/main.rs_ খুলুন এবং এর কোডটিকে নিম্নলিখিত কোড দিয়ে প্রতিস্থাপন করুন, যা এখনই কম্পাইল হবে না:
+Then, in your new _variables_ directory, open _src/main.rs_ and replace its
+code with the following code, which won’t compile just yet:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -12,21 +21,39 @@
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
 ```
 
-সংরক্ষণ করুন এবং `cargo run` ব্যবহার করে প্রোগ্রামটি চালান। এই আউটপুটে দেখানো হিসাবে আপনি একটি অপরিবর্তনীয়তা ত্রুটি সম্পর্কিত একটি ত্রুটি বার্তা পাবেন:
+Save and run the program using `cargo run`. You should receive an error message
+regarding an immutability error, as shown in this output:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/output.txt}}
 ```
 
-এই উদাহরণটি দেখায় যে কম্পাইলার কীভাবে আপনাকে আপনার প্রোগ্রামের ত্রুটি খুঁজে পেতে সহায়তা করে। কম্পাইলার ত্রুটিগুলি হতাশাজনক হতে পারে, তবে এর মানে হল আপনার প্রোগ্রামটি আপনি যা চান তা এখনও নিরাপদে করছে না; এর মানে _এই নয়_ যে আপনি একজন ভালো প্রোগ্রামার নন! অভিজ্ঞ Rustaceanরাও কম্পাইলার ত্রুটি পান।
+This example shows how the compiler helps you find errors in your programs.
+Compiler errors can be frustrating, but really they only mean your program
+isn’t safely doing what you want it to do yet; they do _not_ mean that you’re
+not a good programmer! Experienced Rustaceans still get compiler errors.
 
-আপনি `` cannot assign twice to immutable variable `x` `` ত্রুটি বার্তাটি পেয়েছেন কারণ আপনি অপরিবর্তনীয় `x` ভেরিয়েবলে দ্বিতীয় মান নির্ধারণ করার চেষ্টা করেছিলেন।
+You received the error message `` cannot assign twice to immutable variable `x` `` because you tried to assign a second value to the immutable `x` variable.
 
-এটা গুরুত্বপূর্ণ যে যখন আমরা এমন একটি মান পরিবর্তন করার চেষ্টা করি যা অপরিবর্তনীয় হিসাবে চিহ্নিত করা হয়েছে তখন আমরা কম্পাইল-টাইম ত্রুটি পাই কারণ এই পরিস্থিতিটি বাগের দিকে নিয়ে যেতে পারে। যদি আমাদের কোডের একটি অংশ এই ধারণার উপর কাজ করে যে একটি মান কখনই পরিবর্তন হবে না এবং আমাদের কোডের অন্য অংশ সেই মানটি পরিবর্তন করে, তবে এটি সম্ভব যে কোডের প্রথম অংশটি যা করার জন্য ডিজাইন করা হয়েছিল তা করবে না। এই ধরনের বাগের কারণ খুঁজে বের করা কঠিন হতে পারে, বিশেষ করে যখন দ্বিতীয় অংশের কোডটি _মাঝে মাঝে_ মান পরিবর্তন করে। Rust কম্পাইলার গ্যারান্টি দেয় যে যখন আপনি বলেন যে একটি মান পরিবর্তন হবে না, তখন তা সত্যিই পরিবর্তন হবে না, তাই আপনাকে নিজে থেকে এটির ট্র্যাক রাখতে হবে না। আপনার কোড এইভাবে বুঝতে সহজ।
+It’s important that we get compile-time errors when we attempt to change a
+value that’s designated as immutable because this very situation can lead to
+bugs. If one part of our code operates on the assumption that a value will
+never change and another part of our code changes that value, it’s possible
+that the first part of the code won’t do what it was designed to do. The cause
+of this kind of bug can be difficult to track down after the fact, especially
+when the second piece of code changes the value only _sometimes_. The Rust
+compiler guarantees that when you state that a value won’t change, it really
+won’t change, so you don’t have to keep track of it yourself. Your code is thus
+easier to reason through.
 
-তবে পরিবর্তনশীলতা খুব দরকারী হতে পারে এবং কোড লেখা আরও সুবিধাজনক করতে পারে। যদিও ভেরিয়েবলগুলি ডিফল্টরূপে অপরিবর্তনীয়, আপনি [অধ্যায় 2][storing-values-with-variables]<!-- ignore --> এ যেমন করেছিলেন, ভেরিয়েবলের নামের সামনে `mut` যোগ করে সেগুলিকে পরিবর্তনযোগ্য করতে পারেন। `mut` যোগ করা কোডের ভবিষ্যৎ পাঠকদের কাছে এই ইঙ্গিতও বহন করে যে কোডের অন্যান্য অংশ এই ভেরিয়েবলের মান পরিবর্তন করবে।
+But mutability can be very useful, and can make code more convenient to write.
+Although variables are immutable by default, you can make them mutable by
+adding `mut` in front of the variable name as you did in [Chapter
+2][storing-values-with-variables]<!-- ignore -->. Adding `mut` also conveys
+intent to future readers of the code by indicating that other parts of the code
+will be changing this variable’s value.
 
-উদাহরণস্বরূপ, আসুন _src/main.rs_ কে নিচের মত পরিবর্তন করি:
+For example, let’s change _src/main.rs_ to the following:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -34,39 +61,74 @@
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/src/main.rs}}
 ```
 
-যখন আমরা এখন প্রোগ্রামটি চালাই, তখন আমরা এটি পাই:
+When we run the program now, we get this:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/output.txt}}
 ```
 
-যখন `mut` ব্যবহার করা হয়, তখন `x` এর সাথে আবদ্ধ মান `5` থেকে `6` এ পরিবর্তন করার অনুমতি দেওয়া হয়। পরিশেষে, পরিবর্তনশীলতা ব্যবহার করবেন কিনা তা সিদ্ধান্ত নেওয়া আপনার উপর নির্ভর করে এবং এটি নির্ভর করে সেই বিশেষ পরিস্থিতিতে আপনি কী স্পষ্ট মনে করেন তার উপর।
+We’re allowed to change the value bound to `x` from `5` to `6` when `mut` is
+used. Ultimately, deciding whether to use mutability or not is up to you and
+depends on what you think is clearest in that particular situation.
 
-### ধ্রুবক
+### Constants
 
-অপরিবর্তনীয় ভেরিয়েবলের মতো, _ধ্রুবকগুলিও_ এমন মান যা একটি নামের সাথে আবদ্ধ থাকে এবং পরিবর্তন করার অনুমতি নেই, তবে ধ্রুবক এবং ভেরিয়েবলের মধ্যে কয়েকটি পার্থক্য রয়েছে।
+Like immutable variables, _constants_ are values that are bound to a name and
+are not allowed to change, but there are a few differences between constants
+and variables.
 
-প্রথমত, ধ্রুবকের সাথে `mut` ব্যবহার করার অনুমতি নেই। ধ্রুবকগুলি কেবল ডিফল্টরূপে অপরিবর্তনীয় নয়—এগুলি সর্বদা অপরিবর্তনীয়। আপনি `let` কীওয়ার্ডের পরিবর্তে `const` কীওয়ার্ড ব্যবহার করে ধ্রুবক ঘোষণা করেন এবং মানের টাইপটি _অবশ্যই_ টীকাযুক্ত হতে হবে। আমরা পরবর্তী বিভাগে, [“ডেটা টাইপ”][data-types]<!-- ignore --> এ টাইপ এবং টাইপ টীকাগুলি আলোচনা করব, তাই এখনই বিশদ নিয়ে চিন্তা করবেন না। শুধু জেনে রাখুন যে আপনাকে অবশ্যই সর্বদা টাইপ টীকা করতে হবে।
+First, you aren’t allowed to use `mut` with constants. Constants aren’t just
+immutable by default—they’re always immutable. You declare constants using the
+`const` keyword instead of the `let` keyword, and the type of the value _must_
+be annotated. We’ll cover types and type annotations in the next section,
+[“Data Types”][data-types]<!-- ignore -->, so don’t worry about the details
+right now. Just know that you must always annotate the type.
 
-ধ্রুবকগুলি গ্লোবাল স্কোপ সহ যেকোনো স্কোপে ঘোষণা করা যেতে পারে, যা সেগুলিকে এমন মানগুলির জন্য উপযোগী করে তোলে যা কোডের অনেক অংশের জানা দরকার।
+Constants can be declared in any scope, including the global scope, which makes
+them useful for values that many parts of code need to know about.
 
-শেষ পার্থক্য হল যে ধ্রুবকগুলি শুধুমাত্র একটি ধ্রুবক এক্সপ্রেশনে সেট করা যেতে পারে, এমন মানের ফলাফলে নয় যা শুধুমাত্র রানটাইমে গণনা করা যেতে পারে।
+The last difference is that constants may be set only to a constant expression,
+not the result of a value that could only be computed at runtime.
 
-এখানে একটি ধ্রুবক ঘোষণার উদাহরণ দেওয়া হল:
+Here’s an example of a constant declaration:
 
 ```rust
 const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 ```
 
-ধ্রুবকের নাম হল `THREE_HOURS_IN_SECONDS` এবং এর মান 60 (এক মিনিটে সেকেন্ডের সংখ্যা) কে 60 (এক ঘন্টায় মিনিটের সংখ্যা) দ্বারা গুণ করে 3 (আমরা এই প্রোগ্রামে গণনা করতে চাই এমন ঘণ্টার সংখ্যা) গুণ করার ফলাফলের সাথে সেট করা হয়েছে। ধ্রুবকের জন্য Rust এর নামকরণের নিয়ম হল শব্দগুলির মধ্যে আন্ডারস্কোর সহ সমস্ত বড় হাতের অক্ষর ব্যবহার করা। কম্পাইলার কম্পাইল টাইমে সীমিত সংখ্যক অপারেশন মূল্যায়ন করতে সক্ষম, যা আমাদেরকে 10,800 মানটিতে এই ধ্রুবক সেট করার পরিবর্তে এই মানটি এমনভাবে লেখার অনুমতি দেয় যা বুঝতে এবং যাচাই করা সহজ। ধ্রুবক ঘোষণা করার সময় কোন অপারেশনগুলি ব্যবহার করা যেতে পারে সে সম্পর্কে আরও তথ্যের জন্য [ধ্রুবক মূল্যায়ন সম্পর্কিত Rust রেফারেন্সের বিভাগটি][const-eval] দেখুন।
+The constant’s name is `THREE_HOURS_IN_SECONDS` and its value is set to the
+result of multiplying 60 (the number of seconds in a minute) by 60 (the number
+of minutes in an hour) by 3 (the number of hours we want to count in this
+program). Rust’s naming convention for constants is to use all uppercase with
+underscores between words. The compiler is able to evaluate a limited set of
+operations at compile time, which lets us choose to write out this value in a
+way that’s easier to understand and verify, rather than setting this constant
+to the value 10,800. See the [Rust Reference’s section on constant
+evaluation][const-eval] for more information on what operations can be used
+when declaring constants.
 
-ধ্রুবকগুলি একটি প্রোগ্রাম চলার পুরো সময়ের জন্য বৈধ, যে স্কোপে সেগুলি ঘোষণা করা হয়েছিল তার মধ্যে। এই বৈশিষ্ট্যটি আপনার অ্যাপ্লিকেশন ডোমেনে এমন মানগুলির জন্য ধ্রুবকগুলিকে উপযোগী করে তোলে যা প্রোগ্রামের একাধিক অংশের জানা দরকার হতে পারে, যেমন কোনও গেমের কোনও খেলোয়াড়কে কত পয়েন্ট অর্জন করার অনুমতি দেওয়া হয়েছে, বা আলোর গতি।
+Constants are valid for the entire time a program runs, within the scope in
+which they were declared. This property makes constants useful for values in
+your application domain that multiple parts of the program might need to know
+about, such as the maximum number of points any player of a game is allowed to
+earn, or the speed of light.
 
-আপনার প্রোগ্রাম জুড়ে ব্যবহৃত হার্ডকোডেড মানগুলিকে ধ্রুবক হিসাবে নামকরণ করা কোডের ভবিষ্যতের রক্ষণাবেক্ষণকারীদের কাছে সেই মানের অর্থ বোঝাতে সহায়ক। ভবিষ্যতে যদি হার্ডকোডেড মান আপডেট করার প্রয়োজন হয় তবে আপনার কোডে শুধুমাত্র একটি স্থান পরিবর্তন করতে হবে।
+Naming hardcoded values used throughout your program as constants is useful in
+conveying the meaning of that value to future maintainers of the code. It also
+helps to have only one place in your code you would need to change if the
+hardcoded value needed to be updated in the future.
 
-### শ্যাডোইং
+### Shadowing
 
-আপনি [অধ্যায় 2][comparing-the-guess-to-the-secret-number]<!-- ignore --> এর গেসিং গেম টিউটোরিয়ালে দেখেছেন, আপনি পূর্ববর্তী ভেরিয়েবলের মতো একই নামে একটি নতুন ভেরিয়েবল ঘোষণা করতে পারেন। Rustaceans বলে যে প্রথম ভেরিয়েবলটি দ্বিতীয়টি দ্বারা _শ্যাডো_ করা হয়েছে, যার মানে যখন আপনি ভেরিয়েবলের নাম ব্যবহার করেন তখন কম্পাইলার দ্বিতীয় ভেরিয়েবলটিকে দেখবে। ফলস্বরূপ, দ্বিতীয় ভেরিয়েবলটি প্রথমটিকে আড়াল করে, যতক্ষণ না এটি নিজে শ্যাডো করা হয় বা স্কোপ শেষ না হয় ততক্ষণ ভেরিয়েবলের নামের যেকোনো ব্যবহার নিজেকে নিয়ে নেয়। আমরা একই ভেরিয়েবলের নাম ব্যবহার করে এবং `let` কীওয়ার্ডের ব্যবহার পুনরাবৃত্তি করে একটি ভেরিয়েবলকে শ্যাডো করতে পারি, যেমন:
+As you saw in the guessing game tutorial in [Chapter
+2][comparing-the-guess-to-the-secret-number]<!-- ignore -->, you can declare a
+new variable with the same name as a previous variable. Rustaceans say that the
+first variable is _shadowed_ by the second, which means that the second
+variable is what the compiler will see when you use the name of the variable.
+In effect, the second variable overshadows the first, taking any uses of the
+variable name to itself until either it itself is shadowed or the scope ends.
+We can shadow a variable by using the same variable’s name and repeating the
+use of the `let` keyword as follows:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -74,33 +136,52 @@ const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/src/main.rs}}
 ```
 
-এই প্রোগ্রামটি প্রথমে `x` কে `5` এর মানের সাথে বাইন্ড করে। তারপর এটি `let x =` পুনরাবৃত্তি করে একটি নতুন ভেরিয়েবল `x` তৈরি করে, মূল মানটি নিয়ে `1` যোগ করে যাতে `x` এর মান তখন `6` হয়। তারপর, কার্লি ব্র্যাকেট দিয়ে তৈরি একটি ভিতরের স্কোপের মধ্যে, তৃতীয় `let` স্টেটমেন্টটিও `x` কে শ্যাডো করে এবং একটি নতুন ভেরিয়েবল তৈরি করে, পূর্বের মানটিকে `2` দিয়ে গুণ করে `x` এর মান `12` করে। যখন সেই স্কোপটি শেষ হয়ে যায়, তখন ভিতরের শ্যাডোইং শেষ হয় এবং `x` আবার `6` এ ফিরে আসে। যখন আমরা এই প্রোগ্রামটি চালাই, তখন এটি নিম্নলিখিত আউটপুট দেবে:
+This program first binds `x` to a value of `5`. Then it creates a new variable
+`x` by repeating `let x =`, taking the original value and adding `1` so the
+value of `x` is then `6`. Then, within an inner scope created with the curly
+brackets, the third `let` statement also shadows `x` and creates a new
+variable, multiplying the previous value by `2` to give `x` a value of `12`.
+When that scope is over, the inner shadowing ends and `x` returns to being `6`.
+When we run this program, it will output the following:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/output.txt}}
 ```
 
-শ্যাডোইং একটি ভেরিয়েবলকে `mut` হিসাবে চিহ্নিত করার থেকে আলাদা কারণ আমরা যদি `let` কীওয়ার্ড ব্যবহার না করে এই ভেরিয়েবলে পুনরায় অ্যাসাইন করার চেষ্টা করি তবে আমরা একটি কম্পাইল-টাইম ত্রুটি পাব। `let` ব্যবহার করে, আমরা একটি মানের উপর কয়েকটি রূপান্তর করতে পারি তবে সেই রূপান্তরগুলি সম্পন্ন হওয়ার পরে ভেরিয়েবলটিকে অপরিবর্তনীয় রাখতে পারি।
+Shadowing is different from marking a variable as `mut` because we’ll get a
+compile-time error if we accidentally try to reassign to this variable without
+using the `let` keyword. By using `let`, we can perform a few transformations
+on a value but have the variable be immutable after those transformations have
+been completed.
 
-`mut` এবং শ্যাডোইং এর মধ্যে আরেকটি পার্থক্য হল যে আমরা যখন আবার `let` কীওয়ার্ড ব্যবহার করি তখন কার্যকরভাবে একটি নতুন ভেরিয়েবল তৈরি করি, আমরা মানের টাইপ পরিবর্তন করতে পারি তবে একই নাম পুনরায় ব্যবহার করতে পারি। উদাহরণস্বরূপ, ধরুন আমাদের প্রোগ্রামটি একজন ব্যবহারকারীকে কিছু টেক্সটের মধ্যে তারা কতগুলি স্পেস চান তা স্পেস ক্যারেক্টার ইনপুট করে দেখাতে বলে এবং তারপরে আমরা সেই ইনপুটটিকে একটি সংখ্যা হিসাবে সংরক্ষণ করতে চাই:
+The other difference between `mut` and shadowing is that because we’re
+effectively creating a new variable when we use the `let` keyword again, we can
+change the type of the value but reuse the same name. For example, say our
+program asks a user to show how many spaces they want between some text by
+inputting space characters, and then we want to store that input as a number:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-04-shadowing-can-change-types/src/main.rs:here}}
 ```
 
-প্রথম `spaces` ভেরিয়েবলটি একটি স্ট্রিং টাইপ এবং দ্বিতীয় `spaces` ভেরিয়েবলটি একটি সংখ্যা টাইপ। এইভাবে শ্যাডোইং আমাদেরকে `spaces_str` এবং `spaces_num` এর মতো বিভিন্ন নাম তৈরি করা থেকে বাঁচায়; পরিবর্তে, আমরা আরও সহজ `spaces` নামটি পুনরায় ব্যবহার করতে পারি। তবে, আমরা যদি এর জন্য `mut` ব্যবহার করার চেষ্টা করি, যেমন এখানে দেখানো হয়েছে, তাহলে আমরা একটি কম্পাইল-টাইম ত্রুটি পাব:
+The first `spaces` variable is a string type and the second `spaces` variable
+is a number type. Shadowing thus spares us from having to come up with
+different names, such as `spaces_str` and `spaces_num`; instead, we can reuse
+the simpler `spaces` name. However, if we try to use `mut` for this, as shown
+here, we’ll get a compile-time error:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/src/main.rs:here}}
 ```
 
-ত্রুটিটি বলছে যে আমাদের একটি ভেরিয়েবলের টাইপ পরিবর্তন করার অনুমতি নেই:
+The error says we’re not allowed to mutate a variable’s type:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/output.txt}}
 ```
 
-এখন যেহেতু আমরা ভেরিয়েবলগুলি কীভাবে কাজ করে তা আলোচনা করেছি, আসুন আরও ডেটা টাইপগুলি দেখি যা তাদের থাকতে পারে।
+Now that we’ve explored how variables work, let’s look at more data types they
+can have.
 
 [comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [data-types]: ch03-02-data-types.html#data-types

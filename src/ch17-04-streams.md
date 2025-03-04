@@ -4,13 +4,32 @@
 
 <a id="streams"></a>
 
-এই chapter এ আমরা এতক্ষণ mostly individual future নিয়েই আলোচনা করেছি। এর একটি বড় exception ছিল async channel যা আমরা ব্যবহার করেছিলাম। মনে করুন কিভাবে আমরা [“Message Passing”][17-02-messages]<!-- ignore --> section এ এই chapter এর শুরুতে async channel এর receiver ব্যবহার করেছিলাম। Async `recv` method সময়ের সাথে item এর একটি sequence তৈরি করে। এটি _stream_ নামে পরিচিত একটি general pattern এর instance।
+So far in this chapter, we’ve mostly stuck to individual futures. The one big
+exception was the async channel we used. Recall how we used the receiver for our
+async channel earlier in this chapter in the [“Message
+Passing”][17-02-messages]<!-- ignore --> section. The async `recv` method
+produces a sequence of items over time. This is an instance of a much more
+general pattern known as a _stream_.
 
-আমরা Chapter 13 এ item এর একটি sequence দেখেছিলাম, যখন আমরা [The Iterator Trait and the `next` Method][iterator-trait]<!-- ignore --> section এ `Iterator` trait দেখেছিলাম, কিন্তু iterator এবং async channel receiver এর মধ্যে দুটি পার্থক্য আছে। প্রথম পার্থক্য হলো সময়: iterator synchronous, যেখানে channel receiver asynchronous। দ্বিতীয়টি হলো API। যখন আমরা সরাসরি `Iterator` নিয়ে কাজ করি, তখন আমরা এর synchronous `next` method call করি। Particular `trpl::Receiver` stream এর সাথে, আমরা এর পরিবর্তে asynchronous `recv` method call করেছিলাম। এছাড়া, এই API গুলো দেখতে অনেকটা একই রকম, এবং এই similarity কোনো কাকতালীয় ঘটনা নয়। একটি stream হলো iteration এর asynchronous form এর মতো। যেখানে `trpl::Receiver` specifically message receive করার জন্য wait করে, general-purpose stream API আরও বেশি broad: এটি `Iterator` এর মতো next item provide করে, কিন্তু asynchronously।
+We saw a sequence of items back in Chapter 13, when we looked at the `Iterator`
+trait in [The Iterator Trait and the `next` Method][iterator-trait]<!-- ignore
+--> section, but there are two differences between iterators and the async
+channel receiver. The first difference is time: iterators are synchronous, while
+the channel receiver is asynchronous. The second is the API. When working
+directly with `Iterator`, we call its synchronous `next` method. With the
+`trpl::Receiver` stream in particular, we called an asynchronous `recv` method
+instead. Otherwise, these APIs feel very similar, and that similarity
+isn’t a coincidence. A stream is like an asynchronous form of iteration. Whereas
+the `trpl::Receiver` specifically waits to receive messages, though, the
+general-purpose stream API is much broader: it provides the next item the
+way `Iterator` does, but asynchronously.
 
-Rust এ iterator এবং stream এর মধ্যে similarity মানে হলো আমরা আসলে যেকোনো iterator থেকে একটি stream তৈরি করতে পারি। Iterator এর মতো, আমরা stream এর `next` method call করে এবং তারপর output await করে এর সাথে কাজ করতে পারি, যেমন Listing 17-30 এ দেখানো হয়েছে।
+The similarity between iterators and streams in Rust means we can actually
+create a stream from any iterator. As with an iterator, we can work with a
+stream by calling its `next` method and then awaiting the output, as in Listing
+17-30.
 
-<Listing number="17-30" caption="একটি iterator থেকে stream তৈরি করা এবং এর value print করা" file-name="src/main.rs">
+<Listing number="17-30" caption="Creating a stream from an iterator and printing its values" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-30/src/main.rs:stream}}
@@ -18,9 +37,12 @@ Rust এ iterator এবং stream এর মধ্যে similarity মান�
 
 </Listing>
 
-আমরা numbers এর একটি array দিয়ে শুরু করি, যা আমরা একটি iterator এ convert করি এবং তারপর সব value double করার জন্য `map` call করি। তারপর আমরা `trpl::stream_from_iter` function ব্যবহার করে iterator কে stream এ convert করি। এরপর, `while let` loop দিয়ে stream এ item গুলো আসলে সেগুলোর উপর loop করি।
+We start with an array of numbers, which we convert to an iterator and then call
+`map` on to double all the values. Then we convert the iterator into a stream
+using the `trpl::stream_from_iter` function. Next, we loop over the items in the
+stream as they arrive with the `while let` loop.
 
-দুর্ভাগ্যবশত, যখন আমরা code run করার চেষ্টা করি, তখন এটি compile হয় না, এর পরিবর্তে এটি report করে যে কোনো `next` method available নেই:
+Unfortunately, when we try to run the code, it doesn’t compile, but instead it reports that there’s no `next` method available:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-30
@@ -35,7 +57,7 @@ error[E0599]: no method named `next` found for struct `Iter` in the current scop
 10 |         while let Some(value) = stream.next().await {
    |                                        ^^^^
    |
-   = note: the full type name has been written to 'file:///projects/async_await/target/debug/deps/async_await-9de943556a6001b8.long-type-1281356139287206597.txt'
+   = note: the full type name has been written to '/Users/chris/dev/rust-lang/book/main/listings/ch17-async-await/listing-17-30/target/debug/deps/async_await-575db3dd3197d257.long-type-14490787947592691573.txt'
    = note: consider using `--verbose` to print the full type name to the console
    = help: items from traits can only be used if the trait is in scope
 help: the following traits which provide `next` are implemented but not in scope; perhaps you want to import one of them
@@ -54,13 +76,25 @@ help: there is a method `try_next` with a similar name
    |                                        ~~~~~~~~
 ```
 
-এই output টি explain করে, compiler error এর কারণ হলো `next` method ব্যবহার করার জন্য আমাদের scope এ সঠিক trait এর প্রয়োজন। আমাদের আলোচনা অনুযায়ী, আপনি হয়তো আশা করতে পারেন যে trait টি `Stream` হবে, কিন্তু আসলে এটি `StreamExt`। _Extension_ এর সংক্ষিপ্ত রূপ `Ext` হলো Rust community তে একটি সাধারণ pattern একটি trait কে অন্য trait দিয়ে extend করার জন্য।
+As this output explains, the reason for the compiler error is that we need the
+right trait in scope to be able to use the `next` method. Given our discussion
+so far, you might reasonably expect that trait to be `Stream`, but it’s actually
+`StreamExt`. Short for _extension_, `Ext` is a common pattern in the
+Rust community for extending one trait with another.
 
-আমরা chapter এর শেষে `Stream` এবং `StreamExt` trait নিয়ে আরও বিস্তারিত আলোচনা করব, তবে আপাতত আপনার শুধু জানার প্রয়োজন যে `Stream` trait এমন একটি low-level interface define করে যা effectively `Iterator` এবং `Future` trait কে combine করে। `StreamExt` `Stream` এর উপরে higher-level API এর set supply করে, `next` method সহ এবং `Iterator` trait দ্বারা provide করা utility method এর মতো অন্য utility method ও সরবরাহ করে। `Stream` এবং `StreamExt` এখনও Rust এর standard library এর অংশ নয়, তবে বেশিরভাগ ecosystem crate একই definition ব্যবহার করে।
+We’ll explain the `Stream` and `StreamExt` traits in a bit more detail at the
+end of the chapter, but for now all you need to know is that the `Stream` trait
+defines a low-level interface that effectively combines the `Iterator` and
+`Future` traits. `StreamExt` supplies a higher-level set of APIs on top of
+`Stream`, including the `next` method as well as other utility methods similar
+to those provided by the `Iterator` trait. `Stream` and `StreamExt` are not yet
+part of Rust’s standard library, but most ecosystem crates use the same
+definition.
 
-Compiler error এর fix হলো Listing 17-31 এ দেখানো হিসাবে `trpl::StreamExt` এর জন্য একটি `use` statement যোগ করা।
+The fix to the compiler error is to add a `use` statement for `trpl::StreamExt`,
+as in Listing 17-31.
 
-<Listing number="17-31" caption="একটি iterator কে stream এর basis হিসেবে ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-31" caption="Successfully using an iterator as the basis for a stream" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-31/src/main.rs:all}}
@@ -68,9 +102,12 @@ Compiler error এর fix হলো Listing 17-31 এ দেখানো হি�
 
 </Listing>
 
-সব অংশ একসাথে করলে, এই code টি আমরা যেভাবে চেয়েছি সেভাবে কাজ করে! আরও কি, এখন যেহেতু আমাদের scope এ `StreamExt` আছে, তাই আমরা iterator এর মতো এর সব utility method ব্যবহার করতে পারি। উদাহরণস্বরূপ, Listing 17-32 এ, আমরা `filter` method ব্যবহার করে তিন এবং পাঁচের গুণিতক ছাড়া বাকি সবকিছু filter out করি।
+With all those pieces put together, this code works the way we want! What’s
+more, now that we have `StreamExt` in scope, we can use all of its utility
+methods, just as with iterators. For example, in Listing 17-32, we use the
+`filter` method to filter out everything but multiples of three and five.
 
-<Listing number="17-32" caption="`StreamExt::filter` method দিয়ে একটি stream filter করা" file-name="src/main.rs">
+<Listing number="17-32" caption="Filtering a stream with the `StreamExt::filter` method" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-32/src/main.rs:all}}
@@ -78,15 +115,26 @@ Compiler error এর fix হলো Listing 17-31 এ দেখানো হি�
 
 </Listing>
 
-অবশ্যই, এটি খুব বেশি interesting নয়, কারণ আমরা normal iterator দিয়ে একই কাজ করতে পারতাম এবং কোনো async এর প্রয়োজনও হতো না। চলুন দেখি আমরা streams এর জন্য unique কি করতে পারি।
+Of course, this isn’t very interesting, since we could do the same with normal
+iterators and without any async at all. Let’s look at what
+we can do that _is_ unique to streams.
 
 ### Composing Streams
 
-অনেক concept naturally stream হিসেবে represent করা হয়: queue এ available হওয়া item, computer এর জন্য full data set খুব বেশি বড় হলে file system থেকে incrementally pull করা data এর chunk, বা সময়ের সাথে network এর মাধ্যমে arrive হওয়া data। যেহেতু stream হলো future, তাই আমরা সেগুলোকে অন্য যেকোনো future এর সাথে ব্যবহার করতে পারি এবং interesting উপায়ে combine করতে পারি। উদাহরণস্বরূপ, আমরা খুব বেশি network call trigger করা avoid করার জন্য event batch up করতে পারি, long-running operation এর sequence এ timeout set করতে পারি, অথবা অপ্রয়োজনীয় কাজ করা avoid করার জন্য user interface event throttle করতে পারি।
+Many concepts are naturally represented as streams: items becoming available in
+a queue, chunks of data being pulled incrementally from the filesystem when the
+full data set is too large for the computer’s memory, or data arriving over the
+network over time. Because streams are futures, we can use them with any other
+kind of future and combine them in interesting ways. For example, we can batch
+up events to avoid triggering too many network calls, set timeouts on sequences
+of long-running operations, or throttle user interface events to avoid doing
+needless work.
 
-চলুন Listing 17-33 এ দেখানো হিসাবে WebSocket বা অন্য কোনো real-time communication protocol থেকে আমরা যে data stream দেখতে পারি তার stand-in হিসেবে message এর একটি ছোট stream তৈরি করার মাধ্যমে শুরু করি।
+Let’s start by building a little stream of messages as a stand-in for a stream
+of data we might see from a WebSocket or another real-time communication
+protocol, as shown in Listing 17-33.
 
-<Listing number="17-33" caption="`rx` receiver কে `ReceiverStream` হিসেবে ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-33" caption="Using the `rx` receiver as a `ReceiverStream`" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-33/src/main.rs:all}}
@@ -94,11 +142,15 @@ Compiler error এর fix হলো Listing 17-31 এ দেখানো হি�
 
 </Listing>
 
-প্রথমে, আমরা `get_messages` নামে একটি function তৈরি করি যা `impl Stream<Item = String>` return করে। এর implementation এর জন্য, আমরা একটি async channel তৈরি করি, ইংরেজি alphabet এর প্রথম 10 টি letter এর উপর loop করি, এবং সেগুলোকে channel এর মাধ্যমে send করি।
+First, we create a function called `get_messages` that returns `impl Stream<Item
+= String>`. For its implementation, we create an async channel, loop over the
+first 10 letters of the English alphabet, and send them across the channel.
 
-আমরা একটি নতুন type ও ব্যবহার করি: `ReceiverStream`, যা `trpl::channel` থেকে `rx` receiver কে `next` method সহ একটি `Stream` এ convert করে। `main` এ ফিরে, আমরা stream থেকে সব message print করার জন্য `while let` loop ব্যবহার করি।
+We also use a new type: `ReceiverStream`, which converts the `rx` receiver from
+the `trpl::channel` into a `Stream` with a `next` method. Back in `main`, we use
+a `while let` loop to print all the messages from the stream.
 
-যখন আমরা এই code run করি, তখন আমরা ঠিক সেই result পাই যা আমরা আশা করি:
+When we run this code, we get exactly the results we would expect:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -117,9 +169,12 @@ Message: 'i'
 Message: 'j'
 ```
 
-আবারও, আমরা regular `Receiver` API বা normal `Iterator` API দিয়েও এটা করতে পারতাম, তবে চলুন এমন feature যোগ করি যার জন্য stream এর প্রয়োজন: stream এ থাকা প্রত্যেক item এর উপর apply হয় এমন একটি timeout add করা, এবং আমরা emit করা item গুলোর উপর delay add করা, যা Listing 17-34 এ দেখানো হয়েছে।
+Again, we could do this with the regular `Receiver` API or even the regular
+`Iterator` API, though, so let’s add a feature that requires streams: adding a
+timeout that applies to every item in the stream, and a delay on the items we
+emit, as shown in Listing 17-34.
 
-<Listing number="17-34" caption="Stream এ item গুলোর উপর time limit set করার জন্য `StreamExt::timeout` method ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-34" caption="Using the `StreamExt::timeout` method to set a time limit on the items in a stream" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-34/src/main.rs:timeout}}
@@ -127,11 +182,21 @@ Message: 'j'
 
 </Listing>
 
-আমরা `timeout` method দিয়ে stream এ timeout add করে শুরু করি, যা `StreamExt` trait থেকে আসে। তারপর আমরা `while let` loop এর body update করি, কারণ stream এখন একটি `Result` return করে। `Ok` variant indicate করে যে message টি সময়ে এসেছে; `Err` variant indicate করে যে কোনো message আসার আগে timeout elapsed হয়েছে। আমরা সেই result এর উপর `match` করি এবং যখন আমরা successfully receive করি তখন message print করি অথবা timeout নিয়ে একটি notice print করি। সবশেষে, লক্ষ্য করুন যে timeout apply করার পর আমরা message pin করি, কারণ timeout helper এমন একটি stream তৈরি করে যা poll করার জন্য pin করার প্রয়োজন।
+We start by adding a timeout to the stream with the `timeout` method, which
+comes from the `StreamExt` trait. Then we update the body of the `while let`
+loop, because the stream now returns a `Result`. The `Ok` variant indicates a
+message arrived in time; the `Err` variant indicates that the timeout elapsed
+before any message arrived. We `match` on that result and either print the
+message when we receive it successfully or print a notice about the timeout.
+Finally, notice that we pin the messages after applying the timeout to them,
+because the timeout helper produces a stream that needs to be pinned to be
+polled.
 
-তবে, যেহেতু message গুলোর মধ্যে কোনো delay নেই, তাই এই timeout program এর behaviour change করে না। চলুন আমরা send করা message গুলোতে variable delay add করি, যা Listing 17-35 এ দেখানো হয়েছে।
+However, because there are no delays between messages, this timeout does not
+change the behavior of the program. Let’s add a variable delay to the messages
+we send, as shown in Listing 17-35.
 
-<Listing number="17-35" caption="`get_messages` কে async function না বানিয়ে async delay দিয়ে `tx` এর মাধ্যমে message send করা" file-name="src/main.rs">
+<Listing number="17-35" caption="Sending messages through `tx` with an async delay without making `get_messages` an async function" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-35/src/main.rs:messages}}
@@ -139,21 +204,40 @@ Message: 'j'
 
 </Listing>
 
-`get_messages` এ, আমরা `messages` array এর সাথে `enumerate` iterator method ব্যবহার করি যাতে আমরা item এর সাথে সাথে send করা প্রত্যেক item এর index ও পেতে পারি। তারপর আমরা even-index item এ 100-millisecond delay এবং odd-index item এ 300-millisecond delay apply করি real-world এ message stream থেকে আমরা যে ভিন্ন delay দেখতে পাই তা simulate করার জন্য। যেহেতু আমাদের timeout 200 milliseconds এর জন্য, তাই এটি message গুলোর অর্ধেকের উপর affect করবে।
+In `get_messages`, we use the `enumerate` iterator method with the `messages`
+array so that we can get the index of each item we’re sending along with the
+item itself. Then we apply a 100-millisecond delay to even-index items and a
+300-millisecond delay to odd-index items to simulate the different delays we
+might see from a stream of messages in the real world. Because our timeout is
+for 200 milliseconds, this should affect half of the messages.
 
-Block না করে `get_messages` function এ message এর মাঝে sleep করার জন্য, আমাদের async ব্যবহার করার প্রয়োজন। তবে, আমরা `get_messages` কে async function বানাতে পারি না, কারণ তাহলে আমরা `Stream<Item = String>` এর পরিবর্তে `Future<Output = Stream<Item = String>>` return করতাম। Caller কে stream এর access পাওয়ার জন্য `get_messages` await করতে হতো। কিন্তু মনে রাখবেন: একটি নির্দিষ্ট future এ সবকিছু linearly ঘটে; concurrency future এর _মধ্যে_ ঘটে। `get_messages` await করলে এটি সব message send করতে হতো, প্রত্যেক message এর মাঝে sleep delay সহ, receiver stream return করার আগে। ফলস্বরূপ, timeout useless হতো। Stream এ কোনো delay থাকতো না; সেগুলো stream available হওয়ার আগেই ঘটতো।
+To sleep between messages in the `get_messages` function without blocking, we
+need to use async. However, we can’t make `get_messages` itself into an async
+function, because then we’d return a `Future<Output = Stream<Item = String>>`
+instead of a `Stream<Item = String>>`. The caller would have to await
+`get_messages` itself to get access to the stream. But remember: everything in a
+given future happens linearly; concurrency happens _between_ futures. Awaiting
+`get_messages` would require it to send all the messages, including the sleep
+delay between each message, before returning the receiver stream. As a result,
+the timeout would be useless. There would be no delays in the stream itself;
+they would all happen before the stream was even available.
 
-এর পরিবর্তে, আমরা `get_messages` কে regular function হিসেবে রাখি যা stream return করে, এবং আমরা async `sleep` call handle করার জন্য একটি task spawn করি।
+Instead, we leave `get_messages` as a regular function that returns a stream,
+and we spawn a task to handle the async `sleep` calls.
 
-> Note: এভাবে `spawn_task` call করা কাজ করে কারণ আমরা ইতিমধ্যে আমাদের runtime set up করেছি; যদি না করতাম, তাহলে এটি panic করত। অন্যান্য implementation ভিন্ন tradeoff choose করে: তারা হয়তো একটি নতুন runtime spawn করতে পারে এবং panic avoid করতে পারে তবে কিছু extra overhead এ শেষ হতে পারে, অথবা তারা হয়তো runtime এর reference ছাড়া standalone ভাবে task spawn করার কোনো উপায় provide নাও করতে পারে। নিশ্চিত করুন যে আপনার runtime কোন tradeoff choose করেছে এবং সে অনুযায়ী code লিখুন!
+> Note: Calling `spawn_task` in this way works because we already set up our
+> runtime; had we not, it would cause a panic. Other implementations choose
+> different tradeoffs: they might spawn a new runtime and avoid the panic but
+> end up with a bit of extra overhead, or they may simply not provide a
+> standalone way to spawn tasks without reference to a runtime. Make sure you
+> know what tradeoff your runtime has chosen and write your code accordingly!
 
-এখন আমাদের code এর অনেক বেশি interesting result আছে। Message এর প্রত্যেক অন্য pair এর মাঝে একটি `Problem: Elapsed(())` error আছে।
+Now our code has a much more interesting result. Between every other pair of
+messages, a `Problem: Elapsed(())` error.
 
-<!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-35
-cargo run
-copy only the program output, *not* the compiler output
--->
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 Message: 'a'
@@ -173,18 +257,27 @@ Problem: Elapsed(())
 Message: 'j'
 ```
 
-Timeout message গুলোকে শেষ পর্যন্ত arrive হওয়া থেকে prevent করে না। আমরা এখনও original message গুলো পাই, কারণ আমাদের channel _unbounded_: এটি memory তে fit করতে পারে এমন যত খুশি message hold করতে পারে। যদি timeout এর আগে message arrive না করে, তাহলে আমাদের stream handler সেটার হিসাব করবে, কিন্তু যখন এটি আবার stream poll করে, তখন হয়তো message arrive হয়ে গেছে।
+The timeout doesn’t prevent the messages from arriving in the end. We still get
+all of the original messages, because our channel is _unbounded_: it can hold as
+many messages as we can fit in memory. If the message doesn’t arrive before the
+timeout, our stream handler will account for that, but when it polls the stream
+again, the message may now have arrived.
 
-অন্য ধরনের channel বা আরও general ভাবে অন্য ধরনের stream ব্যবহার করে প্রয়োজন হলে আপনি ভিন্ন behavior পেতে পারেন। চলুন time interval এর stream এর সাথে এই message stream combine করে practice এ দেখি।
-
-[17-02-messages]: ch17-02-applying-concurrency-with-async.html#message-passing
-[iterator-trait]: ch13-02-iterators.html#the-iterator-trait-and-the-next-method
+You can get different behavior if needed by using other kinds of channels or
+other kinds of streams more generally. Let’s see one of those in practice by
+combining a stream of time intervals with this stream of messages.
 
 ### Merging Streams
 
-প্রথমত, চলুন অন্য একটি stream তৈরি করি, যা প্রত্যেক millisecond এ একটি item emit করবে যদি আমরা এটিকে সরাসরি run করতে দেই। Simplicity এর জন্য, আমরা delay তে একটি message send করার জন্য `sleep` function ব্যবহার করতে পারি এবং channel থেকে stream তৈরি করার `get_messages` এ ব্যবহার করা approach এর সাথে combine করতে পারি। পার্থক্য হলো এইবার, আমরা elapsed হওয়া interval এর count send করব, তাই return type `impl Stream<Item = u32>` হবে, এবং আমরা function টি `get_intervals` call করতে পারি (Listing 17-36 দেখুন)।
+First, let’s create another stream, which will emit an item every millisecond if
+we let it run directly. For simplicity, we can use the `sleep` function to send
+a message on a delay and combine it with the same approach we used in
+`get_messages` of creating a stream from a channel. The difference is that this
+time, we’re going to send back the count of intervals that have elapsed, so the
+return type will be `impl Stream<Item = u32>`, and we can call the function
+`get_intervals` (see Listing 17-36).
 
-<Listing number="17-36" caption="একটি counter দিয়ে stream তৈরি করা যা প্রতি millisecond এ একবার emit করা হবে" file-name="src/main.rs">
+<Listing number="17-36" caption="Creating a stream with a counter that will be emitted once every millisecond" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-36/src/main.rs:intervals}}
@@ -192,13 +285,22 @@ Timeout message গুলোকে শেষ পর্যন্ত arrive হও
 
 </Listing>
 
-আমরা task এ একটি `count` define করে শুরু করি। (আমরা task এর বাইরেও define করতে পারতাম, তবে যেকোনো নির্দিষ্ট variable এর scope limit করা clear)। তারপর আমরা একটি infinite loop তৈরি করি। Loop এর প্রত্যেক iteration asynchronously এক millisecond এর জন্য sleep করে, count increment করে, এবং তারপর এটিকে channel এ send করে। যেহেতু এটি `spawn_task` দ্বারা তৈরি task এ wrap করা, তাই runtime এর সাথে এর সব কিছু—infinite loop সহ—clean up করা হবে।
+We start by defining a `count` in the task. (We could define it outside the
+task, too, but it’s clearer to limit the scope of any given variable.) Then we
+create an infinite loop. Each iteration of the loop asynchronously sleeps for
+one millisecond, increments the count, and then sends it over the channel.
+Because this is all wrapped in the task created by `spawn_task`, all of
+it—including the infinite loop—will get cleaned up along with the runtime.
 
-এই ধরনের infinite loop, যা শুধুমাত্র পুরো runtime tear down হলেই শেষ হয়, async Rust এ বেশ common: অনেক program এর indefinitely run করতে থাকার প্রয়োজন। Async এর সাথে, এটি অন্য কিছু block করে না, যতক্ষণ loop এর through এ প্রত্যেক iteration এ কমপক্ষে একটি await point থাকে।
+This kind of infinite loop, which ends only when the whole runtime gets torn
+down, is fairly common in async Rust: many programs need to keep running
+indefinitely. With async, this doesn’t block anything else, as long as there is
+at least one await point in each iteration through the loop.
 
-এখন, আমাদের main function এর async block এ ফিরে, আমরা Listing 17-37 এ দেখানো হিসাবে `messages` এবং `intervals` stream merge করার চেষ্টা করতে পারি।
+Now, back in our main function’s async block, we can attempt to merge the
+`messages` and `intervals` streams, as shown in Listing 17-37.
 
-<Listing number="17-37" caption="`messages` এবং `intervals` stream merge করার চেষ্টা করা" file-name="src/main.rs">
+<Listing number="17-37" caption="Attempting to merge the `messages` and `intervals` streams" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-37/src/main.rs:main}}
@@ -206,13 +308,26 @@ Timeout message গুলোকে শেষ পর্যন্ত arrive হও
 
 </Listing>
 
-আমরা `get_intervals` call করে শুরু করি। তারপর আমরা `merge` method দিয়ে `messages` এবং `intervals` stream merge করি, যা একাধিক stream কে একটি stream এ combine করে যা কোনো particular ordering impose না করে source stream থেকে item available হওয়ার সাথে সাথেই produce করে। সবশেষে, আমরা `messages` এর পরিবর্তে সেই combined stream এর উপর loop করি।
+We start by calling `get_intervals`. Then we merge the `messages` and
+`intervals` streams with the `merge` method, which combines multiple streams
+into one stream that produces items from any of the source streams as soon as
+the items are available, without imposing any particular ordering. Finally, we
+loop over that combined stream instead of over `messages`.
 
-এই মুহূর্তে, `messages` এবং `intervals` কোনোটিরই pin বা mutable হওয়ার প্রয়োজন নেই, কারণ দুটোই single `merged` stream এ combine হবে। তবে, `merge` এর এই call compile হয় না! ( `while let` loop এ `next` call ও করে না, তবে আমরা সেটায় পরে আসব)। কারণ হলো দুটি stream এর type ভিন্ন। `messages` stream এর type হলো `Timeout<impl Stream<Item = String>>`, যেখানে `Timeout` হলো `timeout` call এর জন্য `Stream` implement করা type। `intervals` stream এর type হলো `impl Stream<Item = u32>`। এই দুটি stream merge করার জন্য, আমাদের একটিকে অন্যটির সাথে match করার জন্য transform করার প্রয়োজন। আমরা intervals stream rework করব, কারণ messages ইতিমধ্যে আমাদের desired basic format এ আছে এবং timeout error handle করতে হয় (Listing 17-38 দেখুন)।
+At this point, neither `messages` nor `intervals` needs to be pinned or mutable,
+because both will be combined into the single `merged` stream. However, this
+call to `merge` doesn’t compile! (Neither does the `next` call in the `while
+let` loop, but we’ll come back to that.) This is because the two streams have
+different types. The `messages` stream has the type `Timeout<impl Stream<Item =
+String>>`, where `Timeout` is the type that implements `Stream` for a `timeout`
+call. The `intervals` stream has the type `impl Stream<Item = u32>`. To merge
+these two streams, we need to transform one of them to match the other. We’ll
+rework the intervals stream, because messages is already in the basic format we
+want and has to handle timeout errors (see Listing 17-38).
 
 <!-- We cannot directly test this one, because it never stops. -->
 
-<Listing number="17-38" caption="`intervals` stream এর type কে `messages` stream এর type এর সাথে align করা" file-name="src/main.rs">
+<Listing number="17-38" caption="Aligning the type of the the `intervals` stream with the type of the `messages` stream" file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-38/src/main.rs:main}}
@@ -220,7 +335,17 @@ Timeout message গুলোকে শেষ পর্যন্ত arrive হও
 
 </Listing>
 
-প্রথমত, আমরা `map` helper method ব্যবহার করে `intervals` কে string এ transform করতে পারি। দ্বিতীয়ত, আমাদের `messages` থেকে `Timeout` match করার প্রয়োজন। যেহেতু আমরা আসলে `intervals` এর জন্য timeout _চাই না_, তাই আমরা এমন একটি timeout তৈরি করতে পারি যা আমাদের ব্যবহার করা অন্য duration এর চেয়ে বেশি long। এখানে, আমরা `Duration::from_secs(10)` দিয়ে 10-second timeout তৈরি করি। সবশেষে, আমাদের `stream` কে mutable বানানোর প্রয়োজন, যাতে `while let` loop এর `next` call stream এর মধ্যে iterate করতে পারে, এবং pin করি যাতে এটা safe ভাবে করা যায়। এটা আমাদের _প্রায়_ সেই জায়গায় নিয়ে যায় যেখানে আমাদের থাকার দরকার। সবকিছু type check করে। আপনি যদি এটা run করেন, তাহলে দুটি problem হবে। প্রথমত, এটা কখনো stop হবে না! <span class="keystroke">ctrl-c</span> দিয়ে আপনাকে এটা stop করতে হবে। দ্বিতীয়ত, ইংরেজি alphabet এর message গুলো সব interval counter message এর মাঝে চাপা পরে যাবে:
+First, we can use the `map` helper method to transform the `intervals` into a
+string. Second, we need to match the `Timeout` from `messages`. Because we don’t
+actually _want_ a timeout for `intervals`, though, we can just create a timeout
+which is longer than the other durations we are using. Here, we create a
+10-second timeout with `Duration::from_secs(10)`. Finally, we need to make
+`stream` mutable, so that the `while let` loop’s `next` calls can iterate
+through the stream, and pin it so that it’s safe to do so. That gets us _almost_
+to where we need to be. Everything type checks. If you run this, though, there
+will be two problems. First, it will never stop! You’ll need to stop it with
+<span class="keystroke">ctrl-c</span>. Second, the messages from the English
+alphabet will be buried in the midst of all the interval counter messages:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the tasks running differently rather than
@@ -238,9 +363,9 @@ Interval: 43
 --snip--
 ```
 
-Listing 17-39 এই last দুটি problem solve করার একটি উপায় দেখায়।
+Listing 17-39 shows one way to solve these last two problems.
 
-<Listing number="17-39" caption="Merged stream manage করার জন্য `throttle` এবং `take` ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-39" caption="Using `throttle` and `take` to manage the merged streams" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-39/src/main.rs:throttle}}
@@ -248,17 +373,30 @@ Listing 17-39 এই last দুটি problem solve করার একটি �
 
 </Listing>
 
-প্রথমত, আমরা `intervals` stream এর উপর `throttle` method ব্যবহার করি যাতে এটি `messages` stream কে overwhelm না করে। _Throttling_ হলো এমন একটি উপায় যার মাধ্যমে কোনো function call হওয়ার rate limit করা যায়—অথবা, এই ক্ষেত্রে, stream কতবার poll হবে তা limit করা যায়। প্রতি 100 milliseconds এ একবার করলে ঠিক হবে, কারণ আমাদের message গুলো প্রায় ততটা সময়েই arrive করে।
+First, we use the `throttle` method on the `intervals` stream so that it doesn’t
+overwhelm the `messages` stream. _Throttling_ is a way of limiting the rate at
+which a function will be called—or, in this case, how often the stream will be
+polled. Once every 100 milliseconds should do, because that’s roughly how often
+our messages arrive.
 
-Stream থেকে আমরা যে number এর item accept করব তা limit করার জন্য, আমরা `merged` stream এর উপর `take` method apply করি, কারণ আমরা শুধু একটি stream নয়, final output limit করতে চাই।
+To limit the number of items we will accept from a stream, we apply the `take`
+method to the `merged` stream, because we want to limit the final output, not
+just one stream or the other.
 
-এখন যখন আমরা program run করি, তখন এটি stream থেকে 20টি item pull করার পর stop হয়, এবং interval message গুলো message গুলোকে overwhelm করে না। আমরা `Interval: 100` বা `Interval: 200` বা এই ধরনের কিছু পাই না, কিন্তু এর পরিবর্তে `Interval: 1`, `Interval: 2`, এবং এই ধরনের কিছু পাই—এমনকি যদিও আমাদের source stream এর প্রত্যেক millisecond এ event তৈরি করার ক্ষমতা আছে। কারণ হলো `throttle` call একটি নতুন stream তৈরি করে যা original stream কে wrap করে যাতে original stream throttle rate এ poll হয়, এর "native" rate এ নয়। আমাদের কাছে অনেক unhandled interval message নেই যা আমরা ignore করা choose করছি। এর পরিবর্তে, আমরা সেই interval message গুলো প্রথমে generate করি না! এটি Rust এর future এর inherent "laziness" যা আমাদের performance characteristics choose করার সুযোগ দেয়।
+Now when we run the program, it stops after pulling 20 items from the stream,
+and the intervals don’t overwhelm the messages. We also don’t get `Interval:
+100` or `Interval: 200` or so on, but instead get `Interval: 1`, `Interval: 2`,
+and so on—even though we have a source stream that _can_ produce an event every
+millisecond. That’s because the `throttle` call produces a new stream that wraps
+the original stream so that the original stream gets polled only at the throttle
+rate, not its own “native” rate. We don’t have a bunch of unhandled interval
+messages we’re choosing to ignore. Instead, we never produce those interval
+messages in the first place! This is the inherent “laziness” of Rust’s futures
+at work again, allowing us to choose our performance characteristics.
 
-<!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-39
-cargo run
-copy and paste only the program output
--->
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 Interval: 1
@@ -283,9 +421,16 @@ Problem: Elapsed(())
 Interval: 12
 ```
 
-আমাদের handle করার জন্য শেষ একটি জিনিস আছে: error! এই channel-based stream গুলোর সাথে, channel এর অন্য side close হয়ে গেলে `send` call fail করতে পারে—এবং এটি শুধু matter করে runtime কিভাবে stream তৈরি করা future execute করে। এতক্ষণ, আমরা `unwrap` call করে এই possibility ignore করেছি, কিন্তু একটি well-behaved app এ আমাদের error explicitly handle করা উচিত, কমপক্ষে loop end করে যাতে আমরা আর message send করার চেষ্টা না করি। Listing 17-40 একটি simple error strategy দেখায়: issue print করুন এবং তারপর loop থেকে `break` করুন।
+There’s one last thing we need to handle: errors! With both of these
+channel-based streams, the `send` calls could fail when the other side of the
+channel closes—and that’s just a matter of how the runtime executes the futures
+that make up the stream. Up until now, we’ve ignored this possibility by calling
+`unwrap`, but in a well-behaved app, we should explicitly handle the error, at
+minimum by ending the loop so we don’t try to send any more messages. Listing
+17-40 shows a simple error strategy: print the issue and then `break` from the
+loops.
 
-<Listing number="17-40" caption="Error handle করা এবং loop shut down করা" file-name="src/main.rs">
+<Listing number="17-40" caption="Handling errors and shutting down the loops">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-40/src/main.rs:errors}}
@@ -293,9 +438,12 @@ Interval: 12
 
 </Listing>
 
-যথারীতি, message send error handle করার সঠিক উপায় different হবে; শুধু নিশ্চিত করুন যে আপনার একটি strategy আছে।
+As usual, the correct way to handle a message send error will vary; just make
+sure you have a strategy.
 
-এখন যেহেতু আমরা বাস্তবে অনেক async দেখেছি, তাই চলুন একটু back এ যাই এবং Rust async কে কাজ করানোর জন্য ব্যবহার করা `Future`, `Stream`, এবং অন্য key trait এর কিছু detail নিয়ে আলোচনা করি।
+Now that we’ve seen a bunch of async in practice, let’s take a step back and dig
+into a few of the details of how `Future`, `Stream`, and the other key traits
+Rust uses to make async work.
 
-[17-02-messages]: ch17-02-applying-concurrency-with-async.html#message-passing
+[17-02-messages]: ch17-02-concurrency-with-async.html#message-passing
 [iterator-trait]: ch13-02-iterators.html#the-iterator-trait-and-the-next-method

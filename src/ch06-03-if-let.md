@@ -1,8 +1,12 @@
-## `if let` এবং `let else` দিয়ে সংক্ষিপ্ত কন্ট্রোল ফ্লো
+## Concise Control Flow with `if let` and `let else`
 
-`if let` সিনট্যাক্স আপনাকে `if` এবং `let` কে একত্রিত করতে দেয় একটি কম ভার্বোস উপায়ে মানগুলি হ্যান্ডেল করার জন্য যা একটি pattern এর সাথে মেলে এবং বাকিগুলি উপেক্ষা করে। Listing 6-6 এ প্রোগ্রামটি বিবেচনা করুন যা `config_max` ভেরিয়েবলে একটি `Option<u8>` মানের সাথে মেলে কিন্তু মানটি `Some` variant হলে শুধুমাত্র কোড এক্সিকিউট করতে চায়।
+The `if let` syntax lets you combine `if` and `let` into a less verbose way to
+handle values that match one pattern while ignoring the rest. Consider the
+program in Listing 6-6 that matches on an `Option<u8>` value in the
+`config_max` variable but only wants to execute code if the value is the `Some`
+variant.
 
-<Listing number="6-6" caption="একটি `match` যা শুধুমাত্র মান `Some` হলে কোড এক্সিকিউট করতে চায়">
+<Listing number="6-6" caption="A `match` that only cares about executing code when the value is `Some`">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-06/src/main.rs:here}}
@@ -10,43 +14,70 @@
 
 </Listing>
 
-যদি মানটি `Some` হয়, তবে আমরা pattern এ ভেরিয়েবল `max` এর সাথে মানটিকে বাইন্ড করে `Some` variant এর মানটি প্রিন্ট করি। আমরা `None` মান দিয়ে কিছুই করতে চাই না। `match` এক্সপ্রেশনটিকে সন্তুষ্ট করার জন্য, আমাদের শুধুমাত্র একটি variant প্রক্রিয়া করার পরে `_ => ()` যোগ করতে হবে, যা যোগ করার জন্য বিরক্তিকর boilerplate কোড।
+If the value is `Some`, we print out the value in the `Some` variant by binding
+the value to the variable `max` in the pattern. We don’t want to do anything
+with the `None` value. To satisfy the `match` expression, we have to add `_ =>
+()` after processing just one variant, which is annoying boilerplate code to
+add.
 
-পরিবর্তে, আমরা `if let` ব্যবহার করে এটিকে একটি সংক্ষিপ্ত উপায়ে লিখতে পারি। নিম্নলিখিত কোডটি Listing 6-6 এর `match` এর মতোই আচরণ করে:
+Instead, we could write this in a shorter way using `if let`. The following
+code behaves the same as the `match` in Listing 6-6:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-12-if-let/src/main.rs:here}}
 ```
 
-`if let` সিনট্যাক্স একটি pattern এবং একটি এক্সপ্রেশন নেয় যা সমান চিহ্ন দ্বারা পৃথক করা হয়। এটি একটি `match` এর মতোই কাজ করে, যেখানে এক্সপ্রেশনটি `match` এ দেওয়া হয় এবং pattern টি এর প্রথম arm। এই ক্ষেত্রে, pattern টি হল `Some(max)` এবং `max` `Some` এর ভিতরের মানের সাথে বাইন্ড করে। তারপরে আমরা `if let` ব্লকের বডিতে `max` ব্যবহার করতে পারি ঠিক যেভাবে আমরা সংশ্লিষ্ট `match` arm এ `max` ব্যবহার করেছি। `if let` ব্লকের কোডটি শুধুমাত্র তখনই রান হয় যদি মানটি pattern এর সাথে মেলে।
+The syntax `if let` takes a pattern and an expression separated by an equal
+sign. It works the same way as a `match`, where the expression is given to the
+`match` and the pattern is its first arm. In this case, the pattern is
+`Some(max)`, and the `max` binds to the value inside the `Some`. We can then
+use `max` in the body of the `if let` block in the same way we used `max` in
+the corresponding `match` arm. The code in the `if let` block only runs if the
+value matches the pattern.
 
-`if let` ব্যবহার করার মানে হল কম টাইপ করা, কম ইন্ডেন্টেশন এবং কম boilerplate কোড। তবে, আপনি সেই সম্পূর্ণ চেকিং হারান যা `match` প্রয়োগ করে। `match` এবং `if let` এর মধ্যে বেছে নেওয়া নির্ভর করে আপনি আপনার নির্দিষ্ট পরিস্থিতিতে কী করছেন এবং সংক্ষিপ্ততা লাভ করা সম্পূর্ণ চেকিং হারানোর জন্য একটি উপযুক্ত ট্রেড-অফ কিনা তার উপর।
+Using `if let` means less typing, less indentation, and less boilerplate code.
+However, you lose the exhaustive checking that `match` enforces. Choosing
+between `match` and `if let` depends on what you’re doing in your particular
+situation and whether gaining conciseness is an appropriate trade-off for
+losing exhaustive checking.
 
-অন্য কথায়, আপনি `if let` কে একটি `match` এর জন্য সিনট্যাক্স সুগার হিসাবে ভাবতে পারেন যা মানটি একটি pattern এর সাথে মিললে কোড চালায় এবং তারপরে অন্য সমস্ত মানকে উপেক্ষা করে।
+In other words, you can think of `if let` as syntax sugar for a `match` that
+runs code when the value matches one pattern and then ignores all other values.
 
-আমরা `if let` এর সাথে একটি `else` অন্তর্ভুক্ত করতে পারি। `else` এর সাথে যাওয়া কোড ব্লকটি `match` এক্সপ্রেশনের `_` case এর সাথে যাওয়া কোড ব্লকের মতোই, যা `if let` এবং `else` এর সমতুল্য। Listing 6-4 এ `Coin` enum সংজ্ঞাটি মনে করুন, যেখানে `Quarter` variant টি একটি `UsState` মানও ধরে রেখেছে। যদি আমরা সমস্ত non-quarter কয়েন গণনা করতে চাই এবং একই সাথে কোয়ার্টারগুলির রাজ্য ঘোষণা করতে চাই, তবে আমরা `match` এক্সপ্রেশন দিয়ে তা করতে পারি, যেমন:
+We can include an `else` with an `if let`. The block of code that goes with the
+`else` is the same as the block of code that would go with the `_` case in the
+`match` expression that is equivalent to the `if let` and `else`. Recall the
+`Coin` enum definition in Listing 6-4, where the `Quarter` variant also held a
+`UsState` value. If we wanted to count all non-quarter coins we see while also
+announcing the state of the quarters, we could do that with a `match`
+expression, like this:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-13-count-and-announce-match/src/main.rs:here}}
 ```
 
-অথবা আমরা `if let` এবং `else` এক্সপ্রেশন ব্যবহার করতে পারি, যেমন:
+Or we could use an `if let` and `else` expression, like this:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-14-count-and-announce-if-let-else/src/main.rs:here}}
 ```
 
-## `let else` দিয়ে "happy path" এ থাকা
+## Staying on the “happy path” with `let else`
 
-একটি সাধারণ pattern হল একটি মান উপস্থিত থাকলে কিছু গণনা করা এবং অন্যথায় একটি ডিফল্ট মান ফেরত দেওয়া। `UsState` মান সহ কয়েনগুলির আমাদের উদাহরণটি চালিয়ে গেলে, যদি আমরা কোয়ার্টারের রাজ্যের বয়স কত তার উপর নির্ভর করে মজার কিছু বলতে চাই, তবে আমরা একটি রাজ্যের বয়স পরীক্ষা করার জন্য `UsState` এ একটি method প্রবর্তন করতে পারি, যেমন:
+One common pattern is to perform some computation when a value is present and
+return a default value otherwise. Continuing on with our example of coins with a
+`UsState` value, if we wanted to say something funny depending on how old the
+state on the quarter was, we might introduce a method on `UsState` to check the
+age of a state, like so:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-07/src/main.rs:state}}
 ```
 
-তারপর আমরা Listing 6-7 এর মতো, শর্তের বডিতে একটি `state` ভেরিয়েবল প্রবর্তন করে কয়েনের প্রকারের সাথে মেলানোর জন্য `if let` ব্যবহার করতে পারি।
+Then we might use `if let` to match on the type of coin, introducing a `state`
+variable within the body of the condition, as in Listing 6-7.
 
-<Listing number="6-7" caption="ব্যবহার করে" file-name="src/main.rs">
+<Listing number="6-7" caption="Using" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-07/src/main.rs:describe}}
@@ -54,9 +85,14 @@
 
 </Listing>
 
-এটি কাজ করে, কিন্তু এটি `if let` স্টেটমেন্টের বডিতে কাজটিকে ঠেলে দিয়েছে এবং যদি কাজটি আরও জটিল হয় তবে শীর্ষ-স্তরের শাখাগুলি কীভাবে সম্পর্কিত তা অনুসরণ করা কঠিন হতে পারে। আমরা `if let` থেকে `state` তৈরি করতে বা তাড়াতাড়ি ফেরত দিতে, হয় মান তৈরি করার জন্য এক্সপ্রেশনগুলির সুবিধা নিতে পারি, যেমন Listing 6-8 এ। (আপনি অবশ্যই একটি `match` দিয়েও একই কাজ করতে পারেন!)
+That gets the job done, but it has pushed the work into the body of the `if let`
+statement, and if the work to be done is more complicated, it might be hard to
+follow exactly how the top-level branches relate. We could also take advantage
+of the fact that expressions produce a value either to produce the `state` from
+the `if let` or to return early, as in Listing 6-8. (You could do similar with a
+`match`, of course!)
 
-<Listing number="6-8" caption="একটি মান তৈরি করতে বা তাড়াতাড়ি ফেরত দিতে `if let` ব্যবহার করা।" file-name="src/main.rs">
+<Listing number="6-8" caption="Using `if let` to produce a value or return early." file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-08/src/main.rs:describe}}
@@ -64,13 +100,22 @@
 
 </Listing>
 
-এটি নিজের মতো করে অনুসরণ করা একটু বিরক্তিকর! `if let` এর একটি শাখা একটি মান তৈরি করে এবং অন্যটি ফাংশন থেকে সম্পূর্ণরূপে ফিরে আসে।
+This is a bit annoying to follow in its own way, though! One branch of the `if
+let` produces a value, and the other one returns from the function entirely.
 
-এই সাধারণ patternটিকে প্রকাশ করা আরও সুন্দর করার জন্য, Rust এ `let`-`else` আছে। `let`-`else` সিনট্যাক্সটি বাম দিকে একটি pattern এবং ডানদিকে একটি এক্সপ্রেশন নেয়, যা `if let` এর মতোই, তবে এটির কোনো `if` শাখা নেই, শুধুমাত্র একটি `else` শাখা আছে। যদি pattern টি মেলে, তবে এটি বাইরের scope এ pattern থেকে মানটি বাইন্ড করবে। যদি pattern টি না মেলে, তবে প্রোগ্রামটি `else` arm এ প্রবাহিত হবে, যা অবশ্যই ফাংশন থেকে ফেরত আসবে।
+To make this common pattern nicer to express, Rust has `let`-`else`. The
+`let`-`else` syntax takes a pattern on the left side and an expression on the
+right, very similar to `if let`, but it does not have an `if` branch, only an
+`else` branch. If the pattern matches, it will bind the value from the pattern
+in the outer scope. If the pattern does _not_ match, the program will flow into
+the `else` arm, which must return from the function.
 
-Listing 6-9 এ, আপনি দেখতে পারেন `if let` এর পরিবর্তে `let`-`else` ব্যবহার করলে Listing 6-8 কেমন দেখায়। লক্ষ্য করুন যে `if let` যেভাবে দুটি শাখার জন্য উল্লেখযোগ্যভাবে ভিন্ন কন্ট্রোল ফ্লো না করে এটি এইভাবে ফাংশনের মূল বডিতে "happy path" এ থাকে।
+In Listing 6-9, you can see how Listing 6-8 looks when using `let`-`else` in
+place of `if let`. Notice that it stays “on the happy path” in the main body of
+the function this way, without having significantly different control flow for
+two branches the way the `if let` did.
 
-<Listing number="6-9" caption="ফাংশনের মাধ্যমে ফ্লো স্পষ্ট করতে `let`-`else` ব্যবহার করা।" file-name="src/main.rs">
+<Listing number="6-9" caption="Using `let`-`else` to clarify the flow through the function." file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-09/src/main.rs:describe}}
@@ -78,12 +123,23 @@ Listing 6-9 এ, আপনি দেখতে পারেন `if let` এর �
 
 </Listing>
 
-যদি আপনার এমন পরিস্থিতি থাকে যেখানে আপনার প্রোগ্রামের যুক্তি `match` ব্যবহার করে প্রকাশ করার জন্য খুব বেশি ভার্বোস হয়, তবে মনে রাখবেন যে `if let` এবং `let else` ও আপনার Rust টুলবক্সে রয়েছে।
+If you have a situation in which your program has logic that is too verbose to
+express using a `match`, remember that `if let` and `let else` are in your Rust
+toolbox as well.
 
-## সারসংক্ষেপ
+## Summary
 
-আমরা এখন কভার করেছি কিভাবে enums ব্যবহার করে কাস্টম প্রকার তৈরি করতে হয় যা তালিকাভুক্ত মানগুলির একটি সেট হতে পারে। আমরা দেখিয়েছি কিভাবে standard library এর `Option<T>` টাইপ আপনাকে ত্রুটি প্রতিরোধ করতে টাইপ সিস্টেম ব্যবহার করতে সাহায্য করে। যখন enum মানগুলির ভিতরে ডেটা থাকে, তখন আপনি কতগুলি ক্ষেত্র আপনাকে পরিচালনা করতে হবে তার উপর নির্ভর করে সেই মানগুলি বের করতে এবং ব্যবহার করতে `match` বা `if let` ব্যবহার করতে পারেন।
+We’ve now covered how to use enums to create custom types that can be one of a
+set of enumerated values. We’ve shown how the standard library’s `Option<T>`
+type helps you use the type system to prevent errors. When enum values have
+data inside them, you can use `match` or `if let` to extract and use those
+values, depending on how many cases you need to handle.
 
-আপনার Rust প্রোগ্রামগুলি এখন structs এবং enums ব্যবহার করে আপনার ডোমেনে ধারণাগুলি প্রকাশ করতে পারে। আপনার API তে ব্যবহার করার জন্য কাস্টম টাইপ তৈরি করা প্রকার নিরাপত্তা নিশ্চিত করে: কম্পাইলার নিশ্চিত করবে যে আপনার ফাংশনগুলি শুধুমাত্র সেই প্রকারের মান পায় যা প্রতিটি ফাংশন আশা করে।
+Your Rust programs can now express concepts in your domain using structs and
+enums. Creating custom types to use in your API ensures type safety: the
+compiler will make certain your functions only get values of the type each
+function expects.
 
-আপনার ব্যবহারকারীদের কাছে একটি সুসংগঠিত API প্রদান করার জন্য যা ব্যবহার করা সহজ এবং শুধুমাত্র আপনার ব্যবহারকারীদের যা প্রয়োজন তা প্রকাশ করে, আসুন এখন Rust এর মডিউলগুলিতে যাই।
+In order to provide a well-organized API to your users that is straightforward
+to use and only exposes exactly what your users will need, let’s now turn to
+Rust’s modules.

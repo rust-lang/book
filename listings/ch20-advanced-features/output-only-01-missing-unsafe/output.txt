@@ -1,6 +1,6 @@
 $ cargo run
    Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
-error[E0133]: call to unsafe function `dangerous` is unsafe and requires unsafe function or block
+error[E0133]: call to unsafe function `dangerous` is unsafe and requires unsafe block
  --> src/main.rs:4:5
   |
 4 |     dangerous();

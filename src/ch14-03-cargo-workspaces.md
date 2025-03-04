@@ -1,17 +1,34 @@
 ## Cargo Workspaces
 
-অধ্যায় 12-এ, আমরা একটি প্যাকেজ তৈরি করেছি যাতে একটি বাইনারি crate এবং একটি লাইব্রেরি crate অন্তর্ভুক্ত ছিল। আপনার প্রজেক্ট develop হওয়ার সাথে সাথে, আপনি হয়তো দেখতে পাবেন যে লাইব্রেরি crate আরও বড় হতে থাকে এবং আপনি আপনার প্যাকেজটিকে আরও একাধিক লাইব্রেরি crate-এ বিভক্ত করতে চান। Cargo _workspaces_ নামে একটি বৈশিষ্ট্য সরবরাহ করে যা একাধিক সম্পর্কিত প্যাকেজ পরিচালনা করতে সাহায্য করতে পারে যা একসাথে develop করা হয়।
+In Chapter 12, we built a package that included a binary crate and a library
+crate. As your project develops, you might find that the library crate
+continues to get bigger and you want to split your package further into
+multiple library crates. Cargo offers a feature called _workspaces_ that can
+help manage multiple related packages that are developed in tandem.
 
-### একটি Workspace তৈরি করা
+### Creating a Workspace
 
-একটি _workspace_ হল প্যাকেজের একটি সেট যা একই _Cargo.lock_ এবং আউটপুট ডিরেক্টরি শেয়ার করে। আসুন একটি workspace ব্যবহার করে একটি প্রজেক্ট তৈরি করি—আমরা তুচ্ছ কোড ব্যবহার করব যাতে আমরা workspace-এর কাঠামোর উপর মনোযোগ দিতে পারি। একটি workspace তৈরি করার একাধিক উপায় রয়েছে, তাই আমরা শুধুমাত্র একটি সাধারণ উপায় দেখাব। আমাদের একটি workspace থাকবে যেখানে একটি বাইনারি এবং দুটি লাইব্রেরি থাকবে। বাইনারি, যা প্রধান কার্যকারিতা প্রদান করবে, দুটি লাইব্রেরির উপর নির্ভর করবে। একটি লাইব্রেরি একটি `add_one` ফাংশন প্রদান করবে এবং দ্বিতীয় লাইব্রেরি একটি `add_two` ফাংশন প্রদান করবে। এই তিনটি crate একই workspace-এর অংশ হবে। আমরা workspace-এর জন্য একটি নতুন ডিরেক্টরি তৈরি করে শুরু করব:
+A _workspace_ is a set of packages that share the same _Cargo.lock_ and output
+directory. Let’s make a project using a workspace—we’ll use trivial code so we
+can concentrate on the structure of the workspace. There are multiple ways to
+structure a workspace, so we'll just show one common way. We’ll have a
+workspace containing a binary and two libraries. The binary, which will provide
+the main functionality, will depend on the two libraries. One library will
+provide an `add_one` function, and a second library an `add_two` function.
+These three crates will be part of the same workspace. We’ll start by creating
+a new directory for the workspace:
 
 ```console
 $ mkdir add
 $ cd add
 ```
 
-এর পরে, _add_ ডিরেক্টরিতে, আমরা _Cargo.toml_ ফাইলটি তৈরি করি যা পুরো workspace কনফিগার করবে। এই ফাইলে কোনো `[package]` বিভাগ থাকবে না। পরিবর্তে, এটি একটি `[workspace]` বিভাগ দিয়ে শুরু হবে যা আমাদের workspace-এ সদস্য যোগ করার অনুমতি দেবে। আমরা আমাদের workspace-এ Cargo-এর resolver অ্যালগরিদমের সর্বশেষ এবং সর্বশ্রেষ্ঠ সংস্করণ ব্যবহার করতেও একটি পয়েন্ট করি, `resolver`-কে `“2”`-এ সেট করে।
+Next, in the _add_ directory, we create the _Cargo.toml_ file that will
+configure the entire workspace. This file won’t have a `[package]` section.
+Instead, it will start with a `[workspace]` section that will allow us to add
+members to the workspace. We also make a point to use the latest and greatest
+version of Cargo’s resolver algorithm in our workspace by setting the
+`resolver` to `"2"`.
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -19,10 +36,12 @@ $ cd add
 {{#include ../listings/ch14-more-about-cargo/no-listing-01-workspace/add/Cargo.toml}}
 ```
 
-এর পরে, আমরা _add_ ডিরেক্টরির মধ্যে `cargo new` চালিয়ে `adder` বাইনারি crate তৈরি করব:
+Next, we’ll create the `adder` binary crate by running `cargo new` within the
+_add_ directory:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-01-adder-crate/add
+remove `members = ["adder"]` from Cargo.toml
 rm -rf adder
 cargo new adder
 copy output below
@@ -34,13 +53,16 @@ $ cargo new adder
       Adding `adder` as member of workspace at `file:///projects/add`
 ```
 
-একটি workspace-এর ভিতরে `cargo new` চালালে স্বয়ংক্রিয়ভাবে workspace `Cargo.toml`-এর `[workspace]` সংজ্ঞায় `members` কী-তে নতুন তৈরি প্যাকেজটিও যোগ করা হয়, যেমন:
+Running `cargo new` inside a workspace also automatically adds the newly created
+package to the `members` key in the `[workspace]` definition in the workspace
+`Cargo.toml`, like this:
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/output-only-01-adder-crate/add/Cargo.toml}}
 ```
 
-এই সময়ে, আমরা `cargo build` চালিয়ে workspace তৈরি করতে পারি। আপনার _add_ ডিরেক্টরির ফাইলগুলি এইরকম দেখতে হবে:
+At this point, we can build the workspace by running `cargo build`. The files
+in your _add_ directory should look like this:
 
 ```text
 ├── Cargo.lock
@@ -52,11 +74,22 @@ $ cargo new adder
 └── target
 ```
 
-workspace-এর উপরের স্তরে একটি _target_ ডিরেক্টরি রয়েছে যেখানে কম্পাইল করা আর্টিফ্যাক্টগুলি স্থাপন করা হবে; `adder` প্যাকেজের নিজস্ব _target_ ডিরেক্টরি নেই। এমনকি যদি আমরা _adder_ ডিরেক্টরির ভিতরে থেকে `cargo build` চালাই, কম্পাইল করা আর্টিফ্যাক্টগুলি _add/target_-এ শেষ হবে _add/adder/target_-এর পরিবর্তে। Cargo একটি workspace-এ _target_ ডিরেক্টরিটিকে এভাবে তৈরি করে কারণ একটি workspace-এর crate গুলো একে অপরের উপর নির্ভরশীল হওয়ার কথা। যদি প্রতিটি crate-এর নিজস্ব _target_ ডিরেক্টরি থাকত, তাহলে প্রতিটি crate-কে তার নিজস্ব _target_ ডিরেক্টরিতে আর্টিফ্যাক্টগুলি রাখার জন্য workspace-এর অন্যান্য crate-গুলিকে পুনরায় কম্পাইল করতে হত। একটি _target_ ডিরেক্টরি শেয়ার করে, crateগুলি অপ্রয়োজনীয় পুনর্নির্মাণ এড়াতে পারে।
+The workspace has one _target_ directory at the top level that the compiled
+artifacts will be placed into; the `adder` package doesn’t have its own
+_target_ directory. Even if we were to run `cargo build` from inside the
+_adder_ directory, the compiled artifacts would still end up in _add/target_
+rather than _add/adder/target_. Cargo structures the _target_ directory in a
+workspace like this because the crates in a workspace are meant to depend on
+each other. If each crate had its own _target_ directory, each crate would have
+to recompile each of the other crates in the workspace to place the artifacts
+in its own _target_ directory. By sharing one _target_ directory, the crates
+can avoid unnecessary rebuilding.
 
-### Workspace-এ দ্বিতীয় প্যাকেজ তৈরি করা
+### Creating the Second Package in the Workspace
 
-এর পরে, workspace-এ আরও একটি সদস্য প্যাকেজ তৈরি করা যাক এবং এটিকে `add_one` বলা যাক। `members` তালিকায় _add_one_ পাথ নির্দিষ্ট করতে শীর্ষ-স্তরের _Cargo.toml_ পরিবর্তন করুন:
+Next, let’s create another member package in the workspace and call it
+`add_one`. Change the top-level _Cargo.toml_ to specify the _add_one_ path in
+the `members` list:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -64,10 +97,11 @@ workspace-এর উপরের স্তরে একটি _target_ ডির
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/Cargo.toml}}
 ```
 
-তারপর `add_one` নামের একটি নতুন লাইব্রেরি crate তৈরি করুন:
+Then generate a new library crate named `add_one`:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-02-add-one/add
+remove `"add_one"` from `members` list in Cargo.toml
 rm -rf add_one
 cargo new add_one --lib
 copy output below
@@ -79,7 +113,7 @@ $ cargo new add_one --lib
       Adding `add_one` as member of workspace at `file:///projects/add`
 ```
 
-আপনার _add_ ডিরেক্টরিতে এখন এই ডিরেক্টরি এবং ফাইলগুলি থাকা উচিত:
+Your _add_ directory should now have these directories and files:
 
 ```text
 ├── Cargo.lock
@@ -95,7 +129,7 @@ $ cargo new add_one --lib
 └── target
 ```
 
-_add_one/src/lib.rs_ ফাইলে, আসুন একটি `add_one` ফাংশন যোগ করি:
+In the _add_one/src/lib.rs_ file, let’s add an `add_one` function:
 
 <span class="filename">Filename: add_one/src/lib.rs</span>
 
@@ -103,7 +137,9 @@ _add_one/src/lib.rs_ ফাইলে, আসুন একটি `add_one` ফা
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/add_one/src/lib.rs}}
 ```
 
-এখন আমরা আমাদের বাইনারি সহ `adder` প্যাকেজটিকে `add_one` প্যাকেজের উপর নির্ভরশীল করতে পারি যেখানে আমাদের লাইব্রেরি রয়েছে। প্রথমে, আমাদের _adder/Cargo.toml_-এ `add_one`-এর উপর একটি পাথ নির্ভরতা যোগ করতে হবে।
+Now we can have the `adder` package with our binary depend on the `add_one`
+package that has our library. First, we’ll need to add a path dependency on
+`add_one` to _adder/Cargo.toml_.
 
 <span class="filename">Filename: adder/Cargo.toml</span>
 
@@ -111,11 +147,14 @@ _add_one/src/lib.rs_ ফাইলে, আসুন একটি `add_one` ফা
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:6:7}}
 ```
 
-Cargo ধরে নেয় না যে একটি workspace-এর crate গুলি একে অপরের উপর নির্ভরশীল হবে, তাই আমাদের নির্ভরতা সম্পর্কগুলি সম্পর্কে স্পষ্ট হতে হবে।
+Cargo doesn’t assume that crates in a workspace will depend on each other, so
+we need to be explicit about the dependency relationships.
 
-এর পরে, আসুন `adder` crate-এ `add_one` ফাংশন (যা `add_one` crate থেকে এসেছে) ব্যবহার করি। _adder/src/main.rs_ ফাইলটি খুলুন এবং Listing 14-7-এর মতো `main` ফাংশনটিকে `add_one` ফাংশন কল করার জন্য পরিবর্তন করুন।
+Next, let’s use the `add_one` function (from the `add_one` crate) in the
+`adder` crate. Open the _adder/src/main.rs_ file and change the `main`
+function to call the `add_one` function, as in Listing 14-7.
 
-<Listing number="14-7" file-name="adder/src/main.rs" caption="`adder` crate-এ `add_one` লাইব্রেরি crate ব্যবহার করা">
+<Listing number="14-7" file-name="adder/src/main.rs" caption="Using the `add_one` library crate in the `adder` crate">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
@@ -123,7 +162,8 @@ Cargo ধরে নেয় না যে একটি workspace-এর crate �
 
 </Listing>
 
-আসুন শীর্ষ-স্তরের _add_ ডিরেক্টরিতে `cargo build` চালিয়ে workspace তৈরি করি!
+Let’s build the workspace by running `cargo build` in the top-level _add_
+directory!
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/listing-14-07/add
@@ -138,7 +178,9 @@ $ cargo build
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.22s
 ```
 
-_add_ ডিরেক্টরি থেকে বাইনারি crate চালানোর জন্য, আমরা `-p` আর্গুমেন্ট এবং `cargo run` সহ প্যাকেজের নাম ব্যবহার করে workspace-এ কোন প্যাকেজটি চালাতে চাই তা নির্দিষ্ট করতে পারি:
+To run the binary crate from the _add_ directory, we can specify which
+package in the workspace we want to run by using the `-p` argument and the
+package name with `cargo run`:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/listing-14-07/add
@@ -153,11 +195,19 @@ $ cargo run -p adder
 Hello, world! 10 plus one is 11!
 ```
 
-এটি _adder/src/main.rs_-এর কোড চালায়, যা `add_one` crate-এর উপর নির্ভরশীল।
+This runs the code in _adder/src/main.rs_, which depends on the `add_one` crate.
 
-#### একটি Workspace-এ একটি External প্যাকেজের উপর নির্ভর করা
+#### Depending on an External Package in a Workspace
 
-লক্ষ্য করুন যে workspace-এর উপরের স্তরে শুধুমাত্র একটি _Cargo.lock_ ফাইল রয়েছে, প্রতিটি crate-এর ডিরেক্টরিতে _Cargo.lock_ থাকার পরিবর্তে। এটি নিশ্চিত করে যে সমস্ত crate সমস্ত নির্ভরতার একই সংস্করণ ব্যবহার করছে। যদি আমরা _adder/Cargo.toml_ এবং _add_one/Cargo.toml_ ফাইলগুলিতে `rand` প্যাকেজ যোগ করি, Cargo উভয়কেই `rand`-এর একটি সংস্করণে সমাধান করবে এবং সেটিকে একটি _Cargo.lock_-এ রেকর্ড করবে। workspace-এর সমস্ত crate-কে একই নির্ভরতা ব্যবহার করার মানে হল crate গুলো সবসময় একে অপরের সাথে সামঞ্জস্যপূর্ণ হবে। আসুন `add_one` crate-এ `rand` crate ব্যবহার করতে _add_one/Cargo.toml_ ফাইলের `[dependencies]` বিভাগে `rand` crate যোগ করি:
+Notice that the workspace has only one _Cargo.lock_ file at the top level,
+rather than having a _Cargo.lock_ in each crate’s directory. This ensures that
+all crates are using the same version of all dependencies. If we add the `rand`
+package to the _adder/Cargo.toml_ and _add_one/Cargo.toml_ files, Cargo will
+resolve both of those to one version of `rand` and record that in the one
+_Cargo.lock_. Making all crates in the workspace use the same dependencies
+means the crates will always be compatible with each other. Let’s add the
+`rand` crate to the `[dependencies]` section in the _add_one/Cargo.toml_ file
+so we can use the `rand` crate in the `add_one` crate:
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -171,7 +221,10 @@ Hello, world! 10 plus one is 11!
 {{#include ../listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add/add_one/Cargo.toml:6:7}}
 ```
 
-এখন আমরা _add_one/src/lib.rs_ ফাইলে `use rand;` যোগ করতে পারি এবং _add_ ডিরেক্টরিতে `cargo build` চালিয়ে পুরো workspace তৈরি করলে `rand` crate আসবে এবং কম্পাইল হবে। আমরা একটি warning পাব কারণ আমরা scope-এ আনা `rand`-এর সাথে কিছুই করছি না:
+We can now add `use rand;` to the _add_one/src/lib.rs_ file, and building the
+whole workspace by running `cargo build` in the _add_ directory will bring in
+and compile the `rand` crate. We will get one warning because we aren’t
+referring to the `rand` we brought into scope:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add
@@ -199,7 +252,11 @@ warning: `add_one` (lib) generated 1 warning (run `cargo fix --lib -p add_one` t
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.95s
 ```
 
-শীর্ষ-স্তরের _Cargo.lock_ এখন `rand`-এর উপর `add_one`-এর নির্ভরতা সম্পর্কিত তথ্য ধারণ করে। যাইহোক, workspace-এ কোথাও `rand` ব্যবহার করা হলেও, আমরা workspace-এর অন্যান্য crate-এ এটি ব্যবহার করতে পারি না যতক্ষণ না আমরা তাদের _Cargo.toml_ ফাইলগুলিতেও `rand` যোগ করি। উদাহরণস্বরূপ, যদি আমরা `adder` প্যাকেজের জন্য _adder/src/main.rs_ ফাইলে `use rand;` যোগ করি, তাহলে আমরা একটি error পাব:
+The top-level _Cargo.lock_ now contains information about the dependency of
+`add_one` on `rand`. However, even though `rand` is used somewhere in the
+workspace, we can’t use it in other crates in the workspace unless we add
+`rand` to their _Cargo.toml_ files as well. For example, if we add `use rand;`
+to the _adder/src/main.rs_ file for the `adder` package, we’ll get an error:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-03-use-rand/add
@@ -218,13 +275,23 @@ error[E0432]: unresolved import `rand`
   |     ^^^^ no external crate `rand`
 ```
 
-এটি ঠিক করতে, `adder` প্যাকেজের জন্য _Cargo.toml_ ফাইলটি সম্পাদনা করুন এবং নির্দেশ করুন যে `rand` এটির জন্যও একটি নির্ভরতা। `adder` প্যাকেজ তৈরি করলে _Cargo.lock_-এ `adder`-এর জন্য নির্ভরতার তালিকায় `rand` যোগ হবে, তবে `rand`-এর কোনো অতিরিক্ত কপি ডাউনলোড করা হবে না। Cargo নিশ্চিত করবে যে workspace-এর প্রতিটি প্যাকেজের প্রতিটি crate `rand` প্যাকেজ ব্যবহার করে `rand`-এর সামঞ্জস্যপূর্ণ সংস্করণগুলি নির্দিষ্ট করা পর্যন্ত একই সংস্করণ ব্যবহার করবে, যা আমাদের স্থান বাঁচাবে এবং নিশ্চিত করবে যে workspace-এর crate গুলি একে অপরের সাথে সামঞ্জস্যপূর্ণ হবে।
+To fix this, edit the _Cargo.toml_ file for the `adder` package and indicate
+that `rand` is a dependency for it as well. Building the `adder` package will
+add `rand` to the list of dependencies for `adder` in _Cargo.lock_, but no
+additional copies of `rand` will be downloaded. Cargo will ensure that every
+crate in every package in the workspace using the `rand` package will be using
+the same version as long as they specify compatible versions of `rand`, saving
+us space and ensuring that the crates in the workspace will be compatible with
+each other.
 
-যদি workspace-এর crate গুলি একই নির্ভরতার অসামঞ্জস্যপূর্ণ সংস্করণ নির্দিষ্ট করে, তাহলে Cargo তাদের প্রত্যেকটিকে সমাধান করবে, কিন্তু এখনও যতটা সম্ভব কম সংস্করণ সমাধান করার চেষ্টা করবে।
+If crates in the workspace specify incompatible versions of the same dependency,
+Cargo will resolve each of them, but will still try to resolve as few versions
+as possible.
 
-#### একটি Workspace এ একটি Test যোগ করা
+#### Adding a Test to a Workspace
 
-আরও একটি উন্নতির জন্য, আসুন `add_one` crate-এর মধ্যে `add_one::add_one` ফাংশনের একটি test যোগ করি:
+For another enhancement, let’s add a test of the `add_one::add_one` function
+within the `add_one` crate:
 
 <span class="filename">Filename: add_one/src/lib.rs</span>
 
@@ -232,7 +299,9 @@ error[E0432]: unresolved import `rand`
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add/add_one/src/lib.rs}}
 ```
 
-এখন শীর্ষ-স্তরের _add_ ডিরেক্টরিতে `cargo test` চালান। এইরকম একটি কাঠামোযুক্ত workspace-এ `cargo test` চালালে workspace-এর সমস্ত crate-এর test চলবে:
+Now run `cargo test` in the top-level _add_ directory. Running `cargo test` in
+a workspace structured like this one will run the tests for all the crates in
+the workspace:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
@@ -246,14 +315,14 @@ $ cargo test
    Compiling add_one v0.1.0 (file:///projects/add/add_one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.20s
-     Running unittests src/lib.rs (target/debug/deps/add_one-f0253159197f7841)
+     Running unittests src/lib.rs (target/debug/deps/add_one-93c49ee75dc46543)
 
 running 1 test
 test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-     Running unittests src/main.rs (target/debug/deps/adder-49979ff40686fa8e)
+     Running unittests src/main.rs (target/debug/deps/adder-3a47283c568d2b6a)
 
 running 0 tests
 
@@ -266,9 +335,14 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-আউটপুটের প্রথম বিভাগে দেখা যাচ্ছে যে `add_one` crate-এর `it_works` test পাস করেছে। পরবর্তী বিভাগে দেখা যাচ্ছে যে `adder` crate-এ কোনো test পাওয়া যায়নি এবং তারপর শেষ বিভাগে দেখা যাচ্ছে যে `add_one` crate-এ কোনো ডকুমেন্টেশন test পাওয়া যায়নি।
+The first section of the output shows that the `it_works` test in the `add_one`
+crate passed. The next section shows that zero tests were found in the `adder`
+crate, and then the last section shows zero documentation tests were found in
+the `add_one` crate.
 
-আমরা শীর্ষ-স্তরের ডিরেক্টরি থেকে `-p` ফ্ল্যাগ ব্যবহার করে এবং আমরা যে crate-এর test করতে চাই তার নাম উল্লেখ করে workspace-এর একটি নির্দিষ্ট crate-এর জন্যও test চালাতে পারি:
+We can also run tests for one particular crate in a workspace from the
+top-level directory by using the `-p` flag and specifying the name of the crate
+we want to test:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
@@ -279,7 +353,7 @@ copy output below; the output updating script doesn't handle subdirectories in p
 ```console
 $ cargo test -p add_one
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
-     Running unittests src/lib.rs (target/debug/deps/add_one-b3235fea9a156f74)
+     Running unittests src/lib.rs (target/debug/deps/add_one-93c49ee75dc46543)
 
 running 1 test
 test tests::it_works ... ok
@@ -293,10 +367,18 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-এই আউটপুট দেখায় যে `cargo test` শুধুমাত্র `add_one` crate-এর test চালিয়েছে এবং `adder` crate test চালায়নি।
+This output shows `cargo test` only ran the tests for the `add_one` crate and
+didn’t run the `adder` crate tests.
 
-আপনি যদি workspace-এর crate গুলিকে [crates.io](https://crates.io/)-এ প্রকাশ করেন, তাহলে workspace-এর প্রতিটি crate-কে আলাদাভাবে প্রকাশ করতে হবে। `cargo test`-এর মতো, আমরা `-p` ফ্ল্যাগ ব্যবহার করে এবং আমরা যে crate প্রকাশ করতে চাই তার নাম উল্লেখ করে আমাদের workspace-এ একটি নির্দিষ্ট crate প্রকাশ করতে পারি।
+If you publish the crates in the workspace to [crates.io](https://crates.io/),
+each crate in the workspace will need to be published separately. Like `cargo
+test`, we can publish a particular crate in our workspace by using the `-p`
+flag and specifying the name of the crate we want to publish.
 
-অতিরিক্ত অনুশীলনের জন্য, `add_one` crate-এর মতোই এই workspace-এ একটি `add_two` crate যোগ করুন!
+For additional practice, add an `add_two` crate to this workspace in a similar
+way as the `add_one` crate!
 
-আপনার প্রজেক্ট grow করার সাথে সাথে একটি workspace ব্যবহার করার কথা বিবেচনা করুন: কোডের একটি বড় blob এর চেয়ে ছোট, পৃথক উপাদানগুলি বোঝা সহজ। তদুপরি, workspace-এ crate গুলি রাখলে crateগুলি যদি প্রায়শই একই সময়ে পরিবর্তন করা হয় তবে crate গুলোর মধ্যে সমন্বয় করা সহজ হতে পারে।
+As your project grows, consider using a workspace: it’s easier to understand
+smaller, individual components than one big blob of code. Furthermore, keeping
+the crates in a workspace can make coordination between crates easier if they
+are often changed at the same time.

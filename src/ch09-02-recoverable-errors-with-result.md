@@ -1,8 +1,14 @@
-## `Result` এর সাথে পুনরুদ্ধারযোগ্য ত্রুটি
+## Recoverable Errors with `Result`
 
-বেশিরভাগ ত্রুটি এত গুরুতর নয় যে প্রোগ্রামের সম্পূর্ণভাবে বন্ধ করার প্রয়োজন হয়। কখনও কখনও যখন একটি ফাংশন ব্যর্থ হয় তখন এটি এমন একটি কারণে হয় যা আপনি সহজেই ব্যাখ্যা করতে এবং সাড়া দিতে পারেন। উদাহরণস্বরূপ, আপনি যদি একটি ফাইল খোলার চেষ্টা করেন এবং সেই অপারেশনটি ব্যর্থ হয় কারণ ফাইলটি বিদ্যমান নেই, তাহলে আপনি প্রক্রিয়াটি বন্ধ করার পরিবর্তে ফাইলটি তৈরি করতে চাইতে পারেন।
+Most errors aren’t serious enough to require the program to stop entirely.
+Sometimes when a function fails it’s for a reason that you can easily interpret
+and respond to. For example, if you try to open a file and that operation fails
+because the file doesn’t exist, you might want to create the file instead of
+terminating the process.
 
-[“Handling Potential Failure with `Result`”][handle_failure]<!-- ignore --> অধ্যায়ের 2 থেকে মনে রাখবেন যে `Result` enum টিকে দুটি variant, `Ok` এবং `Err` হিসাবে সংজ্ঞায়িত করা হয়েছে, যা নিম্নরূপ:
+Recall from [“Handling Potential Failure with `Result`”][handle_failure]<!--
+ignore --> in Chapter 2 that the `Result` enum is defined as having two
+variants, `Ok` and `Err`, as follows:
 
 ```rust
 enum Result<T, E> {
@@ -11,11 +17,19 @@ enum Result<T, E> {
 }
 ```
 
-`T` এবং `E` হল জেনেরিক টাইপ প্যারামিটার: আমরা Chapter 10 এ জেনেরিক নিয়ে আরও বিস্তারিত আলোচনা করব। এই মুহূর্তে আপনার যা জানা দরকার তা হল `T` সেই মানের প্রকারকে প্রতিনিধিত্ব করে যা `Ok` variant এর মধ্যে একটি সফল ক্ষেত্রে ফেরত দেওয়া হবে এবং `E` ত্রুটির প্রকারকে প্রতিনিধিত্ব করে যা `Err` variant এর মধ্যে একটি ব্যর্থতার ক্ষেত্রে ফেরত দেওয়া হবে। যেহেতু `Result` এর এই জেনেরিক টাইপ প্যারামিটার রয়েছে, তাই আমরা `Result` টাইপ এবং এর উপর সংজ্ঞায়িত ফাংশনগুলি অনেকগুলি ভিন্ন পরিস্থিতিতে ব্যবহার করতে পারি যেখানে আমরা যে সাফল্যের মান এবং ত্রুটির মান ফেরত দিতে চাই তা ভিন্ন হতে পারে।
+The `T` and `E` are generic type parameters: we’ll discuss generics in more
+detail in Chapter 10. What you need to know right now is that `T` represents
+the type of the value that will be returned in a success case within the `Ok`
+variant, and `E` represents the type of the error that will be returned in a
+failure case within the `Err` variant. Because `Result` has these generic type
+parameters, we can use the `Result` type and the functions defined on it in
+many different situations where the success value and error value we want to
+return may differ.
 
-আসুন এমন একটি ফাংশনকে কল করি যা একটি `Result` মান ফেরত দেয় কারণ ফাংশনটি ব্যর্থ হতে পারে। Listing 9-3 এ আমরা একটি ফাইল খোলার চেষ্টা করি।
+Let’s call a function that returns a `Result` value because the function could
+fail. In Listing 9-3 we try to open a file.
 
-<Listing number="9-3" file-name="src/main.rs" caption="একটি ফাইল খোলা">
+<Listing number="9-3" file-name="src/main.rs" caption="Opening a file">
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-03/src/main.rs}}
@@ -23,13 +37,29 @@ enum Result<T, E> {
 
 </Listing>
 
-`File::open` এর রিটার্ন টাইপ হল একটি `Result<T, E>`। জেনেরিক প্যারামিটার `T` কে `File::open` এর বাস্তবায়ন দ্বারা সাফল্যের মানের প্রকার, `std::fs::File` দিয়ে পূরণ করা হয়েছে, যা একটি ফাইল হ্যান্ডেল। ত্রুটি মানের মধ্যে ব্যবহৃত `E` এর প্রকার হল `std::io::Error`। এই রিটার্ন টাইপের অর্থ হল `File::open` এ কল সফল হতে পারে এবং একটি ফাইল হ্যান্ডেল ফেরত দিতে পারে যা থেকে আমরা পড়তে বা লিখতে পারি। ফাংশন কলটি ব্যর্থও হতে পারে: উদাহরণস্বরূপ, ফাইলটি নাও থাকতে পারে, অথবা আমাদের ফাইটিতে অ্যাক্সেস করার অনুমতি নাও থাকতে পারে। `File::open` ফাংশনের আমাদের বলার একটি উপায় থাকা দরকার যে এটি সফল হয়েছে নাকি ব্যর্থ হয়েছে এবং একই সাথে আমাদের হয় ফাইল হ্যান্ডেল বা ত্রুটি তথ্য দিতে হবে। এই তথ্যটিই `Result` enum প্রকাশ করে।
+The return type of `File::open` is a `Result<T, E>`. The generic parameter `T`
+has been filled in by the implementation of `File::open` with the type of the
+success value, `std::fs::File`, which is a file handle. The type of `E` used in
+the error value is `std::io::Error`. This return type means the call to
+`File::open` might succeed and return a file handle that we can read from or
+write to. The function call also might fail: for example, the file might not
+exist, or we might not have permission to access the file. The `File::open`
+function needs to have a way to tell us whether it succeeded or failed and at
+the same time give us either the file handle or error information. This
+information is exactly what the `Result` enum conveys.
 
-যে ক্ষেত্রে `File::open` সফল হয়, ভেরিয়েবল `greeting_file_result` এর মান হবে `Ok` এর একটি instance যাতে একটি ফাইল হ্যান্ডেল থাকে। যে ক্ষেত্রে এটি ব্যর্থ হয়, `greeting_file_result` এর মান হবে `Err` এর একটি instance যাতে কী ধরনের ত্রুটি ঘটেছে সে সম্পর্কে আরও তথ্য থাকবে।
+In the case where `File::open` succeeds, the value in the variable
+`greeting_file_result` will be an instance of `Ok` that contains a file handle.
+In the case where it fails, the value in `greeting_file_result` will be an
+instance of `Err` that contains more information about the kind of error that
+occurred.
 
-`File::open` কী মান ফেরত দেয় তার উপর নির্ভর করে বিভিন্ন পদক্ষেপ নেওয়ার জন্য আমাদের Listing 9-3 এর কোডে যোগ করতে হবে। Listing 9-4 একটি মৌলিক টুল, `match` এক্সপ্রেশন ব্যবহার করে `Result` হ্যান্ডেল করার একটি উপায় দেখায় যা নিয়ে আমরা Chapter 6 এ আলোচনা করেছি।
+We need to add to the code in Listing 9-3 to take different actions depending
+on the value `File::open` returns. Listing 9-4 shows one way to handle the
+`Result` using a basic tool, the `match` expression that we discussed in
+Chapter 6.
 
-<Listing number="9-4" file-name="src/main.rs" caption="ফেরত দেওয়া যেতে পারে এমন `Result` variant গুলি পরিচালনা করতে একটি `match` এক্সপ্রেশন ব্যবহার করা">
+<Listing number="9-4" file-name="src/main.rs" caption="Using a `match` expression to handle the `Result` variants that might be returned">
 
 ```rust,should_panic
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-04/src/main.rs}}
@@ -37,23 +67,37 @@ enum Result<T, E> {
 
 </Listing>
 
-মনে রাখবেন যে, `Option` enum এর মতো, `Result` enum এবং এর variant গুলি prelude দ্বারা scope এ আনা হয়েছে, তাই `match` arm এ `Ok` এবং `Err` variant গুলির আগে আমাদের `Result::` উল্লেখ করার প্রয়োজন নেই।
+Note that, like the `Option` enum, the `Result` enum and its variants have been
+brought into scope by the prelude, so we don’t need to specify `Result::`
+before the `Ok` and `Err` variants in the `match` arms.
 
-যখন ফলাফল `Ok` হয়, তখন এই কোডটি `Ok` variant থেকে ভিতরের `file` মানটি ফেরত দেবে এবং তারপর আমরা সেই ফাইল হ্যান্ডেল মানটিকে ভেরিয়েবল `greeting_file` এ অ্যাসাইন করি। `match` এর পরে, আমরা ফাইল হ্যান্ডেলটিকে পড়া বা লেখার জন্য ব্যবহার করতে পারি।
+When the result is `Ok`, this code will return the inner `file` value out of
+the `Ok` variant, and we then assign that file handle value to the variable
+`greeting_file`. After the `match`, we can use the file handle for reading or
+writing.
 
-`match` এর অন্য arm টি সেই ক্ষেত্রটি পরিচালনা করে যেখানে আমরা `File::open` থেকে `Err` মান পাই। এই উদাহরণে, আমরা `panic!` macro কল করতে বেছে নিয়েছি। যদি আমাদের বর্তমান ডিরেক্টরিতে _hello.txt_ নামের কোনো ফাইল না থাকে এবং আমরা এই কোডটি চালাই, তাহলে আমরা `panic!` macro থেকে নিম্নলিখিত আউটপুট দেখতে পাব:
+The other arm of the `match` handles the case where we get an `Err` value from
+`File::open`. In this example, we’ve chosen to call the `panic!` macro. If
+there’s no file named _hello.txt_ in our current directory and we run this
+code, we’ll see the following output from the `panic!` macro:
 
 ```console
 {{#include ../listings/ch09-error-handling/listing-09-04/output.txt}}
 ```
 
-যথারীতি, এই আউটপুটটি আমাদের জানায় যে ঠিক কী ভুল হয়েছে।
+As usual, this output tells us exactly what has gone wrong.
 
-### বিভিন্ন ত্রুটির উপর ম্যাচিং
+### Matching on Different Errors
 
-Listing 9-4 এর কোডটি `File::open` কেনই ব্যর্থ হোক না কেন `panic!` করবে। যাইহোক, আমরা বিভিন্ন ব্যর্থতার কারণের জন্য বিভিন্ন পদক্ষেপ নিতে চাই। যদি `File::open` ফাইলটি বিদ্যমান না থাকার কারণে ব্যর্থ হয়, তবে আমরা ফাইলটি তৈরি করতে এবং নতুন ফাইলের হ্যান্ডেলটি ফেরত দিতে চাই। যদি `File::open` অন্য কোনো কারণে ব্যর্থ হয় — উদাহরণস্বরূপ, কারণ আমাদের ফাইলটি খোলার অনুমতি ছিল না — তবুও আমরা চাই কোডটি Listing 9-4 এর মতোই `panic!` করুক। এর জন্য, আমরা একটি অভ্যন্তরীণ `match` এক্সপ্রেশন যোগ করি, যেমন Listing 9-5 এ দেখানো হয়েছে।
+The code in Listing 9-4 will `panic!` no matter why `File::open` failed.
+However, we want to take different actions for different failure reasons. If
+`File::open` failed because the file doesn’t exist, we want to create the file
+and return the handle to the new file. If `File::open` failed for any other
+reason—for example, because we didn’t have permission to open the file—we still
+want the code to `panic!` in the same way it did in Listing 9-4. For this, we
+add an inner `match` expression, shown in Listing 9-5.
 
-<Listing number="9-5" file-name="src/main.rs" caption="বিভিন্ন ধরণের ত্রুটি বিভিন্নভাবে পরিচালনা করা">
+<Listing number="9-5" file-name="src/main.rs" caption="Handling different kinds of errors in different ways">
 
 <!-- ignore this test because otherwise it creates hello.txt which causes other
 tests to fail lol -->
@@ -64,15 +108,32 @@ tests to fail lol -->
 
 </Listing>
 
-`File::open` `Err` variant এর ভিতরে যে মানটি ফেরত দেয় তার প্রকার হল `io::Error`, যা standard library দ্বারা সরবরাহ করা একটি struct। এই struct এর একটি method `kind` আছে যা কল করে আমরা একটি `io::ErrorKind` মান পেতে পারি। `io::ErrorKind` enum টি standard library দ্বারা সরবরাহ করা হয়েছে এবং এর variant রয়েছে যা `io` অপারেশন থেকে আসতে পারে এমন বিভিন্ন ধরণের ত্রুটির প্রতিনিধিত্ব করে। আমরা যে variant টি ব্যবহার করতে চাই তা হল `ErrorKind::NotFound`, যা নির্দেশ করে যে আমরা যে ফাইলটি খোলার চেষ্টা করছি তা এখনও বিদ্যমান নেই। সুতরাং আমরা `greeting_file_result` এর সাথে match করি, তবে আমাদের `error.kind()` এর উপর একটি অভ্যন্তরীণ match ও আছে।
+The type of the value that `File::open` returns inside the `Err` variant is
+`io::Error`, which is a struct provided by the standard library. This struct
+has a method `kind` that we can call to get an `io::ErrorKind` value. The enum
+`io::ErrorKind` is provided by the standard library and has variants
+representing the different kinds of errors that might result from an `io`
+operation. The variant we want to use is `ErrorKind::NotFound`, which indicates
+the file we’re trying to open doesn’t exist yet. So we match on
+`greeting_file_result`, but we also have an inner match on `error.kind()`.
 
-আমরা ভিতরের match এ যে শর্তটি পরীক্ষা করতে চাই তা হল `error.kind()` দ্বারা ফেরত দেওয়া মানটি `ErrorKind` enum এর `NotFound` variant কিনা। যদি হয়, তবে আমরা `File::create` দিয়ে ফাইলটি তৈরি করার চেষ্টা করি। যাইহোক, যেহেতু `File::create` ও ব্যর্থ হতে পারে, তাই ভিতরের `match` এক্সপ্রেশনে আমাদের একটি দ্বিতীয় arm এর প্রয়োজন। যখন ফাইলটি তৈরি করা যায় না, তখন একটি ভিন্ন ত্রুটি বার্তা প্রিন্ট করা হয়। বাইরের `match` এর দ্বিতীয় arm টি একই থাকে, তাই প্রোগ্রামটি ফাইল না পাওয়ার ত্রুটি ছাড়া অন্য কোনো ত্রুটিতে panic করে।
+The condition we want to check in the inner match is whether the value returned
+by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
+we try to create the file with `File::create`. However, because `File::create`
+could also fail, we need a second arm in the inner `match` expression. When the
+file can’t be created, a different error message is printed. The second arm of
+the outer `match` stays the same, so the program panics on any error besides
+the missing file error.
 
-> #### `Result<T, E>` এর সাথে `match` ব্যবহার করার বিকল্প
+> #### Alternatives to Using `match` with `Result<T, E>`
 >
-> এটা অনেক `match`! `match` এক্সপ্রেশন খুবই কার্যকর তবে এটি অনেকটা আদিম। Chapter 13 এ, আপনি closures সম্পর্কে শিখবেন, যা `Result<T, E>` এ সংজ্ঞায়িত অনেক method এর সাথে ব্যবহৃত হয়। আপনার কোডে `Result<T, E>` মানগুলি পরিচালনা করার সময় এই methods গুলি `match` ব্যবহারের চেয়ে বেশি সংক্ষিপ্ত হতে পারে।
+> That’s a lot of `match`! The `match` expression is very useful but also very
+> much a primitive. In Chapter 13, you’ll learn about closures, which are used
+> with many of the methods defined on `Result<T, E>`. These methods can be more
+> concise than using `match` when handling `Result<T, E>` values in your code.
 >
-> উদাহরণস্বরূপ, Listing 9-5 এ দেখানো একই যুক্তি লেখার আরেকটি উপায় এখানে দেওয়া হল, এবার closures এবং `unwrap_or_else` method ব্যবহার করে:
+> For example, here’s another way to write the same logic as shown in Listing
+> 9-5, this time using closures and the `unwrap_or_else` method:
 >
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
 >
@@ -93,11 +154,21 @@ tests to fail lol -->
 > }
 > ```
 >
-> যদিও এই কোডটির আচরণ Listing 9-5 এর মতোই, তবে এতে কোনো `match` এক্সপ্রেশন নেই এবং এটি পড়তে আরও পরিষ্কার। Chapter 13 পড়ার পরে এই উদাহরণে ফিরে আসুন এবং standard library ডকুমেন্টেশনে `unwrap_or_else` method টি দেখে নিন। যখন আপনি ত্রুটিগুলির সাথে কাজ করছেন তখন এই ধরনের আরও অনেক methods বিশাল নেস্টেড `match` এক্সপ্রেশন পরিষ্কার করতে পারে।
+> Although this code has the same behavior as Listing 9-5, it doesn’t contain
+> any `match` expressions and is cleaner to read. Come back to this example
+> after you’ve read Chapter 13, and look up the `unwrap_or_else` method in the
+> standard library documentation. Many more of these methods can clean up huge
+> nested `match` expressions when you’re dealing with errors.
 
-#### ত্রুটিতে Panic এর শর্টকাট: `unwrap` এবং `expect`
+#### Shortcuts for Panic on Error: `unwrap` and `expect`
 
-`match` ব্যবহার করা যথেষ্ট ভালোভাবে কাজ করে, তবে এটি একটু ভার্বোস হতে পারে এবং সর্বদা অভিপ্রায় ভালভাবে বোঝায় না। `Result<T, E>` টাইপে বিভিন্ন নির্দিষ্ট কাজ করার জন্য সংজ্ঞায়িত অনেক সহায়ক methods রয়েছে। `unwrap` method হল একটি শর্টকাট method যা Listing 9-4 এ আমরা যে `match` এক্সপ্রেশন লিখেছি তার মতোই প্রয়োগ করা হয়েছে। যদি `Result` মানটি `Ok` variant হয়, তবে `unwrap` `Ok` এর ভিতরের মানটি ফেরত দেবে। যদি `Result` `Err` variant হয়, তবে `unwrap` আমাদের জন্য `panic!` macro কল করবে। এখানে `unwrap` এর একটি উদাহরণ দেওয়া হল:
+Using `match` works well enough, but it can be a bit verbose and doesn’t always
+communicate intent well. The `Result<T, E>` type has many helper methods
+defined on it to do various, more specific tasks. The `unwrap` method is a
+shortcut method implemented just like the `match` expression we wrote in
+Listing 9-4. If the `Result` value is the `Ok` variant, `unwrap` will return
+the value inside the `Ok`. If the `Result` is the `Err` variant, `unwrap` will
+call the `panic!` macro for us. Here is an example of `unwrap` in action:
 
 <Listing file-name="src/main.rs">
 
@@ -107,7 +178,8 @@ tests to fail lol -->
 
 </Listing>
 
-যদি আমরা _hello.txt_ ফাইল ছাড়া এই কোডটি চালাই, তাহলে আমরা `unwrap` method টি তৈরি করে `panic!` কল থেকে একটি ত্রুটি বার্তা দেখতে পাব:
+If we run this code without a _hello.txt_ file, we’ll see an error message from
+the `panic!` call that the `unwrap` method makes:
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/no-listing-04-unwrap
@@ -120,7 +192,10 @@ thread 'main' panicked at src/main.rs:4:49:
 called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
 ```
 
-একইভাবে, `expect` method টি আমাদের `panic!` ত্রুটি বার্তাও বেছে নিতে দেয়। `unwrap` এর পরিবর্তে `expect` ব্যবহার করা এবং ভাল ত্রুটি বার্তা প্রদান করা আপনার উদ্দেশ্য জানাতে পারে এবং panic এর উৎস খুঁজে বের করা সহজ করে তুলতে পারে। `expect` এর সিনট্যাক্সটি দেখতে এইরকম:
+Similarly, the `expect` method lets us also choose the `panic!` error message.
+Using `expect` instead of `unwrap` and providing good error messages can convey
+your intent and make tracking down the source of a panic easier. The syntax of
+`expect` looks like this:
 
 <Listing file-name="src/main.rs">
 
@@ -130,7 +205,10 @@ called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, messa
 
 </Listing>
 
-আমরা `expect` কে `unwrap` এর মতোই ব্যবহার করি: ফাইল হ্যান্ডেল ফেরত দিতে বা `panic!` macro কল করতে। `expect` এর `panic!` এ কল করার সময় ব্যবহৃত ত্রুটি বার্তাটি হবে প্যারামিটার যা আমরা `expect` এ পাস করি, `unwrap` ব্যবহার করা ডিফল্ট `panic!` বার্তার পরিবর্তে। এটি দেখতে কেমন তা এখানে দেওয়া হল:
+We use `expect` in the same way as `unwrap`: to return the file handle or call
+the `panic!` macro. The error message used by `expect` in its call to `panic!`
+will be the parameter that we pass to `expect`, rather than the default
+`panic!` message that `unwrap` uses. Here’s what it looks like:
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/no-listing-05-expect
@@ -143,15 +221,25 @@ thread 'main' panicked at src/main.rs:5:10:
 hello.txt should be included in this project: Os { code: 2, kind: NotFound, message: "No such file or directory" }
 ```
 
-production-গুণমানের কোডে, বেশিরভাগ Rustacean `unwrap` এর পরিবর্তে `expect` বেছে নেয় এবং অপারেশনটি কেন সর্বদা সফল হবে বলে আশা করা হয় সে সম্পর্কে আরও তথ্য দেয়। এইভাবে, যদি আপনার অনুমান কখনও ভুল প্রমাণিত হয়, তবে আপনার কাছে ডিবাগিংয়ে ব্যবহার করার জন্য আরও তথ্য থাকবে।
+In production-quality code, most Rustaceans choose `expect` rather than
+`unwrap` and give more context about why the operation is expected to always
+succeed. That way, if your assumptions are ever proven wrong, you have more
+information to use in debugging.
 
-### ত্রুটি প্রচার করা
+### Propagating Errors
 
-যখন একটি ফাংশনের বাস্তবায়ন এমন কিছু কল করে যা ব্যর্থ হতে পারে, তখন ফাংশনের মধ্যেই ত্রুটি পরিচালনা করার পরিবর্তে আপনি কলিং কোডে ত্রুটিটি ফেরত দিতে পারেন যাতে এটি কী করতে হবে তা সিদ্ধান্ত নিতে পারে। এটিকে ত্রুটি _প্রচার_ করা হিসাবে পরিচিত এবং এটি কলিং কোডকে আরও বেশি নিয়ন্ত্রণ দেয়, যেখানে আপনার কোডের প্রেক্ষাপটে উপলব্ধ থাকার চেয়ে ত্রুটিটি কীভাবে পরিচালনা করা উচিত তা নির্দেশ করে আরও তথ্য বা যুক্তি থাকতে পারে।
+When a function’s implementation calls something that might fail, instead of
+handling the error within the function itself you can return the error to the
+calling code so that it can decide what to do. This is known as _propagating_
+the error and gives more control to the calling code, where there might be more
+information or logic that dictates how the error should be handled than what
+you have available in the context of your code.
 
-উদাহরণস্বরূপ, Listing 9-6 এ একটি ফাংশন দেখানো হয়েছে যা একটি ফাইল থেকে একটি ব্যবহারকারীর নাম পড়ে। যদি ফাইলটি বিদ্যমান না থাকে বা পড়া না যায়, তবে এই ফাংশনটি সেই ত্রুটিগুলি সেই কোডে ফেরত দেবে যা ফাংশনটিকে কল করেছে।
+For example, Listing 9-6 shows a function that reads a username from a file. If
+the file doesn’t exist or can’t be read, this function will return those errors
+to the code that called the function.
 
-<Listing number="9-6" file-name="src/main.rs" caption="একটি ফাংশন যা `match` ব্যবহার করে কলিং কোডে ত্রুটি ফেরত দেয়">
+<Listing number="9-6" file-name="src/main.rs" caption="A function that returns errors to the calling code using `match`">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -163,23 +251,64 @@ don't want to include it for rustdoc testing purposes. -->
 
 </Listing>
 
-এই ফাংশনটি আরও সংক্ষিপ্ত উপায়ে লেখা যেতে পারে, তবে আমরা ত্রুটি হ্যান্ডলিং অন্বেষণ করার জন্য ম্যানুয়ালি এর অনেকগুলি কাজ করতে যাচ্ছি; শেষে, আমরা সংক্ষিপ্ত উপায় দেখাব। আসুন প্রথমে ফাংশনের রিটার্ন টাইপটি দেখি: `Result<String, io::Error>`। এর মানে হল ফাংশনটি `Result<T, E>` টাইপের একটি মান ফেরত দিচ্ছে, যেখানে জেনেরিক প্যারামিটার `T` কে কংক্রিট টাইপ `String` এবং জেনেরিক টাইপ `E` কে কংক্রিট টাইপ `io::Error` দিয়ে পূরণ করা হয়েছে।
+This function can be written in a much shorter way, but we’re going to start by
+doing a lot of it manually in order to explore error handling; at the end,
+we’ll show the shorter way. Let’s look at the return type of the function
+first: `Result<String, io::Error>`. This means the function is returning a
+value of the type `Result<T, E>`, where the generic parameter `T` has been
+filled in with the concrete type `String` and the generic type `E` has been
+filled in with the concrete type `io::Error`.
 
-যদি এই ফাংশনটি কোনো সমস্যা ছাড়াই সফল হয়, তবে এই ফাংশনটিকে কল করা কোডটি `Ok` মানের একটি মান পাবে যা একটি `String` ধারণ করে — `username` যা এই ফাংশনটি ফাইল থেকে পড়েছে। যদি এই ফাংশনটি কোনো সমস্যার সম্মুখীন হয়, তবে কলিং কোডটি `io::Error` এর একটি instance ধারণ করে এমন একটি `Err` মান পাবে যাতে সমস্যাগুলি কী ছিল সে সম্পর্কে আরও তথ্য থাকে। আমরা এই ফাংশনের রিটার্ন টাইপ হিসাবে `io::Error` বেছে নিয়েছি কারণ এটি এই ফাংশনের বডিতে আমরা কল করছি এমন দুটি অপারেশনের থেকে ফেরত আসা ত্রুটি মানের প্রকার: `File::open` ফাংশন এবং `read_to_string` method।
+If this function succeeds without any problems, the code that calls this
+function will receive an `Ok` value that holds a `String`—the `username` that
+this function read from the file. If this function encounters any problems, the
+calling code will receive an `Err` value that holds an instance of `io::Error`
+that contains more information about what the problems were. We chose
+`io::Error` as the return type of this function because that happens to be the
+type of the error value returned from both of the operations we’re calling in
+this function’s body that might fail: the `File::open` function and the
+`read_to_string` method.
 
-ফাংশনের বডিটি `File::open` ফাংশন কল করে শুরু হয়। তারপরে আমরা Listing 9-4 এর `match` এর অনুরূপ একটি `match` দিয়ে `Result` মানটি পরিচালনা করি। যদি `File::open` সফল হয়, তবে pattern ভেরিয়েবল `file` এর ফাইল হ্যান্ডেলটি mutable ভেরিয়েবল `username_file` এর মান হয়ে যায় এবং ফাংশনটি চলতে থাকে। `Err` ক্ষেত্রে, `panic!` কল করার পরিবর্তে, আমরা ফাংশন থেকে সম্পূর্ণভাবে তাড়াতাড়ি ফেরত দিতে `return` কীওয়ার্ডটি ব্যবহার করি এবং `File::open` থেকে ত্রুটি মানটি, যা এখন pattern ভেরিয়েবল `e`-এ আছে, এই ফাংশনের ত্রুটি মান হিসাবে কলিং কোডে ফেরত দিই।
+The body of the function starts by calling the `File::open` function. Then we
+handle the `Result` value with a `match` similar to the `match` in Listing 9-4.
+If `File::open` succeeds, the file handle in the pattern variable `file`
+becomes the value in the mutable variable `username_file` and the function
+continues. In the `Err` case, instead of calling `panic!`, we use the `return`
+keyword to return early out of the function entirely and pass the error value
+from `File::open`, now in the pattern variable `e`, back to the calling code as
+this function’s error value.
 
-সুতরাং, যদি `username_file`-এ আমাদের একটি ফাইল হ্যান্ডেল থাকে, তবে ফাংশনটি ভেরিয়েবল `username`-এ একটি নতুন `String` তৈরি করে এবং ফাইলের বিষয়বস্তু `username`-এ পড়তে `username_file` এ ফাইল হ্যান্ডেলের উপর `read_to_string` method টি কল করে। `read_to_string` method ও একটি `Result` ফেরত দেয় কারণ এটি ব্যর্থ হতে পারে, যদিও `File::open` সফল হয়েছে। তাই আমাদের সেই `Result` পরিচালনা করার জন্য আরও একটি `match` এর প্রয়োজন: যদি `read_to_string` সফল হয়, তবে আমাদের ফাংশনটি সফল হয়েছে এবং আমরা ফাইল থেকে ব্যবহারকারীর নামটি ফেরত দিই যা এখন `username` এ `Ok` এর ভিতরে মোড়ানো আছে। যদি `read_to_string` ব্যর্থ হয়, তবে আমরা `File::open` এর রিটার্ন মান পরিচালনা করে `match` এ ত্রুটি মান ফেরত দেওয়ার মতোই ত্রুটি মান ফেরত দিই। তবে, আমাদের স্পষ্টভাবে `return` বলার প্রয়োজন নেই, কারণ এটি ফাংশনের শেষ এক্সপ্রেশন।
+So, if we have a file handle in `username_file`, the function then creates a
+new `String` in variable `username` and calls the `read_to_string` method on
+the file handle in `username_file` to read the contents of the file into
+`username`. The `read_to_string` method also returns a `Result` because it
+might fail, even though `File::open` succeeded. So we need another `match` to
+handle that `Result`: if `read_to_string` succeeds, then our function has
+succeeded, and we return the username from the file that’s now in `username`
+wrapped in an `Ok`. If `read_to_string` fails, we return the error value in the
+same way that we returned the error value in the `match` that handled the
+return value of `File::open`. However, we don’t need to explicitly say
+`return`, because this is the last expression in the function.
 
-এই কোডটি কল করা কোডটি তখন `Ok` মান পেতে পরিচালনা করবে যাতে একটি ব্যবহারকারীর নাম থাকে বা `io::Error` ধারণ করে এমন একটি `Err` মান পায়। এই মানগুলির সাথে কী করতে হবে তা সিদ্ধান্ত নেওয়া কলিং কোডের উপর নির্ভর করে। যদি কলিং কোড একটি `Err` মান পায়, তবে এটি `panic!` কল করতে পারে এবং প্রোগ্রামটিকে ক্র্যাশ করতে পারে, একটি ডিফল্ট ব্যবহারকারীর নাম ব্যবহার করতে পারে বা উদাহরণস্বরূপ, একটি ফাইল ছাড়া অন্য কোথাও থেকে ব্যবহারকারীর নামটি lookup করতে পারে। কলিং কোডটি আসলে কী করার চেষ্টা করছে সে সম্পর্কে আমাদের যথেষ্ট তথ্য নেই, তাই আমরা সাফল্যের বা ত্রুটির সমস্ত তথ্য যথাযথভাবে পরিচালনা করার জন্য উপরের দিকে প্রচার করি।
+The code that calls this code will then handle getting either an `Ok` value
+that contains a username or an `Err` value that contains an `io::Error`. It’s
+up to the calling code to decide what to do with those values. If the calling
+code gets an `Err` value, it could call `panic!` and crash the program, use a
+default username, or look up the username from somewhere other than a file, for
+example. We don’t have enough information on what the calling code is actually
+trying to do, so we propagate all the success or error information upward for
+it to handle appropriately.
 
-ত্রুটি প্রচার করার এই pattern Rust এ এত সাধারণ যে Rust এটিকে আরও সহজ করার জন্য প্রশ্নবোধক অপারেটর `?` সরবরাহ করে।
+This pattern of propagating errors is so common in Rust that Rust provides the
+question mark operator `?` to make this easier.
 
-#### ত্রুটি প্রচারের জন্য একটি শর্টকাট: `?` অপারেটর
+#### A Shortcut for Propagating Errors: the `?` Operator
 
-Listing 9-7 এ `read_username_from_file` এর একটি বাস্তবায়ন দেখানো হয়েছে যার কার্যকারিতা Listing 9-6 এর মতোই, তবে এই বাস্তবায়ন `?` অপারেটর ব্যবহার করে।
+Listing 9-7 shows an implementation of `read_username_from_file` that has the
+same functionality as in Listing 9-6, but this implementation uses the `?`
+operator.
 
-<Listing number="9-7" file-name="src/main.rs" caption="একটি ফাংশন যা `?` অপারেটর ব্যবহার করে কলিং কোডে ত্রুটি ফেরত দেয়">
+<Listing number="9-7" file-name="src/main.rs" caption="A function that returns errors to the calling code using the `?` operator">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -191,17 +320,42 @@ don't want to include it for rustdoc testing purposes. -->
 
 </Listing>
 
-`Result` মানের পরে স্থাপন করা `?` কে প্রায় একই উপায়ে কাজ করার জন্য সংজ্ঞায়িত করা হয়েছে যেমন Listing 9-6 এ `Result` মানগুলি পরিচালনা করার জন্য আমরা যে `match` এক্সপ্রেশনগুলি সংজ্ঞায়িত করেছি। যদি `Result` এর মান `Ok` হয়, তবে `Ok` এর ভিতরের মানটি এই এক্সপ্রেশন থেকে ফেরত দেওয়া হবে এবং প্রোগ্রামটি চলতে থাকবে। যদি মানটি একটি `Err` হয়, তবে `Err` সম্পূর্ণ ফাংশন থেকে ফেরত দেওয়া হবে যেন আমরা `return` কীওয়ার্ড ব্যবহার করেছি, তাই ত্রুটি মানটি কলিং কোডে প্রচার করা হয়।
+The `?` placed after a `Result` value is defined to work in almost the same way
+as the `match` expressions we defined to handle the `Result` values in Listing
+9-6. If the value of the `Result` is an `Ok`, the value inside the `Ok` will
+get returned from this expression, and the program will continue. If the value
+is an `Err`, the `Err` will be returned from the whole function as if we had
+used the `return` keyword so the error value gets propagated to the calling
+code.
 
-Listing 9-6 থেকে `match` এক্সপ্রেশন যা করে এবং `?` অপারেটর যা করে তার মধ্যে একটি পার্থক্য রয়েছে: `?` অপারেটর কল করা ত্রুটি মানগুলি standard library তে `From` trait এ সংজ্ঞায়িত `from` ফাংশনের মধ্যে দিয়ে যায়, যা একটি প্রকার থেকে অন্য প্রকারে মান রূপান্তর করতে ব্যবহৃত হয়। যখন `?` অপারেটর `from` ফাংশন কল করে, তখন প্রাপ্ত ত্রুটি প্রকারটি বর্তমান ফাংশনের রিটার্ন টাইপে সংজ্ঞায়িত ত্রুটি প্রকারে রূপান্তরিত হয়। এটি কার্যকর যখন একটি ফাংশন একটি ত্রুটি প্রকার ফেরত দেয় যা একটি ফাংশন কিভাবে ব্যর্থ হতে পারে তার সমস্ত উপায়ের প্রতিনিধিত্ব করে, এমনকি যদি অংশগুলি অনেক ভিন্ন কারণে ব্যর্থ হতে পারে।
+There is a difference between what the `match` expression from Listing 9-6 does
+and what the `?` operator does: error values that have the `?` operator called
+on them go through the `from` function, defined in the `From` trait in the
+standard library, which is used to convert values from one type into another.
+When the `?` operator calls the `from` function, the error type received is
+converted into the error type defined in the return type of the current
+function. This is useful when a function returns one error type to represent
+all the ways a function might fail, even if parts might fail for many different
+reasons.
 
-উদাহরণস্বরূপ, আমরা Listing 9-7 এ `read_username_from_file` ফাংশনটিকে `OurError` নামক একটি কাস্টম ত্রুটি প্রকার ফেরত দেওয়ার জন্য পরিবর্তন করতে পারি যা আমরা সংজ্ঞায়িত করি। আমরা যদি একটি `io::Error` থেকে `OurError` এর একটি instance তৈরি করার জন্য `impl From<io::Error> for OurError` সংজ্ঞায়িত করি, তাহলে `read_username_from_file` এর বডিতে `?` অপারেটর কলগুলি `from` কল করবে এবং ফাংশনে আরও কোনো কোড যোগ করার প্রয়োজন ছাড়াই ত্রুটি প্রকারগুলিকে রূপান্তর করবে।
+For example, we could change the `read_username_from_file` function in Listing
+9-7 to return a custom error type named `OurError` that we define. If we also
+define `impl From<io::Error> for OurError` to construct an instance of
+`OurError` from an `io::Error`, then the `?` operator calls in the body of
+`read_username_from_file` will call `from` and convert the error types without
+needing to add any more code to the function.
 
-Listing 9-7 এর প্রেক্ষাপটে, `File::open` কলের শেষে `?` `username_file` ভেরিয়েবলে একটি `Ok` এর ভিতরের মান ফেরত দেবে। যদি কোনো ত্রুটি ঘটে, তবে `?` অপারেটরটি পুরো ফাংশন থেকে তাড়াতাড়ি ফেরত দেবে এবং কলিং কোডে যেকোনো `Err` মান দেবে। `read_to_string` কলের শেষে `?` এর ক্ষেত্রেও একই কথা প্রযোজ্য।
+In the context of Listing 9-7, the `?` at the end of the `File::open` call will
+return the value inside an `Ok` to the variable `username_file`. If an error
+occurs, the `?` operator will return early out of the whole function and give
+any `Err` value to the calling code. The same thing applies to the `?` at the
+end of the `read_to_string` call.
 
-`?` অপারেটরটি অনেক boilerplate দূর করে এবং এই ফাংশনের বাস্তবায়নকে সহজ করে তোলে। আমরা Listing 9-8 এ দেখানো হিসাবে `?` এর ঠিক পরেই method কল চেইন করে এই কোডটিকে আরও সংক্ষিপ্ত করতে পারি।
+The `?` operator eliminates a lot of boilerplate and makes this function’s
+implementation simpler. We could even shorten this code further by chaining
+method calls immediately after the `?`, as shown in Listing 9-8.
 
-<Listing number="9-8" file-name="src/main.rs" caption="`?` অপারেটরের পরে method কল চেইন করা">
+<Listing number="9-8" file-name="src/main.rs" caption="Chaining method calls after the `?` operator">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -213,11 +367,18 @@ don't want to include it for rustdoc testing purposes. -->
 
 </Listing>
 
-আমরা ফাংশনের শুরুতে `username`-এ নতুন `String` তৈরি করা move করেছি; সেই অংশটি পরিবর্তিত হয়নি। `username_file` নামক একটি ভেরিয়েবল তৈরি করার পরিবর্তে, আমরা সরাসরি `File::open("hello.txt")?` এর ফলাফলের উপর `read_to_string` এ কলটিকে চেইন করেছি। `read_to_string` কলের শেষে এখনও একটি `?` আছে এবং `File::open` এবং `read_to_string` উভয়ই ত্রুটি ফেরত দেওয়ার পরিবর্তে সফল হলে আমরা এখনও `username` ধারণ করে এমন একটি `Ok` মান ফেরত দিই। কার্যকারিতাটি আবার Listing 9-6 এবং Listing 9-7 এর মতোই; এটি লেখার একটি ভিন্ন, আরও ergonomic উপায়।
+We’ve moved the creation of the new `String` in `username` to the beginning of
+the function; that part hasn’t changed. Instead of creating a variable
+`username_file`, we’ve chained the call to `read_to_string` directly onto the
+result of `File::open("hello.txt")?`. We still have a `?` at the end of the
+`read_to_string` call, and we still return an `Ok` value containing `username`
+when both `File::open` and `read_to_string` succeed rather than returning
+errors. The functionality is again the same as in Listing 9-6 and Listing 9-7;
+this is just a different, more ergonomic way to write it.
 
-Listing 9-9 `fs::read_to_string` ব্যবহার করে এটিকে আরও সংক্ষিপ্ত করার একটি উপায় দেখায়।
+Listing 9-9 shows a way to make this even shorter using `fs::read_to_string`.
 
-<Listing number="9-9" file-name="src/main.rs" caption="ফাইল খোলা এবং তারপর পড়ার পরিবর্তে `fs::read_to_string` ব্যবহার করা">
+<Listing number="9-9" file-name="src/main.rs" caption="Using `fs::read_to_string` instead of opening and then reading the file">
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -229,15 +390,28 @@ don't want to include it for rustdoc testing purposes. -->
 
 </Listing>
 
-একটি স্ট্রিং এ একটি ফাইল পড়া একটি মোটামুটি সাধারণ অপারেশন, তাই standard library সুবিধাজনক `fs::read_to_string` ফাংশন প্রদান করে যা ফাইলটি খোলে, একটি নতুন `String` তৈরি করে, ফাইলের বিষয়বস্তু পড়ে, সেই `String` এ বিষয়বস্তু রাখে এবং এটি ফেরত দেয়। অবশ্যই, `fs::read_to_string` ব্যবহার করা আমাদের সমস্ত ত্রুটি হ্যান্ডলিং ব্যাখ্যা করার সুযোগ দেয় না, তাই আমরা প্রথমে এটিকে দীর্ঘ উপায়ে করেছি।
+Reading a file into a string is a fairly common operation, so the standard
+library provides the convenient `fs::read_to_string` function that opens the
+file, creates a new `String`, reads the contents of the file, puts the contents
+into that `String`, and returns it. Of course, using `fs::read_to_string`
+doesn’t give us the opportunity to explain all the error handling, so we did it
+the longer way first.
 
-#### `?` অপারেটর কোথায় ব্যবহার করা যেতে পারে
+#### Where The `?` Operator Can Be Used
 
-`?` অপারেটরটি কেবলমাত্র সেই ফাংশনগুলিতে ব্যবহার করা যেতে পারে যেগুলির রিটার্ন টাইপ `?` ব্যবহার করা মানের সাথে সামঞ্জস্যপূর্ণ। এর কারণ হল `?` অপারেটরটি ফাংশন থেকে কোনো মান ফেরত দেওয়ার জন্য একটি early return সম্পাদন করার জন্য সংজ্ঞায়িত করা হয়েছে, ঠিক যেমন Listing 9-6 এ আমরা সংজ্ঞায়িত করা `match` এক্সপ্রেশন। Listing 9-6 এ, `match` একটি `Result` মান ব্যবহার করছিল এবং early return arm টি একটি `Err(e)` মান ফেরত দিয়েছে। ফাংশনের রিটার্ন টাইপ অবশ্যই `Result` হতে হবে যাতে এটি এই `return` এর সাথে সামঞ্জস্যপূর্ণ হয়।
+The `?` operator can only be used in functions whose return type is compatible
+with the value the `?` is used on. This is because the `?` operator is defined
+to perform an early return of a value out of the function, in the same manner
+as the `match` expression we defined in Listing 9-6. In Listing 9-6, the
+`match` was using a `Result` value, and the early return arm returned an
+`Err(e)` value. The return type of the function has to be a `Result` so that
+it’s compatible with this `return`.
 
-Listing 9-10 এ, আসুন সেই ত্রুটিটি দেখি যা আমরা পাব যদি আমরা `?` অপারেটরটিকে একটি `main` ফাংশনে ব্যবহার করি যার রিটার্ন টাইপ সেই মানের প্রকারের সাথে বেমানান যার উপর আমরা `?` ব্যবহার করি।
+In Listing 9-10, let’s look at the error we’ll get if we use the `?` operator
+in a `main` function with a return type that is incompatible with the type of
+the value we use `?` on.
 
-<Listing number="9-10" file-name="src/main.rs" caption="`main` ফাংশনে `?` ব্যবহার করার চেষ্টা করলে যা `()` ফেরত দেয় তা কম্পাইল হবে না।">
+<Listing number="9-10" file-name="src/main.rs" caption="Attempting to use the `?` in the `main` function that returns `()` won’t compile.">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-10/src/main.rs}}
@@ -245,19 +419,36 @@ Listing 9-10 এ, আসুন সেই ত্রুটিটি দেখি �
 
 </Listing>
 
-এই কোডটি একটি ফাইল খোলে, যা ব্যর্থ হতে পারে। `?` অপারেটরটি `File::open` দ্বারা ফেরত দেওয়া `Result` মানকে অনুসরণ করে, কিন্তু এই `main` ফাংশনের রিটার্ন টাইপ `()` , `Result` নয়। যখন আমরা এই কোডটি কম্পাইল করি, তখন আমরা নিম্নলিখিত ত্রুটি বার্তা পাই:
+This code opens a file, which might fail. The `?` operator follows the `Result`
+value returned by `File::open`, but this `main` function has the return type of
+`()`, not `Result`. When we compile this code, we get the following error
+message:
 
 ```console
 {{#include ../listings/ch09-error-handling/listing-09-10/output.txt}}
 ```
 
-এই ত্রুটিটি নির্দেশ করে যে আমরা শুধুমাত্র সেই ফাংশনে `?` অপারেটর ব্যবহার করার অনুমতি পেয়েছি যা `Result`, `Option` বা `FromResidual` প্রয়োগ করে এমন অন্য কোনো প্রকার ফেরত দেয়।
+This error points out that we’re only allowed to use the `?` operator in a
+function that returns `Result`, `Option`, or another type that implements
+`FromResidual`.
 
-ত্রুটিটি সমাধান করতে, আপনার দুটি পছন্দ আছে। একটি পছন্দ হল আপনার ফাংশনের রিটার্ন টাইপ পরিবর্তন করা যাতে আপনি `?` অপারেটরটি যে মানের উপর ব্যবহার করছেন তার সাথে সামঞ্জস্যপূর্ণ হয় যতক্ষণ না আপনার উপর এমন কোনো বিধিনিষেধ থাকে যা তা প্রতিরোধ করে। অন্য পছন্দটি হল `match` বা `Result<T, E>` এর methods গুলোর একটি ব্যবহার করে `Result<T, E>` কে উপযুক্ত যেকোনো উপায়ে পরিচালনা করা।
+To fix the error, you have two choices. One choice is to change the return type
+of your function to be compatible with the value you’re using the `?` operator
+on as long as you have no restrictions preventing that. The other choice is to
+use a `match` or one of the `Result<T, E>` methods to handle the `Result<T, E>`
+in whatever way is appropriate.
 
-ত্রুটি বার্তায় আরও উল্লেখ করা হয়েছে যে `?` `Option<T>` মানগুলির সাথেও ব্যবহার করা যেতে পারে। `Result` এ `?` ব্যবহার করার মতো, আপনি শুধুমাত্র একটি ফাংশনে `Option` এ `?` ব্যবহার করতে পারেন যা একটি `Option` ফেরত দেয়। যখন একটি `Option<T>` এ কল করা হয় তখন `?` অপারেটরের আচরণ `Result<T, E>` এ কল করার মতোই: যদি মানটি `None` হয়, তবে `None` সেই সময়ে ফাংশন থেকে তাড়াতাড়ি ফেরত দেওয়া হবে। যদি মানটি `Some` হয়, তবে `Some` এর ভিতরের মানটি এক্সপ্রেশনের ফলস্বরূপ মান এবং ফাংশনটি চলতে থাকে। Listing 9-11 এ একটি ফাংশনের উদাহরণ রয়েছে যা প্রদত্ত টেক্সটের প্রথম লাইনের শেষ অক্ষরটি খুঁজে বের করে।
+The error message also mentioned that `?` can be used with `Option<T>` values
+as well. As with using `?` on `Result`, you can only use `?` on `Option` in a
+function that returns an `Option`. The behavior of the `?` operator when called
+on an `Option<T>` is similar to its behavior when called on a `Result<T, E>`:
+if the value is `None`, the `None` will be returned early from the function at
+that point. If the value is `Some`, the value inside the `Some` is the
+resultant value of the expression, and the function continues. Listing 9-11 has
+an example of a function that finds the last character of the first line in the
+given text.
 
-<Listing number="9-11" caption="একটি `Option<T>` মানের উপর `?` অপারেটর ব্যবহার করা">
+<Listing number="9-11" caption="Using the `?` operator on an `Option<T>` value">
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-11/src/main.rs:here}}
@@ -265,17 +456,45 @@ Listing 9-10 এ, আসুন সেই ত্রুটিটি দেখি �
 
 </Listing>
 
-এই ফাংশনটি `Option<char>` ফেরত দেয় কারণ সেখানে একটি অক্ষর থাকা সম্ভব, তবে সেখানে কিছু না থাকাও সম্ভব। এই কোডটি `text` স্ট্রিং স্লাইস আর্গুমেন্ট নেয় এবং এটির উপর `lines` method কল করে, যা স্ট্রিং এর লাইনগুলির উপর একটি iterator ফেরত দেয়। যেহেতু এই ফাংশনটি প্রথম লাইনটি পরীক্ষা করতে চায়, তাই এটি iterator থেকে প্রথম মানটি পাওয়ার জন্য iterator এর উপর `next` কল করে। যদি `text` খালি স্ট্রিং হয়, তবে `next` এ এই কলটি `None` ফেরত দেবে, সেক্ষেত্রে আমরা `last_char_of_first_line` থেকে থামাতে এবং `None` ফেরত দিতে `?` ব্যবহার করি। যদি `text` খালি স্ট্রিং না হয়, তবে `next` `text` এর প্রথম লাইনের একটি স্ট্রিং স্লাইস ধারণ করে এমন একটি `Some` মান ফেরত দেবে।
+This function returns `Option<char>` because it’s possible that there is a
+character there, but it’s also possible that there isn’t. This code takes the
+`text` string slice argument and calls the `lines` method on it, which returns
+an iterator over the lines in the string. Because this function wants to
+examine the first line, it calls `next` on the iterator to get the first value
+from the iterator. If `text` is the empty string, this call to `next` will
+return `None`, in which case we use `?` to stop and return `None` from
+`last_char_of_first_line`. If `text` is not the empty string, `next` will
+return a `Some` value containing a string slice of the first line in `text`.
 
-`?` স্ট্রিং স্লাইসটি বের করে এবং আমরা সেই স্ট্রিং স্লাইসের অক্ষরগুলির একটি iterator পেতে সেই স্ট্রিং স্লাইসের উপর `chars` কল করতে পারি। আমরা এই প্রথম লাইনের শেষ অক্ষরে আগ্রহী, তাই আমরা iterator এর শেষ আইটেমটি ফেরত দিতে `last` কল করি। এটি একটি `Option` কারণ এটি সম্ভব যে প্রথম লাইনটি খালি স্ট্রিং; উদাহরণস্বরূপ, যদি `text` একটি ফাঁকা লাইন দিয়ে শুরু হয় তবে অন্য লাইনে অক্ষর থাকে, যেমন `"\nhi"`। যাইহোক, যদি প্রথম লাইনে একটি শেষ অক্ষর থাকে তবে এটি `Some` variant এ ফেরত দেওয়া হবে। মাঝখানের `?` অপারেটরটি আমাদের এই যুক্তিটিকে সংক্ষিপ্তভাবে প্রকাশ করার একটি উপায় দেয়, যা আমাদের এক লাইনে ফাংশনটি প্রয়োগ করতে দেয়। আমরা যদি `Option` এ `?` অপারেটর ব্যবহার করতে না পারতাম, তবে আমাদের এই যুক্তিটিকে আরও বেশি method কল বা একটি `match` এক্সপ্রেশন ব্যবহার করে প্রয়োগ করতে হতো।
+The `?` extracts the string slice, and we can call `chars` on that string slice
+to get an iterator of its characters. We’re interested in the last character in
+this first line, so we call `last` to return the last item in the iterator.
+This is an `Option` because it’s possible that the first line is the empty
+string; for example, if `text` starts with a blank line but has characters on
+other lines, as in `"\nhi"`. However, if there is a last character on the first
+line, it will be returned in the `Some` variant. The `?` operator in the middle
+gives us a concise way to express this logic, allowing us to implement the
+function in one line. If we couldn’t use the `?` operator on `Option`, we’d
+have to implement this logic using more method calls or a `match` expression.
 
-মনে রাখবেন যে আপনি `Result` ফেরত দেয় এমন একটি ফাংশনে `Result` এর উপর `?` অপারেটর ব্যবহার করতে পারেন এবং আপনি `Option` ফেরত দেয় এমন একটি ফাংশনে `Option` এর উপর `?` অপারেটর ব্যবহার করতে পারেন, তবে আপনি mix and match করতে পারবেন না। `?` অপারেটর স্বয়ংক্রিয়ভাবে একটি `Result` কে `Option` বা এর বিপরীতে রূপান্তর করবে না; সেই ক্ষেত্রে, আপনি স্পষ্টভাবে রূপান্তর করার জন্য `Result` এর `ok` method বা `Option` এর `ok_or` method এর মতো methods ব্যবহার করতে পারেন।
+Note that you can use the `?` operator on a `Result` in a function that returns
+`Result`, and you can use the `?` operator on an `Option` in a function that
+returns `Option`, but you can’t mix and match. The `?` operator won’t
+automatically convert a `Result` to an `Option` or vice versa; in those cases,
+you can use methods like the `ok` method on `Result` or the `ok_or` method on
+`Option` to do the conversion explicitly.
 
-এতক্ষণ পর্যন্ত আমরা যে `main` ফাংশনগুলি ব্যবহার করেছি সেগুলি `()` ফেরত দেয়। `main` ফাংশনটি বিশেষ কারণ এটি একটি এক্সিকিউটেবল প্রোগ্রামের এন্ট্রি পয়েন্ট এবং এক্সিট পয়েন্ট এবং প্রোগ্রামটি প্রত্যাশিতভাবে আচরণ করার জন্য এর রিটার্ন টাইপের উপর বিধিনিষেধ রয়েছে।
+So far, all the `main` functions we’ve used return `()`. The `main` function is
+special because it’s the entry point and exit point of an executable program,
+and there are restrictions on what its return type can be for the program to
+behave as expected.
 
-ভাগ্যক্রমে, `main` একটি `Result<(), E>` ও ফেরত দিতে পারে। Listing 9-12 এ Listing 9-10 এর কোড রয়েছে, তবে আমরা `main` এর রিটার্ন টাইপ পরিবর্তন করে `Result<(), Box<dyn Error>>` করেছি এবং শেষে `Ok(())` একটি রিটার্ন ভ্যালু যোগ করেছি। এই কোডটি এখন কম্পাইল হবে।
+Luckily, `main` can also return a `Result<(), E>`. Listing 9-12 has the code
+from Listing 9-10, but we’ve changed the return type of `main` to be
+`Result<(), Box<dyn Error>>` and added a return value `Ok(())` to the end. This
+code will now compile.
 
-<Listing number="9-12" file-name="src/main.rs" caption="`main` কে `Result<(), E>` ফেরত দেওয়ার জন্য পরিবর্তন করলে `Result` মানগুলিতে `?` অপারেটরের ব্যবহার করার অনুমতি পাওয়া যায়।">
+<Listing number="9-12" file-name="src/main.rs" caption="Changing `main` to return `Result<(), E>` allows the use of the `?` operator on `Result` values.">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-12/src/main.rs}}
@@ -283,14 +502,32 @@ Listing 9-10 এ, আসুন সেই ত্রুটিটি দেখি �
 
 </Listing>
 
-`Box<dyn Error>` প্রকারটি একটি _trait object_, যা নিয়ে আমরা Chapter 18 এর [“Using Trait Objects that Allow for Values of Different
-Types”][trait-objects]<!-- ignore --> বিভাগে আলোচনা করব। আপাতত, আপনি `Box<dyn Error>` কে "যেকোনো ধরনের ত্রুটি" হিসাবে পড়তে পারেন। `Box<dyn Error>` ত্রুটি প্রকার সহ একটি `main` ফাংশনে একটি `Result` মানের উপর `?` ব্যবহার করার অনুমতি দেওয়া হয় কারণ এটি যেকোনো `Err` মানকে তাড়াতাড়ি ফেরত দেওয়ার অনুমতি দেয়। যদিও এই `main` ফাংশনের বডিটি শুধুমাত্র `std::io::Error` প্রকারের ত্রুটি ফেরত দেবে, `Box<dyn Error>` নির্দিষ্ট করে, এই সিগনেচারটি সঠিক থাকবে এমনকি যদি `main` এর বডিতে অন্যান্য ত্রুটি ফেরত দেয় এমন আরও কোড যোগ করা হয়।
+The `Box<dyn Error>` type is a _trait object_, which we’ll talk about in [“Using
+Trait Objects That Allow for Values of Different Types”][trait-objects]<!--
+ignore --> in Chapter 18. For now, you can read `Box<dyn Error>` to mean “any
+kind of error.” Using `?` on a `Result` value in a `main` function with the
+error type `Box<dyn Error>` is allowed because it allows any `Err` value to be
+returned early. Even though the body of this `main` function will only ever
+return errors of type `std::io::Error`, by specifying `Box<dyn Error>`, this
+signature will continue to be correct even if more code that returns other
+errors is added to the body of `main`.
 
-যখন একটি `main` ফাংশন একটি `Result<(), E>` ফেরত দেয়, তখন এক্সিকিউটেবলটি `0` মান দিয়ে প্রস্থান করবে যদি `main` `Ok(())` ফেরত দেয় এবং `main` একটি `Err` মান ফেরত দিলে একটি অশূন্য মান দিয়ে প্রস্থান করবে। C তে লেখা এক্সিকিউটেবলগুলি প্রস্থান করার সময় পূর্ণসংখ্যা ফেরত দেয়: যে প্রোগ্রামগুলি সফলভাবে প্রস্থান করে সেগুলি পূর্ণসংখ্যা `0` ফেরত দেয় এবং যে প্রোগ্রামগুলি ত্রুটিপূর্ণ সেগুলি `0` ছাড়া অন্য কোনো পূর্ণসংখ্যা ফেরত দেয়। Rust ও এই নিয়মের সাথে সঙ্গতিপূর্ণ হওয়ার জন্য এক্সিকিউটেবল থেকে পূর্ণসংখ্যা ফেরত দেয়।
+When a `main` function returns a `Result<(), E>`, the executable will exit with
+a value of `0` if `main` returns `Ok(())` and will exit with a nonzero value if
+`main` returns an `Err` value. Executables written in C return integers when
+they exit: programs that exit successfully return the integer `0`, and programs
+that error return some integer other than `0`. Rust also returns integers from
+executables to be compatible with this convention.
 
-`main` ফাংশনটি এমন যেকোনো প্রকার ফেরত দিতে পারে যা [the `std::process::Termination` trait][termination]<!-- ignore --> প্রয়োগ করে, যেখানে একটি `report` ফাংশন রয়েছে যা একটি `ExitCode` ফেরত দেয়। আপনার নিজের প্রকারের জন্য `Termination` trait প্রয়োগ করার বিষয়ে আরও তথ্যের জন্য standard library ডকুমেন্টেশন দেখুন।
+The `main` function may return any types that implement [the
+`std::process::Termination` trait][termination]<!-- ignore -->, which contains
+a function `report` that returns an `ExitCode`. Consult the standard library
+documentation for more information on implementing the `Termination` trait for
+your own types.
 
-এখন যেহেতু আমরা `panic!` কল করা বা `Result` ফেরত দেওয়ার বিশদ বিবরণ নিয়ে আলোচনা করেছি, আসুন সেই বিষয়ে ফিরে যাই যে কোন ক্ষেত্রে কোনটি ব্যবহার করা উপযুক্ত তা কীভাবে সিদ্ধান্ত নিতে হয়।
+Now that we’ve discussed the details of calling `panic!` or returning `Result`,
+let’s return to the topic of how to decide which is appropriate to use in which
+cases.
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-result
 [trait-objects]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

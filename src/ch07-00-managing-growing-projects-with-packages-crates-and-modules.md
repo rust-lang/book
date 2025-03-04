@@ -1,20 +1,48 @@
-# প্যাকেজ, ক্রেটস এবং মডিউলগুলির সাথে ক্রমবর্ধমান প্রকল্পগুলি পরিচালনা করা
+# Managing Growing Projects with Packages, Crates, and Modules
 
-আপনি যখন বড় প্রোগ্রাম লিখবেন, তখন আপনার কোড সংগঠিত করা ক্রমশ গুরুত্বপূর্ণ হয়ে উঠবে। সম্পর্কিত কার্যকারিতাগুলিকে গোষ্ঠীভুক্ত করে এবং স্বতন্ত্র বৈশিষ্ট্যযুক্ত কোডগুলিকে আলাদা করে, আপনি একটি নির্দিষ্ট বৈশিষ্ট্য প্রয়োগ করে এমন কোড কোথায় খুঁজে পাবেন এবং কোনও বৈশিষ্ট্য কীভাবে কাজ করে তা পরিবর্তন করতে কোথায় যেতে হবে তা স্পষ্ট করবেন।
+As you write large programs, organizing your code will become increasingly
+important. By grouping related functionality and separating code with distinct
+features, you’ll clarify where to find code that implements a particular
+feature and where to go to change how a feature works.
 
-আমরা এখন পর্যন্ত যে প্রোগ্রামগুলি লিখেছি সেগুলি একটি ফাইলে একটি মডিউলে ছিল। যখন একটি প্রজেক্ট বড় হয়, তখন আপনাকে কোডটিকে একাধিক মডিউলে এবং তারপর একাধিক ফাইলে বিভক্ত করে সংগঠিত করা উচিত। একটি প্যাকেজে একাধিক বাইনারি ক্রেট এবং ঐচ্ছিকভাবে একটি লাইব্রেরি ক্রেট থাকতে পারে। যখন একটি প্যাকেজ বড় হয়, তখন আপনি অংশগুলিকে পৃথক ক্রেটগুলিতে বের করতে পারেন যা বাহ্যিক নির্ভরতা হয়ে যায়। এই অধ্যায়ে এই সমস্ত কৌশলগুলি কভার করা হয়েছে। পরস্পর সম্পর্কযুক্ত প্যাকেজগুলির একটি সেট নিয়ে গঠিত খুব বড় প্রকল্পগুলির জন্য যা একসাথে বিকশিত হয়, Cargo _ওয়ার্কস্পেস_ সরবরাহ করে, যা আমরা Chapter 14 এর [“Cargo Workspaces”][workspaces]<!-- ignore --> বিভাগে কভার করব।
+The programs we’ve written so far have been in one module in one file. As a
+project grows, you should organize code by splitting it into multiple modules
+and then multiple files. A package can contain multiple binary crates and
+optionally one library crate. As a package grows, you can extract parts into
+separate crates that become external dependencies. This chapter covers all
+these techniques. For very large projects comprising a set of interrelated
+packages that evolve together, Cargo provides _workspaces_, which we’ll cover
+in [“Cargo Workspaces”][workspaces]<!-- ignore --> in Chapter 14.
 
-আমরা বাস্তবায়নের বিশদ বিবরণ এনক্যাপসুলেট করা নিয়েও আলোচনা করব, যা আপনাকে উচ্চ স্তরে কোড পুনরায় ব্যবহার করতে দেয়: একবার আপনি একটি অপারেশন প্রয়োগ করার পরে, অন্যান্য কোডগুলি বাস্তবায়ন কীভাবে কাজ করে তা না জেনে এর public ইন্টারফেসের মাধ্যমে আপনার কোড কল করতে পারে। আপনি যেভাবে কোড লেখেন তা সংজ্ঞায়িত করে যে কোন অংশগুলি অন্যান্য কোড ব্যবহারের জন্য public এবং কোন অংশগুলি private বাস্তবায়নের বিবরণ যা আপনি পরিবর্তন করার অধিকার রাখেন। এটি আপনার মাথায় রাখতে হবে এমন বিস্তারিত পরিমাণ সীমিত করার আরেকটি উপায়।
+We’ll also discuss encapsulating implementation details, which lets you reuse
+code at a higher level: once you’ve implemented an operation, other code can
+call your code via its public interface without having to know how the
+implementation works. The way you write code defines which parts are public for
+other code to use and which parts are private implementation details that you
+reserve the right to change. This is another way to limit the amount of detail
+you have to keep in your head.
 
-একটি সম্পর্কিত ধারণা হল scope: নেস্টেড প্রেক্ষাপট যেখানে কোড লেখা হয় সেখানে কিছু নামের একটি সেট থাকে যা "scope এ" হিসাবে সংজ্ঞায়িত করা হয়। কোড পড়া, লেখা এবং কম্পাইল করার সময়, প্রোগ্রামার এবং কম্পাইলারদের জানতে হবে যে একটি নির্দিষ্ট স্থানে একটি নির্দিষ্ট নাম একটি ভেরিয়েবল, ফাংশন, struct, enum, মডিউল, ধ্রুবক বা অন্য আইটেমকে নির্দেশ করে কিনা এবং সেই আইটেমের অর্থ কী। আপনি scopes তৈরি করতে এবং কোন নামগুলি scope এ আছে বা নেই তা পরিবর্তন করতে পারেন। একই scope এ একই নামের দুটি আইটেম থাকতে পারে না; নামের দ্বন্দ্ব সমাধানের জন্য সরঞ্জাম উপলব্ধ রয়েছে।
+A related concept is scope: the nested context in which code is written has a
+set of names that are defined as “in scope.” When reading, writing, and
+compiling code, programmers and compilers need to know whether a particular
+name at a particular spot refers to a variable, function, struct, enum, module,
+constant, or other item and what that item means. You can create scopes and
+change which names are in or out of scope. You can’t have two items with the
+same name in the same scope; tools are available to resolve name conflicts.
 
-Rust এ বেশ কয়েকটি বৈশিষ্ট্য রয়েছে যা আপনাকে আপনার কোডের সংগঠন পরিচালনা করার অনুমতি দেয়, যার মধ্যে কোন বিবরণগুলি প্রকাশ করা হয়েছে, কোন বিবরণগুলি private এবং আপনার প্রোগ্রামগুলিতে প্রতিটি scope এ কী কী নাম রয়েছে। এই বৈশিষ্ট্যগুলি, কখনও কখনও সম্মিলিতভাবে _মডিউল সিস্টেম_ হিসাবে উল্লেখ করা হয়, এর মধ্যে রয়েছে:
+Rust has a number of features that allow you to manage your code’s
+organization, including which details are exposed, which details are private,
+and what names are in each scope in your programs. These features, sometimes
+collectively referred to as the _module system_, include:
 
-- **Packages:** একটি Cargo বৈশিষ্ট্য যা আপনাকে ক্রেট তৈরি, পরীক্ষা এবং শেয়ার করতে দেয়
-- **Crates:** মডিউলগুলির একটি গাছ যা একটি লাইব্রেরি বা এক্সিকিউটেবল তৈরি করে
-- **Modules** এবং **use:** আপনাকে paths এর সংগঠন, scope এবং গোপনীয়তা নিয়ন্ত্রণ করতে দেয়
-- **Paths:** একটি আইটেমের নাম দেওয়ার একটি উপায়, যেমন একটি struct, ফাংশন বা মডিউল
+- **Packages:** A Cargo feature that lets you build, test, and share crates
+- **Crates:** A tree of modules that produces a library or executable
+- **Modules** and **use:** Let you control the organization, scope, and
+  privacy of paths
+- **Paths:** A way of naming an item, such as a struct, function, or module
 
-এই অধ্যায়ে, আমরা এই সমস্ত বৈশিষ্ট্যগুলি কভার করব, তারা কীভাবে ইন্টারঅ্যাক্ট করে তা নিয়ে আলোচনা করব এবং scope পরিচালনার জন্য সেগুলি কীভাবে ব্যবহার করতে হয় তা ব্যাখ্যা করব। শেষ পর্যন্ত, আপনার মডিউল সিস্টেমের একটি কঠিন ধারণা থাকা উচিত এবং একজন পেশাদারের মতো scopes এর সাথে কাজ করতে সক্ষম হওয়া উচিত!
+In this chapter, we’ll cover all these features, discuss how they interact, and
+explain how to use them to manage scope. By the end, you should have a solid
+understanding of the module system and be able to work with scopes like a pro!
 
 [workspaces]: ch14-03-cargo-workspaces.html

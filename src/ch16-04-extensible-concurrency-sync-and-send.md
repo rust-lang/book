@@ -1,37 +1,86 @@
 ## Extensible Concurrency with the `Sync` and `Send` Traits
 
-মজার বিষয় হলো, Rust language এ concurrency এর খুবই কম feature আছে। এই chapter এ আমরা concurrency নিয়ে যত feature আলোচনা করেছি তার প্রায় সবই standard library এর অংশ, language এর নয়। Concurrency handle করার জন্য আপনার option গুলো language বা standard library এর মধ্যে সীমাবদ্ধ নয়; আপনি নিজের concurrency feature লিখতে পারেন অথবা অন্যদের লেখা feature ব্যবহার করতে পারেন।
+Interestingly, the Rust language has _very_ few concurrency features. Almost
+every concurrency feature we’ve talked about so far in this chapter has been
+part of the standard library, not the language. Your options for handling
+concurrency are not limited to the language or the standard library; you can
+write your own concurrency features or use those written by others.
 
-তবে, দুটি concurrency concept language এ দেওয়া আছে: `std::marker` traits `Sync` এবং `Send`.
+However, two concurrency concepts are embedded in the language: the
+`std::marker` traits `Sync` and `Send`.
 
 ### Allowing Transference of Ownership Between Threads with `Send`
 
-`Send` marker trait নির্দেশ করে যে `Send` implement করা type এর value এর ownership thread এর মধ্যে transfer করা যেতে পারে। প্রায় সব Rust type `Send`, কিন্তু কিছু exception আছে, যার মধ্যে `Rc<T>` একটি: এটি `Send` হতে পারে না কারণ আপনি যদি একটি `Rc<T>` value clone করেন এবং clone এর ownership অন্য একটি thread এ transfer করার চেষ্টা করেন, তাহলে দুটি thread একই সময়ে reference count update করতে পারে। এই কারণে, `Rc<T>` single-threaded পরিস্থিতিতে ব্যবহারের জন্য implement করা হয়েছে যেখানে আপনি thread-safe performance penalty দিতে চান না।
+The `Send` marker trait indicates that ownership of values of the type
+implementing `Send` can be transferred between threads. Almost every Rust type
+is `Send`, but there are some exceptions, including `Rc<T>`: this cannot be
+`Send` because if you cloned an `Rc<T>` value and tried to transfer ownership
+of the clone to another thread, both threads might update the reference count
+at the same time. For this reason, `Rc<T>` is implemented for use in
+single-threaded situations where you don’t want to pay the thread-safe
+performance penalty.
 
-তাই, Rust এর type system এবং trait bounds নিশ্চিত করে যে আপনি কোনোভাবেই accidentally unsafe ভাবে thread এর মধ্যে `Rc<T>` value send করতে পারবেন না। যখন আমরা Listing 16-14 এ এটা করার চেষ্টা করেছিলাম, তখন আমরা error পেয়েছিলাম `the trait Send is not implemented for Rc<Mutex<i32>>`। যখন আমরা `Arc<T>` এ switch করেছিলাম, যা `Send`, তখন code compile হয়েছিল।
+Therefore, Rust’s type system and trait bounds ensure that you can never
+accidentally send an `Rc<T>` value across threads unsafely. When we tried to do
+this in Listing 16-14, we got the error `the trait Send is not implemented for
+Rc<Mutex<i32>>`. When we switched to `Arc<T>`, which is `Send`, the code
+compiled.
 
-যে type গুলো সম্পূর্ণরূপে `Send` type দিয়ে গঠিত, সেগুলো automatic ভাবে `Send` হিসেবে চিহ্নিত হয়। প্রায় সব primitive type `Send`, raw pointer ছাড়া, যা আমরা Chapter 20 এ আলোচনা করব।
+Any type composed entirely of `Send` types is automatically marked as `Send` as
+well. Almost all primitive types are `Send`, aside from raw pointers, which
+we’ll discuss in Chapter 20.
 
 ### Allowing Access from Multiple Threads with `Sync`
 
-`Sync` marker trait নির্দেশ করে যে `Sync` implement করা type কে একাধিক thread থেকে reference করা safe। অন্যভাবে বলতে গেলে, যেকোনো type `T` `Sync` হবে যদি `&T` (`T` এর immutable reference) `Send` হয়, মানে reference টি safe ভাবে অন্য thread এ send করা যেতে পারে। `Send` এর মতোই, primitive type গুলো `Sync` এবং যে type গুলো সম্পূর্ণরূপে `Sync` type দিয়ে গঠিত সেগুলোও `Sync`।
+The `Sync` marker trait indicates that it is safe for the type implementing
+`Sync` to be referenced from multiple threads. In other words, any type `T` is
+`Sync` if `&T` (an immutable reference to `T`) is `Send`, meaning the reference
+can be sent safely to another thread. Similar to `Send`, primitive types are
+`Sync`, and types composed entirely of types that are `Sync` are also `Sync`.
 
-Smart pointer `Rc<T>` ও `Sync` নয় একই কারণে যে কারণে এটি `Send` নয়। `RefCell<T>` type (যা নিয়ে আমরা Chapter 15 এ আলোচনা করেছিলাম) এবং related `Cell<T>` type এর family ও `Sync` নয়। `RefCell<T>` runtime এ borrow checking এর যে implementation করে তা thread-safe নয়। Smart pointer `Mutex<T>` `Sync` এবং একাধিক thread এর সাথে access share করার জন্য ব্যবহার করা যেতে পারে যেমনটা আপনি [“Sharing a `Mutex<T>` Between Multiple Threads”][sharing-a-mutext-between-multiple-threads]<!-- ignore --> section এ দেখেছেন।
+The smart pointer `Rc<T>` is also not `Sync` for the same reasons that it’s not
+`Send`. The `RefCell<T>` type (which we talked about in Chapter 15) and the
+family of related `Cell<T>` types are not `Sync`. The implementation of borrow
+checking that `RefCell<T>` does at runtime is not thread-safe. The smart
+pointer `Mutex<T>` is `Sync` and can be used to share access with multiple
+threads as you saw in [“Sharing a `Mutex<T>` Between Multiple
+Threads”][sharing-a-mutext-between-multiple-threads]<!-- ignore -->.
 
 ### Implementing `Send` and `Sync` Manually Is Unsafe
 
-যেহেতু যে type গুলো `Send` এবং `Sync` trait দিয়ে তৈরি সেগুলো automatic ভাবে `Send` এবং `Sync` হয়, তাই আমাদের manually এই trait গুলো implement করতে হয় না। Marker trait হিসেবে, এগুলোর implement করার জন্য কোনো method ও নেই। এগুলো শুধু concurrency এর সাথে সম্পর্কিত invariant enforce করার জন্য দরকারি।
+Because types that are made up of `Send` and `Sync` traits are automatically
+also `Send` and `Sync`, we don’t have to implement those traits manually. As
+marker traits, they don’t even have any methods to implement. They’re just
+useful for enforcing invariants related to concurrency.
 
-Manually এই trait গুলো implement করার সাথে unsafe Rust code implement করা জড়িত। আমরা Chapter 20 এ unsafe Rust code ব্যবহার করা নিয়ে আলোচনা করব; আপাতত, গুরুত্বপূর্ণ তথ্য হলো `Send` এবং `Sync` অংশ দিয়ে তৈরি নয় এমন নতুন concurrent type তৈরি করার জন্য safety guarantee গুলো ধরে রাখার জন্য সতর্কতার সাথে চিন্তা করতে হয়। [“The Rustonomicon”][nomicon] এ এই guarantee গুলো এবং কিভাবে সেগুলো ধরে রাখতে হয় সে সম্পর্কে আরও তথ্য আছে।
+Manually implementing these traits involves implementing unsafe Rust code.
+We’ll talk about using unsafe Rust code in Chapter 20; for now, the important
+information is that building new concurrent types not made up of `Send` and
+`Sync` parts requires careful thought to uphold the safety guarantees. [“The
+Rustonomicon”][nomicon] has more information about these guarantees and how to
+uphold them.
 
 ## Summary
 
-এই বইয়ে concurrency নিয়ে এটাই শেষ নয়: পুরো পরের chapter টি async programming এর উপর focus করা হয়েছে, এবং Chapter 21 এর project এ এই chapter এর concept গুলো আরও বাস্তব পরিস্থিতিতে ব্যবহার করা হবে যা এখানে আলোচনা করা ছোট উদাহরণগুলোর চেয়ে অনেক বেশি।
+This isn’t the last you’ll see of concurrency in this book: the whole next
+chapter focuses on async programming, and the project in Chapter 21 will use the
+concepts in this chapter in a more realistic situation than the smaller examples
+discussed here.
 
-আগেই উল্লেখ করা হয়েছে, Rust concurrency handle করার পদ্ধতিগুলোর খুব কম অংশই language এর অংশ হওয়ায়, অনেক concurrency সমাধান crate হিসেবে implement করা হয়েছে। Standard library এর চেয়ে এগুলো দ্রুত evolve হয়, তাই multithreaded পরিস্থিতিতে ব্যবহার করার জন্য current, state-of-the-art crate গুলো online এ search করতে ভুলবেন না।
+As mentioned earlier, because very little of how Rust handles concurrency is
+part of the language, many concurrency solutions are implemented as crates.
+These evolve more quickly than the standard library, so be sure to search
+online for the current, state-of-the-art crates to use in multithreaded
+situations.
 
-Rust standard library message passing এর জন্য channel এবং smart pointer type যেমন `Mutex<T>` এবং `Arc<T>` প্রদান করে, যা concurrent context এ ব্যবহার করা safe। Type system এবং borrow checker নিশ্চিত করে যে এই সমাধানগুলো ব্যবহার করে code data race বা invalid reference এ শেষ হবে না। একবার আপনার code compile হয়ে গেলে, আপনি নিশ্চিত থাকতে পারেন যে এটি অন্যান্য language এর মতো hard-to-track-down bug ছাড়াই একাধিক thread এ run হবে। Concurrent programming আর ভয়ের কোনো বিষয় নয়: এগিয়ে যান এবং আপনার প্রোগ্রামগুলোকে fearlessly concurrent করুন!
+The Rust standard library provides channels for message passing and smart
+pointer types, such as `Mutex<T>` and `Arc<T>`, that are safe to use in
+concurrent contexts. The type system and the borrow checker ensure that the
+code using these solutions won’t end up with data races or invalid references.
+Once you get your code to compile, you can rest assured that it will happily
+run on multiple threads without the kinds of hard-to-track-down bugs common in
+other languages. Concurrent programming is no longer a concept to be afraid of:
+go forth and make your programs concurrent, fearlessly!
 
 [sharing-a-mutext-between-multiple-threads]: ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads
 [nomicon]: ../nomicon/index.html
-```

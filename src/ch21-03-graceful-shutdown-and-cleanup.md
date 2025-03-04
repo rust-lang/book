@@ -1,16 +1,32 @@
-## সুন্দরভাবে বন্ধ করা এবং পরিষ্কার করা
+## Graceful Shutdown and Cleanup
 
-তালিকা 21-20-এর কোডটি একটি থ্রেড পুল ব্যবহারের মাধ্যমে অ্যাসিঙ্ক্রোনাসভাবে অনুরোধগুলির প্রতিক্রিয়া জানাচ্ছে, যেমনটি আমরা চেয়েছিলাম। আমরা `workers`, `id` এবং `thread` ফিল্ডগুলি সম্পর্কে কিছু সতর্কতা পাই যা আমরা সরাসরি উপায়ে ব্যবহার করছি না, যা আমাদের মনে করিয়ে দেয় যে আমরা কিছুই পরিষ্কার করছি না। যখন আমরা প্রধান থ্রেডটিকে থামাতে কম মার্জিত <kbd>ctrl</kbd>-<kbd>c</kbd> পদ্ধতি ব্যবহার করি, তখন অন্য সমস্ত থ্রেডও তত্ক্ষণাত্ বন্ধ হয়ে যায়, এমনকি যদি তারা কোনও অনুরোধ পরিবেশন করার মাঝখানে থাকে।
+The code in Listing 21-20 is responding to requests asynchronously through the
+use of a thread pool, as we intended. We get some warnings about the `workers`,
+`id`, and `thread` fields that we’re not using in a direct way that reminds us
+we’re not cleaning up anything. When we use the less elegant
+<kbd>ctrl</kbd>-<kbd>c</kbd> method to halt the main thread, all other threads
+are stopped immediately as well, even if they’re in the middle of serving a
+request.
 
-এর পরে, আমরা পুলের প্রতিটি থ্রেডে `join` কল করার জন্য `Drop` trait টি প্রয়োগ করব যাতে তারা বন্ধ করার আগে তারা যে অনুরোধগুলির উপর কাজ করছে সেগুলি শেষ করতে পারে। তারপরে আমরা থ্রেডগুলিকে বলতে একটি উপায় প্রয়োগ করব যে তাদের নতুন অনুরোধ গ্রহণ করা বন্ধ করে দেওয়া উচিত এবং বন্ধ করা উচিত। এই কোডটি বাস্তবে দেখার জন্য, আমরা আমাদের সার্ভারটিকে তার থ্রেড পুলটি সুন্দরভাবে বন্ধ করার আগে শুধুমাত্র দুটি অনুরোধ গ্রহণ করার জন্য সংশোধন করব।
+Next, then, we’ll implement the `Drop` trait to call `join` on each of the
+threads in the pool so they can finish the requests they’re working on before
+closing. Then we’ll implement a way to tell the threads they should stop
+accepting new requests and shut down. To see this code in action, we’ll modify
+our server to accept only two requests before gracefully shutting down its
+thread pool.
 
-আমরা যাওয়ার সাথে সাথে লক্ষ্য করার মতো একটি বিষয়: এর কোনোটিই কোডের সেই অংশগুলিকে প্রভাবিত করে না যা ক্লোজারগুলি কার্যকর করার কাজটি করে, তাই এখানে সবকিছু একই রকম থাকবে যদি আমরা একটি async রানটাইমের জন্য একটি থ্রেড পুল ব্যবহার করতাম।
+One thing to notice as we go: none of this affects the parts of the code that
+handle executing the closures, so everything here would be just the same if we
+were using a thread pool for an async runtime.
 
-### `ThreadPool`-এ `Drop` trait প্রয়োগ করা
+### Implementing the `Drop` Trait on `ThreadPool`
 
-আসুন আমাদের থ্রেড পুলে `Drop` প্রয়োগ করার মাধ্যমে শুরু করি। যখন পুলটি ড্রপ করা হয়, তখন আমাদের থ্রেডগুলির সমস্তগুলিকে তাদের কাজ শেষ করার জন্য যোগদান করা উচিত। তালিকা 21-22 `Drop` বাস্তবায়নের প্রথম প্রচেষ্টা দেখায়; এই কোডটি এখনও পুরোপুরি কাজ করবে না।
+Let’s start with implementing `Drop` on our thread pool. When the pool is
+dropped, our threads should all join to make sure they finish their work.
+Listing 21-22 shows a first attempt at a `Drop` implementation; this code won’t
+quite work yet.
 
-<Listing number="21-22" file-name="src/lib.rs" caption="থ্রেড পুল স্কোপের বাইরে চলে গেলে প্রতিটি থ্রেডে যোগদান করা">
+<Listing number="21-22" file-name="src/lib.rs" caption="Joining each thread when the thread pool goes out of scope">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-22/src/lib.rs:here}}
@@ -18,21 +34,43 @@
 
 </Listing>
 
-প্রথমত, আমরা থ্রেড পুলের প্রতিটি `worker`-এর মাধ্যমে লুপ করি। আমরা এর জন্য `&mut` ব্যবহার করি কারণ `self` একটি পরিবর্তনযোগ্য রেফারেন্স, এবং আমাদের `worker` পরিবর্তন করতেও সক্ষম হতে হবে। প্রতিটি কর্মীর জন্য, আমরা একটি বার্তা প্রিন্ট করি যে এই বিশেষ কর্মীটি বন্ধ হয়ে যাচ্ছে, এবং তারপরে আমরা সেই কর্মীর থ্রেডে `join` কল করি। `join`-এর কল ব্যর্থ হলে, আমরা Rust-কে প্যানিক করতে এবং একটি বিশৃঙ্খল শাটডাউনে যেতে `unwrap` ব্যবহার করি।
+First, we loop through each of the thread pool `workers`. We use `&mut` for this
+because `self` is a mutable reference, and we also need to be able to mutate
+`worker`. For each worker, we print a message saying that this particular
+`Worker` instance is shutting down, and then we call `join` on that `Worker`
+instance’s thread. If the call to `join` fails, we use `unwrap` to make Rust
+panic and go into an ungraceful shutdown.
 
-এই কোডটি কম্পাইল করার সময় আমরা যে ত্রুটিটি পাই তা এখানে দেওয়া হল:
+Here is the error we get when we compile this code:
 
 ```console
 {{#include ../listings/ch21-web-server/listing-21-22/output.txt}}
 ```
 
-ত্রুটিটি আমাদের বলছে যে আমরা `join` কল করতে পারি না কারণ আমাদের কাছে প্রতিটি `worker`-এর শুধুমাত্র একটি পরিবর্তনযোগ্য বরো রয়েছে এবং `join` তার আর্গুমেন্টের মালিকানা নেয়। এই সমস্যাটি সমাধান করার জন্য, আমাদের `Worker` উদাহরণ থেকে থ্রেডটিকে সরিয়ে ফেলতে হবে, যা `thread`-এর মালিক যাতে `join` থ্রেডটিকে ব্যবহার করতে পারে। এটি করার একটি উপায় হল তালিকা 18-15-এ আমরা যে পদ্ধতিটি নিয়েছিলাম তা গ্রহণ করা। যদি `Worker` একটি `Option<thread::JoinHandle<()>>` ধারণ করে, তাহলে আমরা `Option`-এ `take` পদ্ধতি কল করতে পারি `Some` রূপ থেকে মানটিকে সরিয়ে নেওয়ার জন্য এবং এর জায়গায় একটি `None` রূপ রেখে দেওয়ার জন্য। অন্য কথায়, একটি `Worker` যা চলছে তার `thread`-এ একটি `Some` রূপ থাকবে, এবং যখন আমরা একটি `Worker` পরিষ্কার করতে চাই, তখন আমরা `Some`-কে `None` দিয়ে প্রতিস্থাপন করব যাতে `Worker`-এর চালানোর জন্য কোনো থ্রেড না থাকে।
+The error tells us we can’t call `join` because we only have a mutable borrow of
+each `worker` and `join` takes ownership of its argument. To solve this issue,
+we need to move the thread out of the `Worker` instance that owns `thread` so
+`join` can consume the thread. One way to do this is by taking the same approach
+we did in Listing 18-15. If `Worker` held an `Option<thread::JoinHandle<()>>`,
+we could call the `take` method on the `Option` to move the value out of the
+`Some` variant and leave a `None` variant in its place. In other words, a
+`Worker` that is running would have a `Some` variant in `thread`, and when we
+wanted to clean up a `Worker`, we’d replace `Some` with `None` so the `Worker`
+wouldn’t have a thread to run.
 
-তবে, এটি _শুধুমাত্র_ তখনই আসবে যখন `Worker` ড্রপ করা হবে। বিনিময়ে, আমরা `worker.thread` অ্যাক্সেস করি এমন প্রতিটি জায়গায় `Option<thread::JoinHandle<()>>` নিয়ে কাজ করতে হবে। ইডিওম্যাটিক Rust বেশ কিছুটা `Option` ব্যবহার করে, তবে যখন আপনি দেখতে পান যে আপনি কোনো সমস্যা সমাধানের জন্য `Option`-এ কিছু মোড়ানোচ্ছেন যদিও আপনি জানেন যে আইটেমটি সর্বদা উপস্থিত থাকবে, তখন বিকল্প পদ্ধতির সন্ধান করা একটি ভাল ধারণা। তারা আপনার কোডকে আরও পরিচ্ছন্ন এবং কম ত্রুটি-প্রবণ করতে পারে।
+However, the _only_ time this would come up would be when dropping the `Worker`.
+In exchange, we’d have to deal with an `Option<thread::JoinHandle<()>>` anywhere
+we accessed `worker.thread`. Idiomatic Rust uses `Option` quite a bit, but when
+you find yourself wrapping something you know will always be present in `Option`
+as a workaround like this, it’s a good idea to look for alternative approaches.
+They can make your code cleaner and less error-prone.
 
-এই ক্ষেত্রে, একটি ভাল বিকল্প আছে: `Vec::drain` পদ্ধতি। এটি একটি পরিসর প্যারামিটার গ্রহণ করে যা `Vec` থেকে কোন আইটেমগুলি সরিয়ে ফেলতে হবে তা নির্দিষ্ট করে এবং সেই আইটেমগুলির একটি পুনরাবৃত্তিকারী ফেরত দেয়। `..` পরিসরের সিনট্যাক্স পাস করা `Vec` থেকে _প্রতিটি_ মান সরিয়ে দেবে।
+In this case, a better alternative exists: the `Vec::drain` method. It accepts
+a range parameter to specify which items to remove from the `Vec`, and returns
+an iterator of those items. Passing the `..` range syntax will remove _every_
+value from the `Vec`.
 
-সুতরাং আমাদের `ThreadPool` `drop` বাস্তবায়নকে এভাবে আপডেট করতে হবে:
+So we need to update the `ThreadPool` `drop` implementation like this:
 
 <Listing file-name="src/lib.rs">
 
@@ -42,17 +80,29 @@
 
 </Listing>
 
-এটি কম্পাইলার ত্রুটি সমাধান করে এবং আমাদের কোডে অন্য কোনও পরিবর্তনের প্রয়োজন হয় না।
+This resolves the compiler error and does not require any other changes to our
+code.
 
-### থ্রেডগুলিকে কাজ শোনার জন্য বন্ধ করার সংকেত দেওয়া
+### Signaling to the Threads to Stop Listening for Jobs
 
-আমরা যে সমস্ত পরিবর্তন করেছি তার সাথে, আমাদের কোড কোনো সতর্কতা ছাড়াই কম্পাইল হয়। তবে, খারাপ খবর হল এই কোডটি এখনও আমাদের পছন্দসই উপায়ে কাজ করে না। মূল বিষয় হল `Worker` উদাহরণগুলির থ্রেড দ্বারা চালিত ক্লোজারগুলির যুক্তি: এই মুহূর্তে, আমরা `join` কল করি, তবে এটি থ্রেডগুলিকে বন্ধ করবে না কারণ তারা কাজ খোঁজার জন্য চিরকাল `loop` করে। আমরা যদি আমাদের `drop`-এর বর্তমান বাস্তবায়নের সাথে `ThreadPool` ড্রপ করার চেষ্টা করি, তবে প্রধান থ্রেডটি প্রথম থ্রেডটি শেষ হওয়ার জন্য অপেক্ষা করতে চিরকাল ব্লক করবে।
+With all the changes we’ve made, our code compiles without any warnings.
+However, the bad news is that this code doesn’t function the way we want it to
+yet. The key is the logic in the closures run by the threads of the `Worker`
+instances: at the moment, we call `join`, but that won’t shut down the threads
+because they `loop` forever looking for jobs. If we try to drop our `ThreadPool`
+with our current implementation of `drop`, the main thread will block forever,
+waiting for the first thread to finish.
 
-এই সমস্যাটি সমাধান করার জন্য, আমাদের `ThreadPool` `drop` বাস্তবায়নে এবং তারপর `Worker` লুপে একটি পরিবর্তন করতে হবে।
+To fix this problem, we’ll need a change in the `ThreadPool` `drop`
+implementation and then a change in the `Worker` loop.
 
-প্রথমত, আমরা থ্রেডগুলি শেষ হওয়ার জন্য অপেক্ষা করার আগে `sender`-কে স্পষ্টভাবে ড্রপ করার জন্য `ThreadPool` `drop` বাস্তবায়নকে পরিবর্তন করব। তালিকা 21-23 `sender`-কে স্পষ্টভাবে ড্রপ করার জন্য `ThreadPool`-এর পরিবর্তনগুলি দেখায়। `workers`-এর মতো নয়, এখানে আমাদের `Option::take` সহ `ThreadPool` থেকে `sender`-কে সরাতে সক্ষম হওয়ার জন্য _অবশ্যই_ একটি `Option` ব্যবহার করতে হবে।
+First we’ll change the `ThreadPool` `drop` implementation to explicitly drop
+the `sender` before waiting for the threads to finish. Listing 21-23 shows the
+changes to `ThreadPool` to explicitly drop `sender`. Unlike with the thread,
+here we _do_ need to use an `Option` to be able to move `sender` out of
+`ThreadPool` with `Option::take`.
 
-<Listing number="21-23" file-name="src/lib.rs" caption="কর্মী থ্রেডে যোগদানের আগে `sender` স্পষ্টভাবে ড্রপ করুন">
+<Listing number="21-23" file-name="src/lib.rs" caption="Explicitly drop `sender` before joining the `Worker` threads">
 
 ```rust,noplayground,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-23/src/lib.rs:here}}
@@ -60,9 +110,13 @@
 
 </Listing>
 
-`sender` ড্রপ করলে চ্যানেলটি বন্ধ হয়ে যায়, যা নির্দেশ করে যে আর কোনো বার্তা পাঠানো হবে না। যখন এটি ঘটে, তখন কর্মীরা অসীম লুপে `recv`-এ করা সমস্ত কল একটি ত্রুটি ফেরত দেবে। তালিকা 21-24-এ, আমরা `Worker` লুপ পরিবর্তন করি সেই ক্ষেত্রে লুপ থেকে সুন্দরভাবে প্রস্থান করতে, যার অর্থ হল `ThreadPool` `drop` বাস্তবায়ন যখন তাদের উপর `join` কল করে তখন থ্রেডগুলি শেষ হবে।
+Dropping `sender` closes the channel, which indicates no more messages will be
+sent. When that happens, all the calls to `recv` that the `Worker` instances do
+in the infinite loop will return an error. In Listing 21-24, we change the
+`Worker` loop to gracefully exit the loop in that case, which means the threads
+will finish when the `ThreadPool` `drop` implementation calls `join` on them.
 
-<Listing number="21-24" file-name="src/lib.rs" caption="`recv` একটি ত্রুটি ফেরত দিলে স্পষ্টভাবে লুপ থেকে বেরিয়ে আসা">
+<Listing number="21-24" file-name="src/lib.rs" caption="Explicitly breaking out of the loop when `recv` returns an error">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-24/src/lib.rs:here}}
@@ -70,9 +124,10 @@
 
 </Listing>
 
-এই কোডটি বাস্তবে দেখার জন্য, আসুন তালিকা 21-25-এ দেখানো হিসাবে, সার্ভারটিকে সুন্দরভাবে বন্ধ করার আগে শুধুমাত্র দুটি অনুরোধ গ্রহণ করার জন্য `main` সংশোধন করি।
+To see this code in action, let’s modify `main` to accept only two requests
+before gracefully shutting down the server, as shown in Listing 21-25.
 
-<Listing number="21-25" file-name="src/main.rs" caption="লুপ থেকে বেরিয়ে গিয়ে দুটি অনুরোধ পরিবেশন করার পরে সার্ভার বন্ধ করুন">
+<Listing number="21-25" file-name="src/main.rs" caption="Shutting down the server after serving two requests by exiting the loop">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-25/src/main.rs:here}}
@@ -80,11 +135,16 @@
 
 </Listing>
 
-আপনি চাইবেন না যে একটি বাস্তব-বিশ্বের ওয়েব সার্ভার শুধুমাত্র দুটি অনুরোধ পরিবেশন করার পরে বন্ধ হয়ে যাক। এই কোডটি শুধুমাত্র প্রদর্শন করে যে সুন্দর শাটডাউন এবং পরিষ্কার করার কাজটি ভালোভাবে চলছে।
+You wouldn’t want a real-world web server to shut down after serving only two
+requests. This code just demonstrates that the graceful shutdown and cleanup is
+in working order.
 
-`take` পদ্ধতিটি `Iterator` trait-এ সংজ্ঞায়িত করা হয়েছে এবং সর্বাধিক দুটি আইটেমের জন্য পুনরাবৃত্তি সীমাবদ্ধ করে। `ThreadPool` `main`-এর শেষে স্কোপের বাইরে চলে যাবে এবং `drop` বাস্তবায়ন চলবে।
+The `take` method is defined in the `Iterator` trait and limits the iteration
+to the first two items at most. The `ThreadPool` will go out of scope at the
+end of `main`, and the `drop` implementation will run.
 
-`cargo run` দিয়ে সার্ভারটি শুরু করুন এবং তিনটি অনুরোধ করুন। তৃতীয় অনুরোধে ত্রুটি হওয়া উচিত, এবং আপনার টার্মিনালে আপনি এইরকম আউটপুট দেখতে পাবেন:
+Start the server with `cargo run`, and make three requests. The third request
+should error, and in your terminal you should see output similar to this:
 
 <!-- manual-regeneration
 cd listings/ch21-web-server/listing-21-25
@@ -115,13 +175,28 @@ Shutting down worker 2
 Shutting down worker 3
 ```
 
-আপনি কর্মী এবং বার্তাগুলির একটি ভিন্ন ক্রম দেখতে পারেন। আমরা বার্তাগুলি থেকে দেখতে পাচ্ছি এই কোডটি কীভাবে কাজ করে: কর্মী 0 এবং 3 প্রথম দুটি অনুরোধ পেয়েছে। সার্ভারটি দ্বিতীয় সংযোগের পরে সংযোগ গ্রহণ করা বন্ধ করে দিয়েছে এবং কর্মী 3 তার কাজ শুরু করার আগেই `ThreadPool`-এ `Drop` বাস্তবায়ন শুরু হয়। `sender` ড্রপ করা সমস্ত কর্মীদের সংযোগ বিচ্ছিন্ন করে এবং তাদের বন্ধ করার নির্দেশ দেয়। কর্মীরা সংযোগ বিচ্ছিন্ন করার সময় প্রতিটি একটি বার্তা প্রিন্ট করে এবং তারপরে থ্রেড পুল প্রতিটি কর্মী থ্রেড শেষ হওয়ার জন্য অপেক্ষা করতে `join` কল করে।
+You might see a different ordering of `Worker` IDs and messages printed. We can
+see how this code works from the messages: `Worker` instances 0 and 3 got the
+first two requests. The server stopped accepting connections after the second
+connection, and the `Drop` implementation on `ThreadPool` starts executing
+before `Worker` 3 even starts its job. Dropping the `sender` disconnects all the
+`Worker` instances and tells them to shut down. The `Worker` instances each
+print a message when they disconnect, and then the thread pool calls `join` to
+wait for each `Worker` thread to finish.
 
-এই বিশেষ নির্বাহের একটি আকর্ষণীয় দিক লক্ষ্য করুন: `ThreadPool` `sender` ড্রপ করেছে এবং কোনো কর্মী একটি ত্রুটি পাওয়ার আগে, আমরা কর্মী 0-এ যোগদানের চেষ্টা করেছি। কর্মী 0 এখনও `recv` থেকে কোনো ত্রুটি পায়নি, তাই প্রধান থ্রেডটি কর্মী 0 শেষ হওয়ার জন্য অপেক্ষা করতে ব্লক করেছে। ইতিমধ্যে, কর্মী 3 একটি কাজ পেয়েছে এবং তারপর সমস্ত থ্রেড একটি ত্রুটি পেয়েছে। যখন কর্মী 0 শেষ হয়েছিল, তখন প্রধান থ্রেডটি বাকি কর্মীদের শেষ হওয়ার জন্য অপেক্ষা করেছিল। সেই সময়ে, তারা সবাই তাদের লুপ থেকে বেরিয়ে এসেছিল এবং বন্ধ হয়ে গিয়েছিল।
+Notice one interesting aspect of this particular execution: the `ThreadPool`
+dropped the `sender`, and before any `Worker` received an error, we tried to
+join `Worker` 0. `Worker` 0 had not yet gotten an error from `recv`, so the main
+thread blocked waiting for `Worker` 0 to finish. In the meantime, `Worker` 3
+received a job and then all threads received an error. When `Worker` 0 finished,
+the main thread waited for the rest of the `Worker` instances to finish. At that
+point, they had all exited their loops and stopped.
 
-অভিনন্দন! আমরা এখন আমাদের প্রকল্পটি সম্পন্ন করেছি; আমাদের একটি বেসিক ওয়েব সার্ভার রয়েছে যা অ্যাসিঙ্ক্রোনাসভাবে প্রতিক্রিয়া জানাতে একটি থ্রেড পুল ব্যবহার করে। আমরা সার্ভারের একটি সুন্দর শাটডাউন করতে সক্ষম, যা পুলের সমস্ত থ্রেড পরিষ্কার করে।
+Congrats! We’ve now completed our project; we have a basic web server that uses
+a thread pool to respond asynchronously. We’re able to perform a graceful
+shutdown of the server, which cleans up all the threads in the pool.
 
-রেফারেন্সের জন্য এখানে সম্পূর্ণ কোড দেওয়া হল:
+Here’s the full code for reference:
 
 <Listing file-name="src/main.rs">
 
@@ -139,14 +214,21 @@ Shutting down worker 3
 
 </Listing>
 
-আমরা এখানে আরও কিছু করতে পারি! আপনি যদি এই প্রকল্পটি উন্নত করতে চালিয়ে যেতে চান, তবে এখানে কিছু ধারণা দেওয়া হল:
+We could do more here! If you want to continue enhancing this project, here are
+some ideas:
 
-- `ThreadPool` এবং এর পাবলিক পদ্ধতিগুলিতে আরও ডকুমেন্টেশন যোগ করুন।
-- লাইব্রেরির কার্যকারিতার পরীক্ষা যোগ করুন।
-- আরও শক্তিশালী ত্রুটি হ্যান্ডলিংয়ের জন্য `unwrap`-এর কল পরিবর্তন করুন।
-- ওয়েব অনুরোধগুলি পরিবেশন করা ছাড়া অন্য কোনো কাজ করার জন্য `ThreadPool` ব্যবহার করুন।
-- [crates.io](https://crates.io/)-এ একটি থ্রেড পুল ক্রেট খুঁজুন এবং পরিবর্তে ক্রেট ব্যবহার করে একটি অনুরূপ ওয়েব সার্ভার প্রয়োগ করুন। তারপরে আমাদের বাস্তবায়িত থ্রেড পুলের সাথে এর API এবং বলিষ্ঠতার তুলনা করুন।
+- Add more documentation to `ThreadPool` and its public methods.
+- Add tests of the library’s functionality.
+- Change calls to `unwrap` to more robust error handling.
+- Use `ThreadPool` to perform some task other than serving web requests.
+- Find a thread pool crate on [crates.io](https://crates.io/) and implement a
+  similar web server using the crate instead. Then compare its API and
+  robustness to the thread pool we implemented.
 
-## সারসংক্ষেপ
+## Summary
 
-সাবাশ! আপনি বইটির শেষ প্রান্তে পৌঁছেছেন! আমরা Rust-এর এই সফরে আমাদের সাথে যোগ দেওয়ার জন্য আপনাকে ধন্যবাদ জানাতে চাই। আপনি এখন আপনার নিজের Rust প্রকল্পগুলি বাস্তবায়ন করতে এবং অন্যান্য লোকেদের প্রকল্পে সাহায্য করার জন্য প্রস্তুত। মনে রাখবেন যে অন্যান্য Rustacean-দের একটি স্বাগত সম্প্রদায় রয়েছে যারা আপনার Rust যাত্রায় সম্মুখীন হওয়া যেকোনো চ্যালেঞ্জে আপনাকে সাহায্য করতে আগ্রহী।
+Well done! You’ve made it to the end of the book! We want to thank you for
+joining us on this tour of Rust. You’re now ready to implement your own Rust
+projects and help with other people’s projects. Keep in mind that there is a
+welcoming community of other Rustaceans who would love to help you with any
+challenges you encounter on your Rust journey.

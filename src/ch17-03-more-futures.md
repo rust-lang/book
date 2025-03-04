@@ -1,8 +1,14 @@
 ## Working with Any Number of Futures
 
-যখন আমরা আগের section এ দুটি future থেকে তিনটি future এ switch করেছিলাম, তখন আমাদের `join` ব্যবহার করার পরিবর্তে `join3` ব্যবহার করতে হয়েছিল। যখনই আমরা join করতে চাই এমন future এর number change করি, তখনই ভিন্ন function call করাটা বিরক্তিকর। সৌভাগ্যবশত, আমাদের `join` এর একটি macro form আছে যেখানে আমরা arbitrary number এর argument pass করতে পারি। এটি future await করাও handle করে। তাই, আমরা Listing 17-13 এর code কে `join3` এর পরিবর্তে `join!` ব্যবহার করে rewrite করতে পারি, যেমন Listing 17-14 এ করা হয়েছে।
+When we switched from using two futures to three in the previous section, we
+also had to switch from using `join` to using `join3`. It would be annoying to
+have to call a different function every time we changed the number of futures we
+wanted to join. Happily, we have a macro form of `join` to which we can pass an
+arbitrary number of arguments. It also handles awaiting the futures itself.
+Thus, we could rewrite the code from Listing 17-13 to use `join!` instead of
+`join3`, as in Listing 17-14.
 
-<Listing number="17-14" caption="একাধিক future এর জন্য wait করার জন্য `join!` ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-14" caption="Using `join!` to wait for multiple futures" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-14/src/main.rs:here}}
@@ -10,11 +16,20 @@
 
 </Listing>
 
-`join` এবং `join3` এবং `join4` এর মধ্যে swap করার চেয়ে এটি অবশ্যই একটি improvement! তবে, এই macro form টিও শুধুমাত্র তখনই কাজ করে যখন আমরা future এর number আগে থেকে জানি। কিন্তু real-world Rust এ, একটি collection এ future push করা এবং তারপর তাদের কিছু বা সব future এর complete হওয়ার জন্য wait করা একটি common pattern।
+This is definitely an improvement over swapping between `join` and
+`join3` and `join4` and so on! However, even this macro form only works
+when we know the number of futures ahead of time. In real-world Rust,
+though, pushing futures into a collection and then waiting on some or
+all the futures of them to complete is a common pattern.
 
-কোনো collection এ সব future check করার জন্য, আমাদের সেগুলোর উপর iterate করে _সবগুলোর_ উপর join করতে হবে। `trpl::join_all` function `Iterator` trait implement করা যেকোনো type accept করে, যা আপনি Chapter 13 এর [The Iterator Trait and the `next` Method][iterator-trait]<!-- ignore --> এ শিখেছেন, তাই এটি ঠিক যেন ticket এর মতো। চলুন আমাদের future গুলোকে একটি vector এ রাখি এবং Listing 17-15 এ দেখানো হিসাবে `join!` কে `join_all` দিয়ে replace করার চেষ্টা করি।
+To check all the futures in some collection, we’ll need to iterate over and
+join on _all_ of them. The `trpl::join_all` function accepts any type that
+implements the `Iterator` trait, which you learned about back in [The Iterator
+Trait and the `next` Method][iterator-trait]<!-- ignore --> Chapter 13, so
+it seems like just the ticket. Let’s try putting our futures in a vector and
+replacing `join!` with `join_all` as show in Listing 17-15.
 
-<Listing  number="17-15" caption="একটি vector এ anonymous future store করা এবং `join_all` call করা">
+<Listing  number="17-15" caption="Storing anonymous futures in a vector and calling `join_all`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-15/src/main.rs:here}}
@@ -22,7 +37,7 @@
 
 </Listing>
 
-দুর্ভাগ্যবশত, এই code compile হয় না। এর পরিবর্তে, আমরা এই error টি পাই:
+Unfortunately, this code doesn’t compile. Instead, we get this error:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-15/
@@ -41,8 +56,7 @@ error[E0308]: mismatched types
    |                      ----- the found `async` block
 ...
 45 |         let futures = vec![tx1_fut, rx_fut, tx_fut];
-   |                                     ^^^^^^ expected `async` block, found a 
-different `async` block
+   |                                     ^^^^^^ expected `async` block, found a different `async` block
    |
    = note: expected `async` block `{async block@src/main.rs:10:23: 10:33}`
               found `async` block `{async block@src/main.rs:24:22: 24:27}`
@@ -50,15 +64,31 @@ different `async` block
    = help: consider pinning your async block and casting it to a trait object
 ```
 
-এটি হয়তো surprising মনে হতে পারে। সব async block কোনো কিছু return করে না, তাই প্রত্যেকটি `Future<Output = ()>` তৈরি করে। মনে রাখবেন যে `Future` একটি trait, এবং compiler প্রত্যেক async block এর জন্য একটি unique enum তৈরি করে। আপনি `Vec` এ দুটি ভিন্ন হাতে লেখা struct রাখতে পারবেন না, এবং একই rule compiler দ্বারা generate হওয়া ভিন্ন enum এর জন্য apply হয়।
+This might be surprising. After all, none of the async blocks returns anything,
+so each one produces a `Future<Output = ()>`. Remember that `Future` is a trait,
+though, and that the compiler creates a unique enum for each async block. You
+can’t put two different hand-written structs in a `Vec`, and the same rule
+applies to the different enums generated by the compiler.
 
-এটি কাজ করার জন্য, আমাদের trait object ব্যবহার করতে হবে, ঠিক যেমন Chapter 12 এর [“Returning Errors from the run function”][dyn]<!-- ignore --> এ করেছিলাম। (আমরা Chapter 18 এ trait object নিয়ে বিস্তারিত আলোচনা করব)। Trait object ব্যবহার করে আমরা এই type গুলো দ্বারা তৈরি হওয়া anonymous future গুলোর প্রত্যেকটিকে একই type হিসেবে treat করতে পারি, কারণ এদের সবাই `Future` trait implement করে।
+To make this work, we need to use _trait objects_, just as we did in [“Returning
+Errors from the run function”][dyn]<!-- ignore --> in Chapter 12. (We’ll cover
+trait objects in detail in Chapter 18.) Using trait objects lets us treat each
+of the anonymous futures produced by these types as the same type, because all
+of them implement the `Future` trait.
 
-> Note: Chapter 8 এর section [Using an Enum to Store Multiple Values][enum-alt]<!-- ignore --> এ, আমরা `Vec` এ multiple type include করার অন্য একটি উপায় নিয়ে আলোচনা করেছিলাম: vector এ appear হতে পারে এমন প্রত্যেক type কে represent করার জন্য enum ব্যবহার করা। তবে, আমরা এখানে তা করতে পারি না। প্রথমত, আমাদের কাছে ভিন্ন type গুলোর নাম দেওয়ার কোনো উপায় নেই, কারণ সেগুলো anonymous। দ্বিতীয়ত, আমরা vector এবং `join_all` এর কাছে এই জন্য পৌঁছেছিলাম যাতে আমরা future এর dynamic collection এর সাথে কাজ করতে পারি যেখানে আমরা শুধু care করি যে তাদের output type একই আছে।
+> Note: In the Chapter 8 section [Using an Enum to Store Multiple
+> Values][enum-alt]<!-- ignore -->, we discussed another way to include multiple
+> types in a `Vec`: using an enum to represent each type that can appear in the
+> vector. We can’t do that here, though. For one thing, we have no way to name
+> the different types, because they are anonymous. For another, the reason we
+> reached for a vector and `join_all` in the first place was to be able to work
+> with a dynamic collection of futures where we only care that they have the
+> same output type.
 
-আমরা Listing 17-16 এ দেখানো হিসাবে `vec!` এ প্রত্যেক future কে `Box::new` এ wrap করে শুরু করি।
+We start by wrapping each future in the `vec!` in a `Box::new`, as shown in
+Listing 17-16.
 
-<Listing number="17-16" caption="`Vec` এ future গুলোর type align করার জন্য `Box::new` ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-16" caption="Using `Box::new` to align the types of the futures in a `Vec`" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-16/src/main.rs:here}}
@@ -66,9 +96,13 @@ different `async` block
 
 </Listing>
 
-দুর্ভাগ্যবশত, এই code এখনও compile হয় না। আসলে, আমরা দ্বিতীয় এবং তৃতীয় `Box::new` call এর জন্য আগের মতোই একই basic error পাই, এবং `Unpin` trait refer করে নতুন error পাই। আমরা `Unpin` error এ একটু পরেই ফিরে আসব। প্রথমে, `futures` variable এর type explicitly annotate করে `Box::new` call এর type error ঠিক করি (Listing 17-17 দেখুন)।
+Unfortunately, this code still doesn’t compile. In fact, we get the same basic
+error we got before for both the second and third `Box::new` calls, as well as
+new errors referring to the `Unpin` trait. We’ll come back to the `Unpin` errors
+in a moment. First, let’s fix the type errors on the `Box::new` calls by
+explicitly annotating the type of the `futures` variable (see Listing 17-17).
 
-<Listing number="17-17" caption="Explicit type declaration ব্যবহার করে type mismatch error এর বাকি অংশ ঠিক করা" file-name="src/main.rs">
+<Listing number="17-17" caption="Fixing the rest of the type mismatch errors by using an explicit type declaration" file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-17/src/main.rs:here}}
@@ -76,14 +110,18 @@ different `async` block
 
 </Listing>
 
-এই type declaration টি একটু জটিল, তাই চলুন এটা নিয়ে আলোচনা করি:
+This type declaration is a little involved, so let’s walk through it:
 
-1.  সবচেয়ে ভিতরের type হলো future নিজেই। আমরা explicitly note করি যে future এর output হলো unit type `()` `Future<Output = ()>` লিখে।
-2.  তারপর আমরা trait কে `dyn` দিয়ে annotate করি dynamic mark করার জন্য।
-3.  পুরো trait reference টি একটি `Box` এ wrap করা।
-4.  অবশেষে, আমরা explicitly declare করি যে `futures` হলো এই item গুলো ধারণ করা একটি `Vec`।
+1. The innermost type is the future itself. We note explicitly that the output
+   of the future is the unit type `()` by writing `Future<Output = ()>`.
+2. Then we annotate the trait with `dyn` to mark it as dynamic.
+3. The entire trait reference is wrapped in a `Box`.
+4. Finally, we state explicitly that `futures` is a `Vec` containing these
+   items.
 
-এতেই অনেক difference তৈরি হয়েছে। এখন যখন আমরা compiler run করি, তখন আমরা শুধুমাত্র `Unpin` mention করা error গুলো পাই। যদিও তাদের তিনটি আছে, তাদের content গুলো প্রায় একই।
+That already made a big difference. Now when we run the compiler, we get only
+the errors mentioning `Unpin`. Although there are three of them, their contents
+are very similar.
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-16
@@ -112,9 +150,9 @@ error[E0308]: mismatched types
     = note: no two async blocks, even if identical, have the same type
     = help: consider pinning your async block and casting it to a trait object
 note: associated function defined here
-   --> file:///home/.rustup/toolchains/1.82/lib/rustlib/src/rust/library/alloc/src/boxed.rs:255:12
+   --> file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/alloc/src/boxed.rs:252:12
     |
-255 |     pub fn new(x: T) -> Self {
+252 |     pub fn new(x: T) -> Self {
     |            ^^^
 
 error[E0308]: mismatched types
@@ -136,16 +174,16 @@ error[E0308]: mismatched types
     = note: no two async blocks, even if identical, have the same type
     = help: consider pinning your async block and casting it to a trait object
 note: associated function defined here
-   --> file:///home/.rustup/toolchains/1.82/lib/rustlib/src/rust/library/alloc/src/boxed.rs:255:12
+   --> file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/alloc/src/boxed.rs:252:12
     |
-255 |     pub fn new(x: T) -> Self {
+252 |     pub fn new(x: T) -> Self {
     |            ^^^
 
 error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
    --> src/main.rs:48:24
     |
 48  |         trpl::join_all(futures).await;
-    |         -------------- ^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`, which is required by `Box<{async block@src/main.rs:10:23: 10:33}>: Future`
+    |         -------------- ^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`
     |         |
     |         required by a bound introduced by this call
     |
@@ -153,7 +191,7 @@ error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
             consider using `Box::pin` if you need to access the pinned value outside of the current scope
     = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
 note: required by a bound in `join_all`
-   --> file:///home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:105:14
+   --> file:///home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.30/src/future/join_all.rs:105:14
     |
 102 | pub fn join_all<I>(iter: I) -> JoinAll<I::Item>
     |        -------- required by a bound in this function
@@ -165,13 +203,13 @@ error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
   --> src/main.rs:48:9
    |
 48 |         trpl::join_all(futures).await;
-   |         ^^^^^^^^^^^^^^^^^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`, which is required by `Box<{async block@src/main.rs:10:23: 10:33}>: Future`
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`
    |
    = note: consider using the `pin!` macro
            consider using `Box::pin` if you need to access the pinned value outside of the current scope
    = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
 note: required by a bound in `futures_util::future::join_all::JoinAll`
-  --> file:///home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+  --> file:///home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.30/src/future/join_all.rs:29:8
    |
 27 | pub struct JoinAll<F>
    |            ------- required by a bound in this struct
@@ -183,13 +221,13 @@ error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
   --> src/main.rs:48:33
    |
 48 |         trpl::join_all(futures).await;
-   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`, which is required by `Box<{async block@src/main.rs:10:23: 10:33}>: Future`
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`
    |
    = note: consider using the `pin!` macro
            consider using `Box::pin` if you need to access the pinned value outside of the current scope
    = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
 note: required by a bound in `futures_util::future::join_all::JoinAll`
-  --> file:///home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+  --> file:///home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.30/src/future/join_all.rs:29:8
    |
 27 | pub struct JoinAll<F>
    |            ------- required by a bound in this struct
@@ -198,9 +236,16 @@ note: required by a bound in `futures_util::future::join_all::JoinAll`
    |        ^^^^^^ required by this bound in `JoinAll`
 ```
 
-এটা digest করার মতো _অনেক_ কিছু, তাই চলুন এটা আলাদা করি। message এর প্রথম অংশ আমাদের জানায় যে প্রথম async block (`src/main.rs:8:23: 20:10`) `Unpin` trait implement করে না এবং এটি resolve করার জন্য `pin!` বা `Box::pin` ব্যবহার করার পরামর্শ দেয়। Chapter এর পরে, আমরা `Pin` এবং `Unpin` নিয়ে আরও কিছু detail এ আলোচনা করব। আপাতত, আমরা শুধু compiler এর advice follow করে stuck হওয়া থেকে বাঁচতে পারি। Listing 17-18 এ, আমরা `futures` এর type annotation update করে শুরু করি, প্রত্যেক `Box` কে `Pin` দিয়ে wrap করে। দ্বিতীয়ত, আমরা future গুলোকে pin করার জন্য `Box::pin` ব্যবহার করি।
+That is a _lot_ to digest, so let’s pull it apart. The first part of the message
+tell us that the first async block (`src/main.rs:8:23: 20:10`) does not
+implement the `Unpin` trait and suggests using `pin!` or `Box::pin` to resolve
+it. Later in the chapter, we’ll dig into a few more details about `Pin` and
+`Unpin`. For the moment, though, we can just follow the compiler’s advice to get
+unstuck. In Listing 17-18, we start by updating the type annotation for
+`futures`, with a `Pin` wrapping each `Box`. Second, we use `Box::pin` to pin
+the futures themselves.
 
-<Listing number="17-18" caption="`Vec` এর type check করানোর জন্য `Pin` এবং `Box::pin` ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-18" caption="Using `Pin` and `Box::pin` to make the `Vec` type check" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-18/src/main.rs:here}}
@@ -208,7 +253,7 @@ note: required by a bound in `futures_util::future::join_all::JoinAll`
 
 </Listing>
 
-যদি আমরা compile এবং run করি, তাহলে আমরা অবশেষে সেই output পাই যা আমরা আশা করেছিলাম:
+If we compile and run this, we finally get the output we hoped for:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -227,11 +272,22 @@ received 'you'
 
 Phew!
 
-এখানে explore করার মতো আরও কিছু বিষয় আছে। একটি হলো, `Pin<Box<T>>` ব্যবহার করে `Box` দিয়ে heap এ future গুলো রাখার জন্য অল্প overhead যোগ করে—এবং আমরা শুধু type গুলোকে align করার জন্য এটা করছি। আসলে আমাদের heap allocation এর দরকার নেই: এই future গুলো এই particular function এর local। আগে উল্লেখ করা হয়েছে, `Pin` নিজেই একটি wrapper type, তাই আমরা `Vec` এ single type রাখার সুবিধা পেতে পারি—`Box` ব্যবহার করার original reason—heap allocation না করে। আমরা `std::pin::pin` macro ব্যবহার করে প্রত্যেক future এর সাথে সরাসরি `Pin` ব্যবহার করতে পারি।
+There’s a bit more to explore here. For one thing, using `Pin<Box<T>>` adds a
+small amount of overhead from putting these futures on the heap with `Box`—and
+we’re only doing that to get the types to line up. We don’t actually _need_ the
+heap allocation, after all: these futures are local to this particular function.
+As noted before, `Pin` is itself a wrapper type, so we can get the benefit of
+having a single type in the `Vec`—the original reason we reached for
+`Box`—without doing a heap allocation. We can use `Pin` directly with each
+future, using the `std::pin::pin` macro.
 
-তবে, আমাদের pinned reference এর type explicitly বলতে হবে; অন্যথায়, Rust এখনও জানবে না যে এগুলোকে dynamic trait object হিসেবে interpret করতে হবে, যা আমাদের `Vec` এ প্রয়োজন। তাই আমরা `pin!` macro ব্যবহার করে প্রত্যেক future pin করি, এবং `futures` কে dynamic future type এ pinned mutable reference ধারণ করা `Vec` হিসেবে define করি, যা Listing 17-19 এ দেখানো হয়েছে।
+However, we must still be explicit about the type of the pinned reference;
+otherwise, Rust will still not know to interpret these as dynamic trait objects,
+which is what we need them to be in the `Vec`. We therefore `pin!` each future
+when we define it, and define `futures` as a `Vec` containing pinned mutable
+references to the dynamic future type, as in Listing 17-19.
 
-<Listing number="17-19" caption="অপ্রয়োজনীয় heap allocation avoid করার জন্য `pin!` macro দিয়ে সরাসরি `Pin` ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-19" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-19/src/main.rs:here}}
@@ -239,9 +295,12 @@ Phew!
 
 </Listing>
 
-আমরা এতদূর পর্যন্ত এসেছি এই fact ignore করে যে আমাদের ভিন্ন `Output` type থাকতে পারে। উদাহরণস্বরূপ, Listing 17-20 এ, `a` এর anonymous future `Future<Output = u32>` implement করে, `b` এর anonymous future `Future<Output = &str>` implement করে, এবং `c` এর anonymous future `Future<Output = bool>` implement করে।
+We got this far by ignoring the fact that we might have different `Output`
+types. For example, in Listing 17-20, the anonymous future for `a` implements
+`Future<Output = u32>`, the anonymous future for `b` implements `Future<Output =
+&str>`, and the anonymous future for `c` implements `Future<Output = bool>`.
 
-<Listing number="17-20" caption="ভিন্ন type এর তিনটি future" file-name="src/main.rs">
+<Listing number="17-20" caption="Three futures with distinct types" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-20/src/main.rs:here}}
@@ -249,17 +308,30 @@ Phew!
 
 </Listing>
 
-আমরা `trpl::join!` ব্যবহার করে await করতে পারি, কারণ এটি আমাদের multiple future type pass করতে দেয় এবং সেই type গুলোর tuple তৈরি করে। আমরা `trpl::join_all` ব্যবহার _করতে পারি না_, কারণ এর জন্য pass করা সব future এর type একই হতে হয়। মনে রাখবেন, সেই error এর কারণে `Pin` এর সাথে এই adventure এ আমাদের শুরু হয়েছিল!
+We can use `trpl::join!` to await them, because it allows us to pass in multiple
+future types and produces a tuple of those types. We _cannot_ use
+`trpl::join_all`, because it requires all of the futures passed in to have the
+same type. Remember, that error is what got us started on this adventure with
+`Pin`!
 
-এটি একটি fundamental tradeoff: আমরা হয় `join_all` দিয়ে dynamic number এর future handle করতে পারি, যতক্ষণ না তাদের সবগুলোর type একই থাকে, অথবা আমরা `join` function বা `join!` macro দিয়ে set number এর future handle করতে পারি, এমনকি যদি তাদের ভিন্ন type ও থাকে। এটি same scenario যা আমরা Rust এ অন্য যেকোনো type এর সাথে কাজ করার সময় face করি। Future বিশেষ কিছু নয়, যদিও আমাদের সাথে কাজ করার জন্য কিছু ভালো syntax আছে, এবং এটা ভালো জিনিস।
+This is a fundamental tradeoff: we can either deal with a dynamic number of
+futures with `join_all`, as long as they all have the same type, or we can deal
+with a set number of futures with the `join` functions or the `join!` macro,
+even if they have different types. This is the same scenario we’d face when
+working with any other types in Rust. Futures are not special, even though we
+have some nice syntax for working with them, and that’s a good thing.
 
 ### Racing Futures
 
-যখন আমরা `join` family এর function এবং macro দিয়ে future "join" করি, তখন আমাদের move on করার আগে তাদের _সবগুলোকে_ শেষ করার প্রয়োজন। তবে, মাঝে মাঝে, আমাদের move on করার আগে set থেকে _কিছু_ future এর finish হওয়ার প্রয়োজন—এক future এর সাথে অন্য future race করানোর মতো।
+When we “join” futures with the `join` family of functions and macros, we
+require _all_ of them to finish before we move on. Sometimes, though, we only
+need _some_ future from a set to finish before we move on—kind of similar to
+racing one future against another.
 
-Listing 17-21 এ, আমরা আবারও `trpl::race` ব্যবহার করি দুটি future, `slow` এবং `fast` কে একে অপরের সাথে race করানোর জন্য।
+In Listing 17-21, we once again use `trpl::race` to run two futures, `slow` and
+`fast`, against each other.
 
-<Listing number="17-21" caption="যে future আগে শেষ হয় তার result পাওয়ার জন্য `race` ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-21" caption="Using `race` to get the result of whichever future finishes first" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-21/src/main.rs:here}}
@@ -267,17 +339,42 @@ Listing 17-21 এ, আমরা আবারও `trpl::race` ব্যবহা�
 
 </Listing>
 
-প্রত্যেক future run করা শুরু করার সময় একটি message print করে, `sleep` call করে এবং await করে কিছু সময়ের জন্য pause নেয়, এবং তারপর শেষ হওয়ার সময় অন্য message print করে। তারপর আমরা `slow` এবং `fast` দুটোকেই `trpl::race` এ pass করি এবং তাদের একটি শেষ হওয়ার জন্য wait করি। (এখানের outcome খুব বেশি surprising নয়: `fast` win করে)। [“Our First Async Program”][async-program]<!-- ignore --> এ যখন আমরা `race` ব্যবহার করেছিলাম, তখন আমরা এখানে return করা `Either` instance কে ignore করি, কারণ async block এর body তে interesting behaviour গুলো ঘটে।
+Each future prints a message when it starts running, pauses for some amount of
+time by calling and awaiting `sleep`, and then prints another message when it
+finishes. Then we pass both `slow` and `fast` to `trpl::race` and wait for one
+of them to finish. (The outcome here isn’t too surprising: `fast` wins.) Unlike
+when we used `race` back in [“Our First Async Program”][async-program]<!--
+ignore -->, we just ignore the `Either` instance it returns here, because all of
+the interesting behavior happens in the body of the async blocks.
 
-লক্ষ্য করুন যে আপনি যদি `race` এর argument এর order flip করেন, তাহলে "started" message এর order change হয়ে যায়, যদিও `fast` future সবসময় আগে complete হয়। কারণ হলো এই particular `race` function এর implementation fair নয়। এটি সবসময় argument হিসেবে pass করা future গুলোকে সেই order এ run করে যে order এ pass করা হয়েছে। অন্য implementation গুলো fair এবং random ভাবে choose করবে কোন future কে আগে poll করবে। তবে আমরা যে race implementation ব্যবহার করি সেটা fair হোক বা না হোক, _একটি_ future তার body তে first `await` পর্যন্ত run করবে তারপর অন্য task শুরু হতে পারবে।
+Notice that if you flip the order of the arguments to `race`, the order of the
+“started” messages changes, even though the `fast` future always completes
+first. That’s because the implementation of this particular `race` function is
+not fair. It always runs the futures passed in as arguments in the order in
+which they’re passed. Other implementations _are_ fair and will randomly choose
+which future to poll first. Regardless of whether the implementation of race
+we’re using is fair, though, _one_ of the futures will run up to the first
+`await` in its body before another task can start.
 
-[Our First Async Program][async-program]<!-- ignore --> থেকে মনে করুন যে প্রত্যেক await point এ, Rust runtime কে task pause করার এবং অন্য task এ switch করার সুযোগ দেয় যদি await করা future ready না থাকে। এর inverse ও সত্য: Rust _শুধুমাত্র_ await point এ async block pause করে এবং runtime এ control back করে। Await point এর মধ্যে সবকিছু synchronous।
+Recall from [Our First Async Program][async-program]<!-- ignore --> that at each
+await point, Rust gives a runtime a chance to pause the task and switch to
+another one if the future being awaited isn’t ready. The inverse is also true:
+Rust _only_ pauses async blocks and hands control back to a runtime at an await
+point. Everything between await points is synchronous.
 
-এর মানে হলো আপনি যদি await point ছাড়া async block এ অনেক কাজ করেন, তাহলে সেই future অন্য future কে progress করা থেকে block করবে। আপনি মাঝে মাঝে শুনতে পারেন যে একটি future অন্য future কে _starve_ করাচ্ছে। কিছু ক্ষেত্রে, এটি খুব বেশি problem তৈরি নাও করতে পারে। তবে, যদি আপনি expensive setup বা long-running কোনো কাজ করেন, বা যদি আপনার এমন কোনো future থাকে যা অনির্দিষ্টকালের জন্য কোনো particular task করতে থাকবে, তাহলে কখন এবং কোথায় runtime এ control back করতে হবে তা নিয়ে চিন্তা করতে হবে।
+That means if you do a bunch of work in an async block without an await point,
+that future will block any other futures from making progress. You may sometimes
+hear this referred to as one future _starving_ other futures. In some cases,
+that may not be a big deal. However, if you are doing some kind of expensive
+setup or long-running work, or if you have a future that will keep doing some
+particular task indefinitely, you’ll need to think about when and where to hand
+control back to the runtime.
 
-একইভাবে, যদি আপনার long-running blocking operation থাকে, তাহলে async program এর বিভিন্ন অংশকে একে অপরের সাথে relate করার উপায় provide করার জন্য একটি useful tool হতে পারে।
+By the same token, if you have long-running blocking operations, async can be a
+useful tool for providing ways for different parts of the program to relate to
+each other.
 
-কিন্তু এই ক্ষেত্রে আপনি _কিভাবে_ runtime এ control back করবেন?
+But _how_ would you hand control back to the runtime in those cases?
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -285,9 +382,10 @@ Listing 17-21 এ, আমরা আবারও `trpl::race` ব্যবহা�
 
 ### Yielding Control to the Runtime
 
-চলুন একটি long-running operation simulate করি। Listing 17-22 একটি `slow` function introduce করে।
+Let’s simulate a long-running operation. Listing 17-22 introduces a `slow`
+function.
 
-<Listing number="17-22" caption="Slow operation simulate করার জন্য `thread::sleep` ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-22" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-22/src/main.rs:slow}}
@@ -295,11 +393,15 @@ Listing 17-21 এ, আমরা আবারও `trpl::race` ব্যবহা�
 
 </Listing>
 
-এই code `trpl::sleep` এর পরিবর্তে `std::thread::sleep` ব্যবহার করে যাতে `slow` call করলে কিছু milliseconds এর জন্য current thread block হয়ে যায়। আমরা `slow` কে এমন real-world operation represent করার জন্য ব্যবহার করতে পারি যা long-running এবং blocking দুটোই।
+This code uses `std::thread::sleep` instead of `trpl::sleep` so that calling
+`slow` will block the current thread for some number of milliseconds. We can use
+`slow` to stand in for real-world operations that are both long-running and
+blocking.
 
-Listing 17-23 এ, আমরা একজোড়া future এ এই ধরনের CPU-bound কাজ emulate করার জন্য `slow` ব্যবহার করি।
+In Listing 17-23, we use `slow` to emulate doing this kind of CPU-bound work in
+a pair of futures.
 
-<Listing number="17-23" caption="Slow operation simulate করার জন্য `thread::sleep` ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-23" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:slow-futures}}
@@ -307,7 +409,8 @@ Listing 17-23 এ, আমরা একজোড়া future এ এই ধরন�
 
 </Listing>
 
-শুরুতে, প্রত্যেক future slow operation এর bunch perform করার _পরে_ control runtime এ back করে। আপনি যদি এই code run করেন, তাহলে আপনি এই output দেখতে পাবেন:
+To begin, each future only hands control back to the runtime _after_ carrying
+out a bunch of slow operations. If you run this code, you will see this output:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-23/
@@ -328,11 +431,21 @@ copy just the output
 'a' finished.
 ```
 
-আমাদের আগের উদাহরণটির মতো, `race` ও `a` এর কাজ শেষ হওয়ার সাথে সাথেই শেষ হয়ে যায়। তবে, দুটি future এর মধ্যে কোনো interleaving নেই। `a` future `trpl::sleep` call await না হওয়া পর্যন্ত তার সব কাজ করে, তারপর `b` future তার নিজের `trpl::sleep` call await না হওয়া পর্যন্ত তার সব কাজ করে, এবং সবশেষে `a` future complete হয়। দুটি future কে slow task এর মাঝে progress করার সুযোগ দেওয়ার জন্য, আমাদের await point দরকার যাতে আমরা control runtime এ back করতে পারি। তার মানে আমাদের এমন কিছুর দরকার যা আমরা await করতে পারি!
+As with our earlier example, `race` still finishes as soon as `a` is done.
+There’s no interleaving between the two futures, though. The `a` future does all
+of its work until the `trpl::sleep` call is awaited, then the `b` future does
+all of its work until its own `trpl::sleep` call is awaited, and finally the `a`
+future completes. To allow both futures to make progress between their slow
+tasks, we need await points so we can hand control back to the runtime. That
+means we need something we can await!
 
-আমরা Listing 17-23 এ এই ধরনের handoff ঘটতে দেখতে পারি: যদি আমরা `a` future এর শেষে `trpl::sleep` remove করি, তাহলে এটি `b` future _একদমই_ run না করে complete হয়ে যেত। চলুন `sleep` function কে operation switch off করার জন্য starting point হিসেবে ব্যবহার করার চেষ্টা করি, যা Listing 17-24 এ দেখানো হয়েছে।
+We can already see this kind of handoff happening in Listing 17-23: if we
+removed the `trpl::sleep` at the end of the `a` future, it would complete
+without the `b` future running _at all_. Let’s try using the `sleep` function as
+a starting point for letting operations switch off making progress, as shown in
+Listing 17-24.
 
-<Listing number="17-24" caption="Operation switch off করার জন্য progress তৈরি করার সুযোগ দেওয়ার জন্য `sleep` ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-24" caption="Using `sleep` to let operations switch off making progress" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-24/src/main.rs:here}}
@@ -340,7 +453,8 @@ copy just the output
 
 </Listing>
 
-Listing 17-24 এ, আমরা `slow` এর প্রত্যেক call এর মধ্যে await point দিয়ে `trpl::sleep` call যোগ করি। এখন দুটি future এর কাজ interleaved:
+In Listing 17-24, we add `trpl::sleep` calls with await points between each call
+to `slow`. Now the two futures’ work is interleaved:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-24
@@ -360,11 +474,18 @@ copy just the output
 'a' finished.
 ```
 
-`a` future `slow` call করার পর `trpl::sleep` call করার আগে কিছুক্ষণের জন্য run হয়, কিন্তু তারপর যখনই একটি await point hit করে, তখনই future গুলো swap হয়। এই ক্ষেত্রে, আমরা `slow` এর প্রত্যেক call এর পর এটা করেছি, কিন্তু আমরা আমাদের জন্য সবচেয়ে বেশি কাজের মনে হয় এমন যেকোনো উপায়ে কাজ break করতে পারি।
+The `a` future still runs for a bit before handing off control to `b`, because
+it calls `slow` before ever calling `trpl::sleep`, but after that the futures
+swap back and forth each time one of them hits an await point. In this case, we
+have done that after every call to `slow`, but we could break up the work in
+whatever way makes the most sense to us.
 
-তবে, আমরা এখানে আসলে _sleep_ করতে চাই না: আমরা যত দ্রুত সম্ভব progress করতে চাই। আমাদের শুধু runtime এ control back করার প্রয়োজন। আমরা `yield_now` function ব্যবহার করে সরাসরি তা করতে পারি। Listing 17-25 এ, আমরা সব `sleep` call কে `yield_now` দিয়ে replace করি।
+We don’t really want to _sleep_ here, though: we want to make progress as fast
+as we can. We just need to hand back control to the runtime. We can do that
+directly, using the `yield_now` function. In Listing 17-25, we replace all those
+`sleep` calls with `yield_now`.
 
-<Listing number="17-25" caption="Operation switch off করার জন্য progress তৈরি করার সুযোগ দেওয়ার জন্য `yield_now` ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-25" caption="Using `yield_now` to let operations switch off making progress" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-25/src/main.rs:yields}}
@@ -372,11 +493,18 @@ copy just the output
 
 </Listing>
 
-এই code টি actual intent এর ব্যাপারে clear এবং `sleep` ব্যবহারের চেয়ে significantly fast হতে পারে, কারণ `sleep` দ্বারা ব্যবহৃত timer গুলোর মতো timer এর granular limit থাকতে পারে। উদাহরণস্বরূপ, আমরা যে `sleep` version ব্যবহার করছি, সেটি সবসময় কমপক্ষে এক millisecond এর জন্য sleep করবে, এমনকি যদি আমরা এটিকে এক nanosecond এর `Duration` ও pass করি। আবারও, আধুনিক কম্পিউটার _fast_: তারা এক millisecond এ অনেক কাজ করতে পারে!
+This code is both clearer about the actual intent and can be significantly
+faster than using `sleep`, because timers such as the one used by `sleep` often
+have limits on how granular they can be. The version of `sleep` we are using,
+for example, will always sleep for at least a millisecond, even if we pass it a
+`Duration` of one nanosecond. Again, modern computers are _fast_: they can do a
+lot in one millisecond!
 
-আপনি নিজে একটি ছোট benchmark set up করে তা দেখতে পারেন, যেমন Listing 17-26 এ দেখানো হয়েছে। (Performance test করার জন্য এটি বিশেষ rigorous উপায় নয়, তবে এখানে difference দেখানোর জন্য যথেষ্ট।)
+You can see this for yourself by setting up a little benchmark, such as the one
+in Listing 17-26. (This isn’t an especially rigorous way to do performance
+testing, but it suffices to show the difference here.)
 
-<Listing number="17-26" caption="`sleep` এবং `yield_now` এর performance compare করা" file-name="src/main.rs">
+<Listing number="17-26" caption="Comparing the performance of `sleep` and `yield_now`" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-26/src/main.rs:here}}
@@ -384,21 +512,41 @@ copy just the output
 
 </Listing>
 
-এখানে, আমরা সব status printing skip করি, `trpl::sleep` এ এক nanosecond `Duration` pass করি, এবং প্রত্যেক future কে নিজে run করতে দেই, future গুলোর মধ্যে কোনো switching ছাড়া। তারপর আমরা 1,000 iteration এর জন্য run করি এবং দেখি `trpl::sleep` ব্যবহার করা future এর `trpl::yield_now` ব্যবহার করা future এর তুলনায় কত সময় লাগে।
+Here, we skip all the status printing, pass a one-nanosecond `Duration` to
+`trpl::sleep`, and let each future run by itself, with no switching between the
+futures. Then we run for 1,000 iterations and see how long the future using
+`trpl::sleep` takes compared to the future using `trpl::yield_now`.
 
-`yield_now` ব্যবহার করা version _অনেক_ বেশি fast!
+The version with `yield_now` is _way_ faster!
 
-এর মানে হলো async compute-bound task এর জন্যও useful হতে পারে, আপনার program আর কি কি করছে তার উপর নির্ভর করে, কারণ এটি program এর বিভিন্ন অংশের মধ্যে relationship structure করার জন্য একটি useful tool provide করে। এটি _cooperative multitasking_ এর একটি form, যেখানে প্রত্যেক future এর await point এর মাধ্যমে control handover করার সময় determine করার power থাকে। তাই প্রত্যেক future এর ও দায়িত্ব আছে খুব বেশি সময় block করা avoid করার। Rust-based embedded operating system এ, এটিই হলো multitasking এর _একমাত্র_ উপায়!
+This means that async can be useful even for compute-bound tasks, depending on
+what else your program is doing, because it provides a useful tool for
+structuring the relationships between different parts of the program. This is a
+form of _cooperative multitasking_, where each future has the power to determine
+when it hands over control via await points. Each future therefore also has the
+responsibility to avoid blocking for too long. In some Rust-based embedded
+operating systems, this is the _only_ kind of multitasking!
 
-Real-world code এ, আপনি সাধারণত প্রত্যেক single line এ await point এর সাথে function call alternate করবেন না। যদিও এভাবে control yield করা relatively inexpensive, এটি free নয়। বেশিরভাগ ক্ষেত্রে, compute-bound task break করার চেষ্টা করলে তা significantly slow হয়ে যেতে পারে, তাই মাঝে মাঝে কোনো operation কে সংক্ষেপে block করতে দেওয়া _overall_ performance এর জন্য ভালো। আপনার code এর actual performance bottleneck কি তা দেখার জন্য সবসময় measure করুন। Underlying dynamic মনে রাখা গুরুত্বপূর্ণ, যদি আপনি serial এ অনেক কাজ হতে দেখেন যা আপনি concurrently হওয়ার আশা করেছিলেন!
+In real-world code, you won’t usually be alternating function calls with await
+points on every single line, of course. While yielding control in this way is
+relatively inexpensive, it’s not free. In many cases, trying to break up a
+compute-bound task might make it significantly slower, so sometimes it’s better
+for _overall_ performance to let an operation block briefly. Always
+measure to see what your code’s actual performance bottlenecks are. The
+underlying dynamic is important to keep in mind, though, if you _are_ seeing a
+lot of work happening in serial that you expected to happen concurrently!
 
 ### Building Our Own Async Abstractions
 
-আমরা নতুন pattern তৈরি করার জন্য future গুলোকে একসাথে compose ও করতে পারি। উদাহরণস্বরূপ, আমরা async building block দিয়ে `timeout` function তৈরি করতে পারি যা আমাদের কাছে আগে থেকেই আছে। যখন আমরা শেষ করব, result এমন একটি building block হবে যা ব্যবহার করে আমরা আরও async abstraction তৈরি করতে পারব।
+We can also compose futures together to create new patterns. For example, we can
+build a `timeout` function with async building blocks we already have. When
+we’re done, the result will be another building block we could use to create
+still more async abstractions.
 
-Listing 17-27 দেখায় কিভাবে আমরা এই `timeout` slow future এর সাথে কাজ করবে বলে আশা করি।
+Listing 17-27 shows how we would expect this `timeout` to work with a slow
+future.
 
-<Listing number="17-27" caption="Time limit দিয়ে slow operation run করার জন্য আমাদের imaginary `timeout` ব্যবহার করা" file-name="src/main.rs">
+<Listing number="17-27" caption="Using our imagined `timeout` to run a slow operation with a time limit" file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-27/src/main.rs:here}}
@@ -406,18 +554,23 @@ Listing 17-27 দেখায় কিভাবে আমরা এই `timeout` s
 
 </Listing>
 
-চলুন এটি implement করি! শুরু করার জন্য, `timeout` এর API নিয়ে ভাবি:
+Let’s implement this! To begin, let’s think about the API for `timeout`:
 
--   আমাদের await করার জন্য এটি নিজে একটি async function হতে হবে।
--   এর প্রথম parameter run করার জন্য একটি future হওয়া উচিত। আমরা এটিকে generic করতে পারি যাতে এটি যেকোনো future এর সাথে কাজ করতে পারে।
--   এর দ্বিতীয় parameter wait করার maximum time হবে। যদি আমরা `Duration` ব্যবহার করি, তাহলে `trpl::sleep` এ pass করা সহজ হবে।
--   এটির `Result` return করা উচিত। যদি future successfully complete হয়, তাহলে `Result` টি future দ্বারা তৈরি value দিয়ে `Ok` হবে। যদি timeout আগে elapsed হয়ে যায়, তাহলে `Result` টি timeout যত duration এর জন্য wait করেছে সেই duration দিয়ে `Err` হবে।
+- It needs to be an async function itself so we can await it.
+- Its first parameter should be a future to run. We can make it generic to allow
+  it to work with any future.
+- Its second parameter will be the maximum time to wait. If we use a `Duration`,
+  that will make it easy to pass along to `trpl::sleep`.
+- It should return a `Result`. If the future completes successfully, the
+  `Result` will be `Ok` with the value produced by the future. If the timeout
+  elapses first, the `Result` will be `Err` with the duration that the timeout
+  waited for.
 
-Listing 17-28 এই declaration দেখায়।
+Listing 17-28 shows this declaration.
 
 <!-- This is not tested because it intentionally does not compile. -->
 
-<Listing number="17-28" caption="`timeout` এর signature define করা" file-name="src/main.rs">
+<Listing number="17-28" caption="Defining the signature of `timeout`" file-name="src/main.rs">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-28/src/main.rs:declaration}}
@@ -425,13 +578,21 @@ Listing 17-28 এই declaration দেখায়।
 
 </Listing>
 
-এটি type এর জন্য আমাদের goal satisfy করে। এখন চলুন আমাদের প্রয়োজনীয় _behaviour_ নিয়ে ভাবি: আমরা pass করা future কে duration এর সাথে race করাতে চাই। আমরা duration থেকে timer future তৈরি করার জন্য `trpl::sleep` ব্যবহার করতে পারি, এবং caller pass করা future এর সাথে সেই timer run করার জন্য `trpl::race` ব্যবহার করতে পারি।
+That satisfies our goals for the types. Now let’s think about the _behavior_ we
+need: we want to race the future passed in against the duration. We can use
+`trpl::sleep` to make a timer future from the duration, and use `trpl::race` to
+run that timer with the future the caller passes in.
 
-আমরা জানি যে `race` fair নয়, argument pass করার order এ poll করে। তাই, আমরা `future_to_try` কে `race` এ প্রথমে pass করি যাতে `max_time` যদি খুব short duration ও হয় তবুও এটির complete হওয়ার সুযোগ থাকে। যদি `future_to_try` আগে শেষ হয়, তাহলে `race` `future_to_try` থেকে output দিয়ে `Left` return করবে। যদি `timer` আগে শেষ হয়, তাহলে `race` timer এর `()` output দিয়ে `Right` return করবে।
+We also know that `race` is not fair, polling arguments in the order in which
+they are passed. Thus, we pass `future_to_try` to `race` first so it gets a
+chance to complete even if `max_time` is a very short duration. If
+`future_to_try` finishes first, `race` will return `Left` with the output from
+`future_to_try`. If `timer` finishes first, `race` will return `Right` with the
+timer’s output of `()`.
 
-Listing 17-29 এ, আমরা `trpl::race` await করার result এর উপর match করি।
+In Listing 17-29, we match on the result of awaiting `trpl::race`.
 
-<Listing number="17-29" caption="`race` এবং `sleep` দিয়ে `timeout` define করা" file-name="src/main.rs">
+<Listing number="17-29" caption="Defining `timeout` with `race` and `sleep`" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-29/src/main.rs:implementation}}
@@ -439,23 +600,40 @@ Listing 17-29 এ, আমরা `trpl::race` await করার result এর �
 
 </Listing>
 
-যদি `future_to_try` succeed হয় এবং আমরা `Left(output)` পাই, তাহলে আমরা `Ok(output)` return করি। যদি এর পরিবর্তে sleep timer elapsed হয় এবং আমরা `Right(())` পাই, তাহলে আমরা `()` কে `_` দিয়ে ignore করি এবং এর পরিবর্তে `Err(max_time)` return করি।
+If the `future_to_try` succeeds and we get a `Left(output)`, we return
+`Ok(output)`. If the sleep timer elapses instead and we get a `Right(())`, we
+ignore the `()` with `_` and return `Err(max_time)` instead.
 
-এর মাধ্যমে, আমরা দুটি async helper দিয়ে তৈরি একটি working `timeout` পেলাম। যদি আমরা আমাদের code run করি, তাহলে এটি timeout এর পরে failure mode print করবে:
+With that, we have a working `timeout` built out of two other async helpers. If
+we run our code, it will print the failure mode after the timeout:
 
 ```text
 Failed after 2 seconds
 ```
 
-যেহেতু future অন্য future এর সাথে compose হয়, তাই আপনি ছোট async building block ব্যবহার করে powerful tool তৈরি করতে পারেন। উদাহরণস্বরূপ, আপনি retry এর সাথে timeout combine করার জন্য একই approach ব্যবহার করতে পারেন, এবং সেগুলো network call এর মতো operation এর সাথে ব্যবহার করতে পারেন (chapter এর শুরু থেকে একটি উদাহরণ)।
+Because futures compose with other futures, you can build really powerful tools
+using smaller async building blocks. For example, you can use this same approach
+to combine timeouts with retries, and in turn use those with operations such as
+network calls (one of the examples from the beginning of the chapter).
 
-বাস্তবে, আপনি সাধারণত সরাসরি `async` এবং `await` এর সাথে কাজ করবেন, এবং দ্বিতীয়ত `join`, `join_all`, `race`, ইত্যাদির মতো function এবং macro এর সাথে কাজ করবেন। এই API গুলোর সাথে future ব্যবহার করার জন্য মাঝে মাঝে আপনার `pin` এর কাছে reach করার প্রয়োজন হবে।
+In practice, you’ll usually work directly with `async` and `await`, and
+secondarily with functions and macros such as `join`, `join_all`, `race`, and so
+on. You’ll only need to reach for `pin` now and again to use futures with those
+APIs.
 
-আমরা এখন একই সময়ে multiple future এর সাথে কাজ করার অনেক উপায় দেখেছি। এরপর, আমরা দেখব কিভাবে আমরা _stream_ ব্যবহার করে সময়ের সাথে multiple future এর sequence এ কাজ করতে পারি। এখানে আরও কিছু জিনিস আছে যা আপনি প্রথমে consider করতে চাইতে পারেন:
+We’ve now seen a number of ways to work with multiple futures at the same
+time. Up next, we’ll look at how we can work with multiple futures in a
+sequence over time with _streams_. Here are a couple more things you might want
+to consider first, though:
 
--   আমরা কোনো group এর সব future এর finish হওয়ার জন্য wait করার জন্য `join_all` এর সাথে `Vec` ব্যবহার করেছিলাম। কিভাবে আপনি sequence এ future এর group process করার জন্য `Vec` ব্যবহার করতে পারেন? সেটা করার Tradeoff কি?
+- We used a `Vec` with `join_all` to wait for all of the futures in some group
+  to finish. How could you use a `Vec` to process a group of futures in
+  sequence instead? What are the tradeoffs of doing that?
 
--   `futures` crate থেকে `futures::stream::FuturesUnordered` type টি দেখুন। এটিকে ব্যবহার করা `Vec` ব্যবহার করার থেকে কিভাবে different হবে? (Crate এর `stream` part থেকে এসেছে এই fact নিয়ে চিন্তা করবেন না; এটি যেকোনো future এর collection এর সাথে ঠিকঠাক কাজ করে)।
+- Take a look at the `futures::stream::FuturesUnordered` type from the `futures`
+  crate. How would using it be different from using a `Vec`? (Don’t worry about
+  the fact that it’s from the `stream` part of the crate; it works just fine
+  with any collection of futures.)
 
 [dyn]: ch12-03-improving-error-handling-and-modularity.html
 [enum-alt]: ch12-03-improving-error-handling-and-modularity.html#returning-errors-from-the-run-function
