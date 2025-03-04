@@ -1,206 +1,195 @@
-## Appendix B: Operators and Symbols
+## পরিশিষ্ট B: অপারেটর এবং প্রতীক
 
-This appendix contains a glossary of Rust’s syntax, including operators and
-other symbols that appear by themselves or in the context of paths, generics,
-trait bounds, macros, attributes, comments, tuples, and brackets.
+এই পরিশিষ্টে Rust-এর সিনট্যাক্সের একটি শব্দকোষ রয়েছে, যার মধ্যে অপারেটর এবং অন্যান্য প্রতীক রয়েছে যা নিজে থেকে বা পাথ, জেনেরিক, ট্রেইট বাউন্ড, ম্যাক্রো, অ্যাট্রিবিউট, কমেন্ট, টাপল এবং ব্র্যাকেটের প্রসঙ্গে প্রদর্শিত হয়।
 
-### Operators
+### অপারেটর
 
-Table B-1 contains the operators in Rust, an example of how the operator would
-appear in context, a short explanation, and whether that operator is
-overloadable. If an operator is overloadable, the relevant trait to use to
-overload that operator is listed.
+সারণি B-1-এ Rust-এর অপারেটরগুলো, অপারেটরটি কীভাবে প্রসঙ্গে প্রদর্শিত হবে তার একটি উদাহরণ, একটি সংক্ষিপ্ত ব্যাখ্যা এবং সেই অপারেটরটি ওভারলোডযোগ্য কিনা তা রয়েছে। যদি একটি অপারেটর ওভারলোডযোগ্য হয়, তাহলে সেই অপারেটরটিকে ওভারলোড করতে ব্যবহৃত প্রাসঙ্গিক ট্রেইটটি তালিকাভুক্ত করা হয়েছে।
 
-<span class="caption">Table B-1: Operators</span>
+<span class="caption">সারণি B-1: অপারেটর</span>
 
-| Operator                  | Example                                                 | Explanation                                                           | Overloadable?  |
+| অপারেটর                   | উদাহরণ                                                  | ব্যাখ্যা                                                                 | ওভারলোডযোগ্য?  |
 | ------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------- | -------------- |
-| `!`                       | `ident!(...)`, `ident!{...}`, `ident![...]`             | Macro expansion                                                       |                |
-| `!`                       | `!expr`                                                 | Bitwise or logical complement                                         | `Not`          |
-| `!=`                      | `expr != expr`                                          | Nonequality comparison                                                | `PartialEq`    |
-| `%`                       | `expr % expr`                                           | Arithmetic remainder                                                  | `Rem`          |
-| `%=`                      | `var %= expr`                                           | Arithmetic remainder and assignment                                   | `RemAssign`    |
-| `&`                       | `&expr`, `&mut expr`                                    | Borrow                                                                |                |
-| `&`                       | `&type`, `&mut type`, `&'a type`, `&'a mut type`        | Borrowed pointer type                                                 |                |
-| `&`                       | `expr & expr`                                           | Bitwise AND                                                           | `BitAnd`       |
-| `&=`                      | `var &= expr`                                           | Bitwise AND and assignment                                            | `BitAndAssign` |
-| `&&`                      | `expr && expr`                                          | Short-circuiting logical AND                                          |                |
-| `*`                       | `expr * expr`                                           | Arithmetic multiplication                                             | `Mul`          |
-| `*=`                      | `var *= expr`                                           | Arithmetic multiplication and assignment                              | `MulAssign`    |
-| `*`                       | `*expr`                                                 | Dereference                                                           | `Deref`        |
-| `*`                       | `*const type`, `*mut type`                              | Raw pointer                                                           |                |
-| `+`                       | `trait + trait`, `'a + trait`                           | Compound type constraint                                              |                |
-| `+`                       | `expr + expr`                                           | Arithmetic addition                                                   | `Add`          |
-| `+=`                      | `var += expr`                                           | Arithmetic addition and assignment                                    | `AddAssign`    |
-| `,`                       | `expr, expr`                                            | Argument and element separator                                        |                |
-| `-`                       | `- expr`                                                | Arithmetic negation                                                   | `Neg`          |
-| `-`                       | `expr - expr`                                           | Arithmetic subtraction                                                | `Sub`          |
-| `-=`                      | `var -= expr`                                           | Arithmetic subtraction and assignment                                 | `SubAssign`    |
-| `->`                      | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | Function and closure return type                                      |                |
-| `.`                       | `expr.ident`                                            | Field access                                                          |                |
-| `.`                       | `expr.ident(expr, ...)`                                 | Method call                                                           |                |
-| `.`                       | `expr.0`, `expr.1`, etc.                                | Tuple indexing                                                        |                |
-| `..`                      | `..`, `expr..`, `..expr`, `expr..expr`                  | Right-exclusive range literal                                         | `PartialOrd`   |
-| `..=`                     | `..=expr`, `expr..=expr`                                | Right-inclusive range literal                                         | `PartialOrd`   |
-| `..`                      | `..expr`                                                | Struct literal update syntax                                          |                |
-| `..`                      | `variant(x, ..)`, `struct_type { x, .. }`               | “And the rest” pattern binding                                        |                |
-| `...`                     | `expr...expr`                                           | (Deprecated, use `..=` instead) In a pattern: inclusive range pattern |                |
-| `/`                       | `expr / expr`                                           | Arithmetic division                                                   | `Div`          |
-| `/=`                      | `var /= expr`                                           | Arithmetic division and assignment                                    | `DivAssign`    |
-| `:`                       | `pat: type`, `ident: type`                              | Constraints                                                           |                |
-| `:`                       | `ident: expr`                                           | Struct field initializer                                              |                |
-| `:`                       | `'a: loop {...}`                                        | Loop label                                                            |                |
-| `;`                       | `expr;`                                                 | Statement and item terminator                                         |                |
-| `;`                       | `[...; len]`                                            | Part of fixed-size array syntax                                       |                |
-| `<<`                      | `expr << expr`                                          | Left-shift                                                            | `Shl`          |
-| `<<=`                     | `var <<= expr`                                          | Left-shift and assignment                                             | `ShlAssign`    |
-| `<`                       | `expr < expr`                                           | Less than comparison                                                  | `PartialOrd`   |
-| `<=`                      | `expr <= expr`                                          | Less than or equal to comparison                                      | `PartialOrd`   |
-| `=`                       | `var = expr`, `ident = type`                            | Assignment/equivalence                                                |                |
-| `==`                      | `expr == expr`                                          | Equality comparison                                                   | `PartialEq`    |
-| `=>`                      | `pat => expr`                                           | Part of match arm syntax                                              |                |
-| `>`                       | `expr > expr`                                           | Greater than comparison                                               | `PartialOrd`   |
-| `>=`                      | `expr >= expr`                                          | Greater than or equal to comparison                                   | `PartialOrd`   |
-| `>>`                      | `expr >> expr`                                          | Right-shift                                                           | `Shr`          |
-| `>>=`                     | `var >>= expr`                                          | Right-shift and assignment                                            | `ShrAssign`    |
-| `@`                       | `ident @ pat`                                           | Pattern binding                                                       |                |
-| `^`                       | `expr ^ expr`                                           | Bitwise exclusive OR                                                  | `BitXor`       |
-| `^=`                      | `var ^= expr`                                           | Bitwise exclusive OR and assignment                                   | `BitXorAssign` |
-| <code>&vert;</code>       | <code>pat &vert; pat</code>                             | Pattern alternatives                                                  |                |
-| <code>&vert;</code>       | <code>expr &vert; expr</code>                           | Bitwise OR                                                            | `BitOr`        |
-| <code>&vert;=</code>      | <code>var &vert;= expr</code>                           | Bitwise OR and assignment                                             | `BitOrAssign`  |
-| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code>                     | Short-circuiting logical OR                                           |                |
-| `?`                       | `expr?`                                                 | Error propagation                                                     |                |
+| `!`                       | `ident!(...)`, `ident!{...}`, `ident![...]`             | ম্যাক্রো এক্সপ্যানশন                                                       |                |
+| `!`                       | `!expr`                                                 | বিটওয়াইজ বা লজিক্যাল কমপ্লিমেন্ট                                         | `Not`          |
+| `!=`                      | `expr != expr`                                          | অসমতা তুলনা                                                | `PartialEq`    |
+| `%`                       | `expr % expr`                                           | অ্যারিথমেটিক রিমেইন্ডার                                                  | `Rem`          |
+| `%=`                      | `var %= expr`                                           | অ্যারিথমেটিক রিমেইন্ডার এবং অ্যাসাইনমেন্ট                                   | `RemAssign`    |
+| `&`                       | `&expr`, `&mut expr`                                    | বোরো                                                                |                |
+| `&`                       | `&type`, `&mut type`, `&'a type`, `&'a mut type`        | বোরোড পয়েন্টার টাইপ                                                 |                |
+| `&`                       | `expr & expr`                                           | বিটওয়াইজ AND                                                           | `BitAnd`       |
+| `&=`                      | `var &= expr`                                           | বিটওয়াইজ AND এবং অ্যাসাইনমেন্ট                                            | `BitAndAssign` |
+| `&&`                      | `expr && expr`                                          | শর্ট-সার্কিটিং লজিক্যাল AND                                          |                |
+| `*`                       | `expr * expr`                                           | অ্যারিথমেটিক গুণ                                             | `Mul`          |
+| `*=`                      | `var *= expr`                                           | অ্যারিথমেটিক গুণ এবং অ্যাসাইনমেন্ট                              | `MulAssign`    |
+| `*`                       | `*expr`                                                 | ডিরেফারেন্স                                                           | `Deref`        |
+| `*`                       | `*const type`, `*mut type`                              | র-পয়েন্টার                                                           |                |
+| `+`                       | `trait + trait`, `'a + trait`                           | কম্পাউন্ড টাইপ কনস্ট্রেইন্ট                                              |                |
+| `+`                       | `expr + expr`                                           | অ্যারিথমেটিক যোগ                                                   | `Add`          |
+| `+=`                      | `var += expr`                                           | অ্যারিথমেটিক যোগ এবং অ্যাসাইনমেন্ট                                    | `AddAssign`    |
+| `,`                       | `expr, expr`                                            | আর্গুমেন্ট এবং এলিমেন্ট বিভাজক                                        |                |
+| `-`                       | `- expr`                                                | অ্যারিথমেটিক নেগেশন                                                   | `Neg`          |
+| `-`                       | `expr - expr`                                           | অ্যারিথমেটিক বিয়োগ                                                | `Sub`          |
+| `-=`                      | `var -= expr`                                           | অ্যারিথমেটিক বিয়োগ এবং অ্যাসাইনমেন্ট                                 | `SubAssign`    |
+| `->`                      | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | ফাংশন এবং ক্লোজার রিটার্ন টাইপ                                      |                |
+| `.`                       | `expr.ident`                                            | ফিল্ড অ্যাক্সেস                                                          |                |
+| `.`                       | `expr.ident(expr, ...)`                                 | মেথড কল                                                           |                |
+| `.`                       | `expr.0`, `expr.1`, ইত্যাদি                               | টাপল ইনডেক্সিং                                                        |                |
+| `..`                      | `..`, `expr..`, `..expr`, `expr..expr`                  | রাইট-এক্সক্লুসিভ রেঞ্জ লিটারেল                                         | `PartialOrd`   |
+| `..=`                     | `..=expr`, `expr..=expr`                                | রাইট-ইনক্লুসিভ রেঞ্জ লিটারেল                                         | `PartialOrd`   |
+| `..`                      | `..expr`                                                | স্ট্রাক্ট লিটারেল আপডেট সিনট্যাক্স                                          |                |
+| `..`                      | `variant(x, ..)`, `struct_type { x, .. }`               | "এবং বাকি" প্যাটার্ন বাইন্ডিং                                        |                |
+| `...`                     | `expr...expr`                                           | (বাতিল, পরিবর্তে `..=` ব্যবহার করুন) একটি প্যাটার্নে: ইনক্লুসিভ রেঞ্জ প্যাটার্ন |                |
+| `/`                       | `expr / expr`                                           | অ্যারিথমেটিক ভাগ                                                   | `Div`          |
+| `/=`                      | `var /= expr`                                           | অ্যারিথমেটিক ভাগ এবং অ্যাসাইনমেন্ট                                    | `DivAssign`    |
+| `:`                       | `pat: type`, `ident: type`                              | কনস্ট্রেইন্ট                                                           |                |
+| `:`                       | `ident: expr`                                           | স্ট্রাক্ট ফিল্ড ইনিশিয়ালাইজার                                              |                |
+| `:`                       | `'a: loop {...}`                                        | লুপ লেবেল                                                            |                |
+| `;`                       | `expr;`                                                 | স্টেটমেন্ট এবং আইটেম টার্মিনেটর                                         |                |
+| `;`                       | `[...; len]`                                            | ফিক্সড-সাইজ অ্যারে সিনট্যাক্সের অংশ                                       |                |
+| `<<`                      | `expr << expr`                                          | লেফট-শিফট                                                            | `Shl`          |
+| `<<=`                     | `var <<= expr`                                          | লেফট-শিফট এবং অ্যাসাইনমেন্ট                                             | `ShlAssign`    |
+| `<`                       | `expr < expr`                                           | তুলনামূলকভাবে ছোট                                                  | `PartialOrd`   |
+| `<=`                      | `expr <= expr`                                          | তুলনামূলকভাবে ছোট বা সমান                                      | `PartialOrd`   |
+| `=`                       | `var = expr`, `ident = type`                            | অ্যাসাইনমেন্ট/সমতা                                                |                |
+| `==`                      | `expr == expr`                                          | সমতা তুলনা                                                   | `PartialEq`    |
+| `=>`                      | `pat => expr`                                           | ম্যাচ আর্ম সিনট্যাক্সের অংশ                                              |                |
+| `>`                       | `expr > expr`                                           | তুলনামূলকভাবে বড়                                               | `PartialOrd`   |
+| `>=`                      | `expr >= expr`                                          | তুলনামূলকভাবে বড় বা সমান                                   | `PartialOrd`   |
+| `>>`                      | `expr >> expr`                                          | রাইট-শিফট                                                           | `Shr`          |
+| `>>=`                     | `var >>= expr`                                          | রাইট-শিফট এবং অ্যাসাইনমেন্ট                                            | `ShrAssign`    |
+| `@`                       | `ident @ pat`                                           | প্যাটার্ন বাইন্ডিং                                                       |                |
+| `^`                       | `expr ^ expr`                                           | বিটওয়াইজ এক্সক্লুসিভ OR                                                  | `BitXor`       |
+| `^=`                      | `var ^= expr`                                           | বিটওয়াইজ এক্সক্লুসিভ OR এবং অ্যাসাইনমেন্ট                                   | `BitXorAssign` |
+| <code>&vert;</code>       | <code>pat &vert; pat</code>                             | প্যাটার্ন অল্টারনেটিভ                                                  |                |
+| <code>&vert;</code>       | <code>expr &vert; expr</code>                           | বিটওয়াইজ OR                                                            | `BitOr`        |
+| <code>&vert;=</code>      | <code>var &vert;= expr</code>                           | বিটওয়াইজ OR এবং অ্যাসাইনমেন্ট                                             | `BitOrAssign`  |
+| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code>                     | শর্ট-সার্কিটিং লজিক্যাল OR                                           |                |
+| `?`                       | `expr?`                                                 | এরর প্রোপাগেশন                                                     |                |
 
-### Non-operator Symbols
+### অপারেটর-বিহীন প্রতীক
 
-The following list contains all symbols that don’t function as operators; that
-is, they don’t behave like a function or method call.
+নিম্নলিখিত তালিকায় সমস্ত প্রতীক রয়েছে যা অপারেটর হিসাবে কাজ করে না; অর্থাৎ, তারা একটি ফাংশন বা মেথড কলের মতো আচরণ করে না।
 
-Table B-2 shows symbols that appear on their own and are valid in a variety of
-locations.
+সারণি B-2 সেই প্রতীকগুলিকে দেখায় যা নিজে থেকে প্রদর্শিত হয় এবং বিভিন্ন স্থানে বৈধ।
 
-<span class="caption">Table B-2: Stand-Alone Syntax</span>
+<span class="caption">সারণি B-2: স্ট্যান্ড-অ্যালোন সিনট্যাক্স</span>
 
-| Symbol                                        | Explanation                                                            |
+| প্রতীক                                         | ব্যাখ্যা                                                            |
 | --------------------------------------------- | ---------------------------------------------------------------------- |
-| `'ident`                                      | Named lifetime or loop label                                           |
-| `...u8`, `...i32`, `...f64`, `...usize`, etc. | Numeric literal of specific type                                       |
-| `"..."`                                       | String literal                                                         |
-| `r"..."`, `r#"..."#`, `r##"..."##`, etc.      | Raw string literal, escape characters not processed                    |
-| `b"..."`                                      | Byte string literal; constructs an array of bytes instead of a string  |
-| `br"..."`, `br#"..."#`, `br##"..."##`, etc.   | Raw byte string literal, combination of raw and byte string literal    |
-| `'...'`                                       | Character literal                                                      |
-| `b'...'`                                      | ASCII byte literal                                                     |
-| <code>&vert;...&vert; expr</code>             | Closure                                                                |
-| `!`                                           | Always empty bottom type for diverging functions                       |
-| `_`                                           | “Ignored” pattern binding; also used to make integer literals readable |
+| `'ident`                                      | নামযুক্ত লাইফটাইম বা লুপ লেবেল                                           |
+| `...u8`, `...i32`, `...f64`, `...usize`, ইত্যাদি | নির্দিষ্ট টাইপের সাংখ্যিক লিটারেল                                       |
+| `"..."`                                       | স্ট্রিং লিটারেল                                                         |
+| `r"..."`, `r#"..."#`, `r##"..."##`, ইত্যাদি      | কাঁচা স্ট্রিং লিটারেল, এস্কেপ অক্ষরগুলি প্রক্রিয়া করা হয় না                    |
+| `b"..."`                                      | বাইট স্ট্রিং লিটারেল; একটি স্ট্রিংয়ের পরিবর্তে বাইটের একটি অ্যারে তৈরি করে  |
+| `br"..."`, `br#"..."#`, `br##"..."##`, ইত্যাদি   | কাঁচা বাইট স্ট্রিং লিটারেল, কাঁচা এবং বাইট স্ট্রিং লিটারেলের সংমিশ্রণ    |
+| `'...'`                                       | অক্ষর লিটারেল                                                      |
+| `b'...'`                                      | ASCII বাইট লিটারেল                                                     |
+| <code>&vert;...&vert; expr</code>             | ক্লোজার                                                                |
+| `!`                                           | ডাইভার্জিং ফাংশনের জন্য সর্বদা খালি বটম টাইপ                       |
+| `_`                                           | "উপেক্ষিত" প্যাটার্ন বাইন্ডিং; পূর্ণসংখ্যা লিটারেলগুলিকে পঠনযোগ্য করতেও ব্যবহৃত হয় |
 
-Table B-3 shows symbols that appear in the context of a path through the module
-hierarchy to an item.
+সারণি B-3 সেই প্রতীকগুলিকে দেখায় যা মডিউল হায়ারার্কির মাধ্যমে একটি আইটেমের পাথের প্রসঙ্গে প্রদর্শিত হয়।
 
-<span class="caption">Table B-3: Path-Related Syntax</span>
+<span class="caption">সারণি B-3: পাথ-সম্পর্কিত সিনট্যাক্স</span>
 
-| Symbol                                  | Explanation                                                                                                                     |
+| প্রতীক                                   | ব্যাখ্যা                                                                                                                     |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `ident::ident`                          | Namespace path                                                                                                                  |
-| `::path`                                | Path relative to the extern prelude, where all other crates are rooted (i.e., an explicitly absolute path including crate name) |
-| `self::path`                            | Path relative to the current module (i.e., an explicitly relative path).                                                        |
-| `super::path`                           | Path relative to the parent of the current module                                                                               |
-| `type::ident`, `<type as trait>::ident` | Associated constants, functions, and types                                                                                      |
-| `<type>::...`                           | Associated item for a type that cannot be directly named (e.g., `<&T>::...`, `<[T]>::...`, etc.)                                |
-| `trait::method(...)`                    | Disambiguating a method call by naming the trait that defines it                                                                |
-| `type::method(...)`                     | Disambiguating a method call by naming the type for which it’s defined                                                          |
-| `<type as trait>::method(...)`          | Disambiguating a method call by naming the trait and type                                                                       |
+| `ident::ident`                          | নেমস্পেস পাথ                                                                                                                  |
+| `::path`                                | এক্সটার্ন প্রি-লুডের সাপেক্ষে পাথ, যেখানে অন্য সমস্ত ক্রেট রুটেড (অর্থাৎ, ক্রেটের নাম সহ একটি স্পষ্টতই অ্যাবসোলিউট পাথ) |
+| `self::path`                            | বর্তমান মডিউলের সাপেক্ষে পাথ (অর্থাৎ, একটি স্পষ্টতই রিলেটিভ পাথ)।                                                        |
+| `super::path`                           | বর্তমান মডিউলের প্যারেন্টের সাপেক্ষে পাথ                                                                               |
+| `type::ident`, `<type as trait>::ident` | অ্যাসোসিয়েটেড কনস্ট্যান্ট, ফাংশন এবং টাইপ                                                                                      |
+| `<type>::...`                           | এমন একটি টাইপের জন্য অ্যাসোসিয়েটেড আইটেম যা সরাসরি নামকরণ করা যায় না (যেমন, `<&T>::...`, `<[T]>::...`, ইত্যাদি)                                |
+| `trait::method(...)`                    | যে ট্রেইট এটিকে সংজ্ঞায়িত করে তার নামকরণের মাধ্যমে একটি মেথড কলকে দ্ব্যর্থহীন করা                                                                |
+| `type::method(...)`                     | যে টাইপের জন্য এটি সংজ্ঞায়িত করা হয়েছে তার নামকরণের মাধ্যমে একটি মেথড কলকে দ্ব্যর্থহীন করা                           |
+| `<type as trait>::method(...)`          | ট্রেইট এবং টাইপের নামকরণের মাধ্যমে একটি মেথড কলকে দ্ব্যর্থহীন করা                                                                       |
 
-Table B-4 shows symbols that appear in the context of using generic type
-parameters.
+সারণি B-4 সেই প্রতীকগুলিকে দেখায় যা জেনেরিক টাইপ প্যারামিটার ব্যবহারের প্রসঙ্গে প্রদর্শিত হয়।
 
-<span class="caption">Table B-4: Generics</span>
+<span class="caption">সারণি B-4: জেনেরিক</span>
 
-| Symbol                         | Explanation                                                                                                                              |
+| প্রতীক                          | ব্যাখ্যা                                                                                                                              |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `path<...>`                    | Specifies parameters to generic type in a type (e.g., `Vec<u8>`)                                                                         |
-| `path::<...>`, `method::<...>` | Specifies parameters to generic type, function, or method in an expression; often referred to as turbofish (e.g., `"42".parse::<i32>()`) |
-| `fn ident<...> ...`            | Define generic function                                                                                                                  |
-| `struct ident<...> ...`        | Define generic structure                                                                                                                 |
-| `enum ident<...> ...`          | Define generic enumeration                                                                                                               |
-| `impl<...> ...`                | Define generic implementation                                                                                                            |
-| `for<...> type`                | Higher-ranked lifetime bounds                                                                                                            |
-| `type<ident=type>`             | A generic type where one or more associated types have specific assignments (e.g., `Iterator<Item=T>`)                                   |
+| `path<...>`                    | একটি টাইপে জেনেরিক টাইপের প্যারামিটার নির্দিষ্ট করে (যেমন, `Vec<u8>`)                                                                         |
+| `path::<...>`, `method::<...>` | একটি এক্সপ্রেশনে জেনেরিক টাইপ, ফাংশন বা মেথডের প্যারামিটার নির্দিষ্ট করে; প্রায়শই টার্বোফিশ হিসাবে উল্লেখ করা হয় (যেমন, `"42".parse::<i32>()`) |
+| `fn ident<...> ...`            | জেনেরিক ফাংশন সংজ্ঞায়িত করুন                                                                                                                  |
+| `struct ident<...> ...`        | জেনেরিক স্ট্রাকচার সংজ্ঞায়িত করুন                                                                                                                 |
+| `enum ident<...> ...`          | জেনেরিক এনিউমারেশন সংজ্ঞায়িত করুন                                                                                                               |
+| `impl<...> ...`                | জেনেরিক ইমপ্লিমেন্টেশন সংজ্ঞায়িত করুন                                                                                                            |
+| `for<...> type`                | উচ্চ-র‍্যাঙ্কড লাইফটাইম বাউন্ড                                                                                                            |
+| `type<ident=type>`             | একটি জেনেরিক টাইপ যেখানে এক বা একাধিক অ্যাসোসিয়েটেড টাইপের নির্দিষ্ট অ্যাসাইনমেন্ট রয়েছে (যেমন, `Iterator<Item=T>`)                                   |
 
-Table B-5 shows symbols that appear in the context of constraining generic type
-parameters with trait bounds.
+সারণি B-5 সেই প্রতীকগুলিকে দেখায় যা ট্রেইট বাউন্ড সহ জেনেরিক টাইপ প্যারামিটারগুলিকে সীমাবদ্ধ করার প্রসঙ্গে প্রদর্শিত হয়।
 
-<span class="caption">Table B-5: Trait Bound Constraints</span>
+<span class="caption">সারণি B-5: ট্রেইট বাউন্ড কনস্ট্রেইন্ট</span>
 
-| Symbol                        | Explanation                                                                                                                                |
+| প্রতীক                         | ব্যাখ্যা                                                                                                                                |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `T: U`                        | Generic parameter `T` constrained to types that implement `U`                                                                              |
-| `T: 'a`                       | Generic type `T` must outlive lifetime `'a` (meaning the type cannot transitively contain any references with lifetimes shorter than `'a`) |
-| `T: 'static`                  | Generic type `T` contains no borrowed references other than `'static` ones                                                                 |
-| `'b: 'a`                      | Generic lifetime `'b` must outlive lifetime `'a`                                                                                           |
-| `T: ?Sized`                   | Allow generic type parameter to be a dynamically sized type                                                                                |
-| `'a + trait`, `trait + trait` | Compound type constraint                                                                                                                   |
+| `T: U`                        | জেনেরিক প্যারামিটার `T` এমন টাইপগুলিতে সীমাবদ্ধ যা `U` ইমপ্লিমেন্ট করে                                                                              |
+| `T: 'a`                       | জেনেরিক টাইপ `T`-কে অবশ্যই লাইফটাইম `'a` থেকে বেশি সময় বাঁচতে হবে (অর্থাৎ টাইপটি ট্রানজিটিভভাবে `'a`-এর চেয়ে কম লাইফটাইম সহ কোনো রেফারেন্স ধারণ করতে পারে না) |
+| `T: 'static`                  | জেনেরিক টাইপ `T`-তে `'static` ছাড়া অন্য কোনো বোরোড রেফারেন্স নেই                                                                 |
+| `'b: 'a`                      | জেনেরিক লাইফটাইম `'b`-কে অবশ্যই লাইফটাইম `'a` থেকে বেশি সময় বাঁচতে হবে                                                                                           |
+| `T: ?Sized`                   | জেনেরিক টাইপ প্যারামিটারকে ডায়নামিকভাবে সাইজ করা টাইপ হওয়ার অনুমতি দিন                                                                                |
+| `'a + trait`, `trait + trait` | কম্পাউন্ড টাইপ কনস্ট্রেইন্ট                                                                                                                   |
 
-Table B-6 shows symbols that appear in the context of calling or defining
-macros and specifying attributes on an item.
+সারণি B-6 সেই প্রতীকগুলিকে দেখায় যা ম্যাক্রো কল করা বা সংজ্ঞায়িত করার এবং একটি আইটেমে অ্যাট্রিবিউট নির্দিষ্ট করার প্রসঙ্গে প্রদর্শিত হয়।
 
-<span class="caption">Table B-6: Macros and Attributes</span>
+<span class="caption">সারণি B-6: ম্যাক্রো এবং অ্যাট্রিবিউট</span>
 
-| Symbol                                      | Explanation        |
+| প্রতীক                                       | ব্যাখ্যা        |
 | ------------------------------------------- | ------------------ |
-| `#[meta]`                                   | Outer attribute    |
-| `#![meta]`                                  | Inner attribute    |
-| `$ident`                                    | Macro substitution |
-| `$ident:kind`                               | Macro capture      |
-| `$(…)…`                                     | Macro repetition   |
-| `ident!(...)`, `ident!{...}`, `ident![...]` | Macro invocation   |
+| `#[meta]`                                   | আউটার অ্যাট্রিবিউট    |
+| `#![meta]`                                  | ইনার অ্যাট্রিবিউট    |
+| `$ident`                                    | ম্যাক্রো সাবস্টিটিউশন |
+| `$ident:kind`                               | ম্যাক্রো ক্যাপচার      |
+| `$(…)…`                                     | ম্যাক্রো রিপিটেশন   |
+| `ident!(...)`, `ident!{...}`, `ident![...]` | ম্যাক্রো ইনভোকেশন   |
 
-Table B-7 shows symbols that create comments.
+সারণি B-7 সেই প্রতীকগুলিকে দেখায় যা কমেন্ট তৈরি করে।
 
-<span class="caption">Table B-7: Comments</span>
+<span class="caption">সারণি B-7: কমেন্ট</span>
 
-| Symbol     | Explanation             |
+| প্রতীক      | ব্যাখ্যা             |
 | ---------- | ----------------------- |
-| `//`       | Line comment            |
-| `//!`      | Inner line doc comment  |
-| `///`      | Outer line doc comment  |
-| `/*...*/`  | Block comment           |
-| `/*!...*/` | Inner block doc comment |
-| `/**...*/` | Outer block doc comment |
+| `//`       | লাইন কমেন্ট            |
+| `//!`      | ইনার লাইন ডক কমেন্ট  |
+| `///`      | আউটার লাইন ডক কমেন্ট  |
+| `/*...*/`  | ব্লক কমেন্ট           |
+| `/*!...*/` | ইনার ব্লক ডক কমেন্ট |
+| `/**...*/` | আউটার ব্লক ডক কমেন্ট |
 
-Table B-8 shows the contexts in which parentheses are used.
+সারণি B-8-এ দেখানো হয়েছে কোন কোন পরিস্থিতিতে গোলাকার বন্ধনী ব্যবহার করা হয়।
 
-<span class="caption">Table B-8: Parentheses</span>
+<span class="caption">সারণি B-8: গোলাকার বন্ধনী</span>
 
-| Symbol                   | Explanation                                                                                 |
+| প্রতীক                    | ব্যাখ্যা                                                                                 |
 | ------------------------ | ------------------------------------------------------------------------------------------- |
-| `()`                     | Empty tuple (aka unit), both literal and type                                               |
-| `(expr)`                 | Parenthesized expression                                                                    |
-| `(expr,)`                | Single-element tuple expression                                                             |
-| `(type,)`                | Single-element tuple type                                                                   |
-| `(expr, ...)`            | Tuple expression                                                                            |
-| `(type, ...)`            | Tuple type                                                                                  |
-| `expr(expr, ...)`        | Function call expression; also used to initialize tuple `struct`s and tuple `enum` variants |
+| `()`                     | খালি টাপল (ইউনিট হিসাবেও পরিচিত), লিটারেল এবং টাইপ উভয়ই                                               |
+| `(expr)`                 | প্যারেনথেসাইজড এক্সপ্রেশন                                                                    |
+| `(expr,)`                | একক-উপাদান টাপল এক্সপ্রেশন                                                             |
+| `(type,)`                | একক-উপাদান টাপল টাইপ                                                                   |
+| `(expr, ...)`            | টাপল এক্সপ্রেশন                                                                            |
+| `(type, ...)`            | টাপল টাইপ                                                                                  |
+| `expr(expr, ...)`        | ফাংশন কল এক্সপ্রেশন; টাপল `struct` এবং টাপল `enum` ভেরিয়েন্ট ইনিশিয়ালাইজ করতেও ব্যবহৃত হয় |
 
-Table B-9 shows the contexts in which curly braces are used.
+সারণি B-9-এ সেই প্রেক্ষাপটগুলি দেখানো হয়েছে যেখানে কোঁকড়া ধনুর্বন্ধনী ব্যবহার করা হয়।
 
-<span class="caption">Table B-9: Curly Brackets</span>
+<span class="caption">সারণি B-9: কোঁকড়া বন্ধনী</span>
 
-| Context      | Explanation      |
+| প্রসঙ্গ       | ব্যাখ্যা      |
 | ------------ | ---------------- |
-| `{...}`      | Block expression |
-| `Type {...}` | `struct` literal |
+| `{...}`      | ব্লক এক্সপ্রেশন |
+| `Type {...}` | `struct` লিটারেল |
 
-Table B-10 shows the contexts in which square brackets are used.
+সারণি B-10 সেই প্রেক্ষাপটগুলি দেখায় যেখানে বর্গাকার বন্ধনী ব্যবহার করা হয়।
 
-<span class="caption">Table B-10: Square Brackets</span>
+<span class="caption">সারণি B-10: বর্গাকার বন্ধনী</span>
 
-| Context                                            | Explanation                                                                                                                   |
+| প্রসঙ্গ                                             | ব্যাখ্যা                                                                                                                   |
 | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `[...]`                                            | Array literal                                                                                                                 |
-| `[expr; len]`                                      | Array literal containing `len` copies of `expr`                                                                               |
-| `[type; len]`                                      | Array type containing `len` instances of `type`                                                                               |
-| `expr[expr]`                                       | Collection indexing. Overloadable (`Index`, `IndexMut`)                                                                       |
-| `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | Collection indexing pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, or `RangeFull` as the “index” |
+| `[...]`                                            | অ্যারে লিটারেল                                                                                                                 |
+| `[expr; len]`                                      | `expr`-এর `len` সংখ্যক কপি ধারণকারী অ্যারে লিটারেল                                                                               |
+| `[type; len]`                                      | `type`-এর `len` সংখ্যক ইন্সট্যান্স ধারণকারী অ্যারে টাইপ                                                                               |
+| `expr[expr]`                                       | কালেকশন ইনডেক্সিং। ওভারলোডযোগ্য (`Index`, `IndexMut`)                                                                       |
+| `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | কালেকশন স্লাইসিং ভান করে কালেকশন ইনডেক্সিং, "সূচক" হিসাবে `Range`, `RangeFrom`, `RangeTo`, বা `RangeFull` ব্যবহার করে |

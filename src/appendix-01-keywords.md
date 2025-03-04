@@ -1,69 +1,58 @@
-## Appendix A: Keywords
+## পরিশিষ্ট A: কিওয়ার্ড (Keywords)
 
-The following list contains keywords that are reserved for current or future
-use by the Rust language. As such, they cannot be used as identifiers (except
-as raw identifiers as we’ll discuss in the “[Raw
-Identifiers][raw-identifiers]<!-- ignore -->” section). Identifiers are names
-of functions, variables, parameters, struct fields, modules, crates, constants,
-macros, static values, attributes, types, traits, or lifetimes.
+নিম্নলিখিত তালিকায় এমন কীওয়ার্ডগুলি রয়েছে যা Rust ভাষা দ্বারা বর্তমান বা ভবিষ্যতের ব্যবহারের জন্য সংরক্ষিত। ফলস্বরূপ, এগুলিকে আইডেন্টিফায়ার হিসাবে ব্যবহার করা যাবে না (তবে কাঁচা আইডেন্টিফায়ার হিসাবে ব্যবহার করা যেতে পারে, যেমনটি আমরা “[Raw Identifiers][raw-identifiers]<!-- ignore -->” বিভাগে আলোচনা করব)। আইডেন্টিফায়ার হল ফাংশন, ভেরিয়েবল, প্যারামিটার, স্ট্রাক্ট ফিল্ড, মডিউল, ক্রেট, কনস্ট্যান্ট, ম্যাক্রো, স্ট্যাটিক ভ্যালু, অ্যাট্রিবিউট, টাইপ, ট্রেইট বা লাইফটাইমের নাম।
 
 [raw-identifiers]: #raw-identifiers
 
-### Keywords Currently in Use
+### বর্তমানে ব্যবহৃত কিওয়ার্ডগুলো
 
-The following is a list of keywords currently in use, with their functionality
-described.
+নিম্নে বর্তমানে ব্যবহৃত কিওয়ার্ডগুলোর একটি তালিকা এবং তাদের কার্যাবলী বর্ণনা করা হলো।
 
-- `as` - perform primitive casting, disambiguate the specific trait containing
-  an item, or rename items in `use` statements
-- `async` - return a `Future` instead of blocking the current thread
-- `await` - suspend execution until the result of a `Future` is ready
-- `break` - exit a loop immediately
-- `const` - define constant items or constant raw pointers
-- `continue` - continue to the next loop iteration
-- `crate` - in a module path, refers to the crate root
-- `dyn` - dynamic dispatch to a trait object
-- `else` - fallback for `if` and `if let` control flow constructs
-- `enum` - define an enumeration
-- `extern` - link an external function or variable
-- `false` - Boolean false literal
-- `fn` - define a function or the function pointer type
-- `for` - loop over items from an iterator, implement a trait, or specify a
-  higher-ranked lifetime
-- `if` - branch based on the result of a conditional expression
-- `impl` - implement inherent or trait functionality
-- `in` - part of `for` loop syntax
-- `let` - bind a variable
-- `loop` - loop unconditionally
-- `match` - match a value to patterns
-- `mod` - define a module
-- `move` - make a closure take ownership of all its captures
-- `mut` - denote mutability in references, raw pointers, or pattern bindings
-- `pub` - denote public visibility in struct fields, `impl` blocks, or modules
-- `ref` - bind by reference
-- `return` - return from function
-- `Self` - a type alias for the type we are defining or implementing
-- `self` - method subject or current module
-- `static` - global variable or lifetime lasting the entire program execution
-- `struct` - define a structure
-- `super` - parent module of the current module
-- `trait` - define a trait
-- `true` - Boolean true literal
-- `type` - define a type alias or associated type
-- `union` - define a [union][union]<!-- ignore -->; is only a keyword when used
-  in a union declaration
-- `unsafe` - denote unsafe code, functions, traits, or implementations
-- `use` - bring symbols into scope; specify precise captures for generic and
-  lifetime bounds
-- `where` - denote clauses that constrain a type
-- `while` - loop conditionally based on the result of an expression
+- `as` - প্রিমিটিভ কাস্টিং সম্পাদন করে, কোনো আইটেমের নির্দিষ্ট ট্রেইটকে দ্ব্যর্থহীন করে, অথবা `use` স্টেটমেন্টে আইটেমগুলোর নাম পরিবর্তন করে।
+- `async` - বর্তমান থ্রেডকে ব্লক করার পরিবর্তে একটি `Future` রিটার্ন করে।
+- `await` - একটি `Future`-এর ফলাফল প্রস্তুত না হওয়া পর্যন্ত এক্সিকিউশন স্থগিত রাখে।
+- `break` - একটি লুপ থেকে অবিলম্বে বের হয়ে যায়।
+- `const` - কনস্ট্যান্ট আইটেম বা কনস্ট্যান্ট র-পয়েন্টার সংজ্ঞায়িত করে।
+- `continue` - লুপের পরবর্তী ইটারেশনে চলে যায়।
+- `crate` - একটি মডিউল পাথে, ক্রেইট রুটকে বোঝায়।
+- `dyn` - একটি ট্রেইট অবজেক্টে ডাইনামিক ডিসপ্যাচ।
+- `else` - `if` এবং `if let` কন্ট্রোল ফ্লো কনস্ট্রাক্টের জন্য ফলব্যাক।
+- `enum` - একটি এনিউমারেশন সংজ্ঞায়িত করে।
+- `extern` - একটি বাহ্যিক ফাংশন বা ভেরিয়েবল লিঙ্ক করে।
+- `false` - বুলিয়ান ফলস লিটারেল।
+- `fn` - একটি ফাংশন বা ফাংশন পয়েন্টার টাইপ সংজ্ঞায়িত করে।
+- `for` - একটি ইটারেটর থেকে আইটেমগুলির উপর লুপ করে, একটি ট্রেইট ইমপ্লিমেন্ট করে, অথবা একটি উচ্চ-র‍্যাঙ্কড লাইফটাইম নির্দিষ্ট করে।
+- `if` - একটি কন্ডিশনাল এক্সপ্রেশনের ফলাফলের উপর ভিত্তি করে ব্রাঞ্চ করে।
+- `impl` - ইনহেরেন্ট বা ট্রেইট কার্যকারিতা ইমপ্লিমেন্ট করে।
+- `in` - `for` লুপ সিনট্যাক্সের অংশ।
+- `let` - একটি ভেরিয়েবল বাইন্ড করে।
+- `loop` - শর্তহীনভাবে লুপ করে।
+- `match` - একটি ভ্যালুকে প্যাটার্নের সাথে ম্যাচ করে।
+- `mod` - একটি মডিউল সংজ্ঞায়িত করে।
+- `move` - একটি ক্লোজারকে তার সমস্ত ক্যাপচারের ওনারশিপ নিতে বাধ্য করে।
+- `mut` - রেফারেন্স, র-পয়েন্টার বা প্যাটার্ন বাইন্ডিংয়ে মিউটেবিলিটি নির্দেশ করে।
+- `pub` - স্ট্রাক্ট ফিল্ড, `impl` ব্লক বা মডিউলে পাবলিক ভিজিবিলিটি নির্দেশ করে।
+- `ref` - রেফারেন্স দ্বারা বাইন্ড করে।
+- `return` - ফাংশন থেকে রিটার্ন করে।
+- `Self` - আমরা যে টাইপটি সংজ্ঞায়িত করছি বা ইমপ্লিমেন্ট করছি তার জন্য একটি টাইপ অ্যালিয়াস।
+- `self` - মেথড সাবজেক্ট বা বর্তমান মডিউল।
+- `static` - গ্লোবাল ভেরিয়েবল বা সম্পূর্ণ প্রোগ্রাম এক্সিকিউশন স্থায়ী লাইফটাইম।
+- `struct` - একটি স্ট্রাকচার সংজ্ঞায়িত করে।
+- `super` - বর্তমান মডিউলের প্যারেন্ট মডিউল।
+- `trait` - একটি ট্রেইট সংজ্ঞায়িত করে।
+- `true` - বুলিয়ান ট্রু লিটারেল।
+- `type` - একটি টাইপ অ্যালিয়াস বা অ্যাসোসিয়েটেড টাইপ সংজ্ঞায়িত করে।
+- `union` - একটি [ইউনিয়ন][union]<!-- ignore --> সংজ্ঞায়িত করে; শুধুমাত্র ইউনিয়ন ডিক্লেয়ারেশন-এ ব্যবহৃত হলেই কীওয়ার্ড।
+- `unsafe` - আনসেইফ কোড, ফাংশন, ট্রেইট বা ইমপ্লিমেন্টেশন নির্দেশ করে।
+- `use` - স্কোপে সিম্বল আনে; জেনেরিক এবং লাইফটাইম বাউন্ডের জন্য সুনির্দিষ্ট ক্যাপচারগুলি নির্দিষ্ট করে।
+- `where` - একটি টাইপকে সীমাবদ্ধ করে এমন ক্লজগুলি নির্দেশ করে।
+- `while` - একটি এক্সপ্রেশনের ফলাফলের উপর ভিত্তি করে শর্তসাপেক্ষে লুপ করে।
 
 [union]: ../reference/items/unions.html
 
-### Keywords Reserved for Future Use
+### ভবিষ্যতের জন্য সংরক্ষিত কিওয়ার্ডগুলো
 
-The following keywords do not yet have any functionality but are reserved by
-Rust for potential future use.
+নিম্নলিখিত কিওয়ার্ডগুলোর এখনও কোনো কার্যকারিতা নেই তবে ভবিষ্যতের সম্ভাব্য ব্যবহারের জন্য Rust দ্বারা সংরক্ষিত।
 
 - `abstract`
 - `become`
@@ -80,13 +69,11 @@ Rust for potential future use.
 - `virtual`
 - `yield`
 
-### Raw Identifiers
+### কাঁচা আইডেন্টিফায়ার (Raw Identifiers)
 
-_Raw identifiers_ are the syntax that lets you use keywords where they wouldn’t
-normally be allowed. You use a raw identifier by prefixing a keyword with `r#`.
+_কাঁচা আইডেন্টিফায়ার_ হল সিনট্যাক্স যা আপনাকে এমন জায়গায় কীওয়ার্ড ব্যবহার করতে দেয় যেখানে সাধারণত তাদের অনুমতি দেওয়া হয় না। আপনি `r#` দিয়ে একটি কীওয়ার্ড প্রিফিক্স করে একটি কাঁচা আইডেন্টিফায়ার ব্যবহার করেন।
 
-For example, `match` is a keyword. If you try to compile the following function
-that uses `match` as its name:
+উদাহরণস্বরূপ, `match` একটি কীওয়ার্ড। আপনি যদি নিম্নলিখিত ফাংশনটি কম্পাইল করার চেষ্টা করেন যা `match` কে তার নাম হিসাবে ব্যবহার করে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -96,7 +83,7 @@ fn match(needle: &str, haystack: &str) -> bool {
 }
 ```
 
-you’ll get this error:
+আপনি এই এররটি পাবেন:
 
 ```text
 error: expected identifier, found keyword `match`
@@ -106,9 +93,7 @@ error: expected identifier, found keyword `match`
   |    ^^^^^ expected identifier, found keyword
 ```
 
-The error shows that you can’t use the keyword `match` as the function
-identifier. To use `match` as a function name, you need to use the raw
-identifier syntax, like this:
+এররটি দেখায় যে আপনি ফাংশন আইডেন্টিফায়ার হিসাবে `match` কীওয়ার্ডটি ব্যবহার করতে পারবেন না। `match` কে ফাংশনের নাম হিসাবে ব্যবহার করতে, আপনাকে কাঁচা আইডেন্টিফায়ার সিনট্যাক্স ব্যবহার করতে হবে, যেমন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -122,18 +107,8 @@ fn main() {
 }
 ```
 
-This code will compile without any errors. Note the `r#` prefix on the function
-name in its definition as well as where the function is called in `main`.
+এই কোডটি কোনো এরর ছাড়াই কম্পাইল হবে। `main`-এ ফাংশনটিকে যেখানে কল করা হয়েছে এবং যেখানে এটিকে ডিফাইন করা হয়েছে, উভয় জায়গাতেই ফাংশনের নামের আগে `r#` প্রিফিক্সটি মনে রাখবেন।
 
-Raw identifiers allow you to use any word you choose as an identifier, even if
-that word happens to be a reserved keyword. This gives us more freedom to choose
-identifier names, as well as lets us integrate with programs written in a
-language where these words aren’t keywords. In addition, raw identifiers allow
-you to use libraries written in a different Rust edition than your crate uses.
-For example, `try` isn’t a keyword in the 2015 edition but is in the 2018, 2021,
-and 2024 editions. If you depend on a library that’s written using the 2015
-edition and has a `try` function, you’ll need to use the raw identifier syntax,
-`r#try` in this case, to call that function from your 2018 edition code. See
-[Appendix E][appendix-e]<!-- ignore --> for more information on editions.
+কাঁচা আইডেন্টিফায়ারগুলি আপনাকে আইডেন্টিফায়ার হিসাবে আপনার পছন্দের যেকোনো শব্দ ব্যবহার করার অনুমতি দেয়, এমনকি যদি সেই শব্দটি একটি সংরক্ষিত কীওয়ার্ড হয়। এটি আমাদেরকে আইডেন্টিফায়ারের নাম চয়ন করার আরও স্বাধীনতা দেয়, পাশাপাশি এমন একটি ভাষায় লেখা প্রোগ্রামগুলির সাথে ইন্টিগ্রেট করতে দেয় যেখানে এই শব্দগুলি কীওয়ার্ড নয়। এছাড়াও, কাঁচা আইডেন্টিফায়ারগুলি আপনাকে আপনার ক্রেট যে Rust এডিশন ব্যবহার করে তার থেকে ভিন্ন একটি এডিশনে লেখা লাইব্রেরিগুলি ব্যবহার করার অনুমতি দেয়। উদাহরণস্বরূপ, `try` 2015 এডিশনে একটি কীওয়ার্ড নয় তবে 2018, 2021 এবং 2024 এডিশনে একটি কীওয়ার্ড। আপনি যদি 2015 এডিশন ব্যবহার করে লেখা একটি লাইব্রেরির উপর নির্ভরশীল হন এবং একটি `try` ফাংশন থাকে, তাহলে আপনার 2018 এডিশনের কোড থেকে সেই ফাংশনটিকে কল করার জন্য আপনাকে কাঁচা আইডেন্টিফায়ার সিনট্যাক্স, এই ক্ষেত্রে `r#try`, ব্যবহার করতে হবে। এডিশন সম্পর্কে আরও তথ্যের জন্য [পরিশিষ্ট E][appendix-e]<!-- ignore --> দেখুন।
 
 [appendix-e]: appendix-05-editions.html

@@ -1,4 +1,3 @@
-# Appendix
+# परिशिष्ट (Appendix)
 
-The following sections contain reference material you may find useful in your
-Rust journey.
+নিম্নলিখিত বিভাগগুলিতে রেফারেন্স সামগ্রী রয়েছে যা আপনার Rust যাত্রায় সহায়ক হতে পারে।
