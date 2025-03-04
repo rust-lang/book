@@ -1,43 +1,22 @@
-# An I/O Project: Building a Command Line Program
+# একটি I/O প্রোজেক্ট: একটি কমান্ড লাইন প্রোগ্রাম তৈরি করা (An I/O Project: Building a Command Line Program)
 
-This chapter is a recap of the many skills you’ve learned so far and an
-exploration of a few more standard library features. We’ll build a command line
-tool that interacts with file and command line input/output to practice some of
-the Rust concepts you now have under your belt.
+এই চ্যাপ্টারটি আপনার ఇప్పటి পর্যন্ত শেখা অনেক দক্ষতার একটি সংক্ষিপ্ত পুনরালোচনা (recap) এবং আরও কিছু স্ট্যান্ডার্ড লাইব্রেরি ফিচারের অনুসন্ধান। আমরা একটি কমান্ড লাইন টুল তৈরি করব যা ফাইল এবং কমান্ড লাইন ইনপুট/আউটপুটের সাথে ইন্টারঅ্যাক্ট করে, যাতে আপনার আয়ত্তে থাকা কিছু Rust কনসেপ্ট অনুশীলন করা যায়।
 
-Rust’s speed, safety, single binary output, and cross-platform support make it
-an ideal language for creating command line tools, so for our project, we’ll
-make our own version of the classic command line search tool `grep`
-(**g**lobally search a **r**egular **e**xpression and **p**rint). In the
-simplest use case, `grep` searches a specified file for a specified string. To
-do so, `grep` takes as its arguments a file path and a string. Then it reads
-the file, finds lines in that file that contain the string argument, and prints
-those lines.
+Rust-এর গতি, নিরাপত্তা, একক বাইনারি আউটপুট, এবং ক্রস-প্ল্যাটফর্ম সাপোর্ট এটিকে কমান্ড লাইন টুল তৈরির জন্য একটি আদর্শ ভাষা করে তোলে। তাই আমাদের প্রোজেক্টের জন্য, আমরা ক্লাসিক কমান্ড লাইন সার্চ টুল `grep` (**g**lobally search a **r**egular **e**xpression and **p**rint)-এর নিজস্ব ভার্সন তৈরি করব। সবচেয়ে সহজ ব্যবহারের ক্ষেত্রে, `grep` একটি নির্দিষ্ট স্ট্রিংয়ের জন্য একটি নির্দিষ্ট ফাইল অনুসন্ধান করে। এটি করার জন্য, `grep` তার আর্গুমেন্ট হিসাবে একটি ফাইলের পাথ (path) এবং একটি স্ট্রিং নেয়। তারপর এটি ফাইলটি পড়ে, সেই ফাইলের মধ্যে থাকা যেসব লাইনে স্ট্রিং আর্গুমেন্টটি রয়েছে সেগুলি খুঁজে বের করে এবং সেই লাইনগুলি প্রিন্ট করে।
 
-Along the way, we’ll show how to make our command line tool use the terminal
-features that many other command line tools use. We’ll read the value of an
-environment variable to allow the user to configure the behavior of our tool.
-We’ll also print error messages to the standard error console stream (`stderr`)
-instead of standard output (`stdout`) so that, for example, the user can
-redirect successful output to a file while still seeing error messages onscreen.
+এই চলার পথে, আমরা দেখাব কীভাবে আমাদের কমান্ড লাইন টুলটিকে টার্মিনালের সেই ফিচারগুলি ব্যবহার করতে হয় যা অন্য অনেক কমান্ড লাইন টুল ব্যবহার করে। ব্যবহারকারীকে আমাদের টুলের আচরণ কনফিগার করার অনুমতি দেওয়ার জন্য আমরা একটি এনভায়রনমেন্ট ভেরিয়েবলের মান পড়ব। আমরা স্ট্যান্ডার্ড আউটপুট (`stdout`)-এর পরিবর্তে স্ট্যান্ডার্ড এরর কনসোল স্ট্রিমে (`stderr`) ত্রুটি বার্তাগুলিও প্রিন্ট করব, যাতে, উদাহরণস্বরূপ, ব্যবহারকারী সফল আউটপুট একটি ফাইলে পুনঃনির্দেশিত (redirect) করতে পারে এবং একই সাথে স্ক্রিনে ত্রুটি বার্তাগুলি দেখতে পায়।
 
-One Rust community member, Andrew Gallant, has already created a fully
-featured, very fast version of `grep`, called `ripgrep`. By comparison, our
-version will be fairly simple, but this chapter will give you some of the
-background knowledge you need to understand a real-world project such as
-`ripgrep`.
+Rust কমিউনিটির একজন সদস্য, Andrew Gallant, ইতিমধ্যেই `grep`-এর একটি সম্পূর্ণ ফিচারযুক্ত, অত্যন্ত দ্রুত ভার্সন তৈরি করেছেন, যার নাম `ripgrep`। তুলনামূলকভাবে, আমাদের ভার্সনটি বেশ সহজ হবে, কিন্তু এই চ্যাপ্টারটি আপনাকে `ripgrep`-এর মতো একটি বাস্তব-বিশ্বের (real-world) প্রোজেক্ট বোঝার জন্য প্রয়োজনীয় কিছু পটভূমির জ্ঞান দেবে।
 
-Our `grep` project will combine a number of concepts you’ve learned so far:
+আমাদের `grep` প্রোজেক্টটি আপনার இதுவரை শেখা বেশ কয়েকটি কনসেপ্টকে একত্রিত করবে:
 
-- Organizing code ([Chapter 7][ch7]<!-- ignore -->)
-- Using vectors and strings ([Chapter 8][ch8]<!-- ignore -->)
-- Handling errors ([Chapter 9][ch9]<!-- ignore -->)
-- Using traits and lifetimes where appropriate ([Chapter 10][ch10]<!-- ignore -->)
-- Writing tests ([Chapter 11][ch11]<!-- ignore -->)
+-   কোড অর্গানাইজ করা ([চ্যাপ্টার ৭][ch7]<!-- ignore -->)
+-   ভেক্টর এবং স্ট্রিং ব্যবহার করা ([চ্যাপ্টার ৮][ch8]<!-- ignore -->)
+-   ত্রুটি হ্যান্ডেল করা ([চ্যাপ্টার ৯][ch9]<!-- ignore -->)
+-   উপযুক্ত স্থানে ট্রেইট এবং লাইফটাইম ব্যবহার করা ([চ্যাপ্টার ১০][ch10]<!-- ignore -->)
+-   টেস্ট লেখা ([চ্যাপ্টার ১১][ch11]<!-- ignore -->)
 
-We’ll also briefly introduce closures, iterators, and trait objects, which
-[Chapter 13][ch13]<!-- ignore --> and [Chapter 18][ch18]<!-- ignore --> will
-cover in detail.
+আমরা সংক্ষেপে ক্লোজার (closure), ইটারেটর (iterator) এবং ট্রেইট অবজেক্টের (trait object) সাথেও পরিচয় করিয়ে দেব, যা [চ্যাপ্টার ১৩][ch13]<!-- ignore --> এবং [চ্যাপ্টার ১৮][ch18]<!-- ignore --> তে বিস্তারিতভাবে আলোচনা করা হবে।
 
 [ch7]: ch07-00-managing-growing-projects-with-packages-crates-and-modules.html
 [ch8]: ch08-00-common-collections.html

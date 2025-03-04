@@ -1,14 +1,11 @@
-# More About Cargo and Crates.io
+# Cargo এবং Crates.io সম্পর্কে আরও
 
-So far we’ve used only the most basic features of Cargo to build, run, and test
-our code, but it can do a lot more. In this chapter, we’ll discuss some of its
-other, more advanced features to show you how to do the following:
+এখন পর্যন্ত আমরা আমাদের কোড build, run এবং test করার জন্য Cargo-র শুধুমাত্র সবচেয়ে basic feature গুলো ব্যবহার করেছি, কিন্তু এটি আরও অনেক কিছু করতে পারে। এই chapter-এ, আমরা এর আরও কিছু advanced feature নিয়ে আলোচনা করব যাতে আপনাকে নিম্নলিখিত কাজগুলো কীভাবে করতে হয় তা দেখানো যায়:
 
-- Customize your build through release profiles
-- Publish libraries on [crates.io](https://crates.io/)<!-- ignore -->
-- Organize large projects with workspaces
-- Install binaries from [crates.io](https://crates.io/)<!-- ignore -->
-- Extend Cargo using custom commands
+-   Release profile-এর মাধ্যমে আপনার build customize করা
+-   [crates.io](https://crates.io/)-তে library publish করা
+-   Workspaces-এর সাহায্যে large project organize করা
+-   [crates.io](https://crates.io/) থেকে binary install করা
+-   Custom command ব্যবহার করে Cargo extend করা
 
-Cargo can do even more than the functionality we cover in this chapter, so for
-a full explanation of all its features, see [its documentation](https://doc.rust-lang.org/cargo/).
+Cargo এই chapter-এ আমরা যা আলোচনা করেছি তার চেয়েও বেশি functionality করতে পারে, তাই এর সমস্ত feature-এর complete explanation-এর জন্য, [এর ডকুমেন্টেশন](https://doc.rust-lang.org/cargo/) দেখুন।

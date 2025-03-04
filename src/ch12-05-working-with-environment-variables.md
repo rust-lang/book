@@ -1,22 +1,12 @@
-## Working with Environment Variables
+## Environment Variable-দের সাথে কাজ করা
 
-We’ll improve `minigrep` by adding an extra feature: an option for
-case-insensitive searching that the user can turn on via an environment
-variable. We could make this feature a command line option and require that
-users enter it each time they want it to apply, but by instead making it an
-environment variable, we allow our users to set the environment variable once
-and have all their searches be case insensitive in that terminal session.
+আমরা `minigrep`-কে আরও উন্নত করব একটি extra feature যোগ করে: case-insensitive searching-এর জন্য একটি option যা user একটি environment variable-এর মাধ্যমে চালু করতে পারবে। আমরা এই feature-টিকে একটি command line option করতে পারতাম এবং users-দের প্রতিবার এটি apply করতে চাইলে সেটি enter করতে বলতে পারতাম, কিন্তু পরিবর্তে এটিকে একটি environment variable করে, আমরা আমাদের user-দের environment variable-টি একবার set করার অনুমতি দিই এবং সেই terminal session-এ তাদের সমস্ত search case-insensitive হয়।
 
-### Writing a Failing Test for the Case-Insensitive `search` Function
+### Case-Insensitive `search` Function-এর জন্য একটি Failing Test লেখা
 
-We first add a new `search_case_insensitive` function that will be called when
-the environment variable has a value. We’ll continue to follow the TDD process,
-so the first step is again to write a failing test. We’ll add a new test for
-the new `search_case_insensitive` function and rename our old test from
-`one_result` to `case_sensitive` to clarify the differences between the two
-tests, as shown in Listing 12-20.
+আমরা প্রথমে একটি নতুন `search_case_insensitive` function যোগ করি যেটি environment variable-টির একটি value থাকলে call করা হবে। আমরা TDD process টি follow করা চালিয়ে যাব, তাই প্রথম step টি হল আবার একটি failing test লেখা। আমরা নতুন `search_case_insensitive` function-এর জন্য একটি নতুন test যোগ করব এবং আমাদের পুরানো test-এর নাম `one_result` থেকে `case_sensitive`-এ পরিবর্তন করব যাতে দুটি test-এর মধ্যে পার্থক্য স্পষ্ট হয়, যেমনটি Listing 12-20-তে দেখানো হয়েছে।
 
-<Listing number="12-20" file-name="src/lib.rs" caption="Adding a new failing test for the case-insensitive function we’re about to add">
+<Listing number="12-20" file-name="src/lib.rs" caption="আমরা যে case-insensitive function টি যোগ করতে যাচ্ছি তার জন্য একটি নতুন failing test যোগ করা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-20/src/lib.rs:here}}
@@ -24,30 +14,15 @@ tests, as shown in Listing 12-20.
 
 </Listing>
 
-Note that we’ve edited the old test’s `contents` too. We’ve added a new line
-with the text `"Duct tape."` using a capital _D_ that shouldn’t match the query
-`"duct"` when we’re searching in a case-sensitive manner. Changing the old test
-in this way helps ensure that we don’t accidentally break the case-sensitive
-search functionality that we’ve already implemented. This test should pass now
-and should continue to pass as we work on the case-insensitive search.
+লক্ষ্য করুন যে আমরা পুরানো test-এর `contents`-ও edit করেছি। আমরা `"Duct tape."` text-সহ একটি নতুন line যোগ করেছি যেখানে একটি capital _D_ রয়েছে যা `"duct"` query-র সাথে match করা উচিত নয় যখন আমরা case-sensitive পদ্ধতিতে search করছি। এইভাবে পুরানো test টি পরিবর্তন করা নিশ্চিত করতে সাহায্য করে যে আমরা accidental ভাবে case-sensitive search functionality break করছি না যা আমরা ইতিমধ্যেই implement করেছি। এই test টি এখন pass করা উচিত এবং case-insensitive search-এ কাজ করার সময় এটি pass করতে থাকা উচিত।
 
-The new test for the case-_insensitive_ search uses `"rUsT"` as its query. In
-the `search_case_insensitive` function we’re about to add, the query `"rUsT"`
-should match the line containing `"Rust:"` with a capital _R_ and match the
-line `"Trust me."` even though both have different casing from the query. This
-is our failing test, and it will fail to compile because we haven’t yet defined
-the `search_case_insensitive` function. Feel free to add a skeleton
-implementation that always returns an empty vector, similar to the way we did
-for the `search` function in Listing 12-16 to see the test compile and fail.
+Case-_insensitive_ search-এর জন্য নতুন test টি `"rUsT"` কে তার query হিসেবে ব্যবহার করে। আমরা যে `search_case_insensitive` function টি যোগ করতে যাচ্ছি, তাতে `"rUsT"` query-টি `"Rust:"`-যুক্ত line-টির সাথে match করা উচিত যেখানে একটি capital _R_ রয়েছে এবং `"Trust me."` line-টির সাথেও match করা উচিত, যদিও query-র থেকে দুটোতেই আলাদা casing রয়েছে। এটি আমাদের failing test, এবং এটি compile হতে fail করবে কারণ আমরা এখনও `search_case_insensitive` function টি define করিনি। Listing 12-16-এ `search` function-এর জন্য যেভাবে করেছিলাম, সেভাবে একটি skeleton implementation যোগ করতে পারেন যেটি সব সময় একটি empty vector return করে, যাতে test compile হয়ে fail করে।
 
-### Implementing the `search_case_insensitive` Function
+### `search_case_insensitive` Function Implement করা
 
-The `search_case_insensitive` function, shown in Listing 12-21, will be almost
-the same as the `search` function. The only difference is that we’ll lowercase
-the `query` and each `line` so that whatever the case of the input arguments,
-they’ll be the same case when we check whether the line contains the query.
+Listing 12-21-এ দেখানো `search_case_insensitive` function টি প্রায় `search` function-এর মতোই হবে। পার্থক্য শুধুমাত্র এই যে আমরা `query` এবং প্রতিটি `line`-কে lowercase করব যাতে input argument-গুলোর case যাই হোক না কেন, line-টিতে query আছে কিনা তা check করার সময় সেগুলি একই case-এর হবে।
 
-<Listing number="12-21" file-name="src/lib.rs" caption="Defining the `search_case_insensitive` function to lowercase the query and the line before comparing them">
+<Listing number="12-21" file-name="src/lib.rs" caption="`query` এবং line-কে তুলনা করার আগে lowercase করার জন্য `search_case_insensitive` ফাংশনটিকে Define করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-21/src/lib.rs:here}}
@@ -55,38 +30,19 @@ they’ll be the same case when we check whether the line contains the query.
 
 </Listing>
 
-First we lowercase the `query` string and store it in a new variable with the
-same name, shadowing the original. Calling `to_lowercase` on the query is
-necessary so that no matter whether the user’s query is `"rust"`, `"RUST"`,
-`"Rust"`, or `"rUsT"`, we’ll treat the query as if it were `"rust"` and be
-insensitive to the case. While `to_lowercase` will handle basic Unicode, it
-won’t be 100% accurate. If we were writing a real application, we’d want to do a
-bit more work here, but this section is about environment variables, not
-Unicode, so we’ll leave it at that here.
+প্রথমে আমরা `query` string-টিকে lowercase করি এবং এটিকে একই নামের একটি নতুন variable-এ store করি, original টিকে shadowing করে। Query-তে `to_lowercase` call করা প্রয়োজন যাতে user-এর query `"rust"`, `"RUST"`, `"Rust"`, বা `"rUsT"` যাই হোক না কেন, আমরা query-টিকে `"rust"` হিসেবে treat করব এবং case-এর প্রতি insensitive হব। যদিও `to_lowercase` basic Unicode handle করবে, এটি 100% accurate হবে না। যদি আমরা একটি real application লিখতাম, তাহলে আমাদের এখানে আরও কিছু কাজ করতে হত, কিন্তু এই section টি environment variable সম্পর্কে, Unicode সম্পর্কে নয়, তাই আমরা এটিকে এখানেই ছেড়ে দেব।
 
-Note that `query` is now a `String` rather than a string slice because calling
-`to_lowercase` creates new data rather than referencing existing data. Say the
-query is `"rUsT"`, as an example: that string slice doesn’t contain a lowercase
-`u` or `t` for us to use, so we have to allocate a new `String` containing
-`"rust"`. When we pass `query` as an argument to the `contains` method now, we
-need to add an ampersand because the signature of `contains` is defined to take
-a string slice.
+লক্ষ্য করুন যে `query` এখন একটি string slice-এর পরিবর্তে একটি `String`, কারণ `to_lowercase` call করা existing data-কে reference করার পরিবর্তে new data create করে। উদাহরণস্বরূপ, ধরা যাক query হল `"rUsT"`: সেই string slice-টিতে আমাদের ব্যবহার করার জন্য কোনো lowercase `u` বা `t` নেই, তাই আমাদের `"rust"` ধারণকারী একটি নতুন `String` allocate করতে হবে। আমরা যখন এখন `contains` method-এ argument হিসেবে `query` pass করি, তখন আমাদের একটি ampersand যোগ করতে হবে কারণ `contains`-এর signature একটি string slice নেওয়ার জন্য define করা হয়েছে।
 
-Next, we add a call to `to_lowercase` on each `line` to lowercase all
-characters. Now that we’ve converted `line` and `query` to lowercase, we’ll
-find matches no matter what the case of the query is.
+এরপরে, আমরা প্রতিটি `line`-এ `to_lowercase`-এ একটি call যোগ করি সমস্ত character lowercase করার জন্য। এখন যেহেতু আমরা `line` এবং `query` কে lowercase-এ convert করেছি, তাই query-র case যাই হোক না কেন আমরা match খুঁজে পাব।
 
-Let’s see if this implementation passes the tests:
+আসুন দেখি এই implementation টি test গুলো pass করে কিনা:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-21/output.txt}}
 ```
 
-Great! They passed. Now, let’s call the new `search_case_insensitive` function
-from the `run` function. First we’ll add a configuration option to the `Config`
-struct to switch between case-sensitive and case-insensitive search. Adding
-this field will cause compiler errors because we aren’t initializing this field
-anywhere yet:
+দারুণ! সেগুলো pass করেছে। এখন, আসুন `run` function থেকে নতুন `search_case_insensitive` function টি call করি। প্রথমে আমরা `Config` struct-এ একটি configuration option যোগ করব case-sensitive এবং case-insensitive search-এর মধ্যে switch করার জন্য। এই field টি যোগ করলে compiler error হবে কারণ আমরা এখনও এই field টি কোথাও initialize করিনি:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -94,12 +50,9 @@ anywhere yet:
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/lib.rs:here}}
 ```
 
-We added the `ignore_case` field that holds a Boolean. Next, we need the `run`
-function to check the `ignore_case` field’s value and use that to decide
-whether to call the `search` function or the `search_case_insensitive`
-function, as shown in Listing 12-22. This still won’t compile yet.
+আমরা `ignore_case` field টি যোগ করেছি যেটিতে একটি Boolean রয়েছে। এরপরে, আমাদের `run` function-এর `ignore_case` field-এর value check করতে হবে এবং `search` function বা `search_case_insensitive` function call করতে হবে কিনা তা decide করতে সেটি ব্যবহার করতে হবে, যেমনটি Listing 12-22-তে দেখানো হয়েছে। এটি এখনও compile হবে না।
 
-<Listing number="12-22" file-name="src/lib.rs" caption="Calling either `search` or `search_case_insensitive` based on the value in `config.ignore_case`">
+<Listing number="12-22" file-name="src/lib.rs" caption="`config.ignore_case`-এর value-র উপর ভিত্তি করে `search` বা `search_case_insensitive` Call করা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/lib.rs:there}}
@@ -107,14 +60,9 @@ function, as shown in Listing 12-22. This still won’t compile yet.
 
 </Listing>
 
-Finally, we need to check for the environment variable. The functions for
-working with environment variables are in the `env` module in the standard
-library, so we bring that module into scope at the top of _src/lib.rs_. Then
-we’ll use the `var` function from the `env` module to check to see if any value
-has been set for an environment variable named `IGNORE_CASE`, as shown in
-Listing 12-23.
+অবশেষে, আমাদের environment variable-টি check করতে হবে। Environment variable-গুলোর সাথে কাজ করার function গুলো standard library-এর `env` module-এ রয়েছে, তাই আমরা _src/lib.rs_-এর উপরের দিকে সেই module-টিকে scope-এ আনি। তারপর আমরা `env` module থেকে `var` function টি ব্যবহার করব এটা দেখতে যে `IGNORE_CASE` নামের একটি environment variable-এর জন্য কোনো value set করা হয়েছে কিনা, যেমনটি Listing 12-23-এ দেখানো হয়েছে।
 
-<Listing number="12-23" file-name="src/lib.rs" caption="Checking for any value in an environment variable named `IGNORE_CASE`">
+<Listing number="12-23" file-name="src/lib.rs" caption="`IGNORE_CASE` নামের একটি environment variable-এ কোনো value আছে কিনা তা Check করা">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-23/src/lib.rs:here}}
@@ -122,55 +70,37 @@ Listing 12-23.
 
 </Listing>
 
-Here, we create a new variable, `ignore_case`. To set its value, we call the
-`env::var` function and pass it the name of the `IGNORE_CASE` environment
-variable. The `env::var` function returns a `Result` that will be the
-successful `Ok` variant that contains the value of the environment variable if
-the environment variable is set to any value. It will return the `Err` variant
-if the environment variable is not set.
+এখানে, আমরা একটি নতুন variable, `ignore_case` তৈরি করি। এর value set করার জন্য, আমরা `env::var` function call করি এবং এতে `IGNORE_CASE` environment variable-এর নাম pass করি। `env::var` function একটি `Result` return করে যেটি successful `Ok` variant হবে যাতে environment variable-টির value থাকবে যদি environment variable-টি কোনো value-তে set করা থাকে। Environment variable-টি set করা না থাকলে এটি `Err` variant return করবে।
 
-We’re using the `is_ok` method on the `Result` to check whether the environment
-variable is set, which means the program should do a case-insensitive search.
-If the `IGNORE_CASE` environment variable isn’t set to anything, `is_ok` will
-return `false` and the program will perform a case-sensitive search. We don’t
-care about the _value_ of the environment variable, just whether it’s set or
-unset, so we’re checking `is_ok` rather than using `unwrap`, `expect`, or any
-of the other methods we’ve seen on `Result`.
+আমরা `Result`-এর উপর `is_ok` method টি ব্যবহার করছি এটা check করার জন্য যে environment variable-টি set করা আছে কিনা, যার অর্থ হল প্রোগ্রামটির case-insensitive search করা উচিত। যদি `IGNORE_CASE` environment variable-টি কোনো কিছুতে set করা না থাকে, তাহলে `is_ok`, `false` return করবে এবং প্রোগ্রামটি case-sensitive search করবে। Environment variable-টির _value_ নিয়ে আমাদের মাথা ঘামানোর দরকার নেই, শুধুমাত্র এটি set করা আছে নাকি unset, তাই আমরা `unwrap`, `expect`, বা `Result`-এ দেখা অন্যান্য method-গুলোর পরিবর্তে `is_ok` check করছি।
 
-We pass the value in the `ignore_case` variable to the `Config` instance so the
-`run` function can read that value and decide whether to call
-`search_case_insensitive` or `search`, as we implemented in Listing 12-22.
+আমরা `ignore_case` variable-এর value-টি `Config` instance-এ pass করি যাতে `run` function সেই value টি read করতে পারে এবং Listing 12-22-এ implement করা `search_case_insensitive` বা `search` call করতে হবে কিনা তা decide করতে পারে।
 
-Let’s give it a try! First we’ll run our program without the environment
-variable set and with the query `to`, which should match any line that contains
-the word _to_ in all lowercase:
+আসুন চেষ্টা করে দেখা যাক! প্রথমে আমরা environment variable set না করে এবং `to` query দিয়ে আমাদের প্রোগ্রামটি run করব, যেটি lowercase-এ _to_ শব্দযুক্ত যেকোনো line-এর সাথে match করা উচিত:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-23/output.txt}}
 ```
 
-Looks like that still works! Now let’s run the program with `IGNORE_CASE` set
-to `1` but with the same query _to_:
+মনে হচ্ছে এটা এখনও কাজ করছে! এখন আসুন `IGNORE_CASE` কে `1`-এ set করে কিন্তু একই query _to_ দিয়ে প্রোগ্রামটি run করি:
 
 ```console
 $ IGNORE_CASE=1 cargo run -- to poem.txt
 ```
 
-If you’re using PowerShell, you will need to set the environment variable and
-run the program as separate commands:
+আপনি যদি PowerShell ব্যবহার করেন, তাহলে আপনাকে environment variable set করতে হবে এবং প্রোগ্রামটিকে আলাদা command হিসেবে run করতে হবে:
 
 ```console
 PS> $Env:IGNORE_CASE=1; cargo run -- to poem.txt
 ```
 
-This will make `IGNORE_CASE` persist for the remainder of your shell session.
-It can be unset with the `Remove-Item` cmdlet:
+এটি আপনার shell session-এর বাকি অংশের জন্য `IGNORE_CASE`-কে স্থায়ী করবে। এটিকে `Remove-Item` cmdlet দিয়ে unset করা যেতে পারে:
 
 ```console
 PS> Remove-Item Env:IGNORE_CASE
 ```
 
-We should get lines that contain _to_ that might have uppercase letters:
+আমাদের _to_ যুক্ত line গুলো পাওয়া উচিত যেগুলিতে uppercase letter থাকতে পারে:
 
 <!-- manual-regeneration
 cd listings/ch12-an-io-project/listing-12-23
@@ -185,18 +115,8 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent, we also got lines containing _To_! Our `minigrep` program can now do
-case-insensitive searching controlled by an environment variable. Now you know
-how to manage options set using either command line arguments or environment
-variables.
+চমৎকার, আমরা _To_ যুক্ত line-ও পেয়েছি! আমাদের `minigrep` প্রোগ্রামটি এখন একটি environment variable দ্বারা নিয়ন্ত্রিত case-insensitive searching করতে পারে। এখন আপনি জানেন কীভাবে command line argument বা environment variable ব্যবহার করে set করা option গুলো manage করতে হয়।
 
-Some programs allow arguments _and_ environment variables for the same
-configuration. In those cases, the programs decide that one or the other takes
-precedence. For another exercise on your own, try controlling case sensitivity
-through either a command line argument or an environment variable. Decide
-whether the command line argument or the environment variable should take
-precedence if the program is run with one set to case sensitive and one set to
-ignore case.
+কিছু প্রোগ্রাম একই configuration-এর জন্য argument _এবং_ environment variable উভয়কেই অনুমতি দেয়। সেই ক্ষেত্রগুলোতে, প্রোগ্রামগুলো decide করে যে কোনটি প্রাধান্য পাবে। নিজে থেকে আরেকটি exercise-এর জন্য, একটি command line argument বা একটি environment variable-এর মাধ্যমে case sensitivity নিয়ন্ত্রণ করার চেষ্টা করুন। প্রোগ্রামটি case sensitive-এ set করা একটি এবং ignore case-এ set করা একটি দিয়ে run করা হলে command line argument বা environment variable-এর মধ্যে কোনটি প্রাধান্য পাওয়া উচিত তা ঠিক করুন।
 
-The `std::env` module contains many more useful features for dealing with
-environment variables: check out its documentation to see what is available.
+`std::env` module-টিতে environment variable-গুলোর সাথে কাজ করার জন্য আরও অনেক useful feature রয়েছে: কী কী available তা দেখতে এর documentation দেখুন।
