@@ -1,19 +1,11 @@
-## Variables and Mutability
+```markdown
+## ভেরিয়েবল এবং মিউটেবিলিটি (Variables and Mutability)
 
-As mentioned in the [“Storing Values with
-Variables”][storing-values-with-variables]<!-- ignore --> section, by default,
-variables are immutable. This is one of many nudges Rust gives you to write
-your code in a way that takes advantage of the safety and easy concurrency that
-Rust offers. However, you still have the option to make your variables mutable.
-Let’s explore how and why Rust encourages you to favor immutability and why
-sometimes you might want to opt out.
+[“ভেরিয়েবল ব্যবহার করে মান সংরক্ষণ করা”][storing-values-with-variables]<!-- ignore --> বিভাগে যেমন উল্লেখ করা হয়েছে, ডিফল্টভাবে ভেরিয়েবলগুলো ইমিউটেবল (immutable) হয়। Rust আপনাকে যে নিরাপত্তা এবং সহজে কনকারেন্সি (concurrency) ব্যবহারের সুবিধা দেয়, সেটির সুবিধা নিতে আপনার কোড লেখার ক্ষেত্রে এটি Rust-এর দেওয়া অনেকগুলো কৌশলের মধ্যে একটি। তবে, আপনার কাছে এখনও আপনার ভেরিয়েবলগুলোকে মিউটেবল (mutable) করার অপশন রয়েছে। চলুন, অনুসন্ধান করি কেন Rust আপনাকে ইমিউটেবিলিটিকে প্রাধান্য দিতে উৎসাহিত করে এবং কেন আপনি কখনও কখনও এর থেকে বেরিয়ে আসতে চাইতে পারেন।
 
-When a variable is immutable, once a value is bound to a name, you can’t change
-that value. To illustrate this, generate a new project called _variables_ in
-your _projects_ directory by using `cargo new variables`.
+যখন একটি ভেরিয়েবল ইমিউটেবল হয়, তখন একটি মান একটি নামের সাথে বাইন্ড হয়ে গেলে, আপনি সেই মান পরিবর্তন করতে পারবেন না। এটি বোঝানোর জন্য, `cargo new variables` ব্যবহার করে আপনার _projects_ ডিরেক্টরিতে _variables_ নামে একটি নতুন প্রোজেক্ট তৈরি করুন।
 
-Then, in your new _variables_ directory, open _src/main.rs_ and replace its
-code with the following code, which won’t compile just yet:
+তারপর, আপনার নতুন _variables_ ডিরেক্টরিতে, _src/main.rs_ খুলুন এবং এর কোডটি নিচের কোড দিয়ে প্রতিস্থাপন করুন, যেটি এখনই কম্পাইল হবে না:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -21,39 +13,21 @@ code with the following code, which won’t compile just yet:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
 ```
 
-Save and run the program using `cargo run`. You should receive an error message
-regarding an immutability error, as shown in this output:
+`cargo run` ব্যবহার করে প্রোগ্রামটি সংরক্ষণ করুন এবং চালান। আপনি এই আউটপুটে দেখানো ইমিউটেবিলিটি এরর সম্পর্কিত একটি এরর মেসেজ পাবেন:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/output.txt}}
 ```
 
-This example shows how the compiler helps you find errors in your programs.
-Compiler errors can be frustrating, but really they only mean your program
-isn’t safely doing what you want it to do yet; they do _not_ mean that you’re
-not a good programmer! Experienced Rustaceans still get compiler errors.
+এই উদাহরণটি দেখায় যে কম্পাইলার কীভাবে আপনার প্রোগ্রামের এররগুলো খুঁজে পেতে সহায়তা করে। কম্পাইলার এররগুলো বিরক্তিকর হতে পারে, কিন্তু আসলে এগুলো কেবল বোঝায় যে আপনার প্রোগ্রামটি আপনি যা করতে চান তা এখনও নিরাপদে করছে না; এগুলোর মানে এই *নয়* যে আপনি ভালো প্রোগ্রামার নন! অভিজ্ঞ Rustacean-রাও কম্পাইলার এরর পান।
 
-You received the error message `` cannot assign twice to immutable variable `x` `` because you tried to assign a second value to the immutable `x` variable.
+আপনি `` cannot assign twice to immutable variable `x` `` এরর মেসেজটি পেয়েছেন কারণ আপনি ইমিউটেবল `x` ভেরিয়েবলে দ্বিতীয়বার মান অ্যাসাইন করার চেষ্টা করেছিলেন।
 
-It’s important that we get compile-time errors when we attempt to change a
-value that’s designated as immutable because this very situation can lead to
-bugs. If one part of our code operates on the assumption that a value will
-never change and another part of our code changes that value, it’s possible
-that the first part of the code won’t do what it was designed to do. The cause
-of this kind of bug can be difficult to track down after the fact, especially
-when the second piece of code changes the value only _sometimes_. The Rust
-compiler guarantees that when you state that a value won’t change, it really
-won’t change, so you don’t have to keep track of it yourself. Your code is thus
-easier to reason through.
+আমরা যখন এমন একটি মান পরিবর্তন করার চেষ্টা করি যা ইমিউটেবল হিসাবে নির্ধারিত, তখন কম্পাইল-টাইম এরর পাওয়া গুরুত্বপূর্ণ, কারণ এই পরিস্থিতি বাগের কারণ হতে পারে। যদি আমাদের কোডের একটি অংশ এই ধারণার উপর কাজ করে যে একটি মান কখনই পরিবর্তন হবে না এবং আমাদের কোডের অন্য অংশ সেই মান পরিবর্তন করে, তাহলে এটি সম্ভব যে কোডের প্রথম অংশটি যেভাবে ডিজাইন করা হয়েছিল সেভাবে কাজ করবে না। এই ধরনের বাগের কারণ পরে খুঁজে বের করা কঠিন হতে পারে, বিশেষ করে যখন কোডের দ্বিতীয় অংশটি শুধুমাত্র _কখনও কখনও_ মান পরিবর্তন করে। Rust কম্পাইলার গ্যারান্টি দেয় যে, যখন আপনি বলেন যে একটি মান পরিবর্তন হবে না, তখন সেটি সত্যিই পরিবর্তন হবে না, তাই আপনাকে নিজে থেকে সেটি ট্র্যাক রাখতে হবে না। এইভাবে আপনার কোড বোঝা সহজ হয়।
 
-But mutability can be very useful, and can make code more convenient to write.
-Although variables are immutable by default, you can make them mutable by
-adding `mut` in front of the variable name as you did in [Chapter
-2][storing-values-with-variables]<!-- ignore -->. Adding `mut` also conveys
-intent to future readers of the code by indicating that other parts of the code
-will be changing this variable’s value.
+কিন্তু মিউটেবিলিটি খুব দরকারী হতে পারে এবং কোড লেখাকে আরও সুবিধাজনক করে তুলতে পারে। যদিও ভেরিয়েবলগুলো ডিফল্টরূপে ইমিউটেবল হয়, আপনি [চ্যাপ্টার ২][storing-values-with-variables]<!-- ignore -->-এ যেমন করেছেন, তেমন ভেরিয়েবলের নামের সামনে `mut` যোগ করে সেগুলোকে মিউটেবল করতে পারেন। `mut` যোগ করা কোডের ভবিষ্যত পাঠকদের কাছে অভিপ্রায় প্রকাশ করে, এটি নির্দেশ করে যে কোডের অন্যান্য অংশগুলো এই ভেরিয়েবলের মান পরিবর্তন করবে।
 
-For example, let’s change _src/main.rs_ to the following:
+উদাহরণস্বরূপ, চলুন _src/main.rs_ পরিবর্তন করে নিচের মতো করি:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -61,74 +35,39 @@ For example, let’s change _src/main.rs_ to the following:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/src/main.rs}}
 ```
 
-When we run the program now, we get this:
+আমরা যখন এখন প্রোগ্রামটি চালাই, তখন আমরা এটি পাই:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/output.txt}}
 ```
 
-We’re allowed to change the value bound to `x` from `5` to `6` when `mut` is
-used. Ultimately, deciding whether to use mutability or not is up to you and
-depends on what you think is clearest in that particular situation.
+`mut` ব্যবহার করা হলে আমরা `x`-এর সাথে বাইন্ড করা মান `5` থেকে `6`-এ পরিবর্তন করার অনুমতি পাই। শেষ পর্যন্ত, মিউটেবিলিটি ব্যবহার করবেন কিনা তা আপনার উপর নির্ভর করে এবং সেই নির্দিষ্ট পরিস্থিতিতে কোনটি সবচেয়ে পরিষ্কার বলে আপনি মনে করেন তার উপর নির্ভর করে।
 
-### Constants
+### কনস্ট্যান্ট (Constants)
 
-Like immutable variables, _constants_ are values that are bound to a name and
-are not allowed to change, but there are a few differences between constants
-and variables.
+ইমিউটেবল ভেরিয়েবলের মতো, *কনস্ট্যান্টগুলোও (constants)* এমন মান যেগুলো একটি নামের সাথে বাইন্ড করা থাকে এবং পরিবর্তন করার অনুমতি নেই, তবে কনস্ট্যান্ট এবং ভেরিয়েবলের মধ্যে কয়েকটি পার্থক্য রয়েছে।
 
-First, you aren’t allowed to use `mut` with constants. Constants aren’t just
-immutable by default—they’re always immutable. You declare constants using the
-`const` keyword instead of the `let` keyword, and the type of the value _must_
-be annotated. We’ll cover types and type annotations in the next section,
-[“Data Types”][data-types]<!-- ignore -->, so don’t worry about the details
-right now. Just know that you must always annotate the type.
+প্রথমত, আপনি কনস্ট্যান্টগুলোর সাথে `mut` ব্যবহার করতে পারবেন না। কনস্ট্যান্টগুলো শুধুমাত্র ডিফল্টভাবে ইমিউটেবল নয়—এগুলো সর্বদাই ইমিউটেবল। আপনি `let` কীওয়ার্ডের পরিবর্তে `const` কীওয়ার্ড ব্যবহার করে কনস্ট্যান্ট ঘোষণা করেন এবং মানের টাইপটি অবশ্যই অ্যানোটেট করতে হবে। আমরা পরের বিভাগে, [“ডেটা টাইপস”][data-types]<!-- ignore -->-এ টাইপ এবং টাইপ অ্যানোটেশন নিয়ে আলোচনা করব, তাই এখনই বিস্তারিত বিবরণ নিয়ে চিন্তা করবেন না। শুধু জেনে রাখুন যে আপনাকে সর্বদাই টাইপ অ্যানোটেট করতে হবে।
 
-Constants can be declared in any scope, including the global scope, which makes
-them useful for values that many parts of code need to know about.
+কনস্ট্যান্টগুলো যেকোনো স্কোপে ঘোষণা করা যেতে পারে, গ্লোবাল স্কোপ সহ, যা সেগুলোকে এমন মানগুলোর জন্য দরকারী করে তোলে যেগুলো কোডের অনেক অংশের জানার প্রয়োজন।
 
-The last difference is that constants may be set only to a constant expression,
-not the result of a value that could only be computed at runtime.
+শেষ পার্থক্য হল কনস্ট্যান্টগুলোকে শুধুমাত্র একটি কনস্ট্যান্ট এক্সপ্রেশনে সেট করা যেতে পারে, এমন কোনো মানের ফলাফলে নয় যা শুধুমাত্র রানটাইমে গণনা করা যেতে পারে।
 
-Here’s an example of a constant declaration:
+এখানে একটি কনস্ট্যান্ট ঘোষণার উদাহরণ দেওয়া হল:
 
 ```rust
 const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 ```
 
-The constant’s name is `THREE_HOURS_IN_SECONDS` and its value is set to the
-result of multiplying 60 (the number of seconds in a minute) by 60 (the number
-of minutes in an hour) by 3 (the number of hours we want to count in this
-program). Rust’s naming convention for constants is to use all uppercase with
-underscores between words. The compiler is able to evaluate a limited set of
-operations at compile time, which lets us choose to write out this value in a
-way that’s easier to understand and verify, rather than setting this constant
-to the value 10,800. See the [Rust Reference’s section on constant
-evaluation][const-eval] for more information on what operations can be used
-when declaring constants.
+কনস্ট্যান্টের নাম হল `THREE_HOURS_IN_SECONDS` এবং এর মান 60 (এক মিনিটের সেকেন্ড সংখ্যা) গুণ 60 (এক ঘন্টার মিনিটের সংখ্যা) গুণ 3 (এই প্রোগ্রামে আমরা যত ঘন্টা গণনা করতে চাই) এর ফলাফলে সেট করা হয়েছে। কনস্ট্যান্টগুলোর জন্য Rust-এর নামকরণের নিয়ম হল শব্দগুলোর মধ্যে আন্ডারস্কোর সহ সমস্ত আপারকেস ব্যবহার করা। কম্পাইলার কম্পাইল টাইমে সীমিত সংখ্যক অপারেশন মূল্যায়ন করতে সক্ষম, যা আমাদের এই কনস্ট্যান্টটিকে 10,800 মানে সেট করার পরিবর্তে, এই মানটিকে এমনভাবে লিখতে দেয় যা বোঝা এবং যাচাই করা সহজ। কনস্ট্যান্ট ঘোষণা করার সময় কোন অপারেশনগুলো ব্যবহার করা যেতে পারে সে সম্পর্কে আরও তথ্যের জন্য [Rust রেফারেন্সের কনস্ট্যান্ট মূল্যায়ন][const-eval] বিভাগটি দেখুন।
 
-Constants are valid for the entire time a program runs, within the scope in
-which they were declared. This property makes constants useful for values in
-your application domain that multiple parts of the program might need to know
-about, such as the maximum number of points any player of a game is allowed to
-earn, or the speed of light.
+কনস্ট্যান্টগুলো যে স্কোপে ঘোষণা করা হয়েছে, তার মধ্যে একটি প্রোগ্রাম চলার পুরো সময়ের জন্য বৈধ। এই বৈশিষ্ট্যটি কনস্ট্যান্টগুলোকে আপনার অ্যাপ্লিকেশন ডোমেইনের এমন মানগুলোর জন্য দরকারী করে তোলে যেগুলো প্রোগ্রামের একাধিক অংশের জানার প্রয়োজন হতে পারে, যেমন একটি গেমের কোনো খেলোয়াড়কে সর্বাধিক যত পয়েন্ট অর্জন করার অনুমতি দেওয়া হয়েছে, বা আলোর গতি।
 
-Naming hardcoded values used throughout your program as constants is useful in
-conveying the meaning of that value to future maintainers of the code. It also
-helps to have only one place in your code you would need to change if the
-hardcoded value needed to be updated in the future.
+আপনার প্রোগ্রাম জুড়ে ব্যবহৃত হার্ডকোডেড মানগুলোকে কনস্ট্যান্ট হিসেবে নামকরণ করা কোডের ভবিষ্যত রক্ষণাবেক্ষণকারীদের কাছে সেই মানের অর্থ বোঝানোর ক্ষেত্রে দরকারী। ভবিষ্যতে যদি হার্ডকোডেড মান পরিবর্তন করার প্রয়োজন হয় তবে আপনার কোডে শুধুমাত্র একটি জায়গায় পরিবর্তন করতে হবে, এটিও সহায়ক।
 
-### Shadowing
+### শ্যাডোয়িং (Shadowing)
 
-As you saw in the guessing game tutorial in [Chapter
-2][comparing-the-guess-to-the-secret-number]<!-- ignore -->, you can declare a
-new variable with the same name as a previous variable. Rustaceans say that the
-first variable is _shadowed_ by the second, which means that the second
-variable is what the compiler will see when you use the name of the variable.
-In effect, the second variable overshadows the first, taking any uses of the
-variable name to itself until either it itself is shadowed or the scope ends.
-We can shadow a variable by using the same variable’s name and repeating the
-use of the `let` keyword as follows:
+আপনি যেমন [চ্যাপ্টার ২][comparing-the-guess-to-the-secret-number]<!-- ignore -->-তে অনুমান করার গেম টিউটোরিয়ালে দেখেছেন, আপনি আগের ভেরিয়েবলের মতো একই নামে একটি নতুন ভেরিয়েবল ঘোষণা করতে পারেন। Rustacean-রা বলে যে প্রথম ভেরিয়েবলটি দ্বিতীয়টি দ্বারা *শ্যাডো (shadow)* হয়েছে, যার অর্থ হল আপনি যখন ভেরিয়েবলের নামটি ব্যবহার করবেন তখন কম্পাইলার দ্বিতীয় ভেরিয়েবলটি দেখবে। কার্যত, দ্বিতীয় ভেরিয়েবলটি প্রথমটিকে ছাপিয়ে যায়, ভেরিয়েবলের নামের যেকোনো ব্যবহার নিজের দিকে নিয়ে যায় যতক্ষণ না এটি নিজে শ্যাডো হয় বা স্কোপ শেষ হয়। আমরা একই ভেরিয়েবলের নাম ব্যবহার করে এবং `let` কীওয়ার্ডের ব্যবহার পুনরাবৃত্তি করে একটি ভেরিয়েবলকে শ্যাডো করতে পারি, এইভাবে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -136,52 +75,33 @@ use of the `let` keyword as follows:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/src/main.rs}}
 ```
 
-This program first binds `x` to a value of `5`. Then it creates a new variable
-`x` by repeating `let x =`, taking the original value and adding `1` so the
-value of `x` is then `6`. Then, within an inner scope created with the curly
-brackets, the third `let` statement also shadows `x` and creates a new
-variable, multiplying the previous value by `2` to give `x` a value of `12`.
-When that scope is over, the inner shadowing ends and `x` returns to being `6`.
-When we run this program, it will output the following:
+এই প্রোগ্রামটি প্রথমে `x`-কে `5` মানের সাথে বাইন্ড করে। তারপর এটি `let x =` পুনরাবৃত্তি করে একটি নতুন ভেরিয়েবল `x` তৈরি করে, আসল মান নিয়ে এবং `1` যোগ করে, তাই `x`-এর মান তখন `6` হয়। তারপর, কার্লি ব্র্যাকেট দিয়ে তৈরি একটি অভ্যন্তরীণ স্কোপের মধ্যে, তৃতীয় `let` স্টেটমেন্টটিও `x`-কে শ্যাডো করে এবং একটি নতুন ভেরিয়েবল তৈরি করে, আগের মানকে `2` দিয়ে গুণ করে `x`-কে `12` মান দেয়। যখন সেই স্কোপটি শেষ হয়ে যায়, তখন অভ্যন্তরীণ শ্যাডোয়িং শেষ হয়ে যায় এবং `x` আবার `6` হয়ে যায়। যখন আমরা এই প্রোগ্রামটি চালাই, তখন এটি নিম্নলিখিত আউটপুট দেবে:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/output.txt}}
 ```
 
-Shadowing is different from marking a variable as `mut` because we’ll get a
-compile-time error if we accidentally try to reassign to this variable without
-using the `let` keyword. By using `let`, we can perform a few transformations
-on a value but have the variable be immutable after those transformations have
-been completed.
+শ্যাডোয়িং একটি ভেরিয়েবলকে `mut` হিসাবে চিহ্নিত করার চেয়ে আলাদা, কারণ `let` কীওয়ার্ড ব্যবহার না করে আমরা যদি ভুলবশত এই ভেরিয়েবলটিতে পুনরায় অ্যাসাইন করার চেষ্টা করি তবে আমরা একটি কম্পাইল-টাইম এরর পাব। `let` ব্যবহার করে, আমরা একটি মানের উপর কয়েকটি রূপান্তর করতে পারি, কিন্তু সেই রূপান্তরগুলো সম্পন্ন হওয়ার পরে ভেরিয়েবলটি ইমিউটেবল থাকবে।
 
-The other difference between `mut` and shadowing is that because we’re
-effectively creating a new variable when we use the `let` keyword again, we can
-change the type of the value but reuse the same name. For example, say our
-program asks a user to show how many spaces they want between some text by
-inputting space characters, and then we want to store that input as a number:
+`mut` এবং শ্যাডোয়িংয়ের মধ্যে আরেকটি পার্থক্য হল, যেহেতু আমরা যখন আবার `let` কীওয়ার্ড ব্যবহার করি তখন কার্যকরভাবে একটি নতুন ভেরিয়েবল তৈরি করি, তাই আমরা মানের টাইপ পরিবর্তন করতে পারি কিন্তু একই নাম পুনরায় ব্যবহার করতে পারি। উদাহরণস্বরূপ, ধরা যাক আমাদের প্রোগ্রাম একজন ব্যবহারকারীকে কিছু টেক্সটের মধ্যে কতগুলো স্পেস চায় তা স্পেস ক্যারেক্টার ইনপুট করে দেখাতে বলে এবং তারপর আমরা সেই ইনপুটটিকে একটি সংখ্যা হিসাবে সংরক্ষণ করতে চাই:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-04-shadowing-can-change-types/src/main.rs:here}}
 ```
 
-The first `spaces` variable is a string type and the second `spaces` variable
-is a number type. Shadowing thus spares us from having to come up with
-different names, such as `spaces_str` and `spaces_num`; instead, we can reuse
-the simpler `spaces` name. However, if we try to use `mut` for this, as shown
-here, we’ll get a compile-time error:
+প্রথম `spaces` ভেরিয়েবলটি হল একটি স্ট্রিং টাইপ এবং দ্বিতীয় `spaces` ভেরিয়েবলটি হল একটি সংখ্যা টাইপ। এইভাবে শ্যাডোয়িং আমাদেরকে `spaces_str` এবং `spaces_num`-এর মতো আলাদা নাম নিয়ে আসার ঝামেলা থেকে বাঁচায়; পরিবর্তে, আমরা সহজ `spaces` নামটি পুনরায় ব্যবহার করতে পারি। তবে, যদি আমরা এর জন্য `mut` ব্যবহার করার চেষ্টা করি, যেমনটি এখানে দেখানো হয়েছে, তাহলে আমরা একটি কম্পাইল-টাইম এরর পাব:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/src/main.rs:here}}
 ```
 
-The error says we’re not allowed to mutate a variable’s type:
+এরর বলছে যে আমাদের একটি ভেরিয়েবলের টাইপ মিউটেট করার অনুমতি নেই:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/output.txt}}
 ```
 
-Now that we’ve explored how variables work, let’s look at more data types they
-can have.
+এখন যেহেতু আমরা অনুসন্ধান করেছি যে ভেরিয়েবলগুলো কীভাবে কাজ করে, আসুন তারা যে আরও ডেটা টাইপ রাখতে পারে সেগুলোর দিকে তাকাই।
 
 [comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [data-types]: ch03-02-data-types.html#data-types

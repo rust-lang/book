@@ -1,33 +1,21 @@
-# Programming a Guessing Game
+# একটি সংখ্যা অনুমানের গেম প্রোগ্রামিং (Programming a Guessing Game)
 
-Let’s jump into Rust by working through a hands-on project together! This
-chapter introduces you to a few common Rust concepts by showing you how to use
-them in a real program. You’ll learn about `let`, `match`, methods, associated
-functions, external crates, and more! In the following chapters, we’ll explore
-these ideas in more detail. In this chapter, you’ll just practice the
-fundamentals.
+আসুন, একসাথে একটি হ্যান্ডস-অন প্রোজেক্টে কাজ করার মাধ্যমে Rust-এর জগতে প্রবেশ করি! এই চ্যাপ্টারটি আপনাকে কিছু সাধারণ Rust কনসেপ্টের সাথে পরিচয় করিয়ে দেবে, একটি বাস্তব প্রোগ্রামে সেগুলো কীভাবে ব্যবহার করা হয় তা দেখিয়ে। আপনি `let`, `match`, মেথড, অ্যাসোসিয়েটেড ফাংশন, এক্সটার্নাল ক্রেট এবং আরও অনেক কিছু সম্পর্কে জানতে পারবেন! নিচের চ্যাপ্টারগুলোতে, আমরা এই ধারণাগুলো আরও বিস্তারিতভাবে আলোচনা করব। এই চ্যাপ্টারে, আপনি শুধুমাত্র মৌলিক বিষয়গুলো অনুশীলন করবেন।
 
-We’ll implement a classic beginner programming problem: a guessing game. Here’s
-how it works: the program will generate a random integer between 1 and 100. It
-will then prompt the player to enter a guess. After a guess is entered, the
-program will indicate whether the guess is too low or too high. If the guess is
-correct, the game will print a congratulatory message and exit.
+আমরা একটি ক্লাসিক বিগিনার প্রোগ্রামিং সমস্যা সমাধান করব: একটি সংখ্যা অনুমানের গেম। এটি কীভাবে কাজ করে তা নিচে বলা হলো: প্রোগ্রামটি 1 থেকে 100-এর মধ্যে একটি র‍্যান্ডম সংখ্যা তৈরি করবে। তারপর এটি প্লেয়ারকে একটি সংখ্যা অনুমান করতে বলবে। একটি সংখ্যা অনুমান করার পরে, প্রোগ্রামটি জানাবে যে অনুমানটি খুব কম না বেশি হয়েছে। যদি অনুমানটি সঠিক হয়, তাহলে গেমটি একটি অভিনন্দন বার্তা প্রিন্ট করবে এবং শেষ হয়ে যাবে।
 
-## Setting Up a New Project
+## একটি নতুন প্রোজেক্ট সেট আপ করা (Setting Up a New Project)
 
-To set up a new project, go to the _projects_ directory that you created in
-Chapter 1 and make a new project using Cargo, like so:
+একটি নতুন প্রোজেক্ট সেট আপ করতে, চ্যাপ্টার ১-এ তৈরি করা _projects_ ডিরেক্টরিতে যান এবং Cargo ব্যবহার করে নিচের মতো একটি নতুন প্রোজেক্ট তৈরি করুন:
 
 ```console
 $ cargo new guessing_game
 $ cd guessing_game
 ```
 
-The first command, `cargo new`, takes the name of the project (`guessing_game`)
-as the first argument. The second command changes to the new project’s
-directory.
+প্রথম কমান্ড, `cargo new`, প্রোজেক্টের নাম (`guessing_game`) প্রথম আর্গুমেন্ট হিসেবে নেয়। দ্বিতীয় কমান্ডটি নতুন প্রোজেক্টের ডিরেক্টরিতে যাওয়া নির্দেশ করে।
 
-Look at the generated _Cargo.toml_ file:
+জেনারেট হওয়া _Cargo.toml_ ফাইলটি দেখুন:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial
@@ -44,8 +32,7 @@ cd ../../..
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/Cargo.toml}}
 ```
 
-As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
-you. Check out the _src/main.rs_ file:
+আপনি যেমন চ্যাপ্টার ১-এ দেখেছেন, `cargo new` আপনার জন্য একটি “Hello, world!” প্রোগ্রাম তৈরি করে। _src/main.rs_ ফাইলটি দেখুন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -53,27 +40,21 @@ you. Check out the _src/main.rs_ file:
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/src/main.rs}}
 ```
 
-Now let’s compile this “Hello, world!” program and run it in the same step
-using the `cargo run` command:
+এবার চলুন, এই “Hello, world!” প্রোগ্রামটি কম্পাইল করি এবং `cargo run` কমান্ড ব্যবহার করে একই ধাপে চালাই:
 
 ```console
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/output.txt}}
 ```
 
-The `run` command comes in handy when you need to rapidly iterate on a project,
-as we’ll do in this game, quickly testing each iteration before moving on to
-the next one.
+`run` কমান্ডটি তখন কাজে আসে যখন আপনাকে একটি প্রোজেক্টে দ্রুত পুনরাবৃত্তি করতে হয়, যেমনটি আমরা এই গেমে করব। অর্থাৎ, পরবর্তী ধাপে যাওয়ার আগে প্রতিটি পুনরাবৃত্তি দ্রুত পরীক্ষা করে নেওয়া যাবে।
 
-Reopen the _src/main.rs_ file. You’ll be writing all the code in this file.
+_src/main.rs_ ফাইলটি আবার খুলুন। আপনি এই ফাইলেই সমস্ত কোড লিখবেন।
 
-## Processing a Guess
+## একটি অনুমান প্রক্রিয়া করা (Processing a Guess)
 
-The first part of the guessing game program will ask for user input, process
-that input, and check that the input is in the expected form. To start, we’ll
-allow the player to input a guess. Enter the code in Listing 2-1 into
-_src/main.rs_.
+অনুমান করার গেম প্রোগ্রামটির প্রথম অংশ ব্যবহারকারীর ইনপুট চাইবে, সেই ইনপুটটি প্রক্রিয়া করবে এবং ইনপুটটি প্রত্যাশিত ফর্ম্যাটে আছে কিনা তা পরীক্ষা করবে। শুরু করার জন্য, আমরা প্লেয়ারকে একটি সংখ্যা অনুমান করতে দেব। Listing 2-1-এর কোডটি _src/main.rs_-এ লিখুন।
 
-<Listing number="2-1" file-name="src/main.rs" caption="Code that gets a guess from the user and prints it">
+<Listing number="2-1" file-name="src/main.rs" caption="ব্যবহারকারীর কাছ থেকে একটি অনুমান নেওয়া এবং সেটি প্রিন্ট করার কোড">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
@@ -81,208 +62,122 @@ _src/main.rs_.
 
 </Listing>
 
-This code contains a lot of information, so let’s go over it line by line. To
-obtain user input and then print the result as output, we need to bring the
-`io` input/output library into scope. The `io` library comes from the standard
-library, known as `std`:
+এই কোডটিতে অনেক তথ্য রয়েছে, তাই চলুন লাইন ধরে ধরে আলোচনা করি। ব্যবহারকারীর ইনপুট নিতে এবং তারপর ফলাফলটি আউটপুট হিসেবে প্রিন্ট করতে, আমাদের `io` ইনপুট/আউটপুট লাইব্রেরিটিকে স্কোপের মধ্যে আনতে হবে। `io` লাইব্রেরিটি স্ট্যান্ডার্ড লাইব্রেরি থেকে আসে, যাকে `std` বলা হয়:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
-By default, Rust has a set of items defined in the standard library that it
-brings into the scope of every program. This set is called the _prelude_, and
-you can see everything in it [in the standard library documentation][prelude].
+ডিফল্টরূপে, Rust-এর স্ট্যান্ডার্ড লাইব্রেরিতে সংজ্ঞায়িত আইটেমগুলোর একটি সেট রয়েছে, যা প্রতিটি প্রোগ্রামের স্কোপে আনা হয়। এই সেটটিকে _প্রেলিউড (prelude)_ বলা হয়, এবং আপনি স্ট্যান্ডার্ড লাইব্রেরি ডকুমেন্টেশনে [prelude]-এর সবকিছু দেখতে পারেন।
 
-If a type you want to use isn’t in the prelude, you have to bring that type
-into scope explicitly with a `use` statement. Using the `std::io` library
-provides you with a number of useful features, including the ability to accept
-user input.
+যদি আপনি যে টাইপটি ব্যবহার করতে চান সেটি প্রেলিউডে না থাকে, তাহলে আপনাকে `use` স্টেটমেন্ট ব্যবহার করে সেই টাইপটিকে স্পষ্টতই স্কোপে আনতে হবে। `std::io` লাইব্রেরি ব্যবহার করলে আপনি বেশ কিছু দরকারী ফিচার পাবেন, যার মধ্যে ব্যবহারকারীর ইনপুট নেওয়ার ক্ষমতাও রয়েছে।
 
-As you saw in Chapter 1, the `main` function is the entry point into the
-program:
+আপনি যেমন চ্যাপ্টার ১-এ দেখেছেন, `main` ফাংশনটি প্রোগ্রামে প্রবেশের পথ:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:main}}
 ```
 
-The `fn` syntax declares a new function; the parentheses, `()`, indicate there
-are no parameters; and the curly bracket, `{`, starts the body of the function.
+`fn` সিনট্যাক্স একটি নতুন ফাংশন ঘোষণা করে; বন্ধনী, `()`, নির্দেশ করে যে কোনও প্যারামিটার নেই; এবং কার্লি ব্র্যাকেট, `{}`, ফাংশনের বডি শুরু করে।
 
-As you also learned in Chapter 1, `println!` is a macro that prints a string to
-the screen:
+আপনি চ্যাপ্টার ১-এ আরও শিখেছেন যে, `println!` হল একটি ম্যাক্রো যা স্ক্রিনে একটি স্ট্রিং প্রিন্ট করে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print}}
 ```
 
-This code is printing a prompt stating what the game is and requesting input
-from the user.
+এই কোডটি একটি প্রম্পট প্রিন্ট করছে, যাতে গেমটি কী তা বলা হয়েছে এবং ব্যবহারকারীর কাছ থেকে ইনপুট চাওয়া হয়েছে।
 
-### Storing Values with Variables
+### ভেরিয়েবল ব্যবহার করে মান সংরক্ষণ করা (Storing Values with Variables)
 
-Next, we’ll create a _variable_ to store the user input, like this:
+এরপর, আমরা ব্যবহারকারীর ইনপুট সংরক্ষণ করার জন্য একটি *ভেরিয়েবল* তৈরি করব, এইভাবে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:string}}
 ```
 
-Now the program is getting interesting! There’s a lot going on in this little
-line. We use the `let` statement to create the variable. Here’s another example:
+এবার প্রোগ্রামটি আরও মজাদার হচ্ছে! এই ছোট লাইনে অনেক কিছু ঘটছে। আমরা ভেরিয়েবল তৈরি করতে `let` স্টেটমেন্ট ব্যবহার করি। আরেকটি উদাহরণ নিচে দেওয়া হলো:
 
 ```rust,ignore
 let apples = 5;
 ```
 
-This line creates a new variable named `apples` and binds it to the value 5. In
-Rust, variables are immutable by default, meaning once we give the variable a
-value, the value won’t change. We’ll be discussing this concept in detail in
-the [“Variables and Mutability”][variables-and-mutability]<!-- ignore -->
-section in Chapter 3. To make a variable mutable, we add `mut` before the
-variable name:
+এই লাইনটি `apples` নামের একটি নতুন ভেরিয়েবল তৈরি করে এবং এটিকে 5 মানের সাথে বাইন্ড করে। Rust-এ, ভেরিয়েবলগুলো ডিফল্টরূপে ইমিউটেবল (immutable) হয়, অর্থাৎ একবার আমরা ভেরিয়েবলকে একটি মান দিলে, সেই মানটি পরিবর্তন হবে না। আমরা চ্যাপ্টার ৩-এর [“ভেরিয়েবল এবং মিউটেবিলিটি”][variables-and-mutability]<!-- ignore --> বিভাগে এই ধারণাটি নিয়ে বিস্তারিত আলোচনা করব। একটি ভেরিয়েবলকে মিউটেবল (mutable) করতে, আমরা ভেরিয়েবলের নামের আগে `mut` যোগ করি:
 
 ```rust,ignore
 let apples = 5; // immutable
 let mut bananas = 5; // mutable
 ```
 
-> Note: The `//` syntax starts a comment that continues until the end of the
-> line. Rust ignores everything in comments. We’ll discuss comments in more
-> detail in [Chapter 3][comments]<!-- ignore -->.
+> দ্রষ্টব্য: `//` সিনট্যাক্স একটি কমেন্ট শুরু করে, যা লাইনের শেষ পর্যন্ত চলতে থাকে। Rust কমেন্টের ভেতরের সবকিছু উপেক্ষা করে। আমরা [চ্যাপ্টার ৩][comments]<!-- ignore -->-এ কমেন্ট নিয়ে আরও বিস্তারিত আলোচনা করব।
 
-Returning to the guessing game program, you now know that `let mut guess` will
-introduce a mutable variable named `guess`. The equal sign (`=`) tells Rust we
-want to bind something to the variable now. On the right of the equal sign is
-the value that `guess` is bound to, which is the result of calling
-`String::new`, a function that returns a new instance of a `String`.
-[`String`][string]<!-- ignore --> is a string type provided by the standard
-library that is a growable, UTF-8 encoded bit of text.
+অনুমানের গেমের প্রোগ্রামে ফিরে আসা যাক। আপনি এখন জানেন যে `let mut guess` `guess` নামের একটি মিউটেবল ভেরিয়েবল তৈরি করবে। সমান চিহ্ন (`=`) Rust-কে বলে যে আমরা এখনই ভেরিয়েবলের সাথে কিছু বাইন্ড করতে চাই। সমান চিহ্নের ডানদিকে `guess`-এর মান রয়েছে, যেটি `String::new` কল করার ফলাফল। `String::new` একটি ফাংশন, যা একটি `String`-এর নতুন ইন্সট্যান্স রিটার্ন করে। [`String`][string]<!-- ignore --> হল স্ট্যান্ডার্ড লাইব্রেরি থেকে পাওয়া একটি স্ট্রিং টাইপ, যা প্রসারণযোগ্য (growable), UTF-8 এনকোডেড টেক্সট।
 
-The `::` syntax in the `::new` line indicates that `new` is an associated
-function of the `String` type. An _associated function_ is a function that’s
-implemented on a type, in this case `String`. This `new` function creates a
-new, empty string. You’ll find a `new` function on many types because it’s a
-common name for a function that makes a new value of some kind.
+`::new` লাইনের `::` সিনট্যাক্স নির্দেশ করে যে `new` হল `String` টাইপের একটি অ্যাসোসিয়েটেড ফাংশন। একটি *অ্যাসোসিয়েটেড ফাংশন* হল এমন একটি ফাংশন যা একটি টাইপের উপর ইমপ্লিমেন্ট করা হয়, এক্ষেত্রে `String`। এই `new` ফাংশনটি একটি নতুন, খালি স্ট্রিং তৈরি করে। আপনি অনেক টাইপের ওপর `new` ফাংশন দেখতে পাবেন, কারণ এটি একটি সাধারণ নাম, যা কোনো কিছুর একটি নতুন মান তৈরি করে।
 
-In full, the `let mut guess = String::new();` line has created a mutable
-variable that is currently bound to a new, empty instance of a `String`. Whew!
+পুরো `let mut guess = String::new();` লাইনটি একটি মিউটেবল ভেরিয়েবল তৈরি করেছে, যা বর্তমানে একটি `String`-এর নতুন, খালি ইন্সট্যান্সের সাথে বাইন্ড করা আছে।
 
-### Receiving User Input
+### ব্যবহারকারীর ইনপুট গ্রহণ করা (Receiving User Input)
 
-Recall that we included the input/output functionality from the standard
-library with `use std::io;` on the first line of the program. Now we’ll call
-the `stdin` function from the `io` module, which will allow us to handle user
-input:
+মনে করে দেখুন, আমরা প্রোগ্রামের প্রথম লাইনে `use std::io;` দিয়ে স্ট্যান্ডার্ড লাইব্রেরি থেকে ইনপুট/আউটপুট ফাংশনালিটি অন্তর্ভুক্ত করেছিলাম। এবার আমরা `io` মডিউল থেকে `stdin` ফাংশনটি কল করব, যা আমাদের ব্যবহারকারীর ইনপুট হ্যান্ডেল করতে দেবে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
-If we hadn’t imported the `io` library with `use std::io;` at the beginning of
-the program, we could still use the function by writing this function call as
-`std::io::stdin`. The `stdin` function returns an instance of
-[`std::io::Stdin`][iostdin]<!-- ignore -->, which is a type that represents a
-handle to the standard input for your terminal.
+যদি আমরা প্রোগ্রামের শুরুতে `use std::io;` দিয়ে `io` লাইব্রেরি ইম্পোর্ট না করতাম, তাহলেও আমরা এই ফাংশনটিকে `std::io::stdin` লিখে ব্যবহার করতে পারতাম। `stdin` ফাংশনটি [`std::io::Stdin`][iostdin]<!-- ignore -->-এর একটি ইন্সট্যান্স রিটার্ন করে, যেটি আপনার টার্মিনালের স্ট্যান্ডার্ড ইনপুটের হ্যান্ডেলের প্রতিনিধিত্ব করে।
 
-Next, the line `.read_line(&mut guess)` calls the [`read_line`][read_line]<!--
-ignore --> method on the standard input handle to get input from the user.
-We’re also passing `&mut guess` as the argument to `read_line` to tell it what
-string to store the user input in. The full job of `read_line` is to take
-whatever the user types into standard input and append that into a string
-(without overwriting its contents), so we therefore pass that string as an
-argument. The string argument needs to be mutable so the method can change the
-string’s content.
+এরপর, `.read_line(&mut guess)` লাইনটি ব্যবহারকারীর কাছ থেকে ইনপুট নেওয়ার জন্য স্ট্যান্ডার্ড ইনপুট হ্যান্ডেলে [`read_line`][read_line]<!-- ignore --> মেথড কল করে। আমরা `read_line`-কে আর্গুমেন্ট হিসেবে `&mut guess` পাস করছি, যাতে এটি ব্যবহারকারীর ইনপুট কোন স্ট্রিংয়ে সংরক্ষণ করবে তা বলতে পারে। `read_line`-এর মূল কাজ হল ব্যবহারকারী স্ট্যান্ডার্ড ইনপুটে যা টাইপ করে, সেটি একটি স্ট্রিংয়ে যুক্ত করা (স্ট্রিংয়ের আগের কনটেন্ট মুছে না দিয়ে)। তাই আমরা সেই স্ট্রিংটিকে আর্গুমেন্ট হিসেবে পাস করি। স্ট্রিং আর্গুমেন্টটিকে অবশ্যই মিউটেবল হতে হবে, যাতে মেথডটি স্ট্রিংয়ের কনটেন্ট পরিবর্তন করতে পারে।
 
-The `&` indicates that this argument is a _reference_, which gives you a way to
-let multiple parts of your code access one piece of data without needing to
-copy that data into memory multiple times. References are a complex feature,
-and one of Rust’s major advantages is how safe and easy it is to use
-references. You don’t need to know a lot of those details to finish this
-program. For now, all you need to know is that, like variables, references are
-immutable by default. Hence, you need to write `&mut guess` rather than
-`&guess` to make it mutable. (Chapter 4 will explain references more
-thoroughly.)
+`&` নির্দেশ করে যে এই আর্গুমেন্টটি একটি *রেফারেন্স*, যা আপনাকে আপনার কোডের একাধিক অংশকে মেমরিতে ডেটা একাধিকবার কপি না করেই ডেটার একটি অংশ অ্যাক্সেস করার সুবিধা দেয়। রেফারেন্স একটি জটিল ফিচার, এবং Rust-এর অন্যতম প্রধান সুবিধা হল রেফারেন্স ব্যবহার করা কতটা নিরাপদ এবং সহজ। এই প্রোগ্রামটি শেষ করার জন্য আপনাকে সেই সমস্ত বিবরণ জানার দরকার নেই। আপাতত, আপনার শুধু এটুকু জানলেই চলবে যে ভেরিয়েবলের মতো রেফারেন্সগুলোও ডিফল্টরূপে ইমিউটেবল হয়। তাই, এটিকে মিউটেবল করার জন্য আপনাকে `&guess`-এর পরিবর্তে `&mut guess` লিখতে হবে। (চ্যাপ্টার ৪ রেফারেন্স আরও বিশদভাবে ব্যাখ্যা করবে।)
 
 <!-- Old heading. Do not remove or links may break. -->
 
 <a id="handling-potential-failure-with-the-result-type"></a>
 
-### Handling Potential Failure with `Result`
+### `Result` দিয়ে সম্ভাব্য ত্রুটি সামলানো (Handling Potential Failure with `Result`)
 
-We’re still working on this line of code. We’re now discussing a third line of
-text, but note that it’s still part of a single logical line of code. The next
-part is this method:
+আমরা এখনও এই লাইনেই কাজ করছি। আমরা এখন টেক্সটের তৃতীয় লাইন নিয়ে আলোচনা করছি, কিন্তু মনে রাখবেন যে এটি এখনও কোডের একটি একক লজিক্যাল লাইনের অংশ।  পরের অংশটি হল এই মেথড:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
 ```
 
-We could have written this code as:
+আমরা এই কোডটিকে এভাবে লিখতে পারতাম:
 
 ```rust,ignore
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
-However, one long line is difficult to read, so it’s best to divide it. It’s
-often wise to introduce a newline and other whitespace to help break up long
-lines when you call a method with the `.method_name()` syntax. Now let’s
-discuss what this line does.
+কিন্তু, একটি লম্বা লাইন পড়া কঠিন, তাই এটিকে ভাগ করে নেওয়া ভালো। `.method_name()` সিনট্যাক্স দিয়ে যখন আপনি একটি মেথড কল করেন, তখন প্রায়ই একটি নতুন লাইন এবং অন্যান্য হোয়াইটস্পেস যোগ করে লম্বা লাইনগুলোকে ভেঙে ফেলা বুদ্ধিমানের কাজ। এবার আলোচনা করা যাক এই লাইনটি কী করে।
 
-As mentioned earlier, `read_line` puts whatever the user enters into the string
-we pass to it, but it also returns a `Result` value. [`Result`][result]<!--
-ignore --> is an [_enumeration_][enums]<!-- ignore -->, often called an _enum_,
-which is a type that can be in one of multiple possible states. We call each
-possible state a _variant_.
+আগে যেমন উল্লেখ করা হয়েছে, `read_line` ব্যবহারকারী যা ইনপুট দেয়, সেটি আমাদের দেওয়া স্ট্রিংয়ে রাখে। কিন্তু এটি একটি `Result` মানও রিটার্ন করে। [`Result`][result]<!-- ignore --> হল একটি [_গণনা (enumeration)_][enums]<!-- ignore -->, যাকে প্রায়শই _enum_ বলা হয়। এটি এমন একটি টাইপ, যা একাধিক সম্ভাব্য অবস্থার মধ্যে একটিতে থাকতে পারে। আমরা প্রতিটি সম্ভাব্য অবস্থাকে একটি _ভেরিয়েন্ট_ বলি।
 
-[Chapter 6][enums]<!-- ignore --> will cover enums in more detail. The purpose
-of these `Result` types is to encode error-handling information.
+[চ্যাপ্টার ৬][enums]<!-- ignore -->-এ enum সম্পর্কে আরও বিস্তারিত আলোচনা করা হবে। এই `Result` টাইপগুলোর উদ্দেশ্য হল এরর-হ্যান্ডলিং তথ্য এনকোড করা।
 
-`Result`’s variants are `Ok` and `Err`. The `Ok` variant indicates the
-operation was successful, and it contains the successfully generated value.
-The `Err` variant means the operation failed, and it contains information
-about how or why the operation failed.
+`Result`-এর ভেরিয়েন্টগুলো হল `Ok` এবং `Err`। `Ok` ভেরিয়েন্ট নির্দেশ করে যে অপারেশন সফল হয়েছে এবং এর মধ্যে সফলভাবে জেনারেট হওয়া মান রয়েছে। `Err` ভেরিয়েন্ট মানে অপারেশন ব্যর্থ হয়েছে এবং এর মধ্যে অপারেশনটি কীভাবে বা কেন ব্যর্থ হয়েছে সে সম্পর্কে তথ্য রয়েছে।
 
-Values of the `Result` type, like values of any type, have methods defined on
-them. An instance of `Result` has an [`expect` method][expect]<!-- ignore -->
-that you can call. If this instance of `Result` is an `Err` value, `expect`
-will cause the program to crash and display the message that you passed as an
-argument to `expect`. If the `read_line` method returns an `Err`, it would
-likely be the result of an error coming from the underlying operating system.
-If this instance of `Result` is an `Ok` value, `expect` will take the return
-value that `Ok` is holding and return just that value to you so you can use it.
-In this case, that value is the number of bytes in the user’s input.
+যেকোনো টাইপের মানের মতোই `Result` টাইপের মানগুলোরও নিজস্ব মেথড ডিফাইন করা থাকে। `Result`-এর একটি ইন্সট্যান্সের একটি [`expect` মেথড][expect]<!-- ignore --> রয়েছে, যাকে আপনি কল করতে পারেন। যদি `Result`-এর এই ইন্সট্যান্সটি একটি `Err` মান হয়, তাহলে `expect` প্রোগ্রামটিকে ক্র্যাশ করাবে এবং আপনি `expect`-এর আর্গুমেন্ট হিসেবে যে মেসেজটি পাস করেছেন সেটি প্রদর্শন করবে। যদি `read_line` মেথড একটি `Err` রিটার্ন করে, তাহলে সম্ভবত এটি অন্তর্নিহিত অপারেটিং সিস্টেম থেকে আসা কোনো এররের ফলাফল। যদি `Result`-এর এই ইন্সট্যান্সটি একটি `Ok` মান হয়, তাহলে `expect` `Ok`-এর মধ্যে থাকা রিটার্ন মানটি গ্রহণ করবে এবং শুধুমাত্র সেই মানটি আপনাকে রিটার্ন করবে, যাতে আপনি সেটি ব্যবহার করতে পারেন। এক্ষেত্রে, সেই মানটি হল ব্যবহারকারীর ইনপুটের বাইটের সংখ্যা।
 
-If you don’t call `expect`, the program will compile, but you’ll get a warning:
+আপনি যদি `expect` কল না করেন, তাহলে প্রোগ্রামটি কম্পাইল হবে, কিন্তু আপনি একটি ওয়ার্নিং পাবেন:
 
 ```console
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-02-without-expect/output.txt}}
 ```
 
-Rust warns that you haven’t used the `Result` value returned from `read_line`,
-indicating that the program hasn’t handled a possible error.
+Rust সতর্ক করে যে আপনি `read_line` থেকে রিটার্ন হওয়া `Result` মানটি ব্যবহার করেননি, যা নির্দেশ করে যে প্রোগ্রামটি একটি সম্ভাব্য এরর হ্যান্ডেল করেনি।
 
-The right way to suppress the warning is to actually write error-handling code,
-but in our case we just want to crash this program when a problem occurs, so we
-can use `expect`. You’ll learn about recovering from errors in [Chapter
-9][recover]<!-- ignore -->.
+ওয়ার্নিংটি দমন করার সঠিক উপায় হল আসলে এরর-হ্যান্ডলিং কোড লেখা। কিন্তু আমাদের ক্ষেত্রে, কোনো সমস্যা হলে আমরা শুধু এই প্রোগ্রামটিকে ক্র্যাশ করাতে চাই, তাই আমরা `expect` ব্যবহার করতে পারি। আপনি [চ্যাপ্টার ৯][recover]<!-- ignore -->-এ এরর থেকে পুনরুদ্ধার সম্পর্কে জানতে পারবেন।
 
-### Printing Values with `println!` Placeholders
+### `println!` প্লেসহোল্ডার দিয়ে মান প্রিন্ট করা (Printing Values with `println!` Placeholders)
 
-Aside from the closing curly bracket, there’s only one more line to discuss in
-the code so far:
+ক্লোজিং কার্লি ব্র্যাকেট ছাড়াও, এখনও পর্যন্ত কোডটিতে আলোচনা করার মতো আর একটি লাইন রয়েছে:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
 ```
 
-This line prints the string that now contains the user’s input. The `{}` set of
-curly brackets is a placeholder: think of `{}` as little crab pincers that hold
-a value in place. When printing the value of a variable, the variable name can
-go inside the curly brackets. When printing the result of evaluating an
-expression, place empty curly brackets in the format string, then follow the
-format string with a comma-separated list of expressions to print in each empty
-curly bracket placeholder in the same order. Printing a variable and the result
-of an expression in one call to `println!` would look like this:
+এই লাইনটি সেই স্ট্রিংটিকে প্রিন্ট করে, যেখানে এখন ব্যবহারকারীর ইনপুট রয়েছে। `{}` কার্লি ব্র্যাকেটের সেটটি হল একটি প্লেসহোল্ডার: `{}`-কে কাঁকড়ার ছোট সাঁড়াশি হিসেবে ভাবতে পারেন, যা একটি মানকে ধরে রাখে। যখন একটি ভেরিয়েবলের মান প্রিন্ট করা হয়, তখন কার্লি ব্র্যাকেটের ভেতরে ভেরিয়েবলের নাম দেওয়া যেতে পারে। যখন একটি এক্সপ্রেশনের মূল্যায়ন করা ফলাফল প্রিন্ট করা হয়, তখন ফরম্যাট স্ট্রিংয়ে খালি কার্লি ব্র্যাকেট বসানো হয়। তারপর ফরম্যাট স্ট্রিংয়ের পরে, প্রতিটি খালি কার্লি ব্র্যাকেট প্লেসহোল্ডারে প্রিন্ট করার জন্য কমা দিয়ে আলাদা করা এক্সপ্রেশনের একটি তালিকা একই ক্রমে দেওয়া হয়। `println!`-এর একটি কলে একটি ভেরিয়েবল এবং একটি এক্সপ্রেশনের ফলাফল প্রিন্ট করা এমন দেখাবে:
 
 ```rust
 let x = 5;
@@ -291,11 +186,11 @@ let y = 10;
 println!("x = {x} and y + 2 = {}", y + 2);
 ```
 
-This code would print `x = 5 and y + 2 = 12`.
+এই কোডটি `x = 5 and y + 2 = 12` প্রিন্ট করবে।
 
-### Testing the First Part
+### প্রথম অংশের পরীক্ষা (Testing the First Part)
 
-Let’s test the first part of the guessing game. Run it using `cargo run`:
+আসুন, অনুমানের গেমের প্রথম অংশটি পরীক্ষা করি। `cargo run` ব্যবহার করে এটি চালান:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-01/
@@ -314,31 +209,230 @@ Please input your guess.
 You guessed: 6
 ```
 
-At this point, the first part of the game is done: we’re getting input from the
-keyboard and then printing it.
+এই পর্যন্ত, গেমের প্রথম অংশটি সম্পন্ন হয়েছে: আমরা কীবোর্ড থেকে ইনপুট নিচ্ছি এবং সেটি প্রিন্ট করছি।
+```markdown
+# একটি সংখ্যা অনুমানের গেম প্রোগ্রামিং (Programming a Guessing Game)
 
-## Generating a Secret Number
+আসুন, একসাথে একটি হ্যান্ডস-অন প্রোজেক্টে কাজ করার মাধ্যমে Rust-এর জগতে ঝাঁপ দেই! এই চ্যাপ্টারটি আপনাকে কিছু সাধারণ Rust কনসেপ্টের সাথে পরিচয় করিয়ে দেবে, একটি বাস্তব প্রোগ্রামে সেগুলো কীভাবে ব্যবহার করা হয় তা দেখিয়ে। আপনি `let`, `match`, মেথড, অ্যাসোসিয়েটেড ফাংশন, এক্সটার্নাল ক্রেট এবং আরও অনেক কিছু সম্পর্কে জানতে পারবেন! নিচের চ্যাপ্টারগুলোতে, আমরা এই ধারণাগুলো আরও বিস্তারিতভাবে আলোচনা করব। এই চ্যাপ্টারে, আপনি শুধুমাত্র মৌলিক বিষয়গুলো অনুশীলন করবেন।
 
-Next, we need to generate a secret number that the user will try to guess. The
-secret number should be different every time so the game is fun to play more
-than once. We’ll use a random number between 1 and 100 so the game isn’t too
-difficult. Rust doesn’t yet include random number functionality in its standard
-library. However, the Rust team does provide a [`rand` crate][randcrate] with
-said functionality.
+আমরা একটি ক্লাসিক বিগিনার প্রোগ্রামিং সমস্যা সমাধান করব: একটি সংখ্যা অনুমানের গেম। এটি কীভাবে কাজ করে তা নিচে বলা হলো: প্রোগ্রামটি 1 থেকে 100-এর মধ্যে একটি র‍্যান্ডম সংখ্যা তৈরি করবে। তারপর এটি প্লেয়ারকে একটি সংখ্যা অনুমান করতে বলবে। একটি সংখ্যা অনুমান করার পরে, প্রোগ্রামটি জানাবে যে অনুমানটি খুব কম না বেশি হয়েছে। যদি অনুমানটি সঠিক হয়, তাহলে গেমটি একটি অভিনন্দন বার্তা প্রিন্ট করবে এবং শেষ হয়ে যাবে।
 
-### Using a Crate to Get More Functionality
+## একটি নতুন প্রোজেক্ট সেট আপ করা (Setting Up a New Project)
 
-Remember that a crate is a collection of Rust source code files. The project
-we’ve been building is a _binary crate_, which is an executable. The `rand`
-crate is a _library crate_, which contains code that is intended to be used in
-other programs and can’t be executed on its own.
+একটি নতুন প্রোজেক্ট সেট আপ করতে, চ্যাপ্টার ১-এ তৈরি করা _projects_ ডিরেক্টরিতে যান এবং Cargo ব্যবহার করে নিচের মতো একটি নতুন প্রোজেক্ট তৈরি করুন:
 
-Cargo’s coordination of external crates is where Cargo really shines. Before we
-can write code that uses `rand`, we need to modify the _Cargo.toml_ file to
-include the `rand` crate as a dependency. Open that file now and add the
-following line to the bottom, beneath the `[dependencies]` section header that
-Cargo created for you. Be sure to specify `rand` exactly as we have here, with
-this version number, or the code examples in this tutorial may not work:
+```console
+$ cargo new guessing_game
+$ cd guessing_game
+```
+
+প্রথম কমান্ড, `cargo new`, প্রোজেক্টের নাম (`guessing_game`) প্রথম আর্গুমেন্ট হিসেবে নেয়। দ্বিতীয় কমান্ডটি নতুন প্রোজেক্টের ডিরেক্টরিতে যাওয়া নির্দেশ করে।
+
+জেনারেট হওয়া _Cargo.toml_ ফাইলটি দেখুন:
+
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial
+rm -rf no-listing-01-cargo-new
+cargo new no-listing-01-cargo-new --name guessing_game
+cd no-listing-01-cargo-new
+cargo run > output.txt 2>&1
+cd ../../..
+-->
+
+<span class="filename">Filename: Cargo.toml</span>
+
+```toml
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/Cargo.toml}}
+```
+
+আপনি যেমন চ্যাপ্টার ১-এ দেখেছেন, `cargo new` আপনার জন্য একটি “Hello, world!” প্রোগ্রাম তৈরি করে। _src/main.rs_ ফাইলটি দেখুন:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/src/main.rs}}
+```
+
+এবার চলুন, এই “Hello, world!” প্রোগ্রামটি কম্পাইল করি এবং `cargo run` কমান্ড ব্যবহার করে একই ধাপে চালাই:
+
+```console
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/output.txt}}
+```
+
+`run` কমান্ডটি তখন কাজে আসে যখন আপনাকে একটি প্রোজেক্টে দ্রুত পুনরাবৃত্তি করতে হয়, যেমনটি আমরা এই গেমে করব। অর্থাৎ, পরবর্তী ধাপে যাওয়ার আগে প্রতিটি পুনরাবৃত্তি দ্রুত পরীক্ষা করে নেওয়া যাবে।
+
+_src/main.rs_ ফাইলটি আবার খুলুন। আপনি এই ফাইলেই সমস্ত কোড লিখবেন।
+
+## একটি অনুমান প্রক্রিয়া করা (Processing a Guess)
+
+অনুমান করার গেম প্রোগ্রামটির প্রথম অংশ ব্যবহারকারীর ইনপুট চাইবে, সেই ইনপুটটি প্রক্রিয়া করবে এবং ইনপুটটি প্রত্যাশিত ফর্ম্যাটে আছে কিনা তা পরীক্ষা করবে। শুরু করার জন্য, আমরা প্লেয়ারকে একটি সংখ্যা অনুমান করতে দেব। Listing 2-1-এর কোডটি _src/main.rs_-এ লিখুন।
+
+<Listing number="2-1" file-name="src/main.rs" caption="ব্যবহারকারীর কাছ থেকে একটি অনুমান নেওয়া এবং সেটি প্রিন্ট করার কোড">
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
+```
+
+</Listing>
+
+এই কোডটিতে অনেক তথ্য রয়েছে, তাই চলুন লাইন ধরে ধরে আলোচনা করি। ব্যবহারকারীর ইনপুট নিতে এবং তারপর ফলাফলটি আউটপুট হিসেবে প্রিন্ট করতে, আমাদের `io` ইনপুট/আউটপুট লাইব্রেরিটিকে স্কোপের মধ্যে আনতে হবে। `io` লাইব্রেরিটি স্ট্যান্ডার্ড লাইব্রেরি থেকে আসে, যাকে `std` বলা হয়:
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
+```
+
+ডিফল্টরূপে, Rust-এর স্ট্যান্ডার্ড লাইব্রেরিতে সংজ্ঞায়িত আইটেমগুলোর একটি সেট রয়েছে, যা প্রতিটি প্রোগ্রামের স্কোপে আনা হয়। এই সেটটিকে _প্রেলিউড (prelude)_ বলা হয়, এবং আপনি স্ট্যান্ডার্ড লাইব্রেরি ডকুমেন্টেশনে [prelude]-এর সবকিছু দেখতে পারেন।
+
+যদি আপনি যে টাইপটি ব্যবহার করতে চান সেটি প্রেলিউডে না থাকে, তাহলে আপনাকে `use` স্টেটমেন্ট ব্যবহার করে সেই টাইপটিকে স্পষ্টতই স্কোপে আনতে হবে। `std::io` লাইব্রেরি ব্যবহার করলে আপনি বেশ কিছু দরকারী ফিচার পাবেন, যার মধ্যে ব্যবহারকারীর ইনপুট নেওয়ার ক্ষমতাও রয়েছে।
+
+আপনি যেমন চ্যাপ্টার ১-এ দেখেছেন, `main` ফাংশনটি প্রোগ্রামে প্রবেশের পথ:
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:main}}
+```
+
+`fn` সিনট্যাক্স একটি নতুন ফাংশন ঘোষণা করে; বন্ধনী, `()`, নির্দেশ করে যে কোনও প্যারামিটার নেই; এবং কার্লি ব্র্যাকেট, `{}`, ফাংশনের বডি শুরু করে।
+
+আপনি চ্যাপ্টার ১-এ আরও শিখেছেন যে, `println!` হল একটি ম্যাক্রো যা স্ক্রিনে একটি স্ট্রিং প্রিন্ট করে:
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print}}
+```
+
+এই কোডটি একটি প্রম্পট প্রিন্ট করছে, যাতে গেমটি কী তা বলা হয়েছে এবং ব্যবহারকারীর কাছ থেকে ইনপুট চাওয়া হয়েছে।
+
+### ভেরিয়েবল ব্যবহার করে মান সংরক্ষণ করা (Storing Values with Variables)
+
+এরপর, আমরা ব্যবহারকারীর ইনপুট সংরক্ষণ করার জন্য একটি *ভেরিয়েবল* তৈরি করব, এইভাবে:
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:string}}
+```
+
+এবার প্রোগ্রামটি আরও মজাদার হচ্ছে! এই ছোট লাইনে অনেক কিছু ঘটছে। আমরা ভেরিয়েবল তৈরি করতে `let` স্টেটমেন্ট ব্যবহার করি। আরেকটি উদাহরণ নিচে দেওয়া হলো:
+
+```rust,ignore
+let apples = 5;
+```
+
+এই লাইনটি `apples` নামের একটি নতুন ভেরিয়েবল তৈরি করে এবং এটিকে 5 মানের সাথে বাইন্ড করে। Rust-এ, ভেরিয়েবলগুলো ডিফল্টরূপে ইমিউটেবল (immutable) হয়, অর্থাৎ একবার আমরা ভেরিয়েবলকে একটি মান দিলে, সেই মানটি পরিবর্তন হবে না। আমরা চ্যাপ্টার ৩-এর [“ভেরিয়েবল এবং মিউটেবিলিটি”][variables-and-mutability]<!-- ignore --> বিভাগে এই ধারণাটি নিয়ে বিস্তারিত আলোচনা করব। একটি ভেরিয়েবলকে মিউটেবল (mutable) করতে, আমরা ভেরিয়েবলের নামের আগে `mut` যোগ করি:
+
+```rust,ignore
+let apples = 5; // immutable
+let mut bananas = 5; // mutable
+```
+
+> দ্রষ্টব্য: `//` সিনট্যাক্স একটি কমেন্ট শুরু করে, যা লাইনের শেষ পর্যন্ত চলতে থাকে। Rust কমেন্টের ভেতরের সবকিছু উপেক্ষা করে। আমরা [চ্যাপ্টার ৩][comments]<!-- ignore -->-এ কমেন্ট নিয়ে আরও বিস্তারিত আলোচনা করব।
+
+অনুমানের গেমের প্রোগ্রামে ফিরে আসা যাক। আপনি এখন জানেন যে `let mut guess` `guess` নামের একটি মিউটেবল ভেরিয়েবল তৈরি করবে। সমান চিহ্ন (`=`) Rust-কে বলে যে আমরা এখনই ভেরিয়েবলের সাথে কিছু বাইন্ড করতে চাই। সমান চিহ্নের ডানদিকে `guess`-এর মান রয়েছে, যেটি `String::new` কল করার ফলাফল। `String::new` একটি ফাংশন, যা একটি `String`-এর নতুন ইন্সট্যান্স রিটার্ন করে। [`String`][string]<!-- ignore --> হল স্ট্যান্ডার্ড লাইব্রেরি থেকে পাওয়া একটি স্ট্রিং টাইপ, যা প্রসারণযোগ্য (growable), UTF-8 এনকোডেড টেক্সট।
+
+`::new` লাইনের `::` সিনট্যাক্স নির্দেশ করে যে `new` হল `String` টাইপের একটি অ্যাসোসিয়েটেড ফাংশন। একটি *অ্যাসোসিয়েটেড ফাংশন* হল এমন একটি ফাংশন যা একটি টাইপের উপর ইমপ্লিমেন্ট করা হয়, এক্ষেত্রে `String`। এই `new` ফাংশনটি একটি নতুন, খালি স্ট্রিং তৈরি করে। আপনি অনেক টাইপের ওপর `new` ফাংশন দেখতে পাবেন, কারণ এটি একটি সাধারণ নাম, যা কোনো কিছুর একটি নতুন মান তৈরি করে।
+
+পুরো `let mut guess = String::new();` লাইনটি একটি মিউটেবল ভেরিয়েবল তৈরি করেছে, যা বর্তমানে একটি `String`-এর নতুন, খালি ইন্সট্যান্সের সাথে বাইন্ড করা আছে।
+
+### ব্যবহারকারীর ইনপুট গ্রহণ করা (Receiving User Input)
+
+মনে করে দেখুন, আমরা প্রোগ্রামের প্রথম লাইনে `use std::io;` দিয়ে স্ট্যান্ডার্ড লাইব্রেরি থেকে ইনপুট/আউটপুট ফাংশনালিটি অন্তর্ভুক্ত করেছিলাম। এবার আমরা `io` মডিউল থেকে `stdin` ফাংশনটি কল করব, যা আমাদের ব্যবহারকারীর ইনপুট হ্যান্ডেল করতে দেবে:
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
+```
+
+যদি আমরা প্রোগ্রামের শুরুতে `use std::io;` দিয়ে `io` লাইব্রেরি ইম্পোর্ট না করতাম, তাহলেও আমরা এই ফাংশনটিকে `std::io::stdin` লিখে ব্যবহার করতে পারতাম। `stdin` ফাংশনটি [`std::io::Stdin`][iostdin]<!-- ignore -->-এর একটি ইন্সট্যান্স রিটার্ন করে, যেটি আপনার টার্মিনালের স্ট্যান্ডার্ড ইনপুটের হ্যান্ডেলের প্রতিনিধিত্ব করে।
+
+এরপর, `.read_line(&mut guess)` লাইনটি ব্যবহারকারীর কাছ থেকে ইনপুট নেওয়ার জন্য স্ট্যান্ডার্ড ইনপুট হ্যান্ডেলে [`read_line`][read_line]<!-- ignore --> মেথড কল করে। আমরা `read_line`-কে আর্গুমেন্ট হিসেবে `&mut guess` পাস করছি, যাতে এটি ব্যবহারকারীর ইনপুট কোন স্ট্রিংয়ে সংরক্ষণ করবে তা বলতে পারে। `read_line`-এর মূল কাজ হল ব্যবহারকারী স্ট্যান্ডার্ড ইনপুটে যা টাইপ করে, সেটি একটি স্ট্রিংয়ে যুক্ত করা (স্ট্রিংয়ের আগের কনটেন্ট মুছে না দিয়ে)। তাই আমরা সেই স্ট্রিংটিকে আর্গুমেন্ট হিসেবে পাস করি। স্ট্রিং আর্গুমেন্টটিকে অবশ্যই মিউটেবল হতে হবে, যাতে মেথডটি স্ট্রিংয়ের কনটেন্ট পরিবর্তন করতে পারে।
+
+`&` নির্দেশ করে যে এই আর্গুমেন্টটি একটি *রেফারেন্স*, যা আপনাকে আপনার কোডের একাধিক অংশকে মেমরিতে ডেটা একাধিকবার কপি না করেই ডেটার একটি অংশ অ্যাক্সেস করার সুবিধা দেয়। রেফারেন্স একটি জটিল ফিচার, এবং Rust-এর অন্যতম প্রধান সুবিধা হল রেফারেন্স ব্যবহার করা কতটা নিরাপদ এবং সহজ। এই প্রোগ্রামটি শেষ করার জন্য আপনাকে সেই সমস্ত বিবরণ জানার দরকার নেই। আপাতত, আপনার শুধু এটুকু জানলেই চলবে যে ভেরিয়েবলের মতো রেফারেন্সগুলোও ডিফল্টরূপে ইমিউটেবল হয়। তাই, এটিকে মিউটেবল করার জন্য আপনাকে `&guess`-এর পরিবর্তে `&mut guess` লিখতে হবে। (চ্যাপ্টার ৪ রেফারেন্স আরও বিশদভাবে ব্যাখ্যা করবে।)
+
+<!-- Old heading. Do not remove or links may break. -->
+
+<a id="handling-potential-failure-with-the-result-type"></a>
+
+### `Result` দিয়ে সম্ভাব্য ত্রুটি সামলানো (Handling Potential Failure with `Result`)
+
+আমরা এখনও এই লাইনেই কাজ করছি। আমরা এখন টেক্সটের তৃতীয় লাইন নিয়ে আলোচনা করছি, কিন্তু মনে রাখবেন যে এটি এখনও কোডের একটি একক লজিক্যাল লাইনের অংশ।  পরের অংশটি হল এই মেথড:
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
+```
+
+আমরা এই কোডটিকে এভাবে লিখতে পারতাম:
+
+```rust,ignore
+io::stdin().read_line(&mut guess).expect("Failed to read line");
+```
+
+কিন্তু, একটি লম্বা লাইন পড়া কঠিন, তাই এটিকে ভাগ করে নেওয়া ভালো। `.method_name()` সিনট্যাক্স দিয়ে যখন আপনি একটি মেথড কল করেন, তখন প্রায়ই একটি নতুন লাইন এবং অন্যান্য হোয়াইটস্পেস যোগ করে লম্বা লাইনগুলোকে ভেঙে ফেলা বুদ্ধিমানের কাজ। এবার আলোচনা করা যাক এই লাইনটি কী করে।
+
+আগে যেমন উল্লেখ করা হয়েছে, `read_line` ব্যবহারকারী যা ইনপুট দেয়, সেটি আমাদের দেওয়া স্ট্রিংয়ে রাখে। কিন্তু এটি একটি `Result` মানও রিটার্ন করে। [`Result`][result]<!-- ignore --> হল একটি [_গণনা (enumeration)_][enums]<!-- ignore -->, যাকে প্রায়শই _enum_ বলা হয়। এটি এমন একটি টাইপ, যা একাধিক সম্ভাব্য অবস্থার মধ্যে একটিতে থাকতে পারে। আমরা প্রতিটি সম্ভাব্য অবস্থাকে একটি _ভেরিয়েন্ট_ বলি।
+
+[চ্যাপ্টার ৬][enums]<!-- ignore -->-এ enum সম্পর্কে আরও বিস্তারিত আলোচনা করা হবে। এই `Result` টাইপগুলোর উদ্দেশ্য হল এরর-হ্যান্ডলিং তথ্য এনকোড করা।
+
+`Result`-এর ভেরিয়েন্টগুলো হল `Ok` এবং `Err`। `Ok` ভেরিয়েন্ট নির্দেশ করে যে অপারেশন সফল হয়েছে এবং এর মধ্যে সফলভাবে জেনারেট হওয়া মান রয়েছে। `Err` ভেরিয়েন্ট মানে অপারেশন ব্যর্থ হয়েছে এবং এর মধ্যে অপারেশনটি কীভাবে বা কেন ব্যর্থ হয়েছে সে সম্পর্কে তথ্য রয়েছে।
+
+যেকোনো টাইপের মানের মতোই `Result` টাইপের মানগুলোরও নিজস্ব মেথড ডিফাইন করা থাকে। `Result`-এর একটি ইন্সট্যান্সের একটি [`expect` মেথড][expect]<!-- ignore --> রয়েছে, যাকে আপনি কল করতে পারেন। যদি `Result`-এর এই ইন্সট্যান্সটি একটি `Err` মান হয়, তাহলে `expect` প্রোগ্রামটিকে ক্র্যাশ করাবে এবং আপনি `expect`-এর আর্গুমেন্ট হিসেবে যে মেসেজটি পাস করেছেন সেটি প্রদর্শন করবে। যদি `read_line` মেথড একটি `Err` রিটার্ন করে, তাহলে সম্ভবত এটি অন্তর্নিহিত অপারেটিং সিস্টেম থেকে আসা কোনো এররের ফলাফল। যদি `Result`-এর এই ইন্সট্যান্সটি একটি `Ok` মান হয়, তাহলে `expect` `Ok`-এর মধ্যে থাকা রিটার্ন মানটি গ্রহণ করবে এবং শুধুমাত্র সেই মানটি আপনাকে রিটার্ন করবে, যাতে আপনি সেটি ব্যবহার করতে পারেন। এক্ষেত্রে, সেই মানটি হল ব্যবহারকারীর ইনপুটের বাইটের সংখ্যা।
+
+আপনি যদি `expect` কল না করেন, তাহলে প্রোগ্রামটি কম্পাইল হবে, কিন্তু আপনি একটি ওয়ার্নিং পাবেন:
+
+```console
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-02-without-expect/output.txt}}
+```
+
+Rust সতর্ক করে যে আপনি `read_line` থেকে রিটার্ন হওয়া `Result` মানটি ব্যবহার করেননি, যা নির্দেশ করে যে প্রোগ্রামটি একটি সম্ভাব্য এরর হ্যান্ডেল করেনি।
+
+ওয়ার্নিংটি দমন করার সঠিক উপায় হল আসলে এরর-হ্যান্ডলিং কোড লেখা। কিন্তু আমাদের ক্ষেত্রে, কোনো সমস্যা হলে আমরা শুধু এই প্রোগ্রামটিকে ক্র্যাশ করাতে চাই, তাই আমরা `expect` ব্যবহার করতে পারি। আপনি [চ্যাপ্টার ৯][recover]<!-- ignore -->-এ এরর থেকে পুনরুদ্ধার সম্পর্কে জানতে পারবেন।
+
+### `println!` প্লেসহোল্ডার দিয়ে মান প্রিন্ট করা (Printing Values with `println!` Placeholders)
+
+ক্লোজিং কার্লি ব্র্যাকেট ছাড়াও, এখনও পর্যন্ত কোডটিতে আলোচনা করার মতো আর একটি লাইন রয়েছে:
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
+```
+
+এই লাইনটি সেই স্ট্রিংটিকে প্রিন্ট করে, যেখানে এখন ব্যবহারকারীর ইনপুট রয়েছে। `{}` কার্লি ব্র্যাকেটের সেটটি হল একটি প্লেসহোল্ডার: `{}`-কে কাঁকড়ার ছোট সাঁড়াশি হিসেবে ভাবতে পারেন, যা একটি মানকে ধরে রাখে। যখন একটি ভেরিয়েবলের মান প্রিন্ট করা হয়, তখন কার্লি ব্র্যাকেটের ভেতরে ভেরিয়েবলের নাম দেওয়া যেতে পারে। যখন একটি এক্সপ্রেশনের মূল্যায়ন করা ফলাফল প্রিন্ট করা হয়, তখন ফরম্যাট স্ট্রিংয়ে খালি কার্লি ব্র্যাকেট বসানো হয়। তারপর ফরম্যাট স্ট্রিংয়ের পরে, প্রতিটি খালি কার্লি ব্র্যাকেট প্লেসহোল্ডারে প্রিন্ট করার জন্য কমা দিয়ে আলাদা করা এক্সপ্রেশনের একটি তালিকা একই ক্রমে দেওয়া হয়। `println!`-এর একটি কলে একটি ভেরিয়েবল এবং একটি এক্সপ্রেশনের ফলাফল প্রিন্ট করা এমন দেখাবে:
+
+```rust
+let x = 5;
+let y = 10;
+
+println!("x = {x} and y + 2 = {}", y + 2);
+```
+
+এই কোডটি `x = 5 and y + 2 = 12` প্রিন্ট করবে।
+
+### প্রথম অংশের পরীক্ষা (Testing the First Part)
+
+আসুন, অনুমানের গেমের প্রথম অংশটি পরীক্ষা করি। `cargo run` ব্যবহার করে এটি চালান:
+
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/listing-02-01/
+cargo clean
+cargo run
+input 6 -->
+
+```console
+$ cargo run
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.44s
+     Running `target/debug/guessing_game`
+Guess the number!
+Please input your guess.
+6
+You guessed: 6
+```
+
+এই পর্যন্ত, গেমের প্রথম অংশটি সম্পন্ন হয়েছে: আমরা কীবোর্ড থেকে ইনপুট নিচ্ছি এবং সেটি প্রিন্ট করছি।
+
+## একটি গোপন সংখ্যা তৈরি করা (Generating a Secret Number)
+
+এরপর, আমাদের একটি গোপন সংখ্যা তৈরি করতে হবে, যেটি ব্যবহারকারী অনুমান করার চেষ্টা করবে। গোপন সংখ্যাটি প্রত্যেকবার আলাদা হওয়া উচিত, যাতে গেমটি একাধিকবার খেলতে মজা লাগে। আমরা 1 থেকে 100-এর মধ্যে একটি র‍্যান্ডম সংখ্যা ব্যবহার করব, যাতে গেমটি খুব কঠিন না হয়। Rust-এর স্ট্যান্ডার্ড লাইব্রেরিতে এখনও র‍্যান্ডম সংখ্যার কার্যকারিতা অন্তর্ভুক্ত নেই। তবে, Rust টিম এই কার্যকারিতা সহ একটি [`rand` ক্রেট][randcrate] সরবরাহ করে।
+
+### আরও কার্যকারিতা পেতে একটি ক্রেট ব্যবহার করা (Using a Crate to Get More Functionality)
+
+মনে রাখবেন যে একটি ক্রেট হল Rust সোর্স কোড ফাইলগুলোর একটি সংগ্রহ। আমরা যে প্রোজেক্টটি তৈরি করছি সেটি হল একটি *বাইনারি ক্রেট*, যেটি একটি এক্সিকিউটেবল। `rand` ক্রেটটি হল একটি *লাইব্রেরি ক্রেট*, যেটিতে কোড রয়েছে যা অন্য প্রোগ্রামগুলোতে ব্যবহার করার উদ্দেশ্যে তৈরি এবং নিজে থেকে চালানো যায় না।
+
+Cargo-র এক্সটার্নাল ক্রেটগুলোর সমন্বয় হল সেই জায়গা যেখানে Cargo সত্যিই சிறந்து (তামিল শব্দ, অর্থ 'shines') দেখায়। `rand` ব্যবহার করে এমন কোড লেখার আগে, আমাদের _Cargo.toml_ ফাইলটিকে পরিবর্তন করতে হবে, যাতে `rand` ক্রেটটি একটি ডিপেন্ডেন্সি হিসেবে অন্তর্ভুক্ত হয়। এখন সেই ফাইলটি খুলুন এবং Cargo আপনার জন্য তৈরি করা `[dependencies]` সেকশন হেডারের নিচে, নিচের লাইনটি যোগ করুন। এখানে যেভাবে `rand` নির্দিষ্ট করা হয়েছে, ঠিক সেভাবে এই ভার্সন নম্বর সহ নির্দিষ্ট করতে ভুলবেন না, নাহলে এই টিউটোরিয়ালের কোড উদাহরণগুলো কাজ নাও করতে পারে:
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -352,23 +446,11 @@ this version number, or the code examples in this tutorial may not work:
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:8:}}
 ```
 
-In the _Cargo.toml_ file, everything that follows a header is part of that
-section that continues until another section starts. In `[dependencies]` you
-tell Cargo which external crates your project depends on and which versions of
-those crates you require. In this case, we specify the `rand` crate with the
-semantic version specifier `0.8.5`. Cargo understands [Semantic
-Versioning][semver]<!-- ignore --> (sometimes called _SemVer_), which is a
-standard for writing version numbers. The specifier `0.8.5` is actually
-shorthand for `^0.8.5`, which means any version that is at least 0.8.5 but
-below 0.9.0.
+_Cargo.toml_ ফাইলে, একটি হেডারের পরে যা কিছু থাকে তা সেই বিভাগের অংশ যা অন্য একটি বিভাগ শুরু না হওয়া পর্যন্ত চলতে থাকে। `[dependencies]`-এ আপনি Cargo-কে জানান যে আপনার প্রোজেক্ট কোন এক্সটার্নাল ক্রেটগুলোর উপর নির্ভর করে এবং সেই ক্রেটগুলোর কোন ভার্সন আপনার প্রয়োজন। এক্ষেত্রে, আমরা `rand` ক্রেটটিকে সেমান্টিক ভার্সন স্পেসিফায়ার `0.8.5` দিয়ে নির্দিষ্ট করি। Cargo [সেমান্টিক ভার্সনিং][semver]<!-- ignore --> (কখনও কখনও *SemVer* বলা হয়) বোঝে, যা ভার্সন নম্বর লেখার একটি স্ট্যান্ডার্ড। স্পেসিফায়ার `0.8.5` আসলে `^0.8.5`-এর শর্টহ্যান্ড, যার অর্থ হল যেকোনো ভার্সন যা কমপক্ষে 0.8.5 কিন্তু 0.9.0-এর নিচে।
 
-Cargo considers these versions to have public APIs compatible with version
-0.8.5, and this specification ensures you’ll get the latest patch release that
-will still compile with the code in this chapter. Any version 0.9.0 or greater
-is not guaranteed to have the same API as what the following examples use.
+Cargo এই ভার্সনগুলোকে 0.8.5 ভার্সনের সাথে সঙ্গতিপূর্ণ পাবলিক API-এর অধিকারী বলে মনে করে এবং এই স্পেসিফিকেশন নিশ্চিত করে যে আপনি সর্বশেষ প্যাচ রিলিজ পাবেন যা এখনও এই চ্যাপ্টারের কোডের সাথে কম্পাইল হবে। 0.9.0 বা তার বেশি কোনো ভার্সনের ক্ষেত্রে, নিচের উদাহরণগুলোতে ব্যবহৃত API-এর মতো একই API থাকার কোনো গ্যারান্টি নেই।
 
-Now, without changing any of the code, let’s build the project, as shown in
-Listing 2-2.
+এখন, কোডের কোনো পরিবর্তন না করেই, চলুন প্রোজেক্টটি বিল্ড করি, যেমনটি Listing 2-2-তে দেখানো হয়েছে।
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -376,7 +458,7 @@ rm Cargo.lock
 cargo clean
 cargo build -->
 
-<Listing number="2-2" caption="The output from running `cargo build` after adding the rand crate as a dependency">
+<Listing number="2-2" caption="`rand` ক্রেটটিকে ডিপেন্ডেন্সি হিসেবে যোগ করার পরে `cargo build` চালানোর আউটপুট">
 
 ```console
 $ cargo build
@@ -403,30 +485,15 @@ $ cargo build
 
 </Listing>
 
-You may see different version numbers (but they will all be compatible with the
-code, thanks to SemVer!) and different lines (depending on the operating
-system), and the lines may be in a different order.
+আপনি হয়তো ভিন্ন ভার্সন নম্বর দেখতে পারেন (কিন্তু সেগুলো সবই কোডের সাথে সঙ্গতিপূর্ণ হবে, SemVer-এর কারণে!) এবং ভিন্ন লাইন (অপারেটিং সিস্টেমের উপর নির্ভর করে), এবং লাইনগুলো ভিন্ন ক্রমে থাকতে পারে।
 
-When we include an external dependency, Cargo fetches the latest versions of
-everything that dependency needs from the _registry_, which is a copy of data
-from [Crates.io][cratesio]. Crates.io is where people in the Rust ecosystem
-post their open source Rust projects for others to use.
+যখন আমরা একটি এক্সটার্নাল ডিপেন্ডেন্সি অন্তর্ভুক্ত করি, Cargo সেই ডিপেন্ডেন্সির প্রয়োজনীয় সবকিছুর সর্বশেষ ভার্সন _রেজিস্ট্রি_ থেকে নিয়ে আসে, যেটি [Crates.io][cratesio] থেকে ডেটার একটি কপি। Crates.io হল সেই জায়গা যেখানে Rust ইকোসিস্টেমের লোকেরা তাদের ওপেন সোর্স Rust প্রোজেক্টগুলো অন্যদের ব্যবহারের জন্য পোস্ট করে।
 
-After updating the registry, Cargo checks the `[dependencies]` section and
-downloads any crates listed that aren’t already downloaded. In this case,
-although we only listed `rand` as a dependency, Cargo also grabbed other crates
-that `rand` depends on to work. After downloading the crates, Rust compiles
-them and then compiles the project with the dependencies available.
+রেজিস্ট্রি আপডেট করার পরে, Cargo `[dependencies]` সেকশনটি পরীক্ষা করে এবং তালিকাভুক্ত যেকোনো ক্রেট ডাউনলোড করে, যেগুলো ইতিমধ্যেই ডাউনলোড করা হয়নি। এই ক্ষেত্রে, যদিও আমরা শুধুমাত্র `rand`-কে ডিপেন্ডেন্সি হিসেবে তালিকাভুক্ত করেছি, Cargo `rand` কাজ করার জন্য যে অন্যান্য ক্রেটগুলোর উপর নির্ভর করে সেগুলোও নিয়ে এসেছে। ক্রেটগুলো ডাউনলোড করার পরে, Rust সেগুলোকে কম্পাইল করে এবং তারপর ডিপেন্ডেন্সিগুলো উপলব্ধ করে প্রোজেক্টটি কম্পাইল করে।
 
-If you immediately run `cargo build` again without making any changes, you
-won’t get any output aside from the `Finished` line. Cargo knows it has already
-downloaded and compiled the dependencies, and you haven’t changed anything
-about them in your _Cargo.toml_ file. Cargo also knows that you haven’t changed
-anything about your code, so it doesn’t recompile that either. With nothing to
-do, it simply exits.
+আপনি যদি কোনো পরিবর্তন না করেই আবার `cargo build` চালান, তাহলে আপনি `Finished` লাইনটি ছাড়া আর কোনো আউটপুট পাবেন না। Cargo জানে যে এটি ইতিমধ্যেই ডিপেন্ডেন্সিগুলো ডাউনলোড এবং কম্পাইল করেছে, এবং আপনি আপনার _Cargo.toml_ ফাইলে সেগুলো সম্পর্কে কোনো পরিবর্তন করেননি। Cargo আরও জানে যে আপনি আপনার কোড সম্পর্কে কোনো পরিবর্তন করেননি, তাই এটি সেটিও পুনরায় কম্পাইল করে না। করার মতো কিছু না থাকায়, এটি কেবল শেষ হয়ে যায়।
 
-If you open the _src/main.rs_ file, make a trivial change, and then save it and
-build again, you’ll only see two lines of output:
+আপনি যদি _src/main.rs_ ফাইলটি খোলেন, একটি সামান্য পরিবর্তন করেন, এবং তারপর সংরক্ষণ করে আবার বিল্ড করেন, তাহলে আপনি কেবল দুটি লাইনের আউটপুট দেখতে পাবেন:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -439,40 +506,17 @@ $ cargo build
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.13s
 ```
 
-These lines show that Cargo only updates the build with your tiny change to the
-_src/main.rs_ file. Your dependencies haven’t changed, so Cargo knows it can
-reuse what it has already downloaded and compiled for those.
+এই লাইনগুলো দেখায় যে Cargo শুধুমাত্র _src/main.rs_ ফাইলে আপনার ছোট পরিবর্তনের সাথে বিল্ডটি আপডেট করে। আপনার ডিপেন্ডেন্সিগুলো পরিবর্তন হয়নি, তাই Cargo জানে যে এটি ইতিমধ্যেই সেগুলোর জন্য যা ডাউনলোড এবং কম্পাইল করেছে তা পুনরায় ব্যবহার করতে পারে।
 
-#### Ensuring Reproducible Builds with the _Cargo.lock_ File
+#### _Cargo.lock_ ফাইল দিয়ে রিপ্রোডিউসিবল বিল্ড নিশ্চিত করা (Ensuring Reproducible Builds with the _Cargo.lock_ File)
 
-Cargo has a mechanism that ensures you can rebuild the same artifact every time
-you or anyone else builds your code: Cargo will use only the versions of the
-dependencies you specified until you indicate otherwise. For example, say that
-next week version 0.8.6 of the `rand` crate comes out, and that version
-contains an important bug fix, but it also contains a regression that will
-break your code. To handle this, Rust creates the _Cargo.lock_ file the first
-time you run `cargo build`, so we now have this in the _guessing_game_
-directory.
+Cargo-র একটি মেকানিজম রয়েছে যা নিশ্চিত করে যে আপনি বা অন্য কেউ যখনই আপনার কোড বিল্ড করবেন, তখনই যেন একই আর্টিফ্যাক্ট পুনরায় তৈরি করা যায়: আপনি অন্যথায় নির্দেশ না দেওয়া পর্যন্ত Cargo শুধুমাত্র আপনার নির্দিষ্ট করা ডিপেন্ডেন্সিগুলোর ভার্সনগুলোই ব্যবহার করবে। উদাহরণস্বরূপ, ধরা যাক পরের সপ্তাহে `rand` ক্রেটের 0.8.6 ভার্সন প্রকাশিত হল, এবং সেই ভার্সনে একটি গুরুত্বপূর্ণ বাগ ফিক্স রয়েছে, কিন্তু এটিতে একটি রিগ্রেশনও রয়েছে যা আপনার কোডকে ভেঙে দেবে। এটি হ্যান্ডেল করার জন্য, আপনি যখন প্রথমবার `cargo build` চালান তখন Rust _Cargo.lock_ ফাইলটি তৈরি করে, তাই এখন আমাদের _guessing_game_ ডিরেক্টরিতে এটি রয়েছে।
 
-When you build a project for the first time, Cargo figures out all the versions
-of the dependencies that fit the criteria and then writes them to the
-_Cargo.lock_ file. When you build your project in the future, Cargo will see
-that the _Cargo.lock_ file exists and will use the versions specified there
-rather than doing all the work of figuring out versions again. This lets you
-have a reproducible build automatically. In other words, your project will
-remain at 0.8.5 until you explicitly upgrade, thanks to the _Cargo.lock_ file.
-Because the _Cargo.lock_ file is important for reproducible builds, it’s often
-checked into source control with the rest of the code in your project.
+আপনি যখন প্রথমবার একটি প্রোজেক্ট বিল্ড করেন, Cargo মানদণ্ড পূরণ করে এমন ডিপেন্ডেন্সিগুলোর সমস্ত ভার্সন খুঁজে বের করে এবং তারপর সেগুলোকে _Cargo.lock_ ফাইলে লিখে রাখে। ভবিষ্যতে যখন আপনি আপনার প্রোজেক্ট বিল্ড করবেন, Cargo দেখবে যে _Cargo.lock_ ফাইলটি বিদ্যমান এবং ভার্সনগুলো পুনরায় বের করার সমস্ত কাজ না করে সেখানে নির্দিষ্ট করা ভার্সনগুলো ব্যবহার করবে। এটি আপনাকে স্বয়ংক্রিয়ভাবে একটি রিপ্রোডিউসিবল বিল্ড করতে দেয়। অন্য কথায়, আপনার প্রোজেক্টটি 0.8.5-এই থাকবে যতক্ষণ না আপনি স্পষ্টতই আপগ্রেড করেন, _Cargo.lock_ ফাইলের কারণে। যেহেতু রিপ্রোডিউসিবল বিল্ডের জন্য _Cargo.lock_ ফাইলটি গুরুত্বপূর্ণ, তাই এটিকে প্রায়শই আপনার প্রোজেক্টের বাকি কোডের সাথে সোর্স কন্ট্রোলে চেক ইন করা হয়।
 
-#### Updating a Crate to Get a New Version
+#### একটি নতুন ভার্সন পেতে একটি ক্রেট আপডেট করা (Updating a Crate to Get a New Version)
 
-When you _do_ want to update a crate, Cargo provides the command `update`,
-which will ignore the _Cargo.lock_ file and figure out all the latest versions
-that fit your specifications in _Cargo.toml_. Cargo will then write those
-versions to the _Cargo.lock_ file. In this case, Cargo will only look for
-versions greater than 0.8.5 and less than 0.9.0. If the `rand` crate has
-released the two new versions 0.8.6 and 0.9.0, you would see the following if
-you ran `cargo update`:
+যখন আপনি একটি ক্রেট আপডেট *করতে* চান, Cargo `update` কমান্ড সরবরাহ করে, যেটি _Cargo.lock_ ফাইলটিকে উপেক্ষা করবে এবং _Cargo.toml_-এ আপনার স্পেসিফিকেশন পূরণ করে এমন সমস্ত সর্বশেষ ভার্সন খুঁজে বের করবে। তারপর Cargo সেই ভার্সনগুলোকে _Cargo.lock_ ফাইলে লিখবে। এই ক্ষেত্রে, Cargo শুধুমাত্র 0.8.5-এর চেয়ে বড় এবং 0.9.0-এর চেয়ে ছোট ভার্সনগুলো খুঁজবে। যদি `rand` ক্রেট দুটি নতুন ভার্সন 0.8.6 এবং 0.9.0 প্রকাশ করে, তাহলে আপনি যদি `cargo update` চালান তবে আপনি নিম্নলিখিতটি দেখতে পাবেন:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -487,32 +531,22 @@ $ cargo update
     Updating rand v0.8.5 -> v0.8.6 (available: v0.9.0)
 ```
 
-Cargo ignores the 0.9.0 release. At this point, you would also notice a change
-in your _Cargo.lock_ file noting that the version of the `rand` crate you are
-now using is 0.8.6. To use `rand` version 0.9.0 or any version in the 0.9._x_
-series, you’d have to update the _Cargo.toml_ file to look like this instead:
+Cargo 0.9.0 রিলিজটিকে উপেক্ষা করে। এই সময়ে, আপনি আপনার _Cargo.lock_ ফাইলে একটি পরিবর্তনও লক্ষ্য করবেন, যেখানে উল্লেখ করা হয়েছে যে আপনি এখন যে `rand` ক্রেট ভার্সনটি ব্যবহার করছেন সেটি হল 0.8.6। `rand` ভার্সন 0.9.0 বা 0.9._x_ সিরিজের যেকোনো ভার্সন ব্যবহার করতে, আপনাকে _Cargo.toml_ ফাইলটিকে এর পরিবর্তে এইরকম দেখাতে আপডেট করতে হবে:
 
 ```toml
 [dependencies]
 rand = "0.9.0"
 ```
 
-The next time you run `cargo build`, Cargo will update the registry of crates
-available and reevaluate your `rand` requirements according to the new version
-you have specified.
+পরের বার যখন আপনি `cargo build` চালাবেন, Cargo উপলব্ধ ক্রেটগুলোর রেজিস্ট্রি আপডেট করবে এবং আপনার নির্দিষ্ট করা নতুন ভার্সন অনুযায়ী আপনার `rand` প্রয়োজনীয়তাগুলো পুনরায় মূল্যায়ন করবে।
 
-There’s a lot more to say about [Cargo][doccargo]<!-- ignore --> and [its
-ecosystem][doccratesio]<!-- ignore -->, which we’ll discuss in Chapter 14, but
-for now, that’s all you need to know. Cargo makes it very easy to reuse
-libraries, so Rustaceans are able to write smaller projects that are assembled
-from a number of packages.
+[Cargo][doccargo]<!-- ignore --> এবং [এর ইকোসিস্টেম][doccratesio]<!-- ignore --> সম্পর্কে আরও অনেক কিছু বলার আছে, যা আমরা চ্যাপ্টার 14-তে আলোচনা করব, কিন্তু আপাতত, আপনার এটুকুই জানা দরকার। Cargo লাইব্রেরিগুলোকে পুনরায় ব্যবহার করা খুব সহজ করে তোলে, তাই Rustacean-রা বেশ কয়েকটি প্যাকেজ থেকে একত্রিত করে ছোট প্রোজেক্ট লিখতে সক্ষম।
 
-### Generating a Random Number
+### একটি র‍্যান্ডম সংখ্যা তৈরি করা (Generating a Random Number)
 
-Let’s start using `rand` to generate a number to guess. The next step is to
-update _src/main.rs_, as shown in Listing 2-3.
+আসুন, অনুমান করার জন্য একটি সংখ্যা তৈরি করতে `rand` ব্যবহার করা শুরু করি। পরবর্তী ধাপ হল _src/main.rs_ আপডেট করা, যেমনটি Listing 2-3-তে দেখানো হয়েছে।
 
-<Listing number="2-3" file-name="src/main.rs" caption="Adding code to generate a random number">
+<Listing number="2-3" file-name="src/main.rs" caption="একটি র‍্যান্ডম সংখ্যা তৈরি করার জন্য কোড যোগ করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:all}}
@@ -520,35 +554,15 @@ update _src/main.rs_, as shown in Listing 2-3.
 
 </Listing>
 
-First we add the line `use rand::Rng;`. The `Rng` trait defines methods that
-random number generators implement, and this trait must be in scope for us to
-use those methods. Chapter 10 will cover traits in detail.
+প্রথমে আমরা `use rand::Rng;` লাইনটি যোগ করি। `Rng` ট্রেইট সেই মেথডগুলো সংজ্ঞায়িত করে যেগুলো র‍্যান্ডম সংখ্যা জেনারেটররা প্রয়োগ করে এবং সেই মেথডগুলো ব্যবহার করার জন্য এই ট্রেইটটি আমাদের স্কোপে থাকতে হবে। চ্যাপ্টার ১০-এ ট্রেইটগুলো বিস্তারিতভাবে আলোচনা করা হবে।
 
-Next, we’re adding two lines in the middle. In the first line, we call the
-`rand::thread_rng` function that gives us the particular random number
-generator we’re going to use: one that is local to the current thread of
-execution and is seeded by the operating system. Then we call the `gen_range`
-method on the random number generator. This method is defined by the `Rng`
-trait that we brought into scope with the `use rand::Rng;` statement. The
-`gen_range` method takes a range expression as an argument and generates a
-random number in the range. The kind of range expression we’re using here takes
-the form `start..=end` and is inclusive on the lower and upper bounds, so we
-need to specify `1..=100` to request a number between 1 and 100.
+এরপর, আমরা মাঝখানে দুটি লাইন যোগ করছি। প্রথম লাইনে, আমরা `rand::thread_rng` ফাংশনটি কল করি যা আমাদের নির্দিষ্ট র‍্যান্ডম সংখ্যা জেনারেটর দেয় যা আমরা ব্যবহার করতে যাচ্ছি: যেটি এক্সিকিউশনের বর্তমান থ্রেডের জন্য লোকাল এবং অপারেটিং সিস্টেম দ্বারা সিডেড। তারপর আমরা র‍্যান্ডম সংখ্যা জেনারেটরের উপর `gen_range` মেথডটি কল করি। এই মেথডটি `Rng` ট্রেইট দ্বারা সংজ্ঞায়িত করা হয়েছে যা আমরা `use rand::Rng;` স্টেটমেন্ট দিয়ে স্কোপে এনেছি। `gen_range` মেথডটি একটি রেঞ্জ এক্সপ্রেশনকে আর্গুমেন্ট হিসেবে নেয় এবং রেঞ্জের মধ্যে একটি র‍্যান্ডম সংখ্যা তৈরি করে। আমরা এখানে যে ধরনের রেঞ্জ এক্সপ্রেশন ব্যবহার করছি সেটি `start..=end` ফর্ম নেয় এবং নিম্ন ও উচ্চ উভয় সীমানাতেই অন্তর্ভুক্ত থাকে, তাই আমাদের 1 থেকে 100-এর মধ্যে একটি সংখ্যা অনুরোধ করতে `1..=100` নির্দিষ্ট করতে হবে।
 
-> Note: You won’t just know which traits to use and which methods and functions
-> to call from a crate, so each crate has documentation with instructions for
-> using it. Another neat feature of Cargo is that running the `cargo doc
-> --open` command will build documentation provided by all your dependencies
-> locally and open it in your browser. If you’re interested in other
-> functionality in the `rand` crate, for example, run `cargo doc --open` and
-> click `rand` in the sidebar on the left.
+> দ্রষ্টব্য: আপনি শুধু কোন ট্রেইট ব্যবহার করবেন এবং কোন মেথড এবং ফাংশন একটি ক্রেট থেকে কল করবেন তা এমনি এমনি জানবেন না, তাই প্রতিটি ক্রেটের ডকুমেন্টেশন থাকে যাতে এটি ব্যবহারের নির্দেশাবলী থাকে। Cargo-র আরেকটি দারুণ ফিচার হল `cargo doc --open` কমান্ড চালালে আপনার সমস্ত ডিপেন্ডেন্সির দেওয়া ডকুমেন্টেশন লোকালি তৈরি হবে এবং আপনার ব্রাউজারে খুলবে। উদাহরণস্বরূপ, আপনি যদি `rand` ক্রেটের অন্যান্য কার্যকারিতা সম্পর্কে আগ্রহী হন, তাহলে `cargo doc --open` চালান এবং বাম দিকের সাইডবারে `rand`-এ ক্লিক করুন।
 
-The second new line prints the secret number. This is useful while we’re
-developing the program to be able to test it, but we’ll delete it from the
-final version. It’s not much of a game if the program prints the answer as soon
-as it starts!
+দ্বিতীয় নতুন লাইনটি গোপন সংখ্যাটি প্রিন্ট করে। এটি দরকারী যখন আমরা প্রোগ্রামটি ডেভেলপ করছি তখন এটি পরীক্ষা করতে, কিন্তু আমরা ফাইনাল ভার্সন থেকে এটি মুছে ফেলব। প্রোগ্রামটি শুরু হওয়ার সাথে সাথেই উত্তর প্রিন্ট করলে সেটি আর তেমন কোনো গেম থাকে না!
 
-Try running the program a few times:
+কয়েকবার প্রোগ্রামটি চালানোর চেষ্টা করুন:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-03/
@@ -579,16 +593,13 @@ Please input your guess.
 You guessed: 5
 ```
 
-You should get different random numbers, and they should all be numbers between
-1 and 100. Great job!
+আপনার ভিন্ন র‍্যান্ডম সংখ্যা পাওয়া উচিত, এবং সেগুলো সবই 1 থেকে 100-এর মধ্যে সংখ্যা হওয়া উচিত। দারুন কাজ!
 
-## Comparing the Guess to the Secret Number
+## অনুমানের সাথে গোপন সংখ্যার তুলনা করা (Comparing the Guess to the Secret Number)
 
-Now that we have user input and a random number, we can compare them. That step
-is shown in Listing 2-4. Note that this code won’t compile just yet, as we will
-explain.
+এখন আমাদের কাছে ব্যবহারকারীর ইনপুট এবং একটি র‍্যান্ডম সংখ্যা রয়েছে, আমরা সেগুলোর তুলনা করতে পারি। সেই ধাপটি Listing 2-4-এ দেখানো হয়েছে। মনে রাখবেন যে এই কোডটি এখনই কম্পাইল হবে না, যেমনটি আমরা ব্যাখ্যা করব।
 
-<Listing number="2-4" file-name="src/main.rs" caption="Handling the possible return values of comparing two numbers">
+<Listing number="2-4" file-name="src/main.rs" caption="দুটি সংখ্যার তুলনা করার সম্ভাব্য রিটার্ন মানগুলো হ্যান্ডেল করা">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:here}}
@@ -596,44 +607,17 @@ explain.
 
 </Listing>
 
-First we add another `use` statement, bringing a type called
-`std::cmp::Ordering` into scope from the standard library. The `Ordering` type
-is another enum and has the variants `Less`, `Greater`, and `Equal`. These are
-the three outcomes that are possible when you compare two values.
+প্রথমে আমরা আরেকটি `use` স্টেটমেন্ট যোগ করি, স্ট্যান্ডার্ড লাইব্রেরি থেকে `std::cmp::Ordering` নামক একটি টাইপকে স্কোপে আনি। `Ordering` টাইপটি হল আরেকটি enum এবং এর ভেরিয়েন্টগুলো হল `Less`, `Greater`, এবং `Equal`। আপনি যখন দুটি মান তুলনা করেন তখন এই তিনটি ফলাফল সম্ভব।
 
-Then we add five new lines at the bottom that use the `Ordering` type. The
-`cmp` method compares two values and can be called on anything that can be
-compared. It takes a reference to whatever you want to compare with: here it’s
-comparing `guess` to `secret_number`. Then it returns a variant of the
-`Ordering` enum we brought into scope with the `use` statement. We use a
-[`match`][match]<!-- ignore --> expression to decide what to do next based on
-which variant of `Ordering` was returned from the call to `cmp` with the values
-in `guess` and `secret_number`.
+তারপর আমরা নিচে পাঁচটি নতুন লাইন যোগ করি যা `Ordering` টাইপ ব্যবহার করে। `cmp` মেথড দুটি মান তুলনা করে এবং যে কোনো কিছুর উপর কল করা যেতে পারে যা তুলনা করা যায়। এটি আপনি যেটির সাথে তুলনা করতে চান তার একটি রেফারেন্স নেয়: এখানে এটি `guess`-কে `secret_number`-এর সাথে তুলনা করছে। তারপর এটি `Ordering` enum-এর একটি ভেরিয়েন্ট রিটার্ন করে যা আমরা `use` স্টেটমেন্ট দিয়ে স্কোপে এনেছি। আমরা একটি [`match`][match]<!-- ignore --> এক্সপ্রেশন ব্যবহার করি, `guess` এবং `secret_number`-এর মান সহ `cmp`-এর কলে কোন `Ordering`-এর ভেরিয়েন্ট রিটার্ন করা হয়েছিল তার উপর ভিত্তি করে পরবর্তীতে কী করতে হবে তা নির্ধারণ করতে।
 
-A `match` expression is made up of _arms_. An arm consists of a _pattern_ to
-match against, and the code that should be run if the value given to `match`
-fits that arm’s pattern. Rust takes the value given to `match` and looks
-through each arm’s pattern in turn. Patterns and the `match` construct are
-powerful Rust features: they let you express a variety of situations your code
-might encounter and they make sure you handle them all. These features will be
-covered in detail in Chapter 6 and Chapter 19, respectively.
+একটি `match` এক্সপ্রেশন _আর্ম_ দিয়ে তৈরি। একটি আর্ম একটি _প্যাটার্ন_ নিয়ে গঠিত, যার সাথে ম্যাচ করতে হবে, এবং কোডটি চালানো উচিত যদি `match`-কে দেওয়া মান সেই আর্মের প্যাটার্নের সাথে মেলে। Rust `match`-কে দেওয়া মান নেয় এবং প্রতিটি আর্মের প্যাটার্নের মধ্য দিয়ে যায়। প্যাটার্ন এবং `match` কনস্ট্রাক্ট হল Rust-এর শক্তিশালী ফিচার: এগুলো আপনাকে বিভিন্ন পরিস্থিতি প্রকাশ করতে দেয় যা আপনার কোড সম্মুখীন হতে পারে এবং নিশ্চিত করে যে আপনি সেগুলোর সবই হ্যান্ডেল করেছেন। এই ফিচারগুলো যথাক্রমে চ্যাপ্টার ৬ এবং চ্যাপ্টার 19-এ বিস্তারিতভাবে আলোচনা করা হবে।
 
-Let’s walk through an example with the `match` expression we use here. Say that
-the user has guessed 50 and the randomly generated secret number this time is
-38.
+আসুন, আমরা এখানে যে `match` এক্সপ্রেশনটি ব্যবহার করি তার একটি উদাহরণ দেখি। ধরা যাক যে ব্যবহারকারী 50 অনুমান করেছে এবং র‍্যান্ডমভাবে তৈরি গোপন সংখ্যাটি এবার 38।
 
-When the code compares 50 to 38, the `cmp` method will return
-`Ordering::Greater` because 50 is greater than 38. The `match` expression gets
-the `Ordering::Greater` value and starts checking each arm’s pattern. It looks
-at the first arm’s pattern, `Ordering::Less`, and sees that the value
-`Ordering::Greater` does not match `Ordering::Less`, so it ignores the code in
-that arm and moves to the next arm. The next arm’s pattern is
-`Ordering::Greater`, which _does_ match `Ordering::Greater`! The associated
-code in that arm will execute and print `Too big!` to the screen. The `match`
-expression ends after the first successful match, so it won’t look at the last
-arm in this scenario.
+কোড যখন 50-কে 38-এর সাথে তুলনা করে, তখন `cmp` মেথডটি `Ordering::Greater` রিটার্ন করবে, কারণ 50, 38-এর চেয়ে বড়। `match` এক্সপ্রেশনটি `Ordering::Greater` মান পায় এবং প্রতিটি আর্মের প্যাটার্ন পরীক্ষা করতে শুরু করে। এটি প্রথম আর্মের প্যাটার্ন, `Ordering::Less`-এর দিকে তাকায় এবং দেখে যে `Ordering::Greater` মানটি `Ordering::Less`-এর সাথে মেলে না, তাই এটি সেই আর্মের কোডটিকে উপেক্ষা করে এবং পরের আর্মে চলে যায়। পরের আর্মের প্যাটার্নটি হল `Ordering::Greater`, যেটি `Ordering::Greater`-এর সাথে মিলে যায়! সেই আর্মের সাথে সম্পর্কিত কোডটি এক্সিকিউট হবে এবং স্ক্রিনে `Too big!` প্রিন্ট করবে। প্রথম সফল ম্যাচের পরেই `match` এক্সপ্রেশনটি শেষ হয়ে যায়, তাই এই পরিস্থিতিতে এটি শেষ আর্মের দিকে তাকাবে না।
 
-However, the code in Listing 2-4 won’t compile yet. Let’s try it:
+কিন্তু, Listing 2-4-এর কোডটি এখনও কম্পাইল হবে না। চলুন চেষ্টা করি:
 
 <!--
 The error numbers in this output should be that of the code **WITHOUT** the
@@ -644,20 +628,9 @@ anchor or snip comments
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-04/output.txt}}
 ```
 
-The core of the error states that there are _mismatched types_. Rust has a
-strong, static type system. However, it also has type inference. When we wrote
-`let mut guess = String::new()`, Rust was able to infer that `guess` should be
-a `String` and didn’t make us write the type. The `secret_number`, on the other
-hand, is a number type. A few of Rust’s number types can have a value between 1
-and 100: `i32`, a 32-bit number; `u32`, an unsigned 32-bit number; `i64`, a
-64-bit number; as well as others. Unless otherwise specified, Rust defaults to
-an `i32`, which is the type of `secret_number` unless you add type information
-elsewhere that would cause Rust to infer a different numerical type. The reason
-for the error is that Rust cannot compare a string and a number type.
+এররের মূল অংশে বলা হয়েছে যে এখানে *টাইপ মিলছে না (mismatched types)*। Rust-এ একটি শক্তিশালী, স্ট্যাটিক টাইপ সিস্টেম রয়েছে। তবে, এতে টাইপ ইনফারেন্সও (type inference) রয়েছে। যখন আমরা `let mut guess = String::new()` লিখেছিলাম, তখন Rust অনুমান করতে পেরেছিল যে `guess` একটি `String` হওয়া উচিত এবং আমাদের টাইপ লিখতে বাধ্য করেনি। অন্যদিকে, `secret_number` হল একটি সংখ্যা টাইপ। Rust-এর কয়েকটি সংখ্যা টাইপের মান 1 থেকে 100-এর মধ্যে হতে পারে: `i32`, একটি 32-বিট সংখ্যা; `u32`, একটি আনসাইনড 32-বিট সংখ্যা; `i64`, একটি 64-বিট সংখ্যা; এবং আরও অনেক কিছু। অন্যভাবে উল্লেখ না করা পর্যন্ত, Rust ডিফল্টভাবে `i32` ব্যবহার করে, যেটি `secret_number`-এর টাইপ, যদি না আপনি অন্য কোথাও টাইপ সম্পর্কিত তথ্য যোগ করেন যা Rust-কে ভিন্ন সাংখ্যিক টাইপ অনুমান করতে বাধ্য করে। এররের কারণ হল Rust একটি স্ট্রিং এবং একটি সংখ্যা টাইপের তুলনা করতে পারে না।
 
-Ultimately, we want to convert the `String` the program reads as input into a
-number type so we can compare it numerically to the secret number. We do so by
-adding this line to the `main` function body:
+শেষ পর্যন্ত, আমরা চাই যে প্রোগ্রামটি ইনপুট হিসেবে যে `String` পড়ে, সেটিকে একটি সংখ্যা টাইপে রূপান্তর করতে, যাতে আমরা এটিকে সংখ্যাগতভাবে গোপন সংখ্যার সাথে তুলনা করতে পারি। আমরা `main` ফাংশন বডিতে এই লাইনটি যোগ করে তা করি:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -665,59 +638,23 @@ adding this line to the `main` function body:
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/src/main.rs:here}}
 ```
 
-The line is:
+লাইনটি হল:
 
 ```rust,ignore
-let guess: u32 = guess.trim().parse().expect("Please type a number!");
+let guess: u32 = guess.trim().parse().expect("অনুগ্রহ করে একটি সংখ্যা টাইপ করুন!");
 ```
 
-We create a variable named `guess`. But wait, doesn’t the program already have
-a variable named `guess`? It does, but helpfully Rust allows us to shadow the
-previous value of `guess` with a new one. _Shadowing_ lets us reuse the `guess`
-variable name rather than forcing us to create two unique variables, such as
-`guess_str` and `guess`, for example. We’ll cover this in more detail in
-[Chapter 3][shadowing]<!-- ignore -->, but for now, know that this feature is
-often used when you want to convert a value from one type to another type.
+আমরা `guess` নামে একটি ভেরিয়েবল তৈরি করি। কিন্তু, প্রোগ্রামে কি ইতিমধ্যেই `guess` নামে একটি ভেরিয়েবল নেই? আছে, কিন্তু সুবিধাজনকভাবে Rust আমাদের `guess`-এর আগের মানটিকে একটি নতুন মান দিয়ে শ্যাডো (shadow) করার অনুমতি দেয়। *শ্যাডোয়িং (Shadowing)* আমাদের `guess` ভেরিয়েবলের নামটি পুনরায় ব্যবহার করার সুযোগ দেয়, `guess_str` এবং `guess`-এর মতো দুটি আলাদা ভেরিয়েবল তৈরি করতে বাধ্য করার পরিবর্তে। আমরা [চ্যাপ্টার ৩][shadowing]<!-- ignore -->-এ এটি আরও বিশদে আলোচনা করব, তবে আপাতত, জেনে রাখুন যে এই ফিচারটি প্রায়শই ব্যবহৃত হয় যখন আপনি একটি মানকে এক টাইপ থেকে অন্য টাইপে রূপান্তর করতে চান।
 
-We bind this new variable to the expression `guess.trim().parse()`. The `guess`
-in the expression refers to the original `guess` variable that contained the
-input as a string. The `trim` method on a `String` instance will eliminate any
-whitespace at the beginning and end, which we must do before we can convert the
-string to a `u32`, which can only contain numerical data. The user must press
-<kbd>enter</kbd> to satisfy `read_line` and input their guess, which adds a
-newline character to the string. For example, if the user types <kbd>5</kbd> and
-presses <kbd>enter</kbd>, `guess` looks like this: `5\n`. The `\n` represents
-“newline.” (On Windows, pressing <kbd>enter</kbd> results in a carriage return
-and a newline, `\r\n`.) The `trim` method eliminates `\n` or `\r\n`, resulting
-in just `5`.
+আমরা এই নতুন ভেরিয়েবলটিকে `guess.trim().parse()` এক্সপ্রেশনের সাথে বাইন্ড করি। এক্সপ্রেশনের `guess` সেই আসল `guess` ভেরিয়েবলকে বোঝায়, যেখানে ইনপুটটি একটি স্ট্রিং হিসাবে ছিল। একটি `String` ইন্সট্যান্সের উপর `trim` মেথডটি শুরু এবং শেষের যেকোনো হোয়াইটস্পেস সরিয়ে দেবে, যা স্ট্রিংটিকে `u32`-তে রূপান্তর করার আগে আমাদের অবশ্যই করতে হবে, কারণ `u32` শুধুমাত্র সংখ্যাসূচক ডেটা ধারণ করতে পারে। ব্যবহারকারীকে `read_line` সম্পূর্ণ করতে এবং তাদের অনুমান ইনপুট করতে <kbd>enter</kbd> চাপতে হবে, যা স্ট্রিংটিতে একটি নতুন লাইন ক্যারেক্টার যুক্ত করে। উদাহরণস্বরূপ, যদি ব্যবহারকারী <kbd>5</kbd> টাইপ করে এবং <kbd>enter</kbd> চাপে, তাহলে `guess` দেখতে এরকম হবে: `5\n`। `\n` মানে “newline”। (Windows-এ, <kbd>enter</kbd> চাপলে একটি ক্যারেজ রিটার্ন এবং একটি নতুন লাইন আসে, `\r\n`।) `trim` মেথডটি `\n` বা `\r\n` সরিয়ে দেয়, ফলে শুধুমাত্র `5` থাকে।
 
-The [`parse` method on strings][parse]<!-- ignore --> converts a string to
-another type. Here, we use it to convert from a string to a number. We need to
-tell Rust the exact number type we want by using `let guess: u32`. The colon
-(`:`) after `guess` tells Rust we’ll annotate the variable’s type. Rust has a
-few built-in number types; the `u32` seen here is an unsigned, 32-bit integer.
-It’s a good default choice for a small positive number. You’ll learn about
-other number types in [Chapter 3][integers]<!-- ignore -->.
+স্ট্রিং-এর উপর [`parse` মেথড][parse]<!-- ignore --> একটি স্ট্রিংকে অন্য টাইপে রূপান্তর করে। এখানে, আমরা এটিকে একটি স্ট্রিং থেকে একটি সংখ্যায় রূপান্তর করতে ব্যবহার করি। `let guess: u32` ব্যবহার করে আমাদের Rust-কে জানাতে হবে যে আমরা ঠিক কোন সংখ্যা টাইপ চাই। `guess`-এর পরে কোলন (`:`) Rust-কে বলে যে আমরা ভেরিয়েবলের টাইপ অ্যানোটেট করব। Rust-এর কয়েকটি বিল্ট-ইন সংখ্যা টাইপ রয়েছে; এখানে দেখানো `u32` হল একটি আনসাইনড, 32-বিট ইন্টিজার। এটি একটি ছোট ধনাত্মক সংখ্যার জন্য একটি ভালো ডিফল্ট পছন্দ। আপনি [চ্যাপ্টার ৩][integers]<!-- ignore -->-এ অন্যান্য সংখ্যা টাইপ সম্পর্কে জানতে পারবেন।
 
-Additionally, the `u32` annotation in this example program and the comparison
-with `secret_number` means Rust will infer that `secret_number` should be a
-`u32` as well. So now the comparison will be between two values of the same
-type!
+অতিরিক্তভাবে, এই উদাহরণ প্রোগ্রামে `u32` অ্যানোটেশন এবং `secret_number`-এর সাথে তুলনা করার অর্থ হল Rust অনুমান করবে যে `secret_number`-ও একটি `u32` হওয়া উচিত। তাই এখন তুলনাটি একই টাইপের দুটি মানের মধ্যে হবে!
 
-The `parse` method will only work on characters that can logically be converted
-into numbers and so can easily cause errors. If, for example, the string
-contained `A👍%`, there would be no way to convert that to a number. Because it
-might fail, the `parse` method returns a `Result` type, much as the `read_line`
-method does (discussed earlier in [“Handling Potential Failure with
-`Result`”](#handling-potential-failure-with-result)<!-- ignore-->). We’ll treat
-this `Result` the same way by using the `expect` method again. If `parse`
-returns an `Err` `Result` variant because it couldn’t create a number from the
-string, the `expect` call will crash the game and print the message we give it.
-If `parse` can successfully convert the string to a number, it will return the
-`Ok` variant of `Result`, and `expect` will return the number that we want from
-the `Ok` value.
+`parse` মেথডটি কেবল সেইসব ক্যারেক্টারের উপর কাজ করবে যেগুলোকে যুক্তিযুক্তভাবে সংখ্যায় রূপান্তর করা যেতে পারে এবং তাই সহজেই এরর ঘটাতে পারে। উদাহরণস্বরূপ, যদি স্ট্রিংটিতে `A👍%` থাকে, তাহলে এটিকে একটি সংখ্যায় রূপান্তর করার কোনো উপায় থাকবে না। যেহেতু এটি ব্যর্থ হতে পারে, তাই `parse` মেথডটি একটি `Result` টাইপ রিটার্ন করে, অনেকটা `read_line` মেথডের মতোই (আগে [“`Result` দিয়ে সম্ভাব্য ত্রুটি সামলানো”](#handling-potential-failure-with-result)<!-- ignore-->)-তে আলোচনা করা হয়েছে)। আমরা এই `Result`-টিকে আবার `expect` মেথড ব্যবহার করে একইভাবে পরিচালনা করব। যদি `parse` একটি `Err` `Result` ভেরিয়েন্ট রিটার্ন করে কারণ এটি স্ট্রিং থেকে একটি সংখ্যা তৈরি করতে পারেনি, তাহলে `expect` কলটি গেমটিকে ক্র্যাশ করাবে এবং আমরা যে মেসেজটি দেব সেটি প্রিন্ট করবে। যদি `parse` সফলভাবে স্ট্রিংটিকে একটি সংখ্যায় রূপান্তর করতে পারে, তাহলে এটি `Result`-এর `Ok` ভেরিয়েন্ট রিটার্ন করবে এবং `expect` `Ok` মান থেকে আমাদের কাঙ্ক্ষিত সংখ্যাটি রিটার্ন করবে।
 
-Let’s run the program now:
+চলুন এবার প্রোগ্রামটি চালানো যাক:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/
@@ -739,18 +676,13 @@ You guessed: 76
 Too big!
 ```
 
-Nice! Even though spaces were added before the guess, the program still figured
-out that the user guessed 76. Run the program a few times to verify the
-different behavior with different kinds of input: guess the number correctly,
-guess a number that is too high, and guess a number that is too low.
+দারুণ! অনুমানের আগে স্পেস যোগ করা হলেও, প্রোগ্রামটি বুঝতে পেরেছে যে ব্যবহারকারী 76 অনুমান করেছে। বিভিন্ন ধরনের ইনপুট দিয়ে ভিন্ন আচরণ যাচাই করতে কয়েকবার প্রোগ্রামটি চালান: সঠিকভাবে সংখ্যাটি অনুমান করুন, খুব বেশি একটি সংখ্যা অনুমান করুন এবং খুব কম একটি সংখ্যা অনুমান করুন।
 
-We have most of the game working now, but the user can make only one guess.
-Let’s change that by adding a loop!
+আমাদের গেমের বেশিরভাগ অংশ এখন কাজ করছে, কিন্তু ব্যবহারকারী কেবল একটি অনুমান করতে পারে। চলুন একটি লুপ যোগ করে এটি পরিবর্তন করি!
 
-## Allowing Multiple Guesses with Looping
+## লুপিংয়ের মাধ্যমে একাধিক অনুমানের সুযোগ (Allowing Multiple Guesses with Looping)
 
-The `loop` keyword creates an infinite loop. We’ll add a loop to give users
-more chances at guessing the number:
+`loop` কীওয়ার্ডটি একটি অসীম লুপ তৈরি করে। ব্যবহারকারীদের সংখ্যা অনুমান করার আরও সুযোগ দিতে আমরা একটি লুপ যোগ করব:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -758,17 +690,9 @@ more chances at guessing the number:
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-04-looping/src/main.rs:here}}
 ```
 
-As you can see, we’ve moved everything from the guess input prompt onward into
-a loop. Be sure to indent the lines inside the loop another four spaces each
-and run the program again. The program will now ask for another guess forever,
-which actually introduces a new problem. It doesn’t seem like the user can quit!
+আপনি দেখতে পাচ্ছেন, আমরা অনুমান ইনপুট প্রম্পট থেকে শুরু করে সবকিছু একটি লুপের মধ্যে নিয়ে এসেছি। লুপের ভেতরের লাইনগুলোকে আরও চারটি স্পেস দিয়ে ইনডেন্ট করতে ভুলবেন না এবং আবার প্রোগ্রামটি চালান। প্রোগ্রামটি এখন চিরকালের জন্য আরেকটি অনুমানের জন্য জিজ্ঞাসা করবে, যা আসলে একটি নতুন সমস্যা তৈরি করে। মনে হচ্ছে ব্যবহারকারী গেমটি বন্ধ করতে পারবে না!
 
-The user could always interrupt the program by using the keyboard shortcut
-<kbd>ctrl</kbd>-<kbd>c</kbd>. But there’s another way to escape this insatiable
-monster, as mentioned in the `parse` discussion in [“Comparing the Guess to the
-Secret Number”](#comparing-the-guess-to-the-secret-number)<!-- ignore -->: if
-the user enters a non-number answer, the program will crash. We can take
-advantage of that to allow the user to quit, as shown here:
+ব্যবহারকারী সবসময় কীবোর্ড শর্টকাট <kbd>ctrl</kbd>-<kbd>c</kbd> ব্যবহার করে প্রোগ্রামটি থামাতে পারে। কিন্তু এই অতৃপ্ত দৈত্য থেকে বাঁচার আরেকটি উপায় আছে, যেমনটি [“অনুমানের সাথে গোপন সংখ্যার তুলনা করা”](#comparing-the-guess-to-the-secret-number)<!-- ignore -->-তে `parse` আলোচনায় উল্লেখ করা হয়েছে: যদি ব্যবহারকারী একটি অ-সংখ্যাসূচক উত্তর প্রবেশ করান, তাহলে প্রোগ্রামটি ক্র্যাশ করবে। ব্যবহারকারীকে গেম বন্ধ করার অনুমতি দেওয়ার জন্য আমরা সেটি কাজে লাগাতে পারি, যেমনটি এখানে দেখানো হয়েছে:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/no-listing-04-looping/
@@ -807,13 +731,11 @@ Please type a number!: ParseIntError { kind: InvalidDigit }
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-Typing `quit` will quit the game, but as you’ll notice, so will entering any
-other non-number input. This is suboptimal, to say the least; we want the game
-to also stop when the correct number is guessed.
+`quit` টাইপ করলে গেমটি বন্ধ হয়ে যাবে, কিন্তু আপনি যেমন লক্ষ্য করবেন, অন্য কোনো অ-সংখ্যাসূচক ইনপুট দিলেও এটি বন্ধ হয়ে যাবে। অন্তত বলতে গেলে, এটি আদর্শ নয়; আমরা চাই যে গেমটি তখনই বন্ধ হোক যখন সঠিক সংখ্যাটি অনুমান করা হয়।
 
-### Quitting After a Correct Guess
+### সঠিক অনুমানের পরে বন্ধ হওয়া (Quitting After a Correct Guess)
 
-Let’s program the game to quit when the user wins by adding a `break` statement:
+আসুন, একটি `break` স্টেটমেন্ট যোগ করে গেমটি এমনভাবে প্রোগ্রাম করি যাতে ব্যবহারকারী জিতলে বন্ধ হয়ে যায়:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -821,18 +743,13 @@ Let’s program the game to quit when the user wins by adding a `break` statemen
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-05-quitting/src/main.rs:here}}
 ```
 
-Adding the `break` line after `You win!` makes the program exit the loop when
-the user guesses the secret number correctly. Exiting the loop also means
-exiting the program, because the loop is the last part of `main`.
+`You win!`-এর পরে `break` লাইনটি যোগ করলে, ব্যবহারকারী যখন গোপন সংখ্যাটি সঠিকভাবে অনুমান করে, তখন প্রোগ্রামটি লুপ থেকে বেরিয়ে আসে। লুপ থেকে বেরিয়ে আসার অর্থ প্রোগ্রাম থেকেও বেরিয়ে আসা, কারণ লুপটি হল `main`-এর শেষ অংশ।
 
-### Handling Invalid Input
+### অবৈধ ইনপুট হ্যান্ডেল করা (Handling Invalid Input)
 
-To further refine the game’s behavior, rather than crashing the program when
-the user inputs a non-number, let’s make the game ignore a non-number so the
-user can continue guessing. We can do that by altering the line where `guess`
-is converted from a `String` to a `u32`, as shown in Listing 2-5.
+গেমের আচরণকে আরও উন্নত করতে, ব্যবহারকারী যখন একটি অ-সংখ্যা ইনপুট দেয় তখন প্রোগ্রামটি ক্র্যাশ করার পরিবর্তে, আসুন গেমটিকে অ-সংখ্যা উপেক্ষা করতে দিই যাতে ব্যবহারকারী অনুমান চালিয়ে যেতে পারে। আমরা `guess`-কে `String` থেকে `u32`-তে রূপান্তর করা লাইনটি পরিবর্তন করে তা করতে পারি, যেমনটি Listing 2-5-এ দেখানো হয়েছে।
 
-<Listing number="2-5" file-name="src/main.rs" caption="Ignoring a non-number guess and asking for another guess instead of crashing the program">
+<Listing number="2-5" file-name="src/main.rs" caption="প্রোগ্রাম ক্র্যাশ করার পরিবর্তে একটি অ-সংখ্যা অনুমান উপেক্ষা করা এবং আরেকটি অনুমানের জন্য জিজ্ঞাসা করা">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:here}}
@@ -840,29 +757,13 @@ is converted from a `String` to a `u32`, as shown in Listing 2-5.
 
 </Listing>
 
-We switch from an `expect` call to a `match` expression to move from crashing
-on an error to handling the error. Remember that `parse` returns a `Result`
-type and `Result` is an enum that has the variants `Ok` and `Err`. We’re using
-a `match` expression here, as we did with the `Ordering` result of the `cmp`
-method.
+এররে ক্র্যাশ করা থেকে এরর হ্যান্ডেলিংয়ে যেতে আমরা একটি `expect` কল থেকে একটি `match` এক্সপ্রেশনে পরিবর্তন করি। মনে রাখবেন যে `parse` একটি `Result` টাইপ রিটার্ন করে এবং `Result` হল একটি enum যার ভেরিয়েন্টগুলো হল `Ok` এবং `Err`। আমরা এখানে একটি `match` এক্সপ্রেশন ব্যবহার করছি, যেমনটি আমরা `cmp` মেথডের `Ordering` ফলাফলের সাথে করেছিলাম।
 
-If `parse` is able to successfully turn the string into a number, it will
-return an `Ok` value that contains the resultant number. That `Ok` value will
-match the first arm’s pattern, and the `match` expression will just return the
-`num` value that `parse` produced and put inside the `Ok` value. That number
-will end up right where we want it in the new `guess` variable we’re creating.
+যদি `parse` সফলভাবে স্ট্রিংটিকে একটি সংখ্যায় পরিণত করতে সক্ষম হয়, তাহলে এটি একটি `Ok` মান রিটার্ন করবে, যেটিতে প্রাপ্ত সংখ্যাটি থাকবে। সেই `Ok` মানটি প্রথম আর্মের প্যাটার্নের সাথে মিলবে, এবং `match` এক্সপ্রেশনটি কেবল `parse` যে `num` মানটি তৈরি করেছে এবং `Ok` মানের ভিতরে রেখেছে সেটি রিটার্ন করবে। সেই সংখ্যাটি যেখানে আমাদের দরকার, অর্থাৎ আমরা যে নতুন `guess` ভেরিয়েবল তৈরি করছি, সেখানেই চলে যাবে।
 
-If `parse` is _not_ able to turn the string into a number, it will return an
-`Err` value that contains more information about the error. The `Err` value
-does not match the `Ok(num)` pattern in the first `match` arm, but it does
-match the `Err(_)` pattern in the second arm. The underscore, `_`, is a
-catch-all value; in this example, we’re saying we want to match all `Err`
-values, no matter what information they have inside them. So the program will
-execute the second arm’s code, `continue`, which tells the program to go to the
-next iteration of the `loop` and ask for another guess. So, effectively, the
-program ignores all errors that `parse` might encounter!
+যদি `parse` স্ট্রিংটিকে একটি সংখ্যায় পরিণত করতে _সক্ষম না হয়_, তাহলে এটি একটি `Err` মান রিটার্ন করবে, যেটিতে এরর সম্পর্কে আরও তথ্য থাকবে। `Err` মানটি প্রথম `match` আর্মের `Ok(num)` প্যাটার্নের সাথে মেলে না, তবে এটি দ্বিতীয় আর্মের `Err(_)` প্যাটার্নের সাথে মেলে। আন্ডারস্কোর, `_`, হল একটি ক্যাচ-অল মান; এই উদাহরণে, আমরা বলছি যে আমরা সমস্ত `Err` মানের সাথে মেলাতে চাই, সেগুলোর ভিতরে যাই তথ্য থাকুক না কেন। তাই প্রোগ্রামটি দ্বিতীয় আর্মের কোড, `continue`, চালাবে, যেটি প্রোগ্রামটিকে `loop`-এর পরবর্তী পুনরাবৃত্তিতে যেতে এবং আরেকটি অনুমানের জন্য জিজ্ঞাসা করতে বলে। সুতরাং, কার্যকরভাবে, প্রোগ্রামটি `parse`-এর সম্মুখীন হতে পারে এমন সমস্ত এরর উপেক্ষা করে!
 
-Now everything in the program should work as expected. Let’s try it:
+এবার প্রোগ্রামের সবকিছু প্রত্যাশিতভাবে কাজ করা উচিত। চলুন চেষ্টা করি:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-05/
@@ -896,12 +797,9 @@ You guessed: 61
 You win!
 ```
 
-Awesome! With one tiny final tweak, we will finish the guessing game. Recall
-that the program is still printing the secret number. That worked well for
-testing, but it ruins the game. Let’s delete the `println!` that outputs the
-secret number. Listing 2-6 shows the final code.
+দারুণ! একটি ছোট্ট ফাইনাল টুইক দিয়ে, আমরা অনুমানের গেমটি শেষ করব। মনে রাখবেন যে প্রোগ্রামটি এখনও গোপন সংখ্যাটি প্রিন্ট করছে। সেটি পরীক্ষার জন্য ভাল কাজ করেছিল, কিন্তু এটি গেমটিকে নষ্ট করে দেয়। চলুন `println!`-টি মুছে ফেলি যেটি গোপন সংখ্যাটি আউটপুট করে। Listing 2-6 চূড়ান্ত কোডটি দেখায়।
 
-<Listing number="2-6" file-name="src/main.rs" caption="Complete guessing game code">
+<Listing number="2-6" file-name="src/main.rs" caption="সম্পূর্ণ অনুমানের গেম কোড">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-06/src/main.rs}}
@@ -909,17 +807,11 @@ secret number. Listing 2-6 shows the final code.
 
 </Listing>
 
-At this point, you’ve successfully built the guessing game. Congratulations!
+এই পর্যায়ে, আপনি সফলভাবে অনুমানের গেমটি তৈরি করেছেন। অভিনন্দন!
 
-## Summary
+## সারসংক্ষেপ (Summary)
 
-This project was a hands-on way to introduce you to many new Rust concepts:
-`let`, `match`, functions, the use of external crates, and more. In the next
-few chapters, you’ll learn about these concepts in more detail. Chapter 3
-covers concepts that most programming languages have, such as variables, data
-types, and functions, and shows how to use them in Rust. Chapter 4 explores
-ownership, a feature that makes Rust different from other languages. Chapter 5
-discusses structs and method syntax, and Chapter 6 explains how enums work.
+এই প্রোজেক্টটি আপনাকে অনেকগুলো নতুন Rust কনসেপ্টের সাথে পরিচয় করিয়ে দেওয়ার একটি হ্যান্ডস-অন উপায় ছিল: `let`, `match`, ফাংশন, এক্সটার্নাল ক্রেটগুলোর ব্যবহার এবং আরও অনেক কিছু। পরের কয়েকটি চ্যাপ্টারে, আপনি এই কনসেপ্টগুলো সম্পর্কে আরও বিস্তারিত জানতে পারবেন। চ্যাপ্টার ৩-এ বেশিরভাগ প্রোগ্রামিং ল্যাঙ্গুয়েজের কনসেপ্টগুলো, যেমন ভেরিয়েবল, ডেটা টাইপ এবং ফাংশন কভার করে এবং সেগুলো Rust-এ কীভাবে ব্যবহার করতে হয় তা দেখায়। চ্যাপ্টার ৪-এ ওনারশিপ (ownership) নিয়ে আলোচনা করা হয়েছে, একটি ফিচার যা Rust-কে অন্যান্য ল্যাঙ্গুয়েজ থেকে আলাদা করে। চ্যাপ্টার ৫-এ স্ট্রাক্ট এবং মেথড সিনট্যাক্স নিয়ে আলোচনা করা হয়েছে এবং চ্যাপ্টার ৬ ব্যাখ্যা করে যে কীভাবে enum কাজ করে।
 
 [prelude]: ../std/prelude/index.html
 [variables-and-mutability]: ch03-01-variables-and-mutability.html#variables-and-mutability
