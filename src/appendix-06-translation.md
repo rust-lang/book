@@ -1,7 +1,6 @@
-## Appendix F: Translations of the Book
+## পরিশিষ্ট F: বইটির অনুবাদ (Translations of the Book)
 
-For resources in languages other than English. Most are still in progress; see
-[the Translations label][label] to help or let us know about a new translation!
+ইংরেজি ছাড়া অন্য ভাষাগুলির রিসোর্সের জন্য। বেশিরভাগই এখনও প্রক্রিয়াধীন; সাহায্য করতে বা একটি নতুন অনুবাদ সম্পর্কে আমাদের জানাতে [অনুবাদ লেবেল][label] দেখুন!
 
 [label]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 

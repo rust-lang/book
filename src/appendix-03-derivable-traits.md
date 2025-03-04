@@ -1,182 +1,88 @@
-## Appendix C: Derivable Traits
+## পরিশিষ্ট C: ডিরাইভেবল ট্রেইট (Derivable Traits)
 
-In various places in the book, we’ve discussed the `derive` attribute, which
-you can apply to a struct or enum definition. The `derive` attribute generates
-code that will implement a trait with its own default implementation on the
-type you’ve annotated with the `derive` syntax.
+বইয়ের বিভিন্ন স্থানে, আমরা `derive` অ্যাট্রিবিউট নিয়ে আলোচনা করেছি, যা আপনি একটি স্ট্রাক্ট বা এনাম সংজ্ঞায় প্রয়োগ করতে পারেন। `derive` অ্যাট্রিবিউট কোড তৈরি করে যা `derive` সিনট্যাক্স দিয়ে আপনি যে টাইপটিকে অ্যানোটেট করেছেন তার উপর নিজস্ব ডিফল্ট ইমপ্লিমেন্টেশন সহ একটি ট্রেইট ইমপ্লিমেন্ট করবে।
 
-In this appendix, we provide a reference of all the traits in the standard
-library that you can use with `derive`. Each section covers:
+এই পরিশিষ্টে, আমরা স্ট্যান্ডার্ড লাইব্রেরির সমস্ত ট্রেইটের একটি রেফারেন্স সরবরাহ করি যা আপনি `derive`-এর সাথে ব্যবহার করতে পারেন। প্রতিটি বিভাগে কভার করা হয়েছে:
 
-- What operators and methods deriving this trait will enable
-- What the implementation of the trait provided by `derive` does
-- What implementing the trait signifies about the type
-- The conditions in which you’re allowed or not allowed to implement the trait
-- Examples of operations that require the trait
+- এই ট্রেইট ডিরাইভ করলে কোন অপারেটর এবং মেথডগুলি সক্রিয় হবে
+- `derive` দ্বারা প্রদত্ত ট্রেইটের ইমপ্লিমেন্টেশন কী করে
+- ট্রেইট ইমপ্লিমেন্ট করা টাইপ সম্পর্কে কী বোঝায়
+- কোন পরিস্থিতিতে আপনাকে ট্রেইট ইমপ্লিমেন্ট করার অনুমতি দেওয়া হয়েছে বা নেই
+- অপারেশনের উদাহরণ যার জন্য ট্রেইট প্রয়োজন
 
-If you want different behavior from that provided by the `derive` attribute,
-consult the [standard library documentation](../std/index.html)<!-- ignore -->
-for each trait for details of how to manually implement them.
+আপনি যদি `derive` অ্যাট্রিবিউট দ্বারা প্রদত্ত আচরণ থেকে ভিন্ন আচরণ চান, তাহলে ম্যানুয়ালি কীভাবে সেগুলি ইমপ্লিমেন্ট করবেন তার বিশদ বিবরণের জন্য প্রতিটি ট্রেইটের জন্য [স্ট্যান্ডার্ড লাইব্রেরি ডকুমেন্টেশন](../std/index.html)<!-- ignore --> দেখুন।
 
-These traits listed here are the only ones defined by the standard library that
-can be implemented on your types using `derive`. Other traits defined in the
-standard library don’t have sensible default behavior, so it’s up to you to
-implement them in the way that makes sense for what you’re trying to accomplish.
+এখানে তালিকাভুক্ত এই ট্রেইটগুলি হল স্ট্যান্ডার্ড লাইব্রেরি দ্বারা সংজ্ঞায়িত একমাত্র ট্রেইট যা `derive` ব্যবহার করে আপনার টাইপগুলিতে ইমপ্লিমেন্ট করা যেতে পারে। স্ট্যান্ডার্ড লাইব্রেরিতে সংজ্ঞায়িত অন্যান্য ট্রেইটগুলির যুক্তিসঙ্গত ডিফল্ট আচরণ নেই, তাই আপনি যা অর্জন করার চেষ্টা করছেন তার জন্য উপযুক্ত উপায়ে সেগুলি ইমপ্লিমেন্ট করা আপনার উপর নির্ভর করে।
 
-An example of a trait that can’t be derived is `Display`, which handles
-formatting for end users. You should always consider the appropriate way to
-display a type to an end user. What parts of the type should an end user be
-allowed to see? What parts would they find relevant? What format of the data
-would be most relevant to them? The Rust compiler doesn’t have this insight, so
-it can’t provide appropriate default behavior for you.
+একটি ট্রেইটের উদাহরণ যা ডিরাইভ করা যায় না তা হল `Display`, যা শেষ ব্যবহারকারীদের জন্য ফরম্যাটিং পরিচালনা করে। আপনার সর্বদা একজন শেষ ব্যবহারকারীর কাছে একটি টাইপ প্রদর্শনের উপযুক্ত উপায় বিবেচনা করা উচিত। টাইপের কোন অংশগুলি শেষ ব্যবহারকারীর দেখার অনুমতি দেওয়া উচিত? কোন অংশগুলি তারা প্রাসঙ্গিক বলে মনে করবে? ডেটার কোন ফরম্যাট তাদের জন্য সবচেয়ে প্রাসঙ্গিক হবে? Rust কম্পাইলারের এই অন্তর্দৃষ্টি নেই, তাই এটি আপনার জন্য উপযুক্ত ডিফল্ট আচরণ সরবরাহ করতে পারে না।
 
-The list of derivable traits provided in this appendix is not comprehensive:
-libraries can implement `derive` for their own traits, making the list of
-traits you can use `derive` with truly open-ended. Implementing `derive`
-involves using a procedural macro, which is covered in the
-[“Macros”][macros]<!-- ignore --> section of Chapter 20.
+এই পরিশিষ্টে প্রদত্ত ডিরাইভেবল ট্রেইটগুলির তালিকা ব্যাপক নয়: লাইব্রেরিগুলি তাদের নিজস্ব ট্রেইটগুলির জন্য `derive` ইমপ্লিমেন্ট করতে পারে, যার ফলে আপনি যে ট্রেইটগুলির সাথে `derive` ব্যবহার করতে পারেন তার তালিকা সত্যিই উন্মুক্ত। `derive` ইমপ্লিমেন্ট করার সাথে একটি প্রসিডিউরাল ম্যাক্রো ব্যবহার করা জড়িত, যা বিশ অধ্যায়ের [“ম্যাক্রো”][macros]<!-- ignore --> বিভাগে কভার করা হয়েছে।
 
-### `Debug` for Programmer Output
+### প্রোগ্রামার আউটপুটের জন্য `Debug`
 
-The `Debug` trait enables debug formatting in format strings, which you
-indicate by adding `:?` within `{}` placeholders.
+`Debug` ট্রেইট ফরম্যাট স্ট্রিংগুলিতে ডিবাগ ফরম্যাটিং সক্রিয় করে, যা আপনি `{}` প্লেসহোল্ডারগুলির মধ্যে `:?` যোগ করে নির্দেশ করেন।
 
-The `Debug` trait allows you to print instances of a type for debugging
-purposes, so you and other programmers using your type can inspect an instance
-at a particular point in a program’s execution.
+`Debug` ট্রেইট আপনাকে ডিবাগিংয়ের উদ্দেশ্যে একটি টাইপের ইন্সট্যান্স প্রিন্ট করার অনুমতি দেয়, যাতে আপনি এবং আপনার টাইপ ব্যবহারকারী অন্যান্য প্রোগ্রামাররা প্রোগ্রামের এক্সিকিউশনের একটি নির্দিষ্ট পয়েন্টে একটি ইন্সট্যান্স পরিদর্শন করতে পারেন।
 
-The `Debug` trait is required, for example, in using the `assert_eq!` macro.
-This macro prints the values of instances given as arguments if the equality
-assertion fails so programmers can see why the two instances weren’t equal.
+উদাহরণস্বরূপ, `assert_eq!` ম্যাক্রো ব্যবহারে `Debug` ট্রেইট প্রয়োজন। যদি সমতা অ্যাসারশন ব্যর্থ হয় তবে এই ম্যাক্রো আর্গুমেন্ট হিসাবে দেওয়া ইন্সট্যান্সগুলির ভ্যালু প্রিন্ট করে যাতে প্রোগ্রামাররা দেখতে পারে কেন দুটি ইন্সট্যান্স সমান ছিল না।
 
-### `PartialEq` and `Eq` for Equality Comparisons
+### সমতা তুলনার জন্য `PartialEq` এবং `Eq`
 
-The `PartialEq` trait allows you to compare instances of a type to check for
-equality and enables use of the `==` and `!=` operators.
+`PartialEq` ট্রেইট আপনাকে সমতা পরীক্ষা করার জন্য একটি টাইপের ইন্সট্যান্সগুলির তুলনা করার অনুমতি দেয় এবং `==` এবং `!=` অপারেটরগুলির ব্যবহার সক্রিয় করে।
 
-Deriving `PartialEq` implements the `eq` method. When `PartialEq` is derived on
-structs, two instances are equal only if _all_ fields are equal, and the
-instances are not equal if any fields are not equal. When derived on enums,
-each variant is equal to itself and not equal to the other variants.
+`PartialEq` ডিরাইভ করা `eq` মেথড ইমপ্লিমেন্ট করে। যখন স্ট্রাক্টগুলিতে `PartialEq` ডিরাইভ করা হয়, তখন দুটি ইন্সট্যান্স শুধুমাত্র তখনই সমান হয় যদি _সমস্ত_ ফিল্ড সমান হয় এবং ইন্সট্যান্সগুলি সমান হয় না যদি কোনও ফিল্ড সমান না হয়। যখন এনামগুলিতে ডিরাইভ করা হয়, তখন প্রতিটি ভেরিয়েন্ট নিজের সাথে সমান এবং অন্য ভেরিয়েন্টগুলির সাথে সমান নয়।
 
-The `PartialEq` trait is required, for example, with the use of the
-`assert_eq!` macro, which needs to be able to compare two instances of a type
-for equality.
+উদাহরণস্বরূপ, `assert_eq!` ম্যাক্রোর ব্যবহারের সাথে `PartialEq` ট্রেইট প্রয়োজন, যেটি সমতার জন্য একটি টাইপের দুটি ইন্সট্যান্সের তুলনা করতে সক্ষম হওয়া প্রয়োজন।
 
-The `Eq` trait has no methods. Its purpose is to signal that for every value of
-the annotated type, the value is equal to itself. The `Eq` trait can only be
-applied to types that also implement `PartialEq`, although not all types that
-implement `PartialEq` can implement `Eq`. One example of this is floating point
-number types: the implementation of floating point numbers states that two
-instances of the not-a-number (`NaN`) value are not equal to each other.
+`Eq` ট্রেইটের কোনো মেথড নেই। এর উদ্দেশ্য হল সংকেত দেওয়া যে অ্যানোটেটেড টাইপের প্রতিটি ভ্যালুর জন্য, ভ্যালুটি নিজের সমান। `Eq` ট্রেইট শুধুমাত্র সেই টাইপগুলিতে প্রয়োগ করা যেতে পারে যা `PartialEq` ইমপ্লিমেন্ট করে, যদিও `PartialEq` ইমপ্লিমেন্ট করে এমন সমস্ত টাইপ `Eq` ইমপ্লিমেন্ট করতে পারে না। এর একটি উদাহরণ হল ফ্লোটিং পয়েন্ট নম্বর টাইপ: ফ্লোটিং পয়েন্ট সংখ্যার ইমপ্লিমেন্টেশন বলে যে নট-এ-নাম্বার (`NaN`) ভ্যালুর দুটি ইন্সট্যান্স একে অপরের সমান নয়।
 
-An example of when `Eq` is required is for keys in a `HashMap<K, V>` so the
-`HashMap<K, V>` can tell whether two keys are the same.
+কখন `Eq` প্রয়োজন তার একটি উদাহরণ হল `HashMap<K, V>`-তে key-এর জন্য, যাতে `HashMap<K, V>` বলতে পারে দুটি key একই কিনা।
 
-### `PartialOrd` and `Ord` for Ordering Comparisons
+### অর্ডারিং তুলনার জন্য `PartialOrd` এবং `Ord`
 
-The `PartialOrd` trait allows you to compare instances of a type for sorting
-purposes. A type that implements `PartialOrd` can be used with the `<`, `>`,
-`<=`, and `>=` operators. You can only apply the `PartialOrd` trait to types
-that also implement `PartialEq`.
+`PartialOrd` ট্রেইট আপনাকে সর্টিংয়ের উদ্দেশ্যে একটি টাইপের ইন্সট্যান্সগুলির তুলনা করার অনুমতি দেয়। যে টাইপ `PartialOrd` ইমপ্লিমেন্ট করে সেটি `<`, `>`, `<=`, এবং `>=` অপারেটরগুলির সাথে ব্যবহার করা যেতে পারে। আপনি শুধুমাত্র সেই টাইপগুলিতে `PartialOrd` ট্রেইট প্রয়োগ করতে পারেন যা `PartialEq` ইমপ্লিমেন্ট করে।
 
-Deriving `PartialOrd` implements the `partial_cmp` method, which returns an
-`Option<Ordering>` that will be `None` when the values given don’t produce an
-ordering. An example of a value that doesn’t produce an ordering, even though
-most values of that type can be compared, is the `NaN` floating point value.
-Calling `partial_cmp` with any floating point number and the `NaN` floating
-point value will return `None`.
+`PartialOrd` ডিরাইভ করা `partial_cmp` মেথড ইমপ্লিমেন্ট করে, যা একটি `Option<Ordering>` রিটার্ন করে যা `None` হবে যখন প্রদত্ত ভ্যালুগুলি কোনো অর্ডারিং তৈরি করে না। একটি ভ্যালুর উদাহরণ যা কোনো অর্ডারিং তৈরি করে না, যদিও সেই টাইপের বেশিরভাগ ভ্যালু তুলনা করা যায়, তা হল `NaN` ফ্লোটিং পয়েন্ট ভ্যালু। যেকোনো ফ্লোটিং পয়েন্ট নম্বর এবং `NaN` ফ্লোটিং পয়েন্ট ভ্যালু দিয়ে `partial_cmp` কল করলে `None` রিটার্ন করবে।
 
-When derived on structs, `PartialOrd` compares two instances by comparing the
-value in each field in the order in which the fields appear in the struct
-definition. When derived on enums, variants of the enum declared earlier in the
-enum definition are considered less than the variants listed later.
+যখন স্ট্রাক্টগুলিতে ডিরাইভ করা হয়, তখন `PartialOrd` স্ট্রাক্ট সংজ্ঞায় ফিল্ডগুলি যে ক্রমে প্রদর্শিত হয় সেই ক্রমে প্রতিটি ফিল্ডের ভ্যালু তুলনা করে দুটি ইন্সট্যান্সের তুলনা করে। যখন এনামগুলিতে ডিরাইভ করা হয়, তখন এনাম সংজ্ঞায় আগে ঘোষিত এনামের ভেরিয়েন্টগুলিকে পরে তালিকাভুক্ত ভেরিয়েন্টগুলির চেয়ে কম বলে মনে করা হয়।
 
-The `PartialOrd` trait is required, for example, for the `gen_range` method
-from the `rand` crate that generates a random value in the range specified by a
-range expression.
+উদাহরণস্বরূপ, `rand` ক্রেট থেকে `gen_range` মেথডের জন্য `PartialOrd` ট্রেইট প্রয়োজন, যা একটি রেঞ্জ এক্সপ্রেশন দ্বারা নির্দিষ্ট করা রেঞ্জে একটি র্যান্ডম ভ্যালু জেনারেট করে।
 
-The `Ord` trait allows you to know that for any two values of the annotated
-type, a valid ordering will exist. The `Ord` trait implements the `cmp` method,
-which returns an `Ordering` rather than an `Option<Ordering>` because a valid
-ordering will always be possible. You can only apply the `Ord` trait to types
-that also implement `PartialOrd` and `Eq` (and `Eq` requires `PartialEq`). When
-derived on structs and enums, `cmp` behaves the same way as the derived
-implementation for `partial_cmp` does with `PartialOrd`.
+`Ord` ট্রেইট আপনাকে জানতে দেয় যে অ্যানোটেটেড টাইপের যেকোনো দুটি ভ্যালুর জন্য, একটি বৈধ অর্ডারিং বিদ্যমান থাকবে। `Ord` ট্রেইট `cmp` মেথড ইমপ্লিমেন্ট করে, যা একটি `Option<Ordering>`-এর পরিবর্তে একটি `Ordering` রিটার্ন করে কারণ একটি বৈধ অর্ডারিং সর্বদা সম্ভব হবে। আপনি শুধুমাত্র সেই টাইপগুলিতে `Ord` ট্রেইট প্রয়োগ করতে পারেন যা `PartialOrd` এবং `Eq` ইমপ্লিমেন্ট করে (এবং `Eq`-এর জন্য `PartialEq` প্রয়োজন)। যখন স্ট্রাক্ট এবং এনামগুলিতে ডিরাইভ করা হয়, তখন `cmp`, `PartialOrd`-এর সাথে `partial_cmp`-এর জন্য ডিরাইভ করা ইমপ্লিমেন্টেশনের মতোই আচরণ করে।
 
-An example of when `Ord` is required is when storing values in a `BTreeSet<T>`,
-a data structure that stores data based on the sort order of the values.
+কখন `Ord` প্রয়োজন তার একটি উদাহরণ হল `BTreeSet<T>`-তে ভ্যালু সংরক্ষণ করার সময়, একটি ডেটা স্ট্রাকচার যা ভ্যালুগুলির সর্ট অর্ডারের উপর ভিত্তি করে ডেটা সংরক্ষণ করে।
 
-### `Clone` and `Copy` for Duplicating Values
+### ভ্যালু ডুপ্লিকেট করার জন্য `Clone` এবং `Copy`
 
-The `Clone` trait allows you to explicitly create a deep copy of a value, and
-the duplication process might involve running arbitrary code and copying heap
-data. See [Variables and Data Interacting with
-Clone”][variables-and-data-interacting-with-clone]<!-- ignore --> in Chapter 4
-for more information on `Clone`.
+`Clone` ট্রেইট আপনাকে একটি ভ্যালুর একটি ডিপ কপি তৈরি করার অনুমতি দেয় এবং ডুপ্লিকেশন প্রক্রিয়ায় নির্বিচারে কোড চালানো এবং হিপ ডেটা কপি করা জড়িত থাকতে পারে। `Clone` সম্পর্কে আরও তথ্যের জন্য চতুর্থ অধ্যায়ের [“ভেরিয়েবল এবং ডেটার সাথে ক্লোনের মিথস্ক্রিয়া”][variables-and-data-interacting-with-clone]<!-- ignore --> দেখুন।
 
-Deriving `Clone` implements the `clone` method, which when implemented for the
-whole type, calls `clone` on each of the parts of the type. This means all the
-fields or values in the type must also implement `Clone` to derive `Clone`.
+`Clone` ডিরাইভ করা `clone` মেথড ইমপ্লিমেন্ট করে, যা সম্পূর্ণ টাইপের জন্য ইমপ্লিমেন্ট করা হলে, টাইপের প্রতিটি অংশে `clone` কল করে। এর মানে হল `Clone` ডিরাইভ করার জন্য টাইপের সমস্ত ফিল্ড বা ভ্যালুগুলিকে অবশ্যই `Clone` ইমপ্লিমেন্ট করতে হবে।
 
-An example of when `Clone` is required is when calling the `to_vec` method on a
-slice. The slice doesn’t own the type instances it contains, but the vector
-returned from `to_vec` will need to own its instances, so `to_vec` calls
-`clone` on each item. Thus, the type stored in the slice must implement `Clone`.
+কখন `Clone` প্রয়োজন তার একটি উদাহরণ হল একটি স্লাইসে `to_vec` মেথড কল করার সময়। স্লাইসটি এতে থাকা টাইপ ইন্সট্যান্সগুলির মালিক নয়, কিন্তু `to_vec` থেকে রিটার্ন করা ভেক্টরটির তার ইন্সট্যান্সগুলির মালিক হতে হবে, তাই `to_vec` প্রতিটি আইটেমে `clone` কল করে। সুতরাং, স্লাইসে সংরক্ষিত টাইপটিকে অবশ্যই `Clone` ইমপ্লিমেন্ট করতে হবে।
 
-The `Copy` trait allows you to duplicate a value by only copying bits stored on
-the stack; no arbitrary code is necessary. See [“Stack-Only Data:
-Copy”][stack-only-data-copy]<!-- ignore --> in Chapter 4 for more information on
-`Copy`.
+`Copy` ট্রেইট আপনাকে শুধুমাত্র স্ট্যাকে সংরক্ষিত বিটগুলি কপি করে একটি ভ্যালু ডুপ্লিকেট করার অনুমতি দেয়; কোনো নির্বিচারে কোডের প্রয়োজন নেই। `Copy` সম্পর্কে আরও তথ্যের জন্য চতুর্থ অধ্যায়ের [“শুধুমাত্র স্ট্যাক ডেটা: কপি”][stack-only-data-copy]<!-- ignore --> দেখুন।
 
-The `Copy` trait doesn’t define any methods to prevent programmers from
-overloading those methods and violating the assumption that no arbitrary code
-is being run. That way, all programmers can assume that copying a value will be
-very fast.
+`Copy` ট্রেইট প্রোগ্রামারদের সেই মেথডগুলিকে ওভারলোড করা এবং কোনও নির্বিচারে কোড চালানো হচ্ছে না সেই অনুমান লঙ্ঘন করা থেকে বিরত রাখতে কোনও মেথড সংজ্ঞায়িত করে না। এইভাবে, সমস্ত প্রোগ্রামার অনুমান করতে পারে যে একটি ভ্যালু কপি করা খুব দ্রুত হবে।
 
-You can derive `Copy` on any type whose parts all implement `Copy`. A type that
-implements `Copy` must also implement `Clone`, because a type that implements
-`Copy` has a trivial implementation of `Clone` that performs the same task as
-`Copy`.
+আপনি যেকোনো টাইপের উপর `Copy` ডিরাইভ করতে পারেন যার সমস্ত অংশ `Copy` ইমপ্লিমেন্ট করে। যে টাইপ `Copy` ইমপ্লিমেন্ট করে তাকে অবশ্যই `Clone` ইমপ্লিমেন্ট করতে হবে, কারণ যে টাইপ `Copy` ইমপ্লিমেন্ট করে তার `Clone`-এর একটি তুচ্ছ ইমপ্লিমেন্টেশন রয়েছে যা `Copy`-এর মতোই কাজ করে।
 
-The `Copy` trait is rarely required; types that implement `Copy` have
-optimizations available, meaning you don’t have to call `clone`, which makes
-the code more concise.
+`Copy` ট্রেইট খুব কমই প্রয়োজন হয়; যে টাইপগুলি `Copy` ইমপ্লিমেন্ট করে তাদের অপ্টিমাইজেশন উপলব্ধ থাকে, যার অর্থ আপনাকে `clone` কল করতে হবে না, যা কোডটিকে আরও সংক্ষিপ্ত করে তোলে।
 
-Everything possible with `Copy` you can also accomplish with `Clone`, but the
-code might be slower or have to use `clone` in places.
+`Copy` দিয়ে যা কিছু সম্ভব তা আপনি `Clone` দিয়েও সম্পন্ন করতে পারেন, তবে কোডটি ধীর হতে পারে বা জায়গায় `clone` ব্যবহার করতে হতে পারে।
 
-### `Hash` for Mapping a Value to a Value of Fixed Size
+### একটি নির্দিষ্ট আকারের ভ্যালুতে একটি ভ্যালু ম্যাপ করার জন্য `Hash`
 
-The `Hash` trait allows you to take an instance of a type of arbitrary size and
-map that instance to a value of fixed size using a hash function. Deriving
-`Hash` implements the `hash` method. The derived implementation of the `hash`
-method combines the result of calling `hash` on each of the parts of the type,
-meaning all fields or values must also implement `Hash` to derive `Hash`.
+`Hash` ট্রেইট আপনাকে নির্বিচারে আকারের একটি টাইপের ইন্সট্যান্স নিতে এবং একটি হ্যাশ ফাংশন ব্যবহার করে সেই ইন্সট্যান্সটিকে নির্দিষ্ট আকারের একটি ভ্যালুতে ম্যাপ করার অনুমতি দেয়। `Hash` ডিরাইভ করা `hash` মেথড ইমপ্লিমেন্ট করে। `hash` মেথডের ডিরাইভ করা ইমপ্লিমেন্টেশন টাইপের প্রতিটি অংশে `hash` কল করার ফলাফলকে একত্রিত করে, যার অর্থ `Hash` ডিরাইভ করার জন্য সমস্ত ফিল্ড বা ভ্যালুগুলিকে অবশ্যই `Hash` ইমপ্লিমেন্ট করতে হবে।
 
-An example of when `Hash` is required is in storing keys in a `HashMap<K, V>`
-to store data efficiently.
+কখন `Hash` প্রয়োজন তার একটি উদাহরণ হল ডেটা দক্ষতার সাথে সংরক্ষণ করার জন্য `HashMap<K, V>`-তে key সংরক্ষণ করার সময়।
 
-### `Default` for Default Values
+### ডিফল্ট ভ্যালুর জন্য `Default`
 
-The `Default` trait allows you to create a default value for a type. Deriving
-`Default` implements the `default` function. The derived implementation of the
-`default` function calls the `default` function on each part of the type,
-meaning all fields or values in the type must also implement `Default` to
-derive `Default`.
+`Default` ট্রেইট আপনাকে একটি টাইপের জন্য একটি ডিফল্ট ভ্যালু তৈরি করার অনুমতি দেয়। `Default` ডিরাইভ করা `default` ফাংশন ইমপ্লিমেন্ট করে। `default` ফাংশনের ডিরাইভ করা ইমপ্লিমেন্টেশন টাইপের প্রতিটি অংশে `default` ফাংশন কল করে, যার অর্থ `Default` ডিরাইভ করার জন্য টাইপের সমস্ত ফিল্ড বা ভ্যালুগুলিকে অবশ্যই `Default` ইমপ্লিমেন্ট করতে হবে।
 
-The `Default::default` function is commonly used in combination with the struct
-update syntax discussed in [“Creating Instances From Other Instances With Struct
-Update
-Syntax”][creating-instances-from-other-instances-with-struct-update-syntax]<!--
-ignore --> in Chapter 5. You can customize a few fields of a struct and then set
-and use a default value for the rest of the fields by using
-`..Default::default()`.
+`Default::default` ফাংশনটি সাধারণত পঞ্চম অধ্যায়ের [“স্ট্রাক্ট আপডেট সিনট্যাক্স সহ অন্যান্য ইন্সট্যান্স থেকে ইন্সট্যান্স তৈরি করা”][creating-instances-from-other-instances-with-struct-update-syntax]<!-- ignore --> তে আলোচিত স্ট্রাক্ট আপডেট সিনট্যাক্সের সাথে ব্যবহার করা হয়। আপনি একটি স্ট্রাক্টের কয়েকটি ফিল্ড কাস্টমাইজ করতে পারেন এবং তারপর `..Default::default()` ব্যবহার করে বাকি ফিল্ডগুলির জন্য একটি ডিফল্ট ভ্যালু সেট এবং ব্যবহার করতে পারেন।
 
-The `Default` trait is required when you use the method `unwrap_or_default` on
-`Option<T>` instances, for example. If the `Option<T>` is `None`, the method
-`unwrap_or_default` will return the result of `Default::default` for the type
-`T` stored in the `Option<T>`.
+উদাহরণস্বরূপ, আপনি যখন `Option<T>` ইন্সট্যান্সে `unwrap_or_default` মেথড ব্যবহার করেন তখন `Default` ট্রেইট প্রয়োজন। যদি `Option<T>` `None` হয়, তাহলে `unwrap_or_default` মেথড `Option<T>`-তে সংরক্ষিত টাইপ `T`-এর জন্য `Default::default`-এর ফলাফল রিটার্ন করবে।
 
 [creating-instances-from-other-instances-with-struct-update-syntax]: ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
 [stack-only-data-copy]: ch04-01-what-is-ownership.html#stack-only-data-copy

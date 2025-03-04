@@ -1,57 +1,25 @@
-## Appendix E - Editions
+## পরিশিষ্ট E - এডিশন (Editions)
 
-In Chapter 1, you saw that `cargo new` adds a bit of metadata to your
-_Cargo.toml_ file about an edition. This appendix talks about what that means!
+প্রথম অধ্যায়ে, আপনি দেখেছেন যে `cargo new` আপনার _Cargo.toml_ ফাইলে এডিশন সম্পর্কে কিছু মেটাডেটা যুক্ত করে। এই পরিশিষ্টে এটি কী বোঝায় তা নিয়ে আলোচনা করা হয়েছে।
 
-The Rust language and compiler have a six-week release cycle, meaning users get
-a constant stream of new features. Other programming languages release larger
-changes less often; Rust releases smaller updates more frequently. After a
-while, all of these tiny changes add up. But from release to release, it can be
-difficult to look back and say, “Wow, between Rust 1.10 and Rust 1.31, Rust has
-changed a lot!”
+Rust ভাষা এবং কম্পাইলারের ছয় সপ্তাহের একটি রিলিজ চক্র রয়েছে, যার অর্থ ব্যবহারকারীরা ক্রমাগত নতুন ফিচারের একটি ধারা পান। অন্যান্য প্রোগ্রামিং ভাষাগুলি কম ঘন ঘন বড় পরিবর্তন প্রকাশ করে; Rust আরও ঘন ঘন ছোট আপডেট প্রকাশ করে। কিছুক্ষণ পর, এই সমস্ত ক্ষুদ্র পরিবর্তনগুলি যোগ হয়ে যায়। কিন্তু রিলিজ থেকে রিলিজে ফিরে তাকানো এবং বলা কঠিন হতে পারে, "বাহ, Rust 1.10 এবং Rust 1.31-এর মধ্যে, Rust অনেক পরিবর্তিত হয়েছে!"
 
-Every two or three years, the Rust team produces a new Rust _edition_. Each
-edition brings together the features that have landed into a clear package with
-fully updated documentation and tooling. New editions ship as part of the usual
-six-week release process.
+প্রতি দুই বা তিন বছরে, Rust টিম একটি নতুন Rust _এডিশন_ তৈরি করে। প্রতিটি এডিশন সম্পূর্ণ আপডেটেড ডকুমেন্টেশন এবং টুলিং সহ একটি পরিষ্কার প্যাকেজে যে ফিচারগুলি এসেছে সেগুলিকে একত্রিত করে। নতুন এডিশনগুলি সাধারণ ছয় সপ্তাহের রিলিজ প্রক্রিয়ার অংশ হিসাবে পাঠানো হয়।
 
-Editions serve different purposes for different people:
+এডিশনগুলি বিভিন্ন লোকের জন্য বিভিন্ন উদ্দেশ্যে কাজ করে:
 
-- For active Rust users, a new edition brings together incremental changes into
-  an easy-to-understand package.
-- For non-users, a new edition signals that some major advancements have
-  landed, which might make Rust worth another look.
-- For those developing Rust, a new edition provides a rallying point for the
-  project as a whole.
+-   সক্রিয় Rust ব্যবহারকারীদের জন্য, একটি নতুন এডিশন ক্রমবর্ধমান পরিবর্তনগুলিকে সহজে বোঝা যায় এমন একটি প্যাকেজে একত্রিত করে।
+-   অ-ব্যবহারকারীদের জন্য, একটি নতুন এডিশন সংকেত দেয় যে কিছু বড় অগ্রগতি এসেছে, যা Rust-কে পুনরায় দেখার যোগ্য করে তুলতে পারে।
+-   যারা Rust ডেভেলপ করছেন তাদের জন্য, একটি নতুন এডিশন সমগ্র প্রোজেক্টের জন্য একটি র‍্যালিং পয়েন্ট প্রদান করে।
 
-At the time of this writing, four Rust editions are available: Rust 2015, Rust
-2018, Rust 2021, and Rust 2024. This book is written using Rust 2024 edition
-idioms.
+এই লেখার সময়, চারটি Rust এডিশন উপলব্ধ: Rust 2015, Rust 2018, Rust 2021, এবং Rust 2024। এই বইটি Rust 2024 এডিশনের ইডিয়ম ব্যবহার করে লেখা হয়েছে।
 
-The `edition` key in _Cargo.toml_ indicates which edition the compiler should
-use for your code. If the key doesn’t exist, Rust uses `2015` as the edition
-value for backward compatibility reasons.
+_Cargo.toml_-এর `edition` কী নির্দেশ করে যে কম্পাইলার আপনার কোডের জন্য কোন এডিশন ব্যবহার করবে। যদি কী-টি বিদ্যমান না থাকে, তাহলে পশ্চাৎগামী সামঞ্জস্যতার কারণে Rust `2015` কে এডিশন ভ্যালু হিসাবে ব্যবহার করে।
 
-Each project can opt in to an edition other than the default 2015 edition.
-Editions can contain incompatible changes, such as including a new keyword that
-conflicts with identifiers in code. However, unless you opt in to those
-changes, your code will continue to compile even as you upgrade the Rust
-compiler version you use.
+প্রতিটি প্রোজেক্ট ডিফল্ট 2015 এডিশন ছাড়া অন্য কোনো এডিশন বেছে নিতে পারে। এডিশনগুলিতে বেমানান পরিবর্তন থাকতে পারে, যেমন একটি নতুন কীওয়ার্ড অন্তর্ভুক্ত করা যা কোডের আইডেন্টিফায়ারের সাথে বিরোধ করে। যাইহোক, আপনি যদি সেই পরিবর্তনগুলিতে অপ্ট ইন না করেন, তাহলে আপনি যে Rust কম্পাইলার ভার্সন ব্যবহার করছেন তা আপগ্রেড করলেও আপনার কোড কম্পাইল হতে থাকবে।
 
-All Rust compiler versions support any edition that existed prior to that
-compiler’s release, and they can link crates of any supported editions
-together. Edition changes only affect the way the compiler initially parses
-code. Therefore, if you’re using Rust 2015 and one of your dependencies uses
-Rust 2018, your project will compile and be able to use that dependency. The
-opposite situation, where your project uses Rust 2018 and a dependency uses
-Rust 2015, works as well.
+সমস্ত Rust কম্পাইলার ভার্সন সেই কম্পাইলারের প্রকাশের আগে বিদ্যমান যেকোনো এডিশনকে সমর্থন করে এবং তারা যেকোনো সমর্থিত এডিশনের ক্রেটগুলিকে একসাথে লিঙ্ক করতে পারে। এডিশন পরিবর্তনগুলি শুধুমাত্র কম্পাইলার প্রাথমিকভাবে কোড পার্স করার পদ্ধতিকে প্রভাবিত করে। অতএব, আপনি যদি Rust 2015 ব্যবহার করেন এবং আপনার একটি ডিপেন্ডেন্সি Rust 2018 ব্যবহার করে, তাহলে আপনার প্রোজেক্ট কম্পাইল হবে এবং সেই ডিপেন্ডেন্সি ব্যবহার করতে পারবে। বিপরীত পরিস্থিতি, যেখানে আপনার প্রোজেক্ট Rust 2018 ব্যবহার করে এবং একটি ডিপেন্ডেন্সি Rust 2015 ব্যবহার করে, তাও কাজ করে।
 
-To be clear: most features will be available on all editions. Developers using
-any Rust edition will continue to see improvements as new stable releases are
-made. However, in some cases, mainly when new keywords are added, some new
-features might only be available in later editions. You will need to switch
-editions if you want to take advantage of such features.
+স্পষ্ট করার জন্য: বেশিরভাগ ফিচার সমস্ত এডিশনে উপলব্ধ থাকবে। যেকোনো Rust এডিশন ব্যবহারকারী ডেভেলপাররা নতুন স্থিতিশীল রিলিজ হওয়ার সাথে সাথে উন্নতি দেখতে থাকবেন। যাইহোক, কিছু ক্ষেত্রে, প্রধানত যখন নতুন কীওয়ার্ড যোগ করা হয়, কিছু নতুন ফিচার শুধুমাত্র পরবর্তী এডিশনগুলিতে উপলব্ধ হতে পারে। আপনি যদি এই ধরনের ফিচারগুলির সুবিধা নিতে চান তবে আপনাকে এডিশন পরিবর্তন করতে হবে।
 
-For more details, the [_Edition Guide_](https://doc.rust-lang.org/stable/edition-guide/) is a complete book
-about editions that enumerates the differences between editions and explains
-how to automatically upgrade your code to a new edition via `cargo fix`.
+আরও বিশদ বিবরণের জন্য, [_Edition Guide_](https://doc.rust-lang.org/stable/edition-guide/) হল এডিশন সম্পর্কে একটি সম্পূর্ণ বই যা এডিশনগুলির মধ্যে পার্থক্য গণনা করে এবং `cargo fix`-এর মাধ্যমে কীভাবে স্বয়ংক্রিয়ভাবে আপনার কোডকে একটি নতুন এডিশনে আপগ্রেড করবেন তা ব্যাখ্যা করে।

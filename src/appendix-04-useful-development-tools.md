@@ -1,40 +1,30 @@
-## Appendix D - Useful Development Tools
+## পরিশিষ্ট D - দরকারী ডেভেলপমেন্ট টুল (Useful Development Tools)
 
-In this appendix, we talk about some useful development tools that the Rust
-project provides. We’ll look at automatic formatting, quick ways to apply
-warning fixes, a linter, and integrating with IDEs.
+এই পরিশিষ্টে, আমরা কিছু দরকারী ডেভেলপমেন্ট টুল নিয়ে আলোচনা করব যা Rust প্রোজেক্ট সরবরাহ করে। আমরা স্বয়ংক্রিয় ফরম্যাটিং, ওয়ার্নিং ফিক্স প্রয়োগ করার দ্রুত উপায়, একটি লিন্টার এবং IDE-এর সাথে ইন্টিগ্রেশন দেখব।
 
-### Automatic Formatting with `rustfmt`
+### `rustfmt` দিয়ে স্বয়ংক্রিয় ফরম্যাটিং (Automatic Formatting)
 
-The `rustfmt` tool reformats your code according to the community code style.
-Many collaborative projects use `rustfmt` to prevent arguments about which
-style to use when writing Rust: everyone formats their code using the tool.
+`rustfmt` টুলটি কমিউনিটি কোড স্টাইল অনুযায়ী আপনার কোড রিফরম্যাট করে। অনেক সহযোগিতামূলক প্রোজেক্ট Rust লেখার সময় কোন স্টাইল ব্যবহার করতে হবে তা নিয়ে তর্ক এড়াতে `rustfmt` ব্যবহার করে: প্রত্যেকে টুল ব্যবহার করে তাদের কোড ফরম্যাট করে।
 
-To install `rustfmt`, enter the following:
+`rustfmt` ইনস্টল করতে, নিম্নলিখিতটি লিখুন:
 
 ```console
 $ rustup component add rustfmt
 ```
 
-This command gives you `rustfmt` and `cargo-fmt`, similar to how Rust gives you
-both `rustc` and `cargo`. To format any Cargo project, enter the following:
+এই কমান্ডটি আপনাকে `rustfmt` এবং `cargo-fmt` দেয়, একইভাবে Rust আপনাকে `rustc` এবং `cargo` উভয়ই দেয়। যেকোনো Cargo প্রোজেক্ট ফরম্যাট করতে, নিম্নলিখিতটি লিখুন:
 
 ```console
 $ cargo fmt
 ```
 
-Running this command reformats all the Rust code in the current crate. This
-should only change the code style, not the code semantics. For more information
-on `rustfmt`, see [its documentation][rustfmt].
+এই কমান্ডটি চালানো বর্তমান ক্রেটের সমস্ত Rust কোডকে রিফরম্যাট করে। এটি শুধুমাত্র কোড স্টাইল পরিবর্তন করবে, কোড শব্দার্থ নয়। `rustfmt` সম্পর্কে আরও তথ্যের জন্য, [এর ডকুমেন্টেশন][rustfmt] দেখুন।
 
 [rustfmt]: https://github.com/rust-lang/rustfmt
 
-### Fix Your Code with `rustfix`
+### `rustfix` দিয়ে আপনার কোড ঠিক করুন (Fix Your Code)
 
-The rustfix tool is included with Rust installations and can automatically fix
-compiler warnings that have a clear way to correct the problem that’s likely
-what you want. It’s likely you’ve seen compiler warnings before. For example,
-consider this code:
+`rustfix` টুলটি Rust ইনস্টলেশনের সাথে অন্তর্ভুক্ত এবং স্বয়ংক্রিয়ভাবে কম্পাইলার ওয়ার্নিংগুলি ঠিক করতে পারে যেগুলির সমস্যা সমাধানের একটি পরিষ্কার উপায় রয়েছে যা সম্ভবত আপনি চান। সম্ভবত আপনি আগেও কম্পাইলার ওয়ার্নিং দেখেছেন। উদাহরণস্বরূপ, এই কোডটি বিবেচনা করুন:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -45,8 +35,7 @@ fn main() {
 }
 ```
 
-Here, we’re defining variable `x` as mutable, but we never actually mutate it.
-Rust warns us about that:
+এখানে, আমরা `x` ভেরিয়েবলটিকে মিউটেবল হিসাবে সংজ্ঞায়িত করছি, কিন্তু আমরা আসলে এটিকে কখনই মিউটেট করি না। Rust আমাদের সেই সম্পর্কে সতর্ক করে:
 
 ```console
 $ cargo build
@@ -62,9 +51,7 @@ warning: variable does not need to be mutable
   = note: `#[warn(unused_mut)]` on by default
 ```
 
-The warning suggests that we remove the `mut` keyword. We can automatically
-apply that suggestion using the `rustfix` tool by running the command `cargo
-fix`:
+ওয়ার্নিংটি সাজেস্ট করে যে আমরা `mut` কীওয়ার্ডটি সরিয়ে দিই। আমরা `cargo fix` কমান্ডটি চালিয়ে `rustfix` টুল ব্যবহার করে স্বয়ংক্রিয়ভাবে সেই সাজেশনটি প্রয়োগ করতে পারি:
 
 ```console
 $ cargo fix
@@ -73,8 +60,7 @@ $ cargo fix
     Finished dev [unoptimized + debuginfo] target(s) in 0.59s
 ```
 
-When we look at _src/main.rs_ again, we’ll see that `cargo fix` has changed the
-code:
+আমরা যখন আবার _src/main.rs_ দেখি, তখন আমরা দেখতে পাব যে `cargo fix` কোড পরিবর্তন করেছে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -85,30 +71,27 @@ fn main() {
 }
 ```
 
-The `x` variable is now immutable, and the warning no longer appears.
+`x` ভেরিয়েবলটি এখন ইমিউটেবল, এবং ওয়ার্নিংটি আর দেখা যায় না।
 
-You can also use the `cargo fix` command to transition your code between
-different Rust editions. Editions are covered in [Appendix E][editions].
+আপনি বিভিন্ন Rust এডিশনের মধ্যে আপনার কোড পরিবর্তন করতে `cargo fix` কমান্ডটিও ব্যবহার করতে পারেন। এডিশনগুলি [পরিশিষ্ট E][editions]-এ কভার করা হয়েছে।
 
-### More Lints with Clippy
+### Clippy-র সাথে আরও লিন্ট (More Lints with Clippy)
 
-The Clippy tool is a collection of lints to analyze your code so you can catch
-common mistakes and improve your Rust code.
+Clippy টুলটি আপনার কোড অ্যানালাইজ করার জন্য লিন্টের একটি সংগ্রহ, যাতে আপনি সাধারণ ভুলগুলি ধরতে পারেন এবং আপনার Rust কোড উন্নত করতে পারেন।
 
-To install Clippy, enter the following:
+Clippy ইনস্টল করতে, নিম্নলিখিতটি লিখুন:
 
 ```console
 $ rustup component add clippy
 ```
 
-To run Clippy’s lints on any Cargo project, enter the following:
+যেকোনো Cargo প্রোজেক্টে Clippy-র লিন্ট চালানোর জন্য, নিম্নলিখিতটি লিখুন:
 
 ```console
 $ cargo clippy
 ```
 
-For example, say you write a program that uses an approximation of a
-mathematical constant, such as pi, as this program does:
+উদাহরণস্বরূপ, ধরুন আপনি এমন একটি প্রোগ্রাম লেখেন যা একটি গাণিতিক কনস্ট্যান্টের আসন্ন মান ব্যবহার করে, যেমন pi, যেমনটি এই প্রোগ্রামটি করে:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -120,7 +103,7 @@ fn main() {
 }
 ```
 
-Running `cargo clippy` on this project results in this error:
+এই প্রোজেক্টে `cargo clippy` চালালে এই এররটি আসে:
 
 ```text
 error: approximate value of `f{32, 64}::consts::PI` found
@@ -134,10 +117,7 @@ error: approximate value of `f{32, 64}::consts::PI` found
   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
-This error lets you know that Rust already has a more precise `PI` constant
-defined, and that your program would be more correct if you used the constant
-instead. You would then change your code to use the `PI` constant. The
-following code doesn’t result in any errors or warnings from Clippy:
+এই এররটি আপনাকে জানায় যে Rust-এ ইতিমধ্যেই একটি আরও সুনির্দিষ্ট `PI` কনস্ট্যান্ট সংজ্ঞায়িত করা হয়েছে এবং আপনি যদি কনস্ট্যান্টটি ব্যবহার করেন তবে আপনার প্রোগ্রামটি আরও সঠিক হবে। তারপর আপনি `PI` কনস্ট্যান্ট ব্যবহার করার জন্য আপনার কোড পরিবর্তন করবেন। নিম্নলিখিত কোডটি Clippy থেকে কোনো এরর বা ওয়ার্নিং দেয় না:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -149,26 +129,18 @@ fn main() {
 }
 ```
 
-For more information on Clippy, see [its documentation][clippy].
+Clippy সম্পর্কে আরও তথ্যের জন্য, [এর ডকুমেন্টেশন][clippy] দেখুন।
 
 [clippy]: https://github.com/rust-lang/rust-clippy
 
-### IDE Integration Using `rust-analyzer`
+### `rust-analyzer` ব্যবহার করে IDE ইন্টিগ্রেশন
 
-To help IDE integration, the Rust community recommends using
-[`rust-analyzer`][rust-analyzer]<!-- ignore -->. This tool is a set of
-compiler-centric utilities that speaks the [Language Server Protocol][lsp]<!--
-ignore -->, which is a specification for IDEs and programming languages to
-communicate with each other. Different clients can use `rust-analyzer`, such as
-[the Rust analyzer plug-in for Visual Studio Code][vscode].
+IDE ইন্টিগ্রেশনে সাহায্য করার জন্য, Rust কমিউনিটি [`rust-analyzer`][rust-analyzer]<!-- ignore --> ব্যবহার করার পরামর্শ দেয়। এই টুলটি কম্পাইলার-কেন্দ্রিক ইউটিলিটিগুলির একটি সেট যা [ল্যাঙ্গুয়েজ সার্ভার প্রোটোকল][lsp]<!-- ignore -->-এ কথা বলে, যা IDE এবং প্রোগ্রামিং ভাষাগুলির একে অপরের সাথে যোগাযোগ করার জন্য একটি স্পেসিফিকেশন। বিভিন্ন ক্লায়েন্ট `rust-analyzer` ব্যবহার করতে পারে, যেমন [Visual Studio Code-এর জন্য Rust analyzer প্লাগ-ইন][vscode]।
 
 [lsp]: http://langserver.org/
 [vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer
 
-Visit the `rust-analyzer` project’s [home page][rust-analyzer]<!-- ignore -->
-for installation instructions, then install the language server support in your
-particular IDE. Your IDE will gain abilities such as autocompletion, jump to
-definition, and inline errors.
+ইনস্টলেশন নির্দেশাবলীর জন্য `rust-analyzer` প্রকল্পের [হোম পেজ][rust-analyzer]<!-- ignore --> দেখুন, তারপর আপনার নির্দিষ্ট IDE-তে ল্যাঙ্গুয়েজ সার্ভার সাপোর্ট ইনস্টল করুন। আপনার IDE অটোকমপ্লিশন, জাম্প টু ডেফিনিশন এবং ইনলাইন এরর-এর মতো ক্ষমতা অর্জন করবে।
 
 [rust-analyzer]: https://rust-analyzer.github.io
 [editions]: appendix-05-editions.md
