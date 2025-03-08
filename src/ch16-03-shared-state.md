@@ -76,15 +76,13 @@ that we acquire a lock before using the value in `m`. The type of `m` is
 value. We can’t forget; the type system won’t let us access the inner `i32`
 otherwise.
 
-As you might suspect, `Mutex<T>` is a smart pointer. More accurately, the call
-to `lock` _returns_ a smart pointer called `MutexGuard`, wrapped in a
-`LockResult` that we handled with the call to `unwrap`. The `MutexGuard` smart
-pointer implements `Deref` to point at our inner data; the smart pointer also
-has a `Drop` implementation that releases the lock automatically when a
-`MutexGuard` goes out of scope, which happens at the end of the inner scope. As
-a result, we don’t risk forgetting to release the lock and blocking the mutex
-from being used by other threads, because the lock release happens
-automatically.
+Note that the `num` type is `MutexGuard<i32>` rather than `i32`. `MutexGuard`
+is a smart pointer just like `Box` or `Rc`. Like other smart pointers,
+`MutexGuard` implements `Deref` to point at the inner data, giving us access to
+the data while keeping its ownership. `MutexGuard` has a very useful property -
+it has a `Drop` implementation that releases the `Mutex` lock automatically. As
+a result, we don’t risk forgetting to release the lock. As soon as `MutexGuard`
+goes out of scope, `Mutex` gets unlocked so other threads can access it.
 
 After dropping the lock, we can print the mutex value and see that we were able
 to change the inner `i32` to 6.
