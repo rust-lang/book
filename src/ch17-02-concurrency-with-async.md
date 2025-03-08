@@ -271,10 +271,10 @@ again, so the runtime pauses it again until another message arrives.
 
 The code now successfully sends and receives all of the messages. Unfortunately,
 there are still a couple of problems. For one thing, the messages do not arrive
-at half-second intervals. They arrive all at once, 2 (2,000 milliseconds) after
-we start the program. For another, this program also never exits! Instead, it
-waits forever for new messages. You will need to shut it down using <span
-class="keystroke">ctrl-c</span>.
+at half-second intervals. They arrive all at once, 2 seconds (2,000
+milliseconds) after we start the program. For another, this program never exits!
+Instead, it waits forever for new messages. You will need to shut it down using
+<span class="keystroke">ctrl-c</span>.
 
 Let’s start by examining why the messages come in all at once after the full
 delay, rather than coming in with delays between each one. Within a given async
