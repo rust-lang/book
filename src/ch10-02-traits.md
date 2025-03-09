@@ -5,7 +5,7 @@ other types. We can use traits to define shared behavior in an abstract way. We
 can use _trait bounds_ to specify that a generic type can be any type that has
 certain behavior.
 
-> Note: Traits are similar to a feature often called _abstract clasess_ in other
+> Note: Traits are similar to a feature often called _abstract classes_ in other
 > languages, although with some differences.
 
 ### Defining a Trait
