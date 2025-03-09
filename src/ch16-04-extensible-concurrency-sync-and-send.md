@@ -48,7 +48,7 @@ Threads”][sharing-a-mutext-between-multiple-threads]<!-- ignore -->.
 
 ### Implementing `Send` and `Sync` Manually Is Unsafe
 
-Because types that are made up of `Send` and `Sync` traits are automatically
+Because types that are made up of `Send` and `Sync` traits are implemented automatically
 also `Send` and `Sync`, we don’t have to implement those traits manually. As
 marker traits, they don’t even have any methods to implement. They’re just
 useful for enforcing invariants related to concurrency.
