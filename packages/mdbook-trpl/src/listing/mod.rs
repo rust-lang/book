@@ -221,7 +221,13 @@ struct Listing {
 
 impl Listing {
     fn opening_html(&self) -> String {
-        let figure = String::from("<figure class=\"listing\">\n");
+        let id_attribute = self
+            .number
+            .as_ref()
+            .map(|number| format!(" id=\"listing-{number}\""))
+            .unwrap_or_default();
+
+        let figure = format!("<figure class=\"listing\"{id_attribute}>\n");
 
         match self.file_name.as_ref() {
             Some(file_name) => format!(
