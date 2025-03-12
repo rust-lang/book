@@ -18,7 +18,7 @@ fn main() {}
 
     assert_eq!(
         &result.unwrap(),
-        r#"<figure class="listing">
+        r#"<figure class="listing" id="listing-1-2">
 <span class="file-name">Filename: src/main.rs</span>
 
 ````rust
@@ -80,7 +80,7 @@ fn get_a_box_of<T>(t: T) -> Box<T> {
 
     assert_eq!(
         &result.unwrap(),
-        r#"<figure class="listing">
+        r#"<figure class="listing" id="listing-34-5">
 
 ````rust
 fn get_a_box_of<T>(t: T) -> Box<T> {
@@ -117,7 +117,7 @@ Save the file and go back to your terminal window"#,
         result.unwrap(),
         r#"Now open the *main.rs* file you just created and enter the code in Listing 1-1.
 
-<figure class="listing">
+<figure class="listing" id="listing-1-1">
 <span class="file-name">Filename: main.rs</span>
 
 ````rust
@@ -155,7 +155,7 @@ This is the closing."#,
         result.unwrap(),
         r#"This is the opening.
 
-<figure class="listing">
+<figure class="listing" id="listing-1-1">
 
 ````rust
 fn main() {}
