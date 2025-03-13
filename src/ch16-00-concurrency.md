@@ -24,9 +24,9 @@ subtle bugs and is easy to refactor without introducing new bugs.
 
 > Note: For simplicity’s sake, we’ll refer to many of the problems as
 > _concurrent_ rather than being more precise by saying _concurrent and/or
-> parallel_. If this book were about concurrency and/or parallelism, we’d be
-> more specific. For this chapter, please mentally substitute _concurrent
-> and/or parallel_ whenever we use _concurrent_.
+> parallel_. For this chapter, please mentally substitute _concurrent
+> and/or parallel_ whenever we use _concurrent_. In the next chapter, where the
+> distinction matters more, we’ll be more specific.
 
 Many languages are dogmatic about the solutions they offer for handling
 concurrent problems. For example, Erlang has elegant functionality for

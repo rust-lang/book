@@ -44,4 +44,4 @@ $ cargo install ripgrep
 The second-to-last line of the output shows the location and the name of the
 installed binary, which in the case of `ripgrep` is `rg`. As long as the
 installation directory is in your `$PATH`, as mentioned previously, you can
-then run `rg --help` and start using a faster, rustier tool for searching files!
+then run `rg --help` and start using a faster, Rustier tool for searching files!

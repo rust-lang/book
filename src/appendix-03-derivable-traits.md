@@ -16,9 +16,9 @@ library that you can use with `derive`. Each section covers:
 
 If you want different behavior from that provided by the `derive` attribute,
 consult the [standard library documentation](../std/index.html)<!-- ignore -->
-for each trait for details of how to manually implement them.
+for each trait for details on how to manually implement them.
 
-These traits listed here are the only ones defined by the standard library that
+The traits listed here are the only ones defined by the standard library that
 can be implemented on your types using `derive`. Other traits defined in the
 standard library don’t have sensible default behavior, so it’s up to you to
 implement them in the way that makes sense for what you’re trying to accomplish.
@@ -45,9 +45,10 @@ The `Debug` trait allows you to print instances of a type for debugging
 purposes, so you and other programmers using your type can inspect an instance
 at a particular point in a program’s execution.
 
-The `Debug` trait is required, for example, in using the `assert_eq!` macro.
-This macro prints the values of instances given as arguments if the equality
-assertion fails so programmers can see why the two instances weren’t equal.
+The `Debug` trait is required, for example, in the use of the `assert_eq!`
+macro. This macro prints the values of instances given as arguments if the
+equality assertion fails so programmers can see why the two instances weren’t
+equal.
 
 ### `PartialEq` and `Eq` for Equality Comparisons
 
@@ -83,9 +84,9 @@ that also implement `PartialEq`.
 Deriving `PartialOrd` implements the `partial_cmp` method, which returns an
 `Option<Ordering>` that will be `None` when the values given don’t produce an
 ordering. An example of a value that doesn’t produce an ordering, even though
-most values of that type can be compared, is the `NaN` floating point value.
-Calling `partial_cmp` with any floating point number and the `NaN` floating
-point value will return `None`.
+most values of that type can be compared, is the not-a-number (`NaN`) floating
+point value. Calling `partial_cmp` with any floating-point number and the `NaN`
+floating-point value will return `None`.
 
 When derived on structs, `PartialOrd` compares two instances by comparing the
 value in each field in the order in which the fields appear in the struct
@@ -122,7 +123,7 @@ fields or values in the type must also implement `Clone` to derive `Clone`.
 An example of when `Clone` is required is when calling the `to_vec` method on a
 slice. The slice doesn’t own the type instances it contains, but the vector
 returned from `to_vec` will need to own its instances, so `to_vec` calls
-`clone` on each item. Thus, the type stored in the slice must implement `Clone`.
+`clone` on each item. Thus the type stored in the slice must implement `Clone`.
 
 The `Copy` trait allows you to duplicate a value by only copying bits stored on
 the stack; no arbitrary code is necessary. See [“Stack-Only Data:
@@ -166,7 +167,7 @@ meaning all fields or values in the type must also implement `Default` to
 derive `Default`.
 
 The `Default::default` function is commonly used in combination with the struct
-update syntax discussed in [“Creating Instances From Other Instances With Struct
+update syntax discussed in [“Creating Instances from Other Instances with Struct
 Update
 Syntax”][creating-instances-from-other-instances-with-struct-update-syntax]<!--
 ignore --> in Chapter 5. You can customize a few fields of a struct and then set

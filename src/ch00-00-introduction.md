@@ -143,16 +143,16 @@ traits that enable their functionality.
 
 In Chapter 16, we’ll walk through different models of concurrent programming and
 talk about how Rust helps you to program in multiple threads fearlessly. In
-Chapter 17, we will build on that by exploring Rust’s async and await syntax and
-the lightweight concurrency model they support.
+Chapter 17, we build on that by exploring Rust’s async and await syntax, along
+with tasks, futures, and streams, and the lightweight concurrency model they
+enable.
 
 Chapter 18 looks at how Rust idioms compare to object-oriented programming
-principles you might be familiar with.
-
-Chapter 19 is a reference on patterns and pattern matching, which are powerful
-ways of expressing ideas throughout Rust programs. Chapter 20 contains a
-smorgasbord of advanced topics of interest, including unsafe Rust, macros, and
-more about lifetimes, traits, types, functions, and closures.
+principles you might be familiar with. Chapter 19 is a reference on patterns and
+pattern matching, which are powerful ways of expressing ideas throughout Rust
+programs. Chapter 20 contains a smorgasbord of advanced topics of interest,
+including unsafe Rust, macros, and more about lifetimes, traits, types,
+functions, and closures.
 
 In Chapter 21, we’ll complete a project in which we’ll implement a low-level
 multithreaded web server!

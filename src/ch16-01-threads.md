@@ -90,12 +90,13 @@ will get to run at all!
 
 We can fix the problem of the spawned thread not running or ending prematurely
 by saving the return value of `thread::spawn` in a variable. The return type of
-`thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned value that, when we
-call the `join` method on it, will wait for its thread to finish. Listing 16-2
-shows how to use the `JoinHandle` of the thread we created in Listing 16-1 and
-how to call `join` to make sure the spawned thread finishes before `main` exits:
+`thread::spawn` is `JoinHandle<T>`. A `JoinHandle<T>` is an owned value that,
+when we call the `join` method on it, will wait for its thread to finish.
+Listing 16-2 shows how to use the `JoinHandle<T>` of the thread we created in
+Listing 16-1 and how to call `join` to make sure the spawned thread finishes
+before `main` exits.
 
-<Listing number="16-2" file-name="src/main.rs" caption="Saving a `JoinHandle` from `thread::spawn` to guarantee the thread is run to completion">
+<Listing number="16-2" file-name="src/main.rs" caption="Saving a `JoinHandle<T>` from `thread::spawn` to guarantee the thread is run to completion">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-02/src/main.rs}}
@@ -174,7 +175,7 @@ threads run at the same time.
 We'll often use the `move` keyword with closures passed to `thread::spawn`
 because the closure will then take ownership of the values it uses from the
 environment, thus transferring ownership of those values from one thread to
-another. In [“Capturing References or Moving Ownership”][capture]<!-- ignore -->
+another. In [“Capturing the Environment With Closures”][capture]<!-- ignore -->
 in Chapter 13, we discussed `move` in the context of closures. Now, we’ll
 concentrate more on the interaction between `move` and `thread::spawn`.
 
@@ -183,7 +184,7 @@ arguments: we’re not using any data from the main thread in the spawned
 thread’s code. To use data from the main thread in the spawned thread, the
 spawned thread’s closure must capture the values it needs. Listing 16-3 shows
 an attempt to create a vector in the main thread and use it in the spawned
-thread. However, this won’t yet work, as you’ll see in a moment.
+thread. However, this won’t work yet, as you’ll see in a moment.
 
 <Listing number="16-3" file-name="src/main.rs" caption="Attempting to use a vector created by the main thread in another thread">
 
@@ -204,8 +205,8 @@ example, we get the following error:
 
 Rust _infers_ how to capture `v`, and because `println!` only needs a reference
 to `v`, the closure tries to borrow `v`. However, there’s a problem: Rust can’t
-tell how long the spawned thread will run, so it doesn’t know if the reference
-to `v` will always be valid.
+tell how long the spawned thread will run, so it doesn’t know whether the
+reference to `v` will always be valid.
 
 Listing 16-4 provides a scenario that’s more likely to have a reference to `v`
 that won’t be valid:
@@ -218,10 +219,10 @@ that won’t be valid:
 
 </Listing>
 
-If Rust allowed us to run this code, there’s a possibility the spawned thread
-would be immediately put in the background without running at all. The spawned
-thread has a reference to `v` inside, but the main thread immediately drops
-`v`, using the `drop` function we discussed in Chapter 15. Then, when the
+If Rust allowed us to run this code, there’s a possibility that the spawned
+thread would be immediately put in the background without running at all. The
+spawned thread has a reference to `v` inside, but the main thread immediately
+drops `v`, using the `drop` function we discussed in Chapter 15. Then, when the
 spawned thread starts to execute, `v` is no longer valid, so a reference to it
 is also invalid. Oh no!
 
@@ -242,7 +243,7 @@ help: to force the closure to take ownership of `v` (and any other referenced va
 By adding the `move` keyword before the closure, we force the closure to take
 ownership of the values it’s using rather than allowing Rust to infer that it
 should borrow the values. The modification to Listing 16-3 shown in Listing
-16-5 will compile and run as we intend:
+16-5 will compile and run as we intend.
 
 <Listing number="16-5" file-name="src/main.rs" caption="Using the `move` keyword to force a closure to take ownership of the values it uses">
 
@@ -273,7 +274,7 @@ rules when we try to use `v` in the main thread. The `move` keyword overrides
 Rust’s conservative default of borrowing; it doesn’t let us violate the
 ownership rules.
 
-With a basic understanding of threads and the thread API, let’s look at what we
-can _do_ with threads.
+Now that we’ve covered what threads are and the methods supplied by the thread
+API, let’s look at some situations in which we can use threads.
 
-[capture]: ch13-01-closures.html#capturing-references-or-moving-ownership
+[capture]: ch13-01-closures.html#capturing-the-environment-with-closures

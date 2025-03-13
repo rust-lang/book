@@ -14,7 +14,7 @@ water, such as a stream or a river. If you put something like a rubber duck
 into a river, it will travel downstream to the end of the waterway.
 
 A channel has two halves: a transmitter and a receiver. The transmitter half is
-the upstream location where you put rubber ducks into the river, and the
+the upstream location where you put the rubber duck into the river, and the
 receiver half is where the rubber duck ends up downstream. One part of your
 code calls methods on the transmitter with the data you want to send, and
 another part checks the receiving end for arriving messages. A channel is said
@@ -24,9 +24,9 @@ Here, we’ll work up to a program that has one thread to generate values and
 send them down a channel, and another thread that will receive the values and
 print them out. We’ll be sending simple values between threads using a channel
 to illustrate the feature. Once you’re familiar with the technique, you could
-use channels for any threads that need to communicate between each other, such
-as a chat system or a system where many threads perform parts of a calculation
-and send the parts to one thread that aggregates the results.
+use channels for any threads that need to communicate with each other, such as
+a chat system or a system where many threads perform parts of a calculation and
+send the parts to one thread that aggregates the results.
 
 First, in Listing 16-6, we’ll create a channel but not do anything with it.
 Note that this won’t compile yet because Rust can’t tell what type of values we
@@ -51,21 +51,21 @@ producer for now, but we’ll add multiple producers when we get this example
 working.
 
 The `mpsc::channel` function returns a tuple, the first element of which is the
-sending end—the transmitter—and the second element is the receiving end—the
-receiver. The abbreviations `tx` and `rx` are traditionally used in many fields
-for _transmitter_ and _receiver_ respectively, so we name our variables as such
-to indicate each end. We’re using a `let` statement with a pattern that
+sending end—the transmitter—and the second element of which is the receiving
+end—the receiver. The abbreviations `tx` and `rx` are traditionally used in many
+fields for _transmitter_ and _receiver_, respectively, so we name our variables
+as such to indicate each end. We’re using a `let` statement with a pattern that
 destructures the tuples; we’ll discuss the use of patterns in `let` statements
-and destructuring in Chapter 19. For now, know that using a `let` statement
-this way is a convenient approach to extract the pieces of the tuple returned
-by `mpsc::channel`.
+and destructuring in Chapter 19. For now, know that using a `let` statement this
+way is a convenient approach to extract the pieces of the tuple returned by
+`mpsc::channel`.
 
 Let’s move the transmitting end into a spawned thread and have it send one
-string so that the spawned thread is communicating with the main thread, as
-shown in Listing 16-7. This is like putting a rubber duck in the river upstream
-or sending a chat message from one thread to another.
+string so the spawned thread is communicating with the main thread, as shown in
+Listing 16-7. This is like putting a rubber duck in the river upstream or
+sending a chat message from one thread to another.
 
-<Listing number="16-7" file-name="src/main.rs" caption="Moving `tx` to a spawned thread and sending “hi”">
+<Listing number="16-7" file-name="src/main.rs" caption='Moving `tx` to a spawned thread and sending `"hi"`'>
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-07/src/main.rs}}
@@ -74,7 +74,7 @@ or sending a chat message from one thread to another.
 </Listing>
 
 Again, we’re using `thread::spawn` to create a new thread and then using `move`
-to move `tx` into the closure so that the spawned thread owns `tx`. The spawned
+to move `tx` into the closure so the spawned thread owns `tx`. The spawned
 thread needs to own the transmitter to be able to send messages through the
 channel.
 
@@ -89,7 +89,7 @@ In Listing 16-8, we’ll get the value from the receiver in the main thread. Thi
 is like retrieving the rubber duck from the water at the end of the river or
 receiving a chat message.
 
-<Listing number="16-8" file-name="src/main.rs" caption="Receiving the value “hi” in the main thread and printing it">
+<Listing number="16-8" file-name="src/main.rs" caption='Receiving the value `"hi"` in the main thread and printing it'>
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-08/src/main.rs}}
@@ -136,7 +136,7 @@ advantage of thinking about ownership throughout your Rust programs. Let’s do
 an experiment to show how channels and ownership work together to prevent
 problems: we’ll try to use a `val` value in the spawned thread _after_ we’ve
 sent it down the channel. Try compiling the code in Listing 16-9 to see why
-this code isn’t allowed:
+this code isn’t allowed.
 
 <Listing number="16-9" file-name="src/main.rs" caption="Attempting to use `val` after we’ve sent it down the channel">
 
@@ -170,7 +170,7 @@ two separate threads were talking to each other over the channel. In Listing
 running concurrently: the spawned thread will now send multiple messages and
 pause for a second between each message.
 
-<Listing number="16-10" file-name="src/main.rs" caption="Sending multiple messages and pausing between each">
+<Listing number="16-10" file-name="src/main.rs" caption="Sending multiple messages and pausing between each one">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-10/src/main.rs}}
@@ -181,14 +181,14 @@ pause for a second between each message.
 This time, the spawned thread has a vector of strings that we want to send to
 the main thread. We iterate over them, sending each individually, and pause
 between each by calling the `thread::sleep` function with a `Duration` value of
-1 second.
+one second.
 
 In the main thread, we’re not calling the `recv` function explicitly anymore:
 instead, we’re treating `rx` as an iterator. For each value received, we’re
 printing it. When the channel is closed, iteration will end.
 
 When running the code in Listing 16-10, you should see the following output
-with a 1-second pause in between each line:
+with a one-second pause in between each line:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -210,7 +210,7 @@ the spawned thread.
 Earlier we mentioned that `mpsc` was an acronym for _multiple producer,
 single consumer_. Let’s put `mpsc` to use and expand the code in Listing 16-10
 to create multiple threads that all send values to the same receiver. We can do
-so by cloning the transmitter, as shown in Listing 16-11:
+so by cloning the transmitter, as shown in Listing 16-11.
 
 <Listing number="16-11" file-name="src/main.rs" caption="Sending multiple messages from multiple producers">
 

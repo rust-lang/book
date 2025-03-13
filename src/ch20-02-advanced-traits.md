@@ -5,7 +5,11 @@ Behavior”][traits-defining-shared-behavior]<!-- ignore --> in Chapter 10, but 
 didn’t discuss the more advanced details. Now that you know more about Rust, we
 can get into the nitty-gritty.
 
-### Specifying Placeholder Types in Trait Definitions with Associated Types
+<!-- Old link, do not remove -->
+
+<a id="specifying-placeholder-types-in-trait-definitions-with-associated-types"></a>
+
+### Associated Types
 
 _Associated types_ connect a type placeholder with a trait such that the trait
 method definitions can use these placeholder types in their signatures. The
@@ -73,16 +77,16 @@ the concrete types of the generic type parameters each time. When we use the
 indicate which implementation of `Iterator` we want to use.
 
 With associated types, we don’t need to annotate types because we can’t
-implement a trait on a type multiple times. In Listing 20-13 with the
-definition that uses associated types, we can only choose what the type of
-`Item` will be once, because there can only be one `impl Iterator for Counter`.
-We don’t have to specify that we want an iterator of `u32` values everywhere
-that we call `next` on `Counter`.
+implement a trait on a type multiple times. In Listing 20-13 with the definition
+that uses associated types, we can choose what the type of `Item` will be only
+once, because there can be only one `impl Iterator for Counter`. We don’t have
+to specify that we want an iterator of `u32` values everywhere that we call
+`next` on `Counter`.
 
 Associated types also become part of the trait’s contract: implementors of the
 trait must provide a type to stand in for the associated type placeholder.
 Associated types often have a name that describes how the type will be used,
-and documenting the associated type in the API documentation is good practice.
+and documenting the associated type in the API documentation is a good practice.
 
 ### Default Generic Type Parameters and Operator Overloading
 
@@ -100,7 +104,7 @@ operators. But you can overload the operations and corresponding traits listed
 in `std::ops` by implementing the traits associated with the operator. For
 example, in Listing 20-15 we overload the `+` operator to add two `Point`
 instances together. We do this by implementing the `Add` trait on a `Point`
-struct:
+struct.
 
 <Listing number="20-15" file-name="src/main.rs" caption="Implementing the `Add` trait to overload the `+` operator for `Point` instances">
 
@@ -128,7 +132,7 @@ trait Add<Rhs=Self> {
 
 This code should look generally familiar: a trait with one method and an
 associated type. The new part is `Rhs=Self`: this syntax is called _default
-type parameters_. The `Rhs` generic type parameter (short for “right hand
+type parameters_. The `Rhs` generic type parameter (short for “right-hand
 side”) defines the type of the `rhs` parameter in the `add` method. If we don’t
 specify a concrete type for `Rhs` when we implement the `Add` trait, the type
 of `Rhs` will default to `Self`, which will be the type we’re implementing
@@ -175,7 +179,11 @@ type parameter to an existing trait, you can give it a default to allow
 extension of the functionality of the trait without breaking the existing
 implementation code.
 
-### Fully Qualified Syntax for Disambiguation: Calling Methods with the Same Name
+<!-- Old link, do not remove -->
+
+<a id="fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name"></a>
+
+### Disambiguating Between Methods with the Same Name
 
 Nothing in Rust prevents a trait from having a method with the same name as
 another trait’s method, nor does Rust prevent you from implementing both traits
@@ -188,7 +196,7 @@ want to use. Consider the code in Listing 20-17 where we’ve defined two traits
 both traits on a type `Human` that already has a method named `fly` implemented
 on it. Each `fly` method does something different.
 
-<Listing number="20-17" file-name="src/main.rs" caption="Two traits are defined to have a ` method and are implemented on the `Human` type, and a `fly` method is implemented on `Human` directly">
+<Listing number="20-17" file-name="src/main.rs" caption="Two traits are defined to have a ` method and are implemented on the `Human` type, and a `fly` method is implemented on `Human` directly.">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-17/src/main.rs:here}}
@@ -326,10 +334,14 @@ in the program. You only need to use this more verbose syntax in cases where
 there are multiple implementations that use the same name and Rust needs help
 to identify which implementation you want to call.
 
-### Using Supertraits to Require One Trait’s Functionality Within Another Trait
+<!-- Old link, do not remove -->
 
-Sometimes, you might write a trait definition that depends on another trait:
-for a type to implement the first trait, you want to require that type to also
+<a id="using-supertraits-to-require-one-traits-functionality-within-another-trait"></a>
+
+### Using Supertraits
+
+Sometimes you might write a trait definition that depends on another trait: for
+a type to implement the first trait, you want to require that type to also
 implement the second trait. You would do this so that your trait definition can
 make use of the associated items of the second trait. The trait your trait
 definition is relying on is called a _supertrait_ of your trait.
@@ -400,7 +412,7 @@ To fix this, we implement `Display` on `Point` and satisfy the constraint that
 
 </Listing>
 
-Then implementing the `OutlinePrint` trait on `Point` will compile
+Then, implementing the `OutlinePrint` trait on `Point` will compile
 successfully, and we can call `outline_print` on a `Point` instance to display
 it within an outline of asterisks.
 
@@ -408,16 +420,16 @@ it within an outline of asterisks.
 
 In [“Implementing a Trait on a Type”][implementing-a-trait-on-a-type]<!-- ignore
 --> in Chapter 10, we mentioned the orphan rule that states we’re only allowed
-to implement a trait on a type if either the trait or the type are local to our
-crate. It’s possible to get around this restriction using the _newtype pattern_,
-which involves creating a new type in a tuple struct. (We covered tuple structs
-in [“Using Tuple Structs without Named Fields to Create Different
-Types”][tuple-structs]<!-- ignore --> in Chapter 5.) The tuple struct will have
-one field and be a thin wrapper around the type we want to implement a trait
-for. Then the wrapper type is local to our crate, and we can implement the trait
-on the wrapper. _Newtype_ is a term that originates from the Haskell programming
-language. There is no runtime performance penalty for using this pattern, and
-the wrapper type is elided at compile time.
+to implement a trait on a type if either the trait or the type, or both, are
+local to our crate. It’s possible to get around this restriction using the
+_newtype pattern_, which involves creating a new type in a tuple struct. (We
+covered tuple structs in [“Using Tuple Structs Without Named Fields to Create
+Different Types”][tuple-structs]<!-- ignore --> in Chapter 5.) The tuple struct
+will have one field and be a thin wrapper around the type for which we want to
+implement a trait. Then the wrapper type is local to our crate, and we can
+implement the trait on the wrapper. _Newtype_ is a term that originates from the
+Haskell programming language. There is no runtime performance penalty for using
+this pattern, and the wrapper type is elided at compile time.
 
 As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the
@@ -442,12 +454,12 @@ doesn’t have the methods of the value it’s holding. We would have to impleme
 all the methods of `Vec<T>` directly on `Wrapper` such that the methods delegate
 to `self.0`, which would allow us to treat `Wrapper` exactly like a `Vec<T>`. If
 we wanted the new type to have every method the inner type has, implementing the
-`Deref` trait (discussed in [“Treating Smart Pointers Like Regular References
-with the `Deref` Trait”][smart-pointer-deref]<!-- ignore --> in Chapter 15) on
-the `Wrapper` to return the inner type would be a solution. If we don’t want the
-`Wrapper` type to have all the methods of the inner type—for example, to
-restrict the `Wrapper` type’s behavior—we would have to implement just the
-methods we do want manually.
+`Deref` trait on the `Wrapper` to return the inner type would be a solution (we
+discussed implementing the `Deref` trait in [“Treating Smart Pointers Like
+Regular References with the `Deref` Trait”][smart-pointer-deref]<!-- ignore -->
+in Chapter 15). If we didn’t want the `Wrapper` type to have all the methods of
+the inner type—for example, to restrict the `Wrapper` type’s behavior—we would
+have to implement just the methods we do want manually.
 
 This newtype pattern is also useful even when traits are not involved. Let’s
 switch focus and look at some advanced ways to interact with Rust’s type system.

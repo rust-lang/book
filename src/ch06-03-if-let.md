@@ -62,7 +62,7 @@ Or we could use an `if let` and `else` expression, like this:
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-14-count-and-announce-if-let-else/src/main.rs:here}}
 ```
 
-## Staying on the “happy path” with `let else`
+## Staying on the “Happy Path” with `let...else`
 
 One common pattern is to perform some computation when a value is present and
 return a default value otherwise. Continuing on with our example of coins with a
@@ -77,7 +77,7 @@ age of a state, like so:
 Then we might use `if let` to match on the type of coin, introducing a `state`
 variable within the body of the condition, as in Listing 6-7.
 
-<Listing number="6-7" caption="Using" file-name="src/main.rs">
+<Listing number="6-7" caption="Checking whether a state existing in 1900 by using conditionals nested inside an `if let`." file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-07/src/main.rs:describe}}
@@ -90,7 +90,7 @@ statement, and if the work to be done is more complicated, it might be hard to
 follow exactly how the top-level branches relate. We could also take advantage
 of the fact that expressions produce a value either to produce the `state` from
 the `if let` or to return early, as in Listing 6-8. (You could do similar with a
-`match`, of course!)
+`match`, too.)
 
 <Listing number="6-8" caption="Using `if let` to produce a value or return early." file-name="src/main.rs">
 
@@ -103,19 +103,19 @@ the `if let` or to return early, as in Listing 6-8. (You could do similar with a
 This is a bit annoying to follow in its own way, though! One branch of the `if
 let` produces a value, and the other one returns from the function entirely.
 
-To make this common pattern nicer to express, Rust has `let`-`else`. The
-`let`-`else` syntax takes a pattern on the left side and an expression on the
+To make this common pattern nicer to express, Rust has `let...else`. The
+`let...else` syntax takes a pattern on the left side and an expression on the
 right, very similar to `if let`, but it does not have an `if` branch, only an
 `else` branch. If the pattern matches, it will bind the value from the pattern
 in the outer scope. If the pattern does _not_ match, the program will flow into
 the `else` arm, which must return from the function.
 
-In Listing 6-9, you can see how Listing 6-8 looks when using `let`-`else` in
+In Listing 6-9, you can see how Listing 6-8 looks when using `let...else` in
 place of `if let`. Notice that it stays “on the happy path” in the main body of
 the function this way, without having significantly different control flow for
 two branches the way the `if let` did.
 
-<Listing number="6-9" caption="Using `let`-`else` to clarify the flow through the function." file-name="src/main.rs">
+<Listing number="6-9" caption="Using `let...else` to clarify the flow through the function." file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-09/src/main.rs:describe}}
@@ -124,8 +124,8 @@ two branches the way the `if let` did.
 </Listing>
 
 If you have a situation in which your program has logic that is too verbose to
-express using a `match`, remember that `if let` and `let else` are in your Rust
-toolbox as well.
+express using a `match`, remember that `if let` and `let...else` are in your
+Rust toolbox as well.
 
 ## Summary
 

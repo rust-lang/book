@@ -10,7 +10,7 @@ while, all of these tiny changes add up. But from release to release, it can be
 difficult to look back and say, “Wow, between Rust 1.10 and Rust 1.31, Rust has
 changed a lot!”
 
-Every two or three years, the Rust team produces a new Rust _edition_. Each
+Every three years or so, the Rust team produces a new Rust _edition_. Each
 edition brings together the features that have landed into a clear package with
 fully updated documentation and tooling. New editions ship as part of the usual
 six-week release process.

@@ -24,7 +24,7 @@ various sizes as the `contents`, different words and words of different lengths
 as the `query`, and all kinds of other variations. The point is this:
 iterators, although a high-level abstraction, get compiled down to roughly the
 same code as if you’d written the lower-level code yourself. Iterators are one
-of Rust’s _zero-cost abstractions_, by which we mean using the abstraction
+of Rust’s _zero-cost abstractions_, by which we mean that using the abstraction
 imposes no additional runtime overhead. This is analogous to how Bjarne
 Stroustrup, the original designer and implementor of C++, defines
 _zero-overhead_ in “Foundations of C++” (2012):
@@ -76,7 +76,7 @@ the loop.
 
 All of the coefficients get stored in registers, which means accessing the
 values is very fast. There are no bounds checks on the array access at runtime.
-All these optimizations that Rust is able to apply make the resulting code
+All these optimizations that Rust is able to apply make the resultant code
 extremely efficient. Now that you know this, you can use iterators and closures
 without fear! They make code seem like it’s higher level but don’t impose a
 runtime performance penalty for doing so.

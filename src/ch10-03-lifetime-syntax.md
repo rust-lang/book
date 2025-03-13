@@ -429,11 +429,11 @@ _lifetime elision rules_. These aren’t rules for programmers to follow; they�
 a set of particular cases that the compiler will consider, and if your code
 fits these cases, you don’t need to write the lifetimes explicitly.
 
-The elision rules don’t provide full inference. If there is still ambiguity as
-to what lifetimes the references have after Rust applies the rules, the
+The elision rules don’t provide full inference. If there is still ambiguity
+about what lifetimes the references have after Rust applies the rules, the
 compiler won’t guess what the lifetime of the remaining references should be.
-Instead of guessing, the compiler will give you an error that you can resolve
-by adding the lifetime annotations.
+Instead of guessing, the compiler will give you an error that you can resolve by
+adding the lifetime annotations.
 
 Lifetimes on function or method parameters are called _input lifetimes_, and
 lifetimes on return values are called _output lifetimes_.

@@ -5,7 +5,7 @@ memory. This address refers to, or “points at,” some other data. The most
 common kind of pointer in Rust is a reference, which you learned about in
 Chapter 4. References are indicated by the `&` symbol and borrow the value they
 point to. They don’t have any special capabilities other than referring to
-data, and have no overhead.
+data, and they have no overhead.
 
 _Smart pointers_, on the other hand, are data structures that act like a
 pointer but also have additional metadata and capabilities. The concept of
@@ -19,14 +19,14 @@ the number of owners and, when no owners remain, cleaning up the data.
 
 Rust, with its concept of ownership and borrowing, has an additional difference
 between references and smart pointers: while references only borrow data, in
-many cases, smart pointers _own_ the data they point to.
+many cases smart pointers _own_ the data they point to.
 
 Though we didn’t call them as such at the time, we’ve already encountered a few
 smart pointers in this book, including `String` and `Vec<T>` in Chapter 8. Both
-these types count as smart pointers because they own some memory and allow you
-to manipulate it. They also have metadata and extra capabilities or guarantees.
-`String`, for example, stores its capacity as metadata and has the extra
-ability to ensure its data will always be valid UTF-8.
+of these types count as smart pointers because they own some memory and allow
+you to manipulate it. They also have metadata and extra capabilities or
+guarantees. `String`, for example, stores its capacity as metadata and has the
+extra ability to ensure its data will always be valid UTF-8.
 
 Smart pointers are usually implemented using structs. Unlike an ordinary
 struct, smart pointers implement the `Deref` and `Drop` traits. The `Deref`
@@ -41,7 +41,7 @@ frequently in Rust, this chapter won’t cover every existing smart pointer. Man
 libraries have their own smart pointers, and you can even write your own. We’ll
 cover the most common smart pointers in the standard library:
 
-- `Box<T>` for allocating values on the heap
+- `Box<T>`, for allocating values on the heap
 - `Rc<T>`, a reference counting type that enables multiple ownership
 - `Ref<T>` and `RefMut<T>`, accessed through `RefCell<T>`, a type that enforces
   the borrowing rules at runtime instead of compile time
