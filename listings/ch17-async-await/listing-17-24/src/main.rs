@@ -26,7 +26,7 @@ fn main() {
             trpl::sleep(one_ms).await;
             slow("b", 15);
             trpl::sleep(one_ms).await;
-            slow("b", 35);
+            slow("b", 350);
             trpl::sleep(one_ms).await;
             println!("'b' finished.");
         };
