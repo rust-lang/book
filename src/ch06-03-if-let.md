@@ -2,7 +2,7 @@
 
 The `if let` syntax lets you combine `if` and `let` into a less verbose way to
 handle values that match one pattern while ignoring the rest. Consider the
-program in Listing 6-6 that matches on an `Option<u8>` value in the
+program in [Listing 6-6](#listing-6-6) that matches on an `Option<u8>` value in the
 `config_max` variable but only wants to execute code if the value is the `Some`
 variant.
 
@@ -21,7 +21,7 @@ with the `None` value. To satisfy the `match` expression, we have to add `_ =>
 add.
 
 Instead, we could write this in a shorter way using `if let`. The following
-code behaves the same as the `match` in Listing 6-6:
+code behaves the same as the `match` in [Listing 6-6](#listing-6-6):
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-12-if-let/src/main.rs:here}}
@@ -47,7 +47,7 @@ runs code when the value matches one pattern and then ignores all other values.
 We can include an `else` with an `if let`. The block of code that goes with the
 `else` is the same as the block of code that would go with the `_` case in the
 `match` expression that is equivalent to the `if let` and `else`. Recall the
-`Coin` enum definition in Listing 6-4, where the `Quarter` variant also held a
+`Coin` enum definition in [Listing 6-4](ch06-02-match.md#listing-6-4), where the `Quarter` variant also held a
 `UsState` value. If we wanted to count all non-quarter coins we see while also
 announcing the state of the quarters, we could do that with a `match`
 expression, like this:
@@ -75,7 +75,7 @@ age of a state, like so:
 ```
 
 Then we might use `if let` to match on the type of coin, introducing a `state`
-variable within the body of the condition, as in Listing 6-7.
+variable within the body of the condition, as in [Listing 6-7](#listing-6-7).
 
 <Listing number="6-7" caption="Checking whether a state existing in 1900 by using conditionals nested inside an `if let`." file-name="src/main.rs">
 
@@ -89,7 +89,7 @@ That gets the job done, but it has pushed the work into the body of the `if let`
 statement, and if the work to be done is more complicated, it might be hard to
 follow exactly how the top-level branches relate. We could also take advantage
 of the fact that expressions produce a value either to produce the `state` from
-the `if let` or to return early, as in Listing 6-8. (You could do similar with a
+the `if let` or to return early, as in [Listing 6-8](#listing-6-8). (You could do similar with a
 `match`, too.)
 
 <Listing number="6-8" caption="Using `if let` to produce a value or return early." file-name="src/main.rs">
@@ -110,7 +110,7 @@ right, very similar to `if let`, but it does not have an `if` branch, only an
 in the outer scope. If the pattern does _not_ match, the program will flow into
 the `else` arm, which must return from the function.
 
-In Listing 6-9, you can see how Listing 6-8 looks when using `let...else` in
+In [Listing 6-9](#listing-6-9), you can see how [Listing 6-8](#listing-6-8) looks when using `let...else` in
 place of `if let`. Notice that it stays “on the happy path” in the main body of
 the function this way, without having significantly different control flow for
 two branches the way the `if let` did.

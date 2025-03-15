@@ -127,7 +127,7 @@ that use our library will be expected to provide the mechanism for sending the
 messages: the application could put a message in the application, send an email,
 send a text message, or do something else. The library doesn’t need to know that
 detail. All it needs is something that implements a trait we’ll provide called
-`Messenger`. Listing 15-20 shows the library code.
+`Messenger`. [Listing 15-20](#listing-15-20) shows the library code.
 
 <Listing number="15-20" file-name="src/lib.rs" caption="A library to keep track of how close a value is to a maximum value and warn when the value is at certain levels">
 
@@ -152,7 +152,7 @@ We need a mock object that, instead of sending an email or text message when we
 call `send`, will only keep track of the messages it’s told to send. We can
 create a new instance of the mock object, create a `LimitTracker` that uses the
 mock object, call the `set_value` method on `LimitTracker`, and then check that
-the mock object has the messages we expect. Listing 15-21 shows an attempt to
+the mock object has the messages we expect. [Listing 15-21](#listing-15-21) shows an attempt to
 implement a mock object to do just that, but the borrow checker won’t allow it.
 
 <Listing number="15-21" file-name="src/lib.rs" caption="An attempt to implement a `MockMessenger` that isn’t allowed by the borrow checker">
@@ -196,7 +196,7 @@ work correctly with our existing design.
 
 This is a situation in which interior mutability can help! We’ll store the
 `sent_messages` within a `RefCell<T>`, and then the `send` method will be
-able to modify `sent_messages` to store the messages we’ve seen. Listing 15-22
+able to modify `sent_messages` to store the messages we’ve seen. [Listing 15-22](#listing-15-22)
 shows what that looks like.
 
 <Listing number="15-22" file-name="src/lib.rs" caption="Using `RefCell<T>` to mutate an inner value while the outer value is considered immutable">
@@ -242,8 +242,8 @@ borrows or one mutable borrow at any point in time.
 
 If we try to violate these rules, rather than getting a compiler error as we
 would with references, the implementation of `RefCell<T>` will panic at
-runtime. Listing 15-23 shows a modification of the implementation of `send` in
-Listing 15-22. We’re deliberately trying to create two mutable borrows active
+runtime. [Listing 15-23](#listing-15-23) shows a modification of the implementation of `send` in
+[Listing 15-22](#listing-15-22). We’re deliberately trying to create two mutable borrows active
 for the same scope to illustrate that `RefCell<T>` prevents us from doing this
 at runtime.
 
@@ -258,8 +258,7 @@ at runtime.
 We create a variable `one_borrow` for the `RefMut<T>` smart pointer returned
 from `borrow_mut`. Then we create another mutable borrow in the same way in the
 variable `two_borrow`. This makes two mutable references in the same scope,
-which isn’t allowed. When we run the tests for our library, the code in Listing
-15-23 will compile without any errors, but the test will fail:
+which isn’t allowed. When we run the tests for our library, the code in [Listing 15-23](#listing-15-23) will compile without any errors, but the test will fail:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-23/output.txt}}
@@ -291,11 +290,11 @@ A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
 access to that data. If you have an `Rc<T>` that holds a `RefCell<T>`, you can
 get a value that can have multiple owners _and_ that you can mutate!
 
-For example, recall the cons list example in Listing 15-18 where we used `Rc<T>`
+For example, recall the cons list example in [Listing 15-18](ch15-04-rc.md#listing-15-18) where we used `Rc<T>`
 to allow multiple lists to share ownership of another list. Because `Rc<T>`
 holds only immutable values, we can’t change any of the values in the list once
 we’ve created them. Let’s add in `RefCell<T>` for its ability to change the
-values in the lists. Listing 15-24 shows that by using a `RefCell<T>` in the
+values in the lists. [Listing 15-24](#listing-15-24) shows that by using a `RefCell<T>` in the
 `Cons` definition, we can modify the value stored in all the lists.
 
 <Listing number="15-24" file-name="src/main.rs" caption="Using `Rc<RefCell<i32>>` to create a `List` that we can mutate">
@@ -314,7 +313,7 @@ than transferring ownership from `value` to `a` or having `a` borrow from
 `value`.
 
 We wrap the list `a` in an `Rc<T>` so that when we create lists `b` and `c`,
-they can both refer to `a`, which is what we did in Listing 15-18.
+they can both refer to `a`, which is what we did in [Listing 15-18](ch15-04-rc.md#listing-15-18).
 
 After we’ve created the lists in `a`, `b`, and `c`, we want to add 10 to the
 value in `value`. We do this by calling `borrow_mut` on `value`, which uses the

@@ -36,7 +36,7 @@ produce a series of values, and we can call the `collect` method on an iterator
 to turn it into a collection, such as a vector, that contains all the elements
 the iterator produces.
 
-The code in Listing 12-1 allows your `minigrep` program to read any command
+The code in [Listing 12-1](#listing-12-1) allows your `minigrep` program to read any command
 line arguments passed to it, and then collect the values into a vector.
 
 <Listing number="12-1" file-name="src/main.rs" caption="Collecting the command line arguments into a vector and printing them">
@@ -97,8 +97,7 @@ chapter, we’ll ignore it and save only the two arguments we need.
 
 The program is currently able to access the values specified as command line
 arguments. Now we need to save the values of the two arguments in variables so
-we can use the values throughout the rest of the program. We do that in Listing
-12-2.
+we can use the values throughout the rest of the program. We do that in [Listing 12-2](#listing-12-2).
 
 <Listing number="12-2" file-name="src/main.rs" caption="Creating variables to hold the query argument and file path argument">
 

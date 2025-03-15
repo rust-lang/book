@@ -1,6 +1,6 @@
 ## Graceful Shutdown and Cleanup
 
-The code in Listing 21-20 is responding to requests asynchronously through the
+The code in [Listing 21-20](ch21-02-multithreaded.md#listing-21-20) is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about the `workers`,
 `id`, and `thread` fields that we’re not using in a direct way that reminds us
 we’re not cleaning up anything. When we use the less elegant
@@ -23,7 +23,7 @@ were using a thread pool for an async runtime.
 
 Let’s start with implementing `Drop` on our thread pool. When the pool is
 dropped, our threads should all join to make sure they finish their work.
-Listing 21-22 shows a first attempt at a `Drop` implementation; this code won’t
+[Listing 21-22](#listing-21-22) shows a first attempt at a `Drop` implementation; this code won’t
 quite work yet.
 
 <Listing number="21-22" file-name="src/lib.rs" caption="Joining each thread when the thread pool goes out of scope">
@@ -51,7 +51,7 @@ The error tells us we can’t call `join` because we only have a mutable borrow 
 each `worker` and `join` takes ownership of its argument. To solve this issue,
 we need to move the thread out of the `Worker` instance that owns `thread` so
 `join` can consume the thread. One way to do this is by taking the same approach
-we did in Listing 18-15. If `Worker` held an `Option<thread::JoinHandle<()>>`,
+we did in [Listing 18-15](ch18-03-oo-design-patterns.md#listing-18-15). If `Worker` held an `Option<thread::JoinHandle<()>>`,
 we could call the `take` method on the `Option` to move the value out of the
 `Some` variant and leave a `None` variant in its place. In other words, a
 `Worker` that is running would have a `Some` variant in `thread`, and when we
@@ -97,7 +97,7 @@ To fix this problem, we’ll need a change in the `ThreadPool` `drop`
 implementation and then a change in the `Worker` loop.
 
 First we’ll change the `ThreadPool` `drop` implementation to explicitly drop
-the `sender` before waiting for the threads to finish. Listing 21-23 shows the
+the `sender` before waiting for the threads to finish. [Listing 21-23](#listing-21-23) shows the
 changes to `ThreadPool` to explicitly drop `sender`. Unlike with the thread,
 here we _do_ need to use an `Option` to be able to move `sender` out of
 `ThreadPool` with `Option::take`.
@@ -112,7 +112,7 @@ here we _do_ need to use an `Option` to be able to move `sender` out of
 
 Dropping `sender` closes the channel, which indicates no more messages will be
 sent. When that happens, all the calls to `recv` that the `Worker` instances do
-in the infinite loop will return an error. In Listing 21-24, we change the
+in the infinite loop will return an error. In [Listing 21-24](#listing-21-24), we change the
 `Worker` loop to gracefully exit the loop in that case, which means the threads
 will finish when the `ThreadPool` `drop` implementation calls `join` on them.
 
@@ -125,7 +125,7 @@ will finish when the `ThreadPool` `drop` implementation calls `join` on them.
 </Listing>
 
 To see this code in action, let’s modify `main` to accept only two requests
-before gracefully shutting down the server, as shown in Listing 21-25.
+before gracefully shutting down the server, as shown in [Listing 21-25](#listing-21-25).
 
 <Listing number="21-25" file-name="src/main.rs" caption="Shutting down the server after serving two requests by exiting the loop">
 

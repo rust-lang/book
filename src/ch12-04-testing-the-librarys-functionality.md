@@ -33,7 +33,7 @@ Then, in _src/lib.rs_, we’ll add a `tests` module with a test function, as we
 did in [Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies
 the behavior we want the `search` function to have: it will take a query and
 the text to search, and it will return only the lines from the text that
-contain the query. Listing 12-15 shows this test, which won’t compile yet.
+contain the query. [Listing 12-15](#listing-12-15) shows this test, which won’t compile yet.
 
 <Listing number="12-15" file-name="src/lib.rs" caption="Creating a failing test for the `search` function we wish we had">
 
@@ -53,7 +53,7 @@ We aren’t yet able to run this test and watch it fail because the test doesn�
 even compile: the `search` function doesn’t exist yet! In accordance with TDD
 principles, we’ll add just enough code to get the test to compile and run by
 adding a definition of the `search` function that always returns an empty
-vector, as shown in Listing 12-16. Then the test should compile and fail
+vector, as shown in [Listing 12-16](#listing-12-16). Then the test should compile and fail
 because an empty vector doesn’t match a vector containing the line `"safe,
 fast, productive."`
 
@@ -123,7 +123,7 @@ Let’s work through each step, starting with iterating through lines.
 #### Iterating Through Lines with the `lines` Method
 
 Rust has a helpful method to handle line-by-line iteration of strings,
-conveniently named `lines`, that works as shown in Listing 12-17. Note that
+conveniently named `lines`, that works as shown in [Listing 12-17](#listing-12-17). Note that
 this won’t compile yet.
 
 <Listing number="12-17" file-name="src/lib.rs" caption="Iterating through each line in `contents`">
@@ -136,7 +136,7 @@ this won’t compile yet.
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
 [Chapter 13][ch13-iterators]<!-- ignore -->, but recall that you saw this way
-of using an iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a
+of using an iterator in [[Listing 3-5](ch03-05-control-flow.md#listing-3-5)][ch3-iter]<!-- ignore -->, where we used a
 `for` loop with an iterator to run some code on each item in a collection.
 
 #### Searching Each Line for the Query
@@ -144,7 +144,7 @@ of using an iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a
 Next, we’ll check whether the current line contains our query string.
 Fortunately, strings have a helpful method named `contains` that does this for
 us! Add a call to the `contains` method in the `search` function, as shown in
-Listing 12-18. Note that this still won’t compile yet.
+[Listing 12-18](#listing-12-18). Note that this still won’t compile yet.
 
 <Listing number="12-18" file-name="src/lib.rs" caption="Adding functionality to see whether the line contains the string in `query`">
 
@@ -163,7 +163,7 @@ signature.
 To finish this function, we need a way to store the matching lines that we want
 to return. For that, we can make a mutable vector before the `for` loop and
 call the `push` method to store a `line` in the vector. After the `for` loop,
-we return the vector, as shown in Listing 12-19.
+we return the vector, as shown in [Listing 12-19](#listing-12-19).
 
 <Listing number="12-19" file-name="src/lib.rs" caption="Storing the lines that match so we can return them">
 

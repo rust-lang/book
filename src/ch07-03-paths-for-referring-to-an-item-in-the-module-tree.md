@@ -15,9 +15,9 @@ A path can take two forms:
 Both absolute and relative paths are followed by one or more identifiers
 separated by double colons (`::`).
 
-Returning to Listing 7-1, say we want to call the `add_to_waitlist` function.
+Returning to [Listing 7-1](ch07-02-defining-modules-to-control-scope-and-privacy.md#listing-7-1), say we want to call the `add_to_waitlist` function.
 This is the same as asking: what’s the path of the `add_to_waitlist` function?
-Listing 7-3 contains Listing 7-1 with some of the modules and functions
+[Listing 7-3](#listing-7-3) contains [Listing 7-1](ch07-02-defining-modules-to-control-scope-and-privacy.md#listing-7-1) with some of the modules and functions
 removed.
 
 We’ll show two ways to call the `add_to_waitlist` function from a new function,
@@ -66,10 +66,10 @@ be updated. Our preference in general is to specify absolute paths because it’
 more likely we’ll want to move code definitions and item calls independently of
 each other.
 
-Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
-errors we get are shown in Listing 7-4.
+Let’s try to compile [Listing 7-3](#listing-7-3) and find out why it won’t compile yet! The
+errors we get are shown in [Listing 7-4](#listing-7-4).
 
-<Listing number="7-4" caption="Compiler errors from building the code in Listing 7-3">
+<Listing number="7-4" caption="Compiler errors from building the code in [Listing 7-3](#listing-7-3)">
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-03/output.txt}}
@@ -100,10 +100,10 @@ modules by using the `pub` keyword to make an item public.
 
 ### Exposing Paths with the `pub` Keyword
 
-Let’s return to the error in Listing 7-4 that told us the `hosting` module is
+Let’s return to the error in [Listing 7-4](#listing-7-4) that told us the `hosting` module is
 private. We want the `eat_at_restaurant` function in the parent module to have
 access to the `add_to_waitlist` function in the child module, so we mark the
-`hosting` module with the `pub` keyword, as shown in Listing 7-5.
+`hosting` module with the `pub` keyword, as shown in [Listing 7-5](#listing-7-5).
 
 <Listing number="7-5" file-name="src/lib.rs" caption="Declaring the `hosting` module as `pub` to use it from `eat_at_restaurant`">
 
@@ -113,10 +113,10 @@ access to the `add_to_waitlist` function in the child module, so we mark the
 
 </Listing>
 
-Unfortunately, the code in Listing 7-5 still results in compiler errors, as
-shown in Listing 7-6.
+Unfortunately, the code in [Listing 7-5](#listing-7-5) still results in compiler errors, as
+shown in [Listing 7-6](#listing-7-6).
 
-<Listing number="7-6" caption="Compiler errors from building the code in Listing 7-5">
+<Listing number="7-6" caption="Compiler errors from building the code in [Listing 7-5](#listing-7-5)">
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-05/output.txt}}
@@ -133,12 +133,12 @@ Because modules are containers, there’s not much we can do by only making the
 module public; we need to go further and choose to make one or more of the
 items within the module public as well.
 
-The errors in Listing 7-6 say that the `add_to_waitlist` function is private.
+The errors in [Listing 7-6](#listing-7-6) say that the `add_to_waitlist` function is private.
 The privacy rules apply to structs, enums, functions, and methods as well as
 modules.
 
 Let’s also make the `add_to_waitlist` function public by adding the `pub`
-keyword before its definition, as in Listing 7-7.
+keyword before its definition, as in [Listing 7-7](#listing-7-7).
 
 <Listing number="7-7" file-name="src/lib.rs" caption="Adding the `pub` keyword to `mod hosting` and `fn add_to_waitlist` lets us call the function from `eat_at_restaurant`">
 
@@ -208,7 +208,7 @@ which can make rearranging the module tree easier when the module is closely
 related to the parent but the parent might be moved elsewhere in the module
 tree someday.
 
-Consider the code in Listing 7-8 that models the situation in which a chef
+Consider the code in [Listing 7-8](#listing-7-8) that models the situation in which a chef
 fixes an incorrect order and personally brings it out to the customer. The
 function `fix_incorrect_order` defined in the `back_of_house` module calls the
 function `deliver_order` defined in the parent module by specifying the path to
@@ -237,7 +237,7 @@ We can also use `pub` to designate structs and enums as public, but there are a
 few extra details to the usage of `pub` with structs and enums. If we use `pub`
 before a struct definition, we make the struct public, but the struct’s fields
 will still be private. We can make each field public or not on a case-by-case
-basis. In Listing 7-9, we’ve defined a public `back_of_house::Breakfast` struct
+basis. In [Listing 7-9](#listing-7-9), we’ve defined a public `back_of_house::Breakfast` struct
 with a public `toast` field but a private `seasonal_fruit` field. This models
 the case in a restaurant where the customer can pick the type of bread that
 comes with a meal, but the chef decides which fruit accompanies the meal based
@@ -266,7 +266,7 @@ have such a function, we couldn’t create an instance of `Breakfast` in
 `seasonal_fruit` field in `eat_at_restaurant`.
 
 In contrast, if we make an enum public, all of its variants are then public. We
-only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
+only need the `pub` before the `enum` keyword, as shown in [Listing 7-10](#listing-7-10).
 
 <Listing number="7-10" file-name="src/lib.rs" caption="Designating an enum as public makes all its variants public.">
 

@@ -87,7 +87,7 @@ By opting out of having Rust enforce these guarantees, you can give up
 guaranteed safety in exchange for greater performance or the ability to
 interface with another language or hardware where Rust’s guarantees don’t apply.
 
-Listing 20-1 shows how to create an immutable and a mutable raw pointer.
+[Listing 20-1](#listing-20-1) shows how to create an immutable and a mutable raw pointer.
 
 <Listing number="20-1" caption="Creating raw pointers with the raw borrow operators">
 
@@ -109,7 +109,7 @@ that assumption about just any raw pointer.
 
 To demonstrate this, next we’ll create a raw pointer whose validity we can’t be
 so certain of, using `as` to cast a value instead of using the raw borrow
-operators. Listing 20-2 shows how to create a raw pointer to an arbitrary
+operators. [Listing 20-2](#listing-20-2) shows how to create a raw pointer to an arbitrary
 location in memory. Trying to use arbitrary memory is undefined: there might be
 data at that address or there might not, the compiler might optimize the code so
 there is no memory access, or the program might terminate with a segmentation
@@ -125,7 +125,7 @@ cases where you can use a raw borrow operator instead, but it is possible.
 </Listing>
 
 Recall that we can create raw pointers in safe code, but we can’t _dereference_
-raw pointers and read the data being pointed to. In Listing 20-3, we use the
+raw pointers and read the data being pointed to. In [Listing 20-3](#listing-20-3), we use the
 dereference operator `*` on a raw pointer that requires an `unsafe` block.
 
 <Listing number="20-3" caption="Dereferencing raw pointers within an `unsafe` block">
@@ -139,7 +139,7 @@ dereference operator `*` on a raw pointer that requires an `unsafe` block.
 Creating a pointer does no harm; it’s only when we try to access the value that
 it points at that we might end up dealing with an invalid value.
 
-Note also that in Listing 20-1 and 20-3, we created `*const i32` and `*mut i32`
+Note also that in [Listing 20-1](#listing-20-1) and 20-3, we created `*const i32` and `*mut i32`
 raw pointers that both pointed to the same memory location, where `num` is
 stored. If we instead tried to create an immutable and a mutable reference to
 `num`, the code would not have compiled because Rust’s ownership rules don’t
@@ -199,7 +199,7 @@ a common abstraction. As an example, let’s study the `split_at_mut` function
 from the standard library, which requires some unsafe code. We’ll explore how
 we might implement it. This safe method is defined on mutable slices: it takes
 one slice and makes it two by splitting the slice at the index given as an
-argument. Listing 20-4 shows how to use `split_at_mut`.
+argument. [Listing 20-4](#listing-20-4) shows how to use `split_at_mut`.
 
 <Listing number="20-4" caption="Using the safe `split_at_mut` function">
 
@@ -210,7 +210,7 @@ argument. Listing 20-4 shows how to use `split_at_mut`.
 </Listing>
 
 We can’t implement this function using only safe Rust. An attempt might look
-something like Listing 20-5, which won’t compile. For simplicity, we’ll
+something like [Listing 20-5](#listing-20-5), which won’t compile. For simplicity, we’ll
 implement `split_at_mut` as a function rather than a method and only for slices
 of `i32` values rather than for a generic type `T`.
 
@@ -232,7 +232,7 @@ Then we return two mutable slices in a tuple: one from the start of the
 original slice to the `mid` index and another from `mid` to the end of the
 slice.
 
-When we try to compile the code in Listing 20-5, we’ll get an error.
+When we try to compile the code in [Listing 20-5](#listing-20-5), we’ll get an error.
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-05/output.txt}}
@@ -244,7 +244,7 @@ Borrowing different parts of a slice is fundamentally okay because the two
 slices aren’t overlapping, but Rust isn’t smart enough to know this. When we
 know code is okay, but Rust doesn’t, it’s time to reach for unsafe code.
 
-Listing 20-6 shows how to use an `unsafe` block, a raw pointer, and some calls
+[Listing 20-6](#listing-20-6) shows how to use an `unsafe` block, a raw pointer, and some calls
 to unsafe functions to make the implementation of `split_at_mut` work.
 
 <Listing number="20-6" caption="Using unsafe code in the implementation of the `split_at_mut` function">
@@ -286,7 +286,7 @@ abstraction to the unsafe code with an implementation of the function that uses
 `unsafe` code in a safe way, because it creates only valid pointers from the
 data this function has access to.
 
-In contrast, the use of `slice::from_raw_parts_mut` in Listing 20-7 would
+In contrast, the use of `slice::from_raw_parts_mut` in [Listing 20-7](#listing-20-7) would
 likely crash when the slice is used. This code takes an arbitrary memory
 location and creates a slice 10,000 items long.
 
@@ -310,7 +310,7 @@ and use of a _Foreign Function Interface (FFI)_. An FFI is a way for a
 programming language to define functions and enable a different (foreign)
 programming language to call those functions.
 
-Listing 20-8 demonstrates how to set up an integration with the `abs` function
+[Listing 20-8](#listing-20-8) demonstrates how to set up an integration with the `abs` function
 from the C standard library. Functions declared within `extern` blocks are
 generally unsafe to call from Rust code, so `extern` blocks must also be marked
 `unsafe`. The reason is that other languages don’t enforce Rust’s rules and
@@ -337,7 +337,7 @@ from C’s standard library does not have any memory safety considerations and w
 know it can be called with any `i32`. In cases like this, we can use the `safe`
 keyword to say that this specific function is safe to call even though it is in
 an `unsafe extern` block. Once we make that change, calling it no longer
-requires an `unsafe` block, as shown in Listing 20-9.
+requires an `unsafe` block, as shown in [Listing 20-9](#listing-20-9).
 
 <Listing number="20-9" file-name="src/main.rs" caption="Explicitly marking a function as `safe` within an `unsafe extern` block and calling it safely">
 
@@ -386,7 +386,7 @@ In this book, we’ve not yet talked about global variables, which Rust does
 support but can be problematic with Rust’s ownership rules. If two threads are
 accessing the same mutable global variable, it can cause a data race.
 
-In Rust, global variables are called _static_ variables. Listing 20-10 shows an
+In Rust, global variables are called _static_ variables. [Listing 20-10](#listing-20-10) shows an
 example declaration and use of a static variable with a string slice as a
 value.
 
@@ -411,7 +411,7 @@ values in a static variable have a fixed address in memory. Using the value
 will always access the same data. Constants, on the other hand, are allowed to
 duplicate their data whenever they’re used. Another difference is that static
 variables can be mutable. Accessing and modifying mutable static variables is
-_unsafe_. Listing 20-11 shows how to declare, access, and modify a mutable
+_unsafe_. [Listing 20-11](#listing-20-11) shows how to declare, access, and modify a mutable
 static variable named `COUNTER`.
 
 <Listing number="20-11" file-name="src/main.rs" caption="Reading from or writing to a mutable static variable is unsafe">
@@ -455,7 +455,7 @@ We can use `unsafe` to implement an unsafe trait. A trait is unsafe when at
 least one of its methods has some invariant that the compiler can’t verify. We
 declare that a trait is `unsafe` by adding the `unsafe` keyword before `trait`
 and marking the implementation of the trait as `unsafe` too, as shown in
-Listing 20-12.
+[Listing 20-12](#listing-20-12).
 
 <Listing number="20-12" caption="Defining and implementing an unsafe trait">
 
@@ -507,7 +507,7 @@ You can run Miri on a project by typing `cargo +nightly miri run` or `cargo
 +nightly miri test`.
 
 For an example of how helpful this can be, consider what happens when we run it
-against Listing 20-11.
+against [Listing 20-11](#listing-20-11).
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-11/output.txt}}

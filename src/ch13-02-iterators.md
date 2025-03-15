@@ -7,7 +7,7 @@ have to reimplement that logic yourself.
 
 In Rust, iterators are _lazy_, meaning they have no effect until you call
 methods that consume the iterator to use it up. For example, the code in
-Listing 13-10 creates an iterator over the items in the vector `v1` by calling
+[Listing 13-10](#listing-13-10) creates an iterator over the items in the vector `v1` by calling
 the `iter` method defined on `Vec<T>`. This code by itself doesn’t do anything
 useful.
 
@@ -20,12 +20,12 @@ useful.
 </Listing>
 
 The iterator is stored in the `v1_iter` variable. Once we’ve created an
-iterator, we can use it in a variety of ways. In Listing 3-5 in Chapter 3, we
+iterator, we can use it in a variety of ways. In [Listing 3-5](ch03-05-control-flow.md#listing-3-5) in Chapter 3, we
 iterated over an array using a `for` loop to execute some code on each of its
 items. Under the hood this implicitly created and then consumed an iterator,
 but we glossed over how exactly that works until now.
 
-In the example in Listing 13-11, we separate the creation of the iterator from
+In the example in [Listing 13-11](#listing-13-11), we separate the creation of the iterator from
 the use of the iterator in the `for` loop. When the `for` loop is called using
 the iterator in `v1_iter`, each element in the iterator is used in one
 iteration of the loop, which prints out each value.
@@ -76,7 +76,7 @@ The `Iterator` trait only requires implementors to define one method: the
 `next` method, which returns one item of the iterator at a time, wrapped in
 `Some` and, when iteration is over, returns `None`.
 
-We can call the `next` method on iterators directly; Listing 13-12 demonstrates
+We can call the `next` method on iterators directly; [Listing 13-12](#listing-13-12) demonstrates
 what values are returned from repeated calls to `next` on the iterator created
 from the vector.
 
@@ -115,7 +115,7 @@ Methods that call `next` are called _consuming adapters_ because calling them
 uses up the iterator. One example is the `sum` method, which takes ownership of
 the iterator and iterates through the items by repeatedly calling `next`, thus
 consuming the iterator. As it iterates through, it adds each item to a running
-total and returns the total when iteration is complete. Listing 13-13 has a
+total and returns the total when iteration is complete. [Listing 13-13](#listing-13-13) has a
 test illustrating a use of the `sum` method.
 
 <Listing number="13-13" file-name="src/lib.rs" caption="Calling the `sum` method to get the total of all items in the iterator">
@@ -135,7 +135,7 @@ _Iterator adapters_ are methods defined on the `Iterator` trait that don’t
 consume the iterator. Instead, they produce different iterators by changing
 some aspect of the original iterator.
 
-Listing 13-14 shows an example of calling the iterator adapter method `map`,
+[Listing 13-14](#listing-13-14) shows an example of calling the iterator adapter method `map`,
 which takes a closure to call on each item as the items are iterated through.
 The `map` method returns a new iterator that produces the modified items. The
 closure here creates a new iterator in which each item from the vector will be
@@ -155,16 +155,16 @@ However, this code produces a warning:
 {{#include ../listings/ch13-functional-features/listing-13-14/output.txt}}
 ```
 
-The code in Listing 13-14 doesn’t do anything; the closure we’ve specified
+The code in [Listing 13-14](#listing-13-14) doesn’t do anything; the closure we’ve specified
 never gets called. The warning reminds us why: iterator adapters are lazy, and
 we need to consume the iterator here.
 
 To fix this warning and consume the iterator, we’ll use the `collect` method,
-which we used in Chapter 12 with `env::args` in Listing 12-1. This method
+which we used in Chapter 12 with `env::args` in [Listing 12-1](ch12-01-accepting-command-line-arguments.md#listing-12-1). This method
 consumes the iterator and collects the resultant values into a collection data
 type.
 
-In Listing 13-15, we collect the results of iterating over the iterator that’s
+In [Listing 13-15](#listing-13-15), we collect the results of iterating over the iterator that’s
 returned from the call to `map` into a vector. This vector will end up
 containing each item from the original vector, incremented by 1.
 
@@ -196,7 +196,7 @@ closure gets an item from the iterator and returns a `bool`. If the closure
 returns `true`, the value will be included in the iteration produced by
 `filter`. If the closure returns `false`, the value won’t be included.
 
-In Listing 13-16, we use `filter` with a closure that captures the `shoe_size`
+In [Listing 13-16](#listing-13-16), we use `filter` with a closure that captures the `shoe_size`
 variable from its environment to iterate over a collection of `Shoe` struct
 instances. It will return only shoes that are the specified size.
 

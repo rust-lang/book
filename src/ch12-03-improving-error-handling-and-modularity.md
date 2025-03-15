@@ -67,7 +67,7 @@ it. Let’s rework our program by following this process.
 
 We’ll extract the functionality for parsing arguments into a function that
 `main` will call to prepare for moving the command line parsing logic to
-_src/lib.rs_. Listing 12-5 shows the new start of `main` that calls a new
+_src/lib.rs_. [Listing 12-5](#listing-12-5) shows the new start of `main` that calls a new
 function `parse_config`, which we’ll define in _src/main.rs_ for the moment.
 
 <Listing number="12-5" file-name="src/main.rs" caption="Extracting a `parse_config` function from `main`">
@@ -109,7 +109,7 @@ struct fields a meaningful name. Doing so will make it easier for future
 maintainers of this code to understand how the different values relate to each
 other and what their purpose is.
 
-Listing 12-6 shows the improvements to the `parse_config` function.
+[Listing 12-6](#listing-12-6) shows the improvements to the `parse_config` function.
 
 <Listing number="12-6" file-name="src/main.rs" caption="Refactoring `parse_config` to return an instance of a `Config` struct">
 
@@ -174,7 +174,7 @@ named `new` that is associated with the `Config` struct. Making this change
 will make the code more idiomatic. We can create instances of types in the
 standard library, such as `String`, by calling `String::new`. Similarly, by
 changing `parse_config` into a `new` function associated with `Config`, we’ll
-be able to create instances of `Config` by calling `Config::new`. Listing 12-7
+be able to create instances of `Config` by calling `Config::new`. [Listing 12-7](#listing-12-7)
 shows the changes we need to make.
 
 <Listing number="12-7" file-name="src/main.rs" caption="Changing `parse_config` into `Config::new`">
@@ -207,7 +207,7 @@ they should do instead. Let’s fix that now.
 
 #### Improving the Error Message
 
-In Listing 12-8, we add a check in the `new` function that will verify that the
+In [Listing 12-8](#listing-12-8), we add a check in the `new` function that will verify that the
 slice is long enough before accessing index 1 and index 2. If the slice isn’t
 long enough, the program panics and displays a better error message.
 
@@ -219,8 +219,7 @@ long enough, the program panics and displays a better error message.
 
 </Listing>
 
-This code is similar to [the `Guess::new` function we wrote in Listing
-9-13][ch9-custom-types]<!-- ignore -->, where we called `panic!` when the
+This code is similar to [the `Guess::new` function we wrote in [Listing 9-13](ch09-03-to-panic-or-not-to-panic.md#listing-9-13)][ch9-custom-types]<!-- ignore -->, where we called `panic!` when the
 `value` argument was out of the range of valid values. Instead of checking for
 a range of values here, we’re checking that the length of `args` is at least
 `3` and the rest of the function can operate under the assumption that this
@@ -236,7 +235,7 @@ arguments again to see what the error looks like now:
 
 This output is better: we now have a reasonable error message. However, we also
 have extraneous information we don’t want to give to our users. Perhaps the
-technique we used in Listing 9-13 isn’t the best one to use here: a call to
+technique we used in [Listing 9-13](ch09-03-to-panic-or-not-to-panic.md#listing-9-13) isn’t the best one to use here: a call to
 `panic!` is more appropriate for a programming problem than a usage problem,
 [as discussed in Chapter 9][ch9-error-guidelines]<!-- ignore -->. Instead,
 we’ll use the other technique you learned about in Chapter 9—[returning a
@@ -257,7 +256,7 @@ problem. Then we can change `main` to convert an `Err` variant into a more
 practical error for our users without the surrounding text about `thread
 'main'` and `RUST_BACKTRACE` that a call to `panic!` causes.
 
-Listing 12-9 shows the changes we need to make to the return value of the
+[Listing 12-9](#listing-12-9) shows the changes we need to make to the return value of the
 function we’re now calling `Config::build` and the body of the function needed
 to return a `Result`. Note that this won’t compile until we update `main` as
 well, which we’ll do in the next listing.
@@ -291,7 +290,7 @@ process more cleanly in the error case.
 
 To handle the error case and print a user-friendly message, we need to update
 `main` to handle the `Result` being returned by `Config::build`, as shown in
-Listing 12-10. We’ll also take the responsibility of exiting the command line
+[Listing 12-10](#listing-12-10). We’ll also take the responsibility of exiting the command line
 tool with a nonzero error code away from `panic!` and instead implement it by
 hand. A nonzero exit status is a convention to signal to the process that
 called our program that the program exited with an error state.
@@ -314,7 +313,7 @@ an anonymous function we define and pass as an argument to `unwrap_or_else`.
 We’ll cover closures in more detail in [Chapter 13][ch13]<!-- ignore -->. For
 now, you just need to know that `unwrap_or_else` will pass the inner value of
 the `Err`, which in this case is the static string `"not enough arguments"`
-that we added in Listing 12-9, to our closure in the argument `err` that
+that we added in [Listing 12-9](#listing-12-9), to our closure in the argument `err` that
 appears between the vertical pipes. The code in the closure can then use the
 `err` value when it runs.
 
@@ -323,7 +322,7 @@ scope. The code in the closure that will be run in the error case is only two
 lines: we print the `err` value and then call `process::exit`. The
 `process::exit` function will stop the program immediately and return the
 number that was passed as the exit status code. This is similar to the
-`panic!`-based handling we used in Listing 12-8, but we no longer get all the
+`panic!`-based handling we used in [Listing 12-8](#listing-12-8), but we no longer get all the
 extra output. Let’s try it:
 
 ```console
@@ -342,7 +341,7 @@ extract a function named `run` that will hold all the logic currently in the
 errors. When we’re done, `main` will be concise and easy to verify by
 inspection, and we’ll be able to write tests for all the other logic.
 
-Listing 12-11 shows the extracted `run` function. For now, we’re just making
+[Listing 12-11](#listing-12-11) shows the extracted `run` function. For now, we’re just making
 the small, incremental improvement of extracting the function. We’re still
 defining the function in _src/main.rs_.
 
@@ -361,11 +360,11 @@ argument.
 #### Returning Errors from the `run` Function
 
 With the remaining program logic separated into the `run` function, we can
-improve the error handling, as we did with `Config::build` in Listing 12-9.
+improve the error handling, as we did with `Config::build` in [Listing 12-9](#listing-12-9).
 Instead of allowing the program to panic by calling `expect`, the `run`
 function will return a `Result<T, E>` when something goes wrong. This will let
 us further consolidate the logic around handling errors into `main` in a
-user-friendly way. Listing 12-12 shows the changes we need to make to the
+user-friendly way. [Listing 12-12](#listing-12-12) shows the changes we need to make to the
 signature and body of `run`.
 
 <Listing number="12-12" file-name="src/main.rs" caption="Changing the `run` function to return `Result`">
@@ -416,7 +415,7 @@ have some error-handling code here! Let’s rectify that problem now.
 #### Handling Errors Returned from `run` in `main`
 
 We’ll check for errors and handle them using a technique similar to one we used
-with `Config::build` in Listing 12-10, but with a slight difference:
+with `Config::build` in [Listing 12-10](#listing-12-10), but with a slight difference:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -448,9 +447,9 @@ _src/lib.rs_:
 - The definition of `Config`
 - The `Config::build` function definition
 
-The contents of _src/lib.rs_ should have the signatures shown in Listing 12-13
+The contents of _src/lib.rs_ should have the signatures shown in [Listing 12-13](#listing-12-13)
 (we’ve omitted the bodies of the functions for brevity). Note that this won’t
-compile until we modify _src/main.rs_ in Listing 12-14.
+compile until we modify _src/main.rs_ in [Listing 12-14](#listing-12-14).
 
 <Listing number="12-13" file-name="src/lib.rs" caption="Moving `Config` and `run` into *src/lib.rs*">
 
@@ -465,7 +464,7 @@ We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and it
 a public API we can test!
 
 Now we need to bring the code we moved to _src/lib.rs_ into the scope of the
-binary crate in _src/main.rs_, as shown in Listing 12-14.
+binary crate in _src/main.rs_, as shown in [Listing 12-14](#listing-12-14).
 
 <Listing number="12-14" file-name="src/main.rs" caption="Using the `minigrep` library crate in *src/main.rs*">
 

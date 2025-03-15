@@ -110,7 +110,7 @@ let s = "hello";
 
 The variable `s` refers to a string literal, where the value of the string is
 hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current _scope_. Listing 4-1 shows a
+which it’s declared until the end of the current _scope_. [Listing 4-1](#listing-4-1) shows a
 program with comments annotating where the variable `s` would be valid.
 
 <Listing number="4-1" caption="A variable and the scope in which it is valid">
@@ -209,7 +209,7 @@ exactly one `free`.
 
 Rust takes a different path: the memory is automatically returned once the
 variable that owns it goes out of scope. Here’s a version of our scope example
-from Listing 4-1 using a `String` instead of a string literal:
+from [Listing 4-1](#listing-4-1) using a `String` instead of a string literal:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-02-string-scope/src/main.rs:here}}
@@ -239,7 +239,7 @@ we’ve allocated on the heap. Let’s explore some of those situations now.
 #### Variables and Data Interacting with Move
 
 Multiple variables can interact with the same data in different ways in Rust.
-Let’s look at an example using an integer in Listing 4-2.
+Let’s look at an example using an integer in [Listing 4-2](#listing-4-2).
 
 <Listing number="4-2" caption="Assigning the integer value of variable `x` to `y`">
 
@@ -415,7 +415,7 @@ different is going on.
 #### Stack-Only Data: Copy
 
 There’s another wrinkle we haven’t talked about yet. This code using
-integers—part of which was shown in Listing 4-2—works and is valid:
+integers—part of which was shown in [Listing 4-2](#listing-4-2)—works and is valid:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
@@ -461,7 +461,7 @@ implement `Copy`:
 
 The mechanics of passing a value to a function are similar to those when
 assigning a value to a variable. Passing a variable to a function will move or
-copy, just as assignment does. Listing 4-3 has an example with some annotations
+copy, just as assignment does. [Listing 4-3](#listing-4-3) has an example with some annotations
 showing where variables go into and out of scope.
 
 <Listing number="4-3" file-name="src/main.rs" caption="Functions with ownership and scope annotated">
@@ -479,9 +479,8 @@ the ownership rules prevent you from doing so.
 
 ### Return Values and Scope
 
-Returning values can also transfer ownership. Listing 4-4 shows an example of a
-function that returns some value, with similar annotations as those in Listing
-4-3.
+Returning values can also transfer ownership. [Listing 4-4](#listing-4-4) shows an example of a
+function that returns some value, with similar annotations as those in [Listing 4-3](#listing-4-3).
 
 <Listing number="4-4" file-name="src/main.rs" caption="Transferring ownership of return values">
 
@@ -502,7 +501,7 @@ not take ownership? It’s quite annoying that anything we pass in also needs to
 be passed back if we want to use it again, in addition to any data resulting
 from the body of the function that we might want to return as well.
 
-Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
+Rust does let us return multiple values using a tuple, as shown in [Listing 4-5](#listing-4-5).
 
 <Listing number="4-5" file-name="src/main.rs" caption="Returning ownership of parameters">
 

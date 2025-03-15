@@ -7,13 +7,13 @@ concise. Let’s look at how iterators can improve our implementation of the
 
 ### Removing a `clone` Using an Iterator
 
-In Listing 12-6, we added code that took a slice of `String` values and created
+In [Listing 12-6](ch12-03-improving-error-handling-and-modularity.md#listing-12-6), we added code that took a slice of `String` values and created
 an instance of the `Config` struct by indexing into the slice and cloning the
-values, allowing the `Config` struct to own those values. In Listing 13-17,
+values, allowing the `Config` struct to own those values. In [Listing 13-17](#listing-13-17),
 we’ve reproduced the implementation of the `Config::build` function as it was
-in Listing 12-23.
+in [Listing 12-23](ch12-05-working-with-environment-variables.md#listing-12-23).
 
-<Listing number="13-17" file-name="src/lib.rs" caption="Reproduction of the `Config::build` function from Listing 12-23">
+<Listing number="13-17" file-name="src/lib.rs" caption="Reproduction of the `Config::build` function from [Listing 12-23](ch12-05-working-with-environment-variables.md#listing-12-23)">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-23-reproduced/src/lib.rs:ch13}}
@@ -49,8 +49,7 @@ Open your I/O project’s _src/main.rs_ file, which should look like this:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-24-reproduced/src/main.rs:ch13}}
 ```
 
-We’ll first change the start of the `main` function that we had in Listing
-12-24 to the code in Listing 13-18, which this time uses an iterator. This
+We’ll first change the start of the `main` function that we had in [Listing 12-24](ch12-06-writing-to-stderr-instead-of-stdout.md#listing-12-24) to the code in [Listing 13-18](#listing-13-18), which this time uses an iterator. This
 won’t compile until we update `Config::build` as well.
 
 <Listing number="13-18" file-name="src/main.rs" caption="Passing the return value of `env::args` to `Config::build`">
@@ -68,7 +67,7 @@ we’re passing ownership of the iterator returned from `env::args` to
 
 Next, we need to update the definition of `Config::build`. In your I/O
 project’s _src/lib.rs_ file, let’s change the signature of `Config::build` to
-look like Listing 13-19. This still won’t compile because we need to update the
+look like [Listing 13-19](#listing-13-19). This still won’t compile because we need to update the
 function body.
 
 <Listing number="13-19" file-name="src/lib.rs" caption="Updating the signature of `Config::build` to expect an iterator">
@@ -97,8 +96,8 @@ iterating over it, we can add the `mut` keyword into the specification of the
 #### Using `Iterator` Trait Methods Instead of Indexing
 
 Next, we’ll fix the body of `Config::build`. Because `args` implements the
-`Iterator` trait, we know we can call the `next` method on it! Listing 13-20
-updates the code from Listing 12-23 to use the `next` method.
+`Iterator` trait, we know we can call the `next` method on it! [Listing 13-20](#listing-13-20)
+updates the code from [Listing 12-23](ch12-05-working-with-environment-variables.md#listing-12-23) to use the `next` method.
 
 <Listing number="13-20" file-name="src/lib.rs" caption="Changing the body of `Config::build` to use iterator methods">
 
@@ -119,9 +118,9 @@ thing for the `file_path` value.
 ### Making Code Clearer with Iterator Adapters
 
 We can also take advantage of iterators in the `search` function in our I/O
-project, which is reproduced here in Listing 13-21 as it was in Listing 12-19:
+project, which is reproduced here in [Listing 13-21](#listing-13-21) as it was in [Listing 12-19](ch12-04-testing-the-librarys-functionality.md#listing-12-19):
 
-<Listing number="13-21" file-name="src/lib.rs" caption="The implementation of the `search` function from Listing 12-19">
+<Listing number="13-21" file-name="src/lib.rs" caption="The implementation of the `search` function from [Listing 12-19](ch12-04-testing-the-librarys-functionality.md#listing-12-19)">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:ch13}}
@@ -134,7 +133,7 @@ Doing so also lets us avoid having a mutable intermediate `results` vector. The
 functional programming style prefers to minimize the amount of mutable state to
 make code clearer. Removing the mutable state might enable a future enhancement
 to make searching happen in parallel, because we wouldn’t have to manage
-concurrent access to the `results` vector. Listing 13-22 shows this change:
+concurrent access to the `results` vector. [Listing 13-22](#listing-13-22) shows this change:
 
 <Listing number="13-22" file-name="src/lib.rs" caption="Using iterator adapter methods in the implementation of the `search` function">
 
@@ -145,8 +144,7 @@ concurrent access to the `results` vector. Listing 13-22 shows this change:
 </Listing>
 
 Recall that the purpose of the `search` function is to return all lines in
-`contents` that contain the `query`. Similar to the `filter` example in Listing
-13-16, this code uses the `filter` adapter to keep only the lines for which
+`contents` that contain the `query`. Similar to the `filter` example in [Listing 13-16](ch13-02-iterators.md#listing-13-16), this code uses the `filter` adapter to keep only the lines for which
 `line.contains(query)` returns `true` for. We then collect the matching lines
 into another vector with `collect`. Much simpler! Feel free to make the same
 change to use iterator methods in the `search_case_insensitive` function as
@@ -155,8 +153,8 @@ well.
 ### Choosing Between Loops or Iterators
 
 The next logical question is which style you should choose in your own code and
-why: the original implementation in Listing 13-21 or the version using
-iterators in Listing 13-22. Most Rust programmers prefer to use the iterator
+why: the original implementation in [Listing 13-21](#listing-13-21) or the version using
+iterators in [Listing 13-22](#listing-13-22). Most Rust programmers prefer to use the iterator
 style. It’s a bit tougher to get the hang of at first, but once you get a feel
 for the various iterator adapters and what they do, iterators can be easier to
 understand. Instead of fiddling with the various bits of looping and building

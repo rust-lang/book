@@ -1,7 +1,7 @@
 ## Using Trait Objects That Allow for Values of Different Types
 
 In Chapter 8, we mentioned that one limitation of vectors is that they can
-store elements of only one type. We created a workaround in Listing 8-9 where
+store elements of only one type. We created a workaround in [Listing 8-9](ch08-01-vectors.md#listing-8-9) where
 we defined a `SpreadsheetCell` enum that had variants to hold integers, floats,
 and text. This meant we could store different types of data in each cell and
 still have a vector that represented a row of cells. This is a perfectly good
@@ -63,7 +63,7 @@ a trait object. Trait objects aren’t as generally useful as objects in other
 languages: their specific purpose is to allow abstraction across common
 behavior.
 
-Listing 18-3 shows how to define a trait named `Draw` with one method named
+[Listing 18-3](#listing-18-3) shows how to define a trait named `Draw` with one method named
 `draw`.
 
 <Listing number="18-3" file-name="src/lib.rs" caption="Definition of the `Draw` trait">
@@ -75,7 +75,7 @@ Listing 18-3 shows how to define a trait named `Draw` with one method named
 </Listing>
 
 This syntax should look familiar from our discussions on how to define traits
-in Chapter 10. Next comes some new syntax: Listing 18-4 defines a struct named
+in Chapter 10. Next comes some new syntax: [Listing 18-4](#listing-18-4) defines a struct named
 `Screen` that holds a vector named `components`. This vector is of type
 `Box<dyn Draw>`, which is a trait object; it’s a stand-in for any type inside
 a `Box` that implements the `Draw` trait.
@@ -89,7 +89,7 @@ a `Box` that implements the `Draw` trait.
 </Listing>
 
 On the `Screen` struct, we’ll define a method named `run` that will call the
-`draw` method on each of its `components`, as shown in Listing 18-5.
+`draw` method on each of its `components`, as shown in [Listing 18-5](#listing-18-5).
 
 <Listing number="18-5" file-name="src/lib.rs" caption="A `run` method on `Screen` that calls the `draw` method on each component">
 
@@ -104,7 +104,7 @@ parameter with trait bounds. A generic type parameter can be substituted with
 only one concrete type at a time, whereas trait objects allow for multiple
 concrete types to fill in for the trait object at runtime. For example, we
 could have defined the `Screen` struct using a generic type and a trait bound
-as in Listing 18-6:
+as in [Listing 18-6](#listing-18-6):
 
 <Listing number="18-6" file-name="src/lib.rs" caption="An alternate implementation of the `Screen` struct and its `run` method using generics and trait bounds">
 
@@ -130,7 +130,7 @@ Now we’ll add some types that implement the `Draw` trait. We’ll provide the
 `Button` type. Again, actually implementing a GUI library is beyond the scope
 of this book, so the `draw` method won’t have any useful implementation in its
 body. To imagine what the implementation might look like, a `Button` struct
-might have fields for `width`, `height`, and `label`, as shown in Listing 18-7:
+might have fields for `width`, `height`, and `label`, as shown in [Listing 18-7](#listing-18-7):
 
 <Listing number="18-7" file-name="src/lib.rs" caption="A `Button` struct that implements the `Draw` trait">
 
@@ -152,7 +152,7 @@ types like `TextField`.
 
 If someone using our library decides to implement a `SelectBox` struct that has
 `width`, `height`, and `options` fields, they would implement the `Draw` trait
-on the `SelectBox` type as well, as shown in Listing 18-8.
+on the `SelectBox` type as well, as shown in [Listing 18-8](#listing-18-8).
 
 <Listing number="18-8" file-name="src/main.rs" caption="Another crate using `gui` and implementing the `Draw` trait on a `SelectBox` struct">
 
@@ -166,7 +166,7 @@ Our library’s user can now write their `main` function to create a `Screen`
 instance. To the `Screen` instance, they can add a `SelectBox` and a `Button`
 by putting each in a `Box<T>` to become a trait object. They can then call the
 `run` method on the `Screen` instance, which will call `draw` on each of the
-components. Listing 18-9 shows this implementation:
+components. [Listing 18-9](#listing-18-9) shows this implementation:
 
 <Listing number="18-9" file-name="src/main.rs" caption="Using trait objects to store values of different types that implement the same trait">
 
@@ -185,7 +185,7 @@ This concept—of being concerned only with the messages a value responds to
 rather than the value’s concrete type—is similar to the concept of _duck
 typing_ in dynamically typed languages: if it walks like a duck and quacks
 like a duck, then it must be a duck! In the implementation of `run` on `Screen`
-in Listing 18-5, `run` doesn’t need to know what the concrete type of each
+in [Listing 18-5](#listing-18-5), `run` doesn’t need to know what the concrete type of each
 component is. It doesn’t check whether a component is an instance of a `Button`
 or a `SelectBox`, it just calls the `draw` method on the component. By
 specifying `Box<dyn Draw>` as the type of the values in the `components`
@@ -198,7 +198,7 @@ value implements a particular method at runtime or worry about getting errors
 if a value doesn’t implement a method but we call it anyway. Rust won’t compile
 our code if the values don’t implement the traits that the trait objects need.
 
-For example, Listing 18-10 shows what happens if we try to create a `Screen`
+For example, [Listing 18-10](#listing-18-10) shows what happens if we try to create a `Screen`
 with a `String` as a component.
 
 <Listing number="18-10" file-name="src/main.rs" caption="Attempting to use a type that doesn’t implement the trait object’s trait">
@@ -242,7 +242,7 @@ code, which in turn prevents some optimizations, and Rust has some rules, called
 _dyn compatibility_, about where you can and cannot use dynamic dispatch. Those
 rules are beyond the scope of this discussion, but  you can read more about them
 [in the reference][dyn-compatibility]. However, we did get extra flexibility in
-the code that we wrote in Listing 18-5 and were able to support in Listing 18-9,
+the code that we wrote in [Listing 18-5](#listing-18-5) and were able to support in [Listing 18-9](#listing-18-9),
 so it’s a trade-off to consider.
 
 [performance-of-code-using-generics]: ch10-01-syntax.html#performance-of-code-using-generics

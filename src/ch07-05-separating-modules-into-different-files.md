@@ -4,7 +4,7 @@ So far, all the examples in this chapter defined multiple modules in one file.
 When modules get large, you might want to move their definitions to a separate
 file to make the code easier to navigate.
 
-For example, let’s start from the code in Listing 7-17 that had multiple
+For example, let’s start from the code in [Listing 7-17](ch07-04-bringing-paths-into-scope-with-the-use-keyword.md#listing-7-17) that had multiple
 restaurant modules. We’ll extract modules into files instead of having all the
 modules defined in the crate root file. In this case, the crate root file is
 _src/lib.rs_, but this procedure also works with binary crates whose crate root
@@ -13,8 +13,8 @@ file is _src/main.rs_.
 First we’ll extract the `front_of_house` module to its own file. Remove the
 code inside the curly brackets for the `front_of_house` module, leaving only
 the `mod front_of_house;` declaration, so that _src/lib.rs_ contains the code
-shown in Listing 7-21. Note that this won’t compile until we create the
-_src/front_of_house.rs_ file in Listing 7-22.
+shown in [Listing 7-21](#listing-7-21). Note that this won’t compile until we create the
+_src/front_of_house.rs_ file in [Listing 7-22](#listing-7-22).
 
 <Listing number="7-21" file-name="src/lib.rs" caption="Declaring the `front_of_house` module whose body will be in *src/front_of_house.rs*">
 
@@ -25,7 +25,7 @@ _src/front_of_house.rs_ file in Listing 7-22.
 </Listing>
 
 Next, place the code that was in the curly brackets into a new file named
-_src/front_of_house.rs_, as shown in Listing 7-22. The compiler knows to look
+_src/front_of_house.rs_, as shown in [Listing 7-22](#listing-7-22). The compiler knows to look
 in this file because it came across the module declaration in the crate root
 with the name `front_of_house`.
 

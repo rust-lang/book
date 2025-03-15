@@ -114,7 +114,7 @@ administrative work.
 
 To structure our crate in this way, we can organize its functions into nested
 modules. Create a new library named `restaurant` by running `cargo new
-restaurant --lib`. Then enter the code in Listing 7-1 into _src/lib.rs_ to
+restaurant --lib`. Then enter the code in [Listing 7-1](#listing-7-1) into _src/lib.rs_ to
 define some modules and function signatures; this code is the front of house
 section.
 
@@ -130,8 +130,7 @@ We define a module with the `mod` keyword followed by the name of the module
 (in this case, `front_of_house`). The body of the module then goes inside curly
 brackets. Inside modules, we can place other modules, as in this case with the
 modules `hosting` and `serving`. Modules can also hold definitions for other
-items, such as structs, enums, constants, traits, and—as in Listing
-7-1—functions.
+items, such as structs, enums, constants, traits, and—as in [Listing 7-1](#listing-7-1)—functions.
 
 By using modules, we can group related definitions together and name why
 they’re related. Programmers using this code can navigate the code based on the
@@ -144,9 +143,9 @@ roots. The reason for their name is that the contents of either of these two
 files form a module named `crate` at the root of the crate’s module structure,
 known as the _module tree_.
 
-Listing 7-2 shows the module tree for the structure in Listing 7-1.
+[Listing 7-2](#listing-7-2) shows the module tree for the structure in [Listing 7-1](#listing-7-1).
 
-<Listing number="7-2" caption="The module tree for the code in Listing 7-1">
+<Listing number="7-2" caption="The module tree for the code in [Listing 7-1](#listing-7-1)">
 
 ```text
 crate

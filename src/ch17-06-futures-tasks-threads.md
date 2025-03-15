@@ -24,8 +24,8 @@ managed by library-level code: the runtime.
 
 In the previous section, we saw that we could build a stream by using an async
 channel and spawning an async task we could call from synchronous code. We can
-do the exact same thing with a thread. In Listing 17-40, we used
-`trpl::spawn_task` and `trpl::sleep`. In Listing 17-41, we replace those with
+do the exact same thing with a thread. In [Listing 17-40](ch17-04-streams.md#listing-17-40), we used
+`trpl::spawn_task` and `trpl::sleep`. In [Listing 17-41](#listing-17-41), we replace those with
 the `thread::spawn` and `thread::sleep` APIs from the standard library in the
 `get_intervals` function.
 
@@ -37,7 +37,7 @@ the `thread::spawn` and `thread::sleep` APIs from the standard library in the
 
 </Listing>
 
-If you run this code, the output is identical to that of Listing 17-40. And
+If you run this code, the output is identical to that of [Listing 17-40](ch17-04-streams.md#listing-17-40). And
 notice how little changes here from the perspective of the calling code. What’s
 more, even though one of our functions spawned an async task on the runtime and
 the other spawned an OS thread, the resulting streams were unaffected by the
@@ -96,7 +96,7 @@ When thinking about which method to use when, consider these rules of thumb:
 
 And if you need both parallelism and concurrency, you don’t have to choose
 between threads and async. You can use them together freely, letting each one
-play the part it’s best at. For example, Listing 17-42 shows a fairly common
+play the part it’s best at. For example, [Listing 17-42](#listing-17-42) shows a fairly common
 example of this kind of mix in real-world Rust code.
 
 <Listing number="17-42" caption="Sending messages with blocking code in a thread and awaiting the messages in an async block" file-name="src/main.rs">

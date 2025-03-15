@@ -47,7 +47,7 @@ the _.rs_ extension. If you’re using more than one word in your filename, the
 convention is to use an underscore to separate them. For example, use
 _hello_world.rs_ rather than _helloworld.rs_.
 
-Now open the _main.rs_ file you just created and enter the code in Listing 1-1.
+Now open the _main.rs_ file you just created and enter the code in [Listing 1-1](#listing-1-1).
 
 <Listing number="1-1" file-name="main.rs" caption="A program that prints `Hello, world!`">
 

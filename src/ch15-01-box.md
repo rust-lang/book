@@ -32,7 +32,7 @@ So what you learn here you’ll apply again in that section!
 Before we discuss the heap storage use case for `Box<T>`, we’ll cover the
 syntax and how to interact with values stored within a `Box<T>`.
 
-Listing 15-1 shows how to use a box to store an `i32` value on the heap.
+[Listing 15-1](#listing-15-1) shows how to use a box to store an `i32` value on the heap.
 
 <Listing number="15-1" file-name="src/main.rs" caption="Storing an `i32` value on the heap using a box">
 
@@ -100,7 +100,7 @@ Other, more complex recursive data types _are_ useful in various situations,
 but by starting with the cons list in this chapter, we can explore how boxes
 let us define a recursive data type without much distraction.
 
-Listing 15-2 contains an enum definition for a cons list. Note that this code
+[Listing 15-2](#listing-15-2) contains an enum definition for a cons list. Note that this code
 won’t compile yet because the `List` type doesn’t have a known size, which
 we’ll demonstrate.
 
@@ -118,7 +118,7 @@ we’ll demonstrate.
 > any type.
 
 Using the `List` type to store the list `1, 2, 3` would look like the code in
-Listing 15-3.
+[Listing 15-3](#listing-15-3).
 
 <Listing number="15-3" file-name="src/main.rs" caption="Using the `List` enum to store the list `1, 2, 3`">
 
@@ -133,8 +133,8 @@ another `Cons` value that holds `2` and another `List` value. This `List` value
 is one more `Cons` value that holds `3` and a `List` value, which is finally
 `Nil`, the non-recursive variant that signals the end of the list.
 
-If we try to compile the code in Listing 15-3, we get the error shown in
-Listing 15-4.
+If we try to compile the code in [Listing 15-3](#listing-15-3), we get the error shown in
+[Listing 15-4](#listing-15-4).
 
 <Listing number="15-4" file-name="output.txt" caption="The error we get when attempting to define a recursive enum">
 
@@ -152,7 +152,7 @@ Rust decides how much space it needs to store a value of a non-recursive type.
 
 #### Computing the Size of a Non-Recursive Type
 
-Recall the `Message` enum we defined in Listing 6-2 when we discussed enum
+Recall the `Message` enum we defined in [Listing 6-2](ch06-01-defining-an-enum.md#listing-6-2) when we discussed enum
 definitions in Chapter 6:
 
 ```rust
@@ -167,7 +167,7 @@ used, the most space a `Message` value will need is the space it would take to
 store the largest of its variants.
 
 Contrast this with what happens when Rust tries to determine how much space a
-recursive type like the `List` enum in Listing 15-2 needs. The compiler starts
+recursive type like the `List` enum in [Listing 15-2](#listing-15-2) needs. The compiler starts
 by looking at the `Cons` variant, which holds a value of type `i32` and a value
 of type `List`. Therefore, `Cons` needs an amount of space equal to the size of
 an `i32` plus the size of a `List`. To figure out how much memory the `List`
@@ -209,8 +209,8 @@ Conceptually, we still have a list, created with lists holding other lists, but
 this implementation is now more like placing the items next to one another
 rather than inside one another.
 
-We can change the definition of the `List` enum in Listing 15-2 and the usage
-of the `List` in Listing 15-3 to the code in Listing 15-5, which will compile.
+We can change the definition of the `List` enum in [Listing 15-2](#listing-15-2) and the usage
+of the `List` in [Listing 15-3](#listing-15-3) to the code in [Listing 15-5](#listing-15-5), which will compile.
 
 <Listing number="15-5" file-name="src/main.rs" caption="Definition of `List` that uses `Box<T>` in order to have a known size">
 

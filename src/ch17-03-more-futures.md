@@ -5,8 +5,8 @@ also had to switch from using `join` to using `join3`. It would be annoying to
 have to call a different function every time we changed the number of futures we
 wanted to join. Happily, we have a macro form of `join` to which we can pass an
 arbitrary number of arguments. It also handles awaiting the futures itself.
-Thus, we could rewrite the code from Listing 17-13 to use `join!` instead of
-`join3`, as in Listing 17-14.
+Thus, we could rewrite the code from [Listing 17-13](ch17-02-concurrency-with-async.md#listing-17-13) to use `join!` instead of
+`join3`, as in [Listing 17-14](#listing-17-14).
 
 <Listing number="17-14" caption="Using `join!` to wait for multiple futures" file-name="src/main.rs">
 
@@ -27,7 +27,7 @@ join on _all_ of them. The `trpl::join_all` function accepts any type that
 implements the `Iterator` trait, which you learned about back in [The Iterator
 Trait and the `next` Method][iterator-trait]<!-- ignore --> Chapter 13, so
 it seems like just the ticket. Let’s try putting our futures in a vector and
-replacing `join!` with `join_all` as show in Listing 17-15.
+replacing `join!` with `join_all` as show in [Listing 17-15](#listing-17-15).
 
 <Listing  number="17-15" caption="Storing anonymous futures in a vector and calling `join_all`">
 
@@ -86,7 +86,7 @@ of them implement the `Future` trait.
 > same output type.
 
 We start by wrapping each future in the `vec!` in a `Box::new`, as shown in
-Listing 17-16.
+[Listing 17-16](#listing-17-16).
 
 <Listing number="17-16" caption="Using `Box::new` to align the types of the futures in a `Vec`" file-name="src/main.rs">
 
@@ -100,7 +100,7 @@ Unfortunately, this code still doesn’t compile. In fact, we get the same basic
 error we got before for both the second and third `Box::new` calls, as well as
 new errors referring to the `Unpin` trait. We’ll come back to the `Unpin` errors
 in a moment. First, let’s fix the type errors on the `Box::new` calls by
-explicitly annotating the type of the `futures` variable (see Listing 17-17).
+explicitly annotating the type of the `futures` variable (see [Listing 17-17](#listing-17-17)).
 
 <Listing number="17-17" caption="Fixing the rest of the type mismatch errors by using an explicit type declaration" file-name="src/main.rs">
 
@@ -196,7 +196,7 @@ tell us that the first async block (`src/main.rs:8:23: 20:10`) does not
 implement the `Unpin` trait and suggests using `pin!` or `Box::pin` to resolve
 it. Later in the chapter, we’ll dig into a few more details about `Pin` and
 `Unpin`. For the moment, though, we can just follow the compiler’s advice to get
-unstuck. In Listing 17-18, we start by updating the type annotation for
+unstuck. In [Listing 17-18](#listing-17-18), we start by updating the type annotation for
 `futures`, with a `Pin` wrapping each `Box`. Second, we use `Box::pin` to pin
 the futures themselves.
 
@@ -240,7 +240,7 @@ However, we must still be explicit about the type of the pinned reference;
 otherwise, Rust will still not know to interpret these as dynamic trait objects,
 which is what we need them to be in the `Vec`. We therefore `pin!` each future
 when we define it, and define `futures` as a `Vec` containing pinned mutable
-references to the dynamic future type, as in Listing 17-19.
+references to the dynamic future type, as in [Listing 17-19](#listing-17-19).
 
 <Listing number="17-19" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
 
@@ -251,7 +251,7 @@ references to the dynamic future type, as in Listing 17-19.
 </Listing>
 
 We got this far by ignoring the fact that we might have different `Output`
-types. For example, in Listing 17-20, the anonymous future for `a` implements
+types. For example, in [Listing 17-20](#listing-17-20), the anonymous future for `a` implements
 `Future<Output = u32>`, the anonymous future for `b` implements `Future<Output =
 &str>`, and the anonymous future for `c` implements `Future<Output = bool>`.
 
@@ -283,7 +283,7 @@ require _all_ of them to finish before we move on. Sometimes, though, we only
 need _some_ future from a set to finish before we move on—kind of similar to
 racing one future against another.
 
-In Listing 17-21, we once again use `trpl::race` to run two futures, `slow` and
+In [Listing 17-21](#listing-17-21), we once again use `trpl::race` to run two futures, `slow` and
 `fast`, against each other.
 
 <Listing number="17-21" caption="Using `race` to get the result of whichever future finishes first" file-name="src/main.rs">
@@ -337,7 +337,7 @@ But _how_ would you hand control back to the runtime in those cases?
 
 ### Yielding Control to the Runtime
 
-Let’s simulate a long-running operation. Listing 17-22 introduces a `slow`
+Let’s simulate a long-running operation. [Listing 17-22](#listing-17-22) introduces a `slow`
 function.
 
 <Listing number="17-22" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
@@ -353,7 +353,7 @@ This code uses `std::thread::sleep` instead of `trpl::sleep` so that calling
 `slow` to stand in for real-world operations that are both long-running and
 blocking.
 
-In Listing 17-23, we use `slow` to emulate doing this kind of CPU-bound work in
+In [Listing 17-23](#listing-17-23), we use `slow` to emulate doing this kind of CPU-bound work in
 a pair of futures.
 
 <Listing number="17-23" caption="Using `thread::sleep` to simulate slow operations" file-name="src/main.rs">
@@ -394,11 +394,11 @@ future completes. To allow both futures to make progress between their slow
 tasks, we need await points so we can hand control back to the runtime. That
 means we need something we can await!
 
-We can already see this kind of handoff happening in Listing 17-23: if we
+We can already see this kind of handoff happening in [Listing 17-23](#listing-17-23): if we
 removed the `trpl::sleep` at the end of the `a` future, it would complete
 without the `b` future running _at all_. Let’s try using the `sleep` function as
 a starting point for letting operations switch off making progress, as shown in
-Listing 17-24.
+[Listing 17-24](#listing-17-24).
 
 <Listing number="17-24" caption="Using `sleep` to let operations switch off making progress" file-name="src/main.rs">
 
@@ -408,7 +408,7 @@ Listing 17-24.
 
 </Listing>
 
-In Listing 17-24, we add `trpl::sleep` calls with await points between each call
+In [Listing 17-24](#listing-17-24), we add `trpl::sleep` calls with await points between each call
 to `slow`. Now the two futures’ work is interleaved:
 
 <!-- manual-regeneration
@@ -437,7 +437,7 @@ whatever way makes the most sense to us.
 
 We don’t really want to _sleep_ here, though: we want to make progress as fast
 as we can. We just need to hand back control to the runtime. We can do that
-directly, using the `yield_now` function. In Listing 17-25, we replace all those
+directly, using the `yield_now` function. In [Listing 17-25](#listing-17-25), we replace all those
 `sleep` calls with `yield_now`.
 
 <Listing number="17-25" caption="Using `yield_now` to let operations switch off making progress" file-name="src/main.rs">
@@ -456,7 +456,7 @@ for example, will always sleep for at least a millisecond, even if we pass it a
 lot in one millisecond!
 
 You can see this for yourself by setting up a little benchmark, such as the one
-in Listing 17-26. (This isn’t an especially rigorous way to do performance
+in [Listing 17-26](#listing-17-26). (This isn’t an especially rigorous way to do performance
 testing, but it suffices to show the difference here.)
 
 <Listing number="17-26" caption="Comparing the performance of `sleep` and `yield_now`" file-name="src/main.rs">
@@ -498,7 +498,7 @@ build a `timeout` function with async building blocks we already have. When
 we’re done, the result will be another building block we could use to create
 still more async abstractions.
 
-Listing 17-27 shows how we would expect this `timeout` to work with a slow
+[Listing 17-27](#listing-17-27) shows how we would expect this `timeout` to work with a slow
 future.
 
 <Listing number="17-27" caption="Using our imagined `timeout` to run a slow operation with a time limit" file-name="src/main.rs">
@@ -521,7 +521,7 @@ Let’s implement this! To begin, let’s think about the API for `timeout`:
   elapses first, the `Result` will be `Err` with the duration that the timeout
   waited for.
 
-Listing 17-28 shows this declaration.
+[Listing 17-28](#listing-17-28) shows this declaration.
 
 <!-- This is not tested because it intentionally does not compile. -->
 
@@ -545,7 +545,7 @@ chance to complete even if `max_time` is a very short duration. If
 `future_to_try`. If `timer` finishes first, `race` will return `Right` with the
 timer’s output of `()`.
 
-In Listing 17-29, we match on the result of awaiting `trpl::race`.
+In [Listing 17-29](#listing-17-29), we match on the result of awaiting `trpl::race`.
 
 <Listing number="17-29" caption="Defining `timeout` with `race` and `sleep`" file-name="src/main.rs">
 
