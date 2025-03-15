@@ -1,6 +1,6 @@
 ## Graceful Shutdown and Cleanup
 
-The code in [Listing 21-20](#listing-21-20) is responding to requests asynchronously through the
+The code in [Listing 21-20](ch21-02-multithreaded.md#listing-21-20) is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about the `workers`,
 `id`, and `thread` fields that we’re not using in a direct way that reminds us
 we’re not cleaning up anything. When we use the less elegant
@@ -51,7 +51,7 @@ The error tells us we can’t call `join` because we only have a mutable borrow 
 each `worker` and `join` takes ownership of its argument. To solve this issue,
 we need to move the thread out of the `Worker` instance that owns `thread` so
 `join` can consume the thread. One way to do this is by taking the same approach
-we did in [Listing 18-15](#listing-18-15). If `Worker` held an `Option<thread::JoinHandle<()>>`,
+we did in [Listing 18-15](ch18-03-oo-design-patterns.md#listing-18-15). If `Worker` held an `Option<thread::JoinHandle<()>>`,
 we could call the `take` method on the `Option` to move the value out of the
 `Some` variant and leave a `None` variant in its place. In other words, a
 `Worker` that is running would have a `Some` variant in `thread`, and when we

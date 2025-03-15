@@ -13,7 +13,7 @@ to Implement External Traits on External Types.”][using-the-newtype-pattern]<!
 ignore --> The newtype pattern is also useful for tasks beyond those we’ve
 discussed so far, including statically enforcing that values are never confused
 and indicating the units of a value. You saw an example of using newtypes to
-indicate units in [Listing 20-16](#listing-20-16): recall that the `Millimeters` and `Meters`
+indicate units in [Listing 20-16](ch20-02-advanced-traits.md#listing-20-16): recall that the `Millimeters` and `Meters`
 structs wrapped `u32` values in a newtype. If we wrote a function with a
 parameter of type `Millimeters`, we wouldn’t be able to compile a program that
 accidentally tried to call that function with a value of type `Meters` or a
@@ -44,7 +44,7 @@ the alias `Kilometers` to `i32` like so:
 ```
 
 Now, the alias `Kilometers` is a _synonym_ for `i32`; unlike the `Millimeters`
-and `Meters` types we created in [Listing 20-16](#listing-20-16), `Kilometers` is not a separate,
+and `Meters` types we created in [Listing 20-16](ch20-02-advanced-traits.md#listing-20-16), `Kilometers` is not a separate,
 new type. Values that have the type `Kilometers` will be treated the same as
 values of type `i32`:
 
@@ -144,7 +144,7 @@ never are called _diverging functions_. We can’t create values of the type `!`
 so `bar` can never possibly return.
 
 But what use is a type you can never create values for? Recall the code from
-[Listing 2-5](#listing-2-5), part of the number-guessing game; we’ve reproduced a bit of it
+[Listing 2-5](ch02-00-guessing-game-tutorial.md#listing-2-5), part of the number-guessing game; we’ve reproduced a bit of it
 here in [Listing 20-27](#listing-20-27).
 
 <Listing number="20-27" caption="A `match` with an arm that ends in `continue`">

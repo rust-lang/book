@@ -98,7 +98,7 @@ fn main() {
 ```
 
 Cargo has generated a “Hello, world!” program for you, just like the one we
-wrote in [Listing 1-1](#listing-1-1)! So far, the differences between our project and the
+wrote in [Listing 1-1](ch01-02-hello-world.md#listing-1-1)! So far, the differences between our project and the
 project Cargo generated are that Cargo placed the code in the _src_ directory
 and we have a _Cargo.toml_ configuration file in the top directory.
 

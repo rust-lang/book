@@ -5,7 +5,7 @@ also had to switch from using `join` to using `join3`. It would be annoying to
 have to call a different function every time we changed the number of futures we
 wanted to join. Happily, we have a macro form of `join` to which we can pass an
 arbitrary number of arguments. It also handles awaiting the futures itself.
-Thus, we could rewrite the code from [Listing 17-13](#listing-17-13) to use `join!` instead of
+Thus, we could rewrite the code from [Listing 17-13](ch17-02-concurrency-with-async.md#listing-17-13) to use `join!` instead of
 `join3`, as in [Listing 17-14](#listing-17-14).
 
 <Listing number="17-14" caption="Using `join!` to wait for multiple futures" file-name="src/main.rs">

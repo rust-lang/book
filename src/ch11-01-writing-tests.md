@@ -185,7 +185,7 @@ to ensure that some condition in a test evaluates to `true`. We give the
 `assert!` macro calls `panic!` to cause the test to fail. Using the `assert!`
 macro helps us check that our code is functioning in the way we intend.
 
-In Chapter 5, [Listing 5-15](#listing-5-15), we used a `Rectangle` struct and a `can_hold`
+In Chapter 5, [Listing 5-15](ch05-03-method-syntax.md#listing-5-15), we used a `Rectangle` struct and a `can_hold`
 method, which are repeated here in [Listing 11-5](#listing-11-5). Let’s put this code in the
 _src/lib.rs_ file, then write some tests for it using the `assert!` macro.
 
@@ -344,7 +344,7 @@ the standard library types implement these traits. For structs and enums that
 you define yourself, you’ll need to implement `PartialEq` to assert equality of
 those types. You’ll also need to implement `Debug` to print the values when the
 assertion fails. Because both traits are derivable traits, as mentioned in
-[Listing 5-12](#listing-5-12) in Chapter 5, this is usually as straightforward as adding the
+[Listing 5-12](ch05-02-example-structs.md#listing-5-12) in Chapter 5, this is usually as straightforward as adding the
 `#[derive(PartialEq, Debug)]` annotation to your struct or enum definition. See
 Appendix C, [“Derivable Traits,”][derivable-traits]<!-- ignore --> for more
 details about these and other derivable traits.
@@ -413,7 +413,7 @@ debug what happened instead of what we were expecting to happen.
 
 In addition to checking return values, it’s important to check that our code
 handles error conditions as we expect. For example, consider the `Guess` type
-that we created in Chapter 9, [Listing 9-13](#listing-9-13). Other code that uses `Guess`
+that we created in Chapter 9, [Listing 9-13](ch09-03-to-panic-or-not-to-panic.md#listing-9-13). Other code that uses `Guess`
 depends on the guarantee that `Guess` instances will contain only values
 between 1 and 100. We can write a test that ensures that attempting to create a
 `Guess` instance with a value outside that range panics.

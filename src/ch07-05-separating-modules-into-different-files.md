@@ -4,7 +4,7 @@ So far, all the examples in this chapter defined multiple modules in one file.
 When modules get large, you might want to move their definitions to a separate
 file to make the code easier to navigate.
 
-For example, let’s start from the code in [Listing 7-17](#listing-7-17) that had multiple
+For example, let’s start from the code in [Listing 7-17](ch07-04-bringing-paths-into-scope-with-the-use-keyword.md#listing-7-17) that had multiple
 restaurant modules. We’ll extract modules into files instead of having all the
 modules defined in the crate root file. In this case, the crate root file is
 _src/lib.rs_, but this procedure also works with binary crates whose crate root

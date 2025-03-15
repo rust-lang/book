@@ -225,7 +225,7 @@ function from the `it_adds_two` test in _tests/integration_test.rs_:
 ```
 
 Note that the `mod common;` declaration is the same as the module declaration
-we demonstrated in [Listing 7-21](#listing-7-21). Then, in the test function, we can call the
+we demonstrated in [Listing 7-21](ch07-05-separating-modules-into-different-files.md#listing-7-21). Then, in the test function, we can call the
 `common::setup()` function.
 
 #### Integration Tests for Binary Crates

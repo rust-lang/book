@@ -1,6 +1,6 @@
 ## References and Borrowing
 
-The issue with the tuple code in [Listing 4-5](#listing-4-5) is that we have to return the
+The issue with the tuple code in [Listing 4-5](ch04-01-what-is-ownership.md#listing-4-5) is that we have to return the
 `String` to the calling function so we can still use the `String` after the
 call to `calculate_length`, because the `String` was moved into
 `calculate_length`. Instead, we can provide a reference to the `String` value.

@@ -152,7 +152,7 @@ Rust decides how much space it needs to store a value of a non-recursive type.
 
 #### Computing the Size of a Non-Recursive Type
 
-Recall the `Message` enum we defined in [Listing 6-2](#listing-6-2) when we discussed enum
+Recall the `Message` enum we defined in [Listing 6-2](ch06-01-defining-an-enum.md#listing-6-2) when we discussed enum
 definitions in Chapter 6:
 
 ```rust

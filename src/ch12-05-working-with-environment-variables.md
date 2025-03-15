@@ -38,7 +38,7 @@ line `"Trust me."` even though both have different casing from the query. This
 is our failing test, and it will fail to compile because we haven’t yet defined
 the `search_case_insensitive` function. Feel free to add a skeleton
 implementation that always returns an empty vector, similar to the way we did
-for the `search` function in [Listing 12-16](#listing-12-16) to see the test compile and fail.
+for the `search` function in [Listing 12-16](ch12-04-testing-the-librarys-functionality.md#listing-12-16) to see the test compile and fail.
 
 ### Implementing the `search_case_insensitive` Function
 

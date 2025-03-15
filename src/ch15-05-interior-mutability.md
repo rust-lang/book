@@ -290,7 +290,7 @@ A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
 access to that data. If you have an `Rc<T>` that holds a `RefCell<T>`, you can
 get a value that can have multiple owners _and_ that you can mutate!
 
-For example, recall the cons list example in [Listing 15-18](#listing-15-18) where we used `Rc<T>`
+For example, recall the cons list example in [Listing 15-18](ch15-04-rc.md#listing-15-18) where we used `Rc<T>`
 to allow multiple lists to share ownership of another list. Because `Rc<T>`
 holds only immutable values, we can’t change any of the values in the list once
 we’ve created them. Let’s add in `RefCell<T>` for its ability to change the
@@ -313,7 +313,7 @@ than transferring ownership from `value` to `a` or having `a` borrow from
 `value`.
 
 We wrap the list `a` in an `Rc<T>` so that when we create lists `b` and `c`,
-they can both refer to `a`, which is what we did in [Listing 15-18](#listing-15-18).
+they can both refer to `a`, which is what we did in [Listing 15-18](ch15-04-rc.md#listing-15-18).
 
 After we’ve created the lists in `a`, `b`, and `c`, we want to add 10 to the
 value in `value`. We do this by calling `borrow_mut` on `value`, which uses the

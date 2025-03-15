@@ -323,7 +323,7 @@ and send it.
 We’ve added `fs` to the `use` statement to bring the standard library’s
 filesystem module into scope. The code for reading the contents of a file to a
 string should look familiar; we used it when we read the contents of a file for
-our I/O project in [Listing 12-4](#listing-12-4).
+our I/O project in [Listing 12-4](ch12-02-reading-a-file.md#listing-12-4).
 
 Next, we use `format!` to add the file’s contents as the body of the success
 response. To ensure a valid HTTP response, we add the `Content-Length` header

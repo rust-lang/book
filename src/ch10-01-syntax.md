@@ -24,7 +24,7 @@ function that uses generics.
 
 </Listing>
 
-The `largest_i32` function is the one we extracted in [Listing 10-3](#listing-10-3) that finds
+The `largest_i32` function is the one we extracted in [Listing 10-3](ch10-00-generics.md#listing-10-3) that finds
 the largest `i32` in a slice. The `largest_char` function finds the largest
 `char` in a slice. The function bodies have the same code, so let’s eliminate
 the duplication by introducing a generic type parameter in a single function.
@@ -179,7 +179,7 @@ The `Result` enum is generic over two types, `T` and `E`, and has two variants:
 `E`. This definition makes it convenient to use the `Result` enum anywhere we
 have an operation that might succeed (return a value of some type `T`) or fail
 (return an error of some type `E`). In fact, this is what we used to open a
-file in [Listing 9-3](#listing-9-3), where `T` was filled in with the type `std::fs::File` when
+file in [Listing 9-3](ch09-02-recoverable-errors-with-result.md#listing-9-3), where `T` was filled in with the type `std::fs::File` when
 the file was opened successfully and `E` was filled in with the type
 `std::io::Error` when there were problems opening the file.
 

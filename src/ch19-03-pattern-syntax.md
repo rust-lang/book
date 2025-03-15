@@ -184,9 +184,9 @@ and the `y` axis, this code would only print `On the x axis at 0`.
 
 #### Destructuring Enums
 
-We've destructured enums in this book (for example, [Listing 6-5](#listing-6-5)), but we haven’t
+We've destructured enums in this book (for example, [Listing 6-5](ch06-02-match.md#listing-6-5)), but we haven’t
 yet explicitly discussed that the pattern to destructure an enum corresponds to
-the way the data stored within the enum is defined. As an example, in [Listing 19-15](#listing-19-15) we use the `Message` enum from [Listing 6-2](#listing-6-2) and write a `match` with
+the way the data stored within the enum is defined. As an example, in [Listing 19-15](#listing-19-15) we use the `Message` enum from [Listing 6-2](ch06-01-defining-an-enum.md#listing-6-2) and write a `match` with
 patterns that will destructure each inner value.
 
 <Listing number="19-15" file-name="src/main.rs" caption="Destructuring enum variants that hold different kinds of values">

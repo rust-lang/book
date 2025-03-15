@@ -136,7 +136,7 @@ this won’t compile yet.
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
 [Chapter 13][ch13-iterators]<!-- ignore -->, but recall that you saw this way
-of using an iterator in [[Listing 3-5](#listing-3-5)][ch3-iter]<!-- ignore -->, where we used a
+of using an iterator in [[Listing 3-5](ch03-05-control-flow.md#listing-3-5)][ch3-iter]<!-- ignore -->, where we used a
 `for` loop with an iterator to run some code on each item in a collection.
 
 #### Searching Each Line for the Query

@@ -22,7 +22,7 @@ expression to run if the value matches that arm’s pattern, like this:
     <em>PATTERN</em> => <em>EXPRESSION</em>,
 }</code></pre>
 
-For example, here's the `match` expression from [Listing 6-5](#listing-6-5) that matches on an
+For example, here's the `match` expression from [Listing 6-5](ch06-02-match.md#listing-6-5) that matches on an
 `Option<i32>` value in the variable `x`:
 
 ```rust,ignore

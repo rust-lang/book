@@ -1,7 +1,7 @@
 ## Bringing Paths into Scope with the `use` Keyword
 
 Having to write out the paths to call functions can feel inconvenient and
-repetitive. In [Listing 7-7](#listing-7-7), whether we chose the absolute or relative path to
+repetitive. In [Listing 7-7](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md#listing-7-7), whether we chose the absolute or relative path to
 the `add_to_waitlist` function, every time we wanted to call `add_to_waitlist`
 we had to specify `front_of_house` and `hosting` too. Fortunately, there’s a
 way to simplify this process: we can create a shortcut to a path with the `use`
@@ -221,7 +221,7 @@ crate.
 
 If we’re using multiple items defined in the same crate or same module, listing
 each item on its own line can take up a lot of vertical space in our files. For
-example, these two `use` statements we had in the guessing game in [Listing 2-4](#listing-2-4)
+example, these two `use` statements we had in the guessing game in [Listing 2-4](ch02-00-guessing-game-tutorial.md#listing-2-4)
 bring items from `std` into scope:
 
 <Listing file-name="src/main.rs">

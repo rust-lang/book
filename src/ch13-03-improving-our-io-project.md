@@ -7,13 +7,13 @@ concise. Let’s look at how iterators can improve our implementation of the
 
 ### Removing a `clone` Using an Iterator
 
-In [Listing 12-6](#listing-12-6), we added code that took a slice of `String` values and created
+In [Listing 12-6](ch12-03-improving-error-handling-and-modularity.md#listing-12-6), we added code that took a slice of `String` values and created
 an instance of the `Config` struct by indexing into the slice and cloning the
 values, allowing the `Config` struct to own those values. In [Listing 13-17](#listing-13-17),
 we’ve reproduced the implementation of the `Config::build` function as it was
-in [Listing 12-23](#listing-12-23).
+in [Listing 12-23](ch12-05-working-with-environment-variables.md#listing-12-23).
 
-<Listing number="13-17" file-name="src/lib.rs" caption="Reproduction of the `Config::build` function from [Listing 12-23](#listing-12-23)">
+<Listing number="13-17" file-name="src/lib.rs" caption="Reproduction of the `Config::build` function from [Listing 12-23](ch12-05-working-with-environment-variables.md#listing-12-23)">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-23-reproduced/src/lib.rs:ch13}}
@@ -49,7 +49,7 @@ Open your I/O project’s _src/main.rs_ file, which should look like this:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-24-reproduced/src/main.rs:ch13}}
 ```
 
-We’ll first change the start of the `main` function that we had in [Listing 12-24](#listing-12-24) to the code in [Listing 13-18](#listing-13-18), which this time uses an iterator. This
+We’ll first change the start of the `main` function that we had in [Listing 12-24](ch12-06-writing-to-stderr-instead-of-stdout.md#listing-12-24) to the code in [Listing 13-18](#listing-13-18), which this time uses an iterator. This
 won’t compile until we update `Config::build` as well.
 
 <Listing number="13-18" file-name="src/main.rs" caption="Passing the return value of `env::args` to `Config::build`">
@@ -97,7 +97,7 @@ iterating over it, we can add the `mut` keyword into the specification of the
 
 Next, we’ll fix the body of `Config::build`. Because `args` implements the
 `Iterator` trait, we know we can call the `next` method on it! [Listing 13-20](#listing-13-20)
-updates the code from [Listing 12-23](#listing-12-23) to use the `next` method.
+updates the code from [Listing 12-23](ch12-05-working-with-environment-variables.md#listing-12-23) to use the `next` method.
 
 <Listing number="13-20" file-name="src/lib.rs" caption="Changing the body of `Config::build` to use iterator methods">
 
@@ -118,9 +118,9 @@ thing for the `file_path` value.
 ### Making Code Clearer with Iterator Adapters
 
 We can also take advantage of iterators in the `search` function in our I/O
-project, which is reproduced here in [Listing 13-21](#listing-13-21) as it was in [Listing 12-19](#listing-12-19):
+project, which is reproduced here in [Listing 13-21](#listing-13-21) as it was in [Listing 12-19](ch12-04-testing-the-librarys-functionality.md#listing-12-19):
 
-<Listing number="13-21" file-name="src/lib.rs" caption="The implementation of the `search` function from [Listing 12-19](#listing-12-19)">
+<Listing number="13-21" file-name="src/lib.rs" caption="The implementation of the `search` function from [Listing 12-19](ch12-04-testing-the-librarys-functionality.md#listing-12-19)">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:ch13}}
@@ -144,7 +144,7 @@ concurrent access to the `results` vector. [Listing 13-22](#listing-13-22) shows
 </Listing>
 
 Recall that the purpose of the `search` function is to return all lines in
-`contents` that contain the `query`. Similar to the `filter` example in [Listing 13-16](#listing-13-16), this code uses the `filter` adapter to keep only the lines for which
+`contents` that contain the `query`. Similar to the `filter` example in [Listing 13-16](ch13-02-iterators.md#listing-13-16), this code uses the `filter` adapter to keep only the lines for which
 `line.contains(query)` returns `true` for. We then collect the matching lines
 into another vector with `collect`. Much simpler! Feel free to make the same
 change to use iterator methods in the `search_case_insensitive` function as

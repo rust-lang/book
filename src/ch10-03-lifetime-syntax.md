@@ -391,10 +391,10 @@ the `ImportantExcerpt` goes out of scope, so the reference in the
 
 You’ve learned that every reference has a lifetime and that you need to specify
 lifetime parameters for functions or structs that use references. However, we
-had a function in [Listing 4-9](#listing-4-9), shown again in [Listing 10-25](#listing-10-25), that compiled
+had a function in [Listing 4-9](ch04-03-slices.md#listing-4-9), shown again in [Listing 10-25](#listing-10-25), that compiled
 without lifetime annotations.
 
-<Listing number="10-25" file-name="src/lib.rs" caption="A function we defined in [Listing 4-9](#listing-4-9) that compiled without lifetime annotations, even though the parameter and return type are references">
+<Listing number="10-25" file-name="src/lib.rs" caption="A function we defined in [Listing 4-9](ch04-03-slices.md#listing-4-9) that compiled without lifetime annotations, even though the parameter and return type are references">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-25/src/main.rs:here}}
@@ -516,7 +516,7 @@ annotate lifetimes in method signatures very often.
 ### Lifetime Annotations in Method Definitions
 
 When we implement methods on a struct with lifetimes, we use the same syntax as
-that of generic type parameters, as shown in [Listing 10-11](#listing-10-11). Where we declare and
+that of generic type parameters, as shown in [Listing 10-11](ch10-01-syntax.md#listing-10-11). Where we declare and
 use the lifetime parameters depends on whether they’re related to the struct
 fields or the method parameters and return values.
 

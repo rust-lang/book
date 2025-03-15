@@ -28,10 +28,10 @@ explicitly match on a slice of `request_line` to pattern match against the
 string literal values; `match` doesn’t do automatic referencing and
 dereferencing, like the equality method does.
 
-The first arm is the same as the `if` block from [Listing 21-9](#listing-21-9). The second arm
+The first arm is the same as the `if` block from [Listing 21-9](ch21-01-single-threaded.md#listing-21-9). The second arm
 matches a request to _/sleep_. When that request is received, the server will
 sleep for five seconds before rendering the successful HTML page. The third arm
-is the same as the `else` block from [Listing 21-9](#listing-21-9).
+is the same as the `else` block from [Listing 21-9](ch21-01-single-threaded.md#listing-21-9).
 
 You can see how primitive our server is: real libraries would handle the
 recognition of multiple requests in a much less verbose way!
@@ -329,7 +329,7 @@ to see what the generated docs for `new` look like!
 
 Instead of adding the `assert!` macro as we’ve done here, we could change `new`
 into `build` and return a `Result` like we did with `Config::build` in the I/O
-project in [Listing 12-9](#listing-12-9). But we’ve decided in this case that trying to create a
+project in [Listing 12-9](ch12-03-improving-error-handling-and-modularity.md#listing-12-9). But we’ve decided in this case that trying to create a
 thread pool without any threads should be an unrecoverable error. If you’re
 feeling ambitious, try to write a function named `build` with the following
 signature to compare with the `new` function:

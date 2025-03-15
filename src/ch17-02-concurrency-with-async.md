@@ -248,7 +248,7 @@ calling `rx.recv().await` four times. In the real world, though, we’ll general
 be waiting on some _unknown_ number of messages, so we need to keep waiting
 until we determine that there are no more messages.
 
-In [Listing 16-10](#listing-16-10), we used a `for` loop to process all the items received from a
+In [Listing 16-10](ch16-02-message-passing.md#listing-16-10), we used a `for` loop to process all the items received from a
 synchronous channel. Rust doesn’t yet have a way to write a `for` loop over an
 _asynchronous_ series of items, however, so we need to use a loop we haven’t
 seen before: the `while let` conditional loop. This is the loop version of the

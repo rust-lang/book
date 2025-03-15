@@ -106,7 +106,7 @@ one arm.
 Valid pattern syntax in macro definitions is different from the pattern syntax
 covered in Chapter 19 because macro patterns are matched against Rust code
 structure rather than values. Let’s walk through what the pattern pieces in
-[Listing 20-29](#listing-20-29) mean; for the full macro pattern syntax, see the [Rust
+[Listing 20-29](ch20-04-advanced-functions-and-closures.md#listing-20-29) mean; for the full macro pattern syntax, see the [Rust
 Reference][ref].
 
 First we use a set of parentheses to encompass the whole pattern. We use a
@@ -383,10 +383,10 @@ into a `DeriveInput` instance, let’s generate the code that implements the
 </Listing>
 
 We get an `Ident` struct instance containing the name (identifier) of the
-annotated type using `ast.ident`. The struct in [Listing 20-33](#listing-20-33) shows that when
-we run the `impl_hello_macro` function on the code in [Listing 20-31](#listing-20-31), the
+annotated type using `ast.ident`. The struct in [Listing 20-33](ch20-04-advanced-functions-and-closures.md#listing-20-33) shows that when
+we run the `impl_hello_macro` function on the code in [Listing 20-31](ch20-04-advanced-functions-and-closures.md#listing-20-31), the
 `ident` we get will have the `ident` field with a value of `"Pancakes"`. Thus,
-the `name` variable in [Listing 20-34](#listing-20-34) will contain an `Ident` struct instance
+the `name` variable in [Listing 20-34](ch20-04-advanced-functions-and-closures.md#listing-20-34) will contain an `Ident` struct instance
 that, when printed, will be the string `"Pancakes"`, the name of the struct in
 [Listing 20-37](#listing-20-37).
 
@@ -416,7 +416,7 @@ expression to print literally, so we use `stringify!`. Using `stringify!` also
 saves an allocation by converting `#name` to a string literal at compile time.
 
 At this point, `cargo build` should complete successfully in both `hello_macro`
-and `hello_macro_derive`. Let’s hook up these crates to the code in [Listing 20-31](#listing-20-31) to see the procedural macro in action! Create a new binary project in
+and `hello_macro_derive`. Let’s hook up these crates to the code in [Listing 20-31](ch20-04-advanced-functions-and-closures.md#listing-20-31) to see the procedural macro in action! Create a new binary project in
 your _projects_ directory using `cargo new pancakes`. We need to add
 `hello_macro` and `hello_macro_derive` as dependencies in the `pancakes`
 crate’s _Cargo.toml_. If you’re publishing your versions of `hello_macro` and

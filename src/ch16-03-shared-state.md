@@ -113,7 +113,7 @@ calling the `lock` method, and then adds 1 to the value in the mutex. When a
 thread finishes running its closure, `num` will go out of scope and release the
 lock so another thread can acquire it.
 
-In the main thread, we collect all the join handles. Then, as we did in [Listing 16-2](#listing-16-2), we call `join` on each handle to make sure all the threads finish. At
+In the main thread, we collect all the join handles. Then, as we did in [Listing 16-2](ch16-01-threads.md#listing-16-2), we call `join` on each handle to make sure all the threads finish. At
 that point, the main thread will acquire the lock and print the result of this
 program.
 

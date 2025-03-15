@@ -20,7 +20,7 @@ useful.
 </Listing>
 
 The iterator is stored in the `v1_iter` variable. Once we’ve created an
-iterator, we can use it in a variety of ways. In [Listing 3-5](#listing-3-5) in Chapter 3, we
+iterator, we can use it in a variety of ways. In [Listing 3-5](ch03-05-control-flow.md#listing-3-5) in Chapter 3, we
 iterated over an array using a `for` loop to execute some code on each of its
 items. Under the hood this implicitly created and then consumed an iterator,
 but we glossed over how exactly that works until now.
@@ -160,7 +160,7 @@ never gets called. The warning reminds us why: iterator adapters are lazy, and
 we need to consume the iterator here.
 
 To fix this warning and consume the iterator, we’ll use the `collect` method,
-which we used in Chapter 12 with `env::args` in [Listing 12-1](#listing-12-1). This method
+which we used in Chapter 12 with `env::args` in [Listing 12-1](ch12-01-accepting-command-line-arguments.md#listing-12-1). This method
 consumes the iterator and collects the resultant values into a collection data
 type.
 

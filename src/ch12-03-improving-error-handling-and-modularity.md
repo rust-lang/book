@@ -219,7 +219,7 @@ long enough, the program panics and displays a better error message.
 
 </Listing>
 
-This code is similar to [the `Guess::new` function we wrote in [Listing 9-13](#listing-9-13)][ch9-custom-types]<!-- ignore -->, where we called `panic!` when the
+This code is similar to [the `Guess::new` function we wrote in [Listing 9-13](ch09-03-to-panic-or-not-to-panic.md#listing-9-13)][ch9-custom-types]<!-- ignore -->, where we called `panic!` when the
 `value` argument was out of the range of valid values. Instead of checking for
 a range of values here, we’re checking that the length of `args` is at least
 `3` and the rest of the function can operate under the assumption that this
@@ -235,7 +235,7 @@ arguments again to see what the error looks like now:
 
 This output is better: we now have a reasonable error message. However, we also
 have extraneous information we don’t want to give to our users. Perhaps the
-technique we used in [Listing 9-13](#listing-9-13) isn’t the best one to use here: a call to
+technique we used in [Listing 9-13](ch09-03-to-panic-or-not-to-panic.md#listing-9-13) isn’t the best one to use here: a call to
 `panic!` is more appropriate for a programming problem than a usage problem,
 [as discussed in Chapter 9][ch9-error-guidelines]<!-- ignore -->. Instead,
 we’ll use the other technique you learned about in Chapter 9—[returning a

@@ -15,9 +15,9 @@ A path can take two forms:
 Both absolute and relative paths are followed by one or more identifiers
 separated by double colons (`::`).
 
-Returning to [Listing 7-1](#listing-7-1), say we want to call the `add_to_waitlist` function.
+Returning to [Listing 7-1](ch07-02-defining-modules-to-control-scope-and-privacy.md#listing-7-1), say we want to call the `add_to_waitlist` function.
 This is the same as asking: what’s the path of the `add_to_waitlist` function?
-[Listing 7-3](#listing-7-3) contains [Listing 7-1](#listing-7-1) with some of the modules and functions
+[Listing 7-3](#listing-7-3) contains [Listing 7-1](ch07-02-defining-modules-to-control-scope-and-privacy.md#listing-7-1) with some of the modules and functions
 removed.
 
 We’ll show two ways to call the `add_to_waitlist` function from a new function,
