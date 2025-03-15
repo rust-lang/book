@@ -326,7 +326,7 @@ operations on. This is where `syn` comes into play. The `parse` function in
 parsed Rust code. Listing 20-40 shows the relevant parts of the `DeriveInput`
 struct we get from parsing the `struct Pancakes;` string.
 
-<Listing number="20-40" caption="The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-37">
+<Listing number="20-41" caption="The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-37">
 
 ```rust,ignore
 DeriveInput {
