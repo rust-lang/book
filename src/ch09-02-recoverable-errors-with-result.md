@@ -132,8 +132,8 @@ the missing file error.
 > with many of the methods defined on `Result<T, E>`. These methods can be more
 > concise than using `match` when handling `Result<T, E>` values in your code.
 >
-> For example, here’s another way to write the same logic as shown in Listing
-> 9-5, this time using closures and the `unwrap_or_else` method:
+> For example, here’s another way to write the same logic as shown in
+> [Listing 9-5](#listing-9-5), this time using closures and the `unwrap_or_else` method:
 >
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
 >

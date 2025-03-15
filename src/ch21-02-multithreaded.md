@@ -671,7 +671,7 @@ thread run them.
 > multiple instances of the same request sequentially for caching reasons. This
 > limitation is not caused by our web server.
 
-This is a good time to pause and consider how the code in Listings 21-18, 21-19,
+This is a good time to pause and consider how the code in [Listings 21-18](#listing-21-18), [21-19](#listing-21-19),
 and 21-20 would be different if we were using futures instead of a closure for
 the work to be done. What types would change? How would the method signatures be
 different, if at all? What parts of the code would stay the same?

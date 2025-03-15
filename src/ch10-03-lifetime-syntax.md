@@ -34,7 +34,7 @@ scope.
 
 </Listing>
 
-> Note: The examples in Listings 10-16, 10-17, and 10-23 declare variables
+> Note: The examples in [Listings 10-16](#listing-10-16), [10-17](#listing-10-17), and [10-23](#listing-10-23) declare variables
 > without giving them an initial value, so the variable name exists in the outer
 > scope. At first glance, this might appear to be in conflict with Rust’s having
 > no null values. However, if we try to use a variable before giving it a value,
@@ -148,7 +148,7 @@ When we’re defining this function, we don’t know the concrete values that wi
 be passed into this function, so we don’t know whether the `if` case or the
 `else` case will execute. We also don’t know the concrete lifetimes of the
 references that will be passed in, so we can’t look at the scopes as we did in
-Listings 10-17 and 10-18 to determine whether the reference we return will
+Listings [10-17](#listing-10-17) and [10-18](#listing-10-18) to determine whether the reference we return will
 always be valid. The borrow checker can’t determine this either, because it
 doesn’t know how the lifetimes of `x` and `y` relate to the lifetime of the
 return value. To fix this error, we’ll add generic lifetime parameters that
