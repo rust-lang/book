@@ -23,7 +23,7 @@ those cases, you’ll need to change either the pattern or the construct you’r
 using the pattern with, depending on the intended behavior of the code.
 
 Let’s look at an example of what happens when we try to use a refutable pattern
-where Rust requires an irrefutable pattern and vice versa. Listing 19-8 shows a
+where Rust requires an irrefutable pattern and vice versa. [Listing 19-8](#listing-19-8) shows a
 `let` statement, but for the pattern, we’ve specified `Some(x)`, a refutable
 pattern. As you might expect, this code will not compile.
 
@@ -51,8 +51,7 @@ pattern `Some(x)`, Rust rightfully produces a compiler error.
 If we have a refutable pattern where an irrefutable pattern is needed, we can
 fix it by changing the code that uses the pattern: instead of using `let`, we
 can use `if let`. Then if the pattern doesn’t match, the code will just skip
-the code in the curly brackets, giving it a way to continue validly. Listing
-19-9 shows how to fix the code in Listing 19-8.
+the code in the curly brackets, giving it a way to continue validly. [Listing 19-9](#listing-19-9) shows how to fix the code in [Listing 19-8](#listing-19-8).
 
 <Listing number="19-9" caption="Using `let...else` and a block with refutable patterns instead of `let`">
 
@@ -64,7 +63,7 @@ the code in the curly brackets, giving it a way to continue validly. Listing
 
 We’ve given the code an out! This code is perfectly valid now. However,
 if we give `if let` an irrefutable pattern (a pattern that will always
-match), such as `x`, as shown in Listing 19-10, the compiler will give a
+match), such as `x`, as shown in [Listing 19-10](#listing-19-10), the compiler will give a
 warning.
 
 <Listing number="19-10" caption="Attempting to use an irrefutable pattern with `if let`">

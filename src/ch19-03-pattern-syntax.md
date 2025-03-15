@@ -23,7 +23,7 @@ them many times in this book. However, there is a complication when you use
 named variables in `match`, `if let`, or `while let` expressions. Because each
 of these kinds of expression starts a new scope, variables declared as part of a
 pattern inside the expression will shadow those with the same name outside, as
-is the case with all variables. In Listing 19-11, we declare a variable named
+is the case with all variables. In [Listing 19-11](#listing-19-11), we declare a variable named
 `x` with the value `Some(5)` and a variable `y` with the value `10`. We then
 create a `match` expression on the value `x`. Look at the patterns in the match
 arms and `println!` at the end, and try to figure out what the code will print
@@ -114,7 +114,7 @@ different parts of these values. Let’s walk through each value.
 
 #### Destructuring Structs
 
-Listing 19-12 shows a `Point` struct with two fields, `x` and `y`, that we can
+[Listing 19-12](#listing-19-12) shows a `Point` struct with two fields, `x` and `y`, that we can
 break apart using a pattern with a `let` statement.
 
 <Listing number="19-12" file-name="src/main.rs" caption="Destructuring a struct’s fields into separate variables">
@@ -133,8 +133,8 @@ easier to remember which variables came from which fields. Because of this
 common usage, and because writing `let Point { x: x, y: y } = p;` contains a
 lot of duplication, Rust has a shorthand for patterns that match struct fields:
 you only need to list the name of the struct field, and the variables created
-from the pattern will have the same names. Listing 19-13 behaves in the same
-way as the code in Listing 19-12, but the variables created in the `let`
+from the pattern will have the same names. [Listing 19-13](#listing-19-13) behaves in the same
+way as the code in [Listing 19-12](#listing-19-12), but the variables created in the `let`
 pattern are `x` and `y` instead of `a` and `b`.
 
 <Listing number="19-13" file-name="src/main.rs" caption="Destructuring struct fields using struct field shorthand">
@@ -154,7 +154,7 @@ rather than creating variables for all the fields. Doing so allows us to test
 some of the fields for particular values while creating variables to
 destructure the other fields.
 
-In Listing 19-14, we have a `match` expression that separates `Point` values
+In [Listing 19-14](#listing-19-14), we have a `match` expression that separates `Point` values
 into three cases: points that lie directly on the `x` axis (which is true when
 `y = 0`), on the `y` axis (`x = 0`), or on neither axis.
 
@@ -184,10 +184,9 @@ and the `y` axis, this code would only print `On the x axis at 0`.
 
 #### Destructuring Enums
 
-We've destructured enums in this book (for example, Listing 6-5), but we haven’t
+We've destructured enums in this book (for example, [Listing 6-5](#listing-6-5)), but we haven’t
 yet explicitly discussed that the pattern to destructure an enum corresponds to
-the way the data stored within the enum is defined. As an example, in Listing
-19-15 we use the `Message` enum from Listing 6-2 and write a `match` with
+the way the data stored within the enum is defined. As an example, in [Listing 19-15](#listing-19-15) we use the `Message` enum from [Listing 6-2](#listing-6-2) and write a `match` with
 patterns that will destructure each inner value.
 
 <Listing number="19-15" file-name="src/main.rs" caption="Destructuring enum variants that hold different kinds of values">
@@ -209,7 +208,7 @@ For struct-like enum variants, such as `Message::Move`, we can use a pattern
 similar to the pattern we specify to match structs. After the variant name, we
 place curly brackets and then list the fields with variables so we break apart
 the pieces to use in the code for this arm. Here we use the shorthand form as
-we did in Listing 19-13.
+we did in [Listing 19-13](#listing-19-13).
 
 For tuple-like enum variants, like `Message::Write` that holds a tuple with one
 element and `Message::ChangeColor` that holds a tuple with three elements, the
@@ -221,8 +220,8 @@ matching.
 
 So far, our examples have all been matching structs or enums one level deep,
 but matching can work on nested items too! For example, we can refactor the
-code in Listing 19-15 to support RGB and HSV colors in the `ChangeColor`
-message, as shown in Listing 19-16.
+code in [Listing 19-15](#listing-19-15) to support RGB and HSV colors in the `ChangeColor`
+message, as shown in [Listing 19-16](#listing-19-16).
 
 <Listing number="19-16" caption="Matching on nested enums">
 
@@ -274,7 +273,7 @@ parts of a value. Let’s explore how and why to use each of these patterns.
 We’ve used the underscore as a wildcard pattern that will match any value but
 not bind to the value. This is especially useful as the last arm in a `match`
 expression, but we can also use it in any pattern, including function
-parameters, as shown in Listing 19-17.
+parameters, as shown in [Listing 19-17](#listing-19-17).
 
 <Listing number="19-17" file-name="src/main.rs" caption="Using `_` in a function signature">
 
@@ -301,7 +300,7 @@ would if you used a name instead.
 
 We can also use `_` inside another pattern to ignore just part of a value, for
 example, when we want to test for only part of a value but have no use for the
-other parts in the corresponding code we want to run. Listing 19-18 shows code
+other parts in the corresponding code we want to run. [Listing 19-18](#listing-19-18) shows code
 responsible for managing a setting’s value. The business requirements are that
 the user should not be allowed to overwrite an existing customization of a
 setting but can unset the setting and give it a value if it is currently unset.
@@ -326,7 +325,7 @@ expressed by the `_` pattern in the second arm, we want to allow
 `new_setting_value` to become `setting_value`.
 
 We can also use underscores in multiple places within one pattern to ignore
-particular values. Listing 19-19 shows an example of ignoring the second and
+particular values. [Listing 19-19](#listing-19-19) shows an example of ignoring the second and
 fourth values in a tuple of five items.
 
 <Listing number="19-19" caption="Ignoring multiple parts of a tuple">
@@ -351,7 +350,7 @@ warning because an unused variable could be a bug. However, sometimes it’s
 useful to be able to create a variable you won’t use yet, such as when you’re
 prototyping or just starting a project. In this situation, you can tell Rust
 not to warn you about the unused variable by starting the name of the variable
-with an underscore. In Listing 19-20, we create two unused variables, but when
+with an underscore. In [Listing 19-20](#listing-19-20), we create two unused variables, but when
 we compile this code, we should only get a warning about one of them.
 
 <Listing number="19-20" file-name="src/main.rs" caption="Starting a variable name with an underscore to avoid getting unused variable warnings">
@@ -368,7 +367,7 @@ warning about not using `_x`.
 Note that there is a subtle difference between using only `_` and using a name
 that starts with an underscore. The syntax `_x` still binds the value to the
 variable, whereas `_` doesn’t bind at all. To show a case where this
-distinction matters, Listing 19-21 will provide us with an error.
+distinction matters, [Listing 19-21](#listing-19-21) will provide us with an error.
 
 <Listing number="19-21" caption="An unused variable starting with an underscore still binds the value, which might take ownership of the value">
 
@@ -380,7 +379,7 @@ distinction matters, Listing 19-21 will provide us with an error.
 
 We’ll receive an error because the `s` value will still be moved into `_s`,
 which prevents us from using `s` again. However, using the underscore by itself
-doesn’t ever bind to the value. Listing 19-22 will compile without any errors
+doesn’t ever bind to the value. [Listing 19-22](#listing-19-22) will compile without any errors
 because `s` doesn’t get moved into `_`.
 
 <Listing number="19-22" caption="Using an underscore does not bind the value">
@@ -400,7 +399,7 @@ This code works just fine because we never bind `s` to anything; it isn’t move
 With values that have many parts, we can use the `..` syntax to use specific
 parts and ignore the rest, avoiding the need to list underscores for each
 ignored value. The `..` pattern ignores any parts of a value that we haven’t
-explicitly matched in the rest of the pattern. In Listing 19-23, we have a
+explicitly matched in the rest of the pattern. In [Listing 19-23](#listing-19-23), we have a
 `Point` struct that holds a coordinate in three-dimensional space. In the
 `match` expression, we want to operate only on the `x` coordinate and ignore
 the values in the `y` and `z` fields.
@@ -418,7 +417,7 @@ than having to list `y: _` and `z: _`, particularly when we’re working with
 structs that have lots of fields in situations where only one or two fields are
 relevant.
 
-The syntax `..` will expand to as many values as it needs to be. Listing 19-24
+The syntax `..` will expand to as many values as it needs to be. [Listing 19-24](#listing-19-24)
 shows how to use `..` with a tuple.
 
 <Listing number="19-24" file-name="src/main.rs" caption="Matching only the first and last values in a tuple and ignoring all other values">
@@ -434,7 +433,7 @@ In this code, the first and last value are matched with `first` and `last`. The
 
 However, using `..` must be unambiguous. If it is unclear which values are
 intended for matching and which should be ignored, Rust will give us an error.
-Listing 19-25 shows an example of using `..` ambiguously, so it will not
+[Listing 19-25](#listing-19-25) shows an example of using `..` ambiguously, so it will not
 compile.
 
 <Listing number="19-25" file-name="src/main.rs" caption="An attempt to use `..` in an ambiguous way">
@@ -467,7 +466,7 @@ useful for expressing more complex ideas than a pattern alone allows. Note,
 however, that they are only available in `match` expressions, not in `if let` or
 `while let` expressions.
 
-The condition can use variables created in the pattern. Listing 19-26 shows a
+The condition can use variables created in the pattern. [Listing 19-26](#listing-19-26) shows a
 `match` where the first arm has the pattern `Some(x)` and also has a match
 guard of `if x % 2 == 0` (which will be `true` if the number is even).
 
@@ -494,11 +493,11 @@ the match guard gives us the ability to express this logic. The downside of
 this additional expressiveness is that the compiler doesn't try to check for
 exhaustiveness when match guard expressions are involved.
 
-In Listing 19-11, we mentioned that we could use match guards to solve our
+In [Listing 19-11](#listing-19-11), we mentioned that we could use match guards to solve our
 pattern-shadowing problem. Recall that we created a new variable inside the
 pattern in the `match` expression instead of using the variable outside the
 `match`. That new variable meant we couldn’t test against the value of the
-outer variable. Listing 19-27 shows how we can use a match guard to fix this
+outer variable. [Listing 19-27](#listing-19-27) shows how we can use a match guard to fix this
 problem.
 
 <Listing number="19-27" file-name="src/main.rs" caption="Using a match guard to test for equality with an outer variable">
@@ -522,8 +521,7 @@ we can look for a value that has the same value as the outer `y` by comparing
 `n` to `y`.
 
 You can also use the _or_ operator `|` in a match guard to specify multiple
-patterns; the match guard condition will apply to all the patterns. Listing
-19-28 shows the precedence when combining a pattern that uses `|` with a match
+patterns; the match guard condition will apply to all the patterns. [Listing 19-28](#listing-19-28) shows the precedence when combining a pattern that uses `|` with a match
 guard. The important part of this example is that the `if y` match guard
 applies to `4`, `5`, _and_ `6`, even though it might look like `if y` only
 applies to `6`.
@@ -563,7 +561,7 @@ were applied only to the final value in the list of values specified using the
 ### `@` Bindings
 
 The _at_ operator `@` lets us create a variable that holds a value at the same
-time we’re testing that value for a pattern match. In Listing 19-29, we want
+time we’re testing that value for a pattern match. In [Listing 19-29](#listing-19-29), we want
 to test that a `Message::Hello` `id` field is within the range `3..=7`. We also
 want to bind the value to the variable `id_variable` so we can use it in the
 code associated with the arm. We could name this variable `id`, the same as the

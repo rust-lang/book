@@ -36,7 +36,7 @@ Any other changes attempted on a post should have no effect. For example, if we
 try to approve a draft blog post before we’ve requested a review, the post
 should remain an unpublished draft.
 
-Listing 18-11 shows this workflow in code form: this is an example usage of the
+[Listing 18-11](#listing-18-11) shows this workflow in code form: this is an example usage of the
 API we’ll implement in a library crate named `blog`. This won’t compile yet
 because we haven’t implemented the `blog` crate.
 
@@ -75,7 +75,7 @@ the states, such as publishing a post before it’s reviewed.
 Let’s get started on the implementation of the library! We know we need a
 public `Post` struct that holds some content, so we’ll start with the
 definition of the struct and an associated public `new` function to create an
-instance of `Post`, as shown in Listing 18-12. We’ll also make a private
+instance of `Post`, as shown in [Listing 18-12](#listing-18-12). We’ll also make a private
 `State` trait that will define the behavior that all state objects for a `Post`
 must have.
 
@@ -106,12 +106,12 @@ field to a new, empty `String`.
 
 ### Storing the Text of the Post Content
 
-We saw in Listing 18-11 that we want to be able to call a method named
+We saw in [Listing 18-11](#listing-18-11) that we want to be able to call a method named
 `add_text` and pass it a `&str` that is then added as the text content of the
 blog post. We implement this as a method, rather than exposing the `content`
 field as `pub`, so that later we can implement a method that will control how
 the `content` field’s data is read. The `add_text` method is pretty
-straightforward, so let’s add the implementation in Listing 18-13 to the `impl
+straightforward, so let’s add the implementation in [Listing 18-13](#listing-18-13) to the `impl
 Post` block.
 
 <Listing number="18-13" file-name="src/lib.rs" caption="Implementing the `add_text` method to add text to a post’s `content`">
@@ -134,12 +134,12 @@ support.
 
 Even after we’ve called `add_text` and added some content to our post, we still
 want the `content` method to return an empty string slice because the post is
-still in the draft state, as shown on line 7 of Listing 18-11. For now, let’s
+still in the draft state, as shown on line 7 of [Listing 18-11](#listing-18-11). For now, let’s
 implement the `content` method with the simplest thing that will fulfill this
 requirement: always returning an empty string slice. We’ll change this later
 once we implement the ability to change a post’s state so it can be published.
 So far, posts can only be in the draft state, so the post content should always
-be empty. Listing 18-14 shows this placeholder implementation.
+be empty. [Listing 18-14](#listing-18-14) shows this placeholder implementation.
 
 <Listing number="18-14" file-name="src/lib.rs" caption="Adding a placeholder implementation for the `content` method on `Post` that always returns an empty string slice">
 
@@ -149,7 +149,7 @@ be empty. Listing 18-14 shows this placeholder implementation.
 
 </Listing>
 
-With this added `content` method, everything in Listing 18-11 up to line 7
+With this added `content` method, everything in [Listing 18-11](#listing-18-11) up to line 7
 works as intended.
 
 <!-- Old link, do not remove -->
@@ -159,7 +159,7 @@ works as intended.
 ### Requesting a Review Changes the Post’s State
 
 Next, we need to add functionality to request a review of a post, which should
-change its state from `Draft` to `PendingReview`. Listing 18-15 shows this code.
+change its state from `Draft` to `PendingReview`. [Listing 18-15](#listing-18-15) shows this code.
 
 <Listing number="18-15" file-name="src/lib.rs" caption="Implementing `request_review` methods on `Post` and the `State` trait">
 
@@ -209,7 +209,7 @@ state is responsible for its own rules.
 We’ll leave the `content` method on `Post` as is, returning an empty string
 slice. We can now have a `Post` in the `PendingReview` state as well as in the
 `Draft` state, but we want the same behavior in the `PendingReview` state.
-Listing 18-11 now works up to line 10!
+[Listing 18-11](#listing-18-11) now works up to line 10!
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -219,7 +219,7 @@ Listing 18-11 now works up to line 10!
 
 The `approve` method will be similar to the `request_review` method: it will
 set `state` to the value that the current state says it should have when that
-state is approved, as shown in Listing 18-16:
+state is approved, as shown in [Listing 18-16](#listing-18-16):
 
 <Listing number="18-16" file-name="src/lib.rs" caption="Implementing the `approve` method on `Post` and the `State` trait">
 
@@ -243,7 +243,7 @@ state in those cases.
 Now we need to update the `content` method on `Post`. We want the value
 returned from `content` to depend on the current state of the `Post`, so we’re
 going to have the `Post` delegate to a `content` method defined on its `state`,
-as shown in Listing 18-17:
+as shown in [Listing 18-17](#listing-18-17):
 
 <Listing number="18-17" file-name="src/lib.rs" caption="Updating the `content` method on `Post` to delegate to a `content` method on `State`">
 
@@ -277,7 +277,7 @@ will take effect on the `&` and the `Box` so the `content` method will
 ultimately be called on the type that implements the `State` trait. That means
 we need to add `content` to the `State` trait definition, and that is where
 we’ll put the logic for what content to return depending on which state we
-have, as shown in Listing 18-18:
+have, as shown in [Listing 18-18](#listing-18-18):
 
 <Listing number="18-18" file-name="src/lib.rs" caption="Adding the `content` method to the `State` trait">
 
@@ -297,7 +297,7 @@ Chapter 10. We’re taking a reference to a `post` as an argument and returning 
 reference to part of that `post`, so the lifetime of the returned reference is
 related to the lifetime of the `post` argument.
 
-And we’re done—all of Listing 18-11 now works! We’ve implemented the state
+And we’re done—all of [Listing 18-11](#listing-18-11) now works! We’ve implemented the state
 pattern with the rules of the blog post workflow. The logic related to the
 rules lives in the state objects rather than being scattered throughout `Post`.
 
@@ -378,7 +378,7 @@ outside code has no knowledge of them, we’ll encode the states into different
 types. Consequently, Rust’s type checking system will prevent attempts to use
 draft posts where only published posts are allowed by issuing a compiler error.
 
-Let’s consider the first part of `main` in Listing 18-11:
+Let’s consider the first part of `main` in [Listing 18-11](#listing-18-11):
 
 <Listing file-name="src/main.rs">
 
@@ -395,7 +395,7 @@ draft posts don’t have the `content` method at all. That way, if we try to get
 a draft post’s content, we’ll get a compiler error telling us the method
 doesn’t exist. As a result, it will be impossible for us to accidentally
 display draft post content in production because that code won’t even compile.
-Listing 18-19 shows the definition of a `Post` struct and a `DraftPost` struct,
+[Listing 18-19](#listing-18-19) shows the definition of a `Post` struct and a `DraftPost` struct,
 as well as methods on each.
 
 <Listing number="18-19" file-name="src/lib.rs" caption="A `Post` with a `content` method and `DraftPost` without a `content` method">
@@ -431,7 +431,7 @@ pending review state should still not display any content. Let’s implement
 these constraints by adding another struct, `PendingReviewPost`, defining the
 `request_review` method on `DraftPost` to return a `PendingReviewPost` and
 defining an `approve` method on `PendingReviewPost` to return a `Post`, as
-shown in Listing 18-20.
+shown in [Listing 18-20](#listing-18-20).
 
 <Listing number="18-20" file-name="src/lib.rs" caption="A `PendingReviewPost` that gets created by calling `request_review` on `DraftPost` and an `approve` method that turns a `PendingReviewPost` into a published `Post`">
 
@@ -459,7 +459,7 @@ called on, so we need to add more `let post =` shadowing assignments to save
 the returned instances. We also can’t have the assertions about the draft and
 pending review posts’ contents be empty strings, nor do we need them: we can’t
 compile code that tries to use the content of posts in those states any longer.
-The updated code in `main` is shown in Listing 18-21.
+The updated code in `main` is shown in [Listing 18-21](#listing-18-21).
 
 <Listing number="18-21" file-name="src/main.rs" caption="Modifications to `main` to use the new implementation of the blog post workflow">
 
@@ -478,7 +478,7 @@ compile time! This ensures that certain bugs, such as display of the content of
 an unpublished post, will be discovered before they make it to production.
 
 Try the tasks suggested at the start of this section on the `blog` crate as it
-is after Listing 18-21 to see what you think about the design of this version
+is after [Listing 18-21](#listing-18-21) to see what you think about the design of this version
 of the code. Note that some of the tasks might be completed already in this
 design.
 

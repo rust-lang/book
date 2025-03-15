@@ -70,7 +70,7 @@ Reopen the _src/main.rs_ file. You’ll be writing all the code in this file.
 
 The first part of the guessing game program will ask for user input, process
 that input, and check that the input is in the expected form. To start, we’ll
-allow the player to input a guess. Enter the code in Listing 2-1 into
+allow the player to input a guess. Enter the code in [Listing 2-1](#listing-2-1) into
 _src/main.rs_.
 
 <Listing number="2-1" file-name="src/main.rs" caption="Code that gets a guess from the user and prints it">
@@ -368,7 +368,7 @@ will still compile with the code in this chapter. Any version 0.9.0 or greater
 is not guaranteed to have the same API as what the following examples use.
 
 Now, without changing any of the code, let’s build the project, as shown in
-Listing 2-2.
+[Listing 2-2](#listing-2-2).
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -510,7 +510,7 @@ from a number of packages.
 ### Generating a Random Number
 
 Let’s start using `rand` to generate a number to guess. The next step is to
-update _src/main.rs_, as shown in Listing 2-3.
+update _src/main.rs_, as shown in [Listing 2-3](#listing-2-3).
 
 <Listing number="2-3" file-name="src/main.rs" caption="Adding code to generate a random number">
 
@@ -585,7 +585,7 @@ You should get different random numbers, and they should all be numbers between
 ## Comparing the Guess to the Secret Number
 
 Now that we have user input and a random number, we can compare them. That step
-is shown in Listing 2-4. Note that this code won’t compile just yet, as we will
+is shown in [Listing 2-4](#listing-2-4). Note that this code won’t compile just yet, as we will
 explain.
 
 <Listing number="2-4" file-name="src/main.rs" caption="Handling the possible return values of comparing two numbers">
@@ -633,7 +633,7 @@ code in that arm will execute and print `Too big!` to the screen. The `match`
 expression ends after the first successful match, so it won’t look at the last
 arm in this scenario.
 
-However, the code in Listing 2-4 won’t compile yet. Let’s try it:
+However, the code in [Listing 2-4](#listing-2-4) won’t compile yet. Let’s try it:
 
 <!--
 The error numbers in this output should be that of the code **WITHOUT** the
@@ -830,7 +830,7 @@ exiting the program, because the loop is the last part of `main`.
 To further refine the game’s behavior, rather than crashing the program when
 the user inputs a non-number, let’s make the game ignore a non-number so the
 user can continue guessing. We can do that by altering the line where `guess`
-is converted from a `String` to a `u32`, as shown in Listing 2-5.
+is converted from a `String` to a `u32`, as shown in [Listing 2-5](#listing-2-5).
 
 <Listing number="2-5" file-name="src/main.rs" caption="Ignoring a non-number guess and asking for another guess instead of crashing the program">
 
@@ -899,7 +899,7 @@ You win!
 Awesome! With one tiny final tweak, we will finish the guessing game. Recall
 that the program is still printing the secret number. That worked well for
 testing, but it ruins the game. Let’s delete the `println!` that outputs the
-secret number. Listing 2-6 shows the final code.
+secret number. [Listing 2-6](#listing-2-6) shows the final code.
 
 <Listing number="2-6" file-name="src/main.rs" caption="Complete guessing game code">
 

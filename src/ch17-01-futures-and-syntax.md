@@ -76,7 +76,7 @@ page finishes that whole process first.
 ### Defining the page_title Function
 
 Let’s start by writing a function that takes one page URL as a parameter, makes
-a request to it, and returns the text of the title element (see Listing 17-1).
+a request to it, and returns the text of the title element (see [Listing 17-1](#listing-17-1)).
 
 <Listing number="17-1" file-name="src/main.rs" caption="Defining an async function to get the title element from an HTML page">
 
@@ -132,7 +132,7 @@ not before it. That is, it’s a _postfix_ keyword. This may differ from what
 you’re used to if you’ve used `async` in other languages, but in Rust it makes
 chains of methods much nicer to work with. As a result, we can change the body
 of `page_url_for` to chain the `trpl::get` and `text` function calls together
-with `await` between them, as shown in Listing 17-2.
+with `await` between them, as shown in [Listing 17-2](#listing-17-2).
 
 <Listing number="17-2" file-name="src/main.rs" caption="Chaining with the `await` keyword">
 
@@ -154,7 +154,7 @@ anonymous data type the compiler creates for that async block.
 
 Thus, writing `async fn` is equivalent to writing a function that returns a
 _future_ of the return type. To the compiler, a function definition such as the
-`async fn page_title` in Listing 17-1 is equivalent to a non-async function
+`async fn page_title` in [Listing 17-1](#listing-17-1) is equivalent to a non-async function
 defined like this:
 
 ```rust
@@ -193,7 +193,7 @@ Now we can call `page_title` in `main`.
 
 ## Determining a Single Page’s Title
 
-To start, we’ll just get the title for a single page. In Listing 17-3, we follow
+To start, we’ll just get the title for a single page. In [Listing 17-3](#listing-17-3), we follow
 the same pattern we used in Chapter 12 to get command line arguments in the
 [Accepting Command Line Arguments][cli-args]<!-- ignore --> section. Then we
 pass the first URL `page_title` and await the result. Because the value
@@ -249,10 +249,10 @@ produced.
 
 We could pass the future returned by `page_title` directly to `run`, and once it
 completed, we could match on the resulting `Option<String>`, as
-we tried to do in Listing 17-3. However, for most of the examples in the chapter
+we tried to do in [Listing 17-3](#listing-17-3). However, for most of the examples in the chapter
 (and most async code in the real world), we’ll be doing more than just one
 async function call, so instead we’ll pass an `async` block and explicitly
-await the result of the `page_title` call, as in Listing 17-4.
+await the result of the `page_title` call, as in [Listing 17-4](#listing-17-4).
 
 <Listing number="17-4" caption="Awaiting an async block with `trpl::run`" file-name="src/main.rs">
 
@@ -311,7 +311,7 @@ when looking into runtimes: an executor is the part of a runtime responsible for
 executing the async code.)
 
 Now you can see why the compiler stopped us from making `main` itself an async
-function back in Listing 17-3. If `main` were an async function, something else
+function back in [Listing 17-3](#listing-17-3). If `main` were an async function, something else
 would need to manage the state machine for whatever future `main` returned, but
 `main` is the starting point for the program! Instead, we called the `trpl::run`
 function in `main` to set up a runtime and run the future returned by the
@@ -319,14 +319,14 @@ function in `main` to set up a runtime and run the future returned by the
 
 > Note: Some runtimes provide macros so you _can_ write an async `main`
 > function. Those macros rewrite `async fn main() { ... }` to be a normal `fn
-> main`, which does the same thing we did by hand in Listing 17-5: call a
+> main`, which does the same thing we did by hand in [Listing 17-5](#listing-17-5): call a
 > function that runs a future to completion the way `trpl::run` does.
 
 Now let’s put these pieces together and see how we can write concurrent code.
 
 ### Racing Our Two URLs Against Each Other
 
-In Listing 17-5, we call `page_title` with two different URLs passed in from the
+In [Listing 17-5](#listing-17-5), we call `page_title` with two different URLs passed in from the
 command line and race them.
 
 <Listing number="17-5" caption="" file-name="src/main.rs">

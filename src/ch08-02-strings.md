@@ -39,7 +39,7 @@ Many of the same operations available with `Vec<T>` are available with `String`
 as well because `String` is actually implemented as a wrapper around a vector
 of bytes with some extra guarantees, restrictions, and capabilities. An example
 of a function that works the same way with `Vec<T>` and `String` is the `new`
-function to create an instance, shown in Listing 8-11.
+function to create an instance, shown in [Listing 8-11](#listing-8-11).
 
 <Listing number="8-11" caption="Creating a new, empty `String`">
 
@@ -52,7 +52,7 @@ function to create an instance, shown in Listing 8-11.
 This line creates a new, empty string called `s`, into which we can then load
 data. Often, we’ll have some initial data with which we want to start the
 string. For that, we use the `to_string` method, which is available on any type
-that implements the `Display` trait, as string literals do. Listing 8-12 shows
+that implements the `Display` trait, as string literals do. [Listing 8-12](#listing-8-12) shows
 two examples.
 
 <Listing number="8-12" caption="Using the `to_string` method to create a `String` from a string literal">
@@ -66,7 +66,7 @@ two examples.
 This code creates a string containing `initial contents`.
 
 We can also use the function `String::from` to create a `String` from a string
-literal. The code in Listing 8-13 is equivalent to the code in Listing 8-12
+literal. The code in [Listing 8-13](#listing-8-13) is equivalent to the code in [Listing 8-12](#listing-8-12)
 that uses `to_string`.
 
 <Listing number="8-13" caption="Using the `String::from` function to create a `String` from a string literal">
@@ -84,7 +84,7 @@ redundant, but they all have their place! In this case, `String::from` and
 readability.
 
 Remember that strings are UTF-8 encoded, so we can include any properly encoded
-data in them, as shown in Listing 8-14.
+data in them, as shown in [Listing 8-14](#listing-8-14).
 
 <Listing number="8-14" caption="Storing greetings in different languages in strings">
 
@@ -105,7 +105,7 @@ use the `+` operator or the `format!` macro to concatenate `String` values.
 #### Appending to a String with `push_str` and `push`
 
 We can grow a `String` by using the `push_str` method to append a string slice,
-as shown in Listing 8-15.
+as shown in [Listing 8-15](#listing-8-15).
 
 <Listing number="8-15" caption="Appending a string slice to a `String` using the `push_str` method">
 
@@ -117,7 +117,7 @@ as shown in Listing 8-15.
 
 After these two lines, `s` will contain `foobar`. The `push_str` method takes a
 string slice because we don’t necessarily want to take ownership of the
-parameter. For example, in the code in Listing 8-16, we want to be able to use
+parameter. For example, in the code in [Listing 8-16](#listing-8-16), we want to be able to use
 `s2` after appending its contents to `s1`.
 
 <Listing number="8-16" caption="Using a string slice after appending its contents to a `String`">
@@ -132,7 +132,7 @@ If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
 
 The `push` method takes a single character as a parameter and adds it to the
-`String`. Listing 8-17 adds the letter _l_ to a `String` using the `push`
+`String`. [Listing 8-17](#listing-8-17) adds the letter _l_ to a `String` using the `push`
 method.
 
 <Listing number="8-17" caption="Adding one character to a `String` value using `push`">
@@ -148,7 +148,7 @@ As a result, `s` will contain `lol`.
 #### Concatenation with the `+` Operator or the `format!` Macro
 
 Often, you’ll want to combine two existing strings. One way to do so is to use
-the `+` operator, as shown in Listing 8-18.
+the `+` operator, as shown in [Listing 8-18](#listing-8-18).
 
 <Listing number="8-18" caption="Using the `+` operator to combine two `String` values into a new `String` value">
 
@@ -178,7 +178,7 @@ First, `s2` has an `&`, meaning that we’re adding a _reference_ of the second
 string to the first string. This is because of the `s` parameter in the `add`
 function: we can only add a `&str` to a `String`; we can’t add two `String`
 values together. But wait—the type of `&s2` is `&String`, not `&str`, as
-specified in the second parameter to `add`. So why does Listing 8-18 compile?
+specified in the second parameter to `add`. So why does [Listing 8-18](#listing-8-18) compile?
 
 The reason we’re able to use `&s2` in the call to `add` is that the compiler
 can _coerce_ the `&String` argument into a `&str`. When we call the `add`
@@ -188,7 +188,7 @@ not take ownership of the `s` parameter, `s2` will still be a valid `String`
 after this operation.
 
 Second, we can see in the signature that `add` takes ownership of `self`
-because `self` does _not_ have an `&`. This means `s1` in Listing 8-18 will be
+because `self` does _not_ have an `&`. This means `s1` in [Listing 8-18](#listing-8-18) will be
 moved into the `add` call and will no longer be valid after that. So, although
 `let s3 = s1 + &s2;` looks like it will copy both strings and create a new one,
 this statement actually takes ownership of `s1`, appends a copy of the contents
@@ -222,7 +222,7 @@ so that this call doesn’t take ownership of any of its parameters.
 In many other programming languages, accessing individual characters in a
 string by referencing them by index is a valid and common operation. However,
 if you try to access parts of a `String` using indexing syntax in Rust, you’ll
-get an error. Consider the invalid code in Listing 8-19.
+get an error. Consider the invalid code in [Listing 8-19](#listing-8-19).
 
 <Listing number="8-19" caption="Attempting to use indexing syntax with a String">
 
@@ -245,7 +245,7 @@ memory.
 #### Internal Representation
 
 A `String` is a wrapper over a `Vec<u8>`. Let’s look at some of our properly
-encoded UTF-8 example strings from Listing 8-14. First, this one:
+encoded UTF-8 example strings from [Listing 8-14](#listing-8-14). First, this one:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:spanish}}

@@ -6,7 +6,7 @@ then refactor the program until we’re using structs instead.
 
 Let’s make a new binary project with Cargo called _rectangles_ that will take
 the width and height of a rectangle specified in pixels and calculate the area
-of the rectangle. Listing 5-8 shows a short program with one way of doing
+of the rectangle. [Listing 5-8](#listing-5-8) shows a short program with one way of doing
 exactly that in our project’s _src/main.rs_.
 
 <Listing number="5-8" file-name="src/main.rs" caption="Calculating the area of a rectangle specified by separate width and height variables">
@@ -42,7 +42,7 @@ of Chapter 3: by using tuples.
 
 ### Refactoring with Tuples
 
-Listing 5-9 shows another version of our program that uses tuples.
+[Listing 5-9](#listing-5-9) shows another version of our program that uses tuples.
 
 <Listing number="5-9" file-name="src/main.rs" caption="Specifying the width and height of the rectangle with a tuple">
 
@@ -68,7 +68,7 @@ our data in our code, it’s now easier to introduce errors.
 
 We use structs to add meaning by labeling the data. We can transform the tuple
 we’re using into a struct with a name for the whole as well as names for the
-parts, as shown in Listing 5-10.
+parts, as shown in [Listing 5-10](#listing-5-10).
 
 <Listing number="5-10" file-name="src/main.rs" caption="Defining a `Rectangle` struct">
 
@@ -102,7 +102,7 @@ win for clarity.
 ### Adding Useful Functionality with Derived Traits
 
 It’d be useful to be able to print an instance of `Rectangle` while we’re
-debugging our program and see the values for all its fields. Listing 5-11 tries
+debugging our program and see the values for all its fields. [Listing 5-11](#listing-5-11) tries
 using the [`println!` macro][println]<!-- ignore --> as we have used in
 previous chapters. This won’t work, however.
 
@@ -158,7 +158,7 @@ But again, the compiler gives us a helpful note:
 Rust _does_ include functionality to print out debugging information, but we
 have to explicitly opt in to make that functionality available for our struct.
 To do that, we add the outer attribute `#[derive(Debug)]` just before the
-struct definition, as shown in Listing 5-12.
+struct definition, as shown in [Listing 5-12](#listing-5-12).
 
 <Listing number="5-12" file-name="src/main.rs" caption="Adding the attribute to derive the `Debug` trait and printing the `Rectangle` instance using debug formatting">
 

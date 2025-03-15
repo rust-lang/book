@@ -26,8 +26,7 @@ way `Iterator` does, but asynchronously.
 
 The similarity between iterators and streams in Rust means we can actually
 create a stream from any iterator. As with an iterator, we can work with a
-stream by calling its `next` method and then awaiting the output, as in Listing
-17-30.
+stream by calling its `next` method and then awaiting the output, as in [Listing 17-30](#listing-17-30).
 
 <Listing number="17-30" caption="Creating a stream from an iterator and printing its values" file-name="src/main.rs">
 
@@ -93,7 +92,7 @@ part of Rust’s standard library, but most ecosystem crates use the same
 definition.
 
 The fix to the compiler error is to add a `use` statement for `trpl::StreamExt`,
-as in Listing 17-31.
+as in [Listing 17-31](#listing-17-31).
 
 <Listing number="17-31" caption="Successfully using an iterator as the basis for a stream" file-name="src/main.rs">
 
@@ -105,7 +104,7 @@ as in Listing 17-31.
 
 With all those pieces put together, this code works the way we want! What’s
 more, now that we have `StreamExt` in scope, we can use all of its utility
-methods, just as with iterators. For example, in Listing 17-32, we use the
+methods, just as with iterators. For example, in [Listing 17-32](#listing-17-32), we use the
 `filter` method to filter out everything but multiples of three and five.
 
 <Listing number="17-32" caption="Filtering a stream with the `StreamExt::filter` method" file-name="src/main.rs">
@@ -133,7 +132,7 @@ needless work.
 
 Let’s start by building a little stream of messages as a stand-in for a stream
 of data we might see from a WebSocket or another real-time communication
-protocol, as shown in Listing 17-33.
+protocol, as shown in [Listing 17-33](#listing-17-33).
 
 <Listing number="17-33" caption="Using the `rx` receiver as a `ReceiverStream`" file-name="src/main.rs">
 
@@ -173,7 +172,7 @@ Message: 'j'
 Again, we could do this with the regular `Receiver` API or even the regular
 `Iterator` API, though, so let’s add a feature that requires streams: adding a
 timeout that applies to every item in the stream, and a delay on the items we
-emit, as shown in Listing 17-34.
+emit, as shown in [Listing 17-34](#listing-17-34).
 
 <Listing number="17-34" caption="Using the `StreamExt::timeout` method to set a time limit on the items in a stream" file-name="src/main.rs">
 
@@ -195,7 +194,7 @@ polled.
 
 However, because there are no delays between messages, this timeout does not
 change the behavior of the program. Let’s add a variable delay to the messages
-we send, as shown in Listing 17-35.
+we send, as shown in [Listing 17-35](#listing-17-35).
 
 <Listing number="17-35" caption="Sending messages through `tx` with an async delay without making `get_messages` an async function" file-name="src/main.rs">
 
@@ -276,7 +275,7 @@ a message on a delay and combine it with the same approach we used in
 `get_messages` of creating a stream from a channel. The difference is that this
 time, we’re going to send back the count of intervals that have elapsed, so the
 return type will be `impl Stream<Item = u32>`, and we can call the function
-`get_intervals` (see Listing 17-36).
+`get_intervals` (see [Listing 17-36](#listing-17-36)).
 
 <Listing number="17-36" caption="Creating a stream with a counter that will be emitted once every millisecond" file-name="src/main.rs">
 
@@ -299,7 +298,7 @@ indefinitely. With async, this doesn’t block anything else, as long as there i
 at least one await point in each iteration through the loop.
 
 Now, back in our main function’s async block, we can attempt to merge the
-`messages` and `intervals` streams, as shown in Listing 17-37.
+`messages` and `intervals` streams, as shown in [Listing 17-37](#listing-17-37).
 
 <Listing number="17-37" caption="Attempting to merge the `messages` and `intervals` streams" file-name="src/main.rs">
 
@@ -324,7 +323,7 @@ String>>`, where `Timeout` is the type that implements `Stream` for a `timeout`
 call. The `intervals` stream has the type `impl Stream<Item = u32>`. To merge
 these two streams, we need to transform one of them to match the other. We’ll
 rework the intervals stream, because messages is already in the basic format we
-want and has to handle timeout errors (see Listing 17-38).
+want and has to handle timeout errors (see [Listing 17-38](#listing-17-38)).
 
 <!-- We cannot directly test this one, because it never stops. -->
 
@@ -364,7 +363,7 @@ Interval: 43
 --snip--
 ```
 
-Listing 17-39 shows one way to solve these last two problems.
+[Listing 17-39](#listing-17-39) shows one way to solve these last two problems.
 
 <Listing number="17-39" caption="Using `throttle` and `take` to manage the merged streams" file-name="src/main.rs">
 
@@ -427,8 +426,7 @@ channel-based streams, the `send` calls could fail when the other side of the
 channel closes—and that’s just a matter of how the runtime executes the futures
 that make up the stream. Up until now, we’ve ignored this possibility by calling
 `unwrap`, but in a well-behaved app, we should explicitly handle the error, at
-minimum by ending the loop so we don’t try to send any more messages. Listing
-17-40 shows a simple error strategy: print the issue and then `break` from the
+minimum by ending the loop so we don’t try to send any more messages. [Listing 17-40](#listing-17-40) shows a simple error strategy: print the issue and then `break` from the
 loops.
 
 <Listing number="17-40" caption="Handling errors and shutting down the loops">

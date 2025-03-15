@@ -1,13 +1,13 @@
 ## Bringing Paths into Scope with the `use` Keyword
 
 Having to write out the paths to call functions can feel inconvenient and
-repetitive. In Listing 7-7, whether we chose the absolute or relative path to
+repetitive. In [Listing 7-7](#listing-7-7), whether we chose the absolute or relative path to
 the `add_to_waitlist` function, every time we wanted to call `add_to_waitlist`
 we had to specify `front_of_house` and `hosting` too. Fortunately, there’s a
 way to simplify this process: we can create a shortcut to a path with the `use`
 keyword once, and then use the shorter name everywhere else in the scope.
 
-In Listing 7-11, we bring the `crate::front_of_house::hosting` module into the
+In [Listing 7-11](#listing-7-11), we bring the `crate::front_of_house::hosting` module into the
 scope of the `eat_at_restaurant` function so we only have to specify
 `hosting::add_to_waitlist` to call the `add_to_waitlist` function in
 `eat_at_restaurant`.
@@ -27,7 +27,7 @@ module had been defined in the crate root. Paths brought into scope with `use`
 also check privacy, like any other paths.
 
 Note that `use` only creates the shortcut for the particular scope in which the
-`use` occurs. Listing 7-12 moves the `eat_at_restaurant` function into a new
+`use` occurs. [Listing 7-12](#listing-7-12) moves the `eat_at_restaurant` function into a new
 child module named `customer`, which is then a different scope than the `use`
 statement, so the function body won’t compile.
 
@@ -53,10 +53,10 @@ the shortcut in the parent module with `super::hosting` within the child
 
 ### Creating Idiomatic `use` Paths
 
-In Listing 7-11, you might have wondered why we specified `use
+In [Listing 7-11](#listing-7-11), you might have wondered why we specified `use
 crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in
 `eat_at_restaurant`, rather than specifying the `use` path all the way out to
-the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
+the `add_to_waitlist` function to achieve the same result, as in [Listing 7-13](#listing-7-13).
 
 <Listing number="7-13" file-name="src/lib.rs" caption="Bringing the `add_to_waitlist` function into scope with `use`, which is unidiomatic">
 
@@ -66,16 +66,15 @@ the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 
 </Listing>
 
-Although both Listing 7-11 and Listing 7-13 accomplish the same task, Listing
-7-11 is the idiomatic way to bring a function into scope with `use`. Bringing
+Although both [Listing 7-11](#listing-7-11) and [Listing 7-13](#listing-7-13) accomplish the same task, [Listing 7-11](#listing-7-11) is the idiomatic way to bring a function into scope with `use`. Bringing
 the function’s parent module into scope with `use` means we have to specify the
 parent module when calling the function. Specifying the parent module when
 calling the function makes it clear that the function isn’t locally defined
-while still minimizing repetition of the full path. The code in Listing 7-13 is
+while still minimizing repetition of the full path. The code in [Listing 7-13](#listing-7-13) is
 unclear as to where `add_to_waitlist` is defined.
 
 On the other hand, when bringing in structs, enums, and other items with `use`,
-it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way
+it’s idiomatic to specify the full path. [Listing 7-14](#listing-7-14) shows the idiomatic way
 to bring the standard library’s `HashMap` struct into the scope of a binary
 crate.
 
@@ -91,7 +90,7 @@ There’s no strong reason behind this idiom: it’s just the convention that ha
 emerged, and folks have gotten used to reading and writing Rust code this way.
 
 The exception to this idiom is if we’re bringing two items with the same name
-into scope with `use` statements, because Rust doesn’t allow that. Listing 7-15
+into scope with `use` statements, because Rust doesn’t allow that. [Listing 7-15](#listing-7-15)
 shows how to bring two `Result` types into scope that have the same name but
 different parent modules, and how to refer to them.
 
@@ -112,8 +111,8 @@ meant when we used `Result`.
 
 There’s another solution to the problem of bringing two types of the same name
 into the same scope with `use`: after the path, we can specify `as` and a new
-local name, or _alias_, for the type. Listing 7-16 shows another way to write
-the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
+local name, or _alias_, for the type. [Listing 7-16](#listing-7-16) shows another way to write
+the code in [Listing 7-15](#listing-7-15) by renaming one of the two `Result` types using `as`.
 
 <Listing number="7-16" file-name="src/lib.rs" caption="Renaming a type when it’s brought into scope with the `as` keyword">
 
@@ -125,7 +124,7 @@ the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 
 In the second `use` statement, we chose the new name `IoResult` for the
 `std::io::Result` type, which won’t conflict with the `Result` from `std::fmt`
-that we’ve also brought into scope. Listing 7-15 and Listing 7-16 are
+that we’ve also brought into scope. [Listing 7-15](#listing-7-15) and [Listing 7-16](#listing-7-16) are
 considered idiomatic, so the choice is up to you!
 
 ### Re-exporting Names with `pub use`
@@ -137,7 +136,7 @@ and `use`. This technique is called _re-exporting_ because we’re bringing an
 item into scope but also making that item available for others to bring into
 their scope.
 
-Listing 7-17 shows the code in Listing 7-11 with `use` in the root module
+[Listing 7-17](#listing-7-17) shows the code in [Listing 7-11](#listing-7-11) with `use` in the root module
 changed to `pub use`.
 
 <Listing number="7-17" file-name="src/lib.rs" caption="Making a name available for any code to use from a new scope with `pub use`">
@@ -222,7 +221,7 @@ crate.
 
 If we’re using multiple items defined in the same crate or same module, listing
 each item on its own line can take up a lot of vertical space in our files. For
-example, these two `use` statements we had in the guessing game in Listing 2-4
+example, these two `use` statements we had in the guessing game in [Listing 2-4](#listing-2-4)
 bring items from `std` into scope:
 
 <Listing file-name="src/main.rs">
@@ -236,7 +235,7 @@ bring items from `std` into scope:
 Instead, we can use nested paths to bring the same items into scope in one
 line. We do this by specifying the common part of the path, followed by two
 colons, and then curly brackets around a list of the parts of the paths that
-differ, as shown in Listing 7-18.
+differ, as shown in [Listing 7-18](#listing-7-18).
 
 <Listing number="7-18" file-name="src/main.rs" caption="Specifying a nested path to bring multiple items with the same prefix into scope">
 
@@ -251,7 +250,7 @@ module using nested paths can reduce the number of separate `use` statements
 needed by a lot!
 
 We can use a nested path at any level in a path, which is useful when combining
-two `use` statements that share a subpath. For example, Listing 7-19 shows two
+two `use` statements that share a subpath. For example, [Listing 7-19](#listing-7-19) shows two
 `use` statements: one that brings `std::io` into scope and one that brings
 `std::io::Write` into scope.
 
@@ -265,9 +264,9 @@ two `use` statements that share a subpath. For example, Listing 7-19 shows two
 
 The common part of these two paths is `std::io`, and that’s the complete first
 path. To merge these two paths into one `use` statement, we can use `self` in
-the nested path, as shown in Listing 7-20.
+the nested path, as shown in [Listing 7-20](#listing-7-20).
 
-<Listing number="7-20" file-name="src/lib.rs" caption="Combining the paths in Listing 7-19 into one `use` statement">
+<Listing number="7-20" file-name="src/lib.rs" caption="Combining the paths in [Listing 7-19](#listing-7-19) into one `use` statement">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-20/src/lib.rs}}

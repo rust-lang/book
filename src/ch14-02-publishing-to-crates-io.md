@@ -23,7 +23,7 @@ your crate is _implemented_.
 
 Documentation comments use three slashes, `///`, instead of two and support
 Markdown notation for formatting the text. Place documentation comments just
-before the item they’re documenting. Listing 14-1 shows documentation comments
+before the item they’re documenting. [Listing 14-1](#listing-14-1) shows documentation comments
 for an `add_one` function in a crate named `my_crate`.
 
 <Listing number="14-1" file-name="src/lib.rs" caption="A documentation comment for a function">
@@ -54,7 +54,7 @@ function</span>
 
 #### Commonly Used Sections
 
-We used the `# Examples` Markdown heading in Listing 14-1 to create a section
+We used the `# Examples` Markdown heading in [Listing 14-1](#listing-14-1) to create a section
 in the HTML with the title “Examples.” Here are some other sections that crate
 authors commonly use in their documentation:
 
@@ -81,7 +81,7 @@ test` will run the code examples in your documentation as tests! Nothing is
 better than documentation with examples. But nothing is worse than examples
 that don’t work because the code has changed since the documentation was
 written. If we run `cargo test` with the documentation for the `add_one`
-function from Listing 14-1, we will see a section in the test results that looks
+function from [Listing 14-1](#listing-14-1), we will see a section in the test results that looks
 like this:
 
 <!-- manual-regeneration
@@ -112,8 +112,7 @@ inside a module to document the crate or the module as a whole.
 
 For example, to add documentation that describes the purpose of the `my_crate`
 crate that contains the `add_one` function, we add documentation comments that
-start with `//!` to the beginning of the _src/lib.rs_ file, as shown in Listing
-14-2:
+start with `//!` to the beginning of the _src/lib.rs_ file, as shown in [Listing 14-2](#listing-14-2):
 
 <Listing number="14-2" file-name="src/lib.rs" caption="Documentation for the `my_crate` crate as a whole">
 
@@ -169,7 +168,7 @@ defined in the other location instead.
 For example, say we made a library named `art` for modeling artistic concepts.
 Within this library are two modules: a `kinds` module containing two enums
 named `PrimaryColor` and `SecondaryColor` and a `utils` module containing a
-function named `mix`, as shown in Listing 14-3:
+function named `mix`, as shown in [Listing 14-3](#listing-14-3):
 
 <Listing number="14-3" file-name="src/lib.rs" caption="An `art` library with items organized into `kinds` and `utils` modules">
 
@@ -193,7 +192,7 @@ see them.
 
 Another crate that depends on this library would need `use` statements that
 bring the items from `art` into scope, specifying the module structure that’s
-currently defined. Listing 14-4 shows an example of a crate that uses the
+currently defined. [Listing 14-4](#listing-14-4) shows an example of a crate that uses the
 `PrimaryColor` and `mix` items from the `art` crate:
 
 <Listing number="14-4" file-name="src/main.rs" caption="A crate using the `art` crate’s items with its internal structure exported">
@@ -204,7 +203,7 @@ currently defined. Listing 14-4 shows an example of a crate that uses the
 
 </Listing>
 
-The author of the code in Listing 14-4, which uses the `art` crate, had to
+The author of the code in [Listing 14-4](#listing-14-4), which uses the `art` crate, had to
 figure out that `PrimaryColor` is in the `kinds` module and `mix` is in the
 `utils` module. The module structure of the `art` crate is more relevant to
 developers working on the `art` crate than to those using it. The internal
@@ -214,8 +213,8 @@ developers who use it have to figure out where to look, and must specify the
 module names in the `use` statements.
 
 To remove the internal organization from the public API, we can modify the
-`art` crate code in Listing 14-3 to add `pub use` statements to re-export the
-items at the top level, as shown in Listing 14-5:
+`art` crate code in [Listing 14-3](#listing-14-3) to add `pub use` statements to re-export the
+items at the top level, as shown in [Listing 14-5](#listing-14-5):
 
 <Listing number="14-5" file-name="src/lib.rs" caption="Adding `pub use` statements to re-export items">
 
@@ -234,9 +233,8 @@ and link re-exports on the front page, as shown in Figure 14-4, making the
 <span class="caption">Figure 14-4: The front page of the documentation for `art`
 that lists the re-exports</span>
 
-The `art` crate users can still see and use the internal structure from Listing
-14-3 as demonstrated in Listing 14-4, or they can use the more convenient
-structure in Listing 14-5, as shown in Listing 14-6:
+The `art` crate users can still see and use the internal structure from [Listing 14-3](#listing-14-3) as demonstrated in [Listing 14-4](#listing-14-4), or they can use the more convenient
+structure in [Listing 14-5](#listing-14-5), as shown in [Listing 14-6](#listing-14-6):
 
 <Listing number="14-6" file-name="src/main.rs" caption="A program using the re-exported items from the `art` crate">
 

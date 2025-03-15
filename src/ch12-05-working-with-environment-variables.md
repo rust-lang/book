@@ -14,7 +14,7 @@ the environment variable has a value. We’ll continue to follow the TDD process
 so the first step is again to write a failing test. We’ll add a new test for
 the new `search_case_insensitive` function and rename our old test from
 `one_result` to `case_sensitive` to clarify the differences between the two
-tests, as shown in Listing 12-20.
+tests, as shown in [Listing 12-20](#listing-12-20).
 
 <Listing number="12-20" file-name="src/lib.rs" caption="Adding a new failing test for the case-insensitive function we’re about to add">
 
@@ -38,11 +38,11 @@ line `"Trust me."` even though both have different casing from the query. This
 is our failing test, and it will fail to compile because we haven’t yet defined
 the `search_case_insensitive` function. Feel free to add a skeleton
 implementation that always returns an empty vector, similar to the way we did
-for the `search` function in Listing 12-16 to see the test compile and fail.
+for the `search` function in [Listing 12-16](#listing-12-16) to see the test compile and fail.
 
 ### Implementing the `search_case_insensitive` Function
 
-The `search_case_insensitive` function, shown in Listing 12-21, will be almost
+The `search_case_insensitive` function, shown in [Listing 12-21](#listing-12-21), will be almost
 the same as the `search` function. The only difference is that we’ll lowercase
 the `query` and each `line` so that whatever the case of the input arguments,
 they’ll be the same case when we check whether the line contains the query.
@@ -97,7 +97,7 @@ anywhere yet:
 We added the `ignore_case` field that holds a Boolean. Next, we need the `run`
 function to check the `ignore_case` field’s value and use that to decide
 whether to call the `search` function or the `search_case_insensitive`
-function, as shown in Listing 12-22. This still won’t compile yet.
+function, as shown in [Listing 12-22](#listing-12-22). This still won’t compile yet.
 
 <Listing number="12-22" file-name="src/lib.rs" caption="Calling either `search` or `search_case_insensitive` based on the value in `config.ignore_case`">
 
@@ -112,7 +112,7 @@ working with environment variables are in the `env` module in the standard
 library, so we bring that module into scope at the top of _src/lib.rs_. Then
 we’ll use the `var` function from the `env` module to check to see if any value
 has been set for an environment variable named `IGNORE_CASE`, as shown in
-Listing 12-23.
+[Listing 12-23](#listing-12-23).
 
 <Listing number="12-23" file-name="src/lib.rs" caption="Checking for any value in an environment variable named `IGNORE_CASE`">
 
@@ -139,7 +139,7 @@ of the other methods we’ve seen on `Result`.
 
 We pass the value in the `ignore_case` variable to the `Config` instance so the
 `run` function can read that value and decide whether to call
-`search_case_insensitive` or `search`, as we implemented in Listing 12-22.
+`search_case_insensitive` or `search`, as we implemented in [Listing 12-22](#listing-12-22).
 
 Let’s give it a try! First we’ll run our program without the environment
 variable set and with the query `to`, which should match any line that contains

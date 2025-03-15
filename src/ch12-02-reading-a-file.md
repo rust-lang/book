@@ -2,7 +2,7 @@
 
 Now we’ll add functionality to read the file specified in the `file_path`
 argument. First we need a sample file to test it with: we’ll use a file with a
-small amount of text over multiple lines with some repeated words. Listing 12-3
+small amount of text over multiple lines with some repeated words. [Listing 12-3](#listing-12-3)
 has an Emily Dickinson poem that will work well! Create a file called
 _poem.txt_ at the root level of your project, and enter the poem “I’m Nobody!
 Who are you?”
@@ -16,7 +16,7 @@ Who are you?”
 </Listing>
 
 With the text in place, edit _src/main.rs_ and add code to read the file, as
-shown in Listing 12-4.
+shown in [Listing 12-4](#listing-12-4).
 
 <Listing number="12-4" file-name="src/main.rs" caption="Reading the contents of the file specified by the second argument">
 

@@ -13,7 +13,7 @@ called on.
 
 Let’s change the `area` function that has a `Rectangle` instance as a parameter
 and instead make an `area` method defined on the `Rectangle` struct, as shown
-in Listing 5-13.
+in [Listing 5-13](#listing-5-13).
 
 <Listing number="5-13" file-name="src/main.rs" caption="Defining an `area` method on the `Rectangle` struct">
 
@@ -141,7 +141,7 @@ struct. This time we want an instance of `Rectangle` to take another instance
 of `Rectangle` and return `true` if the second `Rectangle` can fit completely
 within `self` (the first `Rectangle`); otherwise, it should return `false`.
 That is, once we’ve defined the `can_hold` method, we want to be able to write
-the program shown in Listing 5-14.
+the program shown in [Listing 5-14](#listing-5-14).
 
 <Listing number="5-14" file-name="src/main.rs" caption="Using the as-yet-unwritten `can_hold` method">
 
@@ -172,7 +172,7 @@ calling the `can_hold` method. The return value of `can_hold` will be a
 Boolean, and the implementation will check whether the width and height of
 `self` are greater than the width and height of the other `Rectangle`,
 respectively. Let’s add the new `can_hold` method to the `impl` block from
-Listing 5-13, shown in Listing 5-15.
+[Listing 5-13](#listing-5-13), shown in [Listing 5-15](#listing-5-15).
 
 <Listing number="5-15" file-name="src/main.rs" caption="Implementing the `can_hold` method on `Rectangle` that takes another `Rectangle` instance as a parameter">
 
@@ -182,7 +182,7 @@ Listing 5-13, shown in Listing 5-15.
 
 </Listing>
 
-When we run this code with the `main` function in Listing 5-14, we’ll get our
+When we run this code with the `main` function in [Listing 5-14](#listing-5-14), we’ll get our
 desired output. Methods can take multiple parameters that we add to the
 signature after the `self` parameter, and those parameters work just like
 parameters in functions.
@@ -222,11 +222,10 @@ namespaces created by modules. We’ll discuss modules in [Chapter
 
 ### Multiple `impl` Blocks
 
-Each struct is allowed to have multiple `impl` blocks. For example, Listing
-5-15 is equivalent to the code shown in Listing 5-16, which has each method in
+Each struct is allowed to have multiple `impl` blocks. For example, [Listing 5-15](#listing-5-15) is equivalent to the code shown in [Listing 5-16](#listing-5-16), which has each method in
 its own `impl` block.
 
-<Listing number="5-16" caption="Rewriting Listing 5-15 using multiple `impl` blocks">
+<Listing number="5-16" caption="Rewriting [Listing 5-15](#listing-5-15) using multiple `impl` blocks">
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-16/src/main.rs:here}}

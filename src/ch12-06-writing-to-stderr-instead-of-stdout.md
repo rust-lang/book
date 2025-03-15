@@ -47,7 +47,7 @@ data from a successful run ends up in the file. We’ll change that.
 
 ### Printing Errors to Standard Error
 
-We’ll use the code in Listing 12-24 to change how error messages are printed.
+We’ll use the code in [Listing 12-24](#listing-12-24) to change how error messages are printed.
 Because of the refactoring we did earlier in this chapter, all the code that
 prints error messages is in one function, `main`. The standard library provides
 the `eprintln!` macro that prints to the standard error stream, so let’s change

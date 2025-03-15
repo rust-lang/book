@@ -11,7 +11,7 @@ this, but first we’ll look at the problem in action.
 ### Simulating a Slow Request in the Current Server Implementation
 
 We’ll look at how a slow-processing request can affect other requests made to
-our current server implementation. Listing 21-10 implements handling a request
+our current server implementation. [Listing 21-10](#listing-21-10) implements handling a request
 to _/sleep_ with a simulated slow response that will cause the server to sleep
 for five seconds before responding.
 
@@ -28,10 +28,10 @@ explicitly match on a slice of `request_line` to pattern match against the
 string literal values; `match` doesn’t do automatic referencing and
 dereferencing, like the equality method does.
 
-The first arm is the same as the `if` block from Listing 21-9. The second arm
+The first arm is the same as the `if` block from [Listing 21-9](#listing-21-9). The second arm
 matches a request to _/sleep_. When that request is received, the server will
 sleep for five seconds before rendering the successful HTML page. The third arm
-is the same as the `else` block from Listing 21-9.
+is the same as the `else` block from [Listing 21-9](#listing-21-9).
 
 You can see how primitive our server is: real libraries would handle the
 recognition of multiple requests in a much less verbose way!
@@ -104,7 +104,7 @@ every connection. As mentioned earlier, this isn’t our final plan due to the
 problems with potentially spawning an unlimited number of threads, but it is a
 starting point to get a working multithreaded server first. Then we’ll add the
 thread pool as an improvement, and contrasting the two solutions will be
-easier. Listing 21-11 shows the changes to make to `main` to spawn a new thread
+easier. [Listing 21-11](#listing-21-11) shows the changes to make to `main` to spawn a new thread
 to handle each stream within the `for` loop.
 
 <Listing number="21-11" file-name="src/main.rs" caption="Spawning a new thread for each stream">
@@ -134,7 +134,7 @@ pool and think about how things would look different or the same with async.
 
 We want our thread pool to work in a similar, familiar way so that switching
 from threads to a thread pool doesn’t require large changes to the code that
-uses our API. Listing 21-12 shows the hypothetical interface for a `ThreadPool`
+uses our API. [Listing 21-12](#listing-21-12) shows the hypothetical interface for a `ThreadPool`
 struct we want to use instead of `thread::spawn`.
 
 <Listing number="21-12" file-name="src/main.rs" caption="Our ideal `ThreadPool` interface">
@@ -158,7 +158,7 @@ compile, but we’ll try so the compiler can guide us in how to fix it.
 
 #### Building `ThreadPool` Using Compiler Driven Development
 
-Make the changes in Listing 21-12 to _src/main.rs_, and then let’s use the
+Make the changes in [Listing 21-12](#listing-21-12) to _src/main.rs_, and then let’s use the
 compiler errors from `cargo check` to drive our development. Here is the first
 error we get:
 
@@ -311,7 +311,7 @@ parameter because a pool with a negative number of threads makes no sense.
 However, a pool with zero threads also makes no sense, yet zero is a perfectly
 valid `usize`. We’ll add code to check that `size` is greater than zero before
 we return a `ThreadPool` instance and have the program panic if it receives a
-zero by using the `assert!` macro, as shown in Listing 21-13.
+zero by using the `assert!` macro, as shown in [Listing 21-13](#listing-21-13).
 
 <Listing number="21-13" file-name="src/lib.rs" caption="Implementing `ThreadPool::new` to panic if `size` is zero">
 
@@ -329,7 +329,7 @@ to see what the generated docs for `new` look like!
 
 Instead of adding the `assert!` macro as we’ve done here, we could change `new`
 into `build` and return a `Result` like we did with `Config::build` in the I/O
-project in Listing 12-9. But we’ve decided in this case that trying to create a
+project in [Listing 12-9](#listing-12-9). But we’ve decided in this case that trying to create a
 thread pool without any threads should be an unrecoverable error. If you’re
 feeling ambitious, try to write a function named `build` with the following
 signature to compare with the `new` function:
@@ -358,7 +358,7 @@ closure returns. Let’s try using `JoinHandle` too and see what happens. In our
 case, the closures we’re passing to the thread pool will handle the connection
 and not return anything, so `T` will be the unit type `()`.
 
-The code in Listing 21-14 will compile but doesn’t create any threads yet.
+The code in [Listing 21-14](#listing-21-14) will compile but doesn’t create any threads yet.
 We’ve changed the definition of `ThreadPool` to hold a vector of
 `thread::JoinHandle<()>` instances, initialized the vector with a capacity of
 `size`, set up a `for` loop that will run some code to create the threads, and
@@ -387,7 +387,7 @@ When you run `cargo check` again, it should succeed.
 
 #### A `Worker` Struct Responsible for Sending Code from the `ThreadPool` to a Thread
 
-We left a comment in the `for` loop in Listing 21-14 regarding the creation of
+We left a comment in the `for` loop in [Listing 21-14](#listing-21-14) regarding the creation of
 threads. Here, we’ll look at how we actually create threads. The standard
 library provides `thread::spawn` as a way to create threads, and
 `thread::spawn` expects to get some code the thread should run as soon as the
@@ -426,9 +426,9 @@ set up in this way:
    a new `Worker` with that `id`, and store the worker in the vector.
 
 If you’re up for a challenge, try implementing these changes on your own before
-looking at the code in Listing 21-15.
+looking at the code in [Listing 21-15](#listing-21-15).
 
-Ready? Here is Listing 21-15 with one way to make the preceding modifications.
+Ready? Here is [Listing 21-15](#listing-21-15) with one way to make the preceding modifications.
 
 <Listing number="21-15" file-name="src/lib.rs" caption="Modifying `ThreadPool` to hold `Worker` instances instead of holding threads directly">
 
@@ -486,7 +486,7 @@ the `Worker` instances, which will send the job to its thread. Here is the plan:
    closures of any jobs it receives.
 
 Let’s start by creating a channel in `ThreadPool::new` and holding the sender
-in the `ThreadPool` instance, as shown in Listing 21-16. The `Job` struct
+in the `ThreadPool` instance, as shown in [Listing 21-16](#listing-21-16). The `Job` struct
 doesn’t hold anything for now but will be the type of item we’re sending down
 the channel.
 
@@ -504,7 +504,7 @@ sender. This will successfully compile.
 Let’s try passing a receiver of the channel into each `Worker` as the thread
 pool creates the channel. We know we want to use the receiver in the thread that
 the `Worker` instances spawn, so we’ll reference the `receiver` parameter in the
-closure. The code in Listing 21-17 won’t quite compile yet.
+closure. The code in [Listing 21-17](#listing-21-17) won’t quite compile yet.
 
 <Listing number="21-17" file-name="src/lib.rs" caption="Passing the receiver to each `Worker`">
 
@@ -539,7 +539,7 @@ Recall the thread-safe smart pointers discussed in Chapter 16: to share
 ownership across multiple threads and allow the threads to mutate the value, we
 need to use `Arc<Mutex<T>>`. The `Arc` type will let multiple `Worker` instances
 own the receiver, and `Mutex` will ensure that only one `Worker` gets a job from
-the receiver at a time. Listing 21-18 shows the changes we need to make.
+the receiver at a time. [Listing 21-18](#listing-21-18) shows the changes we need to make.
 
 <Listing number="21-18" file-name="src/lib.rs" caption="Sharing the receiver among the `Worker` instances using `Arc` and `Mutex`">
 
@@ -562,7 +562,7 @@ Let’s finally implement the `execute` method on `ThreadPool`. We’ll also cha
 closure that `execute` receives. As discussed in [“Creating Type Synonyms with
 Type Aliases”][creating-type-synonyms-with-type-aliases]<!-- ignore --> in
 Chapter 20, type aliases allow us to make long types shorter for ease of use.
-Look at Listing 21-19.
+Look at [Listing 21-19](#listing-21-19).
 
 <Listing number="21-19" file-name="src/lib.rs" caption="Creating a `Job` type alias for a `Box` that holds each closure and then sending the job down the channel">
 
@@ -585,7 +585,7 @@ But we’re not quite done yet! In the `Worker`, our closure being passed to
 `thread::spawn` still only _references_ the receiving end of the channel.
 Instead, we need the closure to loop forever, asking the receiving end of the
 channel for a job and running the job when it gets one. Let’s make the change
-shown in Listing 21-20 to `Worker::new`.
+shown in [Listing 21-20](#listing-21-20) to `Worker::new`.
 
 <Listing number="21-20" file-name="src/lib.rs" caption="Receiving and executing the jobs in the `Worker` instance’s thread">
 
@@ -677,7 +677,7 @@ the work to be done. What types would change? How would the method signatures be
 different, if at all? What parts of the code would stay the same?
 
 After learning about the `while let` loop in Chapters 17 and 18, you might be
-wondering why we didn’t write the worker thread code as shown in Listing 21-21.
+wondering why we didn’t write the worker thread code as shown in [Listing 21-21](#listing-21-21).
 
 <Listing number="21-21" file-name="src/lib.rs" caption="An alternative implementation of `Worker::new` using `while let`">
 
@@ -698,12 +698,12 @@ lock. However, this implementation can also result in the lock being held
 longer than intended if we aren’t mindful of the lifetime of the
 `MutexGuard<T>`.
 
-The code in Listing 21-20 that uses `let job =
+The code in [Listing 21-20](#listing-21-20) that uses `let job =
 receiver.lock().unwrap().recv().unwrap();` works because with `let`, any
 temporary values used in the expression on the right hand side of the equal
 sign are immediately dropped when the `let` statement ends. However, `while
 let` (and `if let` and `match`) does not drop temporary values until the end of
-the associated block. In Listing 21-21, the lock remains held for the duration
+the associated block. In [Listing 21-21](#listing-21-21), the lock remains held for the duration
 of the call to `job()`, meaning other `Worker` instances cannot receive jobs.
 
 [creating-type-synonyms-with-type-aliases]: ch20-03-advanced-types.html#creating-type-synonyms-with-type-aliases

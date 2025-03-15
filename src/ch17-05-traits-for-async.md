@@ -63,7 +63,7 @@ available.
 > their documentation. This is similar to how `Iterator::next` behaves.
 
 When you see code that uses `await`, Rust compiles it under the hood to code
-that calls `poll`. If you look back at Listing 17-4, where we printed out the
+that calls `poll`. If you look back at [Listing 17-4](#listing-17-4), where we printed out the
 page title for a single URL once it resolved, Rust compiles it into something
 kind of (although not exactly) like this:
 
@@ -125,7 +125,7 @@ yet ready.
 
 ### The `Pin` and `Unpin` Traits
 
-When we introduced the idea of pinning in Listing 17-16, we ran into a very
+When we introduced the idea of pinning in [Listing 17-16](#listing-17-16), we ran into a very
 gnarly error message. Here is the relevant part of it again:
 
 <!-- manual-regeneration
@@ -365,7 +365,7 @@ That is precisely why it implements `Unpin` rather than `!Unpin`.
 </figure>
 
 Now we know enough to understand the errors reported for that `join_all` call
-from back in Listing 17-17. We originally tried to move the futures produced by
+from back in [Listing 17-17](#listing-17-17). We originally tried to move the futures produced by
 async blocks into a `Vec<Box<dyn Future<Output = ()>>>`, but as we’ve seen,
 those futures may have internal references, so they don’t implement `Unpin`.
 They need to be pinned, and then we can pass the `Pin` type into the `Vec`,

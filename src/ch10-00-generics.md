@@ -39,7 +39,7 @@ technique to extract a generic function! By looking at how to recognize
 duplicated code you can extract into a function, you’ll start to recognize
 duplicated code that can use generics.
 
-We’ll begin with the short program in Listing 10-1 that finds the largest
+We’ll begin with the short program in [Listing 10-1](#listing-10-1) that finds the largest
 number in a list.
 
 <Listing number="10-1" file-name="src/main.rs" caption="Finding the largest number in a list of numbers">
@@ -60,8 +60,8 @@ in the list. After considering all the numbers in the list, `largest` should
 refer to the largest number, which in this case is 100.
 
 We’ve now been tasked with finding the largest number in two different lists of
-numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
-the same logic at two different places in the program, as shown in Listing 10-2.
+numbers. To do so, we can choose to duplicate the code in [Listing 10-1](#listing-10-1) and use
+the same logic at two different places in the program, as shown in [Listing 10-2](#listing-10-2).
 
 <Listing number="10-2" file-name="src/main.rs" caption="Code to find the largest number in *two* lists of numbers">
 
@@ -80,9 +80,9 @@ function that operates on any list of integers passed in as a parameter. This
 solution makes our code clearer and lets us express the concept of finding the
 largest number in a list abstractly.
 
-In Listing 10-3, we extract the code that finds the largest number into a
+In [Listing 10-3](#listing-10-3), we extract the code that finds the largest number into a
 function named `largest`. Then we call the function to find the largest number
-in the two lists from Listing 10-2. We could also use the function on any other
+in the two lists from [Listing 10-2](#listing-10-2). We could also use the function on any other
 list of `i32` values we might have in the future.
 
 <Listing number="10-3" file-name="src/main.rs" caption="Abstracted code to find the largest number in two lists">
@@ -98,8 +98,8 @@ concrete slice of `i32` values we might pass into the function. As a result,
 when we call the function, the code runs on the specific values that we pass
 in.
 
-In summary, here are the steps we took to change the code from Listing 10-2 to
-Listing 10-3:
+In summary, here are the steps we took to change the code from [Listing 10-2](#listing-10-2) to
+[Listing 10-3](#listing-10-3):
 
 1. Identify duplicate code.
 1. Extract the duplicate code into the body of the function, and specify the

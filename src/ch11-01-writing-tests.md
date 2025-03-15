@@ -41,7 +41,7 @@ $ cd adder
 ```
 
 The contents of the _src/lib.rs_ file in your `adder` library should look like
-Listing 11-1.
+[Listing 11-1](#listing-11-1).
 
 <Listing number="11-1" file-name="src/lib.rs" caption="The code generated automatically by `cargo new`">
 
@@ -76,8 +76,7 @@ which contains the result of calling `add` with 2 and 2, equals 4. This
 assertion serves as an example of the format for a typical test. Let’s run it
 to see that this test passes.
 
-The `cargo test` command runs all tests in our project, as shown in Listing
-11-2.
+The `cargo test` command runs all tests in our project, as shown in [Listing 11-2](#listing-11-2).
 
 <Listing number="11-2" caption="The output from running the automatically generated test">
 
@@ -135,7 +134,7 @@ fail when something in the test function panics. Each test is run in a new
 thread, and when the main thread sees that a test thread has died, the test is
 marked as failed. In Chapter 9, we talked about how the simplest way to panic
 is to call the `panic!` macro. Enter the new test as a function named
-`another`, so your _src/lib.rs_ file looks like Listing 11-3.
+`another`, so your _src/lib.rs_ file looks like [Listing 11-3](#listing-11-3).
 
 <Listing number="11-3" file-name="src/lib.rs" caption="Adding a second test that will fail because we call the `panic!` macro">
 
@@ -145,8 +144,7 @@ is to call the `panic!` macro. Enter the new test as a function named
 
 </Listing>
 
-Run the tests again using `cargo test`. The output should look like Listing
-11-4, which shows that our `exploration` test passed and `another` failed.
+Run the tests again using `cargo test`. The output should look like [Listing 11-4](#listing-11-4), which shows that our `exploration` test passed and `another` failed.
 
 <Listing number="11-4" caption="Test results when one test passes and one test fails">
 
@@ -187,8 +185,8 @@ to ensure that some condition in a test evaluates to `true`. We give the
 `assert!` macro calls `panic!` to cause the test to fail. Using the `assert!`
 macro helps us check that our code is functioning in the way we intend.
 
-In Chapter 5, Listing 5-15, we used a `Rectangle` struct and a `can_hold`
-method, which are repeated here in Listing 11-5. Let’s put this code in the
+In Chapter 5, [Listing 5-15](#listing-5-15), we used a `Rectangle` struct and a `can_hold`
+method, which are repeated here in [Listing 11-5](#listing-11-5). Let’s put this code in the
 _src/lib.rs_ file, then write some tests for it using the `assert!` macro.
 
 <Listing number="11-5" file-name="src/lib.rs" caption="The `Rectangle` struct and its `can_hold` method from Chapter 5">
@@ -200,7 +198,7 @@ _src/lib.rs_ file, then write some tests for it using the `assert!` macro.
 </Listing>
 
 The `can_hold` method returns a Boolean, which means it’s a perfect use case
-for the `assert!` macro. In Listing 11-6, we write a test that exercises the
+for the `assert!` macro. In [Listing 11-6](#listing-11-6), we write a test that exercises the
 `can_hold` method by creating a `Rectangle` instance that has a width of 8 and
 a height of 7 and asserting that it can hold another `Rectangle` instance that
 has a width of 5 and a height of 1.
@@ -280,7 +278,7 @@ fails, which makes it easier to see _why_ the test failed; conversely, the
 `assert!` macro only indicates that it got a `false` value for the `==`
 expression, without printing the values that led to the `false` value.
 
-In Listing 11-7, we write a function named `add_two` that adds `2` to its
+In [Listing 11-7](#listing-11-7), we write a function named `add_two` that adds `2` to its
 parameter, then we test this function using the `assert_eq!` macro.
 
 <Listing number="11-7" file-name="src/lib.rs" caption="Testing the function `add_two` using the `assert_eq!` macro">
@@ -346,7 +344,7 @@ the standard library types implement these traits. For structs and enums that
 you define yourself, you’ll need to implement `PartialEq` to assert equality of
 those types. You’ll also need to implement `Debug` to print the values when the
 assertion fails. Because both traits are derivable traits, as mentioned in
-Listing 5-12 in Chapter 5, this is usually as straightforward as adding the
+[Listing 5-12](#listing-5-12) in Chapter 5, this is usually as straightforward as adding the
 `#[derive(PartialEq, Debug)]` annotation to your struct or enum definition. See
 Appendix C, [“Derivable Traits,”][derivable-traits]<!-- ignore --> for more
 details about these and other derivable traits.
@@ -415,7 +413,7 @@ debug what happened instead of what we were expecting to happen.
 
 In addition to checking return values, it’s important to check that our code
 handles error conditions as we expect. For example, consider the `Guess` type
-that we created in Chapter 9, Listing 9-13. Other code that uses `Guess`
+that we created in Chapter 9, [Listing 9-13](#listing-9-13). Other code that uses `Guess`
 depends on the guarantee that `Guess` instances will contain only values
 between 1 and 100. We can write a test that ensures that attempting to create a
 `Guess` instance with a value outside that range panics.
@@ -424,7 +422,7 @@ We do this by adding the attribute `should_panic` to our test function. The
 test passes if the code inside the function panics; the test fails if the code
 inside the function doesn’t panic.
 
-Listing 11-8 shows a test that checks that the error conditions of `Guess::new`
+[Listing 11-8](#listing-11-8) shows a test that checks that the error conditions of `Guess::new`
 happen when we expect them to.
 
 <Listing number="11-8" file-name="src/lib.rs" caption="Testing that a condition will cause a `panic!`">
@@ -450,7 +448,7 @@ that the `new` function will panic if the value is greater than 100:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-08-guess-with-bug/src/lib.rs:here}}
 ```
 
-When we run the test in Listing 11-8, it will fail:
+When we run the test in [Listing 11-8](#listing-11-8), it will fail:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-08-guess-with-bug/output.txt}}
@@ -465,7 +463,7 @@ pass even if the test panics for a different reason from the one we were
 expecting. To make `should_panic` tests more precise, we can add an optional
 `expected` parameter to the `should_panic` attribute. The test harness will
 make sure that the failure message contains the provided text. For example,
-consider the modified code for `Guess` in Listing 11-9 where the `new` function
+consider the modified code for `Guess` in [Listing 11-9](#listing-11-9) where the `new` function
 panics with different messages depending on whether the value is too small or
 too large.
 
@@ -509,7 +507,7 @@ our bug is!
 ### Using `Result<T, E>` in Tests
 
 Our tests so far all panic when they fail. We can also write tests that use
-`Result<T, E>`! Here’s the test from Listing 11-1, rewritten to use `Result<T,
+`Result<T, E>`! Here’s the test from [Listing 11-1](#listing-11-1), rewritten to use `Result<T,
 E>` and return an `Err` instead of panicking:
 
 ```rust,noplayground

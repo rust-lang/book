@@ -9,7 +9,7 @@ lines of text in a file or the prices of items in a shopping cart.
 ### Creating a New Vector
 
 To create a new empty vector, we call the `Vec::new` function, as shown in
-Listing 8-1.
+[Listing 8-1](#listing-8-1).
 
 <Listing number="8-1" caption="Creating a new, empty vector to hold values of type `i32`">
 
@@ -25,13 +25,13 @@ store. This is an important point. Vectors are implemented using generics;
 we’ll cover how to use generics with your own types in Chapter 10. For now,
 know that the `Vec<T>` type provided by the standard library can hold any type.
 When we create a vector to hold a specific type, we can specify the type within
-angle brackets. In Listing 8-1, we’ve told Rust that the `Vec<T>` in `v` will
+angle brackets. In [Listing 8-1](#listing-8-1), we’ve told Rust that the `Vec<T>` in `v` will
 hold elements of the `i32` type.
 
 More often, you’ll create a `Vec<T>` with initial values and Rust will infer
 the type of value you want to store, so you rarely need to do this type
 annotation. Rust conveniently provides the `vec!` macro, which will create a
-new vector that holds the values you give it. Listing 8-2 creates a new
+new vector that holds the values you give it. [Listing 8-2](#listing-8-2) creates a new
 `Vec<i32>` that holds the values `1`, `2`, and `3`. The integer type is `i32`
 because that’s the default integer type, as we discussed in the [“Data
 Types”][data-types]<!-- ignore --> section of Chapter 3.
@@ -51,7 +51,7 @@ to modify a vector.
 ### Updating a Vector
 
 To create a vector and then add elements to it, we can use the `push` method,
-as shown in Listing 8-3.
+as shown in [Listing 8-3](#listing-8-3).
 
 <Listing number="8-3" caption="Using the `push` method to add values to a vector">
 
@@ -72,7 +72,7 @@ There are two ways to reference a value stored in a vector: via indexing or by
 using the `get` method. In the following examples, we’ve annotated the types of
 the values that are returned from these functions for extra clarity.
 
-Listing 8-4 shows both methods of accessing a value in a vector, with indexing
+[Listing 8-4](#listing-8-4) shows both methods of accessing a value in a vector, with indexing
 syntax and the `get` method.
 
 <Listing number="8-4" caption="Using indexing syntax and using the `get` method to access an item in a vector">
@@ -93,7 +93,7 @@ Rust provides these two ways to reference an element so you can choose how the
 program behaves when you try to use an index value outside the range of
 existing elements. As an example, let’s see what happens when we have a vector
 of five elements and then we try to access an element at index 100 with each
-technique, as shown in Listing 8-5.
+technique, as shown in [Listing 8-5](#listing-8-5).
 
 <Listing number="8-5" caption="Attempting to access the element at index 100 in a vector containing five elements">
 
@@ -123,7 +123,7 @@ When the program has a valid reference, the borrow checker enforces the
 ownership and borrowing rules (covered in Chapter 4) to ensure this reference
 and any other references to the contents of the vector remain valid. Recall the
 rule that states you can’t have mutable and immutable references in the same
-scope. That rule applies in Listing 8-6, where we hold an immutable reference
+scope. That rule applies in [Listing 8-6](#listing-8-6), where we hold an immutable reference
 to the first element in a vector and try to add an element to the end. This
 program won’t work if we also try to refer to that element later in the
 function.
@@ -142,7 +142,7 @@ Compiling this code will result in this error:
 {{#include ../listings/ch08-common-collections/listing-08-06/output.txt}}
 ```
 
-The code in Listing 8-6 might look like it should work: why should a reference
+The code in [Listing 8-6](#listing-8-6) might look like it should work: why should a reference
 to the first element care about changes at the end of the vector? This error is
 due to the way vectors work: because vectors put the values next to each other
 in memory, adding a new element onto the end of the vector might require
@@ -158,7 +158,7 @@ ending up in that situation.
 ### Iterating Over the Values in a Vector
 
 To access each element in a vector in turn, we would iterate through all of the
-elements rather than use indices to access one at a time. Listing 8-7 shows how
+elements rather than use indices to access one at a time. [Listing 8-7](#listing-8-7) shows how
 to use a `for` loop to get immutable references to each element in a vector of
 `i32` values and print them.
 
@@ -171,7 +171,7 @@ to use a `for` loop to get immutable references to each element in a vector of
 </Listing>
 
 We can also iterate over mutable references to each element in a mutable vector
-in order to make changes to all the elements. The `for` loop in Listing 8-8
+in order to make changes to all the elements. The `for` loop in [Listing 8-8](#listing-8-8)
 will add `50` to each element.
 
 <Listing number="8-8" caption="Iterating over mutable references to elements in a vector">
@@ -189,8 +189,8 @@ Pointer to the Value”][deref]<!-- ignore --> section of Chapter 15.
 
 Iterating over a vector, whether immutably or mutably, is safe because of the
 borrow checker’s rules. If we attempted to insert or remove items in the `for`
-loop bodies in Listing 8-7 and Listing 8-8, we would get a compiler error
-similar to the one we got with the code in Listing 8-6. The reference to the
+loop bodies in [Listing 8-7](#listing-8-7) and [Listing 8-8](#listing-8-8), we would get a compiler error
+similar to the one we got with the code in [Listing 8-6](#listing-8-6). The reference to the
 vector that the `for` loop holds prevents simultaneous modification of the
 whole vector.
 
@@ -207,7 +207,7 @@ some of the columns in the row contain integers, some floating-point numbers,
 and some strings. We can define an enum whose variants will hold the different
 value types, and all the enum variants will be considered the same type: that
 of the enum. Then we can create a vector to hold that enum and so, ultimately,
-hold different types. We’ve demonstrated this in Listing 8-9.
+hold different types. We’ve demonstrated this in [Listing 8-9](#listing-8-9).
 
 <Listing number="8-9" caption="Defining an `enum` to store values of different types in one vector">
 
@@ -237,7 +237,7 @@ addition to `push`, a `pop` method removes and returns the last element.
 ### Dropping a Vector Drops Its Elements
 
 Like any other `struct`, a vector is freed when it goes out of scope, as
-annotated in Listing 8-10.
+annotated in [Listing 8-10](#listing-8-10).
 
 <Listing number="8-10" caption="Showing where the vector and its elements are dropped">
 

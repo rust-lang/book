@@ -12,8 +12,7 @@ will never be dropped.
 ### Creating a Reference Cycle
 
 Let’s look at how a reference cycle might happen and how to prevent it,
-starting with the definition of the `List` enum and a `tail` method in Listing
-15-25.
+starting with the definition of the `List` enum and a `tail` method in [Listing 15-25](#listing-15-25).
 
 <Listing number="15-25" file-name="src/main.rs" caption="A cons list definition that holds a `RefCell<T>` so we can modify what a `Cons` variant is referring to">
 
@@ -23,15 +22,14 @@ starting with the definition of the `List` enum and a `tail` method in Listing
 
 </Listing>
 
-We’re using another variation of the `List` definition from Listing 15-5. The
+We’re using another variation of the `List` definition from [Listing 15-5](#listing-15-5). The
 second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
-instead of having the ability to modify the `i32` value as we did in Listing
-15-24, we want to modify the `List` value a `Cons` variant is pointing to.
+instead of having the ability to modify the `i32` value as we did in [Listing 15-24](#listing-15-24), we want to modify the `List` value a `Cons` variant is pointing to.
 We’re also adding a `tail` method to make it convenient for us to access the
 second item if we have a `Cons` variant.
 
-In Listing 15-26, we’re adding a `main` function that uses the definitions in
-Listing 15-25. This code creates a list in `a` and a list in `b` that points to
+In [Listing 15-26](#listing-15-26), we’re adding a `main` function that uses the definitions in
+[Listing 15-25](#listing-15-25). This code creates a list in `a` and a list in `b` that points to
 the list in `a`. Then it modifies the list in `a` to point to `b`, creating a
 reference cycle. There are `println!` statements along the way to show what the
 reference counts are at various points in this process.
@@ -101,7 +99,7 @@ Another solution for avoiding reference cycles is reorganizing your data
 structures so that some references express ownership and some references don’t.
 As a result, you can have cycles made up of some ownership relationships and
 some non-ownership relationships, and only the ownership relationships affect
-whether or not a value can be dropped. In Listing 15-25, we always want `Cons`
+whether or not a value can be dropped. In [Listing 15-25](#listing-15-25), we always want `Cons`
 variants to own their list, so reorganizing the data structure isn’t possible.
 Let’s look at an example using graphs made up of parent nodes and child nodes
 to see when non-ownership relationships are an appropriate way to prevent
@@ -163,7 +161,7 @@ modify which nodes are children of another node, so we have a `RefCell<T>` in
 
 Next, we’ll use our struct definition and create one `Node` instance named
 `leaf` with the value `3` and no children, and another instance named `branch`
-with the value `5` and `leaf` as one of its children, as shown in Listing 15-27.
+with the value `5` and `leaf` as one of its children, as shown in [Listing 15-27](#listing-15-27).
 
 <Listing number="15-27" file-name="src/main.rs" caption="Creating a `leaf` node with no children and a `branch` node with `leaf` as one of its children">
 
@@ -205,7 +203,7 @@ like this:
 ```
 
 A node will be able to refer to its parent node but doesn’t own its parent.
-In Listing 15-28, we update `main` to use this new definition so the `leaf`
+In [Listing 15-28](#listing-15-28), we update `main` to use this new definition so the `leaf`
 node will have a way to refer to its parent, `branch`.
 
 <Listing number="15-28" file-name="src/main.rs" caption="A `leaf` node with a weak reference to its parent node `branch`">
@@ -216,7 +214,7 @@ node will have a way to refer to its parent, `branch`.
 
 </Listing>
 
-Creating the `leaf` node looks similar to Listing 15-27 with the exception of
+Creating the `leaf` node looks similar to [Listing 15-27](#listing-15-27) with the exception of
 the `parent` field: `leaf` starts out without a parent, so we create a new,
 empty `Weak<Node>` reference instance.
 
@@ -240,7 +238,7 @@ the `Rc<Node>` in `branch`.
 When we print the parent of `leaf` again, this time we’ll get a `Some` variant
 holding `branch`: now `leaf` can access its parent! When we print `leaf`, we
 also avoid the cycle that eventually ended in a stack overflow like we had in
-Listing 15-26; the `Weak<Node>` references are printed as `(Weak)`:
+[Listing 15-26](#listing-15-26); the `Weak<Node>` references are printed as `(Weak)`:
 
 ```text
 leaf parent = Some(Node { value: 5, parent: RefCell { value: (Weak) },
@@ -258,7 +256,7 @@ Let’s look at how the `strong_count` and `weak_count` values of the `Rc<Node>`
 instances change by creating a new inner scope and moving the creation of
 `branch` into that scope. By doing so, we can see what happens when `branch` is
 created and then dropped when it goes out of scope. The modifications are shown
-in Listing 15-29.
+in [Listing 15-29](#listing-15-29).
 
 <Listing number="15-29" file-name="src/main.rs" caption="Creating `branch` in an inner scope and examining strong and weak reference counts">
 

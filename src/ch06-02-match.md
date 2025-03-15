@@ -22,7 +22,7 @@ the value falls into the associated code block to be used during execution.
 Speaking of coins, let’s use them as an example using `match`! We can write a
 function that takes an unknown US coin and, in a similar way as the counting
 machine, determines which coin it is and returns its value in cents, as shown
-in Listing 6-3.
+in [Listing 6-3](#listing-6-3).
 
 <Listing number="6-3" caption="An enum and a `match` expression that has the variants of the enum as its patterns">
 
@@ -48,14 +48,14 @@ When the `match` expression executes, it compares the resultant value against
 the pattern of each arm, in order. If a pattern matches the value, the code
 associated with that pattern is executed. If that pattern doesn’t match the
 value, execution continues to the next arm, much as in a coin-sorting machine.
-We can have as many arms as we need: in Listing 6-3, our `match` has four arms.
+We can have as many arms as we need: in [Listing 6-3](#listing-6-3), our `match` has four arms.
 
 The code associated with each arm is an expression, and the resultant value of
 the expression in the matching arm is the value that gets returned for the
 entire `match` expression.
 
 We don’t typically use curly brackets if the match arm code is short, as it is
-in Listing 6-3 where each arm just returns a value. If you want to run multiple
+in [Listing 6-3](#listing-6-3) where each arm just returns a value. If you want to run multiple
 lines of code in a match arm, you must use curly brackets, and the comma
 following the arm is then optional. For example, the following code prints
 “Lucky penny!” every time the method is called with a `Coin::Penny`, but still
@@ -76,7 +76,7 @@ From 1999 through 2008, the United States minted quarters with different
 designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
 our `enum` by changing the `Quarter` variant to include a `UsState` value
-stored inside it, which we’ve done in Listing 6-4.
+stored inside it, which we’ve done in [Listing 6-4](#listing-6-4).
 
 <Listing number="6-4" caption="A `Coin` enum in which the `Quarter` variant also holds a `UsState` value">
 
@@ -121,7 +121,7 @@ the function should return the `None` value and not attempt to perform any
 operations.
 
 This function is very easy to write, thanks to `match`, and will look like
-Listing 6-5.
+[Listing 6-5](#listing-6-5).
 
 <Listing number="6-5" caption="A function that uses a `match` expression on an `Option<i32>`">
 
@@ -151,7 +151,7 @@ binds to the value contained in `Some`, so `i` takes the value `5`. The code in
 the match arm is then executed, so we add 1 to the value of `i` and create a
 new `Some` value with our total `6` inside.
 
-Now let’s consider the second call of `plus_one` in Listing 6-5, where `x` is
+Now let’s consider the second call of `plus_one` in [Listing 6-5](#listing-6-5), where `x` is
 `None`. We enter the `match` and compare to the first arm:
 
 ```rust,ignore

@@ -59,7 +59,7 @@ passes, we won’t see the `println!` output in the terminal; we’ll see only t
 line that indicates the test passed. If a test fails, we’ll see whatever was
 printed to standard output with the rest of the failure message.
 
-As an example, Listing 11-10 has a silly function that prints the value of its
+As an example, [Listing 11-10](#listing-11-10) has a silly function that prints the value of its
 parameter and returns 10, as well as a test that passes and a test that fails.
 
 <Listing number="11-10" file-name="src/lib.rs" caption="Tests for a function that calls `println!`">
@@ -88,7 +88,7 @@ also show the output of successful tests with `--show-output`:
 $ cargo test -- --show-output
 ```
 
-When we run the tests in Listing 11-10 again with the `--show-output` flag, we
+When we run the tests in [Listing 11-10](#listing-11-10) again with the `--show-output` flag, we
 see the following output:
 
 ```console
@@ -103,7 +103,7 @@ that code. You can choose which tests to run by passing `cargo test` the name
 or names of the test(s) you want to run as an argument.
 
 To demonstrate how to run a subset of tests, we’ll first create three tests for
-our `add_two` function, as shown in Listing 11-11, and choose which ones to run.
+our `add_two` function, as shown in [Listing 11-11](#listing-11-11), and choose which ones to run.
 
 <Listing number="11-11" file-name="src/lib.rs" caption="Three tests with three different names">
 

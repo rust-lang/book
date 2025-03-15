@@ -14,7 +14,7 @@ with function pointers will allow you to use functions as arguments to other
 functions.
 
 The syntax for specifying that a parameter is a function pointer is similar to
-that of closures, as shown in Listing 20-28, where we’ve defined a function
+that of closures, as shown in [Listing 20-28](#listing-20-28), where we’ve defined a function
 `add_one` that adds 1 to its parameter. The function `do_twice` takes two
 parameters: a function pointer to any function that takes an `i32` parameter
 and returns an `i32`, and one `i32` value. The `do_twice` function calls the
@@ -52,7 +52,7 @@ functions can accept functions as arguments, but C doesn’t have closures.
 As an example of where you could use either a closure defined inline or a named
 function, let’s look at a use of the `map` method provided by the `Iterator`
 trait in the standard library. To use the `map` method to turn a vector of
-numbers into a vector of strings, we could use a closure, as in Listing 20-29.
+numbers into a vector of strings, we could use a closure, as in [Listing 20-29](#listing-20-29).
 
 <Listing number="20-29" caption="Using a closure with the `map` method to convert numbers to strings">
 
@@ -63,7 +63,7 @@ numbers into a vector of strings, we could use a closure, as in Listing 20-29.
 </Listing>
 
 Or we could name a function as the argument to map instead of the closure.
-Listing 20-30 shows what this would look like.
+[Listing 20-30](#listing-20-30) shows what this would look like.
 
 <Listing number="20-30" caption="Using the `String::to_string` method to convert numbers to strings">
 
@@ -85,7 +85,7 @@ Recall from [“Enum values”][enum-values]<!-- ignore --> in Chapter 6 that th
 name of each enum variant that we define also becomes an initializer function.
 We can use these initializer functions as function pointers that implement the
 closure traits, which means we can specify the initializer functions as
-arguments for methods that take closures, as seen in Listing 20-31.
+arguments for methods that take closures, as seen in [Listing 20-31](#listing-20-31).
 
 <Listing number="20-31" caption="Using an enum initializers with the `map` method to create a `Status` instance from numbers">
 
@@ -112,7 +112,7 @@ for example.
 
 Instead, you will normally use the `impl Trait` syntax we learned about in
 Chapter 10. You can return any function type, using `Fn`, `FnOnce` and `FnMut`.
-For example, the code in Listing 20-32 will work just fine.
+For example, the code in [Listing 20-32](#listing-20-32) will work just fine.
 
 <Listing number="20-32" caption="Returning a closure from a function using the `impl Trait` syntax">
 
@@ -127,7 +127,7 @@ Annotation”][closure-types]<!-- ignore --> in Chapter 13, each closure is also
 its own distinct type. If you need to work with multiple functions that have the
 same signature but different implementations, you will need to use a trait
 object for them. Consider what happens if you write code like that shown in
-Listing 20-33.
+[Listing 20-33](#listing-20-33).
 
 <Listing file-name="src/main.rs" number="20-33" caption="Creating a `Vec<T>` of closures defined by functions that return `impl Fn`">
 
@@ -154,7 +154,7 @@ each are distinct. (This is similar to how Rust produces different concrete
 types for distinct async blocks even when they have the same output type, as we
 saw in [“Working with Any Number of Futures”][any-number-of-futures] in Chapter
 17. We have seen a solution to this problem a few times now: we can use a trait
-object, as in Listing 20-34.
+object, as in [Listing 20-34](#listing-20-34).
 
 <Listing number="20-34" caption="Creating a `Vec<T>` of closures defined by functions that return `Box<dyn Fn>` so they have the same type">
 

@@ -24,7 +24,7 @@ You specify the code to run when a value goes out of scope by implementing the
 `drop` that takes a mutable reference to `self`. To see when Rust calls `drop`,
 let’s implement `drop` with `println!` statements for now.
 
-Listing 15-14 shows a `CustomSmartPointer` struct whose only custom
+[Listing 15-14](#listing-15-14) shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print `Dropping CustomSmartPointer!` when the
 instance goes out of scope, to show when Rust runs the `drop` method.
 
@@ -77,7 +77,7 @@ you have to call the `std::mem::drop` function provided by the standard library
 if you want to force a value to be dropped before the end of its scope.
 
 If we try to call the `Drop` trait’s `drop` method manually by modifying the
-`main` function from Listing 15-14, as shown in Listing 15-15, we’ll get a
+`main` function from [Listing 15-14](#listing-15-14), as shown in [Listing 15-15](#listing-15-15), we’ll get a
 compiler error.
 
 <Listing number="15-15" file-name="src/main.rs" caption="Attempting to call the `drop` method from the `Drop` trait manually to clean up early">
@@ -111,8 +111,8 @@ a value to be cleaned up early, we use the `std::mem::drop` function.
 
 The `std::mem::drop` function is different from the `drop` method in the `Drop`
 trait. We call it by passing as an argument the value we want to force-drop.
-The function is in the prelude, so we can modify `main` in Listing 15-15 to
-call the `drop` function, as shown in Listing 15-16.
+The function is in the prelude, so we can modify `main` in [Listing 15-15](#listing-15-15) to
+call the `drop` function, as shown in [Listing 15-16](#listing-15-16).
 
 <Listing number="15-16" file-name="src/main.rs" caption="Calling `std::mem::drop` to explicitly drop a value before it goes out of scope">
 

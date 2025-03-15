@@ -64,7 +64,7 @@ We can use the backtrace of the functions the `panic!` call came from to figure
 out the part of our code that is causing the problem. To understand how to use
 a `panic!` backtrace, let’s look at another example and see what it’s like when
 a `panic!` call comes from a library because of a bug in our code instead of
-from our code calling the macro directly. Listing 9-1 has some code that
+from our code calling the macro directly. [Listing 9-1](#listing-9-1) has some code that
 attempts to access an index in a vector beyond the range of valid indexes.
 
 <Listing number="9-1" file-name="src/main.rs" caption="Attempting to access an element beyond the end of a vector, which will cause a call to `panic!`">
@@ -110,7 +110,7 @@ are code that your code has called; the lines below are code that called your
 code. These before-and-after lines might include core Rust code, standard
 library code, or crates that you’re using. Let’s try getting a backtrace by
 setting the `RUST_BACKTRACE` environment variable to any value except `0`.
-Listing 9-2 shows output similar to what you’ll see.
+[Listing 9-2](#listing-9-2) shows output similar to what you’ll see.
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/listing-09-01
@@ -153,10 +153,10 @@ information, debug symbols must be enabled. Debug symbols are enabled by
 default when using `cargo build` or `cargo run` without the `--release` flag,
 as we have here.
 
-In the output in Listing 9-2, line 6 of the backtrace points to the line in our
+In the output in [Listing 9-2](#listing-9-2), line 6 of the backtrace points to the line in our
 project that’s causing the problem: line 4 of _src/main.rs_. If we don’t want
 our program to panic, we should start our investigation at the location pointed
-to by the first line mentioning a file we wrote. In Listing 9-1, where we
+to by the first line mentioning a file we wrote. In [Listing 9-1](#listing-9-1), where we
 deliberately wrote code that would panic, the way to fix the panic is to not
 request an element beyond the range of the vector indexes. When your code
 panics in the future, you’ll need to figure out what action the code is taking

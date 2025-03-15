@@ -24,8 +24,7 @@ reply to another post.
 We want to make a media aggregator library crate named `aggregator` that can
 display summaries of data that might be stored in a `NewsArticle` or
 `SocialPost` instance. To do this, we need a summary from each type, and we’ll
-request that summary by calling a `summarize` method on an instance. Listing
-10-12 shows the definition of a public `Summary` trait that expresses this
+request that summary by calling a `summarize` method on an instance. [Listing 10-12](#listing-10-12) shows the definition of a public `Summary` trait that expresses this
 behavior.
 
 <Listing number="10-12" file-name="src/lib.rs" caption="A `Summary` trait that consists of the behavior provided by a `summarize` method">
@@ -55,7 +54,7 @@ one per line, and each line ends in a semicolon.
 ### Implementing a Trait on a Type
 
 Now that we’ve defined the desired signatures of the `Summary` trait’s methods,
-we can implement it on the types in our media aggregator. Listing 10-13 shows
+we can implement it on the types in our media aggregator. [Listing 10-13](#listing-10-13) shows
 an implementation of the `Summary` trait on the `NewsArticle` struct that uses
 the headline, the author, and the location to create the return value of
 `summarize`. For the `SocialPost` struct, we define `summarize` as the username
@@ -119,9 +118,9 @@ in a trait instead of requiring implementations for all methods on every type.
 Then, as we implement the trait on a particular type, we can keep or override
 each method’s default behavior.
 
-In Listing 10-14, we specify a default string for the `summarize` method of the
+In [Listing 10-14](#listing-10-14), we specify a default string for the `summarize` method of the
 `Summary` trait instead of only defining the method signature, as we did in
-Listing 10-12.
+[Listing 10-12](#listing-10-12).
 
 <Listing number="10-14" file-name="src/lib.rs" caption="Defining a `Summary` trait with a default implementation of the `summarize` method">
 
@@ -146,7 +145,7 @@ the `summarize` method on an instance of `NewsArticle`, like this:
 This code prints `New article available! (Read more...)`.
 
 Creating a default implementation doesn’t require us to change anything about
-the implementation of `Summary` on `SocialPost` in Listing 10-13. The reason is
+the implementation of `Summary` on `SocialPost` in [Listing 10-13](#listing-10-13). The reason is
 that the syntax for overriding a default implementation is the same as the
 syntax for implementing a trait method that doesn’t have a default
 implementation.
@@ -191,7 +190,7 @@ overriding implementation of that same method.
 Now that you know how to define and implement traits, we can explore how to use
 traits to define functions that accept many different types. We’ll use the
 `Summary` trait we implemented on the `NewsArticle` and `SocialPost` types in
-Listing 10-13 to define a `notify` function that calls the `summarize` method
+[Listing 10-13](#listing-10-13) to define a `notify` function that calls the `summarize` method
 on its `item` parameter, which is of some type that implements the `Summary`
 trait. To do this, we use the `impl Trait` syntax, like this:
 
@@ -332,7 +331,7 @@ Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- igno
 
 By using a trait bound with an `impl` block that uses generic type parameters,
 we can implement methods conditionally for types that implement the specified
-traits. For example, the type `Pair<T>` in Listing 10-15 always implements the
+traits. For example, the type `Pair<T>` in [Listing 10-15](#listing-10-15) always implements the
 `new` function to return a new instance of `Pair<T>` (recall from the
 [“Defining Methods”][methods]<!-- ignore --> section of Chapter 5 that `Self`
 is a type alias for the type of the `impl` block, which in this case is
