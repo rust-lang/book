@@ -329,7 +329,8 @@ Within the `unsafe extern "C"` block, we list the names and signatures of
 external functions from another language we want to call. The `"C"` part defines
 which _application binary interface (ABI)_ the external function uses: the ABI
 defines how to call the function at the assembly level. The `"C"` ABI is the
-most common and follows the C programming language’s ABI.
+most common and follows the C programming language’s ABI. Information about all
+the ABIs Rust supports is available in [the Rust Reference][ABI].
 
 Every item declared within an `unsafe extern` block is implicitly `unsafe`.
 However, some FFI functions *are* safe to call. For example, the `abs` function
@@ -486,7 +487,7 @@ The final action that works only with `unsafe` is accessing fields of a union. A
 particular instance at one time. Unions are primarily used to interface with
 unions in C code. Accessing union fields is unsafe because Rust can’t guarantee
 the type of the data currently being stored in the union instance. You can learn
-more about unions in [the Rust Reference][reference].
+more about unions in [the Rust Reference][unions].
 
 ### Using Miri to Check Unsafe Code
 
@@ -548,10 +549,11 @@ For a much deeper exploration of how to work effectively with unsafe Rust, read
 Rust’s official guide to the subject, the [Rustonomicon][nomicon].
 
 [dangling-references]: ch04-02-references-and-borrowing.html#dangling-references
+[ABI]: ../reference/items/external-blocks.html#abi
 [differences-between-variables-and-constants]: ch03-01-variables-and-mutability.html#constants
 [extensible-concurrency-with-the-sync-and-send-traits]: ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits
 [the-slice-type]: ch04-03-slices.html#the-slice-type
-[reference]: ../reference/items/unions.html
+[unions]: ../reference/items/unions.html
 [miri]: https://github.com/rust-lang/miri
 [editions]: appendix-05-editions.html
 [nightly]: appendix-07-nightly-rust.html
