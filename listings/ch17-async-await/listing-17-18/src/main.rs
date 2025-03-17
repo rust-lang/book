@@ -1,17 +1,19 @@
 extern crate trpl; // required for mdbook test
 
-use std::{
-    future::Future,
-    pin::{Pin, pin},
-    time::Duration,
-};
+// ANCHOR: here
+use std::pin::Pin;
+
+// -- snip --
+
+// ANCHOR_END: here
+use std::time::Duration;
 
 fn main() {
     trpl::run(async {
         let (tx, mut rx) = trpl::channel();
 
         let tx1 = tx.clone();
-        let tx1_fut = pin!(async move {
+        let tx1_fut = async move {
             let vals = vec![
                 String::from("hi"),
                 String::from("from"),
@@ -23,15 +25,15 @@ fn main() {
                 tx1.send(val).unwrap();
                 trpl::sleep(Duration::from_secs(1)).await;
             }
-        });
+        };
 
-        let rx_fut = pin!(async {
+        let rx_fut = async {
             while let Some(value) = rx.recv().await {
                 println!("received '{value}'");
             }
-        });
+        };
 
-        let tx_fut = pin!(async move {
+        let tx_fut = async move {
             let vals = vec![
                 String::from("more"),
                 String::from("messages"),
@@ -43,7 +45,7 @@ fn main() {
                 tx.send(val).unwrap();
                 trpl::sleep(Duration::from_secs(1)).await;
             }
-        });
+        };
 
         // ANCHOR: here
         let futures: Vec<Pin<Box<dyn Future<Output = ()>>>> =

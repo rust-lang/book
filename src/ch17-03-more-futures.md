@@ -196,9 +196,9 @@ tell us that the first async block (`src/main.rs:8:23: 20:10`) does not
 implement the `Unpin` trait and suggests using `pin!` or `Box::pin` to resolve
 it. Later in the chapter, we’ll dig into a few more details about `Pin` and
 `Unpin`. For the moment, though, we can just follow the compiler’s advice to get
-unstuck. In Listing 17-18, we start by updating the type annotation for
-`futures`, with a `Pin` wrapping each `Box`. Second, we use `Box::pin` to pin
-the futures themselves.
+unstuck. In Listing 17-18, we start by importing `Pin` from `std::pin`. Next we
+update the type annotation for `futures`, with a `Pin` wrapping each `Box`.
+Finally, we use `Box::pin` to pin the futures themselves.
 
 <Listing number="17-18" caption="Using `Pin` and `Box::pin` to make the `Vec` type check" file-name="src/main.rs">
 
@@ -238,9 +238,10 @@ future, using the `std::pin::pin` macro.
 
 However, we must still be explicit about the type of the pinned reference;
 otherwise, Rust will still not know to interpret these as dynamic trait objects,
-which is what we need them to be in the `Vec`. We therefore `pin!` each future
-when we define it, and define `futures` as a `Vec` containing pinned mutable
-references to the dynamic future type, as in Listing 17-19.
+which is what we need them to be in the `Vec`. We therefore add `pin` to our
+list of imports from `std::pin`. Then we can `pin!` each future when we define
+it and define `futures` as a `Vec` containing pinned mutable references to the
+dynamic future type, as in Listing 17-19.
 
 <Listing number="17-19" caption="Using `Pin` directly with the `pin!` macro to avoid unnecessary heap allocations" file-name="src/main.rs">
 
