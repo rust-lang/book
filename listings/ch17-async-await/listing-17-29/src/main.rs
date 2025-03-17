@@ -1,6 +1,6 @@
 extern crate trpl; // required for mdbook test
 
-use std::{future::Future, time::Duration};
+use std::time::Duration;
 
 // ANCHOR: implementation
 use trpl::Either;
