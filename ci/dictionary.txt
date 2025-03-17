@@ -152,6 +152,7 @@ durations
 ebook
 ebooks
 Edsger
+efdcd
 egular
 ElementRef
 else's
@@ -206,6 +207,7 @@ grapheme
 Grapheme
 growable
 gzip
+handcoded
 handoff
 hardcode
 hardcoded
@@ -254,6 +256,7 @@ interoperate
 IntoFuture
 IntoIterator
 intra
+intratask
 InvalidDigit
 invariants
 ioerror
@@ -361,6 +364,7 @@ nondeterministic
 nonequality
 nongeneric
 noplayground
+NoStarch
 NotFound
 nsprust
 null's
@@ -439,6 +443,7 @@ reformats
 refutability
 reimplement
 RemAssign
+repost
 repr
 representable
 request's
@@ -484,6 +489,7 @@ sizeof
 SliceIndex
 Smalltalk
 snuck
+SocialPost
 someproject
 SomeType
 someusername
@@ -524,6 +530,7 @@ suboptimal
 subpath
 subslices
 substring
+subtasks
 subteams
 subtree
 subtyping

@@ -62,11 +62,11 @@ when it’s safe to assume the number is positive, it’s shown with no sign.
 Signed numbers are stored using [two’s complement][twos-complement]<!-- ignore
 --> representation.
 
-Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
-1</sup> - 1 inclusive, where _n_ is the number of bits that variant uses. So an
-`i8` can store numbers from -(2<sup>7</sup>) to 2<sup>7</sup> - 1, which equals
--128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1,
-so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
+Each signed variant can store numbers from −(2<sup>n − 1</sup>) to 2<sup>n −
+1</sup> − 1 inclusive, where _n_ is the number of bits that variant uses. So an
+`i8` can store numbers from −(2<sup>7</sup>) to 2<sup>7</sup> − 1, which equals
+−128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> − 1,
+so a `u8` can store numbers from 0 to 2<sup>8</sup> − 1, which equals 0 to 255.
 
 Additionally, the `isize` and `usize` types depend on the architecture of the
 computer your program is running on, which is denoted in the table as “arch”:
@@ -120,7 +120,7 @@ some sort of collection.
 >
 > - Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`.
 > - Return the `None` value if there is overflow with the `checked_*` methods.
-> - Return the value and a boolean indicating whether there was overflow with
+> - Return the value and a Boolean indicating whether there was overflow with
 >   the `overflowing_*` methods.
 > - Saturate at the value’s minimum or maximum values with the `saturating_*`
 >   methods.

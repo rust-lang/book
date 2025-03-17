@@ -178,7 +178,7 @@ input:
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
-If we hadn’t imported the `io` library with `use std::io;` at the beginning of
+If we hadn’t imported the `io` module with `use std::io;` at the beginning of
 the program, we could still use the function by writing this function call as
 `std::io::stdin`. The `stdin` function returns an instance of
 [`std::io::Stdin`][iostdin]<!-- ignore -->, which is a type that represents a
@@ -238,8 +238,8 @@ possible state a _variant_.
 of these `Result` types is to encode error-handling information.
 
 `Result`’s variants are `Ok` and `Err`. The `Ok` variant indicates the
-operation was successful, and inside `Ok` is the successfully generated value.
-The `Err` variant means the operation failed, and `Err` contains information
+operation was successful, and it contains the successfully generated value.
+The `Err` variant means the operation failed, and it contains information
 about how or why the operation failed.
 
 Values of the `Result` type, like values of any type, have methods defined on
@@ -380,29 +380,25 @@ cargo build -->
 
 ```console
 $ cargo build
-    Updating crates.io index
-     Locking 16 packages to latest compatible versions
-      Adding wasi v0.11.0+wasi-snapshot-preview1 (latest: v0.13.3+wasi-0.2.2)
-      Adding zerocopy v0.7.35 (latest: v0.8.9)
-      Adding zerocopy-derive v0.7.35 (latest: v0.8.9)
-  Downloaded syn v2.0.87
-  Downloaded 1 crate (278.1 KB) in 0.16s
-   Compiling proc-macro2 v1.0.89
-   Compiling unicode-ident v1.0.13
-   Compiling libc v0.2.161
-   Compiling cfg-if v1.0.0
-   Compiling byteorder v1.5.0
-   Compiling getrandom v0.2.15
-   Compiling rand_core v0.6.4
-   Compiling quote v1.0.37
-   Compiling syn v2.0.87
-   Compiling zerocopy-derive v0.7.35
-   Compiling zerocopy v0.7.35
-   Compiling ppv-lite86 v0.2.20
-   Compiling rand_chacha v0.3.1
-   Compiling rand v0.8.5
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.69s
+  Updating crates.io index
+   Locking 15 packages to latest Rust 1.85.0 compatible versions
+    Adding rand v0.8.5 (available: v0.9.0)
+ Compiling proc-macro2 v1.0.93
+ Compiling unicode-ident v1.0.17
+ Compiling libc v0.2.170
+ Compiling cfg-if v1.0.0
+ Compiling byteorder v1.5.0
+ Compiling getrandom v0.2.15
+ Compiling rand_core v0.6.4
+ Compiling quote v1.0.38
+ Compiling syn v2.0.98
+ Compiling zerocopy-derive v0.7.35
+ Compiling zerocopy v0.7.35
+ Compiling ppv-lite86 v0.2.20
+ Compiling rand_chacha v0.3.1
+ Compiling rand v0.8.5
+ Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+  Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.48s
 ```
 
 </Listing>
@@ -487,7 +483,8 @@ as a guide to creating the hypothetical output shown here -->
 ```console
 $ cargo update
     Updating crates.io index
-    Updating rand v0.8.5 -> v0.8.6
+     Locking 1 package to latest Rust 1.85.0 compatible version
+    Updating rand v0.8.5 -> v0.8.6 (available: v0.9.0)
 ```
 
 Cargo ignores the 0.9.0 release. At this point, you would also notice a change
@@ -804,7 +801,9 @@ You guessed: 59
 You win!
 Please input your guess.
 quit
-thread 'main' panicked at 'Please type a number!: ParseIntError { kind: InvalidDigit }', src/main.rs:28:47
+
+thread 'main' panicked at src/main.rs:28:47:
+Please type a number!: ParseIntError { kind: InvalidDigit }
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
@@ -857,7 +856,7 @@ If `parse` is _not_ able to turn the string into a number, it will return an
 `Err` value that contains more information about the error. The `Err` value
 does not match the `Ok(num)` pattern in the first `match` arm, but it does
 match the `Err(_)` pattern in the second arm. The underscore, `_`, is a
-catchall value; in this example, we’re saying we want to match all `Err`
+catch-all value; in this example, we’re saying we want to match all `Err`
 values, no matter what information they have inside them. So the program will
 execute the second arm’s code, `continue`, which tells the program to go to the
 next iteration of the `loop` and ask for another guess. So, effectively, the

@@ -31,17 +31,17 @@ cargo install something you don't have, copy relevant output below
 ```console
 $ cargo install ripgrep
     Updating crates.io index
-  Downloaded ripgrep v13.0.0
-  Downloaded 1 crate (243.3 KB) in 0.88s
-  Installing ripgrep v13.0.0
+  Downloaded ripgrep v14.1.1
+  Downloaded 1 crate (213.6 KB) in 0.40s
+  Installing ripgrep v14.1.1
 --snip--
-   Compiling ripgrep v13.0.0
-    Finished `release` profile [optimized + debuginfo] target(s) in 10.64s
+   Compiling grep v0.3.2
+    Finished `release` profile [optimized + debuginfo] target(s) in 6.73s
   Installing ~/.cargo/bin/rg
-   Installed package `ripgrep v13.0.0` (executable `rg`)
+   Installed package `ripgrep v14.1.1` (executable `rg`)
 ```
 
 The second-to-last line of the output shows the location and the name of the
 installed binary, which in the case of `ripgrep` is `rg`. As long as the
 installation directory is in your `$PATH`, as mentioned previously, you can
-then run `rg --help` and start using a faster, rustier tool for searching files!
+then run `rg --help` and start using a faster, Rustier tool for searching files!

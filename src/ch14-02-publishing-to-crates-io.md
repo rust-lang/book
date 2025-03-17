@@ -81,7 +81,8 @@ test` will run the code examples in your documentation as tests! Nothing is
 better than documentation with examples. But nothing is worse than examples
 that don’t work because the code has changed since the documentation was
 written. If we run `cargo test` with the documentation for the `add_one`
-function from Listing 14-1, we will see a section in the test results like this:
+function from Listing 14-1, we will see a section in the test results that looks
+like this:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/listing-14-01/
@@ -98,7 +99,7 @@ test src/lib.rs - add_one (line 5) ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
 ```
 
-Now if we change either the function or the example so the `assert_eq!` in the
+Now, if we change either the function or the example so the `assert_eq!` in the
 example panics and run `cargo test` again, we’ll see that the doc tests catch
 that the example and the code are out of sync with each other!
 
@@ -130,7 +131,7 @@ comments describe the entire crate.
 
 When we run `cargo doc --open`, these comments will display on the front
 page of the documentation for `my_crate` above the list of public items in the
-crate, as shown in Figure 14-2:
+crate, as shown in Figure 14-2.
 
 <img alt="Rendered HTML documentation with a comment for the crate as a whole" src="img/trpl14-02.png" class="center" />
 
@@ -161,7 +162,7 @@ They might also be annoyed at having to enter `use`
 The good news is that if the structure _isn’t_ convenient for others to use
 from another library, you don’t have to rearrange your internal organization:
 instead, you can re-export items to make a public structure that’s different
-from your private structure by using `pub use`. Re-exporting takes a public
+from your private structure by using `pub use`. *Re-exporting* takes a public
 item in one location and makes it public in another location, as if it were
 defined in the other location instead.
 
@@ -306,7 +307,8 @@ Even if you’ve chosen a unique name, when you run `cargo publish` to publish
 the crate at this point, you’ll get a warning and then an error:
 
 <!-- manual-regeneration
-cd listings/ch14-more-about-cargo/listing-14-01/
+Create a new package with an unregistered name, making no further modifications
+  to the generated package, so it is missing the description and license fields.
 cargo publish
 copy just the relevant lines below
 -->
@@ -320,17 +322,17 @@ See https://doc.rust-lang.org/cargo/reference/manifest.html#package-metadata for
 error: failed to publish to registry at https://crates.io
 
 Caused by:
-  the remote server responded with an error (status 400 Bad Request): missing or empty metadata fields: description, license. Please see https://doc.rust-lang.org/cargo/reference/manifest.html for more information on configuring these field
+  the remote server responded with an error (status 400 Bad Request): missing or empty metadata fields: description, license. Please see https://doc.rust-lang.org/cargo/reference/manifest.html for more information on configuring these fields
 ```
 
-This errors because you’re missing some crucial information: a description and
-license are required so people will know what your crate does and under what
-terms they can use it. In _Cargo.toml_, add a description that's just a
-sentence or two, because it will appear with your crate in search results. For
-the `license` field, you need to give a _license identifier value_. The [Linux
-Foundation’s Software Package Data Exchange (SPDX)][spdx] lists the identifiers
-you can use for this value. For example, to specify that you’ve licensed your
-crate using the MIT License, add the `MIT` identifier:
+This results in an error because you’re missing some crucial information: a
+description and license are required so people will know what your crate does
+and under what terms they can use it. In _Cargo.toml_, add a description that's
+just a sentence or two, because it will appear with your crate in search
+results. For the `license` field, you need to give a _license identifier value_.
+The [Linux Foundation’s Software Package Data Exchange (SPDX)][spdx] lists the
+identifiers you can use for this value. For example, to specify that you’ve
+licensed your crate using the MIT License, add the `MIT` identifier:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -360,7 +362,7 @@ _Cargo.toml_ file for a project that is ready to publish might look like this:
 [package]
 name = "guessing_game"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 description = "A fun game where you guess what number the computer has chosen."
 license = "MIT OR Apache-2.0"
 
@@ -425,9 +427,9 @@ Then run `cargo publish` to upload the new version.
 Although you can’t remove previous versions of a crate, you can prevent any
 future projects from adding them as a new dependency. This is useful when a
 crate version is broken for one reason or another. In such situations, Cargo
-supports _yanking_ a crate version.
+supports yanking a crate version.
 
-Yanking a version prevents new projects from depending on that version while
+_Yanking_ a version prevents new projects from depending on that version while
 allowing all existing projects that depend on it to continue. Essentially, a
 yank means that all projects with a _Cargo.lock_ will not break, and any future
 _Cargo.lock_ files generated will not use the yanked version.

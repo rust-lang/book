@@ -60,7 +60,7 @@ fn main() {
 
 Here are the relevant sections in the new and old books:
 
-* **[in the current edition: Ch 17.02 — Trait Objects][2]**
+* **[in the current edition: Ch 18.02 — Trait Objects][2]**
 * <small>[In the first edition: Ch 3.22 — Trait Objects][1]</small>
 
 

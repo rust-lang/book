@@ -6,11 +6,11 @@ concepts we covered in the final chapters, as well as recap some earlier
 lessons.
 
 For our final project, we’ll make a web server that says “hello” and looks like
-Figure 20-1 in a web browser.
+Figure 21-1 in a web browser.
 
-![hello from rust](img/trpl20-01.png)
+![hello from rust](img/trpl21-01.png)
 
-<span class="caption">Figure 20-1: Our final shared project</span>
+<span class="caption">Figure 21-1: Our final shared project</span>
 
 Here is our plan for building the web server:
 
@@ -20,7 +20,7 @@ Here is our plan for building the web server:
 4. Create a proper HTTP response.
 5. Improve the throughput of our server with a thread pool.
 
-Before we get started, we should mention two details: First, the method we’ll
+Before we get started, we should mention two details. First, the method we’ll
 use won’t be the best way to build a web server with Rust. Community members
 have published a number of production-ready crates available on
 [crates.io](https://crates.io/) that provide more complete web server and thread

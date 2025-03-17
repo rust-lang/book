@@ -67,12 +67,12 @@ Consider the code in Listing 11-12 with the private function `internal_adder`.
 
 Note that the `internal_adder` function is not marked as `pub`. Tests are just
 Rust code, and the `tests` module is just another module. As we discussed in
-the [“Paths for Referring to an Item in the Module Tree”][paths]<!-- ignore -->
-section, items in child modules can use the items in their ancestor modules. In
-this test, we bring all of the `tests` module’s parent’s items into scope with
-`use super::*`, and then the test can call `internal_adder`. If you don’t think
-private functions should be tested, there’s nothing in Rust that will compel
-you to do so.
+[“Paths for Referring to an Item in the Module Tree”][paths]<!-- ignore -->,
+items in child modules can use the items in their ancestor modules. In this
+test, we bring all of the `tests` module’s parent’s items into scope with `use
+super::*`, and then the test can call `internal_adder`. If you don’t think
+private functions should be tested, there’s nothing in Rust that will compel you
+to do so.
 
 ### Integration Tests
 
@@ -206,14 +206,13 @@ project directory now looks like this:
     └── integration_test.rs
 ```
 
-This is the older naming convention that Rust also understands that we
-mentioned in the [“Alternate File Paths”][alt-paths]<!-- ignore --> section of
-Chapter 7. Naming the file this way tells Rust not to treat the `common` module
-as an integration test file. When we move the `setup` function code into
-_tests/common/mod.rs_ and delete the _tests/common.rs_ file, the section in the
-test output will no longer appear. Files in subdirectories of the _tests_
-directory don’t get compiled as separate crates or have sections in the test
-output.
+This is the older naming convention that Rust also understands that we mentioned
+in [“Alternate File Paths”][alt-paths]<!-- ignore --> in Chapter 7. Naming the
+file this way tells Rust not to treat the `common` module as an integration test
+file. When we move the `setup` function code into _tests/common/mod.rs_ and
+delete the _tests/common.rs_ file, the section in the test output will no longer
+appear. Files in subdirectories of the _tests_ directory don’t get compiled as
+separate crates or have sections in the test output.
 
 After we’ve created _tests/common/mod.rs_, we can use it from any of the
 integration test files as a module. Here’s an example of calling the `setup`

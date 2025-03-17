@@ -37,7 +37,7 @@ Or follow the [instructions][install-dprint] on the `dprint` website.
 [install-dprint]: https://dprint.dev/install/
 
 To format Rust code, you can run `rustfmt <path to file>`, and to format other
-files, you can pass `dprint <path to file>`. Many text editors also have native
+files, you can pass `dprint fmt <path to file>`. Many text editors also have native
 support or extensions for both `rustfmt` and `dprint`.
 
 ## Checking for Fixes

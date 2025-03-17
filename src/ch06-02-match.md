@@ -8,7 +8,7 @@ Rust has an extremely powerful control flow construct called `match` that
 allows you to compare a value against a series of patterns and then execute
 code based on which pattern matches. Patterns can be made up of literal values,
 variable names, wildcards, and many other things; [Chapter
-18][ch19-00-patterns]<!-- ignore --> covers all the different kinds of patterns
+19][ch19-00-patterns]<!-- ignore --> covers all the different kinds of patterns
 and what they do. The power of `match` comes from the expressiveness of the
 patterns and the fact that the compiler confirms that all possible cases are
 handled.
@@ -193,7 +193,7 @@ possibility in order for the code to be valid. Especially in the case of
 `None` case, it protects us from assuming that we have a value when we might
 have null, thus making the billion-dollar mistake discussed earlier impossible.
 
-### Catch-all Patterns and the `_` Placeholder
+### Catch-All Patterns and the `_` Placeholder
 
 Using enums, we can also take special actions for a few particular values, but
 for all other values take one default action. Imagine we’re implementing a game

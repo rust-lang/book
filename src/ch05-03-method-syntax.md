@@ -5,7 +5,7 @@ name, they can have parameters and a return value, and they contain some code
 that’s run when the method is called from somewhere else. Unlike functions,
 methods are defined within the context of a struct (or an enum or a trait
 object, which we cover in [Chapter 6][enums]<!-- ignore --> and [Chapter
-17][trait-objects]<!-- ignore -->, respectively), and their first parameter is
+18][trait-objects]<!-- ignore -->, respectively), and their first parameter is
 always `self`, which represents the instance of the struct the method is being
 called on.
 
@@ -98,7 +98,7 @@ are and how to designate a field or method as public or private in [Chapter
 >
 > Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
 > feature called _automatic referencing and dereferencing_. Calling methods is
-> one of the few places in Rust that has this behavior.
+> one of the few places in Rust with this behavior.
 >
 > Here’s how it works: when you call a method with `object.something()`, Rust
 > automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of

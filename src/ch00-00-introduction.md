@@ -74,8 +74,8 @@ mean both how quickly Rust code can run and the speed at which Rust lets you
 write programs. The Rust compiler’s checks ensure stability through feature
 additions and refactoring. This is in contrast to the brittle legacy code in
 languages without these checks, which developers are often afraid to modify. By
-striving for zero-cost abstractions, higher-level features that compile to
-lower-level code as fast as code written manually, Rust endeavors to make safe
+striving for zero-cost abstractions—higher-level features that compile to
+lower-level code as fast as code written manually—Rust endeavors to make safe
 code be fast code as well.
 
 The Rust language hopes to support many other users as well; those mentioned
@@ -143,27 +143,27 @@ traits that enable their functionality.
 
 In Chapter 16, we’ll walk through different models of concurrent programming and
 talk about how Rust helps you to program in multiple threads fearlessly. In
-Chapter 17, we will build on that by exploring Rust’s async and await syntax and
-the lightweight concurrency model they support.
+Chapter 17, we build on that by exploring Rust’s async and await syntax, along
+with tasks, futures, and streams, and the lightweight concurrency model they
+enable.
 
 Chapter 18 looks at how Rust idioms compare to object-oriented programming
-principles you might be familiar with.
-
-Chapter 19 is a reference on patterns and pattern matching, which are powerful
-ways of expressing ideas throughout Rust programs. Chapter 20 contains a
-smorgasbord of advanced topics of interest, including unsafe Rust, macros, and
-more about lifetimes, traits, types, functions, and closures.
+principles you might be familiar with. Chapter 19 is a reference on patterns and
+pattern matching, which are powerful ways of expressing ideas throughout Rust
+programs. Chapter 20 contains a smorgasbord of advanced topics of interest,
+including unsafe Rust, macros, and more about lifetimes, traits, types,
+functions, and closures.
 
 In Chapter 21, we’ll complete a project in which we’ll implement a low-level
 multithreaded web server!
 
-Finally, some appendices contain useful information about the language in a
-more reference-like format. Appendix A covers Rust’s keywords, Appendix B
-covers Rust’s operators and symbols, Appendix C covers derivable traits
-provided by the standard library, Appendix D covers some useful development
-tools, and Appendix E explains Rust editions. In Appendix F, you can find
-translations of the book, and in Appendix G we’ll cover how Rust is made and
-what nightly Rust is.
+Finally, some appendixes contain useful information about the language in a more
+reference-like format. **Appendix A** covers Rust’s keywords, **Appendix B**
+covers Rust’s operators and symbols, **Appendix C** covers derivable traits
+provided by the standard library, **Appendix D** covers some useful development
+tools, and **Appendix E** explains Rust editions. In **Appendix F**, you can
+find translations of the book, and in **Appendix G** we’ll cover how Rust is
+made and what nightly Rust is.
 
 There is no wrong way to read this book: if you want to skip ahead, go for it!
 You might have to jump back to earlier chapters if you experience any

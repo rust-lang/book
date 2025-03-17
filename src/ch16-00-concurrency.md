@@ -1,11 +1,11 @@
 # Fearless Concurrency
 
 Handling concurrent programming safely and efficiently is another of Rust’s
-major goals. _Concurrent programming_, where different parts of a program
-execute independently, and _parallel programming_, where different parts of a
-program execute at the same time, are becoming increasingly important as more
+major goals. _Concurrent programming_, in which different parts of a program
+execute independently, and _parallel programming_, in which different parts of
+a program execute at the same time, are becoming increasingly important as more
 computers take advantage of their multiple processors. Historically,
-programming in these contexts has been difficult and error prone: Rust hopes to
+programming in these contexts has been difficult and error prone. Rust hopes to
 change that.
 
 Initially, the Rust team thought that ensuring memory safety and preventing
@@ -24,9 +24,9 @@ subtle bugs and is easy to refactor without introducing new bugs.
 
 > Note: For simplicity’s sake, we’ll refer to many of the problems as
 > _concurrent_ rather than being more precise by saying _concurrent and/or
-> parallel_. If this book were about concurrency and/or parallelism, we’d be
-> more specific. For this chapter, please mentally substitute _concurrent
-> and/or parallel_ whenever we use _concurrent_.
+> parallel_. For this chapter, please mentally substitute _concurrent
+> and/or parallel_ whenever we use _concurrent_. In the next chapter, where the
+> distinction matters more, we’ll be more specific.
 
 Many languages are dogmatic about the solutions they offer for handling
 concurrent problems. For example, Erlang has elegant functionality for

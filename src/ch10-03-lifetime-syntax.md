@@ -14,9 +14,9 @@ when the lifetimes of references could be related in a few different ways. Rust
 requires us to annotate the relationships using generic lifetime parameters to
 ensure the actual references used at runtime will definitely be valid.
 
-Annotating lifetimes is not a concept most other programming languages have, so
-this is going to feel unfamiliar. Although we won’t cover lifetimes in their
-entirety in this chapter, we’ll discuss common ways you might encounter
+Annotating lifetimes is not even a concept most other programming languages
+have, so this is going to feel unfamiliar. Although we won’t cover lifetimes in
+their entirety in this chapter, we’ll discuss common ways you might encounter
 lifetime syntax so you can get comfortable with the concept.
 
 ### Preventing Dangling References with Lifetimes
@@ -34,7 +34,7 @@ scope.
 
 </Listing>
 
-> Note: The examples in Listing 10-16, 10-17, and 10-23 declare variables
+> Note: The examples in Listings 10-16, 10-17, and 10-23 declare variables
 > without giving them an initial value, so the variable name exists in the outer
 > scope. At first glance, this might appear to be in conflict with Rust’s having
 > no null values. However, if we try to use a variable before giving it a value,
@@ -96,7 +96,7 @@ Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
 means `r` can reference `x` because Rust knows that the reference in `r` will
 always be valid while `x` is valid.
 
-Now that you know what the lifetimes of references are and how Rust analyzes
+Now that you know where the lifetimes of references are and how Rust analyzes
 lifetimes to ensure references will always be valid, let’s explore generic
 lifetimes of parameters and return values in the context of functions.
 
@@ -117,10 +117,10 @@ print `The longest string is abcd`.
 
 Note that we want the function to take string slices, which are references,
 rather than strings, because we don’t want the `longest` function to take
-ownership of its parameters. Refer to the [“String Slices as
-Parameters”][string-slices-as-parameters]<!-- ignore --> section in Chapter 4
-for more discussion about why the parameters we use in Listing 10-19 are the
-ones we want.
+ownership of its parameters. Refer to [“String Slices as
+Parameters”][string-slices-as-parameters]<!-- ignore --> in Chapter 4 for more
+discussion about why the parameters we use in Listing 10-19 are the ones we
+want.
 
 If we try to implement the `longest` function as shown in Listing 10-20, it
 won’t compile.
@@ -429,11 +429,11 @@ _lifetime elision rules_. These aren’t rules for programmers to follow; they�
 a set of particular cases that the compiler will consider, and if your code
 fits these cases, you don’t need to write the lifetimes explicitly.
 
-The elision rules don’t provide full inference. If there is still ambiguity as
-to what lifetimes the references have after Rust applies the rules, the
+The elision rules don’t provide full inference. If there is still ambiguity
+about what lifetimes the references have after Rust applies the rules, the
 compiler won’t guess what the lifetime of the remaining references should be.
-Instead of guessing, the compiler will give you an error that you can resolve
-by adding the lifetime annotations.
+Instead of guessing, the compiler will give you an error that you can resolve by
+adding the lifetime annotations.
 
 Lifetimes on function or method parameters are called _input lifetimes_, and
 lifetimes on return values are called _output lifetimes_.
@@ -518,7 +518,7 @@ annotate lifetimes in method signatures very often.
 ### Lifetime Annotations in Method Definitions
 
 When we implement methods on a struct with lifetimes, we use the same syntax as
-that of generic type parameters shown in Listing 10-11. Where we declare and
+that of generic type parameters, as shown in Listing 10-11. Where we declare and
 use the lifetime parameters depends on whether they’re related to the struct
 fields or the method parameters and return values.
 

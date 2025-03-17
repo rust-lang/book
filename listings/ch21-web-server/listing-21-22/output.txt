@@ -9,9 +9,9 @@ error[E0507]: cannot move out of `worker.thread` which is behind a mutable refer
      |             move occurs because `worker.thread` has type `JoinHandle<()>`, which does not implement the `Copy` trait
      |
 note: `JoinHandle::<T>::join` takes ownership of the receiver `self`, which moves `worker.thread`
-    --> file:///home/.rustup/toolchains/1.82/lib/rustlib/src/rust/library/std/src/thread/mod.rs:1763:17
+    --> file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/std/src/thread/mod.rs:1876:17
      |
-1763 |     pub fn join(self) -> Result<T> {
+1876 |     pub fn join(self) -> Result<T> {
      |                 ^^^^
 
 For more information about this error, try `rustc --explain E0507`.

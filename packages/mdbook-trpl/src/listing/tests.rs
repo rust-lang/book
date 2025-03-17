@@ -51,7 +51,7 @@ Trailing text."#,
         &result.unwrap(),
         r#"Leading text.
 
-Filename: src/main.rs
+src/main.rs
 
 ```rust
 fn main() {}

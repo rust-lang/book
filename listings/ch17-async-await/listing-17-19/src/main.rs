@@ -1,10 +1,12 @@
 extern crate trpl; // required for mdbook test
 
-use std::{
-    future::Future,
-    pin::{pin, Pin},
-    time::Duration,
-};
+// ANCHOR: here
+use std::pin::{Pin, pin};
+
+// -- snip --
+
+// ANCHOR_END: here
+use std::time::Duration;
 
 fn main() {
     trpl::run(async {

@@ -12,7 +12,7 @@ space on the heap that the box points to.
 
 In some languages, for some types, the programmer must call code to free memory
 or resources every time they finish using an instance of those types. Examples
-include file handles, sockets, or locks. If they forget, the system might
+include file handles, sockets, and locks. If they forget, the system might
 become overloaded and crash. In Rust, you can specify that a particular bit of
 code be run whenever a value goes out of scope, and the compiler will insert
 this code automatically. As a result, you don’t need to be careful about
@@ -26,7 +26,7 @@ let’s implement `drop` with `println!` statements for now.
 
 Listing 15-14 shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print `Dropping CustomSmartPointer!` when the
-instance goes out of scope, to show when Rust runs the `drop` function.
+instance goes out of scope, to show when Rust runs the `drop` method.
 
 <Listing number="15-14" file-name="src/main.rs" caption="A `CustomSmartPointer` struct that implements the `Drop` trait where we would put our cleanup code">
 
@@ -39,8 +39,8 @@ instance goes out of scope, to show when Rust runs the `drop` function.
 The `Drop` trait is included in the prelude, so we don’t need to bring it into
 scope. We implement the `Drop` trait on `CustomSmartPointer` and provide an
 implementation for the `drop` method that calls `println!`. The body of the
-`drop` function is where you would place any logic that you wanted to run when
-an instance of your type goes out of scope. We’re printing some text here to
+`drop` method is where you would place any logic that you wanted to run when an
+instance of your type goes out of scope. We’re printing some text here to
 demonstrate visually when Rust will call `drop`.
 
 In `main`, we create two instances of `CustomSmartPointer` and then print
@@ -62,7 +62,9 @@ give you a visual guide to how the `drop` method works; usually you would
 specify the cleanup code that your type needs to run rather than a print
 message.
 
-### Dropping a Value Early with `std::mem::drop`
+<!-- Old link, do not remove -->
+
+<a id="dropping-a-value-early-with-std-mem-drop"></a>
 
 Unfortunately, it’s not straightforward to disable the automatic `drop`
 functionality. Disabling `drop` isn’t usually necessary; the whole point of the
@@ -70,13 +72,13 @@ functionality. Disabling `drop` isn’t usually necessary; the whole point of th
 you might want to clean up a value early. One example is when using smart
 pointers that manage locks: you might want to force the `drop` method that
 releases the lock so that other code in the same scope can acquire the lock.
-Rust doesn’t let you call the `Drop` trait’s `drop` method manually; instead
+Rust doesn’t let you call the `Drop` trait’s `drop` method manually; instead,
 you have to call the `std::mem::drop` function provided by the standard library
 if you want to force a value to be dropped before the end of its scope.
 
 If we try to call the `Drop` trait’s `drop` method manually by modifying the
 `main` function from Listing 15-14, as shown in Listing 15-15, we’ll get a
-compiler error:
+compiler error.
 
 <Listing number="15-15" file-name="src/main.rs" caption="Attempting to call the `drop` method from the `Drop` trait manually to clean up early">
 
@@ -108,9 +110,9 @@ scope, and we can’t call the `drop` method explicitly. So, if we need to force
 a value to be cleaned up early, we use the `std::mem::drop` function.
 
 The `std::mem::drop` function is different from the `drop` method in the `Drop`
-trait. We call it by passing as an argument the value we want to force drop.
+trait. We call it by passing as an argument the value we want to force-drop.
 The function is in the prelude, so we can modify `main` in Listing 15-15 to
-call the `drop` function, as shown in Listing 15-16:
+call the `drop` function, as shown in Listing 15-16.
 
 <Listing number="15-16" file-name="src/main.rs" caption="Calling `std::mem::drop` to explicitly drop a value before it goes out of scope">
 

@@ -119,7 +119,7 @@ println!("Hello, world!");
 ```
 
 This line does all the work in this little program: it prints text to the
-screen. There are four important details to notice here.
+screen. There are three important details to notice here.
 
 First, `println!` calls a Rust macro. If it had called a function instead, it
 would be entered as `println` (without the `!`). We’ll discuss Rust macros in

@@ -33,8 +33,8 @@ To parameterize the types in a new single function, we need to name the type
 parameter, just as we do for the value parameters to a function. You can use
 any identifier as a type parameter name. But we’ll use `T` because, by
 convention, type parameter names in Rust are short, often just one letter, and
-Rust’s type-naming convention is UpperCamelCase. Short for _type_, `T` is the
-default choice of most Rust programmers.
+Rust’s type-naming convention is CamelCase. Short for _type_, `T` is the default
+choice of most Rust programmers.
 
 When we use a parameter in the body of the function, we have to declare the
 parameter name in the signature so the compiler knows what that name means.
@@ -55,7 +55,7 @@ same type `T`.
 Listing 10-5 shows the combined `largest` function definition using the generic
 data type in its signature. The listing also shows how we can call the function
 with either a slice of `i32` values or `char` values. Note that this code won’t
-compile yet, but we’ll fix it later in this chapter.
+compile yet.
 
 <Listing number="10-5" file-name="src/main.rs" caption="The `largest` function using generic type parameters; this doesn’t compile yet">
 
@@ -77,10 +77,10 @@ states that the body of `largest` won’t work for all possible types that `T`
 could be. Because we want to compare values of type `T` in the body, we can
 only use types whose values can be ordered. To enable comparisons, the standard
 library has the `std::cmp::PartialOrd` trait that you can implement on types
-(see Appendix C for more on this trait). By following the help text’s
-suggestion, we restrict the types valid for `T` to only those that implement
-`PartialOrd` and this example will compile, because the standard library
-implements `PartialOrd` on both `i32` and `char`.
+(see Appendix C for more on this trait). To fix the example code above, we would
+need to follow the help text's suggestions and restrict the types valid for `T`
+to only those that implement `PartialOrd`. The example would then compile, because
+the standard library implements `PartialOrd` on both `i32` and `char`.
 
 ### In Struct Definitions
 
@@ -210,9 +210,9 @@ generic type after `impl`, Rust can identify that the type in the angle
 brackets in `Point` is a generic type rather than a concrete type. We could
 have chosen a different name for this generic parameter than the generic
 parameter declared in the struct definition, but using the same name is
-conventional. Methods written within an `impl` that declares the generic type
-will be defined on any instance of the type, no matter what concrete type ends
-up substituting for the generic type.
+conventional. If you write a method within an `impl` that declares a generic
+type, that method will be defined on any instance of the type, no matter what
+concrete type ends up substituting for the generic type.
 
 We can also specify constraints on generic types when defining methods on the
 type. We could, for example, implement methods only on `Point<f32>` instances

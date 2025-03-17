@@ -89,7 +89,7 @@
 
 - [Smart Pointers](ch15-00-smart-pointers.md)
   - [Using `Box<T>` to Point to Data on the Heap](ch15-01-box.md)
-  - [Treating Smart Pointers Like Regular References with the `Deref` Trait](ch15-02-deref.md)
+  - [Treating Smart Pointers Like Regular References with `Deref`](ch15-02-deref.md)
   - [Running Code on Cleanup with the `Drop` Trait](ch15-03-drop.md)
   - [`Rc<T>`, the Reference Counted Smart Pointer](ch15-04-rc.md)
   - [`RefCell<T>` and the Interior Mutability Pattern](ch15-05-interior-mutability.md)
@@ -99,14 +99,14 @@
   - [Using Threads to Run Code Simultaneously](ch16-01-threads.md)
   - [Using Message Passing to Transfer Data Between Threads](ch16-02-message-passing.md)
   - [Shared-State Concurrency](ch16-03-shared-state.md)
-  - [Extensible Concurrency with the `Sync` and `Send` Traits](ch16-04-extensible-concurrency-sync-and-send.md)
+  - [Extensible Concurrency with the `Send` and `Sync` Traits](ch16-04-extensible-concurrency-sync-and-send.md)
 
-- [Async and Await](ch17-00-async-await.md)
+- [Fundamentals of Asynchronous Programming: Async, Await, Futures, and Streams](ch17-00-async-await.md)
   - [Futures and the Async Syntax](ch17-01-futures-and-syntax.md)
-  - [Concurrency With Async](ch17-02-concurrency-with-async.md)
+  - [Applying Concurrency with Async](ch17-02-concurrency-with-async.md)
   - [Working With Any Number of Futures](ch17-03-more-futures.md)
-  - [Streams](ch17-04-streams.md)
-  - [Digging Into the Traits for Async](ch17-05-traits-for-async.md)
+  - [Streams: Futures in Sequence](ch17-04-streams.md)
+  - [A Closer Look at the Traits for Async](ch17-05-traits-for-async.md)
   - [Futures, Tasks, and Threads](ch17-06-futures-tasks-threads.md)
 
 - [Object Oriented Programming Features of Rust](ch18-00-oop.md)
@@ -123,10 +123,10 @@
 
 - [Advanced Features](ch20-00-advanced-features.md)
   - [Unsafe Rust](ch20-01-unsafe-rust.md)
-  - [Advanced Traits](ch20-03-advanced-traits.md)
-  - [Advanced Types](ch20-04-advanced-types.md)
-  - [Advanced Functions and Closures](ch20-05-advanced-functions-and-closures.md)
-  - [Macros](ch20-06-macros.md)
+  - [Advanced Traits](ch20-02-advanced-traits.md)
+  - [Advanced Types](ch20-03-advanced-types.md)
+  - [Advanced Functions and Closures](ch20-04-advanced-functions-and-closures.md)
+  - [Macros](ch20-05-macros.md)
 
 - [Final Project: Building a Multithreaded Web Server](ch21-00-final-project-a-web-server.md)
   - [Building a Single-Threaded Web Server](ch21-01-single-threaded.md)

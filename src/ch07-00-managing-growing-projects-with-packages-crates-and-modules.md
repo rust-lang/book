@@ -12,7 +12,7 @@ optionally one library crate. As a package grows, you can extract parts into
 separate crates that become external dependencies. This chapter covers all
 these techniques. For very large projects comprising a set of interrelated
 packages that evolve together, Cargo provides _workspaces_, which we’ll cover
-in the [“Cargo Workspaces”][workspaces]<!-- ignore --> section in Chapter 14.
+in [“Cargo Workspaces”][workspaces]<!-- ignore --> in Chapter 14.
 
 We’ll also discuss encapsulating implementation details, which lets you reuse
 code at a higher level: once you’ve implemented an operation, other code can

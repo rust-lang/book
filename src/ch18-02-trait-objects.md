@@ -19,7 +19,7 @@ some types for people to use, such as `Button` or `TextField`. In addition,
 instance, one programmer might add an `Image` and another might add a
 `SelectBox`.
 
-We won’t implement a fully fledged GUI library for this example but will show
+We won’t implement a full-fledged GUI library for this example but will show
 how the pieces would fit together. At the time of writing the library, we can’t
 know and define all the types other programmers might want to create. But we do
 know that `gui` needs to keep track of many values of different types, and it
@@ -40,17 +40,17 @@ allow users to extend it with new types.
 
 To implement the behavior we want `gui` to have, we’ll define a trait named
 `Draw` that will have one method named `draw`. Then we can define a vector that
-takes a _trait object_. A trait object points to both an instance of a type
+takes a trait object. A _trait object_ points to both an instance of a type
 implementing our specified trait and a table used to look up trait methods on
 that type at runtime. We create a trait object by specifying some sort of
-pointer, such as a `&` reference or a `Box<T>` smart pointer, then the `dyn`
+pointer, such as an `&` reference or a `Box<T>` smart pointer, then the `dyn`
 keyword, and then specifying the relevant trait. (We’ll talk about the reason
-trait objects must use a pointer in Chapter 20 in the section [“Dynamically
-Sized Types and the `Sized` Trait.”][dynamically-sized]<!-- ignore -->) We can
-use trait objects in place of a generic or concrete type. Wherever we use a
-trait object, Rust’s type system will ensure at compile time that any value
-used in that context will implement the trait object’s trait. Consequently, we
-don’t need to know all the possible types at compile time.
+trait objects must use a pointer in [“Dynamically Sized Types and the `Sized`
+Trait”][dynamically-sized]<!-- ignore --> in Chapter 20.) We can use trait
+objects in place of a generic or concrete type. Wherever we use a trait object,
+Rust’s type system will ensure at compile time that any value used in that
+context will implement the trait object’s trait. Consequently, we don’t need to
+know all the possible types at compile time.
 
 We’ve mentioned that, in Rust, we refrain from calling structs and enums
 “objects” to distinguish them from other languages’ objects. In a struct or
@@ -64,7 +64,7 @@ languages: their specific purpose is to allow abstraction across common
 behavior.
 
 Listing 18-3 shows how to define a trait named `Draw` with one method named
-`draw`:
+`draw`.
 
 <Listing number="18-3" file-name="src/lib.rs" caption="Definition of the `Draw` trait">
 
@@ -89,7 +89,7 @@ a `Box` that implements the `Draw` trait.
 </Listing>
 
 On the `Screen` struct, we’ll define a method named `run` that will call the
-`draw` method on each of its `components`, as shown in Listing 18-5:
+`draw` method on each of its `components`, as shown in Listing 18-5.
 
 <Listing number="18-5" file-name="src/lib.rs" caption="A `run` method on `Screen` that calls the `draw` method on each component">
 
@@ -100,8 +100,8 @@ On the `Screen` struct, we’ll define a method named `run` that will call the
 </Listing>
 
 This works differently from defining a struct that uses a generic type
-parameter with trait bounds. A generic type parameter can only be substituted
-with one concrete type at a time, whereas trait objects allow for multiple
+parameter with trait bounds. A generic type parameter can be substituted with
+only one concrete type at a time, whereas trait objects allow for multiple
 concrete types to fill in for the trait object at runtime. For example, we
 could have defined the `Screen` struct using a generic type and a trait bound
 as in Listing 18-6:
@@ -151,8 +151,8 @@ happens when a user clicks the button. These kinds of methods won’t apply to
 types like `TextField`.
 
 If someone using our library decides to implement a `SelectBox` struct that has
-`width`, `height`, and `options` fields, they implement the `Draw` trait on the
-`SelectBox` type as well, as shown in Listing 18-8:
+`width`, `height`, and `options` fields, they would implement the `Draw` trait
+on the `SelectBox` type as well, as shown in Listing 18-8.
 
 <Listing number="18-8" file-name="src/main.rs" caption="Another crate using `gui` and implementing the `Draw` trait on a `SelectBox` struct">
 
@@ -199,7 +199,7 @@ if a value doesn’t implement a method but we call it anyway. Rust won’t comp
 our code if the values don’t implement the traits that the trait objects need.
 
 For example, Listing 18-10 shows what happens if we try to create a `Screen`
-with a `String` as a component:
+with a `String` as a component.
 
 <Listing number="18-10" file-name="src/main.rs" caption="Attempting to use a type that doesn’t implement the trait object’s trait">
 
@@ -215,15 +215,15 @@ We’ll get this error because `String` doesn’t implement the `Draw` trait:
 {{#include ../listings/ch18-oop/listing-18-10/output.txt}}
 ```
 
-This error lets us know that either we’re passing something to `Screen` we
-didn’t mean to pass and so should pass a different type or we should implement
+This error lets us know that either we’re passing something to `Screen` that we
+didn’t mean to pass and so should pass a different type, or we should implement
 `Draw` on `String` so that `Screen` is able to call `draw` on it.
 
 ### Trait Objects Perform Dynamic Dispatch
 
-Recall in the [“Performance of Code Using
-Generics”][performance-of-code-using-generics]<!-- ignore --> section in Chapter
-10 our discussion on the monomorphization process performed on generics by the
+Recall in [“Performance of Code Using
+Generics”][performance-of-code-using-generics]<!-- ignore --> in Chapter 10 our
+discussion on the monomorphization process performed on generics by the
 compiler: the compiler generates nongeneric implementations of functions and
 methods for each concrete type that we use in place of a generic type parameter.
 The code that results from monomorphization is doing _static dispatch_, which is
@@ -236,14 +236,15 @@ When we use trait objects, Rust must use dynamic dispatch. The compiler doesn’
 know all the types that might be used with the code that’s using trait objects,
 so it doesn’t know which method implemented on which type to call. Instead, at
 runtime, Rust uses the pointers inside the trait object to know which method to
-call. This lookup incurs a runtime cost that doesn’t occur with static
-dispatch. Dynamic dispatch also prevents the compiler from choosing to inline a
-method’s code, which in turn prevents some optimizations, and Rust has some
-rules about where you can and cannot use dynamic dispatch, called [_dyn
-compatibility_][dyn-compatibility]. However, we did get extra flexibility in the code
-that we wrote in Listing 18-5 and were able to support in Listing 18-9, so it’s
-a trade-off to consider.
+call. This lookup incurs a runtime cost that doesn’t occur with static dispatch.
+Dynamic dispatch also prevents the compiler from choosing to inline a method’s
+code, which in turn prevents some optimizations, and Rust has some rules, called
+_dyn compatibility_, about where you can and cannot use dynamic dispatch. Those
+rules are beyond the scope of this discussion, but  you can read more about them
+[in the reference][dyn-compatibility]. However, we did get extra flexibility in
+the code that we wrote in Listing 18-5 and were able to support in Listing 18-9,
+so it’s a trade-off to consider.
 
 [performance-of-code-using-generics]: ch10-01-syntax.html#performance-of-code-using-generics
-[dynamically-sized]: ch20-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait
+[dynamically-sized]: ch20-03-advanced-types.html#dynamically-sized-types-and-the-sized-trait
 [dyn-compatibility]: https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility

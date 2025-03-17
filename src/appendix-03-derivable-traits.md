@@ -16,9 +16,9 @@ library that you can use with `derive`. Each section covers:
 
 If you want different behavior from that provided by the `derive` attribute,
 consult the [standard library documentation](../std/index.html)<!-- ignore -->
-for each trait for details of how to manually implement them.
+for each trait for details on how to manually implement them.
 
-These traits listed here are the only ones defined by the standard library that
+The traits listed here are the only ones defined by the standard library that
 can be implemented on your types using `derive`. Other traits defined in the
 standard library don’t have sensible default behavior, so it’s up to you to
 implement them in the way that makes sense for what you’re trying to accomplish.
@@ -45,9 +45,10 @@ The `Debug` trait allows you to print instances of a type for debugging
 purposes, so you and other programmers using your type can inspect an instance
 at a particular point in a program’s execution.
 
-The `Debug` trait is required, for example, in using the `assert_eq!` macro.
-This macro prints the values of instances given as arguments if the equality
-assertion fails so programmers can see why the two instances weren’t equal.
+The `Debug` trait is required, for example, in the use of the `assert_eq!`
+macro. This macro prints the values of instances given as arguments if the
+equality assertion fails so programmers can see why the two instances weren’t
+equal.
 
 ### `PartialEq` and `Eq` for Equality Comparisons
 
@@ -84,8 +85,8 @@ Deriving `PartialOrd` implements the `partial_cmp` method, which returns an
 `Option<Ordering>` that will be `None` when the values given don’t produce an
 ordering. An example of a value that doesn’t produce an ordering, even though
 most values of that type can be compared, is the not-a-number (`NaN`) floating
-point value. Calling `partial_cmp` with any floating point number and the `NaN`
-floating point value will return `None`.
+point value. Calling `partial_cmp` with any floating-point number and the `NaN`
+floating-point value will return `None`.
 
 When derived on structs, `PartialOrd` compares two instances by comparing the
 value in each field in the order in which the fields appear in the struct
@@ -111,9 +112,9 @@ a data structure that stores data based on the sort order of the values.
 
 The `Clone` trait allows you to explicitly create a deep copy of a value, and
 the duplication process might involve running arbitrary code and copying heap
-data. See the [“Ways Variables and Data Interact:
-Clone”][ways-variables-and-data-interact-clone]<!-- ignore --> section in
-Chapter 4 for more information on `Clone`.
+data. See [Variables and Data Interacting with
+Clone”][variables-and-data-interacting-with-clone]<!-- ignore --> in Chapter 4
+for more information on `Clone`.
 
 Deriving `Clone` implements the `clone` method, which when implemented for the
 whole type, calls `clone` on each of the parts of the type. This means all the
@@ -122,12 +123,12 @@ fields or values in the type must also implement `Clone` to derive `Clone`.
 An example of when `Clone` is required is when calling the `to_vec` method on a
 slice. The slice doesn’t own the type instances it contains, but the vector
 returned from `to_vec` will need to own its instances, so `to_vec` calls
-`clone` on each item. Thus, the type stored in the slice must implement `Clone`.
+`clone` on each item. Thus the type stored in the slice must implement `Clone`.
 
 The `Copy` trait allows you to duplicate a value by only copying bits stored on
-the stack; no arbitrary code is necessary. See the [“Stack-Only Data:
-Copy”][stack-only-data-copy]<!-- ignore --> section in Chapter 4 for more
-information on `Copy`.
+the stack; no arbitrary code is necessary. See [“Stack-Only Data:
+Copy”][stack-only-data-copy]<!-- ignore --> in Chapter 4 for more information on
+`Copy`.
 
 The `Copy` trait doesn’t define any methods to prevent programmers from
 overloading those methods and violating the assumption that no arbitrary code
@@ -166,11 +167,11 @@ meaning all fields or values in the type must also implement `Default` to
 derive `Default`.
 
 The `Default::default` function is commonly used in combination with the struct
-update syntax discussed in the [“Creating Instances From Other Instances With
-Struct Update
-Syntax”][creating-instances-from-other-instances-with-struct-update-syntax]<!-- ignore -->
-section in Chapter 5. You can customize a few fields of a struct and then
-set and use a default value for the rest of the fields by using
+update syntax discussed in [“Creating Instances from Other Instances with Struct
+Update
+Syntax”][creating-instances-from-other-instances-with-struct-update-syntax]<!--
+ignore --> in Chapter 5. You can customize a few fields of a struct and then set
+and use a default value for the rest of the fields by using
 `..Default::default()`.
 
 The `Default` trait is required when you use the method `unwrap_or_default` on
@@ -180,5 +181,5 @@ The `Default` trait is required when you use the method `unwrap_or_default` on
 
 [creating-instances-from-other-instances-with-struct-update-syntax]: ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
 [stack-only-data-copy]: ch04-01-what-is-ownership.html#stack-only-data-copy
-[ways-variables-and-data-interact-clone]: ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone
-[macros]: ch20-06-macros.html#macros
+[variables-and-data-interacting-with-clone]: ch04-01-what-is-ownership.html#variables-and-data-interacting-with-clone
+[macros]: ch20-05-macros.html#macros
