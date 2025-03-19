@@ -27,7 +27,7 @@ join on _all_ of them. The `trpl::join_all` function accepts any type that
 implements the `Iterator` trait, which you learned about back in [The Iterator
 Trait and the `next` Method][iterator-trait]<!-- ignore --> Chapter 13, so
 it seems like just the ticket. Let’s try putting our futures in a vector and
-replacing `join!` with `join_all` as show in Listing 17-15.
+replacing `join!` with `join_all` as shown in Listing 17-15.
 
 <Listing  number="17-15" caption="Storing anonymous futures in a vector and calling `join_all`">
 
@@ -636,6 +636,6 @@ to consider first, though:
   with any collection of futures.)
 
 [dyn]: ch12-03-improving-error-handling-and-modularity.html
-[enum-alt]: ch12-03-improving-error-handling-and-modularity.html#returning-errors-from-the-run-function
+[enum-alt]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [async-program]: ch17-01-futures-and-syntax.html#our-first-async-program
 [iterator-trait]: ch13-02-iterators.html#the-iterator-trait-and-the-next-method
