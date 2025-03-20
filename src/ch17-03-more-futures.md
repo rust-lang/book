@@ -76,14 +76,13 @@ trait objects in detail in Chapter 18.) Using trait objects lets us treat each
 of the anonymous futures produced by these types as the same type, because all
 of them implement the `Future` trait.
 
-> Note: In the Chapter 8 section [Using an Enum to Store Multiple
-> Values][enum-alt]<!-- ignore -->, we discussed another way to include multiple
-> types in a `Vec`: using an enum to represent each type that can appear in the
-> vector. We can’t do that here, though. For one thing, we have no way to name
-> the different types, because they are anonymous. For another, the reason we
-> reached for a vector and `join_all` in the first place was to be able to work
-> with a dynamic collection of futures where we only care that they have the
-> same output type.
+> Note: In [Using an Enum to Store Multiple Values][enum-alt]<!-- ignore --> in
+> Chapter 8, we discussed another way to include multiple types in a `Vec`:
+> using an enum to represent each type that can appear in the vector. We can’t
+> do that here, though. For one thing, we have no way to name the different
+> types, because they are anonymous. For another, the reason we reached for a
+> vector and `join_all` in the first place was to be able to work with a dynamic
+> collection of futures where we only care that they have the same output type.
 
 We start by wrapping each future in the `vec!` in a `Box::new`, as shown in
 Listing 17-16.
