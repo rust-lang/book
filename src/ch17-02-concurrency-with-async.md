@@ -308,7 +308,7 @@ flow—exactly what we’re trying _not_ to do.
 With the updated code in Listing 17-11, the messages get printed at
 500-millisecond intervals, rather than all in a rush after 2 seconds.
 
-The program still never exits, though, because of the way `while let` loop
+The program still never exits, though, because of the way the `while let` loop
 interacts with `trpl::join`:
 
 - The future returned from `trpl::join` completes only once _both_ futures

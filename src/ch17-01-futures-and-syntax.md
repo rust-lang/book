@@ -131,7 +131,7 @@ Notice that Rust’s `await` keyword goes _after_ the expression you’re awaiti
 not before it. That is, it’s a _postfix_ keyword. This may differ from what
 you’re used to if you’ve used `async` in other languages, but in Rust it makes
 chains of methods much nicer to work with. As a result, we can change the body
-of `page_url_for` to chain the `trpl::get` and `text` function calls together
+of `page_title` to chain the `trpl::get` and `text` function calls together
 with `await` between them, as shown in Listing 17-2.
 
 <Listing number="17-2" file-name="src/main.rs" caption="Chaining with the `await` keyword">
@@ -319,7 +319,7 @@ function in `main` to set up a runtime and run the future returned by the
 
 > Note: Some runtimes provide macros so you _can_ write an async `main`
 > function. Those macros rewrite `async fn main() { ... }` to be a normal `fn
-> main`, which does the same thing we did by hand in Listing 17-5: call a
+> main`, which does the same thing we did by hand in Listing 17-4: call a
 > function that runs a future to completion the way `trpl::run` does.
 
 Now let’s put these pieces together and see how we can write concurrent code.
@@ -364,10 +364,11 @@ enum Either<A, B> {
 }
 ```
 
-The `race` function returns `Left` with that future’s output if the first
-argument wins, and `Right` with the second future argument’s output if _that_
-one wins. This matches the order the arguments appear in when calling the
-function: the first argument is to the left of the second argument.
+The `race` function returns `Left` with the output from the first future
+argument it finishes first, or `Right` with the output of the second future
+argument if that one finishes first. This matches the order the arguments appear
+in when calling the function: the first argument is to the left of the second
+argument.
 
 We also update `page_title` to return the same URL passed in. That way, if
 the page that returns first does not have a `<title>` we can resolve, we can
