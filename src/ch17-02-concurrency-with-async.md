@@ -311,13 +311,13 @@ With the updated code in Listing 17-11, the messages get printed at
 The program still never exits, though, because of the way the `while let` loop
 interacts with `trpl::join`:
 
-- The future returned from `trpl::join` completes only after _both_ futures
+- The future returned from `trpl::join` completes only once _both_ futures
   passed to it have completed.
 - The `tx` future completes once it finishes sleeping after sending the last
   message in `vals`.
 - The `rx` future won’t complete until the `while let` loop ends.
 - The `while let` loop won’t end until awaiting `rx.recv` produces `None`.
-- Awaiting `rx.recv` will return `None` only after the other end of the channel
+- Awaiting `rx.recv` will return `None` only once the other end of the channel
   is closed.
 - The channel will close only if we call `rx.close` or when the sender side,
   `tx`, is dropped.

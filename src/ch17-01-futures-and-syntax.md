@@ -364,10 +364,11 @@ enum Either<A, B> {
 }
 ```
 
-The `race` function returns `Left` with that future’s output if the first argument
-wins, and `Right` with the second future's output if the second argument wins. This
-matches the order the arguments appear in when calling the function: the first
-argument is to the left of the second argument.
+The `race` function returns `Left` with the output from the first future
+argument it finishes first, or `Right` with the output of the second future
+argument if that one finishes first. This matches the order the arguments appear
+in when calling the function: the first argument is to the left of the second
+argument.
 
 We also update `page_title` to return the same URL passed in. That way, if
 the page that returns first does not have a `<title>` we can resolve, we can
