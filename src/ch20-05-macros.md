@@ -323,10 +323,10 @@ The `hello_macro_derive` function first converts the `input` from a
 `TokenStream` to a data structure that we can then interpret and perform
 operations on. This is where `syn` comes into play. The `parse` function in
 `syn` takes a `TokenStream` and returns a `DeriveInput` struct representing the
-parsed Rust code. Listing 20-40 shows the relevant parts of the `DeriveInput`
+parsed Rust code. Listing 20-41 shows the relevant parts of the `DeriveInput`
 struct we get from parsing the `struct Pancakes;` string.
 
-<Listing number="20-40" caption="The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-37">
+<Listing number="20-41" caption="The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-37">
 
 ```rust,ignore
 DeriveInput {
