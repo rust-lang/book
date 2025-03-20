@@ -239,16 +239,21 @@ impl Listing {
 
     fn closing_html(&self, trailing: &str) -> String {
         match (&self.number, &self.caption) {
-            (Some(number), Some(caption)) => format!(
-                r#"<figcaption>Listing {number}: {caption}</figcaption>
+            (Some(number), caption) => {
+                let caption_text = caption
+                    .as_ref()
+                    .map(|caption| format!(": {}", caption))
+                    .unwrap_or_default();
+                let listing_a_tag = format!(
+                    "<a href=\"#listing-{number}\">Listing {number}</a>"
+                );
+                format!(
+                    r#"<figcaption>{listing_a_tag}{caption_text}</figcaption>
 </figure>{trailing}"#
-            ),
+                )
+            }
             (None, Some(caption)) => format!(
                 r#"<figcaption>{caption}</figcaption>
-</figure>{trailing}"#
-            ),
-            (Some(number), None) => format!(
-                r#"<figcaption>Listing {number}</figcaption>
 </figure>{trailing}"#
             ),
             (None, None) => format!("</figure>{trailing}"),
