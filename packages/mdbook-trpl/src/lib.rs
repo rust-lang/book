@@ -2,6 +2,7 @@ mod config;
 mod figure;
 mod heading;
 mod listing;
+pub mod listing_link;
 mod note;
 
 pub use config::Mode;
