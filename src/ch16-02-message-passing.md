@@ -32,14 +32,13 @@ First, in Listing 16-6, we’ll create a channel but not do anything with it.
 Note that this won’t compile yet because Rust can’t tell what type of values we
 want to send over the channel.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="16-6" file-name="src/main.rs" caption="Creating a channel and assigning the two halves to `tx` and `rx`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-6: Creating a channel and assigning the two
-halves to `tx` and `rx`</span>
+</Listing>
 
 We create a new channel using the `mpsc::channel` function; `mpsc` stands for
 _multiple producer, single consumer_. In short, the way Rust’s standard library
