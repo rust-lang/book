@@ -130,12 +130,12 @@ considered idiomatic, so the choice is up to you!
 
 ### Re-exporting Names with `pub use`
 
-When we bring a name into scope with the `use` keyword, the name available in
-the new scope is private. To enable the code that calls our code to refer to
-that name as if it had been defined in that code’s scope, we can combine `pub`
-and `use`. This technique is called _re-exporting_ because we’re bringing an
-item into scope but also making that item available for others to bring into
-their scope.
+When we bring a name into scope with the `use` keyword, the name is private to
+the scope into which we imported it. To enable code outside that scope to refer
+to that name as if it had been defined in that scope, we can combine `pub` and
+`use`. This technique is called _re-exporting_ because we’re bringing an item
+into scope but also making that item available for others to bring into their
+scope.
 
 Listing 7-17 shows the code in Listing 7-11 with `use` in the root module
 changed to `pub use`.
