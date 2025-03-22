@@ -1,8 +1,8 @@
-# The Rust Programming Language
+# Rust Proglamlama Dili
 
 ![Build Status](https://github.com/rust-lang/book/workflows/CI/badge.svg)
 
-This repository contains the source of "The Rust Programming Language" book.
+Bu depo Rust Programlama Dilinin kaynağını içerir.
 
 [The book is available in dead-tree form from No Starch Press][nostarch].
 
