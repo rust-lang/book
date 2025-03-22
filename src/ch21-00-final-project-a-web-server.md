@@ -20,7 +20,7 @@ Here is our plan for building the web server:
 4. Create a proper HTTP response.
 5. Improve the throughput of our server with a thread pool.
 
-Before we get started, we should mention two details: First, the method we’ll
+Before we get started, we should mention two details. First, the method we’ll
 use won’t be the best way to build a web server with Rust. Community members
 have published a number of production-ready crates available on
 [crates.io](https://crates.io/) that provide more complete web server and thread

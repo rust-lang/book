@@ -11,7 +11,7 @@ In Listing 12-6, we added code that took a slice of `String` values and created
 an instance of the `Config` struct by indexing into the slice and cloning the
 values, allowing the `Config` struct to own those values. In Listing 13-17,
 we’ve reproduced the implementation of the `Config::build` function as it was
-in Listing 12-23:
+in Listing 12-23.
 
 <Listing number="13-17" file-name="src/lib.rs" caption="Reproduction of the `Config::build` function from Listing 12-23">
 
@@ -98,7 +98,7 @@ iterating over it, we can add the `mut` keyword into the specification of the
 
 Next, we’ll fix the body of `Config::build`. Because `args` implements the
 `Iterator` trait, we know we can call the `next` method on it! Listing 13-20
-updates the code from Listing 12-23 to use the `next` method:
+updates the code from Listing 12-23 to use the `next` method.
 
 <Listing number="13-20" file-name="src/lib.rs" caption="Changing the body of `Config::build` to use iterator methods">
 
@@ -110,11 +110,11 @@ updates the code from Listing 12-23 to use the `next` method:
 
 Remember that the first value in the return value of `env::args` is the name of
 the program. We want to ignore that and get to the next value, so first we call
-`next` and do nothing with the return value. Second, we call `next` to get the
-value we want to put in the `query` field of `Config`. If `next` returns a
-`Some`, we use a `match` to extract the value. If it returns `None`, it means
-not enough arguments were given and we return early with an `Err` value. We do
-the same thing for the `file_path` value.
+`next` and do nothing with the return value. Then we call `next` to get the
+value we want to put in the `query` field of `Config`. If `next` returns `Some`,
+we use a `match` to extract the value. If it returns `None`, it means not enough
+arguments were given and we return early with an `Err` value. We do the same
+thing for the `file_path` value.
 
 ### Making Code Clearer with Iterator Adapters
 
@@ -146,7 +146,7 @@ concurrent access to the `results` vector. Listing 13-22 shows this change:
 
 Recall that the purpose of the `search` function is to return all lines in
 `contents` that contain the `query`. Similar to the `filter` example in Listing
-13-16, this code uses the `filter` adapter to keep only the lines that
+13-16, this code uses the `filter` adapter to keep only the lines for which
 `line.contains(query)` returns `true` for. We then collect the matching lines
 into another vector with `collect`. Much simpler! Feel free to make the same
 change to use iterator methods in the `search_case_insensitive` function as
@@ -166,7 +166,6 @@ that are unique to this code, such as the filtering condition each element in
 the iterator must pass.
 
 But are the two implementations truly equivalent? The intuitive assumption
-might be that the more low-level loop will be faster. Let’s talk about
-performance.
+might be that the lower-level loop will be faster. Let’s talk about performance.
 
 [impl-trait]: ch10-02-traits.html#traits-as-parameters

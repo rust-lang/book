@@ -159,23 +159,24 @@ program only operated on values between 1 and 100, and it had many functions
 with this requirement, having a check like this in every function would be
 tedious (and might impact performance).
 
-Instead, we can make a new type and put the validations in a function to create
-an instance of the type rather than repeating the validations everywhere. That
-way, it’s safe for functions to use the new type in their signatures and
-confidently use the values they receive. Listing 9-13 shows one way to define a
-`Guess` type that will only create an instance of `Guess` if the `new` function
-receives a value between 1 and 100.
+Instead, we can make a new type in a dedicated module and put the validations in
+a function to create an instance of the type rather than repeating the
+validations everywhere. That way, it’s safe for functions to use the new type in
+their signatures and confidently use the values they receive. Listing 9-13 shows
+one way to define a `Guess` type that will only create an instance of `Guess` if
+the `new` function receives a value between 1 and 100.
 
-<Listing number="9-13" caption="A `Guess` type that will only continue with values between 1 and 100">
+<Listing number="9-13" caption="A `Guess` type that will only continue with values between 1 and 100" file-name="src/guessing_game.rs">
 
 ```rust
-{{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/lib.rs}}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/guessing_game.rs}}
 ```
 
 </Listing>
 
-First we define a struct named `Guess` that has a field named `value` that
-holds an `i32`. This is where the number will be stored.
+First we create a new module named `guessing_game`. Next we define a struct in
+that module named `Guess` that has a field named `value` that holds an `i32`.
+This is where the number will be stored.
 
 Then we implement an associated function named `new` on `Guess` that creates
 instances of `Guess` values. The `new` function is defined to have one
@@ -197,9 +198,9 @@ a _getter_ because its purpose is to get some data from its fields and return
 it. This public method is necessary because the `value` field of the `Guess`
 struct is private. It’s important that the `value` field be private so code
 using the `Guess` struct is not allowed to set `value` directly: code outside
-the module _must_ use the `Guess::new` function to create an instance of
-`Guess`, thereby ensuring there’s no way for a `Guess` to have a `value` that
-hasn’t been checked by the conditions in the `Guess::new` function.
+the `guessing_game` module _must_ use the `Guess::new` function to create an
+instance of `Guess`, thereby ensuring there’s no way for a `Guess` to have a
+`value` that hasn’t been checked by the conditions in the `Guess::new` function.
 
 A function that has a parameter or returns only numbers between 1 and 100 could
 then declare in its signature that it takes or returns a `Guess` rather than an

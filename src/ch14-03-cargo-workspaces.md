@@ -14,7 +14,7 @@ can concentrate on the structure of the workspace. There are multiple ways to
 structure a workspace, so we'll just show one common way. We’ll have a
 workspace containing a binary and two libraries. The binary, which will provide
 the main functionality, will depend on the two libraries. One library will
-provide an `add_one` function, and a second library an `add_two` function.
+provide an `add_one` function and the other library an `add_two` function.
 These three crates will be part of the same workspace. We’ll start by creating
 a new directory for the workspace:
 
@@ -28,7 +28,7 @@ configure the entire workspace. This file won’t have a `[package]` section.
 Instead, it will start with a `[workspace]` section that will allow us to add
 members to the workspace. We also make a point to use the latest and greatest
 version of Cargo’s resolver algorithm in our workspace by setting the
-`resolver` to `"2"`.
+`resolver` to `"3"`.
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -88,16 +88,7 @@ can avoid unnecessary rebuilding.
 ### Creating the Second Package in the Workspace
 
 Next, let’s create another member package in the workspace and call it
-`add_one`. Change the top-level _Cargo.toml_ to specify the _add_one_ path in
-the `members` list:
-
-<span class="filename">Filename: Cargo.toml</span>
-
-```toml
-{{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/Cargo.toml}}
-```
-
-Then generate a new library crate named `add_one`:
+`add_one`. Generate a new library crate named `add_one`:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-02-add-one/add
@@ -111,6 +102,15 @@ copy output below
 $ cargo new add_one --lib
     Creating library `add_one` package
       Adding `add_one` as member of workspace at `file:///projects/add`
+```
+
+The top-level _Cargo.toml_ will now include the _add_one_ path in the `members`
+list:
+
+<span class="filename">Filename: Cargo.toml</span>
+
+```toml
+{{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/Cargo.toml}}
 ```
 
 Your _add_ directory should now have these directories and files:
@@ -138,7 +138,7 @@ In the _add_one/src/lib.rs_ file, let’s add an `add_one` function:
 ```
 
 Now we can have the `adder` package with our binary depend on the `add_one`
-package that has our library. First, we’ll need to add a path dependency on
+package that has our library. First we’ll need to add a path dependency on
 `add_one` to _adder/Cargo.toml_.
 
 <span class="filename">Filename: adder/Cargo.toml</span>
@@ -279,10 +279,10 @@ To fix this, edit the _Cargo.toml_ file for the `adder` package and indicate
 that `rand` is a dependency for it as well. Building the `adder` package will
 add `rand` to the list of dependencies for `adder` in _Cargo.lock_, but no
 additional copies of `rand` will be downloaded. Cargo will ensure that every
-crate in every package in the workspace using the `rand` package will be using
-the same version as long as they specify compatible versions of `rand`, saving
-us space and ensuring that the crates in the workspace will be compatible with
-each other.
+crate in every package in the workspace using the `rand` package will use the
+same version as long as they specify compatible versions of `rand`, saving us
+space and ensuring that the crates in the workspace will be compatible with each
+other.
 
 If crates in the workspace specify incompatible versions of the same dependency,
 Cargo will resolve each of them, but will still try to resolve as few versions
@@ -378,7 +378,7 @@ flag and specifying the name of the crate we want to publish.
 For additional practice, add an `add_two` crate to this workspace in a similar
 way as the `add_one` crate!
 
-As your project grows, consider using a workspace: it’s easier to understand
-smaller, individual components than one big blob of code. Furthermore, keeping
-the crates in a workspace can make coordination between crates easier if they
-are often changed at the same time.
+As your project grows, consider using a workspace: it enables you to work with
+smaller, easier-to-understand components than one big blob of code. Furthermore,
+keeping the crates in a workspace can make coordination between crates easier if
+they are often changed at the same time.

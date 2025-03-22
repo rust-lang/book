@@ -75,7 +75,7 @@ we can handle before reaching that point.
 
 This technique is just one of many ways to improve the throughput of a web
 server. Other options you might explore are the fork/join model, the
-single-threaded async I/O model, and the multi-threaded async I/O model. If
+single-threaded async I/O model, and the multithreaded async I/O model. If
 you’re interested in this topic, you can read more about other solutions and
 try to implement them; with a low-level language like Rust, all of these
 options are possible.

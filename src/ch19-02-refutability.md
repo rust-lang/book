@@ -9,10 +9,10 @@ a_value` because if the value in the `a_value` variable is `None` rather than
 `Some`, the `Some(x)` pattern will not match.
 
 Function parameters, `let` statements, and `for` loops can only accept
-irrefutable patterns, because the program cannot do anything meaningful when
+irrefutable patterns because the program cannot do anything meaningful when
 values don’t match. The `if let` and `while let` expressions and the
-`let`-`else` statement accept refutable and irrefutable patterns, but the
-compiler warns against irrefutable patterns because by definition they’re
+`let...else` statement accept refutable and irrefutable patterns, but the
+compiler warns against irrefutable patterns because, by definition, they’re
 intended to handle possible failure: the functionality of a conditional is in
 its ability to perform differently depending on success or failure.
 
@@ -24,7 +24,7 @@ using the pattern with, depending on the intended behavior of the code.
 
 Let’s look at an example of what happens when we try to use a refutable pattern
 where Rust requires an irrefutable pattern and vice versa. Listing 19-8 shows a
-`let` statement, but for the pattern we’ve specified `Some(x)`, a refutable
+`let` statement, but for the pattern, we’ve specified `Some(x)`, a refutable
 pattern. As you might expect, this code will not compile.
 
 <Listing number="19-8" caption="Attempting to use a refutable pattern with `let`">
@@ -35,7 +35,7 @@ pattern. As you might expect, this code will not compile.
 
 </Listing>
 
-If `some_option_value` was a `None` value, it would fail to match the pattern
+If `some_option_value` were a `None` value, it would fail to match the pattern
 `Some(x)`, meaning the pattern is refutable. However, the `let` statement can
 only accept an irrefutable pattern because there is nothing valid the code can
 do with a `None` value. At compile time, Rust will complain that we’ve tried to
@@ -54,7 +54,7 @@ can use `if let`. Then if the pattern doesn’t match, the code will just skip
 the code in the curly brackets, giving it a way to continue validly. Listing
 19-9 shows how to fix the code in Listing 19-8.
 
-<Listing number="19-9" caption="Using `if let` and a block with refutable patterns instead of `let`">
+<Listing number="19-9" caption="Using `let...else` and a block with refutable patterns instead of `let`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-09/src/main.rs:here}}

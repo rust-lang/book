@@ -44,7 +44,7 @@ Our `grep` project will combine a number of concepts you’ve learned so far:
 * Writing tests (Chapter 11)
 
 We’ll also briefly introduce closures, iterators, and trait objects, which
-Chapter 13 and Chapter 17 will
+Chapter 13 and Chapter 18 will
 cover in detail.
 
 ## Accepting Command Line Arguments
@@ -87,8 +87,7 @@ the iterator produces.
 The code in Listing 12-1 allows your `minigrep` program to read any command
 line arguments passed to it, and then collect the values into a vector.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::env;
@@ -111,15 +110,14 @@ from `std::env`. It’s also less ambiguous than adding `use std::env::args` and
 then calling the function with just `args`, because `args` might easily be
 mistaken for a function that’s defined in the current module.
 
- >
- > ### The `args` Function and Invalid Unicode
- >
- > Note that `std::env::args` will panic if any argument contains invalid
- > Unicode. If your program needs to accept arguments containing invalid
- > Unicode, use `std::env::args_os` instead. That function returns an iterator
- > that produces `OsString` values instead of `String` values. We’ve chosen to
- > use `std::env::args` here for simplicity because `OsString` values differ per
- > platform and are more complex to work with than `String` values.
+> ### The args Function and Invalid Unicode
+> 
+> Note that `std::env::args` will panic if any argument contains invalid
+> Unicode. If your program needs to accept arguments containing invalid
+> Unicode, use `std::env::args_os` instead. That function returns an iterator
+> that produces `OsString` values instead of `String` values. We’ve chosen to
+> use `std::env::args` here for simplicity because `OsString` values differ per
+> platform and are more complex to work with than `String` values.
 
 On the first line of `main`, we call `env::args`, and we immediately use
 `collect` to turn the iterator into a vector containing all the values produced
@@ -169,8 +167,7 @@ arguments. Now we need to save the values of the two arguments in variables so
 we can use the values throughout the rest of the program. We do that in Listing
 12-2.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::env;
@@ -223,8 +220,7 @@ has an Emily Dickinson poem that will work well! Create a file called
 *poem.txt* at the root level of your project, and enter the poem “I’m Nobody!
 Who are you?”
 
-
-Filename: poem.txt
+poem.txt
 
 ```
 I'm nobody! Who are you?
@@ -243,8 +239,7 @@ Listing 12-3: A poem by Emily Dickinson makes a good test case.
 With the text in place, edit *src/main.rs* and add code to read the file, as
 shown in Listing 12-4.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::env;
@@ -379,8 +374,7 @@ We’ll extract the functionality for parsing arguments into a function that
 *src/lib.rs*. Listing 12-5 shows the new start of `main` that calls a new
 function `parse_config`, which we’ll define in *src/main.rs* for the moment.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 fn main() {
@@ -399,7 +393,7 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 }
 ```
 
-Listing 12-5: Extracting a <code>parse_config</code> function from <code>main</code>
+Listing 12-5: Extracting a `parse_config` function from `main`
 
 We’re still collecting the command line arguments into a vector, but instead of
 assigning the argument value at index 1 to the variable `query` and the
@@ -434,8 +428,7 @@ other and what their purpose is.
 
 Listing 12-6 shows the improvements to the `parse_config` function.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 fn main() {
@@ -465,7 +458,7 @@ fn parse_config(args: &[String]) -> Config {
 }
 ```
 
-Listing 12-6: Refactoring <code>parse_config</code> to return an instance of a <code>Config</code> struct
+Listing 12-6: Refactoring `parse_config` to return an instance of a `Config` struct
 
 We’ve added a struct named `Config` defined to have fields named `query` and
 `file_path`. The signature of `parse_config` now indicates that it returns a
@@ -484,19 +477,18 @@ However, cloning the data also makes our code very straightforward because we
 don’t have to manage the lifetimes of the references; in this circumstance,
 giving up a little performance to gain simplicity is a worthwhile trade-off.
 
- >
- > ### The Trade-Offs of Using `clone`
- >
- > There’s a tendency among many Rustaceans to avoid using `clone` to fix
- > ownership problems because of its runtime cost. In
- > Chapter 13, you’ll learn how to use more efficient
- > methods in this type of situation. But for now, it’s okay to copy a few
- > strings to continue making progress because you’ll make these copies only
- > once and your file path and query string are very small. It’s better to have
- > a working program that’s a bit inefficient than to try to hyperoptimize code
- > on your first pass. As you become more experienced with Rust, it’ll be
- > easier to start with the most efficient solution, but for now, it’s
- > perfectly acceptable to call `clone`.
+> ### The Trade-Offs of Using clone
+> 
+> There’s a tendency among many Rustaceans to avoid using `clone` to fix
+> ownership problems because of its runtime cost. In
+> Chapter 13, you’ll learn how to use more efficient
+> methods in this type of situation. But for now, it’s okay to copy a few
+> strings to continue making progress because you’ll make these copies only
+> once and your file path and query string are very small. It’s better to have
+> a working program that’s a bit inefficient than to try to hyperoptimize code
+> on your first pass. As you become more experienced with Rust, it’ll be
+> easier to start with the most efficient solution, but for now, it’s
+> perfectly acceptable to call `clone`.
 
 We’ve updated `main` so it places the instance of `Config` returned by
 `parse_config` into a variable named `config`, and we updated the code that
@@ -508,7 +500,7 @@ that their purpose is to configure how the program will work. Any code that
 uses these values knows to find them in the `config` instance in the fields
 named for their purpose.
 
-#### Creating a Constructor for `Config`
+#### Creating a Constructor for Config
 
 So far, we’ve extracted the logic responsible for parsing the command line
 arguments from `main` and placed it in the `parse_config` function. Doing so
@@ -526,8 +518,7 @@ changing `parse_config` into a `new` function associated with `Config`, we’ll
 be able to create instances of `Config` by calling `Config::new`. Listing 12-7
 shows the changes we need to make.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 fn main() {
@@ -550,7 +541,7 @@ impl Config {
 }
 ```
 
-Listing 12-7: Changing <code>parse_config</code> into <code>Config::new</code>
+Listing 12-7: Changing `parse_config` into `Config::new`
 
 We’ve updated `main` where we were calling `parse_config` to instead call
 `Config::new`. We’ve changed the name of `parse_config` to `new` and moved it
@@ -584,8 +575,7 @@ In Listing 12-8, we add a check in the `new` function that will verify that the
 slice is long enough before accessing index 1 and index 2. If the slice isn’t
 long enough, the program panics and displays a better error message.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
     // --snip--
@@ -631,7 +621,7 @@ we’ll use the other technique you learned about in Chapter 9—returning a
 
 <a id="returning-a-result-from-new-instead-of-calling-panic"></a>
 
-#### Returning a `Result` Instead of Calling `panic!`
+#### Returning a Result Instead of Calling panic!
 
 We can instead return a `Result` value that will contain a `Config` instance in
 the successful case and will describe the problem in the error case. We’re also
@@ -646,8 +636,7 @@ function we’re now calling `Config::build` and the body of the function needed
 to return a `Result`. Note that this won’t compile until we update `main` as
 well, which we’ll do in the next listing.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 impl Config {
@@ -664,7 +653,7 @@ impl Config {
 }
 ```
 
-Listing 12-9: Returning a <code>Result</code> from <code>Config::build</code>
+Listing 12-9: Returning a `Result` from `Config::build`
 
 Our `build` function returns a `Result` with a `Config` instance in the success
 case and a string literal in the error case. Our error values will always be
@@ -683,7 +672,7 @@ process more cleanly in the error case.
 
 <a id="calling-confignew-and-handling-errors"></a>
 
-#### Calling `Config::build` and Handling Errors
+#### Calling Config::build and Handling Errors
 
 To handle the error case and print a user-friendly message, we need to update
 `main` to handle the `Result` being returned by `Config::build`, as shown in
@@ -692,8 +681,7 @@ tool with a nonzero error code away from `panic!` and instead implement it by
 hand. A nonzero exit status is a convention to signal to the process that
 called our program that the program exited with an error state.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::process;
@@ -709,7 +697,7 @@ fn main() {
     // --snip--
 ```
 
-Listing 12-10: Exiting with an error code if building a <code>Config</code> fails
+Listing 12-10: Exiting with an error code if building a `Config` fails
 
 In this listing, we’ve used a method we haven’t covered in detail yet:
 `unwrap_or_else`, which is defined on `Result<T, E>` by the standard library.
@@ -743,7 +731,7 @@ Problem parsing arguments: not enough arguments
 
 Great! This output is much friendlier for our users.
 
-### Extracting Logic from `main`
+### Extracting Logic from main
 
 Now that we’ve finished refactoring the configuration parsing, let’s turn to
 the program’s logic. As we stated in “Separation of Concerns for Binary
@@ -757,8 +745,7 @@ Listing 12-11 shows the extracted `run` function. For now, we’re just making
 the small, incremental improvement of extracting the function. We’re still
 defining the function in *src/main.rs*.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 fn main() {
@@ -780,13 +767,13 @@ fn run(config: Config) {
 // --snip--
 ```
 
-Listing 12-11: Extracting a <code>run</code> function containing the rest of the program logic
+Listing 12-11: Extracting a `run` function containing the rest of the program logic
 
 The `run` function now contains all the remaining logic from `main`, starting
 from reading the file. The `run` function takes the `Config` instance as an
 argument.
 
-#### Returning Errors from the `run` Function
+#### Returning Errors from the run Function
 
 With the remaining program logic separated into the `run` function, we can
 improve the error handling, as we did with `Config::build` in Listing 12-9.
@@ -796,8 +783,7 @@ us further consolidate the logic around handling errors into `main` in a
 user-friendly way. Listing 12-12 shows the changes we need to make to the
 signature and body of `run`.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::error::Error;
@@ -813,7 +799,7 @@ fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 ```
 
-Listing 12-12: Changing the <code>run</code> function to return <code>Result</code>
+Listing 12-12: Changing the `run` function to return `Result`
 
 We’ve made three significant changes here. First, we changed the return type of
 the `run` function to `Result<(), Box<dyn Error>>`. This function previously
@@ -822,7 +808,7 @@ returned the unit type, `()`, and we keep that as the value returned in the
 
 For the error type, we used the *trait object* `Box<dyn Error>` (and we’ve
 brought `std::error::Error` into scope with a `use` statement at the top).
-We’ll cover trait objects in Chapter 17. For now, just
+We’ll cover trait objects in Chapter 18. For now, just
 know that `Box<dyn Error>` means the function will return a type that
 implements the `Error` trait, but we don’t have to specify what particular type
 the return value will be. This gives us flexibility to return error values that
@@ -882,7 +868,7 @@ might indicate that an error occurred. But we’re not checking to see whether o
 not there was an error, and the compiler reminds us that we probably meant to
 have some error-handling code here! Let’s rectify that problem now.
 
-#### Handling Errors Returned from `run` in `main`
+#### Handling Errors Returned from run in main
 
 We’ll check for errors and handle them using a technique similar to one we used
 with `Config::build` in Listing 12-10, but with a slight difference:
@@ -931,8 +917,7 @@ The contents of *src/lib.rs* should have the signatures shown in Listing 12-13
 (we’ve omitted the bodies of the functions for brevity). Note that this won’t
 compile until we modify *src/main.rs* in Listing 12-14.
 
-
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 use std::error::Error;
@@ -954,7 +939,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 ```
 
-Listing 12-13: Moving <code>Config</code> and <code>run</code> into <em>src/lib.rs</em>
+Listing 12-13: Moving `Config` and `run` into *src/lib.rs*
 
 We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its
 `build` method, and on the `run` function. We now have a library crate that has
@@ -963,8 +948,7 @@ a public API we can test!
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the
 binary crate in *src/main.rs*, as shown in Listing 12-14.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::env;
@@ -980,7 +964,7 @@ fn main() {
 }
 ```
 
-Listing 12-14: Using the <code>minigrep</code> library crate in <em>src/main.rs</em>
+Listing 12-14: Using the `minigrep` library crate in *src/main.rs*
 
 We add a `use minigrep::Config` line to bring the `Config` type from the
 library crate into the binary crate’s scope, and we prefix the `run` function
@@ -1032,8 +1016,7 @@ the behavior we want the `search` function to have: it will take a query and
 the text to search, and it will return only the lines from the text that
 contain the query. Listing 12-15 shows this test, which won’t compile yet.
 
-
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 #[cfg(test)]
@@ -1053,7 +1036,7 @@ Pick three.";
 }
 ```
 
-Listing 12-15: Creating a failing test for the <code>search</code> function we wish we had
+Listing 12-15: Creating a failing test for the `search` function we wish we had
 
 This test searches for the string `"duct"`. The text we’re searching is three
 lines, only one of which contains `"duct"` (note that the backslash after the
@@ -1068,8 +1051,7 @@ adding a definition of the `search` function that always returns an empty
 vector, as shown in Listing 12-16. Then the test should compile and fail
 because an empty vector doesn’t match a vector containing the line `"safe, fast, productive."`
 
-
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
@@ -1077,7 +1059,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-Listing 12-16: Defining just enough of the <code>search</code> function so our test will compile
+Listing 12-16: Defining just enough of the `search` function so our test will compile
 
 Notice that we need to define an explicit lifetime `'a` in the signature of
 `search` and use that lifetime with the `contents` argument and the return
@@ -1172,14 +1154,13 @@ that and implement `search`, our program needs to follow these steps:
 
 Let’s work through each step, starting with iterating through lines.
 
-#### Iterating Through Lines with the `lines` Method
+#### Iterating Through Lines with the lines Method
 
 Rust has a helpful method to handle line-by-line iteration of strings,
 conveniently named `lines`, that works as shown in Listing 12-17. Note that
 this won’t compile yet.
 
-
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
@@ -1189,7 +1170,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-Listing 12-17: Iterating through each line in <code>contents</code>
+Listing 12-17: Iterating through each line in `contents`
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
 Chapter 13, but recall that you saw this way
@@ -1203,8 +1184,7 @@ Fortunately, strings have a helpful method named `contains` that does this for
 us! Add a call to the `contains` method in the `search` function, as shown in
 Listing 12-18. Note that this still won’t compile yet.
 
-
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
@@ -1216,7 +1196,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-Listing 12-18: Adding functionality to see whether the line contains the string in <code>query</code>
+Listing 12-18: Adding functionality to see whether the line contains the string in `query`
 
 At the moment, we’re building up functionality. To get the code to compile, we
 need to return a value from the body as we indicated we would in the function
@@ -1229,8 +1209,7 @@ to return. For that, we can make a mutable vector before the `for` loop and
 call the `push` method to store a `line` in the vector. After the `for` loop,
 we return the vector, as shown in Listing 12-19.
 
-
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
@@ -1285,7 +1264,7 @@ but it doesn’t take advantage of some useful features of iterators. We’ll
 return to this example in Chapter 13, where
 we’ll explore iterators in detail, and look at how to improve it.
 
-#### Using the `search` Function in the `run` Function
+#### Using the search Function in the run Function
 
 Now that the `search` function is working and tested, we need to call `search`
 from our `run` function. We need to pass the `config.query` value and the
@@ -1358,7 +1337,7 @@ users enter it each time they want it to apply, but by instead making it an
 environment variable, we allow our users to set the environment variable once
 and have all their searches be case insensitive in that terminal session.
 
-### Writing a Failing Test for the Case-Insensitive `search` Function
+### Writing a Failing Test for the Case-Insensitive search Function
 
 We first add a new `search_case_insensitive` function that will be called when
 the environment variable has a value. We’ll continue to follow the TDD process,
@@ -1367,8 +1346,7 @@ the new `search_case_insensitive` function and rename our old test from
 `one_result` to `case_sensitive` to clarify the differences between the two
 tests, as shown in Listing 12-20.
 
-
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 #[cfg(test)]
@@ -1422,15 +1400,14 @@ the `search_case_insensitive` function. Feel free to add a skeleton
 implementation that always returns an empty vector, similar to the way we did
 for the `search` function in Listing 12-16 to see the test compile and fail.
 
-### Implementing the `search_case_insensitive` Function
+### Implementing the search_case_insensitive Function
 
 The `search_case_insensitive` function, shown in Listing 12-21, will be almost
 the same as the `search` function. The only difference is that we’ll lowercase
 the `query` and each `line` so that whatever the case of the input arguments,
 they’ll be the same case when we check whether the line contains the query.
 
-
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 pub fn search_case_insensitive<'a>(
@@ -1450,16 +1427,16 @@ pub fn search_case_insensitive<'a>(
 }
 ```
 
-Listing 12-21: Defining the <code>search_case_insensitive</code> function to lowercase the query and the line before comparing them
+Listing 12-21: Defining the `search_case_insensitive` function to lowercase the query and the line before comparing them
 
-First we lowercase the `query` string and store it in a shadowed variable with
-the same name. Calling `to_lowercase` on the query is necessary so that no
-matter whether the user’s query is `"rust"`, `"RUST"`, `"Rust"`, or `"rUsT"`,
-we’ll treat the query as if it were `"rust"` and be insensitive to the case.
-While `to_lowercase` will handle basic Unicode, it won’t be 100% accurate. If
-we were writing a real application, we’d want to do a bit more work here, but
-this section is about environment variables, not Unicode, so we’ll leave it at
-that here.
+First we lowercase the `query` string and store it in a new variable with the
+same name, shadowing the original. Calling `to_lowercase` on the query is
+necessary so that no matter whether the user’s query is `"rust"`, `"RUST"`,
+`"Rust"`, or `"rUsT"`, we’ll treat the query as if it were `"rust"` and be
+insensitive to the case. While `to_lowercase` will handle basic Unicode, it
+won’t be 100% accurate. If we were writing a real application, we’d want to do a
+bit more work here, but this section is about environment variables, not
+Unicode, so we’ll leave it at that here.
 
 Note that `query` is now a `String` rather than a string slice because calling
 `to_lowercase` creates new data rather than referencing existing data. Say the
@@ -1522,8 +1499,7 @@ function to check the `ignore_case` field’s value and use that to decide
 whether to call the `search` function or the `search_case_insensitive`
 function, as shown in Listing 12-22. This still won’t compile yet.
 
-
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
@@ -1543,7 +1519,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 ```
 
-Listing 12-22: Calling either <code>search</code> or <code>search_case_insensitive</code> based on the value in <code>config.ignore_case</code>
+Listing 12-22: Calling either `search` or `search_case_insensitive` based on the value in `config.ignore_case`
 
 Finally, we need to check for the environment variable. The functions for
 working with environment variables are in the `env` module in the standard
@@ -1552,8 +1528,7 @@ we’ll use the `var` function from the `env` module to check to see if any valu
 has been set for an environment variable named `IGNORE_CASE`, as shown in
 Listing 12-23.
 
-
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 use std::env;
@@ -1579,7 +1554,7 @@ impl Config {
 }
 ```
 
-Listing 12-23: Checking for any value in an environment variable named <code>IGNORE_CASE</code>
+Listing 12-23: Checking for any value in an environment variable named `IGNORE_CASE`
 
 Here, we create a new variable, `ignore_case`. To set its value, we call the
 `env::var` function and pass it the name of the `IGNORE_CASE` environment
@@ -1721,8 +1696,7 @@ the `eprintln!` macro that prints to the standard error stream, so let’s chang
 the two places we were calling `println!` to print errors to use `eprintln!`
 instead.
 
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 fn main() {
@@ -1740,7 +1714,7 @@ fn main() {
 }
 ```
 
-Listing 12-24: Writing error messages to standard error instead of standard output using <code>eprintln!</code>
+Listing 12-24: Writing error messages to standard error instead of standard output using `eprintln!`
 
 Let’s now run the program again in the same way, without any arguments and
 redirecting standard output with `>`:
