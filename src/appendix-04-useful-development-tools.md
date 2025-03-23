@@ -21,16 +21,6 @@ $ cargo fmt
 ```
 
 Running this command reformats all the Rust code in the current crate. This
-should only change the code style, not the code semantics.
-
-This command gives you `rustfmt` and `cargo-fmt`, similar to how Rust gives you
-both `rustc` and `cargo`. To format any Cargo project, enter the following:
-
-```console
-$ cargo fmt
-```
-
-Running this command reformats all the Rust code in the current crate. This
 should only change the code style, not the code semantics. For more information
 on `rustfmt`, see [its documentation][rustfmt].
 
