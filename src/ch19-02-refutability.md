@@ -50,8 +50,8 @@ pattern `Some(x)`, Rust rightfully produces a compiler error.
 
 If we have a refutable pattern where an irrefutable pattern is needed, we can
 fix it by changing the code that uses the pattern: Instead of using `let`, we
-can use `let else`. Then, if the pattern doesn’t match, the code will just skip
-the code in the curly brackets, giving it a way to continue validly. Listing
+can use `let else`. Then, if the pattern doesn’t match, the code in the curly
+brackets will be executed, giving it a way to continue validly. Listing
 19-9 shows how to fix the code in Listing 19-8.
 
 <Listing number="19-9" caption="Using `let...else` and a block with refutable patterns instead of `let`">
