@@ -590,7 +590,7 @@ to consider first, though:
   the fact that it’s from the `stream` part of the crate; it works just fine
   with any collection of futures.)
 
-[dyn]: ch12-03-improving-error-handling-and-modularity.html
+[dyn]: ch12-03-improving-error-handling-and-modularity.html#returning-errors-from-the-run-function
 [enum-alt]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [async-program]: ch17-01-futures-and-syntax.html#our-first-async-program
 [iterator-trait]: ch13-02-iterators.html#the-iterator-trait-and-the-next-method
