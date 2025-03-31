@@ -525,12 +525,12 @@ random number generators implement, and this trait must be in scope for us to
 use those methods. Chapter 10 will cover traits in detail.
 
 Next, we’re adding two lines in the middle. In the first line, we call the
-`rand::thread_rng` function that gives us the particular random number
+`rand::rng` function that gives us the particular random number
 generator we’re going to use: one that is local to the current thread of
-execution and is seeded by the operating system. Then we call the `gen_range`
+execution and is seeded by the operating system. Then we call the `random_range`
 method on the random number generator. This method is defined by the `Rng`
 trait that we brought into scope with the `use rand::Rng;` statement. The
-`gen_range` method takes a range expression as an argument and generates a
+`random_range` method takes a range expression as an argument and generates a
 random number in the range. The kind of range expression we’re using here takes
 the form `start..=end` and is inclusive on the lower and upper bounds, so we
 need to specify `1..=100` to request a number between 1 and 100.
@@ -538,7 +538,7 @@ need to specify `1..=100` to request a number between 1 and 100.
 > Note: You won’t just know which traits to use and which methods and functions
 > to call from a crate, so each crate has documentation with instructions for
 > using it. Another neat feature of Cargo is that running the `cargo doc
-> --open` command will build documentation provided by all your dependencies
+--open` command will build documentation provided by all your dependencies
 > locally and open it in your browser. If you’re interested in other
 > functionality in the `rand` crate, for example, run `cargo doc --open` and
 > click `rand` in the sidebar on the left.
@@ -619,8 +619,7 @@ might encounter and they make sure you handle them all. These features will be
 covered in detail in Chapter 6 and Chapter 19, respectively.
 
 Let’s walk through an example with the `match` expression we use here. Say that
-the user has guessed 50 and the randomly generated secret number this time is
-38.
+the user has guessed 50 and the randomly generated secret number this time is 38.
 
 When the code compares 50 to 38, the `cmp` method will return
 `Ordering::Greater` because 50 is greater than 38. The `match` expression gets
