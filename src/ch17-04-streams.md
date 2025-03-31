@@ -345,8 +345,8 @@ which is longer than the other durations we are using. Here, we create a
 through the stream, and pin it so that it’s safe to do so. That gets us _almost_
 to where we need to be. Everything type checks. If you run this, though, there
 will be two problems. First, it will never stop! You’ll need to stop it with
-<span class="keystroke">ctrl-c</span>. Second, the messages from the English
-alphabet will be buried in the midst of all the interval counter messages:
+<kbd>ctrl</kbd>-<kbd>c</kbd>. Second, the messages from the English alphabet
+will be buried in the midst of all the interval counter messages:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the tasks running differently rather than
