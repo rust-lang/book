@@ -194,12 +194,12 @@ have to track down why your data isn’t what you thought it was.
 ### Dangling References
 
 In languages with pointers, it’s easy to erroneously create a _dangling
-pointer_—a pointer that references a location in memory that may have been
-given to someone else—by freeing some memory while preserving a pointer to that
-memory. In Rust, by contrast, the compiler guarantees that references will
-never be dangling references: if you have a reference to some data, the
-compiler will ensure that the data will not go out of scope before the
-reference to the data does.
+pointer_—a pointer that references a location in memory that has been
+deallocated or the original data no longer exists, but the reference
+still tries to access it. In Rust, by contrast, the compiler guarantees
+that references will never be dangling references: if you have a
+reference to some data, the compiler will ensure that the data will not
+go out of scope before the reference to the data does.
 
 Let’s try to create a dangling reference to see how Rust prevents them with a
 compile-time error:
