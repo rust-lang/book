@@ -288,7 +288,7 @@ making sure the data ultimately being referenced stays in place. If a pointer
 moves around, _but the data it points to is in the same place_, as in Figure
 17-7, there’s no potential problem. As an independent exercise, look at the docs
 for the types as well as the `std::pin` module and try to work out how you’d do
-this with a `Pin` wrapping a `Box`.) The key is that the self-referential type
+this with a `Pin` wrapping a `Box`. The key is that the self-referential type
 itself cannot move, because it is still pinned.
 
 <figure>
@@ -365,7 +365,7 @@ That is precisely why it implements `Unpin` rather than `!Unpin`.
 </figure>
 
 Now we know enough to understand the errors reported for that `join_all` call
-from back in Listing 17-17. We originally tried to move the futures produced by
+from back in Listing 17-16. We originally tried to move the futures produced by
 async blocks into a `Vec<Box<dyn Future<Output = ()>>>`, but as we’ve seen,
 those futures may have internal references, so they don’t implement `Unpin`.
 They need to be pinned, and then we can pass the `Pin` type into the `Vec`,
