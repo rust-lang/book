@@ -62,9 +62,16 @@ pub use tokio_stream::{
 ///
 /// - Not *that* far off from what Tokio itself does under the hood in its own
 ///   `tokio::main` macro for supporting `async fn main`.
-pub fn run<F: Future>(future: F) -> F::Output {
+pub fn block_on<F: Future>(future: F) -> F::Output {
     let rt = Runtime::new().unwrap();
     rt.block_on(future)
+}
+
+/// This function has been renamed to `block_on`; please see its documentation.
+/// This function remains to maintain compatibility with the online versions
+/// of the book that use the name `run`.
+pub fn run<F: Future>(future: F) -> F::Output {
+    block_on(future)
 }
 
 /// Run two futures, taking whichever finishes first and canceling the other.
