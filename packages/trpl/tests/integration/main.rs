@@ -142,7 +142,32 @@ mod re_exported_join_apis_work {
 }
 
 #[test]
-fn race() {
+fn select() {
+    #[derive(Debug, PartialEq)]
+    struct Slow;
+
+    #[derive(Debug, PartialEq)]
+    struct Fast;
+
+    let val = trpl::block_on(async {
+        let slow = async {
+            trpl::sleep(Duration::from_millis(1_000)).await;
+            Slow
+        };
+
+        let fast = async {
+            trpl::sleep(Duration::from_millis(1)).await;
+            Fast
+        };
+
+        trpl::select(slow, fast).await
+    });
+
+    assert!(matches!(val, Either::Right(Fast)));
+}
+
+#[test]
+fn race_continues_to_work() {
     #[derive(Debug, PartialEq)]
     struct Slow;
 
