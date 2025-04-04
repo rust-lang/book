@@ -4,9 +4,9 @@ use std::time::Duration;
 
 fn main() {
     trpl::run(async {
-        let (tx, mut rx) = trpl::channel();
 
         // ANCHOR: futures
+        let (tx, mut rx) = trpl::channel();
         let tx_fut = async {
             let vals = vec![
                 String::from("hi"),
