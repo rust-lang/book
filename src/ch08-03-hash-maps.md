@@ -41,7 +41,10 @@ standard library; there’s no built-in macro to construct them, for example.
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
 keys of type `String` and values of type `i32`. Like vectors, hash maps are
 homogeneous: all of the keys must have the same type, and all of the values
-must have the same type.
+must have the same type. While both collections enforce homogeneous types, 
+they differ in when types must be specified. Vectors require type annotations
+when empty because they allocate memory immediately. HashMaps can infer types
+from the first insertion since they allocate memory lazily.
 
 ### Accessing Values in a Hash Map
 
