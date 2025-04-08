@@ -108,7 +108,7 @@ fn main() {
         .read_line(&mut guess)
         .expect("Failed to read line");
 
-    println!("You guessed: {}", guess);
+    println!("You guessed: {guess}");
 }
 ```
 
@@ -400,7 +400,7 @@ Filename: Cargo.toml
 
 ```
 [dependencies]
-rand = "0.8.4"
+rand = "0.8.5"
 ```
 
 In the *Cargo.toml* file, everything that follows a header is part of that
@@ -566,6 +566,7 @@ src/main.rs
 
 ```
 use std::io;
+
 use rand::Rng;
 
 fn main() {
@@ -659,9 +660,10 @@ explain.
 src/main.rs
 
 ```
-use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
+
+use rand::Rng;
 
 fn main() {
     // --snip--
@@ -1067,9 +1069,10 @@ secret number. Listing 2-6 shows the final code.
 src/main.rs
 
 ```
-use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
+
+use rand::Rng;
 
 fn main() {
     println!("Guess the number!");
