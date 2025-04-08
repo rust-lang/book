@@ -32,7 +32,7 @@ warnings. In other words, any newer, stable version of Rust you install using
 these steps should work as expected with the content of this book.
 
 > ### Command Line Notation
-> 
+>
 > In this chapter and throughout the book, we’ll show some commands used in the
 > terminal. Lines that you should enter in a terminal all start with `$`. You
 > don’t need to type the `$` character; it’s the command line prompt shown to
@@ -230,11 +230,11 @@ $ ./main
 Hello, world!
 ```
 
-On Windows, enter the command `.\main.exe` instead of `./main`:
+On Windows, enter the command `.\main` instead of `./main`:
 
 ```
 > rustc main.rs
-> .\main.exe
+> .\main
 Hello, world!
 ```
 
@@ -283,10 +283,11 @@ This line does all the work in this little program: it prints text to the
 screen. There are three important details to notice here.
 
 First, `println!` calls a Rust macro. If it had called a function instead, it
-would be entered as `println` (without the `!`). We’ll discuss Rust macros in
-more detail in Chapter 20. For now, you just need to know that using a `!`
-means that you’re calling a macro instead of a normal function and that macros
-don’t always follow the same rules as functions.
+would be entered as `println` (without the `!`). Rust macros are a way to write
+code that generates code to extend Rust syntax, and we’ll discuss them in more
+detail in Chapter 20. For now, you just need to know that using a `!` means
+that you’re calling a macro instead of a normal function and that macros don’t
+always follow the same rules as functions.
 
 Second, you see the `"Hello, world!"` string. We pass this string as an argument
 to `println!`, and the string is printed to the screen.
@@ -336,7 +337,7 @@ Windows, a file containing debugging information with the *.pdb* extension.
 From here, you run the *main* or *main.exe* file, like this:
 
 ```
-$ ./main # or .\main.exe on Windows
+$ ./main # or .\main on Windows
 ```
 
 If your *main.rs* is your “Hello, world!” program, this line prints `Hello, world!` to your terminal.
