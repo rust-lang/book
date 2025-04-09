@@ -23,8 +23,8 @@ struct that stores information about a user account.
 
 To use a struct after we’ve defined it, we create an _instance_ of that struct
 by specifying concrete values for each of the fields. We create an instance by
-stating the name of the struct and then add curly brackets containing _key:
-value_ pairs, where the keys are the names of the fields and the values are the
+stating the name of the struct and then add curly brackets containing _`key:
+value`_ pairs, where the keys are the names of the fields and the values are the
 data we want to store in those fields. We don’t have to specify the fields in
 the same order in which we declared them in the struct. In other words, the
 struct definition is like a general template for the type, and instances fill
@@ -141,14 +141,14 @@ the struct’s definition.
 Note that the struct update syntax uses `=` like an assignment; this is because
 it moves the data, just as we saw in the [“Variables and Data Interacting with
 Move”][move]<!-- ignore --> section. In this example, we can no longer use
-`user1` as a whole after creating `user2` because the `String` in the
-`username` field of `user1` was moved into `user2`. If we had given `user2` new
-`String` values for both `email` and `username`, and thus only used the
-`active` and `sign_in_count` values from `user1`, then `user1` would still be
-valid after creating `user2`. Both `active` and `sign_in_count` are types that
-implement the `Copy` trait, so the behavior we discussed in the [“Stack-Only
-Data: Copy”][copy]<!-- ignore --> section would apply. We can still use
-`user1.email` in this example, since its value was _not_ moved out.
+`user1` after creating `user2` because the `String` in the `username` field of
+`user1` was moved into `user2`. If we had given `user2` new `String` values for
+both `email` and `username`, and thus only used the `active` and `sign_in_count`
+values from `user1`, then `user1` would still be valid after creating `user2`.
+Both `active` and `sign_in_count` are types that implement the `Copy` trait, so
+the behavior we discussed in the [“Stack-Only Data: Copy”][copy]<!-- ignore -->
+section would apply. We can still use `user1.email` in this example, because its
+value was _not_ moved out.
 
 ### Using Tuple Structs Without Named Fields to Create Different Types
 

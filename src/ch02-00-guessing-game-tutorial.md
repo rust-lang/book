@@ -178,7 +178,7 @@ input:
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
-If we hadn’t imported the `io` library with `use std::io;` at the beginning of
+If we hadn’t imported the `io` module with `use std::io;` at the beginning of
 the program, we could still use the function by writing this function call as
 `std::io::stdin`. The `stdin` function returns an instance of
 [`std::io::Stdin`][iostdin]<!-- ignore -->, which is a type that represents a

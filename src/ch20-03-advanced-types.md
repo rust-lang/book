@@ -15,8 +15,9 @@ discussed so far, including statically enforcing that values are never confused
 and indicating the units of a value. You saw an example of using newtypes to
 indicate units in Listing 20-16: recall that the `Millimeters` and `Meters`
 structs wrapped `u32` values in a newtype. If we wrote a function with a
-parameter of type `Millimeters`, we couldn’t compile a program that accidentally
-tried to call that function with a value of type `Meters` or a plain `u32`.
+parameter of type `Millimeters`, we wouldn’t be able to compile a program that
+accidentally tried to call that function with a value of type `Meters` or a
+plain `u32`.
 
 We can also use the newtype pattern to abstract away some implementation
 details of a type: the new type can expose a public API that is different from
@@ -28,7 +29,7 @@ associated with their name. Code using `People` would only interact with the
 public API we provide, such as a method to add a name string to the `People`
 collection; that code wouldn’t need to know that we assign an `i32` ID to names
 internally. The newtype pattern is a lightweight way to achieve encapsulation to
-hide implementation details, which we discussed in [“Encapsulation that Hides
+hide implementation details, which we discussed in [“Encapsulation That Hides
 Implementation Details”][encapsulation-that-hides-implementation-details]<!--
 ignore --> in Chapter 18.
 
@@ -53,7 +54,7 @@ values of type `i32`:
 
 Because `Kilometers` and `i32` are the same type, we can add values of both
 types and we can pass `Kilometers` values to functions that take `i32`
-parameters. However, using this method, we don’t get the type checking benefits
+parameters. However, using this method, we don’t get the type-checking benefits
 that we get from the newtype pattern discussed earlier. In other words, if we
 mix up `Kilometers` and `i32` values somewhere, the compiler will not give us
 an error.
@@ -81,7 +82,7 @@ A type alias makes this code more manageable by reducing the repetition. In
 Listing 20-26, we’ve introduced an alias named `Thunk` for the verbose type and
 can replace all uses of the type with the shorter alias `Thunk`.
 
-<Listing number="20-26" caption="Introducing a type alias, `Thunk`, to reduce repetition">
+<Listing number="20-26" caption="Introducing a type alias `Thunk` to reduce repetition">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-26/src/main.rs:here}}
@@ -127,7 +128,7 @@ us a consistent interface across all of `std::io`. Because it’s an alias, it�
 just another `Result<T, E>`, which means we can use any methods that work on
 `Result<T, E>` with it, as well as special syntax like the `?` operator.
 
-### The Never Type that Never Returns
+### The Never Type That Never Returns
 
 Rust has a special type named `!` that’s known in type theory lingo as the
 _empty type_ because it has no values. We prefer to call it the _never type_
@@ -143,7 +144,7 @@ never are called _diverging functions_. We can’t create values of the type `!`
 so `bar` can never possibly return.
 
 But what use is a type you can never create values for? Recall the code from
-Listing 2-5, part of the number guessing game; we’ve reproduced a bit of it
+Listing 2-5, part of the number-guessing game; we’ve reproduced a bit of it
 here in Listing 20-27.
 
 <Listing number="20-27" caption="A `match` with an arm that ends in `continue`">

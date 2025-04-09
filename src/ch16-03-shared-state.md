@@ -1,16 +1,16 @@
 ## Shared-State Concurrency
 
-Message passing is a fine way of handling concurrency, but it’s not the only
-one. Another method would be for multiple threads to access the same shared
+Message passing is a fine way to handle concurrency, but it’s not the only
+way. Another method would be for multiple threads to access the same shared
 data. Consider this part of the slogan from the Go language documentation
-again: “do not communicate by sharing memory.”
+again: “Do not communicate by sharing memory.”
 
 What would communicating by sharing memory look like? In addition, why would
 message-passing enthusiasts caution not to use memory sharing?
 
 In a way, channels in any programming language are similar to single ownership,
 because once you transfer a value down a channel, you should no longer use that
-value. Shared memory concurrency is like multiple ownership: multiple threads
+value. Shared-memory concurrency is like multiple ownership: multiple threads
 can access the same memory location at the same time. As you saw in Chapter 15,
 where smart pointers made multiple ownership possible, multiple ownership can
 add complexity because these different owners need managing. Rust’s type system
@@ -20,7 +20,7 @@ for shared memory.
 
 ### Using Mutexes to Allow Access to Data from One Thread at a Time
 
-_Mutex_ is an abbreviation for _mutual exclusion_, as in, a mutex allows only
+_Mutex_ is an abbreviation for _mutual exclusion_, as in a mutex allows only
 one thread to access some data at any given time. To access the data in a
 mutex, a thread must first signal that it wants access by asking to acquire the
 mutex’s _lock_. The lock is a data structure that is part of the mutex that
@@ -50,7 +50,7 @@ system and ownership rules, you can’t get locking and unlocking wrong.
 #### The API of `Mutex<T>`
 
 As an example of how to use a mutex, let’s start by using a mutex in a
-single-threaded context, as shown in Listing 16-12:
+single-threaded context, as shown in Listing 16-12.
 
 <Listing number="16-12" file-name="src/main.rs" caption="Exploring the API of `Mutex<T>` in a single-threaded context for simplicity">
 
@@ -91,13 +91,13 @@ to change the inner `i32` to 6.
 
 #### Sharing a `Mutex<T>` Between Multiple Threads
 
-Now, let’s try to share a value between multiple threads using `Mutex<T>`.
-We’ll spin up 10 threads and have them each increment a counter value by 1, so
-the counter goes from 0 to 10. The next example in Listing 16-13 will have
-a compiler error, and we’ll use that error to learn more about using
-`Mutex<T>` and how Rust helps us use it correctly.
+Now let’s try to share a value between multiple threads using `Mutex<T>`. We’ll
+spin up 10 threads and have them each increment a counter value by 1, so the
+counter goes from 0 to 10. The example in Listing 16-13 will have a compiler
+error, and we’ll use that error to learn more about using `Mutex<T>` and how
+Rust helps us use it correctly.
 
-<Listing number="16-13" file-name="src/main.rs" caption="Ten threads each increment a counter guarded by a `Mutex<T>`">
+<Listing number="16-13" file-name="src/main.rs" caption="Ten threads, each incrementing a counter guarded by a `Mutex<T>`">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-13/src/main.rs}}
@@ -126,12 +126,12 @@ We hinted that this example wouldn’t compile. Now let’s find out why!
 
 The error message states that the `counter` value was moved in the previous
 iteration of the loop. Rust is telling us that we can’t move the ownership
-of `counter` into multiple threads. Let’s fix the compiler error with a
+of lock `counter` into multiple threads. Let’s fix the compiler error with the
 multiple-ownership method we discussed in Chapter 15.
 
 #### Multiple Ownership with Multiple Threads
 
-In Chapter 15, we gave a value multiple owners by using the smart pointer
+In Chapter 15, we gave a value to multiple owners by using the smart pointer
 `Rc<T>` to create a reference counted value. Let’s do the same here and see
 what happens. We’ll wrap the `Mutex<T>` in `Rc<T>` in Listing 16-14 and clone
 the `Rc<T>` before moving ownership to the thread.
@@ -186,7 +186,7 @@ guarantees atomics provide.
 
 Let’s return to our example: `Arc<T>` and `Rc<T>` have the same API, so we fix
 our program by changing the `use` line, the call to `new`, and the call to
-`clone`. The code in Listing 16-15 will finally compile and run:
+`clone`. The code in Listing 16-15 will finally compile and run.
 
 <Listing number="16-15" file-name="src/main.rs" caption="Using an `Arc<T>` to wrap the `Mutex<T>` to be able to share ownership across multiple threads">
 
@@ -221,7 +221,7 @@ type for this example so we could concentrate on how `Mutex<T>` works.
 
 ### Similarities Between `RefCell<T>`/`Rc<T>` and `Mutex<T>`/`Arc<T>`
 
-You might have noticed that `counter` is immutable, but we could get a mutable
+You might have noticed that `counter` is immutable but we could get a mutable
 reference to the value inside it; this means `Mutex<T>` provides interior
 mutability, as the `Cell` family does. In the same way we used `RefCell<T>` in
 Chapter 15 to allow us to mutate contents inside an `Rc<T>`, we use `Mutex<T>`

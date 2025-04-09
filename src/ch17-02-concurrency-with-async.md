@@ -271,10 +271,10 @@ again, so the runtime pauses it again until another message arrives.
 
 The code now successfully sends and receives all of the messages. Unfortunately,
 there are still a couple of problems. For one thing, the messages do not arrive
-at half-second intervals. They arrive all at once, 2 (2,000 milliseconds) after
-we start the program. For another, this program also never exits! Instead, it
-waits forever for new messages. You will need to shut it down using <span
-class="keystroke">ctrl-c</span>.
+at half-second intervals. They arrive all at once, 2 seconds (2,000
+milliseconds) after we start the program. For another, this program never exits!
+Instead, it waits forever for new messages. You will need to shut it down using
+<span class="keystroke">ctrl-c</span>.
 
 Let’s start by examining why the messages come in all at once after the full
 delay, rather than coming in with delays between each one. Within a given async
@@ -308,7 +308,7 @@ flow—exactly what we’re trying _not_ to do.
 With the updated code in Listing 17-11, the messages get printed at
 500-millisecond intervals, rather than all in a rush after 2 seconds.
 
-The program still never exits, though, because of the way `while let` loop
+The program still never exits, though, because of the way the `while let` loop
 interacts with `trpl::join`:
 
 - The future returned from `trpl::join` completes only once _both_ futures

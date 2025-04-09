@@ -69,11 +69,11 @@ $ ./main
 Hello, world!
 ```
 
-On Windows, enter the command `.\main.exe` instead of `./main`:
+On Windows, enter the command `.\main` instead of `./main`:
 
 ```powershell
 > rustc main.rs
-> .\main.exe
+> .\main
 Hello, world!
 ```
 
@@ -122,10 +122,11 @@ This line does all the work in this little program: it prints text to the
 screen. There are three important details to notice here.
 
 First, `println!` calls a Rust macro. If it had called a function instead, it
-would be entered as `println` (without the `!`). We’ll discuss Rust macros in
-more detail in Chapter 20. For now, you just need to know that using a `!`
-means that you’re calling a macro instead of a normal function and that macros
-don’t always follow the same rules as functions.
+would be entered as `println` (without the `!`). Rust macros are a way to write
+code that generates code to extend Rust syntax, and we’ll discuss them in more
+detail in [Chapter 20][ch20-macros]<!-- ignore -->. For now, you just need to
+know that using a `!` means that you’re calling a macro instead of a normal
+function and that macros don’t always follow the same rules as functions.
 
 Second, you see the `"Hello, world!"` string. We pass this string as an argument
 to `println!`, and the string is printed to the screen.
@@ -175,7 +176,7 @@ Windows, a file containing debugging information with the _.pdb_ extension.
 From here, you run the _main_ or _main.exe_ file, like this:
 
 ```console
-$ ./main # or .\main.exe on Windows
+$ ./main # or .\main on Windows
 ```
 
 If your _main.rs_ is your “Hello, world!” program, this line prints `Hello,
@@ -197,3 +198,4 @@ real-world Rust programs.
 
 [troubleshooting]: ch01-01-installation.html#troubleshooting
 [devtools]: appendix-04-useful-development-tools.html
+[ch20-macros]: ch20-05-macros.html

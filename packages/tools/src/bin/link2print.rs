@@ -30,12 +30,11 @@ fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
         .unwrap();
     let output = re
         .replace_all(&buffer, |caps: &Captures<'_>| {
-            let key = caps.get(1).unwrap().as_str().to_uppercase();
+            let key_def = caps.get(1).unwrap().as_str();
+            let key = key_def.to_uppercase();
             let val = caps.get(2).unwrap().as_str().to_string();
             if ref_map.insert(key, val).is_some() {
-                panic!(
-                    "Did not expect markdown page to have duplicate reference"
-                );
+                panic!("unexpected page had duplicate reference for {key_def}",);
             }
             "".to_string()
         })

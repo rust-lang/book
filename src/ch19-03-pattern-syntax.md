@@ -1,7 +1,7 @@
 ## Pattern Syntax
 
-In this section, we gather all the syntax valid in patterns and discuss why and
-when you might want to use each one.
+In this section, we gather all the syntax that is valid in patterns and discuss
+why and when you might want to use each one.
 
 ### Matching Literals
 
@@ -19,9 +19,9 @@ value.
 ### Matching Named Variables
 
 Named variables are irrefutable patterns that match any value, and we’ve used
-them many times in the book. However, there is a complication when you use named
-variables in `match`, `if let`, or `while let` expressions. Because each of
-these kinds of expression starts a new scope, variables declared as part of a
+them many times in this book. However, there is a complication when you use
+named variables in `match`, `if let`, or `while let` expressions. Because each
+of these kinds of expression starts a new scope, variables declared as part of a
 pattern inside the expression will shadow those with the same name outside, as
 is the case with all variables. In Listing 19-11, we declare a variable named
 `x` with the value `Some(5)` and a variable `y` with the value `10`. We then
@@ -44,7 +44,7 @@ continues.
 The pattern in the second match arm introduces a new variable named `y` that
 will match any value inside a `Some` value. Because we’re in a new scope inside
 the `match` expression, this is a new `y` variable, not the `y` we declared at
-the beginning with the value 10. This new `y` binding will match any value
+the beginning with the value `10`. This new `y` binding will match any value
 inside a `Some`, which is what we have in `x`. Therefore, this new `y` binds to
 the inner value of the `Some` in `x`. That value is `5`, so the expression for
 that arm executes and prints `Matched, y = 5`.
@@ -60,10 +60,10 @@ When the `match` expression is done, its scope ends, and so does the scope of
 the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
 
 To create a `match` expression that compares the values of the outer `x` and
-`y`, rather than introducing a new variable which shadows the existing `y`
+`y`, rather than introducing a new variable that shadows the existing `y`
 variable, we would need to use a match guard conditional instead. We’ll talk
-about match guards later in the [“Extra Conditionals with Match
-Guards”](#extra-conditionals-with-match-guards)<!-- ignore --> section.
+about match guards later in [“Extra Conditionals with Match
+Guards”](#extra-conditionals-with-match-guards)<!-- ignore -->.
 
 ### Multiple Patterns
 
@@ -88,10 +88,10 @@ range, that arm will execute:
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-03-ranges/src/main.rs:here}}
 ```
 
-If `x` is 1, 2, 3, 4, or 5, the first arm will match. This syntax is more
-convenient for multiple match values than using the `|` operator to express the
-same idea; if we were to use `|` we would have to specify `1 | 2 | 3 | 4 | 5`.
-Specifying a range is much shorter, especially if we want to match, say, any
+If `x` is `1`, `2`, `3`, `4`, or `5`, the first arm will match. This syntax is
+more convenient for multiple match values than using the `|` operator to express
+the same idea; if we were to use `|` we would have to specify `1 | 2 | 3 | 4 |
+5`. Specifying a range is much shorter, especially if we want to match, say, any
 number between 1 and 1,000!
 
 The compiler checks that the range isn’t empty at compile time, and because the
@@ -156,7 +156,7 @@ destructure the other fields.
 
 In Listing 19-14, we have a `match` expression that separates `Point` values
 into three cases: points that lie directly on the `x` axis (which is true when
-`y = 0`), on the `y` axis (`x = 0`), or neither.
+`y = 0`), on the `y` axis (`x = 0`), or on neither axis.
 
 <Listing number="19-14" file-name="src/main.rs" caption="Destructuring and matching literal values in one pattern">
 
@@ -176,7 +176,7 @@ value of the `y` field. The third arm doesn’t specify any literals, so it
 matches any other `Point` and creates variables for both the `x` and `y` fields.
 
 In this example, the value `p` matches the second arm by virtue of `x`
-containing a 0, so this code will print `On the y axis at 7`.
+containing a `0`, so this code will print `On the y axis at 7`.
 
 Remember that a `match` expression stops checking arms once it has found the
 first matching pattern, so even though `Point { x: 0, y: 0}` is on the `x` axis
@@ -184,11 +184,11 @@ and the `y` axis, this code would only print `On the x axis at 0`.
 
 #### Destructuring Enums
 
-We've destructured enums in this book (for example, Listing 6-5 in Chapter 6),
-but haven’t yet explicitly discussed that the pattern to destructure an enum
-corresponds to the way the data stored within the enum is defined. As an
-example, in Listing 19-15 we use the `Message` enum from Listing 6-2 and write
-a `match` with patterns that will destructure each inner value.
+We've destructured enums in this book (for example, Listing 6-5), but we haven’t
+yet explicitly discussed that the pattern to destructure an enum corresponds to
+the way the data stored within the enum is defined. As an example, in Listing
+19-15 we use the `Message` enum from Listing 6-2 and write a `match` with
+patterns that will destructure each inner value.
 
 <Listing number="19-15" file-name="src/main.rs" caption="Destructuring enum variants that hold different kinds of values">
 
@@ -198,7 +198,7 @@ a `match` with patterns that will destructure each inner value.
 
 </Listing>
 
-This code will print `Change the color to red 0, green 160, and blue 255`. Try
+This code will print `Change color to red 0, green 160, and blue 255`. Try
 changing the value of `msg` to see the code from the other arms run.
 
 For enum variants without any data, like `Message::Quit`, we can’t destructure
@@ -258,14 +258,18 @@ as the value from each field in a struct, separately from each other.
 ### Ignoring Values in a Pattern
 
 You’ve seen that it’s sometimes useful to ignore values in a pattern, such as
-in the last arm of a `match`, to get a catch-all that doesn’t actually do
+in the last arm of a `match`, to get a catchall that doesn’t actually do
 anything but does account for all remaining possible values. There are a few
 ways to ignore entire values or parts of values in a pattern: using the `_`
 pattern (which you’ve seen), using the `_` pattern within another pattern,
 using a name that starts with an underscore, or using `..` to ignore remaining
 parts of a value. Let’s explore how and why to use each of these patterns.
 
-#### Ignoring an Entire Value with `_`
+<!-- Old link, do not remove -->
+
+<a id="ignoring-an-entire-value-with-_"></a>
+
+#### An Entire Value with `_`
 
 We’ve used the underscore as a wildcard pattern that will match any value but
 not bind to the value. This is especially useful as the last arm in a `match`
@@ -291,7 +295,9 @@ function body in your implementation doesn’t need one of the parameters. You
 then avoid getting a compiler warning about unused function parameters, as you
 would if you used a name instead.
 
-#### Ignoring Parts of a Value with a Nested `_`
+<a id="ignoring-parts-of-a-value-with-a-nested-_"></a>
+
+#### Parts of a Value with a Nested `_`
 
 We can also use `_` inside another pattern to ignore just part of a value, for
 example, when we want to test for only part of a value but have no use for the
@@ -315,8 +321,8 @@ when `setting_value` and `new_setting_value` are the `Some` variant. In that
 case, we print the reason for not changing `setting_value`, and it doesn’t get
 changed.
 
-In all other cases (if either `setting_value` or `new_setting_value` are
-`None`) expressed by the `_` pattern in the second arm, we want to allow
+In all other cases (if either `setting_value` or `new_setting_value` is `None`)
+expressed by the `_` pattern in the second arm, we want to allow
 `new_setting_value` to become `setting_value`.
 
 We can also use underscores in multiple places within one pattern to ignore
@@ -331,10 +337,14 @@ fourth values in a tuple of five items.
 
 </Listing>
 
-This code will print `Some numbers: 2, 8, 32`, and the values 4 and 16 will be
-ignored.
+This code will print `Some numbers: 2, 8, 32`, and the values `4` and `16` will
+be ignored.
 
-#### Ignoring an Unused Variable by Starting Its Name with `_`
+<!-- Old link, do not remove -->
+
+<a id="ignoring-an-unused-variable-by-starting-its-name-with-_"></a>
+
+#### An Unused Variable by Starting Its Name with `_`
 
 If you create a variable but don’t use it anywhere, Rust will usually issue a
 warning because an unused variable could be a bug. However, sometimes it’s
@@ -352,7 +362,7 @@ we compile this code, we should only get a warning about one of them.
 
 </Listing>
 
-Here we get a warning about not using the variable `y`, but we don’t get a
+Here, we get a warning about not using the variable `y`, but we don’t get a
 warning about not using `_x`.
 
 Note that there is a subtle difference between using only `_` and using a name
@@ -383,7 +393,9 @@ because `s` doesn’t get moved into `_`.
 
 This code works just fine because we never bind `s` to anything; it isn’t moved.
 
-#### Ignoring Remaining Parts of a Value with `..`
+<a id="ignoring-remaining-parts-of-a-value-with-"></a>
+
+#### Remaining Parts of a Value with `..`
 
 With values that have many parts, we can use the `..` syntax to use specific
 parts and ignore the rest, avoiding the need to list underscores for each
@@ -451,13 +463,13 @@ compiler error because using `..` in two places like this is ambiguous.
 
 A _match guard_ is an additional `if` condition, specified after the pattern in
 a `match` arm, that must also match for that arm to be chosen. Match guards are
-useful for expressing more complex ideas than a pattern alone allows. They are
-only available in `match` expressions, not in `if let` or `while let`
-expressions.
+useful for expressing more complex ideas than a pattern alone allows. Note,
+however, that they are only available in `match` expressions, not in `if let` or
+`while let` expressions.
 
 The condition can use variables created in the pattern. Listing 19-26 shows a
 `match` where the first arm has the pattern `Some(x)` and also has a match
-guard of `if x % 2 == 0` (which will be true if the number is even).
+guard of `if x % 2 == 0` (which will be `true` if the number is even).
 
 <Listing number="19-26" caption="Adding a match guard to a pattern">
 
@@ -468,12 +480,12 @@ guard of `if x % 2 == 0` (which will be true if the number is even).
 </Listing>
 
 This example will print `The number 4 is even`. When `num` is compared to the
-pattern in the first arm, it matches, because `Some(4)` matches `Some(x)`. Then
+pattern in the first arm, it matches because `Some(4)` matches `Some(x)`. Then
 the match guard checks whether the remainder of dividing `x` by 2 is equal to
 0, and because it is, the first arm is selected.
 
 If `num` had been `Some(5)` instead, the match guard in the first arm would
-have been false because the remainder of 5 divided by 2 is 1, which is not
+have been `false` because the remainder of 5 divided by 2 is 1, which is not
 equal to 0. Rust would then go to the second arm, which would match because the
 second arm doesn’t have a match guard and therefore matches any `Some` variant.
 
@@ -527,9 +539,9 @@ applies to `6`.
 The match condition states that the arm only matches if the value of `x` is
 equal to `4`, `5`, or `6` _and_ if `y` is `true`. When this code runs, the
 pattern of the first arm matches because `x` is `4`, but the match guard `if y`
-is false, so the first arm is not chosen. The code moves on to the second arm,
+is `false`, so the first arm is not chosen. The code moves on to the second arm,
 which does match, and this program prints `no`. The reason is that the `if`
-condition applies to the whole pattern `4 | 5 | 6`, not only to the last value
+condition applies to the whole pattern `4 | 5 | 6`, not just to the last value
 `6`. In other words, the precedence of a match guard in relation to a pattern
 behaves like this:
 
@@ -551,7 +563,7 @@ were applied only to the final value in the list of values specified using the
 ### `@` Bindings
 
 The _at_ operator `@` lets us create a variable that holds a value at the same
-time as we’re testing that value for a pattern match. In Listing 19-29, we want
+time we’re testing that value for a pattern match. In Listing 19-29, we want
 to test that a `Message::Hello` `id` field is within the range `3..=7`. We also
 want to bind the value to the variable `id_variable` so we can use it in the
 code associated with the arm. We could name this variable `id`, the same as the
@@ -590,8 +602,8 @@ Rust’s patterns are very useful in distinguishing between different kinds of
 data. When used in `match` expressions, Rust ensures your patterns cover every
 possible value, or your program won’t compile. Patterns in `let` statements and
 function parameters make those constructs more useful, enabling the
-destructuring of values into smaller parts and assigning those parts to
-variables. We can create simple or complex patterns to suit our needs.
+destructuring of values into smaller parts at the same time as assigning those
+parts to variables. We can create simple or complex patterns to suit our needs.
 
 Next, for the penultimate chapter of the book, we’ll look at some advanced
 aspects of a variety of Rust’s features.
