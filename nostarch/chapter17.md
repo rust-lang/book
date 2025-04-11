@@ -2715,7 +2715,7 @@ function. The signature for `join_all` requires that the types of the items in
 the collection all implement the `Future` trait, and `Box<T>` implements
 `Future` only if the `T` it wraps is a future that implements the `Unpin` trait.
 
-That’s a lot to absorb! To really understand it, let’s we dive a little further
+That’s a lot to absorb! To really understand it, let’s dive a little further
 into how the `Future` trait actually works, in particular around *pinning*.
 
 Look again at the definition of the `Future` trait:
