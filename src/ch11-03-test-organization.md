@@ -76,7 +76,7 @@ to do so.
 
 ### Integration Tests
 
-In Rust, integration tests are entirely external to your library. They use your
+In Rust, integration tests are external to your library. They use your
 library in the same way any other code would, which means they can only call
 functions that are part of your library’s public API. Their purpose is to test
 whether many parts of your library work together correctly. Units of code that
