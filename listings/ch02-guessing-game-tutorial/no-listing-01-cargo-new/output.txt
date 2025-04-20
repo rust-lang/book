@@ -1,5 +1,5 @@
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.08s
-     Running `file:///projects/guessing_game/target/debug/guessing_game`
+     Running `target/debug/guessing_game`
 Hello, world!

@@ -75,7 +75,7 @@ using the `cargo run` command:
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.08s
-     Running `file:///projects/guessing_game/target/debug/guessing_game`
+     Running `target/debug/guessing_game`
 Hello, world!
 ```
 
@@ -108,7 +108,7 @@ fn main() {
         .read_line(&mut guess)
         .expect("Failed to read line");
 
-    println!("You guessed: {}", guess);
+    println!("You guessed: {guess}");
 }
 ```
 
@@ -214,7 +214,7 @@ input:
         .read_line(&mut guess)
 ```
 
-If we hadn’t imported the `io` library with `use std::io;` at the beginning of
+If we hadn’t imported the `io` module with `use std::io;` at the beginning of
 the program, we could still use the function by writing this function call as
 `std::io::stdin`. The `stdin` function returns an instance of
 `std::io::Stdin`, which is a type that represents a
@@ -322,7 +322,7 @@ Aside from the closing curly bracket, there’s only one more line to discuss in
 the code so far:
 
 ```
-    println!("You guessed: {}", guess);
+    println!("You guessed: {guess}");
 ```
 
 This line prints the string that now contains the user’s input. The `{}` set of
@@ -400,7 +400,7 @@ Filename: Cargo.toml
 
 ```
 [dependencies]
-rand = "0.8.4"
+rand = "0.8.5"
 ```
 
 In the *Cargo.toml* file, everything that follows a header is part of that
@@ -566,6 +566,7 @@ src/main.rs
 
 ```
 use std::io;
+
 use rand::Rng;
 
 fn main() {
@@ -659,9 +660,10 @@ explain.
 src/main.rs
 
 ```
-use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
+
+use rand::Rng;
 
 fn main() {
     // --snip--
@@ -733,20 +735,17 @@ $ cargo build
    Compiling rand v0.8.5
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 error[E0308]: mismatched types
-   --> src/main.rs:22:21
-    |
-22  |     match guess.cmp(&secret_number) {
-    |                 --- ^^^^^^^^^^^^^^ expected `&String`, found `&{integer}`
-    |                 |
-    |                 arguments to this method are incorrect
-    |
-    = note: expected reference `&String`
-               found reference `&{integer}`
+  --> src/main.rs:23:21
+   |
+23 |     match guess.cmp(&secret_number) {
+   |                 --- ^^^^^^^^^^^^^^ expected `&String`, found `&{integer}`
+   |                 |
+   |                 arguments to this method are incorrect
+   |
+   = note: expected reference `&String`
+              found reference `&{integer}`
 note: method defined here
-   --> file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/core/src/cmp.rs:964:8
-    |
-964 |     fn cmp(&self, other: &Self) -> Ordering;
-    |        ^^^
+  --> /rustc/4eb161250e340c8f48f66e2b929ef4a5bed7c181/library/core/src/cmp.rs:964:8
 
 For more information about this error, try `rustc --explain E0308`.
 error: could not compile `guessing_game` (bin "guessing_game") due to 1 previous error
@@ -1067,9 +1066,10 @@ secret number. Listing 2-6 shows the final code.
 src/main.rs
 
 ```
-use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
+
+use rand::Rng;
 
 fn main() {
     println!("Guess the number!");
