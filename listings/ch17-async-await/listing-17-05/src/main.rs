@@ -18,15 +18,15 @@ fn main() {
 
         println!("{url} returned first");
         match maybe_title {
-            Some(title) => println!("Its page title is: '{title}'"),
-            None => println!("Its title could not be parsed."),
+            Some(title) => println!("Its page title was: '{title}'"),
+            None => println!("It had no title."),
         }
     })
 }
 
 async fn page_title(url: &str) -> (&str, Option<String>) {
-    let text = trpl::get(url).await.text().await;
-    let title = Html::parse(&text)
+    let response_text = trpl::get(url).await.text().await;
+    let title = Html::parse(&response_text)
         .select_first("title")
         .map(|title| title.inner_html());
     (url, title)
