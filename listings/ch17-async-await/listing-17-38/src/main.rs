@@ -13,9 +13,9 @@ fn main() {
             .timeout(Duration::from_secs(10));
         let merged = messages.merge(intervals);
         let mut stream = pin!(merged);
-        // ANCHOR_END: main
 
         while let Some(result) = stream.next().await {
+            // ANCHOR_END: main
             match result {
                 Ok(message) => println!("{message}"),
                 Err(reason) => eprintln!("Problem: {reason:?}"),
