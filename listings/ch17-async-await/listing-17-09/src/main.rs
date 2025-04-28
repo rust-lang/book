@@ -9,7 +9,7 @@ fn main() {
         tx.send(val).unwrap();
 
         let received = rx.recv().await.unwrap();
-        println!("Got: {received}");
+        println!("received '{received}'");
         // ANCHOR_END: channel
     });
 }
