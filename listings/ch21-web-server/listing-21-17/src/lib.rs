@@ -43,16 +43,13 @@ impl ThreadPool {
     // ANCHOR: here
 }
 
-// --snip--
-
-// ANCHOR_END: here
+// ANCHOR: here
 
 struct Worker {
     id: usize,
-    thread: thread::JoinHandle<()>,
+    thread: thread::JoinHandle<mpsc::Receiver<Job>>,
 }
 
-// ANCHOR: here
 impl Worker {
     fn new(id: usize, receiver: mpsc::Receiver<Job>) -> Worker {
         let thread = thread::spawn(|| {
