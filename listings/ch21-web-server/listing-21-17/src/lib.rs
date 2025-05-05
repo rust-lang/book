@@ -43,8 +43,6 @@ impl ThreadPool {
     // ANCHOR: here
 }
 
-// ANCHOR: here
-
 struct Worker {
     id: usize,
     thread: thread::JoinHandle<mpsc::Receiver<Job>>,
