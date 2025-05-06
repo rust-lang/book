@@ -108,9 +108,11 @@ understand. Other languages don’t have the same distinctions, so let’s look 
 what statements and expressions are and how their differences affect the bodies
 of functions.
 
-- **Statements** are instructions that perform some action and do not return
+- Statements are instructions that perform some action and do not return
   a value.
-- **Expressions** evaluate to a resultant value. Let’s look at some examples.
+- Expressions evaluate to a resultant value.
+
+Let’s look at some examples.
 
 We’ve actually already used statements and expressions. Creating a variable and
 assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
@@ -125,8 +127,8 @@ assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
 </Listing>
 
 Function definitions are also statements; the entire preceding example is a
-statement in itself. (As we will see below, _calling_ a function is not a
-statement.)
+statement in itself. (As we’ll see below, _calling_ a function is not a
+statement, though.)
 
 Statements do not return values. Therefore, you can’t assign a `let` statement
 to another variable, as the following code tries to do; you’ll get an error:
