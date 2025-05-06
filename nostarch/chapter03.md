@@ -341,7 +341,7 @@ Table 3-1: Integer Types in Rust
 |32-bit|`i32`|`u32`|
 |64-bit|`i64`|`u64`|
 |128-bit|`i128`|`u128`|
-|arch|`isize`|`usize`|
+|architecture dependent|`isize`|`usize`|
 
 Each variant can be either signed or unsigned and has an explicit size.
 *Signed* and *unsigned* refer to whether it’s possible for the number to be
@@ -359,9 +359,8 @@ Each signed variant can store numbers from −(2<sup>n − 1</sup>) to 2<sup>n �
 so a `u8` can store numbers from 0 to 2<sup>8</sup> − 1, which equals 0 to 255.
 
 Additionally, the `isize` and `usize` types depend on the architecture of the
-computer your program is running on, which is denoted in the table as “arch”:
-64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit
-architecture.
+computer your program is running on: 64 bits if you’re on a 64-bit architecture
+and 32 bits if you’re on a 32-bit architecture.
 
 You can write integer literals in any of the forms shown in Table 3-2. Note
 that number literals that can be multiple numeric types allow a type suffix,
@@ -508,10 +507,10 @@ fn main() {
 
 Note that we specify `char` literals with single quotes, as opposed to string
 literals, which use double quotes. Rust’s `char` type is four bytes in size and
-represents a Unicode Scalar Value, which means it can represent a lot more than
+represents a Unicode scalar value, which means it can represent a lot more than
 just ASCII. Accented letters; Chinese, Japanese, and Korean characters; emoji;
-and zero-width spaces are all valid `char` values in Rust. Unicode Scalar
-Values range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF` inclusive.
+and zero-width spaces are all valid `char` values in Rust. Unicode scalar
+values range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF` inclusive.
 However, a “character” isn’t really a concept in Unicode, so your human
 intuition for what a “character” is may not match up with what a `char` is in
 Rust. We’ll discuss this topic in detail in “Storing UTF-8 Encoded Text with
@@ -609,11 +608,11 @@ fn main() {
 Arrays are useful when you want your data allocated on the stack, the same as
 the other types we have seen so far, rather than the heap (we will discuss the
 stack and the heap more in Chapter 4) or when
-you want to ensure you always have a fixed number of elements. An array isn’t as
-flexible as the vector type, though. A *vector* is a similar collection type
-provided by the standard library that *is* allowed to grow or shrink in size. If
-you’re unsure whether to use an array or a vector, chances are you should use a
-vector. Chapter 8 discusses vectors in more detail.
+you want to ensure you always have a fixed number of elements. An array isn’t
+as flexible as the vector type, though. A *vector* is a similar collection type
+provided by the standard library that *is* allowed to grow or shrink in size
+because its contents live on the heap. If you’re unsure whether to use an array
+or a vector, chances are you should use a vector. Chapter 8 discusses vectors in more detail.
 
 However, arrays are more useful when you know the number of elements will not
 need to change. For example, if you were using the names of the month in a
@@ -876,9 +875,11 @@ understand. Other languages don’t have the same distinctions, so let’s look 
 what statements and expressions are and how their differences affect the bodies
 of functions.
 
-* **Statements** are instructions that perform some action and do not return
+* Statements are instructions that perform some action and do not return
   a value.
-* **Expressions** evaluate to a resultant value. Let’s look at some examples.
+* Expressions evaluate to a resultant value.
+
+Let’s look at some examples.
 
 We’ve actually already used statements and expressions. Creating a variable and
 assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
@@ -895,8 +896,8 @@ fn main() {
 Listing 3-1: A `main` function declaration containing one statement
 
 Function definitions are also statements; the entire preceding example is a
-statement in itself. (As we will see below, *calling* a function is not a
-statement.)
+statement in itself. (As we’ll see below, *calling* a function is not a
+statement, though.)
 
 Statements do not return values. Therefore, you can’t assign a `let` statement
 to another variable, as the following code tries to do; you’ll get an error:
@@ -1440,9 +1441,10 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <kbd>ctrl</kbd>-<kbd>c</kbd>. You
-may or may not see the word `again!` printed after the `^C`, depending on where
-the code was in the loop when it received the interrupt signal.
+The symbol `^C` represents where you pressed <kbd>ctrl</kbd>-<kbd>c</kbd>.
+
+You may or may not see the word `again!` printed after the `^C`, depending on
+where the code was in the loop when it received the interrupt signal.
 
 Fortunately, Rust also provides a way to break out of a loop using code. You
 can place the `break` keyword within the loop to tell the program when to stop
@@ -1569,7 +1571,7 @@ fn main() {
 }
 ```
 
-Listing 3-3: Using a `while` loop to run code while a condition holds true
+Listing 3-3: Using a `while` loop to run code while a condition evaluates to `true`
 
 This construct eliminates a lot of nesting that would be necessary if you used
 `loop`, `if`, `else`, and `break`, and it’s clearer. While a condition
@@ -1577,7 +1579,7 @@ evaluates to `true`, the code runs; otherwise, it exits the loop.
 
 #### Looping Through a Collection with for
 
-You can also use the `while` construct to loop over the elements of a
+You can choose to use the `while` construct to loop over the elements of a
 collection, such as an array. For example, the loop in Listing 3-4 prints each
 element in the array `a`.
 
@@ -1646,7 +1648,9 @@ Listing 3-5: Looping through each element of a collection using a `for` loop
 When we run this code, we’ll see the same output as in Listing 3-4. More
 importantly, we’ve now increased the safety of the code and eliminated the
 chance of bugs that might result from going beyond the end of the array or not
-going far enough and missing some items.
+going far enough and missing some items. Machine code generated from `for`
+loops can be more efficient as well, because the index doesn’t need to be
+compared to the length of the array at every iteration.
 
 Using the `for` loop, you wouldn’t need to remember to change any other code if
 you changed the number of values in the array, as you would with the method

@@ -212,9 +212,10 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <kbd>ctrl</kbd>-<kbd>c</kbd>. You
-may or may not see the word `again!` printed after the `^C`, depending on where
-the code was in the loop when it received the interrupt signal.
+The symbol `^C` represents where you pressed <kbd>ctrl</kbd>-<kbd>c</kbd>.
+
+You may or may not see the word `again!` printed after the `^C`, depending on
+where the code was in the loop when it received the interrupt signal.
 
 Fortunately, Rust also provides a way to break out of a loop using code. You
 can place the `break` keyword within the loop to tell the program when to stop
@@ -297,7 +298,7 @@ evaluates to `true`, the code runs; otherwise, it exits the loop.
 
 #### Looping Through a Collection with `for`
 
-You can also use the `while` construct to loop over the elements of a
+You can choose to use the `while` construct to loop over the elements of a
 collection, such as an array. For example, the loop in Listing 3-4 prints each
 element in the array `a`.
 
@@ -343,7 +344,9 @@ for each item in a collection. A `for` loop looks like the code in Listing 3-5.
 When we run this code, we’ll see the same output as in Listing 3-4. More
 importantly, we’ve now increased the safety of the code and eliminated the
 chance of bugs that might result from going beyond the end of the array or not
-going far enough and missing some items.
+going far enough and missing some items. Machine code generated from `for`
+loops can be more efficient as well, because the index doesn’t need to be
+compared to the length of the array at every iteration.
 
 Using the `for` loop, you wouldn’t need to remember to change any other code if
 you changed the number of values in the array, as you would with the method
