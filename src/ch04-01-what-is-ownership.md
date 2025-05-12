@@ -60,16 +60,16 @@ strings.
 > to hold the data and then perform bookkeeping to prepare for the next
 > allocation.
 >
-> Accessing data in the heap is slower than accessing data on the stack because
-> you have to follow a pointer to get there. Contemporary processors are faster
-> if they jump around less in memory. Continuing the analogy, consider a server
-> at a restaurant taking orders from many tables. It’s most efficient to get
-> all the orders at one table before moving on to the next table. Taking an
-> order from table A, then an order from table B, then one from A again, and
-> then one from B again would be a much slower process. By the same token, a
-> processor can do its job better if it works on data that’s close to other
-> data (as it is on the stack) rather than farther away (as it can be on the
-> heap).
+> Accessing data in the heap is generally slower than accessing data on the
+> stack because you have to follow a pointer to get there. Contemporary
+> processors are faster if they jump around less in memory. Continuing the
+> analogy, consider a server at a restaurant taking orders from many tables.
+> It’s most efficient to get all the orders at one table before moving on to
+> the next table. Taking an order from table A, then an order from table B,
+> then one from A again, and then one from B again would be a much slower
+> process. By the same token, a processor can usually do its job better if it
+> works on data that’s close to other data (as it is on the stack) rather than
+> farther away (as it can be on the heap).
 >
 > When your code calls a function, the values passed into the function
 > (including, potentially, pointers to data on the heap) and the function’s

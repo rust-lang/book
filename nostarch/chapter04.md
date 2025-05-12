@@ -76,16 +76,16 @@ strings.
 > to hold the data and then perform bookkeeping to prepare for the next
 > allocation.
 > 
-> Accessing data in the heap is slower than accessing data on the stack because
-> you have to follow a pointer to get there. Contemporary processors are faster
-> if they jump around less in memory. Continuing the analogy, consider a server
-> at a restaurant taking orders from many tables. It’s most efficient to get
-> all the orders at one table before moving on to the next table. Taking an
-> order from table A, then an order from table B, then one from A again, and
-> then one from B again would be a much slower process. By the same token, a
-> processor can do its job better if it works on data that’s close to other
-> data (as it is on the stack) rather than farther away (as it can be on the
-> heap).
+> Accessing data in the heap is generally slower than accessing data on the
+> stack because you have to follow a pointer to get there. Contemporary
+> processors are faster if they jump around less in memory. Continuing the
+> analogy, consider a server at a restaurant taking orders from many tables.
+> It’s most efficient to get all the orders at one table before moving on to
+> the next table. Taking an order from table A, then an order from table B,
+> then one from A again, and then one from B again would be a much slower
+> process. By the same token, a processor can usually do its job better if it
+> works on data that’s close to other data (as it is on the stack) rather than
+> farther away (as it can be on the heap).
 > 
 > When your code calls a function, the values passed into the function
 > (including, potentially, pointers to data on the heap) and the function’s
@@ -131,7 +131,7 @@ program with comments annotating where the variable `s` would be valid.
 
 
 ```
-    {                      // s is not valid here, it’s not yet declared
+    {                      // s is not valid here, since it's not yet declared
         let s = "hello";   // s is valid from this point forward
 
         // do stuff with s
@@ -193,7 +193,7 @@ This kind of string *can* be mutated:
 
     s.push_str(", world!"); // push_str() appends a literal to a String
 
-    println!("{s}"); // This will print `hello, world!`
+    println!("{s}"); // this will print `hello, world!`
 ```
 
 So, what’s the difference here? Why can `String` be mutated but literals
@@ -536,12 +536,12 @@ fn main() {
 
     let x = 5;                      // x comes into scope
 
-    makes_copy(x);                  // because i32 implements the Copy trait,
+    makes_copy(x);                  // Because i32 implements the Copy trait,
                                     // x does NOT move into the function,
-    println!("{}", x);              // so it's okay to use x afterward
+                                    // so it's okay to use x afterward.
 
-} // Here, x goes out of scope, then s. But because s's value was moved, nothing
-  // special happens.
+} // Here, x goes out of scope, then s. However, because s's value was moved,
+  // nothing special happens.
 
 fn takes_ownership(some_string: String) { // some_string comes into scope
     println!("{some_string}");
@@ -708,7 +708,7 @@ the parameter `s` is a reference. Let’s add some explanatory annotations:
 fn calculate_length(s: &String) -> usize { // s is a reference to a String
     s.len()
 } // Here, s goes out of scope. But because s does not have ownership of what
-  // it refers to, the value is not dropped.
+  // it refers to, the String is not dropped.
 ```
 
 The scope in which the variable `s` is valid is the same as any function
@@ -801,7 +801,7 @@ src/main.rs
     let r1 = &mut s;
     let r2 = &mut s;
 
-    println!("{}, {}", r1, r2);
+    println!("{r1}, {r2}");
 ```
 
 
@@ -870,7 +870,7 @@ This code results in an error:
     let r2 = &s; // no problem
     let r3 = &mut s; // BIG PROBLEM
 
-    println!("{}, {}, and {}", r1, r2, r3);
+    println!("{r1}, {r2}, and {r3}");
 ```
 
 Here’s the error:
@@ -1012,7 +1012,7 @@ fn dangle() -> &String { // dangle returns a reference to a String
     let s = String::from("hello"); // s is a new String
 
     &s // we return a reference to the String, s
-} // Here, s goes out of scope, and is dropped, so its memory goes away.
+} // Here, s goes out of scope and is dropped, so its memory goes away.
   // Danger!
 ```
 
@@ -1049,13 +1049,18 @@ Next, we’ll look at a different kind of reference: slices.
 ## The Slice Type
 
 *Slices* let you reference a contiguous sequence of elements in a
-collection at *ch08-00-common-collections.md* rather than the whole collection. A
-slice is a kind of reference, so it does not have ownership.
+collection. A slice is a kind
+of reference, so it does not have ownership.
 
 Here’s a small programming problem: write a function that takes a string of
 words separated by spaces and returns the first word it finds in that string.
 If the function doesn’t find a space in the string, the whole string must be
 one word, so the entire string should be returned.
+
+> Note: For the purposes of introducing string slices, we are assuming ASCII
+> only in this section; a more thorough discussion of UTF-8 handling is in the
+> “Storing UTF-8 Encoded Text with Strings” section
+> of Chapter 8.
 
 Let’s work through how we’d write the signature of this function without using
 slices, to understand the problem that slices will solve:
@@ -1064,12 +1069,12 @@ slices, to understand the problem that slices will solve:
 fn first_word(s: &String) -> ?
 ```
 
-The `first_word` function has a `&String` as a parameter. We don’t need
+The `first_word` function has a parameter of type `&String`. We don’t need
 ownership, so this is fine. (In idiomatic Rust, functions do not take ownership
 of their arguments unless they need to, and the reasons for that will become
-clear as we keep going!) But what should we return? We don’t really have a way
-to talk about part of a string. However, we could return the index of the end of
-the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
+clear as we keep going.) But what should we return? We don’t really have a way
+to talk about *part* of a string. However, we could return the index of the end
+of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
 src/main.rs
 
@@ -1147,9 +1152,8 @@ fn main() {
 
     s.clear(); // this empties the String, making it equal to ""
 
-    // `word` still has the value `5` here, but `s` no longer has any content
-    // that we could meaningfully use with the value `5`, so `word` is now
-    // totally invalid!
+    // word still has the value 5 here, but s no longer has any content that we
+    // could meaningfully use with the value 5, so word is now totally invalid!
 }
 ```
 
@@ -1178,7 +1182,8 @@ Luckily, Rust has a solution to this problem: string slices.
 
 ### String Slices
 
-A *string slice* is a reference to part of a `String`, and it looks like this:
+A *string slice* is a reference to a contiguous sequence of the elements of a
+`String`, and it looks like this:
 
 ```
     let s = String::from("hello world");
@@ -1243,10 +1248,7 @@ let slice = &s[..];
 
 > Note: String slice range indices must occur at valid UTF-8 character
 > boundaries. If you attempt to create a string slice in the middle of a
-> multibyte character, your program will exit with an error. For the purposes
-> of introducing string slices, we are assuming ASCII only in this section; a
-> more thorough discussion of UTF-8 handling is in the “Storing UTF-8 Encoded
-> Text with Strings” section of Chapter 8.
+> multibyte character, your program will exit with an error.
 
 With all this information in mind, let’s rewrite `first_word` to return a
 slice. The type that signifies “string slice” is written as `&str`:
