@@ -1,13 +1,18 @@
 ## The Slice Type
 
 _Slices_ let you reference a contiguous sequence of elements in a
-[collection](ch08-00-common-collections.md) rather than the whole collection. A
-slice is a kind of reference, so it does not have ownership.
+[collection](ch08-00-common-collections.md)<!-- ignore -->. A slice is a kind
+of reference, so it does not have ownership.
 
 Here’s a small programming problem: write a function that takes a string of
 words separated by spaces and returns the first word it finds in that string.
 If the function doesn’t find a space in the string, the whole string must be
 one word, so the entire string should be returned.
+
+> Note: For the purposes of introducing string slices, we are assuming ASCII
+> only in this section; a more thorough discussion of UTF-8 handling is in the
+> [“Storing UTF-8 Encoded Text with Strings”][strings]<!-- ignore --> section
+> of Chapter 8.
 
 Let’s work through how we’d write the signature of this function without using
 slices, to understand the problem that slices will solve:
@@ -16,12 +21,12 @@ slices, to understand the problem that slices will solve:
 fn first_word(s: &String) -> ?
 ```
 
-The `first_word` function has a `&String` as a parameter. We don’t need
+The `first_word` function has a parameter of type `&String`. We don’t need
 ownership, so this is fine. (In idiomatic Rust, functions do not take ownership
 of their arguments unless they need to, and the reasons for that will become
-clear as we keep going!) But what should we return? We don’t really have a way
-to talk about part of a string. However, we could return the index of the end of
-the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
+clear as we keep going.) But what should we return? We don’t really have a way
+to talk about *part* of a string. However, we could return the index of the end
+of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
 <Listing number="4-7" file-name="src/main.rs" caption="The `first_word` function that returns a byte index value into the `String` parameter">
 
@@ -105,7 +110,8 @@ Luckily, Rust has a solution to this problem: string slices.
 
 ### String Slices
 
-A _string slice_ is a reference to part of a `String`, and it looks like this:
+A _string slice_ is a reference to a contiguous sequence of the elements of a
+`String`, and it looks like this:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
@@ -168,10 +174,7 @@ let slice = &s[..];
 
 > Note: String slice range indices must occur at valid UTF-8 character
 > boundaries. If you attempt to create a string slice in the middle of a
-> multibyte character, your program will exit with an error. For the purposes
-> of introducing string slices, we are assuming ASCII only in this section; a
-> more thorough discussion of UTF-8 handling is in the [“Storing UTF-8 Encoded
-> Text with Strings”][strings]<!-- ignore --> section of Chapter 8.
+> multibyte character, your program will exit with an error.
 
 With all this information in mind, let’s rewrite `first_word` to return a
 slice. The type that signifies “string slice” is written as `&str`:
