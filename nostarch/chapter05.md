@@ -50,8 +50,8 @@ Listing 5-1: A `User` struct definition
 
 To use a struct after we’ve defined it, we create an *instance* of that struct
 by specifying concrete values for each of the fields. We create an instance by
-stating the name of the struct and then add curly brackets containing *key:
-value* pairs, where the keys are the names of the fields and the values are the
+stating the name of the struct and then add curly brackets containing *`key:
+value`* pairs, where the keys are the names of the fields and the values are the
 data we want to store in those fields. We don’t have to specify the fields in
 the same order in which we declared them in the struct. In other words, the
 struct definition is like a general template for the type, and instances fill
@@ -160,8 +160,8 @@ than `email: email`.
 ### Creating Instances from Other Instances with Struct Update Syntax
 
 It’s often useful to create a new instance of a struct that includes most of
-the values from another instance, but changes some. You can do this using
-*struct update syntax*.
+the values from another instance of the same type, but changes some. You can do
+this using *struct update syntax*.
 
 First, in Listing 5-6 we show how to create a new `User` instance in `user2`
 regularly, without the update syntax. We set a new value for `email` but
@@ -217,11 +217,11 @@ Move” section. In this example, we can no longer use `user1` after creating
 `user2` because the `String` in the `username` field of `user1` was moved into
 `user2`. If we had given `user2` new `String` values for both `email` and
 `username`, and thus only used the `active` and `sign_in_count` values from
-`user1`, then `user1` would still be `user1`, then `user1` would still be valid
-after creating `user2`. Both `active` and `sign_in_count` are types that
-implement the `Copy` trait, so the behavior we discussed in “Stack-Only Data:
-Copy” on page XX would apply. We can still use `user1.email` in this example,
-since its value was *not* moved out.
+`user1`, then `user1` would still be valid after creating `user2`. Both
+`active` and `sign_in_count` are types that implement the `Copy` trait, so the
+behavior we discussed in the “Stack-Only Data: Copy” section would apply. We
+can also still use `user1.email` in this example, because its value was not
+moved out of `user1`.
 
 ### Using Tuple Structs Without Named Fields to Create Different Types
 
@@ -259,7 +259,8 @@ values. Otherwise, tuple struct instances are similar to tuples in that you can
 destructure them into their individual pieces, and you can use a `.` followed
 by the index to access an individual value. Unlike tuples, tuple structs
 require you to name the type of the struct when you destructure them. For
-example, we would write `let Point(x, y, z) = point`.
+example, we would write `let Point(x, y, z) = origin;` to destructure the
+values in the `origin` point into variables named `x`, `y`, and `z`.
 
 ### Unit-Like Structs Without Any Fields
 
@@ -294,22 +295,22 @@ implement that behavior! You’ll see in Chapter 10 how to define traits and
 implement them on any type, including unit-like structs.
 
 > ### Ownership of Struct Data
-> 
+>
 > In the `User` struct definition in Listing 5-1, we used the owned `String`
 > type rather than the `&str` string slice type. This is a deliberate choice
 > because we want each instance of this struct to own all of its data and for
 > that data to be valid for as long as the entire struct is valid.
-> 
+>
 > It’s also possible for structs to store references to data owned by something
 > else, but to do so requires the use of *lifetimes*, a Rust feature that we’ll
 > discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
 > is valid for as long as the struct is. Let’s say you try to store a reference
 > in a struct without specifying lifetimes, like the following; this won’t work:
-> 
+>
 > <Listing file-name="src/main.rs">
-> 
+>
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
-> 
+>
 > ````rust,ignore,does_not_compile
 > struct User {
 >     active: bool,
@@ -317,7 +318,7 @@ implement them on any type, including unit-like structs.
 >     email: &str,
 >     sign_in_count: u64,
 > }
-> 
+>
 > fn main() {
 >     let user1 = User {
 >         active: true,
@@ -327,11 +328,11 @@ implement them on any type, including unit-like structs.
 >     };
 > }
 > ````
-> 
+>
 > </Listing>
-> 
+>
 > The compiler will complain that it needs lifetime specifiers:
-> 
+>
 > ````console
 > $ cargo run
 >    Compiling structs v0.1.0 (file:///projects/structs)
@@ -347,7 +348,7 @@ implement them on any type, including unit-like structs.
 > 2 |     active: bool,
 > 3 ~     username: &'a str,
 >   |
-> 
+>
 > error[E0106]: missing lifetime specifier
 >  --> src/main.rs:4:12
 >   |
@@ -361,7 +362,10 @@ implement them on any type, including unit-like structs.
 > 3 |     username: &str,
 > 4 ~     email: &'a str,
 >   |
-> ```
+>
+> For more information about this error, try `rustc --explain E0106`.
+> error: could not compile `structs` (bin "structs") due to 2 previous errors
+> ````
 >
 > In Chapter 10, we’ll discuss how to fix these errors so you can store
 > references in structs, but for now, we’ll fix errors like these using owned
@@ -500,7 +504,7 @@ fn area(rectangle: &Rectangle) -> u32 {
 
 Listing 5-10: Defining a `Rectangle` struct
 
-Here we’ve defined a struct and named it `Rectangle`. Inside the curly
+Here, we’ve defined a struct and named it `Rectangle`. Inside the curly
 brackets, we defined the fields as `width` and `height`, both of which have
 type `u32`. Then, in `main`, we created a particular instance of `Rectangle`
 that has a width of `30` and a height of `50`.
@@ -542,7 +546,7 @@ fn main() {
         height: 50,
     };
 
-    println!("rect1 is {}", rect1);
+    println!("rect1 is {rect1}");
 }
 ```
 
@@ -844,13 +848,13 @@ are and how to designate a field or method as public or private in Chapter
 7.
 
 > ### Where’s the -> Operator?
-> 
+>
 > In C and C++, two different operators are used for calling methods: you use
 > `.` if you’re calling a method on the object directly and `->` if you’re
 > calling the method on a pointer to the object and need to dereference the
 > pointer first. In other words, if `object` is a pointer,
 > `object->something()` is similar to `(*object).something()`.
-> 
+>
 > Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
 > feature called *automatic referencing and dereferencing*. Calling methods is
 > one of the few places in Rust with this behavior.
@@ -858,9 +862,9 @@ are and how to designate a field or method as public or private in Chapter
 > Here’s how it works: when you call a method with `object.something()`, Rust
 > automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
 > the method. In other words, the following are the same:
-> 
+>
 > <!-- CAN'T EXTRACT SEE BUG https://github.com/rust-lang/mdBook/issues/1127 -->
-> 
+>
 > ````rust
 > # #[derive(Debug,Copy,Clone)]
 > # struct Point {
@@ -881,7 +885,7 @@ are and how to designate a field or method as public or private in Chapter
 > p1.distance(&p2);
 > (&p1).distance(&p2);
 > ````
-> 
+>
 > The first one looks much cleaner. This automatic referencing behavior works
 > because methods have a clear receiver—the type of `self`. Given the receiver
 > and name of a method, Rust can figure out definitively whether the method is

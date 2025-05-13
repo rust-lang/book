@@ -103,8 +103,8 @@ than `email: email`.
 ### Creating Instances from Other Instances with Struct Update Syntax
 
 It’s often useful to create a new instance of a struct that includes most of
-the values from another instance, but changes some. You can do this using
-_struct update syntax_.
+the values from another instance of the same type, but changes some. You can do
+this using _struct update syntax_.
 
 First, in Listing 5-6 we show how to create a new `User` instance in `user2`
 regularly, without the update syntax. We set a new value for `email` but
@@ -147,8 +147,8 @@ both `email` and `username`, and thus only used the `active` and `sign_in_count`
 values from `user1`, then `user1` would still be valid after creating `user2`.
 Both `active` and `sign_in_count` are types that implement the `Copy` trait, so
 the behavior we discussed in the [“Stack-Only Data: Copy”][copy]<!-- ignore -->
-section would apply. We can still use `user1.email` in this example, because its
-value was _not_ moved out.
+section would apply. We can also still use `user1.email` in this example,
+because its value was not moved out of `user1`.
 
 ### Using Tuple Structs Without Named Fields to Create Different Types
 
@@ -180,7 +180,8 @@ values. Otherwise, tuple struct instances are similar to tuples in that you can
 destructure them into their individual pieces, and you can use a `.` followed
 by the index to access an individual value. Unlike tuples, tuple structs
 require you to name the type of the struct when you destructure them. For
-example, we would write `let Point(x, y, z) = point`.
+example, we would write `let Point(x, y, z) = origin;` to destructure the
+values in the `origin` point into variables named `x`, `y`, and `z`.
 
 ### Unit-Like Structs Without Any Fields
 
