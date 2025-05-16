@@ -211,10 +211,10 @@ Listing 6-2: A `Message` enum whose variants each store different amounts and ty
 
 This enum has four variants with different types:
 
-* `Quit` has no data associated with it at all.
-* `Move` has named fields, like a struct does.
-* `Write` includes a single `String`.
-* `ChangeColor` includes three `i32` values.
+* `Quit`: Has no data associated with it at all
+* `Move`: Has named fields, like a struct does
+* `Write`: Includes a single `String`
+* `ChangeColor`: Includes three `i32` values
 
 Defining an enum with variants such as the ones in Listing 6-2 is similar to
 defining different kinds of struct definitions, except the enum doesn’t use the
@@ -279,7 +279,7 @@ is no value there. In languages with null, variables can always be in one of
 two states: null or not-null.
 
 In his 2009 presentation “Null References: The Billion Dollar Mistake,” Tony
-Hoare, the inventor of null, has this to say:
+Hoare, the inventor of null, had this to say:
 
 > I call it my billion-dollar mistake. At that time, I was designing the first
 > comprehensive type system for references in an object-oriented language. My
@@ -369,8 +369,8 @@ error[E0277]: cannot add `Option<i8>` to `i8`
   |
   = help: the trait `Add<Option<i8>>` is not implemented for `i8`
   = help: the following other types implement trait `Add<Rhs>`:
-            `&'a i8` implements `Add<i8>`
-            `&i8` implements `Add<&i8>`
+            `&i8` implements `Add<i8>`
+            `&i8` implements `Add`
             `i8` implements `Add<&i8>`
             `i8` implements `Add`
 
@@ -660,25 +660,22 @@ error:
 $ cargo run
    Compiling enums v0.1.0 (file:///projects/enums)
 error[E0004]: non-exhaustive patterns: `None` not covered
-   --> src/main.rs:3:15
-    |
-3   |         match x {
-    |               ^ pattern `None` not covered
-    |
+ --> src/main.rs:3:15
+  |
+3 |         match x {
+  |               ^ pattern `None` not covered
+  |
 note: `Option<i32>` defined here
-   --> file:///home/.rustup/toolchains/1.82/lib/rustlib/src/rust/library/core/src/option.rs:571:1
-    |
-571 | pub enum Option<T> {
-    | ^^^^^^^^^^^^^^^^^^
-...
-575 |     None,
-    |     ---- not covered
-    = note: the matched value is of type `Option<i32>`
+ --> /rustc/4eb161250e340c8f48f66e2b929ef4a5bed7c181/library/core/src/option.rs:572:1
+ ::: /rustc/4eb161250e340c8f48f66e2b929ef4a5bed7c181/library/core/src/option.rs:576:5
+  |
+  = note: not covered
+  = note: the matched value is of type `Option<i32>`
 help: ensure that all possible cases are being handled by adding a match arm with a wildcard pattern or an explicit pattern as shown
-    |
-4   ~             Some(i) => Some(i + 1),
-5   ~             None => todo!(),
-    |
+  |
+4 ~             Some(i) => Some(i + 1),
+5 ~             None => todo!(),
+  |
 
 For more information about this error, try `rustc --explain E0004`.
 error: could not compile `enums` (bin "enums") due to 1 previous error
@@ -779,7 +776,7 @@ There’s more about patterns and matching that we’ll cover in Chapter
 `if let` syntax, which can be useful in situations where the `match` expression
 is a bit wordy.
 
-## Concise Control Flow with if let and let else
+## Concise Control Flow with if let
 
 The `if let` syntax lets you combine `if` and `let` into a less verbose way to
 handle values that match one pattern while ignoring the rest. Consider the
@@ -822,10 +819,10 @@ the corresponding `match` arm. The code in the `if let` block only runs if the
 value matches the pattern.
 
 Using `if let` means less typing, less indentation, and less boilerplate code.
-However, you lose the exhaustive checking that `match` enforces. Choosing
-between `match` and `if let` depends on what you’re doing in your particular
-situation and whether gaining conciseness is an appropriate trade-off for
-losing exhaustive checking.
+However, you lose the exhaustive checking `match` enforces that ensures you
+aren’t forgetting to handle any cases. Choosing between `match` and `if let`
+depends on what you’re doing in your particular situation and whether gaining
+conciseness is an appropriate trade-off for losing exhaustive checking.
 
 In other words, you can think of `if let` as syntax sugar for a `match` that
 runs code when the value matches one pattern and then ignores all other values.
@@ -857,9 +854,9 @@ Or we could use an `if let` and `else` expression, like this:
     }
 ```
 
-## Staying on the “happy path” with let else
+## Staying on the “Happy Path” with let...else
 
-One common pattern is to perform some computation when a value is present and
+The common pattern is to perform some computation when a value is present and
 return a default value otherwise. Continuing on with our example of coins with a
 `UsState` value, if we wanted to say something funny depending on how old the
 state on the quarter was, we might introduce a method on `UsState` to check the
@@ -880,8 +877,6 @@ impl UsState {
 Then we might use `if let` to match on the type of coin, introducing a `state`
 variable within the body of the condition, as in Listing 6-7.
 
-src/main.rs
-
 ```
 fn describe_state_quarter(coin: Coin) -> Option<String> {
     if let Coin::Quarter(state) = coin {
@@ -896,16 +891,15 @@ fn describe_state_quarter(coin: Coin) -> Option<String> {
 }
 ```
 
-Listing 6-7: Using
+Listing 6-7: Checking whether a state existed in 1900 by using conditionals
+nested inside an `if let`.
 
-That gets the job done, but it has pushed the work into the body of the `if let`
-statement, and if the work to be done is more complicated, it might be hard to
-follow exactly how the top-level branches relate. We could also take advantage
-of the fact that expressions produce a value either to produce the `state` from
-the `if let` or to return early, as in Listing 6-8. (You could do similar with a
-`match`, of course!)
-
-src/main.rs
+That gets the job done, but it has pushed the work into the body of the `if
+let` statement, and if the work to be done is more complicated, it might be
+hard to follow exactly how the top-level branches relate. We could also take
+advantage of the fact that expressions produce a value either to produce the
+`state` from the `if let` or to return early, as in Listing 6-8. (You could do
+similar with a `match`, too.)
 
 ```
 fn describe_state_quarter(coin: Coin) -> Option<String> {
@@ -925,21 +919,18 @@ fn describe_state_quarter(coin: Coin) -> Option<String> {
 
 Listing 6-8: Using `if let` to produce a value or return early.
 
-This is a bit annoying to follow in its own way, though! One branch of the `if let` produces a value, and the other one returns from the function entirely.
+This is a bit annoying to follow in its own way, though! One branch of the `if
+let` produces a value, and the other one returns from the function entirely.
 
-To make this common pattern nicer to express, Rust has `let`-`else`. The
-`let`-`else` syntax takes a pattern on the left side and an expression on the
+To make this common pattern nicer to express, Rust has `let...else`. The
+`let...else` syntax takes a pattern on the left side and an expression on the
 right, very similar to `if let`, but it does not have an `if` branch, only an
 `else` branch. If the pattern matches, it will bind the value from the pattern
 in the outer scope. If the pattern does *not* match, the program will flow into
 the `else` arm, which must return from the function.
 
-In Listing 6-9, you can see how Listing 6-8 looks when using `let`-`else` in
-place of `if let`. Notice that it stays “on the happy path” in the main body of
-the function this way, without having significantly different control flow for
-two branches the way the `if let` did.
-
-src/main.rs
+In Listing 6-9, you can see how Listing 6-8 looks when using `let...else` in
+place of `if let`.
 
 ```
 fn describe_state_quarter(coin: Coin) -> Option<String> {
@@ -955,11 +946,15 @@ fn describe_state_quarter(coin: Coin) -> Option<String> {
 }
 ```
 
-Listing 6-9: Using `let`-`else` to clarify the flow through the function.
+Listing 6-9: Using `let...else` to clarify the flow through the function.
+
+Notice that it stays “on the happy path” in the main body of the function this
+way, without having significantly different control flow for two branches the
+way the `if let` did.
 
 If you have a situation in which your program has logic that is too verbose to
-express using a `match`, remember that `if let` and `let else` are in your Rust
-toolbox as well.
+express using a `match`, remember that `if let` and `let...else` are in your
+Rust toolbox as well.
 
 ## Summary
 
