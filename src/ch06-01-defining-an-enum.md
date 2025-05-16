@@ -151,10 +151,10 @@ variety of types embedded in its variants.
 
 This enum has four variants with different types:
 
-- `Quit` has no data associated with it at all.
-- `Move` has named fields, like a struct does.
-- `Write` includes a single `String`.
-- `ChangeColor` includes three `i32` values.
+- `Quit`: Has no data associated with it at all
+- `Move`: Has named fields, like a struct does
+- `Write`: Includes a single `String`
+- `ChangeColor`: Includes three `i32` values
 
 Defining an enum with variants such as the ones in Listing 6-2 is similar to
 defining different kinds of struct definitions, except the enum doesn’t use the
@@ -206,7 +206,7 @@ is no value there. In languages with null, variables can always be in one of
 two states: null or not-null.
 
 In his 2009 presentation “Null References: The Billion Dollar Mistake,” Tony
-Hoare, the inventor of null, has this to say:
+Hoare, the inventor of null, had this to say:
 
 > I call it my billion-dollar mistake. At that time, I was designing the first
 > comprehensive type system for references in an object-oriented language. My
