@@ -330,7 +330,7 @@ condition to `while index < 4`, the code would panic. It’s also slow, because
 the compiler adds runtime code to perform the conditional check of whether the
 index is within the bounds of the array on every iteration through the loop.
 
-As a more concise alternative, you can use a `for` loop and execute some code
+As a more concise alternative, you can use a `for` loop and execute same code
 for each item in a collection. A `for` loop looks like the code in Listing 3-5.
 
 <Listing number="3-5" file-name="src/main.rs" caption="Looping through each element of a collection using a `for` loop">
