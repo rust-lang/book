@@ -124,7 +124,7 @@ in the document, if there is one. Because there may not be any matching element,
 `Option::map` method, which lets us work with the item in the `Option` if it’s
 present, and do nothing if it isn’t. (We could also use a `match` expression
 here, but `map` is more idiomatic.) In the body of the function we supply to
-`map`, we call `inner_html` on the `title_element` to get its content, which is
+`map`, we call `inner_html` on the `title` to get its content, which is
 a `String`. When all is said and done, we have an `Option<String>`.
 
 Notice that Rust’s `await` keyword goes _after_ the expression you’re awaiting,
