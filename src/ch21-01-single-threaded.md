@@ -115,7 +115,7 @@ Browsers also sometimes open multiple connections to the server without sending
 any requests, so that if they *do* later send requests, they can happen faster.
 When this happens, our server will see each connection, regardless of whether
 there are any requests over that connection. Many versions of Chrome-based
-browsers do this, for example; you can disable that optimization by using =
+browsers do this, for example; you can disable that optimization by using
 private browsing mode or use a different browser.
 
 The important factor is that we’ve successfully gotten a handle to a TCP
