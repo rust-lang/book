@@ -43,11 +43,11 @@ organization, including which details are exposed, which details are private,
 and what names are in each scope in your programs. These features, sometimes
 collectively referred to as the *module system*, include:
 
-* **Packages:** A Cargo feature that lets you build, test, and share crates
-* **Crates:** A tree of modules that produces a library or executable
-* **Modules** and **use:** Let you control the organization, scope, and
-  privacy of paths
-* **Paths:** A way of naming an item, such as a struct, function, or module
+* **Packages**: A Cargo feature that lets you build, test, and share crates
+* **Crates**: A tree of modules that produces a library or executable
+* **Modules and use**: Let you control the organization, scope, and privacy of
+paths
+* **Paths**: A way of naming an item, such as a struct, function, or module
 
 In this chapter, we’ll cover all these features, discuss how they interact, and
 explain how to use them to manage scope. By the end, you should have a solid
@@ -72,10 +72,10 @@ created so far have been binary crates.
 
 *Library crates* don’t have a `main` function, and they don’t compile to an
 executable. Instead, they define functionality intended to be shared with
-multiple projects. For example, the `rand` crate we used in Chapter
-2 provides functionality that generates random numbers.
-Most of the time when Rustaceans say “crate”, they mean library crate, and they
-use “crate” interchangeably with the general programming concept of a “library”.
+multiple projects. For example, the `rand` crate we used in Chapter 2 provides
+functionality that generates random numbers. Most of the time when Rustaceans
+say “crate,” they mean library crate, and they use “crate” interchangeably with
+the general programming concept of a “library.”
 
 The *crate root* is a source file that the Rust compiler starts from and makes
 up the root module of your crate (we’ll explain modules in depth in “Defining
@@ -87,9 +87,11 @@ build those crates. Cargo is actually a package that contains the binary crate
 for the command line tool you’ve been using to build your code. The Cargo
 package also contains a library crate that the binary crate depends on. Other
 projects can depend on the Cargo library crate to use the same logic the Cargo
-command line tool uses. A package can contain as many binary crates as you
-like, but at most only one library crate. A package must contain at least one
-crate, whether that’s a library or binary crate.
+command line tool uses.
+
+A package can contain as many binary crates as you like, but at most only one
+library crate. A package must contain at least one crate, whether that’s a
+library or binary crate.
 
 Let’s walk through what happens when we create a package. First we enter the
 command `cargo new my-project`:
@@ -116,16 +118,9 @@ files to `rustc` to build the library or binary.
 
 Here, we have a package that only contains *src/main.rs*, meaning it only
 contains a binary crate named `my-project`. If a package contains *src/main.rs*
-and *src/lib.rs*, it has two crates: a binary and a library, both with the same
-name as the package. A package can have multiple binary crates by placing files
-in the *src/bin* directory: each file will be a separate binary crate.
-
-## Defining Modules to Control Scope and Privacy
-
-In this section, we’ll talk about modules and other parts of the module system,
-namely *paths*, which allow you to name items; the `use` keyword that brings a
-path into scope; and the `pub` keyword to make items public. We’ll also discuss
-the `as` keyword, external packages, and the glob operator.
+and *src/lib.rs*, it has two crates: a binary and a library, both with the
+same name as the package. A package can have multiple binary crates by placing
+files in the *src/bin* directory: each file will be a separate binary crate.
 
 ### Modules Cheat Sheet
 
@@ -141,7 +136,8 @@ great place to refer to as a reminder of how modules work.
 * **Declaring modules**: In the crate root file, you can declare new modules;
   say you declare a “garden” module with `mod garden;`. The compiler will look
   for the module’s code in these places:
-  * Inline, within curly brackets that replace the semicolon following `mod garden`
+  * Inline, within curly brackets that replace the semicolon following `mod
+    garden`
   * In the file *src/garden.rs*
   * In the file *src/garden/mod.rs*
 * **Declaring submodules**: In any file other than the crate root, you can
@@ -163,8 +159,9 @@ great place to refer to as a reminder of how modules work.
   `pub` before their declarations.
 * **The `use` keyword**: Within a scope, the `use` keyword creates shortcuts to
   items to reduce repetition of long paths. In any scope that can refer to
-  `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use crate::garden::vegetables::Asparagus;` and from then on you only need to
-  write `Asparagus` to make use of that type in the scope.
+  `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use
+  crate::garden::vegetables::Asparagus;` and from then on you only need to write
+  `Asparagus` to make use of that type in the scope.
 
 Here, we create a binary crate named `backyard` that illustrates these rules.
 The crate’s directory, also named `backyard`, contains these files and
@@ -176,14 +173,12 @@ backyard
 ├── Cargo.toml
 └── src
     ├── garden
-    │   └── vegetables.rs
+    │   └── vegetables.rs
     ├── garden.rs
     └── main.rs
 ```
 
 The crate root file in this case is *src/main.rs*, and it contains:
-
-src/main.rs
 
 ```
 use crate::garden::vegetables::Asparagus;
@@ -219,7 +214,12 @@ pub struct Asparagus {}
 
 Now let’s get into the details of these rules and demonstrate them in action!
 
-### Grouping Related Code in Modules
+## Defining Modules to Control Scope and Privacy
+
+In this section, we’ll talk about modules and other parts of the module system,
+namely *paths*, which allow you to name items; the `use` keyword that brings a
+path into scope; and the `pub` keyword to make items public. We’ll also discuss
+the `as` keyword, external packages, and the glob operator.
 
 *Modules* let us organize code within a crate for readability and easy reuse.
 Modules also allow us to control the *privacy* of items because code within a
@@ -241,7 +241,8 @@ chefs and cooks work in the kitchen, dishwashers clean up, and managers do
 administrative work.
 
 To structure our crate in this way, we can organize its functions into nested
-modules. Create a new library named `restaurant` by running `cargo new restaurant --lib`. Then enter the code in Listing 7-1 into *src/lib.rs* to
+modules. Create a new library named `restaurant` by running `cargo new
+restaurant --lib`. Then enter the code in Listing 7-1 into *src/lib.rs* to
 define some modules and function signatures; this code is the front of house
 section.
 
@@ -271,8 +272,8 @@ We define a module with the `mod` keyword followed by the name of the module
 (in this case, `front_of_house`). The body of the module then goes inside curly
 brackets. Inside modules, we can place other modules, as in this case with the
 modules `hosting` and `serving`. Modules can also hold definitions for other
-items, such as structs, enums, constants, traits, and—as in Listing
-7-1—functions.
+items, such as structs, enums, constants, traits, and as in Listing 7-1,
+functions.
 
 By using modules, we can group related definitions together and name why
 they’re related. Programmers using this code can navigate the code based on the
@@ -580,8 +581,8 @@ interested in this topic, see The Rust API Guidelines at *https://rust-lang.gith
 > root as well as a *src/lib.rs* library crate root, and both crates will have
 > the package name by default. Typically, packages with this pattern of
 > containing both a library and a binary crate will have just enough code in the
-> binary crate to start an executable that calls code within the library crate.
-> This lets other projects benefit from most of the functionality that the
+> binary crate to start an executable that calls code defined in the library
+> crate. This lets other projects benefit from the most functionality that the
 > package provides because the library crate’s code can be shared.
 > 
 > The module tree should be defined in *src/lib.rs*. Then, any public items can
@@ -590,20 +591,19 @@ interested in this topic, see The Rust API Guidelines at *https://rust-lang.gith
 > external crate would use the library crate: it can only use the public API.
 > This helps you design a good API; not only are you the author, you’re also a
 > client!
-> 
-> In Chapter 12, we’ll demonstrate this organizational
-> practice with a command line program that will contain both a binary crate
-> and a library crate.
+>
+> In Chapter 12, we’ll demonstrate this organizational practice with a command
+> line program that will contain both a binary crate and a library crate.
 
 ### Starting Relative Paths with super
 
 We can construct relative paths that begin in the parent module, rather than
 the current module or the crate root, by using `super` at the start of the
-path. This is like starting a filesystem path with the `..` syntax. Using
-`super` allows us to reference an item that we know is in the parent module,
-which can make rearranging the module tree easier when the module is closely
-related to the parent but the parent might be moved elsewhere in the module
-tree someday.
+path. This is like starting a filesystem path with the `..` syntax that means
+to go to the parent directory. Using `super` allows us to reference an item
+that we know is in the parent module, which can make rearranging the module
+tree easier when the module is closely related to the parent but the parent
+might be moved elsewhere in the module tree someday.
 
 Consider the code in Listing 7-8 that models the situation in which a chef
 fixes an incorrect order and personally brings it out to the customer. The
@@ -940,12 +940,12 @@ considered idiomatic, so the choice is up to you!
 
 ### Re-exporting Names with pub use
 
-When we bring a name into scope with the `use` keyword, the name available in
-the new scope is private. To enable the code that calls our code to refer to
-that name as if it had been defined in that code’s scope, we can combine `pub`
-and `use`. This technique is called *re-exporting* because we’re bringing an
-item into scope but also making that item available for others to bring into
-their scope.
+When we bring a name into scope with the `use` keyword, the name is private to
+the scope into which we imported it. To enable code outside that scope to refer
+to that name as if it had been defined in that scope, we can combine `pub` and
+`use`. This technique is called *re-exporting* because we’re bringing an item
+into scope but also making that item available for others to bring into their
+scope.
 
 Listing 7-17 shows the code in Listing 7-11 with `use` in the root module
 changed to `pub use`.
@@ -1117,7 +1117,10 @@ use std::collections::*;
 This `use` statement brings all public items defined in `std::collections` into
 the current scope. Be careful when using the glob operator! Glob can make it
 harder to tell what names are in scope and where a name used in your program
-was defined.
+was defined. Additionally, if the dependency changes its definitions, what
+you’ve imported changes as well, which may lead to compiler errors when you
+upgrade the dependency if the dependency adds a definition with the same name
+as a definition of yours in the same scope, for example.
 
 The glob operator is often used when testing to bring everything under test into
 the `tests` module; we’ll talk about that in “How to Write

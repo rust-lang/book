@@ -19,8 +19,8 @@ _Library crates_ don’t have a `main` function, and they don’t compile to an
 executable. Instead, they define functionality intended to be shared with
 multiple projects. For example, the `rand` crate we used in [Chapter
 2][rand]<!-- ignore --> provides functionality that generates random numbers.
-Most of the time when Rustaceans say “crate”, they mean library crate, and they
-use “crate” interchangeably with the general programming concept of a “library”.
+Most of the time when Rustaceans say “crate,” they mean library crate, and they
+use “crate” interchangeably with the general programming concept of a “library.”
 
 The _crate root_ is a source file that the Rust compiler starts from and makes
 up the root module of your crate (we’ll explain modules in depth in [“Defining
