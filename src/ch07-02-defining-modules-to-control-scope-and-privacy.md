@@ -130,8 +130,8 @@ We define a module with the `mod` keyword followed by the name of the module
 (in this case, `front_of_house`). The body of the module then goes inside curly
 brackets. Inside modules, we can place other modules, as in this case with the
 modules `hosting` and `serving`. Modules can also hold definitions for other
-items, such as structs, enums, constants, traits, and—as in Listing
-7-1—functions.
+items, such as structs, enums, constants, traits, and as in Listing 7-1,
+functions.
 
 By using modules, we can group related definitions together and name why
 they’re related. Programmers using this code can navigate the code based on the

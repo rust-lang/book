@@ -289,7 +289,10 @@ use std::collections::*;
 This `use` statement brings all public items defined in `std::collections` into
 the current scope. Be careful when using the glob operator! Glob can make it
 harder to tell what names are in scope and where a name used in your program
-was defined.
+was defined. Additionally, if the dependency changes its definitions, what
+you’ve imported changes as well, which may lead to compiler errors when you
+upgrade the dependency if the dependency adds a definition with the same name
+as a definition of yours in the same scope, for example.
 
 The glob operator is often used when testing to bring everything under test into
 the `tests` module; we’ll talk about that in [“How to Write

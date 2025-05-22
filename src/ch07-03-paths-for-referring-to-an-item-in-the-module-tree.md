@@ -183,8 +183,8 @@ interested in this topic, see [The Rust API Guidelines][api-guidelines].
 > root as well as a _src/lib.rs_ library crate root, and both crates will have
 > the package name by default. Typically, packages with this pattern of
 > containing both a library and a binary crate will have just enough code in the
-> binary crate to start an executable that calls code within the library crate.
-> This lets other projects benefit from most of the functionality that the
+> binary crate to start an executable that calls code defined in the library
+> crate. This lets other projects benefit from the most functionality that the
 > package provides because the library crate’s code can be shared.
 >
 > The module tree should be defined in _src/lib.rs_. Then, any public items can
@@ -202,11 +202,11 @@ interested in this topic, see [The Rust API Guidelines][api-guidelines].
 
 We can construct relative paths that begin in the parent module, rather than
 the current module or the crate root, by using `super` at the start of the
-path. This is like starting a filesystem path with the `..` syntax. Using
-`super` allows us to reference an item that we know is in the parent module,
-which can make rearranging the module tree easier when the module is closely
-related to the parent but the parent might be moved elsewhere in the module
-tree someday.
+path. This is like starting a filesystem path with the `..` syntax that means
+to go to the parent directory. Using `super` allows us to reference an item
+that we know is in the parent module, which can make rearranging the module
+tree easier when the module is closely related to the parent but the parent
+might be moved elsewhere in the module tree someday.
 
 Consider the code in Listing 7-8 that models the situation in which a chef
 fixes an incorrect order and personally brings it out to the customer. The
