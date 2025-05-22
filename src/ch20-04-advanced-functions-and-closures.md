@@ -138,7 +138,7 @@ Listing 20-33.
 </Listing>
 
 Here we have two functions, `returns_closure` and `returns_initialized_closure`,
-which both return `impl Fn(i32) -> i32`. Notice that he closures that they
+which both return `impl Fn(i32) -> i32`. Notice that the closures that they
 return are different, even though they implement the same type. If we try to
 compile this, Rust lets us know that it won’t work:
 
@@ -152,8 +152,7 @@ constructs for us. So even though these functions both return closures that
 implements the same trait, `Fn(i32) -> i32`, the opaque types Rust generates for
 each are distinct. (This is similar to how Rust produces different concrete
 types for distinct async blocks even when they have the same output type, as we
-saw in [“Working with Any Number of Futures”][any-number-of-futures] in Chapter
-17. We have seen a solution to this problem a few times now: we can use a trait
+saw in [“Working with Any Number of Futures”][any-number-of-futures] in Chapter 17. We have seen a solution to this problem a few times now: we can use a trait
 object, as in Listing 20-34.
 
 <Listing number="20-34" caption="Creating a `Vec<T>` of closures defined by functions that return `Box<dyn Fn>` so they have the same type">
