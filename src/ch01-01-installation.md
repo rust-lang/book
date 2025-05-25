@@ -52,7 +52,7 @@ $ xcode-select --install
 ```
 
 Linux users should generally install GCC or Clang, according to their
-distribution’s documentation. For example, if you use Ubuntu, you can install
+distribution’s documentation. For example, if you use Debian-based distros, you can install
 the `build-essential` package.
 
 ### Installing `rustup` on Windows
