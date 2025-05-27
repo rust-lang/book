@@ -81,6 +81,7 @@ $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.25s
      Running `target/debug/panic`
+
 thread 'main' panicked at src/main.rs:2:5:
 crash and burn
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
@@ -143,6 +144,7 @@ $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.27s
      Running `target/debug/panic`
+
 thread 'main' panicked at src/main.rs:4:6:
 index out of bounds: the len is 3 but the index is 99
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
@@ -317,6 +319,7 @@ $ cargo run
    Compiling error-handling v0.1.0 (file:///projects/error-handling)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.73s
      Running `target/debug/error-handling`
+
 thread 'main' panicked at src/main.rs:8:23:
 Problem opening the file: Os { code: 2, kind: NotFound, message: "No such file or directory" }
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
@@ -349,14 +352,10 @@ fn main() {
     let greeting_file = match greeting_file_result {
         Ok(file) => file,
         Err(error) => match error.kind() {
-            ErrorKind::NotFound => {
-                match File::create("hello.txt") {
-                    Ok(fc) => fc,
-                    Err(e) => panic!(
-                        "Problem creating the file: {e:?}",
-                    ),
-                }
-            }
+            ErrorKind::NotFound => match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("Problem creating the file: {e:?}"),
+            },
             _ => {
                 panic!("Problem opening the file: {error:?}");
             }
@@ -1046,13 +1045,14 @@ program only operated on values between 1 and 100, and it had many functions
 with this requirement, having a check like this in every function would be
 tedious (and might impact performance).
 
-Instead, we can make a new type and put the validations in a function to create
-an instance of the type rather than repeating the validations everywhere. That
-way, it’s safe for functions to use the new type in their signatures and
-confidently use the values they receive. Listing 9-13 shows one way to define a
-`Guess` type that will only create an instance of `Guess` if the `new` function
-receives a value between 1 and 100.
+Instead, we can make a new type in a dedicated module and put the validations in
+a function to create an instance of the type rather than repeating the
+validations everywhere. That way, it’s safe for functions to use the new type in
+their signatures and confidently use the values they receive. Listing 9-13 shows
+one way to define a `Guess` type that will only create an instance of `Guess` if
+the `new` function receives a value between 1 and 100.
 
+src/guessing_game.rs
 
 ```
 pub struct Guess {
@@ -1076,8 +1076,9 @@ impl Guess {
 
 Listing 9-13: A `Guess` type that will only continue with values between 1 and 100
 
-First we define a struct named `Guess` that has a field named `value` that
-holds an `i32`. This is where the number will be stored.
+First we create a new module named `guessing_game`. Next we define a struct in
+that module named `Guess` that has a field named `value` that holds an `i32`.
+This is where the number will be stored.
 
 Then we implement an associated function named `new` on `Guess` that creates
 instances of `Guess` values. The `new` function is defined to have one
@@ -1099,9 +1100,9 @@ a *getter* because its purpose is to get some data from its fields and return
 it. This public method is necessary because the `value` field of the `Guess`
 struct is private. It’s important that the `value` field be private so code
 using the `Guess` struct is not allowed to set `value` directly: code outside
-the module *must* use the `Guess::new` function to create an instance of
-`Guess`, thereby ensuring there’s no way for a `Guess` to have a `value` that
-hasn’t been checked by the conditions in the `Guess::new` function.
+the `guessing_game` module *must* use the `Guess::new` function to create an
+instance of `Guess`, thereby ensuring there’s no way for a `Guess` to have a
+`value` that hasn’t been checked by the conditions in the `Guess::new` function.
 
 A function that has a parameter or returns only numbers between 1 and 100 could
 then declare in its signature that it takes or returns a `Guess` rather than an
