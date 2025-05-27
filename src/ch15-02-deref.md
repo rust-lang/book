@@ -23,11 +23,12 @@ or smart pointers.
 > We are focusing this example on `Deref`, so where the data is actually stored
 > is less important than the pointer-like behavior.
 
-<!-- Old link, do not remove -->
+<!-- Old links, do not remove -->
 
 <a id="following-the-pointer-to-the-value-with-the-dereference-operator"></a>
+<a id="following-the-pointer-to-the-value"></a>
 
-### Following the Pointer to the Value
+### Following the Reference to the Value
 
 A regular reference is a type of pointer, and one way to think of a pointer is
 as an arrow to a value stored somewhere else. In Listing 15-6, we create a
