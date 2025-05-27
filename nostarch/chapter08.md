@@ -252,8 +252,8 @@ Listing 8-8: Iterating over mutable references to elements in a vector
 
 To change the value that the mutable reference refers to, we have to use the
 `*` dereference operator to get to the value in `i` before we can use the `+=`
-operator. We’ll talk more about the dereference operator in “Following the
-Reference to the Value” on page XX.
+operator. We’ll talk more about the dereference operator in the “Following the
+Reference to the Value” section of Chapter 15.
 
 Iterating over a vector, whether immutably or mutably, is safe because of the
 borrow checker’s rules. If we attempted to insert or remove items in the `for`
@@ -584,7 +584,7 @@ get an error. Consider the invalid code in Listing 8-19.
 
 
 ```
-    let s1 = String::from("hello");
+    let s1 = String::from("hi");
     let h = s1[0];
 ```
 
@@ -601,10 +601,10 @@ error[E0277]: the type `str` cannot be indexed by `{integer}`
 3 |     let h = s1[0];
   |                ^ string indices are ranges of `usize`
   |
-  = help: the trait `SliceIndex<str>` is not implemented for `{integer}`, which is required by `String: Index<_>`
   = note: you can use `.chars().nth()` or `.bytes().nth()`
           for more information, see chapter 8 in The Book: <https://doc.rust-lang.org/book/ch08-02-strings.html#indexing-into-strings>
-  = help: the trait `SliceIndex<[_]>` is implemented for `usize`
+  = help: the trait `SliceIndex<str>` is not implemented for `{integer}`
+          but trait `SliceIndex<[_]>` is implemented for `usize`
   = help: for that trait implementation, expected `[_]`, found `str`
   = note: required for `String` to implement `Index<{integer}>`
 
@@ -729,6 +729,7 @@ $ cargo run
    Compiling collections v0.1.0 (file:///projects/collections)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.43s
      Running `target/debug/collections`
+
 thread 'main' panicked at src/main.rs:4:19:
 byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
