@@ -252,8 +252,8 @@ Listing 8-8: Iterating over mutable references to elements in a vector
 
 To change the value that the mutable reference refers to, we have to use the
 `*` dereference operator to get to the value in `i` before we can use the `+=`
-operator. We’ll talk more about the dereference operator in the “Following the
-Pointer to the Value” section of Chapter 15.
+operator. We’ll talk more about the dereference operator in “Following the
+Reference to the Value” on page XX.
 
 Iterating over a vector, whether immutably or mutably, is safe because of the
 borrow checker’s rules. If we attempted to insert or remove items in the `for`
