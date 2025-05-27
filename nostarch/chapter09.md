@@ -177,21 +177,21 @@ thread 'main' panicked at src/main.rs:4:6:
 index out of bounds: the len is 3 but the index is 99
 stack backtrace:
    0: rust_begin_unwind
-             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/std/src/panicking.rs:662:5
+             at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:692:5
    1: core::panicking::panic_fmt
-             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/core/src/panicking.rs:74:14
+             at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/panicking.rs:75:14
    2: core::panicking::panic_bounds_check
-             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/core/src/panicking.rs:276:5
+             at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/panicking.rs:273:5
    3: <usize as core::slice::index::SliceIndex<[T]>>::index
-             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/core/src/slice/index.rs:302:10
+             at file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/core/src/slice/index.rs:274:10
    4: core::slice::index::<impl core::ops::index::Index<I> for [T]>::index
-             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/core/src/slice/index.rs:16:9
+             at file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/core/src/slice/index.rs:16:9
    5: <alloc::vec::Vec<T,A> as core::ops::index::Index<I>>::index
-             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/alloc/src/vec/mod.rs:2920:9
+             at file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs:3361:9
    6: panic::main
              at ./src/main.rs:4:6
    7: core::ops::function::FnOnce::call_once
-             at /rustc/f6e511eec7342f59a25f7c0534f1dbea00d01b14/library/core/src/ops/function.rs:250:5
+             at file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
 note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
 ```
 
@@ -349,12 +349,16 @@ fn main() {
     let greeting_file = match greeting_file_result {
         Ok(file) => file,
         Err(error) => match error.kind() {
-            ErrorKind::NotFound => match File::create("hello.txt") {
-                Ok(fc) => fc,
-                Err(e) => panic!("Problem creating the file: {e:?}"),
-            },
-            other_error => {
-                panic!("Problem opening the file: {other_error:?}");
+            ErrorKind::NotFound => {
+                match File::create("hello.txt") {
+                    Ok(fc) => fc,
+                    Err(e) => panic!(
+                        "Problem creating the file: {e:?}",
+                    ),
+                }
+            }
+            _ => {
+                panic!("Problem opening the file: {error:?}");
             }
         },
     };
@@ -493,7 +497,7 @@ information to use in debugging.
 ### Propagating Errors
 
 When a function’s implementation calls something that might fail, instead of
-handling the error within the function itself you can return the error to the
+handling the error within the function itself, you can return the error to the
 calling code so that it can decide what to do. This is known as *propagating*
 the error and gives more control to the calling code, where there might be more
 information or logic that dictates how the error should be handled than what
@@ -583,7 +587,7 @@ it to handle appropriately.
 This pattern of propagating errors is so common in Rust that Rust provides the
 question mark operator `?` to make this easier.
 
-#### A Shortcut for Propagating Errors: the ? Operator
+#### A Shortcut for Propagating Errors: The ? Operator
 
 Listing 9-7 shows an implementation of `read_username_from_file` that has the
 same functionality as in Listing 9-6, but this implementation uses the `?`
@@ -700,7 +704,7 @@ into that `String`, and returns it. Of course, using `fs::read_to_string`
 doesn’t give us the opportunity to explain all the error handling, so we did it
 the longer way first.
 
-#### Where The ? Operator Can Be Used
+#### Where the ? Operator Can Be Used
 
 The `?` operator can only be used in functions whose return type is compatible
 with the value the `?` is used on. This is because the `?` operator is defined
@@ -900,15 +904,15 @@ happen.
 
 ### Cases in Which You Have More Information Than the Compiler
 
-It would also be appropriate to call `unwrap` or `expect` when you have some
-other logic that ensures the `Result` will have an `Ok` value, but the logic
-isn’t something the compiler understands. You’ll still have a `Result` value
-that you need to handle: whatever operation you’re calling still has the
-possibility of failing in general, even though it’s logically impossible in
-your particular situation. If you can ensure by manually inspecting the code
-that you’ll never have an `Err` variant, it’s perfectly acceptable to call
-`unwrap`, and even better to document the reason you think you’ll never have an
-`Err` variant in the `expect` text. Here’s an example:
+It would also be appropriate to call `expect` when you have some other logic
+that ensures the `Result` will have an `Ok` value, but the logic isn’t
+something the compiler understands. You’ll still have a `Result` value that you
+need to handle: whatever operation you’re calling still has the possibility of
+failing in general, even though it’s logically impossible in your particular
+situation. If you can ensure by manually inspecting the code that you’ll never
+have an `Err` variant, it’s perfectly acceptable to call `expect` and document
+the reason you think you’ll never have an `Err` variant in the argument text.
+Here’s an example:
 
 ```
     use std::net::IpAddr;

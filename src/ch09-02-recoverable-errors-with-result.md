@@ -229,7 +229,7 @@ information to use in debugging.
 ### Propagating Errors
 
 When a function’s implementation calls something that might fail, instead of
-handling the error within the function itself you can return the error to the
+handling the error within the function itself, you can return the error to the
 calling code so that it can decide what to do. This is known as _propagating_
 the error and gives more control to the calling code, where there might be more
 information or logic that dictates how the error should be handled than what
@@ -302,7 +302,7 @@ it to handle appropriately.
 This pattern of propagating errors is so common in Rust that Rust provides the
 question mark operator `?` to make this easier.
 
-#### A Shortcut for Propagating Errors: the `?` Operator
+#### A Shortcut for Propagating Errors: The `?` Operator
 
 Listing 9-7 shows an implementation of `read_username_from_file` that has the
 same functionality as in Listing 9-6, but this implementation uses the `?`
@@ -397,7 +397,7 @@ into that `String`, and returns it. Of course, using `fs::read_to_string`
 doesn’t give us the opportunity to explain all the error handling, so we did it
 the longer way first.
 
-#### Where The `?` Operator Can Be Used
+#### Where the `?` Operator Can Be Used
 
 The `?` operator can only be used in functions whose return type is compatible
 with the value the `?` is used on. This is because the `?` operator is defined
