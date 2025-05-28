@@ -10,5 +10,5 @@ fn main() {
         repost: false,
     };
 
-    println!("1 new social post: {}", post.summarize());
+    println!("1 new post: {}", post.summarize());
 }
