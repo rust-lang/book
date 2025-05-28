@@ -316,7 +316,7 @@ error[E0369]: binary operation `>` cannot be applied to type `&T`
   |            |
   |            &T
   |
-help: consider restricting type parameter `T`
+help: consider restricting type parameter `T` with trait `PartialOrd`
   |
 1 | fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
   |             ++++++++++++++++++++++
@@ -1732,8 +1732,8 @@ The patterns programmed into Rust’s analysis of references are called the
 a set of particular cases that the compiler will consider, and if your code
 fits these cases, you don’t need to write the lifetimes explicitly.
 
-The elision rules don’t provide full inference. If there is still ambiguity as
-to what lifetimes the references have after Rust applies the rules, the
+The elision rules don’t provide full inference. If there is still ambiguity
+about what lifetimes the references have after Rust applies the rules, the
 compiler won’t guess what the lifetime of the remaining references should be.
 Instead of guessing, the compiler will give you an error that you can resolve
 by adding the lifetime annotations.
