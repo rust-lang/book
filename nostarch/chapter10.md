@@ -271,7 +271,7 @@ same type `T`.
 Listing 10-5 shows the combined `largest` function definition using the generic
 data type in its signature. The listing also shows how we can call the function
 with either a slice of `i32` values or `char` values. Note that this code won’t
-compile yet, but we’ll fix it later in this chapter.
+compile yet.
 
 src/main.rs
 
@@ -331,10 +331,10 @@ states that the body of `largest` won’t work for all possible types that `T`
 could be. Because we want to compare values of type `T` in the body, we can
 only use types whose values can be ordered. To enable comparisons, the standard
 library has the `std::cmp::PartialOrd` trait that you can implement on types
-(see Appendix C for more on this trait). By following the help text’s
-suggestion, we restrict the types valid for `T` to only those that implement
-`PartialOrd` and this example will compile, because the standard library
-implements `PartialOrd` on both `i32` and `char`.
+(see Appendix C for more on this trait). To fix Listing 10-5, we can follow the
+help text’s suggestion and restrict the types valid for `T` to only those that
+implement `PartialOrd`. The listing will then compile, because the standard
+library implements `PartialOrd` on both `i32` and `char`.
 
 ### In Struct Definitions
 
@@ -669,15 +669,16 @@ define a set of behaviors necessary to accomplish some purpose.
 
 For example, let’s say we have multiple structs that hold various kinds and
 amounts of text: a `NewsArticle` struct that holds a news story filed in a
-particular location and a `Tweet` that can have, at most, 280 characters along
-with metadata that indicates whether it was a new tweet, a retweet, or a reply
-to another tweet.
+particular location and a `SocialPost` that can have, at most, 280 characters
+along with metadata that indicates whether it was a new post, a repost, or a
+reply to another post.
 
 We want to make a media aggregator library crate named `aggregator` that can
-display summaries of data that might be stored in a `NewsArticle` or `Tweet`
-instance. To do this, we need a summary from each type, and we’ll request that
-summary by calling a `summarize` method on an instance. Listing 10-12 shows the
-definition of a public `Summary` trait that expresses this behavior.
+display summaries of data that might be stored in a `NewsArticle` or
+`SocialPost` instance. To do this, we need a summary from each type, and we’ll
+request that summary by calling a `summarize` method on an instance. Listing
+10-12 shows the definition of a public `Summary` trait that expresses this
+behavior.
 
 src/lib.rs
 
@@ -711,8 +712,8 @@ Now that we’ve defined the desired signatures of the `Summary` trait’s metho
 we can implement it on the types in our media aggregator. Listing 10-13 shows
 an implementation of the `Summary` trait on the `NewsArticle` struct that uses
 the headline, the author, and the location to create the return value of
-`summarize`. For the `Tweet` struct, we define `summarize` as the username
-followed by the entire text of the tweet, assuming that the tweet content is
+`summarize`. For the `SocialPost` struct, we define `summarize` as the username
+followed by the entire text of the post, assuming that the post content is
 already limited to 280 characters.
 
 src/lib.rs
@@ -731,21 +732,21 @@ impl Summary for NewsArticle {
     }
 }
 
-pub struct Tweet {
+pub struct SocialPost {
     pub username: String,
     pub content: String,
     pub reply: bool,
-    pub retweet: bool,
+    pub repost: bool,
 }
 
-impl Summary for Tweet {
+impl Summary for SocialPost {
     fn summarize(&self) -> String {
         format!("{}: {}", self.username, self.content)
     }
 }
 ```
 
-Listing 10-13: Implementing the `Summary` trait on the `NewsArticle` and `Tweet` types
+Listing 10-13: Implementing the `Summary` trait on the `NewsArticle` and `SocialPost` types
 
 Implementing a trait on a type is similar to implementing regular methods. The
 difference is that after `impl`, we put the trait name we want to implement,
@@ -756,37 +757,37 @@ signature, we use curly brackets and fill in the method body with the specific
 behavior that we want the methods of the trait to have for the particular type.
 
 Now that the library has implemented the `Summary` trait on `NewsArticle` and
-`Tweet`, users of the crate can call the trait methods on instances of
-`NewsArticle` and `Tweet` in the same way we call regular methods. The only
+`SocialPost`, users of the crate can call the trait methods on instances of
+`NewsArticle` and `SocialPost` in the same way we call regular methods. The only
 difference is that the user must bring the trait into scope as well as the
 types. Here’s an example of how a binary crate could use our `aggregator`
 library crate:
 
 ```
-use aggregator::{Summary, Tweet};
+use aggregator::{SocialPost, Summary};
 
 fn main() {
-    let tweet = Tweet {
+    let post = SocialPost {
         username: String::from("horse_ebooks"),
         content: String::from(
             "of course, as you probably already know, people",
         ),
         reply: false,
-        retweet: false,
+        repost: false,
     };
 
-    println!("1 new tweet: {}", tweet.summarize());
+    println!("1 new post: {}", post.summarize());
 }
 ```
 
-This code prints `1 new tweet: horse_ebooks: of course, as you probably already know, people`.
+This code prints `1 new post: horse_ebooks: of course, as you probably already know, people`.
 
 Other crates that depend on the `aggregator` crate can also bring the `Summary`
 trait into scope to implement `Summary` on their own types. One restriction to
 note is that we can implement a trait on a type only if either the trait or the
 type, or both, are local to our crate. For example, we can implement standard
-library traits like `Display` on a custom type like `Tweet` as part of our
-`aggregator` crate functionality because the type `Tweet` is local to our
+library traits like `Display` on a custom type like `SocialPost` as part of our
+`aggregator` crate functionality because the type `SocialPost` is local to our
 `aggregator` crate. We can also implement `Summary` on `Vec<T>` in our
 `aggregator` crate because the trait `Summary` is local to our `aggregator`
 crate.
@@ -849,9 +850,10 @@ the `summarize` method on an instance of `NewsArticle`, like this:
 This code prints `New article available! (Read more...)`.
 
 Creating a default implementation doesn’t require us to change anything about
-the implementation of `Summary` on `Tweet` in Listing 10-13. The reason is that
-the syntax for overriding a default implementation is the same as the syntax
-for implementing a trait method that doesn’t have a default implementation.
+the implementation of `Summary` on `SocialPost` in Listing 10-13. The reason is
+that the syntax for overriding a default implementation is the same as the
+syntax for implementing a trait method that doesn’t have a default
+implementation.
 
 Default implementations can call other methods in the same trait, even if those
 other methods don’t have a default implementation. In this way, a trait can
@@ -875,7 +877,7 @@ To use this version of `Summary`, we only need to define `summarize_author`
 when we implement the trait on a type:
 
 ```
-impl Summary for Tweet {
+impl Summary for SocialPost {
     fn summarize_author(&self) -> String {
         format!("@{}", self.username)
     }
@@ -883,26 +885,26 @@ impl Summary for Tweet {
 ```
 
 After we define `summarize_author`, we can call `summarize` on instances of the
-`Tweet` struct, and the default implementation of `summarize` will call the
+`SocialPost` struct, and the default implementation of `summarize` will call the
 definition of `summarize_author` that we’ve provided. Because we’ve implemented
 `summarize_author`, the `Summary` trait has given us the behavior of the
 `summarize` method without requiring us to write any more code. Here’s what
 that looks like:
 
 ```
-    let tweet = Tweet {
+    let post = SocialPost {
         username: String::from("horse_ebooks"),
         content: String::from(
             "of course, as you probably already know, people",
         ),
         reply: false,
-        retweet: false,
+        repost: false,
     };
 
-    println!("1 new tweet: {}", tweet.summarize());
+    println!("1 new post: {}", post.summarize());
 ```
 
-This code prints `1 new tweet: (Read more from @horse_ebooks...)`.
+This code prints `1 new post: (Read more from @horse_ebooks...)`.
 
 Note that it isn’t possible to call the default implementation from an
 overriding implementation of that same method.
@@ -911,7 +913,7 @@ overriding implementation of that same method.
 
 Now that you know how to define and implement traits, we can explore how to use
 traits to define functions that accept many different types. We’ll use the
-`Summary` trait we implemented on the `NewsArticle` and `Tweet` types in
+`Summary` trait we implemented on the `NewsArticle` and `SocialPost` types in
 Listing 10-13 to define a `notify` function that calls the `summarize` method
 on its `item` parameter, which is of some type that implements the `Summary`
 trait. To do this, we use the `impl Trait` syntax, like this:
@@ -926,7 +928,7 @@ Instead of a concrete type for the `item` parameter, we specify the `impl`
 keyword and the trait name. This parameter accepts any type that implements the
 specified trait. In the body of `notify`, we can call any methods on `item`
 that come from the `Summary` trait, such as `summarize`. We can call `notify`
-and pass in any instance of `NewsArticle` or `Tweet`. Code that calls the
+and pass in any instance of `NewsArticle` or `SocialPost`. Code that calls the
 function with any other type, such as a `String` or an `i32`, won’t compile
 because those types don’t implement `Summary`.
 
@@ -1025,13 +1027,13 @@ value of some type that implements a trait, as shown here:
 
 ```
 fn returns_summarizable() -> impl Summary {
-    Tweet {
+    SocialPost {
         username: String::from("horse_ebooks"),
         content: String::from(
             "of course, as you probably already know, people",
         ),
         reply: false,
-        retweet: false,
+        repost: false,
     }
 }
 ```
@@ -1039,7 +1041,8 @@ fn returns_summarizable() -> impl Summary {
 By using `impl Summary` for the return type, we specify that the
 `returns_summarizable` function returns some type that implements the `Summary`
 trait without naming the concrete type. In this case, `returns_summarizable`
-returns a `Tweet`, but the code calling this function doesn’t need to know that.
+returns a `SocialPost`, but the code calling this function doesn’t need to know
+that.
 
 The ability to specify a return type only by the trait it implements is
 especially useful in the context of closures and iterators, which we cover in
@@ -1049,8 +1052,8 @@ specify that a function returns some type that implements the `Iterator` trait
 without needing to write out a very long type.
 
 However, you can only use `impl Trait` if you’re returning a single type. For
-example, this code that returns either a `NewsArticle` or a `Tweet` with the
-return type specified as `impl Summary` wouldn’t work:
+example, this code that returns either a `NewsArticle` or a `SocialPost` with
+the return type specified as `impl Summary` wouldn’t work:
 
 ```
 fn returns_summarizable(switch: bool) -> impl Summary {
@@ -1067,22 +1070,22 @@ fn returns_summarizable(switch: bool) -> impl Summary {
             ),
         }
     } else {
-        Tweet {
+        SocialPost {
             username: String::from("horse_ebooks"),
             content: String::from(
                 "of course, as you probably already know, people",
             ),
             reply: false,
-            retweet: false,
+            repost: false,
         }
     }
 }
 ```
 
-Returning either a `NewsArticle` or a `Tweet` isn’t allowed due to restrictions
-around how the `impl Trait` syntax is implemented in the compiler. We’ll cover
-how to write a function with this behavior in the “Using Trait Objects That
-Allow for Values of Different
+Returning either a `NewsArticle` or a `SocialPost` isn’t allowed due to
+restrictions around how the `impl Trait` syntax is implemented in the compiler.
+We’ll cover how to write a function with this behavior in the “Using Trait
+Objects That Allow for Values of Different
 Types” section of Chapter 18.
 
 ### Using Trait Bounds to Conditionally Implement Methods
@@ -1173,11 +1176,12 @@ One detail we didn’t discuss in the “References and
 Borrowing” section in Chapter 4 is
 that every reference in Rust has a *lifetime*, which is the scope for which
 that reference is valid. Most of the time, lifetimes are implicit and inferred,
-just like most of the time, types are inferred. We must annotate types only
-when multiple types are possible. In a similar way, we must annotate lifetimes
-when the lifetimes of references could be related in a few different ways. Rust
-requires us to annotate the relationships using generic lifetime parameters to
-ensure the actual references used at runtime will definitely be valid.
+just like most of the time, types are inferred. We are only required to
+annotate types when multiple types are possible. In a similar way, we have to
+annotate lifetimes when the lifetimes of references could be related in a few
+different ways. Rust requires us to annotate the relationships using generic
+lifetime parameters to ensure the actual references used at runtime will
+definitely be valid.
 
 Annotating lifetimes is not even a concept most other programming languages
 have, so this is going to feel unfamiliar. Although we won’t cover lifetimes in
@@ -1338,11 +1342,7 @@ src/main.rs
 
 ```
 fn longest(x: &str, y: &str) -> &str {
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
+    if x.len() > y.len() { x } else { y }
 }
 ```
 
@@ -1431,11 +1431,7 @@ src/main.rs
 
 ```
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
+    if x.len() > y.len() { x } else { y }
 }
 ```
 
@@ -1735,8 +1731,8 @@ fits these cases, you don’t need to write the lifetimes explicitly.
 The elision rules don’t provide full inference. If there is still ambiguity
 about what lifetimes the references have after Rust applies the rules, the
 compiler won’t guess what the lifetime of the remaining references should be.
-Instead of guessing, the compiler will give you an error that you can resolve
-by adding the lifetime annotations.
+Instead of guessing, the compiler will give you an error that you can resolve by
+adding the lifetime annotations.
 
 Lifetimes on function or method parameters are called *input lifetimes*, and
 lifetimes on return values are called *output lifetimes*.
@@ -1902,11 +1898,7 @@ where
     T: Display,
 {
     println!("Announcement! {ann}");
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
+    if x.len() > y.len() { x } else { y }
 }
 ```
 
