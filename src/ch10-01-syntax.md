@@ -77,10 +77,10 @@ states that the body of `largest` won’t work for all possible types that `T`
 could be. Because we want to compare values of type `T` in the body, we can
 only use types whose values can be ordered. To enable comparisons, the standard
 library has the `std::cmp::PartialOrd` trait that you can implement on types
-(see Appendix C for more on this trait). To fix the example code above, we would
-need to follow the help text's suggestions and restrict the types valid for `T`
-to only those that implement `PartialOrd`. The example would then compile, because
-the standard library implements `PartialOrd` on both `i32` and `char`.
+(see Appendix C for more on this trait). To fix Listing 10-5, we can follow the
+help text’s suggestion and restrict the types valid for `T` to only those that
+implement `PartialOrd`. The listing will then compile, because the standard
+library implements `PartialOrd` on both `i32` and `char`.
 
 ### In Struct Definitions
 
