@@ -50,6 +50,7 @@ _src_ directory with a _main.rs_ file inside.
 It has also initialized a new Git repository along with a _.gitignore_ file.
 Git files won’t be generated if you run `cargo new` within an existing Git
 repository; you can override this behavior by using `cargo new --vcs=git`.
+Disables Git repository creation by using `cargo new --vcs=none`.
 
 > Note: Git is a common version control system. You can change `cargo new` to
 > use a different version control system or no version control system by using
