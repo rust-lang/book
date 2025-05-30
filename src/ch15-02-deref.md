@@ -268,6 +268,29 @@ match the parameter’s type. The number of times that `Deref::deref` needs to b
 inserted is resolved at compile time, so there is no runtime penalty for taking
 advantage of deref coercion!
 
+### Calling methods on smart pointers
+
+Because `MyBox` implements implements `Deref`,  methods on a struct can also use
+it as their `self` type, as shown in Listing XX.
+
+<Listing number="15-XX" file-name="src/main.rs" caption="Calling `describe` on a reference to a `MyBox<Point>` value, which also works because of deref coercion">
+
+```rust
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-XX/src/main.rs:here}}
+```
+
+</Listing>
+
+First, we introduce a `Point` type, representing x, y, and z coordinates. Then
+we add a `describe` method. The `describe` method defines the type of `self` as
+`&MyBox<Self>`. This enforces that this method can only be called on a reference
+to `MyBox<Point>`. This is only allowed because `MyBox` implements `Deref` for
+any type it wraps, including `Point`. If we tried to use a different wrapper
+type that did *not* implement `Deref` for `Point`, the code would not compile.
+
+This means that implementing `Deref` gives you many of the same abilities as the
+smart pointer types that come in the standard library.
+
 ### How Deref Coercion Interacts with Mutability
 
 Similar to how you use the `Deref` trait to override the `*` operator on
