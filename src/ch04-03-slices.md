@@ -8,6 +8,8 @@ Here’s a small programming problem: write a function that takes a string of
 words separated by spaces and returns the first word it finds in that string.
 If the function doesn’t find a space in the string, the whole string must be
 one word, so the entire string should be returned.
+The function doesn't need to handle input strings that have leading space
+characters.
 
 > Note: For the purposes of introducing string slices, we are assuming ASCII
 > only in this section; a more thorough discussion of UTF-8 handling is in the
