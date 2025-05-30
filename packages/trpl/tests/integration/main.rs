@@ -14,20 +14,30 @@ use std::{pin::Pin, time::Duration};
 use futures::Future;
 use trpl::{Either, Receiver, Sender};
 
-/// This test is foundational for all the others, as they depend on `run`.
+/// We initially named the function `run` and an online version of the async chapter
+/// was released with that name, so we want to keep it working. We decided to rename
+/// `run` to be `block_on` to more closely match other crates' names, so most of the
+/// tests now use the `block_on` name.
+#[test]
+fn using_run_works() {
+    let val = trpl::run(async { "Hello" });
+    assert_eq!(val, "Hello");
+}
+
+/// This test is foundational for all the others, as they depend on `block_on`.
 ///
 /// If we mess this up, *all* the tests below will fail -- so by the same token,
 /// if all the tests below are failing, this one probably is too; fix it and the
 /// others will likely start working again.
 #[test]
-fn re_exported_run_works() {
-    let val = trpl::run(async { "Hello" });
+fn re_exported_block_on_works() {
+    let val = trpl::block_on(async { "Hello" });
     assert_eq!(val, "Hello");
 }
 
 #[test]
 fn re_exported_spawn_works() {
-    let result = trpl::run(async {
+    let result = trpl::block_on(async {
         let handle_a = trpl::spawn_task(async { "Hello" });
         let handle_b = trpl::spawn_task(async { "Goodbye" });
         vec![handle_a.await.unwrap(), handle_b.await.unwrap()]
@@ -38,7 +48,7 @@ fn re_exported_spawn_works() {
 
 #[test]
 fn re_exported_sleep_works() {
-    let val = trpl::run(async {
+    let val = trpl::block_on(async {
         trpl::sleep(Duration::from_micros(1)).await;
         "Done!"
     });
@@ -47,7 +57,7 @@ fn re_exported_sleep_works() {
 
 #[test]
 fn re_exported_channel_apis_work() {
-    trpl::run(async {
+    trpl::block_on(async {
         // Explicitly naming the type to confirm the re-exports are aligned.
         let (tx, mut rx): (Sender<&str>, Receiver<&str>) = trpl::channel();
 
@@ -67,7 +77,7 @@ mod re_exported_join_apis_work {
 
     #[test]
     fn join_fn() {
-        let result = trpl::run(async {
+        let result = trpl::block_on(async {
             let a = async { 1 };
             let b = async { 2 };
             trpl::join(a, b).await
@@ -78,7 +88,7 @@ mod re_exported_join_apis_work {
 
     #[test]
     fn join3_fn() {
-        let result = trpl::run(async {
+        let result = trpl::block_on(async {
             let a = async { 1 };
             let b = async { 2 };
             let c = async { 3 };
@@ -91,7 +101,7 @@ mod re_exported_join_apis_work {
 
     #[test]
     fn join_all_fn() {
-        let result = trpl::run(async {
+        let result = trpl::block_on(async {
             let a = async { format!("{}", 1) };
 
             let b = async { "Hello".to_string() };
@@ -117,7 +127,7 @@ mod re_exported_join_apis_work {
 
     #[test]
     fn join_macro() {
-        let result = trpl::run(async {
+        let result = trpl::block_on(async {
             let a = async { 1 };
             let b = async { "Hello" };
 
@@ -132,14 +142,39 @@ mod re_exported_join_apis_work {
 }
 
 #[test]
-fn race() {
+fn select() {
     #[derive(Debug, PartialEq)]
     struct Slow;
 
     #[derive(Debug, PartialEq)]
     struct Fast;
 
-    let val = trpl::run(async {
+    let val = trpl::block_on(async {
+        let slow = async {
+            trpl::sleep(Duration::from_millis(1_000)).await;
+            Slow
+        };
+
+        let fast = async {
+            trpl::sleep(Duration::from_millis(1)).await;
+            Fast
+        };
+
+        trpl::select(slow, fast).await
+    });
+
+    assert!(matches!(val, Either::Right(Fast)));
+}
+
+#[test]
+fn race_continues_to_work() {
+    #[derive(Debug, PartialEq)]
+    struct Slow;
+
+    #[derive(Debug, PartialEq)]
+    struct Fast;
+
+    let val = trpl::block_on(async {
         let slow = async {
             trpl::sleep(Duration::from_millis(1_000)).await;
             Slow
@@ -158,7 +193,7 @@ fn race() {
 
 #[test]
 fn yield_now() {
-    let result = trpl::run(async {
+    let result = trpl::block_on(async {
         trpl::yield_now().await;
         "done"
     });
@@ -168,7 +203,7 @@ fn yield_now() {
 
 #[test]
 fn read_to_string() {
-    let result = trpl::run(async {
+    let result = trpl::block_on(async {
         trpl::read_to_string("tests/integration/to-read.txt")
             .await
             .unwrap()
@@ -181,7 +216,7 @@ fn read_to_string() {
 fn stream_iter() {
     use trpl::StreamExt;
 
-    let result = trpl::run(async {
+    let result = trpl::block_on(async {
         let ns = vec![1, 2, 3];
         let mut stream = trpl::stream_from_iter(ns);
         let mut result = vec![];
@@ -202,7 +237,7 @@ fn receiver_stream() {
     use trpl::ReceiverStream;
     use trpl::StreamExt;
 
-    let result: Vec<u32> = trpl::run(async {
+    let result: Vec<u32> = trpl::block_on(async {
         println!("startup");
         let (tx, rx) = trpl::channel();
         let rx_stream = ReceiverStream::new(rx);
@@ -220,7 +255,7 @@ fn receiver_stream() {
 fn re_exported_interval_stream_works() {
     use trpl::{IntervalStream, StreamExt};
 
-    trpl::run(async {
+    trpl::block_on(async {
         let mut interval_stream =
             IntervalStream::new(trpl::interval(Duration::from_millis(1)))
                 .take(1);
