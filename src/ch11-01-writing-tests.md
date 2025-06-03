@@ -98,7 +98,7 @@ instance; we’ll cover that in the [“Ignoring Some Tests Unless Specifically
 Requested”][ignoring]<!-- ignore --> section later in this chapter. Because we
 haven’t done that here, the summary shows `0 ignored`. We can also pass an
 argument to the `cargo test` command to run only tests whose name matches a
-string; this is called _filtering_ and we’ll cover that in the [“Running a
+string; this is called _filtering_ and we’ll cover it in the [“Running a
 Subset of Tests by Name”][subset]<!-- ignore --> section. Here we haven’t
 filtered the tests being run, so the end of the summary shows `0 filtered out`.
 
@@ -164,13 +164,13 @@ check the line number of the panic matches the line number in the following para
 Instead of `ok`, the line `test tests::another` shows `FAILED`. Two new
 sections appear between the individual results and the summary: the first
 displays the detailed reason for each test failure. In this case, we get the
-details that `another` failed because it `panicked at 'Make this test fail'` on
-line 17 in the _src/lib.rs_ file. The next section lists just the names of all
-the failing tests, which is useful when there are lots of tests and lots of
-detailed failing test output. We can use the name of a failing test to run just
-that test to more easily debug it; we’ll talk more about ways to run tests in
-the [“Controlling How Tests Are Run”][controlling-how-tests-are-run]<!-- ignore
---> section.
+details that `tests::another` failed because it panicked with the message `Make
+this test fail` on line 17 in the _src/lib.rs_ file. The next section lists
+just the names of all the failing tests, which is useful when there are lots of
+tests and lots of detailed failing test output. We can use the name of a
+failing test to run just that test to more easily debug it; we’ll talk more
+about ways to run tests in the [“Controlling How Tests Are
+Run”][controlling-how-tests-are-run]<!-- ignore --> section.
 
 The summary line displays at the end: overall, our test result is `FAILED`. We
 had one test pass and one test fail.
@@ -298,9 +298,9 @@ Let’s check that it passes!
 ```
 
 We create a variable named `result` that holds the result of calling
-`add_two(2)`. Then we pass `result` and `4` as the arguments to `assert_eq!`.
-The output line for this test is `test tests::it_adds_two ... ok`, and the `ok`
-text indicates that our test passed!
+`add_two(2)`. Then we pass `result` and `4` as the arguments to the
+`assert_eq!` macro. The output line for this test is `test tests::it_adds_two
+... ok`, and the `ok` text indicates that our test passed!
 
 Let’s introduce a bug into our code to see what `assert_eq!` looks like when it
 fails. Change the implementation of the `add_two` function to instead add `3`:
@@ -315,20 +315,20 @@ Run the tests again:
 {{#include ../listings/ch11-writing-automated-tests/no-listing-04-bug-in-add-two/output.txt}}
 ```
 
-Our test caught the bug! The `it_adds_two` test failed, and the message tells us
-that the assertion that failed was ``assertion `left == right` failed`` and what
-the `left` and `right` values are. This message helps us start debugging: the
-`left` argument, where we had the result of calling `add_two(2)`, was `5` but
-the `right` argument was `4`. You can imagine that this would be especially
-helpful when we have a lot of tests going on.
+Our test caught the bug! The `tests::it_adds_two` test failed, and the message
+tells us that the assertion that failed was `left == right` and what the `left`
+and `right` values are. This message helps us start debugging: the `left`
+argument, where we had the result of calling `add_two(2)`, was `5` but the
+`right` argument was `4`. You can imagine that this would be especially helpful
+when we have a lot of tests going on.
 
 Note that in some languages and test frameworks, the parameters to equality
 assertion functions are called `expected` and `actual`, and the order in which
 we specify the arguments matters. However, in Rust, they’re called `left` and
-`right`, and the order in which we specify the value we expect and the value the
-code produces doesn’t matter. We could write the assertion in this test as
-`assert_eq!(add_two(2), result)`, which would result in the same failure message
-that displays `` assertion failed: `(left == right)` ``.
+`right`, and the order in which we specify the value we expect and the value
+the code produces doesn’t matter. We could write the assertion in this test as
+`assert_eq!(4, result)`, which would result in the same failure message that
+displays `` assertion `left == right` failed``.
 
 The `assert_ne!` macro will pass if the two values we give it are not equal and
 fail if they’re equal. This macro is most useful for cases when we’re not sure
