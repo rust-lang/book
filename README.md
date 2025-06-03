@@ -1,6 +1,6 @@
 # The Rust Programming Language
 
-![Build Status](https://github.com/rust-lang/book/workflows/CI/badge.svg)
+[![Build Status](https://github.com/rust-lang/book/actions/workflows/main.yml/badge.svg)](https://github.com/rust-lang/book/actions/workflows/main.yml)
 
 This repository contains the source of "The Rust Programming Language" book.
 
