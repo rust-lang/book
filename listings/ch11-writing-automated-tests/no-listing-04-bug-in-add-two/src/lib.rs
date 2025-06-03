@@ -1,5 +1,5 @@
 // ANCHOR: here
-pub fn add_two(a: usize) -> usize {
+pub fn add_two(a: u64) -> u64 {
     a + 3
 }
 // ANCHOR_END: here
