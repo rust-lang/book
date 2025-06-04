@@ -1,154 +1,108 @@
-## Installation
+## การติดตั้ง
 
-The first step is to install Rust. We’ll download Rust through `rustup`, a
-command line tool for managing Rust versions and associated tools. You’ll need
-an internet connection for the download.
+ขั้นตอนแรกคือการติดตั้ง Rust เราจะดาวน์โหลด Rust ผ่าน `rustup` ซึ่งเป็นเครื่องมือบรรทัดคำสั่งสำหรับจัดการเวอร์ชัน Rust และเครื่องมือที่เกี่ยวข้อง คุณจะต้องเชื่อมต่ออินเทอร์เน็ตเพื่อดาวน์โหลด
 
-> Note: If you prefer not to use `rustup` for some reason, please see the
-> [Other Rust Installation Methods page][otherinstall] for more options.
+> หมายเหตุ: หากคุณไม่ต้องการใช้ `rustup` ด้วยเหตุผลบางประการ โปรดดูหน้า [วิธีการติดตั้ง Rust อื่นๆ][otherinstall] สำหรับตัวเลือกเพิ่มเติม
 
-The following steps install the latest stable version of the Rust compiler.
-Rust’s stability guarantees ensure that all the examples in the book that
-compile will continue to compile with newer Rust versions. The output might
-differ slightly between versions because Rust often improves error messages and
-warnings. In other words, any newer, stable version of Rust you install using
-these steps should work as expected with the content of this book.
+ขั้นตอนต่อไปนี้เป็นการติดตั้งคอมไพเลอร์ Rust เวอร์ชันเสถียรล่าสุด การรับประกันความเสถียรของ Rust ช่วยให้มั่นใจได้ว่าตัวอย่างทั้งหมดในหนังสือที่คอมไพล์ได้จะยังคงคอมไพล์ได้กับ Rust เวอร์ชันใหม่กว่า ผลลัพธ์อาจแตกต่างกันเล็กน้อยระหว่างเวอร์ชัน เนื่องจาก Rust มักจะปรับปรุงข้อความแสดงข้อผิดพลาดและคำเตือนอยู่เสมอ กล่าวอีกนัยหนึ่งคือ Rust เวอร์ชันเสถียรที่ใหม่กว่าใดๆ ที่คุณติดตั้งโดยใช้ขั้นตอนเหล่านี้ควรทำงานตามที่คาดไว้กับเนื้อหาของหนังสือเล่มนี้
 
-> ### Command Line Notation
+> ### สัญกรณ์บรรทัดคำสั่ง
 >
-> In this chapter and throughout the book, we’ll show some commands used in the
-> terminal. Lines that you should enter in a terminal all start with `$`. You
-> don’t need to type the `$` character; it’s the command line prompt shown to
-> indicate the start of each command. Lines that don’t start with `$` typically
-> show the output of the previous command. Additionally, PowerShell-specific
-> examples will use `>` rather than `$`.
+> ในบทนี้และตลอดทั้งเล่ม เราจะแสดงคำสั่งบางอย่างที่ใช้ในเทอร์มินัล บรรทัดที่คุณควรป้อนในเทอร์มินัลทั้งหมดจะขึ้นต้นด้วย `$` คุณไม่จำเป็นต้องพิมพ์อักขระ `$` มันคือพรอมต์บรรทัดคำสั่งที่แสดงเพื่อระบุการเริ่มต้นของแต่ละคำสั่ง บรรทัดที่ไม่ได้ขึ้นต้นด้วย `$` โดยทั่วไปจะแสดงผลลัพธ์ของคำสั่งก่อนหน้า นอกจากนี้ ตัวอย่างเฉพาะสำหรับ PowerShell จะใช้ `>` แทน `$`
 
-### Installing `rustup` on Linux or macOS
+### การติดตั้ง `rustup` บน Linux หรือ macOS
 
-If you’re using Linux or macOS, open a terminal and enter the following command:
+หากคุณใช้ Linux หรือ macOS ให้เปิดเทอร์มินัลแล้วป้อนคำสั่งต่อไปนี้:
 
 ```console
 $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
-The command downloads a script and starts the installation of the `rustup`
-tool, which installs the latest stable version of Rust. You might be prompted
-for your password. If the install is successful, the following line will appear:
+คำสั่งนี้จะดาวน์โหลดสคริปต์และเริ่มการติดตั้งเครื่องมือ `rustup` ซึ่งจะติดตั้ง Rust เวอร์ชันเสถียรล่าสุด คุณอาจถูกขอให้ป้อนรหัสผ่านของคุณ หากการติดตั้งสำเร็จ บรรทัดต่อไปนี้จะปรากฏขึ้น:
 
 ```text
 Rust is installed now. Great!
 ```
 
-You will also need a _linker_, which is a program that Rust uses to join its
-compiled outputs into one file. It is likely you already have one. If you get
-linker errors, you should install a C compiler, which will typically include a
-linker. A C compiler is also useful because some common Rust packages depend on
-C code and will need a C compiler.
+คุณจะต้องมี _linker_ ด้วย ซึ่งเป็นโปรแกรมที่ Rust ใช้เพื่อรวมผลลัพธ์ที่คอมไพล์แล้วเข้าเป็นไฟล์เดียว มีแนวโน้มว่าคุณมีอยู่แล้ว หากคุณได้รับข้อผิดพลาดเกี่ยวกับ linker คุณควรติดตั้งคอมไพเลอร์ C ซึ่งโดยทั่วไปจะมี linker รวมอยู่ด้วย คอมไพเลอร์ C ยังมีประโยชน์เนื่องจากแพ็กเกจ Rust ทั่วไปบางตัว εξαρτώμαι (depend on) โค้ด C และจะต้องใช้คอมไพเลอร์ C
 
-On macOS, you can get a C compiler by running:
+บน macOS คุณสามารถรับคอมไพเลอร์ C ได้โดยการรัน:
 
 ```console
 $ xcode-select --install
 ```
 
-Linux users should generally install GCC or Clang, according to their
-distribution’s documentation. For example, if you use Ubuntu, you can install
-the `build-essential` package.
+ผู้ใช้ Linux โดยทั่วไปควรติดตั้ง GCC หรือ Clang ตามเอกสารประกอบของ дистрибутив (distribution) ของตน ตัวอย่างเช่น หากคุณใช้ Ubuntu คุณสามารถติดตั้งแพ็กเกจ `build-essential` ได้
 
-### Installing `rustup` on Windows
+### การติดตั้ง `rustup` บน Windows
 
-On Windows, go to [https://www.rust-lang.org/tools/install][install] and follow
-the instructions for installing Rust. At some point in the installation, you’ll
-be prompted to install Visual Studio. This provides a linker and the native
-libraries needed to compile programs. If you need more help with this step, see
-[https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]
+บน Windows ให้ไปที่ [https://www.rust-lang.org/tools/install][install] และทำตามคำแนะนำในการติดตั้ง Rust ในบางขั้นตอนของการติดตั้ง คุณจะได้รับแจ้งให้ติดตั้ง Visual Studio ซึ่งจะให้ linker และไลบรารีแบบเนทีฟที่จำเป็นในการคอมไพล์โปรแกรม หากคุณต้องการความช่วยเหลือเพิ่มเติมในขั้นตอนนี้ โปรดดู [https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]
 
-The rest of this book uses commands that work in both _cmd.exe_ and PowerShell.
-If there are specific differences, we’ll explain which to use.
+ส่วนที่เหลือของหนังสือเล่มนี้ใช้คำสั่งที่ทำงานได้ทั้งใน _cmd.exe_ และ PowerShell หากมีความแตกต่างเฉพาะเจาะจง เราจะอธิบายว่าควรใช้อันไหน
 
-### Troubleshooting
+### การแก้ไขปัญหา
 
-To check whether you have Rust installed correctly, open a shell and enter this
-line:
+หากต้องการตรวจสอบว่าคุณติดตั้ง Rust อย่างถูกต้องหรือไม่ ให้เปิดเชลล์แล้วป้อนบรรทัดนี้:
 
 ```console
 $ rustc --version
 ```
 
-You should see the version number, commit hash, and commit date for the latest
-stable version that has been released, in the following format:
+คุณควรเห็นหมายเลขเวอร์ชัน, commit hash และวันที่ commit สำหรับเวอร์ชันเสถียรล่าสุดที่เผยแพร่แล้ว ในรูปแบบต่อไปนี้:
 
 ```text
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-If you see this information, you have installed Rust successfully! If you don’t
-see this information, check that Rust is in your `%PATH%` system variable as
-follows.
+หากคุณเห็นข้อมูลนี้ แสดงว่าคุณติดตั้ง Rust สำเร็จแล้ว! หากคุณไม่เห็นข้อมูลนี้ ให้ตรวจสอบว่า Rust อยู่ในตัวแปรระบบ `%PATH%` ของคุณดังนี้
 
-In Windows CMD, use:
+ใน Windows CMD ใช้:
 
 ```console
 > echo %PATH%
 ```
 
-In PowerShell, use:
+ใน PowerShell ใช้:
 
 ```powershell
 > echo $env:Path
 ```
 
-In Linux and macOS, use:
+ใน Linux และ macOS ใช้:
 
 ```console
 $ echo $PATH
 ```
 
-If that’s all correct and Rust still isn’t working, there are a number of
-places you can get help. Find out how to get in touch with other Rustaceans (a
-silly nickname we call ourselves) on [the community page][community].
+หากทั้งหมดถูกต้องแล้วแต่ Rust ยังคงใช้งานไม่ได้ มีหลายที่ที่คุณสามารถขอความช่วยเหลือได้ ค้นหาวิธีติดต่อกับ Rustaceans คนอื่นๆ (ชื่อเล่นตลกๆ ที่เราเรียกตัวเอง) ได้ที่ [หน้าชุมชน][community]
 
-### Updating and Uninstalling
+### การอัปเดตและถอนการติดตั้ง
 
-Once Rust is installed via `rustup`, updating to a newly released version is
-easy. From your shell, run the following update script:
+เมื่อติดตั้ง Rust ผ่าน `rustup` แล้ว การอัปเดตเป็นเวอร์ชันที่เผยแพร่ใหม่นั้นทำได้ง่าย จากเชลล์ของคุณ ให้รันสคริปต์อัปเดตต่อไปนี้:
 
 ```console
 $ rustup update
 ```
 
-To uninstall Rust and `rustup`, run the following uninstall script from your
-shell:
+หากต้องการถอนการติดตั้ง Rust และ `rustup` ให้รันสคริปต์ถอนการติดตั้งต่อไปนี้จากเชลล์ของคุณ:
 
 ```console
 $ rustup self uninstall
 ```
 
-### Local Documentation
+### เอกสารประกอบในเครื่อง
 
-The installation of Rust also includes a local copy of the documentation so
-that you can read it offline. Run `rustup doc` to open the local documentation
-in your browser.
+การติดตั้ง Rust ยังรวมสำเนาเอกสารประกอบในเครื่องเพื่อให้คุณสามารถอ่านแบบออฟไลน์ได้ รัน `rustup doc` เพื่อเปิดเอกสารประกอบในเครื่องในเบราว์เซอร์ของคุณ
 
-Any time a type or function is provided by the standard library and you’re not
-sure what it does or how to use it, use the application programming interface
-(API) documentation to find out!
+เมื่อใดก็ตามที่มีไทป์หรือฟังก์ชันที่ไลบรารีมาตรฐานมีให้ และคุณไม่แน่ใจว่ามันทำอะไรหรือใช้งานอย่างไร ให้ใช้เอกสารประกอบ Application Programming Interface (API) เพื่อค้นหา!
 
-### Text Editors and Integrated Development Environments
+### โปรแกรมแก้ไขข้อความและ Integrated Development Environments (IDE)
 
-This book makes no assumptions about what tools you use to author Rust code.
-Just about any text editor will get the job done! However, many text editors and
-integrated development environments (IDEs) have built-in support for Rust. You
-can always find a fairly current list of many editors and IDEs on [the tools
-page][tools] on the Rust website.
+หนังสือเล่มนี้ไม่ได้ตั้งสมมติฐานเกี่ยวกับเครื่องมือที่คุณใช้ในการเขียนโค้ด Rust โปรแกรมแก้ไขข้อความเกือบทุกตัวสามารถทำงานได้! อย่างไรก็ตาม โปรแกรมแก้ไขข้อความและ Integrated Development Environments (IDE) จำนวนมากมีการสนับสนุน Rust ในตัว คุณสามารถค้นหารายชื่อโปรแกรมแก้ไขและ IDE ที่ค่อนข้างเป็นปัจจุบันได้เสมอที่ [หน้าเครื่องมือ][tools] บนเว็บไซต์ Rust
 
-### Working Offline with This Book
+### การทำงานแบบออฟไลน์กับหนังสือเล่มนี้
 
-In several examples, we will use Rust packages beyond the standard library. To
-work through those examples, you will either need to have an internet connection
-or to have downloaded those dependencies ahead of time. To download the
-dependencies ahead of time, you can run the following commands. (We’ll explain
-what `cargo` is and what each of these commands does in detail later.)
+ในหลายตัวอย่าง เราจะใช้แพ็กเกจ Rust นอกเหนือจากไลบรารีมาตรฐาน ในการทำงานผ่านตัวอย่างเหล่านั้น คุณจะต้องมีการเชื่อมต่ออินเทอร์เน็ตหรือดาวน์โหลด εξάρτηση (dependencies) เหล่านั้นล่วงหน้า หากต้องการดาวน์โหลด εξάρτηση (dependencies) ล่วงหน้า คุณสามารถรันคำสั่งต่อไปนี้ได้ (เราจะอธิบายรายละเอียดว่า `cargo` คืออะไรและแต่ละคำสั่งเหล่านี้ทำอะไรในภายหลัง)
 
 ```console
 $ cargo new get-dependencies
@@ -156,11 +110,7 @@ $ cd get-dependencies
 $ cargo add rand@0.8.5 trpl@0.2.0
 ```
 
-This will cache the downloads for these packages so you will not need to
-download them later. Once you have run this command, you do not need to keep the
-`get-dependencies` folder. If you have run this command, you can use the
-`--offline` flag with all `cargo` commands in the rest of the book to use these
-cached versions instead of attempting to use the network. 
+สิ่งนี้จะแคชการดาวน์โหลดสำหรับแพ็กเกจเหล่านี้ เพื่อที่คุณจะไม่ต้องดาวน์โหลดในภายหลัง เมื่อคุณรันคำสั่งนี้แล้ว คุณไม่จำเป็นต้องเก็บโฟลเดอร์ `get-dependencies` ไว้ หากคุณรันคำสั่งนี้แล้ว คุณสามารถใช้แฟล็ก `--offline` กับคำสั่ง `cargo` ทั้งหมดในส่วนที่เหลือของหนังสือเพื่อใช้เวอร์ชันที่แคชไว้เหล่านี้แทนที่จะพยายามใช้เครือข่าย
 
 [otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 [install]: https://www.rust-lang.org/tools/install

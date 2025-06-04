@@ -1,348 +1,221 @@
-## Data Types
+## ชนิดข้อมูล (Data Types)
 
-Every value in Rust is of a certain _data type_, which tells Rust what kind of
-data is being specified so it knows how to work with that data. We’ll look at
-two data type subsets: scalar and compound.
+ทุกค่าใน Rust มี _ชนิดข้อมูล_ (data type) ที่แน่นอน ซึ่งบอก Rust ว่ากำลังระบุข้อมูลชนิดใด เพื่อให้รู้ว่าจะทำงานกับข้อมูลนั้นอย่างไร เราจะดูชนิดข้อมูลสองกลุ่มย่อย: สเกลาร์ (scalar) และประสม (compound)
 
-Keep in mind that Rust is a _statically typed_ language, which means that it
-must know the types of all variables at compile time. The compiler can usually
-infer what type we want to use based on the value and how we use it. In cases
-when many types are possible, such as when we converted a `String` to a numeric
-type using `parse` in the [“Comparing the Guess to the Secret
-Number”][comparing-the-guess-to-the-secret-number]<!-- ignore --> section in
-Chapter 2, we must add a type annotation, like this:
+โปรดทราบว่า Rust เป็นภาษาที่มีการกำหนดชนิดข้อมูลแบบ _สแตติก_ (statically typed) ซึ่งหมายความว่าจะต้องทราบชนิดของตัวแปรทั้งหมดในขณะคอมไพล์ คอมไพเลอร์มักจะสามารถอนุมาน (infer) ได้ว่าเราต้องการใช้ชนิดข้อมูลใดโดยพิจารณาจากค่าและวิธีที่เราใช้งาน ในกรณีที่สามารถเป็นไปได้หลายชนิด เช่น เมื่อเราแปลง `String` เป็นชนิดตัวเลขโดยใช้ `parse` ในส่วน [“การเปรียบเทียบค่าที่ทายกับเลขลับ”][comparing-the-guess-to-the-secret-number]<!-- ignore --> ในบทที่ 2 เราจะต้องเพิ่มคำอธิบายประกอบชนิดข้อมูล (type annotation) ดังนี้:
 
 ```rust
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-If we don’t add the `: u32` type annotation shown in the preceding code, Rust
-will display the following error, which means the compiler needs more
-information from us to know which type we want to use:
+หากเราไม่เพิ่มคำอธิบายประกอบชนิดข้อมูล `: u32` ดังที่แสดงในโค้ดก่อนหน้า Rust จะแสดงข้อผิดพลาดต่อไปนี้ ซึ่งหมายความว่าคอมไพเลอร์ต้องการข้อมูลเพิ่มเติมจากเราเพื่อทราบว่าเราต้องการใช้ชนิดข้อมูลใด:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/output-only-01-no-type-annotations/output.txt}}
 ```
 
-You’ll see different type annotations for other data types.
+คุณจะเห็นคำอธิบายประกอบชนิดข้อมูลที่แตกต่างกันสำหรับชนิดข้อมูลอื่นๆ
 
-### Scalar Types
+### ชนิดข้อมูลสเกลาร์ (Scalar Types)
 
-A _scalar_ type represents a single value. Rust has four primary scalar types:
-integers, floating-point numbers, Booleans, and characters. You may recognize
-these from other programming languages. Let’s jump into how they work in Rust.
+ชนิดข้อมูล _สเกลาร์_ (scalar) แทนค่าเดียว Rust มีชนิดข้อมูลสเกลาร์หลักสี่ชนิด: จำนวนเต็ม (integers), เลขทศนิยม (floating-point numbers), บูลีน (Booleans) และอักขระ (characters) คุณอาจรู้จักชนิดข้อมูลเหล่านี้จากภาษาโปรแกรมอื่น มาดูกันว่ามันทำงานอย่างไรใน Rust
 
-#### Integer Types
+#### ชนิดข้อมูลจำนวนเต็ม (Integer Types)
 
-An _integer_ is a number without a fractional component. We used one integer
-type in Chapter 2, the `u32` type. This type declaration indicates that the
-value it’s associated with should be an unsigned integer (signed integer types
-start with `i` instead of `u`) that takes up 32 bits of space. Table 3-1 shows
-the built-in integer types in Rust. We can use any of these variants to declare
-the type of an integer value.
+_จำนวนเต็ม_ (integer) คือตัวเลขที่ไม่มีส่วนที่เป็นเศษส่วน เราใช้ชนิดข้อมูลจำนวนเต็มหนึ่งชนิดในบทที่ 2 คือชนิด `u32` การประกาศชนิดข้อมูลนี้บ่งชี้ว่าค่าที่เกี่ยวข้องควรเป็นจำนวนเต็มแบบไม่มีเครื่องหมาย (unsigned integer) (ชนิดข้อมูลจำนวนเต็มแบบมีเครื่องหมาย (signed integer) จะขึ้นต้นด้วย `i` แทน `u`) ซึ่งใช้พื้นที่ 32 บิต ตาราง 3-1 แสดงชนิดข้อมูลจำนวนเต็มในตัวของ Rust เราสามารถใช้ variant ใดๆ เหล่านี้เพื่อประกาศชนิดของค่าจำนวนเต็มได้
 
-<span class="caption">Table 3-1: Integer Types in Rust</span>
+<span class="caption">ตาราง 3-1: ชนิดข้อมูลจำนวนเต็มใน Rust</span>
 
-| Length  | Signed  | Unsigned |
+| ขนาด (Length)  | มีเครื่องหมาย (Signed)  | ไม่มีเครื่องหมาย (Unsigned) |
 | ------- | ------- | -------- |
 | 8-bit   | `i8`    | `u8`     |
 | 16-bit  | `i16`   | `u16`    |
 | 32-bit  | `i32`   | `u32`    |
 | 64-bit  | `i64`   | `u64`    |
 | 128-bit | `i128`  | `u128`   |
-| architecture dependent | `isize` | `usize`  |
+| ขึ้นอยู่กับสถาปัตยกรรม (architecture dependent) | `isize` | `usize`  |
 
-Each variant can be either signed or unsigned and has an explicit size.
-_Signed_ and _unsigned_ refer to whether it’s possible for the number to be
-negative—in other words, whether the number needs to have a sign with it
-(signed) or whether it will only ever be positive and can therefore be
-represented without a sign (unsigned). It’s like writing numbers on paper: when
-the sign matters, a number is shown with a plus sign or a minus sign; however,
-when it’s safe to assume the number is positive, it’s shown with no sign.
-Signed numbers are stored using [two’s complement][twos-complement]<!-- ignore
---> representation.
+แต่ละ variant สามารถเป็นได้ทั้งแบบมีเครื่องหมายหรือไม่มีเครื่องหมาย และมีขนาดที่ชัดเจน _มีเครื่องหมาย_ (Signed) และ _ไม่มีเครื่องหมาย_ (unsigned) หมายถึงความเป็นไปได้ที่ตัวเลขจะเป็นค่าลบหรือไม่ กล่าวอีกนัยหนึ่งคือ ตัวเลขจำเป็นต้องมีเครื่องหมายบวกหรือลบกำกับหรือไม่ (มีเครื่องหมาย) หรือว่าตัวเลขนั้นจะเป็นบวกเสมอและสามารถแสดงได้โดยไม่มีเครื่องหมาย (ไม่มีเครื่องหมาย) มันเหมือนกับการเขียนตัวเลขบนกระดาษ: เมื่อเครื่องหมายมีความสำคัญ ตัวเลขจะแสดงด้วยเครื่องหมายบวกหรือลบ อย่างไรก็ตาม เมื่อมั่นใจได้ว่าตัวเลขเป็นบวก ก็จะแสดงโดยไม่มีเครื่องหมาย ตัวเลขแบบมีเครื่องหมายจะถูกเก็บโดยใช้การแทนค่าแบบ [ส่วนเติมเต็มสอง][twos-complement]<!-- ignore --> (two’s complement representation)
 
-Each signed variant can store numbers from −(2<sup>n − 1</sup>) to 2<sup>n −
-1</sup> − 1 inclusive, where _n_ is the number of bits that variant uses. So an
-`i8` can store numbers from −(2<sup>7</sup>) to 2<sup>7</sup> − 1, which equals
-−128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> − 1,
-so a `u8` can store numbers from 0 to 2<sup>8</sup> − 1, which equals 0 to 255.
+แต่ละ variant แบบมีเครื่องหมายสามารถเก็บตัวเลขได้ตั้งแต่ −(2<sup>n − 1</sup>) ถึง 2<sup>n − 1</sup> − 1 โดยที่ _n_ คือจำนวนบิตที่ variant นั้นใช้ ดังนั้น `i8` สามารถเก็บตัวเลขได้ตั้งแต่ −(2<sup>7</sup>) ถึง 2<sup>7</sup> − 1 ซึ่งเท่ากับ −128 ถึง 127 variant แบบไม่มีเครื่องหมายสามารถเก็บตัวเลขได้ตั้งแต่ 0 ถึง 2<sup>n</sup> − 1 ดังนั้น `u8` สามารถเก็บตัวเลขได้ตั้งแต่ 0 ถึง 2<sup>8</sup> − 1 ซึ่งเท่ากับ 0 ถึง 255
 
-Additionally, the `isize` and `usize` types depend on the architecture of the
-computer your program is running on: 64 bits if you’re on a 64-bit architecture
-and 32 bits if you’re on a 32-bit architecture.
+นอกจากนี้ ชนิด `isize` และ `usize` จะขึ้นอยู่กับสถาปัตยกรรมของคอมพิวเตอร์ที่โปรแกรมของคุณกำลังทำงานอยู่: 64 บิตหากคุณใช้สถาปัตยกรรม 64 บิต และ 32 บิตหากคุณใช้สถาปัตยกรรม 32 บิต
 
-You can write integer literals in any of the forms shown in Table 3-2. Note
-that number literals that can be multiple numeric types allow a type suffix,
-such as `57u8`, to designate the type. Number literals can also use `_` as a
-visual separator to make the number easier to read, such as `1_000`, which will
-have the same value as if you had specified `1000`.
+คุณสามารถเขียนค่าจำนวนเต็ม (integer literals) ในรูปแบบใดก็ได้ที่แสดงในตาราง 3-2 โปรดทราบว่าค่าตัวเลขที่สามารถเป็นได้หลายชนิดตัวเลขอนุญาตให้มีส่วนต่อท้ายชนิดข้อมูล (type suffix) เช่น `57u8` เพื่อกำหนดชนิดข้อมูล ค่าตัวเลขยังสามารถใช้ `_` เป็นตัวคั่นเพื่อให้อ่านตัวเลขได้ง่ายขึ้น เช่น `1_000` ซึ่งจะมีค่าเท่ากับ `1000`
 
-<span class="caption">Table 3-2: Integer Literals in Rust</span>
+<span class="caption">ตาราง 3-2: ค่าจำนวนเต็มใน Rust</span>
 
-| Number literals  | Example       |
+| ค่าตัวเลข (Number literals)  | ตัวอย่าง       |
 | ---------------- | ------------- |
-| Decimal          | `98_222`      |
-| Hex              | `0xff`        |
-| Octal            | `0o77`        |
-| Binary           | `0b1111_0000` |
-| Byte (`u8` only) | `b'A'`        |
+| เลขฐานสิบ (Decimal)          | `98_222`      |
+| เลขฐานสิบหก (Hex)              | `0xff`        |
+| เลขฐานแปด (Octal)            | `0o77`        |
+| เลขฐานสอง (Binary)           | `0b1111_0000` |
+| ไบต์ (Byte) (`u8` เท่านั้น) | `b'A'`        |
 
-So how do you know which type of integer to use? If you’re unsure, Rust’s
-defaults are generally good places to start: integer types default to `i32`.
-The primary situation in which you’d use `isize` or `usize` is when indexing
-some sort of collection.
+แล้วจะรู้ได้อย่างไรว่าควรใช้ชนิดข้อมูลจำนวนเต็มแบบใด? หากคุณไม่แน่ใจ ค่าเริ่มต้นของ Rust โดยทั่วไปเป็นจุดเริ่มต้นที่ดี: ชนิดข้อมูลจำนวนเต็มจะมีค่าเริ่มต้นเป็น `i32` สถานการณ์หลักที่คุณจะใช้ `isize` หรือ `usize` คือเมื่อทำการเข้าถึงดัชนี (indexing) ของ collection บางประเภท
 
-> ##### Integer Overflow
+> ##### Integer Overflow (จำนวนเต็มล้น)
 >
-> Let’s say you have a variable of type `u8` that can hold values between 0 and
-> 255. If you try to change the variable to a value outside that range, such as
-> 256, _integer overflow_ will occur, which can result in one of two behaviors.
-> When you’re compiling in debug mode, Rust includes checks for integer overflow
-> that cause your program to _panic_ at runtime if this behavior occurs. Rust
-> uses the term _panicking_ when a program exits with an error; we’ll discuss
-> panics in more depth in the [“Unrecoverable Errors with
-> `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> section in Chapter
-> 9.
+> สมมติว่าคุณมีตัวแปรชนิด `u8` ที่สามารถเก็บค่าได้ระหว่าง 0 ถึง 255 หากคุณพยายามเปลี่ยนตัวแปรเป็นค่านอกช่วงนั้น เช่น 256 _integer overflow_ (จำนวนเต็มล้น) จะเกิดขึ้น ซึ่งอาจส่งผลให้เกิดพฤติกรรมหนึ่งในสองอย่าง เมื่อคุณคอมไพล์ในโหมดดีบัก Rust จะมีการตรวจสอบ integer overflow ที่ทำให้โปรแกรมของคุณ _panic_ (ตื่นตระหนก) ในขณะรันไทม์หากพฤติกรรมนี้เกิดขึ้น Rust ใช้คำว่า _panicking_ เมื่อโปรแกรมจบการทำงานพร้อมข้อผิดพลาด เราจะพูดถึง panic ในรายละเอียดเพิ่มเติมในส่วน [“ข้อผิดพลาดที่ไม่สามารถกู้คืนได้ด้วย `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> ในบทที่ 9
 >
-> When you’re compiling in release mode with the `--release` flag, Rust does
-> _not_ include checks for integer overflow that cause panics. Instead, if
-> overflow occurs, Rust performs _two’s complement wrapping_. In short, values
-> greater than the maximum value the type can hold “wrap around” to the minimum
-> of the values the type can hold. In the case of a `u8`, the value 256 becomes
-> 0, the value 257 becomes 1, and so on. The program won’t panic, but the
-> variable will have a value that probably isn’t what you were expecting it to
-> have. Relying on integer overflow’s wrapping behavior is considered an error.
+> เมื่อคุณคอมไพล์ในโหมด release ด้วยแฟล็ก `--release` Rust จะ _ไม่_ มีการตรวจสอบ integer overflow ที่ทำให้เกิด panic แทนที่จะเป็นเช่นนั้น หากเกิด overflow ขึ้น Rust จะทำการ _two’s complement wrapping_ (การวนครบรอบแบบส่วนเติมเต็มสอง) โดยสรุปคือ ค่าที่มากกว่าค่าสูงสุดที่ชนิดข้อมูลสามารถเก็บได้จะ “วนกลับ” ไปยังค่าต่ำสุดที่ชนิดข้อมูลสามารถเก็บได้ ในกรณีของ `u8` ค่า 256 จะกลายเป็น 0 ค่า 257 จะกลายเป็น 1 และต่อไปเรื่อยๆ โปรแกรมจะไม่ panic แต่ตัวแปรจะมีค่าที่อาจไม่ใช่สิ่งที่คุณคาดหวัง การพึ่งพาพฤติกรรมการวนครบรอบของ integer overflow ถือเป็นข้อผิดพลาด
 >
-> To explicitly handle the possibility of overflow, you can use these families
-> of methods provided by the standard library for primitive numeric types:
+> ในการจัดการกับความเป็นไปได้ของการ overflow อย่างชัดเจน คุณสามารถใช้กลุ่มของเมธอดเหล่านี้ที่ไลบรารีมาตรฐานมีให้สำหรับชนิดข้อมูลตัวเลขพื้นฐาน:
 >
-> - Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`.
-> - Return the `None` value if there is overflow with the `checked_*` methods.
-> - Return the value and a Boolean indicating whether there was overflow with
->   the `overflowing_*` methods.
-> - Saturate at the value’s minimum or maximum values with the `saturating_*`
->   methods.
+> - วนครบรอบในทุกโหมดด้วยเมธอด `wrapping_*` เช่น `wrapping_add`
+> - คืนค่า `None` หากมีการ overflow ด้วยเมธอด `checked_*`
+> - คืนค่าและค่าบูลีนที่ระบุว่ามีการ overflow หรือไม่ด้วยเมธอด `overflowing_*`
+> - ทำให้ค่าอิ่มตัวที่ค่าต่ำสุดหรือสูงสุดของชนิดข้อมูลด้วยเมธอด `saturating_*`
 
-#### Floating-Point Types
+#### ชนิดข้อมูลเลขทศนิยม (Floating-Point Types)
 
-Rust also has two primitive types for _floating-point numbers_, which are
-numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
-which are 32 bits and 64 bits in size, respectively. The default type is `f64`
-because on modern CPUs, it’s roughly the same speed as `f32` but is capable of
-more precision. All floating-point types are signed.
+Rust ยังมีชนิดข้อมูลพื้นฐานสองชนิดสำหรับ _เลขทศนิยม_ (floating-point numbers) ซึ่งเป็นตัวเลขที่มีจุดทศนิยม ชนิดข้อมูลเลขทศนิยมของ Rust คือ `f32` และ `f64` ซึ่งมีขนาด 32 บิตและ 64 บิตตามลำดับ ชนิดข้อมูลเริ่มต้นคือ `f64` เนื่องจากบน CPU สมัยใหม่ มันมีความเร็วใกล้เคียงกับ `f32` แต่มีความแม่นยำมากกว่า ชนิดข้อมูลเลขทศนิยมทั้งหมดเป็นแบบมีเครื่องหมาย
 
-Here’s an example that shows floating-point numbers in action:
+นี่คือตัวอย่างที่แสดงการทำงานของเลขทศนิยม:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ชื่อไฟล์: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-06-floating-point/src/main.rs}}
 ```
 
-Floating-point numbers are represented according to the IEEE-754 standard.
+เลขทศนิยมถูกแทนค่าตามมาตรฐาน IEEE-754
 
-#### Numeric Operations
+#### การดำเนินการทางตัวเลข (Numeric Operations)
 
-Rust supports the basic mathematical operations you’d expect for all the number
-types: addition, subtraction, multiplication, division, and remainder. Integer
-division truncates toward zero to the nearest integer. The following code shows
-how you’d use each numeric operation in a `let` statement:
+Rust สนับสนุนการดำเนินการทางคณิตศาสตร์พื้นฐานที่คุณคาดหวังสำหรับชนิดข้อมูลตัวเลขทั้งหมด: การบวก, การลบ, การคูณ, การหาร และการหาเศษเหลือ การหารจำนวนเต็มจะปัดเศษเข้าหาศูนย์ไปยังจำนวนเต็มที่ใกล้ที่สุด โค้ดต่อไปนี้แสดงวิธีที่คุณจะใช้การดำเนินการทางตัวเลขแต่ละอย่างในคำสั่ง `let`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ชื่อไฟล์: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-07-numeric-operations/src/main.rs}}
 ```
 
-Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable. [Appendix
-B][appendix_b]<!-- ignore --> contains a list of all operators that Rust
-provides.
+แต่ละนิพจน์ในคำสั่งเหล่านี้ใช้ตัวดำเนินการทางคณิตศาสตร์และประเมินผลเป็นค่าเดียว ซึ่งจากนั้นจะถูกผูกเข้ากับตัวแปร [ภาคผนวก B][appendix_b]<!-- ignore --> มีรายการตัวดำเนินการทั้งหมดที่ Rust มีให้
 
-#### The Boolean Type
+#### ชนิดข้อมูลบูลีน (The Boolean Type)
 
-As in most other programming languages, a Boolean type in Rust has two possible
-values: `true` and `false`. Booleans are one byte in size. The Boolean type in
-Rust is specified using `bool`. For example:
+เช่นเดียวกับในภาษาโปรแกรมอื่นส่วนใหญ่ ชนิดข้อมูลบูลีนใน Rust มีสองค่าที่เป็นไปได้: `true` และ `false` บูลีนมีขนาดหนึ่งไบต์ ชนิดข้อมูลบูลีนใน Rust ระบุโดยใช้ `bool` ตัวอย่างเช่น:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ชื่อไฟล์: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-08-boolean/src/main.rs}}
 ```
 
-The main way to use Boolean values is through conditionals, such as an `if`
-expression. We’ll cover how `if` expressions work in Rust in the [“Control
-Flow”][control-flow]<!-- ignore --> section.
+วิธีหลักในการใช้ค่าบูลีนคือผ่านเงื่อนไข เช่น นิพจน์ `if` เราจะครอบคลุมวิธีการทำงานของนิพจน์ `if` ใน Rust ในส่วน [“การควบคุมการทำงานของโปรแกรม”][control-flow]<!-- ignore -->
 
-#### The Character Type
+#### ชนิดข้อมูลอักขระ (The Character Type)
 
-Rust’s `char` type is the language’s most primitive alphabetic type. Here are
-some examples of declaring `char` values:
+ชนิด `char` ของ Rust เป็นชนิดข้อมูลตัวอักษรพื้นฐานที่สุดของภาษา นี่คือตัวอย่างบางส่วนของการประกาศค่า `char`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ชื่อไฟล์: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-09-char/src/main.rs}}
 ```
 
-Note that we specify `char` literals with single quotes, as opposed to string
-literals, which use double quotes. Rust’s `char` type is four bytes in size and
-represents a Unicode scalar value, which means it can represent a lot more than
-just ASCII. Accented letters; Chinese, Japanese, and Korean characters; emoji;
-and zero-width spaces are all valid `char` values in Rust. Unicode scalar
-values range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF` inclusive.
-However, a “character” isn’t really a concept in Unicode, so your human
-intuition for what a “character” is may not match up with what a `char` is in
-Rust. We’ll discuss this topic in detail in [“Storing UTF-8 Encoded Text with
-Strings”][strings]<!-- ignore --> in Chapter 8.
+โปรดทราบว่าเราระบุค่า `char` ด้วยเครื่องหมายอัญประกาศเดี่ยว (single quotes) ซึ่งแตกต่างจากค่าสตริง (string literals) ที่ใช้เครื่องหมายอัญประกาศคู่ (double quotes) ชนิด `char` ของ Rust มีขนาดสี่ไบต์และแทนค่าสเกลาร์ Unicode ซึ่งหมายความว่ามันสามารถแทนค่าได้มากกว่าแค่ ASCII ตัวอักษรที่มีเครื่องหมายกำกับเสียง (accented letters) อักขระจีน ญี่ปุ่น และเกาหลี อีโมจิ และช่องว่างที่ไม่มีความกว้าง (zero-width spaces) ล้วนเป็นค่า `char` ที่ถูกต้องใน Rust ค่าสเกลาร์ Unicode อยู่ในช่วงตั้งแต่ `U+0000` ถึง `U+D7FF` และ `U+E000` ถึง `U+10FFFF` โดยรวม อย่างไรก็ตาม “อักขระ” ไม่ใช่แนวคิดใน Unicode จริงๆ ดังนั้นสัญชาตญาณของมนุษย์เกี่ยวกับว่า “อักขระ” คืออะไรอาจไม่ตรงกับสิ่งที่ `char` เป็นใน Rust เราจะพูดถึงหัวข้อนี้โดยละเอียดใน [“การเก็บข้อความที่เข้ารหัสแบบ UTF-8 ด้วยสตริง”][strings]<!-- ignore --> ในบทที่ 8
 
-### Compound Types
+### ชนิดข้อมูลประสม (Compound Types)
 
-_Compound types_ can group multiple values into one type. Rust has two
-primitive compound types: tuples and arrays.
+_ชนิดข้อมูลประสม_ (Compound types) สามารถจัดกลุ่มหลายค่าให้อยู่ในชนิดข้อมูลเดียวได้ Rust มีชนิดข้อมูลประสมพื้นฐานสองชนิด: ทูเพิล (tuples) และอาร์เรย์ (arrays)
 
-#### The Tuple Type
+#### ชนิดข้อมูลทูเพิล (The Tuple Type)
 
-A _tuple_ is a general way of grouping together a number of values with a
-variety of types into one compound type. Tuples have a fixed length: once
-declared, they cannot grow or shrink in size.
+_ทูเพิล_ (tuple) เป็นวิธีการทั่วไปในการจัดกลุ่มค่าจำนวนหนึ่งที่มีชนิดข้อมูลหลากหลายให้อยู่ในชนิดข้อมูลประสมเดียว ทูเพิลมีความยาวคงที่: เมื่อประกาศแล้ว จะไม่สามารถเพิ่มหรือลดขนาดได้
 
-We create a tuple by writing a comma-separated list of values inside
-parentheses. Each position in the tuple has a type, and the types of the
-different values in the tuple don’t have to be the same. We’ve added optional
-type annotations in this example:
+เราสร้างทูเพิลโดยการเขียนรายการค่าที่คั่นด้วยจุลภาคภายในวงเล็บ แต่ละตำแหน่งในทูเพิลมีชนิดข้อมูล และชนิดข้อมูลของค่าต่างๆ ในทูเพิลไม่จำเป็นต้องเหมือนกัน เราได้เพิ่มคำอธิบายประกอบชนิดข้อมูลที่เป็นทางเลือกในตัวอย่างนี้:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ชื่อไฟล์: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-10-tuples/src/main.rs}}
 ```
 
-The variable `tup` binds to the entire tuple because a tuple is considered a
-single compound element. To get the individual values out of a tuple, we can
-use pattern matching to destructure a tuple value, like this:
+ตัวแปร `tup` ผูกกับทูเพิลทั้งหมด เนื่องจากทูเพิลถือเป็นองค์ประกอบประสมเดียว ในการรับค่าแต่ละค่าออกจากทูเพิล เราสามารถใช้การจับคู่รูปแบบ (pattern matching) เพื่อแยกโครงสร้าง (destructure) ค่าทูเพิลได้ ดังนี้:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ชื่อไฟล์: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-11-destructuring-tuples/src/main.rs}}
 ```
 
-This program first creates a tuple and binds it to the variable `tup`. It then
-uses a pattern with `let` to take `tup` and turn it into three separate
-variables, `x`, `y`, and `z`. This is called _destructuring_ because it breaks
-the single tuple into three parts. Finally, the program prints the value of
-`y`, which is `6.4`.
+โปรแกรมนี้สร้างทูเพิลขึ้นก่อนแล้วผูกเข้ากับตัวแปร `tup` จากนั้นใช้รูปแบบกับ `let` เพื่อนำ `tup` มาเปลี่ยนเป็นตัวแปรแยกกันสามตัวคือ `x`, `y` และ `z` สิ่งนี้เรียกว่า _การแยกโครงสร้าง_ (destructuring) เพราะมันแบ่งทูเพิลเดียวออกเป็นสามส่วน สุดท้าย โปรแกรมจะพิมพ์ค่าของ `y` ซึ่งก็คือ `6.4`
 
-We can also access a tuple element directly by using a period (`.`) followed by
-the index of the value we want to access. For example:
+เรายังสามารถเข้าถึงสมาชิกทูเพิลได้โดยตรงโดยใช้เครื่องหมายจุด (`.`) ตามด้วยดัชนีของค่าที่เราต้องการเข้าถึง ตัวอย่างเช่น:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ชื่อไฟล์: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-12-tuple-indexing/src/main.rs}}
 ```
 
-This program creates the tuple `x` and then accesses each element of the tuple
-using their respective indices. As with most programming languages, the first
-index in a tuple is 0.
+โปรแกรมนี้สร้างทูเพิล `x` แล้วเข้าถึงแต่ละสมาชิกของทูเพิลโดยใช้ดัชนีตามลำดับ เช่นเดียวกับภาษาโปรแกรมส่วนใหญ่ ดัชนีแรกในทูเพิลคือ 0
 
-The tuple without any values has a special name, _unit_. This value and its
-corresponding type are both written `()` and represent an empty value or an
-empty return type. Expressions implicitly return the unit value if they don’t
-return any other value.
+ทูเพิลที่ไม่มีค่าใดๆ มีชื่อพิเศษคือ _unit_ ค่านี้และชนิดข้อมูลที่สอดคล้องกันเขียนแทนด้วย `()` และแทนค่าว่างหรือชนิดข้อมูลส่งคืนที่ว่างเปล่า นิพจน์จะคืนค่า unit โดยปริยายหากไม่ได้คืนค่าอื่นใด
 
-#### The Array Type
+#### ชนิดข้อมูลอาร์เรย์ (The Array Type)
 
-Another way to have a collection of multiple values is with an _array_. Unlike
-a tuple, every element of an array must have the same type. Unlike arrays in
-some other languages, arrays in Rust have a fixed length.
+อีกวิธีหนึ่งในการมี collection ของหลายค่าคือการใช้ _อาร์เรย์_ (array) ซึ่งแตกต่างจากทูเพิลตรงที่ทุกสมาชิกของอาร์เรย์จะต้องมีชนิดข้อมูลเดียวกัน ซึ่งแตกต่างจากอาร์เรย์ในภาษาอื่นบางภาษา อาร์เรย์ใน Rust มีความยาวคงที่
 
-We write the values in an array as a comma-separated list inside square
-brackets:
+เราเขียนค่าในอาร์เรย์เป็นรายการที่คั่นด้วยจุลภาคภายในวงเล็บเหลี่ยม:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ชื่อไฟล์: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-13-arrays/src/main.rs}}
 ```
 
-Arrays are useful when you want your data allocated on the stack, the same as
-the other types we have seen so far, rather than the heap (we will discuss the
-stack and the heap more in [Chapter 4][stack-and-heap]<!-- ignore -->) or when
-you want to ensure you always have a fixed number of elements. An array isn’t
-as flexible as the vector type, though. A _vector_ is a similar collection type
-provided by the standard library that _is_ allowed to grow or shrink in size
-because its contents live on the heap. If you’re unsure whether to use an array
-or a vector, chances are you should use a vector. [Chapter 8][vectors]<!--
-ignore --> discusses vectors in more detail.
+อาร์เรย์มีประโยชน์เมื่อคุณต้องการให้ข้อมูลของคุณถูกจัดสรรบน stack เช่นเดียวกับชนิดข้อมูลอื่นๆ ที่เราเคยเห็นมา แทนที่จะเป็น heap (เราจะพูดถึง stack และ heap เพิ่มเติมใน [บทที่ 4][stack-and-heap]<!-- ignore -->) หรือเมื่อคุณต้องการให้แน่ใจว่าคุณมีจำนวนสมาชิกคงที่เสมอ อาร์เรย์ไม่ได้ยืดหยุ่นเท่ากับชนิดข้อมูล vector อย่างไรก็ตาม _vector_ เป็นชนิดข้อมูล collection ที่คล้ายกันซึ่งไลบรารีมาตรฐานมีให้ และ _สามารถ_ เพิ่มหรือลดขนาดได้เนื่องจากเนื้อหาของมันอยู่บน heap หากคุณไม่แน่ใจว่าจะใช้อาร์เรย์หรือ vector โอกาสที่คุณควรใช้ vector จะสูงกว่า [บทที่ 8][vectors]<!-- ignore --> จะพูดถึง vector ในรายละเอียดเพิ่มเติม
 
-However, arrays are more useful when you know the number of elements will not
-need to change. For example, if you were using the names of the month in a
-program, you would probably use an array rather than a vector because you know
-it will always contain 12 elements:
+อย่างไรก็ตาม อาร์เรย์มีประโยชน์มากกว่าเมื่อคุณทราบว่าจำนวนสมาชิกจะไม่จำเป็นต้องเปลี่ยนแปลง ตัวอย่างเช่น หากคุณใช้ชื่อเดือนในโปรแกรม คุณอาจจะใช้อาร์เรย์แทน vector เพราะคุณรู้ว่ามันจะมี 12 สมาชิกเสมอ:
 
 ```rust
 let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-You write an array’s type using square brackets with the type of each element,
-a semicolon, and then the number of elements in the array, like so:
+คุณเขียนชนิดข้อมูลของอาร์เรย์โดยใช้วงเล็บเหลี่ยมพร้อมด้วยชนิดข้อมูลของแต่ละสมาชิก เครื่องหมายอัฒภาค จากนั้นตามด้วยจำนวนสมาชิกในอาร์เรย์ ดังนี้:
 
 ```rust
 let a: [i32; 5] = [1, 2, 3, 4, 5];
 ```
 
-Here, `i32` is the type of each element. After the semicolon, the number `5`
-indicates the array contains five elements.
+ในที่นี้ `i32` คือชนิดข้อมูลของแต่ละสมาชิก หลังเครื่องหมายอัฒภาค ตัวเลข `5` บ่งชี้ว่าอาร์เรย์มีห้าสมาชิก
 
-You can also initialize an array to contain the same value for each element by
-specifying the initial value, followed by a semicolon, and then the length of
-the array in square brackets, as shown here:
+คุณยังสามารถเริ่มต้นอาร์เรย์ให้มีค่าเดียวกันสำหรับแต่ละสมาชิกได้โดยการระบุค่าเริ่มต้น ตามด้วยเครื่องหมายอัฒภาค จากนั้นตามด้วยความยาวของอาร์เรย์ในวงเล็บเหลี่ยม ดังที่แสดงไว้ที่นี่:
 
 ```rust
 let a = [3; 5];
 ```
 
-The array named `a` will contain `5` elements that will all be set to the value
-`3` initially. This is the same as writing `let a = [3, 3, 3, 3, 3];` but in a
-more concise way.
+อาร์เรย์ชื่อ `a` จะมี `5` สมาชิกซึ่งทั้งหมดจะถูกตั้งค่าเป็น `3` ในตอนเริ่มต้น นี่เหมือนกับการเขียน `let a = [3, 3, 3, 3, 3];` แต่วิธีนี้กระชับกว่า
 
-##### Accessing Array Elements
+##### การเข้าถึงสมาชิกอาร์เรย์ (Accessing Array Elements)
 
-An array is a single chunk of memory of a known, fixed size that can be
-allocated on the stack. You can access elements of an array using indexing,
-like this:
+อาร์เรย์คือส่วนของหน่วยความจำก้อนเดียวที่มีขนาดที่ทราบและคงที่ซึ่งสามารถจัดสรรบน stack ได้ คุณสามารถเข้าถึงสมาชิกของอาร์เรย์โดยใช้การทำดัชนี (indexing) ดังนี้:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ชื่อไฟล์: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-14-array-indexing/src/main.rs}}
 ```
 
-In this example, the variable named `first` will get the value `1` because that
-is the value at index `[0]` in the array. The variable named `second` will get
-the value `2` from index `[1]` in the array.
+ในตัวอย่างนี้ ตัวแปรชื่อ `first` จะได้ค่า `1` เพราะนั่นคือค่าที่ดัชนี `[0]` ในอาร์เรย์ ตัวแปรชื่อ `second` จะได้ค่า `2` จากดัชนี `[1]` ในอาร์เรย์
 
-##### Invalid Array Element Access
+##### การเข้าถึงสมาชิกอาร์เรย์ที่ไม่ถูกต้อง (Invalid Array Element Access)
 
-Let’s see what happens if you try to access an element of an array that is past
-the end of the array. Say you run this code, similar to the guessing game in
-Chapter 2, to get an array index from the user:
+เรามาดูกันว่าจะเกิดอะไรขึ้นหากคุณพยายามเข้าถึงสมาชิกของอาร์เรย์ที่อยู่เลยจุดสิ้นสุดของอาร์เรย์ สมมติว่าคุณรันโค้ดนี้ ซึ่งคล้ายกับเกมทายตัวเลขในบทที่ 2 เพื่อรับดัชนีอาร์เรย์จากผู้ใช้:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ชื่อไฟล์: src/main.rs</span>
 
 ```rust,ignore,panics
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}
 ```
 
-This code compiles successfully. If you run this code using `cargo run` and
-enter `0`, `1`, `2`, `3`, or `4`, the program will print out the corresponding
-value at that index in the array. If you instead enter a number past the end of
-the array, such as `10`, you’ll see output like this:
+โค้ดนี้คอมไพล์สำเร็จ หากคุณรันโค้ดนี้โดยใช้ `cargo run` และป้อน `0`, `1`, `2`, `3` หรือ `4` โปรแกรมจะพิมพ์ค่าที่สอดคล้องกันที่ดัชนีนั้นในอาร์เรย์ออกมา หากคุณป้อนตัวเลขที่อยู่เลยจุดสิ้นสุดของอาร์เรย์ เช่น `10` คุณจะเห็นผลลัพธ์ดังนี้:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access
@@ -356,21 +229,9 @@ index out of bounds: the len is 5 but the index is 10
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-The program resulted in a _runtime_ error at the point of using an invalid
-value in the indexing operation. The program exited with an error message and
-didn’t execute the final `println!` statement. When you attempt to access an
-element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than or equal to the length,
-Rust will panic. This check has to happen at runtime, especially in this case,
-because the compiler can’t possibly know what value a user will enter when they
-run the code later.
+โปรแกรมเกิดข้อผิดพลาดขณะ _รันไทม์_ (runtime error) ณ จุดที่ใช้ค่าที่ไม่ถูกต้องในการดำเนินการทำดัชนี โปรแกรมจบการทำงานพร้อมข้อความแสดงข้อผิดพลาดและไม่ได้ εκτελέσιμο (execute) คำสั่ง `println!` สุดท้าย เมื่อคุณพยายามเข้าถึงสมาชิกโดยใช้การทำดัชนี Rust จะตรวจสอบว่าดัชนีที่คุณระบุนั้นน้อยกว่าความยาวของอาร์เรย์หรือไม่ หากดัชนีมากกว่าหรือเท่ากับความยาว Rust จะ panic การตรวจสอบนี้จะต้องเกิดขึ้นในขณะรันไทม์ โดยเฉพาะอย่างยิ่งในกรณีนี้ เนื่องจากคอมไพเลอร์ไม่สามารถทราบได้เลยว่าผู้ใช้จะป้อนค่าใดเมื่อพวกเขารันโค้ดในภายหลัง
 
-This is an example of Rust’s memory safety principles in action. In many
-low-level languages, this kind of check is not done, and when you provide an
-incorrect index, invalid memory can be accessed. Rust protects you against this
-kind of error by immediately exiting instead of allowing the memory access and
-continuing. Chapter 9 discusses more of Rust’s error handling and how you can
-write readable, safe code that neither panics nor allows invalid memory access.
+นี่เป็นตัวอย่างของหลักการความปลอดภัยของหน่วยความจำ (memory safety principles) ของ Rust ในการทำงาน ในภาษาโปรแกรมระดับต่ำหลายภาษา การตรวจสอบประเภทนี้ไม่ได้ทำ และเมื่อคุณระบุที่ไม่ถูกต้อง อาจมีการเข้าถึงหน่วยความจำที่ไม่ถูกต้องได้ Rust ปกป้องคุณจากข้อผิดพลาดประเภทนี้โดยการจบการทำงานทันทีแทนที่จะอนุญาตให้เข้าถึงหน่วยความจำและดำเนินการต่อ บทที่ 9 จะพูดถึงการจัดการข้อผิดพลาดของ Rust เพิ่มเติม และวิธีที่คุณสามารถเขียนโค้ดที่อ่านง่ายและปลอดภัยซึ่งไม่ panic และไม่อนุญาตให้เข้าถึงหน่วยความจำที่ไม่ถูกต้อง
 
 [comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [twos-complement]: https://en.wikipedia.org/wiki/Two%27s_complement

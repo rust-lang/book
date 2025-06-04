@@ -1,57 +1,25 @@
-## Appendix E - Editions
+## ภาคผนวก E - Editions (รุ่น)
 
-In Chapter 1, you saw that `cargo new` adds a bit of metadata to your
-_Cargo.toml_ file about an edition. This appendix talks about what that means!
+ในบทที่ 1 คุณได้เห็นแล้วว่า `cargo new` เพิ่มข้อมูลเมตาเล็กน้อยเกี่ยวกับ edition เข้าไปในไฟล์ _Cargo.toml_ ของคุณ ภาคผนวกนี้จะอธิบายว่าสิ่งนั้นหมายถึงอะไร!
 
-The Rust language and compiler have a six-week release cycle, meaning users get
-a constant stream of new features. Other programming languages release larger
-changes less often; Rust releases smaller updates more frequently. After a
-while, all of these tiny changes add up. But from release to release, it can be
-difficult to look back and say, “Wow, between Rust 1.10 and Rust 1.31, Rust has
-changed a lot!”
+ภาษา Rust และคอมไพเลอร์มีรอบการเผยแพร่ทุกๆ หกสัปดาห์ หมายความว่าผู้ใช้จะได้รับฟีเจอร์ใหม่ๆ อย่างต่อเนื่อง ภาษาโปรแกรมอื่นๆ เผยแพร่การเปลี่ยนแปลงขนาดใหญ่ไม่บ่อยนัก Rust เผยแพร่การอัปเดตขนาดเล็กบ่อยกว่า เมื่อเวลาผ่านไป การเปลี่ยนแปลงเล็กๆ น้อยๆ เหล่านี้จะรวมกัน แต่จากการเผยแพร่หนึ่งไปยังอีกรุ่นหนึ่ง อาจเป็นเรื่องยากที่จะมองย้อนกลับไปและพูดว่า “ว้าว ระหว่าง Rust 1.10 และ Rust 1.31 Rust เปลี่ยนไปมาก!”
 
-Every three years or so, the Rust team produces a new Rust _edition_. Each
-edition brings together the features that have landed into a clear package with
-fully updated documentation and tooling. New editions ship as part of the usual
-six-week release process.
+ทุกๆ สามปีโดยประมาณ ทีม Rust จะผลิต Rust _edition_ ใหม่แต่ละ edition จะรวบรวมฟีเจอร์ต่างๆ ที่ได้เปิดตัวไปแล้วเข้าไว้ในแพ็กเกจที่ชัดเจน พร้อมด้วยเอกสารและเครื่องมือที่อัปเดตอย่างสมบูรณ์ editions ใหม่จะจัดส่งเป็นส่วนหนึ่งของกระบวนการเผยแพร่ปกติทุกๆ หกสัปดาห์
 
-Editions serve different purposes for different people:
+Editions มีจุดประสงค์ที่แตกต่างกันสำหรับผู้คนที่แตกต่างกัน:
 
-- For active Rust users, a new edition brings together incremental changes into
-  an easy-to-understand package.
-- For non-users, a new edition signals that some major advancements have
-  landed, which might make Rust worth another look.
-- For those developing Rust, a new edition provides a rallying point for the
-  project as a whole.
+- สำหรับผู้ใช้ Rust ที่ใช้งานอยู่ edition ใหม่จะรวบรวมการเปลี่ยนแปลงที่เพิ่มขึ้นทีละน้อยเข้าไว้ในแพ็กเกจที่เข้าใจง่าย
+- สำหรับผู้ที่ไม่ได้ใช้งาน edition ใหม่จะส่งสัญญาณว่ามีความก้าวหน้าครั้งสำคัญบางอย่างเกิดขึ้น ซึ่งอาจทำให้ Rust คุ้มค่าที่จะกลับมาดูอีกครั้ง
+- สำหรับผู้ที่กำลังพัฒนา Rust edition ใหม่จะเป็นจุดรวมพลสำหรับโปรเจกต์โดยรวม
 
-At the time of this writing, four Rust editions are available: Rust 2015, Rust
-2018, Rust 2021, and Rust 2024. This book is written using Rust 2024 edition
-idioms.
+ในขณะที่เขียนบทความนี้ มี Rust editions สี่รุ่นที่พร้อมใช้งาน: Rust 2015, Rust 2018, Rust 2021 และ Rust 2024 หนังสือเล่มนี้เขียนขึ้นโดยใช้สำนวนของ Rust 2024 edition
 
-The `edition` key in _Cargo.toml_ indicates which edition the compiler should
-use for your code. If the key doesn’t exist, Rust uses `2015` as the edition
-value for backward compatibility reasons.
+คีย์ `edition` ในไฟล์ _Cargo.toml_ ระบุว่าคอมไพเลอร์ควรใช้ edition ใดสำหรับโค้ดของคุณ หากไม่มีคีย์อยู่ Rust จะใช้ `2015` เป็นค่า edition เพื่อเหตุผลด้านความเข้ากันได้แบบย้อนหลัง
 
-Each project can opt in to an edition other than the default 2015 edition.
-Editions can contain incompatible changes, such as including a new keyword that
-conflicts with identifiers in code. However, unless you opt in to those
-changes, your code will continue to compile even as you upgrade the Rust
-compiler version you use.
+แต่ละโปรเจกต์สามารถเลือกใช้ edition อื่นนอกเหนือจาก edition 2015 ที่เป็นค่าเริ่มต้นได้ Editions อาจมีการเปลี่ยนแปลงที่ไม่เข้ากัน เช่น การเพิ่ม keyword ใหม่ที่ขัดแย้งกับตัวระบุในโค้ด อย่างไรก็ตาม เว้นแต่คุณจะเลือกใช้การเปลี่ยนแปลงเหล่านั้น โค้ดของคุณจะยังคงคอมไพล์ได้แม้ว่าคุณจะอัปเกรดเวอร์ชันคอมไพเลอร์ Rust ที่คุณใช้ก็ตาม
 
-All Rust compiler versions support any edition that existed prior to that
-compiler’s release, and they can link crates of any supported editions
-together. Edition changes only affect the way the compiler initially parses
-code. Therefore, if you’re using Rust 2015 and one of your dependencies uses
-Rust 2018, your project will compile and be able to use that dependency. The
-opposite situation, where your project uses Rust 2018 and a dependency uses
-Rust 2015, works as well.
+คอมไพเลอร์ Rust ทุกเวอร์ชันรองรับ edition ใดๆ ที่มีอยู่ก่อนการเผยแพร่คอมไพเลอร์นั้น และสามารถเชื่อมโยง крейт ของ edition ที่รองรับใดๆ เข้าด้วยกันได้ การเปลี่ยนแปลง Edition มีผลต่อวิธีที่คอมไพเลอร์แยกวิเคราะห์โค้ดในตอนเริ่มต้นเท่านั้น ดังนั้น หากคุณใช้ Rust 2015 และหนึ่งใน εξαρτήσεις (dependencies) ของคุณใช้ Rust 2018 โปรเจกต์ของคุณจะคอมไพล์และสามารถใช้ εξάρτηση (dependency) นั้นได้ สถานการณ์ตรงกันข้าม ซึ่งโปรเจกต์ของคุณใช้ Rust 2018 และ εξάρτηση (dependency) ใช้ Rust 2015 ก็ทำงานได้เช่นกัน
 
-To be clear: most features will be available on all editions. Developers using
-any Rust edition will continue to see improvements as new stable releases are
-made. However, in some cases, mainly when new keywords are added, some new
-features might only be available in later editions. You will need to switch
-editions if you want to take advantage of such features.
+เพื่อให้ชัดเจน: ฟีเจอร์ส่วนใหญ่จะพร้อมใช้งานในทุก editions นักพัฒนาที่ใช้ Rust edition ใดๆ จะยังคงเห็นการปรับปรุงเมื่อมีการเผยแพร่เวอร์ชันเสถียรใหม่ อย่างไรก็ตาม ในบางกรณี ส่วนใหญ่เมื่อมีการเพิ่ม keywords ใหม่ ฟีเจอร์ใหม่บางอย่างอาจพร้อมใช้งานใน editions ที่ใหม่กว่าเท่านั้น คุณจะต้องเปลี่ยน editions หากคุณต้องการใช้ประโยชน์จากฟีเจอร์ดังกล่าว
 
-For more details, the [_Edition Guide_](https://doc.rust-lang.org/stable/edition-guide/) is a complete book
-about editions that enumerates the differences between editions and explains
-how to automatically upgrade your code to a new edition via `cargo fix`.
+สำหรับรายละเอียดเพิ่มเติม [_Edition Guide_](https://doc.rust-lang.org/stable/edition-guide/) เป็นหนังสือฉบับสมบูรณ์เกี่ยวกับ editions ที่แจกแจงความแตกต่างระหว่าง editions และอธิบายวิธีอัปเกรดโค้ดของคุณไปยัง edition ใหม่โดยอัตโนมัติผ่าน `cargo fix`

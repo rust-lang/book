@@ -1,7 +1,6 @@
-## Appendix F: Translations of the Book
+## ภาคผนวก F: คำแปลของหนังสือ
 
-For resources in languages other than English. Most are still in progress; see
-[the Translations label][label] to help or let us know about a new translation!
+สำหรับแหล่งข้อมูลในภาษาอื่นๆ นอกเหนือจากภาษาอังกฤษ ส่วนใหญ่ยังอยู่ในระหว่างดำเนินการ ดู [ป้ายกำกับ Translations][label] เพื่อช่วยหรือแจ้งให้เราทราบเกี่ยวกับการแปลใหม่!
 
 [label]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 

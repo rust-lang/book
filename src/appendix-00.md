@@ -1,4 +1,3 @@
-# Appendix
+# ภาคผนวก
 
-The following sections contain reference material you may find useful in your
-Rust journey.
+เนื้อหาต่อไปนี้เป็นข้อมูลอ้างอิงที่คุณอาจพบว่ามีประโยชน์ในการเดินทางของคุณกับ Rust

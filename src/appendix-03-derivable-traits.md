@@ -1,183 +1,88 @@
-## Appendix C: Derivable Traits
+## ภาคผนวก C: Derivable Traits (เทรตที่สามารถ Derive ได้)
 
-In various places in the book, we’ve discussed the `derive` attribute, which
-you can apply to a struct or enum definition. The `derive` attribute generates
-code that will implement a trait with its own default implementation on the
-type you’ve annotated with the `derive` syntax.
+ในหลายๆ ส่วนของหนังสือเล่มนี้ เราได้พูดถึงแอททริบิวต์ `derive` ซึ่งคุณสามารถนำไปใช้กับคำจำกัดความของ struct หรือ enum ได้ แอททริบิวต์ `derive` จะสร้างโค้ดที่จะ υλοποιώ (implement) เทรตด้วย υλοποίηση (implementation) เริ่มต้นของมันเองบนไทป์ที่คุณได้ใส่คำอธิบายประกอบด้วย синтаксис `derive`
 
-In this appendix, we provide a reference of all the traits in the standard
-library that you can use with `derive`. Each section covers:
+ในภาคผนวกนี้ เราได้รวบรวมข้อมูลอ้างอิงของเทรตทั้งหมดในไลบรารีมาตรฐานที่คุณสามารถใช้กับ `derive` ได้ แต่ละส่วนจะครอบคลุมถึง:
 
-- What operators and methods deriving this trait will enable
-- What the implementation of the trait provided by `derive` does
-- What implementing the trait signifies about the type
-- The conditions in which you’re allowed or not allowed to implement the trait
-- Examples of operations that require the trait
+- ตัวดำเนินการและเมธอดใดบ้างที่การ derive เทรตนี้จะเปิดใช้งาน
+- υλοποίηση (implementation) ของเทรตที่ได้จาก `derive` ทำอะไร
+- การ υλοποιώ (implement) เทรตนั้นบ่งบอกอะไรเกี่ยวกับไทป์
+- เงื่อนไขที่คุณได้รับอนุญาตหรือไม่ได้รับอนุญาตให้ υλοποιώ (implement) เทรต
+- ตัวอย่างของการดำเนินการที่ต้องการเทรตนั้น
 
-If you want different behavior from that provided by the `derive` attribute,
-consult the [standard library documentation](../std/index.html)<!-- ignore -->
-for each trait for details on how to manually implement them.
+หากคุณต้องการพฤติกรรมที่แตกต่างจากที่แอททริบิวต์ `derive` มอบให้ โปรดดู [เอกสารประกอบไลบรารีมาตรฐาน](../std/index.html)<!-- ignore --> สำหรับแต่ละเทรตเพื่อดูรายละเอียดเกี่ยวกับวิธีการ υλοποιώ (implement) ด้วยตนเอง
 
-The traits listed here are the only ones defined by the standard library that
-can be implemented on your types using `derive`. Other traits defined in the
-standard library don’t have sensible default behavior, so it’s up to you to
-implement them in the way that makes sense for what you’re trying to accomplish.
+เทรตที่ระบุไว้ที่นี่เป็นเพียงเทรตเดียวที่กำหนดโดยไลบรารีมาตรฐานที่สามารถ υλοποιώ (implement) บนไทป์ของคุณโดยใช้ `derive` เทรตอื่นๆ ที่กำหนดในไลบรารีมาตรฐานไม่มีพฤติกรรมเริ่มต้นที่สมเหตุสมผล ดังนั้นจึงขึ้นอยู่กับคุณที่จะ υλοποιώ (implement) ในลักษณะที่สมเหตุสมผลกับสิ่งที่คุณพยายามทำให้สำเร็จ
 
-An example of a trait that can’t be derived is `Display`, which handles
-formatting for end users. You should always consider the appropriate way to
-display a type to an end user. What parts of the type should an end user be
-allowed to see? What parts would they find relevant? What format of the data
-would be most relevant to them? The Rust compiler doesn’t have this insight, so
-it can’t provide appropriate default behavior for you.
+ตัวอย่างของเทรตที่ไม่สามารถ derive ได้คือ `Display` ซึ่งจัดการการจัดรูปแบบสำหรับผู้ใช้ปลายทาง คุณควรพิจารณาวิธีที่เหมาะสมในการแสดงไทป์ต่อผู้ใช้ปลายทางเสมอ ผู้ใช้ปลายทางควรได้รับอนุญาตให้เห็นส่วนใดของไทป์บ้าง? ส่วนใดที่พวกเขาจะพบว่าเกี่ยวข้อง? รูปแบบใดของข้อมูลที่จะเกี่ยวข้องกับพวกเขามากที่สุด? คอมไพเลอร์ Rust ไม่มีข้อมูลเชิงลึกนี้ ดังนั้นจึงไม่สามารถให้พฤติกรรมเริ่มต้นที่เหมาะสมสำหรับคุณได้
 
-The list of derivable traits provided in this appendix is not comprehensive:
-libraries can implement `derive` for their own traits, making the list of
-traits you can use `derive` with truly open-ended. Implementing `derive`
-involves using a procedural macro, which is covered in the
-[“Macros”][macros]<!-- ignore --> section of Chapter 20.
+รายการของ derivable traits ที่ให้ไว้ในภาคผนวกนี้ไม่ครอบคลุมทั้งหมด: ไลบรารีสามารถ υλοποιώ (implement) `derive` สำหรับเทรตของตนเองได้ ทำให้รายการของเทรตที่คุณสามารถใช้ `derive` ด้วยนั้นเปิดกว้างอย่างแท้จริง การ υλοποιώ (implement) `derive` เกี่ยวข้องกับการใช้ procedural macro ซึ่งครอบคลุมอยู่ในส่วน [“Macros”][macros]<!-- ignore --> ของบทที่ 20
 
-### `Debug` for Programmer Output
+### `Debug` สำหรับ Output ของโปรแกรมเมอร์
 
-The `Debug` trait enables debug formatting in format strings, which you
-indicate by adding `:?` within `{}` placeholders.
+เทรต `Debug` เปิดใช้งานการจัดรูปแบบดีบักในสตริงรูปแบบ ซึ่งคุณระบุโดยการเพิ่ม `:?` ภายในวงเล็บปีกกา `{}`
 
-The `Debug` trait allows you to print instances of a type for debugging
-purposes, so you and other programmers using your type can inspect an instance
-at a particular point in a program’s execution.
+เทรต `Debug` ช่วยให้คุณสามารถพิมพ์อินสแตนซ์ของไทป์เพื่อวัตถุประสงค์ในการดีบัก เพื่อให้คุณและโปรแกรมเมอร์คนอื่นๆ ที่ใช้ไทป์ของคุณสามารถตรวจสอบอินสแตนซ์ ณ จุดใดจุดหนึ่งในการทำงานของโปรแกรมได้
 
-The `Debug` trait is required, for example, in the use of the `assert_eq!`
-macro. This macro prints the values of instances given as arguments if the
-equality assertion fails so programmers can see why the two instances weren’t
-equal.
+เทรต `Debug` เป็นสิ่งจำเป็น ตัวอย่างเช่น ในการใช้มาโคร `assert_eq!` มาโครนี้จะพิมพ์ค่าของอินสแตนซ์ที่ให้เป็นอาร์กิวเมนต์หากการยืนยันความเท่ากันล้มเหลว เพื่อให้โปรแกรมเมอร์สามารถเห็นได้ว่าทำไมอินสแตนซ์ทั้งสองจึงไม่เท่ากัน
 
-### `PartialEq` and `Eq` for Equality Comparisons
+### `PartialEq` และ `Eq` สำหรับการเปรียบเทียบความเท่ากัน
 
-The `PartialEq` trait allows you to compare instances of a type to check for
-equality and enables use of the `==` and `!=` operators.
+เทรต `PartialEq` ช่วยให้คุณสามารถเปรียบเทียบอินสแตนซ์ของไทป์เพื่อตรวจสอบความเท่ากัน และเปิดใช้งานการใช้ตัวดำเนินการ `==` และ `!=`
 
-Deriving `PartialEq` implements the `eq` method. When `PartialEq` is derived on
-structs, two instances are equal only if _all_ fields are equal, and the
-instances are not equal if any fields are not equal. When derived on enums,
-each variant is equal to itself and not equal to the other variants.
+การ derive `PartialEq` จะ υλοποιώ (implement) เมธอด `eq` เมื่อ `PartialEq` ถูก derive บน structs อินสแตนซ์สองตัวจะเท่ากันก็ต่อเมื่อฟิลด์ _ทั้งหมด_ เท่ากัน และอินสแตนซ์จะไม่เท่ากันหากมีฟิลด์ใดๆ ไม่เท่ากัน เมื่อ derive บน enums แต่ละ variant จะเท่ากับตัวเองและไม่เท่ากับ variants อื่นๆ
 
-The `PartialEq` trait is required, for example, with the use of the
-`assert_eq!` macro, which needs to be able to compare two instances of a type
-for equality.
+เทรต `PartialEq` เป็นสิ่งจำเป็น ตัวอย่างเช่น กับการใช้มาโคร `assert_eq!` ซึ่งจำเป็นต้องสามารถเปรียบเทียบอินสแตนซ์สองตัวของไทป์เพื่อความเท่ากันได้
 
-The `Eq` trait has no methods. Its purpose is to signal that for every value of
-the annotated type, the value is equal to itself. The `Eq` trait can only be
-applied to types that also implement `PartialEq`, although not all types that
-implement `PartialEq` can implement `Eq`. One example of this is floating point
-number types: the implementation of floating point numbers states that two
-instances of the not-a-number (`NaN`) value are not equal to each other.
+เทรต `Eq` ไม่มีเมธอด จุดประสงค์ของมันคือเพื่อส่งสัญญาณว่าสำหรับทุกค่าของไทป์ที่มีคำอธิบายประกอบ ค่านั้นจะเท่ากับตัวเอง เทรต `Eq` สามารถใช้ได้กับไทป์ที่ υλοποιώ (implement) `PartialEq` ด้วยเท่านั้น แม้ว่าไม่ใช่ทุกไทป์ที่ υλοποιώ (implement) `PartialEq` จะสามารถ υλοποιώ (implement) `Eq` ได้ ตัวอย่างหนึ่งคือไทป์ของตัวเลขทศนิยม: υλοποίηση (implementation) ของตัวเลขทศนิยมระบุว่าอินสแตนซ์สองตัวของค่าที่ไม่ใช่ตัวเลข (`NaN`) จะไม่เท่ากัน
 
-An example of when `Eq` is required is for keys in a `HashMap<K, V>` so the
-`HashMap<K, V>` can tell whether two keys are the same.
+ตัวอย่างของเมื่อ `Eq` เป็นสิ่งจำเป็นคือสำหรับ keys ใน `HashMap<K, V>` เพื่อให้ `HashMap<K, V>` สามารถบอกได้ว่า keys สองตัวเหมือนกันหรือไม่
 
-### `PartialOrd` and `Ord` for Ordering Comparisons
+### `PartialOrd` และ `Ord` สำหรับการเปรียบเทียบการเรียงลำดับ
 
-The `PartialOrd` trait allows you to compare instances of a type for sorting
-purposes. A type that implements `PartialOrd` can be used with the `<`, `>`,
-`<=`, and `>=` operators. You can only apply the `PartialOrd` trait to types
-that also implement `PartialEq`.
+เทรต `PartialOrd` ช่วยให้คุณสามารถเปรียบเทียบอินสแตนซ์ของไทป์เพื่อวัตถุประสงค์ในการเรียงลำดับ ไทป์ที่ υλοποιώ (implement) `PartialOrd` สามารถใช้กับตัวดำเนินการ `<`, `>`, `<=`, และ `>=` ได้ คุณสามารถใช้เทรต `PartialOrd` กับไทป์ที่ υλοποιώ (implement) `PartialEq` ด้วยเท่านั้น
 
-Deriving `PartialOrd` implements the `partial_cmp` method, which returns an
-`Option<Ordering>` that will be `None` when the values given don’t produce an
-ordering. An example of a value that doesn’t produce an ordering, even though
-most values of that type can be compared, is the not-a-number (`NaN`) floating
-point value. Calling `partial_cmp` with any floating-point number and the `NaN`
-floating-point value will return `None`.
+การ derive `PartialOrd` จะ υλοποιώ (implement) เมธอด `partial_cmp` ซึ่งจะคืนค่า `Option<Ordering>` ที่จะเป็น `None` เมื่อค่าที่ให้มาไม่ได้สร้างการเรียงลำดับ ตัวอย่างของค่าที่ไม่ได้สร้างการเรียงลำดับ แม้ว่าค่าส่วนใหญ่ของไทป์นั้นจะสามารถเปรียบเทียบได้ คือค่าทศนิยมที่ไม่ใช่ตัวเลข (`NaN`) การเรียก `partial_cmp` ด้วยตัวเลขทศนิยมใดๆ และค่าทศนิยม `NaN` จะคืนค่า `None`
 
-When derived on structs, `PartialOrd` compares two instances by comparing the
-value in each field in the order in which the fields appear in the struct
-definition. When derived on enums, variants of the enum declared earlier in the
-enum definition are considered less than the variants listed later.
+เมื่อ derive บน structs `PartialOrd` จะเปรียบเทียบอินสแตนซ์สองตัวโดยการเปรียบเทียบค่าในแต่ละฟิลด์ตามลำดับที่ฟิลด์ปรากฏในคำจำกัดความของ struct เมื่อ derive บน enums variants ของ enum ที่ประกาศไว้ก่อนหน้าในคำจำกัดความของ enum จะถือว่าน้อยกว่า variants ที่ระบุไว้ในภายหลัง
 
-The `PartialOrd` trait is required, for example, for the `gen_range` method
-from the `rand` crate that generates a random value in the range specified by a
-range expression.
+เทรต `PartialOrd` เป็นสิ่งจำเป็น ตัวอย่างเช่น สำหรับเมธอด `gen_range` จาก крейт `rand` ที่สร้างค่าสุ่มในช่วงที่ระบุโดยนิพจน์ช่วง
 
-The `Ord` trait allows you to know that for any two values of the annotated
-type, a valid ordering will exist. The `Ord` trait implements the `cmp` method,
-which returns an `Ordering` rather than an `Option<Ordering>` because a valid
-ordering will always be possible. You can only apply the `Ord` trait to types
-that also implement `PartialOrd` and `Eq` (and `Eq` requires `PartialEq`). When
-derived on structs and enums, `cmp` behaves the same way as the derived
-implementation for `partial_cmp` does with `PartialOrd`.
+เทรต `Ord` ช่วยให้คุณทราบว่าสำหรับค่าสองค่าใดๆ ของไทป์ที่มีคำอธิบายประกอบ จะมีการเรียงลำดับที่ถูกต้องอยู่เสมอ เทรต `Ord` υλοποιώ (implement) เมธอด `cmp` ซึ่งจะคืนค่า `Ordering` แทนที่จะเป็น `Option<Ordering>` เนื่องจากการเรียงลำดับที่ถูกต้องจะเป็นไปได้เสมอ คุณสามารถใช้เทรต `Ord` กับไทป์ที่ υλοποιώ (implement) `PartialOrd` และ `Eq` (และ `Eq` ต้องการ `PartialEq`) ด้วยเท่านั้น เมื่อ derive บน structs และ enums `cmp` จะทำงานในลักษณะเดียวกับ υλοποίηση (implementation) ที่ derive สำหรับ `partial_cmp` ด้วย `PartialOrd`
 
-An example of when `Ord` is required is when storing values in a `BTreeSet<T>`,
-a data structure that stores data based on the sort order of the values.
+ตัวอย่างของเมื่อ `Ord` เป็นสิ่งจำเป็นคือเมื่อเก็บค่าใน `BTreeSet<T>` ซึ่งเป็นโครงสร้างข้อมูลที่เก็บข้อมูลตามลำดับการจัดเรียงของค่า
 
-### `Clone` and `Copy` for Duplicating Values
+### `Clone` และ `Copy` สำหรับการทำซ้ำค่า
 
-The `Clone` trait allows you to explicitly create a deep copy of a value, and
-the duplication process might involve running arbitrary code and copying heap
-data. See [Variables and Data Interacting with
-Clone”][variables-and-data-interacting-with-clone]<!-- ignore --> in Chapter 4
-for more information on `Clone`.
+เทรต `Clone` ช่วยให้คุณสามารถสร้างสำเนาลึก (deep copy) ของค่าได้อย่างชัดเจน และกระบวนการทำซ้ำอาจเกี่ยวข้องกับการรันโค้ดที่กำหนดเองและการคัดลอกข้อมูลบน heap ดู [“ตัวแปรและข้อมูลมีปฏิสัมพันธ์กับ Clone”][variables-and-data-interacting-with-clone]<!-- ignore --> ในบทที่ 4 สำหรับข้อมูลเพิ่มเติมเกี่ยวกับ `Clone`
 
-Deriving `Clone` implements the `clone` method, which when implemented for the
-whole type, calls `clone` on each of the parts of the type. This means all the
-fields or values in the type must also implement `Clone` to derive `Clone`.
+การ derive `Clone` จะ υλοποιώ (implement) เมธอด `clone` ซึ่งเมื่อ υλοποιώ (implement) สำหรับทั้งไทป์ จะเรียก `clone` บนแต่ละส่วนของไทป์นั้น ซึ่งหมายความว่าฟิลด์หรือค่าทั้งหมดในไทป์จะต้อง υλοποιώ (implement) `Clone` ด้วยเพื่อที่จะ derive `Clone`
 
-An example of when `Clone` is required is when calling the `to_vec` method on a
-slice. The slice doesn’t own the type instances it contains, but the vector
-returned from `to_vec` will need to own its instances, so `to_vec` calls
-`clone` on each item. Thus the type stored in the slice must implement `Clone`.
+ตัวอย่างของเมื่อ `Clone` เป็นสิ่งจำเป็นคือเมื่อเรียกเมธอด `to_vec` บน slice slice ไม่ได้เป็นเจ้าของอินสแตนซ์ของไทป์ที่มันมีอยู่ แต่ vector ที่คืนค่าจาก `to_vec` จะต้องเป็นเจ้าของอินสแตนซ์ของมัน ดังนั้น `to_vec` จึงเรียก `clone` บนแต่ละไอเท็ม ดังนั้นไทป์ที่เก็บไว้ใน slice จะต้อง υλοποιώ (implement) `Clone`
 
-The `Copy` trait allows you to duplicate a value by only copying bits stored on
-the stack; no arbitrary code is necessary. See [“Stack-Only Data:
-Copy”][stack-only-data-copy]<!-- ignore --> in Chapter 4 for more information on
-`Copy`.
+เทรต `Copy` ช่วยให้คุณสามารถทำซ้ำค่าได้โดยการคัดลอกบิตที่เก็บไว้บน stack เท่านั้น ไม่จำเป็นต้องใช้โค้ดที่กำหนดเอง ดู [“ข้อมูลเฉพาะ Stack: Copy”][stack-only-data-copy]<!-- ignore --> ในบทที่ 4 สำหรับข้อมูลเพิ่มเติมเกี่ยวกับ `Copy`
 
-The `Copy` trait doesn’t define any methods to prevent programmers from
-overloading those methods and violating the assumption that no arbitrary code
-is being run. That way, all programmers can assume that copying a value will be
-very fast.
+เทรต `Copy` ไม่ได้กำหนดเมธอดใดๆ เพื่อป้องกันไม่ให้โปรแกรมเมอร์ overload เมธอดเหล่านั้นและละเมิดข้อสันนิษฐานที่ว่าไม่มีโค้ดที่กำหนดเองกำลังทำงาน ด้วยวิธีนี้ โปรแกรมเมอร์ทุกคนสามารถสันนิษฐานได้ว่าการคัดลอกค่าจะรวดเร็วมาก
 
-You can derive `Copy` on any type whose parts all implement `Copy`. A type that
-implements `Copy` must also implement `Clone`, because a type that implements
-`Copy` has a trivial implementation of `Clone` that performs the same task as
-`Copy`.
+คุณสามารถ derive `Copy` บนไทป์ใดๆ ที่ทุกส่วนของมัน υλοποιώ (implement) `Copy` ไทป์ที่ υλοποιώ (implement) `Copy` จะต้อง υλοποιώ (implement) `Clone` ด้วย เนื่องจากไทป์ที่ υλοποιώ (implement) `Copy` มี υλοποίηση (implementation) ของ `Clone` ที่ไม่ซับซ้อนซึ่งทำงานเหมือนกับ `Copy`
 
-The `Copy` trait is rarely required; types that implement `Copy` have
-optimizations available, meaning you don’t have to call `clone`, which makes
-the code more concise.
+เทรต `Copy` ไม่ค่อยจำเป็น ไทป์ที่ υλοποιώ (implement) `Copy` มีการปรับให้เหมาะสม ซึ่งหมายความว่าคุณไม่จำเป็นต้องเรียก `clone` ซึ่งทำให้โค้ดกระชับยิ่งขึ้น
 
-Everything possible with `Copy` you can also accomplish with `Clone`, but the
-code might be slower or have to use `clone` in places.
+ทุกสิ่งที่ทำได้ด้วย `Copy` คุณก็สามารถทำได้ด้วย `Clone` แต่โค้ดอาจทำงานช้ากว่าหรือต้องใช้ `clone` ในบางแห่ง
 
-### `Hash` for Mapping a Value to a Value of Fixed Size
+### `Hash` สำหรับการจับคู่ค่ากับค่าขนาดคงที่
 
-The `Hash` trait allows you to take an instance of a type of arbitrary size and
-map that instance to a value of fixed size using a hash function. Deriving
-`Hash` implements the `hash` method. The derived implementation of the `hash`
-method combines the result of calling `hash` on each of the parts of the type,
-meaning all fields or values must also implement `Hash` to derive `Hash`.
+เทรต `Hash` ช่วยให้คุณสามารถนำอินสแตนซ์ของไทป์ที่มีขนาดใดก็ได้และจับคู่ินสแตนซ์นั้นกับค่าขนาดคงที่โดยใช้ฟังก์ชันแฮช การ derive `Hash` จะ υλοποιώ (implement) เมธอด `hash` υλοποίηση (implementation) ที่ derive ของเมธอด `hash` จะรวมผลลัพธ์ของการเรียก `hash` บนแต่ละส่วนของไทป์ ซึ่งหมายความว่าฟิลด์หรือค่าทั้งหมดจะต้อง υλοποιώ (implement) `Hash` ด้วยเพื่อที่จะ derive `Hash`
 
-An example of when `Hash` is required is in storing keys in a `HashMap<K, V>`
-to store data efficiently.
+ตัวอย่างของเมื่อ `Hash` เป็นสิ่งจำเป็นคือในการเก็บ keys ใน `HashMap<K, V>` เพื่อเก็บข้อมูลอย่างมีประสิทธิภาพ
 
-### `Default` for Default Values
+### `Default` สำหรับค่าเริ่มต้น
 
-The `Default` trait allows you to create a default value for a type. Deriving
-`Default` implements the `default` function. The derived implementation of the
-`default` function calls the `default` function on each part of the type,
-meaning all fields or values in the type must also implement `Default` to
-derive `Default`.
+เทรต `Default` ช่วยให้คุณสามารถสร้างค่าเริ่มต้นสำหรับไทป์ได้ การ derive `Default` จะ υλοποιώ (implement) ฟังก์ชัน `default` υλοποίηση (implementation) ที่ derive ของฟังก์ชัน `default` จะเรียกฟังก์ชัน `default` บนแต่ละส่วนของไทป์ ซึ่งหมายความว่าฟิลด์หรือค่าทั้งหมดในไทป์จะต้อง υλοποιώ (implement) `Default` ด้วยเพื่อที่จะ derive `Default`
 
-The `Default::default` function is commonly used in combination with the struct
-update syntax discussed in [“Creating Instances from Other Instances with Struct
-Update
-Syntax”][creating-instances-from-other-instances-with-struct-update-syntax]<!--
-ignore --> in Chapter 5. You can customize a few fields of a struct and then set
-and use a default value for the rest of the fields by using
-`..Default::default()`.
+ฟังก์ชัน `Default::default` มักใช้ร่วมกับ синтаксисอัปเดต struct ที่กล่าวถึงใน [“การสร้างอินสแตนซ์จากอินสแตนซ์อื่นด้วย синтаксисอัปเดต Struct”][creating-instances-from-other-instances-with-struct-update-syntax]<!-- ignore --> ในบทที่ 5 คุณสามารถปรับแต่งฟิลด์บางส่วนของ struct แล้วตั้งค่าและใช้ค่าเริ่มต้นสำหรับฟิลด์ที่เหลือโดยใช้ `..Default::default()`
 
-The `Default` trait is required when you use the method `unwrap_or_default` on
-`Option<T>` instances, for example. If the `Option<T>` is `None`, the method
-`unwrap_or_default` will return the result of `Default::default` for the type
-`T` stored in the `Option<T>`.
+เทรต `Default` เป็นสิ่งจำเป็นเมื่อคุณใช้เมธอด `unwrap_or_default` บนอินสแตนซ์ `Option<T>` เป็นต้น หาก `Option<T>` เป็น `None` เมธอด `unwrap_or_default` จะคืนค่าผลลัพธ์ของ `Default::default` สำหรับไทป์ `T` ที่เก็บไว้ใน `Option<T>`
 
 [creating-instances-from-other-instances-with-struct-update-syntax]: ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax
 [stack-only-data-copy]: ch04-01-what-is-ownership.html#stack-only-data-copy

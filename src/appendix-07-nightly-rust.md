@@ -1,50 +1,30 @@
-## Appendix G - How Rust is Made and “Nightly Rust”
+## ภาคผนวก G - Rust ถูกสร้างขึ้นมาอย่างไร และ “Nightly Rust”
 
-This appendix is about how Rust is made and how that affects you as a Rust
-developer.
+ภาคผนวกนี้เกี่ยวกับวิธีการสร้าง Rust และผลกระทบต่อคุณในฐานะนักพัฒนา Rust
 
-### Stability Without Stagnation
+### เสถียรภาพโดยไม่หยุดนิ่ง
 
-As a language, Rust cares a _lot_ about the stability of your code. We want
-Rust to be a rock-solid foundation you can build on, and if things were
-constantly changing, that would be impossible. At the same time, if we can’t
-experiment with new features, we may not find out important flaws until after
-their release, when we can no longer change things.
+ในฐานะภาษา Rust ให้ความสำคัญกับความเสถียรของโค้ดของคุณเป็นอย่าง _มาก_ เราต้องการให้ Rust เป็นรากฐานที่มั่นคงที่คุณสามารถสร้างขึ้นได้ และหากสิ่งต่างๆ เปลี่ยนแปลงอยู่ตลอดเวลา นั่นคงเป็นไปไม่ได้ ในขณะเดียวกัน หากเราไม่สามารถทดลองกับฟีเจอร์ใหม่ๆ ได้ เราอาจไม่พบข้อบกพร่องที่สำคัญจนกว่าจะปล่อยออกมาแล้ว ซึ่งเมื่อถึงตอนนั้นเราก็ไม่สามารถเปลี่ยนแปลงอะไรได้อีก
 
-Our solution to this problem is what we call “stability without stagnation”,
-and our guiding principle is this: you should never have to fear upgrading to a
-new version of stable Rust. Each upgrade should be painless, but should also
-bring you new features, fewer bugs, and faster compile times.
+วิธีแก้ปัญหาของเราสำหรับปัญหานี้คือสิ่งที่เราเรียกว่า “เสถียรภาพโดยไม่หยุดนิ่ง” (stability without stagnation) และหลักการชี้นำของเราคือ: คุณไม่ควรต้องกลัวที่จะอัปเกรดเป็น Rust เวอร์ชันเสถียรใหม่ การอัปเกรดแต่ละครั้งควรไม่ยุ่งยาก แต่ควรนำฟีเจอร์ใหม่ๆ ข้อบกพร่องที่น้อยลง และเวลาคอมไพล์ที่เร็วขึ้นมาให้คุณด้วย
 
-### Choo, Choo! Release Channels and Riding the Trains
+### ชู่ว์ ชู่ว์! ช่องทางการเผยแพร่และการเดินทางของรถไฟ
 
-Rust development operates on a _train schedule_. That is, all development is
-done on the `master` branch of the Rust repository. Releases follow a software
-release train model, which has been used by Cisco IOS and other software
-projects. There are three _release channels_ for Rust:
+การพัฒนา Rust ดำเนินการตาม _ตารางเวลารถไฟ_ นั่นคือ การพัฒนาทั้งหมดทำบน branch `master` ของ repository Rust การเผยแพร่เป็นไปตามโมเดลรถไฟการเผยแพร่ซอฟต์แวร์ ซึ่งใช้โดย Cisco IOS และโปรเจกต์ซอฟต์แวร์อื่นๆ มี _ช่องทางการเผยแพร่_ (release channels) สามช่องทางสำหรับ Rust:
 
 - Nightly
 - Beta
 - Stable
 
-Most Rust developers primarily use the stable channel, but those who want to
-try out experimental new features may use nightly or beta.
+นักพัฒนา Rust ส่วนใหญ่ใช้ช่องทาง stable เป็นหลัก แต่ผู้ที่ต้องการลองใช้ฟีเจอร์ใหม่ๆ ที่ยังทดลองอยู่ อาจใช้ nightly หรือ beta
 
-Here’s an example of how the development and release process works: let’s
-assume that the Rust team is working on the release of Rust 1.5. That release
-happened in December of 2015, but it will provide us with realistic version
-numbers. A new feature is added to Rust: a new commit lands on the `master`
-branch. Each night, a new nightly version of Rust is produced. Every day is a
-release day, and these releases are created by our release infrastructure
-automatically. So as time passes, our releases look like this, once a night:
+นี่คือตัวอย่างของกระบวนการพัฒนาและเผยแพร่: สมมติว่าทีม Rust กำลังทำงานกับการเผยแพร่ Rust 1.5 การเผยแพร่นั้นเกิดขึ้นในเดือนธันวาคม 2015 แต่มันจะให้หมายเลขเวอร์ชันที่สมจริงแก่เรา มีการเพิ่มฟีเจอร์ใหม่เข้าไปใน Rust: commit ใหม่จะถูกรวมเข้ากับ branch `master` ในแต่ละคืน จะมีการผลิต Rust เวอร์ชัน nightly ใหม่ ทุกวันคือวันเผยแพร่ และการเผยแพร่เหล่านี้สร้างขึ้นโดยโครงสร้างพื้นฐานการเผยแพร่ของเราโดยอัตโนมัติ ดังนั้นเมื่อเวลาผ่านไป การเผยแพร่ของเราจะมีลักษณะดังนี้ คืนละครั้ง:
 
 ```text
 nightly: * - - * - - *
 ```
 
-Every six weeks, it’s time to prepare a new release! The `beta` branch of the
-Rust repository branches off from the `master` branch used by nightly. Now,
-there are two releases:
+ทุกๆ หกสัปดาห์ ก็ถึงเวลาเตรียมการเผยแพร่ใหม่! branch `beta` ของ repository Rust จะแตกแขนงออกจาก branch `master` ที่ nightly ใช้ ตอนนี้มีการเผยแพร่สองแบบ:
 
 ```text
 nightly: * - - * - - *
@@ -52,9 +32,7 @@ nightly: * - - * - - *
 beta:                *
 ```
 
-Most Rust users do not use beta releases actively, but test against beta in
-their CI system to help Rust discover possible regressions. In the meantime,
-there’s still a nightly release every night:
+ผู้ใช้ Rust ส่วนใหญ่ไม่ได้ใช้ beta releases อย่างจริงจัง แต่จะทดสอบกับ beta ในระบบ CI ของตนเพื่อช่วยให้ Rust ค้นพบ regressions ที่อาจเกิดขึ้น ในขณะเดียวกัน ก็ยังคงมีการเผยแพร่ nightly ทุกคืน:
 
 ```text
 nightly: * - - * - - * - - * - - *
@@ -62,10 +40,7 @@ nightly: * - - * - - * - - * - - *
 beta:                *
 ```
 
-Let’s say a regression is found. Good thing we had some time to test the beta
-release before the regression snuck into a stable release! The fix is applied
-to `master`, so that nightly is fixed, and then the fix is backported to the
-`beta` branch, and a new release of beta is produced:
+สมมติว่าพบ regression เป็นเรื่องดีที่เรามีเวลาทดสอบ beta release ก่อนที่ regression จะแอบเข้าไปใน stable release! การแก้ไขจะถูกนำไปใช้กับ `master` เพื่อให้ nightly ได้รับการแก้ไข จากนั้นการแก้ไขจะถูก backport ไปยัง branch `beta` และมีการผลิต beta release ใหม่:
 
 ```text
 nightly: * - - * - - * - - * - - * - - *
@@ -73,8 +48,7 @@ nightly: * - - * - - * - - * - - * - - *
 beta:                * - - - - - - - - *
 ```
 
-Six weeks after the first beta was created, it’s time for a stable release! The
-`stable` branch is produced from the `beta` branch:
+หกสัปดาห์หลังจากสร้าง beta แรก ก็ถึงเวลาสำหรับ stable release! branch `stable` ถูกสร้างขึ้นจาก branch `beta`:
 
 ```text
 nightly: * - - * - - * - - * - - * - - * - * - *
@@ -84,10 +58,7 @@ beta:                * - - - - - - - - *
 stable:                                *
 ```
 
-Hooray! Rust 1.5 is done! However, we’ve forgotten one thing: because the six
-weeks have gone by, we also need a new beta of the _next_ version of Rust, 1.6.
-So after `stable` branches off of `beta`, the next version of `beta` branches
-off of `nightly` again:
+เย้! Rust 1.5 เสร็จแล้ว! อย่างไรก็ตาม เราลืมไปอย่างหนึ่ง: เนื่องจากหกสัปดาห์ผ่านไปแล้ว เราจึงต้องการ beta ใหม่ของ Rust เวอร์ชัน _ถัดไป_ คือ 1.6 ด้วย ดังนั้นหลังจากที่ `stable` แตกแขนงออกจาก `beta` แล้ว `beta` เวอร์ชันถัดไปก็จะแตกแขนงออกจาก `nightly` อีกครั้ง:
 
 ```text
 nightly: * - - * - - * - - * - - * - - * - * - *
@@ -97,63 +68,33 @@ beta:                * - - - - - - - - *       *
 stable:                                *
 ```
 
-This is called the “train model” because every six weeks, a release “leaves the
-station”, but still has to take a journey through the beta channel before it
-arrives as a stable release.
+นี่เรียกว่า “โมเดลรถไฟ” เพราะทุกๆ หกสัปดาห์ การเผยแพร่จะ “ออกจากสถานี” แต่ยังคงต้องเดินทางผ่านช่องทาง beta ก่อนที่จะมาถึงเป็น stable release
 
-Rust releases every six weeks, like clockwork. If you know the date of one Rust
-release, you can know the date of the next one: it’s six weeks later. A nice
-aspect of having releases scheduled every six weeks is that the next train is
-coming soon. If a feature happens to miss a particular release, there’s no need
-to worry: another one is happening in a short time! This helps reduce pressure
-to sneak possibly unpolished features in close to the release deadline.
+Rust เผยแพร่ทุกๆ หกสัปดาห์เหมือนเครื่องจักร หากคุณทราบวันที่เผยแพร่ Rust ครั้งหนึ่ง คุณก็จะทราบวันที่เผยแพร่ครั้งถัดไปได้: คือหกสัปดาห์ต่อมา ข้อดีของการมีกำหนดการเผยแพร่ทุกๆ หกสัปดาห์คือรถไฟขบวนถัดไปกำลังจะมาในไม่ช้า หากฟีเจอร์ใดพลาดการเผยแพร่ครั้งใดครั้งหนึ่งไป ก็ไม่จำเป็นต้องกังวล: จะมีการเผยแพร่อีกครั้งในไม่ช้า! สิ่งนี้ช่วยลดแรงกดดันในการแอบใส่ฟีเจอร์ที่อาจยังไม่สมบูรณ์เข้าไปใกล้กับกำหนดเวลาการเผยแพร่
 
-Thanks to this process, you can always check out the next build of Rust and
-verify for yourself that it’s easy to upgrade to: if a beta release doesn’t
-work as expected, you can report it to the team and get it fixed before the
-next stable release happens! Breakage in a beta release is relatively rare, but
-`rustc` is still a piece of software, and bugs do exist.
+ด้วยกระบวนการนี้ คุณสามารถตรวจสอบ Rust build ถัดไปได้เสมอและยืนยันด้วยตัวเองว่าการอัปเกรดนั้นง่ายดาย: หาก beta release ทำงานไม่เป็นไปตามที่คาดไว้ คุณสามารถรายงานไปยังทีมและแก้ไขได้ก่อนที่ stable release ถัดไปจะเกิดขึ้น! การแตกหักใน beta release นั้นค่อนข้างหายาก แต่ `rustc` ก็ยังคงเป็นซอฟต์แวร์ชิ้นหนึ่ง และข้อบกพร่องก็ยังคงมีอยู่
 
-### Maintenance time
+### เวลาในการบำรุงรักษา
 
-The Rust project supports the most recent stable version. When a new stable
-version is released, the old version reaches its end of life (EOL). This means
-each version is supported for six weeks.
+โปรเจกต์ Rust รองรับเวอร์ชัน stable ล่าสุด เมื่อมีการเผยแพร่เวอร์ชัน stable ใหม่ เวอร์ชันเก่าจะสิ้นสุดอายุการใช้งาน (EOL) ซึ่งหมายความว่าแต่ละเวอร์ชันจะได้รับการสนับสนุนเป็นเวลาหกสัปดาห์
 
-### Unstable Features
+### ฟีเจอร์ที่ไม่เสถียร (Unstable Features)
 
-There’s one more catch with this release model: unstable features. Rust uses a
-technique called “feature flags” to determine what features are enabled in a
-given release. If a new feature is under active development, it lands on
-`master`, and therefore, in nightly, but behind a _feature flag_. If you, as a
-user, wish to try out the work-in-progress feature, you can, but you must be
-using a nightly release of Rust and annotate your source code with the
-appropriate flag to opt in.
+ยังมีอีกหนึ่งประเด็นเกี่ยวกับโมเดลการเผยแพร่นี้: ฟีเจอร์ที่ไม่เสถียร Rust ใช้เทคนิคที่เรียกว่า “feature flags” เพื่อกำหนดว่าฟีเจอร์ใดบ้างที่เปิดใช้งานในการเผยแพร่ที่กำหนด หากฟีเจอร์ใหม่กำลังอยู่ระหว่างการพัฒนาอย่างจริงจัง มันจะถูกรวมเข้ากับ `master` และดังนั้นจึงอยู่ใน nightly แต่จะอยู่หลัง _feature flag_ หากคุณในฐานะผู้ใช้ต้องการลองใช้ฟีเจอร์ที่กำลังดำเนินการอยู่ คุณสามารถทำได้ แต่คุณต้องใช้ Rust เวอร์ชัน nightly และใส่คำอธิบายประกอบซอร์สโค้ดของคุณด้วย flag ที่เหมาะสมเพื่อเลือกใช้งาน
 
-If you’re using a beta or stable release of Rust, you can’t use any feature
-flags. This is the key that allows us to get practical use with new features
-before we declare them stable forever. Those who wish to opt into the bleeding
-edge can do so, and those who want a rock-solid experience can stick with
-stable and know that their code won’t break. Stability without stagnation.
+หากคุณใช้ Rust เวอร์ชัน beta หรือ stable คุณจะไม่สามารถใช้ feature flags ใดๆ ได้ นี่คือกุญแจสำคัญที่ช่วยให้เราสามารถใช้งานจริงกับฟีเจอร์ใหม่ๆ ได้ก่อนที่เราจะประกาศว่ามันเสถียรตลอดไป ผู้ที่ต้องการเลือกใช้เทคโนโลยีล้ำสมัยสามารถทำได้ และผู้ที่ต้องการประสบการณ์ที่มั่นคงสามารถใช้ stable ต่อไปได้และรู้ว่าโค้ดของตนจะไม่เสียหาย เสถียรภาพโดยไม่หยุดนิ่ง
 
-This book only contains information about stable features, as in-progress
-features are still changing, and surely they’ll be different between when this
-book was written and when they get enabled in stable builds. You can find
-documentation for nightly-only features online.
+หนังสือเล่มนี้มีเฉพาะข้อมูลเกี่ยวกับฟีเจอร์ที่เสถียรเท่านั้น เนื่องจากฟีเจอร์ที่กำลังดำเนินการยังคงมีการเปลี่ยนแปลง และแน่นอนว่ามันจะแตกต่างกันระหว่างช่วงเวลาที่เขียนหนังสือเล่มนี้กับเมื่อมันถูกเปิดใช้งานใน stable builds คุณสามารถค้นหาเอกสารประกอบสำหรับฟีเจอร์เฉพาะ nightly ได้ทางออนไลน์
 
-### Rustup and the Role of Rust Nightly
+### Rustup และบทบาทของ Rust Nightly
 
-Rustup makes it easy to change between different release channels of Rust, on a
-global or per-project basis. By default, you’ll have stable Rust installed. To
-install nightly, for example:
+Rustup ทำให้ง่ายต่อการสลับระหว่างช่องทางการเผยแพร่ต่างๆ ของ Rust ทั้งแบบโกลบอลหรือแบบต่อโปรเจกต์ โดยค่าเริ่มต้น คุณจะติดตั้ง Rust เวอร์ชัน stable หากต้องการติดตั้ง nightly ตัวอย่างเช่น:
 
 ```console
 $ rustup toolchain install nightly
 ```
 
-You can see all of the _toolchains_ (releases of Rust and associated
-components) you have installed with `rustup` as well. Here’s an example on one
-of your authors’ Windows computer:
+คุณยังสามารถดู _toolchains_ ทั้งหมด (Rust releases และส่วนประกอบที่เกี่ยวข้อง) ที่คุณติดตั้งไว้ด้วย `rustup` ได้อีกด้วย นี่คือตัวอย่างบนคอมพิวเตอร์ Windows ของผู้เขียนคนหนึ่งของคุณ:
 
 ```powershell
 > rustup toolchain list
@@ -162,45 +103,21 @@ beta-x86_64-pc-windows-msvc
 nightly-x86_64-pc-windows-msvc
 ```
 
-As you can see, the stable toolchain is the default. Most Rust users use stable
-most of the time. You might want to use stable most of the time, but use
-nightly on a specific project, because you care about a cutting-edge feature.
-To do so, you can use `rustup override` in that project’s directory to set the
-nightly toolchain as the one `rustup` should use when you’re in that directory:
+ดังที่คุณเห็น toolchain stable เป็นค่าเริ่มต้น ผู้ใช้ Rust ส่วนใหญ่ใช้ stable เกือบตลอดเวลา คุณอาจต้องการใช้ stable เกือบตลอดเวลา แต่ใช้ nightly กับโปรเจกต์เฉพาะ เนื่องจากคุณสนใจฟีเจอร์ล้ำสมัย ในการทำเช่นนั้น คุณสามารถใช้ `rustup override` ในไดเรกทอรีของโปรเจกต์นั้นเพื่อตั้งค่า toolchain nightly ให้เป็น toolchain ที่ `rustup` ควรใช้เมื่อคุณอยู่ในไดเรกทอรีนั้น:
 
 ```console
 $ cd ~/projects/needs-nightly
 $ rustup override set nightly
 ```
 
-Now, every time you call `rustc` or `cargo` inside of
-_~/projects/needs-nightly_, `rustup` will make sure that you are using nightly
-Rust, rather than your default of stable Rust. This comes in handy when you
-have a lot of Rust projects!
+ตอนนี้ ทุกครั้งที่คุณเรียก `rustc` หรือ `cargo` ภายใน _~/projects/needs-nightly_ `rustup` จะตรวจสอบให้แน่ใจว่าคุณกำลังใช้ nightly Rust แทนที่จะเป็น stable Rust ที่เป็นค่าเริ่มต้นของคุณ สิ่งนี้มีประโยชน์เมื่อคุณมีโปรเจกต์ Rust จำนวนมาก!
 
-### The RFC Process and Teams
+### กระบวนการ RFC และทีมงาน
 
-So how do you learn about these new features? Rust’s development model follows
-a _Request For Comments (RFC) process_. If you’d like an improvement in Rust,
-you can write up a proposal, called an RFC.
+แล้วคุณจะเรียนรู้เกี่ยวกับฟีเจอร์ใหม่เหล่านี้ได้อย่างไร? โมเดลการพัฒนาของ Rust เป็นไปตาม _กระบวนการ Request For Comments (RFC)_ หากคุณต้องการการปรับปรุงใน Rust คุณสามารถเขียนข้อเสนอที่เรียกว่า RFC
 
-Anyone can write RFCs to improve Rust, and the proposals are reviewed and
-discussed by the Rust team, which is comprised of many topic subteams. There’s
-a full list of the teams [on Rust’s website](https://www.rust-lang.org/governance), which includes teams for
-each area of the project: language design, compiler implementation,
-infrastructure, documentation, and more. The appropriate team reads the
-proposal and the comments, writes some comments of their own, and eventually,
-there’s consensus to accept or reject the feature.
+ทุกคนสามารถเขียน RFC เพื่อปรับปรุง Rust ได้ และข้อเสนอจะได้รับการตรวจสอบและหารือโดยทีม Rust ซึ่งประกอบด้วยทีมย่อยหลายหัวข้อ มีรายชื่อทีมทั้งหมด [บนเว็บไซต์ของ Rust](https://www.rust-lang.org/governance) ซึ่งรวมถึงทีมสำหรับแต่ละส่วนของโปรเจกต์: การออกแบบภาษา การ υλοποιώ (implement) คอมไพเลอร์ โครงสร้างพื้นฐาน เอกสารประกอบ และอื่นๆ ทีมที่เหมาะสมจะอ่านข้อเสนอและความคิดเห็น เขียนความคิดเห็นของตนเอง และในที่สุดก็จะมีฉันทามติในการยอมรับหรือปฏิเสธฟีเจอร์นั้น
 
-If the feature is accepted, an issue is opened on the Rust repository, and
-someone can implement it. The person who implements it very well may not be the
-person who proposed the feature in the first place! When the implementation is
-ready, it lands on the `master` branch behind a feature gate, as we discussed
-in the [“Unstable Features”](#unstable-features)<!-- ignore --> section.
+หากฟีเจอร์นั้นได้รับการยอมรับ จะมีการเปิด issue บน repository Rust และมีคนสามารถ υλοποιώ (implement) ได้ คนที่ υλοποιώ (implement) อาจไม่ใช่คนเดียวกับที่เสนอฟีเจอร์ตั้งแต่แรก! เมื่อ υλοποίηση (implementation) พร้อมแล้ว มันจะถูกรวมเข้ากับ branch `master` หลัง feature gate ดังที่เราได้กล่าวถึงในส่วน [“ฟีเจอร์ที่ไม่เสถียร”](#unstable-features)<!-- ignore -->
 
-After some time, once Rust developers who use nightly releases have been able
-to try out the new feature, team members will discuss the feature, how it’s
-worked out on nightly, and decide if it should make it into stable Rust or not.
-If the decision is to move forward, the feature gate is removed, and the
-feature is now considered stable! It rides the trains into a new stable release
-of Rust.
+หลังจากนั้นไม่นาน เมื่อนักพัฒนา Rust ที่ใช้ nightly releases ได้ลองใช้ฟีเจอร์ใหม่แล้ว สมาชิกในทีมจะหารือเกี่ยวกับฟีเจอร์นั้น ว่ามันทำงานอย่างไรบน nightly และตัดสินใจว่าควรจะนำเข้าสู่ stable Rust หรือไม่ หากตัดสินใจที่จะดำเนินการต่อ feature gate จะถูกลบออก และฟีเจอร์นั้นจะถือว่าเสถียรแล้ว! มันจะเดินทางไปกับรถไฟสู่ Rust stable release ใหม่

@@ -1,23 +1,11 @@
-# Common Programming Concepts
+# แนวคิดการเขียนโปรแกรมทั่วไป
 
-This chapter covers concepts that appear in almost every programming language
-and how they work in Rust. Many programming languages have much in common at
-their core. None of the concepts presented in this chapter are unique to Rust,
-but we’ll discuss them in the context of Rust and explain the conventions
-around using these concepts.
+บทนี้ครอบคลุมแนวคิดที่ปรากฏในภาษาโปรแกรมเกือบทุกภาษาและวิธีการทำงานของแนวคิดเหล่านั้นใน Rust ภาษาโปรแกรมจำนวนมากมีหลายสิ่งที่เหมือนกันในแก่นแท้ของมัน ไม่มีแนวคิดใดที่นำเสนอในบทนี้ที่เป็นเอกลักษณ์เฉพาะของ Rust แต่เราจะพูดถึงแนวคิดเหล่านั้นในบริบทของ Rust และอธิบายแบบแผนปฏิบัติเกี่ยวกับการใช้แนวคิดเหล่านี้
 
-Specifically, you’ll learn about variables, basic types, functions, comments,
-and control flow. These foundations will be in every Rust program, and learning
-them early will give you a strong core to start from.
+โดยเฉพาะอย่างยิ่ง คุณจะได้เรียนรู้เกี่ยวกับตัวแปร, ชนิดข้อมูลพื้นฐาน, ฟังก์ชัน, คอมเมนต์ และการควบคุมการทำงานของโปรแกรม (control flow) พื้นฐานเหล่านี้จะอยู่ในทุกโปรแกรม Rust และการเรียนรู้ตั้งแต่เนิ่นๆ จะทำให้คุณมีแกนหลักที่แข็งแกร่งในการเริ่มต้น
 
-> #### Keywords
+> #### Keywords (คำสงวน)
 >
-> The Rust language has a set of _keywords_ that are reserved for use by the
-> language only, much as in other languages. Keep in mind that you cannot use
-> these words as names of variables or functions. Most of the keywords have
-> special meanings, and you’ll be using them to do various tasks in your Rust
-> programs; a few have no current functionality associated with them but have
-> been reserved for functionality that might be added to Rust in the future. You
-> can find a list of the keywords in [Appendix A][appendix_a]<!-- ignore -->.
+> ภาษา Rust มีชุดของ _keywords_ (คำสงวน) ที่สงวนไว้สำหรับใช้โดยภาษาเท่านั้น เช่นเดียวกับในภาษาอื่นๆ โปรดทราบว่าคุณไม่สามารถใช้คำเหล่านี้เป็นชื่อของตัวแปรหรือฟังก์ชันได้ keywords ส่วนใหญ่มีความหมายพิเศษ และคุณจะใช้มันเพื่อทำงานต่างๆ ในโปรแกรม Rust ของคุณ มีบางส่วนที่ยังไม่มีฟังก์ชันการทำงานที่เกี่ยวข้องในปัจจุบัน แต่ถูกสงวนไว้สำหรับฟังก์ชันการทำงานที่อาจเพิ่มเข้ามาใน Rust ในอนาคต คุณสามารถค้นหารายการ keywords ได้ใน [ภาคผนวก A][appendix_a]<!-- ignore -->
 
 [appendix_a]: appendix-01-keywords.md

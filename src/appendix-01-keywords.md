@@ -1,69 +1,58 @@
-## Appendix A: Keywords
+## ภาคผนวก A: Keywords (คำสงวน)
 
-The following list contains keywords that are reserved for current or future
-use by the Rust language. As such, they cannot be used as identifiers (except
-as raw identifiers as we’ll discuss in the “[Raw
-Identifiers][raw-identifiers]<!-- ignore -->” section). Identifiers are names
-of functions, variables, parameters, struct fields, modules, crates, constants,
-macros, static values, attributes, types, traits, or lifetimes.
+รายการต่อไปนี้ประกอบด้วยคำสงวน (keywords) ที่ถูกจองไว้สำหรับการใช้งานในปัจจุบันหรือในอนาคตโดยภาษา Rust ด้วยเหตุนี้ คำเหล่านี้จึงไม่สามารถใช้เป็นตัวระบุ (identifiers) ได้ (ยกเว้นการใช้เป็น raw identifiers ตามที่เราจะกล่าวถึงในส่วน “[Raw Identifiers][raw-identifiers]<!-- ignore -->”) ตัวระบุคือชื่อของฟังก์ชัน, ตัวแปร, พารามิเตอร์, ฟิลด์ของ struct, โมดูล, крейт, ค่าคงที่, มาโคร, ค่า static, แอททริบิวต์, ไทป์, เทรต, หรือไลฟ์ไทม์
 
 [raw-identifiers]: #raw-identifiers
 
-### Keywords Currently in Use
+### Keywords ที่ใช้งานอยู่ในปัจจุบัน
 
-The following is a list of keywords currently in use, with their functionality
-described.
+ต่อไปนี้คือรายการของ keywords ที่ใช้งานอยู่ในปัจจุบัน พร้อมคำอธิบายฟังก์ชันการทำงาน:
 
-- `as` - perform primitive casting, disambiguate the specific trait containing
-  an item, or rename items in `use` statements
-- `async` - return a `Future` instead of blocking the current thread
-- `await` - suspend execution until the result of a `Future` is ready
-- `break` - exit a loop immediately
-- `const` - define constant items or constant raw pointers
-- `continue` - continue to the next loop iteration
-- `crate` - in a module path, refers to the crate root
-- `dyn` - dynamic dispatch to a trait object
-- `else` - fallback for `if` and `if let` control flow constructs
-- `enum` - define an enumeration
-- `extern` - link an external function or variable
-- `false` - Boolean false literal
-- `fn` - define a function or the function pointer type
-- `for` - loop over items from an iterator, implement a trait, or specify a
-  higher-ranked lifetime
-- `if` - branch based on the result of a conditional expression
-- `impl` - implement inherent or trait functionality
-- `in` - part of `for` loop syntax
-- `let` - bind a variable
-- `loop` - loop unconditionally
-- `match` - match a value to patterns
-- `mod` - define a module
-- `move` - make a closure take ownership of all its captures
-- `mut` - denote mutability in references, raw pointers, or pattern bindings
-- `pub` - denote public visibility in struct fields, `impl` blocks, or modules
-- `ref` - bind by reference
-- `return` - return from function
-- `Self` - a type alias for the type we are defining or implementing
-- `self` - method subject or current module
-- `static` - global variable or lifetime lasting the entire program execution
-- `struct` - define a structure
-- `super` - parent module of the current module
-- `trait` - define a trait
-- `true` - Boolean true literal
-- `type` - define a type alias or associated type
-- `union` - define a [union][union]<!-- ignore -->; is only a keyword when used
-  in a union declaration
-- `unsafe` - denote unsafe code, functions, traits, or implementations
-- `use` - bring symbols into scope; specify precise captures for generic and
-  lifetime bounds
-- `where` - denote clauses that constrain a type
-- `while` - loop conditionally based on the result of an expression
+- `as` - ทำการแปลงชนิดข้อมูลพื้นฐาน (primitive casting), ชี้ชัดเทรต (trait) ที่มีไอเท็มนั้นอยู่, หรือเปลี่ยนชื่อไอเท็มในคำสั่ง `use`
+- `async` - คืนค่า `Future` แทนที่จะบล็อกเธรดปัจจุบัน
+- `await` - หยุดการทำงานชั่วคราวจนกว่าผลลัพธ์ของ `Future` จะพร้อมใช้งาน
+- `break` - ออกจากลูปทันที
+- `const` - กำหนดไอเท็มค่าคงที่ (constant items) หรือพอยน์เตอร์ดิบค่าคงที่ (constant raw pointers)
+- `continue` - ไปยังการวนซ้ำรอบถัดไปของลูป
+- `crate` - ในเส้นทางโมดูล (module path) อ้างอิงถึงรากของ крейт (crate root)
+- `dyn` - การจัดส่งแบบไดนามิก (dynamic dispatch) ไปยัง trait object
+- `else` - ส่วนสำรองสำหรับโครงสร้างควบคุมการทำงาน `if` และ `if let`
+- `enum` - กำหนด enumeration (การแจงนับ)
+- `extern` - เชื่อมโยงฟังก์ชันหรือตัวแปรภายนอก
+- `false` - ค่าตรรกะเท็จ (Boolean false literal)
+- `fn` - กำหนดฟังก์ชันหรือชนิดของฟังก์ชันพอยน์เตอร์ (function pointer type)
+- `for` - วนซ้ำไอเท็มจาก iterator, υλοποιώ (implement) เทรต, หรือระบุ higher-ranked lifetime
+- `if` - แตกเงื่อนไขตามผลลัพธ์ของนิพจน์เงื่อนไข (conditional expression)
+- `impl` - υλοποιώ (implement) ฟังก์ชันการทำงานแบบ inheren หรือของเทรต
+- `in` - ส่วนหนึ่งของ синтаксис `for` loop
+- `let` - กำหนดค่าให้กับตัวแปร
+- `loop` - วนซ้ำอย่างไม่มีเงื่อนไข
+- `match` - จับคู่ค่ากับรูปแบบ (patterns)
+- `mod` - กำหนดโมดูล
+- `move` - ทำให้ closure ครอบครอง (take ownership) captures ทั้งหมดของมัน
+- `mut` - ระบุความสามารถในการเปลี่ยนแปลงค่า (mutability) ในการอ้างอิง, พอยน์เตอร์ดิบ, หรือการผูกรูปแบบ (pattern bindings)
+- `pub` - ระบุการมองเห็นแบบสาธารณะ (public visibility) ในฟิลด์ของ struct, บล็อก `impl`, หรือโมดูล
+- `ref` - ผูกโดยการอ้างอิง (bind by reference)
+- `return` - คืนค่าออกจากฟังก์ชัน
+- `Self` - ชื่อแทนไทป์ (type alias) สำหรับไทป์ที่เรากำลังกำหนดหรือ υλοποιώ (implement)
+- `self` - ประธานของเมธอด (method subject) หรือโมดูลปัจจุบัน
+- `static` - ตัวแปรโกลบอล (global variable) หรือ lifetime ที่คงอยู่ตลอดการทำงานของโปรแกรม
+- `struct` - กำหนดโครงสร้าง (structure)
+- `super` - โมดูลแม่ (parent module) ของโมดูลปัจจุบัน
+- `trait` - กำหนดเทรต (trait)
+- `true` - ค่าตรรกะจริง (Boolean true literal)
+- `type` - กำหนดชื่อแทนไทป์ (type alias) หรือ associated type
+- `union` - กำหนด [union][union]<!-- ignore -->; เป็น keyword ก็ต่อเมื่อใช้ในการประกาศ union เท่านั้น
+- `unsafe` - ระบุโค้ด, ฟังก์ชัน, เทรต, หรือการ υλοποιώ (implementations) ที่ไม่ปลอดภัย (unsafe)
+- `use` - นำสัญลักษณ์ (symbols) เข้ามาในขอบเขต (scope); ระบุ captures ที่แม่นยำสำหรับ generic และ lifetime bounds
+- `where` - ระบุ clauses ที่จำกัดไทป์
+- `while` - วนซ้ำตามเงื่อนไขตามผลลัพธ์ของนิพจน์
 
 [union]: ../reference/items/unions.html
 
-### Keywords Reserved for Future Use
+### Keywords ที่สงวนไว้สำหรับอนาคต
 
-The following keywords do not yet have any functionality but are reserved by
-Rust for potential future use.
+Keywords ต่อไปนี้ยังไม่มีฟังก์ชันการทำงานใดๆ แต่ถูกสงวนไว้โดย Rust สำหรับการใช้งานที่อาจเกิดขึ้นในอนาคต:
 
 - `abstract`
 - `become`
@@ -82,13 +71,11 @@ Rust for potential future use.
 
 ### Raw Identifiers
 
-_Raw identifiers_ are the syntax that lets you use keywords where they wouldn’t
-normally be allowed. You use a raw identifier by prefixing a keyword with `r#`.
+_Raw identifiers_ คือ синтаксис ที่ช่วยให้คุณสามารถใช้ keywords ในตำแหน่งที่ไม่ได้รับอนุญาตตามปกติ คุณใช้ raw identifier โดยการเติม `r#` หน้า keyword
 
-For example, `match` is a keyword. If you try to compile the following function
-that uses `match` as its name:
+ตัวอย่างเช่น `match` เป็น keyword หากคุณพยายามคอมไพล์ฟังก์ชันต่อไปนี้ที่ใช้ `match` เป็นชื่อ:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ชื่อไฟล์: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
 fn match(needle: &str, haystack: &str) -> bool {
@@ -96,7 +83,7 @@ fn match(needle: &str, haystack: &str) -> bool {
 }
 ```
 
-you’ll get this error:
+คุณจะได้รับข้อผิดพลาดนี้:
 
 ```text
 error: expected identifier, found keyword `match`
@@ -106,11 +93,9 @@ error: expected identifier, found keyword `match`
   |    ^^^^^ expected identifier, found keyword
 ```
 
-The error shows that you can’t use the keyword `match` as the function
-identifier. To use `match` as a function name, you need to use the raw
-identifier syntax, like this:
+ข้อผิดพลาดแสดงให้เห็นว่าคุณไม่สามารถใช้ keyword `match` เป็นชื่อฟังก์ชันได้ หากต้องการใช้ `match` เป็นชื่อฟังก์ชัน คุณต้องใช้ синтаксис raw identifier ดังนี้:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">ชื่อไฟล์: src/main.rs</span>
 
 ```rust
 fn r#match(needle: &str, haystack: &str) -> bool {
@@ -122,18 +107,8 @@ fn main() {
 }
 ```
 
-This code will compile without any errors. Note the `r#` prefix on the function
-name in its definition as well as where the function is called in `main`.
+โค้ดนี้จะคอมไพล์ได้โดยไม่มีข้อผิดพลาด สังเกตคำนำหน้า `r#` ที่ชื่อฟังก์ชันทั้งในส่วนการกำหนดและในส่วนที่เรียกใช้ฟังก์ชันใน `main`
 
-Raw identifiers allow you to use any word you choose as an identifier, even if
-that word happens to be a reserved keyword. This gives us more freedom to choose
-identifier names, as well as lets us integrate with programs written in a
-language where these words aren’t keywords. In addition, raw identifiers allow
-you to use libraries written in a different Rust edition than your crate uses.
-For example, `try` isn’t a keyword in the 2015 edition but is in the 2018, 2021,
-and 2024 editions. If you depend on a library that is written using the 2015
-edition and has a `try` function, you’ll need to use the raw identifier syntax,
-`r#try` in this case, to call that function from your code on later editions.
-See [Appendix E][appendix-e]<!-- ignore --> for more information on editions.
+Raw identifiers ช่วยให้คุณสามารถใช้คำใดก็ได้ที่คุณเลือกเป็นตัวระบุ แม้ว่าคำนั้นจะเป็น keyword ที่สงวนไว้ก็ตาม สิ่งนี้ให้อิสระแก่เรามากขึ้นในการเลือกชื่อตัวระบุ รวมถึงช่วยให้เราสามารถผสานรวมกับโปรแกรมที่เขียนด้วยภาษาอื่นซึ่งคำเหล่านี้ไม่ใช่ keywords นอกจากนี้ raw identifiers ยังช่วยให้คุณสามารถใช้ไลบรารีที่เขียนด้วย Rust edition ที่แตกต่างจากที่ крейт ของคุณใช้ ตัวอย่างเช่น `try` ไม่ใช่ keyword ใน edition 2015 แต่เป็น keyword ใน edition 2018, 2021 และ 2024 หากคุณขึ้นอยู่กับไลบรารีที่เขียนโดยใช้ edition 2015 และมีฟังก์ชัน `try` คุณจะต้องใช้ синтаксис raw identifier `r#try` ในกรณีนี้ เพื่อเรียกใช้ฟังก์ชันนั้นจากโค้ดของคุณใน edition ที่ใหม่กว่า ดู [ภาคผนวก E][appendix-e]<!-- ignore --> สำหรับข้อมูลเพิ่มเติมเกี่ยวกับ editions
 
 [appendix-e]: appendix-05-editions.html
