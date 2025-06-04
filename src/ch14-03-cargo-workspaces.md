@@ -24,8 +24,8 @@ $ cd add
 ```
 
 Next, in the _add_ directory, we create the _Cargo.toml_ file that will
-configure the entire workspace. This file won’t have a `[package]` section.
-Instead, it will start with a `[workspace]` section that will allow us to add
+configure the entire workspace. This file won’t have a `[package]` and `[dependencies]` section.
+Instead, it will only start with a `[workspace]` section that will allow us to add
 members to the workspace. We also make a point to use the latest and greatest
 version of Cargo’s resolver algorithm in our workspace by setting the
 `resolver` to `"3"`.
