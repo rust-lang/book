@@ -181,7 +181,7 @@ that looks like:
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/main.rs:here}}
 ```
 
-This code prints `1 new post: (Read more from @horse_ebooks...)`.
+This code prints `1 new social post: (Read more from @horse_ebooks...)`.
 
 Note that it isn’t possible to call the default implementation from an
 overriding implementation of that same method.
