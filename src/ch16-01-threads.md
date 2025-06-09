@@ -74,7 +74,7 @@ duration, allowing a different thread to run. The threads will probably take
 turns, but that isn’t guaranteed: it depends on how your operating system
 schedules the threads. In this run, the main thread printed first, even though
 the print statement from the spawned thread appears first in the code. And even
-though we told the spawned thread to print until `i` is `9`, it only got to `5`
+though we told the spawned thread to print until `i` is `10`, it only got to `5`
 before the main thread shut down.
 
 If you run this code and only see output from the main thread, or don’t see any
