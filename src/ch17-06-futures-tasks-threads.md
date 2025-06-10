@@ -2,7 +2,7 @@
 
 As we saw in [Chapter 16][ch16]<!-- ignore -->, threads provide one approach to
 concurrency. We’ve seen another approach in this chapter: using async with
-futures and streams. If you‘re wondering when to choose method over the other,
+futures and streams. If you‘re wondering when to choose one method over the other,
 the answer is: it depends! And in many cases, the choice isn’t threads _or_
 async but rather threads _and_ async.
 
