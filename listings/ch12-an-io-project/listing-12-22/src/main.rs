@@ -3,7 +3,12 @@ use std::error::Error;
 use std::fs;
 use std::process;
 
+// ANCHOR: there
 use minigrep::{search, search_case_insensitive};
+
+// --snip--
+
+// ANCHOR_END: there
 
 fn main() {
     let args: Vec<String> = env::args().collect();

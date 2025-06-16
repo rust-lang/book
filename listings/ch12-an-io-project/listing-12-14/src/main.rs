@@ -25,6 +25,7 @@ fn main() {
 }
 
 // --snip--
+
 // ANCHOR_END: here
 
 struct Config {

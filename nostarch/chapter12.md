@@ -340,17 +340,17 @@ Let’s address these four problems by refactoring our project.
 ### Separation of Concerns for Binary Projects
 
 The organizational problem of allocating responsibility for multiple tasks to
-the `main` function is common to many binary projects. As a result, the Rust
-community has developed guidelines for splitting the separate concerns of a
-binary program when `main` starts getting large. This process has the following
-steps:
+the `main` function is common to many binary projects. As a result, many Rust
+programmers find it useful to split up the separate concerns of a binary
+program when the `main` function starts getting large. This process has the
+following steps:
 
 * Split your program into a *main.rs* file and a *lib.rs* file and move your
   program’s logic to *lib.rs*.
 * As long as your command line parsing logic is small, it can remain in
-  *main.rs*.
+  the `main` function.
 * When the command line parsing logic starts getting complicated, extract it
-  from *main.rs* and move it to *lib.rs*.
+  from the `main` function into other functions or types.
 
 The responsibilities that remain in the `main` function after this process
 should be limited to the following:
@@ -363,16 +363,15 @@ should be limited to the following:
 This pattern is about separating concerns: *main.rs* handles running the
 program and *lib.rs* handles all the logic of the task at hand. Because you
 can’t test the `main` function directly, this structure lets you test all of
-your program’s logic by moving it into functions in *lib.rs*. The code that
-remains in *main.rs* will be small enough to verify its correctness by reading
-it. Let’s rework our program by following this process.
+your program’s logic by moving it out of the `main` function. The code that
+remains in the `main` function will be small enough to verify its correctness
+by reading it. Let’s rework our program by following this process.
 
 #### Extracting the Argument Parser
 
 We’ll extract the functionality for parsing arguments into a function that
-`main` will call to prepare for moving the command line parsing logic to
-*src/lib.rs*. Listing 12-5 shows the new start of `main` that calls a new
-function `parse_config`, which we’ll define in *src/main.rs* for the moment.
+`main` will call. Listing 12-5 shows the new start of the `main` function that
+calls a new function `parse_config`, which we’ll define in *src/main.rs*.
 
 src/main.rs
 
@@ -560,6 +559,7 @@ $ cargo run
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep`
+
 thread 'main' panicked at src/main.rs:27:21:
 index out of bounds: the len is 1 but the index is 1
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
@@ -604,6 +604,7 @@ $ cargo run
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep`
+
 thread 'main' panicked at src/main.rs:26:13:
 not enough arguments
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
@@ -731,19 +732,22 @@ Problem parsing arguments: not enough arguments
 
 Great! This output is much friendlier for our users.
 
-### Extracting Logic from main
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="extracting-logic-from-main"></a>
+
+### Extracting Logic from the main Function
 
 Now that we’ve finished refactoring the configuration parsing, let’s turn to
 the program’s logic. As we stated in “Separation of Concerns for Binary
 Projects”, we’ll
 extract a function named `run` that will hold all the logic currently in the
 `main` function that isn’t involved with setting up configuration or handling
-errors. When we’re done, `main` will be concise and easy to verify by
-inspection, and we’ll be able to write tests for all the other logic.
+errors. When we’re done, the `main` function will be concise and easy to verify
+by inspection, and we’ll be able to write tests for all the other logic.
 
-Listing 12-11 shows the extracted `run` function. For now, we’re just making
-the small, incremental improvement of extracting the function. We’re still
-defining the function in *src/main.rs*.
+Listing 12-11 shows the small, incremental improvement of extracting a `run`
+function.
 
 src/main.rs
 
@@ -905,71 +909,67 @@ Our `minigrep` project is looking good so far! Now we’ll split the
 *src/main.rs* file and put some code into the *src/lib.rs* file. That way, we
 can test the code and have a *src/main.rs* file with fewer responsibilities.
 
-Let’s move all the code that isn’t in the `main` function from *src/main.rs* to
-*src/lib.rs*:
+Let’s define the code responsible for searching text in *src/lib.rs* rather
+than in *src/main.rs*, which will let us (or anyone else using our
+`minigrep` library) call the searching function from more contexts than our
+`minigrep` binary.
 
-* The `run` function definition
-* The relevant `use` statements
-* The definition of `Config`
-* The `Config::build` function definition
-
-The contents of *src/lib.rs* should have the signatures shown in Listing 12-13
-(we’ve omitted the bodies of the functions for brevity). Note that this won’t
-compile until we modify *src/main.rs* in Listing 12-14.
+First, let’s define the `search` function signature in *src/lib.rs* as shown in
+Listing 12-13, with a body that calls the `unimplemented!` macro. We’ll explain
+the signature in more detail when we fill in the implementation.
 
 src/lib.rs
 
 ```
-use std::error::Error;
-use std::fs;
-
-pub struct Config {
-    pub query: String,
-    pub file_path: String,
-}
-
-impl Config {
-    pub fn build(args: &[String]) -> Result<Config, &'static str> {
-        // --snip--
-    }
-}
-
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    // --snip--
-}
 ```
 
-Listing 12-13: Moving `Config` and `run` into *src/lib.rs*
+Listing 12-13: Defining the `search` function in  *src/lib.rs*
 
-We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its
-`build` method, and on the `run` function. We now have a library crate that has
-a public API we can test!
+We’ve used the `pub` keyword on the function definition to designate `search`
+as part of our library crate’s public API. We now have a library crate that we
+can use from our binary crate and that we can test!
 
-Now we need to bring the code we moved to *src/lib.rs* into the scope of the
-binary crate in *src/main.rs*, as shown in Listing 12-14.
+Now we need to bring the code defined in *src/lib.rs* into the scope of the
+binary crate in *src/main.rs* and call it, as shown in Listing 12-14.
 
 src/main.rs
 
 ```
-use std::env;
-use std::process;
-
-use minigrep::Config;
+// --snip--
+use minigrep::search;
 
 fn main() {
     // --snip--
-    if let Err(e) = minigrep::run(config) {
-        // --snip--
+}
+
+// --snip--
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let contents = fs::read_to_string(config.file_path)?;
+
+    for line in search(&config.query, &contents) {
+        println!("{line}");
     }
+
+    Ok(())
 }
 ```
 
-Listing 12-14: Using the `minigrep` library crate in *src/main.rs*
+Listing 12-14: Using the `minigrep` library crate’s `search` function in *src/main.rs*
 
-We add a `use minigrep::Config` line to bring the `Config` type from the
-library crate into the binary crate’s scope, and we prefix the `run` function
-with our crate name. Now all the functionality should be connected and should
-work. Run the program with `cargo run` and make sure everything works correctly.
+We add a `use minigrep::search` line to bring the `search` function from
+the library crate into the binary crate’s scope. Then, in the `run` function,
+rather than printing out the contents of the file, we call the `search`
+function and pass the `config.query` value and `contents` as arguments. Then
+`run` will use a `for` loop to print each line returned from `search` that
+matched the query. This is also a good time to remove the `println!` calls in
+the `main` function that displayed the query and the file path so that our
+program only prints the search results (if no errors occur).
+
+Note that the search function will be collecting all the results into a vector
+it returns before any printing happens. This implementation could be slow to
+display results when searching large files because results aren’t printed as
+they’re found; we’ll discuss a possible way to fix this using iterators in
+Chapter 13.
 
 Whew! That was a lot of work, but we’ve set ourselves up for success in the
 future. Now it’s much easier to handle errors, and we’ve made the code more
@@ -981,11 +981,10 @@ write some tests!
 
 ## Developing the Library’s Functionality with Test-Driven Development
 
-Now that we’ve extracted the logic into *src/lib.rs* and left the argument
-collecting and error handling in *src/main.rs*, it’s much easier to write tests
-for the core functionality of our code. We can call functions directly with
-various arguments and check return values without having to call our binary
-from the command line.
+Now that we have the search logic in *src/lib.rs* separate from the `main`
+function, it’s much easier to write tests for the core functionality of our
+code. We can call functions directly with various arguments and check return
+values without having to call our binary from the command line.
 
 In this section, we’ll add the searching logic to the `minigrep` program using
 the test-driven development (TDD) process with the following steps:
@@ -1008,17 +1007,17 @@ lines that match the query. We’ll add this functionality in a function called
 
 ### Writing a Failing Test
 
-Because we don’t need them anymore, let’s remove the `println!` statements from
-*src/lib.rs* and *src/main.rs* that we used to check the program’s behavior.
-Then, in *src/lib.rs*, we’ll add a `tests` module with a test function, as we
-did in Chapter 11. The test function specifies
-the behavior we want the `search` function to have: it will take a query and
-the text to search, and it will return only the lines from the text that
-contain the query. Listing 12-15 shows this test, which won’t compile yet.
+In *src/lib.rs*, we’ll add a `tests` module with a test function, as we did in
+Chapter 11. The test function specifies the
+behavior we want the `search` function to have: it will take a query and the
+text to search, and it will return only the lines from the text that contain
+the query. Listing 12-15 shows this test.
 
 src/lib.rs
 
 ```
+// --snip--
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1036,7 +1035,7 @@ Pick three.";
 }
 ```
 
-Listing 12-15: Creating a failing test for the `search` function we wish we had
+Listing 12-15: Creating a failing test for the `search` function for the functionality we wish we had
 
 This test searches for the string `"duct"`. The text we’re searching is three
 lines, only one of which contains `"duct"` (note that the backslash after the
@@ -1044,11 +1043,11 @@ opening double quote tells Rust not to put a newline character at the beginning
 of the contents of this string literal). We assert that the value returned from
 the `search` function contains only the line we expect.
 
-We aren’t yet able to run this test and watch it fail because the test doesn’t
-even compile: the `search` function doesn’t exist yet! In accordance with TDD
-principles, we’ll add just enough code to get the test to compile and run by
-adding a definition of the `search` function that always returns an empty
-vector, as shown in Listing 12-16. Then the test should compile and fail
+If we run this test, it will currently fail because the `unimplemented!` macro
+panics with the message “not implemented”. In accordance with TDD principles,
+we’ll take a small step of adding just enough code to get the test to not panic
+when calling the function by defining the `search` function to always return an
+empty vector, as shown in Listing 12-16. Then the test should compile and fail
 because an empty vector doesn’t match a vector containing the line `"safe, fast, productive."`
 
 src/lib.rs
@@ -1059,15 +1058,15 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-Listing 12-16: Defining just enough of the `search` function so our test will compile
+Listing 12-16: Defining just enough of the `search` function so calling it won’t panic
 
-Notice that we need to define an explicit lifetime `'a` in the signature of
-`search` and use that lifetime with the `contents` argument and the return
-value. Recall in Chapter 10 that the lifetime
-parameters specify which argument lifetime is connected to the lifetime of the
-return value. In this case, we indicate that the returned vector should contain
-string slices that reference slices of the argument `contents` (rather than the
-argument `query`).
+Now let’s discuss why we need to define an explicit lifetime `'a` in the
+signature of `search` and use that lifetime with the `contents` argument and
+the return value. Recall in Chapter 10 that
+the lifetime parameters specify which argument lifetime is connected to the
+lifetime of the return value. In this case, we indicate that the returned
+vector should contain string slices that reference slices of the argument
+`contents` (rather than the argument `query`).
 
 In other words, we tell Rust that the data returned by the `search` function
 will live as long as the data passed into the `search` function in the
@@ -1083,63 +1082,34 @@ get this error:
 $ cargo build
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
 error[E0106]: missing lifetime specifier
-  --> src/lib.rs:28:51
-   |
-28 | pub fn search(query: &str, contents: &str) -> Vec<&str> {
-   |                      ----            ----         ^ expected named lifetime parameter
-   |
-   = help: this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `query` or `contents`
+ --> src/lib.rs:1:51
+  |
+1 | pub fn search(query: &str, contents: &str) -> Vec<&str> {
+  |                      ----            ----         ^ expected named lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `query` or `contents`
 help: consider introducing a named lifetime parameter
-   |
-28 | pub fn search<'a>(query: &'a str, contents: &'a str) -> Vec<&'a str> {
-   |              ++++         ++                 ++              ++
+  |
+1 | pub fn search<'a>(query: &'a str, contents: &'a str) -> Vec<&'a str> {
+  |              ++++         ++                 ++              ++
 
 For more information about this error, try `rustc --explain E0106`.
 error: could not compile `minigrep` (lib) due to 1 previous error
 ```
 
-Rust can’t possibly know which of the two arguments we need, so we need to tell
-it explicitly. Because `contents` is the argument that contains all of our text
+Rust can’t know which of the two parameters we need for the output, so we need
+to tell it explicitly. Note that the help text suggests specifying the same
+lifetime parameter for all the parameters and the output type, which is
+incorrect! Because `contents` is the parameter that contains all of our text
 and we want to return the parts of that text that match, we know `contents` is
-the argument that should be connected to the return value using the lifetime
-syntax.
+the only parameter that should be connected to the return value using the
+lifetime syntax.
 
 Other programming languages don’t require you to connect arguments to return
 values in the signature, but this practice will get easier over time. You might
 want to compare this example with the examples in the “Validating References
 with Lifetimes” section
 in Chapter 10.
-
-Now let’s run the test:
-
-```
-$ cargo test
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.97s
-     Running unittests src/lib.rs (target/debug/deps/minigrep-9cd200e5fac0fc94)
-
-running 1 test
-test tests::one_result ... FAILED
-
-failures:
-
----- tests::one_result stdout ----
-thread 'tests::one_result' panicked at src/lib.rs:44:9:
-assertion `left == right` failed
-  left: ["safe, fast, productive."]
- right: []
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
-
-
-failures:
-    tests::one_result
-
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
-
-error: test failed, to rerun pass `--lib`
-```
-
-Great, the test fails, exactly as we expected. Let’s get the test to pass!
 
 ### Writing Code to Pass the Test
 
@@ -1264,29 +1234,6 @@ but it doesn’t take advantage of some useful features of iterators. We’ll
 return to this example in Chapter 13, where
 we’ll explore iterators in detail, and look at how to improve it.
 
-#### Using the search Function in the run Function
-
-Now that the `search` function is working and tested, we need to call `search`
-from our `run` function. We need to pass the `config.query` value and the
-`contents` that `run` reads from the file to the `search` function. Then `run`
-will print each line returned from `search`:
-
-Filename: src/lib.rs
-
-```
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.file_path)?;
-
-    for line in search(&config.query, &contents) {
-        println!("{line}");
-    }
-
-    Ok(())
-}
-```
-
-We’re still using a `for` loop to return each line from `search` and print it.
-
 Now the entire program should work! Let’s try it out, first with a word that
 should return exactly one line from the Emily Dickinson poem: *frog*.
 
@@ -1330,7 +1277,7 @@ useful when you’re writing command line programs.
 
 ## Working with Environment Variables
 
-We’ll improve `minigrep` by adding an extra feature: an option for
+We’ll improve the `minigrep` binary by adding an extra feature: an option for
 case-insensitive searching that the user can turn on via an environment
 variable. We could make this feature a command line option and require that
 users enter it each time they want it to apply, but by instead making it an
@@ -1339,12 +1286,12 @@ and have all their searches be case insensitive in that terminal session.
 
 ### Writing a Failing Test for the Case-Insensitive search Function
 
-We first add a new `search_case_insensitive` function that will be called when
-the environment variable has a value. We’ll continue to follow the TDD process,
-so the first step is again to write a failing test. We’ll add a new test for
-the new `search_case_insensitive` function and rename our old test from
-`one_result` to `case_sensitive` to clarify the differences between the two
-tests, as shown in Listing 12-20.
+We first add a new `search_case_insensitive` function to the `minigrep` library
+that will be called when the environment variable has a value. We’ll continue
+to follow the TDD process, so the first step is again to write a failing test.
+We’ll add a new test for the new `search_case_insensitive` function and rename
+our old test from `one_result` to `case_sensitive` to clarify the differences
+between the two tests, as shown in Listing 12-20.
 
 src/lib.rs
 
@@ -1430,13 +1377,13 @@ pub fn search_case_insensitive<'a>(
 Listing 12-21: Defining the `search_case_insensitive` function to lowercase the query and the line before comparing them
 
 First we lowercase the `query` string and store it in a new variable with the
-same name, shadowing the original. Calling `to_lowercase` on the query is
-necessary so that no matter whether the user’s query is `"rust"`, `"RUST"`,
-`"Rust"`, or `"rUsT"`, we’ll treat the query as if it were `"rust"` and be
+same name, shadowing the original `query`. Calling `to_lowercase` on the query
+is necessary so that no matter whether the user’s query is `"rust"`, `"RUST"`,
+`"Rust"`, or ```"``rUsT``"```, we’ll treat the query as if it were `"rust"` and be
 insensitive to the case. While `to_lowercase` will handle basic Unicode, it
-won’t be 100% accurate. If we were writing a real application, we’d want to do a
-bit more work here, but this section is about environment variables, not
-Unicode, so we’ll leave it at that here.
+won’t be 100 percent accurate. If we were writing a real application, we’d want
+to do a bit more work here, but this section is about environment variables,
+not Unicode, so we’ll leave it at that here.
 
 Note that `query` is now a `String` rather than a string slice because calling
 `to_lowercase` creates new data rather than referencing existing data. Say the
@@ -1484,7 +1431,7 @@ struct to switch between case-sensitive and case-insensitive search. Adding
 this field will cause compiler errors because we aren’t initializing this field
 anywhere yet:
 
-Filename: src/lib.rs
+Filename: src/main.rs
 
 ```
 pub struct Config {
@@ -1499,10 +1446,14 @@ function to check the `ignore_case` field’s value and use that to decide
 whether to call the `search` function or the `search_case_insensitive`
 function, as shown in Listing 12-22. This still won’t compile yet.
 
-src/lib.rs
+src/main.rs
 
 ```
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+use minigrep::{search, search_case_insensitive};
+
+// --snip--
+
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.file_path)?;
 
     let results = if config.ignore_case {
@@ -1523,19 +1474,15 @@ Listing 12-22: Calling either `search` or `search_case_insensitive` based on the
 
 Finally, we need to check for the environment variable. The functions for
 working with environment variables are in the `env` module in the standard
-library, so we bring that module into scope at the top of *src/lib.rs*. Then
-we’ll use the `var` function from the `env` module to check to see if any value
-has been set for an environment variable named `IGNORE_CASE`, as shown in
-Listing 12-23.
+library, which is already in scope at the top of *src/main.rs*. We’ll use the
+`var` function from the `env` module to check to see if any value has been set
+for an environment variable named `IGNORE_CASE`, as shown in Listing 12-23.
 
-src/lib.rs
+src/main.rs
 
 ```
-use std::env;
-// --snip--
-
 impl Config {
-    pub fn build(args: &[String]) -> Result<Config, &'static str> {
+    fn build(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
             return Err("not enough arguments");
         }
@@ -1707,7 +1654,7 @@ fn main() {
         process::exit(1);
     });
 
-    if let Err(e) = minigrep::run(config) {
+    if let Err(e) = run(config) {
         eprintln!("Application error: {e}");
         process::exit(1);
     }
