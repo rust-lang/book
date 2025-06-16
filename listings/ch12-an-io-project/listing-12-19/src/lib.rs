@@ -1,8 +1,5 @@
 // ANCHOR: here
-pub fn search<'a>(
-    query: &str,
-    contents: &'a str,
-) -> Vec<&'a str> {
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
     for line in contents.lines() {

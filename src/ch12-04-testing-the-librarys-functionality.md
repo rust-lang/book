@@ -1,10 +1,9 @@
 ## Developing the Library’s Functionality with Test-Driven Development
 
-Now that we’ve extracted the logic into _src/lib.rs_ and left the argument
-collecting and error handling in _src/main.rs_, it’s much easier to write tests
-for the core functionality of our code. We can call functions directly with
-various arguments and check return values without having to call our binary
-from the command line.
+Now that we have the search logic in _src/lib.rs_ separate from the `main`
+function, it’s much easier to write tests for the core functionality of our
+code. We can call functions directly with various arguments and check return
+values without having to call our binary from the command line.
 
 In this section, we’ll add the searching logic to the `minigrep` program using
 the test-driven development (TDD) process with the following steps:
@@ -27,15 +26,13 @@ lines that match the query. We’ll add this functionality in a function called
 
 ### Writing a Failing Test
 
-Because we don’t need them anymore, let’s remove the `println!` statements from
-_src/lib.rs_ and _src/main.rs_ that we used to check the program’s behavior.
-Then, in _src/lib.rs_, we’ll add a `tests` module with a test function, as we
-did in [Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies
-the behavior we want the `search` function to have: it will take a query and
-the text to search, and it will return only the lines from the text that
-contain the query. Listing 12-15 shows this test, which won’t compile yet.
+In _src/lib.rs_, we’ll add a `tests` module with a test function, as we did in
+[Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies the
+behavior we want the `search` function to have: it will take a query and the
+text to search, and it will return only the lines from the text that contain
+the query. Listing 12-15 shows this test.
 
-<Listing number="12-15" file-name="src/lib.rs" caption="Creating a failing test for the `search` function we wish we had">
+<Listing number="12-15" file-name="src/lib.rs" caption="Creating a failing test for the `search` function for the functionality we wish we had">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-15/src/lib.rs:here}}
@@ -49,15 +46,15 @@ opening double quote tells Rust not to put a newline character at the beginning
 of the contents of this string literal). We assert that the value returned from
 the `search` function contains only the line we expect.
 
-We aren’t yet able to run this test and watch it fail because the test doesn’t
-even compile: the `search` function doesn’t exist yet! In accordance with TDD
-principles, we’ll add just enough code to get the test to compile and run by
-adding a definition of the `search` function that always returns an empty
-vector, as shown in Listing 12-16. Then the test should compile and fail
+If we run this test, it will currently fail because the `unimplemented!` macro
+panics with the message “not implemented”. In accordance with TDD principles,
+we’ll take a small step of adding just enough code to get the test to not panic
+when calling the function by defining the `search` function to always return an
+empty vector, as shown in Listing 12-16. Then the test should compile and fail
 because an empty vector doesn’t match a vector containing the line `"safe,
 fast, productive."`
 
-<Listing number="12-16" file-name="src/lib.rs" caption="Defining just enough of the `search` function so our test will compile">
+<Listing number="12-16" file-name="src/lib.rs" caption="Defining just enough of the `search` function so calling it won’t panic">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
@@ -65,13 +62,13 @@ fast, productive."`
 
 </Listing>
 
-Notice that we need to define an explicit lifetime `'a` in the signature of
-`search` and use that lifetime with the `contents` argument and the return
-value. Recall in [Chapter 10][ch10-lifetimes]<!-- ignore --> that the lifetime
-parameters specify which argument lifetime is connected to the lifetime of the
-return value. In this case, we indicate that the returned vector should contain
-string slices that reference slices of the argument `contents` (rather than the
-argument `query`).
+Now let’s discuss why we need to define an explicit lifetime `'a` in the
+signature of `search` and use that lifetime with the `contents` argument and
+the return value. Recall in [Chapter 10][ch10-lifetimes]<!-- ignore --> that
+the lifetime parameters specify which argument lifetime is connected to the
+lifetime of the return value. In this case, we indicate that the returned
+vector should contain string slices that reference slices of the argument
+`contents` (rather than the argument `query`).
 
 In other words, we tell Rust that the data returned by the `search` function
 will live as long as the data passed into the `search` function in the
@@ -87,25 +84,19 @@ get this error:
 {{#include ../listings/ch12-an-io-project/output-only-02-missing-lifetimes/output.txt}}
 ```
 
-Rust can’t possibly know which of the two arguments we need, so we need to tell
-it explicitly. Because `contents` is the argument that contains all of our text
+Rust can’t know which of the two parameters we need for the output, so we need
+to tell it explicitly. Note that the help text suggests specifying the same
+lifetime parameter for all the parameters and the output type, which is
+incorrect! Because `contents` is the parameter that contains all of our text
 and we want to return the parts of that text that match, we know `contents` is
-the argument that should be connected to the return value using the lifetime
-syntax.
+the only parameter that should be connected to the return value using the
+lifetime syntax.
 
 Other programming languages don’t require you to connect arguments to return
 values in the signature, but this practice will get easier over time. You might
 want to compare this example with the examples in the [“Validating References
 with Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> section
 in Chapter 10.
-
-Now let’s run the test:
-
-```console
-{{#include ../listings/ch12-an-io-project/listing-12-16/output.txt}}
-```
-
-Great, the test fails, exactly as we expected. Let’s get the test to pass!
 
 ### Writing Code to Pass the Test
 
@@ -188,21 +179,6 @@ maintain the same functionality. The code in the search function isn’t too bad
 but it doesn’t take advantage of some useful features of iterators. We’ll
 return to this example in [Chapter 13][ch13-iterators]<!-- ignore -->, where
 we’ll explore iterators in detail, and look at how to improve it.
-
-#### Using the `search` Function in the `run` Function
-
-Now that the `search` function is working and tested, we need to call `search`
-from our `run` function. We need to pass the `config.query` value and the
-`contents` that `run` reads from the file to the `search` function. Then `run`
-will print each line returned from `search`:
-
-<span class="filename">Filename: src/lib.rs</span>
-
-```rust,ignore
-{{#rustdoc_include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/src/lib.rs:here}}
-```
-
-We’re still using a `for` loop to return each line from `search` and print it.
 
 Now the entire program should work! Let’s try it out, first with a word that
 should return exactly one line from the Emily Dickinson poem: _frog_.

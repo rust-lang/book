@@ -10,7 +10,7 @@ failures:
 
 ---- tests::one_result stdout ----
 
-thread 'tests::one_result' panicked at src/lib.rs:44:9:
+thread 'tests::one_result' panicked at src/lib.rs:17:9:
 assertion `left == right` failed
   left: ["safe, fast, productive."]
  right: []

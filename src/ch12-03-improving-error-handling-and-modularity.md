@@ -36,17 +36,17 @@ Let’s address these four problems by refactoring our project.
 ### Separation of Concerns for Binary Projects
 
 The organizational problem of allocating responsibility for multiple tasks to
-the `main` function is common to many binary projects. As a result, the Rust
-community has developed guidelines for splitting the separate concerns of a
-binary program when `main` starts getting large. This process has the following
-steps:
+the `main` function is common to many binary projects. As a result, many Rust
+programmers find it useful to split up the separate concerns of a binary
+program when the `main` function starts getting large. This process has the
+following steps:
 
 - Split your program into a _main.rs_ file and a _lib.rs_ file and move your
   program’s logic to _lib.rs_.
 - As long as your command line parsing logic is small, it can remain in
-  _main.rs_.
+  the `main` function.
 - When the command line parsing logic starts getting complicated, extract it
-  from _main.rs_ and move it to _lib.rs_.
+  from the `main` function into other functions or types.
 
 The responsibilities that remain in the `main` function after this process
 should be limited to the following:
@@ -59,16 +59,15 @@ should be limited to the following:
 This pattern is about separating concerns: _main.rs_ handles running the
 program and _lib.rs_ handles all the logic of the task at hand. Because you
 can’t test the `main` function directly, this structure lets you test all of
-your program’s logic by moving it into functions in _lib.rs_. The code that
-remains in _main.rs_ will be small enough to verify its correctness by reading
-it. Let’s rework our program by following this process.
+your program’s logic by moving it out of the `main` function. The code that
+remains in the `main` function will be small enough to verify its correctness
+by reading it. Let’s rework our program by following this process.
 
 #### Extracting the Argument Parser
 
 We’ll extract the functionality for parsing arguments into a function that
-`main` will call to prepare for moving the command line parsing logic to
-_src/lib.rs_. Listing 12-5 shows the new start of `main` that calls a new
-function `parse_config`, which we’ll define in _src/main.rs_ for the moment.
+`main` will call. Listing 12-5 shows the new start of the `main` function that
+calls a new function `parse_config`, which we’ll define in _src/main.rs_.
 
 <Listing number="12-5" file-name="src/main.rs" caption="Extracting a `parse_config` function from `main`">
 
@@ -332,19 +331,22 @@ extra output. Let’s try it:
 
 Great! This output is much friendlier for our users.
 
-### Extracting Logic from `main`
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="extracting-logic-from-main"></a>
+
+### Extracting Logic from the `main` Function
 
 Now that we’ve finished refactoring the configuration parsing, let’s turn to
 the program’s logic. As we stated in [“Separation of Concerns for Binary
 Projects”](#separation-of-concerns-for-binary-projects)<!-- ignore -->, we’ll
 extract a function named `run` that will hold all the logic currently in the
 `main` function that isn’t involved with setting up configuration or handling
-errors. When we’re done, `main` will be concise and easy to verify by
-inspection, and we’ll be able to write tests for all the other logic.
+errors. When we’re done, the `main` function will be concise and easy to verify
+by inspection, and we’ll be able to write tests for all the other logic.
 
-Listing 12-11 shows the extracted `run` function. For now, we’re just making
-the small, incremental improvement of extracting the function. We’re still
-defining the function in _src/main.rs_.
+Listing 12-11 shows the small, incremental improvement of extracting a `run`
+function.
 
 <Listing number="12-11" file-name="src/main.rs" caption="Extracting a `run` function containing the rest of the program logic">
 
@@ -440,34 +442,31 @@ Our `minigrep` project is looking good so far! Now we’ll split the
 _src/main.rs_ file and put some code into the _src/lib.rs_ file. That way, we
 can test the code and have a _src/main.rs_ file with fewer responsibilities.
 
-Let’s move all the code that isn’t in the `main` function from _src/main.rs_ to
-_src/lib.rs_:
+Let’s define the code responsible for searching text in _src/lib.rs_ rather
+than in _src/main.rs_, which will let us (or anyone else using our
+`minigrep` library) call the searching function from more contexts than our
+`minigrep` binary.
 
-- The `run` function definition
-- The relevant `use` statements
-- The definition of `Config`
-- The `Config::build` function definition
+First, let’s define the `search` function signature in _src/lib.rs_ as shown in
+Listing 12-13, with a body that calls the `unimplemented!` macro. We’ll explain
+the signature in more detail when we fill in the implementation.
 
-The contents of _src/lib.rs_ should have the signatures shown in Listing 12-13
-(we’ve omitted the bodies of the functions for brevity). Note that this won’t
-compile until we modify _src/main.rs_ in Listing 12-14.
-
-<Listing number="12-13" file-name="src/lib.rs" caption="Moving `Config` and `run` into *src/lib.rs*">
+<Listing number="12-13" file-name="src/lib.rs" caption="Defining the `search` function in  *src/lib.rs*">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs}}
 ```
 
 </Listing>
 
-We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its
-`build` method, and on the `run` function. We now have a library crate that has
-a public API we can test!
+We’ve used the `pub` keyword on the function definition to designate `search`
+as part of our library crate’s public API. We now have a library crate that we
+can use from our binary crate and that we can test!
 
-Now we need to bring the code we moved to _src/lib.rs_ into the scope of the
-binary crate in _src/main.rs_, as shown in Listing 12-14.
+Now we need to bring the code defined in _src/lib.rs_ into the scope of the
+binary crate in _src/main.rs_ and call it, as shown in Listing 12-14.
 
-<Listing number="12-14" file-name="src/main.rs" caption="Using the `minigrep` library crate in *src/main.rs*">
+<Listing number="12-14" file-name="src/main.rs" caption="Using the `minigrep` library crate’s `search` function in *src/main.rs*">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/main.rs:here}}
@@ -475,10 +474,20 @@ binary crate in _src/main.rs_, as shown in Listing 12-14.
 
 </Listing>
 
-We add a `use minigrep::Config` line to bring the `Config` type from the
-library crate into the binary crate’s scope, and we prefix the `run` function
-with our crate name. Now all the functionality should be connected and should
-work. Run the program with `cargo run` and make sure everything works correctly.
+We add a `use minigrep::search` line to bring the `search` function from
+the library crate into the binary crate’s scope. Then, in the `run` function,
+rather than printing out the contents of the file, we call the `search`
+function and pass the `config.query` value and `contents` as arguments. Then
+`run` will use a `for` loop to print each line returned from `search` that
+matched the query. This is also a good time to remove the `println!` calls in
+the `main` function that displayed the query and the file path so that our
+program only prints the search results (if no errors occur).
+
+Note that the search function will be collecting all the results into a vector
+it returns before any printing happens. This implementation could be slow to
+display results when searching large files because results aren’t printed as
+they’re found; we’ll discuss a possible way to fix this using iterators in
+Chapter 13.
 
 Whew! That was a lot of work, but we’ve set ourselves up for success in the
 future. Now it’s much easier to handle errors, and we’ve made the code more

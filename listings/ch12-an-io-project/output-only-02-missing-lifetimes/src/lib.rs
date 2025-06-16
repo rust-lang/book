@@ -1,7 +1,4 @@
-pub fn search(
-    query: &str,
-    contents: &str,
-) -> Vec<&str> {
+pub fn search(query: &str, contents: &str) -> Vec<&str> {
     vec![]
 }
 // ANCHOR_END: here

@@ -1,11 +1,10 @@
-pub fn search<'a>(
-    query: &str,
-    contents: &'a str,
-) -> Vec<&'a str> {
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     unimplemented!();
 }
 
 // ANCHOR: here
+// --snip--
+
 #[cfg(test)]
 mod tests {
     use super::*;
