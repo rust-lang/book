@@ -323,4 +323,4 @@ runs, it performs just as it would if we had duplicated each definition by
 hand. The process of monomorphization makes Rust’s generics extremely efficient
 at runtime.
 
-["Appendix C"]: appendix-03-derivable-traits.md#partialord-and-ord-for-ordering-comparisons
+["Appendix C"]: appendix-03-derivable-traits.html
