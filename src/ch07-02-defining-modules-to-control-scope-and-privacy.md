@@ -164,7 +164,7 @@ crate
 
 This tree shows how some of the modules nest inside other modules; for example,
 `hosting` nests inside `front_of_house`. The tree also shows that some modules
-are _siblings_, meaning they’re defined in the same module; `hosting` and
+are _siblings_, meaning they’re defined in the same module. Exmaple `hosting` and
 `serving` are siblings defined within `front_of_house`. If module A is
 contained inside module B, we say that module A is the _child_ of module B and
 that module B is the _parent_ of module A. Notice that the entire module tree
