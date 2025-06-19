@@ -17,7 +17,7 @@ great place to refer to as a reminder of how modules work.
   looks in the crate root file (usually _src/lib.rs_ for a library crate or
   _src/main.rs_ for a binary crate) for code to compile.
 - **Declaring modules**: In the crate root file, you can declare new modules;
-  say you declare a “garden” module with `mod garden;`. The compiler will look
+  say you declare a `“garden”` module with `mod garden;`. The compiler will look
   for the module’s code in these places:
   - Inline, within curly brackets that replace the semicolon following `mod
     garden`
@@ -27,14 +27,14 @@ great place to refer to as a reminder of how modules work.
   declare submodules. For example, you might declare `mod vegetables;` in
   _src/garden.rs_. The compiler will look for the submodule’s code within the
   directory named for the parent module in these places:
-  - Inline, directly following `mod vegetables`, within curly brackets instead
-    of the semicolon
+  - Inline, directly following `mod vegetables`, within curly brackets `;` (instead
+    of the semicolon)
   - In the file _src/garden/vegetables.rs_
   - In the file _src/garden/vegetables/mod.rs_
 - **Paths to code in modules**: Once a module is part of your crate, you can
   refer to code in that module from anywhere else in that same crate, as long
   as the privacy rules allow, using the path to the code. For example, an
-  `Asparagus` type in the garden vegetables module would be found at
+  `Asparagus` type in the `garden` `vegetables` module would be found at
   `crate::garden::vegetables::Asparagus`.
 - **Private vs. public**: Code within a module is private from its parent
   modules by default. To make a module public, declare it with `pub mod`
