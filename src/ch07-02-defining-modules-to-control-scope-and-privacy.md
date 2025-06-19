@@ -171,6 +171,6 @@ that module B is the _parent_ of module A. Notice that the entire module tree
 is rooted under the implicit module named `crate`.
 
 The module tree might remind you of the filesystem’s directory tree on your
-computer; this is a very apt comparison! Just like directories in a filesystem,
+computer, this is a very apt comparison! Just like directories in a filesystem,
 you use modules to organize your code. And just like files in a directory, we
 need a way to find our modules.
