@@ -17,7 +17,7 @@ great place to refer to as a reminder of how modules work.
   looks in the crate root file (usually _src/lib.rs_ for a library crate or
   _src/main.rs_ for a binary crate) for code to compile.
 - **Declaring modules**: In the crate root file, you can declare new modules;
-  say you declare a “garden” module with `mod garden;`. The compiler will look
+  say you declare a `“garden”` module with `mod garden;`. The compiler will look
   for the module’s code in these places:
   - Inline, within curly brackets that replace the semicolon following `mod
     garden`
@@ -27,14 +27,14 @@ great place to refer to as a reminder of how modules work.
   declare submodules. For example, you might declare `mod vegetables;` in
   _src/garden.rs_. The compiler will look for the submodule’s code within the
   directory named for the parent module in these places:
-  - Inline, directly following `mod vegetables`, within curly brackets instead
-    of the semicolon
+  - Inline, directly following `mod vegetables`, within curly brackets `;` (instead
+    of the semicolon)
   - In the file _src/garden/vegetables.rs_
   - In the file _src/garden/vegetables/mod.rs_
 - **Paths to code in modules**: Once a module is part of your crate, you can
   refer to code in that module from anywhere else in that same crate, as long
   as the privacy rules allow, using the path to the code. For example, an
-  `Asparagus` type in the garden vegetables module would be found at
+  `Asparagus` type in the `garden` `vegetables` module would be found at
   `crate::garden::vegetables::Asparagus`.
 - **Private vs. public**: Code within a module is private from its parent
   modules by default. To make a module public, declare it with `pub mod`
@@ -71,7 +71,7 @@ The crate root file in this case is _src/main.rs_, and it contains:
 
 </Listing>
 
-The `pub mod garden;` line tells the compiler to include the code it finds in
+The `pub mod garden;` line tells the compiler to include module `garden` it finds in
 _src/garden.rs_, which is:
 
 <Listing file-name="src/garden.rs">
@@ -107,7 +107,7 @@ implementation of a restaurant.
 
 In the restaurant industry, some parts of a restaurant are referred to as
 _front of house_ and others as _back of house_. Front of house is where
-customers are; this encompasses where the hosts seat customers, servers take
+customers are. This encompasses where the hosts seat customers, servers take
 orders and payment, and bartenders make drinks. Back of house is where the
 chefs and cooks work in the kitchen, dishwashers clean up, and managers do
 administrative work.
@@ -164,13 +164,13 @@ crate
 
 This tree shows how some of the modules nest inside other modules; for example,
 `hosting` nests inside `front_of_house`. The tree also shows that some modules
-are _siblings_, meaning they’re defined in the same module; `hosting` and
+are _siblings_, meaning they’re defined in the same module. Exmaple `hosting` and
 `serving` are siblings defined within `front_of_house`. If module A is
 contained inside module B, we say that module A is the _child_ of module B and
 that module B is the _parent_ of module A. Notice that the entire module tree
 is rooted under the implicit module named `crate`.
 
 The module tree might remind you of the filesystem’s directory tree on your
-computer; this is a very apt comparison! Just like directories in a filesystem,
+computer, this is a very apt comparison! Just like directories in a filesystem,
 you use modules to organize your code. And just like files in a directory, we
 need a way to find our modules.
