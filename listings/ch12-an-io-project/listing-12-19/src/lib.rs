@@ -1,4 +1,5 @@
 // ANCHOR: here
+// ANCHOR: ch13
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
@@ -10,6 +11,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
     results
 }
+// ANCHOR_END: ch13
 // ANCHOR_END: here
 
 #[cfg(test)]
