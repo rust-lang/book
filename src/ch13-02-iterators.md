@@ -20,10 +20,10 @@ useful.
 </Listing>
 
 The iterator is stored in the `v1_iter` variable. Once we’ve created an
-iterator, we can use it in a variety of ways. In Listing 3-5 in Chapter 3, we
-iterated over an array using a `for` loop to execute some code on each of its
-items. Under the hood this implicitly created and then consumed an iterator,
-but we glossed over how exactly that works until now.
+iterator, we can use it in a variety of ways. In Listing 3-5, we iterated over
+an array using a `for` loop to execute some code on each of its items. Under
+the hood, this implicitly created and then consumed an iterator, but we glossed
+over how exactly that works until now.
 
 In the example in Listing 13-11, we separate the creation of the iterator from
 the use of the iterator in the `for` loop. When the `for` loop is called using
@@ -74,7 +74,7 @@ iterator.
 
 The `Iterator` trait only requires implementors to define one method: the
 `next` method, which returns one item of the iterator at a time, wrapped in
-`Some` and, when iteration is over, returns `None`.
+`Some`, and, when iteration is over, returns `None`.
 
 We can call the `next` method on iterators directly; Listing 13-12 demonstrates
 what values are returned from repeated calls to `next` on the iterator created
@@ -111,7 +111,7 @@ trait. Some of these methods call the `next` method in their definition, which
 is why you’re required to implement the `next` method when implementing the
 `Iterator` trait.
 
-Methods that call `next` are called _consuming adapters_ because calling them
+Methods that call `next` are called _consuming adapters_, because calling them
 uses up the iterator. One example is the `sum` method, which takes ownership of
 the iterator and iterates through the items by repeatedly calling `next`, thus
 consuming the iterator. As it iterates through, it adds each item to a running
@@ -129,7 +129,7 @@ test illustrating a use of the `sum` method.
 We aren’t allowed to use `v1_iter` after the call to `sum` because `sum` takes
 ownership of the iterator we call it on.
 
-### Methods that Produce Other Iterators
+### Methods That Produce Other Iterators
 
 _Iterator adapters_ are methods defined on the `Iterator` trait that don’t
 consume the iterator. Instead, they produce different iterators by changing
@@ -139,7 +139,7 @@ Listing 13-14 shows an example of calling the iterator adapter method `map`,
 which takes a closure to call on each item as the items are iterated through.
 The `map` method returns a new iterator that produces the modified items. The
 closure here creates a new iterator in which each item from the vector will be
-incremented by 1:
+incremented by 1.
 
 <Listing number="13-14" file-name="src/main.rs" caption="Calling the iterator adapter `map` to create a new iterator">
 
@@ -160,15 +160,14 @@ never gets called. The warning reminds us why: iterator adapters are lazy, and
 we need to consume the iterator here.
 
 To fix this warning and consume the iterator, we’ll use the `collect` method,
-which we used in Chapter 12 with `env::args` in Listing 12-1. This method
-consumes the iterator and collects the resultant values into a collection data
-type.
+which we used with `env::args` in Listing 12-1. This method consumes the
+iterator and collects the resultant values into a collection data type.
 
 In Listing 13-15, we collect the results of iterating over the iterator that’s
 returned from the call to `map` into a vector. This vector will end up
 containing each item from the original vector, incremented by 1.
 
-<Listing number="13-15" file-name="src/main.rs" caption="Calling the `map` method to create a new iterator and then calling the `collect` method to consume the new iterator and create a vector">
+<Listing number="13-15" file-name="src/main.rs" caption="Calling the `map` method to create a new iterator, and then calling the `collect` method to consume the new iterator and create a vector">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-15/src/main.rs:here}}
