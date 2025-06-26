@@ -20,8 +20,8 @@ customization.
 ### Capturing the Environment with Closures
 
 We’ll first examine how we can use closures to capture values from the
-environment they’re defined in for later use. Here’s the scenario: Every so
-often, our t-shirt company gives away an exclusive, limited-edition shirt to
+environment they’re defined in for later use. Here’s the scenario: every so
+often, our T-shirt company gives away an exclusive, limited-edition shirt to
 someone on our mailing list as a promotion. People on the mailing list can
 optionally add their favorite color to their profile. If the person chosen for
 a free shirt has their favorite color set, they get that color shirt. If the
@@ -34,8 +34,8 @@ number of colors available for simplicity). We represent the company’s
 inventory with an `Inventory` struct that has a field named `shirts` that
 contains a `Vec<ShirtColor>` representing the shirt colors currently in stock.
 The method `giveaway` defined on `Inventory` gets the optional shirt
-color preference of the free shirt winner, and returns the shirt color the
-person will get. This setup is shown in Listing 13-1:
+color preference of the free-shirt winner, and returns the shirt color the
+person will get. This setup is shown in Listing 13-1.
 
 <Listing number="13-1" file-name="src/main.rs" caption="Shirt company giveaway situation">
 
@@ -64,12 +64,12 @@ the closure.
 
 We specify the closure expression `|| self.most_stocked()` as the argument to
 `unwrap_or_else`. This is a closure that takes no parameters itself (if the
-closure had parameters, they would appear between the two vertical bars). The
+closure had parameters, they would appear between the two vertical pipes). The
 body of the closure calls `self.most_stocked()`. We’re defining the closure
 here, and the implementation of `unwrap_or_else` will evaluate the closure
 later if the result is needed.
 
-Running this code prints:
+Running this code prints the following:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-01/output.txt}}
@@ -105,7 +105,7 @@ explicitness and clarity at the cost of being more verbose than is strictly
 necessary. Annotating the types for a closure would look like the definition
 shown in Listing 13-2. In this example, we’re defining a closure and storing it
 in a variable rather than defining the closure in the spot we pass it as an
-argument as we did in Listing 13-1.
+argument, as we did in Listing 13-1.
 
 <Listing number="13-2" file-name="src/main.rs" caption="Adding optional type annotations of the parameter and return value types in the closure">
 
@@ -116,7 +116,7 @@ argument as we did in Listing 13-1.
 </Listing>
 
 With type annotations added, the syntax of closures looks more similar to the
-syntax of functions. Here we define a function that adds 1 to its parameter and
+syntax of functions. Here, we define a function that adds 1 to its parameter and
 a closure that has the same behavior, for comparison. We’ve added some spaces
 to line up the relevant parts. This illustrates how closure syntax is similar
 to function syntax except for the use of pipes and the amount of syntax that is
@@ -129,7 +129,7 @@ let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
 
-The first line shows a function definition, and the second line shows a fully
+The first line shows a function definition and the second line shows a fully
 annotated closure definition. In the third line, we remove the type annotations
 from the closure definition. In the fourth line, we remove the brackets, which
 are optional because the closure body has only one expression. These are all
@@ -177,7 +177,7 @@ captured values.
 
 In Listing 13-4, we define a closure that captures an immutable reference to
 the vector named `list` because it only needs an immutable reference to print
-the value:
+the value.
 
 <Listing number="13-4" file-name="src/main.rs" caption="Defining and calling a closure that captures an immutable reference">
 
@@ -201,7 +201,7 @@ is called. This code compiles, runs, and prints:
 ```
 
 Next, in Listing 13-5, we change the closure body so that it adds an element to
-the `list` vector. The closure now captures a mutable reference:
+the `list` vector. The closure now captures a mutable reference.
 
 <Listing number="13-5" file-name="src/main.rs" caption="Defining and calling a closure that captures a mutable reference">
 
@@ -234,7 +234,7 @@ the data so that it’s owned by the new thread. We’ll discuss threads and why
 you would want to use them in detail in Chapter 16 when we talk about
 concurrency, but for now, let’s briefly explore spawning a new thread using a
 closure that needs the `move` keyword. Listing 13-6 shows Listing 13-4 modified
-to print the vector in a new thread rather than in the main thread:
+to print the vector in a new thread rather than in the main thread.
 
 <Listing number="13-6" file-name="src/main.rs" caption="Using `move` to force the closure for the thread to take ownership of `list`">
 
@@ -250,9 +250,10 @@ closure body prints out the list. In Listing 13-4, the closure only captured
 to `list` needed to print it. In this example, even though the closure body
 still only needs an immutable reference, we need to specify that `list` should
 be moved into the closure by putting the `move` keyword at the beginning of the
-closure definition. The new thread might finish before the rest of the main
-thread finishes, or the main thread might finish first. If the main thread
-maintained ownership of `list` but ended before the new thread did and dropped
+closure definition. If the main thread performed more operations before calling
+`join` on the new thread, the new thread might finish before the rest of the
+main thread finishes, or the main thread might finish first. If the main thread
+maintained ownership of `list` but ended before the new thread and drops
 `list`, the immutable reference in the thread would be invalid. Therefore, the
 compiler requires that `list` be moved into the closure given to the new thread
 so the reference will be valid. Try removing the `move` keyword or using `list`
@@ -271,10 +272,11 @@ Once a closure has captured a reference or captured ownership of a value from
 the environment where the closure is defined (thus affecting what, if anything,
 is moved _into_ the closure), the code in the body of the closure defines what
 happens to the references or values when the closure is evaluated later (thus
-affecting what, if anything, is moved _out of_ the closure). A closure body can
-do any of the following: move a captured value out of the closure, mutate the
-captured value, neither move nor mutate the value, or capture nothing from the
-environment to begin with.
+affecting what, if anything, is moved _out of_ the closure).
+
+A closure body can do any of the following: move a captured value out of the
+closure, mutate the captured value, neither move nor mutate the value, or
+capture nothing from the environment to begin with.
 
 The way a closure captures and handles values from the environment affects
 which traits the closure implements, and traits are how functions and structs
@@ -282,18 +284,18 @@ can specify what kinds of closures they can use. Closures will automatically
 implement one, two, or all three of these `Fn` traits, in an additive fashion,
 depending on how the closure’s body handles the values:
 
-1. `FnOnce` applies to closures that can be called once. All closures implement
-   at least this trait because all closures can be called. A closure that moves
-   captured values out of its body will only implement `FnOnce` and none of the
-   other `Fn` traits, because it can only be called once.
-2. `FnMut` applies to closures that don’t move captured values out of their
-   body, but that might mutate the captured values. These closures can be
-   called more than once.
-3. `Fn` applies to closures that don’t move captured values out of their body
-   and that don’t mutate captured values, as well as closures that capture
-   nothing from their environment. These closures can be called more than once
-   without mutating their environment, which is important in cases such as
-   calling a closure multiple times concurrently.
+* `FnOnce` applies to closures that can be called once. All closures implement
+  at least this trait because all closures can be called. A closure that moves
+  captured values out of its body will only implement `FnOnce` and none of the
+  other `Fn` traits because it can only be called once.
+* `FnMut` applies to closures that don’t move captured values out of their
+  body, but that might mutate the captured values. These closures can be
+  called more than once.
+* `Fn` applies to closures that don’t move captured values out of their body
+  and that don’t mutate captured values, as well as closures that capture
+  nothing from their environment. These closures can be called more than once
+  without mutating their environment, which is important in cases such as
+  calling a closure multiple times concurrently.
 
 Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
 we used in Listing 13-1:
@@ -331,20 +333,21 @@ closures implement `FnOnce`, `unwrap_or_else` accepts all three kinds of
 closures and is as flexible as it can be.
 
 > Note: If what we want to do doesn’t require capturing a value from the
-> environment, we can use the name of a function rather than a closure. For
-> example, we could call `unwrap_or_else(Vec::new)` on a `Option<Vec<T>>` value
-> to get a new, empty vector if the value is `None`. The compiler automatically
+> environment, we can use the name of a function rather than a closure where we
+> need something that implements one of the `Fn` traits. For example, on an
+> `Option<Vec<T>>` value, we could call `unwrap_or_else(Vec::new)` to get a
+> new, empty vector if the value is `None`. The compiler automatically
 > implements whichever of the `Fn` traits is applicable for a function
 > definition.
 
-Now let’s look at the standard library method `sort_by_key` defined on slices,
+Now let’s look at the standard library method `sort_by_key`, defined on slices,
 to see how that differs from `unwrap_or_else` and why `sort_by_key` uses
 `FnMut` instead of `FnOnce` for the trait bound. The closure gets one argument
 in the form of a reference to the current item in the slice being considered,
 and returns a value of type `K` that can be ordered. This function is useful
 when you want to sort a slice by a particular attribute of each item. In
 Listing 13-7, we have a list of `Rectangle` instances and we use `sort_by_key`
-to order them by their `width` attribute from low to high:
+to order them by their `width` attribute from low to high.
 
 <Listing number="13-7" file-name="src/main.rs" caption="Using `sort_by_key` to order rectangles by width">
 
@@ -362,12 +365,12 @@ This code prints:
 
 The reason `sort_by_key` is defined to take an `FnMut` closure is that it calls
 the closure multiple times: once for each item in the slice. The closure `|r|
-r.width` doesn’t capture, mutate, or move out anything from its environment, so
+r.width` doesn’t capture, mutate, or move anything out from its environment, so
 it meets the trait bound requirements.
 
 In contrast, Listing 13-8 shows an example of a closure that implements just
 the `FnOnce` trait, because it moves a value out of the environment. The
-compiler won’t let us use this closure with `sort_by_key`:
+compiler won’t let us use this closure with `sort_by_key`.
 
 <Listing number="13-8" file-name="src/main.rs" caption="Attempting to use an `FnOnce` closure with `sort_by_key`">
 

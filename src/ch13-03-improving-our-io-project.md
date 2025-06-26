@@ -68,7 +68,7 @@ we’re passing ownership of the iterator returned from `env::args` to
 
 Next, we need to update the definition of `Config::build`. Let’s change the
 signature of `Config::build` to look like Listing 13-19. This still won’t
-compile because we need to update the function body.
+compile, because we need to update the function body.
 
 <Listing number="13-19" file-name="src/main.rs" caption="Updating the signature of `Config::build` to expect an iterator">
 
@@ -118,7 +118,7 @@ thing for the `file_path` value.
 ### Making Code Clearer with Iterator Adapters
 
 We can also take advantage of iterators in the `search` function in our I/O
-project, which is reproduced here in Listing 13-21 as it was in Listing 12-19:
+project, which is reproduced here in Listing 13-21 as it was in Listing 12-19.
 
 <Listing number="13-21" file-name="src/lib.rs" caption="The implementation of the `search` function from Listing 12-19">
 
@@ -132,8 +132,8 @@ We can write this code in a more concise way using iterator adapter methods.
 Doing so also lets us avoid having a mutable intermediate `results` vector. The
 functional programming style prefers to minimize the amount of mutable state to
 make code clearer. Removing the mutable state might enable a future enhancement
-to make searching happen in parallel, because we wouldn’t have to manage
-concurrent access to the `results` vector. Listing 13-22 shows this change:
+to make searching happen in parallel because we wouldn’t have to manage
+concurrent access to the `results` vector. Listing 13-22 shows this change.
 
 <Listing number="13-22" file-name="src/lib.rs" caption="Using iterator adapter methods in the implementation of the `search` function">
 
@@ -146,23 +146,37 @@ concurrent access to the `results` vector. Listing 13-22 shows this change:
 Recall that the purpose of the `search` function is to return all lines in
 `contents` that contain the `query`. Similar to the `filter` example in Listing
 13-16, this code uses the `filter` adapter to keep only the lines for which
-`line.contains(query)` returns `true` for. We then collect the matching lines
-into another vector with `collect`. Much simpler! Feel free to make the same
-change to use iterator methods in the `search_case_insensitive` function as
-well.
+`line.contains(query)` returns `true`. We then collect the matching lines into
+another vector with `collect`. Much simpler! Feel free to make the same change
+to use iterator methods in the `search_case_insensitive` function as well.
 
-### Choosing Between Loops or Iterators
+For a further improvement, return an iterator from the `search` function by
+removing the call to `collect` and changing the return type to `impl
+Iterator<Item = &'a str>` so that the function becomes an iterator adapter.
+Note that you’ll also need to update the tests! Search through a large file
+using your `minigrep` tool before and after making this change to observe the
+difference in behavior. Before this change, the program won’t print any results
+until it has collected all of the results, but after the change, the results
+will be printed as each matching line is found because the `for` loop in the
+`run` function is able to take advantage of the laziness of the iterator.
+
+<!-- Old heading. Do not remove or links may break. -->
+
+<a id="choosing-between-loops-or-iterators"></a>
+
+### Choosing Between Loops and Iterators
 
 The next logical question is which style you should choose in your own code and
 why: the original implementation in Listing 13-21 or the version using
-iterators in Listing 13-22. Most Rust programmers prefer to use the iterator
-style. It’s a bit tougher to get the hang of at first, but once you get a feel
-for the various iterator adapters and what they do, iterators can be easier to
-understand. Instead of fiddling with the various bits of looping and building
-new vectors, the code focuses on the high-level objective of the loop. This
-abstracts away some of the commonplace code so it’s easier to see the concepts
-that are unique to this code, such as the filtering condition each element in
-the iterator must pass.
+iterators in Listing 13-22 (assuming we’re collecting all the results before
+returning them rather than returning the iterator). Most Rust programmers
+prefer to use the iterator style. It’s a bit tougher to get the hang of at
+first, but once you get a feel for the various iterator adapters and what they
+do, iterators can be easier to understand. Instead of fiddling with the various
+bits of looping and building new vectors, the code focuses on the high-level
+objective of the loop. This abstracts away some of the commonplace code so it’s
+easier to see the concepts that are unique to this code, such as the filtering
+condition each element in the iterator must pass.
 
 But are the two implementations truly equivalent? The intuitive assumption
 might be that the lower-level loop will be faster. Let’s talk about performance.
