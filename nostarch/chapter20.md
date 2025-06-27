@@ -651,7 +651,7 @@ $ cargo +nightly miri run
    Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
      Running `/Users/chris/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo-miri runner target/miri/aarch64-apple-darwin/debug/unsafe-example`
-warning: creating a shared reference to mutable static is discouraged
+warning: creating a shared reference to mutable static
   --> src/main.rs:14:33
    |
 14 |         println!("COUNTER: {}", COUNTER);
