@@ -18,7 +18,8 @@ binary target, or both.
 All binaries installed with `cargo install` are stored in the installation
 root’s _bin_ folder. If you installed Rust using _rustup.rs_ and don’t have any
 custom configurations, this directory will be *$HOME/.cargo/bin*. Ensure that
-directory is in your `$PATH`to be able to run programs you’ve installed with`cargo install`.
+directory is in your `$PATH` to be able to run programs you’ve installed with
+`cargo install`.
 
 For example, in Chapter 12 we mentioned that there’s a Rust implementation of
 the `grep` tool called `ripgrep` for searching files. To install `ripgrep`, we
