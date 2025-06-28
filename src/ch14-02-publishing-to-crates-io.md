@@ -276,8 +276,8 @@ abcdefghijklmnopqrstuvwxyz012345
 ```
 
 This command will inform Cargo of your API token and store it locally in
-_~/.cargo/credentials_. Note that this token is a _secret_: do not share it
-with anyone else. If you do share it with anyone for any reason, you should
+_~/.cargo/credentials.toml_. Note that this token is a _secret_: do not share
+it with anyone else. If you do share it with anyone for any reason, you should
 revoke it and generate a new token on [crates.io](https://crates.io/)<!-- ignore
 -->.
 
@@ -381,12 +381,12 @@ Publishing a crate uploads a specific version to
 [crates.io](https://crates.io/)<!-- ignore --> for others to use.
 
 Be careful, because a publish is _permanent_. The version can never be
-overwritten, and the code cannot be deleted. One major goal of
-[crates.io](https://crates.io/)<!-- ignore --> is to act as a permanent archive
-of code so that builds of all projects that depend on crates from
-[crates.io](https://crates.io/)<!-- ignore --> will continue to work. Allowing
-version deletions would make fulfilling that goal impossible. However, there is
-no limit to the number of crate versions you can publish.
+overwritten, and the code cannot be deleted except in certain circumstances.
+One major goal of [crates.io](https://crates.io/)<!-- ignore --> is to act as a
+permanent archive of code so that builds of all projects that depend on crates
+from [crates.io](https://crates.io/)<!-- ignore --> will continue to work.
+Allowing version deletions would make fulfilling that goal impossible. However,
+there is no limit to the number of crate versions you can publish.
 
 Run the `cargo publish` command again. It should succeed now:
 
@@ -400,11 +400,17 @@ copy just the relevant lines below
 $ cargo publish
     Updating crates.io index
    Packaging guessing_game v0.1.0 (file:///projects/guessing_game)
+    Packaged 6 files, 1.2KiB (895.0B compressed)
    Verifying guessing_game v0.1.0 (file:///projects/guessing_game)
    Compiling guessing_game v0.1.0
 (file:///projects/guessing_game/target/package/guessing_game-0.1.0)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s
    Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
+    Uploaded guessing_game v0.1.0 to registry `crates-io`
+note: waiting for `guessing_game v0.1.0` to be available at registry
+`crates-io`.
+You may press ctrl-c to skip waiting; the crate should be available shortly.
+   Published guessing_game v0.1.0 at registry `crates-io`
 ```
 
 Congratulations! You’ve now shared your code with the Rust community, and
