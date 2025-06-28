@@ -28,7 +28,7 @@ configure the entire workspace. This file won’t have a `[package]` section.
 Instead, it will start with a `[workspace]` section that will allow us to add
 members to the workspace. We also make a point to use the latest and greatest
 version of Cargo’s resolver algorithm in our workspace by setting the
-`resolver` to `"3"`.
+`resolver` value to `"3"`.
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -49,13 +49,13 @@ copy output below
 
 ```console
 $ cargo new adder
-    Creating binary (application) `adder` package
+     Created binary (application) `adder` package
       Adding `adder` as member of workspace at `file:///projects/add`
 ```
 
 Running `cargo new` inside a workspace also automatically adds the newly created
 package to the `members` key in the `[workspace]` definition in the workspace
-`Cargo.toml`, like this:
+_Cargo.toml_, like this:
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/output-only-01-adder-crate/add/Cargo.toml}}
@@ -100,7 +100,7 @@ copy output below
 
 ```console
 $ cargo new add_one --lib
-    Creating library `add_one` package
+     Created library `add_one` package
       Adding `add_one` as member of workspace at `file:///projects/add`
 ```
 
@@ -138,7 +138,7 @@ In the _add_one/src/lib.rs_ file, let’s add an `add_one` function:
 ```
 
 Now we can have the `adder` package with our binary depend on the `add_one`
-package that has our library. First we’ll need to add a path dependency on
+package that has our library. First, we’ll need to add a path dependency on
 `add_one` to _adder/Cargo.toml_.
 
 <span class="filename">Filename: adder/Cargo.toml</span>
@@ -154,7 +154,7 @@ Next, let’s use the `add_one` function (from the `add_one` crate) in the
 `adder` crate. Open the _adder/src/main.rs_ file and change the `main`
 function to call the `add_one` function, as in Listing 14-7.
 
-<Listing number="14-7" file-name="adder/src/main.rs" caption="Using the `add_one` library crate in the `adder` crate">
+<Listing number="14-7" file-name="adder/src/main.rs" caption="Using the `add_one` library crate from the `adder` crate">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
@@ -370,10 +370,11 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 This output shows `cargo test` only ran the tests for the `add_one` crate and
 didn’t run the `adder` crate tests.
 
-If you publish the crates in the workspace to [crates.io](https://crates.io/),
-each crate in the workspace will need to be published separately. Like `cargo
-test`, we can publish a particular crate in our workspace by using the `-p`
-flag and specifying the name of the crate we want to publish.
+If you publish the crates in the workspace to
+[crates.io](https://crates.io/)<!-- ignore -->, each crate in the workspace
+will need to be published separately. Like `cargo test`, we can publish a
+particular crate in our workspace by using the `-p` flag and specifying the
+name of the crate we want to publish.
 
 For additional practice, add an `add_two` crate to this workspace in a similar
 way as the `add_one` crate!
