@@ -865,7 +865,7 @@ Filename: add_one/Cargo.toml
 
 ```
 [dependencies]
-rand = "0.8.5"
+rand = "0.9.0"
 ```
 
 We can now add `use rand;` to the *add_one/src/lib.rs* file, and building the
