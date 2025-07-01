@@ -66,7 +66,7 @@ The reference count of the `Rc<List>` instances in both `a` and `b` is 2 after
 we change the list in `a` to point to `b`. At the end of `main`, Rust drops the
 variable `b`, which decreases the reference count of the `b` `Rc<List>` instance
 from 2 to 1. The memory that `Rc<List>` has on the heap won’t be dropped at
-this point, because its reference count is 1, not 0. Then Rust drops `a`, which
+this point because its reference count is 1, not 0. Then Rust drops `a`, which
 decreases the reference count of the `a` `Rc<List>` instance from 2 to 1 as
 well. This instance’s memory can’t be dropped either, because the other
 `Rc<List>` instance still refers to it. The memory allocated to the list will
@@ -115,10 +115,10 @@ reference cycles.
 
 So far, we’ve demonstrated that calling `Rc::clone` increases the `strong_count`
 of an `Rc<T>` instance, and an `Rc<T>` instance is only cleaned up if its
-`strong_count` is 0. You can also create a _weak reference_ to the value within
+`strong_count` is 0. You can also create a weak reference to the value within
 an `Rc<T>` instance by calling `Rc::downgrade` and passing a reference to the
-`Rc<T>`. Strong references are how you can share ownership of an `Rc<T>`
-instance. Weak references don’t express an ownership relationship, and their
+`Rc<T>`. _Strong references_ are how you can share ownership of an `Rc<T>`
+instance. _Weak references_ don’t express an ownership relationship, and their
 count doesn’t affect when an `Rc<T>` instance is cleaned up. They won’t cause a
 reference cycle because any cycle involving some weak references will be broken
 once the strong reference count of values involved is 0.
@@ -184,7 +184,7 @@ parent. We’ll do that next.
 
 To make the child node aware of its parent, we need to add a `parent` field to
 our `Node` struct definition. The trouble is in deciding what the type of
-`parent` should be. We know it can’t contain an `Rc<T>` because that would
+`parent` should be. We know it can’t contain an `Rc<T>`, because that would
 create a reference cycle with `leaf.parent` pointing to `branch` and
 `branch.children` pointing to `leaf`, which would cause their `strong_count`
 values to never be 0.
@@ -194,7 +194,7 @@ children: if a parent node is dropped, its child nodes should be dropped as
 well. However, a child should not own its parent: if we drop a child node, the
 parent should still exist. This is a case for weak references!
 
-So, instead of `Rc<T>`, we’ll make the type of `parent` use `Weak<T>`,
+So instead of `Rc<T>`, we’ll make the type of `parent` use `Weak<T>`,
 specifically a `RefCell<Weak<Node>>`. Now our `Node` struct definition looks
 like this:
 
@@ -208,7 +208,7 @@ A node will be able to refer to its parent node but doesn’t own its parent.
 In Listing 15-28, we update `main` to use this new definition so the `leaf`
 node will have a way to refer to its parent, `branch`.
 
-<Listing number="15-28" file-name="src/main.rs" caption="A `leaf` node with a weak reference to its parent node `branch`">
+<Listing number="15-28" file-name="src/main.rs" caption="A `leaf` node with a weak reference to its parent node, `branch`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-28/src/main.rs:there}}
@@ -229,7 +229,7 @@ leaf parent = None
 ```
 
 When we create the `branch` node, it will also have a new `Weak<Node>`
-reference in the `parent` field, because `branch` doesn’t have a parent node.
+reference in the `parent` field because `branch` doesn’t have a parent node.
 We still have `leaf` as one of the children of `branch`. Once we have the
 `Node` instance in `branch`, we can modify `leaf` to give it a `Weak<Node>`
 reference to its parent. We use the `borrow_mut` method on the
@@ -284,7 +284,7 @@ don’t get any memory leaks!
 
 If we try to access the parent of `leaf` after the end of the scope, we’ll get
 `None` again. At the end of the program, the `Rc<Node>` in `leaf` has a strong
-count of 1 and a weak count of 0, because the variable `leaf` is now the only
+count of 1 and a weak count of 0 because the variable `leaf` is now the only
 reference to the `Rc<Node>` again.
 
 All of the logic that manages the counts and value dropping is built into

@@ -18,11 +18,6 @@ smart pointers to work in ways similar to references. Then we’ll look at
 Rust’s _deref coercion_ feature and how it lets us work with either references
 or smart pointers.
 
-> Note: There’s one big difference between the `MyBox<T>` type we’re about to
-> build and the real `Box<T>`: our version will not store its data on the heap.
-> We are focusing this example on `Deref`, so where the data is actually stored
-> is less important than the pointer-like behavior.
-
 <!-- Old links, do not remove -->
 
 <a id="following-the-pointer-to-the-value-with-the-dereference-operator"></a>
@@ -66,7 +61,7 @@ to the value it’s pointing to.
 We can rewrite the code in Listing 15-6 to use a `Box<T>` instead of a
 reference; the dereference operator used on the `Box<T>` in Listing 15-7
 functions in the same way as the dereference operator used on the reference in
-Listing 15-6:
+Listing 15-6.
 
 <Listing number="15-7" file-name="src/main.rs" caption="Using the dereference operator on a `Box<i32>`">
 
@@ -81,14 +76,19 @@ The main difference between Listing 15-7 and Listing 15-6 is that here we set
 reference pointing to the value of `x`. In the last assertion, we can use the
 dereference operator to follow the box’s pointer in the same way that we did
 when `y` was a reference. Next, we’ll explore what is special about `Box<T>`
-that enables us to use the dereference operator by defining our own type.
+that enables us to use the dereference operator by defining our own box type.
 
 ### Defining Our Own Smart Pointer
 
-Let’s build a smart pointer similar to the `Box<T>` type provided by the
-standard library to experience how smart pointers behave differently from
+Let’s build a wrapper type similar to the `Box<T>` type provided by the
+standard library to experience how smart pointer types behave differently from
 references by default. Then we’ll look at how to add the ability to use the
 dereference operator.
+
+> Note: There’s one big difference between the `MyBox<T>` type we’re about to
+> build and the real `Box<T>`: our version will not store its data on the heap.
+> We are focusing this example on `Deref`, so where the data is actually stored
+> is less important than the pointer-like behavior.
 
 The `Box<T>` type is ultimately defined as a tuple struct with one element, so
 Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
@@ -137,7 +137,7 @@ implement the `Deref` trait.
 ### Implementing the `Deref` Trait
 
 As discussed in [“Implementing a Trait on a Type”][impl-trait]<!-- ignore --> in
-Chapter 10, to implement a trait, we need to provide implementations for the
+Chapter 10, to implement a trait we need to provide implementations for the
 trait’s required methods. The `Deref` trait, provided by the standard library,
 requires us to implement one method named `deref` that borrows `self` and
 returns a reference to the inner data. Listing 15-10 contains an implementation
