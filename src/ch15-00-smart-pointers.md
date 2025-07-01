@@ -21,13 +21,6 @@ Rust, with its concept of ownership and borrowing, has an additional difference
 between references and smart pointers: while references only borrow data, in
 many cases smart pointers _own_ the data they point to.
 
-Though we didn’t call them as such at the time, we’ve already encountered a few
-smart pointers in this book, including `String` and `Vec<T>` in Chapter 8. Both
-of these types count as smart pointers because they own some memory and allow
-you to manipulate it. They also have metadata and extra capabilities or
-guarantees. `String`, for example, stores its capacity as metadata and has the
-extra ability to ensure its data will always be valid UTF-8.
-
 Smart pointers are usually implemented using structs. Unlike an ordinary
 struct, smart pointers implement the `Deref` and `Drop` traits. The `Deref`
 trait allows an instance of the smart pointer struct to behave like a reference
@@ -48,6 +41,6 @@ cover the most common smart pointers in the standard library:
 
 In addition, we’ll cover the _interior mutability_ pattern where an immutable
 type exposes an API for mutating an interior value. We’ll also discuss
-_reference cycles_: how they can leak memory and how to prevent them.
+reference cycles: how they can leak memory and how to prevent them.
 
 Let’s dive in!

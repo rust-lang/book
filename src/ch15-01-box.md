@@ -1,9 +1,9 @@
 ## Using `Box<T>` to Point to Data on the Heap
 
-The most straightforward smart pointer is a _box_, whose type is written
-`Box<T>`. Boxes allow you to store data on the heap rather than the stack. What
-remains on the stack is the pointer to the heap data. Refer to Chapter 4 to
-review the difference between the stack and the heap.
+The most straightforward smart pointer is a box, whose type is written
+`Box<T>`. _Boxes_ allow you to store data on the heap rather than the stack.
+What remains on the stack is the pointer to the heap data. Refer to Chapter 4
+to review the difference between the stack and the heap.
 
 Boxes don’t have performance overhead, other than storing their data on the
 heap instead of on the stack. But they don’t have many extra capabilities
@@ -54,7 +54,7 @@ Putting a single value on the heap isn’t very useful, so you won’t use boxes
 themselves in this way very often. Having values like a single `i32` on the
 stack, where they’re stored by default, is more appropriate in the majority of
 situations. Let’s look at a case where boxes allow us to define types that we
-wouldn’t be allowed to if we didn’t have boxes.
+wouldn’t be allowed to define if we didn’t have boxes.
 
 ### Enabling Recursive Types with Boxes
 
@@ -136,7 +136,7 @@ is one more `Cons` value that holds `3` and a `List` value, which is finally
 If we try to compile the code in Listing 15-3, we get the error shown in
 Listing 15-4.
 
-<Listing number="15-4" file-name="output.txt" caption="The error we get when attempting to define a recursive enum">
+<Listing number="15-4" caption="The error we get when attempting to define a recursive enum">
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-03/output.txt}}
@@ -222,11 +222,11 @@ of the `List` in Listing 15-3 to the code in Listing 15-5, which will compile.
 
 The `Cons` variant needs the size of an `i32` plus the space to store the
 box’s pointer data. The `Nil` variant stores no values, so it needs less space
-than the `Cons` variant. We now know that any `List` value will take up the
-size of an `i32` plus the size of a box’s pointer data. By using a box, we’ve
-broken the infinite, recursive chain, so the compiler can figure out the size
-it needs to store a `List` value. Figure 15-2 shows what the `Cons` variant
-looks like now.
+on the stack than the `Cons` variant. We now know that any `List` value will
+take up the size of an `i32` plus the size of a box’s pointer data. By using a
+box, we’ve broken the infinite, recursive chain, so the compiler can figure out
+the size it needs to store a `List` value. Figure 15-2 shows what the `Cons`
+variant looks like now.
 
 <img alt="A rectangle labeled 'Cons' split into two smaller rectangles. The first smaller rectangle holds the label 'i32', and the second smaller rectangle holds the label 'Box' with one inner rectangle that contains the label 'usize', representing the finite size of the box's pointer" src="img/trpl15-02.svg" class="center" />
 

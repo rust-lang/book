@@ -47,8 +47,8 @@ beyond the scope of this book but is an interesting topic to research.
 Because some analysis is impossible, if the Rust compiler can’t be sure the
 code complies with the ownership rules, it might reject a correct program; in
 this way, it’s conservative. If Rust accepted an incorrect program, users
-wouldn’t be able to trust in the guarantees Rust makes. However, if Rust
-rejects a correct program, the programmer will be inconvenienced, but nothing
+wouldn’t be able to trust the guarantees Rust makes. However, if Rust rejects a
+correct program, the programmer will be inconvenienced, but nothing
 catastrophic can occur. The `RefCell<T>` type is useful when you’re sure your
 code follows the borrowing rules but the compiler is unable to understand and
 guarantee that.
@@ -146,7 +146,7 @@ is that we want to test the behavior of the `set_value` method on the
 `set_value` doesn’t return anything for us to make assertions on. We want to be
 able to say that if we create a `LimitTracker` with something that implements
 the `Messenger` trait and a particular value for `max`, when we pass different
-numbers for `value`, the messenger is told to send the appropriate messages.
+numbers for `value` the messenger is told to send the appropriate messages.
 
 We need a mock object that, instead of sending an email or text message when we
 call `send`, will only keep track of the messages it’s told to send. We can
@@ -173,7 +173,7 @@ take the message passed in as a parameter and store it in the `MockMessenger`
 list of `sent_messages`.
 
 In the test, we’re testing what happens when the `LimitTracker` is told to set
-`value` to something that is more than 75 percent of the `max` value. First, we
+`value` to something that is more than 75 percent of the `max` value. First we
 create a new `MockMessenger`, which will start with an empty list of messages.
 Then we create a new `LimitTracker` and give it a reference to the new
 `MockMessenger` and a `max` value of `100`. We call the `set_value` method on
@@ -187,12 +187,12 @@ However, there’s one problem with this test, as shown here:
 {{#include ../listings/ch15-smart-pointers/listing-15-21/output.txt}}
 ```
 
-We can’t modify the `MockMessenger` to keep track of the messages, because the
+We can’t modify the `MockMessenger` to keep track of the messages because the
 `send` method takes an immutable reference to `self`. We also can’t take the
 suggestion from the error text to use `&mut self` in both the `impl` method and
-the `trait` definition. We do not want to change the `Messenger` trait solely
-for the sake of testing. Instead, we need to find a way to make our test code
-work correctly with our existing design.
+the trait definition. We do not want to change the `Messenger` trait solely for
+the sake of testing. Instead, we need to find a way to make our test code work
+correctly with our existing design.
 
 This is a situation in which interior mutability can help! We’ll store the
 `sent_messages` within a `RefCell<T>`, and then the `send` method will be
