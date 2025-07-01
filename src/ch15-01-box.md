@@ -175,7 +175,7 @@ type needs, the compiler looks at the variants, starting with the `Cons`
 variant. The `Cons` variant holds a value of type `i32` and a value of type
 `List`, and this process continues infinitely, as shown in Figure 15-1.
 
-<img alt="An infinite Cons list" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
+<img alt="An infinite Cons list: a rectangle labeled 'Cons' split into two smaller rectangles. The first smaller rectangle holds the label 'i32', and the second smaller rectangle holds the label 'Cons' and a smaller version of the outer 'Cons' rectangle. The 'Cons' rectangles continue to hold smaller and smaller versions of themselves until the smallest comfortably-sized rectangle holds an infinity symbol, indicating that this repetition goes on forever" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
 
 <span class="caption">Figure 15-1: An infinite `List` consisting of infinite
 `Cons` variants</span>
@@ -228,7 +228,7 @@ broken the infinite, recursive chain, so the compiler can figure out the size
 it needs to store a `List` value. Figure 15-2 shows what the `Cons` variant
 looks like now.
 
-<img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" />
+<img alt="A rectangle labeled 'Cons' split into two smaller rectangles. The first smaller rectangle holds the label 'i32', and the second smaller rectangle holds the label 'Box' with one inner rectangle that contains the label 'usize', representing the finite size of the box's pointer" src="img/trpl15-02.svg" class="center" />
 
 <span class="caption">Figure 15-2: A `List` that is not infinitely sized
 because `Cons` holds a `Box`</span>
