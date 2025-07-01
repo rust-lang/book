@@ -73,7 +73,7 @@ well. This instance’s memory can’t be dropped either, because the other
 remain uncollected forever. To visualize this reference cycle, we’ve created the
 diagram in Figure 15-4.
 
-<img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
+<img alt="A rectangle labeled 'a' that points to a rectangle containing the integer 5. A rectangle labeled 'b' that points to a rectangle containing the integer 10. The rectangle containing 5 points to the rectangle containing 10, and the rectangle containing 10 points back to the rectangle containing 5, creating a cycle" src="img/trpl15-04.svg" class="center" />
 
 <span class="caption">Figure 15-4: A reference cycle of lists `a` and `b`
 pointing to each other</span>
