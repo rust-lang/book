@@ -138,7 +138,7 @@ Listing 20-33.
 </Listing>
 
 Here we have two functions, `returns_closure` and `returns_initialized_closure`,
-which both return `impl Fn(i32) -> i32`. Notice that he closures that they
+which both return `impl Fn(i32) -> i32`. Notice that the closures that they
 return are different, even though they implement the same type. If we try to
 compile this, Rust lets us know that it won’t work:
 
