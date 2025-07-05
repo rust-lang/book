@@ -26,21 +26,21 @@ than making you spend lots of time trying to reproduce the exact circumstances
 under which a runtime concurrency bug occurs, incorrect code will refuse to
 compile and present an error explaining the problem. As a result, you can fix
 your code while you’re working on it rather than potentially after it has been
-shipped to production. We’ve nicknamed this aspect of Rust *fearless*
-*concurrency*. Fearless concurrency allows you to write code that is free of
+shipped to production. We’ve nicknamed this aspect of Rust *fearless
+concurrency*. Fearless concurrency allows you to write code that is free of
 subtle bugs and is easy to refactor without introducing new bugs.
 
 > Note: For simplicity’s sake, we’ll refer to many of the problems as
 > *concurrent* rather than being more precise by saying *concurrent and/or
-> parallel*. If this book were about concurrency and/or parallelism, we’d be
-> more specific. For this chapter, please mentally substitute *concurrent
-> and/or parallel* whenever we use *concurrent*.
+> parallel*. For this chapter, please mentally substitute *concurrent and/or
+> parallel* whenever we use *concurrent*. In the next chapter, where the
+> distinction matters more, we’ll be more specific.
 
 Many languages are dogmatic about the solutions they offer for handling
 concurrent problems. For example, Erlang has elegant functionality for
 message-passing concurrency but has only obscure ways to share state between
 threads. Supporting only a subset of possible solutions is a reasonable
-strategy for higher-level languages, because a higher-level language promises
+strategy for higher-level languages because a higher-level language promises
 benefits from giving up some control to gain abstractions. However, lower-level
 languages are expected to provide the solution with the best performance in any
 given situation and have fewer abstractions over the hardware. Therefore, Rust
@@ -75,7 +75,7 @@ to problems, such as:
   inconsistent order
 * Deadlocks, in which two threads are waiting for each other, preventing both
   threads from continuing
-* Bugs that happen only in certain situations and are hard to reproduce and fix
+* Bugs that only happen in certain situations and are hard to reproduce and fix
   reliably
 
 Rust attempts to mitigate the negative effects of using threads, but
@@ -84,19 +84,19 @@ a code structure that is different from that in programs running in a single
 thread.
 
 Programming languages implement threads in a few different ways, and many
-operating systems provide an API the language can call for creating new threads.
-The Rust standard library uses a *1:1* model of thread implementation, whereby a
-program uses one operating system thread per one language thread. There are
-crates that implement other models of threading that make different tradeoffs to
-the 1:1 model. (Rust’s async system, which we will see in the next chapter,
-provides another approach to concurrency as well.)
+operating systems provide an API the programming language can call for creating
+new threads. The Rust standard library uses a *1:1* model of thread
+implementation, whereby a program uses one operating system thread per one
+language thread. There are crates that implement other models of threading that
+make different trade-offs to the 1:1 model. (Rust’s async system, which we will
+see in the next chapter, provides another approach to concurrency as well.)
 
 ### Creating a New Thread with spawn
 
 To create a new thread, we call the `thread::spawn` function and pass it a
 closure (we talked about closures in Chapter 13) containing the code we want to
 run in the new thread. The example in Listing 16-1 prints some text from a main
-thread and other text from a new thread:
+thread and other text from a new thread.
 
 src/main.rs
 
@@ -161,12 +161,13 @@ the time due to the main thread ending, but because there is no guarantee on
 the order in which threads run, we also can’t guarantee that the spawned thread
 will get to run at all!
 
-We can fix the problem of the spawned thread not running or ending prematurely
-by saving the return value of `thread::spawn` in a variable. The return type of
-`thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned value that, when we
-call the `join` method on it, will wait for its thread to finish. Listing 16-2
-shows how to use the `JoinHandle` of the thread we created in Listing 16-1 and
-how to call `join` to make sure the spawned thread finishes before `main` exits:
+We can fix the problem of the spawned thread not running or of it ending
+prematurely by saving the return value of `thread::spawn` in a variable. The
+return type of `thread::spawn` is `JoinHandle<T>`. A `JoinHandle<T>` is an
+owned value that, when we call the `join` method on it, will wait for its
+thread to finish. Listing 16-2 shows how to use the `JoinHandle<T>` of the
+thread we created in Listing 16-1 and how to call `join` to make sure the
+spawned thread finishes before `main` exits.
 
 src/main.rs
 
@@ -191,7 +192,7 @@ fn main() {
 }
 ```
 
-Listing 16-2: Saving a `JoinHandle` from `thread::spawn` to guarantee the thread is run to completion
+Listing 16-2: Saving a `JoinHandle<T>` from `thread::spawn` to guarantee the thread is run to completion
 
 Calling `join` on the handle blocks the thread currently running until the
 thread represented by the handle terminates. *Blocking* a thread means that
@@ -281,8 +282,7 @@ threads run at the same time.
 We’ll often use the `move` keyword with closures passed to `thread::spawn`
 because the closure will then take ownership of the values it uses from the
 environment, thus transferring ownership of those values from one thread to
-another. In “Capturing References or Moving Ownership”
-in Chapter 13, we discussed `move` in the context of closures. Now, we’ll
+another. In “Capturing References or Moving Ownership” in Chapter 13, we discussed `move` in the context of closures. Now we’ll
 concentrate more on the interaction between `move` and `thread::spawn`.
 
 Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
@@ -290,7 +290,7 @@ arguments: we’re not using any data from the main thread in the spawned
 thread’s code. To use data from the main thread in the spawned thread, the
 spawned thread’s closure must capture the values it needs. Listing 16-3 shows
 an attempt to create a vector in the main thread and use it in the spawned
-thread. However, this won’t yet work, as you’ll see in a moment.
+thread. However, this won’t work yet, as you’ll see in a moment.
 
 src/main.rs
 
@@ -345,11 +345,11 @@ error: could not compile `threads` (bin "threads") due to 1 previous error
 
 Rust *infers* how to capture `v`, and because `println!` only needs a reference
 to `v`, the closure tries to borrow `v`. However, there’s a problem: Rust can’t
-tell how long the spawned thread will run, so it doesn’t know if the reference
-to `v` will always be valid.
+tell how long the spawned thread will run, so it doesn’t know whether the
+reference to `v` will always be valid.
 
 Listing 16-4 provides a scenario that’s more likely to have a reference to `v`
-that won’t be valid:
+that won’t be valid.
 
 src/main.rs
 
@@ -371,10 +371,10 @@ fn main() {
 
 Listing 16-4: A thread with a closure that attempts to capture a reference to `v` from a main thread that drops `v`
 
-If Rust allowed us to run this code, there’s a possibility the spawned thread
-would be immediately put in the background without running at all. The spawned
-thread has a reference to `v` inside, but the main thread immediately drops
-`v`, using the `drop` function we discussed in Chapter 15. Then, when the
+If Rust allowed us to run this code, there’s a possibility that the spawned
+thread would be immediately put in the background without running at all. The
+spawned thread has a reference to `v` inside, but the main thread immediately
+drops `v`, using the `drop` function we discussed in Chapter 15. Then, when the
 spawned thread starts to execute, `v` is no longer valid, so a reference to it
 is also invalid. Oh no!
 
@@ -395,7 +395,7 @@ help: to force the closure to take ownership of `v` (and any other referenced va
 By adding the `move` keyword before the closure, we force the closure to take
 ownership of the values it’s using rather than allowing Rust to infer that it
 should borrow the values. The modification to Listing 16-3 shown in Listing
-16-5 will compile and run as we intend:
+16-5 will compile and run as we intend.
 
 src/main.rs
 
@@ -453,8 +453,8 @@ rules when we try to use `v` in the main thread. The `move` keyword overrides
 Rust’s conservative default of borrowing; it doesn’t let us violate the
 ownership rules.
 
-With a basic understanding of threads and the thread API, let’s look at what we
-can *do* with threads.
+Now that we’ve covered what threads are and the methods supplied by the thread
+API, let’s look at some situations in which we can use threads.
 
 ## Using Message Passing to Transfer Data Between Threads
 
@@ -472,7 +472,7 @@ water, such as a stream or a river. If you put something like a rubber duck
 into a river, it will travel downstream to the end of the waterway.
 
 A channel has two halves: a transmitter and a receiver. The transmitter half is
-the upstream location where you put rubber ducks into the river, and the
+the upstream location where you put the rubber duck into the river, and the
 receiver half is where the rubber duck ends up downstream. One part of your
 code calls methods on the transmitter with the data you want to send, and
 another part checks the receiving end for arriving messages. A channel is said
@@ -482,15 +482,15 @@ Here, we’ll work up to a program that has one thread to generate values and
 send them down a channel, and another thread that will receive the values and
 print them out. We’ll be sending simple values between threads using a channel
 to illustrate the feature. Once you’re familiar with the technique, you could
-use channels for any threads that need to communicate between each other, such
-as a chat system or a system where many threads perform parts of a calculation
-and send the parts to one thread that aggregates the results.
+use channels for any threads that need to communicate with each other, such as
+a chat system or a system where many threads perform parts of a calculation and
+send the parts to one thread that aggregates the results.
 
 First, in Listing 16-6, we’ll create a channel but not do anything with it.
 Note that this won’t compile yet because Rust can’t tell what type of values we
 want to send over the channel.
 
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::sync::mpsc;
@@ -500,8 +500,7 @@ fn main() {
 }
 ```
 
-Listing 16-6: Creating a channel and assigning the two
-halves to `tx` and `rx`
+Listing 16-6: Creating a channel and assigning the two halves to `tx` and `rx`
 
 We create a new channel using the `mpsc::channel` function; `mpsc` stands for
 *multiple producer, single consumer*. In short, the way Rust’s standard library
@@ -513,19 +512,19 @@ producer for now, but we’ll add multiple producers when we get this example
 working.
 
 The `mpsc::channel` function returns a tuple, the first element of which is the
-sending end—the transmitter—and the second element is the receiving end—the
-receiver. The abbreviations `tx` and `rx` are traditionally used in many fields
-for *transmitter* and *receiver* respectively, so we name our variables as such
-to indicate each end. We’re using a `let` statement with a pattern that
-destructures the tuples; we’ll discuss the use of patterns in `let` statements
-and destructuring in Chapter 19. For now, know that using a `let` statement
-this way is a convenient approach to extract the pieces of the tuple returned
-by `mpsc::channel`.
+sending end—the transmitter—and the second element of which is the receiving
+end—the receiver. The abbreviations `tx` and `rx` are traditionally used in
+many fields for *transmitter* and *receiver*, respectively, so we name our
+variables as such to indicate each end. We’re using a `let` statement with a
+pattern that destructures the tuples; we’ll discuss the use of patterns in
+`let` statements and destructuring in Chapter 19. For now, know that using a
+`let` statement in this way is a convenient approach to extract the pieces of
+the tuple returned by `mpsc::channel`.
 
 Let’s move the transmitting end into a spawned thread and have it send one
-string so that the spawned thread is communicating with the main thread, as
-shown in Listing 16-7. This is like putting a rubber duck in the river upstream
-or sending a chat message from one thread to another.
+string so the spawned thread is communicating with the main thread, as shown in
+Listing 16-7. This is like putting a rubber duck in the river upstream or
+sending a chat message from one thread to another.
 
 src/main.rs
 
@@ -543,10 +542,10 @@ fn main() {
 }
 ```
 
-Listing 16-7: Moving `tx` to a spawned thread and sending “hi”
+Listing 16-7: Moving `tx` to a spawned thread and sending `"hi"`
 
 Again, we’re using `thread::spawn` to create a new thread and then using `move`
-to move `tx` into the closure so that the spawned thread owns `tx`. The spawned
+to move `tx` into the closure so the spawned thread owns `tx`. The spawned
 thread needs to own the transmitter to be able to send messages through the
 channel.
 
@@ -580,7 +579,7 @@ fn main() {
 }
 ```
 
-Listing 16-8: Receiving the value “hi” in the main thread and printing it
+Listing 16-8: Receiving the value `"hi"` in the main thread and printing it
 
 The receiver has two useful methods: `recv` and `try_recv`. We’re using `recv`,
 short for *receive*, which will block the main thread’s execution and wait
@@ -621,7 +620,7 @@ advantage of thinking about ownership throughout your Rust programs. Let’s do
 an experiment to show how channels and ownership work together to prevent
 problems: we’ll try to use a `val` value in the spawned thread *after* we’ve
 sent it down the channel. Try compiling the code in Listing 16-9 to see why
-this code isn’t allowed:
+this code isn’t allowed.
 
 src/main.rs
 
@@ -671,18 +670,19 @@ For more information about this error, try `rustc --explain E0382`.
 error: could not compile `message-passing` (bin "message-passing") due to 1 previous error
 ```
 
-Our concurrency mistake has caused a compile time error. The `send` function
-takes ownership of its parameter, and when the value is moved, the receiver
+Our concurrency mistake has caused a compile-time error. The `send` function
+takes ownership of its parameter, and when the value is moved the receiver
 takes ownership of it. This stops us from accidentally using the value again
 after sending it; the ownership system checks that everything is okay.
 
 ### Sending Multiple Values and Seeing the Receiver Waiting
 
 The code in Listing 16-8 compiled and ran, but it didn’t clearly show us that
-two separate threads were talking to each other over the channel. In Listing
-16-10 we’ve made some modifications that will prove the code in Listing 16-8 is
-running concurrently: the spawned thread will now send multiple messages and
-pause for a second between each message.
+two separate threads were talking to each other over the channel.
+
+In Listing 16-10 we’ve made some modifications that will prove the code in
+Listing 16-8 is running concurrently: the spawned thread will now send multiple
+messages and pause for a second between each message.
 
 src/main.rs
 
@@ -714,19 +714,19 @@ fn main() {
 }
 ```
 
-Listing 16-10: Sending multiple messages and pausing between each
+Listing 16-10: Sending multiple messages and pausing between each one
 
 This time, the spawned thread has a vector of strings that we want to send to
 the main thread. We iterate over them, sending each individually, and pause
 between each by calling the `thread::sleep` function with a `Duration` value of
-1 second.
+one second.
 
 In the main thread, we’re not calling the `recv` function explicitly anymore:
 instead, we’re treating `rx` as an iterator. For each value received, we’re
 printing it. When the channel is closed, iteration will end.
 
 When running the code in Listing 16-10, you should see the following output
-with a 1-second pause in between each line:
+with a one-second pause in between each line:
 
 <!-- Not extracting output because changes to this output aren't significant;
 the changes are likely to be due to the threads running differently rather than
@@ -748,7 +748,7 @@ the spawned thread.
 Earlier we mentioned that `mpsc` was an acronym for *multiple producer,
 single consumer*. Let’s put `mpsc` to use and expand the code in Listing 16-10
 to create multiple threads that all send values to the same receiver. We can do
-so by cloning the transmitter, as shown in Listing 16-11:
+so by cloning the transmitter, as shown in Listing 16-11.
 
 src/main.rs
 
@@ -827,17 +827,17 @@ concurrency.
 
 ## Shared-State Concurrency
 
-Message passing is a fine way of handling concurrency, but it’s not the only
-one. Another method would be for multiple threads to access the same shared
-data. Consider this part of the slogan from the Go language documentation
-again: “do not communicate by sharing memory.”
+Message passing is a fine way to handle concurrency, but it’s not the only way.
+Another method would be for multiple threads to access the same shared data.
+Consider this part of the slogan from the Go language documentation again: “Do
+not communicate by sharing memory.”
 
 What would communicating by sharing memory look like? In addition, why would
 message-passing enthusiasts caution not to use memory sharing?
 
-In a way, channels in any programming language are similar to single ownership,
+In a way, channels in any programming language are similar to single ownership
 because once you transfer a value down a channel, you should no longer use that
-value. Shared memory concurrency is like multiple ownership: multiple threads
+value. Shared-memory concurrency is like multiple ownership: multiple threads
 can access the same memory location at the same time. As you saw in Chapter 15,
 where smart pointers made multiple ownership possible, multiple ownership can
 add complexity because these different owners need managing. Rust’s type system
@@ -847,10 +847,10 @@ for shared memory.
 
 ### Using Mutexes to Allow Access to Data from One Thread at a Time
 
-*Mutex* is an abbreviation for *mutual exclusion*, as in, a mutex allows only
+*Mutex* is an abbreviation for *mutual exclusion*, as in a mutex allows only
 one thread to access some data at any given time. To access the data in a
 mutex, a thread must first signal that it wants access by asking to acquire the
-mutex’s *lock*. The lock is a data structure that is part of the mutex that
+mutex’s lock. The *lock* is a data structure that is part of the mutex that
 keeps track of who currently has exclusive access to the data. Therefore, the
 mutex is described as *guarding* the data it holds via the locking system.
 
@@ -877,7 +877,7 @@ system and ownership rules, you can’t get locking and unlocking wrong.
 #### The API of Mutex<T>
 
 As an example of how to use a mutex, let’s start by using a mutex in a
-single-threaded context, as shown in Listing 16-12:
+single-threaded context, as shown in Listing 16-12.
 
 src/main.rs
 
@@ -914,26 +914,24 @@ that we acquire a lock before using the value in `m`. The type of `m` is
 value. We can’t forget; the type system won’t let us access the inner `i32`
 otherwise.
 
-As you might suspect, `Mutex<T>` is a smart pointer. More accurately, the call
-to `lock` *returns* a smart pointer called `MutexGuard`, wrapped in a
-`LockResult` that we handled with the call to `unwrap`. The `MutexGuard` smart
-pointer implements `Deref` to point at our inner data; the smart pointer also
-has a `Drop` implementation that releases the lock automatically when a
-`MutexGuard` goes out of scope, which happens at the end of the inner scope. As
-a result, we don’t risk forgetting to release the lock and blocking the mutex
-from being used by other threads, because the lock release happens
-automatically.
+The call to `lock` returns a type called `MutexGuard`, wrapped in a
+`LockResult` that we handled with the call to `unwrap`. The `MutexGuard` type
+implements `Deref` to point at our inner data; the type also has a `Drop`
+implementation that releases the lock automatically when a `MutexGuard` goes
+out of scope, which happens at the end of the inner scope. As a result, we
+don’t risk forgetting to release the lock and blocking the mutex from being
+used by other threads because the lock release happens automatically.
 
 After dropping the lock, we can print the mutex value and see that we were able
-to change the inner `i32` to 6.
+to change the inner `i32` to `6`.
 
 #### Sharing a Mutex<T> Between Multiple Threads
 
-Now, let’s try to share a value between multiple threads using `Mutex<T>`.
-We’ll spin up 10 threads and have them each increment a counter value by 1, so
-the counter goes from 0 to 10. The next example in Listing 16-13 will have
-a compiler error, and we’ll use that error to learn more about using
-`Mutex<T>` and how Rust helps us use it correctly.
+Now let’s try to share a value between multiple threads using `Mutex<T>`. We’ll
+spin up 10 threads and have them each increment a counter value by 1, so the
+counter goes from 0 to 10. The example in Listing 16-13 will have a compiler
+error, and we’ll use that error to learn more about using `Mutex<T>` and how
+Rust helps us use it correctly.
 
 src/main.rs
 
@@ -962,7 +960,7 @@ fn main() {
 }
 ```
 
-Listing 16-13: Ten threads each increment a counter guarded by a `Mutex<T>`
+Listing 16-13: Ten threads, each incrementing a counter guarded by a `Mutex<T>`
 
 We create a `counter` variable to hold an `i32` inside a `Mutex<T>`, as we did
 in Listing 16-12. Next, we create 10 threads by iterating over a range of
@@ -1009,13 +1007,13 @@ error: could not compile `shared-state` (bin "shared-state") due to 1 previous e
 ```
 
 The error message states that the `counter` value was moved in the previous
-iteration of the loop. Rust is telling us that we can’t move the ownership
-of `counter` into multiple threads. Let’s fix the compiler error with a
+iteration of the loop. Rust is telling us that we can’t move the ownership of
+lock `counter` into multiple threads. Let’s fix the compiler error with the
 multiple-ownership method we discussed in Chapter 15.
 
 #### Multiple Ownership with Multiple Threads
 
-In Chapter 15, we gave a value multiple owners by using the smart pointer
+In Chapter 15, we gave a value to multiple owners by using the smart pointer
 `Rc<T>` to create a reference counted value. Let’s do the same here and see
 what happens. We’ll wrap the `Mutex<T>` in `Rc<T>` in Listing 16-14 and clone
 the `Rc<T>` before moving ownership to the thread.
@@ -1058,34 +1056,28 @@ lot.
 $ cargo run
    Compiling shared-state v0.1.0 (file:///projects/shared-state)
 error[E0277]: `Rc<Mutex<i32>>` cannot be sent between threads safely
-   --> src/main.rs:11:36
-    |
-11  |           let handle = thread::spawn(move || {
-    |                        ------------- ^------
-    |                        |             |
-    |  ______________________|_____________within this `{closure@src/main.rs:11:36: 11:43}`
-    | |                      |
-    | |                      required by a bound introduced by this call
-12  | |             let mut num = counter.lock().unwrap();
-13  | |
-14  | |             *num += 1;
-15  | |         });
-    | |_________^ `Rc<Mutex<i32>>` cannot be sent between threads safely
-    |
-    = help: within `{closure@src/main.rs:11:36: 11:43}`, the trait `Send` is not implemented for `Rc<Mutex<i32>>`, which is required by `{closure@src/main.rs:11:36: 11:43}: Send`
+  --> src/main.rs:11:36
+   |
+11 |           let handle = thread::spawn(move || {
+   |                        ------------- ^------
+   |                        |             |
+   |  ______________________|_____________within this `{closure@src/main.rs:11:36: 11:43}`
+   | |                      |
+   | |                      required by a bound introduced by this call
+12 | |             let mut num = counter.lock().unwrap();
+13 | |
+14 | |             *num += 1;
+15 | |         });
+   | |_________^ `Rc<Mutex<i32>>` cannot be sent between threads safely
+   |
+   = help: within `{closure@src/main.rs:11:36: 11:43}`, the trait `Send` is not implemented for `Rc<Mutex<i32>>`
 note: required because it's used within this closure
-   --> src/main.rs:11:36
-    |
-11  |         let handle = thread::spawn(move || {
-    |                                    ^^^^^^^
+  --> src/main.rs:11:36
+   |
+11 |         let handle = thread::spawn(move || {
+   |                                    ^^^^^^^
 note: required by a bound in `spawn`
-   --> file:///home/.rustup/toolchains/1.82/lib/rustlib/src/rust/library/std/src/thread/mod.rs:675:8
-    |
-672 | pub fn spawn<F, T>(f: F) -> JoinHandle<T>
-    |        ----- required by a bound in this function
-...
-675 |     F: Send + 'static,
-    |        ^^^^ required by this bound in `spawn`
+  --> /rustc/4eb161250e340c8f48f66e2b929ef4a5bed7c181/library/std/src/thread/mod.rs:728:1
 
 For more information about this error, try `rustc --explain E0277`.
 error: could not compile `shared-state` (bin "shared-state") due to 1 previous error
@@ -1103,7 +1095,7 @@ subtracts from the count when each clone is dropped. But it doesn’t use any
 concurrency primitives to make sure that changes to the count can’t be
 interrupted by another thread. This could lead to wrong counts—subtle bugs that
 could in turn lead to memory leaks or a value being dropped before we’re done
-with it. What we need is a type that is exactly like `Rc<T>` but one that makes
+with it. What we need is a type that is exactly like `Rc<T>`, but that makes
 changes to the reference count in a thread-safe way.
 
 #### Atomic Reference Counting with Arc<T>
@@ -1125,7 +1117,7 @@ guarantees atomics provide.
 
 Let’s return to our example: `Arc<T>` and `Rc<T>` have the same API, so we fix
 our program by changing the `use` line, the call to `new`, and the call to
-`clone`. The code in Listing 16-15 will finally compile and run:
+`clone`. The code in Listing 16-15 will finally compile and run.
 
 src/main.rs
 
@@ -1182,7 +1174,7 @@ type for this example so we could concentrate on how `Mutex<T>` works.
 
 ### Similarities Between RefCell<T>/Rc<T> and Mutex<T>/Arc<T>
 
-You might have noticed that `counter` is immutable, but we could get a mutable
+You might have noticed that `counter` is immutable but we could get a mutable
 reference to the value inside it; this means `Mutex<T>` provides interior
 mutability, as the `Cell` family does. In the same way we used `RefCell<T>` in
 Chapter 15 to allow us to mutate contents inside an `Rc<T>`, we use `Mutex<T>`
@@ -1203,32 +1195,36 @@ useful information.
 We’ll round out this chapter by talking about the `Send` and `Sync` traits and
 how we can use them with custom types.
 
-## Extensible Concurrency with the Sync and Send Traits
+## Extensible Concurrency with the Send and Sync Traits
 
-Interestingly, the Rust language has *very* few concurrency features. Almost
-every concurrency feature we’ve talked about so far in this chapter has been
-part of the standard library, not the language. Your options for handling
-concurrency are not limited to the language or the standard library; you can
-write your own concurrency features or use those written by others.
+<!-- Old link, do not remove -->
 
-However, two concurrency concepts are embedded in the language: the
-`std::marker` traits `Sync` and `Send`.
+<a id="extensible-concurrency-with-the-sync-and-send-traits"></a>
+
+Interestingly, almost every concurrency feature we’ve talked about so far in
+this chapter has been part of the standard library, not the language. Your
+options for handling concurrency are not limited to the language or the
+standard library; you can write your own concurrency features or use those
+written by others.
+
+However, among the key concurrency concepts that are embedded in the language
+rather than the standard library are the `std::marker` traits `Send` and `Sync`.
 
 ### Allowing Transference of Ownership Between Threads with Send
 
 The `Send` marker trait indicates that ownership of values of the type
 implementing `Send` can be transferred between threads. Almost every Rust type
-is `Send`, but there are some exceptions, including `Rc<T>`: this cannot be
-`Send` because if you cloned an `Rc<T>` value and tried to transfer ownership
-of the clone to another thread, both threads might update the reference count
-at the same time. For this reason, `Rc<T>` is implemented for use in
-single-threaded situations where you don’t want to pay the thread-safe
-performance penalty.
+implements `Send`, but there are some exceptions, including `Rc<T>`: this
+cannot implement `Send` because if you cloned an `Rc<T>` value and tried to
+transfer ownership of the clone to another thread, both threads might update
+the reference count at the same time. For this reason, `Rc<T>` is implemented
+for use in single-threaded situations where you don’t want to pay the
+thread-safe performance penalty.
 
 Therefore, Rust’s type system and trait bounds ensure that you can never
 accidentally send an `Rc<T>` value across threads unsafely. When we tried to do
-this in Listing 16-14, we got the error `the trait Send is not implemented for Rc<Mutex<i32>>`. When we switched to `Arc<T>`, which is `Send`, the code
-compiled.
+this in Listing 16-14, we got the error `` the trait `Send` is not implemented for `Rc<Mutex<i32>>` ``. When we switched to `Arc<T>`, which does implement
+`Send`, the code compiled.
 
 Any type composed entirely of `Send` types is automatically marked as `Send` as
 well. Almost all primitive types are `Send`, aside from raw pointers, which
@@ -1237,25 +1233,28 @@ we’ll discuss in Chapter 20.
 ### Allowing Access from Multiple Threads with Sync
 
 The `Sync` marker trait indicates that it is safe for the type implementing
-`Sync` to be referenced from multiple threads. In other words, any type `T` is
-`Sync` if `&T` (an immutable reference to `T`) is `Send`, meaning the reference
-can be sent safely to another thread. Similar to `Send`, primitive types are
-`Sync`, and types composed entirely of types that are `Sync` are also `Sync`.
+`Sync` to be referenced from multiple threads. In other words, any type `T`
+implements `Sync` if `&T` (an immutable reference to `T`) implements `Send`,
+meaning the reference can be sent safely to another thread. Similar to `Send`,
+primitive types all implement `Sync`, and types composed entirely of types that
+implement `Sync` also implement `Sync`.
 
-The smart pointer `Rc<T>` is also not `Sync` for the same reasons that it’s not
-`Send`. The `RefCell<T>` type (which we talked about in Chapter 15) and the
-family of related `Cell<T>` types are not `Sync`. The implementation of borrow
-checking that `RefCell<T>` does at runtime is not thread-safe. The smart
-pointer `Mutex<T>` is `Sync` and can be used to share access with multiple
-threads as you saw in “Sharing a `Mutex<T>` Between Multiple
+The smart pointer `Rc<T>` also doesn’t implement `Sync` for the same reasons
+that it doesn’t implement `Send`. The `RefCell<T>` type (which we talked about
+in Chapter 15) and the family of related `Cell<T>` types don’t implement
+`Sync`. The implementation of borrow checking that `RefCell<T>` does at runtime
+is not thread-safe. The smart pointer `Mutex<T>` implements `Sync` and can be
+used to share access with multiple threads, as you saw in “Sharing a
+`Mutex<T>` Between Multiple
 Threads”.
 
 ### Implementing Send and Sync Manually Is Unsafe
 
-Because types that are made up of `Send` and `Sync` traits are automatically
-also `Send` and `Sync`, we don’t have to implement those traits manually. As
-marker traits, they don’t even have any methods to implement. They’re just
-useful for enforcing invariants related to concurrency.
+Because types composed entirely of other types that implement the `Send` and
+`Sync` traits also automatically implement `Send` and `Sync`, we don’t have to
+implement those traits manually. As marker traits, they don’t even have any
+methods to implement. They’re just useful for enforcing invariants related to
+concurrency.
 
 Manually implementing these traits involves implementing unsafe Rust code.
 We’ll talk about using unsafe Rust code in Chapter 20; for now, the important
@@ -1266,10 +1265,10 @@ uphold them.
 
 ## Summary
 
-This isn’t the last you’ll see of concurrency in this book: the whole next
-chapter focuses on async programming, and the project in Chapter 21 will use the
-concepts in this chapter in a more realistic situation than the smaller examples
-discussed here.
+This isn’t the last you’ll see of concurrency in this book: the next chapter
+focuses on async programming, and the project in Chapter 21 will use the
+concepts in this chapter in a more realistic situation than the smaller
+examples discussed here.
 
 As mentioned earlier, because very little of how Rust handles concurrency is
 part of the language, many concurrency solutions are implemented as crates.

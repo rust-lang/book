@@ -17,7 +17,7 @@ to problems, such as:
   inconsistent order
 - Deadlocks, in which two threads are waiting for each other, preventing both
   threads from continuing
-- Bugs that happen only in certain situations and are hard to reproduce and fix
+- Bugs that only happen in certain situations and are hard to reproduce and fix
   reliably
 
 Rust attempts to mitigate the negative effects of using threads, but
@@ -26,19 +26,19 @@ a code structure that is different from that in programs running in a single
 thread.
 
 Programming languages implement threads in a few different ways, and many
-operating systems provide an API the language can call for creating new threads.
-The Rust standard library uses a _1:1_ model of thread implementation, whereby a
-program uses one operating system thread per one language thread. There are
-crates that implement other models of threading that make different tradeoffs to
-the 1:1 model. (Rust’s async system, which we will see in the next chapter,
-provides another approach to concurrency as well.)
+operating systems provide an API the programming language can call for creating
+new threads. The Rust standard library uses a _1:1_ model of thread
+implementation, whereby a program uses one operating system thread per one
+language thread. There are crates that implement other models of threading that
+make different trade-offs to the 1:1 model. (Rust’s async system, which we will
+see in the next chapter, provides another approach to concurrency as well.)
 
 ### Creating a New Thread with `spawn`
 
 To create a new thread, we call the `thread::spawn` function and pass it a
 closure (we talked about closures in Chapter 13) containing the code we want to
 run in the new thread. The example in Listing 16-1 prints some text from a main
-thread and other text from a new thread:
+thread and other text from a new thread.
 
 <Listing number="16-1" file-name="src/main.rs" caption="Creating a new thread to print one thing while the main thread prints something else">
 
@@ -88,13 +88,13 @@ the time due to the main thread ending, but because there is no guarantee on
 the order in which threads run, we also can’t guarantee that the spawned thread
 will get to run at all!
 
-We can fix the problem of the spawned thread not running or ending prematurely
-by saving the return value of `thread::spawn` in a variable. The return type of
-`thread::spawn` is `JoinHandle<T>`. A `JoinHandle<T>` is an owned value that,
-when we call the `join` method on it, will wait for its thread to finish.
-Listing 16-2 shows how to use the `JoinHandle<T>` of the thread we created in
-Listing 16-1 and how to call `join` to make sure the spawned thread finishes
-before `main` exits.
+We can fix the problem of the spawned thread not running or of it ending
+prematurely by saving the return value of `thread::spawn` in a variable. The
+return type of `thread::spawn` is `JoinHandle<T>`. A `JoinHandle<T>` is an
+owned value that, when we call the `join` method on it, will wait for its
+thread to finish. Listing 16-2 shows how to use the `JoinHandle<T>` of the
+thread we created in Listing 16-1 and how to call `join` to make sure the
+spawned thread finishes before `main` exits.
 
 <Listing number="16-2" file-name="src/main.rs" caption="Saving a `JoinHandle<T>` from `thread::spawn` to guarantee the thread is run to completion">
 
@@ -172,11 +172,11 @@ threads run at the same time.
 
 ### Using `move` Closures with Threads
 
-We'll often use the `move` keyword with closures passed to `thread::spawn`
+We’ll often use the `move` keyword with closures passed to `thread::spawn`
 because the closure will then take ownership of the values it uses from the
 environment, thus transferring ownership of those values from one thread to
-another. In [“Capturing the Environment With Closures”][capture]<!-- ignore -->
-in Chapter 13, we discussed `move` in the context of closures. Now, we’ll
+another. In [“Capturing References or Moving Ownership”][capture]<!-- ignore
+--> in Chapter 13, we discussed `move` in the context of closures. Now we’ll
 concentrate more on the interaction between `move` and `thread::spawn`.
 
 Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
@@ -209,7 +209,7 @@ tell how long the spawned thread will run, so it doesn’t know whether the
 reference to `v` will always be valid.
 
 Listing 16-4 provides a scenario that’s more likely to have a reference to `v`
-that won’t be valid:
+that won’t be valid.
 
 <Listing number="16-4" file-name="src/main.rs" caption="A thread with a closure that attempts to capture a reference to `v` from a main thread that drops `v`">
 
@@ -277,4 +277,4 @@ ownership rules.
 Now that we’ve covered what threads are and the methods supplied by the thread
 API, let’s look at some situations in which we can use threads.
 
-[capture]: ch13-01-closures.html#capturing-the-environment-with-closures
+[capture]: ch13-01-closures.html#capturing-references-or-moving-ownership

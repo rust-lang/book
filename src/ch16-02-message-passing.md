@@ -5,7 +5,7 @@ passing_, where threads or actors communicate by sending each other messages
 containing data. Here’s the idea in a slogan from [the Go language documentation](https://golang.org/doc/effective_go.html#concurrency):
 “Do not communicate by sharing memory; instead, share memory by communicating.”
 
-To accomplish message-sending concurrency, Rust's standard library provides an
+To accomplish message-sending concurrency, Rust’s standard library provides an
 implementation of channels. A _channel_ is a general programming concept by
 which data is sent from one thread to another.
 
@@ -51,13 +51,13 @@ working.
 
 The `mpsc::channel` function returns a tuple, the first element of which is the
 sending end—the transmitter—and the second element of which is the receiving
-end—the receiver. The abbreviations `tx` and `rx` are traditionally used in many
-fields for _transmitter_ and _receiver_, respectively, so we name our variables
-as such to indicate each end. We’re using a `let` statement with a pattern that
-destructures the tuples; we’ll discuss the use of patterns in `let` statements
-and destructuring in Chapter 19. For now, know that using a `let` statement this
-way is a convenient approach to extract the pieces of the tuple returned by
-`mpsc::channel`.
+end—the receiver. The abbreviations `tx` and `rx` are traditionally used in
+many fields for _transmitter_ and _receiver_, respectively, so we name our
+variables as such to indicate each end. We’re using a `let` statement with a
+pattern that destructures the tuples; we’ll discuss the use of patterns in
+`let` statements and destructuring in Chapter 19. For now, know that using a
+`let` statement in this way is a convenient approach to extract the pieces of
+the tuple returned by `mpsc::channel`.
 
 Let’s move the transmitting end into a spawned thread and have it send one
 string so the spawned thread is communicating with the main thread, as shown in
@@ -156,18 +156,19 @@ us an error if we try to compile the code in Listing 16-9:
 {{#include ../listings/ch16-fearless-concurrency/listing-16-09/output.txt}}
 ```
 
-Our concurrency mistake has caused a compile time error. The `send` function
-takes ownership of its parameter, and when the value is moved, the receiver
+Our concurrency mistake has caused a compile-time error. The `send` function
+takes ownership of its parameter, and when the value is moved the receiver
 takes ownership of it. This stops us from accidentally using the value again
 after sending it; the ownership system checks that everything is okay.
 
 ### Sending Multiple Values and Seeing the Receiver Waiting
 
 The code in Listing 16-8 compiled and ran, but it didn’t clearly show us that
-two separate threads were talking to each other over the channel. In Listing
-16-10 we’ve made some modifications that will prove the code in Listing 16-8 is
-running concurrently: the spawned thread will now send multiple messages and
-pause for a second between each message.
+two separate threads were talking to each other over the channel.
+
+In Listing 16-10 we’ve made some modifications that will prove the code in
+Listing 16-8 is running concurrently: the spawned thread will now send multiple
+messages and pause for a second between each message.
 
 <Listing number="16-10" file-name="src/main.rs" caption="Sending multiple messages and pausing between each one">
 
