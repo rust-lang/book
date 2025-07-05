@@ -1,14 +1,14 @@
 ## Shared-State Concurrency
 
-Message passing is a fine way to handle concurrency, but it’s not the only
-way. Another method would be for multiple threads to access the same shared
-data. Consider this part of the slogan from the Go language documentation
-again: “Do not communicate by sharing memory.”
+Message passing is a fine way to handle concurrency, but it’s not the only way.
+Another method would be for multiple threads to access the same shared data.
+Consider this part of the slogan from the Go language documentation again: “Do
+not communicate by sharing memory.”
 
 What would communicating by sharing memory look like? In addition, why would
 message-passing enthusiasts caution not to use memory sharing?
 
-In a way, channels in any programming language are similar to single ownership,
+In a way, channels in any programming language are similar to single ownership
 because once you transfer a value down a channel, you should no longer use that
 value. Shared-memory concurrency is like multiple ownership: multiple threads
 can access the same memory location at the same time. As you saw in Chapter 15,
@@ -23,7 +23,7 @@ for shared memory.
 _Mutex_ is an abbreviation for _mutual exclusion_, as in a mutex allows only
 one thread to access some data at any given time. To access the data in a
 mutex, a thread must first signal that it wants access by asking to acquire the
-mutex’s _lock_. The lock is a data structure that is part of the mutex that
+mutex’s lock. The _lock_ is a data structure that is part of the mutex that
 keeps track of who currently has exclusive access to the data. Therefore, the
 mutex is described as _guarding_ the data it holds via the locking system.
 
@@ -76,18 +76,16 @@ that we acquire a lock before using the value in `m`. The type of `m` is
 value. We can’t forget; the type system won’t let us access the inner `i32`
 otherwise.
 
-As you might suspect, `Mutex<T>` is a smart pointer. More accurately, the call
-to `lock` _returns_ a smart pointer called `MutexGuard`, wrapped in a
-`LockResult` that we handled with the call to `unwrap`. The `MutexGuard` smart
-pointer implements `Deref` to point at our inner data; the smart pointer also
-has a `Drop` implementation that releases the lock automatically when a
-`MutexGuard` goes out of scope, which happens at the end of the inner scope. As
-a result, we don’t risk forgetting to release the lock and blocking the mutex
-from being used by other threads, because the lock release happens
-automatically.
+The call to `lock` returns a type called `MutexGuard`, wrapped in a
+`LockResult` that we handled with the call to `unwrap`. The `MutexGuard` type
+implements `Deref` to point at our inner data; the type also has a `Drop`
+implementation that releases the lock automatically when a `MutexGuard` goes
+out of scope, which happens at the end of the inner scope. As a result, we
+don’t risk forgetting to release the lock and blocking the mutex from being
+used by other threads because the lock release happens automatically.
 
 After dropping the lock, we can print the mutex value and see that we were able
-to change the inner `i32` to 6.
+to change the inner `i32` to `6`.
 
 #### Sharing a `Mutex<T>` Between Multiple Threads
 
@@ -125,8 +123,8 @@ We hinted that this example wouldn’t compile. Now let’s find out why!
 ```
 
 The error message states that the `counter` value was moved in the previous
-iteration of the loop. Rust is telling us that we can’t move the ownership
-of lock `counter` into multiple threads. Let’s fix the compiler error with the
+iteration of the loop. Rust is telling us that we can’t move the ownership of
+lock `counter` into multiple threads. Let’s fix the compiler error with the
 multiple-ownership method we discussed in Chapter 15.
 
 #### Multiple Ownership with Multiple Threads
@@ -164,7 +162,7 @@ subtracts from the count when each clone is dropped. But it doesn’t use any
 concurrency primitives to make sure that changes to the count can’t be
 interrupted by another thread. This could lead to wrong counts—subtle bugs that
 could in turn lead to memory leaks or a value being dropped before we’re done
-with it. What we need is a type that is exactly like `Rc<T>` but one that makes
+with it. What we need is a type that is exactly like `Rc<T>`, but that makes
 changes to the reference count in a thread-safe way.
 
 #### Atomic Reference Counting with `Arc<T>`
