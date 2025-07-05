@@ -1,0 +1,28 @@
+$ cargo +nightly miri run
+   Compiling unsafe-example-2 v0.1.0 (file:///projects/unsafe-example-2)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running `file:///home/.rustup/toolchains/nightly/bin/cargo-miri runner target/miri/debug/unsafe-example-2`
+error: Undefined Behavior: Data race detected between (1) non-atomic write on thread `main` and (2) non-atomic read on thread `unnamed-1` at alloc1. (2) just happened here
+  --> src/main.rs:10:9
+   |
+10 |         COUNTER += inc;
+   |         ^^^^^^^^^^^^^^ Data race detected between (1) non-atomic write on thread `main` and (2) non-atomic read on thread `unnamed-1` at alloc1. (2) just happened here
+   |
+help: and (1) occurred earlier here
+  --> src/main.rs:10:9
+   |
+10 |         COUNTER += inc;
+   |         ^^^^^^^^^^^^^^
+   = help: this indicates a bug in the program: it performed an invalid operation, and caused Undefined Behavior
+   = help: see https://doc.rust-lang.org/nightly/reference/behavior-considered-undefined.html for further information
+   = note: BACKTRACE (of the first span) on thread `unnamed-1`:
+   = note: inside `add_to_count` at src/main.rs:10:9: 10:23
+note: inside closure
+  --> src/main.rs:18:13
+   |
+18 |             add_to_count(3);
+   |             ^^^^^^^^^^^^^^^
+
+note: some details are omitted, run with `MIRIFLAGS=-Zmiri-backtrace=full` for a verbose backtrace
+
+error: aborting due to 1 previous error
