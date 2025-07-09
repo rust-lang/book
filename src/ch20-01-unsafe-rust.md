@@ -311,7 +311,7 @@ programming language to define functions and enable a different (foreign)
 programming language to call those functions.
 
 Listing 20-8 demonstrates how to set up an integration with the `abs` function
-from the C standard library. Functions declared within `extern` blocks are
+from the [C standard library]. Functions declared within `extern` blocks are
 generally unsafe to call from Rust code, so `extern` blocks must also be marked
 `unsafe`. The reason is that other languages don’t enforce Rust’s rules and
 guarantees, and Rust can’t check them, so responsibility falls on the programmer
@@ -558,3 +558,4 @@ Rust’s official guide to the subject, the [Rustonomicon][nomicon].
 [editions]: appendix-05-editions.html
 [nightly]: appendix-07-nightly-rust.html
 [nomicon]: https://doc.rust-lang.org/nomicon/
+[C standard library]:appendix-03-derivable-traits.html
