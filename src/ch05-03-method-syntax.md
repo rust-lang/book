@@ -89,19 +89,20 @@ are and how to designate a field or method as public or private in [Chapter
 7][public]<!-- ignore -->.
 
 > ### Where’s the `->` Operator?
->
-> In C and C++, two different operators are used for calling methods: you use
-> `.` if you’re calling a method on the object directly and `->` if you’re
-> calling the method on a pointer to the object and need to dereference the
-> pointer first. In other words, if `object` is a pointer,
-> `object->something()` is similar to `(*object).something()`.
->
-> Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
-> feature called _automatic referencing and dereferencing_. Calling methods is
-> one of the few places in Rust with this behavior.
->
-> Here’s how it works: when you call a method with `object.something()`, Rust
-> automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
+> 
+> In C and C++, two different operators are used to access members: you use  
+> `.` when working with an object directly, and `->` when working with a  
+> pointer to the object and need to dereference it first. In C++, these  
+> operators can be used to call methods; in C, they are only used to access  
+> struct fields. In other words, if `object` is a pointer,  
+> `object->something()` is similar to `(*object).something()`.  
+>  
+> Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a  
+> feature called _automatic referencing and dereferencing_. Calling methods is  
+> one of the few places in Rust with this behavior.  
+>  
+> Here’s how it works: when you call a method with `object.something()`, Rust  
+> automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of  
 > the method. In other words, the following are the same:
 >
 > <!-- CAN'T EXTRACT SEE BUG https://github.com/rust-lang/mdBook/issues/1127 -->
