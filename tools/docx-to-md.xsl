@@ -144,7 +144,7 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara' or @w:val = 'ChapterIntro' or @w:val = 'BodyContinued' or @w:val = 'SourceForeword']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara' or @w:val = 'ChapterIntro' or @w:val = 'BodyContinued' or @w:val = 'SourceForeword' or @w:val = 'BodyA']]">
         <xsl:if test=".//w:t">
             <xsl:apply-templates select="*" />
             <xsl:text>&#10;&#10;</xsl:text>
