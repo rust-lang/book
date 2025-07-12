@@ -286,7 +286,7 @@ the `Box` pointer. Figure 17-6 illustrates this process.
 In fact, the `Box` pointer can still move around freely. Remember: we care about
 making sure the data ultimately being referenced stays in place. If a pointer
 moves around, _but the data it points to is in the same place_, as in Figure
-17-7, there’s no potential problem. As an independent exercise, look at the docs
+17-7, there’s no potential problem. (As an independent exercise, look at the docs
 for the types as well as the `std::pin` module and try to work out how you’d do
 this with a `Pin` wrapping a `Box`.) The key is that the self-referential type
 itself cannot move, because it is still pinned.
