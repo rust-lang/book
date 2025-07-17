@@ -205,7 +205,7 @@ null feature that many other languages have. _Null_ is a value that means there
 is no value there. In languages with null, variables can always be in one of
 two states: null or not-null.
 
-In his 2009 presentation “Null References: The Billion Dollar Mistake,” Tony
+In his 2009 presentation “Null References: The Billion Dollar Mistake”, Tony
 Hoare, the inventor of null, had this to say:
 
 > I call it my billion-dollar mistake. At that time, I was designing the first
