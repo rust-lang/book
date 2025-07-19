@@ -216,6 +216,7 @@ HTTP is a text-based protocol, and a request takes this format:
 ```text
 Method Request-URI HTTP-Version CRLF
 headers CRLF
+CRLF
 message-body
 ```
 
