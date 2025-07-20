@@ -153,7 +153,7 @@ implements the same trait, `Fn(i32) -> i32`, the opaque types Rust generates for
 each are distinct. (This is similar to how Rust produces different concrete
 types for distinct async blocks even when they have the same output type, as we
 saw in [“Working with Any Number of Futures”][any-number-of-futures] in Chapter
-17. We have seen a solution to this problem a few times now: we can use a trait
+17.) We have seen a solution to this problem a few times now: we can use a trait
 object, as in Listing 20-34.
 
 <Listing number="20-34" caption="Creating a `Vec<T>` of closures defined by functions that return `Box<dyn Fn>` so they have the same type">
