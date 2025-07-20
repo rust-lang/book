@@ -333,7 +333,7 @@ most common and follows the C programming language’s ABI. Information about al
 the ABIs Rust supports is available in [the Rust Reference][ABI].
 
 Every item declared within an `unsafe extern` block is implicitly `unsafe`.
-However, some FFI functions *are* safe to call. For example, the `abs` function
+However, some FFI functions _are_ safe to call. For example, the `abs` function
 from C’s standard library does not have any memory safety considerations and we
 know it can be called with any `i32`. In cases like this, we can use the `safe`
 keyword to say that this specific function is safe to call even though it is in
@@ -508,19 +508,39 @@ You can run Miri on a project by typing `cargo +nightly miri run` or `cargo
 +nightly miri test`.
 
 For an example of how helpful this can be, consider what happens when we run it
-against Listing 20-11.
+against Listing 20-45 which is similar to Listing 20-11 with the addition of
+a thread. This will break the written contract in the comment, but it will
+compile and run without crashing, so it’s a good candidate for Miri to check.
+
+<Listing number="20-45" file-name="src/main.rs" caption="Using Miri to check unsafe code">
+
+```rust
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-45/src/main.rs}}
+```
+
+</Listing>
+
+When we run this code normally, it probably prints `COUNTER: 3` (we can't really
+know for sure how it will run on your system because the behavior is undefined
+and nondeterministic).
 
 ```console
-{{#include ../listings/ch20-advanced-features/listing-20-11/output.txt}}
+{{#include ../listings/ch20-advanced-features/listing-20-45/output.txt}}
+```
+
+When we run it with Miri, however, we get a warning about the unsafe code:
+
+```console
+{{#include ../listings/ch20-advanced-features/listing-20-45/miri-output.txt}}
 ```
 
 Miri correctly warns us that we have shared references to mutable data. Here,
-Miri issues only a warning because this is not guaranteed to be undefined
-behavior in this case, and it does not tell us how to fix the problem. but at
-least we know there is a risk of undefined behavior and can think about how to
-make the code safe. In some cases, Miri can also detect outright errors—code
-patterns that are _sure_ to be wrong—and make recommendations about how to fix
-those errors.
+Miri issues an error because this is a data race, because we did not heed the
+code comments instructions and it does not tell us how to fix the problem. But at
+least we know there is undefined behavior and can think about how to
+make the code safe. In some cases, Miri can also warn us in addition to
+detecting outright errors—code patterns that are _sure_ to be wrong—and make
+recommendations about how to fix those errors.
 
 Miri doesn’t catch everything you might get wrong when writing unsafe code. Miri
 is a dynamic analysis tool, so it only catches problems with code that actually

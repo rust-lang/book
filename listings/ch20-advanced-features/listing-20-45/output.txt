@@ -1,0 +1,5 @@
+$ cargo run
+   Compiling unsafe-example-2 v0.1.0 (file:///projects/unsafe-example-2)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running `target/debug/unsafe_example-2`
+COUNTER: 3
