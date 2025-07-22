@@ -30,17 +30,17 @@ that holds the unsafe code. You can take five actions in unsafe Rust that you
 can’t in safe Rust, which we call _unsafe superpowers_. Those superpowers
 include the ability to:
 
-- Dereference a raw pointer
-- Call an unsafe function or method
-- Access or modify a mutable static variable
-- Implement an unsafe trait
-- Access fields of a `union`
+1. Dereference a raw pointer
+1. Call an unsafe function or method
+1. Access or modify a mutable static variable
+1. Implement an unsafe trait
+1. Access fields of `union`s
 
 It’s important to understand that `unsafe` doesn’t turn off the borrow checker
 or disable any of Rust’s other safety checks: if you use a reference in unsafe
 code, it will still be checked. The `unsafe` keyword only gives you access to
 these five features that are then not checked by the compiler for memory
-safety. You’ll still get some degree of safety inside of an unsafe block.
+safety. You’ll still get some degree of safety inside an unsafe block.
 
 In addition, `unsafe` does not mean the code inside the block is necessarily
 dangerous or that it will definitely have memory safety problems: the intent is
@@ -67,7 +67,7 @@ some abstractions that provide a safe interface to unsafe code.
 
 ### Dereferencing a Raw Pointer
 
-In [“Dangling References”][dangling-references]<!-- ignore --> in Chapter 4, we
+In Chapter 4, in [“Dangling References”][dangling-references]<!-- ignore -->, we
 mentioned that the compiler ensures references are always valid. Unsafe Rust has
 two new types called _raw pointers_ that are similar to references. As with
 references, raw pointers can be immutable or mutable and are written as `*const
@@ -108,13 +108,14 @@ variable, we know these particular raw pointers are valid, but we can’t make
 that assumption about just any raw pointer.
 
 To demonstrate this, next we’ll create a raw pointer whose validity we can’t be
-so certain of, using `as` to cast a value instead of using the raw borrow
-operators. Listing 20-2 shows how to create a raw pointer to an arbitrary
+so certain of, using the keyword `as` to cast a value instead of using the raw
+borrow operator. Listing 20-2 shows how to create a raw pointer to an arbitrary
 location in memory. Trying to use arbitrary memory is undefined: there might be
-data at that address or there might not, the compiler might optimize the code so
-there is no memory access, or the program might terminate with a segmentation
-fault. Usually, there is no good reason to write code like this, especially in
-cases where you can use a raw borrow operator instead, but it is possible.
+data at that address or there might not, the compiler might optimize the code
+so there is no memory access, or the program might terminate with a
+segmentation fault. Usually, there is no good reason to write code like this,
+especially in cases where you can use a raw borrow operator instead, but it is
+possible.
 
 <Listing number="20-2" caption="Creating a raw pointer to an arbitrary memory address">
 
@@ -139,8 +140,8 @@ dereference operator `*` on a raw pointer that requires an `unsafe` block.
 Creating a pointer does no harm; it’s only when we try to access the value that
 it points at that we might end up dealing with an invalid value.
 
-Note also that in Listing 20-1 and 20-3, we created `*const i32` and `*mut i32`
-raw pointers that both pointed to the same memory location, where `num` is
+Note also that in Listings 20-1 and 20-3, we created `*const i32` and `*mut
+i32` raw pointers that both pointed to the same memory location, where `num` is
 stored. If we instead tried to create an immutable and a mutable reference to
 `num`, the code would not have compiled because Rust’s ownership rules don’t
 allow a mutable reference at the same time as any immutable references. With
@@ -149,12 +150,10 @@ same location and change data through the mutable pointer, potentially creating
 a data race. Be careful!
 
 With all of these dangers, why would you ever use raw pointers? One major use
-case is when interfacing with C code, as you’ll see in the next section,
-[“Calling an Unsafe Function or
-Method.”](#calling-an-unsafe-function-or-method)<!-- ignore --> Another case is
-when building up safe abstractions that the borrow checker doesn’t understand.
-We’ll introduce unsafe functions and then look at an example of a safe
-abstraction that uses unsafe code.
+case is when interfacing with C code, as you’ll see in the next section.
+Another case is when building up safe abstractions that the borrow checker
+doesn’t understand. We’ll introduce unsafe functions and then look at an
+example of a safe abstraction that uses unsafe code.
 
 ### Calling an Unsafe Function or Method
 
@@ -185,11 +184,11 @@ With the `unsafe` block, we’re asserting to Rust that we’ve read the functio
 documentation, we understand how to use it properly, and we’ve verified that
 we’re fulfilling the contract of the function.
 
-To perform unsafe operations in the body of an unsafe function, you still need
-to use an `unsafe` block, just as within a regular function, and the compiler
-will warn you if you forget. This helps to keep `unsafe` blocks as small as
-possible, as unsafe operations may not be needed across the whole function
-body.
+To perform unsafe operations in the body of an `unsafe` function, you still
+need to use an `unsafe` block, just as within a regular function, and the
+compiler will warn you if you forget. This helps us keep `unsafe` blocks as
+small as possible, as unsafe operations may not be needed across the whole
+function body.
 
 #### Creating a Safe Abstraction over Unsafe Code
 
@@ -232,7 +231,7 @@ Then we return two mutable slices in a tuple: one from the start of the
 original slice to the `mid` index and another from `mid` to the end of the
 slice.
 
-When we try to compile the code in Listing 20-5, we’ll get an error.
+When we try to compile the code in Listing 20-5, we’ll get an error:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-05/output.txt}}
@@ -256,7 +255,7 @@ to unsafe functions to make the implementation of `split_at_mut` work.
 </Listing>
 
 Recall from [“The Slice Type”][the-slice-type]<!-- ignore --> in Chapter 4 that
-slices are a pointer to some data and the length of the slice. We use the `len`
+a slice is a pointer to some data and the length of the slice. We use the `len`
 method to get the length of a slice and the `as_mut_ptr` method to access the
 raw pointer of a slice. In this case, because we have a mutable slice to `i32`
 values, `as_mut_ptr` returns a raw pointer with the type `*mut i32`, which we’ve
@@ -264,11 +263,11 @@ stored in the variable `ptr`.
 
 We keep the assertion that the `mid` index is within the slice. Then we get to
 the unsafe code: the `slice::from_raw_parts_mut` function takes a raw pointer
-and a length, and it creates a slice. We use it to create a slice that starts
-from `ptr` and is `mid` items long. Then we call the `add` method on `ptr` with
-`mid` as an argument to get a raw pointer that starts at `mid`, and we create a
-slice using that pointer and the remaining number of items after `mid` as the
-length.
+and a length, and it creates a slice. We use this function to create a slice
+that starts from `ptr` and is `mid` items long. Then we call the `add`
+method on `ptr` with `mid` as an argument to get a raw pointer that starts at
+`mid`, and we create a slice using that pointer and the remaining number of
+items after `mid` as the length.
 
 The function `slice::from_raw_parts_mut` is unsafe because it takes a raw
 pointer and must trust that this pointer is valid. The `add` method on raw
@@ -304,9 +303,9 @@ that the slice this code creates contains valid `i32` values. Attempting to use
 
 #### Using `extern` Functions to Call External Code
 
-Sometimes, your Rust code might need to interact with code written in another
+Sometimes your Rust code might need to interact with code written in another
 language. For this, Rust has the keyword `extern` that facilitates the creation
-and use of a _Foreign Function Interface (FFI)_. An FFI is a way for a
+and use of a _Foreign Function Interface (FFI)_, which is a way for a
 programming language to define functions and enable a different (foreign)
 programming language to call those functions.
 
@@ -314,8 +313,8 @@ Listing 20-8 demonstrates how to set up an integration with the `abs` function
 from the C standard library. Functions declared within `extern` blocks are
 generally unsafe to call from Rust code, so `extern` blocks must also be marked
 `unsafe`. The reason is that other languages don’t enforce Rust’s rules and
-guarantees, and Rust can’t check them, so responsibility falls on the programmer
-to ensure safety.
+guarantees, and Rust can’t check them, so responsibility falls on the
+programmer to ensure safety.
 
 <Listing number="20-8" file-name="src/main.rs" caption="Declaring and calling an `extern` function defined in another language">
 
@@ -326,13 +325,13 @@ to ensure safety.
 </Listing>
 
 Within the `unsafe extern "C"` block, we list the names and signatures of
-external functions from another language we want to call. The `"C"` part defines
-which _application binary interface (ABI)_ the external function uses: the ABI
-defines how to call the function at the assembly level. The `"C"` ABI is the
-most common and follows the C programming language’s ABI. Information about all
-the ABIs Rust supports is available in [the Rust Reference][ABI].
+external functions from another language we want to call. The `"C"` part
+defines which _application binary interface (ABI)_ the external function uses:
+the ABI defines how to call the function at the assembly level. The `"C"` ABI
+is the most common and follows the C programming language’s ABI. Information
+about all the ABIs Rust supports is available in [the Rust Reference][ABI].
 
-Every item declared within an `unsafe extern` block is implicitly `unsafe`.
+Every item declared within an `unsafe extern` block is implicitly unsafe.
 However, some FFI functions *are* safe to call. For example, the `abs` function
 from C’s standard library does not have any memory safety considerations and we
 know it can be called with any `i32`. In cases like this, we can use the `safe`
@@ -349,37 +348,37 @@ requires an `unsafe` block, as shown in Listing 20-9.
 </Listing>
 
 Marking a function as `safe` does not inherently make it safe! Instead, it is
-like a promise you are making to Rust that it _is_ safe. It is still your
+like a promise you are making to Rust that it is safe. It is still your
 responsibility to make sure that promise is kept!
 
-> #### Calling Rust Functions from Other Languages
->
-> We can also use `extern` to create an interface that allows other languages to
-> call Rust functions. Instead of creating a whole `extern` block, we add the
-> `extern` keyword and specify the ABI to use just before the `fn` keyword for
-> the relevant function. We also need to add an `#[unsafe(no_mangle)]`
-> annotation to tell the Rust compiler not to mangle the name of this function.
-> _Mangling_ is when a compiler changes the name we’ve given a function to a
-> different name that contains more information for other parts of the
-> compilation process to consume but is less human readable. Every programming
-> language compiler mangles names slightly differently, so for a Rust function
-> to be nameable by other languages, we must disable the Rust compiler’s name
-> mangling. This is unsafe because there might be name collisions across
-> libraries without the built-in mangling, so it is our responsibility to make
-> sure the name we choose is safe to export without mangling.
->
-> In the following example, we make the `call_from_c` function accessible from
-> C code, after it’s compiled to a shared library and linked from C:
->
-> ```rust
-> #[unsafe(no_mangle)]
-> pub extern "C" fn call_from_c() {
->     println!("Just called a Rust function from C!");
-> }
-> ```
->
-> This usage of `extern` requires `unsafe` only in the attribute, not on the
-> `extern` block.
+#### Calling Rust Functions from Other Languages
+
+We can also use `extern` to create an interface that allows other languages to
+call Rust functions. Instead of creating a whole `extern` block, we add the
+`extern` keyword and specify the ABI to use just before the `fn` keyword for
+the relevant function. We also need to add an `#[unsafe(no_mangle)]` annotation
+to tell the Rust compiler not to mangle the name of this function. _Mangling_
+is when a compiler changes the name we’ve given a function to a different name
+that contains more information for other parts of the compilation process to
+consume but is less human readable. Every programming language compiler mangles
+names slightly differently, so for a Rust function to be nameable by other
+languages, we must disable the Rust compiler’s name mangling. This is unsafe
+because there might be name collisions across libraries without the built-in
+mangling, so it is our responsibility to make sure the name we choose is safe
+to export without mangling.
+
+In the following example, we make the `call_from_c` function accessible from C
+code, after it’s compiled to a shared library and linked from C:
+
+```
+#[unsafe(no_mangle)]
+pub extern "C" fn call_from_c() {
+    println!("Just called a Rust function from C!");
+}
+```
+
+This usage of `extern` requires `unsafe` only in the attribute, not on the
+`extern` block.
 
 ### Accessing or Modifying a Mutable Static Variable
 
@@ -415,7 +414,7 @@ variables can be mutable. Accessing and modifying mutable static variables is
 _unsafe_. Listing 20-11 shows how to declare, access, and modify a mutable
 static variable named `COUNTER`.
 
-<Listing number="20-11" file-name="src/main.rs" caption="Reading from or writing to a mutable static variable is unsafe">
+<Listing number="20-11" file-name="src/main.rs" caption="Reading from or writing to a mutable static variable is unsafe.">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-11/src/main.rs}}
@@ -424,12 +423,13 @@ static variable named `COUNTER`.
 </Listing>
 
 As with regular variables, we specify mutability using the `mut` keyword. Any
-code that reads or writes from `COUNTER` must be within an `unsafe` block. This
-code compiles and prints `COUNTER: 3` as we would expect because it’s single
-threaded. Having multiple threads access `COUNTER` would likely result in data
-races, so it is undefined behavior. Therefore, we need to mark the entire
-function as `unsafe`, and document the safety limitation, so anyone calling the
-function knows what they are and are not allowed to do safely.
+code that reads or writes from `COUNTER` must be within an `unsafe` block. The
+code in Listing 20-11 compiles and prints `COUNTER: 3` as we would expect
+because it’s single threaded. Having multiple threads access `COUNTER` would
+likely result in data races, so it is undefined behavior. Therefore, we need to
+mark the entire function as `unsafe` and document the safety limitation, so
+anyone calling the function knows what they are and are not allowed to do
+safely.
 
 Whenever we write an unsafe function, it is idiomatic to write a comment
 starting with `SAFETY` and explaining what the caller needs to do to call the
@@ -437,12 +437,15 @@ function safely. Likewise, whenever we perform an unsafe operation, it is
 idiomatic to write a comment starting with `SAFETY` to explain how the safety
 rules are upheld.
 
-Additionally, the compiler will not allow you to create references to a mutable
-static variable. You can only access it via a raw pointer, created with one of
-the raw borrow operators. That includes in cases where the reference is created
-invisibly, as when it is used in the `println!` in this code listing. The
-requirement that references to static mutable variables can only be created via
-raw pointers helps make the safety requirements for using them more obvious.
+Additionally, the compiler will deny by default any attempt to create
+references to a mutable static variable through a compiler lint. You must
+either explicitly opt-out of that lint’s protections by adding an
+`#[allow(static_mut_refs)]` annotation or access the mutable static variable
+via a raw pointer created with one of the raw borrow operators. That includes
+cases where the reference is created invisibly, as when it is used in the
+`println!` in this code listing. Requiring references to static mutable
+variables to be created via raw pointers helps make the safety requirements for
+using them more obvious.
 
 With mutable data that is globally accessible, it’s difficult to ensure there
 are no data races, which is why Rust considers mutable static variables to be
@@ -469,43 +472,44 @@ Listing 20-12.
 By using `unsafe impl`, we’re promising that we’ll uphold the invariants that
 the compiler can’t verify.
 
-As an example, recall the `Sync` and `Send` marker traits we discussed in
-[“Extensible Concurrency with the `Sync` and `Send`
-Traits”][extensible-concurrency-with-the-sync-and-send-traits]<!-- ignore --> in
-Chapter 16: the compiler implements these traits automatically if our types are
-composed entirely of other types that implement `Send` and `Sync`. If we
+As an example, recall the `Send` and `Sync` marker traits we discussed in
+[“Extensible Concurrency with the `Send` and `Sync`
+Traits”][extensible-concurrency-with-the-send-and-sync-traits]<!-- ignore -->
+in Chapter 16: the compiler implements these traits automatically if our types
+are composed entirely of other types that implement `Send` and `Sync`. If we
 implement a type that contains a type that does not implement `Send` or `Sync`,
-such as raw pointers, and we want to mark that type as `Send` or `Sync`, we must
-use `unsafe`. Rust can’t verify that our type upholds the guarantees that it can
-be safely sent across threads or accessed from multiple threads; therefore, we
-need to do those checks manually and indicate as such with `unsafe`.
+such as raw pointers, and we want to mark that type as `Send` or `Sync`, we
+must use `unsafe`. Rust can’t verify that our type upholds the guarantees that
+it can be safely sent across threads or accessed from multiple threads;
+therefore, we need to do those checks manually and indicate as such with
+`unsafe`.
 
 ### Accessing Fields of a Union
 
-The final action that works only with `unsafe` is accessing fields of a union. A
-`union` is similar to a `struct`, but only one declared field is used in a
+The final action that works only with `unsafe` is accessing fields of a union.
+A *union* is similar to a `struct`, but only one declared field is used in a
 particular instance at one time. Unions are primarily used to interface with
 unions in C code. Accessing union fields is unsafe because Rust can’t guarantee
-the type of the data currently being stored in the union instance. You can learn
-more about unions in [the Rust Reference][unions].
+the type of the data currently being stored in the union instance. You can
+learn more about unions in [the Rust Reference][unions].
 
 ### Using Miri to Check Unsafe Code
 
 When writing unsafe code, you might want to check that what you have written
-actually is safe and correct. One of the best ways to do that is to use
-Miri, an official Rust tool for detecting undefined behavior. Whereas
-the borrow checker is a _static_ tool that works at compile time, Miri is a
-_dynamic_ tool that works at runtime. It checks your code by running your
-program, or its test suite, and detecting when you violate the rules it
-understands about how Rust should work.
+actually is safe and correct. One of the best ways to do that is to use Miri,
+an official Rust tool for detecting undefined behavior. Whereas the borrow
+checker is a _static_ tool which works at compile time, Miri is a _dynamic_
+tool which works at runtime. It checks your code by running your program, or
+its test suite, and detecting when you violate the rules it understands about
+how Rust should work.
 
 Using Miri requires a nightly build of Rust (which we talk about more in
-[Appendix G: How Rust is Made and “Nightly Rust”][nightly]). You can install
-both a nightly version of Rust and the Miri tool by typing `rustup +nightly
-component add miri`. This does not change what version of Rust your project
-uses; it only adds the tool to your system so you can use it when you want to.
-You can run Miri on a project by typing `cargo +nightly miri run` or `cargo
-+nightly miri test`.
+[Appendix G: How Rust is Made and “Nightly Rust”][nightly]<!-- ignore -->). You
+can install both a nightly version of Rust and the Miri tool by typing `rustup
++nightly component add miri`. This does not change what version of Rust your
+project uses; it only adds the tool to your system so you can use it when you
+want to. You can run Miri on a project by typing `cargo +nightly miri run` or
+`cargo +nightly miri test`.
 
 For an example of how helpful this can be, consider what happens when we run it
 against Listing 20-11.
@@ -516,17 +520,17 @@ against Listing 20-11.
 
 Miri correctly warns us that we have shared references to mutable data. Here,
 Miri issues only a warning because this is not guaranteed to be undefined
-behavior in this case, and it does not tell us how to fix the problem. but at
-least we know there is a risk of undefined behavior and can think about how to
-make the code safe. In some cases, Miri can also detect outright errors—code
-patterns that are _sure_ to be wrong—and make recommendations about how to fix
-those errors.
+behavior in this case, and it does not tell us how to fix the problem. Thanks
+to Miri, we now know there is a risk of undefined behavior, and we can think
+about how to make the code safe. In some cases, Miri can also detect outright
+errors—code patterns that are _sure_ to be wrong—and make recommendations about
+how to fix those errors.
 
-Miri doesn’t catch everything you might get wrong when writing unsafe code. Miri
-is a dynamic analysis tool, so it only catches problems with code that actually
-gets run. That means you will need to use it in conjunction with good testing
-techniques to increase your confidence about the unsafe code you have written.
-Miri also does not cover every possible way your code can be unsound.
+Miri doesn’t catch everything you might get wrong when writing unsafe code.
+Miri is a dynamic analysis tool, so it only catches problems with code that
+actually gets run. That means you will need to use it in conjunction with good
+testing techniques to increase your confidence about the unsafe code you have
+written. Miri also does not cover every possible way your code can be unsound.
 
 Put another way: If Miri _does_ catch a problem, you know there’s a bug, but
 just because Miri _doesn’t_ catch a bug doesn’t mean there isn’t a problem. It
@@ -537,13 +541,13 @@ You can learn more about Miri at [its GitHub repository][miri].
 
 ### When to Use Unsafe Code
 
-Using `unsafe` to use one of the five superpowers just discussed
-isn’t wrong or even frowned upon, but it is trickier to get `unsafe` code
-correct because the compiler can’t help uphold memory safety. When you have a
-reason to use `unsafe` code, you can do so, and having the explicit `unsafe`
-annotation makes it easier to track down the source of problems when they occur.
-Whenever you write unsafe code, you can use Miri to help you be more confident
-that the code you have written upholds Rust’s rules.
+Using `unsafe` to use one of the five superpowers just discussed isn’t wrong or
+even frowned upon, but it is trickier to get `unsafe` code correct because the
+compiler can’t help uphold memory safety. When you have a reason to use
+`unsafe` code, you can do so, and having the explicit `unsafe` annotation makes
+it easier to track down the source of problems when they occur. Whenever you
+write unsafe code, you can use Miri to help you be more confident that the code
+you have written upholds Rust’s rules.
 
 For a much deeper exploration of how to work effectively with unsafe Rust, read
 Rust’s official guide to the subject, the [Rustonomicon][nomicon].
@@ -551,7 +555,7 @@ Rust’s official guide to the subject, the [Rustonomicon][nomicon].
 [dangling-references]: ch04-02-references-and-borrowing.html#dangling-references
 [ABI]: ../reference/items/external-blocks.html#abi
 [differences-between-variables-and-constants]: ch03-01-variables-and-mutability.html#constants
-[extensible-concurrency-with-the-sync-and-send-traits]: ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits
+[extensible-concurrency-with-the-send-and-sync-traits]: ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-send-and-sync-traits
 [the-slice-type]: ch04-03-slices.html#the-slice-type
 [unions]: ../reference/items/unions.html
 [miri]: https://github.com/rust-lang/miri

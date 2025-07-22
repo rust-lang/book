@@ -9,8 +9,8 @@ the `!` type and dynamically sized types.
 ### Using the Newtype Pattern for Type Safety and Abstraction
 
 This section assumes you’ve read the earlier section [“Using the Newtype Pattern
-to Implement External Traits on External Types.”][using-the-newtype-pattern]<!--
-ignore --> The newtype pattern is also useful for tasks beyond those we’ve
+to Implement External Traits”][using-the-newtype-pattern]<!--
+ignore -->. The newtype pattern is also useful for tasks beyond those we’ve
 discussed so far, including statically enforcing that values are never confused
 and indicating the units of a value. You saw an example of using newtypes to
 indicate units in Listing 20-16: recall that the `Millimeters` and `Meters`
@@ -29,7 +29,7 @@ associated with their name. Code using `People` would only interact with the
 public API we provide, such as a method to add a name string to the `People`
 collection; that code wouldn’t need to know that we assign an `i32` ID to names
 internally. The newtype pattern is a lightweight way to achieve encapsulation to
-hide implementation details, which we discussed in [“Encapsulation That Hides
+hide implementation details, which we discussed in [“Encapsulation that Hides
 Implementation Details”][encapsulation-that-hides-implementation-details]<!--
 ignore --> in Chapter 18.
 
@@ -43,7 +43,7 @@ the alias `Kilometers` to `i32` like so:
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-04-kilometers-alias/src/main.rs:here}}
 ```
 
-Now, the alias `Kilometers` is a _synonym_ for `i32`; unlike the `Millimeters`
+Now the alias `Kilometers` is a _synonym_ for `i32`; unlike the `Millimeters`
 and `Meters` types we created in Listing 20-16, `Kilometers` is not a separate,
 new type. Values that have the type `Kilometers` will be treated the same as
 values of type `i32`:
@@ -82,7 +82,7 @@ A type alias makes this code more manageable by reducing the repetition. In
 Listing 20-26, we’ve introduced an alias named `Thunk` for the verbose type and
 can replace all uses of the type with the shorter alias `Thunk`.
 
-<Listing number="20-26" caption="Introducing a type alias `Thunk` to reduce repetition">
+<Listing number="20-26" caption="Introducing a type alias, `Thunk`, to reduce repetition">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-26/src/main.rs:here}}
@@ -140,7 +140,7 @@ return. Here is an example:
 ```
 
 This code is read as “the function `bar` returns never.” Functions that return
-never are called _diverging functions_. We can’t create values of the type `!`
+never are called _diverging functions_. We can’t create values of the type `!`,
 so `bar` can never possibly return.
 
 But what use is a type you can never create values for? Recall the code from
@@ -155,10 +155,10 @@ here in Listing 20-27.
 
 </Listing>
 
-At the time, we skipped over some details in this code. In [“The `match` Control
-Flow Operator”][the-match-control-flow-operator]<!-- ignore --> in Chapter 6, we
-discussed that `match` arms must all return the same type. So, for example, the
-following code doesn’t work:
+At the time, we skipped over some details in this code. In [“The `match`
+Control Flow Construct”][the-match-control-flow-construct]<!-- ignore --> in
+Chapter 6, we discussed that `match` arms must all return the same type. So,
+for example, the following code doesn’t work:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-08-match-arms-different-types/src/main.rs:here}}
@@ -214,9 +214,10 @@ code using values whose size we can know only at runtime.
 
 Let’s dig into the details of a dynamically sized type called `str`, which
 we’ve been using throughout the book. That’s right, not `&str`, but `str` on
-its own, is a DST. We can’t know how long the string is until runtime, meaning
-we can’t create a variable of type `str`, nor can we take an argument of type
-`str`. Consider the following code, which does not work:
+its own, is a DST. In many cases, such as when storing text entered by a user,
+we can’t know how long the string is until runtime. That means we can’t create
+a variable of type `str`, nor can we take an argument of type `str`. Consider
+the following code, which does not work:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-11-cant-create-str/src/main.rs:here}}
@@ -232,7 +233,7 @@ holding a dynamically sized type.
 So what do we do? In this case, you already know the answer: we make the types
 of `s1` and `s2` a `&str` rather than a `str`. Recall from [“String
 Slices”][string-slices]<!-- ignore --> in Chapter 4 that the slice data
-structure just stores the starting position and the length of the slice. So
+structure just stores the starting position and the length of the slice. So,
 although a `&T` is a single value that stores the memory address of where the
 `T` is located, a `&str` is _two_ values: the address of the `str` and its
 length. As such, we can know the size of a `&str` value at compile time: it’s
@@ -246,12 +247,11 @@ a pointer of some kind.
 We can combine `str` with all kinds of pointers: for example, `Box<str>` or
 `Rc<str>`. In fact, you’ve seen this before but with a different dynamically
 sized type: traits. Every trait is a dynamically sized type we can refer to by
-using the name of the trait. In [“Using Trait Objects That Allow for Values of
-Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
---> in Chapter 18, we mentioned that to use traits as trait objects, we must put
-them behind a pointer, such as `&dyn Trait` or `Box<dyn Trait>` (`Rc<dyn Trait>`
-would work too).
+using the name of the trait. In [“Using Trait Objects to Abstract over Shared
+Behavior”][using-trait-objects-to-abstract-over-shared-behavior]<!-- ignore -->
+in Chapter 18, we mentioned that to use traits as trait objects, we must put
+them behind a pointer, such as `&dyn Trait` or `Box<dyn Trait>` (`Rc<dyn
+Trait>` would work too).
 
 To work with DSTs, Rust provides the `Sized` trait to determine whether or not
 a type’s size is known at compile time. This trait is automatically implemented
@@ -290,6 +290,6 @@ Next, we’ll talk about functions and closures!
 
 [encapsulation-that-hides-implementation-details]: ch18-01-what-is-oo.html#encapsulation-that-hides-implementation-details
 [string-slices]: ch04-03-slices.html#string-slices
-[the-match-control-flow-operator]: ch06-02-match.html#the-match-control-flow-operator
-[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
-[using-the-newtype-pattern]: ch20-02-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
+[the-match-control-flow-construct]: ch06-02-match.html#the-match-control-flow-construct
+[using-trait-objects-to-abstract-over-shared-behavior]: ch18-02-trait-objects.html#using-trait-objects-to-abstract-over-shared-behavior
+[using-the-newtype-pattern]: ch20-02-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits
