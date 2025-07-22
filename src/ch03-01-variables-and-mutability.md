@@ -1,19 +1,19 @@
-## Variables and Mutability
+## Değişkenler ve Değişebilirlik
 
-As mentioned in the [“Storing Values with
-Variables”][storing-values-with-variables]<!-- ignore --> section, by default,
-variables are immutable. This is one of many nudges Rust gives you to write
-your code in a way that takes advantage of the safety and easy concurrency that
-Rust offers. However, you still have the option to make your variables mutable.
-Let’s explore how and why Rust encourages you to favor immutability and why
-sometimes you might want to opt out.
+“Değerleri
+[Değişkenlerle Saklama”][storing-values-with-variables]<!-- ignore --> bölümünde belirtildiği gibi, varsayılan olarak
+değişkenleri değişmezdir. Bu, kodunuzu
+Rust'ın sunduğu güvenlik ve kolay eşzamanlılıktan yararlanacak şekilde
+yazmanız için Rust'ın size verdiği birçok dürtüden biridir. Ancak yine de değişkenlerinizi değiştirilebilir yapma seçeneğiniz vardır.
+Rust'ın sizi nasıl ve neden değişmezliği tercih etmeye teşvik ettiğini ve neden
+bazen vazgeçmek isteyebileceğinizi inceleyelim.
 
-When a variable is immutable, once a value is bound to a name, you can’t change
-that value. To illustrate this, generate a new project called _variables_ in
-your _projects_ directory by using `cargo new variables`.
+Bir değişken değişmez olduğunda, bir değer bir isme bağlandıktan sonra
+bu değeri değiştiremezsiniz. Bunu göstermek için,
+adresinde _projects_ dizininizde `cargo new variables` kullanarak _variables_ adında yeni bir proje oluşturun.
 
-Then, in your new _variables_ directory, open _src/main.rs_ and replace its
-code with the following code, which won’t compile just yet:
+Ardından, yeni _variables_ dizininizde _src/main.rs_ dosyasını açın ve
+kodunu henüz derlenmeyecek olan aşağıdaki kodla değiştirin:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -21,39 +21,39 @@ code with the following code, which won’t compile just yet:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
 ```
 
-Save and run the program using `cargo run`. You should receive an error message
-regarding an immutability error, as shown in this output:
+Programı kaydedin ve `cargo run` kullanarak çalıştırın. Bu çıktıda gösterildiği gibi bir değişmezlik hatasıyla ilgili olarak
+adresinde bir hata mesajı almalısınız:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/output.txt}}
 ```
 
-This example shows how the compiler helps you find errors in your programs.
-Compiler errors can be frustrating, but really they only mean your program
-isn’t safely doing what you want it to do yet; they do _not_ mean that you’re
-not a good programmer! Experienced Rustaceans still get compiler errors.
+Bu örnek, derleyicinin programlarınızdaki hataları bulmanıza nasıl yardımcı olduğunu gösterir.
+Derleyici hataları sinir bozucu olabilir, ancak gerçekte bunlar yalnızca programınızın
+yapmasını istediğiniz şeyi henüz güvenli bir şekilde yapmadığı anlamına gelir; sizin
+iyi bir programcı olmadığınız anlamına gelmez! Deneyimli Rustaceanlar hala derleyici hataları alırlar.
 
-You received the error message `` cannot assign twice to immutable variable `x` `` because you tried to assign a second value to the immutable `x` variable.
+Değişmez `x` değişkenine ikinci bir değer atamaya çalıştığınız için ``değişmez `x` değişkenine iki kez atama yapılamıyor`` hata mesajını aldınız.
 
-It’s important that we get compile-time errors when we attempt to change a
-value that’s designated as immutable because this very situation can lead to
-bugs. If one part of our code operates on the assumption that a value will
-never change and another part of our code changes that value, it’s possible
-that the first part of the code won’t do what it was designed to do. The cause
-of this kind of bug can be difficult to track down after the fact, especially
-when the second piece of code changes the value only _sometimes_. The Rust
-compiler guarantees that when you state that a value won’t change, it really
-won’t change, so you don’t have to keep track of it yourself. Your code is thus
-easier to reason through.
+Değişmez olarak belirlenmiş bir
+değerini değiştirmeye çalıştığımızda derleme zamanı hataları almamız önemlidir, çünkü bu durum
+hatalarına yol açabilir. Kodumuzun bir bölümü
+bir değerin asla değişmeyeceği varsayımıyla çalışıyorsa ve kodumuzun başka bir bölümü bu değeri değiştiriyorsa
+kodun ilk bölümünün yapmak için tasarlandığı şeyi yapmaması mümkündür. Bu tür bir hatanın nedenini
+özellikle
+ikinci kod parçası değeri yalnızca _bazen_ değiştirdiğinde olaydan sonra izlemek zor olabilir. Rust
+derleyicisi, bir değerin değişmeyeceğini belirttiğinizde, gerçekten
+değişmeyeceğini garanti eder, böylece bunu kendiniz takip etmek zorunda kalmazsınız. Böylece kodunuzda mantık yürütmek
+daha kolay olur.
 
-But mutability can be very useful, and can make code more convenient to write.
-Although variables are immutable by default, you can make them mutable by
-adding `mut` in front of the variable name as you did in [Chapter
-2][storing-values-with-variables]<!-- ignore -->. Adding `mut` also conveys
-intent to future readers of the code by indicating that other parts of the code
-will be changing this variable’s value.
+Bdeğişebilirlik çok yararlı olabilir ve kod yazmayı daha kolay hale getirebilir.
+Değişkenler varsayılan olarak değişmez olsa da, [Bölüm
+2][storing-values-with-variables]<!-- ignore -->'da yaptığınız gibi
+değişken adının önüne `mut` ekleyerek onları değişebilir hale getirebilirsiniz. mut` eklemek ayrıca
+kodunun diğer bölümlerinin bu değişkenin değerini değiştireceğini belirterek kodun gelecekteki okuyucularına
+niyetini iletir.
 
-For example, let’s change _src/main.rs_ to the following:
+Örneğin, _src/main.rs_ dosyasını aşağıdaki şekilde değiştirelim:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -61,74 +61,74 @@ For example, let’s change _src/main.rs_ to the following:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/src/main.rs}}
 ```
 
-When we run the program now, we get this:
+Programı şimdi çalıştırdığımızda şunu elde ediyoruz:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/output.txt}}
 ```
 
-We’re allowed to change the value bound to `x` from `5` to `6` when `mut` is
-used. Ultimately, deciding whether to use mutability or not is up to you and
-depends on what you think is clearest in that particular situation.
+`mut`
+kullanıldığında `x`e bağlı değeri `5`ten `6`ya değiştirmemize izin verilir. Nihayetinde, değişebilirliği kullanıp kullanmamaya karar vermek size bağlıdır ve
+o özel durumda en açık olduğunu düşündüğünüz şeye bağlıdır.
 
-### Constants
+### Sabitler
 
-Like immutable variables, _constants_ are values that are bound to a name and
-are not allowed to change, but there are a few differences between constants
-and variables.
+Değişmez değişkenler gibi, _sabitler_ de bir isme bağlı değerlerdir ve
+değişmesine izin verilmez, ancak sabitler
+ve değişkenler arasında birkaç fark vardır.
 
-First, you aren’t allowed to use `mut` with constants. Constants aren’t just
-immutable by default—they’re always immutable. You declare constants using the
-`const` keyword instead of the `let` keyword, and the type of the value _must_
-be annotated. We’ll cover types and type annotations in the next section,
-[“Data Types”][data-types]<!-- ignore -->, so don’t worry about the details
-right now. Just know that you must always annotate the type.
+İlk olarak, sabitlerle `mut` kullanmanıza izin verilmez. Sabitler sadece
+varsayılan olarak değişmez değildir, her zaman değişmezdir. Sabitleri `let` anahtar sözcüğü yerine
+`const` anahtar sözcüğünü kullanarak bildirirsiniz ve değerin türü _must_
+belirtilmelidir. Türleri ve tür ek açıklamalarını bir sonraki bölümde ele alacağız,
+[“Veri Türleri”][data-types]<!-- ignore -->, bu nedenle şu anda
+ayrıntıları hakkında endişelenmeyin. Sadece her zaman tipe açıklama eklemeniz gerektiğini bilin.
 
-Constants can be declared in any scope, including the global scope, which makes
-them useful for values that many parts of code need to know about.
+Sabitler, global kapsam da dahil olmak üzere herhangi bir kapsamda bildirilebilir, bu da
+adresini kodun birçok bölümünün bilmesi gereken değerler için kullanışlı hale getirir.
 
-The last difference is that constants may be set only to a constant expression,
-not the result of a value that could only be computed at runtime.
+Son fark ise sabitlerin yalnızca sabit bir ifadeye ayarlanabilmesidir
+yalnızca çalışma zamanında hesaplanabilecek bir değerin sonucuna değil.
 
-Here’s an example of a constant declaration:
+İşte bir sabit bildirimi örneği:
 
 ```rust
 const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 ```
 
-The constant’s name is `THREE_HOURS_IN_SECONDS` and its value is set to the
-result of multiplying 60 (the number of seconds in a minute) by 60 (the number
-of minutes in an hour) by 3 (the number of hours we want to count in this
-program). Rust’s naming convention for constants is to use all uppercase with
-underscores between words. The compiler is able to evaluate a limited set of
-operations at compile time, which lets us choose to write out this value in a
-way that’s easier to understand and verify, rather than setting this constant
-to the value 10,800. See the [Rust Reference’s section on constant
-evaluation][const-eval] for more information on what operations can be used
-when declaring constants.
+Sabitin adı `THREE_HOURS_IN_SECONDS` ve değeri 60 (bir dakikadaki saniye sayısı) ile 60'ın (bir saatteki dakikaların
+sayısı) 3 (bu
+programında saymak istediğimiz saat sayısı) çarpımının
+sonucuna ayarlanır. Rust'ın sabitler için adlandırma kuralı, sözcükler arasında
+alt çizgi ile tüm büyük harfleri kullanmaktır. Derleyici, derleme zamanında sınırlı sayıda
+işlemini değerlendirebilir, bu da bu değeri
+sabitini 10.800 değerine ayarlamak yerine, anlaşılması ve doğrulanması daha kolay olan
+bir şekilde yazmayı seçmemizi sağlar. Sabitleri bildirirken
+hangi işlemlerin kullanılabileceği hakkında daha fazla bilgi için [Rust Reference'ın constant
+evaluation][const-eval] bölümüne bakın.
 
-Constants are valid for the entire time a program runs, within the scope in
-which they were declared. This property makes constants useful for values in
-your application domain that multiple parts of the program might need to know
-about, such as the maximum number of points any player of a game is allowed to
-earn, or the speed of light.
+Sabitler, bildirildikleri
+kapsamı dahilinde bir programın çalıştığı süre boyunca geçerlidir. Bu özellik sabitleri
+uygulama alanınızda
+programın birden fazla bölümünün bilmesi gerekebilecek değerler için kullanışlı hale getirir; örneğin
+bir oyundaki herhangi bir oyuncunun kazanmasına izin verilen maksimum puan sayısı veya ışık hızı gibi.
 
-Naming hardcoded values used throughout your program as constants is useful in
-conveying the meaning of that value to future maintainers of the code. It also
-helps to have only one place in your code you would need to change if the
-hardcoded value needed to be updated in the future.
+Programınız boyunca kullanılan kodlanmış değerleri sabitler olarak adlandırmak,
+adresinde bu değerin anlamını kodun gelecekteki bakımcılarına aktarmak açısından yararlıdır. Ayrıca
 
-### Shadowing
+ kodlanmış değerin gelecekte güncellenmesi gerektiğinde kodunuzda değiştirmeniz gereken tek bir yer olmasına yardımcı olur.
 
-As you saw in the guessing game tutorial in [Chapter
-2][comparing-the-guess-to-the-secret-number]<!-- ignore -->, you can declare a
-new variable with the same name as a previous variable. Rustaceans say that the
-first variable is _shadowed_ by the second, which means that the second
-variable is what the compiler will see when you use the name of the variable.
-In effect, the second variable overshadows the first, taking any uses of the
-variable name to itself until either it itself is shadowed or the scope ends.
-We can shadow a variable by using the same variable’s name and repeating the
-use of the `let` keyword as follows:
+### Gölgeleme
+
+Bölüm
+2][comparing-the-guess-to-the-secret-number]<!-- ignore -->'daki tahmin oyunu eğitiminde gördüğünüz gibi, önceki bir değişkenle aynı ada sahip
+yeni bir değişken bildirebilirsiniz. Rustaceanlar
+ilk değişkenin ikinci değişken tarafından _gölgelendiğini_ söylerler, bu da ikinci
+değişkenin, değişkenin adını kullandığınızda derleyicinin göreceği şey olduğu anlamına gelir.
+Gerçekte, ikinci değişken birinciyi gölgeler ve kendisi gölgelenene ya da kapsam sona erene kadar
+değişken adının tüm kullanımlarını kendine alır.
+Aynı değişkenin adını kullanarak ve
+adresinde `let` anahtar sözcüğünü aşağıdaki gibi tekrarlayarak bir değişkeni gölgeleyebiliriz:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -136,52 +136,51 @@ use of the `let` keyword as follows:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/src/main.rs}}
 ```
 
-This program first binds `x` to a value of `5`. Then it creates a new variable
-`x` by repeating `let x =`, taking the original value and adding `1` so the
-value of `x` is then `6`. Then, within an inner scope created with the curly
-brackets, the third `let` statement also shadows `x` and creates a new
-variable, multiplying the previous value by `2` to give `x` a value of `12`.
-When that scope is over, the inner shadowing ends and `x` returns to being `6`.
-When we run this program, it will output the following:
+Bu program ilk olarak `x` değişkenini `5` değerine bağlar. Daha sonra `let x =` ifadesini tekrarlayarak, orijinal değeri alıp `1` ekleyerek yeni bir
+`x` değişkeni yaratır, böylece `x`in
+değeri `6` olur. Daha sonra, küme
+parantezleriyle oluşturulan bir iç kapsam içinde, üçüncü `let` deyimi de `x` değerini gölgeler ve yeni bir
+değişkeni oluşturur, önceki değeri `2` ile çarparak `x` değerini `12` olarak verir.
+Bu kapsam sona erdiğinde, iç gölgeleme sona erer ve `x` değişkeni `6` değerine geri döner.
+Bu programı çalıştırdığımızda, aşağıdaki çıktıyı verecektir:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/output.txt}}
 ```
 
-Shadowing is different from marking a variable as `mut` because we’ll get a
-compile-time error if we accidentally try to reassign to this variable without
-using the `let` keyword. By using `let`, we can perform a few transformations
-on a value but have the variable be immutable after those transformations have
-been completed.
+Gölgeleme, bir değişkeni `mut` olarak işaretlemekten farklıdır, çünkü yanlışlıkla bu değişkene
+olmadan `let` anahtar sözcüğünü kullanarak yeniden atama yapmaya çalışırsak
+derleme zamanı hatası alırız. let` anahtar sözcüğünü kullanarak
+bir değer üzerinde birkaç dönüşüm gerçekleştirebilir
+ancak bu dönüşümler tamamlandıktan sonra değişkenin değişmez olmasını sağlayabiliriz.
 
-The other difference between `mut` and shadowing is that because we’re
-effectively creating a new variable when we use the `let` keyword again, we can
-change the type of the value but reuse the same name. For example, say our
-program asks a user to show how many spaces they want between some text by
-inputting space characters, and then we want to store that input as a number:
+`mut` ile gölgeleme arasındaki diğer fark ise, `let` anahtar sözcüğünü tekrar kullandığımızda
+etkin bir şekilde yeni bir değişken oluşturduğumuz için
+değerin türünü değiştirebilir ancak aynı ismi tekrar kullanabiliriz. Örneğin,
+programımızın bir kullanıcıdan
+boşluk karakterleri girerek bazı metinler arasında kaç boşluk istediğini göstermesini istediğini ve daha sonra bu girdiyi bir sayı olarak saklamak istediğimizi varsayalım:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-04-shadowing-can-change-types/src/main.rs:here}}
 ```
 
-The first `spaces` variable is a string type and the second `spaces` variable
-is a number type. Shadowing thus spares us from having to come up with
-different names, such as `spaces_str` and `spaces_num`; instead, we can reuse
-the simpler `spaces` name. However, if we try to use `mut` for this, as shown
-here, we’ll get a compile-time error:
+İlk `spaces` değişkeni bir string tipidir ve ikinci `spaces` değişkeni
+bir sayı tipidir. Böylece gölgeleme bizi `spaces_str` ve `spaces_num` gibi
+farklı isimler bulmaktan kurtarır; bunun yerine
+daha basit olan `spaces` ismini tekrar kullanabiliriz. Ancak, burada
+gösterildiği gibi bunun için `mut` kullanmayı denersek, derleme zamanı hatası alırız:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/src/main.rs:here}}
 ```
 
-The error says we’re not allowed to mutate a variable’s type:
-
+Hata, bir değişkenin türünü değiştirmemize izin verilmediğini söylüyor:
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/output.txt}}
 ```
 
-Now that we’ve explored how variables work, let’s look at more data types they
-can have.
+Şimdi değişkenlerin nasıl çalıştığını keşfettiğimize göre,
+sahip olabilecekleri daha fazla veri türüne bakalım.
 
 [comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [data-types]: ch03-02-data-types.html#data-types

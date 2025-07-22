@@ -1,101 +1,87 @@
-# Contributing
+# Katkı Sağlama
 
-We'd love your help! Thanks for caring about the book.
+Yardımınıza çok seviniriz! Kitaba ilgi gösterdiğiniz için teşekkür ederiz.
 
-## Where to Edit
+## Düzenleme Yeri
 
-All edits should be made in the `src` directory.
+Tüm düzenlemeler `src` dizininde yapılmalıdır.
 
-The `nostarch` directory contains snapshots for sending edits to the publishers
-of the print version. The snapshot files reflect what has been sent or not, so
-they only get updated when edits are sent to No Starch. **Do not submit pull
-requests changing files in the `nostarch` directory, they will be closed.**
+`nostarch` dizini, basılı sürümün yayıncılarına düzenlemeleri göndermek için kullanılan anlık görüntüleri içerir. Anlık görüntü dosyaları, gönderilen ve gönderilmeyenleri yansıtır, bu nedenle
 
-We use [`rustfmt`][rustfmt] to apply standard formatting to Rust code in the
-repo and [`dprint`][dprint] to apply standing formatting to the Markdown source
-and the non-Rust code in the project.
+sadece düzenlemeler No Starch'a gönderildiğinde güncellenir. **nostarch dizinindeki dosyaları değiştiren pull istekleri göndermeyin, bunlar kapatılacaktır.**
+
+
+Depodaki Rust koduna standart biçimlendirme uygulamak için [rustfmt][rustfmt] ve
+projedeki Markdown kaynağına ve Rust dışı kodlara sabit biçimlendirme uygulamak için [dprint][dprint] kullanıyoruz.
 
 [rustfmt]: https://github.com/rust-lang/rustfmt
 [dprint]: https://dprint.dev
 
-You will normally have `rustfmt` installed if you have a Rust toolchain
-installed; if for some reason you do not have a copy of `rustfmt`, you can add
-it by running the following command:
+Rust araç zinciri yüklü ise normalde `rustfmt` de yüklü olacaktır;
+herhangi bir nedenle `rustfmt` kopyası yoksa, aşağıdaki komutu çalıştırarak ekleyebilirsiniz:
 
 ```sh
 rustup component add rustfmt
 ```
 
-To install `dprint`, you can run the following command:
+`dprint`'i yüklemek için aşağıdaki komutu çalıştırabilirsiniz:
 
 ```sh
 cargo install dprint
 ```
 
-Or follow the [instructions][install-dprint] on the `dprint` website.
+Veya `dprint` web sitesindeki [talimatları][install-dprint] izleyin.
 
 [install-dprint]: https://dprint.dev/install/
 
-To format Rust code, you can run `rustfmt <path to file>`, and to format other
-files, you can pass `dprint fmt <path to file>`. Many text editors also have native
-support or extensions for both `rustfmt` and `dprint`.
+Rust kodunu biçimlendirmek için `rustfmt <dosya yolu>` komutunu çalıştırabilir, diğer dosyaları biçimlendirmek için ise `dprint fmt <dosya yolu>` komutunu kullanabilirsiniz. Birçok metin düzenleyici, hem `rustfmt` hem de `dprint` için yerel destek veya uzantılara sahiptir.
 
-## Checking for Fixes
+## Düzeltmelerin Kontrol Edilmesi
 
-The book rides the Rust release trains. Therefore, if you see a problem on
-https://doc.rust-lang.org/stable/book, it may already be fixed on the `main`
-branch in this repo, but the fix hasn't gone through nightly -> beta -> stable
-yet. Please check the `main` branch in this repo before reporting an issue.
+Kitap, Rust sürüm trenlerini takip etmektedir. Bu nedenle,
+https://doc.rust-lang.org/stable/book adresinde bir sorun görürseniz, bu sorun bu depodaki `main`
+dalında zaten düzeltilmiş olabilir, ancak düzeltme henüz nightly -> beta -> stable
+aşamalarından geçmemiş olabilir. Bir sorun bildirmeden önce lütfen bu depodaki `main` dalını kontrol edin.
 
-Looking at the history for a particular file can also give more information on
-how or whether an issue has been fixed or not if you're trying to figure that
-out.
+Belirli bir dosyanın geçmişine bakmak da, bir sorunun nasıl veya olup olmadığını anlamaya çalışıyorsanız, daha fazla bilgi verebilir.
 
-Please also search open and closed issues and open and closed PRs before
-reporting a new issue or opening a new PR.
+Yeni bir sorun bildirmeden veya yeni bir PR açmadan önce lütfen açık ve kapalı sorunları ve açık ve kapalı PR'leri de arayın.
 
-## Licensing
 
-This repository is under the same license as Rust itself, MIT/Apache2. You
-can find the full text of each license in the `LICENSE-*` files in this
-repository.
+## Lisanslama
 
-## Code of Conduct
+Bu depo, Rust'un kendisiyle aynı lisans altında, MIT/Apache2'dir. Her lisansın tam metnini bu depodaki `LICENSE-*` dosyalarında bulabilirsiniz.
 
-The Rust project has [a code of conduct](http://rust-lang.org/policies/code-of-conduct)
-that governs all sub-projects, including this one. Please respect it!
+## Davranış Kuralları
 
-## Expectations
+Rust projesi, bu proje dahil olmak üzere tüm alt projeleri yöneten [davranış kuralları](http://rust-lang.org/policies/code-of-conduct)
 
-Because the book is [printed][nostarch], and because we want
-to keep the online version of the book close to the print version when
-possible, it may take longer than you're used to for us to address your issue
-or pull request.
+## Beklentiler
+
+Kitap [basılı][nostarch] olduğundan ve kitabın çevrimiçi sürümünü mümkün olduğunca basılı sürüme yakın tutmak istediğimizden,
+ sorununuzu veya çekme isteğinizi ele almamız normalde alıştığınızdan daha uzun sürebilir.
 
 [nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
 
-So far, we've been doing a larger revision to coincide with [Rust Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
-revisions, we will only be correcting errors. If your issue or pull request
-isn't strictly fixing an error, it might sit until the next time that we're
-working on a large revision: expect on the order of months or years. Thank you
-for your patience!
+Şimdiye kadar, [Rust Editions](https://doc.rust-lang.org/edition-guide/) ile eşzamanlı olarak daha büyük bir revizyon yapıyoruz. Bu büyük revizyonlar arasında
+sadece hataları düzelteceğiz. Sorununuz veya çekme isteğiniz
+kesinlikle bir hatayı düzeltmiyorsa, bir sonraki büyük revizyon çalışmamıza kadar beklemede kalabilir:
+bu, aylar veya yıllar sürebilir. Sabrınız için teşekkür ederiz!
 
-## Help wanted
 
-If you're looking for ways to help that don't involve large amounts of
-reading or writing, check out the [open issues with the E-help-wanted
-label][help-wanted]. These might be small fixes to the text, Rust code,
-frontend code, or shell scripts that would help us be more efficient or
-enhance the book in some way!
+## Yardım aranıyor
+
+Çok fazla okuma veya yazma gerektirmeyen yardım yolları arıyorsanız, [E-help-wanted etiketli açık sorunlara] bakın.
+Bunlar, metin, Rust kodu, ön uç kodu veya kabuk betiklerinde küçük düzeltmeler olabilir ve bizim daha verimli olmamıza veya kitabı bir şekilde geliştirmemize yardımcı olabilir!
 
 [help-wanted]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3AE-help-wanted
 
-## Translations
+## Çeviriler
 
-We'd love help translating the book! See the [Translations] label to join in
-efforts that are currently in progress. Open a new issue to start working on
-a new language! We're waiting on [mdbook support] for multiple languages
-before we merge any in, but feel free to start!
+Kitabın çevirisine yardımcı olmak ister misiniz? [Çeviriler] etiketine bakarak şu anda devam eden çalışmalara katılabilirsiniz.
+Yeni bir dil üzerinde çalışmaya başlamak için yeni bir konu açın!
+Birden fazla dil için [mdbook desteği] bekliyoruz,
+ancak siz çalışmaya başlayabilirsiniz!
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 [mdbook support]: https://github.com/rust-lang/mdBook/issues/5

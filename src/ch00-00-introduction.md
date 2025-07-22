@@ -1,196 +1,192 @@
-# Introduction
+# Giriş
 
-> Note: This edition of the book is the same as [The Rust Programming
-> Language][nsprust] available in print and ebook format from [No Starch
-> Press][nsp].
+> Not: Bu kitap baskısı, [No Starch Press][nsp] tarafından basılı ve e-kitap
+> formatında yayınlanan [The Rust Programming Language][nsprust] ile aynıdır.
 
 [nsprust]: https://nostarch.com/rust-programming-language-2nd-edition
 [nsp]: https://nostarch.com/
 
-Welcome to _The Rust Programming Language_, an introductory book about Rust.
-The Rust programming language helps you write faster, more reliable software.
-High-level ergonomics and low-level control are often at odds in programming
-language design; Rust challenges that conflict. Through balancing powerful
-technical capacity and a great developer experience, Rust gives you the option
-to control low-level details (such as memory usage) without all the hassle
-traditionally associated with such control.
+Rust hakkında bir giriş kitabı olan _The Rust Programming Language_'e hoş geldiniz.
+Rust programlama dili, daha hızlı ve daha güvenilir yazılımlar yazmanıza yardımcı olur.
+Yüksek düzey ergonomi ve düşük düzey kontrol, programlama dili tasarımında genellikle
+çelişkilidir; Rust bu çelişkiye meydan okur. Güçlü teknik kapasite ile harika bir geliştirici
+deneyimini dengeleyerek, Rust size düşük düzey ayrıntıları (örneğin bellek kullanımı)
+geleneksel olarak bu tür kontrol ile ilişkili tüm zorluklar olmadan kontrol etme
+seçeneği sunar.
 
-## Who Rust Is For
+## Rust Kimler İçin?
 
-Rust is ideal for many people for a variety of reasons. Let’s look at a few of
-the most important groups.
+Rust, çeşitli nedenlerle birçok kişi için idealdir. En önemli gruplardan
+bazılarına bakalım.
 
-### Teams of Developers
+### Geliştirici Ekipleri
 
-Rust is proving to be a productive tool for collaborating among large teams of
-developers with varying levels of systems programming knowledge. Low-level code
-is prone to various subtle bugs, which in most other languages can be caught
-only through extensive testing and careful code review by experienced
-developers. In Rust, the compiler plays a gatekeeper role by refusing to
-compile code with these elusive bugs, including concurrency bugs. By working
-alongside the compiler, the team can spend their time focusing on the program’s
-logic rather than chasing down bugs.
+Rust, sistem programlama bilgisi farklı düzeylerde olan büyük geliştirici
+ekipleri arasında işbirliği için verimli bir araç olduğunu kanıtlamaktadır. Düşük seviyeli kodlar
+çeşitli ince hatalara meyillidir ve diğer dillerin çoğunda bu hatalar
+sadece kapsamlı testler ve deneyimli geliştiriciler tarafından yapılan dikkatli kod incelemeleriyle
+yakalanabilir. Rust'ta derleyici, eşzamanlılık hataları da dahil olmak üzere bu zor tespit edilen hataları içeren kodları derlemeyi reddederek
+bir kapı bekçisi rolü oynar. Derleyiciyle birlikte çalışarak
+ekip, hataları takip etmek yerine programın
+mantığına odaklanarak zamanını değerlendirebilir.
 
-Rust also brings contemporary developer tools to the systems programming world:
+Rust ayrıca sistem programlama dünyasına çağdaş geliştirici araçları getirir:
 
-- Cargo, the included dependency manager and build tool, makes adding,
-  compiling, and managing dependencies painless and consistent across the Rust
-  ecosystem.
-- The Rustfmt formatting tool ensures a consistent coding style across
-  developers.
-- The rust-analyzer powers Integrated Development Environment (IDE)
-  integration for code completion and inline error messages.
+- Dahili bağımlılık yöneticisi ve derleme aracı olan Cargo, Rust
+  ekosisteminde bağımlılıkları eklemeyi, derlemeyi ve yönetmeyi kolay ve tutarlı hale getirir.
+  .
+- Rustfmt biçimlendirme aracı, geliştiriciler arasında tutarlı bir kodlama stili
+  sağlar.
+- Rust-analyzer, kod tamamlama ve satır içi hata mesajları için Entegre Geliştirme Ortamı (IDE)
+  entegrasyonunu destekler.
 
-By using these and other tools in the Rust ecosystem, developers can be
-productive while writing systems-level code.
+Rust ekosistemindeki bu ve diğer araçları kullanarak, geliştiriciler sistem düzeyinde kod yazarken
+üretken olabilirler.
 
-### Students
+### Öğrenciler
 
-Rust is for students and those who are interested in learning about systems
-concepts. Using Rust, many people have learned about topics like operating
-systems development. The community is very welcoming and happy to answer
-student questions. Through efforts such as this book, the Rust teams want to
-make systems concepts more accessible to more people, especially those new to
-programming.
+Rust, öğrenciler ve sistem kavramlarını öğrenmek isteyenler için tasarlanmıştır.
+Rust kullanarak birçok kişi işletim sistemi geliştirme gibi konuları öğrenmiştir.
+Topluluk çok misafirperverdir ve öğrencilerin sorularını yanıtlamaktan mutluluk
+duyar. Bu kitap gibi çabalarla Rust ekipleri, sistem kavramlarını daha fazla
+kişiye, özellikle programlamaya yeni başlayanlara daha erişilebilir hale
+getirmek istemektedir.
 
-### Companies
+### Şirketler
 
-Hundreds of companies, large and small, use Rust in production for a variety of
-tasks, including command line tools, web services, DevOps tooling, embedded
-devices, audio and video analysis and transcoding, cryptocurrencies,
-bioinformatics, search engines, Internet of Things applications, machine
-learning, and even major parts of the Firefox web browser.
+Yüzlerce büyük ve küçük şirket, komut satırı araçları, web hizmetleri, DevOps
+araçları, gömülü cihazlar, ses ve video analizi ve kod dönüştürme, kripto
+para birimleri, biyoinformatik, arama motorları, Nesnelerin İnterneti
+uygulamaları, makine öğrenimi ve hatta Firefox web tarayıcısının önemli
+bölümleri dahil olmak üzere çeşitli görevler için üretimde Rust kullanmaktadır.
 
-### Open Source Developers
+### Açık Kaynak Geliştiriciler
 
-Rust is for people who want to build the Rust programming language, community,
-developer tools, and libraries. We’d love to have you contribute to the Rust
-language.
+Rust, Rust programlama dilini, topluluğunu,
+geliştirici araçlarını ve kütüphanelerini oluşturmak isteyenler içindir. Rust
+diline katkıda bulunmanızı çok isteriz.
 
-### People Who Value Speed and Stability
+### Hız ve Kararlılığa Değer Verenler
 
-Rust is for people who crave speed and stability in a language. By speed, we
-mean both how quickly Rust code can run and the speed at which Rust lets you
-write programs. The Rust compiler’s checks ensure stability through feature
-additions and refactoring. This is in contrast to the brittle legacy code in
-languages without these checks, which developers are often afraid to modify. By
-striving for zero-cost abstractions—higher-level features that compile to
-lower-level code as fast as code written manually—Rust endeavors to make safe
-code be fast code as well.
+Rust, bir dilde hız ve kararlılık isteyenler içindir. Hız derken, hem Rust kodunun
+ne kadar hızlı çalışabileceğini hem de Rust'un program yazmanıza izin verdiği
+hızı kastediyoruz. Rust derleyicisinin kontrolleri, özellik
+eklemeleri ve yeniden düzenlemeler yoluyla kararlılığı sağlar. Bu, bu kontrollerin olmadığı
+dillerdeki kırılgan eski kodların aksine, geliştiricilerin genellikle değiştirmekten korktuğu kodlardır.
+Sıfır maliyetli soyutlamalar için çabalayan Rust,
+daha yüksek seviyeli özellikleri, manuel olarak yazılan kod kadar hızlı bir şekilde daha düşük seviyeli koda derleyerek, güvenli
+kodun aynı zamanda hızlı kod olmasını sağlamaya çalışır.
 
-The Rust language hopes to support many other users as well; those mentioned
-here are merely some of the biggest stakeholders. Overall, Rust’s greatest
-ambition is to eliminate the trade-offs that programmers have accepted for
-decades by providing safety _and_ productivity, speed _and_ ergonomics. Give
-Rust a try and see if its choices work for you.
+Rust dili, diğer birçok kullanıcıyı da desteklemeyi umut ediyor; burada bahsedilenler
+sadece en büyük paydaşlardan bazılarıdır. Genel olarak, Rust'un en büyük
+hedefi, güvenlik _ve_ üretkenlik, hız _ve_ ergonomi sağlayarak programcıların
+on yıllardır kabul ettiği ödünleşmeleri ortadan kaldırmaktır. Rust'u deneyin ve
+seçimlerinin size uygun olup olmadığını görün.
 
-## Who This Book Is For
+## Bu Kitap Kimler İçin
 
-This book assumes that you’ve written code in another programming language but
-doesn’t make any assumptions about which one. We’ve tried to make the material
-broadly accessible to those from a wide variety of programming backgrounds. We
-don’t spend a lot of time talking about what programming _is_ or how to think
-about it. If you’re entirely new to programming, you would be better served by
-reading a book that specifically provides an introduction to programming.
+Bu kitap, başka bir programlama dilinde kod yazdığınızı varsayar, ancak
+hangi dil olduğunu varsaymaz. Bu materyali, çok çeşitli programlama geçmişine sahip kişiler için
+geniş bir erişilebilirlik sağlayacak şekilde hazırlamaya çalıştık. Programlamanın ne
+olduğu veya nasıl düşünülmesi gerektiği hakkında çok fazla zaman harcamıyoruz.
+Programlamaya tamamen yeniyseniz, programlamaya özel bir giriş sağlayan bir kitap
+okumanız daha yararlı olacaktır.
 
-## How to Use This Book
+## Bu Kitap Nasıl Kullanılır
 
-In general, this book assumes that you’re reading it in sequence from front to
-back. Later chapters build on concepts in earlier chapters, and earlier
-chapters might not delve into details on a particular topic but will revisit
-the topic in a later chapter.
+Genel olarak, bu kitabı önden arkaya doğru
+sırayla okuduğunuzu varsayar. Daha sonraki bölümler daha önceki bölümlerdeki kavramlar üzerine inşa edilmiştir ve daha önceki
+bölümler belirli bir konunun ayrıntılarına girmeyebilir ancak daha sonraki bir bölümde
+konu tekrar ele alınacaktır.
 
-You’ll find two kinds of chapters in this book: concept chapters and project
-chapters. In concept chapters, you’ll learn about an aspect of Rust. In project
-chapters, we’ll build small programs together, applying what you’ve learned so
-far. Chapters 2, 12, and 21 are project chapters; the rest are concept chapters.
+Bu kitapta iki tür bölüm bulacaksınız: kavram bölümleri ve proje
+bölümleri. Kavram bölümlerinde Rust'ın bir yönü hakkında bilgi edineceksiniz. Proje bölümlerinde
+şimdiye kadar
+öğrendiklerinizi uygulayarak birlikte küçük programlar oluşturacağız. Bölüm 2, 12 ve 21 proje bölümleridir; geri kalanı kavram bölümleridir.
 
-Chapter 1 explains how to install Rust, how to write a “Hello, world!” program,
-and how to use Cargo, Rust’s package manager and build tool. Chapter 2 is a
-hands-on introduction to writing a program in Rust, having you build up a
-number guessing game. Here we cover concepts at a high level, and later
-chapters will provide additional detail. If you want to get your hands dirty
-right away, Chapter 2 is the place for that. Chapter 3 covers Rust features
-that are similar to those of other programming languages, and in Chapter 4
-you’ll learn about Rust’s ownership system. If you’re a particularly meticulous
-learner who prefers to learn every detail before moving on to the next, you
-might want to skip Chapter 2 and go straight to Chapter 3, returning to Chapter
-2 when you’d like to work on a project applying the details you’ve learned.
+Bölüm 1, Rust'ın nasıl kurulacağını, bir “Merhaba, dünya!” programının nasıl yazılacağını,
+ve Rust'ın paket yöneticisi ve derleme aracı olan Cargo'nun nasıl kullanılacağını açıklar. Bölüm 2, Rust'ta bir program yazmaya
+uygulamalı bir giriş niteliğindedir ve size bir
+sayı tahmin oyunu oluşturmanızı sağlar. Burada kavramları yüksek düzeyde ele alıyoruz ve daha sonraki
+bölümleri daha fazla ayrıntı sağlayacaktır. Ellerinizi hemen kirletmek istiyorsanız
+Bölüm 2 bunun için doğru yerdir. Bölüm 3'te Rust'un diğer programlama dillerine benzeyen
+özellikleri ele alınıyor ve Bölüm 4'te
+Rust'un sahiplik sistemi hakkında bilgi edineceksiniz. Bir sonraki bölüme geçmeden önce her ayrıntıyı öğrenmeyi tercih eden titiz bir
+öğrencisiyseniz
+Bölüm 2'yi atlayıp doğrudan Bölüm 3'e geçebilir ve öğrendiğiniz ayrıntıları uygulayarak bir proje üzerinde çalışmak istediğinizde Bölüm
+2'ye dönebilirsiniz.
 
-Chapter 5 discusses structs and methods, and Chapter 6 covers enums, `match`
-expressions, and the `if let` control flow construct. You’ll use structs and
-enums to make custom types in Rust.
+Bölüm 5'te yapılar ve yöntemler, Bölüm 6'da ise enumlar, `match`
+ifadeleri ve `if let` kontrol akışı yapısı ele alınmaktadır. Rust'ta özel tipler oluşturmak için struct'ları ve
+enum'ları kullanacaksınız.
 
-In Chapter 7, you’ll learn about Rust’s module system and about privacy rules
-for organizing your code and its public Application Programming Interface
-(API). Chapter 8 discusses some common collection data structures that the
-standard library provides, such as vectors, strings, and hash maps. Chapter 9
-explores Rust’s error-handling philosophy and techniques.
+Bölüm 7'de, Rust'ın modül sistemi ve kodunuzu düzenlemek için gizlilik kuralları
+ve genel Uygulama Programlama Arayüzü
+(API) hakkında bilgi edineceksiniz. Bölüm 8'de
+standart kütüphanesinin sağladığı vektörler, dizeler ve hash haritaları gibi bazı yaygın toplama veri yapıları ele alınmaktadır. Bölüm 9
+Rust'ın hata işleme felsefesini ve tekniklerini incelemektedir.
 
-Chapter 10 digs into generics, traits, and lifetimes, which give you the power
-to define code that applies to multiple types. Chapter 11 is all about testing,
-which even with Rust’s safety guarantees is necessary to ensure your program’s
-logic is correct. In Chapter 12, we’ll build our own implementation of a subset
-of functionality from the `grep` command line tool that searches for text
-within files. For this, we’ll use many of the concepts we discussed in the
-previous chapters.
+Bölüm 10, birden fazla türe uygulanabilen kod tanımlamak için
+size güç veren jenerikler, özellikler ve yaşam sürelerini inceliyor. Bölüm 11, Rust'ın güvenlik garantileriyle bile programınızın
+mantığının doğru olduğundan emin olmak için gerekli olan testlerle ilgilidir. Bölüm 12'de, dosyalar içinde metin
+arayan `grep' komut satırı aracının işlevselliğinin bir alt kümesi
+için kendi uygulamamızı oluşturacağız. Bunun için,
+önceki bölümlerde tartıştığımız kavramların çoğunu kullanacağız.
 
-Chapter 13 explores closures and iterators: features of Rust that come from
-functional programming languages. In Chapter 14, we’ll examine Cargo in more
-depth and talk about best practices for sharing your libraries with others.
-Chapter 15 discusses smart pointers that the standard library provides and the
-traits that enable their functionality.
+Bölüm 13, kapanışları ve yineleyicileri inceliyor: Rust'ın
+işlevsel programlama dillerinden gelen özellikleri. Bölüm 14'te, Cargo'yu
+daha derinlemesine inceleyeceğiz ve kütüphanelerinizi başkalarıyla paylaşmak için en iyi uygulamalar hakkında konuşacağız.
+Bölüm 15, standart kütüphanenin sağladığı akıllı işaretçileri ve bunların işlevselliğini sağlayan
+özelliklerini tartışıyor.
 
-In Chapter 16, we’ll walk through different models of concurrent programming and
-talk about how Rust helps you to program in multiple threads fearlessly. In
-Chapter 17, we build on that by exploring Rust’s async and await syntax, along
-with tasks, futures, and streams, and the lightweight concurrency model they
-enable.
+Bölüm 16'da, farklı eş zamanlı programlama modellerini inceleyeceğiz ve
+Rust'ın birden fazla iş parçacığında korkusuzca programlama yapmanıza nasıl yardımcı olduğunu konuşacağız. Bölüm 17'de, Rust'ın async ve await sözdizimini
+tasks, futures ve streams ile birlikte ve
+etkinleştirdikleri hafif eşzamanlılık modelini keşfederek bunu geliştiriyoruz.
 
-Chapter 18 looks at how Rust idioms compare to object-oriented programming
-principles you might be familiar with. Chapter 19 is a reference on patterns and
-pattern matching, which are powerful ways of expressing ideas throughout Rust
-programs. Chapter 20 contains a smorgasbord of advanced topics of interest,
-including unsafe Rust, macros, and more about lifetimes, traits, types,
-functions, and closures.
+Bölüm 18, Rust deyimlerinin aşina olabileceğiniz nesne yönelimli programlama
+ilkeleriyle nasıl karşılaştırıldığını inceliyor. Bölüm 19, Rust
+programları boyunca fikirleri ifade etmenin güçlü yolları olan kalıplar ve
+kalıp eşleştirme üzerine bir referanstır. Bölüm 20, güvensiz Rust, makrolar ve yaşam süreleri, özellikler, türler,
+işlevleri ve kapanışlar hakkında daha fazlasını içeren
+gibi ilgi çekici ileri düzey konulardan oluşan bir smorgasbord içerir.
 
-In Chapter 21, we’ll complete a project in which we’ll implement a low-level
-multithreaded web server!
+Bölüm 21'de, düşük seviyeli bir
+çok iş parçacıklı web sunucusu uygulayacağımız bir projeyi tamamlayacağız!
 
-Finally, some appendixes contain useful information about the language in a more
-reference-like format. **Appendix A** covers Rust’s keywords, **Appendix B**
-covers Rust’s operators and symbols, **Appendix C** covers derivable traits
-provided by the standard library, **Appendix D** covers some useful development
-tools, and **Appendix E** explains Rust editions. In **Appendix F**, you can
-find translations of the book, and in **Appendix G** we’ll cover how Rust is
-made and what nightly Rust is.
+Son olarak, bazı ekler dil hakkında daha
+referans benzeri bir formatta faydalı bilgiler içermektedir. **Ek A** Rust'ın anahtar kelimelerini, **Ek B**
+Rust'ın operatörlerini ve sembollerini, **Ek C** standart kütüphane tarafından sağlanan
+türetilebilir özellikleri, **Ek D** bazı yararlı geliştirme
+araçlarını ve **Ek E** Rust sürümlerini açıklamaktadır. Ek F**'de
+kitabın çevirilerini bulabilirsiniz ve **Ek G**'de Rust'ın nasıl
+yapıldığını ve gecelik Rust'ın ne olduğunu ele alacağız.
 
-There is no wrong way to read this book: if you want to skip ahead, go for it!
-You might have to jump back to earlier chapters if you experience any
-confusion. But do whatever works for you.
+Bu kitabı okumanın yanlış bir yolu yok: eğer ilerlemek istiyorsanız, devam edin!
+Herhangi bir
+kafa karışıklığı yaşarsanız önceki bölümlere geri dönmeniz gerekebilir. Ama sizin için hangisi uygunsa onu yapın.
 
 <span id="ferris"></span>
 
-An important part of the process of learning Rust is learning how to read the
-error messages the compiler displays: these will guide you toward working code.
-As such, we’ll provide many examples that don’t compile along with the error
-message the compiler will show you in each situation. Know that if you enter
-and run a random example, it may not compile! Make sure you read the
-surrounding text to see whether the example you’re trying to run is meant to
-error. Ferris will also help you distinguish code that isn’t meant to work:
+Rust öğrenme sürecinin önemli bir parçası, derleyicinin gösterdiği
+hata mesajlarını nasıl okuyacağınızı öğrenmektir: bunlar sizi çalışan koda yönlendirecektir.
+Bu nedenle, derleyicinin her durumda size göstereceği hata
+mesajıyla birlikte derlenmeyen birçok örnek sunacağız. adresine girip rastgele bir örnek çalıştırırsanız, bunun derlenmeyebileceğini bilin! Çalıştırmaya çalıştığınız örneğin
+hatasına yönelik olup olmadığını anlamak için
+çevresindeki metni okuduğunuzdan emin olun. Ferris ayrıca çalışması amaçlanmayan kodu ayırt etmenize de yardımcı olacaktır:
 
 | Ferris                                                                                                           | Meaning                                          |
 | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="Ferris with a question mark"/>            | This code does not compile!                      |
-| <img src="img/ferris/panics.svg" class="ferris-explain" alt="Ferris throwing up their hands"/>                   | This code panics!                                |
-| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="Ferris with one claw up, shrugging"/> | This code does not produce the desired behavior. |
+| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="Ferris with a question mark"/>            | Bu kod derlenmiyor!                     |
+| <img src="img/ferris/panics.svg" class="ferris-explain" alt="Ferris throwing up their hands"/>                   | Bu kod panik yapıyor!                                |
+| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="Ferris with one claw up, shrugging"/> | Bu kod istenen davranışı üretmez. |
 
-In most situations, we’ll lead you to the correct version of any code that
-doesn’t compile.
+Çoğu durumda, sizi
+'un derlemediği herhangi bir kodun doğru sürümüne yönlendireceğiz.
 
-## Source Code
+## Kaynak Kod
 
-The source files from which this book is generated can be found on
-[GitHub][book].
+Bu kitabın oluşturulduğu kaynak dosyalar
+[GitHub][kitap] adresinde bulunabilir.
 
 [book]: https://github.com/rust-lang/book/tree/main/src

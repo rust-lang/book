@@ -1,14 +1,14 @@
-# Using Structs to Structure Related Data
+# İlgili Verileri Yapılandırmak için Yapıları Kullanma
 
-A _struct_, or _structure_, is a custom data type that lets you package
-together and name multiple related values that make up a meaningful group. If
-you’re familiar with an object-oriented language, a _struct_ is like an
-object’s data attributes. In this chapter, we’ll compare and contrast tuples
-with structs to build on what you already know and demonstrate when structs are
-a better way to group data.
+Bir _struct_ veya _structure_,
+adresini birlikte paketlemenize ve anlamlı bir grup oluşturan birden fazla ilgili değeri adlandırmanıza olanak tanıyan özel bir veri türüdür. Eğer
+nesne yönelimli bir dile aşinaysanız,_struct_ bir
+nesnesinin veri niteliklerine benzer. Bu bölümde
+tuple'ları struct'larla karşılaştırarak bildiklerinizi geliştirecek ve struct'ların
+verileri gruplamak için ne zaman daha iyi bir yol olduğunu göstereceğiz.
 
-We’ll demonstrate how to define and instantiate structs. We’ll discuss how to
-define associated functions, especially the kind of associated functions called
-_methods_, to specify behavior associated with a struct type. Structs and enums
-(discussed in Chapter 6) are the building blocks for creating new types in your
-program’s domain to take full advantage of Rust’s compile-time type checking.
+Yapıların nasıl tanımlanacağını ve örneklendirileceğini göstereceğiz. Bir struct türüyle ilişkili davranışları belirtmek için
+ilişkili fonksiyonları, özellikle de
+_methods_ adı verilen ilişkili fonksiyonları nasıl tanımlayacağımızı tartışacağız. Yapılar ve enumlar
+(Bölüm 6'da ele alınmıştır), Rust'ın derleme zamanı tip denetiminden tam olarak yararlanmak için
+programınızın etki alanında yeni tipler oluşturmak için yapı taşlarıdır.
