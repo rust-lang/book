@@ -77,11 +77,11 @@ the concrete types of the generic type parameters each time. When we use the
 indicate which implementation of `Iterator` we want to use.
 
 With associated types, we don’t need to annotate types because we can’t
-implement a trait on a type multiple times. In Listing 20-13 with the definition
-that uses associated types, we can choose what the type of `Item` will be only
-once, because there can be only one `impl Iterator for Counter`. We don’t have
-to specify that we want an iterator of `u32` values everywhere that we call
-`next` on `Counter`.
+implement a trait on a type multiple times. In Listing 20-13 with the
+definition that uses associated types, we can choose what the type of `Item`
+will be only once because there can be only one `impl Iterator for Counter`. We
+don’t have to specify that we want an iterator of `u32` values everywhere we
+call `next` on `Counter`.
 
 Associated types also become part of the trait’s contract: implementors of the
 trait must provide a type to stand in for the associated type placeholder.
@@ -146,12 +146,12 @@ default.
 We have two structs, `Millimeters` and `Meters`, holding values in different
 units. This thin wrapping of an existing type in another struct is known as the
 _newtype pattern_, which we describe in more detail in the [“Using the Newtype
-Pattern to Implement External Traits on External Types”][newtype]<!-- ignore
+Pattern to Implement External Traits”][newtype]<!-- ignore
 --> section. We want to add values in millimeters to values in meters and have
 the implementation of `Add` do the conversion correctly. We can implement `Add`
 for `Millimeters` with `Meters` as the `Rhs`, as shown in Listing 20-16.
 
-<Listing number="20-16" file-name="src/lib.rs" caption="Implementing the `Add` trait on `Millimeters` to add `Millimeters` to `Meters`">
+<Listing number="20-16" file-name="src/lib.rs" caption="Implementing the `Add` trait on `Millimeters` to add `Millimeters` and `Meters`">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-16/src/lib.rs}}
@@ -196,7 +196,7 @@ want to use. Consider the code in Listing 20-17 where we’ve defined two traits
 both traits on a type `Human` that already has a method named `fly` implemented
 on it. Each `fly` method does something different.
 
-<Listing number="20-17" file-name="src/main.rs" caption="Two traits are defined to have a ` method and are implemented on the `Human` type, and a `fly` method is implemented on `Human` directly.">
+<Listing number="20-17" file-name="src/main.rs" caption="Two traits are defined to have a `fly` method and are implemented on the `Human` type, and a `fly` method is implemented on `Human` directly.">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-17/src/main.rs:here}}
@@ -248,12 +248,12 @@ trait to use based on the type of `self`.
 
 However, associated functions that are not methods don’t have a `self`
 parameter. When there are multiple types or traits that define non-method
-functions with the same function name, Rust doesn't always know which type you
-mean unless you use _fully qualified syntax_. For example, in Listing 20-20 we
-create a trait for an animal shelter that wants to name all baby dogs _Spot_.
-We make an `Animal` trait with an associated non-method function `baby_name`.
-The `Animal` trait is implemented for the struct `Dog`, on which we also
-provide an associated non-method function `baby_name` directly.
+functions with the same function name, Rust doesn’t always know which type you
+mean unless you use fully qualified syntax. For example, in Listing 20-20 we
+create a trait for an animal shelter that wants to name all baby dogs Spot. We
+make an `Animal` trait with an associated non-method function `baby_name`. The
+`Animal` trait is implemented for the struct `Dog`, on which we also provide an
+associated non-method function `baby_name` directly.
 
 <Listing number="20-20" file-name="src/main.rs" caption="A trait with an associated function and a type with an associated function of the same name that also implements the trait">
 
@@ -347,7 +347,7 @@ make use of the associated items of the second trait. The trait your trait
 definition is relying on is called a _supertrait_ of your trait.
 
 For example, let’s say we want to make an `OutlinePrint` trait with an
-`outline_print` method that will print a given value formatted so that it's
+`outline_print` method that will print a given value formatted so that it’s
 framed in asterisks. That is, given a `Point` struct that implements the
 standard library trait `Display` to result in `(x, y)`, when we call
 `outline_print` on a `Point` instance that has `1` for `x` and `3` for `y`, it
@@ -416,20 +416,24 @@ Then, implementing the `OutlinePrint` trait on `Point` will compile
 successfully, and we can call `outline_print` on a `Point` instance to display
 it within an outline of asterisks.
 
-### Using the Newtype Pattern to Implement External Traits on External Types
+<!-- Old link, do not remove -->
+<a id="using-the-newtype-pattern-to-implement-external-traits-on-external-types"></a>
 
-In [“Implementing a Trait on a Type”][implementing-a-trait-on-a-type]<!-- ignore
---> in Chapter 10, we mentioned the orphan rule that states we’re only allowed
-to implement a trait on a type if either the trait or the type, or both, are
-local to our crate. It’s possible to get around this restriction using the
-_newtype pattern_, which involves creating a new type in a tuple struct. (We
-covered tuple structs in [“Using Tuple Structs Without Named Fields to Create
-Different Types”][tuple-structs]<!-- ignore --> in Chapter 5.) The tuple struct
-will have one field and be a thin wrapper around the type for which we want to
-implement a trait. Then the wrapper type is local to our crate, and we can
-implement the trait on the wrapper. _Newtype_ is a term that originates from the
-Haskell programming language. There is no runtime performance penalty for using
-this pattern, and the wrapper type is elided at compile time.
+### Using the Newtype Pattern to Implement External Traits
+
+In [“Implementing a Trait on a Type”][implementing-a-trait-on-a-type]<!--
+ignore --> in Chapter 10, we mentioned the orphan rule that states we’re only
+allowed to implement a trait on a type if either the trait or the type, or
+both, are local to our crate. It’s possible to get around this restriction
+using the _newtype pattern_, which involves creating a new type in a tuple
+struct. (We covered tuple structs in [“Using Tuple Structs Without Named Fields
+to Create Different Types”][tuple-structs]<!-- ignore --> in Chapter 5.) The
+tuple struct will have one field and be a thin wrapper around the type for
+which we want to implement a trait. Then the wrapper type is local to our
+crate, and we can implement the trait on the wrapper. _Newtype_ is a term that
+originates from the Haskell programming language. There is no runtime
+performance penalty for using this pattern, and the wrapper type is elided at
+compile time.
 
 As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the
@@ -445,26 +449,26 @@ that holds an instance of `Vec<T>`; then we can implement `Display` on
 
 </Listing>
 
-The implementation of `Display` uses `self.0` to access the inner `Vec<T>`,
+The implementation of `Display` uses `self.0` to access the inner `Vec<T>`
 because `Wrapper` is a tuple struct and `Vec<T>` is the item at index 0 in the
 tuple. Then we can use the functionality of the `Display` trait on `Wrapper`.
 
 The downside of using this technique is that `Wrapper` is a new type, so it
 doesn’t have the methods of the value it’s holding. We would have to implement
-all the methods of `Vec<T>` directly on `Wrapper` such that the methods delegate
-to `self.0`, which would allow us to treat `Wrapper` exactly like a `Vec<T>`. If
-we wanted the new type to have every method the inner type has, implementing the
-`Deref` trait on the `Wrapper` to return the inner type would be a solution (we
-discussed implementing the `Deref` trait in [“Treating Smart Pointers Like
-Regular References with the `Deref` Trait”][smart-pointer-deref]<!-- ignore -->
-in Chapter 15). If we didn’t want the `Wrapper` type to have all the methods of
-the inner type—for example, to restrict the `Wrapper` type’s behavior—we would
-have to implement just the methods we do want manually.
+all the methods of `Vec<T>` directly on `Wrapper` such that the methods
+delegate to `self.0`, which would allow us to treat `Wrapper` exactly like a
+`Vec<T>`. If we wanted the new type to have every method the inner type has,
+implementing the `Deref` trait on the `Wrapper` to return the inner type would
+be a solution (we discussed implementing the `Deref` trait in [“Treating Smart
+Pointers Like Regular References with `Deref`”][smart-pointer-deref]<!-- ignore
+--> in Chapter 15). If we didn’t want the `Wrapper` type to have all the
+methods of the inner type—for example, to restrict the `Wrapper` type’s
+behavior—we would have to implement just the methods we do want manually.
 
 This newtype pattern is also useful even when traits are not involved. Let’s
 switch focus and look at some advanced ways to interact with Rust’s type system.
 
-[newtype]: ch20-02-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
+[newtype]: ch20-02-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits
 [implementing-a-trait-on-a-type]: ch10-02-traits.html#implementing-a-trait-on-a-type
 [traits-defining-shared-behavior]: ch10-02-traits.html#traits-defining-shared-behavior
 [smart-pointer-deref]: ch15-02-deref.html#treating-smart-pointers-like-regular-references-with-the-deref-trait

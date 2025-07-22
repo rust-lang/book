@@ -118,9 +118,9 @@ for use in the replacement code. Within `$()` is `$x:expr`, which matches any
 Rust expression and gives the expression the name `$x`.
 
 The comma following `$()` indicates that a literal comma separator character
-must appear between each instance of the code that matches the code within
-`$()`. The `*` specifies that the pattern matches zero or more of whatever
-precedes the `*`.
+must appear between each instance of the code that matches the code in `$()`.
+The `*` specifies that the pattern matches zero or more of whatever precedes
+the `*`.
 
 When we call this macro with `vec![1, 2, 3];`, the `$x` pattern matches three
 times with the three expressions `1`, `2`, and `3`.
@@ -216,7 +216,8 @@ first step is to make a new library crate, like this:
 $ cargo new hello_macro --lib
 ```
 
-Next, we’ll define the `HelloMacro` trait and its associated function:
+Next, in Listing 20-38, we’ll define the `HelloMacro` trait and its associated
+function.
 
 <Listing file-name="src/lib.rs" number="20-38" caption="A simple trait that we will use with the `derive` macro">
 
@@ -302,10 +303,11 @@ procedural macro crate you see or create. The code you specify in the body of
 the inner function (`impl_hello_macro` in this case) will be different
 depending on your procedural macro’s purpose.
 
-We’ve introduced three new crates: `proc_macro`, [`syn`], and [`quote`]. The
-`proc_macro` crate comes with Rust, so we didn’t need to add that to the
-dependencies in _Cargo.toml_. The `proc_macro` crate is the compiler’s API that
-allows us to read and manipulate Rust code from our code.
+We’ve introduced three new crates: `proc_macro`, [`syn`][syn]<!--ignore -->,
+and [`quote`][quote]<!-- ignore -->. The `proc_macro` crate comes with Rust,
+so we didn’t need to add that to the dependencies in _Cargo.toml_. The
+`proc_macro` crate is the compiler’s API that allows us to read and manipulate
+Rust code from our code.
 
 The `syn` crate parses Rust code from a string into a data structure that we
 can perform operations on. The `quote` crate turns `syn` data structures back
@@ -383,10 +385,10 @@ into a `DeriveInput` instance, let’s generate the code that implements the
 </Listing>
 
 We get an `Ident` struct instance containing the name (identifier) of the
-annotated type using `ast.ident`. The struct in Listing 20-33 shows that when
-we run the `impl_hello_macro` function on the code in Listing 20-31, the
-`ident` we get will have the `ident` field with a value of `"Pancakes"`. Thus,
-the `name` variable in Listing 20-34 will contain an `Ident` struct instance
+annotated type using `ast.ident`. The struct in Listing 20-41 shows that when
+we run the `impl_hello_macro` function on the code in Listing 20-37, the
+`ident` we get will have the `ident` field with a value of `"Pancakes"`. Thus
+the `name` variable in Listing 20-42 will contain an `Ident` struct instance
 that, when printed, will be the string `"Pancakes"`, the name of the struct in
 Listing 20-37.
 
@@ -417,15 +419,16 @@ saves an allocation by converting `#name` to a string literal at compile time.
 
 At this point, `cargo build` should complete successfully in both `hello_macro`
 and `hello_macro_derive`. Let’s hook up these crates to the code in Listing
-20-31 to see the procedural macro in action! Create a new binary project in
+20-37 to see the procedural macro in action! Create a new binary project in
 your _projects_ directory using `cargo new pancakes`. We need to add
 `hello_macro` and `hello_macro_derive` as dependencies in the `pancakes`
 crate’s _Cargo.toml_. If you’re publishing your versions of `hello_macro` and
-`hello_macro_derive` to [crates.io](https://crates.io/), they would be regular
-dependencies; if not, you can specify them as `path` dependencies as follows:
+`hello_macro_derive` to [crates.io](https://crates.io/)<!-- ignore -->, they
+would be regular dependencies; if not, you can specify them as `path`
+dependencies as follows:
 
 ```toml
-{{#include ../listings/ch20-advanced-features/no-listing-21-pancakes/pancakes/Cargo.toml:7:9}}
+{{#include ../listings/ch20-advanced-features/no-listing-21-pancakes/pancakes/Cargo.toml:6:8}}
 ```
 
 Put the code in Listing 20-37 into _src/main.rs_, and run `cargo run`: it
@@ -437,7 +440,7 @@ trait implementation.
 Next, let’s explore how the other kinds of procedural macros differ from custom
 `derive` macros.
 
-### Attribute-Like macros
+### Attribute-Like Macros
 
 Attribute-like macros are similar to custom `derive` macros, but instead of
 generating code for the `derive` attribute, they allow you to create new
@@ -468,14 +471,14 @@ Other than that, attribute-like macros work the same way as custom `derive`
 macros: you create a crate with the `proc-macro` crate type and implement a
 function that generates the code you want!
 
-### Function-Like macros
+### Function-Like Macros
 
 Function-like macros define macros that look like function calls. Similarly to
 `macro_rules!` macros, they’re more flexible than functions; for example, they
 can take an unknown number of arguments. However, `macro_rules!` macros can only
 be defined using the match-like syntax we discussed in [“Declarative Macros with
 `macro_rules!` for General Metaprogramming”][decl]<!-- ignore --> earlier.
-Function-like macros take a `TokenStream` parameter and their definition
+Function-like macros take a `TokenStream` parameter, and their definition
 manipulates that `TokenStream` using Rust code as the other two types of
 procedural macros do. An example of a function-like macro is an `sql!` macro
 that might be called like so:
@@ -511,8 +514,8 @@ and do one more project!
 
 [ref]: ../reference/macros-by-example.html
 [tlborm]: https://veykril.github.io/tlborm/
-[`syn`]: https://crates.io/crates/syn
-[`quote`]: https://crates.io/crates/quote
+[syn]: https://crates.io/crates/syn
+[quote]: https://crates.io/crates/quote
 [syn-docs]: https://docs.rs/syn/2.0/syn/struct.DeriveInput.html
 [quote-docs]: https://docs.rs/quote
 [decl]: #declarative-macros-with-macro_rules-for-general-metaprogramming
