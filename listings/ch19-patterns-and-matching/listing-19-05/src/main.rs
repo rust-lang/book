@@ -1,5 +1,9 @@
 fn main() {
     // ANCHOR: here
-    let (x, y) = (1, 2, 3);
+    let v = vec!['a', 'b', 'c'];
+
+    for (index, value) in v.iter().enumerate() {
+        println!("{value} is at index {index}");
+    }
     // ANCHOR_END: here
 }

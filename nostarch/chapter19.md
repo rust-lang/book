@@ -49,13 +49,16 @@ Formally, `match` expressions are defined as the keyword `match`, a value to
 match on, and one or more match arms that consist of a pattern and an
 expression to run if the value matches that arm’s pattern, like this:
 
-```
-match VALUE {
-    PATTERN => EXPRESSION,
-    PATTERN => EXPRESSION,
-    PATTERN => EXPRESSION,
-}
-```
+<!--
+  Manually formatted rather than using Markdown intentionally: Markdown does not
+  support italicizing code in the body of a block like this!
+-->
+
+<pre><code>match <em>VALUE</em> {
+    <em>PATTERN</em> => <em>EXPRESSION</em>,
+    <em>PATTERN</em> => <em>EXPRESSION</em>,
+    <em>PATTERN</em> => <em>EXPRESSION</em>,
+}</code></pre>
 
 For example, here’s the `match` expression from Listing 6-5 that matches on an
 `Option<i32>` value in the variable `x`:
@@ -78,23 +81,108 @@ value can never fail and thus covers every remaining case.
 
 The particular pattern `_` will match anything, but it never binds to a
 variable, so it’s often used in the last match arm. The `_` pattern can be
-useful when you want to ignore any value not specified, for example. We’ll
-cover the `_` pattern in more detail in the “Ignoring Values in a
-Pattern” section later in this
-chapter.
+useful when you want to ignore any value not specified, for example. We’ll cover
+the `_` pattern in more detail in “Ignoring Values in a
+Pattern” later in this chapter.
+
+### let Statements
+
+Prior to this chapter, we had only explicitly discussed using patterns with
+`match` and `if let`, but in fact, we’ve used patterns in other places as well,
+including in `let` statements. For example, consider this straightforward
+variable assignment with `let`:
+
+```
+let x = 5;
+```
+
+Every time you’ve used a `let` statement like this you’ve been using patterns,
+although you might not have realized it! More formally, a `let` statement looks
+like this:
+
+<!--
+  Manually formatted rather than using Markdown intentionally: Markdown does not
+  support italicizing code in the body of a block like this!
+-->
+
+<pre>
+<code>let <em>PATTERN</em> = <em>EXPRESSION</em>;</code>
+</pre>
+
+In statements like `let x = 5;` with a variable name in the PATTERN slot, the
+variable name is just a particularly simple form of a pattern. Rust compares
+the expression against the pattern and assigns any names it finds. So, in the
+`let x = 5;` example, `x` is a pattern that means “bind what matches here to
+the variable `x`.” Because the name `x` is the whole pattern, this pattern
+effectively means “bind everything to the variable `x`, whatever the value is.”
+
+To see the pattern-matching aspect of `let` more clearly, consider Listing
+19-1, which uses a pattern with `let` to destructure a tuple.
+
+
+```
+    let (x, y, z) = (1, 2, 3);
+```
+
+Listing 19-1: Using a pattern to destructure a tuple and create three variables at once
+
+Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
+to the pattern `(x, y, z)` and sees that the value matches the pattern, in that
+it sees that the number of elements is the same in both, so Rust binds `1` to
+`x`, `2` to `y`, and `3` to `z`. You can think of this tuple pattern as nesting
+three individual variable patterns inside it.
+
+If the number of elements in the pattern doesn’t match the number of elements
+in the tuple, the overall type won’t match and we’ll get a compiler error. For
+example, Listing 19-2 shows an attempt to destructure a tuple with three
+elements into two variables, which won’t work.
+
+
+```
+    let (x, y) = (1, 2, 3);
+```
+
+Listing 19-2: Incorrectly constructing a pattern whose variables don’t match the number of elements in the tuple
+
+Attempting to compile this code results in this type error:
+
+```
+$ cargo run
+   Compiling patterns v0.1.0 (file:///projects/patterns)
+error[E0308]: mismatched types
+ --> src/main.rs:2:9
+  |
+2 |     let (x, y) = (1, 2, 3);
+  |         ^^^^^^   --------- this expression has type `({integer}, {integer}, {integer})`
+  |         |
+  |         expected a tuple with 3 elements, found one with 2 elements
+  |
+  = note: expected tuple `({integer}, {integer}, {integer})`
+             found tuple `(_, _)`
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `patterns` (bin "patterns") due to 1 previous error
+```
+
+To fix the error, we could ignore one or more of the values in the tuple using
+`_` or `..`, as you’ll see in the “Ignoring Values in a
+Pattern” section. If the problem
+is that we have too many variables in the pattern, the solution is to make the
+types match by removing variables so the number of variables equals the number
+of elements in the tuple.
 
 ### Conditional if let Expressions
 
-In Chapter 6 we discussed how to use `if let` expressions mainly as a shorter
+In Chapter 6, we discussed how to use `if let` expressions mainly as a shorter
 way to write the equivalent of a `match` that only matches one case.
 Optionally, `if let` can have a corresponding `else` containing code to run if
 the pattern in the `if let` doesn’t match.
 
-Listing 19-1 shows that it’s also possible to mix and match `if let`, `else if`, and `else if let` expressions. Doing so gives us more flexibility than a
+Listing 19-3 shows that it’s also possible to mix and match `if let`, `else if`, and `else if let` expressions. Doing so gives us more flexibility than a
 `match` expression in which we can express only one value to compare with the
-patterns. Also, Rust doesn’t require that the conditions in a series of `if let`, `else if`, `else if let` arms relate to each other.
+patterns. Also, Rust doesn’t require that the conditions in a series of `if let`, `else if`, and `else if let` arms relate to each other.
 
-The code in Listing 19-1 determines what color to make your background based on
+The code in Listing 19-3 determines what color to make your background based on
 a series of checks for several conditions. For this example, we’ve created
 variables with hardcoded values that a real program might receive from user
 input.
@@ -123,7 +211,7 @@ fn main() {
 }
 ```
 
-Listing 19-1: Mixing `if let`, `else if`, `else if let`, and `else`
+Listing 19-3: Mixing `if let`, `else if`, `else if let`, and `else`
 
 If the user specifies a favorite color, that color is used as the background.
 If no favorite color is specified and today is Tuesday, the background color is
@@ -135,7 +223,7 @@ color is blue.
 This conditional structure lets us support complex requirements. With the
 hardcoded values we have here, this example will print `Using purple as the background color`.
 
-You can see that `if let` can also introduce new variables which shadow existing
+You can see that `if let` can also introduce new variables that shadow existing
 variables in the same way that `match` arms can: the line `if let Ok(age) = age`
 introduces a new `age` variable that contains the value inside the `Ok` variant,
 shadowing the existing `age` variable. This means we need to place the `if age > 30` condition within that block: we can’t combine these two conditions into `if let Ok(age) = age && age > 30`. The new `age` we want to compare to 30 isn’t
@@ -149,11 +237,9 @@ not alert us to the possible logic bug.
 ### while let Conditional Loops
 
 Similar in construction to `if let`, the `while let` conditional loop allows a
-`while` loop to run for as long as a pattern continues to match. We first saw a
-`while let` loop in Chapter 17, where we used it to keep looping as long as a
-stream produced new values. Similarly, in Listing 19-2 we show a `while let`
-loop that waits on messages sent between threads, but in this case checking a
-`Result` instead of an `Option`.
+`while` loop to run for as long as a pattern continues to match. In Listing
+19-4 we show a `while let` loop that waits on messages sent between threads,
+but in this case checking a `Result` instead of an `Option`.
 
 
 ```
@@ -169,19 +255,21 @@ loop that waits on messages sent between threads, but in this case checking a
     }
 ```
 
-Listing 19-2: Using a `while let` loop to print values for as long as `rx.recv()` returns `Ok`
+Listing 19-4: Using a `while let` loop to print values for as long as `rx.recv()` returns `Ok`
 
-This example prints 1, 2, and 3. When we saw `recv` back in Chapter 16, we
-unwrapped the error directly, or interacted with it as an iterator using a `for`
-loop. As Listing 19-2 shows, though, we can also use `while let`, because the
-`recv` method returns `Ok` as long as the sender is producing messages, and then
-produces an `Err` once the sender side disconnects.
+This example prints `1`, `2`, and then `3`. The `recv` method takes the first
+message out of the receiver side of the channel and returns an `Ok(value)`. When
+we first saw `recv` back in Chapter 16, we unwrapped the error directly, or
+interacted with it as an iterator using a `for` loop. As Listing 19-4 shows,
+though, we can also use while let, because the `recv` method returns an `Ok`
+each time a message arrives, as long as the sender exists, and then produces an
+`Err `once the sender side disconnects.
 
 ### for Loops
 
 In a `for` loop, the value that directly follows the keyword `for` is a
-pattern. For example, in `for x in y` the `x` is the pattern. Listing 19-3
-demonstrates how to use a pattern in a `for` loop to destructure, or break
+pattern. For example, in `for x in y`, the `x` is the pattern. Listing 19-5
+demonstrates how to use a pattern in a `for` loop to *destructure*, or break
 apart, a tuple as part of the `for` loop.
 
 
@@ -193,9 +281,9 @@ apart, a tuple as part of the `for` loop.
     }
 ```
 
-Listing 19-3: Using a pattern in a `for` loop to destructure a tuple
+Listing 19-5: Using a pattern in a `for` loop to destructure a tuple
 
-The code in Listing 19-3 will print the following:
+The code in Listing 19-5 will print the following:
 
 ```
 $ cargo run
@@ -212,86 +300,6 @@ the index for that value, placed into a tuple. The first value produced is the
 tuple `(0, 'a')`. When this value is matched to the pattern `(index, value)`,
 `index` will be `0` and `value` will be `'a'`, printing the first line of the
 output.
-
-### let Statements
-
-Prior to this chapter, we had only explicitly discussed using patterns with
-`match` and `if let`, but in fact, we’ve used patterns in other places as well,
-including in `let` statements. For example, consider this straightforward
-variable assignment with `let`:
-
-```
-let x = 5;
-```
-
-Every time you’ve used a `let` statement like this you’ve been using patterns,
-although you might not have realized it! More formally, a `let` statement looks
-like this:
-
-```
-let PATTERN = EXPRESSION;
-```
-
-In statements like `let x = 5;` with a variable name in the `PATTERN` slot, the
-variable name is just a particularly simple form of a pattern. Rust compares
-the expression against the pattern and assigns any names it finds. So in the
-`let x = 5;` example, `x` is a pattern that means “bind what matches here to
-the variable `x`.” Because the name `x` is the whole pattern, this pattern
-effectively means “bind everything to the variable `x`, whatever the value is.”
-
-To see the pattern matching aspect of `let` more clearly, consider Listing
-19-4, which uses a pattern with `let` to destructure a tuple.
-
-
-```
-    let (x, y, z) = (1, 2, 3);
-```
-
-Listing 19-4: Using a pattern to destructure a tuple and create three variables at once
-
-Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
-to the pattern `(x, y, z)` and sees that the value matches the pattern, so Rust
-binds `1` to `x`, `2` to `y`, and `3` to `z`. You can think of this tuple
-pattern as nesting three individual variable patterns inside it.
-
-If the number of elements in the pattern doesn’t match the number of elements
-in the tuple, the overall type won’t match and we’ll get a compiler error. For
-example, Listing 19-5 shows an attempt to destructure a tuple with three
-elements into two variables, which won’t work.
-
-
-```
-    let (x, y) = (1, 2, 3);
-```
-
-Listing 19-5: Incorrectly constructing a pattern whose variables don’t match the number of elements in the tuple
-
-Attempting to compile this code results in this type error:
-
-```
-$ cargo run
-   Compiling patterns v0.1.0 (file:///projects/patterns)
-error[E0308]: mismatched types
- --> src/main.rs:2:9
-  |
-2 |     let (x, y) = (1, 2, 3);
-  |         ^^^^^^   --------- this expression has type `({integer}, {integer}, {integer})`
-  |         |
-  |         expected a tuple with 3 elements, found one with 2 elements
-  |
-  = note: expected tuple `({integer}, {integer}, {integer})`
-             found tuple `(_, _)`
-
-For more information about this error, try `rustc --explain E0308`.
-error: could not compile `patterns` (bin "patterns") due to 1 previous error
-```
-
-To fix the error, we could ignore one or more of the values in the tuple using
-`_` or `..`, as you’ll see in the “Ignoring Values in a
-Pattern” section. If the problem
-is that we have too many variables in the pattern, the solution is to make the
-types match by removing variables so the number of variables equals the number
-of elements in the tuple.
 
 ### Function Parameters
 
@@ -331,10 +339,10 @@ This code prints `Current location: (3, 5)`. The values `&(3, 5)` match the
 pattern `&(x, y)`, so `x` is the value `3` and `y` is the value `5`.
 
 We can also use patterns in closure parameter lists in the same way as in
-function parameter lists, because closures are similar to functions, as
+function parameter lists because closures are similar to functions, as
 discussed in Chapter 13.
 
-At this point, you’ve seen several ways of using patterns, but patterns don’t
+At this point, you’ve seen several ways to use patterns, but patterns don’t
 work the same in every place we can use them. In some places, the patterns must
 be irrefutable; in other circumstances, they can be refutable. We’ll discuss
 these two concepts next.
@@ -349,10 +357,10 @@ to match. Patterns that can fail to match for some possible value are
 `Some`, the `Some(x)` pattern will not match.
 
 Function parameters, `let` statements, and `for` loops can only accept
-irrefutable patterns, because the program cannot do anything meaningful when
+irrefutable patterns because the program cannot do anything meaningful when
 values don’t match. The `if let` and `while let` expressions and the
-`let`-`else` statement accept refutable and irrefutable patterns, but the
-compiler warns against irrefutable patterns because by definition they’re
+`let...else` statement accept refutable and irrefutable patterns, but the
+compiler warns against irrefutable patterns because, by definition, they’re
 intended to handle possible failure: the functionality of a conditional is in
 its ability to perform differently depending on success or failure.
 
@@ -364,7 +372,7 @@ using the pattern with, depending on the intended behavior of the code.
 
 Let’s look at an example of what happens when we try to use a refutable pattern
 where Rust requires an irrefutable pattern and vice versa. Listing 19-8 shows a
-`let` statement, but for the pattern we’ve specified `Some(x)`, a refutable
+`let` statement, but for the pattern, we’ve specified `Some(x)`, a refutable
 pattern. As you might expect, this code will not compile.
 
 
@@ -374,7 +382,7 @@ pattern. As you might expect, this code will not compile.
 
 Listing 19-8: Attempting to use a refutable pattern with `let`
 
-If `some_option_value` was a `None` value, it would fail to match the pattern
+If `some_option_value` were a `None` value, it would fail to match the pattern
 `Some(x)`, meaning the pattern is refutable. However, the `let` statement can
 only accept an irrefutable pattern because there is nothing valid the code can
 do with a `None` value. At compile time, Rust will complain that we’ve tried to
@@ -390,7 +398,7 @@ error[E0005]: refutable pattern in local binding
   |         ^^^^^^^ pattern `None` not covered
   |
   = note: `let` bindings require an "irrefutable pattern", like a `struct` or an `enum` with only one variant
-  = note: for more information, visit https://doc.rust-lang.org/book/ch18-02-refutability.html
+  = note: for more information, visit https://doc.rust-lang.org/book/ch19-02-refutability.html
   = note: the matched value is of type `Option<i32>`
 help: you might want to use `let else` to handle the variant that isn't matched
   |
@@ -406,53 +414,52 @@ pattern `Some(x)`, Rust rightfully produces a compiler error.
 
 If we have a refutable pattern where an irrefutable pattern is needed, we can
 fix it by changing the code that uses the pattern: instead of using `let`, we
-can use `if let`. Then if the pattern doesn’t match, the code will just skip
+can use `let else`. Then, if the pattern doesn’t match, the code will just skip
 the code in the curly brackets, giving it a way to continue validly. Listing
 19-9 shows how to fix the code in Listing 19-8.
 
 
 ```
-    if let Some(x) = some_option_value {
-        println!("{x}");
-    }
-```
-
-Listing 19-9: Using `if let` and a block with refutable patterns instead of `let`
-
-We’ve given the code an out! This code is perfectly valid now. However,
-if we give `if let` an irrefutable pattern (a pattern that will always
-match), such as `x`, as shown in Listing 19-10, the compiler will give a
-warning.
-
-
-```
-    if let x = 5 {
-        println!("{x}");
+    let Some(x) = some_option_value else {
+        return;
     };
 ```
 
-Listing 19-10: Attempting to use an irrefutable pattern with `if let`
+Listing 19-9: Using `let...else` and a block with refutable patterns instead of `let`
 
-Rust complains that it doesn’t make sense to use `if let` with an irrefutable
-pattern:
+We’ve given the code an out! This code is perfectly valid, although it means we
+cannot use an irrefutable pattern without receiving a warning. If we give
+`let...else` a pattern that will always match, such as `x`, as shown in Listing
+19-10, the compiler will give a warning.
+
+
+```
+    let x = 5 else {
+        return;
+    };
+```
+
+Listing 19-10: Attempting to use an irrefutable pattern with `let...else`
+
+Rust complains that it doesn’t make sense to use `let...else` with an
+irrefutable pattern:
 
 ```
 $ cargo run
    Compiling patterns v0.1.0 (file:///projects/patterns)
-warning: irrefutable `if let` pattern
- --> src/main.rs:2:8
+warning: irrefutable `let...else` pattern
+ --> src/main.rs:2:5
   |
-2 |     if let x = 5 {
-  |        ^^^^^^^^^
+2 |     let x = 5 else {
+  |     ^^^^^^^^^
   |
-  = note: this pattern will always match, so the `if let` is useless
-  = help: consider replacing the `if let` with a `let`
+  = note: this pattern will always match, so the `else` clause is useless
+  = help: consider removing the `else` clause
   = note: `#[warn(irrefutable_let_patterns)]` on by default
 
 warning: `patterns` (bin "patterns") generated 1 warning
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.39s
      Running `target/debug/patterns`
-5
 ```
 
 For this reason, match arms must use refutable patterns, except for the last
@@ -467,8 +474,8 @@ patterns.
 
 ## Pattern Syntax
 
-In this section, we gather all the syntax valid in patterns and discuss why and
-when you might want to use each one.
+In this section, we gather all the syntax that is valid in patterns and discuss
+why and when you might want to use each one.
 
 ### Matching Literals
 
@@ -486,22 +493,22 @@ following code gives some examples:
     }
 ```
 
-This code prints `one` because the value in `x` is 1. This syntax is useful
+This code prints `one` because the value in `x` is `1`. This syntax is useful
 when you want your code to take an action if it gets a particular concrete
 value.
 
 ### Matching Named Variables
 
 Named variables are irrefutable patterns that match any value, and we’ve used
-them many times in the book. However, there is a complication when you use named
-variables in `match`, `if let`, or `while let` expressions. Because each of
-these kinds of expression starts a new scope, variables declared as part of a
-pattern inside the expression will shadow those with the same name outside, as
-is the case with all variables. In Listing 19-11, we declare a variable named
-`x` with the value `Some(5)` and a variable `y` with the value `10`. We then
-create a `match` expression on the value `x`. Look at the patterns in the match
-arms and `println!` at the end, and try to figure out what the code will print
-before running this code or reading further.
+them many times in this book. However, there is a complication when you use
+named variables in `match`, `if let`, or `while let` expressions. Because each
+of these kinds of expressions starts a new scope, variables declared as part of
+a pattern inside these expressions will shadow those with the same name outside
+the constructs, as is the case with all variables. In Listing 19-11, we declare
+a variable named `x` with the value `Some(5)` and a variable `y` with the value
+`10`. We then create a `match` expression on the value `x`. Look at the
+patterns in the match arms and `println!` at the end, and try to figure out
+what the code will print before running this code or reading further.
 
 src/main.rs
 
@@ -527,7 +534,7 @@ continues.
 The pattern in the second match arm introduces a new variable named `y` that
 will match any value inside a `Some` value. Because we’re in a new scope inside
 the `match` expression, this is a new `y` variable, not the `y` we declared at
-the beginning with the value 10. This new `y` binding will match any value
+the beginning with the value `10`. This new `y` binding will match any value
 inside a `Some`, which is what we have in `x`. Therefore, this new `y` binds to
 the inner value of the `Some` in `x`. That value is `5`, so the expression for
 that arm executes and prints `Matched, y = 5`.
@@ -542,17 +549,18 @@ When the `match` expression is done, its scope ends, and so does the scope of
 the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
 
 To create a `match` expression that compares the values of the outer `x` and
-`y`, rather than introducing a new variable which shadows the existing `y`
+`y`, rather than introducing a new variable that shadows the existing `y`
 variable, we would need to use a match guard conditional instead. We’ll talk
-about match guards later in the “Extra Conditionals with Match
-Guards” section.
+about match guards later in “Extra Conditionals with Match
+Guards”.
 
 ### Multiple Patterns
 
-You can match multiple patterns using the `|` syntax, which is the pattern *or*
-operator. For example, in the following code we match the value of `x` against
-the match arms, the first of which has an *or* option, meaning if the value of
-`x` matches either of the values in that arm, that arm’s code will run:
+In `match` expressions, you can match multiple patterns using the `|` syntax,
+which is the pattern *or* operator. For example, in the following code we match
+the value of `x` against the match arms, the first of which has an *or* option,
+meaning if the value of `x` matches either of the values in that arm, that
+arm’s code will run:
 
 ```
     let x = 1;
@@ -581,11 +589,10 @@ range, that arm will execute:
     }
 ```
 
-If `x` is 1, 2, 3, 4, or 5, the first arm will match. This syntax is more
-convenient for multiple match values than using the `|` operator to express the
-same idea; if we were to use `|` we would have to specify `1 | 2 | 3 | 4 | 5`.
-Specifying a range is much shorter, especially if we want to match, say, any
-number between 1 and 1,000!
+If `x` is `1`, `2`, `3`, `4`, or `5`, the first arm will match. This syntax is
+more convenient for multiple match values than using the `|` operator to
+express the same idea; if we were to use `|`, we would have to specify `1 | 2 | 3 | 4 | 5`. Specifying a range is much shorter, especially if we want to match,
+say, any number between 1 and 1,000!
 
 The compiler checks that the range isn’t empty at compile time, and because the
 only types for which Rust can tell if a range is empty or not are `char` and
@@ -676,7 +683,7 @@ destructure the other fields.
 
 In Listing 19-14, we have a `match` expression that separates `Point` values
 into three cases: points that lie directly on the `x` axis (which is true when
-`y = 0`), on the `y` axis (`x = 0`), or neither.
+`y = 0`), on the `y` axis (`x = 0`), or on neither axis.
 
 src/main.rs
 
@@ -706,7 +713,7 @@ value of the `y` field. The third arm doesn’t specify any literals, so it
 matches any other `Point` and creates variables for both the `x` and `y` fields.
 
 In this example, the value `p` matches the second arm by virtue of `x`
-containing a 0, so this code will print `On the y axis at 7`.
+containing a `0`, so this code will print `On the y axis at 7`.
 
 Remember that a `match` expression stops checking arms once it has found the
 first matching pattern, so even though `Point { x: 0, y: 0}` is on the `x` axis
@@ -744,7 +751,7 @@ fn main() {
             println!("Text message: {text}");
         }
         Message::ChangeColor(r, g, b) => {
-            println!("Change the color to red {r}, green {g}, and blue {b}");
+            println!("Change color to red {r}, green {g}, and blue {b}");
         }
     }
 }
@@ -752,7 +759,7 @@ fn main() {
 
 Listing 19-15: Destructuring enum variants that hold different kinds of values
 
-This code will print `Change the color to red 0, green 160, and blue 255`. Try
+This code will print `Change color to red 0, green 160, and blue 255`. Try
 changing the value of `msg` to see the code from the other arms run.
 
 For enum variants without any data, like `Message::Quit`, we can’t destructure
@@ -842,7 +849,11 @@ pattern (which you’ve seen), using the `_` pattern within another pattern,
 using a name that starts with an underscore, or using `..` to ignore remaining
 parts of a value. Let’s explore how and why to use each of these patterns.
 
-#### Ignoring an Entire Value with \_
+<!-- Old link, do not remove -->
+
+<a id="ignoring-an-entire-value-with-_"></a>
+
+#### An Entire Value with \_
 
 We’ve used the underscore as a wildcard pattern that will match any value but
 not bind to the value. This is especially useful as the last arm in a `match`
@@ -874,7 +885,9 @@ function body in your implementation doesn’t need one of the parameters. You
 then avoid getting a compiler warning about unused function parameters, as you
 would if you used a name instead.
 
-#### Ignoring Parts of a Value with a Nested \_
+<a id="ignoring-parts-of-a-value-with-a-nested-_"></a>
+
+#### Parts of a Value with a Nested \_
 
 We can also use `_` inside another pattern to ignore just part of a value, for
 example, when we want to test for only part of a value but have no use for the
@@ -900,7 +913,7 @@ setting but can unset the setting and give it a value if it is currently unset.
     println!("setting is {setting_value:?}");
 ```
 
-Listing 19-18:  Using an underscore within patterns that match `Some` variants when we don’t need to use the value inside the `Some`
+Listing 19-18: Using an underscore within patterns that match `Some` variants when we don’t need to use the value inside the `Some`
 
 This code will print `Can't overwrite an existing customized value` and then
 `setting is Some(5)`. In the first match arm, we don’t need to match on or use
@@ -909,8 +922,8 @@ when `setting_value` and `new_setting_value` are the `Some` variant. In that
 case, we print the reason for not changing `setting_value`, and it doesn’t get
 changed.
 
-In all other cases (if either `setting_value` or `new_setting_value` are
-`None`) expressed by the `_` pattern in the second arm, we want to allow
+In all other cases (if either `setting_value` or `new_setting_value` is `None`)
+expressed by the `_` pattern in the second arm, we want to allow
 `new_setting_value` to become `setting_value`.
 
 We can also use underscores in multiple places within one pattern to ignore
@@ -923,17 +936,21 @@ fourth values in a tuple of five items.
 
     match numbers {
         (first, _, third, _, fifth) => {
-            println!("Some numbers: {first}, {third}, {fifth}")
+            println!("Some numbers: {first}, {third}, {fifth}");
         }
     }
 ```
 
 Listing 19-19: Ignoring multiple parts of a tuple
 
-This code will print `Some numbers: 2, 8, 32`, and the values 4 and 16 will be
-ignored.
+This code will print `Some numbers: 2, 8, 32`, and the values `4` and `16` will
+be ignored.
 
-#### Ignoring an Unused Variable by Starting Its Name with \_
+<!-- Old link, do not remove -->
+
+<a id="ignoring-an-unused-variable-by-starting-its-name-with-_"></a>
+
+#### An Unused Variable by Starting Its Name with \_
 
 If you create a variable but don’t use it anywhere, Rust will usually issue a
 warning because an unused variable could be a bug. However, sometimes it’s
@@ -954,7 +971,7 @@ fn main() {
 
 Listing 19-20: Starting a variable name with an underscore to avoid getting unused variable warnings
 
-Here we get a warning about not using the variable `y`, but we don’t get a
+Here, we get a warning about not using the variable `y`, but we don’t get a
 warning about not using `_x`.
 
 Note that there is a subtle difference between using only `_` and using a name
@@ -973,7 +990,7 @@ distinction matters, Listing 19-21 will provide us with an error.
     println!("{s:?}");
 ```
 
-Listing 19-21: An unused variable starting with an underscore still binds the value, which might take ownership of the value
+Listing 19-21: An unused variable starting with an underscore still binds the value, which might take ownership of the value.
 
 We’ll receive an error because the `s` value will still be moved into `_s`,
 which prevents us from using `s` again. However, using the underscore by itself
@@ -991,11 +1008,13 @@ because `s` doesn’t get moved into `_`.
     println!("{s:?}");
 ```
 
-Listing 19-22: Using an underscore does not bind the value
+Listing 19-22: Using an underscore does not bind the value.
 
 This code works just fine because we never bind `s` to anything; it isn’t moved.
 
-#### Ignoring Remaining Parts of a Value with ..
+<a id="ignoring-remaining-parts-of-a-value-with-"></a>
+
+#### Remaining Parts of a Value with ..
 
 With values that have many parts, we can use the `..` syntax to use specific
 parts and ignore the rest, avoiding the need to list underscores for each
@@ -1046,8 +1065,8 @@ fn main() {
 
 Listing 19-24: Matching only the first and last values in a tuple and ignoring all other values
 
-In this code, the first and last value are matched with `first` and `last`. The
-`..` will match and ignore everything in the middle.
+In this code, the first and last values are matched with `first` and `last`.
+The `..` will match and ignore everything in the middle.
 
 However, using `..` must be unambiguous. If it is unclear which values are
 intended for matching and which should be ignored, Rust will give us an error.
@@ -1098,13 +1117,13 @@ compiler error because using `..` in two places like this is ambiguous.
 
 A *match guard* is an additional `if` condition, specified after the pattern in
 a `match` arm, that must also match for that arm to be chosen. Match guards are
-useful for expressing more complex ideas than a pattern alone allows. They are
-only available in `match` expressions, not in `if let` or `while let`
-expressions.
+useful for expressing more complex ideas than a pattern alone allows. Note,
+however, that they are only available in `match` expressions, not `if let` or
+`while let` expressions.
 
 The condition can use variables created in the pattern. Listing 19-26 shows a
 `match` where the first arm has the pattern `Some(x)` and also has a match
-guard of `if x % 2 == 0` (which will be true if the number is even).
+guard of `if x % 2 == 0` (which will be `true` if the number is even).
 
 
 ```
@@ -1120,12 +1139,12 @@ guard of `if x % 2 == 0` (which will be true if the number is even).
 Listing 19-26: Adding a match guard to a pattern
 
 This example will print `The number 4 is even`. When `num` is compared to the
-pattern in the first arm, it matches, because `Some(4)` matches `Some(x)`. Then
+pattern in the first arm, it matches because `Some(4)` matches `Some(x)`. Then
 the match guard checks whether the remainder of dividing `x` by 2 is equal to
 0, and because it is, the first arm is selected.
 
 If `num` had been `Some(5)` instead, the match guard in the first arm would
-have been false because the remainder of 5 divided by 2 is 1, which is not
+have been `false` because the remainder of 5 divided by 2 is 1, which is not
 equal to 0. Rust would then go to the second arm, which would match because the
 second arm doesn’t have a match guard and therefore matches any `Some` variant.
 
@@ -1195,11 +1214,11 @@ Listing 19-28: Combining multiple patterns with a match guard
 The match condition states that the arm only matches if the value of `x` is
 equal to `4`, `5`, or `6` *and* if `y` is `true`. When this code runs, the
 pattern of the first arm matches because `x` is `4`, but the match guard `if y`
-is false, so the first arm is not chosen. The code moves on to the second arm,
-which does match, and this program prints `no`. The reason is that the `if`
-condition applies to the whole pattern `4 | 5 | 6`, not only to the last value
-`6`. In other words, the precedence of a match guard in relation to a pattern
-behaves like this:
+is `false`, so the first arm is not chosen. The code moves on to the second
+arm, which does match, and this program prints `no`. The reason is that the
+`if` condition applies to the whole pattern `4 | 5 | 6`, not just to the last
+value `6`. In other words, the precedence of a match guard in relation to a
+pattern behaves like this:
 
 ```
 (4 | 5 | 6) if y => ...
@@ -1219,11 +1238,10 @@ were applied only to the final value in the list of values specified using the
 ### @ Bindings
 
 The *at* operator `@` lets us create a variable that holds a value at the same
-time as we’re testing that value for a pattern match. In Listing 19-29, we want
-to test that a `Message::Hello` `id` field is within the range `3..=7`. We also
-want to bind the value to the variable `id_variable` so we can use it in the
-code associated with the arm. We could name this variable `id`, the same as the
-field, but for this example we’ll use a different name.
+time we’re testing that value for a pattern match. In Listing 19-29, we want to
+test that a `Message::Hello` `id` field is within the range `3..=7`. We also
+want to bind the value to the variable `id` so we can use it in the code
+associated with the arm.
 
 
 ```
@@ -1235,8 +1253,8 @@ field, but for this example we’ll use a different name.
 
     match msg {
         Message::Hello {
-            id: id_variable @ 3..=7,
-        } => println!("Found an id in range: {id_variable}"),
+            id: id @ 3..=7,
+        } => println!("Found an id in range: {id}"),
         Message::Hello { id: 10..=12 } => {
             println!("Found an id in another range")
         }
@@ -1246,8 +1264,9 @@ field, but for this example we’ll use a different name.
 
 Listing 19-29: Using `@` to bind to a value in a pattern while also testing it
 
-This example will print `Found an id in range: 5`. By specifying `id_variable @` before the range `3..=7`, we’re capturing whatever value matched the range
-while also testing that the value matched the range pattern.
+This example will print `Found an id in range: 5`. By specifying `id @` before
+the range `3..=7`, we’re capturing whatever value matched the range in a
+variable named `id` while also testing that the value matched the range pattern.
 
 In the second arm, where we only have a range specified in the pattern, the code
 associated with the arm doesn’t have a variable that contains the actual value
