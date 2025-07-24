@@ -1,34 +1,34 @@
 # Style Guide
 
-## Prose
+## Düzyazı
 
-- Prefer title case for chapter/section headings, ex: `## Generating a Secret
-  Number` rather than `## Generating a secret number`.
-- Prefer italics over single quotes when calling out a term, ex: `is an
-  *associated function* of` rather than `is an ‘associated function’ of`.
-- When talking about a method in prose, DO NOT include the parentheses, ex:
-  `read_line` rather than `read_line()`.
-- Hard wrap at 80 chars
-- Prefer not mixing code and not-code in one word, ex: ``Remember when we wrote
-  `use std::io`?`` rather than ``Remember when we `use`d `std::io`?``
+- Bölüm/bölüm başlıkları için başlık harfini tercih edin, örn: `## Generating a Secret
+  Number` yerine `## Generating a secret number`.
+- Bir terimi çağırırken tek tırnak yerine italik harfleri tercih edin, örn: `'nin ‘ilişkili bir işlevidir` yerine `'nin *ilişkili işlevidir*`.
+- Düzyazıda bir yöntemden bahsederken, parantezleri dahil ETMEYİN, örn:
+  `read_line()` yerine `read_line`.
+- 80 karakterde sert sarma
+- Kod ve kod olmayanları tek bir kelimede karıştırmamayı tercih edin, örneğin: ``Hatırlayın ne zaman yazmıştık
+  “std::io” kullandığımız zamanı hatırlayın`` yerine ``std::io`` kullanın
 
-## Code
 
-- Add the file name before markdown blocks to make it clear which file we're
-  talking about, when applicable.
-- When making changes to code, make it clear which parts of the code changed
-  and which stayed the same... not sure how to do this yet
-- Split up long lines as appropriate to keep them under 80 chars if possible
-- Use `bash` syntax highlighting for command line output code blocks
+## Kod
 
-## Links
+- Hangi dosyayı kullandığımızı netleştirmek için markdown bloklarından önce dosya adını ekleyin
+  uygun olduğunda, hakkında konuşmak.
+- Kodda değişiklik yaparken, kodun hangi bölümlerinin değiştiğini açıkça belirtin
+  ve hangileri aynı kaldı... bunu nasıl yapacağımdan henüz emin değilim
+- Uzun satırları mümkünse 80 karakterin altında tutmak için uygun şekilde bölün
+- Komut satırı çıktı kod blokları için `bash` sözdizimi vurgulamasını kullanma
 
-Once all the scripts are done:
+## Bağlantılar
 
-- If a link shouldn't be printed, mark it to be ignored
-  - This includes all "Chapter XX" intra-book links, which _should_ be links
-    for the HTML version
-- Make intra-book links and stdlib API doc links relative so they work whether
-  the book is read offline or on docs.rust-lang.org
-- Use markdown links and keep in mind that they will be changed into `text at
-  *url*` in print, so word them in a way that it reads well in that format
+Tüm komut dosyaları tamamlandıktan sonra:
+
+- Bir bağlantının yazdırılmaması gerekiyorsa, yok sayılmak üzere işaretleyin
+  - Bu, bağlantı olması gereken tüm "Bölüm XX" kitap içi bağlantıları da içerir
+    HTML sürümü için
+- Kitap içi bağlantıları ve stdlib API doküman bağlantılarını göreceli hale getirin, böylece çalışsınlar
+  kitap çevrimdışı olarak veya docs.rust-lang.org adresinden okunabilir
+- Markdown bağlantılarını kullanın ve bunların `text at` olarak değiştirileceğini unutmayın.
+  `*url*` şeklinde yazın, bu nedenle bu formatta iyi okunacak şekilde ifade edin

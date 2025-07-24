@@ -1,17 +1,31 @@
-# In each chapter
+# Her bölümde
 
-- [ ] Manual regeneration
-- [ ] Check for upstream changes from last snapshot
-- [ ] Propagate updated output to docx
-- [ ] Extract docx and check diff
-- [ ] Answer all comments
-- [ ] Check cross references
-- [ ] Check indentation of --snip--
-- [ ] Numbered lines, Gray out unchanged lines
-- [ ] Check line wrapping
-- [ ] Check for unneeded command/compiling/running output
-- [ ] Check println style and error messages
-- [ ] Add alt text to images
-- [ ] Index tags
-  - [ ] search for "convention" conventions:naming:of blah
-  - [ ] check for double spaces, spaces at the end of paragraphs
+-[ ] Manuel yeniden oluşturma
+
+-[ ] Son anlık görüntüden itibaren yukarı akış değişikliklerini kontrol et
+
+-[ ] Güncellenen çıktıyı docx'e aktar
+
+-[ ] Docx'i çıkar ve farkları kontrol et
+
+-[ ] Tüm yorumları yanıtla
+
+-[ ] Çapraz referansları kontrol et
+
+-[ ] --snip-- girintisini kontrol et
+
+-[ ] Satırları numaralandır, değişmeyen satırları grileştir
+
+-[ ] Satır kaydırmayı kontrol et
+
+-[ ] Gereksiz komut/derleme/çalıştırma çıktısını kontrol et
+
+-[ ] Println stilini ve hata mesajlarını kontrol et
+
+-[ ] Görüntülere alternatif metin ekle
+
+-[ ] Etiketleri indeksle
+
+  -[ ] “convention” conventions:naming:of blah'ı ara
+
+ -[ ] Çift boşlukları ve paragraf sonlarındaki boşlukları    kontrol et
