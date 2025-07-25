@@ -1,27 +1,26 @@
-## Comments
+## Yorumlar
 
-All programmers strive to make their code easy to understand, but sometimes
-extra explanation is warranted. In these cases, programmers leave _comments_ in
-their source code that the compiler will ignore but people reading the source
-code may find useful.
+Tüm programcılar kodlarının kolay anlaşılır olması için çaba gösterirler, ancak bazen
+fazladan açıklama yapılması gerekebilir. Bu gibi durumlarda programcılar
+kaynak kodlarına derleyicinin göz ardı edeceği ancak
+kaynak kodunu okuyan kişilerin yararlı bulabileceği _yorumlar_ bırakırlar.
 
-Here’s a simple comment:
+İşte basit bir yorum:
 
 ```rust
 // hello, world
 ```
 
-In Rust, the idiomatic comment style starts a comment with two slashes, and the
-comment continues until the end of the line. For comments that extend beyond a
-single line, you’ll need to include `//` on each line, like this:
+Rust'ta, deyimsel yorum stili bir yorumu iki eğik çizgi ile başlatır ve
+yorumu satırın sonuna kadar devam eder. tek bir satırın ötesine uzanan yorumlar için, aşağıdaki gibi her satıra `//` eklemeniz gerekir:
 
 ```rust
-// So we're doing something complicated here, long enough that we need
-// multiple lines of comments to do it! Whew! Hopefully, this comment will
-// explain what's going on.
+// Yani burada karmaşık bir şey yapıyoruz, bunu yapmak için
+// birden fazla yorum satırına ihtiyacımız olacak kadar uzun! Vay be! Umarım bu yorum
+// neler olup bittiğini açıklar.
 ```
 
-Comments can also be placed at the end of lines containing code:
+Yorumlar, kod içeren satırların sonuna da yerleştirilebilir:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -29,8 +28,8 @@ Comments can also be placed at the end of lines containing code:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-24-comments-end-of-line/src/main.rs}}
 ```
 
-But you’ll more often see them used in this format, with the comment on a
-separate line above the code it’s annotating:
+Ancak daha sık olarak bu formatta kullanıldıklarını göreceksiniz; yorum,
+adresinde, açıklama yaptığı kodun üzerinde ayrı bir satırda yer alır:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -38,8 +37,8 @@ separate line above the code it’s annotating:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
 ```
 
-Rust also has another kind of comment, documentation comments, which we’ll
-discuss in the [“Publishing a Crate to Crates.io”][publishing]<!-- ignore -->
-section of Chapter 14.
+Rust ayrıca başka bir yorum türüne, dokümantasyon yorumlarına da sahiptir; bunları
+Bölüm 14'ün [“Crates.io'da bir Sandık Yayınlama”][yayınlama]<!-- ignore -->
+kısmında tartışacağız.
 
 [publishing]: ch14-02-publishing-to-crates-io.html

@@ -28,4 +28,4 @@
 
   -[ ] “convention” conventions:naming:of blah'ı ara
 
- -[ ] Çift boşlukları ve paragraf sonlarındaki boşlukları    kontrol et
+ -[ ] Çift boşlukları ve paragraf sonlarındaki boşlukları kontrol et

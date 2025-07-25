@@ -1,25 +1,25 @@
-# Common Collections
+# Ortak Koleksiyonlar
 
-Rust’s standard library includes a number of very useful data structures called
-_collections_. Most other data types represent one specific value, but
-collections can contain multiple values. Unlike the built-in array and tuple
-types, the data that these collections point to is stored on the heap, which
-means the amount of data does not need to be known at compile time and can grow
-or shrink as the program runs. Each kind of collection has different
-capabilities and costs, and choosing an appropriate one for your current
-situation is a skill you’ll develop over time. In this chapter, we’ll discuss
-three collections that are used very often in Rust programs:
+Rust'ın standart kütüphanesi, aşağıdaki gibi adlandırılan bir dizi çok kullanışlı veri yapısı içerir
+_collections_. Diğer veri türlerinin çoğu belirli bir değeri temsil eder, ancak
+koleksiyonları birden fazla değer içerebilir. Yerleşik dizi ve tuple'ın aksine
+türlerinde, bu koleksiyonların işaret ettiği veriler heap üzerinde depolanır.
+veri miktarının derleme zamanında bilinmesine gerek olmadığı ve büyüyebileceği anlamına gelir
+veya program çalıştıkça küçülür. Her koleksiyon türü farklıdır
+yetenekleri ve maliyetleri ve mevcut durumunuz için uygun olanı seçmek
+durum zaman içinde geliştireceğiniz bir beceridir. Bu bölümde şunları tartışacağız
+Rust programlarında çok sık kullanılan üç koleksiyon:
 
-- A _vector_ allows you to store a variable number of values next to each other.
-- A _string_ is a collection of characters. We’ve mentioned the `String` type
-  previously, but in this chapter we’ll talk about it in depth.
-- A _hash map_ allows you to associate a value with a specific key. It’s a
-  particular implementation of the more general data structure called a _map_.
+- Bir _vector_ değişken sayıda değeri yan yana saklamanızı sağlar.
+- Bir _string_ karakter koleksiyonudur. String` türünden daha önce bahsetmiştik
+  daha önce bahsetmiştik, ancak bu bölümde bu konudan derinlemesine bahsedeceğiz.
+- Bir _hash map_, bir değeri belirli bir anahtarla ilişkilendirmenize olanak tanır. Bu bir
+  _map_ adı verilen daha genel bir veri yapısının özel bir uygulamasıdır.
 
-To learn about the other kinds of collections provided by the standard library,
-see [the documentation][collections].
+Standart kütüphane tarafından sağlanan diğer koleksiyon türleri hakkında bilgi edinmek için,
+belgelere][koleksiyonlara] bakın.
 
-We’ll discuss how to create and update vectors, strings, and hash maps, as well
-as what makes each special.
+Vektörlerin, dizelerin ve hash haritalarının nasıl oluşturulacağını ve güncelleneceğini tartışacağız.
+her birini özel kılan şey olarak.
 
-[collections]: ../std/collections/index.html
+[koleksiyonlar]: ../std/collections/index.html

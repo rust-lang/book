@@ -1,28 +1,27 @@
-## Hello, World!
+## Merhaba, Dünya!
 
-Now that you’ve installed Rust, it’s time to write your first Rust program.
-It’s traditional when learning a new language to write a little program that
-prints the text `Hello, world!` to the screen, so we’ll do the same here!
+Artık Rust'ı kurduğunuza göre, ilk Rust programınızı yazmanın zamanı geldi.
+Yeni bir dil öğrenirken
+ekrana `Hello, world!` metnini yazdıran küçük bir program yazmak gelenekseldir, bu yüzden burada da aynısını yapacağız!
 
-> Note: This book assumes basic familiarity with the command line. Rust makes
-> no specific demands about your editing or tooling or where your code lives, so
-> if you prefer to use an integrated development environment (IDE) instead of
-> the command line, feel free to use your favorite IDE. Many IDEs now have some
-> degree of Rust support; check the IDE’s documentation for details. The Rust
-> team has been focusing on enabling great IDE support via `rust-analyzer`. See
-> [Appendix D][devtools]<!-- ignore --> for more details.
+> Not: Bu kitap komut satırına temel düzeyde aşina olunduğunu varsaymaktadır. Rust,
+> düzenleme veya araçlarınız veya kodunuzun nerede bulunduğu hakkında özel bir talepte bulunmaz, bu nedenle
+> komut satırı yerine entegre bir geliştirme ortamı (IDE) kullanmayı tercih ediyorsanız, en sevdiğiniz IDE'yi kullanmaktan çekinmeyin. Pek çok IDE artık
+> Rust desteğine sahiptir; ayrıntılar için IDE'nin belgelerini kontrol edin. Rust
+> ekibi `rust-analyzer' aracılığıyla mükemmel IDE desteği sağlamaya odaklanmaktadır. Daha fazla ayrıntı için
+> [Appendix D][devtools]<!-- ignore --> adresine bakın.
 
-### Creating a Project Directory
+### Proje Dizini Oluşturma
 
-You’ll start by making a directory to store your Rust code. It doesn’t matter
-to Rust where your code lives, but for the exercises and projects in this book,
-we suggest making a _projects_ directory in your home directory and keeping all
-your projects there.
+Rust kodunuzu saklamak için bir dizin oluşturarak başlayacaksınız. Kodunuzun nerede bulunduğu Rust için önemli değildir
+ancak bu kitaptaki alıştırmalar ve projeler için
+ev dizininizde bir _projects_ dizini oluşturmanızı ve tüm projelerinizi
+orada tutmanızı öneririz.
 
-Open a terminal and enter the following commands to make a _projects_ directory
-and a directory for the “Hello, world!” project within the _projects_ directory.
+Bir terminal açın ve
+adresinde bir _projects_ dizini ve _projects_ dizini içinde “Hello, world!” projesi için bir dizin oluşturmak için aşağıdaki komutları girin.
 
-For Linux, macOS, and PowerShell on Windows, enter this:
+Linux, macOS ve Windows'ta PowerShell için şunu girin:
 
 ```console
 $ mkdir ~/projects
@@ -31,7 +30,7 @@ $ mkdir hello_world
 $ cd hello_world
 ```
 
-For Windows CMD, enter this:
+Windows CMD için şunu girin:
 
 ```cmd
 > mkdir "%USERPROFILE%\projects"
@@ -40,16 +39,16 @@ For Windows CMD, enter this:
 > cd hello_world
 ```
 
-### Writing and Running a Rust Program
+### Bir Rust Programı Yazmak ve Çalıştırmak
 
-Next, make a new source file and call it _main.rs_. Rust files always end with
-the _.rs_ extension. If you’re using more than one word in your filename, the
-convention is to use an underscore to separate them. For example, use
-_hello_world.rs_ rather than _helloworld.rs_.
+Ardından, yeni bir kaynak dosyası oluşturun ve _main.rs_ olarak adlandırın. Rust dosyaları her zaman
+_.rs_ uzantısı ile biter. Dosya adınızda birden fazla kelime kullanıyorsanız,
+kuralı bunları ayırmak için alt çizgi kullanmaktır. Örneğin, _helloworld.rs_ yerine
+_hello_world.rs_ kullanın.
 
-Now open the _main.rs_ file you just created and enter the code in Listing 1-1.
+Şimdi yeni oluşturduğunuz _main.rs_ dosyasını açın ve Liste 1-1'deki kodu girin.
 
-<Listing number="1-1" file-name="main.rs" caption="A program that prints `Hello, world!`">
+<Listeleme number="1-1" file-name="main.rs" caption="Merhaba, dünya!"` yazdıran bir program">
 
 ```rust
 fn main() {
@@ -59,9 +58,9 @@ fn main() {
 
 </Listing>
 
-Save the file and go back to your terminal window in the
-_~/projects/hello_world_ directory. On Linux or macOS, enter the following
-commands to compile and run the file:
+Dosyayı kaydedin ve
+_~/projects/hello_world_ dizinindeki terminal pencerenize geri dönün. Linux veya macOS üzerinde, dosyayı derlemek ve çalıştırmak için aşağıdaki
+komutlarını girin:
 
 ```console
 $ rustc main.rs
@@ -69,7 +68,7 @@ $ ./main
 Hello, world!
 ```
 
-On Windows, enter the command `.\main` instead of `./main`:
+Windows'ta `./main` yerine `.\main` komutunu girin:
 
 ```powershell
 > rustc main.rs
@@ -77,18 +76,18 @@ On Windows, enter the command `.\main` instead of `./main`:
 Hello, world!
 ```
 
-Regardless of your operating system, the string `Hello, world!` should print to
-the terminal. If you don’t see this output, refer back to the
-[“Troubleshooting”][troubleshooting]<!-- ignore --> part of the Installation
-section for ways to get help.
+İşletim sisteminiz ne olursa olsun, `Hello, world!` dizesi
+terminaline yazdırılmalıdır. Bu çıktıyı göremiyorsanız, yardım almanın yolları için
+[“Sorun Giderme”][troubleshooting]<!-- ignore --> Kurulum
+bölümüne geri dönün.
 
-If `Hello, world!` did print, congratulations! You’ve officially written a Rust
-program. That makes you a Rust programmer—welcome!
+Eğer `Hello, world!` yazdırıldıysa, tebrikler! Resmi olarak bir Rust
+programı yazdınız. Bu sizi bir Rust programcısı yapar-hoş geldiniz!
 
-### Anatomy of a Rust Program
+### Bir Rust Programının Anatomisi
 
-Let’s review this “Hello, world!” program in detail. Here’s the first piece of
-the puzzle:
+Bu “Merhaba, dünya!” programını ayrıntılı olarak inceleyelim. İşte bulmacanın ilk parçası
+:
 
 ```rust
 fn main() {
@@ -96,105 +95,105 @@ fn main() {
 }
 ```
 
-These lines define a function named `main`. The `main` function is special: it
-is always the first code that runs in every executable Rust program. Here, the
-first line declares a function named `main` that has no parameters and returns
-nothing. If there were parameters, they would go inside the parentheses `()`.
+Bu satırlar `main` adında bir fonksiyon tanımlar. main` fonksiyonu özeldir:
+her çalıştırılabilir Rust programında çalışan ilk koddur. Burada,
+ilk satır parametresi olmayan ve
+hiçbir şey döndürmeyen `main` adında bir fonksiyon tanımlar. Eğer parametreler olsaydı, bunlar `()` parantezlerinin içinde olurdu.
 
-The function body is wrapped in `{}`. Rust requires curly brackets around all
-function bodies. It’s good style to place the opening curly bracket on the same
-line as the function declaration, adding one space in between.
+Fonksiyon gövdesi `{}` içine sarılmıştır. Rust, tüm
+fonksiyon gövdelerinin etrafında küme parantezleri gerektirir. Açılış küme parantezini fonksiyon bildirimi ile aynı
+satıra yerleştirmek ve araya bir boşluk eklemek iyi bir stildir.
 
-> Note: If you want to stick to a standard style across Rust projects, you can
-> use an automatic formatter tool called `rustfmt` to format your code in a
-> particular style (more on `rustfmt` in
-> [Appendix D][devtools]<!-- ignore -->). The Rust team has included this tool
-> with the standard Rust distribution, as `rustc` is, so it should already be
-> installed on your computer!
+> Not: Rust projelerinde standart bir stile bağlı kalmak istiyorsanız, kodunuzu
+> belirli bir stilde biçimlendirmek için
+> `rustfmt` adlı otomatik biçimlendirme aracını kullanabilirsiniz (`rustfmt` hakkında daha fazla bilgi için
+> [Appendix D][devtools]<!-- ignore -->). Rust ekibi bu aracı
+> `rustc` gibi standart Rust dağıtımına dahil etmiştir, bu nedenle bilgisayarınızda zaten
+> yüklü olmalıdır!
 
-The body of the `main` function holds the following code:
+main` fonksiyonunun gövdesi aşağıdaki kodu içerir:
 
 ```rust
 println!("Hello, world!");
 ```
 
-This line does all the work in this little program: it prints text to the
-screen. There are three important details to notice here.
+Bu satır, bu küçük programdaki tüm işi yapar:
+ekranına metin yazdırır. Burada dikkat edilmesi gereken üç önemli ayrıntı var.
 
-First, `println!` calls a Rust macro. If it had called a function instead, it
-would be entered as `println` (without the `!`). Rust macros are a way to write
-code that generates code to extend Rust syntax, and we’ll discuss them in more
-detail in [Chapter 20][ch20-macros]<!-- ignore -->. For now, you just need to
-know that using a `!` means that you’re calling a macro instead of a normal
-function and that macros don’t always follow the same rules as functions.
+İlk olarak, `println!` bir Rust makrosu çağırıyor. Bunun yerine bir fonksiyon çağırmış olsaydı,
+`println` olarak girilirdi (`!` olmadan). Rust makroları, Rust sözdizimini genişletmek için kod üreten
+kodu yazmanın bir yoludur ve bunları [Bölüm 20][ch20-macros]<!-- ignore --> bölümünde daha
+ayrıntılı olarak tartışacağız. Şimdilik, sadece
+`!` kullanmanın normal bir
+işlevi yerine bir makro çağırdığınız anlamına geldiğini ve makroların her zaman işlevlerle aynı kuralları izlemediğini bilmeniz gerekir.
 
-Second, you see the `"Hello, world!"` string. We pass this string as an argument
-to `println!`, and the string is printed to the screen.
+İkinci olarak, `"Merhaba, dünya!"` dizesini görüyorsunuz. Bu dizeyi
+argümanı olarak `println!`'e aktarıyoruz ve dize ekrana yazdırılıyor.
 
-Third, we end the line with a semicolon (`;`), which indicates that this
-expression is over and the next one is ready to begin. Most lines of Rust code
-end with a semicolon.
+Üçüncü olarak, satırı bu
+ifadesinin bittiğini ve bir sonrakinin başlamaya hazır olduğunu belirten bir noktalı virgül (`;`) ile bitiriyoruz. Rust kodunun çoğu satırı
+noktalı virgülle biter.
 
-### Compiling and Running Are Separate Steps
+### Derleme ve Çalıştırma Ayrı Adımlardır
 
-You’ve just run a newly created program, so let’s examine each step in the
-process.
+Yeni oluşturduğunuz bir programı çalıştırdınız, şimdi
+sürecindeki her adımı inceleyelim.
 
-Before running a Rust program, you must compile it using the Rust compiler by
-entering the `rustc` command and passing it the name of your source file, like
-this:
+Bir Rust programını çalıştırmadan önce,
+adresine `rustc` komutunu girerek ve ona kaynak dosyanızın adını vererek Rust derleyicisini kullanarak derlemelisiniz, örneğin
+bu:
 
 ```console
 $ rustc main.rs
 ```
 
-If you have a C or C++ background, you’ll notice that this is similar to `gcc`
-or `clang`. After compiling successfully, Rust outputs a binary executable.
+C veya C++ geçmişiniz varsa, bunun `gcc`
+veya `clang` ile benzer olduğunu fark edeceksiniz. Başarılı bir şekilde derlendikten sonra, Rust ikili bir çalıştırılabilir çıktı verir.
 
-On Linux, macOS, and PowerShell on Windows, you can see the executable by
-entering the `ls` command in your shell:
+Linux, macOS ve Windows'ta PowerShell'de çalıştırılabilir dosyayı
+adresinden kabuğunuzdaki `ls` komutunu girerek görebilirsiniz:
 
 ```console
 $ ls
 main  main.rs
 ```
 
-On Linux and macOS, you’ll see two files. With PowerShell on Windows, you’ll
-see the same three files that you would see using CMD. With CMD on Windows, you
-would enter the following:
+Linux ve macOS'ta iki dosya görürsünüz. Windows'ta PowerShell ile
+CMD kullanarak göreceğiniz aynı üç dosyayı görürsünüz. Windows'ta CMD ile
+aşağıdaki komutu girebilirsiniz:
 
-```cmd
-> dir /B %= the /B option says to only show the file names =%
+``cmd
+> dir /B %= /B seçeneği yalnızca dosya adlarını göstermeyi söyler =%
 main.exe
 main.pdb
 main.rs
 ```
 
-This shows the source code file with the _.rs_ extension, the executable file
-(_main.exe_ on Windows, but _main_ on all other platforms), and, when using
-Windows, a file containing debugging information with the _.pdb_ extension.
-From here, you run the _main_ or _main.exe_ file, like this:
+Bu, _.rs_ uzantılı kaynak kod dosyasını,
+ çalıştırılabilir dosyasını (Windows'ta _main.exe_, ancak diğer tüm platformlarda _main_) ve
+Windows kullanırken, _.pdb_ uzantılı hata ayıklama bilgilerini içeren bir dosyayı gösterir.
+Buradan _main_ veya _main.exe_ dosyasını aşağıdaki gibi çalıştırırsınız:
 
 ```console
 $ ./main # or .\main on Windows
 ```
 
-If your _main.rs_ is your “Hello, world!” program, this line prints `Hello,
-world!` to your terminal.
+Eğer _main.rs_ programınız “Merhaba, dünya!” programınız ise, bu satır terminalinize `Merhaba,
+dünya!"` yazdırır.
 
-If you’re more familiar with a dynamic language, such as Ruby, Python, or
-JavaScript, you might not be used to compiling and running a program as
-separate steps. Rust is an _ahead-of-time compiled_ language, meaning you can
-compile a program and give the executable to someone else, and they can run it
-even without having Rust installed. If you give someone a _.rb_, _.py_, or
-_.js_ file, they need to have a Ruby, Python, or JavaScript implementation
-installed (respectively). But in those languages, you only need one command to
-compile and run your program. Everything is a trade-off in language design.
+Ruby, Python veya
+JavaScript gibi dinamik bir dile daha aşinaysanız, bir programı
+ayrı adımlar olarak derlemeye ve çalıştırmaya alışık olmayabilirsiniz. Rust _zamanından önce derlenen_ bir dildir, yani bir programı
+derleyebilir ve çalıştırılabilir dosyayı başka birine verebilirsiniz ve Rust yüklü olmasa bile
+çalıştırabilir. Eğer birine bir _.rb_, _.py_ veya
+_.js_ dosyası verirseniz, Ruby, Python veya JavaScript uygulamasının
+yüklü olması gerekir (sırasıyla). Ancak bu dillerde, programınızı
+derlemek ve çalıştırmak için yalnızca bir komuta ihtiyacınız vardır. Dil tasarımında her şey bir ödünleşimdir.
 
-Just compiling with `rustc` is fine for simple programs, but as your project
-grows, you’ll want to manage all the options and make it easy to share your
-code. Next, we’ll introduce you to the Cargo tool, which will help you write
-real-world Rust programs.
+Sadece `rustc` ile derleme basit programlar için iyidir, ancak projeniz
+büyüdükçe, tüm seçenekleri yönetmek ve
+kodunuzu paylaşmayı kolaylaştırmak isteyeceksiniz. Daha sonra, size
+gerçek dünya Rust programları yazmanıza yardımcı olacak Cargo aracını tanıtacağız.
 
 [troubleshooting]: ch01-01-installation.html#troubleshooting
 [devtools]: appendix-04-useful-development-tools.html

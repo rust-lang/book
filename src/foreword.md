@@ -43,5 +43,3 @@ erişiminizi ve güveninizi de artırmanıza yardımcı olmak için tasarlanmı�
 ulaşılabilir bir metindir. Öyleyse dalın, öğrenmeye hazır olun ve Rust topluluğuna hoş geldiniz!
 
 — Nicholas Matsakis ve Aaron Turon
-
-Translated with DeepL.com (free version)

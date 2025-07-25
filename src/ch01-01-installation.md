@@ -47,6 +47,7 @@ C koduna bağlıdır ve bir C derleyicisine ihtiyaç duyarlar.
 
 macOS üzerinde, çalıştırarak bir C derleyicisi edinebilirsiniz:
 
+macOS üzerinde, çalıştırarak bir C derleyicisi edinebilirsiniz:
 ```console
 $ xcode-select --install
 ```
@@ -165,3 +166,4 @@ adresinden indirmenize gerek kalmayacaktır. Bu komutu çalıştırdıktan sonra
 [msvc]: https://rust-lang.github.io/rustup/installation/windows-msvc.html
 [community]: https://www.rust-lang.org/community
 [araçlar]: https://www.rust-lang.org/tools
+

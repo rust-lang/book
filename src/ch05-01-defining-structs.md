@@ -1,17 +1,17 @@
-## Defining and Instantiating Structs
+## Yapıları Tanımlama ve Instantiating
 
-Structs are similar to tuples, discussed in [“The Tuple Type”][tuples]<!--
-ignore --> section, in that both hold multiple related values. Like tuples, the
-pieces of a struct can be different types. Unlike with tuples, in a struct
-you’ll name each piece of data so it’s clear what the values mean. Adding these
-names means that structs are more flexible than tuples: you don’t have to rely
-on the order of the data to specify or access the values of an instance.
+Yapılar, [“The Tuple Type”][tuples]<!--
+ignore --> bölümünde ele alınan tuple'lara benzer, çünkü her ikisi de birden fazla ilişkili değeri tutar. Tuple'lar gibi, bir struct'ın
+parçaları farklı türlerde olabilir. Tuple'lardan farklı olarak, bir struct'ta
+değerlerin ne anlama geldiğinin açık olması için her bir veri parçasını adlandırırsınız. Bu
+adlarının eklenmesi, yapıların tuple'lardan daha esnek olduğu anlamına gelir: bir örneğin değerlerini belirtmek veya bunlara erişmek için verilerin sırasına
+güvenmek zorunda değilsiniz.
 
-To define a struct, we enter the keyword `struct` and name the entire struct. A
-struct’s name should describe the significance of the pieces of data being
-grouped together. Then, inside curly brackets, we define the names and types of
-the pieces of data, which we call _fields_. For example, Listing 5-1 shows a
-struct that stores information about a user account.
+Bir struct tanımlamak için `struct` anahtar sözcüğünü gireriz ve struct'ın tamamını adlandırırız. Bir
+struct'ın adı,
+gruplandırılan veri parçalarının önemini tanımlamalıdır. Daha sonra küme parantezleri içinde
+_fields_ olarak adlandırdığımız veri parçalarının adlarını ve türlerini tanımlarız. Örneğin, Liste 5-1, bir kullanıcı hesabı hakkında bilgi depolayan bir
+yapısını göstermektedir.
 
 <Listing number="5-1" file-name="src/main.rs" caption="A `User` struct definition">
 
@@ -21,15 +21,14 @@ struct that stores information about a user account.
 
 </Listing>
 
-To use a struct after we’ve defined it, we create an _instance_ of that struct
-by specifying concrete values for each of the fields. We create an instance by
-stating the name of the struct and then add curly brackets containing _`key:
-value`_ pairs, where the keys are the names of the fields and the values are the
-data we want to store in those fields. We don’t have to specify the fields in
-the same order in which we declared them in the struct. In other words, the
-struct definition is like a general template for the type, and instances fill
-in that template with particular data to create values of the type. For
-example, we can declare a particular user as shown in Listing 5-2.
+Bir yapıyı tanımladıktan sonra kullanmak için, her bir alan için somut değerler belirterek
+bu yapının bir _instance_'ını oluştururuz. Bir örneği
+yapının adını belirterek oluştururuz ve ardından _`key:
+value`_ çiftlerini içeren küme parantezleri ekleriz; burada anahtarlar alanların adları ve değerler de bu alanlarda saklamak istediğimiz
+verileridir. Alanları
+adresinde struct içinde bildirdiğimiz sırayla belirtmek zorunda değiliz. Başka bir deyişle,
+struct tanımı tür için genel bir şablon gibidir ve örnekler türün değerlerini oluşturmak için bu şablondaki
+adresini belirli verilerle doldurur. örneği için, belirli bir kullanıcıyı Liste 5-2'de gösterildiği gibi bildirebiliriz.
 
 <Listing number="5-2" file-name="src/main.rs" caption="Creating an instance of the `User` struct">
 
@@ -39,11 +38,11 @@ example, we can declare a particular user as shown in Listing 5-2.
 
 </Listing>
 
-To get a specific value from a struct, we use dot notation. For example, to
-access this user’s email address, we use `user1.email`. If the instance is
-mutable, we can change a value by using the dot notation and assigning into a
-particular field. Listing 5-3 shows how to change the value in the `email`
-field of a mutable `User` instance.
+Bir yapıdan belirli bir değer elde etmek için nokta gösterimini kullanırız. Örneğin,
+bu kullanıcının e-posta adresine erişmek için `user1.email` kullanırız. Örnek
+değiştirilebilir ise, nokta gösterimini kullanarak ve
+belirli bir alana atayarak bir değeri değiştirebiliriz. Liste 5-3, değişebilir bir `User` örneğinin `email`
+alanındaki değerin nasıl değiştirileceğini gösterir.
 
 <Listing number="5-3" file-name="src/main.rs" caption="Changing the value in the `email` field of a `User` instance">
 
@@ -53,14 +52,14 @@ field of a mutable `User` instance.
 
 </Listing>
 
-Note that the entire instance must be mutable; Rust doesn’t allow us to mark
-only certain fields as mutable. As with any expression, we can construct a new
-instance of the struct as the last expression in the function body to
-implicitly return that new instance.
+Tüm örneğin değiştirilebilir olması gerektiğine dikkat edin; Rust,
+yalnızca belirli alanları değiştirilebilir olarak işaretlememize izin vermez. Herhangi bir ifadede olduğu gibi, fonksiyon gövdesindeki son ifade olarak struct'ın yeni bir
+örneğini oluşturabilir ve
+bu yeni örneği dolaylı olarak döndürebiliriz.
 
-Listing 5-4 shows a `build_user` function that returns a `User` instance with
-the given email and username. The `active` field gets the value of `true`, and
-the `sign_in_count` gets a value of `1`.
+Liste 5-4,
+verilen e-posta ve kullanıcı adı ile bir `User` örneği döndüren bir `build_user` işlevini göstermektedir. Active` alanı `true` değerini alır ve
+`sign_in_count` `1` değerini alır.
 
 <Listing number="5-4" file-name="src/main.rs" caption="A `build_user` function that takes an email and username and returns a `User` instance">
 
@@ -70,21 +69,20 @@ the `sign_in_count` gets a value of `1`.
 
 </Listing>
 
-It makes sense to name the function parameters with the same name as the struct
-fields, but having to repeat the `email` and `username` field names and
-variables is a bit tedious. If the struct had more fields, repeating each name
-would get even more annoying. Luckily, there’s a convenient shorthand!
-
+İşlev parametrelerini struct
+alanlarıyla aynı adla adlandırmak mantıklıdır, ancak `email` ve `username` alan adlarını ve
+değişkenlerini tekrarlamak zorunda kalmak biraz sıkıcıdır. Eğer yapının daha fazla alanı olsaydı, her bir ismi
+tekrarlamak daha da can sıkıcı olurdu. Neyse ki, kullanışlı bir steno var!
 <!-- Old heading. Do not remove or links may break. -->
 
 <a id="using-the-field-init-shorthand-when-variables-and-fields-have-the-same-name"></a>
 
-### Using the Field Init Shorthand
+### Alan Başlangıç Kısaltmasını Kullanma
 
-Because the parameter names and the struct field names are exactly the same in
-Listing 5-4, we can use the _field init shorthand_ syntax to rewrite
-`build_user` so it behaves exactly the same but doesn’t have the repetition of
-`username` and `email`, as shown in Listing 5-5.
+Parametre adları ve struct alan adları
+Liste 5-4'te tamamen aynı olduğu için,
+`build_user`'ı yeniden yazmak için _field init shorthand_ sözdizimini kullanabiliriz, böylece Liste 5-5'te gösterildiği gibi tamamen aynı şekilde davranır ancak
+`username` ve `email` tekrarına sahip olmaz.
 
 <Listing number="5-5" file-name="src/main.rs" caption="A `build_user` function that uses field init shorthand because the `username` and `email` parameters have the same name as struct fields">
 
@@ -94,21 +92,21 @@ Listing 5-4, we can use the _field init shorthand_ syntax to rewrite
 
 </Listing>
 
-Here, we’re creating a new instance of the `User` struct, which has a field
-named `email`. We want to set the `email` field’s value to the value in the
-`email` parameter of the `build_user` function. Because the `email` field and
-the `email` parameter have the same name, we only need to write `email` rather
-than `email: email`.
+Burada,
+adresinde `email` adında bir alana sahip olan `User` yapısının yeni bir örneğini oluşturuyoruz. Biz `email` alanının değerini `build_user` fonksiyonunun
+`email` parametresindeki değere ayarlamak istiyoruz. `email` alanı ve
+`email` parametresi aynı ada sahip olduğundan, `email: email` yerine sadece
+`email` yazmamız gerekir.
 
-### Creating Instances from Other Instances with Struct Update Syntax
+### Struct Update Sözdizimi ile Diğer Örneklerden Örnek Oluşturma
 
-It’s often useful to create a new instance of a struct that includes most of
-the values from another instance of the same type, but changes some. You can do
-this using _struct update syntax_.
+Bir yapının
+aynı türden başka bir örneğindeki değerlerin çoğunu içeren ancak bazılarını değiştiren yeni bir örneğini oluşturmak genellikle yararlıdır. Bunu
+_struct update syntax_ kullanarak yapabilirsiniz.
 
-First, in Listing 5-6 we show how to create a new `User` instance in `user2`
-regularly, without the update syntax. We set a new value for `email` but
-otherwise use the same values from `user1` that we created in Listing 5-2.
+İlk olarak, Liste 5-6'da güncelleme sözdizimi olmadan düzenli olarak `user2`
+içinde yeni bir `User` örneğinin nasıl oluşturulacağını gösteriyoruz. `E-posta` için yeni bir değer belirliyoruz ancak
+bunun dışında Liste `5-2`de oluşturduğumuz `user1` ile aynı değerleri kullanıyoruz.
 
 <Listing number="5-6" file-name="src/main.rs" caption="Creating a new `User` instance using all but one of the values from `user1`">
 
@@ -118,9 +116,9 @@ otherwise use the same values from `user1` that we created in Listing 5-2.
 
 </Listing>
 
-Using struct update syntax, we can achieve the same effect with less code, as
-shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
-explicitly set should have the same value as the fields in the given instance.
+struct update sözdizimini kullanarak, Listing 5-7'de
+gösterildiği gibi aynı etkiyi daha az kodla elde edebiliriz. Sözdizimi `..`,
+açıkça ayarlanmamış kalan alanların verilen örnekteki alanlarla aynı değere sahip olması gerektiğini belirtir.
 
 <Listing number="5-7" file-name="src/main.rs" caption="Using struct update syntax to set a new `email` value for a `User` instance but to use the rest of the values from `user1`">
 
@@ -130,38 +128,38 @@ explicitly set should have the same value as the fields in the given instance.
 
 </Listing>
 
-The code in Listing 5-7 also creates an instance in `user2` that has a
-different value for `email` but has the same values for the `username`,
-`active`, and `sign_in_count` fields from `user1`. The `..user1` must come last
-to specify that any remaining fields should get their values from the
-corresponding fields in `user1`, but we can choose to specify values for as
-many fields as we want in any order, regardless of the order of the fields in
-the struct’s definition.
+`Listing 5-7`deki kod ayrıca `user2` içinde `email` için
+farklı bir değere sahip olan ancak `username`,
+`active` ve `sign_in_count` alanları için `user1` ile aynı değerlere sahip olan bir örnek oluşturur. Geriye kalan tüm alanların değerlerini
+`user1`deki karşılık gelen alanlardan alması gerektiğini belirtmek için `..user1` en son gelmelidir
+, ancak
+yapının tanımındaki alanların sırasına bakılmaksızın, herhangi bir sırada istediğimiz kadar
+alan için değer belirtmeyi seçebiliriz.
 
-Note that the struct update syntax uses `=` like an assignment; this is because
-it moves the data, just as we saw in the [“Variables and Data Interacting with
-Move”][move]<!-- ignore --> section. In this example, we can no longer use
-`user1` after creating `user2` because the `String` in the `username` field of
-`user1` was moved into `user2`. If we had given `user2` new `String` values for
-both `email` and `username`, and thus only used the `active` and `sign_in_count`
-values from `user1`, then `user1` would still be valid after creating `user2`.
-Both `active` and `sign_in_count` are types that implement the `Copy` trait, so
-the behavior we discussed in the [“Stack-Only Data: Copy”][copy]<!-- ignore -->
-section would apply. We can also still use `user1.email` in this example,
-because its value was not moved out of `user1`.
+struct güncelleme sözdiziminin bir atama gibi `=` kullandığına dikkat edin; bunun nedeni
+adresinin [“
+Move ile Etkileşime Giren Değişkenler ve Veriler”][move]<!-- ignore --> bölümünde gördüğümüz gibi verileri taşımasıdır. Bu örnekte, `user2` oluşturduktan sonra artık
+`user1` kullanamayız çünkü
+`user1`in `username` alanındaki `String` `user2`ye taşınmıştır. Eğer `user2`ye
+hem `email` hem de `username` için yeni `String` değerleri vermiş olsaydık ve böylece `user1`den sadece `active` ve `sign_in_count`
+değerlerini kullanmış olsaydık, `user1`, `user2` oluşturulduktan sonra da geçerli olurdu.
+Hem `active` hem de `sign_in_count`, `Copy` özelliğini uygulayan türlerdir, bu nedenle
+[“Stack-Only Data: Copy”][copy]<!-- ignore -->
+bölümünde tartıştığımız davranış geçerli olacaktır. Bu örnekte `user1.email` türünü de kullanabiliriz,
+çünkü değeri `user1` türünün dışına taşınmamıştır.
 
-### Using Tuple Structs Without Named Fields to Create Different Types
+### Farklı Türler Oluşturmak için Adlandırılmış Alanlar Olmadan Tuple Yapılarını Kullanma
 
-Rust also supports structs that look similar to tuples, called _tuple structs_.
-Tuple structs have the added meaning the struct name provides but don’t have
-names associated with their fields; rather, they just have the types of the
-fields. Tuple structs are useful when you want to give the whole tuple a name
-and make the tuple a different type from other tuples, and when naming each
-field as in a regular struct would be verbose or redundant.
+Rust ayrıca _tuple structs_ adı verilen ve tuple'lara benzeyen yapıları da destekler.
+Tuple structs, struct adının sağladığı ek anlama sahiptir, ancak alanlarıyla ilişkili
+adlarına sahip değildir; bunun yerine, yalnızca
+alanlarının türlerine sahiptirler. Tuple struct'lar, tüm tuple'a bir ad vermek
+ve tuple'ı diğer tuple'lardan farklı bir tür yapmak istediğinizde ve her
+alanını normal bir struct'ta olduğu gibi adlandırmanın ayrıntılı veya gereksiz olacağı durumlarda kullanışlıdır.
 
-To define a tuple struct, start with the `struct` keyword and the struct name
-followed by the types in the tuple. For example, here we define and use two
-tuple structs named `Color` and `Point`:
+Bir tuple struct tanımlamak için, `struct` anahtar sözcüğü ile başlayın ve struct adını
+ve ardından tuple içindeki türleri yazın. Örneğin, burada `Color` ve `Point` adında iki
+tuple struct tanımlıyor ve kullanıyoruz:
 
 <Listing file-name="src/main.rs">
 
@@ -171,27 +169,26 @@ tuple structs named `Color` and `Point`:
 
 </Listing>
 
-Note that the `black` and `origin` values are different types because they’re
-instances of different tuple structs. Each struct you define is its own type,
-even though the fields within the struct might have the same types. For
-example, a function that takes a parameter of type `Color` cannot take a
-`Point` as an argument, even though both types are made up of three `i32`
-values. Otherwise, tuple struct instances are similar to tuples in that you can
-destructure them into their individual pieces, and you can use a `.` followed
-by the index to access an individual value. Unlike tuples, tuple structs
-require you to name the type of the struct when you destructure them. For
-example, we would write `let Point(x, y, z) = origin;` to destructure the
-values in the `origin` point into variables named `x`, `y`, and `z`.
+`black` ve `origin` değerlerinin farklı türlerde olduğuna dikkat edin, çünkü bunlar farklı tuple yapılarının
+örnekleridir. Tanımladığınız her struct kendi türündedir,
+struct içindeki alanlar aynı türde olsa bile. Örneğin
+için, `Color` türünde bir parametre alan bir fonksiyon, her iki tür de üç `i32`
+değerinden oluşsa bile, argüman olarak
+`Point` alamaz. Aksi takdirde, tuple struct örnekleri,
+bunları tek tek parçalarına ayırabilmeniz ve tek bir değere erişmek için dizin tarafından
+takip edilen bir `.` kullanabilmeniz açısından tuple'lara benzer. Tuple'lardan farklı olarak, tuple struct'lar
+onları yıktığınızda struct'ın türünü adlandırmanızı gerektirir. örneği için, `origin` noktasındaki
+değerlerini `x`, `y` ve `z` adlı değişkenlere yıkmak için `let Point(x, y, z) = origin;` yazacağız.
 
-### Unit-Like Structs Without Any Fields
+### Herhangi Bir Alanı Olmayan Birim Benzeri Yapılar
 
-You can also define structs that don’t have any fields! These are called
-_unit-like structs_ because they behave similarly to `()`, the unit type that
-we mentioned in [“The Tuple Type”][tuples]<!-- ignore --> section. Unit-like
-structs can be useful when you need to implement a trait on some type but don’t
-have any data that you want to store in the type itself. We’ll discuss traits
-in Chapter 10. Here’s an example of declaring and instantiating a unit struct
-named `AlwaysEqual`:
+Herhangi bir alana sahip olmayan yapılar da tanımlayabilirsiniz! Bunlara
+_unit-like structs_ denir, çünkü [“The Tuple Type”][tuples]<!-- ignore --> bölümünde bahsettiğimiz
+birim tipi olan `()` ile benzer şekilde davranırlar. Birim benzeri
+yapılar, bir tür üzerinde bir özellik uygulamanız gerektiğinde ancak
+türün kendisinde saklamak istediğiniz herhangi bir veriye sahip olmadığınızda yararlı olabilir. Özellikleri
+Bölüm 10'da tartışacağız. İşte `AlwaysEqual` adlı bir birim yapının
+bildirilmesi ve örneklenmesine ilişkin bir örnek:
 
 <Listing file-name="src/main.rs">
 
@@ -201,28 +198,28 @@ named `AlwaysEqual`:
 
 </Listing>
 
-To define `AlwaysEqual`, we use the `struct` keyword, the name we want, and
-then a semicolon. No need for curly brackets or parentheses! Then we can get an
-instance of `AlwaysEqual` in the `subject` variable in a similar way: using the
-name we defined, without any curly brackets or parentheses. Imagine that later
-we’ll implement behavior for this type such that every instance of
-`AlwaysEqual` is always equal to every instance of any other type, perhaps to
-have a known result for testing purposes. We wouldn’t need any data to
-implement that behavior! You’ll see in Chapter 10 how to define traits and
-implement them on any type, including unit-like structs.
+`AlwaysEqual`ı tanımlamak için `struct` anahtar sözcüğünü, istediğimiz ismi ve
+adresini ve ardından noktalı virgül kullanırız. Küme parantezlerine ya da parantezlere gerek yok! Daha sonra benzer bir şekilde `subject` değişkeninde bir
+`AlwaysEqual` örneği elde edebiliriz: herhangi bir küme parantezi veya parantez olmadan tanımladığımız
+adını kullanarak. Daha sonra
+bu tür için öyle bir davranış uygulayacağımızı düşünün ki, her
+`AlwaysEqual` örneği her zaman başka bir türün her örneğine eşit olsun, belki de
+test amacıyla bilinen bir sonuca sahip olmak için. Bu davranışı uygulamak için
+herhangi bir veriye ihtiyacımız olmayacaktır! Bölüm 10'da özellikleri nasıl tanımlayacağınızı ve
+bunları birim benzeri yapılar da dahil olmak üzere herhangi bir tür üzerinde nasıl uygulayacağınızı göreceksiniz.
 
-> ### Ownership of Struct Data
+> ### Struct Verilerinin Sahipliği
 >
-> In the `User` struct definition in Listing 5-1, we used the owned `String`
-> type rather than the `&str` string slice type. This is a deliberate choice
-> because we want each instance of this struct to own all of its data and for
-> that data to be valid for as long as the entire struct is valid.
+> Liste 5-1'deki `Kullanıcı` struct tanımında, `&str` string dilim tipi yerine sahip olunan `String`
+> tipini kullandık. Bu bilinçli bir seçimdir
+> çünkü bu yapının her örneğinin tüm verilerine sahip olmasını ve
+> bu verilerin tüm yapı geçerli olduğu sürece geçerli olmasını istiyoruz.
 >
-> It’s also possible for structs to store references to data owned by something
-> else, but to do so requires the use of _lifetimes_, a Rust feature that we’ll
-> discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
-> is valid for as long as the struct is. Let’s say you try to store a reference
-> in a struct without specifying lifetimes, like the following; this won’t work:
+> Yapıların
+> başka bir şeyin sahip olduğu verilere referansları saklaması da mümkündür, ancak bunu yapmak için Bölüm 10'da
+> tartışacağımız bir Rust özelliği olan _lifetimes_ kullanımı gerekir. Yaşam süreleri, bir struct
+> tarafından referans verilen verilerin struct olduğu sürece geçerli olmasını sağlar. Diyelim ki
+> referansını aşağıdaki gibi yaşam sürelerini belirtmeden bir struct içinde saklamaya çalıştınız; bu işe yaramayacaktır:
 >
 > <Listing file-name="src/main.rs">
 >
@@ -248,7 +245,7 @@ implement them on any type, including unit-like structs.
 >
 > </Listing>
 >
-> The compiler will complain that it needs lifetime specifiers:
+> Derleyici, yaşam süresi belirleyicilerine ihtiyaç duyduğundan şikayet edecektir:
 >
 > ```console
 > $ cargo run
@@ -280,13 +277,13 @@ implement them on any type, including unit-like structs.
 > 4 ~     email: &'a str,
 >   |
 >
-> For more information about this error, try `rustc --explain E0106`.
+> Bu hata hakkında daha fazla bilgi için `rustc --explain E0106` dosyasını deneyin.
 > error: could not compile `structs` (bin "structs") due to 2 previous errors
 > ```
 >
-> In Chapter 10, we’ll discuss how to fix these errors so you can store
-> references in structs, but for now, we’ll fix errors like these using owned
-> types like `String` instead of references like `&str`.
+> Bölüm 10'da,
+> referanslarını yapılarda saklayabilmeniz için bu hataları nasıl düzelteceğimizi tartışacağız, ancak şimdilik, `&str` gibi referanslar yerine `String` gibi sahip olunan
+> türlerini kullanarak bu gibi hataları düzelteceğiz.
 
 <!-- manual-regeneration
 for the error above

@@ -144,4 +144,6 @@ akışı şöyledir:
 - `hyp install ghp-import` (veya [pipx][pipx] kullanarak `pipx install ghp-import`) çalıştırarak `ghp-import` aracını yükleyin.
 - Kök dizinde `tools/generate-preview.sh` dosyasını çalıştırın
 
+- `pip install ghp-import` (veya [pipx][pipx] kullanarak `pipx install ghp-import`) komutunu çalıştırarak `ghp-import` aracını yükleyin.
+- Kök dizininde `tools/generate-preview.sh` komutunu çalıştırın.
 [pipx]: https://pipx.pypa.io/stable/#install-pipx

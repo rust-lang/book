@@ -1,11 +1,12 @@
 # Rust Programlama Dili
 
-![Build Status](https://github.com/rust-lang/book/workflows/CI/badge.svg)
+![Derleme Durumu](https://github.com/rust-lang/book/workflows/CI/badge.svg)
 
 Bu depo, `Rust Proglamlama Dili` kitabının kaynak kodunu içerir.
 
 [Kitap, No Starch Press tarafından basılı olarak satışa sunulmuştur.][nostarch].
 
+[Kitap, No Starch Press tarafından basılı olarak da temin edilebilir][nostarch].
 [nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
 
 Kitabı çevrimiçi olarak ücretsiz olarak da okuyabilirsiniz. Lütfen kitabı, en son [kararlı], [beta] veya [gece] Rust sürümleriyle birlikte gönderilen haliyle inceleyin. Bu sürümlerdeki sorunların, bu depoda zaten düzeltilmiş olabileceğini unutmayın, çünkü bu sürümler daha az sıklıkta güncellenmektedir.
@@ -91,7 +92,7 @@ kesinlikle bir hatayı düzeltmiyorsa, bir sonraki büyük revizyon çalışmam�
 bekleyebilir: bu, aylar veya yıllar sürebilir. Sabrınız için
 teşekkür ederiz!
 
-### Translations
+### Çeviriler
 
 Kitabı çevirmeye yardım etmek isteriz! [Çeviriler] etiketine bakarak şu anda devam eden çalışmalara katılabilirsiniz.
 Yeni bir dil üzerinde çalışmaya başlamak için yeni bir konu açın!
