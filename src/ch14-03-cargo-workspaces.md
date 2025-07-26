@@ -1,34 +1,34 @@
-## Cargo Workspaces
+## Kargo Çalışma Alanları
 
-In Chapter 12, we built a package that included a binary crate and a library
-crate. As your project develops, you might find that the library crate
-continues to get bigger and you want to split your package further into
-multiple library crates. Cargo offers a feature called _workspaces_ that can
-help manage multiple related packages that are developed in tandem.
+Bölüm 12'de, bir ikili sandık ve bir kütüphane
+sandığı içeren bir paket oluşturduk. Projeniz geliştikçe, kütüphane sandığının
+büyümeye devam ettiğini ve paketinizi
+birden fazla kütüphane sandığına bölmek istediğinizi fark edebilirsiniz. Cargo,
+birlikte geliştirilen birden fazla ilgili paketin yönetilmesine yardımcı olabilecek _workspaces_ adlı bir özellik sunar.
 
-### Creating a Workspace
+### Çalışma Alanı Oluşturma
 
-A _workspace_ is a set of packages that share the same _Cargo.lock_ and output
-directory. Let’s make a project using a workspace—we’ll use trivial code so we
-can concentrate on the structure of the workspace. There are multiple ways to
-structure a workspace, so we'll just show one common way. We’ll have a
-workspace containing a binary and two libraries. The binary, which will provide
-the main functionality, will depend on the two libraries. One library will
-provide an `add_one` function and the other library an `add_two` function.
-These three crates will be part of the same workspace. We’ll start by creating
-a new directory for the workspace:
+Bir _workspace_, aynı
+dizinini ve çıktısını paylaşan bir dizi pakettir. Bir çalışma alanı kullanarak bir proje yapalım-önemsiz bir kod kullanacağız, böylece
+çalışma alanının yapısına konsantre olabiliriz. Bir çalışma alanını
+yapılandırmanın birden fazla yolu vardır, bu yüzden sadece yaygın bir yolu göstereceğiz. Bir ikili ve iki kütüphane içeren bir
+çalışma alanımız olacak. Ana işlevselliği
+sağlayacak olan ikili, iki kütüphaneye bağlı olacaktır. Bir kütüphane
+bir `add_one` fonksiyonu ve diğer kütüphane bir `add_two` fonksiyonu sağlayacaktır.
+Bu üç sandık aynı çalışma alanının parçası olacaktır. Çalışma alanı için
+adresinde yeni bir dizin oluşturarak başlayacağız:
 
 ```console
 $ mkdir add
 $ cd add
 ```
 
-Next, in the _add_ directory, we create the _Cargo.toml_ file that will
-configure the entire workspace. This file won’t have a `[package]` section.
-Instead, it will start with a `[workspace]` section that will allow us to add
-members to the workspace. We also make a point to use the latest and greatest
-version of Cargo’s resolver algorithm in our workspace by setting the
-`resolver` value to `"3"`.
+Daha sonra, _add_ dizininde,
+tüm çalışma alanını yapılandıracak olan_Cargo.toml_ dosyasını oluşturuyoruz. Bu dosyanın bir `[package]` bölümü olmayacak.
+Bunun yerine, çalışma alanına
+üyelerini eklememizi sağlayacak bir `[workspace]` bölümü ile başlayacaktır. Ayrıca,
+`resolver` değerini `"3"` olarak ayarlayarak çalışma alanımızda Cargo'nun çözümleyici algoritmasının en son ve en büyük
+sürümünü kullanmaya özen gösteriyoruz.
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -36,8 +36,8 @@ version of Cargo’s resolver algorithm in our workspace by setting the
 {{#include ../listings/ch14-more-about-cargo/no-listing-01-workspace/add/Cargo.toml}}
 ```
 
-Next, we’ll create the `adder` binary crate by running `cargo new` within the
-_add_ directory:
+Daha sonra,
+_add_ dizini içinde `cargo new` çalıştırarak `adder` ikili sandığını oluşturacağız:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-01-adder-crate/add
@@ -53,16 +53,15 @@ $ cargo new adder
       Adding `adder` as member of workspace at `file:///projects/add`
 ```
 
-Running `cargo new` inside a workspace also automatically adds the newly created
-package to the `members` key in the `[workspace]` definition in the workspace
-_Cargo.toml_, like this:
+Bir çalışma alanı içinde `cargo new` çalıştırıldığında, yeni oluşturulan
+paketi otomatik olarak
+_Cargo.toml_ çalışma alanındaki `[workspace]` tanımında yer alan `members` anahtarına eklenir:
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/output-only-01-adder-crate/add/Cargo.toml}}
 ```
-
-At this point, we can build the workspace by running `cargo build`. The files
-in your _add_ directory should look like this:
+Bu noktada, `cargo build` komutunu çalıştırarak çalışma alanını oluşturabiliriz. _add_ dizininizdeki
+dosyaları aşağıdaki gibi görünmelidir:
 
 ```text
 ├── Cargo.lock
@@ -74,21 +73,21 @@ in your _add_ directory should look like this:
 └── target
 ```
 
-The workspace has one _target_ directory at the top level that the compiled
-artifacts will be placed into; the `adder` package doesn’t have its own
-_target_ directory. Even if we were to run `cargo build` from inside the
-_adder_ directory, the compiled artifacts would still end up in _add/target_
-rather than _add/adder/target_. Cargo structures the _target_ directory in a
-workspace like this because the crates in a workspace are meant to depend on
-each other. If each crate had its own _target_ directory, each crate would have
-to recompile each of the other crates in the workspace to place the artifacts
-in its own _target_ directory. By sharing one _target_ directory, the crates
-can avoid unnecessary rebuilding.
+Çalışma alanında, derlenen
+eserlerinin içine yerleştirileceği en üst düzeyde bir _target_ dizini vardır; `adder` paketinin kendi
+_target_ dizini yoktur. Cargo build`i
+_adder_ dizini içinden çalıştırsak bile, derlenen eserler yine de _add/adder/target_ yerine _add/target_
+dizinine yerleştirilecektir. Cargo, bir
+çalışma alanındaki _target_ dizinini bu şekilde yapılandırır çünkü bir çalışma alanındaki sandıkların birbirlerine
+bağlı olması amaçlanmıştır. Eğer her crate kendi _target_ dizinine sahip olsaydı, her crate
+çalışma alanındaki diğer crate'lerin her birini yeniden derleyerek
+artifact'ları kendi _target_ dizinine yerleştirirdi. Bir _target_ dizinini paylaşarak,
+crates gereksiz yeniden oluşturmayı önleyebilir.
 
-### Creating the Second Package in the Workspace
+### Çalışma Alanında İkinci Paketi Oluşturma
 
-Next, let’s create another member package in the workspace and call it
-`add_one`. Generate a new library crate named `add_one`:
+Ardından, çalışma alanında başka bir üye paket oluşturalım ve buna
+`add_one` adını verelim. add_one` adında yeni bir kütüphane sandığı oluşturun:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/output-only-02-add-one/add
@@ -104,8 +103,8 @@ $ cargo new add_one --lib
       Adding `add_one` as member of workspace at `file:///projects/add`
 ```
 
-The top-level _Cargo.toml_ will now include the _add_one_ path in the `members`
-list:
+En Üst düzey _Cargo.toml_ artık `members`
+listesinde _add_one_ yolunu içerecektir:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -137,9 +136,9 @@ In the _add_one/src/lib.rs_ file, let’s add an `add_one` function:
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/add_one/src/lib.rs}}
 ```
 
-Now we can have the `adder` package with our binary depend on the `add_one`
-package that has our library. First, we’ll need to add a path dependency on
-`add_one` to _adder/Cargo.toml_.
+artık ikili dosyamızın bulunduğu `adder` paketinin, kütüphanemizin bulunduğu `add_one`
+paketine bağımlı olmasını sağlayabiliriz. Öncelikle, _adder/Cargo.toml_ dosyasına
+`add_one` için bir yol bağımlılığı eklememiz gerekecek.
 
 <span class="filename">Filename: adder/Cargo.toml</span>
 

@@ -1,88 +1,66 @@
-## Publishing a Crate to Crates.io
+## Crates.io'da bir Crate yayınlamak
 
-We’ve used packages from [crates.io](https://crates.io/)<!-- ignore --> as
-dependencies of our project, but you can also share your code with other people
-by publishing your own packages. The crate registry at
-[crates.io](https://crates.io/)<!-- ignore --> distributes the source code of
-your packages, so it primarily hosts code that is open source.
+crates.io](https://crates.io/)<!-- ignore --> adresindeki paketleri projemizin
+bağımlılıkları olarak kullandık, ancak siz de kendi paketlerinizi yayınlayarak kodunuzu diğer insanlarla
+paylaşabilirsiniz. [crates.io](https://crates.io/)<!-- ignore --> adresindeki crate kayıt defteri, paketlerinizin
+kaynak kodunu dağıtır, bu nedenle öncelikle açık kaynak kodunu barındırır.
 
-Rust and Cargo have features that make your published package easier for people
-to find and use. We’ll talk about some of these features next and then explain
-how to publish a package.
+Rust ve Cargo, yayınladığınız paketin
+insanlar tarafından bulunmasını ve kullanılmasını kolaylaştıran özelliklere sahiptir. Daha sonra bu özelliklerden bazılarından bahsedeceğiz ve ardından
+bir paketin nasıl yayınlanacağını açıklayacağız.
 
-### Making Useful Documentation Comments
+### Faydalı Dokümantasyon Yorumları Yapmak
 
-Accurately documenting your packages will help other users know how and when to
-use them, so it’s worth investing the time to write documentation. In Chapter
-3, we discussed how to comment Rust code using two slashes, `//`. Rust also has
-a particular kind of comment for documentation, known conveniently as a
-_documentation comment_, that will generate HTML documentation. The HTML
-displays the contents of documentation comments for public API items intended
-for programmers interested in knowing how to _use_ your crate as opposed to how
-your crate is _implemented_.
+Paketlerinizi doğru bir şekilde belgelemek, diğer kullanıcıların bunları nasıl ve ne zaman
+kullanacaklarını bilmelerine yardımcı olacaktır, bu nedenle belge yazmak için zaman ayırmaya değer. Bölüm
+3'te, iki eğik çizgi, `//` kullanarak Rust kodunu nasıl yorumlayacağımızı tartıştık. Rust ayrıca
+dokümantasyon için özel bir yorum türüne sahiptir, bu yorum uygun bir şekilde
+_documentation comment_ olarak bilinir ve HTML dokümantasyonu oluşturur. HTML
+,
+crate'inizin nasıl _uygulandığı_ yerine nasıl _kullanılacağını_ bilmek isteyen programcılar için
+amaçlanan genel API öğeleri için dokümantasyon yorumlarının içeriğini görüntüler.
 
-Documentation comments use three slashes, `///`, instead of two and support
-Markdown notation for formatting the text. Place documentation comments just
-before the item they’re documenting. Listing 14-1 shows documentation comments
-for an `add_one` function in a crate named `my_crate`.
-
-<Listing number="14-1" file-name="src/lib.rs" caption="A documentation comment for a function">
-
-```rust,ignore
-{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-01/src/lib.rs}}
-```
-
-</Listing>
-
-Here, we give a description of what the `add_one` function does, start a
-section with the heading `Examples`, and then provide code that demonstrates
-how to use the `add_one` function. We can generate the HTML documentation from
-this documentation comment by running `cargo doc`. This command runs the
-`rustdoc` tool distributed with Rust and puts the generated HTML documentation
-in the _target/doc_ directory.
-
-For convenience, running `cargo doc --open` will build the HTML for your
-current crate’s documentation (as well as the documentation for all of your
-crate’s dependencies) and open the result in a web browser. Navigate to the
-`add_one` function and you’ll see how the text in the documentation comments is
-rendered, as shown in Figure 14-1.
+Belgeleme yorumları iki yerine üç eğik çizgi, `///`, kullanır ve metni biçimlendirmek için
+Markdown notasyonunu destekler. Belgeleme yorumlarını belgeledikleri öğeden hemen
+önce yerleştirin. Liste 14-1, `my_crate` adlı bir sandıktaki `add_one` işlevi için
+belgeleme yorumlarını göstermektedir.
 
 <img alt="Rendered HTML documentation for the `add_one` function of `my_crate`" src="img/trpl14-01.png" class="center" />
 
 <span class="caption">Figure 14-1: HTML documentation for the `add_one`
 function</span>
 
-#### Commonly Used Sections
+#### Sık Kullanılan Bölümler
 
-We used the `# Examples` Markdown heading in Listing 14-1 to create a section
-in the HTML with the title “Examples.” Here are some other sections that crate
-authors commonly use in their documentation:
+HTML'de “Örnekler” başlıklı bir
+bölümü oluşturmak için Liste 14-1'deki `# Örnekler' Markdown başlığını kullandık. İşte
+yazarlarının belgelerinde yaygın olarak kullandıkları diğer bazı bölümler:
 
-- **Panics**: The scenarios in which the function being documented could
-  panic. Callers of the function who don’t want their programs to panic should
-  make sure they don’t call the function in these situations.
-- **Errors**: If the function returns a `Result`, describing the kinds of
-  errors that might occur and what conditions might cause those errors to be
-  returned can be helpful to callers so they can write code to handle the
-  different kinds of errors in different ways.
-- **Safety**: If the function is `unsafe` to call (we discuss unsafety in
-  Chapter 20), there should be a section explaining why the function is unsafe
-  and covering the invariants that the function expects callers to uphold.
+- Panikler**: Belgelenen işlevin
+ panik yaratabileceği senaryolar. Programlarının paniklemesini istemeyen fonksiyonu çağıranlar
+ bu durumlarda fonksiyonu çağırmadıklarından emin olmalıdırlar.
+- Hatalar**: Fonksiyon bir `Sonuç' döndürüyorsa, oluşabilecek
+ hata türlerini ve hangi koşulların bu hataların
+ döndürülmesine neden olabileceğini açıklamak, arayanlara yardımcı olabilir, böylece
+ farklı hata türlerini farklı şekillerde ele almak için kod yazabilirler.
+- Güvenlik**: Eğer fonksiyon çağırmak için `güvensiz` ise (güvensizliği
+ Bölüm 20'de tartışıyoruz), fonksiyonun neden güvensiz olduğunu açıklayan
+ ve fonksiyonun çağıranların uymasını beklediği değişmezleri kapsayan bir bölüm olmalıdır.
 
-Most documentation comments don’t need all of these sections, but this is a
-good checklist to remind you of the aspects of your code users will be
-interested in knowing about.
+Çoğu dokümantasyon açıklamasında bu bölümlerin hepsine gerek yoktur, ancak bu, kodunuzun kullanıcıların
+bilmek isteyeceği yönlerini size hatırlatmak için
+iyi bir kontrol listesidir.
 
-#### Documentation Comments as Tests
+#### Test Olarak Dokümantasyon Yorumları
 
-Adding example code blocks in your documentation comments can help demonstrate
-how to use your library, and doing so has an additional bonus: running `cargo
-test` will run the code examples in your documentation as tests! Nothing is
-better than documentation with examples. But nothing is worse than examples
-that don’t work because the code has changed since the documentation was
-written. If we run `cargo test` with the documentation for the `add_one`
-function from Listing 14-1, we will see a section in the test results that looks
-like this:
+Belgelendirme yorumlarınıza örnek kod blokları eklemek,
+adresinde kütüphanenizin nasıl kullanılacağını göstermeye yardımcı olabilir ve bunu yapmanın ek bir bonusu vardır: `cargo
+test` komutunu çalıştırmak, belgelerinizdeki kod örneklerini test olarak çalıştıracaktır! Hiçbir şey
+örnekli dokümantasyondan daha iyi değildir. Ancak hiçbir şey
+dokümantasyonun
+yazılmasından bu yana kod değiştiği için çalışmayan örneklerden daha kötü olamaz. Listing 14-1'deki `add_one`
+fonksiyonunun dokümantasyonu ile `cargo test`i çalıştırırsak, test sonuçlarında
+aşağıdaki gibi görünen bir bölüm göreceğiz:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/listing-14-01/
@@ -90,19 +68,18 @@ cargo test
 copy just the doc-tests section below
 -->
 
-```text
-   Doc-tests my_crate
+```metin
+ Doc-tests my_crate
 
-running 1 test
-test src/lib.rs - add_one (line 5) ... ok
+1 test çalıştırılıyor
+test src/lib.rs - add_one (satır 5) ... tamam
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+test sonucu: tamam. 1 geçti; 0 başarısız; 0 yok sayıldı; 0 ölçüldü; 0 filtrelendi; 0.27s içinde bitti
 ```
 
-Now, if we change either the function or the example so the `assert_eq!` in the
-example panics, and run `cargo test` again, we’ll see that the doc tests catch
-that the example and the code are out of sync with each other!
-
+Şimdi,
+örneğindeki `assert_eq!` panik yapacak şekilde fonksiyonu veya örneği değiştirirsek ve `cargo test`i tekrar çalıştırırsak, doküman testlerinin
+örnek ve kodun birbiriyle senkronize olmadığını yakaladığını göreceğiz!
 #### Commenting Contained Items
 
 The style of doc comment `//!` adds documentation to the item that *contains*
@@ -142,36 +119,36 @@ Documentation comments within items are useful for describing crates and
 modules especially. Use them to explain the overall purpose of the container to
 help your users understand the crate’s organization.
 
-### Exporting a Convenient Public API with `pub use`
+### `pub use` ile Kullanışlı Bir Genel API Dışa Aktarma
 
-The structure of your public API is a major consideration when publishing a
-crate. People who use your crate are less familiar with the structure than you
-are and might have difficulty finding the pieces they want to use if your crate
-has a large module hierarchy.
+Genel API'nizin yapısı, bir
+crate yayınlarken göz önünde bulundurulması gereken önemli bir husustur. Sandığınızı kullanan kişiler
+bu yapıya sizden daha az aşinadır ve eğer sandığınız
+geniş bir modül hiyerarşisine sahipse kullanmak istedikleri parçaları bulmakta zorluk çekebilirler.
 
-In Chapter 7, we covered how to make items public using the `pub` keyword, and
-how to bring items into a scope with the `use` keyword. However, the structure
-that makes sense to you while you’re developing a crate might not be very
-convenient for your users. You might want to organize your structs in a
-hierarchy containing multiple levels, but then people who want to use a type
-you’ve defined deep in the hierarchy might have trouble finding out that type
-exists. They might also be annoyed at having to enter `use
-my_crate::some_module::another_module::UsefulType;` rather than `use
-my_crate::UsefulType;`.
+Bölüm 7'de, `pub` anahtar sözcüğünü kullanarak öğeleri nasıl herkese açık hale getireceğimizi ve
+`use` anahtar sözcüğüyle öğeleri bir kapsama nasıl dahil edeceğimizi ele aldık. Ancak, bir sandık geliştirirken size mantıklı gelen
+yapısı kullanıcılarınız için çok
+uygun olmayabilir. Yapılarınızı birden fazla düzey içeren bir
+hiyerarşisi içinde düzenlemek isteyebilirsiniz, ancak bu durumda hiyerarşinin derinliklerinde tanımladığınız
+türünü kullanmak isteyen kişiler
+türünün var olduğunu bulmakta zorlanabilir. Ayrıca `use
+my_crate::UsefulType;` yerine `use
+my_crate::some_module::another_module::UsefulType;` girmek zorunda kalmaktan da rahatsız olabilirler.
 
-The good news is that if the structure _isn’t_ convenient for others to use
-from another library, you don’t have to rearrange your internal organization:
-instead, you can re-export items to make a public structure that’s different
-from your private structure by using `pub use`. *Re-exporting* takes a public
-item in one location and makes it public in another location, as if it were
-defined in the other location instead.
+İyi haber şu ki, yapı başkalarının başka bir kütüphaneden
+kullanması için uygun değilse, iç organizasyonunuzu yeniden düzenlemeniz gerekmez:
+bunun yerine, `pub use` kullanarak özel yapınızdan farklı bir
+genel yapı oluşturmak için öğeleri yeniden dışa aktarabilirsiniz. *Yeniden dışa aktarma* bir konumdaki genel bir
+öğesini alır ve sanki bunun yerine diğer konumda
+tanımlanmış gibi başka bir konumda genel hale getirir.
 
-For example, say we made a library named `art` for modeling artistic concepts.
-Within this library are two modules: a `kinds` module containing two enums
-named `PrimaryColor` and `SecondaryColor` and a `utils` module containing a
-function named `mix`, as shown in Listing 14-3.
+Örneğin, sanatsal kavramları modellemek için `art` adında bir kütüphane oluşturduğumuzu varsayalım.
+Bu kütüphanede iki modül bulunmaktadır: `PrimaryColor` ve `SecondaryColor` adlı iki enum
+içeren bir `kinds` modülü ve Listing 14-3'te gösterildiği gibi `mix` adlı bir
+işlevi içeren bir `utils` modülü.
 
-<Listing number="14-3" file-name="src/lib.rs" caption="An `art` library with items organized into `kinds` and `utils` modules">
+<Listing number="14-3" file-name="src/lib.rs" caption="Öğeleri `kinds` ve `utils` modülleri halinde düzenlenmiş bir `art` kütüphanesi">
 
 ```rust,noplayground,test_harness
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-03/src/lib.rs:here}}
@@ -179,24 +156,24 @@ function named `mix`, as shown in Listing 14-3.
 
 </Listing>
 
-Figure 14-3 shows what the front page of the documentation for this crate
-generated by `cargo doc` would look like.
+Şekil 14-3, `cargo doc` tarafından oluşturulan bu sandık
+için belgelerin ön sayfasının nasıl görüneceğini göstermektedir.
 
-<img alt="Rendered documentation for the `art` crate that lists the `kinds` and `utils` modules" src="img/trpl14-03.png" class="center" />
+<img alt="`kinds` ve `utils` modüllerini listeleyen `art` sandığı için oluşturulmuş belgeler" src="img/trpl14-03.png" class="center" />
 
-<span class="caption">Figure 14-3: Front page of the documentation for `art`
-that lists the `kinds` and `utils` modules</span>
+<span class="caption">Şekil 14-3: `kinds` ve `utils` modüllerini listeleyen `art`
+belgesinin ön sayfası</span>
 
-Note that the `PrimaryColor` and `SecondaryColor` types aren’t listed on the
-front page, nor is the `mix` function. We have to click `kinds` and `utils` to
-see them.
+PrimaryColor` ve SecondaryColor` türlerinin
+ön sayfasında listelenmediğine ve `mix` işlevinin de listelenmediğine dikkat edin. Bunları görmek için
+adresinden `kinds` ve `utils` seçeneklerine tıklamamız gerekiyor.
 
-Another crate that depends on this library would need `use` statements that
-bring the items from `art` into scope, specifying the module structure that’s
-currently defined. Listing 14-4 shows an example of a crate that uses the
-`PrimaryColor` and `mix` items from the `art` crate.
+Bu kütüphaneye bağlı olan başka bir sandık,
+öğelerini `art` kapsamına getiren ve
+şu anda tanımlanmış olan modül yapısını belirten `use` ifadelerine ihtiyaç duyacaktır. Liste 14-4,
+`PrimaryColor` ve `mix` öğelerini `art` crate'inden kullanan bir crate örneğini göstermektedir.
 
-<Listing number="14-4" file-name="src/main.rs" caption="A crate using the `art` crate’s items with its internal structure exported">
+<Listing number="14-4" file-name="src/main.rs" caption="İç yapısı dışa aktarılmış `art` sandığının öğelerini kullanan bir sandık">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-04/src/main.rs}}
@@ -204,20 +181,20 @@ currently defined. Listing 14-4 shows an example of a crate that uses the
 
 </Listing>
 
-The author of the code in Listing 14-4, which uses the `art` crate, had to
-figure out that `PrimaryColor` is in the `kinds` module and `mix` is in the
-`utils` module. The module structure of the `art` crate is more relevant to
-developers working on the `art` crate than to those using it. The internal
-structure doesn’t contain any useful information for someone trying to
-understand how to use the `art` crate, but rather causes confusion because
-developers who use it have to figure out where to look, and must specify the
-module names in the `use` statements.
+`Liste 14-4`teki `art` sandığını kullanan kodun yazarı,
+adresinden `PrimaryColor`un `kinds` modülünde ve `mix`in
+`utils` modülünde olduğunu anlamak zorunda kalmıştır. `Art` crate'in modül yapısı, onu kullananlardan çok `art` crate üzerinde çalışan
+geliştiricileri ile ilgilidir. Dahili
+yapısı,
+`art` crate`inin nasıl kullanılacağını anlamaya çalışan biri için herhangi bir yararlı bilgi içermez, aksine kafa karışıklığına neden olur, çünkü onu kullanan
+geliştiricileri nereye bakacaklarını bulmak ve
+modül adlarını `use` deyimlerinde belirtmek zorundadır.
 
-To remove the internal organization from the public API, we can modify the
-`art` crate code in Listing 14-3 to add `pub use` statements to re-export the
-items at the top level, as shown in Listing 14-5.
+Dahili organizasyonu genel API'den kaldırmak için, Listing 14-3'teki
+`art` crate kodunu değiştirerek, Listing 14-5'te gösterildiği gibi
+öğelerini üst düzeyde yeniden dışa aktarmak için `pub use` deyimleri ekleyebiliriz.
 
-<Listing number="14-5" file-name="src/lib.rs" caption="Adding `pub use` statements to re-export items">
+<Liste numarası="14-5" file-name="src/lib.rs" caption="Öğeleri yeniden dışa aktarmak için `pub use` deyimleri ekleme">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-05/src/lib.rs:here}}
@@ -225,136 +202,136 @@ items at the top level, as shown in Listing 14-5.
 
 </Listing>
 
-The API documentation that `cargo doc` generates for this crate will now list
-and link re-exports on the front page, as shown in Figure 14-4, making the
-`PrimaryColor` and `SecondaryColor` types and the `mix` function easier to find.
+Bu sandık için `cargo doc` tarafından oluşturulan API belgeleri artık
+adresini listeleyecek ve Şekil 14-4'te gösterildiği gibi ön sayfada yeniden ihraçları bağlayacak, böylece
+`PrimaryColor` ve `SecondaryColor` türlerini ve `mix` işlevini bulmak daha kolay hale gelecektir.
 
-<img alt="Rendered documentation for the `art` crate with the re-exports on the front page" src="img/trpl14-04.png" class="center" />
+<img alt="Ön sayfadaki yeniden ihraçlarla birlikte `art` sandığı için işlenmiş belgeler" src="img/trpl14-04.png" class="center" />
 
-<span class="caption">Figure 14-4: The front page of the documentation for `art`
-that lists the re-exports</span>
+<span class="caption">Şekil 14-4: Yeniden dışa aktarımları listeleyen `art`
+belgesinin ön sayfası</span>
 
-The `art` crate users can still see and use the internal structure from Listing
-14-3 as demonstrated in Listing 14-4, or they can use the more convenient
-structure in Listing 14-5, as shown in Listing 14-6.
-
-<Listing number="14-6" file-name="src/main.rs" caption="A program using the re-exported items from the `art` crate">
+`art` crate kullanıcıları Liste 14-4'te gösterildiği gibi Liste
+14-3'teki dahili yapıyı görmeye ve kullanmaya devam edebilir ya da Liste 14-6'da gösterildiği gibi Liste 14-5'teki daha kullanışlı
+yapısını kullanabilirler.
 
 ```rust,ignore
+
+<Liste numarası="14-6" file-name="src/main.rs" caption="`art` sandığından yeniden ihraç edilen öğeleri kullanan bir program">
+
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-06/src/main.rs:here}}
 ```
 
 </Listing>
 
-In cases where there are many nested modules, re-exporting the types at the top
-level with `pub use` can make a significant difference in the experience of
-people who use the crate. Another common use of `pub use` is to re-export
-definitions of a dependency in the current crate to make that crate's
-definitions part of your crate’s public API.
+İç içe geçmiş çok sayıda modülün bulunduğu durumlarda, en üst
+seviyesindeki türleri `pub use` ile yeniden dışa aktarmak, sandığı kullanan
+kişilerin deneyiminde önemli bir fark yaratabilir. Pub use`un bir diğer yaygın kullanımı, mevcut crate'teki bir bağımlılığın
+tanımlarını yeniden ihraç ederek o crate'in
+tanımlarını crate'inizin genel API'sinin bir parçası haline getirmektir.
 
-Creating a useful public API structure is more of an art than a science, and
-you can iterate to find the API that works best for your users. Choosing `pub
-use` gives you flexibility in how you structure your crate internally and
-decouples that internal structure from what you present to your users. Look at
-some of the code of crates you’ve installed to see if their internal structure
-differs from their public API.
+Kullanışlı bir genel API yapısı oluşturmak bir bilimden çok bir sanattır ve
+kullanıcılarınız için en iyi çalışan API'yi bulmak için yineleyebilirsiniz. pub
+use` seçeneğini seçmek, crate'inizi dahili olarak nasıl yapılandıracağınız konusunda size esneklik sağlar ve
+bu dahili yapıyı kullanıcılarınıza sunduğunuzdan ayırır. İç yapılarının
+genel API'lerinden farklı olup olmadığını görmek için yüklediğiniz sandıkların kodlarından bazılarına
+bakın.
 
-### Setting Up a Crates.io Account
+### Bir Crates.io Hesabı Oluşturma
 
-Before you can publish any crates, you need to create an account on
-[crates.io](https://crates.io/)<!-- ignore --> and get an API token. To do so,
-visit the home page at [crates.io](https://crates.io/)<!-- ignore --> and log
-in via a GitHub account. (The GitHub account is currently a requirement, but
-the site might support other ways of creating an account in the future.) Once
-you’re logged in, visit your account settings at
-[https://crates.io/me/](https://crates.io/me/)<!-- ignore --> and retrieve your
-API key. Then run the `cargo login` command and paste your API key when prompted, like this:
+Herhangi bir sandık yayınlamadan önce
+[crates.io](https://crates.io/)<!-- ignore --> adresinde bir hesap oluşturmanız ve bir API belirteci almanız gerekir. Bunu yapmak için
+[crates.io](https://crates.io/)<!-- ignore --> adresindeki ana sayfayı ziyaret edin ve bir GitHub hesabı aracılığıyla
+adresinde oturum açın. (GitHub hesabı şu anda bir gerekliliktir, ancak
+sitesi gelecekte hesap oluşturmanın diğer yollarını destekleyebilir). oturum açtıktan sonra,
+[https://crates.io/me/](https://crates.io/me/)<!-- ignore --> adresinden hesap ayarlarınızı ziyaret edin ve
+API anahtarınızı alın. Ardından `cargo login` komutunu çalıştırın ve sorulduğunda API anahtarınızı aşağıdaki gibi yapıştırın:
 
-```console
+``console
 $ cargo login
 abcdefghijklmnopqrstuvwxyz012345
 ```
 
-This command will inform Cargo of your API token and store it locally in
-_~/.cargo/credentials.toml_. Note that this token is a _secret_: do not share
-it with anyone else. If you do share it with anyone for any reason, you should
-revoke it and generate a new token on [crates.io](https://crates.io/)<!-- ignore
+Bu komut Cargo'yu API belirteciniz hakkında bilgilendirecek ve bunu yerel olarak
+_~/.cargo/credentials.toml_ adresinde saklayacaktır. Bu belirtecin bir _secret_ olduğunu unutmayın:
+başka kimseyle paylaşmayın. Herhangi bir nedenle herhangi biriyle paylaşırsanız,
+bunu iptal etmeli ve [crates.io](https://crates.io/)<!-- adresinde yeni bir belirteç oluşturmalısınız.
 -->.
 
-### Adding Metadata to a New Crate
+### Yeni Bir Kasaya Meta Veri Ekleme
 
-Let’s say you have a crate you want to publish. Before publishing, you’ll need
-to add some metadata in the `[package]` section of the crate’s _Cargo.toml_
-file.
+Diyelim ki yayınlamak istediğiniz bir sandık var. Yayınlamadan önce,
+adresinden crate'in
+_Cargo.toml_ dosyasının `[package]` bölümüne bazı meta veriler eklemeniz gerekir.
 
-Your crate will need a unique name. While you’re working on a crate locally,
-you can name a crate whatever you’d like. However, crate names on
-[crates.io](https://crates.io/)<!-- ignore --> are allocated on a first-come,
-first-served basis. Once a crate name is taken, no one else can publish a crate
-with that name. Before attempting to publish a crate, search for the name you
-want to use. If the name has been used, you will need to find another name and
-edit the `name` field in the _Cargo.toml_ file under the `[package]` section to
-use the new name for publishing, like so:
+Sandığınızın benzersiz bir isme ihtiyacı olacaktır. Yerel olarak bir sandık üzerinde çalışırken,
+bir sandığı istediğiniz gibi adlandırabilirsiniz. Ancak,
+[crates.io](https://crates.io/)<!-- ignore --> adresindeki sandık adları ilk gelene,
+ilk hizmet esasına göre tahsis edilir. Bir sandık adı alındıktan sonra, başka hiç kimse bu adla bir sandık
+yayınlayamaz. Bir sandık yayınlamaya çalışmadan önce
+adresinde kullanmak istediğiniz ismi arayın. İsim kullanılmışsa, başka bir isim bulmanız ve
 
-<span class="filename">Filename: Cargo.toml</span>
+ yayınlamak için yeni ismi kullanmak üzere `[package]` bölümü altındaki Cargo.toml_ dosyasındaki `name` alanını aşağıdaki gibi düzenlemeniz gerekecektir:
+
+<span class="filename">Dosya adı: Cargo.toml</span>
 
 ```toml
 [package]
 name = "guessing_game"
 ```
 
-Even if you’ve chosen a unique name, when you run `cargo publish` to publish
-the crate at this point, you’ll get a warning and then an error:
+Benzersiz bir isim seçmiş olsanız bile, bu noktada sandığı
+yayınlamak için `cargo publish` çalıştırdığınızda, bir uyarı ve ardından bir hata alırsınız:
 
 <!-- manual-regeneration
-Create a new package with an unregistered name, making no further modifications
-  to the generated package, so it is missing the description and license fields.
+Oluşturulan pakette
+ başka hiçbir değişiklik yapmadan kayıtsız bir adla yeni bir paket oluşturun, bu nedenle açıklama ve lisans alanları eksiktir.
 cargo publish
-copy just the relevant lines below
+sadece aşağıdaki ilgili satırları kopyalayın
 -->
 
-```console
+‘’``console
 $ cargo publish
-    Updating crates.io index
-warning: manifest has no description, license, license-file, documentation, homepage or repository.
-See https://doc.rust-lang.org/cargo/reference/manifest.html#package-metadata for more info.
+ crates.io dizini güncelleniyor
+Uyarı: manifest'in açıklaması, lisansı, lisans dosyası, belgeleri, ana sayfası veya deposu yok.
+Daha fazla bilgi için https://doc.rust-lang.org/cargo/reference/manifest.html#package-metadata adresine bakın.
 --snip--
 error: failed to publish to registry at https://crates.io
 
-Caused by:
-  the remote server responded with an error (status 400 Bad Request): missing or empty metadata fields: description, license. Please see https://doc.rust-lang.org/cargo/reference/manifest.html for more information on configuring these fields
+Nedeni:
+ uzak sunucu bir hatayla yanıt verdi (durum 400 Kötü İstek): eksik veya boş meta veri alanları: açıklama, lisans. Bu alanların yapılandırılması hakkında daha fazla bilgi için lütfen https://doc.rust-lang.org/cargo/reference/manifest.html adresine bakın
 ```
 
-This results in an error because you’re missing some crucial information: a
-description and license are required so people will know what your crate does
-and under what terms they can use it. In _Cargo.toml_, add a description that's
-just a sentence or two, because it will appear with your crate in search
-results. For the `license` field, you need to give a _license identifier value_.
-The [Linux Foundation’s Software Package Data Exchange (SPDX)][spdx] lists the
-identifiers you can use for this value. For example, to specify that you’ve
-licensed your crate using the MIT License, add the `MIT` identifier:
+Bu, bazı önemli bilgileri eksik bıraktığınız için bir hatayla sonuçlanır:
+açıklaması ve lisans gereklidir, böylece insanlar kasanızın ne yaptığını
+ve hangi koşullar altında kullanabileceklerini bilirler. Cargo.toml_ dosyasına
+sadece bir ya da iki cümlelik bir açıklama ekleyin, çünkü bu açıklama
+arama sonuçlarında sandığınızla birlikte görünecektir. Lisans alanı için bir _lisans tanımlayıcı değeri_ vermeniz gerekir.
+Linux Foundation's Software Package Data Exchange (SPDX)][spdx] bu değer için kullanabileceğiniz
+tanımlayıcılarını listeler. Örneğin,
+adresinden sandığınızı MIT Lisansını kullanarak lisansladığınızı belirtmek için `MIT` tanımlayıcısını ekleyin:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Dosya adı: Cargo.toml</span>
 
-```toml
+````toml
 [package]
 name = "guessing_game"
 license = "MIT"
 ```
 
-If you want to use a license that doesn’t appear in the SPDX, you need to place
-the text of that license in a file, include the file in your project, and then
-use `license-file` to specify the name of that file instead of using the
-`license` key.
+SPDX'te görünmeyen bir lisans kullanmak istiyorsanız,
+bu lisansın metnini bir dosyaya yerleştirmeniz, dosyayı projenize dahil etmeniz ve ardından
 
-Guidance on which license is appropriate for your project is beyond the scope
-of this book. Many people in the Rust community license their projects in the
-same way as Rust by using a dual license of `MIT OR Apache-2.0`. This practice
-demonstrates that you can also specify multiple license identifiers separated
-by `OR` to have multiple licenses for your project.
+ `license` anahtarını kullanmak yerine bu dosyanın adını belirtmek için `license-file` kullanmanız gerekir.
 
-With a unique name, the version, your description, and a license added, the
-_Cargo.toml_ file for a project that is ready to publish might look like this:
+Projeniz için hangi lisansın uygun olduğuna ilişkin rehberlik bu kitabın kapsamı
+dışındadır. Rust topluluğundaki birçok kişi projelerini
+adresinde Rust ile aynı şekilde `MIT OR Apache-2.0` şeklinde ikili bir lisans kullanarak lisanslamaktadır. Bu uygulama
+, projeniz için birden fazla lisansa sahip olmak için
+adresini `OR` ile ayırarak birden fazla lisans tanımlayıcısı da belirtebileceğinizi göstermektedir.
+
+Benzersiz bir ad, sürüm, açıklamanız ve bir lisans eklendiğinde, yayınlanmaya hazır bir proje için
+_Cargo.toml_  dosyası aşağıdaki gibi görünebilir:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -369,26 +346,25 @@ license = "MIT OR Apache-2.0"
 [dependencies]
 ```
 
-[Cargo’s documentation](https://doc.rust-lang.org/cargo/) describes other
-metadata you can specify to ensure that others can discover and use your crate
-more easily.
+[Cargo’s documentation](https://doc.rust-lang.org/cargo/) başkalarının
+kasanızı daha kolay keşfedebilmesini ve kullanabilmesini sağlamak için belirtebileceğiniz diğer
+meta verilerini açıklar.
 
 ### Publishing to Crates.io
 
-Now that you’ve created an account, saved your API token, chosen a name for
-your crate, and specified the required metadata, you’re ready to publish!
-Publishing a crate uploads a specific version to
-[crates.io](https://crates.io/)<!-- ignore --> for others to use.
+Artık bir hesap oluşturduğunuza, API token'ınızı kaydettiğinize, sandığınıza
+için bir isim seçtiğinize ve gerekli meta verileri belirttiğinize göre yayınlamaya hazırsınız!
+Bir sandık yayınlamak, başkalarının kullanması için
+[crates.io](https://crates.io/)<!-- ignore --> adresine belirli bir sürümü yükler.
 
-Be careful, because a publish is _permanent_. The version can never be
-overwritten, and the code cannot be deleted except in certain circumstances.
-One major goal of Crates.io is to act as a permanent archive of code so that
-builds of all projects that depend on crates from
-[crates.io](https://crates.io/)<!-- ignore --> will continue to work. Allowing
-version deletions would make fulfilling that goal impossible. However, there is
-no limit to the number of crate versions you can publish.
+Dikkatli olun, çünkü bir yayınlama _kalıcıdır_. Sürüm asla
+üzerine yazılamaz ve kod belirli durumlar dışında silinemez.
+Crates.io'nun ana hedeflerinden biri, kalıcı bir kod arşivi olarak hareket etmektir, böylece
+adresindeki sandıklara bağlı olan tüm projelerin
+[crates.io](https://crates.io/)<!-- ignore --> çalışmaya devam edecektir. sürüm silmelerine izin vermek bu hedefi gerçekleştirmeyi imkansız hale getirecektir. Ancak,
+yayınlayabileceğiniz sandık sürümlerinin sayısında bir sınırlama yoktur.
 
-Run the `cargo publish` command again. It should succeed now:
+`cargo publish`'ı gene çalışıtırın şimdi başarılı olduğunu göreceksiniz:
 
 <!-- manual-regeneration
 go to some valid crate, publish a new version
@@ -418,34 +394,34 @@ anyone can easily add your crate as a dependency of their project.
 
 ### Publishing a New Version of an Existing Crate
 
-When you’ve made changes to your crate and are ready to release a new version,
-you change the `version` value specified in your _Cargo.toml_ file and
-republish. Use the [Semantic Versioning rules][semver] to decide what an
-appropriate next version number is, based on the kinds of changes you’ve made.
-Then run `cargo publish` to upload the new version.
+crate'inizde değişiklikler yaptığınızda ve yeni bir sürüm yayınlamaya hazır olduğunuzda,
+_Cargo.toml_ dosyanızda belirtilen `version` değerini değiştirin ve
+yeniden yayınlayın. Yaptığınız değişikliklerin türüne göre
+uygun bir sonraki sürüm numarasının ne olduğuna karar vermek için [Anlamsal Sürümleme Kuralları][semver] kullanın yaptığınız değişiklik türlerine göre
+uygun bir sonraki sürüm numarasının ne olduğuna karar vermek için.
+Ardından yeni sürümü yüklemek için `cargo publish` çalıştırın.
 
 <!-- Old link, do not remove -->
 
 <a id="removing-versions-from-cratesio-with-cargo-yank"></a>
 
-### Deprecating Versions from Crates.io with `cargo yank`
+### Crates.io'dan `cargo yank` ile Sürümlerin Kullanımdan Kaldırılması
 
-Although you can’t remove previous versions of a crate, you can prevent any
-future projects from adding them as a new dependency. This is useful when a
-crate version is broken for one reason or another. In such situations, Cargo
-supports yanking a crate version.
+Bir sandığın önceki sürümlerini kaldıramasanız da,
+gelecekteki projelerin bunları yeni bir bağımlılık olarak eklemesini önleyebilirsiniz. Bu, bir
+crate sürümü bir nedenden dolayı bozulduğunda kullanışlıdır. Bu gibi durumlarda, Cargo
+bir sandık sürümünü sıralamayı destekler.
 
-_Yanking_ a version prevents new projects from depending on that version while
-allowing all existing projects that depend on it to continue. Essentially, a
-yank means that all projects with a _Cargo.lock_ will not break, and any future
-_Cargo.lock_ files generated will not use the yanked version.
+Bir sürümü _Yanking_ yapmak yeni projelerin o sürüme bağlı olmasını engellerken
+ona bağlı olan tüm mevcut projelerin devam etmesine izin verir. Esasen, bir
+yankı, _Cargo.lock_ içeren tüm projelerin bozulmayacağı ve gelecekte üretilen
+_Cargo.lock_ dosyalarının yankı sürümünü kullanmayacağı anlamına gelir.
 
-To yank a version of a crate, in the directory of the crate that you’ve
-previously published, run `cargo yank` and specify which version you want to
-yank. For example, if we've published a crate named `guessing_game` version
-1.0.1 and we want to yank it, in the project directory for `guessing_game` we'd
-run:
-
+Bir sandığın bir sürümünü çekmek için,
+daha önce yayınladığınız sandığın dizininde, `cargo yank` komutunu çalıştırın ve hangi sürümü çekmek istediğinizi belirtin
+yank. Örneğin, `guessing_game` adlı bir sandık yayınladıysak ve
+1.0.1 sürümünü çekmek istiyorsak, `guessing_game` için proje dizininde
+çalıştırırız:
 <!-- manual-regeneration:
 cargo yank carol-test --version 2.1.0
 cargo yank carol-test --version 2.1.0 --undo
@@ -457,8 +433,8 @@ $ cargo yank --vers 1.0.1
         Yank guessing_game@1.0.1
 ```
 
-By adding `--undo` to the command, you can also undo a yank and allow projects
-to start depending on a version again:
+Komutuna `--undo` ekleyerek, bir yank'ı geri alabilir ve
+projelerinin tekrar bir sürüme bağlı olarak başlamasına izin verebilirsiniz:
 
 ```console
 $ cargo yank --vers 1.0.1 --undo
@@ -466,8 +442,7 @@ $ cargo yank --vers 1.0.1 --undo
       Unyank guessing_game@1.0.1
 ```
 
-A yank _does not_ delete any code. It cannot, for example, delete accidentally
-uploaded secrets. If that happens, you must reset those secrets immediately.
-
+Bir yank _herhangi bir kodu silmez_. Örneğin, yanlışlıkla
+yüklenen gizli dizileri silemez. Böyle bir durumda, bu sırları derhal sıfırlamanız gerekir.
 [spdx]: https://spdx.org/licenses/
 [semver]: https://semver.org/
