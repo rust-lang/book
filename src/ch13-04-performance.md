@@ -1,53 +1,24 @@
-## Comparing Performance: Loops vs. Iterators
+## Performans Karşılaştırması: Döngüler ve Yineleyiciler
 
-To determine whether to use loops or iterators, you need to know which
-implementation is faster: the version of the `search` function with an explicit
-`for` loop or the version with iterators.
+Döngüleri mi yoksa yineleyicileri mi kullanmanız gerektiğine karar vermek için, hangi uygulamanın daha hızlı olduğunu bilmeniz gerekir: `search` fonksiyonunun açık bir `for` döngüsüyle yazılan sürümü mü, yoksa yineleyicilerle yazılan sürümü mü?
 
-We ran a benchmark by loading the entire contents of _The Adventures of
-Sherlock Holmes_ by Sir Arthur Conan Doyle into a `String` and looking for the
-word _the_ in the contents. Here are the results of the benchmark on the
-version of `search` using the `for` loop and the version using iterators:
+Bir karşılaştırma yapmak için Sir Arthur Conan Doyle'un _The Adventures of Sherlock Holmes_ kitabının tüm içeriğini bir `String`'e yükleyip, içerikte _the_ kelimesini aradık. İşte `search` fonksiyonunun `for` döngüsü kullanan sürümü ile yineleyici kullanan sürümünün karşılaştırma sonuçları:
 
 ```text
 test bench_search_for  ... bench:  19,620,300 ns/iter (+/- 915,700)
 test bench_search_iter ... bench:  19,234,900 ns/iter (+/- 657,200)
 ```
 
-The two implementations have similar performance! We won’t explain the
-benchmark code here because the point is not to prove that the two versions
-are equivalent but to get a general sense of how these two implementations
-compare performance-wise.
+İki uygulamanın da performansı oldukça benzer! Burada karşılaştırma kodunu açıklamıyoruz çünkü amacımız iki sürümün eşdeğer olduğunu kanıtlamak değil, bu iki uygulamanın performans açısından nasıl karşılaştırıldığını genel olarak görmek.
 
-For a more comprehensive benchmark, you should check using various texts of
-various sizes as the `contents`, different words and words of different lengths
-as the `query`, and all kinds of other variations. The point is this:
-iterators, although a high-level abstraction, get compiled down to roughly the
-same code as if you’d written the lower-level code yourself. Iterators are one
-of Rust’s _zero-cost abstractions_, by which we mean that using the abstraction
-imposes no additional runtime overhead. This is analogous to how Bjarne
-Stroustrup, the original designer and implementor of C++, defines
-_zero-overhead_ in “Foundations of C++” (2012):
+Daha kapsamlı bir karşılaştırma için, `contents` olarak farklı boyutlarda ve farklı metinler, `query` olarak farklı kelimeler ve farklı uzunlukta kelimeler ve başka pek çok varyasyonla test yapmalısınız. Buradaki önemli nokta şu: yineleyiciler yüksek seviyeli bir soyutlama olmasına rağmen, derleyici tarafından neredeyse sizin elle yazacağınız düşük seviyeli kodla aynı şekilde derlenir. Yineleyiciler, Rust'ın _sıfır maliyetli soyutlamalarından_ biridir; yani bu soyutlamayı kullanmak, çalışma zamanında ek bir maliyet getirmez. Bu, C++'ın orijinal tasarımcısı ve geliştiricisi Bjarne Stroustrup'un “Foundations of C++” (2012) kitabında _sıfır ek yük_ ilkesini tanımlamasına benzer:
 
-> In general, C++ implementations obey the zero-overhead principle: What you
-> don’t use, you don’t pay for. And further: What you do use, you couldn’t hand
-> code any better.
+> Genel olarak, C++ uygulamaları sıfır ek yük ilkesine uyar: Kullanmadığınız şeyin bedelini ödemezsiniz. Ve dahası: Kullandığınız şeyi, elle kodlasanız daha iyi yapamazsınız.
 
-In many cases, Rust code using iterators compiles to the same assembly you’d
-write by hand. Optimizations such as loop unrolling and eliminating bounds
-checking on array access apply and make the resultant code extremely efficient.
-Now that you know this, you can use iterators and closures without fear! They
-make code seem like it’s higher level but don’t impose a runtime performance
-penalty for doing so.
+Çoğu durumda, yineleyiciler kullanan Rust kodu, elle yazacağınız assembly koduyla aynı şekilde derlenir. Döngü açma (loop unrolling) ve dizi erişiminde sınır kontrolünü kaldırma gibi optimizasyonlar uygulanır ve ortaya çıkan kod son derece verimli olur. Artık bunu bildiğinize göre, yineleyicileri ve kapanışları korkmadan kullanabilirsiniz! Kodunuzu daha yüksek seviyeli gösterirler, ancak bunu yaparken çalışma zamanında performans kaybı yaşatmazlar.
 
-## Summary
+## Özet
 
-Closures and iterators are Rust features inspired by functional programming
-language ideas. They contribute to Rust’s capability to clearly express
-high-level ideas at low-level performance. The implementations of closures and
-iterators are such that runtime performance is not affected. This is part of
-Rust’s goal to strive to provide zero-cost abstractions.
+Kapanışlar ve yineleyiciler, Rust'ın fonksiyonel programlama dillerinden esinlenen özellikleridir. Bu özellikler, Rust'ın yüksek seviyeli fikirleri düşük seviyeli performansla açıkça ifade etme yeteneğine katkıda bulunur. Kapanışların ve yineleyicilerin uygulamaları, çalışma zamanı performansını etkilemeyecek şekilde tasarlanmıştır. Bu, Rust'ın sıfır maliyetli soyutlamalar sağlama hedefinin bir parçasıdır.
 
-Now that we’ve improved the expressiveness of our I/O project, let’s look at
-some more features of `cargo` that will help us share the project with the
-world.
+Artık G/Ç projemizin ifade gücünü artırdığımıza göre, projemizi dünyayla paylaşmamıza yardımcı olacak bazı `cargo` özelliklerine göz atalım.

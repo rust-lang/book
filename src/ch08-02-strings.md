@@ -1,59 +1,59 @@
-## Storing UTF-8 Encoded Text with Strings
+## UTF-8 Kodlu Metni Dizelerle Saklama
 
-We talked about strings in Chapter 4, but we’ll look at them in more depth now.
-New Rustaceans commonly get stuck on strings for a combination of three
-reasons: Rust’s propensity for exposing possible errors, strings being a more
-complicated data structure than many programmers give them credit for, and
-UTF-8. These factors combine in a way that can seem difficult when you’re
-coming from other programming languages.
+Bölüm 4'te dizelerden bahsetmiştik, ancak şimdi onlara daha derinlemesine bakacağız.
+Yeni Rustace'ciler genellikle şu üç nedenden dolayı dizgiler konusunda takılıp kalırlar
+nedenler: Rust'ın olası hataları açığa çıkarma eğilimi, dizgilerin daha
+birçok programcının itibar ettiğinden daha karmaşık bir veri yapısıdır ve
+UTF-8. Bu faktörler bir araya geldiğinde zor görünebilir.
+diğer programlama dillerinden gelmektedir.
 
-We discuss strings in the context of collections because strings are
-implemented as a collection of bytes, plus some methods to provide useful
-functionality when those bytes are interpreted as text. In this section, we’ll
-talk about the operations on `String` that every collection type has, such as
-creating, updating, and reading. We’ll also discuss the ways in which `String`
-is different from the other collections, namely how indexing into a `String` is
-complicated by the differences between how people and computers interpret
-`String` data.
+Dizeleri koleksiyonlar bağlamında tartışıyoruz çünkü dizeler
+bayt koleksiyonu olarak uygulanır, ayrıca yararlı yöntemler sağlamak için bazı yöntemler
+bu baytlar metin olarak yorumlandığında işlevsellik. Bu bölümde, şunları yapacağız
+gibi her koleksiyon türünün sahip olduğu `String` üzerindeki işlemler hakkında konuşun.
+oluşturma, güncelleme ve okuma. Ayrıca `String`'in hangi yollarla kullanıldığını da tartışacağız.
+diğer koleksiyonlardan farklıdır, yani bir `String`e indekslemenin nasıl olduğu
+İnsanların ve bilgisayarların yorumlama biçimleri arasındaki farklar nedeniyle karmaşık
+`String` veri.
 
-### What Is a String?
+### String Nedir?
 
-We’ll first define what we mean by the term _string_. Rust has only one string
-type in the core language, which is the string slice `str` that is usually seen
-in its borrowed form `&str`. In Chapter 4, we talked about _string slices_,
-which are references to some UTF-8 encoded string data stored elsewhere. String
-literals, for example, are stored in the program’s binary and are therefore
-string slices.
+İlk olarak _string_ terimi ile ne kastettiğimizi tanımlayacağız. Rust'ta yalnızca bir dize vardır
+türü, çekirdek dilde genellikle görülen string dilimi `str`dir
+'in ödünç alınmış hali olan `&str`. Bölüm 4'te _string dilimleri_ hakkında konuştuk,
+bunlar başka bir yerde depolanan UTF-8 kodlu dize verilerine referanslardır. Dize
+Örneğin, değişmezler programın ikili dosyasında saklanır ve bu nedenle
+string dilimleri.
 
-The `String` type, which is provided by Rust’s standard library rather than
-coded into the core language, is a growable, mutable, owned, UTF-8 encoded
-string type. When Rustaceans refer to “strings” in Rust, they might be
-referring to either the `String` or the string slice `&str` types, not just one
-of those types. Although this section is largely about `String`, both types are
-used heavily in Rust’s standard library, and both `String` and string slices
-are UTF-8 encoded.
+yerine Rust'ın standart kütüphanesi tarafından sağlanan `String` türü
+çekirdek dile kodlanmış, büyütülebilir, değiştirilebilir, sahipli, UTF-8 kodlu bir
+string türü. Rustacean'lar Rust'ta “string ”lerden bahsettiklerinde şu şekilde olabilirler
+sadece birine değil, `String` veya string slice `&str` türlerine atıfta bulunur
+bu türlerin. Bu bölüm büyük ölçüde `String` ile ilgili olsa da, her iki tür de
+Rust'ın standart kütüphanesinde yoğun olarak kullanılır ve hem `String` hem de string dilimleri
+UTF-8 kodludur.
 
-### Creating a New String
+### Yeni String Oluşturma
 
-Many of the same operations available with `Vec<T>` are available with `String`
-as well because `String` is actually implemented as a wrapper around a vector
-of bytes with some extra guarantees, restrictions, and capabilities. An example
-of a function that works the same way with `Vec<T>` and `String` is the `new`
-function to create an instance, shown in Listing 8-11.
+`Vec<T>` ile kullanılabilen işlemlerin çoğu `String` ile de kullanılabilir
+çünkü `String` aslında bir vektör etrafında bir sarmalayıcı olarak uygulanmaktadır
+bazı ekstra garantiler, kısıtlamalar ve yeteneklere sahip baytlardan oluşur. Bir örnek
+`Vec<T>` ve `String` ile aynı şekilde çalışan bir fonksiyonun `new`
+işlevini kullanarak bir örnek oluşturun, Listing 8-11'de gösterilmiştir.
+
 
 <Listing number="8-11" caption="Creating a new, empty `String`">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-11/src/main.rs:here}}
 ```
-
 </Listing>
 
-This line creates a new, empty string called `s`, into which we can then load
-data. Often, we’ll have some initial data with which we want to start the
-string. For that, we use the `to_string` method, which is available on any type
-that implements the `Display` trait, as string literals do. Listing 8-12 shows
-two examples.
+Bu satır `s` adında yeni, boş bir dize oluşturur ve bu dizeye şunları yükleyebiliriz
+veri. Çoğunlukla, başlamak istediğimiz bazı başlangıç verilerine sahip oluruz
+string. Bunun için, herhangi bir tür üzerinde kullanılabilen `to_string` yöntemini kullanırız
+dizge değişmezlerinin yaptığı gibi `Display` özelliğini uygular. Liste 8-12 şunları gösterir
+iki örnek.
 
 <Listing number="8-12" caption="Using the `to_string` method to create a `String` from a string literal">
 
@@ -63,11 +63,11 @@ two examples.
 
 </Listing>
 
-This code creates a string containing `initial contents`.
+Bu kod `initial contents` içeren bir string oluşturur.
 
-We can also use the function `String::from` to create a `String` from a string
-literal. The code in Listing 8-13 is equivalent to the code in Listing 8-12
-that uses `to_string`.
+Bir stringten `String` oluşturmak için `String::from` fonksiyonunu da kullanabiliriz
+gerçek. Liste 8-13'teki kod, Liste 8-12'deki koda eşdeğerdir
+to_string` kullanan
 
 <Listing number="8-13" caption="Using the `String::from` function to create a `String` from a string literal">
 
@@ -77,14 +77,14 @@ that uses `to_string`.
 
 </Listing>
 
-Because strings are used for so many things, we can use many different generic
-APIs for strings, providing us with a lot of options. Some of them can seem
-redundant, but they all have their place! In this case, `String::from` and
-`to_string` do the same thing, so which one you choose is a matter of style and
-readability.
+Stringler çok fazla şey için kullanıldığından, birçok farklı jenerik
+Dizeler için API'ler, bize birçok seçenek sunar. Bazıları görünebilir
+gereksizdir, ancak hepsinin bir yeri vardır! Bu durumda, `String::from` ve
+to_string` aynı şeyi yapar, bu nedenle hangisini seçeceğiniz bir stil meselesidir ve
+okunabilirlik.
 
-Remember that strings are UTF-8 encoded, so we can include any properly encoded
-data in them, as shown in Listing 8-14.
+Dizelerin UTF-8 kodlu olduğunu unutmayın, bu nedenle düzgün kodlanmış herhangi bir
+Liste 8-14'te gösterildiği gibi, içlerindeki veriler.
 
 <Listing number="8-14" caption="Storing greetings in different languages in strings">
 
@@ -94,18 +94,19 @@ data in them, as shown in Listing 8-14.
 
 </Listing>
 
-All of these are valid `String` values.
+Bunların hepsi geçerli `String` değerleridir.
 
-### Updating a String
+### Bir Dizeyi Güncelleme
 
-A `String` can grow in size and its contents can change, just like the contents
-of a `Vec<T>`, if you push more data into it. In addition, you can conveniently
-use the `+` operator or the `format!` macro to concatenate `String` values.
+Bir `String` boyut olarak büyüyebilir ve içeriği değişebilir, tıpkı içeriği gibi
+içine daha fazla veri iterseniz, bir `Vec<T>`. Ek olarak, rahatça şunları yapabilirsiniz
+`String` değerlerini birleştirmek için `+` operatörünü veya `format!` makrosunu kullanın.
 
-#### Appending to a String with `push_str` and `push`
+#### `push_str` ve `push` ile bir Dizeye Ekleme
 
-We can grow a `String` by using the `push_str` method to append a string slice,
-as shown in Listing 8-15.
+Bir dize dilimi eklemek için `push_str` yöntemini kullanarak bir `String`i büyütebiliriz,
+Liste 8-15'te gösterildiği gibi.
+
 
 <Listing number="8-15" caption="Appending a string slice to a `String` using the `push_str` method">
 
@@ -115,10 +116,10 @@ as shown in Listing 8-15.
 
 </Listing>
 
-After these two lines, `s` will contain `foobar`. The `push_str` method takes a
-string slice because we don’t necessarily want to take ownership of the
-parameter. For example, in the code in Listing 8-16, we want to be able to use
-`s2` after appending its contents to `s1`.
+Bu iki satırdan sonra, `s` `foobar` içerecektir. push_str` yöntemi bir
+dize diliminin sahipliğini almak istemediğimiz için
+parametresini kullanabiliriz. Örneğin, Listing 8-16'daki kodda, aşağıdaki parametreyi kullanabilmek istiyoruz
+s2` içeriğini `s1`e ekledikten sonra.
 
 <Listing number="8-16" caption="Using a string slice after appending its contents to a `String`">
 
@@ -128,12 +129,12 @@ parameter. For example, in the code in Listing 8-16, we want to be able to use
 
 </Listing>
 
-If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
-its value on the last line. However, this code works as we’d expect!
+Eğer `push_str` metodu `s2` metodunun sahipliğini alsaydı, şunları yazdıramazdık
+son satırdaki değeri. Ancak, bu kod beklediğimiz gibi çalışıyor!
 
-The `push` method takes a single character as a parameter and adds it to the
-`String`. Listing 8-17 adds the letter _l_ to a `String` using the `push`
-method.
+Push` metodu parametre olarak tek bir karakter alır ve onu
+`String`. Liste 8-17 `push` kullanarak bir `String`e _l_ harfini ekler
+yöntem.
 
 <Listing number="8-17" caption="Adding one character to a `String` value using `push`">
 
@@ -143,12 +144,12 @@ method.
 
 </Listing>
 
-As a result, `s` will contain `lol`.
+Sonuç olarak, `s` `lol` içerecektir.
 
-#### Concatenation with the `+` Operator or the `format!` Macro
+#### `+` Operatörü veya `format!` Makrosu ile Birleştirme
 
-Often, you’ll want to combine two existing strings. One way to do so is to use
-the `+` operator, as shown in Listing 8-18.
+Genellikle, mevcut iki dizeyi birleştirmek istersiniz. Bunu yapmanın bir yolu
+Liste 8-18'de gösterildiği gibi `+` operatörü.
 
 <Listing number="8-18" caption="Using the `+` operator to combine two `String` values into a new `String` value">
 
@@ -158,71 +159,68 @@ the `+` operator, as shown in Listing 8-18.
 
 </Listing>
 
-The string `s3` will contain `Hello, world!`. The reason `s1` is no longer
-valid after the addition, and the reason we used a reference to `s2`, has to do
-with the signature of the method that’s called when we use the `+` operator.
-The `+` operator uses the `add` method, whose signature looks something like
-this:
+s3` dizesi `Hello, world!` içerecektir. s1`in artık olmamasının nedeni
+eklendikten sonra geçerlidir ve `s2` referansını kullanmamızın nedeni şudur
+operatörünü kullandığımızda çağrılan metodun imzası ile aynıdır.
+`+` operatörü, imzası aşağıdaki gibi görünen `add` metodunu kullanır
+Bu:
 
 ```rust,ignore
 fn add(self, s: &str) -> String {
 ```
 
-In the standard library, you’ll see `add` defined using generics and associated
-types. Here, we’ve substituted in concrete types, which is what happens when we
-call this method with `String` values. We’ll discuss generics in Chapter 10.
-This signature gives us the clues we need in order to understand the tricky
-bits of the `+` operator.
+Standart kütüphanede, jenerikler kullanılarak tanımlanmış `add` ve ilişkili
+türleri. Burada, somut türler ile yer değiştirdik, bu da
+bu yöntemi `String` değerleri ile çağırın. Jenerikleri Bölüm 10'da tartışacağız.
+Bu imza bize, aşağıdaki zorluğu anlamak için ihtiyacımız olan ipuçlarını verir
+operatörünün bitleri.
 
-First, `s2` has an `&`, meaning that we’re adding a _reference_ of the second
-string to the first string. This is because of the `s` parameter in the `add`
-function: we can only add a `&str` to a `String`; we can’t add two `String`
-values together. But wait—the type of `&s2` is `&String`, not `&str`, as
-specified in the second parameter to `add`. So why does Listing 8-18 compile?
+İlk olarak, `s2` bir `&` içerir, bu da ikinci bir _referans_ eklediğimiz anlamına gelir
+dizesini ilk dizeye ekler. Bunun nedeni `add` komutundaki `s` parametresidir
+fonksiyonu: bir `String`e sadece bir `&str` ekleyebiliriz; iki `String` ekleyemeyiz
+değerlerini bir araya getirir. Ancak bekleyin - `&s2`nin türü `&str` değil `&String`dir.
+'e ikinci parametre olarak belirtilir. Peki Liste 8-18 neden derleniyor?
 
-The reason we’re able to use `&s2` in the call to `add` is that the compiler
-can _coerce_ the `&String` argument into a `&str`. When we call the `add`
-method, Rust uses a _deref coercion_, which here turns `&s2` into `&s2[..]`.
-We’ll discuss deref coercion in more depth in Chapter 15. Because `add` does
-not take ownership of the `s` parameter, `s2` will still be a valid `String`
-after this operation.
+`add` çağrısında `&s2` kullanabilmemizin nedeni, derleyicinin
+`&String` argümanını bir `&str`ye _coerce_ edebilir. `add` komutunu çağırdığımızda
+metodunda, Rust burada `&s2`yi `&s2[..]`ye dönüştüren bir _deref coercion_ kullanır.
+Deref zorlamasını Bölüm 15'te daha derinlemesine tartışacağız. Çünkü `add` şunları yapar
+`s` parametresinin sahipliğini almazsa, `s2` hala geçerli bir `String` olacaktır
+bu işlemden sonra.
 
-Second, we can see in the signature that `add` takes ownership of `self`
-because `self` does _not_ have an `&`. This means `s1` in Listing 8-18 will be
-moved into the `add` call and will no longer be valid after that. So, although
-`let s3 = s1 + &s2;` looks like it will copy both strings and create a new one,
-this statement actually takes ownership of `s1`, appends a copy of the contents
-of `s2`, and then returns ownership of the result. In other words, it looks
-like it’s making a lot of copies, but it isn’t; the implementation is more
-efficient than copying.
-
-If we need to concatenate multiple strings, the behavior of the `+` operator
-gets unwieldy:
+İkinci olarak, imzada `add` işleminin `self` işleminin sahipliğini aldığını görebiliriz
+çünkü `self` bir `&` ye sahip değildir. Bu, `Liste 8-18`deki `s1`in şöyle olacağı anlamına gelir
+`add` çağrısına taşınmıştır ve bundan sonra artık geçerli olmayacaktır. Yani, her ne kadar
+`let s3 = s1 + &s2;` her iki dizeyi de kopyalayacak ve yeni bir tane oluşturacak gibi görünüyor,
+bu ifade aslında sahibini
+Birden fazla dizeyi birleştirmemiz gerekirse, `+` işlecinin davranışı
+hantal olur:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/no-listing-01-concat-multiple-strings/src/main.rs:here}}
 ```
 
-At this point, `s` will be `tic-tac-toe`. With all of the `+` and `"`
-characters, it’s difficult to see what’s going on. For combining strings in
-more complicated ways, we can instead use the `format!` macro:
+Bu noktada, `s` `tic-tac-toe` olacaktır. Tüm `+` ve `"` ile
+karakterleri varsa, neler olup bittiğini görmek zordur. Dizeleri birleştirmek için
+daha karmaşık yollar yerine `format!` makrosunu kullanabiliriz:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/no-listing-02-format/src/main.rs:here}}
 ```
 
-This code also sets `s` to `tic-tac-toe`. The `format!` macro works like
-`println!`, but instead of printing the output to the screen, it returns a
-`String` with the contents. The version of the code using `format!` is much
-easier to read, and the code generated by the `format!` macro uses references
-so that this call doesn’t take ownership of any of its parameters.
+Bu kod ayrıca `s` değerini `tic-tac-toe` olarak ayarlar. `format!` makrosu şu şekilde çalışır
+`println!`, ancak çıktıyı ekrana yazdırmak yerine, bir
+içeriğiyle birlikte `String`. Kodun `format!` kullanan sürümü çok
+daha kolay okunur ve `format!` makrosu tarafından oluşturulan kod referansları kullanır
+böylece bu çağrı hiçbir parametresinin sahipliğini almaz.
 
-### Indexing into Strings
+### Dizelere İndeksleme
 
-In many other programming languages, accessing individual characters in a
-string by referencing them by index is a valid and common operation. However,
-if you try to access parts of a `String` using indexing syntax in Rust, you’ll
-get an error. Consider the invalid code in Listing 8-19.
+Diğer birçok programlama dilinde, bir karakterdeki tek tek karakterlere erişmek
+dizesini dizine göre referans vererek kullanmak geçerli ve yaygın bir işlemdir. Ancak,
+Rust'ta indeksleme sözdizimini kullanarak bir `String`in parçalarına erişmeye çalışırsanız
+bir hata alırsınız. Liste 8-19'daki geçersiz kodu düşünün.
+
 
 <Listing number="8-19" caption="Attempting to use indexing syntax with a String">
 
@@ -238,103 +236,103 @@ This code will result in the following error:
 {{#include ../listings/ch08-common-collections/listing-08-19/output.txt}}
 ```
 
-The error and the note tell the story: Rust strings don’t support indexing. But
-why not? To answer that question, we need to discuss how Rust stores strings in
-memory.
+Hata ve not hikayeyi anlatıyor: Rust dizeleri indekslemeyi desteklemez. Fakat
+neden olmasın? Bu soruyu yanıtlamak için, Rust'ın dizeleri nasıl sakladığını tartışmamız gerekir
+Hafıza.
 
-#### Internal Representation
+#### İç Temsil
 
-A `String` is a wrapper over a `Vec<u8>`. Let’s look at some of our properly
-encoded UTF-8 example strings from Listing 8-14. First, this one:
+Bir `String`, bir `Vec<u8>` üzerinde bir sarmalayıcıdır. Şimdi bazı düzgünlerimize bakalım
+Liste 8-14'teki UTF-8 kodlu örnek dizeler. İlk olarak, bu:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:spanish}}
 ```
 
-In this case, `len` will be `4`, which means the vector storing the string
-`"Hola"` is 4 bytes long. Each of these letters takes one byte when encoded in
-UTF-8. The following line, however, may surprise you (note that this string
-begins with the capital Cyrillic letter _Ze_, not the number 3):
+Bu durumda, `len` `4` olacaktır, bu da dizeyi depolayan vektör anlamına gelir
+“Hola”` 4 bayt uzunluğundadır. Bu harflerin her biri şu şekilde kodlandığında bir bayt alır
+UTF-8. Ancak aşağıdaki satır sizi şaşırtabilir (bu dizenin
+büyük Kiril harfi _Ze_ ile başlar, 3 rakamı ile değil):
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:russian}}
 ```
 
-If you were asked how long the string is, you might say 12. In fact, Rust’s
-answer is 24: that’s the number of bytes it takes to encode “Здравствуйте” in
-UTF-8, because each Unicode scalar value in that string takes 2 bytes of
-storage. Therefore, an index into the string’s bytes will not always correlate
-to a valid Unicode scalar value. To demonstrate, consider this invalid Rust
-code:
+İpin ne kadar uzun olduğu sorulsaydı 12 diyebilirdiniz. Aslında, Rust'ın
+cevap 24'tür: bu, “Здравствуйте” kelimesini kodlamak için gereken bayt sayısıdır.
+UTF-8, çünkü bu dizideki her Unicode skaler değeri 2 bayt
+depolama. Bu nedenle, dizenin baytlarına yönelik bir dizin her zaman aşağıdakilerle ilişkili olmayacaktır
+geçerli bir Unicode skaler değerine dönüştürür. Göstermek için şu geçersiz Rust'ı düşünün
+Kod:
 
 ```rust,ignore,does_not_compile
 let hello = "Здравствуйте";
 let answer = &hello[0];
 ```
 
-You already know that `answer` will not be `З`, the first letter. When encoded
-in UTF-8, the first byte of `З` is `208` and the second is `151`, so it would
-seem that `answer` should in fact be `208`, but `208` is not a valid character
-on its own. Returning `208` is likely not what a user would want if they asked
-for the first letter of this string; however, that’s the only data that Rust
-has at byte index 0. Users generally don’t want the byte value returned, even
-if the string contains only Latin letters: if `&"hi"[0]` were valid code that
-returned the byte value, it would return `104`, not `h`.
+Zaten `cevap`ın ilk harf olan `З` olmayacağını biliyorsunuz. Kodlandığında
+UTF-8'de `З`nin ilk baytı `208` ve ikincisi `151`dir, bu nedenle
+aslında `cevap`ın `208` olması gerekir, ancak `208` geçerli bir karakter değildir
+kendi başına. `208` döndürmek muhtemelen bir kullanıcının sorduğunda isteyeceği şey değildir
+Bu dizenin ilk harfi için; ancak, Rust'ın bu dizeye ilişkin tek verisi
+bayt dizini 0'da bulunur. Kullanıcılar genellikle bayt değerinin döndürülmesini istemez, hatta
+eğer dize sadece Latin harfleri içeriyorsa: eğer `&“hi”[0]` geçerli bir kod olsaydı
+bayt değerini döndürdüğünde, `h` değil `104` değerini döndürecektir.
 
-The answer, then, is that to avoid returning an unexpected value and causing
-bugs that might not be discovered immediately, Rust doesn’t compile this code
-at all and prevents misunderstandings early in the development process.
+O halde cevap, beklenmedik bir değer döndürmekten kaçınmak ve
+Hemen keşfedilemeyebilecek hatalar, Rust bu kodu derlemez
+ve geliştirme sürecinin başlarında yanlış anlamaları önler.
 
-#### Bytes and Scalar Values and Grapheme Clusters! Oh My!
+#### Baytlar ve Skaler Değerler ve Grapheme Kümeleri! Aman Tanrım!
 
-Another point about UTF-8 is that there are actually three relevant ways to
-look at strings from Rust’s perspective: as bytes, scalar values, and grapheme
-clusters (the closest thing to what we would call _letters_).
+UTF-8 ile ilgili bir başka nokta da aslında üç ilgili yol olduğudur
+dizelere Rust'ın bakış açısından bakın: baytlar, skaler değerler ve grafem olarak
+kümelerdir (bizim _harfler_ dediğimiz şeye en yakın şey).
 
-If we look at the Hindi word “नमस्ते” written in the Devanagari script, it is
-stored as a vector of `u8` values that looks like this:
+Devanagari alfabesiyle yazılmış Hintçe “नमस्ते” kelimesine bakarsak
+aşağıdaki gibi görünen `u8` değerlerinden oluşan bir vektör olarak saklanır:
 
 ```text
 [224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164,
 224, 165, 135]
 ```
 
-That’s 18 bytes and is how computers ultimately store this data. If we look at
-them as Unicode scalar values, which are what Rust’s `char` type is, those
-bytes look like this:
+Bu 18 bayttır ve bilgisayarlar bu verileri nihai olarak bu şekilde depolar. Eğer bakarsak
+Unicode skaler değerler olarak, ki Rust'ın `char` tipi de budur, bu
+baytlar böyle görünür:
 
 ```text
 ['न', 'म', 'स', '्', 'त', 'े']
 ```
 
-There are six `char` values here, but the fourth and sixth are not letters:
-they’re diacritics that don’t make sense on their own. Finally, if we look at
-them as grapheme clusters, we’d get what a person would call the four letters
-that make up the Hindi word:
+cBurada altı `char` değeri vardır, ancak dördüncü ve altıncı harf değildir:
+kendi başlarına bir anlam ifade etmeyen aksan işaretleridir. Son olarak, eğer bakarsak
+onları grapheme kümeleri olarak, bir kişinin dört harf olarak adlandıracağı şeyi elde ederiz
+Hintçe kelimeyi oluşturan:
 
 ```text
 ["न", "म", "स्", "ते"]
 ```
 
-Rust provides different ways of interpreting the raw string data that computers
-store so that each program can choose the interpretation it needs, no matter
-what human language the data is in.
+Rust, bilgisayarların ham dize verilerini yorumlamak için farklı yollar sağlar
+depolayın, böylece her program ihtiyaç duyduğu yorumu seçebilir, ne olursa olsun
+verinin hangi insan dilinde olduğu.
 
-A final reason Rust doesn’t allow us to index into a `String` to get a
-character is that indexing operations are expected to always take constant time
-(O(1)). But it isn’t possible to guarantee that performance with a `String`,
-because Rust would have to walk through the contents from the beginning to the
-index to determine how many valid characters there were.
+Rust'ın bir `String`i indekslememize izin vermemesinin son bir nedeni
+karakteri, indeksleme işlemlerinin her zaman sabit zaman almasının beklenmesidir
+(O(1)). Ancak bir `String` ile bu performansı garanti etmek mümkün değildir,
+Çünkü Rust, içeriği baştan sona gözden geçirmek zorunda kalacaktı.
+kaç tane geçerli karakter olduğunu belirlemek için dizin.
 
-### Slicing Strings
+### Dizeleri Dilimleme
 
-Indexing into a string is often a bad idea because it’s not clear what the
-return type of the string-indexing operation should be: a byte value, a
-character, a grapheme cluster, or a string slice. If you really need to use
-indices to create string slices, therefore, Rust asks you to be more specific.
+Bir dizeye indeksleme yapmak genellikle kötü bir fikirdir çünkü
+dize indeksleme işleminin dönüş türü şu şekilde olmalıdır: bir bayt değeri, bir
+karakteri, bir grapheme kümesi veya bir dize dilimi. Gerçekten kullanmanız gerekiyorsa
+dizgi dilimleri oluşturmak için indeksler, bu nedenle Rust sizden daha spesifik olmanızı ister.
 
-Rather than indexing using `[]` with a single number, you can use `[]` with a
-range to create a string slice containing particular bytes:
+Tek bir sayı ile `[]` kullanarak indeksleme yapmak yerine, bir sayı ile `[]` kullanabilirsiniz.
+belirli baytları içeren bir dize dilimi oluşturmak için aralık:
 
 ```rust
 let hello = "Здравствуйте";
@@ -342,27 +340,27 @@ let hello = "Здравствуйте";
 let s = &hello[0..4];
 ```
 
-Here, `s` will be a `&str` that contains the first four bytes of the string.
-Earlier, we mentioned that each of these characters was two bytes, which means
-`s` will be `Зд`.
+Burada `s`, dizenin ilk dört baytını içeren bir `&str` olacaktır.
+Daha önce, bu karakterlerin her birinin iki bayt olduğundan bahsetmiştik, yani
+`s`, `Зд` olacaktır.
 
-If we were to try to slice only part of a character’s bytes with something like
-`&hello[0..1]`, Rust would panic at runtime in the same way as if an invalid
-index were accessed in a vector:
+Bir karakterin baytlarının sadece bir kısmını aşağıdaki gibi bir şeyle kesmeye çalışsaydık
+`&hello[0..1]`, Rust çalışma zamanında geçersiz bir
+dizinine bir vektör içinde erişildi:
 
 ```console
 {{#include ../listings/ch08-common-collections/output-only-01-not-char-boundary/output.txt}}
 ```
 
-You should use caution when creating string slices with ranges, because doing
-so can crash your program.
+Aralıklarla dize dilimleri oluştururken dikkatli olmalısınız, çünkü
+bu yüzden programınızı çökertebilir.
 
-### Methods for Iterating Over Strings
+### Dizeler Üzerinde Yineleme Yöntemleri
 
-The best way to operate on pieces of strings is to be explicit about whether
-you want characters or bytes. For individual Unicode scalar values, use the
-`chars` method. Calling `chars` on “Зд” separates out and returns two values of
-type `char`, and you can iterate over the result to access each element:
+String parçaları üzerinde işlem yapmanın en iyi yolu
+karakter veya bayt istiyorsunuz. Tek tek Unicode skaler değerleri için
+`chars` yöntemi. “Зд” üzerinde `chars` çağrıldığında, iki değer ayrılır ve döndürülür
+türünde `char` yazabilir ve her bir öğeye erişmek için sonuç üzerinde yineleme yapabilirsiniz:
 
 ```rust
 for c in "Зд".chars() {
@@ -370,15 +368,15 @@ for c in "Зд".chars() {
 }
 ```
 
-This code will print the following:
+Bu kod aşağıdakileri yazdıracaktır:
 
 ```text
 З
 д
 ```
 
-Alternatively, the `bytes` method returns each raw byte, which might be
-appropriate for your domain:
+Alternatif olarak, `bytes` yöntemi her bir ham baytı döndürür, bu da
+alanınız için uygun:
 
 ```rust
 for b in "Зд".bytes() {
@@ -386,7 +384,7 @@ for b in "Зд".bytes() {
 }
 ```
 
-This code will print the four bytes that make up this string:
+Bu kod, bu dizeyi oluşturan dört baytı yazdıracaktır:
 
 ```text
 208
@@ -395,29 +393,28 @@ This code will print the four bytes that make up this string:
 180
 ```
 
-But be sure to remember that valid Unicode scalar values may be made up of more
-than one byte.
+Ancak geçerli Unicode skaler değerlerinin daha fazla değerden oluşabileceğini unutmayın
+bir bayttan fazla.
 
-Getting grapheme clusters from strings, as with the Devanagari script, is
-complex, so this functionality is not provided by the standard library. Crates
-are available on [crates.io](https://crates.io/)<!-- ignore --> if this is the
-functionality you need.
+Devanagari yazısında olduğu gibi, dizelerden grafem kümeleri elde etmek
+karmaşıktır, bu nedenle bu işlevsellik standart kütüphane tarafından sağlanmamaktadır. Kasalar [crates.io](https://crates.io/)<!-- ignore --> adresinde mevcuttur, eğer bu
+İhtiyacınız olan işlevsellik.
 
-### Strings Are Not So Simple
+### Dizeler O Kadar Basit Değil
 
-To summarize, strings are complicated. Different programming languages make
-different choices about how to present this complexity to the programmer. Rust
-has chosen to make the correct handling of `String` data the default behavior
-for all Rust programs, which means programmers have to put more thought into
-handling UTF-8 data up front. This trade-off exposes more of the complexity of
-strings than is apparent in other programming languages, but it prevents you
-from having to handle errors involving non-ASCII characters later in your
-development life cycle.
+Özetlemek gerekirse, dizgiler karmaşıktır. Farklı programlama dilleri
+Bu karmaşıklığın programcıya nasıl sunulacağı konusunda farklı seçimler. Pas
+`String` verilerinin doğru işlenmesini varsayılan davranış haline getirmeyi seçmiştir
+Bu da programcıların tüm Rust programları için daha fazla düşünmesi gerektiği anlamına gelir.
+UTF-8 verilerini önden işleme. Bu değiş tokuş, daha fazla karmaşıklığı ortaya çıkarır
+Diğer programlama dillerinde görülenden daha fazla dizgi, ancak sizi engeller
+ASCII olmayan karakterleri içeren hataları daha sonra ele almak zorunda kalmamak için
+geliştirme yaşam döngüsü.
 
-The good news is that the standard library offers a lot of functionality built
-off the `String` and `&str` types to help handle these complex situations
-correctly. Be sure to check out the documentation for useful methods like
-`contains` for searching in a string and `replace` for substituting parts of a
-string with another string.
+İyi haber şu ki, standart kütüphane birçok işlevsellik sunuyor
+Bu karmaşık durumların üstesinden gelmeye yardımcı olmak için `String` ve `&str` türlerini
+Doğru şekilde. Aşağıdaki gibi yararlı yöntemler için belgelere göz attığınızdan emin olun
+Bir dize içinde arama yapmak için `contains` ve bir dizenin parçalarını değiştirmek için `replace`
+dizgesini başka bir dizgeyle eşleyebiliriz.
 
-Let’s switch to something a bit less complex: hash maps!
+Biraz daha az karmaşık bir şeye geçelim: hash haritaları!

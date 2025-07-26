@@ -1,27 +1,25 @@
-# The Rust Programming Language
+# Rust Programlama Dili
 
-_by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the
-Rust Community_
+Steve Klabnik, Carol Nichols ve Chris Krycho tarafından,
+Rust Topluluğunun katkılarıyla_
 
-This version of the text assumes you’re using Rust 1.85.0 (released 2025-02-17)
-or later with `edition = "2024"` in the Cargo.toml file of all projects to
-configure them to use Rust 2024 edition idioms. See the [“Installation” section
-of Chapter 1][install]<!-- ignore --> to install or update Rust.
+Metnin bu sürümünde, Rust 1.85.0 (2025-02-17 sürümü)
+veya sonraki sürümlerini kullandığınız ve tüm projelerin Cargo.toml dosyasında `edition = "2024"` ile
+Rust 2024 sürümü deyimlerini kullanacak şekilde yapılandırdığınız varsayılmaktadır. Rust'ı kurmak veya güncellemek için Bölüm 1'deki [“Kurulum” bölümü][install]<!-- ignore --> bölümüne bakın.
 
-The HTML format is available online at
+HTML formatı
 [https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/)
-and offline with installations of Rust made with `rustup`; run `rustup doc
---book` to open.
+adresinde çevrimiçi olarak ve `rustup` ile yapılan Rust kurulumlarında çevrimdışı olarak mevcuttur; `rustup doc`u çalıştırın
+--kitap` açmak için.
+Çeşitli topluluk [çevirileri][translations] de mevcuttur.
 
-Several community [translations] are also available.
+Bu metin, No Starch
+Press'ten  [ciltsiz kitap ve e-kitap formatında][nsprust] temin edilebilir.
 
-This text is available in [paperback and ebook format from No Starch
-Press][nsprust].
-
-[install]: ch01-01-installation.html
+[install]: ch01-01-installation.md
 [nsprust]: https://nostarch.com/rust-programming-language-2nd-edition
-[translations]: appendix-06-translation.html
+[translations]: appendix-06-translation.md
 
-> **🚨 Want a more interactive learning experience? Try out a different version
-> of the Rust Book, featuring: quizzes, highlighting, visualizations, and
+> **🚨 Daha interaktif bir öğrenme deneyimi mi istiyorsunuz? Farklı bir sürüm deneyin
+> Rust Kitabı, şunları içerir: sınavlar, vurgulamalar, görselleştirmeler ve
 > more**: <https://rust-book.cs.brown.edu>

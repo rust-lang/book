@@ -1,31 +1,31 @@
-## Validating References with Lifetimes
+## Referansları Yaşam Süreleri ile Doğrulama
 
-Lifetimes are another kind of generic that we’ve already been using. Rather
-than ensuring that a type has the behavior we want, lifetimes ensure that
-references are valid as long as we need them to be.
+Yaşam süreleri, zaten kullanmakta olduğumuz bir başka genel türdür. Bir türün istediğimiz davranışa sahip olmasını sağlamaktan ziyade
+yaşam süreleri
+referansların ihtiyaç duyduğumuz sürece geçerli olmasını sağlar.
 
-One detail we didn’t discuss in the [“References and
-Borrowing”][references-and-borrowing]<!-- ignore --> section in Chapter 4 is
-that every reference in Rust has a _lifetime_, which is the scope for which
-that reference is valid. Most of the time, lifetimes are implicit and inferred,
-just like most of the time, types are inferred. We are only required to
-annotate types when multiple types are possible. In a similar way, we have to
-annotate lifetimes when the lifetimes of references could be related in a few
-different ways. Rust requires us to annotate the relationships using generic
-lifetime parameters to ensure the actual references used at runtime will
-definitely be valid.
+Bölüm 4'teki [“Referanslar ve
+Ödünç Alma”][references-and-borrowing]<!-- ignore --> bölümünde tartışmadığımız bir ayrıntı
+Rust'taki her referansın bir _lifetime_'a sahip olduğu ve bu referansın
+geçerli olduğu kapsamdır. Çoğu zaman yaşam süreleri örtük ve çıkarımsaldır
+tıpkı çoğu zaman tiplerin çıkarımsal olduğu gibi. Yalnızca birden fazla tür mümkün olduğunda
+türlere açıklama eklememiz gerekir. Benzer bir şekilde, referansların yaşam süreleri birkaç
+farklı şekilde ilişkili olabildiğinde
+yaşam sürelerine açıklama eklememiz gerekir. Rust, çalışma zamanında kullanılan gerçek referansların
+kesinlikle geçerli olmasını sağlamak için genel
+yaşam süresi parametrelerini kullanarak ilişkilere açıklama eklememizi gerektirir.
 
-Annotating lifetimes is not even a concept most other programming languages
-have, so this is going to feel unfamiliar. Although we won’t cover lifetimes in
-their entirety in this chapter, we’ll discuss common ways you might encounter
-lifetime syntax so you can get comfortable with the concept.
+Yaşam sürelerine açıklama eklemek diğer programlama dillerinin çoğunda
+bulunan bir kavram bile değildir, bu nedenle bu durum size yabancı gelecektir. Bu bölümde yaşam sürelerini
+bütünüyle ele almayacak olsak da, kavrama alışabilmeniz için
+yaşam süresi sözdizimiyle karşılaşabileceğiniz yaygın yolları tartışacağız.
 
-### Preventing Dangling References with Lifetimes
+### Yaşam Süreleri ile Sarkan Referansları Önleme
 
-The main aim of lifetimes is to prevent _dangling references_, which cause a
-program to reference data other than the data it’s intended to reference.
-Consider the program in Listing 10-16, which has an outer scope and an inner
-scope.
+Yaşam sürelerinin temel amacı, bir
+programının başvurması gereken verilerden başka verilere başvurmasına neden olan _dangling references_'ı önlemektir.
+Bir dış kapsamı ve bir iç
+kapsamı olan Liste 10-16'daki programı düşünün.
 
 <Listing number="10-16" caption="An attempt to use a reference whose value has gone out of scope">
 
@@ -35,37 +35,37 @@ scope.
 
 </Listing>
 
-> Note: The examples in Listings 10-16, 10-17, and 10-23 declare variables
-> without giving them an initial value, so the variable name exists in the outer
-> scope. At first glance, this might appear to be in conflict with Rust’s having
-> no null values. However, if we try to use a variable before giving it a value,
-> we’ll get a compile-time error, which shows that Rust indeed does not allow
-> null values.
+> Not: Liste 10-16, 10-17 ve 10-23'teki örnekler
+> değişkenlerini onlara bir başlangıç değeri vermeden bildirir, böylece değişken adı dış
+> kapsamında bulunur. İlk bakışta, bu durum Rust'ın
+> null değerlere sahip olmaması ile çelişiyor gibi görünebilir. Ancak, bir değişkene değer vermeden önce kullanmaya çalışırsak,
+> derleme zamanı hatası alırız, bu da Rust'ın gerçekten de
+> null değerlere izin vermediğini gösterir.
 
-The outer scope declares a variable named `r` with no initial value, and the
-inner scope declares a variable named `x` with the initial value of `5`. Inside
-the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
-the inner scope ends, and we attempt to print the value in `r`. This code won’t
-compile because the value that `r` is referring to has gone out of scope before
-we try to use it. Here is the error message:
+Dış kapsam, başlangıç değeri olmayan `r` adında bir değişken bildirir ve
+iç kapsam, başlangıç değeri `5` olan `x` adında bir değişken bildirir. İç kapsam
+içinde, `r` değerini `x` değerine referans olarak ayarlamaya çalışırız. Ardından
+iç kapsam sona erer ve `r` içindeki değeri yazdırmaya çalışırız. Bu kod
+derlenmez, çünkü `r` değerinin başvurduğu değer
+biz onu kullanmaya çalışmadan önce kapsam dışına çıkmıştır. İşte hata mesajı:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/output.txt}}
 ```
 
-The error message says that the variable `x` “does not live long enough.” The
-reason is that `x` will be out of scope when the inner scope ends on line 7.
-But `r` is still valid for the outer scope; because its scope is larger, we say
-that it “lives longer.” If Rust allowed this code to work, `r` would be
-referencing memory that was deallocated when `x` went out of scope, and
-anything we tried to do with `r` wouldn’t work correctly. So how does Rust
-determine that this code is invalid? It uses a borrow checker.
+Hata mesajı `x` değişkeninin “yeterince uzun yaşamadığını” söylüyor. Bunun
+nedeni, iç kapsam 7. satırda sona erdiğinde `x` değişkeninin kapsam dışında kalacak olmasıdır.
+Ancak `r` dış kapsam için hala geçerlidir; kapsamı daha geniş olduğu için
+“daha uzun süre yaşadığını” söylüyoruz. Eğer Rust bu kodun çalışmasına izin verseydi, `r`
+`x` kapsam dışına çıktığında deallocate edilen belleğe referans veriyor olacaktı ve
+`r` ile yapmaya çalıştığımız hiçbir şey doğru çalışmayacaktı. Peki Rust
+bu kodun geçersiz olduğunu nasıl belirler? Bir borç denetleyicisi kullanır.
 
-### The Borrow Checker
+### Ödünç Denetleyicisi
 
-The Rust compiler has a _borrow checker_ that compares scopes to determine
-whether all borrows are valid. Listing 10-17 shows the same code as Listing
-10-16 but with annotations showing the lifetimes of the variables.
+Rust derleyicisi
+tüm borçlanmaların geçerli olup olmadığını belirlemek için kapsamları karşılaştıran bir _borrow checker_'a sahiptir. Liste 10-17, Liste
+10-16 ile aynı kodu, ancak değişkenlerin yaşam sürelerini gösteren ek açıklamalarla birlikte gösterir.
 
 <Listing number="10-17" caption="Annotations of the lifetimes of `r` and `x`, named `'a` and `'b`, respectively">
 
@@ -75,15 +75,9 @@ whether all borrows are valid. Listing 10-17 shows the same code as Listing
 
 </Listing>
 
-Here, we’ve annotated the lifetime of `r` with `'a` and the lifetime of `x`
-with `'b`. As you can see, the inner `'b` block is much smaller than the outer
-`'a` lifetime block. At compile time, Rust compares the size of the two
-lifetimes and sees that `r` has a lifetime of `'a` but that it refers to memory
-with a lifetime of `'b`. The program is rejected because `'b` is shorter than
-`'a`: the subject of the reference doesn’t live as long as the reference.
+Burada, `r`'nin yaşam süresini `'a` ve `x`'in yaşam süresini `'b` ile belirttik. Gördüğünüz gibi, içteki `'b` bloğu dıştaki `'a` yaşam süresi bloğundan çok daha küçük. Derleme zamanında Rust iki yaşam süresinin boyutunu karşılaştırır ve `r`'nin `'a` yaşam süresine sahip olduğunu, ancak `'b` yaşam süresine sahip bir belleği referans aldığını görür. Program reddedilir çünkü `'b`, `'a`'dan daha kısadır: referansın gösterdiği nesne, referansın kendisi kadar uzun yaşamaz.
 
-Listing 10-18 fixes the code so it doesn’t have a dangling reference and it
-compiles without any errors.
+Liste 10-18, kodu asılı referans içermeyecek şekilde düzelterek hatasız derlenmesini sağlıyor.
 
 <Listing number="10-18" caption="A valid reference because the data has a longer lifetime than the reference">
 

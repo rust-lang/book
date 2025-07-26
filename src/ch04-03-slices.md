@@ -1,32 +1,32 @@
-## The Slice Type
+## Dilim Tipi
 
-_Slices_ let you reference a contiguous sequence of elements in a
-[collection](ch08-00-common-collections.md)<!-- ignore -->. A slice is a kind
-of reference, so it does not have ownership.
+_Slices_, bir öğedeki bitişik bir öğe dizisine başvurmanıza olanak tanır
+[collection](ch08-00-common-collections.md)<!-- ignore -->. Dilim bir türdür
+referansına sahip değildir, bu nedenle sahipliğe sahip değildir.
 
-Here’s a small programming problem: write a function that takes a string of
-words separated by spaces and returns the first word it finds in that string.
-If the function doesn’t find a space in the string, the whole string must be
-one word, so the entire string should be returned.
+İşte küçük bir programlama problemi: bir dizi alan bir fonksiyon yazın
+sözcükleri boşluklarla ayırır ve bu dizede bulduğu ilk sözcüğü döndürür.
+İşlev dizede bir boşluk bulamazsa, tüm dize
+bir kelime, bu nedenle tüm dize döndürülmelidir.
 
-> Note: For the purposes of introducing string slices, we are assuming ASCII
-> only in this section; a more thorough discussion of UTF-8 handling is in the
-> [“Storing UTF-8 Encoded Text with Strings”][strings]<!-- ignore --> section
-> of Chapter 8.
+> Not: Dize dilimlerini tanıtmak amacıyla, ASCII
+> UTF-8 kullanımına ilişkin daha kapsamlı bir tartışma bu bölümde yer almaktadır.
+> [“Storing UTF-8 Encoded Text with Strings”][strings]<!-- ignore --> bölüm
+>Bölüm 8'in içinde. 
 
-Let’s work through how we’d write the signature of this function without using
-slices, to understand the problem that slices will solve:
+Bu fonksiyonun imzasını kullanmadan nasıl yazacağımızı inceleyelim
+dilimleri, dilimlerin çözeceği sorunu anlamak için:
 
 ```rust,ignore
 fn first_word(s: &String) -> ?
 ```
 
-The `first_word` function has a parameter of type `&String`. We don’t need
-ownership, so this is fine. (In idiomatic Rust, functions do not take ownership
-of their arguments unless they need to, and the reasons for that will become
-clear as we keep going.) But what should we return? We don’t really have a way
-to talk about *part* of a string. However, we could return the index of the end
-of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
+first_word` fonksiyonunun `&String` tipinde bir parametresi vardır. İhtiyacımız yok
+sahiplik, bu yüzden sorun yok. (Rust deyiminde, fonksiyonlar sahiplik almaz
+Gerekmedikçe argümanlarını kullanmayacaklardır ve bunun nedenleri
+devam ettikçe netleşecek). Ama neyi iade etmeliyiz? Gerçekten bir yolumuz yok
+bir dizenin *bir kısmı* hakkında konuşmak için. Bununla birlikte, sonun indeksini döndürebiliriz
+sözcüğün boşluk ile gösterilen kısmı. Liste 4-7'de gösterildiği gibi bunu deneyelim.
 
 <Listing number="4-7" file-name="src/main.rs" caption="The `first_word` function that returns a byte index value into the `String` parameter">
 
@@ -36,48 +36,48 @@ of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
 </Listing>
 
-Because we need to go through the `String` element by element and check whether
-a value is a space, we’ll convert our `String` to an array of bytes using the
-`as_bytes` method.
+Çünkü `String` öğesini öğe öğe incelememiz ve
+değerinin bir boşluk olduğunu varsayarsak, `String` değerimizi bir bayt dizisine dönüştürmek için
+as_bytes` yöntemi.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
 ```
 
-Next, we create an iterator over the array of bytes using the `iter` method:
+Daha sonra, `iter` yöntemini kullanarak bayt dizisi üzerinde bir yineleyici oluşturuyoruz:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
 
-We’ll discuss iterators in more detail in [Chapter 13][ch13]<!-- ignore -->.
-For now, know that `iter` is a method that returns each element in a collection
-and that `enumerate` wraps the result of `iter` and returns each element as
-part of a tuple instead. The first element of the tuple returned from
-`enumerate` is the index, and the second element is a reference to the element.
-This is a bit more convenient than calculating the index ourselves.
+Yineleyicileri [Bölüm 13][ch13]<!-- ignore --> bölümünde daha ayrıntılı olarak ele alacağız.
+Şimdilik, `iter`in bir koleksiyondaki her bir öğeyi döndüren bir yöntem olduğunu bilin
+ve `enumerate` öğesinin `iter` öğesinin sonucunu sardığını ve her bir öğeyi
+yerine bir tuple'ın parçası. 'den döndürülen tuple'ın ilk elemanı
+`enumerate` indeks, ikinci eleman ise elemana bir referanstır.
+Bu, indeksi kendimiz hesaplamaktan biraz daha kullanışlıdır.
 
-Because the `enumerate` method returns a tuple, we can use patterns to
-destructure that tuple. We’ll be discussing patterns more in [Chapter
-6][ch6]<!-- ignore -->. In the `for` loop, we specify a pattern that has `i`
-for the index in the tuple and `&item` for the single byte in the tuple.
-Because we get a reference to the element from `.iter().enumerate()`, we use
-`&` in the pattern.
+Çünkü `enumerate` metodu bir tuple döndürür, kalıpları şu şekilde kullanabiliriz
+bu tuple'ı yok eder. Kalıpları [Bölüm]'de daha fazla tartışacağız.
+6][ch6]<!-- ignore -->. `for` döngüsünde, `i` olan bir kalıp belirtiriz
+tuple içindeki indeks için ve `&item` tuple içindeki tek bayt için.
+Elemana `.iter().enumerate()` işlevinden bir referans aldığımız için
+`&` olarak tanımlıyoruz.
 
-Inside the `for` loop, we search for the byte that represents the space by
-using the byte literal syntax. If we find a space, we return the position.
-Otherwise, we return the length of the string by using `s.len()`.
+`for` döngüsünün içinde, boşluğu temsil eden baytı şu şekilde ararız
+byte literal sözdizimini kullanarak. Eğer bir boşluk bulursak, pozisyonu döndürürüz.
+Aksi takdirde, `s.len()` kullanarak dizenin uzunluğunu döndürürüz.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:inside_for}}
 ```
 
-We now have a way to find out the index of the end of the first word in the
-string, but there’s a problem. We’re returning a `usize` on its own, but it’s
-only a meaningful number in the context of the `&String`. In other words,
-because it’s a separate value from the `String`, there’s no guarantee that it
-will still be valid in the future. Consider the program in Listing 4-8 that
-uses the `first_word` function from Listing 4-7.
+Artık ilk kelimenin sonunun indeksini bulmak için bir yolumuz var.
+string'i döndürüyoruz, ancak bir sorun var. Kendi başına bir `usize` döndürüyoruz, ancak bu
+sadece `&String` bağlamında anlamlı bir sayıdır. Başka bir deyişle,
+'String'den ayrı bir değer olduğu için, bunun bir garantisi yoktur.
+gelecekte de geçerli olacaktır. Liste 4-8'deki programı düşünün
+Listing 4-7'deki `first_word` fonksiyonunu kullanır.
 
 <Listing number="4-8" file-name="src/main.rs" caption="Storing the result from calling the `first_word` function and then changing the `String` contents">
 
@@ -87,47 +87,47 @@ uses the `first_word` function from Listing 4-7.
 
 </Listing>
 
-This program compiles without any errors and would also do so if we used `word`
-after calling `s.clear()`. Because `word` isn’t connected to the state of `s`
-at all, `word` still contains the value `5`. We could use that value `5` with
-the variable `s` to try to extract the first word out, but this would be a bug
-because the contents of `s` have changed since we saved `5` in `word`.
+Bu program herhangi bir hata olmadan derlenir ve `word` kullansaydık da öyle olurdu
+`s.clear()` çağrısından sonra. Çünkü `word` `s`nin durumuna bağlı değildir
+hiç değilse, `word` hala `5` değerini içerir. Bu değeri `5` ile kullanabiliriz
+ilk kelimeyi çıkarmaya çalışmak için `s` değişkenini kullanabilir, ancak bu bir hata olacaktır
+çünkü `5`i `word`e kaydettiğimizden beri `s`nin içeriği değişti.
 
-Having to worry about the index in `word` getting out of sync with the data in
-`s` is tedious and error prone! Managing these indices is even more brittle if
-we write a `second_word` function. Its signature would have to look like this:
+`word` içindeki indeksin `word` içindeki verilerle senkronize olmaması konusunda endişelenmek
+`s` sıkıcı ve hataya meyillidir! Bu endeksleri yönetmek aşağıdaki durumlarda daha da kırılgandır
+bir `second_word` fonksiyonu yazıyoruz. İmzası şu şekilde görünmelidir:
 
 ```rust,ignore
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking a starting _and_ an ending index, and we have even more
-values that were calculated from data in a particular state but aren’t tied to
-that state at all. We have three unrelated variables floating around that need
-to be kept in sync.
+Şimdi bir başlangıç _ve_ bir bitiş dizinini izliyoruz ve daha da fazlasına sahibiz
+Belirli bir durumdaki verilerden hesaplanan ancak belirli bir duruma bağlı olmayan değerler
+bu durum hiç yok. Etrafta dolaşan üç ilgisiz değişkenimiz var
+senkronize tutulmalıdır.
 
-Luckily, Rust has a solution to this problem: string slices.
+Neyse ki Rust'ın bu soruna bir çözümü var: string dilimleri.
 
-### String Slices
+### Dize Dilimleri
 
-A _string slice_ is a reference to a contiguous sequence of the elements of a
-`String`, and it looks like this:
+Bir _string slice_, bir _string slice_ öğesinin bitişik bir dizisine referanstır.
+`String`, ve şöyle görünür:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
 ```
 
-Rather than a reference to the entire `String`, `hello` is a reference to a
-portion of the `String`, specified in the extra `[0..5]` bit. We create slices
-using a range within brackets by specifying `[starting_index..ending_index]`,
-where _`starting_index`_ is the first position in the slice and _`ending_index`_
-is one more than the last position in the slice. Internally, the slice data
-structure stores the starting position and the length of the slice, which
-corresponds to _`ending_index`_ minus _`starting_index`_. So, in the case of `let
-world = &s[6..11];`, `world` would be a slice that contains a pointer to the
-byte at index 6 of `s` with a length value of `5`.
+Tüm `String`e bir referans yerine, `hello` bir `String`e referanstır.
+ekstra `[0..5]` bitinde belirtilen `String` bölümü. Dilimler oluşturuyoruz
+'`[başlangıç_indeksi..bitiş_indeksi]` belirterek parantez içinde bir aralık kullanarak,
+burada _`starting_index`_ dilimdeki ilk konum ve _`ending_index`_
+dilimdeki son konumdan bir fazladır. Dahili olarak, dilim verileri
+yapısı başlangıç konumunu ve dilimin uzunluğunu saklar.
+_`ending_index`_ eksi _`starting_index`_ değerine karşılık gelir. Yani, `let' durumunda
+world = &s[6..11];`, `world` bir işaretçi içeren bir dilim olacaktır.
+uzunluk değeri `5` olan `s` dizininin 6. byte'ıdır.
 
-Figure 4-7 shows this in a diagram.
+Şekil 4-7 bunu bir diyagramda göstermektedir.
 
 <img alt="Three tables: a table representing the stack data of s, which points
 to the byte at index 0 in a table of the string data &quot;hello world&quot; on
@@ -135,11 +135,11 @@ the heap. The third table rep-resents the stack data of the slice world, which
 has a length value of 5 and points to byte 6 of the heap data table."
 src="img/trpl04-07.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-7: String slice referring to part of a
-`String`</span>
+<span class="caption">Şekil 4-7:
+`String`</span>'in bir kısmına atıfta bulunan String dilimi
 
-With Rust’s `..` range syntax, if you want to start at index 0, you can drop
-the value before the two periods. In other words, these are equal:
+Rust'ın `..` aralık sözdizimiyle, 0 dizininden başlamak istiyorsanız,
+adresini iki noktadan önceki değere bırakabilirsiniz. Başka bir deyişle, bunlar eşittir:
 
 ```rust
 let s = String::from("hello");
@@ -148,8 +148,8 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if your slice includes the last byte of the `String`, you
-can drop the trailing number. That means these are equal:
+Aynı şekilde, diliminiz `String`in son baytını içeriyorsa
+sondaki sayıyı düşürebilir. Bu, bunların eşit olduğu anlamına gelir:
 
 ```rust
 let s = String::from("hello");
@@ -160,8 +160,8 @@ let slice = &s[3..len];
 let slice = &s[3..];
 ```
 
-You can also drop both values to take a slice of the entire string. So these
-are equal:
+Tüm dizenin bir dilimini almak için her iki değeri de bırakabilirsiniz. Yani bunlar
+eşittir:
 
 ```rust
 let s = String::from("hello");
@@ -172,12 +172,12 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-> Note: String slice range indices must occur at valid UTF-8 character
-> boundaries. If you attempt to create a string slice in the middle of a
-> multibyte character, your program will exit with an error.
+> Not: Dize dilimi aralık indisleri geçerli UTF-8 karakterlerinde bulunmalıdır
+> sınırlar. Bir dize diliminin ortasında bir dize dilimi oluşturmaya çalışırsanız
+> çok baytlı karakter döndürürse, programınız bir hata ile çıkacaktır.
 
-With all this information in mind, let’s rewrite `first_word` to return a
-slice. The type that signifies “string slice” is written as `&str`:
+Tüm bu bilgileri aklımızda tutarak, `first_word` öğesini bir
+slice. “Dize dilimi” anlamına gelen tür `&str` olarak yazılır:
 
 <Listing file-name="src/main.rs">
 
@@ -187,30 +187,31 @@ slice. The type that signifies “string slice” is written as `&str`:
 
 </Listing>
 
-We get the index for the end of the word the same way we did in Listing 4-7, by
-looking for the first occurrence of a space. When we find a space, we return a
-string slice using the start of the string and the index of the space as the
-starting and ending indices.
+Sözcüğün sonu için indeksi, Liste 4-7'de yaptığımız gibi, şu şekilde elde ederiz
+ilk boşluk oluşumunu arar. Bir boşluk bulduğumuzda, bir
+olarak dizenin başlangıcını ve boşluğun dizinini kullanarak dize dilimi
+başlangıç ve bitiş indisleri.
 
-Now when we call `first_word`, we get back a single value that is tied to the
-underlying data. The value is made up of a reference to the starting point of
-the slice and the number of elements in the slice.
+Şimdi `first_word` dediğimizde, başlangıç ve bitiş indislerine bağlı tek bir değer alırız.
+temel veri. Değer, verinin başlangıç noktasına yapılan bir referanstan oluşur.
+dilim ve dilimdeki eleman sayısı.
 
-Returning a slice would also work for a `second_word` function:
+Bir dilim döndürmek `second_word` işlevi için de işe yarayacaktır:
+
 
 ```rust,ignore
 fn second_word(s: &String) -> &str {
 ```
 
-We now have a straightforward API that’s much harder to mess up because the
-compiler will ensure the references into the `String` remain valid. Remember
-the bug in the program in Listing 4-8, when we got the index to the end of the
-first word but then cleared the string so our index was invalid? That code was
-logically incorrect but didn’t show any immediate errors. The problems would
-show up later if we kept trying to use the first word index with an emptied
-string. Slices make this bug impossible and let us know we have a problem with
-our code much sooner. Using the slice version of `first_word` will throw a
-compile-time error:
+Artık karıştırması çok daha zor olan basit bir API'ye sahibiz çünkü
+derleyici `String`e yapılan referansların geçerli kalmasını sağlayacaktır. Unutmayın
+Liste 4-8'deki programdaki hata, indeksi dizinin sonuna getirdiğimizde
+ilk kelimeyi girdik ama sonra dizeyi temizledik, böylece dizinimiz geçersiz mi oldu? Bu kod
+mantıksal olarak yanlıştı ancak herhangi bir ani hata göstermiyordu. Sorunlar
+ilk kelime dizinini boş bir şekilde kullanmaya devam edersek daha sonra ortaya çıkar
+string. Dilimler bu hatayı imkansız hale getirir ve bize bir sorunumuz olduğunu bildirir
+kodumuz çok daha erken. İlk_kelime`nin dilim versiyonunu kullanmak bir
+derleme zamanı hatası:
 
 <Listing file-name="src/main.rs">
 
@@ -220,50 +221,50 @@ compile-time error:
 
 </Listing>
 
-Here’s the compiler error:
+İşte derleyici hatası:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}
 ```
 
-Recall from the borrowing rules that if we have an immutable reference to
-something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it needs to get a mutable reference. The `println!`
-after the call to `clear` uses the reference in `word`, so the immutable
-reference must still be active at that point. Rust disallows the mutable
-reference in `clear` and the immutable reference in `word` from existing at the
-same time, and compilation fails. Not only has Rust made our API easier to use,
-but it has also eliminated an entire class of errors at compile time!
+Ödünç alma kurallarından hatırlayın, eğer değişmez bir referansımız varsa
+bir şey varsa, değişebilir bir referans da alamayız. Çünkü `clear` için
+`String`i kesmek için, değiştirilebilir bir referans alması gerekir. 'println!`
+çağrısından sonra `clear` `word` içindeki referansı kullanır, bu nedenle değişmez
+referansı o noktada hala aktif olmalıdır. Rust mutable'a izin vermez
+referansının ve `word` içindeki değişmez referansın `clear` içinde var olmasını engeller.
+aynı zamanda ve derleme başarısız olur. Rust sadece API'mizin kullanımını kolaylaştırmakla kalmadı,
+ama aynı zamanda derleme zamanındaki bütün bir hata sınıfını da ortadan kaldırdı!
 
 <!-- Old heading. Do not remove or links may break. -->
 
 <a id="string-literals-are-slices"></a>
 
-#### String Literals as Slices
+#### Dilim Olarak Dize Harfleri
 
-Recall that we talked about string literals being stored inside the binary. Now
-that we know about slices, we can properly understand string literals:
+Dize değişmezlerinin ikilinin içinde saklandığından bahsettiğimizi hatırlayın. Şimdi
+Dilimler hakkında bildiklerimizle, dize değişmezlerini düzgün bir şekilde anlayabiliriz:
 
 ```rust
 let s = "Hello, world!";
 ```
 
-The type of `s` here is `&str`: it’s a slice pointing to that specific point of
-the binary. This is also why string literals are immutable; `&str` is an
-immutable reference.
+Buradaki `s`nin türü `&str`dir:
+ikilisinin belirli bir noktasına işaret eden bir dilimdir. String değişmezlerinin değişmez olmasının nedeni de budur; `&str` bir
+değişmez referansıdır.
 
-#### String Slices as Parameters
+#### Parametre Olarak String Dilimleri
 
-Knowing that you can take slices of literals and `String` values leads us to
-one more improvement on `first_word`, and that’s its signature:
+Değişmezlerin ve `String` değerlerinin dilimlerini alabileceğinizi bilmek bizi
+adresinde `first_word` üzerinde bir iyileştirme daha yapmaya yönlendirir ve bu da onun imzasıdır:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the signature shown in Listing 4-9
-instead because it allows us to use the same function on both `&String` values
-and `&str` values.
+Daha fazla bölgede bir Rustacean bunun yerine Liste 4-9'da
+programı imzayı yazardı çünkü bu imza aynı fonksiyon hem `&String` değerleri
+hem de `&str` değerleri üzerinde kullanmamıza izin verirdi.      
 
 <Listing number="4-9" caption="Improving the `first_word` function by using a string slice for the type of the `s` parameter">
 
@@ -273,14 +274,13 @@ and `&str` values.
 
 </Listing>
 
-If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the `String` or a reference to the `String`. This
-flexibility takes advantage of _deref coercions_, a feature we will cover in the
-[“Implicit Deref Coercions with Functions and
-Methods”][deref-coercions]<!--ignore--> section of Chapter 15.
+Eğer bir string dilimimiz varsa, bunu doğrudan aktarabiliriz. Elimizde bir `String` varsa,
+`String`in bir dilimini veya `String`e bir referansı geçirebiliriz. Bu
+esnekliği, Bölüm 15'in
+[“Implicit Deref Coercions with Functions and Methods”][deref-coercions]<!--ignore--> bölümünde ele alacağımız bir özellik olan _deref zorlamalarından_ yararlanır.
 
-Defining a function to take a string slice instead of a reference to a `String`
-makes our API more general and useful without losing any functionality:
+Bir `String`
+referansı yerine bir string dilimi almak için bir fonksiyon tanımlamak, API'mizi herhangi bir işlevsellik kaybı olmadan daha genel ve kullanışlı hale getirir:
 
 <Listing file-name="src/main.rs">
 
@@ -290,17 +290,16 @@ makes our API more general and useful without losing any functionality:
 
 </Listing>
 
-### Other Slices
+### Diğer Dilimler
 
-String slices, as you might imagine, are specific to strings. But there’s a
-more general slice type too. Consider this array:
-
+Dize dilimleri, tahmin edebileceğiniz gibi, dizelere özgüdür. Ancak
+daha genel bir dilim türü de vardır. Bu diziyi düşünün:
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
-Just as we might want to refer to part of a string, we might want to refer to
-part of an array. We’d do so like this:
+Tıpkı bir dizinin bir kısmına atıfta bulunmak isteyebileceğimiz gibi, bir dizinin
+kısmına da atıfta bulunmak isteyebiliriz. Bunu şu şekilde yaparız:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -310,22 +309,21 @@ let slice = &a[1..3];
 assert_eq!(slice, &[2, 3]);
 ```
 
-This slice has the type `&[i32]`. It works the same way as string slices do, by
-storing a reference to the first element and a length. You’ll use this kind of
-slice for all sorts of other collections. We’ll discuss these collections in
-detail when we talk about vectors in Chapter 8.
+Bu dilim `&[i32]` türündedir. String dilimleri ile aynı şekilde çalışır,
+ilk elemana bir referans ve bir uzunluk depolar. Bu tür bir
+dilimini diğer tüm koleksiyonlar için kullanacaksınız. Bu koleksiyonları Bölüm 8'de vektörlerden bahsederken
+ayrıntılı olarak tartışacağız.
 
-## Summary
+## Özet
 
-The concepts of ownership, borrowing, and slices ensure memory safety in Rust
-programs at compile time. The Rust language gives you control over your memory
-usage in the same way as other systems programming languages, but having the
-owner of data automatically clean up that data when the owner goes out of scope
-means you don’t have to write and debug extra code to get this control.
+Sahiplik, ödünç alma ve dilimler kavramları, Rust
+programlarında derleme zamanında bellek güvenliğini sağlar. Rust dili, diğer sistem programlama dilleriyle aynı şekilde bellek
+kullanımınız üzerinde kontrol sağlar, ancak
+veri sahibinin kapsam dışına çıktığında bu verileri otomatik olarak temizlemesini sağlamak
+bu kontrolü elde etmek için fazladan kod yazmanız ve hata ayıklamanız gerekmediği anlamına gelir.
 
-Ownership affects how lots of other parts of Rust work, so we’ll talk about
-these concepts further throughout the rest of the book. Let’s move on to
-Chapter 5 and look at grouping pieces of data together in a `struct`.
+Sahiplik, Rust'ın diğer birçok bölümünün nasıl çalıştığını etkiler, bu nedenle kitabın geri kalanında
+bu kavramlar hakkında daha fazla konuşacağız. Bölüm 5'e geçelim ve veri parçalarını bir `struct' içinde gruplamaya bakalım.
 
 [ch13]: ch13-02-iterators.html
 [ch6]: ch06-02-match.html#patterns-that-bind-to-values

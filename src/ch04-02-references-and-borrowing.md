@@ -1,16 +1,16 @@
-## References and Borrowing
+## Referanslar ve Borçlanma
 
-The issue with the tuple code in Listing 4-5 is that we have to return the
-`String` to the calling function so we can still use the `String` after the
-call to `calculate_length`, because the `String` was moved into
-`calculate_length`. Instead, we can provide a reference to the `String` value.
-A _reference_ is like a pointer in that it’s an address we can follow to access
-the data stored at that address; that data is owned by some other variable.
-Unlike a pointer, a reference is guaranteed to point to a valid value of a
-particular type for the life of that reference.
+Listing 4-5'teki tuple koduyla ilgili sorun şu ki
+`String`i çağıran fonksiyona aktarırız, böylece `String`i
+'a yapılan `calculate_length` çağrısı, çünkü `String`
+calculate_length`. Bunun yerine, `String` değerine bir referans sağlayabiliriz.
+Bir _referans_, erişmek için takip edebileceğimiz bir adres olması açısından bir işaretçi gibidir
+Bu adreste depolanan veri; bu verinin sahibi başka bir değişkendir.
+Bir işaretçinin aksine, bir referansın geçerli bir değere işaret etmesi garanti edilir.
+o referansın ömrü boyunca belirli bir tür.
 
-Here is how you would define and use a `calculate_length` function that has a
-reference to an object as a parameter instead of taking ownership of the value:
+Bir `calculate_length` fonksiyonunu nasıl tanımlayacağınız ve kullanacağınız aşağıda açıklanmıştır
+değerin sahipliğini almak yerine bir nesneye parametre olarak başvurur:
 
 <Listing file-name="src/main.rs">
 
@@ -20,54 +20,54 @@ reference to an object as a parameter instead of taking ownership of the value:
 
 </Listing>
 
-First, notice that all the tuple code in the variable declaration and the
-function return value is gone. Second, note that we pass `&s1` into
-`calculate_length` and, in its definition, we take `&String` rather than
-`String`. These ampersands represent _references_, and they allow you to refer
-to some value without taking ownership of it. Figure 4-6 depicts this concept.
+İlk olarak, değişken bildirimindeki tüm tuple kodunun ve
+fonksiyonunun dönüş değeri kaybolur. İkinci olarak, `&s1` ifadesini
+`calculate_length` ve tanımında, `&String` yerine `&String` alıyoruz
+String`. Bu ve işaretleri _referansları_ temsil eder ve referans vermenizi sağlar
+sahipliğini almadan bir değere dönüştürür. Şekil 4-6 bu kavramı tasvir etmektedir.
 
 <img alt="Three tables: the table for s contains only a pointer to the table
 for s1. The table for s1 contains the stack data for s1 and points to the
 string data on the heap." src="img/trpl04-06.svg" class="center" />
 
-<span class="caption">Figure 4-6: A diagram of `&String s` pointing at `String
+<span class="caption">Şekil 4-6: `String'e işaret eden `&String s` diyagramı
 s1`</span>
 
-> Note: The opposite of referencing by using `&` is _dereferencing_, which is
-> accomplished with the dereference operator, `*`. We’ll see some uses of the
-> dereference operator in Chapter 8 and discuss details of dereferencing in
-> Chapter 15.
+> Not: `&` kullanarak referans vermenin tersi _dereferanslama_dır, yani
+> dereferans operatörü `*` ile gerçekleştirilir. Bazı kullanımlarını göreceğiz
+> dereferans operatörünü Bölüm 8'de inceleyecek ve dereferanslamanın ayrıntılarını
+> Bölüm 15.
 
-Let’s take a closer look at the function call here:
+Buradaki fonksiyon çağrısına daha yakından bakalım:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:here}}
 ```
 
-The `&s1` syntax lets us create a reference that _refers_ to the value of `s1`
-but does not own it. Because the reference does not own it, the value it points
-to will not be dropped when the reference stops being used.
+& s1` sözdizimi, `s1` değerine _refere_ eden bir referans oluşturmamızı sağlar
+ancak ona sahip değildir. Referans ona sahip olmadığı için, işaret ettiği değer
+referansın kullanımı sona erdiğinde düşmeyecektir.
 
-Likewise, the signature of the function uses `&` to indicate that the type of
-the parameter `s` is a reference. Let’s add some explanatory annotations:
+Aynı şekilde, işlevin imzasında da `&` kullanılarak işlevin türünün
+parametresi `s` bir referanstır. Bazı açıklayıcı ek açıklamalar ekleyelim:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-08-reference-with-annotations/src/main.rs:here}}
 ```
 
-The scope in which the variable `s` is valid is the same as any function
-parameter’s scope, but the value pointed to by the reference is not dropped
-when `s` stops being used, because `s` doesn’t have ownership. When functions
-have references as parameters instead of the actual values, we won’t need to
-return the values in order to give back ownership, because we never had
-ownership.
+` s` değişkeninin geçerli olduğu kapsam, herhangi bir işlevle aynıdır
+parametresinin kapsamına dahil edilir, ancak referansın işaret ettiği değer düşürülmez
+` s` kullanılmayı bıraktığında, çünkü `s` sahipliğe sahip değildir. Fonksiyonlar ne zaman
+gerçek değerler yerine referansları parametre olarak alırsak
+mülkiyeti geri vermek için değerleri iade edin, çünkü hiçbir zaman
+sahiplik.
 
-We call the action of creating a reference _borrowing_. As in real life, if a
-person owns something, you can borrow it from them. When you’re done, you have
-to give it back. You don’t own it.
+Bir referans oluşturma eylemine _borrowing_ diyoruz. Gerçek hayatta olduğu gibi, eğer bir
+Bir kişi bir şeye sahipse, ondan ödünç alabilirsiniz. İşiniz bittiğinde
+geri vermek için. Ona sahip değilsiniz.
 
-So, what happens if we try to modify something we’re borrowing? Try the code in
-Listing 4-6. Spoiler alert: it doesn’t work!
+Peki, ödünç aldığımız bir şeyi değiştirmeye çalışırsak ne olur? İçindeki kodu deneyin
+Liste 4-6. Spoiler uyarısı: çalışmıyor!
 
 <Listing number="4-6" file-name="src/main.rs" caption="Attempting to modify a borrowed value">
 
@@ -77,19 +77,19 @@ Listing 4-6. Spoiler alert: it doesn’t work!
 
 </Listing>
 
-Here’s the error:
+İşte hata:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/listing-04-06/output.txt}}
 ```
 
-Just as variables are immutable by default, so are references. We’re not
-allowed to modify something we have a reference to.
+Değişkenlerin varsayılan olarak değişmez olması gibi, referanslar da değişmezdir. Biz değiliz
+referansımız olan bir şeyi değiştirmemize izin verilir.
 
-### Mutable References
+### Değiştirilebilir Referanslar
 
-We can fix the code from Listing 4-6 to allow us to modify a borrowed value
-with just a few small tweaks that use, instead, a _mutable reference_:
+Ödünç alınan bir değeri değiştirmemize izin vermek için Listing 4-6'daki kodu düzeltebiliriz
+bunun yerine _mutable reference_ kullanan birkaç küçük değişiklikle:
 
 <Listing file-name="src/main.rs">
 
@@ -99,14 +99,14 @@ with just a few small tweaks that use, instead, a _mutable reference_:
 
 </Listing>
 
-First we change `s` to be `mut`. Then we create a mutable reference with `&mut
-s` where we call the `change` function, and update the function signature to
-accept a mutable reference with `some_string: &mut String`. This makes it very
-clear that the `change` function will mutate the value it borrows.
+Önce `s` yi `mut` olarak değiştiriyoruz. Daha sonra `&mut` ile değiştirilebilir bir referans oluştururuz
+`s` fonksiyonunu çağırıyoruz ve fonksiyon imzasını şu şekilde güncelliyoruz
+değişebilir bir referansı `some_string: &mut String` ile kabul eder. Bu onu çok yapar
+'change' fonksiyonunun ödünç aldığı değeri mutasyona uğratacağı açıktır.
 
-Mutable references have one big restriction: if you have a mutable reference to
-a value, you can have no other references to that value. This code that
-attempts to create two mutable references to `s` will fail:
+Mutable referansların büyük bir kısıtlaması vardır: eğer mutable bir referansınız varsa
+bir değere sahipseniz, bu değere başka hiçbir referansınız olamaz. Bu kod
+'a iki değiştirilebilir referans oluşturma girişimleri başarısız olacaktır:
 
 <Listing file-name="src/main.rs">
 
@@ -116,93 +116,93 @@ attempts to create two mutable references to `s` will fail:
 
 </Listing>
 
-Here’s the error:
+İşte hata:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/output.txt}}
 ```
 
-This error says that this code is invalid because we cannot borrow `s` as
-mutable more than once at a time. The first mutable borrow is in `r1` and must
-last until it’s used in the `println!`, but between the creation of that
-mutable reference and its usage, we tried to create another mutable reference
-in `r2` that borrows the same data as `r1`.
+Bu hata bu kodun geçersiz olduğunu söylüyor çünkü `s` yi
+bir seferde birden fazla değiştirilebilir. İlk değiştirilebilir ödünç `r1` içindedir ve
+'de kullanılana kadar sürer, ancak bunun oluşturulması arasında
+değiştirilebilir referans ve kullanımı, başka bir değiştirilebilir referans oluşturmaya çalıştık
+`r1` ile aynı veriyi ödünç alan `r2` içinde.
 
-The restriction preventing multiple mutable references to the same data at the
-same time allows for mutation but in a very controlled fashion. It’s something
-that new Rustaceans struggle with because most languages let you mutate
-whenever you’d like. The benefit of having this restriction is that Rust can
-prevent data races at compile time. A _data race_ is similar to a race
-condition and happens when these three behaviors occur:
+Aynı veriye birden fazla değiştirilebilir referansı engelleyen kısıtlama
+Aynı zamanda mutasyona da izin verir ama çok kontrollü bir şekilde. Bu bir şey
+yeni Rustace'cilerin zorlandığı bir konu çünkü çoğu dil mutasyona izin veriyor
+ne zaman isterseniz. Bu kısıtlamaya sahip olmanın yararı, Rust'ın
+derleme zamanında veri yarışlarını önler. Bir _veri yarışı_ bir yarışa benzer
+koşuludur ve bu üç davranış gerçekleştiğinde meydana gelir:
 
-- Two or more pointers access the same data at the same time.
-- At least one of the pointers is being used to write to the data.
-- There’s no mechanism being used to synchronize access to the data.
+- İki veya daha fazla işaretçi aynı veriye aynı anda erişiyor.
+- İşaretçilerden en az biri veriye yazmak için kullanılıyor.
+- Verilere erişimi senkronize etmek için kullanılan bir mekanizma yoktur.
 
-Data races cause undefined behavior and can be difficult to diagnose and fix
-when you’re trying to track them down at runtime; Rust prevents this problem by
-refusing to compile code with data races!
+Veri yarışları tanımlanmamış davranışlara neden olur ve teşhis edilmesi ve düzeltilmesi zor olabilir
+Rust, çalışma zamanında onları bulmaya çalıştığınızda bu sorunu şu şekilde önler
+veri yarışları ile kod derlemeyi reddetme!
 
-As always, we can use curly brackets to create a new scope, allowing for
-multiple mutable references, just not _simultaneous_ ones:
+Her zaman olduğu gibi, yeni bir kapsam oluşturmak için küme parantezlerini kullanabiliriz, böylece
+çoklu değiştirilebilir referanslar, sadece _eşzamanlı_ olanlar değil:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-11-muts-in-separate-scopes/src/main.rs:here}}
 ```
 
-Rust enforces a similar rule for combining mutable and immutable references.
-This code results in an error:
+Rust, mutable ve immutable referansları birleştirmek için benzer bir kural uygular.
+Bu kod bir hata ile sonuçlanır:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/src/main.rs:here}}
 ```
 
-Here’s the error:
+İşte hata:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/output.txt}}
 ```
 
-Whew! We _also_ cannot have a mutable reference while we have an immutable one
-to the same value.
+Vay canına! Ayrıca, değişmez bir referansımız varken değişebilir bir referansa sahip olamayız
+aynı değere.
 
-Users of an immutable reference don’t expect the value to suddenly change out
-from under them! However, multiple immutable references are allowed because no
-one who is just reading the data has the ability to affect anyone else’s
-reading of the data.
+Değişmez bir referansı kullananlar, değerin aniden değişmesini beklemezler
+onların altından! Ancak, birden fazla değişmez referansa izin verilir çünkü
+Sadece verileri okuyan bir kişi, başkalarının verilerini etkileme yeteneğine sahiptir.
+verilerin okunması.
 
-Note that a reference’s scope starts from where it is introduced and continues
-through the last time that reference is used. For instance, this code will
-compile because the last usage of the immutable references is in the `println!`,
-before the mutable reference is introduced:
+Bir referansın kapsamının tanıtıldığı yerden başladığını ve devam ettiğini unutmayın
+referansın son kullanıldığı zamana kadar. Örneğin, bu kod
+derlenemez çünkü değişmez referansların son kullanımı `println!
+değiştirilebilir referans tanıtılmadan önce:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
 ```
 
-The scopes of the immutable references `r1` and `r2` end after the `println!`
-where they are last used, which is before the mutable reference `r3` is
-created. These scopes don’t overlap, so this code is allowed: the compiler can
-tell that the reference is no longer being used at a point before the end of
-the scope.
+Değişmez referanslar `r1` ve `r2`nin kapsamları en son kullanıldıkları `println!`
+son kullanıldıkları yerde, yani `r3` değişken referansından önce
+oluşturuldu. Bu kapsamlar çakışmaz, bu nedenle bu koda izin verilir: derleyici
+'nin sonundan önceki bir noktada referansın artık kullanılmadığını söyler.
+kapsamı.
 
-Even though borrowing errors may be frustrating at times, remember that it’s
-the Rust compiler pointing out a potential bug early (at compile time rather
-than at runtime) and showing you exactly where the problem is. Then you don’t
-have to track down why your data isn’t what you thought it was.
+Ödünç alma hataları zaman zaman sinir bozucu olsa da, unutmayın ki
+Rust derleyicisinin potansiyel bir hatayı erkenden işaret etmesi (derleme zamanında değil
+çalışma zamanından daha fazla) ve size sorunun tam olarak nerede olduğunu gösterir. O zaman yapmazsın
+verilerinizin neden düşündüğünüz gibi olmadığını bulmak zorundasınız.
 
-### Dangling References
+### Sarkan Referanslar
 
-In languages with pointers, it’s easy to erroneously create a _dangling
-pointer_—a pointer that references a location in memory that may have been
-given to someone else—by freeing some memory while preserving a pointer to that
-memory. In Rust, by contrast, the compiler guarantees that references will
-never be dangling references: if you have a reference to some data, the
-compiler will ensure that the data will not go out of scope before the
-reference to the data does.
+İşaretçi içeren dillerde, yanlışlıkla bir _dangling
+pointer_-bellekte daha önce bulunmuş olabilecek bir konuma referans veren bir pointer
+bir işaretçiyi korurken bir miktar belleği serbest bırakarak başka birine verilir.
+bellek. Buna karşın Rust'ta derleyici, referansların
+asla sarkan referanslar olmamalıdır: eğer bir veriye referansınız varsa
+derleyici, verinin kapsam dışına çıkmamasını sağlayacaktır.
+referansının yaptığı gibi.
 
-Let’s try to create a dangling reference to see how Rust prevents them with a
-compile-time error:
+Rust'ın bunları nasıl önlediğini görmek için sarkan bir referans oluşturmayı deneyelim
+derleme zamanı hatası:
 
 <Listing file-name="src/main.rs">
 
@@ -212,24 +212,23 @@ compile-time error:
 
 </Listing>
 
-Here’s the error:
+İşte hata:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/output.txt}}
 ```
 
-This error message refers to a feature we haven’t covered yet: lifetimes. We’ll
-discuss lifetimes in detail in Chapter 10. But, if you disregard the parts
-about lifetimes, the message does contain the key to why this code is a problem:
+Bu hata mesajı henüz ele almadığımız bir özelliğe atıfta bulunuyor: yaşam süreleri. Biz yapacağız
+yaşam sürelerini Bölüm 10'da ayrıntılı olarak ele alacağız. Ancak, bu bölümleri göz ardı ederseniz
+ömürleri hakkında, mesaj bu kodun neden bir sorun olduğunun anahtarını içeriyor:
 
 ```text
 this function's return type contains a borrowed value, but there is no value
 for it to be borrowed from
 ```
 
-Let’s take a closer look at exactly what’s happening at each stage of our
-`dangle` code:
-
+Her bir aşamamızda tam olarak neler olduğuna daha yakından bakalım
+`dangle` kodu:
 <Listing file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
@@ -238,26 +237,26 @@ Let’s take a closer look at exactly what’s happening at each stage of our
 
 </Listing>
 
-Because `s` is created inside `dangle`, when the code of `dangle` is finished,
-`s` will be deallocated. But we tried to return a reference to it. That means
-this reference would be pointing to an invalid `String`. That’s no good! Rust
-won’t let us do this.
+Çünkü `s`, `dangle` kodu tamamlandığında `dangle` içinde oluşturulur,
+`s` ayrılmış olacak. Ama biz ona bir referans döndürmeye çalıştık. Bunun anlamı
+bu referans geçersiz bir `String`e işaret ediyor olacaktır. Bu hiç iyi değil! Pas
+bunu yapmamıza izin vermez.
 
-The solution here is to return the `String` directly:
+Buradaki çözüm `String`i doğrudan döndürmektir:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-16-no-dangle/src/main.rs:here}}
 ```
 
-This works without any problems. Ownership is moved out, and nothing is
+Bu sorunsuz bir şekilde işler. Mülkiyet taşındı ve hiçbir şey
 deallocated.
 
-### The Rules of References
+### Referans Kuralları
 
-Let’s recap what we’ve discussed about references:
+Referanslar hakkında konuştuklarımızı özetleyelim:
 
-- At any given time, you can have _either_ one mutable reference _or_ any
-  number of immutable references.
-- References must always be valid.
+- Herhangi bir zamanda, bir _değişebilir_ referansa _veya_ herhangi bir
+  değişmez referans sayısı.
+- Referanslar her zaman geçerli olmalıdır.
 
-Next, we’ll look at a different kind of reference: slices.
+Daha sonra, farklı bir referans türüne bakacağız: dilimler.

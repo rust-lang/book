@@ -1,8 +1,8 @@
-# Getting Started
+# Başlarken
 
-Let’s start your Rust journey! There’s a lot to learn, but every journey starts
-somewhere. In this chapter, we’ll discuss:
+Rust yolculuğunuza başlayalım! Öğrenecek çok şey var, ancak her yolculuk
+bir yerde başlar. Bu bölümde şunları tartışacağız:
 
-- Installing Rust on Linux, macOS, and Windows
-- Writing a program that prints `Hello, world!`
-- Using `cargo`, Rust’s package manager and build system
+- Linux, macOS ve Windows'ta Rust kurulumu
+- Merhaba, dünya!" yazdıran bir program yazmak
+- Rust'ın paket yöneticisi ve derleme sistemi olan `cargo`yu kullanma

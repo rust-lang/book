@@ -1,46 +1,46 @@
-# Generic Types, Traits, and Lifetimes
+# Jenerik Tipler, Özellikler ve Yaşam Süreleri
 
-Every programming language has tools for effectively handling the duplication
-of concepts. In Rust, one such tool is _generics_: abstract stand-ins for
-concrete types or other properties. We can express the behavior of generics or
-how they relate to other generics without knowing what will be in their place
-when compiling and running the code.
+Her programlama dili
+kavramların çoğaltılmasıyla etkili bir şekilde başa çıkmak için araçlara sahiptir. Rust'ta böyle bir araç _generics_'tir:
+somut tipler veya diğer özellikler için soyut stand-ins. Kod derlenirken ve çalıştırılırken
+yerlerine neyin geleceğini bilmeden
+jeneriklerin davranışlarını veya diğer jeneriklerle nasıl ilişki kurduklarını ifade edebiliriz.
 
-Functions can take parameters of some generic type, instead of a concrete type
-like `i32` or `String`, in the same way they take parameters with unknown
-values to run the same code on multiple concrete values. In fact, we’ve already
-used generics in Chapter 6 with `Option<T>`, in Chapter 8 with `Vec<T>` and
-`HashMap<K, V>`, and in Chapter 9 with `Result<T, E>`. In this chapter, you’ll
-explore how to define your own types, functions, and methods with generics!
+Fonksiyonlar, `i32` veya `String` gibi somut bir
+türü yerine bazı genel türlerden parametreler alabilir, aynı şekilde aynı kodu birden fazla somut değer üzerinde çalıştırmak için bilinmeyen
+değerlerine sahip parametreler alabilirler. Aslında, 6. Bölümde `Option<T>` ile, 8. Bölümde `Vec<T>` ve
+`HashMap<K, V>` ile ve 9. Bölümde `Result<T, E>` ile
+jenerikleri zaten kullandık. Bu bölümde,
+kendi türlerinizi, fonksiyonlarınızı ve metotlarınızı jeneriklerle nasıl tanımlayacağınızı keşfedeceksiniz!
 
-First we’ll review how to extract a function to reduce code duplication. We’ll
-then use the same technique to make a generic function from two functions that
-differ only in the types of their parameters. We’ll also explain how to use
-generic types in struct and enum definitions.
+Öncelikle kod tekrarını azaltmak için bir fonksiyonun nasıl çıkarılacağını gözden geçireceğiz. Daha sonra
+aynı tekniği kullanarak
+yalnızca parametrelerinin tipleri farklı olan iki fonksiyondan genel bir fonksiyon oluşturacağız. Ayrıca struct ve enum tanımlarında
+jenerik tiplerinin nasıl kullanılacağını açıklayacağız.
 
-Then you’ll learn how to use _traits_ to define behavior in a generic way. You
-can combine traits with generic types to constrain a generic type to accept
-only those types that have a particular behavior, as opposed to just any type.
+Ardından, davranışı genel bir şekilde tanımlamak için _traits_'i nasıl kullanacağınızı öğreneceksiniz. Genel bir türü
+herhangi bir tür yerine yalnızca belirli bir davranışa sahip türleri kabul edecek şekilde kısıtlamak için
+özellikleri genel türlerle birleştirebilirsiniz.
 
-Finally, we’ll discuss _lifetimes_: a variety of generics that give the
-compiler information about how references relate to each other. Lifetimes allow
-us to give the compiler enough information about borrowed values so that it can
-ensure references will be valid in more situations than it could without our
-help.
+Son olarak, _lifetimes_ konusunu ele alacağız:
+derleyicisine referansların birbirleriyle nasıl ilişkili olduğu hakkında bilgi veren çeşitli jenerikler. Yaşam süreleri
+derleyiciye ödünç alınan değerler hakkında yeterli bilgi vermemize olanak tanır; böylece
+referansların
+yardımımız olmadan yapabileceğinden daha fazla durumda geçerli olmasını sağlayabilir.
 
-## Removing Duplication by Extracting a Function
+## Bir Fonksiyonu Ayıklayarak Çoğaltmayı Kaldırma
 
-Generics allow us to replace specific types with a placeholder that represents
-multiple types to remove code duplication. Before diving into generics syntax,
-let’s first look at how to remove duplication in a way that doesn’t involve
-generic types by extracting a function that replaces specific values with a
-placeholder that represents multiple values. Then we’ll apply the same
-technique to extract a generic function! By looking at how to recognize
-duplicated code you can extract into a function, you’ll start to recognize
-duplicated code that can use generics.
+Jenerikler
+kod tekrarını ortadan kaldırmak için belirli türleri birden fazla türü temsil eden bir yer tutucu ile değiştirmemize olanak tanır. Jenerik sözdizimine geçmeden önce,
+belirli değerleri birden fazla değeri temsil eden bir
+yer tutucuyla değiştiren bir fonksiyonu ayıklayarak
+jenerik türleri içermeyen bir şekilde yinelemeyi nasıl kaldıracağımıza bakalım. Daha sonra aynı
+tekniğini genel bir fonksiyonu ayıklamak için uygulayacağız! Bir fonksiyona çıkarabileceğiniz
+çoğaltılmış kodu nasıl tanıyacağınıza bakarak, jenerikleri kullanabilen
+çoğaltılmış kodu tanımaya başlayacaksınız.
 
-We’ll begin with the short program in Listing 10-1 that finds the largest
-number in a list.
+Liste 10-1'deki bir listedeki en büyük
+sayısını bulan kısa programla başlayacağız.
 
 <Listing number="10-1" file-name="src/main.rs" caption="Finding the largest number in a list of numbers">
 
@@ -50,18 +50,18 @@ number in a list.
 
 </Listing>
 
-We store a list of integers in the variable `number_list` and place a reference
-to the first number in the list in a variable named `largest`. We then iterate
-through all the numbers in the list, and if the current number is greater than
-the number stored in `largest`, we replace the reference in that variable.
-However, if the current number is less than or equal to the largest number seen
-so far, the variable doesn’t change, and the code moves on to the next number
-in the list. After considering all the numbers in the list, `largest` should
-refer to the largest number, which in this case is 100.
+Bir tam sayılar listesini `number_list` değişkeninde saklıyoruz ve listedeki ilk sayıya
+referansını `largest` adlı bir değişkene yerleştiriyoruz. Daha sonra
+listedeki tüm sayılar arasında yineleme yaparız ve geçerli sayı
+`enbüyük` değişkeninde saklanan sayıdan büyükse, bu değişkendeki referansı değiştiririz.
+Ancak mevcut sayı
+şimdiye kadar görülen en büyük sayıdan küçük veya ona eşitse değişken değişmez ve kod
+listedeki bir sonraki sayıya geçer. Listedeki tüm sayılar göz önünde bulundurulduktan sonra, `largest` değişkeni
+adresinde en büyük sayıya atıfta bulunmalıdır; bu durumda bu sayı 100'dür.
 
-We’ve now been tasked with finding the largest number in two different lists of
-numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
-the same logic at two different places in the program, as shown in Listing 10-2.
+Şimdi
+sayılarından oluşan iki farklı listedeki en büyük sayıyı bulmakla görevlendirildik. Bunu yapmak için, Liste 10-1'deki kodu çoğaltmayı ve Liste 10-2'de gösterildiği gibi programın iki farklı yerinde
+aynı mantığı kullanmayı seçebiliriz.
 
 <Listing number="10-2" file-name="src/main.rs" caption="Code to find the largest number in *two* lists of numbers">
 
@@ -71,19 +71,19 @@ the same logic at two different places in the program, as shown in Listing 10-2.
 
 </Listing>
 
-Although this code works, duplicating code is tedious and error prone. We also
-have to remember to update the code in multiple places when we want to change
-it.
+Bu kod çalışsa da, kodu çoğaltmak sıkıcı ve hataya açıktır. Ayrıca
+değiştirmek istediğimizde
+kodu birden fazla yerde güncellemeyi hatırlamamız gerekir.
 
-To eliminate this duplication, we’ll create an abstraction by defining a
-function that operates on any list of integers passed in as a parameter. This
-solution makes our code clearer and lets us express the concept of finding the
-largest number in a list abstractly.
+Bu yinelemeyi ortadan kaldırmak için, parametre olarak aktarılan herhangi bir tamsayı listesi üzerinde çalışan bir
+işlevi tanımlayarak bir soyutlama oluşturacağız. Bu
+çözümü kodumuzu daha anlaşılır hale getirir ve bir listedeki en büyük sayıyı
+bulma kavramını soyut olarak ifade etmemizi sağlar.
 
-In Listing 10-3, we extract the code that finds the largest number into a
-function named `largest`. Then we call the function to find the largest number
-in the two lists from Listing 10-2. We could also use the function on any other
-list of `i32` values we might have in the future.
+Liste 10-3'te, en büyük sayıyı bulan kodu `largest` adlı bir
+fonksiyonuna alıyoruz. Ardından, Liste 10-2'deki iki listede en büyük sayıyı
+bulmak için fonksiyonu çağırıyoruz. Bu fonksiyonu gelecekte sahip olabileceğimiz `i32` değerlerinden oluşan başka bir
+listesinde de kullanabiliriz.
 
 <Listing number="10-3" file-name="src/main.rs" caption="Abstracted code to find the largest number in two lists">
 
@@ -93,23 +93,23 @@ list of `i32` values we might have in the future.
 
 </Listing>
 
-The `largest` function has a parameter called `list`, which represents any
-concrete slice of `i32` values we might pass into the function. As a result,
-when we call the function, the code runs on the specific values that we pass
-in.
+En büyük` fonksiyonu, fonksiyona aktarabileceğimiz herhangi bir
+somut `i32` değer dilimini temsil eden `list` adında bir parametreye sahiptir. Sonuç olarak,
+fonksiyonu çağırdığımızda, kod
+adresine ilettiğimiz belirli değerler üzerinde çalışır.
 
-In summary, here are the steps we took to change the code from Listing 10-2 to
-Listing 10-3:
+Özet olarak, kodu Liste 10-2'den
+Liste 10-3'e değiştirmek için attığımız adımlar şunlardır:
 
-1. Identify duplicate code.
-1. Extract the duplicate code into the body of the function, and specify the
-   inputs and return values of that code in the function signature.
-1. Update the two instances of duplicated code to call the function instead.
+1. Yinelenen kodu belirleyin.
+1. Yinelenen kodu işlevin gövdesine alın ve işlev imzasında bu kodun
+ girişlerini ve dönüş değerlerini belirtin.
+1. Yinelenen kodun iki örneğini, bunun yerine işlevi çağıracak şekilde güncelleyin.
 
-Next, we’ll use these same steps with generics to reduce code duplication. In
-the same way that the function body can operate on an abstract `list` instead
-of specific values, generics allow code to operate on abstract types.
+Daha sonra, kod tekrarını azaltmak için aynı adımları jeneriklerle kullanacağız. İşlev gövdesinin
+belirli değerler yerine soyut bir `liste` üzerinde çalışabilmesi gibi
+jenerikler de kodun soyut tipler üzerinde çalışmasına izin verir.
 
-For example, say we had two functions: one that finds the largest item in a
-slice of `i32` values and one that finds the largest item in a slice of `char`
-values. How would we eliminate that duplication? Let’s find out!
+Örneğin, iki fonksiyonumuz olduğunu varsayalım: biri `i32` değerlerinden oluşan bir
+dilimindeki en büyük öğeyi bulan ve diğeri `char`
+değerlerinden oluşan bir dilimdeki en büyük öğeyi bulan. Bu yinelemeyi nasıl ortadan kaldırırız? Hadi öğrenelim!

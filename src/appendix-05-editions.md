@@ -1,57 +1,57 @@
-## Appendix E - Editions
+## Ek E - Sürümler
 
-In Chapter 1, you saw that `cargo new` adds a bit of metadata to your
-_Cargo.toml_ file about an edition. This appendix talks about what that means!
+1. Bölümde, `cargo new` komutunun _Cargo.toml_ dosyanıza bir sürümle ilgili
+biraz meta veri eklediğini gördünüz. Bu ek, bunun ne anlama geldiğini anlatıyor!
 
-The Rust language and compiler have a six-week release cycle, meaning users get
-a constant stream of new features. Other programming languages release larger
-changes less often; Rust releases smaller updates more frequently. After a
-while, all of these tiny changes add up. But from release to release, it can be
-difficult to look back and say, “Wow, between Rust 1.10 and Rust 1.31, Rust has
-changed a lot!”
+Rust dili ve derleyicisi altı haftalık bir sürüm döngüsüne sahiptir, yani kullanıcılar
+sürekli yeni özellikler alırlar. Diğer programlama dilleri daha büyük değişiklikleri
+daha seyrek yayınlar; Rust ise daha küçük güncellemeleri daha sık yayınlar. Bir süre sonra,
+tüm bu küçük değişiklikler birikir. Ancak sürümden sürüme, geriye dönüp "Vay canına, Rust 1.10 ile Rust 1.31 arasında Rust
+çok değişmiş!" demek zor olabilir.
+Her üç yılda bir, Rust ekibi yeni bir Rust _sürümü_ üretir. Her
 
-Every three years or so, the Rust team produces a new Rust _edition_. Each
-edition brings together the features that have landed into a clear package with
-fully updated documentation and tooling. New editions ship as part of the usual
-six-week release process.
+Rust ekibi, yaklaşık üç yılda bir yeni bir Rust sürümü yayınlar. Her
+sürüm, tamamen güncellenmiş belgeler ve araçlarla birlikte, net bir pakette yer alan
+özellikleri bir araya getirir. Yeni sürümler, olağan altı haftalık sürüm sürecinin bir parçası olarak
+yayınlanır.
 
-Editions serve different purposes for different people:
+Sürümler farklı kişiler için farklı amaçlara hizmet eder:
 
-- For active Rust users, a new edition brings together incremental changes into
-  an easy-to-understand package.
-- For non-users, a new edition signals that some major advancements have
-  landed, which might make Rust worth another look.
-- For those developing Rust, a new edition provides a rallying point for the
-  project as a whole.
+- Aktif Rust kullanıcıları için yeni bir sürüm, artımlı değişiklikleri
+  anlaşılması kolay bir pakette bir araya getirir.
+- Kullanıcı olmayanlar için yeni bir sürüm, bazı önemli gelişmelerin
+  gerçekleştiğini gösterir ve bu da Rust'u tekrar gözden geçirmeye değer hale getirebilir.
+- Rust geliştirenler için yeni bir sürüm, projeyi bir bütün olarak bir araya getiren
+  bir odak noktası sağlar.
 
-At the time of this writing, four Rust editions are available: Rust 2015, Rust
-2018, Rust 2021, and Rust 2024. This book is written using Rust 2024 edition
-idioms.
+Bu yazının yazıldığı tarihte, dört Rust sürümü mevcuttur: Rust 2015, Rust
+2018, Rust 2021 ve Rust 2024. Bu kitap, Rust 2024 sürümünün
+deyimleri kullanılarak yazılmıştır.
 
-The `edition` key in _Cargo.toml_ indicates which edition the compiler should
-use for your code. If the key doesn’t exist, Rust uses `2015` as the edition
-value for backward compatibility reasons.
+_Cargo.toml_ içindeki `edition` anahtarı, derleyicinin kodunuz için hangi sürümü
+kullanması gerektiğini belirtir. Anahtar mevcut değilse, Rust geriye dönük uyumluluk
+nedenleriyle sürüm değeri olarak `2015` kullanır.
 
-Each project can opt in to an edition other than the default 2015 edition.
-Editions can contain incompatible changes, such as including a new keyword that
-conflicts with identifiers in code. However, unless you opt in to those
-changes, your code will continue to compile even as you upgrade the Rust
-compiler version you use.
+Her proje, varsayılan 2015 sürümü dışında bir sürümü seçebilir.
+Sürümler, koddaki tanımlayıcılarla çakışan yeni bir anahtar kelime eklemek gibi
+uyumsuz değişiklikler içerebilir. Ancak, bu değişiklikleri seçmediğiniz sürece,
+kullandığınız Rust derleyici sürümünü yükseltirken bile kodunuz derlenmeye devam
+edecektir.
 
-All Rust compiler versions support any edition that existed prior to that
-compiler’s release, and they can link crates of any supported editions
-together. Edition changes only affect the way the compiler initially parses
-code. Therefore, if you’re using Rust 2015 and one of your dependencies uses
-Rust 2018, your project will compile and be able to use that dependency. The
-opposite situation, where your project uses Rust 2018 and a dependency uses
-Rust 2015, works as well.
+Tüm Rust derleyici sürümleri, o derleyicinin yayınlanmasından önce var olan tüm sürümleri destekler
+ve desteklenen tüm sürümlerin kütüphanelerini birbirine bağlayabilir.
+Sürüm değişiklikleri yalnızca derleyicinin kodu ilk olarak nasıl ayrıştırdığına etki eder.
+Bu nedenle, Rust 2015 kullanıyorsanız ve bağımlılıklarınızdan biri Rust 2018 kullanıyorsa,
+projeniz derlenecek ve o bağımlılığı kullanabilecektir. Ters
+durumda, projeniz Rust 2018 kullanırken bir bağımlılık Rust 2015 kullanıyorsa,
+bu da sorunsuz çalışır.
 
-To be clear: most features will be available on all editions. Developers using
-any Rust edition will continue to see improvements as new stable releases are
-made. However, in some cases, mainly when new keywords are added, some new
-features might only be available in later editions. You will need to switch
-editions if you want to take advantage of such features.
+Açıkça belirtmek gerekirse: çoğu özellik tüm sürümlerde kullanılabilir olacaktır. Herhangi bir Rust sürümünü kullanan geliştiriciler, yeni kararlı sürümler
+yayınlandıkça iyileştirmeleri görmeye devam edeceklerdir. Ancak, bazı durumlarda,
+özellikle yeni anahtar kelimeler eklendiğinde, bazı yeni özellikler yalnızca daha
+sonraki sürümlerde kullanılabilir olabilir. Bu tür özelliklerden yararlanmak istiyorsanız sürümleri değiştirmeniz
+gerekecektir.
 
-For more details, the [_Edition Guide_](https://doc.rust-lang.org/stable/edition-guide/) is a complete book
-about editions that enumerates the differences between editions and explains
-how to automatically upgrade your code to a new edition via `cargo fix`.
+Daha fazla ayrıntı için, [_Sürüm Kılavuzu_](https://doc.rust-lang.org/stable/edition-guide/) sürümler hakkında
+sürümler arasındaki farkları sıralayan ve `cargo fix` ile kodunuzu yeni bir
+sürüme otomatik olarak nasıl yükselteceğinizi açıklayan eksiksiz bir kitaptır.

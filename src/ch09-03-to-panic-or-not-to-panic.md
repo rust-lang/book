@@ -1,144 +1,143 @@
-## To `panic!` or Not to `panic!`
+## `panic!` yapmak ya da `panic!` yapmamak
 
-So how do you decide when you should call `panic!` and when you should return
-`Result`? When code panics, there’s no way to recover. You could call `panic!`
-for any error situation, whether there’s a possible way to recover or not, but
-then you’re making the decision that a situation is unrecoverable on behalf of
-the calling code. When you choose to return a `Result` value, you give the
-calling code options. The calling code could choose to attempt to recover in a
-way that’s appropriate for its situation, or it could decide that an `Err`
-value in this case is unrecoverable, so it can call `panic!` and turn your
-recoverable error into an unrecoverable one. Therefore, returning `Result` is a
-good default choice when you’re defining a function that might fail.
+Peki ne zaman `panic!` çağırmanız ve ne zaman
+`Result` döndürmeniz gerektiğine nasıl karar verirsiniz? Kod paniklediğinde, kurtarmanın bir yolu yoktur. Kurtarmanın olası bir yolu olsun ya da olmasın, herhangi bir hata durumu için `panic!`
+diyebilirsiniz, ancak
+o zaman bir durumun kurtarılamaz olduğuna
+çağıran kod adına karar vermiş olursunuz. Bir `Result` değeri döndürmeyi seçtiğinizde,
+çağıran koda seçenekler sunmuş olursunuz. Çağıran kod, kendi durumuna uygun bir
+şekilde kurtarmayı deneyebilir veya bu durumda bir `Err`
+değerinin kurtarılamaz olduğuna karar verebilir, böylece `panic!` çağırabilir ve
+kurtarılabilir hatanızı kurtarılamaz bir hataya dönüştürebilir. Bu nedenle, başarısız olabilecek bir fonksiyon tanımlarken `Result` değerini döndürmek
+iyi bir varsayılan seçimdir.
 
-In situations such as examples, prototype code, and tests, it’s more
-appropriate to write code that panics instead of returning a `Result`. Let’s
-explore why, then discuss situations in which the compiler can’t tell that
-failure is impossible, but you as a human can. The chapter will conclude with
-some general guidelines on how to decide whether to panic in library code.
+Örnekler, prototip kodu ve testler gibi durumlarda, bir `Result` döndürmek yerine panikleyen kod yazmak daha
+uygundur. Nedenini
+inceleyelim, ardından derleyicinin
+başarısızlığının imkansız olduğunu söyleyemediği, ancak bir insan olarak sizin söyleyebileceğiniz durumları tartışalım. Bölüm, kütüphane kodunda panik yapıp yapmamaya nasıl karar verileceğine ilişkin bazı genel yönergeler
+ile sona erecektir.
 
-### Examples, Prototype Code, and Tests
+### Örnekler, Prototip Kod ve Testler
 
-When you’re writing an example to illustrate some concept, also including
-robust error-handling code can make the example less clear. In examples, it’s
-understood that a call to a method like `unwrap` that could panic is meant as a
-placeholder for the way you’d want your application to handle errors, which can
-differ based on what the rest of your code is doing.
+Bir kavramı açıklamak için bir örnek yazarken,
+sağlam hata işleme kodunu da dahil etmek örneği daha az anlaşılır hale getirebilir. Örneklerde,
+`unwrap` gibi panik yaratabilecek bir yönteme yapılan çağrının, uygulamanızın hataları nasıl ele almasını istediğinize dair bir
+yer tutucu olduğu anlaşılmaktadır; bu da
+kodunuzun geri kalanının ne yaptığına bağlı olarak farklılık gösterebilir.
 
-Similarly, the `unwrap` and `expect` methods are very handy when prototyping,
-before you’re ready to decide how to handle errors. They leave clear markers in
-your code for when you’re ready to make your program more robust.
+Benzer şekilde, `unwrap` ve `expect` yöntemleri, hataları nasıl ele alacağınıza karar vermeye hazır olmadan önce
+prototip oluştururken çok kullanışlıdır. Programınızı daha sağlam hale getirmeye hazır olduğunuzda kodunuz için
+adresinde net işaretler bırakırlar.
 
-If a method call fails in a test, you’d want the whole test to fail, even if
-that method isn’t the functionality under test. Because `panic!` is how a test
-is marked as a failure, calling `unwrap` or `expect` is exactly what should
-happen.
+Bir testte bir yöntem çağrısı başarısız olursa,
+bu yöntem test edilen işlevsellik olmasa bile tüm testin başarısız olmasını istersiniz. Çünkü `panic!` bir testin
+nasıl başarısız olarak işaretlendiğini gösterir, `unwrap` veya `expect` çağrısı tam olarak
+olması gereken şeydir.
 
-### Cases in Which You Have More Information Than the Compiler
+### Derleyiciden Daha Fazla Bilgiye Sahip Olduğunuz Durumlar
 
-It would also be appropriate to call `expect` when you have some other logic
-that ensures the `Result` will have an `Ok` value, but the logic isn’t
-something the compiler understands. You’ll still have a `Result` value that you
-need to handle: whatever operation you’re calling still has the possibility of
-failing in general, even though it’s logically impossible in your particular
-situation. If you can ensure by manually inspecting the code that you’ll never
-have an `Err` variant, it’s perfectly acceptable to call `expect` and document
-the reason you think you’ll never have an `Err` variant in the argument text.
-Here’s an example:
+Ayrıca, `Result` değerinin `Ok` değerine sahip olmasını sağlayan
+başka bir mantığınız olduğunda da `expect` çağrısı yapmak uygun olacaktır, ancak mantık
+derleyicinin anlayacağı bir şey değildir. Hala
+işlemeniz gereken bir `Result` değerine sahip olacaksınız: çağırdığınız işlem her ne olursa olsun, sizin özel
+durumunuzda mantıksal olarak imkansız olsa bile, genel olarak
+başarısız olma olasılığı vardır. Kodu manuel olarak inceleyerek
+asla bir `Err` varyantına sahip olmayacağınızdan emin olabiliyorsanız, `expect` çağrısı yapmak ve argüman metninde asla bir `Err` varyantına sahip olmayacağınızı düşünmenizin nedenini
+belgelemek tamamen kabul edilebilir.
+İşte bir örnek:
 
 ```rust
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-08-unwrap-that-cant-fail/src/main.rs:here}}
 ```
 
-We’re creating an `IpAddr` instance by parsing a hardcoded string. We can see
-that `127.0.0.1` is a valid IP address, so it’s acceptable to use `expect`
-here. However, having a hardcoded, valid string doesn’t change the return type
-of the `parse` method: we still get a `Result` value, and the compiler will
-still make us handle the `Result` as if the `Err` variant is a possibility
-because the compiler isn’t smart enough to see that this string is always a
-valid IP address. If the IP address string came from a user rather than being
-hardcoded into the program and therefore _did_ have a possibility of failure,
-we’d definitely want to handle the `Result` in a more robust way instead.
-Mentioning the assumption that this IP address is hardcoded will prompt us to
-change `expect` to better error-handling code if, in the future, we need to get
-the IP address from some other source instead.
+Kodlanmış bir dizeyi ayrıştırarak bir `IpAddr` örneği oluşturuyoruz. adresinde `127.0.0.1`in geçerli bir IP adresi olduğunu görebiliyoruz, bu nedenle burada `expect`
+kullanmak kabul edilebilir. Ancak, sabit kodlanmış geçerli bir dizeye sahip olmak `parse` yönteminin dönüş türünü
+değiştirmez: hala bir `Result` değeri alırız ve derleyici
+hala `Result` değerini `Err` varyantı bir olasılıkmış gibi ele almamızı sağlar
+çünkü derleyici bu dizenin her zaman
+geçerli bir IP adresi olduğunu görecek kadar akıllı değildir. Eğer IP adresi dizesi
+programa kodlanmak yerine bir kullanıcıdan gelseydi ve bu nedenle başarısızlık olasılığı olsaydı
+`Sonuç`u kesinlikle daha sağlam bir şekilde ele almak isterdik.
+Bu IP adresinin sabit kodlu olduğu varsayımından bahsetmek, gelecekte IP adresini
+yerine başka bir kaynaktan almamız gerekirse
+`expect` kodunu daha iyi bir hata işleme koduyla değiştirmemizi sağlayacaktır.
 
-### Guidelines for Error Handling
+### Hata İşleme Yönergeleri
 
-It’s advisable to have your code panic when it’s possible that your code could
-end up in a bad state. In this context, a _bad state_ is when some assumption,
-guarantee, contract, or invariant has been broken, such as when invalid values,
-contradictory values, or missing values are passed to your code—plus one or
-more of the following:
+Kodunuzun
+kötü bir duruma düşmesi mümkün olduğunda kodunuzun paniklemesini sağlamanız tavsiye edilir. Bu bağlamda, bir _kötü durum_ geçersiz değerler,
+çelişkili değerler veya eksik değerlerin kodunuza aktarılması gibi bazı varsayımların,
+garantilerin, sözleşmelerin veya değişmezlerin ihlal edilmesi ve ayrıca aşağıdakilerden biri veya
+daha fazlasıdır:
 
-- The bad state is something that is unexpected, as opposed to something that
-  will likely happen occasionally, like a user entering data in the wrong
-  format.
-- Your code after this point needs to rely on not being in this bad state,
-  rather than checking for the problem at every step.
-- There’s not a good way to encode this information in the types you use. We’ll
-  work through an example of what we mean in [“Encoding States and Behavior as
-  Types”][encoding]<!-- ignore --> in Chapter 18.
+- Kötü durum, kullanıcının verileri yanlış
+ biçiminde girmesi gibi
+ ara sıra gerçekleşebilecek bir şeyin aksine beklenmedik bir şeydir.
+- Bu noktadan sonra kodunuzun her adımda sorunu kontrol etmek yerine
+ bu kötü durumda olmamaya güvenmesi gerekir.
+- Kullandığınız türlerde bu bilgiyi kodlamanın iyi bir yolu yoktur. Ne demek istediğimizi
+ Bölüm 18'de [“Durumları ve Davranışı
+ Türleri Olarak Kodlama”][encoding]<!-- ignore --> kısmında bir örnekle açıklayacağız.
 
-If someone calls your code and passes in values that don’t make sense, it’s
-best to return an error if you can so the user of the library can decide what
-they want to do in that case. However, in cases where continuing could be
-insecure or harmful, the best choice might be to call `panic!` and alert the
-person using your library to the bug in their code so they can fix it during
-development. Similarly, `panic!` is often appropriate if you’re calling
-external code that is out of your control and it returns an invalid state that
-you have no way of fixing.
+Eğer birisi kodunuzu çağırır ve mantıklı olmayan değerler girerse,
+en iyisi hata döndürmektir, böylece kütüphane kullanıcısı bu durumda ne
+yapmak istediğine karar verebilir. Bununla birlikte, devam etmenin
+güvensiz veya zararlı olabileceği durumlarda, en iyi seçim `panic!` çağrısı yapmak ve kütüphanenizi kullanan
+kişisini kodlarındaki hata konusunda uyarmak olabilir, böylece
+geliştirme sırasında düzeltebilirler. Benzer şekilde, kontrolünüz dışında olan
+harici kodu çağırıyorsanız ve
+düzeltme imkanınız olmayan geçersiz bir durum döndürüyorsa, `panic!` genellikle uygundur.
 
-However, when failure is expected, it’s more appropriate to return a `Result`
-than to make a `panic!` call. Examples include a parser being given malformed
-data or an HTTP request returning a status that indicates you have hit a rate
-limit. In these cases, returning a `Result` indicates that failure is an
-expected possibility that the calling code must decide how to handle.
+Ancak, başarısızlık beklendiğinde, bir `panic!` çağrısı yapmaktansa bir `Result`
+döndürmek daha uygundur. Örnekler arasında bir ayrıştırıcıya hatalı biçimlendirilmiş
+verisi verilmesi veya bir HTTP isteğinin
+hız sınırına ulaştığınızı gösteren bir durum döndürmesi yer alır. Bu durumlarda, bir `Result` döndürmek, başarısızlığın
+beklenen bir olasılık olduğunu ve çağıran kodun nasıl ele alınacağına karar vermesi gerektiğini gösterir.
 
-When your code performs an operation that could put a user at risk if it’s
-called using invalid values, your code should verify the values are valid first
-and panic if the values aren’t valid. This is mostly for safety reasons:
-attempting to operate on invalid data can expose your code to vulnerabilities.
-This is the main reason the standard library will call `panic!` if you attempt
-an out-of-bounds memory access: trying to access memory that doesn’t belong to
-the current data structure is a common security problem. Functions often have
-_contracts_: their behavior is only guaranteed if the inputs meet particular
-requirements. Panicking when the contract is violated makes sense because a
-contract violation always indicates a caller-side bug, and it’s not a kind of
-error you want the calling code to have to explicitly handle. In fact, there’s
-no reasonable way for calling code to recover; the calling _programmers_ need
-to fix the code. Contracts for a function, especially when a violation will
-cause a panic, should be explained in the API documentation for the function.
+Kodunuz
+geçersiz değerler kullanılarak çağrıldığında kullanıcıyı riske atabilecek bir işlem gerçekleştirdiğinde
+kodunuz önce değerlerin geçerli olduğunu doğrulamalı değerler geçerli değilse paniklemelidir. Bu çoğunlukla güvenlik nedenleriyle yapılır:
+geçersiz veriler üzerinde işlem yapmaya çalışmak kodunuzu güvenlik açıklarına maruz bırakabilir.
+Standart kütüphanenin
+sınır dışı bir bellek erişimi denediğinizde `panic!` çağrısı yapmasının ana nedeni budur:
+mevcut veri yapısına ait olmayan belleğe erişmeye çalışmak yaygın bir güvenlik sorunudur. Fonksiyonların genellikle
+_sözleşmeleri_ vardır: davranışları yalnızca girdilerin belirli
+gereksinimlerini karşılaması durumunda garanti edilir. Sözleşme ihlal edildiğinde paniklemek mantıklıdır çünkü
+sözleşme ihlali her zaman çağıran tarafında bir hata olduğunu gösterir ve çağıran kodun açıkça ele almasını istediğiniz bir tür
+hatası değildir. Aslında
+çağıran kodun bunu düzeltmesi için makul bir yol yoktur; çağıran _programcıların_ kodu düzeltmek için
+adresine ihtiyacı vardır. Bir işlev için sözleşmeler, özellikle de bir ihlalin
+paniğe neden olacağı durumlarda, işlevin API belgelerinde açıklanmalıdır.
 
-However, having lots of error checks in all of your functions would be verbose
-and annoying. Fortunately, you can use Rust’s type system (and thus the type
-checking done by the compiler) to do many of the checks for you. If your
-function has a particular type as a parameter, you can proceed with your code’s
-logic knowing that the compiler has already ensured you have a valid value. For
-example, if you have a type rather than an `Option`, your program expects to
-have _something_ rather than _nothing_. Your code then doesn’t have to handle
-two cases for the `Some` and `None` variants: it will only have one case for
-definitely having a value. Code trying to pass nothing to your function won’t
-even compile, so your function doesn’t have to check for that case at runtime.
-Another example is using an unsigned integer type such as `u32`, which ensures
-the parameter is never negative.
+Bununla birlikte, tüm fonksiyonlarınızda çok sayıda hata kontrolü yapmak ayrıntılı
+ve can sıkıcı olacaktır. Neyse ki, Rust'ın tip sistemini (ve dolayısıyla derleyici tarafından yapılan
+tip kontrolünü) kontrollerin çoğunu sizin yerinize yapmak için kullanabilirsiniz. Eğer
+fonksiyonunuz parametre olarak belirli bir tipe sahipse, derleyicinin zaten geçerli bir değere sahip olduğunuzdan emin olduğunu bilerek kodunuzun
+mantığı ile devam edebilirsiniz. Örneğin
+için, bir `Option` yerine bir türünüz varsa, programınız
+_nothing_ yerine _something_ olmasını bekler. Bu durumda kodunuz
+`Some` ve `None` varyantları için iki durumla uğraşmak zorunda kalmaz:
+için kesinlikle bir değere sahip olan tek bir durum olacaktır. İşlevinize hiçbir şey iletmemeye çalışan kod
+derlenmeyecektir, bu nedenle işlevinizin çalışma zamanında bu durumu kontrol etmesi gerekmez.
+Başka bir örnek de
+parametrenin asla negatif olmamasını sağlayan `u32` gibi işaretsiz bir tamsayı türü kullanmaktır.
 
-### Creating Custom Types for Validation
+### Doğrulama için Özel Tipler Oluşturma
 
-Let’s take the idea of using Rust’s type system to ensure we have a valid value
-one step further and look at creating a custom type for validation. Recall the
-guessing game in Chapter 2 in which our code asked the user to guess a number
-between 1 and 100. We never validated that the user’s guess was between those
-numbers before checking it against our secret number; we only validated that
-the guess was positive. In this case, the consequences were not very dire: our
-output of “Too high” or “Too low” would still be correct. But it would be a
-useful enhancement to guide the user toward valid guesses and have different
-behavior when the user guesses a number that’s out of range versus when the
-user types, for example, letters instead.
+Geçerli bir değere sahip olduğumuzdan emin olmak için Rust'ın tip sistemini kullanma fikrini
+bir adım daha ileri götürelim ve doğrulama için özel bir tip oluşturmaya bakalım. Bölüm 2'deki
+tahmin oyununu hatırlayın; kodumuz kullanıcıdan
+1 ile 100 arasında bir sayı tahmin etmesini istemişti. Gizli sayımızla karşılaştırmadan önce kullanıcının tahmininin bu
+sayılar arasında olduğunu doğrulamadık; yalnızca
+tahminin olumlu olduğunu doğruladık. Bu durumda sonuçlar çok vahim değildi:
+adresimizin “Çok yüksek” veya “Çok düşük” çıktısı yine de doğru olacaktı. Ancak, kullanıcıyı geçerli tahminlere yönlendirmek ve kullanıcı aralık dışında bir sayı tahmin ettiğinde farklı
+davranışına sahip olmak ve
+kullanıcısının bunun yerine örneğin harfler yazması
+yararlı bir geliştirme olacaktır.
 
-One way to do this would be to parse the guess as an `i32` instead of only a
-`u32` to allow potentially negative numbers, and then add a check for the
-number being in range, like so:
+Bunu yapmanın bir yolu, potansiyel olarak negatif sayılara izin vermek için tahmini yalnızca
+`u32` yerine bir `i32` olarak ayrıştırmak ve ardından
+sayısının aralıkta olup olmadığına dair bir kontrol eklemek olabilir:
 
 <Listing file-name="src/main.rs">
 
@@ -148,23 +147,23 @@ number being in range, like so:
 
 </Listing>
 
-The `if` expression checks whether our value is out of range, tells the user
-about the problem, and calls `continue` to start the next iteration of the loop
-and ask for another guess. After the `if` expression, we can proceed with the
-comparisons between `guess` and the secret number knowing that `guess` is
-between 1 and 100.
+`if` ifadesi değerimizin aralık dışında olup olmadığını kontrol eder, kullanıcıya
+sorun hakkında bilgi verir ve
+döngüsünün bir sonraki iterasyonunu başlatmak ve başka bir tahmin istemek için `continue` ifadesini çağırır. `if` ifadesinden sonra, `guess` değerinin
+1 ile 100 arasında olduğunu bilerek `guess` ile gizli sayı arasındaki
+karşılaştırmalarına devam edebiliriz.
 
-However, this is not an ideal solution: if it were absolutely critical that the
-program only operated on values between 1 and 100, and it had many functions
-with this requirement, having a check like this in every function would be
-tedious (and might impact performance).
+Ancak, bu ideal bir çözüm değildir:
+programının yalnızca 1 ile 100 arasındaki değerler üzerinde çalışması kesinlikle kritik olsaydı ve bu gereksinime sahip birçok işlevi
+olsaydı, her işlevde bunun gibi bir kontrol yapmak
+sıkıcı olurdu (ve performansı etkileyebilir).
 
-Instead, we can make a new type in a dedicated module and put the validations in
-a function to create an instance of the type rather than repeating the
-validations everywhere. That way, it’s safe for functions to use the new type in
-their signatures and confidently use the values they receive. Listing 9-13 shows
-one way to define a `Guess` type that will only create an instance of `Guess` if
-the `new` function receives a value between 1 and 100.
+Bunun yerine, özel bir modülde yeni bir tür oluşturabilir ve doğrulamaları
+doğrulamalarını her yerde tekrarlamak yerine türün bir örneğini oluşturmak için
+işlevine koyabiliriz. Bu şekilde, işlevlerin yeni türü
+imzalarında kullanmaları ve aldıkları değerleri güvenle kullanmaları güvenli olur. Liste 9-13,
+yalnızca
+`new` fonksiyonu 1 ile 100 arasında bir değer alırsa bir `Guess` örneği oluşturacak bir `Guess` türü tanımlamanın bir yolunu göstermektedir.
 
 <Listing number="9-13" caption="A `Guess` type that will only continue with values between 1 and 100" file-name="src/guessing_game.rs">
 
@@ -174,53 +173,52 @@ the `new` function receives a value between 1 and 100.
 
 </Listing>
 
-Note that this code in *src/guessing_game.rs* depends on adding a module
-declaration `mod guessing_game;` in *src/lib.rs* that we haven’t shown here.
-Within this new module’s file, we define a struct in that module named `Guess`
-that has a field named `value` that holds an `i32`. This is where the number
-will be stored.
+src/guessing_game.rs* dosyasındaki bu kodun, burada göstermediğimiz *src/lib.rs* dosyasındaki `mod guessing_game;` modül
+bildiriminin eklenmesine bağlı olduğunu unutmayın.
+Bu yeni modülün dosyası içinde `Guess`
+adında, `i32` tutan `value` adında bir alana sahip bir yapı tanımlıyoruz. Burası
+sayısının saklanacağı yerdir.
 
-Then we implement an associated function named `new` on `Guess` that creates
-instances of `Guess` values. The `new` function is defined to have one
-parameter named `value` of type `i32` and to return a `Guess`. The code in the
-body of the `new` function tests `value` to make sure it’s between 1 and 100.
-If `value` doesn’t pass this test, we make a `panic!` call, which will alert
-the programmer who is writing the calling code that they have a bug they need
-to fix, because creating a `Guess` with a `value` outside this range would
-violate the contract that `Guess::new` is relying on. The conditions in which
-`Guess::new` might panic should be discussed in its public-facing API
-documentation; we’ll cover documentation conventions indicating the possibility
-of a `panic!` in the API documentation that you create in Chapter 14. If
-`value` does pass the test, we create a new `Guess` with its `value` field set
-to the `value` parameter and return the `Guess`.
+Daha sonra, `Guess` değerlerinin
+örneklerini oluşturan `Guess` üzerinde `new` adlı ilişkili bir işlev uygularız. `new` fonksiyonu, `i32` tipinde `value` adında bir
+parametresine sahip olacak ve bir `Guess` döndürecek şekilde tanımlanmıştır. `new` fonksiyonunun
+gövdesindeki kod, 1 ile 100 arasında olduğundan emin olmak için `value` değerini test eder.
+Eğer `value` bu testi geçemezse, bir `panic!` çağrısı yaparız, bu da çağıran kodu yazan programcıyı
+düzeltmesi için
+adresine ihtiyaç duydukları bir hata olduğu konusunda uyarır, çünkü bu aralığın dışında bir `value` ile bir `Guess` oluşturmak
+`Guess::new` fonksiyonunun dayandığı sözleşmeyi ihlal edecektir. `Guess::new` uygulamasının panik yapabileceği koşullar halka açık API
+dokümantasyonunda tartışılmalıdır; Bölüm 14'te oluşturacağınız API dokümantasyonunda bir `panik!` olasılığını
+belirten dokümantasyon kurallarını ele alacağız. Eğer
+`value` testi geçerse, `value` alanı
+tarafından `value` parametresine ayarlanmış yeni bir `Guess` yaratırız ve `Guess`i geri döndürürüz.
 
-Next, we implement a method named `value` that borrows `self`, doesn’t have any
-other parameters, and returns an `i32`. This kind of method is sometimes called
-a _getter_ because its purpose is to get some data from its fields and return
-it. This public method is necessary because the `value` field of the `Guess`
-struct is private. It’s important that the `value` field be private so code
-using the `Guess` struct is not allowed to set `value` directly: code outside
-the `guessing_game` module _must_ use the `Guess::new` function to create an
-instance of `Guess`, thereby ensuring there’s no way for a `Guess` to have a
-`value` that hasn’t been checked by the conditions in the `Guess::new` function.
+Daha sonra, `self`i ödünç alan,
+başka parametresi olmayan ve bir `i32` döndüren `value` adlı bir yöntem uyguluyoruz. Bu tür yöntemlere bazen
+a _getter_ denir, çünkü amacı alanlarından bazı verileri almak ve
+döndürmektir. Bu genel yöntem gereklidir çünkü `Guess`
+yapısının `value` alanı özeldir. Değer alanının özel olması önemlidir, böylece `Guess` yapısını kullanan
+kodunun değeri doğrudan ayarlamasına izin verilmez:
+dışındaki kod `guessing_game` modülü _must_ bir
+`Guess` örneği oluşturmak için `Guess::new` işlevini kullanmalıdır, böylece bir `Guess`in `Guess::new` işlevindeki koşullar tarafından kontrol edilmemiş bir
+`değer`e sahip olmasının hiçbir yolu yoktur.
 
-A function that has a parameter or returns only numbers between 1 and 100 could
-then declare in its signature that it takes or returns a `Guess` rather than an
-`i32` and wouldn’t need to do any additional checks in its body.
+Parametresi olan ya da yalnızca 1 ile 100 arasındaki sayıları döndüren bir fonksiyon
+imzasında
+`i32` yerine bir `Guess` aldığını ya da döndürdüğünü bildirebilir ve gövdesinde herhangi bir ek kontrol yapması gerekmez.
 
-## Summary
+## Özet
 
-Rust’s error-handling features are designed to help you write more robust code.
-The `panic!` macro signals that your program is in a state it can’t handle and
-lets you tell the process to stop instead of trying to proceed with invalid or
-incorrect values. The `Result` enum uses Rust’s type system to indicate that
-operations might fail in a way that your code could recover from. You can use
-`Result` to tell code that calls your code that it needs to handle potential
-success or failure as well. Using `panic!` and `Result` in the appropriate
-situations will make your code more reliable in the face of inevitable problems.
+Rust'ın hata işleme özellikleri daha sağlam kod yazmanıza yardımcı olmak için tasarlanmıştır.
+`panic!` makrosu, programınızın üstesinden gelemeyeceği bir durumda olduğunu belirtir ve
+geçersiz veya
+yanlış değerlerle devam etmeye çalışmak yerine işleme durmasını söylemenizi sağlar. `Result` enumu,
+işlemlerinin kodunuzun kurtarabileceği bir şekilde başarısız olabileceğini belirtmek için Rust'ın tür sistemini kullanır. Kodunuzu çağıran koda, olası
+başarı veya başarısızlığını da ele alması gerektiğini söylemek için
+`Result` kullanabilirsiniz. Uygun
+durumlarda `panic!` ve `Result` kullanmak, kaçınılmaz sorunlar karşısında kodunuzu daha güvenilir hale getirecektir.
 
-Now that you’ve seen useful ways that the standard library uses generics with
-the `Option` and `Result` enums, we’ll talk about how generics work and how you
-can use them in your code.
+Artık standart kütüphanenin
+ile `Option` ve `Result` enumlarını kullanarak jenerikleri nasıl kullandığını gördüğünüze göre, jeneriklerin nasıl çalıştığından ve
+bunları kodunuzda nasıl kullanabileceğinizden bahsedeceğiz.
 
 [encoding]: ch18-03-oo-design-patterns.html#encoding-states-and-behavior-as-types
