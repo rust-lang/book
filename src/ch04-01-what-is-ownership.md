@@ -517,10 +517,10 @@ Ancak bu, olması gereken bir konsept için çok fazla tören ve çok fazla iş
 yaygındır. Şanslıyız ki Rust'ta bir değeri
 mülkiyetin aktarılması, _referanslar_ olarak adlandırılır.
 
-[data-types]: ch03-02-data-types.html#data-types
-[ch8]: ch08-02-strings.html
-[traits]: ch10-02-traits.html
-[derivable-traits]: appendix-03-derivable-traits.html
-[method-syntax]: ch05-03-method-syntax.html#method-syntax
-[paths-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
+[data-types]: ch03-02-data-types.md#dVeri-Türleri
+[ch8]: ch08-02-strings.md
+[traits]: ch10-02-traits.md
+[derivable-traits]: appendix-03-derivable-traits.md
+[method-syntax]: ch05-03-method-syntax.md#method-syntax
+[paths-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md
 [drop]: ../std/ops/trait.Drop.html#tymethod.drop

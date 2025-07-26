@@ -104,8 +104,7 @@ alt çizgi ile tüm büyük harfleri kullanmaktır. Derleyici, derleme zamanınd
 işlemini değerlendirebilir, bu da bu değeri
 sabitini 10.800 değerine ayarlamak yerine, anlaşılması ve doğrulanması daha kolay olan
 bir şekilde yazmayı seçmemizi sağlar. Sabitleri bildirirken
-hangi işlemlerin kullanılabileceği hakkında daha fazla bilgi için [Rust Reference'ın constant
-evaluation][const-eval] bölümüne bakın.
+hangi işlemlerin kullanılabileceği hakkında daha fazla bilgi için [Rust Reference'ın constant evaluation][const-eval] bölümüne bakın.
 
 Sabitler, bildirildikleri
 kapsamı dahilinde bir programın çalıştığı süre boyunca geçerlidir. Bu özellik sabitleri
@@ -182,7 +181,7 @@ Hata, bir değişkenin türünü değiştirmemize izin verilmediğini söylüyor
 Şimdi değişkenlerin nasıl çalıştığını keşfettiğimize göre,
 sahip olabilecekleri daha fazla veri türüne bakalım.
 
-[comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
-[data-types]: ch03-02-data-types.html#data-types
-[storing-values-with-variables]: ch02-00-guessing-game-tutorial.html#storing-values-with-variables
-[const-eval]: ../reference/const_eval.html
+[comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.md#Tahmini-Gizli-Sayı-ile-Karşılaştırma
+[data-types]: ch03-02-data-types.md#Veri-Türleri
+[storing-values-with-variables]: ch02-00-guessing-game-tutorial.md#Değerleri-Değişkenlerle-Saklama
+[const-eval]:https://doc.rust-lang.org/reference/const_eval.html

@@ -41,4 +41,4 @@ Rust ayrıca başka bir yorum türüne, dokümantasyon yorumlarına da sahiptir;
 Bölüm 14'ün [“Crates.io'da bir Sandık Yayınlama”][yayınlama]<!-- ignore -->
 kısmında tartışacağız.
 
-[publishing]: ch14-02-publishing-to-crates-io.html
+[yayınlama]: ch14-02-publishing-to-crates-io.html

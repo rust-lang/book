@@ -2,8 +2,8 @@
 
 Birlikte uygulamalı bir proje üzerinde çalışarak Rust'a atlayalım! Bu
 bölüm size
-gerçek bir programda nasıl kullanacağınızı göstererek birkaç yaygın Rust kavramını tanıtıyor. let`, `match`, metotlar, ilişkili
-fonksiyonları, harici crate`ler ve daha fazlası hakkında bilgi edineceksiniz! İlerleyen bölümlerde
+gerçek bir programda nasıl kullanacağınızı göstererek birkaç yaygın Rust kavramını tanıtıyor. `let`, `match`, metotlar, ilişkili
+fonksiyonları, harici `crate`ler ve daha fazlası hakkında bilgi edineceksiniz! İlerleyen bölümlerde
 bu fikirleri daha ayrıntılı olarak inceleyeceğiz. Bu bölümde, sadece
 temellerini uygulayacaksınız.
 
@@ -23,11 +23,11 @@ $ cargo new guessing_game
 $ cd guessing_game
 ```
 
-The first command, `cargo new`, takes the name of the project (`guessing_game`)
-as the first argument. The second command changes to the new project’s
-directory.
+İlk komut olan `cargo new`, projenin adını (`guessing_game`)
+ilk argüman olarak alır. İkinci komut, yeni projenin
+dizinine geçer.
 
-Look at the generated _Cargo.toml_ file:
+Oluşturulan _Cargo.toml_ dosyasına bakın:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial
@@ -94,11 +94,11 @@ her programın kapsamına getirdiği standart kütüphanede tanımlanmış bir d
 adresinde [standart kütüphane belgelerinde][prelude] her şeyi görebilirsiniz.
 
 Eğer kullanmak istediğiniz bir tip prelude içinde değilse, o tipi
-kapsamına bir `use` deyimi ile açıkça getirmeniz gerekir. std::io` kütüphanesini kullanmak
+kapsamına bir `use` deyimi ile açıkça getirmeniz gerekir. `std::io` kütüphanesini kullanmak
 size
 kullanıcı girdisini kabul etme yeteneği de dahil olmak üzere bir dizi yararlı özellik sağlar.
 
-Bölüm 1`de gördüğünüz gibi, `main` fonksiyonu
+`Bölüm 1`de gördüğünüz gibi, `main` fonksiyonu
 programının giriş noktasıdır:
 
 ```rust,ignore
@@ -179,7 +179,7 @@ girdisini işlememizi sağlayacak:
 Eğer
 programının başında `use std::io;` ile `io` modülünü içe aktarmamış olsaydık, bu fonksiyon çağrısını
 `std::io::stdin` şeklinde yazarak fonksiyonu yine de kullanabilirdik. stdin` fonksiyonu bir
-[`std::io::Stdin`][iostdin]<!-- ignore --> örneği döndürür, bu da terminaliniz için standart girdiye bir
+[std::io::Stdin][iostdin]<!-- ignore --> örneği döndürür, bu da terminaliniz için standart girdiye bir
 tanıtıcısını temsil eden bir türdür.
 
 Ardından, `.read_line(&mut guess)` satırı, kullanıcıdan girdi almak için standart girdi tanıtıcısında [`read_line`][read_line]<!--
@@ -205,11 +205,11 @@ açıklayacaktır).
 
 <a id="handling-potential-failure-with-the-result-type"></a>
 
-### Handling Potential Failure with `Result`
+### `Result` ile Potansiyel Başarısızlığın Ele Alınması
 
-We’re still working on this line of code. We’re now discussing a third line of
-text, but note that it’s still part of a single logical line of code. The next
-part is this method:
+Hala bu kod satırı üzerinde çalışıyoruz. Şimdi üçüncü bir
+metin satırını tartışıyoruz, ancak bunun hala tek bir mantıksal kod satırının parçası olduğuna dikkat edin. Bir sonraki
+kısmı bu yöntemdir:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
@@ -235,7 +235,7 @@ olası duruma bir _variant_ diyoruz.
 [Bölüm 6][enumlar]<!-- ignore --> enumları daha ayrıntılı olarak ele alacaktır. Bu `Result` türlerinin amacı
 hata işleme bilgilerini kodlamaktır.
 
-`Result` türünün varyantları `Ok` ve `Err`dir. Ok` değişkeni
+`Result` türünün varyantları `Ok` ve `Err`dir. `Ok` değişkeni
 işleminin başarılı olduğunu gösterir ve başarıyla oluşturulan değeri içerir.
 Error` değişkeni işlemin başarısız olduğu anlamına gelir ve işlemin nasıl veya neden başarısız olduğu hakkında
 bilgi içerir.
@@ -348,12 +348,11 @@ bu sürüm numarasıyla belirttiğinizden emin olun, aksi takdirde bu eğitimdek
 ```
 
 Cargo.toml_ dosyasında, bir başlığı takip eden her şey, başka bir bölüm başlayana kadar devam eden
-bölümünün bir parçasıdır. dependencies]` içinde
+bölümünün bir parçasıdır. `[dependencies]` içinde
 Cargo'ya projenizin hangi harici sandıklara bağlı olduğunu ve bu sandıkların
 hangi sürümlerine ihtiyaç duyduğunuzu söylersiniz. Bu durumda,
 semantik sürüm belirteci `0.8.5` ile `rand` sandığını belirtiriz. Cargo, sürüm numaralarını yazmak için bir
-standardı olan [Semantic
-Versioning][semver]<!-- ignore --> (bazen _SemVer_ olarak da adlandırılır) standardını anlar. 0.8.5` belirteci aslında `^0.8.5` için
+standardı olan [Semantic Versioning][semver]<!-- ignore --> (bazen _SemVer_ olarak da adlandırılır) standardını anlar. 0.8.5` belirteci aslında `^0.8.5` için
 kısaltmasıdır, bu da en az 0.8.5 olan ancak
 0.9.0'ın altında olan herhangi bir sürüm anlamına gelir.
 
@@ -588,7 +587,7 @@ Liste 2-4'te gösterilmiştir. adresinde açıklayacağımız gibi, bu kodun hen
 </Listing>
 
 İlk olarak başka bir `use` deyimi ekleyerek
-`std::cmp::Ordering` adlı bir türü standart kütüphaneden kapsam içine alıyoruz. Ordering` türü
+`std::cmp::Ordering` adlı bir türü standart kütüphaneden kapsam içine alıyoruz. `Ordering` türü
 başka bir enumdur ve `Less`, `Greater` ve `Equal` değişkenlerine sahiptir. Bunlar
 iki değeri karşılaştırdığınızda mümkün olan üç sonuçtur.
 
@@ -611,7 +610,7 @@ Burada kullandığımız `match` ifadesi ile bir örnek üzerinden gidelim. Diye
 kullanıcı 50 tahmininde bulundu ve bu sefer rastgele oluşturulan gizli sayı
 38.
 
-Kod 50 ile 38`i karşılaştırdığında `cmp` metodu
+Kod `50` ile `38`i karşılaştırdığında `cmp` metodu
 `Ordering::Greater` değerini döndürecektir çünkü 50, 38`den büyüktür. match` ifadesi
 adresinden `Ordering::Greater` değerini alır ve her bir kolun desenini kontrol etmeye başlar. İlk kolun kalıbı olan `Ordering::Less` değerine
 bakar ve
@@ -695,7 +694,7 @@ tipindeki iki değer arasında olacak!
 sayıya dönüştürülebilen karakterler üzerinde çalışacaktır ve bu nedenle kolayca hatalara neden olabilir. Örneğin,
 dizesi `A👍%` içeriyorsa, bunu sayıya dönüştürmenin bir yolu yoktur. başarısız olabileceğinden, `parse` yöntemi, `read_line`
 yönteminin yaptığı gibi bir `Result` türü döndürür (daha önce [“Handling Potential Failure with
-`Result`”](#handling-potential-failure-with-result)<!-- ignore-->). bu `Sonuç`u yine `expect` yöntemini kullanarak aynı şekilde ele alacağız. Eğer `parse`
+`Result`”](#Result-ile-Potansiyel-Başarısızlığın-Ele-Alınması)<!-- ignore-->). bu `Sonuç`u yine `expect` yöntemini kullanarak aynı şekilde ele alacağız. Eğer `parse`
 ,
 stringinden bir sayı oluşturamadığı için bir `Err` `Result` varyantı döndürürse, `expect` çağrısı oyunu çökertecek ve verdiğimiz mesajı yazdıracaktır.
 Eğer `parse` stringi başarılı bir şekilde sayıya dönüştürebilirse, `Result` değerinin
@@ -751,7 +750,7 @@ bu da aslında yeni bir sorun ortaya çıkarıyor. Kullanıcı programdan çıka
 Kullanıcı her zaman
 <kbd>ctrl</kbd>-<kbd>c</kbd> klavye kısayolunu kullanarak programı yarıda kesebilir. Ancak bu doyumsuz
 canavarından kaçmanın başka bir yolu daha var, [“Tahmin ile
-Gizli Sayının Karşılaştırılması”](#comparing-the-guess-to-the-secret-number)<!-- ignore --> bölümündeki `parse' tartışmasında belirtildiği gibi: eğer
+Gizli Sayının Karşılaştırılması”](#Tahmini-Gizli-Sayı-ile-Karşılaştırma)<!-- ignore --> bölümündeki `parse' tartışmasında belirtildiği gibi: eğer
 kullanıcı sayı olmayan bir cevap girerse, program çökecektir. Burada gösterildiği gibi, kullanıcının çıkmasına izin vermek için
 adresinden yararlanabiliriz:
 
@@ -826,7 +825,7 @@ adresinin bir `String`den bir `u32`ye dönüştürüldüğü satırı değiştir
 </Listing>
 
 Bir hatada
-adresinin çökmesinden hatayı ele almaya geçmek için `expect` çağrısından `match` ifadesine geçiyoruz. Parse` öğesinin bir `Result`
+adresinin çökmesinden hatayı ele almaya geçmek için `expect` çağrısından `match` ifadesine geçiyoruz. ` Parse` öğesinin bir `Result`
 türü döndürdüğünü ve `Result` öğesinin `Ok` ve `Err` değişkenlerine sahip bir enum olduğunu unutmayın. Burada
 bir `match` ifadesi kullanıyoruz, tıpkı `cmp`
 yönteminin `Ordering` sonucuyla yaptığımız gibi.
@@ -897,29 +896,29 @@ Bu noktada, tahmin oyununu başarıyla inşa ettiniz. Tebrikler!
 ## Özet
 
 Bu proje, sizi birçok yeni Rust kavramıyla tanıştırmanın uygulamalı bir yoluydu:
-let`, `match`, fonksiyonlar, harici crate kullanımı ve daha fazlası. Sonraki
+`let`, `match`, fonksiyonlar, harici crate kullanımı ve daha fazlası. Sonraki
 birkaç bölümde, bu kavramları daha ayrıntılı olarak öğreneceksiniz. Bölüm 3
 değişkenler, veri
 türleri ve fonksiyonlar gibi çoğu programlama dilinde bulunan kavramları kapsar ve bunların Rust'ta nasıl kullanılacağını gösterir. Bölüm 4, Rust'ı diğer dillerden farklı kılan bir özellik olan
 sahipliğini araştırıyor. Bölüm 5
 yapıları ve yöntem sözdizimini tartışır ve Bölüm 6 enumların nasıl çalıştığını açıklar.
 
-[prelude]: ../std/prelude/index.html
-[variables-and-mutability]: ch03-01-variables-and-mutability.html#variables-and-mutability
-[comments]: ch03-04-comments.html
-[string]: ../std/string/struct.String.html
-[iostdin]: ../std/io/struct.Stdin.html
-[read_line]: ../std/io/struct.Stdin.html#method.read_line
-[result]: ../std/result/enum.Result.html
-[enums]: ch06-00-enums.html
-[expect]: ../std/result/enum.Result.html#method.expect
-[recover]: ch09-02-recoverable-errors-with-result.html
+[prelude]: ../std/prelude/index.md
+[variables-and-mutability]: ch03-01-variables-and-mutability.md#Değişkenler-ve-Değişebilirlik
+[comments]: ch03-04-comments.md
+[string]: ../std/string/struct.String.md
+[iostdin]: ../std/io/struct.Stdin.md
+[read_line]: ../std/io/struct.Stdin.md#method.read_line
+[result]: ../std/result/enum.Result.md
+[enums]: ch06-00-enums.md
+[expect]: ../std/result/enum.Result.md#method.expect
+[recover]: ch09-02-recoverable-errors-with-result.md
 [randcrate]: https://crates.io/crates/rand
 [semver]: http://semver.org
 [cratesio]: https://crates.io/
 [doccargo]: https://doc.rust-lang.org/cargo/
-[doccratesio]: https://doc.rust-lang.org/cargo/reference/publishing.html
-[match]: ch06-02-match.html
-[shadowing]: ch03-01-variables-and-mutability.html#shadowing
-[parse]: ../std/primitive.str.html#method.parse
-[integers]: ch03-02-data-types.html#integer-types
+[doccratesio]: https://doc.rust-lang.org/cargo/reference/publishing.md
+[match]: ch06-02-match.md
+[shadowing]: ch03-01-variables-and-mutability.md#Gölgeleme
+[parse]: ../std/primitive.str.md#method.parse
+[integers]: ch03-02-data-types.md#integer-types

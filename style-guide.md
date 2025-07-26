@@ -32,3 +32,4 @@ Tüm komut dosyaları tamamlandıktan sonra:
   kitap çevrimdışı olarak veya docs.rust-lang.org adresinden okunabilir
 - Markdown bağlantılarını kullanın ve bunların `text at` olarak değiştirileceğini unutmayın.
   `*url*` şeklinde yazın, bu nedenle bu formatta iyi okunacak şekilde ifade edin
+  
