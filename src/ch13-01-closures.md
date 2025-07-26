@@ -1,43 +1,24 @@
-<!-- Old heading. Do not remove or links may break. -->
+<!-- Eski başlık. Kaldırmayın, bağlantılar bozulabilir. -->
 
 <a id="closures-anonymous-functions-that-can-capture-their-environment"></a>
 
-## Closures: Anonymous Functions That Capture Their Environment
+## Kapanışlar: Ortamlarını Yakalayabilen İsimsiz Fonksiyonlar
 
-Rust’s closures are anonymous functions you can save in a variable or pass as
-arguments to other functions. You can create the closure in one place and then
-call the closure elsewhere to evaluate it in a different context. Unlike
-functions, closures can capture values from the scope in which they’re defined.
-We’ll demonstrate how these closure features allow for code reuse and behavior
-customization.
+Rust'taki kapanışlar, bir değişkende saklayabileceğiniz veya başka fonksiyonlara argüman olarak geçirebileceğiniz isimsiz fonksiyonlardır. Kapanışı bir yerde oluşturup, daha sonra farklı bir bağlamda çağırarak değerlendirebilirsiniz. Fonksiyonlardan farklı olarak, kapanışlar tanımlandıkları kapsamdan değerleri yakalayabilirler. Bu kapanış özelliklerinin kodun yeniden kullanılmasını ve davranışın özelleştirilmesini nasıl sağladığını göstereceğiz.
 
-<!-- Old headings. Do not remove or links may break. -->
+<!-- Eski başlıklar. Kaldırmayın, bağlantılar bozulabilir. -->
 
 <a id="creating-an-abstraction-of-behavior-with-closures"></a>
 <a id="refactoring-using-functions"></a>
 <a id="refactoring-with-closures-to-store-code"></a>
 
-### Capturing the Environment with Closures
+### Kapanışlarla Ortamı Yakalamak
 
-We’ll first examine how we can use closures to capture values from the
-environment they’re defined in for later use. Here’s the scenario: every so
-often, our T-shirt company gives away an exclusive, limited-edition shirt to
-someone on our mailing list as a promotion. People on the mailing list can
-optionally add their favorite color to their profile. If the person chosen for
-a free shirt has their favorite color set, they get that color shirt. If the
-person hasn’t specified a favorite color, they get whatever color the company
-currently has the most of.
+Öncelikle, kapanışların tanımlandıkları ortamdan değerleri daha sonra kullanmak üzere nasıl yakalayabileceğimizi inceleyeceğiz. Senaryo şu: Zaman zaman, tişört şirketimiz promosyon olarak posta listemizden birine özel, sınırlı sayıda bir tişört hediye ediyor. Posta listesindeki kişiler profillerine isteğe bağlı olarak favori renklerini ekleyebiliyor. Eğer seçilen kişinin favori rengi ayarlanmışsa, o renkte tişört alıyor. Eğer favori renk belirtilmemişse, şirkette en çok bulunan renkten bir tişört veriliyor.
 
-There are many ways to implement this. For this example, we’re going to use an
-enum called `ShirtColor` that has the variants `Red` and `Blue` (limiting the
-number of colors available for simplicity). We represent the company’s
-inventory with an `Inventory` struct that has a field named `shirts` that
-contains a `Vec<ShirtColor>` representing the shirt colors currently in stock.
-The method `giveaway` defined on `Inventory` gets the optional shirt
-color preference of the free-shirt winner, and returns the shirt color the
-person will get. This setup is shown in Listing 13-1.
+Bunu uygulamanın birçok yolu var. Bu örnekte, basitlik için yalnızca `Kırmızı` ve `Mavi` varyantlarına sahip bir `ShirtColor` enum'u kullanacağız. Şirketin stoğunu ise, içinde mevcut tişört renklerini tutan bir `Vec<ShirtColor>` içeren `shirts` alanına sahip bir `Inventory` yapısı ile temsil ediyoruz. `Inventory` üzerinde tanımlı `giveaway` metodu, hediye tişört kazanan kişinin isteğe bağlı renk tercihini alır ve kişiye verilecek tişört rengini döndürür. Bu kurulum, Liste 13-1'de gösterilmiştir.
 
-<Listing number="13-1" file-name="src/main.rs" caption="Shirt company giveaway situation">
+<Listing number="13-1" file-name="src/main.rs" caption="Tişört şirketi hediye durumu">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-01/src/main.rs}}
@@ -45,69 +26,29 @@ person will get. This setup is shown in Listing 13-1.
 
 </Listing>
 
-The `store` defined in `main` has two blue shirts and one red shirt remaining
-to distribute for this limited-edition promotion. We call the `giveaway` method
-for a user with a preference for a red shirt and a user without any preference.
+`main`'de tanımlanan `store`'da bu promosyon için dağıtılacak iki mavi ve bir kırmızı tişört kalmıştır. `giveaway` metodunu, kırmızı tişört tercihi olan bir kullanıcı ve tercihi olmayan bir kullanıcı için çağırıyoruz.
 
-Again, this code could be implemented in many ways, and here, to focus on
-closures, we’ve stuck to concepts you’ve already learned, except for the body of
-the `giveaway` method that uses a closure. In the `giveaway` method, we get the
-user preference as a parameter of type `Option<ShirtColor>` and call the
-`unwrap_or_else` method on `user_preference`. The [`unwrap_or_else` method on
-`Option<T>`][unwrap-or-else]<!-- ignore --> is defined by the standard library.
-It takes one argument: a closure without any arguments that returns a value `T`
-(the same type stored in the `Some` variant of the `Option<T>`, in this case
-`ShirtColor`). If the `Option<T>` is the `Some` variant, `unwrap_or_else`
-returns the value from within the `Some`. If the `Option<T>` is the `None`
-variant, `unwrap_or_else` calls the closure and returns the value returned by
-the closure.
+Bu kod birçok şekilde uygulanabilirdi, fakat burada kapanışlara odaklanmak için, öğrendiğiniz kavramlar dışında yalnızca `giveaway` metodunun gövdesinde bir kapanış kullandık. `giveaway` metodunda, kullanıcı tercihini `Option<ShirtColor>` türünde bir parametre olarak alıyoruz ve `user_preference` üzerinde `unwrap_or_else` metodunu çağırıyoruz. [`Option<T>` üzerindeki `unwrap_or_else` metodu][unwrap-or-else]<!-- ignore --> standart kütüphane tarafından tanımlanmıştır. Bir argüman alır: argüman almayan ve bir `T` (bu durumda `ShirtColor`) döndüren bir kapanış. Eğer `Option<T>` `Some` varyantıysa, `unwrap_or_else` içindeki değeri döndürür. Eğer `Option<T>` `None` ise, `unwrap_or_else` kapanışı çağırır ve kapanışın döndürdüğü değeri döndürür.
 
-We specify the closure expression `|| self.most_stocked()` as the argument to
-`unwrap_or_else`. This is a closure that takes no parameters itself (if the
-closure had parameters, they would appear between the two vertical pipes). The
-body of the closure calls `self.most_stocked()`. We’re defining the closure
-here, and the implementation of `unwrap_or_else` will evaluate the closure
-later if the result is needed.
+`unwrap_or_else`'e argüman olarak `|| self.most_stocked()` kapanış ifadesini veriyoruz. Bu, kendisi parametre almayan bir kapanıştır (eğer kapanışın parametreleri olsaydı, iki dikey çizgi arasına yazılırdı). Kapanışın gövdesi `self.most_stocked()` fonksiyonunu çağırır. Kapanışı burada tanımlıyoruz ve `unwrap_or_else`'in implementasyonu gerekirse kapanışı daha sonra çalıştıracak.
 
-Running this code prints the following:
+Bu kodu çalıştırdığınızda şunu yazdırır:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-01/output.txt}}
 ```
 
-One interesting aspect here is that we’ve passed a closure that calls
-`self.most_stocked()` on the current `Inventory` instance. The standard library
-didn’t need to know anything about the `Inventory` or `ShirtColor` types we
-defined, or the logic we want to use in this scenario. The closure captures an
-immutable reference to the `self` `Inventory` instance and passes it with the
-code we specify to the `unwrap_or_else` method. Functions, on the other hand,
-are not able to capture their environment in this way.
+Buradaki ilginç bir nokta, mevcut `Inventory` örneği üzerinde `self.most_stocked()` çağıran bir kapanış geçirmiş olmamızdır. Standart kütüphanenin bizim tanımladığımız `Inventory` veya `ShirtColor` türleri ya da bu senaryoda kullanmak istediğimiz mantık hakkında hiçbir şey bilmesine gerek yoktu. Kapanış, `self` `Inventory` örneğine değiştirilemez bir referans yakalar ve belirttiğimiz kodu `unwrap_or_else` metoduna iletir. Fonksiyonlar ise ortamlarını bu şekilde yakalayamazlar.
 
-### Closure Type Inference and Annotation
+### Kapanışlarda Tür Çıkarımı ve Açık Tür Bildirimi
 
-There are more differences between functions and closures. Closures don’t
-usually require you to annotate the types of the parameters or the return value
-like `fn` functions do. Type annotations are required on functions because the
-types are part of an explicit interface exposed to your users. Defining this
-interface rigidly is important for ensuring that everyone agrees on what types
-of values a function uses and returns. Closures, on the other hand, aren’t used
-in an exposed interface like this: they’re stored in variables and used without
-naming them and exposing them to users of our library.
+Fonksiyonlar ve kapanışlar arasında başka farklar da vardır. Kapanışlar genellikle parametrelerin veya dönüş değerinin türünü, `fn` fonksiyonlarında olduğu gibi belirtmenizi gerektirmez. Fonksiyonlarda tür bildirimleri gereklidir çünkü türler, kullanıcılarınıza açıkça sunulan bir arayüzün parçasıdır. Bu arayüzü katı şekilde tanımlamak, herkesin bir fonksiyonun hangi türde değerler kullandığı ve döndürdüğü konusunda hemfikir olmasını sağlamak için önemlidir. Kapanışlar ise böyle açık bir arayüzde kullanılmaz: değişkenlerde saklanır ve isimlendirilmeden, kütüphanenizin kullanıcılarına sunulmadan kullanılır.
 
-Closures are typically short and relevant only within a narrow context rather
-than in any arbitrary scenario. Within these limited contexts, the compiler can
-infer the types of the parameters and the return type, similar to how it’s able
-to infer the types of most variables (there are rare cases where the compiler
-needs closure type annotations too).
+Kapanışlar genellikle kısa ve yalnızca dar bir bağlamda geçerlidir. Bu sınırlı bağlamlarda, derleyici parametrelerin ve dönüş değerinin türünü, çoğu değişkenin türünü çıkarabildiği gibi çıkarabilir (nadir durumlarda kapanış tür bildirimlerine de ihtiyaç duyulabilir).
 
-As with variables, we can add type annotations if we want to increase
-explicitness and clarity at the cost of being more verbose than is strictly
-necessary. Annotating the types for a closure would look like the definition
-shown in Listing 13-2. In this example, we’re defining a closure and storing it
-in a variable rather than defining the closure in the spot we pass it as an
-argument, as we did in Listing 13-1.
+Değişkenlerde olduğu gibi, açıklığı ve netliği artırmak için tür bildirimleri ekleyebiliriz, ancak bu, gereğinden fazla ayrıntılı olmamıza neden olur. Bir kapanış için tür bildirimleri eklemek, Liste 13-2'de gösterildiği gibi olur. Bu örnekte, kapanışı argüman olarak geçtiğimiz yerde tanımlamak yerine, bir değişkende saklıyoruz.
 
-<Listing number="13-2" file-name="src/main.rs" caption="Adding optional type annotations of the parameter and return value types in the closure">
+<Listing number="13-2" file-name="src/main.rs" caption="Kapanışta parametre ve dönüş türlerinin isteğe bağlı olarak belirtilmesi">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-02/src/main.rs:here}}
@@ -115,12 +56,7 @@ argument, as we did in Listing 13-1.
 
 </Listing>
 
-With type annotations added, the syntax of closures looks more similar to the
-syntax of functions. Here, we define a function that adds 1 to its parameter and
-a closure that has the same behavior, for comparison. We’ve added some spaces
-to line up the relevant parts. This illustrates how closure syntax is similar
-to function syntax except for the use of pipes and the amount of syntax that is
-optional:
+Tür bildirimleri eklendiğinde, kapanışların sözdizimi fonksiyonlarınkine daha çok benzer. Burada, parametresine 1 ekleyen bir fonksiyon ve aynı davranışa sahip bir kapanış tanımlıyoruz. İlgili kısımları hizalamak için bazı boşluklar ekledik. Bu, kapanış sözdiziminin fonksiyon sözdizimine ne kadar benzediğini, ancak boru işaretleri ve isteğe bağlı sözdizimi miktarı dışında nasıl farklılaştığını gösterir:
 
 ```rust,ignore
 fn  add_one_v1   (x: u32) -> u32 { x + 1 }
@@ -129,26 +65,11 @@ let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
 
-The first line shows a function definition and the second line shows a fully
-annotated closure definition. In the third line, we remove the type annotations
-from the closure definition. In the fourth line, we remove the brackets, which
-are optional because the closure body has only one expression. These are all
-valid definitions that will produce the same behavior when they’re called. The
-`add_one_v3` and `add_one_v4` lines require the closures to be evaluated to be
-able to compile because the types will be inferred from their usage. This is
-similar to `let v = Vec::new();` needing either type annotations or values of
-some type to be inserted into the `Vec` for Rust to be able to infer the type.
+İlk satırda bir fonksiyon tanımı, ikinci satırda ise tam tür bildirimli bir kapanış tanımı var. Üçüncü satırda, kapanış tanımından tür bildirimlerini kaldırıyoruz. Dördüncü satırda ise, kapanış gövdesi yalnızca bir ifade içerdiği için süslü parantezleri kaldırıyoruz. Bunların hepsi geçerli tanımlardır ve çağrıldıklarında aynı davranışı gösterirler. `add_one_v3` ve `add_one_v4` satırlarında, kapanışların kullanılacağı yerden türlerin çıkarılması gerekir. Bu, `let v = Vec::new();` ifadesinin de tür çıkarımı için ya tür bildirimi ya da vektöre bir değer eklenmesini gerektirmesine benzer.
 
-For closure definitions, the compiler will infer one concrete type for each of
-their parameters and for their return value. For instance, Listing 13-3 shows
-the definition of a short closure that just returns the value it receives as a
-parameter. This closure isn’t very useful except for the purposes of this
-example. Note that we haven’t added any type annotations to the definition.
-Because there are no type annotations, we can call the closure with any type,
-which we’ve done here with `String` the first time. If we then try to call
-`example_closure` with an integer, we’ll get an error.
+Kapanış tanımlarında, derleyici parametrelerin ve dönüş değerinin her biri için birer somut tür çıkarır. Örneğin, Liste 13-3'te yalnızca aldığı değeri döndüren kısa bir kapanış tanımı gösterilmiştir. Bu kapanış, örnek amacı dışında çok kullanışlı değildir. Tanımda tür bildirimi yoktur. Tür bildirimi olmadığı için, kapanışı herhangi bir türle çağırabiliriz; burada ilk olarak `String` ile çağırıyoruz. Sonra, `example_closure`'ı bir tamsayı ile çağırmaya çalışırsak hata alırız.
 
-<Listing number="13-3" file-name="src/main.rs" caption="Attempting to call a closure whose types are inferred with two different types">
+<Listing number="13-3" file-name="src/main.rs" caption="Türleri çıkarılan bir kapanışı iki farklı türle çağırmaya çalışmak">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-03/src/main.rs:here}}
@@ -156,30 +77,21 @@ which we’ve done here with `String` the first time. If we then try to call
 
 </Listing>
 
-The compiler gives us this error:
+Derleyici bize şu hatayı verir:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-03/output.txt}}
 ```
 
-The first time we call `example_closure` with the `String` value, the compiler
-infers the type of `x` and the return type of the closure to be `String`. Those
-types are then locked into the closure in `example_closure`, and we get a type
-error when we next try to use a different type with the same closure.
+İlk kez `example_closure`'ı bir `String` değeriyle çağırdığımızda, derleyici `x`'in ve kapanışın dönüş değerinin türünü `String` olarak çıkarır. Bu türler, `example_closure` kapanışında kilitlenir ve aynı kapanışla farklı bir tür kullanmaya çalıştığımızda tür hatası alırız.
 
-### Capturing References or Moving Ownership
+### Referansları Yakalamak veya Sahipliği Taşımak
 
-Closures can capture values from their environment in three ways, which
-directly map to the three ways a function can take a parameter: borrowing
-immutably, borrowing mutably, and taking ownership. The closure will decide
-which of these to use based on what the body of the function does with the
-captured values.
+Kapanışlar, ortamlarından değerleri üç şekilde yakalayabilir: değiştirilemez ödünç alma, değiştirilebilir ödünç alma ve sahipliği alma. Kapanış, gövdesinde yakalanan değerlerle ne yaptığına göre hangisini kullanacağına karar verir.
 
-In Listing 13-4, we define a closure that captures an immutable reference to
-the vector named `list` because it only needs an immutable reference to print
-the value.
+Liste 13-4'te, yalnızca değeri yazdırmak için değiştirilemez bir referansa ihtiyaç duyduğu için, `list` adlı vektöre değiştirilemez bir referans yakalayan bir kapanış tanımlıyoruz.
 
-<Listing number="13-4" file-name="src/main.rs" caption="Defining and calling a closure that captures an immutable reference">
+<Listing number="13-4" file-name="src/main.rs" caption="Değiştirilemez referans yakalayan bir kapanış tanımlamak ve çağırmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-04/src/main.rs}}
@@ -187,23 +99,17 @@ the value.
 
 </Listing>
 
-This example also illustrates that a variable can bind to a closure definition,
-and we can later call the closure by using the variable name and parentheses as
-if the variable name were a function name.
+Bu örnek ayrıca, bir değişkenin bir kapanış tanımına bağlanabileceğini ve daha sonra kapanışı, değişken adı ve parantez kullanarak bir fonksiyon adıymış gibi çağırabileceğimizi gösterir.
 
-Because we can have multiple immutable references to `list` at the same time,
-`list` is still accessible from the code before the closure definition, after
-the closure definition but before the closure is called, and after the closure
-is called. This code compiles, runs, and prints:
+Aynı anda birden fazla değiştirilemez referansa sahip olabileceğimiz için, `list` kapanış tanımından önce, tanımdan sonra ama kapanış çağrılmadan önce ve kapanış çağrıldıktan sonra da erişilebilir. Bu kod derlenir, çalışır ve şunu yazdırır:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-04/output.txt}}
 ```
 
-Next, in Listing 13-5, we change the closure body so that it adds an element to
-the `list` vector. The closure now captures a mutable reference.
+Sonraki örnekte, Liste 13-5'te, kapanış gövdesini `list` vektörüne bir eleman ekleyecek şekilde değiştiriyoruz. Kapanış artık değiştirilebilir bir referans yakalıyor.
 
-<Listing number="13-5" file-name="src/main.rs" caption="Defining and calling a closure that captures a mutable reference">
+<Listing number="13-5" file-name="src/main.rs" caption="Değiştirilebilir referans yakalayan bir kapanış tanımlamak ve çağırmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-05/src/main.rs}}
@@ -211,32 +117,19 @@ the `list` vector. The closure now captures a mutable reference.
 
 </Listing>
 
-This code compiles, runs, and prints:
+Bu kod derlenir, çalışır ve şunu yazdırır:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-05/output.txt}}
 ```
 
-Note that there’s no longer a `println!` between the definition and the call of
-the `borrows_mutably` closure: when `borrows_mutably` is defined, it captures a
-mutable reference to `list`. We don’t use the closure again after the closure
-is called, so the mutable borrow ends. Between the closure definition and the
-closure call, an immutable borrow to print isn’t allowed because no other
-borrows are allowed when there’s a mutable borrow. Try adding a `println!`
-there to see what error message you get!
+Artık `borrows_mutably` kapanışının tanımı ile çağrılması arasında bir `println!` yok: `borrows_mutably` tanımlandığında, `list`'e değiştirilebilir bir referans yakalar. Kapanış çağrıldıktan sonra tekrar kullanılmadığı için değiştirilebilir ödünç alma sona erer. Kapanış tanımı ile çağrısı arasında, yazdırmak için değiştirilemez ödünç alma artık izinli değildir çünkü değiştirilebilir ödünç alma varken başka ödünç almalar yapılamaz. Oraya bir `println!` ekleyip alacağınız hata mesajını görebilirsiniz!
 
-If you want to force the closure to take ownership of the values it uses in the
-environment even though the body of the closure doesn’t strictly need
-ownership, you can use the `move` keyword before the parameter list.
+Kapanışın gövdesi sahipliği doğrudan gerektirmese bile, ortamındaki değerlerin sahipliğini kapanışa zorla taşımak isterseniz, parametre listesinin başına `move` anahtar kelimesini ekleyebilirsiniz.
 
-This technique is mostly useful when passing a closure to a new thread to move
-the data so that it’s owned by the new thread. We’ll discuss threads and why
-you would want to use them in detail in Chapter 16 when we talk about
-concurrency, but for now, let’s briefly explore spawning a new thread using a
-closure that needs the `move` keyword. Listing 13-6 shows Listing 13-4 modified
-to print the vector in a new thread rather than in the main thread.
+Bu teknik, genellikle bir kapanışı yeni bir iş parçacığına geçirirken, verinin yeni iş parçacığı tarafından sahiplenilmesini sağlamak için kullanılır. İş parçacıklarını ve neden kullanmak isteyebileceğinizi 16. Bölümde ayrıntılı olarak ele alacağız, ancak şimdilik, bir kapanışın sahipliği almasını gerektiren bir iş parçacığı başlatmayı kısaca inceleyelim. Liste 13-6, Liste 13-4'ün vektörü ana iş parçacığı yerine yeni bir iş parçacığında yazdıracak şekilde değiştirilmiş halini gösterir.
 
-<Listing number="13-6" file-name="src/main.rs" caption="Using `move` to force the closure for the thread to take ownership of `list`">
+<Listing number="13-6" file-name="src/main.rs" caption="İş parçacığı için kapanışın `list`'in sahipliğini almasını zorlamak için `move` kullanmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-06/src/main.rs}}
@@ -244,61 +137,27 @@ to print the vector in a new thread rather than in the main thread.
 
 </Listing>
 
-We spawn a new thread, giving the thread a closure to run as an argument. The
-closure body prints out the list. In Listing 13-4, the closure only captured
-`list` using an immutable reference because that's the least amount of access
-to `list` needed to print it. In this example, even though the closure body
-still only needs an immutable reference, we need to specify that `list` should
-be moved into the closure by putting the `move` keyword at the beginning of the
-closure definition. If the main thread performed more operations before calling
-`join` on the new thread, the new thread might finish before the rest of the
-main thread finishes, or the main thread might finish first. If the main thread
-maintained ownership of `list` but ended before the new thread and drops
-`list`, the immutable reference in the thread would be invalid. Therefore, the
-compiler requires that `list` be moved into the closure given to the new thread
-so the reference will be valid. Try removing the `move` keyword or using `list`
-in the main thread after the closure is defined to see what compiler errors you
-get!
+Yeni bir iş parçacığı başlatıyoruz ve iş parçacığına argüman olarak çalıştırması için bir kapanış veriyoruz. Kapanış gövdesi listeyi yazdırıyor. Liste 13-4'te, kapanış yalnızca yazdırmak için `list`'i değiştirilemez bir referansla yakalamıştı. Bu örnekte, kapanış gövdesi hala yalnızca değiştirilemez bir referansa ihtiyaç duysa da, kapanış tanımının başına `move` anahtar kelimesini ekleyerek `list`'in kapanışa taşınmasını belirtmemiz gerekiyor. Ana iş parçacığı, yeni iş parçacığı çağrılmadan önce daha fazla işlem yaparsa, yeni iş parçacığı ana iş parçacığından önce veya sonra bitebilir. Ana iş parçacığı `list`'in sahipliğini koruyup yeni iş parçacığından önce biterse ve `list`'i bırakırsa, iş parçacığındaki değiştirilemez referans geçersiz olurdu. Bu nedenle, derleyici, yeni iş parçacığına verilen kapanışa `list`'in taşınmasını zorunlu kılar. `move` anahtar kelimesini kaldırmayı veya kapanış tanımından sonra ana iş parçacığında `list`'i kullanmayı deneyin, hangi derleyici hatalarını alacağınızı göreceksiniz!
 
-<!-- Old headings. Do not remove or links may break. -->
+<!-- Eski başlıklar. Kaldırmayın, bağlantılar bozulabilir. -->
 
 <a id="storing-closures-using-generic-parameters-and-the-fn-traits"></a>
 <a id="limitations-of-the-cacher-implementation"></a>
 <a id="moving-captured-values-out-of-the-closure-and-the-fn-traits"></a>
 
-### Moving Captured Values Out of Closures and the `Fn` Traits
+### Kapanışlardan Değerleri Taşımak ve `Fn` Özellikleri
 
-Once a closure has captured a reference or captured ownership of a value from
-the environment where the closure is defined (thus affecting what, if anything,
-is moved _into_ the closure), the code in the body of the closure defines what
-happens to the references or values when the closure is evaluated later (thus
-affecting what, if anything, is moved _out of_ the closure).
+Bir kapanış ortamından bir referans yakaladığında veya bir değerin sahipliğini aldığında (yani kapanışa _ne taşındığını_ etkilediğinde), kapanış gövdesindeki kod, kapanış daha sonra çalıştırıldığında referanslara veya değerlere ne olacağını tanımlar (yani kapanıştan _ne çıkarılacağını_ etkiler).
 
-A closure body can do any of the following: move a captured value out of the
-closure, mutate the captured value, neither move nor mutate the value, or
-capture nothing from the environment to begin with.
+Bir kapanış gövdesi şunları yapabilir: yakalanan bir değeri kapanıştan dışarı taşıyabilir, yakalanan değeri değiştirebilir, değeri ne taşıyabilir ne de değiştirebilir veya ortamdan hiçbir şey yakalamayabilir.
 
-The way a closure captures and handles values from the environment affects
-which traits the closure implements, and traits are how functions and structs
-can specify what kinds of closures they can use. Closures will automatically
-implement one, two, or all three of these `Fn` traits, in an additive fashion,
-depending on how the closure’s body handles the values:
+Bir kapanışın ortamdan değerleri nasıl yakaladığı ve işlediği, kapanışın hangi trait'leri uyguladığını etkiler ve trait'ler, fonksiyonların ve yapıların hangi tür kapanışları kullanabileceğini belirtmesini sağlar. Kapanışlar, gövdelerinin değerlerle ne yaptığına bağlı olarak, bu üç `Fn` trait'inden birini, ikisini veya üçünü birden otomatik olarak uygular:
 
-* `FnOnce` applies to closures that can be called once. All closures implement
-  at least this trait because all closures can be called. A closure that moves
-  captured values out of its body will only implement `FnOnce` and none of the
-  other `Fn` traits because it can only be called once.
-* `FnMut` applies to closures that don’t move captured values out of their
-  body, but that might mutate the captured values. These closures can be
-  called more than once.
-* `Fn` applies to closures that don’t move captured values out of their body
-  and that don’t mutate captured values, as well as closures that capture
-  nothing from their environment. These closures can be called more than once
-  without mutating their environment, which is important in cases such as
-  calling a closure multiple times concurrently.
+* `FnOnce`, yalnızca bir kez çağrılabilen kapanışlar için geçerlidir. Tüm kapanışlar en azından bu trait'i uygular çünkü tüm kapanışlar çağrılabilir. Gövdesinden yakalanan değerleri dışarı taşıyan bir kapanış yalnızca `FnOnce`'ı uygular ve diğer `Fn` trait'lerini uygulamaz çünkü yalnızca bir kez çağrılabilir.
+* `FnMut`, gövdesinden yakalanan değerleri dışarı taşımayan, ancak yakalanan değerleri değiştirebilen kapanışlar için geçerlidir. Bu kapanışlar birden fazla kez çağrılabilir.
+* `Fn`, gövdesinden yakalanan değerleri dışarı taşımayan ve değiştirmeyen, ayrıca ortamdan hiçbir şey yakalamayan kapanışlar için geçerlidir. Bu kapanışlar, ortamlarını değiştirmeden birden fazla kez çağrılabilir, bu da örneğin bir kapanışın aynı anda birden fazla kez çağrılması gereken durumlarda önemlidir.
 
-Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
-we used in Listing 13-1:
+`Option<T>` üzerinde kullandığımız `unwrap_or_else` metodunun tanımına bakalım:
 
 ```rust,ignore
 impl<T> Option<T> {
@@ -314,42 +173,17 @@ impl<T> Option<T> {
 }
 ```
 
-Recall that `T` is the generic type representing the type of the value in the
-`Some` variant of an `Option`. That type `T` is also the return type of the
-`unwrap_or_else` function: code that calls `unwrap_or_else` on an
-`Option<String>`, for example, will get a `String`.
+Burada, `T`, `Option`'ın `Some` varyantındaki değerin türünü temsil eden genel türdür. Bu tür, aynı zamanda `unwrap_or_else` fonksiyonunun dönüş türüdür: örneğin, bir `Option<String>` üzerinde `unwrap_or_else` çağıran kod bir `String` alacaktır.
 
-Next, notice that the `unwrap_or_else` function has the additional generic type
-parameter `F`. The `F` type is the type of the parameter named `f`, which is
-the closure we provide when calling `unwrap_or_else`.
+Sonra, `unwrap_or_else` fonksiyonunun ek bir genel tür parametresi `F` olduğunu görüyoruz. `F` türü, `unwrap_or_else` çağrılırken sağladığımız kapanışın türüdür.
 
-The trait bound specified on the generic type `F` is `FnOnce() -> T`, which
-means `F` must be able to be called once, take no arguments, and return a `T`.
-Using `FnOnce` in the trait bound expresses the constraint that
-`unwrap_or_else` is only going to call `f` at most one time. In the body of
-`unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be
-called. If the `Option` is `None`, `f` will be called once. Because all
-closures implement `FnOnce`, `unwrap_or_else` accepts all three kinds of
-closures and is as flexible as it can be.
+Genel tür `F` üzerindeki trait sınırı `FnOnce() -> T`'dir, yani `F` bir kez çağrılabilmeli, argüman almamalı ve bir `T` döndürmelidir. Trait sınırında `FnOnce` kullanmak, `unwrap_or_else`'in kapanışı en fazla bir kez çağıracağını belirtir. `unwrap_or_else`'in gövdesinde, eğer `Option` `Some` ise, `f` çağrılmaz. Eğer `Option` `None` ise, `f` bir kez çağrılır. Tüm kapanışlar `FnOnce`'ı uyguladığı için, `unwrap_or_else` üç tür kapanışı da kabul eder ve olabildiğince esnektir.
 
-> Note: If what we want to do doesn’t require capturing a value from the
-> environment, we can use the name of a function rather than a closure where we
-> need something that implements one of the `Fn` traits. For example, on an
-> `Option<Vec<T>>` value, we could call `unwrap_or_else(Vec::new)` to get a
-> new, empty vector if the value is `None`. The compiler automatically
-> implements whichever of the `Fn` traits is applicable for a function
-> definition.
+> Not: Eğer yapmak istediğimiz şey ortamdan bir değer yakalamayı gerektirmiyorsa, bir fonksiyonun adını, bir kapanış yerine, `Fn` trait'lerinden birini uygulayan bir yerde kullanabiliriz. Örneğin, bir `Option<Vec<T>>` değeri üzerinde, değer `None` ise yeni, boş bir vektör almak için `unwrap_or_else(Vec::new)` çağırabiliriz. Derleyici, fonksiyon tanımı için uygun olan `Fn` trait'ini otomatik olarak uygular.
 
-Now let’s look at the standard library method `sort_by_key`, defined on slices,
-to see how that differs from `unwrap_or_else` and why `sort_by_key` uses
-`FnMut` instead of `FnOnce` for the trait bound. The closure gets one argument
-in the form of a reference to the current item in the slice being considered,
-and returns a value of type `K` that can be ordered. This function is useful
-when you want to sort a slice by a particular attribute of each item. In
-Listing 13-7, we have a list of `Rectangle` instances and we use `sort_by_key`
-to order them by their `width` attribute from low to high.
+Şimdi, dilimlerde tanımlı olan ve standart kütüphanede bulunan `sort_by_key` metoduna bakalım; bu metodun neden `FnOnce` yerine `FnMut` trait sınırı kullandığını görelim. Kapanış, dilimdeki mevcut öğeye bir referans olarak bir argüman alır ve sıralanabilir bir türde bir değer döndürür. Bu fonksiyon, bir dilimi her bir öğenin belirli bir özelliğine göre sıralamak istediğinizde kullanışlıdır. Liste 13-7'de, bir dizi `Rectangle` örneğimiz var ve bunları `width` alanına göre küçükten büyüğe sıralamak için `sort_by_key` kullanıyoruz.
 
-<Listing number="13-7" file-name="src/main.rs" caption="Using `sort_by_key` to order rectangles by width">
+<Listing number="13-7" file-name="src/main.rs" caption="Dikdörtgenleri genişliğe göre sıralamak için `sort_by_key` kullanmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs}}
@@ -357,22 +191,17 @@ to order them by their `width` attribute from low to high.
 
 </Listing>
 
-This code prints:
+Bu kod şunu yazdırır:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-07/output.txt}}
 ```
 
-The reason `sort_by_key` is defined to take an `FnMut` closure is that it calls
-the closure multiple times: once for each item in the slice. The closure `|r|
-r.width` doesn’t capture, mutate, or move anything out from its environment, so
-it meets the trait bound requirements.
+`sort_by_key`'in bir `FnMut` kapanış alacak şekilde tanımlanmasının nedeni, kapanışı dilimdeki her bir öğe için birden fazla kez çağırmasıdır. `|r| r.width` kapanışı ortamdan hiçbir şey yakalamaz, değiştirmez veya dışarı taşımaz, bu nedenle trait sınırı gereksinimlerini karşılar.
 
-In contrast, Listing 13-8 shows an example of a closure that implements just
-the `FnOnce` trait, because it moves a value out of the environment. The
-compiler won’t let us use this closure with `sort_by_key`.
+Buna karşılık, Liste 13-8'de yalnızca `FnOnce` trait'ini uygulayan bir kapanış örneği gösterilmiştir, çünkü ortamdan bir değeri dışarı taşır. Derleyici, bu kapanışı `sort_by_key` ile kullanmamıza izin vermez.
 
-<Listing number="13-8" file-name="src/main.rs" caption="Attempting to use an `FnOnce` closure with `sort_by_key`">
+<Listing number="13-8" file-name="src/main.rs" caption="`sort_by_key` ile bir `FnOnce` kapanış kullanmaya çalışmak">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs}}
@@ -380,31 +209,15 @@ compiler won’t let us use this closure with `sort_by_key`.
 
 </Listing>
 
-This is a contrived, convoluted way (that doesn’t work) to try and count the
-number of times `sort_by_key` calls the closure when sorting `list`. This code
-attempts to do this counting by pushing `value`—a `String` from the closure’s
-environment—into the `sort_operations` vector. The closure captures `value` and
-then moves `value` out of the closure by transferring ownership of `value` to
-the `sort_operations` vector. This closure can be called once; trying to call
-it a second time wouldn’t work because `value` would no longer be in the
-environment to be pushed into `sort_operations` again! Therefore, this closure
-only implements `FnOnce`. When we try to compile this code, we get this error
-that `value` can’t be moved out of the closure because the closure must
-implement `FnMut`:
+Bu, `sort_by_key` kapanışı sıralama sırasında kaç kez çağırdığını saymak için ortamdan bir `String` olan `value`'ı `sort_operations` vektörüne ekleyerek saymaya çalışan, yapay ve karmaşık bir örnektir (ve çalışmaz). Kapanış, ortamdan `value`'ı yakalar ve ardından sahipliğini `sort_operations` vektörüne aktararak dışarı taşır. Bu kapanış yalnızca bir kez çağrılabilir; ikinci kez çağrılmaya çalışılırsa, `value` ortamda artık bulunmayacağı için çalışmaz! Bu nedenle, bu kapanış yalnızca `FnOnce`'ı uygular. Bu kodu derlemeye çalıştığımızda, kapanışın ortamdan bir değeri dışarı taşıyamayacağına dair bir hata alırız çünkü kapanışın `FnMut` uygulaması gerekir:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
 ```
 
-The error points to the line in the closure body that moves `value` out of the
-environment. To fix this, we need to change the closure body so that it doesn’t
-move values out of the environment. Keeping a counter in the environment and
-incrementing its value in the closure body is a more straightforward way to
-count the number of times the closure is called. The closure in Listing 13-9
-works with `sort_by_key` because it is only capturing a mutable reference to the
-`num_sort_operations` counter and can therefore be called more than once:
+Hata, kapanış gövdesinde ortamdan bir değerin dışarı taşındığı satırı işaret eder. Bunu düzeltmek için, kapanış gövdesini ortamdan değer taşımayacak şekilde değiştirmemiz gerekir. Ortamda bir sayaç tutup, kapanış gövdesinde bu sayacı artırmak, kapanışın kaç kez çağrıldığını saymanın daha basit bir yoludur. Liste 13-9'daki kapanış, yalnızca sayaç olan `num_sort_operations`'a değiştirilebilir bir referans yakaladığı için `sort_by_key` ile çalışır ve birden fazla kez çağrılabilir:
 
-<Listing number="13-9" file-name="src/main.rs" caption="Using an `FnMut` closure with `sort_by_key` is allowed">
+<Listing number="13-9" file-name="src/main.rs" caption="`sort_by_key` ile bir `FnMut` kapanış kullanmak mümkündür">
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-09/src/main.rs}}
@@ -412,9 +225,6 @@ works with `sort_by_key` because it is only capturing a mutable reference to the
 
 </Listing>
 
-The `Fn` traits are important when defining or using functions or types that
-make use of closures. In the next section, we’ll discuss iterators. Many
-iterator methods take closure arguments, so keep these closure details in mind
-as we continue!
+`Fn` trait'leri, kapanışları kullanan fonksiyonları veya türleri tanımlarken veya kullanırken önemlidir. Sonraki bölümde yineleyicileri tartışacağız. Birçok yineleyici metodu kapanış argümanları alır, bu nedenle bu kapanış ayrıntılarını aklınızda bulundurun!
 
 [unwrap-or-else]: ../std/option/enum.Option.html#method.unwrap_or_else

@@ -1,21 +1,13 @@
-## Reference Cycles Can Leak Memory
+## Referans Döngüleri Bellek Sızıntısına Yol Açabilir
 
-Rust’s memory safety guarantees make it difficult, but not impossible, to
-accidentally create memory that is never cleaned up (known as a _memory leak_).
-Preventing memory leaks entirely is not one of Rust’s guarantees, meaning
-memory leaks are memory safe in Rust. We can see that Rust allows memory leaks
-by using `Rc<T>` and `RefCell<T>`: it’s possible to create references where
-items refer to each other in a cycle. This creates memory leaks because the
-reference count of each item in the cycle will never reach 0, and the values
-will never be dropped.
 
-### Creating a Reference Cycle
+Rust'ın bellek güvenliği garantileri, yanlışlıkla asla temizlenmeyen (buna _bellek sızıntısı_ denir) bellek oluşturmayı zorlaştırır, ancak imkansız kılmaz. Bellek sızıntılarını tamamen önlemek Rust'ın garantilerinden biri değildir; yani, bellek sızıntıları Rust'ta bellek açısından güvenlidir. Rust'ın bellek sızıntılarına izin verdiğini `Rc<T>` ve `RefCell<T>` kullanarak görebiliriz: öğelerin birbirine döngüsel olarak referans verdiği durumlar oluşturmak mümkündür. Bu, her döngüdeki öğenin referans sayısı asla 0'a ulaşmayacağı ve değerler asla düşürülmeyeceği için bellek sızıntılarına yol açar.
 
-Let’s look at how a reference cycle might happen and how to prevent it,
-starting with the definition of the `List` enum and a `tail` method in Listing
-15-25.
+### Referans Döngüsü Oluşturmak
 
-<Listing number="15-25" file-name="src/main.rs" caption="A cons list definition that holds a `RefCell<T>` so we can modify what a `Cons` variant is referring to">
+Bir referans döngüsünün nasıl oluşabileceğine ve bunu nasıl önleyebileceğimize bakalım; önce `List` enum'unun ve bir `tail` metodunun tanımıyla başlayalım (Liste 15-25).
+
+<Listing number="15-25" file-name="src/main.rs" caption="Bir `Cons` varyantının neyi işaret ettiğini değiştirebilmemiz için `RefCell<T>` tutan bir cons liste tanımı">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-25/src/main.rs}}
@@ -23,20 +15,11 @@ starting with the definition of the `List` enum and a `tail` method in Listing
 
 </Listing>
 
-We’re using another variation of the `List` definition from Listing 15-5. The
-second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
-instead of having the ability to modify the `i32` value as we did in Listing
-15-24, we want to modify the `List` value a `Cons` variant is pointing to.
-We’re also adding a `tail` method to make it convenient for us to access the
-second item if we have a `Cons` variant.
+Burada, Liste 15-5'teki `List` tanımının başka bir varyasyonunu kullanıyoruz. `Cons` varyantındaki ikinci eleman artık `RefCell<Rc<List>>`, yani Liste 15-24'te yaptığımız gibi `i32` değerini değiştirmek yerine, bir `Cons` varyantının işaret ettiği `List` değerini değiştirmek istiyoruz. Ayrıca, bir `Cons` varyantına sahipsek ikinci öğeye kolayca erişebilmemiz için bir `tail` metodu ekliyoruz.
 
-In Listing 15-26, we’re adding a `main` function that uses the definitions in
-Listing 15-25. This code creates a list in `a` and a list in `b` that points to
-the list in `a`. Then it modifies the list in `a` to point to `b`, creating a
-reference cycle. There are `println!` statements along the way to show what the
-reference counts are at various points in this process.
+Liste 15-26'da, Liste 15-25'teki tanımları kullanan bir `main` fonksiyonu ekliyoruz. Bu kod, `a`'da bir liste ve `b`'de `a`'ya işaret eden bir liste oluşturuyor. Sonra, `a` listesini `b`'ye işaret edecek şekilde değiştirerek bir referans döngüsü oluşturuyoruz. Süreç boyunca referans sayılarını göstermek için `println!` ifadeleri var.
 
-<Listing number="15-26" file-name="src/main.rs" caption="Creating a reference cycle of two `List` values pointing to each other">
+<Listing number="15-26" file-name="src/main.rs" caption="Birbirine işaret eden iki `List` değerinden oluşan bir referans döngüsü oluşturmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-26/src/main.rs:here}}
@@ -44,128 +27,59 @@ reference counts are at various points in this process.
 
 </Listing>
 
-We create an `Rc<List>` instance holding a `List` value in the variable `a`
-with an initial list of `5, Nil`. We then create an `Rc<List>` instance holding
-another `List` value in the variable `b` that contains the value `10` and points
-to the list in `a`.
+`a` değişkeninde bir `Rc<List>` örneği oluşturup, başlangıçta `5, Nil` listesini tutuyoruz. Ardından, `b` değişkeninde başka bir `Rc<List>` örneği oluşturup, değeri `10` olan ve `a` listesini işaret eden bir liste elde ediyoruz.
 
-We modify `a` so it points to `b` instead of `Nil`, creating a cycle. We do
-that by using the `tail` method to get a reference to the `RefCell<Rc<List>>`
-in `a`, which we put in the variable `link`. Then we use the `borrow_mut`
-method on the `RefCell<Rc<List>>` to change the value inside from an `Rc<List>`
-that holds a `Nil` value to the `Rc<List>` in `b`.
+`a`'yı, `Nil` yerine `b`'yi işaret edecek şekilde değiştirerek bir döngü oluşturuyoruz. Bunu, `tail` metodunu kullanarak `a`'daki `RefCell<Rc<List>>`'e bir referans alıp, bunu `link` değişkenine atayarak yapıyoruz. Sonra, `Ref
 
-When we run this code, keeping the last `println!` commented out for the
-moment, we’ll get this output:
+Bu kodu çalıştırdığımızda (şimdilik son `println!` satırı yorum satırı olarak bırakılmışken) şu çıktıyı alırız:
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-26/output.txt}}
 ```
 
-The reference count of the `Rc<List>` instances in both `a` and `b` is 2 after
-we change the list in `a` to point to `b`. At the end of `main`, Rust drops the
-variable `b`, which decreases the reference count of the `b` `Rc<List>` instance
-from 2 to 1. The memory that `Rc<List>` has on the heap won’t be dropped at
-this point because its reference count is 1, not 0. Then Rust drops `a`, which
-decreases the reference count of the `a` `Rc<List>` instance from 2 to 1 as
-well. This instance’s memory can’t be dropped either, because the other
-`Rc<List>` instance still refers to it. The memory allocated to the list will
-remain uncollected forever. To visualize this reference cycle, we’ve created the
-diagram in Figure 15-4.
+Hem `a` hem de `b`'deki `Rc<List>` örneklerinin referans sayısı, `a` listesini `b`'ye işaret edecek şekilde değiştirdikten sonra 2 olur. `main` fonksiyonunun sonunda, Rust önce `b` değişkenini düşürür ve bu, `b`'deki `Rc<List>` örneğinin referans sayısını 2'den 1'e düşürür. Yığında tutulan `Rc<List>`'in belleği bu noktada düşürülmez, çünkü referans sayısı 1'dir, 0 değildir. Sonra Rust, `a`'yı düşürür ve bu da `a`'daki `Rc<List>` örneğinin referans sayısını 2'den 1'e düşürür. Bu örneğin belleği de düşürülemez, çünkü diğer `Rc<List>` örneği hâlâ ona referans vermektedir. Listeye ayrılan bellek sonsuza kadar toplanmadan kalacaktır. Bu referans döngüsünü görselleştirmek için Şekil 15-4'ü oluşturduk.
 
-<img alt="A rectangle labeled 'a' that points to a rectangle containing the integer 5. A rectangle labeled 'b' that points to a rectangle containing the integer 10. The rectangle containing 5 points to the rectangle containing 10, and the rectangle containing 10 points back to the rectangle containing 5, creating a cycle" src="img/trpl15-04.svg" class="center" />
+<img alt="'a' etiketli bir dikdörtgen, içinde 5 olan bir dikdörtgene işaret ediyor. 'b' etiketli bir dikdörtgen, içinde 10 olan bir dikdörtgene işaret ediyor. 5 içeren dikdörtgen 10 içeren dikdörtgene, 10 içeren dikdörtgen de tekrar 5 içeren dikdörtgene işaret ederek bir döngü oluşturuyor" src="img/trpl15-04.svg" class="center" />
 
-<span class="caption">Figure 15-4: A reference cycle of lists `a` and `b`
-pointing to each other</span>
+<span class="caption">Şekil 15-4: Birbirine işaret eden `a` ve `b` listelerinden oluşan bir referans döngüsü</span>
 
-If you uncomment the last `println!` and run the program, Rust will try to print
-this cycle with `a` pointing to `b` pointing to `a` and so forth until it
-overflows the stack.
+Son `println!` satırının yorumunu kaldırıp programı çalıştırırsanız, Rust bu döngüyü, `a`'nın `b`'ye, `b`'nin tekrar `a`'ya işaret etmesiyle sonsuza kadar devam ettirir ve sonunda yığın taşmasına (stack overflow) yol açar.
 
-Compared to a real-world program, the consequences of creating a reference cycle
-in this example aren’t very dire: right after we create the reference cycle,
-the program ends. However, if a more complex program allocated lots of memory
-in a cycle and held onto it for a long time, the program would use more memory
-than it needed and might overwhelm the system, causing it to run out of
-available memory.
+Gerçek bir programla karşılaştırıldığında, bu örnekte referans döngüsü oluşturmanın sonuçları çok ciddi değildir: Döngüyü oluşturduktan hemen sonra program sona erer. Ancak, daha karmaşık bir programda döngüde çok fazla bellek ayrılır ve uzun süre tutulursa, program ihtiyacından fazla bellek kullanır ve sistemi aşırı yükleyerek mevcut belleğin tükenmesine neden olabilir.
 
-Creating reference cycles is not easily done, but it’s not impossible either.
-If you have `RefCell<T>` values that contain `Rc<T>` values or similar nested
-combinations of types with interior mutability and reference counting, you must
-ensure that you don’t create cycles; you can’t rely on Rust to catch them.
-Creating a reference cycle would be a logic bug in your program that you should
-use automated tests, code reviews, and other software development practices to
-minimize.
+Referans döngüleri oluşturmak kolay değildir, ancak imkânsız da değildir. Eğer `RefCell<T>` değerleriniz içinde `Rc<T>` değerleri veya benzer iç içe geçmiş, içsel değiştirilebilirlik ve referans sayımı kombinasyonları varsa, döngü oluşturmadığınızdan emin olmalısınız; Rust'ın bunu yakalamasına güvenemezsiniz. Referans döngüsü oluşturmak, programınızda bir mantık hatası olur ve bunu en aza indirmek için otomatik testler, kod incelemeleri ve diğer yazılım geliştirme uygulamalarını kullanmalısınız.
 
-Another solution for avoiding reference cycles is reorganizing your data
-structures so that some references express ownership and some references don’t.
-As a result, you can have cycles made up of some ownership relationships and
-some non-ownership relationships, and only the ownership relationships affect
-whether or not a value can be dropped. In Listing 15-25, we always want `Cons`
-variants to own their list, so reorganizing the data structure isn’t possible.
-Let’s look at an example using graphs made up of parent nodes and child nodes
-to see when non-ownership relationships are an appropriate way to prevent
-reference cycles.
+Referans döngülerini önlemenin bir başka yolu da veri yapılarınızı, bazı referansların sahiplik (ownership) ilişkisi, bazılarının ise sahiplik dışı ilişki ifade edecek şekilde yeniden düzenlemektir. Sonuç olarak, bazı sahiplik ilişkileri ve bazı sahiplik dışı ilişkilerden oluşan döngüleriniz olabilir ve yalnızca sahiplik ilişkileri bir değerin düşürülüp düşürülemeyeceğini etkiler. 15-25 numaralı listede, her zaman `Cons` varyantlarının listelerine sahip olmasını istiyoruz, bu nedenle veri yapısını yeniden düzenlemek mümkün değil. Şimdi, ebeveyn ve çocuk düğümlerden oluşan grafikler kullanarak, sahiplik dışı ilişkilerin referans döngülerini önlemede uygun bir yol olduğu bir örneğe bakalım.
 
-<!-- Old link, do not remove -->
+<!-- Eski bağlantı, silmeyin -->
 
 <a id="preventing-reference-cycles-turning-an-rct-into-a-weakt"></a>
 
-### Preventing Reference Cycles Using `Weak<T>`
+### Referans Döngülerini `Weak<T>` Kullanarak Önlemek
 
-So far, we’ve demonstrated that calling `Rc::clone` increases the `strong_count`
-of an `Rc<T>` instance, and an `Rc<T>` instance is only cleaned up if its
-`strong_count` is 0. You can also create a weak reference to the value within
-an `Rc<T>` instance by calling `Rc::downgrade` and passing a reference to the
-`Rc<T>`. _Strong references_ are how you can share ownership of an `Rc<T>`
-instance. _Weak references_ don’t express an ownership relationship, and their
-count doesn’t affect when an `Rc<T>` instance is cleaned up. They won’t cause a
-reference cycle because any cycle involving some weak references will be broken
-once the strong reference count of values involved is 0.
+Şimdiye kadar, `Rc::clone` çağrısının bir `Rc<T>` örneğinin `strong_count` (güçlü referans sayısı) değerini artırdığını ve bir `Rc<T>` örneğinin yalnızca `strong_count` değeri 0 ise temizlendiğini gösterdik. Ayrıca, bir `Rc<T>` örneğinin içindeki değere zayıf bir referans oluşturmak için `Rc::downgrade` fonksiyonunu çağırabilir ve bir `Rc<T>` referansı geçebilirsiniz. _Güçlü referanslar_, bir `Rc<T>` örneğinin sahipliğini paylaşmanın yoludur. _Zayıf referanslar_ ise sahiplik ilişkisi ifade etmez ve sayıları, bir `Rc<T>` örneğinin ne zaman temizleneceğini etkilemez. Zayıf referanslar, herhangi bir döngüde yer alsalar bile, ilgili değerlerin güçlü referans sayısı 0 olduğunda döngü kırılır ve sızıntı oluşmaz.
 
-When you call `Rc::downgrade`, you get a smart pointer of type `Weak<T>`.
-Instead of increasing the `strong_count` in the `Rc<T>` instance by 1, calling
-`Rc::downgrade` increases the `weak_count` by 1. The `Rc<T>` type uses
-`weak_count` to keep track of how many `Weak<T>` references exist, similar to
-`strong_count`. The difference is the `weak_count` doesn’t need to be 0 for the
-`Rc<T>` instance to be cleaned up.
+`Rc::downgrade` çağrıldığında, `Weak<T>` tipinde akıllı bir işaretçi elde edersiniz. `Rc<T>` örneğinde `strong_count` değerini 1 artırmak yerine, `Rc::downgrade` çağrısı `weak_count` değerini 1 artırır. `Rc<T>` tipi, kaç tane `Weak<T>` referansı olduğunu takip etmek için `weak_count` kullanır, tıpkı `strong_count` gibi. Farkı ise, `Rc<T>` örneğinin temizlenmesi için `weak_count` değerinin 0 olması gerekmez.
 
-Because the value that `Weak<T>` references might have been dropped, to do
-anything with the value that a `Weak<T>` is pointing to you must make sure the
-value still exists. Do this by calling the `upgrade` method on a `Weak<T>`
-instance, which will return an `Option<Rc<T>>`. You’ll get a result of `Some`
-if the `Rc<T>` value has not been dropped yet and a result of `None` if the
-`Rc<T>` value has been dropped. Because `upgrade` returns an `Option<Rc<T>>`,
-Rust will ensure that the `Some` case and the `None` case are handled, and
-there won’t be an invalid pointer.
+`Weak<T>`'nin işaret ettiği değerin düşürülmüş olabileceğinden, bir `Weak<T>`'nin işaret ettiği değerle bir şey yapmak için, değerin hâlâ var olduğundan emin olmalısınız. Bunu, bir `Weak<T>` örneği üzerinde `upgrade` metodunu çağırarak yapabilirsiniz; bu, size bir `Option<Rc<T>>` döndürür. Eğer `Rc<T>` değeri henüz düşürülmemişse `Some`, düşürülmüşse `None` sonucu alırsınız. `upgrade` metodu `Option<Rc<T>>` döndürdüğü için, Rust hem `Some` hem de `None` durumlarının ele alınmasını zorunlu kılar ve geçersiz bir işaretçi oluşmaz.
 
-As an example, rather than using a list whose items know only about the next
-item, we’ll create a tree whose items know about their children items _and_
-their parent items.
+Örnek olarak, yalnızca bir sonraki öğeyi bilen bir liste yerine, hem çocuklarını hem de ebeveynini bilen düğümlerden oluşan bir ağaç oluşturacağız.
 
-#### Creating a Tree Data Structure: A `Node` with Child Nodes
+#### Bir Ağaç Veri Yapısı Oluşturmak: Çocuk Düğümleri Olan Bir `Node`
 
-To start, we’ll build a tree with nodes that know about their child nodes.
-We’ll create a struct named `Node` that holds its own `i32` value as well as
-references to its children `Node` values:
+Başlangıç olarak, çocuk düğümlerini bilen düğümlerden oluşan bir ağaç inşa edeceğiz. Kendi `i32` değerini ve çocuk `Node` referanslarını tutan bir `Node` yapısı oluşturacağız:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Dosya Adı: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-27/src/main.rs:here}}
 ```
 
-We want a `Node` to own its children, and we want to share that ownership with
-variables so we can access each `Node` in the tree directly. To do this, we
-define the `Vec<T>` items to be values of type `Rc<Node>`. We also want to
-modify which nodes are children of another node, so we have a `RefCell<T>` in
-`children` around the `Vec<Rc<Node>>`.
+Çocuklarını sahiplenmesini ve bu sahipliği değişkenlerle paylaşabilmeyi istiyoruz, böylece ağaçtaki her `Node`'a doğrudan erişebiliriz. Bunu yapmak için, `Vec<T>` öğelerini `Rc<Node>` tipinde tanımlıyoruz. Ayrıca, hangi düğümlerin başka bir düğümün çocuğu olduğunu değiştirmek istediğimiz için, `children` alanında `Vec<Rc<Node>>`'ı saran bir `RefCell<T>` kullanıyoruz.
 
-Next, we’ll use our struct definition and create one `Node` instance named
-`leaf` with the value `3` and no children, and another instance named `branch`
-with the value `5` and `leaf` as one of its children, as shown in Listing 15-27.
+Şimdi, yapı tanımımızı kullanarak, değeri `3` olan ve çocuğu olmayan bir `leaf` düğümü ve değeri `5` olan, `leaf`'i çocuğu olarak tutan bir `branch` düğümü oluşturalım (15-27 numaralı listede gösterildiği gibi).
 
-<Listing number="15-27" file-name="src/main.rs" caption="Creating a `leaf` node with no children and a `branch` node with `leaf` as one of its children">
+<Listing number="15-27" file-name="src/main.rs" caption="Çocuğu olmayan bir `leaf` düğümü ve `leaf`'i çocuğu olarak tutan bir `branch` düğümü oluşturmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-27/src/main.rs:there}}
@@ -173,42 +87,25 @@ with the value `5` and `leaf` as one of its children, as shown in Listing 15-27.
 
 </Listing>
 
-We clone the `Rc<Node>` in `leaf` and store that in `branch`, meaning the
-`Node` in `leaf` now has two owners: `leaf` and `branch`. We can get from
-`branch` to `leaf` through `branch.children`, but there’s no way to get from
-`leaf` to `branch`. The reason is that `leaf` has no reference to `branch` and
-doesn’t know they’re related. We want `leaf` to know that `branch` is its
-parent. We’ll do that next.
+`leaf`'deki `Rc<Node>`'u klonlayıp `branch`'de saklıyoruz; bu, `leaf`'deki `Node`'un artık iki sahibi olduğu anlamına gelir: `leaf` ve `branch`. `branch.children` üzerinden `branch`'den `leaf`'e ulaşabiliriz, ancak `leaf`'ten `branch`'e ulaşmanın bir yolu yoktur. Çünkü `leaf`, `branch`'e referans vermez ve aralarındaki ilişkiyi bilmez. `leaf`'in, `branch`'in ebeveyni olduğunu bilmesini istiyoruz. Bunu şimdi yapacağız.
 
-#### Adding a Reference from a Child to Its Parent
+#### Bir Çocuğun Ebeveynine Referans Eklemek
 
-To make the child node aware of its parent, we need to add a `parent` field to
-our `Node` struct definition. The trouble is in deciding what the type of
-`parent` should be. We know it can’t contain an `Rc<T>`, because that would
-create a reference cycle with `leaf.parent` pointing to `branch` and
-`branch.children` pointing to `leaf`, which would cause their `strong_count`
-values to never be 0.
+Çocuk düğümün ebeveynini bilmesini sağlamak için, `Node` yapı tanımımıza bir `parent` alanı eklememiz gerekiyor. Sorun, `parent`'ın tipinin ne olması gerektiğine karar vermekte. Bunun bir `Rc<T>` olamayacağını biliyoruz, çünkü bu durumda `leaf.parent`'ın `branch`'i, `branch.children`'ın ise `leaf`'i işaret etmesiyle bir referans döngüsü oluşur ve bunların `strong_count` değerleri asla 0 olmaz.
 
-Thinking about the relationships another way, a parent node should own its
-children: if a parent node is dropped, its child nodes should be dropped as
-well. However, a child should not own its parent: if we drop a child node, the
-parent should still exist. This is a case for weak references!
+İlişkileri başka bir şekilde düşünürsek, bir ebeveyn düğüm çocuklarının sahibi olmalıdır: Bir ebeveyn düğüm düşürülürse, çocuk düğümler de düşürülmelidir. Ancak, bir çocuk ebeveyninin sahibi olmamalıdır: Bir çocuk düğüm düşürülürse, ebeveyn hâlâ var olmalıdır. Bu, zayıf referanslar için uygun bir durumdur!
 
-So instead of `Rc<T>`, we’ll make the type of `parent` use `Weak<T>`,
-specifically a `RefCell<Weak<Node>>`. Now our `Node` struct definition looks
-like this:
+Bu nedenle, `Rc<T>` yerine, `parent` alanının tipini `Weak<T>` olarak belirleyeceğiz, özellikle de `RefCell<Weak<Node>>` olarak. Artık `Node` yapı tanımımız şöyle görünüyor:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Dosya Adı: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-28/src/main.rs:here}}
 ```
 
-A node will be able to refer to its parent node but doesn’t own its parent.
-In Listing 15-28, we update `main` to use this new definition so the `leaf`
-node will have a way to refer to its parent, `branch`.
+Bir düğüm, ebeveynine referans verebilecek ama ona sahip olmayacak. 15-28 numaralı listede, bu yeni tanımı kullanacak şekilde `main` fonksiyonunu güncelliyoruz, böylece `leaf` düğümü ebeveyni olan `branch`'e referans verebilecek.
 
-<Listing number="15-28" file-name="src/main.rs" caption="A `leaf` node with a weak reference to its parent node, `branch`">
+<Listing number="15-28" file-name="src/main.rs" caption="Bir `leaf` düğümünün, ebeveyni olan `branch` düğümüne zayıf referansla işaret etmesi">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-28/src/main.rs:there}}
@@ -216,31 +113,17 @@ node will have a way to refer to its parent, `branch`.
 
 </Listing>
 
-Creating the `leaf` node looks similar to Listing 15-27 with the exception of
-the `parent` field: `leaf` starts out without a parent, so we create a new,
-empty `Weak<Node>` reference instance.
+`leaf` düğümünü oluşturmak, 15-27 numaralı listedekine benzer; tek farkı, `parent` alanı: `leaf` başta ebeveyni olmadan başlar, bu yüzden yeni, boş bir `Weak<Node>` referansı oluşturuyoruz.
 
-At this point, when we try to get a reference to the parent of `leaf` by using
-the `upgrade` method, we get a `None` value. We see this in the output from the
-first `println!` statement:
+Bu noktada, `leaf`'in ebeveynine `upgrade` metodu ile erişmeye çalışırsak, `None` değeri alırız. Bunu ilk `println!` ifadesinin çıktısında görebiliriz:
 
 ```text
 leaf parent = None
 ```
 
-When we create the `branch` node, it will also have a new `Weak<Node>`
-reference in the `parent` field because `branch` doesn’t have a parent node.
-We still have `leaf` as one of the children of `branch`. Once we have the
-`Node` instance in `branch`, we can modify `leaf` to give it a `Weak<Node>`
-reference to its parent. We use the `borrow_mut` method on the
-`RefCell<Weak<Node>>` in the `parent` field of `leaf`, and then we use the
-`Rc::downgrade` function to create a `Weak<Node>` reference to `branch` from
-the `Rc<Node>` in `branch`.
+`branch` düğümünü oluşturduğumuzda, onun da `parent` alanında yeni bir `Weak<Node>` referansı olur, çünkü `branch`'in ebeveyni yoktur. Yine de, `branch`'in çocukları arasında `leaf` vardır. `branch`deki `Node` örneğini elde ettikten sonra, `leaf`'i, ebeveynine (`branch`) zayıf bir referans verecek şekilde değiştirebiliriz. Bunun için, `leaf`'in `parent` alanındaki `RefCell<Weak<Node>>` üzerinde `borrow_mut` metodunu kullanırız ve ardından `branch`'deki `Rc<Node>`'dan `Rc::downgrade` fonksiyonunu çağırarak bir `Weak<Node>` referansı oluştururuz.
 
-When we print the parent of `leaf` again, this time we’ll get a `Some` variant
-holding `branch`: now `leaf` can access its parent! When we print `leaf`, we
-also avoid the cycle that eventually ended in a stack overflow like we had in
-Listing 15-26; the `Weak<Node>` references are printed as `(Weak)`:
+`leaf`'in ebeveynini tekrar yazdırdığımızda, bu sefer `Some` varyantı içinde `branch`'i görürüz: Artık `leaf` ebeveynine erişebiliyor! Ayrıca, `leaf`'i yazdırdığımızda, 15-26 numaralı listede olduğu gibi sonsuz döngüye girip yığın taşmasına neden olmadan, `Weak<Node>` referansları `(Weak)` olarak yazdırılır:
 
 ```text
 leaf parent = Some(Node { value: 5, parent: RefCell { value: (Weak) },
@@ -248,19 +131,13 @@ children: RefCell { value: [Node { value: 3, parent: RefCell { value: (Weak) },
 children: RefCell { value: [] } }] } })
 ```
 
-The lack of infinite output indicates that this code didn’t create a reference
-cycle. We can also tell this by looking at the values we get from calling
-`Rc::strong_count` and `Rc::weak_count`.
+Sonsuz çıktı olmaması, bu kodun referans döngüsü oluşturmadığını gösterir. Ayrıca, `Rc::strong_count` ve `Rc::weak_count` fonksiyonlarını çağırarak elde ettiğimiz değerlerden de bunu anlayabiliriz.
 
-#### Visualizing Changes to `strong_count` and `weak_count`
+#### `strong_count` ve `weak_count` Değerlerindeki Değişiklikleri Görselleştirmek
 
-Let’s look at how the `strong_count` and `weak_count` values of the `Rc<Node>`
-instances change by creating a new inner scope and moving the creation of
-`branch` into that scope. By doing so, we can see what happens when `branch` is
-created and then dropped when it goes out of scope. The modifications are shown
-in Listing 15-29.
+`Rc<Node>` örneklerinin `strong_count` ve `weak_count` değerlerinin nasıl değiştiğine bakalım. Bunu görmek için yeni bir iç scope (kapsam) oluşturup, `branch`'in oluşturulmasını bu scope'a taşıyoruz. Böylece, `branch` oluşturulup scope sona erdiğinde neler olduğunu görebiliriz. Değişiklikler 15-29 numaralı listede gösterilmiştir.
 
-<Listing number="15-29" file-name="src/main.rs" caption="Creating `branch` in an inner scope and examining strong and weak reference counts">
+<Listing number="15-29" file-name="src/main.rs" caption="`branch`'i bir iç scope'ta oluşturmak ve güçlü/zayıf referans sayılarını incelemek">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-29/src/main.rs:here}}
@@ -268,52 +145,22 @@ in Listing 15-29.
 
 </Listing>
 
-After `leaf` is created, its `Rc<Node>` has a strong count of 1 and a weak
-count of 0. In the inner scope, we create `branch` and associate it with
-`leaf`, at which point when we print the counts, the `Rc<Node>` in `branch`
-will have a strong count of 1 and a weak count of 1 (for `leaf.parent` pointing
-to `branch` with a `Weak<Node>`). When we print the counts in `leaf`, we’ll see
-it will have a strong count of 2 because `branch` now has a clone of the
-`Rc<Node>` of `leaf` stored in `branch.children`, but will still have a weak
-count of 0.
+`leaf` oluşturulduktan sonra, onun `Rc<Node>`'unda güçlü referans sayısı 1, zayıf referans sayısı 0'dır. İç scope'ta, `branch` oluşturulup `leaf` ile ilişkilendirildiğinde, çıktıda `branch`'deki `Rc<Node>`'un güçlü referans sayısı 1, zayıf referans sayısı 1 olur (`leaf.parent`'ın `branch`'i `Weak<Node>` ile işaretlemesi nedeniyle). `leaf`'teki sayıları yazdırdığımızda, `branch.children`'da `leaf`'in `Rc<Node>`'u klonlandığı için güçlü referans sayısı 2, zayıf referans sayısı ise hâlâ 0 olur.
 
-When the inner scope ends, `branch` goes out of scope and the strong count of
-the `Rc<Node>` decreases to 0, so its `Node` is dropped. The weak count of 1
-from `leaf.parent` has no bearing on whether or not `Node` is dropped, so we
-don’t get any memory leaks!
+İç scope sona erdiğinde, `branch` scope dışına çıkar ve `Rc<Node>`'un güçlü referans sayısı 0'a düşer, böylece ilgili `Node` düşürülür. `leaf.parent`'ın zayıf referans sayısı 1 olmasının, `Node`'un düşürülüp düşürülmemesi üzerinde etkisi yoktur, bu yüzden bellek sızıntısı oluşmaz!
 
-If we try to access the parent of `leaf` after the end of the scope, we’ll get
-`None` again. At the end of the program, the `Rc<Node>` in `leaf` has a strong
-count of 1 and a weak count of 0 because the variable `leaf` is now the only
-reference to the `Rc<Node>` again.
+Scope sona erdikten sonra, `leaf`'in ebeveynine tekrar erişmeye çalışırsak yine `None` alırız. Programın sonunda, `leaf`'teki `Rc<Node>`'un güçlü referans sayısı 1, zayıf referans sayısı 0'dır; çünkü artık yalnızca `leaf` değişkeni bu `Rc<Node>`'a referans vermektedir.
 
-All of the logic that manages the counts and value dropping is built into
-`Rc<T>` and `Weak<T>` and their implementations of the `Drop` trait. By
-specifying that the relationship from a child to its parent should be a
-`Weak<T>` reference in the definition of `Node`, you’re able to have parent
-nodes point to child nodes and vice versa without creating a reference cycle
-and memory leaks.
+Tüm bu referans sayısı yönetimi ve değer düşürme mantığı, `Rc<T>` ve `Weak<T>` ile bunların `Drop` trait'inin implementasyonlarında yerleşiktir. `Node` tanımında, çocuktan ebeveynе ilişkinin `Weak<T>` referansı olmasını belirterek, ebeveyn düğümlerin çocuklara ve çocukların ebeveynlere işaret etmesini sağlayabilir, referans döngüsü ve bellek sızıntısı oluşmasını önleyebilirsiniz.
 
-## Summary
+## Özet
 
-This chapter covered how to use smart pointers to make different guarantees and
-trade-offs from those Rust makes by default with regular references. The
-`Box<T>` type has a known size and points to data allocated on the heap. The
-`Rc<T>` type keeps track of the number of references to data on the heap so
-that data can have multiple owners. The `RefCell<T>` type with its interior
-mutability gives us a type that we can use when we need an immutable type but
-need to change an inner value of that type; it also enforces the borrowing
-rules at runtime instead of at compile time.
+Bu bölümde, akıllı işaretçileri kullanarak Rust'ın varsayılan olarak sunduğu referanslardan farklı garantiler ve ödünleşimler elde etmeyi gördük. `Box<T>` tipi, bilinen boyutta olup yığında ayrılmış veriye işaret eder. `Rc<T>` tipi, yığındaki veriye yapılan referansların sayısını takip ederek, verinin birden fazla sahibi olmasını sağlar. `RefCell<T>` tipi ise, içsel değiştirilebilirliğiyle, değiştirilemez bir tipte iç değeri değiştirmemiz gerektiğinde kullanılabilir; ayrıca ödünç alma kurallarını derleme zamanında değil, çalışma zamanında uygular.
 
-Also discussed were the `Deref` and `Drop` traits, which enable a lot of the
-functionality of smart pointers. We explored reference cycles that can cause
-memory leaks and how to prevent them using `Weak<T>`.
+Ayrıca, akıllı işaretçilerin pek çok işlevselliğini sağlayan `Deref` ve `Drop` trait'lerini de ele aldık. Bellek sızıntısına yol açabilen referans döngülerini ve bunları `Weak<T>` kullanarak nasıl önleyebileceğimizi inceledik.
 
-If this chapter has piqued your interest and you want to implement your own
-smart pointers, check out [“The Rustonomicon”][nomicon] for more useful
-information.
+Eğer bu bölüm ilginizi çektiyse ve kendi akıllı işaretçilerinizi uygulamak istiyorsanız, daha fazla bilgi için ["The Rustonomicon"] [nomicon] kaynağına göz atabilirsiniz.
 
-Next, we’ll talk about concurrency in Rust. You’ll even learn about a few new
-smart pointers.
+Sıradaki bölümde, Rust'ta eşzamanlılık (concurrency) konusunu ele alacağız. Ayrıca birkaç yeni akıllı işaretçiyle de tanışacaksınız.
 
 [nomicon]: ../nomicon/index.html

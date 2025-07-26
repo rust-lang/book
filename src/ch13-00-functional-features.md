@@ -1,24 +1,14 @@
-# Functional Language Features: Iterators and Closures
+# Fonksiyonel Dil Özellikleri: Yineleyiciler ve Kapanışlar
 
-Rust’s design has taken inspiration from many existing languages and
-techniques, and one significant influence is _functional programming_.
-Programming in a functional style often includes using functions as values by
-passing them in arguments, returning them from other functions, assigning them
-to variables for later execution, and so forth.
+Rust'ın tasarımı, birçok mevcut dilden ve teknikten ilham almıştır ve önemli bir etkisi de _fonksiyonel programlama_ olmuştur. Fonksiyonel bir tarzda programlama genellikle fonksiyonları değer olarak kullanmayı, onları argüman olarak geçirmeyi, başka fonksiyonlardan döndürmeyi, daha sonra çalıştırmak üzere değişkenlere atamayı ve benzeri işlemleri içerir.
 
-In this chapter, we won’t debate the issue of what functional programming is or
-isn’t but will instead discuss some features of Rust that are similar to
-features in many languages often referred to as functional.
+Bu bölümde, fonksiyonel programlamanın ne olup ne olmadığı tartışmasına girmeyeceğiz; bunun yerine, Rust'ta fonksiyonel olarak adlandırılan birçok dilde bulunan benzer özellikleri ele alacağız.
 
-More specifically, we’ll cover:
+Daha spesifik olarak şunları ele alacağız:
 
-- _Closures_, a function-like construct you can store in a variable
-- _Iterators_, a way of processing a series of elements
-- How to use closures and iterators to improve the I/O project in Chapter 12
-- The performance of closures and iterators (spoiler alert: they’re faster than
-  you might think!)
+- Bir değişkende saklayabileceğiniz fonksiyon benzeri bir yapı olan _kapanışlar_
+- Bir dizi öğeyi işlemenin bir yolu olan _yineleyiciler_
+- Kapanışları ve yineleyicileri 12. Bölümdeki G/Ç projesini geliştirmek için nasıl kullanacağımızı
+- Kapanışların ve yineleyicilerin performansı (ipucu: düşündüğünüzden daha hızlılar!)
 
-We’ve already covered some other Rust features, such as pattern matching and
-enums, that are also influenced by the functional style. Because mastering
-closures and iterators is an important part of writing idiomatic, fast Rust
-code, we’ll devote this entire chapter to them.
+Daha önce, fonksiyonel tarzdan etkilenen desen eşleştirme ve enumlar gibi bazı Rust özelliklerini de ele aldık. Kapanışlar ve yineleyicilerde ustalaşmak, idiomatik ve hızlı Rust kodu yazmanın önemli bir parçası olduğundan, bu bölümün tamamını onlara ayıracağız.

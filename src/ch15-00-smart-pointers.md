@@ -1,46 +1,19 @@
-# Smart Pointers
+# Akıllı İşaretçiler
 
-A _pointer_ is a general concept for a variable that contains an address in
-memory. This address refers to, or “points at,” some other data. The most
-common kind of pointer in Rust is a reference, which you learned about in
-Chapter 4. References are indicated by the `&` symbol and borrow the value they
-point to. They don’t have any special capabilities other than referring to
-data, and they have no overhead.
+_Bir işaretçi_ (pointer), bellekte bir adres içeren bir değişken için genel bir kavramdır. Bu adres, başka bir veriye işaret eder veya onu "gösterir". Rust'taki en yaygın işaretçi türü, 4. Bölümde öğrendiğiniz referanstır. Referanslar `&` sembolüyle gösterilir ve işaret ettikleri değeri ödünç alırlar. Referansların veri göstermenin dışında özel bir yeteneği yoktur ve ek bir maliyeti yoktur.
 
-_Smart pointers_, on the other hand, are data structures that act like a
-pointer but also have additional metadata and capabilities. The concept of
-smart pointers isn’t unique to Rust: smart pointers originated in C++ and exist
-in other languages as well. Rust has a variety of smart pointers defined in the
-standard library that provide functionality beyond that provided by references.
-To explore the general concept, we’ll look at a couple of different examples of
-smart pointers, including a _reference counting_ smart pointer type. This
-pointer enables you to allow data to have multiple owners by keeping track of
-the number of owners and, when no owners remain, cleaning up the data.
+_ Akıllı işaretçiler_ ise, bir işaretçi gibi davranan ancak ek olarak bazı meta veriler ve yetenekler barındıran veri yapılarıdır. Akıllı işaretçi kavramı Rust'a özgü değildir: akıllı işaretçiler ilk olarak C++'da ortaya çıkmış ve başka dillerde de mevcuttur. Rust, standart kütüphanede referansların sunduğundan daha fazla işlevsellik sağlayan çeşitli akıllı işaretçi türleri tanımlar. Genel kavramı keşfetmek için, birkaç farklı akıllı işaretçi örneğine bakacağız; bunlardan biri de _referans sayımı_ yapan bir akıllı işaretçi türüdür. Bu işaretçi, sahiplerin sayısını takip ederek verinin birden fazla sahibi olmasına olanak tanır ve hiç sahip kalmadığında veriyi temizler.
 
-Rust, with its concept of ownership and borrowing, has an additional difference
-between references and smart pointers: while references only borrow data, in
-many cases smart pointers _own_ the data they point to.
+Rust'ın sahiplik ve ödünç alma kavramı ile, referanslar ve akıllı işaretçiler arasında ek bir fark daha vardır: Referanslar yalnızca veriyi ödünç alırken, çoğu durumda akıllı işaretçiler işaret ettikleri verinin _sahibi_ olurlar.
 
-Smart pointers are usually implemented using structs. Unlike an ordinary
-struct, smart pointers implement the `Deref` and `Drop` traits. The `Deref`
-trait allows an instance of the smart pointer struct to behave like a reference
-so you can write your code to work with either references or smart pointers.
-The `Drop` trait allows you to customize the code that’s run when an instance
-of the smart pointer goes out of scope. In this chapter, we’ll discuss both of
-these traits and demonstrate why they’re important to smart pointers.
+Akıllı işaretçiler genellikle yapılar (struct) kullanılarak uygulanır. Sıradan bir yapıdan farklı olarak, akıllı işaretçiler `Deref` ve `Drop` trait'lerini uygular. `Deref` trait'i, akıllı işaretçi yapısının bir örneğinin referans gibi davranmasını sağlar; böylece kodunuzu hem referanslarla hem de akıllı işaretçilerle çalışacak şekilde yazabilirsiniz. `Drop` trait'i ise, akıllı işaretçi kapsamdan çıktığında çalışacak kodu özelleştirmenize olanak tanır. Bu bölümde, bu iki trait'i tartışacak ve neden akıllı işaretçiler için önemli olduklarını göstereceğiz.
 
-Given that the smart pointer pattern is a general design pattern used
-frequently in Rust, this chapter won’t cover every existing smart pointer. Many
-libraries have their own smart pointers, and you can even write your own. We’ll
-cover the most common smart pointers in the standard library:
+Akıllı işaretçi deseni Rust'ta sıkça kullanılan genel bir tasarım deseni olduğundan, bu bölümde mevcut tüm akıllı işaretçileri ele almayacağız. Birçok kütüphanenin kendi akıllı işaretçileri vardır ve siz de kendi akıllı işaretçinizi yazabilirsiniz. Standart kütüphanedeki en yaygın akıllı işaretçileri ele alacağız:
 
-- `Box<T>`, for allocating values on the heap
-- `Rc<T>`, a reference counting type that enables multiple ownership
-- `Ref<T>` and `RefMut<T>`, accessed through `RefCell<T>`, a type that enforces
-  the borrowing rules at runtime instead of compile time
+- Yığın üzerinde değer ayırmak için `Box<T>`
+- Çoklu sahipliğe olanak tanıyan referans sayımı türü `Rc<T>`
+- Derleme zamanında değil, çalışma zamanında ödünç alma kurallarını uygulayan `RefCell<T>` üzerinden erişilen `Ref<T>` ve `RefMut<T>`
 
-In addition, we’ll cover the _interior mutability_ pattern where an immutable
-type exposes an API for mutating an interior value. We’ll also discuss
-reference cycles: how they can leak memory and how to prevent them.
+Buna ek olarak, değiştirilemez bir türün içteki bir değeri değiştirmeye olanak tanıyan _içsel değiştirilebilirlik_ (interior mutability) desenini de ele alacağız. Ayrıca, referans döngülerini, bunların nasıl bellek sızıntısına yol açabileceğini ve nasıl önlenebileceğini tartışacağız.
 
-Let’s dive in!
+Haydi başlayalım!

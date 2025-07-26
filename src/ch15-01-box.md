@@ -1,40 +1,22 @@
-## Using `Box<T>` to Point to Data on the Heap
+## `Box<T>` Kullanarak Veriye Heap Üzerinden İşaret Etmek
 
-The most straightforward smart pointer is a box, whose type is written
-`Box<T>`. _Boxes_ allow you to store data on the heap rather than the stack.
-What remains on the stack is the pointer to the heap data. Refer to Chapter 4
-to review the difference between the stack and the heap.
+En basit akıllı işaretçi, türü `Box<T>` olarak yazılan kutudur (box). _Box_ yapısı, veriyi yığın (stack) yerine heap üzerinde saklamanızı sağlar. Yığında kalan ise, heap'teki veriye işaret eden işaretçidir. Yığın ve heap arasındaki farkı gözden geçirmek için 4. Bölüme bakabilirsiniz.
 
-Boxes don’t have performance overhead, other than storing their data on the
-heap instead of on the stack. But they don’t have many extra capabilities
-either. You’ll use them most often in these situations:
+Box'ların, verilerini yığın yerine heap'te saklamaları dışında herhangi bir performans maliyeti yoktur. Ancak, çok fazla ek yetenekleri de yoktur. Genellikle şu durumlarda kullanılırlar:
 
-- When you have a type whose size can’t be known at compile time and you want
-  to use a value of that type in a context that requires an exact size
-- When you have a large amount of data and you want to transfer ownership but
-  ensure the data won’t be copied when you do so
-- When you want to own a value and you care only that it’s a type that
-  implements a particular trait rather than being of a specific type
+- Derleme zamanında boyutu bilinemeyen bir türünüz olduğunda ve bu türdeki bir değeri kesin boyut gerektiren bir bağlamda kullanmak istediğinizde
+- Büyük miktarda veriniz olduğunda ve sahipliği devretmek, ancak verinin kopyalanmadığından emin olmak istediğinizde
+- Bir değerin sahipliğini almak ve yalnızca belirli bir trait'i uygulamasına önem vermek, belirli bir türe sahip olmasına değil
 
-We’ll demonstrate the first situation in [“Enabling Recursive Types with
-Boxes”](#enabling-recursive-types-with-boxes)<!-- ignore -->. In the second
-case, transferring ownership of a large amount of data can take a long time
-because the data is copied around on the stack. To improve performance in this
-situation, we can store the large amount of data on the heap in a box. Then,
-only the small amount of pointer data is copied around on the stack, while the
-data it references stays in one place on the heap. The third case is known as a
-_trait object_, and [“Using Trait Objects That Allow for Values of Different
-Types,”][trait-objects]<!-- ignore --> in Chapter 18 is devoted to that topic.
-So what you learn here you’ll apply again in that section!
+İlk durumu ["Box ile Özyinelemeli Türleri Etkinleştirmek"](#enabling-recursive-types-with-boxes) bölümünde göstereceğiz. İkinci durumda, büyük miktarda verinin sahipliğini devretmek uzun sürebilir çünkü veri yığın üzerinde kopyalanır. Bu durumda performansı artırmak için, büyük veriyi bir kutuda heap'te saklayabiliriz. Böylece, yığında yalnızca küçük bir işaretçi kopyalanır, asıl veri ise heap'te bir yerde kalır. Üçüncü durum ise _trait nesnesi_ olarak bilinir ve 18. Bölümdeki ["Farklı Türde Değerler İçin Trait Nesneleri Kullanmak"](ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types) bölümünde ayrıntılı olarak ele alınacaktır. Burada öğrendiklerinizi orada tekrar kullanacaksınız!
 
-### Using `Box<T>` to Store Data on the Heap
+### `Box<T>` ile Veriyi Heap'te Saklamak
 
-Before we discuss the heap storage use case for `Box<T>`, we’ll cover the
-syntax and how to interact with values stored within a `Box<T>`.
+`Box<T>`'nin heap'te veri saklama kullanımını tartışmadan önce, sözdizimini ve bir kutuda saklanan değerlerle nasıl etkileşime geçileceğini ele alalım.
 
-Listing 15-1 shows how to use a box to store an `i32` value on the heap.
+Liste 15-1, bir kutu kullanarak bir `i32` değerinin heap'te nasıl saklanacağını gösteriyor.
 
-<Listing number="15-1" file-name="src/main.rs" caption="Storing an `i32` value on the heap using a box">
+<Listing number="15-1" file-name="src/main.rs" caption="Bir kutu kullanarak bir `i32` değerini heap'te saklamak">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-01/src/main.rs}}
@@ -42,69 +24,33 @@ Listing 15-1 shows how to use a box to store an `i32` value on the heap.
 
 </Listing>
 
-We define the variable `b` to have the value of a `Box` that points to the
-value `5`, which is allocated on the heap. This program will print `b = 5`; in
-this case, we can access the data in the box similarly to how we would if this
-data were on the stack. Just like any owned value, when a box goes out of
-scope, as `b` does at the end of `main`, it will be deallocated. The
-deallocation happens both for the box (stored on the stack) and the data it
-points to (stored on the heap).
+`b` değişkenini, heap'te ayrılmış olan `5` değerine işaret eden bir `Box` olarak tanımlıyoruz. Bu program `b = 5` yazdıracaktır; bu durumda, kutudaki veriye, sanki bu veri yığında saklanıyormuş gibi erişebiliriz. Sahip olunan herhangi bir değer gibi, bir kutu kapsamdan çıktığında (örneğin `b`'nin `main` sonunda olduğu gibi) bellekten silinir. Hem kutu (yığında saklanan) hem de işaret ettiği veri (heap'te saklanan) serbest bırakılır.
 
-Putting a single value on the heap isn’t very useful, so you won’t use boxes by
-themselves in this way very often. Having values like a single `i32` on the
-stack, where they’re stored by default, is more appropriate in the majority of
-situations. Let’s look at a case where boxes allow us to define types that we
-wouldn’t be allowed to define if we didn’t have boxes.
+Tek bir değeri heap'te saklamak çok kullanışlı değildir, bu yüzden kutuları bu şekilde tek başına sık kullanmazsınız. Çoğu durumda, tek bir `i32` gibi değerlerin yığında saklanması daha uygundur. Şimdi, kutuların, kutu olmadan tanımlayamayacağımız türleri tanımlamamıza nasıl olanak sağladığı bir duruma bakalım.
 
-### Enabling Recursive Types with Boxes
+### Box ile Özyinelemeli Türleri Etkinleştirmek
 
-A value of a _recursive type_ can have another value of the same type as part of
-itself. Recursive types pose an issue because Rust needs to know at compile time
-how much space a type takes up. However, the nesting of values of recursive
-types could theoretically continue infinitely, so Rust can’t know how much space
-the value needs. Because boxes have a known size, we can enable recursive types
-by inserting a box in the recursive type definition.
+_Bir özyinelemeli türün_ bir değeri, kendisinin başka bir değerini de içerebilir. Özyinelemeli türler bir sorun oluşturur çünkü Rust, bir türün ne kadar yer kaplayacağını derleme zamanında bilmek ister. Ancak, özyinelemeli türlerdeki değerlerin iç içe geçmesi teorik olarak sonsuza kadar devam edebilir, bu yüzden Rust değerin ne kadar alana ihtiyacı olduğunu bilemez. Kutuların boyutu bilindiğinden, özyinelemeli tür tanımında bir kutu kullanarak özyinelemeli türleri etkinleştirebiliriz.
 
-As an example of a recursive type, let’s explore the _cons list_. This is a data
-type commonly found in functional programming languages. The cons list type
-we’ll define is straightforward except for the recursion; therefore, the
-concepts in the example we’ll work with will be useful any time you get into
-more complex situations involving recursive types.
+Özyinelemeli bir tür örneği olarak, _cons listesi_ni inceleyelim. Bu, fonksiyonel programlama dillerinde yaygın olarak bulunan bir veri türüdür. Tanımlayacağımız cons listesi türü, özyineleme dışında oldukça basittir; bu nedenle, örnekte işleyeceğimiz kavramlar, özyinelemeli türlerle ilgili daha karmaşık durumlarda da faydalı olacaktır.
 
-#### More Information About the Cons List
+#### Cons Listesi Hakkında Daha Fazla Bilgi
 
-A _cons list_ is a data structure that comes from the Lisp programming language
-and its dialects, is made up of nested pairs, and is the Lisp version of a
-linked list. Its name comes from the `cons` function (short for _construct
-function_) in Lisp that constructs a new pair from its two arguments. By
-calling `cons` on a pair consisting of a value and another pair, we can
-construct cons lists made up of recursive pairs.
+_Cons listesi_, Lisp programlama dili ve türevlerinden gelen, iç içe geçmiş çiftlerden oluşan ve bağlı listenin (linked list) Lisp versiyonu olan bir veri yapısıdır. Adını, iki argümandan yeni bir çift oluşturan Lisp'teki `cons` fonksiyonundan (construct function) alır. Bir değer ve başka bir çift içeren bir çift üzerinde `cons` çağırarak, özyinelemeli çiftlerden oluşan cons listeleri oluşturabiliriz.
 
-For example, here’s a pseudocode representation of a cons list containing the
-list `1, 2, 3` with each pair in parentheses:
+Örneğin, `1, 2, 3` listesini içeren bir cons listesinin sözde kod gösterimi şöyle olur:
 
 ```text
 (1, (2, (3, Nil)))
 ```
 
-Each item in a cons list contains two elements: the value of the current item
-and the next item. The last item in the list contains only a value called `Nil`
-without a next item. A cons list is produced by recursively calling the `cons`
-function. The canonical name to denote the base case of the recursion is `Nil`.
-Note that this is not the same as the “null” or “nil” concept discussed in
-Chapter 6, which is an invalid or absent value.
+Cons listesindeki her öğe iki eleman içerir: mevcut öğenin değeri ve bir sonraki öğe. Listedeki son öğe ise yalnızca `Nil` adlı bir değer içerir ve sonraki bir öğe yoktur. Cons listesi, özyinelemeli olarak `cons` fonksiyonu çağrılarak üretilir. Özyinelemenin taban durumu için kullanılan kanonik ad `Nil`'dir. Bunun, 6. Bölümde tartışılan "null" veya "nil" kavramıyla aynı olmadığını unutmayın; burada "nil" geçersiz veya olmayan bir değeri ifade etmez.
 
-The cons list isn’t a commonly used data structure in Rust. Most of the time
-when you have a list of items in Rust, `Vec<T>` is a better choice to use.
-Other, more complex recursive data types _are_ useful in various situations,
-but by starting with the cons list in this chapter, we can explore how boxes
-let us define a recursive data type without much distraction.
+Cons listesi Rust'ta yaygın olarak kullanılan bir veri yapısı değildir. Rust'ta bir öğe listesine ihtiyacınız olduğunda çoğu zaman `Vec<T>` daha iyi bir seçimdir. Diğer, daha karmaşık özyinelemeli veri türleri ise çeşitli durumlarda faydalıdır, ancak bu bölümde cons listesiyle başlayarak, kutuların özyinelemeli bir veri türünü nasıl tanımlamamıza olanak sağladığını görebiliriz.
 
-Listing 15-2 contains an enum definition for a cons list. Note that this code
-won’t compile yet because the `List` type doesn’t have a known size, which
-we’ll demonstrate.
+Liste 15-2, bir cons listesi için bir enum tanımını içeriyor. Bu kod henüz derlenmeyecek çünkü `List` türünün boyutu bilinmiyor; bunu göstereceğiz.
 
-<Listing number="15-2" file-name="src/main.rs" caption="The first attempt at defining an enum to represent a cons list data structure of `i32` values">
+<Listing number="15-2" file-name="src/main.rs" caption="`i32` değerlerinden oluşan bir cons listesi veri yapısını temsil eden enum tanımının ilk denemesi">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-02/src/main.rs:here}}
@@ -112,15 +58,11 @@ we’ll demonstrate.
 
 </Listing>
 
-> Note: We’re implementing a cons list that holds only `i32` values for the
-> purposes of this example. We could have implemented it using generics, as we
-> discussed in Chapter 10, to define a cons list type that could store values of
-> any type.
+> Not: Bu örnek için yalnızca `i32` değerleri tutan bir cons listesi uyguluyoruz. 10. Bölümde tartıştığımız gibi, generics kullanarak herhangi bir türde değer tutabilen bir cons listesi de tanımlayabilirdik.
 
-Using the `List` type to store the list `1, 2, 3` would look like the code in
-Listing 15-3.
+`List` türünü kullanarak `1, 2, 3` listesini saklamak, 15-3 numaralı listedeki kod gibi olurdu.
 
-<Listing number="15-3" file-name="src/main.rs" caption="Using the `List` enum to store the list `1, 2, 3`">
+<Listing number="15-3" file-name="src/main.rs" caption="`List` enum'unu kullanarak `1, 2, 3` listesini saklamak">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-03/src/main.rs:here}}
@@ -128,15 +70,11 @@ Listing 15-3.
 
 </Listing>
 
-The first `Cons` value holds `1` and another `List` value. This `List` value is
-another `Cons` value that holds `2` and another `List` value. This `List` value
-is one more `Cons` value that holds `3` and a `List` value, which is finally
-`Nil`, the non-recursive variant that signals the end of the list.
+İlk `Cons` değeri `1` ve başka bir `List` değeri tutar. Bu `List` değeri, `2` ve başka bir `List` değeri tutan başka bir `Cons` değeridir. Bu `List` değeri, `3` ve bir `List` değeri (sonunda `Nil`) tutan bir başka `Cons` değeridir. `Nil`, listenin sonunu belirten özyinelemeli olmayan varyanttır.
 
-If we try to compile the code in Listing 15-3, we get the error shown in
-Listing 15-4.
+15-3 numaralı listedeki kodu derlemeye çalışırsak, 15-4 numaralı listede gösterilen hatayı alırız.
 
-<Listing number="15-4" caption="The error we get when attempting to define a recursive enum">
+<Listing number="15-4" caption="Özyinelemeli bir enum tanımlamaya çalışırken aldığımız hata">
 
 ```console
 {{#include ../listings/ch15-smart-pointers/listing-15-03/output.txt}}
@@ -144,75 +82,42 @@ Listing 15-4.
 
 </Listing>
 
-The error shows this type “has infinite size.” The reason is that we’ve defined
-`List` with a variant that is recursive: it holds another value of itself
-directly. As a result, Rust can’t figure out how much space it needs to store a
-`List` value. Let’s break down why we get this error. First we’ll look at how
-Rust decides how much space it needs to store a value of a non-recursive type.
+Hata, bu türün "sonsuz boyuta sahip" olduğunu gösteriyor. Bunun nedeni, `List`'i özyinelemeli bir varyantla tanımlamış olmamız: doğrudan kendisinden başka bir değer tutuyor. Sonuç olarak, Rust bir `List` değerini saklamak için ne kadar alana ihtiyacı olduğunu belirleyemiyor. Bu hatayı neden aldığımızı inceleyelim. Önce, Rust'ın özyinelemeli olmayan bir türün ne kadar yer kaplayacağını nasıl belirlediğine bakalım.
 
-#### Computing the Size of a Non-Recursive Type
+#### Özyinelemeli Olmayan Bir Türün Boyutunu Hesaplamak
 
-Recall the `Message` enum we defined in Listing 6-2 when we discussed enum
-definitions in Chapter 6:
+6-2 numaralı listede, 6. Bölümde enum tanımlarını tartışırken tanımladığımız `Message` enum'unu hatırlayın:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-02/src/main.rs:here}}
 ```
 
-To determine how much space to allocate for a `Message` value, Rust goes
-through each of the variants to see which variant needs the most space. Rust
-sees that `Message::Quit` doesn’t need any space, `Message::Move` needs enough
-space to store two `i32` values, and so forth. Because only one variant will be
-used, the most space a `Message` value will need is the space it would take to
-store the largest of its variants.
+Bir `Message` değeri için ne kadar alan ayrılacağını belirlemek için, Rust her varyantı inceler ve en çok alana ihtiyaç duyan varyantı bulur. Sadece bir varyant kullanılacağı için, bir `Message` değerinin ihtiyaç duyacağı en fazla alan, varyantlardan en büyüğünün kaplayacağı alandır.
 
-Contrast this with what happens when Rust tries to determine how much space a
-recursive type like the `List` enum in Listing 15-2 needs. The compiler starts
-by looking at the `Cons` variant, which holds a value of type `i32` and a value
-of type `List`. Therefore, `Cons` needs an amount of space equal to the size of
-an `i32` plus the size of a `List`. To figure out how much memory the `List`
-type needs, the compiler looks at the variants, starting with the `Cons`
-variant. The `Cons` variant holds a value of type `i32` and a value of type
-`List`, and this process continues infinitely, as shown in Figure 15-1.
+Bunu, Rust'ın 15-2 numaralı listedeki `List` enum'u gibi özyinelemeli bir türün ne kadar alana ihtiyacı olduğunu belirlemeye çalışırken ne olduğuyla karşılaştırın. Derleyici, `Cons` varyantına bakarak başlar; bu, bir `i32` ve bir `List` değeri tutar. Yani, `Cons`'un ihtiyacı olan alan, bir `i32`'nin boyutu artı bir `List`'in boyutudur. `List` türünün ne kadar belleğe ihtiyacı olduğunu bulmak için, derleyici varyantlara bakar ve yine `Cons` varyantından başlar. `Cons` bir `i32` ve bir `List` tutar ve bu süreç sonsuza kadar devam eder, bu da Şekil 15-1'de gösterilmiştir.
 
-<img alt="An infinite Cons list: a rectangle labeled 'Cons' split into two smaller rectangles. The first smaller rectangle holds the label 'i32', and the second smaller rectangle holds the label 'Cons' and a smaller version of the outer 'Cons' rectangle. The 'Cons' rectangles continue to hold smaller and smaller versions of themselves until the smallest comfortably-sized rectangle holds an infinity symbol, indicating that this repetition goes on forever" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
+<img alt="Sonsuz bir Cons listesi: 'Cons' olarak etiketlenmiş bir dikdörtgen, iki daha küçük dikdörtgene bölünmüş. İlk daha küçük dikdörtgen 'i32' etiketini, ikinci daha küçük dikdörtgen ise 'Cons' etiketini ve dıştaki 'Cons' dikdörtgeninin daha küçük bir versiyonunu tutuyor. 'Cons' dikdörtgenleri, en küçük rahatça boyutlandırılmış dikdörtgen bir sonsuzluk sembolü tutana kadar kendilerinin daha küçük ve daha küçük versiyonlarını tutmaya devam ediyor, bu da bu tekrarın sonsuza kadar devam ettiğini gösteriyor." src="img/trpl15-01.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 15-1: An infinite `List` consisting of infinite
-`Cons` variants</span>
+<span class="caption">Şekil 15-1: Sonsuz `List`'in sonsuz `Cons` varyantlarından oluşması</span>
 
-#### Using `Box<T>` to Get a Recursive Type with a Known Size
+#### `Box<T>` Kullanarak Bilinen Boyuta Sahip Özyinelemeli Tür Elde Etmek
 
-Because Rust can’t figure out how much space to allocate for recursively
-defined types, the compiler gives an error with this helpful suggestion:
-
-<!-- manual-regeneration
-after doing automatic regeneration, look at listings/ch15-smart-pointers/listing-15-03/output.txt and copy the relevant line
--->
+Rust, özyinelemeli tanımlanan türler için ne kadar alan ayıracağını bilemediğinden, derleyici şu yardımcı öneriyle birlikte bir hata verir:
 
 ```text
-help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to break the cycle
+help: döngüyü kırmak için biraz dolaylılık ekleyin (ör. `Box`, `Rc` veya `&`)
   |
 2 |     Cons(i32, Box<List>),
   |               ++++    +
 ```
 
-In this suggestion, _indirection_ means that instead of storing a value
-directly, we should change the data structure to store the value indirectly by
-storing a pointer to the value instead.
+Buradaki _dolaylılık_ (indirection), bir değeri doğrudan saklamak yerine, veri yapısını değeri dolaylı olarak, yani ona işaret eden bir işaretçiyle saklayacak şekilde değiştirmemiz gerektiği anlamına gelir.
 
-Because a `Box<T>` is a pointer, Rust always knows how much space a `Box<T>`
-needs: a pointer’s size doesn’t change based on the amount of data it’s
-pointing to. This means we can put a `Box<T>` inside the `Cons` variant instead
-of another `List` value directly. The `Box<T>` will point to the next `List`
-value that will be on the heap rather than inside the `Cons` variant.
-Conceptually, we still have a list, created with lists holding other lists, but
-this implementation is now more like placing the items next to one another
-rather than inside one another.
+Bir `Box<T>` bir işaretçi olduğundan, Rust her zaman bir `Box<T>`'nin ne kadar alana ihtiyacı olduğunu bilir: bir işaretçinin boyutu, işaret ettiği verinin miktarına göre değişmez. Bu, `Cons` varyantında doğrudan başka bir `List` değeri yerine bir `Box<T>` koyabileceğimiz anlamına gelir. `Box<T>`, bir sonraki `List` değerine işaret eder ve bu değer heap'te saklanır, `Cons` varyantının içinde değil. Kavramsal olarak hâlâ listelerden oluşan bir listeye sahibiz, ancak bu uygulama artık öğeleri birbirinin içine koymak yerine yan yana koymak gibidir.
 
-We can change the definition of the `List` enum in Listing 15-2 and the usage
-of the `List` in Listing 15-3 to the code in Listing 15-5, which will compile.
+15-2 ve 15-3 numaralı listelerdeki `List` enum'unun tanımını ve kullanımını, derlenecek şekilde 15-5 numaralı listedeki koda dönüştürebiliriz.
 
-<Listing number="15-5" file-name="src/main.rs" caption="Definition of `List` that uses `Box<T>` in order to have a known size">
+<Listing number="15-5" file-name="src/main.rs" caption="Bilinen boyuta sahip olmak için `Box<T>` kullanan `List` tanımı">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-05/src/main.rs}}
@@ -220,32 +125,14 @@ of the `List` in Listing 15-3 to the code in Listing 15-5, which will compile.
 
 </Listing>
 
-The `Cons` variant needs the size of an `i32` plus the space to store the
-box’s pointer data. The `Nil` variant stores no values, so it needs less space
-on the stack than the `Cons` variant. We now know that any `List` value will
-take up the size of an `i32` plus the size of a box’s pointer data. By using a
-box, we’ve broken the infinite, recursive chain, so the compiler can figure out
-the size it needs to store a `List` value. Figure 15-2 shows what the `Cons`
-variant looks like now.
+`Cons` varyantı, bir `i32`'nin boyutuna ek olarak kutunun işaretçi verisini saklayacak kadar alana ihtiyaç duyar. `Nil` varyantı ise hiçbir değer saklamaz, bu yüzden yığında `Cons`'tan daha az alana ihtiyaç duyar. Artık herhangi bir `List` değerinin, bir `i32` boyutu artı bir kutunun işaretçi verisi kadar yer kaplayacağını biliyoruz. Bir kutu kullanarak sonsuz, özyinelemeli zinciri kırdık ve derleyici artık bir `List` değerini saklamak için ne kadar alana ihtiyacı olduğunu belirleyebiliyor. Şekil 15-2, `Cons` varyantının şimdi nasıl göründüğünü gösteriyor.
 
-<img alt="A rectangle labeled 'Cons' split into two smaller rectangles. The first smaller rectangle holds the label 'i32', and the second smaller rectangle holds the label 'Box' with one inner rectangle that contains the label 'usize', representing the finite size of the box's pointer" src="img/trpl15-02.svg" class="center" />
+<img alt="Bir dikdörtgen 'Cons' etiketli iki daha küçük dikdörtgene bölünmüş. İlk daha küçük dikdörtgen 'i32' etiketini taşırken, ikinci daha küçük dikdörtgen 'Box' etiketini taşır ve içinde 'usize' etiketli bir dikdörtgen bulunur, bu da kutunun işaretçi verisinin sonlu boyutunu temsil eder." src="img/trpl15-02.svg" class="center" />
 
-<span class="caption">Figure 15-2: A `List` that is not infinitely sized
-because `Cons` holds a `Box`</span>
+<span class="caption">Şekil 15-2: `Cons`'un bir `Box` tuttuğu için sonsuz boyutta olmaması</span>
 
-Boxes provide only the indirection and heap allocation; they don’t have any
-other special capabilities, like those we’ll see with the other smart pointer
-types. They also don’t have the performance overhead that these special
-capabilities incur, so they can be useful in cases like the cons list where the
-indirection is the only feature we need. We’ll look at more use cases for boxes
-in Chapter 18.
+Kutular yalnızca dolaylılık ve heap tahsisi sağlar; diğer akıllı işaretçi türlerinde göreceğimiz gibi özel yetenekleri yoktur. Ayrıca, bu özel yeteneklerin getirdiği performans maliyetine de sahip değillerdir; bu nedenle, yalnızca dolaylılığın gerektiği cons listesi gibi durumlarda faydalı olabilirler. Kutuların başka kullanım alanlarını 18. Bölümde göreceğiz.
 
-The `Box<T>` type is a smart pointer because it implements the `Deref` trait,
-which allows `Box<T>` values to be treated like references. When a `Box<T>`
-value goes out of scope, the heap data that the box is pointing to is cleaned
-up as well because of the `Drop` trait implementation. These two traits will be
-even more important to the functionality provided by the other smart pointer
-types we’ll discuss in the rest of this chapter. Let’s explore these two traits
-in more detail.
+`Box<T>` türü, `Deref` trait'ini uyguladığı için bir akıllı işaretçidir; bu, `Box<T>` değerlerinin referans gibi kullanılmasına olanak tanır. Bir `Box<T>` değeri kapsamdan çıktığında, kutunun işaret ettiği heap verisi de `Drop` trait'i sayesinde temizlenir. Bu iki trait, bu bölümün geri kalanında ele alacağımız diğer akıllı işaretçi türlerinin sunduğu işlevsellik için daha da önemli olacaktır. Şimdi bu iki trait'i daha ayrıntılı inceleyelim.
 
 [trait-objects]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
