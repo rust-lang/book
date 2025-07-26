@@ -105,49 +105,77 @@ bölümleri. Kavram bölümlerinde Rust'ın bir yönü hakkında bilgi edineceks
 öğrendiklerinizi uygulayarak birlikte küçük programlar oluşturacağız. Bölüm 2, 12 ve 21 proje bölümleridir; geri kalanı kavram bölümleridir.
 
 Bölüm 1, Rust'ın nasıl kurulacağını, bir “Merhaba, dünya!” programının nasıl yazılacağını,
-ve Rust'ın paket yöneticisi ve derleme aracı olan Cargo'nun nasıl kullanılacağını açıklar. Bölüm 2, Rust'ta bir program yazmaya
+ve Rust'ın paket yöneticisi ve derleme aracı olan Cargo'nun nasıl kullanılacağını açıklar.
+
+ Bölüm 2, Rust'ta bir program yazmaya
 uygulamalı bir giriş niteliğindedir ve size bir
 sayı tahmin oyunu oluşturmanızı sağlar. Burada kavramları yüksek düzeyde ele alıyoruz ve daha sonraki
 bölümleri daha fazla ayrıntı sağlayacaktır. Ellerinizi hemen kirletmek istiyorsanız
-Bölüm 2 bunun için doğru yerdir. Bölüm 3'te Rust'un diğer programlama dillerine benzeyen
-özellikleri ele alınıyor ve Bölüm 4'te
+Bölüm 2 bunun için doğru yerdir.
+
+ Bölüm 3'te Rust'un diğer programlama dillerine benzeyen
+özellikleri ele alınıyor ve 
+
+Bölüm 4'te
 Rust'un sahiplik sistemi hakkında bilgi edineceksiniz. Bir sonraki bölüme geçmeden önce her ayrıntıyı öğrenmeyi tercih eden titiz bir
 öğrencisiyseniz
 Bölüm 2'yi atlayıp doğrudan Bölüm 3'e geçebilir ve öğrendiğiniz ayrıntıları uygulayarak bir proje üzerinde çalışmak istediğinizde Bölüm
 2'ye dönebilirsiniz.
 
-Bölüm 5'te yapılar ve yöntemler, Bölüm 6'da ise enumlar, `match`
+
+Bölüm 5'te yapılar ve yöntemler, 
+
+
+Bölüm 6'da ise enumlar, `match`
 ifadeleri ve `if let` kontrol akışı yapısı ele alınmaktadır. Rust'ta özel tipler oluşturmak için struct'ları ve
 enum'ları kullanacaksınız.
 
 Bölüm 7'de, Rust'ın modül sistemi ve kodunuzu düzenlemek için gizlilik kuralları
 ve genel Uygulama Programlama Arayüzü
-(API) hakkında bilgi edineceksiniz. Bölüm 8'de
-standart kütüphanesinin sağladığı vektörler, dizeler ve hash haritaları gibi bazı yaygın toplama veri yapıları ele alınmaktadır. Bölüm 9
+(API) hakkında bilgi edineceksiniz. 
+
+Bölüm 8'de
+standart kütüphanesinin sağladığı vektörler, dizeler ve hash haritaları gibi bazı yaygın toplama veri yapıları ele alınmaktadır. 
+
+Bölüm 9
 Rust'ın hata işleme felsefesini ve tekniklerini incelemektedir.
 
+
 Bölüm 10, birden fazla türe uygulanabilen kod tanımlamak için
-size güç veren jenerikler, özellikler ve yaşam sürelerini inceliyor. Bölüm 11, Rust'ın güvenlik garantileriyle bile programınızın
-mantığının doğru olduğundan emin olmak için gerekli olan testlerle ilgilidir. Bölüm 12'de, dosyalar içinde metin
+size güç veren jenerikler, özellikler ve yaşam sürelerini inceliyor. 
+
+Bölüm 11, Rust'ın güvenlik garantileriyle bile programınızın
+mantığının doğru olduğundan emin olmak için gerekli olan testlerle ilgilidir. 
+
+Bölüm 12'de, dosyalar içinde metin
 arayan `grep' komut satırı aracının işlevselliğinin bir alt kümesi
 için kendi uygulamamızı oluşturacağız. Bunun için,
 önceki bölümlerde tartıştığımız kavramların çoğunu kullanacağız.
 
 Bölüm 13, kapanışları ve yineleyicileri inceliyor: Rust'ın
-işlevsel programlama dillerinden gelen özellikleri. Bölüm 14'te, Cargo'yu
+işlevsel programlama dillerinden gelen özellikleri. 
+
+Bölüm 14'te, Cargo'yu
 daha derinlemesine inceleyeceğiz ve kütüphanelerinizi başkalarıyla paylaşmak için en iyi uygulamalar hakkında konuşacağız.
+
 Bölüm 15, standart kütüphanenin sağladığı akıllı işaretçileri ve bunların işlevselliğini sağlayan
 özelliklerini tartışıyor.
 
 Bölüm 16'da, farklı eş zamanlı programlama modellerini inceleyeceğiz ve
-Rust'ın birden fazla iş parçacığında korkusuzca programlama yapmanıza nasıl yardımcı olduğunu konuşacağız. Bölüm 17'de, Rust'ın async ve await sözdizimini
+Rust'ın birden fazla iş parçacığında korkusuzca programlama yapmanıza nasıl yardımcı olduğunu konuşacağız. 
+
+Bölüm 17'de, Rust'ın async ve await sözdizimini
 tasks, futures ve streams ile birlikte ve
 etkinleştirdikleri hafif eşzamanlılık modelini keşfederek bunu geliştiriyoruz.
 
 Bölüm 18, Rust deyimlerinin aşina olabileceğiniz nesne yönelimli programlama
-ilkeleriyle nasıl karşılaştırıldığını inceliyor. Bölüm 19, Rust
+ilkeleriyle nasıl karşılaştırıldığını inceliyor. 
+
+Bölüm 19, Rust
 programları boyunca fikirleri ifade etmenin güçlü yolları olan kalıplar ve
-kalıp eşleştirme üzerine bir referanstır. Bölüm 20, güvensiz Rust, makrolar ve yaşam süreleri, özellikler, türler,
+kalıp eşleştirme üzerine bir referanstır. 
+
+Bölüm 20, güvensiz Rust, makrolar ve yaşam süreleri, özellikler, türler,
 işlevleri ve kapanışlar hakkında daha fazlasını içeren
 gibi ilgi çekici ileri düzey konulardan oluşan bir smorgasbord içerir.
 
@@ -158,9 +186,7 @@ Son olarak, bazı ekler dil hakkında daha
 referans benzeri bir formatta faydalı bilgiler içermektedir. **Ek A** Rust'ın anahtar kelimelerini, **Ek B**
 Rust'ın operatörlerini ve sembollerini, **Ek C** standart kütüphane tarafından sağlanan
 türetilebilir özellikleri, **Ek D** bazı yararlı geliştirme
-araçlarını ve **Ek E** Rust sürümlerini açıklamaktadır. Ek F**'de
-kitabın çevirilerini bulabilirsiniz ve **Ek G**'de Rust'ın nasıl
-yapıldığını ve gecelik Rust'ın ne olduğunu ele alacağız.
+araçlarını ve **Ek E** Rust sürümlerini açıklamaktadır. **Ek F**'de kitabın çevirilerini bulabilirsiniz ve **Ek G**'de Rust'ın nasıl yapıldığını ve gecelik Rust'ın ne olduğunu ele alacağız.
 
 Bu kitabı okumanın yanlış bir yolu yok: eğer ilerlemek istiyorsanız, devam edin!
 Herhangi bir

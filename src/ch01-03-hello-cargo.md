@@ -51,7 +51,7 @@ Ayrıca bir _.gitignore_ dosyası ile birlikte yeni bir Git deposu da başlatmı
 Mevcut bir Git
 deposu içinde `cargo new` çalıştırırsanız Git dosyaları oluşturulmayacaktır; `cargo new --vcs=git` kullanarak bu davranışı geçersiz kılabilirsiniz.
 
-> Not: Git yaygın bir sürüm kontrol sistemidir. cargo new`i
+> Not: Git yaygın bir sürüm kontrol sistemidir. `cargo new`i
 > farklı bir sürüm kontrol sistemi kullanacak şekilde değiştirebilir veya
 > `--vcs` bayrağını kullanarak hiçbir sürüm kontrol sistemi kullanmayabilirsiniz. Mevcut seçenekleri görmek için `cargo new --help` komutunu çalıştırın.
 
@@ -151,9 +151,7 @@ $ cargo run
 Hello, world!
 ```
 
-Cargo run` komutunu kullanmak, `cargo
-build` komutunu çalıştırmayı ve ardından ikili dosyanın tüm yolunu kullanmayı hatırlamaktan daha kullanışlıdır, bu nedenle çoğu geliştirici `cargo
-run` komutunu kullanır.
+`Cargo run` komutunu kullanmak, `cargo build` komutunu çalıştırmayı ve ardından ikili dosyanın tüm yolunu kullanmayı hatırlamaktan daha kullanışlıdır, bu nedenle çoğu geliştirici `cargo run` komutunu kullanır.
 
 Bu sefer Cargo'nun
 `hello_cargo` dosyasını derlediğini gösteren bir çıktı görmediğimize dikkat edin. Cargo dosyaların değişmediğini anladı, bu yüzden
@@ -187,22 +185,21 @@ programlarını yazarken periyodik olarak `cargo check` çalıştırır. Daha so
 
 Cargo hakkında şimdiye kadar öğrendiklerimizi özetleyelim:
 
-- Cargo new` kullanarak bir proje oluşturabiliriz.
-- cargo build` kullanarak bir proje oluşturabiliriz.
+- `Cargo new` kullanarak bir proje oluşturabiliriz.
+- `cargo build` kullanarak bir proje oluşturabiliriz.
 - Bir projeyi `cargo run` kullanarak tek adımda oluşturabilir ve çalıştırabiliriz.
 -
  `cargo check` kullanarak hataları kontrol etmek için bir ikili üretmeden bir proje oluşturabiliriz.
 - Derleme sonucunu kodumuzla aynı dizine kaydetmek yerine,
  Cargo bunu _target/debug_ dizininde saklar.
 
-Cargo kullanmanın bir diğer avantajı da komutların
-hangi işletim sisteminde çalışıyor olursanız olun aynı olmasıdır. Dolayısıyla, bu noktada artık
+`Cargo kullanmanın bir diğer avantajı da komutların hangi işletim sisteminde çalışıyor olursanız olun aynı olmasıdır`. Dolayısıyla, bu noktada artık
 adresinde Linux ve macOS ile Windows için özel talimatlar vermeyeceğiz.
 
-### Building for Release
+### Sürüm için Hazırlık
 
-Projeniz nihayet yayınlanmaya hazır olduğunda, `cargo build
-optimizasyonlarla derlemek için --release`. Bu komut _target/debug_ yerine _target/release_ içinde bir
+Projeniz nihayet yayınlanmaya hazır olduğunda, `cargo build --release`
+optimizasyonlarla derlemek için . Bu komut _target/debug_ yerine _target/release_ içinde bir
 çalıştırılabilir dosyası oluşturacaktır. Optimizasyonlar
 Rust kodunuzun daha hızlı çalışmasını sağlar, ancak bunları açmak programınızın derlenmesi için
 gereken süreyi uzatır. Bu nedenle iki farklı profil vardır: biri
@@ -211,7 +208,8 @@ tekrar tekrar yeniden oluşturulmayacak ve mümkün olduğunca hızlı çalışa
 bir kullanıcıya vereceğiniz son programı oluşturmak için. Eğer
 kodunuzun çalışma süresini kıyaslıyorsanız, `cargo build --release` çalıştırdığınızdan ve _target/release_ içindeki çalıştırılabilir dosyayı
 ile kıyasladığınızdan emin olun.
-### Sözleşme olarak kargo
+
+### Sözleşme olarak cargo
 
 Basit projelerde, Cargo sadece
 `rustc` kullanmaktan çok fazla değer sağlamaz, ancak programlarınız daha karmaşık hale geldikçe değerini kanıtlayacaktır.
@@ -222,6 +220,7 @@ Hello_cargo` projesi basit olmasına rağmen, Rust kariyerinizin geri kalanında
 araçlarının çoğunu kullanıyor. Aslında, herhangi bir
 mevcut proje üzerinde çalışmak için, Git kullanarak
 kodunu kontrol etmek, bu projenin dizinine geçmek ve derlemek için aşağıdaki komutları kullanabilirsiniz:
+
 ```console
 $ git clone example.org/someproject
 $ cd someproject
@@ -246,7 +245,7 @@ adresini okumaya ve Rust kodu yazmaya alışmak için daha önemli bir program o
 Yaygın programlama kavramlarının
 Rust'ta nasıl çalıştığını öğrenerek başlamayı tercih ederseniz, Bölüm 3'e bakın ve ardından Bölüm 2'ye dönün.
 
-[installation]: ch01-01-installation.html#installation
+[installation]: ch01-01-installation.md#installation
 [toml]: https://toml.io
-[appendix-e]: appendix-05-editions.html
+[appendix-e]: appendix-05-editions.md
 [cargo]: https://doc.rust-lang.org/cargo/

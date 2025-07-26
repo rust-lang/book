@@ -10,8 +10,7 @@ hangi türü kullanmak istediğimizi değere ve onu nasıl kullandığımıza ba
 
 
 Bölüm 2'deki[“Tahmin ile Gizli
-[SayınınKarşılaştırılması
-”][ comparing-the-guess-to-the-secret-number]<!-- ignore --> bölümünde`parse'
+[SayınınKarşılaştırılması”][ comparing-the-guess-to-the-secret-number]<!-- ignore --> bölümünde`parse'
 kullanarakbir `String'i sayısal bir türe dönüştürdüğümüzde
 
 
@@ -34,6 +33,7 @@ Diğer veri türleri için farklı tür ek açıklamaları göreceksiniz.
 ### Skaler Tipler
 
 Bir _scalar_ türü tek bir değeri temsil eder. Rust'ın dört temel skaler türü vardır:
+
 tamsayılar, kayan noktalı sayılar, Boolean'lar ve karakterler. Bunları
 diğer programlama dillerinden tanıyor olabilirsiniz. Rust'ta nasıl çalıştıklarına geçelim.
 
@@ -110,7 +110,7 @@ bir çeşit koleksiyonu indekslerken olur.
 > 9'daki [“Unrecoverable Errors with
 > `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> bölümünde daha derinlemesine tartışacağız.
 >
-> Sürüm modunda `--release' bayrağıyla derleme yaptığınızda, Rust
+> Sürüm modunda `--release` bayrağıyla derleme yaptığınızda, Rust
 > _not_ paniğe neden olan tamsayı taşması kontrollerini içermez. Bunun yerine,
 > taşma meydana gelirse, Rust _two's complement wrapping_ gerçekleştirir. Kısacası
 > türün tutabileceği maksimum değerden büyük değerler
@@ -168,7 +168,9 @@ B][appendix_b]<!-- ignore --> Rust
 #### Boolean Türü
 
 Diğer programlama dillerinin çoğunda olduğu gibi, Rust'ta da bir Boolean tipinin iki olası
-değeri vardır: true` ve `false`. Booleanlar bir bayt boyutundadır. Rust'ta Boolean türü `bool` kullanılarak belirtilir. Örneğin:
+değeri vardır:`
+
+ `true` ve `false`. Booleanlar bir bayt boyutundadır. Rust'ta Boolean türü `bool` kullanılarak belirtilir. Örneğin:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -177,8 +179,7 @@ değeri vardır: true` ve `false`. Booleanlar bir bayt boyutundadır. Rust'ta Bo
 ```
 
 Boolean değerlerini kullanmanın ana yolu, `if`
-ifadesi gibi koşullu ifadelerdir. Rust'ta `if' ifadelerinin nasıl çalıştığını [“Control
-Flow”][control-flow]<!-- ignore --> bölümünde ele alacağız.
+ifadesi gibi koşullu ifadelerdir. Rust'ta `if' ifadelerinin nasıl çalıştığını [“Control Flow”][control-flow]<!-- ignore --> bölümünde ele alacağız.
 
 #### Karakter Türü
 
@@ -249,7 +250,7 @@ kullanabiliriz. Örneğin:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-12-tuple-indexing/src/main.rs}}
 ```
 
-Bu program `x` tuple`ını oluşturur ve ardından
+Bu program `x` tuple'ını oluşturur ve ardından
 tuple`ının her bir elemanına kendi indislerini kullanarak erişir. Çoğu programlama dilinde olduğu gibi, bir tuple içindeki ilk
 indeksi 0'dır.
 
@@ -310,7 +311,7 @@ belirterek her bir öğe için aynı değeri içerecek şekilde de başlatabilir
 let a = [3; 5];
 ```
 
-a` adlı dizi, başlangıçta hepsi
+`a` adlı dizi, başlangıçta hepsi
 `3` değerine ayarlanacak `5` eleman içerecektir. Bu, `let a = [3, 3, 3, 3];` yazmakla aynıdır, ancak
 daha kısa bir şekilde.
 
@@ -327,7 +328,7 @@ bu şekilde:
 ```
 
 Bu örnekte, `first` adlı değişken `1` değerini alacaktır çünkü
-dizideki `[0]` indeksindeki değerdir. second` adlı değişken
+dizideki `[0]` indeksindeki değerdir. `second` adlı değişken
 adresinden dizideki `[1]` dizininden `2` değerini alacaktır.
 
 ##### Geçersiz Dizi Elemanı Erişimi
@@ -375,11 +376,11 @@ devam ederek sizi bu
 tür hatalara karşı korur. Bölüm 9'da Rust'ın hata işleme özelliği ve
 adresinde nasıl panik yapmayan veya geçersiz bellek erişimine izin vermeyen okunabilir, güvenli kod yazabileceğiniz anlatılmaktadır.
 
-[comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+[comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.md#Tahmini-Gizli-Sayı-ile-Karşılaştırma
 [twos-complement]: https://en.wikipedia.org/wiki/Two%27s_complement
-[control-flow]: ch03-05-control-flow.html#control-flow
-[strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
-[stack-and-heap]: ch04-01-what-is-ownership.html#the-stack-and-the-heap
-[vectors]: ch08-01-vectors.html
-[unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.html
+[control-flow]: ch03-05-control-flow.md#Kontrol-Akışı
+[strings]: ch08-02-strings.md#UTF-8-Kodlu-Metni-Dizelerle-Saklama
+[stack-and-heap]: ch04-01-what-is-ownership.md#Yığın-ve-Yığın
+[vectors]: ch08-01-vectors.md
+[unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.md
 [appendix_b]: appendix-02-operators.md

@@ -14,7 +14,7 @@ uyarılarını geliştirdiği için çıktılar
 sürümler arasında biraz farklılık gösterebilir. Başka bir deyişle,
 bu adımları kullanarak yüklediğiniz herhangi bir yeni, kararlı Rust sürümü, bu kitabın içeriğiyle beklendiği gibi çalışmalıdır.
 
-> ### Komut Satırı Gösterimi
+> ### Komut Satırı Gösterimi 
 >
 > Bu bölümde ve kitap boyunca,
 > terminalinde kullanılan bazı komutları göstereceğiz. Terminalde girmeniz gereken satırların tümü `$` ile başlar. > `$` karakterini yazmanıza gerek yoktur; bu,

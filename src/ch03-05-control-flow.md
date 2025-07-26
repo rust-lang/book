@@ -20,14 +20,7 @@ if` ifadesini girin. _src/main.rs_ dosyasına aşağıdakileri girin:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/src/main.rs}}
 ```
 
-Tüm `if` ifadeleri `if` anahtar sözcüğü ile başlar ve ardından bir koşul gelir. İçinde
-bu durumda, koşul `sayı` değişkeninin bir
-değeri 5'ten küçükse. Koşul aşağıdaki gibi ise çalıştırılacak kod bloğunu yerleştiriyoruz
-küme parantezleri içindeki koşuldan hemen sonra `true`. Kod blokları
-'if' ifadelerindeki koşullarla ilişkili olanlara bazen _arms_ denir,
-tıpkı [“Karşılaştırma”] bölümünde tartıştığımız `match` ifadelerindeki kollar gibi
-Gizli Numarayı Tahmin Etme"][gizli-sayıyı-tahmin-etme-karşılaştırması]<!--
-Bölüm 2'deki --> bölümünü göz ardı edin.
+Tüm ififadeler anahtar kelimeyle başlar ifve ardından bir koşul gelir. Bu durumda, koşul, değişkenin number5'ten küçük bir değere sahip olup olmadığını kontrol eder. Koşulun truehemen ardından kıvırcık parantez içine koşul gelirse çalıştırılacak kod bloğunu yerleştiririz. İfadelerdeki koşullarla ilişkili kod blokları, tıpkı 2. Bölüm'deki ["Tahmini Gizli Sayı ile Karşılaştırma"][Tahmini Gizli Sayı ile Karşılaştırma] bölümünde ele aldığımız ifadelerdeki arms gibi, bazen armsif olarak adlandırılır .match
 
 İsteğe bağlı olarak, bir `else` ifadesi de ekleyebiliriz, ki biz bunu yapmayı seçtik
 burada, programa aşağıdaki durumlarda çalıştırılacak alternatif bir kod bloğu vermek için
@@ -64,7 +57,7 @@ aşağıdaki kod:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/src/main.rs}}
 ```
 
-if` koşulu bu kez `3` değerine değerlendirilir ve Rust bir
+`if` koşulu bu kez `3` değerine değerlendirilir ve Rust bir
 Hata:
 
 ```console
@@ -106,8 +99,8 @@ aşağıdaki çıktıya bakın:
 
 Bu program çalıştığında, her `if` ifadesini sırayla kontrol eder ve
 koşulun `true` olarak değerlendirildiği ilk gövde. Unutmayın ki
-6 sayısı 2'ye bölünebilir olmasına rağmen, `sayı 2'ye bölünebilir' çıktısını görmüyoruz,
-ne de `sayı 4, 3 veya 2`ye bölünemez` metnini `else` metninde görmüyoruz
+6 sayısı 2'ye bölünebilir olmasına rağmen, `sayı 2`ye bölünebilir' çıktısını görmüyoruz,
+ne de `sayı 4, 3 veya 2'ye bölünemez` metnini `else` metninde görmüyoruz
 bloğu. Bunun nedeni Rust'ın bloğu yalnızca ilk `true` için çalıştırmasıdır.
 koşulunu kullanır ve birini bulduğunda diğerlerini kontrol etmez bile.
 
@@ -117,7 +110,7 @@ Bu durumlar için `match` adı verilen Rust dallanma yapısı.
 
 #### Bir `let` Deyimi İçinde `if` Kullanımı
 
-if` bir ifade olduğu için, onu bir `let` ifadesinin sağ tarafında kullanabiliriz
+`if` bir ifade olduğu için, onu bir `let` ifadesinin sağ tarafında kullanabiliriz
 deyimi ile sonucu bir değişkene atamak için, Liste 3-2'de olduğu gibi.
 
 <Listing number="3-2" file-name="src/main.rs" caption="Assigning the result of an `if` expression to a variable">
@@ -128,7 +121,7 @@ deyimi ile sonucu bir değişkene atamak için, Liste 3-2'de olduğu gibi.
 
 </Listing>
 
-Sayı` değişkeni, `if` değişkeninin sonucuna bağlı olarak bir değere bağlanacaktır.
+`Sayı` değişkeni, `if` değişkeninin sonucuna bağlı olarak bir değere bağlanacaktır.
 ifade. Ne olduğunu görmek için bu kodu çalıştırın:
 
 ```console
@@ -149,7 +142,7 @@ kolu `i32` tamsayılarıydı. Türler uyumsuzsa, aşağıdaki gibi
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/src/main.rs}}
 ```
 
-Bu kodu derlemeye çalıştığımızda bir hata alacağız. if` ve `else` kolları
+Bu kodu derlemeye çalıştığımızda bir hata alacağız. `if` ve `else` kolları
 uyumsuz değer türlerine sahiptir ve Rust tam olarak nerede
 Programdaki sorunu bulun:
 
@@ -157,10 +150,10 @@ Programdaki sorunu bulun:
 {{#include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/output.txt}}
 ```
 
-if` bloğundaki ifade bir tamsayı olarak değerlendirilir ve
-else` bloğu bir string olarak değerlendirilir. Bu işe yaramaz çünkü değişkenler
+`if` bloğundaki ifade bir tamsayı olarak değerlendirilir ve
+`else` bloğu bir string olarak değerlendirilir. Bu işe yaramaz çünkü değişkenler
 tek bir türe sahiptir ve Rust'ın derleme zamanında
-değişkeni kesin olarak `sayı`dır. Sayı` değişkeninin türünü bilmek
+değişkeni kesin olarak `sayı`dır. `Sayı` değişkeninin türünü bilmek
 derleyici `number` kullandığımız her yerde türün geçerli olduğunu doğrular. Pas olmazdı
 'sayı'nın türü yalnızca çalışma zamanında belirleniyorsa bunu yapabilirdi
 derleyici daha karmaşık olacak ve kod hakkında daha az garanti verecektir.
@@ -189,10 +182,10 @@ Bunun gibi:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-loop/src/main.rs}}
 ```
 
-When we run this program, we’ll see `again!` printed over and over continuously
-until we stop the program manually. Most terminals support the keyboard shortcut
-<kbd>ctrl</kbd>-<kbd>c</kbd> to interrupt a program that is stuck in a continual
-loop. Give it a try:
+Bu programı çalıştırdığımızda, programı manuel olarak durdurana kadar sürekli olarak
+adresinde `again!` yazdırıldığını göreceğiz. Çoğu terminal, sürekli bir
+döngüsüne takılan bir programı kesmek için
+<kbd>ctrl</kbd>-<kbd>c</kbd> klavye kısayolunu destekler. Bir deneyin:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-32-loop
@@ -212,21 +205,21 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <kbd>ctrl</kbd>-<kbd>c</kbd>.
+^C` sembolü <kbd>ctrl</kbd>-<kbd>c</kbd> tuşlarına bastığınız yeri gösterir.
 
-You may or may not see the word `again!` printed after the `^C`, depending on
-where the code was in the loop when it received the interrupt signal.
+Kesme sinyalini aldığında kodun döngüde nerede olduğuna
+bağlı olarak `^C`den sonra `again!` kelimesinin basıldığını görebilir veya görmeyebilirsiniz.
 
-Fortunately, Rust also provides a way to break out of a loop using code. You
-can place the `break` keyword within the loop to tell the program when to stop
-executing the loop. Recall that we did this in the guessing game in the
-[“Quitting After a Correct Guess”][quitting-after-a-correct-guess]<!-- ignore
---> section of Chapter 2 to exit the program when the user won the game by
-guessing the correct number.
+Neyse ki Rust, kod kullanarak bir döngüden çıkmanın bir yolunu da sağlar. Programa
+döngüyü yürütmeyi ne zaman durduracağını söylemek için
+döngü içine `break` anahtar sözcüğünü yerleştirebilirsiniz. Bunu
+[“Doğru Tahminden Sonra Çıkmak”][quitting-after-a-correct-guess]<!-- ignore adresindeki tahmin oyununda yaptığımızı hatırlayın
+Kullanıcı
+doğru sayıyı tahmin ederek oyunu kazandığında programdan çıkmak için Bölüm 2'nin --> bölümü.
 
-We also used `continue` in the guessing game, which in a loop tells the program
-to skip over any remaining code in this iteration of the loop and go to the
-next iteration.
+Tahmin oyununda ayrıca, bir döngüde programa
+döngünün bu yinelemesinde kalan kodları atlamasını ve
+bir sonraki yinelemeye geçmesini söyleyen `continue` komutunu kullandık.
 
 #### Döngülerden Değer Döndürme
 
@@ -245,11 +238,11 @@ Döngüden önce, `counter` adında bir değişken bildiriyoruz ve bunu
 `0`. Daha sonra `result` adında bir değişken tanımlayarak bu değişkenden dönen değeri tutuyoruz.
 döngü. Döngünün her iterasyonunda `counter` değişkenine `1` ekliyoruz,
 ve sonra `sayı`nın `10`a eşit olup olmadığını kontrol ediyoruz. Eşit olduğu zaman
-break` anahtar sözcüğünü `counter * 2` değeriyle değiştiriyoruz. Döngüden sonra, bir
+`break` anahtar sözcüğünü `counter * 2` değeriyle değiştiriyoruz. Döngüden sonra, bir
 'a değer atayan ifadeyi sonlandırmak için noktalı virgül. Son olarak, biz
 Bu durumda `20` olan `result` içindeki değeri yazdırır.
 
-Bir döngünün içinden de `return` yapabilirsiniz. break` sadece mevcut döngüden çıkarken
+Bir döngünün içinden de `return` yapabilirsiniz. `break` sadece mevcut döngüden çıkarken
 döngüsünde, `return` her zaman geçerli işlevden çıkar.
 
 #### Birden Fazla Döngü Arasındaki Anlamı Belirsizleştirmek için Döngü Etiketleri
@@ -265,7 +258,7 @@ tek bir tırnak işareti ile. İşte iki iç içe döngü içeren bir örnek:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/src/main.rs}}
 ```
 
-Dış döngü `‘counting_up’ etiketine sahiptir ve 0'dan 2'ye kadar sayar.
+Dış döngü `‘counting_up’` etiketine sahiptir ve 0'dan 2'ye kadar sayar.
 Etiketsiz iç döngü 10'dan 9'a kadar geri sayar. İlk `break`
 bir etiket belirtmezse yalnızca iç döngüden çıkacaktır. Break
 'counting_up;` deyimi dış döngüden çıkacaktır. Bu kod yazdırılır:
@@ -320,7 +313,7 @@ dizideki eleman:
 {{#include ../listings/ch03-common-programming-concepts/listing-03-04/output.txt}}
 ```
 
-Beklendiği gibi, beş dizi değerinin tümü terminalde görünür. index` olsa bile
+Beklendiği gibi, beş dizi değerinin tümü terminalde görünür. `index` olsa bile
 bir noktada `5` değerine ulaşırsa, döngü denemeden önce yürütmeyi durdurur
 diziden altıncı bir değer almak için.
 
@@ -349,11 +342,11 @@ yeterince ileri gitmek ve bazı öğeleri kaçırmak. for`dan üretilen makine k
 döngüler de daha verimli olabilir, çünkü indeksin
 her yinelemede dizinin uzunluğuyla karşılaştırılır.
 
-for` döngüsünü kullanarak, aşağıdaki durumlarda başka herhangi bir kodu değiştirmeyi hatırlamanız gerekmez
+`for` döngüsünü kullanarak, aşağıdaki durumlarda başka herhangi bir kodu değiştirmeyi hatırlamanız gerekmez
 yönteminde yaptığınız gibi, dizideki değer sayısını değiştirdiniz
 Liste 3-4'te kullanılmıştır.
 
-for` döngülerinin güvenliği ve kısalığı, onları en yaygın kullanılan döngü haline getirir
+`for` döngülerinin güvenliği ve kısalığı, onları en yaygın kullanılan döngü haline getirir
 Rust'ta yapı. Bazı kodları çalıştırmak istediğiniz durumlarda bile
 belirli sayıda kez, `while` döngüsü kullanan geri sayım örneğinde olduğu gibi
 Listeleme 3-3'te, çoğu Rustacean bir `for` döngüsü kullanacaktır. Bunu yapmanın yolu
@@ -388,5 +381,5 @@ Devam etmeye hazır olduğunuzda, Rust'ta bir kavram hakkında konuşacağız.
 diğer programlama dillerinde yaygın olarak bulunur: sahiplik.
 
 
-[comparing-the-guess-to-the-secret-number]: ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
-[quitting-after-a-correct-guess]: ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess
+[Tahmini Gizli Sayı ile Karşılaştırma]: ch02-00-guessing-game-tutorial.md#Tahmini-Gizli-Sayı-ile-Karşılaştırma
+[quitting-after-a-correct-guess]: ch02-00-guessing-game-tutorial.md#Doğru-Tahminden-Sonra-Çıkmak

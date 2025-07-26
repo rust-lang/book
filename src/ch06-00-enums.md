@@ -1,11 +1,11 @@
-# Enums and Pattern Matching
+# Enumlar ve Kalıp Eşleştirme
 
-In this chapter, we’ll look at _enumerations_, also referred to as _enums_.
-Enums allow you to define a type by enumerating its possible _variants_. First
-we’ll define and use an enum to show how an enum can encode meaning along with
-data. Next, we’ll explore a particularly useful enum, called `Option`, which
-expresses that a value can be either something or nothing. Then we’ll look at
-how pattern matching in the `match` expression makes it easy to run different
-code for different values of an enum. Finally, we’ll cover how the `if let`
-construct is another convenient and concise idiom available to handle enums in
-your code.
+Bu bölümde, _enum_ olarak da adlandırılan _enumerations_ konusuna bakacağız.
+Enumlar, bir türü olası _varyantlarını_ sıralayarak tanımlamanıza olanak tanır. Birinci
+ile birlikte bir enumun anlamı nasıl kodlayabileceğini göstermek için bir enum tanımlayacağız ve kullanacağız.
+veri. Daha sonra, `Option` adı verilen özellikle kullanışlı bir enum'u keşfedeceğiz.
+bir değerin ya bir şey ya da hiçbir şey olabileceğini ifade eder. O zaman bakacağız
+'match' ifadesindeki desen eşleştirmenin farklı ifadeleri çalıştırmayı nasıl kolaylaştırdığını
+bir enum'un farklı değerleri için kod. Son olarak, `if let'in nasıl kullanıldığını ele alacağız
+yapısı, enum'ları işlemek için kullanılabilen başka bir kullanışlı ve özlü deyimdir.
+senin kodun.

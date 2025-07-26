@@ -95,7 +95,7 @@ fn main() {
 }
 ```
 
-Bu satırlar `main` adında bir fonksiyon tanımlar. main` fonksiyonu özeldir:
+Bu satırlar `main` adında bir fonksiyon tanımlar. `main` fonksiyonu özeldir:
 her çalıştırılabilir Rust programında çalışan ilk koddur. Burada,
 ilk satır parametresi olmayan ve
 hiçbir şey döndürmeyen `main` adında bir fonksiyon tanımlar. Eğer parametreler olsaydı, bunlar `()` parantezlerinin içinde olurdu.
@@ -162,7 +162,7 @@ Linux ve macOS'ta iki dosya görürsünüz. Windows'ta PowerShell ile
 CMD kullanarak göreceğiniz aynı üç dosyayı görürsünüz. Windows'ta CMD ile
 aşağıdaki komutu girebilirsiniz:
 
-``cmd
+```cmd
 > dir /B %= /B seçeneği yalnızca dosya adlarını göstermeyi söyler =%
 main.exe
 main.pdb
@@ -175,7 +175,7 @@ Windows kullanırken, _.pdb_ uzantılı hata ayıklama bilgilerini içeren bir d
 Buradan _main_ veya _main.exe_ dosyasını aşağıdaki gibi çalıştırırsınız:
 
 ```console
-$ ./main # or .\main on Windows
+$ ./main # ya da .\main windows da
 ```
 
 Eğer _main.rs_ programınız “Merhaba, dünya!” programınız ise, bu satır terminalinize `Merhaba,
@@ -195,6 +195,6 @@ büyüdükçe, tüm seçenekleri yönetmek ve
 kodunuzu paylaşmayı kolaylaştırmak isteyeceksiniz. Daha sonra, size
 gerçek dünya Rust programları yazmanıza yardımcı olacak Cargo aracını tanıtacağız.
 
-[troubleshooting]: ch01-01-installation.html#troubleshooting
-[devtools]: appendix-04-useful-development-tools.html
-[ch20-macros]: ch20-05-macros.html
+[troubleshooting]:ch01-01-installation.md#troubleshooting
+[devtools]:appendix-04-useful-development-tools.md
+[ch20-macros]:ch20-05-macros.md
