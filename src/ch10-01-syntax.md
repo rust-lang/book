@@ -1,20 +1,20 @@
-## Generic Data Types
+## Jenerik Veri Tipleri
 
-We use generics to create definitions for items like function signatures or
-structs, which we can then use with many different concrete data types. Let’s
-first look at how to define functions, structs, enums, and methods using
-generics. Then we’ll discuss how generics affect code performance.
+Fonksiyon imzaları veya
+structs gibi öğeler için tanımlar oluşturmak için jenerikleri kullanırız ve bunları daha sonra birçok farklı somut veri türüyle kullanabiliriz. İlk olarak
 
-### In Function Definitions
+ jeneriklerini kullanarak fonksiyonları, yapıları, enumları ve metotları nasıl tanımlayacağımıza bakalım. Daha sonra jeneriklerin kod performansını nasıl etkilediğini tartışacağız.
 
-When defining a function that uses generics, we place the generics in the
-signature of the function where we would usually specify the data types of the
-parameters and return value. Doing so makes our code more flexible and provides
-more functionality to callers of our function while preventing code duplication.
+### Fonksiyon Tanımlarında
 
-Continuing with our `largest` function, Listing 10-4 shows two functions that
-both find the largest value in a slice. We’ll then combine these into a single
-function that uses generics.
+Jenerik kullanan bir fonksiyon tanımlarken, jenerikleri fonksiyonun
+imzasına, genellikle
+parametrelerinin ve dönüş değerinin veri tiplerini belirttiğimiz yere yerleştiririz. Bunu yapmak kodumuzu daha esnek hale getirir ve kod tekrarını önlerken fonksiyonumuzu çağıranlara
+daha fazla işlevsellik sağlar.
+
+En büyük fonksiyonumuzla devam edersek, Liste 10-4'te
+her ikisi de bir dilimdeki en büyük değeri bulan iki fonksiyon gösterilmektedir. Daha sonra bunları jenerik kullanan tek bir
+fonksiyonunda birleştireceğiz.
 
 <Listing number="10-4" file-name="src/main.rs" caption="Two functions that differ only in their names and in the types in their signatures">
 
@@ -24,38 +24,38 @@ function that uses generics.
 
 </Listing>
 
-The `largest_i32` function is the one we extracted in Listing 10-3 that finds
-the largest `i32` in a slice. The `largest_char` function finds the largest
-`char` in a slice. The function bodies have the same code, so let’s eliminate
-the duplication by introducing a generic type parameter in a single function.
+Liste 10-3'te çıkardığımız `largest_i32` fonksiyonu
+bir dilimdeki en büyük `i32`yi bulur. En büyük_char` fonksiyonu bir dilimdeki en büyük
+`char`ı bulur. Fonksiyon gövdeleri aynı koda sahiptir, bu nedenle tek bir fonksiyona genel bir tip parametresi ekleyerek
+yinelemeyi ortadan kaldıralım.
 
-To parameterize the types in a new single function, we need to name the type
-parameter, just as we do for the value parameters to a function. You can use
-any identifier as a type parameter name. But we’ll use `T` because, by
-convention, type parameter names in Rust are short, often just one letter, and
-Rust’s type-naming convention is CamelCase. Short for _type_, `T` is the default
-choice of most Rust programmers.
+Yeni bir tek fonksiyonda tipleri parametrelendirmek için, tıpkı bir fonksiyonun değer parametreleri için yaptığımız gibi, tip
+parametresini adlandırmamız gerekir. Tip parametresi adı olarak
+herhangi bir tanımlayıcıyı kullanabilirsiniz. Ancak biz `T` kullanacağız çünkü
+kuralına göre, Rust'ta tip parametre isimleri kısadır, genellikle sadece bir harftir ve
+Rust'ın tip isimlendirme kuralı CamelCase'dir. _type_'ın kısaltması olan `T`, çoğu Rust programcısının varsayılan
+seçimidir.
 
-When we use a parameter in the body of the function, we have to declare the
-parameter name in the signature so the compiler knows what that name means.
-Similarly, when we use a type parameter name in a function signature, we have
-to declare the type parameter name before we use it. To define the generic
-`largest` function, we place type name declarations inside angle brackets,
-`<>`, between the name of the function and the parameter list, like this:
+İşlevin gövdesinde bir parametre kullandığımızda, derleyicinin bu adın ne anlama geldiğini bilmesi için imzada
+parametre adını bildirmemiz gerekir.
+Benzer şekilde, bir fonksiyon imzasında bir tip parametre adı kullandığımızda, kullanmadan önce tip parametre adını bildirmek için
+adresine sahibiz. Genel
+`largest` işlevini tanımlamak için, tür adı bildirimlerini açılı parantezler içine,
+`<>`, işlevin adı ile parametre listesi arasına aşağıdaki gibi yerleştiririz:
 
 ```rust,ignore
 fn largest<T>(list: &[T]) -> &T {
 ```
 
-We read this definition as: the function `largest` is generic over some type
-`T`. This function has one parameter named `list`, which is a slice of values
-of type `T`. The `largest` function will return a reference to a value of the
-same type `T`.
+Bu tanımı şu şekilde okuyabiliriz: `largest` fonksiyonu
+`T` tipi üzerinde geneldir. Bu fonksiyonun `list` adında bir parametresi vardır ve bu parametre
+tipinde `T` değerlerinin bir dilimidir. En büyük` fonksiyonu
+aynı `T` tipinde bir değere referans döndürecektir.
 
-Listing 10-5 shows the combined `largest` function definition using the generic
-data type in its signature. The listing also shows how we can call the function
-with either a slice of `i32` values or `char` values. Note that this code won’t
-compile yet.
+Listing 10-5, imzasında genel
+veri tipini kullanan birleşik `largest` fonksiyon tanımını gösterir. Listeleme ayrıca
+fonksiyonunu `i32` değerlerinden oluşan bir dilim ya da `char` değerleriyle nasıl çağırabileceğimizi de göstermektedir. Bu kodun henüz
+derlenmeyeceğini unutmayın.
 
 <Listing number="10-5" file-name="src/main.rs" caption="The `largest` function using generic type parameters; this doesn’t compile yet">
 
@@ -65,28 +65,28 @@ compile yet.
 
 </Listing>
 
-If we compile this code right now, we’ll get this error:
+Bu kodu şu anda derlersek, bu hatayı alırız:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
-The help text mentions `std::cmp::PartialOrd`, which is a _trait_, and we’re
-going to talk about traits in the next section. For now, know that this error
-states that the body of `largest` won’t work for all possible types that `T`
-could be. Because we want to compare values of type `T` in the body, we can
-only use types whose values can be ordered. To enable comparisons, the standard
-library has the `std::cmp::PartialOrd` trait that you can implement on types
-(see Appendix C for more on this trait). To fix Listing 10-5, we can follow the
-help text’s suggestion and restrict the types valid for `T` to only those that
-implement `PartialOrd`. The listing will then compile, because the standard
-library implements `PartialOrd` on both `i32` and `char`.
+Yardım metni bir _trait_ olan `std::cmp::PartialOrd`dan bahseder ve biz
+bir sonraki bölümde traitler hakkında konuşacağız. Şimdilik, bu hatanın
+`largest` gövdesinin `T`
+'nin olabileceği tüm olası türler için çalışmayacağını belirttiğini bilin. Gövdede `T` türündeki değerleri karşılaştırmak istediğimiz için,
+yalnızca değerleri sıralanabilen türleri kullanabiliriz. Karşılaştırmaları etkinleştirmek için, standart
+kütüphanesi,
+ türleri üzerinde uygulayabileceğiniz `std::cmp::PartialOrd` özelliğine sahiptir (bu özellik hakkında daha fazla bilgi için Ek C'ye bakın). Liste 10-5'i düzeltmek için,
+yardım metninin önerisini takip edebilir ve `T` için geçerli türleri yalnızca
+`PartialOrd` uygulayanlarla sınırlandırabiliriz. Listeleme daha sonra derlenecektir, çünkü standart
+kütüphanesi hem `i32` hem de `char` üzerinde `PartialOrd` uygular.
 
-### In Struct Definitions
+### Struct Tanımlarında
 
-We can also define structs to use a generic type parameter in one or more
-fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
-`x` and `y` coordinate values of any type.
+Ayrıca, `<>` sözdizimini kullanarak bir veya daha fazla
+alanında genel bir tür parametresi kullanmak için yapılar tanımlayabiliriz. Liste 10-6, herhangi bir tipteki
+`x` ve `y` koordinat değerlerini tutmak için bir `Point<T>` struct'ı tanımlar.
 
 <Listing number="10-6" file-name="src/main.rs" caption="A `Point<T>` struct that holds `x` and `y` values of type `T`">
 
@@ -96,17 +96,17 @@ fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
 
 </Listing>
 
-The syntax for using generics in struct definitions is similar to that used in
-function definitions. First we declare the name of the type parameter inside
-angle brackets just after the name of the struct. Then we use the generic
-type in the struct definition where we would otherwise specify concrete data
-types.
+Struct tanımlarında jenerikleri kullanmak için kullanılan sözdizimi
+fonksiyon tanımlarında kullanılana benzer. İlk olarak, struct adından hemen sonra
+köşeli parantez içinde tip parametresinin adını bildiririz. Ardından, struct tanımında somut veri
+türlerini belirteceğimiz yerde genel
+türünü kullanırız.
 
-Note that because we’ve used only one generic type to define `Point<T>`, this
-definition says that the `Point<T>` struct is generic over some type `T`, and
-the fields `x` and `y` are _both_ that same type, whatever that type may be. If
-we create an instance of a `Point<T>` that has values of different types, as in
-Listing 10-7, our code won’t compile.
+Nokta`<T>`yi tanımlamak için yalnızca bir genel tip kullandığımızdan, bu
+tanımının `Nokta<T>` yapısının bazı `T` tipleri üzerinde genel olduğunu ve
+`x` ve `y` alanlarının, bu tip ne olursa olsun, _ikisinin de_ aynı tip olduğunu söylediğini unutmayın. Eğer
+
+ Liste 10-7'de olduğu gibi farklı tiplerde değerlere sahip bir `Point<T>` örneği yaratırsak, kodumuz derlenmeyecektir.
 
 <Listing number="10-7" file-name="src/main.rs" caption="The fields `x` and `y` must be the same type because both have the same generic data type `T`.">
 
@@ -116,19 +116,19 @@ Listing 10-7, our code won’t compile.
 
 </Listing>
 
-In this example, when we assign the integer value `5` to `x`, we let the
-compiler know that the generic type `T` will be an integer for this instance of
-`Point<T>`. Then when we specify `4.0` for `y`, which we’ve defined to have the
-same type as `x`, we’ll get a type mismatch error like this:
+Bu örnekte, `x` öğesine `5` tamsayı değerini atadığımızda,
+derleyicisine
+`Point<T>` öğesinin bu örneği için `T` genel türünün bir tamsayı olacağını bildiririz. Daha sonra, `x` ile
+aynı türe sahip olacak şekilde tanımladığımız `y` için `4.0` değerini belirttiğimizde, aşağıdaki gibi bir tür uyuşmazlığı hatası alırız:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/output.txt}}
 ```
 
-To define a `Point` struct where `x` and `y` are both generics but could have
-different types, we can use multiple generic type parameters. For example, in
-Listing 10-8, we change the definition of `Point` to be generic over types `T`
-and `U` where `x` is of type `T` and `y` is of type `U`.
+`x` ve `y` türlerinin her ikisinin de jenerik olduğu ancak
+farklı türlere sahip olabileceği bir `Point` yapısı tanımlamak için birden fazla jenerik tür parametresi kullanabiliriz. Örneğin,
+Liste 10-8'de, `Point` tanımını `T`
+ve `U` tipleri üzerinde genel olacak şekilde değiştiriyoruz, burada `x` `T` tipinde ve `y` `U` tipindedir.
 
 <Listing number="10-8" file-name="src/main.rs" caption="A `Point<T, U>` generic over two types so that `x` and `y` can be values of different types">
 
@@ -138,17 +138,17 @@ and `U` where `x` is of type `T` and `y` is of type `U`.
 
 </Listing>
 
-Now all the instances of `Point` shown are allowed! You can use as many generic
-type parameters in a definition as you want, but using more than a few makes
-your code hard to read. If you’re finding you need lots of generic types in
-your code, it could indicate that your code needs restructuring into smaller
-pieces.
+Artık gösterilen tüm `Point` örneklerine izin verilmektedir! Bir tanımda istediğiniz kadar genel
+tip parametresi kullanabilirsiniz, ancak birkaç taneden fazla kullanmak
+kodunuzun okunmasını zorlaştırır. Kodunuzda
+çok sayıda genel tipe ihtiyaç duyuyorsanız
+bu durum kodunuzun daha küçük parçalar halinde yeniden yapılandırılması gerektiğini gösterebilir.
 
-### In Enum Definitions
+### Enum Tanımlarında
 
-As we did with structs, we can define enums to hold generic data types in their
-variants. Let’s take another look at the `Option<T>` enum that the standard
-library provides, which we used in Chapter 6:
+Yapılarda yaptığımız gibi, genel veri tiplerini
+varyantlarında tutmak için enum'ları tanımlayabiliriz. Bölüm 6'da kullandığımız standart
+kütüphanesinin sağladığı `Option<T>` enumuna bir kez daha göz atalım:
 
 ```rust
 enum Option<T> {
@@ -157,15 +157,15 @@ enum Option<T> {
 }
 ```
 
-This definition should now make more sense to you. As you can see, the
-`Option<T>` enum is generic over type `T` and has two variants: `Some`, which
-holds one value of type `T`, and a `None` variant that doesn’t hold any value.
-By using the `Option<T>` enum, we can express the abstract concept of an
-optional value, and because `Option<T>` is generic, we can use this abstraction
-no matter what the type of the optional value is.
+Bu tanım şimdi size daha anlamlı gelecektir. Gördüğünüz gibi,
+`Option<T>` enumu `T` tipi üzerinde geneldir ve iki çeşidi vardır:
+`T` tipinde bir değer tutan `Some` ve herhangi bir değer tutmayan `None` çeşidi.
+Opsiyon<T>` enumunu kullanarak, soyut bir
+isteğe bağlı değer kavramını ifade edebiliriz ve `Opsiyon<T>` genel olduğundan, isteğe bağlı değerin türü ne olursa olsun bu soyutlamayı
+kullanabiliriz.
 
-Enums can use multiple generic types as well. The definition of the `Result`
-enum that we used in Chapter 9 is one example:
+Enumlar birden fazla jenerik tip de kullanabilir. Bölüm 9'da kullandığımız `Result`
+enum tanımı buna bir örnektir:
 
 ```rust
 enum Result<T, E> {
@@ -174,24 +174,24 @@ enum Result<T, E> {
 }
 ```
 
-The `Result` enum is generic over two types, `T` and `E`, and has two variants:
-`Ok`, which holds a value of type `T`, and `Err`, which holds a value of type
-`E`. This definition makes it convenient to use the `Result` enum anywhere we
-have an operation that might succeed (return a value of some type `T`) or fail
-(return an error of some type `E`). In fact, this is what we used to open a
-file in Listing 9-3, where `T` was filled in with the type `std::fs::File` when
-the file was opened successfully and `E` was filled in with the type
-`std::io::Error` when there were problems opening the file.
+Sonuç` enumu `T` ve `E` olmak üzere iki tip üzerinde geneldir ve iki çeşidi vardır:
+`T` tipinde bir değer tutan `Ok` ve
+`E` tipinde bir değer tutan `Err`. Bu tanım,
+başarılı olabilecek (`T` türünde bir değer döndüren) veya başarısız olabilecek (`E` türünde bir hata döndüren)
+ bir işleme sahip olduğumuz her yerde `Result` enumunu kullanmayı kolaylaştırır. Aslında, Listing 9-3'te bir
+dosyasını açmak için kullandığımız şey buydu; burada
+dosya başarıyla açıldığında `T`, `std::fs::File` türüyle dolduruldu ve dosyanın açılmasında sorun olduğunda `E`,
+`std::io::Error` türüyle dolduruldu.
 
-When you recognize situations in your code with multiple struct or enum
-definitions that differ only in the types of the values they hold, you can
-avoid duplication by using generic types instead.
+Kodunuzda yalnızca tuttukları değerlerin türlerinde farklılık gösteren birden fazla struct veya enum
+tanımının bulunduğu durumları fark ettiğinizde
+bunun yerine genel türleri kullanarak yinelemeden kaçınabilirsiniz.
 
-### In Method Definitions
+### Yöntem Tanımlarında
 
-We can implement methods on structs and enums (as we did in Chapter 5) and use
-generic types in their definitions too. Listing 10-9 shows the `Point<T>`
-struct we defined in Listing 10-6 with a method named `x` implemented on it.
+Yapılar ve enumlar üzerinde yöntemler uygulayabilir (Bölüm 5'te yaptığımız gibi) ve tanımlarında
+genel türlerini de kullanabiliriz. Liste 10-9, Liste 10-6'da tanımladığımız `Point<T>`
+yapısını ve üzerinde uygulanan `x` adlı bir yöntemi göstermektedir.
 
 <Listing number="10-9" file-name="src/main.rs" caption="Implementing a method named `x` on the `Point<T>` struct that will return a reference to the `x` field of type `T`">
 
@@ -201,23 +201,23 @@ struct we defined in Listing 10-6 with a method named `x` implemented on it.
 
 </Listing>
 
-Here, we’ve defined a method named `x` on `Point<T>` that returns a reference
-to the data in the field `x`.
+Burada, `x` alanındaki veriye
+referansını döndüren `Point<T>` üzerinde `x` adlı bir yöntem tanımladık.
 
-Note that we have to declare `T` just after `impl` so we can use `T` to specify
-that we’re implementing methods on the type `Point<T>`. By declaring `T` as a
-generic type after `impl`, Rust can identify that the type in the angle
-brackets in `Point` is a generic type rather than a concrete type. We could
-have chosen a different name for this generic parameter than the generic
-parameter declared in the struct definition, but using the same name is
-conventional. If you write a method within an `impl` that declares a generic
-type, that method will be defined on any instance of the type, no matter what
-concrete type ends up substituting for the generic type.
+T`yi `impl`den hemen sonra bildirmemiz gerektiğine dikkat edin, böylece
+adresinde `Point<T>` türü üzerinde yöntemler uyguladığımızı belirtmek için `T`yi kullanabiliriz. Rust, `impl` türünden sonra `T` türünü bir
+jenerik türü olarak bildirerek, `Point` türündeki
+köşeli parantez içindeki türün somut bir türden ziyade jenerik bir tür olduğunu belirleyebilir. Bu jenerik parametre için
+struct tanımında bildirilen jenerik
+parametresinden farklı bir isim seçebilirdik, ancak aynı ismi kullanmak
+gelenekseldir. Bir `impl` içinde genel bir
+türü bildiren bir yöntem yazarsanız, bu yöntem,
+somut türünün genel türün yerine geçmesi ne olursa olsun, türün herhangi bir örneği üzerinde tanımlanacaktır.
 
-We can also specify constraints on generic types when defining methods on the
-type. We could, for example, implement methods only on `Point<f32>` instances
-rather than on `Point<T>` instances with any generic type. In Listing 10-10 we
-use the concrete type `f32`, meaning we don’t declare any types after `impl`.
+Ayrıca
+türünde yöntemler tanımlarken genel türler üzerinde kısıtlamalar da belirleyebiliriz. Örneğin, herhangi bir jenerik tipe sahip `Point<T>` örnekleri yerine yalnızca `Point<f32>` örnekleri
+üzerinde yöntemler uygulayabiliriz. Liste 10-10'da
+somut `f32` tipini kullanıyoruz, yani `impl`den sonra herhangi bir tip bildirmiyoruz.
 
 <Listing number="10-10" file-name="src/main.rs" caption="An `impl` block that only applies to a struct with a particular concrete type for the generic type parameter `T`">
 
@@ -227,18 +227,18 @@ use the concrete type `f32`, meaning we don’t declare any types after `impl`.
 
 </Listing>
 
-This code means the type `Point<f32>` will have a `distance_from_origin`
-method; other instances of `Point<T>` where `T` is not of type `f32` will not
-have this method defined. The method measures how far our point is from the
-point at coordinates (0.0, 0.0) and uses mathematical operations that are
-available only for floating-point types.
+Bu kod, `Point<f32>` türünün bir `distance_from_origin`
+yöntemine sahip olacağı anlamına gelir; `T` türünün `f32` olmadığı diğer `Point<T>` örnekleri
+bu yönteme sahip olmayacaktır. Yöntem, noktamızın (0.0, 0.0) koordinatlarındaki
+noktasından ne kadar uzakta olduğunu ölçer ve
+yalnızca kayan nokta türleri için kullanılabilen matematiksel işlemleri kullanır.
 
-Generic type parameters in a struct definition aren’t always the same as those
-you use in that same struct’s method signatures. Listing 10-11 uses the generic
-types `X1` and `Y1` for the `Point` struct and `X2` `Y2` for the `mixup` method
-signature to make the example clearer. The method creates a new `Point`
-instance with the `x` value from the `self` `Point` (of type `X1`) and the `y`
-value from the passed-in `Point` (of type `Y2`).
+Bir struct tanımındaki jenerik tip parametreleri her zaman aynı struct'ın metot imzalarında kullandığınız
+parametrelerle aynı değildir. Liste 10-11, örneği daha anlaşılır kılmak için `Point` yapısı için `X1` ve `Y1` genel
+türlerini ve `mixup` yöntemi için `X2` `Y2`
+imzasını kullanır. Yöntem, `self` `Point` (`X1` türünden) `x` değeri ve aktarılan `Point` (`Y2` türünden) `y`
+değeri ile yeni bir `Point`
+örneği oluşturur.
 
 <Listing number="10-11" file-name="src/main.rs" caption="A method that uses generic types different from its struct’s definition">
 
@@ -248,52 +248,39 @@ value from the passed-in `Point` (of type `Y2`).
 
 </Listing>
 
-In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
-and an `f64` for `y` (with value `10.4`). The `p2` variable is a `Point` struct
-that has a string slice for `x` (with value `"Hello"`) and a `char` for `y`
-(with value `c`). Calling `mixup` on `p1` with the argument `p2` gives us `p3`,
-which will have an `i32` for `x` because `x` came from `p1`. The `p3` variable
-will have a `char` for `y` because `y` came from `p2`. The `println!` macro
-call will print `p3.x = 5, p3.y = c`.
+`main` fonksiyonunda, `x` alanı için `i32` türünde bir değer (`5`) ve `y` alanı için `f64` türünde bir değer (`10.4`) içeren bir `Point` tanımladık. `p2` değişkeni ise `x` alanı için bir string dilimi (`"Hello"`) ve `y` alanı için bir `char` türünde değer (`c`) içeren başka bir `Point` yapısıdır. `p1` üzerinde `p2` argümanıyla `mixup` fonksiyonunu çağırdığımızda elde ettiğimiz `p3`, `x` değerini `p1`'den aldığı için `i32` türünde bir `x` alanına sahip olacaktır. `p3` değişkeninin `y` alanı ise `p2`'den geldiği için `char` türünde olacaktır. `println!` makrosu çağrısı `p3.x = 5, p3.y = c` çıktısını verecektir.
 
-The purpose of this example is to demonstrate a situation in which some generic
-parameters are declared with `impl` and some are declared with the method
-definition. Here, the generic parameters `X1` and `Y1` are declared after
-`impl` because they go with the struct definition. The generic parameters `X2`
-and `Y2` are declared after `fn mixup` because they’re only relevant to the
-method.
+Bu örneğin amacı, bazı genel tür parametrelerinin `impl` ile, bazılarının ise metod tanımıyla belirtildiği durumları göstermektir. Burada, `X1` ve `Y1` genel tür parametreleri `impl`'den sonra belirtilmiştir çünkü yapı tanımıyla ilişkilidir. `X2` ve `Y2` genel tür parametreleri ise yalnızca metodla ilgili olduğu için `fn mixup`'tan sonra belirtilmiştir.
 
-### Performance of Code Using Generics
+### Generic Kullanan Kodun Performansı
 
-You might be wondering whether there is a runtime cost when using generic type
-parameters. The good news is that using generic types won’t make your program
-run any slower than it would with concrete types.
+Generic tür parametreleri kullanmanın çalışma zamanında bir maliyeti olup olmadığını merak ediyor olabilirsiniz. İyi haber şu ki, generic türler kullanmak programınızı somut türler kullandığınız duruma göre daha yavaş çalıştırmayacaktır.
 
-Rust accomplishes this by performing monomorphization of the code using
-generics at compile time. _Monomorphization_ is the process of turning generic
-code into specific code by filling in the concrete types that are used when
-compiled. In this process, the compiler does the opposite of the steps we used
-to create the generic function in Listing 10-5: the compiler looks at all the
-places where generic code is called and generates code for the concrete types
-the generic code is called with.
+Rust bunu, derleme zamanında
+generics kullanarak kodun monomorfizasyonunu gerçekleştirerek başarır. Monomorfizasyon_
+derlendiğinde kullanılan somut tiplerin içini doldurarak genel
+kodunu özel koda dönüştürme işlemidir. Bu işlemde derleyici
+Liste 10-5'teki genel işlevi oluşturmak için kullandığımız adımların tersini yapar: derleyici
+genel kodun çağrıldığı tüm yerlere bakar ve genel kodun çağrıldığı somut türler
+için kod oluşturur.
 
-Let’s look at how this works by using the standard library’s generic
-`Option<T>` enum:
+Standart kütüphanenin genel
+`Option<T>` enumunu kullanarak bunun nasıl çalıştığına bakalım:
 
 ```rust
 let integer = Some(5);
 let float = Some(5.0);
 ```
 
-When Rust compiles this code, it performs monomorphization. During that
-process, the compiler reads the values that have been used in `Option<T>`
-instances and identifies two kinds of `Option<T>`: one is `i32` and the other
-is `f64`. As such, it expands the generic definition of `Option<T>` into two
-definitions specialized to `i32` and `f64`, thereby replacing the generic
-definition with the specific ones.
+Rust bu kodu derlediğinde, monomorfizasyon gerçekleştirir. Bu
+işlemi sırasında, derleyici `Option<T>`
+örneklerinde kullanılan değerleri okur ve iki tür `Option<T>` tanımlar: biri `i32` ve diğer
+`f64`. Bu nedenle, `Option<T>` genel tanımını `i32` ve `f64` için özelleşmiş iki
+tanımına genişletir, böylece genel
+tanımını özel olanlarla değiştirir.
 
-The monomorphized version of the code looks similar to the following (the
-compiler uses different names than what we’re using here for illustration):
+Kodun monomorfize edilmiş versiyonu aşağıdakine benzer (
+derleyicisi burada örnekleme için kullandığımızdan farklı isimler kullanır):
 
 <Listing file-name="src/main.rs">
 
@@ -316,9 +303,9 @@ fn main() {
 
 </Listing>
 
-The generic `Option<T>` is replaced with the specific definitions created by
-the compiler. Because Rust compiles generic code into code that specifies the
-type in each instance, we pay no runtime cost for using generics. When the code
-runs, it performs just as it would if we had duplicated each definition by
-hand. The process of monomorphization makes Rust’s generics extremely efficient
-at runtime.
+Genel `Option<T>`, derleyici tarafından
+tarafından oluşturulan özel tanımlarla değiştirilir. Rust, jenerik kodu her örnekte
+türünü belirten koda derlediğinden, jenerikleri kullanmak için çalışma zamanı maliyeti ödemeyiz. Kod
+çalıştığında, her bir tanımı
+eliyle çoğaltmış olsaydık yapacağı gibi çalışır. Monomorfizasyon süreci, Rust'ın jeneriklerini çalışma zamanında
+son derece verimli hale getirir.
