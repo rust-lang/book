@@ -1,24 +1,25 @@
-# Error Handling
+# Hata İşleme
 
-Errors are a fact of life in software, so Rust has a number of features for
-handling situations in which something goes wrong. In many cases, Rust requires
-you to acknowledge the possibility of an error and take some action before your
-code will compile. This requirement makes your program more robust by ensuring
-that you’ll discover errors and handle them appropriately before deploying your
-code to production!
+Hatalar yazılımda hayatın bir gerçeğidir, bu nedenle Rust bir şeylerin yanlış gittiği durumları ele almak için
+bir dizi özelliğe sahiptir. Çoğu durumda, Rust
+bir hata olasılığını kabul etmenizi ve
+kodunuz derlenmeden önce bazı eylemlerde bulunmanızı gerektirir. Bu gereklilik,
+kodunuzu üretime dağıtmadan önce
+hataları keşfetmenizi ve uygun şekilde ele almanızı sağlayarak programınızı daha sağlam hale getirir!
 
-Rust groups errors into two major categories: _recoverable_ and _unrecoverable_
-errors. For a recoverable error, such as a _file not found_ error, we most
-likely just want to report the problem to the user and retry the operation.
-Unrecoverable errors are always symptoms of bugs, such as trying to access a
-location beyond the end of an array, and so we want to immediately stop the
-program.
 
-Most languages don’t distinguish between these two kinds of errors and handle
-both in the same way, using mechanisms such as exceptions. Rust doesn’t have
-exceptions. Instead, it has the type `Result<T, E>` for recoverable errors and
-the `panic!` macro that stops execution when the program encounters an
-unrecoverable error. This chapter covers calling `panic!` first and then talks
-about returning `Result<T, E>` values. Additionally, we’ll explore
-considerations when deciding whether to try to recover from an error or to stop
-execution.
+Rust hataları iki ana kategoride toplar: Kurtarılabilir_ ve _kurtarılamaz_
+hatalar. Kurtarılabilir bir hata için, örneğin _dosya bulunamadı_ hatası, büyük olasılıkla sadece
+sorunu kullanıcıya bildirmek ve işlemi yeniden denemek isteriz.
+Kurtarılamayan hatalar her zaman bir dizinin sonunun ötesindeki bir
+konumuna erişmeye çalışmak gibi hataların belirtileridir ve bu nedenle
+programını derhal durdurmak isteriz.
+
+Çoğu dil bu iki hata türü arasında ayrım yapmaz ve istisnalar gibi mekanizmalar kullanarak
+her ikisini de aynı şekilde ele alır. Rust'ta
+istisnaları yoktur. Bunun yerine, kurtarılabilir hatalar için `Result<T, E>` tipine ve program
+kurtarılamaz bir hatayla karşılaştığında yürütmeyi durduran
+`panic!` makrosuna sahiptir. Bu bölümde önce `panic!` çağrısı ele alınacak, ardından
+adresinde `Result<T, E>` değerlerinin döndürülmesinden bahsedilecektir. Ek olarak, bir hatadan kurtulmaya mı yoksa
+yürütmesini durdurmaya mı karar verirken
+hususlarını inceleyeceğiz.
