@@ -1,40 +1,39 @@
-## Customizing Builds with Release Profiles
+## Sürüm Profilleri ile Derlemeleri Özelleştirme
 
-In Rust, _release profiles_ are predefined and customizable profiles with
-different configurations that allow a programmer to have more control over
-various options for compiling code. Each profile is configured independently of
-the others.
+Rust'ta _release profiles_
+programcının
+kod derlemek için çeşitli seçenekler üzerinde daha fazla kontrol sahibi olmasını sağlayan farklı yapılandırmalara sahip önceden tanımlanmış ve özelleştirilebilir profillerdir. Her profil
+diğerlerinden bağımsız olarak yapılandırılır.
 
-Cargo has two main profiles: the `dev` profile Cargo uses when you run `cargo
-build`, and the `release` profile Cargo uses when you run `cargo build
---release`. The `dev` profile is defined with good defaults for development,
-and the `release` profile has good defaults for release builds.
+Cargo'nun iki ana profili vardır: `cargo build` komutunu çalıştırdığınızda Cargo'nun kullandığı `dev` profili ve `cargo build` komutunu çalıştırdığınızda Cargo'nun kullandığı `release` profili
+--release`. Dev` profili geliştirme için iyi varsayılanlarla tanımlanmıştır,
+ve `release` profili sürüm derlemeleri için iyi varsayılanlara sahiptir.
 
-These profile names might be familiar from the output of your builds:
+Bu profil isimleri derlemelerinizin çıktılarından tanıdık gelebilir:
 
-<!-- manual-regeneration
-anywhere, run:
+<!--
+'u herhangi bir yerde manuel olarak yeniden oluşturun, çalıştırın:
 cargo build
 cargo build --release
-and ensure output below is accurate
+ve aşağıdaki çıktının doğru olduğundan emin olun
 -->
 
 ```console
 $ cargo build
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s
+ 0.00s içinde `dev` profili [optimize edilmemiş + debuginfo] hedef(ler)i tamamlandı
 $ cargo build --release
-    Finished `release` profile [optimized] target(s) in 0.32s
+ 0.32s içinde `release` profili [optimize edilmiş] hedef(ler)i tamamlandı
 ```
 
-The `dev` and `release` are these different profiles used by the compiler.
+`Dev` ve `release` derleyici tarafından kullanılan bu farklı profillerdir.
 
-Cargo has default settings for each of the profiles that apply when you haven't
-explicitly added any `[profile.*]` sections in the project’s _Cargo.toml_ file.
-By adding `[profile.*]` sections for any profile you want to customize, you
-override any subset of the default settings. For example, here are the default
-values for the `opt-level` setting for the `dev` and `release` profiles:
+Cargo,
+projenin _Cargo.toml_ dosyasına açıkça herhangi bir `[profile.*]` bölümü eklemediğinizde geçerli olan profillerin her biri için varsayılan ayarlara sahiptir.
+Özelleştirmek istediğiniz herhangi bir profil için `[profile.*]` bölümleri ekleyerek
+varsayılan ayarların herhangi bir alt kümesini geçersiz kılabilirsiniz. Örneğin, `dev` ve `release` profilleri için `opt-level` ayarı için varsayılan
+değerleri aşağıda verilmiştir:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Dosya adı: Cargo.toml</span>
 
 ```toml
 [profile.dev]
@@ -44,32 +43,33 @@ opt-level = 0
 opt-level = 3
 ```
 
-The `opt-level` setting controls the number of optimizations Rust will apply to
-your code, with a range of 0 to 3. Applying more optimizations extends
-compiling time, so if you’re in development and compiling your code often,
-you’ll want fewer optimizations to compile faster even if the resultant code
-runs slower. The default `opt-level` for `dev` is therefore `0`. When you’re
-ready to release your code, it’s best to spend more time compiling. You’ll only
-compile in release mode once, but you’ll run the compiled program many times,
-so release mode trades longer compile time for code that runs faster. That is
-why the default `opt-level` for the `release` profile is `3`.
+`Opt-level` ayarı
+Rust'ın kodunuza uygulayacağı optimizasyon sayısını kontrol eder ve 0 ile 3 arasında değişir. Daha fazla optimizasyon uygulamak
+derleme süresini uzatır; bu nedenle geliştirme aşamasındaysanız ve kodunuzu sık sık derliyorsanız
+ortaya çıkan kod
+daha yavaş çalışsa bile daha hızlı derlemek için daha az optimizasyon isteyeceksinizdir. Bu nedenle `dev` için varsayılan `opt-level` `0`dır. Kodunuzu yayınlamaya
+hazır olduğunuzda, derlemeye daha fazla zaman harcamak en iyisidir. Yayınlama modunda yalnızca
+bir kez derleme yapacaksınız, ancak derlenen programı birçok kez çalıştıracaksınız
+bu nedenle yayınlama modu daha hızlı çalışan kod için daha uzun derleme süresini takas eder. Bu
+yüzden `release` profili için varsayılan `opt-level` `3`tür.
 
-You can override a default setting by adding a different value for it in
-_Cargo.toml_. For example, if we want to use optimization level 1 in the
-development profile, we can add these two lines to our project’s _Cargo.toml_
-file:
+Varsayılan ayarı,
+ .toml_ dosyasına farklı bir değer ekleyerek geçersiz kılabilirsiniz. Örneğin,
+geliştirme profilinde optimizasyon seviyesi 1'i kullanmak istiyorsak, bu iki satırı projemizin _Cargo.toml_
+dosyasına ekleyebiliriz:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Dosya adı: Cargo.toml</span>
 
 ```toml
 [profile.dev]
 opt-level = 1
 ```
 
-This code overrides the default setting of `0`. Now when we run `cargo build`,
-Cargo will use the defaults for the `dev` profile plus our customization to
-`opt-level`. Because we set `opt-level` to `1`, Cargo will apply more
-optimizations than the default, but not as many as in a release build.
+Bu kod varsayılan `0` ayarını geçersiz kılar. Şimdi `cargo build` çalıştırdığımızda,
+Cargo, `dev` profili için varsayılanları ve
+`opt-level` için özelleştirmemizi kullanacaktır. Opt-level` seçeneğini `1` olarak ayarladığımız için, Cargo varsayılandan daha fazla
+optimizasyonu uygulayacaktır, ancak bir sürüm derlemesindeki kadar çok değildir.
 
-For the full list of configuration options and defaults for each profile, see
-[Cargo’s documentation](https://doc.rust-lang.org/cargo/reference/profiles.html).
+
+Her profil için yapılandırma seçeneklerinin ve varsayılanların tam listesi için:
+[Cargo’nun belgeleri](https://doc.rust-lang.org/cargo/reference/profiles.html).
