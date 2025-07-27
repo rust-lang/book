@@ -1,50 +1,32 @@
-## Cargo Workspaces
+## Cargo Çalışma Alanları (Workspaces)
 
-In Chapter 12, we built a package that included a binary crate and a library
-crate. As your project develops, you might find that the library crate
-continues to get bigger and you want to split your package further into
-multiple library crates. Cargo offers a feature called _workspaces_ that can
-help manage multiple related packages that are developed in tandem.
+12. bölümde, bir ikili crate ve bir kütüphane crate'i içeren bir paket oluşturmuştuk. Projeniz geliştikçe, kütüphane crate'inizin büyümeye devam ettiğini ve paketinizi birden fazla kütüphane crate'ine bölmek isteyebileceğinizi fark edebilirsiniz. Cargo, birlikte geliştirilen birden fazla ilişkili paketi yönetmeye yardımcı olan _çalışma alanları_ (workspaces) adlı bir özellik sunar.
 
-### Creating a Workspace
+### Bir Çalışma Alanı Oluşturmak
 
-A _workspace_ is a set of packages that share the same _Cargo.lock_ and output
-directory. Let’s make a project using a workspace—we’ll use trivial code so we
-can concentrate on the structure of the workspace. There are multiple ways to
-structure a workspace, so we'll just show one common way. We’ll have a
-workspace containing a binary and two libraries. The binary, which will provide
-the main functionality, will depend on the two libraries. One library will
-provide an `add_one` function and the other library an `add_two` function.
-These three crates will be part of the same workspace. We’ll start by creating
-a new directory for the workspace:
+Bir _çalışma alanı_, aynı _Cargo.lock_ ve çıktı dizinini paylaşan paketler kümesidir. Şimdi bir çalışma alanı kullanarak bir proje oluşturalım—odak noktamız çalışma alanının yapısı olacağı için basit kodlar kullanacağız. Bir çalışma alanını yapılandırmanın birden fazla yolu vardır; biz yaygın bir yolu göstereceğiz. Bir ikili ve iki kütüphane içeren bir çalışma alanımız olacak. Ana işlevselliği sağlayacak ikili, iki kütüphaneye bağımlı olacak. Kütüphanelerden biri `add_one` fonksiyonunu, diğeri ise `add_two` fonksiyonunu sağlayacak. Bu üç crate aynı çalışma alanının parçası olacak. Önce çalışma alanı için yeni bir dizin oluşturarak başlayalım:
 
 ```console
 $ mkdir add
 $ cd add
 ```
 
-Next, in the _add_ directory, we create the _Cargo.toml_ file that will
-configure the entire workspace. This file won’t have a `[package]` section.
-Instead, it will start with a `[workspace]` section that will allow us to add
-members to the workspace. We also make a point to use the latest and greatest
-version of Cargo’s resolver algorithm in our workspace by setting the
-`resolver` value to `"3"`.
+Sonra, _add_ dizininde, tüm çalışma alanını yapılandıracak _Cargo.toml_ dosyasını oluşturuyoruz. Bu dosyada bir `[package]` bölümü olmayacak. Bunun yerine, üyeleri çalışma alanına eklememizi sağlayan bir `[workspace]` bölümüyle başlayacak. Ayrıca, çalışma alanımızda Cargo'nun en güncel çözümleyici algoritmasını kullanmak için `resolver` değerini "3" olarak ayarlıyoruz.
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Dosya Adı: Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-01-workspace/add/Cargo.toml}}
 ```
 
-Next, we’ll create the `adder` binary crate by running `cargo new` within the
-_add_ directory:
+Şimdi, _add_ dizininde `cargo new` komutunu çalıştırarak `adder` adlı ikili crate'i oluşturalım:
 
-<!-- manual-regeneration
+<!-- manuel-yenileme
 cd listings/ch14-more-about-cargo/output-only-01-adder-crate/add
-remove `members = ["adder"]` from Cargo.toml
+members = ["adder"]'ı Cargo.toml'dan kaldırın
 rm -rf adder
 cargo new adder
-copy output below
+aşağıdaki çıktıyı kopyalayın
 -->
 
 ```console
@@ -53,16 +35,13 @@ $ cargo new adder
       Adding `adder` as member of workspace at `file:///projects/add`
 ```
 
-Running `cargo new` inside a workspace also automatically adds the newly created
-package to the `members` key in the `[workspace]` definition in the workspace
-_Cargo.toml_, like this:
+Bir çalışma alanında `cargo new` çalıştırmak, oluşturulan paketi otomatik olarak çalışma alanı _Cargo.toml_'undaki `[workspace]` tanımındaki `members` anahtarına ekler:
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/output-only-01-adder-crate/add/Cargo.toml}}
 ```
 
-At this point, we can build the workspace by running `cargo build`. The files
-in your _add_ directory should look like this:
+Bu noktada, `cargo build` komutunu çalıştırarak çalışma alanını derleyebiliriz. _add_ dizininizdeki dosyalar şöyle görünmelidir:
 
 ```text
 ├── Cargo.lock
@@ -74,28 +53,18 @@ in your _add_ directory should look like this:
 └── target
 ```
 
-The workspace has one _target_ directory at the top level that the compiled
-artifacts will be placed into; the `adder` package doesn’t have its own
-_target_ directory. Even if we were to run `cargo build` from inside the
-_adder_ directory, the compiled artifacts would still end up in _add/target_
-rather than _add/adder/target_. Cargo structures the _target_ directory in a
-workspace like this because the crates in a workspace are meant to depend on
-each other. If each crate had its own _target_ directory, each crate would have
-to recompile each of the other crates in the workspace to place the artifacts
-in its own _target_ directory. By sharing one _target_ directory, the crates
-can avoid unnecessary rebuilding.
+Çalışma alanında derlenmiş çıktılar, en üst düzeydeki _target_ dizinine yerleştirilir; `adder` paketinin kendi _target_ dizini yoktur. Hatta _adder_ dizininde `cargo build` çalıştırsak bile, derlenmiş çıktılar yine _add/target_ dizininde olur. Cargo, çalışma alanındaki crate'ler birbirine bağımlı olacağı için _target_ dizinini bu şekilde yapılandırır. Her crate'in kendi _target_ dizini olsaydı, her crate diğerlerini kendi _target_ dizinine derlemek zorunda kalırdı. Ortak bir _target_ dizini paylaşarak, gereksiz yeniden derlemelerden kaçınılır.
 
-### Creating the Second Package in the Workspace
+### Çalışma Alanında İkinci Paketi Oluşturmak
 
-Next, let’s create another member package in the workspace and call it
-`add_one`. Generate a new library crate named `add_one`:
+Şimdi, çalışma alanında bir üye paket daha oluşturalım ve adını `add_one` koyalım. Yeni bir kütüphane crate'i oluşturun:
 
-<!-- manual-regeneration
+<!-- manuel-yenileme
 cd listings/ch14-more-about-cargo/output-only-02-add-one/add
-remove `"add_one"` from `members` list in Cargo.toml
+"add_one"'ı Cargo.toml'daki members listesinden kaldırın
 rm -rf add_one
 cargo new add_one --lib
-copy output below
+aşağıdaki çıktıyı kopyalayın
 -->
 
 ```console
@@ -104,16 +73,15 @@ $ cargo new add_one --lib
       Adding `add_one` as member of workspace at `file:///projects/add`
 ```
 
-The top-level _Cargo.toml_ will now include the _add_one_ path in the `members`
-list:
+Artık üst düzey _Cargo.toml_ dosyası, `members` listesinde _add_one_ yolunu da içerir:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Dosya Adı: Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/Cargo.toml}}
 ```
 
-Your _add_ directory should now have these directories and files:
+_add_ dizininizdeki dosya ve dizinler artık şöyle olmalı:
 
 ```text
 ├── Cargo.lock
@@ -129,32 +97,27 @@ Your _add_ directory should now have these directories and files:
 └── target
 ```
 
-In the _add_one/src/lib.rs_ file, let’s add an `add_one` function:
+_add_one/src/lib.rs_ dosyasına bir `add_one` fonksiyonu ekleyelim:
 
-<span class="filename">Filename: add_one/src/lib.rs</span>
+<span class="filename">Dosya Adı: add_one/src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/add_one/src/lib.rs}}
 ```
 
-Now we can have the `adder` package with our binary depend on the `add_one`
-package that has our library. First, we’ll need to add a path dependency on
-`add_one` to _adder/Cargo.toml_.
+Artık ikili crate'imiz olan `adder` paketinin, kütüphanemiz olan `add_one` paketine bağımlı olmasını sağlayabiliriz. Öncelikle, _adder/Cargo.toml_ dosyasına `add_one` için bir yol bağımlılığı eklememiz gerekecek.
 
-<span class="filename">Filename: adder/Cargo.toml</span>
+<span class="filename">Dosya Adı: adder/Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:6:7}}
 ```
 
-Cargo doesn’t assume that crates in a workspace will depend on each other, so
-we need to be explicit about the dependency relationships.
+Cargo, çalışma alanındaki crate'lerin birbirine bağımlı olacağını varsaymaz; bu yüzden bağımlılık ilişkilerini açıkça belirtmemiz gerekir.
 
-Next, let’s use the `add_one` function (from the `add_one` crate) in the
-`adder` crate. Open the _adder/src/main.rs_ file and change the `main`
-function to call the `add_one` function, as in Listing 14-7.
+Şimdi, `adder` crate'inde, `add_one` fonksiyonunu kullanalım. _adder/src/main.rs_ dosyasını açıp, `main` fonksiyonunu, Liste 14-7'deki gibi `add_one` fonksiyonunu çağıracak şekilde değiştirin.
 
-<Listing number="14-7" file-name="adder/src/main.rs" caption="Using the `add_one` library crate from the `adder` crate">
+<Listing number="14-7" file-name="adder/src/main.rs" caption="`adder` crate'inden `add_one` kütüphanesini kullanmak">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
@@ -162,13 +125,12 @@ function to call the `add_one` function, as in Listing 14-7.
 
 </Listing>
 
-Let’s build the workspace by running `cargo build` in the top-level _add_
-directory!
+Şimdi, üst düzey _add_ dizininde `cargo build` komutunu çalıştırarak çalışma alanını derleyelim!
 
-<!-- manual-regeneration
+<!-- manuel-yenileme
 cd listings/ch14-more-about-cargo/listing-14-07/add
 cargo build
-copy output below; the output updating script doesn't handle subdirectories in paths properly
+aşağıdaki çıktıyı kopyalayın
 -->
 
 ```console
@@ -178,14 +140,12 @@ $ cargo build
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.22s
 ```
 
-To run the binary crate from the _add_ directory, we can specify which
-package in the workspace we want to run by using the `-p` argument and the
-package name with `cargo run`:
+İkili crate'i _add_ dizininden çalıştırmak için, `cargo run` komutunda `-p` argümanı ve paket adını kullanarak hangi paketi çalıştırmak istediğimizi belirtebiliriz:
 
-<!-- manual-regeneration
+<!-- manuel-yenileme
 cd listings/ch14-more-about-cargo/listing-14-07/add
 cargo run -p adder
-copy output below; the output updating script doesn't handle subdirectories in paths properly
+aşağıdaki çıktıyı kopyalayın
 -->
 
 ```console
@@ -195,41 +155,29 @@ $ cargo run -p adder
 Hello, world! 10 plus one is 11!
 ```
 
-This runs the code in _adder/src/main.rs_, which depends on the `add_one` crate.
+Bu, _adder/src/main.rs_ dosyasındaki kodu çalıştırır; bu kod, `add_one` crate'ine bağımlıdır.
 
-#### Depending on an External Package in a Workspace
+#### Çalışma Alanında Harici Bir Pakete Bağımlı Olmak
 
-Notice that the workspace has only one _Cargo.lock_ file at the top level,
-rather than having a _Cargo.lock_ in each crate’s directory. This ensures that
-all crates are using the same version of all dependencies. If we add the `rand`
-package to the _adder/Cargo.toml_ and _add_one/Cargo.toml_ files, Cargo will
-resolve both of those to one version of `rand` and record that in the one
-_Cargo.lock_. Making all crates in the workspace use the same dependencies
-means the crates will always be compatible with each other. Let’s add the
-`rand` crate to the `[dependencies]` section in the _add_one/Cargo.toml_ file
-so we can use the `rand` crate in the `add_one` crate:
+Dikkat edin, çalışma alanında her crate'in dizininde ayrı bir _Cargo.lock_ dosyası yerine, yalnızca üst düzeyde bir _Cargo.lock_ dosyası vardır. Bu, tüm crate'lerin aynı bağımlılık sürümünü kullandığından emin olmayı sağlar. Eğer _adder/Cargo.toml_ ve _add_one/Cargo.toml_ dosyalarına `rand` paketini eklersek, Cargo her ikisini de tek bir `rand` sürümüne çözümler ve bunu tek _Cargo.lock_ dosyasına kaydeder. Tüm crate'lerin aynı bağımlılıkları kullanması, crate'lerin her zaman birbiriyle uyumlu olmasını sağlar. Şimdi, `add_one` crate'inde `rand` paketini kullanabilmek için _add_one/Cargo.toml_ dosyasındaki `[dependencies]` bölümüne `rand` crate'ini ekleyelim:
 
-<!-- When updating the version of `rand` used, also update the version of
-`rand` used in these files so they all match:
+<!-- `rand` sürümünü güncellerken, aşağıdaki dosyalarda da aynı sürümü kullandığınızdan emin olun:
 * ch02-00-guessing-game-tutorial.md
 * ch07-04-bringing-paths-into-scope-with-the-use-keyword.md
 -->
 
-<span class="filename">Filename: add_one/Cargo.toml</span>
+<span class="filename">Dosya Adı: add_one/Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add/add_one/Cargo.toml:6:7}}
 ```
 
-We can now add `use rand;` to the _add_one/src/lib.rs_ file, and building the
-whole workspace by running `cargo build` in the _add_ directory will bring in
-and compile the `rand` crate. We will get one warning because we aren’t
-referring to the `rand` we brought into scope:
+Artık _add_one/src/lib.rs_ dosyasına `use rand;` ekleyebiliriz ve _add_ dizininde `cargo build` komutunu çalıştırmak, `rand` crate'ini indirip derleyecektir. Ancak, `rand`'ı scope'a aldığımız halde kullanmadığımız için bir uyarı alırız:
 
-<!-- manual-regeneration
+<!-- manuel-yenileme
 cd listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add
 cargo build
-copy output below; the output updating script doesn't handle subdirectories in paths properly
+aşağıdaki çıktıyı kopyalayın
 -->
 
 ```console
@@ -252,16 +200,12 @@ warning: `add_one` (lib) generated 1 warning (run `cargo fix --lib -p add_one` t
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.95s
 ```
 
-The top-level _Cargo.lock_ now contains information about the dependency of
-`add_one` on `rand`. However, even though `rand` is used somewhere in the
-workspace, we can’t use it in other crates in the workspace unless we add
-`rand` to their _Cargo.toml_ files as well. For example, if we add `use rand;`
-to the _adder/src/main.rs_ file for the `adder` package, we’ll get an error:
+Artık üst düzey _Cargo.lock_ dosyası, `add_one`'ın `rand` bağımlılığına dair bilgileri içeriyor. Ancak, çalışma alanında bir yerde `rand` kullanılsa bile, diğer crate'lerde kullanmak için onların _Cargo.toml_ dosyalarına da `rand` eklememiz gerekir. Örneğin, `adder` paketinin _adder/src/main.rs_ dosyasına `use rand;` eklersek, bir hata alırız:
 
-<!-- manual-regeneration
+<!-- manuel-yenileme
 cd listings/ch14-more-about-cargo/output-only-03-use-rand/add
 cargo build
-copy output below; the output updating script doesn't handle subdirectories in paths properly
+aşağıdaki çıktıyı kopyalayın
 -->
 
 ```console
@@ -275,39 +219,26 @@ error[E0432]: unresolved import `rand`
   |     ^^^^ no external crate `rand`
 ```
 
-To fix this, edit the _Cargo.toml_ file for the `adder` package and indicate
-that `rand` is a dependency for it as well. Building the `adder` package will
-add `rand` to the list of dependencies for `adder` in _Cargo.lock_, but no
-additional copies of `rand` will be downloaded. Cargo will ensure that every
-crate in every package in the workspace using the `rand` package will use the
-same version as long as they specify compatible versions of `rand`, saving us
-space and ensuring that the crates in the workspace will be compatible with each
-other.
+Bunu düzeltmek için, `adder` paketinin _Cargo.toml_ dosyasını düzenleyip, onun için de `rand`'ı bağımlılık olarak belirtmeliyiz. `adder` paketini derlemek, _Cargo.lock_ dosyasına `adder` için de `rand` bağımlılığını ekler, ancak ek bir `rand` kopyası indirilmez. Cargo, çalışma alanındaki tüm crate'lerin aynı `rand` sürümünü kullandığından emin olur (uyumlu sürümler belirtildiği sürece), böylece hem yerden tasarruf edilir hem de crate'ler birbiriyle uyumlu olur.
 
-If crates in the workspace specify incompatible versions of the same dependency,
-Cargo will resolve each of them, but will still try to resolve as few versions
-as possible.
+Çalışma alanındaki crate'ler aynı bağımlılığın uyumsuz sürümlerini belirtirse, Cargo her biri için çözümleme yapar, ancak yine de mümkün olduğunca az sürüm kullanmaya çalışır.
 
-#### Adding a Test to a Workspace
+#### Çalışma Alanına Test Eklemek
 
-For another enhancement, let’s add a test of the `add_one::add_one` function
-within the `add_one` crate:
+Bir başka geliştirme olarak, `add_one` crate'inde `add_one::add_one` fonksiyonunun testini ekleyelim:
 
-<span class="filename">Filename: add_one/src/lib.rs</span>
+<span class="filename">Dosya Adı: add_one/src/lib.rs</span>
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add/add_one/src/lib.rs}}
 ```
 
-Now run `cargo test` in the top-level _add_ directory. Running `cargo test` in
-a workspace structured like this one will run the tests for all the crates in
-the workspace:
+Şimdi, üst düzey _add_ dizininde `cargo test` komutunu çalıştırın. Böyle yapılandırılmış bir çalışma alanında `cargo test` çalıştırmak, çalışma alanındaki tüm crate'lerin testlerini çalıştırır:
 
-<!-- manual-regeneration
+<!-- manuel-yenileme
 cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
 cargo test
-copy output below; the output updating script doesn't handle subdirectories in
-paths properly
+aşağıdaki çıktıyı kopyalayın
 -->
 
 ```console
@@ -335,19 +266,14 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-The first section of the output shows that the `it_works` test in the `add_one`
-crate passed. The next section shows that zero tests were found in the `adder`
-crate, and then the last section shows zero documentation tests were found in
-the `add_one` crate.
+Çıktının ilk bölümünde, `add_one` crate'indeki `it_works` testinin geçtiği görülüyor. Sonraki bölümde, `adder` crate'inde sıfır test bulunduğu, son bölümde ise `add_one` crate'inde sıfır dokümantasyon testi bulunduğu görülüyor.
 
-We can also run tests for one particular crate in a workspace from the
-top-level directory by using the `-p` flag and specifying the name of the crate
-we want to test:
+Ayrıca, üst düzey dizinden `-p` bayrağı ve test etmek istediğimiz crate'in adını belirterek, çalışma alanındaki belirli bir crate'in testlerini çalıştırabiliriz:
 
-<!-- manual-regeneration
+<!-- manuel-yenileme
 cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
 cargo test -p add_one
-copy output below; the output updating script doesn't handle subdirectories in paths properly
+aşağıdaki çıktıyı kopyalayın
 -->
 
 ```console
@@ -367,19 +293,10 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-This output shows `cargo test` only ran the tests for the `add_one` crate and
-didn’t run the `adder` crate tests.
+Bu çıktı, `cargo test` komutunun yalnızca `add_one` crate'indeki testleri çalıştırdığını, `adder` crate'indeki testleri çalıştırmadığını gösteriyor.
 
-If you publish the crates in the workspace to
-[crates.io](https://crates.io/)<!-- ignore -->, each crate in the workspace
-will need to be published separately. Like `cargo test`, we can publish a
-particular crate in our workspace by using the `-p` flag and specifying the
-name of the crate we want to publish.
+Çalışma alanındaki crate'leri [crates.io](https://crates.io/)<!-- ignore -->'ya yayımlarsanız, çalışma alanındaki her crate'i ayrı ayrı yayımlamanız gerekir. `cargo test` gibi, yayımlamak istediğiniz crate'in adını `-p` bayrağı ile belirterek yalnızca o crate'i yayımlayabilirsiniz.
 
-For additional practice, add an `add_two` crate to this workspace in a similar
-way as the `add_one` crate!
+Ek alıştırma olarak, bu çalışma alanına `add_one` crate'iyle benzer şekilde bir `add_two` crate'i ekleyin!
 
-As your project grows, consider using a workspace: it enables you to work with
-smaller, easier-to-understand components than one big blob of code. Furthermore,
-keeping the crates in a workspace can make coordination between crates easier if
-they are often changed at the same time.
+Projeniz büyüdükçe, bir çalışma alanı kullanmayı düşünün: bu, tek bir büyük kod yığını yerine daha küçük ve anlaşılır bileşenlerle çalışmanızı sağlar. Ayrıca, çalışma alanındaki crate'ler sık sık aynı anda değişiyorsa, aralarındaki koordinasyonu kolaylaştırır.

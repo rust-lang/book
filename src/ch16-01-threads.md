@@ -1,46 +1,22 @@
-## Using Threads to Run Code Simultaneously
+## Kodunuzu Aynı Anda Çalıştırmak için Thread Kullanmak
 
-In most current operating systems, an executed program’s code is run in a
-_process_, and the operating system will manage multiple processes at once.
-Within a program, you can also have independent parts that run simultaneously.
-The features that run these independent parts are called _threads_. For
-example, a web server could have multiple threads so that it can respond to
-more than one request at the same time.
+Çoğu modern işletim sisteminde, çalıştırılan bir programın kodu bir _proses_ (process) içinde çalışır ve işletim sistemi aynı anda birden fazla prosesi yönetir. Bir programın içinde de, aynı anda bağımsız olarak çalışabilen bölümler olabilir. Bu bağımsız bölümleri çalıştıran özelliklere _thread_ (iş parçacığı) denir. Örneğin, bir web sunucusu, aynı anda birden fazla isteğe yanıt verebilmek için birden fazla thread'e sahip olabilir.
 
-Splitting the computation in your program into multiple threads to run multiple
-tasks at the same time can improve performance, but it also adds complexity.
-Because threads can run simultaneously, there’s no inherent guarantee about the
-order in which parts of your code on different threads will run. This can lead
-to problems, such as:
+Programınızdaki hesaplamayı birden fazla thread'e bölerek aynı anda birden fazla görevi çalıştırmak performansı artırabilir, ancak bu aynı zamanda karmaşıklık da ekler. Thread'ler aynı anda çalışabildiği için, farklı thread'lerdeki kod bölümlerinin hangi sırayla çalışacağına dair doğal bir garanti yoktur. Bu da şu gibi sorunlara yol açabilir:
 
-- Race conditions, in which threads are accessing data or resources in an
-  inconsistent order
-- Deadlocks, in which two threads are waiting for each other, preventing both
-  threads from continuing
-- Bugs that only happen in certain situations and are hard to reproduce and fix
-  reliably
+- Thread'lerin veri veya kaynaklara tutarsız bir sırayla eriştiği _yarış durumları_ (race conditions)
+- İki thread'in birbirini bekleyip ikisinin de devam edemediği _deadlock_ (kilitlenme) durumları
+- Sadece belirli durumlarda ortaya çıkan ve tekrarlaması, düzeltmesi zor olan hatalar
 
-Rust attempts to mitigate the negative effects of using threads, but
-programming in a multithreaded context still takes careful thought and requires
-a code structure that is different from that in programs running in a single
-thread.
+Rust, thread kullanmanın olumsuz etkilerini azaltmaya çalışır; ancak çoklu thread'li bir bağlamda programlama hâlâ dikkatli düşünmeyi ve tek thread'li programlardan farklı bir kod yapısı gerektirir.
 
-Programming languages implement threads in a few different ways, and many
-operating systems provide an API the programming language can call for creating
-new threads. The Rust standard library uses a _1:1_ model of thread
-implementation, whereby a program uses one operating system thread per one
-language thread. There are crates that implement other models of threading that
-make different trade-offs to the 1:1 model. (Rust’s async system, which we will
-see in the next chapter, provides another approach to concurrency as well.)
+Programlama dilleri thread'leri birkaç farklı şekilde uygular ve birçok işletim sistemi, programlama dilinin yeni thread'ler oluşturmak için çağırabileceği bir API sunar. Rust standart kütüphanesi, _1:1_ thread modeli kullanır; yani bir program, her bir dil thread'i için bir işletim sistemi thread'i kullanır. Farklı ödünleşimler sunan başka thread modelleri uygulayan crate'ler de vardır. (Rust'ın bir sonraki bölümde göreceğimiz async sistemi de eşzamanlılığa başka bir yaklaşım sunar.)
 
-### Creating a New Thread with `spawn`
+### `spawn` ile Yeni Bir Thread Oluşturmak
 
-To create a new thread, we call the `thread::spawn` function and pass it a
-closure (we talked about closures in Chapter 13) containing the code we want to
-run in the new thread. The example in Listing 16-1 prints some text from a main
-thread and other text from a new thread.
+Yeni bir thread oluşturmak için, `thread::spawn` fonksiyonunu çağırır ve yeni thread'de çalıştırmak istediğimiz kodu içeren bir closure (13. bölümde closure'ları işlemiştik) veririz. 16-1 numaralı listede, ana thread'den bazı metinler ve yeni bir thread'den başka metinler yazdıran bir örnek gösteriliyor.
 
-<Listing number="16-1" file-name="src/main.rs" caption="Creating a new thread to print one thing while the main thread prints something else">
+<Listing number="16-1" file-name="src/main.rs" caption="Ana thread başka bir şey yazdırırken yeni bir thread oluşturmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-01/src/main.rs}}
@@ -48,14 +24,7 @@ thread and other text from a new thread.
 
 </Listing>
 
-Note that when the main thread of a Rust program completes, all spawned threads
-are shut down, whether or not they have finished running. The output from this
-program might be a little different every time, but it will look similar to the
-following:
-
-<!-- Not extracting output because changes to this output aren't significant;
-the changes are likely to be due to the threads running differently rather than
-changes in the compiler -->
+Dikkat edin, bir Rust programında ana thread tamamlandığında, başlatılan tüm thread'ler de, çalışmayı bitirip bitirmediklerine bakılmaksızın kapatılır. Bu programın çıktısı her seferinde biraz farklı olabilir, ancak aşağıdakine benzer olacaktır:
 
 ```text
 hi number 1 from the main thread!
@@ -69,34 +38,17 @@ hi number 4 from the spawned thread!
 hi number 5 from the spawned thread!
 ```
 
-The calls to `thread::sleep` force a thread to stop its execution for a short
-duration, allowing a different thread to run. The threads will probably take
-turns, but that isn’t guaranteed: it depends on how your operating system
-schedules the threads. In this run, the main thread printed first, even though
-the print statement from the spawned thread appears first in the code. And even
-though we told the spawned thread to print until `i` is `9`, it only got to `5`
-before the main thread shut down.
+`thread::sleep` çağrıları, bir thread'in kısa bir süreliğine çalışmasını durdurur ve başka bir thread'in çalışmasına olanak tanır. Thread'ler muhtemelen sırayla çalışacaktır, ancak bu garanti değildir: işletim sisteminizin thread'leri nasıl zamanladığına bağlıdır. Bu çalıştırmada, ana thread ilk yazdırmayı yaptı, ancak kodda önce spawned thread'in print satırı olmasına rağmen. Ayrıca, spawned thread'e `i` 9 olana kadar yazdırmasını söylemiş olsak da, ana thread kapandığı için sadece 5'e kadar yazdırabildi.
 
-If you run this code and only see output from the main thread, or don’t see any
-overlap, try increasing the numbers in the ranges to create more opportunities
-for the operating system to switch between the threads.
+Eğer bu kodu çalıştırdığınızda sadece ana thread'den çıktı görüyorsanız veya hiç örtüşme yoksa, thread'ler arasında geçiş için işletim sistemine daha fazla fırsat vermek adına aralardaki sayıları artırmayı deneyin.
 
-### Waiting for All Threads to Finish Using `join` Handles
+### Tüm Thread'lerin Bitmesini `join` Handle ile Beklemek
 
-The code in Listing 16-1 not only stops the spawned thread prematurely most of
-the time due to the main thread ending, but because there is no guarantee on
-the order in which threads run, we also can’t guarantee that the spawned thread
-will get to run at all!
+16-1 numaralı listedeki kodda, ana thread sona erdiği için spawned thread çoğu zaman erken duruyor; ayrıca thread'lerin hangi sırayla çalışacağına dair bir garanti olmadığından, spawned thread'in hiç çalışmama ihtimali de var!
 
-We can fix the problem of the spawned thread not running or of it ending
-prematurely by saving the return value of `thread::spawn` in a variable. The
-return type of `thread::spawn` is `JoinHandle<T>`. A `JoinHandle<T>` is an
-owned value that, when we call the `join` method on it, will wait for its
-thread to finish. Listing 16-2 shows how to use the `JoinHandle<T>` of the
-thread we created in Listing 16-1 and how to call `join` to make sure the
-spawned thread finishes before `main` exits.
+Spawned thread'in çalışmama veya erken bitme sorununu, `thread::spawn`'ın dönüş değerini bir değişkende saklayarak çözebiliriz. `thread::spawn`'ın dönüş tipi `JoinHandle<T>`'dir. Bir `JoinHandle<T>`, üzerinde `join` metodunu çağırdığımızda, ilgili thread'in bitmesini bekleyen sahipli bir değerdir. 16-2 numaralı listede, 16-1'de oluşturduğumuz thread'in `JoinHandle<T>`'ını nasıl kullandığımız ve `join` çağrısı ile spawned thread'in ana thread'den önce bitmesini nasıl sağladığımız gösteriliyor.
 
-<Listing number="16-2" file-name="src/main.rs" caption="Saving a `JoinHandle<T>` from `thread::spawn` to guarantee the thread is run to completion">
+<Listing number="16-2" file-name="src/main.rs" caption="`thread::spawn`'dan dönen `JoinHandle<T>`'ı saklayarak thread'in tamamlanmasını garanti etmek">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-02/src/main.rs}}
@@ -104,15 +56,7 @@ spawned thread finishes before `main` exits.
 
 </Listing>
 
-Calling `join` on the handle blocks the thread currently running until the
-thread represented by the handle terminates. _Blocking_ a thread means that
-thread is prevented from performing work or exiting. Because we’ve put the call
-to `join` after the main thread’s `for` loop, running Listing 16-2 should
-produce output similar to this:
-
-<!-- Not extracting output because changes to this output aren't significant;
-the changes are likely to be due to the threads running differently rather than
-changes in the compiler -->
+Handle üzerinde `join` çağrısı, o anda çalışan thread'i, handle'ın temsil ettiği thread sona erene kadar _bloklar_. Bir thread'i bloklamak, o thread'in iş yapmasını veya çıkmasını engellemek demektir. `join` çağrısını ana thread'in `for` döngüsünden sonra koyduğumuz için, 16-2'yi çalıştırmak aşağıdakine benzer bir çıktı üretmelidir:
 
 ```text
 hi number 1 from the main thread!
@@ -130,11 +74,9 @@ hi number 8 from the spawned thread!
 hi number 9 from the spawned thread!
 ```
 
-The two threads continue alternating, but the main thread waits because of the
-call to `handle.join()` and does not end until the spawned thread is finished.
+İki thread sırayla çalışmaya devam eder, ancak ana thread, `handle.join()` çağrısı nedeniyle spawned thread bitene kadar bekler ve sona ermez.
 
-But let’s see what happens when we instead move `handle.join()` before the
-`for` loop in `main`, like this:
+Ama `handle.join()`'ı ana thread'deki `for` döngüsünden önce koyarsak ne olur bakalım:
 
 <Listing file-name="src/main.rs">
 
@@ -144,12 +86,7 @@ But let’s see what happens when we instead move `handle.join()` before the
 
 </Listing>
 
-The main thread will wait for the spawned thread to finish and then run its
-`for` loop, so the output won’t be interleaved anymore, as shown here:
-
-<!-- Not extracting output because changes to this output aren't significant;
-the changes are likely to be due to the threads running differently rather than
-changes in the compiler -->
+Ana thread, spawned thread bitene kadar bekler ve ardından kendi `for` döngüsünü çalıştırır; bu nedenle çıktı artık iç içe geçmez, şöyle olur:
 
 ```text
 hi number 1 from the spawned thread!
@@ -167,26 +104,15 @@ hi number 3 from the main thread!
 hi number 4 from the main thread!
 ```
 
-Small details, such as where `join` is called, can affect whether or not your
-threads run at the same time.
+Küçük detaylar, örneğin `join`'ın nerede çağrıldığı, thread'lerinizin aynı anda çalışıp çalışmadığını etkileyebilir.
 
-### Using `move` Closures with Threads
+### Thread'lerle Birlikte `move` Closure Kullanmak
 
-We’ll often use the `move` keyword with closures passed to `thread::spawn`
-because the closure will then take ownership of the values it uses from the
-environment, thus transferring ownership of those values from one thread to
-another. In [“Capturing References or Moving Ownership”][capture]<!-- ignore
---> in Chapter 13, we discussed `move` in the context of closures. Now we’ll
-concentrate more on the interaction between `move` and `thread::spawn`.
+Genellikle, `thread::spawn`'a verilen closure'larda `move` anahtar kelimesini kullanırız; çünkü bu durumda closure, kullandığı değerlerin sahipliğini alır ve bu değerlerin sahipliğini bir thread'den diğerine aktarır. 13. bölümde ["Referansları Yakalamak veya Sahipliği Taşımak"](ch13-01-closures.html#capturing-references-or-moving-ownership) başlığında `move`'u closure'lar bağlamında tartışmıştık. Şimdi, `move` ile `thread::spawn` etkileşimine daha yakından bakacağız.
 
-Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
-arguments: we’re not using any data from the main thread in the spawned
-thread’s code. To use data from the main thread in the spawned thread, the
-spawned thread’s closure must capture the values it needs. Listing 16-3 shows
-an attempt to create a vector in the main thread and use it in the spawned
-thread. However, this won’t work yet, as you’ll see in a moment.
+16-1 numaralı listede, `thread::spawn`'a verdiğimiz closure'ın argüman almadığına dikkat edin: spawned thread'in kodunda ana thread'den herhangi bir veri kullanmıyoruz. Ana thread'deki verileri spawned thread'de kullanmak için, spawned thread'in closure'ı ihtiyaç duyduğu değerleri yakalamalıdır. 16-3 numaralı listede, ana thread'de bir vektör oluşturup, onu spawned thread'de kullanmaya çalışıyoruz. Ancak, bu henüz çalışmayacak, birazdan göreceksiniz.
 
-<Listing number="16-3" file-name="src/main.rs" caption="Attempting to use a vector created by the main thread in another thread">
+<Listing number="16-3" file-name="src/main.rs" caption="Ana thread'de oluşturulan bir vektörü başka bir thread'de kullanmaya çalışmak">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-03/src/main.rs}}
@@ -194,24 +120,17 @@ thread. However, this won’t work yet, as you’ll see in a moment.
 
 </Listing>
 
-The closure uses `v`, so it will capture `v` and make it part of the closure’s
-environment. Because `thread::spawn` runs this closure in a new thread, we
-should be able to access `v` inside that new thread. But when we compile this
-example, we get the following error:
+Closure, `v`'yi kullandığı için onu yakalar ve closure'ın ortamının bir parçası yapar. `thread::spawn` bu closure'ı yeni bir thread'de çalıştırdığı için, yeni thread içinde `v`'ye erişebilmemiz gerekir. Ancak bu örneği derlediğimizde şu hatayı alırız:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-03/output.txt}}
 ```
 
-Rust _infers_ how to capture `v`, and because `println!` only needs a reference
-to `v`, the closure tries to borrow `v`. However, there’s a problem: Rust can’t
-tell how long the spawned thread will run, so it doesn’t know whether the
-reference to `v` will always be valid.
+Rust, `v`'yi nasıl yakalayacağını _tahmin eder_ ve `println!` yalnızca bir referansa ihtiyaç duyduğu için closure, `v`'yi ödünç almaya çalışır. Ancak burada bir sorun var: Rust, spawned thread'in ne kadar süreceğini bilemez, bu yüzden `v`'ye olan referansın her zaman geçerli olup olmayacağını da bilemez.
 
-Listing 16-4 provides a scenario that’s more likely to have a reference to `v`
-that won’t be valid.
+16-4 numaralı listede, `v`'ye olan referansın geçerli olmayacağı bir senaryo gösteriliyor.
 
-<Listing number="16-4" file-name="src/main.rs" caption="A thread with a closure that attempts to capture a reference to `v` from a main thread that drops `v`">
+<Listing number="16-4" file-name="src/main.rs" caption="Ana thread'den referans yakalamaya çalışan bir closure ile thread oluşturmak; ana thread 'v'yi düşürüyor">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-04/src/main.rs}}
@@ -219,33 +138,20 @@ that won’t be valid.
 
 </Listing>
 
-If Rust allowed us to run this code, there’s a possibility that the spawned
-thread would be immediately put in the background without running at all. The
-spawned thread has a reference to `v` inside, but the main thread immediately
-drops `v`, using the `drop` function we discussed in Chapter 15. Then, when the
-spawned thread starts to execute, `v` is no longer valid, so a reference to it
-is also invalid. Oh no!
+Rust bu kodun çalışmasına izin verseydi, spawned thread hemen arka plana alınabilir ve hiç çalışmayabilirdi. Spawned thread'in içinde `v`'ye bir referans var, ancak ana thread hemen ardından `v`'yi `drop` fonksiyonu ile düşürüyor (15. bölümde `drop`'u işlemiştik). Sonra, spawned thread çalışmaya başladığında, `v` artık geçerli değildir ve referansı da geçersiz olurdu. Vay canına!
 
-To fix the compiler error in Listing 16-3, we can use the error message’s
-advice:
-
-<!-- manual-regeneration
-after automatic regeneration, look at listings/ch16-fearless-concurrency/listing-16-03/output.txt and copy the relevant part
--->
+16-3 numaralı listedeki derleyici hatasını düzeltmek için, hata mesajının önerisini kullanabiliriz:
 
 ```text
-help: to force the closure to take ownership of `v` (and any other referenced variables), use the `move` keyword
+help: closure'ın `v` (ve diğer referanslı değişkenlerin) sahipliğini almasını zorlamak için `move` anahtar kelimesini kullanın
   |
 6 |     let handle = thread::spawn(move || {
   |                                ++++
 ```
 
-By adding the `move` keyword before the closure, we force the closure to take
-ownership of the values it’s using rather than allowing Rust to infer that it
-should borrow the values. The modification to Listing 16-3 shown in Listing
-16-5 will compile and run as we intend.
+Closure'ın başına `move` anahtar kelimesini ekleyerek, closure'ın kullandığı değerlerin sahipliğini almasını sağlarız; böylece Rust'ın bu değerleri ödünç alması yerine sahiplenmesini zorlamış oluruz. 16-3'teki değişikliğin gösterildiği 16-5 numaralı liste, istediğimiz gibi derlenir ve çalışır.
 
-<Listing number="16-5" file-name="src/main.rs" caption="Using the `move` keyword to force a closure to take ownership of the values it uses">
+<Listing number="16-5" file-name="src/main.rs" caption="`move` anahtar kelimesiyle closure'ın kullandığı değerlerin sahipliğini almasını sağlamak">
 
 ```rust
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-05/src/main.rs}}
@@ -253,28 +159,14 @@ should borrow the values. The modification to Listing 16-3 shown in Listing
 
 </Listing>
 
-We might be tempted to try the same thing to fix the code in Listing 16-4 where
-the main thread called `drop` by using a `move` closure. However, this fix will
-not work because what Listing 16-4 is trying to do is disallowed for a
-different reason. If we added `move` to the closure, we would move `v` into the
-closure’s environment, and we could no longer call `drop` on it in the main
-thread. We would get this compiler error instead:
+Aynı şeyi, ana thread'de `drop` çağrısı yapılan 16-4 numaralı kodda da denemek isteyebilirsiniz. Ancak, bu çözüm burada işe yaramaz; çünkü 16-4'te yapılmak istenen şey farklı bir nedenle izin verilmez. Eğer closure'a `move` eklersek, `v`'nin sahipliğini closure ortamına taşımış oluruz ve artık ana thread'de `drop` çağrısı yapamayız. Bu sefer şu derleyici hatasını alırız:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/output-only-01-move-drop/output.txt}}
 ```
 
-Rust’s ownership rules have saved us again! We got an error from the code in
-Listing 16-3 because Rust was being conservative and only borrowing `v` for the
-thread, which meant the main thread could theoretically invalidate the spawned
-thread’s reference. By telling Rust to move ownership of `v` to the spawned
-thread, we’re guaranteeing to Rust that the main thread won’t use `v` anymore.
-If we change Listing 16-4 in the same way, we’re then violating the ownership
-rules when we try to use `v` in the main thread. The `move` keyword overrides
-Rust’s conservative default of borrowing; it doesn’t let us violate the
-ownership rules.
+Rust'ın sahiplik kuralları bizi yine kurtardı! 16-3'teki kodda hata aldık çünkü Rust temkinli davranıp, thread için yalnızca `v`'yi ödünç alıyordu; bu da ana thread'in teorik olarak spawned thread'in referansını geçersiz kılabileceği anlamına geliyordu. Rust'a, `v`'nin sahipliğini spawned thread'e taşımasını söylediğimizde, ana thread'in artık `v`'yi kullanmayacağını garanti etmiş oluyoruz. 16-4'ü aynı şekilde değiştirirsek, bu sefer ana thread'de `v`'yi kullanmaya çalıştığımızda sahiplik kurallarını ihlal etmiş oluruz. `move` anahtar kelimesi, Rust'ın temkinli varsayılanı olan ödünç almayı geçersiz kılar; sahiplik kurallarını ihlal etmenize izin vermez.
 
-Now that we’ve covered what threads are and the methods supplied by the thread
-API, let’s look at some situations in which we can use threads.
+Artık thread'lerin ne olduğunu ve thread API'sinin sağladığı yöntemleri gördüğümüze göre, thread'leri kullanabileceğimiz bazı durumlara bakalım.
 
 [capture]: ch13-01-closures.html#capturing-references-or-moving-ownership

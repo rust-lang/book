@@ -1,49 +1,16 @@
-# Fearless Concurrency
+# Korkusuz Eşzamanlılık (Fearless Concurrency)
 
-Handling concurrent programming safely and efficiently is another of Rust’s
-major goals. _Concurrent programming_, in which different parts of a program
-execute independently, and _parallel programming_, in which different parts of
-a program execute at the same time, are becoming increasingly important as more
-computers take advantage of their multiple processors. Historically,
-programming in these contexts has been difficult and error prone. Rust hopes to
-change that.
+Eşzamanlı programlamayı güvenli ve verimli bir şekilde yönetmek, Rust'ın başlıca hedeflerinden bir diğeridir. Bir programın farklı bölümlerinin bağımsız olarak çalıştığı _eşzamanlı programlama_ (concurrent programming) ve farklı bölümlerin aynı anda çalıştığı _paralel programlama_ (parallel programming), daha fazla bilgisayar çoklu işlemcilerden yararlandıkça giderek daha önemli hale geliyor. Tarihsel olarak, bu bağlamlarda programlama zor ve hataya açık olmuştur. Rust bunu değiştirmeyi hedefliyor.
 
-Initially, the Rust team thought that ensuring memory safety and preventing
-concurrency problems were two separate challenges to be solved with different
-methods. Over time, the team discovered that the ownership and type systems are
-a powerful set of tools to help manage memory safety _and_ concurrency
-problems! By leveraging ownership and type checking, many concurrency errors
-are compile-time errors in Rust rather than runtime errors. Therefore, rather
-than making you spend lots of time trying to reproduce the exact circumstances
-under which a runtime concurrency bug occurs, incorrect code will refuse to
-compile and present an error explaining the problem. As a result, you can fix
-your code while you’re working on it rather than potentially after it has been
-shipped to production. We’ve nicknamed this aspect of Rust _fearless
-concurrency_. Fearless concurrency allows you to write code that is free of
-subtle bugs and is easy to refactor without introducing new bugs.
+Başlangıçta, Rust ekibi bellek güvenliğini sağlamak ve eşzamanlılık problemlerini önlemenin iki ayrı zorluk olduğunu ve farklı yöntemlerle çözülmesi gerektiğini düşünüyordu. Zamanla, sahiplik (ownership) ve tip sistemlerinin, hem bellek güvenliğini _hem de_ eşzamanlılık problemlerini yönetmek için güçlü araçlar olduğu keşfedildi! Sahiplik ve tip denetimini kullanarak, birçok eşzamanlılık hatası Rust'ta çalışma zamanı hatası yerine derleme zamanı hatası olur. Böylece, bir eşzamanlılık hatasının çalışma zamanında hangi koşullarda ortaya çıktığını tekrar tekrar bulmaya çalışmak yerine, hatalı kod derlenmez ve sorunu açıklayan bir hata mesajı gösterir. Sonuç olarak, kodunuzu üzerinde çalışırken düzeltebilirsiniz; potansiyel olarak üretime gönderdikten sonra değil. Rust'ta bu özelliğe _korkusuz eşzamanlılık_ (fearless concurrency) diyoruz. Korkusuz eşzamanlılık, ince hatalardan arınmış ve yeniden düzenlemesi kolay kodlar yazmanızı sağlar.
 
-> Note: For simplicity’s sake, we’ll refer to many of the problems as
-> _concurrent_ rather than being more precise by saying _concurrent and/or
-> parallel_. For this chapter, please mentally substitute _concurrent and/or
-> parallel_ whenever we use _concurrent_. In the next chapter, where the
-> distinction matters more, we’ll be more specific.
+> Not: Basitlik adına, birçok problemi _eşzamanlı_ olarak adlandıracağız; aslında _eşzamanlı ve/veya paralel_ demek daha doğru olurdu. Bu bölümde, _eşzamanlı_ dediğimizde lütfen zihninizde _eşzamanlı ve/veya paralel_ olarak düşünün. Sonraki bölümde, bu ayrım daha önemli olduğunda daha spesifik olacağız.
 
-Many languages are dogmatic about the solutions they offer for handling
-concurrent problems. For example, Erlang has elegant functionality for
-message-passing concurrency but has only obscure ways to share state between
-threads. Supporting only a subset of possible solutions is a reasonable
-strategy for higher-level languages because a higher-level language promises
-benefits from giving up some control to gain abstractions. However, lower-level
-languages are expected to provide the solution with the best performance in any
-given situation and have fewer abstractions over the hardware. Therefore, Rust
-offers a variety of tools for modeling problems in whatever way is appropriate
-for your situation and requirements.
+Birçok dil, eşzamanlılık problemlerini çözmek için sunduğu çözümler konusunda katıdır. Örneğin, Erlang mesajlaşma tabanlı eşzamanlılık için zarif işlevsellik sunar, ancak thread'ler arasında durumu paylaşmak için yalnızca dolaylı yollar sağlar. Yalnızca olası çözümlerin bir alt kümesini desteklemek, üst düzey diller için makul bir stratejidir; çünkü üst düzey bir dil, bazı kontrollerden vazgeçerek soyutlamalar sunma sözü verir. Ancak, alt düzey dillerin herhangi bir durumda en iyi performansı sağlayacak çözümü sunması ve donanım üzerinde daha az soyutlama yapması beklenir. Bu nedenle, Rust durumunuza ve gereksinimlerinize uygun şekilde problemleri modellemek için çeşitli araçlar sunar.
 
-Here are the topics we’ll cover in this chapter:
+Bu bölümde ele alacağımız konular şunlardır:
 
-- How to create threads to run multiple pieces of code at the same time
-- _Message-passing_ concurrency, where channels send messages between threads
-- _Shared-state_ concurrency, where multiple threads have access to some piece
-  of data
-- The `Sync` and `Send` traits, which extend Rust’s concurrency guarantees to
-  user-defined types as well as types provided by the standard library
+- Aynı anda birden fazla kod parçası çalıştırmak için thread'ler oluşturmak
+- Thread'ler arasında mesaj gönderen _mesajlaşma tabanlı_ eşzamanlılık
+- Birden fazla thread'in aynı veriye erişebildiği _paylaşılan durumlu_ eşzamanlılık
+- Rust'ın eşzamanlılık garantilerini hem standart kütüphanedeki hem de kullanıcı tanımlı türlere genişleten `Sync` ve `Send` trait'leri

@@ -1,28 +1,14 @@
-## Advanced Functions and Closures
+## İleri Düzey Fonksiyonlar ve Kapatıcılar (Closures)
 
-This section explores some advanced features related to functions and closures,
-including function pointers and returning closures.
+Bu bölümde, fonksiyonlar ve kapatıcılarla (closure) ilgili bazı ileri düzey özellikler, fonksiyon işaretçileri ve closure döndürme gibi konular ele alınacaktır.
 
-### Function Pointers
+### Fonksiyon İşaretçileri
 
-We’ve talked about how to pass closures to functions; you can also pass regular
-functions to functions! This technique is useful when you want to pass a
-function you’ve already defined rather than defining a new closure. Functions
-coerce to the type `fn` (with a lowercase _f_), not to be confused with the `Fn`
-closure trait. The `fn` type is called a _function pointer_. Passing functions
-with function pointers will allow you to use functions as arguments to other
-functions.
+Fonksiyonlara closure geçirmeyi daha önce konuştuk; ayrıca normal fonksiyonları da fonksiyonlara parametre olarak geçirebilirsiniz! Bu teknik, yeni bir closure tanımlamak yerine zaten tanımlı bir fonksiyonu geçirmek istediğinizde kullanışlıdır. Fonksiyonlar, closure trait'i olan `Fn` ile karıştırılmaması gereken küçük harfli `fn` tipine dönüştürülebilir. `fn` tipi, _fonksiyon işaretçisi_ (function pointer) olarak adlandırılır. Fonksiyon işaretçileriyle fonksiyonları başka fonksiyonlara argüman olarak geçirebilirsiniz.
 
-The syntax for specifying that a parameter is a function pointer is similar to
-that of closures, as shown in Listing 20-28, where we’ve defined a function
-`add_one` that adds 1 to its parameter. The function `do_twice` takes two
-parameters: a function pointer to any function that takes an `i32` parameter
-and returns an `i32`, and one `i32` value. The `do_twice` function calls the
-function `f` twice, passing it the `arg` value, then adds the two function call
-results together. The `main` function calls `do_twice` with the arguments
-`add_one` and `5`.
+Bir parametrenin fonksiyon işaretçisi olduğunu belirtmek için kullanılan söz dizimi, closure'lara benzer; bu, 20-28'de gösterilmiştir. Burada, parametresine 1 ekleyen `add_one` fonksiyonunu tanımladık. `do_twice` fonksiyonu iki parametre alır: herhangi bir `i32` parametresi alıp `i32` döndüren bir fonksiyon işaretçisi ve bir `i32` değeri. `do_twice`, `f` fonksiyonunu iki kez çağırır, her seferinde `arg` değerini geçirir ve iki fonksiyon çağrısının sonucunu toplar. `main` fonksiyonu, `do_twice`'ı `add_one` ve `5` argümanlarıyla çağırır.
 
-<Listing number="20-28" file-name="src/main.rs" caption="Using the `fn` type to accept a function pointer as an argument">
+<Listing number="20-28" file-name="src/main.rs" caption="Bir argüman olarak fonksiyon işaretçisi almak için `fn` tipini kullanmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-28/src/main.rs}}
@@ -30,31 +16,17 @@ results together. The `main` function calls `do_twice` with the arguments
 
 </Listing>
 
-This code prints `The answer is: 12`. We specify that the parameter `f` in
-`do_twice` is an `fn` that takes one parameter of type `i32` and returns an
-`i32`. We can then call `f` in the body of `do_twice`. In `main`, we can pass
-the function name `add_one` as the first argument to `do_twice`.
+Bu kod "The answer is: 12" çıktısını verir. `do_twice` fonksiyonundaki `f` parametresinin, bir `i32` parametresi alıp bir `i32` döndüren bir `fn` olduğunu belirtiriz. Ardından, `do_twice` fonksiyonu gövdesinde `f`'yi çağırabiliriz. `main`'de, fonksiyon adı olan `add_one`'ı `do_twice`'a ilk argüman olarak geçebiliriz.
 
-Unlike closures, `fn` is a type rather than a trait, so we specify `fn` as the
-parameter type directly rather than declaring a generic type parameter with one
-of the `Fn` traits as a trait bound.
+Closure'lardan farklı olarak, `fn` bir trait değil bir tiptir; bu yüzden parametre tipini doğrudan `fn` olarak belirtiriz, closure trait'lerinden biriyle trait sınırı belirten jenerik tip tanımı yapmamıza gerek yoktur.
 
-Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
-`FnOnce`), meaning you can always pass a function pointer as an argument for a
-function that expects a closure. It’s best to write functions using a generic
-type and one of the closure traits so your functions can accept either
-functions or closures.
+Fonksiyon işaretçileri, üç closure trait'inin (`Fn`, `FnMut`, `FnOnce`) hepsini uygular; yani, closure bekleyen bir fonksiyona her zaman fonksiyon işaretçisi geçirebilirsiniz. Fonksiyonlarınızı hem closure hem de fonksiyon kabul edebilecek şekilde yazmak için, closure trait'lerinden biriyle jenerik tip kullanmak en iyisidir.
 
-That said, one example of where you would want to only accept `fn` and not
-closures is when interfacing with external code that doesn’t have closures: C
-functions can accept functions as arguments, but C doesn’t have closures.
+Bununla birlikte, yalnızca `fn` kabul etmek isteyebileceğiniz bir örnek, closure'ların olmadığı harici kodlarla arayüz kurarken olur: C fonksiyonları argüman olarak fonksiyon kabul edebilir, ancak closure kavramı yoktur.
 
-As an example of where you could use either a closure defined inline or a named
-function, let’s look at a use of the `map` method provided by the `Iterator`
-trait in the standard library. To use the `map` method to turn a vector of
-numbers into a vector of strings, we could use a closure, as in Listing 20-29.
+Hem satır içi tanımlı bir closure hem de adlandırılmış bir fonksiyon kullanabileceğiniz bir örnek olarak, standart kütüphanedeki `Iterator` trait'inin sağladığı `map` metodunun kullanımına bakalım. Bir sayı vektörünü string vektörüne dönüştürmek için `map` metodunu kullanırken, 20-29'da olduğu gibi bir closure kullanabiliriz.
 
-<Listing number="20-29" caption="Using a closure with the `map` method to convert numbers to strings">
+<Listing number="20-29" caption="Sayıları string'e dönüştürmek için `map` metoduyla closure kullanmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-29/src/main.rs:here}}
@@ -62,10 +34,9 @@ numbers into a vector of strings, we could use a closure, as in Listing 20-29.
 
 </Listing>
 
-Or we could name a function as the argument to map instead of the closure.
-Listing 20-30 shows what this would look like.
+Ya da closure yerine argüman olarak bir fonksiyon adı verebiliriz. 20-30'da bunun nasıl görüneceği gösterilmiştir.
 
-<Listing number="20-30" caption="Using the `String::to_string` method to convert numbers to strings">
+<Listing number="20-30" caption="Sayıları string'e dönüştürmek için `String::to_string` metodunu kullanmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-30/src/main.rs:here}}
@@ -73,21 +44,13 @@ Listing 20-30 shows what this would look like.
 
 </Listing>
 
-Note that we must use the fully qualified syntax that we talked about in
-[“Advanced Traits”][advanced-traits]<!-- ignore --> because there are multiple
-functions available named `to_string`.
+Burada, birden fazla `to_string` fonksiyonu bulunduğu için, ["İleri Düzey Trait'ler"][advanced-traits]<!-- ignore --> bölümünde bahsettiğimiz tam nitelikli sözdizimini kullanmamız gerekir.
 
-Here, we’re using the `to_string` function defined in the `ToString` trait,
-which the standard library has implemented for any type that implements
-`Display`.
+Burada, `ToString` trait'inde tanımlı olan `to_string` fonksiyonunu kullanıyoruz, ki bu da standart kütüphanenin `Display`'i uygulayan herhangi bir tür için uyguladığı bir trait'tir.
 
-Recall from [“Enum values”][enum-values]<!-- ignore --> in Chapter 6 that the
-name of each enum variant that we define also becomes an initializer function.
-We can use these initializer functions as function pointers that implement the
-closure traits, which means we can specify the initializer functions as
-arguments for methods that take closures, as seen in Listing 20-31.
+Hatırlarsanız, 6. Bölümdeki ["Enum değerleri"][enum-values]<!-- ignore --> kısmında, tanımladığımız her enum varyantının aynı zamanda bir başlatıcı fonksiyon haline geldiğinden bahsetmiştik. Bu başlatıcı fonksiyonları, closure'ları alan yöntemler için argüman olarak belirtebileceğimiz fonksiyon işaretçileri olarak kullanabiliriz; bu, 20-31'de görüldüğü gibidir.
 
-<Listing number="20-31" caption="Using an enum initializers with the `map` method to create a `Status` instance from numbers">
+<Listing number="20-31" caption="Sayılar üzerinden bir `Status` örneği oluşturmak için enum başlatıcılarını kullanmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-31/src/main.rs:here}}
@@ -95,26 +58,15 @@ arguments for methods that take closures, as seen in Listing 20-31.
 
 </Listing>
 
-Here we create `Status::Value` instances using each `u32` value in the range
-that `map` is called on by using the initializer function of `Status::Value`.
-Some people prefer this style and some people prefer to use closures. They
-compile to the same code, so use whichever style is clearer to you.
+Burada, `map`'in çağrıldığı aralıkta bulunan her `u32` değeri için `Status::Value` örnekleri oluşturuyoruz; bunu `Status::Value`'nın başlatıcı fonksiyonu ile yapıyoruz. Bazı insanlar bu stili tercih ederken bazıları closure kullanmayı tercih ediyor. Her iki stil de aynı koda derlenir, bu yüzden sizin için hangisi daha açıksa o stili kullanın.
 
-### Returning Closures
+### Closure Döndürme
 
-Closures are represented by traits, which means you can’t return closures
-directly. In most cases where you might want to return a trait, you can instead
-use the concrete type that implements the trait as the return value of the
-function. However, you can’t usually do that with closures because they don’t
-have a concrete type that is returnable. You’re not allowed to use the function
-pointer `fn` as a return type if the closure captures any values from its scope,
-for example.
+Kapatıcılar trait'ler tarafından temsil edilir, bu da doğrudan kapatıcı döndüremeyeceğiniz anlamına gelir. Bir trait döndürmek isteyebileceğiniz çoğu durumda, bunun yerine o trait'i uygulayan somut tipi fonksiyonun dönüş değeri olarak kullanabilirsiniz. Ancak, kapatıcılar söz konusu olduğunda genellikle bunu yapamazsınız çünkü onların döndürülebilir somut bir tipi yoktur. Örneğin, kapanış herhangi bir değeri kapsıyorsa, `fn` işaretçisi gibi davranan bir dönüş tipi kullanmanıza izin verilmez.
 
-Instead, you will normally use the `impl Trait` syntax we learned about in
-Chapter 10. You can return any function type, using `Fn`, `FnOnce` and `FnMut`.
-For example, the code in Listing 20-32 will work just fine.
+Bunun yerine, genellikle 10. Bölümde öğrendiğimiz `impl Trait` sözdizimini kullanırsınız. Herhangi bir fonksiyon tipini döndürebilirsiniz; `Fn`, `FnOnce` ve `FnMut` kullanarak. Örneğin, 20-32'deki kod sorunsuz bir şekilde çalışacaktır.
 
-<Listing number="20-32" caption="Returning a closure from a function using the `impl Trait` syntax">
+<Listing number="20-32" caption="Fonksiyondan bir closure döndürmek için `impl Trait` sözdizimini kullanmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-32/src/lib.rs}}
@@ -122,14 +74,10 @@ For example, the code in Listing 20-32 will work just fine.
 
 </Listing>
 
-However, as we noted in [“Closure Type Inference and
-Annotation”][closure-types]<!-- ignore --> in Chapter 13, each closure is also
-its own distinct type. If you need to work with multiple functions that have the
-same signature but different implementations, you will need to use a trait
-object for them. Consider what happens if you write code like that shown in
-Listing 20-33.
+Ancak, 13. Bölümdeki ["Kapatıcı Tipi Çıkarımı ve
+Açıklaması"][closure-types]<!-- ignore --> kısmında belirttiğimiz gibi, her kapatıcı kendi benzersiz tipidir. Aynı imzaya sahip ancak farklı uygulamalara sahip birden fazla fonksiyonla çalışmanız gerektiğinde, bunlar için bir trait nesnesi kullanmanız gerekecektir. 20-33'de gösterilen kodu yazarsanız ne olacağını düşünün.
 
-<Listing file-name="src/main.rs" number="20-33" caption="Creating a `Vec<T>` of closures defined by functions that return `impl Fn`">
+<Listing file-name="src/main.rs" number="20-33" caption="Farklı `impl Fn` döndüren fonksiyonlar için bir `Vec<T>` oluşturmak">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-33/src/main.rs}}
@@ -137,26 +85,15 @@ Listing 20-33.
 
 </Listing>
 
-Here we have two functions, `returns_closure` and `returns_initialized_closure`,
-which both return `impl Fn(i32) -> i32`. Notice that he closures that they
-return are different, even though they implement the same type. If we try to
-compile this, Rust lets us know that it won’t work:
+Burada, her ikisi de `impl Fn(i32) -> i32` döndüren iki fonksiyonumuz var: `returns_closure` ve `returns_initialized_closure`. Dikkat edin ki, döndürdükleri kapatıcılar farklıdır, her ne kadar aynı tipi uygulıyor olsalar da. Bunu derlemeye çalışırsak, Rust bize bunun çalışmayacağını bildirir:
 
 ```text
 {{#include ../listings/ch20-advanced-features/listing-20-33/output.txt}}
 ```
 
-The error message tells us that whenever we return an `impl Trait` Rust creates
-a unique _opaque type_, a type where we cannot see into the details of what Rust
-constructs for us. So even though these functions both return closures that
-implements the same trait, `Fn(i32) -> i32`, the opaque types Rust generates for
-each are distinct. (This is similar to how Rust produces different concrete
-types for distinct async blocks even when they have the same output type, as we
-saw in [“Working with Any Number of Futures”][any-number-of-futures] in Chapter
-17. We have seen a solution to this problem a few times now: we can use a trait
-object, as in Listing 20-34.
+Hata mesajı, `impl Trait` döndürdüğümüzde Rust'ın bizim için nasıl benzersiz bir _opak tip_ oluşturduğunu, yani Rust'ın bizim için oluşturduğu şeylerin detaylarına girmeden göremediğimiz bir tipi oluşturduğunu söyler. Bu yüzden, bu fonksiyonlar her ne kadar aynı trait'i (`Fn(i32) -> i32`) uygulayan kapatıcılar döndürse de, Rust'ın her biri için ürettiği opak tipler farklıdır. (Bu, 17. Bölümde gördüğümüz gibi, aynı çıktı tipine sahip farklı async blokları için Rust'ın nasıl farklı somut tipler ürettiğine benzer; bkz. [“Herhangi Bir Sayıda Gelecek ile Çalışmak”][any-number-of-futures] Bölüm 17. Bu sorunun birkaç kez çözümünü gördük: bir trait nesnesi kullanabiliriz, bu da 20-34'de gösterilmiştir.
 
-<Listing number="20-34" caption="Creating a `Vec<T>` of closures defined by functions that return `Box<dyn Fn>` so they have the same type">
+<Listing number="20-34" caption="Aynı tipe sahip olmaları için `Box<dyn Fn>` döndüren fonksiyonlar için bir `Vec<T>` oluşturmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-34/src/main.rs:here}}
@@ -164,12 +101,10 @@ object, as in Listing 20-34.
 
 </Listing>
 
-This code will compile just fine. For more about trait objects, refer to the
-section [“Using Trait Objects That Allow for Values of Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
---> in Chapter 18.
+Bu kod sorunsuz bir şekilde derlenecektir. Trait nesneleri hakkında daha fazla bilgi için, 18. Bölümdeki ["Farklı Tip Değerlerine İzin Veren Trait Nesnelerini Kullanma"][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore
+--> kısmına bakın.
 
-Next, let’s look at macros!
+Şimdi, makrolara bakalım!
 
 [advanced-traits]: ch20-02-advanced-traits.html#advanced-traits
 [enum-values]: ch06-01-defining-an-enum.html#enum-values

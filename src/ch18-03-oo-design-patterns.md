@@ -1,57 +1,29 @@
-## Implementing an Object-Oriented Design Pattern
+## Nesne Yönelimli Bir Tasarım Deseni Uygulamak
 
-The _state pattern_ is an object-oriented design pattern. The crux of the
-pattern is that we define a set of states a value can have internally. The
-states are represented by a set of _state objects_, and the value’s behavior
-changes based on its state. We’re going to work through an example of a blog
-post struct that has a field to hold its state, which will be a state object
-from the set “draft,” “review,” or “published.”
+_State pattern_ (durum deseni), nesne yönelimli bir tasarım desenidir. Bu desenin özü, bir değerin dahili olarak sahip olabileceği bir dizi durumu tanımlamaktır. Durumlar, bir dizi _durum nesnesi_ ile temsil edilir ve değerin davranışı, mevcut durumuna göre değişir. Şimdi, bir alanında durumunu tutan bir blog yazısı struct'ı örneği üzerinden ilerleyeceğiz; bu alan, "taslak", "inceleme" veya "yayınlandı" durum nesnelerinden biri olacak.
 
-The state objects share functionality: in Rust, of course, we use structs and
-traits rather than objects and inheritance. Each state object is responsible
-for its own behavior and for governing when it should change into another
-state. The value that holds a state object knows nothing about the different
-behavior of the states or when to transition between states.
+Durum nesneleri bazı işlevleri paylaşır: Rust'ta elbette nesne ve kalıtım yerine struct ve trait kullanırız. Her durum nesnesi kendi davranışından ve başka bir duruma ne zaman geçeceğinden sorumludur. Durum nesnesini tutan değer ise, durumların farklı davranışları veya ne zaman geçiş yapılacağı hakkında hiçbir şey bilmez.
 
-The advantage of using the state pattern is that, when the business
-requirements of the program change, we won’t need to change the code of the
-value holding the state or the code that uses the value. We’ll only need to
-update the code inside one of the state objects to change its rules or perhaps
-add more state objects.
+Durum desenini kullanmanın avantajı, programın iş gereksinimleri değiştiğinde, durumu tutan değerin kodunu veya onu kullanan kodu değiştirmemize gerek olmamasıdır. Sadece bir durum nesnesinin içindeki kodu güncelleyerek kuralları değiştirebilir veya yeni durum nesneleri ekleyebiliriz.
 
-First we’re going to implement the state pattern in a more traditional
-object-oriented way, then we’ll use an approach that’s a bit more natural in
-Rust. Let’s dig in to incrementally implement a blog post workflow using the
-state pattern.
+Önce, durum desenini daha geleneksel nesne yönelimli bir şekilde uygulayacağız; ardından Rust'a daha doğal gelen bir yaklaşımla tekrar ele alacağız. Şimdi, durum desenini kullanarak bir blog yazısı iş akışını adım adım uygulayalım.
 
-The final functionality will look like this:
+Son işlevsellik şöyle olacak:
 
-1. A blog post starts as an empty draft.
-1. When the draft is done, a review of the post is requested.
-1. When the post is approved, it gets published.
-1. Only published blog posts return content to print, so unapproved posts can’t
-   accidentally be published.
+1. Bir blog yazısı boş bir taslak olarak başlar.
+1. Taslak tamamlandığında, yazının incelenmesi istenir.
+1. Yazı onaylandığında, yayınlanır.
+1. Yalnızca yayınlanmış blog yazıları içerik döndürür; onaylanmamış yazılar yanlışlıkla yayınlanamaz.
 
-Any other changes attempted on a post should have no effect. For example, if we
-try to approve a draft blog post before we’ve requested a review, the post
-should remain an unpublished draft.
+Bir yazı üzerinde yapılan diğer değişiklikler etkisiz olmalıdır. Örneğin, bir taslak blog yazısını inceleme istemeden onaylamaya çalışırsak, yazı yayınlanmamış taslak olarak kalmalıdır.
 
-### A Traditional Object-oriented Attempt
+### Geleneksel Nesne Yönelimli Bir Deneme
 
-There are infinite ways to structure code to solve the same problem, each with
-different trade-offs. This section’s implementation is more of a traditional
-object-oriented style, which is possible to write in Rust, but doesn’t take
-advantage of some of Rust’s strengths. Later, we’ll demonstrate a different
-solution that still uses the object-oriented design pattern but is structured
-in a way that might look less familiar to programmers with object-oriented
-experience. We’ll compare the two solutions to experience the trade-offs of
-designing Rust code differently than code in other languages.
+Aynı problemi çözmek için sonsuz sayıda kod yapısı oluşturulabilir ve her birinin farklı avantajları/dezavantajları vardır. Bu bölümdeki uygulama, Rust'ta yazılması mümkün olan ama Rust'ın bazı güçlü yönlerinden faydalanmayan, daha geleneksel nesne yönelimli bir stildir. Sonrasında, yine nesne yönelimli tasarım desenini kullanan ama nesne yönelimli programlamaya aşina olanlara daha az tanıdık gelebilecek, Rust'a daha uygun bir çözüm göstereceğiz. İki çözümü karşılaştırarak, Rust kodunu diğer dillerdeki kodlardan farklı tasarlamanın avantaj/dezavantajlarını göreceğiz.
 
-Listing 18-11 shows this workflow in code form: this is an example usage of the
-API we’ll implement in a library crate named `blog`. This won’t compile yet
-because we haven’t implemented the `blog` crate.
+18-11 numaralı listede, bu iş akışının kod hali gösteriliyor: Bu, `blog` adında bir kütüphane crate'inde uygulayacağımız API'nin örnek kullanımıdır. Henüz `blog` crate'ini uygulamadığımız için bu kod derlenmeyecek.
 
-<Listing number="18-11" file-name="src/main.rs" caption="Code that demonstrates the desired behavior we want our `blog` crate to have">
+<Listing number="18-11" file-name="src/main.rs" caption="`blog` crate'imizin sahip olmasını istediğimiz davranışı gösteren kod">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch18-oop/listing-18-11/src/main.rs:all}}
@@ -59,42 +31,19 @@ because we haven’t implemented the `blog` crate.
 
 </Listing>
 
-We want to allow the user to create a new draft blog post with `Post::new`. We
-want to allow text to be added to the blog post. If we try to get the post’s
-content immediately, before approval, we shouldn’t get any text because the
-post is still a draft. We’ve added `assert_eq!` in the code for demonstration
-purposes. An excellent unit test for this would be to assert that a draft blog
-post returns an empty string from the `content` method, but we’re not going to
-write tests for this example.
+Kullanıcının `Post::new` ile yeni bir taslak blog yazısı oluşturmasına izin vermek istiyoruz. Blog yazısına metin eklenebilmesini istiyoruz. Eğer onaydan önce yazının içeriğini almaya çalışırsak, hiçbir metin almamalıyız; çünkü yazı hâlâ taslaktır. Kodda gösterim amaçlı olarak `assert_eq!` kullandık. Bunun için mükemmel bir birim testi, taslak bir blog yazısının `content` metodundan boş bir dize döndürdüğünü doğrulamak olurdu; ancak bu örnekte test yazmayacağız.
 
-Next, we want to enable a request for a review of the post, and we want
-`content` to return an empty string while waiting for the review. When the post
-receives approval, it should get published, meaning the text of the post will
-be returned when `content` is called.
+Sonraki adımda, yazının incelenmesini istemeyi etkinleştirmek ve inceleme beklerken `content`'in boş dize döndürmesini istiyoruz. Yazı onaylandığında ise yayınlanmalı; yani `content` çağrıldığında yazının metni döndürülmeli.
 
-Notice that the only type we’re interacting with from the crate is the `Post`
-type. This type will use the state pattern and will hold a value that will be
-one of three state objects representing the various states a post can be
-in—draft, review, or published. Changing from one state to another will be
-managed internally within the `Post` type. The states change in response to the
-methods called by our library’s users on the `Post` instance, but they don’t
-have to manage the state changes directly. Also, users can’t make a mistake
-with the states, such as publishing a post before it’s reviewed.
+Dikkat edin, crate'ten etkileşime geçtiğimiz tek tip `Post` tipi. Bu tip, durum desenini kullanacak ve bir yazının olabileceği üç farklı durumu temsil eden bir değer tutacak: taslak, inceleme veya yayınlandı. Bir durumdan diğerine geçiş, `Post` tipi içinde dahili olarak yönetilecek. Durumlar, kütüphanemizin kullanıcılarının `Post` örneği üzerinde çağırdığı metotlara yanıt olarak değişecek, ancak kullanıcılar durum geçişlerini doğrudan yönetmek zorunda kalmayacak. Ayrıca, kullanıcılar yazının incelemeden önce yayınlanması gibi durumlarla ilgili hatalar yapamayacak.
 
-#### Defining `Post` and Creating a New Instance in the Draft State
+#### `Post` Tanımlama ve Taslak Durumda Yeni Bir Örnek Oluşturma
 
-Let’s get started on the implementation of the library! We know we need a
-public `Post` struct that holds some content, so we’ll start with the
-definition of the struct and an associated public `new` function to create an
-instance of `Post`, as shown in Listing 18-12. We’ll also make a private
-`State` trait that will define the behavior that all state objects for a `Post`
-must have.
+Kütüphanenin uygulanmasına başlarken, öncelikle bazı içerikler tutan bir `Post` struct'ına ihtiyacımız olduğunu biliyoruz. Bu nedenle, bir `Post` örneği oluşturmak için bir `new` işlevi ile birlikte struct'ın tanımıyla başlayacağız. Ayrıca, tüm durum nesnelerinin sahip olması gereken davranışları tanımlayacak özel bir `State` trait'i oluşturacağız.
 
-Then `Post` will hold a trait object of `Box<dyn State>` inside an `Option<T>`
-in a private field named `state` to hold the state object. You’ll see why the
-`Option<T>` is necessary in a bit.
+Ardından, `Post`, bir `Option<T>` içinde `Box<dyn State>` türünde bir trait nesnesi tutacak bir `state` adlı özel bir alanda durum nesnesini tutacak. `Option<T>` türünün neden gerekli olduğunu birazdan göreceksiniz.
 
-<Listing number="18-12" file-name="src/lib.rs" caption="Definition of a `Post` struct and a `new` function that creates a new `Post` instance, a `State` trait, and a `Draft` struct">
+<Listing number="18-12" file-name="src/lib.rs" caption="Yeni bir `Post` örneği oluşturan bir `new` işlevi, bir `State` trait'i ve bir `Draft` struct'ının tanımı">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-12/src/lib.rs}}
@@ -102,30 +51,15 @@ in a private field named `state` to hold the state object. You’ll see why the
 
 </Listing>
 
-The `State` trait defines the behavior shared by different post states. The
-state objects are `Draft`, `PendingReview`, and `Published`, and they will all
-implement the `State` trait. For now, the trait doesn’t have any methods, and
-we’ll start by defining just the `Draft` state because that is the state we
-want a post to start in.
+`State` trait'i, farklı gönderi durumları tarafından paylaşılan davranışları tanımlar. Durum nesneleri `Draft`, `PendingReview` ve `Published` olup, bunların tümü `State` trait'ini uygulayacaktır. Şu anda, trait'in herhangi bir yöntemi yok ve önce yalnızca `Draft` durumunu tanımlayacağız; çünkü bir gönderinin başlamak istediğimiz durumudur.
 
-When we create a new `Post`, we set its `state` field to a `Some` value that
-holds a `Box`. This `Box` points to a new instance of the `Draft` struct. This
-ensures that whenever we create a new instance of `Post`, it will start out as
-a draft. Because the `state` field of `Post` is private, there is no way to
-create a `Post` in any other state! In the `Post::new` function, we set the
-`content` field to a new, empty `String`.
+Yeni bir `Post` oluşturduğumuzda, `state` alanını bir `Some` değeri ile dolduruyoruz ve bu değer bir `Draft` struct'ına işaret ediyor. Bu, yeni bir `Post` örneği oluşturduğumuzda, onun bir taslak olarak başlamasını sağlıyor. `Post`'un `state` alanı özel olduğundan, başka bir durumda `Post` oluşturmanın bir yolu yoktur! `Post::new` işlevinde, `content` alanını yeni, boş bir `String` ile dolduruyoruz.
 
-#### Storing the Text of the Post Content
+#### Gönderi İçeriğinin Metnini Saklama
 
-We saw in Listing 18-11 that we want to be able to call a method named
-`add_text` and pass it a `&str` that is then added as the text content of the
-blog post. We implement this as a method, rather than exposing the `content`
-field as `pub`, so that later we can implement a method that will control how
-the `content` field’s data is read. The `add_text` method is pretty
-straightforward, so let’s add the implementation in Listing 18-13 to the `impl
-Post` block.
+18-11 numaralı listede, `add_text` adlı bir yöntemi çağırmak ve ona bir `&str` geçirerek bu metni blog yazısının içerik metni olarak eklemek istediğimizi gördük. Bunu, daha sonra `content` alanının verilerinin nasıl okunacağını kontrol eden bir yöntem olarak uyguluyoruz. `add_text` yöntemi oldukça basit, bu nedenle `impl Post` bloğuna 18-13 numaralı listede gösterildiği gibi uygulayalım.
 
-<Listing number="18-13" file-name="src/lib.rs" caption="Implementing the `add_text` method to add text to a post’s `content`">
+<Listing number="18-13" file-name="src/lib.rs" caption="Bir gönderinin `content` alanına metin eklemek için `add_text` yönteminin uygulanması">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-13/src/lib.rs:here}}
@@ -133,26 +67,13 @@ Post` block.
 
 </Listing>
 
-The `add_text` method takes a mutable reference to `self` because we’re
-changing the `Post` instance that we’re calling `add_text` on. We then call
-`push_str` on the `String` in `content` and pass the `text` argument to add to
-the saved `content`. This behavior doesn’t depend on the state the post is in,
-so it’s not part of the state pattern. The `add_text` method doesn’t interact
-with the `state` field at all, but it is part of the behavior we want to
-support.
+`add_text` yöntemi, kendisi üzerinde `add_text` çağırdığımız `Post` örneğini değiştirdiğimiz için `self`'in bir referansını alır. Ardından, `content` içindeki `String` üzerinde `push_str` çağırır ve eklemek için `text` argümanını geçiririz. Bu davranış, gönderinin bulunduğu duruma bağlı değildir, bu nedenle durum deseninin bir parçası değildir. `add_text` yöntemi, `state` alanı ile etkileşime girmez, ancak desteklemek istediğimiz bir davranışın parçasıdır.
 
-#### Ensuring the Content of a Draft Post Is Empty
+#### Taslak Bir Gönderinin İçeriğinin Boş Olmasını Sağlama
 
-Even after we’ve called `add_text` and added some content to our post, we still
-want the `content` method to return an empty string slice because the post is
-still in the draft state, as shown on line 7 of Listing 18-11. For now, let’s
-implement the `content` method with the simplest thing that will fulfill this
-requirement: always returning an empty string slice. We’ll change this later
-once we implement the ability to change a post’s state so it can be published.
-So far, posts can only be in the draft state, so the post content should always
-be empty. Listing 18-14 shows this placeholder implementation.
+`add_text` çağrıldıktan ve gönderimize biraz içerik eklendikten sonra bile, `content` yönteminin bir boş dize dilimi döndürmesini istiyoruz; çünkü gönderi hâlâ taslak durumundadır, bu da 18-11 numaralı listenin 7. satırında gösterilmiştir. Şimdilik, bu gereksinimi karşılayacak en basit şeyle `content` yöntemini uygulayalım: her zaman boş bir dize dilimi döndürmek. Bunu daha sonra, bir gönderinin durumunu değiştirmenin yolunu uyguladığımızda değiştireceğiz, böylece yayınlanabilir. Şu anda, gönderiler yalnızca taslak durumunda olabilir, bu nedenle gönderi içeriği her zaman boş olmalıdır. 18-14 numaralı listede bu yer tutucu uygulamasını görebilirsiniz.
 
-<Listing number="18-14" file-name="src/lib.rs" caption="Adding a placeholder implementation for the `content` method on `Post` that always returns an empty string slice">
+<Listing number="18-14" file-name="src/lib.rs" caption="Her zaman boş bir dize dilimi döndüren `content` yönteminin `Post` üzerindeki yer tutucu uygulamasının eklenmesi">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-14/src/lib.rs:here}}
@@ -160,19 +81,17 @@ be empty. Listing 18-14 shows this placeholder implementation.
 
 </Listing>
 
-With this added `content` method, everything in Listing 18-11 up to line 7
-works as intended.
+Bu eklenmiş `content` yöntemi ile, 18-11 numaralı listedeki 7. satıra kadar her şey istenildiği gibi çalışıyor.
 
-<!-- Old headings. Do not remove or links may break. -->
+<!-- Eski başlıklar. Kaldırmayın yoksa bağlantılar bozulabilir. -->
 
 <a id="requesting-a-review-of-the-post-changes-its-state"></a>
 
-#### Requesting a Review Changes the Post’s State
+#### İnceleme İstemek Gönderinin Durumunu Değiştirir
 
-Next, we need to add functionality to request a review of a post, which should
-change its state from `Draft` to `PendingReview`. Listing 18-15 shows this code.
+Sonraki adımda, bir gönderinin incelemesini istemek için işlevsellik eklememiz gerekiyor; bu, durumunu `Draft`'tan `PendingReview`'a değiştirmelidir. Bu kod 18-15 numaralı listede gösterilmektedir.
 
-<Listing number="18-15" file-name="src/lib.rs" caption="Implementing `request_review` methods on `Post` and the `State` trait">
+<Listing number="18-15" file-name="src/lib.rs" caption="`Post` ve `State` trait'inde `request_review` yönteminin uygulanması">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-15/src/lib.rs:here}}
@@ -180,59 +99,29 @@ change its state from `Draft` to `PendingReview`. Listing 18-15 shows this code.
 
 </Listing>
 
-We give `Post` a public method named `request_review` that will take a mutable
-reference to `self`. Then we call an internal `request_review` method on the
-current state of `Post`, and this second `request_review` method consumes the
-current state and returns a new state.
+`Post`'a, kendisine değişken bir referans alacak şekilde bir `request_review` adlı genel bir yöntem veriyoruz. Ardından, `Post`'un mevcut durumunun içindeki `request_review` adlı dahili bir yöntemi çağırıyoruz ve bu ikinci `request_review` yöntemi mevcut durumu tüketip yeni bir durum döndürüyor.
 
-We add the `request_review` method to the `State` trait; all types that
-implement the trait will now need to implement the `request_review` method.
-Note that rather than having `self`, `&self`, or `&mut self` as the first
-parameter of the method, we have `self: Box<Self>`. This syntax means the
-method is only valid when called on a `Box` holding the type. This syntax takes
-ownership of `Box<Self>`, invalidating the old state so the state value of the
-`Post` can transform into a new state.
+`request_review` yöntemini `State` trait'ine ekliyoruz; trait'i uygulayan tüm türler artık `request_review` yöntemini uygulamak zorunda kalacak. İlk parametre olarak `self`, `&self` veya `&mut self` yerine `self: Box<Self>` kullanıyoruz. Bu sözdizimi, yöntemin yalnızca türü tutan bir `Box` üzerinde çağrıldığında geçerli olduğunu ifade eder. Bu sözdizimi, durumu sahiplenerek eski durumu geçersiz kılar, böylece `Post`'un durum değeri yeni bir duruma dönüşebilir.
 
-To consume the old state, the `request_review` method needs to take ownership
-of the state value. This is where the `Option` in the `state` field of `Post`
-comes in: we call the `take` method to take the `Some` value out of the `state`
-field and leave a `None` in its place because Rust doesn’t let us have
-unpopulated fields in structs. This lets us move the `state` value out of
-`Post` rather than borrowing it. Then we’ll set the post’s `state` value to the
-result of this operation.
+Eski durumu tüketmek için, `request_review` yöntemi durum değerinin sahipliğini almalıdır. Bu, `Post`'un durum değerini hareket ettirmemize olanak tanır. Ardından, `state` değerini bu işlemin sonucuna ayarlayacağız.
 
-We need to set `state` to `None` temporarily rather than setting it directly
-with code like `self.state = self.state.request_review();` to get ownership of
-the `state` value. This ensures `Post` can’t use the old `state` value after
-we’ve transformed it into a new state.
+`state`'i geçici olarak `None`'a ayarlamamızın nedeni, doğrudan `self.state = self.state.request_review();` gibi bir kodla ayarlamaktan ziyade, durum değerinin sahipliğini elde etmektir. Bu, `Post`'un eski `state` değerini kullanmasını engeller.
 
-The `request_review` method on `Draft` returns a new, boxed instance of a new
-`PendingReview` struct, which represents the state when a post is waiting for a
-review. The `PendingReview` struct also implements the `request_review` method
-but doesn’t do any transformations. Rather, it returns itself because when we
-request a review on a post already in the `PendingReview` state, it should stay
-in the `PendingReview` state.
+`Draft` üzerindeki `request_review` yöntemi, bir gönderinin inceleme beklediği durumu temsil eden yeni bir `PendingReview` struct'ısının yeni, kutulu bir örneğini döndüren bir yöntemdir. `PendingReview` struct'ı da `request_review` yöntemini uygular, ancak herhangi bir dönüşüm yapmaz. Bunun yerine, kendisini döndürür; çünkü bir gönderinin zaten `PendingReview` durumunda inceleme istemesi durumunda, `PendingReview` durumunda kalmalıdır.
 
-Now we can start seeing the advantages of the state pattern: the
-`request_review` method on `Post` is the same no matter its `state` value. Each
-state is responsible for its own rules.
+Artık durum deseninin avantajlarını görmeye başlayabiliriz: `Post` üzerindeki `request_review` yöntemi, durum değeri ne olursa olsun aynıdır. Her durum kendi kurallarından sorumludur.
 
-We’ll leave the `content` method on `Post` as is, returning an empty string
-slice. We can now have a `Post` in the `PendingReview` state as well as in the
-`Draft` state, but we want the same behavior in the `PendingReview` state.
-Listing 18-11 now works up to line 10!
+`content` yöntemini olduğu gibi bırakacağız; boş bir dize dilimi döndürmeye devam edecek. Artık `PendingReview` durumunda da bir `Post`'a sahip olabiliriz, ayrıca `Draft` durumunda da, ancak `PendingReview` durumundaki davranış aynı olmalıdır. 18-11 numaralı liste artık 10. satıra kadar çalışıyor!
 
-<!-- Old headings. Do not remove or links may break. -->
+<!-- Eski başlıklar. Kaldırmayın yoksa bağlantılar bozulabilir. -->
 
 <a id="adding-the-approve-method-that-changes-the-behavior-of-content"></a>
 
-#### Adding `approve` to Change the Behavior of `content`
+#### `approve` Ekleme ile `content`'in Davranışını Değiştirme
 
-The `approve` method will be similar to the `request_review` method: it will
-set `state` to the value that the current state says it should have when that
-state is approved, as shown in Listing 18-16.
+`approve` yöntemi, `request_review` yöntemine benzer olacaktır: durumu, o durumun onaylandığında sahip olması gereken değere ayarlayacaktır. Bu, 18-16 numaralı listede gösterilmiştir.
 
-<Listing number="18-16" file-name="src/lib.rs" caption="Implementing the `approve` method on `Post` and the `State` trait">
+<Listing number="18-16" file-name="src/lib.rs" caption="`Post` ve `State` trait'inde `approve` yönteminin uygulanması">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-16/src/lib.rs:here}}
@@ -240,158 +129,71 @@ state is approved, as shown in Listing 18-16.
 
 </Listing>
 
-We add the `approve` method to the `State` trait and add a new struct that
-implements `State`, the `Published` state.
+`approve` yöntemini `State` trait'ine ekliyoruz ve `State`'i uygulayan yeni bir yapı olan `Published` durumunu ekliyoruz.
 
-Similar to the way `request_review` on `PendingReview` works, if we call the
-`approve` method on a `Draft`, it will have no effect because `approve` will
-return `self`. When we call `approve` on `PendingReview`, it returns a new,
-boxed instance of the `Published` struct. The `Published` struct implements the
-`State` trait, and for both the `request_review` method and the `approve`
-method, it returns itself because the post should stay in the `Published` state
-in those cases.
+`PendingReview` üzerindeki `approve` yöntemi gibi, `Draft` üzerindeki `approve` çağrısı da etkisiz olacaktır; çünkü `approve`, kendisini döndürecektir. `PendingReview` üzerinde `approve` çağırdığımızda, bu yeni bir `Published` struct'ı örneği döndürür. `Published` struct'ı, `State` trait'ini uygular ve hem `request_review` hem de `approve` yöntemleri için kendisini döndürür; çünkü gönderi bu durumlarda `Published` durumunda kalmalıdır.
 
-Now we need to update the `content` method on `Post`. We want the value
-returned from `content` to depend on the current state of the `Post`, so we’re
-going to have the `Post` delegate to a `content` method defined on its `state`,
-as shown in Listing 18-17.
+Artık `Post` üzerindeki `content` yöntemini güncellememiz gerekiyor. `content`'in döndürdüğü değerin `Post`'un mevcut durumuna bağlı olmasını istiyoruz, bu yüzden `Post`, `state`'inin üzerinde tanımlı bir `content` yöntemini devretmesini sağlayacağız. Bu, 18-17 numaralı listede gösterilmiştir.
 
-<Listing number="18-17" file-name="src/lib.rs" caption="Updating the `content` method on `Post` to delegate to a `content` method on `State`">
+<Listing number="18-17" file-name="src/lib.rs" caption="`Post` üzerindeki `content` yönteminin, `State` üzerindeki bir `content` yöntemini devretmek üzere güncellenmesi">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch18-oop/listing-18-17/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch18-oop/listing-18-17/src.lib.rs:here}}
 ```
 
 </Listing>
 
-Because the goal is to keep all of these rules inside the structs that
-implement `State`, we call a `content` method on the value in `state` and pass
-the post instance (that is, `self`) as an argument. Then we return the value
-that’s returned from using the `content` method on the `state` value.
+Amacımız, tüm bu kuralları `State`'i uygulayan yapıların içinde tutmak olduğundan, `state` içindeki değere bir `content` yöntemi çağırıyoruz ve gönderi örneğini (yani `self`) bir argüman olarak geçiriyoruz. Ardından, `state` değerindeki `content` yöntemini kullanarak döndürülen değeri döndürüyoruz.
 
-We call the `as_ref` method on the `Option` because we want a reference to the
-value inside the `Option` rather than ownership of the value. Because `state` is
-an `Option<Box<dyn State>>`, when we call `as_ref`, an `Option<&Box<dyn
-State>>` is returned. If we didn’t call `as_ref`, we would get an error because
-we can’t move `state` out of the borrowed `&self` of the function parameter.
+`Option` üzerindeki `as_ref` yöntemini çağırıyoruz çünkü `state` içindeki değere sahip olmak değil, ona referans almak istiyoruz. `state`, `Option<Box<dyn State>>` olduğundan, `as_ref` çağırdığımızda `Option<&Box<dyn State>>` döndürülür. Eğer `as_ref` çağırmazsak, fonksiyon parametresi olan `&self`'in hareket etmesine izin verilmediği için hata alırız.
 
-We then call the `unwrap` method, which we know will never panic because we
-know the methods on `Post` ensure that `state` will always contain a `Some`
-value when those methods are done. This is one of the cases we talked about in
-[“Cases in Which You Have More Information Than the
-Compiler”][more-info-than-rustc]<!-- ignore --> in Chapter 9 when we know that
-a `None` value is never possible, even though the compiler isn’t able to
-understand that.
+Ardından, `unwrap` yöntemini çağırıyoruz; bu, `state`'in bu yöntemler tamamlandığında her zaman bir `Some` değeri içereceğini bildiğimiz için panik yapmayacaktır. Bu, 9. Bölümde, derleyicinin anlayamadığı durumlarda bile, belirli bir değerin (bu durumda `None`) asla olamayacağını bildiğimiz durumlar için geçerli olan bir durumdur.
 
-At this point, when we call `content` on the `&Box<dyn State>`, deref coercion
-will take effect on the `&` and the `Box` so the `content` method will
-ultimately be called on the type that implements the `State` trait. That means
-we need to add `content` to the `State` trait definition, and that is where
-we’ll put the logic for what content to return depending on which state we
-have, as shown in Listing 18-18.
+Bu noktada, `&Box<dyn State>` üzerindeki `content`'i çağırdığımızda, `&` ve `Box` üzerindeki deref dönüştürmesi etkili olacaktır, bu nedenle `content` yöntemi nihayetinde `State` trait'ini uygulayan tür üzerinde çağrılacaktır. Bu nedenle, `State` trait tanımına `content` eklememiz gerekiyor ve işte burada, hangi duruma sahip olduğumuza bağlı olarak hangi içeriğin döndürüleceği ile ilgili mantığı koyacağız. 18-18 numaralı listede gösterilmiştir.
 
-<Listing number="18-18" file-name="src/lib.rs" caption="Adding the `content` method to the `State` trait">
+<Listing number="18-18" file-name="src/lib.rs" caption="`State` trait'ine `content` yönteminin eklenmesi">
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch18-oop/listing-18-18/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch18-oop/listing-18-18/src.lib.rs:here}}
 ```
 
 </Listing>
 
-We add a default implementation for the `content` method that returns an empty
-string slice. That means we don’t need to implement `content` on the `Draft`
-and `PendingReview` structs. The `Published` struct will override the `content`
-method and return the value in `post.content`. While convenient, having the
-`content` method on `State` determine the `content` of the `Post` is blurring
-the lines between the responsibility of `State` and the responsibility of
-`Post`.
+`content` yöntemi için varsayılan bir uygulama ekliyoruz; bu, `content` yöntemini `Draft` ve `PendingReview` üzerinde uygulamamız gerekmediği anlamına gelir. `Published` struct'ı, `content` yöntemini geçersiz kılar ve `post.content` değerini döndürür. Ancak, `State` üzerindeki `content` yönteminin `Post`'un `content`'ini belirlemesi, `State` ve `Post`'un sorumlulukları arasındaki sınırları bulanıklaştırmaktadır.
 
-Note that we need lifetime annotations on this method, as we discussed in
-Chapter 10. We’re taking a reference to a `post` as an argument and returning a
-reference to part of that `post`, so the lifetime of the returned reference is
-related to the lifetime of the `post` argument.
+Bu yöntemde, argüman olarak bir `post` referansı alıyoruz ve o `post`'un bir parçasına referans döndürüyoruz, bu nedenle döndürülen referansın ömrü, `post` argümanının ömrü ile ilişkilidir.
 
-And we’re done—all of Listing 18-11 now works! We’ve implemented the state
-pattern with the rules of the blog post workflow. The logic related to the
-rules lives in the state objects rather than being scattered throughout `Post`.
+Ve işte bu kadar! Artık 18-11 numaralı listenin tamamı çalışıyor! Durum desenini, blog yazısı iş akışının kurallarıyla birlikte uyguladık. İlgili mantık, `Post` içinde dağınık olmak yerine durum nesnelerinde yer alıyor.
 
-> ### Why Not An Enum?
+> ### Neden Bir Enum Değil?
 >
-> You may have been wondering why we didn’t use an `enum` with the different
-> possible post states as variants. That’s certainly a possible solution; try it
-> and compare the end results to see which you prefer! One disadvantage of using
-> an enum is that every place that checks the value of the enum will need a
-> `match` expression or similar to handle every possible variant. This could get
-> more repetitive than this trait object solution.
+> Enum kullanarak, farklı olası gönderi durumlarını varyantlar olarak tanımlamayı düşünmüş olabilirsiniz. Bu kesinlikle mümkün bir çözüm; deneyin ve hangisini tercih ettiğinizi görmek için son sonuçları karşılaştırın! Enum kullanmanın bir dezavantajı, enum'un değerini kontrol eden her yerde her olası varyantı ele almak için bir `match` ifadesine ihtiyaç duyulmasıdır. Bu, bu trait nesnesi çözümünden daha fazla tekrara yol açabilir.
 
-#### Trade-offs of the State Pattern
+#### Durum Deseninin Dezavantajları
 
-We’ve shown that Rust is capable of implementing the object-oriented state
-pattern to encapsulate the different kinds of behavior a post should have in
-each state. The methods on `Post` know nothing about the various behaviors. The
-way we organized the code, we have to look in only one place to know the
-different ways a published post can behave: the implementation of the `State`
-trait on the `Published` struct.
+Rust'ın, bir gönderinin her durumda sahip olması gereken farklı türdeki davranışları kapsüllemek için nesne yönelimli durum desenini uygulamakta yetenekli olduğunu gösterdik. `Post` üzerindeki yöntemler, çeşitli davranışlar hakkında hiçbir şey bilmez. Kodumuzu düzenleme şeklimizle, bir yayınlanmış gönderinin nasıl davranabileceğini bilmek için yalnızca bir yere bakmamız yeterlidir: `Published` struct'ında `State` trait'inin uygulanması.
 
-If we were to create an alternative implementation that didn’t use the state
-pattern, we might instead use `match` expressions in the methods on `Post` or
-even in the `main` code that checks the state of the post and changes behavior
-in those places. That would mean we would have to look in several places to
-understand all the implications of a post being in the published state.
+Alternatif bir uygulama oluşturursak, durum desenini kullanmazsak, bunun yerine `Post` üzerindeki yöntemlerde veya gönderinin durumunu kontrol eden `main` kodunda her durumu kontrol eden `match` ifadeleri kullanabiliriz. Bu, bir gönderinin yayınlanmış durumda olmasının tüm sonuçlarını anlamak için birkaç yere bakmamız gerektiği anlamına gelir.
 
-With the state pattern, the `Post` methods and the places we use `Post` don’t
-need `match` expressions, and to add a new state, we would only need to add a
-new struct and implement the trait methods on that one struct in one location.
+Durum desenini kullanarak yapılan uygulama, yeni işlevsellik eklemeyi kolaylaştırır. Durum desenini kullanan kodun bakımının ne kadar basit olduğunu görmek için, aşağıdaki önerilerden birkaçını deneyin:
 
-The implementation using the state pattern is easy to extend to add more
-functionality. To see the simplicity of maintaining code that uses the state
-pattern, try a few of these suggestions:
+- `PendingReview` durumundan durumu `Draft`'a geri döndüren bir `reject` yöntemi ekleyin.
+- Durumun `Published`'a değişmesi için `approve` yöntemine iki kez çağrı yapılmasını gerektirin.
+- Kullanıcıların yalnızca bir gönderi `Draft` durumundayken metin içeriği eklemesine izin verin. İpucu: durum nesnesinin, içeriğin neyin değişebileceğinden sorumlu olmasını ancak `Post`'u değiştirmekten sorumlu olmamasını sağlayın.
 
-- Add a `reject` method that changes the post’s state from `PendingReview` back
-  to `Draft`.
-- Require two calls to `approve` before the state can be changed to `Published`.
-- Allow users to add text content only when a post is in the `Draft` state.
-  Hint: have the state object responsible for what might change about the
-  content but not responsible for modifying the `Post`.
+Durum deseninin bir dezavantajı, durumların durumlar arası geçişleri uyguladığından, bazı durumların birbirine bağlı olmasıdır. Eğer `PendingReview` ile `Published` arasında, örneğin `Scheduled` gibi başka bir durum eklersek, `PendingReview` kodunu `Scheduled`'a geçecek şekilde değiştirmemiz gerekecektir. Bu, başka bir tasarım desenine geçmekten daha az iş olacaktır.
 
-One downside of the state pattern is that, because the states implement the
-transitions between states, some of the states are coupled to each other. If we
-add another state between `PendingReview` and `Published`, such as `Scheduled`,
-we would have to change the code in `PendingReview` to transition to
-`Scheduled` instead. It would be less work if `PendingReview` didn’t need to
-change with the addition of a new state, but that would mean switching to
-another design pattern.
+Başka bir dezavantaj, bazı mantıkları çoğaltmış olmamızdır. Çoğaltmayı ortadan kaldırmak için, `State` trait'inde varsayılan uygulamalar yapmayı deneyebiliriz. Ancak bu işe yaramaz: `State` trait'ini nesne yönelimli bir şekilde kullandığımızda, trait tam olarak hangi somut `self`'in kullanılacağını bilmez, bu nedenle dönüş türü derleme zamanında bilinmez. (Bu, daha önce bahsedilen `dyn` uyumluluğu kurallarından biridir.)
 
-Another downside is that we’ve duplicated some logic. To eliminate some of the
-duplication, we might try to make default implementations for the
-`request_review` and `approve` methods on the `State` trait that return `self`.
-However, this wouldn’t work: when using `State` as a trait object, the trait
-doesn’t know what the concrete `self` will be exactly, so the return type isn’t
-known at compile time. (This is one of the `dyn` compatibility rules mentioned
-earlier.)
+Başka bir çoğaltma, `Post` üzerindeki `request_review` ve `approve` yöntemlerinin benzer uygulamalarıdır. Her iki yöntem de `Post`'un `state` alanı ile `Option::take` kullanır ve `state` bazı ise, sarılı değerin aynı yöntemini uygular ve `state` alanının yeni değerini ayarlar. Eğer `Post` üzerinde bu deseni takip eden birçok yöntem olsaydı, tekrarı ortadan kaldırmak için bir makro tanımlamayı düşünebilirdik (bkz. 20. Bölümdeki "Makrolar").
 
-Other duplication includes the similar implementations of the `request_review`
-and `approve` methods on `Post`. Both methods use `Option::take` with the
-`state` field of `Post`, and if `state` is `Some`, they delegate to the wrapped
-value’s implementation of the same method and set the new value of the `state`
-field to the result. If we had a lot of methods on `Post` that followed this
-pattern, we might consider defining a macro to eliminate the repetition (see
-[“Macros”][macros]<!-- ignore --> in Chapter 20).
+Durum desenini, nesne yönelimli diller için tanımlandığı gibi uygulayarak, Rust'ın güçlü yönlerinden tam olarak faydalanmıyoruz. Hatalı durumları ve geçişleri derleme zamanı hatalarına dönüştüren bazı değişiklikleri `blog` crate'inde görelim.
 
-By implementing the state pattern exactly as it’s defined for object-oriented
-languages, we’re not taking as full advantage of Rust’s strengths as we could.
-Let’s look at some changes we can make to the `blog` crate that can make
-invalid states and transitions into compile-time errors.
+### Durumları ve Davranışları Türler Olarak Kodlama
 
-### Encoding States and Behavior as Types
+Durum desenini yeniden düşünerek farklı bir avantaj/dezavantaj seti elde etmeyi göstereceğiz. Durumları ve geçişleri tamamen kapsüllemek yerine, türlere kodlayacağız. Sonuç olarak, Rust'ın tür kontrol sistemi, yalnızca yayınlanmış gönderilerin izin verildiği yerlerde taslak gönderilerin kullanılmaya çalışılmasını önleyecektir.
 
-We’ll show you how to rethink the state pattern to get a different set of
-trade-offs. Rather than encapsulating the states and transitions completely so
-outside code has no knowledge of them, we’ll encode the states into different
-types. Consequently, Rust’s type checking system will prevent attempts to use
-draft posts where only published posts are allowed by issuing a compiler error.
-
-Let’s consider the first part of `main` in Listing 18-11:
+Şimdi, 18-11 numaralı listenin `main` fonksiyonunun ilk kısmını ele alalım:
 
 <Listing file-name="src/main.rs">
 
@@ -401,17 +203,9 @@ Let’s consider the first part of `main` in Listing 18-11:
 
 </Listing>
 
-We still enable the creation of new posts in the draft state using `Post::new`
-and the ability to add text to the post’s content. But instead of having a
-`content` method on a draft post that returns an empty string, we’ll make it so
-draft posts don’t have the `content` method at all. That way, if we try to get
-a draft post’s content, we’ll get a compiler error telling us the method
-doesn’t exist. As a result, it will be impossible for us to accidentally
-display draft post content in production because that code won’t even compile.
-Listing 18-19 shows the definition of a `Post` struct and a `DraftPost` struct,
-as well as methods on each.
+Hala `Post::new` ile taslak durumunda yeni gönderiler oluşturma ve gönderinin içeriğine metin ekleme yeteneğini sağlıyoruz. Ancak, taslak bir gönderinin içeriğini döndüren bir `content` yöntemine sahip olmasını sağlamaktan kaçınıyoruz. Bu nedenle, bir taslak gönderinin içeriğini almaya çalışırsak, bu yöntem mevcut değildir şeklinde bir derleme zamanı hatası alırız. Bu, taslak gönderi içeriğinin üretimde yanlışlıkla görüntülenmesini önleyecektir. 18-19 numaralı listede, bir `Post` struct'ının ve bir `DraftPost` struct'ının tanımı ile her biri üzerindeki yöntemleri görebilirsiniz.
 
-<Listing number="18-19" file-name="src/lib.rs" caption="A `Post` with a `content` method and `DraftPost` without a `content` method">
+<Listing number="18-19" file-name="src/lib.rs" caption="`content` yöntemine sahip bir `Post` ve `DraftPost` tanımı">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-19/src/lib.rs}}
@@ -419,36 +213,19 @@ as well as methods on each.
 
 </Listing>
 
-Both the `Post` and `DraftPost` structs have a private `content` field that
-stores the blog post text. The structs no longer have the `state` field because
-we’re moving the encoding of the state to the types of the structs. The `Post`
-struct will represent a published post, and it has a `content` method that
-returns the `content`.
+Hem `Post` hem de `DraftPost` struct'larının özel bir `content` alanı vardır ve bu alan blog yazısı metnini saklar. Artık `state` alanına ihtiyacımız yok çünkü durum kodlamasını yapıların türlerine taşıyoruz. `Post` yapısı, yayınlanmış bir gönderiyi temsil edecek ve `content` yöntemine sahip olacak, bu yöntem de `content` değerini döndürecek.
 
-We still have a `Post::new` function, but instead of returning an instance of
-`Post`, it returns an instance of `DraftPost`. Because `content` is private and
-there aren’t any functions that return `Post`, it’s not possible to create an
-instance of `Post` right now.
+Hala bir `Post::new` işlevine sahibiz, ancak bu işlev artık bir `Post` örneği döndürmek yerine bir `DraftPost` örneği döndürüyor. `content` özel olduğundan ve `Post` döndüren hiçbir işlev olmadığından, şu anda `Post` örneği oluşturmak mümkün değildir.
 
-The `DraftPost` struct has an `add_text` method, so we can add text to
-`content` as before, but note that `DraftPost` does not have a `content` method
-defined! So now the program ensures all posts start as draft posts, and draft
-posts don’t have their content available for display. Any attempt to get around
-these constraints will result in a compiler error.
+`DraftPost` yapısının bir `add_text` yöntemi vardır, böylece daha önce olduğu gibi `content`'e metin ekleyebiliriz, ancak dikkat edin ki `DraftPost` üzerinde tanımlı bir `content` yöntemi yoktur! Bu nedenle, şimdi gönderi içeriğini almaya çalışmak derleme zamanı hatasına yol açacaktır. Taslak gönderilerin yalnızca taslak durumunda kalmasını ve içeriklerinin görüntülenememesini sağlamak için bu türden yararlanıyoruz. Herhangi birinin bu kısıtlamaları aşmaya çalışması durumunda bir derleyici hatası ile sonuçlanacaktır.
 
-<!-- Old headings. Do not remove or links may break. -->
+<!-- Eski başlıklar. Kaldırmayın yoksa bağlantılar bozulabilir. -->
 
 <a id="implementing-transitions-as-transformations-into-different-types"></a>
 
-So how do we get a published post? We want to enforce the rule that a draft
-post has to be reviewed and approved before it can be published. A post in the
-pending review state should still not display any content. Let’s implement
-these constraints by adding another struct, `PendingReviewPost`, defining the
-`request_review` method on `DraftPost` to return a `PendingReviewPost` and
-defining an `approve` method on `PendingReviewPost` to return a `Post`, as
-shown in Listing 18-20.
+Peki, yayınlanmış bir gönderiyi nasıl alırız? Taslak bir gönderinin incelenip onaylanmadan yayınlanamayacağı kuralını zorunlu kılmak istiyoruz. İnceleme bekleyen bir gönderi, hâlâ içerik göstermemelidir. Bu kısıtlamaları, `PendingReviewPost` adlı başka bir yapı ekleyerek, `DraftPost` üzerinde `request_review` yöntemini tanımlayarak ve `PendingReviewPost` üzerinde bir `approve` yöntemi tanımlayarak uygulayalım. Bu, 18-20 numaralı listede gösterilmiştir.
 
-<Listing number="18-20" file-name="src/lib.rs" caption="A `PendingReviewPost` that gets created by calling `request_review` on `DraftPost` and an `approve` method that turns a `PendingReviewPost` into a published `Post`">
+<Listing number="18-20" file-name="src/lib.rs" caption="`DraftPost` üzerinde `request_review` çağrıldığında oluşturulan bir `PendingReviewPost` ve `PendingReviewPost`'u yayınlanmış bir `Post`'a dönüştüren bir `approve` yöntemi">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch18-oop/listing-18-20/src/lib.rs:here}}
@@ -456,27 +233,11 @@ shown in Listing 18-20.
 
 </Listing>
 
-The `request_review` and `approve` methods take ownership of `self`, thus
-consuming the `DraftPost` and `PendingReviewPost` instances and transforming
-them into a `PendingReviewPost` and a published `Post`, respectively. This way,
-we won’t have any lingering `DraftPost` instances after we’ve called
-`request_review` on them, and so forth. The `PendingReviewPost` struct doesn’t
-have a `content` method defined on it, so attempting to read its content
-results in a compiler error, as with `DraftPost`. Because the only way to get a
-published `Post` instance that does have a `content` method defined is to call
-the `approve` method on a `PendingReviewPost`, and the only way to get a
-`PendingReviewPost` is to call the `request_review` method on a `DraftPost`,
-we’ve now encoded the blog post workflow into the type system.
+`request_review` ve `approve` yöntemleri, `self`'in sahipliğini alır; böylece `DraftPost` ve `PendingReviewPost` örneklerini sırasıyla bir `PendingReviewPost` ve bir yayınlanmış `Post`'a dönüştürür. Bu şekilde, `request_review` çağrıldığında artık bekleyen `DraftPost` örneklerimiz olmaz ve aynı şekilde devam ederiz. `PendingReviewPost` yapısının üzerinde tanımlı bir `content` yöntemi yoktur, bu nedenle içeriğini okumaya çalışmak, `DraftPost` gibi derleme zamanı hatasına yol açar. Ancak, üzerinde `content` yöntemi tanımlı bir `Post` almak için tek yol, bir `PendingReviewPost` üzerindeki `approve` yöntemini çağırmaktır ve bir `PendingReviewPost` almak için tek yol, bir `DraftPost` üzerindeki `request_review` yöntemini çağırmaktır. Böylece, blog yazısı iş akışını tür sistemine kodlamış olduk.
 
-But we also have to make some small changes to `main`. The `request_review` and
-`approve` methods return new instances rather than modifying the struct they’re
-called on, so we need to add more `let post =` shadowing assignments to save
-the returned instances. We also can’t have the assertions about the draft and
-pending review posts’ contents be empty strings, nor do we need them: we can’t
-compile code that tries to use the content of posts in those states any longer.
-The updated code in `main` is shown in Listing 18-21.
+Ancak, `main` üzerinde bazı küçük değişiklikler yapmamız gerekiyor. `request_review` ve `approve` yöntemleri, çağrıldıkları struct'ı değiştirmek yerine yeni örnekler döndürdüklerinden, döndürülen örnekleri kaydetmek için daha fazla `let post =` gölgeleme ataması eklememiz gerekiyor. Ayrıca, taslak ve inceleme bekleyen gönderilerin içeriklerinin boş dize olmaması gerektiği gibi, bu içeriklerin boş dize olmasını bekleyen `assert_eq!` ifadelerini de ekleyemeyiz. `main`'deki güncellenmiş kod 18-21 numaralı listede gösterilmiştir.
 
-<Listing number="18-21" file-name="src/main.rs" caption="Modifications to `main` to use the new implementation of the blog post workflow">
+<Listing number="18-21" file-name="src/main.rs" caption="Blog yazısı iş akışının yeni uygulamasını kullanmak için `main`'deki değişiklikler">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch18-oop/listing-18-21/src/main.rs}}
@@ -484,43 +245,14 @@ The updated code in `main` is shown in Listing 18-21.
 
 </Listing>
 
-The changes we needed to make to `main` to reassign `post` mean that this
-implementation doesn’t quite follow the object-oriented state pattern anymore:
-the transformations between the states are no longer encapsulated entirely
-within the `Post` implementation. However, our gain is that invalid states are
-now impossible because of the type system and the type checking that happens at
-compile time! This ensures that certain bugs, such as display of the content of
-an unpublished post, will be discovered before they make it to production.
+`post`'u yeniden atamak zorunda olmamız, bu uygulamanın nesne yönelimli durum desenini tam olarak takip etmediği anlamına geliyor: durumlar arasındaki dönüşümler artık tamamen `Post` uygulaması içinde kapsüllenmemiştir. Ancak, kazancımız, geçersiz durumların artık tür sistemi ve derleme zamanında gerçekleşen tür kontrolü sayesinde imkansız hale gelmesidir! Bu, bazı hataların, örneğin, bir yayımlanmamış gönderinin içeriğinin görüntülenmesi gibi, üretime geçmeden önce keşfedileceğini garanti eder.
 
-Try the tasks suggested at the start of this section on the `blog` crate as it
-is after Listing 18-21 to see what you think about the design of this version
-of the code. Note that some of the tasks might be completed already in this
-design.
+`main` fonksiyonundaki 18-21 numaralı listeden sonraki `blog` crate'ine önerilen görevleri deneyin; kodun bu versiyonundaki tasarım hakkında ne düşündüğünüzü görün. Bazı görevların bu tasarımda zaten tamamlanmış olabileceğini unutmayın.
 
-We’ve seen that even though Rust is capable of implementing object-oriented
-design patterns, other patterns, such as encoding state into the type system,
-are also available in Rust. These patterns have different trade-offs. Although
-you might be very familiar with object-oriented patterns, rethinking the
-problem to take advantage of Rust’s features can provide benefits, such as
-preventing some bugs at compile time. Object-oriented patterns won’t always be
-the best solution in Rust due to certain features, like ownership, that
-object-oriented languages don’t have.
+Rust'ın nesne yönelimli tasarım desenlerini uygulamakta yetenekli olduğunu gördük, ancak durumun tür sistemine kodlanması gibi diğer desenler de Rust'ta mevcuttur. Bu desenlerin farklı avantaj ve dezavantajları vardır. Nesne yönelimli desenlere çok aşina olsanız bile, Rust'ın özelliklerinden yararlanmak için sorunu yeniden düşünmek, derleme zamanında bazı hataların önlenmesi gibi faydalar sağlayabilir. Nesne yönelimli desenler, Rust'ın sahiplik gibi bazı özellikleri nedeniyle her zaman en iyi çözüm olmayabilir.
 
-## Summary
+## Özet
 
-Regardless of whether you think Rust is an object-oriented language after
-reading this chapter, you now know that you can use trait objects to get some
-object-oriented features in Rust. Dynamic dispatch can give your code some
-flexibility in exchange for a bit of runtime performance. You can use this
-flexibility to implement object-oriented patterns that can help your code’s
-maintainability. Rust also has other features, like ownership, that
-object-oriented languages don’t have. An object-oriented pattern won’t always
-be the best way to take advantage of Rust’s strengths, but it is an available
-option.
+Bu bölümü okuduktan sonra Rust'ın nesne yönelimli bir dil olup olmadığını düşünseniz de, Rust'ta bazı nesne yönelimli özellikler elde etmek için trait nesnelerini kullanabileceğinizi artık biliyorsunuz. Dinamik dispatch, kodunuza biraz çalışma zamanı performansı karşılığında esneklik kazandırabilir. Bu esnekliği, kodunuzun bakımını kolaylaştırabilecek nesne yönelimli desenleri uygulamak için kullanabilirsiniz. Rust ayrıca, nesne yönelimli dillerde bulunmayan sahiplik gibi diğer özelliklere de sahiptir. Nesne yönelimli bir desen, Rust'ın güçlü yönlerinden yararlanmanın her zaman en iyi yolu olmayabilir, ancak mevcut bir seçenektir.
 
-Next, we’ll look at patterns, which are another of Rust’s features that enable
-lots of flexibility. We’ve looked at them briefly throughout the book but
-haven’t seen their full capability yet. Let’s go!
-
-[more-info-than-rustc]: ch09-03-to-panic-or-not-to-panic.html#cases-in-which-you-have-more-information-than-the-compiler
-[macros]: ch20-05-macros.html#macros
+Şimdi, Rust'ın çok fazla esneklik sağlayan bir başka özelliği olan desenlere bakalım. Kitap boyunca kısaca onlara değindik ama henüz tam yeteneklerini görmedik. Haydi gidelim!

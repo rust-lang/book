@@ -1,35 +1,14 @@
-## Putting It All Together: Futures, Tasks, and Threads
+## Hepsini Bir Araya Getirmek: Future'lar, Görevler ve Thread'ler
 
-As we saw in [Chapter 16][ch16]<!-- ignore -->, threads provide one approach to
-concurrency. We’ve seen another approach in this chapter: using async with
-futures and streams. If you‘re wondering when to choose method over the other,
-the answer is: it depends! And in many cases, the choice isn’t threads _or_
-async but rather threads _and_ async.
+[16. Bölüm][ch16]<!-- ignore -->'de gördüğümüz gibi, thread'ler eşzamanlılık için bir yaklaşım sunar. Bu bölümde ise başka bir yaklaşım gördük: async ile future ve stream kullanmak. Hangi yöntemi ne zaman seçmeniz gerektiğini merak ediyorsanız, cevabı: duruma göre değişir! Hatta çoğu zaman seçim thread _veya_ async değil, thread _ve_ async olur.
 
-Many operating systems have supplied threading-based concurrency models for
-decades now, and many programming languages support them as a result. However,
-these models are not without their tradeoffs. On many operating systems, they
-use a fair bit of memory for each thread, and they come with some overhead for
-starting up and shutting down. Threads are also only an option when your
-operating system and hardware support them. Unlike mainstream desktop and mobile
-computers, some embedded systems don’t have an OS at all, so they also don’t
-have threads.
+Birçok işletim sistemi onlarca yıldır thread tabanlı eşzamanlılık modelleri sunuyor ve birçok programlama dili de bu nedenle thread desteği sağlıyor. Ancak bu modellerin de bazı dezavantajları var. Çoğu işletim sisteminde, her thread için hatırı sayılır miktarda bellek kullanılır ve başlatma/kapatma işlemlerinde ek maliyet oluşur. Ayrıca thread'ler, yalnızca işletim sisteminiz ve donanımınız destekliyorsa kullanılabilir. Ana akım masaüstü ve mobil bilgisayarların aksine, bazı gömülü sistemlerde hiç işletim sistemi yoktur; dolayısıyla thread de yoktur.
 
-The async model provides a different—and ultimately complementary—set of
-tradeoffs. In the async model, concurrent operations don’t require their own
-threads. Instead, they can run on tasks, as when we used `trpl::spawn_task` to
-kick off work from a synchronous function in the streams section. A task is
-similar to a thread, but instead of being managed by the operating system, it’s
-managed by library-level code: the runtime.
+Async modeli ise farklı—ve nihayetinde tamamlayıcı—bir dizi avantaj ve dezavantaj sunar. Async modelde, eşzamanlı işlemler kendi thread'lerine ihtiyaç duymaz. Bunun yerine, görevler (task) üzerinde çalışabilirler; örneğin, stream bölümünde senkron bir fonksiyondan iş başlatmak için `trpl::spawn_task` kullandık. Görev, thread'e benzer; ancak işletim sistemi yerine kütüphane seviyesinde, yani çalışma zamanı (runtime) tarafından yönetilir.
 
-In the previous section, we saw that we could build a stream by using an async
-channel and spawning an async task we could call from synchronous code. We can
-do the exact same thing with a thread. In Listing 17-40, we used
-`trpl::spawn_task` and `trpl::sleep`. In Listing 17-41, we replace those with
-the `thread::spawn` and `thread::sleep` APIs from the standard library in the
-`get_intervals` function.
+Önceki bölümde, async bir kanal kullanarak ve senkron koddan çağrılabilen bir async görev başlatarak bir stream oluşturabileceğimizi gördük. Aynı şeyi bir thread ile de yapabiliriz. 17-40 numaralı listede `trpl::spawn_task` ve `trpl::sleep` kullandık. 17-41 numaralı listede ise bunların yerine standart kütüphanedeki `thread::spawn` ve `thread::sleep` API'lerini `get_intervals` fonksiyonunda kullandık.
 
-<Listing number="17-41" caption="Using the `std::thread` APIs instead of the async `trpl` APIs for the `get_intervals` function" file-name="src/main.rs">
+<Listing number="17-41" caption="`get_intervals` fonksiyonu için async `trpl` API'leri yerine `std::thread` API'lerini kullanmak" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-41/src/main.rs:threads}}
@@ -37,69 +16,26 @@ the `thread::spawn` and `thread::sleep` APIs from the standard library in the
 
 </Listing>
 
-If you run this code, the output is identical to that of Listing 17-40. And
-notice how little changes here from the perspective of the calling code. What’s
-more, even though one of our functions spawned an async task on the runtime and
-the other spawned an OS thread, the resulting streams were unaffected by the
-differences.
+Bu kodu çalıştırırsanız, çıktısı 17-40 numaralı listeninkiyle aynıdır. Ayrıca, çağıran kod açısından ne kadar az şeyin değiştiğine dikkat edin. Dahası, fonksiyonlardan biri çalışma zamanında async bir görev başlatırken, diğeri işletim sistemi thread'i başlatıyor olsa da, ortaya çıkan stream'ler bu farklardan etkilenmez.
 
-Despite their similarities, these two approaches behave very differently,
-although we might have a hard time measuring it in this very simple example. We
-could spawn millions of async tasks on any modern personal computer. If we tried
-to do that with threads, we would literally run out of memory!
+Benzerliklerine rağmen, bu iki yaklaşım çok farklı davranır; ancak bu basit örnekte bunu ölçmek zor olabilir. Modern bir kişisel bilgisayarda milyonlarca async görev başlatabiliriz. Bunu thread'lerle yapmaya kalkarsak, kelimenin tam anlamıyla belleğimiz tükenir!
 
-However, there’s a reason these APIs are so similar. Threads act as a boundary
-for sets of synchronous operations; concurrency is possible _between_ threads.
-Tasks act as a boundary for sets of _asynchronous_ operations; concurrency is
-possible both _between_ and _within_ tasks, because a task can switch between
-futures in its body. Finally, futures are Rust’s most granular unit of
-concurrency, and each future may represent a tree of other futures. The
-runtime—specifically, its executor—manages tasks, and tasks manage futures. In
-that regard, tasks are similar to lightweight, runtime-managed threads with
-added capabilities that come from being managed by a runtime instead of by the
-operating system.
+Bu API'lerin bu kadar benzer olmasının bir nedeni var. Thread'ler, senkron işlemler kümesi için bir sınır oluşturur; eşzamanlılık thread'ler _arasında_ mümkündür. Görevler ise _asenkron_ işlemler kümesi için bir sınırdır; eşzamanlılık hem görevler _arasında_ hem de görevlerin _içinde_ mümkündür, çünkü bir görev gövdesinde farklı future'lar arasında geçiş yapabilir. Son olarak, future'lar Rust'ın en ince taneli eşzamanlılık birimidir ve her future başka future'lardan oluşan bir ağaç olabilir. Çalışma zamanı—özellikle executor'u—görevleri yönetir, görevler de future'ları yönetir. Bu açıdan görevler, işletim sistemi yerine çalışma zamanı tarafından yönetilen hafif thread'lere benzer, ancak ek yeteneklere sahiptir.
 
-This doesn’t mean that async tasks are always better than threads (or vice
-versa). Concurrency with threads is in some ways a simpler programming model
-than concurrency with `async`. That can be a strength or a weakness. Threads are
-somewhat “fire and forget”; they have no native equivalent to a future, so they
-simply run to completion without being interrupted except by the operating
-system itself. That is, they have no built-in support for _intratask
-concurrency_ the way futures do. Threads in Rust also have no mechanisms for
-cancellation—a subject we haven’t covered explicitly in this chapter but was
-implied by the fact that whenever we ended a future, its state got cleaned up
-correctly.
+Bu, async görevlerin her zaman thread'lerden daha iyi olduğu anlamına gelmez (veya tersi). Thread'lerle eşzamanlılık, bazı açılardan `async` ile eşzamanlılıktan daha basit bir programlama modelidir. Bu, hem avantaj hem de dezavantaj olabilir. Thread'ler biraz "başlat ve unut" tarzındadır; future'a karşılık gelen bir yapıları yoktur, bu yüzden sadece tamamlanana kadar çalışırlar ve yalnızca işletim sistemi tarafından kesintiye uğratılabilirler. Yani, future'larda olduğu gibi _görev içi eşzamanlılık_ desteği yoktur. Rust'taki thread'lerin ayrıca iptal mekanizması da yoktur—bu bölümde açıkça ele almadık ama bir future sona erdiğinde durumunun düzgünce temizlendiğini gördük.
 
-These limitations also make threads harder to compose than futures. It’s much
-more difficult, for example, to use threads to build helpers such as the
-`timeout` and `throttle` methods we built earlier in this chapter. The fact that
-futures are richer data structures means they can be composed together more
-naturally, as we have seen.
+Bu sınırlamalar, thread'leri future'lardan daha zor birleştirilebilir (compose) hale getirir. Örneğin, bu bölümde oluşturduğumuz `timeout` ve `throttle` yardımcılarını thread'lerle yapmak çok daha zordur. Future'ların daha zengin veri yapıları olması, onları doğal olarak birleştirilebilir kılar; bunu da gördük.
 
-Tasks, then, give us _additional_ control over futures, allowing us to choose
-where and how to group them. And it turns out that threads and tasks often work
-very well together, because tasks can (at least in some runtimes) be moved
-around between threads. In fact, under the hood, the runtime we’ve been
-using—including the `spawn_blocking` and `spawn_task` functions—is multithreaded
-by default! Many runtimes use an approach called _work stealing_ to
-transparently move tasks around between threads, based on how the threads are
-currently being utilized, to improve the system’s overall performance. That
-approach actually requires threads _and_ tasks, and therefore futures.
+Sonuç olarak, görevler future'lar üzerinde _ek_ kontrol sağlar ve onları nasıl ve nerede gruplayacağımızı seçmemize olanak tanır. Ve aslında, thread'ler ve görevler çoğu zaman birlikte çok iyi çalışır; çünkü görevler (en azından bazı çalışma zamanlarında) thread'ler arasında taşınabilir. Aslında, kullandığımız çalışma zamanı—`spawn_blocking` ve `spawn_task` fonksiyonları dahil—varsayılan olarak çoklu thread'lidir! Birçok çalışma zamanı, thread'ler arasındaki yükü dengelemek için _iş çalma_ (work stealing) yaklaşımını kullanır; böylece thread'lerin mevcut kullanımına göre görevler thread'ler arasında şeffafça taşınır ve sistemin genel performansı artar. Bu yaklaşım aslında thread _ve_ görev, dolayısıyla future gerektirir.
 
-When thinking about which method to use when, consider these rules of thumb:
+Hangi yöntemi ne zaman kullanacağınızı düşünürken şu kuralları göz önünde bulundurun:
 
-- If the work is _very parallelizable_, such as processing a bunch of data where
-  each part can be processed separately, threads are a better choice.
-- If the work is _very concurrent_, such as handling messages from a bunch of
-  different sources that may come in at different intervals or different rates,
-  async is a better choice.
+- İş _çok paralelleştirilebiliyorsa_, yani her parçası ayrı ayrı işlenebilen büyük bir veri kümesi gibi, thread'ler daha iyi bir seçimdir.
+- İş _çok eşzamanlıysa_, yani farklı aralık ve hızlarda gelen çok sayıda kaynaktan mesaj işlemek gibi, async daha iyi bir seçimdir.
 
-And if you need both parallelism and concurrency, you don’t have to choose
-between threads and async. You can use them together freely, letting each one
-play the part it’s best at. For example, Listing 17-42 shows a fairly common
-example of this kind of mix in real-world Rust code.
+Hem paralellik hem de eşzamanlılık gerekiyorsa, thread ve async arasında seçim yapmak zorunda değilsiniz. Her ikisini de özgürce birlikte kullanabilirsiniz; her biri en iyi olduğu rolü oynar. Örneğin, 17-42 numaralı listede, gerçek dünyadaki Rust kodunda bu tür bir karışımın oldukça yaygın bir örneği gösteriliyor.
 
-<Listing number="17-42" caption="Sending messages with blocking code in a thread and awaiting the messages in an async block" file-name="src/main.rs">
+<Listing number="17-42" caption="Bir thread'de bloklayıcı kodla mesaj gönderip, async blokta mesajları await etmek" file-name="src/main.rs">
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-42/src/main.rs:all}}
@@ -107,31 +43,17 @@ example of this kind of mix in real-world Rust code.
 
 </Listing>
 
-We begin by creating an async channel, then spawn a thread that takes
-ownership of the sender side of the channel. Within the thread, we send the
-numbers 1 through 10, sleeping for a second between each. Finally, we run a
-future created with an async block passed to `trpl::run` just as we have
-throughout the chapter. In that future, we await those messages, just as in
-the other message-passing examples we have seen.
+Önce bir async kanal oluşturuyoruz, ardından kanalın gönderici tarafının sahipliğini alan bir thread başlatıyoruz. Thread içinde, 1'den 10'a kadar sayıları gönderiyoruz ve her biri arasında bir saniye bekliyoruz. Son olarak, bu bölüm boyunca yaptığımız gibi, `trpl::run` ile bir async blok future'ı çalıştırıyoruz. O future'da, tıpkı diğer mesajlaşma örneklerinde olduğu gibi, bu mesajları await ediyoruz.
 
-To return to the scenario we opened the chapter with, imagine running a set of
-video encoding tasks using a dedicated thread (because video encoding is
-compute-bound) but notifying the UI that those operations are done with an async
-channel. There are countless examples of these kinds of combinations in
-real-world use cases.
+Bölümün başında ele aldığımız senaryoya dönersek, örneğin video kodlama işlemlerini özel bir thread'de (çünkü video kodlama işlemciye yük bindirir) çalıştırıp, bu işlemlerin tamamlandığını async bir kanal ile arayüze bildirdiğimizi hayal edin. Gerçek dünyada bu tür kombinasyonların sayısız örneği vardır.
 
-## Summary
+## Özet
 
-This isn’t the last you’ll see of concurrency in this book. The project in
-[Chapter 21][ch21] will apply these concepts in a more realistic situation
-than the simpler examples discussed here and compare problem-solving with threading versus tasks more directly.
+Bu kitapta eşzamanlılık konusunu son kez görmüyorsunuz. [21. Bölüm][ch21]'deki projede, burada tartışılan basit örneklerden daha gerçekçi bir durumda bu kavramlar uygulanacak ve thread ile görev tabanlı çözüm yolları doğrudan karşılaştırılacak.
 
-No matter which of these approaches you choose, Rust gives you the tools you need to write safe, fast, concurrent
-code—whether for a high-throughput web server or an embedded operating system.
+Hangi yaklaşımı seçerseniz seçin, Rust size güvenli, hızlı ve eşzamanlı kod yazmak için gereken araçları sunar—ister yüksek verimli bir web sunucusu, ister gömülü bir işletim sistemi için olsun.
 
-Next, we’ll talk about idiomatic ways to model problems and structure solutions
-as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idioms
-relate to those you might be familiar with from object-oriented programming.
+Sırada, Rust programlarınız büyüdükçe problemleri modellemenin ve çözümleri yapılandırmanın idiomatik yollarını konuşacağız. Ayrıca, Rust'ın idiomlarının nesne yönelimli programlamadan aşina olabileceğiniz yaklaşımlarla nasıl ilişkili olduğuna değineceğiz.
 
 [ch16]: http://localhost:3000/ch16-00-concurrency.html
 [combining-futures]: ch17-03-more-futures.html#building-our-own-async-abstractions

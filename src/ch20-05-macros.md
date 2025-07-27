@@ -211,7 +211,7 @@ $ cargo new hello_macro --lib
 
 Ardından, `HelloMacro` özelliğini ve bununla ilişkili işlevi tanımlayacağız:
 
-<Listing file-name="src/lib.rs" number="20-38" caption="A simple trait that we will use with the `derive` macro">
+<Listing file-name="src/lib.rs" number="20-38" caption="`derive` makrosu ile kullanacağımız basit bir trait">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-38/hello_macro/src/lib.rs}}
@@ -221,7 +221,7 @@ Ardından, `HelloMacro` özelliğini ve bununla ilişkili işlevi tanımlayacağ
 
 Bir özellik ve onun işlevi var. Bu noktada, crate kullanıcımız, Listing 20-39'da olduğu gibi, istenen işlevselliği elde etmek için özelliği uygulayabilir.
 
-<Listing number="20-39" file-name="src/main.rs" caption="How it would look if users wrote a manual implementation of the `HelloMacro` trait">
+<Listing number="20-39" file-name="src/main.rs" caption="Kullanıcıların `HelloMacro` trait'ini elle uyguladığı hali">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-39/pancakes/src/main.rs}}
@@ -277,7 +277,7 @@ Prosedürel makroyu tanımlamaya başlamak için, Listing 20-40'taki kodu
 `hello_macro_derive` crate'i için _src/lib.rs_ dosyanıza yerleştirin. Bu kod,
 `impl_hello_macro` fonksiyonu için bir tanım ekleyene kadar derlenmeyecektir.
 
-<Listing number="20-40" file-name="hello_macro_derive/src/lib.rs" caption="Code that most procedural macro crates will require in order to process Rust code">
+<Listing number="20-40" file-name="hello_macro_derive/src/lib.rs" caption="Rust kodunu işlemek için çoğu prosedürel makro kutusunda bulunması gereken kod">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-40/hello_macro/hello_macro_derive/src/lib.rs}}
@@ -318,7 +318,7 @@ parslenmiş Rust kodunu temsil eden bir `DeriveInput` yapısı döndürür.
 Listing 20-41, `struct Pancakes;` dizesini parseleyerek elde ettiğimiz `DeriveInput`
 yapısının ilgili kısımlarını göstermektedir.
 
-<Listing number="20-41" caption="The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-37">
+<Listing number="20-41" caption="Makronun özniteliğine sahip kodu ayrıştırdığımızda elde ettiğimiz `DeriveInput` örneği">
 
 ```rust,ignore
 DeriveInput {
@@ -349,22 +349,13 @@ alan vardır; daha fazla bilgi için [`syn``DeriveInput` belgelerine][syn-docs] 
 Yakında, dahil etmek istediğimiz yeni Rust kodunu oluşturacağımız `impl_hello_macro` işlevini tanımlayacağız.
 Ancak bunu yapmadan önce, `derive` makromuzun çıktısının da bir `TokenStream` olduğunu unutmayın.
 Döndürülen `TokenStream`, Döndürülen `TokenStream`,
-krate kullanıcılarımızın yazdığı koda eklenir, böylece crate'lerini derlediklerinde,
-değiştirilmiş
-`TokenStream`'de sağladığımız ek işlevselliği elde ederler.
+krate kullanıcılarımızın yazdığı koda eklenir, böylece crate'lerini derlediklerinde, değiştirilmiş `TokenStream`'de sağladığımız ek işlevselliği elde ederler.
 
-`syn::parse` işlevinin çağrısı burada başarısız olursa,
-`hello_macro_derive` işlevinin paniğe kapılması için `unwrap` işlevini çağırdığımızı fark etmiş olabilirsiniz. Prosedürel makromuzun hatalarda paniğe kapılması gerekir, çünkü
-`proc_macro_derive` işlevleri, prosedürel makro API'sına uymak için
-`Result` yerine `TokenStream` döndürmelidir. Bu örneği `unwrap` kullanarak basitleştirdik;
-üretim kodunda, `panic!` veya `expect` kullanarak neyin yanlış gittiğine dair
-daha spesifik hata mesajları sağlamalısınız.
+`syn::parse` işlevinin çağrısı burada başarısız olursa, `hello_macro_derive` işlevinin paniğe kapılması için `unwrap` işlevini çağırdığımızı fark etmiş olabilirsiniz. Prosedürel makromuzun hatalarda paniğe kapılması gerekir, çünkü `proc_macro_derive` işlevleri, prosedürel makro API'sına uymak için `Result` yerine `TokenStream` döndürmelidir. Bu örneği `unwrap` kullanarak basitleştirdik; üretim kodunda, `panic!` veya `expect` kullanarak neyin yanlış gittiğine dair daha spesifik hata mesajları sağlamalısınız.
 
-Artık, `TokenStream`
-'den `DeriveInput` örneğine dönüştürmek için gerekli olan Rust koduna sahip olduğumuza göre, Listing 20-42'de gösterildiği gibi,
-`HelloMacro` özelliğini anotlanmış tür üzerinde uygulayan kodu oluşturalım.
+Artık, `TokenStream`'den `DeriveInput` örneğine dönüştürmek için gerekli olan Rust koduna sahip olduğumuza göre, Listing 20-42'de gösterildiği gibi, `HelloMacro` özelliğini anotlanmış tür üzerinde uygulayan kodu oluşturalım.
 
-<Listing number="20-42" file-name="hello_macro_derive/src/lib.rs" caption="Implementing the `HelloMacro` trait using the parsed Rust code">
+<Listing number="20-42" file-name="hello_macro_derive/src/lib.rs" caption="Ayrıştırılmış Rust kodunu kullanarak `HelloMacro` trait'ini uygulamak">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-42/hello_macro/hello_macro_derive/src/lib.rs:here}}
@@ -372,130 +363,67 @@ Artık, `TokenStream`
 
 </Listing>
 
-`ast.ident` kullanarak, anotlanmış türün adını (tanımlayıcı) içeren bir `Ident` yapısı örneği elde ederiz.
-Listing 20-33'teki yapı, Listing 20-31'deki kod üzerinde `impl_hello_macro` işlevini çalıştırdığımızda,
-elde ettiğimiz `ident`'in `ident` alanı `“Pancakes”` değerine sahip olacağını gösterir. Böylece,
-`ident` alanının değeri `“Pancakes”` olur. Böylece,
-Listing 20-34'teki `name` değişkeni, yazdırıldığında
-Listing 20-37'deki yapının adı olan `“Pancakes”` dizesi olacak bir `Ident` yapısı örneği
-içerecektir.
+`ast.ident` kullanarak, anotlanmış türün adını (tanımlayıcı) içeren bir `Ident` yapısı örneği elde ederiz. Listing 20-33'teki yapı, Listing 20-31'deki kod üzerinde `impl_hello_macro` işlevini çalıştırdığımızda, elde ettiğimiz `ident`'in `ident` alanı `“Pancakes”` değerine sahip olacağını gösterir. Böylece, `ident` alanının değeri `“Pancakes”` olur. Böylece, Listing 20-34'teki `name` değişkeni, yazdırıldığında Listing 20-37'deki yapının adı olan `“Pancakes”` dizesi olacak bir `Ident` yapısı örneği içerecektir.
 
-`quote!` makrosu, döndürmek istediğimiz Rust kodunu tanımlamamızı sağlar.
-Derleyici, `quote!` makrosunun yürütülmesinin doğrudan sonucundan farklı bir şey
-bekler, bu yüzden onu bir `TokenStream`'e dönüştürmemiz gerekir. Bunu,
-bu ara temsilini tüketen ve gerekli `TokenStream` türünde bir değer döndüren
-`into` yöntemini çağırarak yaparız.
+`quote!` makrosu, döndürmek istediğimiz Rust kodunu tanımlamamızı sağlar. Derleyici, `quote!` makrosunun yürütülmesinin doğrudan sonucundan farklı bir şey bekler, bu yüzden onu bir `TokenStream`'e dönüştürmemiz gerekir. Bunu, bu ara temsilini tüketen ve gerekli `TokenStream` türünde bir değer döndüren `into` yöntemini çağırarak yaparız.
 
-`quote!` makrosu ayrıca bazı çok kullanışlı şablon mekanizmaları da sağlar:
-`#name` girebiliriz ve `quote!` bunu `name` değişkenindeki değerle
-değiştirir. Normal makroların çalışma şekline benzer şekilde bazı tekrarlamalar da yapabilirsiniz.
-Kapsamlı bir giriş için [`quote` crate belgelerine][quote-docs] bakın.
+`quote!` makrosu ayrıca bazı çok kullanışlı şablon mekanizmaları da sağlar: `#name` girebiliriz ve `quote!` bunu `name` değişkenindeki değerle değiştirir. Normal makroların çalışma şekline benzer şekilde bazı tekrarlamalar da yapabilirsiniz. Kapsamlı bir giriş için [`quote` crate belgelerine][quote-docs] bakın.
 
-Prosedürel makromuzun, kullanıcının `#name` kullanarak elde edebileceğimiz,
-anotasyon yaptığı tür için `HelloMacro` özelliğinin bir uygulamasını
-oluşturmasını istiyoruz. Özellik uygulaması, sağlamak istediğimiz işlevselliği içeren
-`hello_macro` adlı tek bir işleve sahiptir: `Hello, Macro! My name is` ve ardından
-anotasyon yapılan türün adını yazdırmak.
+Prosedürel makromuzun, kullanıcının `#name` kullanarak elde edebileceğimiz, anotasyon yaptığı tür için `HelloMacro` özelliğinin bir uygulamasını oluşturmasını istiyoruz. Özellik uygulaması, sağlamak istediğimiz işlevselliği içeren `hello_macro` adlı tek bir işleve sahiptir: `Hello, Macro! My name is` ve ardından anotasyon yapılan türün adını yazdırmak.
 
-Burada kullanılan `stringify!` makrosu Rust'a yerleşiktir. Rust
-ifadesi, örneğin `1 + 2`, derleme sırasında ifadeyi
-`“1 + 2”` gibi bir string literal'a dönüştürür. Bu, ifadeyi değerlendirip sonucu
-`String`'e dönüştüren `format!` veya
-`println!` makrolarından farklıdır. `#name` girdisinin,
-harfiyen yazdırılacak bir ifade olma ihtimali vardır, bu yüzden `stringify!` kullanıyoruz. `stringify!` kullanmak,
-derleme sırasında `#name`'i bir string literal'a dönüştürerek bir tahsisat tasarrufu da sağlar.
+Burada kullanılan `stringify!` makrosu Rust'a yerleşiktir. Rust ifadesi, örneğin `1 + 2`, derleme sırasında ifadeyi `“1 + 2”` gibi bir string literal'a dönüştürür. Bu, ifadeyi değerlendirip sonucu `String`'e dönüştüren `format!` veya `println!` makrolarından farklıdır. `#name` girdisinin, harfiyen yazdırılacak bir ifade olma ihtimali vardır, bu yüzden `stringify!` kullanıyoruz. `stringify!` kullanmak, derleme sırasında `#name`'i bir string literal'a dönüştürerek bir tahsisat tasarrufu da sağlar.
 
-Bu noktada, `cargo build` hem `hello_macro`
-hem de `hello_macro_derive`'de başarıyla tamamlanmalıdır. Bu kutuları Listing
-20-31'deki koda bağlayarak prosedürel makronun nasıl çalıştığını görelim!
-_projects_ dizininde `cargo new pancakes` kullanarak yeni bir ikili proje oluşturun.
-`pancakes` kutusunun _Cargo.toml_ dosyasına
-`hello_macro` ve `hello_macro_derive` bağımlılıklarını eklememiz gerekiyor. `hello_macro` ve
-`hello_macro_derive` sürümlerinizi [crates.io](https://crates.io/) adresinde yayınlıyorsanız, bunlar normal
-bağımlılıklar olacaktır; yayınlamıyorsanız, bunları aşağıdaki gibi `path` bağımlılıkları olarak belirtebilirsiniz:
+Bu noktada, `cargo build` hem `hello_macro` hem de `hello_macro_derive`'de başarıyla tamamlanmalıdır. Bu kutuları Listing 20-31'deki koda bağlayarak prosedürel makronun nasıl çalıştığını görelim! _projects_ dizininde `cargo new pancakes` kullanarak yeni bir ikili proje oluşturun. `pancakes` kutusunun _Cargo.toml_ dosyasına `hello_macro` ve `hello_macro_derive` bağımlılıklarını eklememiz gerekiyor. `hello_macro` ve `hello_macro_derive` sürümlerinizi [crates.io](https://crates.io/) adresinde yayınlıyorsanız, bunlar normal bağımlılıklar olacaktır; yayınlamıyorsanız, bunları aşağıdaki gibi `path` bağımlılıkları olarak belirtebilirsiniz:
 
 ```toml
 {{#include ../listings/ch20-advanced-features/no-listing-21-pancakes/pancakes/Cargo.toml:7:9}}
 ```
 
-Listing 20-37'deki kodu _src/main.rs_ dosyasına ekleyin ve `cargo run` komutunu çalıştırın:
-`Hello, Macro! My name is Pancakes!` yazısı görüntülenmelidir. Prosedürel makrodan
-`HelloMacro` özelliğinin uygulaması,
-`pancakes` kutusunun bunu uygulamasına gerek kalmadan dahil edildi; `#[derive(HelloMacro)]` özelliği,
-özelliğin uygulamasını ekledi.
+Listing 20-37'deki kodu _src/main.rs_ dosyasına ekleyin ve `cargo run` komutunu çalıştırın: `Hello, Macro! My name is Pancakes!` yazısı görüntülenmelidir. Prosedürel makrodan `HelloMacro` özelliğinin uygulaması, `pancakes` kutusunun bunu uygulamasına gerek kalmadan dahil edildi; `#[derive(HelloMacro)]` özelliği, özelliğin uygulamasını ekledi.
 
-Şimdi, diğer prosedürel makro türlerinin özel
-`derive` makrolarından nasıl farklı olduğunu inceleyelim.
+Şimdi, diğer prosedürel makro türlerinin özel `derive` makrolarından nasıl farklı olduğunu inceleyelim.
 
 ### Öznitelik benzeri makrolar
 
-Öznitelik benzeri makrolar, özel `derive` makrolarına benzer, ancak
-`derive` özniteliği için kod üretmek yerine, yeni öznitelikler oluşturmanıza
-izin verir. Ayrıca daha esnektirler: `derive` yalnızca yapılar ve
-enumlar için çalışır; öznitelikler ise işlevler gibi diğer öğelere de uygulanabilir.
-Özellik benzeri makro kullanmanın bir örneği. Bir web uygulama çerçevesi kullanırken işlevleri açıklama amaçlı
-`route` adlı bir özelliğiniz olduğunu varsayalım:
+Öznitelik benzeri makrolar, özel `derive` makrolarına benzer, ancak `derive` özniteliği için kod üretmek yerine, yeni öznitelikler oluşturmanıza izin verir. Ayrıca daha esnektirler: `derive` yalnızca yapılar ve enumlar için çalışır; öznitelikler ise işlevler gibi diğer öğelere de uygulanabilir. Özellik benzeri makro kullanmanın bir örneği. Bir web uygulama çerçevesi kullanırken işlevleri açıklama amaçlı `route` adlı bir özelliğiniz olduğunu varsayalım:
 
 ```rust,ignore
 #[route(GET, "/")]
 fn index() {
 ```
 
-Bu `#[route]` özniteliği, çerçeve tarafından prosedürel bir makro olarak tanımlanacaktır.
-Makro tanımlama işlevinin imzası şöyle görünecektir:
+Bu `#[route]` özniteliği, çerçeve tarafından prosedürel bir makro olarak tanımlanacaktır. Makro tanımlama işlevinin imzası şöyle görünecektir:
 
 ```rust,ignore
 #[proc_macro_attribute]
 pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 ```
 
-Burada, `TokenStream` türünde iki parametre var. İlki, özniteliğin içeriği için:
-`GET, “/”` kısmı. İkincisi ise özniteliğin eklendiği öğenin gövdesi: bu durumda,
-`fn index() {}` ve fonksiyonun geri kalan gövdesi.
-Bunun dışında, öznitelik benzeri makrolar, özel `derive` makrolarıyla aynı şekilde çalışır:
+Burada, `TokenStream` türünde iki parametre var. İlki, özniteliğin içeriği için: `GET, “/”` kısmı. İkincisi ise özniteliğin eklendiği öğenin gövdesi: bu durumda, `fn index() {}` ve fonksiyonun geri kalan gövdesi. Bunun dışında, öznitelik benzeri makrolar, özel `derive` makrolarıyla aynı şekilde çalışır:
 
-Bunun dışında, öznitelik benzeri makrolar özel `derive`
-makroları ile aynı şekilde çalışır: `proc-macro` kutu türü ile bir kutu oluşturur ve
-istediğiniz kodu üreten bir işlev uygularsınız!
+Bunun dışında, öznitelik benzeri makrolar özel `derive` makroları ile aynı şekilde çalışır: `proc-macro` kutu türü ile bir kutu oluşturur ve istediğiniz kodu üreten bir işlev uygularsınız!
 
 ### İşlev benzeri makrolar
 
-İşlev benzeri makrolar, işlev çağrılarına benzeyen makroları tanımlar.
-`macro_rules!` makrolarına benzer şekilde, işlevlerden daha esnektirler; örneğin,
-bilinmeyen sayıda argüman alabilirler. Ancak, `macro_rules!` makroları yalnızca
-daha önce [“Genel Metaprogramlama için Bildirimsel Makrolar `macro_rules!` for General Metaprogramming”][decl]<!-- ignore --> bölümünde tartıştığımız eşleşme benzeri sözdizimi kullanılarak tanımlanabilir.
-İşlev benzeri makrolar bir `TokenStream` parametresi alır ve tanımları, diğer iki tür
-prosedürel makro gibi Rust kodu kullanarak bu `TokenStream`'i işler.
-İşlev benzeri bir makro örneği, şu şekilde çağrılabilen `sql!` makrosudur:
+İşlev benzeri makrolar, işlev çağrılarına benzeyen makroları tanımlar. `macro_rules!` makrolarına benzer şekilde, işlevlerden daha esnektirler; örneğin, bilinmeyen sayıda argüman alabilirler. Ancak, `macro_rules!` makroları yalnızca daha önce [“Genel Metaprogramlama için Bildirimsel Makrolar `macro_rules!` for General Metaprogramming”][decl]<!-- ignore --> bölümünde tartıştığımız eşleşme benzeri sözdizimi kullanılarak tanımlanabilir. İşlev benzeri makrolar bir `TokenStream` parametresi alır ve tanımları, diğer iki tür prosedürel makro gibi Rust kodu kullanarak bu `TokenStream`'i işler. İşlev benzeri bir makro örneği, şu şekilde çağrılabilen `sql!` makrosudur:
 
 ```rust,ignore
 let sql = sql!(SELECT * FROM posts WHERE id=1);
 ```
 
-Bu makro, içindeki SQL ifadesini ayrıştırır ve
-sözdizimsel olarak doğru olup olmadığını kontrol eder, bu da
-`macro_rules!` makrosunun yapabileceğinden çok daha karmaşık bir işlemdir. `sql!` makrosu şu şekilde tanımlanır:
+Bu makro, içindeki SQL ifadesini ayrıştırır ve sözdizimsel olarak doğru olup olmadığını kontrol eder, bu da `macro_rules!` makrosunun yapabileceğinden çok daha karmaşık bir işlemdir. `sql!` makrosu şu şekilde tanımlanır:
 
 ```rust,ignore
 #[proc_macro]
 pub fn sql(input: TokenStream) -> TokenStream {
 ```
 
-Bu tanım, özel `derive` makrosunun imzasına benzer: parantez içindeki
-tokenleri alır ve oluşturmak istediğimiz kodu döndürürüz.
+Bu tanım, özel `derive` makrosunun imzasına benzer: parantez içindeki tokenleri alır ve oluşturmak istediğimiz kodu döndürürüz.
 ## Özet
 
+Vay canına! Artık araç kutunuzda, muhtemelen sık kullanmayacağınız bazı Rust özellikleri var, ancak bunların çok özel durumlarda kullanılabileceğini bileceksiniz. Birkaç karmaşık konuyu tanıttık, böylece bunları hata mesajı önerilerinde veya başkalarının kodlarında gördüğünüzde, bu kavramları ve sözdizimini tanıyabileceksiniz. Bu bölümü, çözüm bulmak için kılavuz olarak kullanın.
 
-
-Vay canına! Artık araç kutunuzda, muhtemelen sık kullanmayacağınız bazı Rust özellikleri var,
-ancak bunların çok özel durumlarda kullanılabileceğini bileceksiniz.
-Birkaç karmaşık konuyu tanıttık, böylece bunları
-hata mesajı önerilerinde veya başkalarının kodlarında gördüğünüzde,
-bu kavramları ve sözdizimini tanıyabileceksiniz. Bu bölümü, çözüm bulmak için
-kılavuz olarak kullanın.
-
-Şimdi, kitap boyunca tartıştığımız her şeyi uygulamaya koyup
-bir proje daha yapacağız!
+Şimdi, kitap boyunca tartıştığımız her şeyi uygulamaya koyup bir proje daha yapacağız!
 
 [ref]: ../reference/macros-by-example.md
 [tlborm]: https://veykril.github.io/tlborm/

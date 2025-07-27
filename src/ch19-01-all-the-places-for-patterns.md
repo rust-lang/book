@@ -1,29 +1,22 @@
-## All the Places Patterns Can Be Used
+## Desenlerin Kullanılabildiği Tüm Yerler
 
-Patterns pop up in a number of places in Rust, and you’ve been using them a lot
-without realizing it! This section discusses all the places where patterns are
-valid.
+Desenler, Rust'ta birçok yerde karşımıza çıkar ve aslında farkında olmadan onları sıkça kullanmış olabilirsiniz! Bu bölümde, desenlerin geçerli olduğu tüm yerleri ele alacağız.
 
-### `match` Arms
+### `match` Kolları
 
-As discussed in Chapter 6, we use patterns in the arms of `match` expressions.
-Formally, `match` expressions are defined as the keyword `match`, a value to
-match on, and one or more match arms that consist of a pattern and an
-expression to run if the value matches that arm’s pattern, like this:
+6. bölümde tartışıldığı gibi, desenleri `match` ifadelerinin kollarında kullanırız. Biçimsel olarak, `match` ifadeleri, `match` anahtar kelimesi, eşlenecek bir değer ve bir veya daha fazla desen ve bu desene uyan değer için çalıştırılacak bir ifadeden oluşur. Şöyle görünür:
 
 <!--
-  Manually formatted rather than using Markdown intentionally: Markdown does not
-  support italicizing code in the body of a block like this!
+  Elle biçimlendirildi, çünkü Markdown kod bloğunda gövde içinde kodu italik yapamıyor!
 -->
 
-<pre><code>match <em>VALUE</em> {
-    <em>PATTERN</em> => <em>EXPRESSION</em>,
-    <em>PATTERN</em> => <em>EXPRESSION</em>,
-    <em>PATTERN</em> => <em>EXPRESSION</em>,
+<pre><code>match <em>DEĞER</em> {
+    <em>DESEN</em> => <em>İFADE</em>,
+    <em>DESEN</em> => <em>İFADE</em>,
+    <em>DESEN</em> => <em>İFADE</em>,
 }</code></pre>
 
-For example, here’s the `match` expression from Listing 6-5 that matches on an
-`Option<i32>` value in the variable `x`:
+Örneğin, 6-5 numaralı listede, `x` değişkenindeki bir `Option<i32>` değeriyle eşleşen bir `match` ifadesi vardı:
 
 ```rust,ignore
 match x {
@@ -32,57 +25,36 @@ match x {
 }
 ```
 
-The patterns in this `match` expression are the `None` and `Some(i)` on the
-left of each arrow.
+Bu `match` ifadesindeki desenler, okların solundaki `None` ve `Some(i)`'dir.
 
-One requirement for `match` expressions is that they need to be _exhaustive_ in
-the sense that all possibilities for the value in the `match` expression must
-be accounted for. One way to ensure you’ve covered every possibility is to have
-a catch-all pattern for the last arm: for example, a variable name matching any
-value can never fail and thus covers every remaining case.
+`match` ifadeleriyle ilgili bir gereklilik, _kapsamlı_ (exhaustive) olmalarıdır; yani, `match` ifadesindeki değer için tüm olasılıkların hesaba katılması gerekir. Tüm olasılıkları kapsadığınızdan emin olmanın bir yolu, son kola bir joker desen (catch-all) eklemektir: örneğin, herhangi bir değeri eşleyen bir değişken adı asla başarısız olmaz ve kalan tüm durumları kapsar.
 
-The particular pattern `_` will match anything, but it never binds to a
-variable, so it’s often used in the last match arm. The `_` pattern can be
-useful when you want to ignore any value not specified, for example. We’ll cover
-the `_` pattern in more detail in [“Ignoring Values in a
-Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> later in this chapter.
+Özel olarak `_` deseni her şeyi eşler, ancak hiçbir değişkene bağlanmaz; bu yüzden genellikle son `match` kolunda kullanılır. `_` deseni, örneğin belirtilmeyen herhangi bir değeri yok saymak istediğinizde faydalı olabilir. `_` desenini bu bölümün ilerleyen kısımlarında ["Bir Desende Değerleri Yok Saymak"] [ignoring-values-in-a-pattern]<!-- ignore --> başlığı altında daha ayrıntılı ele alacağız.
 
-### let Statements
+### let İfadeleri
 
-Prior to this chapter, we had only explicitly discussed using patterns with
-`match` and `if let`, but in fact, we’ve used patterns in other places as well,
-including in `let` statements. For example, consider this straightforward
-variable assignment with `let`:
+Bu bölüme kadar, desenleri yalnızca `match` ve `if let` ile kullandığımızı açıkça tartışmıştık; ancak aslında desenleri başka yerlerde de kullandık, örneğin `let` ifadelerinde. Örneğin, aşağıdaki gibi basit bir değişken atamasını düşünün:
 
 ```rust
 let x = 5;
 ```
 
-Every time you’ve used a `let` statement like this you’ve been using patterns,
-although you might not have realized it! More formally, a `let` statement looks
-like this:
+Her `let` ifadesi kullandığınızda aslında bir desen kullanmış oluyorsunuz, farkında olmasanız bile! Biçimsel olarak, bir `let` ifadesi şöyle görünür:
 
 <!--
-  Manually formatted rather than using Markdown intentionally: Markdown does not
-  support italicizing code in the body of a block like this!
+  Elle biçimlendirildi, çünkü Markdown kod bloğunda gövde içinde kodu italik yapamıyor!
 -->
 
 <pre>
-<code>let <em>PATTERN</em> = <em>EXPRESSION</em>;</code>
+<code>let <em>DESEN</em> = <em>İFADE</em>;</code>
 </pre>
 
-In statements like `let x = 5;` with a variable name in the PATTERN slot, the
-variable name is just a particularly simple form of a pattern. Rust compares
-the expression against the pattern and assigns any names it finds. So, in the
-`let x = 5;` example, `x` is a pattern that means “bind what matches here to
-the variable `x`.” Because the name `x` is the whole pattern, this pattern
-effectively means “bind everything to the variable `x`, whatever the value is.”
+`let x = 5;` gibi ifadelerde, DESEN kısmında bir değişken adı vardır ve bu, desenin özellikle basit bir biçimidir. Rust, ifadeyi desenle karşılaştırır ve bulduğu tüm adları atar. Yani, `let x = 5;` örneğinde, `x` burada "buraya uyanı `x` değişkenine bağla" anlamına gelen bir desendir. `x` adının tüm desen olması, bu desenin "her şeyi, ne olursa olsun `x` değişkenine bağla" anlamına gelmesini sağlar.
 
-To see the pattern-matching aspect of `let` more clearly, consider Listing
-19-1, which uses a pattern with `let` to destructure a tuple.
+Desenlerin eşleşme yönünü `let` ifadesinde daha net görebilmek için, bir demet (tuple) yapısını `let` ile çözümleyen 19-1 numaralı listeye bakalım.
 
 
-<Listing number="19-1" caption="Using a pattern to destructure a tuple and create three variables at once">
+<Listing number="19-1" caption="Bir deseni kullanarak bir demeti çözümleme ve aynı anda üç değişken oluşturma">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-01/src/main.rs:here}}
@@ -90,18 +62,11 @@ To see the pattern-matching aspect of `let` more clearly, consider Listing
 
 </Listing>
 
-Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
-to the pattern `(x, y, z)` and sees that the value matches the pattern, in that
-it sees that the number of elements is the same in both, so Rust binds `1` to
-`x`, `2` to `y`, and `3` to `z`. You can think of this tuple pattern as nesting
-three individual variable patterns inside it.
+Burada, bir demet, bir desenle eşleştirilir. Rust, `(1, 2, 3)` değerini `(x, y, z)` deseniyle karşılaştırır ve değer ile desenin, her ikisinde de eleman sayısının aynı olduğunu görerek eşleştiğini belirler; böylece Rust, `1` değerini `x`'e, `2` değerini `y`'ye ve `3` değerini `z`'ye bağlar. Bu demet desenini, içinde üç tane bireysel değişken desenini iç içe geçmiş gibi düşünebilirsiniz.
 
-If the number of elements in the pattern doesn’t match the number of elements
-in the tuple, the overall type won’t match and we’ll get a compiler error. For
-example, Listing 19-2 shows an attempt to destructure a tuple with three
-elements into two variables, which won’t work.
+Eğer desendeki eleman sayısı, demetteki eleman sayısıyla uyuşmuyorsa, genel tür eşleşmeyecek ve bir derleyici hatası alacağız. Örneğin, 19-2 numaralı listede, üç elemanlı bir demeti iki değişkene çözümlemeye çalıştığımızda oluşan hata gösterilmektedir.
 
-<Listing number="19-2" caption="Incorrectly constructing a pattern whose variables don’t match the number of elements in the tuple">
+<Listing number="19-2" caption="Değişken sayısının demetteki eleman sayısıyla uyuşmadığı bir deseni yanlışlıkla oluşturma">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-02/src/main.rs:here}}
@@ -109,38 +74,23 @@ elements into two variables, which won’t work.
 
 </Listing>
 
-Attempting to compile this code results in this type error:
+Bu kodu derlemeye çalışmak, şu tür hatasına yol açar:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-02/output.txt}}
 ```
 
-To fix the error, we could ignore one or more of the values in the tuple using
-`_` or `..`, as you’ll see in the [“Ignoring Values in a
-Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> section. If the problem
-is that we have too many variables in the pattern, the solution is to make the
-types match by removing variables so the number of variables equals the number
-of elements in the tuple.
+Hatanın üstesinden gelmek için, demetteki bir veya daha fazla değeri `_` veya `..` kullanarak yok sayabiliriz; bunu, bu bölümün ilerleyen kısımlarında ["Bir Desende Değerleri Yok Saymak"] [ignoring-values-in-a-pattern]<!-- ignore --> başlığı altında göreceksiniz. Eğer sorun, desendeki fazla değişken sayısından kaynaklanıyorsa, o zaman türlerin eşleşmesini sağlamak için değişkenleri çıkararak demetteki eleman sayısıyla değişken sayısını eşitleyacak şekilde düzeltmemiz gerekir.
 
-### Conditional if let Expressions
+### Koşullu if let İfadeleri
 
-In Chapter 6, we discussed how to use `if let` expressions mainly as a shorter
-way to write the equivalent of a `match` that only matches one case.
-Optionally, `if let` can have a corresponding `else` containing code to run if
-the pattern in the `if let` doesn’t match.
+6. bölümde, `if let` ifadelerini esasen yalnızca bir durumu eşleştiren bir `match` ifadesinin daha kısa bir yolunu yazmak için nasıl kullanacağımızı tartıştık. İsteğe bağlı olarak, `if let` ifadesinin eşleşmediği durumlarda çalıştırılacak bir kod içeren karşılık gelen bir `else` bloğu olabilir.
 
-Listing 19-3 shows that it’s also possible to mix and match `if let`, `else
-if`, and `else if let` expressions. Doing so gives us more flexibility than a
-`match` expression in which we can express only one value to compare with the
-patterns. Also, Rust doesn’t require that the conditions in a series of `if
-let`, `else if`, and `else if let` arms relate to each other.
+19-3 numaralı listede, `if let`, `else if` ve `else if let` ifadelerini karıştırıp eşleştirmenin de mümkün olduğunu gösteriyoruz. Bunu yapmak, bir dizi koşul için arka arkaya kontrol yapmamıza olanak tanır; bu koşulların her biri, bir değeri desenlerle karşılaştırmak için kullanılır. Ayrıca, Rust, bir dizi `if let`, `else if` ve `else if let` kolundaki koşulların birbirleriyle ilişkili olmasını gerektirmez.
 
-The code in Listing 19-3 determines what color to make your background based on
-a series of checks for several conditions. For this example, we’ve created
-variables with hardcoded values that a real program might receive from user
-input.
+19-3 numaralı listedeki kod, arka planda hangi rengi kullanacağımıza karar verirken bir dizi kontrol yapar. Bu örnekte, gerçek bir programın kullanıcıdan alabileceği sabit kodlu değerlerle değişkenler oluşturduk.
 
-<Listing number="19-3" file-name="src/main.rs" caption="Mixing `if let`, `else if`, `else if let`, and `else`">
+<Listing number="19-3" file-name="src/main.rs" caption="Karıştırma `if let`, `else if`, `else if let` ve `else`">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-03/src/main.rs}}
@@ -148,38 +98,19 @@ input.
 
 </Listing>
 
-If the user specifies a favorite color, that color is used as the background.
-If no favorite color is specified and today is Tuesday, the background color is
-green. Otherwise, if the user specifies their age as a string and we can parse
-it as a number successfully, the color is either purple or orange depending on
-the value of the number. If none of these conditions apply, the background
-color is blue.
+Eğer kullanıcı bir favori renk belirtirse, arka plan o renk olarak ayarlanır. Eğer hiçbir favori renk belirtilmemişse ve bugün Salı ise, arka plan rengi yeşil olur. Aksi takdirde, eğer kullanıcı yaşı bir dize olarak belirtmişse ve bunu bir sayıya başarıyla ayrıştırabiliyorsak, renk ya mor ya da turuncu olur; bu, sayının değerine bağlıdır. Eğer bu koşullardan hiçbiri geçerli değilse, arka plan rengi mavi olur.
 
-This conditional structure lets us support complex requirements. With the
-hardcoded values we have here, this example will print `Using purple as the
-background color`.
+Bu koşullu yapı, karmaşık gereksinimleri desteklememizi sağlar. Buradaki sabit kodlu değerlerle, bu örnek `Arka plan rengi olarak mor kullanılıyor` çıktısını verecektir.
 
-You can see that `if let` can also introduce new variables that shadow existing
-variables in the same way that `match` arms can: the line `if let Ok(age) = age`
-introduces a new `age` variable that contains the value inside the `Ok` variant,
-shadowing the existing `age` variable. This means we need to place the `if age >
-30` condition within that block: we can’t combine these two conditions into `if
-let Ok(age) = age && age > 30`. The new `age` we want to compare to 30 isn’t
-valid until the new scope starts with the curly bracket.
+Ayrıca, `if let` ifadelerinin, `match` kollarında olduğu gibi mevcut değişkenleri gölgeleyerek yeni değişkenler tanıtabileceğini görebilirsiniz: `if let Ok(age) = age` satırı, `Ok` varyantının içindeki değeri içeren yeni bir `age` değişkeni tanıtır ve bu, mevcut `age` değişkenini gölgeler. Bu, `if age > 30` koşulunu o blok içinde yerleştirmemiz gerektiği anlamına gelir; bu iki koşulu `if let Ok(age) = age && age > 30` şeklinde birleştiremeyiz. Karşılaştırmak istediğimiz yeni `age` değişkeni, yeni kapsam açılana kadar geçerli değildir.
 
-The downside of using `if let` expressions is that the compiler doesn’t check
-for exhaustiveness, whereas with `match` expressions it does. If we omitted the
-last `else` block and therefore missed handling some cases, the compiler would
-not alert us to the possible logic bug.
+`if let` ifadelerinin bir dezavantajı, derleyicinin kapsayıcılığı kontrol etmemesidir; oysa `match` ifadelerinde kontrol eder. Eğer son `else` bloğunu atlar ve bu nedenle bazı durumları ele almayı kaçırırsak, derleyici bize olası bir mantık hatası hakkında bilgi vermez.
 
-### `while let` Conditional Loops
+### `while let` Koşullu Döngüleri
 
-Similar in construction to `if let`, the `while let` conditional loop allows a
-`while` loop to run for as long as a pattern continues to match. In Listing
-19-4 we show a `while let` loop that waits on messages sent between threads,
-but in this case checking a `Result` instead of an `Option`.
+`if let` ile yapısal olarak benzer olan `while let` koşullu döngüsü, bir desen eşleşmeye devam ettiği sürece `while` döngüsünün çalışmasına olanak tanır. 19-4 numaralı listede, bir `while let` döngüsünün, bir `Option` yerine bir `Result` kontrolü yaparak, iş parçacıkları arasında gönderilen mesajları beklerken nasıl kullanılacağını gösteriyoruz.
 
-<Listing number="19-4" caption="Using a `while let` loop to print values for as long as `rx.recv()` returns `Ok`">
+<Listing number="19-4" caption="Bir `while let` döngüsü kullanarak `rx.recv()` her `Ok` döndüğünde değerleri yazdırma">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-04/src/main.rs:here}}
@@ -187,23 +118,14 @@ but in this case checking a `Result` instead of an `Option`.
 
 </Listing>
 
-This example prints `1`, `2`, and then `3`. The `recv` method takes the first
-message out of the receiver side of the channel and returns an `Ok(value)`. When
-we first saw `recv` back in Chapter 16, we unwrapped the error directly, or
-interacted with it as an iterator using a `for` loop. As Listing 19-4 shows,
-though, we can also use while let, because the `recv` method returns an `Ok`
-each time a message arrives, as long as the sender exists, and then produces an
-`Err `once the sender side disconnects.
+Bu örnek, sırasıyla `1`, `2` ve `3` değerlerini yazdırır. `recv` yöntemi, kanalın alıcı tarafındaki ilk mesajı alır ve bir `Ok(değer)` döndürür. 16. bölümde `recv` ile ilk kez karşılaştığımızda, hatayı doğrudan açmış veya bir `for` döngüsü kullanarak bir yineleyici gibi etkileşimde bulunmuştuk. Ancak, 19-4 numaralı listede gösterildiği gibi, `recv` yöntemi her mesaj geldiğinde bir `Ok` döndürdüğünden ve ardından gönderen tarafı kapandığında bir `Err` ürettiğinden, `while let` kullanabiliriz.
 
-### `for` Loops
+### `for` Döngüleri
 
-In a `for` loop, the value that directly follows the keyword `for` is a
-pattern. For example, in `for x in y`, the `x` is the pattern. Listing 19-5
-demonstrates how to use a pattern in a `for` loop to *destructure*, or break
-apart, a tuple as part of the `for` loop.
+Bir `for` döngüsünde, `for` anahtar kelimesinin hemen ardından gelen değer bir desendir. Örneğin, `for x in y` ifadesindeki `x` bir desendir. 19-5 numaralı listede, bir `for` döngüsünde bir demeti *çözümlemek* veya parçalarına ayırmak için bir deseni nasıl kullanacağımızı gösteriyoruz.
 
 
-<Listing number="19-5" caption="Using a pattern in a `for` loop to destructure a tuple">
+<Listing number="19-5" caption="Bir `for` döngüsünde bir deseni kullanarak bir demeti çözümleme">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-05/src/main.rs:here}}
@@ -211,26 +133,20 @@ apart, a tuple as part of the `for` loop.
 
 </Listing>
 
-The code in Listing 19-5 will print the following:
+19-5 numaralı listedeki kod, aşağıdaki çıktıyı verir:
 
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-05/output.txt}}
 ```
 
-We adapt an iterator using the `enumerate` method so it produces a value and
-the index for that value, placed into a tuple. The first value produced is the
-tuple `(0, 'a')`. When this value is matched to the pattern `(index, value)`,
-`index` will be `0` and `value` will be `'a'`, printing the first line of the
-output.
+Bir yineleyiciyi, bir değer ve o değerin dizinini üretecek şekilde `enumerate` yöntemiyle uyarlıyoruz; bu, bir demet içine yerleştirilir. Üretilen ilk değer, `(0, 'a')` demetidir. Bu değer, `(index, value)` desenine eşlendiğinde, `index` değeri `0` ve `value` değeri `'a'` olur ve çıktının ilk satırını yazdırır.
 
-### Function Parameters
+### Fonksiyon Parametreleri
 
-Function parameters can also be patterns. The code in Listing 19-6, which
-declares a function named `foo` that takes one parameter named `x` of type
-`i32`, should by now look familiar.
+Fonksiyon parametreleri de desenler olabilir. 19-6 numaralı listede, `x` adında bir `i32` türünde bir parametre alan `foo` adlı bir fonksiyon tanımlıyoruz; bu, muhtemelen artık tanıdık gelecektir.
 
-<Listing number="19-6" caption="A function signature uses patterns in the parameters">
+<Listing number="19-6" caption="Bir fonksiyon imzasında parametrelerde desenler kullanımı">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-06/src/main.rs:here}}
@@ -238,11 +154,9 @@ declares a function named `foo` that takes one parameter named `x` of type
 
 </Listing>
 
-The `x` part is a pattern! As we did with `let`, we could match a tuple in a
-function’s arguments to the pattern. Listing 19-7 splits the values in a tuple
-as we pass it to a function.
+`x` kısmı bir desendir! `let` ile yaptığımız gibi, bir fonksiyonun argümanlarında bir demeti desene göre eşleştirebiliriz. 19-7 numaralı listede, bir demeti çözümleyerek bir fonksiyona geçiriyoruz.
 
-<Listing number="19-7" file-name="src/main.rs" caption="A function with parameters that destructure a tuple">
+<Listing number="19-7" file-name="src/main.rs" caption="Bir demeti çözümleyen parametrelerle bir fonksiyon">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-07/src/main.rs}}
@@ -250,16 +164,10 @@ as we pass it to a function.
 
 </Listing>
 
-This code prints `Current location: (3, 5)`. The values `&(3, 5)` match the
-pattern `&(x, y)`, so `x` is the value `3` and `y` is the value `5`.
+Bu kod, `Mevcut konum: (3, 5)` çıktısını verir. `&(3, 5)` değerleri, `&(x, y)` deseniyle eşleşir; bu nedenle, `x` değeri `3` ve `y` değeri `5` olur.
 
-We can also use patterns in closure parameter lists in the same way as in
-function parameter lists because closures are similar to functions, as
-discussed in Chapter 13.
+Ayrıca, kapanış (closure) parametre listelerinde de desenleri, fonksiyon parametre listelerinde olduğu gibi kullanabiliriz; çünkü kapanışlar, 13. bölümde tartışıldığı gibi, fonksiyonlara benzer.
 
-At this point, you’ve seen several ways to use patterns, but patterns don’t
-work the same in every place we can use them. In some places, the patterns must
-be irrefutable; in other circumstances, they can be refutable. We’ll discuss
-these two concepts next.
+Bu noktada, desenleri kullanmanın birkaç yolunu gördünüz, ancak desenler her kullanıldıkları yerde aynı şekilde çalışmaz. Bazı yerlerde, desenlerin ırkçı olmaması gerekir; diğer durumlarda, ırkçı olabilirler. Bu iki kavramı bir sonraki bölümde tartışacağız.
 
 [ignoring-values-in-a-pattern]: ch19-03-pattern-syntax.html#ignoring-values-in-a-pattern

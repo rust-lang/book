@@ -1,29 +1,15 @@
-# Patterns and Matching
+# Desenler ve Eşleme
 
-_Patterns_ are a special syntax in Rust for matching against the structure of
-types, both complex and simple. Using patterns in conjunction with `match`
-expressions and other constructs gives you more control over a program’s
-control flow. A pattern consists of some combination of the following:
+_Desenler_ (patterns), Rust'ta hem karmaşık hem de basit türlerin yapısına göre eşleme yapmak için kullanılan özel bir söz dizimidir. Desenleri `match` ifadeleri ve diğer yapılarla birlikte kullanmak, bir programın kontrol akışı üzerinde daha fazla kontrol sağlar. Bir desen, aşağıdakilerin bir kombinasyonundan oluşabilir:
 
-- Literals
-- Destructured arrays, enums, structs, or tuples
-- Variables
-- Wildcards
-- Placeholders
+- Sabitler (literals)
+- Yapısı açılmış diziler, enum'lar, struct'lar veya tuple'lar
+- Değişkenler
+- Joker karakterler (wildcards)
+- Yer tutucular (placeholders)
 
-Some example patterns include `x`, `(a, 3)`, and `Some(Color::Red)`. In the
-contexts in which patterns are valid, these components describe the shape of
-data. Our program then matches values against the patterns to determine whether
-it has the correct shape of data to continue running a particular piece of code.
+Bazı örnek desenler: `x`, `(a, 3)` ve `Some(Color::Red)`. Desenlerin geçerli olduğu bağlamlarda, bu bileşenler verinin şeklini tanımlar. Programımız, değerleri desenlerle eşleştirerek, belirli bir kod parçasını çalıştırmaya devam etmek için doğru şekle sahip olup olmadığını belirler.
 
-To use a pattern, we compare it to some value. If the pattern matches the
-value, we use the value parts in our code. Recall the `match` expressions in
-Chapter 6 that used patterns, such as the coin-sorting machine example. If the
-value fits the shape of the pattern, we can use the named pieces. If it
-doesn’t, the code associated with the pattern won’t run.
+Bir deseni kullanmak için, onu bir değerle karşılaştırırız. Eğer desen değere uyuyorsa, değerin parçalarını kodumuzda kullanırız. 6. bölümdeki desen kullanan `match` ifadelerini hatırlayın; örneğin, para ayırıcı makine örneği. Eğer değer, desenin şekline uyuyorsa, adlandırılmış parçaları kullanabiliriz. Uymuyorsa, desene bağlı kod çalışmaz.
 
-This chapter is a reference on all things related to patterns. We’ll cover the
-valid places to use patterns, the difference between refutable and irrefutable
-patterns, and the different kinds of pattern syntax that you might see. By the
-end of the chapter, you’ll know how to use patterns to express many concepts in
-a clear way.
+Bu bölüm, desenlerle ilgili her şey için bir başvuru niteliğindedir. Desenlerin geçerli olduğu yerleri, refutable (çürütülebilir) ve irrefutable (çürütülemez) desenler arasındaki farkı ve görebileceğiniz farklı desen söz dizimlerini ele alacağız. Bölümün sonunda, desenleri birçok kavramı açık bir şekilde ifade etmek için nasıl kullanacağınızı biliyor olacaksınız.

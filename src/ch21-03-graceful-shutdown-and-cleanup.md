@@ -1,32 +1,16 @@
-## Graceful Shutdown and Cleanup
+## Zarif Kapatma ve Temizlik
 
-The code in Listing 21-20 is responding to requests asynchronously through the
-use of a thread pool, as we intended. We get some warnings about the `workers`,
-`id`, and `thread` fields that we’re not using in a direct way that reminds us
-we’re not cleaning up anything. When we use the less elegant
-<kbd>ctrl</kbd>-<kbd>c</kbd> method to halt the main thread, all other threads
-are stopped immediately as well, even if they’re in the middle of serving a
-request.
+21-20 Listesi'ndeki kod, amaçladığımız gibi bir iş parçacığı havuzu kullanarak isteklere eşzamanlı olarak yanıt veriyor. `workers`, `id` ve `thread` alanlarını doğrudan kullanmadığımız için bazı uyarılar alıyoruz; bu da aslında hiçbir şeyi temizlemediğimizi hatırlatıyor. Ana iş parçacığını durdurmak için daha az zarif olan <kbd>ctrl</kbd>-<kbd>c</kbd> yöntemini kullandığımızda, diğer tüm iş parçacıkları da hemen durdurulur; hatta bir isteği işlerken bile.
 
-Next, then, we’ll implement the `Drop` trait to call `join` on each of the
-threads in the pool so they can finish the requests they’re working on before
-closing. Then we’ll implement a way to tell the threads they should stop
-accepting new requests and shut down. To see this code in action, we’ll modify
-our server to accept only two requests before gracefully shutting down its
-thread pool.
+Şimdi, havuzdaki her iş parçacığı üzerinde `join` çağrısı yapmak için `Drop` trait'ini uygulayacağız; böylece iş parçacıkları çalıştıkları istekleri bitirebilecek ve ardından kapanacak. Sonra, iş parçacıklarına yeni istek kabul etmeyi bırakmaları ve kapanmaları gerektiğini bildiren bir yol ekleyeceğiz. Bu kodu çalışırken görmek için, sunucumuzu yalnızca iki isteği kabul edecek ve ardından iş parçacığı havuzunu zarifçe kapatacak şekilde değiştireceğiz.
 
-One thing to notice as we go: none of this affects the parts of the code that
-handle executing the closures, so everything here would be just the same if we
-were using a thread pool for an async runtime.
+Dikkat edilmesi gereken bir şey: Buradaki hiçbir şey, closure'ların çalıştırılmasını yöneten kodu etkilemez; yani burada yaptığımız her şey, bir async çalışma zamanı için iş parçacığı havuzu kullansaydık da aynı olurdu.
 
-### Implementing the `Drop` Trait on `ThreadPool`
+### ThreadPool Üzerinde `Drop` Trait'ini Uygulamak
 
-Let’s start with implementing `Drop` on our thread pool. When the pool is
-dropped, our threads should all join to make sure they finish their work.
-Listing 21-22 shows a first attempt at a `Drop` implementation; this code won’t
-quite work yet.
+Thread havuzumuz üzerinde `Drop` uygulamakla başlayalım. Havuz bırakıldığında, iş parçacıklarımızın tümü, yaptıkları işleri bitirmek için bir araya gelmelidir. 21-22 Listesi, `Drop` uygulamasına yönelik ilk denemeyi göstermektedir; bu kod henüz tam olarak çalışmayacaktır.
 
-<Listing number="21-22" file-name="src/lib.rs" caption="Joining each thread when the thread pool goes out of scope">
+<Listing number="21-22" file-name="src/lib.rs" caption="Thread havuzu kapsam dışına çıktığında her iş parçacığını birleştirme">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-22/src/lib.rs:here}}
@@ -34,43 +18,21 @@ quite work yet.
 
 </Listing>
 
-First, we loop through each of the thread pool `workers`. We use `&mut` for this
-because `self` is a mutable reference, and we also need to be able to mutate
-`worker`. For each worker, we print a message saying that this particular
-`Worker` instance is shutting down, and then we call `join` on that `Worker`
-instance’s thread. If the call to `join` fails, we use `unwrap` to make Rust
-panic and go into an ungraceful shutdown.
+Öncelikle, her bir iş parçacığı havuzu `workers` üzerinden döngü yapıyoruz. Bunu yapmak için `&mut` kullanıyoruz çünkü `self` değişken bir referans ve ayrıca `worker` değişkenini de değiştirmemiz gerekiyor. Her bir işçi için, bu belirli `Worker` örneğinin kapanmakta olduğunu belirten bir mesaj yazdırıyoruz ve ardından `Worker` örneğinin iş parçacığına `join` çağrısı yapıyoruz. `join` çağrısı başarısız olursa, Rust'ın panik yapması ve kontrolsüz bir kapanışa girmesi için `unwrap` kullanıyoruz.
 
-Here is the error we get when we compile this code:
+Bu kodu derlediğimizde aldığımız hata şudur:
 
 ```console
 {{#include ../listings/ch21-web-server/listing-21-22/output.txt}}
 ```
 
-The error tells us we can’t call `join` because we only have a mutable borrow of
-each `worker` and `join` takes ownership of its argument. To solve this issue,
-we need to move the thread out of the `Worker` instance that owns `thread` so
-`join` can consume the thread. One way to do this is by taking the same approach
-we did in Listing 18-15. If `Worker` held an `Option<thread::JoinHandle<()>>`,
-we could call the `take` method on the `Option` to move the value out of the
-`Some` variant and leave a `None` variant in its place. In other words, a
-`Worker` that is running would have a `Some` variant in `thread`, and when we
-wanted to clean up a `Worker`, we’d replace `Some` with `None` so the `Worker`
-wouldn’t have a thread to run.
+Hata, `join` çağrısı yapamayacağımızı çünkü her bir `worker` üzerinde yalnızca değişken bir ödünç alma işlemi gerçekleştirdiğimizi ve `join`'in argümanının sahipliğini aldığını söylüyor. Bu sorunu çözmek için, `join`'in iş parçacığını tüketebilmesi için `worker`'ın `thread` alanından iş parçacığını çıkarmamız gerekiyor. Bunu, 18-15 Listesi'nde yaptığımız aynı yaklaşımı benimseyerek yapabiliriz. `Worker`, bir `Option<thread::JoinHandle<()>>` tutuyorsa, `Option` üzerindeki `take` yöntemini çağırarak değeri `Some` varyantından çıkarabilir ve yerine `None` varyantını bırakabiliriz. Diğer bir deyişle, çalışan bir `Worker`, `thread` içinde bir `Some` varyantına sahip olurdu ve bir `Worker`'ı temizlemek istediğimizde, `Some`'ı `None` ile değiştirerek `Worker`'ın çalışacak bir iş parçacığına sahip olmamasını sağlardık.
 
-However, the _only_ time this would come up would be when dropping the `Worker`.
-In exchange, we’d have to deal with an `Option<thread::JoinHandle<()>>` anywhere
-we accessed `worker.thread`. Idiomatic Rust uses `Option` quite a bit, but when
-you find yourself wrapping something you know will always be present in `Option`
-as a workaround like this, it’s a good idea to look for alternative approaches.
-They can make your code cleaner and less error-prone.
+Ancak, bu durum yalnızca `Worker`'ı bırakırken ortaya çıkacaktır. Bunun karşılığında, `worker.thread`'e eriştiğimiz her yerde bir `Option<thread::JoinHandle<()>>` ile başa çıkmak zorunda kalacağız. İdiomatik Rust, `Option`'ı oldukça fazla kullanır, ancak bir şeyi `Option` içinde sarmalamanız gerektiğinde ve bunun bir çözüm olarak ortaya çıktığında, alternatif yaklaşımlar aramak iyi bir fikirdir. Bu, kodunuzu daha temiz ve daha az hata yapma olasılığıyla yazmanıza yardımcı olabilir.
 
-In this case, a better alternative exists: the `Vec::drain` method. It accepts
-a range parameter to specify which items to remove from the `Vec`, and returns
-an iterator of those items. Passing the `..` range syntax will remove _every_
-value from the `Vec`.
+Bu durumda, daha iyi bir alternatif vardır: `Vec::drain` yöntemi. Bu yöntem, hangi öğelerin `Vec`'den çıkarılacağını belirtmek için bir aralık parametresi kabul eder ve bu öğelerin bir iteratörünü döndürür. `..` aralık sözdizimini geçirmek, `Vec`'den _herhangi birini_ çıkarmak anlamına gelir.
 
-So we need to update the `ThreadPool` `drop` implementation like this:
+Bu nedenle, `ThreadPool`'un `drop` uygulamasını şu şekilde güncellememiz gerekiyor:
 
 <Listing file-name="src/lib.rs">
 
@@ -80,29 +42,17 @@ So we need to update the `ThreadPool` `drop` implementation like this:
 
 </Listing>
 
-This resolves the compiler error and does not require any other changes to our
-code.
+Bu, derleyici hatasını çözer ve kodumuzda başka herhangi bir değişiklik gerektirmez.
 
-### Signaling to the Threads to Stop Listening for Jobs
+### İş Parçacıklarına İş Beklemeyi Bırakmalarını Bildirmek
 
-With all the changes we’ve made, our code compiles without any warnings.
-However, the bad news is that this code doesn’t function the way we want it to
-yet. The key is the logic in the closures run by the threads of the `Worker`
-instances: at the moment, we call `join`, but that won’t shut down the threads
-because they `loop` forever looking for jobs. If we try to drop our `ThreadPool`
-with our current implementation of `drop`, the main thread will block forever,
-waiting for the first thread to finish.
+Yaptığımız tüm değişikliklerle birlikte, kodumuz uyarı vermeden derleniyor. Ancak, kötü haber şu ki, bu kod henüz istediğimiz gibi çalışmıyor. Anahtar, `Worker` örneklerinin içinde çalışan closure'larda: şu anda `join` çağırıyoruz, ancak bu, iş parçacıklarını sonsuz döngüde iş beklerken kapatmayacaktır. Mevcut `drop` uygulamamızla `ThreadPool`'u bırakmaya çalıştığımızda, ana iş parçacığı ilk iş parçacığının bitmesini beklerken sonsuz döngüye girecektir.
 
-To fix this problem, we’ll need a change in the `ThreadPool` `drop`
-implementation and then a change in the `Worker` loop.
+Bu sorunu çözmek için, önce `ThreadPool`'un `drop` uygulamasında bir değişiklik yapmamız ve ardından `Worker` döngüsünde bir değişiklik yapmamız gerekecek.
 
-First we’ll change the `ThreadPool` `drop` implementation to explicitly drop
-the `sender` before waiting for the threads to finish. Listing 21-23 shows the
-changes to `ThreadPool` to explicitly drop `sender`. Unlike with the thread,
-here we _do_ need to use an `Option` to be able to move `sender` out of
-`ThreadPool` with `Option::take`.
+Öncelikle, `ThreadPool`'un `drop` uygulamasını, iş parçacıklarının bitmesini beklemeden önce `sender`'ı açıkça bırakacak şekilde değiştireceğiz. 21-23 Listesi, `ThreadPool`'a `sender`'ı açıkça bırakacak şekilde yapılan değişiklikleri göstermektedir. İş parçacığı ile birlikte burada, `ThreadPool`'dan `Option::take` ile `sender`'ı çıkarabilmek için bir `Option` kullanmamız gerekiyor.
 
-<Listing number="21-23" file-name="src/lib.rs" caption="Explicitly drop `sender` before joining the `Worker` threads">
+<Listing number="21-23" file-name="src/lib.rs" caption="Worker iş parçacıklarını birleştirmeden önce `sender`'ı açıkça bırakma">
 
 ```rust,noplayground,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-23/src/lib.rs:here}}
@@ -110,13 +60,9 @@ here we _do_ need to use an `Option` to be able to move `sender` out of
 
 </Listing>
 
-Dropping `sender` closes the channel, which indicates no more messages will be
-sent. When that happens, all the calls to `recv` that the `Worker` instances do
-in the infinite loop will return an error. In Listing 21-24, we change the
-`Worker` loop to gracefully exit the loop in that case, which means the threads
-will finish when the `ThreadPool` `drop` implementation calls `join` on them.
+`sender`'ı bırakmak, kanalı kapatır; bu da daha fazla mesaj gönderilmeyeceğini gösterir. Bu olduğunda, `Worker` örneklerinin sonsuz döngülerinde yaptıkları tüm `recv` çağrıları bir hata döndürecektir. 21-24 Listesi'nde, `Worker` döngüsünü bu durumda döngüden zarifçe çıkacak şekilde değiştiriyoruz; bu, iş parçacıkları `ThreadPool`'un `drop` uygulaması `join` çağrısı yaptığında biteceği anlamına gelir.
 
-<Listing number="21-24" file-name="src/lib.rs" caption="Explicitly breaking out of the loop when `recv` returns an error">
+<Listing number="21-24" file-name="src/lib.rs" caption="recv bir hata döndürdüğünde döngüden açıkça çıkma">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-24/src/lib.rs:here}}
@@ -124,10 +70,9 @@ will finish when the `ThreadPool` `drop` implementation calls `join` on them.
 
 </Listing>
 
-To see this code in action, let’s modify `main` to accept only two requests
-before gracefully shutting down the server, as shown in Listing 21-25.
+Bu kodu çalıştırırken görmek için, `main` fonksiyonumuzu yalnızca iki isteği kabul edecek ve ardından sunucuyu zarifçe kapatacak şekilde değiştirelim; bu, 21-25 Listesi'nde gösterilmiştir.
 
-<Listing number="21-25" file-name="src/main.rs" caption="Shutting down the server after serving two requests by exiting the loop">
+<Listing number="21-25" file-name="src/main.rs" caption="İki isteği işledikten sonra sunucuyu kapatma">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-25/src/main.rs:here}}
@@ -135,16 +80,11 @@ before gracefully shutting down the server, as shown in Listing 21-25.
 
 </Listing>
 
-You wouldn’t want a real-world web server to shut down after serving only two
-requests. This code just demonstrates that the graceful shutdown and cleanup is
-in working order.
+Gerçek bir web sunucusunun yalnızca iki isteği işledikten sonra kapanmasını istemezsiniz. Bu kod, zarif kapanış ve temizlik işleminin çalıştığını göstermek içindir.
 
-The `take` method is defined in the `Iterator` trait and limits the iteration
-to the first two items at most. The `ThreadPool` will go out of scope at the
-end of `main`, and the `drop` implementation will run.
+`take` yöntemi, `Iterator` trait'inde tanımlanmıştır ve yine de en fazla iki öğe ile sınırlıdır. `ThreadPool`, `main`'in sonunda kapsam dışı kalacak ve `drop` uygulaması çalışacaktır.
 
-Start the server with `cargo run`, and make three requests. The third request
-should error, and in your terminal you should see output similar to this:
+Sunucuyu `cargo run` ile başlatın ve üç istek gönderin. Üçüncü isteğin hata vermesi gerekir ve terminalinizde benzer bir çıktı görmelisiniz:
 
 <!-- manual-regeneration
 cd listings/ch21-web-server/listing-21-25
@@ -175,28 +115,13 @@ Shutting down worker 2
 Shutting down worker 3
 ```
 
-You might see a different ordering of `Worker` IDs and messages printed. We can
-see how this code works from the messages: `Worker` instances 0 and 3 got the
-first two requests. The server stopped accepting connections after the second
-connection, and the `Drop` implementation on `ThreadPool` starts executing
-before `Worker` 3 even starts its job. Dropping the `sender` disconnects all the
-`Worker` instances and tells them to shut down. The `Worker` instances each
-print a message when they disconnect, and then the thread pool calls `join` to
-wait for each `Worker` thread to finish.
+İş parçacıklarının kimlikleri ve mesajlarının sıralaması farklı olabilir. Bu kodun, mesajlardan nasıl çalıştığını görebiliriz: `Worker` örnekleri 0 ve 3 ilk iki isteği aldı. Sunucu, ikinci bağlantıdan sonra yeni bağlantılar kabul etmeyi bıraktı ve `ThreadPool` üzerindeki `Drop` uygulaması, `Worker` 3 bile işine başlamadan önce çalışmaya başladı. `sender`'ın bırakılması, tüm `Worker` örneklerini devre dışı bırakır ve kapanmalarını söyler. `Worker` örnekleri her biri, devre dışı kaldıklarında bir mesaj yazdırır ve ardından iş parçacığı havuzu, her `Worker` iş parçacığını bitirmek için `join` çağrısı yapar.
 
-Notice one interesting aspect of this particular execution: the `ThreadPool`
-dropped the `sender`, and before any `Worker` received an error, we tried to
-join `Worker` 0. `Worker` 0 had not yet gotten an error from `recv`, so the main
-thread blocked waiting for `Worker` 0 to finish. In the meantime, `Worker` 3
-received a job and then all threads received an error. When `Worker` 0 finished,
-the main thread waited for the rest of the `Worker` instances to finish. At that
-point, they had all exited their loops and stopped.
+Bu belirli yürütmenin ilginç bir yönüne dikkat edin: `ThreadPool`, `sender`'ı devre dışı bıraktı ve hiçbir `Worker` bir hata almadığı sürece, `Worker` 0'ı birleştirmeye çalıştık. `Worker` 0, `recv`'den bir hata almadığı için ana iş parçacığı, `Worker` 0'ın bitmesini beklerken engellendi. Bu arada, `Worker` 3 bir iş aldı ve ardından tüm iş parçacıkları bir hata aldı. `Worker` 0 bittiğinde, ana iş parçacığı diğer `Worker` örneklerinin bitmesini bekledi. O noktada, hepsi döngülerinden çıkmış ve durmuştu.
 
-Congrats! We’ve now completed our project; we have a basic web server that uses
-a thread pool to respond asynchronously. We’re able to perform a graceful
-shutdown of the server, which cleans up all the threads in the pool.
+Tebrikler! Artık projemizi tamamladık; eşzamanlı olarak yanıt veren bir iş parçacığı havuzuna sahip temel bir web sunucumuz var. Sunucunun zarif bir şekilde kapanmasını sağlıyoruz ve bu da havuzdaki tüm iş parçacıklarını temizliyor.
 
-Here’s the full code for reference:
+Referans için tam kod burada:
 
 <Listing file-name="src/main.rs">
 
@@ -214,21 +139,14 @@ Here’s the full code for reference:
 
 </Listing>
 
-We could do more here! If you want to continue enhancing this project, here are
-some ideas:
+Burada daha fazla şey yapabiliriz! Bu projeyi geliştirmeye devam etmek istiyorsanız, işte bazı fikirler:
 
-- Add more documentation to `ThreadPool` and its public methods.
-- Add tests of the library’s functionality.
-- Change calls to `unwrap` to more robust error handling.
-- Use `ThreadPool` to perform some task other than serving web requests.
-- Find a thread pool crate on [crates.io](https://crates.io/) and implement a
-  similar web server using the crate instead. Then compare its API and
-  robustness to the thread pool we implemented.
+- `ThreadPool` ve genel yöntemleri hakkında daha fazla belge ekleyin.
+- Kitaplığın işlevselliğini test edin.
+- `unwrap` çağrılarını daha sağlam hata işleme ile değiştirin.
+- `ThreadPool`'u web istekleri dışında başka bir görevi yerine getirmek için kullanın.
+- [crates.io](https://crates.io/) adresinde bir iş parçacığı havuzu kütüphanesi bulun ve bunun yerine bu kütüphaneyi kullanarak benzer bir web sunucusu uygulayın. Ardından, uyguladığınız iş parçacığı havuzunun API'sini ve sağlamlığını karşılaştırın.
 
-## Summary
+## Özet
 
-Well done! You’ve made it to the end of the book! We want to thank you for
-joining us on this tour of Rust. You’re now ready to implement your own Rust
-projects and help with other people’s projects. Keep in mind that there is a
-welcoming community of other Rustaceans who would love to help you with any
-challenges you encounter on your Rust journey.
+Aferin! Kitabın sonuna geldiniz! Sizi Rust'ın bu turuna katıldığınız için teşekkür etmek istiyoruz. Artık kendi Rust projelerinizi uygulamaya ve diğer insanların projelerine yardımcı olmaya hazırsınız. Unutmayın ki, Rust yolculuğunuzda karşılaştığınız her türlü zorlukta size yardımcı olmaktan mutluluk duyacak diğer Rustaceans topluluğu var.

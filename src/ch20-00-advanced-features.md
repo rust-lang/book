@@ -1,22 +1,13 @@
-# Advanced Features
+# İleri Düzey Özellikler
 
-By now, you’ve learned the most commonly used parts of the Rust programming
-language. Before we do one more project in Chapter 21, we’ll look at a few
-aspects of the language you might run into every once in a while, but may not
-use every day. You can use this chapter as a reference for when you encounter
-any unknowns. The features covered here are useful in very specific situations.
-Although you might not reach for them often, we want to make sure you have a
-grasp of all the features Rust has to offer.
+Artık Rust programlama dilinin en sık kullanılan bölümlerini öğrendiniz. 21. Bölümde bir proje daha yapmadan önce, zaman zaman karşılaşabileceğiniz ancak her gün kullanmayacağınız bazı dil özelliklerine göz atacağız. Bu bölümü, karşılaştığınız bilinmeyenler için bir başvuru kaynağı olarak kullanabilirsiniz. Burada ele alınan özellikler çok özel durumlarda faydalıdır. Her zaman başvurmasanız da, Rust'ın sunduğu tüm özelliklere hâkim olmanızı istiyoruz.
 
-In this chapter, we’ll cover:
+Bu bölümde şunları ele alacağız:
 
-- Unsafe Rust: how to opt out of some of Rust’s guarantees and take
-  responsibility for manually upholding those guarantees
-- Advanced traits: associated types, default type parameters, fully qualified
-  syntax, supertraits, and the newtype pattern in relation to traits
-- Advanced types: more about the newtype pattern, type aliases, the never type,
-  and dynamically sized types
-- Advanced functions and closures: function pointers and returning closures
-- Macros: ways to define code that defines more code at compile time
+- Güvensiz Rust: Rust'ın bazı garantilerinden vazgeçip bu garantileri manuel olarak sağlamanın sorumluluğunu nasıl üstlenebileceğiniz
+- İleri düzey trait'ler: ilişkili tipler, varsayılan tip parametreleri, tam nitelikli sözdizimi, üst trait'ler ve trait'lerle ilgili newtype deseni
+- İleri düzey tipler: newtype deseni hakkında daha fazla bilgi, tip takma adları, asla tipi (never type) ve dinamik boyutlu tipler
+- İleri düzey fonksiyonlar ve closure'lar: fonksiyon işaretçileri ve closure döndürmek
+- Makrolar: Derleme zamanında daha fazla kod tanımlayan kodları tanımlamanın yolları
 
-It’s a panoply of Rust features with something for everyone! Let’s dive in!
+Herkese hitap eden bir Rust özellikleri şöleni! Haydi başlayalım!

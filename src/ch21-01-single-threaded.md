@@ -1,28 +1,14 @@
-## Building a Single-Threaded Web Server
+## Tek İş Parçacıklı Bir Web Sunucusu Oluşturmak
 
-We’ll start by getting a single-threaded web server working. Before we begin,
-let’s look at a quick overview of the protocols involved in building web
-servers. The details of these protocols are beyond the scope of this book, but
-a brief overview will give you the information you need.
+Öncelikle, tek iş parçacıklı bir web sunucusunu çalıştırarak başlayacağız. Başlamadan önce, web sunucuları oluştururken yer alan protokollere hızlıca bir göz atalım. Bu protokollerin ayrıntıları bu kitabın kapsamı dışında, ancak kısa bir özet ihtiyacınız olan bilgiyi verecektir.
 
-The two main protocols involved in web servers are _Hypertext Transfer
-Protocol_ _(HTTP)_ and _Transmission Control Protocol_ _(TCP)_. Both protocols
-are _request-response_ protocols, meaning a _client_ initiates requests and a
-_server_ listens to the requests and provides a response to the client. The
-contents of those requests and responses are defined by the protocols.
+Web sunucularında yer alan iki ana protokol _Hiper Metin Aktarım Protokolü_ (_HTTP_) ve _Aktarım Kontrol Protokolü_ (_TCP_)'dir. Her iki protokol de _istek-yanıt_ protokolüdür; yani bir _istemci_ istek başlatır ve bir _sunucu_ bu istekleri dinler ve istemciye bir yanıt sağlar. Bu istek ve yanıtların içeriği protokoller tarafından tanımlanır.
 
-TCP is the lower-level protocol that describes the details of how information
-gets from one server to another but doesn’t specify what that information is.
-HTTP builds on top of TCP by defining the contents of the requests and
-responses. It’s technically possible to use HTTP with other protocols, but in
-the vast majority of cases, HTTP sends its data over TCP. We’ll work with the
-raw bytes of TCP and HTTP requests and responses.
+TCP, bilgilerin bir sunucudan diğerine nasıl iletileceğinin ayrıntılarını tanımlayan alt seviye bir protokoldür, ancak bu bilgilerin ne olduğunu belirtmez. HTTP ise, istek ve yanıtların içeriğini tanımlayarak TCP'nin üzerine inşa edilmiştir. Teknik olarak HTTP'nin başka protokollerle de kullanılması mümkündür, ancak çoğu durumda HTTP verilerini TCP üzerinden gönderir. Biz de TCP ve HTTP istek ve yanıtlarının ham baytlarıyla çalışacağız.
 
-### Listening to the TCP Connection
+### TCP Bağlantısını Dinlemek
 
-Our web server needs to listen to a TCP connection, so that’s the first part
-we’ll work on. The standard library offers a `std::net` module that lets us do
-this. Let’s make a new project in the usual fashion:
+Web sunucumuzun bir TCP bağlantısını dinlemesi gerekir, bu yüzden önce bu kısmı ele alacağız. Standart kütüphane, bunu yapmamıza olanak tanıyan bir `std::net` modülü sunar. Her zamanki gibi yeni bir proje oluşturalım:
 
 ```console
 $ cargo new hello
@@ -30,11 +16,9 @@ $ cargo new hello
 $ cd hello
 ```
 
-Now enter the code in Listing 21-1 in _src/main.rs_ to start. This code will
-listen at the local address `127.0.0.1:7878` for incoming TCP streams. When it
-gets an incoming stream, it will print `Connection established!`.
+Şimdi, _src/main.rs_ dosyasına 21-1 Listesi'ndeki kodu girin. Bu kod, `127.0.0.1:7878` yerel adresinde gelen TCP akışlarını dinleyecek. Bir akış geldiğinde, `Bağlantı kuruldu!` mesajını yazdıracak.
 
-<Listing number="21-1" file-name="src/main.rs" caption="Listening for incoming streams and printing a message when we receive a stream">
+<Listing number="21-1" file-name="src/main.rs" caption="Gelen akışları dinlemek ve bir akış aldığımızda mesaj yazdırmak">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-01/src/main.rs}}
@@ -42,100 +26,23 @@ gets an incoming stream, it will print `Connection established!`.
 
 </Listing>
 
-Using `TcpListener`, we can listen for TCP connections at the address
-`127.0.0.1:7878`. In the address, the section before the colon is an IP address
-representing your computer (this is the same on every computer and doesn’t
-represent the authors’ computer specifically), and `7878` is the port. We’ve
-chosen this port for two reasons: HTTP isn’t normally accepted on this port so
-our server is unlikely to conflict with any other web server you might have
-running on your machine, and 7878 is _rust_ typed on a telephone.
+`TcpListener` kullanarak, `127.0.0.1:7878` adresinde TCP bağlantılarını dinleyebiliriz. Adresteki iki nokta öncesi kısım bilgisayarınızı (her bilgisayarda aynıdır ve yazarların bilgisayarına özel değildir), `7878` ise portu temsil eder. Bu portu iki nedenle seçtik: HTTP genellikle bu portta kabul edilmez, bu nedenle sunucumuzun makinenizde çalışan başka bir web sunucusuyla çakışma olasılığı düşüktür ve 7878, telefonda _rust_ olarak yazılır.
 
-The `bind` function in this scenario works like the `new` function in that it
-will return a new `TcpListener` instance. The function is called `bind`
-because, in networking, connecting to a port to listen to is known as “binding
-to a port.”
+Bu senaryoda `bind` fonksiyonu, `new` fonksiyonu gibi çalışır ve yeni bir `TcpListener` örneği döndürür. Fonksiyonun adı "bind"'dir çünkü ağ programlamasında bir portu dinlemek için bağlanmaya "porta bağlanmak" denir.
 
-The `bind` function returns a `Result<T, E>`, which indicates that it’s
-possible for binding to fail. For example, connecting to port 80 requires
-administrator privileges (non-administrators can listen only on ports higher
-than 1023), so if we tried to connect to port 80 without being an
-administrator, binding wouldn’t work. Binding also wouldn’t work, for example,
-if we ran two instances of our program and so had two programs listening to the
-same port. Because we’re writing a basic server just for learning purposes, we
-won’t worry about handling these kinds of errors; instead, we use `unwrap` to
-stop the program if errors happen.
+`bind` fonksiyonu bir `Result<T, E>` döndürür, yani bağlanmanın başarısız olabileceğini gösterir. Örneğin, 80 numaralı porta bağlanmak için yönetici ayrıcalıkları gerekir (yönetici olmayanlar yalnızca 1023'ten büyük portlarda dinleme yapabilir), bu nedenle yönetici olmadan 80 numaralı porta bağlanmaya çalışırsak bağlanma gerçekleşmez. Ayrıca, programımızın iki örneğini çalıştırırsak ve iki program aynı portu dinlerse de bağlanma gerçekleşmez. Temel bir sunucu yazdığımız için bu tür hatalarla ilgilenmeyeceğiz; bunun yerine, hata olursa programı durdurmak için `unwrap` kullanıyoruz.
 
-The `incoming` method on `TcpListener` returns an iterator that gives us a
-sequence of streams (more specifically, streams of type `TcpStream`). A single
-_stream_ represents an open connection between the client and the server. A
-_connection_ is the name for the full request and response process in which a
-client connects to the server, the server generates a response, and the server
-closes the connection. As such, we will read from the `TcpStream` to see what
-the client sent and then write our response to the stream to send data back to
-the client. Overall, this `for` loop will process each connection in turn and
-produce a series of streams for us to handle.
+`TcpListener` üzerindeki `incoming` metodu, bize bir dizi akış (daha spesifik olarak, `TcpStream` türünde akışlar) veren bir yineleyici döndürür. Tek bir _akış_, istemci ile sunucu arasında açık bir bağlantıyı temsil eder. Bir _bağlantı_, istemcinin sunucuya bağlandığı, sunucunun bir yanıt ürettiği ve bağlantının kapatıldığı tam istek-yanıt sürecinin adıdır. Bu nedenle, istemcinin ne gönderdiğini görmek için `TcpStream`'den okuyacak ve yanıtımızı istemciye göndermek için akışa yazacağız. Genel olarak, bu `for` döngüsü her bağlantıyı sırayla işleyecek ve bizim ele almamız için bir dizi akış üretecek.
 
-For now, our handling of the stream consists of calling `unwrap` to terminate
-our program if the stream has any errors; if there aren’t any errors, the
-program prints a message. We’ll add more functionality for the success case in
-the next listing. The reason we might receive errors from the `incoming` method
-when a client connects to the server is that we’re not actually iterating over
-connections. Instead, we’re iterating over _connection attempts_. The
-connection might not be successful for a number of reasons, many of them
-operating system specific. For example, many operating systems have a limit to
-the number of simultaneous open connections they can support; new connection
-attempts beyond that number will produce an error until some of the open
-connections are closed.
+Şimdilik, akışı ele alma işlemimiz, akışta herhangi bir hata olursa programı sonlandırmak için `unwrap` çağırmaktan ibaret; hata yoksa program bir mesaj yazdırır. Başarılı durum için daha fazla işlevsellik ekleyeceğiz.
 
-Let’s try running this code! Invoke `cargo run` in the terminal and then load
-_127.0.0.1:7878_ in a web browser. The browser should show an error message
-like “Connection reset” because the server isn’t currently sending back any
-data. But when you look at your terminal, you should see several messages that
-were printed when the browser connected to the server!
+TCP bağlantısını dinlemeyi başardık! Şimdi, bir tarayıcıdan gelen isteği okuyalım ve bu isteğe yanıt verelim.
 
-```text
-     Running `target/debug/hello`
-Connection established!
-Connection established!
-Connection established!
-```
+### İsteği Okuma
 
-Sometimes you’ll see multiple messages printed for one browser request; the
-reason might be that the browser is making a request for the page as well as a
-request for other resources, like the _favicon.ico_ icon that appears in the
-browser tab.
+Tarayıcıdan isteği okuma işlevselliğini uygulayalım! Bağlantıyı alıp bu bağlantıyla bazı eylemler gerçekleştirme kaygısını ayırmak için, istekleri dinleyip yanıt verecek yeni bir `handle_connection` işlevi başlatacağız. Bu yeni işlevde, TCP akışından veri okuyacağız ve bu verileri ekrana yazdıracağız. Kodumuzu 21-2 Listesi'ndeki gibi değiştirelim.
 
-It could also be that the browser is trying to connect to the server multiple
-times because the server isn’t responding with any data. When `stream` goes out
-of scope and is dropped at the end of the loop, the connection is closed as
-part of the `drop` implementation. Browsers sometimes deal with closed
-connections by retrying, because the problem might be temporary.
-
-Browsers also sometimes open multiple connections to the server without sending
-any requests, so that if they *do* later send requests, they can happen faster.
-When this happens, our server will see each connection, regardless of whether
-there are any requests over that connection. Many versions of Chrome-based
-browsers do this, for example; you can disable that optimization by using =
-private browsing mode or use a different browser.
-
-The important factor is that we’ve successfully gotten a handle to a TCP
-connection!
-
-Remember to stop the program by pressing <kbd>ctrl</kbd>-<kbd>c</kbd> when
-you’re done running a particular version of the code. Then restart the program
-by invoking the `cargo run` command after you’ve made each set of code changes
-to make sure you’re running the newest code.
-
-### Reading the Request
-
-Let’s implement the functionality to read the request from the browser! To
-separate the concerns of first getting a connection and then taking some action
-with the connection, we’ll start a new function for processing connections. In
-this new `handle_connection` function, we’ll read data from the TCP stream and
-print it so we can see the data being sent from the browser. Change the code to
-look like Listing 21-2.
-
-<Listing number="21-2" file-name="src/main.rs" caption="Reading from the `TcpStream` and printing the data">
+<Listing number="21-2" file-name="src/main.rs" caption="TcpStream'den okumak ve verileri yazdırmak">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-02/src/main.rs}}
@@ -143,38 +50,17 @@ look like Listing 21-2.
 
 </Listing>
 
-We bring `std::io::prelude` and `std::io::BufReader` into scope to get access
-to traits and types that let us read from and write to the stream. In the `for`
-loop in the `main` function, instead of printing a message that says we made a
-connection, we now call the new `handle_connection` function and pass the
-`stream` to it.
+`std::io::prelude` ve `std::io::BufReader`'ı kapsamımıza alarak, akıştan okuma ve akışa yazma işlemlerini gerçekleştirmemizi sağlayan özellikler ve türler elde ediyoruz. `main` işlevindeki `for` döngüsünde, artık bağlantı kuruldu mesajı yazdırmak yerine, yeni oluşturduğumuz `handle_connection` işlevini çağırıyor ve `stream`'i ona iletiyoruz.
 
-In the `handle_connection` function, we create a new `BufReader` instance that
-wraps a reference to the `stream`. The `BufReader` adds buffering by managing calls
-to the `std::io::Read` trait methods for us.
+`handle_connection` işlevinde, `stream`'in referansını saran yeni bir `BufReader` örneği oluşturuyoruz. `BufReader`, bizim için `std::io::Read` özelliği yöntemlerine yapılan çağrıları yöneterek tamponlama ekler.
 
-We create a variable named `http_request` to collect the lines of the request
-the browser sends to our server. We indicate that we want to collect these
-lines in a vector by adding the `Vec<_>` type annotation.
+Tarayıcıdan sunucumuza gelen isteğin satırlarını toplamak için `http_request` adında bir değişken oluşturuyoruz. Bu satırları bir vektörde toplamak istediğimizi belirtmek için `Vec<_>` türü ekliyoruz.
 
-`BufReader` implements the `std::io::BufRead` trait, which provides the `lines`
-method. The `lines` method returns an iterator of `Result<String,
-std::io::Error>` by splitting the stream of data whenever it sees a newline
-byte. To get each `String`, we map and `unwrap` each `Result`. The `Result`
-might be an error if the data isn’t valid UTF-8 or if there was a problem
-reading from the stream. Again, a production program should handle these errors
-more gracefully, but we’re choosing to stop the program in the error case for
-simplicity.
+`BufReader`, `std::io::BufRead` özelliğini uygular; bu özellik `lines` yöntemini sağlar. `lines` yöntemi, verileri her gördüğünde bir yeni satır baytı ile ayırarak bir `Result<String, std::io::Error>` yineleyicisi döndürür. Her `String`'i elde etmek için her `Result`'ı eşleştirip `unwrap`lıyoruz. `Result`, veriler geçerli UTF-8 değilse veya akıştan okuma sırasında bir sorun oluşursa hata verebilir. Yine, üretim amaçlı bir program bu hataları daha zarif bir şekilde ele almalıdır, ancak biz basitlik açısından hata durumunda programı durdurmayı seçiyoruz.
 
-The browser signals the end of an HTTP request by sending two newline
-characters in a row, so to get one request from the stream, we take lines until
-we get a line that is the empty string. Once we’ve collected the lines into the
-vector, we’re printing them out using pretty debug formatting so we can take a
-look at the instructions the web browser is sending to our server.
+Tarayıcı, bir HTTP isteğinin sonunu iki ardışık yeni satır karakteri göndererek belirtir, bu nedenle akıştan bir isteği almak için, boş bir satır alana kadar satırları toplarız. Satırları vektöre topladıktan sonra, sunucumuza gelen verileri görebilmek için bunları güzel bir şekilde biçimlendirilmiş olarak yazdırıyoruz.
 
-Let’s try this code! Start the program and make a request in a web browser
-again. Note that we’ll still get an error page in the browser, but our
-program’s output in the terminal will now look similar to this:
+Bu kodu deneyelim! Programı başlatın ve tekrar bir web tarayıcısında istek yapın. Tarayıcıda hala bir hata sayfası göreceğiz, ancak terminaldeki program çıktımız artık buna benzer görünmelidir:
 
 ```console
 $ cargo run
@@ -199,19 +85,13 @@ Request: [
 ]
 ```
 
-Depending on your browser, you might get slightly different output. Now that
-we’re printing the request data, we can see why we get multiple connections
-from one browser request by looking at the path after `GET` in the first line
-of the request. If the repeated connections are all requesting _/_, we know the
-browser is trying to fetch _/_ repeatedly because it’s not getting a response
-from our program.
+Tarayıcınıza bağlı olarak, biraz farklı bir çıktı alabilirsiniz. Artık istek verilerini yazdırdığımıza göre, bir tarayıcı isteğinden gelen birden fazla bağlantıyı görmenin nedenini, isteğin ilk satırındaki `GET` sonrası yola bakarak görebiliriz. Tekrar eden bağlantıların hepsi _/_'yi talep ediyorsa, tarayıcının sunucumuzdan yanıt alamadığı için _/_'yi tekrar tekrar almaya çalıştığını biliyoruzdur.
 
-Let’s break down this request data to understand what the browser is asking of
-our program.
+Bu istek verilerine daha yakından bakalım, böylece tarayıcının programımızdan ne talep ettiğini anlayalım.
 
-### A Closer Look at an HTTP Request
+### HTTP İsteğine Yakından Bakış
 
-HTTP is a text-based protocol, and a request takes this format:
+HTTP, metin tabanlı bir protokoldür ve bir istek şu formatı alır:
 
 ```text
 Method Request-URI HTTP-Version CRLF
@@ -219,68 +99,39 @@ headers CRLF
 message-body
 ```
 
-The first line is the _request line_ that holds information about what the
-client is requesting. The first part of the request line indicates the _method_
-being used, such as `GET` or `POST`, which describes how the client is making
-this request. Our client used a `GET` request, which means it is asking for
-information.
+İlk satır, istemcinin ne talep ettiğine dair bilgi içeren _istek satırı_'dır. İstek satırının ilk kısmı, istemcinin bu isteği nasıl yaptığını tanımlayan `GET` veya `POST` gibi bir _metot_'u gösterir. İstemcimiz bir `GET` isteği kullandı, bu da bilgilere erişim talep ettiği anlamına geliyor.
 
-The next part of the request line is _/_, which indicates the _uniform resource
-identifier_ _(URI)_ the client is requesting: a URI is almost, but not quite,
-the same as a _uniform resource locator_ _(URL)_. The difference between URIs
-and URLs isn’t important for our purposes in this chapter, but the HTTP spec
-uses the term URI, so we can just mentally substitute _URL_ for _URI_ here.
+İstek satırının bir sonraki kısmı _/_, istemcinin talep ettiği _üniform kaynak tanımlayıcısı_ _(URI)_'dır: bir URI, neredeyse ama tam olarak, bir _üniform kaynak konumlayıcı_ _(URL)_'dır. URI'ler ve URL'ler arasındaki farklar, bu bölümdeki amacımız için önemli değildir, ancak HTTP spesifikasyonu terim olarak URI kullanır, bu yüzden burada sadece zihnimizde _URL_ ile _URI_ arasında bir değiş tokuş yapabiliriz.
 
-The last part is the HTTP version the client uses, and then the request line
-ends in a CRLF sequence. (CRLF stands for _carriage return_ and _line feed_,
-which are terms from the typewriter days!) The CRLF sequence can also be
-written as `\r\n`, where `\r` is a carriage return and `\n` is a line feed. The
-_CRLF sequence_ separates the request line from the rest of the request data.
-Note that when the CRLF is printed, we see a new line start rather than `\r\n`.
+Son olarak, istemcinin kullandığı HTTP sürümünü gösterir ve ardından istek satırı bir CRLF dizisi ile biter. (CRLF, _carriage return_ ve _line feed_ anlamına gelir, bu terimler daktilo günlerinden kalmadır!) CRLF dizisi ayrıca `\r\n` olarak da yazılabilir; burada `\r` bir taşıyıcı dönüş ve `\n` bir satır beslemesidir. _CRLF dizisi_, istek satırını geri kalan istek verilerinden ayırır. CRLF yazdırıldığında, yeni bir satırın başlamasını görürüz, `\r\n`'yi değil.
 
-Looking at the request line data we received from running our program so far,
-we see that `GET` is the method, _/_ is the request URI, and `HTTP/1.1` is the
-version.
+Şu ana kadar programımızı çalıştırarak elde ettiğimiz istek satırı verilerine bakarak, `GET` metodunun, _/_ istek URI'sinin ve `HTTP/1.1` sürümünün kullanıldığını görüyoruz. İstek satırından sonra, `Host:` ile başlayan kalan satırlar başlıklardır. `GET` isteklerinin gövdesi yoktur.
 
-After the request line, the remaining lines starting from `Host:` onward are
-headers. `GET` requests have no body.
+Farklı bir tarayıcıdan istek yapmayı veya _127.0.0.1:7878/test_ gibi farklı bir adresi istemeyi deneyin, istek verisinin nasıl değiştiğini gözlemleyin.
 
-Try making a request from a different browser or asking for a different
-address, such as _127.0.0.1:7878/test_, to see how the request data changes.
+Artık tarayıcının bizden ne istediğini bildiğimize göre, biraz veri gönderelim!
 
-Now that we know what the browser is asking for, let’s send back some data!
+### Bir Yanıt Yazmak
 
-### Writing a Response
-
-We’re going to implement sending data in response to a client request.
-Responses have the following format:
+İstemci isteğine yanıt olarak veri göndermeyi uygulayacağız. Yanıtlar şu biçimdedir:
 
 ```text
-HTTP-Version Status-Code Reason-Phrase CRLF
-headers CRLF
-message-body
+HTTP-Sürümü Durum-Kodu Açıklama-İfadesi CRLF
+başlıklar CRLF
+mesaj-gövdesi
 ```
 
-The first line is a _status line_ that contains the HTTP version used in the
-response, a numeric status code that summarizes the result of the request, and
-a reason phrase that provides a text description of the status code. After the
-CRLF sequence are any headers, another CRLF sequence, and the body of the
-response.
+İlk satır, yanıtta kullanılan HTTP sürümünü, isteğin sonucunu özetleyen sayısal bir durum kodunu ve durum kodunun metinsel açıklamasını içeren _durum satırı_dır. CRLF dizisinden sonra başlıklar, bir başka CRLF dizisi ve yanıtın gövdesi gelir.
 
-Here is an example response that uses HTTP version 1.1, and has a status code of
-200, an OK reason phrase, no headers, and no body:
+Aşağıda, HTTP 1.1 sürümünü kullanan, 200 durum koduna ve OK açıklama ifadesine sahip, başlıksız ve gövdesiz bir örnek yanıt verilmiştir:
 
 ```text
 HTTP/1.1 200 OK\r\n\r\n
 ```
 
-The status code 200 is the standard success response. The text is a tiny
-successful HTTP response. Let’s write this to the stream as our response to a
-successful request! From the `handle_connection` function, remove the
-`println!` that was printing the request data and replace it with the code in
-Listing 21-3.
+200 durum kodu, standart başarı yanıtıdır. Bu metin, küçük bir başarılı HTTP yanıtıdır. Bunu, başarılı bir isteğe yanıt olarak akışa yazalım! `handle_connection` fonksiyonunda, istek verisini yazdıran `println!`'ı kaldırın ve yerine 21-3 Listesi'ndeki kodu ekleyin.
 
-<Listing number="21-3" file-name="src/main.rs" caption="Writing a tiny successful HTTP response to the stream">
+<Listing number="21-3" file-name="src/main.rs" caption="Akışa küçük bir başarılı HTTP yanıtı yazmak">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-03/src/main.rs:here}}
@@ -288,27 +139,15 @@ Listing 21-3.
 
 </Listing>
 
-The first new line defines the `response` variable that holds the success
-message’s data. Then we call `as_bytes` on our `response` to convert the string
-data to bytes. The `write_all` method on `stream` takes a `&[u8]` and sends
-those bytes directly down the connection. Because the `write_all` operation
-could fail, we use `unwrap` on any error result as before. Again, in a real
-application you would add error handling here.
+İlk yeni satır, başarı mesajının verisini tutan `response` değişkenini tanımlar. Ardından, `response` üzerindeki `as_bytes` fonksiyonunu çağırarak dize verisini baytlara dönüştürürüz. `stream` üzerindeki `write_all` metodu bir `&[u8]` alır ve bu baytları doğrudan bağlantı üzerinden gönderir. `write_all` işlemi başarısız olabileceğinden, hata durumunda yine `unwrap` kullanıyoruz. Gerçek bir uygulamada burada hata yönetimi eklenmelidir.
 
-With these changes, let’s run our code and make a request. We’re no longer
-printing any data to the terminal, so we won’t see any output other than the
-output from Cargo. When you load _127.0.0.1:7878_ in a web browser, you should
-get a blank page instead of an error. You’ve just handcoded receiving an HTTP
-request and sending a response!
+Bu değişikliklerle kodumuzu çalıştırıp bir istek yapalım. Artık terminalde herhangi bir veri yazdırmıyoruz, bu yüzden Cargo'dan başka bir çıktı görmeyeceğiz. _127.0.0.1:7878_ adresini bir web tarayıcısında yüklediğinizde, bir hata yerine boş bir sayfa görmelisiniz. Artık bir HTTP isteği alıp yanıt göndermeyi elle kodladınız!
 
-### Returning Real HTML
+### Gerçek HTML Döndürmek
 
-Let’s implement the functionality for returning more than a blank page. Create
-the new file _hello.html_ in the root of your project directory, not in the
-_src_ directory. You can input any HTML you want; Listing 21-4 shows one
-possibility.
+Boş bir sayfa yerine daha fazlasını döndürmek için işlevsellik ekleyelim. Proje dizininizin kökünde, _src_ klasörünün dışında yeni bir _hello.html_ dosyası oluşturun. İstediğiniz herhangi bir HTML'yi girebilirsiniz; 21-4 Listesi'nde bir örnek gösterilmiştir.
 
-<Listing number="21-4" file-name="hello.html" caption="A sample HTML file to return in a response">
+<Listing number="21-4" file-name="hello.html" caption="Yanıtta döndürülecek örnek bir HTML dosyası">
 
 ```html
 {{#include ../listings/ch21-web-server/listing-21-05/hello.html}}
@@ -316,12 +155,9 @@ possibility.
 
 </Listing>
 
-This is a minimal HTML5 document with a heading and some text. To return this
-from the server when a request is received, we’ll modify `handle_connection` as
-shown in Listing 21-5 to read the HTML file, add it to the response as a body,
-and send it.
+Bu, bir başlık ve biraz metin içeren minimal bir HTML5 belgesidir. Sunucuya bir istek geldiğinde bunu döndürmek için, 21-5 Listesi'nde gösterildiği gibi `handle_connection` fonksiyonunu değiştirerek HTML dosyasını okuyup yanıtın gövdesine ekleyecek ve göndereceğiz.
 
-<Listing number="21-5" file-name="src/main.rs" caption="Sending the contents of *hello.html* as the body of the response">
+<Listing number="21-5" file-name="src/main.rs" caption="Yanıt gövdesi olarak *hello.html* içeriğini göndermek">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-05/src/main.rs:here}}
@@ -329,38 +165,19 @@ and send it.
 
 </Listing>
 
-We’ve added `fs` to the `use` statement to bring the standard library’s
-filesystem module into scope. The code for reading the contents of a file to a
-string should look familiar; we used it when we read the contents of a file for
-our I/O project in Listing 12-4.
+`use` satırına standart kütüphanenin dosya sistemi modülünü (`fs`) ekledik. Bir dosyanın içeriğini bir dizeye okuma kodu tanıdık gelmeli; 12-4 Listesi'nde dosya içeriğini okurken de kullanmıştık.
 
-Next, we use `format!` to add the file’s contents as the body of the success
-response. To ensure a valid HTTP response, we add the `Content-Length` header
-which is set to the size of our response body, in this case the size of
-`hello.html`.
+Sonra, dosya içeriğini başarı yanıtının gövdesi olarak eklemek için `format!` kullanıyoruz. Geçerli bir HTTP yanıtı sağlamak için, yanıt gövdemizin boyutına (bu durumda `hello.html`'in boyutuna) ayarlanan `Content-Length` başlığını ekliyoruz.
 
-Run this code with `cargo run` and load _127.0.0.1:7878_ in your browser; you
-should see your HTML rendered!
+Bu kodu `cargo run` ile çalıştırın ve tarayıcınızda _127.0.0.1:7878_ adresini yükleyin; HTML'nizin görüntülendiğini görmelisiniz!
 
-Currently, we’re ignoring the request data in `http_request` and just sending
-back the contents of the HTML file unconditionally. That means if you try
-requesting _127.0.0.1:7878/something-else_ in your browser, you’ll still get
-back this same HTML response. At the moment, our server is very limited and
-does not do what most web servers do. We want to customize our responses
-depending on the request and only send back the HTML file for a well-formed
-request to _/_.
+Şu anda, `http_request`'teki istek verisini yok sayıyor ve HTML dosyasının içeriğini koşulsuz olarak döndürüyoruz. Yani, tarayıcınızda _127.0.0.1:7878/something-else_ gibi başka bir istek yapsanız bile aynı HTML yanıtını alırsınız. Şu anda sunucumuz çok sınırlı ve çoğu web sunucusunun yaptığı gibi davranmıyor. Yanıtlarımızı isteğe göre özelleştirmek ve yalnızca _/_'ye düzgün bir istek geldiğinde HTML dosyasını döndürmek istiyoruz.
 
-### Validating the Request and Selectively Responding
+### İsteği Doğrulama ve Seçici Yanıt Verme
 
-Right now, our web server will return the HTML in the file no matter what the
-client requested. Let’s add functionality to check that the browser is
-requesting _/_ before returning the HTML file and return an error if the
-browser requests anything else. For this we need to modify `handle_connection`,
-as shown in Listing 21-6. This new code checks the content of the request
-received against what we know a request for _/_ looks like and adds `if` and
-`else` blocks to treat requests differently.
+Şu anda, web sunucumuz istemci ne isterse istesin dosyadaki HTML'yi döndürüyor. Tarayıcının _/_ isteyip istemediğini kontrol edecek ve başka bir şey isterse hata döndürecek işlevsellik ekleyelim. Bunun için, 21-6 Listesi'nde gösterildiği gibi `handle_connection` fonksiyonunu değiştirmemiz gerekiyor. Bu yeni kod, alınan isteğin içeriğini _/_ isteğiyle bildiğimiz istekle karşılaştırır ve farklı istekleri farklı şekilde ele almak için `if` ve `else` blokları ekler.
 
-<Listing number="21-6" file-name="src/main.rs" caption="Handling requests to */* differently from other requests">
+<Listing number="21-6" file-name="src/main.rs" caption="*/ * isteklerini diğer isteklerden farklı şekilde ele almak">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-06/src/main.rs:here}}
@@ -368,32 +185,17 @@ received against what we know a request for _/_ looks like and adds `if` and
 
 </Listing>
 
-We’re only going to be looking at the first line of the HTTP request, so rather
-than reading the entire request into a vector, we’re calling `next` to get the
-first item from the iterator. The first `unwrap` takes care of the `Option` and
-stops the program if the iterator has no items. The second `unwrap` handles the
-`Result` and has the same effect as the `unwrap` that was in the `map` added in
-Listing 21-2.
+Yalnızca HTTP isteğinin ilk satırına bakacağımız için, isteğin tamamını bir vektöre okumak yerine, yineleyiciden ilk öğeyi almak için `next` çağırıyoruz. İlk `unwrap`, `Option`'ı ele alır ve yineleyicide hiç öğe yoksa programı durdurur. İkinci `unwrap`, `Result`'ı ele alır ve 21-2 Listesi'nde `map` ile eklenen `unwrap` ile aynı etkiye sahiptir.
 
-Next, we check the `request_line` to see if it equals the request line of a GET
-request to the _/_ path. If it does, the `if` block returns the contents of our
-HTML file.
+Sonra, `request_line`'ı, _/_ yoluna yapılan bir GET isteğinin istek satırıyla eşit olup olmadığını kontrol ediyoruz. Eğer eşitse, `if` bloğu HTML dosyamızın içeriğini döndürür.
 
-If the `request_line` does _not_ equal the GET request to the _/_ path, it
-means we’ve received some other request. We’ll add code to the `else` block in
-a moment to respond to all other requests.
+Eğer `request_line`, _/_ yoluna yapılan GET isteğiyle eşleşmiyorsa, başka bir istek aldık demektir. Birazdan `else` bloğuna, diğer tüm isteklere yanıt olarak dönecek kodu ekleyeceğiz.
 
-Run this code now and request _127.0.0.1:7878_; you should get the HTML in
-_hello.html_. If you make any other request, such as
-_127.0.0.1:7878/something-else_, you’ll get a connection error like those you
-saw when running the code in Listing 21-1 and Listing 21-2.
+Şimdi bu kodu çalıştırın ve _127.0.0.1:7878_ isteği yapın; _hello.html_ içeriğini almalısınız. Başka bir istek yaparsanız, örneğin _127.0.0.1:7878/something-else_, 21-1 ve 21-2 Listeleri'ndeki kodları çalıştırırken gördüğünüz gibi bir bağlantı hatası alırsınız.
 
-Now let’s add the code in Listing 21-7 to the `else` block to return a response
-with the status code 404, which signals that the content for the request was
-not found. We’ll also return some HTML for a page to render in the browser
-indicating the response to the end user.
+Şimdi, 21-7 Listesi'ndeki kodu `else` bloğuna ekleyerek, istenen içerik bulunamadığında 404 durum kodu ve bir hata sayfası döndürelim. Ayrıca, yanıt olarak kullanıcıya gösterilecek bir HTML de döndüreceğiz.
 
-<Listing number="21-7" file-name="src/main.rs" caption="Responding with status code 404 and an error page if anything other than */* was requested">
+<Listing number="21-7" file-name="src/main.rs" caption="*/ * dışında bir şey istenirse 404 durum kodu ve hata sayfası ile yanıt verme">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-07/src/main.rs:here}}
@@ -401,13 +203,9 @@ indicating the response to the end user.
 
 </Listing>
 
-Here, our response has a status line with status code 404 and the reason phrase
-`NOT FOUND`. The body of the response will be the HTML in the file _404.html_.
-You’ll need to create a _404.html_ file next to _hello.html_ for the error
-page; again feel free to use any HTML you want or use the example HTML in
-Listing 21-8.
+Burada, yanıtımızda 404 durum kodu ve `NOT FOUND` açıklama ifadesi olan bir durum satırı var. Yanıtın gövdesi olarak _404.html_ dosyasındaki HTML dönecek. Hata sayfası için _hello.html_ dosyasının yanında bir _404.html_ dosyası oluşturmanız gerekecek; yine istediğiniz herhangi bir HTML'yi kullanabilir veya 21-8 Listesi'ndeki örnek HTML'yi kullanabilirsiniz.
 
-<Listing number="21-8" file-name="404.html" caption="Sample content for the page to send back with any 404 response">
+<Listing number="21-8" file-name="404.html" caption="404 yanıtı ile gönderilecek sayfa için örnek içerik">
 
 ```html
 {{#include ../listings/ch21-web-server/listing-21-07/404.html}}
@@ -415,22 +213,13 @@ Listing 21-8.
 
 </Listing>
 
-With these changes, run your server again. Requesting _127.0.0.1:7878_ should
-return the contents of _hello.html_, and any other request, like
-_127.0.0.1:7878/foo_, should return the error HTML from _404.html_.
+Bu değişikliklerle sunucunuzu tekrar çalıştırın. _127.0.0.1:7878_ isteği _hello.html_ içeriğini döndürmeli, _127.0.0.1:7878/foo_ gibi başka bir istek ise _404.html_'den hata HTML'sini döndürmelidir.
 
-### A Touch of Refactoring
+### Biraz Refaktörizasyon
 
-At the moment, the `if` and `else` blocks have a lot of repetition: they’re both
-reading files and writing the contents of the files to the stream. The only
-differences are the status line and the filename. Let’s make the code more
-concise by pulling out those differences into separate `if` and `else` lines
-that will assign the values of the status line and the filename to variables; we
-can then use those variables unconditionally in the code to read the file and
-write the response. Listing 21-9 shows the resultant code after replacing the
-large `if` and `else` blocks.
+Şu anda, `if` ve `else` bloklarında çok fazla tekrar var: ikisi de dosya okuyor ve dosya içeriğini akışa yazıyor. Tek fark, durum satırı ve dosya adı. Kodu daha derli toplu yapmak için, bu farkları ayrı `if` ve `else` satırlarında değişkenlere atayalım; ardından bu değişkenleri dosya okuma ve yanıt yazma kodunda koşulsuz kullanalım. 21-9 Listesi'nde, iki durum arasındaki farkı gösteren kodu görebilirsiniz.
 
-<Listing number="21-9" file-name="src/main.rs" caption="Refactoring the `if` and `else` blocks to contain only the code that differs between the two cases">
+<Listing number="21-9" file-name="src/main.rs" caption="İki durum arasındaki farkı yalnızca değişken atamasıyla ayıran refaktörize kod">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-09/src/main.rs:here}}
@@ -438,23 +227,10 @@ large `if` and `else` blocks.
 
 </Listing>
 
-Now the `if` and `else` blocks only return the appropriate values for the
-status line and filename in a tuple; we then use destructuring to assign these
-two values to `status_line` and `filename` using a pattern in the `let`
-statement, as discussed in Chapter 19.
+Artık `if` ve `else` blokları yalnızca durum satırı ve dosya adı için uygun değerleri bir tuple olarak döndürüyor; ardından bu iki değeri, 19. Bölümde tartışıldığı gibi, `let` ifadesinde desen kullanarak `status_line` ve `filename` değişkenlerine atıyoruz.
 
-The previously duplicated code is now outside the `if` and `else` blocks and
-uses the `status_line` and `filename` variables. This makes it easier to see
-the difference between the two cases, and it means we have only one place to
-update the code if we want to change how the file reading and response writing
-work. The behavior of the code in Listing 21-9 will be the same as that in
-Listing 21-7.
+Daha önce tekrarlanan kod artık `if` ve `else` bloklarının dışında ve `status_line` ile `filename` değişkenlerini kullanıyor. Bu, iki durum arasındaki farkı görmeyi kolaylaştırıyor ve dosya okuma ve yanıt yazma işlemini değiştirmek istersek kodu yalnızca bir yerde güncellememizi sağlıyor. 21-9 Listesi'ndeki kodun davranışı, 21-7 Listesi'ndeki kodla aynı olacaktır.
 
-Awesome! We now have a simple web server in approximately 40 lines of Rust code
-that responds to one request with a page of content and responds to all other
-requests with a 404 response.
+Harika! Artık yaklaşık 40 satırlık Rust koduyla, bir isteğe içerik sayfası dönen ve diğer tüm isteklere 404 yanıtı veren basit bir web sunucumuz var.
 
-Currently, our server runs in a single thread, meaning it can only serve one
-request at a time. Let’s examine how that can be a problem by simulating some
-slow requests. Then we’ll fix it so our server can handle multiple requests at
-once.
+Şu anda sunucumuz tek bir iş parçacığında çalışıyor, yani aynı anda yalnızca bir isteğe hizmet edebiliyor. Şimdi, bazı yavaş istekleri simüle ederek bunun nasıl bir sorun olabileceğine bakalım. Ardından, sunucumuzu aynı anda birden fazla isteği işleyebilecek şekilde düzelteceğiz.

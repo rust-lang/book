@@ -1,35 +1,22 @@
-## Pattern Syntax
+## Desen Sözdizimi
 
-In this section, we gather all the syntax that is valid in patterns and discuss
-why and when you might want to use each one.
+Bu bölümde, desenlerde geçerli olan tüm sözdizimini bir araya getiriyor ve her birini ne zaman ve neden kullanmak isteyebileceğinizi tartışıyoruz.
 
-### Matching Literals
+### Sabitlerle Eşleştirme
 
-As you saw in Chapter 6, you can match patterns against literals directly. The
-following code gives some examples:
+6. bölümde gördüğünüz gibi, desenleri doğrudan sabitlerle eşleştirebilirsiniz. Aşağıdaki kodda bazı örnekler verilmiştir:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-01-literals/src/main.rs:here}}
 ```
 
-This code prints `one` because the value in `x` is `1`. This syntax is useful
-when you want your code to take an action if it gets a particular concrete
-value.
+Bu kod, `x`'in değeri `1` olduğu için `one` yazdırır. Bu sözdizimi, kodunuzun belirli bir somut değeri aldığında bir işlem yapmasını istediğinizde kullanışlıdır.
 
-### Matching Named Variables
+### İsimlendirilmiş Değişkenlerle Eşleştirme
 
-Named variables are irrefutable patterns that match any value, and we’ve used
-them many times in this book. However, there is a complication when you use
-named variables in `match`, `if let`, or `while let` expressions. Because each
-of these kinds of expressions starts a new scope, variables declared as part of
-a pattern inside these expressions will shadow those with the same name outside
-the constructs, as is the case with all variables. In Listing 19-11, we declare
-a variable named `x` with the value `Some(5)` and a variable `y` with the value
-`10`. We then create a `match` expression on the value `x`. Look at the
-patterns in the match arms and `println!` at the end, and try to figure out
-what the code will print before running this code or reading further.
+İsimlendirilmiş değişkenler, herhangi bir değeri eşleştiren irrefutable desenlerdir ve bu kitapta birçok kez kullandık. Ancak, `match`, `if let` veya `while let` ifadelerinde isimlendirilmiş değişkenler kullandığınızda bir karmaşıklık ortaya çıkar. Bu tür ifadelerin her biri yeni bir kapsam başlattığından, bu ifadeler içinde desenin parçası olarak tanımlanan değişkenler, yapının dışındaki aynı isimli değişkenleri gölgeler; bu, tüm değişkenler için geçerlidir. 19-11 numaralı listede, değeri `Some(5)` olan `x` adında bir değişken ve değeri `10` olan bir `y` değişkeni tanımlıyoruz. Ardından, `x` değerinde bir `match` ifadesi oluşturuyoruz. Match kollarındaki desenlere ve sonda yer alan `println!` ifadesine bakın ve kodun ne yazdıracağını çalıştırmadan veya okumaya devam etmeden önce tahmin etmeye çalışın.
 
-<Listing number="19-11" file-name="src/main.rs" caption="A `match` expression with an arm that introduces a new variable which shadows an existing variable `y`">
+<Listing number="19-11" file-name="src/main.rs" caption="Bir kolunda mevcut `y` değişkenini gölgeleyen yeni bir değişken tanımlayan `match` ifadesi">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-11/src/main.rs:here}}
@@ -37,89 +24,55 @@ what the code will print before running this code or reading further.
 
 </Listing>
 
-Let’s walk through what happens when the `match` expression runs. The pattern
-in the first match arm doesn’t match the defined value of `x`, so the code
-continues.
+`match` ifadesi çalıştığında neler olduğunu adım adım inceleyelim. İlk match kolundaki desen, `x`'in tanımlı değeriyle eşleşmez, bu yüzden kod devam eder.
 
-The pattern in the second match arm introduces a new variable named `y` that
-will match any value inside a `Some` value. Because we’re in a new scope inside
-the `match` expression, this is a new `y` variable, not the `y` we declared at
-the beginning with the value `10`. This new `y` binding will match any value
-inside a `Some`, which is what we have in `x`. Therefore, this new `y` binds to
-the inner value of the `Some` in `x`. That value is `5`, so the expression for
-that arm executes and prints `Matched, y = 5`.
+İkinci match kolundaki desen, `Some` değerinin içindeki herhangi bir değeri eşleştirecek yeni bir `y` değişkeni tanımlar. `match` ifadesinin içinde yeni bir kapsamda olduğumuz için, bu yeni bir `y` değişkenidir; başta değeri `10` olan `y` ile aynı değildir. Bu yeni `y` bağlaması, `Some` içindeki herhangi bir değeri eşleştirir; bu da `x`'te olan değerdir. Bu nedenle, bu yeni `y`, `x`'teki `Some`'un iç değerine bağlanır. O değer `5`'tir, bu yüzden o kolun ifadesi çalışır ve `Matched, y = 5` yazdırılır.
 
-If `x` had been a `None` value instead of `Some(5)`, the patterns in the first
-two arms wouldn’t have matched, so the value would have matched to the
-underscore. We didn’t introduce the `x` variable in the pattern of the
-underscore arm, so the `x` in the expression is still the outer `x` that hasn’t
-been shadowed. In this hypothetical case, the `match` would print `Default case,
-x = None`.
+Eğer `x` değeri `Some(5)` yerine `None` olsaydı, ilk iki kolun desenleri eşleşmezdi, bu yüzden değer, alt çizgiye (`_`) eşleşirdi. Alt çizgi kolunun deseninde `x` değişkenini tanımlamadık, bu yüzden ifadede kullanılan `x`, hala gölgelenmemiş olan dıştaki `x` olurdu. Bu durumda, `match` ifadesi `Default case, x = None` yazdırırdı.
 
-When the `match` expression is done, its scope ends, and so does the scope of
-the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
+`match` ifadesi tamamlandığında, kapsamı sona erer ve içteki `y`'nin kapsamı da biter. Son `println!` ifadesi `at the end: x = Some(5), y = 10` yazdırır.
 
-To create a `match` expression that compares the values of the outer `x` and
-`y`, rather than introducing a new variable that shadows the existing `y`
-variable, we would need to use a match guard conditional instead. We’ll talk
-about match guards later in [“Extra Conditionals with Match
-Guards”](#extra-conditionals-with-match-guards)<!-- ignore -->.
+Dıştaki `x` ve `y` değerlerini karşılaştıran bir `match` ifadesi oluşturmak için, mevcut `y` değişkenini gölgeleyen yeni bir değişken tanımlamak yerine, bir match guard koşulu kullanmamız gerekir. Match guard'ları daha sonra ["Match Guard'larla Ekstra Koşullar"](#extra-conditionals-with-match-guards)<!-- ignore --> başlığında ele alacağız.
 
-### Multiple Patterns
+### Birden Fazla Desen
 
-In `match` expressions, you can match multiple patterns using the `|` syntax,
-which is the pattern _or_ operator. For example, in the following code we match
-the value of `x` against the match arms, the first of which has an _or_ option,
-meaning if the value of `x` matches either of the values in that arm, that
-arm’s code will run:
-
+`match` ifadelerinde, `|` sözdizimini kullanarak birden fazla deseni eşleştirebilirsiniz; bu, desen _veya_ operatörüdür. Örneğin, aşağıdaki kodda, `x` değerini match kollarına karşı eşleştiriyoruz; ilk kolun bir _veya_ seçeneği var, yani `x`'in değeri o koldaki değerlerden herhangi biriyle eşleşirse, o kolun kodu çalışır:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-02-multiple-patterns/src/main.rs:here}}
 ```
 
-This code prints `one or two`.
+Bu kod `one or two` yazdırır.
 
-### Matching Ranges of Values with `..=`
+### `..=` ile Değer Aralıklarını Eşleştirme
 
-The `..=` syntax allows us to match to an inclusive range of values. In the
-following code, when a pattern matches any of the values within the given
-range, that arm will execute:
+`..=` sözdizimi, kapsayıcı bir değer aralığıyla eşleşmemizi sağlar. Aşağıdaki kodda, bir desen verilen aralıktaki herhangi bir değerle eşleşirse, o kol çalışır:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-03-ranges/src/main.rs:here}}
 ```
 
-If `x` is `1`, `2`, `3`, `4`, or `5`, the first arm will match. This syntax is
-more convenient for multiple match values than using the `|` operator to
-express the same idea; if we were to use `|`, we would have to specify `1 | 2 |
-3 | 4 | 5`. Specifying a range is much shorter, especially if we want to match,
-say, any number between 1 and 1,000!
+Eğer `x` değeri `1`, `2`, `3`, `4` veya `5` ise, ilk kol eşleşir. Bu sözdizimi, aynı fikri ifade etmek için `|` operatörünü kullanmaktan daha kullanışlıdır; eğer `|` kullansaydık, `1 | 2 | 3 | 4 | 5` yazmamız gerekirdi. Özellikle 1 ile 1000 arasındaki herhangi bir sayıyı eşleştirmek istiyorsak, aralık belirtmek çok daha kısadır!
 
-The compiler checks that the range isn’t empty at compile time, and because the
-only types for which Rust can tell if a range is empty or not are `char` and
-numeric values, ranges are only allowed with numeric or `char` values.
+Derleyici, aralığın boş olmadığını derleme zamanında kontrol eder ve Rust'ın bir aralığın boş olup olmadığını anlayabildiği tek türler `char` ve sayısal değerlerdir; bu nedenle aralıklar yalnızca sayısal veya `char` değerlerle kullanılabilir.
 
-Here is an example using ranges of `char` values:
+İşte `char` değerlerinin aralıklarını kullanan bir örnek:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-04-ranges-of-char/src/main.rs:here}}
 ```
 
-Rust can tell that `'c'` is within the first pattern’s range and prints `early
-ASCII letter`.
+Rust, `'c'` harfinin ilk desenin aralığında olduğunu anlar ve `early ASCII letter` yazdırır.
 
-### Destructuring to Break Apart Values
+### Değerleri Parçalarına Ayırmak için Destructuring
 
-We can also use patterns to destructure structs, enums, and tuples to use
-different parts of these values. Let’s walk through each value.
+Desenleri, struct, enum ve tuple'ları parçalarına ayırmak (destructure) ve bu değerlerin farklı kısımlarını kullanmak için de kullanabiliriz. Her bir değer türünü adım adım inceleyelim.
 
-#### Destructuring Structs
+#### Struct'ları Parçalarına Ayırmak
 
-Listing 19-12 shows a `Point` struct with two fields, `x` and `y`, that we can
-break apart using a pattern with a `let` statement.
+19-12 numaralı listede, iki alanı (`x` ve `y`) olan bir `Point` struct'ı gösteriliyor; bunu bir `let` ifadesinde bir desenle parçalarına ayırabiliriz.
 
-<Listing number="19-12" file-name="src/main.rs" caption="Destructuring a struct’s fields into separate variables">
+<Listing number="19-12" file-name="src/main.rs" caption="Bir struct'ın alanlarını ayrı değişkenlere ayırmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-12/src/main.rs}}
@@ -127,19 +80,9 @@ break apart using a pattern with a `let` statement.
 
 </Listing>
 
-This code creates the variables `a` and `b` that match the values of the `x`
-and `y` fields of the `p` struct. This example shows that the names of the
-variables in the pattern don’t have to match the field names of the struct.
-However, it’s common to match the variable names to the field names to make it
-easier to remember which variables came from which fields. Because of this
-common usage, and because writing `let Point { x: x, y: y } = p;` contains a
-lot of duplication, Rust has a shorthand for patterns that match struct fields:
-you only need to list the name of the struct field, and the variables created
-from the pattern will have the same names. Listing 19-13 behaves in the same
-way as the code in Listing 19-12, but the variables created in the `let`
-pattern are `x` and `y` instead of `a` and `b`.
+Bu kod, `p` struct'ının `x` ve `y` alanlarının değerleriyle eşleşen `a` ve `b` değişkenlerini oluşturur. Bu örnek, desendeki değişken isimlerinin struct alan isimleriyle aynı olmak zorunda olmadığını gösterir. Ancak, değişken isimlerini alan isimleriyle eşleştirmek, hangi değişkenin hangi alandan geldiğini hatırlamayı kolaylaştırdığı için yaygındır. Bu yaygın kullanım nedeniyle ve `let Point { x: x, y: y } = p;` yazmak çok fazla tekrar içerdiğinden, Rust struct alanlarını eşleştiren desenler için bir kısayol sunar: yalnızca struct alanının adını yazmanız yeterlidir ve desenden oluşturulan değişkenler aynı isimlere sahip olur. 19-13 numaralı liste, 19-12 numaralı listedeki kodla aynı şekilde davranır; ancak `let` deseninde oluşturulan değişkenler `x` ve `y` olur.
 
-<Listing number="19-13" file-name="src/main.rs" caption="Destructuring struct fields using struct field shorthand">
+<Listing number="19-13" file-name="src/main.rs" caption="Struct alanlarını struct alanı kısayoluyla parçalarına ayırmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-13/src/main.rs}}
@@ -147,20 +90,13 @@ pattern are `x` and `y` instead of `a` and `b`.
 
 </Listing>
 
-This code creates the variables `x` and `y` that match the `x` and `y` fields
-of the `p` variable. The outcome is that the variables `x` and `y` contain the
-values from the `p` struct.
+Bu kod, `p` değişkeninin `x` ve `y` alanlarıyla eşleşen `x` ve `y` değişkenlerini oluşturur. Sonuç olarak, `x` ve `y` değişkenleri `p` struct'ından gelen değerleri içerir.
 
-We can also destructure with literal values as part of the struct pattern
-rather than creating variables for all the fields. Doing so allows us to test
-some of the fields for particular values while creating variables to
-destructure the other fields.
+Ayrıca, tüm alanlar için değişken oluşturmak yerine, struct deseninin bir parçası olarak sabit değerler de kullanabiliriz. Bu, bazı alanları belirli değerlere göre test etmemizi, diğer alanları ise parçalarına ayırmak için değişken oluşturmamızı sağlar.
 
-In Listing 19-14, we have a `match` expression that separates `Point` values
-into three cases: points that lie directly on the `x` axis (which is true when
-`y = 0`), on the `y` axis (`x = 0`), or on neither axis.
+19-14 numaralı listede, bir `match` ifadesiyle `Point` değerlerini üç duruma ayırıyoruz: doğrudan `x` ekseninde olan noktalar (`y = 0` olduğunda), `y` ekseninde olan noktalar (`x = 0` olduğunda) veya hiçbir eksende olmayan noktalar.
 
-<Listing number="19-14" file-name="src/main.rs" caption="Destructuring and matching literal values in one pattern">
+<Listing number="19-14" file-name="src/main.rs" caption="Bir desende sabit değerlerle eşleştirerek parçalarına ayırmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-14/src/main.rs:here}}
@@ -168,31 +104,19 @@ into three cases: points that lie directly on the `x` axis (which is true when
 
 </Listing>
 
-The first arm will match any point that lies on the `x` axis by specifying that
-the `y` field matches if its value matches the literal `0`. The pattern still
-creates an `x` variable that we can use in the code for this arm.
+İlk kol, `y` alanının değeri `0` ise, `x` ekseninde olan herhangi bir noktayı eşleştirir. Desen yine de bu kolda kullanabileceğimiz bir `x` değişkeni oluşturur.
 
-Similarly, the second arm matches any point on the `y` axis by specifying that
-the `x` field matches if its value is `0` and creates a variable `y` for the
-value of the `y` field. The third arm doesn’t specify any literals, so it
-matches any other `Point` and creates variables for both the `x` and `y` fields.
+Benzer şekilde, ikinci kol, `x` alanının değeri `0` ise, `y` ekseninde olan herhangi bir noktayı eşleştirir ve `y` alanının değeri için bir `y` değişkeni oluşturur. Üçüncü kol ise herhangi bir sabit belirtmez, bu nedenle diğer tüm `Point` değerleriyle eşleşir ve hem `x` hem de `y` alanları için değişkenler oluşturur.
 
-In this example, the value `p` matches the second arm by virtue of `x`
-containing a `0`, so this code will print `On the y axis at 7`.
+Bu örnekte, `p` değeri, `x` değeri `0` içerdiği için ikinci kola eşleşir; bu kod `On the y axis at 7` yazdırır.
 
-Remember that a `match` expression stops checking arms once it has found the
-first matching pattern, so even though `Point { x: 0, y: 0}` is on the `x` axis
-and the `y` axis, this code would only print `On the x axis at 0`.
+Bir `match` ifadesinin, ilk eşleşen deseni bulduktan sonra diğer kolları kontrol etmeyi bıraktığını unutmayın; bu nedenle, `Point { x: 0, y: 0}` hem `x` ekseninde hem de `y` eksenindedir, ancak bu kod yalnızca `On the x axis at 0` yazdırır.
 
-#### Destructuring Enums
+#### Enum'ları Parçalarına Ayırmak
 
-We’ve destructured enums in this book (for example, Listing 6-5 in Chapter 6),
-but haven’t yet explicitly discussed that the pattern to destructure an enum
-corresponds to the way the data stored within the enum is defined. As an
-example, in Listing 19-15 we use the `Message` enum from Listing 6-2 and write
-a `match` with patterns that will destructure each inner value.
+Bu kitapta enum'ları parçalarına ayırdık (örneğin, 6. bölümdeki 6-5 numaralı listede), ancak henüz enum'ı parçalarına ayıran desenin, enum içinde depolanan verinin tanımına karşılık geldiğini açıkça tartışmadık. Örneğin, 19-15 numaralı listede, 6-2 numaralı listeden alınan `Message` enum'ını kullanıyor ve her iç değeri parçalarına ayıracak desenlerle bir `match` yazıyoruz.
 
-<Listing number="19-15" file-name="src/main.rs" caption="Destructuring enum variants that hold different kinds of values">
+<Listing number="19-15" file-name="src/main.rs" caption="Farklı türde değerler tutan enum varyantlarını parçalarına ayırmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-15/src/main.rs}}
@@ -200,33 +124,19 @@ a `match` with patterns that will destructure each inner value.
 
 </Listing>
 
-This code will print `Change color to red 0, green 160, and blue 255`. Try
-changing the value of `msg` to see the code from the other arms run.
+Bu kod, `Change color to red 0, green 160, and blue 255` yazdırır. `msg` değerini değiştirerek diğer kolların kodunun çalışmasını görebilirsiniz.
 
-For enum variants without any data, like `Message::Quit`, we can’t destructure
-the value any further. We can only match on the literal `Message::Quit` value,
-and no variables are in that pattern.
+Veri içermeyen enum varyantları için, örneğin `Message::Quit`, değeri daha fazla parçalarına ayıramayız. Yalnızca `Message::Quit` sabit değeriyle eşleştirebiliriz ve bu desende değişken yoktur.
 
-For struct-like enum variants, such as `Message::Move`, we can use a pattern
-similar to the pattern we specify to match structs. After the variant name, we
-place curly brackets and then list the fields with variables so we break apart
-the pieces to use in the code for this arm. Here we use the shorthand form as
-we did in Listing 19-13.
+Struct benzeri enum varyantları için, örneğin `Message::Move`, struct'ları eşleştirmek için kullandığımız desene benzer bir desen kullanabiliriz. Varyant adından sonra süslü parantezler açar ve alanları değişkenlerle listeleriz; böylece bu kolda kullanmak üzere parçalarına ayırırız. Burada, 19-13 numaralı listede olduğu gibi kısayol formunu kullanıyoruz.
 
-For tuple-like enum variants, like `Message::Write` that holds a tuple with one
-element and `Message::ChangeColor` that holds a tuple with three elements, the
-pattern is similar to the pattern we specify to match tuples. The number of
-variables in the pattern must match the number of elements in the variant we’re
-matching.
+Tuple benzeri enum varyantları için, örneğin bir elemanlı tuple tutan `Message::Write` ve üç elemanlı tuple tutan `Message::ChangeColor`, desen, tuple'ları eşleştirmek için kullandığımız desene benzer. Desendeki değişken sayısı, eşleştirdiğimiz varyanttaki eleman sayısıyla aynı olmalıdır.
 
-#### Destructuring Nested Structs and Enums
+#### İç İçe Struct ve Enum'ları Parçalarına Ayırmak
 
-So far, our examples have all been matching structs or enums one level deep,
-but matching can work on nested items too! For example, we can refactor the
-code in Listing 19-15 to support RGB and HSV colors in the `ChangeColor`
-message, as shown in Listing 19-16.
+Şimdiye kadar örneklerimizde yalnızca bir seviye derinliğinde struct veya enum'ları eşleştirdik; ancak eşleştirme, iç içe geçmiş öğelerde de çalışır! Örneğin, 19-15 numaralı listedeki kodu, `ChangeColor` mesajında RGB ve HSV renklerini destekleyecek şekilde 19-16 numaralı listede yeniden düzenleyebiliriz.
 
-<Listing number="19-16" caption="Matching on nested enums">
+<Listing number="19-16" caption="İç içe enum'larda eşleştirme">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-16/src/main.rs}}
@@ -234,51 +144,33 @@ message, as shown in Listing 19-16.
 
 </Listing>
 
-The pattern of the first arm in the `match` expression matches a
-`Message::ChangeColor` enum variant that contains a `Color::Rgb` variant; then
-the pattern binds to the three inner `i32` values. The pattern of the second
-arm also matches a `Message::ChangeColor` enum variant, but the inner enum
-matches `Color::Hsv` instead. We can specify these complex conditions in one
-`match` expression, even though two enums are involved.
+`match` ifadesindeki ilk kolun deseni, bir `Message::ChangeColor` enum varyantını ve onun içinde bir `Color::Rgb` varyantını eşleştirir; ardından desen, üç içteki `i32` değerine bağlanır. İkinci kolun deseni de bir `Message::ChangeColor` enum varyantını eşleştirir, ancak içteki enum `Color::Hsv` ile eşleşir. Bu karmaşık koşulları, iki enum dahil olsa bile tek bir `match` ifadesinde belirtebiliriz.
 
-#### Destructuring Structs and Tuples
+#### Struct ve Tuple'ları Parçalarına Ayırmak
 
-We can mix, match, and nest destructuring patterns in even more complex ways.
-The following example shows a complicated destructure where we nest structs and
-tuples inside a tuple and destructure all the primitive values out:
+Destructuring desenlerini daha da karmaşık şekillerde karıştırabilir, eşleştirebilir ve iç içe kullanabiliriz. Aşağıdaki örnek, bir tuple'ın içine struct ve tuple'lar yerleştirip, tüm ilkel değerleri parçalarına ayırdığımız karmaşık bir destructure işlemi gösteriyor:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/no-listing-05-destructuring-structs-and-tuples/src/main.rs:here}}
 ```
 
-This code lets us break complex types into their component parts so we can use
-the values we’re interested in separately.
+Bu kod, karmaşık türleri bileşenlerine ayırmamıza ve ilgilendiğimiz değerleri ayrı ayrı kullanmamıza olanak tanır.
 
-Destructuring with patterns is a convenient way to use pieces of values, such
-as the value from each field in a struct, separately from each other.
+Destructuring ile desen kullanmak, bir struct'ın her alanındaki değeri birbirinden bağımsız olarak kullanmak gibi, değerlerin parçalarını kullanmanın pratik bir yoludur.
 
-### Ignoring Values in a Pattern
+### Bir Desende Değerleri Yok Saymak
 
-You’ve seen that it’s sometimes useful to ignore values in a pattern, such as
-in the last arm of a `match`, to get a catch-all that doesn’t actually do
-anything but does account for all remaining possible values. There are a few
-ways to ignore entire values or parts of values in a pattern: using the `_`
-pattern (which you’ve seen), using the `_` pattern within another pattern,
-using a name that starts with an underscore, or using `..` to ignore remaining
-parts of a value. Let’s explore how and why to use each of these patterns.
+Bazen bir desende değerleri yok saymak faydalı olabilir; örneğin, bir `match` ifadesinin son kolunda, kalan tüm olası değerleri hesaba katmak için bir yakalama (catch-all) kolu oluşturmak isteyebilirsiniz. Bir desende tüm değerleri veya değerlerin bazı kısımlarını yok saymanın birkaç yolu vardır: `_` deseni kullanmak (daha önce gördünüz), başka bir desenin içinde `_` kullanmak, ismi alt çizgiyle başlayan bir isim kullanmak veya kalan değerleri yok saymak için `..` kullanmak. Şimdi bu desenlerin her birini nasıl ve neden kullanacağımızı inceleyelim.
 
-<!-- Old link, do not remove -->
+<!-- Eski bağlantı, kaldırmayın -->
 
 <a id="ignoring-an-entire-value-with-_"></a>
 
-#### An Entire Value with `_`
+#### `_` ile Tüm Değeri Yok Saymak
 
-We’ve used the underscore as a wildcard pattern that will match any value but
-not bind to the value. This is especially useful as the last arm in a `match`
-expression, but we can also use it in any pattern, including function
-parameters, as shown in Listing 19-17.
+Alt çizgiyi, herhangi bir değeri eşleştiren ancak değere bağlanmayan joker desen olarak kullandık. Bu, özellikle bir `match` ifadesinin son kolunda kullanışlıdır; ancak, bir desenin kullanıldığı her yerde, fonksiyon parametreleri dahil, kullanılabilir. 19-17 numaralı listede gösterilmiştir.
 
-<Listing number="19-17" file-name="src/main.rs" caption="Using `_` in a function signature">
+<Listing number="19-17" file-name="src/main.rs" caption="Bir fonksiyon imzasında `_` kullanmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-17/src/main.rs}}
@@ -286,29 +178,17 @@ parameters, as shown in Listing 19-17.
 
 </Listing>
 
-This code will completely ignore the value `3` passed as the first argument,
-and will print `This code only uses the y parameter: 4`.
+Bu kod, ilk argüman olarak verilen `3` değerini tamamen yok sayar ve `This code only uses the y parameter: 4` yazdırır.
 
-In most cases when you no longer need a particular function parameter, you
-would change the signature so it doesn’t include the unused parameter. Ignoring
-a function parameter can be especially useful in cases when, for example,
-you’re implementing a trait when you need a certain type signature but the
-function body in your implementation doesn’t need one of the parameters. You
-then avoid getting a compiler warning about unused function parameters, as you
-would if you used a name instead.
+Çoğu durumda, artık ihtiyaç duymadığınız bir fonksiyon parametresi varsa, imzayı değiştirip kullanılmayan parametreyi çıkarmak daha iyidir. Ancak, bir trait'i uygularken belirli bir tür imzasına ihtiyacınız olup, fonksiyon gövdesinde o parametreye ihtiyacınız yoksa, fonksiyon parametresini yok saymak özellikle faydalı olabilir. Böylece, bir isim kullansaydınız alacağınız kullanılmayan parametre uyarısından kaçınmış olursunuz.
 
 <a id="ignoring-parts-of-a-value-with-a-nested-_"></a>
 
-#### Parts of a Value with a Nested `_`
+#### Bir Değerin Parçalarını İç İçe `_` ile Yok Saymak
 
-We can also use `_` inside another pattern to ignore just part of a value, for
-example, when we want to test for only part of a value but have no use for the
-other parts in the corresponding code we want to run. Listing 19-18 shows code
-responsible for managing a setting’s value. The business requirements are that
-the user should not be allowed to overwrite an existing customization of a
-setting but can unset the setting and give it a value if it is currently unset.
+Bir değerin yalnızca bir kısmını yok saymak istediğimizde, `_`'yı başka bir desenin içinde de kullanabiliriz; örneğin, yalnızca bir değerin bir kısmını test etmek istiyor ancak ilgili kodda diğer kısımlara ihtiyacımız yoksa. 19-18 numaralı listede, bir ayarın değerini yöneten kod gösteriliyor. İş gereksinimleri, kullanıcının mevcut bir özelleştirmeyi üzerine yazmasına izin verilmemesini, ancak ayar kaldırıldığında ve şu anda ayarlanmamışsa bir değer verilebilmesini gerektiriyor.
 
-<Listing number="19-18" caption="Using an underscore within patterns that match `Some` variants when we don’t need to use the value inside the `Some`">
+<Listing number="19-18" caption="`Some` varyantlarının içindeki değeri kullanmamız gerekmediğinde desenlerde alt çizgi kullanmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-18/src/main.rs:here}}
@@ -316,22 +196,13 @@ setting but can unset the setting and give it a value if it is currently unset.
 
 </Listing>
 
-This code will print `Can't overwrite an existing customized value` and then
-`setting is Some(5)`. In the first match arm, we don’t need to match on or use
-the values inside either `Some` variant, but we do need to test for the case
-when `setting_value` and `new_setting_value` are the `Some` variant. In that
-case, we print the reason for not changing `setting_value`, and it doesn’t get
-changed.
+Bu kod, `Can't overwrite an existing customized value` ve ardından `setting is Some(5)` yazdırır. İlk match kolunda, her iki `Some` varyantının içindeki değerleri eşleştirmemiz veya kullanmamız gerekmez; ancak, hem `setting_value` hem de `new_setting_value` `Some` varyantı olduğunda bu durumu test etmemiz gerekir. Bu durumda, ayarın neden değiştirilmediğini yazdırırız ve `setting_value` değişmez.
 
-In all other cases (if either `setting_value` or `new_setting_value` is `None`)
-expressed by the `_` pattern in the second arm, we want to allow
-`new_setting_value` to become `setting_value`.
+Diğer tüm durumlarda (ya `setting_value` ya da `new_setting_value` `None` ise), ikinci koldaki `_` deseniyle ifade edilir, `new_setting_value`'yu `setting_value` yapmaya izin veririz.
 
-We can also use underscores in multiple places within one pattern to ignore
-particular values. Listing 19-19 shows an example of ignoring the second and
-fourth values in a tuple of five items.
+Aynı desende birden fazla yerde alt çizgi kullanarak belirli değerleri yok sayabiliriz. 19-19 numaralı listede, beş elemanlı bir tuple'da ikinci ve dördüncü değerleri yok sayma örneği gösterilmiştir.
 
-<Listing number="19-19" caption="Ignoring multiple parts of a tuple">
+<Listing number="19-19" caption="Bir tuple'ın birden fazla parçasını yok saymak">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-19/src/main.rs:here}}
@@ -339,24 +210,17 @@ fourth values in a tuple of five items.
 
 </Listing>
 
-This code will print `Some numbers: 2, 8, 32`, and the values `4` and `16` will
-be ignored.
+Bu kod, `Some numbers: 2, 8, 32` yazdırır ve `4` ile `16` değerleri yok sayılır.
 
-<!-- Old link, do not remove -->
+<!-- Eski bağlantı, kaldırmayın -->
 
 <a id="ignoring-an-unused-variable-by-starting-its-name-with-_"></a>
 
-#### An Unused Variable by Starting Its Name with `_`
+#### İsmi Alt Çizgiyle Başlayan Kullanılmayan Değişken
 
-If you create a variable but don’t use it anywhere, Rust will usually issue a
-warning because an unused variable could be a bug. However, sometimes it’s
-useful to be able to create a variable you won’t use yet, such as when you’re
-prototyping or just starting a project. In this situation, you can tell Rust
-not to warn you about the unused variable by starting the name of the variable
-with an underscore. In Listing 19-20, we create two unused variables, but when
-we compile this code, we should only get a warning about one of them.
+Bir değişken oluşturup onu hiçbir yerde kullanmazsanız, Rust genellikle kullanılmayan değişkenin bir hata olabileceği için uyarı verir. Ancak, bazen henüz kullanmayacağınız bir değişken oluşturmak faydalı olabilir; örneğin, prototipleme yaparken veya bir projeye yeni başlarken. Bu durumda, Rust'a kullanılmayan değişken hakkında uyarı vermemesi için değişkenin adını alt çizgiyle başlatabilirsiniz. 19-20 numaralı listede, iki kullanılmayan değişken oluşturuyoruz; ancak bu kodu derlediğimizde yalnızca biri hakkında uyarı almalıyız.
 
-<Listing number="19-20" file-name="src/main.rs" caption="Starting a variable name with an underscore to avoid getting unused variable warnings">
+<Listing number="19-20" file-name="src/main.rs" caption="Kullanılmayan değişken uyarısı almamak için değişken adını alt çizgiyle başlatmak">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-20/src/main.rs}}
@@ -364,15 +228,11 @@ we compile this code, we should only get a warning about one of them.
 
 </Listing>
 
-Here, we get a warning about not using the variable `y`, but we don’t get a
-warning about not using `_x`.
+Burada, `y` değişkenini kullanmadığımız için uyarı alırız; ancak `_x` için uyarı almayız.
 
-Note that there is a subtle difference between using only `_` and using a name
-that starts with an underscore. The syntax `_x` still binds the value to the
-variable, whereas `_` doesn’t bind at all. To show a case where this
-distinction matters, Listing 19-21 will provide us with an error.
+Yalnızca `_` kullanmak ile alt çizgiyle başlayan bir isim kullanmak arasında ince bir fark vardır. `_x` sözdizimi, değeri değişkene bağlar; oysa `_` hiçbir zaman değere bağlanmaz. Bu farkın önemli olduğu bir durumu göstermek için, 19-21 numaralı liste bir hata örneği sunar.
 
-<Listing number="19-21" caption="An unused variable starting with an underscore still binds the value, which might take ownership of the value.">
+<Listing number="19-21" caption="Alt çizgiyle başlayan kullanılmayan bir değişken yine de değeri bağlar ve değerin sahipliğini alabilir.">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-21/src/main.rs:here}}
@@ -380,12 +240,9 @@ distinction matters, Listing 19-21 will provide us with an error.
 
 </Listing>
 
-We’ll receive an error because the `s` value will still be moved into `_s`,
-which prevents us from using `s` again. However, using the underscore by itself
-doesn’t ever bind to the value. Listing 19-22 will compile without any errors
-because `s` doesn’t get moved into `_`.
+Burada hata alırız; çünkü `s` değeri `_s`'ye taşınır ve `s`'yi tekrar kullanmamız engellenir. Ancak, yalnızca alt çizgi kullanırsak, değer hiçbir zaman bağlanmaz. 19-22 numaralı liste, bu nedenle hata vermeden derlenir.
 
-<Listing number="19-22" caption="Using an underscore does not bind the value.">
+<Listing number="19-22" caption="Alt çizgi kullanmak değeri bağlamaz.">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-22/src/main.rs:here}}
@@ -393,37 +250,27 @@ because `s` doesn’t get moved into `_`.
 
 </Listing>
 
-This code works just fine because we never bind `s` to anything; it isn’t moved.
+Bu kod sorunsuz çalışır; çünkü `s` hiçbir şeye bağlanmaz ve taşınmaz.
 
 <a id="ignoring-remaining-parts-of-a-value-with-"></a>
 
-#### Remaining Parts of a Value with `..`
+#### `..` ile Bir Değerin Kalan Parçalarını Yok Saymak
 
-With values that have many parts, we can use the `..` syntax to use specific
-parts and ignore the rest, avoiding the need to list underscores for each
-ignored value. The `..` pattern ignores any parts of a value that we haven’t
-explicitly matched in the rest of the pattern. In Listing 19-23, we have a
-`Point` struct that holds a coordinate in three-dimensional space. In the
-`match` expression, we want to operate only on the `x` coordinate and ignore
-the values in the `y` and `z` fields.
+Birçok parçaya sahip değerlerle, belirli parçaları kullanmak ve geri kalanını yok saymak için `..` sözdizimini kullanabiliriz; bu, her göz ardı edilen değer için alt çizgileri listeleme gereğini ortadan kaldırır. `..` deseni, kalanı yok saymak için eşleştiğimiz desenin geri kalanında açıkça eşleştirmediğimiz değerlerin herhangi bir parçasını yok sayar. 19-23 numaralı listede, üç boyutlu uzayda bir koordinat tutan bir `Point` struct'ımız var. `match` ifadesinde, yalnızca `x` koordinatı üzerinde işlem yapmak ve `y` ve `z` alanlarındaki değerleri yok saymak istiyoruz.
 
-<Listing number="19-23" caption="Ignoring all fields of a `Point` except for `x` by using `..`">
+<Listing number="19-23" caption="Sadece `x` için eşleşip `y` ve `z` alanlarını yoksayarak bir `Point` değerinin tüm alanlarını yoksaymak">
 
 ```rust
-{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-23/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-23/src/main.rs}}
 ```
 
 </Listing>
 
-We list the `x` value and then just include the `..` pattern. This is quicker
-than having to list `y: _` and `z: _`, particularly when we’re working with
-structs that have lots of fields in situations where only one or two fields are
-relevant.
+`x` değerini listeleyip ardından sadece `..` desenini ekliyoruz. Bu, özellikle çok sayıda alanı olan struct'larla çalışırken, yalnızca bir veya iki alana ihtiyaç duyduğumuz durumlarda, `y: _` ve `z: _` listelemekten daha hızlıdır.
 
-The syntax `..` will expand to as many values as it needs to be. Listing 19-24
-shows how to use `..` with a tuple.
+`..` sözdizimi, ihtiyaç duyduğu kadar genişleyecektir. 19-24 numaralı liste, bir tuple ile `..` kullanımını göstermektedir.
 
-<Listing number="19-24" file-name="src/main.rs" caption="Matching only the first and last values in a tuple and ignoring all other values">
+<Listing number="19-24" file-name="src/main.rs" caption="Bir tuple'daki yalnızca ilk ve son değerleri eşleştirip, diğer tüm değerleri yoksaymak">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-24/src/main.rs}}
@@ -431,15 +278,11 @@ shows how to use `..` with a tuple.
 
 </Listing>
 
-In this code, the first and last values are matched with `first` and `last`.
-The `..` will match and ignore everything in the middle.
+Bu kodda, ilk ve son değerler `first` ve `last` ile eşleştirilir. `..` ortadaki her şeyi eşleştirip yoksayacaktır.
 
-However, using `..` must be unambiguous. If it is unclear which values are
-intended for matching and which should be ignored, Rust will give us an error.
-Listing 19-25 shows an example of using `..` ambiguously, so it will not
-compile.
+Ancak, `..` kullanımı belirsiz olmamalıdır. Eşleşmesi gereken ve hangi değerlerin yoksayılacağı konusunda belirsizlik varsa, Rust bize bir hata verecektir. 19-25 numaralı liste, belirsiz bir şekilde `..` kullanmaya çalıştığımız bir örneği göstermektedir; bu nedenle derlenmeyecektir.
 
-<Listing number="19-25" file-name="src/main.rs" caption="An attempt to use `..` in an ambiguous way">
+<Listing number="19-25" file-name="src/main.rs" caption="Belirsiz bir şekilde `..` kullanma girişimi">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-25/src/main.rs}}
@@ -447,33 +290,21 @@ compile.
 
 </Listing>
 
-When we compile this example, we get this error:
+Bu örneği derlediğimizde şu hatayı alırız:
 
 ```console
 {{#include ../listings/ch19-patterns-and-matching/listing-19-25/output.txt}}
 ```
 
-It’s impossible for Rust to determine how many values in the tuple to ignore
-before matching a value with `second` and then how many further values to
-ignore thereafter. This code could mean that we want to ignore `2`, bind
-`second` to `4`, and then ignore `8`, `16`, and `32`; or that we want to ignore
-`2` and `4`, bind `second` to `8`, and then ignore `16` and `32`; and so forth.
-The variable name `second` doesn’t mean anything special to Rust, so we get a
-compiler error because using `..` in two places like this is ambiguous.
+Rust'ın, `second` ile bir değer eşleştirmeden önce kaç değeri yoksayacağını ve sonrasında kaç değeri yoksayacağını belirlemesi imkansızdır. Bu kod, `2`'yi yoksaymak, `second`'ı `4`'e bağlamak ve ardından `8`, `16` ve `32`'yi yoksaymak isteyip istemediğimizi veya `2` ve `4`'ü yoksaymak, `second`'ı `8`'e bağlamak ve ardından `16` ve `32`'yi yoksaymak isteyip istemediğimizi belirlemek için iki anlamına gelebilir. Değişken adı `second`, Rust için özel bir anlam ifade etmez, bu yüzden bu şekilde `..` kullanmak derleyici hatasına yol açar.
 
-### Extra Conditionals with Match Guards
+### Match Guard'larla Ekstra Koşullar
 
-A _match guard_ is an additional `if` condition, specified after the pattern in
-a `match` arm, that must also match for that arm to be chosen. Match guards are
-useful for expressing more complex ideas than a pattern alone allows. Note,
-however, that they are only available in `match` expressions, not `if let` or
-`while let` expressions.
+Bir _match guard_, bir `match` kolundaki desenden sonra belirtilen ek bir `if` koşuludur ve o kolun seçilmesi için o kolun da eşleşmesi gerekir. Match guard'lar, bir desenin tek başına ifade edemeyeceği daha karmaşık fikirleri ifade etmek için faydalıdır. Ancak, yalnızca `match` ifadelerinde mevcuttur, `if let` veya `while let` ifadelerinde değil.
 
-The condition can use variables created in the pattern. Listing 19-26 shows a
-`match` where the first arm has the pattern `Some(x)` and also has a match
-guard of `if x % 2 == 0` (which will be `true` if the number is even).
+Koşul, desende oluşturulan değişkenleri kullanabilir. 19-26 numaralı liste, ilk kolu `Some(x)` deseni olan ve ayrıca `x % 2 == 0` (bu, sayı çiftse `true` olacaktır) koşuluna sahip bir `match` örneğini gösterir.
 
-<Listing number="19-26" caption="Adding a match guard to a pattern">
+<Listing number="19-26" caption="Bir desene match guard eklemek">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-26/src/main.rs:here}}
@@ -481,29 +312,15 @@ guard of `if x % 2 == 0` (which will be `true` if the number is even).
 
 </Listing>
 
-This example will print `The number 4 is even`. When `num` is compared to the
-pattern in the first arm, it matches because `Some(4)` matches `Some(x)`. Then
-the match guard checks whether the remainder of dividing `x` by 2 is equal to
-0, and because it is, the first arm is selected.
+Bu örnek, `The number 4 is even` yazdırır. `num`, ilk kolun deseniyle karşılaştırıldığında, `Some(4)` deseni `Some(x)` ile eşleşir. Ardından, `x`'in 2 ile bölümünden kalanının 0'a eşit olup olmadığını kontrol eden match guard devreye girer ve eğer öyleyse, ilk kol seçilir.
 
-If `num` had been `Some(5)` instead, the match guard in the first arm would
-have been `false` because the remainder of 5 divided by 2 is 1, which is not
-equal to 0. Rust would then go to the second arm, which would match because the
-second arm doesn’t have a match guard and therefore matches any `Some` variant.
+Eğer `num` değeri `Some(5)` olsaydı, ilk kolun match guard'ı `false` olurdu çünkü 5'in 2'ye bölümünden kalan 1'dir ve bu 0'a eşit değildir. Rust, ikinci kola geçer; bu kol, bir match guard'a sahip olmadığı için herhangi bir `Some` varyantıyla eşleşir.
 
-There is no way to express the `if x % 2 == 0` condition within a pattern, so
-the match guard gives us the ability to express this logic. The downside of
-this additional expressiveness is that the compiler doesn’t try to check for
-exhaustiveness when match guard expressions are involved.
+`if x % 2 == 0` koşulunu bir desende ifade etmenin bir yolu yoktur, bu yüzden match guard, bu mantığı ifade etme yeteneği sağlar. Bu ek ifade yeteneğinin dezavantajı, derleyicinin match guard ifadeleriyle ilgili olarak tamlık kontrolü yapmamasıdır.
 
-In Listing 19-11, we mentioned that we could use match guards to solve our
-pattern-shadowing problem. Recall that we created a new variable inside the
-pattern in the `match` expression instead of using the variable outside the
-`match`. That new variable meant we couldn’t test against the value of the
-outer variable. Listing 19-27 shows how we can use a match guard to fix this
-problem.
+19-11 numaralı listede, match guard'ların gölgeleme sorununu nasıl çözdüğümüzü belirtmiştik. Hatırlarsanız, `match` ifadesinde yeni bir değişken oluşturmuştuk; bu, dışarıdaki değişkenle aynı isme sahip yeni bir değişken anlamına geliyordu. Bu yeni değişken, dışarıdaki değişkenin değerine karşı test edilemezdi. 19-27 numaralı liste, bu sorunu çözmek için bir match guard nasıl kullanabileceğimizi gösterir.
 
-<Listing number="19-27" file-name="src/main.rs" caption="Using a match guard to test for equality with an outer variable">
+<Listing number="19-27" file-name="src/main.rs" caption="Bir eşleşme koruyucusu kullanarak dış değişkenle eşitliği test etme">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-27/src/main.rs}}
@@ -511,26 +328,11 @@ problem.
 
 </Listing>
 
-This code will now print `Default case, x = Some(5)`. The pattern in the second
-match arm doesn’t introduce a new variable `y` that would shadow the outer `y`,
-meaning we can use the outer `y` in the match guard. Instead of specifying the
-pattern as `Some(y)`, which would have shadowed the outer `y`, we specify
-`Some(n)`. This creates a new variable `n` that doesn’t shadow anything because
-there is no `n` variable outside the `match`.
+Bu kod artık `Default case, x = Some(5)` yazdırır. İkinci match kolundaki desen, dıştaki `y` değişkenini gölgeleyen yeni bir `y` değişkeni tanımlamaz; bu nedenle, match guard'da dıştaki `y` kullanılabilir. Deseni `Some(y)` olarak belirtmek yerine, yeni bir değişken olan `Some(n)` olarak belirtiriz. Bu, `match` dışında bir `n` değişkeni olmadığı için hiçbir şeyi gölgelemez. `n` ile `y` arasındaki karşılaştırma, dıştaki `y` ile aynı değere sahip bir değeri aramamıza olanak tanır.
 
-The match guard `if n == y` is not a pattern and therefore doesn’t introduce new
-variables. This `y` _is_ the outer `y` rather than a new `y` shadowing it, and
-we can look for a value that has the same value as the outer `y` by comparing
-`n` to `y`.
+Match guard'da `|` operatörünü de kullanarak birden fazla deseni belirtebilirsiniz; match guard koşulu tüm desenler için geçerli olacaktır. 19-28 numaralı liste, `|` kullanan bir deseni match guard ile birleştirmenin önceliğini gösterir. Bu örneğin önemli kısmı, `if y` match guard'ının hem `4`, hem `5`, hem de `6` için geçerli olduğudur; bu, yalnızca `6` için geçerli olduğu izlenimini verebilir.
 
-You can also use the _or_ operator `|` in a match guard to specify multiple
-patterns; the match guard condition will apply to all the patterns. Listing
-19-28 shows the precedence when combining a pattern that uses `|` with a match
-guard. The important part of this example is that the `if y` match guard
-applies to `4`, `5`, _and_ `6`, even though it might look like `if y` only
-applies to `6`.
-
-<Listing number="19-28" caption="Combining multiple patterns with a match guard">
+<Listing number="19-28" caption="Bir desenle match guard'ı birleştirirken öncelik">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-28/src/main.rs:here}}
@@ -538,39 +340,25 @@ applies to `6`.
 
 </Listing>
 
-The match condition states that the arm only matches if the value of `x` is
-equal to `4`, `5`, or `6` _and_ if `y` is `true`. When this code runs, the
-pattern of the first arm matches because `x` is `4`, but the match guard `if y`
-is `false`, so the first arm is not chosen. The code moves on to the second
-arm, which does match, and this program prints `no`. The reason is that the
-`if` condition applies to the whole pattern `4 | 5 | 6`, not just to the last
-value `6`. In other words, the precedence of a match guard in relation to a
-pattern behaves like this:
+Match koşulu, `x`'in değeri `4`, `5` veya `6` olduğunda ve `y`'nin `true` olduğu durumlarda eşleşir. Bu kod çalıştığında, ilk kolun deseni `x` `4` olduğu için eşleşir, ancak `if y` match guard'ı `false` olduğu için ilk kol seçilmez. Kod, eşleşen ikinci kola geçer ve bu durumda `no` yazdırılır. Bunun nedeni, bir match guard'ın, belirtilen değerler listesinin sonundaki değere değil, tümüne uygulanmasıdır.
 
 ```text
 (4 | 5 | 6) if y => ...
 ```
 
-rather than this:
+şeklinde davranır, bu da şu anlama gelir:
 
 ```text
 4 | 5 | (6 if y) => ...
 ```
 
-After running the code, the precedence behavior is evident: if the match guard
-were applied only to the final value in the list of values specified using the
-`|` operator, the arm would have matched and the program would have printed
-`yes`.
+Kod çalıştırıldığında, öncelik davranışı açıktır: eğer match guard yalnızca `|` operatörüyle belirtilen değerler listesinin sonundaki değere uygulanıyorsa, kol eşleşir ve program `yes` yazdırır.
 
-### `@` Bindings
+### `@` Bağlantıları
 
-The _at_ operator `@` lets us create a variable that holds a value at the same
-time we’re testing that value for a pattern match. In Listing 19-29, we want to
-test that a `Message::Hello` `id` field is within the range `3..=7`. We also
-want to bind the value to the variable `id` so we can use it in the code
-associated with the arm.
+_At_ operatörü `@`, bir deseni eşleştirirken aynı anda o değeri tutan bir değişken oluşturmamıza olanak tanır. 19-29 numaralı listede, bir `Message::Hello` `id` alanının `3..=7` aralığında olup olmadığını test etmek istiyoruz. Ayrıca, kolun kodunda kullanabilmek için değeri `id` değişkenine bağlamak istiyoruz.
 
-<Listing number="19-29" caption="Using `@` to bind to a value in a pattern while also testing it">
+<Listing number="19-29" caption="Bir desende eşleştirirken bir değere bağlanmak için `@` kullanımı">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-29/src/main.rs:here}}
@@ -578,33 +366,16 @@ associated with the arm.
 
 </Listing>
 
-This example will print `Found an id in range: 5`. By specifying `id @` before
-the range `3..=7`, we’re capturing whatever value matched the range in a
-variable named `id` while also testing that the value matched the range pattern.
+Bu örnek, `Found an id in range: 5` yazdırır. `id @` belirterek, aralığın eşleştiği değeri bir `id` adlı değişkende tutuyoruz ve aynı zamanda değerin aralık desenine uyup uymadığını test ediyoruz.
 
-In the second arm, where we only have a range specified in the pattern, the code
-associated with the arm doesn’t have a variable that contains the actual value
-of the `id` field. The `id` field’s value could have been 10, 11, or 12, but
-the code that goes with that pattern doesn’t know which it is. The pattern code
-isn’t able to use the value from the `id` field, because we haven’t saved the
-`id` value in a variable.
+Deseni yalnızca bir aralık belirterek kullandığımız ikinci kol, o kolun koduyla birlikte `id` alanının gerçek değerini içeren bir değişkeni içermez. `id` alanının değeri 10, 11 veya 12 olabilir, ancak o desenle eşleşen kod, `id` alanındaki değeri bilmez. Desen kodu, o kolun kodunda kullanmak üzere `id` alanının değerini kaydetmediğimiz için o değeri kullanamaz.
 
-In the last arm, where we’ve specified a variable without a range, we do have
-the value available to use in the arm’s code in a variable named `id`. The
-reason is that we’ve used the struct field shorthand syntax. But we haven’t
-applied any test to the value in the `id` field in this arm, as we did with the
-first two arms: any value would match this pattern.
+Son kol, bir aralık belirtmeden yalnızca bir değişken belirttiğimiz için, o kolun kodunda `id` adlı bir değişkenle o değeri kullanma imkanına sahibiz. Ancak, bu kolun kodunda, ilk iki kol gibi, `id` alanının değerine herhangi bir test uygulamadık: bu desen, herhangi bir değeri eşleştirir.
 
-Using `@` lets us test a value and save it in a variable within one pattern.
+`@` kullanmak, bir deseni test etmemizi ve bir değeri bir desende bağlamamızı sağlar.
 
-## Summary
+## Özet
 
-Rust’s patterns are very useful in distinguishing between different kinds of
-data. When used in `match` expressions, Rust ensures your patterns cover every
-possible value, or your program won’t compile. Patterns in `let` statements and
-function parameters make those constructs more useful, enabling the
-destructuring of values into smaller parts and assigning those parts to
-variables. We can create simple or complex patterns to suit our needs.
+Rust'ın desenleri, farklı veri türlerini ayırt etmekte çok faydalıdır. `match` ifadelerinde kullanıldığında, Rust desenlerinizin her olası değeri kapsadığından emin olur; aksi takdirde programınız derlenmez. `let` ifadelerinde ve fonksiyon parametrelerinde desenler, bu yapıları daha kullanışlı hale getirir, değerleri daha küçük parçalara ayırma ve bu parçaları değişkenlere atama olanağı tanır. İhtiyaçlarımıza uygun basit veya karmaşık desenler oluşturabiliriz.
 
-Next, for the penultimate chapter of the book, we’ll look at some advanced
-aspects of a variety of Rust’s features.
+Kitabın sondan bir önceki bölümünde, Rust'ın çeşitli özelliklerinin bazı ileri düzey yönlerini inceleyeceğiz.

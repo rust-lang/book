@@ -1,35 +1,20 @@
-## Advanced Traits
+## İleri Düzey Trait'ler
 
-We first covered traits in [“Traits: Defining Shared
-Behavior”][traits-defining-shared-behavior]<!-- ignore --> in Chapter 10, but we
-didn’t discuss the more advanced details. Now that you know more about Rust, we
-can get into the nitty-gritty.
+Trait'leri ilk olarak ["Trait'ler: Paylaşılan Davranışları Tanımlama"][traits-defining-shared-behavior]<!-- ignore --> başlıklı 10. Bölüm'de ele almıştık, ancak daha gelişmiş detaylara değinmemiştik. Artık Rust hakkında daha fazla şey bildiğinize göre, işin inceliklerine girebiliriz.
 
-<!-- Old link, do not remove -->
+<!-- Eski bağlantı, lütfen silmeyin -->
 
 <a id="specifying-placeholder-types-in-trait-definitions-with-associated-types"></a>
 
-### Associated Types
+### İlişkili Tipler
 
-_Associated types_ connect a type placeholder with a trait such that the trait
-method definitions can use these placeholder types in their signatures. The
-implementor of a trait will specify the concrete type to be used instead of the
-placeholder type for the particular implementation. That way, we can define a
-trait that uses some types without needing to know exactly what those types are
-until the trait is implemented.
+_İlişkili tipler_ (associated types), bir trait ile bir tip yer tutucusunu birbirine bağlar; böylece trait metod tanımlarında bu yer tutucu tipler imzalarda kullanılabilir. Bir trait'i uygulayan kişi, belirli bir implementasyon için yer tutucu tip yerine kullanılacak somut tipi belirtir. Bu sayede, trait'i uygulayana kadar bu tiplerin tam olarak ne olduğunu bilmeden, bazı tipleri kullanan bir trait tanımlayabiliriz.
 
-We’ve described most of the advanced features in this chapter as being rarely
-needed. Associated types are somewhere in the middle: they’re used more rarely
-than features explained in the rest of the book but more commonly than many of
-the other features discussed in this chapter.
+Bu bölümdeki gelişmiş özelliklerin çoğunu nadiren ihtiyaç duyulan şeyler olarak tanımladık. İlişkili tipler ise ortada bir yerde: Kitabın geri kalanında açıklanan özelliklerden daha az kullanılırlar, ancak bu bölümdeki diğer birçok özelliğe göre daha yaygındırlar.
 
-One example of a trait with an associated type is the `Iterator` trait that the
-standard library provides. The associated type is named `Item` and stands in
-for the type of the values the type implementing the `Iterator` trait is
-iterating over. The definition of the `Iterator` trait is as shown in Listing
-20-13.
+İlişkili tipe sahip bir trait'e örnek olarak, standart kütüphanenin sağladığı `Iterator` trait'i verilebilir. İlişkili tipin adı `Item`'dır ve `Iterator` trait'ini uygulayan tipin üzerinde yineleme yaptığı değerlerin tipini temsil eder. `Iterator` trait'inin tanımı, Liste 20-13'te gösterilmiştir.
 
-<Listing number="20-13" caption="The definition of the `Iterator` trait that has an associated type `Item`">
+<Listing number="20-13" caption="İlişkili tipi `Item` olan `Iterator` trait'inin tanımı">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-13/src/lib.rs}}
@@ -37,16 +22,9 @@ iterating over. The definition of the `Iterator` trait is as shown in Listing
 
 </Listing>
 
-The type `Item` is a placeholder, and the `next` method’s definition shows that
-it will return values of type `Option<Self::Item>`. Implementors of the
-`Iterator` trait will specify the concrete type for `Item`, and the `next`
-method will return an `Option` containing a value of that concrete type.
+`Item` tipi bir yer tutucudur ve `next` metodunun tanımı, bu metodun `Option<Self::Item>` tipinde değerler döndüreceğini gösterir. `Iterator` trait'ini uygulayanlar, `Item` için somut tipi belirtir ve `next` metodu, bu somut tipte bir değeri içeren bir `Option` döndürür.
 
-Associated types might seem like a similar concept to generics, in that the
-latter allow us to define a function without specifying what types it can
-handle. To examine the difference between the two concepts, we’ll look at an
-implementation of the `Iterator` trait on a type named `Counter` that specifies
-the `Item` type is `u32`:
+İlişkili tipler, jeneriklere (generics) benzer bir kavram gibi görünebilir; çünkü jenerikler de bir fonksiyonu hangi tiplerle çalışabileceğini belirtmeden tanımlamamıza olanak tanır. Bu iki kavram arasındaki farkı incelemek için, `Item` tipinin `u32` olarak belirtildiği ve `Iterator` trait'inin `Counter` adlı bir tipe uygulandığı bir örneğe bakalım:
 
 <Listing file-name="src/lib.rs">
 
@@ -56,10 +34,9 @@ the `Item` type is `u32`:
 
 </Listing>
 
-This syntax seems comparable to that of generics. So why not just define the
-`Iterator` trait with generics, as shown in Listing 20-14?
+Bu söz dizimi jeneriklerle olan söz dizimine benziyor. Peki neden `Iterator` trait'ini jeneriklerle, Liste 20-14'te gösterildiği gibi tanımlamıyoruz?
 
-<Listing number="20-14" caption="A hypothetical definition of the `Iterator` trait using generics">
+<Listing number="20-14" caption="Jeneriklerle tanımlanmış varsayımsal bir `Iterator` trait'i">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-14/src/lib.rs}}
@@ -67,46 +44,21 @@ This syntax seems comparable to that of generics. So why not just define the
 
 </Listing>
 
-The difference is that when using generics, as in Listing 20-14, we must
-annotate the types in each implementation; because we can also implement
-`Iterator<String> for Counter` or any other type, we could have multiple
-implementations of `Iterator` for `Counter`. In other words, when a trait has a
-generic parameter, it can be implemented for a type multiple times, changing
-the concrete types of the generic type parameters each time. When we use the
-`next` method on `Counter`, we would have to provide type annotations to
-indicate which implementation of `Iterator` we want to use.
+Fark şu: Jenerikler kullanıldığında, Liste 20-14'te olduğu gibi, her implementasyonda tipleri belirtmemiz gerekir; çünkü ayrıca `Iterator<String> for Counter` veya başka herhangi bir tip için de implementasyon yapabiliriz, yani `Counter` için `Iterator` trait'inin birden fazla implementasyonunu yazabiliriz. Başka bir deyişle, bir trait jenerik parametreye sahipse, o trait bir tipe her seferinde jenerik tip parametrelerinin somut tiplerini değiştirerek birden fazla kez uygulanabilir. `Counter` üzerinde `next` metodunu kullandığımızda, hangi `Iterator` implementasyonunu kullanmak istediğimizi belirtmek için tip açıklamaları sağlamamız gerekir.
 
-With associated types, we don’t need to annotate types because we can’t
-implement a trait on a type multiple times. In Listing 20-13 with the definition
-that uses associated types, we can choose what the type of `Item` will be only
-once, because there can be only one `impl Iterator for Counter`. We don’t have
-to specify that we want an iterator of `u32` values everywhere that we call
-`next` on `Counter`.
+İlişkili tiplerle ise, tipleri belirtmemize gerek yoktur çünkü bir trait'i bir tipe birden fazla kez uygulayamayız. 20-13'teki tanımda ilişkili tipler kullanıldığında, `Item` tipinin ne olacağını yalnızca bir kez seçebiliriz; çünkü yalnızca bir `impl Iterator for Counter` olabilir. `next` metodunu `Counter` üzerinde çağırdığımız her yerde `u32` değerlerinde bir iterator istediğimizi belirtmemize gerek yoktur.
 
-Associated types also become part of the trait’s contract: implementors of the
-trait must provide a type to stand in for the associated type placeholder.
-Associated types often have a name that describes how the type will be used,
-and documenting the associated type in the API documentation is a good practice.
+İlişkili tipler ayrıca, trait'in sözleşmesinin bir parçası haline gelir: trait'i uygulayanlar, ilişkili tip yer tutucusu için bir tip sağlamak zorundadır. İlişkili tiplerin adı genellikle tipin nasıl kullanılacağını tanımlar ve API belgelerinde ilişkili tipleri belgelemek iyi bir uygulamadır.
 
-### Default Generic Type Parameters and Operator Overloading
+### Varsayılan Jenerik Tip Parametreleri ve Operatör Aşırı Yükleme
 
-When we use generic type parameters, we can specify a default concrete type for
-the generic type. This eliminates the need for implementors of the trait to
-specify a concrete type if the default type works. You specify a default type
-when declaring a generic type with the `<PlaceholderType=ConcreteType>` syntax.
+Jenerik tip parametreleri kullandığımızda, jenerik tip için varsayılan bir somut tip belirtebiliriz. Bu, trait'in uygulayıcılarının varsayılan tip işe yarıyorsa somut bir tip belirtme gereksinimini ortadan kaldırır. Bir jenerik tipi `<PlaceholderType=ConcreteType>` sözdizimiyle tanımlarken varsayılan bir tip belirlersiniz.
 
-A great example of a situation where this technique is useful is with _operator
-overloading_, in which you customize the behavior of an operator (such as `+`)
-in particular situations.
+Bu tekniğin kullanışlı olduğu bir durum örneği, belirli durumlarda bir operatörün (örneğin `+`) davranışını özelleştirdiğiniz _operatör aşırı yüklemesi_ dir.
 
-Rust doesn’t allow you to create your own operators or overload arbitrary
-operators. But you can overload the operations and corresponding traits listed
-in `std::ops` by implementing the traits associated with the operator. For
-example, in Listing 20-15 we overload the `+` operator to add two `Point`
-instances together. We do this by implementing the `Add` trait on a `Point`
-struct.
+Rust, kendi operatörlerinizi oluşturmanıza veya rastgele operatörleri aşırı yüklemenize izin vermez. Ancak, `std::ops` ile listelenen işlemleri ve ilgili trait'leri, ilgili trait'leri uygulayarak aşırı yükleyebilirsiniz. Örneğin, Liste 20-15'te `+` operatörünü iki `Point` örneğini toplamak için aşırı yüklüyoruz. Bunu, `Add` trait'ini bir `Point` yapısı üzerinde uygulayarak yapıyoruz.
 
-<Listing number="20-15" file-name="src/main.rs" caption="Implementing the `Add` trait to overload the `+` operator for `Point` instances">
+<Listing number="20-15" file-name="src/main.rs" caption="`Point` örnekleri için `+` operatörünü aşırı yüklemek için `Add` trait'ini uygulama">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-15/src/main.rs}}
@@ -114,13 +66,9 @@ struct.
 
 </Listing>
 
-The `add` method adds the `x` values of two `Point` instances and the `y`
-values of two `Point` instances to create a new `Point`. The `Add` trait has an
-associated type named `Output` that determines the type returned from the `add`
-method.
+`add` metodu, iki `Point` örneğinin `x` değerlerini ve `y` değerlerini toplayarak yeni bir `Point` oluşturur. `Add` trait'inin, `add` metodundan dönen tipin belirlenmesini sağlayan bir ilişkili tipi olan `Output` vardır.
 
-The default generic type in this code is within the `Add` trait. Here is its
-definition:
+Bu kodda varsayılan jenerik tip, `Add` trait'indedir. İşte tanımı:
 
 ```rust
 trait Add<Rhs=Self> {
@@ -130,28 +78,11 @@ trait Add<Rhs=Self> {
 }
 ```
 
-This code should look generally familiar: a trait with one method and an
-associated type. The new part is `Rhs=Self`: this syntax is called _default
-type parameters_. The `Rhs` generic type parameter (short for “right-hand
-side”) defines the type of the `rhs` parameter in the `add` method. If we don’t
-specify a concrete type for `Rhs` when we implement the `Add` trait, the type
-of `Rhs` will default to `Self`, which will be the type we’re implementing
-`Add` on.
+Bu kod genel olarak tanıdık görünmelidir: bir metodu ve bir ilişkili tipi olan bir trait. Yeni kısım ise `Rhs=Self`: bu sözdizimi _varsayılan tip parametreleri_ olarak adlandırılır. `Rhs` jenerik tip parametresi (sağ taraf tipi için kısaltma), `add` metodundaki `rhs` parametresinin tipini tanımlar. Eğer `Add` trait'ini `Rhs` için somut bir tip belirtmeden uygularsak, `Rhs`'nin tipi varsayılan olarak `Self` olur; bu da `Add`yi uyguladığımız tip olacaktır.
 
-When we implemented `Add` for `Point`, we used the default for `Rhs` because we
-wanted to add two `Point` instances. Let’s look at an example of implementing
-the `Add` trait where we want to customize the `Rhs` type rather than using the
-default.
+`Add`yi `Point` için uyguladığımızda, `Rhs` için varsayılanı kullandık çünkü iki `Point` örneğini toplamak istedik. Şimdi, varsayılan `Rhs` tipi yerine `Add` trait'ini `Millimeters` üzerinde `Meters` ile uygulamak istediğimiz bir örneğe bakalım. Bu, `Add` trait'inin `Rhs` tip parametresinin değerini varsayılan `Self` yerine ayarlamak için `impl Add<Meters>` belirterek yapılır; bu, Liste 20-16'da gösterilmiştir.
 
-We have two structs, `Millimeters` and `Meters`, holding values in different
-units. This thin wrapping of an existing type in another struct is known as the
-_newtype pattern_, which we describe in more detail in the [“Using the Newtype
-Pattern to Implement External Traits on External Types”][newtype]<!-- ignore
---> section. We want to add values in millimeters to values in meters and have
-the implementation of `Add` do the conversion correctly. We can implement `Add`
-for `Millimeters` with `Meters` as the `Rhs`, as shown in Listing 20-16.
-
-<Listing number="20-16" file-name="src/lib.rs" caption="Implementing the `Add` trait on `Millimeters` to add `Millimeters` to `Meters`">
+<Listing number="20-16" file-name="src/lib.rs" caption="`Millimeters` üzerinde `Add` trait'ini uygulayarak `Millimeters` ile `Meters`'i toplama">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-16/src/lib.rs}}
@@ -159,44 +90,28 @@ for `Millimeters` with `Meters` as the `Rhs`, as shown in Listing 20-16.
 
 </Listing>
 
-To add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to set the
-value of the `Rhs` type parameter instead of using the default of `Self`.
+`Millimeters` ve `Meters`'i toplamak için, varsayılan `Self` yerine `Rhs` tip parametresinin değerini `Meters` olarak belirtiyoruz.
 
-You’ll use default type parameters in two main ways:
+İki ana şekilde varsayılan tip parametrelerini kullanacaksınız:
 
-1. To extend a type without breaking existing code
-2. To allow customization in specific cases most users won’t need
+1. Mevcut kodu bozmadan bir tipi uzatmak için
+2. Çoğu kullanıcının ihtiyaç duymayacağı belirli durumlarda özelleştirmeye izin vermek için
 
-The standard library’s `Add` trait is an example of the second purpose:
-usually, you’ll add two like types, but the `Add` trait provides the ability to
-customize beyond that. Using a default type parameter in the `Add` trait
-definition means you don’t have to specify the extra parameter most of the
-time. In other words, a bit of implementation boilerplate isn’t needed, making
-it easier to use the trait.
+Standart kütüphanenin `Add` trait'i, ikinci amaç için bir örnektir: genellikle, benzer tipleri toplarsınız, ancak `Add` trait'i bunun ötesinde özelleştirme olanağı sağlar. `Add` trait'inin tanımında varsayılan bir tip parametresi kullanmak, ek parametreyi çoğu zaman belirtmenize gerek kalmaması anlamına gelir. Başka bir deyişle, varsayılan bir tip parametresi kullanmak, trait'in kullanımını kolaylaştırır.
 
-The first purpose is similar to the second but in reverse: if you want to add a
-type parameter to an existing trait, you can give it a default to allow
-extension of the functionality of the trait without breaking the existing
-implementation code.
+İlk amaç, tersine benzer: mevcut bir trait'e bir tip parametresi eklemek istiyorsanız, varsayılan bir tip vererek, trait'in işlevselliğini uzatmanıza olanak tanır; bu, mevcut implementasyon kodunu bozmaz.
 
-<!-- Old link, do not remove -->
+<!-- Eski bağlantı, lütfen silmeyin -->
 
 <a id="fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name"></a>
 
-### Disambiguating Between Methods with the Same Name
+### Aynı İsimli Metotlar Arasında Ayrım Yapma
 
-Nothing in Rust prevents a trait from having a method with the same name as
-another trait’s method, nor does Rust prevent you from implementing both traits
-on one type. It’s also possible to implement a method directly on the type with
-the same name as methods from traits.
+Rust'ta, bir trait'in başka bir trait ile aynı isme sahip bir metoda sahip olmasını engelleyen hiçbir şey yoktur; ayrıca, her iki trait'i de bir tipe uygulamanızı engelleyen hiçbir şey yoktur. Bir tipe doğrudan, trait'lerden biriyle aynı isme sahip bir metot uygulamak da mümkündür.
 
-When calling methods with the same name, you’ll need to tell Rust which one you
-want to use. Consider the code in Listing 20-17 where we’ve defined two traits,
-`Pilot` and `Wizard`, that both have a method called `fly`. We then implement
-both traits on a type `Human` that already has a method named `fly` implemented
-on it. Each `fly` method does something different.
+Aynı isimli metodları çağırırken, Rust'a hangi metodun kullanılacağını belirtmek zorundasınız. Listing 20-17'de, her biri `fly` adlı bir metoda sahip iki trait tanımladık: `Pilot` ve `Wizard`. Ardından, doğrudan bir `fly` metoduna sahip `Human` tipi üzerinde her iki trait'i de uyguluyoruz. Her `fly` metodu farklı bir şey yapıyor.
 
-<Listing number="20-17" file-name="src/main.rs" caption="Two traits are defined to have a ` method and are implemented on the `Human` type, and a `fly` method is implemented on `Human` directly.">
+<Listing number="20-17" file-name="src/main.rs" caption="İki trait tanımlanıyor, her biri `fly` metoduna sahip ve `Human` tipi üzerinde uygulanıyor, ayrıca `Human` üzerinde doğrudan aynı isimli bir `fly` metodu tanımlanıyor.">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-17/src/main.rs:here}}
@@ -204,10 +119,9 @@ on it. Each `fly` method does something different.
 
 </Listing>
 
-When we call `fly` on an instance of `Human`, the compiler defaults to calling
-the method that is directly implemented on the type, as shown in Listing 20-18.
+`Human` örneğinin üzerinde `fly` çağırdığımızda, derleyici varsayılan olarak doğrudan tip üzerinde tanımlanan metodu çağırır, bu da Liste 20-18'de gösterilmiştir.
 
-<Listing number="20-18" file-name="src/main.rs" caption="Calling `fly` on an instance of `Human`">
+<Listing number="20-18" file-name="src/main.rs" caption="Bir `Human` örneği üzerinde `fly` çağırma">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-18/src/main.rs:here}}
@@ -215,14 +129,11 @@ the method that is directly implemented on the type, as shown in Listing 20-18.
 
 </Listing>
 
-Running this code will print `*waving arms furiously*`, showing that Rust
-called the `fly` method implemented on `Human` directly.
+Bu kodu çalıştırmak `*kolları çılgınca sallıyor*` çıktısını verecektir ve bu, Rust'ın doğrudan `Human` üzerinde tanımlanan `fly` metodunu çağırdığını gösterir.
 
-To call the `fly` methods from either the `Pilot` trait or the `Wizard` trait,
-we need to use more explicit syntax to specify which `fly` method we mean.
-Listing 20-19 demonstrates this syntax.
+`Pilot` veya `Wizard` trait'lerinden birinin `fly` metodunu çağırmak için, hangi `fly` metodunu kastettiğimizi belirtmek için daha açık bir sözdizimi kullanmamız gerekir. Liste 20-19 bu sözdizimini göstermektedir.
 
-<Listing number="20-19" file-name="src/main.rs" caption="Specifying which trait’s `fly` method we want to call">
+<Listing number="20-19" file-name="src/main.rs" caption="Hangi trait'in `fly` metodunu çağırmak istediğimizi belirtme">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-19/src/main.rs:here}}
@@ -230,32 +141,19 @@ Listing 20-19 demonstrates this syntax.
 
 </Listing>
 
-Specifying the trait name before the method name clarifies to Rust which
-implementation of `fly` we want to call. We could also write
-`Human::fly(&person)`, which is equivalent to the `person.fly()` that we used
-in Listing 20-19, but this is a bit longer to write if we don’t need to
-disambiguate.
+Metodun önüne trait adını yazarak, Rust'a hangi `fly` implementasyonunu çağırmak istediğimizi netleştiriyoruz. Ayrıca `Human::fly(&person)` yazabiliriz; bu, Liste 20-19'da kullandığımız `person.fly()` ile eşdeğerdir, ancak eğer ayrım yapmamıza gerek yoksa yazması biraz daha uzundur.
 
-Running this code prints the following:
+Bu kodu çalıştırmak aşağıdaki çıktıyı verecektir:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-19/output.txt}}
 ```
 
-Because the `fly` method takes a `self` parameter, if we had two _types_ that
-both implement one _trait_, Rust could figure out which implementation of a
-trait to use based on the type of `self`.
+`fly` metodu bir `self` parametresi aldığından, eğer iki _tip_ da bir _trait_'i implement ediyorsa, Rust hangi trait implementasyonunu kullanacağını `self`'in tipine göre belirleyebilir.
 
-However, associated functions that are not methods don’t have a `self`
-parameter. When there are multiple types or traits that define non-method
-functions with the same function name, Rust doesn't always know which type you
-mean unless you use _fully qualified syntax_. For example, in Listing 20-20 we
-create a trait for an animal shelter that wants to name all baby dogs _Spot_.
-We make an `Animal` trait with an associated non-method function `baby_name`.
-The `Animal` trait is implemented for the struct `Dog`, on which we also
-provide an associated non-method function `baby_name` directly.
+Ancak, bir metod olmayan ilişkili fonksiyonlar `self` parametresine sahip değildir. Aynı isimle birden fazla tip veya trait olduğunda ve bunlar metod olmayan fonksiyonlar tanımlıyorsa, Rust hangi tipi kastettiğinizi her zaman bilemez; bu yüzden _tam nitelikli sözdizimi_ kullanmanız gerekir. Örneğin, Liste 20-20'de, tüm yavru köpekleri _Spot_ olarak adlandırmak isteyen bir hayvan barınağı için bir trait oluşturuyoruz. `baby_name` adlı ilişkili bir metod olmayan fonksiyon içeren bir `Animal` trait'i tanımlıyoruz. `Animal` trait'i `Dog` yapısı için uygulanıyor ve burada da doğrudan `baby_name` adlı bir ilişkili metod olmayan fonksiyon sağlıyoruz.
 
-<Listing number="20-20" file-name="src/main.rs" caption="A trait with an associated function and a type with an associated function of the same name that also implements the trait">
+<Listing number="20-20" file-name="src/main.rs" caption="Bir fonksiyona sahip bir trait ve aynı isme sahip bir fonksiyona sahip bir tip üzerinde trait'i uygulama">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-20/src/main.rs}}
@@ -263,26 +161,17 @@ provide an associated non-method function `baby_name` directly.
 
 </Listing>
 
-We implement the code for naming all puppies Spot in the `baby_name` associated
-function that is defined on `Dog`. The `Dog` type also implements the trait
-`Animal`, which describes characteristics that all animals have. Baby dogs are
-called puppies, and that is expressed in the implementation of the `Animal`
-trait on `Dog` in the `baby_name` function associated with the `Animal` trait.
+Yavru köpekleri Spot olarak adlandırma kodunu, `Dog` üzerinde doğrudan tanımlanan `baby_name` ilişkili fonksiyonunda uyguluyoruz. `Dog` tipi ayrıca `Animal` trait'ini uygular; bu trait, tüm hayvanların sahip olduğu özellikleri tanımlar. Yavru köpekler, köpek yavruları olarak adlandırılır ve bu, `Dog` üzerindeki `Animal` trait'inin implementasyonunda, `baby_name` fonksiyonunda ifade edilir.
 
-In `main`, we call the `Dog::baby_name` function, which calls the associated
-function defined on `Dog` directly. This code prints the following:
+`main` fonksiyonunda, `Dog::baby_name` fonksiyonunu çağırıyoruz; bu, doğrudan `Dog` üzerinde tanımlanan ilişkili fonksiyonu çağırır. Bu kod aşağıdaki çıktıyı verir:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-20/output.txt}}
 ```
 
-This output isn’t what we wanted. We want to call the `baby_name` function that
-is part of the `Animal` trait that we implemented on `Dog` so the code prints
-`A baby dog is called a puppy`. The technique of specifying the trait name that
-we used in Listing 20-19 doesn’t help here; if we change `main` to the code in
-Listing 20-21, we’ll get a compilation error.
+Bu çıktı, istediğimiz şey değildir. `Dog` üzerinde uyguladığımız `Animal` trait'ine ait `baby_name` fonksiyonunu çağırmak istiyoruz, böylece kod `Bir yavru köpeğe Spot denir` çıktısını versin. Liste 20-19'da kullandığımız ayrım yapma tekniği burada işe yaramaz; eğer `main`i Liste 20-21'deki kod gibi değiştirirsek, derleme hatası alırız.
 
-<Listing number="20-21" file-name="src/main.rs" caption="Attempting to call the `baby_name` function from the `Animal` trait, but Rust doesn’t know which implementation to use">
+<Listing number="20-21" file-name="src/main.rs" caption="`Animal` trait'ine ait `baby_name` fonksiyonunu çağırmaya çalışma, ancak Rust hangi implementasyonu kullanacağını bilemiyor">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-21/src/main.rs:here}}
@@ -290,20 +179,15 @@ Listing 20-21, we’ll get a compilation error.
 
 </Listing>
 
-Because `Animal::baby_name` doesn’t have a `self` parameter, and there could be
-other types that implement the `Animal` trait, Rust can’t figure out which
-implementation of `Animal::baby_name` we want. We’ll get this compiler error:
+`Animal::baby_name` bir `self` parametresine sahip olmadığından ve `Animal` trait'ini uygulayan başka tipler olabileceğinden, Rust hangi `Animal::baby_name` implementasyonunu kullanmak istediğimizi bilemez. Bu derleyici hatasını alırız:
 
 ```console
-{{#include ../listings/ch20-advanced-features/listing-20-21/output.txt}}
+{{#include ../listings/ch20-advanced-features/no-listing-02-impl-outlineprint-for-point/output.txt}}
 ```
 
-To disambiguate and tell Rust that we want to use the implementation of
-`Animal` for `Dog` as opposed to the implementation of `Animal` for some other
-type, we need to use fully qualified syntax. Listing 20-22 demonstrates how to
-use fully qualified syntax.
+`Animal` için `Dog` implementasyonunu kullanmak istediğimizi belirtmek ve başka bir tip için `Animal` implementasyonunu kullanmak istemediğimizi belirtmek için tam nitelikli sözdizimini kullanmamız gerekir. Liste 20-22, tam nitelikli sözdizimini nasıl kullanacağımızı göstermektedir.
 
-<Listing number="20-22" file-name="src/main.rs" caption="Using fully qualified syntax to specify that we want to call the `baby_name` function from the `Animal` trait as implemented on `Dog`">
+<Listing number="20-22" file-name="src/main.rs" caption="`Animal` trait'ine ait `baby_name` fonksiyonunu `Dog` üzerinde çağırmak için tam nitelikli sözdizimini kullanma">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-22/src/main.rs:here}}
@@ -311,47 +195,29 @@ use fully qualified syntax.
 
 </Listing>
 
-We’re providing Rust with a type annotation within the angle brackets, which
-indicates we want to call the `baby_name` method from the `Animal` trait as
-implemented on `Dog` by saying that we want to treat the `Dog` type as an
-`Animal` for this function call. This code will now print what we want:
+Köşeli parantez içindeki bir tip açıklaması veriyoruz; bu, `Dog` tipini bu fonksiyon çağrısı için bir `Animal` olarak ele almak istediğimizi belirtiyor. Bu kod artık istediğimiz çıktıyı verecektir:
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-22/output.txt}}
 ```
 
-In general, fully qualified syntax is defined as follows:
+Genel olarak, tam nitelikli sözdizimi şu şekilde tanımlanır:
 
 ```rust,ignore
 <Type as Trait>::function(receiver_if_method, next_arg, ...);
 ```
 
-For associated functions that aren’t methods, there would not be a `receiver`:
-there would only be the list of other arguments. You could use fully qualified
-syntax everywhere that you call functions or methods. However, you’re allowed
-to omit any part of this syntax that Rust can figure out from other information
-in the program. You only need to use this more verbose syntax in cases where
-there are multiple implementations that use the same name and Rust needs help
-to identify which implementation you want to call.
+Metod olmayan ilişkili fonksiyonlar için, bir `receiver` olmayacaktır: yalnızca diğer argümanların listesi olacaktır. Fonksiyonları veya metodları çağırırken bu sözdizimini her yerde kullanabilirsiniz. Ancak, Rust'ın programdaki diğer bilgilere dayanarak hangi implementasyonun çağrılacağını belirleyebileceği durumlarda, bu sözdiziminin herhangi bir kısmını atlayabilirsiniz. Bu daha ayrıntılı sözdizimini yalnızca aynı isme sahip birden fazla implementasyon olduğunda ve Rust'ın hangi implementasyonu çağırmak istediğinizi belirlemesine yardımcı olması gerektiğinde kullanmanız gerekir.
 
-<!-- Old link, do not remove -->
+<!-- Eski bağlantı, lütfen silmeyin -->
 
 <a id="using-supertraits-to-require-one-traits-functionality-within-another-trait"></a>
 
-### Using Supertraits
+### Süpertrait'ler Kullanma
 
-Sometimes you might write a trait definition that depends on another trait: for
-a type to implement the first trait, you want to require that type to also
-implement the second trait. You would do this so that your trait definition can
-make use of the associated items of the second trait. The trait your trait
-definition is relying on is called a _supertrait_ of your trait.
+Bazen, bir trait tanımının başka bir trait'e bağlı olduğu durumlar yazarsınız: ilk trait'i uygulamak için, o tipin ayrıca ikinci trait'i de uygulamasını istemek istersiniz. Bunu, trait tanımınızın ikinci trait'in ilişkili öğelerini kullanabilmesi için yaparsınız. Trait'inizinin bağımlı olduğu trait'e _süpertrait_ denir.
 
-For example, let’s say we want to make an `OutlinePrint` trait with an
-`outline_print` method that will print a given value formatted so that it's
-framed in asterisks. That is, given a `Point` struct that implements the
-standard library trait `Display` to result in `(x, y)`, when we call
-`outline_print` on a `Point` instance that has `1` for `x` and `3` for `y`, it
-should print the following:
+Örneğin, bir `OutlinePrint` trait'i oluşturmak istiyoruz; bu trait'in `outline_print` metodu, verilen bir değeri yıldızlarla çerçevelenmiş şekilde yazdıracaktır. Yani, bir `Point` yapısı düşünün; bu yapı, `Display` standart kütüphane trait'ini uyguluyor ve sonucu `(x, y)` şeklinde veriyor. `x` değeri 1 ve `y` değeri 3 olan bir `Point` örneği üzerinde `outline_print` çağırdığımızda, aşağıdaki çıktıyı vermelidir:
 
 ```text
 **********
@@ -361,15 +227,9 @@ should print the following:
 **********
 ```
 
-In the implementation of the `outline_print` method, we want to use the
-`Display` trait’s functionality. Therefore, we need to specify that the
-`OutlinePrint` trait will work only for types that also implement `Display` and
-provide the functionality that `OutlinePrint` needs. We can do that in the
-trait definition by specifying `OutlinePrint: Display`. This technique is
-similar to adding a trait bound to the trait. Listing 20-23 shows an
-implementation of the `OutlinePrint` trait.
+`outline_print` metodunun implementasyonunda, `Display` trait'inin işlevselliğini kullanmak istiyoruz. Bu nedenle, `OutlinePrint` trait'inin yalnızca `Display`'i de uygulayan tipler için çalışacağını belirtmemiz gerekir ve bu, trait tanımında `OutlinePrint: Display` belirterek yapılır. Bu teknik, trait'e bir trait sınırı eklemeye benzer. Liste 20-23, `OutlinePrint` trait'inin bir implementasyonunu göstermektedir.
 
-<Listing number="20-23" file-name="src/main.rs" caption="Implementing the `OutlinePrint` trait that requires the functionality from `Display`">
+<Listing number="20-23" file-name="src/main.rs" caption="`Display`'den gelen işlevselliği gerektiren `OutlinePrint` trait'inin implementasyonu">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-23/src/main.rs:here}}
@@ -377,15 +237,9 @@ implementation of the `OutlinePrint` trait.
 
 </Listing>
 
-Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
-can use the `to_string` function that is automatically implemented for any type
-that implements `Display`. If we tried to use `to_string` without adding a
-colon and specifying the `Display` trait after the trait name, we’d get an
-error saying that no method named `to_string` was found for the type `&Self` in
-the current scope.
+`OutlinePrint`'in `Display` trait'ini gerektirdiğini belirttiğimiz için, `Display`'i uygulayan herhangi bir tip için otomatik olarak uygulanmış olan `to_string` fonksiyonunu kullanabiliriz. Eğer trait adından sonra bir iki nokta üst üste ve `Display` trait'ini belirtmeden `to_string` kullanmaya çalışırsak, `to_string` metodunun mevcut olmadığına dair bir hata alırız.
 
-Let’s see what happens when we try to implement `OutlinePrint` on a type that
-doesn’t implement `Display`, such as the `Point` struct:
+`OutlinePrint`'i `Display`'i uygulamayan bir tipe, örneğin `Point` yapısına uygulamaya çalıştığımızda ne olduğunu görelim:
 
 <Listing file-name="src/main.rs">
 
@@ -395,14 +249,13 @@ doesn’t implement `Display`, such as the `Point` struct:
 
 </Listing>
 
-We get an error saying that `Display` is required but not implemented:
+`Display`'in gerekli olduğu ancak uygulanmadığına dair bir hata alırız:
 
 ```console
 {{#include ../listings/ch20-advanced-features/no-listing-02-impl-outlineprint-for-point/output.txt}}
 ```
 
-To fix this, we implement `Display` on `Point` and satisfy the constraint that
-`OutlinePrint` requires, like so:
+Bunu düzeltmek için, `Point` üzerinde `Display`'i uyguluyoruz ve böylece `OutlinePrint`'in gerektirdiği kısıtlamayı karşılıyoruz:
 
 <Listing file-name="src/main.rs">
 
@@ -412,32 +265,15 @@ To fix this, we implement `Display` on `Point` and satisfy the constraint that
 
 </Listing>
 
-Then, implementing the `OutlinePrint` trait on `Point` will compile
-successfully, and we can call `outline_print` on a `Point` instance to display
-it within an outline of asterisks.
+Ardından, `Point` üzerinde `OutlinePrint` trait'ini implement etmek başarılı olacaktır ve bir `Point` örneğini yıldızlarla çerçevelenmiş şekilde görüntülemek için `outline_print` çağırabiliriz.
 
-### Using the Newtype Pattern to Implement External Traits on External Types
+### Dış Trait'leri Dış Tipler Üzerinde Uygulamak için Yeni Tip Desenini Kullanma
 
-In [“Implementing a Trait on a Type”][implementing-a-trait-on-a-type]<!-- ignore
---> in Chapter 10, we mentioned the orphan rule that states we’re only allowed
-to implement a trait on a type if either the trait or the type, or both, are
-local to our crate. It’s possible to get around this restriction using the
-_newtype pattern_, which involves creating a new type in a tuple struct. (We
-covered tuple structs in [“Using Tuple Structs Without Named Fields to Create
-Different Types”][tuple-structs]<!-- ignore --> in Chapter 5.) The tuple struct
-will have one field and be a thin wrapper around the type for which we want to
-implement a trait. Then the wrapper type is local to our crate, and we can
-implement the trait on the wrapper. _Newtype_ is a term that originates from the
-Haskell programming language. There is no runtime performance penalty for using
-this pattern, and the wrapper type is elided at compile time.
+10. Bölüm'de ["Bir Tip Üzerinde Trait Uygulama"][implementing-a-trait-on-a-type]<!-- ignore --> başlığında, bir trait'i bir tip üzerinde uygulamanın yalnızca trait'in veya tipin ya da her ikisinin de yerel olduğu durumlarda mümkün olduğunu belirten _yabancı kural_ (orphan rule) dan bahsetmiştik. Bu kısıtlamayı aşmanın bir yolu, _yeni tip deseni_ (newtype pattern) adı verilen bir tekniği kullanmaktır; bu, bir demet yapısında yeni bir tip oluşturmayı içerir. (Demet yapıları, 5. Bölüm'de ["Farklı Tipler Oluşturmak için İsimlendirilmemiş Alanlarla Demet Yapıları Kullanma"][tuple-structs]<!-- ignore --> başlığında ele alınmıştır.) Demet yapısı bir alan içerecek şekilde tanımlanır ve trait'ini uygulamak istediğimiz tipe ince bir sarıcı görevi görür. Böylece, sarıcı tip yerel hale gelir ve trait'i bu sarıcı üzerinde uygulayabiliriz. _Yeni tip_ terimi, Haskell programlama dilinden gelmektedir. Bu deseni kullanmanın çalışma zamanı performansında herhangi bir cezası yoktur ve sarıcı tip, derleme zamanında elenir.
 
-As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
-orphan rule prevents us from doing directly because the `Display` trait and the
-`Vec<T>` type are defined outside our crate. We can make a `Wrapper` struct
-that holds an instance of `Vec<T>`; then we can implement `Display` on
-`Wrapper` and use the `Vec<T>` value, as shown in Listing 20-24.
+Örneğin, `Display`'i `Vec<T>` üzerinde uygulamak istiyoruz; ancak yabancı kural, bunu doğrudan yapmamıza izin vermez çünkü `Display` trait'i ve `Vec<T>` tipi, dışarıda tanımlanmıştır. `Vec<T>`'yi tutan bir `Wrapper` yapısı oluşturabiliriz; ardından `Display`'i `Wrapper` üzerinde uygulayabiliriz ve `Vec<T>` değerini kullanabiliriz, bu da Liste 20-24'te gösterilmiştir.
 
-<Listing number="20-24" file-name="src/main.rs" caption="Creating a `Wrapper` type around `Vec<String>` to implement `Display`">
+<Listing number="20-24" file-name="src/main.rs" caption="`Vec<String>` etrafında bir `Wrapper` tipi oluşturarak `Display`'i uygulama">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-24/src/main.rs}}
@@ -445,24 +281,11 @@ that holds an instance of `Vec<T>`; then we can implement `Display` on
 
 </Listing>
 
-The implementation of `Display` uses `self.0` to access the inner `Vec<T>`,
-because `Wrapper` is a tuple struct and `Vec<T>` is the item at index 0 in the
-tuple. Then we can use the functionality of the `Display` trait on `Wrapper`.
+`Display`'in implementasyonu, içteki `Vec<T>`'ye erişmek için `self.0` kullanır; çünkü `Wrapper` bir demet yapısıdır ve `Vec<T>` sırasıyla 0 indeksindeki öğedir. Böylece, `Wrapper` üzerinde `Display` trait'inin işlevselliğini kullanabiliriz.
 
-The downside of using this technique is that `Wrapper` is a new type, so it
-doesn’t have the methods of the value it’s holding. We would have to implement
-all the methods of `Vec<T>` directly on `Wrapper` such that the methods delegate
-to `self.0`, which would allow us to treat `Wrapper` exactly like a `Vec<T>`. If
-we wanted the new type to have every method the inner type has, implementing the
-`Deref` trait on the `Wrapper` to return the inner type would be a solution (we
-discussed implementing the `Deref` trait in [“Treating Smart Pointers Like
-Regular References with the `Deref` Trait”][smart-pointer-deref]<!-- ignore -->
-in Chapter 15). If we didn’t want the `Wrapper` type to have all the methods of
-the inner type—for example, to restrict the `Wrapper` type’s behavior—we would
-have to implement just the methods we do want manually.
+Bu tekniği kullanmanın dezavantajı, `Wrapper`'ın yeni bir tip olmasıdır, bu yüzden tutmakta olduğu değerin yöntemlerine sahip değildir. `Wrapper`'ı, `Vec<T>` gibi davranabilmesi için, `Wrapper` üzerinde `Vec<T>`'nin tüm yöntemlerini doğrudan uygulamak zorunda kalırız; bu da yöntemlerin `self.0`'a yönlendirilmesini sağlar. Eğer yeni tipin, içteki tipin sahip olduğu her yönteme sahip olmasını istiyorsak, `Deref` trait'ini `Wrapper` üzerinde uygulamak, içteki tipe geri dönecek şekilde bir çözüm olacaktır (bunu, 15. Bölüm'de ["Akıllı İşaretçileri `Deref` Trait'i ile Normal Referanslar Gibi Kullanma"][smart-pointer-deref]<!-- ignore --> başlığında ele aldık). Eğer `Wrapper` tipinin, içteki tipin tüm yöntemlerine sahip olmasını istemiyorsak, örneğin `Wrapper` tipinin davranışını kısıtlamak için, yalnızca istediğimiz yöntemleri manuel olarak uygulamamız gerekir.
 
-This newtype pattern is also useful even when traits are not involved. Let’s
-switch focus and look at some advanced ways to interact with Rust’s type system.
+Bu yeni tip deseni, trait'lerle ilgili olmasa bile kullanışlıdır. Şimdi odaklanmamızı değiştirip Rust'ın tip sistemiyle etkileşimde bulunmanın bazı ileri düzey yollarına bakalım.
 
 [newtype]: ch20-02-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
 [implementing-a-trait-on-a-type]: ch10-02-traits.html#implementing-a-trait-on-a-type
