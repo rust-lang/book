@@ -2,27 +2,27 @@
 
 <a id="the-match-control-flow-operator"></a>
 
-## The `match` Control Flow Construct
+## `match` Kontrol Akışı Yapısı
 
-Rust has an extremely powerful control flow construct called `match` that
-allows you to compare a value against a series of patterns and then execute
-code based on which pattern matches. Patterns can be made up of literal values,
-variable names, wildcards, and many other things; [Chapter
-19][ch19-00-patterns]<!-- ignore --> covers all the different kinds of patterns
-and what they do. The power of `match` comes from the expressiveness of the
-patterns and the fact that the compiler confirms that all possible cases are
-handled.
+Rust, `match` adı verilen son derece güçlü bir kontrol akışı yapısına sahiptir.
+bir değeri bir dizi kalıpla karşılaştırmanıza ve ardından
+kodunu hangi kalıpla eşleştiğine göre belirler. Kalıplar gerçek değerlerden oluşabilir,
+değişken adları, joker karakterler ve diğer pek çok şey; [Bölüm 19][ch19-00-patterns]<!-- ignore --> tüm farklı kalıp türlerini kapsar
+ve ne yaptıkları. Eşleştirme`nin gücü, eşleştirmenin ifade gücünden gelir.
+kalıpları ve derleyicinin tüm olası durumların olduğunu doğrulaması gerçeği
+ele alınmıştır.
 
-Think of a `match` expression as being like a coin-sorting machine: coins slide
-down a track with variously sized holes along it, and each coin falls through
-the first hole it encounters that it fits into. In the same way, values go
-through each pattern in a `match`, and at the first pattern the value “fits,”
-the value falls into the associated code block to be used during execution.
+Bir `match` ifadesini bozuk para ayıklama makinesi gibi düşünün: bozuk paralar kayar
+üzerinde çeşitli büyüklüklerde delikler bulunan bir raydan aşağı iner ve her bozuk para
+karşılaştığı ilk deliğe sığar. Aynı şekilde, değerler de
+bir `match` içindeki her bir desen aracılığıyla ve ilk desende “fits,” değeri
+değer, yürütme sırasında kullanılmak üzere ilişkili kod bloğuna düşer.
 
-Speaking of coins, let’s use them as an example using `match`! We can write a
-function that takes an unknown US coin and, in a similar way as the counting
-machine, determines which coin it is and returns its value in cents, as shown
-in Listing 6-3.
+Madeni paralardan bahsetmişken, onları `match` kullanarak bir örnek olarak kullanalım! Yazabiliriz
+fonksiyonu bilinmeyen bir ABD madeni parasını alır ve sayma işlemine benzer şekilde
+makine, hangi madeni para olduğunu belirler ve gösterildiği gibi değerini sent olarak verir
+Liste 6-3'te.
+
 
 <Listing number="6-3" caption="An enum and a `match` expression that has the variants of the enum as its patterns">
 
@@ -255,5 +255,5 @@ There’s more about patterns and matching that we’ll cover in [Chapter
 `if let` syntax, which can be useful in situations where the `match` expression
 is a bit wordy.
 
-[tuples]: ch03-02-data-types.html#the-tuple-type
-[ch19-00-patterns]: ch19-00-patterns.html
+[tuples]: ch03-02-data-types.md#the-tuple-type
+[ch19-00-patterns]: ch19-00-patterns.md

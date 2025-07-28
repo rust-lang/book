@@ -245,7 +245,7 @@ adresini okumaya ve Rust kodu yazmaya alışmak için daha önemli bir program o
 Yaygın programlama kavramlarının
 Rust'ta nasıl çalıştığını öğrenerek başlamayı tercih ederseniz, Bölüm 3'e bakın ve ardından Bölüm 2'ye dönün.
 
-[installation]: ch01-01-installation.md#installation
+[installation]: ch01-01-installation.md#kurulum
 [toml]: https://toml.io
 [appendix-e]: appendix-05-editions.md
 [cargo]: https://doc.rust-lang.org/cargo/

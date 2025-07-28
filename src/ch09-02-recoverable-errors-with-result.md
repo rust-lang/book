@@ -462,6 +462,6 @@ main fonksiyonu, [std::process::Termination][termination] özelliğini uygulayan
 
 Artık panic! çağırmanın veya Result döndürmenin detaylarını ele aldığımıza göre, hangi durumlarda hangisinin uygun olduğuna nasıl karar vereceğimiz konusuna geri dönebiliriz.
 
-[handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-result
-[trait-objects]: ch18-02-trait-objects.md#using-trait-objects-that-**allow**-for-values-of-different-types
-[termination]: ../std/process/trait.Termination.md
+[handle_failure]: ch02-00-guessing-game-tutorial.md#`Result`-ile-Potansiyel-Başarısızlığın-Ele-Alınması
+[trait-objects]: ch18-02-trait-objects.md#Ortak-Davranış-için-Trait-Tanımlamak
+[termination]: ../std/process/trait.Termination.html

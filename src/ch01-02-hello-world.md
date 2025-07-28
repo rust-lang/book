@@ -195,6 +195,6 @@ büyüdükçe, tüm seçenekleri yönetmek ve
 kodunuzu paylaşmayı kolaylaştırmak isteyeceksiniz. Daha sonra, size
 gerçek dünya Rust programları yazmanıza yardımcı olacak Cargo aracını tanıtacağız.
 
-[troubleshooting]:ch01-01-installation.md#troubleshooting
+[troubleshooting]:ch01-01-installation.md#sorun-giderme
 [devtools]:appendix-04-useful-development-tools.md
 [ch20-macros]:ch20-05-macros.md

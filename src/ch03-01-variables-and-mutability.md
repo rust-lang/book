@@ -33,7 +33,7 @@ Derleyici hataları sinir bozucu olabilir, ancak gerçekte bunlar yalnızca prog
 yapmasını istediğiniz şeyi henüz güvenli bir şekilde yapmadığı anlamına gelir; sizin
 iyi bir programcı olmadığınız anlamına gelmez! Deneyimli Rustaceanlar hala derleyici hataları alırlar.
 
-Değişmez `x` değişkenine ikinci bir değer atamaya çalıştığınız için ``değişmez `x` değişkenine iki kez atama yapılamıyor`` hata mesajını aldınız.
+Değişmez `x` değişkenine ikinci bir değer atamaya çalıştığınız için değişmez `x` değişkenine iki kez atama yapılamıyor hata mesajını aldınız.
 
 Değişmez olarak belirlenmiş bir
 değerini değiştirmeye çalıştığımızda derleme zamanı hataları almamız önemlidir, çünkü bu durum
@@ -47,8 +47,7 @@ değişmeyeceğini garanti eder, böylece bunu kendiniz takip etmek zorunda kalm
 daha kolay olur.
 
 Bdeğişebilirlik çok yararlı olabilir ve kod yazmayı daha kolay hale getirebilir.
-Değişkenler varsayılan olarak değişmez olsa da, [Bölüm
-2][storing-values-with-variables]<!-- ignore -->'da yaptığınız gibi
+Değişkenler varsayılan olarak değişmez olsa da, [Bölüm 2][storing-values-with-variables]<!-- ignore -->'da yaptığınız gibi
 değişken adının önüne `mut` ekleyerek onları değişebilir hale getirebilirsiniz. mut` eklemek ayrıca
 kodunun diğer bölümlerinin bu değişkenin değerini değiştireceğini belirterek kodun gelecekteki okuyucularına
 niyetini iletir.
