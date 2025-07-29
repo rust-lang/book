@@ -316,9 +316,7 @@ ile bir `NewsArticle` veya bir `SocialPost` döndüren bu kod çalışmayacaktı
 
 Derleyicide `impl Trait` sözdiziminin nasıl uygulandığına ilişkin
 kısıtlamaları nedeniyle bir `NewsArticle` veya bir `SocialPost` döndürülmesine izin verilmez.
-Bu davranışa sahip bir fonksiyonun nasıl yazılacağını [“Using Trait
-Objects That Allow for Values of Different
-Types”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore bölümünde ele alacağız
+Bu davranışa sahip bir fonksiyonun nasıl yazılacağını [“Ortak Davranışları Soyutlamak için Trait Nesneleri Kullanmak”][using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore bölümünde ele alacağız
 --> Bölüm 18'in bir bölümü.
 
 ### Yöntemleri Koşullu Olarak Uygulamak için Özellik Sınırlarını Kullanma
@@ -378,5 +376,5 @@ zamanında zaten kontrol ettiğimiz için çalışma zamanında davranış kontr
 kodu yazmak zorunda kalmayız. Bunu yapmak, jeneriklerin esnekliğinden
 vazgeçmek zorunda kalmadan performansı artırır.
 
-[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.md#using-trait-objects-that-allow-for-values-of-different-types
-[methods]: ch05-03-method-syntax.md#defining-methods
+[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.md#Ortak-Davranışları-Soyutlamak-için-Trait-Nesneleri-Kullanmak
+[methods]: ch05-03-method-syntax.md#tanımlama-yöntemleri

@@ -93,7 +93,7 @@ listesinde de kullanabiliriz.
 
 </Listing>
 
-En büyük` fonksiyonu, fonksiyona aktarabileceğimiz herhangi bir
+`En büyük` fonksiyonu, fonksiyona aktarabileceğimiz herhangi bir
 somut `i32` değer dilimini temsil eden `list` adında bir parametreye sahiptir. Sonuç olarak,
 fonksiyonu çağırdığımızda, kod
 adresine ilettiğimiz belirli değerler üzerinde çalışır.

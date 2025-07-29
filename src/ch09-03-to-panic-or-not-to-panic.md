@@ -221,4 +221,4 @@ Artık standart kütüphanenin
 ile `Option` ve `Result` enumlarını kullanarak jenerikleri nasıl kullandığını gördüğünüze göre, jeneriklerin nasıl çalıştığından ve
 bunları kodunuzda nasıl kullanabileceğinizden bahsedeceğiz.
 
-[encoding]: ch18-03-oo-design-patterns.html#encoding-states-and-behavior-as-types
+[encoding]: ch18-03-oo-design-patterns.md#durumları-ve-davranışları-türler-olarak-kodlama

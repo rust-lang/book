@@ -1,33 +1,33 @@
-# Writing Automated Tests
+# Otomatik Testler Yazma
 
-In his 1972 essay “The Humble Programmer,” Edsger W. Dijkstra said that “program
-testing can be a very effective way to show the presence of bugs, but it is
-hopelessly inadequate for showing their absence.” That doesn’t mean we shouldn’t
-try to test as much as we can!
+Edsger W. Dijkstra 1972 yılında yazdığı “The Humble Programmer” adlı makalesinde "program
+testleri hataların varlığını göstermek için çok etkili bir yol olabilir, ancak
+yokluklarını göstermek için umutsuzca yetersizdir." Bu demek değil ki
+eli̇mi̇zden geldi̇ği̇nce test etmeye çalişalim!
 
-Correctness in our programs is the extent to which our code does what we intend
-it to do. Rust is designed with a high degree of concern about the correctness
-of programs, but correctness is complex and not easy to prove. Rust’s type
-system shoulders a huge part of this burden, but the type system cannot catch
-everything. As such, Rust includes support for writing automated software tests.
+Programlarımızdaki doğruluk, kodumuzun amaçladığımız şeyi ne ölçüde yaptığıdır
+yapmak için. Rust, doğruluk konusunda yüksek derecede endişe ile tasarlanmıştır
+ancak doğruluk karmaşıktır ve kanıtlanması kolay değildir. Rust'ın tipi
+sistemi bu yükün büyük bir kısmını üstlenmektedir, ancak tip sistemi
+her şey. Bu nedenle Rust, otomatik yazılım testleri yazmak için destek içerir.
 
-Say we write a function `add_two` that adds 2 to whatever number is passed to
-it. This function’s signature accepts an integer as a parameter and returns an
-integer as a result. When we implement and compile that function, Rust does all
-the type checking and borrow checking that you’ve learned so far to ensure
-that, for instance, we aren’t passing a `String` value or an invalid reference
-to this function. But Rust _can’t_ check that this function will do precisely
-what we intend, which is return the parameter plus 2 rather than, say, the
-parameter plus 10 or the parameter minus 50! That’s where tests come in.
+Diyelim ki `add_two` fonksiyonunu yazdık ve bu fonksiyona aktarılan sayıya 2 ekledik
+it. Bu fonksiyonun imzası parametre olarak bir tamsayı kabul eder ve bir
+sonuç olarak tamsayı. Bu fonksiyonu uyguladığımızda ve derlediğimizde, Rust tüm
+sağlamak için şimdiye kadar öğrendiğiniz tür denetimi ve ödünç denetimi
+Örneğin, bir `String` değeri veya geçersiz bir referans aktarmadığımızı
+bu işleve. Ancak Rust, bu işlevin tam olarak aşağıdakileri yapacağını kontrol edemez
+amaçladığımız şey, parametre artı 2'yi döndürmek yerine, diyelim ki
+parametre artı 10 veya parametre eksi 50! İşte burada testler devreye girer.
 
-We can write tests that assert, for example, that when we pass `3` to the
-`add_two` function, the returned value is `5`. We can run these tests whenever
-we make changes to our code to make sure any existing correct behavior has not
-changed.
+Örneğin, `3` değerini
+'add_two' fonksiyonunun döndürdüğü değer `5`tir. Bu testleri her zaman çalıştırabiliriz
+mevcut doğru davranışın değişmediğinden emin olmak için kodumuzda değişiklikler yaparız
+değişti.
 
-Testing is a complex skill: although we can’t cover in one chapter every detail
-about how to write good tests, in this chapter we will discuss the mechanics of
-Rust’s testing facilities. We’ll talk about the annotations and macros
-available to you when writing your tests, the default behavior and options
-provided for running your tests, and how to organize tests into unit tests and
-integration tests.
+Test karmaşık bir beceridir: bir bölümde her ayrıntıyı ele alamasak da
+İyi testlerin nasıl yazılacağı hakkında, bu bölümde testlerin mekaniğini tartışacağız.
+Rust'ın test olanakları. Ek açıklamalar ve makrolar hakkında konuşacağız
+testlerinizi yazarken kullanabileceğiniz varsayılan davranış ve seçenekler
+testlerinizi çalıştırmak için sağlanan ve testleri birim testleri ve
+entegrasyon testleri.

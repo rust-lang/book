@@ -163,4 +163,4 @@ Bu
 bölümünün ilerleyen kısımlarında [“`panic!` yapmak ya da
 `panic!` yapmamak”][to-panic-or-not-to-panic]<!-- ignore --> bölümünde hata koşullarını ele almak için `panic!` ve ne zaman `panic!` kullanıp kullanmamamız gerektiği konusuna geri döneceğiz. Daha sonra, `Result` kullanarak bir hatadan nasıl kurtulacağımıza bakacağız.
 
-[to-panic-or-not-to-panic]: ch09-03-to-panic-or-not-to-panic.md#to-panic-or-not-to-panic
+[to-panic-or-not-to-panic]: ch09-03-to-panic-or-not-to-panic.md#panic-yapmak-ya-da-panic-yapmamak

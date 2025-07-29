@@ -22,4 +22,4 @@ belgelere][koleksiyonlara] bakın.
 Vektörlerin, dizelerin ve hash haritalarının nasıl oluşturulacağını ve güncelleneceğini tartışacağız.
 her birini özel kılan şey olarak.
 
-[koleksiyonlar]: ../std/collections/index.html
+[koleksiyonlar]: ../std/collections/index.md

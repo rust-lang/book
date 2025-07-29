@@ -1,206 +1,207 @@
-## Appendix B: Operators and Symbols
+## Ek B: Operatörler ve Semboller
 
-This appendix contains a glossary of Rust’s syntax, including operators and
-other symbols that appear by themselves or in the context of paths, generics,
-trait bounds, macros, attributes, comments, tuples, and brackets.
+Bu ek, Rust'ın sözdiziminin bir sözlüğünü içerir, operatörler ve
+kendi başlarına veya yollar, jenerikler bağlamında görünen diğer semboller,
+özellik sınırları, makrolar, nitelikler, yorumlar, tuple'lar ve parantezler.
 
-### Operators
+### Operatörler
 
-Table B-1 contains the operators in Rust, an example of how the operator would
-appear in context, a short explanation, and whether that operator is
-overloadable. If an operator is overloadable, the relevant trait to use to
-overload that operator is listed.
+Tablo B-1, Rust'taki operatörleri ve operatörün nasıl kullanılacağına dair bir örneği içerir
+bağlam içinde görünüp görünmediği, kısa bir açıklama ve bu operatörün
+aşırı yüklenebilir. Eğer bir operatör aşırı yüklenebilir ise, ilgili özellik
+operatörünün listelendiği aşırı yük.
+3
 
 <span class="caption">Table B-1: Operators</span>
 
-| Operator                  | Example                                                 | Explanation                                                           | Overloadable?  |
+| Operatör                  | Örnek                                                 | Açıklama                                                           | Aşırı yüklenebilir?  |
 | ------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------- | -------------- |
-| `!`                       | `ident!(...)`, `ident!{...}`, `ident![...]`             | Macro expansion                                                       |                |
-| `!`                       | `!expr`                                                 | Bitwise or logical complement                                         | `Not`          |
-| `!=`                      | `expr != expr`                                          | Nonequality comparison                                                | `PartialEq`    |
-| `%`                       | `expr % expr`                                           | Arithmetic remainder                                                  | `Rem`          |
-| `%=`                      | `var %= expr`                                           | Arithmetic remainder and assignment                                   | `RemAssign`    |
-| `&`                       | `&expr`, `&mut expr`                                    | Borrow                                                                |                |
-| `&`                       | `&type`, `&mut type`, `&'a type`, `&'a mut type`        | Borrowed pointer type                                                 |                |
-| `&`                       | `expr & expr`                                           | Bitwise AND                                                           | `BitAnd`       |
-| `&=`                      | `var &= expr`                                           | Bitwise AND and assignment                                            | `BitAndAssign` |
-| `&&`                      | `expr && expr`                                          | Short-circuiting logical AND                                          |                |
-| `*`                       | `expr * expr`                                           | Arithmetic multiplication                                             | `Mul`          |
-| `*=`                      | `var *= expr`                                           | Arithmetic multiplication and assignment                              | `MulAssign`    |
-| `*`                       | `*expr`                                                 | Dereference                                                           | `Deref`        |
-| `*`                       | `*const type`, `*mut type`                              | Raw pointer                                                           |                |
-| `+`                       | `trait + trait`, `'a + trait`                           | Compound type constraint                                              |                |
-| `+`                       | `expr + expr`                                           | Arithmetic addition                                                   | `Add`          |
-| `+=`                      | `var += expr`                                           | Arithmetic addition and assignment                                    | `AddAssign`    |
-| `,`                       | `expr, expr`                                            | Argument and element separator                                        |                |
-| `-`                       | `- expr`                                                | Arithmetic negation                                                   | `Neg`          |
-| `-`                       | `expr - expr`                                           | Arithmetic subtraction                                                | `Sub`          |
-| `-=`                      | `var -= expr`                                           | Arithmetic subtraction and assignment                                 | `SubAssign`    |
-| `->`                      | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | Function and closure return type                                      |                |
-| `.`                       | `expr.ident`                                            | Field access                                                          |                |
-| `.`                       | `expr.ident(expr, ...)`                                 | Method call                                                           |                |
-| `.`                       | `expr.0`, `expr.1`, etc.                                | Tuple indexing                                                        |                |
-| `..`                      | `..`, `expr..`, `..expr`, `expr..expr`                  | Right-exclusive range literal                                         | `PartialOrd`   |
-| `..=`                     | `..=expr`, `expr..=expr`                                | Right-inclusive range literal                                         | `PartialOrd`   |
-| `..`                      | `..expr`                                                | Struct literal update syntax                                          |                |
-| `..`                      | `variant(x, ..)`, `struct_type { x, .. }`               | “And the rest” pattern binding                                        |                |
-| `...`                     | `expr...expr`                                           | (Deprecated, use `..=` instead) In a pattern: inclusive range pattern |                |
-| `/`                       | `expr / expr`                                           | Arithmetic division                                                   | `Div`          |
-| `/=`                      | `var /= expr`                                           | Arithmetic division and assignment                                    | `DivAssign`    |
-| `:`                       | `pat: type`, `ident: type`                              | Constraints                                                           |                |
-| `:`                       | `ident: expr`                                           | Struct field initializer                                              |                |
-| `:`                       | `'a: loop {...}`                                        | Loop label                                                            |                |
-| `;`                       | `expr;`                                                 | Statement and item terminator                                         |                |
-| `;`                       | `[...; len]`                                            | Part of fixed-size array syntax                                       |                |
-| `<<`                      | `expr << expr`                                          | Left-shift                                                            | `Shl`          |
-| `<<=`                     | `var <<= expr`                                          | Left-shift and assignment                                             | `ShlAssign`    |
-| `<`                       | `expr < expr`                                           | Less than comparison                                                  | `PartialOrd`   |
-| `<=`                      | `expr <= expr`                                          | Less than or equal to comparison                                      | `PartialOrd`   |
-| `=`                       | `var = expr`, `ident = type`                            | Assignment/equivalence                                                |                |
-| `==`                      | `expr == expr`                                          | Equality comparison                                                   | `PartialEq`    |
-| `=>`                      | `pat => expr`                                           | Part of match arm syntax                                              |                |
-| `>`                       | `expr > expr`                                           | Greater than comparison                                               | `PartialOrd`   |
-| `>=`                      | `expr >= expr`                                          | Greater than or equal to comparison                                   | `PartialOrd`   |
-| `>>`                      | `expr >> expr`                                          | Right-shift                                                           | `Shr`          |
-| `>>=`                     | `var >>= expr`                                          | Right-shift and assignment                                            | `ShrAssign`    |
-| `@`                       | `ident @ pat`                                           | Pattern binding                                                       |                |
-| `^`                       | `expr ^ expr`                                           | Bitwise exclusive OR                                                  | `BitXor`       |
-| `^=`                      | `var ^= expr`                                           | Bitwise exclusive OR and assignment                                   | `BitXorAssign` |
-| <code>&vert;</code>       | <code>pat &vert; pat</code>                             | Pattern alternatives                                                  |                |
-| <code>&vert;</code>       | <code>expr &vert; expr</code>                           | Bitwise OR                                                            | `BitOr`        |
-| <code>&vert;=</code>      | <code>var &vert;= expr</code>                           | Bitwise OR and assignment                                             | `BitOrAssign`  |
-| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code>                     | Short-circuiting logical OR                                           |                |
-| `?`                       | `expr?`                                                 | Error propagation                                                     |                |
+| `!`                       | `ident!(...)`, `ident!{...}`, `ident![...]`             | Makro genişleme                                                       |                |
+| `!`                       | `!expr`                                                 | Bitsel veya mantıksal tümleyen                                       | `Not`          |
+| `!=`                      | `expr != expr`                                          | Kalite karşılaştırması yok                                               | `PartialEq`    |
+| `%`                       | `expr % expr`                                           | Aritmetik kalan                                                | `Rem`          |
+| `%=`                      | `var %= expr`                                           | Aritmetik kalan ve atama                                  | `RemAssign`    |
+| `&`                       | `&expr`, `&mut expr`                                    | Ödünç almak                                                                |                |
+| `&`                       | `&type`, `&mut type`, `&'a type`, `&'a mut type`        | Ödünç alınmış işaretçi türü                                               |                |
+| `&`                       | `expr & expr`                                           | Bitsel AND                                                           | `BitAnd`       |
+| `&=`                      | `var &= expr`                                           | Bitsel AND ve atama                                          | `BitAndAssign` |
+| `&&`                      | `expr && expr`                                          | Kısa devre yapan mantıksal AND                                       |                |
+| `*`                       | `expr * expr`                                           | Aritmetik çarpma                                            | `Mul`          |
+| `*=`                      | `var *= expr`                                           | Aritmetik çarpma ve atama                              | `MulAssign`    |
+| `*`                       | `*expr`                                                 | Dereferans                                                           | `Deref`        |
+| `*`                       | `*const type`, `*mut type`                              | Ham işaretçi                                                          |                |
+| `+`                       | `trait + trait`, `'a + trait`                           | Bileşik tip kısıtlaması                                              |                |
+| `+`                       | `expr + expr`                                           | Aritmetik toplama                                                 | `Add`          |
+| `+=`                      | `var += expr`                                           | Aritmetik toplama ve atama                                  | `AddAssign`    |
+| `,`                       | `expr, expr`                                            | Argüman ve eleman ayırıcı                                      |                |
+| `-`                       | `- expr`                                                | Aritmetik olumsuzlama                                                 | `Neg`          |
+| `-`                       | `expr - expr`                                           | Aritmetik çıkarma                                             | `Sub`          |
+| `-=`                      | `var -= expr`                                           | Aritmetik çıkarma ve atama                               | `SubAssign`    |
+| `->`                      | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | İşlev ve kapanış dönüş türü                               |                |
+| `.`                       | `expr.ident`                                            | Saha erişimi                                                   |                |
+| `.`                       | `expr.ident(expr, ...)`                                 | Metot çağrısı                                                          |                |
+| `.`                       | `expr.0`, `expr.1`, etc.                                | Tuple indeksleme                                                        |                |
+| `..`                      | `..`, `expr..`, `..expr`, `expr..expr`                  | Sağa özel gerçek aralık                                         | `PartialOrd`   |
+| `..=`                     | `..=expr`, `expr..=expr`                                | Doğru kapsayıcı gerçek aralık                                         | `PartialOrd`   |
+| `..`                      | `..expr`                                                | Struct literal güncelleme sözdizimi                                          |                |
+| `..`                      | `variant(x, ..)`, `struct_type { x, .. }`               | “Ve geri kalanı” desen bağlama                                        |                |
+| `...`                     | `expr...expr`                                           | (Kullanımdan kaldırılmıştır, bunun yerine `..=` kullanın) Kalıp içinde: kapsayıcı aralık kalıbı |                |
+| `/`                       | `expr / expr`                                           | Aritmetik bölme                                                   | `Div`          |
+| `/=`                      | `var /= expr`                                           | Aritmetik bölme ve atama                                    | `DivAssign`    |
+| `:`                       | `pat: type`, `ident: type`                              | Kısıtlamalar                                                           |                |
+| `:`                       | `ident: expr`                                           | Struct alan başlatıcısı                                              |                |
+| `:`                       | `'a: loop {...}`                                        | Döngü etiketi                                                           |                |
+| `;`                       | `expr;`                                                 | Açıklama ve öğe sonlandırıcı                                         |                |
+| `;`                       | `[...; len]`                                            | Sabit boyutlu dizi sözdiziminin bir parçası                                      |                |
+| `<<`                      | `expr << expr`                                          | Sola kaydırma                                                            | `Shl`          |
+| `<<=`                     | `var <<= expr`                                          | Sola kaydırma ve atama                                           | `ShlAssign`    |
+| `<`                       | `expr < expr`                                           | Karşılaştırmadan daha az                                                  | `PartialOrd`   |
+| `<=`                      | `expr <= expr`                                          | Karşılaştırmaya eşit veya daha az                                      | `PartialOrd`   |
+| `=`                       | `var = expr`, `ident = type`                            | Atama/eşdeğerlik                                                |                |
+| `==`                      | `expr == expr`                                          | Eşitlik karşılaştırması                                                   | `PartialEq`    |
+| `=>`                      | `pat => expr`                                           | Maç kolu sözdiziminin bir parçası                                              |                |
+| `>`                       | `expr > expr`                                           | Karşılaştırmadan daha büyük                                               | `PartialOrd`   |
+| `>=`                      | `expr >= expr`                                          | Karşılaştırmadan büyük veya eşit                                   | `PartialOrd`   |
+| `>>`                      | `expr >> expr`                                          | Sağa kaydırma                                                          | `Shr`          |
+| `>>=`                     | `var >>= expr`                                          | Sağa kaydırma ve atama                                            | `ShrAssign`    |
+| `@`                       | `ident @ pat`                                           | Desen bağlama                                                       |                |
+| `^`                       | `expr ^ expr`                                           | Bitsel özel OR                                                 | `BitXor`       |
+| `^=`                      | `var ^= expr`                                           | Bitsel özel OR ve atama                                  | `BitXorAssign` |
+| <code>&vert;</code>       | <code>pat &vert; pat</code>                             | Desen alternatifleri                                                 |                |
+| <code>&vert;</code>       | <code>expr &vert; expr</code>                           | Bitsel OR                                                     | `BitOr`        |
+| <code>&vert;=</code>      | <code>var &vert;= expr</code>                           | Bitsel OR ve atama                                             | `BitOrAssign`  |
+| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code>                     | Kısa devre yapan mantıksal OR                                           |                |
+| `?`                       | `expr?`                                                 | Hata yayılımı                                                  |                |
 
-### Non-operator Symbols
+### Operatör Olmayan Semboller
 
-The following list contains all symbols that don’t function as operators; that
-is, they don’t behave like a function or method call.
+Aşağıdaki liste, operatör olarak işlev görmeyen tüm sembolleri içerir; yani
+Yani, bir işlev veya yöntem çağrısı gibi davranmazlar.
 
-Table B-2 shows symbols that appear on their own and are valid in a variety of
-locations.
+Tablo B-2, kendi başlarına görünen ve çeşitli durumlarda geçerli olan sembolleri gösterir
+yerler.
 
 <span class="caption">Table B-2: Stand-Alone Syntax</span>
 
-| Symbol                                        | Explanation                                                            |
+| Sembol                                        | Açıklama                                                            |
 | --------------------------------------------- | ---------------------------------------------------------------------- |
-| `'ident`                                      | Named lifetime or loop label                                           |
-| `...u8`, `...i32`, `...f64`, `...usize`, etc. | Numeric literal of specific type                                       |
-| `"..."`                                       | String literal                                                         |
-| `r"..."`, `r#"..."#`, `r##"..."##`, etc.      | Raw string literal, escape characters not processed                    |
-| `b"..."`                                      | Byte string literal; constructs an array of bytes instead of a string  |
-| `br"..."`, `br#"..."#`, `br##"..."##`, etc.   | Raw byte string literal, combination of raw and byte string literal    |
-| `'...'`                                       | Character literal                                                      |
-| `b'...'`                                      | ASCII byte literal                                                     |
-| <code>&vert;...&vert; expr</code>             | Closure                                                                |
-| `!`                                           | Always empty bottom type for diverging functions                       |
-| `_`                                           | “Ignored” pattern binding; also used to make integer literals readable |
+| `'ident`                                      | Adlandırılmış ömür veya döngü etiketi                                       |
+| `...u8`, `...i32`, `...f64`, `...usize`, etc. | Belirli türde sayısal değişmez                                    |
+| `"..."`                                       | String literal                                                       |
+| `r"..."`, `r#"..."#`, `r##"..."##`, etc.      | Ham dize değişmezi, kaçış karakterleri işlenmez               |
+| `b"..."`                                      | Bayt dizesi değişmezi; dize yerine bir bayt dizisi oluşturur  |
+| `br"..."`, `br#"..."#`, `br##"..."##`, etc.   | Ham bayt dizesi değişmezi, ham ve bayt dizesi değişmezi kombinasyonu    |
+| `'...'`                                       | Gerçek karakter                                                      |
+| `b'...'`                                      | ASCII bayt değişmezi                                               |
+| <code>&vert;...&vert; expr</code>             | Kapanış                                                                |
+| `!`                                           | Ayrışan fonksiyonlar için daima boş alt tip                     |
+| `_`                                           | “Ignored” kalıp bağlama; tamsayı değişmezlerini okunabilir hale getirmek için de kullanılır |
 
-Table B-3 shows symbols that appear in the context of a path through the module
-hierarchy to an item.
+Tablo B-3, modül boyunca bir yol bağlamında görünen sembolleri göstermektedir
+bir öğeye hiyerarşi.
 
 <span class="caption">Table B-3: Path-Related Syntax</span>
 
-| Symbol                                  | Explanation                                                                                                                     |
+| Sembol                                  | Açıklama                                                                                                                     |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `ident::ident`                          | Namespace path                                                                                                                  |
-| `::path`                                | Path relative to the extern prelude, where all other crates are rooted (i.e., an explicitly absolute path including crate name) |
-| `self::path`                            | Path relative to the current module (i.e., an explicitly relative path).                                                        |
-| `super::path`                           | Path relative to the parent of the current module                                                                               |
-| `type::ident`, `<type as trait>::ident` | Associated constants, functions, and types                                                                                      |
-| `<type>::...`                           | Associated item for a type that cannot be directly named (e.g., `<&T>::...`, `<[T]>::...`, etc.)                                |
-| `trait::method(...)`                    | Disambiguating a method call by naming the trait that defines it                                                                |
-| `type::method(...)`                     | Disambiguating a method call by naming the type for which it’s defined                                                          |
-| `<type as trait>::method(...)`          | Disambiguating a method call by naming the trait and type                                                                       |
+| `ident::ident`                          | Ad alanı yolu                                                                                                    |
+| `::path`                                | Diğer tüm sandıkların köklendiği extern prelude'a göreli yol (yani, sandık adını içeren açıkça mutlak bir yol) |
+| `self::path`                            | Geçerli modüle göreli yol (yani, açıkça göreli bir yol).                                                        |
+| `super::path`                           | Geçerli modülün üst öğesine göre yol                                                                              |
+| `type::ident`, `<type as trait>::ident` | İlişkili sabitler, fonksiyonlar ve tipler                                                                                      |
+| `<type>::...`                           | Doğrudan adlandırılamayan bir tür için ilişkilendirilmiş öğe (örneğin, `<&T>::...`, `<[T]>::...`, vb.)                               |
+| `trait::method(...)`                    | Bir yöntem çağrısını, onu tanımlayan özelliği adlandırarak belirsizleştirmek                                                              |
+| `type::method(...)`                     | Tanımlandığı türü adlandırarak bir yöntem çağrısının belirsizliğini giderme                                                        |
+| `<type as trait>::method(...)`          | Özellik ve türü adlandırarak bir yöntem çağrısının belirsizliğini giderme                                                                      |
 
-Table B-4 shows symbols that appear in the context of using generic type
-parameters.
+Tablo B-4, genel tip kullanımı bağlamında görünen sembolleri göstermektedir
+Parametreler.
 
 <span class="caption">Table B-4: Generics</span>
 
-| Symbol                         | Explanation                                                                                                                              |
+| Sembol                         | Açıklama                                                                                                                              |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `path<...>`                    | Specifies parameters to generic type in a type (e.g., `Vec<u8>`)                                                                         |
-| `path::<...>`, `method::<...>` | Specifies parameters to generic type, function, or method in an expression; often referred to as turbofish (e.g., `"42".parse::<i32>()`) |
-| `fn ident<...> ...`            | Define generic function                                                                                                                  |
-| `struct ident<...> ...`        | Define generic structure                                                                                                                 |
-| `enum ident<...> ...`          | Define generic enumeration                                                                                                               |
-| `impl<...> ...`                | Define generic implementation                                                                                                            |
-| `for<...> type`                | Higher-ranked lifetime bounds                                                                                                            |
-| `type<ident=type>`             | A generic type where one or more associated types have specific assignments (e.g., `Iterator<Item=T>`)                                   |
+| `path<...>`                    | Bir tipteki genel tip için parametreleri belirtir (örn,`Vec<u8>`)                                                                         |
+| `path::<...>`, `method::<...>` | Bir ifadedeki genel tür, işlev veya yöntem için parametreleri belirtir; genellikle turbofish olarak adlandırılır (örneğin, `“42”.parse::<i32>()`) |
+| `fn ident<...> ...`            | Genel işlev tanımlama                                                                                                             |
+| `struct ident<...> ...`        | Genel yapıyı tanımlayın                                                                                                          |
+| `enum ident<...> ...`          | Genel numaralandırmayı tanımlama                                                                                                          |
+| `impl<...> ...`                | Genel uygulamayı tanımlayın                                                                                                          |
+| `for<...> type`                | Daha yüksek sıralı yaşam süresi sınırları                                                                                                       |
+| `type<ident=type>`             | Bir veya daha fazla ilişkili tipin belirli atamalara sahip olduğu genel bir tip (örneğin, `Iterator<Item=T>`)                                |
 
-Table B-5 shows symbols that appear in the context of constraining generic type
-parameters with trait bounds.
+Tablo B-5, genel tipin kısıtlanması bağlamında görünen sembolleri göstermektedir
+özellik sınırlarına sahip parametreler.
 
 <span class="caption">Table B-5: Trait Bound Constraints</span>
 
 | Symbol                        | Explanation                                                                                                                                |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `T: U`                        | Generic parameter `T` constrained to types that implement `U`                                                                              |
-| `T: 'a`                       | Generic type `T` must outlive lifetime `'a` (meaning the type cannot transitively contain any references with lifetimes shorter than `'a`) |
-| `T: 'static`                  | Generic type `T` contains no borrowed references other than `'static` ones                                                                 |
-| `'b: 'a`                      | Generic lifetime `'b` must outlive lifetime `'a`                                                                                           |
-| `T: ?Sized`                   | Allow generic type parameter to be a dynamically sized type                                                                                |
-| `'a + trait`, `trait + trait` | Compound type constraint                                                                                                                   |
+| `T: U`                        | Genel parametre `T`, `U` uygulayan türlerle sınırlandırılmıştır                                                                       |
+| `T: 'a`                       | Genel `T` türü `a` yaşam süresinden daha uzun ömürlü olmalıdır (yani tür, `a` dan daha kısa yaşam sürelerine sahip herhangi bir referansı geçişli olarak içeremez) |
+| `T: 'static`                  | `T` jenerik tipi `'static` olanlar dışında ödünç alınmış referanslar içermez                                    |
+| `'b: 'a`                      | Genel yaşam süresi `b`, yaşam süresi `a` dan uzun olmalıdır                                                                                    |
+| `T: ?Sized`                   | Genel tip parametresinin dinamik olarak boyutlandırılmış bir tip olmasına izin ver                                                                        |
+| `'a + trait`, `trait + trait` | Bileşik tip kısıtlaması                                                                                                                  |
 
-Table B-6 shows symbols that appear in the context of calling or defining
-macros and specifying attributes on an item.
+Tablo B-6, çağrı veya tanımlama bağlamında görünen sembolleri göstermektedir
+makroları ve bir öğe üzerinde öznitelik belirtme.
 
 <span class="caption">Table B-6: Macros and Attributes</span>
 
-| Symbol                                      | Explanation        |
+| Sembol                                      | Açıklama        |
 | ------------------------------------------- | ------------------ |
-| `#[meta]`                                   | Outer attribute    |
-| `#![meta]`                                  | Inner attribute    |
-| `$ident`                                    | Macro substitution |
-| `$ident:kind`                               | Macro capture      |
-| `$(…)…`                                     | Macro repetition   |
-| `ident!(...)`, `ident!{...}`, `ident![...]` | Macro invocation   |
+| `#[meta]`                                   | Dış nitelik   |
+| `#![meta]`                                  | İç nitelik   |
+| `$ident`                                    | Makro ikamesi |
+| `$ident:kind`                               | Makro çekim      |
+| `$(…)…`                                     | Makro tekrarı  |
+| `ident!(...)`, `ident!{...}`, `ident![...]` | Makro çağırma   |
 
-Table B-7 shows symbols that create comments.
+Tablo B-7 yorum oluşturan sembolleri göstermektedir.
 
 <span class="caption">Table B-7: Comments</span>
 
-| Symbol     | Explanation             |
+| Sembol     | Açıklama             |
 | ---------- | ----------------------- |
-| `//`       | Line comment            |
-| `//!`      | Inner line doc comment  |
-| `///`      | Outer line doc comment  |
-| `/*...*/`  | Block comment           |
-| `/*!...*/` | Inner block doc comment |
-| `/**...*/` | Outer block doc comment |
+| `//`       | Hat kommenlerit            |
+| `//!`      | İç satır doküman yorumu  |
+| `///`      | Dış satır doküman yorumu  |
+| `/*...*/`  | Blok yorumu           |
+| `/*!...*/` | İç blok doküman yorumu |
+| `/**...*/` | Dış blok doküman yorumu |
 
-Table B-8 shows the contexts in which parentheses are used.
+Tablo B-8'de parantezlerin kullanıldığı bağlamlar gösterilmektedir.
 
 <span class="caption">Table B-8: Parentheses</span>
 
-| Symbol                   | Explanation                                                                                 |
+| Sembol                   | Açıklama                                                                                 |
 | ------------------------ | ------------------------------------------------------------------------------------------- |
-| `()`                     | Empty tuple (aka unit), both literal and type                                               |
-| `(expr)`                 | Parenthesized expression                                                                    |
-| `(expr,)`                | Single-element tuple expression                                                             |
-| `(type,)`                | Single-element tuple type                                                                   |
-| `(expr, ...)`            | Tuple expression                                                                            |
-| `(type, ...)`            | Tuple type                                                                                  |
-| `expr(expr, ...)`        | Function call expression; also used to initialize tuple `struct`s and tuple `enum` variants |
+| `()`                     | Boş tuple (diğer adıyla birim), hem gerçek hem de tip                                             |
+| `(expr)`                 | Parantezli ifade                                                                   |
+| `(expr,)`                | Tek öğeli tuple ifadesi                                                             |
+| `(type,)`                | Tek elemanlı tuple tipi                                                                   |
+| `(expr, ...)`            | Tuple ifade                                                                            |
+| `(type, ...)`            | Tuple ifade                                                                                 |
+| `expr(expr, ...)`        | Fonksiyon çağrı ifadesi; tuple `struct` ve tuple `enum` varyantlarını başlatmak için de kullanılır |
 
-Table B-9 shows the contexts in which curly braces are used.
+Tablo B-9, küme parantezlerinin kullanıldığı bağlamları göstermektedir.
 
 <span class="caption">Table B-9: Curly Brackets</span>
 
-| Context      | Explanation      |
+| Bağlam      | Açıklama      |
 | ------------ | ---------------- |
-| `{...}`      | Block expression |
+| `{...}`      | Blok ifade |
 | `Type {...}` | `struct` literal |
 
-Table B-10 shows the contexts in which square brackets are used.
+Tablo B-10 köşeli parantezlerin kullanıldığı bağlamları göstermektedir.
 
 <span class="caption">Table B-10: Square Brackets</span>
 
-| Context                                            | Explanation                                                                                                                   |
+| Bağlam                                            | cAçıklama                                                                                                                   |
 | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `[...]`                                            | Array literal                                                                                                                 |
-| `[expr; len]`                                      | Array literal containing `len` copies of `expr`                                                                               |
-| `[type; len]`                                      | Array type containing `len` instances of `type`                                                                               |
-| `expr[expr]`                                       | Collection indexing. Overloadable (`Index`, `IndexMut`)                                                                       |
-| `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | Collection indexing pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, or `RangeFull` as the “index” |
+| `[...]`                                            | Gerçek dizi                                                                                                              |
+| `[expr; len]`                                      | expr`nin `len` kopyalarını içeren dizi değişmezi                                                                               |
+| `[type; len]`                                      | type` türünün `len` örneklerini içeren dizi türü                                                                               |
+| `expr[expr]`                                       | Koleksiyon indeksleme. Aşırı yüklenebilir (`Index`, `IndexMut`)                                                                      |
+| `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | Koleksiyon dilimleme gibi davranan koleksiyon indeksleme, “indeks” olarak `Range`, `RangeFrom`, `RangeTo` veya `RangeFull` kullanır |
