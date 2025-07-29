@@ -649,23 +649,51 @@ want to. You can run Miri on a project by typing `cargo +nightly miri run` or
 `cargo +nightly miri test`.
 
 For an example of how helpful this can be, consider what happens when we run it
-against Listing 20-11.
+against Listing 20-7.
 
 ```
 $ cargo +nightly miri run
    Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
-     Running `file:///home/.rustup/toolchains/nightly/bin/cargo-miri runner target/miri/debug/unsafe-example`
-COUNTER: 3
+     Running `file:///home/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo-miri runner target/miri/aarch64-apple-darwin/debug/unsafe-example`
+warning: integer-to-pointer cast
+ --> src/main.rs:6:13
+  |
+6 |     let r = address as *mut i32;
+  |             ^^^^^^^^^^^^^^^^^^^ integer-to-pointer cast
+  |
+  = help: this program is using integer-to-pointer casts or (equivalently) `ptr::with_exposed_provenance`, which means that Miri might miss pointer bugs in this program
+  = help: see https://doc.rust-lang.org/nightly/std/ptr/fn.with_exposed_provenance.html for more details on that operation
+  = help: to ensure that Miri does not miss bugs in your program, use Strict Provenance APIs (https://doc.rust-lang.org/nightly/std/ptr/index.html#strict-provenance, https://crates.io/crates/sptr) instead
+  = help: you can then set `MIRIFLAGS=-Zmiri-strict-provenance` to ensure you are not relying on `with_exposed_provenance` semantics
+  = help: alternatively, `MIRIFLAGS=-Zmiri-permissive-provenance` disables this warning
+  = note: BACKTRACE:
+  = note: inside `main` at src/main.rs:6:13: 6:32
+
+error: Undefined Behavior: pointer not dereferenceable: pointer must be dereferenceable for 40000 bytes, but got 0x1234[noalloc] which is a dangling pointer (it has no provenance)
+ --> src/main.rs:8:35
+  |
+8 |     let values: &[i32] = unsafe { slice::from_raw_parts_mut(r, 10000) };
+  |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Undefined Behavior occurred here
+  |
+  = help: this indicates a bug in the program: it performed an invalid operation, and caused Undefined Behavior
+  = help: see https://doc.rust-lang.org/nightly/reference/behavior-considered-undefined.html for further information
+  = note: BACKTRACE:
+  = note: inside `main` at src/main.rs:8:35: 8:70
+
+note: some details are omitted, run with `MIRIFLAGS=-Zmiri-backtrace=full` for a verbose backtrace
+
+error: aborting due to 1 previous error; 1 warning emitted
+
 ```
 
-Miri correctly warns us that we have shared references to mutable data. Here,
-Miri issues only a warning because this is not guaranteed to be undefined
-behavior in this case, and it does not tell us how to fix the problem. Thanks
-to Miri, we now know there is a risk of undefined behavior, and we can think
-about how to make the code safe. In some cases, Miri can also detect outright
-errors—code patterns that are *sure* to be wrong—and make recommendations about
-how to fix those errors.
+Miri correctly warns us that we’re casting an integer to a pointer, which might
+be a problem but Miri can’t detect if there is because it doesn’t know how the
+pointer originated. Then, Miri returns an error where Listing 20-7 has
+undefined behavior because we have a dangling pointer. Thanks to Miri, we now
+know there is a risk of undefined behavior, and we can think about how to make
+the code safe. In some cases, Miri can even make recommendations about how to
+fix errors.
 
 Miri doesn’t catch everything you might get wrong when writing unsafe code.
 Miri is a dynamic analysis tool, so it only catches problems with code that

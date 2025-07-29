@@ -512,19 +512,19 @@ want to. You can run Miri on a project by typing `cargo +nightly miri run` or
 `cargo +nightly miri test`.
 
 For an example of how helpful this can be, consider what happens when we run it
-against Listing 20-11.
+against Listing 20-7.
 
 ```console
-{{#include ../listings/ch20-advanced-features/listing-20-11/output.txt}}
+{{#include ../listings/ch20-advanced-features/listing-20-07/output.txt}}
 ```
 
-Miri correctly warns us that we have shared references to mutable data. Here,
-Miri issues only a warning because this is not guaranteed to be undefined
-behavior in this case, and it does not tell us how to fix the problem. Thanks
-to Miri, we now know there is a risk of undefined behavior, and we can think
-about how to make the code safe. In some cases, Miri can also detect outright
-errors—code patterns that are _sure_ to be wrong—and make recommendations about
-how to fix those errors.
+Miri correctly warns us that we’re casting an integer to a pointer, which might
+be a problem but Miri can’t detect if there is because it doesn’t know how the
+pointer originated. Then, Miri returns an error where Listing 20-7 has
+undefined behavior because we have a dangling pointer. Thanks to Miri, we now
+know there is a risk of undefined behavior, and we can think about how to make
+the code safe. In some cases, Miri can even make recommendations about how to
+fix errors.
 
 Miri doesn’t catch everything you might get wrong when writing unsafe code.
 Miri is a dynamic analysis tool, so it only catches problems with code that
