@@ -13,6 +13,7 @@ değerlerine sahip parametreler alabilirler. Aslında, 6. Bölümde `Option<T>` 
 jenerikleri zaten kullandık. Bu bölümde,
 kendi türlerinizi, fonksiyonlarınızı ve metotlarınızı jeneriklerle nasıl tanımlayacağınızı keşfedeceksiniz!
 
+
 Öncelikle kod tekrarını azaltmak için bir fonksiyonun nasıl çıkarılacağını gözden geçireceğiz. Daha sonra
 aynı tekniği kullanarak
 yalnızca parametrelerinin tipleri farklı olan iki fonksiyondan genel bir fonksiyon oluşturacağız. Ayrıca struct ve enum tanımlarında

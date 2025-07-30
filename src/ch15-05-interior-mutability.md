@@ -157,7 +157,7 @@ Bir `Rc<RefCell<i32>>` örneği oluşturup, daha sonra doğrudan erişebilmek i�
 
 `a` listesini bir `Rc<T>` ile sarıyoruz, böylece `b` ve `c` listelerini oluşturduğumuzda, her ikisi de `a`'ya referans verebiliyor; bunu 15-18 numaralı listede de yapmıştık.
 
-`a`, `b` ve `c` listelerini oluşturduktan sonra, `value` içindeki değere 10 eklemek istiyoruz. Bunu, `value` üzerinde `borrow_mut` çağırarak yapıyoruz; bu, 5. Bölümde tartıştığımız otomatik dereference özelliğini kullanarak `Rc<T>`'yi içteki `RefCell<T>` değerine dereference eder. `borrow_mut` metodu bir `RefMut<T>` akıllı işaretçi döndürür ve bunun üzerinde dereference operatörünü kullanıp içteki değeri değiştiririz.
+`a`, `b` ve `c` listelerini oluşturduktan sonra, `value` içindeki değere 10 eklemek istiyoruz. Bunu, `value` üzerinde `borrow_mut` çağırarak yapıyoruz; bu, [5. Bölümde][operatör-nerede] tartıştığımız otomatik dereference özelliğini kullanarak `Rc<T>`'yi içteki `RefCell<T>` değerine dereference eder. `borrow_mut` metodu bir `RefMut<T>` akıllı işaretçi döndürür ve bunun üzerinde dereference operatörünü kullanıp içteki değeri değiştiririz.
 
 `a`, `b` ve `c`'yi yazdırdığımızda, hepsinin artık `5` yerine değiştirilmiş `15` değerine sahip olduğunu görebiliriz:
 
@@ -167,4 +167,4 @@ Bir `Rc<RefCell<i32>>` örneği oluşturup, daha sonra doğrudan erişebilmek i�
 
 Bu teknik oldukça kullanışlı! `RefCell<T>` kullanarak, dışarıdan bakıldığında değiştirilemez bir `List` değerine sahibiz. Ama `RefCell<T>`'nin içsel değiştirilebilirlik sağlayan metotlarını kullanarak, verimizi gerektiğinde değiştirebiliyoruz. Ödünç alma kurallarının çalışma zamanı kontrolleri, veri yarışlarından korunmamızı sağlar ve veri yapılarımızda bu esneklik için bazen biraz hızdan feragat etmeye değer. Dikkat edin, `RefCell<T>` çok iş parçacıklı kodda çalışmaz! `Mutex<T>`, `RefCell<T>`'nin iş parçacığı güvenli sürümüdür ve 16. Bölümde `Mutex<T>`'yi tartışacağız.
 
-[wheres-the---operator]: ch05-03-method-syntax.html#wheres-the---operator
+[operatör-nerede]: ch05-03-method-syntax.md#`->`-Operatörü-nerede?

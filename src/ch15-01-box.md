@@ -8,7 +8,7 @@ Box'ların, verilerini yığın yerine heap'te saklamaları dışında herhangi 
 - Büyük miktarda veriniz olduğunda ve sahipliği devretmek, ancak verinin kopyalanmadığından emin olmak istediğinizde
 - Bir değerin sahipliğini almak ve yalnızca belirli bir trait'i uygulamasına önem vermek, belirli bir türe sahip olmasına değil
 
-İlk durumu ["Box ile Özyinelemeli Türleri Etkinleştirmek"](#enabling-recursive-types-with-boxes) bölümünde göstereceğiz. İkinci durumda, büyük miktarda verinin sahipliğini devretmek uzun sürebilir çünkü veri yığın üzerinde kopyalanır. Bu durumda performansı artırmak için, büyük veriyi bir kutuda heap'te saklayabiliriz. Böylece, yığında yalnızca küçük bir işaretçi kopyalanır, asıl veri ise heap'te bir yerde kalır. Üçüncü durum ise _trait nesnesi_ olarak bilinir ve 18. Bölümdeki ["Farklı Türde Değerler İçin Trait Nesneleri Kullanmak"](ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types) bölümünde ayrıntılı olarak ele alınacaktır. Burada öğrendiklerinizi orada tekrar kullanacaksınız!
+İlk durumu ["Box ile Özyinelemeli Türleri Etkinleştirmek"](#box-ile-özyinelemeli-türleri-etkinleştirmek) bölümünde göstereceğiz. İkinci durumda, büyük miktarda verinin sahipliğini devretmek uzun sürebilir çünkü veri yığın üzerinde kopyalanır. Bu durumda performansı artırmak için, büyük veriyi bir kutuda heap'te saklayabiliriz. Böylece, yığında yalnızca küçük bir işaretçi kopyalanır, asıl veri ise heap'te bir yerde kalır. Üçüncü durum ise _trait nesnesi_ olarak bilinir ve 18. Bölümdeki ["Farklı Türde Değerler İçin Trait Nesneleri Kullanmak"](ch18-02-trait-objects.md#ortak-davranışları-soyutlamak-için-trait-nesneleri-kullanmak) bölümünde ayrıntılı olarak ele alınacaktır. Burada öğrendiklerinizi orada tekrar kullanacaksınız!
 
 ### `Box<T>` ile Veriyi Heap'te Saklamak
 
@@ -135,4 +135,4 @@ Kutular yalnızca dolaylılık ve heap tahsisi sağlar; diğer akıllı işaret�
 
 `Box<T>` türü, `Deref` trait'ini uyguladığı için bir akıllı işaretçidir; bu, `Box<T>` değerlerinin referans gibi kullanılmasına olanak tanır. Bir `Box<T>` değeri kapsamdan çıktığında, kutunun işaret ettiği heap verisi de `Drop` trait'i sayesinde temizlenir. Bu iki trait, bu bölümün geri kalanında ele alacağımız diğer akıllı işaretçi türlerinin sunduğu işlevsellik için daha da önemli olacaktır. Şimdi bu iki trait'i daha ayrıntılı inceleyelim.
 
-[trait-objects]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[trait-objects]: ch18-02-trait-objects.md#ortak-davranışları-soyutlamak-için-trait-nesneleri-kullanmak

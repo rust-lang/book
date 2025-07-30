@@ -409,7 +409,7 @@ Artık aynı anda birden fazla future ile çalışmanın çeşitli yollarını g
 
 - `futures` crate'inden `futures::stream::FuturesUnordered` tipine göz atın. Bunu bir `Vec` kullanmaktan ne farkı olurdu? (Bunun crate'in `stream` kısmında olmasına takılmayın; herhangi bir future koleksiyonuyla gayet iyi çalışır.)
 
-[dyn]: ch12-03-improving-error-handling-and-modularity.html
-[enum-alt]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
-[async-program]: ch17-01-futures-and-syntax.html#our-first-async-program
-[iterator-trait]: ch13-02-iterators.html#the-iterator-trait-and-the-next-method
+[dyn]: ch12-03-improving-error-handling-and-modularity.md
+[enum-alt]: ch08-01-vectors.md#enum-kullanarak-birden-fazla-türü-depolama
+[async-program]: ch17-01-futures-and-syntax.md#i̇lk-async-programımız
+[iterator-trait]: ch13-02-iterators.md#iterator-özelliği-ve-next-metodu

@@ -282,5 +282,5 @@ Her zamanki gibi, bir mesaj gönderme hatasını nasıl ele alacağınız duruma
 
 Artık pratikte birçok async örneği gördük; şimdi bir adım geri çekilip, Rust'ın async'i çalıştırmak için kullandığı `Future`, `Stream` ve diğer temel trait'lerin ayrıntılarına bakalım.
 
-[17-02-messages]: ch17-02-concurrency-with-async.html#message-passing
-[iterator-trait]: ch13-02-iterators.html#the-iterator-trait-and-the-next-method
+[17-02-messages]: ch17-02-concurrency-with-async.md#i̇ki-görevde-sayma-i̇şlemini-mesajlaşma-ile-yapmak
+[iterator-trait]: ch13-02-iterators.md#iterator-özelliği-ve-next-metodu

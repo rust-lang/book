@@ -108,7 +108,7 @@ Küçük detaylar, örneğin `join`'ın nerede çağrıldığı, thread'lerinizi
 
 ### Thread'lerle Birlikte `move` Closure Kullanmak
 
-Genellikle, `thread::spawn`'a verilen closure'larda `move` anahtar kelimesini kullanırız; çünkü bu durumda closure, kullandığı değerlerin sahipliğini alır ve bu değerlerin sahipliğini bir thread'den diğerine aktarır. 13. bölümde ["Referansları Yakalamak veya Sahipliği Taşımak"](ch13-01-closures.html#capturing-references-or-moving-ownership) başlığında `move`'u closure'lar bağlamında tartışmıştık. Şimdi, `move` ile `thread::spawn` etkileşimine daha yakından bakacağız.
+Genellikle, `thread::spawn`'a verilen closure'larda `move` anahtar kelimesini kullanırız; çünkü bu durumda closure, kullandığı değerlerin sahipliğini alır ve bu değerlerin sahipliğini bir thread'den diğerine aktarır. 13. bölümde ["Referansları Yakalamak veya Sahipliği Taşımak"](ch13-01-closures.md#referansları-yakalamak-veya-sahipliği-taşımak) başlığında `move`'u closure'lar bağlamında tartışmıştık. Şimdi, `move` ile `thread::spawn` etkileşimine daha yakından bakacağız.
 
 16-1 numaralı listede, `thread::spawn`'a verdiğimiz closure'ın argüman almadığına dikkat edin: spawned thread'in kodunda ana thread'den herhangi bir veri kullanmıyoruz. Ana thread'deki verileri spawned thread'de kullanmak için, spawned thread'in closure'ı ihtiyaç duyduğu değerleri yakalamalıdır. 16-3 numaralı listede, ana thread'de bir vektör oluşturup, onu spawned thread'de kullanmaya çalışıyoruz. Ancak, bu henüz çalışmayacak, birazdan göreceksiniz.
 
@@ -169,4 +169,4 @@ Rust'ın sahiplik kuralları bizi yine kurtardı! 16-3'teki kodda hata aldık ç
 
 Artık thread'lerin ne olduğunu ve thread API'sinin sağladığı yöntemleri gördüğümüze göre, thread'leri kullanabileceğimiz bazı durumlara bakalım.
 
-[capture]: ch13-01-closures.html#capturing-references-or-moving-ownership
+

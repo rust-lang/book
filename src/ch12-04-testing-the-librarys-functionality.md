@@ -1,36 +1,36 @@
-## Developing the Library’s Functionality with Test-Driven Development
+## Test Güdümlü Geliştirme ile Kütüphanenin İşlevselliğini Geliştirme
 
-Now that we have the search logic in _src/lib.rs_ separate from the `main`
-function, it’s much easier to write tests for the core functionality of our
-code. We can call functions directly with various arguments and check return
-values without having to call our binary from the command line.
+Artık _src/lib.rs_ içinde `main`
+işlevinden ayrı bir arama mantığımız olduğuna göre,
+kodumuzun temel işlevleri için testler yazmak çok daha kolay. Fonksiyonları çeşitli argümanlarla doğrudan çağırabilir ve ikili dosyamızı komut satırından çağırmak zorunda kalmadan dönen
+değerlerini kontrol edebiliriz.
 
-In this section, we’ll add the searching logic to the `minigrep` program using
-the test-driven development (TDD) process with the following steps:
+Bu bölümde, aşağıdaki adımlarla test güdümlü geliştirme (TDD) sürecini
+kullanarak `minigrep` programına arama mantığını ekleyeceğiz:
 
-1. Write a test that fails and run it to make sure it fails for the reason you
-   expect.
-2. Write or modify just enough code to make the new test pass.
-3. Refactor the code you just added or changed and make sure the tests continue
-   to pass.
-4. Repeat from step 1!
+1. Başarısız olan bir test yazın ve
+ beklediğiniz nedenle başarısız olduğundan emin olmak için çalıştırın.
+2. Yeni testin geçmesini sağlayacak kadar kod yazın ya da değiştirin.
+3. Yeni eklediğiniz veya değiştirdiğiniz kodu yeniden düzenleyin ve testlerin
+ geçmeye devam ettiğinden emin olun.
+4. Adım 1'den itibaren tekrarlayın!
 
-Though it’s just one of many ways to write software, TDD can help drive code
-design. Writing the test before you write the code that makes the test pass
-helps to maintain high test coverage throughout the process.
+TDD, yazılım yazmanın birçok yolundan yalnızca biri olsa da, kodun
+tasarımını yönlendirmeye yardımcı olabilir. Testin geçmesini sağlayan kodu yazmadan önce testi yazmak
+süreç boyunca yüksek test kapsamının korunmasına yardımcı olur.
 
-We’ll test-drive the implementation of the functionality that will actually do
-the searching for the query string in the file contents and produce a list of
-lines that match the query. We’ll add this functionality in a function called
-`search`.
+Dosya içeriğinde
+sorgu dizesini arayacak ve sorguyla eşleşen
+satırlarının bir listesini üretecek işlevselliğin uygulanmasını test edeceğiz. Bu işlevi
+`search` adlı bir fonksiyona ekleyeceğiz.
 
-### Writing a Failing Test
+### Başarısız Bir Test Yazmak
 
-In _src/lib.rs_, we’ll add a `tests` module with a test function, as we did in
-[Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies the
-behavior we want the `search` function to have: it will take a query and the
-text to search, and it will return only the lines from the text that contain
-the query. Listing 12-15 shows this test.
+_src/lib.rs_ dosyasına,
+[Bölüm 11][ch11-anatomy]<!-- ignore --> dosyasında yaptığımız gibi bir test fonksiyonuna sahip bir `tests` modülü ekleyeceğiz. Test fonksiyonu, `search` fonksiyonunun sahip olmasını istediğimiz
+davranışını belirtir: bir sorgu ve aranacak
+metnini alır ve metinden yalnızca sorguyu
+içeren satırları döndürür. Liste 12-15 bu testi göstermektedir.
 
 <Listing number="12-15" file-name="src/lib.rs" caption="Creating a failing test for the `search` function for the functionality we wish we had">
 
@@ -40,19 +40,18 @@ the query. Listing 12-15 shows this test.
 
 </Listing>
 
-This test searches for the string `"duct"`. The text we’re searching is three
-lines, only one of which contains `"duct"` (note that the backslash after the
-opening double quote tells Rust not to put a newline character at the beginning
-of the contents of this string literal). We assert that the value returned from
-the `search` function contains only the line we expect.
+Bu test `"duct"` dizesini arar. Aradığımız metin, yalnızca biri `"duct"` içeren üç
+satırdır (
+açılış çift tırnak işaretinden sonraki ters eğik çizginin Rust'a bu dize değişmezinin içeriğinin başına
+yeni satır karakteri koymamasını söylediğine dikkat edin). `search` fonksiyonundan dönen değerin sadece beklediğimiz satırı içerdiğini iddia ediyoruz.
 
-If we run this test, it will currently fail because the `unimplemented!` macro
-panics with the message “not implemented”. In accordance with TDD principles,
-we’ll take a small step of adding just enough code to get the test to not panic
-when calling the function by defining the `search` function to always return an
-empty vector, as shown in Listing 12-16. Then the test should compile and fail
-because an empty vector doesn’t match a vector containing the line `"safe,
-fast, productive."`
+Eğer bu testi çalıştırırsak, şu anda başarısız olacaktır çünkü `unimplemented!` makrosu
+“not implemented” mesajıyla paniğe kapılır. TDD ilkelerine uygun olarak,
+Listing 12-16'da gösterildiği gibi, `search` fonksiyonunu her zaman bir
+boş vektör döndürecek şekilde tanımlayarak, fonksiyonu çağırırken testin paniklememesi için
+yeterli kodu ekleyerek küçük bir adım atacağız. Ardından test derlenmeli ve boş bir vektör `"safe,
+fast, productive."` satırını içeren bir vektörle eşleşmediği için
+başarısız olmalıdır.
 
 <Listing number="12-16" file-name="src/lib.rs" caption="Defining just enough of the `search` function so calling it won’t panic">
 
@@ -62,60 +61,59 @@ fast, productive."`
 
 </Listing>
 
-Now let’s discuss why we need to define an explicit lifetime `'a` in the
-signature of `search` and use that lifetime with the `contents` argument and
-the return value. Recall in [Chapter 10][ch10-lifetimes]<!-- ignore --> that
-the lifetime parameters specify which argument lifetime is connected to the
-lifetime of the return value. In this case, we indicate that the returned
-vector should contain string slices that reference slices of the argument
-`contents` (rather than the argument `query`).
+Şimdi neden `search` öğesinin
+imzasında açık bir `'a` yaşam süresi tanımlamamız ve bu yaşam süresini `contents` argümanıyla ve
+dönüş değeriyle kullanmamız gerektiğini tartışalım. Bölüm 10][ch10-lifetimes]<!-- ignore -->'da
+yaşam süresi parametrelerinin hangi argüman yaşam süresinin dönüş değerinin
+yaşam süresine bağlı olduğunu belirttiğini hatırlayın. Bu durumda, döndürülen
+vektörünün,
+`contents` argümanının dilimlerine (`query` argümanı yerine) referans veren dize dilimleri içermesi gerektiğini belirtiyoruz.
 
-In other words, we tell Rust that the data returned by the `search` function
-will live as long as the data passed into the `search` function in the
-`contents` argument. This is important! The data referenced _by_ a slice needs
-to be valid for the reference to be valid; if the compiler assumes we’re making
-string slices of `query` rather than `contents`, it will do its safety checking
-incorrectly.
+Başka bir deyişle, Rust'a
+`search` fonksiyonu tarafından döndürülen verilerin
+`contents` argümanında `search` fonksiyonuna aktarılan veriler kadar yaşayacağını söylüyoruz. Bu çok önemli! Bir dilim tarafından referans verilen verinin geçerli olabilmesi için
+geçerli olması gerekir; eğer derleyici
+string dilimlerini `contents` yerine `query` yaptığımızı varsayarsa, güvenlik kontrolünü
+yanlış yapacaktır.
 
-If we forget the lifetime annotations and try to compile this function, we’ll
-get this error:
+Yaşam süresi ek açıklamalarını unutur ve bu fonksiyonu derlemeye çalışırsak,
+bu hatayı alırız:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-02-missing-lifetimes/output.txt}}
 ```
 
-Rust can’t know which of the two parameters we need for the output, so we need
-to tell it explicitly. Note that the help text suggests specifying the same
-lifetime parameter for all the parameters and the output type, which is
-incorrect! Because `contents` is the parameter that contains all of our text
-and we want to return the parts of that text that match, we know `contents` is
-the only parameter that should be connected to the return value using the
-lifetime syntax.
+Rust, çıktı için iki parametreden hangisine ihtiyacımız olduğunu bilemez, bu nedenle
+adresine açıkça söylememiz gerekir. Yardım metninin tüm parametreler ve çıktı türü için aynı
+lifetime parametresini belirtmeyi önerdiğine dikkat edin, ki bu
+yanlıştır! Contents` parametresi
+metnimizin tamamını içerdiğinden ve bu metnin eşleşen kısımlarını döndürmek istediğimizden,
+lifetime sözdizimini kullanarak dönüş değerine bağlanması gereken tek parametrenin
+olduğunu biliyoruz.
 
-Other programming languages don’t require you to connect arguments to return
-values in the signature, but this practice will get easier over time. You might
-want to compare this example with the examples in the [“Validating References
-with Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> section
-in Chapter 10.
+Diğer programlama dilleri, imzada
+değerlerini döndürmek için argümanları bağlamanızı gerektirmez, ancak bu uygulama zamanla daha kolay hale gelecektir. Bu örneği
+Bölüm 10'daki [“Validating Referenceswith Lifetimes”][validating-references-with-lifetimes]<!-- ignore -->
+bölümündeki örneklerle karşılaştırmak isteyebilirsiniz.
 
-### Writing Code to Pass the Test
+### Testi Geçmek İçin Kod Yazma
 
-Currently, our test is failing because we always return an empty vector. To fix
-that and implement `search`, our program needs to follow these steps:
+Şu anda, her zaman boş bir vektör döndürdüğümüz için testimiz başarısız oluyor. Bunu
+düzeltmek ve `search` uygulamak için programımızın aşağıdaki adımları izlemesi gerekir:
 
-1. Iterate through each line of the contents.
-2. Check whether the line contains our query string.
-3. If it does, add it to the list of values we’re returning.
-4. If it doesn’t, do nothing.
-5. Return the list of results that match.
+1. İçeriğin her satırını yineleyin.
+2. Satırın sorgu dizemizi içerip içermediğini kontrol edin.
+3. Eğer içeriyorsa, döndürdüğümüz değerler listesine ekleyin.
+4. Eğer içermiyorsa, hiçbir şey yapmayın.
+5. Eşleşen sonuçların listesini döndürün.
 
-Let’s work through each step, starting with iterating through lines.
+Satırlar arasında yineleme ile başlayarak her adımda çalışalım.
 
-#### Iterating Through Lines with the `lines` Method
+#### `lines` Yöntemi ile Satırlar Arasında Yineleme
 
-Rust has a helpful method to handle line-by-line iteration of strings,
-conveniently named `lines`, that works as shown in Listing 12-17. Note that
-this won’t compile yet.
+Rust, dizelerin satır satır yinelenmesini işlemek için yararlı bir yönteme sahiptir,
+uygun bir şekilde `lines` olarak adlandırılır ve Liste 12-17'de gösterildiği gibi çalışır. Unutmayın ki
+bu henüz derlenmeyecektir.
 
 <Listing number="12-17" file-name="src/lib.rs" caption="Iterating through each line in `contents`">
 
@@ -125,17 +123,16 @@ this won’t compile yet.
 
 </Listing>
 
-The `lines` method returns an iterator. We’ll talk about iterators in depth in
-[Chapter 13][ch13-iterators]<!-- ignore -->, but recall that you saw this way
-of using an iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a
-`for` loop with an iterator to run some code on each item in a collection.
+lines` yöntemi bir yineleyici döndürür. Yineleyiciler hakkında
+[Bölüm 13][ch13-iterators]<!-- ignore --> adresinde derinlemesine konuşacağız, ancak bir yineleyici kullanmanın bu yolunu
+adresinde gördüğünüzü hatırlayın [Listing 3-5][ch3-iter]<!-- ignore -->, burada bir koleksiyondaki her öğe üzerinde bazı kodlar çalıştırmak için bir yineleyici ile bir
+`for` döngüsü kullandık.
 
-#### Searching Each Line for the Query
+#### Sorgu için Her Satırı Arama
 
-Next, we’ll check whether the current line contains our query string.
-Fortunately, strings have a helpful method named `contains` that does this for
-us! Add a call to the `contains` method in the `search` function, as shown in
-Listing 12-18. Note that this still won’t compile yet.
+Daha sonra, geçerli satırın sorgu dizemizi içerip içermediğini kontrol edeceğiz.
+Neyse ki, dizelerin bunu
+bizim için yapan `contains` adlı yararlı bir yöntemi vardır! Liste 12-18'de gösterildiği gibi `search` fonksiyonuna `contains` metoduna bir çağrı ekleyin. Bunun henüz derlenmeyeceğini unutmayın.
 
 <Listing number="12-18" file-name="src/lib.rs" caption="Adding functionality to see whether the line contains the string in `query`">
 
@@ -145,16 +142,16 @@ Listing 12-18. Note that this still won’t compile yet.
 
 </Listing>
 
-At the moment, we’re building up functionality. To get the code to compile, we
-need to return a value from the body as we indicated we would in the function
-signature.
+Şu anda işlevsellik oluşturuyoruz. Kodun derlenmesini sağlamak için
 
-#### Storing Matching Lines
+ imzasında belirttiğimiz gibi gövdeden bir değer döndürmemiz gerekir.
 
-To finish this function, we need a way to store the matching lines that we want
-to return. For that, we can make a mutable vector before the `for` loop and
-call the `push` method to store a `line` in the vector. After the `for` loop,
-we return the vector, as shown in Listing 12-19.
+#### Eşleşen Satırları Saklama
+
+Bu fonksiyonu tamamlamak için,
+adresinin döndürmesini istediğimiz eşleşen satırları saklamanın bir yoluna ihtiyacımız var. Bunun için `for` döngüsünden önce değişebilir bir vektör oluşturabilir ve
+adresinden `push` yöntemini çağırarak vektörde bir `line` saklayabiliriz. for` döngüsünden sonra,
+Liste 12-19'da gösterildiği gibi vektörü döndürürüz.
 
 <Listing number="12-19" file-name="src/lib.rs" caption="Storing the lines that match so we can return them">
 
@@ -164,52 +161,52 @@ we return the vector, as shown in Listing 12-19.
 
 </Listing>
 
-Now the `search` function should return only the lines that contain `query`,
-and our test should pass. Let’s run the test:
+Şimdi `search` fonksiyonu sadece `query`,
+içeren satırları döndürmeli ve testimiz geçmelidir. Testi çalıştıralım:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-19/output.txt}}
 ```
 
-Our test passed, so we know it works!
+Testimiz geçti, yani çalıştığını biliyoruz!
 
-At this point, we could consider opportunities for refactoring the
-implementation of the search function while keeping the tests passing to
-maintain the same functionality. The code in the search function isn’t too bad,
-but it doesn’t take advantage of some useful features of iterators. We’ll
-return to this example in [Chapter 13][ch13-iterators]<!-- ignore -->, where
-we’ll explore iterators in detail, and look at how to improve it.
+Bu noktada,
+adresine geçen testlerin aynı işlevselliği sürdürmesini sağlarken arama işlevinin
+uygulamasını yeniden düzenleme fırsatlarını değerlendirebiliriz. Arama fonksiyonundaki kod çok kötü değil,
+ancak yineleyicilerin bazı yararlı özelliklerinden yararlanmıyor. Bu örneğe
+[Bölüm 13][ch13-iterators]<!-- ignore -->'da geri döneceğiz, burada
+yineleyicileri ayrıntılı olarak inceleyeceğiz ve nasıl geliştireceğimize bakacağız.
 
-Now the entire program should work! Let’s try it out, first with a word that
-should return exactly one line from the Emily Dickinson poem: _frog_.
+Şimdi tüm program çalışmalıdır! İlk olarak
+adresinin Emily Dickinson şiirinden tam olarak bir satır döndürmesi gereken bir kelimeyle deneyelim: _frog_.
 
 ```console
 {{#include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/output.txt}}
 ```
 
-Cool! Now let’s try a word that will match multiple lines, like _body_:
+Harika! Şimdi _body_ gibi birden fazla satırla eşleşecek bir kelime deneyelim:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-03-multiple-matches/output.txt}}
 ```
 
-And finally, let’s make sure that we don’t get any lines when we search for a
-word that isn’t anywhere in the poem, such as _monomorphization_:
+Ve son olarak, şiirin hiçbir yerinde olmayan bir
+kelimesini aradığımızda, örneğin _monomorphization_ gibi, herhangi bir satır almadığımızdan emin olalım:
 
 ```console
 {{#include ../listings/ch12-an-io-project/output-only-04-no-matches/output.txt}}
 ```
 
-Excellent! We’ve built our own mini version of a classic tool and learned a lot
-about how to structure applications. We’ve also learned a bit about file input
-and output, lifetimes, testing, and command line parsing.
+Mükemmel! Klasik bir aracın kendi mini versiyonunu oluşturduk ve uygulamaların nasıl yapılandırılacağı hakkında
+çok şey öğrendik. Ayrıca dosya girişi
+ve çıkışı, yaşam süreleri, test etme ve komut satırı ayrıştırma hakkında da biraz bilgi edindik.
 
-To round out this project, we’ll briefly demonstrate how to work with
-environment variables and how to print to standard error, both of which are
-useful when you’re writing command line programs.
+Bu projeyi tamamlamak için,
+ortam değişkenleri ile nasıl çalışılacağını ve standart hataya nasıl yazdırılacağını kısaca göstereceğiz, her ikisi de komut satırı programları yazarken
+yararlıdır.
 
-[validating-references-with-lifetimes]: ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
-[ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function
-[ch10-lifetimes]: ch10-03-lifetime-syntax.html
-[ch3-iter]: ch03-05-control-flow.html#looping-through-a-collection-with-for
-[ch13-iterators]: ch13-02-iterators.html
+[validating-references-with-lifetimes]: ch10-03-lifetime-syntax.md#referansları-yaşam-süreleri-ile-doğrulama
+[ch11-anatomy]: ch11-01-writing-tests.md#test-i̇şlevinin-yapısı
+[ch10-lifetimes]: ch10-03-lifetime-syntax.md
+[ch3-iter]: ch03-05-control-flow.md#for-ile-bir-koleksiyonda-döngü-oluşturma
+[ch13-iterators]: ch13-02-iterators.md

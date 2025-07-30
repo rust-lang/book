@@ -240,9 +240,9 @@ received 'you'
 
 Bu iyi bir başlangıç, ama bizi sadece birkaç future ile sınırlar: `join` ile iki, `join3` ile üç. Şimdi daha fazla future ile nasıl çalışabileceğimize bakalım.
 
-[thread-spawn]: ch16-01-threads.html#creating-a-new-thread-with-spawn
-[join-handles]: ch16-01-threads.html#waiting-for-all-threads-to-finish-using-join-handles
-[message-passing-threads]: ch16-02-message-passing.html
-[if-let]: ch06-03-if-let.html
-[capture-or-move]: ch13-01-closures.html#capturing-references-or-moving-ownership
-[move-threads]: ch16-01-threads.html#using-move-closures-with-threads
+[thread-spawn]: ch16-01-threads.md#spawn-ile-yeni-bir-thread-oluşturmak
+[join-handles]: ch16-01-threads.md#tüm-threadlerin-bitmesini-join-handle-ile-beklemek
+[message-passing-threads]: ch16-02-message-passing.md
+[if-let]: ch06-03-if-let.md
+[capture-or-move]: ch13-01-closures.md#referansları-yakalamak-veya-sahipliği-taşımak
+[move-threads]: ch16-01-threads.md#threadlerle-birlikte-move-closure-kullanmak

@@ -1,20 +1,20 @@
-## Separating Modules into Different Files
+## Modülleri Farklı Dosyalara Ayırma
 
-So far, all the examples in this chapter defined multiple modules in one file.
-When modules get large, you might want to move their definitions to a separate
-file to make the code easier to navigate.
+Şimdiye kadar, bu bölümdeki tüm örneklerde bir dosyada birden fazla modül tanımlanmıştı.
+Modüller büyüdükçe, kodda gezinmeyi kolaylaştırmak için tanımlarını ayrı bir
+dosyaya taşımak isteyebilirsiniz.
 
-For example, let’s start from the code in Listing 7-17 that had multiple
-restaurant modules. We’ll extract modules into files instead of having all the
-modules defined in the crate root file. In this case, the crate root file is
-_src/lib.rs_, but this procedure also works with binary crates whose crate root
-file is _src/main.rs_.
+Örneğin, Listing 7-17'deki birden fazla
+restoran modülü içeren koddan başlayalım. Tüm modülleri crate kök dosyasında tanımlamak yerine, modülleri dosyalara ayıracağız.
+Bu durumda, crate kök dosyası
+_src/lib.rs_'dir, ancak bu prosedür, crate kök dosyası
+_src/main.rs_ olan ikili crate'lerde de işe yarar.
 
-First we’ll extract the `front_of_house` module to its own file. Remove the
-code inside the curly brackets for the `front_of_house` module, leaving only
-the `mod front_of_house;` declaration, so that _src/lib.rs_ contains the code
-shown in Listing 7-21. Note that this won’t compile until we create the
-_src/front_of_house.rs_ file in Listing 7-22.
+İlk olarak, `front_of_house` modülünü kendi dosyasına ayıracağız. `front_of_house` modülünün küme parantezleri içindeki kodu kaldırın ve sadece
+`mod front_of_house;` bildirimini bırakın, böylece _src/lib.rs_ dosyası Listing 7-21'de gösterilen kodu içersin.
+Listing 7-22'deki _src/front_of_house.rs_ dosyasını oluşturana kadar bunun derlenmeyeceğini unutmayın.
+Listing 7-22.
+`front_of_house` modülünü kendi dosyasına ayırmak için
 
 <Listing number="7-21" file-name="src/lib.rs" caption="Declaring the `front_of_house` module whose body will be in *src/front_of_house.rs*">
 
@@ -24,10 +24,10 @@ _src/front_of_house.rs_ file in Listing 7-22.
 
 </Listing>
 
-Next, place the code that was in the curly brackets into a new file named
-_src/front_of_house.rs_, as shown in Listing 7-22. The compiler knows to look
-in this file because it came across the module declaration in the crate root
-with the name `front_of_house`.
+Ardından, küme parantezleri içindeki kodu, Listing 7-22'de gösterildiği gibi
+_src/front_of_house.rs_ adlı yeni bir dosyaya yerleştirin. Derleyici,
+crate kökünde `front_of_house` adlı modül bildirimi ile karşılaştığı için
+bu dosyaya bakacağını bilir.
 
 <Listing number="7-22" file-name="src/front_of_house.rs" caption="Definitions inside the `front_of_house` module in *src/front_of_house.rs*">
 
@@ -37,22 +37,20 @@ with the name `front_of_house`.
 
 </Listing>
 
-Note that you only need to load a file using a `mod` declaration _once_ in your
-module tree. Once the compiler knows the file is part of the project (and knows
-where in the module tree the code resides because of where you’ve put the `mod`
-statement), other files in your project should refer to the loaded file’s code
-using a path to where it was declared, as covered in the [“Paths for Referring
-to an Item in the Module Tree”][paths]<!-- ignore --> section. In other words,
-`mod` is _not_ an “include” operation that you may have seen in other
-programming languages.
+Modül ağacınızda bir dosyayı `mod` bildirimi kullanarak yalnızca bir kez yüklemeniz gerektiğini unutmayın.
+Derleyici, dosyanın projenin bir parçası olduğunu (ve `mod`
+ifadesini koyduğunuz yere göre modül ağacında kodun nerede bulunduğunu) öğrendikten sonra, projenizdeki diğer dosyalar,
+[“Modül Ağacındaki Bir Öğeye Başvurmak için Yollar”][paths]<!-- ignore --> bölümünde anlatıldığı gibi, bildirildiği yere giden bir yol kullanarak yüklenen dosyanın koduna. Diğer bir deyişle,
+`mod`, diğer programlama dillerinde gördüğünüz türden bir “include” işlemi
+değildir.
 
-Next, we’ll extract the `hosting` module to its own file. The process is a bit
-different because `hosting` is a child module of `front_of_house`, not of the
-root module. We’ll place the file for `hosting` in a new directory that will be
-named for its ancestors in the module tree, in this case _src/front_of_house_.
+Ardından, `hosting` modülünü kendi dosyasına çıkaracağız. Bu işlem biraz
+farklıdır, çünkü `hosting`, kök modülün değil, `front_of_house` modülünün alt modülüdür.
+`hosting` dosyasını, modül ağacındaki atalarının adını taşıyan yeni bir dizine yerleştireceğiz, bu durumda _src/front_of_house_.
+`hosting` modülünü taşımaya başlamak için, _src/front_of_house.rs_ dosyasını
 
-To start moving `hosting`, we change _src/front_of_house.rs_ to contain only
-the declaration of the `hosting` module:
+`hosting` modülünü taşımaya başlamak için, _src/front_of_house.rs_ dosyasını yalnızca
+`hosting` modülünün bildirimini içerecek şekilde değiştiriyoruz:
 
 <Listing file-name="src/front_of_house.rs">
 
@@ -62,8 +60,8 @@ the declaration of the `hosting` module:
 
 </Listing>
 
-Then we create a _src/front_of_house_ directory and a _hosting.rs_ file to
-contain the definitions made in the `hosting` module:
+Ardından, _src/front_of_house_ dizinini ve _hosting.rs_ dosyasını oluşturarak
+`hosting` modülünde yapılan tanımları bu dosyaya ekliyoruz:
 
 <Listing file-name="src/front_of_house/hosting.rs">
 
@@ -73,57 +71,58 @@ contain the definitions made in the `hosting` module:
 
 </Listing>
 
-If we instead put _hosting.rs_ in the _src_ directory, the compiler would
-expect the _hosting.rs_ code to be in a `hosting` module declared in the crate
-root, and not declared as a child of the `front_of_house` module. The
-compiler’s rules for which files to check for which modules’ code mean the
-directories and files more closely match the module tree.
+Bunun yerine _hosting.rs_ dosyasını _src_ dizinine koyarsak, derleyici
+_hosting.rs_ kodunun crate kökünde bildirilen bir `hosting` modülünde olmasını
+bekler ve `front_of_house` modülünün alt modülü olarak bildirilmesini beklemez.
+Derleyicinin hangi modüllerin kodunu hangi dosyalar için kontrol edeceği kuralları,
+dizinlerin ve dosyaların modül ağacına daha yakından uyması anlamına gelir.
 
-> ### Alternate File Paths
+> ### Alternatif Dosya Yolları
 >
-> So far we’ve covered the most idiomatic file paths the Rust compiler uses,
-> but Rust also supports an older style of file path. For a module named
-> `front_of_house` declared in the crate root, the compiler will look for the
-> module’s code in:
+> Şimdiye kadar Rust derleyicisinin kullandığı en yaygın dosya yollarını ele aldık,
+> ancak Rust eski tarz dosya yollarını da destekler. Crate kökünde bildirilen
+> `front_of_house` adlı bir modül için, derleyici modülün kodunu şu konumlarda arar:
 >
-> - _src/front_of_house.rs_ (what we covered)
-> - _src/front_of_house/mod.rs_ (older style, still supported path)
 >
-> For a module named `hosting` that is a submodule of `front_of_house`, the
-> compiler will look for the module’s code in:
+> - _src/front_of_house.rs_ (ele aldığımız)
+> - _src/front_of_house/mod.rs_ (eski stil, hala desteklenen yol)
 >
-> - _src/front_of_house/hosting.rs_ (what we covered)
-> - _src/front_of_house/hosting/mod.rs_ (older style, still supported path)
+> `front_of_house` modülünün alt modülü olan `hosting` adlı bir modül için,
+> derleyici modülün kodunu şu konumlarda arayacaktır:
 >
-> If you use both styles for the same module, you’ll get a compiler error.
-> Using a mix of both styles for different modules in the same project is
-> allowed, but might be confusing for people navigating your project.
+> - _src/front_of_house/hosting.rs_ (incelediğimiz)
+> - _src/front_of_house/hosting/mod.rs_ (eski stil, hala desteklenen yol)
 >
-> The main downside to the style that uses files named _mod.rs_ is that your
-> project can end up with many files named _mod.rs_, which can get confusing
-> when you have them open in your editor at the same time.
+> Aynı modül için her iki stili de kullanırsanız, derleyici hatası alırsınız.
+> Aynı projedeki farklı modüller için her iki stili bir arada kullanmak
+> mümkündür, ancak projenizi inceleyen kişiler için kafa karıştırıcı olabilir.
+>
+> _mod.rs_ adlı dosyaları kullanan stilin en büyük dezavantajı, projenizde
+> çok sayıda _mod.rs_ adlı dosya bulunmasıdır. Bu da, dosyaları editörünüzde aynı anda açtığınızda
+> kafa karıştırıcı olabilir.
 
-We’ve moved each module’s code to a separate file, and the module tree remains
-the same. The function calls in `eat_at_restaurant` will work without any
-modification, even though the definitions live in different files. This
-technique lets you move modules to new files as they grow in size.
+Her modülün kodunu ayrı bir dosyaya taşıdık ve modül ağacı aynı kaldı.
+`eat_at_restaurant` içindeki işlev çağrıları, tanımlar farklı dosyalarda olsa bile
+herhangi bir değişiklik yapılmadan çalışacaktır. Bu teknik, modüllerin boyutu
+büyüdükçe yeni dosyalara taşınmasına olanak tanır.
 
-Note that the `pub use crate::front_of_house::hosting` statement in
-_src/lib.rs_ also hasn’t changed, nor does `use` have any impact on what files
-are compiled as part of the crate. The `mod` keyword declares modules, and Rust
-looks in a file with the same name as the module for the code that goes into
-that module.
+_src/lib.rs_ içindeki `pub use crate::front_of_house::hosting` ifadesinin de
+değişmediğini ve `use` ifadesinin, kutu kapsamında derlenen dosyalar üzerinde
+herhangi bir etkisi olmadığını unutmayın. `mod` anahtar sözcüğü modülleri bildirir ve Rust,
+modüle girecek kodu modülle aynı ada sahip dosyada arar.
 
-## Summary
+## Özet
 
-Rust lets you split a package into multiple crates and a crate into modules so
-you can refer to items defined in one module from another module. You can do
-this by specifying absolute or relative paths. These paths can be brought into
-scope with a `use` statement so you can use a shorter path for multiple uses of
-the item in that scope. Module code is private by default, but you can make
-definitions public by adding the `pub` keyword.
+Rust, bir paketi birden fazla kutuya ve bir kutuyu modüllere bölebilir, böylece
 
-In the next chapter, we’ll look at some collection data structures in the
-standard library that you can use in your neatly organized code.
+Rust, bir paketi birden fazla kutuya ve bir kutuyu modüllere bölebilmenizi sağlar, böylece
+bir modülde tanımlanan öğelere başka bir modülden başvurabilirsiniz. Bunu,
+mutlak veya göreli yollar belirterek yapabilirsiniz. Bu yollar, `use` deyimi ile
+kapsama alınabilir, böylece o kapsamdaki öğeyi birden fazla kez kullanmak için
+daha kısa bir yol kullanabilirsiniz. Modül kodu varsayılan olarak özeldir, ancak
+`pub` anahtar sözcüğünü ekleyerek tanımları genel hale getirebilirsiniz.
 
-[paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
+Bir sonraki bölümde, düzenli kodunuzda kullanabileceğiniz standart kütüphanedeki bazı koleksiyon veri yapılarına
+bakacağız.
+
+[paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md

@@ -1,16 +1,16 @@
-## Bringing Paths into Scope with the `use` Keyword
+## `use` Anahtar Sözcüğüyle Yolları Kapsama Almak
 
-Having to write out the paths to call functions can feel inconvenient and
-repetitive. In Listing 7-7, whether we chose the absolute or relative path to
-the `add_to_waitlist` function, every time we wanted to call `add_to_waitlist`
-we had to specify `front_of_house` and `hosting` too. Fortunately, there’s a
-way to simplify this process: we can create a shortcut to a path with the `use`
-keyword once, and then use the shorter name everywhere else in the scope.
+İşlevleri çağırmak için yolları yazmak zorunda kalmak rahatsız edici ve
+tekrarlı olabilir. Listing 7-7'de, `add_to_waitlist` işlevine mutlak veya göreceli yol
+seçmiş olsak da, `add_to_waitlist` işlevini her çağırmak istediğimizde
+`front_of_house` ve `hosting`'i de belirtmek zorundaydık. Neyse ki, bu süreci basitleştirmenin bir
+yolu var: `use` anahtar sözcüğüyle bir yola kısayol oluşturabiliriz
+ve ardından kapsamın geri kalanında daha kısa adı kullanabiliriz.
 
-In Listing 7-11, we bring the `crate::front_of_house::hosting` module into the
-scope of the `eat_at_restaurant` function so we only have to specify
-`hosting::add_to_waitlist` to call the `add_to_waitlist` function in
-`eat_at_restaurant`.
+Listing 7-11'de, `crate::front_of_house::hosting` modülünü
+`eat_at_restaurant` işlevinin kapsamına getiriyoruz, böylece
+`eat_at_restaurant` içindeki `add_to_waitlist` işlevini çağırmak için sadece
+`hosting::add_to_waitlist` belirtmemiz yeterli oluyor.
 
 <Listing number="7-11" file-name="src/lib.rs" caption="Bringing a module into scope with `use`">
 
@@ -20,16 +20,16 @@ scope of the `eat_at_restaurant` function so we only have to specify
 
 </Listing>
 
-Adding `use` and a path in a scope is similar to creating a symbolic link in
-the filesystem. By adding `use crate::front_of_house::hosting` in the crate
-root, `hosting` is now a valid name in that scope, just as though the `hosting`
-module had been defined in the crate root. Paths brought into scope with `use`
-also check privacy, like any other paths.
+Bir kapsamda `use` ve bir yol eklemek, dosya sisteminde sembolik bir bağlantı oluşturmaya benzer.
+Crate köküne `use crate::front_of_house::hosting` ekleyerek,
+`hosting` artık o kapsamda geçerli bir ad haline gelir, sanki `hosting`
+modülü crate kökünde tanımlanmış gibi. `use` ile kapsama alınan yollar da,
+diğer yollar gibi gizlilik kontrolünden geçer.
 
-Note that `use` only creates the shortcut for the particular scope in which the
-`use` occurs. Listing 7-12 moves the `eat_at_restaurant` function into a new
-child module named `customer`, which is then a different scope than the `use`
-statement, so the function body won’t compile.
+`use` komutunun yalnızca `use` komutunun kullanıldığı belirli kapsam için kısayol oluşturduğunu unutmayın.
+Listing 7-12, `eat_at_restaurant` işlevini `customer` adlı yeni bir alt modüle taşır.
+Bu modül, `use` komutundan farklı bir kapsamda olduğundan, işlev gövdesi derlenmez.
+Listing 7-12. `eat_at_restaurant` işlevini `customer` adlı yeni bir alt modüle taşıma
 
 <Listing number="7-12" file-name="src/lib.rs" caption="A `use` statement only applies in the scope it’s in.">
 
@@ -39,24 +39,24 @@ statement, so the function body won’t compile.
 
 </Listing>
 
-The compiler error shows that the shortcut no longer applies within the
-`customer` module:
+Derleyici hatası, kısayolun artık
+`customer` modülü içinde geçerli olmadığını gösteriyor:
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-12/output.txt}}
 ```
 
-Notice there’s also a warning that the `use` is no longer used in its scope! To
-fix this problem, move the `use` within the `customer` module too, or reference
-the shortcut in the parent module with `super::hosting` within the child
-`customer` module.
+`use` komutunun artık kendi kapsamında kullanılmadığına dair bir uyarı da olduğunu unutmayın! Bu
+sorunu gidermek için, `use` komutunu da `customer` modülüne taşıyın veya
+çocuk modül olan `customer` modülünde `super::hosting` ile üst modüldeki kısayola
+bağlantı verin.
 
-### Creating Idiomatic `use` Paths
+### İdiomatik `use` Yollarının Oluşturulması
 
-In Listing 7-11, you might have wondered why we specified `use
-crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in
-`eat_at_restaurant`, rather than specifying the `use` path all the way out to
-the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
+Listing 7-11'de, neden `use
+crate::front_of_house::hosting` belirttikten sonra `hosting::add_to_waitlist`'i
+`eat_at_restaurant` içinde `hosting::add_to_waitlist`'i çağırdığımızı merak etmiş olabilirsiniz.
+Aynı sonucu elde etmek için, Listing 7-13'te olduğu gibi `add_to_waitlist` işlevine kadar `use` yolunu belirtmek yerine.
 
 <Listing number="7-13" file-name="src/lib.rs" caption="Bringing the `add_to_waitlist` function into scope with `use`, which is unidiomatic">
 
@@ -66,18 +66,18 @@ the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 
 </Listing>
 
-Although both Listing 7-11 and Listing 7-13 accomplish the same task, Listing
-7-11 is the idiomatic way to bring a function into scope with `use`. Bringing
-the function’s parent module into scope with `use` means we have to specify the
-parent module when calling the function. Specifying the parent module when
-calling the function makes it clear that the function isn’t locally defined
-while still minimizing repetition of the full path. The code in Listing 7-13 is
-unclear as to where `add_to_waitlist` is defined.
+Listing 7-11 ve Listing 7-13 aynı görevi yerine getirmesine rağmen, Listing
+7-11, `use` ile bir işlevi kapsam içine almak için kullanılan geleneksel yöntemdir.
+`use` ile işlevin üst modülünü kapsam içine almak, işlevi çağırırken üst modülü
+belirtmemiz gerektiği anlamına gelir. Fonksiyonu çağırırken üst modülü belirtmek,
+fonksiyonun yerel olarak tanımlanmadığını açıkça gösterirken, tam yolun tekrarını en aza indirir.
+Listing 7-13'teki kod, `add_to_waitlist`'in nerede tanımlandığını
+belirsiz kılar.
 
-On the other hand, when bringing in structs, enums, and other items with `use`,
-it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way
-to bring the standard library’s `HashMap` struct into the scope of a binary
-crate.
+Öte yandan, `use` ile yapıları, enumları ve diğer öğeleri getirirken,
+tam yolu belirtmek gelenekseldir. Listing 7-14, standart kütüphanenin `HashMap` yapısını ikili bir
+kutu kapsamına getirmenin geleneksel yolunu
+göstermektedir.
 
 <Listing number="7-14" file-name="src/main.rs" caption="Bringing `HashMap` into scope in an idiomatic way">
 
@@ -87,13 +87,13 @@ crate.
 
 </Listing>
 
-There’s no strong reason behind this idiom: it’s just the convention that has
-emerged, and folks have gotten used to reading and writing Rust code this way.
+Bu deyimin arkasında güçlü bir neden yoktur: bu sadece ortaya çıkan bir gelenektir
+ve insanlar Rust kodunu bu şekilde okumaya ve yazmaya alışmıştır.
 
-The exception to this idiom is if we’re bringing two items with the same name
-into scope with `use` statements, because Rust doesn’t allow that. Listing 7-15
-shows how to bring two `Result` types into scope that have the same name but
-different parent modules, and how to refer to them.
+Bu deyimin istisnası, aynı ada sahip iki öğeyi
+`use` deyimleriyle kapsam içine almamızdır, çünkü Rust buna izin vermez. Listing 7-15,
+ aynı ada sahip ancak
+farklı üst modüllere sahip iki `Result` türünü kapsam içine almayı ve bunlara nasıl atıfta bulunulacağını gösterir.
 
 <Listing number="7-15" file-name="src/lib.rs" caption="Bringing two types with the same name into the same scope requires using their parent modules.">
 
@@ -103,17 +103,17 @@ different parent modules, and how to refer to them.
 
 </Listing>
 
-As you can see, using the parent modules distinguishes the two `Result` types.
-If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
-have two `Result` types in the same scope, and Rust wouldn’t know which one we
-meant when we used `Result`.
+Gördüğünüz gibi, üst modülleri kullanmak iki `Result` türünü birbirinden ayırır.
+Bunun yerine `use std::fmt::Result` ve `use std::io::Result` belirtseydik,
+aynı kapsamda iki `Result` türü olurdu ve Rust, `Result` kullandığımızda hangisini
+kastettiğimizi bilemezdi.
 
-### Providing New Names with the `as` Keyword
+### `as` Anahtar Sözcüğüyle Yeni İsimler Sağlama
 
-There’s another solution to the problem of bringing two types of the same name
-into the same scope with `use`: after the path, we can specify `as` and a new
-local name, or _alias_, for the type. Listing 7-16 shows another way to write
-the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
+`use` ile aynı isimdeki iki türü aynı kapsama alanına getirme sorununa başka bir çözüm daha vardır:
+yolun ardından, `as` ve tür için yeni bir yerel isim veya _alias_ belirtebiliriz.
+Listing 7-16, Listing 7-15'teki kodu, iki `Result` türünden birini `as` kullanarak yeniden adlandırarak yazmanın başka bir yolunu göstermektedir.
+Listing 7-16. Listing 7-15'teki kodu yeniden yazma
 
 <Listing number="7-16" file-name="src/lib.rs" caption="Renaming a type when it’s brought into scope with the `as` keyword">
 
@@ -123,22 +123,22 @@ the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 
 </Listing>
 
-In the second `use` statement, we chose the new name `IoResult` for the
-`std::io::Result` type, which won’t conflict with the `Result` from `std::fmt`
-that we’ve also brought into scope. Listing 7-15 and Listing 7-16 are
-considered idiomatic, so the choice is up to you!
+İkinci `use` deyiminde, `std::io::Result` türü için yeni isim `IoResult` seçtik.
+Bu isim, aynı zamanda kapsamımıza aldığımız `std::fmt`'den gelen `Result` ile
+çakışmayacaktır. Listing 7-15 ve Listing 7-16,
+deyimsel olarak kabul edilir, bu yüzden seçim size kalmıştır!
 
-### Re-exporting Names with `pub use`
+### `pub use` ile İsimleri Yeniden Dışa Aktarma
 
-When we bring a name into scope with the `use` keyword, the name is private to
-the scope into which we imported it. To enable code outside that scope to refer
-to that name as if it had been defined in that scope, we can combine `pub` and
-`use`. This technique is called _re-exporting_ because we’re bringing an item
-into scope but also making that item available for others to bring into their
-scope.
+`use` anahtar sözcüğüyle bir ismi kapsam içine aldığımızda, bu isim onu içe aktardığımız
+kapsam içinde özel hale gelir. Bu kapsam dışındaki kodların, o isim bu kapsam içinde tanımlanmış gibi
+o isme başvurmasını sağlamak için, `pub` ve
+`use`'u birleştirebiliriz. Bu teknik, bir öğeyi
+kapsama alanına getirirken aynı zamanda diğerlerinin de kendi
+kapsama alanlarına getirebilmelerini sağladığımız için _yeniden dışa aktarma_ olarak adlandırılır.
 
-Listing 7-17 shows the code in Listing 7-11 with `use` in the root module
-changed to `pub use`.
+Listing 7-17, Listing 7-11'deki kodu, kök modüldeki `use`
+`pub use` olarak değiştirilmiş halini gösterir.
 
 <Listing number="7-17" file-name="src/lib.rs" caption="Making a name available for any code to use from a new scope with `pub use`">
 
@@ -148,29 +148,28 @@ changed to `pub use`.
 
 </Listing>
 
-Before this change, external code would have to call the `add_to_waitlist`
-function by using the path
-`restaurant::front_of_house::hosting::add_to_waitlist()`, which also would have
-required the `front_of_house` module to be marked as `pub`. Now that this `pub
-use` has re-exported the `hosting` module from the root module, external code
-can use the path `restaurant::hosting::add_to_waitlist()` instead.
+Bu değişiklikten önce, harici kod `add_to_waitlist`
+işlevini
+`restaurant::front_of_house::hosting::add_to_waitlist()` yolunu kullanarak çağırmak zorundaydı, bu da
+`front_of_house` modülünün `pub` olarak işaretlenmesini gerektiriyordu. Artık bu `pub
+use`, `hosting` modülünü kök modülden yeniden dışa aktardığından, harici kod
+bunun yerine `restaurant::hosting::add_to_waitlist()` yolunu kullanabilir.
 
-Re-exporting is useful when the internal structure of your code is different
-from how programmers calling your code would think about the domain. For
-example, in this restaurant metaphor, the people running the restaurant think
-about “front of house” and “back of house.” But customers visiting a restaurant
-probably won’t think about the parts of the restaurant in those terms. With `pub
-use`, we can write our code with one structure but expose a different structure.
-Doing so makes our library well organized for programmers working on the library
-and programmers calling the library. We’ll look at another example of `pub use`
-and how it affects your crate’s documentation in [“Exporting a Convenient Public
-API with `pub use`”][ch14-pub-use]<!-- ignore --> in Chapter 14.
+Yeniden dışa aktarma, kodunuzun iç yapısı, kodunuzu çağıran programcıların
+alan hakkında düşündüklerinden farklı olduğunda yararlıdır. Örneğin,
+bu restoran metaforunda, restoranı işleten kişiler
+“restoranın önü” ve “restoranın arkası” hakkında düşünürler. Ancak restoranı ziyaret eden müşteriler
+muhtemelen restoranın bölümlerini bu terimlerle düşünmezler. `pub
+use` ile kodumuzu tek bir yapı ile yazabilir, ancak farklı bir yapı ortaya çıkarabiliriz.
+Böylece, kütüphanemiz üzerinde çalışan programcılar ve kütüphaneyi çağıran programcılar için
+kütüphanemiz iyi organize olur. `pub use`'un başka bir örneğine ve bunun crate'inizin belgelerini nasıl etkilediğine
+14. bölümdeki [“`pub use` ile Kullanışlı Bir Genel API Dışa Aktarma”][ch14-pub-use]<!-- ignore --> bölümünde bakacağız.
 
-### Using External Packages
+### Harici Paketleri Kullanma
 
-In Chapter 2, we programmed a guessing game project that used an external
-package called `rand` to get random numbers. To use `rand` in our project, we
-added this line to _Cargo.toml_:
+2. bölümde, rastgele sayılar elde etmek için `rand` adlı harici bir
+paket kullanan bir tahmin oyunu projesi programladık. Projemizde `rand` kullanmak için,
+_Cargo.toml_ dosyasına şu satırı ekledik:
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -186,44 +185,42 @@ added this line to _Cargo.toml_:
 
 </Listing>
 
-Adding `rand` as a dependency in _Cargo.toml_ tells Cargo to download the
-`rand` package and any dependencies from [crates.io](https://crates.io/) and
-make `rand` available to our project.
+`rand`'ı _Cargo.toml_ dosyasına bağımlılık olarak eklemek, Cargo'ya
+`rand` paketini ve [crates.io](https://crates.io/) adresinden tüm bağımlılıkları indirmesini ve
+`rand`'ı projemizde kullanılabilir hale getirmesini söyler.
 
-Then, to bring `rand` definitions into the scope of our package, we added a
-`use` line starting with the name of the crate, `rand`, and listed the items we
-wanted to bring into scope. Recall that in [“Generating a Random
-Number”][rand]<!-- ignore --> in Chapter 2, we brought the `Rng` trait into
-scope and called the `rand::thread_rng` function:
+Ardından, `rand` tanımlarını paketimizin kapsamına dahil etmek için,
+`rand` ile başlayan bir `use` satırı ekledik ve kapsam içine almak istediğimiz öğeleri listeledik.
+Bölüm 2'deki [“Rastgele Sayı Üretme”][rand]<!-- ignore --> bölümünde, `Rng` özelliğini kapsam içine aldığımızı ve `rand::thread_rng` işlevini çağırdığımızı hatırlayın:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
 ```
 
-Members of the Rust community have made many packages available at
-[crates.io](https://crates.io/), and pulling any of them into your package
-involves these same steps: listing them in your package’s _Cargo.toml_ file and
-using `use` to bring items from their crates into scope.
+Rust topluluğunun üyeleri,
+[crates.io](https://crates.io/) adresinde birçok paket sunmuştur ve bunlardan herhangi birini paketinize eklemek için
+aynı adımları izlemeniz gerekir: bunları paketinizin _Cargo.toml_ dosyasında listelemek ve
+`use` komutunu kullanarak öğeleri kutusundan kapsam içine almak.
 
-Note that the standard `std` library is also a crate that’s external to our
-package. Because the standard library is shipped with the Rust language, we
-don’t need to change _Cargo.toml_ to include `std`. But we do need to refer to
-it with `use` to bring items from there into our package’s scope. For example,
-with `HashMap` we would use this line:
+Standart `std` kütüphanesi de paketimizin dışında bulunan bir crate olduğunu unutmayın.
+Standart kütüphane Rust diliyle birlikte geldiği için,
+`std`'yi dahil etmek için _Cargo.toml_ dosyasını değiştirmemiz gerekmez. Ancak,
+oradaki öğeleri paketimizin kapsamına almak için `use` ile ona başvurmamız gerekir. Örneğin,
+`HashMap` ile şu satırı kullanırız:
 
 ```rust
 use std::collections::HashMap;
 ```
 
-This is an absolute path starting with `std`, the name of the standard library
-crate.
+Bu, standart kütüphane
+kutusunun adı olan `std` ile başlayan mutlak bir yoldur.
 
-### Using Nested Paths to Clean Up Large `use` Lists
+### İç içe geçmiş yollar kullanarak büyük `use` listelerini temizleme
 
-If we’re using multiple items defined in the same crate or same module, listing
-each item on its own line can take up a lot of vertical space in our files. For
-example, these two `use` statements we had in the guessing game in Listing 2-4
-bring items from `std` into scope:
+Aynı crate veya aynı modülde tanımlanmış birden fazla öğe kullanıyorsak,
+her öğeyi ayrı bir satırda listelemek dosyalarımızda çok fazla dikey alan kaplayabilir.
+Örneğin, Listing 2-4'teki tahmin oyununda kullandığımız bu iki `use` ifadesi,
+`std` öğelerini kapsam içine alır:
 
 <Listing file-name="src/main.rs">
 
@@ -233,10 +230,10 @@ bring items from `std` into scope:
 
 </Listing>
 
-Instead, we can use nested paths to bring the same items into scope in one
-line. We do this by specifying the common part of the path, followed by two
-colons, and then curly brackets around a list of the parts of the paths that
-differ, as shown in Listing 7-18.
+Bunun yerine, iç içe geçmiş yollar kullanarak aynı öğeleri tek bir satırda
+kapsama alabiliriz. Bunu, yolun ortak kısmını belirtip ardından iki
+iki nokta üst üste işareti ve ardından yolların farklı olan kısımlarının listesini
+kıvrımlı parantezlerle çevreleyerek yaparız, Listing 7-18'de gösterildiği gibi.
 
 <Listing number="7-18" file-name="src/main.rs" caption="Specifying a nested path to bring multiple items with the same prefix into scope">
 
@@ -246,14 +243,14 @@ differ, as shown in Listing 7-18.
 
 </Listing>
 
-In bigger programs, bringing many items into scope from the same crate or
-module using nested paths can reduce the number of separate `use` statements
-needed by a lot!
+Daha büyük programlarda, aynı kutu veya modülden iç içe geçmiş yollar kullanarak birçok öğeyi kapsam içine almak,
+gerekli olan ayrı `use` deyimlerinin sayısını
+büyük ölçüde azaltabilir!
 
-We can use a nested path at any level in a path, which is useful when combining
-two `use` statements that share a subpath. For example, Listing 7-19 shows two
-`use` statements: one that brings `std::io` into scope and one that brings
-`std::io::Write` into scope.
+Yerleşik bir yolu, yolun herhangi bir seviyesinde kullanabiliriz; bu, bir alt yolu paylaşan
+iki `use` ifadesini birleştirirken kullanışlıdır. Örneğin, Listing 7-19 iki
+`use` ifadesini gösterir: biri `std::io`'yu kapsam içine alır, diğeri ise
+`std::io::Write`'ı kapsam içine alır.
 
 <Listing number="7-19" file-name="src/lib.rs" caption="Two `use` statements where one is a subpath of the other">
 
@@ -263,9 +260,9 @@ two `use` statements that share a subpath. For example, Listing 7-19 shows two
 
 </Listing>
 
-The common part of these two paths is `std::io`, and that’s the complete first
-path. To merge these two paths into one `use` statement, we can use `self` in
-the nested path, as shown in Listing 7-20.
+Bu iki yolun ortak kısmı `std::io`'dur ve bu, ilk yolun tamamıdır.
+Bu iki yolu tek bir `use` ifadesinde birleştirmek için, Listing 7-20'de gösterildiği gibi iç içe geçmiş yolda `self` kullanabiliriz.
+Listing 7-20. İç içe geçmiş yolun `use` ifadesinde `self` kullanımı
 
 <Listing number="7-20" file-name="src/lib.rs" caption="Combining the paths in Listing 7-19 into one `use` statement">
 
@@ -275,32 +272,29 @@ the nested path, as shown in Listing 7-20.
 
 </Listing>
 
-This line brings `std::io` and `std::io::Write` into scope.
+Bu satır, `std::io` ve `std::io::Write` 'yi kapsam içine alır.
 
-### The Glob Operator
+### Glob Operatörü
 
-If we want to bring _all_ public items defined in a path into scope, we can
-specify that path followed by the `*` glob operator:
+Bir yolda tanımlanan _tüm_ genel öğeleri kapsam içine almak istiyorsak,
+o yolu `*` glob operatörünün ardından belirtiriz:
 
 ```rust
 use std::collections::*;
 ```
 
-This `use` statement brings all public items defined in `std::collections` into
-the current scope. Be careful when using the glob operator! Glob can make it
-harder to tell what names are in scope and where a name used in your program
-was defined. Additionally, if the dependency changes its definitions, what
-you’ve imported changes as well, which may lead to compiler errors when you
-upgrade the dependency if the dependency adds a definition with the same name
-as a definition of yours in the same scope, for example.
+Bu `use` ifadesi, `std::collections` içinde tanımlanan tüm genel öğeleri
+geçerli kapsama alanına getirir. Glob operatörünü kullanırken dikkatli olun! Glob,
+kapsamda hangi isimlerin olduğunu ve programınızda kullanılan bir ismin
+nerede tanımlandığını anlamayı zorlaştırabilir. Ayrıca, bağımlılık tanımlarını değiştirirse,
+içe aktardığınız öğeler de değişir ve bu, bağımlılığı yükselttiğinizde derleyici hatalarına yol açabilir,
+örneğin bağımlılık aynı kapsamdaki tanımınızla aynı ada sahip bir tanım eklediğinde.
 
-The glob operator is often used when testing to bring everything under test into
-the `tests` module; we’ll talk about that in [“How to Write
-Tests”][writing-tests]<!-- ignore --> in Chapter 11. The glob operator is also
-sometimes used as part of the prelude pattern: see [the standard library
-documentation](../std/prelude/index.html#other-preludes)<!-- ignore --> for more
-information on that pattern.
+Glob operatörü genellikle test sırasında test edilen her şeyi
+`tests` modülüne getirmek için kullanılır; bunu 11. bölümdeki [“Testler Nasıl Yazılır”][writing-tests]<!-- ignore --> bölümünde ele alacağız. Glob operatörü bazen
+prelude deseninin bir parçası olarak da kullanılır: bu desen hakkında daha fazla
+bilgi için [standart kütüphane belgelerine](../std/prelude/index.html#other-preludes)<!-- ignore --> bakın.
 
-[ch14-pub-use]: ch14-02-publishing-to-crates-io.html#exporting-a-convenient-public-api-with-pub-use
-[rand]: ch02-00-guessing-game-tutorial.html#generating-a-random-number
-[writing-tests]: ch11-01-writing-tests.html#how-to-write-tests
+[ch14-pub-use]: ch14-02-publishing-to-crates-io.md#pub-use-ile-kullanışlı-bir-kamuya-açık-api-dışa-aktarmak
+[rand]: ch02-00-guessing-game-tutorial.md#rastgele-sayı-oluşturma
+[writing-tests]: ch11-01-writing-tests.md#how-to-write-tests

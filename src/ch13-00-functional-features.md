@@ -12,3 +12,4 @@ Daha spesifik olarak şunları ele alacağız:
 - Kapanışların ve yineleyicilerin performansı (ipucu: düşündüğünüzden daha hızlılar!)
 
 Daha önce, fonksiyonel tarzdan etkilenen desen eşleştirme ve enumlar gibi bazı Rust özelliklerini de ele aldık. Kapanışlar ve yineleyicilerde ustalaşmak, idiomatik ve hızlı Rust kodu yazmanın önemli bir parçası olduğundan, bu bölümün tamamını onlara ayıracağız.
+

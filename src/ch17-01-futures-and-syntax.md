@@ -203,10 +203,10 @@ Ayrıca, `page_title` fonksiyonunu, iletilen URL'yi de döndürecek şekilde gü
 
 Artık küçük, çalışan bir web kazıyıcıya sahipsiniz! Birkaç URL seçip komut satırı aracını çalıştırın. Bazı sitelerin sürekli olarak diğerlerinden daha hızlı olduğunu, bazen de hangi sitenin daha hızlı olduğunun değiştiğini görebilirsiniz. Daha da önemlisi, future'larla çalışmanın temellerini öğrendiniz; şimdi async ile neler yapabileceğimizi daha derinlemesine inceleyebiliriz.
 
-[impl-trait]: ch10-02-traits.html#traits-as-parameters
-[iterators-lazy]: ch13-02-iterators.html
-[thread-spawn]: ch16-01-threads.html#creating-a-new-thread-with-spawn
-[cli-args]: ch12-01-accepting-command-line-arguments.html
+[impl-trait]: ch10-02-traits.md#parametre-olarak-özellikler
+[iterators-lazy]: ch13-02-iterators.md
+[thread-spawn]: ch16-01-threads.md#spawn-ile-yeni-bir-thread-oluşturmak
+[cli-args]: ch12-01-accepting-command-line-arguments.md
 
 <!-- TODO: map source link version to version of Rust? -->
 

@@ -130,3 +130,4 @@ Kamuya açık API'den dahili organizasyonu kaldırmak için, Liste 14-3'teki `ar
 </Listing>
 
 Bu crate için `cargo doc` ile oluşturulan API dokümantasyonu, artık ana sayfada yeniden dışa aktarılan öğeleri listeler ve bağlantı verir (Şekil 14-4); böylece `PrimaryColor`
+

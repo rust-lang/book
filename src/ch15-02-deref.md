@@ -175,5 +175,5 @@ Rust, üç durumda türleri ve trait uygulamalarını bulduğunda deref zorlama 
 
 Üçüncü durum daha karmaşıktır: Rust, değiştirilebilir bir referansı değiştirilemez bir referansa da zorlayabilir. Ancak tersi _mümkün değildir_: değiştirilemez referanslar asla değiştirilebilir referanslara zorlanmaz. Ödünç alma kuralları gereği, elinizde bir değiştirilebilir referans varsa, bu referans o veriye tek referans olmalıdır (aksi takdirde program derlenmezdi). Bir değiştirilebilir referansı bir değiştirilemez referansa dönüştürmek ödünç alma kurallarını asla bozmaz. Bir değiştirilemez referansı değiştirilebilir referansa dönüştürmek ise, ilk değiştirilemez referansın o veriye tek değiştirilemez referans olmasını gerektirir, ancak ödünç alma kuralları bunu garanti etmez. Bu nedenle, Rust bir değiştirilemez referansı değiştirilebilir referansa dönüştürmenin mümkün olduğunu varsayamaz.
 
-[impl-trait]: ch10-02-traits.html#implementing-a-trait-on-a-type
-[tuple-structs]: ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types
+[impl-trait]: ch10-02-traits.md#bir-tür-üzerinde-özellik-uygulamak
+[tuple-structs]: ch05-01-defining-structs.md#farklı-türler-oluşturmak-için-adlandırılmış-alanlar-olmadan-tuple-yapılarını-kullanma

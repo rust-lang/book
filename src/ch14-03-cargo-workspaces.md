@@ -300,3 +300,4 @@ Bu çıktı, `cargo test` komutunun yalnızca `add_one` crate'indeki testleri ç
 Ek alıştırma olarak, bu çalışma alanına `add_one` crate'iyle benzer şekilde bir `add_two` crate'i ekleyin!
 
 Projeniz büyüdükçe, bir çalışma alanı kullanmayı düşünün: bu, tek bir büyük kod yığını yerine daha küçük ve anlaşılır bileşenlerle çalışmanızı sağlar. Ayrıca, çalışma alanındaki crate'ler sık sık aynı anda değişiyorsa, aralarındaki koordinasyonu kolaylaştırır.
+

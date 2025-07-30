@@ -5,6 +5,7 @@ testleri hataların varlığını göstermek için çok etkili bir yol olabilir,
 yokluklarını göstermek için umutsuzca yetersizdir." Bu demek değil ki
 eli̇mi̇zden geldi̇ği̇nce test etmeye çalişalim!
 
+
 Programlarımızdaki doğruluk, kodumuzun amaçladığımız şeyi ne ölçüde yaptığıdır
 yapmak için. Rust, doğruluk konusunda yüksek derecede endişe ile tasarlanmıştır
 ancak doğruluk karmaşıktır ve kanıtlanması kolay değildir. Rust'ın tipi

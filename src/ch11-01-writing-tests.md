@@ -1,38 +1,36 @@
-## How to Write Tests
+## Testler Nasıl Yazılır
 
-Tests are Rust functions that verify that the non-test code is functioning in
-the expected manner. The bodies of test functions typically perform these three
-actions:
+Testler, test dışı kodun beklenen şekilde çalıştığını doğrulayan Rust işlevleridir.
+Test işlevlerinin gövdeleri genellikle şu üç
+işlemi gerçekleştirir:
 
-- Set up any needed data or state.
-- Run the code you want to test.
-- Assert that the results are what you expect.
+- Gerekli verileri veya durumu ayarlayın.
+- Test etmek istediğiniz kodu çalıştırın.
+- Sonuçların beklediğiniz gibi olduğunu doğrulayın.
 
-Let’s look at the features Rust provides specifically for writing tests that
-take these actions, which include the `test` attribute, a few macros, and the
-`should_panic` attribute.
+Rust'un bu eylemleri gerçekleştiren testler yazmak için özel olarak sağladığı özelliklere
+bakalım. Bunlar arasında `test` özniteliği, birkaç makro ve
+`should_panic` özniteliği bulunur.
 
-### The Anatomy of a Test Function
+### Test İşlevinin Yapısı
 
-At its simplest, a test in Rust is a function that’s annotated with the `test`
-attribute. Attributes are metadata about pieces of Rust code; one example is
-the `derive` attribute we used with structs in Chapter 5. To change a function
-into a test function, add `#[test]` on the line before `fn`. When you run your
-tests with the `cargo test` command, Rust builds a test runner binary that runs
-the annotated functions and reports on whether each test function passes or
-fails.
+En basit haliyle, Rust'ta bir test, `test`
+özniteliği ile açıklanmış bir işlevdir. Özellikler, Rust kod parçaları hakkında meta verileridir; bir örnek,
+5. Bölümde yapılarla kullandığımız `derive` özelliğidir. Bir işlevi
+test işlevine dönüştürmek için, `fn` önündeki satıra `#[test]` ekleyin.
+`cargo test` komutuyla testlerinizi çalıştırdığınızda, Rust,
+açıklamalı işlevleri çalıştıran ve her test işlevinin başarılı olup olmadığını
+raporlayan bir test çalıştırıcı ikili dosyası oluşturur.
 
-Whenever we make a new library project with Cargo, a test module with a test
-function in it is automatically generated for us. This module gives you a
-template for writing your tests so you don’t have to look up the exact
-structure and syntax every time you start a new project. You can add as many
-additional test functions and as many test modules as you want!
+Cargo ile yeni bir kütüphane projesi oluşturduğumuzda, içinde test
+fonksiyonu bulunan bir test modülü otomatik olarak oluşturulur. Bu modül,
+testlerinizi yazmak için bir şablon sağlar, böylece her yeni projeye başladığınızda
+tam yapısını ve sözdizimini aramak zorunda kalmazsınız. İstediğiniz kadar
+ek test fonksiyonu ve test modülü ekleyebilirsiniz!
 
-We’ll explore some aspects of how tests work by experimenting with the template
-test before we actually test any code. Then we’ll write some real-world tests
-that call some code that we’ve written and assert that its behavior is correct.
-
-Let’s create a new library project called `adder` that will add two numbers:
+Herhangi bir kodu test etmeden önce, şablon testi ile deneyler yaparak testlerin nasıl çalıştığına dair bazı yönleri inceleyeceğiz.
+Ardından, yazdığımız bazı kodları çağıran ve davranışlarının doğru olduğunu doğrulayan bazı gerçek dünya testleri yazacağız.
+İki sayıyı toplayacak olan `adder` adlı yeni bir kütüphane projesi oluşturalım:
 
 ```console
 $ cargo new adder --lib
@@ -40,7 +38,7 @@ $ cargo new adder --lib
 $ cd adder
 ```
 
-The contents of the _src/lib.rs_ file in your `adder` library should look like
+`adder` kütüphanenizdeki _src/lib.rs_ dosyasının içeriği şöyle görünmelidir
 Listing 11-1.
 
 <Listing number="11-1" file-name="src/lib.rs" caption="The code generated automatically by `cargo new`">
@@ -62,22 +60,22 @@ cd ../../..
 
 </Listing>
 
-The file starts with an example `add` function, so that we have something
-to test.
+Dosya, test etmek için bir örnek `add` işleviyle başlar.
+Şimdilik, yalnızca `it_works` işlevine odaklanalım.
 
-For now, let’s focus solely on the `it_works` function. Note the `#[test]`
-annotation: this attribute indicates this is a test function, so the test
-runner knows to treat this function as a test. We might also have non-test
-functions in the `tests` module to help set up common scenarios or perform
-common operations, so we always need to indicate which functions are tests.
+Şimdilik, yalnızca `it_works` işlevine odaklanalım. `#[test]`
+açıklamasına dikkat edin: bu öznitelik, bunun bir test işlevi olduğunu gösterir, böylece test
+çalıştırıcısı bu işlevi bir test olarak ele alır. `tests` modülünde, yaygın senaryolar oluşturmaya veya yaygın işlemleri gerçekleştirmeye yardımcı olmak için test
+işlevi olmayan işlevler de olabilir, bu nedenle hangi işlevlerin test olduğunu her zaman belirtmemiz gerekir.
+Örnek işlev gövdesi, `assert_eq!` makrosunu kullanarak, `add` işlevinin 2 ve 2 ile çağrıldığında
 
-The example function body uses the `assert_eq!` macro to assert that `result`,
-which contains the result of calling `add` with 2 and 2, equals 4. This
-assertion serves as an example of the format for a typical test. Let’s run it
-to see that this test passes.
+Örnek işlev gövdesi, `assert_eq!` makrosunu kullanarak, 2 ve 2 ile `add` işlevini çağırmanın sonucunu içeren `result`
+değerinin 4'e eşit olduğunu doğrular. Bu
+doğrulama, tipik bir testin formatına örnek teşkil eder. Bu testin başarılı olduğunu görmek için
+onu çalıştıralım.
 
-The `cargo test` command runs all tests in our project, as shown in Listing
-11-2.
+`cargo test` komutu, Listing
+11-2'de gösterildiği gibi projemizdeki tüm testleri çalıştırır.
 
 <Listing number="11-2" caption="The output from running the automatically generated test">
 
@@ -87,35 +85,32 @@ The `cargo test` command runs all tests in our project, as shown in Listing
 
 </Listing>
 
-Cargo compiled and ran the test. We see the line `running 1 test`. The next
-line shows the name of the generated test function, called `tests::it_works`,
-and that the result of running that test is `ok`. The overall summary `test
-result: ok.` means that all the tests passed, and the portion that reads `1
-passed; 0 failed` totals the number of tests that passed or failed.
+Cargo testi derledi ve çalıştırdı. `running 1 test` satırını görüyoruz. Bir sonraki
+satırda, `tests::it_works` adlı oluşturulan test işlevinin adı ve
+bu testin sonucunun `ok` olduğu gösteriliyor. Genel özet `test
+sonucu: ok.` tüm testlerin başarılı olduğu anlamına gelir ve `1
+başarılı; 0 başarısız` kısmı, başarılı veya başarısız olan testlerin toplam sayısını gösterir.
 
-It’s possible to mark a test as ignored so it doesn’t run in a particular
-instance; we’ll cover that in the [“Ignoring Some Tests Unless Specifically
-Requested”][ignoring]<!-- ignore --> section later in this chapter. Because we
-haven’t done that here, the summary shows `0 ignored`. We can also pass an
-argument to the `cargo test` command to run only tests whose name matches a
-string; this is called _filtering_ and we’ll cover it in the [“Running a
-Subset of Tests by Name”][subset]<!-- ignore --> section. Here we haven’t
-filtered the tests being run, so the end of the summary shows `0 filtered out`.
+Bir testi, belirli bir durumda çalıştırılmaması için
+yoksayılmış olarak işaretlemek mümkündür; bunu bu bölümün ilerleyen kısımlarında [“Özel Olarak İstenmedikçe Bazı Testleri Yoksayma”][ignoring]<!-- ignore --> bölümünde ele alacağız. Burada
+bunu yapmadığımız için özet `0 ignored` (0 yoksayıldı) olarak gösterilir. Ayrıca,
+`cargo test` komutuna bir argüman geçirerek, adı bir
+dizgiyle eşleşen testleri çalıştırabiliriz; buna _filtreleme_ denir ve bunu [“Adına Göre Testlerin Bir Alt Kümesini Çalıştırma”][subset]<!-- ignore --> bölümünde ele alacağız. Burada
+çalıştırılan testleri filtrelemedik, bu nedenle özetin sonunda `0 filtered out` (0 filtrelendi) yazıyor.
 
-The `0 measured` statistic is for benchmark tests that measure performance.
-Benchmark tests are, as of this writing, only available in nightly Rust. See
-[the documentation about benchmark tests][bench] to learn more.
+`0 ölçüldü` istatistiği, performansı ölçen benchmark testleri içindir.
+Benchmark testleri, bu yazının yazıldığı tarihte, yalnızca gece Rust sürümünde mevcuttur. Daha fazla bilgi için
+[benchmark testleri hakkındaki belgelere][bench] bakın.
 
-The next part of the test output starting at `Doc-tests adder` is for the
-results of any documentation tests. We don’t have any documentation tests yet,
-but Rust can compile any code examples that appear in our API documentation.
-This feature helps keep your docs and your code in sync! We’ll discuss how to
-write documentation tests in the [“Documentation Comments as
-Tests”][doc-comments]<!-- ignore --> section of Chapter 14. For now, we’ll
-ignore the `Doc-tests` output.
+Test çıktısının `Doc-tests adder` ile başlayan sonraki kısmı,
+herhangi bir dokümantasyon testinin sonuçları içindir. Henüz herhangi bir dokümantasyon testimiz yok,
+ancak Rust, API dokümantasyonumuzda görünen tüm kod örneklerini derleyebilir.
+Bu özellik, belgelerinizin ve kodunuzun senkronize olmasını sağlar! Belgeleme testlerinin nasıl yazılacağını
+14. bölümün [“Test Olarak Belgeleme Yorumları”][doc-comments]<!-- ignore --> bölümünde ele alacağız. Şimdilik,
+`Doc-tests` çıktısını göz ardı edeceğiz.
 
-Let’s start to customize the test to our own needs. First, change the name of
-the `it_works` function to a different name, such as `exploration`, like so:
+Testi kendi ihtiyaçlarımıza göre özelleştirmeye başlayalım. İlk olarak,
+`it_works` işlevinin adını `exploration` gibi farklı bir adla değiştirin, şöyle:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -123,19 +118,19 @@ the `it_works` function to a different name, such as `exploration`, like so:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/src/lib.rs}}
 ```
 
-Then run `cargo test` again. The output now shows `exploration` instead of
-`it_works`:
+Ardından `cargo test` komutunu tekrar çalıştırın. Çıktıda artık `it_works` yerine `exploration` yazıyor
+:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/output.txt}}
 ```
 
-Now we’ll add another test, but this time we’ll make a test that fails! Tests
-fail when something in the test function panics. Each test is run in a new
-thread, and when the main thread sees that a test thread has died, the test is
-marked as failed. In Chapter 9, we talked about how the simplest way to panic
-is to call the `panic!` macro. Enter the new test as a function named
-`another`, so your _src/lib.rs_ file looks like Listing 11-3.
+Şimdi başka bir test ekleyeceğiz, ancak bu sefer başarısız olan bir test yapacağız! Testler,
+test işlevinde bir şey paniklediğinde başarısız olur. Her test yeni bir
+iş parçacığında çalıştırılır ve ana iş parçacığı bir test iş parçacığının öldüğünü gördüğünde, test
+başarısız olarak işaretlenir. 9. Bölümde, paniğe kapılmanın en basit yolunun
+`panic!` makrosunu çağırmak olduğunu konuşmuştuk. Yeni testi
+`another` adlı bir işlev olarak girin, böylece _src/lib.rs_ dosyanız Listing 11-3 gibi görünür.
 
 <Listing number="11-3" file-name="src/lib.rs" caption="Adding a second test that will fail because we call the `panic!` macro">
 
@@ -145,8 +140,8 @@ is to call the `panic!` macro. Enter the new test as a function named
 
 </Listing>
 
-Run the tests again using `cargo test`. The output should look like Listing
-11-4, which shows that our `exploration` test passed and `another` failed.
+`cargo test` komutunu kullanarak testleri tekrar çalıştırın. Çıktı, Listing
+11-4 gibi görünmelidir. Bu, `exploration` testimizin başarılı olduğunu ve `another` testimizin başarısız olduğunu gösterir.
 
 <Listing number="11-4" caption="Test results when one test passes and one test fails">
 
@@ -161,35 +156,33 @@ rg panicked listings/ch11-writing-automated-tests/listing-11-03/output.txt
 check the line number of the panic matches the line number in the following paragraph
  -->
 
-Instead of `ok`, the line `test tests::another` shows `FAILED`. Two new
-sections appear between the individual results and the summary: the first
-displays the detailed reason for each test failure. In this case, we get the
-details that `tests::another` failed because it panicked with the message `Make
-this test fail` on line 17 in the _src/lib.rs_ file. The next section lists
-just the names of all the failing tests, which is useful when there are lots of
-tests and lots of detailed failing test output. We can use the name of a
-failing test to run just that test to more easily debug it; we’ll talk more
-about ways to run tests in the [“Controlling How Tests Are
-Run”][controlling-how-tests-are-run]<!-- ignore --> section.
+`ok` yerine, `test tests::another` satırı `FAILED` gösterir. Bireysel sonuçlar ve özet arasında iki yeni
+bölüm görünür: ilki
+her test başarısızlığının ayrıntılı nedenini gösterir. Bu durumda,
+`tests::another`'ın _src/lib.rs_ dosyasının 17. satırında `Make
+this test fail` mesajıyla paniğe kapıldığı için başarısız olduğu bilgisini alırız. Bir sonraki bölümde
+sadece başarısız olan tüm testlerin adları listelenir; bu, çok sayıda
+test ve çok sayıda ayrıntılı başarısız test çıktısı olduğunda yararlıdır. Başarısız olan bir
+testin adını kullanarak sadece o testi çalıştırıp daha kolay hata ayıklama yapabiliriz; testleri çalıştırma yöntemleri hakkında daha fazla bilgiyi
+[“Testlerin Çalıştırılma Şeklinin Kontrol Edilmesi”][controlling-how-tests-are-run]<!-- ignore --> bölümünde daha ayrıntılı olarak ele alacağız.
 
-The summary line displays at the end: overall, our test result is `FAILED`. We
-had one test pass and one test fail.
+Özet satırı sonunda görüntülenir: genel olarak, test sonucumuz `FAILED`.
+Bir test başarılı, bir test başarısız oldu.
 
-Now that you’ve seen what the test results look like in different scenarios,
-let’s look at some macros other than `panic!` that are useful in tests.
+Farklı senaryolarda test sonuçlarının nasıl göründüğünü gördük,
+şimdi testlerde yararlı olan `panic!` dışındaki bazı makroları inceleyelim.
 
-### Checking Results with the `assert!` Macro
+### `assert!` Makrosu ile Sonuçları Kontrol Etme
 
-The `assert!` macro, provided by the standard library, is useful when you want
-to ensure that some condition in a test evaluates to `true`. We give the
-`assert!` macro an argument that evaluates to a Boolean. If the value is
-`true`, nothing happens and the test passes. If the value is `false`, the
-`assert!` macro calls `panic!` to cause the test to fail. Using the `assert!`
-macro helps us check that our code is functioning in the way we intend.
+Standart kütüphane tarafından sağlanan `assert!` makrosu, bir testteki bazı koşulların `true` olarak değerlendirildiğinden emin olmak istediğinizde
+kullanışlıdır. `assert!` makrosuna Boolean olarak değerlendirilen bir argüman veririz. Değer
+`true` ise hiçbir şey olmaz ve test geçer. Değer `false` ise,
+`assert!` makrosu `panic!`'i çağırarak testin başarısız olmasına neden olur. `assert!`
+makrosunu kullanmak, kodumuzun istediğimiz şekilde çalıştığını kontrol etmemize yardımcı olur.
 
-In Chapter 5, Listing 5-15, we used a `Rectangle` struct and a `can_hold`
-method, which are repeated here in Listing 11-5. Let’s put this code in the
-_src/lib.rs_ file, then write some tests for it using the `assert!` macro.
+Bölüm 5, Listing 5-15'te, bir `Rectangle` yapısı ve bir `can_hold`
+yöntemi kullandık; bunlar Listing 11-5'te tekrarlanmaktadır. Bu kodu
+_src/lib.rs_ dosyasına koyalım, ardından `assert!` makrosunu kullanarak bunun için bazı testler yazalım.
 
 <Listing number="11-5" file-name="src/lib.rs" caption="The `Rectangle` struct and its `can_hold` method from Chapter 5">
 
@@ -199,11 +192,11 @@ _src/lib.rs_ file, then write some tests for it using the `assert!` macro.
 
 </Listing>
 
-The `can_hold` method returns a Boolean, which means it’s a perfect use case
-for the `assert!` macro. In Listing 11-6, we write a test that exercises the
-`can_hold` method by creating a `Rectangle` instance that has a width of 8 and
-a height of 7 and asserting that it can hold another `Rectangle` instance that
-has a width of 5 and a height of 1.
+`can_hold` yöntemi bir Boolean değeri döndürür, bu da `assert!` makrosu için mükemmel bir kullanım örneği olduğu anlamına gelir.
+Listing 11-6'da, genişliği 8 ve yüksekliği 7 olan bir `Rectangle` örneği oluşturarak
+`can_hold` yöntemini çalıştıran bir test yazıyoruz. Bu testte, genişliği 8 ve
+yüksekliği 7 olan bir `Rectangle` örneği oluşturuyor ve bu örneğin, genişliği 5 ve yüksekliği 1 olan başka bir `Rectangle` örneğini
+barındırabildiğini doğruluyoruz.v
 
 <Listing number="11-6" file-name="src/lib.rs" caption="A test for `can_hold` that checks whether a larger rectangle can indeed hold a smaller rectangle">
 
@@ -213,26 +206,25 @@ has a width of 5 and a height of 1.
 
 </Listing>
 
-Note the `use super::*;` line inside the `tests` module. The `tests` module is
-a regular module that follows the usual visibility rules we covered in Chapter
-7 in the [“Paths for Referring to an Item in the Module
-Tree”][paths-for-referring-to-an-item-in-the-module-tree]<!-- ignore -->
-section. Because the `tests` module is an inner module, we need to bring the
-code under test in the outer module into the scope of the inner module. We use
-a glob here, so anything we define in the outer module is available to this
-`tests` module.
+`tests` modülü içindeki `use super::*;` satırına dikkat edin. `tests` modülü,
+[“Modül Ağacındaki Bir Öğeye Başvurma Yolları”][paths-for-referring-to-an-item-in-the-module-tree]<!-- ignore -->
+bölümünde ele aldığımız olağan görünürlük kurallarına uyan normal bir modüldür.
+`tests` modülü bir iç modül olduğu için, `tests` modülü bir iç modül olduğu için, dış modüldeki test edilecek
+kodu iç modülün kapsamına almamız gerekir. Burada bir glob kullanıyoruz, böylece dış modülde tanımladığımız her şey bu
+`tests` modülünde kullanılabilir hale geliyor.
+Testimize `larger_can_hold_smaller` adını verdik ve ihtiyacımız olan iki
 
-We’ve named our test `larger_can_hold_smaller`, and we’ve created the two
-`Rectangle` instances that we need. Then we called the `assert!` macro and
-passed it the result of calling `larger.can_hold(&smaller)`. This expression is
-supposed to return `true`, so our test should pass. Let’s find out!
+Testimize `larger_can_hold_smaller` adını verdik ve ihtiyacımız olan iki
+`Rectangle` örneğini oluşturduk. Ardından `assert!` makrosunu çağırdık ve
+`larger.can_hold(&smaller)` çağrısının sonucunu ona aktardık. Bu ifade
+`true` değerini döndürmesi gerektiğinden, testimiz başarılı olmalıdır. Hadi öğrenelim!
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-06/output.txt}}
 ```
 
-It does pass! Let’s add another test, this time asserting that a smaller
-rectangle cannot hold a larger rectangle:
+Geçiyor! Başka bir test daha ekleyelim, bu sefer daha küçük bir
+dikdörtgenin daha büyük bir dikdörtgeni içermemesi gerektiğini doğrulayan bir test:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -240,48 +232,47 @@ rectangle cannot hold a larger rectangle:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-02-adding-another-rectangle-test/src/lib.rs:here}}
 ```
 
-Because the correct result of the `can_hold` function in this case is `false`,
-we need to negate that result before we pass it to the `assert!` macro. As a
-result, our test will pass if `can_hold` returns `false`:
+Bu durumda `can_hold` işlevinin doğru sonucu `false` olduğundan,
+bu sonucu `assert!` makrosuna aktarmadan önce tersine çevirmemiz gerekir. Sonuç olarak,
+`can_hold` `false` döndürdüğünde testimiz başarılı olacaktır:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-02-adding-another-rectangle-test/output.txt}}
 ```
 
-Two tests that pass! Now let’s see what happens to our test results when we
-introduce a bug in our code. We’ll change the implementation of the `can_hold`
-method by replacing the greater-than sign with a less-than sign when it
-compares the widths:
+Tİki test de başarılı! Şimdi kodumuza bir hata eklediğimizde test sonuçlarımızın ne olacağını görelim.
+`can_hold` yönteminin uygulamasını, genişlikleri karşılaştırırken
+büyük-küçük işaretini küçük-büyük işaretiyle değiştirerek değiştireceğiz:
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-03-introducing-a-bug/src/lib.rs:here}}
 ```
 
-Running the tests now produces the following:
+Testleri çalıştırdığınızda şu sonuçlar elde edilir:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-03-introducing-a-bug/output.txt}}
 ```
 
-Our tests caught the bug! Because `larger.width` is `8` and `smaller.width` is
-`5`, the comparison of the widths in `can_hold` now returns `false`: 8 is not
-less than 5.
+Testlerimiz hatayı yakaladı! `larger.width` değeri `8` ve `smaller.width` değeri
+`5` olduğu için, `can_hold` içindeki genişliklerin karşılaştırması artık `false` sonucunu veriyor: 8, 5'ten
+küçük değil.
 
-### Testing Equality with the `assert_eq!` and `assert_ne!` Macros
+### `assert_eq!` ve `assert_ne!` Makrolarıyla Eşitliği Test Etme
 
-A common way to verify functionality is to test for equality between the result
-of the code under test and the value you expect the code to return. You could
-do this by using the `assert!` macro and passing it an expression using the
-`==` operator. However, this is such a common test that the standard library
-provides a pair of macros—`assert_eq!` and `assert_ne!`—to perform this test
-more conveniently. These macros compare two arguments for equality or
-inequality, respectively. They’ll also print the two values if the assertion
-fails, which makes it easier to see _why_ the test failed; conversely, the
-`assert!` macro only indicates that it got a `false` value for the `==`
-expression, without printing the values that led to the `false` value.
+İşlevselliği doğrulamanın yaygın bir yolu, test edilen kodun sonucu ile kodun döndürmesini beklediğiniz değer arasındaki eşitliği test etmektir.
+Bunu, `assert!` makrosunu kullanarak ve ona `==` operatörünü kullanarak bir ifade aktararak yapabilirsiniz.
+Ancak, bu test o kadar yaygın bir testtir ki, standart kütüphane
+bu testi daha rahat bir şekilde gerçekleştirmek için `assert_eq!` ve `assert_ne!` adlı bir çift makro sağlar. Ancak, bu o kadar yaygın bir testtir ki, standart kütüphane
+bu testi daha kolay gerçekleştirmek için bir çift makro sağlar:
+`assert_eq!` ve `assert_ne!`. Bu makrolar, sırasıyla iki argümanın eşitliğini veya
+eşit olmadığını karşılaştırır. Ayrıca, onaylama başarısız olursa iki değeri de yazdırırlar,
+bu da testin neden başarısız olduğunu görmeyi kolaylaştırır; tersine,
+`assert!` makrosu, `==`
+ifadesi için `false` değeri aldığını belirtir, ancak `false` değerine yol açan değerleri yazdırmaz.
 
-In Listing 11-7, we write a function named `add_two` that adds `2` to its
-parameter, then we test this function using the `assert_eq!` macro.
+Listing 11-7'de, parametresine `2` ekleyen `add_two` adlı bir fonksiyon yazıyoruz,
+ardından bu fonksiyonu `assert_eq!` makrosunu kullanarak test ediyoruz.
 
 <Listing number="11-7" file-name="src/lib.rs" caption="Testing the function `add_two` using the `assert_eq!` macro">
 
@@ -291,80 +282,78 @@ parameter, then we test this function using the `assert_eq!` macro.
 
 </Listing>
 
-Let’s check that it passes!
+Geçip geçmediğini kontrol edelim!
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-07/output.txt}}
 ```
 
-We create a variable named `result` that holds the result of calling
-`add_two(2)`. Then we pass `result` and `4` as the arguments to the
-`assert_eq!` macro. The output line for this test is `test tests::it_adds_two
-... ok`, and the `ok` text indicates that our test passed!
+`add_two(2)` çağrısının sonucunu tutan `result` adlı bir değişken oluşturuyoruz.
+Ardından `result` ve `4` değerlerini `assert_eq!` makrosuna argüman olarak
+aktarıyoruz. Bu testin çıktı satırı `test tests::it_adds_two...
+ ok` şeklindedir ve `ok` metni testimizin başarılı olduğunu gösterir!
 
-Let’s introduce a bug into our code to see what `assert_eq!` looks like when it
-fails. Change the implementation of the `add_two` function to instead add `3`:
+Kodumuza bir hata ekleyerek `assert_eq!` başarısız olduğunda nasıl göründüğünü görelim.
+`add_two` işlevinin uygulamasını değiştirerek yerine `3` ekleyin:
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-04-bug-in-add-two/src/lib.rs:here}}
 ```
 
-Run the tests again:
+Testleri tekrar çalıştırın:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-04-bug-in-add-two/output.txt}}
 ```
 
-Our test caught the bug! The `tests::it_adds_two` test failed, and the message
-tells us that the assertion that failed was `left == right` and what the `left`
-and `right` values are. This message helps us start debugging: the `left`
-argument, where we had the result of calling `add_two(2)`, was `5` but the
-`right` argument was `4`. You can imagine that this would be especially helpful
-when we have a lot of tests going on.
+Testimiz hatayı yakaladı! `tests::it_adds_two` testi başarısız oldu ve mesaj
+bize başarısız olan onaylamanın `left == right` olduğunu ve `left`
+ve `right` değerlerinin ne olduğunu söylüyor. Bu mesaj hata ayıklamaya başlamamıza yardımcı oluyor: `left`
+argümanı, `add_two(2)` çağrısının sonucunu içeren, `5` idi, ancak
+`right` argümanı `4` idi. Bu durumun, özellikle çok sayıda test yaptığımızda
+çok yararlı olacağını tahmin edebilirsiniz.
 
-Note that in some languages and test frameworks, the parameters to equality
-assertion functions are called `expected` and `actual`, and the order in which
-we specify the arguments matters. However, in Rust, they’re called `left` and
-`right`, and the order in which we specify the value we expect and the value
-the code produces doesn’t matter. We could write the assertion in this test as
-`assert_eq!(4, result)`, which would result in the same failure message that
-displays `` assertion `left == right` failed``.
+Bazı dillerde ve test çerçevelerinde, eşitlik
+iddia işlevlerinin parametreleri `expected` ve `actual` olarak adlandırılır ve
+argümanları belirtme sırası önemlidir. Ancak Rust'ta bunlar `left` ve
+`right` olarak adlandırılır ve beklediğimiz değeri ve kodun ürettiği değeri
+belirtme sırası önemli değildir. Bu testteki onaylamayı
+`assert_eq!(4, result)` olarak yazabiliriz, bu da `` onaylama `left == right` başarısız`` mesajının
+görüntülenmesiyle sonuçlanır.
 
-The `assert_ne!` macro will pass if the two values we give it are not equal and
-fail if they’re equal. This macro is most useful for cases when we’re not sure
-what a value _will_ be, but we know what the value definitely _shouldn’t_ be.
-For example, if we’re testing a function that is guaranteed to change its input
-in some way, but the way in which the input is changed depends on the day of
-the week that we run our tests, the best thing to assert might be that the
-output of the function is not equal to the input.
+`assert_ne!` makrosu, verdiğimiz iki değer eşit değilse geçer,
+eşitse başarısız olur. Bu makro, bir değerin ne olacağından emin olmadığımız,
+ancak kesinlikle ne olmaması gerektiğini bildiğimiz durumlarda en kullanışlıdır.
+Örneğin, girdisini bir şekilde değiştireceği garanti edilen bir fonksiyonu test ediyorsak,
+ancak girdinin değiştirilme şekli testleri yaptığımız günün
+haftanın hangi günü olduğuna bağlıysa, en iyi iddia, fonksiyonun çıktısının girdisine eşit
+olmadığı olabilir.
 
-Under the surface, the `assert_eq!` and `assert_ne!` macros use the operators
-`==` and `!=`, respectively. When the assertions fail, these macros print their
-arguments using debug formatting, which means the values being compared must
-implement the `PartialEq` and `Debug` traits. All primitive types and most of
-the standard library types implement these traits. For structs and enums that
-you define yourself, you’ll need to implement `PartialEq` to assert equality of
-those types. You’ll also need to implement `Debug` to print the values when the
-assertion fails. Because both traits are derivable traits, as mentioned in
-Listing 5-12 in Chapter 5, this is usually as straightforward as adding the
-`#[derive(PartialEq, Debug)]` annotation to your struct or enum definition. See
-Appendix C, [“Derivable Traits,”][derivable-traits]<!-- ignore --> for more
-details about these and other derivable traits.
+Yüzeyin altında, `assert_eq!` ve `assert_ne!` makroları sırasıyla
+`==` ve `!=` operatörlerini kullanır. Assertionlar başarısız olduğunda, bu makrolar
+argümanlarını hata ayıklama biçimlendirmesini kullanarak yazdırır, bu da karşılaştırılan değerlerin
+`PartialEq` ve `Debug` özelliklerini uygulaması gerektiği anlamına gelir. Tüm temel türler ve
+standart kütüphane türlerinin çoğu bu özellikleri uygular. Kendiniz tanımladığınız yapılar ve sıralamalar için,
+bu türlerin eşitliğini doğrulamak üzere `PartialEq` özelliğini uygulamalısınız.
+Ayrıca, doğrulama başarısız olduğunda değerleri yazdırmak için `Debug` özelliğini de uygulamalısınız.
+Her iki özellik de türetilebilir özellikler olduğundan,
+Bölüm 5'teki Listing 5-12'de belirtildiği gibi, bu genellikle yapı veya sıralama tanımınıza
+`#[derive(PartialEq, Debug)]` eklemek kadar basittir. Bu ve diğer türetilebilir özellikler hakkında daha fazla
+bilgi için Ek C, [“Türetilebilir Özellikler,”][derivable-traits]<!-- ignore --> bölümüne bakın.
 
-### Adding Custom Failure Messages
+### Özel Hata Mesajları Ekleme
 
-You can also add a custom message to be printed with the failure message as
-optional arguments to the `assert!`, `assert_eq!`, and `assert_ne!` macros. Any
-arguments specified after the required arguments are passed along to the
-`format!` macro (discussed in [“Concatenation with the `+` Operator or the
-`format!` Macro”][concatenation-with-the--operator-or-the-format-macro]<!--
-ignore --> in Chapter 8), so you can pass a format string that contains `{}`
-placeholders and values to go in those placeholders. Custom messages are useful
-for documenting what an assertion means; when a test fails, you’ll have a better
-idea of what the problem is with the code.
+Ayrıca, `assert!`, `assert_eq!` ve `assert_ne!` makrolarına isteğe bağlı argümanlar olarak
+hata mesajıyla birlikte yazdırılacak özel bir mesaj da ekleyebilirsiniz. Gerekli argümanlardan sonra belirtilen tüm
+argümanlar,
+`format!` makrosuna aktarılır (bkz. [“`+` Operatörü veya `format!` Makrosu ile Birleştirme”][concatenation-with-the--operator-or-the-format-macro]<!--
+ignore --> bölümünde ele alınmıştır), bu nedenle `{}`
+yer tutucuları ve bu yer tutuculara girecek değerleri içeren bir biçim dizesi aktarabilirsiniz. Özel mesajlar, bir onaylamanın ne anlama geldiğini belgelemek için kullanışlıdır;
+bir test başarısız olduğunda, koddaki sorunun ne olduğu hakkında daha iyi
+bir fikir sahibi olursunuz.
 
-For example, let’s say we have a function that greets people by name and we
-want to test that the name we pass into the function appears in the output:
+Örneğin, insanları isimleriyle selamlayan bir işlevimiz olduğunu ve
+işleve aktardığımız ismin çıktıda göründüğünü test etmek istediğimizi varsayalım:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -372,60 +361,59 @@ want to test that the name we pass into the function appears in the output:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-05-greeter/src/lib.rs}}
 ```
 
-The requirements for this program haven’t been agreed upon yet, and we’re
-pretty sure the `Hello` text at the beginning of the greeting will change. We
-decided we don’t want to have to update the test when the requirements change,
-so instead of checking for exact equality to the value returned from the
-`greeting` function, we’ll just assert that the output contains the text of the
-input parameter.
+Bu programın gereksinimleri henüz kararlaştırılmadı ve
+selamlamanın başındaki `Hello` metninin değişeceği konusunda oldukça eminiz.
+Gereksinimler değiştiğinde testi güncellemek istemediğimize karar verdik,
+bu nedenle `greeting` işlevinden döndürülen değerle tam olarak eşit olup olmadığını
+kontrol etmek yerine, çıktının giriş parametresinin metnini içerdiğini
+doğrulayacağız.
 
-Now let’s introduce a bug into this code by changing `greeting` to exclude
-`name` to see what the default test failure looks like:
+Şimdi, `greeting` işlevini `name` parametresini hariç tutacak şekilde değiştirerek
+bu koda bir hata ekleyelim ve varsayılan test hatasının nasıl göründüğünü görelim:
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-06-greeter-with-bug/src/lib.rs:here}}
 ```
 
-Running this test produces the following:
+Bu testi çalıştırdığınızda aşağıdaki sonuçlar elde edilir:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-06-greeter-with-bug/output.txt}}
 ```
 
-This result just indicates that the assertion failed and which line the
-assertion is on. A more useful failure message would print the value from the
-`greeting` function. Let’s add a custom failure message composed of a format
-string with a placeholder filled in with the actual value we got from the
-`greeting` function:
+Bu sonuç sadece iddianın başarısız olduğunu ve iddianın hangi satırda olduğunu gösterir.
+Daha yararlı bir hata mesajı,
+`greeting` işlevinden alınan değeri yazdırır.
+`greeting` işlevinden aldığımız gerçek değerle doldurulmuş bir yer tutucu içeren bir biçim dizesi içeren özel bir hata mesajı ekleyelim:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-07-custom-failure-message/src/lib.rs:here}}
 ```
 
-Now when we run the test, we’ll get a more informative error message:
+Şimdi testi çalıştırdığımızda, daha bilgilendirici bir hata mesajı alacağız:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-07-custom-failure-message/output.txt}}
 ```
 
-We can see the value we actually got in the test output, which would help us
-debug what happened instead of what we were expecting to happen.
+Test çıktısında gerçekte elde ettiğimiz değeri görebiliriz, bu da bize
+beklediğimiz şey yerine olanları hata ayıklamada yardımcı olur.
 
-### Checking for Panics with `should_panic`
+### `should_panic` ile Panik Kontrolü
 
-In addition to checking return values, it’s important to check that our code
-handles error conditions as we expect. For example, consider the `Guess` type
-that we created in Chapter 9, Listing 9-13. Other code that uses `Guess`
-depends on the guarantee that `Guess` instances will contain only values
-between 1 and 100. We can write a test that ensures that attempting to create a
-`Guess` instance with a value outside that range panics.
+Dönüş değerlerini kontrol etmenin yanı sıra, kodumuzun
+hata koşullarını beklediğimiz gibi işlediğini kontrol etmek de önemlidir. Örneğin, Bölüm 9, Listing 9-13'te oluşturduğumuz `Guess` türünü
+düşünelim. `Guess` türünü kullanan diğer kodlar, `Guess` örneklerinin yalnızca
+1 ile 100 arasındaki değerleri içereceğine dair garantiye dayanır. Bu aralığın
+dışındaki bir değerle `Guess` örneği oluşturmaya çalışıldığında panik oluştuğunu
+garanti eden bir test yazabiliriz.
 
-We do this by adding the attribute `should_panic` to our test function. The
-test passes if the code inside the function panics; the test fails if the code
-inside the function doesn’t panic.
+Bunu, test işlevimize `should_panic` özniteliğini ekleyerek yaparız. İşlevin içindeki kod panik yaparsa
+test geçer; işlevin içindeki kod panik yapmazsa
+test başarısız olur.
 
-Listing 11-8 shows a test that checks that the error conditions of `Guess::new`
-happen when we expect them to.
+Listing 11-8, `Guess::new`'un hata koşullarının
+beklediğimiz şekilde gerçekleştiğini kontrol eden bir testi gösterir.
 
 <Listing number="11-8" file-name="src/lib.rs" caption="Testing that a condition will cause a `panic!`">
 
@@ -435,39 +423,36 @@ happen when we expect them to.
 
 </Listing>
 
-We place the `#[should_panic]` attribute after the `#[test]` attribute and
-before the test function it applies to. Let’s look at the result when this test
-passes:
+`#[test]` özniteliğinden sonra ve uygulandığı test işlevinden önce `#[should_panic]` özniteliğini yerleştiriyoruz. Bu testin başarılı olduğu durumda sonucu inceleyelim:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-08/output.txt}}
 ```
 
-Looks good! Now let’s introduce a bug in our code by removing the condition
-that the `new` function will panic if the value is greater than 100:
+Güzel görünüyor! Şimdi, değer 100'den büyükse `new` işlevinin paniğe kapılacağı koşulunu kaldırarak kodumuza bir hata ekleyelim:
 
 ```rust,not_desired_behavior,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-08-guess-with-bug/src/lib.rs:here}}
 ```
 
-When we run the test in Listing 11-8, it will fail:
+Listing 11-8'deki testi çalıştırdığımızda, test başarısız olacaktır:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-08-guess-with-bug/output.txt}}
 ```
 
-We don’t get a very helpful message in this case, but when we look at the test
-function, we see that it’s annotated with `#[should_panic]`. The failure we got
-means that the code in the test function did not cause a panic.
+Bu durumda çok yardımcı bir mesaj almıyoruz, ancak test işlevine baktığımızda,
+`#[should_panic]` ile işaretlendiğini görüyoruz. Aldığımız hata, test işlevindeki kodun
+panik durumuna neden olmadığı anlamına geliyor.
 
-Tests that use `should_panic` can be imprecise. A `should_panic` test would
-pass even if the test panics for a different reason from the one we were
-expecting. To make `should_panic` tests more precise, we can add an optional
-`expected` parameter to the `should_panic` attribute. The test harness will
-make sure that the failure message contains the provided text. For example,
-consider the modified code for `Guess` in Listing 11-9 where the `new` function
-panics with different messages depending on whether the value is too small or
-too large.
+`should_panic` kullanan testler kesin olmayabilir. Bir `should_panic` testi,
+beklediğimizden farklı bir nedenden dolayı panik yapsa bile
+geçer. `should_panic` testlerini daha kesin hale getirmek için, `should_panic` özniteliğine isteğe bağlı bir
+`expected` parametresi ekleyebiliriz. Test donanımı,
+hata mesajının sağlanan metni içerdiğinden emin olacaktır. Örneğin,
+Listing 11-9'daki `Guess` için değiştirilmiş kodu ele alalım. Burada `new` işlevi,
+değerin çok küçük veya
+çok büyük olmasına bağlı olarak farklı mesajlarla paniğe kapılır.
 
 <Listing number="11-9" file-name="src/lib.rs" caption="Testing for a `panic!` with a panic message containing a specified substring">
 
@@ -477,68 +462,67 @@ too large.
 
 </Listing>
 
-This test will pass because the value we put in the `should_panic` attribute’s
-`expected` parameter is a substring of the message that the `Guess::new`
-function panics with. We could have specified the entire panic message that we
-expect, which in this case would be `Guess value must be less than or equal to
-100, got 200`. What you choose to specify depends on how much of the panic
-message is unique or dynamic and how precise you want your test to be. In this
-case, a substring of the panic message is enough to ensure that the code in the
-test function executes the `else if value > 100` case.
+Bu test başarılı olacaktır çünkü `should_panic` özniteliğinin
+`expected` parametresine girdiğimiz değer, `Guess::new`
+işlevinin paniklediği mesajın bir alt dizesidir. Beklediğimiz panik mesajının tamamını
+belirtmiş olabilirdik, bu durumda mesaj `Guess value must be less than or equal to
+100, got 200` olurdu. Ne belirleyeceğiniz, panik mesajının ne kadarının benzersiz veya dinamik olduğuna ve
+testinizin ne kadar kesin olmasını istediğinize bağlıdır. Bu durumda, panik
+mesajının bir alt dizesi, test işlevindeki kodun `else if value > 100` durumunu
+yürütmesini sağlamak için yeterlidir.
 
-To see what happens when a `should_panic` test with an `expected` message
-fails, let’s again introduce a bug into our code by swapping the bodies of the
-`if value < 1` and the `else if value > 100` blocks:
+`expected` mesajı olan bir `should_panic` testi başarısız olduğunda ne olduğunu görmek için,
+`if value < 1` ve `else if value > 100` bloklarının gövdelerini değiştirerek kodumuza tekrar bir hata ekleyelim:
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/src/lib.rs:here}}
 ```
 
-This time when we run the `should_panic` test, it will fail:
+Bu sefer `should_panic` testini çalıştırdığımızda, test başarısız olacaktır:
 
 ```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/output.txt}}
 ```
 
-The failure message indicates that this test did indeed panic as we expected,
-but the panic message did not include the expected string `less than or equal
-to 100`. The panic message that we did get in this case was `Guess value must
-be greater than or equal to 1, got 200.` Now we can start figuring out where
-our bug is!
+Hata mesajı, bu testin beklediğimiz gibi gerçekten paniklediğini gösteriyor,
+ancak panik mesajı beklenen `100'den küçük veya eşit` dizisini içermiyordu.
+Bu durumda aldığımız panik mesajı `Tahmin değeri 1'den büyük veya eşit
+olmalıdır, 200 alındı.` Şimdi hatanın nerede olduğunu bulmaya başlayabiliriz!
+Testlerde `Result<T, E>` kullanma
 
-### Using `Result<T, E>` in Tests
+### Testlerde `Result<T, E>` kullanımı
 
-Our tests so far all panic when they fail. We can also write tests that use
-`Result<T, E>`! Here’s the test from Listing 11-1, rewritten to use `Result<T,
-E>` and return an `Err` instead of panicking:
+Şimdiye kadar yaptığımız testlerin tümü başarısız olduğunda paniklemiştir.
+`Result<T, E>` kullanan testler de yazabiliriz! Listing 11-1'deki test, `Result<T,
+E>` kullanmak ve paniklemek yerine `Err` döndürmek üzere yeniden yazılmıştır:
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-10-result-in-tests/src/lib.rs:here}}
 ```
 
-The `it_works` function now has the `Result<(), String>` return type. In the
-body of the function, rather than calling the `assert_eq!` macro, we return
-`Ok(())` when the test passes and an `Err` with a `String` inside when the test
-fails.
+`it_works` işlevi artık `Result<(), String>` dönüş türünü kullanıyor. İşlevin
+gövdesinde, `assert_eq!` makrosunu çağırmak yerine, test başarılı olduğunda
+`Ok(())`, test başarısız olduğunda ise içinde `String` bulunan bir `Err` döndürüyoruz.
+`Result<T, E>` döndüren testler yazmak, testlerin gövdesinde soru işareti
 
-Writing tests so they return a `Result<T, E>` enables you to use the question
-mark operator in the body of tests, which can be a convenient way to write
-tests that should fail if any operation within them returns an `Err` variant.
+Testleri `Result<T, E>` döndürecek şekilde yazmak, testlerin gövdesinde soru
+işareti operatörünü kullanmanıza olanak tanır. Bu, içlerindeki herhangi bir işlem `Err` varyantı döndürdüğünde başarısız olması gereken testleri yazmak için
+kullanışlı bir yol olabilir.
 
-You can’t use the `#[should_panic]` annotation on tests that use `Result<T,
-E>`. To assert that an operation returns an `Err` variant, _don’t_ use the
-question mark operator on the `Result<T, E>` value. Instead, use
-`assert!(value.is_err())`.
+`Result<T,
+E>` kullanan testlerde `#[should_panic]` ek açıklaması kullanamazsınız. Bir işlemin `Err` varyantını döndürdüğünü doğrulamak için, `Result<T, E>` değerinde
+soru işareti operatörünü _kullanmayın_. Bunun yerine,
+`assert!(value.is_err())` kullanın.
 
-Now that you know several ways to write tests, let’s look at what is happening
-when we run our tests and explore the different options we can use with `cargo
-test`.
+Test yazmanın çeşitli yollarını öğrendiğinize göre, testlerimizi çalıştırdığımızda neler olduğunu
+inceleyelim ve `cargo
+test` ile kullanabileceğimiz farklı seçenekleri keşfedelim.
 
-[concatenation-with-the--operator-or-the-format-macro]: ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
+[concatenation-with-the--operator-or-the-format-macro]: ch08-02-strings.md#-operatörü-veya-format-makrosu-ile-birleştirme
 [bench]: ../unstable-book/library-features/test.html
-[ignoring]: ch11-02-running-tests.html#ignoring-some-tests-unless-specifically-requested
-[subset]: ch11-02-running-tests.html#running-a-subset-of-tests-by-name
-[controlling-how-tests-are-run]: ch11-02-running-tests.html#controlling-how-tests-are-run
-[derivable-traits]: appendix-03-derivable-traits.html
-[doc-comments]: ch14-02-publishing-to-crates-io.html#documentation-comments-as-tests
-[paths-for-referring-to-an-item-in-the-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
+[ignoring]: ch11-02-running-tests.md#özel-olarak-talep-edilmedikçe-bazı-testleri-göz-ardı-etmek
+[subset]: ch11-02-running-tests.md#adına-göre-testlerin-bir-alt-kümesini-çalıştırma
+[controlling-how-tests-are-run]: ch11-02-running-tests.md#testlerin-nasıl-çalıştırılacağını-kontrol-etme
+[derivable-traits]: appendix-03-derivable-traits.md
+[doc-comments]: ch14-02-publishing-to-crates-io.md#dokümantasyon-yorumları-test-olarak
+[paths-for-referring-to-an-item-in-the-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md

@@ -110,4 +110,4 @@ Bir sonraki mantıklı soru, kendi kodunuzda hangi tarzı seçmeniz gerektiği v
 
 Peki, iki uygulama gerçekten eşdeğer mi? Sezgisel olarak, daha düşük seviyeli döngünün daha hızlı olacağı düşünülebilir. Şimdi performanstan bahsedelim.
 
-[impl-trait]: ch10-02-traits.html#traits-as-parameters
+[impl-trait]: ch10-02-traits.md#parametre-olarak-özellikler

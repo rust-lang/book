@@ -32,51 +32,50 @@ Liste 6-3'te.
 
 </Listing>
 
-Let’s break down the `match` in the `value_in_cents` function. First we list
-the `match` keyword followed by an expression, which in this case is the value
-`coin`. This seems very similar to a conditional expression used with `if`, but
-there’s a big difference: with `if`, the condition needs to evaluate to a
-Boolean value, but here it can be any type. The type of `coin` in this example
-is the `Coin` enum that we defined on the first line.
+`value_in_cents` işlevindeki `match` ifadesini inceleyelim. Öncelikle,
+`match` anahtar kelimesini ve ardından bir ifadeyi listeliyoruz. Bu durumda ifade,
+`coin` değeridir. Bu, `if` ile kullanılan koşullu ifadeye çok benziyor, ancak
+büyük bir fark var: `if` ile koşul, bir
+Boolean değeri olarak değerlendirilmelidir, ancak burada herhangi bir tür olabilir. Bu örnekteki `coin` türü,
+ilk satırda tanımladığımız `Coin` enum'dur.
 
-Next are the `match` arms. An arm has two parts: a pattern and some code. The
-first arm here has a pattern that is the value `Coin::Penny` and then the `=>`
-operator that separates the pattern and the code to run. The code in this case
-is just the value `1`. Each arm is separated from the next with a comma.
+Sırada `match` kolları var. Bir kol iki bölümden oluşur: bir desen ve bazı kodlar.
+Buradaki ilk kol, `Coin::Penny` değeri olan bir desene ve ardından deseni ve çalıştırılacak kodu ayıran `=>`
+işlemcisine sahiptir. Bu durumda kod
+sadece `1` değeridir. Her kol, bir sonraki koldan virgülle ayrılır.
 
-When the `match` expression executes, it compares the resultant value against
-the pattern of each arm, in order. If a pattern matches the value, the code
-associated with that pattern is executed. If that pattern doesn’t match the
-value, execution continues to the next arm, much as in a coin-sorting machine.
-We can have as many arms as we need: in Listing 6-3, our `match` has four arms.
+`match` ifadesi yürütüldüğünde, sonuç değeri sırayla her kolun
+deseniyle karşılaştırılır. Bir desen değerle eşleşirse, o desenle ilişkili kod
+yürütülür. Desen değerle eşleşmezse,
+yürütme bir madeni para ayırma makinesinde olduğu gibi bir sonraki kola devam eder.
+İhtiyacımız olduğu kadar çok kol olabilir: Listing 6-3'te, `match` ifademizin dört kolu vardır.
 
-The code associated with each arm is an expression, and the resultant value of
-the expression in the matching arm is the value that gets returned for the
-entire `match` expression.
+Her kol ile ilişkili kod bir ifadedir ve eşleşen koldaki ifadenin sonuç değeri,
+tüm `match` ifadesi için döndürülen değerdir.
+`match` ifadesinin sonuç değeri,
 
-We don’t typically use curly brackets if the match arm code is short, as it is
-in Listing 6-3 where each arm just returns a value. If you want to run multiple
-lines of code in a match arm, you must use curly brackets, and the comma
-following the arm is then optional. For example, the following code prints
-“Lucky penny!” every time the method is called with a `Coin::Penny`, but still
-returns the last value of the block, `1`:
+Eşleşme kolu kodu kısa ise genellikle küme parantezleri kullanmayız,
+Listing 6-3'te olduğu gibi her kol sadece bir değer döndürür. Eşleşme kolunda birden fazla
+kod satırı çalıştırmak istiyorsanız, küme parantezleri kullanmanız gerekir ve kolun
+ardından gelen virgül isteğe bağlıdır. Örneğin, aşağıdaki kod
+“Lucky penny!” yazdırır, ancak yine de bloğun son değeri olan `1`'i döndürür:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-08-match-arm-multiple-lines/src/main.rs:here}}
 ```
 
-### Patterns That Bind to Values
+### Değerlere Bağlanan Kalıplar
 
-Another useful feature of match arms is that they can bind to the parts of the
-values that match the pattern. This is how we can extract values out of enum
-variants.
+Eşleştirme kolları, desene uyan değerlerin parçalarına bağlanabilmeleri açısından da
+kullanışlıdır. Bu sayede, enum varyantlarından değerleri çıkarabiliriz.
 
-As an example, let’s change one of our enum variants to hold data inside it.
-From 1999 through 2008, the United States minted quarters with different
-designs for each of the 50 states on one side. No other coins got state
-designs, so only quarters have this extra value. We can add this information to
-our `enum` by changing the `Quarter` variant to include a `UsState` value
-stored inside it, which we’ve done in Listing 6-4.
+
+Örnek olarak, enum varyantlarımızdan birini içinde veri tutacak şekilde değiştirelim.
+1999'dan 2008'e kadar, Amerika Birleşik Devletleri 50 eyaletin her biri için farklı
+tasarımlara sahip çeyrek dolarlar bastı. Başka hiçbir madeni para eyalet
+tasarımlarına sahip değildi, bu yüzden sadece çeyrek dolarlar bu ekstra değere sahipti. Bu bilgiyi
+`enum`'umuza, `Quarter` varyantını içinde depolanan bir `UsState` değeri
+içerecek şekilde değiştirerek ekleyebiliriz, bunu Listing 6-4'te yaptık.
 
 <Listing number="6-4" caption="A `Coin` enum in which the `Quarter` variant also holds a `UsState` value">
 
@@ -86,42 +85,42 @@ stored inside it, which we’ve done in Listing 6-4.
 
 </Listing>
 
-Let’s imagine that a friend is trying to collect all 50 state quarters. While
-we sort our loose change by coin type, we’ll also call out the name of the
-state associated with each quarter so that if it’s one our friend doesn’t have,
-they can add it to their collection.
+Bir arkadaşımızın 50 eyalet çeyreğini toplamaya çalıştığını hayal edelim.
+Bozuk paralarımızı para türüne göre sıralarken, her çeyreğin ait olduğu eyaletin
+adını da söyleyeceğiz, böylece arkadaşımızın sahip olmadığı bir çeyrek varsa,
+onu koleksiyonuna ekleyebilsin.
 
-In the match expression for this code, we add a variable called `state` to the
-pattern that matches values of the variant `Coin::Quarter`. When a
-`Coin::Quarter` matches, the `state` variable will bind to the value of that
-quarter’s state. Then we can use `state` in the code for that arm, like so:
+Bu kodun eşleştirme ifadesinde, `Coin::Quarter` varyantının değerleriyle eşleşen
+desene `state` adlı bir değişken ekliyoruz. Bir
+`Coin::Quarter` eşleştiğinde, `state` değişkeni o çeyreklik madalyonun ait olduğu
+eyaletin değerine bağlanacaktır. Ardından, o kol için kodda `state` değişkenini şu şekilde kullanabiliriz:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-09-variable-in-pattern/src/main.rs:here}}
 ```
 
-If we were to call `value_in_cents(Coin::Quarter(UsState::Alaska))`, `coin`
-would be `Coin::Quarter(UsState::Alaska)`. When we compare that value with each
-of the match arms, none of them match until we reach `Coin::Quarter(state)`. At
-that point, the binding for `state` will be the value `UsState::Alaska`. We can
-then use that binding in the `println!` expression, thus getting the inner
-state value out of the `Coin` enum variant for `Quarter`.
+`value_in_cents(Coin::Quarter(UsState::Alaska))` çağrısı yaparsak, `coin`
+`Coin::Quarter(UsState::Alaska)` olur. Bu değeri her bir eşleşme koluyla karşılaştırdığımızda,
+`Coin::Quarter(state)`'ye ulaşana kadar hiçbiri eşleşmez. Bu
+noktada, `state` için bağlama değeri `UsState::Alaska` olacaktır. Daha sonra
+bu bağlamayı `println!` ifadesinde kullanabiliriz, böylece `Quarter` için `Coin` enum varyantından iç
+durum değerini elde ederiz.
 
-### Matching with `Option<T>`
+### `Option<T>` ile eşleştirme
 
-In the previous section, we wanted to get the inner `T` value out of the `Some`
-case when using `Option<T>`; we can also handle `Option<T>` using `match`, as
-we did with the `Coin` enum! Instead of comparing coins, we’ll compare the
-variants of `Option<T>`, but the way the `match` expression works remains the
-same.
+Önceki bölümde, `Option<T>` kullanırken `Some`
+durumundan iç `T` değerini almak istedik; `Coin` enumunda yaptığımız gibi, `match` kullanarak `Option<T>` ile de çalışabiliriz!
+Madeni paraları karşılaştırmak yerine,
+`Option<T>` varyantlarını karşılaştıracağız, ancak `match` ifadesinin çalışma şekli aynı
+kalacaktır.
 
-Let’s say we want to write a function that takes an `Option<i32>` and, if
-there’s a value inside, adds 1 to that value. If there isn’t a value inside,
-the function should return the `None` value and not attempt to perform any
-operations.
+Diyelim ki, bir `Option<i32>` alan ve içinde bir değer varsa
+bu değere 1 ekleyen bir işlev yazmak istiyoruz. İçinde bir değer yoksa,
+işlev `None` değerini döndürmeli ve herhangi bir
+işlem yapmaya çalışmamalıdır.
 
-This function is very easy to write, thanks to `match`, and will look like
-Listing 6-5.
+Bu işlev, `match` sayesinde yazması çok kolaydır ve
+Listing 6-5 gibi görünecektir.
 
 <Listing number="6-5" caption="A function that uses a `match` expression on an `Option<i32>`">
 
@@ -131,129 +130,127 @@ Listing 6-5.
 
 </Listing>
 
-Let’s examine the first execution of `plus_one` in more detail. When we call
-`plus_one(five)`, the variable `x` in the body of `plus_one` will have the
-value `Some(5)`. We then compare that against each match arm:
+`plus_one` işlevinin ilk yürütülmesini daha ayrıntılı olarak inceleyelim.
+`plus_one(five)` işlevini çağırdığımızda, `plus_one` işlevinin gövdesindeki `x` değişkeni
+`Some(5)` değerine sahip olacaktır. Ardından bunu her bir eşleşme koluyla karşılaştırırız:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:first_arm}}
 ```
 
-The `Some(5)` value doesn’t match the pattern `None`, so we continue to the
-next arm:
+`Some(5)` değeri `None` deseniyle eşleşmediğinden, bir sonraki kola geçiyoruz:
+`None`
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:second_arm}}
 ```
 
-Does `Some(5)` match `Some(i)`? It does! We have the same variant. The `i`
-binds to the value contained in `Some`, so `i` takes the value `5`. The code in
-the match arm is then executed, so we add 1 to the value of `i` and create a
-new `Some` value with our total `6` inside.
+`Some(5)`, `Some(i)` ile eşleşir mi? Eşleşir! Aynı varyantımız var. `i`,
+`Some` içindeki değere bağlanır, bu nedenle `i`, `5` değerini alır.
+Eşleşme kolundaki kod daha sonra yürütülür, bu nedenle `i` değerine 1 ekleriz ve toplam `6` değerini içeren yeni bir
+`Some` değeri oluştururuz.
 
-Now let’s consider the second call of `plus_one` in Listing 6-5, where `x` is
-`None`. We enter the `match` and compare to the first arm:
+Şimdi, Listing 6-5'teki `plus_one`'ın ikinci çağrısını ele alalım, burada `x`
+`None`'dur. `match`'e gireriz ve ilk kol ile karşılaştırırız:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:first_arm}}
 ```
 
-It matches! There’s no value to add to, so the program stops and returns the
-`None` value on the right side of `=>`. Because the first arm matched, no other
-arms are compared.
+Eşleşiyor! Eklenecek bir değer olmadığı için program durur ve
+`=>` sağ tarafındaki `None` değerini döndürür. İlk kol eşleştiği için diğer
+kollar karşılaştırılmaz.
 
-Combining `match` and enums is useful in many situations. You’ll see this
-pattern a lot in Rust code: `match` against an enum, bind a variable to the
-data inside, and then execute code based on it. It’s a bit tricky at first, but
-once you get used to it, you’ll wish you had it in all languages. It’s
-consistently a user favorite.
+`match` ve enum'ları birleştirmek birçok durumda kullanışlıdır. Rust kodunda bu
+deseni sıkça göreceksiniz: bir enum'a karşı `match`, değişkeni içindeki
+verilere bağlayın ve ardından buna göre kodu çalıştırın. Başlangıçta biraz zor olabilir, ancak
+alıştığınızda, tüm dillerde olmasını isteyeceksiniz. Bu,
+kullanıcıların sürekli olarak en sevdiği özelliktir.
 
-### Matches Are Exhaustive
+### Eşleşmeler Kapsamlıdır
 
-There’s one other aspect of `match` we need to discuss: the arms’ patterns must
-cover all possibilities. Consider this version of our `plus_one` function,
-which has a bug and won’t compile:
+`match` ile ilgili tartışmamız gereken bir başka husus daha var: dalların kalıpları
+tüm olasılıkları kapsamalıdır. Hatalı olduğu için derlenemeyen `plus_one` işlevimizin bu
+sürümünü ele alalım:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/src/main.rs:here}}
 ```
 
-We didn’t handle the `None` case, so this code will cause a bug. Luckily, it’s
-a bug Rust knows how to catch. If we try to compile this code, we’ll get this
-error:
+`None` durumunu ele almadık, bu nedenle bu kod bir hata oluşturacaktır. Neyse ki, bu
+Rust'un yakalayabileceği bir hatadır. Bu kodu derlemeye çalışırsak, şu
+hatayı alırız:
 
 ```console
 {{#include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/output.txt}}
 ```
 
-Rust knows that we didn’t cover every possible case, and even knows which
-pattern we forgot! Matches in Rust are _exhaustive_: we must exhaust every last
-possibility in order for the code to be valid. Especially in the case of
-`Option<T>`, when Rust prevents us from forgetting to explicitly handle the
-`None` case, it protects us from assuming that we have a value when we might
-have null, thus making the billion-dollar mistake discussed earlier impossible.
+Rust, her olası durumu kapsamadığımızı bilir ve hatta hangi
+deseni unuttuğumuzu bile bilir! Rust'ta eşleşmeler _kapsamlıdır_: kodun geçerli olması için her türlü
+olasılığı tüketmeliyiz. Özellikle
+`Option<T>` durumunda, Rust, `None` durumunu açıkça ele almayı unutmamızı engelleyerek
+`None` durumunu açıkça ele almamızı engellediğinde, null olabilecek bir durumda bir değerimiz olduğunu varsaymamızı önler ve böylece
+daha önce bahsedilen milyar dolarlık hatayı imkansız hale getirir.
 
-### Catch-All Patterns and the `_` Placeholder
+### Her şeyi kapsayan desenler ve `_` yer tutucusu
 
-Using enums, we can also take special actions for a few particular values, but
-for all other values take one default action. Imagine we’re implementing a game
-where, if you roll a 3 on a dice roll, your player doesn’t move, but instead
-gets a new fancy hat. If you roll a 7, your player loses a fancy hat. For all
-other values, your player moves that number of spaces on the game board. Here’s
-a `match` that implements that logic, with the result of the dice roll
-hardcoded rather than a random value, and all other logic represented by
-functions without bodies because actually implementing them is out of scope for
-this example:
+Enum'ları kullanarak, birkaç belirli değer için özel eylemler de gerçekleştirebiliriz, ancak
+diğer tüm değerler için tek bir varsayılan eylem gerçekleştiririz. Bir oyun uyguladığımızı düşünün,
+ zar attığınızda 3 gelirse, oyuncunuz hareket etmez, bunun yerine
+yeni bir şık şapka alır. 7 gelirse, oyuncunuz şık şapkasını kaybeder. Diğer tüm
+değerler için, oyuncunuz oyun tahtasında o sayı kadar ilerler. İşte
+bu mantığı uygulayan bir `match`, zar atma sonucu
+rastgele bir değer yerine sabit kodlanmış ve diğer tüm mantık,
+gerçekleştirilmesi bu örneğin kapsamı dışında olduğu için gövdesi olmayan
+fonksiyonlarla temsil edilmiştir:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-15-binding-catchall/src/main.rs:here}}
 ```
 
-For the first two arms, the patterns are the literal values `3` and `7`. For
-the last arm that covers every other possible value, the pattern is the
-variable we’ve chosen to name `other`. The code that runs for the `other` arm
-uses the variable by passing it to the `move_player` function.
+İlk iki kol için, desenler `3` ve `7` gibi gerçek değerlerdir.
+Diğer tüm olası değerleri kapsayan son kol için, desen
+`other` adını verdiğimiz değişkendir. `other` kolu için çalışan kod,
+değişkeni `move_player` işlevine aktararak kullanır.
 
-This code compiles, even though we haven’t listed all the possible values a
-`u8` can have, because the last pattern will match all values not specifically
-listed. This catch-all pattern meets the requirement that `match` must be
-exhaustive. Note that we have to put the catch-all arm last because the
-patterns are evaluated in order. If we put the catch-all arm earlier, the other
-arms would never run, so Rust will warn us if we add arms after a catch-all!
+Bu kod derlenir, ancak `u8`'in sahip olabileceği tüm olası değerleri listelememiş olsak da
+`u8`'in sahip olabileceği tüm olası değerleri listelememiş olsak da derlenir, çünkü son desen özellikle listelenmemiş tüm değerlerle eşleşir.
+Bu her şeyi kapsayan desen, `match`'in kapsamlı olması gerekliliğini karşılar.
+Desenler sırayla değerlendirildiğinden, her şeyi kapsayan kolu en sona koymamız gerektiğini unutmayın.
+Her şeyi kapsayan kolu daha öne koyarsak, diğer
+kollar asla çalışmaz, bu nedenle her şeyi kapsayan kolun arkasına kol eklediğimizde Rust bizi uyarır!
 
-Rust also has a pattern we can use when we want a catch-all but don’t want to
-_use_ the value in the catch-all pattern: `_` is a special pattern that matches
-any value and does not bind to that value. This tells Rust we aren’t going to
-use the value, so Rust won’t warn us about an unused variable.
+Rust'ta, her şeyi kapsayan bir desen istediğimizde ancak her şeyi kapsayan desendeki değeri
+_kullanmak_ istemediğimizde kullanabileceğimiz bir desen de vardır: `_`, herhangi bir değeri eşleştiren ve o değere bağlanmayan özel bir desendir.
+Bu, Rust'a değeri kullanmayacağımızı söyler, böylece Rust kullanılmayan bir değişken hakkında bizi uyarmaz.
+Oyunun kurallarını değiştirelim: artık 3 veya 7 dışında herhangi bir şey atarsanız,
 
-Let’s change the rules of the game: now, if you roll anything other than a 3 or
-a 7, you must roll again. We no longer need to use the catch-all value, so we
-can change our code to use `_` instead of the variable named `other`:
+Oyunun kurallarını değiştirelim: artık 3 veya
+7 dışında bir sayı attığınızda, tekrar atmanız gerekir. Artık catch-all değerini kullanmamıza gerek yok, bu yüzden
+`other` adlı değişken yerine `_` kullanacak şekilde kodumuzu değiştirebiliriz:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-16-underscore-catchall/src/main.rs:here}}
 ```
 
-This example also meets the exhaustiveness requirement because we’re explicitly
-ignoring all other values in the last arm; we haven’t forgotten anything.
+Bu örnek de kapsamlılık gerekliliğini karşılamaktadır, çünkü son kolun diğer tüm değerlerini açıkça
+görmezden geliyoruz; hiçbir şeyi unutmadık.
 
-Finally, we’ll change the rules of the game one more time so that nothing else
-happens on your turn if you roll anything other than a 3 or a 7. We can express
-that by using the unit value (the empty tuple type we mentioned in [“The Tuple
-Type”][tuples]<!-- ignore --> section) as the code that goes with the `_` arm:
+Son olarak, oyunun kurallarını bir kez daha değiştireceğiz, böylece 3 veya 7 dışında bir sayı attığınızda
+sıranızda başka hiçbir şey olmayacak. Bunu,
+`_` koluna ait kod olarak birim değeri ([“Tuple Türü”][tuples]<!-- ignore --> bölümünde bahsettiğimiz boş tuple türü) kullanarak ifade edebiliriz:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-17-underscore-unit/src/main.rs:here}}
 ```
 
-Here, we’re telling Rust explicitly that we aren’t going to use any other value
-that doesn’t match a pattern in an earlier arm, and we don’t want to run any
-code in this case.
+Burada, Rust'a açıkça, önceki kolun deseniyle eşleşmeyen başka hiçbir değeri kullanmayacağımızı
+ve bu durumda hiçbir
+kodu çalıştırmak istemediğimizi söylüyoruz.
 
-There’s more about patterns and matching that we’ll cover in [Chapter
-19][ch19-00-patterns]<!-- ignore -->. For now, we’re going to move on to the
-`if let` syntax, which can be useful in situations where the `match` expression
-is a bit wordy.
+Desenler ve eşleştirme hakkında daha fazla bilgiyi [Bölüm 19][ch19-00-patterns]<!-- ignore -->. Şimdilik, `match` ifadesinin
+biraz uzun olduğu durumlarda yararlı olabilecek
+`if let` sözdizimine geçeceğiz.
 
 [tuples]: ch03-02-data-types.md#the-tuple-type
 [ch19-00-patterns]: ch19-00-patterns.md

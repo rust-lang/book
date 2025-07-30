@@ -159,7 +159,7 @@ Bu bölümde, akıllı işaretçileri kullanarak Rust'ın varsayılan olarak sun
 
 Ayrıca, akıllı işaretçilerin pek çok işlevselliğini sağlayan `Deref` ve `Drop` trait'lerini de ele aldık. Bellek sızıntısına yol açabilen referans döngülerini ve bunları `Weak<T>` kullanarak nasıl önleyebileceğimizi inceledik.
 
-Eğer bu bölüm ilginizi çektiyse ve kendi akıllı işaretçilerinizi uygulamak istiyorsanız, daha fazla bilgi için ["The Rustonomicon"] [nomicon] kaynağına göz atabilirsiniz.
+Eğer bu bölüm ilginizi çektiyse ve kendi akıllı işaretçilerinizi uygulamak istiyorsanız, daha fazla bilgi için ["The Rustonomicon"][nomicon] kaynağına göz atabilirsiniz.
 
 Sıradaki bölümde, Rust'ta eşzamanlılık (concurrency) konusunu ele alacağız. Ayrıca birkaç yeni akıllı işaretçiyle de tanışacaksınız.
 

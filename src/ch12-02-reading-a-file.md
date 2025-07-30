@@ -1,11 +1,11 @@
-## Reading a File
+## Dosya Okuma
 
-Now we’ll add functionality to read the file specified in the `file_path`
-argument. First we need a sample file to test it with: we’ll use a file with a
-small amount of text over multiple lines with some repeated words. Listing 12-3
-has an Emily Dickinson poem that will work well! Create a file called
-_poem.txt_ at the root level of your project, and enter the poem “I’m Nobody!
-Who are you?”
+Şimdi `file_path`
+argümanında belirtilen dosyayı okumak için işlevsellik ekleyeceğiz. Öncelikle bunu test etmek için bir örnek dosyaya ihtiyacımız var: birkaç satırda az miktarda metin ve bazı tekrarlanan kelimeler içeren bir dosya kullanacağız. Listing 12-3,
+ bu iş için uygun bir Emily Dickinson şiiri içeriyor!
+Projenizin kök dizininde Projenizin kök dizininde
+_poem.txt_ adlı bir dosya oluşturun ve "I'm Nobody!
+Who are you?" şiirini girin.
 
 <Listing number="12-3" file-name="poem.txt" caption="A poem by Emily Dickinson makes a good test case.">
 
@@ -15,8 +15,8 @@ Who are you?”
 
 </Listing>
 
-With the text in place, edit _src/main.rs_ and add code to read the file, as
-shown in Listing 12-4.
+Metin hazır olduğunda, _src/main.rs_ dosyasını düzenleyin ve dosyayı okumak için kod ekleyin,
+Listing 12-4'te gösterildiği gibi.
 
 <Listing number="12-4" file-name="src/main.rs" caption="Reading the contents of the file specified by the second argument">
 
@@ -26,31 +26,31 @@ shown in Listing 12-4.
 
 </Listing>
 
-First we bring in a relevant part of the standard library with a `use`
-statement: we need `std::fs` to handle files.
+Öncelikle, `use`
+ifadesi ile standart kütüphanenin ilgili bir bölümünü getiriyoruz: dosyaları işlemek için `std::fs`'ye ihtiyacımız var.
 
-In `main`, the new statement `fs::read_to_string` takes the `file_path`, opens
-that file, and returns a value of type `std::io::Result<String>` that contains
-the file’s contents.
+`main` içinde, yeni `fs::read_to_string` ifadesi `file_path`'i alır,
+bu dosyayı açar ve dosyanın içeriğini içeren `std::io::Result<String>` türünde bir değer döndürür.
 
-After that, we again add a temporary `println!` statement that prints the value
-of `contents` after the file is read, so we can check that the program is
-working so far.
+Bundan sonra, dosyayı okuduktan sonra `contents` değerini yazdırmak için geçici bir `println!` ifadesi ekliyoruz, böylece programın
 
-Let’s run this code with any string as the first command line argument (because
-we haven’t implemented the searching part yet) and the _poem.txt_ file as the
-second argument:
+Bundan sonra, dosya okunduktan sonra `contents` değerini yazdırmak için geçici bir `println!` deyimi ekliyoruz, böylece programın
+şimdiye kadar çalıştığını kontrol edebiliyoruz.
+
+Bu kodu, ilk komut satırı argümanı olarak herhangi bir dize (çünkü
+
+arama kısmını henüz uygulamadık) ve ikinci argüman olarak _poem.txt_ dosyası ile çalıştıralım:
 
 ```console
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/output.txt}}
 ```
 
-Great! The code read and then printed the contents of the file. But the code
-has a few flaws. At the moment, the `main` function has multiple
-responsibilities: generally, functions are clearer and easier to maintain if
-each function is responsible for only one idea. The other problem is that we’re
-not handling errors as well as we could. The program is still small, so these
-flaws aren’t a big problem, but as the program grows, it will be harder to fix
-them cleanly. It’s a good practice to begin refactoring early on when
-developing a program because it’s much easier to refactor smaller amounts of
-code. We’ll do that next.
+Harika! Kod dosyayı okudu ve içeriğini yazdı. Ancak kodda
+birkaç kusur var. Şu anda, `main` işlevi birden fazla
+sorumluluğa sahip: genellikle, her işlev tek bir fikirden sorumlu olduğunda işlevler daha net ve bakımı daha kolay olur.
+Diğer sorun ise, hataları olabildiğince iyi yönetemememizdir. Program hala küçük olduğundan, bu Diğer bir sorun ise, hataları
+olabildiğince iyi yönetemememizdir. Program hala küçük olduğundan, bu
+kusurlar büyük bir sorun teşkil etmiyor, ancak program büyüdükçe, bunları temiz bir şekilde düzeltmek
+daha zor hale gelecektir. Bir program geliştirirken erken aşamada yeniden düzenlemeye başlamak
+iyi bir uygulamadır, çünkü daha az miktarda kodu yeniden düzenlemek
+çok daha kolaydır. Şimdi bunu yapacağız.

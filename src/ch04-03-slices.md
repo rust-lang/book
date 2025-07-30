@@ -229,7 +229,7 @@ derleme zamanı hatası:
 
 Ödünç alma kurallarından hatırlayın, eğer değişmez bir referansımız varsa
 bir şey varsa, değişebilir bir referans da alamayız. Çünkü `clear` için
-`String`i kesmek için, değiştirilebilir bir referans alması gerekir. 'println!`
+`String`i kesmek için, değiştirilebilir bir referans alması gerekir. `println!`
 çağrısından sonra `clear` `word` içindeki referansı kullanır, bu nedenle değişmez
 referansı o noktada hala aktif olmalıdır. Rust mutable'a izin vermez
 referansının ve `word` içindeki değişmez referansın `clear` içinde var olmasını engeller.
@@ -325,7 +325,7 @@ bu kontrolü elde etmek için fazladan kod yazmanız ve hata ayıklamanız gerek
 Sahiplik, Rust'ın diğer birçok bölümünün nasıl çalıştığını etkiler, bu nedenle kitabın geri kalanında
 bu kavramlar hakkında daha fazla konuşacağız. Bölüm 5'e geçelim ve veri parçalarını bir `struct' içinde gruplamaya bakalım.
 
-[ch13]: ch13-02-iterators.html
-[ch6]: ch06-02-match.html#patterns-that-bind-to-values
-[strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
-[deref-coercions]: ch15-02-deref.html#implicit-deref-coercions-with-functions-and-methods
+[ch13]: ch13-02-iterators.md
+[ch6]: ch06-02-match.md#değerlere-bağlanan-kalıplar
+[strings]: ch08-02-strings.md#utf-8-kodlu-metni-dizelerle-saklama
+[deref-coercions]: ch15-02-deref.md#fonksiyonlar-ve-metotlarla-otomatik-deref-zorlamaları

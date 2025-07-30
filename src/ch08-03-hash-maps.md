@@ -1,28 +1,30 @@
-## Storing Keys with Associated Values in Hash Maps
+## Hash Haritalarında İlişkili Değerlerle Anahtarları Depolama
 
-The last of our common collections is the _hash map_. The type `HashMap<K, V>`
-stores a mapping of keys of type `K` to values of type `V` using a _hashing
-function_, which determines how it places these keys and values into memory.
-Many programming languages support this kind of data structure, but they often
-use a different name, such as _hash_, _map_, _object_, _hash table_,
-_dictionary_, or _associative array_, just to name a few.
+Yaygın koleksiyonlarımızın sonuncusu _hash haritası_dır. `HashMap<K, V>` türü,
+_hashing
+fonksiyonu kullanarak `K` türündeki anahtarların `V` türündeki değerlere eşlenmesini depolar. Bu fonksiyon, bu anahtar ve değerlerin belleğe nasıl yerleştirileceğini belirler.
+Birçok programlama dili bu tür veri yapısını destekler, ancak genellikle
+_hash_, _map_, _object_, _hash table_,
+_dictionary_ veya _associative array_ gibi farklı isimler kullanırlar.
 
-Hash maps are useful when you want to look up data not by using an index, as
-you can with vectors, but by using a key that can be of any type. For example,
-in a game, you could keep track of each team’s score in a hash map in which
-each key is a team’s name and the values are each team’s score. Given a team
-name, you can retrieve its score.
+Hash haritaları, vektörlerde olduğu gibi bir dizin kullanarak değil,
+herhangi bir türde olabilen bir anahtar kullanarak verileri aramak istediğinizde kullanışlıdır. Örneğin,
+bir oyunda, her takımın puanını, her anahtarın takım adı ve değerlerin her takımın puanı olduğu bir hash haritasında
+takip edebilirsiniz. Bir takım adı verildiğinde,
+o takımın puanını alabilirsiniz.
 
-We’ll go over the basic API of hash maps in this section, but many more goodies
-are hiding in the functions defined on `HashMap<K, V>` by the standard library.
-As always, check the standard library documentation for more information.
+Bu bölümde hash haritalarının temel API'sini inceleyeceğiz, ancak standart kütüphanede `HashMap<K, V>` üzerinde tanımlanan işlevlerde
+daha birçok yararlı özellik bulunmaktadır.
+Her zaman olduğu gibi, daha fazla bilgi için standart kütüphane belgelerine bakın.
 
-### Creating a New Hash Map
+Translated with DeepL.com (free version)
 
-One way to create an empty hash map is to use `new` and to add elements with
-`insert`. In Listing 8-20, we’re keeping track of the scores of two teams whose
-names are _Blue_ and _Yellow_. The Blue team starts with 10 points, and the
-Yellow team starts with 50.
+### Yeni Bir Hash Haritası Oluşturma
+
+Boş bir hash haritası oluşturmanın bir yolu, `new` kullanmak ve
+`insert` ile öğeler eklemektir. Listing 8-20'de, isimleri _Blue_ ve _Yellow_ olan iki takımın puanlarını takip ediyoruz.
+Mavi takım 10 puanla başlıyor ve
+Sarı takım 50 puanla başlıyor.
 
 <Listing number="8-20" caption="Creating a new hash map and inserting some keys and values">
 
@@ -32,21 +34,21 @@ Yellow team starts with 50.
 
 </Listing>
 
-Note that we need to first `use` the `HashMap` from the collections portion of
-the standard library. Of our three common collections, this one is the least
-often used, so it’s not included in the features brought into scope
-automatically in the prelude. Hash maps also have less support from the
-standard library; there’s no built-in macro to construct them, for example.
+Öncelikle, standart kütüphanenin koleksiyonlar bölümünden `HashMap`'i `use` etmemiz gerektiğini unutmayın.
+Üç yaygın koleksiyonumuzdan bu en az
+sık kullanılanıdır, bu nedenle önsözde otomatik olarak kapsama dahil edilen özellikler arasında
+yer almaz. Hash haritaları da standart kütüphaneden daha az destek alır;
+örneğin, bunları oluşturmak için yerleşik bir makro yoktur.
 
-Just like vectors, hash maps store their data on the heap. This `HashMap` has
-keys of type `String` and values of type `i32`. Like vectors, hash maps are
-homogeneous: all of the keys must have the same type, and all of the values
-must have the same type.
+Vektörler gibi, hash haritaları da verilerini yığın üzerinde depolar. Bu `HashMap`,
+`String` türünde anahtarlar ve `i32` türünde değerler içerir. Vektörler gibi, hash haritaları da
+homojendir: tüm anahtarlar aynı türe sahip olmalı ve tüm değerler
+aynı türe sahip olmalıdır.
 
-### Accessing Values in a Hash Map
+### Hash Haritasındaki Değerlere Erişme
 
-We can get a value out of the hash map by providing its key to the `get`
-method, as shown in Listing 8-21.
+Listing 8-21'de gösterildiği gibi, `get`
+yöntemine anahtarını sağlayarak hash haritasından bir değer alabiliriz.
 
 <Listing number="8-21" caption="Accessing the score for the Blue team stored in the hash map">
 
@@ -56,32 +58,32 @@ method, as shown in Listing 8-21.
 
 </Listing>
 
-Here, `score` will have the value that’s associated with the Blue team, and the
-result will be `10`. The `get` method returns an `Option<&V>`; if there’s no
-value for that key in the hash map, `get` will return `None`. This program
-handles the `Option` by calling `copied` to get an `Option<i32>` rather than an
-`Option<&i32>`, then `unwrap_or` to set `score` to zero if `scores` doesn’t
-have an entry for the key.
+Burada, `score` mavi takımla ilişkili değeri alacak ve
+sonuç `10` olacaktır. `get` yöntemi bir `Option<&V>` döndürür; eğer hash haritasında o anahtar için bir değer yoksa,
+`get` `None` döndürür. Bu program,
+`Option`'ı `copied`'i çağırarak bir `Option<i32>` yerine bir
+`unwrap_or`'u çağırarak `score`'u sıfıra ayarlar.
 
-We can iterate over each key-value pair in a hash map in a similar manner as we
-do with vectors, using a `for` loop:
+
+Hash haritasındaki her anahtar-değer çiftini, vektörlerde yaptığımız gibi benzer bir şekilde
+`for` döngüsü kullanarak yineleyebiliriz:
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/no-listing-03-iterate-over-hashmap/src/main.rs:here}}
 ```
 
-This code will print each pair in an arbitrary order:
+Bu kod, her çifti rastgele bir sırayla yazdıracaktır:
 
 ```text
 Yellow: 50
 Blue: 10
 ```
 
-### Hash Maps and Ownership
+### Hash Haritaları ve Sahiplik
 
-For types that implement the `Copy` trait, like `i32`, the values are copied
-into the hash map. For owned values like `String`, the values will be moved and
-the hash map will be the owner of those values, as demonstrated in Listing 8-22.
+`i32` gibi `Copy` özelliğini uygulayan türler için, değerler hash haritasına kopyalanır.
+`String` gibi sahip olunan değerler için, değerler taşınır ve
+hash haritası bu değerlerin sahibi olur, Listing 8-22'de gösterildiği gibi.
 
 <Listing number="8-22" caption="Showing that keys and values are owned by the hash map once they’re inserted">
 
@@ -91,36 +93,36 @@ the hash map will be the owner of those values, as demonstrated in Listing 8-22.
 
 </Listing>
 
-We aren’t able to use the variables `field_name` and `field_value` after
-they’ve been moved into the hash map with the call to `insert`.
+`insert` çağrısı ile hash haritasına taşındıktan sonra `field_name` ve `field_value` değişkenlerini kullanamayız.
 
-If we insert references to values into the hash map, the values won’t be moved
-into the hash map. The values that the references point to must be valid for at
-least as long as the hash map is valid. We’ll talk more about these issues in
-[“Validating References with
-Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> in Chapter 10.
 
-### Updating a Hash Map
+Hash haritasına değerlere referanslar eklersek, değerler hash haritasına taşınmaz.
+Referansların işaret ettiği değerler, en azından hash haritası geçerli olduğu sürece geçerli olmalıdır.
 
-Although the number of key and value pairs is growable, each unique key can
-only have one value associated with it at a time (but not vice versa: for
-example, both the Blue team and the Yellow team could have the value `10`
-stored in the `scores` hash map).
+Bu konular hakkında daha fazla bilgi için Bu konular hakkında daha fazla bilgiyi
+[“Ömür Süresi ile Referansları Doğrulama”][validating-references-with-lifetimes]<!-- ignore --> bölümünde bulabilirsiniz.
 
-When you want to change the data in a hash map, you have to decide how to
-handle the case when a key already has a value assigned. You could replace the
-old value with the new value, completely disregarding the old value. You could
-keep the old value and ignore the new value, only adding the new value if the
-key _doesn’t_ already have a value. Or you could combine the old value and the
-new value. Let’s look at how to do each of these!
+### Hash Haritasını Güncelleme
 
-#### Overwriting a Value
+Anahtar ve değer çiftlerinin sayısı artabilir, ancak her bir benzersiz anahtar
+aynı anda yalnızca bir değerle ilişkilendirilebilir (ancak bunun tersi geçerli değildir:
+örneğin, hem Mavi takım hem de Sarı takım `scores` hash haritasında `10`
+değerini saklayabilir).
 
-If we insert a key and a value into a hash map and then insert that same key
-with a different value, the value associated with that key will be replaced.
-Even though the code in Listing 8-23 calls `insert` twice, the hash map will
-only contain one key-value pair because we’re inserting the value for the Blue
-team’s key both times.
+Hash haritasındaki verileri değiştirmek istediğinizde, bir anahtara zaten bir değer atanmışsa
+bu durumu nasıl ele alacağınıza karar vermelisiniz. Eski değeri tamamen göz ardı ederek
+eski değeri yeni değerle değiştirebilirsiniz. Eski değeri koruyup yeni değeri
+göz ardı edebilir, yalnızca anahtarın zaten bir değeri yoksa yeni değeri ekleyebilirsiniz.
+Ya da eski değeri ve yeni değeri birleştirebilirsiniz. Bunların her birinin nasıl yapıldığını
+inceleyelim!
+
+#### Bir Değeri Üzerine Yazma
+
+Bir anahtar ve bir değeri bir hash haritasına ekledikten sonra aynı anahtarı
+farklı bir değerle eklediğimizde, o anahtarla ilişkili değer değiştirilir.
+Listing 8-23'teki kodda `insert` iki kez çağrılsa da, hash haritası
+sadece bir anahtar-değer çifti içerecektir, çünkü her iki seferde de Blue
+takımının anahtarı için değeri ekliyoruz.
 
 <Listing number="8-23" caption="Replacing a value stored with a particular key">
 
@@ -137,19 +139,18 @@ overwritten.
 
 <a id="only-inserting-a-value-if-the-key-has-no-value"></a>
 
-#### Adding a Key and Value Only If a Key Isn’t Present
+#### Anahtar ve Değerin Yalnızca Anahtar Mevcut Değilse Eklenmesi
 
-It’s common to check whether a particular key already exists in the hash map
-with a value and then to take the following actions: if the key does exist in
-the hash map, the existing value should remain the way it is; if the key
-doesn’t exist, insert it and a value for it.
+Hash haritasında belirli bir anahtarın bir değerle birlikte zaten mevcut olup olmadığını kontrol etmek ve ardından aşağıdaki eylemleri gerçekleştirmek yaygın bir uygulamadır: anahtar hash haritasında mevcutsa, mevcut değer olduğu gibi kalmalıdır; anahtar mevcut değilse, anahtar ve değeri eklenmelidir.
 
-Hash maps have a special API for this called `entry` that takes the key you
-want to check as a parameter. The return value of the `entry` method is an enum
-called `Entry` that represents a value that might or might not exist. Let’s say
-we want to check whether the key for the Yellow team has a value associated
-with it. If it doesn’t, we want to insert the value `50`, and the same for the
-Blue team. Using the `entry` API, the code looks like Listing 8-24.
+Hash haritaları, kontrol etmek istediğiniz anahtarı parametre olarak alan `entry` adlı özel bir API'ye sahiptir.
+
+Hash haritaları, kontrol etmek istediğiniz anahtarı parametre olarak alan `entry` adlı özel bir API'ye sahiptir.
+`entry` yönteminin dönüş değeri, var olan veya olmayan bir değeri temsil eden
+`Entry` adlı bir enumdur. Diyelim ki
+Sarı takımın anahtarının bir değeri olup olmadığını kontrol etmek istiyoruz.
+ Eğer yoksa, `50` değerini eklemek istiyoruz ve aynı şeyi
+Mavi takım için de yapmak istiyoruz. `entry` API'sini kullanarak, kod Listing 8-24 gibi görünür.
 
 <Listing number="8-24" caption="Using the `entry` method to only insert if the key does not already have a value">
 
@@ -159,26 +160,24 @@ Blue team. Using the `entry` API, the code looks like Listing 8-24.
 
 </Listing>
 
-The `or_insert` method on `Entry` is defined to return a mutable reference to
-the value for the corresponding `Entry` key if that key exists, and if not, it
-inserts the parameter as the new value for this key and returns a mutable
-reference to the new value. This technique is much cleaner than writing the
-logic ourselves and, in addition, plays more nicely with the borrow checker.
+`Entry` üzerindeki `or_insert` yöntemi, ilgili `Entry` anahtarı varsa, bu anahtarın
+değerine değiştirilebilir bir referans döndürmek üzere tanımlanmıştır. Anahtar yoksa,
+parametreyi bu anahtarın yeni değeri olarak ekler ve yeni değere değiştirilebilir bir
+referans döndürür. Bu teknik, mantığı kendimiz yazmaktan çok daha temizdir ve
+ayrıca ödünç kontrolü ile daha uyumludur.
 
-Running the code in Listing 8-24 will print `{"Yellow": 50, "Blue": 10}`. The
-first call to `entry` will insert the key for the Yellow team with the value
-`50` because the Yellow team doesn’t have a value already. The second call to
-`entry` will not change the hash map because the Blue team already has the
-value `10`.
+Listing 8-24'teki kodu çalıştırdığınızda `{“Yellow”: 50, “Blue”: 10}` çıktısı alınır.
+`entry`'ye yapılan ilk çağrı, Yellow takımının henüz bir değeri olmadığı için,
+Yellow takımının anahtarını `50` değeriyle ekler. `entry`'ye yapılan ikinci çağrı,
+Blue takımının zaten `10` değerine sahip olduğu için hash haritasını değiştirmez.
 
-#### Updating a Value Based on the Old Value
+#### Eski Değere Göre Bir Değeri Güncelleme
 
-Another common use case for hash maps is to look up a key’s value and then
-update it based on the old value. For instance, Listing 8-25 shows code that
-counts how many times each word appears in some text. We use a hash map with
-the words as keys and increment the value to keep track of how many times we’ve
-seen that word. If it’s the first time we’ve seen a word, we’ll first insert
-the value `0`.
+Hash haritalarının bir başka yaygın kullanım alanı, bir anahtarın değerini aramak ve ardından
+eski değere göre güncellemektir. Örneğin, Listing 8-25, bir metinde her kelimenin kaç kez geçtiğini
+saymak için kullanılan kodu gösterir. Anahtarlar olarak kelimeleri içeren bir hash haritası kullanıyoruz ve
+o kelimeyi kaç kez gördüğümüzü takip etmek için değeri artırıyoruz. Bir kelimeyi
+ilk kez görüyorsak, önce `0` değerini ekliyoruz.
 
 <Listing number="8-25" caption="Counting occurrences of words using a hash map that stores words and counts">
 
@@ -188,61 +187,60 @@ the value `0`.
 
 </Listing>
 
-This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see
-the same key-value pairs printed in a different order: recall from [“Accessing
-Values in a Hash Map”][access]<!-- ignore --> that iterating over a hash map
-happens in an arbitrary order.
+Bu kod `{“world”: 2, ‘hello’: 1, “wonderful”: 1}` yazdırır.
+Aynı anahtar-değer çiftlerinin farklı bir sırayla yazdırıldığını görebilirsiniz: [“Hash Map'te Değerlere Erişme”][access]<!-- ignore --> bölümünden hatırlayacağınız gibi, hash map üzerinde yineleme
+rastgele bir sırayla gerçekleşir.
 
-The `split_whitespace` method returns an iterator over subslices, separated by
-whitespace, of the value in `text`. The `or_insert` method returns a mutable
-reference (`&mut V`) to the value for the specified key. Here, we store that
-mutable reference in the `count` variable, so in order to assign to that value,
-we must first dereference `count` using the asterisk (`*`). The mutable
-reference goes out of scope at the end of the `for` loop, so all of these
-changes are safe and allowed by the borrowing rules.
+`split_whitespace` yöntemi, `text` içindeki değerin boşluklarla ayrılmış alt dilimler üzerinde bir yineleyici döndürür.
+`or_insert` yöntemi, belirtilen anahtarın değerine değiştirilebilir bir
+referans (`&mut V`) döndürür. Burada, bu
+değiştirilebilir referansı `count` değişkeninde saklıyoruz, bu nedenle bu değere atama yapmak için,
+önce yıldız işareti (`*`) kullanarak `count` referansını kaldırmalıyız. Değiştirilebilir
+referans, `for` döngüsünün sonunda kapsam dışı kalır, bu nedenle tüm bu
+değişiklikler güvenlidir ve ödünç alma kuralları tarafından izin verilir.
 
-### Hashing Functions
+### Karma İşlevleri
 
-By default, `HashMap` uses a hashing function called _SipHash_ that can provide
-resistance to denial-of-service (DoS) attacks involving hash
-tables[^siphash]<!-- ignore -->. This is not the fastest hashing algorithm
-available, but the trade-off for better security that comes with the drop in
-performance is worth it. If you profile your code and find that the default
-hash function is too slow for your purposes, you can switch to another function
-by specifying a different hasher. A _hasher_ is a type that implements the
-`BuildHasher` trait. We’ll talk about traits and how to implement them in
-[Chapter 10][traits]<!-- ignore -->. You don’t necessarily have to implement
-your own hasher from scratch; [crates.io](https://crates.io/)<!-- ignore -->
-has libraries shared by other Rust users that provide hashers implementing many
-common hashing algorithms.
+Varsayılan olarak, `HashMap`, karma tabloları içeren hizmet reddi (DoS) saldırılarına karşı direnç sağlayabilen
+_SipHash_ adlı bir karma işlevi kullanır
+[^siphash]<!-- ignore -->. Bu, mevcut en hızlı karma algoritması değildir,
+ ancak performans düşüşüyle birlikte gelen daha iyi güvenlik için yapılan ödün
+vermeye değer. Kodunuzu profilleyip varsayılan
+hash fonksiyonunun amaçlarınız için çok yavaş olduğunu fark ederseniz, farklı bir hasher
+belirleyerek başka bir fonksiyona geçebilirsiniz. Bir _hasher_,
+`BuildHasher` özelliğini uygulayan bir türdür. Özellikler ve bunların nasıl uygulandığı hakkında
+[Bölüm 10][özellikler]<!-- ignore -->'da konuşacağız. Kendi hash işleyicinizi sıfırdan
+uygulamanız gerekmez; [crates.io](https://crates.io/)<!-- ignore -->
+diğer Rust kullanıcıları tarafından paylaşılan ve birçok
+yaygın hash algoritmasını uygulayan hash işleyicileri sağlayan kütüphaneler içerir.
 
 [^siphash]: [https://en.wikipedia.org/wiki/SipHash](https://en.wikipedia.org/wiki/SipHash)
 
-## Summary
+## Özet
 
-Vectors, strings, and hash maps will provide a large amount of functionality
-necessary in programs when you need to store, access, and modify data. Here are
-some exercises you should now be equipped to solve:
+Vektörler, diziler ve karma haritalar, verileri depolamak, erişmek ve değiştirmek
+için programlarda gerekli olan çok sayıda işlevsellik sağlar. İşte şimdi çözebilecek
+olmanız gereken bazı alıştırmalar:
 
-1. Given a list of integers, use a vector and return the median (when sorted,
-   the value in the middle position) and mode (the value that occurs most
-   often; a hash map will be helpful here) of the list.
-1. Convert strings to pig latin. The first consonant of each word is moved to
-   the end of the word and _ay_ is added, so _first_ becomes _irst-fay_. Words
-   that start with a vowel have _hay_ added to the end instead (_apple_ becomes
-   _apple-hay_). Keep in mind the details about UTF-8 encoding!
-1. Using a hash map and vectors, create a text interface to allow a user to add
-   employee names to a department in a company; for example, “Add Sally to
-   Engineering” or “Add Amir to Sales.” Then let the user retrieve a list of all
-   people in a department or all people in the company by department, sorted
-   alphabetically.
+1. Bir tamsayı listesi verildiğinde, bir vektör kullanarak medyanı (sıralandığında
+   ortadaki değer) ve modu (en sık görülen değer) döndürün
+   ; burada bir hash haritası yardımcı olacaktır) değerini döndürün.
+1. Dizileri pig latin'e dönüştürün. Her kelimenin ilk ünsüz harfi kelimenin sonuna taşınır
+   ve _ay_ eklenir, böylece _first_, _irst-fay_ olur. Ünlü harfle başlayan kelimelerin
+   sonuna ise _hay_ eklenir (_apple_,
+   _apple-hay_ olur). UTF-8 kodlamasıyla ilgili ayrıntıları unutmayın!
+1. Hash haritası ve vektörler kullanarak, kullanıcının bir şirketin departmanına
+   çalışan isimleri eklemesine olanak tanıyan bir metin arayüzü oluşturun; örneğin, "Sally'yi Mühendislik
+   departmanına ekle“ veya ”Amir'i Satış departmanına ekle". Ardından, kullanıcının bir departmandaki tüm
+   kişilerin veya şirketteki tüm kişilerin alfabetik olarak sıralanmış bir listesini
+   almasına izin verin.
 
-The standard library API documentation describes methods that vectors, strings,
-and hash maps have that will be helpful for these exercises!
+Standart kütüphane API belgeleri, vektörlerin, dizilerin ve
+hash haritalarının bu alıştırmalar için yararlı olacak yöntemlerini açıklamaktadır!
 
-We’re getting into more complex programs in which operations can fail, so it’s
-a perfect time to discuss error handling. We’ll do that next!
+İşlemlerin başarısız olabileceği daha karmaşık programlara giriyoruz, bu nedenle
+hata işlemeyi tartışmak için mükemmel bir zaman. Bunu bir sonraki bölümde yapacağız!
 
-[validating-references-with-lifetimes]: ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
-[access]: #accessing-values-in-a-hash-map
-[traits]: ch10-02-traits.html
+[validating-references-with-lifetimes]: ch10-03-lifetime-syntax.md#yaşam-süreleri-ile-sarkan-referansları-önleme
+[access]: #hash-haritaları-ve-sahiplik
+[traits]: ch10-02-traits.md

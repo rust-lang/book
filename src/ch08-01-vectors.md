@@ -246,14 +246,14 @@ Listing 8-10'da belirtildiği gibi.
 
 </Listing>
 
-When the vector gets dropped, all of its contents are also dropped, meaning the
-integers it holds will be cleaned up. The borrow checker ensures that any
-references to contents of a vector are only used while the vector itself is
-valid.
+Vektör silindiğinde, içindeki tüm içerikler de silinir, yani
+içerdiği tamsayılar temizlenir. Ödünç alma denetleyicisi, vektörün içeriğine yapılan tüm
+bağlantıların yalnızca vektörün kendisi geçerli olduğu sürece
+kullanılmasını sağlar.
 
-Let’s move on to the next collection type: `String`!
+Bir sonraki koleksiyon türüne geçelim: `String`!
 
-[data-types]: ch03-02-data-types.html#data-types
+[data-types]: ch03-02-data-types.md#veri-türleri
 [nomicon]: ../nomicon/vec/vec.html
-[vec-api]: ../std/vec/struct.Vec.html
-[deref]: ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator
+[vec-api]: ../std/vec/struct.Vec.md
+[deref]: ch15-02-deref.md#akıllı-i̇şaretçileri-deref-ile-normal-referanslar-gibi-kullanmak

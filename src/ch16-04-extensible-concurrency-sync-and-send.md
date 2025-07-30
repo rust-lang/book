@@ -36,5 +36,5 @@ Daha önce de belirtildiği gibi, Rust'ın eşzamanlılığı nasıl yönettiği
 
 Rust standart kütüphanesi, mesajlaşma için kanallar ve `Mutex<T>`, `Arc<T>` gibi eşzamanlı ortamlarda güvenle kullanılabilen akıllı işaretçi türleri sunar. Tip sistemi ve ödünç alma denetleyicisi, bu çözümleri kullanan kodun veri yarışlarına veya geçersiz referanslara yol açmamasını sağlar. Kodunuzu derlemeyi başardığınızda, diğer dillerde yaygın olan, izlenmesi zor hatalar olmadan kodunuzun birden fazla thread'de mutlu bir şekilde çalışacağından emin olabilirsiniz. Eşzamanlı programlama artık korkulacak bir kavram değil: gidin ve programlarınızı korkusuzca eşzamanlı yapın!
 
-[sharing-a-mutext-between-multiple-threads]: ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads
+[sharing-a-mutext-between-multiple-threads]: ch16-03-shared-state.md#birden-fazla-thread-arasında-mutext-paylaşmak
 [nomicon]: ../nomicon/index.html

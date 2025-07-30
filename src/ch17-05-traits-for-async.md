@@ -10,9 +10,9 @@ Throughout this chapter, we've used the `Future`, `Pin`, `Unpin`, `Stream`, and 
 
 <a id="future"></a>
 
-### The `Future` Trait
+### `Gelecek` Özelliği
 
-First, let's take a closer look at how the `Future` trait works. Rust defines it like this:
+İlk olarak, `Future` özelliğinin nasıl çalıştığına daha yakından bakalım. Rust bunu şu şekilde tanımlar:
 
 ```rust
 use std::pin::Pin;
@@ -25,9 +25,9 @@ pub trait Future {
 }
 ```
 
-This trait definition contains a number of new types and some syntax we haven't seen before, so let's break it down piece by piece.
+Bu özellik tanımı bir dizi yeni tip ve daha önce görmediğimiz bazı sözdizimi içeriyor, bu yüzden parça parça inceleyelim.
 
-First, the associated type `Output` of `Future` specifies what the future will resolve to. This is similar to the `Item` associated type of the `Iterator` trait. Second, `Future` also has a special `poll` method that takes a `Pin` reference and a mutable reference to a `Context`, and returns a `Poll<Self::Output>`. We'll get to `Pin` and `Context` in a moment. For now, let's focus on the `Poll` type returned by the method:
+İlk olarak, `Future` ile ilişkili `Output` tipi geleceğin neye çözümleneceğini belirtir. Bu, `Iterator` özelliğinin `Item` ilişkili tipine benzer. İkinci olarak, `Future` ayrıca bir `Pin` referansı ve bir `Context` için değiştirilebilir bir referans alan ve bir `Poll<Self::Output>` döndüren özel bir `poll` yöntemine sahiptir.` Pin` ve `Context` konularına birazdan değineceğiz. Şimdilik, yöntem tarafından döndürülen `Poll` türüne odaklanalım:
 
 ```rust
 enum Poll<T> {
@@ -36,11 +36,11 @@ enum Poll<T> {
 }
 ```
 
-This `Poll` type is somewhat like an `Option`. It has a `Ready(T)` variant with a value, and a `Pending` variant without one. But `Poll` means something quite different from `Option`! The `Pending` variant indicates that the future still has work to do and the caller should check back later. The `Ready` variant means the future is done and the value `T` is ready.
+Bu `Poll` tipi bir nevi `Option` gibidir. Değer içeren bir `Ready(T)` çeşidi ve değer içermeyen bir `Pending` çeşidi vardır. Ancak `Poll`, `Option`dan oldukça farklı bir anlama gelir! Beklemede değişkeni geleceğin hala yapacak işleri olduğunu ve çağıranın daha sonra tekrar kontrol etmesi gerektiğini belirtir.` Ready` değişkeni ise geleceğin işinin bittiğini ve `T` değerinin hazır olduğunu ifade eder.
 
-> Note: For most futures, you should not call `poll` again after the future returns `Ready`. Many futures will panic if polled again after being ready. Futures that can be polled again will state so explicitly in their documentation. This is similar to the behavior of `Iterator::next`.
+> Not: Çoğu future için, future `Ready` değerini döndürdükten sonra `poll` seçeneğini tekrar çağırmamalısınız. Birçok gelecek, hazır olduktan sonra tekrar sorgulanırsa panikleyecektir. Tekrar sorgulanabilen future'lar bunu dokümantasyonlarında açıkça belirtecektir. Bu `Iterator::next` davranışına benzer.
 
-When you use `await` in your code, Rust compiles it down to code that calls `poll` behind the scenes. If you look at the example in 17-4 where we printed a URL's title when it resolved, Rust compiles it to something roughly (though not exactly) like this:
+Kodunuzda `await` kullandığınızda, Rust bunu perde arkasında `poll` çağıran bir kod olarak derler. 17-4'te çözümlendiğinde bir URL'nin başlığını yazdırdığımız örneğe bakarsanız, Rust bunu kabaca (tam olarak olmasa da) aşağıdaki gibi derler:
 
 ```rust,ignore
 match page_title(url).poll() {
@@ -54,7 +54,7 @@ match page_title(url).poll() {
 }
 ```
 
-If the future is still `Pending`, what should we do? We need a way to try again—so we need a loop:
+Eğer gelecek hala `Bekliyor` ise, ne yapmalıyız? Tekrar denemek için bir yola ihtiyacımız var - bu yüzden bir döngüye ihtiyacımız var:
 
 ```rust,ignore
 let mut page_title_fut = page_title(url);
@@ -71,19 +71,18 @@ loop {
 }
 ```
 
-But if Rust compiled it exactly like this, every `await` point would be blocking—the exact opposite of what we want! Instead, Rust allows the loop to yield control to something else that can work on another future and then come back to check this one again. As we've seen, that something is an async runtime, and this scheduling and coordination is one of its main jobs.
+Ancak Rust bunu tam olarak bu şekilde derleseydi, her `await' noktası bloke edici olurdu - istediğimizin tam tersi! Bunun yerine Rust, döngünün kontrolü başka bir gelecek üzerinde çalışabilecek başka bir şeye vermesine ve daha sonra bunu tekrar kontrol etmek için geri gelmesine izin verir. Gördüğümüz gibi, bu şey bir asenkron çalışma zamanıdır ve bu zamanlama ve koordinasyon onun ana işlerinden biridir.
 
-Earlier in the chapter, we talked about waiting for `rx.recv`. The `recv` call returns a future, and awaiting the future polls it. The runtime will suspend the future until it's ready, and when the channel closes, it will return either `Some(message)` or `None`. Now that we understand the `Future` trait and especially `Future::poll` better, we can see how this works. The runtime knows the future isn't ready when `poll` returns `Poll::Pending`. Conversely, when `poll` returns `Poll::Ready(Some(message))` or `Poll::Ready(None)`, the future is ready and the runtime can proceed.
+Bölümün başlarında `rx.recv` çağrısını beklemekten bahsetmiştik. `Recv` çağrısı bir gelecek döndürür ve geleceğin onu yoklamasını bekler. Çalışma zamanı, hazır olana kadar geleceği askıya alır ve kanal kapandığında ya `Some(message)` ya da `None` döndürür. Şimdi `Future` özelliğini ve özellikle `Future::poll` özelliğini daha iyi anladığımıza göre, bunun nasıl çalıştığını görebiliriz. Çalışma zamanı, `poll` `Poll::Pending` döndürdüğünde geleceğin hazır olmadığını bilir. Tersine, `poll` `Poll::Ready(Some(message))` veya `Poll::Ready(None)` döndürdüğünde, gelecek hazırdır ve çalışma zamanı devam edebilir.
 
-Exactly how a runtime does this is outside the scope of this book, but it's important to see the basic mechanics of futures: the runtime _polls_ each future it's responsible for, and if the future isn't ready yet, it puts it back to sleep.
-
+Bir çalışma zamanının bunu tam olarak nasıl yaptığı bu kitabın kapsamı dışındadır, ancak geleceklerin temel mekaniğini görmek önemlidir: çalışma zamanı sorumlu olduğu her geleceği _poll_ eder ve gelecek henüz hazır değilse, onu tekrar uykuya yatırır.
 <!-- Old headings. Please do not delete, links may break. -->
 
 <a id="pinning-and-the-pin-and-unpin-traits"></a>
 
-### The `Pin` and `Unpin` Traits
+### `Pin` ve `Unpin` Özellikleri
 
-When we introduced the concept of pinning in Listing 17-16, we encountered a rather complex error message. Here's the relevant part again:
+Liste 17-16'da sabitleme kavramını tanıttığımızda, oldukça karmaşık bir hata mesajıyla karşılaştık. İşte ilgili kısım tekrar:
 
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-16
@@ -111,13 +110,13 @@ note: required by a bound in `futures_util::future::join_all::JoinAll`
    |        ^^^^^^ required by this bound in `JoinAll`
 ```
 
-This error message not only tells us that we need to pin values, but also why pinning is necessary. The `trpl::join_all` function returns a struct called `JoinAll`. This struct is generic over a type `F`, which must implement the `Future` trait. Awaiting a future directly implicitly pins it, so you don't need to use `pin!` everywhere you want to await a future.
+Bu hata mesajı bize sadece değerleri sabitlememiz gerektiğini değil, aynı zamanda sabitlemenin neden gerekli olduğunu da söyler. `trpl::join_all` fonksiyonu `JoinAll` adında bir struct döndürür. Bu struct, `Future` özelliğini uygulaması gereken bir `F` tipi üzerinde geneldir. Bir geleceği doğrudan beklemek onu dolaylı olarak sabitler, böylece bir geleceği beklemek istediğiniz her yerde `pin!` kullanmanıza gerek kalmaz.
 
-But here, we're not awaiting a future directly. Instead, we're giving a collection of futures to `join_all`, which creates a new future called `JoinAll`. The signature of `join_all` requires that the items in the collection implement `Future`, and `Box<T>` only implements `Future` if the wrapped `T` future implements the `Unpin` trait.
+Ancak burada, bir geleceği doğrudan beklemiyoruz. Bunun yerine, `JoinAll` adında yeni bir gelecek oluşturan `join_all`'a bir gelecek koleksiyonu veriyoruz. `Join_all`un imzası, koleksiyondaki öğelerin `Future` özelliğini uygulamasını gerektirir ve `Box<T>` yalnızca sarılmış `T` geleceği `Unpin` özelliğini uygularsa `Future` özelliğini uygular.
 
-That's a lot of information! To really understand, let's look a bit more closely at how the _pinning_ part of the `Future` trait works.
+Bu çok fazla bilgi demek! Gerçekten anlamak için, `Future` özelliğinin _pinning_ kısmının nasıl çalıştığına biraz daha yakından bakalım.
 
-Look again at the definition of the `Future` trait:
+Future` özelliğinin tanımına tekrar bakın:
 
 ```rust
 use std::pin::Pin;
@@ -131,22 +130,24 @@ pub trait Future {
 }
 ```
 
-The `cx` parameter and its `Context` type are the key to how a runtime knows when to check any given future. The details of how this works are outside the scope of this section and usually only matter when writing a custom `Future` implementation. Instead, let's focus on the syntax where a method takes a type annotation for `self` for the first time. The type annotation for `self` works like other function parameter type annotations, but with two important differences:
+`cx` parametresi ve onun `Context` tipi, bir çalışma zamanının herhangi bir geleceği ne zaman kontrol edeceğini nasıl bildiğinin anahtarıdır. Bunun nasıl çalıştığının ayrıntıları bu bölümün kapsamı dışındadır ve genellikle yalnızca özel bir `Future` uygulaması yazarken önemlidir. Bunun yerine, bir metodun ilk kez `self` için bir tip ek açıklaması aldığı sözdizimine odaklanalım. self` için tip ek açıklaması diğer fonksiyon parametresi tip ek açıklamaları gibi çalışır, ancak iki önemli fark vardır:
 
-- It tells Rust what type `self` must be for the method to be called.
-- It can't be just any type. It can only be the type the method is implemented for, a reference to that type, a smart pointer, or a `Pin` wrapping a reference to that type.
+- Rust`a metodun çağrılabilmesi için `self` türünün ne olması gerektiğini söyler.
+- Herhangi bir tür olamaz. Yalnızca yöntemin uygulandığı tür, bu türe bir referans, akıllı bir işaretçi veya bu türe bir referansı saran bir `Pin` olabilir.
 
-You'll see more of this syntax in [Chapter 18][ch-18]<!-- ignore -->. For now, what you need to know is that to check whether a future is `Pending` or `Ready(Output)`, you need a mutable reference to the type wrapped in `Pin`.
+Bu sözdiziminin daha fazlasını [Bölüm 18][ch-18]<!-- ignore --> bölümünde göreceksiniz. Şimdilik bilmeniz gereken şey, bir geleceğin `Pending` ya da `Ready(Output)` olup olmadığını kontrol etmek için, `Pin` içine sarılmış tipe değişken bir referansa ihtiyacınız olduğudur.
 
-`Pin` is a wrapper for pointer-like types such as `&`, `&mut`, `Box`, and `Rc`. (Technically, `Pin` works with types that implement the `Deref` or `DerefMut` traits, but in practice, this means pointers.) `Pin` itself is not a pointer and doesn't have its own behavior like `Rc` or `Arc`; it's just a tool to help the compiler enforce restrictions on pointer usage.
+`Pin`, `&`, `&mut`, `Box` ve `Rc` gibi işaretçi benzeri tipler için bir sarmalayıcıdır. (Teknik olarak, `Pin` `Deref` veya `DerefMut` özelliklerini uygulayan türlerle çalışır, ancak pratikte bu işaretçiler anlamına gelir). `Pin`in kendisi bir işaretçi değildir ve `Rc` veya `Arc` gibi kendi davranışına sahip değildir; sadece derleyicinin işaretçi kullanımına kısıtlamalar getirmesine yardımcı olan bir araçtır.
 
-Remembering that `await` is implemented behind the scenes with `poll` calls helps explain the error message we saw earlier; but that error was about `Unpin`, not `Pin`. So, how exactly is `Pin` related to `Unpin`, and why does the `Future`'s `poll` call require `self` to be of type `Pin`?
+`await`in perde arkasında `poll` çağrılarıyla uygulandığını hatırlamak, daha önce gördüğümüz hata mesajını açıklamaya yardımcı olur; ancak bu hata `Pin` ile değil `Unpin` ile ilgiliydi. Peki, nasıl
 
-Earlier in this section, we said that await points in a future are compiled into a state machine, and the compiler ensures that this state machine follows Rust's usual safety rules (ownership, borrowing). To do this, Rust looks at what data is needed between one await point and the next, or the end of the async block. Then, it creates a corresponding variant in the compiled state machine. Each variant gets access to the data needed at that point in the source code, either by taking ownership or by borrowing mutably or immutably.
+`await`in perde arkasında `poll` çağrılarıyla uygulandığını hatırlamak, daha önce gördüğümüz hata mesajını açıklamaya yardımcı olur; ancak bu hata `Pin` ile değil `Unpin` ile ilgiliydi. Peki, `Pin` tam olarak `Unpin` ile nasıl ilişkilidir ve `Future`un `poll` çağrısı neden `self`in `Pin` tipinde olmasını gerektirir?
 
-So far, so good: if you make a mistake with ownership or references in an async block, the borrow checker will catch it. But when you want to move the future itself—say, by putting it in a `Vec` and using `join_all`, or by returning it from a function—things get tricky.
+Bu bölümün başlarında, bir gelecekteki bekleme noktalarının bir durum makinesine derlendiğini ve derleyicinin bu durum makinesinin Rust'ın olağan güvenlik kurallarına (sahiplik, ödünç alma) uymasını sağladığını söylemiştik. Bunu yapmak için Rust, bir await noktası ile bir sonraki veya asenkron bloğun sonu arasında hangi verilere ihtiyaç duyulduğuna bakar. Ardından, derlenmiş durum makinesinde karşılık gelen bir varyant oluşturur. Her varyant, kaynak kodun o noktasında ihtiyaç duyulan verilere ya sahiplik alarak ya da değişken veya değişmez olarak ödünç alarak erişir.
 
-Moving a future—whether putting it in a data structure or returning it from a function—actually means moving the state machine that Rust created for you. And unlike most types in Rust, futures compiled from async blocks can contain references to themselves in the fields of any variant (see Figure 17-4).
+Buraya kadar her şey yolunda: Bir asenkron blokta sahiplik veya referanslarla ilgili bir hata yaparsanız, ödünç alma denetleyicisi bunu yakalayacaktır. Ancak geleceğin kendisini taşımak istediğinizde - örneğin, bir `Vec` içine koyup `join_all` kullanarak veya bir fonksiyondan döndürerek - işler zorlaşır.
+
+Bir geleceği taşımak -ister bir veri yapısına koymak ister bir fonksiyondan döndürmek olsun- aslında Rust'ın sizin için oluşturduğu durum makinesini taşımak anlamına gelir. Ve Rust'taki çoğu türün aksine, async bloklardan derlenen future'lar herhangi bir varyantın alanlarında kendilerine referanslar içerebilir (bkz. Şekil 17-4).
 
 <figure>
 
@@ -156,41 +157,42 @@ Moving a future—whether putting it in a data structure or returning it from a 
 
 </figure>
 
-But any self-referential object is unsafe to move by default, because references always point to the actual memory address they refer to (see Figure 17-5). If you move the data structure and the internal references still point to the old location, that memory is now invalid. Changes to that location won't affect the new data structure, and more importantly, the computer might use that memory for something else! You could end up reading completely unrelated data later.
+Ancak, referanslar her zaman başvurdukları gerçek bellek adresini gösterdiğinden, kendi kendine referans veren herhangi bir nesnenin taşınması varsayılan olarak güvenli değildir (bkz. Şekil 17-5). Veri yapısını taşırsanız ve dahili referanslar hala eski konumu gösteriyorsa, o bellek artık geçersizdir. Bu konumda yapılan değişiklikler yeni veri yapısını etkilemez ve daha da önemlisi, bilgisayar bu belleği başka bir şey için kullanabilir! Daha sonra tamamen ilgisiz verileri okumak zorunda kalabilirsiniz.
 
 <figure>
 
 <img alt="Two tables showing two futures, fut1 and fut2. fut1 is gray with question marks in each index (unknown memory). fut2 has 0 and 1, and the third row has an arrow pointing to the second row of fut1, showing a reference to the old location before moving." src="img/trpl17-05.svg" class="center" />
 
-<figcaption>Figure 17-5: The unsafe result of moving a self-referential data type.</figcaption>
+<figcaption>Şekil 17-5: Öz referanslı bir veri türünü taşımanın güvenli olmayan sonucu</figcaption>
 
 </figure>
 
-In theory, the Rust compiler could try to update all references when an object is moved, but that would be a big performance hit, especially if there's a web of references. Instead, if we ensure the relevant data structure is _not moved in memory_, we don't need to update the references. Rust's borrow checker requires exactly this: in safe code, any item with an active reference cannot be moved.
+Teorik olarak, Rust derleyicisi bir nesne taşındığında tüm referansları güncellemeye çalışabilir, ancak bu, özellikle bir referans ağı varsa, büyük bir performans darbesi olacaktır. Bunun yerine, ilgili veri yapısının bellekte _taşınmadığından_ emin olursak, referansları güncellememize gerek kalmaz. Rust'ın ödünç alma denetleyicisi tam olarak bunu gerektirir: güvenli kodda, aktif bir referansı olan herhangi bir öğe taşınamaz.
 
-`Pin` gives us exactly the guarantee we need. By wrapping a pointer to a value in `Pin`, we _pin_ the value so it can't be moved. So, if you have a `Pin<Box<SomeType>>`, you're actually pinning the value of `SomeType`, not the _Box_ pointer. Figure 17-6 shows this.
+`Pin` bize tam olarak ihtiyacımız olan garantiyi verir. Bir değere işaretçiyi `Pin` içine sararak, değeri _pin_ yaparız, böylece taşınamaz. Yani, eğer bir `Pin<Box<SomeType>>` varsa, aslında _Box_ işaretçisini değil, `SomeType` değerini sabitlemiş olursunuz. Şekil 17-6 bunu göstermektedir.
+
 
 <figure>
 
 <img alt="Three boxes side by side: the first is 'Pin', the second is 'b1', the third is 'pinned'. The 'pinned' box contains a table called 'fut', with cells for each part of the future. The first cell is 0, the second cell has an arrow to the fourth cell, the third cell has ... The arrow from 'Pin' goes through 'b1' and 'pinned'." src="img/trpl17-06.svg" class="center" />
 
-<figcaption>Figure 17-6: Pinning a Box pointing to a self-referential future type.</figcaption>
+<figcaption>Şekil 17-6: Kendinden referanslı bir gelecek türüne işaret eden bir Kutunun sabitlenmesi</figcaption>
 
 </figure>
 
-In fact, the Box pointer itself can still be moved freely. What's important is that the data it points to stays in the same place. As long as the pointer moves but the data it points to doesn't (see Figure 17-7), that's fine. (On your own, try looking at the documentation for types and the `std::pin` module to see how you can do this by wrapping a `Box` in a `Pin`.) The key point is that the self-referential type itself can't be moved, because it's still pinned.
+Aslında, Kutu işaretçisinin kendisi hala serbestçe hareket ettirilebilir. Önemli olan, işaret ettiği verinin aynı yerde kalmasıdır. İşaretçi hareket ettiği ancak işaret ettiği veri hareket etmediği sürece (bkz. Şekil 17-7), sorun yoktur. (Kendi başınıza, bir `Box`ı bir `Pin`e sararak bunu nasıl yapabileceğinizi görmek için tiplerin ve `std::pin` modülünün belgelerine bakmayı deneyin). Kilit nokta, öz referanslı tipin kendisinin taşınamayacağıdır, çünkü hala sabitlenmiştir.
 
 <figure>
 
 <img alt="Four boxes in three columns; same as the previous diagram, but the second column has two boxes: 'b1' and 'b2'. 'b1' is gray, the arrow now goes from 'b2'; the pointer has moved from 'b1' to 'b2', but the data in 'pinned' hasn't moved." src="img/trpl17-07.svg" class="center" />
 
-<figcaption>Figure 17-7: Moving a Box pointing to a self-referential future type.</figcaption>
+<figcaption>Şekil 17-7: Kendinden referanslı bir gelecek türüne işaret eden bir Kutunun taşınması</figcaption>
 
 </figure>
 
-However, most types are perfectly safe to move even if they're wrapped in a pin. We only need to think about pinning for types with internal references. Primitive values like numbers and booleans are safe because they don't have internal references. Most types you use in Rust don't have internal references either. For example, you can move a `Vec` however you like. If you had a `Pin<Vec<String>>`, you'd have to use the safe but restrictive API provided by `Pin`, but moving a `Vec<String>` is always safe if there are no other references. We need a way to tell the compiler that it's okay to move items in these cases—this is where `Unpin` comes in.
+Bununla birlikte, çoğu tür bir pine sarılmış olsalar bile taşınmaları tamamen güvenlidir. Yalnızca dahili referansları olan tipler için pinleme hakkında düşünmemiz gerekir. Sayılar ve booleanlar gibi ilkel değerler güvenlidir çünkü iç referansları yoktur. Rust'ta kullandığınız çoğu türün de iç referansları yoktur. Örneğin, bir `Vec`i istediğiniz gibi taşıyabilirsiniz. Eğer bir `Pin<Vec<String>>` olsaydı, `Pin` tarafından sağlanan güvenli ancak kısıtlayıcı API'yi kullanmanız gerekirdi, ancak başka referanslar yoksa bir `Vec<String>` taşımak her zaman güvenlidir. Derleyiciye bu durumlarda öğeleri taşımanın sorun olmadığını söylemenin bir yoluna ihtiyacımız var - işte `Unpin` burada devreye giriyor.
 
-`Unpin` is a marker trait, like the `Send` and `Sync` traits we saw in Chapter 16, and it doesn't do anything on its own. Marker traits exist only to tell the compiler that a type is safe to use in a certain context. `Unpin` tells the compiler that it's okay to move the type in question.
+`Unpin`, Bölüm 16'da gördüğümüz `Send` ve `Sync` özellikleri gibi bir işaretleyici özelliktir ve kendi başına hiçbir şey yapmaz. İşaretleyici özellikler yalnızca derleyiciye bir türün belirli bir bağlamda kullanılmasının güvenli olduğunu söylemek için vardır. Unpin` derleyiciye söz konusu tipin taşınmasında bir sakınca olmadığını söyler.
 
 <!--
   The inline `<code>` in the block below is just to emphasize the `<em>` inside, per NoStarch style.

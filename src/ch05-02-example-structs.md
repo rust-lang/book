@@ -186,54 +186,54 @@ aksine), kodunuzda bu `dbg!` makro çağrısının gerçekleştiği
 dosya ve satır numarasını bu ifadenin
 sonuç değeriyle birlikte yazdırır ve değerin sahipliğini geri verir.
 
-> Note: Calling the `dbg!` macro prints to the standard error console stream
-> (`stderr`), as opposed to `println!`, which prints to the standard output
-> console stream (`stdout`). We’ll talk more about `stderr` and `stdout` in the
-> [“Writing Error Messages to Standard Error Instead of Standard Output”
-> section in Chapter 12][err]<!-- ignore -->.
+> Not: `dbg!` makrosunu çağırmak, standart hata konsol akışına
+> (`stderr`) yazdırır, buna karşılık `println!` makrosu standart çıktı
+> konsol akışına (`stdout`) yazdırır. `stderr` ve `stdout` hakkında daha fazla bilgiyi
+> [“Hata Mesajlarını Standart Çıktı Yerine Standart Hata Akışına Yazma”
+> bölümünde, 12. Bölüm][err]<!-- ignore -->.
 
-Here’s an example where we’re interested in the value that gets assigned to the
-`width` field, as well as the value of the whole struct in `rect1`:
+İşte,
+`width` alanına atanan değerin yanı sıra `rect1` içindeki tüm yapının değerini de ilgilendiren bir örnek:
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-05-dbg-macro/src/main.rs}}
 ```
 
-We can put `dbg!` around the expression `30 * scale` and, because `dbg!`
-returns ownership of the expression’s value, the `width` field will get the
-same value as if we didn’t have the `dbg!` call there. We don’t want `dbg!` to
-take ownership of `rect1`, so we use a reference to `rect1` in the next call.
-Here’s what the output of this example looks like:
+`30 * scale` ifadesinin etrafına `dbg!` koyabiliriz ve `dbg!`
+ifadenin değerinin sahipliğini geri verdiği için, `width` alanı,
+`dbg!` çağrısı olmasaydı alacağı değerle aynı değeri alacaktır. `dbg!`'nin
+`rect1`'in sahipliğini almasını istemediğimiz için, bir sonraki çağrıda `rect1`'e bir referans kullanırız.
+Bu örneğin çıktısı şöyle görünür:
 
 ```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/no-listing-05-dbg-macro/output.txt}}
 ```
 
-We can see the first bit of output came from _src/main.rs_ line 10 where we’re
-debugging the expression `30 * scale`, and its resultant value is `60` (the
-`Debug` formatting implemented for integers is to print only their value). The
-`dbg!` call on line 14 of _src/main.rs_ outputs the value of `&rect1`, which is
-the `Rectangle` struct. This output uses the pretty `Debug` formatting of the
-`Rectangle` type. The `dbg!` macro can be really helpful when you’re trying to
-figure out what your code is doing!
+İlk çıktının _src/main.rs_ dosyasının 10. satırından geldiğini görebiliriz. Burada
+`30 * scale` ifadesini hata ayıklıyoruz ve sonuç değeri `60` oluyor (
+`Debug` biçimlendirmesi tamsayılar için yalnızca değerlerini yazdırmak üzere uygulanmıştır).
+`dbg!` çağrısı, `&rect1` değerini, yani `Rectangle` yapısını çıktılar. Bu çıktı,
+`Rectangle` türünün güzel `Debug` biçimlendirmesini kullanır. `dbg!` makrosu, kodunuzun ne yaptığını anlamaya çalışırken
+gerçekten yardımcı olabilir!
+`Debug` özelliğine ek olarak, Rust, özel türlerimize yararlı davranışlar ekleyebildiğimiz
 
-In addition to the `Debug` trait, Rust has provided a number of traits for us
-to use with the `derive` attribute that can add useful behavior to our custom
-types. Those traits and their behaviors are listed in [Appendix C][app-c]<!--
-ignore -->. We’ll cover how to implement these traits with custom behavior as
-well as how to create your own traits in Chapter 10. There are also many
-attributes other than `derive`; for more information, see [the “Attributes”
-section of the Rust Reference][attributes].
+`Debug` özelliğine ek olarak, Rust, özel türlerimize yararlı davranışlar ekleyebilen
+`derive` özniteliği ile kullanabileceğimiz bir dizi özellik sunar.
+Bu özellikler ve davranışları [Ek C][app-c]<!--
+ignore -->'da listelenmiştir. Bu özellikleri özel davranışlarla nasıl uygulayacağımızı ve
+kendi özelliklerinizi nasıl oluşturacağınızı 10. Bölümde ele alacağız. `derive` dışında birçok
+özellik de vardır; daha fazla bilgi için [Rust Referansı'nın “Özellikler”
+bölümüne][attributes] bakın.
 
-Our `area` function is very specific: it only computes the area of rectangles.
-It would be helpful to tie this behavior more closely to our `Rectangle` struct
-because it won’t work with any other type. Let’s look at how we can continue to
-refactor this code by turning the `area` function into an `area` _method_
-defined on our `Rectangle` type.
+`area` işlevimiz çok spesifiktir: sadece dikdörtgenlerin alanını hesaplar.
+Bu davranışı `Rectangle` yapımızla daha yakından ilişkilendirmek faydalı olacaktır,
+çünkü başka hiçbir türle çalışmayacaktır. `area` işlevini `Rectangle` türümüzde tanımlanan bir `area` _yöntemi_
+haline getirerek bu kodu nasıl yeniden düzenleyebileceğimize bakalım.
+`Rectangle` türünde tanımlanan bir `area` _yöntemi_
 
-[the-tuple-type]: ch03-02-data-types.html#the-tuple-type
+[the-tuple-type]: ch03-02-data-types.md#tuple-türü
 [app-c]: appendix-03-derivable-traits.md
-[println]: ../std/macro.println.html
+[println]: ../std/macro.println.md
 [dbg]: ../std/macro.dbg.html
-[err]: ch12-06-writing-to-stderr-instead-of-stdout.html
+[err]: ch12-06-writing-to-stderr-instead-of-stdout.md
 [attributes]: ../reference/attributes.html

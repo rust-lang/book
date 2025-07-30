@@ -41,8 +41,8 @@
 - [Paketler ve Crates](ch07-01-packages-and-crates.md)
   - [Kapsamı ve Gizliliği Kontrol Etmek için Modülleri Tanımlama](ch07-02-defining-modules-to-control-scope-and-privacy.md)
 - [Modül Ağacındaki Bir Öğeye Başvurmak için Yollar](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
-  - [`use` Anahtar Sözcüğüyle Yolları Kapsama Almak](ch07-04-use-anahtar-sözcüğüyle-yolları-kapsama-alamak.md)
-- [Modülleri Farklı Dosyalara Ayırmak](ch07-05-modülleri-farklı-dosyalara-ayırmak.md)
+  - [`use` Anahtar Sözcüğüyle Yolları Kapsama Almak](ch07-04-Bringing-Paths-into-Scope-with-the-use-Keyword.md)
+- [Modülleri Farklı Dosyalara Ayırmak](ch07-05-Separating-Modules-into-Different-Files.md)
 
 - [Yaygın Koleksiyonlar](ch08-00-common-collections.md)
   - [Vektörlerle Değer Listelerini Depolama](ch08-01-vectors.md)
