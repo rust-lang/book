@@ -1,5 +1,5 @@
 // ANCHOR: here
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a, 'b>(query: &'a str, contents: &'b str) -> Vec<&'b str> {
     for line in contents.lines() {
         // do something with line
     }
