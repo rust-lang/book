@@ -106,8 +106,8 @@ Bu kod sorunsuz bir şekilde derlenecektir. Trait nesneleri hakkında daha fazla
 
 Şimdi, makrolara bakalım!
 
-[advanced-traits]: ch20-02-advanced-traits.html#advanced-traits
-[enum-values]: ch06-01-defining-an-enum.html#enum-values
-[closure-types]: ch13-01-closures.html#closure-type-inference-and-annotation
-[any-number-of-futures]: ch17-03-more-futures.html
-[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[advanced-traits]: ch20-02-advanced-traits.md#i̇leri-düzey-traitler
+[enum-values]: ch06-01-defining-an-enum.md#enum-değerleri
+[closure-types]: ch13-01-closures.md#kapanışlarda-tür-çıkarımı-ve-açık-tür-bildirimi
+[any-number-of-futures]: ch17-03-more-futures.md
+[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.md#ortak-davranışları-soyutlamak-için-trait-nesneleri-kullanmak

@@ -5,7 +5,7 @@ Rust dili tarafından kullanılır. Bu nedenle, tanımlayıcı olarak kullanıla
 fonksiyonlar, değişkenler, parametreler, struct alanları, modüller, crate'ler, sabitler,
 makrolar, statik değerler, nitelikler, türler, özellikler veya yaşam süreleri.
 
-[raw-identifiers]: #raw-identifiers
+[raw-identifiers]: #ham-tanımlayıcılar
 
 ### Şu Anda Kullanımda Olan Anahtar Kelimeler
 

@@ -162,8 +162,8 @@ Ayrıca, `t` parametresinin tipini `T`'den `&T`'ye değiştirdiğimizi unutmayı
 
 Sonraki bölümümüzde fonksiyonlar ve kapanışlar hakkında konuşacağız!
 
-[encapsulation-that-hides-implementation-details]: ch18-01-what-is-oo.html#encapsulation-that-hides-implementation-details
-[string-slices]: ch04-03-slices.html#string-slices
-[the-match-control-flow-operator]: ch06-02-match.html#the-match-control-flow-operator
-[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
-[using-the-newtype-pattern]: ch20-02-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
+[encapsulation-that-hides-implementation-details]: ch18-01-what-is-oo.md#kalıtımın-bir-tür-sistemi-olarak-ve-kod-paylaşımı-olarak-kullanımı
+[string-slices]: ch04-03-slices.md#dize-dilimleri
+[the-match-control-flow-operator]: ch06-02-match.md#match-kontrol-akışı-yapısı
+[using-trait-objects-that-allow-for-values-of-different-types]: ch18-02-trait-objects.md#ortak-davranışları-soyutlamak-için-trait-nesneleri-kullanmak
+[using-the-newtype-pattern]: ch20-02-advanced-traits.md

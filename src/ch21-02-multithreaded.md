@@ -134,7 +134,7 @@ Kodu tekrar kontrol edelim:
 {{#include ../listings/ch21-web-server/no-listing-02-impl-threadpool-new/output.txt}}
 ```
 
-Şimdi hata, `ThreadPool` üzerinde bir `execute` metodu olmadığı için oluşuyor. ["Sınırlı Sayıda İş Parçacığı İçin Benzer Bir Arayüz Oluşturmak"](#creating-a-finite-number-of-threads)<!-- ignore --> kısmında, iş parçacığı havuzumuzun `thread::spawn`'a benzer bir arayüze sahip olması gerektiğine karar vermiştik. Ayrıca, `execute` fonksiyonunu, aldığı closure'ı havuzdaki boşta olan bir iş parçacığına çalıştırması için verecek şekilde uygulayacağız.
+Şimdi hata, `ThreadPool` üzerinde bir `execute` metodu olmadığı için oluşuyor. ["Sınırlı Sayıda İş Parçacığı İçin Benzer Bir Arayüz Oluşturmak"](#sınırlı-sayıda-i̇ş-parçacığı-i̇çin-benzer-bir-arayüz-oluşturmak)<!-- ignore --> kısmında, iş parçacığı havuzumuzun `thread::spawn`'a benzer bir arayüze sahip olması gerektiğine karar vermiştik. Ayrıca, `execute` fonksiyonunu, aldığı closure'ı havuzdaki boşta olan bir iş parçacığına çalıştırması için verecek şekilde uygulayacağız.
 
 `ThreadPool` üzerinde, parametre olarak bir closure alacak şekilde `execute` metodunu tanımlayacağız. 13. Bölümde ["Kapatıcıdan Taşınan Değerler ve `Fn` Trait'leri"] [fn-traits]<!-- ignore --> kısmında closure'ları üç farklı trait ile parametre olarak alabileceğimizi öğrenmiştik: `Fn`, `FnMut` ve `FnOnce`. Burada hangi tür closure kullanacağımıza karar vermemiz gerekiyor. Sonunda, `execute`'da aldığımız argümanı `spawn`'a aktaracağımız için, standart kütüphanedeki `thread::spawn` uygulamasının parametresinde hangi trait sınırlarının olduğunu inceleyebiliriz. Belgeler bize şunu gösteriyor:
 

@@ -287,8 +287,8 @@ Bu tekniği kullanmanın dezavantajı, `Wrapper`'ın yeni bir tip olmasıdır, b
 
 Bu yeni tip deseni, trait'lerle ilgili olmasa bile kullanışlıdır. Şimdi odaklanmamızı değiştirip Rust'ın tip sistemiyle etkileşimde bulunmanın bazı ileri düzey yollarına bakalım.
 
-[newtype]: ch20-02-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
-[implementing-a-trait-on-a-type]: ch10-02-traits.html#implementing-a-trait-on-a-type
-[traits-defining-shared-behavior]: ch10-02-traits.html#traits-defining-shared-behavior
-[smart-pointer-deref]: ch15-02-deref.html#treating-smart-pointers-like-regular-references-with-the-deref-trait
-[tuple-structs]: ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types
+[newtype]: ch20-02-advanced-traits.md#dış-traitleri-dış-tipler-üzerinde-uygulamak-için-yeni-tip-desenini-kullanma
+[implementing-a-trait-on-a-type]: ch10-02-traits.md#özellikleri-uygulayan-geri-dönüş-türleri
+[traits-defining-shared-behavior]: ch10-02-traits.md#özellikleri-uygulayan-geri-dönüş-türleri
+[smart-pointer-deref]: ch15-02-deref.md#akıllı-i̇şaretçileri-deref-ile-normal-referanslar-gibi-kullanmak
+[tuple-structs]: ch05-01-defining-structs.md#farklı-türler-oluşturmak-için-adlandırılmış-alanlar-olmadan-tuple-yapılarını-kullanma

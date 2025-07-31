@@ -170,4 +170,4 @@ Ayrıca, kapanış (closure) parametre listelerinde de desenleri, fonksiyon para
 
 Bu noktada, desenleri kullanmanın birkaç yolunu gördünüz, ancak desenler her kullanıldıkları yerde aynı şekilde çalışmaz. Bazı yerlerde, desenlerin ırkçı olmaması gerekir; diğer durumlarda, ırkçı olabilirler. Bu iki kavramı bir sonraki bölümde tartışacağız.
 
-[ignoring-values-in-a-pattern]: ch19-03-pattern-syntax.html#ignoring-values-in-a-pattern
+[ignoring-values-in-a-pattern]: ch19-03-pattern-syntax.md#bir-desende-değerleri-yok-saymak

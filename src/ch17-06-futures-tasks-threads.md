@@ -55,7 +55,7 @@ Hangi yaklaşımı seçerseniz seçin, Rust size güvenli, hızlı ve eşzamanl�
 
 Sırada, Rust programlarınız büyüdükçe problemleri modellemenin ve çözümleri yapılandırmanın idiomatik yollarını konuşacağız. Ayrıca, Rust'ın idiomlarının nesne yönelimli programlamadan aşina olabileceğiniz yaklaşımlarla nasıl ilişkili olduğuna değineceğiz.
 
-[ch16]: http://localhost:3000/ch16-00-concurrency.html
-[combining-futures]: ch17-03-more-futures.html#building-our-own-async-abstractions
-[streams]: ch17-04-streams.html#composing-streams
-[ch21]: ch21-00-final-project-a-web-server.html
+[ch16]: ch16-00-concurrency.md
+[combining-futures]: ch17-03-more-futures.md#kendi-async-soyutlamalarımızı-oluşturmak
+[streams]: ch17-04-streams.md#akışları-birleştirmek-composing-streams
+[ch21]: ch21-00-final-project-a-web-server.md

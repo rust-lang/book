@@ -284,13 +284,13 @@ Yukarıda tartışılan beş süper güçten birini kullanmak için `unsafe` kul
 
 Güvensiz Rust ile etkili bir şekilde çalışmanın çok daha derin bir keşfi için, konuyla ilgili resmi Rust kılavuzunu, [Rustonomicon'u][nomicon] okuyun.
 
-[dangling-references]: ch04-02-references-and-borrowing.html#dangling-references
+[dangling-references]: ch04-02-references-and-borrowing.md#sarkan-referanslar
 [ABI]: ../reference/items/external-blocks.html#abi
-[differences-between-variables-and-constants]: ch03-01-variables-and-mutability.html#constants
-[extensible-concurrency-with-the-sync-and-send-traits]: ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits
-[the-slice-type]: ch04-03-slices.html#the-slice-type
+[differences-between-variables-and-constants]: ch03-01-variables-and-mutability.md#sabitler
+[extensible-concurrency-with-the-sync-and-send-traits]: ch16-04-extensible-concurrency-sync-and-send.md#send-ve-sync-traitleri-ile-genişletilebilir-eşzamanlılık
+[the-slice-type]: ch04-03-slices.md#dilim-tipi
 [unions]: ../reference/items/unions.html
 [miri]: https://github.com/rust-lang/miri
-[editions]: appendix-05-editions.html
-[nightly]: appendix-07-nightly-rust.html
+[editions]: appendix-05-editions.md
+[nightly]: appendix-07-nightly-rust.md
 [nomicon]: https://doc.rust-lang.org/nomicon/

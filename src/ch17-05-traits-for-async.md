@@ -198,21 +198,21 @@ Bununla birlikte, çoğu tür bir pine sarılmış olsalar bile taşınmaları t
   The inline `<code>` in the block below is just to emphasize the `<em>` inside, per NoStarch style.
 -->
 
-Just like `Send` and `Sync`, the compiler automatically implements `Unpin` for all types it can prove are safe. The special case, as with `Send` and `Sync`, is when a type does _not_ implement `Unpin`. This is shown as <code>impl !Unpin for <em>SomeType</em></code>; here, <code><em>SomeType</em></code> is a type that needs to provide these guarantees to be safe when used with a pointer.
+Tıpkı `Send` ve `Sync` gibi, derleyici güvenli olduğunu kanıtlayabildiği tüm tipler için otomatik olarak `Unpin` uygular. Özel durum, `Send` ve `Sync`de olduğu gibi, bir türün `Unpin`i _uygulamadığı_ durumdur. This is shown as <code>impl !Unpin for <em>SomeType</em></code>; here, <code><em>SomeType</em></code> is a type that needs to provide these guarantees to be safe when used with a pointer.
 
-So, keep two things in mind about the relationship between `Pin` and `Unpin`. First, `Unpin` is the "normal" case, and `!Unpin` is the special case. Second, whether a type implements `Unpin` or `!Unpin` only matters when you use a pointer wrapped in `Pin` to that type, like <code>Pin<&mut <em>SomeType</em>></code>.
+Bu nedenle, `Pin` ve `Unpin` arasındaki ilişki hakkında iki şeyi aklınızda bulundurun.İlk olarak, `Unpin` “normal” durumdur ve `!Unpin` özel durumdur. İkinci olarak, bir türün `Unpin` veya `!Unpin` uygulayıp uygulamadığı yalnızca o türe `Pin` ile sarılmış bir işaretçi kullandığınızda önemlidir, like <code>Pin<&mut <em>SomeType</em>></code>.
 
-To make this concrete, consider a `String`: it has a length and characters. We can wrap a `String` in a `Pin` (see Figure 17-8). But `String` automatically implements `Unpin`, as do most types in Rust.
+Bunu somutlaştırmak için bir `String` düşünün: bir uzunluğu ve karakterleri vardır. Bir `String`i bir `Pin` içine sarabiliriz (bkz. Şekil 17-8). Ancak `String`, Rust`taki çoğu tür gibi otomatik olarak `Unpin`i uygular.
 
 <figure>
 
 <img alt="Concurrent workflow" src="img/trpl17-08.svg" class="center" />
 
-<figcaption>Figure 17-8: Pinning a `String`; the dashed line shows that `String` implements `Unpin` and thus is not actually pinned.</figcaption>
+<figcaption>Şekil 17-8: Bir `String`in sabitlenmesi; kesikli çizgi `String`in `Unpin`i uyguladığını ve bu nedenle aslında sabitlenmediğini gösterir.</figcaption>
 
 </figure>
 
-As a result, we can do things that would be forbidden if `String` implemented `!Unpin`, like replacing a string in memory with a completely different string (see Figure 17-9). This doesn't violate the `Pin` contract, because `String` doesn't have internal references that would make moving it unsafe! That's exactly why it implements `Unpin`, not `!Unpin`.
+Sonuç olarak, `String` `!Unpin` uygulasaydı yasak olacak şeyleri yapabiliriz, örneğin bellekteki bir dizeyi tamamen farklı bir dizeyle değiştirmek gibi (bkz. Şekil 17-9). Bu `Pin` sözleşmesini ihlal etmez, çünkü `String` dizginin taşınmasını güvensiz kılacak iç referanslara sahip değildir! İşte tam da bu yüzden `!Unpin` değil `Unpin` uygulanmaktadır.
 
 <figure>
 
@@ -222,21 +222,22 @@ As a result, we can do things that would be forbidden if `String` implemented `!
 
 </figure>
 
-Now, we know enough to understand the errors reported for the `join_all` call in 17-17. We tried to move futures produced from async blocks into a `Vec<Box<dyn Future<Output = ()>>>`, but as we've seen, these futures may have internal references, so they don't implement `Unpin`. We need to pin them, and then put the `Pin` type into the `Vec`, so the underlying data in the futures is _not moved_.
+Şimdi, 17-17'deki `join_all` çağrısı için bildirilen hataları anlamak için yeterince bilgimiz var. Async bloklardan üretilen futures'ları bir `Vec<Box<dyn Future<Output = ()>>` içine taşımaya çalıştık, ancak gördüğümüz gibi, bu futures'lar dahili referanslara sahip olabilir, bu nedenle `Unpin` uygulamasını gerçekleştirmezler. Bunları pinlememiz ve ardından `Pin` türünü `Vec` içine koymamız gerekir, böylece futures'lardaki temel veriler _taşınmaz_.
 
-`Pin` and `Unpin` mostly matter when building low-level libraries or a runtime; you usually don't need them in everyday Rust code. But when you see these traits in error messages, you'll now have a better idea of how to fix your code!
+Pin` ve `Unpin` çoğunlukla düşük seviyeli kütüphaneler veya bir çalışma zamanı oluştururken önemlidir; genellikle günlük Rust kodunda bunlara ihtiyacınız yoktur. Ancak bu özellikleri hata mesajlarında gördüğünüzde, kodunuzu nasıl düzelteceğiniz konusunda artık daha iyi bir fikriniz olacak!
 
-> Note: This combination of `Pin` and `Unpin` makes it possible to safely implement complex types in Rust that would otherwise be difficult because they're self-referential. Types that require pinning are most common in async Rust today, but you may see them in other contexts as well.
+> Not: `Pin` ve `Unpin` kombinasyonu, aksi takdirde kendi kendine referanslı oldukları için zor olabilecek karmaşık tiplerin Rust'ta güvenli bir şekilde uygulanmasını mümkün kılar. Pinning gerektiren tipler günümüzde en çok async Rust'ta yaygındır, ancak bunları başka bağlamlarda da görebilirsiniz.
 >
-> The details of how `Pin` and `Unpin` work and the rules they must follow are explained in detail in the `std::pin` API documentation; start there if you want to learn more.
+> `Pin` ve `Unpin`in nasıl çalıştığının ayrıntıları ve uymaları gereken kurallar `std::pin` API belgelerinde ayrıntılı olarak açıklanmıştır; daha fazla bilgi edinmek istiyorsanız oradan başlayın.
 >
-> For an even deeper understanding, see Chapters [2.][under-the-hood] and [4.][pinning] of the [_Asynchronous Programming in Rust_][async-book] book.
+> Daha derin bir anlayış için [_Asynchronous Programming in Rust_][async-book] kitabının [2.][under-the-hood] ve [4.][pinning] bölümlerine bakın.
 
-### The `Stream` Trait
+### `Stream` Özelliği
 
-Now that you have a better understanding of the `Future`, `Pin`, and `Unpin` traits, let's focus on the `Stream` trait. As you learned earlier in the chapter, streams are like asynchronous iterators. However, unlike `Iterator` and `Future`, there is currently no definition of `Stream` in the standard library; but a widely used definition exists in the `futures` crate.
+Artık `Future`, `Pin` ve `Unpin` özelliklerini daha iyi anladığınıza göre, `Stream` özelliğine odaklanalım. Bölümün başlarında öğrendiğiniz gibi, akışlar asenkron iteratörler gibidir. Ancak, `Iterator` ve `Future` özelliklerinin aksine, standart kütüphanede `Stream` özelliğinin bir tanımı yoktur; ancak `futures` crate'inde yaygın olarak kullanılan bir tanım mevcuttur.
 
-Let's review the definitions of the `Iterator` and `Future` traits, then see how a `Stream` trait can combine them. From `Iterator`, we get the idea of a sequence: the `next` method returns an `Option<Self::Item>`. From `Future`, we get the idea of readiness over time: the `poll` method returns a `Poll<Self::Output>`. To represent a sequence of items that become ready over time, we define a `Stream` trait that combines these features:
+Şimdi `Iterator` ve `Future` özelliklerinin tanımlarını gözden geçirelim, ardından bir `Stream` özelliğinin bunları nasıl birleştirebileceğini görelim.` Iterator`dan bir dizi fikrini alırız: `next` metodu bir `Option<Self::Item>` döndürür.` Future`dan, zaman içinde hazır olma fikrini elde ederiz: `poll` yöntemi bir `Poll<Self::Output>` döndürür. Zaman içinde hazır hale gelen bir dizi öğeyi temsil etmek için, bu özellikleri birleştiren bir `Stream` özelliği tanımlarız:
+
 
 ```rust
 use std::pin::Pin;
@@ -252,13 +253,13 @@ trait Stream {
 }
 ```
 
-The `Stream` trait defines an associated type called `Item`, which specifies the type of items the stream produces. This is similar to `Iterator`, since there can be zero or more items; in `Future`, there's always a single `Output`, even if it's the unit type `()`.
+`Stream` özelliği, akışın ürettiği öğelerin türünü belirten `Item` adlı ilişkili bir tür tanımlar. Bu `Iterator` tipine benzer, çünkü sıfır ya da daha fazla öğe olabilir; `Future` tipinde, `()` birim tipi olsa bile her zaman tek bir `Output` vardır.
 
-`Stream` also defines a method to get these items. We call it `poll_next`, to emphasize that it both polls like `Future::poll` and produces a sequence like `Iterator::next`. The return type combines `Poll` and `Option`. The outer type is `Poll`, because we need to check readiness like a future. The inner type is `Option`, because we need to indicate whether there are more messages, like an iterator.
+`Stream` ayrıca bu öğeleri almak için bir yöntem tanımlar. Hem `Future::poll` gibi yoklama yaptığını hem de `Iterator::next` gibi bir dizi ürettiğini vurgulamak için buna `poll_next` adını veriyoruz. Dönüş tipi `Poll` ve `Option`ı birleştirir. Dış tip `Poll`, çünkü bir gelecek gibi hazır olup olmadığını kontrol etmemiz gerekiyor. İç tip `Option`dır, çünkü bir iterator gibi daha fazla mesaj olup olmadığını belirtmemiz gerekir.
 
-Something very similar to this will likely become part of Rust's standard library. For now, it's available in most runtime toolkits, so you can use it with confidence, and what we say next will generally apply!
+Buna çok benzer bir şey muhtemelen Rust'ın standart kütüphanesinin bir parçası olacak. Şimdilik, çoğu çalışma zamanı araç setinde mevcuttur, bu yüzden güvenle kullanabilirsiniz ve bundan sonra söylediklerimiz genellikle geçerli olacaktır!
 
-In the example we saw in the streams section, we didn't use `poll_next` or `Stream` directly; instead, we used `next` and `StreamExt`. Of course, we could have written our own stream state machines and worked directly with the `poll_next` API, just as we could work directly with the `poll` method for futures. But using `await` is much nicer, and the `StreamExt` trait provides the `next` method so we can do just that:
+Akışlar bölümünde gördüğümüz örnekte, doğrudan `poll_next` veya `Stream` kullanmadık; bunun yerine `next` ve `StreamExt` kullandık. Elbette, kendi akış durum makinelerimizi yazabilir ve doğrudan `poll_next` API'si ile çalışabilirdik, tıpkı futures için doğrudan `poll` yöntemi ile çalışabileceğimiz gibi. Ancak `await` kullanmak çok daha güzeldir ve `StreamExt` özelliği `next` yöntemini sağlar, böylece bunu yapabiliriz:
 
 ```rust
 {{#rustdoc_include ../listings/ch17-async-await/no-listing-stream-ext/src/lib.rs:here}}
@@ -268,23 +269,23 @@ In the example we saw in the streams section, we didn't use `poll_next` or `Stre
 TODO: When crates like tokio update MSRV and support async functions in traits, update this section.
 -->
 
-> Note: The actual definition we used earlier in the chapter looks a bit different, because it also supports Rust versions that don't support async functions in traits. As a result, it looks like this:
+> Not: Bölümün başlarında kullandığımız gerçek tanım biraz farklı görünüyor, çünkü trait'lerde async fonksiyonlarını desteklemeyen Rust sürümlerini de destekliyor. Sonuç olarak, şu şekilde görünür:
 >
 > ```rust,ignore
 > fn next(&mut self) -> Next<'_, Self> where Self: Unpin;
 > ```
 >
-> This `Next` type is a `struct` that implements `Future`, and the lifetime in `Next<'_, Self>` allows us to name the reference's lifetime, so we can use `await` with this method.
+> Bu `Next` tipi `Future` uygulayan bir `struct`tur ve `Next<'_, Self>` içindeki yaşam süresi referansın yaşam süresini adlandırmamıza izin verir, böylece bu yöntemle `await` kullanabiliriz.
 
-The `StreamExt` trait is also home to all the interesting methods you can use with streams. `StreamExt` is automatically implemented for any type that implements `Stream`; but these traits are defined separately so the community can develop helper APIs without affecting the core trait.
+`StreamExt` özelliği de akışlarla kullanabileceğiniz tüm ilginç yöntemlere ev sahipliği yapar. StreamExt` özelliği `Stream` özelliğini uygulayan her tür için otomatik olarak uygulanır; ancak bu özellikler, topluluğun çekirdek özelliği etkilemeden yardımcı API'ler geliştirebilmesi için ayrı olarak tanımlanmıştır.
 
-In the version of `StreamExt` used in the `trpl` crate, the trait not only defines the `next` method, but also provides a default implementation of `next` that correctly calls `Stream::poll_next`. So, even if you write your own stream data type, you only need to implement `Stream`, and anyone using your type can automatically use `StreamExt` and its methods.
+trpl` crate`inde kullanılan `StreamExt` sürümünde, özellik yalnızca `next` yöntemini tanımlamakla kalmaz, aynı zamanda `Stream::poll_next` yöntemini doğru şekilde çağıran varsayılan bir `next` uygulaması da sağlar. Yani, kendi stream veri tipinizi yazsanız bile, sadece `Stream`i uygulamanız yeterlidir ve tipinizi kullanan herkes otomatik olarak `StreamExt` ve metotlarını kullanabilir.
 
-That's all we have to say about the low-level details of these traits. Finally, let's think about how futures (including streams), tasks, and threads fit together!
+Bu özelliklerin düşük seviyeli detayları hakkında söyleyeceklerimiz bu kadar. Son olarak, vadeli işlemlerin (akışlar dahil), görevlerin ve iş parçacıklarının birbirine nasıl uyduğunu düşünelim!
 
-[ch-18]: ch18-00-oop.html
+[ch-18]: ch18-00-oop.md
 [async-book]: https://rust-lang.github.io/async-book/
 [under-the-hood]: https://rust-lang.github.io/async-book/02_execution/01_chapter.html
 [pinning]: https://rust-lang.github.io/async-book/04_pinning/01_chapter.html
-[first-async]: ch17-01-futures-and-syntax.html#our-first-async-program
-[any-number-futures]: ch17-03-more-futures.html#working-with-any-number-of-futures
+[first-async]: ch17-01-futures-and-syntax.md#i̇lk-async-programımız
+[any-number-futures]: ch17-03-more-futures.md#herhangi-bir-sayıda-future-ile-çalışmak

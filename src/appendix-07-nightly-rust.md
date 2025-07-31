@@ -1,50 +1,51 @@
-## Appendix G - How Rust is Made and “Nightly Rust”
+## Ek G - Rust Nasıl Yapılır ve “Nightly Rust”
 
-This appendix is about how Rust is made and how that affects you as a Rust
-developer.
+Bu ek, Rust'ın nasıl üretildiği ve bunun bir Rust kullanıcısı olarak sizi nasıl etkilediği ile ilgilidir.
+geliştirici.
 
-### Stability Without Stagnation
+### Durgunluk Olmadan İstikrar
 
-As a language, Rust cares a _lot_ about the stability of your code. We want
-Rust to be a rock-solid foundation you can build on, and if things were
-constantly changing, that would be impossible. At the same time, if we can’t
-experiment with new features, we may not find out important flaws until after
-their release, when we can no longer change things.
+Bir dil olarak Rust, kodunuzun kararlılığına çok önem verir. Biz istiyoruz ki
+Pas, üzerine inşa edebileceğiniz kaya gibi sağlam bir temeldir ve eğer işler
+sürekli değişiyor, bu imkansız olurdu. Aynı zamanda, eğer
+yeni özellikleri denediğimizde, önemli kusurları daha sonra fark edebiliriz.
+Artık bir şeyleri değiştiremeyeceğimiz zaman, onların serbest bırakılması.
 
-Our solution to this problem is what we call “stability without stagnation”,
-and our guiding principle is this: you should never have to fear upgrading to a
-new version of stable Rust. Each upgrade should be painless, but should also
-bring you new features, fewer bugs, and faster compile times.
+Bizim bu soruna çözümümüz “durgunluk olmadan istikrar” dediğimiz şeydir,
+ve yol gösterici prensibimiz şudur: asla bir üst modele geçmekten korkmamalısınız
+kararlı Rust'ın yeni sürümü. Her yükseltme acısız olmalı, ancak aynı zamanda
+size yeni özellikler, daha az hata ve daha hızlı derleme süreleri sunar.
 
-### Choo, Choo! Release Channels and Riding the Trains
+### Choo, Choo! Kanalları Serbest Bırakın ve Trenlere Binin
 
-Rust development operates on a _train schedule_. That is, all development is
-done on the `master` branch of the Rust repository. Releases follow a software
-release train model, which has been used by Cisco IOS and other software
-projects. There are three _release channels_ for Rust:
+Rust geliştirme bir _tren programı_ üzerinde çalışır. Yani, tüm geliştirme
+Rust deposunun `master` dalında yapılır. Sürümler bir yazılımı takip eder
+Cisco IOS ve diğer yazılımlar tarafından kullanılan sürüm treni modeli
+projeler. Rust için üç _serbest bırakma kanalı_ vardır:
 
-- Nightly
+- Gecelik
 - Beta
-- Stable
+- Kararlı
 
-Most Rust developers primarily use the stable channel, but those who want to
-try out experimental new features may use nightly or beta.
+Çoğu Rust geliştiricisi öncelikle kararlı kanalı kullanır, ancak isteyenler
+Deneysel yeni özellikleri denemek için nightly veya beta kullanabilir.
 
-Here’s an example of how the development and release process works: let’s
-assume that the Rust team is working on the release of Rust 1.5. That release
-happened in December of 2015, but it will provide us with realistic version
-numbers. A new feature is added to Rust: a new commit lands on the `master`
-branch. Each night, a new nightly version of Rust is produced. Every day is a
-release day, and these releases are created by our release infrastructure
-automatically. So as time passes, our releases look like this, once a night:
+İşte geliştirme ve yayınlama sürecinin nasıl işlediğine dair bir örnek: hadi
+Rust ekibinin Rust 1.5 sürümü üzerinde çalıştığını varsayalım. Bu sürüm
+Aralık 2015'te gerçekleşti, ancak bize gerçekçi bir versiyon sunacak
+sayılar. Rust'a yeni bir özellik eklendi: yeni bir commit `master`
+şube. Her gece, Rust'ın yeni bir gece sürümü üretilir. Her gün bir
+yayın günü ve bu yayınlar yayın altyapımız tarafından oluşturulur
+otomatik olarak. Yani zaman geçtikçe, yayınlarımız gecede bir kez bu şekilde görünüyor:
+
 
 ```text
 nightly: * - - * - - *
 ```
 
-Every six weeks, it’s time to prepare a new release! The `beta` branch of the
-Rust repository branches off from the `master` branch used by nightly. Now,
-there are two releases:
+Her altı haftada bir, yeni bir sürüm hazırlama zamanı! Yeni sürümün `beta` dalı
+Rust deposu, nightly tarafından kullanılan `master` dalından ayrılır. Şimdi,
+iki sürüm var:
 
 ```text
 nightly: * - - * - - *
@@ -52,9 +53,9 @@ nightly: * - - * - - *
 beta:                *
 ```
 
-Most Rust users do not use beta releases actively, but test against beta in
-their CI system to help Rust discover possible regressions. In the meantime,
-there’s still a nightly release every night:
+Çoğu Rust kullanıcısı beta sürümlerini aktif olarak kullanmaz, ancak beta sürümlerine karşı test
+Rust'ın olası gerilemeleri keşfetmesine yardımcı olmak için CI sistemleri. Bu arada,
+hala her gece bir yayın var:
 
 ```text
 nightly: * - - * - - * - - * - - *
@@ -62,10 +63,10 @@ nightly: * - - * - - * - - * - - *
 beta:                *
 ```
 
-Let’s say a regression is found. Good thing we had some time to test the beta
-release before the regression snuck into a stable release! The fix is applied
-to `master`, so that nightly is fixed, and then the fix is backported to the
-`beta` branch, and a new release of beta is produced:
+Diyelim ki bir regresyon bulundu. İyi ki betayı test etmek için biraz zamanımız oldu
+regresyon kararlı sürüme sızmadan önce yayınlayın! Düzeltme uygulanır
+'a gönderilir, böylece nightly düzeltilir ve ardından düzeltme
+'beta' dalı ve yeni bir beta sürümü üretilir:
 
 ```text
 nightly: * - - * - - * - - * - - * - - *
@@ -73,8 +74,8 @@ nightly: * - - * - - * - - * - - * - - *
 beta:                * - - - - - - - - *
 ```
 
-Six weeks after the first beta was created, it’s time for a stable release! The
-`stable` branch is produced from the `beta` branch:
+İlk betanın oluşturulmasından altı hafta sonra, kararlı sürümün zamanı geldi! Bu
+beta` dalından `stable` dalı üretilir:
 
 ```text
 nightly: * - - * - - * - - * - - * - - * - * - *
@@ -84,10 +85,10 @@ beta:                * - - - - - - - - *
 stable:                                *
 ```
 
-Hooray! Rust 1.5 is done! However, we’ve forgotten one thing: because the six
-weeks have gone by, we also need a new beta of the _next_ version of Rust, 1.6.
-So after `stable` branches off of `beta`, the next version of `beta` branches
-off of `nightly` again:
+Yaşasın! Rust 1.5 tamamlandı! Ancak, bir şeyi unuttuk: çünkü altı
+haftalar geçtikten sonra, Rust'ın _bir sonraki_ sürümü olan 1.6'nın yeni bir betasına da ihtiyacımız var.
+Yani `beta`dan `stable` dalı çıktıktan sonra, `beta` dalının bir sonraki sürümü
+tekrar “gece” dışında:
 
 ```text
 nightly: * - - * - - * - - * - - * - - * - * - *
@@ -97,63 +98,63 @@ beta:                * - - - - - - - - *       *
 stable:                                *
 ```
 
-This is called the “train model” because every six weeks, a release “leaves the
-station”, but still has to take a journey through the beta channel before it
-arrives as a stable release.
+Buna “tren modeli” denir çünkü her altı haftada bir, bir sürüm “trenden ayrılır”.
+istasyonu", ancak yine de beta kanalından geçmeden önce bir yolculuk yapmak zorundadır.
+kararlı bir sürüm olarak gelir.
 
-Rust releases every six weeks, like clockwork. If you know the date of one Rust
-release, you can know the date of the next one: it’s six weeks later. A nice
-aspect of having releases scheduled every six weeks is that the next train is
-coming soon. If a feature happens to miss a particular release, there’s no need
-to worry: another one is happening in a short time! This helps reduce pressure
-to sneak possibly unpolished features in close to the release deadline.
+Rust, saat gibi her altı haftada bir yayınlanır. Eğer bir Rust sürümünün tarihini biliyorsanız
+yayınlandığında, bir sonrakinin tarihini bilebilirsiniz: altı hafta sonra. Güzel.
+her altı haftada bir planlanmış sürümlere sahip olmanın yönü, bir sonraki trenin
+yakında geliyor. Bir özellik belirli bir sürümü kaçırırsa, gerek yoktur
+Endişelenmenize gerek yok: kısa bir süre sonra bir tane daha olacak! Bu, baskıyı azaltmaya yardımcı olur
+son sürüm tarihine yakın bir zamanda muhtemelen cilalanmamış özellikleri gizlice eklemek için.
 
-Thanks to this process, you can always check out the next build of Rust and
-verify for yourself that it’s easy to upgrade to: if a beta release doesn’t
-work as expected, you can report it to the team and get it fixed before the
-next stable release happens! Breakage in a beta release is relatively rare, but
-`rustc` is still a piece of software, and bugs do exist.
+Bu süreç sayesinde, Rust'ın bir sonraki sürümüne her zaman göz atabilir ve
+yükseltmenin kolay olduğunu kendiniz doğrulayın: eğer bir beta sürümü
+beklendiği gibi çalışıyorsa, bunu ekibe bildirebilir ve teslimattan önce düzeltilmesini sağlayabilirsiniz.
+bi̇r sonraki̇ kararli sürüm gerçekleşi̇yor! Bir beta sürümünde kırılma nispeten nadirdir, ancak
+rustc' hala bir yazılım parçasıdır ve hatalar mevcuttur.
 
-### Maintenance time
+### Bakım süresi
 
-The Rust project supports the most recent stable version. When a new stable
-version is released, the old version reaches its end of life (EOL). This means
-each version is supported for six weeks.
+Rust projesi en son kararlı sürümü desteklemektedir. Yeni bir kararlı
+sürümü yayınlandığında, eski sürüm kullanım ömrünün sonuna (EOL) ulaşır. Bu şu anlama gelir
+her sürüm altı hafta boyunca desteklenmektedir.
 
-### Unstable Features
+### Kararsız Özellikler
 
-There’s one more catch with this release model: unstable features. Rust uses a
-technique called “feature flags” to determine what features are enabled in a
-given release. If a new feature is under active development, it lands on
-`master`, and therefore, in nightly, but behind a _feature flag_. If you, as a
-user, wish to try out the work-in-progress feature, you can, but you must be
-using a nightly release of Rust and annotate your source code with the
-appropriate flag to opt in.
+Bu sürüm modeliyle ilgili bir sorun daha var: kararsız özellikler. Rust bir
+hangi özelliklerin etkin olduğunu belirlemek için “özellik bayrakları” adı verilen teknik
+sürüm verildi. Yeni bir özellik aktif geliştirme aşamasındaysa
+'master', ve bu nedenle, gece, ancak bir _özellik bayrağının_ arkasında. Eğer siz, bir
+kullanıcısıysanız, devam eden çalışma özelliğini denemek istiyorsanız, deneyebilirsiniz, ancak
+Rust'ın bir gecelik sürümünü kullanarak ve kaynak kodunuzu
+tercih etmek için uygun bayrak.
 
-If you’re using a beta or stable release of Rust, you can’t use any feature
-flags. This is the key that allows us to get practical use with new features
-before we declare them stable forever. Those who wish to opt into the bleeding
-edge can do so, and those who want a rock-solid experience can stick with
-stable and know that their code won’t break. Stability without stagnation.
+Rust'ın beta veya kararlı bir sürümünü kullanıyorsanız, herhangi bir özelliği kullanamazsınız
+bayraklar. Bu, yeni özelliklerle pratik kullanım elde etmemizi sağlayan anahtardır
+onları sonsuza dek istikrarlı ilan etmeden önce. Kanamayı tercih etmek isteyenler
+kenarı bunu yapabilir ve kaya gibi sağlam bir deneyim isteyenler
+kararlı ve kodlarının bozulmayacağını biliyorlar. Durgunluk olmadan istikrar.
 
-This book only contains information about stable features, as in-progress
-features are still changing, and surely they’ll be different between when this
-book was written and when they get enabled in stable builds. You can find
-documentation for nightly-only features online.
+Bu kitap yalnızca kararlı özellikler hakkında bilgi içerir, çünkü devam eden
+özellikler hala değişiyor ve kesinlikle bu kitapla bu kitap arasında farklı olacaklar.
+kitabının ne zaman yazıldığını ve kararlı sürümlerde ne zaman etkinleştirildiklerini öğrenebilirsiniz. Bulabilirsin
+nightly özellikleri için belgeler çevrimiçi.
 
-### Rustup and the Role of Rust Nightly
+### Rustup ve Rust Nightly'nin Rolü
 
-Rustup makes it easy to change between different release channels of Rust, on a
-global or per-project basis. By default, you’ll have stable Rust installed. To
-install nightly, for example:
+Rustup, Rust'ın farklı sürüm kanalları arasında geçiş yapmayı kolaylaştırır, bir
+küresel veya proje bazında. Varsayılan olarak, kararlı Rust yüklü olacaktır. için
+Örneğin, gece yükleyin:
 
 ```console
 $ rustup toolchain install nightly
 ```
 
-You can see all of the _toolchains_ (releases of Rust and associated
-components) you have installed with `rustup` as well. Here’s an example on one
-of your authors’ Windows computer:
+Tüm _toolchains_ (Rust sürümleri ve ilgili araç zincirlerini) görebilirsiniz.
+bileşenleri) de `rustup` ile yüklediniz. İşte bir örnek
+yazarlarınızın Windows bilgisayarının:
 
 ```powershell
 > rustup toolchain list
@@ -162,45 +163,45 @@ beta-x86_64-pc-windows-msvc
 nightly-x86_64-pc-windows-msvc
 ```
 
-As you can see, the stable toolchain is the default. Most Rust users use stable
-most of the time. You might want to use stable most of the time, but use
-nightly on a specific project, because you care about a cutting-edge feature.
-To do so, you can use `rustup override` in that project’s directory to set the
-nightly toolchain as the one `rustup` should use when you’re in that directory:
+Gördüğünüz gibi, kararlı araç zinciri varsayılandır. Çoğu Rust kullanıcısı kararlı
+çoğu zaman. Çoğu zaman sabit kullanmak isteyebilirsiniz, ancak
+Belirli bir projede gecelik olarak, çünkü son teknoloji bir özelliği önemsiyorsunuz.
+Bunu yapmak için, söz konusu projenin dizininde `rustup override` özelliğini kullanarak
+gece araç zincirini, o dizindeyken `rustup`ın kullanması gereken araç zinciri olarak ayarlayın:
 
 ```console
 $ cd ~/projects/needs-nightly
 $ rustup override set nightly
 ```
 
-Now, every time you call `rustc` or `cargo` inside of
-_~/projects/needs-nightly_, `rustup` will make sure that you are using nightly
-Rust, rather than your default of stable Rust. This comes in handy when you
-have a lot of Rust projects!
+Şimdi, `rustc` veya `cargo` öğesini her çağırdığınızda
+_~/projects/needs-nightly_, `rustup` nightly kullandığınızdan emin olacaktır
+Rust, varsayılan kararlı Rust yerine. Bu, şu durumlarda kullanışlı olur
+bir sürü Rust projesi var!
 
-### The RFC Process and Teams
+### RFC Süreci ve Ekipler
 
-So how do you learn about these new features? Rust’s development model follows
-a _Request For Comments (RFC) process_. If you’d like an improvement in Rust,
-you can write up a proposal, called an RFC.
+Peki bu yeni özellikler hakkında nasıl bilgi edinebilirsiniz? Rust'ın geliştirme modeli şu şekildedir
+bir _Request For Comments (RFC) süreci_. Eğer Rust'ta bir iyileştirme istiyorsanız,
+RFC adı verilen bir öneri yazabilirsiniz.
 
-Anyone can write RFCs to improve Rust, and the proposals are reviewed and
-discussed by the Rust team, which is comprised of many topic subteams. There’s
-a full list of the teams [on Rust’s website](https://www.rust-lang.org/governance), which includes teams for
-each area of the project: language design, compiler implementation,
-infrastructure, documentation, and more. The appropriate team reads the
-proposal and the comments, writes some comments of their own, and eventually,
-there’s consensus to accept or reject the feature.
+Herkes Rust'ı geliştirmek için RFC yazabilir ve teklifler gözden geçirilir ve
+birçok konu alt ekibinden oluşan Rust ekibi tarafından tartışılmaktadır. Burada
+ekiplerin tam listesi [Rust'ın web sitesinde](https://www.rust-lang.org/governance) yer almaktadır.
+Projenin her bir alanı: dil tasarımı, derleyici uygulaması,
+altyapı, dokümantasyon ve daha fazlası. Uygun ekip aşağıdaki belgeleri okur
+teklifini ve yorumları değerlendirir, kendi yorumlarını yazar ve sonunda
+özelliği kabul etmek veya reddetmek için fikir birliği vardır.
 
-If the feature is accepted, an issue is opened on the Rust repository, and
-someone can implement it. The person who implements it very well may not be the
-person who proposed the feature in the first place! When the implementation is
-ready, it lands on the `master` branch behind a feature gate, as we discussed
-in the [“Unstable Features”](#unstable-features)<!-- ignore --> section.
+Özellik kabul edilirse, Rust deposunda bir sorun açılır ve
+Birisi bunu uygulayabilir. Bunu çok iyi bir şekilde uygulayan kişi
+ilk etapta özelliği öneren kişi! Uygulama ne zaman
+hazır olduğunda, tartıştığımız gibi bir özellik kapısının arkasındaki `master` dalına iner
+[“Kararsız Özellikler”](#kararsız-özellikler)<!-- ignore --> bölümünde.
 
-After some time, once Rust developers who use nightly releases have been able
-to try out the new feature, team members will discuss the feature, how it’s
-worked out on nightly, and decide if it should make it into stable Rust or not.
-If the decision is to move forward, the feature gate is removed, and the
-feature is now considered stable! It rides the trains into a new stable release
-of Rust.
+Bir süre sonra, gecelik sürümleri kullanan Rust geliştiricileri
+yeni özelliği denemek için ekip üyeleri özelliği, nasıl kullanıldığını ve
+üzerinde çalışılır ve kararlı Rust'a girip girmeyeceğine karar verilir.
+Karar ilerlemek yönündeyse, özellik kapısı kaldırılır ve
+özelliği artık kararlı olarak kabul ediliyor! Trenleri yeni bir kararlı sürüme doğru sürüyor
+Rust'ın.
