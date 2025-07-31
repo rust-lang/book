@@ -670,6 +670,10 @@ thread run them.
 > might load one at a time in five-second intervals. Some web browsers execute
 > multiple instances of the same request sequentially for caching reasons. This
 > limitation is not caused by our web server.
+>
+> To work around this limitation, you can either make requests from different
+> browsers (as opposed to separate browser tabs), or avoid using a browser
+> altogether and send the requests using a tool like `curl`.
 
 This is a good time to pause and consider how the code in Listings 21-18, 21-19,
 and 21-20 would be different if we were using futures instead of a closure for
