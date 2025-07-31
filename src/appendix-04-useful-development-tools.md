@@ -17,7 +17,7 @@ and `cargo-fmt` understands conventions of a project that uses Cargo.
 
 To format any Cargo project, enter the following:
 
-```sh
+```console
 $ cargo fmt
 ```
 
