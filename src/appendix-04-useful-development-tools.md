@@ -13,20 +13,11 @@ style to use when writing Rust: everyone formats their code using the tool.
 Rust installations include rustfmt by default, so you should already have the
 programs `rustfmt` and `cargo-fmt` on your system. These two commands are
 analogous to `rustc` and `cargo` in that `rustfmt` allows finer-grained control
-and `cargo-fmt` understands conventions of a project that uses Cargo. To format
-any Cargo project, enter the following:
+and `cargo-fmt` understands conventions of a project that uses Cargo.
+
+To format any Cargo project, enter the following:
 
 ```sh
-$ cargo fmt
-```
-
-Running this command reformats all the Rust code in the current crate. This
-should only change the code style, not the code semantics.
-
-This command gives you `rustfmt` and `cargo-fmt`, similar to how Rust gives you
-both `rustc` and `cargo`. To format any Cargo project, enter the following:
-
-```console
 $ cargo fmt
 ```
 
