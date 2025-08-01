@@ -8,14 +8,17 @@ process, subsequent requests will have to wait until the long request is
 finished, even if the new requests can be processed quickly. We’ll need to fix
 this, but first we’ll look at the problem in action.
 
-### Simulating a Slow Request in the Current Server Implementation
+<!-- Old headings. Do not remove or links may break. -->
+<a id="simulating-a-slow-request-in-the-current-server-implementation"></a>
+
+### Simulating a Slow Request
 
 We’ll look at how a slow-processing request can affect other requests made to
 our current server implementation. Listing 21-10 implements handling a request
 to _/sleep_ with a simulated slow response that will cause the server to sleep
 for five seconds before responding.
 
-<Listing number="21-10" file-name="src/main.rs" caption="Simulating a slow request by sleeping for 5 seconds">
+<Listing number="21-10" file-name="src/main.rs" caption="Simulating a slow request by sleeping for five seconds">
 
 ```rust,no_run
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-10/src/main.rs:here}}
@@ -24,7 +27,7 @@ for five seconds before responding.
 </Listing>
 
 We switched from `if` to `match` now that we have three cases. We need to
-explicitly match on a slice of `request_line` to pattern match against the
+explicitly match on a slice of `request_line` to pattern-match against the
 string literal values; `match` doesn’t do automatic referencing and
 dereferencing, like the equality method does.
 
@@ -37,7 +40,7 @@ You can see how primitive our server is: real libraries would handle the
 recognition of multiple requests in a much less verbose way!
 
 Start the server using `cargo run`. Then open two browser windows: one for
-_http://127.0.0.1:7878/_ and the other for _http://127.0.0.1:7878/sleep_. If
+_http://127.0.0.1:7878_ and the other for _http://127.0.0.1:7878/sleep_. If
 you enter the _/_ URI a few times, as before, you’ll see it respond quickly.
 But if you enter _/sleep_ and then load _/_, you’ll see that _/_ waits until
 `sleep` has slept for its full five seconds before loading.
@@ -68,7 +71,7 @@ threads waiting in the pool. Requests that come in are sent to the pool for
 processing. The pool will maintain a queue of incoming requests. Each of the
 threads in the pool will pop off a request from this queue, handle the request,
 and then ask the queue for another request. With this design, we can process up
-to *`N`* requests concurrently, where *`N`* is the number of threads. If each
+to _`N`_ requests concurrently, where _`N`_ is the number of threads. If each
 thread is responding to a long-running request, subsequent requests can still
 back up in the queue, but we’ve increased the number of long-running requests
 we can handle before reaching that point.
@@ -103,9 +106,10 @@ First, let’s explore how our code might look if it did create a new thread for
 every connection. As mentioned earlier, this isn’t our final plan due to the
 problems with potentially spawning an unlimited number of threads, but it is a
 starting point to get a working multithreaded server first. Then we’ll add the
-thread pool as an improvement, and contrasting the two solutions will be
-easier. Listing 21-11 shows the changes to make to `main` to spawn a new thread
-to handle each stream within the `for` loop.
+thread pool as an improvement, and contrasting the two solutions will be easier.
+
+Listing 21-11 shows the changes to make to `main` to spawn a new thread to
+handle each stream within the `for` loop.
 
 <Listing number="21-11" file-name="src/main.rs" caption="Spawning a new thread for each stream">
 
@@ -150,13 +154,13 @@ of threads, in this case four. Then, in the `for` loop, `pool.execute` has a
 similar interface as `thread::spawn` in that it takes a closure the pool should
 run for each stream. We need to implement `pool.execute` so it takes the
 closure and gives it to a thread in the pool to run. This code won’t yet
-compile, but we’ll try so the compiler can guide us in how to fix it.
+compile, but we’ll try so that the compiler can guide us in how to fix it.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="building-the-threadpool-struct-using-compiler-driven-development"></a>
 
-#### Building `ThreadPool` Using Compiler Driven Development
+#### Building `ThreadPool` Using Compiler-Driven Development
 
 Make the changes in Listing 21-12 to _src/main.rs_, and then let’s use the
 compiler errors from `cargo check` to drive our development. Here is the first
@@ -185,7 +189,8 @@ definition of a `ThreadPool` struct that we can have for now:
 
 </Listing>
 
-Then edit _main.rs_ file to bring `ThreadPool` into scope from the library
+
+Then edit the _main.rs_ file to bring `ThreadPool` into scope from the library
 crate by adding the following code to the top of _src/main.rs_:
 
 <Listing file-name="src/main.rs">
@@ -299,7 +304,7 @@ yet!
 > writing unit tests to check that the code compiles _and_ has the behavior we
 > want.
 
-Consider: what would be different here if we were going to execute a _future_
+Consider: what would be different here if we were going to execute a future
 instead of a closure?
 
 #### Validating the Number of Threads in `new`
@@ -385,7 +390,10 @@ which resizes itself as elements are inserted.
 
 When you run `cargo check` again, it should succeed.
 
-#### A `Worker` Struct Responsible for Sending Code from the `ThreadPool` to a Thread
+<!-- Old headings. Do not remove or links may break. -->
+<a id ="a-worker-struct-responsible-for-sending-code-from-the-threadpool-to-a-thread"></a>
+
+#### Sending Code from the `ThreadPool` to a Thread
 
 We left a comment in the `for` loop in Listing 21-14 regarding the creation of
 threads. Here, we’ll look at how we actually create threads. The standard
@@ -400,11 +408,11 @@ We’ll implement this behavior by introducing a new data structure between the
 `ThreadPool` and the threads that will manage this new behavior. We’ll call
 this data structure _Worker_, which is a common term in pooling
 implementations. The `Worker` picks up code that needs to be run and runs the
-code in the Worker’s thread.
+code in its thread.
 
 Think of people working in the kitchen at a restaurant: the workers wait until
 orders come in from customers, and then they’re responsible for taking those
-orders and fulfilling them.
+orders and filling them.
 
 Instead of storing a vector of `JoinHandle<()>` instances in the thread pool,
 we’ll store instances of the `Worker` struct. Each `Worker` will store a single
@@ -423,7 +431,7 @@ set up in this way:
    `Worker` instance that holds the `id` and a thread spawned with an empty
    closure.
 4. In `ThreadPool::new`, use the `for` loop counter to generate an `id`, create
-   a new `Worker` with that `id`, and store the worker in the vector.
+   a new `Worker` with that `id`, and store the `Worker` in the vector.
 
 If you’re up for a challenge, try implementing these changes on your own before
 looking at the code in Listing 21-15.
@@ -676,8 +684,9 @@ and 21-20 would be different if we were using futures instead of a closure for
 the work to be done. What types would change? How would the method signatures be
 different, if at all? What parts of the code would stay the same?
 
-After learning about the `while let` loop in Chapters 17 and 18, you might be
-wondering why we didn’t write the worker thread code as shown in Listing 21-21.
+After learning about the `while let` loop in Chapter 17 and Chapter 19, you
+might be wondering why we didn’t write the `Worker` thread code as shown in
+Listing 21-21.
 
 <Listing number="21-21" file-name="src/lib.rs" caption="An alternative implementation of `Worker::new` using `while let`">
 
@@ -700,7 +709,7 @@ longer than intended if we aren’t mindful of the lifetime of the
 
 The code in Listing 21-20 that uses `let job =
 receiver.lock().unwrap().recv().unwrap();` works because with `let`, any
-temporary values used in the expression on the right hand side of the equal
+temporary values used in the expression on the right-hand side of the equal
 sign are immediately dropped when the `let` statement ends. However, `while
 let` (and `if let` and `match`) does not drop temporary values until the end of
 the associated block. In Listing 21-21, the lock remains held for the duration

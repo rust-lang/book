@@ -31,9 +31,9 @@ Figure 21-1: Our final shared project
 Before we get started, we should mention two details. First, the method we’ll
 use won’t be the best way to build a web server with Rust. Community members
 have published a number of production-ready crates available at
-https://crates.io that provide more complete web server and thread pool
-implementations than we’ll build. However, our intention in this chapter is to
-help you learn, not to take the easy route. Because Rust is a systems
+crates.io at *https://crates.io/* that provide more complete web server and thread
+pool implementations than we’ll build. However, our intention in this chapter is
+to help you learn, not to take the easy route. Because Rust is a systems
 programming language, we can choose the level of abstraction we want to work
 with and can go to a lower level than is possible or practical in other
 languages.
@@ -166,8 +166,17 @@ It could also be that the browser is trying to connect to the server multiple
 times because the server isn’t responding with any data. When `stream` goes out
 of scope and is dropped at the end of the loop, the connection is closed as
 part of the `drop` implementation. Browsers sometimes deal with closed
-connections by retrying, because the problem might be temporary. The important
-factor is that we’ve successfully gotten a handle to a TCP connection!
+connections by retrying, because the problem might be temporary.
+
+Browsers also sometimes open multiple connections to the server without sending
+any requests, so that if they *do* later send requests, those requests can
+happen faster. When this happens, our server will see each connection,
+regardless of whether there are any requests over that connection. Many
+versions of Chrome-based browsers do this, for example; you can disable that
+optimization by using private browsing mode or using a different browser.
+
+The important factor is that we’ve successfully gotten a handle to a TCP
+connection!
 
 Remember to stop the program by pressing <kbd>ctrl</kbd>-<kbd>C</kbd> when
 you’re done running a particular version of the code. Then restart the program
@@ -222,8 +231,8 @@ connection, we now call the new `handle_connection` function and pass the
 `stream` to it.
 
 In the `handle_connection` function, we create a new `BufReader` instance that
-wraps a reference to the `stream`. `BufReader` adds buffering by managing calls
-to the `std::io::Read` trait methods for us.
+wraps a reference to the `stream`. The `BufReader` adds buffering by managing
+calls to the `std::io::Read` trait methods for us.
 
 We create a variable named `http_request` to collect the lines of the request
 the browser sends to our server. We indicate that we want to collect these
@@ -643,6 +652,7 @@ finished, even if the new requests can be processed quickly. We’ll need to fix
 this, but first we’ll look at the problem in action.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="simulating-a-slow-request-in-the-current-server-implementation"></a>
 
 ### Simulating a Slow Request
@@ -696,10 +706,10 @@ You can see how primitive our server is: real libraries would handle the
 recognition of multiple requests in a much less verbose way!
 
 Start the server using `cargo run`. Then open two browser windows: one for
-*http://127.0.0.1:7878* and the other for *http://127.0.0.1:7878/sleep*. If you
-enter the */* URI a few times, as before, you’ll see it respond quickly. But if
-you enter */sleep* and then load */*, you’ll see that */* waits until `sleep`
-has slept for its full five seconds before loading.
+*http://127.0.0.1:7878* and the other for *http://127.0.0.1:7878/sleep*. If
+you enter the */* URI a few times, as before, you’ll see it respond quickly.
+But if you enter */sleep* and then load */*, you’ll see that */* waits until
+`sleep` has slept for its full five seconds before loading.
 
 There are multiple techniques we could use to avoid requests backing up behind
 a slow request, including using async as we did Chapter 17; the one we’ll
@@ -1143,6 +1153,7 @@ which resizes itself as elements are inserted.
 When you run `cargo check` again, it should succeed.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id ="a-worker-struct-responsible-for-sending-code-from-the-threadpool-to-a-thread"></a>
 
 #### Sending Code from the ThreadPool to a Thread
@@ -1516,12 +1527,14 @@ src/lib.rs
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(move || loop {
-            let job = receiver.lock().unwrap().recv().unwrap();
+        let thread = thread::spawn(move || {
+            loop {
+                let job = receiver.lock().unwrap().recv().unwrap();
 
-            println!("Worker {id} got a job; executing.");
+                println!("Worker {id} got a job; executing.");
 
-            job();
+                job();
+            }
         });
 
         Worker { id, thread }
@@ -1650,7 +1663,7 @@ longer than intended if we aren’t mindful of the lifetime of the
 `MutexGuard<T>`.
 
 The code in Listing 21-20 that uses `let job = receiver.lock().unwrap().recv().unwrap();` works because with `let`, any
-temporary values used in the expression on the right-hand side of the equal
+temporary values used in the expression on the right hand side of the equal
 sign are immediately dropped when the `let` statement ends. However, `while let` (and `if let` and `match`) does not drop temporary values until the end of
 the associated block. In Listing 21-21, the lock remains held for the duration
 of the call to `job()`, meaning other `Worker` instances cannot receive jobs.
@@ -1712,18 +1725,15 @@ Here is the error we get when we compile this code:
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
 error[E0507]: cannot move out of `worker.thread` which is behind a mutable reference
-    --> src/lib.rs:52:13
-     |
-52   |             worker.thread.join().unwrap();
-     |             ^^^^^^^^^^^^^ ------ `worker.thread` moved due to this method call
-     |             |
-     |             move occurs because `worker.thread` has type `JoinHandle<()>`, which does not implement the `Copy` trait
-     |
+  --> src/lib.rs:52:13
+   |
+52 |             worker.thread.join().unwrap();
+   |             ^^^^^^^^^^^^^ ------ `worker.thread` moved due to this method call
+   |             |
+   |             move occurs because `worker.thread` has type `JoinHandle<()>`, which does not implement the `Copy` trait
+   |
 note: `JoinHandle::<T>::join` takes ownership of the receiver `self`, which moves `worker.thread`
-    --> file:///home/.rustup/toolchains/1.82/lib/rustlib/src/rust/library/std/src/thread/mod.rs:1763:17
-     |
-1763 |     pub fn join(self) -> Result<T> {
-     |                 ^^^^
+  --> /rustc/4eb161250e340c8f48f66e2b929ef4a5bed7c181/library/std/src/thread/mod.rs:1876:17
 
 For more information about this error, try `rustc --explain E0507`.
 error: could not compile `hello` (lib) due to 1 previous error
@@ -1849,18 +1859,20 @@ src/lib.rs
 ```
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(move || loop {
-            let message = receiver.lock().unwrap().recv();
+        let thread = thread::spawn(move || {
+            loop {
+                let message = receiver.lock().unwrap().recv();
 
-            match message {
-                Ok(job) => {
-                    println!("Worker {id} got a job; executing.");
+                match message {
+                    Ok(job) => {
+                        println!("Worker {id} got a job; executing.");
 
-                    job();
-                }
-                Err(_) => {
-                    println!("Worker {id} disconnected; shutting down.");
-                    break;
+                        job();
+                    }
+                    Err(_) => {
+                        println!("Worker {id} disconnected; shutting down.");
+                        break;
+                    }
                 }
             }
         });
@@ -1965,7 +1977,7 @@ src/main.rs
 use hello::ThreadPool;
 use std::{
     fs,
-    io::{prelude::*, BufReader},
+    io::{BufReader, prelude::*},
     net::{TcpListener, TcpStream},
     thread,
     time::Duration,
@@ -2015,7 +2027,7 @@ src/lib.rs
 
 ```
 use std::{
-    sync::{mpsc, Arc, Mutex},
+    sync::{Arc, Mutex, mpsc},
     thread,
 };
 
@@ -2084,18 +2096,20 @@ struct Worker {
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(move || loop {
-            let message = receiver.lock().unwrap().recv();
+        let thread = thread::spawn(move || {
+            loop {
+                let message = receiver.lock().unwrap().recv();
 
-            match message {
-                Ok(job) => {
-                    println!("Worker {id} got a job; executing.");
+                match message {
+                    Ok(job) => {
+                        println!("Worker {id} got a job; executing.");
 
-                    job();
-                }
-                Err(_) => {
-                    println!("Worker {id} disconnected; shutting down.");
-                    break;
+                        job();
+                    }
+                    Err(_) => {
+                        println!("Worker {id} disconnected; shutting down.");
+                        break;
+                    }
                 }
             }
         });
