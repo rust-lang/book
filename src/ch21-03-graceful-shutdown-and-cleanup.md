@@ -4,7 +4,7 @@ The code in Listing 21-20 is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about the `workers`,
 `id`, and `thread` fields that we’re not using in a direct way that reminds us
 we’re not cleaning up anything. When we use the less elegant
-<kbd>ctrl</kbd>-<kbd>c</kbd> method to halt the main thread, all other threads
+<kbd>ctrl</kbd>-<kbd>C</kbd> method to halt the main thread, all other threads
 are stopped immediately as well, even if they’re in the middle of serving a
 request.
 
@@ -34,9 +34,9 @@ quite work yet.
 
 </Listing>
 
-First, we loop through each of the thread pool `workers`. We use `&mut` for this
+First we loop through each of the thread pool `workers`. We use `&mut` for this
 because `self` is a mutable reference, and we also need to be able to mutate
-`worker`. For each worker, we print a message saying that this particular
+`worker`. For each `worker`, we print a message saying that this particular
 `Worker` instance is shutting down, and then we call `join` on that `Worker`
 instance’s thread. If the call to `join` fails, we use `unwrap` to make Rust
 panic and go into an ungraceful shutdown.
@@ -61,14 +61,14 @@ wouldn’t have a thread to run.
 However, the _only_ time this would come up would be when dropping the `Worker`.
 In exchange, we’d have to deal with an `Option<thread::JoinHandle<()>>` anywhere
 we accessed `worker.thread`. Idiomatic Rust uses `Option` quite a bit, but when
-you find yourself wrapping something you know will always be present in `Option`
-as a workaround like this, it’s a good idea to look for alternative approaches.
-They can make your code cleaner and less error-prone.
+you find yourself wrapping something you know will always be present in an
+`Option` as a workaround like this, it’s a good idea to look for alternative
+approaches to make your code cleaner and less error-prone.
 
 In this case, a better alternative exists: the `Vec::drain` method. It accepts
-a range parameter to specify which items to remove from the `Vec`, and returns
-an iterator of those items. Passing the `..` range syntax will remove _every_
-value from the `Vec`.
+a range parameter to specify which items to remove from the vector and returns
+an iterator of those items. Passing the `..` range syntax will remove *every*
+value from the vector.
 
 So we need to update the `ThreadPool` `drop` implementation like this:
 
@@ -81,17 +81,20 @@ So we need to update the `ThreadPool` `drop` implementation like this:
 </Listing>
 
 This resolves the compiler error and does not require any other changes to our
-code.
+code. Note that, because drop can be called when panicking, the unwrap
+could also panic and cause a double panic, which immediately crashes the
+program and ends any cleanup in progress. This is fine for an example program,
+but isn’t recommended for production code.
 
 ### Signaling to the Threads to Stop Listening for Jobs
 
 With all the changes we’ve made, our code compiles without any warnings.
 However, the bad news is that this code doesn’t function the way we want it to
 yet. The key is the logic in the closures run by the threads of the `Worker`
-instances: at the moment, we call `join`, but that won’t shut down the threads
-because they `loop` forever looking for jobs. If we try to drop our `ThreadPool`
-with our current implementation of `drop`, the main thread will block forever,
-waiting for the first thread to finish.
+instances: at the moment, we call `join`, but that won’t shut down the threads,
+because they `loop` forever looking for jobs. If we try to drop our
+`ThreadPool` with our current implementation of `drop`, the main thread will
+block forever, waiting for the first thread to finish.
 
 To fix this problem, we’ll need a change in the `ThreadPool` `drop`
 implementation and then a change in the `Worker` loop.
@@ -102,7 +105,7 @@ changes to `ThreadPool` to explicitly drop `sender`. Unlike with the thread,
 here we _do_ need to use an `Option` to be able to move `sender` out of
 `ThreadPool` with `Option::take`.
 
-<Listing number="21-23" file-name="src/lib.rs" caption="Explicitly drop `sender` before joining the `Worker` threads">
+<Listing number="21-23" file-name="src/lib.rs" caption="Explicitly dropping `sender` before joining the `Worker` threads">
 
 ```rust,noplayground,not_desired_behavior
 {{#rustdoc_include ../listings/ch21-web-server/listing-21-23/src/lib.rs:here}}
@@ -187,7 +190,7 @@ wait for each `Worker` thread to finish.
 Notice one interesting aspect of this particular execution: the `ThreadPool`
 dropped the `sender`, and before any `Worker` received an error, we tried to
 join `Worker` 0. `Worker` 0 had not yet gotten an error from `recv`, so the main
-thread blocked waiting for `Worker` 0 to finish. In the meantime, `Worker` 3
+thread blocked, waiting for `Worker` 0 to finish. In the meantime, `Worker` 3
 received a job and then all threads received an error. When `Worker` 0 finished,
 the main thread waited for the rest of the `Worker` instances to finish. At that
 point, they had all exited their loops and stopped.

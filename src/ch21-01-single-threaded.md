@@ -46,7 +46,7 @@ Using `TcpListener`, we can listen for TCP connections at the address
 `127.0.0.1:7878`. In the address, the section before the colon is an IP address
 representing your computer (this is the same on every computer and doesn’t
 represent the authors’ computer specifically), and `7878` is the port. We’ve
-chosen this port for two reasons: HTTP isn’t normally accepted on this port so
+chosen this port for two reasons: HTTP isn’t normally accepted on this port, so
 our server is unlikely to conflict with any other web server you might have
 running on your machine, and 7878 is _rust_ typed on a telephone.
 
@@ -56,14 +56,11 @@ because, in networking, connecting to a port to listen to is known as “binding
 to a port.”
 
 The `bind` function returns a `Result<T, E>`, which indicates that it’s
-possible for binding to fail. For example, connecting to port 80 requires
-administrator privileges (non-administrators can listen only on ports higher
-than 1023), so if we tried to connect to port 80 without being an
-administrator, binding wouldn’t work. Binding also wouldn’t work, for example,
-if we ran two instances of our program and so had two programs listening to the
-same port. Because we’re writing a basic server just for learning purposes, we
-won’t worry about handling these kinds of errors; instead, we use `unwrap` to
-stop the program if errors happen.
+possible for binding to fail. For example, if we ran two instances of our
+program and so had two programs listening to the same port. Because we’re
+writing a basic server just for learning purposes, we won’t worry about
+handling these kinds of errors; instead, we use `unwrap` to stop the program if
+errors happen.
 
 The `incoming` method on `TcpListener` returns an iterator that gives us a
 sequence of streams (more specifically, streams of type `TcpStream`). A single
@@ -112,16 +109,16 @@ part of the `drop` implementation. Browsers sometimes deal with closed
 connections by retrying, because the problem might be temporary.
 
 Browsers also sometimes open multiple connections to the server without sending
-any requests, so that if they *do* later send requests, they can happen faster.
-When this happens, our server will see each connection, regardless of whether
-there are any requests over that connection. Many versions of Chrome-based
-browsers do this, for example; you can disable that optimization by using =
-private browsing mode or use a different browser.
+any requests, so that if they *do* later send requests, those requests can
+happen faster. When this happens, our server will see each connection,
+regardless of whether there are any requests over that connection. Many
+versions of Chrome-based browsers do this, for example; you can disable that
+optimization by using private browsing mode or using a different browser.
 
 The important factor is that we’ve successfully gotten a handle to a TCP
 connection!
 
-Remember to stop the program by pressing <kbd>ctrl</kbd>-<kbd>c</kbd> when
+Remember to stop the program by pressing <kbd>ctrl</kbd>-<kbd>C</kbd> when
 you’re done running a particular version of the code. Then restart the program
 by invoking the `cargo run` command after you’ve made each set of code changes
 to make sure you’re running the newest code.
@@ -150,8 +147,8 @@ connection, we now call the new `handle_connection` function and pass the
 `stream` to it.
 
 In the `handle_connection` function, we create a new `BufReader` instance that
-wraps a reference to the `stream`. The `BufReader` adds buffering by managing calls
-to the `std::io::Read` trait methods for us.
+wraps a reference to the `stream`. The `BufReader` adds buffering by managing
+calls to the `std::io::Read` trait methods for us.
 
 We create a variable named `http_request` to collect the lines of the request
 the browser sends to our server. We indicate that we want to collect these
@@ -229,7 +226,7 @@ The next part of the request line is _/_, which indicates the _uniform resource
 identifier_ _(URI)_ the client is requesting: a URI is almost, but not quite,
 the same as a _uniform resource locator_ _(URL)_. The difference between URIs
 and URLs isn’t important for our purposes in this chapter, but the HTTP spec
-uses the term URI, so we can just mentally substitute _URL_ for _URI_ here.
+uses the term _URI_, so we can just mentally substitute _URL_ for _URI_ here.
 
 The last part is the HTTP version the client uses, and then the request line
 ends in a CRLF sequence. (CRLF stands for _carriage return_ and _line feed_,
@@ -354,7 +351,7 @@ request to _/_.
 
 Right now, our web server will return the HTML in the file no matter what the
 client requested. Let’s add functionality to check that the browser is
-requesting _/_ before returning the HTML file and return an error if the
+requesting _/_ before returning the HTML file, and return an error if the
 browser requests anything else. For this we need to modify `handle_connection`,
 as shown in Listing 21-6. This new code checks the content of the request
 received against what we know a request for _/_ looks like and adds `if` and
@@ -404,7 +401,7 @@ indicating the response to the end user.
 Here, our response has a status line with status code 404 and the reason phrase
 `NOT FOUND`. The body of the response will be the HTML in the file _404.html_.
 You’ll need to create a _404.html_ file next to _hello.html_ for the error
-page; again feel free to use any HTML you want or use the example HTML in
+page; again feel free to use any HTML you want, or use the example HTML in
 Listing 21-8.
 
 <Listing number="21-8" file-name="404.html" caption="Sample content for the page to send back with any 404 response">
