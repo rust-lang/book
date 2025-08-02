@@ -753,7 +753,7 @@ async blocks compile to anonymous futures, we can put each loop in an async
 block and have the runtime run them both to completion using the `trpl::join`
 function.
 
-In the section Waiting for All Threads to Finish Using `join`
+In the section Waiting for All Threads to Finishing Using `join`
 Handles, we showed how to use the `join` method on
 the `JoinHandle` type returned when you call `std::thread::spawn`. The
 `trpl::join` function is similar, but for futures. When you give it two futures,
