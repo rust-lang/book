@@ -365,7 +365,7 @@ enum Either<A, B> {
 ```
 
 The `race` function returns `Left` with the output from the first future
-argument it finishes first, or `Right` with the output of the second future
+argument if it finishes first, or `Right` with the output of the second future
 argument if that one finishes first. This matches the order the arguments appear
 in when calling the function: the first argument is to the left of the second
 argument.
