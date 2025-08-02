@@ -125,7 +125,7 @@ is one more than the last position in the slice. Internally, the slice data
 structure stores the starting position and the length of the slice, which
 corresponds to _`ending_index`_ minus _`starting_index`_. So, in the case of `let
 world = &s[6..11];`, `world` would be a slice that contains a pointer to the
-byte at index 6 of `s` with a length value of `5`.
+byte at index 6 of `w` with a length value of `5`.
 
 Figure 4-7 shows this in a diagram.
 
