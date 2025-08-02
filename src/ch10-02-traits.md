@@ -89,7 +89,7 @@ library crate:
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs}}
 ```
 
-This code prints `1 new post: horse_ebooks: of course, as you probably already
+This code prints `1 new social post: horse_ebooks: of course, as you probably already
 know, people`.
 
 Other crates that depend on the `aggregator` crate can also bring the `Summary`
