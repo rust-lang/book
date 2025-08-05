@@ -6,11 +6,11 @@ fn main() {
     trpl::run(async {
         // ANCHOR: here
         let slow = async {
-            trpl::sleep(Duration::from_millis(100)).await;
-            "I finished!"
+            trpl::sleep(Duration::from_secs(5)).await;
+            "Finally finished"
         };
 
-        match timeout(slow, Duration::from_millis(10)).await {
+        match timeout(slow, Duration::from_secs(2)).await {
             Ok(message) => println!("Succeeded with '{message}'"),
             Err(duration) => {
                 println!("Failed after {} seconds", duration.as_secs())
