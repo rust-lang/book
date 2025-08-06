@@ -54,7 +54,7 @@ Rust تصمیم گرفته است که سیستم ماژول به این صور�
 <Listing number="7-5" file-name="src/lib.rs" caption="اعلان ماژول `hosting` به عنوان `pub` برای استفاده از آن در `eat_at_restaurant`">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-05/src/lib.rs}}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-05/src/lib.rs:here}}
 ```
 
 </Listing>
@@ -78,32 +78,71 @@ Rust تصمیم گرفته است که سیستم ماژول به این صور�
 <Listing number="7-7" file-name="src/lib.rs" caption="اضافه کردن کلمه کلیدی `pub` به `mod hosting` و `fn add_to_waitlist` به ما اجازه می‌دهد تابع را از `eat_at_restaurant` فراخوانی کنیم">
 
 ```rust,noplayground,test_harness
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-07/src/lib.rs}}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-07/src/lib.rs:here}}
 ```
 
 </Listing>
 
-حالا کد کامپایل می‌شود! برای اینکه ببینیم چرا اضافه کردن کلمه کلیدی `pub` به ما اجازه می‌دهد از این مسیرها در `eat_at_restaurant` استفاده کنیم، بیایید به مسیرهای مطلق و نسبی نگاه کنیم.
+Now the code will compile! To see why adding the `pub` keyword lets us use
+these paths in `eat_at_restaurant` with respect to the privacy rules, let’s look
+at the absolute and the relative paths.
 
-در مسیر مطلق، با `crate`، ریشه درخت ماژول جعبه (crate) خود شروع می‌کنیم. ماژول `front_of_house` در ریشه جعبه (crate) تعریف شده است. اگرچه `front_of_house` عمومی نیست، از آنجا که تابع `eat_at_restaurant` در همان ماژول به عنوان `front_of_house` تعریف شده است (یعنی `eat_at_restaurant` و `front_of_house` هم‌سطح هستند)، می‌توانیم از `eat_at_restaurant` به `front_of_house` ارجاع دهیم. بعد، ماژول `hosting` که با `pub` علامت‌گذاری شده است قرار دارد. ما می‌توانیم به ماژول والد `hosting` دسترسی داشته باشیم، بنابراین می‌توانیم به `hosting` دسترسی داشته باشیم. در نهایت، تابع `add_to_waitlist` با `pub` علامت‌گذاری شده است و می‌توانیم به ماژول والد آن دسترسی داشته باشیم، بنابراین این فراخوانی تابع کار می‌کند!
+In the absolute path, we start with `crate`, the root of our crate’s module
+tree. The `front_of_house` module is defined in the crate root. While
+`front_of_house` isn’t public, because the `eat_at_restaurant` function is
+defined in the same module as `front_of_house` (that is, `eat_at_restaurant`
+and `front_of_house` are siblings), we can refer to `front_of_house` from
+`eat_at_restaurant`. Next is the `hosting` module marked with `pub`. We can
+access the parent module of `hosting`, so we can access `hosting`. Finally, the
+`add_to_waitlist` function is marked with `pub` and we can access its parent
+module, so this function call works!
 
-در مسیر نسبی، منطق همان مسیر مطلق است با این تفاوت که مرحله اول متفاوت است: به جای شروع از ریشه جعبه (crate)، مسیر از `front_of_house` شروع می‌شود. ماژول `front_of_house` در همان ماژولی که `eat_at_restaurant` تعریف شده است قرار دارد، بنابراین مسیر نسبی که از ماژولی که `eat_at_restaurant` در آن تعریف شده است شروع می‌شود کار می‌کند. سپس، از آنجا که `hosting` و `add_to_waitlist` با `pub` علامت‌گذاری شده‌اند، بقیه مسیر کار می‌کند و این فراخوانی تابع معتبر است!
+In the relative path, the logic is the same as the absolute path except for the
+first step: rather than starting from the crate root, the path starts from
+`front_of_house`. The `front_of_house` module is defined within the same module
+as `eat_at_restaurant`, so the relative path starting from the module in which
+`eat_at_restaurant` is defined works. Then, because `hosting` and
+`add_to_waitlist` are marked with `pub`, the rest of the path works, and this
+function call is valid!
 
-اگر قصد دارید جعبه (crate) کتابخانه خود را به اشتراک بگذارید تا پروژه‌های دیگر بتوانند از کد شما استفاده کنند، API عمومی شما قرارداد شما با کاربران جعبه (crate) است که تعیین می‌کند چگونه می‌توانند با کد شما تعامل داشته باشند. نکات زیادی در مورد مدیریت تغییرات API عمومی شما وجود دارد که به افراد کمک می‌کند به جعبه (crate) شما وابسته باشند. این ملاحظات خارج از دامنه این کتاب هستند؛ اگر به این موضوع علاقه‌مند هستید، به [راهنمای API Rust][api-guidelines] مراجعه کنید.
+If you plan on sharing your library crate so other projects can use your code,
+your public API is your contract with users of your crate that determines how
+they can interact with your code. There are many considerations around managing
+changes to your public API to make it easier for people to depend on your
+crate. These considerations are out of the scope of this book; if you’re
+interested in this topic, see [The Rust API Guidelines][api-guidelines].
 
 > #### بهترین شیوه‌ها برای بسته‌هایی که یک جعبه (crate) باینری و یک جعبه (crate) کتابخانه‌ای دارند
 >
-> ما اشاره کردیم که یک بسته می‌تواند هم یک ریشه جعبه (crate) باینری در _src/main.rs_ و هم یک ریشه جعبه (crate) کتابخانه‌ای در _src/lib.rs_ داشته باشد، و هر دو جعبه (crate) به صورت پیش‌فرض نام بسته را خواهند داشت. معمولاً بسته‌هایی که این الگو را دنبال می‌کنند فقط به اندازه کافی کد در جعبه (crate) باینری دارند تا یک فایل اجرایی ایجاد کنند که کدی درون جعبه (crate) کتابخانه‌ای را فراخوانی کند. این کار به پروژه‌های دیگر اجازه می‌دهد از بیشتر عملکردهایی که بسته ارائه می‌دهد بهره‌مند شوند، زیرا کد جعبه (crate) کتابخانه‌ای می‌تواند به اشتراک گذاشته شود.
+> We mentioned that a package can contain both a _src/main.rs_ binary crate
+> root as well as a _src/lib.rs_ library crate root, and both crates will have
+> the package name by default. Typically, packages with this pattern of
+> containing both a library and a binary crate will have just enough code in the
+> binary crate to start an executable that calls code within the library crate.
+> This lets other projects benefit from most of the functionality that the
+> package provides because the library crate’s code can be shared.
 >
 > درخت ماژول باید در _src/lib.rs_ تعریف شود. سپس، هر آیتم عمومی را می‌توان در جعبه (crate) باینری با شروع مسیرها با نام بسته استفاده کرد. جعبه (crate) باینری به یک کاربر از جعبه (crate) کتابخانه‌ای تبدیل می‌شود، درست مثل اینکه یک جعبه (crate) کاملاً خارجی از جعبه (crate) کتابخانه‌ای استفاده می‌کند: تنها می‌تواند از API عمومی استفاده کند. این کار به شما کمک می‌کند یک API خوب طراحی کنید؛ نه تنها نویسنده آن هستید، بلکه یک کاربر نیز هستید!
 >
-> در [فصل ۱۲][ch12]، ما این شیوه سازمان‌دهی را با یک برنامه خط فرمان که هم یک جعبه (crate) باینری و هم یک جعبه (crate) کتابخانه‌ای دارد نشان خواهیم داد.
+> In [Chapter 12][ch12]<!-- ignore -->, we’ll demonstrate this organizational
+> practice with a command-line program that will contain both a binary crate
+> and a library crate.
 
-### شروع مسیرهای نسبی با `super`
+### Starting Relative Paths with `super`
 
-ما می‌توانیم مسیرهای نسبی‌ای بسازیم که از ماژول والد شروع شوند، نه از ماژول فعلی یا ریشه جعبه (crate)، با استفاده از `super` در ابتدای مسیر. این مشابه شروع مسیر در فایل‌سیستم با سینتکس `..` است. استفاده از `super` به ما امکان می‌دهد به آیتمی که می‌دانیم در ماژول والد قرار دارد ارجاع دهیم، که می‌تواند جابجایی درخت ماژول را آسان‌تر کند، به خصوص زمانی که ماژول به ماژول والد مرتبط است اما ممکن است روزی والد به جای دیگری در درخت ماژول منتقل شود.
+We can construct relative paths that begin in the parent module, rather than
+the current module or the crate root, by using `super` at the start of the
+path. This is like starting a filesystem path with the `..` syntax. Using
+`super` allows us to reference an item that we know is in the parent module,
+which can make rearranging the module tree easier when the module is closely
+related to the parent but the parent might be moved elsewhere in the module
+tree someday.
 
-کد موجود در لیستینگ 7-8 را در نظر بگیرید که موقعیتی را مدل‌سازی می‌کند که در آن یک آشپز سفارش نادرست را اصلاح کرده و شخصاً آن را به مشتری می‌آورد. تابع `fix_incorrect_order` که در ماژول `back_of_house` تعریف شده است، تابع `deliver_order` را که در ماژول والد تعریف شده است، فراخوانی می‌کند و مسیر `deliver_order` را با شروع از `super` مشخص می‌کند.
+Consider the code in Listing 7-8 that models the situation in which a chef
+fixes an incorrect order and personally brings it out to the customer. The
+function `fix_incorrect_order` defined in the `back_of_house` module calls the
+function `deliver_order` defined in the parent module by specifying the path to
+`deliver_order`, starting with `super`.
 
 <Listing number="7-8" file-name="src/lib.rs" caption="فراخوانی یک تابع با استفاده از یک مسیر نسبی که با `super` شروع می‌شود">
 
@@ -134,7 +173,7 @@ Rust تصمیم گرفته است که سیستم ماژول به این صور�
 در مقابل، اگر یک enum را عمومی کنیم، تمام متغیرهای آن نیز عمومی می‌شوند. ما فقط به `pub` قبل از کلمه کلیدی `enum` نیاز داریم، همان‌طور که در لیستینگ 7-10 نشان داده شده است.
 
 
-<Listing number="7-10" file-name="src/lib.rs" caption="عمومی کردن یک enum تمام متغیرهای آن را عمومی می‌کند">
+<Listing number="7-10" file-name="src/lib.rs" caption="Designating an enum as public makes all its variants public">
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-10/src/lib.rs}}

@@ -20,7 +20,7 @@ optionally one library crate. As a package grows, you can extract parts into
 separate crates that become external dependencies. This chapter covers all
 these techniques. For very large projects comprising a set of interrelated
 packages that evolve together, Cargo provides *workspaces*, which we’ll cover
-in the “Cargo Workspaces” section in Chapter 14.
+in “Cargo Workspaces” in Chapter 14.
 
 We’ll also discuss encapsulating implementation details, which lets you reuse
 code at a higher level: once you’ve implemented an operation, other code can
@@ -43,11 +43,11 @@ organization, including which details are exposed, which details are private,
 and what names are in each scope in your programs. These features, sometimes
 collectively referred to as the *module system*, include:
 
-* **Packages:** A Cargo feature that lets you build, test, and share crates
-* **Crates:** A tree of modules that produces a library or executable
-* **Modules** and **use:** Let you control the organization, scope, and
-  privacy of paths
-* **Paths:** A way of naming an item, such as a struct, function, or module
+* **Packages**: A Cargo feature that lets you build, test, and share crates
+* **Crates**: A tree of modules that produces a library or executable
+* **Modules and use**: Let you control the organization, scope, and privacy of
+paths
+* **Paths**: A way of naming an item, such as a struct, function, or module
 
 In this chapter, we’ll cover all these features, discuss how they interact, and
 explain how to use them to manage scope. By the end, you should have a solid
@@ -59,39 +59,37 @@ The first parts of the module system we’ll cover are packages and crates.
 
 A *crate* is the smallest amount of code that the Rust compiler considers at a
 time. Even if you run `rustc` rather than `cargo` and pass a single source code
-file (as we did all the way back in the “Writing and Running a Rust Program”
-section of Chapter 1), the compiler considers that file to be a crate. Crates
-can contain modules, and the modules may be defined in other files that get
-compiled with the crate, as we’ll see in the coming sections.
+file (as we did all the way back in “Writing and Running a Rust Program” in
+Chapter 1), the compiler considers that file to be a crate. Crates can contain
+modules, and the modules may be defined in other files that get compiled with
+the crate, as we’ll see in the coming sections.
 
 A crate can come in one of two forms: a binary crate or a library crate.
 *Binary crates* are programs you can compile to an executable that you can run,
-such as a command-line program or a server. Each must have a function called
+such as a command line program or a server. Each must have a function called
 `main` that defines what happens when the executable runs. All the crates we’ve
 created so far have been binary crates.
 
 *Library crates* don’t have a `main` function, and they don’t compile to an
 executable. Instead, they define functionality intended to be shared with
-multiple projects. For example, the `rand` crate we used in Chapter
-2 provides functionality that generates random numbers.
-Most of the time when Rustaceans say “crate”, they mean library crate, and they
-use “crate” interchangeably with the general programming concept of a “library”.
+multiple projects. For example, the `rand` crate we used in Chapter 2 provides
+functionality that generates random numbers. Most of the time when Rustaceans
+say “crate,” they mean library crate, and they use “crate” interchangeably with
+the general programming concept of a “library.”
 
 The *crate root* is a source file that the Rust compiler starts from and makes
-up the root module of your crate (we’ll explain modules in depth in the
-“Defining Modules to Control Scope and Privacy”
-section).
+up the root module of your crate (we’ll explain modules in depth in “Defining
+Modules to Control Scope and Privacy”).
 
 A *package* is a bundle of one or more crates that provides a set of
 functionality. A package contains a *Cargo.toml* file that describes how to
 build those crates. Cargo is actually a package that contains the binary crate
-for the command-line tool you’ve been using to build your code. The Cargo
+for the command line tool you’ve been using to build your code. The Cargo
 package also contains a library crate that the binary crate depends on. Other
 projects can depend on the Cargo library crate to use the same logic the Cargo
-command-line tool uses.
+command line tool uses.
 
-A crate can come in one of two forms: a binary crate or a library crate. A
-package can contain as many binary crates as you like, but at most only one
+A package can contain as many binary crates as you like, but at most only one
 library crate. A package must contain at least one crate, whether that’s a
 library or binary crate.
 
@@ -120,16 +118,9 @@ files to `rustc` to build the library or binary.
 
 Here, we have a package that only contains *src/main.rs*, meaning it only
 contains a binary crate named `my-project`. If a package contains *src/main.rs*
-and *src/lib.rs*, it has two crates: a binary and a library, both with the same
-name as the package. A package can have multiple binary crates by placing files
-in the *src/bin* directory: each file will be a separate binary crate.
-
-## Defining Modules to Control Scope and Privacy
-
-In this section, we’ll talk about modules and other parts of the module system,
-namely *paths*, which allow you to name items; the `use` keyword that brings a
-path into scope; and the `pub` keyword to make items public. We’ll also discuss
-the `as` keyword, external packages, and the glob operator.
+and *src/lib.rs*, it has two crates: a binary and a library, both with the
+same name as the package. A package can have multiple binary crates by placing
+files in the *src/bin* directory: each file will be a separate binary crate.
 
 ### Modules Cheat Sheet
 
@@ -145,7 +136,8 @@ great place to refer to as a reminder of how modules work.
 * **Declaring modules**: In the crate root file, you can declare new modules;
   say you declare a “garden” module with `mod garden;`. The compiler will look
   for the module’s code in these places:
-  * Inline, within curly brackets that replace the semicolon following `mod garden`
+  * Inline, within curly brackets that replace the semicolon following `mod
+    garden`
   * In the file *src/garden.rs*
   * In the file *src/garden/mod.rs*
 * **Declaring submodules**: In any file other than the crate root, you can
@@ -167,8 +159,9 @@ great place to refer to as a reminder of how modules work.
   `pub` before their declarations.
 * **The `use` keyword**: Within a scope, the `use` keyword creates shortcuts to
   items to reduce repetition of long paths. In any scope that can refer to
-  `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use crate::garden::vegetables::Asparagus;` and from then on you only need to
-  write `Asparagus` to make use of that type in the scope.
+  `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use
+  crate::garden::vegetables::Asparagus;` and from then on you only need to write
+  `Asparagus` to make use of that type in the scope.
 
 Here, we create a binary crate named `backyard` that illustrates these rules.
 The crate’s directory, also named `backyard`, contains these files and
@@ -180,14 +173,12 @@ backyard
 ├── Cargo.toml
 └── src
     ├── garden
-    │   └── vegetables.rs
+    │   └── vegetables.rs
     ├── garden.rs
     └── main.rs
 ```
 
 The crate root file in this case is *src/main.rs*, and it contains:
-
-Filename: src/main.rs
 
 ```
 use crate::garden::vegetables::Asparagus;
@@ -200,14 +191,18 @@ fn main() {
 }
 ```
 
+
+
 The `pub mod garden;` line tells the compiler to include the code it finds in
 *src/garden.rs*, which is:
 
-Filename: src/garden.rs
+src/garden.rs
 
 ```
 pub mod vegetables;
 ```
+
+
 
 Here, `pub mod vegetables;` means the code in *src/garden/vegetables.rs* is
 included too. That code is:
@@ -219,7 +214,12 @@ pub struct Asparagus {}
 
 Now let’s get into the details of these rules and demonstrate them in action!
 
-### Grouping Related Code in Modules
+## Defining Modules to Control Scope and Privacy
+
+In this section, we’ll talk about modules and other parts of the module system,
+namely *paths*, which allow you to name items; the `use` keyword that brings a
+path into scope; and the `pub` keyword to make items public. We’ll also discuss
+the `as` keyword, external packages, and the glob operator.
 
 *Modules* let us organize code within a crate for readability and easy reuse.
 Modules also allow us to control the *privacy* of items because code within a
@@ -241,11 +241,12 @@ chefs and cooks work in the kitchen, dishwashers clean up, and managers do
 administrative work.
 
 To structure our crate in this way, we can organize its functions into nested
-modules. Create a new library named `restaurant` by running `cargo new restaurant --lib`. Then enter the code in Listing 7-1 into *src/lib.rs* to
+modules. Create a new library named `restaurant` by running `cargo new
+restaurant --lib`. Then enter the code in Listing 7-1 into *src/lib.rs* to
 define some modules and function signatures; this code is the front of house
 section.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 mod front_of_house {
@@ -265,15 +266,14 @@ mod front_of_house {
 }
 ```
 
-Listing 7-1: A `front_of_house` module containing other
-modules that then contain functions
+Listing 7-1: A `front_of_house` module containing other modules that then contain functions
 
 We define a module with the `mod` keyword followed by the name of the module
 (in this case, `front_of_house`). The body of the module then goes inside curly
 brackets. Inside modules, we can place other modules, as in this case with the
 modules `hosting` and `serving`. Modules can also hold definitions for other
-items, such as structs, enums, constants, traits, and—as in Listing
-7-1—functions.
+items, such as structs, enums, constants, traits, and as in Listing 7-1,
+functions.
 
 By using modules, we can group related definitions together and name why
 they’re related. Programmers using this code can navigate the code based on the
@@ -288,6 +288,7 @@ known as the *module tree*.
 
 Listing 7-2 shows the module tree for the structure in Listing 7-1.
 
+
 ```
 crate
  └── front_of_house
@@ -300,8 +301,7 @@ crate
          └── take_payment
 ```
 
-Listing 7-2: The module tree for the code in Listing
-7-1
+Listing 7-2: The module tree for the code in Listing 7-1
 
 This tree shows how some of the modules nest inside other modules; for example,
 `hosting` nests inside `front_of_house`. The tree also shows that some modules
@@ -347,7 +347,7 @@ The `eat_at_restaurant` function is part of our library crate’s public API, so
 we mark it with the `pub` keyword. In the “Exposing Paths with the `pub`
 Keyword” section, we’ll go into more detail about `pub`.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 mod front_of_house {
@@ -365,8 +365,7 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-Listing 7-3: Calling the `add_to_waitlist` function using
-absolute and relative paths
+Listing 7-3: Calling the `add_to_waitlist` function using absolute and relative paths
 
 The first time we call the `add_to_waitlist` function in `eat_at_restaurant`,
 we use an absolute path. The `add_to_waitlist` function is defined in the same
@@ -399,6 +398,7 @@ each other.
 
 Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
 errors we get are shown in Listing 7-4.
+
 
 ```
 $ cargo build
@@ -435,8 +435,7 @@ For more information about this error, try `rustc --explain E0603`.
 error: could not compile `restaurant` (lib) due to 2 previous errors
 ```
 
-Listing 7-4: Compiler errors from building the code in
-Listing 7-3
+Listing 7-4: Compiler errors from building the code in Listing 7-3
 
 The error messages say that module `hosting` is private. In other words, we
 have the correct paths for the `hosting` module and the `add_to_waitlist`
@@ -459,14 +458,14 @@ inner code you can change without breaking outer code. However, Rust does give
 you the option to expose inner parts of child modules’ code to outer ancestor
 modules by using the `pub` keyword to make an item public.
 
-### Exposing Paths with the `pub` Keyword
+### Exposing Paths with the pub Keyword
 
 Let’s return to the error in Listing 7-4 that told us the `hosting` module is
 private. We want the `eat_at_restaurant` function in the parent module to have
 access to the `add_to_waitlist` function in the child module, so we mark the
 `hosting` module with the `pub` keyword, as shown in Listing 7-5.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 mod front_of_house {
@@ -475,20 +474,14 @@ mod front_of_house {
     }
 }
 
-pub fn eat_at_restaurant() {
-    // Absolute path
-    crate::front_of_house::hosting::add_to_waitlist();
-
-    // Relative path
-    front_of_house::hosting::add_to_waitlist();
-}
+// -- snip --
 ```
 
-Listing 7-5: Declaring the `hosting` module as `pub` to
-use it from `eat_at_restaurant`
+Listing 7-5: Declaring the `hosting` module as `pub` to use it from `eat_at_restaurant`
 
 Unfortunately, the code in Listing 7-5 still results in compiler errors, as
 shown in Listing 7-6.
+
 
 ```
 $ cargo build
@@ -521,8 +514,7 @@ For more information about this error, try `rustc --explain E0603`.
 error: could not compile `restaurant` (lib) due to 2 previous errors
 ```
 
-Listing 7-6: Compiler errors from building the code in
-Listing 7-5
+Listing 7-6: Compiler errors from building the code in Listing 7-5
 
 What happened? Adding the `pub` keyword in front of `mod hosting` makes the
 module public. With this change, if we can access `front_of_house`, we can
@@ -540,7 +532,7 @@ modules.
 Let’s also make the `add_to_waitlist` function public by adding the `pub`
 keyword before its definition, as in Listing 7-7.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 mod front_of_house {
@@ -549,18 +541,10 @@ mod front_of_house {
     }
 }
 
-pub fn eat_at_restaurant() {
-    // Absolute path
-    crate::front_of_house::hosting::add_to_waitlist();
-
-    // Relative path
-    front_of_house::hosting::add_to_waitlist();
-}
+// -- snip --
 ```
 
-Listing 7-7: Adding the `pub` keyword to `mod hosting`
-and `fn add_to_waitlist` lets us call the function from
-`eat_at_restaurant`
+Listing 7-7: Adding the `pub` keyword to `mod hosting` and `fn add_to_waitlist` lets us call the function from `eat_at_restaurant`
 
 Now the code will compile! To see why adding the `pub` keyword lets us use
 these paths in `eat_at_restaurant` with respect to the privacy rules, let’s look
@@ -588,40 +572,38 @@ If you plan on sharing your library crate so other projects can use your code,
 your public API is your contract with users of your crate that determines how
 they can interact with your code. There are many considerations around managing
 changes to your public API to make it easier for people to depend on your
-crate. These considerations are out of the scope of this book; if you’re
+crate. These considerations are beyond the scope of this book; if you’re
 interested in this topic, see The Rust API Guidelines at *https://rust-lang.github.io/api-guidelines/*.
 
- >
- > #### Best Practices for Packages with a Binary and a Library
- >
- > We mentioned that a package can contain both a *src/main.rs* binary crate
- > root as well as a *src/lib.rs* library crate root, and both crates will have
- > the package name by default. Typically, packages with this pattern of
- > containing both a library and a binary crate will have just enough code in the
- > binary crate to start an executable that calls code within the library crate.
- > This lets other projects benefit from most of the functionality that the
- > package provides because the library crate’s code can be shared.
- >
- > The module tree should be defined in *src/lib.rs*. Then, any public items can
- > be used in the binary crate by starting paths with the name of the package.
- > The binary crate becomes a user of the library crate just like a completely
- > external crate would use the library crate: it can only use the public API.
- > This helps you design a good API; not only are you the author, you’re also a
- > client!
- >
- > In Chapter 12, we’ll demonstrate this organizational
- > practice with a command-line program that will contain both a binary crate
- > and a library crate.
+> #### Best Practices for Packages with a Binary and a Library
+> 
+> We mentioned that a package can contain both a *src/main.rs* binary crate
+> root as well as a *src/lib.rs* library crate root, and both crates will have
+> the package name by default. Typically, packages with this pattern of
+> containing both a library and a binary crate will have just enough code in the
+> binary crate to start an executable that calls code defined in the library
+> crate. This lets other projects benefit from the most functionality that the
+> package provides because the library crate’s code can be shared.
+> 
+> The module tree should be defined in *src/lib.rs*. Then, any public items can
+> be used in the binary crate by starting paths with the name of the package.
+> The binary crate becomes a user of the library crate just like a completely
+> external crate would use the library crate: it can only use the public API.
+> This helps you design a good API; not only are you the author, you’re also a
+> client!
+>
+> In Chapter 12, we’ll demonstrate this organizational practice with a command
+> line program that will contain both a binary crate and a library crate.
 
-### Starting Relative Paths with `super`
+### Starting Relative Paths with super
 
 We can construct relative paths that begin in the parent module, rather than
 the current module or the crate root, by using `super` at the start of the
-path. This is like starting a filesystem path with the `..` syntax. Using
-`super` allows us to reference an item that we know is in the parent module,
-which can make rearranging the module tree easier when the module is closely
-related to the parent but the parent might be moved elsewhere in the module
-tree someday.
+path. This is like starting a filesystem path with the `..` syntax that means
+to go to the parent directory. Using `super` allows us to reference an item
+that we know is in the parent module, which can make rearranging the module
+tree easier when the module is closely related to the parent but the parent
+might be moved elsewhere in the module tree someday.
 
 Consider the code in Listing 7-8 that models the situation in which a chef
 fixes an incorrect order and personally brings it out to the customer. The
@@ -629,7 +611,7 @@ function `fix_incorrect_order` defined in the `back_of_house` module calls the
 function `deliver_order` defined in the parent module by specifying the path to
 `deliver_order`, starting with `super`.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 fn deliver_order() {}
@@ -644,8 +626,7 @@ mod back_of_house {
 }
 ```
 
-Listing 7-8: Calling a function using a relative path
-starting with `super`
+Listing 7-8: Calling a function using a relative path starting with `super`
 
 The `fix_incorrect_order` function is in the `back_of_house` module, so we can
 use `super` to go to the parent module of `back_of_house`, which in this case
@@ -669,7 +650,7 @@ comes with a meal, but the chef decides which fruit accompanies the meal based
 on what’s in season and in stock. The available fruit changes quickly, so
 customers can’t choose the fruit or even see which fruit they’ll get.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 mod back_of_house {
@@ -689,20 +670,19 @@ mod back_of_house {
 }
 
 pub fn eat_at_restaurant() {
-    // Order a breakfast in the summer with Rye toast
+    // Order a breakfast in the summer with Rye toast.
     let mut meal = back_of_house::Breakfast::summer("Rye");
-    // Change our mind about what bread we'd like
+    // Change our mind about what bread we'd like.
     meal.toast = String::from("Wheat");
     println!("I'd like {} toast please", meal.toast);
 
     // The next line won't compile if we uncomment it; we're not allowed
-    // to see or modify the seasonal fruit that comes with the meal
+    // to see or modify the seasonal fruit that comes with the meal.
     // meal.seasonal_fruit = String::from("blueberries");
 }
 ```
 
-Listing 7-9: A struct with some public fields and some
-private fields
+Listing 7-9: A struct with some public fields and some private fields
 
 Because the `toast` field in the `back_of_house::Breakfast` struct is public,
 in `eat_at_restaurant` we can write and read to the `toast` field using dot
@@ -720,7 +700,7 @@ have such a function, we couldn’t create an instance of `Breakfast` in
 In contrast, if we make an enum public, all of its variants are then public. We
 only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 mod back_of_house {
@@ -736,8 +716,7 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-Listing 7-10: Designating an enum as public makes all its
-variants public
+Listing 7-10: Designating an enum as public makes all its variants public.
 
 Because we made the `Appetizer` enum public, we can use the `Soup` and `Salad`
 variants in `eat_at_restaurant`.
@@ -752,7 +731,7 @@ There’s one more situation involving `pub` that we haven’t covered, and that
 our last module system feature: the `use` keyword. We’ll cover `use` by itself
 first, and then we’ll show how to combine `pub` and `use`.
 
-## Bringing Paths into Scope with the `use` Keyword
+## Bringing Paths into Scope with the use Keyword
 
 Having to write out the paths to call functions can feel inconvenient and
 repetitive. In Listing 7-7, whether we chose the absolute or relative path to
@@ -766,7 +745,7 @@ scope of the `eat_at_restaurant` function so we only have to specify
 `hosting::add_to_waitlist` to call the `add_to_waitlist` function in
 `eat_at_restaurant`.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 mod front_of_house {
@@ -782,8 +761,7 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-Listing 7-11: Bringing a module into scope with
-`use`
+Listing 7-11: Bringing a module into scope with `use`
 
 Adding `use` and a path in a scope is similar to creating a symbolic link in
 the filesystem. By adding `use crate::front_of_house::hosting` in the crate
@@ -796,7 +774,7 @@ Note that `use` only creates the shortcut for the particular scope in which the
 child module named `customer`, which is then a different scope than the `use`
 statement, so the function body won’t compile.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 mod front_of_house {
@@ -814,8 +792,7 @@ mod customer {
 }
 ```
 
-Listing 7-12: A `use` statement only applies in the scope
-it’s in
+Listing 7-12: A `use` statement only applies in the scope it’s in.
 
 The compiler error shows that the shortcut no longer applies within the
 `customer` module:
@@ -852,13 +829,13 @@ fix this problem, move the `use` within the `customer` module too, or reference
 the shortcut in the parent module with `super::hosting` within the child
 `customer` module.
 
-### Creating Idiomatic `use` Paths
+### Creating Idiomatic use Paths
 
 In Listing 7-11, you might have wondered why we specified `use crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in
 `eat_at_restaurant`, rather than specifying the `use` path all the way out to
 the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 mod front_of_house {
@@ -874,8 +851,7 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-Listing 7-13: Bringing the `add_to_waitlist` function
-into scope with `use`, which is unidiomatic
+Listing 7-13: Bringing the `add_to_waitlist` function into scope with `use`, which is unidiomatic
 
 Although both Listing 7-11 and Listing 7-13 accomplish the same task, Listing
 7-11 is the idiomatic way to bring a function into scope with `use`. Bringing
@@ -890,7 +866,7 @@ it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way
 to bring the standard library’s `HashMap` struct into the scope of a binary
 crate.
 
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::collections::HashMap;
@@ -901,8 +877,7 @@ fn main() {
 }
 ```
 
-Listing 7-14: Bringing `HashMap` into scope in an
-idiomatic way
+Listing 7-14: Bringing `HashMap` into scope in an idiomatic way
 
 There’s no strong reason behind this idiom: it’s just the convention that has
 emerged, and folks have gotten used to reading and writing Rust code this way.
@@ -912,7 +887,7 @@ into scope with `use` statements, because Rust doesn’t allow that. Listing 7-1
 shows how to bring two `Result` types into scope that have the same name but
 different parent modules, and how to refer to them.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 use std::fmt;
@@ -927,22 +902,21 @@ fn function2() -> io::Result<()> {
 }
 ```
 
-Listing 7-15: Bringing two types with the same name into
-the same scope requires using their parent modules.
+Listing 7-15: Bringing two types with the same name into the same scope requires using their parent modules.
 
 As you can see, using the parent modules distinguishes the two `Result` types.
 If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
 have two `Result` types in the same scope, and Rust wouldn’t know which one we
 meant when we used `Result`.
 
-### Providing New Names with the `as` Keyword
+### Providing New Names with the as Keyword
 
 There’s another solution to the problem of bringing two types of the same name
 into the same scope with `use`: after the path, we can specify `as` and a new
 local name, or *alias*, for the type. Listing 7-16 shows another way to write
 the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 use std::fmt::Result;
@@ -957,27 +931,26 @@ fn function2() -> IoResult<()> {
 }
 ```
 
-Listing 7-16: Renaming a type when it’s brought into
-scope with the `as` keyword
+Listing 7-16: Renaming a type when it’s brought into scope with the `as` keyword
 
 In the second `use` statement, we chose the new name `IoResult` for the
 `std::io::Result` type, which won’t conflict with the `Result` from `std::fmt`
 that we’ve also brought into scope. Listing 7-15 and Listing 7-16 are
 considered idiomatic, so the choice is up to you!
 
-### Re-exporting Names with `pub use`
+### Re-exporting Names with pub use
 
-When we bring a name into scope with the `use` keyword, the name available in
-the new scope is private. To enable the code that calls our code to refer to
-that name as if it had been defined in that code’s scope, we can combine `pub`
-and `use`. This technique is called *re-exporting* because we’re bringing an
-item into scope but also making that item available for others to bring into
-their scope.
+When we bring a name into scope with the `use` keyword, the name is private to
+the scope into which we imported it. To enable code outside that scope to refer
+to that name as if it had been defined in that scope, we can combine `pub` and
+`use`. This technique is called *re-exporting* because we’re bringing an item
+into scope but also making that item available for others to bring into their
+scope.
 
 Listing 7-17 shows the code in Listing 7-11 with `use` in the root module
 changed to `pub use`.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 mod front_of_house {
@@ -993,8 +966,7 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-Listing 7-17: Making a name available for any code to use
-from a new scope with `pub use`
+Listing 7-17: Making a name available for any code to use from a new scope with `pub use`
 
 Before this change, external code would have to call the `add_to_waitlist`
 function by using the path
@@ -1006,13 +978,11 @@ Re-exporting is useful when the internal structure of your code is different
 from how programmers calling your code would think about the domain. For
 example, in this restaurant metaphor, the people running the restaurant think
 about “front of house” and “back of house.” But customers visiting a restaurant
-probably won’t think about the parts of the restaurant in those terms. With
-`pub use`, we can write our code with one structure but expose a different
-structure. Doing so makes our library well organized for programmers working on
-the library and programmers calling the library. We’ll look at another example
-of `pub use` and how it affects your crate’s documentation in the “Exporting a
-Convenient Public API with `pub use`” section of
-Chapter 14.
+probably won’t think about the parts of the restaurant in those terms. With `pub use`, we can write our code with one structure but expose a different structure.
+Doing so makes our library well organized for programmers working on the library
+and programmers calling the library. We’ll look at another example of `pub use`
+and how it affects your crate’s documentation in “Exporting a Convenient Public
+API with `pub use`” in Chapter 14.
 
 ### Using External Packages
 
@@ -1026,21 +996,23 @@ added this line to *Cargo.toml*:
 * ch14-03-cargo-workspaces.md
 -->
 
-Filename: Cargo.toml
+Cargo.toml
 
 ```
 rand = "0.8.5"
 ```
+
+
 
 Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the
 `rand` package and any dependencies from crates.io at *https://crates.io/* and
 make `rand` available to our project.
 
 Then, to bring `rand` definitions into the scope of our package, we added a
-`use` line starting with the name of the crate, `rand`, and listed the items
-we wanted to bring into scope. Recall that in the “Generating a Random
-Number” section in Chapter 2, we brought the `Rng` trait
-into scope and called the `rand::thread_rng` function:
+`use` line starting with the name of the crate, `rand`, and listed the items we
+wanted to bring into scope. Recall that in “Generating a Random
+Number” in Chapter 2, we brought the `Rng` trait into
+scope and called the `rand::thread_rng` function:
 
 ```
 use rand::Rng;
@@ -1068,14 +1040,14 @@ use std::collections::HashMap;
 This is an absolute path starting with `std`, the name of the standard library
 crate.
 
-### Using Nested Paths to Clean Up Large `use` Lists
+### Using Nested Paths to Clean Up Large use Lists
 
 If we’re using multiple items defined in the same crate or same module, listing
 each item on its own line can take up a lot of vertical space in our files. For
 example, these two `use` statements we had in the guessing game in Listing 2-4
 bring items from `std` into scope:
 
-Filename: src/main.rs
+src/main.rs
 
 ```
 // --snip--
@@ -1084,12 +1056,14 @@ use std::io;
 // --snip--
 ```
 
+
+
 Instead, we can use nested paths to bring the same items into scope in one
 line. We do this by specifying the common part of the path, followed by two
 colons, and then curly brackets around a list of the parts of the paths that
 differ, as shown in Listing 7-18.
 
-Filename: src/main.rs
+src/main.rs
 
 ```
 // --snip--
@@ -1097,8 +1071,7 @@ use std::{cmp::Ordering, io};
 // --snip--
 ```
 
-Listing 7-18: Specifying a nested path to bring multiple
-items with the same prefix into scope
+Listing 7-18: Specifying a nested path to bring multiple items with the same prefix into scope
 
 In bigger programs, bringing many items into scope from the same crate or
 module using nested paths can reduce the number of separate `use` statements
@@ -1109,28 +1082,26 @@ two `use` statements that share a subpath. For example, Listing 7-19 shows two
 `use` statements: one that brings `std::io` into scope and one that brings
 `std::io::Write` into scope.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 use std::io;
 use std::io::Write;
 ```
 
-Listing 7-19: Two `use` statements where one is a subpath
-of the other
+Listing 7-19: Two `use` statements where one is a subpath of the other
 
 The common part of these two paths is `std::io`, and that’s the complete first
 path. To merge these two paths into one `use` statement, we can use `self` in
 the nested path, as shown in Listing 7-20.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 use std::io::{self, Write};
 ```
 
-Listing 7-20: Combining the paths in Listing 7-19 into
-one `use` statement
+Listing 7-20: Combining the paths in Listing 7-19 into one `use` statement
 
 This line brings `std::io` and `std::io::Write` into scope.
 
@@ -1146,14 +1117,17 @@ use std::collections::*;
 This `use` statement brings all public items defined in `std::collections` into
 the current scope. Be careful when using the glob operator! Glob can make it
 harder to tell what names are in scope and where a name used in your program
-was defined.
+was defined. Additionally, if the dependency changes its definitions, what
+you’ve imported changes as well, which may lead to compiler errors when you
+upgrade the dependency if the dependency adds a definition with the same name
+as a definition of yours in the same scope, for example.
 
-The glob operator is often used when testing to bring everything under test
-into the `tests` module; we’ll talk about that in the “How to Write
-Tests” section in Chapter 11. The glob operator
-is also sometimes used as part of the prelude pattern: see the standard
-library documentation
-for more information on that pattern.
+The glob operator is often used when testing to bring everything under test into
+the `tests` module; we’ll talk about that in “How to Write
+Tests” in Chapter 11. The glob operator is also
+sometimes used as part of the prelude pattern: see the standard library
+documentation for more
+information on that pattern.
 
 ## Separating Modules into Different Files
 
@@ -1173,7 +1147,7 @@ the `mod front_of_house;` declaration, so that *src/lib.rs* contains the code
 shown in Listing 7-21. Note that this won’t compile until we create the
 *src/front_of_house.rs* file in Listing 7-22.
 
-Filename: src/lib.rs
+src/lib.rs
 
 ```
 mod front_of_house;
@@ -1185,15 +1159,14 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-Listing 7-21: Declaring the `front_of_house` module whose
-body will be in *src/front_of_house.rs*
+Listing 7-21: Declaring the `front_of_house` module whose body will be in *src/front_of_house.rs*
 
 Next, place the code that was in the curly brackets into a new file named
 *src/front_of_house.rs*, as shown in Listing 7-22. The compiler knows to look
 in this file because it came across the module declaration in the crate root
 with the name `front_of_house`.
 
-Filename: src/front_of_house.rs
+src/front_of_house.rs
 
 ```
 pub mod hosting {
@@ -1201,8 +1174,7 @@ pub mod hosting {
 }
 ```
 
-Listing 7-22: Definitions inside the `front_of_house`
-module in *src/front_of_house.rs*
+Listing 7-22: Definitions inside the `front_of_house` module in *src/front_of_house.rs*
 
 Note that you only need to load a file using a `mod` declaration *once* in your
 module tree. Once the compiler knows the file is part of the project (and knows
@@ -1221,20 +1193,24 @@ named for its ancestors in the module tree, in this case *src/front_of_house*.
 To start moving `hosting`, we change *src/front_of_house.rs* to contain only
 the declaration of the `hosting` module:
 
-Filename: src/front_of_house.rs
+src/front_of_house.rs
 
 ```
 pub mod hosting;
 ```
 
+
+
 Then we create a *src/front_of_house* directory and a *hosting.rs* file to
 contain the definitions made in the `hosting` module:
 
-Filename: src/front_of_house/hosting.rs
+src/front_of_house/hosting.rs
 
 ```
 pub fn add_to_waitlist() {}
 ```
+
+
 
 If we instead put *hosting.rs* in the *src* directory, the compiler would
 expect the *hosting.rs* code to be in a `hosting` module declared in the crate
@@ -1242,30 +1218,29 @@ root, and not declared as a child of the `front_of_house` module. The
 compiler’s rules for which files to check for which modules’ code mean the
 directories and files more closely match the module tree.
 
- >
- > ### Alternate File Paths
- >
- > So far we’ve covered the most idiomatic file paths the Rust compiler uses,
- > but Rust also supports an older style of file path. For a module named
- > `front_of_house` declared in the crate root, the compiler will look for the
- > module’s code in:
- >
- > * *src/front_of_house.rs* (what we covered)
- > * *src/front_of_house/mod.rs* (older style, still supported path)
- >
- > For a module named `hosting` that is a submodule of `front_of_house`, the
- > compiler will look for the module’s code in:
- >
- > * *src/front_of_house/hosting.rs* (what we covered)
- > * *src/front_of_house/hosting/mod.rs* (older style, still supported path)
- >
- > If you use both styles for the same module, you’ll get a compiler error.
- > Using a mix of both styles for different modules in the same project is
- > allowed, but might be confusing for people navigating your project.
- >
- > The main downside to the style that uses files named *mod.rs* is that your
- > project can end up with many files named *mod.rs*, which can get confusing
- > when you have them open in your editor at the same time.
+> ### Alternate File Paths
+> 
+> So far we’ve covered the most idiomatic file paths the Rust compiler uses,
+> but Rust also supports an older style of file path. For a module named
+> `front_of_house` declared in the crate root, the compiler will look for the
+> module’s code in:
+> 
+> * *src/front_of_house.rs* (what we covered)
+> * *src/front_of_house/mod.rs* (older style, still supported path)
+> 
+> For a module named `hosting` that is a submodule of `front_of_house`, the
+> compiler will look for the module’s code in:
+> 
+> * *src/front_of_house/hosting.rs* (what we covered)
+> * *src/front_of_house/hosting/mod.rs* (older style, still supported path)
+> 
+> If you use both styles for the same module, you’ll get a compiler error.
+> Using a mix of both styles for different modules in the same project is
+> allowed, but might be confusing for people navigating your project.
+> 
+> The main downside to the style that uses files named *mod.rs* is that your
+> project can end up with many files named *mod.rs*, which can get confusing
+> when you have them open in your editor at the same time.
 
 We’ve moved each module’s code to a separate file, and the module tree remains
 the same. The function calls in `eat_at_restaurant` will work without any

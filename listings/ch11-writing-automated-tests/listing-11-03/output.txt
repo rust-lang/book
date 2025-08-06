@@ -10,6 +10,7 @@ test tests::exploration ... ok
 failures:
 
 ---- tests::another stdout ----
+
 thread 'tests::another' panicked at src/lib.rs:17:9:
 Make this test fail
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

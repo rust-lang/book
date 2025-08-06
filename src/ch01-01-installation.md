@@ -100,8 +100,34 @@ $ rustup self uninstall
 
 این کتاب هیچ فرضی درباره ابزارهایی که برای نوشتن کد راست استفاده می‌کنید، ندارد. تقریباً هر ویرایشگر متنی کار را انجام می‌دهد! با این حال، بسیاری از ویرایشگرها و محیط‌های توسعه یکپارچه (IDE) پشتیبانی داخلی برای راست دارند. همیشه می‌توانید فهرست نسبتاً جدیدی از بسیاری از ویرایشگرها و IDEها را در [صفحه ابزارها][tools] در وب‌سایت راست پیدا کنید.
 
-[otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html  
-[install]: https://www.rust-lang.org/tools/install  
-[msvc]: https://rust-lang.github.io/rustup/installation/windows-msvc.html  
-[community]: https://www.rust-lang.org/community  
+### کار با این کتاب به‌صورت آفلاین
+
+در چندین مثال، از پکیج‌هایی در Rust استفاده خواهیم کرد
+که فراتر از کتابخانه استاندارد هستند. برای اجرای این
+مثال‌ها، یا باید به اینترنت متصل باشید یا اینکه
+پیشاپیش این وابستگی‌ها را دانلود کرده باشید.
+برای دانلود پیشاپیش این وابستگی‌ها، می‌توانید
+دستورات زیر را اجرا کنید. (در ادامه، `cargo` و
+عملکرد هرکدام از این دستورات را به‌طور کامل توضیح خواهیم داد.)
+
+```console
+$ cargo new get-dependencies
+$ cd get-dependencies
+$ cargo add rand@0.8.5 trpl@0.2.0
+```
+
+این کار نسخه‌های دانلودشده‌ی این پکیج‌ها را در کش
+ذخیره می‌کند تا در آینده نیازی به دانلود مجدد نباشد.
+پس از اجرای این دستورات، نیازی به نگه‌داشتن
+پوشه‌ی `get-dependencies` ندارید. اگر این دستورات
+را اجرا کرده باشید، می‌توانید در باقی قسمت‌های
+این کتاب از فلگ `--offline` همراه با تمام دستورات
+`cargo` استفاده کنید تا به‌جای اتصال به شبکه،
+از نسخه‌های کش‌شده بهره ببرید.
+
+
+[otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
+[install]: https://www.rust-lang.org/tools/install
+[msvc]: https://rust-lang.github.io/rustup/installation/windows-msvc.html
+[community]: https://www.rust-lang.org/community
 [tools]: https://www.rust-lang.org/tools

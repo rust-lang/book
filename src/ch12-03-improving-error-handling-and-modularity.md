@@ -1,52 +1,74 @@
-## بازسازی برای بهبود ماژولار بودن و مدیریت خطاها
+## Refactoring to Improve Modularity and Error Handling
 
-برای بهبود برنامه خود، چهار مشکلی که به ساختار برنامه و نحوه مدیریت خطاهای بالقوه مربوط می‌شوند را رفع خواهیم کرد. 
+To improve our program, we’ll fix four problems that have to do with the
+program’s structure and how it’s handling potential errors. First, our `main`
+function now performs two tasks: it parses arguments and reads files. As our
+program grows, the number of separate tasks the `main` function handles will
+increase. As a function gains responsibilities, it becomes more difficult to
+reason about, harder to test, and harder to change without breaking one of its
+parts. It’s best to separate functionality so each function is responsible for
+one task.
 
-<ul dir="rtl">
-  <li>
-    <strong>تک‌مسئولیتی کردن تابع <code>main</code></strong>:  
-    در حال حاضر، تابع <code>main</code> دو وظیفه را انجام می‌دهد: تجزیه آرگومان‌ها و خواندن فایل‌ها. با رشد برنامه، تعداد وظایف جداگانه‌ای که تابع <code>main</code> باید مدیریت کند افزایش خواهد یافت. هرچه یک تابع مسئولیت‌های بیشتری داشته باشد، درک آن سخت‌تر می‌شود، تست کردن آن پیچیده‌تر خواهد شد و تغییر آن بدون آسیب به بخش‌های دیگر دشوارتر می‌شود. بهتر است قابلیت‌ها را جدا کنیم تا هر تابع فقط مسئول یک وظیفه باشد.
-  </li>
-  <li>
-    <strong>گروه‌بندی متغیرهای پیکربندی</strong>:  
-    متغیرهایی مانند <code>query</code> و <code>file_path</code> متغیرهای پیکربندی برای برنامه ما هستند، در حالی که متغیرهایی مانند <code>contents</code> برای اجرای منطق برنامه استفاده می‌شوند. هرچه تابع <code>main</code> طولانی‌تر شود، به متغیرهای بیشتری نیاز خواهد داشت که وارد دامنه شوند؛ و هرچه تعداد متغیرها بیشتر شود، پیگیری هدف هر متغیر دشوارتر خواهد شد. بهتر است متغیرهای پیکربندی را در یک ساختار گروه‌بندی کنیم تا هدف آن‌ها واضح‌تر باشد.
-  </li>
-  <li>
-    <strong>بهبود پیام‌های خطا</strong>:  
-    هنگام شکست در خواندن فایل، از <code>expect</code> برای چاپ پیام خطا استفاده کرده‌ایم، اما پیام خطا فقط <code>Should have been able to read the file</code> را چاپ می‌کند. خواندن یک فایل می‌تواند به دلایل مختلفی شکست بخورد: مثلاً ممکن است فایل وجود نداشته باشد یا ممکن است اجازه دسترسی به آن را نداشته باشیم. در حال حاضر، بدون توجه به شرایط، همان پیام خطا برای همه چیز چاپ می‌شود که اطلاعاتی به کاربر نمی‌دهد.
-  </li>
-  <li>
-    <strong>یکپارچه‌سازی مدیریت خطاها</strong>:  
-    اگر کاربر برنامه ما را بدون مشخص کردن تعداد کافی آرگومان اجرا کند، یک خطای <code>index out of bounds</code> از Rust دریافت می‌کنند که به وضوح مشکل را توضیح نمی‌دهد. بهتر است تمام کد مدیریت خطاها در یک مکان قرار گیرد تا نگهداری‌کنندگان آینده تنها یک مکان را برای بررسی تغییرات در منطق مدیریت خطا داشته باشند. این کار همچنین اطمینان حاصل می‌کند که پیام‌هایی که چاپ می‌شوند برای کاربران نهایی معنادار هستند.
-  </li>
-</ul>
+This issue also ties into the second problem: although `query` and `file_path`
+are configuration variables to our program, variables like `contents` are used
+to perform the program’s logic. The longer `main` becomes, the more variables
+we’ll need to bring into scope; the more variables we have in scope, the harder
+it will be to keep track of the purpose of each. It’s best to group the
+configuration variables into one structure to make their purpose clear.
 
-### جداسازی وظایف برای پروژه‌های دودویی
+The third problem is that we’ve used `expect` to print an error message when
+reading the file fails, but the error message just prints `Should have been
+able to read the file`. Reading a file can fail in a number of ways: for
+example, the file could be missing, or we might not have permission to open it.
+Right now, regardless of the situation, we’d print the same error message for
+everything, which wouldn’t give the user any information!
 
-مشکل تخصیص مسئولیت‌های چندگانه به تابع `main` در بسیاری از پروژه‌های دودویی رایج است. به همین دلیل، جامعه Rust دستورالعمل‌هایی برای تقسیم دغدغه‌های جداگانه یک برنامه دودویی ارائه داده است. این فرایند شامل مراحل زیر است:
+Fourth, we use `expect` to handle an error, and if the user runs our program
+without specifying enough arguments, they’ll get an `index out of bounds` error
+from Rust that doesn’t clearly explain the problem. It would be best if all the
+error-handling code were in one place so future maintainers had only one place
+to consult the code if the error-handling logic needed to change. Having all the
+error-handling code in one place will also ensure that we’re printing messages
+that will be meaningful to our end users.
 
+Let’s address these four problems by refactoring our project.
 
-<ul dir="rtl">
-<li> برنامه خود را به فایل‌های _main.rs_ و _lib.rs_ تقسیم کرده و منطق برنامه را به _lib.rs_ منتقل کنید. </li>
-<li> تا زمانی که منطق تجزیه آرگومان‌های خط فرمان کوچک است، می‌تواند در _main.rs_ باقی بماند. </li>
-<li> وقتی منطق تجزیه آرگومان‌ها پیچیده شد، آن را از _main.rs_ جدا کرده و به _lib.rs_ منتقل کنید. </li>
-</ul>
+### Separation of Concerns for Binary Projects
 
-وظایفی که پس از این فرایند در تابع `main` باقی می‌مانند باید محدود به موارد زیر باشند:
+The organizational problem of allocating responsibility for multiple tasks to
+the `main` function is common to many binary projects. As a result, the Rust
+community has developed guidelines for splitting the separate concerns of a
+binary program when `main` starts getting large. This process has the following
+steps:
 
-<ul dir="rtl">
-<li> فراخوانی منطق تجزیه آرگومان‌های خط فرمان با مقادیر آرگومان‌ها </li>
-<li> تنظیم هرگونه پیکربندی دیگر </li>
-<li> فراخوانی یک تابع `run` در _lib.rs_ </li>
-<li> مدیریت خطاها در صورت بازگرداندن خطا توسط `run` </li>
+- Split your program into a _main.rs_ file and a _lib.rs_ file and move your
+  program’s logic to _lib.rs_.
+- As long as your command line parsing logic is small, it can remain in
+  _main.rs_.
+- When the command line parsing logic starts getting complicated, extract it
+  from _main.rs_ and move it to _lib.rs_.
 
-</ul>
+The responsibilities that remain in the `main` function after this process
+should be limited to the following:
 
-این الگو درباره جداسازی وظایف است: _main.rs_ اجرای برنامه را مدیریت می‌کند و _lib.rs_ تمام منطق مربوط به کار مورد نظر را مدیریت می‌کند. از آنجا که نمی‌توان تابع `main` را مستقیماً تست کرد، این ساختار به شما اجازه می‌دهد تمام منطق برنامه خود را با انتقال آن به توابع در _lib.rs_ تست کنید. کدی که در _main.rs_ باقی می‌ماند به اندازه کافی کوچک خواهد بود که با خواندن آن از صحت آن اطمینان حاصل کنید. بیایید برنامه خود را با پیروی از این فرایند بازسازی کنیم.
+- Calling the command line parsing logic with the argument values
+- Setting up any other configuration
+- Calling a `run` function in _lib.rs_
+- Handling the error if `run` returns an error
 
-#### استخراج تجزیه‌کننده آرگومان‌ها
+This pattern is about separating concerns: _main.rs_ handles running the
+program and _lib.rs_ handles all the logic of the task at hand. Because you
+can’t test the `main` function directly, this structure lets you test all of
+your program’s logic by moving it into functions in _lib.rs_. The code that
+remains in _main.rs_ will be small enough to verify its correctness by reading
+it. Let’s rework our program by following this process.
 
-ما قابلیت تجزیه آرگومان‌ها را به یک تابع جداگانه استخراج می‌کنیم که تابع `main` آن را فراخوانی خواهد کرد تا برای انتقال منطق تجزیه آرگومان خط فرمان به فایل _src/lib.rs_ آماده شویم. لیست ۱۲-۵ شروع جدید تابع `main` را نشان می‌دهد که یک تابع جدید به نام `parse_config` را فراخوانی می‌کند، که در حال حاضر در _src/main.rs_ تعریف خواهیم کرد.
+#### Extracting the Argument Parser
+
+We’ll extract the functionality for parsing arguments into a function that
+`main` will call to prepare for moving the command line parsing logic to
+_src/lib.rs_. Listing 12-5 shows the new start of `main` that calls a new
+function `parse_config`, which we’ll define in _src/main.rs_ for the moment.
 
 <Listing number="12-5" file-name="src/main.rs" caption="استخراج تابع `parse_config` از `main`">
 
@@ -189,11 +211,19 @@
 
 عالی! این خروجی برای کاربران ما بسیار دوستانه‌تر است.
 
-### جداسازی منطق از `main`
+### Extracting Logic from `main`
 
-اکنون که بازآرایی برای تجزیه تنظیمات را به پایان رسانده‌ایم، بیایید به منطق برنامه بپردازیم. همان‌طور که در [«تفکیک نگرانی‌ها برای پروژه‌های باینری»](#separation-of-concerns-for-binary-projects)<!-- ignore --> بیان کردیم، تابعی به نام `run` استخراج خواهیم کرد که تمام منطقی که در حال حاضر در تابع `main` وجود دارد و مربوط به تنظیمات یا مدیریت خطا نیست را نگه می‌دارد. هنگامی که کار ما تمام شود، `main` مختصر و آسان برای بررسی خواهد بود و می‌توانیم تست‌هایی برای سایر منطق‌ها بنویسیم.
+Now that we’ve finished refactoring the configuration parsing, let’s turn to
+the program’s logic. As we stated in [“Separation of Concerns for Binary
+Projects”](#separation-of-concerns-for-binary-projects)<!-- ignore -->, we’ll
+extract a function named `run` that will hold all the logic currently in the
+`main` function that isn’t involved with setting up configuration or handling
+errors. When we’re done, `main` will be concise and easy to verify by
+inspection, and we’ll be able to write tests for all the other logic.
 
-لیست ۱۲-۱۱ تابع استخراج‌شده `run` را نشان می‌دهد. فعلاً فقط بهبود کوچکی انجام می‌دهیم که تابع را استخراج کنیم. همچنان تابع را در فایل _src/main.rs_ تعریف می‌کنیم.
+Listing 12-11 shows the extracted `run` function. For now, we’re just making
+the small, incremental improvement of extracting the function. We’re still
+defining the function in _src/main.rs_.
 
 <Listing number="12-11" file-name="src/main.rs" caption="استخراج تابع `run` از `main`">
 
@@ -260,36 +290,40 @@ Rust به ما یادآوری می‌کند که کد ما مقدار `Result` �
 
 بدنه‌های `if let` و `unwrap_or_else` در هر دو حالت یکسان هستند: ما خطا را چاپ کرده و خارج می‌شویم.
 
-### تقسیم کد به یک کتابخانه
+### Splitting Code into a Library Crate
 
-پروژه `minigrep` ما تا اینجا خوب پیش می‌رود! اکنون کد فایل _src/main.rs_ را تقسیم کرده و برخی از کد را به فایل _src/lib.rs_ منتقل می‌کنیم. به این ترتیب، می‌توانیم کد را تست کنیم و فایل _src/main.rs_ مسئولیت‌های کمتری داشته باشد.
+Our `minigrep` project is looking good so far! Now we’ll split the
+_src/main.rs_ file and put some code into the _src/lib.rs_ file. That way, we
+can test the code and have a _src/main.rs_ file with fewer responsibilities.
 
-بیایید تمام کدی که در تابع `main` نیست از _src/main.rs_ به _src/lib.rs_ منتقل کنیم:
+Let’s move all the code that isn’t in the `main` function from _src/main.rs_ to
+_src/lib.rs_:
 
-<ul dir="rtl">
+- The `run` function definition
+- The relevant `use` statements
+- The definition of `Config`
+- The `Config::build` function definition
 
-<li> تعریف تابع `run` </li>
-<li> دستورات `use` مرتبط </li>
-<li> تعریف `Config` </li>
-<li> تعریف تابع `Config::build` </li>
+The contents of _src/lib.rs_ should have the signatures shown in Listing 12-13
+(we’ve omitted the bodies of the functions for brevity). Note that this won’t
+compile until we modify _src/main.rs_ in Listing 12-14.
 
-</ul>
-
-محتویات فایل _src/lib.rs_ باید امضاهایی که در لیست ۱۲-۱۳ آمده است را داشته باشد (بدنه توابع برای اختصار حذف شده است). توجه داشته باشید که این کد تا زمانی که _src/main.rs_ را همانطور که در لیست ۱۲-۱۴ نشان داده شده است تغییر ندهیم کامپایل نمی‌شود.
-
-<Listing number="12-13" file-name="src/lib.rs" caption="انتقال `Config` و `run` به *src/lib.rs*">
+<Listing number="12-13" file-name="src/lib.rs" caption="Moving `Config` and `run` into *src/lib.rs*">
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs:here}}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs}}
 ```
 
 </Listing>
 
-ما به طور گسترده از کلمه کلیدی `pub` استفاده کرده‌ایم: در `Config`، فیلدهای آن، متد `build` و همچنین تابع `run`. اکنون یک crate کتابخانه‌ای داریم که یک API عمومی دارد و می‌توانیم آن را تست کنیم!
+We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its
+`build` method, and on the `run` function. We now have a library crate that has
+a public API we can test!
 
-حالا باید کدی که به _src/lib.rs_ منتقل کرده‌ایم را به محدوده crate باینری در _src/main.rs_ بیاوریم، همانطور که در لیست ۱۲-۱۴ نشان داده شده است.
+Now we need to bring the code we moved to _src/lib.rs_ into the scope of the
+binary crate in _src/main.rs_, as shown in Listing 12-14.
 
-<Listing number="12-14" file-name="src/main.rs" caption="استفاده از crate کتابخانه‌ای `minigrep` در *src/main.rs*">
+<Listing number="12-14" file-name="src/main.rs" caption="Using the `minigrep` library crate in *src/main.rs*">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/main.rs:here}}
@@ -297,7 +331,10 @@ Rust به ما یادآوری می‌کند که کد ما مقدار `Result` �
 
 </Listing>
 
-ما خط `use minigrep::Config` را اضافه کرده‌ایم تا نوع `Config` را از crate کتابخانه‌ای به محدوده crate باینری بیاوریم، و تابع `run` را با پیشوند نام crate فراخوانی کرده‌ایم. اکنون همه قابلیت‌ها باید متصل شوند و کار کنند. برنامه را با `cargo run` اجرا کنید و مطمئن شوید که همه چیز به درستی کار می‌کند.
+We add a `use minigrep::Config` line to bring the `Config` type from the
+library crate into the binary crate’s scope, and we prefix the `run` function
+with our crate name. Now all the functionality should be connected and should
+work. Run the program with `cargo run` and make sure everything works correctly.
 
 وای! این یک کار سخت بود، اما ما خودمان را برای موفقیت در آینده آماده کردیم. اکنون مدیریت خطاها بسیار آسان‌تر شده است و کد ما ماژولارتر شده است. از اینجا به بعد تقریباً تمام کارهای ما در فایل _src/lib.rs_ انجام خواهد شد.
 

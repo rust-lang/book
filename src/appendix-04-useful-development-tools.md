@@ -4,15 +4,14 @@
 
 ### فرمت‌دهی خودکار با `rustfmt`
 
-ابزار `rustfmt` کد شما را بر اساس سبک کدنویسی جامعه فرمت می‌کند. بسیاری از پروژه‌های مشترک از `rustfmt` استفاده می‌کنند تا از بحث در مورد سبک کدنویسی در هنگام نوشتن کدهای Rust جلوگیری شود: همه کدهای خود را با استفاده از این ابزار فرمت می‌کنند.
-
-برای نصب `rustfmt`، دستور زیر را وارد کنید:
-
-```console
-$ rustup component add rustfmt
-```
-
-این دستور ابزارهای `rustfmt` و `cargo-fmt` را به شما می‌دهد، مشابه به اینکه Rust ابزارهای `rustc` و `cargo` را ارائه می‌دهد. برای فرمت کردن هر پروژه‌ای که از Cargo استفاده می‌کند، دستور زیر را وارد کنید:
+نصب‌های Rust به‌صورت پیش‌فرض شامل `rustfmt`
+هستند، بنابراین احتمالاً هم‌اکنون برنامه‌های
+`rustfmt` و `cargo-fmt` روی سیستم شما
+نصب شده‌اند. این دو دستور همانند `rustc` و `cargo`
+هستند؛ به این صورت که `rustfmt` کنترل دقیق‌تری
+ارائه می‌دهد و `cargo-fmt` با ساختار و قراردادهای
+پروژه‌های مبتنی بر Cargo آشنایی دارد. برای قالب‌بندی
+هر پروژه‌ی Cargo، دستور زیر را وارد کنید:
 
 ```console
 $ cargo fmt
@@ -24,37 +23,45 @@ $ cargo fmt
 
 ### اصلاح کد شما با `rustfix`
 
-ابزار `rustfix` که همراه با نصب‌های Rust ارائه می‌شود، می‌تواند به طور خودکار هشدارهای کامپایلر را که یک راه حل واضح برای رفع مشکل دارند و احتمالاً همان چیزی است که می‌خواهید، اصلاح کند. احتمالاً قبلاً هشدارهای کامپایلر را دیده‌اید. به عنوان مثال، کد زیر را در نظر بگیرید:
+ابزار `rustfix` همراه با نصب Rust ارائه می‌شود و
+می‌تواند هشدارهای کامپایلر را به‌صورت خودکار
+برطرف کند، آن هم در مواردی که راه‌حل مشخصی
+برای رفع مشکل وجود دارد و احتمالاً همان چیزی است
+که شما انتظار دارید. احتمالاً پیش از این با
+هشدارهای کامپایلر روبه‌رو شده‌اید. برای مثال،
+به کد زیر توجه کنید:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn do_something() {}
-
 fn main() {
-    for i in 0..100 {
-        do_something();
-    }
+    let mut x = 42;
+    println!("{x}");
 }
 ```
 
-در اینجا، ما تابع `do_something` را 100 بار فراخوانی می‌کنیم، اما هرگز متغیر `i` را در بدنه حلقه `for` استفاده نمی‌کنیم. Rust در این مورد به ما هشدار می‌دهد:
+در اینجا، متغیر `x` را به‌صورت قابل‌تغییر (mutable)  
+تعریف کرده‌ایم، اما در عمل هیچ‌گاه آن را تغییر نمی‌دهیم.  
+Rust در این مورد به ما هشدار می‌دهد:
 
 ```console
 $ cargo build
    Compiling myprogram v0.1.0 (file:///projects/myprogram)
-warning: unused variable: `i`
- --> src/main.rs:4:9
+warning: variable does not need to be mutable
+ --> src/main.rs:2:9
   |
-4 |     for i in 0..100 {
-  |         ^ help: consider using `_i` instead
+2 |     let mut x = 0;
+  |         ----^
+  |         |
+  |         help: remove this `mut`
   |
-  = note: #[warn(unused_variables)] on by default
-
-    Finished dev [unoptimized + debuginfo] target(s) in 0.50s
+  = note: `#[warn(unused_mut)]` on by default
 ```
 
-هشدار پیشنهاد می‌دهد که به جای آن از نام `_i` استفاده کنیم: خط زیرنویس نشان می‌دهد که قصد داریم این متغیر استفاده نشده باقی بماند. ما می‌توانیم به طور خودکار این پیشنهاد را با استفاده از ابزار `rustfix` و اجرای دستور `cargo fix` اعمال کنیم:
+هشدار پیشنهاد می‌دهد که کلمه‌ی کلیدی `mut`
+را حذف کنیم. می‌توانیم این پیشنهاد را به‌صورت
+خودکار با استفاده از ابزار `rustfix` و اجرای دستور
+`cargo fix` اعمال کنیم:
 
 ```console
 $ cargo fix
@@ -68,28 +75,23 @@ $ cargo fix
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn do_something() {}
-
 fn main() {
-    for _i in 0..100 {
-        do_something();
-    }
+    let x = 42;
+    println!("{x}");
 }
 ```
 
-اکنون متغیر حلقه `for` به نام `_i` تغییر یافته است و هشدار دیگر نمایش داده نمی‌شود.
+متغیر `x` اکنون غیرقابل‌تغییر (immutable) شده است
+و هشدار نیز دیگر نمایش داده نمی‌شود.
 
 همچنین می‌توانید از دستور `cargo fix` برای انتقال کد خود بین نسخه‌های مختلف Rust استفاده کنید. نسخه‌ها در [ضمیمه ه][editions] پوشش داده شده‌اند.
 
 ### لینت‌های بیشتر با Clippy
 
-ابزار Clippy مجموعه‌ای از تحلیلگرهای کد (لینت‌ها) است که کد شما را تحلیل می‌کنند تا بتوانید اشتباهات رایج را پیدا کرده و کد Rust خود را بهبود دهید.
-
-برای نصب Clippy، دستور زیر را وارد کنید:
-
-```console
-$ rustup component add clippy
-```
+ابزار Clippy مجموعه‌ای از lintها برای تحلیل کد شماست
+تا بتوانید خطاهای رایج را شناسایی کرده و کد Rust خود
+را بهبود دهید. Clippy همراه با نصب استاندارد Rust
+در دسترس است.
 
 برای اجرای تحلیلگرهای Clippy روی هر پروژه Cargo، دستور زیر را وارد کنید:
 
@@ -99,7 +101,7 @@ $ cargo clippy
 
 به عنوان مثال، فرض کنید برنامه‌ای می‌نویسید که از یک مقدار تقریبی برای یک ثابت ریاضی، مانند pi، استفاده می‌کند، همانطور که این برنامه انجام می‌دهد:
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing file-name="src/main.rs">
 
 ```rust
 fn main() {
@@ -109,7 +111,9 @@ fn main() {
 }
 ```
 
-اجرای `cargo clippy` روی این پروژه به این خطا منجر می‌شود:
+</Listing>
+
+اجرای `cargo clippy` روی این پروژه منجر به این خطا می‌شود:
 
 ```text
 error: approximate value of `f{32, 64}::consts::PI` found
@@ -123,9 +127,15 @@ error: approximate value of `f{32, 64}::consts::PI` found
   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
-این خطا به شما اطلاع می‌دهد که Rust از قبل یک ثابت دقیق‌تر `PI` تعریف کرده است و برنامه شما اگر از این ثابت استفاده کند، صحیح‌تر خواهد بود. سپس کد خود را تغییر می‌دهید تا از ثابت `PI` استفاده کنید. کد زیر هیچ خطا یا هشداری از Clippy تولید نمی‌کند:
+این خطا به شما اطلاع می‌دهد که Rust از پیش
+ثابت `PI` دقیق‌تری را تعریف کرده است، و استفاده از
+این ثابت در برنامه‌تان باعث درستی بیشتر کد می‌شود.
+بنابراین باید کد خود را طوری تغییر دهید که از
+ثابت `PI` استفاده کند.
 
-<span class="filename">Filename: src/main.rs</span>
+کد زیر هیچ خطا یا هشداری از Clippy ایجاد نمی‌کند:
+
+<Listing file-name="src/main.rs">
 
 ```rust
 fn main() {
@@ -135,18 +145,31 @@ fn main() {
 }
 ```
 
-برای اطلاعات بیشتر درباره Clippy، به [مستندات آن][clippy] مراجعه کنید.
+</Listing>
 
-[clippy]: https://github.com/rust-lang/rust-clippy
+برای اطلاعات بیشتر درباره Clippy، به [مستندات آن][clippy] مراجعه کنید.
 
 ### یکپارچه‌سازی IDE با استفاده از `rust-analyzer`
 
-برای کمک به یکپارچه‌سازی با IDE، جامعه Rust استفاده از [`rust-analyzer`][rust-analyzer]<!-- ignore --> را توصیه می‌کند. این ابزار مجموعه‌ای از ابزارهای متمرکز بر کامپایلر است که با [پروتکل زبان سرور][lsp]<!-- ignore --> کار می‌کند، که یک مشخصه برای ارتباط IDEها و زبان‌های برنامه‌نویسی با یکدیگر است. مشتری‌های مختلف می‌توانند از `rust-analyzer` استفاده کنند، مانند [پلاگین Rust analyzer برای Visual Studio Code][vscode].
+برای یکپارچه‌سازی بهتر با محیط‌های توسعه (IDE)،
+جامعه‌ی Rust استفاده از [`rust-analyzer`][rust-analyzer]
+را توصیه می‌کند. این ابزار مجموعه‌ای از ابزارهای
+وابسته به کامپایلر است که با [پروتکل زبان سرور (LSP)][lsp]
+ارتباط برقرار می‌کند؛ این پروتکل مشخصاتی است برای
+ارتباط میان IDEها و زبان‌های برنامه‌نویسی.
+کلاینت‌های مختلفی می‌توانند از `rust-analyzer`
+استفاده کنند، مانند [افزونه‌ی Rust Analyzer برای
+Visual Studio Code][vscode].
 
+برای دریافت دستورالعمل نصب، به [صفحه‌ی اصلی
+پروژه‌ی `rust-analyzer`][rust-analyzer] مراجعه کنید،
+سپس پشتیبانی از language server را در IDE خود نصب نمایید.
+پس از آن، امکاناتی مانند تکمیل خودکار، پرش به تعریف،
+و نمایش خطاها به‌صورت درون‌خطی به IDE شما اضافه خواهد شد.
+
+[rustfmt]: https://github.com/rust-lang/rustfmt
+[editions]: appendix-05-editions.md
+[clippy]: https://github.com/rust-lang/rust-clippy
+[rust-analyzer]: https://rust-analyzer.github.io
 [lsp]: http://langserver.org/
 [vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer
-
-برای دستورالعمل‌های نصب، به [صفحه اصلی پروژه `rust-analyzer`][rust-analyzer]<!-- ignore --> مراجعه کنید، سپس پشتیبانی از سرور زبان را در IDE خاص خود نصب کنید. IDE شما قابلیت‌هایی مانند تکمیل خودکار، پرش به تعریف و نمایش خطاها به صورت درون‌خطی را به دست خواهد آورد.
-
-[rust-analyzer]: https://rust-analyzer.github.io
-[editions]: appendix-05-editions.md

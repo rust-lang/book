@@ -130,13 +130,12 @@ This code will compile without any errors. Note the `r#` prefix on the function
 name in its definition as well as where the function is called in `main`.
 
 Raw identifiers allow you to use any word you choose as an identifier, even if
-that word happens to be a reserved keyword. This gives us more freedom to
-choose identifier names, as well as lets us integrate with programs written in
-a language where these words aren’t keywords. In addition, raw identifiers
-allow you to use libraries written in a different Rust edition than your crate
-uses. For example, `try` isn’t a keyword in the 2015 edition but is in the 2018
-and 2021 editions. If you depend on a library that is written using the 2015
+that word happens to be a reserved keyword. This gives us more freedom to choose
+identifier names, as well as lets us integrate with programs written in a
+language where these words aren’t keywords. In addition, raw identifiers allow
+you to use libraries written in a different Rust edition than your crate uses.
+For example, `try` isn’t a keyword in the 2015 edition but is in the 2018, 2021,
+and 2024 editions. If you depend on a library that is written using the 2015
 edition and has a `try` function, you’ll need to use the raw identifier syntax,
-`r#try` in this case, to call that function from your 2021 edition code. See
-Appendix E for more information on editions.
-
+`r#try` in this case, to call that function from your code on later editions.
+See Appendix E for more information on editions.

@@ -18,15 +18,15 @@ fn main() {}
 
     assert_eq!(
         &result.unwrap(),
-        r#"<figure class="listing">
+        r##"<figure class="listing" id="listing-1-2">
 <span class="file-name">Filename: src/main.rs</span>
 
 ````rust
 fn main() {}
 ````
 
-<figcaption>Listing 1-2: A write-up which <em>might</em> include inline Markdown like <code>code</code> etc.</figcaption>
-</figure>"#
+<figcaption><a href="#listing-1-2">Listing 1-2</a>: A write-up which <em>might</em> include inline Markdown like <code>code</code> etc.</figcaption>
+</figure>"##
     );
 }
 
@@ -80,7 +80,7 @@ fn get_a_box_of<T>(t: T) -> Box<T> {
 
     assert_eq!(
         &result.unwrap(),
-        r#"<figure class="listing">
+        r##"<figure class="listing" id="listing-34-5">
 
 ````rust
 fn get_a_box_of<T>(t: T) -> Box<T> {
@@ -88,8 +88,8 @@ fn get_a_box_of<T>(t: T) -> Box<T> {
 }
 ````
 
-<figcaption>Listing 34-5: This has a <code>Box&lt;T&gt;</code> in it.</figcaption>
-</figure>"#
+<figcaption><a href="#listing-34-5">Listing 34-5</a>: This has a <code>Box&lt;T&gt;</code> in it.</figcaption>
+</figure>"##
     );
 }
 
@@ -115,9 +115,9 @@ Save the file and go back to your terminal window"#,
     assert!(result.is_ok());
     assert_eq!(
         result.unwrap(),
-        r#"Now open the *main.rs* file you just created and enter the code in Listing 1-1.
+        r##"Now open the *main.rs* file you just created and enter the code in Listing 1-1.
 
-<figure class="listing">
+<figure class="listing" id="listing-1-1">
 <span class="file-name">Filename: main.rs</span>
 
 ````rust
@@ -126,10 +126,10 @@ fn main() {
 }
 ````
 
-<figcaption>Listing 1-1: A program that prints <code>Hello, world!</code></figcaption>
+<figcaption><a href="#listing-1-1">Listing 1-1</a>: A program that prints <code>Hello, world!</code></figcaption>
 </figure>
 
-Save the file and go back to your terminal window"#
+Save the file and go back to your terminal window"##
     );
 }
 
@@ -153,18 +153,18 @@ This is the closing."#,
     assert!(result.is_ok());
     assert_eq!(
         result.unwrap(),
-        r#"This is the opening.
+        r##"This is the opening.
 
-<figure class="listing">
+<figure class="listing" id="listing-1-1">
 
 ````rust
 fn main() {}
 ````
 
-<figcaption>Listing 1-1: This is the caption</figcaption>
+<figcaption><a href="#listing-1-1">Listing 1-1</a>: This is the caption</figcaption>
 </figure>
 
-This is the closing."#
+This is the closing."##
     );
 }
 

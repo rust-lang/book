@@ -22,10 +22,6 @@ where
     T: Display,
 {
     println!("Announcement! {ann}");
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
+    if x.len() > y.len() { x } else { y }
 }
 // ANCHOR_END: here

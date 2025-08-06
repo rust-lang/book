@@ -11,12 +11,12 @@ directory, so all fixes need to be made in `/src/`.
 Rust’s standard library includes a number of very useful data structures called
 *collections*. Most other data types represent one specific value, but
 collections can contain multiple values. Unlike the built-in array and tuple
-types, the data these collections point to is stored on the heap, which means
-the amount of data does not need to be known at compile time and can grow or
-shrink as the program runs. Each kind of collection has different capabilities
-and costs, and choosing an appropriate one for your current situation is a
-skill you’ll develop over time. In this chapter, we’ll discuss three
-collections that are used very often in Rust programs:
+types, the data that these collections point to is stored on the heap, which
+means the amount of data does not need to be known at compile time and can grow
+or shrink as the program runs. Each kind of collection has different
+capabilities and costs, and choosing an appropriate one for your current
+situation is a skill you’ll develop over time. In this chapter, we’ll discuss
+three collections that are used very often in Rust programs:
 
 * A *vector* allows you to store a variable number of values next to each other.
 * A *string* is a collection of characters. We’ve mentioned the `String` type
@@ -43,12 +43,12 @@ lines of text in a file or the prices of items in a shopping cart.
 To create a new empty vector, we call the `Vec::new` function, as shown in
 Listing 8-1.
 
+
 ```
     let v: Vec<i32> = Vec::new();
 ```
 
-Listing 8-1: Creating a new, empty vector to hold values
-of type `i32`
+Listing 8-1: Creating a new, empty vector to hold values of type `i32`
 
 Note that we added a type annotation here. Because we aren’t inserting any
 values into this vector, Rust doesn’t know what kind of elements we intend to
@@ -67,12 +67,12 @@ new vector that holds the values you give it. Listing 8-2 creates a new
 because that’s the default integer type, as we discussed in the “Data
 Types” section of Chapter 3.
 
+
 ```
     let v = vec![1, 2, 3];
 ```
 
-Listing 8-2: Creating a new vector containing
-values
+Listing 8-2: Creating a new vector containing values
 
 Because we’ve given initial `i32` values, Rust can infer that the type of `v`
 is `Vec<i32>`, and the type annotation isn’t necessary. Next, we’ll look at how
@@ -83,6 +83,7 @@ to modify a vector.
 To create a vector and then add elements to it, we can use the `push` method,
 as shown in Listing 8-3.
 
+
 ```
     let mut v = Vec::new();
 
@@ -92,8 +93,7 @@ as shown in Listing 8-3.
     v.push(8);
 ```
 
-Listing 8-3: Using the `push` method to add values to a
-vector
+Listing 8-3: Using the `push` method to add values to a vector
 
 As with any variable, if we want to be able to change its value, we need to
 make it mutable using the `mut` keyword, as discussed in Chapter 3. The numbers
@@ -109,6 +109,7 @@ the values that are returned from these functions for extra clarity.
 Listing 8-4 shows both methods of accessing a value in a vector, with indexing
 syntax and the `get` method.
 
+
 ```
     let v = vec![1, 2, 3, 4, 5];
 
@@ -122,8 +123,7 @@ syntax and the `get` method.
     }
 ```
 
-Listing 8-4: Using indexing syntax and using the `get`
-method to access an item in a vector
+Listing 8-4: Using indexing syntax and using the `get` method to access an item in a vector
 
 Note a few details here. We use the index value of `2` to get the third element
 because vectors are indexed by number, starting at zero. Using `&` and `[]`
@@ -137,6 +137,7 @@ existing elements. As an example, let’s see what happens when we have a vector
 of five elements and then we try to access an element at index 100 with each
 technique, as shown in Listing 8-5.
 
+
 ```
     let v = vec![1, 2, 3, 4, 5];
 
@@ -144,8 +145,7 @@ technique, as shown in Listing 8-5.
     let does_not_exist = v.get(100);
 ```
 
-Listing 8-5: Attempting to access the element at index
-100 in a vector containing five elements
+Listing 8-5: Attempting to access the element at index 100 in a vector containing five elements
 
 When we run this code, the first `[]` method will cause the program to panic
 because it references a nonexistent element. This method is best used when you
@@ -172,6 +172,7 @@ to the first element in a vector and try to add an element to the end. This
 program won’t work if we also try to refer to that element later in the
 function.
 
+
 ```
     let mut v = vec![1, 2, 3, 4, 5];
 
@@ -182,8 +183,7 @@ function.
     println!("The first element is: {first}");
 ```
 
-Listing 8-6: Attempting to add an element to a vector
-while holding a reference to an item
+Listing 8-6: Attempting to add an element to a vector while holding a reference to an item
 
 Compiling this code will result in this error:
 
@@ -226,6 +226,7 @@ elements rather than use indices to access one at a time. Listing 8-7 shows how
 to use a `for` loop to get immutable references to each element in a vector of
 `i32` values and print them.
 
+
 ```
     let v = vec![100, 32, 57];
     for i in &v {
@@ -233,12 +234,12 @@ to use a `for` loop to get immutable references to each element in a vector of
     }
 ```
 
-Listing 8-7: Printing each element in a vector by
-iterating over the elements using a `for` loop
+Listing 8-7: Printing each element in a vector by iterating over the elements using a `for` loop
 
 We can also iterate over mutable references to each element in a mutable vector
 in order to make changes to all the elements. The `for` loop in Listing 8-8
 will add `50` to each element.
+
 
 ```
     let mut v = vec![100, 32, 57];
@@ -247,14 +248,12 @@ will add `50` to each element.
     }
 ```
 
-Listing 8-8: Iterating over mutable references to
-elements in a vector
+Listing 8-8: Iterating over mutable references to elements in a vector
 
 To change the value that the mutable reference refers to, we have to use the
 `*` dereference operator to get to the value in `i` before we can use the `+=`
 operator. We’ll talk more about the dereference operator in the “Following the
-Pointer to the Value with the Dereference Operator”
-section of Chapter 15.
+Reference to the Value” section of Chapter 15.
 
 Iterating over a vector, whether immutably or mutably, is safe because of the
 borrow checker’s rules. If we attempted to insert or remove items in the `for`
@@ -278,6 +277,7 @@ value types, and all the enum variants will be considered the same type: that
 of the enum. Then we can create a vector to hold that enum and so, ultimately,
 hold different types. We’ve demonstrated this in Listing 8-9.
 
+
 ```
     enum SpreadsheetCell {
         Int(i32),
@@ -292,8 +292,7 @@ hold different types. We’ve demonstrated this in Listing 8-9.
     ];
 ```
 
-Listing 8-9: Defining an `enum` to store values of
-different types in one vector
+Listing 8-9: Defining an `enum` to store values of different types in one vector
 
 Rust needs to know what types will be in the vector at compile time so it knows
 exactly how much memory on the heap will be needed to store each element. We
@@ -305,7 +304,7 @@ at compile time that every possible case is handled, as discussed in Chapter 6.
 
 If you don’t know the exhaustive set of types a program will get at runtime to
 store in a vector, the enum technique won’t work. Instead, you can use a trait
-object, which we’ll cover in Chapter 17.
+object, which we’ll cover in Chapter 18.
 
 Now that we’ve discussed some of the most common ways to use vectors, be sure
 to review the API documentation for all of the many
@@ -317,6 +316,7 @@ addition to `push`, a `pop` method removes and returns the last element.
 Like any other `struct`, a vector is freed when it goes out of scope, as
 annotated in Listing 8-10.
 
+
 ```
     {
         let v = vec![1, 2, 3, 4];
@@ -325,8 +325,7 @@ annotated in Listing 8-10.
     } // <- v goes out of scope and is freed here
 ```
 
-Listing 8-10: Showing where the vector and its elements
-are dropped
+Listing 8-10: Showing where the vector and its elements are dropped
 
 When the vector gets dropped, all of its contents are also dropped, meaning the
 integers it holds will be cleaned up. The borrow checker ensures that any
@@ -378,6 +377,7 @@ of bytes with some extra guarantees, restrictions, and capabilities. An example
 of a function that works the same way with `Vec<T>` and `String` is the `new`
 function to create an instance, shown in Listing 8-11.
 
+
 ```
     let mut s = String::new();
 ```
@@ -390,17 +390,17 @@ string. For that, we use the `to_string` method, which is available on any type
 that implements the `Display` trait, as string literals do. Listing 8-12 shows
 two examples.
 
+
 ```
     let data = "initial contents";
 
     let s = data.to_string();
 
-    // the method also works on a literal directly:
+    // The method also works on a literal directly:
     let s = "initial contents".to_string();
 ```
 
-Listing 8-12: Using the `to_string` method to create a
-`String` from a string literal
+Listing 8-12: Using the `to_string` method to create a `String` from a string literal
 
 This code creates a string containing `initial contents`.
 
@@ -408,12 +408,12 @@ We can also use the function `String::from` to create a `String` from a string
 literal. The code in Listing 8-13 is equivalent to the code in Listing 8-12
 that uses `to_string`.
 
+
 ```
     let s = String::from("initial contents");
 ```
 
-Listing 8-13: Using the `String::from` function to create
-a `String` from a string literal
+Listing 8-13: Using the `String::from` function to create a `String` from a string literal
 
 Because strings are used for so many things, we can use many different generic
 APIs for strings, providing us with a lot of options. Some of them can seem
@@ -423,6 +423,7 @@ readability.
 
 Remember that strings are UTF-8 encoded, so we can include any properly encoded
 data in them, as shown in Listing 8-14.
+
 
 ```
     let hello = String::from("السلام عليكم");
@@ -438,8 +439,7 @@ data in them, as shown in Listing 8-14.
     let hello = String::from("Hola");
 ```
 
-Listing 8-14: Storing greetings in different languages in
-strings
+Listing 8-14: Storing greetings in different languages in strings
 
 All of these are valid `String` values.
 
@@ -449,23 +449,24 @@ A `String` can grow in size and its contents can change, just like the contents
 of a `Vec<T>`, if you push more data into it. In addition, you can conveniently
 use the `+` operator or the `format!` macro to concatenate `String` values.
 
-#### Appending to a String with `push_str` and `push`
+#### Appending to a String with push_str and push
 
 We can grow a `String` by using the `push_str` method to append a string slice,
 as shown in Listing 8-15.
+
 
 ```
     let mut s = String::from("foo");
     s.push_str("bar");
 ```
 
-Listing 8-15: Appending a string slice to a `String`
-using the `push_str` method
+Listing 8-15: Appending a string slice to a `String` using the `push_str` method
 
 After these two lines, `s` will contain `foobar`. The `push_str` method takes a
 string slice because we don’t necessarily want to take ownership of the
 parameter. For example, in the code in Listing 8-16, we want to be able to use
 `s2` after appending its contents to `s1`.
+
 
 ```
     let mut s1 = String::from("foo");
@@ -474,8 +475,7 @@ parameter. For example, in the code in Listing 8-16, we want to be able to use
     println!("s2 is {s2}");
 ```
 
-Listing 8-16: Using a string slice after appending its
-contents to a `String`
+Listing 8-16: Using a string slice after appending its contents to a `String`
 
 If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
@@ -484,20 +484,21 @@ The `push` method takes a single character as a parameter and adds it to the
 `String`. Listing 8-17 adds the letter *l* to a `String` using the `push`
 method.
 
+
 ```
     let mut s = String::from("lo");
     s.push('l');
 ```
 
-Listing 8-17: Adding one character to a `String` value
-using `push`
+Listing 8-17: Adding one character to a `String` value using `push`
 
 As a result, `s` will contain `lol`.
 
-#### Concatenation with the `+` Operator or the `format!` Macro
+#### Concatenation with the + Operator or the format! Macro
 
 Often, you’ll want to combine two existing strings. One way to do so is to use
 the `+` operator, as shown in Listing 8-18.
+
 
 ```
     let s1 = String::from("Hello, ");
@@ -505,8 +506,7 @@ the `+` operator, as shown in Listing 8-18.
     let s3 = s1 + &s2; // note s1 has been moved here and can no longer be used
 ```
 
-Listing 8-18: Using the `+` operator to combine two
-`String` values into a new `String` value
+Listing 8-18: Using the `+` operator to combine two `String` values into a new `String` value
 
 The string `s3` will contain `Hello, world!`. The reason `s1` is no longer
 valid after the addition, and the reason we used a reference to `s2`, has to do
@@ -582,33 +582,31 @@ string by referencing them by index is a valid and common operation. However,
 if you try to access parts of a `String` using indexing syntax in Rust, you’ll
 get an error. Consider the invalid code in Listing 8-19.
 
+
 ```
-    let s1 = String::from("hello");
+    let s1 = String::from("hi");
     let h = s1[0];
 ```
 
-Listing 8-19: Attempting to use indexing syntax with a
-String
+Listing 8-19: Attempting to use indexing syntax with a String
 
 This code will result in the following error:
 
 ```
 $ cargo run
    Compiling collections v0.1.0 (file:///projects/collections)
-error[E0277]: the type `String` cannot be indexed by `{integer}`
+error[E0277]: the type `str` cannot be indexed by `{integer}`
  --> src/main.rs:3:16
   |
 3 |     let h = s1[0];
-  |                ^ `String` cannot be indexed by `{integer}`
+  |                ^ string indices are ranges of `usize`
   |
-  = help: the trait `Index<{integer}>` is not implemented for `String`
-  = help: the following other types implement trait `Index<Idx>`:
-            <String as Index<RangeFull>>
-            <String as Index<std::ops::Range<usize>>>
-            <String as Index<RangeFrom<usize>>>
-            <String as Index<RangeTo<usize>>>
-            <String as Index<RangeInclusive<usize>>>
-            <String as Index<RangeToInclusive<usize>>>
+  = note: you can use `.chars().nth()` or `.bytes().nth()`
+          for more information, see chapter 8 in The Book: <https://doc.rust-lang.org/book/ch08-02-strings.html#indexing-into-strings>
+  = help: the trait `SliceIndex<str>` is not implemented for `{integer}`
+          but trait `SliceIndex<[_]>` is implemented for `usize`
+  = help: for that trait implementation, expected `[_]`, found `str`
+  = note: required for `String` to implement `Index<{integer}>`
 
 For more information about this error, try `rustc --explain E0277`.
 error: could not compile `collections` (bin "collections") due to 1 previous error
@@ -654,8 +652,8 @@ seem that `answer` should in fact be `208`, but `208` is not a valid character
 on its own. Returning `208` is likely not what a user would want if they asked
 for the first letter of this string; however, that’s the only data that Rust
 has at byte index 0. Users generally don’t want the byte value returned, even
-if the string contains only Latin letters: if `&"hello"[0]` were valid code
-that returned the byte value, it would return `104`, not `h`.
+if the string contains only Latin letters: if `&"hi"[0]` were valid code that
+returned the byte value, it would return `104`, not `h`.
 
 The answer, then, is that to avoid returning an unexpected value and causing
 bugs that might not be discovered immediately, Rust doesn’t compile this code
@@ -729,8 +727,9 @@ index were accessed in a vector:
 ```
 $ cargo run
    Compiling collections v0.1.0 (file:///projects/collections)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.43s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.43s
      Running `target/debug/collections`
+
 thread 'main' panicked at src/main.rs:4:19:
 byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
@@ -830,6 +829,7 @@ One way to create an empty hash map is to use `new` and to add elements with
 names are *Blue* and *Yellow*. The Blue team starts with 10 points, and the
 Yellow team starts with 50.
 
+
 ```
     use std::collections::HashMap;
 
@@ -839,8 +839,7 @@ Yellow team starts with 50.
     scores.insert(String::from("Yellow"), 50);
 ```
 
-Listing 8-20: Creating a new hash map and inserting some
-keys and values
+Listing 8-20: Creating a new hash map and inserting some keys and values
 
 Note that we need to first `use` the `HashMap` from the collections portion of
 the standard library. Of our three common collections, this one is the least
@@ -858,6 +857,7 @@ must have the same type.
 We can get a value out of the hash map by providing its key to the `get`
 method, as shown in Listing 8-21.
 
+
 ```
     use std::collections::HashMap;
 
@@ -870,8 +870,7 @@ method, as shown in Listing 8-21.
     let score = scores.get(&team_name).copied().unwrap_or(0);
 ```
 
-Listing 8-21: Accessing the score for the Blue team
-stored in the hash map
+Listing 8-21: Accessing the score for the Blue team stored in the hash map
 
 Here, `score` will have the value that’s associated with the Blue team, and the
 result will be `10`. The `get` method returns an `Option<&V>`; if there’s no
@@ -880,7 +879,7 @@ handles the `Option` by calling `copied` to get an `Option<i32>` rather than an
 `Option<&i32>`, then `unwrap_or` to set `score` to zero if `scores` doesn’t
 have an entry for the key.
 
-We can iterate over each key–value pair in a hash map in a similar manner as we
+We can iterate over each key-value pair in a hash map in a similar manner as we
 do with vectors, using a `for` loop:
 
 ```
@@ -909,6 +908,7 @@ For types that implement the `Copy` trait, like `i32`, the values are copied
 into the hash map. For owned values like `String`, the values will be moved and
 the hash map will be the owner of those values, as demonstrated in Listing 8-22.
 
+
 ```
     use std::collections::HashMap;
 
@@ -921,8 +921,7 @@ the hash map will be the owner of those values, as demonstrated in Listing 8-22.
     // see what compiler error you get!
 ```
 
-Listing 8-22: Showing that keys and values are owned by
-the hash map once they’re inserted
+Listing 8-22: Showing that keys and values are owned by the hash map once they’re inserted
 
 We aren’t able to use the variables `field_name` and `field_value` after
 they’ve been moved into the hash map with the call to `insert`.
@@ -930,9 +929,8 @@ they’ve been moved into the hash map with the call to `insert`.
 If we insert references to values into the hash map, the values won’t be moved
 into the hash map. The values that the references point to must be valid for at
 least as long as the hash map is valid. We’ll talk more about these issues in
-the “Validating References with
-Lifetimes” section in
-Chapter 10.
+“Validating References with
+Lifetimes” in Chapter 10.
 
 ### Updating a Hash Map
 
@@ -953,8 +951,9 @@ new value. Let’s look at how to do each of these!
 If we insert a key and a value into a hash map and then insert that same key
 with a different value, the value associated with that key will be replaced.
 Even though the code in Listing 8-23 calls `insert` twice, the hash map will
-only contain one key–value pair because we’re inserting the value for the Blue
+only contain one key-value pair because we’re inserting the value for the Blue
 team’s key both times.
+
 
 ```
     use std::collections::HashMap;
@@ -967,13 +966,13 @@ team’s key both times.
     println!("{scores:?}");
 ```
 
-Listing 8-23: Replacing a value stored with a particular
-key
+Listing 8-23: Replacing a value stored with a particular key
 
 This code will print `{"Blue": 25}`. The original value of `10` has been
 overwritten.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="only-inserting-a-value-if-the-key-has-no-value"></a>
 
 #### Adding a Key and Value Only If a Key Isn’t Present
@@ -990,6 +989,7 @@ we want to check whether the key for the Yellow team has a value associated
 with it. If it doesn’t, we want to insert the value `50`, and the same for the
 Blue team. Using the `entry` API, the code looks like Listing 8-24.
 
+
 ```
     use std::collections::HashMap;
 
@@ -1002,8 +1002,7 @@ Blue team. Using the `entry` API, the code looks like Listing 8-24.
     println!("{scores:?}");
 ```
 
-Listing 8-24: Using the `entry` method to only insert if
-the key does not already have a value
+Listing 8-24: Using the `entry` method to only insert if the key does not already have a value
 
 The `or_insert` method on `Entry` is defined to return a mutable reference to
 the value for the corresponding `Entry` key if that key exists, and if not, it
@@ -1026,6 +1025,7 @@ the words as keys and increment the value to keep track of how many times we’v
 seen that word. If it’s the first time we’ve seen a word, we’ll first insert
 the value `0`.
 
+
 ```
     use std::collections::HashMap;
 
@@ -1041,13 +1041,12 @@ the value `0`.
     println!("{map:?}");
 ```
 
-Listing 8-25: Counting occurrences of words using a hash
-map that stores words and counts
+Listing 8-25: Counting occurrences of words using a hash map that stores words and counts
 
 This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see
-the same key–value pairs printed in a different order: recall from the
-“Accessing Values in a Hash Map” section that
-iterating over a hash map happens in an arbitrary order.
+the same key-value pairs printed in a different order: recall from “Accessing
+Values in a Hash Map” that iterating over a hash map
+happens in an arbitrary order.
 
 The `split_whitespace` method returns an iterator over subslices, separated by
 whitespace, of the value in `text`. The `or_insert` method returns a mutable
@@ -1061,7 +1060,7 @@ changes are safe and allowed by the borrowing rules.
 
 By default, `HashMap` uses a hashing function called *SipHash* that can provide
 resistance to denial-of-service (DoS) attacks involving hash
-tables^siphash at *[https://en.wikipedia.org/wiki/SipHash](https://en.wikipedia.org/wiki/SipHash)*<!-- ignore -->. This is not the fastest hashing algorithm
+tables[^siphash]<!-- ignore -->. This is not the fastest hashing algorithm
 available, but the trade-off for better security that comes with the drop in
 performance is worth it. If you profile your code and find that the default
 hash function is too slow for your purposes, you can switch to another function

@@ -9,6 +9,7 @@ test tests::it_adds_two ... FAILED
 failures:
 
 ---- tests::it_adds_two stdout ----
+
 thread 'tests::it_adds_two' panicked at src/lib.rs:12:9:
 assertion `left == right` failed
   left: 5

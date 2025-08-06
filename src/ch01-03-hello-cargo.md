@@ -38,9 +38,7 @@ $ cd hello_cargo
 [package]
 name = "hello_cargo"
 version = "0.1.0"
-edition = "2021"
-
-# برای مشاهده کلیدها و تعاریف بیشتر به https://doc.rust-lang.org/cargo/reference/manifest.html مراجعه کنید
+edition = "2024"
 
 [dependencies]
 ```

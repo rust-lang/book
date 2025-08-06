@@ -48,7 +48,7 @@ cargo install mdbook --locked --version <version_num>
 Example:
 
 ```bash
-cargo install mdbook --locked --version 0.4.37
+$ cargo install --locked --path packages/mdbook-trpl --force
 ```
 
 این کتاب همچنین از دو افزونه mdbook استفاده می‌کند که بخشی از این مخزن هستند. اگر آنها را نصب نکنید، هنگام ساخت هشدارهایی مشاهده خواهید کرد و خروجی به درستی نمایش داده نمی‌شود، اما هنوز هم می‌توانید کتاب را بسازید. برای استفاده از افزونه‌ها، باید دستور زیر را اجرا کنید:

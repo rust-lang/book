@@ -9,6 +9,7 @@ test tests::greater_than_100 - should panic ... FAILED
 failures:
 
 ---- tests::greater_than_100 stdout ----
+
 thread 'tests::greater_than_100' panicked at src/lib.rs:12:13:
 Guess value must be greater than or equal to 1, got 200.
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

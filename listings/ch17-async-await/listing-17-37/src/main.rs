@@ -10,9 +10,9 @@ fn main() {
         let messages = get_messages().timeout(Duration::from_millis(200));
         let intervals = get_intervals();
         let merged = messages.merge(intervals);
-        // ANCHOR_END: main
 
         while let Some(result) = merged.next().await {
+            // ANCHOR_END: main
             match result {
                 Ok(message) => println!("{message}"),
                 Err(reason) => eprintln!("Problem: {reason:?}"),

@@ -42,4 +42,4 @@ git-repository-url = "https://github.com/persian-rust/book"
 output-mode = "default"
 
 [rust]
-edition = "2021"
+edition = "2024"

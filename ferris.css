@@ -43,3 +43,25 @@ body.ayu .not_desired_behavior {
 .ferris-explain {
   width: 100px;
 }
+
+/*
+  A bit of a hack to make small Ferris use the existing buttons container but
+  only show/hide the buttons on hover over the `pre`. Targeting `.listing`
+  increases the specificity of this rule.
+*/
+pre > .buttons {
+  visibility: visible;
+  opacity: 1;
+  transition: none;
+}
+
+pre > .buttons button {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.1s linear, opacity 0.1s linear;
+}
+
+pre:hover > .buttons button {
+  visibility: visible;
+  opacity: 1;
+}

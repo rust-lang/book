@@ -2,7 +2,7 @@
 name = "rust-book-tools"
 version = "0.0.1"
 description = "The Rust Book"
-edition = "2021"
+edition = "2024"
 
 [[bin]]
 name = "concat_chapters"

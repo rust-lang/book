@@ -22,6 +22,9 @@ directory, so all fixes need to be made in `/src/`.
     unzip -o "tmp/$filename.docx" -d "tmp/$filename"
     # Convert to markdown with XSL.
     xsltproc tools/docx-to-md.xsl "tmp/$filename/word/document.xml" | \
+    # Remove all non-breaking spaces, which NoStarch adds for inline references
+    # to listings, chapters, etc., but which we don’t care about in the source.
+    sed "s: : :g" | \
     # Hard wrap at 80 chars at word boundaries.
     fold -w 80 -s | \
     # Remove trailing whitespace and append to the file in the `nostarch` dir for comparison.

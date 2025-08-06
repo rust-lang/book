@@ -116,7 +116,13 @@ let mut bananas = 5; // mutable
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
-اگر کتابخانه `io` را با `use std::io;` در ابتدای برنامه وارد نکرده بودیم، همچنان می‌توانستیم تابع را با نوشتن `std::io::stdin` فراخوانی کنیم. تابع `stdin` یک نمونه از نوع [`std::io::Stdin`][iostdin]<!-- ignore --> بازمی‌گرداند که یک نوع برای مدیریت ورودی استاندارد ترمینال شما است.
+اگر ماژول `io` را با دستور `use std::io;`
+در ابتدای برنامه وارد نکرده بودیم، همچنان
+می‌توانستیم از این تابع استفاده کنیم، به این شکل
+که آن را به‌صورت `std::io::stdin` فراخوانی کنیم.
+تابع `stdin` نمونه‌ای از [`std::io::Stdin`][iostdin]
+بازمی‌گرداند، که نوعی است برای نمایش یک
+دسته (handle) به ورودی استاندارد ترمینال شما.
 
 در خط بعدی، متد `.read_line(&mut guess)` را روی handle ورودی استاندارد فراخوانی می‌کنیم تا ورودی کاربر را دریافت کنیم. همچنین `&mut guess` را به‌عنوان آرگومان به `read_line` ارسال می‌کنیم تا به آن بگوییم ورودی کاربر را در چه رشته‌ای ذخیره کند. وظیفه کامل `read_line` این است که هر چیزی را که کاربر در ورودی استاندارد تایپ می‌کند به رشته‌ای اضافه کند (بدون بازنویسی محتوای آن)، بنابراین این رشته را به‌عنوان آرگومان ارسال می‌کنیم. آرگومان رشته باید تغییرپذیر باشد تا متد بتواند محتوای رشته را تغییر دهد.
 
@@ -225,29 +231,25 @@ cargo build -->
 
 ```console
 $ cargo build
-    Updating crates.io index
-     Locking 16 packages to latest compatible versions
-      Adding wasi v0.11.0+wasi-snapshot-preview1 (latest: v0.13.3+wasi-0.2.2)
-      Adding zerocopy v0.7.35 (latest: v0.8.9)
-      Adding zerocopy-derive v0.7.35 (latest: v0.8.9)
-  Downloaded syn v2.0.87
-  Downloaded 1 crate (278.1 KB) in 0.16s
-   Compiling proc-macro2 v1.0.89
-   Compiling unicode-ident v1.0.13
-   Compiling libc v0.2.161
-   Compiling cfg-if v1.0.0
-   Compiling byteorder v1.5.0
-   Compiling getrandom v0.2.15
-   Compiling rand_core v0.6.4
-   Compiling quote v1.0.37
-   Compiling syn v2.0.87
-   Compiling zerocopy-derive v0.7.35
-   Compiling zerocopy v0.7.35
-   Compiling ppv-lite86 v0.2.20
-   Compiling rand_chacha v0.3.1
-   Compiling rand v0.8.5
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.69s
+  Updating crates.io index
+   Locking 15 packages to latest Rust 1.85.0 compatible versions
+    Adding rand v0.8.5 (available: v0.9.0)
+ Compiling proc-macro2 v1.0.93
+ Compiling unicode-ident v1.0.17
+ Compiling libc v0.2.170
+ Compiling cfg-if v1.0.0
+ Compiling byteorder v1.5.0
+ Compiling getrandom v0.2.15
+ Compiling rand_core v0.6.4
+ Compiling quote v1.0.38
+ Compiling syn v2.0.98
+ Compiling zerocopy-derive v0.7.35
+ Compiling zerocopy v0.7.35
+ Compiling ppv-lite86 v0.2.20
+ Compiling rand_chacha v0.3.1
+ Compiling rand v0.8.5
+ Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+  Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.48s
 ```
 
 </Listing>
@@ -283,7 +285,8 @@ Cargo مکانیزمی دارد که اطمینان می‌دهد شما یا ه
 ```console
 $ cargo update
     Updating crates.io index
-    Updating rand v0.8.5 -> v0.8.6
+     Locking 1 package to latest Rust 1.85.0 compatible version
+    Updating rand v0.8.5 -> v0.8.6 (available: v0.9.0)
 ```
 
 Cargo نسخه 0.9.0 را نادیده می‌گیرد. در این مرحله، شما همچنین تغییری در فایل _Cargo.lock_ مشاهده می‌کنید که نشان می‌دهد نسخه crate `rand` که اکنون استفاده می‌کنید 0.8.6 است. برای استفاده از نسخه 0.9.0 `rand` یا هر نسخه‌ای در سری 0.9._x_، باید فایل _Cargo.toml_ را به این شکل تغییر دهید:
@@ -480,7 +483,9 @@ You guessed: 59
 You win!
 Please input your guess.
 quit
-thread 'main' panicked at 'Please type a number!: ParseIntError { kind: InvalidDigit }', src/main.rs:28:47
+
+thread 'main' panicked at src/main.rs:28:47:
+Please type a number!: ParseIntError { kind: InvalidDigit }
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
@@ -514,7 +519,20 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 اگر `parse` بتواند رشته را با موفقیت به یک عدد تبدیل کند، یک مقدار `Ok` بازمی‌گرداند که عدد تولیدشده را در خود دارد. مقدار `Ok` با الگوی شاخه اول مطابقت خواهد داشت و عبارت `match` فقط مقدار `num` که `parse` تولید کرده و در داخل مقدار `Ok` قرار داده است را بازمی‌گرداند. آن عدد در همان جایی که می‌خواهیم، در متغیر جدید `guess` که ایجاد می‌کنیم، قرار می‌گیرد.
 
-اگر `parse` _نتواند_ رشته را به عدد تبدیل کند، یک مقدار `Err` بازمی‌گرداند که اطلاعات بیشتری درباره خطا دارد. مقدار `Err` با الگوی `Ok(num)` در شاخه اول `match` مطابقت ندارد، اما با الگوی `Err(_)` در شاخه دوم مطابقت دارد. کاراکتر زیرخط، `_`، یک مقدار کلی است؛ در این مثال، ما می‌گوییم که می‌خواهیم تمام مقادیر `Err` را بدون توجه به اطلاعات داخل آن‌ها مطابقت دهیم. بنابراین برنامه کد شاخه دوم، `continue` را اجرا می‌کند، که به برنامه می‌گوید به تکرار بعدی `loop` برود و یک حدس دیگر درخواست کند. بنابراین، برنامه به‌طور مؤثر تمام خطاهایی که `parse` ممکن است با آن‌ها مواجه شود را نادیده می‌گیرد!
+اگر `parse` نتواند رشته را به عدد تبدیل کند،
+یک مقدار `Err` بازمی‌گرداند که اطلاعات بیشتری
+درباره‌ی خطا در خود دارد. مقدار `Err` با الگوی
+`Ok(num)` در شاخه‌ی اول `match` تطابق ندارد،
+اما با الگوی `Err(_)` در شاخه‌ی دوم مطابقت دارد.
+کاراکتر زیرخط، یعنی `_`، یک مقدار عمومی است
+که همه‌چیز را شامل می‌شود؛ در این مثال، ما
+می‌گوییم که می‌خواهیم تمام مقادیر `Err` را
+صرف‌نظر از محتوای داخلی آن‌ها، تطبیق دهیم.
+در نتیجه، برنامه کد شاخه‌ی دوم یعنی `continue`
+را اجرا می‌کند، که به برنامه می‌گوید به دور بعدی
+حلقه‌ی `loop` برود و یک حدس دیگر بگیرد.
+در عمل، برنامه تمام خطاهایی را که `parse` ممکن است
+با آن مواجه شود نادیده می‌گیرد!
 
 حالا همه چیز در برنامه باید طبق انتظار کار کند. بیایید آن را امتحان کنیم:
 

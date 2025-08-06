@@ -24,7 +24,7 @@ fn main() {
             trpl::yield_now().await;
             slow("b", 15);
             trpl::yield_now().await;
-            slow("b", 35);
+            slow("b", 350);
             trpl::yield_now().await;
             println!("'b' finished.");
         };

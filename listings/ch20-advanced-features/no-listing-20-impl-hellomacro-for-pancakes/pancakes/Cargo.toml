@@ -1,7 +1,0 @@
-[package]
-name = "pancakes"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-hello_macro = { path = "../hello_macro" }

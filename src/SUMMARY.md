@@ -87,7 +87,7 @@
   - [نصب باینری‌ها از Crates.io با `cargo install`](ch14-04-installing-binaries.md)  
   - [گسترش Cargo با دستورات سفارشی](ch14-05-extending-cargo.md)  
 
-- [اشاره‌گر (Pointer)های هوشمند](ch15-00-smart-pointers.md)  
+- [اشاره‌گرهای هوشمند (Smart Pointers)](ch15-00-smart-pointers.md)  
   - [استفاده از `Box<T>` برای اشاره به داده‌ها در Heap](ch15-01-box.md)  
   - [رفتار اشاره‌گر (Pointer)های هوشمند مانند ارجاعات معمولی با صفت `Deref`](ch15-02-deref.md)  
   - [اجرای کد هنگام پاک‌سازی با صفت `Drop`](ch15-03-drop.md)  

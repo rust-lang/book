@@ -2,9 +2,10 @@
 
 تا اینجا در این فصل، بیشتر به آینده‌های فردی (_individual futures_) پایبند بوده‌ایم. یک استثنای بزرگ استفاده از کانال async بود. به یاد بیاورید چگونه در ابتدای این فصل در بخش [“ارسال پیام”][17-02-messages]<!-- ignore --> از گیرنده کانال async استفاده کردیم. متد async به نام `recv` یک دنباله از آیتم‌ها را در طول زمان تولید می‌کند. این یک نمونه از یک الگوی کلی‌تر به نام _stream_ است.
 
-ما در فصل ۱۳ یک دنباله از آیتم‌ها را دیدیم، زمانی که ویژگی `Iterator` را در بخش [ویژگی Iterator و متد `next`][iterator-trait]<!-- ignore --> بررسی کردیم، اما بین iteratorها و گیرنده کانال async دو تفاوت وجود دارد. تفاوت اول در زمان است: iteratorها همزمان (_synchronous_) هستند، در حالی که گیرنده کانال async است. تفاوت دوم در API است. هنگام کار مستقیم با `Iterator`، ما متد همزمان `next` را فراخوانی می‌کنیم. به طور خاص، با stream `trpl::Receiver`، به جای آن، یک متد async به نام `recv` را فراخوانی کردیم. در غیر این صورت، این APIها احساس بسیار مشابهی دارند و این شباهت تصادفی نیست. یک stream مانند یک شکل ناهمزمان از iteration است. در حالی که `trpl::Receiver` به طور خاص منتظر دریافت پیام‌ها است، API عمومی stream بسیار گسترده‌تر است: این API آیتم بعدی را همان‌طور که `Iterator` انجام می‌دهد ارائه می‌دهد، اما به صورت ناهمزمان.
-
-شباهت بین iteratorها و stream‌ها در Rust به این معناست که ما در واقع می‌توانیم از هر iterator یک stream ایجاد کنیم. مانند یک iterator، می‌توانیم با فراخوانی متد `next` یک stream کار کنیم و سپس خروجی را انتظار بکشیم، همان‌طور که در لیست ۱۷-۳۰ نشان داده شده است.
+ما پیش‌تر در فصل ۱۳ با یک توالی از آیتم‌ها مواجه شدیم، زمانی که به `Iterator` و متد `next` آن در بخش [ویژگی Iterator و متد `next`][iterator-trait]<!-- ignore --> پرداختیم، اما بین `Iterator`ها و گیرنده‌ی ناهمگام کانال‌ها دو تفاوت وجود دارد.
+تفاوت اول مربوط به *زمان* است: `Iterator`ها همگام (synchronous) هستند، در حالی که گیرنده‌ی کانال ناهمگام (asynchronous) است.
+تفاوت دوم در *رابط برنامه‌نویسی کاربردی (API)* است. وقتی به‌صورت مستقیم با `Iterator` کار می‌کنیم، از متد همگام `next` استفاده می‌کنیم. در `stream`‌ مربوط به `trpl::Receiver`، ما به جای آن متد ناهمگام `recv` را فراخوانی کردیم.
+با این وجود، این APIها از لحاظ کارکرد بسیار مشابه هستند، و این شباهت اتفاقی نیست. یک *stream* در واقع شکل ناهمگام پیمایش (iteration) است. در حالی که `trpl::Receiver` به‌طور خاص منتظر دریافت پیام می‌ماند، API عمومی‌تر stream بسیار گسترده‌تر است: این API، آیتم بعدی را به همان شیوه‌ای که `Iterator` فراهم می‌کند، ولی به‌صورت ناهمگام ارائه می‌دهد.
 
 
 <Listing number="17-30" caption="ایجاد یک stream از یک iterator و چاپ مقادیر آن" file-name="src/main.rs">
@@ -32,7 +33,7 @@ error[E0599]: no method named `next` found for struct `Iter` in the current scop
 10 |         while let Some(value) = stream.next().await {
    |                                        ^^^^
    |
-   = note: the full type name has been written to 'file:///projects/async_await/target/debug/deps/async_await-9de943556a6001b8.long-type-1281356139287206597.txt'
+   = note: the full type name has been written to 'file:///projects/async-await/target/debug/deps/async_await-575db3dd3197d257.long-type-14490787947592691573.txt'
    = note: consider using `--verbose` to print the full type name to the console
    = help: items from traits can only be used if the trait is in scope
 help: the following traits which provide `next` are implemented but not in scope; perhaps you want to import one of them
@@ -77,7 +78,6 @@ help: there is a method `try_next` with a similar name
 </Listing>
 
 البته این خیلی جالب نیست، چون می‌توانستیم همین کار را با iteratorهای معمولی و بدون هیچ async انجام دهیم. بیایید ببینیم چه کاری می‌توانیم انجام دهیم که _منحصربه‌فرد_ برای stream‌ها باشد.
-
 
 ### ترکیب Stream‌ها
 
@@ -149,11 +149,9 @@ Message: 'j'
 
 اکنون کد ما نتیجه بسیار جالب‌تری دارد! بین هر جفت پیام، یک خطا گزارش می‌شود: `Problem: Elapsed(())`.
 
-<!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-35
-cargo run
-copy only the program output, *not* the compiler output
--->
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 Message: 'a'
@@ -255,11 +253,9 @@ Interval: 43
 اکنون وقتی برنامه را اجرا می‌کنیم، پس از دریافت ۲۰ آیتم از stream متوقف می‌شود و intervals باعث غرق شدن messages نمی‌شود. همچنین، ما دیگر `Interval: 100` یا `Interval: 200` و موارد مشابه را نمی‌بینیم، بلکه به جای آن `Interval: 1`، `Interval: 2` و به همین ترتیب دریافت می‌کنیم—حتی اگر یک stream منبع داریم که _می‌تواند_ هر میلی‌ثانیه یک رویداد تولید کند. دلیل این است که فراخوانی `throttle` یک stream جدید تولید می‌کند که stream اصلی را بسته‌بندی می‌کند تا stream اصلی فقط با نرخ throttle و نه با نرخ "ذاتی" خود poll شود. ما یک سری پیام interval غیرقابل پردازش نداریم که انتخاب کرده باشیم آن‌ها را نادیده بگیریم. بلکه، ما هرگز آن پیام‌های interval را در وهله اول تولید نمی‌کنیم! این همان "تنبلی" ذاتی futures در Rust است که دوباره به کار گرفته می‌شود و به ما اجازه می‌دهد ویژگی‌های عملکردی خود را انتخاب کنیم.
 
 
-<!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-39
-cargo run
-copy and paste only the program output
--->
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 Interval: 1

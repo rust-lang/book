@@ -2,6 +2,7 @@ personal_ws-1.1 en 0 utf-8
 abcabcabc
 abcd
 abcdefghijklmnopqrstuvwxyz
+ABIs
 AddAssign
 Addr
 adfb
@@ -151,6 +152,7 @@ durations
 ebook
 ebooks
 Edsger
+efdcd
 egular
 ElementRef
 else's
@@ -205,6 +207,7 @@ grapheme
 Grapheme
 growable
 gzip
+handcoded
 handoff
 hardcode
 hardcoded
@@ -307,6 +310,7 @@ memoization
 metadata
 Metadata
 metaprogramming
+metavariable
 mibbit
 Mibbit
 microcontroller
@@ -440,6 +444,7 @@ reformats
 refutability
 reimplement
 RemAssign
+repost
 repr
 representable
 request's
@@ -485,6 +490,7 @@ sizeof
 SliceIndex
 Smalltalk
 snuck
+SocialPost
 someproject
 SomeType
 someusername

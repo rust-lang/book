@@ -10,27 +10,53 @@
 
 برای تغییر به Unsafe Rust، از کلیدواژه `unsafe` استفاده کنید و سپس یک بلوک جدید که کد ناامن را نگه می‌دارد شروع کنید. در Unsafe Rust می‌توانید پنج عمل را انجام دهید که در راست امن نمی‌توانید، و ما این‌ها را _قدرت‌های فوق‌العاده ناامن_ می‌نامیم. این قدرت‌ها شامل توانایی‌های زیر هستند:
 
-- Dereference یک اشاره‌گر (Pointer) خام
-- فراخوانی یک تابع یا متد ناامن
-- دسترسی یا تغییر یک متغیر static قابل تغییر
-- پیاده‌سازی یک trait ناامن
-- دسترسی به فیلدهای یک `union`
+- Dereference a raw pointer
+- Call an unsafe function or method
+- Access or modify a mutable static variable
+- Implement an unsafe trait
+- Access fields of a `union`
 
-مهم است که بفهمید `unsafe` سیستم borrow checker یا سایر بررسی‌های ایمنی راست را خاموش نمی‌کند: اگر از یک reference در کد ناامن استفاده کنید، همچنان بررسی خواهد شد. کلیدواژه `unsafe` فقط به شما دسترسی به این پنج ویژگی می‌دهد که سپس توسط کامپایلر برای ایمنی حافظه بررسی نمی‌شوند. شما همچنان درجه‌ای از ایمنی را در داخل یک بلوک ناامن خواهید داشت.
+It’s important to understand that `unsafe` doesn’t turn off the borrow checker
+or disable any other of Rust’s safety checks: if you use a reference in unsafe
+code, it will still be checked. The `unsafe` keyword only gives you access to
+these five features that are then not checked by the compiler for memory
+safety. You’ll still get some degree of safety inside of an unsafe block.
 
-علاوه بر این، `unsafe` به این معنا نیست که کد داخل بلوک لزوماً خطرناک است یا اینکه حتماً مشکلات ایمنی حافظه خواهد داشت: قصد این است که به‌عنوان برنامه‌نویس، شما اطمینان حاصل کنید که کد داخل یک بلوک `unsafe` به روشی معتبر به حافظه دسترسی خواهد داشت.
+In addition, `unsafe` does not mean the code inside the block is necessarily
+dangerous or that it will definitely have memory safety problems: the intent is
+that as the programmer, you’ll ensure the code inside an `unsafe` block will
+access memory in a valid way.
 
-از آنجا که انسان‌ها دچار اشتباه می‌شوند، ممکن است اشتباهاتی رخ دهد، اما با الزام این پنج عملیات ناامن به اینکه در بلوک‌هایی که با `unsafe` حاشیه‌نویسی شده‌اند قرار گیرند، شما می‌دانید که هر خطایی مرتبط با ایمنی حافظه باید در داخل یک بلوک ناامن باشد. بلوک‌های `unsafe` را کوچک نگه دارید؛ بعداً زمانی که به بررسی باگ‌های حافظه می‌پردازید، از این کار سپاسگزار خواهید بود.
+People are fallible, and mistakes will happen, but by requiring these five
+unsafe operations to be inside blocks annotated with `unsafe` you’ll know that
+any errors related to memory safety must be within an `unsafe` block. Keep
+`unsafe` blocks small; you’ll be thankful later when you investigate memory
+bugs.
 
-برای ایزوله کردن کد ناامن تا حد ممکن، بهتر است کد ناامن را درون یک انتزاع امن قرار دهید و یک API امن ارائه دهید، که در ادامه فصل وقتی توابع و متدهای ناامن را بررسی می‌کنیم، در این مورد بحث خواهیم کرد. بخش‌هایی از کتابخانه استاندارد به‌عنوان انتزاعات امن روی کد ناامن که مورد بازبینی قرار گرفته‌اند پیاده‌سازی شده‌اند. محصور کردن کد ناامن در یک انتزاع امن از نشت استفاده‌های `unsafe` به تمام مکان‌هایی که شما یا کاربران‌تان ممکن است بخواهند از قابلیت‌هایی که با کد ناامن پیاده‌سازی شده‌اند استفاده کنند، جلوگیری می‌کند، زیرا استفاده از یک انتزاع امن، امن است.
+To isolate unsafe code as much as possible, it’s best to enclose unsafe code
+within a safe abstraction and provide a safe API, which we’ll discuss later in
+the chapter when we examine unsafe functions and methods. Parts of the standard
+library are implemented as safe abstractions over unsafe code that has been
+audited. Wrapping unsafe code in a safe abstraction prevents uses of `unsafe`
+from leaking out into all the places that you or your users might want to use
+the functionality implemented with `unsafe` code, because using a safe
+abstraction is safe.
 
-بیایید به هر یک از پنج قدرت فوق‌العاده ناامن به‌نوبت نگاه کنیم. همچنین به برخی از انتزاعات که یک رابط امن برای کد ناامن فراهم می‌کنند نگاهی خواهیم انداخت.
+Let’s look at each of the five unsafe superpowers in turn. We’ll also look at
+some abstractions that provide a safe interface to unsafe code.
 
 ### Dereferencing a Raw Pointer
 
-در فصل 4، در بخش [“Dangling References”][dangling-references]<!-- ignore -->، اشاره کردیم که کامپایلر تضمین می‌کند که ارجاعات همیشه معتبر هستند. Unsafe Rust دو نوع جدید به نام _اشاره‌گر (Pointer)های خام_ (raw pointers) دارد که مشابه ارجاعات هستند. مانند ارجاعات، اشاره‌گر (Pointer)های خام می‌توانند immutable یا mutable باشند و به‌ترتیب به‌شکل `*const T` و `*mut T` نوشته می‌شوند. ستاره (`*`) عملگر dereference نیست؛ بلکه بخشی از نام نوع است. در زمینه اشاره‌گر (Pointer)های خام، _immutable_ به این معناست که اشاره‌گر (Pointer) نمی‌تواند پس از dereference مستقیماً مقداردهی شود.
+In Chapter 4, in the [“Dangling References”][dangling-references]<!-- ignore
+--> section, we mentioned that the compiler ensures references are always
+valid. Unsafe Rust has two new types called _raw pointers_ that are similar to
+references. As with references, raw pointers can be immutable or mutable and
+are written as `*const T` and `*mut T`, respectively. The asterisk isn’t the
+dereference operator; it’s part of the type name. In the context of raw
+pointers, _immutable_ means that the pointer can’t be directly assigned to
+after being dereferenced.
 
-در مقایسه با ارجاعات و اشاره‌گر های هوشمند (smart pointers)، اشاره‌گر (Pointer)های خام:
+Different from references and smart pointers, raw pointers:
 
 - مجاز به نادیده گرفتن قوانین borrowing هستند، به این صورت که می‌توانند هم اشاره‌گر (Pointer)های immutable و هم اشاره‌گر (Pointer)های mutable به همان مکان داشته باشند.
 - تضمینی برای اشاره به حافظه معتبر ندارند.
@@ -49,11 +75,24 @@
 
 </Listing>
 
-توجه داشته باشید که ما در این کد از کلیدواژه `unsafe` استفاده نکرده‌ایم. می‌توانیم اشاره‌گر (Pointer)های خام را در کد امن ایجاد کنیم؛ فقط نمی‌توانیم خارج از یک بلوک `unsafe` اشاره‌گر (Pointer)های خام را dereference کنیم، همان‌طور که در ادامه خواهید دید.
+Notice that we don’t include the `unsafe` keyword in this code. We can create
+raw pointers in safe code; we just can’t dereference raw pointers outside an
+unsafe block, as you’ll see in a bit.
 
-ما اشاره‌گر (Pointer)های خام را با استفاده از عملگرهای raw borrow ایجاد کرده‌ایم: `&raw const num` یک اشاره‌گر (Pointer) خام immutable از نوع `*const i32` ایجاد می‌کند، و `&raw mut num` یک اشاره‌گر (Pointer) خام mutable از نوع `*mut i32` ایجاد می‌کند. چون آن‌ها را مستقیماً از یک متغیر محلی ایجاد کرده‌ایم، می‌دانیم که این اشاره‌گر (Pointer)های خام خاص معتبر هستند، اما نمی‌توانیم این فرض را برای هر اشاره‌گر (Pointer) خامی داشته باشیم.
+We’ve created raw pointers by using the raw borrow operators: `&raw const num`
+creates a `*const i32` immutable raw pointer, and `&raw mut num` creates a `*mut
+i32` mutable raw pointer. Because we created them directly from a local
+variable, we know these particular raw pointers are valid, but we can’t make
+that assumption about just any raw pointer.
 
-برای نشان دادن این موضوع، در ادامه یک اشاره‌گر (Pointer) خام ایجاد می‌کنیم که نمی‌توانیم به‌طور قطع از اعتبار آن مطمئن باشیم، با استفاده از `as` برای تبدیل یک مقدار به‌جای استفاده از عملگرهای raw reference. فهرست 20-2 نشان می‌دهد که چگونه یک اشاره‌گر (Pointer) خام به یک مکان دلخواه در حافظه ایجاد کنیم. تلاش برای استفاده از حافظه دلخواه تعریف‌نشده است: ممکن است داده‌ای در آن آدرس باشد یا نباشد، کامپایلر ممکن است کد را بهینه‌سازی کند تا هیچ دسترسی حافظه‌ای وجود نداشته باشد، یا برنامه ممکن است با یک خطای segmentation fault مواجه شود. معمولاً دلیل خوبی برای نوشتن کدی مانند این وجود ندارد، به‌ویژه در مواردی که می‌توانید از عملگر raw borrow استفاده کنید، اما این کار امکان‌پذیر است.
+To demonstrate this, next we’ll create a raw pointer whose validity we can’t be
+so certain of, using `as` to cast a value instead of using the raw reference
+operators. Listing 20-2 shows how to create a raw pointer to an arbitrary
+location in memory. Trying to use arbitrary memory is undefined: there might be
+data at that address or there might not, the compiler might optimize the code so
+there is no memory access, or the program might error with a segmentation fault.
+Usually, there is no good reason to write code like this, especially in cases
+where you can use a raw borrow operator instead, but it is possible.
 
 <Listing number="20-2" caption="ایجاد یک اشاره‌گر (Pointer) خام به یک آدرس حافظه دلخواه">
 
@@ -73,17 +112,39 @@
 
 </Listing>
 
-ایجاد یک اشاره‌گر (Pointer) آسیبی نمی‌رساند؛ فقط وقتی سعی می‌کنیم به مقداری که به آن اشاره می‌کند دسترسی پیدا کنیم ممکن است با یک مقدار نامعتبر سر و کار داشته باشیم.
+Creating a pointer does no harm; it’s only when we try to access the value that
+it points at that we might end up dealing with an invalid value.
 
-همچنین توجه داشته باشید که در فهرست 20-1 و 20-3، ما اشاره‌گر (Pointer)های خام `*const i32` و `*mut i32` ایجاد کردیم که هر دو به همان مکان حافظه که `num` در آن ذخیره شده بود اشاره می‌کردند. اگر به‌جای این کار، سعی می‌کردیم یک ارجاع immutable و یک ارجاع mutable به `num` ایجاد کنیم، کد کامپایل نمی‌شد، زیرا قوانین مالکیت راست اجازه نمی‌دهند که یک ارجاع mutable همزمان با هر ارجاع immutable دیگری وجود داشته باشد. با اشاره‌گر (Pointer)های خام، می‌توانیم یک اشاره‌گر (Pointer) mutable و یک اشاره‌گر (Pointer) immutable به همان مکان ایجاد کنیم و داده‌ها را از طریق اشاره‌گر (Pointer) mutable تغییر دهیم، که ممکن است یک data race ایجاد کند. مراقب باشید!
+Note also that in Listing 20-1 and 20-3, we created `*const i32` and `*mut i32`
+raw pointers that both pointed to the same memory location, where `num` is
+stored. If we instead tried to create an immutable and a mutable reference to
+`num`, the code would not have compiled because Rust’s ownership rules don’t
+allow a mutable reference at the same time as any immutable references. With
+raw pointers, we can create a mutable pointer and an immutable pointer to the
+same location and change data through the mutable pointer, potentially creating
+a data race. Be careful!
 
-با وجود تمام این خطرات، چرا باید از اشاره‌گر (Pointer)های خام استفاده کنید؟ یکی از موارد استفاده اصلی هنگام تعامل با کد C است، همان‌طور که در بخش بعدی [“Calling an Unsafe Function or Method.”](#calling-an-unsafe-function-or-method)<!-- ignore --> خواهید دید. مورد دیگر زمانی است که انتزاعات امنی ایجاد می‌کنید که سیستم borrow checker آن را نمی‌فهمد. ابتدا توابع ناامن را معرفی می‌کنیم و سپس به یک مثال از یک انتزاع امن که از کد ناامن استفاده می‌کند، می‌پردازیم.
+With all of these dangers, why would you ever use raw pointers? One major use
+case is when interfacing with C code, as you’ll see in the next section,
+[“Calling an Unsafe Function or
+Method.”](#calling-an-unsafe-function-or-method)<!-- ignore --> Another case is
+when building up safe abstractions that the borrow checker doesn’t understand.
+We’ll introduce unsafe functions and then look at an example of a safe
+abstraction that uses unsafe code.
 
 ### Calling an Unsafe Function or Method
 
-دومین نوع عملیاتی که می‌توانید در یک بلوک ناامن انجام دهید، فراخوانی توابع ناامن است. توابع و متدهای ناامن دقیقاً شبیه توابع و متدهای عادی به نظر می‌رسند، اما قبل از بقیه تعریف یک `unsafe` اضافه دارند. کلیدواژه `unsafe` در این زمینه نشان می‌دهد که تابع دارای الزاماتی است که هنگام فراخوانی این تابع باید رعایت کنیم، زیرا راست نمی‌تواند تضمین کند که این الزامات را رعایت کرده‌ایم. با فراخوانی یک تابع ناامن در یک بلوک `unsafe`، ما می‌گوییم که مستندات این تابع را خوانده‌ایم و مسئولیت رعایت قراردادهای تابع را بر عهده می‌گیریم.
+The second type of operation you can perform in an unsafe block is calling
+unsafe functions. Unsafe functions and methods look exactly like regular
+functions and methods, but they have an extra `unsafe` before the rest of the
+definition. The `unsafe` keyword in this context indicates the function has
+requirements we need to uphold when we call this function, because Rust can’t
+guarantee we’ve met these requirements. By calling an unsafe function within an
+`unsafe` block, we’re saying that we’ve read this function’s documentation and
+take responsibility for upholding the function’s contracts.
 
-در اینجا یک تابع ناامن به نام `dangerous` آورده شده است که در بدنه خود کاری انجام نمی‌دهد:
+Here is an unsafe function named `dangerous` that doesn’t do anything in its
+body:
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-01-unsafe-fn/src/main.rs:here}}
@@ -95,9 +156,15 @@
 {{#include ../listings/ch20-advanced-features/output-only-01-missing-unsafe/output.txt}}
 ```
 
-با استفاده از بلوک `unsafe`، ما به راست اعلام می‌کنیم که مستندات تابع را خوانده‌ایم، می‌دانیم چگونه به‌درستی از آن استفاده کنیم، و تأیید کرده‌ایم که قرارداد تابع را رعایت می‌کنیم.
+With the `unsafe` block, we’re asserting to Rust that we’ve read the function’s
+documentation, we understand how to use it properly, and we’ve verified that
+we’re fulfilling the contract of the function.
 
-برای انجام عملیات ناایمن (_unsafe_) در بدنه یک تابع ناایمن، همچنان باید از یک بلوک `unsafe` استفاده کنید، همان‌طور که در یک تابع معمولی این کار را می‌کنید، و اگر این کار را فراموش کنید، کامپایلر به شما هشدار خواهد داد. این امر به کوچک نگه داشتن بلوک‌های `unsafe` کمک می‌کند، زیرا ممکن است عملیات ناایمن در کل بدنه تابع مورد نیاز نباشد.
+To perform unsafe operations in the body of an unsafe function, you still need
+to use an `unsafe` block just as within a regular function, and the compiler
+will warn you if you forget. This helps to keep `unsafe` blocks as small as
+possible, as unsafe operations may not be needed across the whole function
+body.
 
 #### Creating a Safe Abstraction over Unsafe Code
 
@@ -121,11 +188,17 @@
 
 </Listing>
 
-این تابع ابتدا طول کل برش را به دست می‌آورد. سپس تأیید می‌کند که ایندکسی که به‌عنوان پارامتر داده شده در محدوده برش قرار دارد، با بررسی اینکه آیا کمتر از یا برابر طول است. این تأیید به این معناست که اگر ایندکسی بزرگ‌تر از طول برای تقسیم برش داده شود، تابع قبل از تلاش برای استفاده از آن ایندکس دچار panic خواهد شد.
+This function first gets the total length of the slice. Then it asserts that
+the index given as a parameter is within the slice by checking whether it’s
+less than or equal to the length. The assertion means that if we pass an index
+that is greater than the length to split the slice at, the function will panic
+before it attempts to use that index.
 
-سپس دو برش قابل تغییر را در یک tuple بازمی‌گردانیم: یکی از ابتدای برش اصلی تا ایندکس `mid` و دیگری از `mid` تا انتهای برش.
+Then we return two mutable slices in a tuple: one from the start of the
+original slice to the `mid` index and another from `mid` to the end of the
+slice.
 
-وقتی سعی می‌کنیم کد در فهرست 20-5 را کامپایل کنیم، با خطا مواجه خواهیم شد.
+When we try to compile the code in Listing 20-5, we’ll get an error.
 
 ```console
 {{#include ../listings/ch20-advanced-features/listing-20-05/output.txt}}
@@ -143,15 +216,40 @@ Rust’s borrow checker نمی‌تواند بفهمد که ما در حال ق�
 
 </Listing>
 
-به یاد بیاورید از بخش [“The Slice Type”][the-slice-type]<!-- ignore --> در فصل 4 که برش‌ها یک اشاره‌گر (Pointer) به برخی داده‌ها و طول آن برش هستند. ما از متد `len` برای دریافت طول یک برش و از متد `as_mut_ptr` برای دسترسی به اشاره‌گر (Pointer) خام یک برش استفاده می‌کنیم. در این مورد، چون ما یک برش قابل تغییر به مقادیر `i32` داریم، `as_mut_ptr` یک اشاره‌گر (Pointer) خام با نوع `*mut i32` بازمی‌گرداند که آن را در متغیر `ptr` ذخیره کرده‌ایم.
+Recall from [“The Slice Type”][the-slice-type]<!-- ignore --> section in
+Chapter 4 that slices are a pointer to some data and the length of the slice.
+We use the `len` method to get the length of a slice and the `as_mut_ptr`
+method to access the raw pointer of a slice. In this case, because we have a
+mutable slice to `i32` values, `as_mut_ptr` returns a raw pointer with the type
+`*mut i32`, which we’ve stored in the variable `ptr`.
 
-ما تأیید می‌کنیم که ایندکس `mid` در محدوده برش است. سپس به کد ناامن می‌رسیم: تابع `slice::from_raw_parts_mut` یک اشاره‌گر (Pointer) خام و یک طول را می‌گیرد و یک برش ایجاد می‌کند. ما از این تابع برای ایجاد یک برش که از `ptr` شروع می‌شود و `mid` آیتم طول دارد استفاده می‌کنیم. سپس متد `add` را روی `ptr` با آرگومان `mid` فراخوانی می‌کنیم تا یک اشاره‌گر (Pointer) خام که از `mid` شروع می‌شود دریافت کنیم، و با استفاده از آن اشاره‌گر (Pointer) و تعداد آیتم‌های باقی‌مانده بعد از `mid` به‌عنوان طول، یک برش ایجاد می‌کنیم.
+We keep the assertion that the `mid` index is within the slice. Then we get to
+the unsafe code: the `slice::from_raw_parts_mut` function takes a raw pointer
+and a length, and it creates a slice. We use this function to create a slice
+that starts from `ptr` and is `mid` items long. Then we call the `add`
+method on `ptr` with `mid` as an argument to get a raw pointer that starts at
+`mid`, and we create a slice using that pointer and the remaining number of
+items after `mid` as the length.
 
-تابع `slice::from_raw_parts_mut` ناامن است زیرا یک اشاره‌گر (Pointer) خام می‌گیرد و باید اعتماد کند که این اشاره‌گر (Pointer) معتبر است. متد `add` روی اشاره‌گر (Pointer)های خام نیز ناامن است، زیرا باید اعتماد کند که موقعیت آفست نیز یک اشاره‌گر (Pointer) معتبر است. بنابراین، ما مجبور شدیم یک بلوک `unsafe` در اطراف فراخوانی‌های خود به `slice::from_raw_parts_mut` و `add` قرار دهیم تا بتوانیم آن‌ها را فراخوانی کنیم. با نگاه به کد و با افزودن تأییدیه‌ای که `mid` باید کمتر از یا برابر با `len` باشد، می‌توانیم بگوییم که تمام اشاره‌گر (Pointer)های خام استفاده‌شده در بلوک `unsafe` اشاره‌گر (Pointer)های معتبری به داده‌های درون برش خواهند بود. این یک استفاده قابل‌قبول و مناسب از `unsafe` است.
+The function `slice::from_raw_parts_mut` is unsafe because it takes a raw
+pointer and must trust that this pointer is valid. The `add` method on raw
+pointers is also unsafe, because it must trust that the offset location is also
+a valid pointer. Therefore, we had to put an `unsafe` block around our calls to
+`slice::from_raw_parts_mut` and `add` so we could call them. By looking at
+the code and by adding the assertion that `mid` must be less than or equal to
+`len`, we can tell that all the raw pointers used within the `unsafe` block
+will be valid pointers to data within the slice. This is an acceptable and
+appropriate use of `unsafe`.
 
-توجه داشته باشید که نیازی به علامت‌گذاری تابع `split_at_mut` به‌عنوان `unsafe` نداریم و می‌توانیم این تابع را از کد امن Rust فراخوانی کنیم. ما یک انتزاع امن برای کد ناامن با پیاده‌سازی تابعی که از کد ناامن به روش ایمن استفاده می‌کند ایجاد کرده‌ایم، زیرا فقط اشاره‌گر (Pointer)های معتبری از داده‌هایی که این تابع به آن‌ها دسترسی دارد ایجاد می‌کند.
+Note that we don’t need to mark the resulting `split_at_mut` function as
+`unsafe`, and we can call this function from safe Rust. We’ve created a safe
+abstraction to the unsafe code with an implementation of the function that uses
+`unsafe` code in a safe way, because it creates only valid pointers from the
+data this function has access to.
 
-در مقابل، استفاده از `slice::from_raw_parts_mut` در فهرست 20-7 احتمالاً هنگام استفاده از برش باعث کرش کردن می‌شود. این کد یک مکان حافظه دلخواه می‌گیرد و یک برش با طول 10,000 آیتم ایجاد می‌کند.
+In contrast, the use of `slice::from_raw_parts_mut` in Listing 20-7 would
+likely crash when the slice is used. This code takes an arbitrary memory
+location and creates a slice 10,000 items long.
 
 <Listing number="20-7" caption="ایجاد یک برش از یک مکان حافظه دلخواه">
 
@@ -165,9 +263,18 @@ Rust’s borrow checker نمی‌تواند بفهمد که ما در حال ق�
 
 #### Using `extern` Functions to Call External Code
 
-گاهی اوقات، کد Rust شما ممکن است نیاز به تعامل با کدی که به زبان دیگری نوشته شده دارد. برای این منظور، راست کلیدواژه `extern` را ارائه می‌دهد که امکان ایجاد و استفاده از یک _رابط تابع خارجی (FFI)_ را فراهم می‌کند. یک FFI راهی است برای یک زبان برنامه‌نویسی برای تعریف توابع و امکان فراخوانی آن توابع توسط یک زبان برنامه‌نویسی دیگر (خارجی).
+Sometimes, your Rust code might need to interact with code written in another
+language. For this, Rust has the keyword `extern` that facilitates the creation
+and use of a _Foreign Function Interface (FFI)_. An FFI is a way for a
+programming language to define functions and enable a different (foreign)
+programming language to call those functions.
 
-فهرست 20-8 نشان می‌دهد که چگونه یک یکپارچه‌سازی با تابع `abs` از کتابخانه استاندارد C تنظیم کنیم. توابعی که درون بلوک‌های `extern` اعلام می‌شوند معمولاً از کد راست ناامن برای فراخوانی استفاده می‌شوند، بنابراین باید با `unsafe` نیز علامت‌گذاری شوند. دلیل این است که زبان‌های دیگر قوانین و تضمین‌های راست را اعمال نمی‌کنند، و راست نمی‌تواند آن‌ها را بررسی کند، بنابراین مسئولیت بر عهده برنامه‌نویس است که ایمنی را تضمین کند.
+Listing 20-8 demonstrates how to set up an integration with the `abs` function
+from the C standard library. Functions declared within `extern` blocks are
+usually unsafe to call from Rust code, so they must also be marked `unsafe`. The
+reason is that other languages don’t enforce Rust’s rules and guarantees, and
+Rust can’t check them, so responsibility falls on the programmer to ensure
+safety.
 
 <Listing number="20-8" file-name="src/main.rs" caption="اعلام و فراخوانی یک تابع `extern` تعریف‌شده در زبان دیگر">
 
@@ -177,9 +284,17 @@ Rust’s borrow checker نمی‌تواند بفهمد که ما در حال ق�
 
 </Listing>
 
-درون بلوک `unsafe extern "C"`، ما نام‌ها و امضاهای توابع خارجی از یک زبان دیگر که می‌خواهیم فراخوانی کنیم را فهرست می‌کنیم. بخش `"C"` مشخص می‌کند که کدام _رابط دودویی برنامه (ABI)_ توسط تابع خارجی استفاده می‌شود: ABI تعریف می‌کند که چگونه تابع در سطح اسمبلی فراخوانی شود. ABI `"C"` رایج‌ترین است و از ABI زبان برنامه‌نویسی C پیروی می‌کند.
+Within the `unsafe extern "C"` block, we list the names and signatures of
+external functions from another language we want to call. The `"C"` part defines
+which _application binary interface (ABI)_ the external function uses: the ABI
+defines how to call the function at the assembly level. The `"C"` ABI is the
+most common and follows the C programming language’s ABI.
 
-این تابع خاص هیچ ملاحظات ایمنی حافظه‌ای ندارد. در واقع، ما می‌دانیم که هر فراخوانی به `abs` همیشه برای هر `i32` ایمن خواهد بود، بنابراین می‌توانیم از کلیدواژه `safe` استفاده کنیم تا بگوییم که این تابع خاص حتی با وجود اینکه در یک بلوک `unsafe extern` است، ایمن است. هنگامی که این تغییر را اعمال کنیم، فراخوانی آن دیگر نیاز به یک بلوک `unsafe` ندارد، همان‌طور که در فهرست 20-9 نشان داده شده است.
+This particular function does not have any memory safety considerations, though.
+In fact, we know that any call to `abs` will always be safe for any `i32`, so we
+can use the `safe` keyword to say that this specific function is safe to call
+even though it is in an `unsafe extern` block. Once we make that change, calling
+it no longer requires an `unsafe` block, as shown in Listing 20-9.
 
 <Listing number="20-9" file-name="src/main.rs" caption="علامت‌گذاری صریح یک تابع به‌عنوان `safe` درون یک بلوک `unsafe extern` و فراخوانی ایمن آن">
 
@@ -189,13 +304,28 @@ Rust’s borrow checker نمی‌تواند بفهمد که ما در حال ق�
 
 </Listing>
 
-علامت‌گذاری یک تابع به‌عنوان `safe` ذاتاً آن را ایمن نمی‌کند! در عوض، این مانند یک وعده‌ای است که شما به راست می‌دهید که ایمن _است_. همچنان مسئولیت شماست که اطمینان حاصل کنید این وعده رعایت شود!
+Marking a function as `safe` does not inherently make it safe! Instead, it is
+like a promise you are making to Rust that it _is_ safe. It is still your
+responsibility to make sure that promise is kept!
 
 > #### Calling Rust Functions from Other Languages
 >
-> ما همچنین می‌توانیم از `extern` برای ایجاد یک رابط استفاده کنیم که به زبان‌های دیگر اجازه دهد توابع راست را فراخوانی کنند. به جای ایجاد یک بلوک `extern` کامل، ما کلیدواژه `extern` را اضافه می‌کنیم و ABI مورد استفاده را درست قبل از کلیدواژه `fn` برای تابع مربوطه مشخص می‌کنیم. همچنین باید یک حاشیه‌نویسی `#[unsafe(no_mangle)]` اضافه کنیم تا به کامپایلر راست بگوییم نام این تابع را تغییر ندهد. _Mangling_ زمانی است که یک کامپایلر نامی را که به یک تابع داده‌ایم به نامی متفاوت تغییر می‌دهد که حاوی اطلاعات بیشتری برای سایر بخش‌های فرآیند کامپایل باشد اما کمتر قابل خواندن برای انسان باشد. هر کامپایلر زبان برنامه‌نویسی نام‌ها را کمی متفاوت mangling می‌کند، بنابراین برای اینکه یک تابع راست توسط زبان‌های دیگر قابل نام‌گذاری باشد، باید mangling نام کامپایلر راست را غیرفعال کنیم. این ناامن است زیرا ممکن است در میان کتابخانه‌ها تضاد نام رخ دهد بدون mangling داخلی، بنابراین مسئولیت ماست که اطمینان حاصل کنیم نامی که صادر کرده‌ایم برای صدور بدون mangling ایمن است.
+> We can also use `extern` to create an interface that allows other languages to
+> call Rust functions. Instead of creating a whole `extern` block, we add the
+> `extern` keyword and specify the ABI to use just before the `fn` keyword for
+> the relevant function. We also need to add a `#[unsafe(no_mangle)]` annotation
+> to tell the Rust compiler not to mangle the name of this function. _Mangling_
+> is when a compiler changes the name we’ve given a function to a different name
+> that contains more information for other parts of the compilation process to
+> consume but is less human readable. Every programming language compiler
+> mangles names slightly differently, so for a Rust function to be nameable by
+> other languages, we must disable the Rust compiler’s name mangling. This is
+> unsafe because there might be name collisions across libraries without the
+> built-in mangling, so it is our responsibility to make sure the name we have
+> exported is safe to export without mangling.
 >
-> در مثال زیر، ما تابع `call_from_c` را برای کد C در دسترس قرار می‌دهیم، پس از اینکه به یک کتابخانه مشترک کامپایل و از C لینک شد:
+> In the following example, we make the `call_from_c` function accessible from
+> C code, after it’s compiled to a shared library and linked from C:
 >
 > ```rust
 > #[unsafe(no_mangle)]
@@ -204,11 +334,13 @@ Rust’s borrow checker نمی‌تواند بفهمد که ما در حال ق�
 > }
 > ```
 >
-> این استفاده از `extern` نیازی به `unsafe` ندارد.
+> This usage of `extern` does not require `unsafe`.
 
 ### Accessing or Modifying a Mutable Static Variable
 
-در این کتاب، هنوز در مورد _متغیرهای جهانی_ صحبت نکرده‌ایم، که راست از آن‌ها پشتیبانی می‌کند اما ممکن است با قوانین مالکیت راست مشکل‌ساز شوند. اگر دو thread به یک متغیر جهانی قابل تغییر دسترسی داشته باشند، ممکن است یک data race ایجاد شود.
+In this book, we’ve not yet talked about _global variables_, which Rust does
+support but can be problematic with Rust’s ownership rules. If two threads are
+accessing the same mutable global variable, it can cause a data race.
 
 در راست، متغیرهای جهانی _static_ نامیده می‌شوند. فهرست 20-10 یک مثال از اعلام و استفاده از یک متغیر static با یک string slice به‌عنوان مقدار را نشان می‌دهد.
 
@@ -220,11 +352,23 @@ Rust’s borrow checker نمی‌تواند بفهمد که ما در حال ق�
 
 </Listing>
 
-متغیرهای static مشابه ثابت‌ها هستند، که در بخش [“Constants”][differences-between-variables-and-constants]<!-- ignore --> در فصل 3 در مورد آن‌ها صحبت کردیم. نام متغیرهای static طبق قرارداد به‌صورت `SCREAMING_SNAKE_CASE` نوشته می‌شود. متغیرهای static فقط می‌توانند ارجاع‌هایی با lifetime `'static` ذخیره کنند، به این معنا که کامپایلر راست می‌تواند lifetime را مشخص کند و نیازی نیست که آن را صراحتاً حاشیه‌نویسی کنیم. دسترسی به یک متغیر static غیرقابل تغییر ایمن است.
+Static variables are similar to constants, which we discussed in the
+[“Constants”][differences-between-variables-and-constants]<!-- ignore --> section
+in Chapter 3. The names of static variables are in `SCREAMING_SNAKE_CASE` by
+convention. Static variables can only store references with the `'static`
+lifetime, which means the Rust compiler can figure out the lifetime and we
+aren’t required to annotate it explicitly. Accessing an immutable static
+variable is safe.
 
-یک تفاوت ظریف بین ثابت‌ها و متغیرهای static غیرقابل تغییر این است که مقادیر در یک متغیر static دارای یک آدرس ثابت در حافظه هستند. استفاده از مقدار همیشه به همان داده دسترسی خواهد داشت. از سوی دیگر، ثابت‌ها مجاز هستند داده‌های خود را هر زمان که استفاده می‌شوند تکرار کنند. تفاوت دیگر این است که متغیرهای static می‌توانند قابل تغییر باشند. دسترسی و تغییر متغیرهای static قابل تغییر _ناامن_ است. فهرست 20-11 نشان می‌دهد که چگونه یک متغیر static قابل تغییر به نام `COUNTER` را اعلام، دسترسی و تغییر دهیم.
+A subtle difference between constants and immutable static variables is that
+values in a static variable have a fixed address in memory. Using the value
+will always access the same data. Constants, on the other hand, are allowed to
+duplicate their data whenever they’re used. Another difference is that static
+variables can be mutable. Accessing and modifying mutable static variables is
+_unsafe_. Listing 20-11 shows how to declare, access, and modify a mutable
+static variable named `COUNTER`.
 
-<Listing number="20-11" file-name="src/main.rs" caption="خواندن از یا نوشتن به یک متغیر static قابل تغییر ناامن است">
+<Listing number="20-11" file-name="src/main.rs" caption="Reading from or writing to a mutable static variable is unsafe">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-11/src/main.rs}}
@@ -232,13 +376,33 @@ Rust’s borrow checker نمی‌تواند بفهمد که ما در حال ق�
 
 </Listing>
 
-همانند متغیرهای معمولی، ما با استفاده از کلمه کلیدی `mut` قابلیت تغییرپذیری را مشخص می‌کنیم. هر کدی که بخواهد از `COUNTER` بخواند یا در آن بنویسد، باید در یک بلوک `unsafe` باشد. کدی که در لیست ۲۰-۱۱ نشان داده شده است کامپایل می‌شود و مقدار `COUNTER: 3` را همان‌طور که انتظار می‌رود چاپ می‌کند، زیرا این کد تک‌ریسمانی (_single-threaded_) است. دسترسی چندین ریسمان به `COUNTER` به احتمال زیاد منجر به رقابت داده‌ای (_data race_) می‌شود و این رفتار تعریف‌نشده (_undefined behavior_) خواهد بود. بنابراین، نیاز است کل تابع را به عنوان `unsafe` علامت‌گذاری کنیم و محدودیت ایمنی را مستند کنیم، تا هرکسی که تابع را فراخوانی می‌کند بداند چه کارهایی را می‌تواند با اطمینان انجام دهد و چه کارهایی را نمی‌تواند.
+As with regular variables, we specify mutability using the `mut` keyword. Any
+code that reads or writes from `COUNTER` must be within an `unsafe` block. The
+code in Listing 20-11 compiles and prints `COUNTER: 3` as we would expect
+because it’s single threaded. Having multiple threads access `COUNTER` would
+likely result in data races, so it is undefined behavior. Therefore, we need to
+mark the entire function as `unsafe`, and document the safety limitation, so
+anyone calling the function knows what they are and are not allowed to do
+safely.
 
-هر زمان که یک تابع ناامن می‌نویسیم، به صورت قراردادی کامنتی با `SAFETY` شروع می‌کنیم و توضیح می‌دهیم که فراخوانی تابع چه چیزی نیاز دارد تا ایمن باشد. به همین ترتیب، هر زمان که یک عملیات ناامن انجام می‌دهیم، نوشتن یک کامنت که با `SAFETY` شروع شود برای توضیح اینکه چگونه قوانین ایمنی رعایت می‌شوند، قراردادی است.
+Whenever we write an unsafe function, it is idiomatic to write a comment
+starting with `SAFETY` and explaining what the caller needs to do to call the
+function safely. Likewise, whenever we perform an unsafe operation, it is
+idiomatic to write a comment starting with `SAFETY` to explain how the safety
+rules are upheld.
 
-علاوه بر این، کامپایلر به شما اجازه نمی‌دهد که مراجع به یک متغیر استاتیک تغییرپذیر ایجاد کنید. تنها می‌توانید از طریق یک اشاره‌گر خام (_raw pointer_) که با یکی از عملگرهای قرض خام ایجاد می‌شود به آن دسترسی پیدا کنید. این شامل مواردی است که مرجع به صورت نامرئی ایجاد می‌شود، مانند زمانی که در `println!` در این لیست کد استفاده می‌شود. الزام اینکه مراجع به متغیرهای استاتیک تغییرپذیر فقط از طریق اشاره‌گرهای خام ایجاد شوند، به وضوح بیشتر نیازهای ایمنی در استفاده از آن‌ها کمک می‌کند.
+Additionally, the compiler will not allow you to create references to a mutable
+static variable. You can only access it via a raw pointer, created with one of
+the raw borrow operators. That includes in cases where the reference is created
+invisibly, as when it is used in the `println!` in this code listing. The
+requirement that references to static mutable variables can only be created via
+raw pointers helps make the safety requirements for using them more obvious.
 
-با داده‌های تغییرپذیری که به صورت جهانی قابل دسترسی هستند، اطمینان از اینکه رقابت داده‌ای (_data race_) رخ نمی‌دهد دشوار است، به همین دلیل Rust متغیرهای استاتیک تغییرپذیر را ناایمن در نظر می‌گیرد. در صورت امکان، ترجیح داده می‌شود از تکنیک‌های همزمانی (_concurrency techniques_) و اشاره‌گرهای هوشمند ایمن برای ریسمان‌ها (_thread-safe smart pointers_) که در فصل ۱۶ مورد بحث قرار گرفتند استفاده کنید تا کامپایلر بررسی کند که دسترسی به داده‌ها از ریسمان‌های مختلف به صورت ایمن انجام می‌شود.
+With mutable data that is globally accessible, it’s difficult to ensure there
+are no data races, which is why Rust considers mutable static variables to be
+unsafe. Where possible, it’s preferable to use the concurrency techniques and
+thread-safe smart pointers we discussed in Chapter 16 so the compiler checks
+that data accessed from different threads is done safely.
 
 ### Implementing an Unsafe Trait
 
@@ -247,46 +411,94 @@ Rust’s borrow checker نمی‌تواند بفهمد که ما در حال ق�
 <Listing number="20-12" caption="تعریف و پیاده‌سازی یک trait ناامن">
 
 ```rust
-{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-12/src/main.rs}}
+{{#rustdoc_include ../listings/ch20-advanced-features/listing-20-12/src/main.rs:here}}
 ```
 
 </Listing>
 
-با استفاده از `unsafe impl`، ما قول می‌دهیم که قاعده‌هایی را که کامپایلر نمی‌تواند تأیید کند، رعایت کنیم.
+By using `unsafe impl`, we’re promising that we’ll uphold the invariants that
+the compiler can’t verify.
 
-به‌عنوان مثال، به marker traitهای `Sync` و `Send` که در بخش [“Extensible Concurrency with the `Sync` and `Send` Traits”][extensible-concurrency-with-the-sync-and-send-traits]<!-- ignore --> در فصل 16 بررسی کردیم، بازگردید: کامپایلر این traitها را به‌صورت خودکار پیاده‌سازی می‌کند اگر نوع‌های ما به‌طور کامل از نوع‌های `Send` و `Sync` تشکیل شده باشند. اگر نوعی پیاده‌سازی کنیم که حاوی نوعی است که `Send` یا `Sync` نیست، مانند اشاره‌گر (Pointer)های خام، و بخواهیم آن نوع را به‌عنوان `Send` یا `Sync` علامت‌گذاری کنیم، باید از `unsafe` استفاده کنیم. راست نمی‌تواند تأیید کند که نوع ما تضمین‌های لازم برای ارسال ایمن بین ریسمان‌ها یا دسترسی ایمن از ریسمان‌های متعدد را رعایت می‌کند؛ بنابراین، ما باید این بررسی‌ها را به‌صورت دستی انجام دهیم و این را با `unsafe` نشان دهیم.
+As an example, recall the `Sync` and `Send` marker traits we discussed in the
+[“Extensible Concurrency with the `Sync` and `Send`
+Traits”][extensible-concurrency-with-the-sync-and-send-traits]<!-- ignore -->
+section in Chapter 16: the compiler implements these traits automatically if
+our types are composed entirely of `Send` and `Sync` types. If we implement a
+type that contains a type that is not `Send` or `Sync`, such as raw pointers,
+and we want to mark that type as `Send` or `Sync`, we must use `unsafe`. Rust
+can’t verify that our type upholds the guarantees that it can be safely sent
+across threads or accessed from multiple threads; therefore, we need to do
+those checks manually and indicate as such with `unsafe`.
 
 ### Accessing Fields of a Union
 
-آخرین عملی که تنها با `unsafe` کار می‌کند، دسترسی به فیلدهای یک _union_ است. یک `union` شبیه به یک `struct` است، اما تنها یکی از فیلدهای اعلام‌شده در یک نمونه در هر زمان خاص استفاده می‌شود. unions عمدتاً برای تعامل با unions در کد C استفاده می‌شوند. دسترسی به فیلدهای union ناامن است زیرا راست نمی‌تواند نوع داده‌ای که در حال حاضر در نمونه union ذخیره شده را تضمین کند. می‌توانید اطلاعات بیشتری درباره unions در [مرجع راست][reference] بیاموزید.
+The final action that works only with `unsafe` is accessing fields of a
+_union_. A `union` is similar to a `struct`, but only one declared field is
+used in a particular instance at one time. Unions are primarily used to
+interface with unions in C code. Accessing union fields is unsafe because Rust
+can’t guarantee the type of the data currently being stored in the union
+instance. You can learn more about unions in [the Rust Reference][reference].
 
-### Using Miri to check unsafe code
+### Using Miri to Check Unsafe Code
 
-هنگام نوشتن کد ناامن، ممکن است بخواهید بررسی کنید که چیزی که نوشته‌اید واقعاً ایمن و درست است. یکی از بهترین روش‌ها برای این کار استفاده از [Miri][miri]، یک ابزار رسمی راست برای شناسایی رفتارهای تعریف‌نشده است. در حالی که borrow checker یک ابزار _استاتیک_ است که در زمان کامپایل کار می‌کند، Miri یک ابزار _داینامیک_ است که در زمان اجرا کار می‌کند. این ابزار کد شما را با اجرای برنامه یا مجموعه تست آن بررسی می‌کند و زمانی که قوانین مربوط به نحوه کار راست را نقض کنید، آن را تشخیص می‌دهد.
+When writing unsafe code, you might want to check that what you have written
+actually is safe and correct. One of the best ways to do that is to use
+[Miri][miri], an official Rust tool for detecting undefined behavior. Whereas
+the borrow checker is a _static_ tool which works at compile time, Miri is a
+_dynamic_ tool which works at runtime. It checks your code by running your
+program, or its test suite, and detecting when you violate the rules it
+understands about how Rust should work.
 
-استفاده از Miri نیاز به یک نسخه nightly از راست دارد (که در [ضمیمه ی: How Rust is Made and “Nightly Rust”][nightly] بیشتر درباره آن صحبت کرده‌ایم). می‌توانید یک نسخه nightly از راست و ابزار Miri را با تایپ کردن `rustup +nightly component add miri` نصب کنید. این کار نسخه راست پروژه شما را تغییر نمی‌دهد؛ فقط ابزار را به سیستم شما اضافه می‌کند تا هر زمان که بخواهید از آن استفاده کنید. می‌توانید Miri را روی یک پروژه با تایپ کردن `cargo +nightly miri run` یا `cargo +nightly miri test` اجرا کنید.
+Using Miri requires a nightly build of Rust (which we talk about more in
+[Appendix G: How Rust is Made and “Nightly Rust”][nightly]). You can install
+both a nightly version of Rust and the Miri tool by typing `rustup +nightly
+component add miri`. This does not change what version of Rust your project
+uses; it only adds the tool to your system so you can use it when you want to.
+You can run Miri on a project by typing `cargo +nightly miri run` or `cargo
++nightly miri test`.
 
-برای مثالی از اینکه این ابزار چقدر می‌تواند مفید باشد، به خروجی اجرای آن روی فهرست 20-11 توجه کنید:
+For an example of how helpful this can be, consider what happens when we run it
+against Listing 20-11:
 
 ```console
-{{#include ../listings/ch20-advanced-features/listing-20-11/output.txt}}
+{{#include ../listings/ch20-advanced-features/listing-20-07/output.txt}}
 ```
 
-این ابزار به‌درستی متوجه می‌شود که ما به داده‌های قابل تغییر ارجاعات مشترک داده‌ایم و در این مورد هشدار می‌دهد. در این مورد، ابزار به ما نمی‌گوید که چگونه مشکل را برطرف کنیم، اما به ما اطلاع می‌دهد که ممکن است یک مشکل وجود داشته باشد و می‌توانیم به این فکر کنیم که چگونه مطمئن شویم که ایمن است. در موارد دیگر، ممکن است به ما بگوید که بخشی از کد قطعاً اشتباه است و توصیه‌هایی برای رفع آن ارائه دهد.
+It helpfully and correctly notices that we have shared references to mutable
+data, and warns about it. In this case, it does not tell us how to fix the
+problem, but it means that we know there is a possible issue and can think about
+how to make sure it is safe. In other cases, it can actually tell us that some
+code is _sure_ to be wrong and make recommendations about how to fix it.
 
-Miri همه چیزهایی را که ممکن است در هنگام نوشتن کد ناامن اشتباه باشد، شناسایی نمی‌کند. اولاً، چون این ابزار یک بررسی داینامیک است، فقط مشکلات کدی را که واقعاً اجرا می‌شود شناسایی می‌کند. این بدان معناست که باید از آن همراه با تکنیک‌های تست خوب استفاده کنید تا اطمینان بیشتری درباره کد ناامن خود داشته باشید. ثانیاً، این ابزار تمام راه‌های ممکن برای ناسالم بودن کد شما را پوشش نمی‌دهد. اگر Miri مشکلی را شناسایی کند، می‌دانید که یک باگ وجود دارد، اما فقط به این دلیل که Miri باگی را شناسایی نمی‌کند، به این معنا نیست که مشکلی وجود ندارد. با این حال، Miri می‌تواند بسیاری از مشکلات را شناسایی کند. آن را روی سایر مثال‌های کد ناامن در این فصل اجرا کنید و ببینید چه می‌گوید!
+Miri doesn’t catch _everything_ you might get wrong when writing unsafe code.
+For one thing, since it is a dynamic check, it only catches problems with code
+that actually gets run. That means you will need to use it in conjunction with
+good testing techniques to increase your confidence about the unsafe code you
+have written. For another thing, it does not cover every possible way your code
+can be unsound. If Miri _does_ catch a problem, you know there’s a bug, but just
+because Miri _doesn’t_ catch a bug doesn’t mean there isn’t a problem. Miri can
+catch a lot, though. Try running it on the other examples of unsafe code in this
+chapter and see what it says!
 
 ### When to Use Unsafe Code
 
-استفاده از `unsafe` برای انجام یکی از پنج عمل (ابرقدرت) که در اینجا بحث شد، اشتباه یا حتی نامناسب نیست. اما درست کردن کد `unsafe` سخت‌تر است، زیرا کامپایلر نمی‌تواند به حفظ ایمنی حافظه کمک کند. وقتی دلیلی برای استفاده از کد `unsafe` دارید، می‌توانید این کار را انجام دهید، و داشتن حاشیه‌نویسی صریح `unsafe` ردیابی منبع مشکلات را زمانی که اتفاق می‌افتند آسان‌تر می‌کند. هر زمان که کد ناامن می‌نویسید، می‌توانید از Miri استفاده کنید تا اطمینان بیشتری داشته باشید که کدی که نوشته‌اید قوانین راست را رعایت می‌کند.
+Using `unsafe` to take one of the five actions (superpowers) just discussed
+isn’t wrong or even frowned upon. But it is trickier to get `unsafe` code
+correct because the compiler can’t help uphold memory safety. When you have a
+reason to use `unsafe` code, you can do so, and having the explicit `unsafe`
+annotation makes it easier to track down the source of problems when they occur.
+Whenever you write unsafe code, you can use Miri to help you be more confident
+that the code you have written upholds Rust’s rules.
 
-برای یک بررسی عمیق‌تر درباره نحوه کار مؤثر با راست ناامن، راهنمای رسمی راست در این موضوع، یعنی [Rustonomicon][nomicon] را بخوانید.
+For a much deeper exploration of how to work effectively with unsafe Rust, read
+Rust’s official guide to the subject, the [Rustonomicon][nomicon].
 
 [dangling-references]: ch04-02-references-and-borrowing.html#dangling-references
+[ABI]: ../reference/items/external-blocks.html#abi
 [differences-between-variables-and-constants]: ch03-01-variables-and-mutability.html#constants
-[extensible-concurrency-with-the-sync-and-send-traits]: ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits
+[extensible-concurrency-with-the-send-and-sync-traits]: ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-send-and-sync-traits
 [the-slice-type]: ch04-03-slices.html#the-slice-type
-[reference]: ../reference/items/unions.html
+[unions]: ../reference/items/unions.html
 [miri]: https://github.com/rust-lang/miri
 [editions]: appendix-05-editions.html
 [nightly]: appendix-07-nightly-rust.html

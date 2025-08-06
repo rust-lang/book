@@ -21,7 +21,9 @@ occasional maintenance tasks.
 ## Update the `edition` in all listings
 
 To update the `edition = "[year]"` metadata in all the listings' `Cargo.toml`s,
-run the `./tools/update-editions.sh` script and commit the changes.
+run the `./tools/update-editions.sh` script. Check the diff to make sure it
+looks reasonable, and in particular check whether the updates necessitate any
+changes to the text. Then commit the changes.
 
 ## Update the `edition` in mdBook config
 

@@ -8,10 +8,6 @@ fn main() {
 
 // ANCHOR: here
 fn longest(x: &str, y: &str) -> &str {
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
+    if x.len() > y.len() { x } else { y }
 }
 // ANCHOR_END: here

@@ -40,10 +40,12 @@ function attachFerrises(type) {
       continue;
     }
 
-    let lines = codeBlock.innerText.replace(/\n$/, "").split(/\n/).length;
+    let codeLines = codeBlock.innerText;
+    let extra = codeLines.endsWith("\n") ? 1 : 0;
+    let numLines = codeLines.split("\n").length - extra;
 
     /** @type {'small' | 'large'} */
-    let size = lines < 4 ? "small" : "large";
+    let size = numLines < 4 ? "small" : "large";
 
     let container = prepareFerrisContainer(codeBlock, size == "small");
     if (!container) {

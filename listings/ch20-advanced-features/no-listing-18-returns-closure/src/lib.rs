@@ -1,3 +1,3 @@
-fn returns_closure() -> impl Fn(i32) -> i32 {
-    |x| x + 1
+fn returns_closure(init: i32) -> impl Fn(i32) -> i32 {
+    move |x| x + init
 }

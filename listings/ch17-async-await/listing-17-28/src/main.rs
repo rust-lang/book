@@ -1,6 +1,6 @@
 extern crate trpl; // required for mdbook test
 
-use std::{future::Future, time::Duration};
+use std::time::Duration;
 
 fn main() {
     trpl::run(async {
@@ -9,7 +9,7 @@ fn main() {
             "Finally finished"
         };
 
-        match timeout(slow, Duration::from_millis(10)).await {
+        match timeout(slow, Duration::from_secs(2)).await {
             Ok(message) => println!("Succeeded with '{message}'"),
             Err(duration) => {
                 println!("Failed after {} seconds", duration.as_secs())

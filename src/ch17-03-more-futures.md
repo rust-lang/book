@@ -13,7 +13,12 @@
 
 این قطعاً نسبت به جابجایی بین `join`، `join3`، `join4` و موارد دیگر بهبود یافته است! با این حال، حتی این فرم ماکرو نیز فقط زمانی کار می‌کند که تعداد futures را از قبل بدانیم. اما در دنیای واقعی Rust، اضافه کردن futures به یک مجموعه و سپس انتظار برای کامل شدن برخی یا تمام آن‌ها یک الگوی رایج است.
 
-برای بررسی تمام futures در یک مجموعه، باید روی _همه_ آن‌ها حلقه بزنیم و آن‌ها را join کنیم. تابع `trpl::join_all` هر نوعی را که ویژگی `Iterator` را پیاده‌سازی می‌کند قبول می‌کند، که در فصل ۱۳ در بخش [ویژگی Iterator و متد `next`][iterator-trait]<!-- ignore --> درباره آن یاد گرفتید، بنابراین به نظر می‌رسد دقیقاً همان چیزی است که نیاز داریم. بیایید سعی کنیم futures خود را در یک وکتور قرار دهیم و `join!` را با `join_all` جایگزین کنیم، همان‌طور که در لیست ۱۷-۱۵ نشان داده شده است.
+برای بررسی همه‌ی futureها در یک مجموعه، باید روی همه‌ی آن‌ها پیمایش کنیم و روی همه join کنیم.
+تابع `trpl::join_all` هر نوعی را می‌پذیرد که trait `Iterator` را پیاده‌سازی کرده باشد،
+که در فصل ۱۳ در بخش [trait پیمایشگر و متد `next`][iterator-trait] درباره‌ی آن آموختید،
+پس به نظر می‌رسد که دقیقاً مناسب باشد.
+بیایید futureهایمان را در یک بردار قرار دهیم و `join!` را با `join_all` جایگزین کنیم،
+همان‌طور که در لیستینگ 17-15 نشان داده شده است.
 
 <Listing number="17-15" caption="ذخیره آینده‌های ناشناس در یک بردار و فراخوانی `join_all`">
 
@@ -42,8 +47,7 @@ error[E0308]: mismatched types
    |                      ----- the found `async` block
 ...
 45 |         let futures = vec![tx1_fut, rx_fut, tx_fut];
-   |                                     ^^^^^^ expected `async` block, found a 
-different `async` block
+   |                                     ^^^^^^ expected `async` block, found a different `async` block
    |
    = note: expected `async` block `{async block@src/main.rs:10:23: 10:33}`
               found `async` block `{async block@src/main.rs:24:22: 24:27}`
@@ -54,7 +58,13 @@ different `async` block
 این ممکن است شگفت‌آور باشد. بالاخره، هیچ‌یک از بلوک‌های async چیزی بازنمی‌گردانند، بنابراین هر کدام یک `Future<Output = ()>` تولید می‌کنند. اما به یاد داشته باشید که `Future` یک ویژگی (_trait_) است و کامپایلر برای هر بلوک async یک enum منحصربه‌فرد ایجاد می‌کند. نمی‌توانید دو struct مختلف را که دستی نوشته شده‌اند در یک `Vec` قرار دهید، و همین قانون برای enumهای مختلفی که توسط کامپایلر تولید می‌شوند اعمال می‌شود.
 
 
-برای اینکه این کار انجام شود، باید از _اشیاء ویژگی_ (_trait objects_) استفاده کنیم، همان‌طور که در [“بازگرداندن خطاها از تابع run”][dyn]<!-- ignore --> در فصل ۱۲ انجام دادیم. (ما اشیاء ویژگی را در فصل ۱۸ به‌طور مفصل پوشش خواهیم داد.) استفاده از اشیاء ویژگی به ما اجازه می‌دهد هر یک از futureهای ناشناس تولیدشده توسط این انواع را به‌عنوان یک نوع یکسان در نظر بگیریم، زیرا همه آن‌ها ویژگی `Future` را پیاده‌سازی می‌کنند.
+> توجه: در بخش [استفاده از یک enum برای نگهداری چند مقدار][enum-alt]<!-- ignore --> در فصل ۸،
+> روش دیگری برای گنجاندن چند نوع مختلف در یک `Vec` را بررسی کردیم:
+> استفاده از یک `enum` برای نمایش هر نوعی که ممکن است در بردار وجود داشته باشد.
+> اما در اینجا نمی‌توانیم این کار را انجام دهیم.
+> اولاً، هیچ راهی برای نام‌گذاری نوع‌های مختلف نداریم چون آن‌ها ناشناس (anonymous) هستند.
+> ثانیاً، دلیل اصلی استفاده‌ی ما از بردار و `join_all` این بود که بتوانیم با مجموعه‌ای پویا از futureها کار کنیم،
+> جایی که تنها مهم است همه خروجی‌های آن‌ها یکسان باشند.
 
 > نکته: در بخش فصل ۸ [استفاده از یک Enum برای ذخیره مقادیر متعدد][enum-alt]<!-- ignore -->، درباره یک روش دیگر برای شامل کردن چندین نوع در یک `Vec` صحبت کردیم: استفاده از یک enum برای نمایش هر نوعی که می‌تواند در وکتور ظاهر شود. اما نمی‌توانیم اینجا از آن استفاده کنیم. از یک طرف، هیچ راهی برای نام‌گذاری انواع مختلف نداریم، زیرا آن‌ها ناشناس هستند. از طرف دیگر، دلیلی که ما در وهله اول به دنبال یک وکتور و `join_all` رفتیم، این بود که بتوانیم با یک مجموعه پویا از futures کار کنیم، جایی که فقط به این اهمیت می‌دهیم که همه آن‌ها خروجی یکسانی دارند.
 
@@ -88,74 +98,26 @@ different `async` block
 این تغییر تأثیر قابل‌توجهی داشت. اکنون وقتی کامپایلر را اجرا می‌کنیم، فقط خطاهایی که به `Unpin` اشاره دارند باقی می‌مانند. اگرچه سه خطا وجود دارد، اما محتوای آن‌ها بسیار مشابه است.
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-16
+cd listings/ch17-async-await/listing-17-17
 cargo build
 # copy *only* the errors
 # fix the paths
 -->
 
 ```text
-error[E0308]: mismatched types
-   --> src/main.rs:46:46
+error[E0277]: `dyn Future<Output = ()>` cannot be unpinned
+   --> src/main.rs:49:24
     |
-10  |         let tx1_fut = async move {
-    |                       ---------- the expected `async` block
-...
-24  |         let rx_fut = async {
-    |                      ----- the found `async` block
-...
-46  |             vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
-    |                                     -------- ^^^^^^ expected `async` block, found a different `async` block
-    |                                     |
-    |                                     arguments to this function are incorrect
-    |
-    = note: expected `async` block `{async block@src/main.rs:10:23: 10:33}`
-               found `async` block `{async block@src/main.rs:24:22: 24:27}`
-    = note: no two async blocks, even if identical, have the same type
-    = help: consider pinning your async block and casting it to a trait object
-note: associated function defined here
-   --> file:///home/.rustup/toolchains/1.82/lib/rustlib/src/rust/library/alloc/src/boxed.rs:255:12
-    |
-255 |     pub fn new(x: T) -> Self {
-    |            ^^^
-
-error[E0308]: mismatched types
-   --> src/main.rs:46:64
-    |
-10  |         let tx1_fut = async move {
-    |                       ---------- the expected `async` block
-...
-30  |         let tx_fut = async move {
-    |                      ---------- the found `async` block
-...
-46  |             vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
-    |                                                       -------- ^^^^^^ expected `async` block, found a different `async` block
-    |                                                       |
-    |                                                       arguments to this function are incorrect
-    |
-    = note: expected `async` block `{async block@src/main.rs:10:23: 10:33}`
-               found `async` block `{async block@src/main.rs:30:22: 30:32}`
-    = note: no two async blocks, even if identical, have the same type
-    = help: consider pinning your async block and casting it to a trait object
-note: associated function defined here
-   --> file:///home/.rustup/toolchains/1.82/lib/rustlib/src/rust/library/alloc/src/boxed.rs:255:12
-    |
-255 |     pub fn new(x: T) -> Self {
-    |            ^^^
-
-error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
-   --> src/main.rs:48:24
-    |
-48  |         trpl::join_all(futures).await;
-    |         -------------- ^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`, which is required by `Box<{async block@src/main.rs:10:23: 10:33}>: Future`
+49  |         trpl::join_all(futures).await;
+    |         -------------- ^^^^^^^ the trait `Unpin` is not implemented for `dyn Future<Output = ()>`
     |         |
     |         required by a bound introduced by this call
     |
     = note: consider using the `pin!` macro
             consider using `Box::pin` if you need to access the pinned value outside of the current scope
-    = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
+    = note: required for `Box<dyn Future<Output = ()>>` to implement `Future`
 note: required by a bound in `join_all`
-   --> file:///home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:105:14
+   --> file:///home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.30/src/future/join_all.rs:105:14
     |
 102 | pub fn join_all<I>(iter: I) -> JoinAll<I::Item>
     |        -------- required by a bound in this function
@@ -163,17 +125,17 @@ note: required by a bound in `join_all`
 105 |     I::Item: Future,
     |              ^^^^^^ required by this bound in `join_all`
 
-error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
-  --> src/main.rs:48:9
+error[E0277]: `dyn Future<Output = ()>` cannot be unpinned
+  --> src/main.rs:49:9
    |
-48 |         trpl::join_all(futures).await;
-   |         ^^^^^^^^^^^^^^^^^^^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`, which is required by `Box<{async block@src/main.rs:10:23: 10:33}>: Future`
+49 |         trpl::join_all(futures).await;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ the trait `Unpin` is not implemented for `dyn Future<Output = ()>`
    |
    = note: consider using the `pin!` macro
            consider using `Box::pin` if you need to access the pinned value outside of the current scope
-   = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
+   = note: required for `Box<dyn Future<Output = ()>>` to implement `Future`
 note: required by a bound in `futures_util::future::join_all::JoinAll`
-  --> file:///home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+  --> file:///home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.30/src/future/join_all.rs:29:8
    |
 27 | pub struct JoinAll<F>
    |            ------- required by a bound in this struct
@@ -181,26 +143,36 @@ note: required by a bound in `futures_util::future::join_all::JoinAll`
 29 |     F: Future,
    |        ^^^^^^ required by this bound in `JoinAll`
 
-error[E0277]: `{async block@src/main.rs:10:23: 10:33}` cannot be unpinned
-  --> src/main.rs:48:33
+error[E0277]: `dyn Future<Output = ()>` cannot be unpinned
+  --> src/main.rs:49:33
    |
-48 |         trpl::join_all(futures).await;
-   |                                 ^^^^^ the trait `Unpin` is not implemented for `{async block@src/main.rs:10:23: 10:33}`, which is required by `Box<{async block@src/main.rs:10:23: 10:33}>: Future`
+49 |         trpl::join_all(futures).await;
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `dyn Future<Output = ()>`
    |
    = note: consider using the `pin!` macro
            consider using `Box::pin` if you need to access the pinned value outside of the current scope
-   = note: required for `Box<{async block@src/main.rs:10:23: 10:33}>` to implement `Future`
+   = note: required for `Box<dyn Future<Output = ()>>` to implement `Future`
 note: required by a bound in `futures_util::future::join_all::JoinAll`
-  --> file:///home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/futures-util-0.3.30/src/future/join_all.rs:29:8
+  --> file:///home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.30/src/future/join_all.rs:29:8
    |
 27 | pub struct JoinAll<F>
    |            ------- required by a bound in this struct
 28 | where
 29 |     F: Future,
    |        ^^^^^^ required by this bound in `JoinAll`
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `async_await` (bin "async_await") due to 3 previous errors
 ```
 
-این پیام اطلاعات زیادی برای هضم کردن دارد، بنابراین بیایید آن را تجزیه کنیم. بخش اول پیام به ما می‌گوید که اولین بلوک async (`src/main.rs:8:23: 20:10`) ویژگی `Unpin` را پیاده‌سازی نمی‌کند و پیشنهاد می‌دهد از `pin!` یا `Box::pin` برای حل آن استفاده کنیم. در ادامه این فصل، جزئیات بیشتری درباره `Pin` و `Unpin` بررسی خواهیم کرد. با این حال، فعلاً می‌توانیم فقط از توصیه کامپایلر پیروی کنیم تا از این مشکل عبور کنیم. در لیست ۱۷-۱۸، ابتدا با به‌روزرسانی اعلان نوع برای `futures` شروع می‌کنیم، به طوری که هر `Box` درون یک `Pin` قرار بگیرد. دوم، از `Box::pin` برای pin کردن خود futures استفاده می‌کنیم.
+این پیام حجم زیادی از اطلاعات را دارد، پس بیایید آن را بخش‌بندی کنیم.
+بخش اول پیام می‌گوید که اولین بلاک async (`src/main.rs:8:23: 20:10`) trait `Unpin` را پیاده‌سازی نکرده است
+و پیشنهاد می‌کند برای رفع این مشکل از `pin!` یا `Box::pin` استفاده کنیم.
+در ادامه‌ی فصل، به جزئیات بیشتری درباره‌ی `Pin` و `Unpin` خواهیم پرداخت.
+فعلاً می‌توانیم فقط از توصیه‌ی کامپایلر پیروی کنیم تا مشکل برطرف شود.
+در لیستینگ 17-18، ابتدا `Pin` را از `std::pin` وارد می‌کنیم.
+سپس نوع `futures` را به‌روزرسانی می‌کنیم، به‌طوری که هر `Box` داخل یک `Pin` قرار گیرد.
+در نهایت، از `Box::pin` برای pin کردن خود futureها استفاده می‌کنیم.
 
 
 <Listing number="17-18" caption="استفاده از `Pin` و `Box::pin` برای برطرف کردن نوع `Vec`" file-name="src/main.rs">
@@ -232,7 +204,13 @@ received 'you'
 
 اینجا چیزهای بیشتری برای بررسی وجود دارد. برای یک مورد، استفاده از `Pin<Box<T>>` یک مقدار کمی سربار اضافه می‌کند، زیرا این futures را با `Box` روی heap قرار می‌دهیم—و ما فقط این کار را برای هم‌تراز کردن انواع انجام می‌دهیم. بعد از همه این‌ها، ما _واقعاً_ نیازی به تخصیص heap نداریم: این futures به این تابع خاص محدود هستند. همان‌طور که قبلاً ذکر شد، `Pin` خودش یک نوع wrapper است، بنابراین می‌توانیم از مزیت داشتن یک نوع واحد در `Vec` بهره‌مند شویم—دلیل اصلی که به دنبال `Box` رفتیم—بدون انجام تخصیص heap. می‌توانیم مستقیماً از `Pin` با هر future استفاده کنیم، با استفاده از ماکروی `std::pin::pin`.
 
-با این حال، هنوز باید نوع مرجع pin شده را به‌صراحت مشخص کنیم؛ در غیر این صورت، Rust هنوز نمی‌داند که این‌ها را به‌عنوان اشیاء ویژگی دینامیک تفسیر کند، که دقیقاً همان چیزی است که ما در `Vec` به آن نیاز داریم. بنابراین، هر future را زمانی که تعریف می‌کنیم با `pin!` pin می‌کنیم، و `futures` را به‌عنوان یک `Vec` که شامل مراجع متغیر pin شده به نوع future دینامیک است تعریف می‌کنیم، همان‌طور که در لیست ۱۷-۱۹ نشان داده شده است.
+با این حال، همچنان باید به‌صورت صریح نوع رفرنس پین‌شده را مشخص کنیم؛  
+در غیر این صورت، Rust نمی‌داند که این‌ها باید به عنوان trait objectهای داینامیک تفسیر شوند،  
+که این همان چیزی است که در `Vec` به آن نیاز داریم.  
+بنابراین، `pin` را به لیست واردات‌مان از `std::pin` اضافه می‌کنیم.  
+سپس می‌توانیم هر future را هنگام تعریف آن با `pin!` پین کنیم  
+و `futures` را به‌صورت یک `Vec` شامل رفرنس‌های mutable پین‌شده به نوع dynamic future تعریف کنیم،  
+همان‌طور که در لیستینگ 17-19 نشان داده شده است.
 
 با این حال، باید به‌صراحت نوع مرجع pinned را مشخص کنیم؛ در غیر این صورت، راست همچنان نمی‌داند که این‌ها را به‌عنوان شیءهای ویژگی دینامیک تفسیر کند، که همان چیزی است که برای قرار گرفتن در `Vec` نیاز داریم. بنابراین، هر آینده را وقتی تعریف می‌کنیم `pin!` می‌کنیم و `futures` را به‌عنوان یک `Vec` که شامل مراجع متغیر pinned به نوع ویژگی دینامیک `Future` است تعریف می‌کنیم، همانطور که در فهرست 17-19 نشان داده شده است.
 
@@ -463,6 +441,6 @@ Failed after 2 seconds
 - به نوع `futures::stream::FuturesUnordered` از crate `futures` نگاهی بیندازید. استفاده از آن چگونه می‌تواند با استفاده از یک `Vec` متفاوت باشد؟ (نگران این نباشید که این نوع از بخش `stream` crate آمده است؛ با هر مجموعه‌ای از futures به خوبی کار می‌کند.)
 
 [dyn]: ch12-03-improving-error-handling-and-modularity.html
-[enum-alt]: ch12-03-improving-error-handling-and-modularity.html#returning-errors-from-the-run-function
+[enum-alt]: ch08-01-vectors.html#using-an-enum-to-store-multiple-types
 [async-program]: ch17-01-futures-and-syntax.html#our-first-async-program
 [iterator-trait]: ch13-02-iterators.html#the-iterator-trait-and-the-next-method

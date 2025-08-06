@@ -80,9 +80,12 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
     #
     # - Replaces the path up to `.rustup/toolchains` with `file:///home`, while
     #   preserving leading spaces and the `-->`.
-    # - Replaces the version-and-architecture-tripl with just the version, so
+    # - Replaces the version-and-architecture-triple with just the version, so
     #   e.g. `1.82-aarch64-apple-darwin` becomes `1.82`.
     sed -i '' -E -e 's@^([[:space:]]*-->[[:space:]]+).*(\.rustup/toolchains/[[:digit:]]+\.[[:digit:]]+)([^/]*)@\1file:///home/\2@' "${full_output_path}"
+
+    # Similarly, replace Miri paths
+    sed -i '' -E -e "s@Running \`(.*)\.rustup/toolchains/nightly([^/]*)/bin/cargo-miri runner target/miri/([^/]*)/debug/([^/]*)@Running \`file:///home/.rustup/toolchains/nightly/bin/cargo-miri runner target/miri/debug/\4@" "${full_output_path}"
 
     # Restore the previous compile time, if there is one
     if [ -n  "${compile_time}" ]; then
