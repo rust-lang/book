@@ -12,6 +12,10 @@ name = "mdbook-trpl-listing"
 path = "src/bin/listing.rs"
 
 [[bin]]
+name = "mdbook-trpl-listing-link"
+path = "src/bin/listing_link.rs"
+
+[[bin]]
 name = "mdbook-trpl-heading"
 path = "src/bin/heading.rs"
 
@@ -29,6 +33,7 @@ pulldown-cmark-to-cmark = "19"
 serde_json = "1"
 thiserror = "1.0.60"
 toml = "0.8.12"
+regex = "1.5"
 
 [dev-dependencies]
 assert_cmd = "2"

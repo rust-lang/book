@@ -38,6 +38,7 @@ git-repository-url = "https://github.com/rust-lang/book"
 [preprocessor.trpl-note]
 
 [preprocessor.trpl-listing]
+[preprocessor.trpl-listing-link]
 output-mode = "default"
 
 [rust]
