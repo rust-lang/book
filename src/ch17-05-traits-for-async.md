@@ -123,7 +123,7 @@ yet ready.
 
 <a id="pinning-and-the-pin-and-unpin-traits"></a>
 
-### The `Pin` and `Unpin` Traits
+### The `Pin` struct and the `Unpin` trait
 
 When we introduced the idea of pinning in Listing 17-16, we ran into a very
 gnarly error message. Here is the relevant part of it again:
