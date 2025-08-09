@@ -21,6 +21,18 @@ single line, you’ll need to include `//` on each line, like this:
 // explain what's going on.
 ```
 
+Rust also supports Block comments:
+
+```rust
+/*
+This is a block comment
+it can span multiple lines
+block comments can be useful in certain situations
+*/
+```
+
+While block comments are valid in Rust, they are less commonly used compared to // comments. One reason is that block comments cannot be nested, which can sometimes make debugging trickier. That said, they can be helpful for temporarily commenting out large sections of code during development.
+
 Comments can also be placed at the end of lines containing code:
 
 <span class="filename">Filename: src/main.rs</span>
