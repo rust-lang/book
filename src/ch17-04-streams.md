@@ -215,7 +215,7 @@ for 200 milliseconds, this should affect half of the messages.
 To sleep between messages in the `get_messages` function without blocking, we
 need to use async. However, we can’t make `get_messages` itself into an async
 function, because then we’d return a `Future<Output = Stream<Item = String>>`
-instead of a `Stream<Item = String>>`. The caller would have to await
+instead of a `Stream<Item = String>`. The caller would have to await
 `get_messages` itself to get access to the stream. But remember: everything in a
 given future happens linearly; concurrency happens _between_ futures. Awaiting
 `get_messages` would require it to send all the messages, including the sleep
