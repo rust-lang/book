@@ -54,25 +54,57 @@ mdbook build
 The output will be in the `book` subdirectory. To check it out, open it in
 your web browser.
 
-_Firefox:_
+### Firefox:
+
+_Linux:_
 
 ```sh
-firefox book/index.html                       # Linux
-open -a "Firefox" book/index.html             # OS X
-Start-Process "firefox.exe" .\book\index.html # Windows (PowerShell)
-start firefox.exe .\book\index.html           # Windows (Cmd)
+firefox book/index.html                       
 ```
-
-_Chrome:_
+_macOS:_
 
 ```sh
-google-chrome book/index.html                 # Linux
-open -a "Google Chrome" book/index.html       # OS X
-Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
-start chrome.exe .\book\index.html            # Windows (Cmd)
+open -a "Firefox" book/index.html             
 ```
 
-To run the tests:
+_Windows | Powershell:_
+
+```sh
+Start-Process "firefox.exe" .\book\index.html 
+```
+
+_Windows | CMD:_
+
+```sh
+start firefox.exe .\book\index.html           
+```
+
+### Chrome:
+
+_Linux:_
+
+```sh
+google-chrome book/index.html                       
+```
+_macOS:_
+
+```sh
+open -a "Google Chrome" book/index.html             
+```
+
+_Windows | Powershell:_
+
+```sh
+Start-Process "chrome.exe" .\book\index.html 
+```
+
+_Windows | CMD:_
+
+```sh
+start chrome.exe .\book\index.html           
+```
+
+## TESTING
 
 ```sh
 cd packages/trpl
@@ -86,23 +118,18 @@ kinds of contributions we're looking for.
 
 [contrib]: https://github.com/rust-lang/book/blob/main/CONTRIBUTING.md
 
-Because the book is [printed][nostarch], and because we want
-to keep the online version of the book close to the print version when
-possible, it may take longer than you're used to for us to address your issue
-or pull request.
+Considering the book is [printed], and parity between available forms is desired, it may take a while for your issue or PR to be addressed.
 
-So far, we've been doing a larger revision to coincide with [Rust Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
-revisions, we will only be correcting errors. If your issue or pull request
-isn't strictly fixing an error, it might sit until the next time that we're
-working on a large revision: expect on the order of months or years. Thank you
+A larger revision is currently underway to coincide with [Rust Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
+revisions, only error-correcting will take place.
+
+If the submitted issue or pull request isn't strictly fixing an error, it might sit until the next large revision: expect on the order of months or years. Thank you
 for your patience!
 
 ### Translations
 
-We'd love help translating the book! See the [Translations] label to join in
-efforts that are currently in progress. Open a new issue to start working on
-a new language! We're waiting on [mdbook support] for multiple languages
-before we merge any in, but feel free to start!
+See the [Translations] label to join in efforts that are currently in progress. Open a new issue to start working on
+a new language! We're waiting on [mdbook support] for multiple languages before we merge any in, but feel free to start!
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 [mdbook support]: https://github.com/rust-lang/mdBook/issues/5
