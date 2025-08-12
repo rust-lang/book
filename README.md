@@ -29,8 +29,8 @@ rust-lang/rust uses in [this file][rust-mdbook]. To get it:
 [mdBook]: https://github.com/rust-lang/mdBook
 [rust-mdbook]: https://github.com/rust-lang/rust/blob/master/src/tools/rustbook/Cargo.toml
 
-```bash
-$ cargo install mdbook --locked --version <version_num>
+```sh
+cargo install mdbook --locked --version <version_num>
 ```
 
 The book also uses two mdbook plugins which are part of this repository. If you
@@ -38,16 +38,16 @@ do not install them, you will see warnings when building and the output will not
 look right, but you _will_ still be able to build the book. To use the plugins,
 you should run:
 
-```bash
-$ cargo install --locked --path packages/mdbook-trpl --force
+```sh
+cargo install --locked --path packages/mdbook-trpl --force
 ```
 
 ## Building
 
 To build the book, type:
 
-```bash
-$ mdbook build
+```sh
+mdbook build
 ```
 
 The output will be in the `book` subdirectory. To check it out, open it in
@@ -55,27 +55,27 @@ your web browser.
 
 _Firefox:_
 
-```bash
-$ firefox book/index.html                       # Linux
-$ open -a "Firefox" book/index.html             # OS X
-$ Start-Process "firefox.exe" .\book\index.html # Windows (PowerShell)
-$ start firefox.exe .\book\index.html           # Windows (Cmd)
+```sh
+firefox book/index.html                       # Linux
+open -a "Firefox" book/index.html             # OS X
+Start-Process "firefox.exe" .\book\index.html # Windows (PowerShell)
+start firefox.exe .\book\index.html           # Windows (Cmd)
 ```
 
 _Chrome:_
 
-```bash
-$ google-chrome book/index.html                 # Linux
-$ open -a "Google Chrome" book/index.html       # OS X
-$ Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
-$ start chrome.exe .\book\index.html            # Windows (Cmd)
+```sh
+google-chrome book/index.html                 # Linux
+open -a "Google Chrome" book/index.html       # OS X
+Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
+start chrome.exe .\book\index.html            # Windows (Cmd)
 ```
 
 To run the tests:
 
-```bash
-$ cd packages/trpl
-$ mdbook test --library-path packages/trpl/target/debug/deps
+```sh
+cd packages/trpl
+mdbook test --library-path packages/trpl/target/debug/deps
 ```
 
 ## Contributing
