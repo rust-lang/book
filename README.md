@@ -113,8 +113,7 @@ mdbook test --library-path packages/trpl/target/debug/deps
 
 ## Contributing
 
-We'd love your help! Please see [CONTRIBUTING.md][contrib] to learn about the
-kinds of contributions we're looking for.
+Please see [CONTRIBUTING.md][contrib] 
 
 [contrib]: https://github.com/rust-lang/book/blob/main/CONTRIBUTING.md
 
