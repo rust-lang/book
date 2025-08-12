@@ -5,9 +5,9 @@ This repository contains the source of "The Rust Programming Language" book.
 
 The book is available in various forms and releases:
 - [Printed form, **stable** release, from No Starch Press][printed]
-- [Digital form, **stable** release, from No Starch Press][stable]
-- [Digital form, **beta** release, from No Starch Press][beta]
-- [Digital form, **nightly** release, from No Starch Press][nightly]
+- [Digital form, **stable** release][stable]
+- [Digital form, **beta** release][beta]
+- [Digital form, **nightly** release][nightly]
 
 > [!WARNING]
 Be aware that issues in those versions may have been fixed in this repository already, as those
