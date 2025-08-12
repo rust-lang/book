@@ -1,18 +1,19 @@
-# The Rust Programming Language
-
 ![Build Status](https://github.com/rust-lang/book/workflows/CI/badge.svg)
-
+# The Rust Programming Language
+## Abstract
 This repository contains the source of "The Rust Programming Language" book.
 
-[The book is available in printed form from No Starch Press][nostarch].
+The book is available in various forms and releases:
+- [Printed form, **stable** release, from No Starch Press][printed]
+- [Digital form, **stable** release, from No Starch Press][stable]
+- [Digital form, **beta** release, from No Starch Press][beta]
+- [Digital form, **nightly** release, from No Starch Press][nightly]
 
-[nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
-
-You can also read the book for free online. Please see the book as shipped with
-the latest [stable], [beta], or [nightly] Rust releases. Be aware that issues
-in those versions may have been fixed in this repository already, as those
+> [!WARNING]
+Be aware that issues in those versions may have been fixed in this repository already, as those
 releases are updated less frequently.
 
+[printed]: https;//nostarch.com/rust-programming-language-2nd-edition 
 [stable]: https://doc.rust-lang.org/stable/book/
 [beta]: https://doc.rust-lang.org/beta/book/
 [nightly]: https://doc.rust-lang.org/nightly/book/
@@ -21,7 +22,7 @@ See the [releases] to download just the code of all the code listings that appea
 
 [releases]: https://github.com/rust-lang/book/releases
 
-## Requirements
+## Prerequisites
 
 Building the book requires [mdBook], ideally the same version that
 rust-lang/rust uses in [this file][rust-mdbook]. To get it:
