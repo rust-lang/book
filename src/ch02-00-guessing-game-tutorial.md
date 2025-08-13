@@ -288,7 +288,7 @@ of an expression in one call to `println!` would look like this:
 let x = 5;
 let y = 10;
 
-println!("x = {x} and y + 2 = {}", y + 2);
+println!("x = {x} and y + 2 = {}", x, y + 2);
 ```
 
 This code would print `x = 5 and y + 2 = 12`.
