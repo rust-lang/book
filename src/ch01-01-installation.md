@@ -104,6 +104,18 @@ In Linux and macOS, use:
 $ echo $PATH
 ```
 
+If you don’t see `$HOME/.cargo/bin` listed, you can try this quick fix:
+
+```console
+source $HOME/.cargo/env
+```
+
+This will add Rust to your PATH for the current shell session only. To make it permanent, add the following line to your shell config file (e.g. ~/.zshrc, ~/.bashrc, or ~/.bash_profile) and reload your profile:
+
+```console
+export PATH="$HOME/.cargo/bin:$PATH"
+```
+
 If that’s all correct and Rust still isn’t working, there are a number of
 places you can get help. Find out how to get in touch with other Rustaceans (a
 silly nickname we call ourselves) on [the community page][community].
@@ -160,7 +172,7 @@ This will cache the downloads for these packages so you will not need to
 download them later. Once you have run this command, you do not need to keep the
 `get-dependencies` folder. If you have run this command, you can use the
 `--offline` flag with all `cargo` commands in the rest of the book to use these
-cached versions instead of attempting to use the network. 
+cached versions instead of attempting to use the network.
 
 [otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 [install]: https://www.rust-lang.org/tools/install
