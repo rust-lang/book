@@ -237,13 +237,9 @@ moving the state machine Rust creates for us. And unlike most other types in
 Rust, the futures Rust creates for async blocks can end up with references to
 themselves in the fields of any given variant, as shown in the simplified illustration in Figure 17-4.
 
-<figure>
-
 <img alt="A single-column, three-row table representing a future, fut1, which has data values 0 and 1 in the first two rows and an arrow pointing from the third row back to the second row, representing an internal reference within the future." src="img/trpl17-04.svg" class="center" />
 
-<figcaption>Figure 17-4: A self-referential data type.</figcaption>
-
-</figure>
+<span class="caption">Figure 17-4: A self-referential data type.</span>
 
 By default, though, any object that has a reference to itself is unsafe to move,
 because references always point to the actual memory address of whatever they
@@ -254,13 +250,9 @@ when you make changes to the data structure. For another—more important—thin
 the computer is now free to reuse that memory for other purposes! You could end
 up reading completely unrelated data later.
 
-<figure>
-
 <img alt="Two tables, depicting two futures, fut1 and fut2, each of which has one column and three rows, representing the result of having moved a future out of fut1 into fut2. The first, fut1, is grayed out, with a question mark in each index, representing unknown memory. The second, fut2, has 0 and 1 in the first and second rows and an arrow pointing from its third row back to the second row of fut1, representing a pointer that is referencing the old location in memory of the future before it was moved." src="img/trpl17-05.svg" class="center" />
 
-<figcaption>Figure 17-5: The unsafe result of moving a self-referential data type</figcaption>
-
-</figure>
+<span class="caption">Figure 17-5: The unsafe result of moving a self-referential data type</span>
 
 Theoretically, the Rust compiler could try to update every reference to an
 object whenever it gets moved, but that could add a lot of performance overhead,
@@ -275,13 +267,9 @@ value by wrapping a pointer to that value in `Pin`, it can no longer move. Thus,
 if you have `Pin<Box<SomeType>>`, you actually pin the `SomeType` value, _not_
 the `Box` pointer. Figure 17-6 illustrates this process.
 
-<figure>
-
 <img alt="Three boxes laid out side by side. The first is labeled “Pin”, the second “b1”, and the third “pinned”. Within “pinned” is a table labeled “fut”, with a single column; it represents a future with cells for each part of the data structure. Its first cell has the value “0”, its second cell has an arrow coming out of it and pointing to the fourth and final cell, which has the value “1” in it, and the third cell has dashed lines and an ellipsis to indicate there may be other parts to the data structure. All together, the “fut” table represents a future which is self-referential. An arrow leaves the box labeled “Pin”, goes through the box labeled “b1” and has terminates inside the “pinned” box at the “fut” table." src="img/trpl17-06.svg" class="center" />
 
-<figcaption>Figure 17-6: Pinning a `Box` that points to a self-referential future type.</figcaption>
-
-</figure>
+<span class="caption">Figure 17-6: Pinning a `Box` that points to a self-referential future type.</span>
 
 In fact, the `Box` pointer can still move around freely. Remember: we care about
 making sure the data ultimately being referenced stays in place. If a pointer
@@ -291,13 +279,9 @@ for the types as well as the `std::pin` module and try to work out how you’d d
 this with a `Pin` wrapping a `Box`.) The key is that the self-referential type
 itself cannot move, because it is still pinned.
 
-<figure>
-
 <img alt="Four boxes laid out in three rough columns, identical to the previous diagram with a change to the second column. Now there are two boxes in the second column, labeled “b1” and “b2”, “b1” is grayed out, and the arrow from “Pin” goes through “b2” instead of “b1”, indicating that the pointer has moved from “b1” to “b2”, but the data in “pinned” has not moved." src="img/trpl17-07.svg" class="center" />
 
-<figcaption>Figure 17-7: Moving a `Box` which points to a self-referential future type.</figcaption>
-
-</figure>
+<span class="caption">Figure 17-7: Moving a `Box` which points to a self-referential future type.</span>
 
 However, most types are perfectly safe to move around, even if they happen to be
 behind a `Pin` wrapper. We only need to think about pinning when items have
@@ -342,13 +326,9 @@ characters that make it up. We can wrap a `String` in `Pin`, as seen in Figure
 17-8. However, `String` automatically implements `Unpin`, as do most other types
 in Rust.
 
-<figure>
-
 <img alt="Concurrent work flow" src="img/trpl17-08.svg" class="center" />
 
-<figcaption>Figure 17-8: Pinning a `String`; the dotted line indicates that the `String` implements the `Unpin` trait, and thus is not pinned.</figcaption>
-
-</figure>
+<span class="caption">Figure 17-8: Pinning a `String`; the dotted line indicates that the `String` implements the `Unpin` trait, and thus is not pinned.</span>
 
 As a result, we can do things that would be illegal if `String` implemented
 `!Unpin` instead, such as replacing one string with another at the exact same
@@ -356,13 +336,9 @@ location in memory as in Figure 17-9. This doesn’t violate the `Pin` contract,
 because `String` has no internal references that make it unsafe to move around!
 That is precisely why it implements `Unpin` rather than `!Unpin`.
 
-<figure>
-
 <img alt="Concurrent work flow" src="img/trpl17-09.svg" class="center" />
 
-<figcaption>Figure 17-9: Replacing the `String` with an entirely different `String` in memory.</figcaption>
-
-</figure>
+<span class="caption">Figure 17-9: Replacing the `String` with an entirely different `String` in memory.</span>
 
 Now we know enough to understand the errors reported for that `join_all` call
 from back in Listing 17-17. We originally tried to move the futures produced by
