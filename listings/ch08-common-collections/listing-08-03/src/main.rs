@@ -1,6 +1,6 @@
 fn main() {
     // ANCHOR: here
-    let mut v = Vec::new();
+    let mut v : Vec<i32> = Vec::new();
 
     v.push(5);
     v.push(6);
