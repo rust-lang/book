@@ -26,6 +26,46 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// Remove $ prompts when copying terminal commands (but not command + output blocks)
+document.addEventListener('copy', function (e) {
+  try {
+    const selection = window.getSelection();
+
+    // Check if selection exists and has content
+    if (!selection || !selection.toString()) {
+      return;
+    }
+
+    const selectionText = selection.toString();
+
+    // Only process if it contains terminal prompts
+    if (!selectionText.includes('$ ')) {
+      return;
+    }
+
+    // Split into lines to analyze the selection
+    const lines = selectionText.split('\n');
+
+    // Only remove $ if ALL non-empty lines start with $ (i.e., only commands, no output)
+    const nonEmptyLines = lines.filter(line => line.trim().length > 0);
+    const allLinesAreCommands = nonEmptyLines.length > 0 &&
+      nonEmptyLines.every(line => line.trim().startsWith('$ '));
+
+    // Only clean if we're copying pure commands (no mixed command + output)
+    if (allLinesAreCommands) {
+      const cleaned = selectionText.replace(/^\$ /gm, '');
+
+      if (cleaned !== selectionText && e.clipboardData) {
+        e.clipboardData.setData('text/plain', cleaned);
+        e.preventDefault();
+      }
+    }
+  } catch (error) {
+    // Fail silently - let default copy behavior happen
+    console.warn('Copy enhancement failed, using default behavior');
+  }
+});
+
 /**
  * @param {FerrisType} type
  */
