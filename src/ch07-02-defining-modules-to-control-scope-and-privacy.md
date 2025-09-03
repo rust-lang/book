@@ -46,9 +46,8 @@ great place to refer to as a reminder of how modules work.
   crate::garden::vegetables::Asparagus;` and from then on you only need to
   write `Asparagus` to make use of that type in the scope.
 
-Here, we create a binary crate named `backyard` that illustrates these rules.
-The crate’s directory, also named `backyard`, contains these files and
-directories:
+To illustrate these rules, we create a package named `backyard` that contains a binary crate.
+The package contains these files and directories:
 
 ```text
 backyard
