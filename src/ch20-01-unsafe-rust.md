@@ -324,22 +324,22 @@ programmer to ensure safety.
 
 </Listing>
 
-Within the `unsafe extern "C"` block, we list the names and signatures of
+Within the `extern "C"` block, we list the names and signatures of
 external functions from another language we want to call. The `"C"` part
 defines which _application binary interface (ABI)_ the external function uses:
 the ABI defines how to call the function at the assembly level. The `"C"` ABI
 is the most common and follows the C programming language’s ABI. Information
 about all the ABIs Rust supports is available in [the Rust Reference][ABI].
 
-Every item declared within an `unsafe extern` block is implicitly unsafe.
+Every item declared within an `extern` block is implicitly unsafe.
 However, some FFI functions *are* safe to call. For example, the `abs` function
 from C’s standard library does not have any memory safety considerations and we
 know it can be called with any `i32`. In cases like this, we can use the `safe`
 keyword to say that this specific function is safe to call even though it is in
-an `unsafe extern` block. Once we make that change, calling it no longer
+an `extern` block. Once we make that change, calling it no longer
 requires an `unsafe` block, as shown in Listing 20-9.
 
-<Listing number="20-9" file-name="src/main.rs" caption="Explicitly marking a function as `safe` within an `unsafe extern` block and calling it safely">
+<Listing number="20-9" file-name="src/main.rs" caption="Explicitly marking a function as `safe` within an `extern` block and calling it safely">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-09/src/main.rs}}
