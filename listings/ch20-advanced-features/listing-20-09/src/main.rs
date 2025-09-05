@@ -1,4 +1,4 @@
-unsafe extern "C" {
+extern "C" {
     safe fn abs(input: i32) -> i32;
 }
 
