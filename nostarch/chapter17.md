@@ -2737,7 +2737,7 @@ knows when to check any given future while still being lazy. Again, the details
 of how that works are beyond the scope of this chapter, and you generally only
 need to think about this when writing a custom `Future` implementation. We’ll
 focus instead on the type for `self`, as this is the first time we’ve seen a
-method where `self` has a type annotation. A type annotation for `self` is works
+method where `self` has a type annotation. A type annotation for `self` works
 like type annotations for other function parameters, but with two key
 differences:
 
