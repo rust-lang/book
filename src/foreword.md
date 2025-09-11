@@ -1,41 +1,39 @@
-# Foreword
+# 서문
 
-It wasn’t always so clear, but the Rust programming language is fundamentally
-about _empowerment_: no matter what kind of code you are writing now, Rust
-empowers you to reach farther, to program with confidence in a wider variety of
-domains than you did before.
+Rust 프로그래밍 언어는 처음부터 그 의미가 분명하지는 않았지만, 근본적으로는  
+**역량 강화(empowerment)**를 지향합니다. 지금 어떤 종류의 코드를 작성하고  
+계시든, Rust는 더 멀리 나아가도록 이끌고, 더 넓은 영역에서 자신 있게  
+프로그래밍할 수 있는 힘을 제공합니다.  
 
-Take, for example, “systems-level” work that deals with low-level details of
-memory management, data representation, and concurrency. Traditionally, this
-realm of programming is seen as arcane, accessible only to a select few who
-have devoted the necessary years learning to avoid its infamous pitfalls. And
-even those who practice it do so with caution, lest their code be open to
-exploits, crashes, or corruption.
+예를 들어, 메모리 관리, 데이터 표현, 동시성과 같은 저수준의 세부 사항을 다루는  
+“시스템 수준” 작업을 떠올려 보십시오. 전통적으로 이 영역은 난해하고, 오랜  
+시간 동안 악명 높은 함정을 피하는 법을 배운 소수의 사람들만 접근할 수 있는  
+분야로 여겨져 왔습니다. 심지어 그 일을 해내는 이들조차도 코드가 취약점이나  
+충돌, 손상에 노출되지 않도록 극도로 조심해야 했습니다.  
 
-Rust breaks down these barriers by eliminating the old pitfalls and providing a
-friendly, polished set of tools to help you along the way. Programmers who need
-to “dip down” into lower-level control can do so with Rust, without taking on
-the customary risk of crashes or security holes, and without having to learn
-the fine points of a fickle toolchain. Better yet, the language is designed to
-guide you naturally towards reliable code that is efficient in terms of speed
-and memory usage.
+Rust는 이러한 장벽을 허물고, 기존의 함정을 제거하며, 프로그래머를 돕는  
+친절하고 세련된 도구 모음을 제공합니다. 저수준 제어가 필요한 경우에도 Rust를  
+사용하면 충돌이나 보안 결함의 위험을 크게 줄일 수 있으며, 까다로운 도구  
+체인의 세부 사항까지 익히지 않아도 됩니다. 나아가 Rust는 자연스럽게 신뢰할  
+수 있는 코드를 작성하도록 이끌며, 속도와 메모리 효율성까지 보장합니다.  
 
-Programmers who are already working with low-level code can use Rust to raise
-their ambitions. For example, introducing parallelism in Rust is a relatively
-low-risk operation: the compiler will catch the classical mistakes for you. And
-you can tackle more aggressive optimizations in your code with the confidence
-that you won’t accidentally introduce crashes or vulnerabilities.
+이미 저수준 코드를 다루는 프로그래머라면, Rust를 통해 더 높은 목표를 세울  
+수 있습니다. 예를 들어, 병렬성을 도입하는 일은 상대적으로 위험이 적습니다.  
+컴파일러가 전형적인 오류를 잡아내기 때문입니다. 또한 더 과감한 최적화를  
+시도하더라도 충돌이나 취약점이 우발적으로 생길까 걱정하지 않고 자신 있게  
+코드를 작성할 수 있습니다.  
 
-But Rust isn’t limited to low-level systems programming. It’s expressive and
-ergonomic enough to make CLI apps, web servers, and many other kinds of code
-quite pleasant to write — you’ll find simple examples of both later in the
-book. Working with Rust allows you to build skills that transfer from one
-domain to another; you can learn Rust by writing a web app, then apply those
-same skills to target your Raspberry Pi.
+그러나 Rust는 저수준 시스템 프로그래밍에만 머물지 않습니다. CLI 애플리케이션,  
+웹 서버, 그 밖의 다양한 프로그램을 즐겁게 작성할 만큼 표현력이 풍부하고  
+사용성도 뛰어납니다. 이 책의 뒷부분에서는 그러한 간단한 예제들을 확인하실 수  
+있을 것입니다. Rust로 작업하면 한 영역에서 익힌 기술을 다른 영역에도 손쉽게  
+옮겨 적용할 수 있습니다. 예를 들어, 웹 애플리케이션을 작성하며 Rust를 익히고,  
+그 기술을 Raspberry Pi 같은 환경에도 적용할 수 있습니다.  
 
-This book fully embraces the potential of Rust to empower its users. It’s a
-friendly and approachable text intended to help you level up not just your
-knowledge of Rust, but also your reach and confidence as a programmer in
-general. So dive in, get ready to learn—and welcome to the Rust community!
+이 책은 Rust가 독자에게 제공할 수 있는 역량 강화를 온전히 담고 있습니다.  
+친근하고 읽기 쉬운 텍스트로, 단순히 Rust의 지식뿐 아니라 프로그래머로서  
+여러분의 시야와 자신감을 함께 넓혀 드리고자 합니다. 그러니 이제 깊이  
+뛰어들 준비를 하시고, 학습을 시작해 보십시오 — 그리고 Rust 커뮤니티에  
+오신 것을 환영합니다!  
 
-— Nicholas Matsakis and Aaron Turon
+— Nicholas Matsakis, Aaron Turon

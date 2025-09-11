@@ -1,28 +1,28 @@
 ## Hello, World!
 
-Now that you’ve installed Rust, it’s time to write your first Rust program.
-It’s traditional when learning a new language to write a little program that
-prints the text `Hello, world!` to the screen, so we’ll do the same here!
+이제 Rust를 설치했으니, 첫 번째 Rust 프로그램을 작성할 차례입니다.  
+새로운 언어를 배울 때는 전통적으로 화면에 `Hello, world!`를 출력하는  
+작은 프로그램을 작성하곤 합니다. 여기서도 똑같이 해 보겠습니다!
 
-> Note: This book assumes basic familiarity with the command line. Rust makes
-> no specific demands about your editing or tooling or where your code lives, so
-> if you prefer to use an integrated development environment (IDE) instead of
-> the command line, feel free to use your favorite IDE. Many IDEs now have some
-> degree of Rust support; check the IDE’s documentation for details. The Rust
-> team has been focusing on enabling great IDE support via `rust-analyzer`. See
-> [Appendix D][devtools]<!-- ignore --> for more details.
+> 참고: 이 책은 명령줄에 대한 기본적인 익숙함을 전제로 합니다. Rust는 코드가
+> 어디에 있든, 어떤 편집기를 쓰든 특별한 제약을 두지 않습니다. 따라서
+> 명령줄 대신 IDE(통합 개발 환경)를 사용하고 싶으시다면 자유롭게 사용하셔도
+> 됩니다. 요즘 많은 IDE가 Rust를 어느 정도 지원합니다. 자세한 내용은 IDE
+> 문서를 참고하세요. Rust 팀은 `rust-analyzer`를 통해 훌륭한 IDE 지원을
+> 제공하는 데 집중해 왔습니다. 더 자세한 내용은 [부록 D][devtools]에서
+> 확인할 수 있습니다.
 
-### Creating a Project Directory
+### 프로젝트 디렉터리 만들기
 
-You’ll start by making a directory to store your Rust code. It doesn’t matter
-to Rust where your code lives, but for the exercises and projects in this book,
-we suggest making a _projects_ directory in your home directory and keeping all
-your projects there.
+먼저 Rust 코드를 저장할 디렉터리를 만들어 보겠습니다. Rust는 코드가 어디에
+있든 상관하지 않지만, 이 책의 연습 문제와 프로젝트를 위해서는 홈 디렉터리
+안에 _projects_ 디렉터리를 하나 만들고 모든 프로젝트를 그 안에 두는 것을
+권장합니다.
 
-Open a terminal and enter the following commands to make a _projects_ directory
-and a directory for the “Hello, world!” project within the _projects_ directory.
+터미널을 열고 _projects_ 디렉터리를 만든 뒤, 그 안에 “Hello, world!” 프로젝트
+디렉터리를 만드는 명령을 입력하세요.
 
-For Linux, macOS, and PowerShell on Windows, enter this:
+Linux, macOS, Windows PowerShell에서는 다음을 입력합니다:
 
 ```console
 $ mkdir ~/projects
@@ -31,7 +31,7 @@ $ mkdir hello_world
 $ cd hello_world
 ```
 
-For Windows CMD, enter this:
+Windows CMD에서는 다음을 입력합니다:
 
 ```cmd
 > mkdir "%USERPROFILE%\projects"
@@ -40,16 +40,16 @@ For Windows CMD, enter this:
 > cd hello_world
 ```
 
-### Writing and Running a Rust Program
+### Rust 프로그램 작성하고 실행하기
 
-Next, make a new source file and call it _main.rs_. Rust files always end with
-the _.rs_ extension. If you’re using more than one word in your filename, the
-convention is to use an underscore to separate them. For example, use
-_hello_world.rs_ rather than _helloworld.rs_.
+이제 새로운 소스 파일을 만들고 이름을 _main.rs_로 지정하세요. Rust 소스 파일은
+항상 _.rs_ 확장자로 끝납니다. 파일 이름이 여러 단어로 이루어져 있다면,
+언더스코어(_)로 구분하는 것이 관례입니다. 예를 들어, _hello_world.rs_라고
+쓰고, _helloworld.rs_라고 쓰지는 않습니다.
 
-Now open the _main.rs_ file you just created and enter the code in Listing 1-1.
+방금 만든 _main.rs_ 파일을 열고, Listing 1-1의 코드를 입력하세요.
 
-<Listing number="1-1" file-name="main.rs" caption="A program that prints `Hello, world!`">
+<Listing number="1-1" file-name="main.rs" caption="`Hello, world!`를 출력하는 프로그램">
 
 ```rust
 fn main() {
@@ -59,9 +59,8 @@ fn main() {
 
 </Listing>
 
-Save the file and go back to your terminal window in the
-_~/projects/hello_world_ directory. On Linux or macOS, enter the following
-commands to compile and run the file:
+파일을 저장한 뒤, 터미널에서 _~/projects/hello_world_ 디렉터리로 돌아가세요.  
+Linux나 macOS에서는 다음 명령으로 파일을 컴파일하고 실행합니다:
 
 ```console
 $ rustc main.rs
@@ -69,7 +68,7 @@ $ ./main
 Hello, world!
 ```
 
-On Windows, enter the command `.\main` instead of `./main`:
+Windows에서는 `./main` 대신 `.\main`을 입력합니다:
 
 ```powershell
 > rustc main.rs
@@ -77,18 +76,16 @@ On Windows, enter the command `.\main` instead of `./main`:
 Hello, world!
 ```
 
-Regardless of your operating system, the string `Hello, world!` should print to
-the terminal. If you don’t see this output, refer back to the
-[“Troubleshooting”][troubleshooting]<!-- ignore --> part of the Installation
-section for ways to get help.
+어떤 운영체제를 쓰든, 터미널에 `Hello, world!`가 출력될 것입니다. 만약 출력이
+보이지 않는다면, 설치 절의 [“문제 해결”][troubleshooting] 부분을 참고해
+도움을 받으세요.
 
-If `Hello, world!` did print, congratulations! You’ve officially written a Rust
-program. That makes you a Rust programmer—welcome!
+만약 `Hello, world!`가 출력됐다면, 축하합니다! 이제 공식적으로 Rust 프로그램을
+작성한 것입니다. 여러분은 Rust 프로그래머입니다 — 환영합니다!
 
-### Anatomy of a Rust Program
+### Rust 프로그램의 구조
 
-Let’s review this “Hello, world!” program in detail. Here’s the first piece of
-the puzzle:
+이제 “Hello, world!” 프로그램을 자세히 살펴봅시다. 먼저 이 부분을 보겠습니다:
 
 ```rust
 fn main() {
@@ -96,72 +93,65 @@ fn main() {
 }
 ```
 
-These lines define a function named `main`. The `main` function is special: it
-is always the first code that runs in every executable Rust program. Here, the
-first line declares a function named `main` that has no parameters and returns
-nothing. If there were parameters, they would go inside the parentheses `()`.
+이 코드는 `main`이라는 함수를 정의합니다. `main` 함수는 특별한 함수로, 모든
+실행 가능한 Rust 프로그램에서 항상 가장 먼저 실행됩니다. 첫 번째 줄은 매개변수도
+없고 반환 값도 없는 `main` 함수를 선언합니다. 만약 매개변수가 있다면
+괄호 `()` 안에 들어갑니다.
 
-The function body is wrapped in `{}`. Rust requires curly brackets around all
-function bodies. It’s good style to place the opening curly bracket on the same
-line as the function declaration, adding one space in between.
+함수 본문은 `{}`로 감싸져 있습니다. Rust에서는 모든 함수 본문을 중괄호로
+감싸야 합니다. 일반적으로 여는 중괄호는 함수 선언과 같은 줄에, 한 칸 띄고
+작성하는 것이 좋은 스타일입니다.
 
-> Note: If you want to stick to a standard style across Rust projects, you can
-> use an automatic formatter tool called `rustfmt` to format your code in a
-> particular style (more on `rustfmt` in
-> [Appendix D][devtools]<!-- ignore -->). The Rust team has included this tool
-> with the standard Rust distribution, as `rustc` is, so it should already be
-> installed on your computer!
+> 참고: Rust 프로젝트 전반에서 일관된 스타일을 유지하고 싶다면, `rustfmt`
+> 라는 자동 코드 포맷터 도구를 사용할 수 있습니다. `rustfmt`에 대해서는
+> [부록 D][devtools]에서 더 다룹니다. Rust 팀은 `rustc`와 마찬가지로
+> `rustfmt`를 표준 배포판에 포함시켰으므로, 이미 설치되어 있을 것입니다.
 
-The body of the `main` function holds the following code:
+`main` 함수의 본문에는 다음 코드가 들어 있습니다:
 
 ```rust
 println!("Hello, world!");
 ```
 
-This line does all the work in this little program: it prints text to the
-screen. There are three important details to notice here.
+이 한 줄이 이 작은 프로그램의 모든 일을 합니다. 화면에 텍스트를 출력하는 것이죠.  
+여기서 주목할 세 가지가 있습니다.
 
-First, `println!` calls a Rust macro. If it had called a function instead, it
-would be entered as `println` (without the `!`). Rust macros are a way to write
-code that generates code to extend Rust syntax, and we’ll discuss them in more
-detail in [Chapter 20][ch20-macros]<!-- ignore -->. For now, you just need to
-know that using a `!` means that you’re calling a macro instead of a normal
-function and that macros don’t always follow the same rules as functions.
+첫째, `println!`은 Rust 매크로 호출입니다. 만약 함수였다면 `println`이라고
+`!` 없이 작성했을 겁니다. Rust 매크로는 문법을 확장하기 위해 코드를 생성하는
+방식으로 작성되며, 자세한 내용은 [20장][ch20-macros]에서 다룹니다. 지금은
+`!`가 붙으면 함수가 아니라 매크로를 호출한다는 점만 기억하시면 됩니다.
 
-Second, you see the `"Hello, world!"` string. We pass this string as an argument
-to `println!`, and the string is printed to the screen.
+둘째, `"Hello, world!"`라는 문자열입니다. 이 문자열을 `println!` 매크로에
+인자로 넘기면, 화면에 출력됩니다.
 
-Third, we end the line with a semicolon (`;`), which indicates that this
-expression is over and the next one is ready to begin. Most lines of Rust code
-end with a semicolon.
+셋째, 줄 끝에 세미콜론(`;`)을 붙입니다. 이는 표현식이 끝났음을 나타내고,
+다음 표현식을 시작할 준비가 되었음을 의미합니다. 대부분의 Rust 코드 줄은
+세미콜론으로 끝납니다.
 
-### Compiling and Running Are Separate Steps
+### 컴파일과 실행은 별개의 단계
 
-You’ve just run a newly created program, so let’s examine each step in the
-process.
+방금 새로 만든 프로그램을 실행했으니, 이제 과정의 각 단계를 살펴봅시다.
 
-Before running a Rust program, you must compile it using the Rust compiler by
-entering the `rustc` command and passing it the name of your source file, like
-this:
+Rust 프로그램을 실행하기 전에 먼저 `rustc` 명령으로 컴파일해야 합니다. 소스
+파일 이름을 함께 넘겨줍니다:
 
 ```console
 $ rustc main.rs
 ```
 
-If you have a C or C++ background, you’ll notice that this is similar to `gcc`
-or `clang`. After compiling successfully, Rust outputs a binary executable.
+C나 C++ 경험이 있다면, `gcc`나 `clang`을 쓰는 것과 유사하다는 걸 알 수 있을
+겁니다. 컴파일이 성공하면 Rust는 바이너리 실행 파일을 생성합니다.
 
-On Linux, macOS, and PowerShell on Windows, you can see the executable by
-entering the `ls` command in your shell:
+Linux, macOS, Windows PowerShell에서는 셸에서 `ls` 명령으로 실행 파일을
+확인할 수 있습니다:
 
 ```console
 $ ls
 main  main.rs
 ```
 
-On Linux and macOS, you’ll see two files. With PowerShell on Windows, you’ll
-see the same three files that you would see using CMD. With CMD on Windows, you
-would enter the following:
+Linux와 macOS에서는 두 개의 파일이 보입니다. PowerShell을 쓰는 Windows에서는
+CMD와 동일하게 세 개의 파일이 보일 것입니다. CMD에서는 다음 명령을 입력합니다:
 
 ```cmd
 > dir /B %= the /B option says to only show the file names =%
@@ -170,31 +160,28 @@ main.pdb
 main.rs
 ```
 
-This shows the source code file with the _.rs_ extension, the executable file
-(_main.exe_ on Windows, but _main_ on all other platforms), and, when using
-Windows, a file containing debugging information with the _.pdb_ extension.
-From here, you run the _main_ or _main.exe_ file, like this:
+여기에는 _.rs_ 확장자의 소스 파일, 실행 파일(Windows에서는 _main.exe_, 다른
+플랫폼에서는 _main_), 그리고 Windows의 경우 디버깅 정보를 담은 _.pdb_ 파일이
+포함됩니다. 이제 _main_ 또는 _main.exe_ 파일을 실행합니다:
 
 ```console
-$ ./main # or .\main on Windows
+$ ./main # Windows에서는 .\main
 ```
 
-If your _main.rs_ is your “Hello, world!” program, this line prints `Hello,
-world!` to your terminal.
+_ main.rs_ 파일이 “Hello, world!” 프로그램이라면, 이 명령은 `Hello, world!`를
+터미널에 출력합니다.
 
-If you’re more familiar with a dynamic language, such as Ruby, Python, or
-JavaScript, you might not be used to compiling and running a program as
-separate steps. Rust is an _ahead-of-time compiled_ language, meaning you can
-compile a program and give the executable to someone else, and they can run it
-even without having Rust installed. If you give someone a _.rb_, _.py_, or
-_.js_ file, they need to have a Ruby, Python, or JavaScript implementation
-installed (respectively). But in those languages, you only need one command to
-compile and run your program. Everything is a trade-off in language design.
+Ruby, Python, JavaScript 같은 동적 언어에 익숙하다면, 컴파일과 실행을
+따로따로 하는 과정이 낯설 수 있습니다. Rust는 _사전 컴파일(ahead-of-time
+compiled)_ 언어이기 때문에, 프로그램을 컴파일한 뒤 생성된 실행 파일을 다른
+사람에게 주면, 그 사람이 Rust를 설치하지 않았더라도 실행할 수 있습니다.
+반면, _.rb_, _.py_, _.js_ 파일을 주려면 상대방이 해당 언어의 실행 환경을
+가지고 있어야 합니다. 하지만 이러한 언어들은 컴파일과 실행이 한 번에
+이뤄집니다. 언어 설계는 언제나 이런 식의 트레이드오프가 있습니다.
 
-Just compiling with `rustc` is fine for simple programs, but as your project
-grows, you’ll want to manage all the options and make it easy to share your
-code. Next, we’ll introduce you to the Cargo tool, which will help you write
-real-world Rust programs.
+단순한 프로그램은 `rustc`만으로 충분하지만, 프로젝트가 커질수록 다양한 옵션을
+관리하고 코드를 쉽게 공유할 수 있는 방법이 필요합니다. 다음 절에서는 실전
+Rust 프로그램 개발을 도와줄 Cargo 도구를 소개하겠습니다.
 
 [troubleshooting]: ch01-01-installation.html#troubleshooting
 [devtools]: appendix-04-useful-development-tools.html
