@@ -1,0 +1,16 @@
+digraph {
+    node[shape=record];
+    rankdir=LR;
+
+    l1[label="{<data> 5| <next>}"];
+    l2[label="{<data> 10| <next>}"];
+
+    {node[shape=point height=0] invisible_start invisible_end}
+
+    a -> l1:n;
+    b -> l2:n;
+    invisible_start:n -> l1[arrowtail=none];
+    invisible_start:s -> invisible_end:s[dir=none];
+    l1:next:c -> l2:data;
+    l2:next:c -> invisible_end:n[arrowhead=none];
+}
