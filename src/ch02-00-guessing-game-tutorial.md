@@ -525,12 +525,12 @@ random number generators implement, and this trait must be in scope for us to
 use those methods. Chapter 10 will cover traits in detail.
 
 Next, we’re adding two lines in the middle. In the first line, we call the
-`rand::thread_rng` function that gives us the particular random number
+`rand::rng` function that gives us the particular random number
 generator we’re going to use: one that is local to the current thread of
-execution and is seeded by the operating system. Then we call the `gen_range`
+execution and is seeded by the operating system. Then we call the `random_range`
 method on the random number generator. This method is defined by the `Rng`
 trait that we brought into scope with the `use rand::Rng;` statement. The
-`gen_range` method takes a range expression as an argument and generates a
+`random_range` method takes a range expression as an argument and generates a
 random number in the range. The kind of range expression we’re using here takes
 the form `start..=end` and is inclusive on the lower and upper bounds, so we
 need to specify `1..=100` to request a number between 1 and 100.
