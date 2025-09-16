@@ -509,7 +509,7 @@ from a number of packages.
 
 ### Generating a Random Number
 
-Let’s start using `rand` to generate a number to guess. The next step is to
+Let’s start using `rand 0.8.6` to generate a number to guess. The next step is to
 update _src/main.rs_, as shown in Listing 2-3.
 
 <Listing number="2-3" file-name="src/main.rs" caption="Adding code to generate a random number">
