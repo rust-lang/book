@@ -8,7 +8,7 @@ these ideas in more detail. In this chapter, you’ll just practice the
 fundamentals.
 
 We’ll implement a classic beginner programming problem: a guessing game. Here’s
-how it works: the program will generate a random integer between 1 and 100. It
+how it works: The program will generate a random integer between 1 and 100. It
 will then prompt the player to enter a guess. After a guess is entered, the
 program will indicate whether the guess is too low or too high. If the guess is
 correct, the game will print a congratulatory message and exit.
@@ -134,9 +134,9 @@ line. We use the `let` statement to create the variable. Here’s another exampl
 let apples = 5;
 ```
 
-This line creates a new variable named `apples` and binds it to the value 5. In
-Rust, variables are immutable by default, meaning once we give the variable a
-value, the value won’t change. We’ll be discussing this concept in detail in
+This line creates a new variable named `apples` and binds it to the value `5`.
+In Rust, variables are immutable by default, meaning once we give the variable
+a value, the value won’t change. We’ll be discussing this concept in detail in
 the [“Variables and Mutability”][variables-and-mutability]<!-- ignore -->
 section in Chapter 3. To make a variable mutable, we add `mut` before the
 variable name:
@@ -190,8 +190,8 @@ We’re also passing `&mut guess` as the argument to `read_line` to tell it what
 string to store the user input in. The full job of `read_line` is to take
 whatever the user types into standard input and append that into a string
 (without overwriting its contents), so we therefore pass that string as an
-argument. The string argument needs to be mutable so the method can change the
-string’s content.
+argument. The string argument needs to be mutable so that the method can change
+the string’s content.
 
 The `&` indicates that this argument is a _reference_, which gives you a way to
 let multiple parts of your code access one piece of data without needing to
@@ -249,8 +249,8 @@ will cause the program to crash and display the message that you passed as an
 argument to `expect`. If the `read_line` method returns an `Err`, it would
 likely be the result of an error coming from the underlying operating system.
 If this instance of `Result` is an `Ok` value, `expect` will take the return
-value that `Ok` is holding and return just that value to you so you can use it.
-In this case, that value is the number of bytes in the user’s input.
+value that `Ok` is holding and return just that value to you so that you can
+use it. In this case, that value is the number of bytes in the user’s input.
 
 If you don’t call `expect`, the program will compile, but you’ll get a warning:
 
@@ -276,7 +276,7 @@ the code so far:
 ```
 
 This line prints the string that now contains the user’s input. The `{}` set of
-curly brackets is a placeholder: think of `{}` as little crab pincers that hold
+curly brackets is a placeholder: Think of `{}` as little crab pincers that hold
 a value in place. When printing the value of a variable, the variable name can
 go inside the curly brackets. When printing the result of evaluating an
 expression, place empty curly brackets in the format string, then follow the
@@ -314,24 +314,27 @@ Please input your guess.
 You guessed: 6
 ```
 
-At this point, the first part of the game is done: we’re getting input from the
+At this point, the first part of the game is done: We’re getting input from the
 keyboard and then printing it.
 
 ## Generating a Secret Number
 
 Next, we need to generate a secret number that the user will try to guess. The
-secret number should be different every time so the game is fun to play more
-than once. We’ll use a random number between 1 and 100 so the game isn’t too
-difficult. Rust doesn’t yet include random number functionality in its standard
-library. However, the Rust team does provide a [`rand` crate][randcrate] with
-said functionality.
+secret number should be different every time so that the game is fun to play
+more than once. We’ll use a random number between 1 and 100 so that the game
+isn’t too difficult. Rust doesn’t yet include random number functionality in
+its standard library. However, the Rust team does provide a [`rand`
+crate][randcrate] with said functionality.
 
-### Using a Crate to Get More Functionality
+<!-- Old headings. Do not remove or links may break. -->
+<a id="using-a-crate-to-get-more-functionality"></a>
+
+### Increasing Functionality with a Crate
 
 Remember that a crate is a collection of Rust source code files. The project
-we’ve been building is a _binary crate_, which is an executable. The `rand`
-crate is a _library crate_, which contains code that is intended to be used in
-other programs and can’t be executed on its own.
+we’ve been building is a binary crate, which is an executable. The `rand` crate
+is a library crate, which contains code that is intended to be used in other
+programs and can’t be executed on its own.
 
 Cargo’s coordination of external crates is where Cargo really shines. Before we
 can write code that uses `rand`, we need to modify the _Cargo.toml_ file to
@@ -353,7 +356,7 @@ this version number, or the code examples in this tutorial may not work:
 ```
 
 In the _Cargo.toml_ file, everything that follows a header is part of that
-section that continues until another section starts. In `[dependencies]` you
+section that continues until another section starts. In `[dependencies]`, you
 tell Cargo which external crates your project depends on and which versions of
 those crates you require. In this case, we specify the `rand` crate with the
 semantic version specifier `0.8.5`. Cargo understands [Semantic
@@ -363,9 +366,10 @@ shorthand for `^0.8.5`, which means any version that is at least 0.8.5 but
 below 0.9.0.
 
 Cargo considers these versions to have public APIs compatible with version
-0.8.5, and this specification ensures you’ll get the latest patch release that
-will still compile with the code in this chapter. Any version 0.9.0 or greater
-is not guaranteed to have the same API as what the following examples use.
+0.8.5, and this specification ensures that you’ll get the latest patch release
+that will still compile with the code in this chapter. Any version 0.9.0 or
+greater is not guaranteed to have the same API as what the following examples
+use.
 
 Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2.
@@ -376,7 +380,7 @@ rm Cargo.lock
 cargo clean
 cargo build -->
 
-<Listing number="2-2" caption="The output from running `cargo build` after adding the rand crate as a dependency">
+<Listing number="2-2" caption="The output from running `cargo build` after adding the `rand` crate as a dependency">
 
 ```console
 $ cargo build
@@ -443,12 +447,15 @@ These lines show that Cargo only updates the build with your tiny change to the
 _src/main.rs_ file. Your dependencies haven’t changed, so Cargo knows it can
 reuse what it has already downloaded and compiled for those.
 
-#### Ensuring Reproducible Builds with the _Cargo.lock_ File
+<!-- Old headings. Do not remove or links may break. -->
+<a id="ensuring-reproducible-builds-with-the-cargo-lock-file"></a>
 
-Cargo has a mechanism that ensures you can rebuild the same artifact every time
-you or anyone else builds your code: Cargo will use only the versions of the
-dependencies you specified until you indicate otherwise. For example, say that
-next week version 0.8.6 of the `rand` crate comes out, and that version
+#### Ensuring Reproducible Builds
+
+Cargo has a mechanism that ensures that you can rebuild the same artifact every
+time you or anyone else builds your code: Cargo will use only the versions of
+the dependencies you specified until you indicate otherwise. For example, say
+that next week version 0.8.6 of the `rand` crate comes out, and that version
 contains an important bug fix, but it also contains a regression that will
 break your code. To handle this, Rust creates the _Cargo.lock_ file the first
 time you run `cargo build`, so we now have this in the _guessing_game_
@@ -469,8 +476,8 @@ checked into source control with the rest of the code in your project.
 When you _do_ want to update a crate, Cargo provides the command `update`,
 which will ignore the _Cargo.lock_ file and figure out all the latest versions
 that fit your specifications in _Cargo.toml_. Cargo will then write those
-versions to the _Cargo.lock_ file. In this case, Cargo will only look for
-versions greater than 0.8.5 and less than 0.9.0. If the `rand` crate has
+versions to the _Cargo.lock_ file. Otherwise, by default, Cargo will only look
+for versions greater than 0.8.5 and less than 0.9.0. If the `rand` crate has
 released the two new versions 0.8.6 and 0.9.0, you would see the following if
 you ran `cargo update`:
 
@@ -520,14 +527,14 @@ update _src/main.rs_, as shown in Listing 2-3.
 
 </Listing>
 
-First we add the line `use rand::Rng;`. The `Rng` trait defines methods that
+First, we add the line `use rand::Rng;`. The `Rng` trait defines methods that
 random number generators implement, and this trait must be in scope for us to
 use those methods. Chapter 10 will cover traits in detail.
 
 Next, we’re adding two lines in the middle. In the first line, we call the
 `rand::thread_rng` function that gives us the particular random number
 generator we’re going to use: one that is local to the current thread of
-execution and is seeded by the operating system. Then we call the `gen_range`
+execution and is seeded by the operating system. Then, we call the `gen_range`
 method on the random number generator. This method is defined by the `Rng`
 trait that we brought into scope with the `use rand::Rng;` statement. The
 `gen_range` method takes a range expression as an argument and generates a
@@ -596,15 +603,15 @@ explain.
 
 </Listing>
 
-First we add another `use` statement, bringing a type called
+First, we add another `use` statement, bringing a type called
 `std::cmp::Ordering` into scope from the standard library. The `Ordering` type
 is another enum and has the variants `Less`, `Greater`, and `Equal`. These are
 the three outcomes that are possible when you compare two values.
 
-Then we add five new lines at the bottom that use the `Ordering` type. The
+Then, we add five new lines at the bottom that use the `Ordering` type. The
 `cmp` method compares two values and can be called on anything that can be
-compared. It takes a reference to whatever you want to compare with: here it’s
-comparing `guess` to `secret_number`. Then it returns a variant of the
+compared. It takes a reference to whatever you want to compare with: Here, it’s
+comparing `guess` to `secret_number`. Then, it returns a variant of the
 `Ordering` enum we brought into scope with the `use` statement. We use a
 [`match`][match]<!-- ignore --> expression to decide what to do next based on
 which variant of `Ordering` was returned from the call to `cmp` with the values
@@ -614,8 +621,8 @@ A `match` expression is made up of _arms_. An arm consists of a _pattern_ to
 match against, and the code that should be run if the value given to `match`
 fits that arm’s pattern. Rust takes the value given to `match` and looks
 through each arm’s pattern in turn. Patterns and the `match` construct are
-powerful Rust features: they let you express a variety of situations your code
-might encounter and they make sure you handle them all. These features will be
+powerful Rust features: They let you express a variety of situations your code
+might encounter, and they make sure you handle them all. These features will be
 covered in detail in Chapter 6 and Chapter 19, respectively.
 
 Let’s walk through an example with the `match` expression we use here. Say that
@@ -656,8 +663,8 @@ elsewhere that would cause Rust to infer a different numerical type. The reason
 for the error is that Rust cannot compare a string and a number type.
 
 Ultimately, we want to convert the `String` the program reads as input into a
-number type so we can compare it numerically to the secret number. We do so by
-adding this line to the `main` function body:
+number type so that we can compare it numerically to the secret number. We do
+so by adding this line to the `main` function body:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -701,7 +708,7 @@ other number types in [Chapter 3][integers]<!-- ignore -->.
 
 Additionally, the `u32` annotation in this example program and the comparison
 with `secret_number` means Rust will infer that `secret_number` should be a
-`u32` as well. So now the comparison will be between two values of the same
+`u32` as well. So, now the comparison will be between two values of the same
 type!
 
 The `parse` method will only work on characters that can logically be converted
@@ -709,7 +716,7 @@ into numbers and so can easily cause errors. If, for example, the string
 contained `A👍%`, there would be no way to convert that to a number. Because it
 might fail, the `parse` method returns a `Result` type, much as the `read_line`
 method does (discussed earlier in [“Handling Potential Failure with
-`Result`”](#handling-potential-failure-with-result)<!-- ignore-->). We’ll treat
+`Result`”](#handling-potential-failure-with-result)<!-- ignore -->). We’ll treat
 this `Result` the same way by using the `expect` method again. If `parse`
 returns an `Err` `Result` variant because it couldn’t create a number from the
 string, the `expect` call will crash the game and print the message we give it.
@@ -741,7 +748,7 @@ Too big!
 
 Nice! Even though spaces were added before the guess, the program still figured
 out that the user guessed 76. Run the program a few times to verify the
-different behavior with different kinds of input: guess the number correctly,
+different behavior with different kinds of input: Guess the number correctly,
 guess a number that is too high, and guess a number that is too low.
 
 We have most of the game working now, but the user can make only one guess.
@@ -764,9 +771,9 @@ and run the program again. The program will now ask for another guess forever,
 which actually introduces a new problem. It doesn’t seem like the user can quit!
 
 The user could always interrupt the program by using the keyboard shortcut
-<kbd>ctrl</kbd>-<kbd>c</kbd>. But there’s another way to escape this insatiable
+<kbd>ctrl</kbd>-<kbd>C</kbd>. But there’s another way to escape this insatiable
 monster, as mentioned in the `parse` discussion in [“Comparing the Guess to the
-Secret Number”](#comparing-the-guess-to-the-secret-number)<!-- ignore -->: if
+Secret Number”](#comparing-the-guess-to-the-secret-number)<!-- ignore -->: If
 the user enters a non-number answer, the program will crash. We can take
 advantage of that to allow the user to quit, as shown here:
 
@@ -828,9 +835,9 @@ exiting the program, because the loop is the last part of `main`.
 ### Handling Invalid Input
 
 To further refine the game’s behavior, rather than crashing the program when
-the user inputs a non-number, let’s make the game ignore a non-number so the
-user can continue guessing. We can do that by altering the line where `guess`
-is converted from a `String` to a `u32`, as shown in Listing 2-5.
+the user inputs a non-number, let’s make the game ignore a non-number so that
+the user can continue guessing. We can do that by altering the line where
+`guess` is converted from a `String` to a `u32`, as shown in Listing 2-5.
 
 <Listing number="2-5" file-name="src/main.rs" caption="Ignoring a non-number guess and asking for another guess instead of crashing the program">
 
@@ -857,7 +864,7 @@ If `parse` is _not_ able to turn the string into a number, it will return an
 does not match the `Ok(num)` pattern in the first `match` arm, but it does
 match the `Err(_)` pattern in the second arm. The underscore, `_`, is a
 catch-all value; in this example, we’re saying we want to match all `Err`
-values, no matter what information they have inside them. So the program will
+values, no matter what information they have inside them. So, the program will
 execute the second arm’s code, `continue`, which tells the program to go to the
 next iteration of the `loop` and ask for another guess. So, effectively, the
 program ignores all errors that `parse` might encounter!
