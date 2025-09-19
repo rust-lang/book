@@ -4,7 +4,7 @@ _Ownership_ is a set of rules that govern how a Rust program manages memory.
 All programs have to manage the way they use a computer’s memory while running.
 Some languages have garbage collection that regularly looks for no-longer-used
 memory as the program runs; in other languages, the programmer must explicitly
-allocate and free the memory. Rust uses a third approach: memory is managed
+allocate and free the memory. Rust uses a third approach: Memory is managed
 through a system of ownership with a set of rules that the compiler checks. If
 any of the rules are violated, the program won’t compile. None of the features
 of ownership will slow down your program while it’s running.
@@ -31,8 +31,8 @@ strings.
 > Both the stack and the heap are parts of memory available to your code to use
 > at runtime, but they are structured in different ways. The stack stores
 > values in the order it gets them and removes the values in the opposite
-> order. This is referred to as _last in, first out_. Think of a stack of
-> plates: when you add more plates, you put them on top of the pile, and when
+> order. This is referred to as _last in, first out (LIFO)_. Think of a stack of
+> plates: When you add more plates, you put them on top of the pile, and when
 > you need a plate, you take one off the top. Adding or removing plates from
 > the middle or bottom wouldn’t work as well! Adding data is called _pushing
 > onto the stack_, and removing data is called _popping off the stack_. All
@@ -40,7 +40,7 @@ strings.
 > size at compile time or a size that might change must be stored on the heap
 > instead.
 >
-> The heap is less organized: when you put data on the heap, you request a
+> The heap is less organized: When you put data on the heap, you request a
 > certain amount of space. The memory allocator finds an empty spot in the heap
 > that is big enough, marks it as being in use, and returns a _pointer_, which
 > is the address of that location. This process is called _allocating on the
@@ -78,10 +78,11 @@ strings.
 >
 > Keeping track of what parts of code are using what data on the heap,
 > minimizing the amount of duplicate data on the heap, and cleaning up unused
-> data on the heap so you don’t run out of space are all problems that ownership
-> addresses. Once you understand ownership, you won’t need to think about the
-> stack and the heap very often, but knowing that the main purpose of ownership
-> is to manage heap data can help explain why it works the way it does.
+> data on the heap so that you don’t run out of space are all problems that
+> ownership addresses. Once you understand ownership, you won’t need to think
+> about the stack and the heap very often. But knowing that the main purpose of
+> ownership is to manage heap data can help explain why it works the way it
+> does.
 
 ### Ownership Rules
 
@@ -95,13 +96,13 @@ work through the examples that illustrate them:
 ### Variable Scope
 
 Now that we’re past basic Rust syntax, we won’t include all the `fn main() {`
-code in examples, so if you’re following along, make sure to put the following
-examples inside a `main` function manually. As a result, our examples will be a
-bit more concise, letting us focus on the actual details rather than
+code in the examples, so if you’re following along, make sure to put the
+following examples inside a `main` function manually. As a result, our examples
+will be a bit more concise, letting us focus on the actual details rather than
 boilerplate code.
 
-As a first example of ownership, we’ll look at the _scope_ of some variables. A
-scope is the range within a program for which an item is valid. Take the
+As a first example of ownership, we’ll look at the scope of some variables. A
+_scope_ is the range within a program for which an item is valid. Take the
 following variable:
 
 ```rust
@@ -110,7 +111,7 @@ let s = "hello";
 
 The variable `s` refers to a string literal, where the value of the string is
 hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current _scope_. Listing 4-1 shows a
+which it’s declared until the end of the current scope. Listing 4-1 shows a
 program with comments annotating where the variable `s` would be valid.
 
 <Listing number="4-1" caption="A variable and the scope in which it is valid">
@@ -143,15 +144,15 @@ clean up that data, and the `String` type is a great example.
 
 We’ll concentrate on the parts of `String` that relate to ownership. These
 aspects also apply to other complex data types, whether they are provided by
-the standard library or created by you. We’ll discuss `String` in more depth in
-[Chapter 8][ch8]<!-- ignore -->.
+the standard library or created by you. We’ll discuss non-ownership aspects of
+`String` in [Chapter 8][ch8]<!-- ignore -->.
 
 We’ve already seen string literals, where a string value is hardcoded into our
 program. String literals are convenient, but they aren’t suitable for every
 situation in which we may want to use text. One reason is that they’re
 immutable. Another is that not every string value can be known when we write
-our code: for example, what if we want to take user input and store it? For
-these situations, Rust has a second string type, `String`. This type manages
+our code: For example, what if we want to take user input and store it? It is
+for these situations that Rust has the `String` type. This type manages
 data allocated on the heap and as such is able to store an amount of text that
 is unknown to us at compile time. You can create a `String` from a string
 literal using the `from` function, like so:
@@ -162,10 +163,10 @@ let s = String::from("hello");
 
 The double colon `::` operator allows us to namespace this particular `from`
 function under the `String` type rather than using some sort of name like
-`string_from`. We’ll discuss this syntax more in the [“Method
-Syntax”][method-syntax]<!-- ignore --> section of Chapter 5, and when we talk
-about namespacing with modules in [“Paths for Referring to an Item in the
-Module Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
+`string_from`. We’ll discuss this syntax more in the [“Methods”][methods]<!--
+ignore --> section of Chapter 5, and when we talk about namespacing with
+modules in [“Paths for Referring to an Item in the Module
+Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
 
 This kind of string _can_ be mutated:
 
@@ -193,7 +194,7 @@ to hold the contents. This means:
 - We need a way of returning this memory to the allocator when we’re done with
   our `String`.
 
-That first part is done by us: when we call `String::from`, its implementation
+That first part is done by us: When we call `String::from`, its implementation
 requests the memory it needs. This is pretty much universal in programming
 languages.
 
@@ -207,7 +208,7 @@ we’ll waste memory. If we do it too early, we’ll have an invalid variable. I
 we do it twice, that’s a bug too. We need to pair exactly one `allocate` with
 exactly one `free`.
 
-Rust takes a different path: the memory is automatically returned once the
+Rust takes a different path: The memory is automatically returned once the
 variable that owns it goes out of scope. Here’s a version of our scope example
 from Listing 4-1 using a `String` instead of a string literal:
 
@@ -239,7 +240,7 @@ we’ve allocated on the heap. Let’s explore some of those situations now.
 #### Variables and Data Interacting with Move
 
 Multiple variables can interact with the same data in different ways in Rust.
-Let’s look at an example using an integer in Listing 4-2.
+Listing 4-2 shows an example using an integer.
 
 <Listing number="4-2" caption="Assigning the integer value of variable `x` to `y`">
 
@@ -249,7 +250,7 @@ Let’s look at an example using an integer in Listing 4-2.
 
 </Listing>
 
-We can probably guess what this is doing: “bind the value `5` to `x`; then make
+We can probably guess what this is doing: “Bind the value `5` to `x`; then, make
 a copy of the value in `x` and bind it to `y`.” We now have two variables, `x`
 and `y`, and both equal `5`. This is indeed what is happening, because integers
 are simple values with a known, fixed size, and these two `5` values are pushed
@@ -262,7 +263,7 @@ Now let’s look at the `String` version:
 ```
 
 This looks very similar, so we might assume that the way it works would be the
-same: that is, the second line would make a copy of the value in `s1` and bind
+same: That is, the second line would make a copy of the value in `s1` and bind
 it to `s2`. But this isn’t quite what happens.
 
 Take a look at Figure 4-1 to see what is happening to `String` under the
@@ -277,7 +278,7 @@ value in the second table. The second table contains the representation of the
 string data on the heap, byte by byte." src="img/trpl04-01.svg" class="center"
 style="width: 50%;" />
 
-<span class="caption">Figure 4-1: Representation in memory of a `String`
+<span class="caption">Figure 4-1: The representation in memory of a `String`
 holding the value `"hello"` bound to `s1`</span>
 
 The length is how much memory, in bytes, the contents of the `String` are
@@ -295,8 +296,8 @@ representation in memory looks like Figure 4-2.
 stack, respectively, and both pointing to the same string data on the heap."
 src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-2: Representation in memory of the variable `s2`
-that has a copy of the pointer, length, and capacity of `s1`</span>
+<span class="caption">Figure 4-2: The representation in memory of the variable
+`s2` that has a copy of the pointer, length, and capacity of `s1`</span>
 
 The representation does _not_ look like Figure 4-3, which is what memory would
 look like if Rust instead copied the heap data as well. If Rust did this, the
@@ -313,7 +314,7 @@ do if Rust copied the heap data as well</span>
 Earlier, we said that when a variable goes out of scope, Rust automatically
 calls the `drop` function and cleans up the heap memory for that variable. But
 Figure 4-2 shows both data pointers pointing to the same location. This is a
-problem: when `s2` and `s1` go out of scope, they will both try to free the
+problem: When `s2` and `s1` go out of scope, they will both try to free the
 same memory. This is known as a _double free_ error and is one of the memory
 safety bugs we mentioned previously. Freeing memory twice can lead to memory
 corruption, which can potentially lead to security vulnerabilities.
@@ -343,12 +344,12 @@ was _moved_ into `s2`. So, what actually happens is shown in Figure 4-4.
 
 <img alt="Three tables: tables s1 and s2 representing those strings on the
 stack, respectively, and both pointing to the same string data on the heap.
-Table s1 is grayed out be-cause s1 is no longer valid; only s2 can be used to
+Table s1 is grayed out because s1 is no longer valid; only s2 can be used to
 access the heap data." src="img/trpl04-04.svg" class="center" style="width:
 50%;" />
 
-<span class="caption">Figure 4-4: Representation in memory after `s1` has been
-invalidated</span>
+<span class="caption">Figure 4-4: The representation in memory after `s1` has
+been invalidated</span>
 
 That solves our problem! With only `s2` valid, when it goes out of scope it
 alone will free the memory, and we’re done.
@@ -369,20 +370,17 @@ value’s memory immediately. Consider this code, for example:
 ```
 
 We initially declare a variable `s` and bind it to a `String` with the value
-`"hello"`. Then we immediately create a new `String` with the value `"ahoy"` and
-assign it to `s`. At this point, nothing is referring to the original value on
-the heap at all.
+`"hello"`. Then, we immediately create a new `String` with the value `"ahoy"`
+and assign it to `s`. At this point, nothing is referring to the original value
+on the heap at all. Figure 4-5 illustrates the stack and heap data now:
 
-<img alt="One table s representing the string value on the stack, pointing to
+<img alt="One table representing the string value on the stack, pointing to
 the second piece of string data (ahoy) on the heap, with the original string
 data (hello) grayed out because it cannot be accessed anymore."
-src="img/trpl04-05.svg"
-class="center"
-style="width: 50%;"
-/>
+src="img/trpl04-05.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-5: Representation in memory after the initial
-value has been replaced in its entirety.</span>
+<span class="caption">Figure 4-5: The representation in memory after the initial
+value has been replaced in its entirety</span>
 
 The original string thus immediately goes out of scope. Rust will run the `drop`
 function on it and its memory will be freed right away. When we print the value
@@ -421,7 +419,7 @@ integers—part of which was shown in Listing 4-2—works and is valid:
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
 ```
 
-But this code seems to contradict what we just learned: we don’t have a call to
+But this code seems to contradict what we just learned: We don’t have a call to
 `clone`, but `x` is still valid and wasn’t moved into `y`.
 
 The reason is that types such as integers that have a known size at compile
@@ -491,7 +489,7 @@ function that returns some value, with similar annotations as those in Listing
 
 </Listing>
 
-The ownership of a variable follows the same pattern every time: assigning a
+The ownership of a variable follows the same pattern every time: Assigning a
 value to another variable moves it. When a variable that includes data on the
 heap goes out of scope, the value will be cleaned up by `drop` unless ownership
 of the data has been moved to another variable.
@@ -514,12 +512,12 @@ Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
 
 But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for using a value without
-transferring ownership, called _references_.
+transferring ownership: references.
 
 [data-types]: ch03-02-data-types.html#data-types
 [ch8]: ch08-02-strings.html
 [traits]: ch10-02-traits.html
 [derivable-traits]: appendix-03-derivable-traits.html
-[method-syntax]: ch05-03-method-syntax.html#method-syntax
+[methods]: ch05-03-method-syntax.html#methods
 [paths-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
 [drop]: ../std/ops/trait.Drop.html#tymethod.drop
