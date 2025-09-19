@@ -1,4 +1,8 @@
-## Method Syntax
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="method-syntax"></a>
+
+## Methods
 
 _Methods_ are similar to functions: we declare them with the `fn` keyword and a
 name, they can have parameters and a return value, and they contain some code
