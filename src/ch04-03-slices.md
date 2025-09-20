@@ -236,7 +236,7 @@ reference in `clear` and the immutable reference in `word` from existing at the
 same time, and compilation fails. Not only has Rust made our API easier to use,
 but it has also eliminated an entire class of errors at compile time!
 
-<!-- Old heading. Do not remove or links may break. -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="string-literals-are-slices"></a>
 
