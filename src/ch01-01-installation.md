@@ -57,11 +57,13 @@ the `build-essential` package.
 
 ### Installing `rustup` on Windows
 
-On Windows, go to [https://www.rust-lang.org/tools/install][install] and follow
-the instructions for installing Rust. At some point in the installation, you’ll
-be prompted to install Visual Studio. This provides a linker and the native
-libraries needed to compile programs. If you need more help with this step, see
-[https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]
+On Windows, go to [https://www.rust-lang.org/tools/install][install]<!-- ignore
+--> and follow the instructions for installing Rust. At some point in the
+installation, you’ll be prompted to install Visual Studio. This provides a
+linker and the native libraries needed to compile programs. If you need more
+help with this step, see
+[https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]<!--
+ignore -->.
 
 The rest of this book uses commands that work in both _cmd.exe_ and PowerShell.
 If there are specific differences, we’ll explain which to use.
@@ -124,7 +126,10 @@ shell:
 $ rustup self uninstall
 ```
 
-### Local Documentation
+<!-- Old headings. Do not remove or links may break. -->
+<a id="local-documentation"></a>
+
+### Reading the Local Documentation
 
 The installation of Rust also includes a local copy of the documentation so
 that you can read it offline. Run `rustup doc` to open the local documentation
@@ -134,7 +139,10 @@ Any time a type or function is provided by the standard library and you’re not
 sure what it does or how to use it, use the application programming interface
 (API) documentation to find out!
 
-### Text Editors and Integrated Development Environments
+<!-- Old headings. Do not remove or links may break. -->
+<a id="text-editors-and-integrated-development-environments"></a>
+
+### Using Text Editors and IDEs
 
 This book makes no assumptions about what tools you use to author Rust code.
 Just about any text editor will get the job done! However, many text editors and
@@ -160,7 +168,7 @@ This will cache the downloads for these packages so you will not need to
 download them later. Once you have run this command, you do not need to keep the
 `get-dependencies` folder. If you have run this command, you can use the
 `--offline` flag with all `cargo` commands in the rest of the book to use these
-cached versions instead of attempting to use the network. 
+cached versions instead of attempting to use the network.
 
 [otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 [install]: https://www.rust-lang.org/tools/install

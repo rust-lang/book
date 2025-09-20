@@ -1,10 +1,10 @@
 ## References and Borrowing
 
 The issue with the tuple code in Listing 4-5 is that we have to return the
-`String` to the calling function so we can still use the `String` after the
-call to `calculate_length`, because the `String` was moved into
+`String` to the calling function so that we can still use the `String` after
+the call to `calculate_length`, because the `String` was moved into
 `calculate_length`. Instead, we can provide a reference to the `String` value.
-A _reference_ is like a pointer in that it’s an address we can follow to access
+A reference is like a pointer in that it’s an address we can follow to access
 the data stored at that address; that data is owned by some other variable.
 Unlike a pointer, a reference is guaranteed to point to a valid value of a
 particular type for the life of that reference.
@@ -23,15 +23,15 @@ reference to an object as a parameter instead of taking ownership of the value:
 First, notice that all the tuple code in the variable declaration and the
 function return value is gone. Second, note that we pass `&s1` into
 `calculate_length` and, in its definition, we take `&String` rather than
-`String`. These ampersands represent _references_, and they allow you to refer
-to some value without taking ownership of it. Figure 4-6 depicts this concept.
+`String`. These ampersands represent references, and they allow you to refer to
+some value without taking ownership of it. Figure 4-6 depicts this concept.
 
 <img alt="Three tables: the table for s contains only a pointer to the table
 for s1. The table for s1 contains the stack data for s1 and points to the
 string data on the heap." src="img/trpl04-06.svg" class="center" />
 
-<span class="caption">Figure 4-6: A diagram of `&String s` pointing at `String
-s1`</span>
+<span class="caption">Figure 4-6: A diagram of `&String` `s` pointing at
+`String` `s1`</span>
 
 > Note: The opposite of referencing by using `&` is _dereferencing_, which is
 > accomplished with the dereference operator, `*`. We’ll see some uses of the
@@ -67,7 +67,7 @@ person owns something, you can borrow it from them. When you’re done, you have
 to give it back. You don’t own it.
 
 So, what happens if we try to modify something we’re borrowing? Try the code in
-Listing 4-6. Spoiler alert: it doesn’t work!
+Listing 4-6. Spoiler alert: It doesn’t work!
 
 <Listing number="4-6" file-name="src/main.rs" caption="Attempting to modify a borrowed value">
 
@@ -99,12 +99,12 @@ with just a few small tweaks that use, instead, a _mutable reference_:
 
 </Listing>
 
-First we change `s` to be `mut`. Then we create a mutable reference with `&mut
-s` where we call the `change` function, and update the function signature to
-accept a mutable reference with `some_string: &mut String`. This makes it very
-clear that the `change` function will mutate the value it borrows.
+First, we change `s` to be `mut`. Then, we create a mutable reference with
+`&mut s` where we call the `change` function and update the function signature
+to accept a mutable reference with `some_string: &mut String`. This makes it
+very clear that the `change` function will mutate the value it borrows.
 
-Mutable references have one big restriction: if you have a mutable reference to
+Mutable references have one big restriction: If you have a mutable reference to
 a value, you can have no other references to that value. This code that
 attempts to create two mutable references to `s` will fail:
 
@@ -182,13 +182,13 @@ before the mutable reference is introduced:
 
 The scopes of the immutable references `r1` and `r2` end after the `println!`
 where they are last used, which is before the mutable reference `r3` is
-created. These scopes don’t overlap, so this code is allowed: the compiler can
+created. These scopes don’t overlap, so this code is allowed: The compiler can
 tell that the reference is no longer being used at a point before the end of
 the scope.
 
 Even though borrowing errors may be frustrating at times, remember that it’s
 the Rust compiler pointing out a potential bug early (at compile time rather
-than at runtime) and showing you exactly where the problem is. Then you don’t
+than at runtime) and showing you exactly where the problem is. Then, you don’t
 have to track down why your data isn’t what you thought it was.
 
 ### Dangling References
@@ -197,7 +197,7 @@ In languages with pointers, it’s easy to erroneously create a _dangling
 pointer_—a pointer that references a location in memory that may have been
 given to someone else—by freeing some memory while preserving a pointer to that
 memory. In Rust, by contrast, the compiler guarantees that references will
-never be dangling references: if you have a reference to some data, the
+never be dangling references: If you have a reference to some data, the
 compiler will ensure that the data will not go out of scope before the
 reference to the data does.
 

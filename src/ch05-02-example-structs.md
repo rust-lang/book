@@ -1,7 +1,7 @@
 ## An Example Program Using Structs
 
 To understand when we might want to use structs, let’s write a program that
-calculates the area of a rectangle. We’ll start by using single variables, and
+calculates the area of a rectangle. We’ll start by using single variables and
 then refactor the program until we’re using structs instead.
 
 Let’s make a new binary project with Cargo called _rectangles_ that will take
@@ -54,7 +54,7 @@ Listing 5-9 shows another version of our program that uses tuples.
 
 In one way, this program is better. Tuples let us add a bit of structure, and
 we’re now passing just one argument. But in another way, this version is less
-clear: tuples don’t name their elements, so we have to index into the parts of
+clear: Tuples don’t name their elements, so we have to index into the parts of
 the tuple, making our calculation less obvious.
 
 Mixing up the width and height wouldn’t matter for the area calculation, but if
@@ -64,7 +64,11 @@ index `1`. This would be even harder for someone else to figure out and keep in
 mind if they were to use our code. Because we haven’t conveyed the meaning of
 our data in our code, it’s now easier to introduce errors.
 
-### Refactoring with Structs: Adding More Meaning
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="refactoring-with-structs-adding-more-meaning"></a>
+
+### Refactoring with Structs
 
 We use structs to add meaning by labeling the data. We can transform the tuple
 we’re using into a struct with a name for the whole as well as names for the
@@ -93,13 +97,17 @@ where we call the function.
 The `area` function accesses the `width` and `height` fields of the `Rectangle`
 instance (note that accessing fields of a borrowed struct instance does not
 move the field values, which is why you often see borrows of structs). Our
-function signature for `area` now says exactly what we mean: calculate the area
+function signature for `area` now says exactly what we mean: Calculate the area
 of `Rectangle`, using its `width` and `height` fields. This conveys that the
 width and height are related to each other, and it gives descriptive names to
 the values rather than using the tuple index values of `0` and `1`. This is a
 win for clarity.
 
-### Adding Useful Functionality with Derived Traits
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="adding-useful-functionality-with-derived-traits"></a>
+
+### Adding Functionality with Derived Traits
 
 It’d be useful to be able to print an instance of `Rectangle` while we’re
 debugging our program and see the values for all its fields. Listing 5-11 tries
@@ -140,8 +148,8 @@ If we continue reading the errors, we’ll find this helpful note:
 Let’s try it! The `println!` macro call will now look like `println!("rect1 is
 {rect1:?}");`. Putting the specifier `:?` inside the curly brackets tells
 `println!` we want to use an output format called `Debug`. The `Debug` trait
-enables us to print our struct in a way that is useful for developers so we can
-see its value while we’re debugging our code.
+enables us to print our struct in a way that is useful for developers so that
+we can see its value while we’re debugging our code.
 
 Compile the code with this change. Drat! We still get an error:
 
@@ -194,8 +202,8 @@ of that expression, and returns ownership of the value.
 > Note: Calling the `dbg!` macro prints to the standard error console stream
 > (`stderr`), as opposed to `println!`, which prints to the standard output
 > console stream (`stdout`). We’ll talk more about `stderr` and `stdout` in the
-> [“Writing Error Messages to Standard Error Instead of Standard Output”
-> section in Chapter 12][err]<!-- ignore -->.
+> [“Redirecting Errors to Standard Error” section in Chapter
+> 12][err]<!-- ignore -->.
 
 Here’s an example where we’re interested in the value that gets assigned to the
 `width` field, as well as the value of the whole struct in `rect1`:
@@ -230,10 +238,10 @@ well as how to create your own traits in Chapter 10. There are also many
 attributes other than `derive`; for more information, see [the “Attributes”
 section of the Rust Reference][attributes].
 
-Our `area` function is very specific: it only computes the area of rectangles.
+Our `area` function is very specific: It only computes the area of rectangles.
 It would be helpful to tie this behavior more closely to our `Rectangle` struct
 because it won’t work with any other type. Let’s look at how we can continue to
-refactor this code by turning the `area` function into an `area` _method_
+refactor this code by turning the `area` function into an `area` method
 defined on our `Rectangle` type.
 
 [the-tuple-type]: ch03-02-data-types.html#the-tuple-type

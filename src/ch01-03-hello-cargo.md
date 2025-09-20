@@ -99,7 +99,7 @@ fn main() {
 
 Cargo has generated a “Hello, world!” program for you, just like the one we
 wrote in Listing 1-1! So far, the differences between our project and the
-project Cargo generated are that Cargo placed the code in the _src_ directory
+project Cargo generated are that Cargo placed the code in the _src_ directory,
 and we have a _Cargo.toml_ configuration file in the top directory.
 
 Cargo expects your source files to live inside the _src_ directory. The
@@ -186,7 +186,7 @@ Why would you not want an executable? Often, `cargo check` is much faster than
 continually checking your work while writing the code, using `cargo check` will
 speed up the process of letting you know if your project is still compiling! As
 such, many Rustaceans run `cargo check` periodically as they write their
-program to make sure it compiles. Then they run `cargo build` when they’re
+program to make sure it compiles. Then, they run `cargo build` when they’re
 ready to use the executable.
 
 Let’s recap what we’ve learned so far about Cargo:
@@ -216,7 +216,10 @@ repeatedly and that will run as fast as possible. If you’re benchmarking your
 code’s running time, be sure to run `cargo build --release` and benchmark with
 the executable in _target/release_.
 
-### Cargo as Convention
+<!-- Old headings. Do not remove or links may break. -->
+<a id="cargo-as-convention"></a>
+
+### Leveraging Cargo’s Conventions
 
 With simple projects, Cargo doesn’t provide a lot of value over just using
 `rustc`, but it will prove its worth as your programs become more intricate.
@@ -238,14 +241,14 @@ For more information about Cargo, check out [its documentation][cargo].
 
 ## Summary
 
-You’re already off to a great start on your Rust journey! In this chapter,
-you’ve learned how to:
+You’re already off to a great start on your Rust journey! In this chapter, you
+learned how to:
 
-- Install the latest stable version of Rust using `rustup`
-- Update to a newer Rust version
-- Open locally installed documentation
-- Write and run a “Hello, world!” program using `rustc` directly
-- Create and run a new project using the conventions of Cargo
+- Install the latest stable version of Rust using `rustup`.
+- Update to a newer Rust version.
+- Open locally installed documentation.
+- Write and run a “Hello, world!” program using `rustc` directly.
+- Create and run a new project using the conventions of Cargo.
 
 This is a great time to build a more substantial program to get used to reading
 and writing Rust code. So, in Chapter 2, we’ll build a guessing game program.

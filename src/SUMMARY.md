@@ -28,7 +28,7 @@
 - [Using Structs to Structure Related Data](ch05-00-structs.md)
   - [Defining and Instantiating Structs](ch05-01-defining-structs.md)
   - [An Example Program Using Structs](ch05-02-example-structs.md)
-  - [Method Syntax](ch05-03-method-syntax.md)
+  - [Methods](ch05-03-method-syntax.md)
 
 - [Enums and Pattern Matching](ch06-00-enums.md)
   - [Defining an Enum](ch06-01-defining-an-enum.md)
@@ -70,7 +70,7 @@
   - [Refactoring to Improve Modularity and Error Handling](ch12-03-improving-error-handling-and-modularity.md)
   - [Developing the Library’s Functionality with Test Driven Development](ch12-04-testing-the-librarys-functionality.md)
   - [Working with Environment Variables](ch12-05-working-with-environment-variables.md)
-  - [Writing Error Messages to Standard Error Instead of Standard Output](ch12-06-writing-to-stderr-instead-of-stdout.md)
+  - [Redirecting Errors to Standard Error](ch12-06-writing-to-stderr-instead-of-stdout.md)
 
 ## Thinking in Rust
 

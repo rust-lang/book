@@ -1,4 +1,8 @@
-## Writing Error Messages to Standard Error Instead of Standard Output
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="writing-error-messages-to-standard-error-instead-of-standard-output"></a>
+
+## Redirecting Errors to Standard Error
 
 At the moment, we’re writing all of our output to the terminal using the
 `println!` macro. In most terminals, there are two kinds of output: _standard

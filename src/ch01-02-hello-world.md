@@ -6,13 +6,16 @@ prints the text `Hello, world!` to the screen, so we’ll do the same here!
 
 > Note: This book assumes basic familiarity with the command line. Rust makes
 > no specific demands about your editing or tooling or where your code lives, so
-> if you prefer to use an integrated development environment (IDE) instead of
-> the command line, feel free to use your favorite IDE. Many IDEs now have some
-> degree of Rust support; check the IDE’s documentation for details. The Rust
-> team has been focusing on enabling great IDE support via `rust-analyzer`. See
-> [Appendix D][devtools]<!-- ignore --> for more details.
+> if you prefer to use an IDE instead of the command line, feel free to use your
+> favorite IDE. Many IDEs now have some degree of Rust support; check the IDE’s
+> documentation for details. The Rust team has been focusing on enabling great
+> IDE support via `rust-analyzer`. See [Appendix D][devtools]<!-- ignore -->
+> for more details.
 
-### Creating a Project Directory
+<!-- Old headings. Do not remove or links may break. -->
+<a id="creating-a-project-directory"></a>
+
+### Project Directory Setup
 
 You’ll start by making a directory to store your Rust code. It doesn’t matter
 to Rust where your code lives, but for the exercises and projects in this book,
@@ -40,7 +43,10 @@ For Windows CMD, enter this:
 > cd hello_world
 ```
 
-### Writing and Running a Rust Program
+<!-- Old headings. Do not remove or links may break. -->
+<a id="writing-and-running-a-rust-program"></a>
+
+### Rust Program Basics
 
 Next, make a new source file and call it _main.rs_. Rust files always end with
 the _.rs_ extension. If you’re using more than one word in your filename, the
@@ -96,10 +102,10 @@ fn main() {
 }
 ```
 
-These lines define a function named `main`. The `main` function is special: it
+These lines define a function named `main`. The `main` function is special: It
 is always the first code that runs in every executable Rust program. Here, the
 first line declares a function named `main` that has no parameters and returns
-nothing. If there were parameters, they would go inside the parentheses `()`.
+nothing. If there were parameters, they would go inside the parentheses (`()`).
 
 The function body is wrapped in `{}`. Rust requires curly brackets around all
 function bodies. It’s good style to place the opening curly bracket on the same
@@ -118,7 +124,7 @@ The body of the `main` function holds the following code:
 println!("Hello, world!");
 ```
 
-This line does all the work in this little program: it prints text to the
+This line does all the work in this little program: It prints text to the
 screen. There are three important details to notice here.
 
 First, `println!` calls a Rust macro. If it had called a function instead, it
@@ -132,10 +138,13 @@ Second, you see the `"Hello, world!"` string. We pass this string as an argument
 to `println!`, and the string is printed to the screen.
 
 Third, we end the line with a semicolon (`;`), which indicates that this
-expression is over and the next one is ready to begin. Most lines of Rust code
+expression is over, and the next one is ready to begin. Most lines of Rust code
 end with a semicolon.
 
-### Compiling and Running Are Separate Steps
+<!-- Old headings. Do not remove or links may break. -->
+<a id="compiling-and-running-are-separate-steps"></a>
+
+### Compilation and Execution
 
 You’ve just run a newly created program, so let’s examine each step in the
 process.
