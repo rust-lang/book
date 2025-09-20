@@ -233,7 +233,7 @@ simple right now, but the behavior of code can be unexpected in more
 complicated situations when we want to have multiple variables use the data
 we’ve allocated on the heap. Let’s explore some of those situations now.
 
-<!-- Old heading. Do not remove or links may break. -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="ways-variables-and-data-interact-move"></a>
 
@@ -386,7 +386,7 @@ The original string thus immediately goes out of scope. Rust will run the `drop`
 function on it and its memory will be freed right away. When we print the value
 at the end, it will be `"ahoy, world!"`.
 
-<!-- Old heading. Do not remove or links may break. -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="ways-variables-and-data-interact-clone"></a>
 

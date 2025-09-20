@@ -2,10 +2,10 @@
 
 A _struct_, or _structure_, is a custom data type that lets you package
 together and name multiple related values that make up a meaningful group. If
-you’re familiar with an object-oriented language, a _struct_ is like an
-object’s data attributes. In this chapter, we’ll compare and contrast tuples
-with structs to build on what you already know and demonstrate when structs are
-a better way to group data.
+you’re familiar with an object-oriented language, a struct is like an object’s
+data attributes. In this chapter, we’ll compare and contrast tuples with
+structs to build on what you already know and demonstrate when structs are a
+better way to group data.
 
 We’ll demonstrate how to define and instantiate structs. We’ll discuss how to
 define associated functions, especially the kind of associated functions called
