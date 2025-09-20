@@ -24,7 +24,7 @@ situation, we can store the large amount of data on the heap in a box. Then,
 only the small amount of pointer data is copied around on the stack, while the
 data it references stays in one place on the heap. The third case is known as a
 _trait object_, and [“Using Trait Objects That Allow for Values of Different
-Types,”][trait-objects]<!-- ignore --> in Chapter 18 is devoted to that topic.
+Types”][trait-objects]<!-- ignore --> in Chapter 18 is devoted to that topic.
 So what you learn here you’ll apply again in that section!
 
 ### Using `Box<T>` to Store Data on the Heap
