@@ -198,8 +198,8 @@ pointer_—a pointer that references a location in memory that may have been
 given to someone else—by freeing some memory while preserving a pointer to that
 memory. In Rust, by contrast, the compiler guarantees that references will
 never be dangling references: if you have a reference to some data, the
-compiler will ensure that the data will not go out of scope before the
-reference to the data does.
+compiler will not let you use that reference after the data has gone
+out of scope.
 
 Let’s try to create a dangling reference to see how Rust prevents them with a
 compile-time error:
