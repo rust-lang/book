@@ -150,10 +150,10 @@ changed to `pub use`.
 
 Before this change, external code would have to call the `add_to_waitlist`
 function by using the path
-`restaurant::front_of_house::hosting::add_to_waitlist()`, which also would have
+`crate::front_of_house::hosting::add_to_waitlist()`, which also would have
 required the `front_of_house` module to be marked as `pub`. Now that this `pub
 use` has re-exported the `hosting` module from the root module, external code
-can use the path `restaurant::hosting::add_to_waitlist()` instead.
+can use the path `crate::hosting::add_to_waitlist()` instead.
 
 Re-exporting is useful when the internal structure of your code is different
 from how programmers calling your code would think about the domain. For
@@ -297,8 +297,7 @@ as a definition of yours in the same scope, for example.
 The glob operator is often used when testing to bring everything under test into
 the `tests` module; we’ll talk about that in [“How to Write
 Tests”][writing-tests]<!-- ignore --> in Chapter 11. The glob operator is also
-sometimes used as part of the prelude pattern: see [the standard library
-documentation](../std/prelude/index.html#other-preludes)<!-- ignore --> for more
+sometimes used as part of the prelude pattern: see [the standard library documentation](../std/prelude/index.html#other-preludes)<!-- ignore --> for more
 information on that pattern.
 
 [ch14-pub-use]: ch14-02-publishing-to-crates-io.html#exporting-a-convenient-public-api-with-pub-use
