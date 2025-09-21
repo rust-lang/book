@@ -12,7 +12,7 @@ they only get updated when edits are sent to No Starch. **Do not submit pull
 requests changing files in the `nostarch` directory, they will be closed.**
 
 We use [`rustfmt`][rustfmt] to apply standard formatting to Rust code in the
-repo and [`dprint`][dprint] to apply standing formatting to the Markdown source
+repo and [`dprint`][dprint] to apply standard formatting to the Markdown source
 and the non-Rust code in the project.
 
 [rustfmt]: https://github.com/rust-lang/rustfmt
