@@ -36,10 +36,10 @@ the corresponding `match` arm. The code in the `if let` block only runs if the
 value matches the pattern.
 
 Using `if let` means less typing, less indentation, and less boilerplate code.
-However, you lose the exhaustive checking `match` enforces that ensures you
-aren’t forgetting to handle any cases. Choosing between `match` and `if let`
-depends on what you’re doing in your particular situation and whether gaining
-conciseness is an appropriate trade-off for losing exhaustive checking.
+However, you lose the exhaustive checking `match` enforces that ensures that
+you aren’t forgetting to handle any cases. Choosing between `match` and `if
+let` depends on what you’re doing in your particular situation and whether
+gaining conciseness is an appropriate trade-off for losing exhaustive checking.
 
 In other words, you can think of `if let` as syntax sugar for a `match` that
 runs code when the value matches one pattern and then ignores all other values.
@@ -65,7 +65,7 @@ Or we could use an `if let` and `else` expression, like this:
 ## Staying on the “Happy Path” with `let...else`
 
 The common pattern is to perform some computation when a value is present and
-return a default value otherwise. Continuing on with our example of coins with a
+return a default value otherwise. Continuing with our example of coins with a
 `UsState` value, if we wanted to say something funny depending on how old the
 state on the quarter was, we might introduce a method on `UsState` to check the
 age of a state, like so:
@@ -74,10 +74,10 @@ age of a state, like so:
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-07/src/main.rs:state}}
 ```
 
-Then we might use `if let` to match on the type of coin, introducing a `state`
+Then, we might use `if let` to match on the type of coin, introducing a `state`
 variable within the body of the condition, as in Listing 6-7.
 
-<Listing number="6-7" caption="Checking whether a state existed in 1900 by using conditionals nested inside an `if let`.">
+<Listing number="6-7" caption="Checking whether a state existed in 1900 by using conditionals nested inside an `if let`">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-07/src/main.rs:describe}}
@@ -90,9 +90,9 @@ let` statement, and if the work to be done is more complicated, it might be
 hard to follow exactly how the top-level branches relate. We could also take
 advantage of the fact that expressions produce a value either to produce the
 `state` from the `if let` or to return early, as in Listing 6-8. (You could do
-similar with a `match`, too.)
+something similar with a `match`, too.)
 
-<Listing number="6-8" caption="Using `if let` to produce a value or return early.">
+<Listing number="6-8" caption="Using `if let` to produce a value or return early">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-08/src/main.rs:describe}}
@@ -113,7 +113,7 @@ the `else` arm, which must return from the function.
 In Listing 6-9, you can see how Listing 6-8 looks when using `let...else` in
 place of `if let`.
 
-<Listing number="6-9" caption="Using `let...else` to clarify the flow through the function.">
+<Listing number="6-9" caption="Using `let...else` to clarify the flow through the function">
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-09/src/main.rs:describe}}
@@ -121,7 +121,7 @@ place of `if let`.
 
 </Listing>
 
-Notice that it stays “on the happy path” in the main body of the function this
+Notice that it stays on the “happy path” in the main body of the function this
 way, without having significantly different control flow for two branches the
 way the `if let` did.
 
@@ -138,7 +138,7 @@ data inside them, you can use `match` or `if let` to extract and use those
 values, depending on how many cases you need to handle.
 
 Your Rust programs can now express concepts in your domain using structs and
-enums. Creating custom types to use in your API ensures type safety: the
+enums. Creating custom types to use in your API ensures type safety: The
 compiler will make certain your functions only get values of the type each
 function expects.
 
