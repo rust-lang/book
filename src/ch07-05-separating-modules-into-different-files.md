@@ -10,7 +10,7 @@ modules defined in the crate root file. In this case, the crate root file is
 _src/lib.rs_, but this procedure also works with binary crates whose crate root
 file is _src/main.rs_.
 
-First we’ll extract the `front_of_house` module to its own file. Remove the
+First, we’ll extract the `front_of_house` module to its own file. Remove the
 code inside the curly brackets for the `front_of_house` module, leaving only
 the `mod front_of_house;` declaration, so that _src/lib.rs_ contains the code
 shown in Listing 7-21. Note that this won’t compile until we create the
@@ -62,7 +62,7 @@ the declaration of the `hosting` module:
 
 </Listing>
 
-Then we create a _src/front_of_house_ directory and a _hosting.rs_ file to
+Then, we create a _src/front_of_house_ directory and a _hosting.rs_ file to
 contain the definitions made in the `hosting` module:
 
 <Listing file-name="src/front_of_house/hosting.rs">
@@ -75,7 +75,7 @@ contain the definitions made in the `hosting` module:
 
 If we instead put _hosting.rs_ in the _src_ directory, the compiler would
 expect the _hosting.rs_ code to be in a `hosting` module declared in the crate
-root, and not declared as a child of the `front_of_house` module. The
+root and not declared as a child of the `front_of_house` module. The
 compiler’s rules for which files to check for which modules’ code mean the
 directories and files more closely match the module tree.
 
@@ -97,7 +97,7 @@ directories and files more closely match the module tree.
 >
 > If you use both styles for the same module, you’ll get a compiler error.
 > Using a mix of both styles for different modules in the same project is
-> allowed, but might be confusing for people navigating your project.
+> allowed but might be confusing for people navigating your project.
 >
 > The main downside to the style that uses files named _mod.rs_ is that your
 > project can end up with many files named _mod.rs_, which can get confusing
@@ -117,11 +117,11 @@ that module.
 ## Summary
 
 Rust lets you split a package into multiple crates and a crate into modules so
-you can refer to items defined in one module from another module. You can do
-this by specifying absolute or relative paths. These paths can be brought into
-scope with a `use` statement so you can use a shorter path for multiple uses of
-the item in that scope. Module code is private by default, but you can make
-definitions public by adding the `pub` keyword.
+that you can refer to items defined in one module from another module. You can
+do this by specifying absolute or relative paths. These paths can be brought
+into scope with a `use` statement so that you can use a shorter path for
+multiple uses of the item in that scope. Module code is private by default, but
+you can make definitions public by adding the `pub` keyword.
 
 In the next chapter, we’ll look at some collection data structures in the
 standard library that you can use in your neatly organized code.

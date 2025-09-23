@@ -1,4 +1,8 @@
-## Defining Modules to Control Scope and Privacy
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="defining-modules-to-control-scope-and-privacy"></a>
+
+## Control Scope and Privacy with Modules
 
 In this section, we’ll talk about modules and other parts of the module system,
 namely _paths_, which allow you to name items; the `use` keyword that brings a
@@ -14,7 +18,7 @@ through examples of each of these rules throughout this chapter, but this is a
 great place to refer to as a reminder of how modules work.
 
 - **Start from the crate root**: When compiling a crate, the compiler first
-  looks in the crate root file (usually _src/lib.rs_ for a library crate or
+  looks in the crate root file (usually _src/lib.rs_ for a library crate and
   _src/main.rs_ for a binary crate) for code to compile.
 - **Declaring modules**: In the crate root file, you can declare new modules;
   say you declare a “garden” module with `mod garden;`. The compiler will look
@@ -43,11 +47,11 @@ great place to refer to as a reminder of how modules work.
 - **The `use` keyword**: Within a scope, the `use` keyword creates shortcuts to
   items to reduce repetition of long paths. In any scope that can refer to
   `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use
-  crate::garden::vegetables::Asparagus;` and from then on you only need to
+  crate::garden::vegetables::Asparagus;`, and from then on you only need to
   write `Asparagus` to make use of that type in the scope.
 
 Here, we create a binary crate named `backyard` that illustrates these rules.
-The crate’s directory, also named `backyard`, contains these files and
+The crate’s directory, also named _backyard_, contains these files and
 directories:
 
 ```text
@@ -105,16 +109,16 @@ restaurant. We’ll define the signatures of functions but leave their bodies
 empty to concentrate on the organization of the code rather than the
 implementation of a restaurant.
 
-In the restaurant industry, some parts of a restaurant are referred to as
-_front of house_ and others as _back of house_. Front of house is where
-customers are; this encompasses where the hosts seat customers, servers take
-orders and payment, and bartenders make drinks. Back of house is where the
-chefs and cooks work in the kitchen, dishwashers clean up, and managers do
-administrative work.
+In the restaurant industry, some parts of a restaurant are referred to as front
+of house and others as back of house. _Front of house_ is where customers are;
+this encompasses where the hosts seat customers, servers take orders and
+payment, and bartenders make drinks. _Back of house_ is where the chefs and
+cooks work in the kitchen, dishwashers clean up, and managers do administrative
+work.
 
 To structure our crate in this way, we can organize its functions into nested
 modules. Create a new library named `restaurant` by running `cargo new
-restaurant --lib`. Then enter the code in Listing 7-1 into _src/lib.rs_ to
+restaurant --lib`. Then, enter the code in Listing 7-1 into _src/lib.rs_ to
 define some modules and function signatures; this code is the front of house
 section.
 
@@ -139,8 +143,8 @@ groups rather than having to read through all the definitions, making it easier
 to find the definitions relevant to them. Programmers adding new functionality
 to this code would know where to place the code to keep the program organized.
 
-Earlier, we mentioned that _src/main.rs_ and _src/lib.rs_ are called crate
-roots. The reason for their name is that the contents of either of these two
+Earlier, we mentioned that _src/main.rs_ and _src/lib.rs_ are called _crate
+roots__. The reason for their name is that the contents of either of these two
 files form a module named `crate` at the root of the crate’s module structure,
 known as the _module tree_.
 
