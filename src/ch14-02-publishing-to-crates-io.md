@@ -142,7 +142,12 @@ Documentation comments within items are useful for describing crates and
 modules especially. Use them to explain the overall purpose of the container to
 help your users understand the crate’s organization.
 
-### Exporting a Convenient Public API with `pub use`
+
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="exporting-a-convenient-public-api-with-pub-use"></a>
+
+### Exporting a Convenient Public API
 
 The structure of your public API is a major consideration when publishing a
 crate. People who use your crate are less familiar with the structure than you
