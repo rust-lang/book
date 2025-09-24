@@ -14,7 +14,7 @@ go to `cargo test` followed by the separator `--` and then the ones that go to
 the test binary. Running `cargo test --help` displays the options you can use
 with `cargo test`, and running `cargo test -- --help` displays the options you
 can use after the separator. Those options are also documented in [the “Tests”
-section][tests] of the [the rustc book][rustc].
+section][tests] of [the rustc book][rustc].
 
 [tests]: https://doc.rust-lang.org/rustc/tests/index.html
 [rustc]: https://doc.rust-lang.org/rustc/index.html
