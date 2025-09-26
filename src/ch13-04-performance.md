@@ -1,4 +1,8 @@
-## Comparing Performance: Loops vs. Iterators
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="comparing-performance-loops-vs-iterators"></a>
+
+## Performance in Loops vs. Iterators
 
 To determine whether to use loops or iterators, you need to know which
 implementation is faster: the version of the `search` function with an explicit

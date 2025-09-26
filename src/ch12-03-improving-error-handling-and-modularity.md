@@ -33,7 +33,11 @@ that will be meaningful to our end users.
 
 Let’s address these four problems by refactoring our project.
 
-### Separation of Concerns for Binary Projects
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="separation-of-concerns-for-binary-projects"></a>
+
+### Separating Concerns in Binary Projects
 
 The organizational problem of allocating responsibility for multiple tasks to
 the `main` function is common to many binary projects. As a result, many Rust
@@ -333,9 +337,9 @@ Great! This output is much friendlier for our users.
 
 <!-- Old headings. Do not remove or links may break. -->
 
-<a id="extracting-logic-from-main"></a>
+<a id="extracting-logic-from-the-main-function"></a>
 
-### Extracting Logic from the `main` Function
+### Extracting Logic from `main`
 
 Now that we’ve finished refactoring the configuration parsing, let’s turn to
 the program’s logic. As we stated in [“Separation of Concerns for Binary

@@ -1,4 +1,7 @@
-## Developing the Library’s Functionality with Test-Driven Development
+<!-- Old headings. Do not remove or links may break. -->
+<a id="developing-the-librarys-functionality-with-test-driven-development"></a>
+
+## Adding Functionality with Test-Driven Development
 
 Now that we have the search logic in _src/lib.rs_ separate from the `main`
 function, it’s much easier to write tests for the core functionality of our

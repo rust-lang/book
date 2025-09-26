@@ -12,7 +12,11 @@ Let’s look at the features Rust provides specifically for writing tests that
 take these actions, which include the `test` attribute, a few macros, and the
 `should_panic` attribute.
 
-### The Anatomy of a Test Function
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="the-anatomy-of-a-test-function"></a>
+
+### Structuring Test Functions
 
 At its simplest, a test in Rust is a function that’s annotated with the `test`
 attribute. Attributes are metadata about pieces of Rust code; one example is

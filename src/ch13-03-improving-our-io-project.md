@@ -93,7 +93,11 @@ Because we’re taking ownership of `args` and we’ll be mutating `args` by
 iterating over it, we can add the `mut` keyword into the specification of the
 `args` parameter to make it mutable.
 
-#### Using `Iterator` Trait Methods Instead of Indexing
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="using-iterator-trait-methods-instead-of-indexing"></a>
+
+#### Using `Iterator` Trait Methods
 
 Next, we’ll fix the body of `Config::build`. Because `args` implements the
 `Iterator` trait, we know we can call the `next` method on it! Listing 13-20
@@ -115,7 +119,11 @@ we use a `match` to extract the value. If it returns `None`, it means not enough
 arguments were given and we return early with an `Err` value. We do the same
 thing for the `file_path` value.
 
-### Making Code Clearer with Iterator Adapters
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="making-code-clearer-with-iterator-adapters"></a>
+
+### Clarifying Code with Iterator Adapters
 
 We can also take advantage of iterators in the `search` function in our I/O
 project, which is reproduced here in Listing 13-21 as it was in Listing 12-19.
@@ -160,7 +168,7 @@ until it has collected all of the results, but after the change, the results
 will be printed as each matching line is found because the `for` loop in the
 `run` function is able to take advantage of the laziness of the iterator.
 
-<!-- Old heading. Do not remove or links may break. -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="choosing-between-loops-or-iterators"></a>
 

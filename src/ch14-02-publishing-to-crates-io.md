@@ -103,7 +103,12 @@ Now, if we change either the function or the example so the `assert_eq!` in the
 example panics, and run `cargo test` again, we’ll see that the doc tests catch
 that the example and the code are out of sync with each other!
 
-#### Commenting Contained Items
+
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="commenting-contained-items"></a>
+
+#### Contained Item Comments
 
 The style of doc comment `//!` adds documentation to the item that *contains*
 the comments rather than to the items *following* the comments. We typically use
@@ -429,11 +434,12 @@ republish. Use the [Semantic Versioning rules][semver] to decide what an
 appropriate next version number is, based on the kinds of changes you’ve made.
 Then run `cargo publish` to upload the new version.
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="removing-versions-from-cratesio-with-cargo-yank"></a>
+<a id="deprecating-versions-from-cratesio-with-cargo-yank"></a>
 
-### Deprecating Versions from Crates.io with `cargo yank`
+### Deprecating Versions from Crates.io
 
 Although you can’t remove previous versions of a crate, you can prevent any
 future projects from adding them as a new dependency. This is useful when a

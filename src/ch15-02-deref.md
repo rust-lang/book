@@ -1,8 +1,9 @@
-## Treating Smart Pointers Like Regular References with `Deref`
+## Treating Smart Pointers Like Regular References
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="treating-smart-pointers-like-regular-references-with-the-deref-trait"></a>
+<a id="treating-smart-pointers-like-regular-references-with-deref"></a>
 
 Implementing the `Deref` trait allows you to customize the behavior of the
 _dereference operator_ `*` (not to be confused with the multiplication or glob
@@ -18,7 +19,7 @@ smart pointers to work in ways similar to references. Then we’ll look at
 Rust’s _deref coercion_ feature and how it lets us work with either references
 or smart pointers.
 
-<!-- Old links, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="following-the-pointer-to-the-value-with-the-dereference-operator"></a>
 <a id="following-the-pointer-to-the-value"></a>
@@ -130,7 +131,7 @@ Our `MyBox<T>` type can’t be dereferenced because we haven’t implemented tha
 ability on our type. To enable dereferencing with the `*` operator, we
 implement the `Deref` trait.
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="treating-a-type-like-a-reference-by-implementing-the-deref-trait"></a>
 
@@ -197,8 +198,9 @@ Listing 15-9.
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="implicit-deref-coercions-with-functions-and-methods"></a>
+<a id="using-deref-coercions-in-functions-and-methods"></a>
 
-### Using Deref Coercions in Functions and Methods
+### Using Deref Coercion in Functions and Methods
 
 _Deref coercion_ converts a reference to a type that implements the `Deref`
 trait into a reference to another type. For example, deref coercion can convert
@@ -272,7 +274,11 @@ match the parameter’s type. The number of times that `Deref::deref` needs to b
 inserted is resolved at compile time, so there is no runtime penalty for taking
 advantage of deref coercion!
 
-### How Deref Coercion Interacts with Mutability
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="how-deref-coercion-interacts-with-mutability"></a>
+
+### Handling Deref Coercion with Mutable References
 
 Similar to how you use the `Deref` trait to override the `*` operator on
 immutable references, you can use the `DerefMut` trait to override the `*`

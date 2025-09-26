@@ -107,7 +107,7 @@ Let’s look at an example using graphs made up of parent nodes and child nodes
 to see when non-ownership relationships are an appropriate way to prevent
 reference cycles.
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="preventing-reference-cycles-turning-an-rct-into-a-weakt"></a>
 
@@ -143,7 +143,11 @@ As an example, rather than using a list whose items know only about the next
 item, we’ll create a tree whose items know about their children items _and_
 their parent items.
 
-#### Creating a Tree Data Structure: A `Node` with Child Nodes
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="creating-a-tree-data-structure-a-node-with-child-nodes"></a>
+
+#### Creating a Tree Data Structure
 
 To start, we’ll build a tree with nodes that know about their child nodes.
 We’ll create a struct named `Node` that holds its own `i32` value as well as

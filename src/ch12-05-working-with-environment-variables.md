@@ -7,7 +7,10 @@ users enter it each time they want it to apply, but by instead making it an
 environment variable, we allow our users to set the environment variable once
 and have all their searches be case insensitive in that terminal session.
 
-### Writing a Failing Test for the Case-Insensitive `search` Function
+<!-- Old headings. Do not remove or links may break. -->
+<a id="writing-a-failing-test-for-the-case-insensitive-search-function"></a>
+
+### Writing a Failing Test for Case-Insensitive Search
 
 We first add a new `search_case_insensitive` function to the `minigrep` library
 that will be called when the environment variable has a value. We’ll continue

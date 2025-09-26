@@ -5,11 +5,12 @@ Behavior”][traits-defining-shared-behavior]<!-- ignore --> in Chapter 10, but 
 didn’t discuss the more advanced details. Now that you know more about Rust, we
 can get into the nitty-gritty.
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="specifying-placeholder-types-in-trait-definitions-with-associated-types"></a>
+<a id="associated-types"></a>
 
-### Associated Types
+### Defining Traits with Associated Types
 
 _Associated types_ connect a type placeholder with a trait such that the trait
 method definitions can use these placeholder types in their signatures. The
@@ -88,7 +89,11 @@ trait must provide a type to stand in for the associated type placeholder.
 Associated types often have a name that describes how the type will be used,
 and documenting the associated type in the API documentation is a good practice.
 
-### Default Generic Type Parameters and Operator Overloading
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="default-generic-type-parameters-and-operator-overloading"></a>
+
+### Using Default Generic Type Parameters and Operator Overloading
 
 When we use generic type parameters, we can specify a default concrete type for
 the generic type. This eliminates the need for implementors of the trait to
@@ -179,11 +184,12 @@ type parameter to an existing trait, you can give it a default to allow
 extension of the functionality of the trait without breaking the existing
 implementation code.
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name"></a>
+<a id="disambiguating-between-methods-with-the-same-name"></a>
 
-### Disambiguating Between Methods with the Same Name
+### Disambiguating Between Identically Named Methods
 
 Nothing in Rust prevents a trait from having a method with the same name as
 another trait’s method, nor does Rust prevent you from implementing both traits
@@ -334,7 +340,7 @@ in the program. You only need to use this more verbose syntax in cases where
 there are multiple implementations that use the same name and Rust needs help
 to identify which implementation you want to call.
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-supertraits-to-require-one-traits-functionality-within-another-trait"></a>
 
@@ -416,10 +422,12 @@ Then, implementing the `OutlinePrint` trait on `Point` will compile
 successfully, and we can call `outline_print` on a `Point` instance to display
 it within an outline of asterisks.
 
-<!-- Old link, do not remove -->
-<a id="using-the-newtype-pattern-to-implement-external-traits-on-external-types"></a>
+<!-- Old headings. Do not remove or links may break. -->
 
-### Using the Newtype Pattern to Implement External Traits
+<a id="using-the-newtype-pattern-to-implement-external-traits-on-external-types"></a>
+<a id="using-the-newtype-pattern-to-implement-external-traits"></a>
+
+### Implementing External Traits with the Newtype Pattern
 
 In [“Implementing a Trait on a Type”][implementing-a-trait-on-a-type]<!--
 ignore --> in Chapter 10, we mentioned the orphan rule that states we’re only

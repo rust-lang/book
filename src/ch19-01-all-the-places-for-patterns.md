@@ -47,7 +47,7 @@ useful when you want to ignore any value not specified, for example. We’ll cov
 the `_` pattern in more detail in [“Ignoring Values in a
 Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> later in this chapter.
 
-### let Statements
+### `let` Statements
 
 Prior to this chapter, we had only explicitly discussed using patterns with
 `match` and `if let`, but in fact, we’ve used patterns in other places as well,
@@ -122,7 +122,7 @@ is that we have too many variables in the pattern, the solution is to make the
 types match by removing variables so the number of variables equals the number
 of elements in the tuple.
 
-### Conditional if let Expressions
+### Conditional `if let` Expressions
 
 In Chapter 6, we discussed how to use `if let` expressions mainly as a shorter
 way to write the equivalent of a `match` that only matches one case.

@@ -21,7 +21,7 @@ code that they’re testing. The convention is to create a module named `tests`
 in each file to contain the test functions and to annotate the module with
 `cfg(test)`.
 
-#### The Tests Module and `#[cfg(test)]`
+#### The `tests` Module and `#[cfg(test)]`
 
 The `#[cfg(test)]` annotation on the `tests` module tells Rust to compile and
 run the test code only when you run `cargo test`, not when you run `cargo
@@ -49,7 +49,11 @@ given a certain configuration option. In this case, the configuration option is
 with `cargo test`. This includes any helper functions that might be within this
 module, in addition to the functions annotated with `#[test]`.
 
-#### Testing Private Functions
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="testing-private-functions"></a>
+
+#### Private Function Tests
 
 There’s debate within the testing community about whether or not private
 functions should be tested directly, and other languages make it difficult or

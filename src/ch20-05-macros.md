@@ -44,7 +44,11 @@ Another important difference between macros and functions is that you must
 define macros or bring them into scope _before_ you call them in a file, as
 opposed to functions you can define anywhere and call anywhere.
 
-### Declarative Macros with `macro_rules!` for General Metaprogramming
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="declarative-macros-with-macro_rules-for-general-metaprogramming"></a>
+
+### Declarative Macros for General Metaprogramming
 
 The most widely used form of macros in Rust is the _declarative macro_. These
 are also sometimes referred to as “macros by example,” “`macro_rules!` macros,”
@@ -189,7 +193,11 @@ Let’s look at the different kinds of procedural macros. We’ll start with a
 custom `derive` macro and then explain the small dissimilarities that make the
 other forms different.
 
-### How to Write a Custom `derive` Macro
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="how-to-write-a-custom-derive-macro"></a>
+
+### Custom `derive` Macros
 
 Let’s create a crate named `hello_macro` that defines a trait named
 `HelloMacro` with one associated function named `hello_macro`. Rather than

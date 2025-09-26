@@ -18,7 +18,11 @@ and ownership rules greatly assist in getting this management correct. For an
 example, let’s look at mutexes, one of the more common concurrency primitives
 for shared memory.
 
-### Using Mutexes to Allow Access to Data from One Thread at a Time
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="using-mutexes-to-allow-access-to-data-from-one-thread-at-a-time"></a>
+
+### Controlling Access with Mutexes
 
 _Mutex_ is an abbreviation for _mutual exclusion_, as in a mutex allows only
 one thread to access some data at any given time. To access the data in a
@@ -87,7 +91,11 @@ used by other threads because the lock release happens automatically.
 After dropping the lock, we can print the mutex value and see that we were able
 to change the inner `i32` to `6`.
 
-#### Sharing a `Mutex<T>` Between Multiple Threads
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="sharing-a-mutext-between-multiple-threads"></a>
+
+#### Shared Access to `Mutex<T>`
 
 Now let’s try to share a value between multiple threads using `Mutex<T>`. We’ll
 spin up 10 threads and have them each increment a counter value by 1, so the
@@ -217,7 +225,11 @@ standard library][atomic]<!-- ignore -->. These types provide safe, concurrent,
 atomic access to primitive types. We chose to use `Mutex<T>` with a primitive
 type for this example so we could concentrate on how `Mutex<T>` works.
 
-### Similarities Between `RefCell<T>`/`Rc<T>` and `Mutex<T>`/`Arc<T>`
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="similarities-between-refcelltrct-and-mutextarct"></a>
+
+### Comparing `RefCell<T>`/`Rc<T>` and `Mutex<T>`/`Arc<T>`
 
 You might have noticed that `counter` is immutable but we could get a mutable
 reference to the value inside it; this means `Mutex<T>` provides interior

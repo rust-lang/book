@@ -16,7 +16,11 @@ safe API, and the outer type is still immutable.
 Let’s explore this concept by looking at the `RefCell<T>` type that follows the
 interior mutability pattern.
 
-### Enforcing Borrowing Rules at Runtime with `RefCell<T>`
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="enforcing-borrowing-rules-at-runtime-with-refcellt"></a>
+
+### Enforcing Borrowing Rules at Runtime
 
 Unlike `Rc<T>`, the `RefCell<T>` type represents single ownership over the data
 it holds. So what makes `RefCell<T>` different from a type like `Box<T>`?
@@ -73,7 +77,11 @@ Mutating the value inside an immutable value is the _interior mutability_
 pattern. Let’s look at a situation in which interior mutability is useful and
 examine how it’s possible.
 
-### Interior Mutability: A Mutable Borrow to an Immutable Value
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="interior-mutability-a-mutable-borrow-to-an-immutable-value"></a>
+
+### Using Interior Mutability
 
 A consequence of the borrowing rules is that when you have an immutable value,
 you can’t borrow it mutably. For example, this code won’t compile:
@@ -100,7 +108,11 @@ a compiler error.
 Let’s work through a practical example where we can use `RefCell<T>` to mutate
 an immutable value and see why that is useful.
 
-#### A Use Case for Interior Mutability: Mock Objects
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="a-use-case-for-interior-mutability-mock-objects"></a>
+
+#### Testing with Mock Objects
 
 Sometimes during testing a programmer will use a type in place of another type,
 in order to observe particular behavior and assert that it’s implemented
@@ -224,7 +236,11 @@ immutable reference to the vector.
 
 Now that you’ve seen how to use `RefCell<T>`, let’s dig into how it works!
 
-#### Keeping Track of Borrows at Runtime with `RefCell<T>`
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="keeping-track-of-borrows-at-runtime-with-refcellt"></a>
+
+#### Tracking Borrows at Runtime
 
 When creating immutable and mutable references, we use the `&` and `&mut`
 syntax, respectively. With `RefCell<T>`, we use the `borrow` and `borrow_mut`
@@ -280,11 +296,12 @@ in a context where only immutable values are allowed. You can use `RefCell<T>`
 despite its trade-offs to get more functionality than regular references
 provide.
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="having-multiple-owners-of-mutable-data-by-combining-rc-t-and-ref-cell-t"></a>
+<a id="allowing-multiple-owners-of-mutable-data-with-rct-and-refcellt"></a>
 
-### Allowing Multiple Owners of Mutable Data with `Rc<T>` and `RefCell<T>`
+### Allowing Multiple Owners of Mutable Data
 
 A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
 `Rc<T>` lets you have multiple owners of some data, but it only gives immutable

@@ -81,7 +81,11 @@ If you run this code and only see output from the main thread, or don’t see an
 overlap, try increasing the numbers in the ranges to create more opportunities
 for the operating system to switch between the threads.
 
-### Waiting for All Threads to Finish Using `join` Handles
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="waiting-for-all-threads-to-finish-using-join-handles"></a>
+
+### Waiting for All Threads to Finish
 
 The code in Listing 16-1 not only stops the spawned thread prematurely most of
 the time due to the main thread ending, but because there is no guarantee on

@@ -150,7 +150,11 @@ named `one_hundred`. Also note that the module in which a test appears becomes
 part of the test’s name, so we can run all the tests in a module by filtering
 on the module’s name.
 
-### Ignoring Some Tests Unless Specifically Requested
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="ignoring-some-tests-unless-specifically-requested"></a>
+
+### Ignoring Tests Unless Specifically Requested
 
 Sometimes a few specific tests can be very time-consuming to execute, so you
 might want to exclude them during most runs of `cargo test`. Rather than

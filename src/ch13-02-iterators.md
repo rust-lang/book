@@ -184,7 +184,10 @@ You can chain multiple calls to iterator adapters to perform complex actions in
 a readable way. But because all iterators are lazy, you have to call one of the
 consuming adapter methods to get results from calls to iterator adapters.
 
-### Using Closures That Capture Their Environment
+<!-- Old headings. Do not remove or links may break. -->
+<a id="using-closures-that-capture-their-environment"></a>
+
+### Closures That Capture Their Environment
 
 Many iterator adapters take closures as arguments, and commonly the closures
 we’ll specify as arguments to iterator adapters will be closures that capture

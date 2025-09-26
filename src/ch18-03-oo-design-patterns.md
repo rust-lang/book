@@ -81,7 +81,11 @@ methods called by our library’s users on the `Post` instance, but they don’t
 have to manage the state changes directly. Also, users can’t make a mistake
 with the states, such as publishing a post before it’s reviewed.
 
-#### Defining `Post` and Creating a New Instance in the Draft State
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="defining-post-and-creating-a-new-instance-in-the-draft-state"></a>
+
+#### Defining `Post` and Creating a New Instance
 
 Let’s get started on the implementation of the library! We know we need a
 public `Post` struct that holds some content, so we’ll start with the
@@ -225,8 +229,9 @@ Listing 18-11 now works up to line 10!
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="adding-the-approve-method-that-changes-the-behavior-of-content"></a>
+<a id="adding-approve-to-change-the-behavior-of-content"></a>
 
-#### Adding `approve` to Change the Behavior of `content`
+#### Adding `approve` to Change `content`'s Behavior
 
 The `approve` method will be similar to the `request_review` method: it will
 set `state` to the value that the current state says it should have when that
@@ -324,7 +329,11 @@ rules lives in the state objects rather than being scattered throughout `Post`.
 > `match` expression or similar to handle every possible variant. This could get
 > more repetitive than this trait object solution.
 
-#### Trade-offs of the State Pattern
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="trade-offs-of-the-state-pattern"></a>
+
+#### Evaluating the State Pattern
 
 We’ve shown that Rust is capable of implementing the object-oriented state
 pattern to encapsulate the different kinds of behavior a post should have in
