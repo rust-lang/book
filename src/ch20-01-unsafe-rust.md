@@ -23,7 +23,11 @@ writing your own operating system. Working with low-level systems programming
 is one of the goals of the language. Let’s explore what we can do with unsafe
 Rust and how to do it.
 
-### Unsafe Superpowers
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="unsafe-superpowers"></a>
+
+### Performing Unsafe Superpowers
 
 To switch to unsafe Rust, use the `unsafe` keyword and then start a new block
 that holds the unsafe code. You can take five actions in unsafe Rust that you

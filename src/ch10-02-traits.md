@@ -1,4 +1,8 @@
-## Traits: Defining Shared Behavior
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="traits-defining-shared-behavior"></a>
+
+## Defining Shared Behavior with Traits
 
 A _trait_ defines the functionality a particular type has and can share with
 other types. We can use traits to define shared behavior in an abstract way. We
@@ -112,7 +116,11 @@ break your code and vice versa. Without the rule, two crates could implement
 the same trait for the same type, and Rust wouldn’t know which implementation
 to use.
 
-### Default Implementations
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="default-implementations"></a>
+
+### Using Default Implementations
 
 Sometimes it’s useful to have default behavior for some or all of the methods
 in a trait instead of requiring implementations for all methods on every type.
@@ -186,7 +194,11 @@ This code prints `1 new post: (Read more from @horse_ebooks...)`.
 Note that it isn’t possible to call the default implementation from an
 overriding implementation of that same method.
 
-### Traits as Parameters
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="traits-as-parameters"></a>
+
+### Using Traits as Parameters
 
 Now that you know how to define and implement traits, we can explore how to use
 traits to define functions that accept many different types. We’ll use the
@@ -248,7 +260,11 @@ The generic type `T` specified as the type of the `item1` and `item2`
 parameters constrains the function such that the concrete type of the value
 passed as an argument for `item1` and `item2` must be the same.
 
-#### Specifying Multiple Trait Bounds with the `+` Syntax
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="specifying-multiple-trait-bounds-with-the--syntax"></a>
+
+#### Multiple Trait Bounds with the `+` Syntax
 
 We can also specify more than one trait bound. Say we wanted `notify` to use
 display formatting as well as `summarize` on `item`: we specify in the `notify`

@@ -27,7 +27,11 @@ _trait object_, and [“Using Trait Objects That Allow for Values of Different
 Types,”][trait-objects]<!-- ignore --> in Chapter 18 is devoted to that topic.
 So what you learn here you’ll apply again in that section!
 
-### Using `Box<T>` to Store Data on the Heap
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="using-boxt-to-store-data-on-the-heap"></a>
+
+### Storing Data on the Heap
 
 Before we discuss the heap storage use case for `Box<T>`, we’ll cover the
 syntax and how to interact with values stored within a `Box<T>`.
@@ -71,7 +75,11 @@ we’ll define is straightforward except for the recursion; therefore, the
 concepts in the example we’ll work with will be useful any time you get into
 more complex situations involving recursive types.
 
-#### More Information About the Cons List
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="more-information-about-the-cons-list"></a>
+
+#### Understanding the Cons List
 
 A _cons list_ is a data structure that comes from the Lisp programming language
 and its dialects, is made up of nested pairs, and is the Lisp version of a
@@ -180,7 +188,11 @@ variant. The `Cons` variant holds a value of type `i32` and a value of type
 <span class="caption">Figure 15-1: An infinite `List` consisting of infinite
 `Cons` variants</span>
 
-#### Using `Box<T>` to Get a Recursive Type with a Known Size
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="using-boxt-to-get-a-recursive-type-with-a-known-size"></a>
+
+#### Getting a Recursive Type with a Known Size
 
 Because Rust can’t figure out how much space to allocate for recursively
 defined types, the compiler gives an error with this helpful suggestion:

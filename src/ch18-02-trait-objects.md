@@ -220,7 +220,11 @@ This error lets us know that either we’re passing something to `Screen` that w
 didn’t mean to pass and so should pass a different type, or we should implement
 `Draw` on `String` so that `Screen` is able to call `draw` on it.
 
-### Trait Objects Perform Dynamic Dispatch
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="trait-objects-perform-dynamic-dispatch"></a>
+
+### Performing Dynamic Dispatch
 
 Recall in [“Performance of Code Using
 Generics”][performance-of-code-using-generics]<!-- ignore --> in Chapter 10 our

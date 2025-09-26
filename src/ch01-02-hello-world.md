@@ -91,7 +91,11 @@ section for ways to get help.
 If `Hello, world!` did print, congratulations! You’ve officially written a Rust
 program. That makes you a Rust programmer—welcome!
 
-### Anatomy of a Rust Program
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="anatomy-of-a-rust-program"></a>
+
+### The Anatomy of a Rust Program
 
 Let’s review this “Hello, world!” program in detail. Here’s the first piece of
 the puzzle:

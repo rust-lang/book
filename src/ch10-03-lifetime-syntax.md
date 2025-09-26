@@ -20,7 +20,11 @@ have, so this is going to feel unfamiliar. Although we won’t cover lifetimes i
 their entirety in this chapter, we’ll discuss common ways you might encounter
 lifetime syntax so you can get comfortable with the concept.
 
-### Preventing Dangling References with Lifetimes
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="preventing-dangling-references-with-lifetimes"></a>
+
+### Dangling References
 
 The main aim of lifetimes is to prevent _dangling references_, which cause a
 program to reference data other than the data it’s intended to reference.
@@ -186,7 +190,11 @@ annotations are meant to tell Rust how generic lifetime parameters of multiple
 references relate to each other. Let’s examine how the lifetime annotations
 relate to each other in the context of the `longest` function.
 
-### Lifetime Annotations in Function Signatures
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="lifetime-annotations-in-function-signatures"></a>
+
+### In Function Signatures
 
 To use lifetime annotations in function signatures, we need to declare the
 generic _lifetime_ parameters inside angle brackets between the function name
@@ -303,7 +311,11 @@ references passed in to the `longest` function and how the returned reference
 is used. Make hypotheses about whether or not your experiments will pass the
 borrow checker before you compile; then check to see if you’re right!
 
-### Thinking in Terms of Lifetimes
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="thinking-in-terms-of-lifetimes"></a>
+
+### Relationships
 
 The way in which you need to specify lifetime parameters depends on what your
 function is doing. For example, if we changed the implementation of the
@@ -361,7 +373,11 @@ parameters and return values of functions. Once they’re connected, Rust has
 enough information to allow memory-safe operations and disallow operations that
 would create dangling pointers or otherwise violate memory safety.
 
-### Lifetime Annotations in Struct Definitions
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="lifetime-annotations-in-struct-definitions"></a>
+
+### In Struct Definitions
 
 So far, the structs we’ve defined all hold owned types. We can define structs
 to hold references, but in that case we would need to add a lifetime annotation
@@ -516,7 +532,11 @@ Because the third rule really only applies in method signatures, we’ll look at
 lifetimes in that context next to see why the third rule means we don’t have to
 annotate lifetimes in method signatures very often.
 
-### Lifetime Annotations in Method Definitions
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="lifetime-annotations-in-method-definitions"></a>
+
+### In Method Definitions
 
 When we implement methods on a struct with lifetimes, we use the same syntax as
 that of generic type parameters, as shown in Listing 10-11. Where we declare and

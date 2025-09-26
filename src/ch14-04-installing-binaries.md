@@ -1,4 +1,4 @@
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="installing-binaries-from-cratesio-with-cargo-install"></a>
 

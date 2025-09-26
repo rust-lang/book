@@ -197,7 +197,11 @@ Hello, world! 10 plus one is 11!
 
 This runs the code in _adder/src/main.rs_, which depends on the `add_one` crate.
 
-#### Depending on an External Package in a Workspace
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="depending-on-an-external-package-in-a-workspace"></a>
+
+### Depending on an External Package
 
 Notice that the workspace has only one _Cargo.lock_ file at the top level,
 rather than having a _Cargo.lock_ in each crate’s directory. This ensures that
@@ -288,7 +292,7 @@ If crates in the workspace specify incompatible versions of the same dependency,
 Cargo will resolve each of them, but will still try to resolve as few versions
 as possible.
 
-#### Adding a Test to a Workspace
+### Adding a Test to a Workspace
 
 For another enhancement, let’s add a test of the `add_one::add_one` function
 within the `add_one` crate:

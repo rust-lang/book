@@ -62,7 +62,7 @@ give you a visual guide to how the `drop` method works; usually you would
 specify the cleanup code that your type needs to run rather than a print
 message.
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="dropping-a-value-early-with-std-mem-drop"></a>
 

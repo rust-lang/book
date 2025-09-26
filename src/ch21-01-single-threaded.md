@@ -206,7 +206,11 @@ from our program.
 Let’s break down this request data to understand what the browser is asking of
 our program.
 
-### A Closer Look at an HTTP Request
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="a-closer-look-at-an-http-request"></a>
+
+### Looking Closer at an HTTP Request
 
 HTTP is a text-based protocol, and a request takes this format:
 
@@ -416,7 +420,11 @@ With these changes, run your server again. Requesting _127.0.0.1:7878_ should
 return the contents of _hello.html_, and any other request, like
 _127.0.0.1:7878/foo_, should return the error HTML from _404.html_.
 
-### A Touch of Refactoring
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="a-touch-of-refactoring"></a>
+
+### Refactoring
 
 At the moment, the `if` and `else` blocks have a lot of repetition: they’re both
 reading files and writing the contents of the files to the stream. The only

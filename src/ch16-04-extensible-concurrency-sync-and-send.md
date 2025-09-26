@@ -1,8 +1,9 @@
-## Extensible Concurrency with the `Send` and `Sync` Traits
+## Extensible Concurrency with `Send` and `Sync`
 
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="extensible-concurrency-with-the-sync-and-send-traits"></a>
+<a id="extensible-concurrency-with-the-send-and-sync-traits"></a>
 
 Interestingly, almost every concurrency feature we’ve talked about so far in
 this chapter has been part of the standard library, not the language. Your
@@ -13,7 +14,11 @@ written by others.
 However, among the key concurrency concepts that are embedded in the language
 rather than the standard library are the `std::marker` traits `Send` and `Sync`.
 
-### Allowing Transference of Ownership Between Threads with `Send`
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="allowing-transference-of-ownership-between-threads-with-send"></a>
+
+### Transferring Ownership Between Threads
 
 The `Send` marker trait indicates that ownership of values of the type
 implementing `Send` can be transferred between threads. Almost every Rust type
@@ -34,7 +39,11 @@ Any type composed entirely of `Send` types is automatically marked as `Send` as
 well. Almost all primitive types are `Send`, aside from raw pointers, which
 we’ll discuss in Chapter 20.
 
-### Allowing Access from Multiple Threads with `Sync`
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="allowing-access-from-multiple-threads-with-sync"></a>
+
+### Accessing from Multiple Threads
 
 The `Sync` marker trait indicates that it is safe for the type implementing
 `Sync` to be referenced from multiple threads. In other words, any type `T`
