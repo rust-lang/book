@@ -459,6 +459,7 @@ retweet
 rewordings
 rint
 ripgrep
+Rumbul
 runnable
 runtime
 runtimes
