@@ -58,6 +58,7 @@ booleans
 Bors
 BorrowMutError
 BoxMeUp
+boxt
 BTreeSet
 BufRead
 BufReader
@@ -343,6 +344,7 @@ mutexes
 Mutexes
 MutexGuard
 mutext
+mutextarct
 MyAsyncStateMachine
 MyBox
 myprogram
@@ -440,6 +442,7 @@ refactoring
 refcell
 RefCell
 refcellt
+refcelltrct
 RefMut
 reformats
 refutability
