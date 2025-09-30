@@ -102,25 +102,17 @@ to the other. You’re just one person, so you can’t make progress on both tas
 at the exact same time, but you can multi-task, making progress on one at a time
 by switching between them (see Figure 17-1).
 
-<figure>
-
 <img src="img/trpl17-01.svg" class="center" alt="A diagram with boxes labeled Task A and Task B, with diamonds in them representing subtasks. There are arrows pointing from A1 to B1, B1 to A2, A2 to B2, B2 to A3, A3 to A4, and A4 to B3. The arrows between the subtasks cross the boxes between Task A and Task B." />
 
-<figcaption>Figure 17-1: A concurrent workflow, switching between Task A and Task B</figcaption>
-
-</figure>
+<span class="caption">Figure 17-1: A concurrent workflow, switching between Task A and Task B</span>
 
 When the team splits up a group of tasks by having each member take one task and
 work on it alone, this is _parallelism_. Each person on the team can make
 progress at the exact same time (see Figure 17-2).
 
-<figure>
-
 <img src="img/trpl17-02.svg" class="center" alt="A diagram with boxes labeled Task A and Task B, with diamonds in them representing subtasks. There are arrows pointing from A1 to A2, A2 to A3, A3 to A4, B1 to B2, and B2 to B3. No arrows cross between the boxes for Task A and Task B." />
 
-<figcaption>Figure 17-2: A parallel workflow, where work happens on Task A and Task B independently</figcaption>
-
-</figure>
+<span class="caption">Figure 17-2: A parallel workflow, where work happens on Task A and Task B independently</span>
 
 In both of these workflows, you might have to coordinate between different
 tasks. Maybe you _thought_ the task assigned to one person was totally
@@ -129,13 +121,9 @@ on the team to finish their task first. Some of the work could be done in
 parallel, but some of it was actually _serial_: it could only happen in a
 series, one task after the other, as in Figure 17-3.
 
-<figure>
-
 <img src="img/trpl17-03.svg" class="center" alt="A diagram with boxes labeled Task A and Task B, with diamonds in them representing subtasks. There are arrows pointing from A1 to A2, A2 to a pair of thick vertical lines like a “pause” symbol, from that symbol to A3, B1 to B2, B2 to B3, which is below that symbol, B3 to A3, and B3 to B4." />
 
-<figcaption>Figure 17-3: A partially parallel workflow, where work happens on Task A and Task B independently until Task A3 is blocked on the results of Task B3.</figcaption>
-
-</figure>
+<span class="caption">Figure 17-3: A partially parallel workflow, where work happens on Task A and Task B independently until Task A3 is blocked on the results of Task B3.</span>
 
 Likewise, you might realize that one of your own tasks depends on another of
 your tasks. Now your concurrent work has also become serial.
