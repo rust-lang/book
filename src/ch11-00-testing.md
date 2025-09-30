@@ -5,11 +5,12 @@ testing can be a very effective way to show the presence of bugs, but it is
 hopelessly inadequate for showing their absence.” That doesn’t mean we shouldn’t
 try to test as much as we can!
 
-Correctness in our programs is the extent to which our code does what we intend
-it to do. Rust is designed with a high degree of concern about the correctness
-of programs, but correctness is complex and not easy to prove. Rust’s type
-system shoulders a huge part of this burden, but the type system cannot catch
-everything. As such, Rust includes support for writing automated software tests.
+_Correctness_ in our programs is the extent to which our code does what we
+intend it to do. Rust is designed with a high degree of concern about the
+correctness of programs, but correctness is complex and not easy to prove.
+Rust’s type system shoulders a huge part of this burden, but the type system
+cannot catch everything. As such, Rust includes support for writing automated
+software tests.
 
 Say we write a function `add_two` that adds 2 to whatever number is passed to
 it. This function’s signature accepts an integer as a parameter and returns an
@@ -25,7 +26,7 @@ We can write tests that assert, for example, that when we pass `3` to the
 we make changes to our code to make sure any existing correct behavior has not
 changed.
 
-Testing is a complex skill: although we can’t cover in one chapter every detail
+Testing is a complex skill: Although we can’t cover in one chapter every detail
 about how to write good tests, in this chapter we will discuss the mechanics of
 Rust’s testing facilities. We’ll talk about the annotations and macros
 available to you when writing your tests, the default behavior and options

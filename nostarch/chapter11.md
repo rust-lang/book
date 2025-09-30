@@ -13,11 +13,12 @@ testing can be a very effective way to show the presence of bugs, but it is
 hopelessly inadequate for showing their absence.” That doesn’t mean we shouldn’t
 try to test as much as we can!
 
-Correctness in our programs is the extent to which our code does what we intend
-it to do. Rust is designed with a high degree of concern about the correctness
-of programs, but correctness is complex and not easy to prove. Rust’s type
-system shoulders a huge part of this burden, but the type system cannot catch
-everything. As such, Rust includes support for writing automated software tests.
+*Correctness* in our programs is the extent to which our code does what we
+intend it to do. Rust is designed with a high degree of concern about the
+correctness of programs, but correctness is complex and not easy to prove.
+Rust’s type system shoulders a huge part of this burden, but the type system
+cannot catch everything. As such, Rust includes support for writing automated
+software tests.
 
 Say we write a function `add_two` that adds 2 to whatever number is passed to
 it. This function’s signature accepts an integer as a parameter and returns an
@@ -33,7 +34,7 @@ We can write tests that assert, for example, that when we pass `3` to the
 we make changes to our code to make sure any existing correct behavior has not
 changed.
 
-Testing is a complex skill: although we can’t cover in one chapter every detail
+Testing is a complex skill: Although we can’t cover in one chapter every detail
 about how to write good tests, in this chapter we will discuss the mechanics of
 Rust’s testing facilities. We’ll talk about the annotations and macros
 available to you when writing your tests, the default behavior and options
@@ -42,7 +43,7 @@ integration tests.
 
 ## How to Write Tests
 
-Tests are Rust functions that verify that the non-test code is functioning in
+*Tests* are Rust functions that verify that the non-test code is functioning in
 the expected manner. The bodies of test functions typically perform these three
 actions:
 
@@ -54,7 +55,11 @@ Let’s look at the features Rust provides specifically for writing tests that
 take these actions, which include the `test` attribute, a few macros, and the
 `should_panic` attribute.
 
-### The Anatomy of a Test Function
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="the-anatomy-of-a-test-function"></a>
+
+### Structuring Test Functions
 
 At its simplest, a test in Rust is a function that’s annotated with the `test`
 attribute. Attributes are metadata about pieces of Rust code; one example is
@@ -66,12 +71,12 @@ fails.
 
 Whenever we make a new library project with Cargo, a test module with a test
 function in it is automatically generated for us. This module gives you a
-template for writing your tests so you don’t have to look up the exact
+template for writing your tests so that you don’t have to look up the exact
 structure and syntax every time you start a new project. You can add as many
 additional test functions and as many test modules as you want!
 
 We’ll explore some aspects of how tests work by experimenting with the template
-test before we actually test any code. Then we’ll write some real-world tests
+test before we actually test any code. Then, we’ll write some real-world tests
 that call some code that we’ve written and assert that its behavior is correct.
 
 Let’s create a new library project called `adder` that will add two numbers:
@@ -117,11 +122,11 @@ mod tests {
 
 Listing 11-1: The code generated automatically by `cargo new`
 
-The file starts with an example `add` function, so that we have something
-to test.
+The file starts with an example `add` function so that we have something to
+test.
 
 For now, let’s focus solely on the `it_works` function. Note the `#[test]`
-annotation: this attribute indicates this is a test function, so the test
+annotation: This attribute indicates this is a test function, so the test
 runner knows to treat this function as a test. We might also have non-test
 functions in the `tests` module to help set up common scenarios or perform
 common operations, so we always need to indicate which functions are tests.
@@ -160,13 +165,13 @@ Cargo compiled and ran the test. We see the line `running 1 test`. The next
 line shows the name of the generated test function, called `tests::it_works`,
 and that the result of running that test is `ok`. The overall summary `test result: ok.` means that all the tests passed, and the portion that reads `1 passed; 0 failed` totals the number of tests that passed or failed.
 
-It’s possible to mark a test as ignored so it doesn’t run in a particular
-instance; we’ll cover that in the “Ignoring Some Tests Unless Specifically
+It’s possible to mark a test as ignored so that it doesn’t run in a particular
+instance; we’ll cover that in the “Ignoring Tests Unless Specifically
 Requested” section later in this chapter. Because we
 haven’t done that here, the summary shows `0 ignored`. We can also pass an
 argument to the `cargo test` command to run only tests whose name matches a
-string; this is called *filtering* and we’ll cover it in the “Running a
-Subset of Tests by Name” section. Here we haven’t
+string; this is called *filtering*, and we’ll cover it in the “Running a
+Subset of Tests by Name” section. Here, we haven’t
 filtered the tests being run, so the end of the summary shows `0 filtered out`.
 
 The `0 measured` statistic is for benchmark tests that measure performance.
@@ -203,7 +208,7 @@ mod tests {
 }
 ```
 
-Then run `cargo test` again. The output now shows `exploration` instead of
+Then, run `cargo test` again. The output now shows `exploration` instead of
 `it_works`:
 
 ```
@@ -297,22 +302,26 @@ check the line number of the panic matches the line number in the following para
  -->
 
 Instead of `ok`, the line `test tests::another` shows `FAILED`. Two new
-sections appear between the individual results and the summary: the first
+sections appear between the individual results and the summary: The first
 displays the detailed reason for each test failure. In this case, we get the
 details that `tests::another` failed because it panicked with the message `Make this test fail` on line 17 in the *src/lib.rs* file. The next section lists
 just the names of all the failing tests, which is useful when there are lots of
 tests and lots of detailed failing test output. We can use the name of a
-failing test to run just that test to more easily debug it; we’ll talk more
+failing test to run just that test to debug it more easily; we’ll talk more
 about ways to run tests in the “Controlling How Tests Are
 Run” section.
 
-The summary line displays at the end: overall, our test result is `FAILED`. We
+The summary line displays at the end: Overall, our test result is `FAILED`. We
 had one test pass and one test fail.
 
 Now that you’ve seen what the test results look like in different scenarios,
 let’s look at some macros other than `panic!` that are useful in tests.
 
-### Checking Results with the assert! Macro
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="checking-results-with-the-assert-macro"></a>
+
+### Checking Results with assert!
 
 The `assert!` macro, provided by the standard library, is useful when you want
 to ensure that some condition in a test evaluates to `true`. We give the
@@ -384,7 +393,7 @@ a glob here, so anything we define in the outer module is available to this
 `tests` module.
 
 We’ve named our test `larger_can_hold_smaller`, and we’ve created the two
-`Rectangle` instances that we need. Then we called the `assert!` macro and
+`Rectangle` instances that we need. Then, we called the `assert!` macro and
 passed it the result of calling `larger.can_hold(&smaller)`. This expression is
 supposed to return `true`, so our test should pass. Let’s find out!
 
@@ -464,8 +473,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 Two tests that pass! Now let’s see what happens to our test results when we
 introduce a bug in our code. We’ll change the implementation of the `can_hold`
-method by replacing the greater-than sign with a less-than sign when it
-compares the widths:
+method by replacing the greater-than sign (`>`) with a less-than sign (`<`)
+when it compares the widths:
 
 ```
 // --snip--
@@ -509,7 +518,11 @@ Our tests caught the bug! Because `larger.width` is `8` and `smaller.width` is
 `5`, the comparison of the widths in `can_hold` now returns `false`: 8 is not
 less than 5.
 
-### Testing Equality with the assert_eq! and assert_ne! Macros
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="testing-equality-with-the-assert_eq-and-assert_ne-macros"></a>
+
+### Testing Equality with assert_eq! and assert_ne!
 
 A common way to verify functionality is to test for equality between the result
 of the code under test and the value you expect the code to return. You could
@@ -523,7 +536,7 @@ fails, which makes it easier to see *why* the test failed; conversely, the
 expression, without printing the values that led to the `false` value.
 
 In Listing 11-7, we write a function named `add_two` that adds `2` to its
-parameter, then we test this function using the `assert_eq!` macro.
+parameter, and then we test this function using the `assert_eq!` macro.
 
 src/lib.rs
 
@@ -568,7 +581,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 ```
 
 We create a variable named `result` that holds the result of calling
-`add_two(2)`. Then we pass `result` and `4` as the arguments to the
+`add_two(2)`. Then, we pass `result` and `4` as the arguments to the
 `assert_eq!` macro. The output line for this test is `test tests::it_adds_two ... ok`, and the `ok` text indicates that our test passed!
 
 Let’s introduce a bug into our code to see what `assert_eq!` looks like when it
@@ -612,8 +625,8 @@ error: test failed, to rerun pass `--lib`
 
 Our test caught the bug! The `tests::it_adds_two` test failed, and the message
 tells us that the assertion that failed was `left == right` and what the `left`
-and `right` values are. This message helps us start debugging: the `left`
-argument, where we had the result of calling `add_two(2)`, was `5` but the
+and `right` values are. This message helps us start debugging: The `left`
+argument, where we had the result of calling `add_two(2)`, was `5`, but the
 `right` argument was `4`. You can imagine that this would be especially helpful
 when we have a lot of tests going on.
 
@@ -623,14 +636,14 @@ we specify the arguments matters. However, in Rust, they’re called `left` and
 `right`, and the order in which we specify the value we expect and the value
 the code produces doesn’t matter. We could write the assertion in this test as
 `assert_eq!(4, result)`, which would result in the same failure message that
-displays `` assertion `left == right` failed``.
+displays ``assertion `left == right` failed``.
 
 The `assert_ne!` macro will pass if the two values we give it are not equal and
-fail if they’re equal. This macro is most useful for cases when we’re not sure
-what a value *will* be, but we know what the value definitely *shouldn’t* be.
-For example, if we’re testing a function that is guaranteed to change its input
-in some way, but the way in which the input is changed depends on the day of
-the week that we run our tests, the best thing to assert might be that the
+will fail if they are equal. This macro is most useful for cases when we’re not
+sure what a value *will* be, but we know what the value definitely *shouldn’t*
+be. For example, if we’re testing a function that is guaranteed to change its
+input in some way, but the way in which the input is changed depends on the day
+of the week that we run our tests, the best thing to assert might be that the
 output of the function is not equal to the input.
 
 Under the surface, the `assert_eq!` and `assert_ne!` macros use the operators
@@ -651,8 +664,8 @@ details about these and other derivable traits.
 You can also add a custom message to be printed with the failure message as
 optional arguments to the `assert!`, `assert_eq!`, and `assert_ne!` macros. Any
 arguments specified after the required arguments are passed along to the
-`format!` macro (discussed in “Concatenation with the `+` Operator or the
-`format!` Macro” in Chapter 8), so you can pass a format string that contains `{}`
+`format!` macro (discussed in “Concatenating with `+` or
+`format!`” in Chapter 8), so you can pass a format string that contains `{}`
 placeholders and values to go in those placeholders. Custom messages are useful
 for documenting what an assertion means; when a test fails, you’ll have a better
 idea of what the problem is with the code.
@@ -984,15 +997,19 @@ error: test failed, to rerun pass `--lib`
 ```
 
 The failure message indicates that this test did indeed panic as we expected,
-but the panic message did not include the expected string `less than or equal to 100`. The panic message that we did get in this case was `Guess value must be greater than or equal to 1, got 200.` Now we can start figuring out where
+but the panic message did not include the expected string `less than or equal to 100`. The panic message that we did get in this case was `Guess value must be greater than or equal to 1, got 200`. Now we can start figuring out where
 our bug is!
 
 ### Using Result<T, E> in Tests
 
-Our tests so far all panic when they fail. We can also write tests that use
+All of our tests so far panic when they fail. We can also write tests that use
 `Result<T, E>`! Here’s the test from Listing 11-1, rewritten to use `Result<T, E>` and return an `Err` instead of panicking:
 
 ```
+#[cfg(test)]
+mod tests {
+    use super::*;
+
     #[test]
     fn it_works() -> Result<(), String> {
         let result = add(2, 2);
@@ -1003,6 +1020,7 @@ Our tests so far all panic when they fail. We can also write tests that use
             Err(String::from("two plus two does not equal four"))
         }
     }
+}
 ```
 
 The `it_works` function now has the `Result<(), String>` return type. In the
@@ -1010,9 +1028,10 @@ body of the function, rather than calling the `assert_eq!` macro, we return
 `Ok(())` when the test passes and an `Err` with a `String` inside when the test
 fails.
 
-Writing tests so they return a `Result<T, E>` enables you to use the question
-mark operator in the body of tests, which can be a convenient way to write
-tests that should fail if any operation within them returns an `Err` variant.
+Writing tests so that they return a `Result<T, E>` enables you to use the
+question mark operator in the body of tests, which can be a convenient way to
+write tests that should fail if any operation within them returns an `Err`
+variant.
 
 You can’t use the `#[should_panic]` annotation on tests that use `Result<T, E>`. To assert that an operation returns an `Err` variant, *don’t* use the
 question mark operator on the `Result<T, E>` value. Instead, use
@@ -1036,26 +1055,26 @@ binary. To separate these two types of arguments, you list the arguments that
 go to `cargo test` followed by the separator `--` and then the ones that go to
 the test binary. Running `cargo test --help` displays the options you can use
 with `cargo test`, and running `cargo test -- --help` displays the options you
-can use after the separator. Those options are also documented in the “Tests”
-section at *https://doc.rust-lang.org/rustc/tests/index.html* of the the rustc book at *https://doc.rust-lang.org/rustc/index.html*.
+can use after the separator. These options are also documented in the “Tests”
+section of *The `rustc` Book* at *https://doc.rust-lang.org/rustc/tests/index.html*.
 
 ### Running Tests in Parallel or Consecutively
 
 When you run multiple tests, by default they run in parallel using threads,
-meaning they finish running faster and you get feedback quicker. Because the
-tests are running at the same time, you must make sure your tests don’t depend
-on each other or on any shared state, including a shared environment, such as
-the current working directory or environment variables.
+meaning they finish running more quickly and you get feedback sooner. Because
+the tests are running at the same time, you must make sure your tests don’t
+depend on each other or on any shared state, including a shared environment,
+such as the current working directory or environment variables.
 
 For example, say each of your tests runs some code that creates a file on disk
-named *test-output.txt* and writes some data to that file. Then each test reads
-the data in that file and asserts that the file contains a particular value,
-which is different in each test. Because the tests run at the same time, one
-test might overwrite the file in the time between another test writing and
-reading the file. The second test will then fail, not because the code is
-incorrect but because the tests have interfered with each other while running
-in parallel. One solution is to make sure each test writes to a different file;
-another solution is to run the tests one at a time.
+named *test-output.txt* and writes some data to that file. Then, each test
+reads the data in that file and asserts that the file contains a particular
+value, which is different in each test. Because the tests run at the same time,
+one test might overwrite the file in the time between when another test is
+writing and reading the file. The second test will then fail, not because the
+code is incorrect but because the tests have interfered with each other while
+running in parallel. One solution is to make sure each test writes to a
+different file; another solution is to run the tests one at a time.
 
 If you don’t want to run the tests in parallel or if you want more fine-grained
 control over the number of threads used, you can send the `--test-threads` flag
@@ -1198,7 +1217,7 @@ error: test failed, to rerun pass `--lib`
 
 ### Running a Subset of Tests by Name
 
-Sometimes, running a full test suite can take a long time. If you’re working on
+Running a full test suite can sometimes take a long time. If you’re working on
 code in a particular area, you might want to run only the tests pertaining to
 that code. You can choose which tests to run by passing `cargo test` the name
 or names of the test(s) you want to run as an argument.
@@ -1312,7 +1331,11 @@ named `one_hundred`. Also note that the module in which a test appears becomes
 part of the test’s name, so we can run all the tests in a module by filtering
 on the module’s name.
 
-### Ignoring Some Tests Unless Specifically Requested
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="ignoring-some-tests-unless-specifically-requested"></a>
+
+### Ignoring Tests Unless Specifically Requested
 
 Sometimes a few specific tests can be very time-consuming to execute, so you
 might want to exclude them during most runs of `cargo test`. Rather than
@@ -1415,7 +1438,7 @@ code that they’re testing. The convention is to create a module named `tests`
 in each file to contain the test functions and to annotate the module with
 `cfg(test)`.
 
-#### The Tests Module and \#[cfg(test)]
+#### The tests Module and \#[cfg(test)]
 
 The `#[cfg(test)]` annotation on the `tests` module tells Rust to compile and
 run the test code only when you run `cargo test`, not when you run `cargo build`. This saves compile time when you only want to build the library and
@@ -1455,7 +1478,11 @@ given a certain configuration option. In this case, the configuration option is
 with `cargo test`. This includes any helper functions that might be within this
 module, in addition to the functions annotated with `#[test]`.
 
-#### Testing Private Functions
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="testing-private-functions"></a>
+
+#### Private Function Tests
 
 There’s debate within the testing community about whether or not private
 functions should be tested directly, and other languages make it difficult or
@@ -1492,9 +1519,10 @@ Note that the `internal_adder` function is not marked as `pub`. Tests are just
 Rust code, and the `tests` module is just another module. As we discussed in
 “Paths for Referring to an Item in the Module Tree”,
 items in child modules can use the items in their ancestor modules. In this
-test, we bring all of the `tests` module’s parent’s items into scope with `use super::*`, and then the test can call `internal_adder`. If you don’t think
-private functions should be tested, there’s nothing in Rust that will compel you
-to do so.
+test, we bring all of the items belonging to the `tests` module’s parent into
+scope with `use super::*`, and then the test can call `internal_adder`. If you
+don’t think private functions should be tested, there’s nothing in Rust that
+will compel you to do so.
 
 ### Integration Tests
 
@@ -1544,7 +1572,7 @@ fn it_adds_two() {
 Listing 11-13: An integration test of a function in the `adder` crate
 
 Each file in the *tests* directory is a separate crate, so we need to bring our
-library into each test crate’s scope. For that reason we add `use adder::add_two;` at the top of the code, which we didn’t need in the unit tests.
+library into each test crate’s scope. For that reason, we add `use adder::add_two;` at the top of the code, which we didn’t need in the unit tests.
 
 We don’t need to annotate any code in *tests/integration_test.rs* with
 `#[cfg(test)]`. Cargo treats the *tests* directory specially and compiles files
@@ -1579,7 +1607,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 The three sections of output include the unit tests, the integration test, and
 the doc tests. Note that if any test in a section fails, the following sections
 will not be run. For example, if a unit test fails, there won’t be any output
-for integration and doc tests because those tests will only be run if all unit
+for integration and doc tests, because those tests will only be run if all unit
 tests are passing.
 
 The first section for the unit tests is the same as we’ve been seeing: one line
@@ -1625,7 +1653,7 @@ share the same behavior as files in *src* do, as you learned in Chapter 7
 regarding how to separate code into modules and files.
 
 The different behavior of *tests* directory files is most noticeable when you
-have a set of helper functions to use in multiple integration test files and
+have a set of helper functions to use in multiple integration test files, and
 you try to follow the steps in the “Separating Modules into Different
 Files” section of Chapter 7 to
 extract them into a common module. For example, if we create *tests/common.rs*
@@ -1743,8 +1771,8 @@ file will work as well, and that small amount of code doesn’t need to be teste
 ## Summary
 
 Rust’s testing features provide a way to specify how code should function to
-ensure it continues to work as you expect, even as you make changes. Unit tests
-exercise different parts of a library separately and can test private
+ensure that it continues to work as you expect, even as you make changes. Unit
+tests exercise different parts of a library separately and can test private
 implementation details. Integration tests check that many parts of the library
 work together correctly, and they use the library’s public API to test the code
 in the same way external code will use it. Even though Rust’s type system and
