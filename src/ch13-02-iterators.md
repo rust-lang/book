@@ -65,7 +65,7 @@ pub trait Iterator {
 ```
 
 Notice that this definition uses some new syntax: `type Item` and `Self::Item`,
-which are defining an _associated type_ with this trait. We’ll talk about
+which are defining an associated type with this trait. We’ll talk about
 associated types in depth in Chapter 20. For now, all you need to know is that
 this code says implementing the `Iterator` trait requires that you also define
 an `Item` type, and this `Item` type is used in the return type of the `next`
@@ -88,11 +88,11 @@ from the vector.
 
 </Listing>
 
-Note that we needed to make `v1_iter` mutable: calling the `next` method on an
+Note that we needed to make `v1_iter` mutable: Calling the `next` method on an
 iterator changes internal state that the iterator uses to keep track of where
 it is in the sequence. In other words, this code _consumes_, or uses up, the
 iterator. Each call to `next` eats up an item from the iterator. We didn’t need
-to make `v1_iter` mutable when we used a `for` loop because the loop took
+to make `v1_iter` mutable when we used a `for` loop, because the loop took
 ownership of `v1_iter` and made it mutable behind the scenes.
 
 Also note that the values we get from the calls to `next` are immutable
@@ -111,7 +111,7 @@ trait. Some of these methods call the `next` method in their definition, which
 is why you’re required to implement the `next` method when implementing the
 `Iterator` trait.
 
-Methods that call `next` are called _consuming adapters_, because calling them
+Methods that call `next` are called _consuming adapters_ because calling them
 uses up the iterator. One example is the `sum` method, which takes ownership of
 the iterator and iterates through the items by repeatedly calling `next`, thus
 consuming the iterator. As it iterates through, it adds each item to a running
@@ -126,7 +126,7 @@ test illustrating a use of the `sum` method.
 
 </Listing>
 
-We aren’t allowed to use `v1_iter` after the call to `sum` because `sum` takes
+We aren’t allowed to use `v1_iter` after the call to `sum`, because `sum` takes
 ownership of the iterator we call it on.
 
 ### Methods That Produce Other Iterators
@@ -156,7 +156,7 @@ However, this code produces a warning:
 ```
 
 The code in Listing 13-14 doesn’t do anything; the closure we’ve specified
-never gets called. The warning reminds us why: iterator adapters are lazy, and
+never gets called. The warning reminds us why: Iterator adapters are lazy, and
 we need to consume the iterator here.
 
 To fix this warning and consume the iterator, we’ll use the `collect` method,
@@ -185,6 +185,7 @@ a readable way. But because all iterators are lazy, you have to call one of the
 consuming adapter methods to get results from calls to iterator adapters.
 
 <!-- Old headings. Do not remove or links may break. -->
+
 <a id="using-closures-that-capture-their-environment"></a>
 
 ### Closures That Capture Their Environment
@@ -214,15 +215,15 @@ The `shoes_in_size` function takes ownership of a vector of shoes and a shoe
 size as parameters. It returns a vector containing only shoes of the specified
 size.
 
-In the body of `shoes_in_size`, we call `into_iter` to create an iterator
-that takes ownership of the vector. Then we call `filter` to adapt that
-iterator into a new iterator that only contains elements for which the closure
-returns `true`.
+In the body of `shoes_in_size`, we call `into_iter` to create an iterator that
+takes ownership of the vector. Then, we call `filter` to adapt that iterator
+into a new iterator that only contains elements for which the closure returns
+`true`.
 
 The closure captures the `shoe_size` parameter from the environment and
 compares the value with each shoe’s size, keeping only shoes of the size
 specified. Finally, calling `collect` gathers the values returned by the
 adapted iterator into a vector that’s returned by the function.
 
-The test shows that when we call `shoes_in_size`, we get back only shoes
-that have the same size as the value we specified.
+The test shows that when we call `shoes_in_size`, we get back only shoes that
+have the same size as the value we specified.

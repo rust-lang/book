@@ -23,19 +23,20 @@ More specifically, we’ll cover:
 * *Closures*, a function-like construct you can store in a variable
 * *Iterators*, a way of processing a series of elements
 * How to use closures and iterators to improve the I/O project in Chapter 12
-* The performance of closures and iterators (spoiler alert: they’re faster than
+* The performance of closures and iterators (spoiler alert: They’re faster than
   you might think!)
 
 We’ve already covered some other Rust features, such as pattern matching and
 enums, that are also influenced by the functional style. Because mastering
-closures and iterators is an important part of writing idiomatic, fast Rust
+closures and iterators is an important part of writing fast, idiomatic, Rust
 code, we’ll devote this entire chapter to them.
 
-<!-- Old heading. Do not remove or links may break. -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="closures-anonymous-functions-that-can-capture-their-environment"></a>
+<a id="closures-anonymous-functions-that-capture-their-environment"></a>
 
-## Closures: Anonymous Functions That Capture Their Environment
+## Closures
 
 Rust’s closures are anonymous functions you can save in a variable or pass as
 arguments to other functions. You can create the closure in one place and then
@@ -49,11 +50,12 @@ customization.
 <a id="creating-an-abstraction-of-behavior-with-closures"></a>
 <a id="refactoring-using-functions"></a>
 <a id="refactoring-with-closures-to-store-code"></a>
+<a id="capturing-the-environment-with-closures"></a>
 
-### Capturing the Environment with Closures
+### Capturing the Environment
 
 We’ll first examine how we can use closures to capture values from the
-environment they’re defined in for later use. Here’s the scenario: every so
+environment they’re defined in for later use. Here’s the scenario: Every so
 often, our T-shirt company gives away an exclusive, limited-edition shirt to
 someone on our mailing list as a promotion. People on the mailing list can
 optionally add their favorite color to their profile. If the person chosen for
@@ -66,8 +68,8 @@ enum called `ShirtColor` that has the variants `Red` and `Blue` (limiting the
 number of colors available for simplicity). We represent the company’s
 inventory with an `Inventory` struct that has a field named `shirts` that
 contains a `Vec<ShirtColor>` representing the shirt colors currently in stock.
-The method `giveaway` defined on `Inventory` gets the optional shirt
-color preference of the free-shirt winner, and returns the shirt color the
+The method `giveaway` defined on `Inventory` gets the optional shirt color
+preference of the free-shirt winner, and it returns the shirt color the
 person will get. This setup is shown in Listing 13-1.
 
 src/main.rs
@@ -172,7 +174,11 @@ immutable reference to the `self` `Inventory` instance and passes it with the
 code we specify to the `unwrap_or_else` method. Functions, on the other hand,
 are not able to capture their environment in this way.
 
-### Closure Type Inference and Annotation
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="closure-type-inference-and-annotation"></a>
+
+### Inferring and Annotating Closure Types
 
 There are more differences between functions and closures. Closures don’t
 usually require you to annotate the types of the parameters or the return value
@@ -180,8 +186,8 @@ like `fn` functions do. Type annotations are required on functions because the
 types are part of an explicit interface exposed to your users. Defining this
 interface rigidly is important for ensuring that everyone agrees on what types
 of values a function uses and returns. Closures, on the other hand, aren’t used
-in an exposed interface like this: they’re stored in variables and used without
-naming them and exposing them to users of our library.
+in an exposed interface like this: They’re stored in variables, and they’re
+used without naming them and exposing them to users of our library.
 
 Closures are typically short and relevant only within a narrow context rather
 than in any arbitrary scenario. Within these limited contexts, the compiler can
@@ -368,10 +374,10 @@ After calling closure: [1, 2, 3, 7]
 ```
 
 Note that there’s no longer a `println!` between the definition and the call of
-the `borrows_mutably` closure: when `borrows_mutably` is defined, it captures a
+the `borrows_mutably` closure: When `borrows_mutably` is defined, it captures a
 mutable reference to `list`. We don’t use the closure again after the closure
 is called, so the mutable borrow ends. Between the closure definition and the
-closure call, an immutable borrow to print isn’t allowed because no other
+closure call, an immutable borrow to print isn’t allowed, because no other
 borrows are allowed when there’s a mutable borrow. Try adding a `println!`
 there to see what error message you get!
 
@@ -415,17 +421,18 @@ main thread finishes, or the main thread might finish first. If the main thread
 maintained ownership of `list` but ended before the new thread and drops
 `list`, the immutable reference in the thread would be invalid. Therefore, the
 compiler requires that `list` be moved into the closure given to the new thread
-so the reference will be valid. Try removing the `move` keyword or using `list`
-in the main thread after the closure is defined to see what compiler errors you
-get!
+so that the reference will be valid. Try removing the `move` keyword or using
+`list` in the main thread after the closure is defined to see what compiler
+errors you get!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="storing-closures-using-generic-parameters-and-the-fn-traits"></a>
 <a id="limitations-of-the-cacher-implementation"></a>
 <a id="moving-captured-values-out-of-the-closure-and-the-fn-traits"></a>
+<a id="moving-captured-values-out-of-closures-and-the-fn-traits"></a>
 
-### Moving Captured Values Out of Closures and the Fn Traits
+### Moving Captured Values Out of Closures
 
 Once a closure has captured a reference or captured ownership of a value from
 the environment where the closure is defined (thus affecting what, if anything,
@@ -433,7 +440,7 @@ is moved *into* the closure), the code in the body of the closure defines what
 happens to the references or values when the closure is evaluated later (thus
 affecting what, if anything, is moved *out of* the closure).
 
-A closure body can do any of the following: move a captured value out of the
+A closure body can do any of the following: Move a captured value out of the
 closure, mutate the captured value, neither move nor mutate the value, or
 capture nothing from the environment to begin with.
 
@@ -447,14 +454,13 @@ depending on how the closure’s body handles the values:
   at least this trait because all closures can be called. A closure that moves
   captured values out of its body will only implement `FnOnce` and none of the
   other `Fn` traits because it can only be called once.
-* `FnMut` applies to closures that don’t move captured values out of their
-  body, but that might mutate the captured values. These closures can be
-  called more than once.
+* `FnMut` applies to closures that don’t move captured values out of their body
+  but might mutate the captured values. These closures can be called more than
+  once.
 * `Fn` applies to closures that don’t move captured values out of their body
-  and that don’t mutate captured values, as well as closures that capture
-  nothing from their environment. These closures can be called more than once
-  without mutating their environment, which is important in cases such as
-  calling a closure multiple times concurrently.
+  and don’t mutate captured values, as well as closures that capture nothing
+  from their environment. These closures can be called more than once without
+  mutating their environment, which is important in cases such as calling a closure multiple times concurrently.
 
 Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
 we used in Listing 13-1:
@@ -475,7 +481,7 @@ impl<T> Option<T> {
 
 Recall that `T` is the generic type representing the type of the value in the
 `Some` variant of an `Option`. That type `T` is also the return type of the
-`unwrap_or_else` function: code that calls `unwrap_or_else` on an
+`unwrap_or_else` function: Code that calls `unwrap_or_else` on an
 `Option<String>`, for example, will get a `String`.
 
 Next, notice that the `unwrap_or_else` function has the additional generic type
@@ -485,7 +491,7 @@ the closure we provide when calling `unwrap_or_else`.
 The trait bound specified on the generic type `F` is `FnOnce() -> T`, which
 means `F` must be able to be called once, take no arguments, and return a `T`.
 Using `FnOnce` in the trait bound expresses the constraint that
-`unwrap_or_else` is only going to call `f` at most one time. In the body of
+`unwrap_or_else` will not call `f` more than once. In the body of
 `unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be
 called. If the `Option` is `None`, `f` will be called once. Because all
 closures implement `FnOnce`, `unwrap_or_else` accepts all three kinds of
@@ -503,9 +509,9 @@ Now let’s look at the standard library method `sort_by_key`, defined on slices
 to see how that differs from `unwrap_or_else` and why `sort_by_key` uses
 `FnMut` instead of `FnOnce` for the trait bound. The closure gets one argument
 in the form of a reference to the current item in the slice being considered,
-and returns a value of type `K` that can be ordered. This function is useful
+and it returns a value of type `K` that can be ordered. This function is useful
 when you want to sort a slice by a particular attribute of each item. In
-Listing 13-7, we have a list of `Rectangle` instances and we use `sort_by_key`
+Listing 13-7, we have a list of `Rectangle` instances, and we use `sort_by_key`
 to order them by their `width` attribute from low to high.
 
 src/main.rs
@@ -591,13 +597,13 @@ fn main() {
 
 Listing 13-8: Attempting to use an `FnOnce` closure with `sort_by_key`
 
-This is a contrived, convoluted way (that doesn’t work) to try and count the
+This is a contrived, convoluted way (that doesn’t work) to try to count the
 number of times `sort_by_key` calls the closure when sorting `list`. This code
 attempts to do this counting by pushing `value`—a `String` from the closure’s
 environment—into the `sort_operations` vector. The closure captures `value` and
 then moves `value` out of the closure by transferring ownership of `value` to
 the `sort_operations` vector. This closure can be called once; trying to call
-it a second time wouldn’t work because `value` would no longer be in the
+it a second time wouldn’t work, because `value` would no longer be in the
 environment to be pushed into `sort_operations` again! Therefore, this closure
 only implements `FnOnce`. When we try to compile this code, we get this error
 that `value` can’t be moved out of the closure because the closure must
@@ -632,7 +638,7 @@ move values out of the environment. Keeping a counter in the environment and
 incrementing its value in the closure body is a more straightforward way to
 count the number of times the closure is called. The closure in Listing 13-9
 works with `sort_by_key` because it is only capturing a mutable reference to the
-`num_sort_operations` counter and can therefore be called more than once:
+`num_sort_operations` counter and can therefore be called more than once.
 
 src/main.rs
 
@@ -659,7 +665,7 @@ fn main() {
 }
 ```
 
-Listing 13-9: Using an `FnMut` closure with `sort_by_key` is allowed
+Listing 13-9: Using an `FnMut` closure with `sort_by_key` is allowed.
 
 The `Fn` traits are important when defining or using functions or types that
 make use of closures. In the next section, we’ll discuss iterators. Many
@@ -774,11 +780,11 @@ src/lib.rs
 
 Listing 13-12: Calling the `next` method on an iterator
 
-Note that we needed to make `v1_iter` mutable: calling the `next` method on an
+Note that we needed to make `v1_iter` mutable: Calling the `next` method on an
 iterator changes internal state that the iterator uses to keep track of where
 it is in the sequence. In other words, this code *consumes*, or uses up, the
 iterator. Each call to `next` eats up an item from the iterator. We didn’t need
-to make `v1_iter` mutable when we used a `for` loop because the loop took
+to make `v1_iter` mutable when we used a `for` loop, because the loop took
 ownership of `v1_iter` and made it mutable behind the scenes.
 
 Also note that the values we get from the calls to `next` are immutable
@@ -797,7 +803,7 @@ trait. Some of these methods call the `next` method in their definition, which
 is why you’re required to implement the `next` method when implementing the
 `Iterator` trait.
 
-Methods that call `next` are called *consuming adapters*, because calling them
+Methods that call `next` are called *consuming adapters* because calling them
 uses up the iterator. One example is the `sum` method, which takes ownership of
 the iterator and iterates through the items by repeatedly calling `next`, thus
 consuming the iterator. As it iterates through, it adds each item to a running
@@ -821,7 +827,7 @@ src/lib.rs
 
 Listing 13-13: Calling the `sum` method to get the total of all items in the iterator
 
-We aren’t allowed to use `v1_iter` after the call to `sum` because `sum` takes
+We aren’t allowed to use `v1_iter` after the call to `sum`, because `sum` takes
 ownership of the iterator we call it on.
 
 ### Methods That Produce Other Iterators
@@ -870,7 +876,7 @@ warning: `iterators` (bin "iterators") generated 1 warning
 ```
 
 The code in Listing 13-14 doesn’t do anything; the closure we’ve specified
-never gets called. The warning reminds us why: iterator adapters are lazy, and
+never gets called. The warning reminds us why: Iterator adapters are lazy, and
 we need to consume the iterator here.
 
 To fix this warning and consume the iterator, we’ll use the `collect` method,
@@ -902,7 +908,11 @@ You can chain multiple calls to iterator adapters to perform complex actions in
 a readable way. But because all iterators are lazy, you have to call one of the
 consuming adapter methods to get results from calls to iterator adapters.
 
-### Using Closures That Capture Their Environment
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="using-closures-that-capture-their-environment"></a>
+
+### Closures That Capture Their Environment
 
 Many iterator adapters take closures as arguments, and commonly the closures
 we’ll specify as arguments to iterator adapters will be closures that capture
@@ -976,18 +986,18 @@ The `shoes_in_size` function takes ownership of a vector of shoes and a shoe
 size as parameters. It returns a vector containing only shoes of the specified
 size.
 
-In the body of `shoes_in_size`, we call `into_iter` to create an iterator
-that takes ownership of the vector. Then we call `filter` to adapt that
-iterator into a new iterator that only contains elements for which the closure
-returns `true`.
+In the body of `shoes_in_size`, we call `into_iter` to create an iterator that
+takes ownership of the vector. Then, we call `filter` to adapt that iterator
+into a new iterator that only contains elements for which the closure returns
+`true`.
 
 The closure captures the `shoe_size` parameter from the environment and
 compares the value with each shoe’s size, keeping only shoes of the size
 specified. Finally, calling `collect` gathers the values returned by the
 adapted iterator into a vector that’s returned by the function.
 
-The test shows that when we call `shoes_in_size`, we get back only shoes
-that have the same size as the value we specified.
+The test shows that when we call `shoes_in_size`, we get back only shoes that
+have the same size as the value we specified.
 
 ## Improving Our I/O Project
 
@@ -1035,7 +1045,8 @@ we would remove them in the future. Well, that time is now!
 We needed `clone` here because we have a slice with `String` elements in the
 parameter `args`, but the `build` function doesn’t own `args`. To return
 ownership of a `Config` instance, we had to clone the values from the `query`
-and `file_path` fields of `Config` so the `Config` instance can own its values.
+and `file_path` fields of `Config` so that the `Config` instance can own its
+values.
 
 With our new knowledge about iterators, we can change the `build` function to
 take ownership of an iterator as its argument instead of borrowing a slice.
@@ -1110,18 +1121,21 @@ The standard library documentation for the `env::args` function shows that the
 type of the iterator it returns is `std::env::Args`, and that type implements
 the `Iterator` trait and returns `String` values.
 
-We’ve updated the signature of the `Config::build` function so the parameter
-`args` has a generic type with the trait bounds `impl Iterator<Item = String>`
-instead of `&[String]`. This usage of the `impl Trait` syntax we discussed in
-the “Traits as Parameters” section of Chapter 10
-means that `args` can be any type that implements the `Iterator` trait and
-returns `String` items.
+We’ve updated the signature of the `Config::build` function so that the
+parameter `args` has a generic type with the trait bounds `impl Iterator<Item = String>` instead of `&[String]`. This usage of the `impl Trait` syntax we
+discussed in the “Using Traits as Parameters”
+section of Chapter 10 means that `args` can be any type that implements the
+`Iterator` trait and returns `String` items.
 
 Because we’re taking ownership of `args` and we’ll be mutating `args` by
 iterating over it, we can add the `mut` keyword into the specification of the
 `args` parameter to make it mutable.
 
-#### Using Iterator Trait Methods Instead of Indexing
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="using-iterator-trait-methods-instead-of-indexing"></a>
+
+#### Using Iterator Trait Methods
 
 Next, we’ll fix the body of `Config::build`. Because `args` implements the
 `Iterator` trait, we know we can call the `next` method on it! Listing 13-20
@@ -1161,13 +1175,17 @@ Listing 13-20: Changing the body of `Config::build` to use iterator methods
 
 Remember that the first value in the return value of `env::args` is the name of
 the program. We want to ignore that and get to the next value, so first we call
-`next` and do nothing with the return value. Then we call `next` to get the
-value we want to put in the `query` field of `Config`. If `next` returns `Some`,
-we use a `match` to extract the value. If it returns `None`, it means not enough
-arguments were given and we return early with an `Err` value. We do the same
-thing for the `file_path` value.
+`next` and do nothing with the return value. Then, we call `next` to get the
+value we want to put in the `query` field of `Config`. If `next` returns
+`Some`, we use a `match` to extract the value. If it returns `None`, it means
+not enough arguments were given, and we return early with an `Err` value. We do
+the same thing for the `file_path` value.
 
-### Making Code Clearer with Iterator Adapters
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="making-code-clearer-with-iterator-adapters"></a>
+
+### Clarifying Code with Iterator Adapters
 
 We can also take advantage of iterators in the `search` function in our I/O
 project, which is reproduced here in Listing 13-21 as it was in Listing 12-19.
@@ -1226,7 +1244,7 @@ until it has collected all of the results, but after the change, the results
 will be printed as each matching line is found because the `for` loop in the
 `run` function is able to take advantage of the laziness of the iterator.
 
-<!-- Old heading. Do not remove or links may break. -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="choosing-between-loops-or-iterators"></a>
 
@@ -1240,14 +1258,18 @@ prefer to use the iterator style. It’s a bit tougher to get the hang of at
 first, but once you get a feel for the various iterator adapters and what they
 do, iterators can be easier to understand. Instead of fiddling with the various
 bits of looping and building new vectors, the code focuses on the high-level
-objective of the loop. This abstracts away some of the commonplace code so it’s
-easier to see the concepts that are unique to this code, such as the filtering
-condition each element in the iterator must pass.
+objective of the loop. This abstracts away some of the commonplace code so that
+it’s easier to see the concepts that are unique to this code, such as the
+filtering condition each element in the iterator must pass.
 
 But are the two implementations truly equivalent? The intuitive assumption
 might be that the lower-level loop will be faster. Let’s talk about performance.
 
-## Comparing Performance: Loops vs. Iterators
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="comparing-performance-loops-vs-iterators"></a>
+
+## Performance in Loops vs. Iterators
 
 To determine whether to use loops or iterators, you need to know which
 implementation is faster: the version of the `search` function with an explicit
@@ -1271,12 +1293,12 @@ compare performance-wise.
 For a more comprehensive benchmark, you should check using various texts of
 various sizes as the `contents`, different words and words of different lengths
 as the `query`, and all kinds of other variations. The point is this:
-iterators, although a high-level abstraction, get compiled down to roughly the
+Iterators, although a high-level abstraction, get compiled down to roughly the
 same code as if you’d written the lower-level code yourself. Iterators are one
 of Rust’s *zero-cost abstractions*, by which we mean that using the abstraction
 imposes no additional runtime overhead. This is analogous to how Bjarne
 Stroustrup, the original designer and implementor of C++, defines
-*zero-overhead* in “Foundations of C++” (2012):
+zero-overhead in his 2012 ETAPS keynote presentation “Foundations of C++”:
 
 > In general, C++ implementations obey the zero-overhead principle: What you
 > don’t use, you don’t pay for. And further: What you do use, you couldn’t hand
