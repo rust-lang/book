@@ -26,12 +26,12 @@ compare performance-wise.
 For a more comprehensive benchmark, you should check using various texts of
 various sizes as the `contents`, different words and words of different lengths
 as the `query`, and all kinds of other variations. The point is this:
-iterators, although a high-level abstraction, get compiled down to roughly the
+Iterators, although a high-level abstraction, get compiled down to roughly the
 same code as if you’d written the lower-level code yourself. Iterators are one
 of Rust’s _zero-cost abstractions_, by which we mean that using the abstraction
 imposes no additional runtime overhead. This is analogous to how Bjarne
 Stroustrup, the original designer and implementor of C++, defines
-_zero-overhead_ in “Foundations of C++” (2012):
+zero-overhead in his 2012 ETAPS keynote presentation “Foundations of C++”:
 
 > In general, C++ implementations obey the zero-overhead principle: What you
 > don’t use, you don’t pay for. And further: What you do use, you couldn’t hand

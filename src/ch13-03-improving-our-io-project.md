@@ -27,7 +27,8 @@ we would remove them in the future. Well, that time is now!
 We needed `clone` here because we have a slice with `String` elements in the
 parameter `args`, but the `build` function doesn’t own `args`. To return
 ownership of a `Config` instance, we had to clone the values from the `query`
-and `file_path` fields of `Config` so the `Config` instance can own its values.
+and `file_path` fields of `Config` so that the `Config` instance can own its
+values.
 
 With our new knowledge about iterators, we can change the `build` function to
 take ownership of an iterator as its argument instead of borrowing a slice.
@@ -82,12 +83,12 @@ The standard library documentation for the `env::args` function shows that the
 type of the iterator it returns is `std::env::Args`, and that type implements
 the `Iterator` trait and returns `String` values.
 
-We’ve updated the signature of the `Config::build` function so the parameter
-`args` has a generic type with the trait bounds `impl Iterator<Item = String>`
-instead of `&[String]`. This usage of the `impl Trait` syntax we discussed in
-the [“Traits as Parameters”][impl-trait]<!-- ignore --> section of Chapter 10
-means that `args` can be any type that implements the `Iterator` trait and
-returns `String` items.
+We’ve updated the signature of the `Config::build` function so that the
+parameter `args` has a generic type with the trait bounds `impl Iterator<Item =
+String>` instead of `&[String]`. This usage of the `impl Trait` syntax we
+discussed in the [“Using Traits as Parameters”][impl-trait]<!-- ignore -->
+section of Chapter 10 means that `args` can be any type that implements the
+`Iterator` trait and returns `String` items.
 
 Because we’re taking ownership of `args` and we’ll be mutating `args` by
 iterating over it, we can add the `mut` keyword into the specification of the
@@ -113,11 +114,11 @@ updates the code from Listing 12-23 to use the `next` method.
 
 Remember that the first value in the return value of `env::args` is the name of
 the program. We want to ignore that and get to the next value, so first we call
-`next` and do nothing with the return value. Then we call `next` to get the
-value we want to put in the `query` field of `Config`. If `next` returns `Some`,
-we use a `match` to extract the value. If it returns `None`, it means not enough
-arguments were given and we return early with an `Err` value. We do the same
-thing for the `file_path` value.
+`next` and do nothing with the return value. Then, we call `next` to get the
+value we want to put in the `query` field of `Config`. If `next` returns
+`Some`, we use a `match` to extract the value. If it returns `None`, it means
+not enough arguments were given, and we return early with an `Err` value. We do
+the same thing for the `file_path` value.
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -182,9 +183,9 @@ prefer to use the iterator style. It’s a bit tougher to get the hang of at
 first, but once you get a feel for the various iterator adapters and what they
 do, iterators can be easier to understand. Instead of fiddling with the various
 bits of looping and building new vectors, the code focuses on the high-level
-objective of the loop. This abstracts away some of the commonplace code so it’s
-easier to see the concepts that are unique to this code, such as the filtering
-condition each element in the iterator must pass.
+objective of the loop. This abstracts away some of the commonplace code so that
+it’s easier to see the concepts that are unique to this code, such as the
+filtering condition each element in the iterator must pass.
 
 But are the two implementations truly equivalent? The intuitive assumption
 might be that the lower-level loop will be faster. Let’s talk about performance.
