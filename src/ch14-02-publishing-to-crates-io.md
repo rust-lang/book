@@ -49,7 +49,7 @@ rendered, as shown in Figure 14-1.
 
 <img alt="Rendered HTML documentation for the `add_one` function of `my_crate`" src="img/trpl14-01.png" class="center" />
 
-<span class="caption">Figure 14-1: HTML documentation for the `add_one`
+<span class="caption">Figure 14-1: The HTML documentation for the `add_one`
 function</span>
 
 #### Commonly Used Sections
@@ -58,12 +58,12 @@ We used the `# Examples` Markdown heading in Listing 14-1 to create a section
 in the HTML with the title “Examples.” Here are some other sections that crate
 authors commonly use in their documentation:
 
-- **Panics**: The scenarios in which the function being documented could
-  panic. Callers of the function who don’t want their programs to panic should
-  make sure they don’t call the function in these situations.
+- **Panics**: These are the scenarios in which the function being documented
+  could panic. Callers of the function who don’t want their programs to panic
+  should make sure they don’t call the function in these situations.
 - **Errors**: If the function returns a `Result`, describing the kinds of
   errors that might occur and what conditions might cause those errors to be
-  returned can be helpful to callers so they can write code to handle the
+  returned can be helpful to callers so that they can write code to handle the
   different kinds of errors in different ways.
 - **Safety**: If the function is `unsafe` to call (we discuss unsafety in
   Chapter 20), there should be a section explaining why the function is unsafe
@@ -76,13 +76,12 @@ interested in knowing about.
 #### Documentation Comments as Tests
 
 Adding example code blocks in your documentation comments can help demonstrate
-how to use your library, and doing so has an additional bonus: running `cargo
-test` will run the code examples in your documentation as tests! Nothing is
-better than documentation with examples. But nothing is worse than examples
-that don’t work because the code has changed since the documentation was
-written. If we run `cargo test` with the documentation for the `add_one`
-function from Listing 14-1, we will see a section in the test results that looks
-like this:
+how to use your library and has an additional bonus: Running `cargo test` will
+run the code examples in your documentation as tests! Nothing is better than
+documentation with examples. But nothing is worse than examples that don’t work
+because the code has changed since the documentation was written. If we run
+`cargo test` with the documentation for the `add_one` function from Listing
+14-1, we will see a section in the test results that looks like this:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/listing-14-01/
@@ -99,10 +98,9 @@ test src/lib.rs - add_one (line 5) ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
 ```
 
-Now, if we change either the function or the example so the `assert_eq!` in the
-example panics, and run `cargo test` again, we’ll see that the doc tests catch
-that the example and the code are out of sync with each other!
-
+Now, if we change either the function or the example so that the `assert_eq!`
+in the example panics, and run `cargo test` again, we’ll see that the doc tests
+catch that the example and the code are out of sync with each other!
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -111,16 +109,16 @@ that the example and the code are out of sync with each other!
 #### Contained Item Comments
 
 The style of doc comment `//!` adds documentation to the item that *contains*
-the comments rather than to the items *following* the comments. We typically use
-these doc comments inside the crate root file (_src/lib.rs_ by convention) or
-inside a module to document the crate or the module as a whole.
+the comments rather than to the items *following* the comments. We typically
+use these doc comments inside the crate root file (_src/lib.rs_ by convention)
+or inside a module to document the crate or the module as a whole.
 
 For example, to add documentation that describes the purpose of the `my_crate`
 crate that contains the `add_one` function, we add documentation comments that
 start with `//!` to the beginning of the _src/lib.rs_ file, as shown in Listing
 14-2.
 
-<Listing number="14-2" file-name="src/lib.rs" caption="Documentation for the `my_crate` crate as a whole">
+<Listing number="14-2" file-name="src/lib.rs" caption="The documentation for the `my_crate` crate as a whole">
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-02/src/lib.rs:here}}
@@ -134,19 +132,18 @@ that contains this comment rather than an item that follows this comment. In
 this case, that item is the _src/lib.rs_ file, which is the crate root. These
 comments describe the entire crate.
 
-When we run `cargo doc --open`, these comments will display on the front
-page of the documentation for `my_crate` above the list of public items in the
+When we run `cargo doc --open`, these comments will display on the front page
+of the documentation for `my_crate` above the list of public items in the
 crate, as shown in Figure 14-2.
-
-<img alt="Rendered HTML documentation with a comment for the crate as a whole" src="img/trpl14-02.png" class="center" />
-
-<span class="caption">Figure 14-2: Rendered documentation for `my_crate`,
-including the comment describing the crate as a whole</span>
 
 Documentation comments within items are useful for describing crates and
 modules especially. Use them to explain the overall purpose of the container to
 help your users understand the crate’s organization.
 
+<img alt="Rendered HTML documentation with a comment for the crate as a whole" src="img/trpl14-02.png" class="center" />
+
+<span class="caption">Figure 14-2: The rendered documentation for `my_crate`,
+including the comment describing the crate as a whole</span>
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -171,7 +168,7 @@ my_crate::UsefulType;`.
 
 The good news is that if the structure _isn’t_ convenient for others to use
 from another library, you don’t have to rearrange your internal organization:
-instead, you can re-export items to make a public structure that’s different
+Instead, you can re-export items to make a public structure that’s different
 from your private structure by using `pub use`. *Re-exporting* takes a public
 item in one location and makes it public in another location, as if it were
 defined in the other location instead.
@@ -194,7 +191,7 @@ generated by `cargo doc` would look like.
 
 <img alt="Rendered documentation for the `art` crate that lists the `kinds` and `utils` modules" src="img/trpl14-03.png" class="center" />
 
-<span class="caption">Figure 14-3: Front page of the documentation for `art`
+<span class="caption">Figure 14-3: The front page of the documentation for `art`
 that lists the `kinds` and `utils` modules</span>
 
 Note that the `PrimaryColor` and `SecondaryColor` types aren’t listed on the
@@ -262,12 +259,12 @@ people who use the crate. Another common use of `pub use` is to re-export
 definitions of a dependency in the current crate to make that crate's
 definitions part of your crate’s public API.
 
-Creating a useful public API structure is more of an art than a science, and
-you can iterate to find the API that works best for your users. Choosing `pub
-use` gives you flexibility in how you structure your crate internally and
-decouples that internal structure from what you present to your users. Look at
-some of the code of crates you’ve installed to see if their internal structure
-differs from their public API.
+Creating a useful public API structure is more an art than a science, and you
+can iterate to find the API that works best for your users. Choosing `pub use`
+gives you flexibility in how you structure your crate internally and decouples
+that internal structure from what you present to your users. Look at some of
+the code of crates you’ve installed to see if their internal structure differs
+from their public API.
 
 ### Setting Up a Crates.io Account
 
@@ -278,7 +275,7 @@ in via a GitHub account. (The GitHub account is currently a requirement, but
 the site might support other ways of creating an account in the future.) Once
 you’re logged in, visit your account settings at
 [https://crates.io/me/](https://crates.io/me/)<!-- ignore --> and retrieve your
-API key. Then run the `cargo login` command and paste your API key when prompted, like this:
+API key. Then, run the `cargo login` command and paste your API key when prompted, like this:
 
 ```console
 $ cargo login
@@ -286,7 +283,7 @@ abcdefghijklmnopqrstuvwxyz012345
 ```
 
 This command will inform Cargo of your API token and store it locally in
-_~/.cargo/credentials.toml_. Note that this token is a _secret_: do not share
+_~/.cargo/credentials.toml_. Note that this token is a secret: Do not share
 it with anyone else. If you do share it with anyone for any reason, you should
 revoke it and generate a new token on [crates.io](https://crates.io/)<!-- ignore
 -->.
@@ -335,14 +332,14 @@ Caused by:
   the remote server responded with an error (status 400 Bad Request): missing or empty metadata fields: description, license. Please see https://doc.rust-lang.org/cargo/reference/manifest.html for more information on configuring these fields
 ```
 
-This results in an error because you’re missing some crucial information: a
-description and license are required so people will know what your crate does
-and under what terms they can use it. In _Cargo.toml_, add a description that's
-just a sentence or two, because it will appear with your crate in search
-results. For the `license` field, you need to give a _license identifier value_.
-The [Linux Foundation’s Software Package Data Exchange (SPDX)][spdx] lists the
-identifiers you can use for this value. For example, to specify that you’ve
-licensed your crate using the MIT License, add the `MIT` identifier:
+This results in an error because you’re missing some crucial information: A
+description and license are required so that people will know what your crate
+does and under what terms they can use it. In _Cargo.toml_, add a description
+that's just a sentence or two, because it will appear with your crate in search
+results. For the `license` field, you need to give a _license identifier
+value_. The [Linux Foundation’s Software Package Data Exchange (SPDX)][spdx]
+lists the identifiers you can use for this value. For example, to specify that
+you’ve licensed your crate using the MIT License, add the `MIT` identifier:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -432,7 +429,7 @@ When you’ve made changes to your crate and are ready to release a new version,
 you change the `version` value specified in your _Cargo.toml_ file and
 republish. Use the [Semantic Versioning rules][semver] to decide what an
 appropriate next version number is, based on the kinds of changes you’ve made.
-Then run `cargo publish` to upload the new version.
+Then, run `cargo publish` to upload the new version.
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -453,9 +450,9 @@ _Cargo.lock_ files generated will not use the yanked version.
 
 To yank a version of a crate, in the directory of the crate that you’ve
 previously published, run `cargo yank` and specify which version you want to
-yank. For example, if we've published a crate named `guessing_game` version
-1.0.1 and we want to yank it, in the project directory for `guessing_game` we'd
-run:
+yank. For example, if we’ve published a crate named `guessing_game` version
+1.0.1 and we want to yank it, then we’d run the following in the project
+directory for `guessing_game`:
 
 <!-- manual-regeneration:
 cargo yank carol-test --version 2.1.0
