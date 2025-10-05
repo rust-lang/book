@@ -4,7 +4,7 @@ There is no consensus in the programming community about what features a
 language must have to be considered object oriented. Rust is influenced by many
 programming paradigms, including OOP; for example, we explored the features
 that came from functional programming in Chapter 13. Arguably, OOP languages
-share certain common characteristics, namely objects, encapsulation, and
+share certain common characteristics—namely, objects, encapsulation, and
 inheritance. Let’s look at what each of those characteristics means and whether
 Rust supports it.
 
@@ -19,7 +19,7 @@ object-oriented design patterns. It defines OOP in this way:
 > data and the procedures that operate on that data. The procedures are
 > typically called **methods** or **operations**.
 
-Using this definition, Rust is object oriented: structs and enums have data,
+Using this definition, Rust is object oriented: Structs and enums have data,
 and `impl` blocks provide methods on structs and enums. Even though structs and
 enums with methods aren’t _called_ objects, they provide the same
 functionality, according to the Gang of Four’s definition of objects.
@@ -34,7 +34,7 @@ the object’s internals and change data or behavior directly. This enables the
 programmer to change and refactor an object’s internals without needing to
 change the code that uses the object.
 
-We discussed how to control encapsulation in Chapter 7: we can use the `pub`
+We discussed how to control encapsulation in Chapter 7: We can use the `pub`
 keyword to decide which modules, types, functions, and methods in our code
 should be public, and by default everything else is private. For example, we
 can define a struct `AveragedCollection` that has a field containing a vector
@@ -72,7 +72,7 @@ or modify data in an instance of `AveragedCollection`. When an item is added to
 implementations of each call the private `update_average` method that handles
 updating the `average` field as well.
 
-We leave the `list` and `average` fields private so there is no way for
+We leave the `list` and `average` fields private so that there is no way for
 external code to add or remove items to or from the `list` field directly;
 otherwise, the `average` field might become out of sync when the `list`
 changes. The `average` method returns the value in the `average` field,
@@ -107,7 +107,7 @@ can use other solutions in Rust, depending on your reason for reaching for
 inheritance in the first place.
 
 You would choose inheritance for two main reasons. One is for reuse of code:
-you can implement particular behavior for one type, and inheritance enables you
+You can implement particular behavior for one type, and inheritance enables you
 to reuse that implementation for a different type. You can do this in a limited
 way in Rust code using default trait method implementations, which you saw in
 Listing 10-14 when we added a default implementation of the `summarize` method
@@ -134,7 +134,7 @@ each other at runtime if they share certain characteristics.
 > trait bounds to impose constraints on what those types must provide. This is
 > sometimes called _bounded parametric polymorphism_.
 
-Rust has chosen a different set of tradeoffs by not offering inheritance.
+Rust has chosen a different set of trade-offs by not offering inheritance.
 Inheritance is often at risk of sharing more code than necessary. Subclasses
 shouldn’t always share all characteristics of their parent class but will do so
 with inheritance. This can make a program’s design less flexible. It also
@@ -145,5 +145,5 @@ subclass can only inherit from one class), further restricting the flexibility
 of a program’s design.
 
 For these reasons, Rust takes the different approach of using trait objects
-instead of inheritance to enable polymorphism. Let’s look at how trait objects
-work.
+instead of inheritance to achieve polymorphism at runtime. Let’s look at how
+trait objects work.
