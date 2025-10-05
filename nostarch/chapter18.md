@@ -8,6 +8,10 @@ directory, so all fixes need to be made in `/src/`.
 
 # Object-Oriented Programming Features
 
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="object-oriented-programming-features-of-rust"></a>
+
 Object-oriented programming (OOP) is a way of modeling programs. Objects as a
 programmatic concept were introduced in the programming language Simula in the
 1960s. Those objects influenced Alan Kay’s programming architecture in which
@@ -26,7 +30,7 @@ There is no consensus in the programming community about what features a
 language must have to be considered object oriented. Rust is influenced by many
 programming paradigms, including OOP; for example, we explored the features
 that came from functional programming in Chapter 13. Arguably, OOP languages
-share certain common characteristics, namely objects, encapsulation, and
+share certain common characteristics—namely, objects, encapsulation, and
 inheritance. Let’s look at what each of those characteristics means and whether
 Rust supports it.
 
@@ -41,10 +45,10 @@ object-oriented design patterns. It defines OOP in this way:
 > data and the procedures that operate on that data. The procedures are
 > typically called **methods** or **operations**.
 
-Using this definition, Rust is object oriented: structs and enums have data,
+Using this definition, Rust is object oriented: Structs and enums have data,
 and `impl` blocks provide methods on structs and enums. Even though structs and
-enums with methods aren’t *called* objects, they provide the same functionality,
-according to the Gang of Four’s definition of objects.
+enums with methods aren’t *called* objects, they provide the same
+functionality, according to the Gang of Four’s definition of objects.
 
 ### Encapsulation That Hides Implementation Details
 
@@ -56,7 +60,7 @@ the object’s internals and change data or behavior directly. This enables the
 programmer to change and refactor an object’s internals without needing to
 change the code that uses the object.
 
-We discussed how to control encapsulation in Chapter 7: we can use the `pub`
+We discussed how to control encapsulation in Chapter 7: We can use the `pub`
 keyword to decide which modules, types, functions, and methods in our code
 should be public, and by default everything else is private. For example, we
 can define a struct `AveragedCollection` that has a field containing a vector
@@ -122,7 +126,7 @@ or modify data in an instance of `AveragedCollection`. When an item is added to
 implementations of each call the private `update_average` method that handles
 updating the `average` field as well.
 
-We leave the `list` and `average` fields private so there is no way for
+We leave the `list` and `average` fields private so that there is no way for
 external code to add or remove items to or from the `list` field directly;
 otherwise, the `average` field might become out of sync when the `list`
 changes. The `average` method returns the value in the `average` field,
@@ -157,7 +161,7 @@ can use other solutions in Rust, depending on your reason for reaching for
 inheritance in the first place.
 
 You would choose inheritance for two main reasons. One is for reuse of code:
-you can implement particular behavior for one type, and inheritance enables you
+You can implement particular behavior for one type, and inheritance enables you
 to reuse that implementation for a different type. You can do this in a limited
 way in Rust code using default trait method implementations, which you saw in
 Listing 10-14 when we added a default implementation of the `summarize` method
@@ -184,7 +188,7 @@ each other at runtime if they share certain characteristics.
 > trait bounds to impose constraints on what those types must provide. This is
 > sometimes called *bounded parametric polymorphism*.
 
-Rust has chosen a different set of tradeoffs by not offering inheritance.
+Rust has chosen a different set of trade-offs by not offering inheritance.
 Inheritance is often at risk of sharing more code than necessary. Subclasses
 shouldn’t always share all characteristics of their parent class but will do so
 with inheritance. This can make a program’s design less flexible. It also
@@ -195,8 +199,8 @@ subclass can only inherit from one class), further restricting the flexibility
 of a program’s design.
 
 For these reasons, Rust takes the different approach of using trait objects
-instead of inheritance to enable polymorphism. Let’s look at how trait objects
-work.
+instead of inheritance to achieve polymorphism at runtime. Let’s look at how
+trait objects work.
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -219,8 +223,8 @@ through a list of items, calling a `draw` method on each one to draw it to the
 screen—a common technique for GUI tools. We’ll create a library crate called
 `gui` that contains the structure of a GUI library. This crate might include
 some types for people to use, such as `Button` or `TextField`. In addition,
-`gui` users will want to create their own types that can be drawn: for
-instance, one programmer might add an `Image` and another might add a
+`gui` users will want to create their own types that can be drawn: For
+instance, one programmer might add an `Image`, and another might add a
 `SelectBox`.
 
 At the time of writing the library, we can’t know and define all the types
@@ -241,19 +245,19 @@ allow users to create new types compatible with the library.
 
 ### Defining a Trait for Common Behavior
 
-To implement the behavior we want `gui` to have, we’ll define a trait named
-`Draw` that will have one method named `draw`. Then we can define a vector that
-takes a trait object. A *trait object* points to both an instance of a type
-implementing our specified trait and a table used to look up trait methods on
-that type at runtime. We create a trait object by specifying some sort of
-pointer, such as an `&` reference or a `Box<T>` smart pointer, then the `dyn`
-keyword, and then specifying the relevant trait. (We’ll talk about the reason
-trait objects must use a pointer in “Dynamically Sized Types and the `Sized`
-Trait” in Chapter 20.) We can use trait
-objects in place of a generic or concrete type. Wherever we use a trait object,
-Rust’s type system will ensure at compile time that any value used in that
-context will implement the trait object’s trait. Consequently, we don’t need to
-know all the possible types at compile time.
+To implement the behavior that we want `gui` to have, we’ll define a trait
+named `Draw` that will have one method named `draw`. Then, we can define a
+vector that takes a trait object. A *trait object* points to both an instance
+of a type implementing our specified trait and a table used to look up trait
+methods on that type at runtime. We create a trait object by specifying some
+sort of pointer, such as a reference or a `Box<T>` smart pointer, then the
+`dyn` keyword, and then specifying the relevant trait. (We’ll talk about the
+reason trait objects must use a pointer in “Dynamically Sized Types and the
+`Sized` Trait” in Chapter 20.) We can use
+trait objects in place of a generic or concrete type. Wherever we use a trait
+object, Rust’s type system will ensure at compile time that any value used in
+that context will implement the trait object’s trait. Consequently, we don’t
+need to know all the possible types at compile time.
 
 We’ve mentioned that, in Rust, we refrain from calling structs and enums
 “objects” to distinguish them from other languages’ objects. In a struct or
@@ -261,7 +265,7 @@ enum, the data in the struct fields and the behavior in `impl` blocks are
 separated, whereas in other languages, the data and behavior combined into one
 concept is often labeled an object. Trait objects differ from objects in other
 languages in that we can’t add data to a trait object. Trait objects aren’t as
-generally useful as objects in other languages: their specific purpose is to
+generally useful as objects in other languages: Their specific purpose is to
 allow abstraction across common behavior.
 
 Listing 18-3 shows how to define a trait named `Draw` with one method named
@@ -336,8 +340,7 @@ where
 }
 ```
 
-Listing 18-6: An alternate implementation of the `Screen` struct and its `run`
-method using generics and trait bounds
+Listing 18-6: An alternate implementation of the `Screen` struct and its `run` method using generics and trait bounds
 
 This restricts us to a `Screen` instance that has a list of components all of
 type `Button` or all of type `TextField`. If you’ll only ever have homogeneous
@@ -453,7 +456,7 @@ means it implements the `draw` method.
 
 This concept—of being concerned only with the messages a value responds to
 rather than the value’s concrete type—is similar to the concept of *duck
-typing* in dynamically typed languages: if it walks like a duck and quacks like
+typing* in dynamically typed languages: If it walks like a duck and quacks like
 a duck, then it must be a duck! In the implementation of `run` on `Screen` in
 Listing 18-5, `run` doesn’t need to know what the concrete type of each
 component is. It doesn’t check whether a component is an instance of a `Button`
@@ -509,12 +512,16 @@ This error lets us know that either we’re passing something to `Screen` that w
 didn’t mean to pass and so should pass a different type, or we should implement
 `Draw` on `String` so that `Screen` is able to call `draw` on it.
 
-### Trait Objects Perform Dynamic Dispatch
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="trait-objects-perform-dynamic-dispatch"></a>
+
+### Performing Dynamic Dispatch
 
 Recall in “Performance of Code Using
 Generics” in Chapter 10 our
 discussion on the monomorphization process performed on generics by the
-compiler: the compiler generates nongeneric implementations of functions and
+compiler: The compiler generates nongeneric implementations of functions and
 methods for each concrete type that we use in place of a generic type
 parameter. The code that results from monomorphization is doing *static
 dispatch*, which is when the compiler knows what method you’re calling at
@@ -526,13 +533,14 @@ When we use trait objects, Rust must use dynamic dispatch. The compiler doesn’
 know all the types that might be used with the code that’s using trait objects,
 so it doesn’t know which method implemented on which type to call. Instead, at
 runtime, Rust uses the pointers inside the trait object to know which method to
-call. This lookup incurs a runtime cost that doesn’t occur with static
-dispatch. Dynamic dispatch also prevents the compiler from choosing to inline a
-method’s code, which in turn prevents some optimizations, and Rust has some
-rules about where you can and cannot use dynamic dispatch, called *dyn
-compatibility* at *https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility*. However, we did get extra flexibility in the code
-that we wrote in Listing 18-5 and were able to support in Listing 18-9, so it’s
-a trade-off to consider.
+call. This lookup incurs a runtime cost that doesn’t occur with static dispatch.
+Dynamic dispatch also prevents the compiler from choosing to inline a method’s
+code, which in turn prevents some optimizations, and Rust has some rules about
+where you can and cannot use dynamic dispatch, called *dyn compatibility*. Those
+rules are beyond the scope of this discussion, but you can read more about them
+in the reference. However, we did get extra
+flexibility in the code that we wrote in Listing 18-5 and were able to support
+in Listing 18-9, so it’s a trade-off to consider.
 
 ## Implementing an Object-Oriented Design Pattern
 
@@ -543,7 +551,7 @@ changes based on its state. We’re going to work through an example of a blog
 post struct that has a field to hold its state, which will be a state object
 from the set “draft,” “review,” or “published.”
 
-The state objects share functionality: in Rust, of course, we use structs and
+The state objects share functionality: In Rust, of course, we use structs and
 traits rather than objects and inheritance. Each state object is responsible
 for its own behavior and for governing when it should change into another
 state. The value that holds a state object knows nothing about the different
@@ -555,8 +563,8 @@ value holding the state or the code that uses the value. We’ll only need to
 update the code inside one of the state objects to change its rules or perhaps
 add more state objects.
 
-First we’re going to implement the state pattern in a more traditional
-object-oriented way, then we’ll use an approach that’s a bit more natural in
+First, we’re going to implement the state pattern in a more traditional
+object-oriented way. Then, we’ll use an approach that’s a bit more natural in
 Rust. Let’s dig in to incrementally implement a blog post workflow using the
 state pattern.
 
@@ -565,14 +573,18 @@ The final functionality will look like this:
 1. A blog post starts as an empty draft.
 1. When the draft is done, a review of the post is requested.
 1. When the post is approved, it gets published.
-1. Only published blog posts return content to print, so unapproved posts can’t
-   accidentally be published.
+1. Only published blog posts return content to print so that unapproved posts
+   can’t accidentally be published.
 
 Any other changes attempted on a post should have no effect. For example, if we
 try to approve a draft blog post before we’ve requested a review, the post
 should remain an unpublished draft.
 
-### A Traditional Object-oriented Attempt
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="a-traditional-object-oriented-attempt"></a>
+
+### Attempting Traditional Object-Oriented Style
 
 There are infinite ways to structure code to solve the same problem, each with
 different trade-offs. This section’s implementation is more of a traditional
@@ -583,7 +595,7 @@ in a way that might look less familiar to programmers with object-oriented
 experience. We’ll compare the two solutions to experience the trade-offs of
 designing Rust code differently than code in other languages.
 
-Listing 18-11 shows this workflow in code form: this is an example usage of the
+Listing 18-11 shows this workflow in code form: This is an example usage of the
 API we’ll implement in a library crate named `blog`. This won’t compile yet
 because we haven’t implemented the `blog` crate.
 
@@ -630,7 +642,11 @@ methods called by our library’s users on the `Post` instance, but they don’t
 have to manage the state changes directly. Also, users can’t make a mistake
 with the states, such as publishing a post before it’s reviewed.
 
-#### Defining Post and Creating a New Instance in the Draft State
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="defining-post-and-creating-a-new-instance-in-the-draft-state"></a>
+
+#### Defining Post and Creating a New Instance
 
 Let’s get started on the implementation of the library! We know we need a
 public `Post` struct that holds some content, so we’ll start with the
@@ -639,7 +655,7 @@ instance of `Post`, as shown in Listing 18-12. We’ll also make a private
 `State` trait that will define the behavior that all state objects for a `Post`
 must have.
 
-Then `Post` will hold a trait object of `Box<dyn State>` inside an `Option<T>`
+Then, `Post` will hold a trait object of `Box<dyn State>` inside an `Option<T>`
 in a private field named `state` to hold the state object. You’ll see why the
 `Option<T>` is necessary in a bit.
 
@@ -689,8 +705,7 @@ We saw in Listing 18-11 that we want to be able to call a method named
 blog post. We implement this as a method, rather than exposing the `content`
 field as `pub`, so that later we can implement a method that will control how
 the `content` field’s data is read. The `add_text` method is pretty
-straightforward, so let’s add the implementation in Listing 18-13 to the `impl
-Post` block.
+straightforward, so let’s add the implementation in Listing 18-13 to the `impl Post` block.
 
 src/lib.rs
 
@@ -713,16 +728,21 @@ so it’s not part of the state pattern. The `add_text` method doesn’t interac
 with the `state` field at all, but it is part of the behavior we want to
 support.
 
-#### Ensuring the Content of a Draft Post Is Empty
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="ensuring-the-content-of-a-draft-post-is-empty"></a>
+
+#### Ensuring That the Content of a Draft Post Is Empty
 
 Even after we’ve called `add_text` and added some content to our post, we still
 want the `content` method to return an empty string slice because the post is
-still in the draft state, as shown on line 7 of Listing 18-11. For now, let’s
-implement the `content` method with the simplest thing that will fulfill this
-requirement: always returning an empty string slice. We’ll change this later
-once we implement the ability to change a post’s state so it can be published.
-So far, posts can only be in the draft state, so the post content should always
-be empty. Listing 18-14 shows this placeholder implementation.
+still in the draft state, as shown by the first `assert_eq!` in Listing 18-11.
+For now, let’s implement the `content` method with the simplest thing that will
+fulfill this requirement: always returning an empty string slice. We’ll change
+this later once we implement the ability to change a post’s state so that it
+can be published. So far, posts can only be in the draft state, so the post
+content should always be empty. Listing 18-14 shows this placeholder
+implementation.
 
 src/lib.rs
 
@@ -737,14 +757,15 @@ impl Post {
 
 Listing 18-14: Adding a placeholder implementation for the `content` method on `Post` that always returns an empty string slice
 
-With this added `content` method, everything in Listing 18-11 up to line 7
-works as intended.
+With this added `content` method, everything in Listing 18-11 through the first
+`assert_eq!` works as intended.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="requesting-a-review-of-the-post-changes-its-state"></a>
+<a id="requesting-a-review-changes-the-posts-state"></a>
 
-#### Requesting a Review Changes the Post’s State
+#### Requesting a Review, Which Changes the Post’s State
 
 Next, we need to add functionality to request a review of a post, which should
 change its state from `Draft` to `PendingReview`. Listing 18-15 shows this code.
@@ -785,7 +806,7 @@ impl State for PendingReview {
 Listing 18-15: Implementing `request_review` methods on `Post` and the `State` trait
 
 We give `Post` a public method named `request_review` that will take a mutable
-reference to `self`. Then we call an internal `request_review` method on the
+reference to `self`. Then, we call an internal `request_review` method on the
 current state of `Post`, and this second `request_review` method consumes the
 current state and returns a new state.
 
@@ -794,21 +815,21 @@ implement the trait will now need to implement the `request_review` method.
 Note that rather than having `self`, `&self`, or `&mut self` as the first
 parameter of the method, we have `self: Box<Self>`. This syntax means the
 method is only valid when called on a `Box` holding the type. This syntax takes
-ownership of `Box<Self>`, invalidating the old state so the state value of the
-`Post` can transform into a new state.
+ownership of `Box<Self>`, invalidating the old state so that the state value of
+the `Post` can transform into a new state.
 
 To consume the old state, the `request_review` method needs to take ownership
 of the state value. This is where the `Option` in the `state` field of `Post`
-comes in: we call the `take` method to take the `Some` value out of the `state`
+comes in: We call the `take` method to take the `Some` value out of the `state`
 field and leave a `None` in its place because Rust doesn’t let us have
 unpopulated fields in structs. This lets us move the `state` value out of
-`Post` rather than borrowing it. Then we’ll set the post’s `state` value to the
-result of this operation.
+`Post` rather than borrowing it. Then, we’ll set the post’s `state` value to
+the result of this operation.
 
 We need to set `state` to `None` temporarily rather than setting it directly
 with code like `self.state = self.state.request_review();` to get ownership of
-the `state` value. This ensures `Post` can’t use the old `state` value after
-we’ve transformed it into a new state.
+the `state` value. This ensures that `Post` can’t use the old `state` value
+after we’ve transformed it into a new state.
 
 The `request_review` method on `Draft` returns a new, boxed instance of a new
 `PendingReview` struct, which represents the state when a post is waiting for a
@@ -817,22 +838,23 @@ but doesn’t do any transformations. Rather, it returns itself because when we
 request a review on a post already in the `PendingReview` state, it should stay
 in the `PendingReview` state.
 
-Now we can start seeing the advantages of the state pattern: the
+Now we can start seeing the advantages of the state pattern: The
 `request_review` method on `Post` is the same no matter its `state` value. Each
 state is responsible for its own rules.
 
 We’ll leave the `content` method on `Post` as is, returning an empty string
 slice. We can now have a `Post` in the `PendingReview` state as well as in the
 `Draft` state, but we want the same behavior in the `PendingReview` state.
-Listing 18-11 now works up to line 10!
+Listing 18-11 now works up to the second `assert_eq!` call!
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="adding-the-approve-method-that-changes-the-behavior-of-content"></a>
+<a id="adding-approve-to-change-the-behavior-of-content"></a>
 
-#### Adding `approve` to Change the Behavior of content
+#### Adding approve to Change content’s Behavior
 
-The `approve` method will be similar to the `request_review` method: it will
+The `approve` method will be similar to the `request_review` method: It will
 set `state` to the value that the current state says it should have when that
 state is approved, as shown in Listing 18-16.
 
@@ -918,25 +940,24 @@ Listing 18-17: Updating the `content` method on `Post` to delegate to a `content
 
 Because the goal is to keep all of these rules inside the structs that
 implement `State`, we call a `content` method on the value in `state` and pass
-the post instance (that is, `self`) as an argument. Then we return the value
+the post instance (that is, `self`) as an argument. Then, we return the value
 that’s returned from using the `content` method on the `state` value.
 
 We call the `as_ref` method on the `Option` because we want a reference to the
 value inside the `Option` rather than ownership of the value. Because `state` is
-an `Option<Box<dyn State>>`, when we call `as_ref`, an `Option<&Box<dyn
-State>>` is returned. If we didn’t call `as_ref`, we would get an error because
+an `Option<Box<dyn State>>`, when we call `as_ref`, an `Option<&Box<dyn State>>` is returned. If we didn’t call `as_ref`, we would get an error because
 we can’t move `state` out of the borrowed `&self` of the function parameter.
 
-We then call the `unwrap` method, which we know will never panic because we know
-the methods on `Post` ensure that `state` will always contain a `Some` value when
-those methods are done. This is one of the cases we talked about in “Cases in
-Which You Have More Information Than the
+We then call the `unwrap` method, which we know will never panic because we
+know the methods on `Post` ensure that `state` will always contain a `Some`
+value when those methods are done. This is one of the cases we talked about in
+the “When You Have More Information Than the
 Compiler” section of Chapter 9 when we
 know that a `None` value is never possible, even though the compiler isn’t able
 to understand that.
 
 At this point, when we call `content` on the `&Box<dyn State>`, deref coercion
-will take effect on the `&` and the `Box` so the `content` method will
+will take effect on the `&` and the `Box` so that the `content` method will
 ultimately be called on the type that implements the `State` trait. That means
 we need to add `content` to the `State` trait definition, and that is where
 we’ll put the logic for what content to return depending on which state we
@@ -969,7 +990,7 @@ We add a default implementation for the `content` method that returns an empty
 string slice. That means we don’t need to implement `content` on the `Draft`
 and `PendingReview` structs. The `Published` struct will override the `content`
 method and return the value in `post.content`. While convenient, having the
-`content` method on `State` determine the `content` of the `Post` is blurring
+`content` method on `State` determine the content of the `Post` is blurring
 the lines between the responsibility of `State` and the responsibility of
 `Post`.
 
@@ -984,21 +1005,25 @@ rules lives in the state objects rather than being scattered throughout `Post`.
 
 > ### Why Not An Enum?
 >
-> You may have been wondering why we didn’t use an `enum` with the different
+> You may have been wondering why we didn’t use an enum with the different
 > possible post states as variants. That’s certainly a possible solution; try it
 > and compare the end results to see which you prefer! One disadvantage of using
 > an enum is that every place that checks the value of the enum will need a
 > `match` expression or similar to handle every possible variant. This could get
 > more repetitive than this trait object solution.
 
-#### Trade-offs of the State Pattern
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="trade-offs-of-the-state-pattern"></a>
+
+#### Evaluating the State Pattern
 
 We’ve shown that Rust is capable of implementing the object-oriented state
 pattern to encapsulate the different kinds of behavior a post should have in
-each state. The methods on `Post` know nothing about the various behaviors. The
-way we organized the code, we have to look in only one place to know the
-different ways a published post can behave: the implementation of the `State`
-trait on the `Published` struct.
+each state. The methods on `Post` know nothing about the various behaviors.
+Because of the way we organized the code, we have to look in only one place to
+know the different ways a published post can behave: the implementation of the
+`State` trait on the `Published` struct.
 
 If we were to create an alternative implementation that didn’t use the state
 pattern, we might instead use `match` expressions in the methods on `Post` or
@@ -1032,17 +1057,18 @@ another design pattern.
 Another downside is that we’ve duplicated some logic. To eliminate some of the
 duplication, we might try to make default implementations for the
 `request_review` and `approve` methods on the `State` trait that return `self`.
-However, this wouldn’t work: when using `State` as a trait object, the trait
+However, this wouldn’t work: When using `State` as a trait object, the trait
 doesn’t know what the concrete `self` will be exactly, so the return type isn’t
-known at compile time. (This is one of the `dyn` compatibility rules mentioned
+known at compile time. (This is one of the dyn compatibility rules mentioned
 earlier.)
 
 Other duplication includes the similar implementations of the `request_review`
-and `approve` methods on `Post`. Both methods delegate to the implementation of
-the same method on the value in the `state` field of `Option` and set the new
-value of the `state` field to the result. If we had a lot of methods on `Post`
-that followed this pattern, we might consider defining a macro to eliminate the
-repetition (see the “Macros” section in Chapter 20).
+and `approve` methods on `Post`. Both methods use `Option::take` with the
+`state` field of `Post`, and if `state` is `Some`, they delegate to the wrapped
+value’s implementation of the same method and set the new value of the `state`
+field to the result. If we had a lot of methods on `Post` that followed this
+pattern, we might consider defining a macro to eliminate the repetition (see
+the “Macros” section in Chapter 20).
 
 By implementing the state pattern exactly as it’s defined for object-oriented
 languages, we’re not taking as full advantage of Rust’s strengths as we could.
@@ -1053,9 +1079,10 @@ invalid states and transitions into compile-time errors.
 
 We’ll show you how to rethink the state pattern to get a different set of
 trade-offs. Rather than encapsulating the states and transitions completely so
-outside code has no knowledge of them, we’ll encode the states into different
-types. Consequently, Rust’s type checking system will prevent attempts to use
-draft posts where only published posts are allowed by issuing a compiler error.
+that outside code has no knowledge of them, we’ll encode the states into
+different types. Consequently, Rust’s type-checking system will prevent
+attempts to use draft posts where only published posts are allowed by issuing a
+compiler error.
 
 Let’s consider the first part of `main` in Listing 18-11:
 
@@ -1070,11 +1097,13 @@ fn main() {
 }
 ```
 
+
+
 We still enable the creation of new posts in the draft state using `Post::new`
 and the ability to add text to the post’s content. But instead of having a
 `content` method on a draft post that returns an empty string, we’ll make it so
-draft posts don’t have the `content` method at all. That way, if we try to get
-a draft post’s content, we’ll get a compiler error telling us the method
+that draft posts don’t have the `content` method at all. That way, if we try to
+get a draft post’s content, we’ll get a compiler error telling us the method
 doesn’t exist. As a result, it will be impossible for us to accidentally
 display draft post content in production because that code won’t even compile.
 Listing 18-19 shows the definition of a `Post` struct and a `DraftPost` struct,
@@ -1125,15 +1154,15 @@ instance of `Post` right now.
 
 The `DraftPost` struct has an `add_text` method, so we can add text to
 `content` as before, but note that `DraftPost` does not have a `content` method
-defined! So now the program ensures all posts start as draft posts, and draft
-posts don’t have their content available for display. Any attempt to get around
-these constraints will result in a compiler error.
+defined! So now the program ensures that all posts start as draft posts, and
+draft posts don’t have their content available for display. Any attempt to get
+around these constraints will result in a compiler error.
 
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="implementing-transitions-as-transformations-into-different-types"></a>
 
-So how do we get a published post? We want to enforce the rule that a draft
+So, how do we get a published post? We want to enforce the rule that a draft
 post has to be reviewed and approved before it can be published. A post in the
 pending review state should still not display any content. Let’s implement
 these constraints by adding another struct, `PendingReviewPost`, defining the
@@ -1184,7 +1213,7 @@ But we also have to make some small changes to `main`. The `request_review` and
 `approve` methods return new instances rather than modifying the struct they’re
 called on, so we need to add more `let post =` shadowing assignments to save
 the returned instances. We also can’t have the assertions about the draft and
-pending review posts’ contents be empty strings, nor do we need them: we can’t
+pending review posts’ contents be empty strings, nor do we need them: We can’t
 compile code that tries to use the content of posts in those states any longer.
 The updated code in `main` is shown in Listing 18-21.
 
@@ -1210,7 +1239,7 @@ Listing 18-21: Modifications to `main` to use the new implementation of the blog
 
 The changes we needed to make to `main` to reassign `post` mean that this
 implementation doesn’t quite follow the object-oriented state pattern anymore:
-the transformations between the states are no longer encapsulated entirely
+The transformations between the states are no longer encapsulated entirely
 within the `Post` implementation. However, our gain is that invalid states are
 now impossible because of the type system and the type checking that happens at
 compile time! This ensures that certain bugs, such as display of the content of

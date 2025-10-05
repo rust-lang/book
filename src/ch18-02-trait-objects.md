@@ -1,8 +1,8 @@
-## Using Trait Objects to Abstract over Shared Behavior
-
 <!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-trait-objects-that-allow-for-values-of-different-types"></a>
+
+## Using Trait Objects to Abstract over Shared Behavior
 
 In Chapter 8, we mentioned that one limitation of vectors is that they can
 store elements of only one type. We created a workaround in Listing 8-9 where
@@ -19,8 +19,8 @@ through a list of items, calling a `draw` method on each one to draw it to the
 screen—a common technique for GUI tools. We’ll create a library crate called
 `gui` that contains the structure of a GUI library. This crate might include
 some types for people to use, such as `Button` or `TextField`. In addition,
-`gui` users will want to create their own types that can be drawn: for
-instance, one programmer might add an `Image` and another might add a
+`gui` users will want to create their own types that can be drawn: For
+instance, one programmer might add an `Image`, and another might add a
 `SelectBox`.
 
 At the time of writing the library, we can’t know and define all the types
@@ -41,19 +41,19 @@ allow users to create new types compatible with the library.
 
 ### Defining a Trait for Common Behavior
 
-To implement the behavior we want `gui` to have, we’ll define a trait named
-`Draw` that will have one method named `draw`. Then we can define a vector that
-takes a trait object. A _trait object_ points to both an instance of a type
-implementing our specified trait and a table used to look up trait methods on
-that type at runtime. We create a trait object by specifying some sort of
-pointer, such as an `&` reference or a `Box<T>` smart pointer, then the `dyn`
-keyword, and then specifying the relevant trait. (We’ll talk about the reason
-trait objects must use a pointer in [“Dynamically Sized Types and the `Sized`
-Trait”][dynamically-sized]<!-- ignore --> in Chapter 20.) We can use trait
-objects in place of a generic or concrete type. Wherever we use a trait object,
-Rust’s type system will ensure at compile time that any value used in that
-context will implement the trait object’s trait. Consequently, we don’t need to
-know all the possible types at compile time.
+To implement the behavior that we want `gui` to have, we’ll define a trait
+named `Draw` that will have one method named `draw`. Then, we can define a
+vector that takes a trait object. A _trait object_ points to both an instance
+of a type implementing our specified trait and a table used to look up trait
+methods on that type at runtime. We create a trait object by specifying some
+sort of pointer, such as a reference or a `Box<T>` smart pointer, then the
+`dyn` keyword, and then specifying the relevant trait. (We’ll talk about the
+reason trait objects must use a pointer in [“Dynamically Sized Types and the
+`Sized` Trait”][dynamically-sized]<!-- ignore --> in Chapter 20.) We can use
+trait objects in place of a generic or concrete type. Wherever we use a trait
+object, Rust’s type system will ensure at compile time that any value used in
+that context will implement the trait object’s trait. Consequently, we don’t
+need to know all the possible types at compile time.
 
 We’ve mentioned that, in Rust, we refrain from calling structs and enums
 “objects” to distinguish them from other languages’ objects. In a struct or
@@ -61,7 +61,7 @@ enum, the data in the struct fields and the behavior in `impl` blocks are
 separated, whereas in other languages, the data and behavior combined into one
 concept is often labeled an object. Trait objects differ from objects in other
 languages in that we can’t add data to a trait object. Trait objects aren’t as
-generally useful as objects in other languages: their specific purpose is to
+generally useful as objects in other languages: Their specific purpose is to
 allow abstraction across common behavior.
 
 Listing 18-3 shows how to define a trait named `Draw` with one method named
@@ -184,7 +184,7 @@ means it implements the `draw` method.
 
 This concept—of being concerned only with the messages a value responds to
 rather than the value’s concrete type—is similar to the concept of _duck
-typing_ in dynamically typed languages: if it walks like a duck and quacks like
+typing_ in dynamically typed languages: If it walks like a duck and quacks like
 a duck, then it must be a duck! In the implementation of `run` on `Screen` in
 Listing 18-5, `run` doesn’t need to know what the concrete type of each
 component is. It doesn’t check whether a component is an instance of a `Button`
@@ -229,7 +229,7 @@ didn’t mean to pass and so should pass a different type, or we should implemen
 Recall in [“Performance of Code Using
 Generics”][performance-of-code-using-generics]<!-- ignore --> in Chapter 10 our
 discussion on the monomorphization process performed on generics by the
-compiler: the compiler generates nongeneric implementations of functions and
+compiler: The compiler generates nongeneric implementations of functions and
 methods for each concrete type that we use in place of a generic type
 parameter. The code that results from monomorphization is doing _static
 dispatch_, which is when the compiler knows what method you’re calling at
