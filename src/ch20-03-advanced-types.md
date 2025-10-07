@@ -2,7 +2,7 @@
 
 The Rust type system has some features that we’ve so far mentioned but haven’t
 yet discussed. We’ll start by discussing newtypes in general as we examine why
-newtypes are useful as types. Then we’ll move on to type aliases, a feature
+they are useful as types. Then, we’ll move on to type aliases, a feature
 similar to newtypes but with slightly different semantics. We’ll also discuss
 the `!` type and dynamically sized types.
 
@@ -12,19 +12,18 @@ the `!` type and dynamically sized types.
 
 ### Type Safety and Abstraction with the Newtype Pattern
 
-This section assumes you’ve read the earlier section [“Using the Newtype Pattern
-to Implement External Traits”][using-the-newtype-pattern]<!--
-ignore -->. The newtype pattern is also useful for tasks beyond those we’ve
-discussed so far, including statically enforcing that values are never confused
-and indicating the units of a value. You saw an example of using newtypes to
-indicate units in Listing 20-16: recall that the `Millimeters` and `Meters`
-structs wrapped `u32` values in a newtype. If we wrote a function with a
-parameter of type `Millimeters`, we wouldn’t be able to compile a program that
-accidentally tried to call that function with a value of type `Meters` or a
-plain `u32`.
+This section assumes you’ve read the earlier section [“Implementing External
+Traits with the Newtype Pattern”][newtype]<!-- ignore -->. The newtype pattern
+is also useful for tasks beyond those we’ve discussed so far, including
+statically enforcing that values are never confused and indicating the units of
+a value. You saw an example of using newtypes to indicate units in Listing
+20-16: Recall that the `Millimeters` and `Meters` structs wrapped `u32` values
+in a newtype. If we wrote a function with a parameter of type `Millimeters`, we
+wouldn’t be able to compile a program that accidentally tried to call that
+function with a value of type `Meters` or a plain `u32`.
 
 We can also use the newtype pattern to abstract away some implementation
-details of a type: the new type can expose a public API that is different from
+details of a type: The new type can expose a public API that is different from
 the API of the private inner type.
 
 Newtypes can also hide internal implementation. For example, we could provide a
@@ -32,10 +31,11 @@ Newtypes can also hide internal implementation. For example, we could provide a
 associated with their name. Code using `People` would only interact with the
 public API we provide, such as a method to add a name string to the `People`
 collection; that code wouldn’t need to know that we assign an `i32` ID to names
-internally. The newtype pattern is a lightweight way to achieve encapsulation to
-hide implementation details, which we discussed in [“Encapsulation that Hides
-Implementation Details”][encapsulation-that-hides-implementation-details]<!--
-ignore --> in Chapter 18.
+internally. The newtype pattern is a lightweight way to achieve encapsulation
+to hide implementation details, which we discussed in the [“Encapsulation that
+Hides Implementation
+Details”][encapsulation-that-hides-implementation-details]<!-- ignore -->
+section in Chapter 18.
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -61,7 +61,7 @@ values of type `i32`:
 ```
 
 Because `Kilometers` and `i32` are the same type, we can add values of both
-types and we can pass `Kilometers` values to functions that take `i32`
+types and can pass `Kilometers` values to functions that take `i32`
 parameters. However, using this method, we don’t get the type-checking benefits
 that we get from the newtype pattern discussed earlier. In other words, if we
 mix up `Kilometers` and `i32` values somewhere, the compiler will not give us
@@ -75,7 +75,7 @@ Box<dyn Fn() + Send + 'static>
 ```
 
 Writing this lengthy type in function signatures and as type annotations all
-over the code can be tiresome and error prone. Imagine having a project full of
+over the code can be tiresome and error-prone. Imagine having a project full of
 code like that in Listing 20-25.
 
 <Listing number="20-25" caption="Using a long type in many places">
@@ -131,7 +131,7 @@ looking like this:
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-06-result-alias/src/lib.rs:there}}
 ```
 
-The type alias helps in two ways: it makes code easier to write _and_ it gives
+The type alias helps in two ways: It makes code easier to write _and_ it gives
 us a consistent interface across all of `std::io`. Because it’s an alias, it’s
 just another `Result<T, E>`, which means we can use any methods that work on
 `Result<T, E>` with it, as well as special syntax like the `?` operator.
@@ -164,16 +164,16 @@ here in Listing 20-27.
 </Listing>
 
 At the time, we skipped over some details in this code. In [“The `match`
-Control Flow Construct”][the-match-control-flow-construct]<!-- ignore --> in
-Chapter 6, we discussed that `match` arms must all return the same type. So,
-for example, the following code doesn’t work:
+Control Flow Construct”][the-match-control-flow-construct]<!-- ignore -->
+section in Chapter 6, we discussed that `match` arms must all return the same
+type. So, for example, the following code doesn’t work:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-08-match-arms-different-types/src/main.rs:here}}
 ```
 
 The type of `guess` in this code would have to be an integer _and_ a string,
-and Rust requires that `guess` have only one type. So what does `continue`
+and Rust requires that `guess` have only one type. So, what does `continue`
 return? How were we allowed to return a `u32` from one arm and have another arm
 that ends with `continue` in Listing 20-27?
 
@@ -202,7 +202,7 @@ of the overall `match` expression is `T`. This code works because `panic!`
 doesn’t produce a value; it ends the program. In the `None` case, we won’t be
 returning a value from `unwrap`, so this code is valid.
 
-One final expression that has the type `!` is a `loop`:
+One final expression that has the type `!` is a loop:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-10-loop-returns-never/src/main.rs:here}}
@@ -238,28 +238,28 @@ same amount of space. But they have different lengths: `s1` needs 12 bytes of
 storage and `s2` needs 15. This is why it’s not possible to create a variable
 holding a dynamically sized type.
 
-So what do we do? In this case, you already know the answer: we make the types
-of `s1` and `s2` a `&str` rather than a `str`. Recall from [“String
-Slices”][string-slices]<!-- ignore --> in Chapter 4 that the slice data
-structure just stores the starting position and the length of the slice. So,
-although a `&T` is a single value that stores the memory address of where the
-`T` is located, a `&str` is _two_ values: the address of the `str` and its
-length. As such, we can know the size of a `&str` value at compile time: it’s
-twice the length of a `usize`. That is, we always know the size of a `&str`, no
-matter how long the string it refers to is. In general, this is the way in which
-dynamically sized types are used in Rust: they have an extra bit of metadata
-that stores the size of the dynamic information. The golden rule of dynamically
-sized types is that we must always put values of dynamically sized types behind
-a pointer of some kind.
+So, what do we do? In this case, you already know the answer: We make the type
+of `s1` and `s2` string slice (`&str`) rather than `str`. Recall from the
+[“String Slices”][string-slices]<!-- ignore --> section in Chapter 4 that the
+slice data structure only stores the starting position and the length of the
+slice. So, although `&T` is a single value that stores the memory address of
+where the `T` is located, a string slice is _two_ values: the address of the
+`str` and its length. As such, we can know the size of a string slice value at
+compile time: It’s twice the length of a `usize`. That is, we always know the
+size of a string slice, no matter how long the string it refers to is. In
+general, this is the way in which dynamically sized types are used in Rust:
+They have an extra bit of metadata that stores the size of the dynamic
+information. The golden rule of dynamically sized types is that we must always
+put values of dynamically sized types behind a pointer of some kind.
 
 We can combine `str` with all kinds of pointers: for example, `Box<str>` or
 `Rc<str>`. In fact, you’ve seen this before but with a different dynamically
 sized type: traits. Every trait is a dynamically sized type we can refer to by
-using the name of the trait. In [“Using Trait Objects to Abstract over Shared
-Behavior”][using-trait-objects-to-abstract-over-shared-behavior]<!-- ignore -->
-in Chapter 18, we mentioned that to use traits as trait objects, we must put
-them behind a pointer, such as `&dyn Trait` or `Box<dyn Trait>` (`Rc<dyn
-Trait>` would work too).
+using the name of the trait. In the [“Using Trait Objects to Abstract over
+Shared Behavior”][using-trait-objects-to-abstract-over-shared-behavior]<!--
+ignore --> section in Chapter 18, we mentioned that to use traits as trait
+objects, we must put them behind a pointer, such as `&dyn Trait` or `Box<dyn
+Trait>` (`Rc<dyn Trait>` would work too).
 
 To work with DSTs, Rust provides the `Sized` trait to determine whether or not
 a type’s size is known at compile time. This trait is automatically implemented
@@ -285,7 +285,7 @@ restriction:
 {{#rustdoc_include ../listings/ch20-advanced-features/no-listing-14-generic-maybe-sized/src/lib.rs}}
 ```
 
-A trait bound on `?Sized` means “`T` may or may not be `Sized`” and this
+A trait bound on `?Sized` means “`T` may or may not be `Sized`,” and this
 notation overrides the default that generic types must have a known size at
 compile time. The `?Trait` syntax with this meaning is only available for
 `Sized`, not any other traits.
@@ -300,4 +300,4 @@ Next, we’ll talk about functions and closures!
 [string-slices]: ch04-03-slices.html#string-slices
 [the-match-control-flow-construct]: ch06-02-match.html#the-match-control-flow-construct
 [using-trait-objects-to-abstract-over-shared-behavior]: ch18-02-trait-objects.html#using-trait-objects-to-abstract-over-shared-behavior
-[using-the-newtype-pattern]: ch20-02-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits
+[newtype]: ch20-02-advanced-traits.html#implementing-external-traits-with-the-newtype-pattern
