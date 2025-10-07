@@ -32,19 +32,19 @@ match x {
 }
 ```
 
-The patterns in this `match` expression are the `None` and `Some(i)` on the
+The patterns in this `match` expression are the `None` and `Some(i)` to the
 left of each arrow.
 
-One requirement for `match` expressions is that they need to be _exhaustive_ in
+One requirement for `match` expressions is that they need to be exhaustive in
 the sense that all possibilities for the value in the `match` expression must
-be accounted for. One way to ensure you’ve covered every possibility is to have
-a catch-all pattern for the last arm: for example, a variable name matching any
-value can never fail and thus covers every remaining case.
+be accounted for. One way to ensure that you’ve covered every possibility is to
+have a catch-all pattern for the last arm: For example, a variable name
+matching any value can never fail and thus covers every remaining case.
 
 The particular pattern `_` will match anything, but it never binds to a
 variable, so it’s often used in the last match arm. The `_` pattern can be
-useful when you want to ignore any value not specified, for example. We’ll cover
-the `_` pattern in more detail in [“Ignoring Values in a
+useful when you want to ignore any value not specified, for example. We’ll
+cover the `_` pattern in more detail in [“Ignoring Values in a
 Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> later in this chapter.
 
 ### `let` Statements
@@ -91,8 +91,8 @@ To see the pattern-matching aspect of `let` more clearly, consider Listing
 </Listing>
 
 Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
-to the pattern `(x, y, z)` and sees that the value matches the pattern, in that
-it sees that the number of elements is the same in both, so Rust binds `1` to
+to the pattern `(x, y, z)` and sees that the value matches the pattern—that is,
+it sees that the number of elements is the same in both—so Rust binds `1` to
 `x`, `2` to `y`, and `3` to `z`. You can think of this tuple pattern as nesting
 three individual variable patterns inside it.
 
@@ -119,8 +119,8 @@ To fix the error, we could ignore one or more of the values in the tuple using
 `_` or `..`, as you’ll see in the [“Ignoring Values in a
 Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> section. If the problem
 is that we have too many variables in the pattern, the solution is to make the
-types match by removing variables so the number of variables equals the number
-of elements in the tuple.
+types match by removing variables so that the number of variables equals the
+number of elements in the tuple.
 
 ### Conditional `if let` Expressions
 
@@ -160,10 +160,10 @@ hardcoded values we have here, this example will print `Using purple as the
 background color`.
 
 You can see that `if let` can also introduce new variables that shadow existing
-variables in the same way that `match` arms can: the line `if let Ok(age) = age`
+variables in the same way that `match` arms can: The line `if let Ok(age) = age`
 introduces a new `age` variable that contains the value inside the `Ok` variant,
 shadowing the existing `age` variable. This means we need to place the `if age >
-30` condition within that block: we can’t combine these two conditions into `if
+30` condition within that block: We can’t combine these two conditions into `if
 let Ok(age) = age && age > 30`. The new `age` we want to compare to 30 isn’t
 valid until the new scope starts with the curly bracket.
 
@@ -176,7 +176,7 @@ not alert us to the possible logic bug.
 
 Similar in construction to `if let`, the `while let` conditional loop allows a
 `while` loop to run for as long as a pattern continues to match. In Listing
-19-4 we show a `while let` loop that waits on messages sent between threads,
+19-4, we show a `while let` loop that waits on messages sent between threads,
 but in this case checking a `Result` instead of an `Option`.
 
 <Listing number="19-4" caption="Using a `while let` loop to print values for as long as `rx.recv()` returns `Ok`">
@@ -190,16 +190,16 @@ but in this case checking a `Result` instead of an `Option`.
 This example prints `1`, `2`, and then `3`. The `recv` method takes the first
 message out of the receiver side of the channel and returns an `Ok(value)`. When
 we first saw `recv` back in Chapter 16, we unwrapped the error directly, or
-interacted with it as an iterator using a `for` loop. As Listing 19-4 shows,
-though, we can also use while let, because the `recv` method returns an `Ok`
+we interacted with it as an iterator using a `for` loop. As Listing 19-4 shows,
+though, we can also use `while let`, because the `recv` method returns an `Ok`
 each time a message arrives, as long as the sender exists, and then produces an
-`Err `once the sender side disconnects.
+`Err` once the sender side disconnects.
 
 ### `for` Loops
 
 In a `for` loop, the value that directly follows the keyword `for` is a
 pattern. For example, in `for x in y`, the `x` is the pattern. Listing 19-5
-demonstrates how to use a pattern in a `for` loop to *destructure*, or break
+demonstrates how to use a pattern in a `for` loop to destructure, or break
 apart, a tuple as part of the `for` loop.
 
 
@@ -218,11 +218,12 @@ The code in Listing 19-5 will print the following:
 {{#include ../listings/ch19-patterns-and-matching/listing-19-05/output.txt}}
 ```
 
-We adapt an iterator using the `enumerate` method so it produces a value and
-the index for that value, placed into a tuple. The first value produced is the
-tuple `(0, 'a')`. When this value is matched to the pattern `(index, value)`,
-`index` will be `0` and `value` will be `'a'`, printing the first line of the
-output.
+We adapt an iterator using the `enumerate` method so that it produces a value
+and the index for that value, placed into a tuple. The first value produced is
+the tuple `(0, 'a')`. When this value is matched to the pattern `(index,
+value)`, index will be `0` and value will be `'a'`, printing the first line of
+the output.
+
 
 ### Function Parameters
 
@@ -230,7 +231,7 @@ Function parameters can also be patterns. The code in Listing 19-6, which
 declares a function named `foo` that takes one parameter named `x` of type
 `i32`, should by now look familiar.
 
-<Listing number="19-6" caption="A function signature uses patterns in the parameters">
+<Listing number="19-6" caption="A function signature using patterns in the parameters">
 
 ```rust
 {{#rustdoc_include ../listings/ch19-patterns-and-matching/listing-19-06/src/main.rs:here}}
