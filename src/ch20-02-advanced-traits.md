@@ -1,9 +1,9 @@
 ## Advanced Traits
 
-We first covered traits in [“Traits: Defining Shared
-Behavior”][traits-defining-shared-behavior]<!-- ignore --> in Chapter 10, but we
-didn’t discuss the more advanced details. Now that you know more about Rust, we
-can get into the nitty-gritty.
+We first covered traits in the [“Defining Shared Behavior with
+Traits”][traits]<!-- ignore --> section in Chapter 10, but we didn’t discuss
+the more advanced details. Now that you know more about Rust, we can get into
+the nitty-gritty.
 
 <!-- Old headings. Do not remove or links may break. -->
 
@@ -20,7 +20,7 @@ trait that uses some types without needing to know exactly what those types are
 until the trait is implemented.
 
 We’ve described most of the advanced features in this chapter as being rarely
-needed. Associated types are somewhere in the middle: they’re used more rarely
+needed. Associated types are somewhere in the middle: They’re used more rarely
 than features explained in the rest of the book but more commonly than many of
 the other features discussed in this chapter.
 
@@ -57,7 +57,7 @@ the `Item` type is `u32`:
 
 </Listing>
 
-This syntax seems comparable to that of generics. So why not just define the
+This syntax seems comparable to that of generics. So, why not just define the
 `Iterator` trait with generics, as shown in Listing 20-14?
 
 <Listing number="20-14" caption="A hypothetical definition of the `Iterator` trait using generics">
@@ -77,14 +77,14 @@ the concrete types of the generic type parameters each time. When we use the
 `next` method on `Counter`, we would have to provide type annotations to
 indicate which implementation of `Iterator` we want to use.
 
-With associated types, we don’t need to annotate types because we can’t
+With associated types, we don’t need to annotate types, because we can’t
 implement a trait on a type multiple times. In Listing 20-13 with the
 definition that uses associated types, we can choose what the type of `Item`
 will be only once because there can be only one `impl Iterator for Counter`. We
 don’t have to specify that we want an iterator of `u32` values everywhere we
 call `next` on `Counter`.
 
-Associated types also become part of the trait’s contract: implementors of the
+Associated types also become part of the trait’s contract: Implementors of the
 trait must provide a type to stand in for the associated type placeholder.
 Associated types often have a name that describes how the type will be used,
 and documenting the associated type in the API documentation is a good practice.
@@ -93,7 +93,7 @@ and documenting the associated type in the API documentation is a good practice.
 
 <a id="default-generic-type-parameters-and-operator-overloading"></a>
 
-### Using Default Generic Type Parameters and Operator Overloading
+### Using Default Generic Parameters and Operator Overloading
 
 When we use generic type parameters, we can specify a default concrete type for
 the generic type. This eliminates the need for implementors of the trait to
@@ -107,7 +107,7 @@ in particular situations.
 Rust doesn’t allow you to create your own operators or overload arbitrary
 operators. But you can overload the operations and corresponding traits listed
 in `std::ops` by implementing the traits associated with the operator. For
-example, in Listing 20-15 we overload the `+` operator to add two `Point`
+example, in Listing 20-15, we overload the `+` operator to add two `Point`
 instances together. We do this by implementing the `Add` trait on a `Point`
 struct.
 
@@ -136,7 +136,7 @@ trait Add<Rhs=Self> {
 ```
 
 This code should look generally familiar: a trait with one method and an
-associated type. The new part is `Rhs=Self`: this syntax is called _default
+associated type. The new part is `Rhs=Self`: This syntax is called _default
 type parameters_. The `Rhs` generic type parameter (short for “right-hand
 side”) defines the type of the `rhs` parameter in the `add` method. If we don’t
 specify a concrete type for `Rhs` when we implement the `Add` trait, the type
@@ -150,11 +150,11 @@ default.
 
 We have two structs, `Millimeters` and `Meters`, holding values in different
 units. This thin wrapping of an existing type in another struct is known as the
-_newtype pattern_, which we describe in more detail in the [“Using the Newtype
-Pattern to Implement External Traits”][newtype]<!-- ignore
---> section. We want to add values in millimeters to values in meters and have
-the implementation of `Add` do the conversion correctly. We can implement `Add`
-for `Millimeters` with `Meters` as the `Rhs`, as shown in Listing 20-16.
+_newtype pattern_, which we describe in more detail in the [“Implementing
+External Traits with the Newtype Pattern”][newtype]<!-- ignore --> section. We
+want to add values in millimeters to values in meters and have the
+implementation of `Add` do the conversion correctly. We can implement `Add` for
+`Millimeters` with `Meters` as the `Rhs`, as shown in Listing 20-16.
 
 <Listing number="20-16" file-name="src/lib.rs" caption="Implementing the `Add` trait on `Millimeters` to add `Millimeters` and `Meters`">
 
@@ -173,13 +173,13 @@ You’ll use default type parameters in two main ways:
 2. To allow customization in specific cases most users won’t need
 
 The standard library’s `Add` trait is an example of the second purpose:
-usually, you’ll add two like types, but the `Add` trait provides the ability to
+Usually, you’ll add two like types, but the `Add` trait provides the ability to
 customize beyond that. Using a default type parameter in the `Add` trait
 definition means you don’t have to specify the extra parameter most of the
 time. In other words, a bit of implementation boilerplate isn’t needed, making
 it easier to use the trait.
 
-The first purpose is similar to the second but in reverse: if you want to add a
+The first purpose is similar to the second but in reverse: If you want to add a
 type parameter to an existing trait, you can give it a default to allow
 extension of the functionality of the trait without breaking the existing
 implementation code.
@@ -255,7 +255,7 @@ trait to use based on the type of `self`.
 However, associated functions that are not methods don’t have a `self`
 parameter. When there are multiple types or traits that define non-method
 functions with the same function name, Rust doesn’t always know which type you
-mean unless you use fully qualified syntax. For example, in Listing 20-20 we
+mean unless you use fully qualified syntax. For example, in Listing 20-20, we
 create a trait for an animal shelter that wants to name all baby dogs Spot. We
 make an `Animal` trait with an associated non-method function `baby_name`. The
 `Animal` trait is implemented for the struct `Dog`, on which we also provide an
@@ -283,10 +283,10 @@ function defined on `Dog` directly. This code prints the following:
 ```
 
 This output isn’t what we wanted. We want to call the `baby_name` function that
-is part of the `Animal` trait that we implemented on `Dog` so the code prints
-`A baby dog is called a puppy`. The technique of specifying the trait name that
-we used in Listing 20-19 doesn’t help here; if we change `main` to the code in
-Listing 20-21, we’ll get a compilation error.
+is part of the `Animal` trait that we implemented on `Dog` so that the code
+prints `A baby dog is called a puppy`. The technique of specifying the trait
+name that we used in Listing 20-19 doesn’t help here; if we change `main` to
+the code in Listing 20-21, we’ll get a compilation error.
 
 <Listing number="20-21" file-name="src/main.rs" caption="Attempting to call the `baby_name` function from the `Animal` trait, but Rust doesn’t know which implementation to use">
 
@@ -333,7 +333,7 @@ In general, fully qualified syntax is defined as follows:
 ```
 
 For associated functions that aren’t methods, there would not be a `receiver`:
-there would only be the list of other arguments. You could use fully qualified
+There would only be the list of other arguments. You could use fully qualified
 syntax everywhere that you call functions or methods. However, you’re allowed
 to omit any part of this syntax that Rust can figure out from other information
 in the program. You only need to use this more verbose syntax in cases where
@@ -346,7 +346,7 @@ to identify which implementation you want to call.
 
 ### Using Supertraits
 
-Sometimes you might write a trait definition that depends on another trait: for
+Sometimes you might write a trait definition that depends on another trait: For
 a type to implement the first trait, you want to require that type to also
 implement the second trait. You would do this so that your trait definition can
 make use of the associated items of the second trait. The trait your trait
@@ -429,24 +429,23 @@ it within an outline of asterisks.
 
 ### Implementing External Traits with the Newtype Pattern
 
-In [“Implementing a Trait on a Type”][implementing-a-trait-on-a-type]<!--
-ignore --> in Chapter 10, we mentioned the orphan rule that states we’re only
-allowed to implement a trait on a type if either the trait or the type, or
-both, are local to our crate. It’s possible to get around this restriction
-using the _newtype pattern_, which involves creating a new type in a tuple
-struct. (We covered tuple structs in [“Using Tuple Structs Without Named Fields
-to Create Different Types”][tuple-structs]<!-- ignore --> in Chapter 5.) The
-tuple struct will have one field and be a thin wrapper around the type for
-which we want to implement a trait. Then the wrapper type is local to our
-crate, and we can implement the trait on the wrapper. _Newtype_ is a term that
-originates from the Haskell programming language. There is no runtime
-performance penalty for using this pattern, and the wrapper type is elided at
-compile time.
+In the [“Implementing a Trait on a Type”][implementing-a-trait-on-a-type]<!--
+ignore --> section in Chapter 10, we mentioned the orphan rule that states
+we’re only allowed to implement a trait on a type if either the trait or the
+type, or both, are local to our crate. It’s possible to get around this
+restriction using the newtype pattern, which involves creating a new type in a
+tuple struct. (We covered tuple structs in the [“Creating Different Types with
+Tuple Structs”][tuple-structs]<!-- ignore --> section in Chapter 5.) The tuple
+struct will have one field and be a thin wrapper around the type for which we
+want to implement a trait. Then, the wrapper type is local to our crate, and we
+can implement the trait on the wrapper. _Newtype_ is a term that originates
+from the Haskell programming language. There is no runtime performance penalty
+for using this pattern, and the wrapper type is elided at compile time.
 
 As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the
 `Vec<T>` type are defined outside our crate. We can make a `Wrapper` struct
-that holds an instance of `Vec<T>`; then we can implement `Display` on
+that holds an instance of `Vec<T>`; then, we can implement `Display` on
 `Wrapper` and use the `Vec<T>` value, as shown in Listing 20-24.
 
 <Listing number="20-24" file-name="src/main.rs" caption="Creating a `Wrapper` type around `Vec<String>` to implement `Display`">
@@ -459,7 +458,7 @@ that holds an instance of `Vec<T>`; then we can implement `Display` on
 
 The implementation of `Display` uses `self.0` to access the inner `Vec<T>`
 because `Wrapper` is a tuple struct and `Vec<T>` is the item at index 0 in the
-tuple. Then we can use the functionality of the `Display` trait on `Wrapper`.
+tuple. Then, we can use the functionality of the `Display` trait on `Wrapper`.
 
 The downside of using this technique is that `Wrapper` is a new type, so it
 doesn’t have the methods of the value it’s holding. We would have to implement
@@ -467,17 +466,17 @@ all the methods of `Vec<T>` directly on `Wrapper` such that the methods
 delegate to `self.0`, which would allow us to treat `Wrapper` exactly like a
 `Vec<T>`. If we wanted the new type to have every method the inner type has,
 implementing the `Deref` trait on the `Wrapper` to return the inner type would
-be a solution (we discussed implementing the `Deref` trait in [“Treating Smart
-Pointers Like Regular References with `Deref`”][smart-pointer-deref]<!-- ignore
---> in Chapter 15). If we didn’t want the `Wrapper` type to have all the
+be a solution (we discussed implementing the `Deref` trait in the [“Treating
+Smart Pointers Like Regular References”][smart-pointer-deref]<!-- ignore -->
+section in Chapter 15). If we didn’t want the `Wrapper` type to have all the
 methods of the inner type—for example, to restrict the `Wrapper` type’s
 behavior—we would have to implement just the methods we do want manually.
 
 This newtype pattern is also useful even when traits are not involved. Let’s
 switch focus and look at some advanced ways to interact with Rust’s type system.
 
-[newtype]: ch20-02-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits
+[newtype]: ch20-02-advanced-traits.html#implementing-external-traits-with-the-newtype-pattern
 [implementing-a-trait-on-a-type]: ch10-02-traits.html#implementing-a-trait-on-a-type
-[traits-defining-shared-behavior]: ch10-02-traits.html#traits-defining-shared-behavior
-[smart-pointer-deref]: ch15-02-deref.html#treating-smart-pointers-like-regular-references-with-the-deref-trait
-[tuple-structs]: ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types
+[traits]: ch10-02-traits.html
+[smart-pointer-deref]: ch15-02-deref.html#treating-smart-pointers-like-regular-references
+[tuple-structs]: ch05-01-defining-structs.html#creating-different-types-with-tuple-structs
