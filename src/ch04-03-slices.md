@@ -207,7 +207,7 @@ We now have a straightforward API that’s much harder to mess up because the
 compiler will ensure that the references into the `String` remain valid.
 Remember the bug in the program in Listing 4-8, when we got the index to the
 end of the first word but then cleared the string so our index was invalid?
-That code was logically incorrect but didn’t show any immediate errors. The
+That code was logically correct but didn’t show any immediate errors. The
 problems would show up later if we kept trying to use the first word index with
 an emptied string. Slices make this bug impossible and let us know much sooner
 that we have a problem with our code. Using the slice version of `first_word`
