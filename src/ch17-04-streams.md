@@ -106,7 +106,7 @@ as in Listing 17-31.
 With all those pieces put together, this code works the way we want! What’s
 more, now that we have `StreamExt` in scope, we can use all of its utility
 methods, just as with iterators. For example, in Listing 17-32, we use the
-`filter` method to filter out everything but multiples of three and five.
+`filter` method to filter out everything but multiples of three or five.
 
 <Listing number="17-32" caption="Filtering a stream with the `StreamExt::filter` method" file-name="src/main.rs">
 
