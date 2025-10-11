@@ -52,15 +52,11 @@ impl ThreadPool {
     // ANCHOR: here
 }
 
-// --snip--
-
-// ANCHOR_END: here
 struct Worker {
     id: usize,
-    thread: thread::JoinHandle<()>,
+    thread: thread::JoinHandle<Arc<Mutex<mpsc::Receiver<Job>>>>,
 }
 
-// ANCHOR: here
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         // --snip--

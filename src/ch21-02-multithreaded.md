@@ -527,7 +527,9 @@ closure. The code in Listing 21-17 won’t quite compile yet.
 </Listing>
 
 We’ve made some small and straightforward changes: we pass the receiver into
-`Worker::new`, and then we use it inside the closure.
+`Worker::new`, and then we use it inside the closure. This causes the type returned
+from `thread::spawn` to change too. So, we also updated the type for the `thread`
+field in the `Worker` struct.
 
 When we try to check this code, we get this error:
 
