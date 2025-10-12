@@ -9,7 +9,7 @@ use trpl::Either;
 // ANCHOR: implementation
 
 fn main() {
-    trpl::run(async {
+    trpl::block_on(async {
         let slow = async {
             trpl::sleep(Duration::from_secs(5)).await;
             "Finally finished"
@@ -24,14 +24,14 @@ fn main() {
     });
 }
 
+// ANCHOR: implementation
 async fn timeout<F: Future>(
     future_to_try: F,
     max_time: Duration,
 ) -> Result<F::Output, Duration> {
-    // ANCHOR: implementation
-    match trpl::race(future_to_try, trpl::sleep(max_time)).await {
+    match trpl::select(future_to_try, trpl::sleep(max_time)).await {
         Either::Left(output) => Ok(output),
         Either::Right(_) => Err(max_time),
     }
-    // ANCHOR_END: implementation
 }
+// ANCHOR_END: implementation

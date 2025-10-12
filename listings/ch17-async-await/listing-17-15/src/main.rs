@@ -3,7 +3,7 @@ extern crate trpl; // required for mdbook test
 use std::time::Duration;
 
 fn main() {
-    trpl::run(async {
+    trpl::block_on(async {
         let (tx, mut rx) = trpl::channel();
 
         let tx1 = tx.clone();
@@ -42,7 +42,8 @@ fn main() {
         };
 
         // ANCHOR: here
-        let futures = vec![tx1_fut, rx_fut, tx_fut];
+        let futures: Vec<Box<dyn Future<Output = ()>>> =
+            vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
 
         trpl::join_all(futures).await;
         // ANCHOR_END: here

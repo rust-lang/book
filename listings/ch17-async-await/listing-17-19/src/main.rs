@@ -9,7 +9,7 @@ use std::pin::{Pin, pin};
 use std::time::Duration;
 
 fn main() {
-    trpl::run(async {
+    trpl::block_on(async {
         let (tx, mut rx) = trpl::channel();
 
         let tx1 = tx.clone();

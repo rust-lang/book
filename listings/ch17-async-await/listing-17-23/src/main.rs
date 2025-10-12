@@ -3,7 +3,7 @@ extern crate trpl; // required for mdbook test
 use std::{thread, time::Duration};
 
 fn main() {
-    trpl::run(async {
+    trpl::block_on(async {
         // ANCHOR: slow-futures
         let a = async {
             println!("'a' started.");
@@ -24,7 +24,7 @@ fn main() {
             println!("'b' finished.");
         };
 
-        trpl::race(a, b).await;
+        trpl::select(a, b).await;
         // ANCHOR_END: slow-futures
     });
 }
