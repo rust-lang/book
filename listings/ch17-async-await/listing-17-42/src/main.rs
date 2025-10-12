@@ -13,7 +13,7 @@ fn main() {
         }
     });
 
-    trpl::run(async {
+    trpl::block_on(async {
         while let Some(message) = rx.recv().await {
             println!("{message}");
         }

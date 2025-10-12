@@ -3,7 +3,7 @@ extern crate trpl; // required for mdbook test
 use std::{thread, time::Duration};
 
 fn main() {
-    trpl::run(async {
+    trpl::block_on(async {
         // ANCHOR: yields
         let a = async {
             println!("'a' started.");
@@ -30,7 +30,7 @@ fn main() {
         };
         // ANCHOR_END: yields
 
-        trpl::race(a, b).await;
+        trpl::select(a, b).await;
     });
 }
 

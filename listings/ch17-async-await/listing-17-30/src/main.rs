@@ -1,7 +1,7 @@
 extern crate trpl; // required for mdbook test
 
 fn main() {
-    trpl::run(async {
+    trpl::block_on(async {
         // ANCHOR: stream
         let values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let iter = values.iter().map(|n| n * 2);

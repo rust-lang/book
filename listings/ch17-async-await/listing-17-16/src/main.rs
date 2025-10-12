@@ -3,7 +3,7 @@ extern crate trpl; // required for mdbook test
 use std::time::Duration;
 
 fn main() {
-    trpl::run(async {
+    trpl::block_on(async {
         let (tx, mut rx) = trpl::channel();
 
         let tx1 = tx.clone();
@@ -27,7 +27,10 @@ fn main() {
             }
         };
 
+        // ANCHOR: here
         let tx_fut = async move {
+            // -- snip --
+            // ANCHOR_END: here
             let vals = vec![
                 String::from("more"),
                 String::from("messages"),
@@ -39,7 +42,9 @@ fn main() {
                 tx.send(val).unwrap();
                 trpl::sleep(Duration::from_secs(1)).await;
             }
+        // ANCHOR: here
         };
+        // ANCHOR_END: here
 
         // ANCHOR: here
         let futures =
