@@ -625,6 +625,7 @@ wasi
 wasn
 weakt
 WeatherForecast
+webpage
 WebSocket
 whitespace
 wildcard
