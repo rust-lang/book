@@ -20,7 +20,7 @@ style to use when writing Rust: everyone formats their code using the tool.
 
 Rust installations include `rustfmt` by default, so you should already have the
 programs `rustfmt` and `cargo-fmt` on your system. These two commands are
-analagous to `rustc` and `cargo` in that `rustfmt` allows finer-grained control
+analogous to `rustc` and `cargo` in that `rustfmt` allows finer-grained control
 and `cargo-fmt` understands conventions of a project that uses Cargo. To format
 any Cargo project, enter the following:
 
@@ -42,34 +42,30 @@ example, consider this code:
 Filename: src/main.rs
 
 ```
-fn do_something() {}
-
 fn main() {
-    for i in 0..100 {
-        do_something();
-    }
+    let mut x = 42;
+    println!("{x}");
 }
 ```
 
-Here, we’re calling the `do_something` function 100 times, but we never use the
-variable `i` in the body of the `for` loop. Rust warns us about that:
+Here, we’re defining the variable `x` as mutable, but we never actually mutate
+it. Rust warns us about that:
 
 ```
 $ cargo build
    Compiling myprogram v0.1.0 (file:///projects/myprogram)
-warning: unused variable: `i`
- --> src/main.rs:4:9
+warning: variable does not need to be mutable
+ --> src/main.rs:2:9
   |
-4 |     for i in 0..100 {
-  |         ^ help: consider using `_i` instead
+2 |     let mut x = 0;
+  |         ----^
+  |         |
+  |         help: remove this `mut`
   |
-  = note: #[warn(unused_variables)] on by default
-
-    Finished dev [unoptimized + debuginfo] target(s) in 0.50s
+  = note: `#[warn(unused_mut)]` on by default
 ```
 
-The warning suggests that we use `_i` as a name instead: the underscore
-indicates that we intend for this variable to be unused. We can automatically
+The warning suggests that we remove the `mut` keyword. We can automatically
 apply that suggestion using the `rustfix` tool by running the command `cargo
 fix`:
 
@@ -86,16 +82,13 @@ code:
 Filename: src/main.rs
 
 ```
-fn do_something() {}
-
 fn main() {
-    for _i in 0..100 {
-        do_something();
-    }
+    let x = 42;
+    println!("{x}");
 }
 ```
 
-The `for` loop variable is now named `_i`, and the warning no longer appears.
+The variable `x` is now immutable, and the warning no longer appears.
 
 You can also use the `cargo fix` command to transition your code between
 different Rust editions. Editions are covered in Appendix E.
@@ -157,7 +150,7 @@ fn main() {
 ```
 
 For more information on Clippy, see its documentation at
-*https://github.com/rust-lang/rust-clippy**.*
+*https://github.com/rust-lang/rust-clippy*.
 
 ## IDE Integration Using rust-analyzer
 
@@ -171,5 +164,5 @@ languages to communicate with each other. Different clients can use
 Visit the `rust-analyzer` project’s home page at
 *https://rust-analyzer.github.io* for installation instructions, then install
 the language server support in your particular IDE. Your IDE will gain
-capabilities such as autocompletion, jump to definition, and inline errors
+capabilities such as autocompletion, jump to definition, and inline errors.
 

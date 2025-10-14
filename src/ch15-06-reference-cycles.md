@@ -1,7 +1,7 @@
 ## Reference Cycles Can Leak Memory
 
 Rust’s memory safety guarantees make it difficult, but not impossible, to
-accidentally create memory that is never cleaned up (known as a *memory leak*).
+accidentally create memory that is never cleaned up (known as a _memory leak_).
 Preventing memory leaks entirely is not one of Rust’s guarantees, meaning
 memory leaks are memory safe in Rust. We can see that Rust allows memory leaks
 by using `Rc<T>` and `RefCell<T>`: it’s possible to create references where
@@ -13,16 +13,15 @@ will never be dropped.
 
 Let’s look at how a reference cycle might happen and how to prevent it,
 starting with the definition of the `List` enum and a `tail` method in Listing
-15-25:
+15-25.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-25" file-name="src/main.rs" caption="A cons list definition that holds a `RefCell<T>` so we can modify what a `Cons` variant is referring to">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-25/src/main.rs}}
 ```
 
-<span class="caption">Listing 15-25: A cons list definition that holds a
-`RefCell<T>` so we can modify what a `Cons` variant is referring to</span>
+</Listing>
 
 We’re using another variation of the `List` definition from Listing 15-5. The
 second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
@@ -37,18 +36,17 @@ the list in `a`. Then it modifies the list in `a` to point to `b`, creating a
 reference cycle. There are `println!` statements along the way to show what the
 reference counts are at various points in this process.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-26" file-name="src/main.rs" caption="Creating a reference cycle of two `List` values pointing to each other">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-26/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-26: Creating a reference cycle of two `List`
-values pointing to each other</span>
+</Listing>
 
 We create an `Rc<List>` instance holding a `List` value in the variable `a`
 with an initial list of `5, Nil`. We then create an `Rc<List>` instance holding
-another `List` value in the variable `b` that contains the value 10 and points
+another `List` value in the variable `b` that contains the value `10` and points
 to the list in `a`.
 
 We modify `a` so it points to `b` instead of `Nil`, creating a cycle. We do
@@ -64,24 +62,24 @@ moment, we’ll get this output:
 {{#include ../listings/ch15-smart-pointers/listing-15-26/output.txt}}
 ```
 
-The reference count of the `Rc<List>` instances in both `a` and `b` are 2 after
+The reference count of the `Rc<List>` instances in both `a` and `b` is 2 after
 we change the list in `a` to point to `b`. At the end of `main`, Rust drops the
 variable `b`, which decreases the reference count of the `b` `Rc<List>` instance
 from 2 to 1. The memory that `Rc<List>` has on the heap won’t be dropped at
-this point, because its reference count is 1, not 0. Then Rust drops `a`, which
+this point because its reference count is 1, not 0. Then Rust drops `a`, which
 decreases the reference count of the `a` `Rc<List>` instance from 2 to 1 as
 well. This instance’s memory can’t be dropped either, because the other
 `Rc<List>` instance still refers to it. The memory allocated to the list will
-remain uncollected forever. To visualize this reference cycle, we’ve created a
+remain uncollected forever. To visualize this reference cycle, we’ve created the
 diagram in Figure 15-4.
 
-<img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
+<img alt="A rectangle labeled 'a' that points to a rectangle containing the integer 5. A rectangle labeled 'b' that points to a rectangle containing the integer 10. The rectangle containing 5 points to the rectangle containing 10, and the rectangle containing 10 points back to the rectangle containing 5, creating a cycle" src="img/trpl15-04.svg" class="center" />
 
 <span class="caption">Figure 15-4: A reference cycle of lists `a` and `b`
 pointing to each other</span>
 
-If you uncomment the last `println!` and run the program, Rust will try to
-print this cycle with `a` pointing to `b` pointing to `a` and so forth until it
+If you uncomment the last `println!` and run the program, Rust will try to print
+this cycle with `a` pointing to `b` pointing to `a` and so forth until it
 overflows the stack.
 
 Compared to a real-world program, the consequences of creating a reference cycle
@@ -109,17 +107,21 @@ Let’s look at an example using graphs made up of parent nodes and child nodes
 to see when non-ownership relationships are an appropriate way to prevent
 reference cycles.
 
-### Preventing Reference Cycles: Turning an `Rc<T>` into a `Weak<T>`
+<!-- Old headings. Do not remove or links may break. -->
 
-So far, we’ve demonstrated that calling `Rc::clone` increases the
-`strong_count` of an `Rc<T>` instance, and an `Rc<T>` instance is only cleaned
-up if its `strong_count` is 0. You can also create a *weak reference* to the
-value within an `Rc<T>` instance by calling `Rc::downgrade` and passing a
-reference to the `Rc<T>`. Strong references are how you can share ownership of
-an `Rc<T>` instance. Weak references don’t express an ownership relationship,
-and their count doesn’t affect when an `Rc<T>` instance is cleaned up. They
-won’t cause a reference cycle because any cycle involving some weak references
-will be broken once the strong reference count of values involved is 0.
+<a id="preventing-reference-cycles-turning-an-rct-into-a-weakt"></a>
+
+### Preventing Reference Cycles Using `Weak<T>`
+
+So far, we’ve demonstrated that calling `Rc::clone` increases the `strong_count`
+of an `Rc<T>` instance, and an `Rc<T>` instance is only cleaned up if its
+`strong_count` is 0. You can also create a weak reference to the value within
+an `Rc<T>` instance by calling `Rc::downgrade` and passing a reference to the
+`Rc<T>`. _Strong references_ are how you can share ownership of an `Rc<T>`
+instance. _Weak references_ don’t express an ownership relationship, and their
+count doesn’t affect when an `Rc<T>` instance is cleaned up. They won’t cause a
+reference cycle because any cycle involving some weak references will be broken
+once the strong reference count of values involved is 0.
 
 When you call `Rc::downgrade`, you get a smart pointer of type `Weak<T>`.
 Instead of increasing the `strong_count` in the `Rc<T>` instance by 1, calling
@@ -129,7 +131,7 @@ Instead of increasing the `strong_count` in the `Rc<T>` instance by 1, calling
 `Rc<T>` instance to be cleaned up.
 
 Because the value that `Weak<T>` references might have been dropped, to do
-anything with the value that a `Weak<T>` is pointing to, you must make sure the
+anything with the value that a `Weak<T>` is pointing to you must make sure the
 value still exists. Do this by calling the `upgrade` method on a `Weak<T>`
 instance, which will return an `Option<Rc<T>>`. You’ll get a result of `Some`
 if the `Rc<T>` value has not been dropped yet and a result of `None` if the
@@ -138,10 +140,14 @@ Rust will ensure that the `Some` case and the `None` case are handled, and
 there won’t be an invalid pointer.
 
 As an example, rather than using a list whose items know only about the next
-item, we’ll create a tree whose items know about their children items *and*
+item, we’ll create a tree whose items know about their children items _and_
 their parent items.
 
-#### Creating a Tree Data Structure: a `Node` with Child Nodes
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="creating-a-tree-data-structure-a-node-with-child-nodes"></a>
+
+#### Creating a Tree Data Structure
 
 To start, we’ll build a tree with nodes that know about their child nodes.
 We’ll create a struct named `Node` that holds its own `i32` value as well as
@@ -160,17 +166,16 @@ modify which nodes are children of another node, so we have a `RefCell<T>` in
 `children` around the `Vec<Rc<Node>>`.
 
 Next, we’ll use our struct definition and create one `Node` instance named
-`leaf` with the value 3 and no children, and another instance named `branch`
-with the value 5 and `leaf` as one of its children, as shown in Listing 15-27:
+`leaf` with the value `3` and no children, and another instance named `branch`
+with the value `5` and `leaf` as one of its children, as shown in Listing 15-27.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-27" file-name="src/main.rs" caption="Creating a `leaf` node with no children and a `branch` node with `leaf` as one of its children">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-27/src/main.rs:there}}
 ```
 
-<span class="caption">Listing 15-27: Creating a `leaf` node with no children
-and a `branch` node with `leaf` as one of its children</span>
+</Listing>
 
 We clone the `Rc<Node>` in `leaf` and store that in `branch`, meaning the
 `Node` in `leaf` now has two owners: `leaf` and `branch`. We can get from
@@ -205,16 +210,15 @@ like this:
 
 A node will be able to refer to its parent node but doesn’t own its parent.
 In Listing 15-28, we update `main` to use this new definition so the `leaf`
-node will have a way to refer to its parent, `branch`:
+node will have a way to refer to its parent, `branch`.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-28" file-name="src/main.rs" caption="A `leaf` node with a weak reference to its parent node, `branch`">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-28/src/main.rs:there}}
 ```
 
-<span class="caption">Listing 15-28: A `leaf` node with a weak reference to its
-parent node `branch`</span>
+</Listing>
 
 Creating the `leaf` node looks similar to Listing 15-27 with the exception of
 the `parent` field: `leaf` starts out without a parent, so we create a new,
@@ -229,13 +233,13 @@ leaf parent = None
 ```
 
 When we create the `branch` node, it will also have a new `Weak<Node>`
-reference in the `parent` field, because `branch` doesn’t have a parent node.
+reference in the `parent` field because `branch` doesn’t have a parent node.
 We still have `leaf` as one of the children of `branch`. Once we have the
 `Node` instance in `branch`, we can modify `leaf` to give it a `Weak<Node>`
 reference to its parent. We use the `borrow_mut` method on the
 `RefCell<Weak<Node>>` in the `parent` field of `leaf`, and then we use the
 `Rc::downgrade` function to create a `Weak<Node>` reference to `branch` from
-the `Rc<Node>` in `branch.`
+the `Rc<Node>` in `branch`.
 
 When we print the parent of `leaf` again, this time we’ll get a `Some` variant
 holding `branch`: now `leaf` can access its parent! When we print `leaf`, we
@@ -258,23 +262,22 @@ Let’s look at how the `strong_count` and `weak_count` values of the `Rc<Node>`
 instances change by creating a new inner scope and moving the creation of
 `branch` into that scope. By doing so, we can see what happens when `branch` is
 created and then dropped when it goes out of scope. The modifications are shown
-in Listing 15-29:
+in Listing 15-29.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="15-29" file-name="src/main.rs" caption="Creating `branch` in an inner scope and examining strong and weak reference counts">
 
 ```rust
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-29/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-29: Creating `branch` in an inner scope and
-examining strong and weak reference counts</span>
+</Listing>
 
 After `leaf` is created, its `Rc<Node>` has a strong count of 1 and a weak
 count of 0. In the inner scope, we create `branch` and associate it with
 `leaf`, at which point when we print the counts, the `Rc<Node>` in `branch`
 will have a strong count of 1 and a weak count of 1 (for `leaf.parent` pointing
 to `branch` with a `Weak<Node>`). When we print the counts in `leaf`, we’ll see
-it will have a strong count of 2, because `branch` now has a clone of the
+it will have a strong count of 2 because `branch` now has a clone of the
 `Rc<Node>` of `leaf` stored in `branch.children`, but will still have a weak
 count of 0.
 
@@ -285,7 +288,7 @@ don’t get any memory leaks!
 
 If we try to access the parent of `leaf` after the end of the scope, we’ll get
 `None` again. At the end of the program, the `Rc<Node>` in `leaf` has a strong
-count of 1 and a weak count of 0, because the variable `leaf` is now the only
+count of 1 and a weak count of 0 because the variable `leaf` is now the only
 reference to the `Rc<Node>` again.
 
 All of the logic that manages the counts and value dropping is built into

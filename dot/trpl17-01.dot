@@ -1,0 +1,41 @@
+digraph {
+   dpi = 300.0;
+   
+   rankdir = "LR";
+   
+   // makes ordering between subgraphs work
+   newrank = true;
+   
+   node [shape = diamond;];
+   
+   subgraph cluster_task_a {
+      label = "Task A";
+      
+      A1;
+      A2;
+      A3;
+      A4;
+      
+      A1 -> A2 -> A3 -> A4 -> A0 [style = invis;];
+      
+      // for vertical alignment purposes only
+      A0 [style = invis;];
+      
+      // Makes the heights line up between the boxes.
+      A4 -> A0 [style = invis;];
+   }
+   
+   subgraph cluster_task_b {
+      label = "Task B";
+      
+      B0 [style = invis;];
+      
+      B1;
+      B2;
+      B3;
+      
+      B0 -> B1 -> B2 -> B3 [style = invis;];
+   }
+   
+   A1 -> B1 -> A2 -> B2 -> A3 -> A4 -> B3;
+}

@@ -10,7 +10,7 @@ help: consider changing this to be a mutable reference in the `impl` method and 
    |
 2  ~     fn send(&mut self, msg: &str);
 3  | }
- ...
+...
 56 |     impl Messenger for MockMessenger {
 57 ~         fn send(&mut self, message: &str) {
    |

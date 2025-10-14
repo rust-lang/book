@@ -14,4 +14,4 @@ pub trait Iterator {
 ---
 
 You can find the latest version of this information
-[here](ch19-03-advanced-traits.html#specifying-placeholder-types-in-trait-definitions-with-associated-types).
+[here](ch20-02-advanced-traits.html#specifying-placeholder-types-in-trait-definitions-with-associated-types).

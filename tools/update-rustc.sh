@@ -2,6 +2,17 @@
 
 set -eu
 
+# Build book `trpl` crate dependency in the location where the listings will go
+# looking for it so they can compile correctly.
+echo 'Building book dependencies in tmp/packages...'
+mkdir -p tmp/packages
+cp -r packages/trpl tmp/packages/trpl
+cd tmp/packages/trpl
+ # hide the output; if it fails, debug then.
+cargo clean > /dev/null 2>&1
+cargo build > /dev/null 2>&1
+cd - > /dev/null
+
 # Build the book before making any changes for comparison of the output.
 echo 'Building book into tmp/book-before before updating...'
 mdbook build -d tmp/book-before
@@ -62,6 +73,19 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
     # Set the project file path to the projects directory plus the crate name
     # instead of a path to the computer of whoever is running this
     sed -i '' -E -e 's@(Compiling|Checking) ([^\)]*) v0.1.0 (.*)@\1 \2 v0.1.0 (file:///projects/\2)@' "${full_output_path}"
+
+    # Likewise, use a "default" installation directory for rustup's install
+    # location so the version of the source is not a path on the computer of
+    # whoever is doing the update. This does two substitutions:
+    #
+    # - Replaces the path up to `.rustup/toolchains` with `file:///home`, while
+    #   preserving leading spaces and the `-->`.
+    # - Replaces the version-and-architecture-triple with just the version, so
+    #   e.g. `1.82-aarch64-apple-darwin` becomes `1.82`.
+    sed -i '' -E -e 's@^([[:space:]]*-->[[:space:]]+).*(\.rustup/toolchains/[[:digit:]]+\.[[:digit:]]+)([^/]*)@\1file:///home/\2@' "${full_output_path}"
+
+    # Similarly, replace Miri paths
+    sed -i '' -E -e "s@Running \`(.*)\.rustup/toolchains/nightly([^/]*)/bin/cargo-miri runner target/miri/([^/]*)/debug/([^/]*)@Running \`file:///home/.rustup/toolchains/nightly/bin/cargo-miri runner target/miri/debug/\4@" "${full_output_path}"
 
     # Restore the previous compile time, if there is one
     if [ -n  "${compile_time}" ]; then

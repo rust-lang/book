@@ -1,6 +1,6 @@
 [book]
 title = "The Rust Programming Language"
-authors = ["Steve Klabnik", "Carol Nichols", "Contributions from the Rust Community"]
+authors = ["Steve Klabnik", "Carol Nichols", "Chris Krycho", "Contributions from the Rust Community"]
 src = "../src" # needs to be explicit (it is implicit in `/book.toml`).
 
 [output.html]
@@ -13,3 +13,14 @@ build-dir = "../tmp"
 
 [preprocessor.trpl-listing]
 output-mode = "simple"
+
+# Only used in this version, *not* in the root `book.toml`, because its job is
+# to remove `<figure>` and `<figcaption>` markup from the version we send them.
+[preprocessor.trpl-figure]
+output-mode = "simple"
+
+[preprocessor.trpl-heading]
+output-mode = "simple"
+
+[rust]
+edition = "2024"

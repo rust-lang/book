@@ -11,6 +11,7 @@ failures:
 
 ---- tests::this_test_will_fail stdout ----
 I got the value 8
+
 thread 'tests::this_test_will_fail' panicked at src/lib.rs:19:9:
 assertion `left == right` failed
   left: 10

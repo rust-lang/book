@@ -15,4 +15,4 @@ fn generic<T: ?Sized>(t: &T) {
 ---
 
 You can find the latest version of this information
-[here](ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait).
+[here](ch20-03-advanced-types.html#dynamically-sized-types-and-the-sized-trait).

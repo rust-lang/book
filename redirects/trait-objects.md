@@ -60,9 +60,9 @@ fn main() {
 
 Here are the relevant sections in the new and old books:
 
-* **[in the current edition: Ch 17.02 — Trait Objects][2]**
+* **[in the current edition: Ch 18.02 — Trait Objects][2]**
 * <small>[In the first edition: Ch 3.22 — Trait Objects][1]</small>
 
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/trait-objects.html
-[2]: ch17-02-trait-objects.html
+[2]: ch18-02-trait-objects.html

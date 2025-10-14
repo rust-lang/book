@@ -6,6 +6,6 @@ struct MoveMessage {
 }
 struct WriteMessage(String); // tuple struct
 struct ChangeColorMessage(i32, i32, i32); // tuple struct
-                                          // ANCHOR_END: here
+// ANCHOR_END: here
 
 fn main() {}

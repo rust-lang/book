@@ -5,7 +5,7 @@ developer.
 
 ### Stability Without Stagnation
 
-As a language, Rust cares a *lot* about the stability of your code. We want
+As a language, Rust cares a _lot_ about the stability of your code. We want
 Rust to be a rock-solid foundation you can build on, and if things were
 constantly changing, that would be impossible. At the same time, if we can’t
 experiment with new features, we may not find out important flaws until after
@@ -18,14 +18,14 @@ bring you new features, fewer bugs, and faster compile times.
 
 ### Choo, Choo! Release Channels and Riding the Trains
 
-Rust development operates on a *train schedule*. That is, all development is
+Rust development operates on a _train schedule_. That is, all development is
 done on the `master` branch of the Rust repository. Releases follow a software
 release train model, which has been used by Cisco IOS and other software
-projects. There are three *release channels* for Rust:
+projects. There are three _release channels_ for Rust:
 
-* Nightly
-* Beta
-* Stable
+- Nightly
+- Beta
+- Stable
 
 Most Rust developers primarily use the stable channel, but those who want to
 try out experimental new features may use nightly or beta.
@@ -85,7 +85,7 @@ stable:                                *
 ```
 
 Hooray! Rust 1.5 is done! However, we’ve forgotten one thing: because the six
-weeks have gone by, we also need a new beta of the *next* version of Rust, 1.6.
+weeks have gone by, we also need a new beta of the _next_ version of Rust, 1.6.
 So after `stable` branches off of `beta`, the next version of `beta` branches
 off of `nightly` again:
 
@@ -125,7 +125,7 @@ each version is supported for six weeks.
 There’s one more catch with this release model: unstable features. Rust uses a
 technique called “feature flags” to determine what features are enabled in a
 given release. If a new feature is under active development, it lands on
-`master`, and therefore, in nightly, but behind a *feature flag*. If you, as a
+`master`, and therefore, in nightly, but behind a _feature flag_. If you, as a
 user, wish to try out the work-in-progress feature, you can, but you must be
 using a nightly release of Rust and annotate your source code with the
 appropriate flag to opt in.
@@ -151,7 +151,7 @@ install nightly, for example:
 $ rustup toolchain install nightly
 ```
 
-You can see all of the *toolchains* (releases of Rust and associated
+You can see all of the _toolchains_ (releases of Rust and associated
 components) you have installed with `rustup` as well. Here’s an example on one
 of your authors’ Windows computer:
 
@@ -174,20 +174,19 @@ $ rustup override set nightly
 ```
 
 Now, every time you call `rustc` or `cargo` inside of
-*~/projects/needs-nightly*, `rustup` will make sure that you are using nightly
+_~/projects/needs-nightly_, `rustup` will make sure that you are using nightly
 Rust, rather than your default of stable Rust. This comes in handy when you
 have a lot of Rust projects!
 
 ### The RFC Process and Teams
 
 So how do you learn about these new features? Rust’s development model follows
-a *Request For Comments (RFC) process*. If you’d like an improvement in Rust,
+a _Request For Comments (RFC) process_. If you’d like an improvement in Rust,
 you can write up a proposal, called an RFC.
 
 Anyone can write RFCs to improve Rust, and the proposals are reviewed and
 discussed by the Rust team, which is comprised of many topic subteams. There’s
-a full list of the teams [on Rust’s
-website](https://www.rust-lang.org/governance), which includes teams for
+a full list of the teams [on Rust’s website](https://www.rust-lang.org/governance), which includes teams for
 each area of the project: language design, compiler implementation,
 infrastructure, documentation, and more. The appropriate team reads the
 proposal and the comments, writes some comments of their own, and eventually,

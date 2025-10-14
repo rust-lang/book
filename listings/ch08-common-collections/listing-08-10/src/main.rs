@@ -5,5 +5,5 @@ fn main() {
 
         // do stuff with v
     } // <- v goes out of scope and is freed here
-      // ANCHOR_END: here
+    // ANCHOR_END: here
 }

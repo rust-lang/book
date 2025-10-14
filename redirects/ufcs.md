@@ -45,4 +45,4 @@ fn main() {
 ---
 
 You can find the latest version of this information
-[here](ch19-03-advanced-traits.html#fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name).
+[here](ch20-02-advanced-traits.html#fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name).

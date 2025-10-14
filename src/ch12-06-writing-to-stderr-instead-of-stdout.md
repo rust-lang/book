@@ -1,18 +1,22 @@
-## Writing Error Messages to Standard Error Instead of Standard Output
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="writing-error-messages-to-standard-error-instead-of-standard-output"></a>
+
+## Redirecting Errors to Standard Error
 
 At the moment, we’re writing all of our output to the terminal using the
-`println!` macro. In most terminals, there are two kinds of output: *standard
-output* (`stdout`) for general information and *standard error* (`stderr`) for
+`println!` macro. In most terminals, there are two kinds of output: _standard
+output_ (`stdout`) for general information and _standard error_ (`stderr`) for
 error messages. This distinction enables users to choose to direct the
 successful output of a program to a file but still print error messages to the
 screen.
 
-The `println!` macro is only capable of printing to standard output, so we
-have to use something else to print to standard error.
+The `println!` macro is only capable of printing to standard output, so we have
+to use something else to print to standard error.
 
 ### Checking Where Errors Are Written
 
-First, let’s observe how the content printed by `minigrep` is currently being
+First let’s observe how the content printed by `minigrep` is currently being
 written to standard output, including any error messages we want to write to
 standard error instead. We’ll do that by redirecting the standard output stream
 to a file while intentionally causing an error. We won’t redirect the standard
@@ -21,11 +25,11 @@ the screen.
 
 Command line programs are expected to send error messages to the standard error
 stream so we can still see error messages on the screen even if we redirect the
-standard output stream to a file. Our program is not currently well-behaved:
+standard output stream to a file. Our program is not currently well behaved:
 we’re about to see that it saves the error message output to a file instead!
 
 To demonstrate this behavior, we’ll run the program with `>` and the file path,
-*output.txt*, that we want to redirect the standard output stream to. We won’t
+_output.txt_, that we want to redirect the standard output stream to. We won’t
 pass any arguments, which should cause an error:
 
 ```console
@@ -33,9 +37,9 @@ $ cargo run > output.txt
 ```
 
 The `>` syntax tells the shell to write the contents of standard output to
-*output.txt* instead of the screen. We didn’t see the error message we were
+_output.txt_ instead of the screen. We didn’t see the error message we were
 expecting printed to the screen, so that means it must have ended up in the
-file. This is what *output.txt* contains:
+file. This is what _output.txt_ contains:
 
 ```text
 Problem parsing arguments: not enough arguments
@@ -70,7 +74,7 @@ $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
 
-Now we see the error onscreen and *output.txt* contains nothing, which is the
+Now we see the error onscreen and _output.txt_ contains nothing, which is the
 behavior we expect of command line programs.
 
 Let’s run the program again with arguments that don’t cause an error but still
@@ -80,7 +84,7 @@ redirect standard output to a file, like so:
 $ cargo run -- to poem.txt > output.txt
 ```
 
-We won’t see any output to the terminal, and *output.txt* will contain our
+We won’t see any output to the terminal, and _output.txt_ will contain our
 results:
 
 <span class="filename">Filename: output.txt</span>

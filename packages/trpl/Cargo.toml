@@ -1,0 +1,28 @@
+[package]
+name = "trpl"
+version = "0.3.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+description = "A support crate for The Rust Programming Language book"
+readme = "README.md"
+repository = "https://github.com/rust-lang/book"
+authors = ["Chris Krycho <hello@chriskrycho.com>"]
+
+[dependencies]
+futures = "0.3"
+reqwest = { version = "0.12", default-features = false, features = [
+    "rustls-tls",
+] }
+scraper = "0.20"
+tokio = { version = "1", default-features = false, features = [
+    "fs",
+    "rt-multi-thread",
+    "sync",
+    "time",
+] }
+tokio-stream = "0.1"
+
+# This package is built as a standalone package to publish to crates.io, and is
+# also built as a path dependency for distribution with Rust, so it must not be
+# built as part of the `rust-lang/book` or `rust-lang/rust` workspaces.
+[workspace]

@@ -12,15 +12,19 @@ implemented as a collection of bytes, plus some methods to provide useful
 functionality when those bytes are interpreted as text. In this section, we’ll
 talk about the operations on `String` that every collection type has, such as
 creating, updating, and reading. We’ll also discuss the ways in which `String`
-is different from the other collections, namely how indexing into a `String` is
+is different from the other collections, namely, how indexing into a `String` is
 complicated by the differences between how people and computers interpret
 `String` data.
 
-### What Is a String?
+<!-- Old headings. Do not remove or links may break. -->
 
-We’ll first define what we mean by the term *string*. Rust has only one string
+<a id="what-is-a-string"></a>
+
+### Defining Strings
+
+We’ll first define what we mean by the term _string_. Rust has only one string
 type in the core language, which is the string slice `str` that is usually seen
-in its borrowed form `&str`. In Chapter 4, we talked about *string slices*,
+in its borrowed form, `&str`. In Chapter 4, we talked about string slices,
 which are references to some UTF-8 encoded string data stored elsewhere. String
 literals, for example, are stored in the program’s binary and are therefore
 string slices.
@@ -41,11 +45,13 @@ of bytes with some extra guarantees, restrictions, and capabilities. An example
 of a function that works the same way with `Vec<T>` and `String` is the `new`
 function to create an instance, shown in Listing 8-11.
 
+<Listing number="8-11" caption="Creating a new, empty `String`">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-11: Creating a new, empty `String`</span>
+</Listing>
 
 This line creates a new, empty string called `s`, into which we can then load
 data. Often, we’ll have some initial data with which we want to start the
@@ -53,12 +59,13 @@ string. For that, we use the `to_string` method, which is available on any type
 that implements the `Display` trait, as string literals do. Listing 8-12 shows
 two examples.
 
+<Listing number="8-12" caption="Using the `to_string` method to create a `String` from a string literal">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-12/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-12: Using the `to_string` method to create a
-`String` from a string literal</span>
+</Listing>
 
 This code creates a string containing `initial contents`.
 
@@ -66,12 +73,13 @@ We can also use the function `String::from` to create a `String` from a string
 literal. The code in Listing 8-13 is equivalent to the code in Listing 8-12
 that uses `to_string`.
 
+<Listing number="8-13" caption="Using the `String::from` function to create a `String` from a string literal">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-13/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-13: Using the `String::from` function to create
-a `String` from a string literal</span>
+</Listing>
 
 Because strings are used for so many things, we can use many different generic
 APIs for strings, providing us with a lot of options. Some of them can seem
@@ -82,12 +90,13 @@ readability.
 Remember that strings are UTF-8 encoded, so we can include any properly encoded
 data in them, as shown in Listing 8-14.
 
+<Listing number="8-14" caption="Storing greetings in different languages in strings">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-14: Storing greetings in different languages in
-strings</span>
+</Listing>
 
 All of these are valid `String` values.
 
@@ -97,57 +106,69 @@ A `String` can grow in size and its contents can change, just like the contents
 of a `Vec<T>`, if you push more data into it. In addition, you can conveniently
 use the `+` operator or the `format!` macro to concatenate `String` values.
 
-#### Appending to a String with `push_str` and `push`
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="appending-to-a-string-with-push_str-and-push"></a>
+
+#### Appending with `push_str` or `push`
 
 We can grow a `String` by using the `push_str` method to append a string slice,
 as shown in Listing 8-15.
+
+<Listing number="8-15" caption="Appending a string slice to a `String` using the `push_str` method">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-15/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-15: Appending a string slice to a `String`
-using the `push_str` method</span>
+</Listing>
 
 After these two lines, `s` will contain `foobar`. The `push_str` method takes a
 string slice because we don’t necessarily want to take ownership of the
 parameter. For example, in the code in Listing 8-16, we want to be able to use
 `s2` after appending its contents to `s1`.
 
+<Listing number="8-16" caption="Using a string slice after appending its contents to a `String`">
+
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-16/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-16: Using a string slice after appending its
-contents to a `String`</span>
+</Listing>
 
 If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
 
 The `push` method takes a single character as a parameter and adds it to the
-`String`. Listing 8-17 adds the letter *l* to a `String` using the `push`
+`String`. Listing 8-17 adds the letter _l_ to a `String` using the `push`
 method.
+
+<Listing number="8-17" caption="Adding one character to a `String` value using `push`">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-17/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-17: Adding one character to a `String` value
-using `push`</span>
+</Listing>
 
 As a result, `s` will contain `lol`.
 
-#### Concatenation with the `+` Operator or the `format!` Macro
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="concatenation-with-the--operator-or-the-format-macro"></a>
+
+#### Concatenating with `+` or `format!`
 
 Often, you’ll want to combine two existing strings. One way to do so is to use
 the `+` operator, as shown in Listing 8-18.
+
+<Listing number="8-18" caption="Using the `+` operator to combine two `String` values into a new `String` value">
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-18/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-18: Using the `+` operator to combine two
-`String` values into a new `String` value</span>
+</Listing>
 
 The string `s3` will contain `Hello, world!`. The reason `s1` is no longer
 valid after the addition, and the reason we used a reference to `s2`, has to do
@@ -165,21 +186,22 @@ call this method with `String` values. We’ll discuss generics in Chapter 10.
 This signature gives us the clues we need in order to understand the tricky
 bits of the `+` operator.
 
-First, `s2` has an `&`, meaning that we’re adding a *reference* of the second
+First, `s2` has an `&`, meaning that we’re adding a reference of the second
 string to the first string. This is because of the `s` parameter in the `add`
-function: we can only add a `&str` to a `String`; we can’t add two `String`
-values together. But wait—the type of `&s2` is `&String`, not `&str`, as
-specified in the second parameter to `add`. So why does Listing 8-18 compile?
+function: We can only add a string slice to a `String`; we can’t add two
+`String` values together. But wait—the type of `&s2` is `&String`, not `&str`,
+as specified in the second parameter to `add`. So, why does Listing 8-18
+compile?
 
 The reason we’re able to use `&s2` in the call to `add` is that the compiler
-can *coerce* the `&String` argument into a `&str`. When we call the `add`
-method, Rust uses a *deref coercion*, which here turns `&s2` into `&s2[..]`.
-We’ll discuss deref coercion in more depth in Chapter 15. Because `add` does
-not take ownership of the `s` parameter, `s2` will still be a valid `String`
-after this operation.
+can coerce the `&String` argument into a `&str`. When we call the `add` method,
+Rust uses a deref coercion, which here turns `&s2` into `&s2[..]`. We’ll
+discuss deref coercion in more depth in Chapter 15. Because `add` does not take
+ownership of the `s` parameter, `s2` will still be a valid `String` after this
+operation.
 
 Second, we can see in the signature that `add` takes ownership of `self`
-because `self` does *not* have an `&`. This means `s1` in Listing 8-18 will be
+because `self` does _not_ have an `&`. This means `s1` in Listing 8-18 will be
 moved into the `add` call and will no longer be valid after that. So, although
 `let s3 = s1 + &s2;` looks like it will copy both strings and create a new one,
 this statement actually takes ownership of `s1`, appends a copy of the contents
@@ -215,12 +237,13 @@ string by referencing them by index is a valid and common operation. However,
 if you try to access parts of a `String` using indexing syntax in Rust, you’ll
 get an error. Consider the invalid code in Listing 8-19.
 
+<Listing number="8-19" caption="Attempting to use indexing syntax with a `String`">
+
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-19/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-19: Attempting to use indexing syntax with a
-String</span>
+</Listing>
 
 This code will result in the following error:
 
@@ -228,9 +251,8 @@ This code will result in the following error:
 {{#include ../listings/ch08-common-collections/listing-08-19/output.txt}}
 ```
 
-The error and the note tell the story: Rust strings don’t support indexing. But
-why not? To answer that question, we need to discuss how Rust stores strings in
-memory.
+The error tells the story: Rust strings don’t support indexing. But why not? To
+answer that question, we need to discuss how Rust stores strings in memory.
 
 #### Internal Representation
 
@@ -242,16 +264,16 @@ encoded UTF-8 example strings from Listing 8-14. First, this one:
 ```
 
 In this case, `len` will be `4`, which means the vector storing the string
-`"Hola"` is 4 bytes long. Each of these letters takes one byte when encoded in
+`"Hola"` is 4 bytes long. Each of these letters takes 1 byte when encoded in
 UTF-8. The following line, however, may surprise you (note that this string
-begins with the capital Cyrillic letter *Ze*, not the number 3):
+begins with the capital Cyrillic letter _Ze_, not the number 3):
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:russian}}
 ```
 
 If you were asked how long the string is, you might say 12. In fact, Rust’s
-answer is 24: that’s the number of bytes it takes to encode “Здравствуйте” in
+answer is 24: That’s the number of bytes it takes to encode “Здравствуйте” in
 UTF-8, because each Unicode scalar value in that string takes 2 bytes of
 storage. Therefore, an index into the string’s bytes will not always correlate
 to a valid Unicode scalar value. To demonstrate, consider this invalid Rust
@@ -268,18 +290,22 @@ seem that `answer` should in fact be `208`, but `208` is not a valid character
 on its own. Returning `208` is likely not what a user would want if they asked
 for the first letter of this string; however, that’s the only data that Rust
 has at byte index 0. Users generally don’t want the byte value returned, even
-if the string contains only Latin letters: if `&"hello"[0]` were valid code
-that returned the byte value, it would return `104`, not `h`.
+if the string contains only Latin letters: If `&"hi"[0]` were valid code that
+returned the byte value, it would return `104`, not `h`.
 
 The answer, then, is that to avoid returning an unexpected value and causing
 bugs that might not be discovered immediately, Rust doesn’t compile this code
 at all and prevents misunderstandings early in the development process.
 
-#### Bytes and Scalar Values and Grapheme Clusters! Oh My!
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="bytes-and-scalar-values-and-grapheme-clusters-oh-my"></a>
+
+#### Bytes, Scalar Values, and Grapheme Clusters
 
 Another point about UTF-8 is that there are actually three relevant ways to
 look at strings from Rust’s perspective: as bytes, scalar values, and grapheme
-clusters (the closest thing to what we would call *letters*).
+clusters (the closest thing to what we would call _letters_).
 
 If we look at the Hindi word “नमस्ते” written in the Devanagari script, it is
 stored as a vector of `u8` values that looks like this:
@@ -298,7 +324,7 @@ bytes look like this:
 ```
 
 There are six `char` values here, but the fourth and sixth are not letters:
-they’re diacritics that don’t make sense on their own. Finally, if we look at
+They’re diacritics that don’t make sense on their own. Finally, if we look at
 them as grapheme clusters, we’d get what a person would call the four letters
 that make up the Hindi word:
 
@@ -332,8 +358,8 @@ let hello = "Здравствуйте";
 let s = &hello[0..4];
 ```
 
-Here, `s` will be a `&str` that contains the first four bytes of the string.
-Earlier, we mentioned that each of these characters was two bytes, which means
+Here, `s` will be a `&str` that contains the first 4 bytes of the string.
+Earlier, we mentioned that each of these characters was 2 bytes, which means
 `s` will be `Зд`.
 
 If we were to try to slice only part of a character’s bytes with something like
@@ -347,7 +373,11 @@ index were accessed in a vector:
 You should use caution when creating string slices with ranges, because doing
 so can crash your program.
 
-### Methods for Iterating Over Strings
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="methods-for-iterating-over-strings"></a>
+
+### Iterating Over Strings
 
 The best way to operate on pieces of strings is to be explicit about whether
 you want characters or bytes. For individual Unicode scalar values, use the
@@ -376,7 +406,7 @@ for b in "Зд".bytes() {
 }
 ```
 
-This code will print the four bytes that make up this string:
+This code will print the 4 bytes that make up this string:
 
 ```text
 208
@@ -386,14 +416,18 @@ This code will print the four bytes that make up this string:
 ```
 
 But be sure to remember that valid Unicode scalar values may be made up of more
-than one byte.
+than 1 byte.
 
 Getting grapheme clusters from strings, as with the Devanagari script, is
 complex, so this functionality is not provided by the standard library. Crates
 are available on [crates.io](https://crates.io/)<!-- ignore --> if this is the
 functionality you need.
 
-### Strings Are Not So Simple
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="strings-are-not-so-simple"></a>
+
+### Handling the Complexities of Strings
 
 To summarize, strings are complicated. Different programming languages make
 different choices about how to present this complexity to the programmer. Rust

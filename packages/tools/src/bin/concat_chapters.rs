@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 use std::env;
-use std::fs::{create_dir, read_dir, File};
+use std::fs::{File, create_dir, read_dir};
 use std::io;
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};

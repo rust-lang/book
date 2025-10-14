@@ -39,7 +39,7 @@ for your password. If the install is successful, the following line will appear:
 Rust is installed now. Great!
 ```
 
-You will also need a *linker*, which is a program that Rust uses to join its
+You will also need a _linker_, which is a program that Rust uses to join its
 compiled outputs into one file. It is likely you already have one. If you get
 linker errors, you should install a C compiler, which will typically include a
 linker. A C compiler is also useful because some common Rust packages depend on
@@ -57,13 +57,15 @@ the `build-essential` package.
 
 ### Installing `rustup` on Windows
 
-On Windows, go to [https://www.rust-lang.org/tools/install][install] and follow
-the instructions for installing Rust. At some point in the installation, you’ll
-be prompted to install Visual Studio. This provides a linker and the native
-libraries needed to compile programs. If you need more help with this step, see
-[https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]
+On Windows, go to [https://www.rust-lang.org/tools/install][install]<!-- ignore
+--> and follow the instructions for installing Rust. At some point in the
+installation, you’ll be prompted to install Visual Studio. This provides a
+linker and the native libraries needed to compile programs. If you need more
+help with this step, see
+[https://rust-lang.github.io/rustup/installation/windows-msvc.html][msvc]<!--
+ignore -->.
 
-The rest of this book uses commands that work in both *cmd.exe* and PowerShell.
+The rest of this book uses commands that work in both _cmd.exe_ and PowerShell.
 If there are specific differences, we’ll explain which to use.
 
 ### Troubleshooting
@@ -124,7 +126,10 @@ shell:
 $ rustup self uninstall
 ```
 
-### Local Documentation
+<!-- Old headings. Do not remove or links may break. -->
+<a id="local-documentation"></a>
+
+### Reading the Local Documentation
 
 The installation of Rust also includes a local copy of the documentation so
 that you can read it offline. Run `rustup doc` to open the local documentation
@@ -134,7 +139,39 @@ Any time a type or function is provided by the standard library and you’re not
 sure what it does or how to use it, use the application programming interface
 (API) documentation to find out!
 
+<!-- Old headings. Do not remove or links may break. -->
+<a id="text-editors-and-integrated-development-environments"></a>
+
+### Using Text Editors and IDEs
+
+This book makes no assumptions about what tools you use to author Rust code.
+Just about any text editor will get the job done! However, many text editors and
+integrated development environments (IDEs) have built-in support for Rust. You
+can always find a fairly current list of many editors and IDEs on [the tools
+page][tools] on the Rust website.
+
+### Working Offline with This Book
+
+In several examples, we will use Rust packages beyond the standard library. To
+work through those examples, you will either need to have an internet connection
+or to have downloaded those dependencies ahead of time. To download the
+dependencies ahead of time, you can run the following commands. (We’ll explain
+what `cargo` is and what each of these commands does in detail later.)
+
+```console
+$ cargo new get-dependencies
+$ cd get-dependencies
+$ cargo add rand@0.8.5 trpl@0.2.0
+```
+
+This will cache the downloads for these packages so you will not need to
+download them later. Once you have run this command, you do not need to keep the
+`get-dependencies` folder. If you have run this command, you can use the
+`--offline` flag with all `cargo` commands in the rest of the book to use these
+cached versions instead of attempting to use the network.
+
 [otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 [install]: https://www.rust-lang.org/tools/install
 [msvc]: https://rust-lang.github.io/rustup/installation/windows-msvc.html
 [community]: https://www.rust-lang.org/community
+[tools]: https://www.rust-lang.org/tools

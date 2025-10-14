@@ -6,1989 +6,2537 @@ directory, so all fixes need to be made in `/src/`.
 
 [TOC]
 
-# Final Project: Building a Multithreaded Web Server
+# Advanced Features
 
-It’s been a long journey, but we’ve reached the end of the book. In this
-chapter, we’ll build one more project together to demonstrate some of the
-concepts we covered in the final chapters, as well as recap some earlier
-lessons.
+By now, you’ve learned the most commonly used parts of the Rust programming
+language. Before we do one more project, in Chapter 21, we’ll look at a few
+aspects of the language you might run into every once in a while, but may not
+use every day. You can use this chapter as a reference for when you encounter
+any unknowns. The features covered here are useful in very specific situations.
+Although you might not reach for them often, we want to make sure you have a
+grasp of all the features Rust has to offer.
 
-For our final project, we’ll make a web server that says “hello” and looks like
-Figure 20-1 in a web browser.
+In this chapter, we’ll cover:
 
-Figure 20-1: Our final shared project
+* Unsafe Rust: how to opt out of some of Rust’s guarantees and take
+  responsibility for manually upholding those guarantees
+* Advanced traits: associated types, default type parameters, fully qualified
+  syntax, supertraits, and the newtype pattern in relation to traits
+* Advanced types: more about the newtype pattern, type aliases, the never type,
+  and dynamically sized types
+* Advanced functions and closures: function pointers and returning closures
+* Macros: ways to define code that defines more code at compile time
 
-Here is our plan for building the web server:
+It’s a panoply of Rust features with something for everyone! Let’s dive in!
 
-1. Learn a bit about TCP and HTTP.
-1. Listen for TCP connections on a socket.
-1. Parse a small number of HTTP requests.
-1. Create a proper HTTP response.
-1. Improve the throughput of our server with a thread pool.
+## Unsafe Rust
 
-Before we get started, we should mention one detail: the method we’ll use won’t
-be the best way to build a web server with Rust. Community members have
-published a number of production-ready crates available at *https://crates.io*
-that provide more complete web server and thread pool implementations than
-we’ll build. However, our intention in this chapter is to help you learn, not
-to take the easy route. Because Rust is a systems programming language, we can
-choose the level of abstraction we want to work with and can go to a lower
-level than is possible or practical in other languages. We’ll therefore write
-the basic HTTP server and thread pool manually so you can learn the general
-ideas and techniques behind the crates you might use in the future.
+All the code we’ve discussed so far has had Rust’s memory safety guarantees
+enforced at compile time. However, Rust has a second language hidden inside it
+that doesn’t enforce these memory safety guarantees: it’s called *unsafe Rust*
+and works just like regular Rust, but gives us extra superpowers.
 
-## Building a Single-Threaded Web Server
+Unsafe Rust exists because, by nature, static analysis is conservative. When
+the compiler tries to determine whether or not code upholds the guarantees,
+it’s better for it to reject some valid programs than to accept some invalid
+programs. Although the code *might* be okay, if the Rust compiler doesn’t have
+enough information to be confident, it will reject the code. In these cases,
+you can use unsafe code to tell the compiler, “Trust me, I know what I’m
+doing.” Be warned, however, that you use unsafe Rust at your own risk: if you
+use unsafe code incorrectly, problems can occur due to memory unsafety, such as
+null pointer dereferencing.
 
-We’ll start by getting a single-threaded web server working. Before we begin,
-let’s look at a quick overview of the protocols involved in building web
-servers. The details of these protocols are beyond the scope of this book, but
-a brief overview will give you the information you need.
+Another reason Rust has an unsafe alter ego is that the underlying computer
+hardware is inherently unsafe. If Rust didn’t let you do unsafe operations, you
+couldn’t do certain tasks. Rust needs to allow you to do low-level systems
+programming, such as directly interacting with the operating system or even
+writing your own operating system. Working with low-level systems programming
+is one of the goals of the language. Let’s explore what we can do with unsafe
+Rust and how to do it.
 
-The two main protocols involved in web servers are *Hypertext Transfer
-Protocol* *(HTTP)* and *Transmission Control Protocol* *(TCP)*. Both protocols
-are *request-response* protocols, meaning a *client* initiates requests and a
-*server* listens to the requests and provides a response to the client. The
-contents of those requests and responses are defined by the protocols.
+### Unsafe Superpowers
 
-TCP is the lower-level protocol that describes the details of how information
-gets from one server to another but doesn’t specify what that information is.
-HTTP builds on top of TCP by defining the contents of the requests and
-responses. It’s technically possible to use HTTP with other protocols, but in
-the vast majority of cases, HTTP sends its data over TCP. We’ll work with the
-raw bytes of TCP and HTTP requests and responses.
+To switch to unsafe Rust, use the `unsafe` keyword and then start a new block
+that holds the unsafe code. You can take five actions in unsafe Rust that you
+can’t in safe Rust, which we call *unsafe superpowers*. Those superpowers
+include the ability to:
 
-### Listening to the TCP Connection
+1. Dereference a raw pointer
+1. Call an unsafe function or method
+1. Access or modify a mutable static variable
+1. Implement an unsafe trait
+1. Access fields of `union`s
 
-Our web server needs to listen to a TCP connection, so that’s the first part
-we’ll work on. The standard library offers a `std::net` module that lets us do
-this. Let’s make a new project in the usual fashion:
+It’s important to understand that `unsafe` doesn’t turn off the borrow checker
+or disable any of Rust’s other safety checks: if you use a reference in unsafe
+code, it will still be checked. The `unsafe` keyword only gives you access to
+these five features that are then not checked by the compiler for memory
+safety. You’ll still get some degree of safety inside an unsafe block.
+
+In addition, `unsafe` does not mean the code inside the block is necessarily
+dangerous or that it will definitely have memory safety problems: the intent is
+that as the programmer, you’ll ensure the code inside an `unsafe` block will
+access memory in a valid way.
+
+People are fallible and mistakes will happen, but by requiring these five
+unsafe operations to be inside blocks annotated with `unsafe`, you’ll know that
+any errors related to memory safety must be within an `unsafe` block. Keep
+`unsafe` blocks small; you’ll be thankful later when you investigate memory
+bugs.
+
+To isolate unsafe code as much as possible, it’s best to enclose such code
+within a safe abstraction and provide a safe API, which we’ll discuss later in
+the chapter when we examine unsafe functions and methods. Parts of the standard
+library are implemented as safe abstractions over unsafe code that has been
+audited. Wrapping unsafe code in a safe abstraction prevents uses of `unsafe`
+from leaking out into all the places that you or your users might want to use
+the functionality implemented with `unsafe` code, because using a safe
+abstraction is safe.
+
+Let’s look at each of the five unsafe superpowers in turn. We’ll also look at
+some abstractions that provide a safe interface to unsafe code.
+
+### Dereferencing a Raw Pointer
+
+In Chapter 4, in “Dangling References”, we
+mentioned that the compiler ensures references are always valid. Unsafe Rust has
+two new types called *raw pointers* that are similar to references. As with
+references, raw pointers can be immutable or mutable and are written as `*const T` and `*mut T`, respectively. The asterisk isn’t the dereference operator; it’s
+part of the type name. In the context of raw pointers, *immutable* means that
+the pointer can’t be directly assigned to after being dereferenced.
+
+Different from references and smart pointers, raw pointers:
+
+* Are allowed to ignore the borrowing rules by having both immutable and
+  mutable pointers or multiple mutable pointers to the same location
+* Aren’t guaranteed to point to valid memory
+* Are allowed to be null
+* Don’t implement any automatic cleanup
+
+By opting out of having Rust enforce these guarantees, you can give up
+guaranteed safety in exchange for greater performance or the ability to
+interface with another language or hardware where Rust’s guarantees don’t apply.
+
+Listing 20-1 shows how to create an immutable and a mutable raw pointer.
+
 
 ```
-$ cargo new hello
-     Created binary (application) `hello` project
-$ cd hello
+    let mut num = 5;
+
+    let r1 = &raw const num;
+    let r2 = &raw mut num;
 ```
 
-Now enter the code in Listing 20-1 in *src/main.rs* to start. This code will
-listen at the local address `127.0.0.1:7878` for incoming TCP streams. When it
-gets an incoming stream, it will print `Connection established!`.
+Listing 20-1: Creating raw pointers with the raw borrow operators
 
-Filename: src/main.rs
+Notice that we don’t include the `unsafe` keyword in this code. We can create
+raw pointers in safe code; we just can’t dereference raw pointers outside an
+unsafe block, as you’ll see in a bit.
+
+We’ve created raw pointers by using the raw borrow operators: `&raw const num`
+creates a `*const i32` immutable raw pointer, and `&raw mut num` creates a `*mut i32` mutable raw pointer. Because we created them directly from a local
+variable, we know these particular raw pointers are valid, but we can’t make
+that assumption about just any raw pointer.
+
+To demonstrate this, next we’ll create a raw pointer whose validity we can’t be
+so certain of, using the keyword `as` to cast a value instead of using the raw
+borrow operator. Listing 20-2 shows how to create a raw pointer to an arbitrary
+location in memory. Trying to use arbitrary memory is undefined: there might be
+data at that address or there might not, the compiler might optimize the code
+so there is no memory access, or the program might terminate with a
+segmentation fault. Usually, there is no good reason to write code like this,
+especially in cases where you can use a raw borrow operator instead, but it is
+possible.
+
 
 ```
-use std::net::TcpListener;
+    let address = 0x012345usize;
+    let r = address as *const i32;
+```
 
-fn main() {
-  1 let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+Listing 20-2: Creating a raw pointer to an arbitrary memory address
 
-  2 for stream in listener.incoming() {
-      3 let stream = stream.unwrap();
+Recall that we can create raw pointers in safe code, but we can’t *dereference*
+raw pointers and read the data being pointed to. In Listing 20-3, we use the
+dereference operator `*` on a raw pointer that requires an `unsafe` block.
 
-      4 println!("Connection established!");
+
+```
+    let mut num = 5;
+
+    let r1 = &raw const num;
+    let r2 = &raw mut num;
+
+    unsafe {
+        println!("r1 is: {}", *r1);
+        println!("r2 is: {}", *r2);
     }
-}
 ```
 
-Listing 20-1: Listening for incoming streams and printing a message when we
-receive a stream
+Listing 20-3: Dereferencing raw pointers within an `unsafe` block
 
-Using `TcpListener`, we can listen for TCP connections at the address
-`127.0.0.1:7878` [1]. In the address, the section before the colon is an IP
-address representing your computer (this is the same on every computer and
-doesn’t represent the authors’ computer specifically), and `7878` is the port.
-We’ve chosen this port for two reasons: HTTP isn’t normally accepted on this
-port, so our server is unlikely to conflict with any other web server you might
-have running on your machine, and 7878 is *rust* typed on a telephone.
+Creating a pointer does no harm; it’s only when we try to access the value that
+it points at that we might end up dealing with an invalid value.
 
-The `bind` function in this scenario works like the `new` function in that it
-will return a new `TcpListener` instance. The function is called `bind`
-because, in networking, connecting to a port to listen to is known as “binding
-to a port.”
+Note also that in Listings 20-1 and 20-3, we created `*const i32` and `*mut i32` raw pointers that both pointed to the same memory location, where `num` is
+stored. If we instead tried to create an immutable and a mutable reference to
+`num`, the code would not have compiled because Rust’s ownership rules don’t
+allow a mutable reference at the same time as any immutable references. With
+raw pointers, we can create a mutable pointer and an immutable pointer to the
+same location and change data through the mutable pointer, potentially creating
+a data race. Be careful!
 
-The `bind` function returns a `Result<T, E>`, which indicates that it’s
-possible for binding to fail. For example, connecting to port 80 requires
-administrator privileges (non-administrators can listen only on ports higher
-than 1023), so if we tried to connect to port 80 without being an
-administrator, binding wouldn’t work. Binding also wouldn’t work, for example,
-if we ran two instances of our program and so had two programs listening to the
-same port. Because we’re writing a basic server just for learning purposes, we
-won’t worry about handling these kinds of errors; instead, we use `unwrap` to
-stop the program if errors happen.
+With all of these dangers, why would you ever use raw pointers? One major use
+case is when interfacing with C code, as you’ll see in the next section.
+Another case is when building up safe abstractions that the borrow checker
+doesn’t understand. We’ll introduce unsafe functions and then look at an
+example of a safe abstraction that uses unsafe code.
 
-The `incoming` method on `TcpListener` returns an iterator that gives us a
-sequence of streams [2] (more specifically, streams of type `TcpStream`). A
-single *stream* represents an open connection between the client and the
-server. A *connection* is the name for the full request and response process in
-which a client connects to the server, the server generates a response, and the
-server closes the connection. As such, we will read from the `TcpStream` to see
-what the client sent and then write our response to the stream to send data
-back to the client. Overall, this `for` loop will process each connection in
-turn and produce a series of streams for us to handle.
+### Calling an Unsafe Function or Method
 
-For now, our handling of the stream consists of calling `unwrap` to terminate
-our program if the stream has any errors [3]; if there aren’t any errors, the
-program prints a message [4]. We’ll add more functionality for the success case
-in the next listing. The reason we might receive errors from the `incoming`
-method when a client connects to the server is that we’re not actually
-iterating over connections. Instead, we’re iterating over *connection
-attempts*. The connection might not be successful for a number of reasons, many
-of them operating system specific. For example, many operating systems have a
-limit to the number of simultaneous open connections they can support; new
-connection attempts beyond that number will produce an error until some of the
-open connections are closed.
+The second type of operation you can perform in an unsafe block is calling
+unsafe functions. Unsafe functions and methods look exactly like regular
+functions and methods, but they have an extra `unsafe` before the rest of the
+definition. The `unsafe` keyword in this context indicates the function has
+requirements we need to uphold when we call this function, because Rust can’t
+guarantee we’ve met these requirements. By calling an unsafe function within an
+`unsafe` block, we’re saying that we’ve read this function’s documentation and
+we take responsibility for upholding the function’s contracts.
 
-Let’s try running this code! Invoke `cargo run` in the terminal and then load
-*127.0.0.1:7878* in a web browser. The browser should show an error message
-like “Connection reset” because the server isn’t currently sending back any
-data. But when you look at your terminal, you should see several messages that
-were printed when the browser connected to the server!
+Here is an unsafe function named `dangerous` that doesn’t do anything in its
+body:
 
 ```
-     Running `target/debug/hello`
-Connection established!
-Connection established!
-Connection established!
-```
+    unsafe fn dangerous() {}
 
-Sometimes you’ll see multiple messages printed for one browser request; the
-reason might be that the browser is making a request for the page as well as a
-request for other resources, like the *favicon.ico* icon that appears in the
-browser tab.
-
-It could also be that the browser is trying to connect to the server multiple
-times because the server isn’t responding with any data. When `stream` goes out
-of scope and is dropped at the end of the loop, the connection is closed as
-part of the `drop` implementation. Browsers sometimes deal with closed
-connections by retrying, because the problem might be temporary. The important
-factor is that we’ve successfully gotten a handle to a TCP connection!
-
-Remember to stop the program by pressing ctrl-C when you’re done running a
-particular version of the code. Then restart the program by invoking the `cargo
-run` command after you’ve made each set of code changes to make sure you’re
-running the newest code.
-
-### Reading the Request
-
-Let’s implement the functionality to read the request from the browser! To
-separate the concerns of first getting a connection and then taking some action
-with the connection, we’ll start a new function for processing connections. In
-this new `handle_connection` function, we’ll read data from the TCP stream and
-print it so we can see the data being sent from the browser. Change the code to
-look like Listing 20-2.
-
-Filename: src/main.rs
-
-```
-1 use std::{
-    io::{prelude::*, BufReader},
-    net::{TcpListener, TcpStream},
-};
-
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
-
-      2 handle_connection(stream);
+    unsafe {
+        dangerous();
     }
-}
-
-fn handle_connection(mut stream: TcpStream) {
-  3 let buf_reader = BufReader::new(&mut stream);
-  4 let http_request: Vec<_> = buf_reader
-      5 .lines()
-      6 .map(|result| result.unwrap())
-      7 .take_while(|line| !line.is_empty())
-        .collect();
-
-  8 println!("Request: {:#?}", http_request);
-}
 ```
 
-Listing 20-2: Reading from the `TcpStream` and printing the data
-
-We bring `std::io::prelude` and `std::io::BufReader` into scope to get access
-to traits and types that let us read from and write to the stream [1]. In the
-`for` loop in the `main` function, instead of printing a message that says we
-made a connection, we now call the new `handle_connection` function and pass
-the `stream` to it [2].
-
-In the `handle_connection` function, we create a new `BufReader` instance that
-wraps a mutable reference to the `stream` [3]. `BufReader` adds buffering by
-managing calls to the `std::io::Read` trait methods for us.
-
-We create a variable named `http_request` to collect the lines of the request
-the browser sends to our server. We indicate that we want to collect these
-lines in a vector by adding the `Vec<_>` type annotation [4].
-
-`BufReader` implements the `std::io::BufRead` trait, which provides the `lines`
-method [5]. The `lines` method returns an iterator of `Result<String,
-std::io::Error>` by splitting the stream of data whenever it sees a newline
-byte. To get each `String`, we map and `unwrap` each `Result` [6]. The `Result`
-might be an error if the data isn’t valid UTF-8 or if there was a problem
-reading from the stream. Again, a production program should handle these errors
-more gracefully, but we’re choosing to stop the program in the error case for
-simplicity.
-
-The browser signals the end of an HTTP request by sending two newline
-characters in a row, so to get one request from the stream, we take lines until
-we get a line that is the empty string [7]. Once we’ve collected the lines into
-the vector, we’re printing them out using pretty debug formatting [8] so we can
-take a look at the instructions the web browser is sending to our server.
-
-Let’s try this code! Start the program and make a request in a web browser
-again. Note that we’ll still get an error page in the browser, but our
-program’s output in the terminal will now look similar to this:
+We must call the `dangerous` function within a separate `unsafe` block. If we
+try to call `dangerous` without the `unsafe` block, we’ll get an error:
 
 ```
 $ cargo run
-   Compiling hello v0.1.0 (file:///projects/hello)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.42s
-     Running `target/debug/hello`
-Request: [
-    "GET / HTTP/1.1",
-    "Host: 127.0.0.1:7878",
-    "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:99.0)
-Gecko/20100101 Firefox/99.0",
-    "Accept:
-text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*
-;q=0.8",
-    "Accept-Language: en-US,en;q=0.5",
-    "Accept-Encoding: gzip, deflate, br",
-    "DNT: 1",
-    "Connection: keep-alive",
-    "Upgrade-Insecure-Requests: 1",
-    "Sec-Fetch-Dest: document",
-    "Sec-Fetch-Mode: navigate",
-    "Sec-Fetch-Site: none",
-    "Sec-Fetch-User: ?1",
-    "Cache-Control: max-age=0",
-]
+   Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
+error[E0133]: call to unsafe function `dangerous` is unsafe and requires unsafe block
+ --> src/main.rs:4:5
+  |
+4 |     dangerous();
+  |     ^^^^^^^^^^^ call to unsafe function
+  |
+  = note: consult the function's documentation for information on how to avoid undefined behavior
+
+For more information about this error, try `rustc --explain E0133`.
+error: could not compile `unsafe-example` (bin "unsafe-example") due to 1 previous error
 ```
 
-Depending on your browser, you might get slightly different output. Now that
-we’re printing the request data, we can see why we get multiple connections
-from one browser request by looking at the path after `GET` in the first line
-of the request. If the repeated connections are all requesting */*, we know the
-browser is trying to fetch */* repeatedly because it’s not getting a response
-from our program.
+With the `unsafe` block, we’re asserting to Rust that we’ve read the function’s
+documentation, we understand how to use it properly, and we’ve verified that
+we’re fulfilling the contract of the function.
 
-Let’s break down this request data to understand what the browser is asking of
-our program.
+To perform unsafe operations in the body of an `unsafe` function, you still
+need to use an `unsafe` block, just as within a regular function, and the
+compiler will warn you if you forget. This helps us keep `unsafe` blocks as
+small as possible, as unsafe operations may not be needed across the whole
+function body.
 
-### A Closer Look at an HTTP Request
+#### Creating a Safe Abstraction over Unsafe Code
 
-HTTP is a text-based protocol, and a request takes this format:
+Just because a function contains unsafe code doesn’t mean we need to mark the
+entire function as unsafe. In fact, wrapping unsafe code in a safe function is
+a common abstraction. As an example, let’s study the `split_at_mut` function
+from the standard library, which requires some unsafe code. We’ll explore how
+we might implement it. This safe method is defined on mutable slices: it takes
+one slice and makes it two by splitting the slice at the index given as an
+argument. Listing 20-4 shows how to use `split_at_mut`.
 
-```
-Method Request-URI HTTP-Version CRLF
-headers CRLF
-message-body
-```
-
-The first line is the *request line* that holds information about what the
-client is requesting. The first part of the request line indicates the *method*
-being used, such as `GET` or `POST`, which describes how the client is making
-this request. Our client used a `GET` request, which means it is asking for
-information.
-
-The next part of the request line is */*, which indicates the *uniform resource
-identifier* *(URI)* the client is requesting: a URI is almost, but not quite,
-the same as a *uniform resource locator* *(URL)*. The difference between URIs
-and URLs isn’t important for our purposes in this chapter, but the HTTP spec
-uses the term *URI*, so we can just mentally substitute *URL* for *URI* here.
-
-The last part is the HTTP version the client uses, and then the request line
-ends in a CRLF sequence. (CRLF stands for *carriage return* and *line feed*,
-which are terms from the typewriter days!) The CRLF sequence can also be
-written as `\r\n`, where `\r` is a carriage return and `\n` is a line feed. The
-*CRLF sequence* separates the request line from the rest of the request data.
-Note that when the CRLF is printed, we see a new line start rather than `\r\n`.
-
-Looking at the request line data we received from running our program so far,
-we see that `GET` is the method, */* is the request URI, and `HTTP/1.1` is the
-version.
-
-After the request line, the remaining lines starting from `Host:` onward are
-headers. `GET` requests have no body.
-
-Try making a request from a different browser or asking for a different
-address, such as *127.0.0.1:7878/test*, to see how the request data changes.
-
-Now that we know what the browser is asking for, let’s send back some data!
-
-### Writing a Response
-
-We’re going to implement sending data in response to a client request.
-Responses have the following format:
 
 ```
-HTTP-Version Status-Code Reason-Phrase CRLF
-headers CRLF
-message-body
+    let mut v = vec![1, 2, 3, 4, 5, 6];
+
+    let r = &mut v[..];
+
+    let (a, b) = r.split_at_mut(3);
+
+    assert_eq!(a, &mut [1, 2, 3]);
+    assert_eq!(b, &mut [4, 5, 6]);
 ```
 
-The first line is a *status line* that contains the HTTP version used in the
-response, a numeric status code that summarizes the result of the request, and
-a reason phrase that provides a text description of the status code. After the
-CRLF sequence are any headers, another CRLF sequence, and the body of the
-response.
+Listing 20-4: Using the safe `split_at_mut` function
 
-Here is an example response that uses HTTP version 1.1, and has a status code
-of 200, an OK reason phrase, no headers, and no body:
+We can’t implement this function using only safe Rust. An attempt might look
+something like Listing 20-5, which won’t compile. For simplicity, we’ll
+implement `split_at_mut` as a function rather than a method and only for slices
+of `i32` values rather than for a generic type `T`.
 
-```
-HTTP/1.1 200 OK\r\n\r\n
-```
-
-The status code 200 is the standard success response. The text is a tiny
-successful HTTP response. Let’s write this to the stream as our response to a
-successful request! From the `handle_connection` function, remove the
-`println!` that was printing the request data and replace it with the code in
-Listing 20-3.
-
-Filename: src/main.rs
 
 ```
-fn handle_connection(mut stream: TcpStream) {
-    let buf_reader = BufReader::new(&mut stream);
-    let http_request: Vec<_> = buf_reader
-        .lines()
-        .map(|result| result.unwrap())
-        .take_while(|line| !line.is_empty())
-        .collect();
+fn split_at_mut(values: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
+    let len = values.len();
 
-  1 let response = "HTTP/1.1 200 OK\r\n\r\n";
+    assert!(mid <= len);
 
-  2 stream.write_all(response.3 as_bytes()).unwrap();
+    (&mut values[..mid], &mut values[mid..])
 }
 ```
 
-Listing 20-3: Writing a tiny successful HTTP response to the stream
+Listing 20-5: An attempted implementation of `split_at_mut` using only safe Rust
 
-The first new line defines the `response` variable that holds the success
-message’s data [1]. Then we call `as_bytes` on our `response` to convert the
-string data to bytes [3]. The `write_all` method on `stream` takes a `&[u8]`
-and sends those bytes directly down the connection [2]. Because the `write_all`
-operation could fail, we use `unwrap` on any error result as before. Again, in
-a real application you would add error handling here.
+This function first gets the total length of the slice. Then it asserts that
+the index given as a parameter is within the slice by checking whether it’s
+less than or equal to the length. The assertion means that if we pass an index
+that is greater than the length to split the slice at, the function will panic
+before it attempts to use that index.
 
-With these changes, let’s run our code and make a request. We’re no longer
-printing any data to the terminal, so we won’t see any output other than the
-output from Cargo. When you load *127.0.0.1:7878* in a web browser, you should
-get a blank page instead of an error. You’ve just handcoded receiving an HTTP
-request and sending a response!
+Then we return two mutable slices in a tuple: one from the start of the
+original slice to the `mid` index and another from `mid` to the end of the
+slice.
 
-### Returning Real HTML
-
-Let’s implement the functionality for returning more than a blank page. Create
-the new file *hello.html* in the root of your project directory, not in the
-*src* directory. You can input any HTML you want; Listing 20-4 shows one
-possibility.
-
-Filename: hello.html
+When we try to compile the code in Listing 20-5, we’ll get an error:
 
 ```
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Hello!</title>
-  </head>
-  <body>
-    <h1>Hello!</h1>
-    <p>Hi from Rust</p>
-  </body>
-</html>
-```
-
-Listing 20-4: A sample HTML file to return in a response
-
-This is a minimal HTML5 document with a heading and some text. To return this
-from the server when a request is received, we’ll modify `handle_connection` as
-shown in Listing 20-5 to read the HTML file, add it to the response as a body,
-and send it.
-
-Filename: src/main.rs
-
-```
-use std::{
-  1 fs,
-    io::{prelude::*, BufReader},
-    net::{TcpListener, TcpStream},
-};
---snip--
-
-fn handle_connection(mut stream: TcpStream) {
-    let buf_reader = BufReader::new(&mut stream);
-    let http_request: Vec<_> = buf_reader
-        .lines()
-        .map(|result| result.unwrap())
-        .take_while(|line| !line.is_empty())
-        .collect();
-
-    let status_line = "HTTP/1.1 200 OK";
-    let contents = fs::read_to_string("hello.html").unwrap();
-    let length = contents.len();
-
-  2 let response = format!(
-        "{status_line}\r\n\
-         Content-Length: {length}\r\n\r\n\
-         {contents}"
-    );
-
-    stream.write_all(response.as_bytes()).unwrap();
-}
-```
-
-Listing 20-5: Sending the contents of *hello.html* as the body of the response
-
-We’ve added `fs` to the `use` statement to bring the standard library’s
-filesystem module into scope [1]. The code for reading the contents of a file
-to a string should look familiar; we used it when we read the contents of a
-file for our I/O project in Listing 12-4.
-
-Next, we use `format!` to add the file’s contents as the body of the success
-response [2]. To ensure a valid HTTP response, we add the `Content-Length`
-header which is set to the size of our response body, in this case the size of
-`hello.html`.
-
-Run this code with `cargo run` and load *127.0.0.1:7878* in your browser; you
-should see your HTML rendered!
-
-Currently, we’re ignoring the request data in `http_request` and just sending
-back the contents of the HTML file unconditionally. That means if you try
-requesting *127.0.0.1:7878/something-else* in your browser, you’ll still get
-back this same HTML response. At the moment, our server is very limited and
-does not do what most web servers do. We want to customize our responses
-depending on the request and only send back the HTML file for a well-formed
-request to */*.
-
-### Validating the Request and Selectively Responding
-
-Right now, our web server will return the HTML in the file no matter what the
-client requested. Let’s add functionality to check that the browser is
-requesting */* before returning the HTML file, and return an error if the
-browser requests anything else. For this we need to modify `handle_connection`,
-as shown in Listing 20-6. This new code checks the content of the request
-received against what we know a request for */* looks like and adds `if` and
-`else` blocks to treat requests differently.
-
-Filename: src/main.rs
-
-```
---snip--
-
-fn handle_connection(mut stream: TcpStream) {
-    let buf_reader = BufReader::new(&mut stream);
-  1 let request_line = buf_reader
-        .lines()
-        .next()
-        .unwrap()
-        .unwrap();
-
-  2 if request_line == "GET / HTTP/1.1" {
-        let status_line = "HTTP/1.1 200 OK";
-        let contents = fs::read_to_string("hello.html").unwrap();
-        let length = contents.len();
-
-        let response = format!(
-            "{status_line}\r\n\
-             Content-Length: {length}\r\n\r\n\
-             {contents}"
-        );
-
-        stream.write_all(response.as_bytes()).unwrap();
-  3 } else {
-        // some other request
-    }
-}
-```
-
-Listing 20-6: Handling requests to */* differently from other requests
-
-We’re only going to be looking at the first line of the HTTP request, so rather
-than reading the entire request into a vector, we’re calling `next` to get the
-first item from the iterator [1]. The first `unwrap` takes care of the `Option`
-and stops the program if the iterator has no items. The second `unwrap` handles
-the `Result` and has the same effect as the `unwrap` that was in the `map`
-added in Listing 20-2.
-
-Next, we check the `request_line` to see if it equals the request line of a GET
-request to the */* path [2]. If it does, the `if` block returns the contents of
-our HTML file.
-
-If the `request_line` does *not* equal the GET request to the */* path, it
-means we’ve received some other request. We’ll add code to the `else` block [3]
-in a moment to respond to all other requests.
-
-Run this code now and request *127.0.0.1:7878*; you should get the HTML in
-*hello.html*. If you make any other request, such as
-*127.0.0.1:7878/something-else*, you’ll get a connection error like those you
-saw when running the code in Listing 20-1 and Listing 20-2.
-
-Now let’s add the code in Listing 20-7 to the `else` block to return a response
-with the status code 404, which signals that the content for the request was
-not found. We’ll also return some HTML for a page to render in the browser
-indicating the response to the end user.
-
-Filename: src/main.rs
-
-```
---snip--
-} else {
-  1 let status_line = "HTTP/1.1 404 NOT FOUND";
-  2 let contents = fs::read_to_string("404.html").unwrap();
-    let length = contents.len();
-
-    let response = format!(
-        "{status_line}\r\n\
-         Content-Length: {length}\r\n\r\n
-         {contents}"
-    );
-
-    stream.write_all(response.as_bytes()).unwrap();
-}
-```
-
-Listing 20-7: Responding with status code 404 and an error page if anything
-other than */* was requested
-
-Here, our response has a status line with status code 404 and the reason phrase
-`NOT FOUND` [1]. The body of the response will be the HTML in the file
-*404.html* [1]. You’ll need to create a *404.html* file next to *hello.html*
-for the error page; again feel free to use any HTML you want, or use the
-example HTML in Listing 20-8.
-
-Filename: 404.html
-
-```
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Hello!</title>
-  </head>
-  <body>
-    <h1>Oops!</h1>
-    <p>Sorry, I don't know what you're asking for.</p>
-  </body>
-</html>
-```
-
-Listing 20-8: Sample content for the page to send back with any 404 response
-
-With these changes, run your server again. Requesting *127.0.0.1:7878* should
-return the contents of *hello.html*, and any other request, like
-*127.0.0.1:7878/foo*, should return the error HTML from *404.html*.
-
-### A Touch of Refactoring
-
-At the moment, the `if` and `else` blocks have a lot of repetition: they’re
-both reading files and writing the contents of the files to the stream. The
-only differences are the status line and the filename. Let’s make the code more
-concise by pulling out those differences into separate `if` and `else` lines
-that will assign the values of the status line and the filename to variables;
-we can then use those variables unconditionally in the code to read the file
-and write the response. Listing 20-9 shows the resultant code after replacing
-the large `if` and `else` blocks.
-
-Filename: src/main.rs
-
-```
---snip--
-
-fn handle_connection(mut stream: TcpStream) {
-    --snip--
-
-    let (status_line, filename) =
-        if request_line == "GET / HTTP/1.1" {
-            ("HTTP/1.1 200 OK", "hello.html")
-        } else {
-            ("HTTP/1.1 404 NOT FOUND", "404.html")
-        };
-
-    let contents = fs::read_to_string(filename).unwrap();
-    let length = contents.len();
-
-    let response = format!(
-        "{status_line}\r\n\
-         Content-Length: {length}\r\n\r\n\
-         {contents}"
-    );
-
-    stream.write_all(response.as_bytes()).unwrap();
-}
-```
-
-Listing 20-9: Refactoring the `if` and `else` blocks to contain only the code
-that differs between the two cases
-
-Now the `if` and `else` blocks only return the appropriate values for the
-status line and filename in a tuple; we then use destructuring to assign these
-two values to `status_line` and `filename` using a pattern in the `let`
-statement, as discussed in Chapter 18.
-
-The previously duplicated code is now outside the `if` and `else` blocks and
-uses the `status_line` and `filename` variables. This makes it easier to see
-the difference between the two cases, and it means we have only one place to
-update the code if we want to change how the file reading and response writing
-work. The behavior of the code in Listing 20-9 will be the same as that in
-Listing 20-8.
-
-Awesome! We now have a simple web server in approximately 40 lines of Rust code
-that responds to one request with a page of content and responds to all other
-requests with a 404 response.
-
-Currently, our server runs in a single thread, meaning it can only serve one
-request at a time. Let’s examine how that can be a problem by simulating some
-slow requests. Then we’ll fix it so our server can handle multiple requests at
-once.
-
-## Turning Our Single-Threaded Server into a Multithreaded Server
-
-Right now, the server will process each request in turn, meaning it won’t
-process a second connection until the first is finished processing. If the
-server received more and more requests, this serial execution would be less and
-less optimal. If the server receives a request that takes a long time to
-process, subsequent requests will have to wait until the long request is
-finished, even if the new requests can be processed quickly. We’ll need to fix
-this, but first we’ll look at the problem in action.
-
-### Simulating a Slow Request
-
-We’ll look at how a slow-processing request can affect other requests made to
-our current server implementation. Listing 20-10 implements handling a request
-to */sleep* with a simulated slow response that will cause the server to sleep
-for five seconds before responding.
-
-Filename: src/main.rs
-
-```
-use std::{
-    fs,
-    io::{prelude::*, BufReader},
-    net::{TcpListener, TcpStream},
-    thread,
-    time::Duration,
-};
---snip--
-
-fn handle_connection(mut stream: TcpStream) {
-    --snip--
-
-    let (status_line, filename) = 1 match &request_line[..] {
-      2 "GET / HTTP/1.1" => ("HTTP/1.1 200 OK", "hello.html"),
-      3 "GET /sleep HTTP/1.1" => {
-            thread::sleep(Duration::from_secs(5));
-            ("HTTP/1.1 200 OK", "hello.html")
-        }
-      4 _ => ("HTTP/1.1 404 NOT FOUND", "404.html"),
-    };
-
-    --snip--
-}
-```
-
-Listing 20-10: Simulating a slow request by sleeping for five seconds
-
-We switched from `if` to `match` now that we have three cases [1]. We need to
-explicitly match on a slice of `request_line` to pattern-match against the
-string literal values; `match` doesn’t do automatic referencing and
-dereferencing, like the equality method does.
-
-The first arm [2] is the same as the `if` block from Listing 20-9. The second
-arm [3] matches a request to */sleep*. When that request is received, the
-server will sleep for five seconds before rendering the successful HTML page.
-The third arm [4] is the same as the `else` block from Listing 20-9.
-
-You can see how primitive our server is: real libraries would handle the
-recognition of multiple requests in a much less verbose way!
-
-Start the server using `cargo run`. Then open two browser windows: one for
-*http://127.0.0.1:7878* and the other for *http://127.0.0.1:7878/sleep*. If you
-enter the */* URI a few times, as before, you’ll see it respond quickly. But if
-you enter */sleep* and then load */*, you’ll see that */* waits until `sleep`
-has slept for its full five seconds before loading.
-
-There are multiple techniques we could use to avoid requests backing up behind
-a slow request; the one we’ll implement is a thread pool.
-
-### Improving Throughput with a Thread Pool
-
-A *thread pool* is a group of spawned threads that are waiting and ready to
-handle a task. When the program receives a new task, it assigns one of the
-threads in the pool to the task, and that thread will process the task. The
-remaining threads in the pool are available to handle any other tasks that come
-in while the first thread is processing. When the first thread is done
-processing its task, it’s returned to the pool of idle threads, ready to handle
-a new task. A thread pool allows you to process connections concurrently,
-increasing the throughput of your server.
-
-We’ll limit the number of threads in the pool to a small number to protect us
-from DoS attacks; if we had our program create a new thread for each request as
-it came in, someone making 10 million requests to our server could create havoc
-by using up all our server’s resources and grinding the processing of requests
-to a halt.
-
-Rather than spawning unlimited threads, then, we’ll have a fixed number of
-threads waiting in the pool. Requests that come in are sent to the pool for
-processing. The pool will maintain a queue of incoming requests. Each of the
-threads in the pool will pop off a request from this queue, handle the request,
-and then ask the queue for another request. With this design, we can process up
-to N requests concurrently, where N is the number of threads. If each thread is
-responding to a long-running request, subsequent requests can still back up in
-the queue, but we’ve increased the number of long-running requests we can
-handle before reaching that point.
-
-This technique is just one of many ways to improve the throughput of a web
-server. Other options you might explore are the fork/join model, the
-single-threaded async I/O model, and the multithreaded async I/O model. If
-you’re interested in this topic, you can read more about other solutions and
-try to implement them; with a low-level language like Rust, all of these
-options are possible.
-
-Before we begin implementing a thread pool, let’s talk about what using the
-pool should look like. When you’re trying to design code, writing the client
-interface first can help guide your design. Write the API of the code so it’s
-structured in the way you want to call it; then implement the functionality
-within that structure rather than implementing the functionality and then
-designing the public API.
-
-Similar to how we used test-driven development in the project in Chapter 12,
-we’ll use compiler-driven development here. We’ll write the code that calls the
-functions we want, and then we’ll look at errors from the compiler to determine
-what we should change next to get the code to work. Before we do that, however,
-we’ll explore the technique we’re not going to use as a starting point.
-
-#### Spawning a Thread for Each Request
-
-First, let’s explore how our code might look if it did create a new thread for
-every connection. As mentioned earlier, this isn’t our final plan due to the
-problems with potentially spawning an unlimited number of threads, but it is a
-starting point to get a working multithreaded server first. Then we’ll add the
-thread pool as an improvement, and contrasting the two solutions will be easier.
-
-Listing 20-11 shows the changes to make to `main` to spawn a new thread to
-handle each stream within the `for` loop.
-
-Filename: src/main.rs
-
-```
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
-
-        thread::spawn(|| {
-            handle_connection(stream);
-        });
-    }
-}
-```
-
-Listing 20-11: Spawning a new thread for each stream
-
-As you learned in Chapter 16, `thread::spawn` will create a new thread and then
-run the code in the closure in the new thread. If you run this code and load
-*/sleep* in your browser, then */* in two more browser tabs, you’ll indeed see
-that the requests to */* don’t have to wait for */sleep* to finish. However, as
-we mentioned, this will eventually overwhelm the system because you’d be making
-new threads without any limit.
-
-#### Creating a Finite Number of Threads
-
-We want our thread pool to work in a similar, familiar way so that switching
-from threads to a thread pool doesn’t require large changes to the code that
-uses our API. Listing 20-12 shows the hypothetical interface for a `ThreadPool`
-struct we want to use instead of `thread::spawn`.
-
-Filename: src/main.rs
-
-```
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-  1 let pool = ThreadPool::new(4);
-
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
-
-      2 pool.execute(|| {
-            handle_connection(stream);
-        });
-    }
-}
-```
-
-Listing 20-12: Our ideal `ThreadPool` interface
-
-We use `ThreadPool::new` to create a new thread pool with a configurable number
-of threads, in this case four [1]. Then, in the `for` loop, `pool.execute` has
-a similar interface as `thread::spawn` in that it takes a closure the pool
-should run for each stream [2]. We need to implement `pool.execute` so it takes
-the closure and gives it to a thread in the pool to run. This code won’t yet
-compile, but we’ll try so that the compiler can guide us in how to fix it.
-
-#### Building ThreadPool Using Compiler-Driven Development
-
-Make the changes in Listing 20-12 to *src/main.rs*, and then let’s use the
-compiler errors from `cargo check` to drive our development. Here is the first
-error we get:
-
-```
-$ cargo check
-    Checking hello v0.1.0 (file:///projects/hello)
-error[E0433]: failed to resolve: use of undeclared type `ThreadPool`
-  --> src/main.rs:11:16
-   |
-11 |     let pool = ThreadPool::new(4);
-   |                ^^^^^^^^^^ use of undeclared type `ThreadPool`
-```
-
-Great! This error tells us we need a `ThreadPool` type or module, so we’ll
-build one now. Our `ThreadPool` implementation will be independent of the kind
-of work our web server is doing. So let’s switch the `hello` crate from a
-binary crate to a library crate to hold our `ThreadPool` implementation. After
-we change to a library crate, we could also use the separate thread pool
-library for any work we want to do using a thread pool, not just for serving
-web requests.
-
-Create a *src/lib.rs* file that contains the following, which is the simplest
-definition of a `ThreadPool` struct that we can have for now:
-
-Filename: src/lib.rs
-
-```
-pub struct ThreadPool;
-```
-
-Then edit the *main.rs* file to bring `ThreadPool` into scope from the library
-crate by adding the following code to the top of *src/main.rs*:
-
-Filename: src/main.rs
-
-```
-use hello::ThreadPool;
-```
-
-This code still won’t work, but let’s check it again to get the next error that
-we need to address:
-
-```
-$ cargo check
-    Checking hello v0.1.0 (file:///projects/hello)
-error[E0599]: no function or associated item named `new` found for struct
-`ThreadPool` in the current scope
-  --> src/main.rs:12:28
-   |
-12 |     let pool = ThreadPool::new(4);
-   |                            ^^^ function or associated item not found in
-`ThreadPool`
-```
-
-This error indicates that next we need to create an associated function named
-`new` for `ThreadPool`. We also know that `new` needs to have one parameter
-that can accept `4` as an argument and should return a `ThreadPool` instance.
-Let’s implement the simplest `new` function that will have those
-characteristics:
-
-Filename: src/lib.rs
-
-```
-pub struct ThreadPool;
-
-impl ThreadPool {
-    pub fn new(size: usize) -> ThreadPool {
-        ThreadPool
-    }
-}
-```
-
-We chose `usize` as the type of the `size` parameter because we know that a
-negative number of threads doesn’t make any sense. We also know we’ll use this
-`4` as the number of elements in a collection of threads, which is what the
-`usize` type is for, as discussed in “Integer Types” on page XX.
-
-Let’s check the code again:
-
-```
-$ cargo check
-    Checking hello v0.1.0 (file:///projects/hello)
-error[E0599]: no method named `execute` found for struct `ThreadPool` in the
-current scope
-  --> src/main.rs:17:14
-   |
-17 |         pool.execute(|| {
-   |              ^^^^^^^ method not found in `ThreadPool`
-```
-
-Now the error occurs because we don’t have an `execute` method on `ThreadPool`.
-Recall from “Creating a Finite Number of Threads” on page XX that we decided
-our thread pool should have an interface similar to `thread::spawn`. In
-addition, we’ll implement the `execute` function so it takes the closure it’s
-given and gives it to an idle thread in the pool to run.
-
-We’ll define the `execute` method on `ThreadPool` to take a closure as a
-parameter. Recall from “Moving Captured Values Out of Closures and the Fn
-Traits” on page XX that we can take closures as parameters with three different
-traits: `Fn`, `FnMut`, and `FnOnce`. We need to decide which kind of closure to
-use here. We know we’ll end up doing something similar to the standard library
-`thread::spawn` implementation, so we can look at what bounds the signature of
-`thread::spawn` has on its parameter. The documentation shows us the following:
-
-```
-pub fn spawn<F, T>(f: F) -> JoinHandle<T>
-    where
-        F: FnOnce() -> T,
-        F: Send + 'static,
-        T: Send + 'static,
-```
-
-The `F` type parameter is the one we’re concerned with here; the `T` type
-parameter is related to the return value, and we’re not concerned with that. We
-can see that `spawn` uses `FnOnce` as the trait bound on `F`. This is probably
-what we want as well, because we’ll eventually pass the argument we get in
-`execute` to `spawn`. We can be further confident that `FnOnce` is the trait we
-want to use because the thread for running a request will only execute that
-request’s closure one time, which matches the `Once` in `FnOnce`.
-
-The `F` type parameter also has the trait bound `Send` and the lifetime bound
-`'static`, which are useful in our situation: we need `Send` to transfer the
-closure from one thread to another and `'static` because we don’t know how long
-the thread will take to execute. Let’s create an `execute` method on
-`ThreadPool` that will take a generic parameter of type `F` with these bounds:
-
-Filename: src/lib.rs
-
-```
-impl ThreadPool {
-    --snip--
-    pub fn execute<F>(&self, f: F)
-    where
-        F: FnOnce() 1 + Send + 'static,
-    {
-    }
-}
-```
-
-We still use the `()` after `FnOnce` [1] because this `FnOnce` represents a
-closure that takes no parameters and returns the unit type `()`. Just like
-function definitions, the return type can be omitted from the signature, but
-even if we have no parameters, we still need the parentheses.
-
-Again, this is the simplest implementation of the `execute` method: it does
-nothing, but we’re only trying to make our code compile. Let’s check it again:
-
-```
-$ cargo check
-    Checking hello v0.1.0 (file:///projects/hello)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.24s
-```
-
-It compiles! But note that if you try `cargo run` and make a request in the
-browser, you’ll see the errors in the browser that we saw at the beginning of
-the chapter. Our library isn’t actually calling the closure passed to `execute`
-yet!
-
-> Note: A saying you might hear about languages with strict compilers, such as
-Haskell and Rust, is “if the code compiles, it works.” But this saying is not
-universally true. Our project compiles, but it does absolutely nothing! If we
-were building a real, complete project, this would be a good time to start
-writing unit tests to check that the code compiles *and* has the behavior we
-want.
-
-#### Validating the Number of Threads in new
-
-We aren’t doing anything with the parameters to `new` and `execute`. Let’s
-implement the bodies of these functions with the behavior we want. To start,
-let’s think about `new`. Earlier we chose an unsigned type for the `size`
-parameter because a pool with a negative number of threads makes no sense.
-However, a pool with zero threads also makes no sense, yet zero is a perfectly
-valid `usize`. We’ll add code to check that `size` is greater than zero before
-we return a `ThreadPool` instance and have the program panic if it receives a
-zero by using the `assert!` macro, as shown in Listing 20-13.
-
-Filename: src/lib.rs
-
-```
-impl ThreadPool {
-    /// Create a new ThreadPool.
-    ///
-    /// The size is the number of threads in the pool.
-    ///
-  1 /// # Panics
-    ///
-    /// The `new` function will panic if the size is zero.
-    pub fn new(size: usize) -> ThreadPool {
-      2 assert!(size > 0);
-
-        ThreadPool
-    }
-
-    --snip--
-}
-```
-
-Listing 20-13: Implementing `ThreadPool::new` to panic if `size` is zero
-
-We’ve also added some documentation for our `ThreadPool` with doc comments.
-Note that we followed good documentation practices by adding a section that
-calls out the situations in which our function can panic [1], as discussed in
-Chapter 14. Try running `cargo doc --open` and clicking the `ThreadPool` struct
-to see what the generated docs for `new` look like!
-
-Instead of adding the `assert!` macro as we’ve done here [2], we could change
-`new` into `build` and return a `Result` like we did with `Config::build` in
-the I/O project in Listing 12-9. But we’ve decided in this case that trying to
-create a thread pool without any threads should be an unrecoverable error. If
-you’re feeling ambitious, try to write a function named `build` with the
-following signature to compare with the `new` function:
-
-```
-pub fn build(
-    size: usize
-) -> Result<ThreadPool, PoolCreationError> {
-```
-
-#### Creating Space to Store the Threads
-
-Now that we have a way to know we have a valid number of threads to store in
-the pool, we can create those threads and store them in the `ThreadPool` struct
-before returning the struct. But how do we “store” a thread? Let’s take another
-look at the `thread::spawn` signature:
-
-```
-pub fn spawn<F, T>(f: F) -> JoinHandle<T>
-    where
-        F: FnOnce() -> T,
-        F: Send + 'static,
-        T: Send + 'static,
-```
-
-The `spawn` function returns a `JoinHandle<T>`, where `T` is the type that the
-closure returns. Let’s try using `JoinHandle` too and see what happens. In our
-case, the closures we’re passing to the thread pool will handle the connection
-and not return anything, so `T` will be the unit type `()`.
-
-The code in Listing 20-14 will compile but doesn’t create any threads yet.
-We’ve changed the definition of `ThreadPool` to hold a vector of
-`thread::JoinHandle<()>` instances, initialized the vector with a capacity of
-`size`, set up a `for` loop that will run some code to create the threads, and
-returned a `ThreadPool` instance containing them.
-
-Filename: src/lib.rs
-
-```
-1 use std::thread;
-
-pub struct ThreadPool {
-  2 threads: Vec<thread::JoinHandle<()>>,
-}
-
-impl ThreadPool {
-    --snip--
-    pub fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-      3 let mut threads = Vec::with_capacity(size);
-
-        for _ in 0..size {
-            // create some threads and store them in the vector
-        }
-
-        ThreadPool { threads }
-    }
-    --snip--
-}
-```
-
-Listing 20-14: Creating a vector for `ThreadPool` to hold the threads
-
-We’ve brought `std::thread` into scope in the library crate [1] because we’re
-using `thread::JoinHandle` as the type of the items in the vector in
-`ThreadPool` [2].
-
-Once a valid size is received, our `ThreadPool` creates a new vector that can
-hold `size` items [3]. The `with_capacity` function performs the same task as
-`Vec::new` but with an important difference: it pre-allocates space in the
-vector. Because we know we need to store `size` elements in the vector, doing
-this allocation up front is slightly more efficient than using `Vec::new`,
-which resizes itself as elements are inserted.
-
-When you run `cargo check` again, it should succeed.
-
-#### Sending Code from the ThreadPool to a Thread
-
-We left a comment in the `for` loop in Listing 20-14 regarding the creation of
-threads. Here, we’ll look at how we actually create threads. The standard
-library provides `thread::spawn` as a way to create threads, and
-`thread::spawn` expects to get some code the thread should run as soon as the
-thread is created. However, in our case, we want to create the threads and have
-them *wait* for code that we’ll send later. The standard library’s
-implementation of threads doesn’t include any way to do that; we have to
-implement it manually.
-
-We’ll implement this behavior by introducing a new data structure between the
-`ThreadPool` and the threads that will manage this new behavior. We’ll call
-this data structure *Worker*, which is a common term in pooling
-implementations. The `Worker` picks up code that needs to be run and runs the
-code in its thread.
-
-Think of people working in the kitchen at a restaurant: the workers wait until
-orders come in from customers, and then they’re responsible for taking those
-orders and filling them.
-
-Instead of storing a vector of `JoinHandle<()>` instances in the thread pool,
-we’ll store instances of the `Worker` struct. Each `Worker` will store a single
-`JoinHandle<()>` instance. Then we’ll implement a method on `Worker` that will
-take a closure of code to run and send it to the already running thread for
-execution. We’ll also give each `Worker` an `id` so we can distinguish between
-the different instances of `Worker` in the pool when logging or debugging.
-
-Here is the new process that will happen when we create a `ThreadPool`. We’ll
-implement the code that sends the closure to the thread after we have `Worker`
-set up in this way:
-
-1. Define a `Worker` struct that holds an `id` and a `JoinHandle<()>`.
-1. Change `ThreadPool` to hold a vector of `Worker` instances.
-1. Define a `Worker::new` function that takes an `id` number and returns a
-`Worker` instance that holds the `id` and a thread spawned with an empty
-closure.
-1. In `ThreadPool::new`, use the `for` loop counter to generate an `id`, create
-a new `Worker` with that `id`, and store the `Worker` in the vector.
-
-If you’re up for a challenge, try implementing these changes on your own before
-looking at the code in Listing 20-15.
-
-Ready? Here is Listing 20-15 with one way to make the preceding modifications.
-
-Filename: src/lib.rs
-
-```
-use std::thread;
-
-pub struct ThreadPool {
-  1 workers: Vec<Worker>,
-}
-
-impl ThreadPool {
-    --snip--
-    pub fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-        let mut workers = Vec::with_capacity(size);
-
-      2 for id in 0..size {
-          3 workers.push(Worker::new(id));
-        }
-
-        ThreadPool { workers }
-    }
-    --snip--
-}
-
-4 struct Worker {
-    id: usize,
-    thread: thread::JoinHandle<()>,
-}
-
-impl Worker {
-  5 fn new(id: usize) -> Worker {
-      6 let thread = thread::spawn(|| {});
-
-        Worker { 7 id, 8 thread }
-    }
-}
-```
-
-Listing 20-15: Modifying `ThreadPool` to hold `Worker` instances instead of
-holding threads directly
-
-We’ve changed the name of the field on `ThreadPool` from `threads` to `workers`
-because it’s now holding `Worker` instances instead of `JoinHandle<()>`
-instances [1]. We use the counter in the `for` loop [2] as an argument to
-`Worker::new`, and we store each new `Worker` in the vector named `workers` [3].
-
-External code (like our server in *src/main.rs*) doesn’t need to know the
-implementation details regarding using a `Worker` struct within `ThreadPool`,
-so we make the `Worker` struct [4] and its `new` function [5] private. The
-`Worker::new` function uses the `id` we give it [7] and stores a
-`JoinHandle<()>` instance [8] that is created by spawning a new thread using an
-empty closure [6].
-
-> Note: If the operating system can’t create a thread because there aren’t
-enough system resources, `thread::spawn` will panic. That will cause our whole
-server to panic, even though the creation of some threads might succeed. For
-simplicity’s sake, this behavior is fine, but in a production thread pool
-implementation, you’d likely want to use `std::thread::Builder` and its `spawn`
-method that returns `Result` instead.
-
-This code will compile and will store the number of `Worker` instances we
-specified as an argument to `ThreadPool::new`. But we’re *still* not processing
-the closure that we get in `execute`. Let’s look at how to do that next.
-
-#### Sending Requests to Threads via Channels
-
-The next problem we’ll tackle is that the closures given to `thread::spawn` do
-absolutely nothing. Currently, we get the closure we want to execute in the
-`execute` method. But we need to give `thread::spawn` a closure to run when we
-create each `Worker` during the creation of the `ThreadPool`.
-
-We want the `Worker` structs that we just created to fetch the code to run from
-a queue held in the `ThreadPool` and send that code to its thread to run.
-
-The channels we learned about in Chapter 16—a simple way to communicate between
-two threads—would be perfect for this use case. We’ll use a channel to function
-as the queue of jobs, and `execute` will send a job from the `ThreadPool` to
-the `Worker` instances, which will send the job to its thread. Here is the plan:
-
-1. The `ThreadPool` will create a channel and hold on to the sender.
-1. Each `Worker` will hold on to the receiver.
-1. We’ll create a new `Job` struct that will hold the closures we want to send
-down the channel.
-1. The `execute` method will send the job it wants to execute through the
-sender.
-1. In its thread, the `Worker` will loop over its receiver and execute the
-closures of any jobs it receives.
-
-Let’s start by creating a channel in `ThreadPool::new` and holding the sender
-in the `ThreadPool` instance, as shown in Listing 20-16. The `Job` struct
-doesn’t hold anything for now but will be the type of item we’re sending down
-the channel.
-
-Filename: src/lib.rs
-
-```
-use std::{sync::mpsc, thread};
-
-pub struct ThreadPool {
-    workers: Vec<Worker>,
-    sender: mpsc::Sender<Job>,
-}
-
-struct Job;
-
-impl ThreadPool {
-    --snip--
-    pub fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-      1 let (sender, receiver) = mpsc::channel();
-
-        let mut workers = Vec::with_capacity(size);
-
-        for id in 0..size {
-            workers.push(Worker::new(id));
-        }
-
-        ThreadPool { workers, 2 sender }
-    }
-    --snip--
-}
-```
-
-Listing 20-16: Modifying `ThreadPool` to store the sender of a channel that
-transmits `Job` instances
-
-In `ThreadPool::new`, we create our new channel [1] and have the pool hold the
-sender [2]. This will successfully compile.
-
-Let’s try passing a receiver of the channel into each `Worker` as the thread
-pool creates the channel. We know we want to use the receiver in the thread
-that the `Worker` instances spawn, so we’ll reference the `receiver` parameter
-in the closure. The code in Listing 20-17 won’t quite compile yet.
-
-Filename: src/lib.rs
-
-```
-impl ThreadPool {
-    --snip--
-    pub fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-        let (sender, receiver) = mpsc::channel();
-
-        let mut workers = Vec::with_capacity(size);
-
-        for id in 0..size {
-          1 workers.push(Worker::new(id, receiver));
-        }
-
-        ThreadPool { workers, sender }
-    }
-    --snip--
-}
-
---snip--
-
-impl Worker {
-    fn new(id: usize, receiver: mpsc::Receiver<Job>) -> Worker {
-        let thread = thread::spawn(|| {
-          2 receiver;
-        });
-
-        Worker { id, thread }
-    }
-}
-```
-
-Listing 20-17: Passing the receiver to each `Worker`
-
-We’ve made some small and straightforward changes: we pass the receiver into
-`Worker::new` [1], and then we use it inside the closure [2].
-
-When we try to check this code, we get this error:
-
-```
-$ cargo check
-    Checking hello v0.1.0 (file:///projects/hello)
-error[E0382]: use of moved value: `receiver`
-  --> src/lib.rs:26:42
-   |
-21 |         let (sender, receiver) = mpsc::channel();
-   |                      -------- move occurs because `receiver` has type
-`std::sync::mpsc::Receiver<Job>`, which does not implement the `Copy` trait
+$ cargo run
+   Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
+error[E0499]: cannot borrow `*values` as mutable more than once at a time
+ --> src/main.rs:6:31
+  |
+1 | fn split_at_mut(values: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
+  |                         - let's call the lifetime of this reference `'1`
 ...
-26 |             workers.push(Worker::new(id, receiver));
-   |                                          ^^^^^^^^ value moved here, in
-previous iteration of loop
-```
-
-The code is trying to pass `receiver` to multiple `Worker` instances. This
-won’t work, as you’ll recall from Chapter 16: the channel implementation that
-Rust provides is multiple *producer*, single *consumer*. This means we can’t
-just clone the consuming end of the channel to fix this code. We also don’t
-want to send a message multiple times to multiple consumers; we want one list
-of messages with multiple `Worker` instances such that each message gets
-processed once.
-
-Additionally, taking a job off the channel queue involves mutating the
-`receiver`, so the threads need a safe way to share and modify `receiver`;
-otherwise, we might get race conditions (as covered in Chapter 16).
-
-Recall the thread-safe smart pointers discussed in Chapter 16: to share
-ownership across multiple threads and allow the threads to mutate the value, we
-need to use `Arc<Mutex<T>>`. The `Arc` type will let multiple `Worker`
-instances own the receiver, and `Mutex` will ensure that only one `Worker` gets
-a job from the receiver at a time. Listing 20-18 shows the changes we need to
-make.
-
-Filename: src/lib.rs
-
-```
-use std::{
-    sync::{mpsc, Arc, Mutex},
-    thread,
-};
---snip--
-
-impl ThreadPool {
-    --snip--
-    pub fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-        let (sender, receiver) = mpsc::channel();
-
-      1 let receiver = Arc::new(Mutex::new(receiver));
-
-        let mut workers = Vec::with_capacity(size);
-
-        for id in 0..size {
-            workers.push(
-                Worker::new(id, Arc::clone(& 2 receiver))
-            );
-        }
-
-        ThreadPool { workers, sender }
-    }
-
-    --snip--
-}
-
---snip--
-
-impl Worker {
-    fn new(
-        id: usize,
-        receiver: Arc<Mutex<mpsc::Receiver<Job>>>,
-    ) -> Worker {
-        --snip--
-    }
-}
-```
-
-Listing 20-18: Sharing the receiver among the `Worker` instances using `Arc`
-and `Mutex`
-
-In `ThreadPool::new`, we put the receiver in an `Arc` and a `Mutex` [1]. For
-each new `Worker`, we clone the `Arc` to bump the reference count so the
-`Worker` instances can share ownership of the receiver [2].
-
-With these changes, the code compiles! We’re getting there!
-
-#### Implementing the execute Method
-
-Let’s finally implement the `execute` method on `ThreadPool`. We’ll also change
-`Job` from a struct to a type alias for a trait object that holds the type of
-closure that `execute` receives. As discussed in “Creating Type Synonyms with
-Type Aliases” on page XX, type aliases allow us to make long types shorter for
-ease of use. Look at Listing 20-19.
-
-Filename: src/lib.rs
-
-```
---snip--
-
-type Job = Box<dyn FnOnce() + Send + 'static>;
-
-impl ThreadPool {
-    --snip--
-
-    pub fn execute<F>(&self, f: F)
-    where
-        F: FnOnce() + Send + 'static,
-    {
-      1 let job = Box::new(f);
-
-      2 self.sender.send(job).unwrap();
-    }
-}
-
---snip--
-```
-
-Listing 20-19: Creating a `Job` type alias for a `Box` that holds each closure
-and then sending the job down the channel
-
-After creating a new `Job` instance using the closure we get in `execute` [1],
-we send that job down the sending end of the channel [2]. We’re calling
-`unwrap` on `send` for the case that sending fails. This might happen if, for
-example, we stop all our threads from executing, meaning the receiving end has
-stopped receiving new messages. At the moment, we can’t stop our threads from
-executing: our threads continue executing as long as the pool exists. The
-reason we use `unwrap` is that we know the failure case won’t happen, but the
-compiler doesn’t know that.
-
-But we’re not quite done yet! In the `Worker`, our closure being passed to
-`thread::spawn` still only *references* the receiving end of the channel.
-Instead, we need the closure to loop forever, asking the receiving end of the
-channel for a job and running the job when it gets one. Let’s make the change
-shown in Listing 20-20 to `Worker::new`.
-
-Filename: src/lib.rs
-
-```
---snip--
-
-impl Worker {
-    fn new(
-        id: usize,
-        receiver: Arc<Mutex<mpsc::Receiver<Job>>>,
-    ) -> Worker {
-        let thread = thread::spawn(move || loop {
-            let job = receiver
-              1 .lock()
-              2 .unwrap()
-              3 .recv()
-              4 .unwrap();
-
-            println!("Worker {id} got a job; executing.");
-
-            job();
-        });
-
-        Worker { id, thread }
-    }
-}
-```
-
-Listing 20-20: Receiving and executing the jobs in the `Worker` instance’s
-thread
-
-Here, we first call `lock` on the `receiver` to acquire the mutex [1], and then
-we call `unwrap` to panic on any errors [2]. Acquiring a lock might fail if the
-mutex is in a *poisoned* state, which can happen if some other thread panicked
-while holding the lock rather than releasing the lock. In this situation,
-calling `unwrap` to have this thread panic is the correct action to take. Feel
-free to change this `unwrap` to an `expect` with an error message that is
-meaningful to you.
-
-If we get the lock on the mutex, we call `recv` to receive a `Job` from the
-channel [3]. A final `unwrap` moves past any errors here as well [4], which
-might occur if the thread holding the sender has shut down, similar to how the
-`send` method returns `Err` if the receiver shuts down.
-
-The call to `recv` blocks, so if there is no job yet, the current thread will
-wait until a job becomes available. The `Mutex<T>` ensures that only one
-`Worker` thread at a time is trying to request a job.
-
-Our thread pool is now in a working state! Give it a `cargo run` and make some
-requests:
-
-```
-$ cargo run
-   Compiling hello v0.1.0 (file:///projects/hello)
-warning: field is never read: `workers`
- --> src/lib.rs:7:5
+6 |     (&mut values[..mid], &mut values[mid..])
+  |     --------------------------^^^^^^--------
+  |     |     |                   |
+  |     |     |                   second mutable borrow occurs here
+  |     |     first mutable borrow occurs here
+  |     returning this value requires that `*values` is borrowed for `'1`
   |
-7 |     workers: Vec<Worker>,
-  |     ^^^^^^^^^^^^^^^^^^^^
+  = help: use `.split_at_mut(position)` to obtain two mutable non-overlapping sub-slices
+
+For more information about this error, try `rustc --explain E0499`.
+error: could not compile `unsafe-example` (bin "unsafe-example") due to 1 previous error
+```
+
+Rust’s borrow checker can’t understand that we’re borrowing different parts of
+the slice; it only knows that we’re borrowing from the same slice twice.
+Borrowing different parts of a slice is fundamentally okay because the two
+slices aren’t overlapping, but Rust isn’t smart enough to know this. When we
+know code is okay, but Rust doesn’t, it’s time to reach for unsafe code.
+
+Listing 20-6 shows how to use an `unsafe` block, a raw pointer, and some calls
+to unsafe functions to make the implementation of `split_at_mut` work.
+
+
+```
+use std::slice;
+
+fn split_at_mut(values: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
+    let len = values.len();
+    let ptr = values.as_mut_ptr();
+
+    assert!(mid <= len);
+
+    unsafe {
+        (
+            slice::from_raw_parts_mut(ptr, mid),
+            slice::from_raw_parts_mut(ptr.add(mid), len - mid),
+        )
+    }
+}
+```
+
+Listing 20-6: Using unsafe code in the implementation of the `split_at_mut` function
+
+Recall from “The Slice Type” in Chapter 4 that
+a slice is a pointer to some data and the length of the slice. We use the `len`
+method to get the length of a slice and the `as_mut_ptr` method to access the
+raw pointer of a slice. In this case, because we have a mutable slice to `i32`
+values, `as_mut_ptr` returns a raw pointer with the type `*mut i32`, which we’ve
+stored in the variable `ptr`.
+
+We keep the assertion that the `mid` index is within the slice. Then we get to
+the unsafe code: the `slice::from_raw_parts_mut` function takes a raw pointer
+and a length, and it creates a slice. We use this function to create a slice
+that starts from `ptr` and is `mid` items long. Then we call the `add`
+method on `ptr` with `mid` as an argument to get a raw pointer that starts at
+`mid`, and we create a slice using that pointer and the remaining number of
+items after `mid` as the length.
+
+The function `slice::from_raw_parts_mut` is unsafe because it takes a raw
+pointer and must trust that this pointer is valid. The `add` method on raw
+pointers is also unsafe because it must trust that the offset location is also
+a valid pointer. Therefore, we had to put an `unsafe` block around our calls to
+`slice::from_raw_parts_mut` and `add` so we could call them. By looking at
+the code and by adding the assertion that `mid` must be less than or equal to
+`len`, we can tell that all the raw pointers used within the `unsafe` block
+will be valid pointers to data within the slice. This is an acceptable and
+appropriate use of `unsafe`.
+
+Note that we don’t need to mark the resultant `split_at_mut` function as
+`unsafe`, and we can call this function from safe Rust. We’ve created a safe
+abstraction to the unsafe code with an implementation of the function that uses
+`unsafe` code in a safe way, because it creates only valid pointers from the
+data this function has access to.
+
+In contrast, the use of `slice::from_raw_parts_mut` in Listing 20-7 would
+likely crash when the slice is used. This code takes an arbitrary memory
+location and creates a slice 10,000 items long.
+
+
+```
+    use std::slice;
+
+    let address = 0x01234usize;
+    let r = address as *mut i32;
+
+    let values: &[i32] = unsafe { slice::from_raw_parts_mut(r, 10000) };
+```
+
+Listing 20-7: Creating a slice from an arbitrary memory location
+
+We don’t own the memory at this arbitrary location, and there is no guarantee
+that the slice this code creates contains valid `i32` values. Attempting to use
+`values` as though it’s a valid slice results in undefined behavior.
+
+#### Using extern Functions to Call External Code
+
+Sometimes your Rust code might need to interact with code written in another
+language. For this, Rust has the keyword `extern` that facilitates the creation
+and use of a *Foreign Function Interface (FFI)*, which is a way for a
+programming language to define functions and enable a different (foreign)
+programming language to call those functions.
+
+Listing 20-8 demonstrates how to set up an integration with the `abs` function
+from the C standard library. Functions declared within `extern` blocks are
+generally unsafe to call from Rust code, so `extern` blocks must also be marked
+`unsafe`. The reason is that other languages don’t enforce Rust’s rules and
+guarantees, and Rust can’t check them, so responsibility falls on the
+programmer to ensure safety.
+
+src/main.rs
+
+```
+unsafe extern "C" {
+    fn abs(input: i32) -> i32;
+}
+
+fn main() {
+    unsafe {
+        println!("Absolute value of -3 according to C: {}", abs(-3));
+    }
+}
+```
+
+Listing 20-8: Declaring and calling an `extern` function defined in another language
+
+Within the `unsafe extern "C"` block, we list the names and signatures of
+external functions from another language we want to call. The `"C"` part
+defines which *application binary interface (ABI)* the external function uses:
+the ABI defines how to call the function at the assembly level. The `"C"` ABI
+is the most common and follows the C programming language’s ABI. Information
+about all the ABIs Rust supports is available in the Rust Reference at *../reference/items/external-blocks.html#abi*.
+
+Every item declared within an `unsafe extern` block is implicitly unsafe.
+However, some FFI functions *are* safe to call. For example, the `abs` function
+from C’s standard library does not have any memory safety considerations and we
+know it can be called with any `i32`. In cases like this, we can use the `safe`
+keyword to say that this specific function is safe to call even though it is in
+an `unsafe extern` block. Once we make that change, calling it no longer
+requires an `unsafe` block, as shown in Listing 20-9.
+
+src/main.rs
+
+```
+unsafe extern "C" {
+    safe fn abs(input: i32) -> i32;
+}
+
+fn main() {
+    println!("Absolute value of -3 according to C: {}", abs(-3));
+}
+```
+
+Listing 20-9: Explicitly marking a function as `safe` within an `unsafe extern` block and calling it safely
+
+Marking a function as `safe` does not inherently make it safe! Instead, it is
+like a promise you are making to Rust that it is safe. It is still your
+responsibility to make sure that promise is kept!
+
+#### Calling Rust Functions from Other Languages
+
+We can also use `extern` to create an interface that allows other languages to
+call Rust functions. Instead of creating a whole `extern` block, we add the
+`extern` keyword and specify the ABI to use just before the `fn` keyword for
+the relevant function. We also need to add an `#[unsafe(no_mangle)]` annotation
+to tell the Rust compiler not to mangle the name of this function. *Mangling*
+is when a compiler changes the name we’ve given a function to a different name
+that contains more information for other parts of the compilation process to
+consume but is less human readable. Every programming language compiler mangles
+names slightly differently, so for a Rust function to be nameable by other
+languages, we must disable the Rust compiler’s name mangling. This is unsafe
+because there might be name collisions across libraries without the built-in
+mangling, so it is our responsibility to make sure the name we choose is safe
+to export without mangling.
+
+In the following example, we make the `call_from_c` function accessible from C
+code, after it’s compiled to a shared library and linked from C:
+
+```
+#[unsafe(no_mangle)]
+pub extern "C" fn call_from_c() {
+    println!("Just called a Rust function from C!");
+}
+```
+
+This usage of `extern` requires `unsafe` only in the attribute, not on the
+`extern` block.
+
+### Accessing or Modifying a Mutable Static Variable
+
+In this book, we’ve not yet talked about global variables, which Rust does
+support but can be problematic with Rust’s ownership rules. If two threads are
+accessing the same mutable global variable, it can cause a data race.
+
+In Rust, global variables are called *static* variables. Listing 20-10 shows an
+example declaration and use of a static variable with a string slice as a
+value.
+
+src/main.rs
+
+```
+static HELLO_WORLD: &str = "Hello, world!";
+
+fn main() {
+    println!("value is: {HELLO_WORLD}");
+}
+```
+
+Listing 20-10: Defining and using an immutable static variable
+
+Static variables are similar to constants, which we discussed in
+“Constants” in
+Chapter 3. The names of static variables are in `SCREAMING_SNAKE_CASE` by
+convention. Static variables can only store references with the `'static`
+lifetime, which means the Rust compiler can figure out the lifetime and we
+aren’t required to annotate it explicitly. Accessing an immutable static
+variable is safe.
+
+A subtle difference between constants and immutable static variables is that
+values in a static variable have a fixed address in memory. Using the value
+will always access the same data. Constants, on the other hand, are allowed to
+duplicate their data whenever they’re used. Another difference is that static
+variables can be mutable. Accessing and modifying mutable static variables is
+*unsafe*. Listing 20-11 shows how to declare, access, and modify a mutable
+static variable named `COUNTER`.
+
+src/main.rs
+
+```
+static mut COUNTER: u32 = 0;
+
+/// SAFETY: Calling this from more than a single thread at a time is undefined
+/// behavior, so you *must* guarantee you only call it from a single thread at
+/// a time.
+unsafe fn add_to_count(inc: u32) {
+    unsafe {
+        COUNTER += inc;
+    }
+}
+
+fn main() {
+    unsafe {
+        // SAFETY: This is only called from a single thread in `main`.
+        add_to_count(3);
+        println!("COUNTER: {}", *(&raw const COUNTER));
+    }
+}
+```
+
+Listing 20-11: Reading from or writing to a mutable static variable is unsafe.
+
+As with regular variables, we specify mutability using the `mut` keyword. Any
+code that reads or writes from `COUNTER` must be within an `unsafe` block. The
+code in Listing 20-11 compiles and prints `COUNTER: 3` as we would expect
+because it’s single threaded. Having multiple threads access `COUNTER` would
+likely result in data races, so it is undefined behavior. Therefore, we need to
+mark the entire function as `unsafe` and document the safety limitation, so
+anyone calling the function knows what they are and are not allowed to do
+safely.
+
+Whenever we write an unsafe function, it is idiomatic to write a comment
+starting with `SAFETY` and explaining what the caller needs to do to call the
+function safely. Likewise, whenever we perform an unsafe operation, it is
+idiomatic to write a comment starting with `SAFETY` to explain how the safety
+rules are upheld.
+
+Additionally, the compiler will deny by default any attempt to create
+references to a mutable static variable through a compiler lint. You must
+either explicitly opt-out of that lint’s protections by adding an
+`#[allow(static_mut_refs)]` annotation or access the mutable static variable
+via a raw pointer created with one of the raw borrow operators. That includes
+cases where the reference is created invisibly, as when it is used in the
+`println!` in this code listing. Requiring references to static mutable
+variables to be created via raw pointers helps make the safety requirements for
+using them more obvious.
+
+With mutable data that is globally accessible, it’s difficult to ensure there
+are no data races, which is why Rust considers mutable static variables to be
+unsafe. Where possible, it’s preferable to use the concurrency techniques and
+thread-safe smart pointers we discussed in Chapter 16 so the compiler checks
+that data access from different threads is done safely.
+
+### Implementing an Unsafe Trait
+
+We can use `unsafe` to implement an unsafe trait. A trait is unsafe when at
+least one of its methods has some invariant that the compiler can’t verify. We
+declare that a trait is `unsafe` by adding the `unsafe` keyword before `trait`
+and marking the implementation of the trait as `unsafe` too, as shown in
+Listing 20-12.
+
+
+```
+unsafe trait Foo {
+    // methods go here
+}
+
+unsafe impl Foo for i32 {
+    // method implementations go here
+}
+```
+
+Listing 20-12: Defining and implementing an unsafe trait
+
+By using `unsafe impl`, we’re promising that we’ll uphold the invariants that
+the compiler can’t verify.
+
+As an example, recall the `Send` and `Sync` marker traits we discussed in
+“Extensible Concurrency with the `Send` and `Sync`
+Traits”
+in Chapter 16: the compiler implements these traits automatically if our types
+are composed entirely of other types that implement `Send` and `Sync`. If we
+implement a type that contains a type that does not implement `Send` or `Sync`,
+such as raw pointers, and we want to mark that type as `Send` or `Sync`, we
+must use `unsafe`. Rust can’t verify that our type upholds the guarantees that
+it can be safely sent across threads or accessed from multiple threads;
+therefore, we need to do those checks manually and indicate as such with
+`unsafe`.
+
+### Accessing Fields of a Union
+
+The final action that works only with `unsafe` is accessing fields of a union.
+A *union* is similar to a `struct`, but only one declared field is used in a
+particular instance at one time. Unions are primarily used to interface with
+unions in C code. Accessing union fields is unsafe because Rust can’t guarantee
+the type of the data currently being stored in the union instance. You can
+learn more about unions in the Rust Reference at *../reference/items/unions.html*.
+
+### Using Miri to Check Unsafe Code
+
+When writing unsafe code, you might want to check that what you have written
+actually is safe and correct. One of the best ways to do that is to use Miri,
+an official Rust tool for detecting undefined behavior. Whereas the borrow
+checker is a *static* tool which works at compile time, Miri is a *dynamic*
+tool which works at runtime. It checks your code by running your program, or
+its test suite, and detecting when you violate the rules it understands about
+how Rust should work.
+
+Using Miri requires a nightly build of Rust (which we talk about more in
+Appendix G: How Rust is Made and “Nightly Rust”). You
+can install both a nightly version of Rust and the Miri tool by typing `rustup +nightly component add miri`. This does not change what version of Rust your
+project uses; it only adds the tool to your system so you can use it when you
+want to. You can run Miri on a project by typing `cargo +nightly miri run` or
+`cargo +nightly miri test`.
+
+For an example of how helpful this can be, consider what happens when we run it
+against Listing 20-7.
+
+```
+$ cargo +nightly miri run
+   Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running `file:///home/.rustup/toolchains/nightly-aarch64-apple-darwin/bin/cargo-miri runner target/miri/aarch64-apple-darwin/debug/unsafe-example`
+warning: integer-to-pointer cast
+ --> src/main.rs:6:13
   |
-  = note: `#[warn(dead_code)]` on by default
+6 |     let r = address as *mut i32;
+  |             ^^^^^^^^^^^^^^^^^^^ integer-to-pointer cast
+  |
+  = help: this program is using integer-to-pointer casts or (equivalently) `ptr::with_exposed_provenance`, which means that Miri might miss pointer bugs in this program
+  = help: see https://doc.rust-lang.org/nightly/std/ptr/fn.with_exposed_provenance.html for more details on that operation
+  = help: to ensure that Miri does not miss bugs in your program, use Strict Provenance APIs (https://doc.rust-lang.org/nightly/std/ptr/index.html#strict-provenance, https://crates.io/crates/sptr) instead
+  = help: you can then set `MIRIFLAGS=-Zmiri-strict-provenance` to ensure you are not relying on `with_exposed_provenance` semantics
+  = help: alternatively, `MIRIFLAGS=-Zmiri-permissive-provenance` disables this warning
+  = note: BACKTRACE:
+  = note: inside `main` at src/main.rs:6:13: 6:32
 
-warning: field is never read: `id`
-  --> src/lib.rs:48:5
-   |
-48 |     id: usize,
-   |     ^^^^^^^^^
+error: Undefined Behavior: pointer not dereferenceable: pointer must be dereferenceable for 40000 bytes, but got 0x1234[noalloc] which is a dangling pointer (it has no provenance)
+ --> src/main.rs:8:35
+  |
+8 |     let values: &[i32] = unsafe { slice::from_raw_parts_mut(r, 10000) };
+  |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Undefined Behavior occurred here
+  |
+  = help: this indicates a bug in the program: it performed an invalid operation, and caused Undefined Behavior
+  = help: see https://doc.rust-lang.org/nightly/reference/behavior-considered-undefined.html for further information
+  = note: BACKTRACE:
+  = note: inside `main` at src/main.rs:8:35: 8:70
 
-warning: field is never read: `thread`
-  --> src/lib.rs:49:5
-   |
-49 |     thread: thread::JoinHandle<()>,
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: some details are omitted, run with `MIRIFLAGS=-Zmiri-backtrace=full` for a verbose backtrace
 
-warning: `hello` (lib) generated 3 warnings
-    Finished dev [unoptimized + debuginfo] target(s) in 1.40s
-     Running `target/debug/hello`
-Worker 0 got a job; executing.
-Worker 2 got a job; executing.
-Worker 1 got a job; executing.
-Worker 3 got a job; executing.
-Worker 0 got a job; executing.
-Worker 2 got a job; executing.
-Worker 1 got a job; executing.
-Worker 3 got a job; executing.
-Worker 0 got a job; executing.
-Worker 2 got a job; executing.
-```
-
-Success! We now have a thread pool that executes connections asynchronously.
-There are never more than four threads created, so our system won’t get
-overloaded if the server receives a lot of requests. If we make a request to
-*/sleep*, the server will be able to serve other requests by having another
-thread run them.
-
-> Note: If you open */sleep* in multiple browser windows simultaneously, they
-might load one at a time in five-second intervals. Some web browsers execute
-multiple instances of the same request sequentially for caching reasons. This
-limitation is not caused by our web server.
-
-After learning about the `while let` loop in Chapter 18, you might be wondering
-why we didn’t write the `Worker` thread code as shown in Listing 20-21.
-
-Filename: src/lib.rs
+error: aborting due to 1 previous error; 1 warning emitted
 
 ```
---snip--
 
-impl Worker {
-    fn new(
-        id: usize,
-        receiver: Arc<Mutex<mpsc::Receiver<Job>>>,
-    ) -> Worker {
-        let thread = thread::spawn(move || {
-            while let Ok(job) = receiver.lock().unwrap().recv() {
-                println!("Worker {id} got a job; executing.");
+Miri correctly warns us that we’re casting an integer to a pointer, which might
+be a problem but Miri can’t detect if there is because it doesn’t know how the
+pointer originated. Then, Miri returns an error where Listing 20-7 has
+undefined behavior because we have a dangling pointer. Thanks to Miri, we now
+know there is a risk of undefined behavior, and we can think about how to make
+the code safe. In some cases, Miri can even make recommendations about how to
+fix errors.
 
-                job();
-            }
-        });
+Miri doesn’t catch everything you might get wrong when writing unsafe code.
+Miri is a dynamic analysis tool, so it only catches problems with code that
+actually gets run. That means you will need to use it in conjunction with good
+testing techniques to increase your confidence about the unsafe code you have
+written. Miri also does not cover every possible way your code can be unsound.
 
-        Worker { id, thread }
-    }
+Put another way: If Miri *does* catch a problem, you know there’s a bug, but
+just because Miri *doesn’t* catch a bug doesn’t mean there isn’t a problem. It
+can catch a lot, though. Try running it on the other examples of unsafe code in
+this chapter and see what it says!
+
+You can learn more about Miri at its GitHub repository at *https://github.com/rust-lang/miri*.
+
+### When to Use Unsafe Code
+
+Using `unsafe` to use one of the five superpowers just discussed isn’t wrong or
+even frowned upon, but it is trickier to get `unsafe` code correct because the
+compiler can’t help uphold memory safety. When you have a reason to use
+`unsafe` code, you can do so, and having the explicit `unsafe` annotation makes
+it easier to track down the source of problems when they occur. Whenever you
+write unsafe code, you can use Miri to help you be more confident that the code
+you have written upholds Rust’s rules.
+
+For a much deeper exploration of how to work effectively with unsafe Rust, read
+Rust’s official guide to the subject, the Rustonomicon at *https://doc.rust-lang.org/nomicon/*.
+
+## Advanced Traits
+
+We first covered traits in “Traits: Defining Shared
+Behavior” in Chapter 10, but we
+didn’t discuss the more advanced details. Now that you know more about Rust, we
+can get into the nitty-gritty.
+
+<!-- Old link, do not remove -->
+
+<a id="specifying-placeholder-types-in-trait-definitions-with-associated-types"></a>
+
+### Associated Types
+
+*Associated types* connect a type placeholder with a trait such that the trait
+method definitions can use these placeholder types in their signatures. The
+implementor of a trait will specify the concrete type to be used instead of the
+placeholder type for the particular implementation. That way, we can define a
+trait that uses some types without needing to know exactly what those types are
+until the trait is implemented.
+
+We’ve described most of the advanced features in this chapter as being rarely
+needed. Associated types are somewhere in the middle: they’re used more rarely
+than features explained in the rest of the book but more commonly than many of
+the other features discussed in this chapter.
+
+One example of a trait with an associated type is the `Iterator` trait that the
+standard library provides. The associated type is named `Item` and stands in
+for the type of the values the type implementing the `Iterator` trait is
+iterating over. The definition of the `Iterator` trait is as shown in Listing
+20-13.
+
+
+```
+pub trait Iterator {
+    type Item;
+
+    fn next(&mut self) -> Option<Self::Item>;
 }
 ```
 
-Listing 20-21: An alternative implementation of `Worker::new` using `while let`
+Listing 20-13: The definition of the `Iterator` trait that has an associated type `Item`
 
-This code compiles and runs but doesn’t result in the desired threading
-behavior: a slow request will still cause other requests to wait to be
-processed. The reason is somewhat subtle: the `Mutex` struct has no public
-`unlock` method because the ownership of the lock is based on the lifetime of
-the `MutexGuard<T>` within the `LockResult<MutexGuard<T>>` that the `lock`
-method returns. At compile time, the borrow checker can then enforce the rule
-that a resource guarded by a `Mutex` cannot be accessed unless we hold the
-lock. However, this implementation can also result in the lock being held
-longer than intended if we aren’t mindful of the lifetime of the
-`MutexGuard<T>`.
+The type `Item` is a placeholder, and the `next` method’s definition shows that
+it will return values of type `Option<Self::Item>`. Implementors of the
+`Iterator` trait will specify the concrete type for `Item`, and the `next`
+method will return an `Option` containing a value of that concrete type.
 
-The code in Listing 20-20 that uses `let job =
-receiver.lock().unwrap().recv().unwrap();` works because with `let`, any
-temporary values used in the expression on the right-hand side of the equal
-sign are immediately dropped when the `let` statement ends. However, `while
-let` (and `if let` and `match`) does not drop temporary values until the end of
-the associated block. In Listing 20-21, the lock remains held for the duration
-of the call to `job()`, meaning other `Worker` instances cannot receive jobs.
+Associated types might seem like a similar concept to generics, in that the
+latter allow us to define a function without specifying what types it can
+handle. To examine the difference between the two concepts, we’ll look at an
+implementation of the `Iterator` trait on a type named `Counter` that specifies
+the `Item` type is `u32`:
 
-## Graceful Shutdown and Cleanup
-
-The code in Listing 20-20 is responding to requests asynchronously through the
-use of a thread pool, as we intended. We get some warnings about the `workers`,
-`id`, and `thread` fields that we’re not using in a direct way that reminds us
-we’re not cleaning up anything. When we use the less elegant ctrl-C method to
-halt the main thread, all other threads are stopped immediately as well, even
-if they’re in the middle of serving a request.
-
-Next, then, we’ll implement the `Drop` trait to call `join` on each of the
-threads in the pool so they can finish the requests they’re working on before
-closing. Then we’ll implement a way to tell the threads they should stop
-accepting new requests and shut down. To see this code in action, we’ll modify
-our server to accept only two requests before gracefully shutting down its
-thread pool.
-
-### Implementing the Drop Trait on ThreadPool
-
-Let’s start with implementing `Drop` on our thread pool. When the pool is
-dropped, our threads should all join to make sure they finish their work.
-Listing 20-22 shows a first attempt at a `Drop` implementation; this code won’t
-quite work yet.
-
-Filename: src/lib.rs
+src/lib.rs
 
 ```
-impl Drop for ThreadPool {
-    fn drop(&mut self) {
-      1 for worker in &mut self.workers {
-          2 println!("Shutting down worker {}", worker.id);
+impl Iterator for Counter {
+    type Item = u32;
 
-          3 worker.thread.join().unwrap();
+    fn next(&mut self) -> Option<Self::Item> {
+        // --snip--
+```
+
+
+
+This syntax seems comparable to that of generics. So why not just define the
+`Iterator` trait with generics, as shown in Listing 20-14?
+
+
+```
+pub trait Iterator<T> {
+    fn next(&mut self) -> Option<T>;
+}
+```
+
+Listing 20-14: A hypothetical definition of the `Iterator` trait using generics
+
+The difference is that when using generics, as in Listing 20-14, we must
+annotate the types in each implementation; because we can also implement
+`Iterator<String> for Counter` or any other type, we could have multiple
+implementations of `Iterator` for `Counter`. In other words, when a trait has a
+generic parameter, it can be implemented for a type multiple times, changing
+the concrete types of the generic type parameters each time. When we use the
+`next` method on `Counter`, we would have to provide type annotations to
+indicate which implementation of `Iterator` we want to use.
+
+With associated types, we don’t need to annotate types because we can’t
+implement a trait on a type multiple times. In Listing 20-13 with the
+definition that uses associated types, we can choose what the type of `Item`
+will be only once because there can be only one `impl Iterator for Counter`. We
+don’t have to specify that we want an iterator of `u32` values everywhere we
+call `next` on `Counter`.
+
+Associated types also become part of the trait’s contract: implementors of the
+trait must provide a type to stand in for the associated type placeholder.
+Associated types often have a name that describes how the type will be used,
+and documenting the associated type in the API documentation is a good practice.
+
+### Default Generic Type Parameters and Operator Overloading
+
+When we use generic type parameters, we can specify a default concrete type for
+the generic type. This eliminates the need for implementors of the trait to
+specify a concrete type if the default type works. You specify a default type
+when declaring a generic type with the `<PlaceholderType=ConcreteType>` syntax.
+
+A great example of a situation where this technique is useful is with *operator
+overloading*, in which you customize the behavior of an operator (such as `+`)
+in particular situations.
+
+Rust doesn’t allow you to create your own operators or overload arbitrary
+operators. But you can overload the operations and corresponding traits listed
+in `std::ops` by implementing the traits associated with the operator. For
+example, in Listing 20-15 we overload the `+` operator to add two `Point`
+instances together. We do this by implementing the `Add` trait on a `Point`
+struct.
+
+src/main.rs
+
+```
+use std::ops::Add;
+
+#[derive(Debug, Copy, Clone, PartialEq)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+impl Add for Point {
+    type Output = Point;
+
+    fn add(self, other: Point) -> Point {
+        Point {
+            x: self.x + other.x,
+            y: self.y + other.y,
         }
     }
 }
-```
 
-Listing 20-22: Joining each thread when the thread pool goes out of scope
-
-First we loop through each of the thread pool `workers` [1]. We use `&mut` for
-this because `self` is a mutable reference, and we also need to be able to
-mutate `worker`. For each `worker`, we print a message saying that this
-particular `Worker` instance is shutting down [2], and then we call `join` on
-that `Worker` instance’s thread [3]. If the call to `join` fails, we use
-`unwrap` to make Rust panic and go into an ungraceful shutdown.
-
-Here is the error we get when we compile this code:
-
-```
-error[E0507]: cannot move out of `worker.thread` which is behind a mutable
-reference
-    --> src/lib.rs:52:13
-     |
-52   |             worker.thread.join().unwrap();
-     |             ^^^^^^^^^^^^^ ------ `worker.thread` moved due to this
-method call
-     |             |
-     |             move occurs because `worker.thread` has type
-`JoinHandle<()>`, which does not implement the `Copy` trait
-     |
-note: this function takes ownership of the receiver `self`, which moves
-`worker.thread`
-```
-
-The error tells us we can’t call `join` because we only have a mutable borrow
-of each `worker` and `join` takes ownership of its argument. To solve this
-issue, we need to move the thread out of the `Worker` instance that owns
-`thread` so `join` can consume the thread. We did this in Listing 17-15: if
-`Worker` holds an `Option<thread::JoinHandle<()>>` instead, we can call the
-`take` method on the `Option` to move the value out of the `Some` variant and
-leave a `None` variant in its place. In other words, a `Worker` that is running
-will have a `Some` variant in `thread`, and when we want to clean up a
-`Worker`, we’ll replace `Some` with `None` so the `Worker` doesn’t have a
-thread to run.
-
-So we know we want to update the definition of `Worker` like this:
-
-Filename: src/lib.rs
-
-```
-struct Worker {
-    id: usize,
-    thread: Option<thread::JoinHandle<()>>,
+fn main() {
+    assert_eq!(
+        Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
+        Point { x: 3, y: 3 }
+    );
 }
 ```
 
-Now let’s lean on the compiler to find the other places that need to change.
-Checking this code, we get two errors:
+Listing 20-15: Implementing the `Add` trait to overload the `+` operator for `Point` instances
+
+The `add` method adds the `x` values of two `Point` instances and the `y`
+values of two `Point` instances to create a new `Point`. The `Add` trait has an
+associated type named `Output` that determines the type returned from the `add`
+method.
+
+The default generic type in this code is within the `Add` trait. Here is its
+definition:
 
 ```
-error[E0599]: no method named `join` found for enum `Option` in the current
-scope
-  --> src/lib.rs:52:27
-   |
-52 |             worker.thread.join().unwrap();
-   |                           ^^^^ method not found in
-`Option<JoinHandle<()>>`
+trait Add<Rhs=Self> {
+    type Output;
 
-error[E0308]: mismatched types
-  --> src/lib.rs:72:22
-   |
-72 |         Worker { id, thread }
-   |                      ^^^^^^ expected enum `Option`, found struct
-`JoinHandle`
-   |
-   = note: expected enum `Option<JoinHandle<()>>`
-            found struct `JoinHandle<_>`
-help: try wrapping the expression in `Some`
-   |
-72 |         Worker { id, thread: Some(thread) }
-   |                      +++++++++++++      +
+    fn add(self, rhs: Rhs) -> Self::Output;
+}
 ```
 
-Let’s address the second error, which points to the code at the end of
-`Worker::new`; we need to wrap the `thread` value in `Some` when we create a
-new `Worker`. Make the following changes to fix this error:
+This code should look generally familiar: a trait with one method and an
+associated type. The new part is `Rhs=Self`: this syntax is called *default
+type parameters*. The `Rhs` generic type parameter (short for “right-hand
+side”) defines the type of the `rhs` parameter in the `add` method. If we don’t
+specify a concrete type for `Rhs` when we implement the `Add` trait, the type
+of `Rhs` will default to `Self`, which will be the type we’re implementing
+`Add` on.
 
-Filename: src/lib.rs
+When we implemented `Add` for `Point`, we used the default for `Rhs` because we
+wanted to add two `Point` instances. Let’s look at an example of implementing
+the `Add` trait where we want to customize the `Rhs` type rather than using the
+default.
+
+We have two structs, `Millimeters` and `Meters`, holding values in different
+units. This thin wrapping of an existing type in another struct is known as the
+*newtype pattern*, which we describe in more detail in the “Using the Newtype
+Pattern to Implement External Traits” section. We want to add values in millimeters to values in meters and have
+the implementation of `Add` do the conversion correctly. We can implement `Add`
+for `Millimeters` with `Meters` as the `Rhs`, as shown in Listing 20-16.
+
+src/lib.rs
 
 ```
-impl Worker {
-    fn new(
-        id: usize,
-        receiver: Arc<Mutex<mpsc::Receiver<Job>>>,
-    ) -> Worker {
-        --snip--
+use std::ops::Add;
 
-        Worker {
-            id,
-            thread: Some(thread),
-        }
+struct Millimeters(u32);
+struct Meters(u32);
+
+impl Add<Meters> for Millimeters {
+    type Output = Millimeters;
+
+    fn add(self, other: Meters) -> Millimeters {
+        Millimeters(self.0 + (other.0 * 1000))
     }
 }
 ```
 
-The first error is in our `Drop` implementation. We mentioned earlier that we
-intended to call `take` on the `Option` value to move `thread` out of `worker`.
-The following changes will do so:
+Listing 20-16: Implementing the `Add` trait on `Millimeters` to add `Millimeters` and `Meters`
 
-Filename: src/lib.rs
+To add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to set the
+value of the `Rhs` type parameter instead of using the default of `Self`.
+
+You’ll use default type parameters in two main ways:
+
+1. To extend a type without breaking existing code
+1. To allow customization in specific cases most users won’t need
+
+The standard library’s `Add` trait is an example of the second purpose:
+usually, you’ll add two like types, but the `Add` trait provides the ability to
+customize beyond that. Using a default type parameter in the `Add` trait
+definition means you don’t have to specify the extra parameter most of the
+time. In other words, a bit of implementation boilerplate isn’t needed, making
+it easier to use the trait.
+
+The first purpose is similar to the second but in reverse: if you want to add a
+type parameter to an existing trait, you can give it a default to allow
+extension of the functionality of the trait without breaking the existing
+implementation code.
+
+<!-- Old link, do not remove -->
+
+<a id="fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name"></a>
+
+### Disambiguating Between Methods with the Same Name
+
+Nothing in Rust prevents a trait from having a method with the same name as
+another trait’s method, nor does Rust prevent you from implementing both traits
+on one type. It’s also possible to implement a method directly on the type with
+the same name as methods from traits.
+
+When calling methods with the same name, you’ll need to tell Rust which one you
+want to use. Consider the code in Listing 20-17 where we’ve defined two traits,
+`Pilot` and `Wizard`, that both have a method called `fly`. We then implement
+both traits on a type `Human` that already has a method named `fly` implemented
+on it. Each `fly` method does something different.
+
+src/main.rs
 
 ```
-impl Drop for ThreadPool {
-    fn drop(&mut self) {
-        for worker in &mut self.workers {
-            println!("Shutting down worker {}", worker.id);
+trait Pilot {
+    fn fly(&self);
+}
 
-          1 if let Some(thread) = worker.thread.take() {
-              2 thread.join().unwrap();
-            }
-        }
+trait Wizard {
+    fn fly(&self);
+}
+
+struct Human;
+
+impl Pilot for Human {
+    fn fly(&self) {
+        println!("This is your captain speaking.");
+    }
+}
+
+impl Wizard for Human {
+    fn fly(&self) {
+        println!("Up!");
+    }
+}
+
+impl Human {
+    fn fly(&self) {
+        println!("*waving arms furiously*");
     }
 }
 ```
 
-As discussed in Chapter 17, the `take` method on `Option` takes the `Some`
-variant out and leaves `None` in its place. We’re using `if let` to destructure
-the `Some` and get the thread [1]; then we call `join` on the thread [2]. If a
-`Worker` instance’s thread is already `None`, we know that `Worker` has already
-had its thread cleaned up, so nothing happens in that case.
+Listing 20-17: Two traits are defined to have a `fly` method and are implemented on the `Human` type, and a `fly` method is implemented on `Human` directly.
 
-### Signaling to the Threads to Stop Listening for Jobs
+When we call `fly` on an instance of `Human`, the compiler defaults to calling
+the method that is directly implemented on the type, as shown in Listing 20-18.
 
-With all the changes we’ve made, our code compiles without any warnings.
-However, the bad news is that this code doesn’t function the way we want it to
-yet. The key is the logic in the closures run by the threads of the `Worker`
-instances: at the moment, we call `join`, but that won’t shut down the threads,
-because they `loop` forever looking for jobs. If we try to drop our
-`ThreadPool` with our current implementation of `drop`, the main thread will
-block forever, waiting for the first thread to finish.
-
-To fix this problem, we’ll need a change in the `ThreadPool` `drop`
-implementation and then a change in the `Worker` loop.
-
-First we’ll change the `ThreadPool` `drop` implementation to explicitly drop
-the `sender` before waiting for the threads to finish. Listing 20-23 shows the
-changes to `ThreadPool` to explicitly drop `sender`. We use the same `Option`
-and `take` technique as we did with the thread to be able to move `sender` out
-of `ThreadPool`.
-
-Filename: src/lib.rs
-
-```
-pub struct ThreadPool {
-    workers: Vec<Worker>,
-    sender: Option<mpsc::Sender<Job>>,
-}
---snip--
-impl ThreadPool {
-    pub fn new(size: usize) -> ThreadPool {
-        --snip--
-
-        ThreadPool {
-            workers,
-            sender: Some(sender),
-        }
-    }
-
-    pub fn execute<F>(&self, f: F)
-    where
-        F: FnOnce() + Send + 'static,
-    {
-        let job = Box::new(f);
-
-        self.sender
-            .as_ref()
-            .unwrap()
-            .send(job)
-            .unwrap();
-    }
-}
-
-impl Drop for ThreadPool {
-    fn drop(&mut self) {
-      1 drop(self.sender.take());
-
-        for worker in &mut self.workers {
-            println!("Shutting down worker {}", worker.id);
-
-            if let Some(thread) = worker.thread.take() {
-                thread.join().unwrap();
-            }
-        }
-    }
-}
-```
-
-Listing 20-23: Explicitly dropping `sender` before joining the `Worker` threads
-
-Dropping `sender` [1] closes the channel, which indicates no more messages will
-be sent. When that happens, all the calls to `recv` that the `Worker` instances
-do in the infinite loop will return an error. In Listing 20-24, we change the
-`Worker` loop to gracefully exit the loop in that case, which means the threads
-will finish when the `ThreadPool` `drop` implementation calls `join` on them.
-
-Filename: src/lib.rs
-
-```
-impl Worker {
-    fn new(
-        id: usize,
-        receiver: Arc<Mutex<mpsc::Receiver<Job>>>,
-    ) -> Worker {
-        let thread = thread::spawn(move || loop {
-            let message = receiver.lock().unwrap().recv();
-
-            match message {
-                Ok(job) => {
-                    println!(
-                        "Worker {id} got a job; executing."
-                    );
-
-                    job();
-                }
-                Err(_) => {
-                    println!(
-                        "Worker {id} shutting down."
-                    );
-                    break;
-                }
-            }
-        });
-
-        Worker {
-            id,
-            thread: Some(thread),
-        }
-    }
-}
-```
-
-Listing 20-24: Explicitly breaking out of the loop when `recv` returns an error
-
-To see this code in action, let’s modify `main` to accept only two requests
-before gracefully shutting down the server, as shown in Listing 20-25.
-
-Filename: src/main.rs
+src/main.rs
 
 ```
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-    let pool = ThreadPool::new(4);
-
-    for stream in listener.incoming().take(2) {
-        let stream = stream.unwrap();
-
-        pool.execute(|| {
-            handle_connection(stream);
-        });
-    }
-
-    println!("Shutting down.");
+    let person = Human;
+    person.fly();
 }
 ```
 
-Listing 20-25: Shutting down the server after serving two requests by exiting
-the loop
+Listing 20-18: Calling `fly` on an instance of `Human`
 
-You wouldn’t want a real-world web server to shut down after serving only two
-requests. This code just demonstrates that the graceful shutdown and cleanup is
-in working order.
+Running this code will print `*waving arms furiously*`, showing that Rust
+called the `fly` method implemented on `Human` directly.
 
-The `take` method is defined in the `Iterator` trait and limits the iteration
-to the first two items at most. The `ThreadPool` will go out of scope at the
-end of `main`, and the `drop` implementation will run.
+To call the `fly` methods from either the `Pilot` trait or the `Wizard` trait,
+we need to use more explicit syntax to specify which `fly` method we mean.
+Listing 20-19 demonstrates this syntax.
 
-Start the server with `cargo run`, and make three requests. The third request
-should error, and in your terminal you should see output similar to this:
+src/main.rs
+
+```
+fn main() {
+    let person = Human;
+    Pilot::fly(&person);
+    Wizard::fly(&person);
+    person.fly();
+}
+```
+
+Listing 20-19: Specifying which trait’s `fly` method we want to call
+
+Specifying the trait name before the method name clarifies to Rust which
+implementation of `fly` we want to call. We could also write
+`Human::fly(&person)`, which is equivalent to the `person.fly()` that we used
+in Listing 20-19, but this is a bit longer to write if we don’t need to
+disambiguate.
+
+Running this code prints the following:
 
 ```
 $ cargo run
-   Compiling hello v0.1.0 (file:///projects/hello)
-    Finished dev [unoptimized + debuginfo] target(s) in 1.0s
-     Running `target/debug/hello`
-Worker 0 got a job; executing.
-Shutting down.
-Shutting down worker 0
-Worker 3 got a job; executing.
-Worker 1 disconnected; shutting down.
-Worker 2 disconnected; shutting down.
-Worker 3 disconnected; shutting down.
-Worker 0 disconnected; shutting down.
-Shutting down worker 1
-Shutting down worker 2
-Shutting down worker 3
+   Compiling traits-example v0.1.0 (file:///projects/traits-example)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.46s
+     Running `target/debug/traits-example`
+This is your captain speaking.
+Up!
+*waving arms furiously*
 ```
 
-You might see a different ordering of `Worker` IDs and messages printed. We can
-see how this code works from the messages: `Worker` instances 0 and 3 got the
-first two requests. The server stopped accepting connections after the second
-connection, and the `Drop` implementation on `ThreadPool` starts executing
-before `Worker` 3 even starts its job. Dropping the `sender` disconnects all
-the `Worker` instances and tells them to shut down. The `Worker` instances each
-print a message when they disconnect, and then the thread pool calls `join` to
-wait for each `Worker` thread to finish.
+Because the `fly` method takes a `self` parameter, if we had two *types* that
+both implement one *trait*, Rust could figure out which implementation of a
+trait to use based on the type of `self`.
 
-Notice one interesting aspect of this particular execution: the `ThreadPool`
-dropped the `sender`, and before any `Worker` received an error, we tried to
-join `Worker` 0. `Worker` 0 had not yet gotten an error from `recv`, so the
-main thread blocked, waiting for `Worker` 0 to finish. In the meantime,
-`Worker` 3 received a job and then all threads received an error. When `Worker`
-0 finished, the main thread waited for the rest of the `Worker` instances to
-finish. At that point, they had all exited their loops and stopped.
+However, associated functions that are not methods don’t have a `self`
+parameter. When there are multiple types or traits that define non-method
+functions with the same function name, Rust doesn’t always know which type you
+mean unless you use fully qualified syntax. For example, in Listing 20-20 we
+create a trait for an animal shelter that wants to name all baby dogs Spot. We
+make an `Animal` trait with an associated non-method function `baby_name`. The
+`Animal` trait is implemented for the struct `Dog`, on which we also provide an
+associated non-method function `baby_name` directly.
 
-Congrats! We’ve now completed our project; we have a basic web server that uses
-a thread pool to respond asynchronously. We’re able to perform a graceful
-shutdown of the server, which cleans up all the threads in the pool. See
-*https://www.nostarch.com/Rust2021* to download the full code for this chapter
-for reference.
+src/main.rs
 
-We could do more here! If you want to continue enhancing this project, here are
-some ideas:
+```
+trait Animal {
+    fn baby_name() -> String;
+}
 
-* Add more documentation to `ThreadPool` and its public methods.
-* Add tests of the library’s functionality.
-* Change calls to `unwrap` to more robust error handling.
-* Use `ThreadPool` to perform some task other than serving web requests.
-* Find a thread pool crate on *https://crates.io* and implement a similar web
-server using the crate instead. Then compare its API and robustness to the
-thread pool we implemented.
+struct Dog;
+
+impl Dog {
+    fn baby_name() -> String {
+        String::from("Spot")
+    }
+}
+
+impl Animal for Dog {
+    fn baby_name() -> String {
+        String::from("puppy")
+    }
+}
+
+fn main() {
+    println!("A baby dog is called a {}", Dog::baby_name());
+}
+```
+
+Listing 20-20: A trait with an associated function and a type with an associated function of the same name that also implements the trait
+
+We implement the code for naming all puppies Spot in the `baby_name` associated
+function that is defined on `Dog`. The `Dog` type also implements the trait
+`Animal`, which describes characteristics that all animals have. Baby dogs are
+called puppies, and that is expressed in the implementation of the `Animal`
+trait on `Dog` in the `baby_name` function associated with the `Animal` trait.
+
+In `main`, we call the `Dog::baby_name` function, which calls the associated
+function defined on `Dog` directly. This code prints the following:
+
+```
+$ cargo run
+   Compiling traits-example v0.1.0 (file:///projects/traits-example)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.54s
+     Running `target/debug/traits-example`
+A baby dog is called a Spot
+```
+
+This output isn’t what we wanted. We want to call the `baby_name` function that
+is part of the `Animal` trait that we implemented on `Dog` so the code prints
+`A baby dog is called a puppy`. The technique of specifying the trait name that
+we used in Listing 20-19 doesn’t help here; if we change `main` to the code in
+Listing 20-21, we’ll get a compilation error.
+
+src/main.rs
+
+```
+fn main() {
+    println!("A baby dog is called a {}", Animal::baby_name());
+}
+```
+
+Listing 20-21: Attempting to call the `baby_name` function from the `Animal` trait, but Rust doesn’t know which implementation to use
+
+Because `Animal::baby_name` doesn’t have a `self` parameter, and there could be
+other types that implement the `Animal` trait, Rust can’t figure out which
+implementation of `Animal::baby_name` we want. We’ll get this compiler error:
+
+```
+$ cargo run
+   Compiling traits-example v0.1.0 (file:///projects/traits-example)
+error[E0790]: cannot call associated function on trait without specifying the corresponding `impl` type
+  --> src/main.rs:20:43
+   |
+2  |     fn baby_name() -> String;
+   |     ------------------------- `Animal::baby_name` defined here
+...
+20 |     println!("A baby dog is called a {}", Animal::baby_name());
+   |                                           ^^^^^^^^^^^^^^^^^^^ cannot call associated function of trait
+   |
+help: use the fully-qualified path to the only available implementation
+   |
+20 |     println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
+   |                                           +++++++       +
+
+For more information about this error, try `rustc --explain E0790`.
+error: could not compile `traits-example` (bin "traits-example") due to 1 previous error
+```
+
+To disambiguate and tell Rust that we want to use the implementation of
+`Animal` for `Dog` as opposed to the implementation of `Animal` for some other
+type, we need to use fully qualified syntax. Listing 20-22 demonstrates how to
+use fully qualified syntax.
+
+src/main.rs
+
+```
+fn main() {
+    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
+}
+```
+
+Listing 20-22: Using fully qualified syntax to specify that we want to call the `baby_name` function from the `Animal` trait as implemented on `Dog`
+
+We’re providing Rust with a type annotation within the angle brackets, which
+indicates we want to call the `baby_name` method from the `Animal` trait as
+implemented on `Dog` by saying that we want to treat the `Dog` type as an
+`Animal` for this function call. This code will now print what we want:
+
+```
+$ cargo run
+   Compiling traits-example v0.1.0 (file:///projects/traits-example)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.48s
+     Running `target/debug/traits-example`
+A baby dog is called a puppy
+```
+
+In general, fully qualified syntax is defined as follows:
+
+```
+<Type as Trait>::function(receiver_if_method, next_arg, ...);
+```
+
+For associated functions that aren’t methods, there would not be a `receiver`:
+there would only be the list of other arguments. You could use fully qualified
+syntax everywhere that you call functions or methods. However, you’re allowed
+to omit any part of this syntax that Rust can figure out from other information
+in the program. You only need to use this more verbose syntax in cases where
+there are multiple implementations that use the same name and Rust needs help
+to identify which implementation you want to call.
+
+<!-- Old link, do not remove -->
+
+<a id="using-supertraits-to-require-one-traits-functionality-within-another-trait"></a>
+
+### Using Supertraits
+
+Sometimes you might write a trait definition that depends on another trait: for
+a type to implement the first trait, you want to require that type to also
+implement the second trait. You would do this so that your trait definition can
+make use of the associated items of the second trait. The trait your trait
+definition is relying on is called a *supertrait* of your trait.
+
+For example, let’s say we want to make an `OutlinePrint` trait with an
+`outline_print` method that will print a given value formatted so that it’s
+framed in asterisks. That is, given a `Point` struct that implements the
+standard library trait `Display` to result in `(x, y)`, when we call
+`outline_print` on a `Point` instance that has `1` for `x` and `3` for `y`, it
+should print the following:
+
+```
+**********
+*        *
+* (1, 3) *
+*        *
+**********
+```
+
+In the implementation of the `outline_print` method, we want to use the
+`Display` trait’s functionality. Therefore, we need to specify that the
+`OutlinePrint` trait will work only for types that also implement `Display` and
+provide the functionality that `OutlinePrint` needs. We can do that in the
+trait definition by specifying `OutlinePrint: Display`. This technique is
+similar to adding a trait bound to the trait. Listing 20-23 shows an
+implementation of the `OutlinePrint` trait.
+
+src/main.rs
+
+```
+use std::fmt;
+
+trait OutlinePrint: fmt::Display {
+    fn outline_print(&self) {
+        let output = self.to_string();
+        let len = output.len();
+        println!("{}", "*".repeat(len + 4));
+        println!("*{}*", " ".repeat(len + 2));
+        println!("* {output} *");
+        println!("*{}*", " ".repeat(len + 2));
+        println!("{}", "*".repeat(len + 4));
+    }
+}
+```
+
+Listing 20-23: Implementing the `OutlinePrint` trait that requires the functionality from `Display`
+
+Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
+can use the `to_string` function that is automatically implemented for any type
+that implements `Display`. If we tried to use `to_string` without adding a
+colon and specifying the `Display` trait after the trait name, we’d get an
+error saying that no method named `to_string` was found for the type `&Self` in
+the current scope.
+
+Let’s see what happens when we try to implement `OutlinePrint` on a type that
+doesn’t implement `Display`, such as the `Point` struct:
+
+src/main.rs
+
+```
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+impl OutlinePrint for Point {}
+```
+
+
+
+We get an error saying that `Display` is required but not implemented:
+
+```
+$ cargo run
+   Compiling traits-example v0.1.0 (file:///projects/traits-example)
+error[E0277]: `Point` doesn't implement `std::fmt::Display`
+  --> src/main.rs:20:23
+   |
+20 | impl OutlinePrint for Point {}
+   |                       ^^^^^ `Point` cannot be formatted with the default formatter
+   |
+   = help: the trait `std::fmt::Display` is not implemented for `Point`
+   = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+note: required by a bound in `OutlinePrint`
+  --> src/main.rs:3:21
+   |
+3  | trait OutlinePrint: fmt::Display {
+   |                     ^^^^^^^^^^^^ required by this bound in `OutlinePrint`
+
+error[E0277]: `Point` doesn't implement `std::fmt::Display`
+  --> src/main.rs:24:7
+   |
+24 |     p.outline_print();
+   |       ^^^^^^^^^^^^^ `Point` cannot be formatted with the default formatter
+   |
+   = help: the trait `std::fmt::Display` is not implemented for `Point`
+   = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+note: required by a bound in `OutlinePrint::outline_print`
+  --> src/main.rs:3:21
+   |
+3  | trait OutlinePrint: fmt::Display {
+   |                     ^^^^^^^^^^^^ required by this bound in `OutlinePrint::outline_print`
+4  |     fn outline_print(&self) {
+   |        ------------- required by a bound in this associated function
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `traits-example` (bin "traits-example") due to 2 previous errors
+```
+
+To fix this, we implement `Display` on `Point` and satisfy the constraint that
+`OutlinePrint` requires, like so:
+
+src/main.rs
+
+```
+use std::fmt;
+
+impl fmt::Display for Point {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({}, {})", self.x, self.y)
+    }
+}
+```
+
+
+
+Then, implementing the `OutlinePrint` trait on `Point` will compile
+successfully, and we can call `outline_print` on a `Point` instance to display
+it within an outline of asterisks.
+
+<!-- Old link, do not remove -->
+
+<a id="using-the-newtype-pattern-to-implement-external-traits-on-external-types"></a>
+
+### Using the Newtype Pattern to Implement External Traits
+
+In “Implementing a Trait on a Type” in Chapter 10, we mentioned the orphan rule that states we’re only
+allowed to implement a trait on a type if either the trait or the type, or
+both, are local to our crate. It’s possible to get around this restriction
+using the *newtype pattern*, which involves creating a new type in a tuple
+struct. (We covered tuple structs in “Using Tuple Structs Without Named Fields
+to Create Different Types” in Chapter 5.) The
+tuple struct will have one field and be a thin wrapper around the type for
+which we want to implement a trait. Then the wrapper type is local to our
+crate, and we can implement the trait on the wrapper. *Newtype* is a term that
+originates from the Haskell programming language. There is no runtime
+performance penalty for using this pattern, and the wrapper type is elided at
+compile time.
+
+As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
+orphan rule prevents us from doing directly because the `Display` trait and the
+`Vec<T>` type are defined outside our crate. We can make a `Wrapper` struct
+that holds an instance of `Vec<T>`; then we can implement `Display` on
+`Wrapper` and use the `Vec<T>` value, as shown in Listing 20-24.
+
+src/main.rs
+
+```
+use std::fmt;
+
+struct Wrapper(Vec<String>);
+
+impl fmt::Display for Wrapper {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "[{}]", self.0.join(", "))
+    }
+}
+
+fn main() {
+    let w = Wrapper(vec![String::from("hello"), String::from("world")]);
+    println!("w = {w}");
+}
+```
+
+Listing 20-24: Creating a `Wrapper` type around `Vec<String>` to implement `Display`
+
+The implementation of `Display` uses `self.0` to access the inner `Vec<T>`
+because `Wrapper` is a tuple struct and `Vec<T>` is the item at index 0 in the
+tuple. Then we can use the functionality of the `Display` trait on `Wrapper`.
+
+The downside of using this technique is that `Wrapper` is a new type, so it
+doesn’t have the methods of the value it’s holding. We would have to implement
+all the methods of `Vec<T>` directly on `Wrapper` such that the methods
+delegate to `self.0`, which would allow us to treat `Wrapper` exactly like a
+`Vec<T>`. If we wanted the new type to have every method the inner type has,
+implementing the `Deref` trait on the `Wrapper` to return the inner type would
+be a solution (we discussed implementing the `Deref` trait in “Treating Smart
+Pointers Like Regular References with `Deref`” in Chapter 15). If we didn’t want the `Wrapper` type to have all the
+methods of the inner type—for example, to restrict the `Wrapper` type’s
+behavior—we would have to implement just the methods we do want manually.
+
+This newtype pattern is also useful even when traits are not involved. Let’s
+switch focus and look at some advanced ways to interact with Rust’s type system.
+
+## Advanced Types
+
+The Rust type system has some features that we’ve so far mentioned but haven’t
+yet discussed. We’ll start by discussing newtypes in general as we examine why
+newtypes are useful as types. Then we’ll move on to type aliases, a feature
+similar to newtypes but with slightly different semantics. We’ll also discuss
+the `!` type and dynamically sized types.
+
+### Using the Newtype Pattern for Type Safety and Abstraction
+
+This section assumes you’ve read the earlier section “Using the Newtype Pattern
+to Implement External Traits”. The newtype pattern is also useful for tasks beyond those we’ve
+discussed so far, including statically enforcing that values are never confused
+and indicating the units of a value. You saw an example of using newtypes to
+indicate units in Listing 20-16: recall that the `Millimeters` and `Meters`
+structs wrapped `u32` values in a newtype. If we wrote a function with a
+parameter of type `Millimeters`, we wouldn’t be able to compile a program that
+accidentally tried to call that function with a value of type `Meters` or a
+plain `u32`.
+
+We can also use the newtype pattern to abstract away some implementation
+details of a type: the new type can expose a public API that is different from
+the API of the private inner type.
+
+Newtypes can also hide internal implementation. For example, we could provide a
+`People` type to wrap a `HashMap<i32, String>` that stores a person’s ID
+associated with their name. Code using `People` would only interact with the
+public API we provide, such as a method to add a name string to the `People`
+collection; that code wouldn’t need to know that we assign an `i32` ID to names
+internally. The newtype pattern is a lightweight way to achieve encapsulation to
+hide implementation details, which we discussed in “Encapsulation that Hides
+Implementation Details” in Chapter 18.
+
+### Creating Type Synonyms with Type Aliases
+
+Rust provides the ability to declare a *type alias* to give an existing type
+another name. For this we use the `type` keyword. For example, we can create
+the alias `Kilometers` to `i32` like so:
+
+```
+    type Kilometers = i32;
+```
+
+Now the alias `Kilometers` is a *synonym* for `i32`; unlike the `Millimeters`
+and `Meters` types we created in Listing 20-16, `Kilometers` is not a separate,
+new type. Values that have the type `Kilometers` will be treated the same as
+values of type `i32`:
+
+```
+    type Kilometers = i32;
+
+    let x: i32 = 5;
+    let y: Kilometers = 5;
+
+    println!("x + y = {}", x + y);
+```
+
+Because `Kilometers` and `i32` are the same type, we can add values of both
+types and we can pass `Kilometers` values to functions that take `i32`
+parameters. However, using this method, we don’t get the type-checking benefits
+that we get from the newtype pattern discussed earlier. In other words, if we
+mix up `Kilometers` and `i32` values somewhere, the compiler will not give us
+an error.
+
+The main use case for type synonyms is to reduce repetition. For example, we
+might have a lengthy type like this:
+
+```
+Box<dyn Fn() + Send + 'static>
+```
+
+Writing this lengthy type in function signatures and as type annotations all
+over the code can be tiresome and error prone. Imagine having a project full of
+code like that in Listing 20-25.
+
+
+```
+    let f: Box<dyn Fn() + Send + 'static> = Box::new(|| println!("hi"));
+
+    fn takes_long_type(f: Box<dyn Fn() + Send + 'static>) {
+        // --snip--
+    }
+
+    fn returns_long_type() -> Box<dyn Fn() + Send + 'static> {
+        // --snip--
+    }
+```
+
+Listing 20-25: Using a long type in many places
+
+A type alias makes this code more manageable by reducing the repetition. In
+Listing 20-26, we’ve introduced an alias named `Thunk` for the verbose type and
+can replace all uses of the type with the shorter alias `Thunk`.
+
+
+```
+    type Thunk = Box<dyn Fn() + Send + 'static>;
+
+    let f: Thunk = Box::new(|| println!("hi"));
+
+    fn takes_long_type(f: Thunk) {
+        // --snip--
+    }
+
+    fn returns_long_type() -> Thunk {
+        // --snip--
+    }
+```
+
+Listing 20-26: Introducing a type alias, `Thunk`, to reduce repetition
+
+This code is much easier to read and write! Choosing a meaningful name for a
+type alias can help communicate your intent as well (*thunk* is a word for code
+to be evaluated at a later time, so it’s an appropriate name for a closure that
+gets stored).
+
+Type aliases are also commonly used with the `Result<T, E>` type for reducing
+repetition. Consider the `std::io` module in the standard library. I/O
+operations often return a `Result<T, E>` to handle situations when operations
+fail to work. This library has a `std::io::Error` struct that represents all
+possible I/O errors. Many of the functions in `std::io` will be returning
+`Result<T, E>` where the `E` is `std::io::Error`, such as these functions in
+the `Write` trait:
+
+```
+use std::fmt;
+use std::io::Error;
+
+pub trait Write {
+    fn write(&mut self, buf: &[u8]) -> Result<usize, Error>;
+    fn flush(&mut self) -> Result<(), Error>;
+
+    fn write_all(&mut self, buf: &[u8]) -> Result<(), Error>;
+    fn write_fmt(&mut self, fmt: fmt::Arguments) -> Result<(), Error>;
+}
+```
+
+The `Result<..., Error>` is repeated a lot. As such, `std::io` has this type
+alias declaration:
+
+```
+type Result<T> = std::result::Result<T, std::io::Error>;
+```
+
+Because this declaration is in the `std::io` module, we can use the fully
+qualified alias `std::io::Result<T>`; that is, a `Result<T, E>` with the `E`
+filled in as `std::io::Error`. The `Write` trait function signatures end up
+looking like this:
+
+```
+pub trait Write {
+    fn write(&mut self, buf: &[u8]) -> Result<usize>;
+    fn flush(&mut self) -> Result<()>;
+
+    fn write_all(&mut self, buf: &[u8]) -> Result<()>;
+    fn write_fmt(&mut self, fmt: fmt::Arguments) -> Result<()>;
+}
+```
+
+The type alias helps in two ways: it makes code easier to write *and* it gives
+us a consistent interface across all of `std::io`. Because it’s an alias, it’s
+just another `Result<T, E>`, which means we can use any methods that work on
+`Result<T, E>` with it, as well as special syntax like the `?` operator.
+
+### The Never Type That Never Returns
+
+Rust has a special type named `!` that’s known in type theory lingo as the
+*empty type* because it has no values. We prefer to call it the *never type*
+because it stands in the place of the return type when a function will never
+return. Here is an example:
+
+```
+fn bar() -> ! {
+    // --snip--
+}
+```
+
+This code is read as “the function `bar` returns never.” Functions that return
+never are called *diverging functions*. We can’t create values of the type `!`,
+so `bar` can never possibly return.
+
+But what use is a type you can never create values for? Recall the code from
+Listing 2-5, part of the number-guessing game; we’ve reproduced a bit of it
+here in Listing 20-27.
+
+
+```
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
+```
+
+Listing 20-27: A `match` with an arm that ends in `continue`
+
+At the time, we skipped over some details in this code. In “The `match`
+Control Flow Construct” in
+Chapter 6, we discussed that `match` arms must all return the same type. So,
+for example, the following code doesn’t work:
+
+```
+    let guess = match guess.trim().parse() {
+        Ok(_) => 5,
+        Err(_) => "hello",
+    };
+```
+
+The type of `guess` in this code would have to be an integer *and* a string,
+and Rust requires that `guess` have only one type. So what does `continue`
+return? How were we allowed to return a `u32` from one arm and have another arm
+that ends with `continue` in Listing 20-27?
+
+As you might have guessed, `continue` has a `!` value. That is, when Rust
+computes the type of `guess`, it looks at both match arms, the former with a
+value of `u32` and the latter with a `!` value. Because `!` can never have a
+value, Rust decides that the type of `guess` is `u32`.
+
+The formal way of describing this behavior is that expressions of type `!` can
+be coerced into any other type. We’re allowed to end this `match` arm with
+`continue` because `continue` doesn’t return a value; instead, it moves control
+back to the top of the loop, so in the `Err` case, we never assign a value to
+`guess`.
+
+The never type is useful with the `panic!` macro as well. Recall the `unwrap`
+function that we call on `Option<T>` values to produce a value or panic with
+this definition:
+
+```
+impl<T> Option<T> {
+    pub fn unwrap(self) -> T {
+        match self {
+            Some(val) => val,
+            None => panic!("called `Option::unwrap()` on a `None` value"),
+        }
+    }
+}
+```
+
+In this code, the same thing happens as in the `match` in Listing 20-27: Rust
+sees that `val` has the type `T` and `panic!` has the type `!`, so the result
+of the overall `match` expression is `T`. This code works because `panic!`
+doesn’t produce a value; it ends the program. In the `None` case, we won’t be
+returning a value from `unwrap`, so this code is valid.
+
+One final expression that has the type `!` is a `loop`:
+
+```
+    print!("forever ");
+
+    loop {
+        print!("and ever ");
+    }
+```
+
+Here, the loop never ends, so `!` is the value of the expression. However, this
+wouldn’t be true if we included a `break`, because the loop would terminate
+when it got to the `break`.
+
+### Dynamically Sized Types and the Sized Trait
+
+Rust needs to know certain details about its types, such as how much space to
+allocate for a value of a particular type. This leaves one corner of its type
+system a little confusing at first: the concept of *dynamically sized types*.
+Sometimes referred to as *DSTs* or *unsized types*, these types let us write
+code using values whose size we can know only at runtime.
+
+Let’s dig into the details of a dynamically sized type called `str`, which
+we’ve been using throughout the book. That’s right, not `&str`, but `str` on
+its own, is a DST. In many cases, such as when storing text entered by a user,
+we can’t know how long the string is until runtime. That means we can’t create
+a variable of type `str`, nor can we take an argument of type `str`. Consider
+the following code, which does not work:
+
+```
+    let s1: str = "Hello there!";
+    let s2: str = "How's it going?";
+```
+
+Rust needs to know how much memory to allocate for any value of a particular
+type, and all values of a type must use the same amount of memory. If Rust
+allowed us to write this code, these two `str` values would need to take up the
+same amount of space. But they have different lengths: `s1` needs 12 bytes of
+storage and `s2` needs 15. This is why it’s not possible to create a variable
+holding a dynamically sized type.
+
+So what do we do? In this case, you already know the answer: we make the types
+of `s1` and `s2` a `&str` rather than a `str`. Recall from “String
+Slices” in Chapter 4 that the slice data
+structure just stores the starting position and the length of the slice. So,
+although a `&T` is a single value that stores the memory address of where the
+`T` is located, a `&str` is *two* values: the address of the `str` and its
+length. As such, we can know the size of a `&str` value at compile time: it’s
+twice the length of a `usize`. That is, we always know the size of a `&str`, no
+matter how long the string it refers to is. In general, this is the way in which
+dynamically sized types are used in Rust: they have an extra bit of metadata
+that stores the size of the dynamic information. The golden rule of dynamically
+sized types is that we must always put values of dynamically sized types behind
+a pointer of some kind.
+
+We can combine `str` with all kinds of pointers: for example, `Box<str>` or
+`Rc<str>`. In fact, you’ve seen this before but with a different dynamically
+sized type: traits. Every trait is a dynamically sized type we can refer to by
+using the name of the trait. In “Using Trait Objects to Abstract over Shared
+Behavior”
+in Chapter 18, we mentioned that to use traits as trait objects, we must put
+them behind a pointer, such as `&dyn Trait` or `Box<dyn Trait>` (`Rc<dyn Trait>` would work too).
+
+To work with DSTs, Rust provides the `Sized` trait to determine whether or not
+a type’s size is known at compile time. This trait is automatically implemented
+for everything whose size is known at compile time. In addition, Rust
+implicitly adds a bound on `Sized` to every generic function. That is, a
+generic function definition like this:
+
+```
+fn generic<T>(t: T) {
+    // --snip--
+}
+```
+
+is actually treated as though we had written this:
+
+```
+fn generic<T: Sized>(t: T) {
+    // --snip--
+}
+```
+
+By default, generic functions will work only on types that have a known size at
+compile time. However, you can use the following special syntax to relax this
+restriction:
+
+```
+fn generic<T: ?Sized>(t: &T) {
+    // --snip--
+}
+```
+
+A trait bound on `?Sized` means “`T` may or may not be `Sized`” and this
+notation overrides the default that generic types must have a known size at
+compile time. The `?Trait` syntax with this meaning is only available for
+`Sized`, not any other traits.
+
+Also note that we switched the type of the `t` parameter from `T` to `&T`.
+Because the type might not be `Sized`, we need to use it behind some kind of
+pointer. In this case, we’ve chosen a reference.
+
+Next, we’ll talk about functions and closures!
+
+## Advanced Functions and Closures
+
+This section explores some advanced features related to functions and closures,
+including function pointers and returning closures.
+
+### Function Pointers
+
+We’ve talked about how to pass closures to functions; you can also pass regular
+functions to functions! This technique is useful when you want to pass a
+function you’ve already defined rather than defining a new closure. Functions
+coerce to the type `fn` (with a lowercase *f*), not to be confused with the
+`Fn` closure trait. The `fn` type is called a *function pointer*. Passing
+functions with function pointers will allow you to use functions as arguments
+to other functions.
+
+The syntax for specifying that a parameter is a function pointer is similar to
+that of closures, as shown in Listing 20-28, where we’ve defined a function
+`add_one` that adds 1 to its parameter. The function `do_twice` takes two
+parameters: a function pointer to any function that takes an `i32` parameter
+and returns an `i32`, and one `i32` value. The `do_twice` function calls the
+function `f` twice, passing it the `arg` value, then adds the two function call
+results together. The `main` function calls `do_twice` with the arguments
+`add_one` and `5`.
+
+src/main.rs
+
+```
+fn add_one(x: i32) -> i32 {
+    x + 1
+}
+
+fn do_twice(f: fn(i32) -> i32, arg: i32) -> i32 {
+    f(arg) + f(arg)
+}
+
+fn main() {
+    let answer = do_twice(add_one, 5);
+
+    println!("The answer is: {answer}");
+}
+```
+
+Listing 20-28: Using the `fn` type to accept a function pointer as an argument
+
+This code prints `The answer is: 12`. We specify that the parameter `f` in
+`do_twice` is an `fn` that takes one parameter of type `i32` and returns an
+`i32`. We can then call `f` in the body of `do_twice`. In `main`, we can pass
+the function name `add_one` as the first argument to `do_twice`.
+
+Unlike closures, `fn` is a type rather than a trait, so we specify `fn` as the
+parameter type directly rather than declaring a generic type parameter with one
+of the `Fn` traits as a trait bound.
+
+Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
+`FnOnce`), meaning you can always pass a function pointer as an argument for a
+function that expects a closure. It’s best to write functions using a generic
+type and one of the closure traits so your functions can accept either
+functions or closures.
+
+That said, one example of where you would want to only accept `fn` and not
+closures is when interfacing with external code that doesn’t have closures: C
+functions can accept functions as arguments, but C doesn’t have closures.
+
+As an example of where you could use either a closure defined inline or a named
+function, let’s look at a use of the `map` method provided by the `Iterator`
+trait in the standard library. To use the `map` method to turn a vector of
+numbers into a vector of strings, we could use a closure, as in Listing 20-29.
+
+
+```
+    let list_of_numbers = vec![1, 2, 3];
+    let list_of_strings: Vec<String> =
+        list_of_numbers.iter().map(|i| i.to_string()).collect();
+```
+
+Listing 20-29: Using a closure with the `map` method to convert numbers to strings
+
+Or we could name a function as the argument to `map` instead of the closure.
+Listing 20-30 shows what this would look like.
+
+
+```
+    let list_of_numbers = vec![1, 2, 3];
+    let list_of_strings: Vec<String> =
+        list_of_numbers.iter().map(ToString::to_string).collect();
+```
+
+Listing 20-30: Using the `String::to_string` function with the `map` method method to convert numbers to strings
+
+Note that we must use the fully qualified syntax that we talked about in
+“Advanced Traits” because there are multiple
+functions available named `to_string`.
+
+Here, we’re using the `to_string` function defined in the `ToString` trait,
+which the standard library has implemented for any type that implements
+`Display`.
+
+Recall from “Enum Values” in Chapter 6 that the
+name of each enum variant that we define also becomes an initializer function.
+We can use these initializer functions as function pointers that implement the
+closure traits, which means we can specify the initializer functions as
+arguments for methods that take closures, as seen in Listing 20-31.
+
+
+```
+    enum Status {
+        Value(u32),
+        Stop,
+    }
+
+    let list_of_statuses: Vec<Status> = (0u32..20).map(Status::Value).collect();
+```
+
+Listing 20-31: Using an enum initializer with the `map` method to create a `Status` instance from numbers
+
+Here, we create `Status::Value` instances using each `u32` value in the range
+that `map` is called on by using the initializer function of `Status::Value`.
+Some people prefer this style and some people prefer to use closures. They
+compile to the same code, so use whichever style is clearer to you.
+
+### Returning Closures
+
+Closures are represented by traits, which means you can’t return closures
+directly. In most cases where you might want to return a trait, you can instead
+use the concrete type that implements the trait as the return value of the
+function. However, you can’t usually do that with closures because they don’t
+have a concrete type that is returnable; you’re not allowed to use the function
+pointer `fn` as a return type if the closure captures any values from its
+scope, for example.
+
+Instead, you will normally use the `impl Trait` syntax we learned about in
+Chapter 10. You can return any function type, using `Fn`, `FnOnce` and `FnMut`.
+For example, the code in Listing 20-32 will compile just fine.
+
+
+```
+fn returns_closure() -> impl Fn(i32) -> i32 {
+    |x| x + 1
+}
+```
+
+Listing 20-32: Returning a closure from a function using the `impl Trait` syntax
+
+However, as we noted in “Closure Type Inference and
+Annotation” in Chapter 13, each closure is also
+its own distinct type. If you need to work with multiple functions that have the
+same signature but different implementations, you will need to use a trait
+object for them. Consider what happens if you write code like that shown in
+Listing 20-33.
+
+src/main.rs
+
+```
+fn main() {
+    let handlers = vec![returns_closure(), returns_initialized_closure(123)];
+    for handler in handlers {
+        let output = handler(5);
+        println!("{output}");
+    }
+}
+
+fn returns_closure() -> impl Fn(i32) -> i32 {
+    |x| x + 1
+}
+
+fn returns_initialized_closure(init: i32) -> impl Fn(i32) -> i32 {
+    move |x| x + init
+}
+```
+
+Listing 20-33: Creating a `Vec<T>` of closures defined by functions that return `impl Fn` types
+
+Here we have two functions, `returns_closure` and `returns_initialized_closure`,
+which both return `impl Fn(i32) -> i32`. Notice that the closures that they
+return are different, even though they implement the same type. If we try to
+compile this, Rust lets us know that it won’t work:
+
+```
+$ cargo build
+   Compiling functions-example v0.1.0 (file:///projects/functions-example)
+error[E0308]: mismatched types
+  --> src/main.rs:2:44
+   |
+2  |     let handlers = vec![returns_closure(), returns_initialized_closure(123)];
+   |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected opaque type, found a different opaque type
+...
+9  | fn returns_closure() -> impl Fn(i32) -> i32 {
+   |                         ------------------- the expected opaque type
+...
+13 | fn returns_initialized_closure(init: i32) -> impl Fn(i32) -> i32 {
+   |                                              ------------------- the found opaque type
+   |
+   = note: expected opaque type `impl Fn(i32) -> i32` (opaque type at <src/main.rs:9:25>)
+              found opaque type `impl Fn(i32) -> i32` (opaque type at <src/main.rs:13:46>)
+   = note: distinct uses of `impl Trait` result in different opaque types
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `functions-example` (bin "functions-example") due to 1 previous error
+```
+
+The error message tells us that whenever we return an `impl Trait`, Rust
+creates a unique *opaque type*, a type where we cannot see into the details of
+what Rust constructs for us, nor can we guess the type Rust will generate to
+write ourselves. So even though these functions return closures that implement
+the same trait, `Fn(i32) -> i32`, the opaque types Rust generates for each are
+distinct. (This is similar to how Rust produces different concrete types for
+distinct async blocks even when they have the same output type, as we saw in
+“Working with Any Number of Futures” in
+Chapter 17.) We have seen a solution to this problem a few times now: we can
+use a trait object, as in Listing 20-34.
+
+
+```
+fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
+    Box::new(|x| x + 1)
+}
+
+fn returns_initialized_closure(init: i32) -> Box<dyn Fn(i32) -> i32> {
+    Box::new(move |x| x + init)
+}
+```
+
+Listing 20-34: Creating a `Vec<T>` of closures defined by functions that return `Box<dyn Fn>` so they have the same type
+
+This code will compile just fine. For more about trait objects, refer to the
+section “Using Trait Objects That Allow for Values of Different
+Types” in Chapter 18.
+
+Next, let’s look at macros!
+
+## Macros
+
+We’ve used macros like `println!` throughout this book, but we haven’t fully
+explored what a macro is and how it works. The term *macro* refers to a family
+of features in Rust: *declarative* macros with `macro_rules!` and three kinds
+of *procedural* macros:
+
+* Custom `#[derive]` macros that specify code added with the `derive` attribute
+  used on structs and enums
+* Attribute-like macros that define custom attributes usable on any item
+* Function-like macros that look like function calls but operate on the tokens
+  specified as their argument
+
+We’ll talk about each of these in turn, but first, let’s look at why we even
+need macros when we already have functions.
+
+### The Difference Between Macros and Functions
+
+Fundamentally, macros are a way of writing code that writes other code, which
+is known as *metaprogramming*. In Appendix C, we discuss the `derive`
+attribute, which generates an implementation of various traits for you. We’ve
+also used the `println!` and `vec!` macros throughout the book. All of these
+macros *expand* to produce more code than the code you’ve written manually.
+
+Metaprogramming is useful for reducing the amount of code you have to write and
+maintain, which is also one of the roles of functions. However, macros have
+some additional powers that functions don’t have.
+
+A function signature must declare the number and type of parameters the
+function has. Macros, on the other hand, can take a variable number of
+parameters: we can call `println!("hello")` with one argument or
+`println!("hello {}", name)` with two arguments. Also, macros are expanded
+before the compiler interprets the meaning of the code, so a macro can, for
+example, implement a trait on a given type. A function can’t, because it gets
+called at runtime and a trait needs to be implemented at compile time.
+
+The downside to implementing a macro instead of a function is that macro
+definitions are more complex than function definitions because you’re writing
+Rust code that writes Rust code. Due to this indirection, macro definitions are
+generally more difficult to read, understand, and maintain than function
+definitions.
+
+Another important difference between macros and functions is that you must
+define macros or bring them into scope *before* you call them in a file, as
+opposed to functions you can define anywhere and call anywhere.
+
+### Declarative Macros with macro_rules! for General Metaprogramming
+
+The most widely used form of macros in Rust is the *declarative macro*. These
+are also sometimes referred to as “macros by example,” “`macro_rules!` macros,”
+or just plain “macros.” At their core, declarative macros allow you to write
+something similar to a Rust `match` expression. As discussed in Chapter 6,
+`match` expressions are control structures that take an expression, compare the
+resultant value of the expression to patterns, and then run the code associated
+with the matching pattern. Macros also compare a value to patterns that are
+associated with particular code: in this situation, the value is the literal
+Rust source code passed to the macro; the patterns are compared with the
+structure of that source code; and the code associated with each pattern, when
+matched, replaces the code passed to the macro. This all happens during
+compilation.
+
+To define a macro, you use the `macro_rules!` construct. Let’s explore how to
+use `macro_rules!` by looking at how the `vec!` macro is defined. Chapter 8
+covered how we can use the `vec!` macro to create a new vector with particular
+values. For example, the following macro creates a new vector containing three
+integers:
+
+```
+let v: Vec<u32> = vec![1, 2, 3];
+```
+
+We could also use the `vec!` macro to make a vector of two integers or a vector
+of five string slices. We wouldn’t be able to use a function to do the same
+because we wouldn’t know the number or type of values up front.
+
+Listing 20-35 shows a slightly simplified definition of the `vec!` macro.
+
+src/lib.rs
+
+```
+#[macro_export]
+macro_rules! vec {
+    ( $( $x:expr ),* ) => {
+        {
+            let mut temp_vec = Vec::new();
+            $(
+                temp_vec.push($x);
+            )*
+            temp_vec
+        }
+    };
+}
+```
+
+Listing 20-35: A simplified version of the `vec!` macro definition
+
+> Note: The actual definition of the `vec!` macro in the standard library
+> includes code to pre-allocate the correct amount of memory up front. That code
+> is an optimization that we don’t include here, to make the example simpler.
+
+The `#[macro_export]` annotation indicates that this macro should be made
+available whenever the crate in which the macro is defined is brought into
+scope. Without this annotation, the macro can’t be brought into scope.
+
+We then start the macro definition with `macro_rules!` and the name of the
+macro we’re defining *without* the exclamation mark. The name, in this case
+`vec`, is followed by curly brackets denoting the body of the macro definition.
+
+The structure in the `vec!` body is similar to the structure of a `match`
+expression. Here we have one arm with the pattern `( $( $x:expr ),* )`,
+followed by `=>` and the block of code associated with this pattern. If the
+pattern matches, the associated block of code will be emitted. Given that this
+is the only pattern in this macro, there is only one valid way to match; any
+other pattern will result in an error. More complex macros will have more than
+one arm.
+
+Valid pattern syntax in macro definitions is different from the pattern syntax
+covered in Chapter 19 because macro patterns are matched against Rust code
+structure rather than values. Let’s walk through what the pattern pieces in
+Listing 20-29 mean; for the full macro pattern syntax, see the Rust
+Reference at *../reference/macros-by-example.html*.
+
+First we use a set of parentheses to encompass the whole pattern. We use a
+dollar sign (`$`) to declare a variable in the macro system that will contain
+the Rust code matching the pattern. The dollar sign makes it clear this is a
+macro variable as opposed to a regular Rust variable. Next comes a set of
+parentheses that captures values that match the pattern within the parentheses
+for use in the replacement code. Within `$()` is `$x:expr`, which matches any
+Rust expression and gives the expression the name `$x`.
+
+The comma following `$()` indicates that a literal comma separator character
+must appear between each instance of the code that matches the code in `$()`.
+The `*` specifies that the pattern matches zero or more of whatever precedes
+the `*`.
+
+When we call this macro with `vec![1, 2, 3];`, the `$x` pattern matches three
+times with the three expressions `1`, `2`, and `3`.
+
+Now let’s look at the pattern in the body of the code associated with this arm:
+`temp_vec.push()` within `$()*` is generated for each part that matches `$()`
+in the pattern zero or more times depending on how many times the pattern
+matches. The `$x` is replaced with each expression matched. When we call this
+macro with `vec![1, 2, 3];`, the code generated that replaces this macro call
+will be the following:
+
+```
+{
+    let mut temp_vec = Vec::new();
+    temp_vec.push(1);
+    temp_vec.push(2);
+    temp_vec.push(3);
+    temp_vec
+}
+```
+
+We’ve defined a macro that can take any number of arguments of any type and can
+generate code to create a vector containing the specified elements.
+
+To learn more about how to write macros, consult the online documentation or
+other resources, such as “The Little Book of Rust Macros” at *https://veykril.github.io/tlborm/* started by
+Daniel Keep and continued by Lukas Wirth.
+
+### Procedural Macros for Generating Code from Attributes
+
+The second form of macros is the procedural macro, which acts more like a
+function (and is a type of procedure). *Procedural macros* accept some code as
+an input, operate on that code, and produce some code as an output rather than
+matching against patterns and replacing the code with other code as declarative
+macros do. The three kinds of procedural macros are custom `derive`,
+attribute-like, and function-like, and all work in a similar fashion.
+
+When creating procedural macros, the definitions must reside in their own crate
+with a special crate type. This is for complex technical reasons that we hope
+to eliminate in the future. In Listing 20-36, we show how to define a
+procedural macro, where `some_attribute` is a placeholder for using a specific
+macro variety.
+
+src/lib.rs
+
+```
+use proc_macro;
+
+#[some_attribute]
+pub fn some_name(input: TokenStream) -> TokenStream {
+}
+```
+
+Listing 20-36: An example of defining a procedural macro
+
+The function that defines a procedural macro takes a `TokenStream` as an input
+and produces a `TokenStream` as an output. The `TokenStream` type is defined by
+the `proc_macro` crate that is included with Rust and represents a sequence of
+tokens. This is the core of the macro: the source code that the macro is
+operating on makes up the input `TokenStream`, and the code the macro produces
+is the output `TokenStream`. The function also has an attribute attached to it
+that specifies which kind of procedural macro we’re creating. We can have
+multiple kinds of procedural macros in the same crate.
+
+Let’s look at the different kinds of procedural macros. We’ll start with a
+custom `derive` macro and then explain the small dissimilarities that make the
+other forms different.
+
+### How to Write a Custom derive Macro
+
+Let’s create a crate named `hello_macro` that defines a trait named
+`HelloMacro` with one associated function named `hello_macro`. Rather than
+making our users implement the `HelloMacro` trait for each of their types,
+we’ll provide a procedural macro so users can annotate their type with
+`#[derive(HelloMacro)]` to get a default implementation of the `hello_macro`
+function. The default implementation will print `Hello, Macro! My name is TypeName!` where `TypeName` is the name of the type on which this trait has
+been defined. In other words, we’ll write a crate that enables another
+programmer to write code like Listing 20-37 using our crate.
+
+src/main.rs
+
+```
+use hello_macro::HelloMacro;
+use hello_macro_derive::HelloMacro;
+
+#[derive(HelloMacro)]
+struct Pancakes;
+
+fn main() {
+    Pancakes::hello_macro();
+}
+```
+
+Listing 20-37: The code a user of our crate will be able to write when using our procedural macro
+
+This code will print `Hello, Macro! My name is Pancakes!` when we’re done. The
+first step is to make a new library crate, like this:
+
+```
+$ cargo new hello_macro --lib
+```
+
+Next, in Listing 20-38, we’ll define the `HelloMacro` trait and its associated
+function.
+
+src/lib.rs
+
+```
+pub trait HelloMacro {
+    fn hello_macro();
+}
+```
+
+Listing 20-38: A simple trait that we will use with the `derive` macro
+
+We have a trait and its function. At this point, our crate user could implement
+the trait to achieve the desired functionality, as in Listing 20-39.
+
+src/main.rs
+
+```
+use hello_macro::HelloMacro;
+
+struct Pancakes;
+
+impl HelloMacro for Pancakes {
+    fn hello_macro() {
+        println!("Hello, Macro! My name is Pancakes!");
+    }
+}
+
+fn main() {
+    Pancakes::hello_macro();
+}
+```
+
+Listing 20-39: How it would look if users wrote a manual implementation of the `HelloMacro` trait
+
+However, they would need to write the implementation block for each type they
+wanted to use with `hello_macro`; we want to spare them from having to do this
+work.
+
+Additionally, we can’t yet provide the `hello_macro` function with default
+implementation that will print the name of the type the trait is implemented
+on: Rust doesn’t have reflection capabilities, so it can’t look up the type’s
+name at runtime. We need a macro to generate code at compile time.
+
+The next step is to define the procedural macro. At the time of this writing,
+procedural macros need to be in their own crate. Eventually, this restriction
+might be lifted. The convention for structuring crates and macro crates is as
+follows: for a crate named `foo`, a custom `derive` procedural macro crate is
+called `foo_derive`. Let’s start a new crate called `hello_macro_derive` inside
+our `hello_macro` project:
+
+```
+$ cargo new hello_macro_derive --lib
+```
+
+Our two crates are tightly related, so we create the procedural macro crate
+within the directory of our `hello_macro` crate. If we change the trait
+definition in `hello_macro`, we’ll have to change the implementation of the
+procedural macro in `hello_macro_derive` as well. The two crates will need to
+be published separately, and programmers using these crates will need to add
+both as dependencies and bring them both into scope. We could instead have the
+`hello_macro` crate use `hello_macro_derive` as a dependency and re-export the
+procedural macro code. However, the way we’ve structured the project makes it
+possible for programmers to use `hello_macro` even if they don’t want the
+`derive` functionality.
+
+We need to declare the `hello_macro_derive` crate as a procedural macro crate.
+We’ll also need functionality from the `syn` and `quote` crates, as you’ll see
+in a moment, so we need to add them as dependencies. Add the following to the
+*Cargo.toml* file for `hello_macro_derive`:
+
+hello_macro_derive/Cargo.toml
+
+```
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = "2.0"
+quote = "1.0"
+```
+
+
+
+To start defining the procedural macro, place the code in Listing 20-40 into
+your *src/lib.rs* file for the `hello_macro_derive` crate. Note that this code
+won’t compile until we add a definition for the `impl_hello_macro` function.
+
+hello_macro_derive/src/lib.rs
+
+```
+use proc_macro::TokenStream;
+use quote::quote;
+
+#[proc_macro_derive(HelloMacro)]
+pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
+    // Construct a representation of Rust code as a syntax tree
+    // that we can manipulate.
+    let ast = syn::parse(input).unwrap();
+
+    // Build the trait implementation.
+    impl_hello_macro(&ast)
+}
+```
+
+Listing 20-40: Code that most procedural macro crates will require in order to process Rust code
+
+Notice that we’ve split the code into the `hello_macro_derive` function, which
+is responsible for parsing the `TokenStream`, and the `impl_hello_macro`
+function, which is responsible for transforming the syntax tree: this makes
+writing a procedural macro more convenient. The code in the outer function
+(`hello_macro_derive` in this case) will be the same for almost every
+procedural macro crate you see or create. The code you specify in the body of
+the inner function (`impl_hello_macro` in this case) will be different
+depending on your procedural macro’s purpose.
+
+We’ve introduced three new crates: `proc_macro`, `syn` at *https://crates.io/crates/syn*<!--ignore -->,
+and `quote`. The `proc_macro` crate comes with Rust,
+so we didn’t need to add that to the dependencies in *Cargo.toml*. The
+`proc_macro` crate is the compiler’s API that allows us to read and manipulate
+Rust code from our code.
+
+The `syn` crate parses Rust code from a string into a data structure that we
+can perform operations on. The `quote` crate turns `syn` data structures back
+into Rust code. These crates make it much simpler to parse any sort of Rust
+code we might want to handle: writing a full parser for Rust code is no simple
+task.
+
+The `hello_macro_derive` function will be called when a user of our library
+specifies `#[derive(HelloMacro)]` on a type. This is possible because we’ve
+annotated the `hello_macro_derive` function here with `proc_macro_derive` and
+specified the name `HelloMacro`, which matches our trait name; this is the
+convention most procedural macros follow.
+
+The `hello_macro_derive` function first converts the `input` from a
+`TokenStream` to a data structure that we can then interpret and perform
+operations on. This is where `syn` comes into play. The `parse` function in
+`syn` takes a `TokenStream` and returns a `DeriveInput` struct representing the
+parsed Rust code. Listing 20-41 shows the relevant parts of the `DeriveInput`
+struct we get from parsing the `struct Pancakes;` string.
+
+
+```
+DeriveInput {
+    // --snip--
+
+    ident: Ident {
+        ident: "Pancakes",
+        span: #0 bytes(95..103)
+    },
+    data: Struct(
+        DataStruct {
+            struct_token: Struct,
+            fields: Unit,
+            semi_token: Some(
+                Semi
+            )
+        }
+    )
+}
+```
+
+Listing 20-41: The `DeriveInput` instance we get when parsing the code that has the macro’s attribute in Listing 20-37
+
+The fields of this struct show that the Rust code we’ve parsed is a unit struct
+with the `ident` (*identifier*, meaning the name) of `Pancakes`. There are more
+fields on this struct for describing all sorts of Rust code; check the `syn`
+documentation for `DeriveInput` at *https://docs.rs/syn/2.0/syn/struct.DeriveInput.html* for more information.
+
+Soon we’ll define the `impl_hello_macro` function, which is where we’ll build
+the new Rust code we want to include. But before we do, note that the output
+for our `derive` macro is also a `TokenStream`. The returned `TokenStream` is
+added to the code that our crate users write, so when they compile their crate,
+they’ll get the extra functionality that we provide in the modified
+`TokenStream`.
+
+You might have noticed that we’re calling `unwrap` to cause the
+`hello_macro_derive` function to panic if the call to the `syn::parse` function
+fails here. It’s necessary for our procedural macro to panic on errors because
+`proc_macro_derive` functions must return `TokenStream` rather than `Result` to
+conform to the procedural macro API. We’ve simplified this example by using
+`unwrap`; in production code, you should provide more specific error messages
+about what went wrong by using `panic!` or `expect`.
+
+Now that we have the code to turn the annotated Rust code from a `TokenStream`
+into a `DeriveInput` instance, let’s generate the code that implements the
+`HelloMacro` trait on the annotated type, as shown in Listing 20-42.
+
+hello_macro_derive/src/lib.rs
+
+```
+fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
+    let name = &ast.ident;
+    let generated = quote! {
+        impl HelloMacro for #name {
+            fn hello_macro() {
+                println!("Hello, Macro! My name is {}!", stringify!(#name));
+            }
+        }
+    };
+    generated.into()
+}
+```
+
+Listing 20-42: Implementing the `HelloMacro` trait using the parsed Rust code
+
+We get an `Ident` struct instance containing the name (identifier) of the
+annotated type using `ast.ident`. The struct in Listing 20-41 shows that when
+we run the `impl_hello_macro` function on the code in Listing 20-37, the
+`ident` we get will have the `ident` field with a value of `"Pancakes"`. Thus
+the `name` variable in Listing 20-42 will contain an `Ident` struct instance
+that, when printed, will be the string `"Pancakes"`, the name of the struct in
+Listing 20-37.
+
+The `quote!` macro lets us define the Rust code that we want to return. The
+compiler expects something different to the direct result of the `quote!`
+macro’s execution, so we need to convert it to a `TokenStream`. We do this by
+calling the `into` method, which consumes this intermediate representation and
+returns a value of the required `TokenStream` type.
+
+The `quote!` macro also provides some very cool templating mechanics: we can
+enter `#name`, and `quote!` will replace it with the value in the variable
+`name`. You can even do some repetition similar to the way regular macros work.
+Check out the `quote` crate’s docs at *https://docs.rs/quote* for a thorough introduction.
+
+We want our procedural macro to generate an implementation of our `HelloMacro`
+trait for the type the user annotated, which we can get by using `#name`. The
+trait implementation has the one function `hello_macro`, whose body contains the
+functionality we want to provide: printing `Hello, Macro! My name is` and then
+the name of the annotated type.
+
+The `stringify!` macro used here is built into Rust. It takes a Rust
+expression, such as `1 + 2`, and at compile time turns the expression into a
+string literal, such as `"1 + 2"`. This is different from `format!` or
+`println!`, macros which evaluate the expression and then turn the result into
+a `String`. There is a possibility that the `#name` input might be an
+expression to print literally, so we use `stringify!`. Using `stringify!` also
+saves an allocation by converting `#name` to a string literal at compile time.
+
+At this point, `cargo build` should complete successfully in both `hello_macro`
+and `hello_macro_derive`. Let’s hook up these crates to the code in Listing
+20-37 to see the procedural macro in action! Create a new binary project in
+your *projects* directory using `cargo new pancakes`. We need to add
+`hello_macro` and `hello_macro_derive` as dependencies in the `pancakes`
+crate’s *Cargo.toml*. If you’re publishing your versions of `hello_macro` and
+`hello_macro_derive` to crates.io, they
+would be regular dependencies; if not, you can specify them as `path`
+dependencies as follows:
+
+```
+[dependencies]
+hello_macro = { path = "../hello_macro" }
+hello_macro_derive = { path = "../hello_macro/hello_macro_derive" }
+```
+
+Put the code in Listing 20-37 into *src/main.rs*, and run `cargo run`: it
+should print `Hello, Macro! My name is Pancakes!` The implementation of the
+`HelloMacro` trait from the procedural macro was included without the
+`pancakes` crate needing to implement it; the `#[derive(HelloMacro)]` added the
+trait implementation.
+
+Next, let’s explore how the other kinds of procedural macros differ from custom
+`derive` macros.
+
+### Attribute-Like Macros
+
+Attribute-like macros are similar to custom `derive` macros, but instead of
+generating code for the `derive` attribute, they allow you to create new
+attributes. They’re also more flexible: `derive` only works for structs and
+enums; attributes can be applied to other items as well, such as functions.
+Here’s an example of using an attribute-like macro. Say you have an attribute
+named `route` that annotates functions when using a web application framework:
+
+```
+#[route(GET, "/")]
+fn index() {
+```
+
+This `#[route]` attribute would be defined by the framework as a procedural
+macro. The signature of the macro definition function would look like this:
+
+```
+#[proc_macro_attribute]
+pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
+```
+
+Here, we have two parameters of type `TokenStream`. The first is for the
+contents of the attribute: the `GET, "/"` part. The second is the body of the
+item the attribute is attached to: in this case, `fn index() {}` and the rest
+of the function’s body.
+
+Other than that, attribute-like macros work the same way as custom `derive`
+macros: you create a crate with the `proc-macro` crate type and implement a
+function that generates the code you want!
+
+### Function-Like Macros
+
+Function-like macros define macros that look like function calls. Similarly to
+`macro_rules!` macros, they’re more flexible than functions; for example, they
+can take an unknown number of arguments. However, `macro_rules!` macros can only
+be defined using the match-like syntax we discussed in “Declarative Macros with
+`macro_rules!` for General Metaprogramming” earlier.
+Function-like macros take a `TokenStream` parameter, and their definition
+manipulates that `TokenStream` using Rust code as the other two types of
+procedural macros do. An example of a function-like macro is an `sql!` macro
+that might be called like so:
+
+```
+let sql = sql!(SELECT * FROM posts WHERE id=1);
+```
+
+This macro would parse the SQL statement inside it and check that it’s
+syntactically correct, which is much more complex processing than a
+`macro_rules!` macro can do. The `sql!` macro would be defined like this:
+
+```
+#[proc_macro]
+pub fn sql(input: TokenStream) -> TokenStream {
+```
+
+This definition is similar to the custom `derive` macro’s signature: we receive
+the tokens that are inside the parentheses and return the code we wanted to
+generate.
 
 ## Summary
 
-Well done! You’ve made it to the end of the book! We want to thank you for
-joining us on this tour of Rust. You’re now ready to implement your own Rust
-projects and help with other people’s projects. Keep in mind that there is a
-welcoming community of other Rustaceans who would love to help you with any
-challenges you encounter on your Rust journey.
+Whew! Now you have some Rust features in your toolbox that you likely won’t use
+often, but you’ll know they’re available in very particular circumstances.
+We’ve introduced several complex topics so that when you encounter them in
+error message suggestions or in other people’s code, you’ll be able to
+recognize these concepts and syntax. Use this chapter as a reference to guide
+you to solutions.
 
+Next, we’ll put everything we’ve discussed throughout the book into practice
+and do one more project!

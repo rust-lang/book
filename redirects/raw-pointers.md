@@ -14,4 +14,4 @@ let r2 = &mut num as *mut i32;
 ---
 
 You can find the latest version of this information
-[here](ch19-01-unsafe-rust.html#dereferencing-a-raw-pointer)
+[here](ch20-01-unsafe-rust.html#dereferencing-a-raw-pointer)

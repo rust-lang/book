@@ -11,6 +11,35 @@ of the print version. The snapshot files reflect what has been sent or not, so
 they only get updated when edits are sent to No Starch. **Do not submit pull
 requests changing files in the `nostarch` directory, they will be closed.**
 
+We use [`rustfmt`][rustfmt] to apply standard formatting to Rust code in the
+repo and [`dprint`][dprint] to apply standing formatting to the Markdown source
+and the non-Rust code in the project.
+
+[rustfmt]: https://github.com/rust-lang/rustfmt
+[dprint]: https://dprint.dev
+
+You will normally have `rustfmt` installed if you have a Rust toolchain
+installed; if for some reason you do not have a copy of `rustfmt`, you can add
+it by running the following command:
+
+```sh
+rustup component add rustfmt
+```
+
+To install `dprint`, you can run the following command:
+
+```sh
+cargo install dprint
+```
+
+Or follow the [instructions][install-dprint] on the `dprint` website.
+
+[install-dprint]: https://dprint.dev/install/
+
+To format Rust code, you can run `rustfmt <path to file>`, and to format other
+files, you can pass `dprint fmt <path to file>`. Many text editors also have native
+support or extensions for both `rustfmt` and `dprint`.
+
 ## Checking for Fixes
 
 The book rides the Rust release trains. Therefore, if you see a problem on
@@ -45,8 +74,7 @@ or pull request.
 
 [nostarch]: https://nostarch.com/rust-programming-language-2nd-edition
 
-So far, we've been doing a larger revision to coincide with [Rust
-Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
+So far, we've been doing a larger revision to coincide with [Rust Editions](https://doc.rust-lang.org/edition-guide/). Between those larger
 revisions, we will only be correcting errors. If your issue or pull request
 isn't strictly fixing an error, it might sit until the next time that we're
 working on a large revision: expect on the order of months or years. Thank you

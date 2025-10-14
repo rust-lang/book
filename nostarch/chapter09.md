@@ -12,13 +12,13 @@ Errors are a fact of life in software, so Rust has a number of features for
 handling situations in which something goes wrong. In many cases, Rust requires
 you to acknowledge the possibility of an error and take some action before your
 code will compile. This requirement makes your program more robust by ensuring
-that you’ll discover errors and handle them appropriately before you’ve
-deployed your code to production!
+that you’ll discover errors and handle them appropriately before deploying your
+code to production!
 
-Rust groups errors into two major categories: *recoverable* and *unrecoverable*
-errors. For a recoverable error, such as a *file not found* error, we most
+Rust groups errors into two major categories: recoverable and unrecoverable
+errors. For a *recoverable error*, such as a *file not found* error, we most
 likely just want to report the problem to the user and retry the operation.
-Unrecoverable errors are always symptoms of bugs, such as trying to access a
+*Unrecoverable errors* are always symptoms of bugs, such as trying to access a
 location beyond the end of an array, and so we want to immediately stop the
 program.
 
@@ -31,7 +31,7 @@ about returning `Result<T, E>` values. Additionally, we’ll explore
 considerations when deciding whether to try to recover from an error or to stop
 execution.
 
-## Unrecoverable Errors with `panic!`
+## Unrecoverable Errors with panic!
 
 Sometimes bad things happen in your code, and there’s nothing you can do about
 it. In these cases, Rust has the `panic!` macro. There are two ways to cause a
@@ -43,28 +43,28 @@ environment variable, you can also have Rust display the call stack when a
 panic occurs to make it easier to track down the source of the panic.
 
 > ### Unwinding the Stack or Aborting in Response to a Panic
->
-> By default, when a panic occurs the program starts *unwinding*, which means
+> 
+> By default, when a panic occurs, the program starts *unwinding*, which means
 > Rust walks back up the stack and cleans up the data from each function it
-> encounters. However, walking back and cleaning up is a lot of work. Rust,
-> therefore, allows you to choose the alternative of immediately *aborting*,
+> encounters. However, walking back and cleaning up is a lot of work. Rust
+> therefore allows you to choose the alternative of immediately *aborting*,
 > which ends the program without cleaning up.
->
+> 
 > Memory that the program was using will then need to be cleaned up by the
 > operating system. If in your project you need to make the resultant binary as
 > small as possible, you can switch from unwinding to aborting upon a panic by
 > adding `panic = 'abort'` to the appropriate `[profile]` sections in your
 > *Cargo.toml* file. For example, if you want to abort on panic in release mode,
 > add this:
->
-> ```toml
-> profile.release
+> 
+> ````toml
+> [profile.release]
 > panic = 'abort'
-> ```
+> ````
 
 Let’s try calling `panic!` in a simple program:
 
-Filename: src/main.rs
+src/main.rs
 
 ```
 fn main() {
@@ -72,13 +72,16 @@ fn main() {
 }
 ```
 
+
+
 When you run the program, you’ll see something like this:
 
 ```
 $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.25s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.25s
      Running `target/debug/panic`
+
 thread 'main' panicked at src/main.rs:2:5:
 crash and burn
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
@@ -96,6 +99,7 @@ the error message will be someone else’s code where the `panic!` macro is
 called, not the line of our code that eventually led to the `panic!` call.
 
 <!-- Old heading. Do not remove or links may break. -->
+
 <a id="using-a-panic-backtrace"></a>
 
 We can use the backtrace of the functions the `panic!` call came from to figure
@@ -105,7 +109,7 @@ a `panic!` call comes from a library because of a bug in our code instead of
 from our code calling the macro directly. Listing 9-1 has some code that
 attempts to access an index in a vector beyond the range of valid indexes.
 
-Filename: src/main.rs
+src/main.rs
 
 ```
 fn main() {
@@ -115,8 +119,7 @@ fn main() {
 }
 ```
 
-Listing 9-1: Attempting to access an element beyond the
-end of a vector, which will cause a call to `panic!`
+Listing 9-1: Attempting to access an element beyond the end of a vector, which will cause a call to `panic!`
 
 Here, we’re attempting to access the 100th element of our vector (which is at
 index 99 because indexing starts at zero), but the vector has only three
@@ -139,25 +142,26 @@ continue. Let’s try it and see:
 ```
 $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.27s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.27s
      Running `target/debug/panic`
+
 thread 'main' panicked at src/main.rs:4:6:
 index out of bounds: the len is 3 but the index is 99
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
 This error points at line 4 of our *main.rs* where we attempt to access index
-`99` of the vector in `v`.
+99 of the vector in `v`.
 
 The `note:` line tells us that we can set the `RUST_BACKTRACE` environment
 variable to get a backtrace of exactly what happened to cause the error. A
 *backtrace* is a list of all the functions that have been called to get to this
-point. Backtraces in Rust work as they do in other languages: the key to
+point. Backtraces in Rust work as they do in other languages: The key to
 reading the backtrace is to start from the top and read until you see files you
 wrote. That’s the spot where the problem originated. The lines above that spot
 are code that your code has called; the lines below are code that called your
 code. These before-and-after lines might include core Rust code, standard
-library code, or crates that you’re using. Let’s try getting a backtrace by
+library code, or crates that you’re using. Let’s try to get a backtrace by
 setting the `RUST_BACKTRACE` environment variable to any value except `0`.
 Listing 9-2 shows output similar to what you’ll see.
 
@@ -168,32 +172,32 @@ copy the backtrace output below
 check the backtrace number mentioned in the text below the listing
 -->
 
+
 ```
 $ RUST_BACKTRACE=1 cargo run
 thread 'main' panicked at src/main.rs:4:6:
 index out of bounds: the len is 3 but the index is 99
 stack backtrace:
    0: rust_begin_unwind
-             at /rustc/07dca489ac2d933c78d3c5158e3f43beefeb02ce/library/std/src/panicking.rs:645:5
+             at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:692:5
    1: core::panicking::panic_fmt
-             at /rustc/07dca489ac2d933c78d3c5158e3f43beefeb02ce/library/core/src/panicking.rs:72:14
+             at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/panicking.rs:75:14
    2: core::panicking::panic_bounds_check
-             at /rustc/07dca489ac2d933c78d3c5158e3f43beefeb02ce/library/core/src/panicking.rs:208:5
+             at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/panicking.rs:273:5
    3: <usize as core::slice::index::SliceIndex<[T]>>::index
-             at /rustc/07dca489ac2d933c78d3c5158e3f43beefeb02ce/library/core/src/slice/index.rs:255:10
+             at file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/core/src/slice/index.rs:274:10
    4: core::slice::index::<impl core::ops::index::Index<I> for [T]>::index
-             at /rustc/07dca489ac2d933c78d3c5158e3f43beefeb02ce/library/core/src/slice/index.rs:18:9
+             at file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/core/src/slice/index.rs:16:9
    5: <alloc::vec::Vec<T,A> as core::ops::index::Index<I>>::index
-             at /rustc/07dca489ac2d933c78d3c5158e3f43beefeb02ce/library/alloc/src/vec/mod.rs:2770:9
+             at file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs:3361:9
    6: panic::main
              at ./src/main.rs:4:6
    7: core::ops::function::FnOnce::call_once
-             at /rustc/07dca489ac2d933c78d3c5158e3f43beefeb02ce/library/core/src/ops/function.rs:250:5
+             at file:///home/.rustup/toolchains/1.85/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
 note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
 ```
 
-Listing 9-2: The backtrace generated by a call to
-`panic!` displayed when the environment variable `RUST_BACKTRACE` is set
+Listing 9-2: The backtrace generated by a call to `panic!` displayed when the environment variable `RUST_BACKTRACE` is set
 
 That’s a lot of output! The exact output you see might be different depending
 on your operating system and Rust version. In order to get backtraces with this
@@ -215,10 +219,10 @@ handle error conditions in the “To `panic!` or Not to
 `panic!`” section later in this
 chapter. Next, we’ll look at how to recover from an error using `Result`.
 
-## Recoverable Errors with `Result`
+## Recoverable Errors with Result
 
 Most errors aren’t serious enough to require the program to stop entirely.
-Sometimes when a function fails it’s for a reason that you can easily interpret
+Sometimes when a function fails, it’s for a reason that you can easily interpret
 and respond to. For example, if you try to open a file and that operation fails
 because the file doesn’t exist, you might want to create the file instead of
 terminating the process.
@@ -233,7 +237,7 @@ enum Result<T, E> {
 }
 ```
 
-The `T` and `E` are generic type parameters: we’ll discuss generics in more
+The `T` and `E` are generic type parameters: We’ll discuss generics in more
 detail in Chapter 10. What you need to know right now is that `T` represents
 the type of the value that will be returned in a success case within the `Ok`
 variant, and `E` represents the type of the error that will be returned in a
@@ -243,9 +247,9 @@ many different situations where the success value and error value we want to
 return may differ.
 
 Let’s call a function that returns a `Result` value because the function could
-fail. In Listing 9-3 we try to open a file.
+fail. In Listing 9-3, we try to open a file.
 
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::fs::File;
@@ -262,7 +266,7 @@ has been filled in by the implementation of `File::open` with the type of the
 success value, `std::fs::File`, which is a file handle. The type of `E` used in
 the error value is `std::io::Error`. This return type means the call to
 `File::open` might succeed and return a file handle that we can read from or
-write to. The function call also might fail: for example, the file might not
+write to. The function call also might fail: For example, the file might not
 exist, or we might not have permission to access the file. The `File::open`
 function needs to have a way to tell us whether it succeeded or failed and at
 the same time give us either the file handle or error information. This
@@ -279,7 +283,7 @@ on the value `File::open` returns. Listing 9-4 shows one way to handle the
 `Result` using a basic tool, the `match` expression that we discussed in
 Chapter 6.
 
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::fs::File;
@@ -294,8 +298,7 @@ fn main() {
 }
 ```
 
-Listing 9-4: Using a `match` expression to handle the
-`Result` variants that might be returned
+Listing 9-4: Using a `match` expression to handle the `Result` variants that might be returned
 
 Note that, like the `Option` enum, the `Result` enum and its variants have been
 brought into scope by the prelude, so we don’t need to specify `Result::`
@@ -314,8 +317,9 @@ code, we’ll see the following output from the `panic!` macro:
 ```
 $ cargo run
    Compiling error-handling v0.1.0 (file:///projects/error-handling)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.73s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.73s
      Running `target/debug/error-handling`
+
 thread 'main' panicked at src/main.rs:8:23:
 Problem opening the file: Os { code: 2, kind: NotFound, message: "No such file or directory" }
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
@@ -333,7 +337,7 @@ reason—for example, because we didn’t have permission to open the file—we 
 want the code to `panic!` in the same way it did in Listing 9-4. For this, we
 add an inner `match` expression, shown in Listing 9-5.
 
-Filename: src/main.rs
+src/main.rs
 
 <!-- ignore this test because otherwise it creates hello.txt which causes other
 tests to fail lol -->
@@ -352,24 +356,23 @@ fn main() {
                 Ok(fc) => fc,
                 Err(e) => panic!("Problem creating the file: {e:?}"),
             },
-            other_error => {
-                panic!("Problem opening the file: {other_error:?}");
+            _ => {
+                panic!("Problem opening the file: {error:?}");
             }
         },
     };
 }
 ```
 
-Listing 9-5: Handling different kinds of errors in
-different ways
+Listing 9-5: Handling different kinds of errors in different ways
 
 The type of the value that `File::open` returns inside the `Err` variant is
 `io::Error`, which is a struct provided by the standard library. This struct
-has a method `kind` that we can call to get an `io::ErrorKind` value. The enum
-`io::ErrorKind` is provided by the standard library and has variants
+has a method, `kind`, that we can call to get an `io::ErrorKind` value. The
+enum `io::ErrorKind` is provided by the standard library and has variants
 representing the different kinds of errors that might result from an `io`
 operation. The variant we want to use is `ErrorKind::NotFound`, which indicates
-the file we’re trying to open doesn’t exist yet. So we match on
+the file we’re trying to open doesn’t exist yet. So, we match on
 `greeting_file_result`, but we also have an inner match on `error.kind()`.
 
 The condition we want to check in the inner match is whether the value returned
@@ -380,22 +383,22 @@ file can’t be created, a different error message is printed. The second arm of
 the outer `match` stays the same, so the program panics on any error besides
 the missing file error.
 
-> #### Alternatives to Using `match` with `Result<T, E>`
->
+> #### Alternatives to Using match with Result<T, E>
+> 
 > That’s a lot of `match`! The `match` expression is very useful but also very
 > much a primitive. In Chapter 13, you’ll learn about closures, which are used
 > with many of the methods defined on `Result<T, E>`. These methods can be more
 > concise than using `match` when handling `Result<T, E>` values in your code.
->
+> 
 > For example, here’s another way to write the same logic as shown in Listing
 > 9-5, this time using closures and the `unwrap_or_else` method:
->
+> 
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
->
-> ```rust,ignore
+> 
+> ````rust,ignore
 > use std::fs::File;
 > use std::io::ErrorKind;
->
+> 
 > fn main() {
 >     let greeting_file = File::open("hello.txt").unwrap_or_else(|error| {
 >         if error.kind() == ErrorKind::NotFound {
@@ -407,15 +410,19 @@ the missing file error.
 >         }
 >     });
 > }
-> ```
->
+> ````
+> 
 > Although this code has the same behavior as Listing 9-5, it doesn’t contain
 > any `match` expressions and is cleaner to read. Come back to this example
-> after you’ve read Chapter 13, and look up the `unwrap_or_else` method in the
-> standard library documentation. Many more of these methods can clean up huge
+> after you’ve read Chapter 13 and look up the `unwrap_or_else` method in the
+> standard library documentation. Many more of these methods can clean up huge,
 > nested `match` expressions when you’re dealing with errors.
 
-#### Shortcuts for Panic on Error: `unwrap` and `expect`
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="shortcuts-for-panic-on-error-unwrap-and-expect"></a>
+
+#### Shortcuts for Panic on Error
 
 Using `match` works well enough, but it can be a bit verbose and doesn’t always
 communicate intent well. The `Result<T, E>` type has many helper methods
@@ -425,7 +432,7 @@ Listing 9-4. If the `Result` value is the `Ok` variant, `unwrap` will return
 the value inside the `Ok`. If the `Result` is the `Err` variant, `unwrap` will
 call the `panic!` macro for us. Here is an example of `unwrap` in action:
 
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::fs::File;
@@ -434,6 +441,8 @@ fn main() {
     let greeting_file = File::open("hello.txt").unwrap();
 }
 ```
+
+
 
 If we run this code without a *hello.txt* file, we’ll see an error message from
 the `panic!` call that the `unwrap` method makes:
@@ -454,7 +463,7 @@ Using `expect` instead of `unwrap` and providing good error messages can convey
 your intent and make tracking down the source of a panic easier. The syntax of
 `expect` looks like this:
 
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::fs::File;
@@ -464,6 +473,8 @@ fn main() {
         .expect("hello.txt should be included in this project");
 }
 ```
+
+
 
 We use `expect` in the same way as `unwrap`: to return the file handle or call
 the `panic!` macro. The error message used by `expect` in its call to `panic!`
@@ -489,7 +500,7 @@ information to use in debugging.
 ### Propagating Errors
 
 When a function’s implementation calls something that might fail, instead of
-handling the error within the function itself you can return the error to the
+handling the error within the function itself, you can return the error to the
 calling code so that it can decide what to do. This is known as *propagating*
 the error and gives more control to the calling code, where there might be more
 information or logic that dictates how the error should be handled than what
@@ -499,7 +510,7 @@ For example, Listing 9-6 shows a function that reads a username from a file. If
 the file doesn’t exist or can’t be read, this function will return those errors
 to the code that called the function.
 
-Filename: src/main.rs
+src/main.rs
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -526,8 +537,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-Listing 9-6: A function that returns errors to the
-calling code using `match`
+Listing 9-6: A function that returns errors to the calling code using `match`
 
 This function can be written in a much shorter way, but we’re going to start by
 doing a lot of it manually in order to explore error handling; at the end,
@@ -547,7 +557,7 @@ type of the error value returned from both of the operations we’re calling in
 this function’s body that might fail: the `File::open` function and the
 `read_to_string` method.
 
-The body of the function starts by calling the `File::open` function. Then we
+The body of the function starts by calling the `File::open` function. Then, we
 handle the `Result` value with a `match` similar to the `match` in Listing 9-4.
 If `File::open` succeeds, the file handle in the pattern variable `file`
 becomes the value in the mutable variable `username_file` and the function
@@ -560,8 +570,8 @@ So, if we have a file handle in `username_file`, the function then creates a
 new `String` in variable `username` and calls the `read_to_string` method on
 the file handle in `username_file` to read the contents of the file into
 `username`. The `read_to_string` method also returns a `Result` because it
-might fail, even though `File::open` succeeded. So we need another `match` to
-handle that `Result`: if `read_to_string` succeeds, then our function has
+might fail, even though `File::open` succeeded. So, we need another `match` to
+handle that `Result`: If `read_to_string` succeeds, then our function has
 succeeded, and we return the username from the file that’s now in `username`
 wrapped in an `Ok`. If `read_to_string` fails, we return the error value in the
 same way that we returned the error value in the `match` that handled the
@@ -580,13 +590,17 @@ it to handle appropriately.
 This pattern of propagating errors is so common in Rust that Rust provides the
 question mark operator `?` to make this easier.
 
-#### A Shortcut for Propagating Errors: the `?` Operator
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="a-shortcut-for-propagating-errors-the--operator"></a>
+
+#### The ? Operator Shortcut
 
 Listing 9-7 shows an implementation of `read_username_from_file` that has the
 same functionality as in Listing 9-6, but this implementation uses the `?`
 operator.
 
-Filename: src/main.rs
+src/main.rs
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -604,19 +618,18 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-Listing 9-7: A function that returns errors to the
-calling code using the `?` operator
+Listing 9-7: A function that returns errors to the calling code using the `?` operator
 
 The `?` placed after a `Result` value is defined to work in almost the same way
-as the `match` expressions we defined to handle the `Result` values in Listing
-9-6. If the value of the `Result` is an `Ok`, the value inside the `Ok` will
-get returned from this expression, and the program will continue. If the value
-is an `Err`, the `Err` will be returned from the whole function as if we had
-used the `return` keyword so the error value gets propagated to the calling
-code.
+as the `match` expressions that we defined to handle the `Result` values in
+Listing 9-6. If the value of the `Result` is an `Ok`, the value inside the `Ok`
+will get returned from this expression, and the program will continue. If the
+value is an `Err`, the `Err` will be returned from the whole function as if we
+had used the `return` keyword so that the error value gets propagated to the
+calling code.
 
 There is a difference between what the `match` expression from Listing 9-6 does
-and what the `?` operator does: error values that have the `?` operator called
+and what the `?` operator does: Error values that have the `?` operator called
 on them go through the `from` function, defined in the `From` trait in the
 standard library, which is used to convert values from one type into another.
 When the `?` operator calls the `from` function, the error type received is
@@ -642,7 +655,7 @@ The `?` operator eliminates a lot of boilerplate and makes this function’s
 implementation simpler. We could even shorten this code further by chaining
 method calls immediately after the `?`, as shown in Listing 9-8.
 
-Filename: src/main.rs
+src/main.rs
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -661,8 +674,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-Listing 9-8: Chaining method calls after the `?`
-operator
+Listing 9-8: Chaining method calls after the `?` operator
 
 We’ve moved the creation of the new `String` in `username` to the beginning of
 the function; that part hasn’t changed. Instead of creating a variable
@@ -675,7 +687,7 @@ this is just a different, more ergonomic way to write it.
 
 Listing 9-9 shows a way to make this even shorter using `fs::read_to_string`.
 
-Filename: src/main.rs
+src/main.rs
 
 <!-- Deliberately not using rustdoc_include here; the `main` function in the
 file panics. We do want to include it for reader experimentation purposes, but
@@ -690,8 +702,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-Listing 9-9: Using `fs::read_to_string` instead of
-opening and then reading the file
+Listing 9-9: Using `fs::read_to_string` instead of opening and then reading the file
 
 Reading a file into a string is a fairly common operation, so the standard
 library provides the convenient `fs::read_to_string` function that opens the
@@ -700,7 +711,11 @@ into that `String`, and returns it. Of course, using `fs::read_to_string`
 doesn’t give us the opportunity to explain all the error handling, so we did it
 the longer way first.
 
-#### Where The `?` Operator Can Be Used
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="where-the--operator-can-be-used"></a>
+
+#### Where to Use the ? Operator
 
 The `?` operator can only be used in functions whose return type is compatible
 with the value the `?` is used on. This is because the `?` operator is defined
@@ -714,7 +729,7 @@ In Listing 9-10, let’s look at the error we’ll get if we use the `?` operato
 in a `main` function with a return type that is incompatible with the type of
 the value we use `?` on.
 
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::fs::File;
@@ -724,8 +739,7 @@ fn main() {
 }
 ```
 
-Listing 9-10: Attempting to use the `?` in the `main`
-function that returns `()` won’t compile.
+Listing 9-10: Attempting to use the `?` in the `main` function that returns `()` won’t compile.
 
 This code opens a file, which might fail. The `?` operator follows the `Result`
 value returned by `File::open`, but this `main` function has the return type of
@@ -744,6 +758,12 @@ error[E0277]: the `?` operator can only be used in a function that returns `Resu
   |                                                ^ cannot use the `?` operator in a function that returns `()`
   |
   = help: the trait `FromResidual<Result<Infallible, std::io::Error>>` is not implemented for `()`
+help: consider adding return type
+  |
+3 ~ fn main() -> Result<(), Box<dyn std::error::Error>> {
+4 |     let greeting_file = File::open("hello.txt")?;
+5 +     Ok(())
+  |
 
 For more information about this error, try `rustc --explain E0277`.
 error: could not compile `error-handling` (bin "error-handling") due to 1 previous error
@@ -763,11 +783,12 @@ The error message also mentioned that `?` can be used with `Option<T>` values
 as well. As with using `?` on `Result`, you can only use `?` on `Option` in a
 function that returns an `Option`. The behavior of the `?` operator when called
 on an `Option<T>` is similar to its behavior when called on a `Result<T, E>`:
-if the value is `None`, the `None` will be returned early from the function at
+If the value is `None`, the `None` will be returned early from the function at
 that point. If the value is `Some`, the value inside the `Some` is the
 resultant value of the expression, and the function continues. Listing 9-11 has
 an example of a function that finds the last character of the first line in the
 given text.
+
 
 ```
 fn last_char_of_first_line(text: &str) -> Option<char> {
@@ -775,8 +796,7 @@ fn last_char_of_first_line(text: &str) -> Option<char> {
 }
 ```
 
-Listing 9-11: Using the `?` operator on an `Option<T>`
-value
+Listing 9-11: Using the `?` operator on an `Option<T>` value
 
 This function returns `Option<char>` because it’s possible that there is a
 character there, but it’s also possible that there isn’t. This code takes the
@@ -816,7 +836,7 @@ from Listing 9-10, but we’ve changed the return type of `main` to be
 `Result<(), Box<dyn Error>>` and added a return value `Ok(())` to the end. This
 code will now compile.
 
-Filename: src/main.rs
+src/main.rs
 
 ```
 use std::error::Error;
@@ -829,23 +849,22 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 ```
 
-Listing 9-12: Changing `main` to return `Result<(), E>`
-allows the use of the `?` operator on `Result` values.
+Listing 9-12: Changing `main` to return `Result<(), E>` allows the use of the `?` operator on `Result` values.
 
-The `Box<dyn Error>` type is a *trait object*, which we’ll talk about in the
-“Using Trait Objects that Allow for Values of Different
-Types” section in Chapter 17. For now, you can
-read `Box<dyn Error>` to mean “any kind of error.” Using `?` on a `Result`
-value in a `main` function with the error type `Box<dyn Error>` is allowed
-because it allows any `Err` value to be returned early. Even though the body of
-this `main` function will only ever return errors of type `std::io::Error`, by
-specifying `Box<dyn Error>`, this signature will continue to be correct even if
-more code that returns other errors is added to the body of `main`.
+The `Box<dyn Error>` type is a trait object, which we’ll talk about in “Using
+Trait Objects to Abstract over Shared Behavior”
+in Chapter 18. For now, you can read `Box<dyn Error>` to mean “any kind of
+error.” Using `?` on a `Result` value in a `main` function with the error type
+`Box<dyn Error>` is allowed because it allows any `Err` value to be returned
+early. Even though the body of this `main` function will only ever return
+errors of type `std::io::Error`, by specifying `Box<dyn Error>`, this signature
+will continue to be correct even if more code that returns other errors is
+added to the body of `main`.
 
 When a `main` function returns a `Result<(), E>`, the executable will exit with
 a value of `0` if `main` returns `Ok(())` and will exit with a nonzero value if
 `main` returns an `Err` value. Executables written in C return integers when
-they exit: programs that exit successfully return the integer `0`, and programs
+they exit: Programs that exit successfully return the integer `0`, and programs
 that error return some integer other than `0`. Rust also returns integers from
 executables to be compatible with this convention.
 
@@ -859,9 +878,9 @@ Now that we’ve discussed the details of calling `panic!` or returning `Result`
 let’s return to the topic of how to decide which is appropriate to use in which
 cases.
 
-## To `panic!` or Not to `panic!`
+## To panic! or Not to panic!
 
-So how do you decide when you should call `panic!` and when you should return
+So, how do you decide when you should call `panic!` and when you should return
 `Result`? When code panics, there’s no way to recover. You could call `panic!`
 for any error situation, whether there’s a possible way to recover or not, but
 then you’re making the decision that a situation is unrecoverable on behalf of
@@ -886,26 +905,31 @@ understood that a call to a method like `unwrap` that could panic is meant as a
 placeholder for the way you’d want your application to handle errors, which can
 differ based on what the rest of your code is doing.
 
-Similarly, the `unwrap` and `expect` methods are very handy when prototyping,
-before you’re ready to decide how to handle errors. They leave clear markers in
-your code for when you’re ready to make your program more robust.
+Similarly, the `unwrap` and `expect` methods are very handy when you’re
+prototyping and you’re not yet ready to decide how to handle errors. They leave
+clear markers in your code for when you’re ready to make your program more
+robust.
 
 If a method call fails in a test, you’d want the whole test to fail, even if
 that method isn’t the functionality under test. Because `panic!` is how a test
 is marked as a failure, calling `unwrap` or `expect` is exactly what should
 happen.
 
-### Cases in Which You Have More Information Than the Compiler
+<!-- Old headings. Do not remove or links may break. -->
 
-It would also be appropriate to call `unwrap` or `expect` when you have some
-other logic that ensures the `Result` will have an `Ok` value, but the logic
-isn’t something the compiler understands. You’ll still have a `Result` value
-that you need to handle: whatever operation you’re calling still has the
-possibility of failing in general, even though it’s logically impossible in
-your particular situation. If you can ensure by manually inspecting the code
-that you’ll never have an `Err` variant, it’s perfectly acceptable to call
-`unwrap`, and even better to document the reason you think you’ll never have an
-`Err` variant in the `expect` text. Here’s an example:
+<a id="cases-in-which-you-have-more-information-than-the-compiler"></a>
+
+### When You Have More Information Than the Compiler
+
+It would also be appropriate to call `expect` when you have some other logic
+that ensures that the `Result` will have an `Ok` value, but the logic isn’t
+something the compiler understands. You’ll still have a `Result` value that you
+need to handle: Whatever operation you’re calling still has the possibility of
+failing in general, even though it’s logically impossible in your particular
+situation. If you can ensure by manually inspecting the code that you’ll never
+have an `Err` variant, it’s perfectly acceptable to call `expect` and document
+the reason you think you’ll never have an `Err` variant in the argument text.
+Here’s an example:
 
 ```
     use std::net::IpAddr;
@@ -918,7 +942,7 @@ that you’ll never have an `Err` variant, it’s perfectly acceptable to call
 We’re creating an `IpAddr` instance by parsing a hardcoded string. We can see
 that `127.0.0.1` is a valid IP address, so it’s acceptable to use `expect`
 here. However, having a hardcoded, valid string doesn’t change the return type
-of the `parse` method: we still get a `Result` value, and the compiler will
+of the `parse` method: We still get a `Result` value, and the compiler will
 still make us handle the `Result` as if the `Err` variant is a possibility
 because the compiler isn’t smart enough to see that this string is always a
 valid IP address. If the IP address string came from a user rather than being
@@ -942,17 +966,17 @@ more of the following:
 * Your code after this point needs to rely on not being in this bad state,
   rather than checking for the problem at every step.
 * There’s not a good way to encode this information in the types you use. We’ll
-  work through an example of what we mean in the “Encoding States and Behavior
-  as Types” section of Chapter 17.
+  work through an example of what we mean in “Encoding States and Behavior as
+  Types” in Chapter 18.
 
 If someone calls your code and passes in values that don’t make sense, it’s
-best to return an error if you can so the user of the library can decide what
-they want to do in that case. However, in cases where continuing could be
+best to return an error if you can so that the user of the library can decide
+what they want to do in that case. However, in cases where continuing could be
 insecure or harmful, the best choice might be to call `panic!` and alert the
-person using your library to the bug in their code so they can fix it during
-development. Similarly, `panic!` is often appropriate if you’re calling
-external code that is out of your control and it returns an invalid state that
-you have no way of fixing.
+person using your library to the bug in their code so that they can fix it
+during development. Similarly, `panic!` is often appropriate if you’re calling
+external code that is out of your control and returns an invalid state that you
+have no way of fixing.
 
 However, when failure is expected, it’s more appropriate to return a `Result`
 than to make a `panic!` call. Examples include a parser being given malformed
@@ -963,11 +987,11 @@ expected possibility that the calling code must decide how to handle.
 When your code performs an operation that could put a user at risk if it’s
 called using invalid values, your code should verify the values are valid first
 and panic if the values aren’t valid. This is mostly for safety reasons:
-attempting to operate on invalid data can expose your code to vulnerabilities.
+Attempting to operate on invalid data can expose your code to vulnerabilities.
 This is the main reason the standard library will call `panic!` if you attempt
-an out-of-bounds memory access: trying to access memory that doesn’t belong to
+an out-of-bounds memory access: Trying to access memory that doesn’t belong to
 the current data structure is a common security problem. Functions often have
-*contracts*: their behavior is only guaranteed if the inputs meet particular
+*contracts*: Their behavior is only guaranteed if the inputs meet particular
 requirements. Panicking when the contract is violated makes sense because a
 contract violation always indicates a caller-side bug, and it’s not a kind of
 error you want the calling code to have to explicitly handle. In fact, there’s
@@ -979,33 +1003,37 @@ However, having lots of error checks in all of your functions would be verbose
 and annoying. Fortunately, you can use Rust’s type system (and thus the type
 checking done by the compiler) to do many of the checks for you. If your
 function has a particular type as a parameter, you can proceed with your code’s
-logic knowing that the compiler has already ensured you have a valid value. For
-example, if you have a type rather than an `Option`, your program expects to
-have *something* rather than *nothing*. Your code then doesn’t have to handle
-two cases for the `Some` and `None` variants: it will only have one case for
-definitely having a value. Code trying to pass nothing to your function won’t
-even compile, so your function doesn’t have to check for that case at runtime.
-Another example is using an unsigned integer type such as `u32`, which ensures
-the parameter is never negative.
+logic knowing that the compiler has already ensured that you have a valid
+value. For example, if you have a type rather than an `Option`, your program
+expects to have *something* rather than *nothing*. Your code then doesn’t have
+to handle two cases for the `Some` and `None` variants: It will only have one
+case for definitely having a value. Code trying to pass nothing to your
+function won’t even compile, so your function doesn’t have to check for that
+case at runtime. Another example is using an unsigned integer type such as
+`u32`, which ensures that the parameter is never negative.
 
-### Creating Custom Types for Validation
+<!-- Old headings. Do not remove or links may break. -->
 
-Let’s take the idea of using Rust’s type system to ensure we have a valid value
-one step further and look at creating a custom type for validation. Recall the
-guessing game in Chapter 2 in which our code asked the user to guess a number
-between 1 and 100. We never validated that the user’s guess was between those
-numbers before checking it against our secret number; we only validated that
-the guess was positive. In this case, the consequences were not very dire: our
-output of “Too high” or “Too low” would still be correct. But it would be a
-useful enhancement to guide the user toward valid guesses and have different
-behavior when the user guesses a number that’s out of range versus when the
-user types, for example, letters instead.
+<a id="creating-custom-types-for-validation"></a>
+
+### Custom Types for Validation
+
+Let’s take the idea of using Rust’s type system to ensure that we have a valid
+value one step further and look at creating a custom type for validation.
+Recall the guessing game in Chapter 2 in which our code asked the user to guess
+a number between 1 and 100. We never validated that the user’s guess was
+between those numbers before checking it against our secret number; we only
+validated that the guess was positive. In this case, the consequences were not
+very dire: Our output of “Too high” or “Too low” would still be correct. But it
+would be a useful enhancement to guide the user toward valid guesses and have
+different behavior when the user guesses a number that’s out of range versus
+when the user types, for example, letters instead.
 
 One way to do this would be to parse the guess as an `i32` instead of only a
 `u32` to allow potentially negative numbers, and then add a check for the
 number being in range, like so:
 
-Filename: src/main.rs
+src/main.rs
 
 ```
     loop {
@@ -1026,25 +1054,27 @@ Filename: src/main.rs
     }
 ```
 
+
+
 The `if` expression checks whether our value is out of range, tells the user
 about the problem, and calls `continue` to start the next iteration of the loop
 and ask for another guess. After the `if` expression, we can proceed with the
 comparisons between `guess` and the secret number knowing that `guess` is
 between 1 and 100.
 
-However, this is not an ideal solution: if it were absolutely critical that the
+However, this is not an ideal solution: If it were absolutely critical that the
 program only operated on values between 1 and 100, and it had many functions
 with this requirement, having a check like this in every function would be
 tedious (and might impact performance).
 
-Instead, we can make a new type and put the validations in a function to create
-an instance of the type rather than repeating the validations everywhere. That
-way, it’s safe for functions to use the new type in their signatures and
-confidently use the values they receive. Listing 9-13 shows one way to define a
-`Guess` type that will only create an instance of `Guess` if the `new` function
-receives a value between 1 and 100.
+Instead, we can make a new type in a dedicated module and put the validations
+in a function to create an instance of the type rather than repeating the
+validations everywhere. That way, it’s safe for functions to use the new type
+in their signatures and confidently use the values they receive. Listing 9-13
+shows one way to define a `Guess` type that will only create an instance of
+`Guess` if the `new` function receives a value between 1 and 100.
 
-Filename: src/lib.rs
+src/guessing_game.rs
 
 ```
 pub struct Guess {
@@ -1066,13 +1096,15 @@ impl Guess {
 }
 ```
 
-Listing 9-13: A `Guess` type that will only continue with
-values between 1 and 100
+Listing 9-13: A `Guess` type that will only continue with values between 1 and 100
 
-First we define a struct named `Guess` that has a field named `value` that
-holds an `i32`. This is where the number will be stored.
+Note that this code in *src/guessing_game.rs* depends on adding a module
+declaration `mod guessing_game;` in *src/lib.rs* that we haven’t shown here.
+Within this new module’s file, we define a struct named `Guess` that has a
+field named `value` that holds an `i32`. This is where the number will be
+stored.
 
-Then we implement an associated function named `new` on `Guess` that creates
+Then, we implement an associated function named `new` on `Guess` that creates
 instances of `Guess` values. The `new` function is defined to have one
 parameter named `value` of type `i32` and to return a `Guess`. The code in the
 body of the `new` function tests `value` to make sure it’s between 1 and 100.
@@ -1090,11 +1122,12 @@ Next, we implement a method named `value` that borrows `self`, doesn’t have an
 other parameters, and returns an `i32`. This kind of method is sometimes called
 a *getter* because its purpose is to get some data from its fields and return
 it. This public method is necessary because the `value` field of the `Guess`
-struct is private. It’s important that the `value` field be private so code
-using the `Guess` struct is not allowed to set `value` directly: code outside
-the module *must* use the `Guess::new` function to create an instance of
-`Guess`, thereby ensuring there’s no way for a `Guess` to have a `value` that
-hasn’t been checked by the conditions in the `Guess::new` function.
+struct is private. It’s important that the `value` field be private so that
+code using the `Guess` struct is not allowed to set `value` directly: Code
+outside the `guessing_game` module *must* use the `Guess::new` function to
+create an instance of `Guess`, thereby ensuring that there’s no way for a
+`Guess` to have a `value` that hasn’t been checked by the conditions in the
+`Guess::new` function.
 
 A function that has a parameter or returns only numbers between 1 and 100 could
 then declare in its signature that it takes or returns a `Guess` rather than an

@@ -1,7 +1,7 @@
 # Generic Types, Traits, and Lifetimes
 
 Every programming language has tools for effectively handling the duplication
-of concepts. In Rust, one such tool is *generics*: abstract stand-ins for
+of concepts. In Rust, one such tool is _generics_: abstract stand-ins for
 concrete types or other properties. We can express the behavior of generics or
 how they relate to other generics without knowing what will be in their place
 when compiling and running the code.
@@ -18,11 +18,11 @@ then use the same technique to make a generic function from two functions that
 differ only in the types of their parameters. We’ll also explain how to use
 generic types in struct and enum definitions.
 
-Then you’ll learn how to use *traits* to define behavior in a generic way. You
+Then you’ll learn how to use _traits_ to define behavior in a generic way. You
 can combine traits with generic types to constrain a generic type to accept
 only those types that have a particular behavior, as opposed to just any type.
 
-Finally, we’ll discuss *lifetimes*: a variety of generics that give the
+Finally, we’ll discuss _lifetimes_: a variety of generics that give the
 compiler information about how references relate to each other. Lifetimes allow
 us to give the compiler enough information about borrowed values so that it can
 ensure references will be valid in more situations than it could without our
@@ -42,14 +42,13 @@ duplicated code that can use generics.
 We’ll begin with the short program in Listing 10-1 that finds the largest
 number in a list.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-1" file-name="src/main.rs" caption="Finding the largest number in a list of numbers">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-1: Finding the largest number in a list of
-numbers</span>
+</Listing>
 
 We store a list of integers in the variable `number_list` and place a reference
 to the first number in the list in a variable named `largest`. We then iterate
@@ -64,14 +63,13 @@ We’ve now been tasked with finding the largest number in two different lists o
 numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
 the same logic at two different places in the program, as shown in Listing 10-2.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-2" file-name="src/main.rs" caption="Code to find the largest number in *two* lists of numbers">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-02/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-2: Code to find the largest number in *two*
-lists of numbers</span>
+</Listing>
 
 Although this code works, duplicating code is tedious and error prone. We also
 have to remember to update the code in multiple places when we want to change
@@ -87,14 +85,13 @@ function named `largest`. Then we call the function to find the largest number
 in the two lists from Listing 10-2. We could also use the function on any other
 list of `i32` values we might have in the future.
 
-<span class="filename">Filename: src/main.rs</span>
+<Listing number="10-3" file-name="src/main.rs" caption="Abstracted code to find the largest number in two lists">
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-3: Abstracted code to find the largest number
-in two lists</span>
+</Listing>
 
 The `largest` function has a parameter called `list`, which represents any
 concrete slice of `i32` values we might pass into the function. As a result,
