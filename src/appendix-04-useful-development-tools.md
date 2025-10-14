@@ -1,4 +1,4 @@
-## Appendix D - Useful Development Tools
+## Appendix D: Useful Development Tools
 
 In this appendix, we talk about some useful development tools that the Rust
 project provides. We’ll look at automatic formatting, quick ways to apply
@@ -8,11 +8,11 @@ warning fixes, a linter, and integrating with IDEs.
 
 The `rustfmt` tool reformats your code according to the community code style.
 Many collaborative projects use `rustfmt` to prevent arguments about which
-style to use when writing Rust: everyone formats their code using the tool.
+style to use when writing Rust: Everyone formats their code using the tool.
 
 Rust installations include `rustfmt` by default, so you should already have the
 programs `rustfmt` and `cargo-fmt` on your system. These two commands are
-analogous to `rustc` and `cargo` in that `rustfmt` allows finer-grained control
+analogous to `rustc` and `cargo` in that `rustfmt` allows finer grained control
 and `cargo-fmt` understands conventions of a project that uses Cargo. To format
 any Cargo project, enter the following:
 
@@ -26,10 +26,10 @@ on `rustfmt`, see [its documentation][rustfmt].
 
 ### Fix Your Code with `rustfix`
 
-The `rustfix` tool is included with Rust installations and can automatically fix
-compiler warnings that have a clear way to correct the problem that’s likely
-what you want. You’ve probably seen compiler warnings before. For example,
-consider this code:
+The `rustfix` tool is included with Rust installations and can automatically
+fix compiler warnings that have a clear way to correct the problem that’s
+likely what you want. You’ve probably seen compiler warnings before. For
+example, consider this code:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -83,13 +83,14 @@ fn main() {
 The variable `x` is now immutable, and the warning no longer appears.
 
 You can also use the `cargo fix` command to transition your code between
-different Rust editions. Editions are covered in [Appendix E][editions].
+different Rust editions. Editions are covered in [Appendix E][editions]<!--
+ignore -->.
 
 ### More Lints with Clippy
 
-The Clippy tool is a collection of lints to analyze your code so you can catch
-common mistakes and improve your Rust code. Clippy is included with standard
-Rust installations.
+The Clippy tool is a collection of lints to analyze your code so that you can
+catch common mistakes and improve your Rust code. Clippy is included with
+standard Rust installations.
 
 To run Clippy’s lints on any Cargo project, enter the following:
 
