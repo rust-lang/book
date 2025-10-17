@@ -4,7 +4,7 @@ fn main() {
 
     {
         let string2 = String::from("xyz");
-        let result = longest(string1.as_str(), string2.as_str());
+        let result = longest(&string1, &string2);
         println!("The longest string is {result}");
     }
 }
