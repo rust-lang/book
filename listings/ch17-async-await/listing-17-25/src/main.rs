@@ -1,40 +1,22 @@
-extern crate trpl; // required for mdbook test
+extern crate trpl; // for mdbook test
 
+// ANCHOR: all
 use std::{thread, time::Duration};
 
 fn main() {
+    let (tx, mut rx) = trpl::channel();
+
+    thread::spawn(move || {
+        for i in 1..11 {
+            tx.send(i).unwrap();
+            thread::sleep(Duration::from_secs(1));
+        }
+    });
+
     trpl::block_on(async {
-        // ANCHOR: yields
-        let a = async {
-            println!("'a' started.");
-            slow("a", 30);
-            trpl::yield_now().await;
-            slow("a", 10);
-            trpl::yield_now().await;
-            slow("a", 20);
-            trpl::yield_now().await;
-            println!("'a' finished.");
-        };
-
-        let b = async {
-            println!("'b' started.");
-            slow("b", 75);
-            trpl::yield_now().await;
-            slow("b", 10);
-            trpl::yield_now().await;
-            slow("b", 15);
-            trpl::yield_now().await;
-            slow("b", 350);
-            trpl::yield_now().await;
-            println!("'b' finished.");
-        };
-        // ANCHOR_END: yields
-
-        trpl::select(a, b).await;
+        while let Some(message) = rx.recv().await {
+            println!("{message}");
+        }
     });
 }
-
-fn slow(name: &str, ms: u64) {
-    thread::sleep(Duration::from_millis(ms));
-    println!("'{name}' ran for {ms}ms");
-}
+// ANCHOR_END: all

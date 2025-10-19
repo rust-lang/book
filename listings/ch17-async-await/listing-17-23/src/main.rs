@@ -1,35 +1,56 @@
 extern crate trpl; // required for mdbook test
 
-use std::{thread, time::Duration};
+use std::time::Duration;
 
 fn main() {
     trpl::block_on(async {
-        // ANCHOR: slow-futures
-        let a = async {
-            println!("'a' started.");
-            slow("a", 30);
-            slow("a", 10);
-            slow("a", 20);
-            trpl::sleep(Duration::from_millis(50)).await;
-            println!("'a' finished.");
+        let (tx, mut rx) = trpl::channel();
+
+        let tx1 = tx.clone();
+        let tx1_fut = async move {
+            let vals = vec![
+                String::from("hi"),
+                String::from("from"),
+                String::from("the"),
+                String::from("future"),
+            ];
+
+            for val in vals {
+                tx1.send(val).unwrap();
+                trpl::sleep(Duration::from_secs(1)).await;
+            }
         };
 
-        let b = async {
-            println!("'b' started.");
-            slow("b", 75);
-            slow("b", 10);
-            slow("b", 15);
-            slow("b", 350);
-            trpl::sleep(Duration::from_millis(50)).await;
-            println!("'b' finished.");
+        let rx_fut = async {
+            while let Some(value) = rx.recv().await {
+                println!("received '{value}'");
+            }
         };
 
-        trpl::select(a, b).await;
-        // ANCHOR_END: slow-futures
+        // ANCHOR: here
+        let tx_fut = async move {
+            // -- snip --
+            // ANCHOR_END: here
+            let vals = vec![
+                String::from("more"),
+                String::from("messages"),
+                String::from("for"),
+                String::from("you"),
+            ];
+
+            for val in vals {
+                tx.send(val).unwrap();
+                trpl::sleep(Duration::from_secs(1)).await;
+            }
+        // ANCHOR: here
+        };
+        // ANCHOR_END: here
+
+        // ANCHOR: here
+        let futures =
+            vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
+
+        trpl::join_all(futures).await;
+        // ANCHOR_END: here
     });
-}
-
-fn slow(name: &str, ms: u64) {
-    thread::sleep(Duration::from_millis(ms));
-    println!("'{name}' ran for {ms}ms");
 }
