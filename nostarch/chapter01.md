@@ -167,6 +167,26 @@ integrated development environments (IDEs) have built-in support for Rust. You
 can always find a fairly current list of many editors and IDEs on the tools
 page at *https://www.rust-lang.org/tools* on the Rust website.
 
+### Working Offline with This Book
+
+In several examples, we will use Rust packages beyond the standard library. To
+work through those examples, you will either need to have an internet connection
+or to have downloaded those dependencies ahead of time. To download the
+dependencies ahead of time, you can run the following commands. (We’ll explain
+what `cargo` is and what each of these commands does in detail later.)
+
+```
+$ cargo new get-dependencies
+$ cd get-dependencies
+$ cargo add rand@0.8.5 trpl@0.2.0
+```
+
+This will cache the downloads for these packages so you will not need to
+download them later. Once you have run this command, you do not need to keep the
+`get-dependencies` folder. If you have run this command, you can use the
+`--offline` flag with all `cargo` commands in the rest of the book to use these
+cached versions instead of attempting to use the network.
+
 ## Hello, World!
 
 Now that you’ve installed Rust, it’s time to write your first Rust program.
@@ -262,7 +282,11 @@ section for ways to get help.
 If `Hello, world!` did print, congratulations! You’ve officially written a Rust
 program. That makes you a Rust programmer—welcome!
 
-### Anatomy of a Rust Program
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="anatomy-of-a-rust-program"></a>
+
+### The Anatomy of a Rust Program
 
 Let’s review this “Hello, world!” program in detail. Here’s the first piece of
 the puzzle:

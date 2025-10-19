@@ -98,7 +98,7 @@ be in code that our code calls, and the filename and line number reported by
 the error message will be someone else’s code where the `panic!` macro is
 called, not the line of our code that eventually led to the `panic!` call.
 
-<!-- Old heading. Do not remove or links may break. -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="using-a-panic-backtrace"></a>
 

@@ -747,7 +747,7 @@ pub trait Iterator {
 ```
 
 Notice that this definition uses some new syntax: `type Item` and `Self::Item`,
-which are defining an *associated type* with this trait. We’ll talk about
+which are defining an associated type with this trait. We’ll talk about
 associated types in depth in Chapter 20. For now, all you need to know is that
 this code says implementing the `Iterator` trait requires that you also define
 an `Item` type, and this `Item` type is used in the return type of the `next`

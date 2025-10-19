@@ -184,7 +184,7 @@ Table B-1: Operators
 |`-`|`- expr`|Arithmetic negation|`Neg`|
 |`-`|`expr - expr`|Arithmetic subtraction|`Sub`|
 |`-=`|`var -= expr`|Arithmetic subtraction and assignment|`SubAssign`|
-|`->`|`fn(...) -> type`, <code>\|...\| -> type</code>|Function and closure return type||
+|`->`|`fn(...) -> type`, <code>\|…\| -> type</code>|Function and closure return type||
 |`.`|`expr.ident`|Field access||
 |`.`|`expr.ident(expr, ...)`|Method call||
 |`.`|`expr.0`, `expr.1`, and so on|Tuple indexing||
@@ -240,7 +240,7 @@ Table B-2: Stand-alone Syntax
 |`br"..."`, `br#"..."#`, `br##"..."##`, and so on|Raw byte string literal; combination of raw and byte string literal|
 |`'...'`|Character literal|
 |`b'...'`|ASCII byte literal|
-|<code>\|...\| expr</code>|Closure|
+|<code>\|…\| expr</code>|Closure|
 |`!`|Always-empty bottom type for diverging functions|
 |`_`|“Ignored” pattern binding; also used to make integer literals readable|
 
