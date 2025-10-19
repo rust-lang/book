@@ -8,6 +8,8 @@ fn main() {
         let (tx, mut rx) = trpl::channel();
 
         let tx_fut = async move {
+            // --snip--
+            // ANCHOR_END: with-move
             let vals = vec![
                 String::from("hi"),
                 String::from("from"),
@@ -28,6 +30,5 @@ fn main() {
         };
 
         trpl::join(tx_fut, rx_fut).await;
-        // ANCHOR_END: with-move
     });
 }

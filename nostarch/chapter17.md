@@ -20,7 +20,6 @@ bit of code should run. *Asynchronous programming* is an abstraction that lets
 us express our code in terms of potential pausing points and eventual results
 that takes care of the details of coordination for us.
 
-
 This chapter builds on Chapter 16’s use of threads for parallelism and
 concurrency by introducing an alternative approach to writing code: Rust’s
 futures, streams, and the `async` and `await` syntax that let us express how
@@ -209,20 +208,19 @@ everything you need to know as we go.
 To keep the focus of this chapter on learning async rather than juggling parts
 of the ecosystem, we’ve created the `trpl` crate (`trpl` is short for “The Rust
 Programming Language”). It re-exports all the types, traits, and functions
-you’ll need, primarily from the `futures` and `tokio` crates. The `futures`
-crate is an official home for Rust experimentation for async code, and it’s
-actually where the `Future` trait was originally designed. Tokio is the most
-widely used async runtime in Rust today, especially for web applications. There
-are other great runtimes out there, and they may be more suitable for your
-purposes. We use the `tokio` crate under the hood for `trpl` because it’s well
-tested and widely used.
+you’ll need, primarily from the `futures` and
+`tokio` crates. The `futures` crate is an official home
+for Rust experimentation for async code, and it’s actually where the `Future`
+trait was originally designed. Tokio is the most widely used async runtime in
+Rust today, especially for web applications. There are other great runtimes out
+there, and they may be more suitable for your purposes. We use the `tokio`
+crate under the hood for `trpl` because it’s well tested and widely used.
 
 In some cases, `trpl` also renames or wraps the original APIs to keep you
 focused on the details relevant to this chapter. If you want to understand what
-the crate does, we encourage you to check out its source code at
-*https://github.com/rust-lang/book/tree/main/packages/trpl*. You’ll be able to
-see what crate each re-export comes from, and we’ve left extensive comments
-explaining what the crate does.
+the crate does, we encourage you to check out its source code at *https://github.com/rust-lang/book/tree/main/packages/trpl*.
+You’ll be able to see what crate each re-export comes from, and we’ve left
+extensive comments explaining what the crate does.
 
 Create a new binary project named `hello-async` and add the `trpl` crate as a
 dependency:
@@ -275,18 +273,18 @@ We have to explicitly await both of these futures, because futures in Rust are
 *lazy*: they don’t do anything until you ask them to with the `await` keyword.
 (In fact, Rust will show a compiler warning if you don’t use a future.) This
 might remind you of the discussion of iterators in the “Processing a Series of
-Items with Iterators” section in Chapter 13. Iterators do nothing unless you
-call their `next` method—whether directly or by using `for` loops or methods
-such as `map` that use `next` under the hood. Likewise, futures do nothing
-unless you explicitly ask them to. This laziness allows Rust to avoid running
-async code until it’s actually needed.
+Items with Iterators” section in Chapter 13.
+Iterators do nothing unless you call their `next` method—whether directly or by
+using `for` loops or methods such as `map` that use `next` under the hood.
+Likewise, futures do nothing unless you explicitly ask them to. This laziness
+allows Rust to avoid running async code until it’s actually needed.
 
 > Note: This is different from the behavior we saw when using `thread::spawn`
-> in the “Creating a New Thread with spawn” section in Chapter 16, where the
-> closure we passed to another thread started running immediately. It’s also
-> different from how many other languages approach async. But it’s important
-> for Rust to be able to provide its performance guarantees, just as it is with
-> iterators.
+> in the “Creating a New Thread with spawn”
+> section in Chapter 16, where the closure we passed to another thread started
+> running immediately. It’s also different from how many other languages
+> approach async. But it’s important for Rust to be able to provide its
+> performance guarantees, just as it is with iterators.
 
 Once we have `response_text`, we can parse it into an instance of the `Html`
 type using `Html::parse`. Instead of a raw string, we now have a data type we
@@ -389,10 +387,11 @@ async fn main() {
 Listing 17-3: Calling the `page_title` function from `main` with a user-supplied argument
 
 We follow the same pattern we used to get command line arguments in the
-“Accepting Command Line Arguments” section in Chapter 12. Then we pass the URL
-argument to `page_title` and await the result. Because the value produced by
-the future is an `Option<String>`, we use a `match` expression to print
-different messages to account for whether the page had a `<title>`.
+“Accepting Command Line Arguments” section in
+Chapter 12. Then we pass the URL argument to `page_title` and await the result.
+Because the value produced by the future is an `Option<String>`, we use a
+`match` expression to print different messages to account for whether the page
+had a `<title>`.
 
 The only place we can use the `await` keyword is in async functions or blocks,
 and Rust won’t let us mark the special `main` function as `async`.
@@ -466,7 +465,7 @@ When we run this code, we get the behavior we expected initially:
 <!-- manual-regeneration
 cd listings/ch17-async-await/listing-17-04
 cargo build # skip all the build noise
-cargo run https://www.rust-lang.org
+cargo run -- "https://www.rust-lang.org"
 # copy the output here
 -->
 
@@ -519,8 +518,7 @@ would need to manage the state machine for whatever future `main` returned, but
 returned by the `async` block until it’s done.
 
 > Note: Some runtimes provide macros so you *can* write an async `main`
-> function. Those macros rewrite `async fn main() { ... }` to be a normal `fn
-> main`, which does the same thing we did by hand in Listing 17-4: call a
+> function. Those macros rewrite `async fn main() { ... }` to be a normal `fn main`, which does the same thing we did by hand in Listing 17-4: call a
 > function that runs a future to completion the way `trpl::block_on` does.
 
 Now let’s put these pieces together and see how we can write concurrent code.
@@ -640,12 +638,12 @@ characteristics.
 
 ### Creating a New Task with spawn_task
 
-The first operation we tackled in the “Creating a New Thread with spawn”
-section in Chapter 16 was counting up on two separate threads. Let’s do the
-same using async. The `trpl` crate supplies a `spawn_task` function that looks
-very similar to the `thread::spawn` API, and a `sleep` function that is an
-async version of the `thread::sleep` API. We can use these together to
-implement the counting example, as shown in Listing 17-6.
+The first operation we tackled in the “Creating a New Thread with
+`spawn`” section in Chapter 16 was counting up on
+two separate threads. Let’s do the same using async. The `trpl` crate supplies
+a `spawn_task` function that looks very similar to the `thread::spawn` API, and
+a `sleep` function that is an async version of the `thread::sleep` API. We can
+use these together to implement the counting example, as shown in Listing 17-6.
 
 src/main.rs
 
@@ -764,15 +762,15 @@ async blocks compile to anonymous futures, we can put each loop in an async
 block and have the runtime run them both to completion using the `trpl::join`
 function.
 
-In the “Waiting for All Threads to Finish” section in Chapter 16, we showed how
-to use the `join` method on the `JoinHandle` type returned when you call
-`std::thread::spawn`. The `trpl::join` function is similar, but for futures.
-When you give it two futures, it produces a single new future whose output is a
-tuple containing the output of each future you passed in once they *both*
-complete. Thus, in Listing 17-8, we use `trpl::join` to wait for both `fut1`
-and `fut2` to finish. We do *not* await `fut1` and `fut2` but instead the new
-future produced by `trpl::join`. We ignore the output, because it’s just a
-tuple containing two unit values.
+In the “Waiting for All Threads to Finish”
+section in Chapter 16, we showed how to use the `join` method on the
+`JoinHandle` type returned when you call `std::thread::spawn`. The `trpl::join`
+function is similar, but for futures. When you give it two futures, it produces
+a single new future whose output is a tuple containing the output of each
+future you passed in once they *both* complete. Thus, in Listing 17-8, we use
+`trpl::join` to wait for both `fut1` and `fut2` to finish. We do *not* await
+`fut1` and `fut2` but instead the new future produced by `trpl::join`. We
+ignore the output, because it’s just a tuple containing two unit values.
 
 src/main.rs
 
@@ -851,10 +849,10 @@ each case *before* running the code!
 Sharing data between futures will also be familiar: we’ll use message passing
 again, but this time with async versions of the types and functions. We’ll take
 a slightly different path than we did in the “Transfer Data Between Threads
-with Message Passing” section in Chapter 16 to illustrate some of the key
-differences between thread-based and futures-based concurrency. In Listing
-17-9, we’ll begin with just a single async block—*not* spawning a separate task
-as we spawned a separate thread.
+with Message Passing” section in
+Chapter 16 to illustrate some of the key differences between thread-based and
+futures-based concurrency. In Listing 17-9, we’ll begin with just a single
+async block—*not* spawning a separate task as we spawned a separate thread.
 
 src/main.rs
 
@@ -937,9 +935,9 @@ In Listing 16-10, we used a `for` loop to process all the items received from a
 synchronous channel. Rust doesn’t yet have a way to use a `for` loop with an
 *asynchronously produced* series of items, however, so we need to use a loop we
 haven’t seen before: the `while let` conditional loop. This is the loop version
-of the `if let` construct we saw back in the “Concise Control Flow with `if
-let` and `let else`” section in Chapter 6. The loop will continue executing as
-long as the pattern it specifies continues to match the value.
+of the `if let` construct we saw back in the “Concise Control Flow with `if let` and `let else`” section in Chapter 6. The loop
+will continue executing as long as the pattern it specifies continues to match
+the value.
 
 The `rx.recv` call produces a future, which we await. The runtime will pause
 the future until it is ready. Once a message arrives, the future will resolve
@@ -1017,7 +1015,7 @@ With the updated code in Listing 17-11, the messages get printed at
 
 #### Moving Ownership Into an Async Block
 
-The program still never exits, though, because of the way `while let` loop
+The program still never exits, though, because of the way the `while let` loop
 interacts with `trpl::join`:
 
 * The future returned from `trpl::join` completes only once *both* futures
@@ -1038,12 +1036,13 @@ interacts with `trpl::join`:
 Right now, the async block where we send the messages only *borrows* `tx`
 because sending a message doesn’t require ownership, but if we could *move*
 `tx` into that async block, it would be dropped once that block ends. In the
-“Capturing References or Moving Ownership” section in Chapter 13, you learned
-how to use the `move` keyword with closures, and, as discussed in the “Using
-`move` Closures with Threads” section in Chapter 16, we often need to move data
-into closures when working with threads. The same basic dynamics apply to async
-blocks, so the `move` keyword works with async blocks just as it does with
-closures.
+“Capturing References or Moving Ownership”
+section in Chapter 13, you learned how to use the `move` keyword with closures,
+and, as discussed in the “Using `move` Closures with
+Threads” section in Chapter 16, we often need to
+move data into closures when working with threads. The same basic dynamics
+apply to async blocks, so the `move` keyword works with async blocks just as it
+does with closures.
 
 In Listing 17-12, we change the block used to send messages from `async` to
 `async move`.
@@ -1054,7 +1053,7 @@ src/main.rs
         let (tx, mut rx) = trpl::channel();
 
         let tx_fut = async move {
-        // --snip--
+            // --snip--
 ```
 
 Listing 17-12: A revision of the code from Listing 17-11 that correctly shuts down when complete
@@ -1063,7 +1062,7 @@ When we run *this* version of the code, it shuts down gracefully after the last
 message is sent and received. Next, let’s see what would need to change to send
 data from more than one future.
 
-#### Joining a Number of Futures with the `join!` Macro
+#### Joining a Number of Futures with the join! Macro
 
 This async channel is also a multiple-producer channel, so we can call `clone`
 on `tx` if we want to send messages from multiple futures, as shown in Listing
@@ -1160,11 +1159,11 @@ to tell the runtime it can switch to another task.
 
 ### Yielding Control to the Runtime
 
-Recall from the “Our First Async Program” section that at each
-await point, Rust gives a runtime a chance to pause the task and switch to
-another one if the future being awaited isn’t ready. The inverse is also true:
-Rust *only* pauses async blocks and hands control back to a runtime at an await
-point. Everything between await points is synchronous.
+Recall from the “Our First Async Program”
+section that at each await point, Rust gives a runtime a chance to pause the
+task and switch to another one if the future being awaited isn’t ready. The
+inverse is also true: Rust *only* pauses async blocks and hands control back to
+a runtime at an await point. Everything between await points is synchronous.
 
 That means if you do a bunch of work in an async block without an await point,
 that future will block any other futures from making progress. You may sometimes
@@ -1193,8 +1192,8 @@ This code uses `std::thread::sleep` instead of `trpl::sleep` so that calling
 use `slow` to stand in for real-world operations that are both long-running and
 blocking.
 
-In Listing 17-15, we use `slow` to emulate doing this kind of CPU-bound work in a
-pair of futures.
+In Listing 17-15, we use `slow` to emulate doing this kind of CPU-bound work in
+a pair of futures.
 
 src/main.rs
 
@@ -1221,13 +1220,13 @@ src/main.rs
         trpl::select(a, b).await;
 ```
 
-Listing 17-15: Using `thread::sleep` to simulate slow operations
+Listing 17-15: Calling `slow` to simulate running slow operations
 
 Each future hands control back to the runtime only *after* carrying out a bunch
 of slow operations. If you run this code, you will see this output:
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-23/
+cd listings/ch17-async-await/listing-17-15/
 cargo run
 copy just the output
 -->
@@ -1296,7 +1295,7 @@ We’ve added `trpl::sleep` calls with await points between each call to `slow`.
 Now the two futures’ work is interleaved:
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-24
+cd listings/ch17-async-await/listing-17-16
 cargo run
 copy just the output
 -->
@@ -1346,7 +1345,7 @@ src/main.rs
             trpl::yield_now().await;
             slow("b", 15);
             trpl::yield_now().await;
-            slow("b", 35);
+            slow("b", 350);
             trpl::yield_now().await;
             println!("'b' finished.");
         };
@@ -1503,29 +1502,28 @@ time with *streams*.
 ## Streams: Futures in Sequence
 
 Recall how we used the receiver for our async channel earlier in this chapter
-in the “Message Passing” section. The async `recv` method produces a sequence
-of items over time. This is an instance of a much more general pattern known as
-a *stream*. Many concepts are naturally represented as streams: items becoming
-available in a queue, chunks of data being pulled incrementally from the
-filesystem when the full data set is too large for the computer’s memory, or
-data arriving over the network over time. Because streams are futures, we can
-use them with any other kind of future and combine them in interesting ways.
-For example, we can batch up events to avoid triggering too many network calls,
-set timeouts on sequences of long-running operations, or throttle user
-interface events to avoid doing needless work.
+in the “Message Passing” section. The async
+`recv` method produces a sequence of items over time. This is an instance of a
+much more general pattern known as a *stream*. Many concepts are naturally
+represented as streams: items becoming available in a queue, chunks of data
+being pulled incrementally from the filesystem when the full data set is too
+large for the computer’s memory, or data arriving over the network over time.
+Because streams are futures, we can use them with any other kind of future and
+combine them in interesting ways. For example, we can batch up events to avoid
+triggering too many network calls, set timeouts on sequences of long-running
+operations, or throttle user interface events to avoid doing needless work.
 
 We saw a sequence of items back in Chapter 13, when we looked at the Iterator
-trait in “The Iterator Trait and the `next` Method” section, but there are two
-differences between iterators and the async channel receiver. The first
-difference is time: iterators are synchronous, while the channel receiver is
-asynchronous. The second difference is the API. When working directly with
-`Iterator`, we call its synchronous `next` method. With the `trpl::Receiver`
-stream in particular, we called an asynchronous `recv` method instead.
-Otherwise, these APIs feel very similar, and that similarity isn’t a
-coincidence. A stream is like an asynchronous form of iteration. Whereas the
-`trpl::Receiver` specifically waits to receive messages, though, the
-general-purpose stream API is much broader: it provides the next item the way
-`Iterator` does, but asynchronously.
+trait in “The Iterator Trait and the `next` Method” section, but there are two differences between iterators and the
+async channel receiver. The first difference is time: iterators are
+synchronous, while the channel receiver is asynchronous. The second difference
+is the API. When working directly with `Iterator`, we call its synchronous
+`next` method. With the `trpl::Receiver` stream in particular, we called an
+asynchronous `recv` method instead. Otherwise, these APIs feel very similar,
+and that similarity isn’t a coincidence. A stream is like an asynchronous form
+of iteration. Whereas the `trpl::Receiver` specifically waits to receive
+messages, though, the general-purpose stream API is much broader: it provides
+the next item the way `Iterator` does, but asynchronously.
 
 The similarity between iterators and streams in Rust means we can actually
 create a stream from any iterator. As with an iterator, we can work with a
@@ -1555,7 +1553,7 @@ Unfortunately, when we try to run the code, it doesn’t compile but instead
 reports that there’s no `next` method available:
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-30
+cd listings/ch17-async-await/listing-17-21
 cargo build
 copy only the error output
 -->
@@ -1631,6 +1629,10 @@ situations where you’ll need to understand a few more of these traits’ detai
 along with the `Pin` type and the `Unpin` trait. In this section, we’ll dig in
 just enough to help in those scenarios, still leaving the *really* deep dive
 for other documentation.
+
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="future"></a>
 
 ### The Future Trait
 
@@ -1721,14 +1723,15 @@ future to work on other futures and then check this one again later. As we’ve
 seen, that something is an async runtime, and this scheduling and coordination
 work is one of its main jobs.
 
-In the “Sending Data Between Two Tasks Using Message Passing” section, we
-described waiting on `rx.recv`. The `recv` call returns a future, and awaiting
-the future polls it. We noted that a runtime will pause the future until it’s
-ready with either `Some(message)` or `None` when the channel closes. With our
-deeper understanding of the `Future` trait, and specifically `Future::poll`, we
-can see how that works. The runtime knows the future isn’t ready when it
-returns `Poll::Pending`. Conversely, the runtime knows the future *is* ready
-and advances it when `poll` returns `Poll::Ready(Some(message))` or
+In the “Sending Data Between Two Tasks Using Message
+Passing” section, we described waiting on
+`rx.recv`. The `recv` call returns a future, and awaiting the future polls it.
+We noted that a runtime will pause the future until it’s ready with either
+`Some(message)` or `None` when the channel closes. With our deeper
+understanding of the `Future` trait, and specifically `Future::poll`, we can
+see how that works. The runtime knows the future isn’t ready when it returns
+`Poll::Pending`. Conversely, the runtime knows the future *is* ready and
+advances it when `poll` returns `Poll::Ready(Some(message))` or
 `Poll::Ready(None)`.
 
 The exact details of how a runtime does that are beyond the scope of this book,
@@ -1752,14 +1755,14 @@ and calls the `trpl::join_all` function instead, which won’t compile yet.
 src/main.rs
 
 ```
-let tx_fut = async move {
-    // --snip—
-};
+        let tx_fut = async move {
+            // --snip--
+        };
 
-let futures: Vec<Box<dyn Future<Output = ()>>> =
-    vec![Box::new(tx1_fut), Box::new(tx_fut), Box::new(rx_fut)];
+        let futures: Vec<Box<dyn Future<Output = ()>>> =
+            vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
 
-trpl::join_all(futures).await;
+        trpl::join_all(futures).await;
 ```
 
 Listing 17-23: Awaiting futures in a collection
@@ -1782,25 +1785,23 @@ await the result. However, this doesn’t compile; here’s the relevant part of
 the error messages.
 
 <!-- manual-regeneration
-TODO
+cd listings/ch17-async-await/listing-17-23
+cargo build
+copy *only* the final `error` block from the errors
 -->
 
 ```
 error[E0277]: `dyn Future<Output = ()>` cannot be unpinned
-  --> src/main.rs:44:33
+  --> src/main.rs:48:33
    |
-44 |         trpl::join_all(futures).await;
-   |                                 ^^^^^ the trait `Unpin` is not implemented
-for `dyn Future<Output = ()>`
+48 |         trpl::join_all(futures).await;
+   |                                 ^^^^^ the trait `Unpin` is not implemented for `dyn Future<Output = ()>`
    |
    = note: consider using the `pin!` macro
-           consider using `Box::pin` if you need to access the pinned value
-outside of the current scope
+           consider using `Box::pin` if you need to access the pinned value outside of the current scope
    = note: required for `Box<dyn Future<Output = ()>>` to implement `Future`
 note: required by a bound in `futures_util::future::join_all::JoinAll`
-  -->
-~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.31/src/f
-uture/join_all.rs:29:8
+  --> file:///home/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/futures-util-0.3.30/src/future/join_all.rs:29:8
    |
 27 | pub struct JoinAll<F>
    |            ------- required by a bound in this struct
@@ -1892,8 +1893,7 @@ When we move a future—whether by pushing it into a data structure to use as an
 iterator with `join_all` or by returning it from a function—that actually means
 moving the state machine Rust creates for us. And unlike most other types in
 Rust, the futures Rust creates for async blocks can end up with references to
-themselves in the fields of any given variant, as shown in the simplified
-illustration in Figure 17-4.
+themselves in the fields of any given variant, as shown in the simplified illustration in Figure 17-4.
 
 <img alt="A single-column, three-row table representing a future, fut1, which has data values 0 and 1 in the first two rows and an arrow pointing from the third row back to the second row, representing an internal reference within the future." src="img/trpl17-04.svg" class="center" />
 
@@ -1929,20 +1929,20 @@ the `Box` pointer. Figure 17-6 illustrates this process.
 
 Figure 17-6: Pinning a `Box` that points to a self-referential future type
 
-In fact, the `Box` pointer can still move around freely. Remember: we care
-about making sure the data ultimately being referenced stays in place. If a
-pointer moves around, *but the data it points to* is in the same place, as in
-Figure 17-7, there’s no potential problem. (As an independent exercise, look at
-the docs for the types as well as the `std::pin` module and try to work out how
-you’d do this with a `Pin` wrapping a `Box`.) The key is that the
-self-referential type itself cannot move, because it is still pinned.
+In fact, the `Box` pointer can still move around freely. Remember: we care about
+making sure the data ultimately being referenced stays in place. If a pointer
+moves around, *but the data it points to* is in the same place, as in Figure
+17-7, there’s no potential problem. (As an independent exercise, look at the docs
+for the types as well as the `std::pin` module and try to work out how you’d do
+this with a `Pin` wrapping a `Box`.) The key is that the self-referential type
+itself cannot move, because it is still pinned.
 
 <img alt="Four boxes laid out in three rough columns, identical to the previous diagram with a change to the second column. Now there are two boxes in the second column, labeled “b1” and “b2”, “b1” is grayed out, and the arrow from “Pin” goes through “b2” instead of “b1”, indicating that the pointer has moved from “b1” to “b2”, but the data in “pinned” has not moved." src="img/trpl17-07.svg" class="center" />
 
 Figure 17-7: Moving a `Box` which points to a self-referential future type
 
-However, most types are perfectly safe to move around, even if they happen to
-be behind a `Pin` pointer. We only need to think about pinning when items have
+However, most types are perfectly safe to move around, even if they happen to be
+behind a `Pin` pointer. We only need to think about pinning when items have
 internal references. Primitive values such as numbers and Booleans are safe
 because they obviously don’t have any internal references.
 Neither do most types you normally work with in Rust. You can move around
@@ -2007,25 +2007,26 @@ the `Vec`, confident that the underlying data in the futures will *not* be
 moved. Listing 17-24 shows how to fix the code by calling the `pin!` macro
 where each of the three futures are defined and adjusting the trait object type.
 
+
 ```
 use std::pin::{Pin, pin};
 
 // --snip--
 
-let tx1_fut = pin!(async move {
-    // --snip--
-});
+        let tx1_fut = pin!(async move {
+            // --snip--
+        });
 
-let rx_fut = pin!(async {
-    // --snip--
-});
+        let rx_fut = pin!(async {
+            // --snip--
+        });
 
-let tx_fut = pin!(async move {
-    // --snip--
-});
+        let tx_fut = pin!(async move {
+            // --snip--
+        });
 
-let futures: Vec<Pin<&mut dyn Future<Output = ()>>> =
-    vec![tx1_fut, rx_fut, tx_fut];
+        let futures: Vec<Pin<&mut dyn Future<Output = ()>>> =
+            vec![tx1_fut, rx_fut, tx_fut];
 ```
 
 Listing 17-24: Pinning the futures to enable moving them into the vector
@@ -2043,14 +2044,15 @@ idea of how to fix your code!
 > challenging because they’re self-referential. Types that require `Pin` show up
 > most commonly in async Rust today, but every once in a while, you might see
 > them in other contexts, too.
->
+> 
 > The specifics of how `Pin` and `Unpin` work, and the rules they’re required
 > to uphold, are covered extensively in the API documentation for `std::pin`, so
 > if you’re interested in learning more, that’s a great place to start.
->
+> 
 > If you want to understand how things work under the hood in even more detail,
-> see Chapters 2 and 4 of *Asynchronous Programming in Rust*, available at
-> *https://rust-lang.github.io/async-book/*.
+> see Chapters 2 and
+> 4 of
+> *Asynchronous Programming in Rust* at *https://rust-lang.github.io/async-book/*.
 
 ### The Stream Trait
 
@@ -2100,13 +2102,12 @@ Something very similar to this definition will likely end up as part of Rust’s
 standard library. In the meantime, it’s part of the toolkit of most runtimes,
 so you can rely on it, and everything we cover next should generally apply!
 
-In the examples we saw in the “Streams: Futures in Sequence” section, though,
-we didn’t use `poll_next` *or* `Stream`, but instead used `next` and
-`StreamExt`. We *could* work directly in terms of the `poll_next` API by
-hand-writing our own `Stream` state machines, of course, just as we *could*
-work with futures directly via their `poll` method. Using `await` is much
-nicer, though, and the `StreamExt` trait supplies the `next` method so we can
-do just that:
+In the examples we saw in the “Streams: Futures in Sequence” section, though, we didn’t use `poll_next` *or* `Stream`, but
+instead used `next` and `StreamExt`. We *could* work directly in terms of the
+`poll_next` API by hand-writing our own `Stream` state machines, of course,
+just as we *could* work with futures directly via their `poll` method. Using
+`await` is much nicer, though, and the `StreamExt` trait supplies the `next`
+method so we can do just that:
 
 ```
 trait StreamExt: Stream {
@@ -2126,11 +2127,11 @@ in traits, since the lack thereof is the reason they do not yet have this.
 > Note: The actual definition we used earlier in the chapter looks slightly
 > different than this, because it supports versions of Rust that did not yet
 > support using async functions in traits. As a result, it looks like this:
->
+> 
 > ````rust,ignore
 > fn next(&mut self) -> Next<'_, Self> where Self: Unpin;
 > ````
->
+> 
 > That `Next` type is a `struct` that implements `Future` and allows us to name
 > the lifetime of the reference to `self` with `Next<'_, Self>`, so that `await`
 > can work with this method.
@@ -2231,7 +2232,7 @@ fn main() {
         }
     });
 
-    trpl::run(async {
+    trpl::block_on(async {
         while let Some(message) = rx.recv().await {
             println!("{message}");
         }
@@ -2258,9 +2259,9 @@ real-world use cases.
 ## Summary
 
 This isn’t the last you’ll see of concurrency in this book. The project in
-Chapter 21 will apply these concepts in a more realistic situation than the
-simpler examples discussed here and compare problem-solving with threading
-versus tasks and futures more directly.
+Chapter 21 will apply these concepts in a more realistic
+situation than the simpler examples discussed here and compare problem-solving
+with threading versus tasks and futures more directly.
 
 No matter which of these approaches you choose, Rust gives you the tools you
 need to write safe, fast, concurrent code—whether for a high-throughput web
@@ -2269,4 +2270,3 @@ server or an embedded operating system.
 Next, we’ll talk about idiomatic ways to model problems and structure solutions
 as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idioms
 relate to those you might be familiar with from object-oriented programming.
-

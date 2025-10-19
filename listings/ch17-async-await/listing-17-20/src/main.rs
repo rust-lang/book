@@ -6,8 +6,8 @@ use std::time::Duration;
 use trpl::Either;
 
 // --snip--
-// ANCHOR: implementation
 
+// ANCHOR_END: implementation
 fn main() {
     trpl::block_on(async {
         let slow = async {

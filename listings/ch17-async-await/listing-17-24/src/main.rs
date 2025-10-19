@@ -3,7 +3,7 @@ extern crate trpl; // required for mdbook test
 // ANCHOR: here
 use std::pin::{Pin, pin};
 
-// -- snip --
+// --snip--
 
 // ANCHOR_END: here
 use std::time::Duration;

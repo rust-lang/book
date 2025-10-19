@@ -95,7 +95,7 @@ We’ve added `trpl::sleep` calls with await points between each call to `slow`.
 Now the two futures’ work is interleaved:
 
 <!-- manual-regeneration
-cd listings/ch17-async-await/listing-17-24
+cd listings/ch17-async-await/listing-17-16
 cargo run
 copy just the output
 -->
@@ -245,3 +245,5 @@ macro to control how the outermost futures are executed.
 We’ve now seen a number of ways to work with multiple futures at the same time.
 Up next, we’ll look at how we can work with multiple futures in a sequence over
 time with _streams_.
+
+[async-program]: ch17-01-futures-and-syntax.html#our-first-async-program
