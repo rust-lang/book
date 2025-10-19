@@ -306,23 +306,23 @@ implement that behavior! You’ll see in Chapter 10 how to define traits and
 implement them on any type, including unit-like structs.
 
 > ### Ownership of Struct Data
->
+> 
 > In the `User` struct definition in Listing 5-1, we used the owned `String`
 > type rather than the `&str` string slice type. This is a deliberate choice
 > because we want each instance of this struct to own all of its data and for
 > that data to be valid for as long as the entire struct is valid.
->
+> 
 > It’s also possible for structs to store references to data owned by something
 > else, but to do so requires the use of *lifetimes*, a Rust feature that we’ll
 > discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
 > is valid for as long as the struct is. Let’s say you try to store a reference
 > in a struct without specifying lifetimes, like the following in
 > *src/main.rs*; this won’t work:
->
+> 
 > <Listing file-name="src/main.rs">
->
+> 
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
->
+> 
 > ````rust,ignore,does_not_compile
 > struct User {
 >     active: bool,
@@ -330,7 +330,7 @@ implement them on any type, including unit-like structs.
 >     email: &str,
 >     sign_in_count: u64,
 > }
->
+> 
 > fn main() {
 >     let user1 = User {
 >         active: true,
@@ -340,11 +340,11 @@ implement them on any type, including unit-like structs.
 >     };
 > }
 > ````
->
+> 
 > </Listing>
->
+> 
 > The compiler will complain that it needs lifetime specifiers:
->
+> 
 > ````console
 > $ cargo run
 >    Compiling structs v0.1.0 (file:///projects/structs)
@@ -360,7 +360,7 @@ implement them on any type, including unit-like structs.
 > 2 |     active: bool,
 > 3 ~     username: &'a str,
 >   |
->
+> 
 > error[E0106]: missing lifetime specifier
 >  --> src/main.rs:4:12
 >   |
@@ -374,11 +374,11 @@ implement them on any type, including unit-like structs.
 > 3 |     username: &str,
 > 4 ~     email: &'a str,
 >   |
->
+> 
 > For more information about this error, try `rustc --explain E0106`.
 > error: could not compile `structs` (bin "structs") due to 2 previous errors
 > ````
->
+> 
 > In Chapter 10, we’ll discuss how to fix these errors so that you can store
 > references in structs, but for now, we’ll fix errors like these using owned
 > types like `String` instead of references like `&str`.
@@ -872,23 +872,23 @@ are and how to designate a field or method as public or private in Chapter
 7.
 
 > ### Where’s the -> Operator?
->
+> 
 > In C and C++, two different operators are used for calling methods: You use
 > `.` if you’re calling a method on the object directly and `->` if you’re
 > calling the method on a pointer to the object and need to dereference the
 > pointer first. In other words, if `object` is a pointer,
 > `object->something()` is similar to `(*object).something()`.
->
+> 
 > Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
 > feature called *automatic referencing and dereferencing*. Calling methods is
 > one of the few places in Rust with this behavior.
->
+> 
 > Here’s how it works: When you call a method with `object.something()`, Rust
 > automatically adds in `&`, `&mut`, or `*` so that `object` matches the
 > signature of the method. In other words, the following are the same:
->
+> 
 > <!-- CAN'T EXTRACT SEE BUG https://github.com/rust-lang/mdBook/issues/1127 -->
->
+> 
 > ````rust
 > # #[derive(Debug,Copy,Clone)]
 > # struct Point {
@@ -909,7 +909,7 @@ are and how to designate a field or method as public or private in Chapter
 > p1.distance(&p2);
 > (&p1).distance(&p2);
 > ````
->
+> 
 > The first one looks much cleaner. This automatic referencing behavior works
 > because methods have a clear receiver—the type of `self`. Given the receiver
 > and name of a method, Rust can figure out definitively whether the method is

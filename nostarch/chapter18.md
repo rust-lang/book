@@ -179,11 +179,11 @@ called *polymorphism*, which means that you can substitute multiple objects for
 each other at runtime if they share certain characteristics.
 
 > ### Polymorphism
->
+> 
 > To many people, polymorphism is synonymous with inheritance. But it’s
 > actually a more general concept that refers to code that can work with data of
 > multiple types. For inheritance, those types are generally subclasses.
->
+> 
 > Rust instead uses generics to abstract over different possible types and
 > trait bounds to impose constraints on what those types must provide. This is
 > sometimes called *bounded parametric polymorphism*.
@@ -1004,7 +1004,7 @@ pattern with the rules of the blog post workflow. The logic related to the
 rules lives in the state objects rather than being scattered throughout `Post`.
 
 > ### Why Not An Enum?
->
+> 
 > You may have been wondering why we didn’t use an enum with the different
 > possible post states as variants. That’s certainly a possible solution; try it
 > and compare the end results to see which you prefer! One disadvantage of using
