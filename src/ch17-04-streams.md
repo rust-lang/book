@@ -56,7 +56,7 @@ cargo build
 copy only the error output
 -->
 
-```
+```text
 error[E0599]: no method named `next` found for struct `tokio_stream::iter::Iter` in the current scope
   --> src/main.rs:10:40
    |
