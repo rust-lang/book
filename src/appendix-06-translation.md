@@ -28,3 +28,4 @@ For resources in languages other than English. Most are still in progress; see
 - [Danske](https://github.com/DanKHansen/book-dk)
 - [Tiếng Việt](https://github.com/tuanemdev/rust-book-vn)
 - [Italiano](https://nixxo.github.io/rust-lang-book-it/)
+- [বাংলা](https://github.com/IsmailHosenIsmailJames/rust-book-bn)
