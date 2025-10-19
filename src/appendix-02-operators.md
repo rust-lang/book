@@ -39,7 +39,7 @@ overload that operator is listed.
 | `->`                      | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | Function and closure return type                                      |                |
 | `.`                       | `expr.ident`                                            | Field access                                                          |                |
 | `.`                       | `expr.ident(expr, ...)`                                 | Method call                                                           |                |
-| `.`                       | `expr.0`, `expr.1`, etc.                                | Tuple indexing                                                        |                |
+| `.`                       | `expr.0`, `expr.1`, and so on                           | Tuple indexing                                                        |                |
 | `..`                      | `..`, `expr..`, `..expr`, `expr..expr`                  | Right-exclusive range literal                                         | `PartialOrd`   |
 | `..=`                     | `..=expr`, `expr..=expr`                                | Right-inclusive range literal                                         | `PartialOrd`   |
 | `..`                      | `..expr`                                                | Struct literal update syntax                                          |                |
@@ -74,26 +74,26 @@ overload that operator is listed.
 
 ### Non-operator Symbols
 
-The following list contains all symbols that don’t function as operators; that
+The following tables contain all symbols that don’t function as operators; that
 is, they don’t behave like a function or method call.
 
 Table B-2 shows symbols that appear on their own and are valid in a variety of
 locations.
 
-<span class="caption">Table B-2: Stand-Alone Syntax</span>
+<span class="caption">Table B-2: Stand-alone Syntax</span>
 
 | Symbol                                                                 | Explanation                                                            |
 | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | `'ident`                                                               | Named lifetime or loop label                                           |
-| Digits immediately followed by `u8`, `i32`,  `f64`, `usize`, and so on | Numeric literal of specific type                                       |
+| Digits immediately followed by `u8`, `i32`, `f64`, `usize`, and so on  | Numeric literal of specific type                                       |
 | `"..."`                                                                | String literal                                                         |
-| `r"..."`, `r#"..."#`, `r##"..."##`, etc.                               | Raw string literal, escape characters not processed                    |
+| `r"..."`, `r#"..."#`, `r##"..."##`, and so on                          | Raw string literal; escape characters not processed                    |
 | `b"..."`                                                               | Byte string literal; constructs an array of bytes instead of a string  |
-| `br"..."`, `br#"..."#`, `br##"..."##`, etc.                            | Raw byte string literal, combination of raw and byte string literal    |
+| `br"..."`, `br#"..."#`, `br##"..."##`, and so on                       | Raw byte string literal; combination of raw and byte string literal    |
 | `'...'`                                                                | Character literal                                                      |
 | `b'...'`                                                               | ASCII byte literal                                                     |
 | <code>&vert;...&vert; expr</code>                                      | Closure                                                                |
-| `!`                                                                    | Always empty bottom type for diverging functions                       |
+| `!`                                                                    | Always-empty bottom type for diverging functions                       |
 | `_`                                                                    | “Ignored” pattern binding; also used to make integer literals readable |
 
 Table B-3 shows symbols that appear in the context of a path through the module
@@ -101,33 +101,33 @@ hierarchy to an item.
 
 <span class="caption">Table B-3: Path-Related Syntax</span>
 
-| Symbol                                  | Explanation                                                                                                                     |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `ident::ident`                          | Namespace path                                                                                                                  |
-| `::path`                                | Path relative to the extern prelude, where all other crates are rooted (i.e., an explicitly absolute path including crate name) |
-| `self::path`                            | Path relative to the current module (i.e., an explicitly relative path).                                                        |
-| `super::path`                           | Path relative to the parent of the current module                                                                               |
-| `type::ident`, `<type as trait>::ident` | Associated constants, functions, and types                                                                                      |
-| `<type>::...`                           | Associated item for a type that cannot be directly named (e.g., `<&T>::...`, `<[T]>::...`, etc.)                                |
-| `trait::method(...)`                    | Disambiguating a method call by naming the trait that defines it                                                                |
-| `type::method(...)`                     | Disambiguating a method call by naming the type for which it’s defined                                                          |
-| `<type as trait>::method(...)`          | Disambiguating a method call by naming the trait and type                                                                       |
+| Symbol                                  | Explanation                                                                                                  |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------|
+| `ident::ident`                          | Namespace path                                                                                               |
+| `::path`                                | Path relative to the crate root (that is, an explicitly absolute path)                                       |
+| `self::path`                            | Path relative to the current module (that is, an explicitly relative path)                                   |
+| `super::path`                           | Path relative to the parent of the current module                                                            |
+| `type::ident`, `<type as trait>::ident` | Associated constants, functions, and types                                                                   |
+| `<type>::...`                           | Associated item for a type that cannot be directly named (for example, `<&T>::...`, `<[T]>::...`, and so on) |
+| `trait::method(...)`                    | Disambiguating a method call by naming the trait that defines it                                             |
+| `type::method(...)`                     | Disambiguating a method call by naming the type for which it’s defined                                       |
+| `<type as trait>::method(...)`          | Disambiguating a method call by naming the trait and type                                                    |
 
 Table B-4 shows symbols that appear in the context of using generic type
 parameters.
 
 <span class="caption">Table B-4: Generics</span>
 
-| Symbol                         | Explanation                                                                                                                              |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `path<...>`                    | Specifies parameters to generic type in a type (e.g., `Vec<u8>`)                                                                         |
-| `path::<...>`, `method::<...>` | Specifies parameters to generic type, function, or method in an expression; often referred to as turbofish (e.g., `"42".parse::<i32>()`) |
-| `fn ident<...> ...`            | Define generic function                                                                                                                  |
-| `struct ident<...> ...`        | Define generic structure                                                                                                                 |
-| `enum ident<...> ...`          | Define generic enumeration                                                                                                               |
-| `impl<...> ...`                | Define generic implementation                                                                                                            |
-| `for<...> type`                | Higher-ranked lifetime bounds                                                                                                            |
-| `type<ident=type>`             | A generic type where one or more associated types have specific assignments (e.g., `Iterator<Item=T>`)                                   |
+| Symbol                         | Explanation                                                                                                                                         |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `path<...>`                    | Specifies parameters to a generic type in a type (for example, `Vec<u8>`)                                                                           |
+| `path::<...>`, `method::<...>` | Specifies parameters to a generic type, function, or method in an expression; often referred to as _turbofish_ (for example, `"42".parse::<i32>()`) |
+| `fn ident<...> ...`            | Define generic function                                                                                                                             |
+| `struct ident<...> ...`        | Define generic structure                                                                                                                            |
+| `enum ident<...> ...`          | Define generic enumeration                                                                                                                          |
+| `impl<...> ...`                | Define generic implementation                                                                                                                       |
+| `for<...> type`                | Higher ranked lifetime bounds                                                                                                                       |
+| `type<ident=type>`             | A generic type where one or more associated types have specific assignments (for example, `Iterator<Item=T>`)                                       |
 
 Table B-5 shows symbols that appear in the context of constraining generic type
 parameters with trait bounds.
@@ -184,7 +184,7 @@ Table B-8 shows the contexts in which parentheses are used.
 | `(type, ...)`            | Tuple type                                                                                  |
 | `expr(expr, ...)`        | Function call expression; also used to initialize tuple `struct`s and tuple `enum` variants |
 
-Table B-9 shows the contexts in which curly braces are used.
+Table B-9 shows the contexts in which curly brackets are used.
 
 <span class="caption">Table B-9: Curly Brackets</span>
 
@@ -202,5 +202,5 @@ Table B-10 shows the contexts in which square brackets are used.
 | `[...]`                                            | Array literal                                                                                                                 |
 | `[expr; len]`                                      | Array literal containing `len` copies of `expr`                                                                               |
 | `[type; len]`                                      | Array type containing `len` instances of `type`                                                                               |
-| `expr[expr]`                                       | Collection indexing. Overloadable (`Index`, `IndexMut`)                                                                       |
+| `expr[expr]`                                       | Collection indexing; overloadable (`Index`, `IndexMut`)                                                                       |
 | `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | Collection indexing pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, or `RangeFull` as the “index” |

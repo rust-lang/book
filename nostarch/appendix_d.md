@@ -16,11 +16,11 @@ warning fixes, a linter, and integrating with IDEs.
 
 The `rustfmt` tool reformats your code according to the community code style.
 Many collaborative projects use `rustfmt` to prevent arguments about which
-style to use when writing Rust: everyone formats their code using the tool.
+style to use when writing Rust: Everyone formats their code using the tool.
 
 Rust installations include `rustfmt` by default, so you should already have the
 programs `rustfmt` and `cargo-fmt` on your system. These two commands are
-analogous to `rustc` and `cargo` in that `rustfmt` allows finer-grained control
+analogous to `rustc` and `cargo` in that `rustfmt` allows finer grained control
 and `cargo-fmt` understands conventions of a project that uses Cargo. To format
 any Cargo project, enter the following:
 
@@ -95,9 +95,9 @@ different Rust editions. Editions are covered in Appendix E.
 
 ## More Lints with Clippy
 
-The Clippy tool is a collection of lints to analyze your code so you can catch
-common mistakes and improve your Rust code. Clippy is included with standard
-Rust installations.
+The Clippy tool is a collection of lints to analyze your code so that you can
+catch common mistakes and improve your Rust code. Clippy is included with
+standard Rust installations.
 
 To run Clippy’s lints on any Cargo project, enter the following:
 

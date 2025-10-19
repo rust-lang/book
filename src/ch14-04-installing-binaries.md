@@ -1,4 +1,4 @@
-<!-- Old link, do not remove -->
+<!-- Old headings. Do not remove or links may break. -->
 
 <a id="installing-binaries-from-cratesio-with-cargo-install"></a>
 
@@ -12,14 +12,14 @@ packages that have binary targets. A _binary target_ is the runnable program
 that is created if the crate has a _src/main.rs_ file or another file specified
 as a binary, as opposed to a library target that isn’t runnable on its own but
 is suitable for including within other programs. Usually, crates have
-information in the _README_ file about whether a crate is a library, has a
+information in the README file about whether a crate is a library, has a
 binary target, or both.
 
 All binaries installed with `cargo install` are stored in the installation
 root’s _bin_ folder. If you installed Rust using _rustup.rs_ and don’t have any
 custom configurations, this directory will be *$HOME/.cargo/bin*. Ensure that
-directory is in your `$PATH` to be able to run programs you’ve installed with
-`cargo install`.
+this directory is in your `$PATH` to be able to run programs you’ve installed
+with `cargo install`.
 
 For example, in Chapter 12 we mentioned that there’s a Rust implementation of
 the `grep` tool called `ripgrep` for searching files. To install `ripgrep`, we

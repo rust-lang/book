@@ -21,7 +21,7 @@ code that they’re testing. The convention is to create a module named `tests`
 in each file to contain the test functions and to annotate the module with
 `cfg(test)`.
 
-#### The Tests Module and `#[cfg(test)]`
+#### The `tests` Module and `#[cfg(test)]`
 
 The `#[cfg(test)]` annotation on the `tests` module tells Rust to compile and
 run the test code only when you run `cargo test`, not when you run `cargo
@@ -49,7 +49,11 @@ given a certain configuration option. In this case, the configuration option is
 with `cargo test`. This includes any helper functions that might be within this
 module, in addition to the functions annotated with `#[test]`.
 
-#### Testing Private Functions
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="testing-private-functions"></a>
+
+#### Private Function Tests
 
 There’s debate within the testing community about whether or not private
 functions should be tested directly, and other languages make it difficult or
@@ -69,10 +73,10 @@ Note that the `internal_adder` function is not marked as `pub`. Tests are just
 Rust code, and the `tests` module is just another module. As we discussed in
 [“Paths for Referring to an Item in the Module Tree”][paths]<!-- ignore -->,
 items in child modules can use the items in their ancestor modules. In this
-test, we bring all of the `tests` module’s parent’s items into scope with `use
-super::*`, and then the test can call `internal_adder`. If you don’t think
-private functions should be tested, there’s nothing in Rust that will compel you
-to do so.
+test, we bring all of the items belonging to the `tests` module’s parent into
+scope with `use super::*`, and then the test can call `internal_adder`. If you
+don’t think private functions should be tested, there’s nothing in Rust that
+will compel you to do so.
 
 ### Integration Tests
 
@@ -116,7 +120,7 @@ Enter the code in Listing 11-13 into the _tests/integration_test.rs_ file.
 </Listing>
 
 Each file in the _tests_ directory is a separate crate, so we need to bring our
-library into each test crate’s scope. For that reason we add `use
+library into each test crate’s scope. For that reason, we add `use
 adder::add_two;` at the top of the code, which we didn’t need in the unit tests.
 
 We don’t need to annotate any code in _tests/integration_test.rs_ with
@@ -130,7 +134,7 @@ in this directory only when we run `cargo test`. Run `cargo test` now:
 The three sections of output include the unit tests, the integration test, and
 the doc tests. Note that if any test in a section fails, the following sections
 will not be run. For example, if a unit test fails, there won’t be any output
-for integration and doc tests because those tests will only be run if all unit
+for integration and doc tests, because those tests will only be run if all unit
 tests are passing.
 
 The first section for the unit tests is the same as we’ve been seeing: one line
@@ -168,7 +172,7 @@ share the same behavior as files in _src_ do, as you learned in Chapter 7
 regarding how to separate code into modules and files.
 
 The different behavior of _tests_ directory files is most noticeable when you
-have a set of helper functions to use in multiple integration test files and
+have a set of helper functions to use in multiple integration test files, and
 you try to follow the steps in the [“Separating Modules into Different
 Files”][separating-modules-into-files]<!-- ignore --> section of Chapter 7 to
 extract them into a common module. For example, if we create _tests/common.rs_
@@ -246,8 +250,8 @@ file will work as well, and that small amount of code doesn’t need to be teste
 ## Summary
 
 Rust’s testing features provide a way to specify how code should function to
-ensure it continues to work as you expect, even as you make changes. Unit tests
-exercise different parts of a library separately and can test private
+ensure that it continues to work as you expect, even as you make changes. Unit
+tests exercise different parts of a library separately and can test private
 implementation details. Integration tests check that many parts of the library
 work together correctly, and they use the library’s public API to test the code
 in the same way external code will use it. Even though Rust’s type system and

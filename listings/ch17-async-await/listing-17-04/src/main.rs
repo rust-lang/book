@@ -6,7 +6,7 @@ use trpl::Html;
 fn main() {
     let args: Vec<String> = std::env::args().collect();
 
-    trpl::run(async {
+    trpl::block_on(async {
         let url = &args[1];
         match page_title(url).await {
             Some(title) => println!("The title for {url} was {title}"),

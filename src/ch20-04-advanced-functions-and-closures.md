@@ -42,7 +42,7 @@ of the `Fn` traits as a trait bound.
 Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
 `FnOnce`), meaning you can always pass a function pointer as an argument for a
 function that expects a closure. It’s best to write functions using a generic
-type and one of the closure traits so your functions can accept either
+type and one of the closure traits so that your functions can accept either
 functions or closures.
 
 That said, one example of where you would want to only accept `fn` and not
@@ -65,7 +65,7 @@ numbers into a vector of strings, we could use a closure, as in Listing 20-29.
 Or we could name a function as the argument to `map` instead of the closure.
 Listing 20-30 shows what this would look like.
 
-<Listing number="20-30" caption="Using the `String::to_string` function with the `map` method method to convert numbers to strings">
+<Listing number="20-30" caption="Using the `String::to_string` function with the `map` method to convert numbers to strings">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-30/src/main.rs:here}}
@@ -73,19 +73,19 @@ Listing 20-30 shows what this would look like.
 
 </Listing>
 
-Note that we must use the fully qualified syntax that we talked about in
-[“Advanced Traits”][advanced-traits]<!-- ignore --> because there are multiple
-functions available named `to_string`.
+Note that we must use the fully qualified syntax that we talked about in the
+[“Advanced Traits”][advanced-traits]<!-- ignore --> section because there are
+multiple functions available named `to_string`.
 
 Here, we’re using the `to_string` function defined in the `ToString` trait,
 which the standard library has implemented for any type that implements
 `Display`.
 
-Recall from [“Enum Values”][enum-values]<!-- ignore --> in Chapter 6 that the
-name of each enum variant that we define also becomes an initializer function.
-We can use these initializer functions as function pointers that implement the
-closure traits, which means we can specify the initializer functions as
-arguments for methods that take closures, as seen in Listing 20-31.
+Recall from the [“Enum Values”][enum-values]<!-- ignore --> section in Chapter
+6 that the name of each enum variant that we define also becomes an initializer
+function. We can use these initializer functions as function pointers that
+implement the closure traits, which means we can specify the initializer
+functions as arguments for methods that take closures, as seen in Listing 20-31.
 
 <Listing number="20-31" caption="Using an enum initializer with the `map` method to create a `Status` instance from numbers">
 
@@ -111,7 +111,7 @@ pointer `fn` as a return type if the closure captures any values from its
 scope, for example.
 
 Instead, you will normally use the `impl Trait` syntax we learned about in
-Chapter 10. You can return any function type, using `Fn`, `FnOnce` and `FnMut`.
+Chapter 10. You can return any function type, using `Fn`, `FnOnce`, and `FnMut`.
 For example, the code in Listing 20-32 will compile just fine.
 
 <Listing number="20-32" caption="Returning a closure from a function using the `impl Trait` syntax">
@@ -122,12 +122,12 @@ For example, the code in Listing 20-32 will compile just fine.
 
 </Listing>
 
-However, as we noted in [“Closure Type Inference and
-Annotation”][closure-types]<!-- ignore --> in Chapter 13, each closure is also
-its own distinct type. If you need to work with multiple functions that have the
-same signature but different implementations, you will need to use a trait
-object for them. Consider what happens if you write code like that shown in
-Listing 20-33.
+However, as we noted in the [“Inferring and Annotating Closure
+Types”][closure-types]<!-- ignore --> section in Chapter 13, each closure is
+also its own distinct type. If you need to work with multiple functions that
+have the same signature but different implementations, you will need to use a
+trait object for them. Consider what happens if you write code like that shown
+in Listing 20-33.
 
 <Listing file-name="src/main.rs" number="20-33" caption="Creating a `Vec<T>` of closures defined by functions that return `impl Fn` types">
 
@@ -149,15 +149,15 @@ compile this, Rust lets us know that it won’t work:
 The error message tells us that whenever we return an `impl Trait`, Rust
 creates a unique _opaque type_, a type where we cannot see into the details of
 what Rust constructs for us, nor can we guess the type Rust will generate to
-write ourselves. So even though these functions return closures that implement
+write ourselves. So, even though these functions return closures that implement
 the same trait, `Fn(i32) -> i32`, the opaque types Rust generates for each are
 distinct. (This is similar to how Rust produces different concrete types for
 distinct async blocks even when they have the same output type, as we saw in
-[“Working with Any Number of Futures”][any-number-of-futures]<!-- ignore --> in
-Chapter 17.) We have seen a solution to this problem a few times now: we can
+[“The `Pin` Type and the `Unpin` Trait”][future-types]<!-- ignore --> in
+Chapter 17.) We have seen a solution to this problem a few times now: We can
 use a trait object, as in Listing 20-34.
 
-<Listing number="20-34" caption="Creating a `Vec<T>` of closures defined by functions that return `Box<dyn Fn>` so they have the same type">
+<Listing number="20-34" caption="Creating a `Vec<T>` of closures defined by functions that return `Box<dyn Fn>` so that they have the same type">
 
 ```rust
 {{#rustdoc_include ../listings/ch20-advanced-features/listing-20-34/src/main.rs:here}}
@@ -166,14 +166,13 @@ use a trait object, as in Listing 20-34.
 </Listing>
 
 This code will compile just fine. For more about trait objects, refer to the
-section [“Using Trait Objects That Allow for Values of Different
-Types”][using-trait-objects-to-abstract-over-shared-behavior]<!-- ignore
---> in Chapter 18.
+section [“Using Trait Objects To Abstract over Shared
+Behavior”][trait-objects]<!-- ignore --> in Chapter 18.
 
 Next, let’s look at macros!
 
 [advanced-traits]: ch20-02-advanced-traits.html#advanced-traits
 [enum-values]: ch06-01-defining-an-enum.html#enum-values
 [closure-types]: ch13-01-closures.html#closure-type-inference-and-annotation
-[any-number-of-futures]: ch17-03-more-futures.html
-[using-trait-objects-to-abstract-over-shared-behavior]: ch18-02-trait-objects.html#using-trait-objects-to-abstract-over-shared-behavior
+[future-types]: ch17-03-more-futures.html
+[trait-objects]: ch18-02-trait-objects.html

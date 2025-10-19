@@ -77,7 +77,7 @@ associated with it. We’ve used a struct to bundle the `kind` and `address`
 values together, so now the variant is associated with the value.
 
 However, representing the same concept using just an enum is more concise:
-rather than an enum inside a struct, we can put data directly into each enum
+Rather than an enum inside a struct, we can put data directly into each enum
 variant. This new definition of the `IpAddr` enum says that both `V4` and `V6`
 variants will have associated `String` values:
 
@@ -87,13 +87,13 @@ variants will have associated `String` values:
 
 We attach data to each variant of the enum directly, so there is no need for an
 extra struct. Here, it’s also easier to see another detail of how enums work:
-the name of each enum variant that we define also becomes a function that
+The name of each enum variant that we define also becomes a function that
 constructs an instance of the enum. That is, `IpAddr::V4()` is a function call
 that takes a `String` argument and returns an instance of the `IpAddr` type. We
 automatically get this constructor function defined as a result of defining the
 enum.
 
-There’s another advantage to using an enum rather than a struct: each variant
+There’s another advantage to using an enum rather than a struct: Each variant
 can have different types and amounts of associated data. Version four IP
 addresses will always have four numeric components that will have values
 between 0 and 255. If we wanted to store `V4` addresses as four `u8` values but
@@ -108,7 +108,7 @@ We’ve shown several different ways to define data structures to store version
 four and version six IP addresses. However, as it turns out, wanting to store
 IP addresses and encode which kind they are is so common that [the standard
 library has a definition we can use!][IpAddr]<!-- ignore --> Let’s look at how
-the standard library defines `IpAddr`: it has the exact enum and variants that
+the standard library defines `IpAddr`. It has the exact enum and variants that
 we’ve defined and used, but it embeds the address data inside the variants in
 the form of two different structs, which are defined differently for each
 variant:
@@ -138,7 +138,7 @@ we can still create and use our own definition without conflict because we
 haven’t brought the standard library’s definition into our scope. We’ll talk
 more about bringing types into scope in Chapter 7.
 
-Let’s look at another example of an enum in Listing 6-2: this one has a wide
+Let’s look at another example of an enum in Listing 6-2: This one has a wide
 variety of types embedded in its variants.
 
 <Listing number="6-2" caption="A `Message` enum whose variants each store different amounts and types of values">
@@ -170,7 +170,7 @@ But if we used the different structs, each of which has its own type, we
 couldn’t as easily define a function to take any of these kinds of messages as
 we could with the `Message` enum defined in Listing 6-2, which is a single type.
 
-There is one more similarity between enums and structs: just as we’re able to
+There is one more similarity between enums and structs: Just as we’re able to
 define methods on structs using `impl`, we’re also able to define methods on
 enums. Here’s a method named `call` that we could define on our `Message` enum:
 
@@ -186,11 +186,15 @@ body of the `call` method when `m.call()` runs.
 Let’s look at another enum in the standard library that is very common and
 useful: `Option`.
 
-### The `Option` Enum and Its Advantages Over Null Values
+<!-- Old headings. Do not remove or links may break. -->
+
+<a id="the-option-enum-and-its-advantages-over-null-values"></a>
+
+### The `Option` Enum
 
 This section explores a case study of `Option`, which is another enum defined
 by the standard library. The `Option` type encodes the very common scenario in
-which a value could be something or it could be nothing.
+which a value could be something, or it could be nothing.
 
 For example, if you request the first item in a non-empty list, you would get
 a value. If you request the first item in an empty list, you would get nothing.
@@ -221,7 +225,7 @@ The problem with null values is that if you try to use a null value as a
 not-null value, you’ll get an error of some kind. Because this null or not-null
 property is pervasive, it’s extremely easy to make this kind of error.
 
-However, the concept that null is trying to express is still a useful one: a
+However, the concept that null is trying to express is still a useful one: A
 null is a value that is currently invalid or absent for some reason.
 
 The problem isn’t really with the concept but with the particular
@@ -239,7 +243,7 @@ enum Option<T> {
 
 The `Option<T>` enum is so useful that it’s even included in the prelude; you
 don’t need to bring it into scope explicitly. Its variants are also included in
-the prelude: you can use `Some` and `None` directly without the `Option::`
+the prelude: You can use `Some` and `None` directly without the `Option::`
 prefix. The `Option<T>` enum is still just a regular enum, and `Some(T)` and
 `None` are still variants of type `Option<T>`.
 
@@ -258,14 +262,14 @@ number types and char types:
 The type of `some_number` is `Option<i32>`. The type of `some_char` is
 `Option<char>`, which is a different type. Rust can infer these types because
 we’ve specified a value inside the `Some` variant. For `absent_number`, Rust
-requires us to annotate the overall `Option` type: the compiler can’t infer the
+requires us to annotate the overall `Option` type: The compiler can’t infer the
 type that the corresponding `Some` variant will hold by looking only at a
 `None` value. Here, we tell Rust that we mean for `absent_number` to be of type
 `Option<i32>`.
 
-When we have a `Some` value, we know that a value is present and the value is
+When we have a `Some` value, we know that a value is present, and the value is
 held within the `Some`. When we have a `None` value, in some sense it means the
-same thing as null: we don’t have a valid value. So why is having `Option<T>`
+same thing as null: We don’t have a valid value. So, why is having `Option<T>`
 any better than having null?
 
 In short, because `Option<T>` and `T` (where `T` can be any type) are different
@@ -296,14 +300,14 @@ In other words, you have to convert an `Option<T>` to a `T` before you can
 perform `T` operations with it. Generally, this helps catch one of the most
 common issues with null: assuming that something isn’t null when it actually is.
 
-Eliminating the risk of incorrectly assuming a not-null value helps you to be
-more confident in your code. In order to have a value that can possibly be
-null, you must explicitly opt in by making the type of that value `Option<T>`.
-Then, when you use that value, you are required to explicitly handle the case
-when the value is null. Everywhere that a value has a type that isn’t an
-`Option<T>`, you _can_ safely assume that the value isn’t null. This was a
-deliberate design decision for Rust to limit null’s pervasiveness and increase
-the safety of Rust code.
+Eliminating the risk of incorrectly assuming a not-null value helps you be more
+confident in your code. In order to have a value that can possibly be null, you
+must explicitly opt in by making the type of that value `Option<T>`. Then, when
+you use that value, you are required to explicitly handle the case when the
+value is null. Everywhere that a value has a type that isn’t an `Option<T>`,
+you _can_ safely assume that the value isn’t null. This was a deliberate design
+decision for Rust to limit null’s pervasiveness and increase the safety of Rust
+code.
 
 So how do you get the `T` value out of a `Some` variant when you have a value
 of type `Option<T>` so that you can use that value? The `Option<T>` enum has a
@@ -317,7 +321,7 @@ will handle each variant. You want some code that will run only when you have a
 `Some(T)` value, and this code is allowed to use the inner `T`. You want some
 other code to run only if you have a `None` value, and that code doesn’t have a
 `T` value available. The `match` expression is a control flow construct that
-does just this when used with enums: it will run different code depending on
+does just this when used with enums: It will run different code depending on
 which variant of the enum it has, and that code can use the data inside the
 matching value.
 

@@ -13,10 +13,10 @@ Rust journey.
 
 ## Appendix A: Keywords
 
-The following list contains keywords that are reserved for current or future
+The following lists contain keywords that are reserved for current or future
 use by the Rust language. As such, they cannot be used as identifiers (except
-as raw identifiers as we’ll discuss in the “Raw
-Identifiers” section). Identifiers are names
+as raw identifiers, as we discuss in the “Raw
+Identifiers” section). *Identifiers* are names
 of functions, variables, parameters, struct fields, modules, crates, constants,
 macros, static values, attributes, types, traits, or lifetimes.
 
@@ -25,54 +25,55 @@ macros, static values, attributes, types, traits, or lifetimes.
 The following is a list of keywords currently in use, with their functionality
 described.
 
-* `as` - perform primitive casting, disambiguate the specific trait containing
-  an item, or rename items in `use` statements
-* `async` - return a `Future` instead of blocking the current thread
-* `await` - suspend execution until the result of a `Future` is ready
-* `break` - exit a loop immediately
-* `const` - define constant items or constant raw pointers
-* `continue` - continue to the next loop iteration
-* `crate` - in a module path, refers to the crate root
-* `dyn` - dynamic dispatch to a trait object
-* `else` - fallback for `if` and `if let` control flow constructs
-* `enum` - define an enumeration
-* `extern` - link an external function or variable
-* `false` - Boolean false literal
-* `fn` - define a function or the function pointer type
-* `for` - loop over items from an iterator, implement a trait, or specify a
-  higher-ranked lifetime
-* `if` - branch based on the result of a conditional expression
-* `impl` - implement inherent or trait functionality
-* `in` - part of `for` loop syntax
-* `let` - bind a variable
-* `loop` - loop unconditionally
-* `match` - match a value to patterns
-* `mod` - define a module
-* `move` - make a closure take ownership of all its captures
-* `mut` - denote mutability in references, raw pointers, or pattern bindings
-* `pub` - denote public visibility in struct fields, `impl` blocks, or modules
-* `ref` - bind by reference
-* `return` - return from function
-* `Self` - a type alias for the type we are defining or implementing
-* `self` - method subject or current module
-* `static` - global variable or lifetime lasting the entire program execution
-* `struct` - define a structure
-* `super` - parent module of the current module
-* `trait` - define a trait
-* `true` - Boolean true literal
-* `type` - define a type alias or associated type
-* `union` - define a union; is only a keyword when used
-  in a union declaration
-* `unsafe` - denote unsafe code, functions, traits, or implementations
-* `use` - bring symbols into scope; specify precise captures for generic and
-  lifetime bounds
-* `where` - denote clauses that constrain a type
-* `while` - loop conditionally based on the result of an expression
+* **`as`**: Perform primitive casting, disambiguate the specific trait
+  containing an item, or rename items in `use` statements.
+* **`async`**: Return a `Future` instead of blocking the current thread.
+* **`await`**: Suspend execution until the result of a `Future` is ready.
+* **`break`**: Exit a loop immediately.
+* **`const`**: Define constant items or constant raw pointers.
+* **`continue`**: Continue to the next loop iteration.
+* **`crate`**: In a module path, refers to the crate root.
+* **`dyn`**: Dynamic dispatch to a trait object.
+* **`else`**: Fallback for `if` and `if let` control flow constructs.
+* **`enum`**: Define an enumeration.
+* **`extern`**: Link an external function or variable.
+* **`false`**: Boolean false literal.
+* **`fn`**: Define a function or the function pointer type.
+* **`for`**: Loop over items from an iterator, implement a trait, or specify a
+  higher ranked lifetime.
+* **`if`**: Branch based on the result of a conditional expression.
+* **`impl`**: Implement inherent or trait functionality.
+* **`in`**: Part of `for` loop syntax.
+* **`let`**: Bind a variable.
+* **`loop`**: Loop unconditionally.
+* **`match`**: Match a value to patterns.
+* **`mod`**: Define a module.
+* **`move`**: Make a closure take ownership of all its captures.
+* **`mut`**: Denote mutability in references, raw pointers, or pattern bindings.
+* **`pub`**: Denote public visibility in struct fields, `impl` blocks, or
+  modules.
+* **`ref`**: Bind by reference.
+* **`return`**: Return from function.
+* **`Self`**: A type alias for the type we are defining or implementing.
+* **`self`**: Method subject or current module.
+* **`static`**: Global variable or lifetime lasting the entire program
+  execution.
+* **`struct`**: Define a structure.
+* **`super`**: Parent module of the current module.
+* **`trait`**: Define a trait.
+* **`true`**: Boolean true literal.
+* **`type`**: Define a type alias or associated type.
+* **`union`**: Define a union; is a keyword only when
+  used in a union declaration.
+* **`unsafe`**: Denote unsafe code, functions, traits, or implementations.
+* **`use`**: Bring symbols into scope.
+* **`where`**: Denote clauses that constrain a type.
+* **`while`**: Loop conditionally based on the result of an expression.
 
 ### Keywords Reserved for Future Use
 
 The following keywords do not yet have any functionality but are reserved by
-Rust for potential future use.
+Rust for potential future use:
 
 * `abstract`
 * `become`
@@ -140,10 +141,10 @@ identifier names, as well as lets us integrate with programs written in a
 language where these words aren’t keywords. In addition, raw identifiers allow
 you to use libraries written in a different Rust edition than your crate uses.
 For example, `try` isn’t a keyword in the 2015 edition but is in the 2018, 2021,
-and 2024 editions. If you depend on a library that’s written using the 2015
+and 2024 editions. If you depend on a library that is written using the 2015
 edition and has a `try` function, you’ll need to use the raw identifier syntax,
-`r#try` in this case, to call that function from your 2018 edition code. See
-Appendix E for more information on editions.
+`r#try` in this case, to call that function from your code on later editions.
+See Appendix E for more information on editions.
 
 ## Appendix B: Operators and Symbols
 
@@ -183,10 +184,10 @@ Table B-1: Operators
 |`-`|`- expr`|Arithmetic negation|`Neg`|
 |`-`|`expr - expr`|Arithmetic subtraction|`Sub`|
 |`-=`|`var -= expr`|Arithmetic subtraction and assignment|`SubAssign`|
-|`->`|`fn(...) -> type`, <code>\|...\| -> type</code>|Function and closure return type||
+|`->`|`fn(...) -> type`, <code>\|…\| -> type</code>|Function and closure return type||
 |`.`|`expr.ident`|Field access||
 |`.`|`expr.ident(expr, ...)`|Method call||
-|`.`|`expr.0`, `expr.1`, etc.|Tuple indexing||
+|`.`|`expr.0`, `expr.1`, and so on|Tuple indexing||
 |`..`|`..`, `expr..`, `..expr`, `expr..expr`|Right-exclusive range literal|`PartialOrd`|
 |`..=`|`..=expr`, `expr..=expr`|Right-inclusive range literal|`PartialOrd`|
 |`..`|`..expr`|Struct literal update syntax||
@@ -221,26 +222,26 @@ Table B-1: Operators
 
 ### Non-operator Symbols
 
-The following list contains all symbols that don’t function as operators; that
+The following tables contain all symbols that don’t function as operators; that
 is, they don’t behave like a function or method call.
 
 Table B-2 shows symbols that appear on their own and are valid in a variety of
 locations.
 
-Table B-2: Stand-Alone Syntax
+Table B-2: Stand-alone Syntax
 
 |Symbol|Explanation|
 |------|-----------|
 |`'ident`|Named lifetime or loop label|
-|Digits immediately followed by `u8`, `i32`,  `f64`, `usize`, and so on|Numeric literal of specific type|
+|Digits immediately followed by `u8`, `i32`, `f64`, `usize`, and so on|Numeric literal of specific type|
 |`"..."`|String literal|
-|`r"..."`, `r#"..."#`, `r##"..."##`, etc.|Raw string literal, escape characters not processed|
+|`r"..."`, `r#"..."#`, `r##"..."##`, and so on|Raw string literal; escape characters not processed|
 |`b"..."`|Byte string literal; constructs an array of bytes instead of a string|
-|`br"..."`, `br#"..."#`, `br##"..."##`, etc.|Raw byte string literal, combination of raw and byte string literal|
+|`br"..."`, `br#"..."#`, `br##"..."##`, and so on|Raw byte string literal; combination of raw and byte string literal|
 |`'...'`|Character literal|
 |`b'...'`|ASCII byte literal|
-|<code>\|...\| expr</code>|Closure|
-|`!`|Always empty bottom type for diverging functions|
+|<code>\|…\| expr</code>|Closure|
+|`!`|Always-empty bottom type for diverging functions|
 |`_`|“Ignored” pattern binding; also used to make integer literals readable|
 
 Table B-3 shows symbols that appear in the context of a path through the module
@@ -251,11 +252,11 @@ Table B-3: Path-Related Syntax
 |Symbol|Explanation|
 |------|-----------|
 |`ident::ident`|Namespace path|
-|`::path`|Path relative to the extern prelude, where all other crates are rooted (i.e., an explicitly absolute path including crate name)|
-|`self::path`|Path relative to the current module (i.e., an explicitly relative path).|
+|`::path`|Path relative to the crate root (that is, an explicitly absolute path)|
+|`self::path`|Path relative to the current module (that is, an explicitly relative path)|
 |`super::path`|Path relative to the parent of the current module|
 |`type::ident`, `<type as trait>::ident`|Associated constants, functions, and types|
-|`<type>::...`|Associated item for a type that cannot be directly named (e.g., `<&T>::...`, `<[T]>::...`, etc.)|
+|`<type>::...`|Associated item for a type that cannot be directly named (for example, `<&T>::...`, `<[T]>::...`, and so on)|
 |`trait::method(...)`|Disambiguating a method call by naming the trait that defines it|
 |`type::method(...)`|Disambiguating a method call by naming the type for which it’s defined|
 |`<type as trait>::method(...)`|Disambiguating a method call by naming the trait and type|
@@ -267,14 +268,14 @@ Table B-4: Generics
 
 |Symbol|Explanation|
 |------|-----------|
-|`path<...>`|Specifies parameters to generic type in a type (e.g., `Vec<u8>`)|
-|`path::<...>`, `method::<...>`|Specifies parameters to generic type, function, or method in an expression; often referred to as turbofish (e.g., `"42".parse::<i32>()`)|
+|`path<...>`|Specifies parameters to a generic type in a type (for example, `Vec<u8>`)|
+|`path::<...>`, `method::<...>`|Specifies parameters to a generic type, function, or method in an expression; often referred to as *turbofish* (for example, `"42".parse::<i32>()`)|
 |`fn ident<...> ...`|Define generic function|
 |`struct ident<...> ...`|Define generic structure|
 |`enum ident<...> ...`|Define generic enumeration|
 |`impl<...> ...`|Define generic implementation|
-|`for<...> type`|Higher-ranked lifetime bounds|
-|`type<ident=type>`|A generic type where one or more associated types have specific assignments (e.g., `Iterator<Item=T>`)|
+|`for<...> type`|Higher ranked lifetime bounds|
+|`type<ident=type>`|A generic type where one or more associated types have specific assignments (for example, `Iterator<Item=T>`)|
 
 Table B-5 shows symbols that appear in the context of constraining generic type
 parameters with trait bounds.
@@ -331,7 +332,7 @@ Table B-8: Parentheses
 |`(type, ...)`|Tuple type|
 |`expr(expr, ...)`|Function call expression; also used to initialize tuple `struct`s and tuple `enum` variants|
 
-Table B-9 shows the contexts in which curly braces are used.
+Table B-9 shows the contexts in which curly brackets are used.
 
 Table B-9: Curly Brackets
 
@@ -349,7 +350,7 @@ Table B-10: Square Brackets
 |`[...]`|Array literal|
 |`[expr; len]`|Array literal containing `len` copies of `expr`|
 |`[type; len]`|Array type containing `len` instances of `type`|
-|`expr[expr]`|Collection indexing. Overloadable (`Index`, `IndexMut`)|
+|`expr[expr]`|Collection indexing; overloadable (`Index`, `IndexMut`)|
 |`expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]`|Collection indexing pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, or `RangeFull` as the “index”|
 
 ## Appendix C: Derivable Traits
@@ -370,9 +371,9 @@ library that you can use with `derive`. Each section covers:
 
 If you want different behavior from that provided by the `derive` attribute,
 consult the standard library documentation
-for each trait for details of how to manually implement them.
+for each trait for details on how to manually implement them.
 
-These traits listed here are the only ones defined by the standard library that
+The traits listed here are the only ones defined by the standard library that
 can be implemented on your types using `derive`. Other traits defined in the
 standard library don’t have sensible default behavior, so it’s up to you to
 implement them in the way that makes sense for what you’re trying to accomplish.
@@ -385,10 +386,10 @@ would be most relevant to them? The Rust compiler doesn’t have this insight, s
 it can’t provide appropriate default behavior for you.
 
 The list of derivable traits provided in this appendix is not comprehensive:
-libraries can implement `derive` for their own traits, making the list of
-traits you can use `derive` with truly open-ended. Implementing `derive`
-involves using a procedural macro, which is covered in the
-“Macros” section of Chapter 20.
+Libraries can implement `derive` for their own traits, making the list of
+traits you can use `derive` with truly open ended. Implementing `derive`
+involves using a procedural macro, which is covered in the “Custom `derive`
+Macros” section in Chapter 20.
 
 ### Debug for Programmer Output
 
@@ -399,9 +400,10 @@ The `Debug` trait allows you to print instances of a type for debugging
 purposes, so you and other programmers using your type can inspect an instance
 at a particular point in a program’s execution.
 
-The `Debug` trait is required, for example, in using the `assert_eq!` macro.
-This macro prints the values of instances given as arguments if the equality
-assertion fails so programmers can see why the two instances weren’t equal.
+The `Debug` trait is required, for example, in the use of the `assert_eq!`
+macro. This macro prints the values of instances given as arguments if the
+equality assertion fails so that programmers can see why the two instances
+weren’t equal.
 
 ### PartialEq and Eq for Equality Comparisons
 
@@ -410,7 +412,7 @@ equality and enables use of the `==` and `!=` operators.
 
 Deriving `PartialEq` implements the `eq` method. When `PartialEq` is derived on
 structs, two instances are equal only if *all* fields are equal, and the
-instances are not equal if any fields are not equal. When derived on enums,
+instances are not equal if *any* fields are not equal. When derived on enums,
 each variant is equal to itself and not equal to the other variants.
 
 The `PartialEq` trait is required, for example, with the use of the
@@ -420,12 +422,12 @@ for equality.
 The `Eq` trait has no methods. Its purpose is to signal that for every value of
 the annotated type, the value is equal to itself. The `Eq` trait can only be
 applied to types that also implement `PartialEq`, although not all types that
-implement `PartialEq` can implement `Eq`. One example of this is floating point
-number types: the implementation of floating point numbers states that two
+implement `PartialEq` can implement `Eq`. One example of this is floating-point
+number types: The implementation of floating-point numbers states that two
 instances of the not-a-number (`NaN`) value are not equal to each other.
 
-An example of when `Eq` is required is for keys in a `HashMap<K, V>` so the
-`HashMap<K, V>` can tell whether two keys are the same.
+An example of when `Eq` is required is for keys in a `HashMap<K, V>` so that
+the `HashMap<K, V>` can tell whether two keys are the same.
 
 ### PartialOrd and Ord for Ordering Comparisons
 
@@ -438,8 +440,8 @@ Deriving `PartialOrd` implements the `partial_cmp` method, which returns an
 `Option<Ordering>` that will be `None` when the values given don’t produce an
 ordering. An example of a value that doesn’t produce an ordering, even though
 most values of that type can be compared, is the `NaN` floating point value.
-Calling `partial_cmp` with any floating point number and the `NaN` floating
-point value will return `None`.
+Calling `partial_cmp` with any floating-point number and the `NaN`
+floating-point value will return `None`.
 
 When derived on structs, `PartialOrd` compares two instances by comparing the
 value in each field in the order in which the fields appear in the struct
@@ -465,9 +467,9 @@ a data structure that stores data based on the sort order of the values.
 
 The `Clone` trait allows you to explicitly create a deep copy of a value, and
 the duplication process might involve running arbitrary code and copying heap
-data. See Variables and Data Interacting with
-Clone” in Chapter 4
-for more information on `Clone`.
+data. See the “Variables and Data Interacting with
+Clone” section in
+Chapter 4 for more information on `Clone`.
 
 Deriving `Clone` implements the `clone` method, which when implemented for the
 whole type, calls `clone` on each of the parts of the type. This means all the
@@ -479,9 +481,9 @@ returned from `to_vec` will need to own its instances, so `to_vec` calls
 `clone` on each item. Thus, the type stored in the slice must implement `Clone`.
 
 The `Copy` trait allows you to duplicate a value by only copying bits stored on
-the stack; no arbitrary code is necessary. See “Stack-Only Data:
-Copy” in Chapter 4 for more information on
-`Copy`.
+the stack; no arbitrary code is necessary. See the “Stack-Only Data:
+Copy” section in Chapter 4 for more
+information on `Copy`.
 
 The `Copy` trait doesn’t define any methods to prevent programmers from
 overloading those methods and violating the assumption that no arbitrary code
@@ -489,7 +491,7 @@ is being run. That way, all programmers can assume that copying a value will be
 very fast.
 
 You can derive `Copy` on any type whose parts all implement `Copy`. A type that
-implements `Copy` must also implement `Clone`, because a type that implements
+implements `Copy` must also implement `Clone` because a type that implements
 `Copy` has a trivial implementation of `Clone` that performs the same task as
 `Copy`.
 
@@ -520,10 +522,10 @@ meaning all fields or values in the type must also implement `Default` to
 derive `Default`.
 
 The `Default::default` function is commonly used in combination with the struct
-update syntax discussed in “Creating Instances From Other Instances With Struct
-Update
-Syntax” in Chapter 5. You can customize a few fields of a struct and then set
-and use a default value for the rest of the fields by using
+update syntax discussed in the “Creating Instances from Other Instances with
+Struct Update
+Syntax” section in Chapter 5. You can customize a few fields of a struct and
+then set and use a default value for the rest of the fields by using
 `..Default::default()`.
 
 The `Default` trait is required when you use the method `unwrap_or_default` on
@@ -531,7 +533,7 @@ The `Default` trait is required when you use the method `unwrap_or_default` on
 `unwrap_or_default` will return the result of `Default::default` for the type
 `T` stored in the `Option<T>`.
 
-## Appendix D - Useful Development Tools
+## Appendix D: Useful Development Tools
 
 In this appendix, we talk about some useful development tools that the Rust
 project provides. We’ll look at automatic formatting, quick ways to apply
@@ -541,11 +543,11 @@ warning fixes, a linter, and integrating with IDEs.
 
 The `rustfmt` tool reformats your code according to the community code style.
 Many collaborative projects use `rustfmt` to prevent arguments about which
-style to use when writing Rust: everyone formats their code using the tool.
+style to use when writing Rust: Everyone formats their code using the tool.
 
 Rust installations include `rustfmt` by default, so you should already have the
 programs `rustfmt` and `cargo-fmt` on your system. These two commands are
-analogous to `rustc` and `cargo` in that `rustfmt` allows finer-grained control
+analogous to `rustc` and `cargo` in that `rustfmt` allows finer grained control
 and `cargo-fmt` understands conventions of a project that uses Cargo. To format
 any Cargo project, enter the following:
 
@@ -559,10 +561,10 @@ on `rustfmt`, see its documentation at *https://github.com/rust-lang/rustfmt*.
 
 ### Fix Your Code with rustfix
 
-The `rustfix` tool is included with Rust installations and can automatically fix
-compiler warnings that have a clear way to correct the problem that’s likely
-what you want. You’ve probably seen compiler warnings before. For example,
-consider this code:
+The `rustfix` tool is included with Rust installations and can automatically
+fix compiler warnings that have a clear way to correct the problem that’s
+likely what you want. You’ve probably seen compiler warnings before. For
+example, consider this code:
 
 Filename: src/main.rs
 
@@ -615,13 +617,13 @@ fn main() {
 The variable `x` is now immutable, and the warning no longer appears.
 
 You can also use the `cargo fix` command to transition your code between
-different Rust editions. Editions are covered in Appendix E at *appendix-05-editions.md*.
+different Rust editions. Editions are covered in Appendix E.
 
 ### More Lints with Clippy
 
-The Clippy tool is a collection of lints to analyze your code so you can catch
-common mistakes and improve your Rust code. Clippy is included with standard
-Rust installations.
+The Clippy tool is a collection of lints to analyze your code so that you can
+catch common mistakes and improve your Rust code. Clippy is included with
+standard Rust installations.
 
 To run Clippy’s lints on any Cargo project, enter the following:
 
@@ -691,7 +693,7 @@ for installation instructions, then install the language server support in your
 particular IDE. Your IDE will gain capabilities such as autocompletion, jump to
 definition, and inline errors.
 
-## Appendix E - Editions
+## Appendix E: Editions
 
 In Chapter 1, you saw that `cargo new` adds a bit of metadata to your
 *Cargo.toml* file about an edition. This appendix talks about what that means!
@@ -703,7 +705,7 @@ while, all of these tiny changes add up. But from release to release, it can be
 difficult to look back and say, “Wow, between Rust 1.10 and Rust 1.31, Rust has
 changed a lot!”
 
-Every two or three years, the Rust team produces a new Rust *edition*. Each
+Every three years or so, the Rust team produces a new Rust *edition*. Each
 edition brings together the features that have landed into a clear package with
 fully updated documentation and tooling. New editions ship as part of the usual
 six-week release process.
@@ -739,15 +741,15 @@ Rust 2018, your project will compile and be able to use that dependency. The
 opposite situation, where your project uses Rust 2018 and a dependency uses
 Rust 2015, works as well.
 
-To be clear: most features will be available on all editions. Developers using
+To be clear: Most features will be available on all editions. Developers using
 any Rust edition will continue to see improvements as new stable releases are
 made. However, in some cases, mainly when new keywords are added, some new
 features might only be available in later editions. You will need to switch
 editions if you want to take advantage of such features.
 
-For more details, the *Edition Guide* at *https://doc.rust-lang.org/stable/edition-guide/* is a complete book
-about editions that enumerates the differences between editions and explains
-how to automatically upgrade your code to a new edition via `cargo fix`.
+For more details, see *The Rust Edition Guide* at *https://doc.rust-lang.org/stable/edition-guide*. This is a
+complete book that enumerates the differences between editions and explains how
+to automatically upgrade your code to a new edition via `cargo fix`.
 
 ## Appendix F: Translations of the Book
 

@@ -9,15 +9,15 @@ are stopped immediately as well, even if they’re in the middle of serving a
 request.
 
 Next, then, we’ll implement the `Drop` trait to call `join` on each of the
-threads in the pool so they can finish the requests they’re working on before
-closing. Then we’ll implement a way to tell the threads they should stop
-accepting new requests and shut down. To see this code in action, we’ll modify
-our server to accept only two requests before gracefully shutting down its
-thread pool.
+threads in the pool so that they can finish the requests they’re working on
+before closing. Then, we’ll implement a way to tell the threads they should
+stop accepting new requests and shut down. To see this code in action, we’ll
+modify our server to accept only two requests before gracefully shutting down
+its thread pool.
 
-One thing to notice as we go: none of this affects the parts of the code that
-handle executing the closures, so everything here would be just the same if we
-were using a thread pool for an async runtime.
+One thing to notice as we go: None of this affects the parts of the code that
+handle executing the closures, so everything here would be the same if we were
+using a thread pool for an async runtime.
 
 ### Implementing the `Drop` Trait on `ThreadPool`
 
@@ -34,7 +34,7 @@ quite work yet.
 
 </Listing>
 
-First we loop through each of the thread pool `workers`. We use `&mut` for this
+First, we loop through each of the thread pool `workers`. We use `&mut` for this
 because `self` is a mutable reference, and we also need to be able to mutate
 `worker`. For each `worker`, we print a message saying that this particular
 `Worker` instance is shutting down, and then we call `join` on that `Worker`
@@ -47,30 +47,31 @@ Here is the error we get when we compile this code:
 {{#include ../listings/ch21-web-server/listing-21-22/output.txt}}
 ```
 
-The error tells us we can’t call `join` because we only have a mutable borrow of
-each `worker` and `join` takes ownership of its argument. To solve this issue,
-we need to move the thread out of the `Worker` instance that owns `thread` so
-`join` can consume the thread. One way to do this is by taking the same approach
-we did in Listing 18-15. If `Worker` held an `Option<thread::JoinHandle<()>>`,
-we could call the `take` method on the `Option` to move the value out of the
-`Some` variant and leave a `None` variant in its place. In other words, a
-`Worker` that is running would have a `Some` variant in `thread`, and when we
-wanted to clean up a `Worker`, we’d replace `Some` with `None` so the `Worker`
-wouldn’t have a thread to run.
+The error tells us we can’t call `join` because we only have a mutable borrow
+of each `worker` and `join` takes ownership of its argument. To solve this
+issue, we need to move the thread out of the `Worker` instance that owns
+`thread` so that `join` can consume the thread. One way to do this is to take
+the same approach we took in Listing 18-15. If `Worker` held an
+`Option<thread::JoinHandle<()>>`, we could call the `take` method on the
+`Option` to move the value out of the `Some` variant and leave a `None` variant
+in its place. In other words, a `Worker` that is running would have a `Some`
+variant in `thread`, and when we wanted to clean up a `Worker`, we’d replace
+`Some` with `None` so that the `Worker` wouldn’t have a thread to run.
 
-However, the _only_ time this would come up would be when dropping the `Worker`.
-In exchange, we’d have to deal with an `Option<thread::JoinHandle<()>>` anywhere
-we accessed `worker.thread`. Idiomatic Rust uses `Option` quite a bit, but when
-you find yourself wrapping something you know will always be present in an
-`Option` as a workaround like this, it’s a good idea to look for alternative
-approaches to make your code cleaner and less error-prone.
+However, the _only_ time this would come up would be when dropping the
+`Worker`. In exchange, we’d have to deal with an
+`Option<thread::JoinHandle<()>>` anywhere we accessed `worker.thread`.
+Idiomatic Rust uses `Option` quite a bit, but when you find yourself wrapping
+something you know will always be present in an `Option` as a workaround like
+this, it’s a good idea to look for alternative approaches to make your code
+cleaner and less error-prone.
 
 In this case, a better alternative exists: the `Vec::drain` method. It accepts
 a range parameter to specify which items to remove from the vector and returns
 an iterator of those items. Passing the `..` range syntax will remove *every*
 value from the vector.
 
-So we need to update the `ThreadPool` `drop` implementation like this:
+So, we need to update the `ThreadPool` `drop` implementation like this:
 
 <Listing file-name="src/lib.rs">
 
@@ -84,14 +85,14 @@ This resolves the compiler error and does not require any other changes to our
 code. Note that, because drop can be called when panicking, the unwrap
 could also panic and cause a double panic, which immediately crashes the
 program and ends any cleanup in progress. This is fine for an example program,
-but isn’t recommended for production code.
+but it isn’t recommended for production code.
 
 ### Signaling to the Threads to Stop Listening for Jobs
 
 With all the changes we’ve made, our code compiles without any warnings.
 However, the bad news is that this code doesn’t function the way we want it to
 yet. The key is the logic in the closures run by the threads of the `Worker`
-instances: at the moment, we call `join`, but that won’t shut down the threads,
+instances: At the moment, we call `join`, but that won’t shut down the threads,
 because they `loop` forever looking for jobs. If we try to drop our
 `ThreadPool` with our current implementation of `drop`, the main thread will
 block forever, waiting for the first thread to finish.
@@ -99,7 +100,7 @@ block forever, waiting for the first thread to finish.
 To fix this problem, we’ll need a change in the `ThreadPool` `drop`
 implementation and then a change in the `Worker` loop.
 
-First we’ll change the `ThreadPool` `drop` implementation to explicitly drop
+First, we’ll change the `ThreadPool` `drop` implementation to explicitly drop
 the `sender` before waiting for the threads to finish. Listing 21-23 shows the
 changes to `ThreadPool` to explicitly drop `sender`. Unlike with the thread,
 here we _do_ need to use an `Option` to be able to move `sender` out of
@@ -146,8 +147,8 @@ The `take` method is defined in the `Iterator` trait and limits the iteration
 to the first two items at most. The `ThreadPool` will go out of scope at the
 end of `main`, and the `drop` implementation will run.
 
-Start the server with `cargo run`, and make three requests. The third request
-should error, and in your terminal you should see output similar to this:
+Start the server with `cargo run` and make three requests. The third request
+should error, and in your terminal, you should see output similar to this:
 
 <!-- manual-regeneration
 cd listings/ch21-web-server/listing-21-25
@@ -182,16 +183,16 @@ You might see a different ordering of `Worker` IDs and messages printed. We can
 see how this code works from the messages: `Worker` instances 0 and 3 got the
 first two requests. The server stopped accepting connections after the second
 connection, and the `Drop` implementation on `ThreadPool` starts executing
-before `Worker` 3 even starts its job. Dropping the `sender` disconnects all the
+before `Worker 3` even starts its job. Dropping the `sender` disconnects all the
 `Worker` instances and tells them to shut down. The `Worker` instances each
 print a message when they disconnect, and then the thread pool calls `join` to
 wait for each `Worker` thread to finish.
 
-Notice one interesting aspect of this particular execution: the `ThreadPool`
+Notice one interesting aspect of this particular execution: The `ThreadPool`
 dropped the `sender`, and before any `Worker` received an error, we tried to
-join `Worker` 0. `Worker` 0 had not yet gotten an error from `recv`, so the main
-thread blocked, waiting for `Worker` 0 to finish. In the meantime, `Worker` 3
-received a job and then all threads received an error. When `Worker` 0 finished,
+join `Worker 0`. `Worker 0` had not yet gotten an error from `recv`, so the main
+thread blocked, waiting for `Worker 0` to finish. In the meantime, `Worker 3`
+received a job and then all threads received an error. When `Worker 0` finished,
 the main thread waited for the rest of the `Worker` instances to finish. At that
 point, they had all exited their loops and stopped.
 
@@ -225,7 +226,7 @@ some ideas:
 - Change calls to `unwrap` to more robust error handling.
 - Use `ThreadPool` to perform some task other than serving web requests.
 - Find a thread pool crate on [crates.io](https://crates.io/) and implement a
-  similar web server using the crate instead. Then compare its API and
+  similar web server using the crate instead. Then, compare its API and
   robustness to the thread pool we implemented.
 
 ## Summary
