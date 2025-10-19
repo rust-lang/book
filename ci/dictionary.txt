@@ -602,6 +602,7 @@ unsynchronized
 Unyank
 UpperCamelCase
 URIs
+urls
 UsefulType
 username
 USERPROFILE
