@@ -135,7 +135,7 @@ some number futures that won’t be known until runtime. Let’s change Listing
 17-13 to the code in Listing 17-23 that puts the three futures into a vector
 and calls the `trpl::join_all` function instead, which won’t compile yet.
 
-<Listing number="17-23" caption="Awaiting futures in a collection">
+<Listing number="17-23" caption="Awaiting futures in a collection"  file-name="src/main.rs">
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-async-await/listing-17-23/src/main.rs:here}}

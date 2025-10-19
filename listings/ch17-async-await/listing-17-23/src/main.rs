@@ -29,7 +29,7 @@ fn main() {
 
         // ANCHOR: here
         let tx_fut = async move {
-            // -- snip --
+            // --snip--
             // ANCHOR_END: here
             let vals = vec![
                 String::from("more"),
@@ -44,10 +44,8 @@ fn main() {
             }
         // ANCHOR: here
         };
-        // ANCHOR_END: here
 
-        // ANCHOR: here
-        let futures =
+        let futures: Vec<Box<dyn Future<Output = ()>>> =
             vec![Box::new(tx1_fut), Box::new(rx_fut), Box::new(tx_fut)];
 
         trpl::join_all(futures).await;
