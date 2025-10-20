@@ -364,7 +364,7 @@ note: required by `std::fmt::Display::fmt`
 
 [I'm a reference-style link][Arbitrary case-insensitive reference text]
 
-[I'm a relative reference to a repository file](../blob/master/LICENSE)
+[I'm a relative reference to a repository file](../blob/HEAD/LICENSE)
 
 [You can use numbers for reference-style link definitions][1]
 
@@ -387,7 +387,7 @@ I'm an inline-style link with title at *https://www.google.com*
 
 I'm a reference-style link at *https://www.mozilla.org*
 
-I'm a relative reference to a repository file at *../blob/master/LICENSE*
+I'm a relative reference to a repository file at *../blob/HEAD/LICENSE*
 
 You can use numbers for reference-style link definitions at *http://slashdot.org*
 
