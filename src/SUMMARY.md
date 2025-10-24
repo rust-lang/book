@@ -4,8 +4,6 @@
 [Foreword](foreword.md)
 [Introduction](ch00-00-introduction.md)
 
-## Getting started
-
 - [Getting Started](ch01-00-getting-started.md)
   - [Installation](ch01-01-installation.md)
   - [Hello, World!](ch01-02-hello-world.md)
@@ -34,8 +32,6 @@
   - [Defining an Enum](ch06-01-defining-an-enum.md)
   - [The `match` Control Flow Construct](ch06-02-match.md)
   - [Concise Control Flow with `if let` and `let else`](ch06-03-if-let.md)
-
-## Basic Rust Literacy
 
 - [Packages, Crates, and Modules](ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)
   - [Packages and Crates](ch07-01-packages-and-crates.md)
@@ -71,8 +67,6 @@
   - [Adding Functionality with Test Driven Development](ch12-04-testing-the-librarys-functionality.md)
   - [Working with Environment Variables](ch12-05-working-with-environment-variables.md)
   - [Redirecting Errors to Standard Error](ch12-06-writing-to-stderr-instead-of-stdout.md)
-
-## Thinking in Rust
 
 - [Functional Language Features: Iterators and Closures](ch13-00-functional-features.md)
   - [Closures](ch13-01-closures.md)
@@ -113,8 +107,6 @@
   - [Characteristics of Object-Oriented Languages](ch18-01-what-is-oo.md)
   - [Using Trait Objects to Abstract over Shared Behavior](ch18-02-trait-objects.md)
   - [Implementing an Object-Oriented Design Pattern](ch18-03-oo-design-patterns.md)
-
-## Advanced Topics
 
 - [Patterns and Matching](ch19-00-patterns.md)
   - [All the Places Patterns Can Be Used](ch19-01-all-the-places-for-patterns.md)
