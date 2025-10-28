@@ -9,7 +9,7 @@ test tests::greater_than_100 - should panic ... FAILED
 failures:
 
 ---- tests::greater_than_100 stdout ----
-note: test did not panic as expected
+note: test did not panic as expected at src/lib.rs:21:8
 
 failures:
     tests::greater_than_100
