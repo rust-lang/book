@@ -3,12 +3,21 @@ $ cargo run
 error[E0382]: use of moved value: `a`
   --> src/main.rs:11:30
    |
-9  |     let a = Cons(5, Box::new(Cons(10, Box::new(Nil))));
+ 9 |     let a = Cons(5, Box::new(Cons(10, Box::new(Nil))));
    |         - move occurs because `a` has type `List`, which does not implement the `Copy` trait
 10 |     let b = Cons(3, Box::new(a));
    |                              - value moved here
 11 |     let c = Cons(4, Box::new(a));
    |                              ^ value used here after move
+   |
+note: if `List` implemented `Clone`, you could clone the value
+  --> src/main.rs:1:1
+   |
+ 1 | enum List {
+   | ^^^^^^^^^ consider implementing `Clone` for this type
+...
+10 |     let b = Cons(3, Box::new(a));
+   |                              - you could clone this value
 
 For more information about this error, try `rustc --explain E0382`.
 error: could not compile `cons-list` (bin "cons-list") due to 1 previous error

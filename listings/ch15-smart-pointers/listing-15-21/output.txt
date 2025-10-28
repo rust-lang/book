@@ -8,8 +8,8 @@ error[E0596]: cannot borrow `self.sent_messages` as mutable, as it is behind a `
    |
 help: consider changing this to be a mutable reference in the `impl` method and the `trait` definition
    |
-2  ~     fn send(&mut self, msg: &str);
-3  | }
+ 2 ~     fn send(&mut self, msg: &str);
+ 3 | }
 ...
 56 |     impl Messenger for MockMessenger {
 57 ~         fn send(&mut self, message: &str) {

@@ -3,7 +3,7 @@ $ cargo run
 error[E0790]: cannot call associated function on trait without specifying the corresponding `impl` type
   --> src/main.rs:20:43
    |
-2  |     fn baby_name() -> String;
+ 2 |     fn baby_name() -> String;
    |     ------------------------- `Animal::baby_name` defined here
 ...
 20 |     println!("A baby dog is called a {}", Animal::baby_name());
