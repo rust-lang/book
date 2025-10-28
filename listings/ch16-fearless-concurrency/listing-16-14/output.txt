@@ -22,7 +22,7 @@ note: required because it's used within this closure
 11 |         let handle = thread::spawn(move || {
    |                                    ^^^^^^^
 note: required by a bound in `spawn`
-  --> /rustc/6b00bc3880198600130e1cf62b8f8a93494488cc/library/std/src/thread/mod.rs:723:1
+  --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2/library/std/src/thread/mod.rs:723:1
 
 For more information about this error, try `rustc --explain E0277`.
 error: could not compile `shared-state` (bin "shared-state") due to 1 previous error
