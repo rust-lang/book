@@ -42,7 +42,7 @@ fn main() {
                 tx.send(val).unwrap();
                 trpl::sleep(Duration::from_secs(1)).await;
             }
-        // ANCHOR: here
+            // ANCHOR: here
         };
 
         let futures: Vec<Box<dyn Future<Output = ()>>> =
