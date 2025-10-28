@@ -9,7 +9,7 @@ error[E0507]: cannot move out of `worker.thread` which is behind a mutable refer
    |             move occurs because `worker.thread` has type `JoinHandle<()>`, which does not implement the `Copy` trait
    |
 note: `JoinHandle::<T>::join` takes ownership of the receiver `self`, which moves `worker.thread`
-  --> /rustc/4eb161250e340c8f48f66e2b929ef4a5bed7c181/library/std/src/thread/mod.rs:1876:17
+  --> /rustc/05f9846f893b09a1be1fc8560e33fc3c815cfecb/library/std/src/thread/mod.rs:1886:17
 
 For more information about this error, try `rustc --explain E0507`.
 error: could not compile `hello` (lib) due to 1 previous error

@@ -1,4 +1,5 @@
 $ cargo +nightly miri run
+Preparing a sysroot for Miri (target: aarch64-apple-darwin)... done
    Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
      Running `file:///home/.rustup/toolchains/nightly/bin/cargo-miri runner target/miri/debug/unsafe-example`

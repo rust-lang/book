@@ -12,8 +12,8 @@ error[E0308]: mismatched types
 13 | fn returns_initialized_closure(init: i32) -> impl Fn(i32) -> i32 {
    |                                              ------------------- the found opaque type
    |
-   = note: expected opaque type `impl Fn(i32) -> i32` (opaque type at <src/main.rs:9:25>)
-              found opaque type `impl Fn(i32) -> i32` (opaque type at <src/main.rs:13:46>)
+   = note: expected opaque type `impl Fn(i32) -> i32`
+              found opaque type `impl Fn(i32) -> i32`
    = note: distinct uses of `impl Trait` result in different opaque types
 
 For more information about this error, try `rustc --explain E0308`.
