@@ -3,10 +3,10 @@ $ cargo build
 error[E0308]: mismatched types
   --> src/main.rs:2:44
    |
-2  |     let handlers = vec![returns_closure(), returns_initialized_closure(123)];
+ 2 |     let handlers = vec![returns_closure(), returns_initialized_closure(123)];
    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected opaque type, found a different opaque type
 ...
-9  | fn returns_closure() -> impl Fn(i32) -> i32 {
+ 9 | fn returns_closure() -> impl Fn(i32) -> i32 {
    |                         ------------------- the expected opaque type
 ...
 13 | fn returns_initialized_closure(init: i32) -> impl Fn(i32) -> i32 {
