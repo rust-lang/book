@@ -520,4 +520,4 @@ transferring ownership: references.
 [derivable-traits]: appendix-03-derivable-traits.html
 [methods]: ch05-03-method-syntax.html#methods
 [paths-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
-[drop]: ../std/ops/trait.Drop.html#tymethod.drop
+[drop]: ../std/ops/trait.Drop.html#method.drop
