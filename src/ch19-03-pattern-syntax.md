@@ -188,7 +188,7 @@ In this example, the value `p` matches the second arm by virtue of `x`
 containing a `0`, so this code will print `On the y axis at 7`.
 
 Remember that a `match` expression stops checking arms once it has found the
-first matching pattern, so even though `Point { x: 0, y: 0}` is on the `x` axis
+first matching pattern, so even though `Point { x: 0, y: 0 }` is on the `x` axis
 and the `y` axis, this code would only print `On the x axis at 0`.
 
 <!-- Old headings. Do not remove or links may break. -->
