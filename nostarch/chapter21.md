@@ -580,7 +580,7 @@ Listing 21-8.
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Hello!</title>
+    <title>Oops!</title>
   </head>
   <body>
     <h1>Oops!</h1>
